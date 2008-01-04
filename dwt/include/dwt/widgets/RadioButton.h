@@ -36,7 +36,7 @@
 #ifndef DWT_RadioButton_h
 #define DWT_RadioButton_h
 
-#include "Button.h"
+#include "CheckBox.h"
 
 namespace dwt {
 
@@ -52,9 +52,9 @@ namespace dwt {
    * previously selected one.
    */
 class RadioButton :
-	public Button
+	public CheckBox
 {
-	typedef Button BaseType;
+	typedef CheckBox BaseType;
 	friend class WidgetCreator< RadioButton >;
 public:
 	/// Class type
@@ -75,18 +75,6 @@ public:
 		Seed(const tstring& caption_ = tstring());
 	};
 
-	/// Returns true if the RadioButton is selected
-	 /** Call this function to determine if the RadioButton is selected or not,
-	   * returns true if it is selected
-	   */
-	bool getChecked();
-
-	/// Sets the checked value of the RadioButton
-	 /** Call this function to either check the RadioButton or to uncheck the
-	   * RadioButton
-	   */
-	void setChecked( bool value = true );
-
 protected:
 	// Constructor Taking pointer to parent
 	explicit RadioButton( Widget * parent );
@@ -104,16 +92,6 @@ protected:
 inline RadioButton::RadioButton( Widget * parent )
 	: BaseType( parent )
 {
-}
-
-inline bool RadioButton::getChecked()
-{
-	return this->sendMessage(BM_GETCHECK) == BST_CHECKED;
-}
-
-inline void RadioButton::setChecked( bool value )
-{
-	this->sendMessage(BM_SETCHECK, value ? BST_CHECKED : BST_UNCHECKED);
 }
 
 }

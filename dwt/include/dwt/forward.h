@@ -61,6 +61,7 @@ typedef DateTime* DateTimePtr;
 
 class Grid;
 typedef Grid* GridPtr;
+class GridInfo;
 
 class GroupBox;
 typedef GroupBox* GroupBoxPtr;

@@ -34,7 +34,7 @@ private:
 	ItemList items;
 
 	TextBoxPtr nick;
-	GridPtr grid;
+	GroupBoxPtr group;
 
 	void handleNickTextChanged();
 };

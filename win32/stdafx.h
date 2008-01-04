@@ -69,6 +69,7 @@ using dwt::MenuPtr;
 using dwt::Spinner;
 using dwt::SpinnerPtr;
 using dwt::Grid;
+using dwt::GridInfo;
 using dwt::GridPtr;
 using dwt::GroupBox;
 using dwt::GroupBoxPtr;

@@ -73,6 +73,9 @@ public:
 
 		/// Fills with default parameters
 		Seed(const tstring& caption_ = tstring());
+	protected:
+		// For checkboxes
+		Seed(const tstring& caption_, DWORD style);
 	};
 
 	/// Returns the checked state of the Check Box
@@ -84,6 +87,8 @@ public:
 	/** Call this one to programmaticially check a Check Box.
 	  */
 	void setChecked( bool value = true );
+
+	virtual Point getPreferedSize();
 
 protected:
 	// Constructor Taking pointer to parent

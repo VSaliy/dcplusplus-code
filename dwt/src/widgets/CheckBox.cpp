@@ -35,9 +35,31 @@
 namespace dwt {
 
 CheckBox::Seed::Seed(const tstring& caption) :
-	BaseType::Seed(caption, BS_AUTOCHECKBOX | BS_CHECKBOX)
+	BaseType::Seed(caption, BS_AUTOCHECKBOX)
 {
 
+}
+
+CheckBox::Seed::Seed(const tstring& caption, DWORD style) :
+	BaseType::Seed(caption, style)
+{
+
+}
+
+Point CheckBox::getPreferedSize() {
+	// Pixels between icon and text
+	const int MARGIN = 4;
+
+	UpdateCanvas c(this);
+
+	c.selectFont(getFont());
+	TEXTMETRIC tmNew = { 0 };
+	c.getTextMetrics(tmNew);
+
+	Point ret = c.getTextExtent(getText());
+	ret.y = std::max((int)tmNew.tmHeight, ::GetSystemMetrics(SM_CYSMICON));
+	ret.x += ::GetSystemMetrics(SM_CXSMICON) + MARGIN;
+	return ret;
 }
 
 }

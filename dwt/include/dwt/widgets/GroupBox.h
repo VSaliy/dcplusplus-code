@@ -96,6 +96,8 @@ public:
 
 	virtual Point getPreferedSize();
 
+	virtual void layout(const Rectangle& rect);
+
 protected:
 	/// Constructor Taking pointer to parent
 	explicit GroupBox( Widget * parent );
@@ -105,6 +107,8 @@ protected:
 	virtual ~GroupBox()
 	{}
 
+	Rectangle shrink(const Rectangle& client);
+	Point expand(const Point& child);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

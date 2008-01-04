@@ -45,6 +45,8 @@ private:
 	TextBoxPtr externalIP;
 	CheckBoxPtr overrideIP;
 
+	GridPtr ports;
+
 	TextBoxPtr tcp;
 	TextBoxPtr udp;
 	TextBoxPtr tls;
