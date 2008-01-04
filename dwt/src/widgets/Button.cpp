@@ -59,5 +59,4 @@ Point Button::getPreferedSize() {
 	return ret;
 }
 
-
 }

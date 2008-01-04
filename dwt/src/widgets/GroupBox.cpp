@@ -38,6 +38,10 @@
 
 namespace dwt {
 
+// Amount of space between child and border
+// TODO make configurable or something
+static const int PADDING = 3;
+
 GroupBox::Seed::Seed(const tstring& caption) :
 	BaseType::Seed(WC_BUTTON, BS_GROUPBOX | WS_CHILD, 0, caption),
 	font(new Font(DefaultGuiFont))
@@ -51,31 +55,51 @@ void GroupBox::create( const GroupBox::Seed & cs ) {
 }
 
 Point GroupBox::getPreferedSize() {
-	// TODO How large is that border really?
-
-	static const int BORDER = 4;
-	// TODO find better way of keeping track of children
 	Point ret(0, 0);
+	Widget* w = getChild();
 
-	for(HWND wnd = ::FindWindowEx(handle(), NULL, NULL, NULL); wnd; wnd = ::FindWindowEx(handle(), wnd, NULL, NULL)) {
-		Widget* w = hwnd_cast<Widget*>(wnd);
-		if(w) {
-			ret.maxOf(w->getPreferedSize());
-		}
+	if(w) {
+		ret = w->getPreferedSize();
 	}
 
+	return expand(ret);
+}
+
+void GroupBox::layout(const Rectangle& rect) {
+	BaseType::layout(rect);
+
+	Widget* child = getChild();
+	if(child) {
+		child->layout(shrink(Rectangle(0, 0, rect.width(), rect.height())));
+	}
+}
+
+Rectangle GroupBox::shrink(const Rectangle& client) {
 	// Taken from http://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
 
 	c.selectFont(getFont());
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);
+	const int h = tmNew.tmHeight;
 
+	return Rectangle(
+		client.width() > PADDING ? client.x() + PADDING : client.width(),
+		client.height() > PADDING + h ? client.y() + PADDING + h : client.height(),
+		client.width() > PADDING * 2 ? client.width() - PADDING * 2 : 0,
+		client.height() > PADDING * 2 + h ? client.height() - PADDING * 2 - h : 0
+	);
+}
+
+Point GroupBox::expand(const Point& child) {
+	UpdateCanvas c(this);
+
+	c.selectFont(getFont());
+	TEXTMETRIC tmNew = { 0 };
+	c.getTextMetrics(tmNew);
+	const int h = tmNew.tmHeight;
 	Point txt = c.getTextExtent(getText());
-	ret.x = std::max(ret.x, txt.x) + 2 * BORDER;
-	ret.y += tmNew.tmHeight + BORDER;
-
-	return ret;
+	return Point(std::max(child.x, txt.x) + PADDING * 2, child.y + PADDING * 2 + h);
 }
 
 }

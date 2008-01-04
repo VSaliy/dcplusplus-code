@@ -46,9 +46,9 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 	createDialog(IDD_GENERALPAGE);
 	setHelpId(IDH_GENERALPAGE);
 
-	GroupBoxPtr group = addChild(GroupBox::Seed(T_("Personal Information")));
+	group = addChild(GroupBox::Seed(T_("Personal Information")));
 
-	grid = group->addChild(Grid::Seed(4, 3));
+	GridPtr grid = group->addChild(Grid::Seed(4, 3));
 	grid->column(1).mode = dwt::GridInfo::FILL;
 
 	grid->addChild(Label::Seed(T_("Nick")));
@@ -91,21 +91,15 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 	}
 	connections->setSelected(selected);
 
-	dwt::Point gridSize = grid->getPreferedSize();
-
-	//attachChild<TextBox>(IDC_EMAIL);
-	// TODO Height should be adjusted for font size
-	group->layout(dwt::Rectangle(7, 7, getClientAreaSize().x - 14, gridSize.y + 45));
-
-	dwt::Point groupSize = group->getClientAreaSize();
-	grid->layout(dwt::Rectangle(7, 18, groupSize.x - 14, gridSize.y));
+	layout();
 }
 
 GeneralPage::~GeneralPage() {
 }
 
 void GeneralPage::layout() {
-	grid->layout(grid->getBounds());
+	dwt::Point groupSize = group->getPreferedSize();
+	group->layout(dwt::Rectangle(7, 4, getClientAreaSize().x - 14, groupSize.y));
 }
 
 void GeneralPage::write() {
