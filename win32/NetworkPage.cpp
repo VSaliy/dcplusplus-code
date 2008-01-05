@@ -64,6 +64,7 @@ NetworkPage::NetworkPage(dwt::Widget* parent) : PropPage(parent) {
 	setHelpId(IDH_NETWORKPAGE);
 
 	grid = addChild(Grid::Seed(2, 1));
+	grid->column(0).mode = GridInfo::FILL;
 
 	GroupBoxPtr groupIn = grid->addChild(GroupBox::Seed(T_("Incoming connection settings")));
 	GridPtr gridIn = groupIn->addChild(Grid::Seed(1, 2));
@@ -176,14 +177,14 @@ NetworkPage::NetworkPage(dwt::Widget* parent) : PropPage(parent) {
 	attachChild<TextBox>(IDC_PORT_TLS);
 	attachChild<TextBox>(IDC_EXTERNAL_IP);
 	*/
-
-	layout();
 }
 
 NetworkPage::~NetworkPage() {
 }
 
-void NetworkPage::layout() {
+void NetworkPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
 	dwt::Point gridSize = grid->getPreferedSize();
 	grid->layout(dwt::Rectangle(7, 4, getClientAreaSize().x - 14, gridSize.y));
 }

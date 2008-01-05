@@ -27,7 +27,7 @@ public:
 	GeneralPage(dwt::Widget* parent);
 	virtual ~GeneralPage();
 
-	virtual void layout();
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:

@@ -37,15 +37,20 @@ private:
 	PropPage* currentPage;
 
 	TreePtr pageTree;
+	GridPtr grid;
 
-	HTREEITEM addPage(const tstring& title, PropPage* page, HTREEITEM parent = TVI_ROOT);
+	HTREEITEM addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent = TVI_ROOT);
 	void updateTitle();
 	void write();
+
+	void layout();
 
 	bool initDialog();
 	void handleHelp(HWND hWnd, unsigned id);
 	void handleSelectionChanged();
 	void handleOKClicked();
+	void handleSized(const dwt::SizedEvent& sz);
+
 };
 
 #endif
