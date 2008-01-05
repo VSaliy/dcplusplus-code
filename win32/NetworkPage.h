@@ -28,7 +28,7 @@ public:
 	NetworkPage(dwt::Widget* parent);
 	virtual ~NetworkPage();
 
-	virtual void layout();
+	virtual void layout(const dwt::Rectangle& rc);
 	virtual void write();
 
 private:

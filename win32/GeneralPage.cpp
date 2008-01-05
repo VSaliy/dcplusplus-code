@@ -90,14 +90,14 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 		}
 	}
 	connections->setSelected(selected);
-
-	layout();
 }
 
 GeneralPage::~GeneralPage() {
 }
 
-void GeneralPage::layout() {
+void GeneralPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
 	dwt::Point groupSize = group->getPreferedSize();
 	group->layout(dwt::Rectangle(7, 4, getClientAreaSize().x - 14, groupSize.y));
 }

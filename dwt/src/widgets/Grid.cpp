@@ -71,7 +71,8 @@ Point Grid::getPreferedSize(size_t row, size_t column) const {
 	Point ret(0, 0);
 
 	for(WidgetInfoList::const_iterator i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
-		if(i->inCell(row, column)) {
+		// TOOD AspectVisible?
+		if(i->inCell(row, column) && ::IsWindowVisible(i->w->handle())) {
 			ret = i->w->getPreferedSize();
 			// TODO consider fractions...
 			if(i->colSpan > 1) {

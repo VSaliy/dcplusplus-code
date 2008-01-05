@@ -39,6 +39,8 @@
 #include "UCPage.h"
 #include "CertificatesPage.h"
 
+#include <dwt/widgets/Grid.h>
+
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_PAGES, IDH_SETTINGS_TREE },
@@ -52,6 +54,7 @@ static const WinUtil::HelpItem helpItems[] = {
 SettingsDialog::SettingsDialog(dwt::Widget* parent) : WidgetFactory<dwt::ModalDialog>(parent), currentPage(0) {
 	onInitDialog(std::tr1::bind(&SettingsDialog::initDialog, this));
 	onHelp(std::tr1::bind(&SettingsDialog::handleHelp, this, _1, _2));
+	onSized(std::tr1::bind(&SettingsDialog::handleSized, this, _1));
 }
 
 int SettingsDialog::run() {
@@ -72,56 +75,79 @@ bool SettingsDialog::initDialog() {
 
 	setText(T_("Settings"));
 
-	attachChild(pageTree, IDC_SETTINGS_PAGES);
+	grid = addChild(Grid::Seed(2, 1));
+
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+	grid->column(0).mode = GridInfo::FILL;
+
+	GridPtr upper = grid->addChild(Grid::Seed(1, 2));
+
+	upper->row(0).mode = GridInfo::FILL;
+	upper->row(0).align = GridInfo::STRETCH;
+
+	upper->column(0).size = 90;
+	upper->column(0).mode = GridInfo::STATIC;
+	upper->column(1).mode = GridInfo::FILL;
+
+	pageTree = upper->addChild(Tree::Seed());
+
 	pageTree->onSelectionChanged(std::tr1::bind(&SettingsDialog::handleSelectionChanged, this));
 
+	addPage(T_("Personal information"), upper, new GeneralPage(upper));
+
+	addPage(T_("Connection settings"), upper, new NetworkPage(upper));
+
 	{
-		ButtonPtr button = attachChild<Button>(IDOK);
+		HTREEITEM item = addPage(T_("Downloads"), upper, new DownloadPage(upper));
+		addPage(T_("Favorites"), upper, new FavoriteDirsPage(upper), item);
+		addPage(T_("Queue"), upper, new QueuePage(upper), item);
+	}
+
+	addPage(T_("Sharing"), upper, new UploadPage(upper));
+
+	{
+		HTREEITEM item = addPage(T_("Appearance"),upper,  new AppearancePage(upper));
+		addPage(T_("Colors and sounds"), upper, new Appearance2Page(upper), item);
+		addPage(T_("Tabs"), upper, new TabsPage(upper), item);
+		addPage(T_("Windows"), upper, new WindowsPage(upper), item);
+	}
+
+	{
+		HTREEITEM item = addPage(T_("Advanced"), upper, new AdvancedPage(upper));
+		addPage(T_("Logs"), upper, new LogPage(upper), item);
+		addPage(T_("Experts only"), upper, new Advanced3Page(upper), item);
+		addPage(T_("User Commands"), upper, new UCPage(upper), item);
+		addPage(T_("Security Certificates"), upper, new CertificatesPage(upper), item);
+	}
+
+	GridPtr lower = grid->addChild(Grid::Seed(1, 3));
+
+	{
+		ButtonPtr button = lower->addChild(Button::Seed());
 		button->setText(T_("OK"));
 		button->onClicked(std::tr1::bind(&SettingsDialog::handleOKClicked, this));
 
-		button = attachChild<Button>(IDCANCEL);
+		button = lower->addChild(Button::Seed());
 		button->setText(T_("Cancel"));
 		button->onClicked(std::tr1::bind(&SettingsDialog::endDialog, this, IDCANCEL));
 
-		button = attachChild<Button>(IDHELP);
+		button = lower->addChild(Button::Seed());
 		button->setText(T_("Help"));
 		button->onClicked(std::tr1::bind(&SettingsDialog::handleHelp, this, handle(), IDH_INDEX));
 	}
 
-	addPage(T_("Personal information"), new GeneralPage(this));
-
-	addPage(T_("Connection settings"), new NetworkPage(this));
-
-	{
-		HTREEITEM item = addPage(T_("Downloads"), new DownloadPage(this));
-		addPage(T_("Favorites"), new FavoriteDirsPage(this), item);
-		addPage(T_("Queue"), new QueuePage(this), item);
-	}
-
-	addPage(T_("Sharing"), new UploadPage(this));
-
-	{
-		HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(this));
-		addPage(T_("Colors and sounds"), new Appearance2Page(this), item);
-		addPage(T_("Tabs"), new TabsPage(this), item);
-		addPage(T_("Windows"), new WindowsPage(this), item);
-	}
-
-	{
-		HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(this));
-		addPage(T_("Logs"), new LogPage(this), item);
-		addPage(T_("Experts only"), new Advanced3Page(this), item);
-		addPage(T_("User Commands"), new UCPage(this), item);
-		addPage(T_("Security Certificates"), new CertificatesPage(this), item);
-	}
 
 	updateTitle();
+
+	layout();
 
 	return false;
 }
 
-HTREEITEM SettingsDialog::addPage(const tstring& title, PropPage* page, HTREEITEM parent) {
+HTREEITEM SettingsDialog::addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent) {
+	upper->setWidget(page, 0, 1);
+
 	pages.push_back(page);
 
 	HTREEITEM item = pageTree->insert(title, parent, reinterpret_cast<LPARAM>(page));
@@ -147,6 +173,7 @@ void SettingsDialog::handleSelectionChanged() {
 		currentPage = page;
 
 		updateTitle();
+		layout();
 	}
 }
 
@@ -166,3 +193,11 @@ void SettingsDialog::write() {
 	}
 }
 
+void SettingsDialog::handleSized(const dwt::SizedEvent& sz) {
+	layout();
+}
+
+void SettingsDialog::layout() {
+	dwt::Point sz = getClientSize();
+	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
+}
