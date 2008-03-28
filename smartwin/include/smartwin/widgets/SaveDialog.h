@@ -25,8 +25,8 @@
   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef WidgetSaveFile_h
-#define WidgetSaveFile_h
+#ifndef SaveDialog_h
+#define SaveDialog_h
 
 #include "../Widget.h"
 #include "../../SmartUtil.h"
@@ -43,7 +43,7 @@ namespace SmartWin
   * Either derive from it or call WidgetFactory::createSaveFile. <br>
   * Related classes 
   * <ul>
-  * <li>WidgetLoadFile</li>
+  * <li>LoadDialog</li>
   * <li>AspectFileFilter</li>
   * <li>WidgetFileCommon</li>
   * </ul>
@@ -53,12 +53,12 @@ namespace SmartWin
   * arguments returning an HWND. <br>
   * the complete signature of the function will then be "HWND parent();"   
   */
-class WidgetSaveFile
+class SaveDialog
 	: public AspectFileFilter
 {
 public:
 	/// Class type
-	typedef WidgetSaveFile ThisType;
+	typedef SaveDialog ThisType;
 
 	/// Object type
 	/** Note, not a pointer!!!!
@@ -72,9 +72,9 @@ public:
 	SmartUtil::tstring showDialog();
 
 	/// Constructor Taking pointer to parent
-	explicit WidgetSaveFile( Widget * parent = 0 );
+	explicit SaveDialog( Widget * parent = 0 );
 
-	virtual ~WidgetSaveFile()
+	virtual ~SaveDialog()
 	{}
 
 private:
@@ -85,7 +85,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-inline SmartUtil::tstring WidgetSaveFile::showDialog()
+inline SmartUtil::tstring SaveDialog::showDialog()
 {
 	TCHAR szFile[MAX_PATH + 1]; // buffer for file name
 	szFile[0] = '\0';
@@ -108,7 +108,7 @@ inline SmartUtil::tstring WidgetSaveFile::showDialog()
 	return retVal;
 }
 
-inline WidgetSaveFile::WidgetSaveFile( Widget * parent )
+inline SaveDialog::SaveDialog( Widget * parent )
 	: itsParent( parent )
 {
 }

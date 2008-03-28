@@ -25,8 +25,8 @@
   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef WidgetLoadFile_h
-#define WidgetLoadFile_h
+#ifndef LoadDialog_h
+#define LoadDialog_h
 
 #include "../Widget.h"
 #include "../../SmartUtil.h"
@@ -44,7 +44,7 @@ namespace SmartWin
   * Either derive from it or call WidgetFactory::createLoadFile. <br>
   * Related classes 
   * <ul>
-  * <li>WidgetSaveFile</li>
+  * <li>SaveDialog</li>
   * <li>AspectFileFilter</li>
   * <li>WidgetFileCommon</li>
   * </ul>
@@ -54,12 +54,12 @@ namespace SmartWin
   * and HWND in the Parent template parameter. <br>
   * the complete signature of the function will then be "HWND parent()"   
   */
-class WidgetLoadFile
+class LoadDialog
 	: public AspectFileFilter
 {
 public:
 	/// Class type
-	typedef WidgetLoadFile ThisType;
+	typedef LoadDialog ThisType;
 
 	/// Object type
 	/** Note, not a pointer!!!!
@@ -87,9 +87,9 @@ public:
 	std::vector<SmartUtil::tstring> showDialogMultiSelect();
 
 	// Constructor Taking pointer to parent
-	explicit WidgetLoadFile( Widget * parent = 0 );
+	explicit LoadDialog( Widget * parent = 0 );
 
-	virtual ~WidgetLoadFile() { }
+	virtual ~LoadDialog() { }
 private:
 	Widget * itsParent;
 	HWND getParentHandle() { return itsParent ? itsParent->handle() : NULL; }
@@ -98,7 +98,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-inline SmartUtil::tstring WidgetLoadFile::showDialog()
+inline SmartUtil::tstring LoadDialog::showDialog()
 {
 	TCHAR szFile[PATH_BUFFER_SIZE]; // buffer for file name
 	szFile[0] = '\0';
@@ -122,7 +122,7 @@ inline SmartUtil::tstring WidgetLoadFile::showDialog()
 	return retVal;
 }
 
-inline std::vector<SmartUtil::tstring> WidgetLoadFile::showDialogMultiSelect() 
+inline std::vector<SmartUtil::tstring> LoadDialog::showDialogMultiSelect() 
 { 
 	TCHAR szFile[PATH_BUFFER_SIZE]; // buffer for file name 
 	szFile[0] = '\0'; 
@@ -165,7 +165,7 @@ inline std::vector<SmartUtil::tstring> WidgetLoadFile::showDialogMultiSelect()
 	return retVal; 
 } 
 
-inline WidgetLoadFile::WidgetLoadFile( Widget * parent )
+inline LoadDialog::LoadDialog( Widget * parent )
 	: itsParent( parent )
 {}
 

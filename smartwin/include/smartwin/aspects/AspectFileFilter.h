@@ -37,11 +37,11 @@ namespace SmartWin
 {
 // begin namespace SmartWin
 
-/// Class for adding a filter to e.g. a WidgetLoadFile dialog.
+/// Class for adding a filter to e.g. a LoadDialog dialog.
 /** \ingroup AspectClasses
   * Class is an Aspect class which should be realized into classes that needs it.
   * <br>
-  * Help the WidgetLoadFile and the WidgetSaveFile to add up filters on which file
+  * Help the LoadDialog and the SaveDialog to add up filters on which file
   * types to look for!
   */
 class AspectFileFilter
@@ -84,7 +84,7 @@ public:
 		return itsActiveFilter + 1;
 	}
 
-	/// Sets the starting directory of the WidgetLoadFile or WidgetSaveFile Widget
+	/// Sets the starting directory of the LoadDialog or SaveDialog Widget
 	/** If given your dialog will try to start in the given directory, otherwise it
 	  * will use the working directory of the process.
 	  */
@@ -94,7 +94,7 @@ public:
 	}
 
 	/// Ensure filename meets OS expectations for path separators.
-	/** We want WidgetSaveFile and WidgetLoadFile to always return a pathname that
+	/** We want SaveDialog and LoadDialog to always return a pathname that
 	  * meets the OS expectations. <br>
 	  * Windows wants: C:\dir\dir\file.ext <br>
 	  * and UnixLinux: /dir/dir/file.ext <br>
@@ -135,7 +135,7 @@ protected:
 	static const int PATH_BUFFER_SIZE = 32768; //really arbitrary, but 32K sounds reasonable. size in number of TCHARS!
 
 	// Fills out the common members of the OPENFILENAME struct.
-	// This is called for both WidgetLoadFile and for WidgetSaveFile Widgets
+	// This is called for both LoadDialog and for SaveDialog Widgets
 	void fillOutCommonStructure( OPENFILENAME & ofn, HWND parent, int flags )
 	{
 		// Initialize OPENFILENAME
