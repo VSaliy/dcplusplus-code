@@ -24,6 +24,7 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/QueueManager.h>
 #include <dcpp/ClientManager.h>
+#include <dcpp/ShareManager.h>
 
 int SearchFrame::columnIndexes[] = { COLUMN_FILENAME, COLUMN_NICK, COLUMN_TYPE, COLUMN_SIZE,
 	COLUMN_PATH, COLUMN_SLOTS, COLUMN_CONNECTION, COLUMN_HUB, COLUMN_EXACT_SIZE, COLUMN_IP, COLUMN_TTH, COLUMN_CID };
@@ -96,6 +97,8 @@ SearchFrame::SearchFrame(SmartWin::WidgetTabView* mdiParent, const tstring& init
 	optionLabel(0),
 	slots(0),
 	onlyFree(BOOLSETTING(SEARCH_ONLY_FREE_SLOTS)),
+	filter(0),
+	filterShared(BOOLSETTING(SEARCH_FILTER_SHARED)),
 	hubsLabel(0),
 	hubs(0),
 	results(0),
@@ -210,6 +213,14 @@ SearchFrame::SearchFrame(SmartWin::WidgetTabView* mdiParent, const tstring& init
 		slots->setChecked(onlyFree);
 
 		slots->onClicked(std::tr1::bind(&SearchFrame::handleSlotsClicked, this)) ;
+	}
+
+	{
+		WidgetCheckBox::Seed cs(T_("Hide files already in share"));
+		filter = createCheckBox(cs);
+		filter->setChecked(filterShared);
+
+		filter->onClicked(std::tr1::bind(&SearchFrame::handleFilterClicked, this)) ;
 	}
 
 	{
@@ -376,6 +387,10 @@ void SearchFrame::layout() {
 		rect.pos.y += rect.size.y + spacing;
 		rect.size.y = yedit;
 		slots->setBounds(rect);
+
+		rect.pos.y += rect.size.y + spacing;
+		rect.size.y = yedit;
+		filter->setBounds(rect);
 		
 		rect.pos.y += rect.size.y + groupSpacing;
 		rect.size.y = labelH;
@@ -582,6 +597,10 @@ void SearchFrame::handlePurgeClicked() {
 
 void SearchFrame::handleSlotsClicked() {
 	onlyFree = slots->getChecked();
+}
+
+void SearchFrame::handleFilterClicked() {
+	filterShared = filter->getChecked();
 }
 
 void SearchFrame::handleShowUIClicked() {
@@ -845,6 +864,19 @@ void SearchFrame::on(SearchManagerListener::SR, SearchResult* aResult) throw() {
 					return;
 				}
 			}
+		}
+	}
+
+	if (filterShared != BOOLSETTING(SEARCH_FILTER_SHARED))
+		SettingsManager::getInstance()->set(SettingsManager::SEARCH_FILTER_SHARED, filterShared);
+
+	// Filter already shared files
+	if( filterShared ) {
+		const TTHValue& t = aResult->getTTH();
+		if( ShareManager::getInstance()->isTTHShared(t) ) {
+			droppedResults++;
+			speak(SPEAK_FILTER_RESULT);
+			return;
 		}
 	}
 
