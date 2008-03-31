@@ -171,7 +171,7 @@ private:
 	CheckBoxPtr slots;
 	bool onlyFree;
 
-	WidgetCheckBoxPtr filter;
+	CheckBoxPtr filter;
 	bool filterShared;
 
 	LabelPtr hubsLabel;

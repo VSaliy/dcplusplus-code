@@ -216,7 +216,7 @@ SearchFrame::SearchFrame(SmartWin::WidgetTabView* mdiParent, const tstring& init
 	}
 
 	{
-		WidgetCheckBox::Seed cs(T_("Hide files already in share"));
+		CheckBox::Seed cs(T_("Hide files already in share"));
 		filter = createCheckBox(cs);
 		filter->setChecked(filterShared);
 
