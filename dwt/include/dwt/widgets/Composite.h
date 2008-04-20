@@ -136,6 +136,10 @@ public:
 	}
 
 	void create(const Seed& cs);
+
+	IconPtr& getIcon() { return windowClass->getIcon(); }
+	IconPtr& getSmallIcon() { return windowClass->getSmallIcon(); }
+
 protected:
 	friend class WidgetCreator<Composite<Policy> >;
 	

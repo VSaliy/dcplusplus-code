@@ -47,6 +47,9 @@ public:
 	
 	LPCTSTR getClassName() { return reinterpret_cast<LPCTSTR>(static_cast<size_t>(atom)); }
 
+	IconPtr& getIcon() { return icon; }
+	IconPtr& getSmallIcon() { return smallIcon; }
+
 	/// Generate a new unique window class name
 	static tstring getNewClassName(Widget* widget);
 
