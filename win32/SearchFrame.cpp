@@ -486,22 +486,6 @@ void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) {
 	}
 }
 
-void SearchFrame::SearchInfo::getList() {
-	try {
-		QueueManager::getInstance()->addList(srs[0]->getUser(), QueueItem::FLAG_CLIENT_VIEW, Text::fromT(columns[COLUMN_PATH]));
-	} catch(const Exception&) {
-		// Ignore for now...
-	}
-}
-
-void SearchFrame::SearchInfo::browseList() {
-	try {
-		QueueManager::getInstance()->addPfs(srs[0]->getUser(), Text::fromT(columns[COLUMN_PATH]));
-	} catch(const Exception&) {
-		// Ignore for now...
-	}
-}
-
 void SearchFrame::SearchInfo::CheckTTH::operator()(SearchInfo* si) {
 	if(firstTTH) {
 		tth = si->columns[COLUMN_TTH];
@@ -1165,12 +1149,4 @@ bool SearchFrame::handleSearchKeyDown(int c) {
 		return true;
 	}
 	return false;
-}
-
-void SearchFrame::handleGetList() {
-	results->forEachSelected(&SearchInfo::getList);
-}
-
-void SearchFrame::handleBrowseList() {
-	results->forEachSelected(&SearchInfo::browseList);
 }
