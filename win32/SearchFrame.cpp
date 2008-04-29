@@ -830,7 +830,7 @@ SearchFrame::MenuPtr SearchFrame::makeMenu() {
 	menu->appendSeparatorItem();
 	
 	UserCollector users = results->forEachSelectedT(UserCollector());
-	WinUtil::addUserItems(menu, users.users, getParent(), "");
+	WinUtil::addUserItems(menu, users.users, getParent());
 	
 	menu->appendSeparatorItem();
 	menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&SearchFrame::handleRemove, this));
