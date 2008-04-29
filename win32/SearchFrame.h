@@ -27,13 +27,10 @@
 #include <dcpp/SearchManager.h>
 #include <dcpp/ClientManagerListener.h>
 
-#include "UserInfoBase.h"
-
 class SearchFrame : 
 	public MDIChildFrame<SearchFrame>, 
 	private SearchManagerListener, 
 	private ClientManagerListener,
-	public AspectUserInfo<SearchFrame>,
 	public AspectUserCommand<SearchFrame>
 {
 	typedef MDIChildFrame<SearchFrame> BaseType;
@@ -51,7 +48,6 @@ public:
 
 private:
 	friend class MDIChildFrame<SearchFrame>;
-	friend class AspectUserInfo<SearchFrame>;
 	friend class AspectUserCommand<SearchFrame>;
 	
 	enum Speakers {
@@ -86,9 +82,6 @@ private:
 	public:
 		SearchInfo(const SearchResultPtr& aSR);
 		~SearchInfo() {	}
-
-		void getList();
-		void browseList();
 
 		void view();
 		struct Download {
@@ -225,9 +218,6 @@ private:
 	void handleRemove();
 	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	bool handleSearchKeyDown(int c);
-	
-	void handleGetList();
-	void handleBrowseList();
 	
 	void layout();
 	bool preClosing();
