@@ -95,7 +95,11 @@ void Transfer::getParams(const UserConnection& aSource, StringMap& params) {
 	params["fileTR"] = getTTH().toBase32();
 }
 
-UserPtr Transfer::getUser() {
+UserPtr& Transfer::getUser() {
+	return getUserConnection().getUser();
+}
+
+const UserPtr& Transfer::getUser() const {
 	return getUserConnection().getUser();
 }
 

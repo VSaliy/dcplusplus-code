@@ -26,15 +26,24 @@
 #include "HoldRedraw.h"
 
 #include <dcpp/File.h>
+#include <dcpp/TaskQueue.h>
+#include <dcpp/FinishedItem.h>
 #include <dcpp/FinishedManager.h>
 #include <dcpp/TimerManager.h>
+#include <dcpp/ClientManager.h>
+
+static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
+	control->setBounds(dwt::Rectangle(parent->getClientAreaSize()));
+}
 
 template<class T, bool in_UL>
-class FinishedFrameBase : 
-	public StaticFrame<T>, 
-	private FinishedManagerListener 
+class FinishedFrameBase :
+	public StaticFrame<T>,
+	private FinishedManagerListener
 {
 	typedef StaticFrame<T> BaseType;
+	typedef FinishedFrameBase<T, in_UL> ThisType;
+
 public:
 	enum Status {
 		STATUS_STATUS,
@@ -45,47 +54,104 @@ public:
 	};
 
 protected:
-	typedef MDIChildFrame<T> MDIChildType;
 	friend class StaticFrame<T>;
 	friend class MDIChildFrame<T>;
-	typedef FinishedFrameBase<T, in_UL> ThisType;
-	
-	FinishedFrameBase(dwt::TabView* mdiParent, const tstring& title, unsigned helpId, int icon) :
-		BaseType(mdiParent, title, helpId, icon),
-		items(0),
-		totalBytes(0),
-		totalTime(0)
+
+	FinishedFrameBase(dwt::TabView* mdiParent, const tstring& title, unsigned helpId, unsigned resourceId) :
+		BaseType(mdiParent, title, helpId, resourceId),
+		tabs(0),
+		files(0),
+		filesWindow(0),
+		users(0),
+		usersWindow(0)
 	{
 		{
-			items = static_cast<T*>(this)->addChild(typename WidgetItems::Seed());
-			items->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
-			addWidget(items);
-
-			items->createColumns(WinUtil::getStrings(columnNames));
-			items->setColumnOrder(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_ORDER : SettingsManager::FINISHED_ORDER), columnIndexes));
-			items->setColumnWidths(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_WIDTHS : SettingsManager::FINISHED_WIDTHS), columnSizes));
-			items->setSort(COLUMN_DONE);
-			
-			items->setSmallImageList(WinUtil::fileImages);
-
-			items->onDblClicked(std::tr1::bind(&ThisType::handleDoubleClick, this));
-			items->onKeyDown(std::tr1::bind(&ThisType::handleKeyDown, this, _1));
-			items->onContextMenu(std::tr1::bind(&ThisType::handleContextMenu, this, _1));
+			dwt::TabView::Seed cs;
+			cs.location = this->getBounds();
+			tabs = this->addChild(cs);
 		}
+
+		{
+			dwt::Container::Seed cs;
+			cs.caption = T_("Grouped by files");
+			cs.background = (HBRUSH)(COLOR_3DFACE + 1);
+			cs.location = tabs->getClientSize();
+			filesWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
+			tabs->add(filesWindow);
+
+			cs.style &= ~WS_VISIBLE;
+			cs.caption = T_("Grouped by users");
+			usersWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
+			tabs->add(usersWindow);
+		}
+
+		{
+			files = filesWindow->addChild(typename WidgetFiles::Seed());
+			files->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
+			addWidget(files);
+
+			files->createColumns(WinUtil::getStrings(filesNames));
+			files->setColumnOrder(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_ORDER : SettingsManager::FINISHED_DL_FILES_ORDER), filesIndexes));
+			files->setColumnWidths(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_WIDTHS : SettingsManager::FINISHED_DL_FILES_WIDTHS), filesSizes));
+			files->setSort(FILES_COLUMN_TIME);
+
+			files->setSmallImageList(WinUtil::fileImages);
+
+			files->onDblClicked(std::tr1::bind(&ThisType::handleOpenFile, this));
+			files->onKeyDown(std::tr1::bind(&ThisType::handleFilesKeyDown, this, _1));
+			files->onContextMenu(std::tr1::bind(&ThisType::handleFilesContextMenu, this, _1));
+		}
+
+		{
+			users = usersWindow->addChild(typename WidgetUsers::Seed());
+			users->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
+			addWidget(users);
+
+			users->createColumns(WinUtil::getStrings(usersNames));
+			users->setColumnOrder(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_ORDER : SettingsManager::FINISHED_DL_USERS_ORDER), usersIndexes));
+			users->setColumnWidths(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_WIDTHS : SettingsManager::FINISHED_DL_USERS_WIDTHS), usersSizes));
+			users->setSort(USERS_COLUMN_TIME);
+
+			users->setSmallImageList(WinUtil::userImages);
+
+			users->onKeyDown(std::tr1::bind(&ThisType::handleUsersKeyDown, this, _1));
+			users->onContextMenu(std::tr1::bind(&ThisType::handleUsersContextMenu, this, _1));
+		}
+
+		filesWindow->onSized(std::tr1::bind(&fills, filesWindow, files));
+		usersWindow->onSized(std::tr1::bind(&fills, usersWindow, users));
 
 		this->initStatus();
 
-		setStatusHelpId(STATUS_COUNT, in_UL ? IDH_FINISHED_UL_COUNT : IDH_FINISHED_DL_COUNT);
-		setStatusHelpId(STATUS_BYTES, in_UL ? IDH_FINISHED_UL_BYTES : IDH_FINISHED_DL_BYTES);
-		setStatusHelpId(STATUS_SPEED, in_UL ? IDH_FINISHED_UL_SPEED : IDH_FINISHED_DL_SPEED);
+		this->setStatusHelpId(STATUS_COUNT, in_UL ? IDH_FINISHED_UL_COUNT : IDH_FINISHED_DL_COUNT);
+		this->setStatusHelpId(STATUS_BYTES, in_UL ? IDH_FINISHED_UL_BYTES : IDH_FINISHED_DL_BYTES);
+		this->setStatusHelpId(STATUS_SPEED, in_UL ? IDH_FINISHED_UL_SPEED : IDH_FINISHED_DL_SPEED);
 
 		layout();
 
-		onSpeaker(std::tr1::bind(&ThisType::handleSpeaker, this, _1, _2));
+		filesWindow->onActivate(std::tr1::bind(&ThisType::updateStatus, this, _1));
+		usersWindow->onActivate(std::tr1::bind(&ThisType::updateStatus, this, _1));
+
+		onSpeaker(std::tr1::bind(&ThisType::handleSpeaker, this));
 
 		FinishedManager::getInstance()->addListener(this);
-		updateList(FinishedManager::getInstance()->lockList(in_UL));
-		FinishedManager::getInstance()->unlockList();
+
+		FinishedManager::getInstance()->lockLists();
+		{
+			HoldRedraw hold(files);
+			const FinishedManager::MapByFile& map = FinishedManager::getInstance()->getMapByFile(in_UL);
+			for(FinishedManager::MapByFile::const_iterator i = map.begin(); i != map.end(); ++i)
+				addFile(i->first, i->second);
+		}
+		{
+			HoldRedraw hold(users);
+			const FinishedManager::MapByUser& map = FinishedManager::getInstance()->getMapByUser(in_UL);
+			for(FinishedManager::MapByUser::const_iterator i = map.begin(); i != map.end(); ++i)
+				addUser(i->first, i->second);
+		}
+		FinishedManager::getInstance()->unLockLists();
+
+		updateStatus();
 	}
 
 	virtual ~FinishedFrameBase() { }
@@ -94,7 +160,7 @@ protected:
 		dwt::Rectangle r(this->getClientAreaSize());
 
 		this->layoutStatus(r);
-		items->setBounds(r);
+		tabs->setBounds(r);
 	}
 
 	bool preClosing() {
@@ -103,152 +169,321 @@ protected:
 	}
 
 	void postClosing() {
-		clearList();
+		tasks.clear();
+		clearTables();
 
-		SettingsManager::getInstance()->set(in_UL ? SettingsManager::FINISHED_UL_ORDER : SettingsManager::FINISHED_ORDER, WinUtil::toString(items->getColumnOrder()));
-		SettingsManager::getInstance()->set(in_UL ? SettingsManager::FINISHED_UL_WIDTHS : SettingsManager::FINISHED_WIDTHS, WinUtil::toString(items->getColumnWidths()));
+		saveColumns(files,
+			in_UL ? SettingsManager::FINISHED_UL_FILES_ORDER : SettingsManager::FINISHED_DL_FILES_ORDER,
+			in_UL ? SettingsManager::FINISHED_UL_FILES_WIDTHS : SettingsManager::FINISHED_DL_FILES_WIDTHS);
+		saveColumns(users,
+			in_UL ? SettingsManager::FINISHED_UL_USERS_ORDER : SettingsManager::FINISHED_DL_USERS_ORDER,
+			in_UL ? SettingsManager::FINISHED_UL_USERS_WIDTHS : SettingsManager::FINISHED_DL_USERS_WIDTHS);
 	}
 
 private:
-	enum {
-		SPEAK_ADD_LINE,
-		SPEAK_REMOVE,
-		SPEAK_REMOVE_ALL
+	enum Tasks {
+		ADD_FILE,
+		ADD_USER,
+		UPDATE_FILE,
+		UPDATE_USER,
+		REMOVE_FILE,
+		REMOVE_USER,
+		REMOVE_ALL
+	};
+
+	struct FileItemTask : public Task {
+		FileItemTask(const string& file_, const FinishedFileItemPtr& entry_) : file(file_), entry(entry_) { }
+
+		string file;
+		FinishedFileItemPtr entry;
+	};
+
+	struct UserItemTask : public Task {
+		UserItemTask(const UserPtr& user_, const FinishedUserItemPtr& entry_) : user(user_), entry(entry_) { }
+
+		UserPtr user;
+		FinishedUserItemPtr entry;
+	};
+
+	struct UserTask : public Task {
+		UserTask(const UserPtr& user_) : user(user_) { }
+
+		UserPtr user;
 	};
 
 	enum {
-		COLUMN_FIRST,
-		COLUMN_FILE = COLUMN_FIRST,
-		COLUMN_DONE,
-		COLUMN_PATH,
-		COLUMN_NICK,
-		COLUMN_HUB,
-		COLUMN_SIZE,
-		COLUMN_SPEED,
-		COLUMN_CRC32,
-		COLUMN_LAST
+		FILES_COLUMN_FIRST,
+		FILES_COLUMN_FILE = FILES_COLUMN_FIRST,
+		FILES_COLUMN_PATH,
+		FILES_COLUMN_NICKS,
+		FILES_COLUMN_TRANSFERRED,
+		FILES_COLUMN_SPEED,
+		FILES_COLUMN_CRC32,
+		FILES_COLUMN_TIME,
+		FILES_COLUMN_LAST
 	};
 
-	static int columnSizes[COLUMN_LAST];
-	static int columnIndexes[COLUMN_LAST];
-	static const char* columnNames[COLUMN_LAST];
+	enum {
+		USERS_COLUMN_FIRST,
+		USERS_COLUMN_NICK = USERS_COLUMN_FIRST,
+		USERS_COLUMN_HUB,
+		USERS_COLUMN_TRANSFERRED,
+		USERS_COLUMN_SPEED,
+		USERS_COLUMN_FILES,
+		USERS_COLUMN_TIME,
+		USERS_COLUMN_LAST
+	};
 
-	class ItemInfo : public FastAlloc<ItemInfo> {
+	static int filesSizes[FILES_COLUMN_LAST];
+	static int filesIndexes[FILES_COLUMN_LAST];
+	static const char* filesNames[FILES_COLUMN_LAST];
+
+	static int usersSizes[USERS_COLUMN_LAST];
+	static int usersIndexes[USERS_COLUMN_LAST];
+	static const char* usersNames[USERS_COLUMN_LAST];
+
+	class FileInfo : public FastAlloc<FileInfo> {
 	public:
-		ItemInfo(FinishedItemPtr entry_) : entry(entry_) {
-			columns[COLUMN_FILE] = Text::toT(Util::getFileName(entry->getTarget()));
-			columns[COLUMN_DONE] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
-			columns[COLUMN_PATH] = Text::toT(Util::getFilePath(entry->getTarget()));
-			columns[COLUMN_NICK] = Text::toT(entry->getUser());
-			columns[COLUMN_HUB] = Text::toT(entry->getHub());
-			columns[COLUMN_SIZE] = Text::toT(Util::formatBytes(entry->getSize()));
-			columns[COLUMN_SPEED] = Text::toT(Util::formatBytes(entry->getAvgSpeed()) + "/s");
-			columns[COLUMN_CRC32] = entry->getCrc32Checked() ? T_("Yes") : T_("No");
+		FileInfo(const string& file_, const FinishedFileItemPtr& entry_) : file(file_), entry(entry_) {
+			columns[FILES_COLUMN_FILE] = Text::toT(Util::getFileName(file));
+			columns[FILES_COLUMN_PATH] = Text::toT(Util::getFilePath(file));
+			update();
 		}
 
-		FinishedItemPtr entry;
+		void update() {
+			{
+				StringList nicks;
+				for(FinishedFileItem::UserSet::const_iterator i = entry->getUsers().begin(); i != entry->getUsers().end(); ++i)
+					nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks((*i)->getCID())));
+				columns[FILES_COLUMN_NICKS] = Text::toT(Util::toString(nicks));
+			}
+			columns[FILES_COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(entry->getTransferred()));
+			columns[FILES_COLUMN_SPEED] = Text::toT(Util::formatBytes(entry->getAverageSpeed()) + "/s");
+			columns[FILES_COLUMN_CRC32] = entry->getCrc32Checked() ? T_("Yes") : T_("No");
+			columns[FILES_COLUMN_TIME] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
+		}
 
 		const tstring& getText(int col) const {
 			return columns[col];
 		}
 		int getImage() const {
-			return WinUtil::getIconIndex(Text::toT(entry->getTarget()));
+			return WinUtil::getIconIndex(Text::toT(file));
 		}
-		
-		static int compareItems(ItemInfo* a, ItemInfo* b, int col) {
+
+		static int compareItems(FileInfo* a, FileInfo* b, int col) {
 			switch(col) {
-				case COLUMN_SIZE: return compare(a->entry->getSize(), b->entry->getSize());
-				case COLUMN_SPEED: return compare(a->entry->getAvgSpeed(), b->entry->getAvgSpeed());
+				case FILES_COLUMN_TRANSFERRED: return compare(a->entry->getTransferred(), b->entry->getTransferred());
+				case FILES_COLUMN_SPEED: return compare(a->entry->getAverageSpeed(), b->entry->getAverageSpeed());
 				default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
 			}
-
 		}
 
 		void openFile() {
-			WinUtil::openFile(Text::toT(entry->getTarget()));
+			WinUtil::openFile(Text::toT(file));
 		}
 
 		void openFolder() {
-			WinUtil::openFolder(Text::toT(entry->getTarget()));
+			WinUtil::openFolder(Text::toT(file));
 		}
 
+		void remove() {
+			FinishedManager::getInstance()->remove(in_UL, file);
+		}
+
+		string file;
+		FinishedFileItemPtr entry;
+
 	private:
-		tstring columns[COLUMN_LAST];
+		tstring columns[FILES_COLUMN_LAST];
 	};
 
-	typedef TypedTable<ItemInfo> WidgetItems;
-	typedef WidgetItems* WidgetItemsPtr;
-	WidgetItemsPtr items;
+	class UserInfo : public FastAlloc<UserInfo> {
+	public:
+		UserInfo(const UserPtr& user_, const FinishedUserItemPtr& entry_) : user(user_), entry(entry_) {
+			columns[USERS_COLUMN_NICK] = WinUtil::getNicks(user);
+			columns[USERS_COLUMN_HUB] = Text::toT(Util::toString(ClientManager::getInstance()->getHubNames(user->getCID())));
+			update();
+		}
 
-	int64_t totalBytes, totalTime;
+		void update() {
+			columns[USERS_COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(entry->getTransferred()));
+			columns[USERS_COLUMN_SPEED] = Text::toT(Util::formatBytes(entry->getAverageSpeed()) + "/s");
+			columns[USERS_COLUMN_FILES] = Text::toT(Util::toString(entry->getFiles()));
+			columns[USERS_COLUMN_TIME] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
+		}
 
-	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam) {
-		if(wParam == SPEAK_ADD_LINE) {
-			FinishedItemPtr entry = (FinishedItemPtr)lParam;
-			addEntry(entry);
-			this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
-			updateStatus();
-		} else if(wParam == SPEAK_REMOVE) {
-			updateStatus();
-		} else if(wParam == SPEAK_REMOVE_ALL) {
-			clearList();
-			updateStatus();
+		const tstring& getText(int col) const {
+			return columns[col];
+		}
+		int getImage() const {
+			return 0;
+		}
+
+		static int compareItems(UserInfo* a, UserInfo* b, int col) {
+			switch(col) {
+				case USERS_COLUMN_TRANSFERRED: return compare(a->entry->getTransferred(), b->entry->getTransferred());
+				case USERS_COLUMN_SPEED: return compare(a->entry->getAverageSpeed(), b->entry->getAverageSpeed());
+				default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+			}
+		}
+
+		void remove() {
+			FinishedManager::getInstance()->remove(in_UL, user);
+		}
+
+		UserPtr user;
+		FinishedUserItemPtr entry;
+
+	private:
+		tstring columns[USERS_COLUMN_LAST];
+	};
+
+	dwt::TabViewPtr tabs;
+
+	typedef TypedTable<FileInfo> WidgetFiles;
+	typedef WidgetFiles* WidgetFilesPtr;
+	WidgetFilesPtr files;
+	dwt::ContainerPtr filesWindow;
+
+	typedef TypedTable<UserInfo> WidgetUsers;
+	typedef WidgetUsers* WidgetUsersPtr;
+	WidgetUsersPtr users;
+	dwt::ContainerPtr usersWindow;
+
+	TaskQueue tasks;
+
+	LRESULT handleSpeaker() {
+		TaskQueue::List t;
+		tasks.get(t);
+		for(TaskQueue::Iter i = t.begin(); i != t.end(); ++i) {
+			if(i->first == ADD_FILE) {
+				FileItemTask& task = *static_cast<FileItemTask*>(i->second);
+				addFile(task.file, task.entry);
+				updateStatus();
+				this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
+			} else if(i->first == ADD_USER) {
+				UserItemTask& task = *static_cast<UserItemTask*>(i->second);
+				addUser(task.user, task.entry);
+				updateStatus();
+				this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
+			} else if(i->first == UPDATE_FILE) {
+				FileInfo* data = findFileInfo(static_cast<StringTask*>(i->second)->str);
+				if(data) {
+					data->update();
+					files->update(data);
+				}
+			} else if(i->first == UPDATE_USER) {
+				UserInfo* data = findUserInfo(static_cast<UserTask*>(i->second)->user);
+				if(data) {
+					data->update();
+					users->update(data);
+				}
+			} else if(i->first == REMOVE_FILE) {
+				FileInfo* data = findFileInfo(static_cast<StringTask*>(i->second)->str);
+				if(data)
+					files->erase(data);
+				updateStatus();
+			} else if(i->first == REMOVE_USER) {
+				UserInfo* data = findUserInfo(static_cast<UserTask*>(i->second)->user);
+				if(data)
+					users->erase(data);
+				updateStatus();
+			} else if(i->first == REMOVE_ALL) {
+				clearTables();
+				updateStatus();
+			}
 		}
 		return 0;
 	}
 
-	void handleDoubleClick() {
-		if(items->hasSelected())
-			items->getSelectedData()->openFile();
-	}
-
-	bool handleKeyDown(int c) {
-		if(c == VK_DELETE) {
-			this->postMessage(WM_COMMAND, IDC_REMOVE);
-			return true;
+	bool handleFilesKeyDown(int c) {
+		switch(c) {
+			case VK_RETURN: handleOpenFile(); return true;
+			case VK_DELETE: handleRemoveFiles(); return true;
+			default: return false;
 		}
-		return false;
 	}
 
-	bool handleContextMenu(dwt::ScreenCoordinate pt) {
-		if(items->hasSelected()) {
+	bool handleUsersKeyDown(int c) {
+		switch(c) {
+			case VK_DELETE: handleRemoveUsers(); return true;
+			default: return false;
+		}
+	}
+
+	struct UserCollector {
+		void operator()(FileInfo* data) {
+			for(FinishedFileItem::UserSet::const_iterator i = data->entry->getUsers().begin(); i != data->entry->getUsers().end(); ++i)
+				users.push_back(*i);
+		}
+		void operator()(UserInfo* data) {
+			users.push_back(data->user);
+		}
+		UserList users;
+	};
+
+	bool handleFilesContextMenu(dwt::ScreenCoordinate pt) {
+		if(files->hasSelected()) {
 			if(pt.x() == -1 && pt.y() == -1) {
-				pt = items->getContextMenuPos();
+				pt = files->getContextMenuPos();
 			}
 
-			if(BOOLSETTING(SHOW_SHELL_MENU) && items->countSelected() == 1) {
-				string path = items->getSelectedData()->entry->getTarget();
+			if(BOOLSETTING(SHOW_SHELL_MENU) && files->countSelected() == 1) {
+				string path = files->getSelectedData()->file;
 				if(File::getSize(path) != -1) {
 					CShellContextMenu shellMenu;
 					shellMenu.SetPath(Text::utf8ToWide(path));
 
-					typename T::Menu::Seed cs = WinUtil::Seeds::menu;
+					dwt::Menu::Seed cs = WinUtil::Seeds::menu;
 					cs.ownerDrawn = false;
-					typename T::MenuPtr pShellMenu = this->addChild(cs);
-					pShellMenu->appendItem(IDC_VIEW_AS_TEXT, T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this));
-					pShellMenu->appendItem(IDC_OPEN_FILE, T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this));
-					pShellMenu->appendItem(IDC_OPEN_FOLDER, T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
-					pShellMenu->appendSeparatorItem();
-					pShellMenu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&ThisType::handleRemove, this));
-					pShellMenu->appendItem(IDC_REMOVE_ALL, T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
-					pShellMenu->appendSeparatorItem();
+					dwt::MenuPtr menu = this->addChild(cs);
+					menu->appendItem(IDC_VIEW_AS_TEXT, T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this));
+					menu->appendItem(IDC_OPEN_FILE, T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this));
+					menu->appendItem(IDC_OPEN_FOLDER, T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
+					menu->appendSeparatorItem();
+					menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveFiles, this));
+					menu->appendItem(IDC_REMOVE_ALL, T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
+					menu->appendSeparatorItem();
+					WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
+					menu->appendSeparatorItem();
 
-					UINT idCommand = shellMenu.ShowContextMenu(pShellMenu, pt);
+					UINT idCommand = shellMenu.ShowContextMenu(menu, pt);
 					if(idCommand != 0)
 						this->postMessage(WM_COMMAND, idCommand);
 					return true;
 				}
 			}
 
-			typename T::MenuPtr contextMenu = this->addChild(WinUtil::Seeds::menu);
-			contextMenu->appendItem(IDC_VIEW_AS_TEXT, T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this));
-			contextMenu->appendItem(IDC_OPEN_FILE, T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this));
-			contextMenu->appendItem(IDC_OPEN_FOLDER, T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
-			contextMenu->appendSeparatorItem();
-			contextMenu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&ThisType::handleRemove, this));
-			contextMenu->appendItem(IDC_REMOVE_ALL, T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
-			contextMenu->setDefaultItem(IDC_OPEN_FILE);
-			contextMenu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+			dwt::MenuPtr menu = this->addChild(WinUtil::Seeds::menu);
+			menu->appendItem(IDC_VIEW_AS_TEXT, T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this));
+			menu->appendItem(IDC_OPEN_FILE, T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this));
+			menu->appendItem(IDC_OPEN_FOLDER, T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
+			menu->appendSeparatorItem();
+			menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveFiles, this));
+			menu->appendItem(IDC_REMOVE_ALL, T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
+			menu->appendSeparatorItem();
+			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
+			menu->setDefaultItem(IDC_OPEN_FILE);
+
+			menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+			return true;
+		}
+		return false;
+	}
+
+	bool handleUsersContextMenu(dwt::ScreenCoordinate pt) {
+		if(users->hasSelected()) {
+			if(pt.x() == -1 && pt.y() == -1) {
+				pt = users->getContextMenuPos();
+			}
+
+			dwt::MenuPtr menu = this->addChild(WinUtil::Seeds::menu);
+			menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveUsers, this));
+			menu->appendItem(IDC_REMOVE_ALL, T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
+			menu->appendSeparatorItem();
+			WinUtil::addUserItems(menu, users->forEachSelectedT(UserCollector()).users, this->getParent());
+
+			menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 			return true;
 		}
 		return false;
@@ -256,94 +491,210 @@ private:
 
 	void handleViewAsText() {
 		int i = -1;
-		while((i = items->getNext(i, LVNI_SELECTED)) != -1)
-			new TextFrame(this->getParent(), items->getData(i)->entry->getTarget());
+		while((i = files->getNext(i, LVNI_SELECTED)) != -1)
+			new TextFrame(this->getParent(), files->getData(i)->file);
 	}
 
 	void handleOpenFile() {
-		items->forEachSelected(&ItemInfo::openFile);
+		files->forEachSelected(&FileInfo::openFile);
 	}
 
 	void handleOpenFolder() {
-		items->forEachSelected(&ItemInfo::openFolder);
+		files->forEachSelected(&FileInfo::openFolder);
 	}
 
-	void handleRemove() {
-		int i;
-		while((i = items->getNext(-1, LVNI_SELECTED)) != -1) {
-			FinishedManager::getInstance()->remove(items->getData(i)->entry, in_UL);
-			items->erase(i);
-		}
+	void handleRemoveFiles() {
+		files->forEachSelected(&FileInfo::remove);
+	}
+
+	void handleRemoveUsers() {
+		users->forEachSelected(&UserInfo::remove);
 	}
 
 	void handleRemoveAll() {
 		FinishedManager::getInstance()->removeAll(in_UL);
 	}
 
-	void updateStatus() {
-		setStatus(STATUS_COUNT, str(TFN_("%1% item", "%1% items", items->size()) % items->size()));
-		setStatus(STATUS_BYTES, Text::toT(Util::formatBytes(totalBytes)));
-		setStatus(STATUS_SPEED, str(TF_("%1%/s") % Text::toT(Util::formatBytes((totalTime > 0) ? totalBytes * ((int64_t)1000) / totalTime : 0))));
-	}
+	void updateStatus(bool activate = true) {
+		if(!activate)
+			return;
 
-	void updateList(const FinishedItemList& fl) {
-		HoldRedraw hold(items);
-		for(FinishedItemList::const_iterator i = fl.begin(); i != fl.end(); ++i) {
-			addEntry(*i);
+		size_t count = 0;
+		int64_t bytes = 0;
+		int64_t time = 0;
+		if(users->getVisible()) {
+			count = users->size();
+			for(size_t i = 0; i < count; ++i) {
+				const FinishedUserItemPtr& entry = users->getData(i)->entry;
+				bytes += entry->getTransferred();
+				time += entry->getMilliSeconds();
+			}
+		} else {
+			count = files->size();
+			for(size_t i = 0; i < count; ++i) {
+				const FinishedFileItemPtr& entry = files->getData(i)->entry;
+				bytes += entry->getTransferred();
+				time += entry->getMilliSeconds();
+			}
 		}
-		updateStatus();
+
+		this->setStatus(STATUS_COUNT, str(TFN_("%1% item", "%1% items", count) % count));
+		this->setStatus(STATUS_BYTES, Text::toT(Util::formatBytes(bytes)));
+		this->setStatus(STATUS_SPEED, str(TF_("%1%/s") % Text::toT(Util::formatBytes((time > 0) ? bytes * ((int64_t)1000) / time : 0))));
 	}
 
-	void addEntry(FinishedItemPtr entry) {
-		totalBytes += entry->getChunkSize();
-		totalTime += entry->getMilliSeconds();
-
-		int loc = items->insert(new ItemInfo(entry));
-		items->ensureVisible(loc);
+	void addFile(const string& file, const FinishedFileItemPtr& entry) {
+		int loc = files->insert(new FileInfo(file, entry));
+		if(files->getVisible())
+			files->ensureVisible(loc);
 	}
 
-	void clearList() {
-		items->clear();
+	void addUser(const UserPtr& user, const FinishedUserItemPtr& entry) {
+		int loc = users->insert(new UserInfo(user, entry));
+		if(users->getVisible())
+			users->ensureVisible(loc);
 	}
 
-	virtual void on(Added, bool upload, FinishedItemPtr entry) throw() {
+	FileInfo* findFileInfo(const string& file) {
+		for(size_t i = 0; i < files->size(); ++i) {
+			FileInfo* data = files->getData(i);
+			if(data->file == file)
+				return data;
+		}
+		return 0;
+	}
+
+	UserInfo* findUserInfo(const UserPtr& user) {
+		for(size_t i = 0; i < users->size(); ++i) {
+			UserInfo* data = users->getData(i);
+			if(data->user == user)
+				return data;
+		}
+		return 0;
+	}
+
+	void saveColumns(dwt::TablePtr table, SettingsManager::StrSetting order, SettingsManager::StrSetting widths) {
+		SettingsManager::getInstance()->set(order, WinUtil::toString(table->getColumnOrder()));
+		SettingsManager::getInstance()->set(widths, WinUtil::toString(table->getColumnWidths()));
+	}
+
+	template<typename TableType>
+	void clearTable(TableType* table) {
+		table->clear();
+	}
+	inline void clearTables() {
+		clearTable(files);
+		clearTable(users);
+	}
+
+	using BaseType::speak;
+	void speak(Tasks s) {
+		tasks.add(s, 0);
+		this->speak();
+	}
+	template<typename TaskType>
+	void speak(Tasks s, TaskType task) {
+		tasks.add(s, task);
+		this->speak();
+	}
+
+	virtual void on(AddedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
 		if(upload == in_UL)
-			this->speak(SPEAK_ADD_LINE, (LPARAM)entry);
+			speak(ADD_FILE, new FileItemTask(file, entry));
 	}
 
-	virtual void on(Removed, bool upload, FinishedItemPtr entry) throw() {
-		if(upload == in_UL) {
-			totalBytes -= entry->getChunkSize();
-			totalTime -= entry->getMilliSeconds();
-			this->speak(SPEAK_REMOVE);
-		}
+	virtual void on(AddedUser, bool upload, const UserPtr& user, const FinishedUserItemPtr& entry) throw() {
+		if(upload == in_UL)
+			speak(ADD_USER, new UserItemTask(user, entry));
+	}
+
+	virtual void on(UpdatedFile, bool upload, const string& file) throw() {
+		if(upload == in_UL)
+			speak(UPDATE_FILE, new StringTask(file));
+	}
+
+	virtual void on(UpdatedUser, bool upload, const UserPtr& user) throw() {
+		if(upload == in_UL)
+			speak(UPDATE_USER, new UserTask(user));
+	}
+
+	virtual void on(RemovedFile, bool upload, const string& file) throw() {
+		if(upload == in_UL)
+			speak(REMOVE_FILE, new StringTask(file));
+	}
+
+	virtual void on(RemovedUser, bool upload, const UserPtr& user) throw() {
+		if(upload == in_UL)
+			speak(REMOVE_USER, new UserTask(user));
 	}
 
 	virtual void on(RemovedAll, bool upload) throw() {
-		if(upload == in_UL) {
-			totalBytes = 0;
-			totalTime = 0;
-			this->speak(SPEAK_REMOVE_ALL);
-		}
+		if(upload == in_UL)
+			speak(REMOVE_ALL);
 	}
 };
 
-template <class T, bool in_UL>
-int FinishedFrameBase<T, in_UL>::columnIndexes[] = { COLUMN_DONE, COLUMN_FILE, COLUMN_PATH, COLUMN_NICK, COLUMN_HUB, COLUMN_SIZE, COLUMN_SPEED, COLUMN_CRC32 };
+template<class T, bool in_UL>
+int FinishedFrameBase<T, in_UL>::filesIndexes[] = {
+	FILES_COLUMN_FILE,
+	FILES_COLUMN_PATH,
+	FILES_COLUMN_NICKS,
+	FILES_COLUMN_TRANSFERRED,
+	FILES_COLUMN_SPEED,
+	FILES_COLUMN_CRC32,
+	FILES_COLUMN_TIME
+};
 
-template <class T, bool in_UL>
-int FinishedFrameBase<T, in_UL>::columnSizes[] = { 100, 110, 290, 125, 80, 80, 80, 90 };
+template<class T, bool in_UL>
+int FinishedFrameBase<T, in_UL>::filesSizes[] = {
+	125,
+	250,
+	250,
+	100,
+	100,
+	80,
+	125
+};
 
-template <class T, bool in_UL>
-const char* FinishedFrameBase<T, in_UL>::columnNames[] = { 
+template<class T, bool in_UL>
+const char* FinishedFrameBase<T, in_UL>::filesNames[] = {
 	N_("Filename"),
-	N_("Time"),
-	N_("Path"), 
+	N_("Path"),
+	N_("Nicks"),
+	N_("Transferred"),
+	N_("Speed"),
+	N_("CRC Checked"),
+	N_("Time")
+};
+
+template<class T, bool in_UL>
+int FinishedFrameBase<T, in_UL>::usersIndexes[] = {
+	USERS_COLUMN_NICK,
+	USERS_COLUMN_HUB,
+	USERS_COLUMN_TRANSFERRED,
+	USERS_COLUMN_SPEED,
+	USERS_COLUMN_FILES,
+	USERS_COLUMN_TIME
+};
+
+template<class T, bool in_UL>
+int FinishedFrameBase<T, in_UL>::usersSizes[] = {
+	125,
+	125,
+	100,
+	100,
+	300,
+	125
+};
+
+template<class T, bool in_UL>
+const char* FinishedFrameBase<T, in_UL>::usersNames[] = {
 	N_("Nick"),
 	N_("Hub"),
-	N_("Size"),
+	N_("Transferred"),
 	N_("Speed"),
-	N_("CRC Checked")
+	N_("Files"),
+	N_("Time")
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FINISHED_FRAME_BASE_H)
