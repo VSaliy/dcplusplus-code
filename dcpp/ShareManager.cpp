@@ -117,7 +117,7 @@ string ShareManager::Directory::getRealPath(const std::string& path) const throw
 string ShareManager::findRealRoot(const string& virtualRoot, const string& virtualPath) const throw(ShareException) {
 	for(StringMap::const_iterator i = shares.begin(); i != shares.end(); ++i) {
 		if(Util::stricmp(i->second, virtualRoot) == 0) {
-			std::string name = i->first + PATH_SEPARATOR_STR + virtualPath;
+			std::string name = i->first + virtualPath;
 			dcdebug("Matching %s\n", name.c_str());
 			if(File::getSize(name) != -1) {
 				return name;
@@ -287,9 +287,13 @@ void ShareManager::load(SimpleXML& aXml) {
 	if(aXml.findChild("Share")) {
 		aXml.stepIn();
 		while(aXml.findChild("Directory")) {
-			const string& realPath = aXml.getChildData();
+			string realPath = aXml.getChildData();
 			if(realPath.empty()) {
 				continue;
+			}
+			// make sure realPath ends with a PATH_SEPARATOR
+			if(realPath[realPath.size() - 1] != PATH_SEPARATOR) {
+				realPath += PATH_SEPARATOR;
 			}
 
 			const string& virtualName = aXml.getChildAttrib("Virtual");
