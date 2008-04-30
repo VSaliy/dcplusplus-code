@@ -1,5 +1,6 @@
 * Fixed crash when pressing F1 twice
 * [L#203213] Search results with same tth are grouped
+* [L#209419] Keep nick when user goes offline
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
