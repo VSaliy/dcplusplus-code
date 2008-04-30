@@ -60,8 +60,8 @@ SettingsDialog::~SettingsDialog() {
 }
 
 bool SettingsDialog::initDialog() {
-	// set this to IDH_STARTPAGE so that clicking in an empty space of the dialog generates a WM_HELP message with no error; then SettingsDialog::handleHelp will convert IDH_STARTPAGE to the current page's help id
-	setHelpId(IDH_STARTPAGE);
+	// set this to IDH_INDEX so that clicking in an empty space of the dialog generates a WM_HELP message with no error; then SettingsDialog::handleHelp will convert IDH_INDEX to the current page's help id
+	setHelpId(IDH_INDEX);
 
 	WinUtil::setHelpIds(this, helpItems);
 
@@ -81,7 +81,7 @@ bool SettingsDialog::initDialog() {
 
 		button = attachChild<Button>(IDHELP);
 		button->setText(T_("Help"));
-		button->onClicked(std::tr1::bind(&SettingsDialog::handleHelp, this, handle(), IDH_STARTPAGE));
+		button->onClicked(std::tr1::bind(&SettingsDialog::handleHelp, this, handle(), IDH_INDEX));
 	}
 
 	addPage(T_("Personal information"), new GeneralPage(this));
@@ -125,7 +125,7 @@ HTREEITEM SettingsDialog::addPage(const tstring& title, PropPage* page, HTREEITE
 }
 
 void SettingsDialog::handleHelp(HWND hWnd, unsigned id) {
-	if(id == IDH_STARTPAGE && currentPage)
+	if(id == IDH_INDEX && currentPage)
 		id = currentPage->getHelpId();
 	WinUtil::help(hWnd, id);
 }

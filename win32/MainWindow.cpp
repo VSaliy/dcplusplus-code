@@ -133,7 +133,7 @@ MainWindow::MainWindow() :
 	speak(PARSE_COMMAND_LINE);
 
 	if(SETTING(NICK).empty()) {
-		WinUtil::help(handle(), IDH_GENERALPAGE);
+		WinUtil::help(handle(), IDH_GET_STARTED);
 		postMessage(WM_COMMAND, IDC_SETTINGS);
 	}
 	
@@ -240,7 +240,8 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr help = mainMenu->appendPopup(T_("&Help"));
 
-		help->appendItem(IDH_STARTPAGE, T_("Help &Contents\tF1"), std::tr1::bind(&WinUtil::help, handle(), _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_HELP)));
+		help->appendItem(IDH_INDEX, T_("Help &Contents\tF1"), std::tr1::bind(&WinUtil::help, handle(), _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_HELP)));
+		help->appendItem(IDH_GET_STARTED, T_("Get started"), std::tr1::bind(&WinUtil::help, handle(), _1));
 		help->appendSeparatorItem();
 		help->appendItem(IDH_CHANGELOG, T_("Change Log"), std::tr1::bind(&WinUtil::help, handle(), _1));
 		help->appendItem(IDC_ABOUT, T_("About DC++..."), std::tr1::bind(&MainWindow::handleAbout, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_DCPP)));
@@ -303,11 +304,7 @@ void MainWindow::initToolbar() {
 	toolbar->appendItem(image++, T_("Settings"), IDH_TOOLBAR_SETTINGS, std::tr1::bind(&MainWindow::handleSettings, this));
 	toolbar->appendItem(image++, T_("Notepad"), IDH_TOOLBAR_NOTEPAD, std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_NOTEPAD));
 	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_(
-		"\"What's This?\" help button\n\n"
-		"Get help on specific parts of DC++\n\n"
-		"Click this button once and your mouse cursor will change into a help cursor; then click on the control for which you wish to get help for."
-		), IDH_TOOLBAR_WHATS_THIS, std::tr1::bind(&MainWindow::handleWhatsThis, this));
+	toolbar->appendItem(image++, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS, std::tr1::bind(&MainWindow::handleWhatsThis, this));
 
 	toolbar->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 }

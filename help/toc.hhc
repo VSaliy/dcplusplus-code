@@ -13,6 +13,10 @@
 		<param name="Local" value="index.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Get started">
+		<param name="Local" value="get_started.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Changelog">
 		<param name="Local" value="changelog.html">
 		</OBJECT>

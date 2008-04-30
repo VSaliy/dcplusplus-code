@@ -17,6 +17,7 @@ cshelp.h
 cshelp.txt
 office11.css
 index.html
+get_started.html
 changelog.html
 settings_advanced.html
 settings_appearance.html
@@ -78,7 +79,8 @@ dev_applypatch.html
 links.html
 
 [ALIAS]
-IDH_STARTPAGE=index.html
+IDH_INDEX=index.html
+IDH_GET_STARTED=get_started.html
 IDH_CHANGELOG=changelog.html
 IDH_KEYBOARD=faq_keyboard_commands.html
 IDH_MAIN=window_main.html

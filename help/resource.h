@@ -5,9 +5,10 @@
 
 #include "cshelp.h"
 
-#define IDH_STARTPAGE 10000
-#define IDH_CHANGELOG 10001
-#define IDH_KEYBOARD 10002
+#define IDH_INDEX 10000
+#define IDH_GET_STARTED 10001
+#define IDH_CHANGELOG 10002
+#define IDH_KEYBOARD 10003
 
 // windows
 #define IDH_MAIN 10100
