@@ -101,6 +101,8 @@ private:
 
 	typedef unordered_map<CID, UserPtr> UserMap;
 	typedef UserMap::iterator UserIter;
+	
+	typedef unordered_map<CID, std::string> NickMap;
 
 	typedef unordered_multimap<CID, OnlineUser*> OnlineMap;
 	typedef OnlineMap::iterator OnlineIter;
@@ -113,6 +115,7 @@ private:
 
 	UserMap users;
 	OnlineMap onlineUsers;
+	NickMap nicks;
 
 	UserPtr me;
 
@@ -130,12 +133,14 @@ private:
 		TimerManager::getInstance()->removeListener(this);
 	}
 
+	void updateNick(const OnlineUser& user) throw();
+	
 	// ClientListener
-	virtual void on(Connected, Client* c) throw() { fire(ClientManagerListener::ClientConnected(), c); }
-	virtual void on(UserUpdated, Client*, const OnlineUser& user) throw() { fire(ClientManagerListener::UserUpdated(), user); }
-	virtual void on(UsersUpdated, Client* c, const UserList&) throw() { fire(ClientManagerListener::ClientUpdated(), c); }
+	virtual void on(Connected, Client* c) throw();
+	virtual void on(UserUpdated, Client*, const OnlineUser& user) throw();
+	virtual void on(UsersUpdated, Client* c, const OnlineUserList&) throw();
 	virtual void on(Failed, Client*, const string&) throw();
-	virtual void on(HubUpdated, Client* c) throw() { fire(ClientManagerListener::ClientUpdated(), c); }
+	virtual void on(HubUpdated, Client* c) throw();
 	virtual void on(HubUserCommand, Client*, int, int, const string&, const string&) throw();
 	virtual void on(NmdcSearch, Client* aClient, const string& aSeeker, int aSearchType, int64_t aSize,
 		int aFileType, const string& aString) throw();

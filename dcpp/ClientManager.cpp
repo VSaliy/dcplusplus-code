@@ -95,16 +95,21 @@ StringList ClientManager::getHubNames(const CID& cid) const {
 
 StringList ClientManager::getNicks(const CID& cid) const {
 	Lock l(cs);
-	StringSet nicks;
+	StringSet ret;
 	OnlinePairC op = onlineUsers.equal_range(cid);
 	for(OnlineIterC i = op.first; i != op.second; ++i) {
-		nicks.insert(i->second->getIdentity().getNick());
+		ret.insert(i->second->getIdentity().getNick());
 	}
-	if(nicks.empty()) {
-		// Offline perhaps?
-		nicks.insert('{' + cid.toBase32() + '}');
+	if(ret.empty()) {
+		NickMap::const_iterator i = nicks.find(cid);
+		if(i != nicks.end()) {
+			ret.insert(i->second);
+		} else {
+			// Offline perhaps?
+			ret.insert('{' + cid.toBase32() + '}');
+		}
 	}
-	return StringList(nicks.begin(), nicks.end());
+	return StringList(ret.begin(), ret.end());
 }
 
 string ClientManager::getConnection(const CID& cid) const {
@@ -469,6 +474,37 @@ CID ClientManager::getMyCID() {
 	TigerHash tiger;
 	tiger.update(getMyPID().data(), CID::SIZE);
 	return CID(tiger.finalize());
+}
+
+void ClientManager::updateNick(const OnlineUser& user) throw() {
+	Lock l(cs);
+	if(nicks.find(user.getUser()->getCID()) != nicks.end()) {
+		return;
+	}
+	
+	if(!user.getIdentity().getNick().empty()) {
+		nicks.insert(std::make_pair(user.getUser()->getCID(), user.getIdentity().getNick()));
+	}
+}
+
+void ClientManager::on(Connected, Client* c) throw() { 
+	fire(ClientManagerListener::ClientConnected(), c); 
+}
+
+void ClientManager::on(UserUpdated, Client*, const OnlineUser& user) throw() {
+	updateNick(user);
+	fire(ClientManagerListener::UserUpdated(), user); 
+}
+
+void ClientManager::on(UsersUpdated, Client* c, const OnlineUserList& l) throw() {
+	for(OnlineUserList::const_iterator i = l.begin(), iend = l.end(); i != iend; ++i) {
+		updateNick(*(*i));
+		fire(ClientManagerListener::UserUpdated(), *(*i)); 
+	}
+}
+
+void ClientManager::on(HubUpdated, Client* c) throw() { 
+	fire(ClientManagerListener::ClientUpdated(), c); 
 }
 
 void ClientManager::on(Failed, Client* client, const string&) throw() {
