@@ -51,9 +51,11 @@ class FavoriteUser;
 
 class File;
 
-class FinishedItem;
-typedef FinishedItem* FinishedItemPtr;
-typedef std::vector<FinishedItemPtr> FinishedItemList;
+class FinishedFileItem;
+typedef FinishedFileItem* FinishedFileItemPtr;
+
+class FinishedUserItem;
+typedef FinishedUserItem* FinishedUserItemPtr;
 
 class FinishedManager;
 

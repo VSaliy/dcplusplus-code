@@ -28,7 +28,7 @@
 
 namespace dcpp {
 
-class Transfer {
+class Transfer : private boost::noncopyable {
 public:
 	enum Type {
 		TYPE_FILE,
@@ -64,7 +64,7 @@ public:
 
 	double getAverageSpeed() const;
 
-	int64_t getSecondsLeft() {
+	int64_t getSecondsLeft() const {
 		double avg = getAverageSpeed();
 		return (avg > 0) ? (getBytesLeft() / avg) : 0;
 	}
@@ -76,6 +76,7 @@ public:
 	virtual void getParams(const UserConnection& aSource, StringMap& params);
 
 	UserPtr getUser();
+	const UserPtr getUser() const;
 	
 	const string& getPath() const { return path; }
 	const TTHValue& getTTH() const { return tth; }
@@ -90,9 +91,6 @@ private:
 	
 	typedef std::pair<uint64_t, int64_t> Sample;
 	typedef deque<Sample> SampleList;
-	
-	Transfer(const Transfer&);
-	Transfer& operator=(const Transfer&);
 	
 	SampleList samples;
 	mutable CriticalSection cs;

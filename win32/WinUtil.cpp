@@ -1134,8 +1134,6 @@ void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabVie
 	
 	addUsers(addSub, menu, T_("Grant &extra slot"), IDC_GRANTSLOT, users,
 		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));
-	
-	menu->appendSeparatorItem();
 
 	typedef void (QueueManager::*qmp)(const UserPtr&, int);
 	addUsers(addSub, menu, T_("Remove user from queue"), IDC_REMOVE_ALL, users,

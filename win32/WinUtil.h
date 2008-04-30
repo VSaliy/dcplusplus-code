@@ -190,7 +190,7 @@ public:
 		return Text::fromT(tstring(buf, x));
 	}
 	
-	static void addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const string& dir);
+	static void addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const string& dir = Util::emptyString);
 
 #ifdef PORT_ME
 	static int getTextWidth(const tstring& str, HWND hWnd) {

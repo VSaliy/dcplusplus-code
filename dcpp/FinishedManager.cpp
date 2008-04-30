@@ -21,7 +21,7 @@
 
 #include "FinishedManager.h"
 
-#include "ClientManager.h"
+#include "FinishedItem.h"
 #include "FinishedManagerListener.h"
 #include "Download.h"
 #include "Upload.h"
@@ -39,66 +39,145 @@ FinishedManager::~FinishedManager() throw() {
 	DownloadManager::getInstance()->removeListener(this);
 	UploadManager::getInstance()->removeListener(this);
 
-	Lock l(cs);
-	for_each(downloads.begin(), downloads.end(), DeleteFunction());
-	for_each(uploads.begin(), uploads.end(), DeleteFunction());
+	clearDLs();
+	clearULs();
 }
 
-void FinishedManager::remove(FinishedItemPtr item, bool upload /* = false */) {
+void FinishedManager::lockLists() {
+	cs.enter();
+}
+
+const FinishedManager::MapByFile& FinishedManager::getMapByFile(bool upload) const {
+	return upload ? ULByFile : DLByFile;
+}
+
+const FinishedManager::MapByUser& FinishedManager::getMapByUser(bool upload) const {
+	return upload ? ULByUser : DLByUser;
+}
+
+void FinishedManager::unLockLists() {
+	cs.leave();
+}
+
+void FinishedManager::remove(bool upload, const string& file) {
 	{
 		Lock l(cs);
-		FinishedItemList *listptr = upload ? &uploads : &downloads;
-		FinishedItemList::iterator it = find(listptr->begin(), listptr->end(), item);
-
-		if(it != listptr->end())
-			listptr->erase(it);
-		else
+		MapByFile& map = upload ? ULByFile : DLByFile;
+		MapByFile::iterator it = map.find(file);
+		if(it != map.end()) {
+			delete it->second;
+			map.erase(it);
+		} else
 			return;
 	}
-	fire(FinishedManagerListener::Removed(), upload, item);
-	delete item;
+	fire(FinishedManagerListener::RemovedFile(), upload, file);
 }
 
-void FinishedManager::removeAll(bool upload /* = false */) {
+void FinishedManager::remove(bool upload, const UserPtr& user) {
 	{
 		Lock l(cs);
-		FinishedItemList *listptr = upload ? &uploads : &downloads;
-		for_each(listptr->begin(), listptr->end(), DeleteFunction());
-		listptr->clear();
+		MapByUser& map = upload ? ULByUser : DLByUser;
+		MapByUser::iterator it = map.find(user);
+		if(it != map.end()) {
+			delete it->second;
+			map.erase(it);
+		} else
+			return;
 	}
+	fire(FinishedManagerListener::RemovedUser(), upload, user);
+}
+
+void FinishedManager::removeAll(bool upload) {
+	if(upload)
+		clearULs();
+	else
+		clearDLs();
 	fire(FinishedManagerListener::RemovedAll(), upload);
 }
 
-void FinishedManager::on(DownloadManagerListener::Complete, Download* d) throw()
-{
-	if(d->getType() == Transfer::TYPE_FILE || (d->getType() == Transfer::TYPE_FULL_LIST && BOOLSETTING(LOG_FILELIST_TRANSFERS))) {
-		FinishedItemPtr item = new FinishedItem(
-			d->getPath(), Util::toString(ClientManager::getInstance()->getNicks(d->getUser()->getCID())),
-			Util::toString(ClientManager::getInstance()->getHubNames(d->getUser()->getCID())),
-			d->getSize(), d->getPos(), (GET_TICK() - d->getStart()), GET_TIME(), d->isSet(Download::FLAG_CRC32_OK));
+void FinishedManager::clearDLs() {
+	Lock l(cs);
+	for(MapByFile::iterator i = DLByFile.begin(); i != DLByFile.end(); ++i)
+		delete i->second;
+	for(MapByUser::iterator i = DLByUser.begin(); i != DLByUser.end(); ++i)
+		delete i->second;
+	DLByFile.clear();
+	DLByUser.clear();
+}
+
+void FinishedManager::clearULs() {
+	Lock l(cs);
+	for(MapByFile::iterator i = ULByFile.begin(); i != ULByFile.end(); ++i)
+		delete i->second;
+	for(MapByUser::iterator i = ULByUser.begin(); i != ULByUser.end(); ++i)
+		delete i->second;
+	ULByFile.clear();
+	ULByUser.clear();
+}
+
+void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
+	if(t->getType() == Transfer::TYPE_FILE || (t->getType() == Transfer::TYPE_FULL_LIST && BOOLSETTING(LOG_FILELIST_TRANSFERS))) {
+		string file = t->getPath();
+		const UserPtr& user = t->getUser();
+
+		Lock l(cs);
+
 		{
-			Lock l(cs);
-			downloads.push_back(item);
+			MapByFile& map = upload ? ULByFile : DLByFile;
+			MapByFile::iterator it = map.find(file);
+			if(it == map.end()) {
+				FinishedFileItemPtr p = new FinishedFileItem(
+					t->getPos(),
+					GET_TICK() - t->getStart(),
+					GET_TIME(),
+					crc32Checked,
+					user
+					);
+				map[file] = p;
+				fire(FinishedManagerListener::AddedFile(), upload, file, p);
+			} else {
+				it->second->update(
+					t->getPos(),
+					GET_TICK() - t->getStart(),
+					GET_TIME(),
+					crc32Checked,
+					user
+					);
+				fire(FinishedManagerListener::UpdatedFile(), upload, file);
+			}
 		}
 
-		fire(FinishedManagerListener::Added(), false, item);
+		{
+			MapByUser& map = upload ? ULByUser : DLByUser;
+			MapByUser::iterator it = map.find(user);
+			if(it == map.end()) {
+				FinishedUserItemPtr p = new FinishedUserItem(
+					t->getPos(),
+					GET_TICK() - t->getStart(),
+					GET_TIME(),
+					file
+					);
+				map[user] = p;
+				fire(FinishedManagerListener::AddedUser(), upload, user, p);
+			} else {
+				it->second->update(
+					t->getPos(),
+					GET_TICK() - t->getStart(),
+					GET_TIME(),
+					file
+					);
+				fire(FinishedManagerListener::UpdatedUser(), upload, user);
+			}
+		}
 	}
 }
 
-void FinishedManager::on(UploadManagerListener::Complete, Upload* u) throw()
-{
-	if(u->getType() == Transfer::TYPE_FILE || (u->getType() == Transfer::TYPE_FULL_LIST && BOOLSETTING(LOG_FILELIST_TRANSFERS))) {
-		FinishedItemPtr item = new FinishedItem(
-			u->getPath(), Util::toString(ClientManager::getInstance()->getNicks(u->getUser()->getCID())),
-			Util::toString(ClientManager::getInstance()->getHubNames(u->getUser()->getCID())),
-			u->getSize(), u->getPos(), (GET_TICK() - u->getStart()), GET_TIME());
-		{
-			Lock l(cs);
-			uploads.push_back(item);
-		}
+void FinishedManager::on(DownloadManagerListener::Complete, Download* d) throw() {
+	onComplete(d, false, d->isSet(Download::FLAG_CRC32_OK));
+}
 
-		fire(FinishedManagerListener::Added(), true, item);
-	}
+void FinishedManager::on(UploadManagerListener::Complete, Upload* u) throw() {
+	onComplete(u, true);
 }
 
 } // namespace dcpp
