@@ -99,4 +99,8 @@ UserPtr Transfer::getUser() {
 	return getUserConnection().getUser();
 }
 
+const UserPtr Transfer::getUser() const {
+	return getUserConnection().getUser();
+}
+
 } // namespace dcpp
