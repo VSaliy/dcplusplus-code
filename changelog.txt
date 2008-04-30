@@ -2,6 +2,7 @@
 * [L#203213] Search results with same tth are grouped
 * [L#209419] Keep nick when user goes offline
 * [L#208615] Fix finished frames being spammed by segments (thanks poy)
+* Fixed crash on shell menu when browsing own file list (poy)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
