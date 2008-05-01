@@ -158,7 +158,7 @@ void WinUtil::init() {
 	xtreeView.exStyle = WS_EX_CLIENTEDGE;
 	xtreeView.font = font;
 
-	::HtmlHelp(NULL, NULL, HH_INITIALIZE, (DWORD)&helpCookie);
+	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR>(&helpCookie));
 }
 
 void WinUtil::uninit() {
@@ -557,8 +557,11 @@ void WinUtil::help(HWND hWnd, unsigned id) {
 		return;
 
 	string path = Util::getDataPath() + "DCPlusPlus.chm";
-	if(File::getSize(path) == -1)
+	if(File::getSize(path) == -1) {
+		// todo also check that the file is up-to-date
+		// todo alert the user that the help file isn't found/up-to-date
 		return;
+	}
 	tstring helpFile = Text::toT(path);
 
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
@@ -571,14 +574,17 @@ void WinUtil::help(HWND hWnd, unsigned id) {
 		popup.pt.x = (rect.left + rect.right) / 2;
 		popup.pt.y = rect.top;
 
-		popup.rcMargins.left = 5;
-		popup.rcMargins.top = 5;
-		popup.rcMargins.right = 5;
-		popup.rcMargins.bottom = 5;
+		popup.rcMargins.left = -1;
+		popup.rcMargins.top = -1;
+		popup.rcMargins.right = -1;
+		popup.rcMargins.bottom = -1;
 
 		helpPopup = ::HtmlHelp(hWnd, helpFile.c_str(), HH_DISPLAY_TEXT_POPUP, reinterpret_cast<DWORD_PTR>(&popup));
-	} else
-		::HtmlHelp(hWnd, helpFile.c_str(), id ? HH_HELP_CONTEXT : HH_DISPLAY_TOC, id);
+	} else {
+		if(id < IDH_BEGIN || id > IDH_END)
+			id = IDH_INDEX;
+		::HtmlHelp(hWnd, helpFile.c_str(), HH_HELP_CONTEXT, id);
+	}
 }
 
 bool WinUtil::getVersionInfo(OSVERSIONINFOEX& ver) {

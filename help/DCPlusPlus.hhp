@@ -3,6 +3,7 @@ Auto Index=Yes
 Compatibility=1.1 or later
 Compiled file=..\build\help\DCPlusPlus.chm
 Contents file=toc.hhc
+Default Window=main
 Default topic=index.html
 Display compile progress=Yes
 Enhanced decompilation=Yes
@@ -10,6 +11,9 @@ Full-text search=Yes
 Index file=index.hhk
 Language=0x409 Anglais (États-Unis)
 Title=Help for DC++
+
+[WINDOWS]
+main=,"toc.hhc","index.hhk","index.html","index.html",,,,,0x42520,220,0x204e,[0,0,640,480],,,,,,,0
 
 
 [FILES]
