@@ -383,7 +383,8 @@ bool BufferedSocket::checkEvents() {
 		if(p.first == SHUTDOWN) {
 			return false;
 		} else if(p.first == UPDATED) {
-			fire(BufferedSocketListener::Updated());			
+			fire(BufferedSocketListener::Updated());
+			continue;
 		}
 		
 		if(state == STARTING) {
@@ -393,7 +394,7 @@ bool BufferedSocket::checkEvents() {
 			} else if(p.first == ACCEPTED) {
 				state = RUNNING;
 			} else {
-				dcdebug("%d unexpected in STARTING state", p.first);
+				dcdebug("%d unexpected in STARTING state\n", p.first);
 			}
 		} else if(state == RUNNING) {
 			if(p.first == SEND_DATA) {
@@ -403,7 +404,7 @@ bool BufferedSocket::checkEvents() {
 			} else if(p.first == DISCONNECT) {
 				fail(_("Disconnected"));
 			} else {
-				dcdebug("%d unexpected in RUNNING state", p.first);
+				dcdebug("%d unexpected in RUNNING state\n", p.first);
 			}
 		}
 	}

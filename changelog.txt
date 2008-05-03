@@ -2,6 +2,7 @@
 * [L#203213] Search results with same tth are grouped
 * [L#209419] Keep nick when user goes offline
 * [L#208615] Fix finished frames being spammed by segments (thanks poy)
+* Fixed a potential loss of connection with compressed transfers
 * Fixed crash on shell menu when browsing own file list (poy)
 * Help updates (eMTee, poy)
 
