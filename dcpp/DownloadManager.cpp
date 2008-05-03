@@ -247,10 +247,13 @@ void DownloadManager::startData(UserConnection* aSource, int64_t start, int64_t 
 		d->setFlag(Download::FLAG_TTH_CHECK);
 	}
 
+	// Check that we don't get too many bytes
+	d->setFile(new LimitedOutputStream<true>(d->getFile(), bytes));
+
 	if(z) {
 		d->setFlag(Download::FLAG_ZDOWNLOAD);
 		d->setFile(new FilteredOutputStream<UnZFilter, true>(d->getFile()));
-	}
+	} 
 
 	d->setStart(GET_TICK());
 	d->tick();
@@ -278,9 +281,7 @@ void DownloadManager::on(UserConnectionListener::Data, UserConnection* aSource, 
 		d->addPos(d->getFile()->write(aData, aLen), aLen);
 		d->tick();
 		
-		if(d->getPos() > d->getSize()) {
-			failDownload(aSource, _("More data was sent than was expected"));
-		} else if(d->getPos() == d->getSize()) {
+		if(d->getFile()->eof()) {
 			endData(aSource);
 			aSource->setLineMode(0);
 		}
