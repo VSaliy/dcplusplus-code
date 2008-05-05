@@ -6,6 +6,8 @@
 * Fixed crash on shell menu when browsing own file list (poy)
 * Help updates (eMTee, poy)
 * [L#217878] Use system messages for file errors on nix (thanks individ)
+* [L#185549] Fix connection hang on local hub connection
+* [L#226188] Fix small chunks uploaded without slot (thanks pseudonym)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
