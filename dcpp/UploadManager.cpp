@@ -103,7 +103,7 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 					return false;
 				}
 
-				free = free || (size <= (int64_t)(SETTING(SET_MINISLOT_SIZE) * 1024) );
+				free = free || (sz <= (int64_t)(SETTING(SET_MINISLOT_SIZE) * 1024) );
 
 				f->setPos(start);
 				is = f;

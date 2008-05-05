@@ -40,8 +40,9 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 "defr, ullner, fleetcommand, liny, xan, olle svensson, mark gillespie, jeremy huddleston, "
 "bsod, sulan, jonathan stone, tim burton, izzzo, guitarm, paka, nils maier, jens oknelid, yoji, "
 "krzysztof tyszecki, poison, mikejj, pur, bigmuscle, martin, jove, bart vullings, "
-"steven sheehy, tobias nygren, poy, dorian, stephan hohe, mafa_45, mikael eman, james ross,"
-"stanislav maslovski, david grundberg, pavel andreev, yakov suraev, kulmegil, smir, emtee, individ. "
+"steven sheehy, tobias nygren, poy, dorian, stephan hohe, mafa_45, mikael eman, james ross, "
+"stanislav maslovski, david grundberg, pavel andreev, yakov suraev, kulmegil, smir, emtee, individ, "
+"pseudonym. "
 "Keep it coming!";
 
 AboutDlg::AboutDlg(dwt::Widget* parent) : WidgetFactory<dwt::ModalDialog>(parent) {
