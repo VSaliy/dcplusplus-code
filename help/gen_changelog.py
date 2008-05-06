@@ -14,7 +14,8 @@ start_head = """<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"htt
 <head>
   <meta content=\"en-us\" http-equiv=\"Content-Language\"/>
   <meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\"/>
-  <link href=\"office11.css\" rel=\"stylesheet\" type=\"text/css\"/>
+  <link type=\"text/css\" rel=\"stylesheet\" href=\"office11.css\"/>
+  <link type=\"text/css\" rel=\"stylesheet\" href=\"style.css\"/>
   <title>Changelog</title>
   <style type=\"text/css\">
     li { margin-left: auto; margin: 0em 0em 0em 0em; }
