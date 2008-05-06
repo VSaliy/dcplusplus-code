@@ -82,6 +82,10 @@ IDR_WAITING_USERS       ICON                    "res/wuicon.ico"
 IDR_MAGNET              ICON                    "res/Magnet.ico"
 IDR_HUB_OFF             ICON                    "res/HubOff.ico"
 IDR_PRIVATE_OFF         ICON                    "res/UserOff.ico"
+IDR_FINISHED_DL_BY_FILE ICON                    "res/FinishedDLByFile.ico"
+IDR_FINISHED_UL_BY_FILE ICON                    "res/FinishedULByFile.ico"
+IDR_FINISHED_DL_BY_USER ICON                    "res/FinishedDLByUser.ico"
+IDR_FINISHED_UL_BY_USER ICON                    "res/FinishedULByUser.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
