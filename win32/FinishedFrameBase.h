@@ -77,12 +77,12 @@ protected:
 			cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 			cs.location = tabs->getClientSize();
 			filesWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
-			tabs->add(filesWindow);
+			tabs->add(filesWindow, dwt::IconPtr(new dwt::Icon(in_UL ? IDR_FINISHED_UL_BY_FILE : IDR_FINISHED_DL_BY_FILE)));
 
 			cs.style &= ~WS_VISIBLE;
 			cs.caption = T_("Grouped by users");
 			usersWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
-			tabs->add(usersWindow);
+			tabs->add(usersWindow, dwt::IconPtr(new dwt::Icon(in_UL ? IDR_FINISHED_UL_BY_USER : IDR_FINISHED_DL_BY_USER)));
 		}
 
 		{
