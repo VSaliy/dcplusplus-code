@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta content="text/html; charset=us-ascii" http-equiv="content-type"/>
-<link type="text/css" rel="stylesheet" href="office11.css"/>
-<link type="text/css" rel="stylesheet" href="style.css"/>
+  <link type="text/css" rel="stylesheet" href="office11.css"/>
+  <link type="text/css" rel="stylesheet" href="style.css"/>
   <title>How to set up active mode</title>
 </head>
 <body>
@@ -12,64 +12,119 @@
  title="Transmission Control Protocol">TCP</acronym> and <acronym
  title="User Datagram Protocol">UDP</acronym> listening ports, as well
 as outgoing access on all ports for both TCP and UDP.</p>
+
+<h2>If you are NOT behind a router:</h2>
+<ul>
+	<li>	
+      Click on File menu and then Settings. Click on <a href="settings_connection.html">Connection Settings</a>.
+	</li>	
+	<li>	
+      Select the <b>Direct Connection</b> radio button.  Leave the IP fields blank. This will make DC++ use the current IP assigned to your network card. You must NOT have an internal IP address for this to work. 
+	</li>	
+	<li>	
+      Leave the TCP/UDP/TLS ports blank also. This will make DC++ randomize the port it uses each time.
+	</li>	
+	<li>	
+      Leave the Outgoing Connection settings set to Direct Connection. Click OK.  
+	</li>	
+	<li>	
+      You may need to allow DC++ in your <a href="http://www.dslreports.com/faq/dc/3.1_Software_Firewalls" target="_blank" class="external">software firewall</a>. Consult its documentation on how to do this.
+	</li>	
+	<li>	
+      Test active mode by joining several hubs and doing a search for a common term. You should get results back. If not, then you are likely behind a router, have an internal IP address or haven't properly configured your <a href="http://www.dslreports.com/faq/dc/3.1_Software_Firewalls" target="_blank" class="external">software firewall</a>.
+	</li>	
+</ul>
+
+<h2>If you are behind a router:</h2>
+
 <p>You can simplify the process of setting up active mode if your
 router and operating system is <acronym title="Universal Plug and Play">UPnP
-</acronym> compatible. If so, please read the <a href="faq_upnp.html">How to set up UPnP FAQ</a> instead, for more information.</p>
+</acronym> compatible (UPnP is available only on Windows XP and Windows Vista).
+For setting up active mode with UPnP or get help how to decide that your router
+is UPnP compatible or not, please read the <a href="faq_upnp.html">How to set up UPnP FAQ</a>.
+If UPnP does not work or is not an option, follow the steps below.</p>
+
+<p>The second option for using active mode behind a router or a gateway is to <i>set up port forwarding manually</i>.
+For an in-depth, but still easy to understand explanation of port forwarding, read 
+<a href="http://portforward.com/help/portforwarding.htm" target="_blank" class="external">What is Port Forwarding?</a>
+The following steps describe the configuration of port forwarding in general. Later you will find links to get configuration information specific to your own router device.</p>
 <ol>
   <li>First you need to set up the router to forward the connections to
 the computer with DC++. This is could be called Port mapping, port
-redirecting, port forwarding or something like that. Find out how to do
-this with your router / <acronym title="Network Address Translation">NAT</acronym>
-in the user manual.</li>
+redirecting, port forwarding or something like that in your router configuration. 
+Find out how to do this with your router / <acronym title="Network Address Translation">NAT</acronym>
+in the user manual came with your device.</li>
   <li>You need to forward two ports, with either the same port number
 or different ones. Select one or two numbers between 1024 -
 65535, they should mostly all be free. Make sure both UDP and TCP is
 being forwarded on the port(s) you chose. </li>
   <li>The IP that you are forwarding to should be the <span
- style="font-weight: bold;">internal</span> IP address of your DC++
-computer. It usually begins with <a href="non-routable.html">"192.168",
-"172.16." or "10.x."</a>. Go to the command prompt and type: <span
- style="font-style: italic;">ipconfig</span> (Start Menu -&gt; Run
+ style="font-weight: bold;">internal</span> IP address of your computer running DC++.
+ It usually begins with <a href="non-routable.html">"192.168",
+"172.16." or "10.x."</a>. To see your internal IP address go to the command prompt and type:
+<span style="font-style: italic;">ipconfig</span> (Start Menu -&gt; Run
 -&gt; <span style="font-style: italic;">cmd /k ipconfig</span>)</li>
   <li>When you have mapped the port(s) on the router, open up DC++ and
-go to Settings. Select active mode. In the port fields, enter the port
+go to <a href="settings_connection.html">Connection Settings</a>. 
+Select <b>Firewall with manual port forwarding</b>. In the port fields, enter the port
 number(s) that you forwarded on the router. </li>
-  <li>In the IP field, you need to enter the <span
+  <li>In the External / WAN IP field, you need to enter the <span
  style="font-weight: bold;">external</span> IP address of your router.
-Your external IP can be checked against <a
- href="http://www.dslreports.com/ip" target="_blank" class="external">DSLReport's
-IP page</a>. </li>
-  <li>It should now be working. If it is working for a while, but the
-next time you use DC++, you only get "Connection Timeout"s or no
+Your external IP can be checked on 
+<a href="http://www.dslreports.com/ip" target="_blank" class="external">DSLReport's
+IP page</a> or at <a
+ href="http://whatismyip.com" target="_blank" class="external">WhatIsMyIP.com</a>. </li>
+  <li>Active mode should now be working. For checking or troubleshooting if you have properly
+  	 forwarded the port(s) to DC++, use <a
+ href="http://www.canyouseeme.org" target="_blank" class="external">www.canyouseeme.org</a>.  Make sure DC++ is open.  Then, from the site, enter in the port you're forwarding and click Check. If everything has been properly set up, the site should say Success.  If you get an error message in red, then you need to double-check the port forwarding on the router, DC++ settings and possibly your <a href="http://www.dslreports.com/faq/dc/3.1_Software_Firewalls" target="_blank" class="external">software firewall</a> settings.    </li>
+</ol>
+<p>You may find detailed how-to guides with screen shots for various router models at <a
+ href="http://www.portforward.com/routers.htm" target="_blank" class="external">www.portforward.com</a>. There is a huge list of models there, click on your model name,
+ then select DC++ from the list of applications. An interactive guide will appear to help you how 
+ to access your router's configuration page and how to set up port forwarding for DC++. 
+ You can find some more how-to's for popular router models at the <a href="http://www.dslreports.com/faq/dc/3.2_Hardware_Firewalls___Routers" target="_blank" class="external">DSLReport FAQ page</a> as well.
+</p>
+
+<p>If active mode is working for a while, but <u>the next time when you use DC++</u>, you only get <i>Connection Timeout</i>s or no
 results when searching, your IP (either <span
  style="font-weight: bold;">external</span> or <span
- style="font-weight: bold;">internal</span>) is likely to have changed.
-If you find the external IP is constantly changing, you can set
-yourself up with a dynamic name (i.e. <i>hub.example.com</i>).
-Such as <a href="http://www.dynip.com/" target="_blank"
- class="external">Dynip</a> or <a
+ style="font-weight: bold;">internal</span>) is likely to have changed. Of course you can update your IP settings manually each time 
+ they changed, but there are better solutions to avoid constant IP address updates:
+</p> 
+<ul>
+	<li>
+    If you find the external IP is constantly changing, you can sign up to a free dynamic DNS service 
+such as <a href="http://www.no-ip.com/" target="_blank"
+ class="external">No-IP</a> ,
+ <a href="http://www.dynip.com/" target="_blank"
+ class="external">Dynip</a>  or <a
  href="http://www.dyndns.org/" target="_blank" class="external">DynDns</a>
-and put that name into the IP field. Make sure to use a
-program that updates the dynamic name service with your latest IP.</li>
-</ol>
+    and put your dynamic DNS address into the External / WAN IP field in DC++ <a href="settings_connection.html">Connection Settings</a>. Each DDNS provider has a downloadable IP updater software what updates the dynamic name service with your latest IP. Make sure you download, configure and  run this program while using DC++. Many router models have DDNS client software included for specific DDNS provider(s) so it worth a check in your router configurations before choosing a provider. After you setup the built-in DDNS client you won't need to run any IP updater software, your router will automatically take care of updating your DNS name.</li>
+	<li>
+If you find that your internal IP changes when you restart your computer then your operating system is obtaining an IP address from your router at boot using <a href="http://www.portforward.com/networking/dhcp.htm" target="_blank" class="external">DHCP protocol</a>. If you want your computer to always have the same internal IP address you must setup Static DHCP in your router configuration. Static DHCP is a useful feature which makes your router always assign the same IP address to a specific computer on your network. You will have to <a href="http://www.dur.ac.uk/its/services/network/lan/mac/windows/" target="_blank" class="external">find MAC address of your network card</a> to set up Static DHCP.<br/>
+Another option to ensure you'll always have the same internal IP address is to set up static IP address for your computer. Here's a <a href="http://www.portforward.com/networking/staticip.htm" target="_blank" class="external">FAQ</a> how to do this for different versions of Windows.
+    </li>
+</ul>    
 <h2>Windows XP?</h2>
 <ul>
   <li><span style="text-decoration: underline;">Service Pack 1</span>:
 Its strongly recommended that you do not use the SP1 firewall and
 instead use a third party one.
 Make sure to disable the XP firewall if you do choose this option. If
-you really must use it, then checkout <a
+you really must use it, then check out <a
  href="http://www.microsoft.com/security/protect/ports.asp"
- target="_blank" class="external"> this guide</a> on how to set it up.</li>
-  <li><span style="text-decoration: underline;">Service Pack 2</span>:
-The firewall in SP2 is a lot more robust than its original incarnation.
+ target="_blank" class="external"> this guide</a>  on how to set it up.</li>
+  <li><span style="text-decoration: underline;">Service Pack 2 or 3</span>:
+The firewall in SP2 & SP3 is a lot more robust than its original incarnation.
 While it does not offer a plethora of options, its suitable to use by
 itself for protection. Its wise to enable logging of packets that the
 firewall drops for troubleshooting applications. To do this, go to
 Control Panels -&gt; Windows Firewall -&gt; Advanced Tab -&gt; Security
 Logging -&gt; Settings. Enable <span style="font-style: italic;">Log
 Dropped Packets</span>. The log file is located at:
-C:\WINDOWS\pfirewall.log.</li>
+C:\WINDOWS\pfirewall.log. Here's a complete guide <a
+ href="http://www.microsoft.com/technet/security/smallbusiness/prodtech/windowsxp/cfgfwall.mspx"
+ target="_blank" class="external">How to Configure Windows Firewall on Windows XP SP2 & SP3</a>.</li>
 </ul>
 </body>
 </html>
