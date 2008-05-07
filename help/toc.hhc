@@ -135,6 +135,10 @@
 		</OBJECT>
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Why do I need active mode?">
+			<param name="Local" value="faq_whyactive.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="How to set up active mode?">
 			<param name="Local" value="faq_activemode.html">
 			</OBJECT>
