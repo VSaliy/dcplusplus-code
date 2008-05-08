@@ -813,7 +813,8 @@ void DirectoryListingFrame::findFile(bool findNext)
 
 	HoldRedraw hold(files);
 	HoldRedraw hold2(dirs);
-	
+	HoldRedraw hold3(status);
+
 	// Do a search
 	int foundFile = -1, skipHitsTmp = skipHits;
 	HTREEITEM const oldDir = dirs->getSelected();
@@ -859,6 +860,7 @@ void DirectoryListingFrame::findFile(bool findNext)
 			dirs->setFocus();
 		}
 	} else {
+		dirs->setSelected(NULL);
 		dirs->setSelected(oldDir);
 		createMessageBox().show(T_("No matches"), T_("Search for file"));
 	}
