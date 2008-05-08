@@ -12,48 +12,61 @@
 things, Internet applications to configure home routers and gateways,
 bypassing manual port forwarding configuration. UPnP was introduced in
 Windows XP and is supported in that and later versions, including
-Windows Server 2003. To take advantage of UPnP, you must have support
+Windows Server 2003 and Vista. To take advantage of UPnP, you must have support
 enabled in Windows and UPnP capable hardware (typically a broadband
 router using <acronym title="Network Address Translation">NAT</acronym>
 traversal). If you meet both of these requirements, setting up DC++ is
 normally a simple process. <span style="font-weight: bold;">UPnP
-support is only in DC++ 0.4033 and later.</span></p>
-<p>To enable UPnP in DC++, open the Settings panel, select Advanced,
-scroll down to the bottom, enable "Use UPnP Control". Restart
-DC++. If your UPnP system is setup correctly, DC++ will now
+support introduced in DC++ 0.4033</span>. For using DC++ with UPnP 
+<b>under Vista you need version 0.695 or newer</b>.</p>
+<p><u>To enable UPnP in DC++:</u></p>
+<ul>
+	<li>	
+      Click on File menu and then Settings. Click on 
+      <a href="settings_connection.html">Connection Settings</a>.
+	</li>	
+	<li>	
+	  Select <b>Firewall with UPnP</b>. 
+	</li>	
+	<li>	
+	  Restart DC++. 
+	</li>	
+</ul>
+<p>If your UPnP system is setup correctly, DC++ will now
 automatically create the required port mappings for DC++ to operate in
 Active Mode. It will also detect your external IP address, and switch
 into Active Mode. </p>
-If UPnP works successfully or unsuccessfully, fill out <a
- href="http://fp.mgillespie.plus.com/upnpresults.htm" target="_blank"
- class="external">Mark Gillespie's UPnP feedback form</a>
-so other users can know which configurations work.
 <h3>Troubleshooting</h3>
 <p>If you are having trouble getting this all to work (or see messages
-in the DC++ <a href="settings_logs.html#system">system.log</a>
-like "Failed To Create Port Mappings"), and you are sure you meet the
+in the DC++ <a href="window_system_log.html">System Log</a>
+like <i>"Failed To Create Port Mappings"</i>), and you are sure you meet the
 minimum requirements mentioned above, firstly, download a UPnP
 diagnostic tool. The recommended one is <a target="_blank"
  href="http://www.junegillespie.plus.com/UPnPTest.exe" class="external">Mark
-Gillespie's UPnP test tool</a>. This program
-will tell you what network
-interfaces on your computer support UPnP. If none of your network
-interfaces are reporting UPnP capabilities, try the following
-suggestions: </p>
+Gillespie's UPnP test tool</a>. This program will tell you what network
+interfaces on your computer support UPnP.</p>
+<p>Alternatively, to test your UPnP functionality, you can run the web based
+<a href="http://www.microsoft.com/windows/using/tools/igd/default.mspx"
+ target="_blank" class="external">Internet Connectivity Evaluation Tool</a>
+from Microsoft. This tool is avaliable only for Windows XP and Vista
+and requires IE6 or later to run.</p>
+<p>If your router fails the UPnP test(s), then it's doubtful DC++ will 
+function properly with UPnP either. If none of your network interfaces are 
+reporting UPnP capabilities, try the following suggestions: </p>
 <ol>
   <li>Ensure your UPnP hardware has the UPnP service switched on (some
 routers default to off), consult your manufacturer's documentation.</li>
   <li>Ensure Windows UPnP services (Control Panel -&gt; Administrative
 Tools -&gt; Services) are running. "Universal Plug and Play Device
-Host" and "SSDP Discovery Service". Both of these XP services should be
-set to "Automatic" startup and "Started" status:</li>
+Host" and "SSDP Discovery Service". Both of these services should be
+set to "Automatic" startup and "Started" status.</li>
   <li>Switch on the UPnP User Interface. To do this: Open "My Network
 Places", and in the Network Tasks Panel, select "Show icons for
-networked UPnP devices".</li>
+networked UPnP devices". If UPnP is working, you should see your router's
+name in My Network Places. Also, when you go to: Start Menu, Settings,
+Network Connections, you should see Internet Connection listed under
+the Internet Gateway category.</li>
   <li>Reboot both your PC and your UPnP device (router).</li>
-  <li>If the diagnostic tool is still not reporting any UPnP devices,
-considering more drastic actions like upgrading your router firmware,
-as many routers have UPnP implementation bugs.</li>
   <li>If you do not see your router as a network device in "My Network
 Places" after several minutes, UPnPTest will fail to create an UPnP
 mapping to the router, resulting in something looking like: <span
@@ -62,10 +75,20 @@ Disabled</span><i>.</i> Make sure the windows firewall or your third
 party firewall is not blocking UPnP packets. To do this, go to Control
 Panels -&gt; Windows Firewall -&gt; Advanced Tab -&gt; Security Logging
 -&gt; Settings. Enable <span style="font-style: italic;">Log Dropped
-Packets</span>. The log file is located at: C:\WINDOWS\pfirewall.log
+Packets</span>. The log file is located at: C:\WINDOWS\pfirewall.log.
 If you see any packets being dropped with the port 1900 or 2869, the
 the firewall is misconfigured and <span style="font-weight: bold;">is</span>
-preventing UPnP from working.</li>
+preventing UPnP from working. In case of a third party firewall checking 
+this setting varies widely between firewalls. Most decent firewalls have
+some sort of logging function, where one can see what the firewall is blocking.
+Look for "UPnP" or ports 1900 and 2869 and refer the firewall's manual
+how to ublock.</li>
+<li>If the diagnostic tool is still not reporting any UPnP devices,
+considering more drastic actions like upgrading your router firmware,
+as many routers have UPnP implementation bugs.</li>
 </ol>
+<p>If your router still fails the UPnP test follow the guide on
+<a href="faq_activemode.html">Manual port forwarding</a> 
+to be able to use DC++ in active mode.</p>
 </body>
 </html>
