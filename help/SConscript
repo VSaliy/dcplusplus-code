@@ -1,0 +1,55 @@
+# todo gen_changelog and gen_cshelp are always called, call them only when
+# their source file[s] change
+
+# generate cshelp.h and cshelp.txt
+# cshelp.h is included in resource.h, which in turn is included in the DC++
+# source; hence, we build it even when the help file is not being built.
+import gen_cshelp
+
+Import('dev')
+env = dev.env.Clone()
+
+if not env['help']:
+	Return()
+
+# generate changelog.html
+import gen_changelog
+
+# the following is inspired by the NSIS build system
+
+chm_builder = Builder(
+	action = [
+		Copy('users.bmp', '../res/users.bmp'),
+		Action('hhc DCPlusPlus.hhp > compile.log', 'Building the help file'),
+		Delete('users.bmp')
+	], chdir = 'help'
+)
+env.Append(BUILDERS = {'CHMBuild' : chm_builder})
+
+# fix hhc.exe reverse return value - UGLY
+old_spawn = env['SPAWN']
+def new_spawn(*args, **kw):
+	result = old_spawn(*args, **kw)
+	if 'hhc' in args[3]:
+		return not result
+	else:
+		return result
+env['SPAWN'] = new_spawn
+
+# define which files can trigger a help rebuild
+# todo scan the [FILES] section of DCPlusPlus.hhp instead
+chm_sources = Glob('*.html')
+chm_sources.append('cshelp.h')
+chm_sources.append('cshelp.txt')
+chm_sources.append('DCPlusPlus.hhp')
+chm_sources.append('external.png')
+chm_sources.append('index.hhk')
+chm_sources.append('logo.jpg')
+chm_sources.append('office11.css')
+chm_sources.append('resource.h')
+chm_sources.append('style.css')
+chm_sources.append('toc.hhc')
+
+# build CHM
+ret = env.CHMBuild('#/build/help/DCPlusPlus.chm', chm_sources)
+Return('ret')

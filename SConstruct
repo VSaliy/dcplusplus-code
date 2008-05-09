@@ -1,20 +1,7 @@
 # vim: set filetype: py
 
+import os,sys
 from build_util import Dev
-
-opts = Options('custom.py', ARGUMENTS)
-
-opts.AddOptions(
-	EnumOption('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
-	EnumOption('mode', 'Compile mode', 'debug', ['debug', 'release']),
-	BoolOption('nativestl', 'Use native STL instead of STLPort', 'yes'),
-	BoolOption('gch', 'Use GCH when compiling GUI (disable if you have linking problems with mingw)', 'yes'),
-	BoolOption('verbose', 'Show verbose command lines', 'no'),
-	BoolOption('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
-	BoolOption('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
-	BoolOption('i18n', 'Rebuild i18n files in debug build', 'no'),
-	('prefix', 'Prefix to use when cross compiling', 'i386-mingw32-')
-)
 
 gcc_flags = {
 	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-fexceptions', '-mthreads'],
@@ -68,13 +55,25 @@ gcc_defs = {
 
 # --- cut ---
 
-import os,sys
-
 tools = ARGUMENTS.get('tools', 'mingw')
-
 toolset = [tools]
 
-env = Environment(tools = toolset, options=opts, ENV=os.environ)
+env = Environment(tools = toolset, ENV = os.environ)
+
+opts = Options('custom.py', ARGUMENTS)
+opts.AddOptions(
+	EnumOption('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
+	EnumOption('mode', 'Compile mode', 'debug', ['debug', 'release']),
+	BoolOption('nativestl', 'Use native STL instead of STLPort', 'yes'),
+	BoolOption('gch', 'Use GCH when compiling GUI (disable if you have linking problems with mingw)', 'yes'),
+	BoolOption('verbose', 'Show verbose command lines', 'no'),
+	BoolOption('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
+	BoolOption('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
+	BoolOption('help', 'Build the help file', env.WhereIs('hhc') is not None),
+	BoolOption('i18n', 'Rebuild i18n files in debug build', 'no'),
+	('prefix', 'Prefix to use when cross compiling', 'i386-mingw32-')
+)
+opts.Update(env)
 Help(opts.GenerateHelpText(env))
 
 if 'mingw' not in env['TOOLS'] and 'gcc' in env['TOOLS']:
@@ -174,5 +173,5 @@ dev.bzip2 = dev.build('bzip2/')
 dev.intl = dev.build('intl/')
 dev.dwt = dev.build('dwt/')
 dev.client = dev.build('dcpp/')
+dev.help = dev.build('help/')
 dev.win32 = dev.build('win32/')
-
