@@ -10,6 +10,7 @@ custom.py
 natupnp.h
 ./help/changelog.html
 ./help/compile.log
+./help/cshelp.h
 ./help/cshelp.txt
 ./.pydevproject
 ./doc
