@@ -17,12 +17,8 @@
 		<param name="Local" value="get_started.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Changelog">
-		<param name="Local" value="changelog.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Chat Commands">
-		<param name="Local" value="chat_commands.html">
+		<param name="Name" value="Etiquette">
+		<param name="Local" value="netiquette.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Windows">
@@ -131,55 +127,6 @@
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Frequently Asked Questions">
-		</OBJECT>
-	<UL>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Why do I need active mode?">
-			<param name="Local" value="faq_whyactive.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="How to set up active mode?">
-			<param name="Local" value="faq_activemode.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="How to set up UPnP?">
-			<param name="Local" value="faq_upnp.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="My University blocks DC++">
-			<param name="Local" value="faq_university.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Why don't I get any search results?">
-			<param name="Local" value="faq_nosearch.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Why am I getting slow download speeds?">
-			<param name="Local" value="faq_slowdownload.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Which keyboard commands can I use?">
-			<param name="Local" value="faq_keyboard_commands.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="What do the different icons mean?">
-			<param name="Local" value="faq_different_icons.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="What do the units mean?">
-			<param name="Local" value="faq_units.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="How do I install/uninstall/upgrade DC++?">
-			<param name="Local" value="faq_install.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="What secret stuff are there?">
-			<param name="Local" value="faq_secret.html">
-			</OBJECT>
-	</UL>
-	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Settings">
 		</OBJECT>
 	<UL>
@@ -251,6 +198,55 @@
 		</UL>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Frequently Asked Questions">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Why do I need active mode?">
+			<param name="Local" value="faq_whyactive.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="How to set up active mode?">
+			<param name="Local" value="faq_activemode.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="How to set up UPnP?">
+			<param name="Local" value="faq_upnp.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="My University blocks DC++">
+			<param name="Local" value="faq_university.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Why don't I get any search results?">
+			<param name="Local" value="faq_nosearch.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Why am I getting slow download speeds?">
+			<param name="Local" value="faq_slowdownload.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Which keyboard commands can I use?">
+			<param name="Local" value="faq_keyboard_commands.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="What do the different icons mean?">
+			<param name="Local" value="faq_different_icons.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="What do the units mean?">
+			<param name="Local" value="faq_units.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="How do I install/uninstall/upgrade DC++?">
+			<param name="Local" value="faq_install.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="What secret stuff are there?">
+			<param name="Local" value="faq_secret.html">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Development">
 		</OBJECT>
 	<UL>
@@ -264,8 +260,12 @@
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Etiquette">
-		<param name="Local" value="netiquette.html">
+		<param name="Name" value="Chat Commands">
+		<param name="Local" value="chat_commands.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Changelog">
+		<param name="Local" value="changelog.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Links">
