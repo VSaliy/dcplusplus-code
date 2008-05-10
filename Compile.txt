@@ -43,6 +43,11 @@ and copy the file to the include directory of your compiler (or add it to the in
 	To see more options, type "scons -h".
 	Tip: You can create a file custom.py and put your options in there.
 
+   You can choose which targets to build; eg:
+	scons build/help
+   will only build the help file. By default, when no target is specified, SCons will build all targets.
+   To see more possible arguments, consult the SCons manual.
+
 Note; If you have problems, use google. It works for me.
 
 By the way, with doxygen, graphviz and some luck you can use the supplied doxygen configuration file
