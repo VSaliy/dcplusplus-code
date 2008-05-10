@@ -30,8 +30,8 @@ See the version history of DC++ below.
 end_html = "</body>\n</html>"
 
 start_change = "  <li>%(change)s"
-bugzilla_text = "  <li><a href=\"http://dcpp.net/bugzilla/show_bug.cgi?id=%(bug_id)s\">[Bugzilla bug %(bug_id)s]</a> %(change)s"
-launchpad_text = "  <li><a href=\"https://bugs.launchpad.net/dcplusplus/+bug/%(bug_id)s\">[Launchpad bug %(bug_id)s]</a> %(change)s"
+bugzilla_text = "  <li><a href=\"http://dcpp.net/bugzilla/show_bug.cgi?id=%(bug_id)s\" target=\"_blank\" class=\"external\">[Bugzilla bug %(bug_id)s]</a> %(change)s"
+launchpad_text = "  <li><a href=\"https://bugs.launchpad.net/dcplusplus/+bug/%(bug_id)s\" target=\"_blank\" class=\"external\">[Launchpad bug %(bug_id)s]</a> %(change)s"
 change = " %(change)s"
 end_change = "</li>\n"
 
