@@ -1,19 +1,21 @@
-# todo gen_changelog and gen_cshelp are always called, call them only when
-# their source file[s] change
-
-# generate cshelp.h and cshelp.txt
-# cshelp.h is included in resource.h, which in turn is included in the DC++
-# source; hence, we build it even when the help file is not being built.
-import gen_cshelp
-
 Import('dev')
 env = dev.env.Clone()
+
+# generate cshelp.h and cshelp.txt from all HTML files in the current folder
+# cshelp.h is included in resource.h, which in turn is included in the DC++
+# source; hence, we build it even when the help file is not being built.
+from gen_cshelp import gen_cshelp
+cshelp_files = ['cshelp.h', 'cshelp.txt']
+env.Ignore(cshelp_files, 'changelog.html')
+env.Command(cshelp_files, Glob('*.html'), Action(gen_cshelp, 'Building context-sensitive help files'))
+env.Depends('resource.h', 'cshelp.h')
 
 if not env['help']:
 	Return()
 
 # generate changelog.html
-import gen_changelog
+from gen_changelog import gen_changelog
+env.Command('changelog.html', '#/changelog.txt', Action(gen_changelog, 'Building changelog.html'))
 
 # the following is inspired by the NSIS build system
 
