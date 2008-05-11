@@ -5,9 +5,12 @@ env = dev.env.Clone()
 # cshelp.h is included in resource.h, which in turn is included in the DC++
 # source; hence, we build it even when the help file is not being built.
 from gen_cshelp import gen_cshelp
-cshelp_files = ['cshelp.h', 'cshelp.txt']
-env.Ignore(cshelp_files, 'changelog.html')
-env.Command(cshelp_files, Glob('*.html'), Action(gen_cshelp, 'Building context-sensitive help files'))
+cshelp_targets = ['cshelp.h', 'cshelp.txt']
+env.Ignore(cshelp_targets, 'changelog.html')
+cshelp_sources = Glob('*.html', strings = 1)
+if 'changelog.html' in cshelp_sources:
+	cshelp_sources.remove('changelog.html')
+env.Command(cshelp_targets, cshelp_sources, Action(gen_cshelp, 'Building context-sensitive help files'))
 env.Depends('resource.h', 'cshelp.h')
 
 if not env['help']:
