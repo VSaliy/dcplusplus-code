@@ -60,6 +60,8 @@ def gen_cshelp(target, source, env):
 		f.close()
 		parser.close()
 
+	output.sort()
+
 	# generate cshelp.h (target[0]) and cshelp.txt (target[1])
 	f_h = open(str(target[0]), "w")
 	f_h.write("""// this file contains help ids for field-level help tooltips
