@@ -9,6 +9,7 @@
 * [L#185549] Fix connection hang on local hub connection
 * [L#226188] Fix small chunks uploaded without slot (thanks pseudonym)
 * [L#228059] Fix UI not updating after "Find" in a file list window yields no result (poy)
+* Fixed invisible menu items in large owner-drawn menus (poy)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
