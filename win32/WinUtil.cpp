@@ -1142,7 +1142,7 @@ void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabVie
 		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));
 
 	typedef void (QueueManager::*qmp)(const UserPtr&, int);
-	addUsers(addSub, menu, T_("Remove user from queue"), IDC_REMOVE_ALL, users,
+	addUsers(addSub, menu, T_("Remove user from queue"), IDC_REMOVE_FROM_QUEUE, users,
 		std::tr1::bind((qmp)&QueueManager::removeSource, qm, _1, 
 			(int)QueueItem::Source::FLAG_REMOVED));
 }

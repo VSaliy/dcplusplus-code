@@ -33,7 +33,7 @@ public:
 	void pm(dwt::TabViewPtr);
 	void grant();
 	void addFav();
-	void removeAll();
+	void removeFromQueue();
 	void connectFav(dwt::TabViewPtr);
 
 	UserPtr& getUser() { return user; }
@@ -82,8 +82,8 @@ public:
 	void handleGrantSlot() {
 		static_cast<T*>(this)->getUserList()->forEachSelected(&UserInfoBase::grant);
 	}
-	void handleRemoveAll() {
-		static_cast<T*>(this)->getUserList()->forEachSelected(&UserInfoBase::removeAll);
+	void handleRemoveFromQueue() {
+		static_cast<T*>(this)->getUserList()->forEachSelected(&UserInfoBase::removeFromQueue);
 	}
 	void handleConnectFav(dwt::TabViewPtr parent) {
 		static_cast<T*>(this)->getUserList()->forEachSelectedT(Caller(parent, &UserInfoBase::connectFav));
@@ -103,7 +103,7 @@ public:
 		if(!traits.nonFavOnly)
 			menu->appendItem(IDC_CONNECT, T_("Connect to hub"), std::tr1::bind(&T::handleConnectFav, This, parent), dwt::BitmapPtr(new dwt::Bitmap(IDB_HUB)));
 		menu->appendSeparatorItem();
-		menu->appendItem(IDC_REMOVE_ALL, T_("Remove user from queue"), std::tr1::bind(&T::handleRemoveAll, This));
+		menu->appendItem(IDC_REMOVE_FROM_QUEUE, T_("Remove user from queue"), std::tr1::bind(&T::handleRemoveFromQueue, This));
 	}
 };
 
