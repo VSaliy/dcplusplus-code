@@ -239,7 +239,7 @@ private:
 	bool handleUsersContextMenu(dwt::ScreenCoordinate pt);
 	HRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	void handleShowUsersClicked();
-	void handleCopyNick();
+	void handleMultiCopy(unsigned id);
 	void handleDoubleClickUsers();
 	bool handleTabContextMenu(const dwt::ScreenCoordinate& pt);
 	void handleCopyHub();
