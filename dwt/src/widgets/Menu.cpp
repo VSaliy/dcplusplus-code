@@ -425,12 +425,10 @@ bool Menu::handleDrawItem(int id, LPDRAWITEMSTRUCT drawInfo) {
 	int stripWidth = imageSize.x + textIconGap;
 
 	// prepare item rectangle
-	Rectangle itemRectangle( drawInfo->rcItem.left, drawInfo->rcItem.top, // position
-		drawInfo->rcItem.right - drawInfo->rcItem.left, // width
-		drawInfo->rcItem.bottom - drawInfo->rcItem.top ); // height
+	Rectangle itemRectangle = drawInfo->rcItem;
 
 	// setup buffered canvas
-	BufferedCanvas< FreeCanvas > canvas( reinterpret_cast<HWND>(wrapper->menu->handle()), drawInfo->hDC );
+	BufferedCanvas< FreeCanvas > canvas(reinterpret_cast<HWND>(wrapper->menu->handle()), drawInfo->hDC, itemRectangle.left(), itemRectangle.top());
 
 	// this will contain adjusted sidebar width
 	int sidebarWidth = 0;
