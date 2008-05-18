@@ -1163,8 +1163,12 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		appendUserItems(getParent(), menu);
-		
-		menu->appendItem(IDC_COPY_NICK, T_("Copy &nick to clipboard"), std::tr1::bind(&HubFrame::handleCopyNick, this));
+
+		menu->appendSeparatorItem();
+		MenuPtr copyMenu = menu->appendPopup(T_("&Copy"));
+		for(int j=0; j<COLUMN_LAST; j++) {
+			copyMenu->appendItem(IDC_MULTI_COPY + j, T_(columnNames[j]), std::tr1::bind(&HubFrame::handleMultiCopy, this, _1));
+		}
 		menu->setDefaultItem(IDC_GETLIST);
 		prepareMenu(menu, UserCommand::CONTEXT_CHAT, client->getHubUrl());
 		
@@ -1213,18 +1217,24 @@ void HubFrame::handleShowUsersClicked() {
 	layout();
 }
 
-void HubFrame::handleCopyNick() {
+void HubFrame::handleMultiCopy(unsigned id) {
+	int n = (int)id - IDC_MULTI_COPY;
+
+	if(n < 0 || n > COLUMN_LAST) {
+		return;
+	}
+
 	int i=-1;
-	string nicks;
+	tstring tmpstr;
 
 	while( (i = users->getNext(i, LVNI_SELECTED)) != -1) {
-		nicks += users->getData(i)->getNick();
-		nicks += ' ';
+		tmpstr += users->getText(i, n);
+		tmpstr += _T(" / ");
 	}
-	if(!nicks.empty()) {
+	if(!tmpstr.empty()) {
 		// remove last space
-		nicks.erase(nicks.length() - 1);
-		WinUtil::setClipboard(Text::toT(nicks));
+		tmpstr.erase(tmpstr.length() - 3);
+		WinUtil::setClipboard(tmpstr);
 	}
 }
 
