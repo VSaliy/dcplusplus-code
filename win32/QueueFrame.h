@@ -268,7 +268,7 @@ private:
 	
 	void addBrowseMenu(const MenuPtr& parent, QueueItemInfo* qii);
 	void addRemoveMenu(const MenuPtr& parent, QueueItemInfo* qii);
-	void addRemoveAllMenu(const MenuPtr& parent, QueueItemInfo* qii);
+	void addRemoveSourcesMenu(const MenuPtr& parent, QueueItemInfo* qii);
 	void addPMMenu(const MenuPtr& parent, QueueItemInfo* qii);
 	void addPriorityMenu(const MenuPtr& parent);
 	void addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii);

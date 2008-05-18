@@ -956,7 +956,7 @@ QueueFrame::MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	menu->appendSeparatorItem();
 	addReaddMenu(menu, qii);
 	addRemoveMenu(menu, qii);
-	addRemoveAllMenu(menu, qii);
+	addRemoveSourcesMenu(menu, qii);
 	menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&QueueFrame::handleRemove, this));
 	
 	return menu;
@@ -1026,7 +1026,7 @@ void QueueFrame::addRemoveMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 		parent->setItemEnabled(pos, true, false);
 }
 
-void QueueFrame::addRemoveAllMenu(const MenuPtr& parent, QueueItemInfo* qii) {
+void QueueFrame::addRemoveSourcesMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 	unsigned int pos = parent->getCount();
 	MenuPtr menu = parent->appendPopup(T_("Remove user from queue"));
 	if(!addUsers(menu, IDC_REMOVE_SOURCES, &QueueFrame::handleRemoveSources, qii->getSources(), true))
