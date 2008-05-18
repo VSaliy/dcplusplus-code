@@ -133,10 +133,10 @@ class BufferedCanvas
 {
 public:
 	/// Constructor initializing the given source
-	BufferedCanvas( HWND window, HDC source )
+	BufferedCanvas( HWND window, HDC source, long width = 0, long height = 0 )
 		: CanvasType( window, source )
 	{
-		init( source );
+		init( source, width, height );
 	}
 
 	/// Constructor initializing the given source
@@ -240,11 +240,11 @@ public:
 
 private:
 	/// Creates and inits back-buffer for the given source
-	void init( HDC source )
+	void init( HDC source, long width = 0, long height = 0 )
 	{
-		// get screen size
-		int width = this->getDeviceCaps( HORZRES );
-		int height = this->getDeviceCaps( VERTRES );
+		// the buffer might have to be larger than the screen size
+		width += this->getDeviceCaps(HORZRES);
+		height += this->getDeviceCaps(VERTRES);
 
 		// create memory buffer for the source and reset itsHDC
 		itsSource = source;
