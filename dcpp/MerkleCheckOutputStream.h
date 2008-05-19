@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#if !defined(MERKLE_CHECK_OUTPUT_STREAM_H)
-#define MERKLE_CHECK_OUTPUT_STREAM_H
+#ifndef DCPLUSPLUS_DCPP_MERKLE_CHECK_OUTPUT_STREAM_H
+#define DCPLUSPLUS_DCPP_MERKLE_CHECK_OUTPUT_STREAM_H
 
 #include "Streams.h"
 #include "MerkleTree.h"
@@ -57,7 +57,7 @@ public:
 		return s->flush();
 	}
 
-	virtual void commitBytes(const void* b, size_t len) throw(FileException) {
+	void commitBytes(const void* b, size_t len) throw(FileException) {
 		uint8_t* xb = (uint8_t*)b;
 		size_t pos = 0;
 
