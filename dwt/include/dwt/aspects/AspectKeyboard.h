@@ -118,7 +118,7 @@ class AspectKeyboard : public AspectKeyboardBase
 
 		KeyDispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			return f(static_cast< int >( msg.wParam ));
 		}
 

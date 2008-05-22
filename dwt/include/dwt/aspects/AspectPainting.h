@@ -55,7 +55,7 @@ class AspectPainting
 		
 		Dispatcher(const F& f_, Widget* widget_) : f(f_), widget(widget_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			PaintCanvas canvas( widget->handle() );
 
 			f(canvas);

@@ -44,7 +44,11 @@ void __stl_debug_terminate() {
 }
 #endif
 
-extern "C" int _nl_msg_cat_cntr;
+extern "C"
+#ifdef _MSC_VER
+__declspec (dllimport)
+#endif
+int _nl_msg_cat_cntr;
 
 namespace dcpp {
 

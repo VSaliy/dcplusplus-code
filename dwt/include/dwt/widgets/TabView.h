@@ -153,7 +153,7 @@ private:
 	
 	void setTop(ContainerPtr w);
 
-	bool handleTextChanging(ContainerPtr w, const tstring& newText);
+	void handleTextChanging(ContainerPtr w, const tstring& newText);
 	void handleSized(const SizedEvent&);
 	void handleTabSelected();
 	LRESULT handleToolTip(LPARAM lParam);

@@ -4,7 +4,10 @@
 ./.sconsign.dblite
 ./.settings
 custom.py
-*.h.gch
+*.gch
+*.obj
+*.pch
+*.pdb
 ./htmlhelp/include/htmlhelp.h
 ./htmlhelp/lib/htmlhelp.lib
 natupnp.h

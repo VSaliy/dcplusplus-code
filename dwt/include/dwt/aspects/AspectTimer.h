@@ -46,7 +46,7 @@ class AspectTimer {
 		
 		Dispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			if(!f()) {
 				/// @todo remove from message map as well...
 				::KillTimer(msg.hwnd, msg.wParam);

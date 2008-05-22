@@ -88,7 +88,7 @@ class Table :
 
 		HeaderDispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			LPNMLISTVIEW p = (LPNMLISTVIEW) msg.lParam; 
 			f(p->iSubItem);
 			return true;

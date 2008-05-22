@@ -44,6 +44,8 @@ PropPage::TextItem CertificatesPage::texts[] = {
 	{ IDC_SETTINGS_CERTIFICATE_FILE, N_("Own certificate file") },
 	{ IDC_SETTINGS_TRUSTED_CERTIFICATES_PATH, N_("Trusted certificates path") },
 	{ IDC_GENERATE_CERTS, N_("Generate certificates") },
+	{ IDC_CERTS_UNDER_CONSTRUCTION, N_("Under construction, restart DC++ to see effects...") },
+	{ IDC_CERTS_EXPERIMENTAL, N_("Experimental feature, don't consider DC++ secure in any way") },
 	{ 0, 0 }
 };
 

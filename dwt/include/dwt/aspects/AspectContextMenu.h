@@ -46,7 +46,7 @@ class AspectContextMenu {
 		typedef Dispatchers::Base<bool(const ScreenCoordinate&)> BaseType;
 		Dispatcher(const F& f_) : BaseType(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			bool shown = f(ScreenCoordinate(Point::fromLParam(msg.lParam)));
 			ret = shown;
 			return shown;

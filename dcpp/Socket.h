@@ -22,6 +22,8 @@
 #include "Util.h"
 #include "Exception.h"
 
+#include <errno.h>
+
 #ifdef _WIN32
 // Berkely constants converted to the windows equivs...
 #define EADDRNOTAVAIL WSAEADDRNOTAVAIL
@@ -35,7 +37,6 @@ typedef SOCKET socket_t;
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <errno.h>
 #include <netdb.h>
 #include <fcntl.h>
 

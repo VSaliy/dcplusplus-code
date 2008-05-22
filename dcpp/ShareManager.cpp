@@ -485,9 +485,7 @@ void ShareManager::Directory::merge(Directory* source) {
 	source->directories.clear();
 	
 	for(File::Set::iterator i = source->files.begin(); i != source->files.end(); ++i) {
-		File::Set::iterator j = findFile(i->getName());
-		
-		if(j == files.end()) {
+		if(findFile(i->getName()) == files.end()) {
 			if(directories.find(i->getName()) != directories.end()) {
 				dcdebug("Directory named the same as file");
 			} else {

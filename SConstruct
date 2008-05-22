@@ -16,10 +16,15 @@ gcc_xxflags = {
 }
 
 msvc_flags = {
-	# 4512: assn not generated, 4100: <something annoying, forget which>, 4189: var init'd, unused, 4996: fn unsafe, use fn_s
+	# 4100: unreferenced formal parameter
 	# 4121: alignment of member sensitive to packing
-	'common' : ['/W4', '/EHsc', '/Zi', '/GR', '/wd4121', '/wd4100', '/wd4189', '/wd4996', '/wd4512'],
-	'debug' : ['/MT'],
+	# 4127: conditional expression is constant
+	# 4189: var init'd, unused
+	# 4512: assn not generated
+	# 4800: converting from BOOL to bool
+	# 4996: fn unsafe, use fn_s
+	'common' : ['/W4', '/EHsc', '/Zi', '/GR', '/wd4100', '/wd4121', '/wd4127', '/wd4189', '/wd4512', '/wd4800', '/wd4996'],
+	'debug' : ['/MTd'],
 	'release' : ['/O2', '/MT']
 }
 
@@ -36,14 +41,14 @@ gcc_link_flags = {
 }
 
 msvc_link_flags = {
-	'common' : ['/DEBUG', '/FIXED:NO', '/INCREMENTAL:NO', '/SUBSYSTEM:WINDOWS'],
+	'common' : ['/DEBUG', '/FIXED:NO', '/INCREMENTAL:NO', '/SUBSYSTEM:WINDOWS', '/NODEFAULTLIB:libcmt', "/MANIFESTDEPENDENCY:type='Win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='X86' publicKeyToken='6595b64144ccf1df' language='*'"],
 	'debug' : [],
 	'release' : []
 }
 
 msvc_defs = {
 	'common' : ['_REENTRANT'],
-	'debug' : [''],
+	'debug' : ['_DEBUG'],
 	'release' : ['NDEBUG']
 }
 
@@ -55,11 +60,7 @@ gcc_defs = {
 
 # --- cut ---
 
-tools = ARGUMENTS.get('tools', 'mingw')
-toolset = [tools]
-
-env = Environment(tools = toolset, ENV = os.environ)
-
+defEnv = Environment(ENV = os.environ)
 opts = Options('custom.py', ARGUMENTS)
 opts.AddOptions(
 	EnumOption('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
@@ -69,12 +70,14 @@ opts.AddOptions(
 	BoolOption('verbose', 'Show verbose command lines', 'no'),
 	BoolOption('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
 	BoolOption('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
-	BoolOption('help', 'Build the help file', env.WhereIs('hhc') is not None),
+	BoolOption('help', 'Build the help file', defEnv.WhereIs('hhc') is not None),
 	BoolOption('i18n', 'Rebuild i18n files in debug build', 'no'),
 	('prefix', 'Prefix to use when cross compiling', 'i386-mingw32-')
 )
-opts.Update(env)
-Help(opts.GenerateHelpText(env))
+opts.Update(defEnv)
+Help(opts.GenerateHelpText(defEnv))
+
+env = Environment(ENV = os.environ, tools = [defEnv['tools']], options = opts)
 
 if 'mingw' not in env['TOOLS'] and 'gcc' in env['TOOLS']:
 	print "Non-mingw gcc builds not supported"
@@ -85,25 +88,30 @@ if mode not in gcc_flags:
 	print "Unknown mode, exiting"
 	Exit(1)
 
-dev = Dev(mode, tools, env)
+dev = Dev(mode, env['tools'], env)
 dev.prepare()
 
 env.SConsignFile()
-env.Tool("gch", toolpath=".")
 
 env.Append(CPPPATH = ["#/boost/boost/tr1/tr1/", "#/boost/", "#/htmlhelp/include/", "#/intl/"])
 env.Append(LIBPATH = ["#/htmlhelp/lib/"])
 
-if not env['nativestl']:
+if env['nativestl']:
+	# assume any STL included by the compiler has all tr1 containers
+	# todo: the define name is mis-leading, as MSVC 9 can also have all tr1 containers
+	env.Append(CPPDEFINES = ['BOOST_HAS_GCC_TR1'])
+
+else:
 	env.Append(CPPPATH = ['#/stlport/stlport/'])
 	env.Append(LIBPATH = ['#/stlport/lib/'])
 	env.Append(CPPDEFINES = ['HAVE_STLPORT', '_STLP_USE_STATIC_LIB=1'])
 	if mode == 'debug':
 		env.Append(LIBS = ['stlportg.5.1'])
 	else:
-		env.Append(LIBS = ['stlport.5.1'])	
-elif 'gcc' in env['TOOLS']:
-	env.Append(CPPDEFINES = ['BOOST_HAS_GCC_TR1'])
+		env.Append(LIBS = ['stlport.5.1'])
+
+	# assume STLPort has basic tr1 containers
+	env.Append(CPPDEFINES = ['BOOST_HAS_TR1'])
 
 if 'gcc' in env['TOOLS']:
 	if env['savetemps']:
@@ -113,8 +121,8 @@ if 'gcc' in env['TOOLS']:
 
 if env['unicode']:
 	env.Append(CPPDEFINES = ['UNICODE', '_UNICODE'])
-	
-if env['CC'] == 'cl':
+
+if env['CC'] == 'cl': # MSVC
 	flags = msvc_flags
 	xxflags = msvc_xxflags
 	link_flags = msvc_link_flags
@@ -126,6 +134,8 @@ else:
 	xxflags = gcc_xxflags
 	link_flags = gcc_link_flags
 	defs = gcc_defs
+
+	env.Tool("gch", toolpath=".")
 
 env.Append(CPPDEFINES = defs[mode])
 env.Append(CPPDEFINES = defs['common'])

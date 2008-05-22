@@ -3,6 +3,10 @@
 
   Copyright (c) 2007-2008, Jacek Sieka
 
+  SmartWin++
+
+  Copyright (c) 2005 Thomas Hansen
+
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
@@ -13,7 +17,7 @@
       * Redistributions in binary form must reproduce the above copyright notice, 
         this list of conditions and the following disclaimer in the documentation 
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor the names of its contributors 
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors 
         may be used to endorse or promote products derived from this software 
         without specific prior written permission.
 
@@ -29,55 +33,13 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_DISPATCHERS_H_
-#define DWT_DISPATCHERS_H_
+#ifndef DWT_UNORDERED_MAP_H
+#define DWT_UNORDERED_MAP_H
 
-#include "WindowsHeaders.h"
-#include <functional>
+#ifdef __GNUC__
+#include <tr1/unordered_map>
+#else
+#include <unordered_map>
+#endif
 
-namespace dwt {
-
-namespace Dispatchers {
-
-template<typename T>
-struct Base {
-	typedef std::tr1::function<T> F;
-
-	Base(const F& f_) : f(f_) { }
-	F f;
-};
-
-template<typename T>
-T convert(const MSG& msg) {
-	return T(msg);
-}
-
-template<typename P, P (*C)(const MSG&) = convert<P>, bool handled = true >
-class ConvertBase : public Base<void(const P&)> {
-	typedef Base<void(const P&)> BaseType;
-public:
-	ConvertBase(const typename BaseType::F& f_) : BaseType(f_) { }
-	
-	bool operator()(const MSG& msg, LRESULT& ret) const {
-		f((*C)(msg));
-		return handled;
-	}
-};
-
-template<LRESULT value = 0, bool handled = true>
-struct VoidVoid : public Base<void ()> {
-
-	VoidVoid(const F& f_) : Base<void ()>(f_) { }
-
-	bool operator()(const MSG& msg, LRESULT& ret) const {
-		f();
-		ret = value;
-		return handled;
-	}
-};
-
-}
-
-}
-
-#endif /*DISPATCHERS_H_*/
+#endif

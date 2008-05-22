@@ -45,7 +45,7 @@ class AspectCloseable {
 		
 		Dispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			return !f();
 		}
 

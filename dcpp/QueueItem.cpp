@@ -120,7 +120,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 		int64_t end = std::min(getSize(), start + curSize);
 		Segment block(start, end - start);
 		bool overlaps = false;
-		for(SegmentIter i = done.begin(); !overlaps && i != done.end(); ++i) {
+		for(SegmentConstIter i = done.begin(); !overlaps && i != done.end(); ++i) {
 			if(curSize <= blockSize) {
 				int64_t dstart = i->getStart();
 				int64_t dend = i->getEnd();

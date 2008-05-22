@@ -71,7 +71,7 @@ class DateTime :
 
 		Dispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			f(reinterpret_cast< NMDATETIMECHANGE * >( msg.lParam )->st);
 			return true;
 		}

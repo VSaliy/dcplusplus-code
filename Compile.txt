@@ -11,11 +11,8 @@ How to compile in n easy steps:
     and gcc.exe respectively.
     Note; Make sure gcc/g++ is in your path and before any cygwin installation.
 
-1b) or install Microsoft Visual C++ 8.0 (I don't use it so there might be some compile problems)
-   - Make sure cl.exe is in your path (open a VS command prompt when building).
-   - You will probably need STLPort as MSVC doesn't have tr1 unordered containers (this might change
-     those are included in boost at some point in the future). Make sure to turn off nativestl (see 
-     "scons -h") and compile/install STLPort in the stlport directory.
+1b) or install Microsoft Visual C++ 9.0 along with the "Visual C++ 2008 Feature Pack Release" from:
+    http://www.microsoft.com/downloads/details.aspx?FamilyId=D466226B-8DAB-445F-A7B4-448B326C48E7
 
 Note; If you get errors about a missing file "natupnp.h", you need to download the Platform SDK from MS
 and copy the file to the include directory of your compiler (or add it to the include path...).
@@ -49,6 +46,12 @@ and copy the file to the include directory of your compiler (or add it to the in
    To see more possible arguments, consult the SCons manual.
 
 Note; If you have problems, use google. It works for me.
+
+Note; DC++ requires tr1 containers to be compiled. Those are already provided when using MinGW;
+however, MSVC doesn't include them by default. Hence, you need that feature pack mentioned in 1b)
+in order to get tr1 containers in MSVC 9. Other ways of getting tr1 containers are using boost or
+STLPort (make sure to turn off nativestl (see "scons -h") and compile/install STLPort in the
+stlport directory), but in these cases you will probably encounter compile problems.
 
 By the way, with doxygen, graphviz and some luck you can use the supplied doxygen configuration file
 to generate some nice docs...just check that the paths in doxyfile are correct (graphviz)...

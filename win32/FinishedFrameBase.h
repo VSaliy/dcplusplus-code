@@ -32,10 +32,6 @@
 #include <dcpp/TimerManager.h>
 #include <dcpp/ClientManager.h>
 
-static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
-	control->setBounds(dwt::Rectangle(parent->getClientAreaSize()));
-}
-
 template<class T, bool in_UL>
 class FinishedFrameBase :
 	public StaticFrame<T>,
@@ -120,8 +116,8 @@ protected:
 			users->onContextMenu(std::tr1::bind(&ThisType::handleUsersContextMenu, this, _1));
 		}
 
-		filesWindow->onSized(std::tr1::bind(&fills, filesWindow, files));
-		usersWindow->onSized(std::tr1::bind(&fills, usersWindow, users));
+		filesWindow->onSized(std::tr1::bind(&ThisType::fills, filesWindow, files));
+		usersWindow->onSized(std::tr1::bind(&ThisType::fills, usersWindow, users));
 
 		this->initStatus();
 
@@ -356,6 +352,10 @@ private:
 
 	static bool noClose() {
 		return false;
+	}
+
+	static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
+		control->setBounds(dwt::Rectangle(parent->getClientAreaSize()));
 	}
 
 	LRESULT handleSpeaker() {

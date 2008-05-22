@@ -104,6 +104,7 @@ public:
 
 	typedef set<Segment> SegmentSet;
 	typedef SegmentSet::iterator SegmentIter;
+	typedef SegmentSet::const_iterator SegmentConstIter;
 	
 	QueueItem(const string& aTarget, int64_t aSize, Priority aPriority, int aFlag, 
 		time_t aAdded, const TTHValue& tth) :

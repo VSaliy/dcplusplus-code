@@ -43,7 +43,7 @@ namespace dwt {
   * implement so that platform dependant code can be stuffed in here instead of
   * having lots of #ifdefs layingn around everywhere
   */
-template< typename ContainerType, enum Platform >
+template< typename ContainerType, enum dwt::Platform >
 class WidgetFactoryPlatformImplementation
 {
 };

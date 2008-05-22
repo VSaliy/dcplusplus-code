@@ -49,7 +49,7 @@ namespace dwt {
   * Windows API will be here
   */
 template< typename ContainerWidgetType >
-class WidgetFactoryPlatformImplementation< ContainerWidgetType,  dwtDesktop >
+class WidgetFactoryPlatformImplementation< ContainerWidgetType, dwtDesktop >
 	: public ContainerWidgetType
 {
 public:
