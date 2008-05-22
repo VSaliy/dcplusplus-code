@@ -520,7 +520,7 @@ void AdcHub::handle(AdcCommand::GET, AdcCommand& c) throw() {
 		size_t n = ShareManager::getInstance()->getSharedFiles();
 		
 		// Ideal size for m is n * k / ln(2), but we allow some slack
-		if(m > (5 * n * k / log(2)) || m > (1 << h)) {
+		if(m > (5 * n * k / log(2.)) || m > (1 << h)) {
 			send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_TRANSFER_GENERIC, "Unsupported m"));
 			return;
 		}

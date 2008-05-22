@@ -41,11 +41,11 @@
 #include "Rectangle.h"
 #include "Message.h"
 #include "tstring.h"
+#include "dwt_unordered_map.h"
 
 #include <boost/noncopyable.hpp>
 #include <list>
 #include <functional>
-#include <tr1/unordered_map>
 
 namespace dwt {
 

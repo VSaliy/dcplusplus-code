@@ -81,7 +81,7 @@ protected:
 
 		Dispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			bool update = false;
 			NMTVDISPINFO * nmDisp = reinterpret_cast< NMTVDISPINFO * >( msg.lParam );
 			if ( nmDisp->item.pszText != 0 )

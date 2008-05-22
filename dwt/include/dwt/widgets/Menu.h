@@ -44,7 +44,6 @@
 
 #include <memory>
 #include <vector>
-#include <tr1/unordered_map>
 
 namespace dwt {
 
@@ -128,7 +127,7 @@ public:
 
 		IdDispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			f(LOWORD(msg.wParam));
 			return true;
 		}
@@ -143,7 +142,7 @@ public:
 
 		DrawItemDispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			return f(msg.wParam, reinterpret_cast<LPDRAWITEMSTRUCT>(msg.lParam));
 		}
 
@@ -155,7 +154,7 @@ public:
 
 		MeasureItemDispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			return f(reinterpret_cast<LPMEASUREITEMSTRUCT>(msg.lParam));
 		}
 

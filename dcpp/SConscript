@@ -33,8 +33,12 @@ for i, source in enumerate(sources):
 	if source.find("version.cpp") != -1:
 		rev = ['DCPP_REVISION=' + getRevision()]
 		sources[i] = env.StaticObject(source, CPPDEFINES=env['CPPDEFINES'] + rev)
-	
-if 'gcc' in env['TOOLS']:
+
+# precompiled header
+if env['CC'] == 'cl': # MSVC
+	env['PCHSTOP'] = 'stdinc.h'
+	env['PCH'] = env.PCH('stdinc.cpp')[0]
+elif 'gcc' in env['TOOLS']:
 	env['Gch'] = env.Gch('stdinc.h')[0]
 
 env.Append(CPPDEFINES=["BUILDING_DCPP=1"])

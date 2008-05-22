@@ -123,7 +123,7 @@ typedef unsigned __int64 uint64_t;
 #include <boost/scoped_array.hpp>
 #include <boost/noncopyable.hpp>
 
-#ifdef _STLPORT_VERSION
+#if defined(_MSC_VER) || defined(_STLPORT_VERSION)
 
 #include <unordered_map>
 #include <unordered_set>
@@ -133,8 +133,6 @@ typedef unsigned __int64 uint64_t;
 #include <tr1/unordered_set>
 #include <tr1/unordered_map>
 
-#elif defined(_MSC_VER)  // Assume the msvc stl
-#error "afaik msvc doesn't have tr1 containers, so it'll need stlport (or maybe a recent version of boost)"
 #else
 #error "Unknown STL, please configure accordingly"
 #endif

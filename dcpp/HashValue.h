@@ -47,7 +47,6 @@ struct HashValue : FastAlloc<HashValue<Hasher> >{
 } // namespace dcpp
 
 namespace std { namespace tr1 {
-template<>
 template<typename T>
 struct hash<dcpp::HashValue<T> > {
 	size_t operator()(const dcpp::HashValue<T>& rhs) const { return *(size_t*)rhs.data; }

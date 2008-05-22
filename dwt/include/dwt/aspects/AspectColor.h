@@ -68,7 +68,7 @@ class AspectColorCtlImpl {
 	struct Dispatcher {
 		Dispatcher(COLORREF text_, COLORREF bg_) : brush(new Brush(bg_)), text(text_), bg(bg_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			HDC dc = (HDC) msg.wParam;
 			::SetTextColor(dc, text);
 			::SetBkColor(dc, bg);

@@ -36,6 +36,7 @@
 #include <dwt/Application.h>
 #include <dwt/tstring.h>
 #include <dwt/DWTException.h>
+#include <dwt/util/check.h>
 
 extern int SmartWinMain( dwt::Application & app );
 
@@ -94,7 +95,7 @@ void Application::checkCorruptOrMemleak( bool & corruptMemMemLeak )
 #ifndef WINCE
 #ifdef _DEBUG
 	corruptMemMemLeak = _CrtCheckMemory() != TRUE; // Check for corruption right now.
-	xAssert( ! corruptMemMemLeak, _T( "The application has corrupted its heap memory." ) );
+	dwtassert( ! corruptMemMemLeak, _T( "The application has corrupted its heap memory." ) );
 #endif
 #endif
 #endif

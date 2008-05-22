@@ -60,7 +60,7 @@ class AspectEraseBackground
 		
 		Dispatcher(const F& f_, WidgetType* widget_) : f(f_), widget(widget_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			FreeCanvas canvas( widget->handle(), reinterpret_cast< HDC >( msg.wParam ) );
 
 			f(canvas);

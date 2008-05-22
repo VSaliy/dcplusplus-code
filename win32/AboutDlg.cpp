@@ -60,6 +60,7 @@ bool AboutDlg::handleInitDialog() {
 	attachChild<TextBox>(IDC_TTH)->setText(WinUtil::tth);
 	attachChild<TextBox>(IDC_THANKS)->setText(Text::toT(thanks));
 	setItemText(IDC_UPDOWN, str(TF_("Upload: %1%, Download: %2%") % Text::toT(Util::formatBytes(SETTING(TOTAL_UPLOAD))) % Text::toT(Util::formatBytes(SETTING(TOTAL_DOWNLOAD)))));
+	setItemText(IDC_ABOUT_TTH, T_("TTH:"));
 	setItemText(IDC_GREETZ, T_("Greetz and Contributors"));
 	setItemText(IDC_TOTALS, T_("Totals"));
 	setItemText(IDC_LATEST_VERSION, T_("Latest stable version"));

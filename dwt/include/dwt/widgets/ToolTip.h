@@ -58,7 +58,7 @@ class ToolTip :
 
 		Dispatcher(const F& f_) : f(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			LPNMTTDISPINFO ttdi = reinterpret_cast< LPNMTTDISPINFO >( msg.lParam );
 			ToolTip* tip = hwnd_cast<ToolTip*>(ttdi->hdr.hwndFrom);
 			if(tip) {

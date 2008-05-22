@@ -29,7 +29,7 @@ public:
 	PropPage(dwt::Widget* parent);
 	virtual ~PropPage();
 
-	virtual void write() = 0;
+	virtual void write() { }
 
 	enum Type { T_STR, T_INT, T_BOOL, T_CUSTOM, T_END };
 

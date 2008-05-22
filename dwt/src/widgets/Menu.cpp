@@ -42,6 +42,7 @@
 #include <dwt/DWTException.h>
 #include <dwt/util/check.h>
 
+#include <algorithm>
 #include <boost/scoped_array.hpp>
 
 namespace dwt {

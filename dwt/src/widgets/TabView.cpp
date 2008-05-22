@@ -37,6 +37,8 @@
 #include <dwt/util/StringUtils.h>
 #include <dwt/DWTException.h>
 
+#include <algorithm>
+
 namespace dwt {
 
 TabView::Seed::Seed(bool toggleActive_) :
@@ -285,7 +287,7 @@ TabView::TabInfo* TabView::getTabInfo(int i) {
 	return 0;
 }
 
-bool TabView::handleTextChanging(ContainerPtr w, const tstring& newText) {
+void TabView::handleTextChanging(ContainerPtr w, const tstring& newText) {
 	int i = findTab(w);
 	if(i != -1) {
 		setText(i, formatTitle(newText));
@@ -294,7 +296,6 @@ bool TabView::handleTextChanging(ContainerPtr w, const tstring& newText) {
 		if((i == active) && titleChangedFunction)
 			titleChangedFunction(newText);
 	}
-	return true;
 }
 
 tstring TabView::formatTitle(tstring title) {

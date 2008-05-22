@@ -4,8 +4,12 @@ Import('dev source_path')
 
 env, target, sources = dev.prepare_build(source_path, 'DCPlusPlus')
 
-if 'gcc' in env['TOOLS'] and env['gch']:
-    env['Gch'] = env.Gch('stdafx.h')[0]
+# precompiled header
+if env['CC'] == 'cl': # MSVC
+	env['PCHSTOP'] = 'stdafx.h'
+	env['PCH'] = env.PCH('stdafx.cpp')[0]
+elif 'gcc' in env['TOOLS'] and env['gch']:
+	env['Gch'] = env.Gch('stdafx.h')[0]
 
 res = env.RES(dev.get_sources(source_path, '*.rc'))
 env.Depends(res, 'resource.h')

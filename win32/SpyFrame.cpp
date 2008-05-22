@@ -28,7 +28,9 @@
 
 int SpyFrame::columnSizes[] = { 305, 70, 85 };
 int SpyFrame::columnIndexes[] = { COLUMN_STRING, COLUMN_COUNT, COLUMN_TIME };
+#ifndef _MSC_VER
 const size_t SpyFrame::AVG_TIME; // TODO gcc needs this - why?
+#endif
 
 static const char* columnNames[] = {
 	N_("Search String"),

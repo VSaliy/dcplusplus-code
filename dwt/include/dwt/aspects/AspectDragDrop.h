@@ -62,7 +62,7 @@ class AspectDragDrop
 
 		Dispatcher(const F& f_) : f(f_) { }
 		
-		bool operator()(const MSG& msg, LRESULT& ret) {
+		bool operator()(const MSG& msg, LRESULT& ret) const {
 			std::vector<tstring> files;
 			Point pt;
 			HDROP handle = (HDROP)msg.wParam;

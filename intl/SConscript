@@ -1,8 +1,12 @@
 Import('dev source_path')
 
-ret = None
+if dev.env['CC'] == 'cl': # MSVC
+	# from the gettext win32-readme: "MS Visual C/C++ with "nmake" is no longer supported."
+	# therefore, we use a pre-compiled library and directly link to it.
+	dev.env.Prepend(LIBS=['intl'])
+	dev.env.Append(LIBPATH=['#/intl/lib'])
 
-if dev.is_win32():
+elif 'mingw' in dev.env['TOOLS']:
 	env, target, sources = dev.prepare_build(source_path, 'aintl', '*.c', in_bin=False)
 
 	env.Append(CPPDEFINES=['LOCALEDIR=\\"\\"', 'LOCALE_ALIAS_PATH=\\"\\"', 'INSTALLDIR=\\"\\"', 'LIBDIR=\\"\\"', 'BUILDING_LIBINTL', 
@@ -14,7 +18,9 @@ if dev.is_win32():
 	import os
 	dev.env.Append(LIBPATH=[os.path.dirname(target)])
 	ret = env.StaticLibrary(target, sources)
+	Return('ret')
+
 else:
 	print "intl only built on win32"
 
-Return('ret')
+Return()
