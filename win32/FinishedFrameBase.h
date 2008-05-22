@@ -77,11 +77,13 @@ protected:
 			cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 			cs.location = tabs->getClientSize();
 			filesWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
+			filesWindow->onClosing(std::tr1::bind(&noClose));
 			tabs->add(filesWindow, dwt::IconPtr(new dwt::Icon(in_UL ? IDR_FINISHED_UL_BY_FILE : IDR_FINISHED_DL_BY_FILE)));
 
 			cs.style &= ~WS_VISIBLE;
 			cs.caption = T_("Grouped by users");
 			usersWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
+			usersWindow->onClosing(std::tr1::bind(&noClose));
 			tabs->add(usersWindow, dwt::IconPtr(new dwt::Icon(in_UL ? IDR_FINISHED_UL_BY_USER : IDR_FINISHED_DL_BY_USER)));
 		}
 
@@ -351,6 +353,10 @@ private:
 	dwt::ContainerPtr usersWindow;
 
 	TaskQueue tasks;
+
+	static bool noClose() {
+		return false;
+	}
 
 	LRESULT handleSpeaker() {
 		TaskQueue::List t;

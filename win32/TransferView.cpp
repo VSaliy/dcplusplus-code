@@ -60,6 +60,10 @@ static const char* downloadNames[] = {
 	N_("Size")
 };
 
+static bool noClose() {
+	return false;
+}
+
 static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
 	control->setBounds(dwt::Rectangle(parent->getClientAreaSize()));
 }
@@ -88,12 +92,14 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		cs.location = tabs->getClientSize();
 		connectionsWindow = dwt::WidgetCreator<Container>::create(tabs, cs);
 		connectionsWindow->setHelpId(IDH_CONNECTIONS);
+		connectionsWindow->onClosing(std::tr1::bind(&noClose));
 		tabs->add(connectionsWindow);
 
 		cs.style &= ~WS_VISIBLE;
 		cs.caption = T_("Downloads");
 		downloadsWindow = dwt::WidgetCreator<Container>::create(tabs, cs);
 		downloadsWindow->setHelpId(IDH_DOWNLOADS);
+		downloadsWindow->onClosing(std::tr1::bind(&noClose));
 		tabs->add(downloadsWindow);
 	}
 	
