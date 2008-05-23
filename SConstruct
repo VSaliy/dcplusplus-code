@@ -97,9 +97,9 @@ env.Append(CPPPATH = ["#/boost/boost/tr1/tr1/", "#/boost/", "#/htmlhelp/include/
 env.Append(LIBPATH = ["#/htmlhelp/lib/"])
 
 if env['nativestl']:
-	# assume any STL included by the compiler has all tr1 containers
-	# todo: the define name is mis-leading, as MSVC 9 can also have all tr1 containers
-	env.Append(CPPDEFINES = ['BOOST_HAS_GCC_TR1'])
+	if 'gcc' in env['TOOLS']:
+		env.Append(CPPDEFINES = ['BOOST_HAS_GCC_TR1'])
+	# boost detects MSVC's tr1 automagically
 
 else:
 	env.Append(CPPPATH = ['#/stlport/stlport/'])
@@ -110,7 +110,7 @@ else:
 	else:
 		env.Append(LIBS = ['stlport.5.1'])
 
-	# assume STLPort has basic tr1 containers
+	# assume STLPort has tr1 containers
 	env.Append(CPPDEFINES = ['BOOST_HAS_TR1'])
 
 if 'gcc' in env['TOOLS']:
