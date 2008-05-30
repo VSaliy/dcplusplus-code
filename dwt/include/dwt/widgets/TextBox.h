@@ -113,6 +113,12 @@ public:
 	/// Returns the position of the caret
 	int getCaretPos();
 
+	/// Returns the currently selected text offset range
+	std::pair<long, long> getCaretPosRange() const;
+
+	/// Return first visible line of edit control
+	long getFirstVisibleLine();
+
 	/// Call this function to scroll the caret into view
 	/** If the caret is not visible within the currently scrolled in area, the Text
 	  * Box will scroll either down or up until the caret is visible.
@@ -164,10 +170,14 @@ public:
 	
 	int lineFromChar(int c = -1);
 	
+	int lineLength(int c);
+	
 	void setModify(bool modify = false);
 	
 	bool getModify();
 
+	ScreenCoordinate getContextMenuPos();
+	
 protected:
 	// Constructor Taking pointer to parent
 	explicit TextBoxBase( dwt::Widget * parent );
@@ -236,15 +246,11 @@ public:
 	  */
 	void setLowerCase( bool value = true );
 
-	ScreenCoordinate getContextMenuPos();
-	
 	int charFromPos(const ScreenCoordinate& pt);
 	
 	int lineFromPos(const ScreenCoordinate& pt);
 	
 	int lineIndex(int line);
-	
-	int lineLength(int c);
 	
 	tstring getLine(int line);
 
@@ -307,6 +313,16 @@ inline int TextBoxBase::getCaretPos() {
 	DWORD start, end;
 	this->sendMessage(EM_GETSEL, reinterpret_cast< WPARAM >( & start ), reinterpret_cast< LPARAM >( & end ) );
 	return static_cast< int >( end );
+}
+
+inline std::pair<long, long> TextBoxBase::getCaretPosRange() const {
+	DWORD start, end;
+	this->sendMessage(EM_GETSEL, reinterpret_cast< WPARAM >( & start ), reinterpret_cast< LPARAM >( & end ) );
+	return std::make_pair(static_cast< long >( start ), static_cast< long >( end ));
+}
+
+inline long TextBoxBase::getFirstVisibleLine() {
+	return this->sendMessage(EM_GETFIRSTVISIBLELINE, 0, 0);
 }
 
 inline void TextBoxBase::showCaret() {
@@ -401,7 +417,7 @@ inline int TextBox::lineIndex(int line) {
 	return static_cast<int>(::SendMessage(this->handle(), EM_LINEINDEX, static_cast<WPARAM>(line), 0));
 }
 
-inline int TextBox::lineLength(int c) {
+inline int TextBoxBase::lineLength(int c) {
 	return static_cast<int>(::SendMessage(this->handle(), EM_LINELENGTH, static_cast<WPARAM>(c), 0));
 }
 
