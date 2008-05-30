@@ -148,6 +148,7 @@ SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString_,
 			searchBox->insertValue(0, *i);
 		}
 		searchBox->getTextBox()->onKeyDown(std::tr1::bind(&SearchFrame::handleSearchKeyDown, this, _1));
+		searchBox->getTextBox()->onChar(std::tr1::bind(&SearchFrame::handleSearchChar, this, _1));
 	}
 
 	{
@@ -1149,4 +1150,9 @@ bool SearchFrame::handleSearchKeyDown(int c) {
 		return true;
 	}
 	return false;
+}
+
+bool SearchFrame::handleSearchChar(int c) {
+	// avoid the "beep" sound when enter is pressed
+	return c == VK_RETURN;
 }

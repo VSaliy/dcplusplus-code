@@ -13,6 +13,7 @@
 * [L#230972] Copy any field of hubframe userlist to clipboard (cologic)
 * Prevent transfer tabs from being closed (poy)
 * [dwt] Improved richedit support (thanks cologic)
+* [L#228285] No "beep" sound when starting a search with the enter key (poy)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
