@@ -60,6 +60,7 @@ class RichTextBox :
 	public TextBoxBase
 {
 	friend class WidgetCreator< RichTextBox >;
+	typedef TextBoxBase BaseType;
 public:
 	/// Class type
 	typedef RichTextBox ThisType;
@@ -72,10 +73,8 @@ public:
 	  * knows the type of the class whose seed values it contains. Every widget
 	  * should define one of these.       
 	  */
-	class Seed
-		: public Widget::Seed
+	struct Seed : public BaseType::Seed
 	{
-	public:
 		typedef RichTextBox::ThisType WidgetType;
 
 		FontPtr font;
@@ -100,6 +99,16 @@ public:
 	  */
 	void setBackgroundColor( COLORREF color );
 
+	/// Sets default character formatting of the WidgetRichTextBox
+	void setDefaultCharFormat( CHARFORMAT cf );
+
+	int charFromPos(const ScreenCoordinate& pt);
+
+	int lineFromPos(const ScreenCoordinate& pt);
+
+	tstring textUnderCursor(const ScreenCoordinate& p);
+
+	LONG streamIn(UINT uFormat, EDITSTREAM& es);
 protected:
 	// Constructor Taking pointer to parent
 	explicit RichTextBox( dwt::Widget * parent );
@@ -124,6 +133,12 @@ inline void RichTextBox::setBackgroundColor( COLORREF color )
 	this->sendMessage(EM_SETBKGNDCOLOR, 0, static_cast< LPARAM >( color ) );
 }
 
+inline void RichTextBox::setDefaultCharFormat( CHARFORMAT cf )
+{
+	this->sendMessage(EM_SETCHARFORMAT, 0, reinterpret_cast< LPARAM >(&cf));
+}
+
+// end namespace dwt
 }
 
 #endif //! WINCE
