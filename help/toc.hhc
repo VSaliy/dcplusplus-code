@@ -251,6 +251,10 @@
 		</OBJECT>
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Compile instructions">
+			<param name="Local" value="compile.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Applying patches">
 			<param name="Local" value="dev_applypatch.html">
 			</OBJECT>

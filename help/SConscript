@@ -6,10 +6,12 @@ env = dev.env.Clone()
 # source; hence, we build it even when the help file is not being built.
 from gen_cshelp import gen_cshelp
 cshelp_targets = ['cshelp.h', 'cshelp.txt']
-env.Ignore(cshelp_targets, 'changelog.html')
+env.Ignore(cshelp_targets, ['changelog.html', 'compile.html'])
 cshelp_sources = Glob('*.html', strings = 1)
 if 'changelog.html' in cshelp_sources:
 	cshelp_sources.remove('changelog.html')
+if 'compile.html' in cshelp_sources:
+	cshelp_sources.remove('compile.html')
 env.Command(cshelp_targets, cshelp_sources, Action(gen_cshelp, 'Building context-sensitive help files'))
 env.Depends('resource.h', 'cshelp.h')
 
@@ -18,14 +20,18 @@ if not env['help']:
 
 # generate changelog.html
 from gen_changelog import gen_changelog
-env.Command('changelog.html', '#/changelog.txt', Action(gen_changelog, 'Building changelog.html'))
+env.Command('changelog.html', ['#/changelog.txt', 'template.html'], Action(gen_changelog, 'Building changelog.html'))
+
+# generate compile.html
+from gen_compile import gen_compile
+env.Command('compile.html', ['#/Compile.txt', 'template.html'], Action(gen_compile, 'Building compile.html'))
 
 # the following is inspired by the NSIS build system
 
 chm_builder = Builder(
 	action = [
 		Copy('users.bmp', '../res/users.bmp'),
-		Action('hhc DCPlusPlus.hhp > compile.log', 'Building the help file'),
+		Action('hhc DCPlusPlus.hhp > hhc.log', 'Building the help file'),
 		Delete('users.bmp')
 	], chdir = 'help'
 )
