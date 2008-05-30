@@ -218,6 +218,7 @@ private:
 	void handleRemove();
 	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	bool handleSearchKeyDown(int c);
+	bool handleSearchChar(int c);
 	
 	void layout();
 	bool preClosing();
