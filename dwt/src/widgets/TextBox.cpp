@@ -82,7 +82,7 @@ tstring TextBoxBase::getSelection() const
 	return retVal;
 }
 
-ScreenCoordinate TextBox::getContextMenuPos() {
+ScreenCoordinate TextBoxBase::getContextMenuPos() {
 	RECT rc;
 	::GetClientRect(this->handle(), &rc);
 	return ClientCoordinate (Point(rc.right/2, rc.bottom/2), this);

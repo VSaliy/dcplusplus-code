@@ -12,6 +12,7 @@
 * Fixed invisible menu items in large owner-drawn menus (poy)
 * [L#230972] Copy any field of hubframe userlist to clipboard (cologic)
 * Prevent transfer tabs from being closed (poy)
+* [dwt] Improved richedit support (thanks cologic)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
