@@ -29,6 +29,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <boost/lambda/lambda.hpp>
 #include <dwt/widgets/RichTextBox.h>
 
 #include <dwt/LibraryLoader.h>
@@ -36,7 +37,7 @@
 namespace dwt {
 
 RichTextBox::Seed::Seed() :
-	Widget::Seed(RICHEDIT_CLASS, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | WS_HSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_MULTILINE | WS_BORDER | ES_WANTRETURN),
+	BaseType::Seed(RICHEDIT_CLASS, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | WS_HSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_MULTILINE | WS_BORDER | ES_WANTRETURN),
 	font(new Font(DefaultGuiFont)),
 	backgroundColor(RGB( 255, 255, 255 )),
 	scrollBarHorizontallyFlag(false),
@@ -58,5 +59,47 @@ void RichTextBox::create( const Seed & cs )
 	setScrollBarVertically( cs.scrollBarVerticallyFlag );
 }
 
+inline int RichTextBox::charFromPos(const ScreenCoordinate& pt) {	
+	ClientCoordinate cc(pt, this);
+	// Unlike edit control: "The return value specifies the zero-based character index of the character
+	// nearest the specified point. The return value indicates the last character in the edit control if the
+	// specified point is beyond the last character in the control."
+	POINTL lp;
+	lp.x = cc.x();
+	lp.y = cc.y();
+	return ::SendMessage(this->handle(), EM_CHARFROMPOS, 0, (LPARAM)&lp);
+}
+
+inline int RichTextBox::lineFromPos(const ScreenCoordinate& pt) {
+	ClientCoordinate cc(pt, this);
+	return ::SendMessage(this->handle(), EM_EXLINEFROMCHAR, 0, charFromPos(pt));
+}
+
+tstring RichTextBox::textUnderCursor(const ScreenCoordinate& p) {
+	int i = charFromPos(p), cur = 0;
+	tstring tmp = getText();
+
+	// http://rubyforge.org/pipermail/wxruby-users/2006-August/002116.html
+	// Otherwise charFromPos will be increasingly off from getText with each new
+	// line by one character. 
+	i = std::find_if(tmp.begin(), tmp.end(),
+		(cur += (boost::lambda::_1 != _T('\r')), boost::lambda::var(cur) >= i)) - tmp.begin();
+
+	tstring::size_type start = tmp.find_last_of(_T(" <\t\r\n"), i);
+	if(start == tstring::npos)
+		start = 0;
+	else
+		start++;
+
+	tstring::size_type end = tmp.find_first_of(_T(" >\t\r\n"), start + 1);
+	if(end == tstring::npos)
+		end = tmp.size();
+
+	return tmp.substr(start, end - start);
+}
+
+LONG RichTextBox::streamIn(UINT uFormat, EDITSTREAM& es) {
+	return static_cast<LONG>(sendMessage(EM_STREAMIN, uFormat, (LPARAM)&es));
+}
 
 }
