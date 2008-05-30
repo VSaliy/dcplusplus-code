@@ -12,8 +12,9 @@ custom.py
 ./htmlhelp/lib/htmlhelp.lib
 natupnp.h
 ./help/changelog.html
-./help/compile.log
+./help/compile.html
 ./help/cshelp.h
 ./help/cshelp.txt
+./help/hhc.log
 ./.pydevproject
 ./doc

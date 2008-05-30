@@ -9,6 +9,7 @@
 #define IDH_GET_STARTED 10001
 #define IDH_CHANGELOG 10002
 #define IDH_KEYBOARD 10003
+#define IDH_COMPILE 10004
 
 // windows
 #define IDH_MAIN 10100

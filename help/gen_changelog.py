@@ -1,25 +1,20 @@
 def gen_changelog(target, source, env):
         import re, cgi
 
-	start_head = """<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\">
-<head>
-  <meta content=\"en-us\" http-equiv=\"Content-Language\"/>
-  <meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\"/>
-  <link type=\"text/css\" rel=\"stylesheet\" href=\"office11.css\"/>
-  <link type=\"text/css\" rel=\"stylesheet\" href=\"style.css\"/>
-  <title>Changelog</title>
-  <style type=\"text/css\">
-    li { margin-left: auto; margin: 0em 0em 0em 0em; }
-  </style>
-</head>
-<body>
+	f_template = open(str(source[1]), "r")
+	template = f_template.read()
+	f_template.close()
+	template = template.split("<!-- contents -->", 1)
+
+	start_head = template[0] + """
+<style type=\"text/css\">
+li { margin-left: auto; margin: 0em 0em 0em 0em; }
+</style>
+
 <h1>DC++ Changelog</h1>
 See the version history of DC++ below.
 
 """
-
-	end_html = "</body>\n</html>"
 
 	start_change = "  <li>%(change)s"
 	bugzilla_text = "  <li><a href=\"http://dcpp.net/bugzilla/show_bug.cgi?id=%(bug_id)s\" target=\"_blank\" class=\"external\">[Bugzilla bug %(bug_id)s]</a> %(change)s"
@@ -112,6 +107,6 @@ See the version history of DC++ below.
 		fp_html.write(end_change)
 	if close_version:
 		fp_html.write(end_version)
-	fp_html.write(end_html)
+	fp_html.write(template[1])
 	fp_html.close()
 	fp_txt.close()
