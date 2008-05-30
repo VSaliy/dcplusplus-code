@@ -44,6 +44,10 @@ public:
 		explicit Seed(double pos_ = 0.5);
 	};
 
+	double getRelativePos() const {
+		return pos;
+	}
+
 	void setRelativePos(double pos_) {
 		pos = pos_;
 		resizeChildren();

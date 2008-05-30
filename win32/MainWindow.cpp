@@ -173,7 +173,7 @@ void MainWindow::initWindow() {
 	
 	setHelpId(IDH_MAIN);
 
-	paned = addChild(WidgetHPaned::Seed(0.7));
+	paned = addChild(WidgetHPaned::Seed(SETTING(MAIN_WINDOW_PANED_POS) / 1000.));
 }
 
 void MainWindow::initMenu() {
@@ -468,10 +468,10 @@ void MainWindow::autoConnect(const FavoriteHubEntryList& fl) {
 }
 
 void MainWindow::saveWindowSettings() {
-	WINDOWPLACEMENT wp = { sizeof(wp)};
+	SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_PANED_POS, static_cast<int>(paned->getRelativePos() * 1000.));
 
+	WINDOWPLACEMENT wp = { sizeof(wp)};
 	::GetWindowPlacement(this->handle(), &wp);
-	
 	if(wp.showCmd == SW_SHOW || wp.showCmd == SW_SHOWNORMAL) {
 		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_X, static_cast<int>(wp.rcNormalPosition.left));
 		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_Y, static_cast<int>(wp.rcNormalPosition.top));
