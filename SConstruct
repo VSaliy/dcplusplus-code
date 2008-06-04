@@ -43,7 +43,7 @@ gcc_link_flags = {
 }
 
 msvc_link_flags = {
-	'common' : ['/DEBUG', '/FIXED:NO', '/INCREMENTAL:NO', '/SUBSYSTEM:WINDOWS', '/NODEFAULTLIB:libcmt', "/MANIFESTDEPENDENCY:type='Win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='X86' publicKeyToken='6595b64144ccf1df' language='*'"],
+	'common' : ['/DEBUG', '/FIXED:NO', '/INCREMENTAL:NO', '/SUBSYSTEM:WINDOWS', '/NODEFAULTLIB:libcmt', '/MANIFEST:NO'],
 	'debug' : [],
 	'release' : []
 }
