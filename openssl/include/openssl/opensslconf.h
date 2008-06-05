@@ -10,8 +10,8 @@
 #ifndef OPENSSL_NO_CAMELLIA
 # define OPENSSL_NO_CAMELLIA
 #endif
-#ifndef OPENSSL_NO_ENGINE
-# define OPENSSL_NO_ENGINE
+#ifndef OPENSSL_NO_CMS
+# define OPENSSL_NO_CMS
 #endif
 #ifndef OPENSSL_NO_GMP
 # define OPENSSL_NO_GMP
@@ -39,6 +39,9 @@
 #ifndef OPENSSL_THREADS
 # define OPENSSL_THREADS
 #endif
+#ifndef OPENSSL_NO_DYNAMIC_ENGINE
+# define OPENSSL_NO_DYNAMIC_ENGINE
+#endif
 
 /* The OPENSSL_NO_* macros are also defined as NO_* if the application
    asks for it.  This is a transient feature that is provided for those
@@ -48,8 +51,8 @@
 # if defined(OPENSSL_NO_CAMELLIA) && !defined(NO_CAMELLIA)
 #  define NO_CAMELLIA
 # endif
-# if defined(OPENSSL_NO_ENGINE) && !defined(NO_ENGINE)
-#  define NO_ENGINE
+# if defined(OPENSSL_NO_CMS) && !defined(NO_CMS)
+#  define NO_CMS
 # endif
 # if defined(OPENSSL_NO_GMP) && !defined(NO_GMP)
 #  define NO_GMP
