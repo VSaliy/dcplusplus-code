@@ -99,7 +99,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 		}
 
 		// there are no other downloads
-		return Segment(0, remaining);
+		return Segment(getDownloadedBytes(), remaining);
 	}
 
 	int64_t targetSize;
