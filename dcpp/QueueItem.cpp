@@ -89,24 +89,22 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 	if(getSize() == -1 || blockSize == 0) {
 		return Segment(0, -1);
 	}
-
-	int64_t remaining = getSize() - getDownloadedBytes();
-
-	if(!BOOLSETTING(SEGMENTED_DL)) {
-		if(!downloads.empty()) {
-			// cancel current downloads
-			return Segment(0, 0);
-		}
-
-		// there are no other downloads
-		return Segment(getDownloadedBytes(), remaining);
+	
+	if(!BOOLSETTING(SEGMENTED_DL) && !downloads.empty()) {
+		return Segment(0, 0);
 	}
-
+	
+	int64_t remaining = getSize() - getDownloadedBytes();
+	
 	int64_t targetSize;
-	double doneBytes = static_cast<double>(getDownloadedBytes()) / getSize();
-
-	// We want smaller blocks at the end of the transfer, squaring gives a nice curve...
-	targetSize = wantedSize * std::max(0.25, (1. - (doneBytes * doneBytes)));
+	if(BOOLSETTING(SEGMENTED_DL)) {
+		double done = static_cast<double>(getDownloadedBytes()) / getSize();
+		
+		// We want smaller blocks at the end of the transfer, squaring gives a nice curve...
+		targetSize = wantedSize * std::max(0.25, (1. - (done * done)));
+	} else {
+		targetSize = remaining;
+	}
 
 	if(targetSize > blockSize) {
 		// Round off to nearest block size
@@ -117,7 +115,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 
 	int64_t start = 0;
 	int64_t curSize = targetSize;
-	
+
 	while(start < getSize()) {
 		int64_t end = std::min(getSize(), start + curSize);
 		Segment block(start, end - start);
