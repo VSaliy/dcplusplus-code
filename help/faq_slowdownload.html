@@ -8,42 +8,34 @@
 </head>
 <body>
 <h1>Slow download speeds </h1>
-<p>If you experience slow downloads, it could be for many reasons:</p>
+<p>If you experience slow downloads, it could be for many reasons. However, 
+	they can be different when you experience slow download speed from certain
+	user(s) or when you get slow speeds downloading from every peer. Please try 
+	to download from or get filelist of several (at least 10) users before you go on.
+	Note that this faq does NOT cover the case when your downloads won't start at all.</p>
+	
+<h2>Slow downloads from certain user(s)</h2>
+<p>This can happen for the following reasons :</p>
 <ol>
-  <li>The upload bandwidth of the person you're downloading from is
-maxed out. Don't pay attention to the value of the <span
- style="font-style: italic;">connection type</span> column, the value
-is often is not an accurate representation of the user's
-connection type.
-    <ul>
-      <li>Users with fewer slots used <span style="font-style: italic;">may</span>
-result in faster speeds - someone with two out of three (2/3) slots
-free may have more bandwidth available than someone with one out of
-three (1/3). This number appears in the status column of the
-Search Window. </li>
-    </ul>
-  </li>
-  <li>You need to optimize your operating system for your current
-connection speed. First, <span style="font-weight: bold;">close <span
- style="text-decoration: underline;">all</span></span> <acronym
- title="peer to peer">P2P</acronym> applications. Next run the <a
- href="http://www.dslreports.com/tweaks" target="_blank" class="external">DSLReports
-TweakTest</a>. Once you have optimized it, then run a 
-<a href="http://www.dslreports.com/stest" target="_blank" class="external">Speed
-Test</a> (select the site closest to your location for
-accurate results). This will give you a good idea what your
-maximum download and upload speeds are. If you're getting within
-10% of your connection speed, that's the best you can get! If you
-are having trouble with your <span style="font-style: italic;">broadband</span>
-connection, and it relates to packet loss, excessive latency, or
-Internet or <acronym title="Internet Service Provider">ISP</acronym>
-congestion, running the <a href="http://www.dslreports.com/linequality"
- target="_blank" class="external">Line Quality Test </a>
-may help find the cause (<i>requires logon, free signup).</i>
-  </li>
-  <li>The person who you are downloading from is using a bandwidth
+ <li>The upload bandwidth of the person(s) you're downloading from is
+ maxed out. Don't pay attention to the value of the 
+ <a href="window_hub.html#userlistcolumns">Connection</a>
+ column in the user's list, it's completely subjective and often is not a true reflection
+ on the person's connection type since they can set it. 
+ </li>
+ <li>The peer you're downloading from is too far from you (maybe in another
+ continent) and there's too many <a href="http://www.webopedia.com/TERM/H/hop.html"
+ target="_blank" class="external">hops</a> in the connection between you and your peer.
+ Its also possible that either your ISP or the other user's provider has
+ limited overseas bandwith available. 
+ You can check what country is your peer from in the <i>IP</i> column of the 
+ <a href="window_connections.html"> Connections window</a> 
+ if the setting <a href="settings_appearance.html#guessip">Guess user country from IP</a>
+ is enabled in the Appearance</a> settings panel.
+  </li> 
+ <li>The person who you are downloading from is using a bandwidth
 limiter. There are two types: client based and third-party
-program. <br/>
+program. 
     <ul>
       <li>Often the clients with limiting capability have set download
 and upload speed ratios in place to avoid abuse. (ex. If the
@@ -62,34 +54,126 @@ may be more prone to abuse. For particularly slow transfers - 1
 KiB/s or slower, it <span style="font-weight: bold;">may</span> be to
 blame. </li>
     </ul>
-  </li>
+ </li> 
+ <li>The person who you are downloading from suffers from one or more  
+ constant speed problem described in the next section.
+ </li> 
+</ol>
+<p>Solution : try to find more sources for your downloads :</p>
+<ul>
+ <li>
+ To gain more possible sources for your download select your download either in 
+ the <a href="window_download_queue.html">Download Queue</a> or in the
+ <a href="window_downloads.html">Downloads window</a>. Then use the rightclick
+ function <i>Search for alternates</i> to see if there are other users have
+ the file shared. In the slots column of the <a href="window_search.html">
+ Search results window</a> you can find users with fewer slots used 
+ <span style="font-style: italic;">may</span> result in faster speeds - someone 
+ with two out of three (2/3) slots free may have more bandwidth available 
+ than someone with one out of three (1/3).</li>
+ <li>
+ Sources from search results can be automatically added to the queue if you enable
+ <a href="settings_queue.html#automatchqueue">Automatically Match Queue for Auto Search Hits</a>
+ in Queue settings.</li>
+ <li>
+ Automatic discovery for additional sources is also possible if you enable
+ <a href="settings_queue.html#autosearchdl">Automatically Search for Alternative Download Locations</a>
+ in Queue settings. Note that some hubs have
+ predefined minimum search interval rules so enabling this function may
+ result no hits for manual searches in these hubs.
+ </li>
+ <li>
+ To minimize the download time make sure you have checked 
+ <a href="settings_advanced.html#segmented">Enable segmented downloads</a> in
+ Advanced settings. With segmented downloads enabled
+ you are able to download the pieces of a file from several sources at the same time.
+ </li>
+</ul>
+
+<h2>Slow downloads from every user</h2>
+<p>If you experience constant slow downloads with DC++ this can be for one or more of the following reasons :</p>
+<ol>
+
   <li>Your Internet connection is shared with others on your <acronym
  title="Local Area Network">LAN</acronym> and they are using up all the
-available bandwidth. Tell them to knock it off. =) </li>
-  <li>Your copy of Windows XP or Server 2003 has the "<acronym
- title="Quality of Service">QoS</acronym> Packet Scheduler"
-enabled. Follow <a
- href="http://support.earthlink.net/mu/1/psc/img/walkthroughs/windows_XP/6800.psc.html"
- target="_blank" class="external"> this guide to disable QoS</a>.
-Windows 95/98, Millennium, and 2000 do not come
-with QoS. Some routers have QoS capabilities, but shouldn't be
-enabled by default. Please consult your router's manual for more
-information. </li>
+available bandwidth. Tell them to knock it off. =) 
+  Also your connection speed to the gateway or router on your <acronym
+ title="Local Area Network">LAN</acronym> can be slower than the available speed
+ from your <acronym title="Internet Service Provider">ISP</acronym>. 
+ It could be for reasons like week signal strength on a wireless connection, 
+ broken/old network devices, etc... Try to do a file transfer test within your local
+ network to be sure that it's fast enough.</li>
+  
   <li>Your ISP may be limiting your P2P traffic via some method of
 packet shaping. Call up the ISP and inquire if they do anything
-with P2P traffic. If the ISP <span style="font-style: italic;">does</span>
-throttle you, then there is nothing that can be done to increase the
+with P2P traffic. You can try to connect to ADC hubs and test your downloads there.
+As ADC is a newer and more efficient DC protocol it can be still unknown to your ISP's
+throttling system. If the ISP <span style="font-style: italic;">does</span>
+throttle you, then there is nothing much that can be done to increase the
 speeds. This is very common at Universities and at the workplace,
 and is <a href="faq_university.html">the topic of another FAQ</a>.</li>
-  <li>Your Internet connection is <acronym
+
+  <li>You haven't set up your third party firewall or internet monitor
+software correctly. Some of these security applications may treat p2p transfer as a 
+<a href="http://en.wikipedia.org/wiki/Denial-of-service_attack" target="_blank"
+ class="external"> DDoS flood</a> attempt and tries to defend your computer from it.
+Try to disable or even uninstall these applications temporarily and test your downloads again.
+If it helps refer the application's documentation how to make exception rules for DC++.
+If you have a router its also possible that it has some anti-DDoS or flood protection
+feature and it may enabled by default. Check the router's documentation or configuration page
+for a possible option of this kind.</li>
+
+<li>You need to optimize your operating system for your current
+connection speed. First, <span style="font-weight: bold;">close <span
+ style="text-decoration: underline;">all</span></span> <acronym
+ title="peer to peer">P2P</acronym> applications. Next run the <a
+ href="http://www.dslreports.com/tweaks" target="_blank" class="external">DSLReports
+TweakTest</a>. Once you have optimized it, then run a speed test at
+<a href="http://www.dslreports.com/stest" target="_blank" class="external">DSLReports
+SpeedTest Page</a> or at the nice looking
+<a href="http://speedtest.net" target="_blank" class="external">SpeedTest.Net</a> page
+(select a test site closest to your location for
+accurate results). This will give you a good idea what your
+maximum download and upload speeds are. If you're getting within
+10% of your connection speed, that's the best you can get! If you
+are having trouble with your <span style="font-style: italic;">broadband</span>
+connection, and it relates to packet loss, excessive latency, or
+Internet or <acronym title="Internet Service Provider">ISP</acronym>
+congestion, running the <a href="http://www.dslreports.com/linequality"
+ target="_blank" class="external">Line Quality Test </a>
+may help find the cause (<i>requires logon, free signup).</i>
+  </li>
+
+    <li>Your Internet connection is <acronym
  title="Digital Subscriber Loop">DSL</acronym>, cable, or satellite one
 with an asymmetrical connection speed, such as 768/128 Kib/s or
 3.0 Mib/s / 256 Kib/s. On such connections, if you upload near the speed of
 your upload limit (16 KiB/s in the case of the 768/128 connection), it
-will affect the speeds of your downloads, no matter how much larger
-your download connection is. If this is happening, you can use
-the "<a href="settings_advanced.html#smallbuffer">Use small send buffer</a>"
-setting. </li>
+may affect the speeds of your downloads, no matter how much larger
+your download connection is. If this is happening, you can change the size of
+the <a href="settings_expert.html#writebuffer">Socket Write Buffer</a> in Experts Only
+panel of DC++ settings. It defaults to 8 KiB and you can try to change it to a smaller
+value. You should specify the value in bytes and you may have to try several values
+to test what size suits your connection best. Note that you should restart DC++ to 
+changes take effect.</li>
+
+  <li>Your copy of Windows XP, 2003 Server or Vista has the "<acronym
+ title="Quality of Service">QoS</acronym> Packet Scheduler"
+enabled so you are not able to use some reserved bandwith for download. Follow <a
+ href="http://kb.earthlink.net/case.asp?article=23629"
+ target="_blank" class="external"> this guide</a> to disable QoS in XP or
+ <a href="http://www.vistax64.com/tutorials/109326-qos-bandwidth-reserve-limit.html"
+ target="_blank" class="external"> this one</a> to disable QoS in Vista.
+Windows 2000 does not come with QoS. Some routers also have QoS capabilities, 
+but shouldn't be enabled by default. Please consult your router's manual for more
+information. </li>
+
+  <li>Your computer is infected with malicious software which altered the low level network
+settings of your operating system. This is common when your Windows become infected with spy/adware.
+Even they are disinfected, their destructive modifications usually still remain. You can
+follow the official guided help from Microsoft how to restore these settings 
+<a href="http://support.microsoft.com/kb/299357" target="_blank" class="external">here</a> and
+<a href="http://support.microsoft.com/kb/811259" target="_blank" class="external">here</a>.</li>
 </ol>
 </body>
 </html>
