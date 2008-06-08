@@ -29,6 +29,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <algorithm>
 #include <boost/lambda/lambda.hpp>
 #include <dwt/widgets/RichTextBox.h>
 
