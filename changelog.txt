@@ -15,7 +15,8 @@
 * [dwt] Improved richedit support (thanks cologic)
 * [L#228285] No "beep" sound when starting a search with the enter key (poy)
 * Upgraded to OpenSSL 0.9.8h (poy)
-* [L#237396] Fix crash when segmented downloads are switched off (poy)
+* [L#237396] Fix crash when segmented downloads are switched off (thanks bigmuscle)
+* [L#238333] Fix a possible remote crash on partial file list requests (thanks crise)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
@@ -92,7 +93,7 @@
 * [L#186429] Fix right-click issue when chat history is long (thanks poy)
 * [L#188107] In waiting users, show requested chunk (since we can't know % done)
 * [L#188585] Fixed crash when download connection was disconnected before any data was received
-* Fixed crash due to race condition on idle check (thans bigmuscle)
+* Fixed crash due to race condition on idle check (thanks bigmuscle)
 * Fixed crash when copying identity
 * Fixed potential timer race condition (thanks bigmuscle)
 * The good parts of partially downloaded segments are now added to queue (thanks bigmuscle)

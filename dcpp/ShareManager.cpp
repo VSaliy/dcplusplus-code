@@ -980,9 +980,9 @@ MemoryInputStream* ShareManager::generatePartialList(const string& dir, bool rec
 		}
 	} else {
 		string::size_type i = 1, j = 1;
-		
-		Directory* root = NULL;
-		
+
+		Directory* root = 0;
+
 		bool first = true;
 		while( (i = dir.find('/', j)) != string::npos) {
 			if(i == j) {
@@ -1007,6 +1007,10 @@ MemoryInputStream* ShareManager::generatePartialList(const string& dir, bool rec
 			}
 			j = i + 1;
 		}
+
+		if(!root)
+			return 0;
+
 		for(Directory::Map::const_iterator it2 = root->directories.begin(); it2 != root->directories.end(); ++it2) {
 			it2->second->toXml(sos, indent, tmp, recurse);
 		}
