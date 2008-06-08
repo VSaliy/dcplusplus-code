@@ -245,6 +245,10 @@
 			<param name="Name" value="What secret stuff are there?">
 			<param name="Local" value="faq_secret.html">
 			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="What do the DC++ tags mean?">
+			<param name="Local" value="faq_plusplus_tag.html">
+			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Development">

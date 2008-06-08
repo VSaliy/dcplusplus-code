@@ -9,12 +9,12 @@
 </head>
 
 <body>
-    <h1>The DC++-style tag</h1>
+    <h1>What do the DC++-style tags mean?</h1>
 
-    <h2>Notation</h2>The following information is appended to the
-    description field:<br/>
-    &lt;++ V:x,M:x,H:x/y/z,S:x[,O:x]&gt;<br/>
-    This is updated every 1-2 minutes if there are changes.
+    <h2>Notation</h2>The following information appears in the
+    <a href="window_hub.html#userlistcolumns">Tag column</a> for every
+    user in the user list of the <a href="window_hub.html">Hub window</a>:
+    &lt;++ V:x,M:x,H:x/y/z,S:x[,O:x]&gt;, where<br/>
 
     <div style="MARGIN-LEFT: 40px">
         <dl>
@@ -47,6 +47,10 @@
             it is enabled.</dd>
         </dl>
     </div>
+    The tag is updated every 1-2 minutes if there are changes. 
+    Other clients may introduce more tag elements such as L:x
+    or B:x which means usage of upolad bandwith limiter where
+    x is the amount of maximal upload bandwith in KiBs.
 
     <h2>History</h2>The DC++ tag was introduced back when the only
     available Direct Connect client was Neo-Modus DirectConnect
@@ -62,7 +66,7 @@
     joining multiple hubs or not, has a similar tag in it's
     description field. The custom is to replace "++" with some
     other identifier uniquely identifying the client type (common
-    are "oDC", "DCGUI" and "DC").
+    are "StrgDC++", "ApexDC++" and "PWDC++").
 </body>
 </html>
 

@@ -43,7 +43,6 @@ settings_tabs.html
 settings_favoritedirs.html
 chat_commands.html
 non-routable.html
-plusplus_tag.html
 netiquette.html
 credits.html
 window_main.html
@@ -82,6 +81,7 @@ faq_different_icons.html
 faq_units.html
 faq_install.html
 faq_secret.html
+faq_plusplus_tag.html
 dev_createpatch.html
 dev_applypatch.html
 links.html

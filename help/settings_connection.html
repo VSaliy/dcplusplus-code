@@ -10,7 +10,10 @@
 <h1><a name="connection"></a>Connection Settings</h1>
 This page has options on it that will let you properly configure DC++'s
 options for incoming and outgoing connections. Your incoming connection
-type must be properly chosen for downloading to work.<br/>
+type must be properly chosen for downloading to work. If you unsure
+about these settings you may want to follow the 
+<a href="get_started.html#connection">connection setup part</a>
+of the <a href="get_started.html">Get Started guide</a>.<br/>
 <h2>Incoming connection settings</h2>
 <dl style="margin-left: 40px;">
   <dt>Direct Connection</dt>
@@ -56,7 +59,7 @@ results. If this setting is blank, DC++ will use a random port between
   <dt>TLS Port</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_PORT_TLS">This is the port that DC++ listens on for <a href="settings_certs.html">TLS</a> connections.
  If this setting is blank, DC++ will use a random port between
-1025 and 32000.</dd>
+1025 and 32000. If specified, <b>it should be a different port value than TCP or UDP.</b></dd>
   <dt>External / WAN IP</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_EXTERNAL_IP">If you're directly connected to the internet, DC++ will tell remote users to connect to your local IP.
 Fill in this box <span style="font-weight: bold;">only</span> if you need to override the auto-detection.
