@@ -88,7 +88,13 @@ void Util::initialize() {
 	systemPath = Util::getFilePath(Text::fromT(buf));
 	configPath = systemPath;
 	dataPath = systemPath;
-	localePath = dataPath + "locale\\";
+
+	// libintl doesn't support wide path names so we use the short (8.3) format.
+	// https://sourceforge.net/forum/message.php?msg_id=4882703
+	tstring localePath_ = Text::toT(dataPath) + _T("locale\\");
+	memset(buf, 0, sizeof(buf));
+	::GetShortPathName(localePath_.c_str(), buf, sizeof(TCHAR) * (localePath_.size() + 1));
+	localePath = Text::fromT(buf);
 
 #else
 	systemPath = "/etc/";
