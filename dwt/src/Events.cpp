@@ -44,28 +44,35 @@ SizedEvent::SizedEvent( const MSG& msg ) :
 MouseEvent::MouseEvent(const MSG& msg) : pos(Point::fromLParam(msg.lParam)) {
 	::ClientToScreen(msg.hwnd, &pos.getPoint());
 
-	DWORD keys, button;
+	DWORD keys;
 	if(msg.message == WM_XBUTTONDOWN || msg.message == WM_XBUTTONUP || msg.message == WM_XBUTTONDBLCLK) {
 		keys = GET_KEYSTATE_WPARAM(msg.wParam);
-		button = GET_XBUTTON_WPARAM(msg.wParam);
-	} else
-		keys = button = msg.wParam;
 
-	isControlPressed = keys & MK_CONTROL;
-	isShiftPressed = keys & MK_SHIFT;
+		DWORD button = GET_XBUTTON_WPARAM(msg.wParam);
+		ButtonPressed = (
+			XBUTTON1 & button ? MouseEvent::X1 : (
+				XBUTTON2 & button ? MouseEvent::X2 : MouseEvent::OTHER
+			)
+		);
+	} else {
+		keys = msg.wParam;
 
-	// These might be an issue when porting to Windows CE since CE does only support LEFT and RIGHT (or something...)
-	ButtonPressed = (
-		MK_LBUTTON & button ? MouseEvent::LEFT : (
-			MK_RBUTTON & button ? MouseEvent::RIGHT : (
-				MK_MBUTTON & button ? MouseEvent::MIDDLE : (
-					MK_XBUTTON1 & button ? MouseEvent::X1 : (
-						MK_XBUTTON2 & button ? MouseEvent::X2 : MouseEvent::OTHER
+		// These might be an issue when porting to Windows CE since CE does only support LEFT and RIGHT (or something...)
+		ButtonPressed = (
+			MK_LBUTTON & keys ? MouseEvent::LEFT : (
+				MK_RBUTTON & keys ? MouseEvent::RIGHT : (
+					MK_MBUTTON & keys ? MouseEvent::MIDDLE : (
+						MK_XBUTTON1 & keys ? MouseEvent::X1 : (
+							MK_XBUTTON2 & keys ? MouseEvent::X2 : MouseEvent::OTHER
+						)
 					)
 				)
 			)
-		)
-	);
+		);
+	}
+
+	isControlPressed = keys & MK_CONTROL;
+	isShiftPressed = keys & MK_SHIFT;
 }
 
 }
