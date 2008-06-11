@@ -19,6 +19,7 @@
 * [L#238333] Fix a possible remote crash on partial file list requests (thanks crise)
 * [L#238522] Make translations work with wide path names (poy)
 * Extra mouse buttons can be used to switch between tabs (poy)
+* Fixed Alt+key combinations in the file list window (poy)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
