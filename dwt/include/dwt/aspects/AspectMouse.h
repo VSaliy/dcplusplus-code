@@ -162,7 +162,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onXMouseDown(const typename Dispatcher::F& f) {
+	void onXMouseDown(const typename XDispatcher::F& f) {
 		onXMouse(WM_XBUTTONDOWN, f);
 	}
 
@@ -173,7 +173,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onXMouseUp(const typename Dispatcher::F& f) {
+	void onXMouseUp(const typename XDispatcher::F& f) {
 		onXMouse(WM_XBUTTONUP, f);
 	}
 
@@ -183,7 +183,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onXMouseDblClick(const typename Dispatcher::F& f) {
+	void onXMouseDblClick(const typename XDispatcher::F& f) {
 		onXMouse(WM_XBUTTONDBLCLK, f);
 	}
 
