@@ -133,6 +133,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 		dirs->setNormalImageList(WinUtil::fileImages);
 		dirs->onSelectionChanged(std::tr1::bind(&DirectoryListingFrame::handleSelectionChanged, this));
 		dirs->onContextMenu(std::tr1::bind(&DirectoryListingFrame::handleDirsContextMenu, this, _1));
+		dirs->onXMouseUp(std::tr1::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
 	}
 	
 	{
@@ -151,6 +152,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 		files->onDblClicked(std::tr1::bind(&DirectoryListingFrame::handleDoubleClickFiles, this));
 		files->onKeyDown(std::tr1::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));
 		files->onContextMenu(std::tr1::bind(&DirectoryListingFrame::handleFilesContextMenu, this, _1));
+		files->onXMouseUp(std::tr1::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
 	}
 	
 	{
@@ -185,8 +187,6 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 	setStatus(STATUS_FIND, T_("Find"));
 	setStatus(STATUS_NEXT, T_("Next"));
 
-	files->onRaw(std::tr1::bind(&DirectoryListingFrame::handleXButtonUp, this, _1, _2), dwt::Message(WM_XBUTTONUP));
-	dirs->onRaw(std::tr1::bind(&DirectoryListingFrame::handleXButtonUp, this, _1, _2), dwt::Message(WM_XBUTTONUP));
 	string nick = ClientManager::getInstance()->getNicks(dl->getUser()->getCID())[0];
 	treeRoot = dirs->insert(NULL, new ItemInfo(Text::toT(nick), dl->getRoot()));
 
@@ -935,16 +935,11 @@ void DirectoryListingFrame::handleDoubleClickFiles() {
 	}
 }
 
-LRESULT DirectoryListingFrame::handleXButtonUp(WPARAM wParam, LPARAM lParam) {
-	if(HIWORD(wParam) & XBUTTON1) {
-		back();
-		return TRUE;
-	} else if(HIWORD(wParam) & XBUTTON2) {
-		forward();
-		return TRUE;
+void DirectoryListingFrame::handleXMouseUp(const dwt::MouseEvent& mouseEvent) {
+	switch(mouseEvent.ButtonPressed) {
+	case dwt::MouseEvent::X1: back(); break;
+	case dwt::MouseEvent::X2: forward(); break;
 	}
-
-	return FALSE;
 }
 
 bool DirectoryListingFrame::handleKeyDownFiles(int c) {

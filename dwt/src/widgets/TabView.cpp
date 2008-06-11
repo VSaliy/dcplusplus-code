@@ -106,6 +106,7 @@ void TabView::create(const Seed & cs) {
 	onLeftMouseUp(std::tr1::bind(&TabView::handleLeftMouseUp, this, _1));
 	onContextMenu(std::tr1::bind(&TabView::handleContextMenu, this, _1));
 	onMiddleMouseDown(std::tr1::bind(&TabView::handleMiddleMouseDown, this, _1));
+	onXMouseUp(std::tr1::bind(&TabView::handleXMouseUp, this, _1));
 
 	if(cs.style & TCS_TOOLTIPS) {
 		tip = WidgetCreator<ToolTip>::attach(this, TabCtrl_GetToolTips(handle())); // created and managed by the tab control thanks to the TCS_TOOLTIPS style
@@ -394,10 +395,10 @@ LRESULT TabView::handleToolTip(LPARAM lParam) {
 	return 0;
 }
 
-void TabView::handleLeftMouseDown(const MouseEvent& mouseEventResult) {
-	TabInfo* ti = getTabInfo(hitTest(mouseEventResult.pos));
+void TabView::handleLeftMouseDown(const MouseEvent& mouseEvent) {
+	TabInfo* ti = getTabInfo(hitTest(mouseEvent.pos));
 	if(ti) {
-		if(mouseEventResult.isShiftPressed)
+		if(mouseEvent.isShiftPressed)
 			ti->w->close();
 		else {
 			dragging = ti->w;
@@ -406,7 +407,7 @@ void TabView::handleLeftMouseDown(const MouseEvent& mouseEventResult) {
 	}
 }
 
-void TabView::handleLeftMouseUp(const MouseEvent& mouseEventResult) {
+void TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 	::ReleaseCapture();
 
 	if(dragging) {
@@ -416,7 +417,7 @@ void TabView::handleLeftMouseUp(const MouseEvent& mouseEventResult) {
 		if(dragPos == -1)
 			return;
 
-		int dropPos = hitTest(mouseEventResult.pos);
+		int dropPos = hitTest(mouseEvent.pos);
 
 		if(dropPos == -1) {
 			// not in the tab control; move the tab to the end
@@ -477,10 +478,17 @@ bool TabView::handleContextMenu(ScreenCoordinate pt) {
 	return false;
 }
 
-void TabView::handleMiddleMouseDown(const MouseEvent& mouseEventResult) {
-	TabInfo* ti = getTabInfo(hitTest(mouseEventResult.pos));
+void TabView::handleMiddleMouseDown(const MouseEvent& mouseEvent) {
+	TabInfo* ti = getTabInfo(hitTest(mouseEvent.pos));
 	if(ti)
 		ti->w->close();
+}
+
+void TabView::handleXMouseUp(const MouseEvent& mouseEvent) {
+	switch(mouseEvent.ButtonPressed) {
+	case MouseEvent::X1: next(true); break;
+	case MouseEvent::X2: next(); break;
+	}
 }
 
 void TabView::helpImpl(unsigned& id) {

@@ -61,8 +61,8 @@ class AspectText
 		return tstring( reinterpret_cast< TCHAR * >( msg.lParam ) );
 	}
 	
-	typedef Dispatchers::ConvertBase<tstring, &AspectText<WidgetType>::getText, false> Dispatcher;
-	friend class Dispatchers::ConvertBase<tstring, &AspectText<WidgetType>::getText, false>;
+	typedef Dispatchers::ConvertBase<tstring, &AspectText<WidgetType>::getText, 0, false> Dispatcher;
+	friend class Dispatchers::ConvertBase<tstring, &AspectText<WidgetType>::getText, 0, false>;
 public:
 	/// Sets the text of the AspectText realizing class
 	/** The txt parameter is the new text to put into the realizing object.

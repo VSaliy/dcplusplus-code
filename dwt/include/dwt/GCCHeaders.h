@@ -85,6 +85,12 @@
 	#ifndef DT_HIDEPREFIX
 	#define DT_HIDEPREFIX               0x00100000
 	#endif
+	#ifndef GET_KEYSTATE_WPARAM
+	#define GET_KEYSTATE_WPARAM(wParam)     (LOWORD(wParam))
+	#endif
+	#ifndef GET_XBUTTON_WPARAM
+	#define GET_XBUTTON_WPARAM(wParam)      (HIWORD(wParam))
+	#endif
 	#endif
 
 	// Additional (gcc, normally) stuff

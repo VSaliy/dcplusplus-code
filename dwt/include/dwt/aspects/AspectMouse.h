@@ -45,117 +45,167 @@ namespace dwt {
 /// Aspect class used by Widgets that have the possibility of trapping "mouse
 /// clicked" events.
 /** \ingroup AspectClasses
-  * E.g. the Window can trap "mouse clicked events" therefore it realize the
-  * AspectMouse through inheritance.
-  */
+* E.g. the Window can trap "mouse clicked events" therefore it realize the
+* AspectMouse through inheritance.
+*/
 template< class WidgetType >
 class AspectMouse
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	
+
 	typedef Dispatchers::ConvertBase<MouseEvent> Dispatcher;
+	typedef Dispatchers::ConvertBase<MouseEvent, Dispatchers::convert<MouseEvent>, TRUE> XDispatcher;
+
 public:
-	/// \ingroup EventHandlersAspectMouse
-	/// Left mouse button pressed and released event handler setter
-	/** If supplied, function will be called when user releases the Left Mouse button
-	  * after clicking onto the client area of the Widget. <br>
-	  * The parameter passed is const MouseEvent & which contains the state of
-	  * the mouse.
-	  */
-	void onLeftMouseUp(const typename Dispatcher::F& f) {
-		onMouse(WM_LBUTTONUP, f);
-	}
-	
-	/// \ingroup EventHandlersAspectMouse
-	/// Right mouse button pressed and released event handler setter
-	/** If supplied, function will be called when user releases the Right Mouse
-	  * button after clicking onto the client area of the Widget. <br>
-	  * The parameter passed is const MouseEvent & which contains the state of
-	  * the mouse.
-	  */
-	void onRightMouseUp(const typename Dispatcher::F& f) {
-		onRightMouseUp(WM_RBUTTONUP, f);
-	}
-
-	/// \ingroup EventHandlersAspectMouse
-	/// Middle mouse button pressed and released event handler setter
-	/** If supplied, function will be called when user releases the middle Mouse
-	  * button after clicking onto the client area of the Widget. <br>
-	  * The parameter passed is const MouseEvent & which contains the state of
-	  * the mouse.
-	  */
-	void onMiddleMouseUp(const typename Dispatcher::F& f) {
-		onMiddleMouseUp(WM_MBUTTONUP, f);
-	}
-
 	/// \ingroup EventHandlersAspectMouse
 	/// Left mouse button pressed event handler setter
 	/** If supplied, function will be called when user press the Left Mouse button in
-	  * the client area of the widget. <br>
-	  * The parameter passed is const MouseEvent & which contains the state of
-	  * the mouse.
-	  */
+	* the client area of the widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
 	void onLeftMouseDown(const typename Dispatcher::F& f) {
 		onMouse(WM_LBUTTONDOWN, f);
 	}
 
 	/// \ingroup EventHandlersAspectMouse
-	/// Right mouse button pressed event handler setter
-	/** If supplied, function will be called when user press the Right Mouse button
-	  * in the client area of the widget. <br>
-	  * The parameter passed is const MouseEvent & which contains the state of
-	  * the mouse.
-	  */
-	void onRightMouseDown(const typename Dispatcher::F& f) {
-		onMouse(WM_RBUTTONDOWN, f);
-	}
-
-	/// Middle mouse button pressed event handler setter
-	/** If supplied, function will be called when user press the Middle Mouse button
-	  * in the client area of the widget. <br>
-	  * The parameter passed is const MouseEvent & which contains the state of
-	  * the mouse.
-	  */
-	void onMiddleMouseDown(const typename Dispatcher::F& f) {
-		onMouse(WM_MBUTTONDOWN, f);
+	/// Left mouse button pressed and released event handler setter
+	/** If supplied, function will be called when user releases the Left Mouse button
+	* after clicking onto the client area of the Widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
+	void onLeftMouseUp(const typename Dispatcher::F& f) {
+		onMouse(WM_LBUTTONUP, f);
 	}
 
 	/// Left mouse button double-clicked event handler setter
 	/** If supplied, function will be called when user double clicks the Left mouse button
-	  * in the client area of the widget. <br>
-	  * The parameter passed is const MouseEvent & which contains the state of
-	  * the mouse.
-	  */
+	* in the client area of the widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
 	void onLeftMouseDblClick(const typename Dispatcher::F& f) {
 		onMouse(WM_LBUTTONDBLCLK, f);
 	}
 
+	/// \ingroup EventHandlersAspectMouse
+	/// Right mouse button pressed event handler setter
+	/** If supplied, function will be called when user press the Right Mouse button
+	* in the client area of the widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
+	void onRightMouseDown(const typename Dispatcher::F& f) {
+		onMouse(WM_RBUTTONDOWN, f);
+	}
+
+	/// \ingroup EventHandlersAspectMouse
+	/// Right mouse button pressed and released event handler setter
+	/** If supplied, function will be called when user releases the Right Mouse
+	* button after clicking onto the client area of the Widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
+	void onRightMouseUp(const typename Dispatcher::F& f) {
+		onMouse(WM_RBUTTONUP, f);
+	}
+
+	/// \ingroup EventHandlersAspectMouse
 	/// Right mouse button double-clicked event handler setter
 	/** If supplied, function will be called when user  double clicks the Right mouse button
-	  * in the client area of the widget. <br>
-	  * The parameter passed is const MouseEvent & which contains the state of
-	  * the mouse.
-	  */
+	* in the client area of the widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
 	void onRightMouseDblClick(const typename Dispatcher::F& f) {
 		onMouse(WM_RBUTTONDBLCLK, f);
 	}
 
 	/// \ingroup EventHandlersAspectMouse
+	/// Middle mouse button pressed event handler setter
+	/** If supplied, function will be called when user press the Middle Mouse button
+	* in the client area of the widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
+	void onMiddleMouseDown(const typename Dispatcher::F& f) {
+		onMouse(WM_MBUTTONDOWN, f);
+	}
+
+	/// \ingroup EventHandlersAspectMouse
+	/// Middle mouse button pressed and released event handler setter
+	/** If supplied, function will be called when user releases the middle Mouse
+	* button after clicking onto the client area of the Widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
+	void onMiddleMouseUp(const typename Dispatcher::F& f) {
+		onMouse(WM_MBUTTONUP, f);
+	}
+
+	/// \ingroup EventHandlersAspectMouse
+	/// Middle mouse button double-clicked event handler setter
+	/** If supplied, function will be called when user double clicks the Middle mouse button
+	* in the client area of the widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
+	void onMiddleDblClick(const typename Dispatcher::F& f) {
+		onMouse(WM_MBUTTONDBLCLK, f);
+	}
+
+	/// \ingroup EventHandlersAspectMouse
+	/// X mouse button pressed event handler setter
+	/** If supplied, function will be called when user press the X Mouse button in
+	* the client area of the widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
+	void onXMouseDown(const typename Dispatcher::F& f) {
+		onXMouse(WM_XBUTTONDOWN, f);
+	}
+
+	/// \ingroup EventHandlersAspectMouse
+	/// X mouse button pressed and released event handler setter
+	/** If supplied, function will be called when user releases the X Mouse button
+	* after clicking onto the client area of the Widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
+	void onXMouseUp(const typename Dispatcher::F& f) {
+		onXMouse(WM_XBUTTONUP, f);
+	}
+
+	/// X mouse button double-clicked event handler setter
+	/** If supplied, function will be called when user double clicks the X mouse button
+	* in the client area of the widget. <br>
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
+	void onXMouseDblClick(const typename Dispatcher::F& f) {
+		onXMouse(WM_XBUTTONDBLCLK, f);
+	}
+
+	/// \ingroup EventHandlersAspectMouse
 	/// Mouse moved event handler setter
 	/** If supplied, function will be called when user moves the mouse. <br>
-	  * The parameter passed is const MouseEvent & which contains the state of
-	  * the mouse.
-	  */
+	* The parameter passed is const MouseEvent & which contains the state of
+	* the mouse.
+	*/
 	void onMouseMove(const typename Dispatcher::F& f) {
 		onMouse(WM_MOUSEMOVE, f);
 	}
 
 protected:
-	
 	void onMouse(UINT msg, const typename Dispatcher::F& f) {
-		W().addCallback(Message( msg ), Dispatcher(f));
+		W().addCallback(Message(msg), Dispatcher(f));
 	}
-	
+
+	void onXMouse(UINT msg, const typename XDispatcher::F& f) {
+		W().addCallback(Message(msg), XDispatcher(f));
+	}
+
 	virtual ~AspectMouse() { }
 };
 
