@@ -90,11 +90,6 @@ struct MouseEvent {
 	  */
 	bool isShiftPressed;
 
-	/// is the ALT key pressed
-	/** true if ALT key is pressed, otherwise false
-	  */
-	bool isAltPressed;
-
 	/// Indicates which mouse button was actually pressed
 	Button ButtonPressed;
 };

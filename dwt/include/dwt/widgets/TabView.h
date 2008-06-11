@@ -157,10 +157,11 @@ private:
 	void handleSized(const SizedEvent&);
 	void handleTabSelected();
 	LRESULT handleToolTip(LPARAM lParam);
-	void handleLeftMouseDown(const MouseEvent& mouseEventResult);
-	void handleLeftMouseUp(const MouseEvent& mouseEventResult);
+	void handleLeftMouseDown(const MouseEvent& mouseEvent);
+	void handleLeftMouseUp(const MouseEvent& mouseEvent);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
-	void handleMiddleMouseDown(const MouseEvent& mouseEventResult);
+	void handleMiddleMouseDown(const MouseEvent& mouseEvent);
+	void handleXMouseUp(const MouseEvent& mouseEvent);
 	
 	tstring formatTitle(tstring title);
 	void layout();

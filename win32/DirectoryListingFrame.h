@@ -206,7 +206,7 @@ private:
 	
 	bool handleDirsContextMenu(dwt::ScreenCoordinate pt);
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt);
-	LRESULT handleXButtonUp(WPARAM wParam, LPARAM lParam);
+	void handleXMouseUp(const dwt::MouseEvent& mouseEvent);
 	
 	void changeDir(DirectoryListing::Directory* d);
 	void updateTree(DirectoryListing::Directory* tree, HTREEITEM treeItem);

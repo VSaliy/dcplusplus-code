@@ -52,7 +52,7 @@ T convert(const MSG& msg) {
 	return T(msg);
 }
 
-template<typename P, P (*C)(const MSG&) = convert<P>, bool handled = true >
+template<typename P, P (*C)(const MSG&) = convert<P>, LRESULT value = 0, bool handled = true >
 class ConvertBase : public Base<void(const P&)> {
 	typedef Base<void(const P&)> BaseType;
 public:
@@ -60,6 +60,7 @@ public:
 	
 	bool operator()(const MSG& msg, LRESULT& ret) const {
 		f((*C)(msg));
+		ret = value;
 		return handled;
 	}
 };
