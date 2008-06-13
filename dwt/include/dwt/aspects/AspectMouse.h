@@ -198,6 +198,9 @@ public:
 	}
 
 protected:
+	virtual ~AspectMouse() { }
+
+private:
 	void onMouse(UINT msg, const typename Dispatcher::F& f) {
 		W().addCallback(Message(msg), Dispatcher(f));
 	}
@@ -205,8 +208,6 @@ protected:
 	void onXMouse(UINT msg, const typename XDispatcher::F& f) {
 		W().addCallback(Message(msg), XDispatcher(f));
 	}
-
-	virtual ~AspectMouse() { }
 };
 
 }
