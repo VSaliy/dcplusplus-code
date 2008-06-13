@@ -51,6 +51,7 @@
 
 #include <dwt/widgets/ToolBar.h>
 #include <dwt/LibraryLoader.h>
+#include <dwt/util/StringUtils.h>
 
 MainWindow::MainWindow() :
 	WidgetFactory<dwt::Window>(0), 
@@ -287,7 +288,7 @@ void MainWindow::initToolbar() {
 	toolbar->appendItem(image++, T_("Reconnect"), IDH_TOOLBAR_RECONNECT, std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT));
 	toolbar->appendItem(image++, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW, std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW));
 	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS, std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_FAVORITE_HUBS));
+	toolbar->appendItem(image++, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS, std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_FAVORITE_HUBS), std::tr1::bind(&MainWindow::handleFavHubsDropDown, this, _1));
 	toolbar->appendItem(image++, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS, std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_FAVUSERS));
 	toolbar->appendSeparator();
 	toolbar->appendItem(image++, T_("Download Queue"), IDH_TOOLBAR_QUEUE, std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_QUEUE));
@@ -352,6 +353,19 @@ bool MainWindow::filter(MSG& msg) {
 
 void MainWindow::handleTabsTitleChanged(const tstring& title) {
 	setText(title.empty() ? _T(APPNAME) _T(" ") _T(VERSIONSTRING) : _T(APPNAME) _T(" ") _T(VERSIONSTRING) _T(" - [") + title + _T("]"));
+}
+
+void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
+	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+
+	unsigned id = 0;
+	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
+	for(FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i) {
+		FavoriteHubEntry* entry = *i;
+		menu->appendItem(id++, dwt::util::escapeMenu(Text::toT(entry->getName())), std::tr1::bind(&HubFrame::openWindow, getTabView(), entry->getServer()));
+	}
+
+	menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 }
 
 void MainWindow::handleExit() {

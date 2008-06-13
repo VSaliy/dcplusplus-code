@@ -43,6 +43,7 @@
 #include "../aspects/AspectFont.h"
 #include "../resources/ImageList.h"
 #include "../DWTException.h"
+#include "../dwt_unordered_map.h"
 #include "Control.h"
 
 #include <vector>
@@ -67,6 +68,7 @@ class ToolBar :
 {
 	typedef CommonControl BaseType;
 	typedef Dispatchers::VoidVoid<> Dispatcher;
+	typedef std::tr1::function<void (const ScreenCoordinate&)> DropDownFunction;
 	friend class WidgetCreator< ToolBar >;
 public:
 	/// Class type
@@ -110,8 +112,8 @@ public:
 	  */
 	void appendSeparator();
 
-	void appendItem(int image, const tstring& toolTip, DWORD_PTR data = 0, const Dispatcher::F& f = Dispatcher::F());
-	
+	void appendItem(int image, const tstring& toolTip, DWORD_PTR data = 0, const Dispatcher::F& f = Dispatcher::F(), const DropDownFunction& dropDownF = 0);
+
 	/// Set the image list with the normal button images.
 	/** normalImageList is the image list that contains the images
 	  * for the toolbar buttons in "normal" state.
@@ -185,6 +187,9 @@ private:
 	ImageListPtr itsDisabledImageList;
 
 	std::vector<Dispatcher::F> commands;
+	std::tr1::unordered_map<int, DropDownFunction> dropDownCommands;
+
+	LRESULT handleDropDown(LPARAM lParam);
 
 	// AspectHelp
 	void helpImpl(unsigned& id);

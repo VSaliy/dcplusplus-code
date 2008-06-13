@@ -42,10 +42,12 @@ void ToolBar::create( const Seed & cs )
 {
 	BaseType::create(cs);
 
-	this->sendMessage(TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_MIXEDBUTTONS);
+	this->sendMessage(TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_MIXEDBUTTONS);
 
 	//// Telling the toolbar what the size of TBBUTTON struct is
 	this->sendMessage(TB_BUTTONSTRUCTSIZE, ( WPARAM ) sizeof( TBBUTTON ));
+
+	onRaw(std::tr1::bind(&ToolBar::handleDropDown, this, _2), Message(WM_NOTIFY, TBN_DROPDOWN));
 }
 
 void ToolBar::appendSeparator()
@@ -58,7 +60,7 @@ void ToolBar::appendSeparator()
 	}
 }
 
-void ToolBar::appendItem(int image, const tstring& toolTip, DWORD_PTR data, const Dispatcher::F& f)
+void ToolBar::appendItem(int image, const tstring& toolTip, DWORD_PTR data, const Dispatcher::F& f, const DropDownFunction& dropDownF)
 {
 	int id = -1;
 	
@@ -73,13 +75,20 @@ void ToolBar::appendItem(int image, const tstring& toolTip, DWORD_PTR data, cons
 			commands[id] = f;
 		}
 	}
-	
+
+	if(dropDownF) {
+		dwtassert(f, _T("You must provide a dispatcher for button presses."));
+		dropDownCommands[id] = dropDownF;
+	}
+
 	// Adding button
 	TBBUTTON tb = { 0 };
 	tb.iBitmap = image;
 	tb.idCommand = id;
 	tb.fsState = TBSTATE_ENABLED;
 	tb.fsStyle = BTNS_AUTOSIZE;
+	if(dropDownF)
+		tb.fsStyle |= BTNS_DROPDOWN;
 	tb.dwData = data;
 	tb.iString = reinterpret_cast<INT_PTR>(toolTip.c_str());
 	if ( this->sendMessage(TB_ADDBUTTONS, 1, reinterpret_cast< LPARAM >( &tb ) ) == FALSE )
@@ -102,6 +111,16 @@ bool ToolBar::tryFire( const MSG & msg, LRESULT & retVal ) {
 		}
 	}
 	return PolicyType::tryFire(msg, retVal);
+}
+
+LRESULT ToolBar::handleDropDown(LPARAM lParam) {
+	LPNMTOOLBAR lpnmtb = reinterpret_cast<LPNMTOOLBAR>(lParam);
+	const DropDownFunction& f = dropDownCommands[lpnmtb->iItem];
+	if(f) {
+		f(ScreenCoordinate(ClientCoordinate(Point(lpnmtb->rcButton.left, lpnmtb->rcButton.bottom), this)));
+		return TBDDRET_DEFAULT;
+	}
+	return TBDDRET_NODEFAULT;
 }
 
 void ToolBar::helpImpl(unsigned& id) {
