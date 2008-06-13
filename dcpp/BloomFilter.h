@@ -77,7 +77,7 @@ private:
 	size_t getPos(const string& s, size_t i, size_t l) const {
 		size_t h = 0;
 		const char* c = s.data() + i;
-		const char* end = s.data() + l;
+		const char* end = s.data() + i + l;
 		for(; c < end; ++c) {
 			h ^= *c + 0x9e3779b9 + (h<<6) + (h>>2);
 		}
