@@ -82,7 +82,7 @@ private:
 	LRESULT handleItemChanged(WPARAM /*wParam*/, LPARAM lParam);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 
-	void addEntry(const FavoriteHubEntryPtr entry, int index = -1);
+	void addEntry(const FavoriteHubEntryPtr entry, int index = -1, bool scroll = true);
 	void openSelected();
 
 	virtual void on(FavoriteAdded, const FavoriteHubEntryPtr e) throw();

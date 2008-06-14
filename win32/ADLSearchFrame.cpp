@@ -108,7 +108,7 @@ ADLSearchFrame::ADLSearchFrame(dwt::TabView* mdiParent) :
 	// Load all searches
 	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
 	for(ADLSearchManager::SearchCollection::iterator i = collection.begin(); i != collection.end(); ++i)
-		addEntry(*i);
+		addEntry(*i, /*itemCount*/ -1, /*scroll*/ false);
 }
 
 ADLSearchFrame::~ADLSearchFrame() {
@@ -301,7 +301,7 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	return true;
 }
 
-void ADLSearchFrame::addEntry(ADLSearch& search, int index) {
+void ADLSearchFrame::addEntry(ADLSearch& search, int index, bool scroll) {
 	TStringList l;
 	l.push_back(Text::toT(search.searchString));
 	l.push_back(Text::toT(search.SourceTypeToString(search.sourceType)));
@@ -312,5 +312,6 @@ void ADLSearchFrame::addEntry(ADLSearch& search, int index) {
 	if(index == -1)
 		index = itemCount;
 	items->setChecked(index, search.isActive);
-	items->ensureVisible(index);
+	if (scroll)
+		items->ensureVisible(index);
 }

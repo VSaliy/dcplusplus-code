@@ -76,7 +76,7 @@ private:
 	LRESULT handleItemChanged(LPARAM lParam);
 	bool handleContextMenu(dwt::ScreenCoordinate sc);
 
-	void addEntry(ADLSearch& search, int index = -1);
+	void addEntry(ADLSearch& search, int index = -1, bool scroll = true);
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ADL_SEARCH_FRAME_H)

@@ -111,7 +111,7 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 
 	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
 	for(FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i)
-		addEntry(*i);
+		addEntry(*i, /*itemCount*/ -1, /*scroll*/ false);
 
 	FavoriteManager::getInstance()->addListener(this);
 }
@@ -301,7 +301,7 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	return true;
 }
 
-void FavHubsFrame::addEntry(const FavoriteHubEntryPtr entry, int index) {
+void FavHubsFrame::addEntry(const FavoriteHubEntryPtr entry, int index, bool scroll) {
 	TStringList l;
 	l.push_back(Text::toT(entry->getName()));
 	l.push_back(Text::toT(entry->getDescription()));
@@ -314,7 +314,8 @@ void FavHubsFrame::addEntry(const FavoriteHubEntryPtr entry, int index) {
 	if(index == -1)
 		index = itemCount;
 	hubs->setChecked(index, b);
-	hubs->ensureVisible(index);
+	if (scroll)
+		hubs->ensureVisible(index);
 }
 
 void FavHubsFrame::openSelected() {
