@@ -23,6 +23,7 @@
 * Added a drop-down menu next to the toolbar icon for favorite hubs (poy)
 * [L#237682] Fix bug that would make DC++ not return correct search results
 * Fixed directories not being returned when searching for directories only
+* Fix wrong default settings in some cases (poy)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations

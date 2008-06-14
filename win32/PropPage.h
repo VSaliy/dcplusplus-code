@@ -31,7 +31,13 @@ public:
 
 	virtual void write() { }
 
-	enum Type { T_STR, T_INT, T_BOOL, T_CUSTOM, T_END };
+	enum Type {
+		T_STR,
+		T_INT,
+		T_INT_WITH_SPIN, // fill even when the current value is the same as the default value (for controls with a spin buddy)
+		T_BOOL,
+		T_END
+	};
 
 	struct Item {
 		WORD itemID;
