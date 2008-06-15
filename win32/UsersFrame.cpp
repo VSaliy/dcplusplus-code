@@ -56,11 +56,14 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 		users->onContextMenu(std::tr1::bind(&UsersFrame::handleContextMenu, this, _1));
 	}
 
-	FavoriteManager::FavoriteMap ul = FavoriteManager::getInstance()->getFavoriteUsers();
-	HoldRedraw hold(users);
-	for(FavoriteManager::FavoriteMap::iterator i = ul.begin(); i != ul.end(); ++i) {
-		addUser(i->second);
+	{
+		HoldRedraw hold(users);
+		FavoriteManager::FavoriteMap ul = FavoriteManager::getInstance()->getFavoriteUsers();
+		for(FavoriteManager::FavoriteMap::iterator i = ul.begin(); i != ul.end(); ++i) {
+			addUser(i->second);
+		}
 	}
+
 	FavoriteManager::getInstance()->addListener(this);
 
 	initStatus();
@@ -97,8 +100,8 @@ UsersFrame::UserInfo::UserInfo(const FavoriteUser& u) : UserInfoBase(u.getUser()
 	update(u);
 }
 
-void UsersFrame::UserInfo::remove() { 
-	FavoriteManager::getInstance()->removeFavoriteUser(user); 
+void UsersFrame::UserInfo::remove() {
+	FavoriteManager::getInstance()->removeFavoriteUser(user);
 }
 
 void UsersFrame::UserInfo::update(const FavoriteUser& u) {
@@ -125,10 +128,10 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 	}
 }
 
-void UsersFrame::removeUser(const FavoriteUser& aUser) {
+void UsersFrame::removeUser(const UserPtr& aUser) {
 	for(size_t i = 0; i < users->size(); ++i) {
 		UserInfo *ui = users->getData(i);
-		if(ui->user == aUser.getUser()) {
+		if(ui->user == aUser) {
 			users->erase(i);
 			return;
 		}
@@ -196,6 +199,9 @@ LRESULT UsersFrame::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 	if(wParam == USER_UPDATED) {
 		boost::scoped_ptr<UserInfoBase> uib(reinterpret_cast<UserInfoBase*>(lParam));
 		updateUser(uib->user);
+	} else if(wParam == REMOVE_USER) {
+		boost::scoped_ptr<UserInfoBase> uib(reinterpret_cast<UserInfoBase*>(lParam));
+		removeUser(uib->user);
 	}
 	return 0;
 }
@@ -205,7 +211,7 @@ void UsersFrame::on(UserAdded, const FavoriteUser& aUser) throw() {
 }
 
 void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) throw() {
-	removeUser(aUser);
+	speak(REMOVE_USER, reinterpret_cast<LPARAM>(new UserInfoBase(aUser.getUser())));
 }
 
 void UsersFrame::on(StatusChanged, const UserPtr& aUser) throw() {
