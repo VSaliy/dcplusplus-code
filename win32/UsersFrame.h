@@ -65,7 +65,7 @@ private:
 	};
 
 	enum {
-		USER_UPDATED
+		USER_UPDATED, REMOVE_USER
 	};
 
 	class UserInfo : public UserInfoBase {
@@ -102,7 +102,7 @@ private:
 
 	void addUser(const FavoriteUser& aUser);
 	void updateUser(const UserPtr& aUser);
-	void removeUser(const FavoriteUser& aUser);
+	void removeUser(const UserPtr& aUser);
 
 	void handleDescription();
 	void handleRemove();

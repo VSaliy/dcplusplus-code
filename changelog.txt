@@ -25,6 +25,7 @@
 * Fixed directories not being returned when searching for directories only
 * Fix wrong default settings in some cases (poy)
 * Fixed favorite hubs & ADLSearch windows scrolled down when opened (emtee)
+* Fix removal of multiple favorite users at the same time (poy)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
