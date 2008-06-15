@@ -150,6 +150,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 		
 		files->onSelectionChanged(std::tr1::bind(&DirectoryListingFrame::updateStatus, this));
 		files->onDblClicked(std::tr1::bind(&DirectoryListingFrame::handleDoubleClickFiles, this));
+		files->onKeyDown(std::tr1::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));
 		files->onSysKeyDown(std::tr1::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));
 		files->onContextMenu(std::tr1::bind(&DirectoryListingFrame::handleFilesContextMenu, this, _1));
 		files->onXMouseUp(std::tr1::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
