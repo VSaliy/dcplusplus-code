@@ -66,6 +66,8 @@ class Identity;
 
 class InputStream;
 
+class LogManager;
+
 class OnlineUser;
 typedef OnlineUser* OnlineUserPtr;
 typedef std::vector<OnlineUserPtr> OnlineUserList;

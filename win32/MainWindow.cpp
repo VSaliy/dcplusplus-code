@@ -40,6 +40,7 @@
 #include <dcpp/DownloadManager.h>
 #include <dcpp/UploadManager.h>
 #include <dcpp/FavoriteManager.h>
+#include <dcpp/LogManager.h>
 #include <dcpp/Client.h>
 #include <dcpp/TimerManager.h>
 #include <dcpp/SearchManager.h>
@@ -312,7 +313,10 @@ void MainWindow::initToolbar() {
 
 void MainWindow::initStatusBar() {
 	dcdebug("initStatusBar\n");
+
 	initStatus(true);
+	status->onDblClicked(std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
+
 	statusSizes[STATUS_AWAY] = status->getTextSize(T_("AWAY")).x + 12;
 	///@todo set to checkbox width + resizedrag width really
 	statusSizes[STATUS_DUMMY] = 32;

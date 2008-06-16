@@ -23,8 +23,8 @@
 #include "LogPage.h"
 
 #include <dcpp/SettingsManager.h>
-
 #include <dcpp/LogManager.h>
+#include <dcpp/File.h>
 #include "WinUtil.h"
 
 static const WinUtil::HelpItem helpItems[] = {

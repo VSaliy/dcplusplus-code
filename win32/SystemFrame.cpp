@@ -19,6 +19,8 @@
 #include "stdafx.h"
 
 #include "SystemFrame.h"
+
+#include <dcpp/LogManager.h>
 #include "HoldRedraw.h"
 #include "WinUtil.h"
 
@@ -34,15 +36,17 @@ SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 	}
 
 	initStatus();
+	status->onDblClicked(std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
+
 	layout();
 	
-	deque<pair<time_t, string> > oldMessages = LogManager::getInstance()->getLastLogs();
+	LogManager::List oldMessages = LogManager::getInstance()->getLastLogs();
 	// Technically, we might miss a message or two here, but who cares...
 	LogManager::getInstance()->addListener(this);
 
-	onSpeaker(std::tr1::bind(&SystemFrame::handleSpeaker, this, _1, _2));
+	onSpeaker(std::tr1::bind(&SystemFrame::handleSpeaker, this, _1));
 	
-	for(deque<pair<time_t, string> >::iterator i = oldMessages.begin(); i != oldMessages.end(); ++i) {
+	for(LogManager::List::const_iterator i = oldMessages.begin(); i != oldMessages.end(); ++i) {
 		addLine(i->first, Text::toT(i->second));
 	}
 }
@@ -82,9 +86,9 @@ void SystemFrame::layout() {
 		log->sendMessage(WM_VSCROLL, SB_BOTTOM);
 }
 
-HRESULT SystemFrame::handleSpeaker(WPARAM wp, LPARAM lp) {
-	boost::scoped_ptr<std::pair<time_t, tstring> > msg(reinterpret_cast<std::pair<time_t, tstring>*>(wp));
-	addLine(msg->first, msg->second);
+LRESULT SystemFrame::handleSpeaker(WPARAM wp) {
+	boost::scoped_ptr<LogManager::Pair> msg(reinterpret_cast<LogManager::Pair*>(wp));
+	addLine(msg->first, Text::toT(msg->second));
 	return 0;
 }
 
@@ -94,5 +98,5 @@ bool SystemFrame::preClosing() {
 }
 
 void SystemFrame::on(Message, time_t t, const string& message) throw() { 
-	speak(reinterpret_cast<WPARAM>(new pair<time_t, tstring>(t, Text::toT(message)))); 
+	speak(reinterpret_cast<WPARAM>(new LogManager::Pair(t, message))); 
 }

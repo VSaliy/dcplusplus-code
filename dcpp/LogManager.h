@@ -16,108 +16,50 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#if !defined(LOG_MANAGER_H)
-#define LOG_MANAGER_H
+#ifndef DCPLUSPLUS_DCPP_LOG_MANAGER_H
+#define DCPLUSPLUS_DCPP_LOG_MANAGER_H
 
-#include "File.h"
 #include "CriticalSection.h"
 #include "Singleton.h"
-#include "TimerManager.h"
+#include "Speaker.h"
+#include "LogManagerListener.h"
 
 namespace dcpp {
-
-class LogManagerListener {
-public:
-	virtual ~LogManagerListener() { }
-	template<int I>	struct X { enum { TYPE = I }; };
-
-	typedef X<0> Message;
-	virtual void on(Message, time_t, const string&) throw() { }
-};
 
 class LogManager : public Singleton<LogManager>, public Speaker<LogManagerListener>
 {
 public:
-	enum LogArea { CHAT, PM, DOWNLOAD, UPLOAD, SYSTEM, STATUS, LAST };
-	enum {FILE, FORMAT};
+	typedef pair<time_t, string> Pair;
+	typedef deque<Pair> List;
 
-	void log(LogArea area, StringMap& params) throw() {
-		string path = SETTING(LOG_DIRECTORY);
-		string msg;
+	enum Area { CHAT, PM, DOWNLOAD, UPLOAD, SYSTEM, STATUS, LAST };
+	enum { FILE, FORMAT };
 
-		path += Util::formatParams(getSetting(area, FILE), params, true);
-		msg = Util::formatParams(getSetting(area, FORMAT), params, false);
+	void log(Area area, StringMap& params) throw();
+	void message(const string& msg);
 
-		log(path, msg);
-	}
+	List getLastLogs();
+	string getPath(Area area, StringMap& params) const;
+	string getPath(Area area) const;
 
-	deque<pair<time_t, string> > getLastLogs() { Lock l(cs); return lastLogs; }
-
-	void message(const string& msg) {
-		if(BOOLSETTING(LOG_SYSTEM)) {
-			StringMap params;
-			params["message"] = msg;
-			log(LogManager::SYSTEM, params);
-		}
-		time_t t = GET_TIME();
-		{
-			Lock l(cs);
-			// Keep the last 100 messages (completely arbitrary number...)
-			while(lastLogs.size() > 100)
-				lastLogs.pop_front();
-			lastLogs.push_back(make_pair(t, msg));
-		}
-		fire(LogManagerListener::Message(), t, msg);
-	}
-
-	const string& getSetting(int area, int sel) {
-		return SettingsManager::getInstance()->get(static_cast<SettingsManager::StrSetting>(logOptions[area][sel]), true);
-	}
-
-	void saveSetting(int area, int sel, const string& setting) {
-		SettingsManager::getInstance()->set(static_cast<SettingsManager::StrSetting>(logOptions[area][sel]), setting);
-	}
+	const string& getSetting(int area, int sel) const;
+	void saveSetting(int area, int sel, const string& setting);
 
 private:
-	void log(const string& area, const string& msg) throw() {
-		Lock l(cs);
-		try {
-			string aArea = Util::validateFileName(area);
-			File::ensureDirectory(aArea);
-			File f(aArea, File::WRITE, File::OPEN | File::CREATE);
-			f.setEndPos(0);
-			f.write(msg + "\r\n");
-		} catch (const FileException&) {
-			// ...
-		}
-	}
+	void log(const string& area, const string& msg) throw();
 
 	friend class Singleton<LogManager>;
 	CriticalSection cs;
-	deque<pair<time_t, string> > lastLogs;
+	List lastLogs;
 
-	int logOptions[LAST][2];
+	int options[LAST][2];
 
-	LogManager() {
-		logOptions[UPLOAD][FILE]		= SettingsManager::LOG_FILE_UPLOAD;
-		logOptions[UPLOAD][FORMAT]		= SettingsManager::LOG_FORMAT_POST_UPLOAD;
-		logOptions[DOWNLOAD][FILE]		= SettingsManager::LOG_FILE_DOWNLOAD;
-		logOptions[DOWNLOAD][FORMAT]	= SettingsManager::LOG_FORMAT_POST_DOWNLOAD;
-		logOptions[CHAT][FILE]			= SettingsManager::LOG_FILE_MAIN_CHAT;
-		logOptions[CHAT][FORMAT]		= SettingsManager::LOG_FORMAT_MAIN_CHAT;
-		logOptions[PM][FILE]			= SettingsManager::LOG_FILE_PRIVATE_CHAT;
-		logOptions[PM][FORMAT]			= SettingsManager::LOG_FORMAT_PRIVATE_CHAT;
-		logOptions[SYSTEM][FILE]		= SettingsManager::LOG_FILE_SYSTEM;
-		logOptions[SYSTEM][FORMAT]		= SettingsManager::LOG_FORMAT_SYSTEM;
-		logOptions[STATUS][FILE]		= SettingsManager::LOG_FILE_STATUS;
-		logOptions[STATUS][FORMAT]		= SettingsManager::LOG_FORMAT_STATUS;
-	}
-	virtual ~LogManager() throw() { }
-
+	LogManager();
+	virtual ~LogManager() throw();
 };
 
 #define LOG(area, msg) LogManager::getInstance()->log(area, msg)
 
 } // namespace dcpp
 
-#endif // !defined(LOG_MANAGER_H)
+#endif // !defined(DCPLUSPLUS_DCPP_LOG_MANAGER_H)

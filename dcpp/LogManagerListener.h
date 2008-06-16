@@ -16,40 +16,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_SYSTEM_FRAME_H
-#define DCPLUSPLUS_WIN32_SYSTEM_FRAME_H
+#ifndef DCPLUSPLUS_DCPP_LOG_MANAGER_LISTENER_H
+#define DCPLUSPLUS_DCPP_LOG_MANAGER_LISTENER_H
 
-#include "StaticFrame.h"
+namespace dcpp {
 
-#include <dcpp/LogManagerListener.h>
-
-class SystemFrame : public StaticFrame<SystemFrame>,
-	private LogManagerListener
-{
-	typedef StaticFrame<SystemFrame> BaseType;
+class LogManagerListener {
 public:
-	enum Status {
-		STATUS_STATUS,
-		STATUS_LAST
-	};
-	
-private:
-	friend class StaticFrame<SystemFrame>;
-	friend class MDIChildFrame<SystemFrame>;
-	
-	TextBoxPtr log;
-	
-	SystemFrame(dwt::TabView* mdiParent);
-	virtual ~SystemFrame();
+	virtual ~LogManagerListener() { }
+	template<int I>	struct X { enum { TYPE = I }; };
 
-	void layout();
-	LRESULT handleSpeaker(WPARAM wParam);
-	bool preClosing();
-
-	void addLine(time_t t, const tstring& msg);
-
-	// LogManagerListener
-	virtual void on(Message, time_t t, const string& message) throw();
+	typedef X<0> Message;
+	virtual void on(Message, time_t, const string&) throw() { }
 };
 
-#endif
+} // namespace dcpp
+
+#endif // !defined(DCPLUSPLUS_DCPP_LOG_MANAGER_LISTENER_H)

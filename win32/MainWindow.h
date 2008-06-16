@@ -22,7 +22,7 @@
 #include <dcpp/forward.h>
 
 #include <dcpp/QueueManagerListener.h>
-#include <dcpp/LogManager.h>
+#include <dcpp/LogManagerListener.h>
 #include <dcpp/HttpConnection.h>
 #include <dcpp/User.h>
 
