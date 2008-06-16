@@ -357,7 +357,10 @@ bool HubFrame::enter() {
 				}
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
-			openLog(!param.empty() || Util::stricmp(param.c_str(), _T("status")) == 0);
+			if(param.empty())
+				openLog();
+			else if(Util::stricmp(param.c_str(), _T("status")) == 0)
+				openLog(true);
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
 			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /clear, /ts, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
