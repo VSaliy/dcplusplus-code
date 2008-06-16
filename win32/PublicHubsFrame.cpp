@@ -275,7 +275,10 @@ void PublicHubsFrame::layout() {
 }
 
 void PublicHubsFrame::updateStatus() {
-	setStatus(STATUS_HUBS, str(TF_("Hubs: %1%") % visibleHubs));
+	if (entries.size() > visibleHubs)
+		setStatus(STATUS_HUBS, str(TF_("Hubs: %1% / %2%") % visibleHubs % entries.size()));
+	else
+		setStatus(STATUS_HUBS, str(TF_("Hubs: %1%") % visibleHubs));
 	setStatus(STATUS_USERS, str(TF_("Users: %1%") % users));
 }
 
