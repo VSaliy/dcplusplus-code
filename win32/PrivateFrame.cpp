@@ -106,13 +106,14 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 	}
 	
 	initStatus();
+	status->onDblClicked(std::tr1::bind(&PrivateFrame::openLog, this));
 
 	updateTitle();
 	layout();
 	
 	readLog();
 	
-	onSpeaker(std::tr1::bind(&PrivateFrame::handleSpeaker, this, _1, _2));
+	onSpeaker(std::tr1::bind(&PrivateFrame::handleSpeaker, this, _1));
 	onTabContextMenu(std::tr1::bind(&PrivateFrame::handleTabContextMenu, this, _1));
 
 	ClientManager::getInstance()->addListener(this);
@@ -177,6 +178,16 @@ bool PrivateFrame::preClosing() {
 	return true;
 }
 
+void PrivateFrame::openLog() {
+	StringMap params;
+	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo->getCID()));
+	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo->getCID()));
+	params["userCID"] = replyTo->getCID().toBase32();
+	params["userNI"] = ClientManager::getInstance()->getNicks(replyTo->getCID())[0];
+	params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
+	WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::PM, params))));
+}
+
 void PrivateFrame::readLog() {
 	if(SETTING(SHOW_LAST_LINES_LOG) == 0)
 		return;
@@ -187,7 +198,7 @@ void PrivateFrame::readLog() {
 	params["userCID"] = replyTo->getCID().toBase32();
 	params["userNI"] = ClientManager::getInstance()->getNicks(replyTo->getCID())[0];
 	params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
-	string path = Util::validateFileName(SETTING(LOG_DIRECTORY) + Util::formatParams(SETTING(LOG_FILE_PRIVATE_CHAT), params, true));
+	string path = Util::validateFileName(LogManager::getInstance()->getPath(LogManager::PM, params));
 
 	StringList lines;
 
@@ -289,14 +300,7 @@ bool PrivateFrame::enter() {
 		} else if(Util::stricmp(cmd.c_str(), _T("getlist")) == 0) {
 			// TODO handleGetList();
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
-			StringMap params;
-
-			params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo->getCID()));
-			params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo->getCID()));
-			params["userCID"] = replyTo->getCID().toBase32();
-			params["userNI"] = ClientManager::getInstance()->getNicks(replyTo->getCID())[0];
-			params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
-			WinUtil::openFile(Text::toT(Util::validateFileName(SETTING(LOG_DIRECTORY) + Util::formatParams(SETTING(LOG_FILE_PRIVATE_CHAT), params, true))));
+			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
 			addStatus(_T("*** ") + WinUtil::commands + _T(", /getlist, /clear, /grant, /close, /favorite, /log <system, downloads, uploads>"));
 		} else {
@@ -325,8 +329,9 @@ void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
 	ClientManager::getInstance()->privateMessage(replyTo, Text::fromT(msg), thirdPerson);
 }
 
-HRESULT PrivateFrame::handleSpeaker(WPARAM, LPARAM) {
-	updateTitle();
+LRESULT PrivateFrame::handleSpeaker(WPARAM wParam) {
+	if(wParam == USER_UPDATED)
+		updateTitle();
 	return 0;
 }
 

@@ -31,6 +31,7 @@
 #include <dcpp/FinishedManager.h>
 #include <dcpp/TimerManager.h>
 #include <dcpp/ClientManager.h>
+#include <dcpp/LogManager.h>
 
 template<class T, bool in_UL>
 class FinishedFrameBase :
@@ -120,6 +121,7 @@ protected:
 		usersWindow->onSized(std::tr1::bind(&ThisType::fills, usersWindow, users));
 
 		this->initStatus();
+		this->status->onDblClicked(std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(in_UL ? LogManager::UPLOAD : LogManager::DOWNLOAD)))));
 
 		this->setStatusHelpId(STATUS_COUNT, in_UL ? IDH_FINISHED_UL_COUNT : IDH_FINISHED_DL_COUNT);
 		this->setStatusHelpId(STATUS_BYTES, in_UL ? IDH_FINISHED_UL_BYTES : IDH_FINISHED_DL_BYTES);

@@ -252,6 +252,8 @@ private:
 	bool parseFilter(FilterModes& mode, int64_t& size);
 	bool matchFilter(const UserInfo& ui, int sel, bool doSizeCompare = false, FilterModes mode = NONE, int64_t size = 0);
 
+	void openLog(bool status = false);
+
 	string stripNick(const string& nick) const;
 	tstring scanNickPrefix(const tstring& prefix);
 

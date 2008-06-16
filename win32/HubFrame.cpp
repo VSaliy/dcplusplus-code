@@ -160,6 +160,8 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	}
 
 	initStatus();
+	status->onDblClicked(std::tr1::bind(&HubFrame::openLog, this, false));
+
 	///@todo get real resizer width
 	statusSizes[STATUS_SHOW_USERS] = 16;
 
@@ -355,15 +357,7 @@ bool HubFrame::enter() {
 				}
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
-			StringMap params;
-			params["hubNI"] = client->getHubName();
-			params["hubURL"] = client->getHubUrl();
-			params["myNI"] = client->getMyNick();
-			if(param.empty()) {
-				WinUtil::openFile(Text::toT(Util::validateFileName(SETTING(LOG_DIRECTORY) + Util::formatParams(SETTING(LOG_FILE_MAIN_CHAT), params, true))));
-			} else if(Util::stricmp(param.c_str(), _T("status")) == 0) {
-				WinUtil::openFile(Text::toT(Util::validateFileName(SETTING(LOG_DIRECTORY) + Util::formatParams(SETTING(LOG_FILE_STATUS), params, true))));
-			}
+			openLog(!param.empty() || Util::stricmp(param.c_str(), _T("status")) == 0);
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
 			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /clear, /ts, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
@@ -1271,6 +1265,14 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 			client->sendUserCmd(Util::formatParams(uc.getCommand(), tmp, false));
 		}
 	}
+}
+
+void HubFrame::openLog(bool status) {
+	StringMap params;
+	params["hubNI"] = client->getHubName();
+	params["hubURL"] = client->getHubUrl();
+	params["myNI"] = client->getMyNick();
+	WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(status ? LogManager::STATUS : LogManager::CHAT, params))));
 }
 
 string HubFrame::stripNick(const string& nick) const {

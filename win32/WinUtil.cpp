@@ -241,11 +241,11 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 
 	if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 		if(Util::stricmp(param.c_str(), _T("system")) == 0) {
-			WinUtil::openFile(Text::toT(Util::validateFileName(SETTING(LOG_DIRECTORY) + "system.log")));
+			WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM))));
 		} else if(Util::stricmp(param.c_str(), _T("downloads")) == 0) {
-			WinUtil::openFile(Text::toT(Util::validateFileName(SETTING(LOG_DIRECTORY) + Util::formatTime(SETTING(LOG_FILE_DOWNLOAD), time(NULL)))));
+			WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::DOWNLOAD))));
 		} else if(Util::stricmp(param.c_str(), _T("uploads")) == 0) {
-			WinUtil::openFile(Text::toT(Util::validateFileName(SETTING(LOG_DIRECTORY) + Util::formatTime(SETTING(LOG_FILE_UPLOAD), time(NULL)))));
+			WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::UPLOAD))));
 		} else {
 			return false;
 		}

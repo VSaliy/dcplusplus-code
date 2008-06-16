@@ -66,7 +66,7 @@ private:
 	virtual ~PrivateFrame();
 	
 	void layout();
-	HRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
+	LRESULT handleSpeaker(WPARAM wParam);
 	bool preClosing();
 	bool handleTabContextMenu(const dwt::ScreenCoordinate& pt);
 	void handleGetList();
@@ -76,6 +76,7 @@ private:
 	bool handleKeyDown(int c);
 	bool enter();
 
+	void openLog();
 	void readLog();
 	void addChat(const tstring& aLine);
 	void addStatus(const tstring& aLine, bool inChat = true);
