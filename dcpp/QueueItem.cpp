@@ -89,17 +89,17 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 	if(getSize() == -1 || blockSize == 0) {
 		return Segment(0, -1);
 	}
-	
+
 	if(!BOOLSETTING(SEGMENTED_DL) && !downloads.empty()) {
 		return Segment(0, 0);
 	}
-	
+
 	int64_t remaining = getSize() - getDownloadedBytes();
-	
+
 	int64_t targetSize;
 	if(BOOLSETTING(SEGMENTED_DL)) {
 		double done = static_cast<double>(getDownloadedBytes()) / getSize();
-		
+
 		// We want smaller blocks at the end of the transfer, squaring gives a nice curve...
 		targetSize = wantedSize * std::max(0.25, (1. - (done * done)));
 	} else {
@@ -132,15 +132,15 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 				overlaps = block.overlaps(*i);
 			}
 		}
-		
+
 		for(DownloadList::const_iterator i = downloads.begin(); !overlaps && i !=downloads.end(); ++i) {
 			overlaps = block.overlaps((*i)->getSegment());
 		}
-		
+
 		if(!overlaps) {
 			return block;
 		}
-		
+
 		if(curSize > blockSize) {
 			curSize -= blockSize;
 		} else {
@@ -148,7 +148,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 			curSize = targetSize;
 		}
 	}
-	
+
 	return Segment(0, 0);
 }
 
@@ -163,10 +163,10 @@ int64_t QueueItem::getDownloadedBytes() const {
 void QueueItem::addSegment(const Segment& segment) {
 	done.insert(segment);
 
-	// Consilidate segments
+	// Consolidate segments
 	if(done.size() == 1)
 		return;
-	
+
 	for(SegmentSet::iterator i = ++done.begin() ; i != done.end(); ) {
 		SegmentSet::iterator prev = i;
 		prev--;

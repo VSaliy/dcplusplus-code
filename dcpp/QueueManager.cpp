@@ -46,7 +46,7 @@
 namespace dcpp {
 
 QueueItem* QueueManager::FileQueue::add(const string& aTarget, int64_t aSize,
-						  int aFlags, QueueItem::Priority p, const string& aTempTarget, 
+						  int aFlags, QueueItem::Priority p, const string& aTempTarget,
 						  time_t aAdded, const TTHValue& root) throw(QueueException, FileException)
 {
 	if(p == QueueItem::DEFAULT) {
@@ -63,7 +63,7 @@ QueueItem* QueueManager::FileQueue::add(const string& aTarget, int64_t aSize,
 			p = QueueItem::LOWEST;
 		}
 	}
-	
+
 	QueueItem* qi = new QueueItem(aTarget, aSize, p, aFlags, aAdded, root);
 
 	if(!qi->isSet(QueueItem::FLAG_USER_LIST)) {
@@ -205,7 +205,7 @@ QueueItem* QueueManager::UserQueue::getNext(const UserPtr& aUser, QueueItem::Pri
 				if(qi->isWaiting()) {
 					return qi;
 				}
-				
+
 				// No segmented downloading when getting the tree
 				if(qi->getDownloads()[0]->getType() == Transfer::TYPE_TREE) {
 					continue;
@@ -261,7 +261,7 @@ int64_t QueueManager::UserQueue::getQueued(const UserPtr& aUser) const {
 		if(iulm == ulm.end()) {
 			continue;
 		}
-		
+
 		for(QueueItem::List::const_iterator j = iulm->second.begin(); j != iulm->second.end(); ++j) {
 			const QueueItem::Ptr qi = *j;
 			if(qi->getSize() != -1) {
@@ -287,7 +287,7 @@ void QueueManager::UserQueue::remove(QueueItem* qi, const UserPtr& aUser, bool r
 	if(removeRunning && qi->isRunning()) {
 		removeDownload(qi, aUser);
 	}
-	
+
 	dcassert(qi->isSource(aUser));
 	QueueItem::UserListMap& ulm = userQueue[qi->getPriority()];
 	QueueItem::UserListIter j = ulm.find(aUser);
@@ -434,7 +434,7 @@ void QueueManager::addPfs(const UserPtr& aUser, const string& aDir) throw(QueueE
 	ConnectionManager::getInstance()->getDownloadConnection(aUser);
 }
 
-void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser, 
+void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser,
 	int aFlags /* = 0 */, bool addBad /* = true */) throw(QueueException, FileException)
 {
 	bool wantConnection = true;
@@ -476,10 +476,10 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 		} else {
 			if(q->getSize() != aSize) {
 				throw QueueException(_("A file with a different size already exists in the queue"));
-			} 
+			}
 			if(!(root == q->getTTH())) {
 				throw QueueException(_("A file with different tth root already exists in the queue"));
-			} 
+			}
 			q->setFlag(aFlags);
 
 			// We don't add any more sources to user list downloads, but we want their flags updated
@@ -727,7 +727,7 @@ void QueueManager::getTargets(const TTHValue& tth, StringList& sl) {
 
 Download* QueueManager::getDownload(UserConnection& aSource, bool supportsTrees) throw() {
 	Lock l(cs);
-	
+
 	UserPtr& aUser = aSource.getUser();
 	dcdebug("Getting download for %s...", aUser->getCID().toBase32().c_str());
 	// First check PFS's...
@@ -742,6 +742,14 @@ Download* QueueManager::getDownload(UserConnection& aSource, bool supportsTrees)
 	if(!q) {
 		dcdebug("none\n");
 		return 0;
+	}
+
+	// Check that the file we will be downloading to exists
+	if(q->getDownloadedBytes() > 0) {
+		if(File::getSize(q->getTempTarget()) == -1) {
+			// Temp target gone?
+			q->resetDownloaded();
+		}
 	}
 
 	Download* d = new Download(aSource, *q, supportsTrees);
@@ -795,20 +803,29 @@ private:
 void QueueManager::setFile(Download* d) {
 	if(d->getType() == Transfer::TYPE_FILE) {
 		Lock l(cs);
-		
+
 		QueueItem* qi = fileQueue.find(d->getPath());
 		if(!qi) {
 			throw QueueException(_("Target removed"));
 		}
-		
+
 		string target = d->getDownloadTarget();
-		File::ensureDirectory(target);
+
+		if(d->getSegment().getStart() > 0) {
+			if(File::getSize(target) == -1) {
+				// When trying the download the next time, the resume pos will be reset
+				throw QueueException("Target file disappeared");
+			}
+		} else {
+			File::ensureDirectory(target);
+		}
+
 		File* f = new File(target, File::WRITE, File::OPEN | File::CREATE | File::SHARED);
-		
+
 		if(d->isSet(Download::FLAG_ANTI_FRAG) && f->getSize() < qi->getSize()) {
 			f->setSize(qi->getSize());
 		}
-		
+
 		f->setPos(d->getSegment().getStart());
 		d->setFile(f);
 	} else if(d->getType() == Transfer::TYPE_FULL_LIST) {
@@ -824,7 +841,7 @@ void QueueManager::setFile(Download* d) {
 	} else if(d->getType() == Transfer::TYPE_PARTIAL_LIST) {
 		d->setFile(new StringOutputStream(d->getPFS()));
 	} else if(d->getType() == Transfer::TYPE_TREE) {
-		d->setFile(new TreeOutputStream(d->getTigerTree()));		
+		d->setFile(new TreeOutputStream(d->getTigerTree()));
 	}
 }
 
@@ -911,11 +928,11 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 								dirMap.erase(i);
 							}
 						}
-						
+
 						if(aDownload->getType() == Transfer::TYPE_FILE) {
 							q->addSegment(aDownload->getSegment());
 						}
-						
+
 						if(aDownload->getType() != Transfer::TYPE_FILE || q->isFinished()) {
 
 							// Check if we're anti-fragging...
@@ -930,7 +947,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 									// Now what?
 								}
 							}
-							
+
 							// Check if we need to move the file
 							if( !aDownload->getTempTarget().empty() && (Util::stricmp(aDownload->getPath().c_str(), aDownload->getTempTarget().c_str()) != 0) ) {
 								moveFile(aDownload->getTempTarget(), aDownload->getPath());
@@ -938,7 +955,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 
 							fire(QueueManagerListener::Finished(), q, dir, aDownload->getAverageSpeed());
 							fire(QueueManagerListener::Removed(), q);
-	
+
 							userQueue.remove(q);
 							fileQueue.remove(q);
 						} else {
@@ -1023,7 +1040,7 @@ void QueueManager::processList(const string& name, UserPtr& user, int flags) {
 	}
 	if(flags & QueueItem::FLAG_MATCH_QUEUE) {
 		size_t files = matchListing(dirList);
-		LogManager::getInstance()->message(str(FN_("%1%: Matched %2% file", "%1%: Matched %2% files", files) % 
+		LogManager::getInstance()->message(str(FN_("%1%: Matched %2% file", "%1%: Matched %2% files", files) %
 			Util::toString(ClientManager::getInstance()->getNicks(user->getCID())) % files));
 	}
 }
@@ -1357,7 +1374,7 @@ void QueueLoader::startTag(const string& name, StringPairList& attribs, bool sim
 		} else if(cur && name == sSegment) {
 			int64_t start = Util::toInt64(getAttrib(attribs, sStart, 0));
 			int64_t size = Util::toInt64(getAttrib(attribs, sSize, 1));
-			
+
 			if(size > 0 && start >= 0 && (start + size) < cur->getSize()) {
 				cur->addSegment(Segment(start, size));
 			}

@@ -73,7 +73,7 @@ class QueueManager : public Singleton<QueueManager>, public Speaker<QueueManager
 {
 public:
 	/** Add a file to the queue. */
-	void add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser, 
+	void add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser,
 		int aFlags = 0, bool addBad = true) throw(QueueException, FileException);
 	/** Add a user's filelist to the queue. */
 	void addList(const UserPtr& aUser, int aFlags, const string& aInitialDir = Util::emptyString) throw(QueueException, FileException);
@@ -87,7 +87,7 @@ public:
 	int matchListing(const DirectoryListing& dl) throw();
 
 	bool getTTH(const string& name, TTHValue& tth) throw();
-	
+
 	int64_t getSize(const string& target) throw();
 	int64_t getPos(const string& target) throw();
 
@@ -107,9 +107,9 @@ public:
 	Download* getDownload(UserConnection& aSource, bool supportsTrees) throw();
 	void putDownload(Download* aDownload, bool finished) throw();
 	void setFile(Download* download);
-	
+
 	int64_t getQueued(const UserPtr& aUser) const;
-	
+
 	/** @return The highest priority download the user has, PAUSED may also mean no downloads */
 	QueueItem::Priority hasDownload(const UserPtr& aUser) throw();
 
@@ -152,8 +152,8 @@ private:
 				delete i->second;
 		}
 		void add(QueueItem* qi);
-		QueueItem* add(const string& aTarget, int64_t aSize, int aFlags, QueueItem::Priority p, 
-			const string& aTempTarget, time_t aAdded, const TTHValue& root) 
+		QueueItem* add(const string& aTarget, int64_t aSize, int aFlags, QueueItem::Priority p,
+			const string& aTempTarget, time_t aAdded, const TTHValue& root)
 			throw(QueueException, FileException);
 
 		QueueItem* find(const string& target);
