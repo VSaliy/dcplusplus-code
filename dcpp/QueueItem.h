@@ -86,7 +86,7 @@ public:
 			FLAG_NO_TREE = 0x80,
 			FLAG_SLOW_SOURCE = 0x100,
 			FLAG_MASK = FLAG_FILE_NOT_AVAILABLE
-				| FLAG_PASSIVE | FLAG_REMOVED | FLAG_CRC_FAILED | FLAG_CRC_WARN 
+				| FLAG_PASSIVE | FLAG_REMOVED | FLAG_CRC_FAILED | FLAG_CRC_WARN
 				| FLAG_BAD_TREE | FLAG_NO_TREE | FLAG_SLOW_SOURCE
 		};
 
@@ -97,7 +97,7 @@ public:
 		UserPtr& getUser() { return user; }
 		GETSET(UserPtr, user, User);
 	};
-	
+
 	typedef std::vector<Source> SourceList;
 	typedef SourceList::iterator SourceIter;
 	typedef SourceList::const_iterator SourceConstIter;
@@ -105,10 +105,10 @@ public:
 	typedef set<Segment> SegmentSet;
 	typedef SegmentSet::iterator SegmentIter;
 	typedef SegmentSet::const_iterator SegmentConstIter;
-	
-	QueueItem(const string& aTarget, int64_t aSize, Priority aPriority, int aFlag, 
+
+	QueueItem(const string& aTarget, int64_t aSize, Priority aPriority, int aFlag,
 		time_t aAdded, const TTHValue& tth) :
-		Flags(aFlag), target(aTarget), size(aSize), 
+		Flags(aFlag), target(aTarget), size(aSize),
 		priority(aPriority), added(aAdded),	tthRoot(tth)
 	{ }
 
@@ -149,28 +149,29 @@ public:
 			return i->isAnySet(exceptions^Source::FLAG_MASK);
 		return false;
 	}
-	
+
 	int64_t getDownloadedBytes() const;
 	double getDownloadedFraction() const { return static_cast<double>(getDownloadedBytes()) / getSize(); }
-	
+
 	DownloadList& getDownloads() { return downloads; }
-	
+
 	/** Next segment that is not done and not being downloaded, zero-sized segment returned if there is none is found */
 	Segment getNextSegment(int64_t blockSize, int64_t wantedSize) const;
-	
+
 	void addSegment(const Segment& segment);
-	
+	void resetDownloaded() { done.clear(); }
+
 	bool isFinished() const {
 		return done.size() == 1 && *done.begin() == Segment(0, getSize());
 	}
-	
+
 	bool isRunning() const {
 		return !isWaiting();
 	}
 	bool isWaiting() const {
 		return downloads.empty();
 	}
-	
+
 	string getListName() const {
 		dcassert(isSet(QueueItem::FLAG_USER_LIST));
 		if(isSet(QueueItem::FLAG_XML_BZLIST)) {
@@ -182,7 +183,7 @@ public:
 
 	const string& getTempTarget();
 	void setTempTarget(const string& aTempTarget) { tempTarget = aTempTarget; }
-	
+
 	GETSET(SegmentSet, done, Done);
 	GETSET(DownloadList, downloads, Downloads);
 	GETSET(string, target, Target);

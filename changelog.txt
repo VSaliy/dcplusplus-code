@@ -28,6 +28,7 @@
 * Fix removal of multiple favorite users at the same time (poy)
 * Double-click on status bars to open corresponding log files (poy)
 * The number of filtered items shown in public hubs (emtee)
+* [L#225592] Fix file corruption when partially downloaded file is corrupted
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
