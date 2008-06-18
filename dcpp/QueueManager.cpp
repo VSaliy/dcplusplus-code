@@ -746,9 +746,15 @@ Download* QueueManager::getDownload(UserConnection& aSource, bool supportsTrees)
 
 	// Check that the file we will be downloading to exists
 	if(q->getDownloadedBytes() > 0) {
-		if(File::getSize(q->getTempTarget()) == -1) {
-			// Temp target gone?
-			q->resetDownloaded();
+		if(File::getSize(q->getTempTarget()) != q->getSize()) {
+			// <= 0.706 added ".antifrag" to temporary download files if antifrag was enabled...
+			std::string antifrag = q->getTempTarget() + ".antifrag";
+			if(File::getSize(antifrag) == q->getSize()) {
+				File::renameFile(antifrag, q->getTempTarget());
+			} else {
+				// Temp target gone?
+				q->resetDownloaded();
+			}
 		}
 	}
 
@@ -812,9 +818,9 @@ void QueueManager::setFile(Download* d) {
 		string target = d->getDownloadTarget();
 
 		if(d->getSegment().getStart() > 0) {
-			if(File::getSize(target) == -1) {
+			if(File::getSize(target) != qi->getSize()) {
 				// When trying the download the next time, the resume pos will be reset
-				throw QueueException("Target file disappeared");
+				throw QueueException("Target file is missing or wrong size");
 			}
 		} else {
 			File::ensureDirectory(target);
@@ -822,7 +828,7 @@ void QueueManager::setFile(Download* d) {
 
 		File* f = new File(target, File::WRITE, File::OPEN | File::CREATE | File::SHARED);
 
-		if(d->isSet(Download::FLAG_ANTI_FRAG) && f->getSize() < qi->getSize()) {
+		if(f->getSize() != qi->getSize()) {
 			f->setSize(qi->getSize());
 		}
 
@@ -935,19 +941,6 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 
 						if(aDownload->getType() != Transfer::TYPE_FILE || q->isFinished()) {
 
-							// Check if we're anti-fragging...
-							if(aDownload->isSet(Download::FLAG_ANTI_FRAG)) {
-								// Ok, rename the file to what we expect it to be...
-								try {
-									const string& tgt = aDownload->getTempTarget().empty() ? aDownload->getPath() : aDownload->getTempTarget();
-									File::renameFile(aDownload->getDownloadTarget(), tgt);
-									aDownload->unsetFlag(Download::FLAG_ANTI_FRAG);
-								} catch(const FileException& e) {
-									dcdebug("AntiFrag: %s\n", e.getError().c_str());
-									// Now what?
-								}
-							}
-
 							// Check if we need to move the file
 							if( !aDownload->getTempTarget().empty() && (Util::stricmp(aDownload->getPath().c_str(), aDownload->getTempTarget().c_str()) != 0) ) {
 								moveFile(aDownload->getTempTarget(), aDownload->getPath());
@@ -995,7 +988,6 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 				}
 			} else if(aDownload->getType() != Transfer::TYPE_TREE) {
 				if(!aDownload->getTempTarget().empty() && (aDownload->getType() == Transfer::TYPE_FULL_LIST || aDownload->getTempTarget() != aDownload->getPath())) {
-					File::deleteFile(aDownload->getTempTarget() + Download::ANTI_FRAG_EXT);
 					File::deleteFile(aDownload->getTempTarget());
 				}
 			}
@@ -1070,7 +1062,6 @@ void QueueManager::remove(const string& aTarget) throw() {
 				dirMap.erase((*i)->getUser()->getCID().toBase32());
 			}
 		} else if(!q->getTempTarget().empty() && q->getTempTarget() != q->getTarget()) {
-			File::deleteFile(q->getTempTarget() + Download::ANTI_FRAG_EXT);
 			File::deleteFile(q->getTempTarget());
 		}
 
