@@ -27,18 +27,18 @@
 
 namespace dcpp {
 
-Download::Download(UserConnection& conn, const string& pfsDir) throw() : Transfer(conn, pfsDir, TTHValue()), 
-	file(0), treeValid(false) 
+Download::Download(UserConnection& conn, const string& pfsDir) throw() : Transfer(conn, pfsDir, TTHValue()),
+	file(0), treeValid(false)
 {
 	conn.setDownload(this);
 	setType(TYPE_PARTIAL_LIST);
 }
 
 Download::Download(UserConnection& conn, QueueItem& qi, bool supportsTrees) throw() : Transfer(conn, qi.getTarget(), qi.getTTH()),
-	tempTarget(qi.getTempTarget()), file(0), treeValid(false) 
+	tempTarget(qi.getTempTarget()), file(0), treeValid(false)
 {
 	conn.setDownload(this);
-	
+
 	if(qi.isSet(QueueItem::FLAG_USER_LIST)) {
 		setType(TYPE_FULL_LIST);
 	}
@@ -58,10 +58,6 @@ Download::Download(UserConnection& conn, QueueItem& qi, bool supportsTrees) thro
 			setTreeValid(true);
 			setSegment(qi.getNextSegment(getTigerTree().getBlockSize(), 0));
 		}
-		
-		if(getType() == TYPE_FILE) {
-			setFlag(Download::FLAG_ANTI_FRAG);
-		}
 	}
 }
 
@@ -71,10 +67,10 @@ Download::~Download() {
 
 AdcCommand Download::getCommand(bool zlib) {
 	AdcCommand cmd(AdcCommand::CMD_GET);
-	
+
 	cmd.addParam(Transfer::names[getType()]);
 
-	if(getType() == TYPE_PARTIAL_LIST) { 
+	if(getType() == TYPE_PARTIAL_LIST) {
 		cmd.addParam(Util::toAdcFile(getPath()));
 	} else if(getType() == TYPE_FULL_LIST) {
 		if(isSet(Download::FLAG_XML_BZ_LIST)) {
@@ -85,7 +81,7 @@ AdcCommand Download::getCommand(bool zlib) {
 	} else {
 		cmd.addParam("TTH/" + getTTH().toBase32());
 	}
-	
+
 	cmd.addParam(Util::toString(getStartPos()));
 	cmd.addParam(Util::toString(getSize()));
 

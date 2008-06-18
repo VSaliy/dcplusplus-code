@@ -42,7 +42,6 @@
 namespace dcpp {
 
 static const string DOWNLOAD_AREA = "Downloads";
-const string Download::ANTI_FRAG_EXT = ".antifrag";
 
 DownloadManager::DownloadManager() {
 	TimerManager::getInstance()->addListener(this);
@@ -225,7 +224,7 @@ void DownloadManager::startData(UserConnection* aSource, int64_t start, int64_t 
 		failDownload(aSource, _("Response does not match request"));
 		return;
 	}
-	
+
 	try {
 		QueueManager::getInstance()->setFile(d);
 	} catch(const FileException& e) {
@@ -239,10 +238,10 @@ void DownloadManager::startData(UserConnection* aSource, int64_t start, int64_t 
 	if((d->getType() == Transfer::TYPE_FILE || d->getType() == Transfer::TYPE_FULL_LIST) && SETTING(BUFFER_SIZE) > 0 ) {
 		d->setFile(new BufferedOutputStream<true>(d->getFile()));
 	}
-		
+
 	if(d->getType() == Transfer::TYPE_FILE) {
 		typedef MerkleCheckOutputStream<TigerTree, true> MerkleStream;
-		
+
 		d->setFile(new MerkleStream(d->getTigerTree(), d->getFile(), d->getStartPos()));
 		d->setFlag(Download::FLAG_TTH_CHECK);
 	}
@@ -253,7 +252,7 @@ void DownloadManager::startData(UserConnection* aSource, int64_t start, int64_t 
 	if(z) {
 		d->setFlag(Download::FLAG_ZDOWNLOAD);
 		d->setFile(new FilteredOutputStream<UnZFilter, true>(d->getFile()));
-	} 
+	}
 
 	d->setStart(GET_TICK());
 	d->tick();
@@ -280,7 +279,7 @@ void DownloadManager::on(UserConnectionListener::Data, UserConnection* aSource, 
 	try {
 		d->addPos(d->getFile()->write(aData, aLen), aLen);
 		d->tick();
-		
+
 		if(d->getFile()->eof()) {
 			endData(aSource);
 			aSource->setLineMode(0);
@@ -326,10 +325,10 @@ void DownloadManager::endData(UserConnection* aSource) {
 			failDownload(aSource, e.getError());
 			return;
 		}
-		
+
 		aSource->setSpeed(d->getAverageSpeed());
 		aSource->updateChunkSize(d->getTigerTree().getBlockSize(), d->getSize(), GET_TICK() - d->getStart());
-		
+
 		dcdebug("Download finished: %s, size " I64_FMT ", downloaded " I64_FMT "\n", d->getPath().c_str(), d->getSize(), d->getPos());
 
 #if PORT_ME
@@ -338,7 +337,7 @@ void DownloadManager::endData(UserConnection* aSource) {
 			if(!checkSfv(aSource, d))
 				return;
 		}
-#endif	
+#endif
 		if(BOOLSETTING(LOG_DOWNLOADS) && (BOOLSETTING(LOG_FILELIST_TRANSFERS) || d->getType() == Transfer::TYPE_FILE)) {
 			logDownload(aSource, d);
 		}
@@ -517,7 +516,7 @@ void DownloadManager::on(UserConnectionListener::Updated, UserConnection* aSourc
 			return;
 		idlers.erase(i);
 	}
-	
+
 	checkDownloads(aSource);
 }
 
@@ -527,7 +526,7 @@ void DownloadManager::fileNotAvailable(UserConnection* aSource) {
 		aSource->disconnect();
 		return;
 	}
-	
+
 	Download* d = aSource->getDownload();
 	dcassert(d != NULL);
 	dcdebug("File Not Available: %s\n", d->getPath().c_str());
@@ -538,7 +537,7 @@ void DownloadManager::fileNotAvailable(UserConnection* aSource) {
 	QueueManager::getInstance()->removeSource(d->getPath(), aSource->getUser(), d->getType() == Transfer::TYPE_TREE ? QueueItem::Source::FLAG_NO_TREE : QueueItem::Source::FLAG_FILE_NOT_AVAILABLE, false);
 
 	QueueManager::getInstance()->putDownload(d, false);
-	
+
 	checkDownloads(aSource);
 }
 
