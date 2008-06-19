@@ -356,7 +356,7 @@ inline size_t Tree::sizeImpl() const {
 }
 
 inline void Tree::editLabel( HTREEITEM node ) {
-	TreeView_EditLabel( this->handle(), node );
+	static_cast<void>(TreeView_EditLabel( this->handle(), node ));
 }
 
 inline void Tree::ensureVisible( HTREEITEM node ) {

@@ -44,7 +44,7 @@ public:
 		DeleteCriticalSection(&cs);
 	}
 private:
-	dcdrun(long counter;);
+	dcdrun(long counter);
 	CRITICAL_SECTION cs;
 #else
 public:
