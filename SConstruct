@@ -6,7 +6,7 @@ import os,sys
 from build_util import Dev
 
 gcc_flags = {
-	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-fexceptions', '-mthreads'],
+	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-Wno-address', '-fexceptions', '-mthreads'],
 	'debug': [], 
 	'release' : ['-O2', '-mwindows']
 }
