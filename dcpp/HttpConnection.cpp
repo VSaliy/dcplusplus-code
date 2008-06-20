@@ -63,11 +63,14 @@ void HttpConnection::downloadFile(const string& aUrl) {
 		Util::decodeUrl(SETTING(HTTP_PROXY), server, port, file);
 		file = currentUrl;
 	}
-	
-	if(SETTING(CORAL)) {
-		if(server.length() > CORAL_SUFFIX.length() && server.compare(server.length() - CORAL_SUFFIX.length(), CORAL_SUFFIX.length(), CORAL_SUFFIX) != 0) {
+
+	if(SETTING(CORAL) && coralizeState != ST_NOCORALIZE) {
+		if(server.length() > CORAL_SUFFIX.length() && server.compare(server.length() - CORAL_SUFFIX.length(), CORAL_SUFFIX.length(), CORAL_SUFFIX) !=0) {
 			server += CORAL_SUFFIX;
-		}
+		} else {
+			coralizeState = ST_NOCORALIZE;
+		}	
+		
 	}
 
 	if(port == 0)
@@ -99,12 +102,13 @@ void HttpConnection::on(BufferedSocketListener::Connected) throw() {
 	socket->write("Host: " + sRemoteServer + "\r\n");
 	socket->write("Connection: close\r\n");	// we'll only be doing one request
 	socket->write("Cache-Control: no-cache\r\n\r\n");
+	coralizeState = ST_CONNECTED;
 }
 
 void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) throw() {
 	if(!ok) {
 		if(aLine.find("200") == string::npos) {
-			if(aLine.find("302") != string::npos){
+			if(aLine.find("301") != string::npos || aLine.find("302") != string::npos){
 				moved302 = true;
 			} else {
 				socket->disconnect();
@@ -112,10 +116,12 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) throw
 				BufferedSocket::putSocket(socket);
 				socket = NULL;
 				fire(HttpConnectionListener::Failed(), this, aLine + " (" + currentUrl + ")");
+				coralizeState = ST_DEFAULT;			
 				return;
 			}
 		}
 		ok = true;
+		dcdebug("%s\n",aLine.c_str());
 	} else if(moved302 && Util::findSubString(aLine, "Location") != string::npos){
 		dcassert(socket);
 		socket->removeListener(this);
@@ -140,7 +146,9 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) throw
 		}
 		fire(HttpConnectionListener::Redirected(), this, location302);
 
+		coralizeState = ST_DEFAULT;			
 		downloadFile(location302); 
+
 	} else if(aLine == "\x0d") {
 		socket->setDataMode(size);
 	} else if(Util::findSubString(aLine, "Content-Length") != string::npos) {
@@ -155,6 +163,13 @@ void HttpConnection::on(BufferedSocketListener::Failed, const string& aLine) thr
 	socket->removeListener(this);
 	BufferedSocket::putSocket(socket);
 	socket = NULL;
+	if(SETTING(CORAL) && coralizeState == ST_DEFAULT) {
+		coralizeState = ST_NOCORALIZE;
+		dcdebug("Coralized address failed, retrying : %s\n",currentUrl.c_str());
+		downloadFile(currentUrl); 
+		return;
+	}
+	coralizeState = ST_DEFAULT;			
 	fire(HttpConnectionListener::Failed(), this, aLine + " (" + currentUrl + ")");
 }
 
@@ -164,6 +179,7 @@ void HttpConnection::on(BufferedSocketListener::ModeChange) throw() {
 	BufferedSocket::putSocket(socket);
 	socket = NULL;
 	fire(HttpConnectionListener::Complete(), this, currentUrl);
+	coralizeState = ST_DEFAULT;			
 }
 void HttpConnection::on(BufferedSocketListener::Data, uint8_t* aBuf, size_t aLen) throw() {
 	fire(HttpConnectionListener::Data(), this, aBuf, aLen);
