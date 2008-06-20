@@ -746,14 +746,23 @@ Download* QueueManager::getDownload(UserConnection& aSource, bool supportsTrees)
 
 	// Check that the file we will be downloading to exists
 	if(q->getDownloadedBytes() > 0) {
-		if(File::getSize(q->getTempTarget()) != q->getSize()) {
+		int64_t tempSize = File::getSize(q->getTempTarget());
+		if(tempSize != q->getSize()) {
 			// <= 0.706 added ".antifrag" to temporary download files if antifrag was enabled...
+			// 0.705 added ".antifrag" even if antifrag was disabled
 			std::string antifrag = q->getTempTarget() + ".antifrag";
-			if(File::getSize(antifrag) == q->getSize()) {
+			if(File::getSize(antifrag) > 0) {
 				File::renameFile(antifrag, q->getTempTarget());
-			} else {
-				// Temp target gone?
-				q->resetDownloaded();
+				tempSize = File::getSize(q->getTempTarget());	
+			}	
+			if(tempSize != q->getSize()) {
+				if(tempSize > 0 && tempSize < q->getSize()) {
+					// Probably started with <=0.699 or with 0.705 without antifrag enabled...
+					File(q->getTempTarget(), File::WRITE, File::OPEN).setSize(q->getSize()); 
+				} else {
+					// Temp target gone?
+					q->resetDownloaded();
+				}
 			}
 		}
 	}
