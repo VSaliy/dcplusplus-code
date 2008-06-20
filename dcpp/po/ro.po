@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-04-23 17:22+0200\n"
-"PO-Revision-Date: 2008-04-07 13:06+0000\n"
-"Last-Translator: Ionuț Jula <ionutjula@gmail.com>\n"
+"POT-Creation-Date: 2008-06-20 23:05+0200\n"
+"PO-Revision-Date: 2008-06-19 15:42+0000\n"
+"Last-Translator: iurianu <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-04-23 11:12+0000\n"
+"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:381
+#: dcpp/Util.cpp:387
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:349
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp/Util.cpp:339
+#: dcpp/Util.cpp:345
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp/Util.cpp:341
+#: dcpp/Util.cpp:347
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp/Util.cpp:347
+#: dcpp/Util.cpp:353
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp/Util.cpp:345
+#: dcpp/Util.cpp:351
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -65,7 +65,7 @@ msgstr ""
 "%1% nu e partajat; calculul CRC32 nu se potrivește cu cel găsit în fișierul "
 "SFV."
 
-#: dcpp/QueueManager.cpp:332
+#: dcpp/QueueManager.cpp:333
 #, boost-format
 msgid "%1% renamed to %2%"
 msgstr "%1% redenumit ca %2%"
@@ -85,29 +85,29 @@ msgstr "%1% a fost dat afară: %2%"
 msgid "%1%: File not available"
 msgstr "%1%: Fișierul nu e disponibil"
 
-#: dcpp/Util.cpp:337
+#: dcpp/Util.cpp:343
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp/Util.cpp:377
+#: dcpp/Util.cpp:383
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
 
-#: dcpp/QueueManager.cpp:534
+#: dcpp/QueueManager.cpp:535
 msgid "A file of equal or larger size already exists at the target location"
 msgstr "Un fișier de mărime egală sau mai mare există deja la destinație"
 
-#: dcpp/QueueManager.cpp:477
+#: dcpp/QueueManager.cpp:478
 msgid "A file with a different size already exists in the queue"
 msgstr "Un fișier cu o mărime diferită există deja în coadă"
 
-#: dcpp/QueueManager.cpp:480
+#: dcpp/QueueManager.cpp:481
 msgid "A file with different tth root already exists in the queue"
 msgstr "Un fișier cu o rădăcina TTH diferită există deja în coadă"
 
-#: dcpp/QueueManager.cpp:449
+#: dcpp/QueueManager.cpp:450
 msgid "A file with the same hash already exists in your share"
 msgstr "Un fișier cu cod hash identic există deja în partajul dumneavoastră"
 
@@ -137,12 +137,12 @@ msgstr "Conexiune închisă"
 msgid "Connection timeout"
 msgstr "Conexiune Expirată"
 
-#: dcpp/DownloadManager.cpp:232
+#: dcpp/DownloadManager.cpp:231
 #, boost-format
 msgid "Could not open target file: %1%"
 msgstr "Fișierul destinație nu poate fi deschis: %1%"
 
-#: dcpp/ShareManager.cpp:422
+#: dcpp/ShareManager.cpp:427
 msgid "Directory already shared"
 msgstr "Dosar partajat deja"
 
@@ -150,7 +150,7 @@ msgstr "Dosar partajat deja"
 msgid "Discard"
 msgstr "Elimină"
 
-#: dcpp/BufferedSocket.cpp:404
+#: dcpp/BufferedSocket.cpp:405
 msgid "Disconnected"
 msgstr "Deconectat"
 
@@ -159,11 +159,11 @@ msgstr "Deconectat"
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Utilizator care a părăsit hubul deconectat: %1%"
 
-#: dcpp/DCPlusPlus.cpp:107
+#: dcpp/DCPlusPlus.cpp:111
 msgid "Download Queue"
 msgstr "Coada de descărcare"
 
-#: dcpp/ShareManager.cpp:802
+#: dcpp/ShareManager.cpp:805
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1%%2% (Size: %3% B) Dupe matched "
@@ -172,7 +172,7 @@ msgstr ""
 "Fișierul duplicat nu va fi partajat: %1%%2% (Dimensiune: %3% B) Duplicat cu: "
 "%4%%5%"
 
-#: dcpp/QueueManager.cpp:547 dcpp/QueueManager.cpp:551
+#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Sursa duplicată: %1%"
@@ -188,8 +188,8 @@ msgid "Error during compression"
 msgstr "Eroare în cursul comprimării"
 
 #: dcpp/ZUtils.cpp:100 dcpp/ZUtils.cpp:123 dcpp/BZUtils.cpp:72
-#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:342
-#: dcpp/CryptoManager.cpp:361 dcpp/CryptoManager.cpp:375
+#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:343
+#: dcpp/CryptoManager.cpp:362 dcpp/CryptoManager.cpp:376
 msgid "Error during decompression"
 msgstr "Eroare în cursul decomprimării"
 
@@ -203,13 +203,13 @@ msgstr "Eroare la generarea codului hash %1%: %2%"
 msgid "Error saving hash data: %1%"
 msgstr "Eroare la salvarea datelor hash: %1%"
 
-#: dcpp/CryptoManager.cpp:226 dcpp/CryptoManager.cpp:230
-#: dcpp/CryptoManager.cpp:235 dcpp/CryptoManager.cpp:239
+#: dcpp/CryptoManager.cpp:227 dcpp/CryptoManager.cpp:231
+#: dcpp/CryptoManager.cpp:236 dcpp/CryptoManager.cpp:240
 msgid "Failed to load certificate file"
 msgstr "Incărcarea fișierului certificat a eșuat"
 
-#: dcpp/CryptoManager.cpp:244 dcpp/CryptoManager.cpp:248
-#: dcpp/CryptoManager.cpp:253 dcpp/CryptoManager.cpp:257
+#: dcpp/CryptoManager.cpp:245 dcpp/CryptoManager.cpp:249
+#: dcpp/CryptoManager.cpp:254 dcpp/CryptoManager.cpp:258
 msgid "Failed to load private key"
 msgstr "Incărcarea cheii private a eșuat"
 
@@ -225,16 +225,16 @@ msgstr ""
 "Setarea server/ului SOCKS pentru redirecționare UDP a eșuat (verificați "
 "adresa și portul server/ului SOCKS)"
 
-#: dcpp/ShareManager.cpp:837
+#: dcpp/ShareManager.cpp:840
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Actualizarea listei de fișiere a eșuat: %1%"
 
-#: dcpp/ShareManager.cpp:882
+#: dcpp/ShareManager.cpp:885
 msgid "File list refresh finished"
 msgstr "Actualizarea listei de fișiere terminată"
 
-#: dcpp/ShareManager.cpp:817
+#: dcpp/ShareManager.cpp:820
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -242,11 +242,11 @@ msgstr ""
 "Actualizarea listei de fișiere în desfășurare, așteptați terminarea înainte "
 "de a încerca din nou"
 
-#: dcpp/ShareManager.cpp:858
+#: dcpp/ShareManager.cpp:861
 msgid "File list refresh initiated"
 msgstr "Actualizarea listei de fișiere începută"
 
-#: dcpp/DirectoryListing.cpp:102
+#: dcpp/DirectoryListing.cpp:101
 msgid "File not available"
 msgstr "Fișier indisponibil"
 
@@ -264,11 +264,11 @@ msgstr "Calculare hash terminată: %1% (%2%/s)"
 msgid "Full tree does not match TTH root"
 msgstr "Arborele complet nu se potrivește cu rădacina TTH"
 
-#: dcpp/CryptoManager.cpp:219
+#: dcpp/CryptoManager.cpp:220
 msgid "Generated new TLS certificate"
 msgstr "Certificat TLS nou generat"
 
-#: dcpp/DCPlusPlus.cpp:101
+#: dcpp/DCPlusPlus.cpp:105
 msgid "Hash database"
 msgstr "Baza de date a codurilor hash"
 
@@ -289,11 +289,11 @@ msgstr ""
 "Hubul e probabil compatibil cu o versiune veche de ADC, încurajați "
 "proprietarul să îl actualizeze"
 
-#: dcpp/DownloadManager.cpp:220
+#: dcpp/DownloadManager.cpp:219
 msgid "Invalid size"
 msgstr "Dimensiune invalidă"
 
-#: dcpp/QueueManager.cpp:517 dcpp/QueueManager.cpp:525
+#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -314,11 +314,11 @@ msgstr "Socket-ul în ascultare a eșuat (trebuie să reporniți %1%): %2%"
 msgid "Maximum command length exceeded"
 msgstr "Depășire lungime maximă a comenzii"
 
-#: dcpp/DownloadManager.cpp:282
-msgid "More data was sent than was expected"
-msgstr "Au fost transmise mai multe date decît se aștepta"
+#: dcpp/Streams.h:140
+msgid "More bytes written than requested"
+msgstr "Numărul de biţi scrişi a depăşit cererea"
 
-#: dcpp/ShareManager.cpp:409
+#: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "Nici un dosar specificat"
 
@@ -331,29 +331,29 @@ msgstr "Nici un slot disponibil"
 msgid "Not listening for connections - please restart %1%"
 msgstr "Socket-ul nu a intrat în modul de ascultare - reporniți %1%"
 
-#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:115
-#: dcpp/SearchManager.cpp:267 dcpp/SearchManager.cpp:329
-#: dcpp/SearchManager.cpp:331
+#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
+#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
+#: dcpp/SearchManager.cpp:274
 msgid "Offline"
 msgstr "Neconectat"
 
 #: dcpp/FavoriteManager.cpp:442
 msgid "Redirect user(s)"
-msgstr "Redirecționeayă utilizatorul/utilizatorii"
+msgstr "Redirecționează utilizatorul/utilizatorii"
 
-#: dcpp/ShareManager.cpp:425
+#: dcpp/ShareManager.cpp:430
 msgid "Remove all subdirectories before adding this one"
-msgstr "Înlătură toate subdirectoarele înainte de a-l adăuga pe acesta"
+msgstr "Înlătură toate dosarele înainte de a-l adăuga pe acesta"
 
 #: dcpp/BitInputStream.h:40
 msgid "Request to seek beyond the end of data"
 msgstr "Cerere de citire după terminarea datelor"
 
-#: dcpp/DownloadManager.cpp:225
+#: dcpp/DownloadManager.cpp:224
 msgid "Response does not match request"
 msgstr "Răspunsul nu se potrivește cu cererea"
 
-#: dcpp/DCPlusPlus.cpp:104
+#: dcpp/DCPlusPlus.cpp:108
 msgid "Shared Files"
 msgstr "Fișiere Partajate"
 
@@ -362,12 +362,12 @@ msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 "Autentificarea pe server-ul SOCKS eșuată (utilizator / parolă greșite ?)"
 
-#: dcpp/CryptoManager.cpp:221
+#: dcpp/CryptoManager.cpp:222
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "Sistemul TLS închis, generarea certificatului a eşuat: %1%"
 
-#: dcpp/CryptoManager.cpp:211
+#: dcpp/CryptoManager.cpp:212
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS e dezactivat, nu e setat fișierul-certificat"
 
@@ -375,11 +375,11 @@ msgstr "TLS e dezactivat, nu e setat fișierul-certificat"
 msgid "TTH inconsistency"
 msgstr "Inconsistență TTH"
 
-#: dcpp/QueueManager.cpp:512 dcpp/QueueManager.cpp:521
+#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
 msgid "Target filename too long"
 msgstr "Numele fișierului-țintă e prea lung"
 
-#: dcpp/QueueManager.cpp:800
+#: dcpp/QueueManager.cpp:824
 msgid "Target removed"
 msgstr "Țintă înlăturată"
 
@@ -396,11 +396,11 @@ msgstr "Server-ul SOCKS a eșuat în stabilirea unei conexiuni"
 msgid "The socks server requires authentication"
 msgstr "Server-ul SOCKS necesită autentificare"
 
-#: dcpp/ShareManager.cpp:413
+#: dcpp/ShareManager.cpp:418
 msgid "The temporary download directory cannot be shared"
 msgstr "Dosarul de descărcare temporară nu poate fi partajat"
 
-#: dcpp/QueueManager.cpp:469
+#: dcpp/QueueManager.cpp:470
 msgid "This file is already queued"
 msgstr "Acest fișier există deja în coadă"
 
@@ -408,7 +408,7 @@ msgstr "Acest fișier există deja în coadă"
 msgid "Unable to create thread"
 msgstr "Nu se poate crea firul de execuţie"
 
-#: dcpp/QueueManager.cpp:1002
+#: dcpp/QueueManager.cpp:1021
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Nu se poate deschide lista de fişiere: %1%"
@@ -417,7 +417,7 @@ msgstr "Nu se poate deschide lista de fişiere: %1%"
 msgid "Unable to read hash data file"
 msgstr "Citirea fișierului de coduri hash nu e posibilă"
 
-#: dcpp/QueueManager.cpp:334
+#: dcpp/QueueManager.cpp:335
 #, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "Nu se poate redenumi %1%: %2%"
@@ -432,17 +432,20 @@ msgstr "Nu se poate trimite fişierul %1%:%2%"
 msgid "Unknown error: 0x%1$x"
 msgstr "Eroare necunoscută: 0x%1$x"
 
-#: dcpp/QueueManager.cpp:419 dcpp/QueueManager.cpp:443
+#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
 msgid "You're trying to download from yourself!"
 msgstr "Încercați să descărcați de la dv. înșivă!"
 
-#: dcpp/SettingsManager.cpp:155
+#: dcpp/SettingsManager.cpp:157
 msgid "downloaded from"
 msgstr "descărcat de la"
 
-#: dcpp/SettingsManager.cpp:156
+#: dcpp/SettingsManager.cpp:158
 msgid "uploaded to"
 msgstr "trimis spre"
+
+#~ msgid "More data was sent than was expected"
+#~ msgstr "Au fost transmise mai multe date decît se aștepta"
 
 #~ msgid "Unknown error: 0x%1%"
 #~ msgstr "Eroare necunoscută: 0x%1%"

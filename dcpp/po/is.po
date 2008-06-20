@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-04-23 17:22+0200\n"
+"POT-Creation-Date: 2008-06-20 23:05+0200\n"
 "PO-Revision-Date: 2008-03-13 23:09+0000\n"
 "Last-Translator: Jacek Sieka <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-04-23 11:12+0000\n"
+"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:381
+#: dcpp/Util.cpp:387
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr ""
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:349
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr ""
 
-#: dcpp/Util.cpp:339
+#: dcpp/Util.cpp:345
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr ""
 
-#: dcpp/Util.cpp:341
+#: dcpp/Util.cpp:347
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr ""
 
-#: dcpp/Util.cpp:347
+#: dcpp/Util.cpp:353
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr ""
 
-#: dcpp/Util.cpp:345
+#: dcpp/Util.cpp:351
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr ""
@@ -63,7 +63,7 @@ msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr ""
 
-#: dcpp/QueueManager.cpp:332
+#: dcpp/QueueManager.cpp:333
 #, boost-format
 msgid "%1% renamed to %2%"
 msgstr ""
@@ -83,29 +83,29 @@ msgstr ""
 msgid "%1%: File not available"
 msgstr "Skrá ekki til"
 
-#: dcpp/Util.cpp:337
+#: dcpp/Util.cpp:343
 #, c-format, boost-format
 msgid "%d B"
 msgstr ""
 
-#: dcpp/Util.cpp:377
+#: dcpp/Util.cpp:383
 #, c-format, boost-format
 msgid "%s B"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:534
+#: dcpp/QueueManager.cpp:535
 msgid "A file of equal or larger size already exists at the target location"
 msgstr "Eins skrá með eins eða stærri stærð er þegar til"
 
-#: dcpp/QueueManager.cpp:477
+#: dcpp/QueueManager.cpp:478
 msgid "A file with a different size already exists in the queue"
 msgstr "Eins skrá með annari stærð er þegar til í biðlista"
 
-#: dcpp/QueueManager.cpp:480
+#: dcpp/QueueManager.cpp:481
 msgid "A file with different tth root already exists in the queue"
 msgstr "Eins skrá með aðra TTH rót er þegar í biðlista"
 
-#: dcpp/QueueManager.cpp:449
+#: dcpp/QueueManager.cpp:450
 msgid "A file with the same hash already exists in your share"
 msgstr "Skrá með sama auðkenni er þegar í deilingu"
 
@@ -140,12 +140,12 @@ msgstr "Tenging rann út"
 msgid "Connection timeout"
 msgstr "Tenging rann út"
 
-#: dcpp/DownloadManager.cpp:232
+#: dcpp/DownloadManager.cpp:231
 #, boost-format
 msgid "Could not open target file: %1%"
 msgstr ""
 
-#: dcpp/ShareManager.cpp:422
+#: dcpp/ShareManager.cpp:427
 msgid "Directory already shared"
 msgstr "Mappa þegar deild"
 
@@ -153,7 +153,7 @@ msgstr "Mappa þegar deild"
 msgid "Discard"
 msgstr ""
 
-#: dcpp/BufferedSocket.cpp:404
+#: dcpp/BufferedSocket.cpp:405
 msgid "Disconnected"
 msgstr "Aftengd/ur"
 
@@ -162,18 +162,18 @@ msgstr "Aftengd/ur"
 msgid "Disconnected user leaving the hub: %1%"
 msgstr ""
 
-#: dcpp/DCPlusPlus.cpp:107
+#: dcpp/DCPlusPlus.cpp:111
 msgid "Download Queue"
 msgstr "Bið niðurhleðslu"
 
-#: dcpp/ShareManager.cpp:802
+#: dcpp/ShareManager.cpp:805
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1%%2% (Size: %3% B) Dupe matched "
 "against: %4%%5%"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:547 dcpp/QueueManager.cpp:551
+#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr ""
@@ -189,8 +189,8 @@ msgid "Error during compression"
 msgstr "Villa í þjöppun"
 
 #: dcpp/ZUtils.cpp:100 dcpp/ZUtils.cpp:123 dcpp/BZUtils.cpp:72
-#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:342
-#: dcpp/CryptoManager.cpp:361 dcpp/CryptoManager.cpp:375
+#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:343
+#: dcpp/CryptoManager.cpp:362 dcpp/CryptoManager.cpp:376
 msgid "Error during decompression"
 msgstr "Villa í afþjöppun"
 
@@ -204,13 +204,13 @@ msgstr ""
 msgid "Error saving hash data: %1%"
 msgstr ""
 
-#: dcpp/CryptoManager.cpp:226 dcpp/CryptoManager.cpp:230
-#: dcpp/CryptoManager.cpp:235 dcpp/CryptoManager.cpp:239
+#: dcpp/CryptoManager.cpp:227 dcpp/CryptoManager.cpp:231
+#: dcpp/CryptoManager.cpp:236 dcpp/CryptoManager.cpp:240
 msgid "Failed to load certificate file"
 msgstr ""
 
-#: dcpp/CryptoManager.cpp:244 dcpp/CryptoManager.cpp:248
-#: dcpp/CryptoManager.cpp:253 dcpp/CryptoManager.cpp:257
+#: dcpp/CryptoManager.cpp:245 dcpp/CryptoManager.cpp:249
+#: dcpp/CryptoManager.cpp:254 dcpp/CryptoManager.cpp:258
 msgid "Failed to load private key"
 msgstr ""
 
@@ -226,26 +226,26 @@ msgstr ""
 "Mistókst að setja upp socks þjónin fyrir UDP svar (athugið socks slóð og "
 "port)"
 
-#: dcpp/ShareManager.cpp:837
+#: dcpp/ShareManager.cpp:840
 #, fuzzy, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Skráarlisti endurnýjaður"
 
-#: dcpp/ShareManager.cpp:882
+#: dcpp/ShareManager.cpp:885
 msgid "File list refresh finished"
 msgstr "Skráarlisti endurnýjaður"
 
-#: dcpp/ShareManager.cpp:817
+#: dcpp/ShareManager.cpp:820
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
 msgstr ""
 
-#: dcpp/ShareManager.cpp:858
+#: dcpp/ShareManager.cpp:861
 msgid "File list refresh initiated"
 msgstr "Endurnýjun skráarlista hafið"
 
-#: dcpp/DirectoryListing.cpp:102
+#: dcpp/DirectoryListing.cpp:101
 msgid "File not available"
 msgstr "Skrá ekki til"
 
@@ -263,11 +263,11 @@ msgstr ""
 msgid "Full tree does not match TTH root"
 msgstr "Sótt auðkenni passar ekki við TTH auðkenningu"
 
-#: dcpp/CryptoManager.cpp:219
+#: dcpp/CryptoManager.cpp:220
 msgid "Generated new TLS certificate"
 msgstr ""
 
-#: dcpp/DCPlusPlus.cpp:101
+#: dcpp/DCPlusPlus.cpp:105
 msgid "Hash database"
 msgstr "Geri TTH auðkenni fyrir skrár í deilingu..."
 
@@ -286,11 +286,11 @@ msgid ""
 "upgrade"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:220
+#: dcpp/DownloadManager.cpp:219
 msgid "Invalid size"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:517 dcpp/QueueManager.cpp:525
+#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -311,11 +311,12 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:282
-msgid "More data was sent than was expected"
+#: dcpp/Streams.h:140
+#, fuzzy
+msgid "More bytes written than requested"
 msgstr "Meira af gögnum var sent en bjóst var við"
 
-#: dcpp/ShareManager.cpp:409
+#: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "Engin mappa valin"
 
@@ -328,9 +329,9 @@ msgstr "Engin hleðsluhólf laus"
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
 
-#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:115
-#: dcpp/SearchManager.cpp:267 dcpp/SearchManager.cpp:329
-#: dcpp/SearchManager.cpp:331
+#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
+#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
+#: dcpp/SearchManager.cpp:274
 msgid "Offline"
 msgstr "Aftengdur"
 
@@ -338,7 +339,7 @@ msgstr "Aftengdur"
 msgid "Redirect user(s)"
 msgstr "Áframsenda notanda(um)"
 
-#: dcpp/ShareManager.cpp:425
+#: dcpp/ShareManager.cpp:430
 msgid "Remove all subdirectories before adding this one"
 msgstr "Fjarlægðu allar möppur staðsettar undir þessari á undan"
 
@@ -346,12 +347,12 @@ msgstr "Fjarlægðu allar möppur staðsettar undir þessari á undan"
 msgid "Request to seek beyond the end of data"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:225
+#: dcpp/DownloadManager.cpp:224
 #, fuzzy
 msgid "Response does not match request"
 msgstr "Sótt auðkenni passar ekki við TTH auðkenningu"
 
-#: dcpp/DCPlusPlus.cpp:104
+#: dcpp/DCPlusPlus.cpp:108
 msgid "Shared Files"
 msgstr "Deildar skrár"
 
@@ -359,12 +360,12 @@ msgstr "Deildar skrár"
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr "Auðkenning á Socks þjóni mistókst (vitlaust notendanafn / lykilorð?)"
 
-#: dcpp/CryptoManager.cpp:221
+#: dcpp/CryptoManager.cpp:222
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr ""
 
-#: dcpp/CryptoManager.cpp:211
+#: dcpp/CryptoManager.cpp:212
 msgid "TLS disabled, no certificate file set"
 msgstr ""
 
@@ -372,11 +373,11 @@ msgstr ""
 msgid "TTH inconsistency"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:512 dcpp/QueueManager.cpp:521
+#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
 msgid "Target filename too long"
 msgstr "Nafn á viðfangsefni of langt"
 
-#: dcpp/QueueManager.cpp:800
+#: dcpp/QueueManager.cpp:824
 msgid "Target removed"
 msgstr ""
 
@@ -393,11 +394,11 @@ msgstr "Socks þjóninum mistókst að koma á tengingu"
 msgid "The socks server requires authentication"
 msgstr "Þessi socks þjónn þarfnast auðkenna"
 
-#: dcpp/ShareManager.cpp:413
+#: dcpp/ShareManager.cpp:418
 msgid "The temporary download directory cannot be shared"
 msgstr "Ekki er hægt að deila temp möppum"
 
-#: dcpp/QueueManager.cpp:469
+#: dcpp/QueueManager.cpp:470
 msgid "This file is already queued"
 msgstr ""
 
@@ -405,7 +406,7 @@ msgstr ""
 msgid "Unable to create thread"
 msgstr "Get ekki sett inn þráð"
 
-#: dcpp/QueueManager.cpp:1002
+#: dcpp/QueueManager.cpp:1021
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr ""
@@ -415,7 +416,7 @@ msgstr ""
 msgid "Unable to read hash data file"
 msgstr "Get ekki sett inn þráð"
 
-#: dcpp/QueueManager.cpp:334
+#: dcpp/QueueManager.cpp:335
 #, fuzzy, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "Get ekki sett inn þráð"
@@ -430,17 +431,20 @@ msgstr ""
 msgid "Unknown error: 0x%1$x"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:419 dcpp/QueueManager.cpp:443
+#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
 msgid "You're trying to download from yourself!"
 msgstr "Það er ekki hægt að sækja frá sjálfum sér!"
 
-#: dcpp/SettingsManager.cpp:155
+#: dcpp/SettingsManager.cpp:157
 msgid "downloaded from"
 msgstr ""
 
-#: dcpp/SettingsManager.cpp:156
+#: dcpp/SettingsManager.cpp:158
 msgid "uploaded to"
 msgstr ""
+
+#~ msgid "More data was sent than was expected"
+#~ msgstr "Meira af gögnum var sent en bjóst var við"
 
 #~ msgid "Virtual directory name already exists"
 #~ msgstr "Stafrænt nafn möppunnar er þegar til"

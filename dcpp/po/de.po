@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-04-23 17:22+0200\n"
-"PO-Revision-Date: 2008-03-17 19:03+0000\n"
+"POT-Creation-Date: 2008-06-20 23:05+0200\n"
+"PO-Revision-Date: 2008-05-09 13:03+0000\n"
 "Last-Translator: soccer <soccerLE@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-04-23 11:12+0000\n"
+"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:381
+#: dcpp/Util.cpp:387
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:349
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp/Util.cpp:339
+#: dcpp/Util.cpp:345
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp/Util.cpp:341
+#: dcpp/Util.cpp:347
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp/Util.cpp:347
+#: dcpp/Util.cpp:353
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp/Util.cpp:345
+#: dcpp/Util.cpp:351
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -65,7 +65,7 @@ msgstr ""
 "%1% nicht freigegeben, errechneter CRC32 Wert passt nicht zu dem in der SFV "
 "Datei"
 
-#: dcpp/QueueManager.cpp:332
+#: dcpp/QueueManager.cpp:333
 #, boost-format
 msgid "%1% renamed to %2%"
 msgstr "%1% umbenannt in %2%"
@@ -85,31 +85,31 @@ msgstr "%1% wurde gekickt: %2%"
 msgid "%1%: File not available"
 msgstr "%1%: Datei nicht verfügbar"
 
-#: dcpp/Util.cpp:337
+#: dcpp/Util.cpp:343
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp/Util.cpp:377
+#: dcpp/Util.cpp:383
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
 
-#: dcpp/QueueManager.cpp:534
+#: dcpp/QueueManager.cpp:535
 msgid "A file of equal or larger size already exists at the target location"
 msgstr "Eine Datei gleicher oder größerer Größe existiert bereits am Zielort"
 
-#: dcpp/QueueManager.cpp:477
+#: dcpp/QueueManager.cpp:478
 msgid "A file with a different size already exists in the queue"
 msgstr ""
 "Eine Datei mit anderer Größe ist bereits in der Warteschlange vorhanden"
 
-#: dcpp/QueueManager.cpp:480
+#: dcpp/QueueManager.cpp:481
 msgid "A file with different tth root already exists in the queue"
 msgstr ""
 "Eine Datei mit anderem TTH Root ist bereits in der Warteschlange vorhanden"
 
-#: dcpp/QueueManager.cpp:449
+#: dcpp/QueueManager.cpp:450
 msgid "A file with the same hash already exists in your share"
 msgstr "Eine Datei mit dem selben Hash-Wert wurde bereits freigegeben"
 
@@ -139,12 +139,12 @@ msgstr "Verbindung getrennt"
 msgid "Connection timeout"
 msgstr "Zeitüberschreitung der Verbindung"
 
-#: dcpp/DownloadManager.cpp:232
+#: dcpp/DownloadManager.cpp:231
 #, boost-format
 msgid "Could not open target file: %1%"
 msgstr "Konnte die Zieldatei nicht öffnen: %1%"
 
-#: dcpp/ShareManager.cpp:422
+#: dcpp/ShareManager.cpp:427
 msgid "Directory already shared"
 msgstr "Verzeichnis ist bereits freigegeben"
 
@@ -152,20 +152,20 @@ msgstr "Verzeichnis ist bereits freigegeben"
 msgid "Discard"
 msgstr "Verwerfen"
 
-#: dcpp/BufferedSocket.cpp:404
+#: dcpp/BufferedSocket.cpp:405
 msgid "Disconnected"
 msgstr "Getrennt"
 
 #: dcpp/UploadManager.cpp:453
 #, boost-format
 msgid "Disconnected user leaving the hub: %1%"
-msgstr "Getrennter User verlässt Hub: %1%"
+msgstr "Getrennter Benutzer verlässt Hub: %1%"
 
-#: dcpp/DCPlusPlus.cpp:107
+#: dcpp/DCPlusPlus.cpp:111
 msgid "Download Queue"
 msgstr "Download Warteschlange"
 
-#: dcpp/ShareManager.cpp:802
+#: dcpp/ShareManager.cpp:805
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1%%2% (Size: %3% B) Dupe matched "
@@ -174,7 +174,7 @@ msgstr ""
 "Dateiduplikat wird nicht freigegeben: %1%%2% (Größe: %3% B) Duplikat passend "
 "zu: %4%%5%"
 
-#: dcpp/QueueManager.cpp:547 dcpp/QueueManager.cpp:551
+#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Doppelte Quelle: %1%"
@@ -190,8 +190,8 @@ msgid "Error during compression"
 msgstr "Fehler bei Komprimierung"
 
 #: dcpp/ZUtils.cpp:100 dcpp/ZUtils.cpp:123 dcpp/BZUtils.cpp:72
-#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:342
-#: dcpp/CryptoManager.cpp:361 dcpp/CryptoManager.cpp:375
+#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:343
+#: dcpp/CryptoManager.cpp:362 dcpp/CryptoManager.cpp:376
 msgid "Error during decompression"
 msgstr "Fehler bei Dekomprimierung"
 
@@ -205,13 +205,13 @@ msgstr "Fehler beim Hashen von %1%: %2%"
 msgid "Error saving hash data: %1%"
 msgstr "Fehler beim Speichern der Hash-Daten: %1%"
 
-#: dcpp/CryptoManager.cpp:226 dcpp/CryptoManager.cpp:230
-#: dcpp/CryptoManager.cpp:235 dcpp/CryptoManager.cpp:239
+#: dcpp/CryptoManager.cpp:227 dcpp/CryptoManager.cpp:231
+#: dcpp/CryptoManager.cpp:236 dcpp/CryptoManager.cpp:240
 msgid "Failed to load certificate file"
 msgstr "Laden des Zertifikats fehlgeschlagen"
 
-#: dcpp/CryptoManager.cpp:244 dcpp/CryptoManager.cpp:248
-#: dcpp/CryptoManager.cpp:253 dcpp/CryptoManager.cpp:257
+#: dcpp/CryptoManager.cpp:245 dcpp/CryptoManager.cpp:249
+#: dcpp/CryptoManager.cpp:254 dcpp/CryptoManager.cpp:258
 msgid "Failed to load private key"
 msgstr "Laden des privaten Schlüssels fehlgeschlagen"
 
@@ -227,16 +227,16 @@ msgstr ""
 "Konnte den Socks Server nicht für UDP Relay einrichten (überprüfen Sie "
 "Adresse und Port des Servers)"
 
-#: dcpp/ShareManager.cpp:837
+#: dcpp/ShareManager.cpp:840
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Aktualisieren der Dateiliste fehlgeschlagen: %1%"
 
-#: dcpp/ShareManager.cpp:882
+#: dcpp/ShareManager.cpp:885
 msgid "File list refresh finished"
 msgstr "Aktualisieren der Dateiliste beendet"
 
-#: dcpp/ShareManager.cpp:817
+#: dcpp/ShareManager.cpp:820
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -244,11 +244,11 @@ msgstr ""
 "Aktualisieren der Dateiliste im Gange, bitte vor erneuter Aktualisierung auf "
 "Ende warten"
 
-#: dcpp/ShareManager.cpp:858
+#: dcpp/ShareManager.cpp:861
 msgid "File list refresh initiated"
 msgstr "Aktualisieren der Dateiliste gestartet"
 
-#: dcpp/DirectoryListing.cpp:102
+#: dcpp/DirectoryListing.cpp:101
 msgid "File not available"
 msgstr "Die Datei ist nicht verfügbar"
 
@@ -266,11 +266,11 @@ msgstr "Hash berechnen beendet: %1% (%2%/s)"
 msgid "Full tree does not match TTH root"
 msgstr "Kompletter Baum stimmt nicht mit TTH Root überein"
 
-#: dcpp/CryptoManager.cpp:219
+#: dcpp/CryptoManager.cpp:220
 msgid "Generated new TLS certificate"
 msgstr "Neues TLS Zertifikat erstellt"
 
-#: dcpp/DCPlusPlus.cpp:101
+#: dcpp/DCPlusPlus.cpp:105
 msgid "Hash database"
 msgstr "Hash-Datenbank"
 
@@ -291,11 +291,11 @@ msgstr ""
 "Hub benutzt möglicherweise eine alte Version von ADC. Bitte empfehlen Sie "
 "dem Besitzer zu aktualisieren."
 
-#: dcpp/DownloadManager.cpp:220
+#: dcpp/DownloadManager.cpp:219
 msgid "Invalid size"
 msgstr "Ungültige Größe"
 
-#: dcpp/QueueManager.cpp:517 dcpp/QueueManager.cpp:525
+#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -305,7 +305,7 @@ msgstr ""
 
 #: dcpp/FavoriteManager.cpp:438
 msgid "Kick user(s)"
-msgstr "Kicke User"
+msgstr "Benutzer kicken"
 
 #: dcpp/ConnectionManager.cpp:230
 #, boost-format
@@ -316,11 +316,12 @@ msgstr "Lesen vom Socket fehlgeschlagen (%1% muss neugestartet werden): %2%"
 msgid "Maximum command length exceeded"
 msgstr "Maximale Befehlslänge überschritten"
 
-#: dcpp/DownloadManager.cpp:282
-msgid "More data was sent than was expected"
+#: dcpp/Streams.h:140
+#, fuzzy
+msgid "More bytes written than requested"
 msgstr "Es wurden mehr Daten gesendet als erwartet"
 
-#: dcpp/ShareManager.cpp:409
+#: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "Kein Verzeichnis ausgewählt"
 
@@ -333,17 +334,17 @@ msgstr "Keine Slots verfügbar"
 msgid "Not listening for connections - please restart %1%"
 msgstr "Es wird nicht auf Verbindungen gewartet - bitte %1% neustarten"
 
-#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:115
-#: dcpp/SearchManager.cpp:267 dcpp/SearchManager.cpp:329
-#: dcpp/SearchManager.cpp:331
+#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
+#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
+#: dcpp/SearchManager.cpp:274
 msgid "Offline"
 msgstr "Offline"
 
 #: dcpp/FavoriteManager.cpp:442
 msgid "Redirect user(s)"
-msgstr "User umleiten"
+msgstr "Benutzer umleiten"
 
-#: dcpp/ShareManager.cpp:425
+#: dcpp/ShareManager.cpp:430
 msgid "Remove all subdirectories before adding this one"
 msgstr "Alle Unterverzeichnisse entfernen bevor dieses hinzugefügt wird"
 
@@ -351,11 +352,11 @@ msgstr "Alle Unterverzeichnisse entfernen bevor dieses hinzugefügt wird"
 msgid "Request to seek beyond the end of data"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:225
+#: dcpp/DownloadManager.cpp:224
 msgid "Response does not match request"
 msgstr "Antwort stimmt nicht mit Anfrage überein"
 
-#: dcpp/DCPlusPlus.cpp:104
+#: dcpp/DCPlusPlus.cpp:108
 msgid "Shared Files"
 msgstr "Freigegebene Dateien"
 
@@ -364,12 +365,12 @@ msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 "Socks Server Authentifizierung fehlgeschlagen (Login / Passwort falsch?)"
 
-#: dcpp/CryptoManager.cpp:221
+#: dcpp/CryptoManager.cpp:222
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS deaktiviert, Generierung des Zertifikats fehlgeschlagen: %1%"
 
-#: dcpp/CryptoManager.cpp:211
+#: dcpp/CryptoManager.cpp:212
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS deaktiviert, kein Zertifikat eingestellt"
 
@@ -377,11 +378,11 @@ msgstr "TLS deaktiviert, kein Zertifikat eingestellt"
 msgid "TTH inconsistency"
 msgstr "TTH Inkonsistenz"
 
-#: dcpp/QueueManager.cpp:512 dcpp/QueueManager.cpp:521
+#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
 msgid "Target filename too long"
 msgstr "Zieldateiname zu lang"
 
-#: dcpp/QueueManager.cpp:800
+#: dcpp/QueueManager.cpp:824
 msgid "Target removed"
 msgstr "Ziel entfernt"
 
@@ -398,11 +399,11 @@ msgstr "Socks Server konnte keine Verbindung aufbauen"
 msgid "The socks server requires authentication"
 msgstr "Socks Server benötigt Authentifizierung"
 
-#: dcpp/ShareManager.cpp:413
+#: dcpp/ShareManager.cpp:418
 msgid "The temporary download directory cannot be shared"
 msgstr "Das temporäre Downloadverzeichnis kann nicht freigegeben werden"
 
-#: dcpp/QueueManager.cpp:469
+#: dcpp/QueueManager.cpp:470
 msgid "This file is already queued"
 msgstr "Diese Datei befindet sich bereits in der Warteschlange"
 
@@ -410,7 +411,7 @@ msgstr "Diese Datei befindet sich bereits in der Warteschlange"
 msgid "Unable to create thread"
 msgstr "Thread kann nicht erschaffen werden"
 
-#: dcpp/QueueManager.cpp:1002
+#: dcpp/QueueManager.cpp:1021
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Dateiliste kann nicht geöffnet werden: %1%"
@@ -419,7 +420,7 @@ msgstr "Dateiliste kann nicht geöffnet werden: %1%"
 msgid "Unable to read hash data file"
 msgstr "Hash-Datendatei kann nicht gelesen werden"
 
-#: dcpp/QueueManager.cpp:334
+#: dcpp/QueueManager.cpp:335
 #, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "%1% kann nicht umbenannt werden: %2%"
@@ -434,17 +435,20 @@ msgstr "Datei %1% kann nicht gesendet werden: %2%"
 msgid "Unknown error: 0x%1$x"
 msgstr "Unbekannter Fehler: 0x%1$x"
 
-#: dcpp/QueueManager.cpp:419 dcpp/QueueManager.cpp:443
+#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
 msgid "You're trying to download from yourself!"
 msgstr "Kein Download von sich selbst möglich!"
 
-#: dcpp/SettingsManager.cpp:155
+#: dcpp/SettingsManager.cpp:157
 msgid "downloaded from"
 msgstr "heruntergeladen von"
 
-#: dcpp/SettingsManager.cpp:156
+#: dcpp/SettingsManager.cpp:158
 msgid "uploaded to"
 msgstr "hochgeladen an"
+
+#~ msgid "More data was sent than was expected"
+#~ msgstr "Es wurden mehr Daten gesendet als erwartet"
 
 #~ msgid "Unknown error: 0x%1%"
 #~ msgstr "Unbekannter Fehler: 0x%1%"

@@ -30,6 +30,10 @@
 * The number of filtered items shown in public hubs (emtee)
 * [L#225592] Fix file corruption when partially downloaded file is corrupted (part emtee)
 * [L#239793] Automagically retry if coral fails (thanks emtee)
+* Updated Icelandic, Greek, Polish, Turkish, German, Finnish, Chinese, Slovak,
+  Arabic, Norwegian, Dutch, Ukranian, Czech, Spanish, Estonian, Brazilian,
+  Hungarian, French, UK English, Romanian, Hebrew, Swedish, Russian,
+  Portuguese and Slovenian translations (thanks to the respective translators)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations

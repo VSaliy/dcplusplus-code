@@ -7,45 +7,45 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-04-23 17:22+0200\n"
-"PO-Revision-Date: 2008-03-13 23:13+0000\n"
-"Last-Translator: Jacek Sieka <Unknown>\n"
+"POT-Creation-Date: 2008-06-20 23:05+0200\n"
+"PO-Revision-Date: 2008-05-08 22:16+0000\n"
+"Last-Translator: Serkan Arıkuşu <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-04-23 11:12+0000\n"
+"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:381
+#: dcpp/Util.cpp:387
 #, c-format, boost-format
 msgid "%'lld B"
-msgstr ""
+msgstr "%'lld B"
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:349
 #, c-format, boost-format
 msgid "%.02f GiB"
-msgstr ""
-
-#: dcpp/Util.cpp:339
-#, c-format, boost-format
-msgid "%.02f KiB"
-msgstr ""
-
-#: dcpp/Util.cpp:341
-#, c-format, boost-format
-msgid "%.02f MiB"
-msgstr ""
-
-#: dcpp/Util.cpp:347
-#, c-format, boost-format
-msgid "%.02f PiB"
-msgstr ""
+msgstr "%.02f GiB"
 
 #: dcpp/Util.cpp:345
 #, c-format, boost-format
+msgid "%.02f KiB"
+msgstr "%.02f KiB"
+
+#: dcpp/Util.cpp:347
+#, c-format, boost-format
+msgid "%.02f MiB"
+msgstr "%.02f MiB"
+
+#: dcpp/Util.cpp:353
+#, c-format, boost-format
+msgid "%.02f PiB"
+msgstr "%.02f PiB"
+
+#: dcpp/Util.cpp:351
+#, c-format, boost-format
 msgid "%.02f TiB"
-msgstr ""
+msgstr "%.02f TiB"
 
 #: dcpp/AdcHub.cpp:139
 #, boost-format
@@ -63,10 +63,10 @@ msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr ""
 
-#: dcpp/QueueManager.cpp:332
+#: dcpp/QueueManager.cpp:333
 #, boost-format
 msgid "%1% renamed to %2%"
-msgstr ""
+msgstr "%1% %2% olarak yeniden adlandırıldı"
 
 #: dcpp/AdcHub.cpp:281
 #, boost-format
@@ -83,29 +83,29 @@ msgstr ""
 msgid "%1%: File not available"
 msgstr "Dosya mevcut değil"
 
-#: dcpp/Util.cpp:337
+#: dcpp/Util.cpp:343
 #, c-format, boost-format
 msgid "%d B"
-msgstr ""
+msgstr "%d B"
 
-#: dcpp/Util.cpp:377
+#: dcpp/Util.cpp:383
 #, c-format, boost-format
 msgid "%s B"
-msgstr ""
+msgstr "%s B"
 
-#: dcpp/QueueManager.cpp:534
+#: dcpp/QueueManager.cpp:535
 msgid "A file of equal or larger size already exists at the target location"
 msgstr "Aynı veya daha büyük boyutta bir dosya zaten mevcut"
 
-#: dcpp/QueueManager.cpp:477
+#: dcpp/QueueManager.cpp:478
 msgid "A file with a different size already exists in the queue"
 msgstr "Farklı boyuta sahip bir dosya zaten listenizde mevcut"
 
-#: dcpp/QueueManager.cpp:480
+#: dcpp/QueueManager.cpp:481
 msgid "A file with different tth root already exists in the queue"
 msgstr "Farklı TTH'a sahip bir dosya zaten listenizde mevcut"
 
-#: dcpp/QueueManager.cpp:449
+#: dcpp/QueueManager.cpp:450
 msgid "A file with the same hash already exists in your share"
 msgstr "Aynı TTH'a sahip bir dosya zaten paylaşımda"
 
@@ -136,20 +136,20 @@ msgstr "Bağlantı yeterli sürede sağlanamadı"
 msgid "Connection timeout"
 msgstr "Bağlantı yeterli sürede sağlanamadı"
 
-#: dcpp/DownloadManager.cpp:232
+#: dcpp/DownloadManager.cpp:231
 #, boost-format
 msgid "Could not open target file: %1%"
-msgstr ""
+msgstr "Açılamayan hedef dosya: %1%"
 
-#: dcpp/ShareManager.cpp:422
+#: dcpp/ShareManager.cpp:427
 msgid "Directory already shared"
 msgstr "Dikkat! Klasör zaten paylaştırılmış"
 
 #: dcpp/ADLSearch.h:281
 msgid "Discard"
-msgstr ""
+msgstr "Gözardı Et"
 
-#: dcpp/BufferedSocket.cpp:404
+#: dcpp/BufferedSocket.cpp:405
 msgid "Disconnected"
 msgstr "Bağlantı kesildi"
 
@@ -158,18 +158,18 @@ msgstr "Bağlantı kesildi"
 msgid "Disconnected user leaving the hub: %1%"
 msgstr ""
 
-#: dcpp/DCPlusPlus.cpp:107
+#: dcpp/DCPlusPlus.cpp:111
 msgid "Download Queue"
 msgstr "İndirilecekler"
 
-#: dcpp/ShareManager.cpp:802
+#: dcpp/ShareManager.cpp:805
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1%%2% (Size: %3% B) Dupe matched "
 "against: %4%%5%"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:547 dcpp/QueueManager.cpp:551
+#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr ""
@@ -185,8 +185,8 @@ msgid "Error during compression"
 msgstr "Sıkıştırma yapılamadı!."
 
 #: dcpp/ZUtils.cpp:100 dcpp/ZUtils.cpp:123 dcpp/BZUtils.cpp:72
-#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:342
-#: dcpp/CryptoManager.cpp:361 dcpp/CryptoManager.cpp:375
+#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:343
+#: dcpp/CryptoManager.cpp:362 dcpp/CryptoManager.cpp:376
 msgid "Error during decompression"
 msgstr "Hata! Sıkıştırma açılamadı"
 
@@ -200,13 +200,13 @@ msgstr ""
 msgid "Error saving hash data: %1%"
 msgstr ""
 
-#: dcpp/CryptoManager.cpp:226 dcpp/CryptoManager.cpp:230
-#: dcpp/CryptoManager.cpp:235 dcpp/CryptoManager.cpp:239
+#: dcpp/CryptoManager.cpp:227 dcpp/CryptoManager.cpp:231
+#: dcpp/CryptoManager.cpp:236 dcpp/CryptoManager.cpp:240
 msgid "Failed to load certificate file"
 msgstr "(!)Hata Sertifika Yüklenemedi"
 
-#: dcpp/CryptoManager.cpp:244 dcpp/CryptoManager.cpp:248
-#: dcpp/CryptoManager.cpp:253 dcpp/CryptoManager.cpp:257
+#: dcpp/CryptoManager.cpp:245 dcpp/CryptoManager.cpp:249
+#: dcpp/CryptoManager.cpp:254 dcpp/CryptoManager.cpp:258
 msgid "Failed to load private key"
 msgstr "(!)Hata Özel şifre yüklenemedi"
 
@@ -222,26 +222,26 @@ msgstr ""
 "SOCKS sunucusu UDP iletişimi için ayarlanamadı. (SOCKS adresini ve port "
 "numarasını kontrol ediniz)"
 
-#: dcpp/ShareManager.cpp:837
+#: dcpp/ShareManager.cpp:840
 #, fuzzy, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Dosya listeniz güncellendi!"
 
-#: dcpp/ShareManager.cpp:882
+#: dcpp/ShareManager.cpp:885
 msgid "File list refresh finished"
 msgstr "Dosya listeniz güncellendi!"
 
-#: dcpp/ShareManager.cpp:817
+#: dcpp/ShareManager.cpp:820
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
 msgstr "Dosya listeniz işleniyor, Lütfen bekleyin veya tekrar deneyin."
 
-#: dcpp/ShareManager.cpp:858
+#: dcpp/ShareManager.cpp:861
 msgid "File list refresh initiated"
 msgstr "Dosya listeniz güncelleniyor..."
 
-#: dcpp/DirectoryListing.cpp:102
+#: dcpp/DirectoryListing.cpp:101
 msgid "File not available"
 msgstr "Dosya mevcut değil"
 
@@ -259,11 +259,11 @@ msgstr ""
 msgid "Full tree does not match TTH root"
 msgstr "İndirme listesindeki TTH ile uyuşmuyor"
 
-#: dcpp/CryptoManager.cpp:219
+#: dcpp/CryptoManager.cpp:220
 msgid "Generated new TLS certificate"
-msgstr ""
+msgstr "Yeni TLS sertifikası oluşturuldu"
 
-#: dcpp/DCPlusPlus.cpp:101
+#: dcpp/DCPlusPlus.cpp:105
 msgid "Hash database"
 msgstr "Dosya veritabanı"
 
@@ -282,11 +282,11 @@ msgid ""
 "upgrade"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:220
+#: dcpp/DownloadManager.cpp:219
 msgid "Invalid size"
-msgstr ""
+msgstr "Geçersiz boyut"
 
-#: dcpp/QueueManager.cpp:517 dcpp/QueueManager.cpp:525
+#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -307,11 +307,12 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr "Maksimum komut limiti'ni aştınız"
 
-#: dcpp/DownloadManager.cpp:282
-msgid "More data was sent than was expected"
+#: dcpp/Streams.h:140
+#, fuzzy
+msgid "More bytes written than requested"
 msgstr "Belirlenenden daha fazla bilgi gönderildi"
 
-#: dcpp/ShareManager.cpp:409
+#: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "Geçerli bir klasör belirtilmedi"
 
@@ -324,9 +325,9 @@ msgstr "Boş slot bekleniyor"
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
 
-#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:115
-#: dcpp/SearchManager.cpp:267 dcpp/SearchManager.cpp:329
-#: dcpp/SearchManager.cpp:331
+#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
+#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
+#: dcpp/SearchManager.cpp:274
 msgid "Offline"
 msgstr "Çevrimdışı"
 
@@ -334,7 +335,7 @@ msgstr "Çevrimdışı"
 msgid "Redirect user(s)"
 msgstr "Kullanıcı(ları) Yönlendir"
 
-#: dcpp/ShareManager.cpp:425
+#: dcpp/ShareManager.cpp:430
 msgid "Remove all subdirectories before adding this one"
 msgstr "Bunu eklemeden önce tüm alt klasörleri kaldır"
 
@@ -342,12 +343,12 @@ msgstr "Bunu eklemeden önce tüm alt klasörleri kaldır"
 msgid "Request to seek beyond the end of data"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:225
+#: dcpp/DownloadManager.cpp:224
 #, fuzzy
 msgid "Response does not match request"
 msgstr "İndirme listesindeki TTH ile uyuşmuyor"
 
-#: dcpp/DCPlusPlus.cpp:104
+#: dcpp/DCPlusPlus.cpp:108
 msgid "Shared Files"
 msgstr "Paylaşım"
 
@@ -357,12 +358,12 @@ msgstr ""
 "SOCKS sunucusunda kimlik doğrulaması tamamlanamadı. (Kullanıcı adı / Şifre?)"
 "yanlış!"
 
-#: dcpp/CryptoManager.cpp:221
+#: dcpp/CryptoManager.cpp:222
 #, fuzzy, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS Kapalı, Sertifika tanımlanmamış"
 
-#: dcpp/CryptoManager.cpp:211
+#: dcpp/CryptoManager.cpp:212
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS Kapalı, Sertifika tanımlanmamış"
 
@@ -370,11 +371,11 @@ msgstr "TLS Kapalı, Sertifika tanımlanmamış"
 msgid "TTH inconsistency"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:512 dcpp/QueueManager.cpp:521
+#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
 msgid "Target filename too long"
 msgstr "Hedef dosya ismi çok uzun"
 
-#: dcpp/QueueManager.cpp:800
+#: dcpp/QueueManager.cpp:824
 msgid "Target removed"
 msgstr ""
 
@@ -391,11 +392,11 @@ msgstr "SOCKS sunucusu ile bağlantı kurulamadı"
 msgid "The socks server requires authentication"
 msgstr "SOCKS sunucusu kimlik doğrulaması gerektiriyor"
 
-#: dcpp/ShareManager.cpp:413
+#: dcpp/ShareManager.cpp:418
 msgid "The temporary download directory cannot be shared"
 msgstr "(!) Geçici dosyaların bulunduğu klasörü paylaştıramazsınız."
 
-#: dcpp/QueueManager.cpp:469
+#: dcpp/QueueManager.cpp:470
 msgid "This file is already queued"
 msgstr "This file is already queued"
 
@@ -403,7 +404,7 @@ msgstr "This file is already queued"
 msgid "Unable to create thread"
 msgstr "İşlem yaratılamadı"
 
-#: dcpp/QueueManager.cpp:1002
+#: dcpp/QueueManager.cpp:1021
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr ""
@@ -412,7 +413,7 @@ msgstr ""
 msgid "Unable to read hash data file"
 msgstr "(!)Hata indeksleme okunamadı"
 
-#: dcpp/QueueManager.cpp:334
+#: dcpp/QueueManager.cpp:335
 #, fuzzy, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "İşlem yaratılamadı"
@@ -427,17 +428,20 @@ msgstr ""
 msgid "Unknown error: 0x%1$x"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:419 dcpp/QueueManager.cpp:443
+#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
 msgid "You're trying to download from yourself!"
 msgstr "(!) Kendinizden dosya indiremezsiniz"
 
-#: dcpp/SettingsManager.cpp:155
+#: dcpp/SettingsManager.cpp:157
 msgid "downloaded from"
 msgstr ""
 
-#: dcpp/SettingsManager.cpp:156
+#: dcpp/SettingsManager.cpp:158
 msgid "uploaded to"
 msgstr ""
+
+#~ msgid "More data was sent than was expected"
+#~ msgstr "Belirlenenden daha fazla bilgi gönderildi"
 
 #~ msgid "Virtual directory name already exists"
 #~ msgstr "Sanal dizin Adı zaten var"
