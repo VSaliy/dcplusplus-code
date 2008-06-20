@@ -281,7 +281,7 @@ protected:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline Message TextBoxBase::getUpdateMessage() {
-	return Message( WM_COMMAND, MAKEWPARAM(0, EN_UPDATE) );
+	return Message( WM_COMMAND, EN_UPDATE );
 }
 
 inline void TextBoxBase::setSelection( int start, int end )
