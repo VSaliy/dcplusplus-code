@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-04-23 17:22+0200\n"
+"POT-Creation-Date: 2008-06-20 23:05+0200\n"
 "PO-Revision-Date: 2008-03-13 23:10+0000\n"
 "Last-Translator: Tian Seng Leong <tleong@andrew.cmu.edu>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-04-23 11:12+0000\n"
+"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:381
+#: dcpp/Util.cpp:387
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:349
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp/Util.cpp:339
+#: dcpp/Util.cpp:345
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp/Util.cpp:341
+#: dcpp/Util.cpp:347
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp/Util.cpp:347
+#: dcpp/Util.cpp:353
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp/Util.cpp:345
+#: dcpp/Util.cpp:351
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -65,7 +65,7 @@ msgstr ""
 "%1% tidak dikongsi; kiraan CRC32 tidak sama dengan objek yang dijumpai di "
 "fail SFV"
 
-#: dcpp/QueueManager.cpp:332
+#: dcpp/QueueManager.cpp:333
 #, boost-format
 msgid "%1% renamed to %2%"
 msgstr "%1% ditukar kepada %2%"
@@ -85,30 +85,30 @@ msgstr ""
 msgid "%1%: File not available"
 msgstr "%1%: Tidak ada fail"
 
-#: dcpp/Util.cpp:337
+#: dcpp/Util.cpp:343
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp/Util.cpp:377
+#: dcpp/Util.cpp:383
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
 
-#: dcpp/QueueManager.cpp:534
+#: dcpp/QueueManager.cpp:535
 msgid "A file of equal or larger size already exists at the target location"
 msgstr ""
 "Fail ini mempunyai fail yang lebih besar atau sama size di lokasi target"
 
-#: dcpp/QueueManager.cpp:477
+#: dcpp/QueueManager.cpp:478
 msgid "A file with a different size already exists in the queue"
 msgstr "Fail yang saiznya berlainan sudah wujud dalam barisan"
 
-#: dcpp/QueueManager.cpp:480
+#: dcpp/QueueManager.cpp:481
 msgid "A file with different tth root already exists in the queue"
 msgstr "Fail dengan tth root yang berlainan sudah wujud dalam barisan"
 
-#: dcpp/QueueManager.cpp:449
+#: dcpp/QueueManager.cpp:450
 msgid "A file with the same hash already exists in your share"
 msgstr "Fail dengan hash yang sama sudah wujud dalam kongsian anda"
 
@@ -139,12 +139,12 @@ msgstr "Masa untuk sambungan telah habis"
 msgid "Connection timeout"
 msgstr "Masa untuk sambungan telah habis"
 
-#: dcpp/DownloadManager.cpp:232
+#: dcpp/DownloadManager.cpp:231
 #, boost-format
 msgid "Could not open target file: %1%"
 msgstr "Tidak boleh buka fail target: %1%"
 
-#: dcpp/ShareManager.cpp:422
+#: dcpp/ShareManager.cpp:427
 msgid "Directory already shared"
 msgstr "Direktori sudah dikongsi"
 
@@ -152,7 +152,7 @@ msgstr "Direktori sudah dikongsi"
 msgid "Discard"
 msgstr ""
 
-#: dcpp/BufferedSocket.cpp:404
+#: dcpp/BufferedSocket.cpp:405
 msgid "Disconnected"
 msgstr "Terputus"
 
@@ -161,11 +161,11 @@ msgstr "Terputus"
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Pengguna terputus meninggalkan hub: %1%"
 
-#: dcpp/DCPlusPlus.cpp:107
+#: dcpp/DCPlusPlus.cpp:111
 msgid "Download Queue"
 msgstr "Barisan Muat turun"
 
-#: dcpp/ShareManager.cpp:802
+#: dcpp/ShareManager.cpp:805
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1%%2% (Size: %3% B) Dupe matched "
@@ -174,7 +174,7 @@ msgstr ""
 "Fail yang mempunyai duplikasi tidak akan dikongsi : %1%%2% (Saiz: %3% B) "
 "Duplikasi disahkan dengan: %4%%5%"
 
-#: dcpp/QueueManager.cpp:547 dcpp/QueueManager.cpp:551
+#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Duplikasi Sumber: %1%"
@@ -190,8 +190,8 @@ msgid "Error during compression"
 msgstr "Ralat semasa kompresi"
 
 #: dcpp/ZUtils.cpp:100 dcpp/ZUtils.cpp:123 dcpp/BZUtils.cpp:72
-#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:342
-#: dcpp/CryptoManager.cpp:361 dcpp/CryptoManager.cpp:375
+#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:343
+#: dcpp/CryptoManager.cpp:362 dcpp/CryptoManager.cpp:376
 msgid "Error during decompression"
 msgstr "Ralat semasa dikompresi"
 
@@ -205,13 +205,13 @@ msgstr "Ralat hashing %1%: %2%"
 msgid "Error saving hash data: %1%"
 msgstr "Ralat menyimpan data hash: %1%"
 
-#: dcpp/CryptoManager.cpp:226 dcpp/CryptoManager.cpp:230
-#: dcpp/CryptoManager.cpp:235 dcpp/CryptoManager.cpp:239
+#: dcpp/CryptoManager.cpp:227 dcpp/CryptoManager.cpp:231
+#: dcpp/CryptoManager.cpp:236 dcpp/CryptoManager.cpp:240
 msgid "Failed to load certificate file"
 msgstr "Gagal muat sijil fail"
 
-#: dcpp/CryptoManager.cpp:244 dcpp/CryptoManager.cpp:248
-#: dcpp/CryptoManager.cpp:253 dcpp/CryptoManager.cpp:257
+#: dcpp/CryptoManager.cpp:245 dcpp/CryptoManager.cpp:249
+#: dcpp/CryptoManager.cpp:254 dcpp/CryptoManager.cpp:258
 msgid "Failed to load private key"
 msgstr "Gagal muat kunci persendirian"
 
@@ -227,16 +227,16 @@ msgstr ""
 "Gatal untuk menyediakan server socks untuk relay UDP (semak alamat dan port "
 "socks)"
 
-#: dcpp/ShareManager.cpp:837
+#: dcpp/ShareManager.cpp:840
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Senarai fail yang hendak diperbaharui telah gagal: %1%"
 
-#: dcpp/ShareManager.cpp:882
+#: dcpp/ShareManager.cpp:885
 msgid "File list refresh finished"
 msgstr "Senarai fail telah diperbaharui"
 
-#: dcpp/ShareManager.cpp:817
+#: dcpp/ShareManager.cpp:820
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -244,11 +244,11 @@ msgstr ""
 "Senarai fail sedang diperbaharui, sila tunggu sehingga habis sebelum cuba "
 "untuk memperbaharui semula."
 
-#: dcpp/ShareManager.cpp:858
+#: dcpp/ShareManager.cpp:861
 msgid "File list refresh initiated"
 msgstr "Perbaharui Senarai fail sedang dimulakan"
 
-#: dcpp/DirectoryListing.cpp:102
+#: dcpp/DirectoryListing.cpp:101
 msgid "File not available"
 msgstr "Tiada fail"
 
@@ -266,11 +266,11 @@ msgstr "Habis process hashing: %1% (%2%/s)"
 msgid "Full tree does not match TTH root"
 msgstr "Pokok penuh tidak sama dengan TTH root"
 
-#: dcpp/CryptoManager.cpp:219
+#: dcpp/CryptoManager.cpp:220
 msgid "Generated new TLS certificate"
 msgstr "Certifikasi TLS telah diperbaharui"
 
-#: dcpp/DCPlusPlus.cpp:101
+#: dcpp/DCPlusPlus.cpp:105
 msgid "Hash database"
 msgstr "Pangakalan Data hash"
 
@@ -289,11 +289,11 @@ msgid ""
 "upgrade"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:220
+#: dcpp/DownloadManager.cpp:219
 msgid "Invalid size"
 msgstr "Saiz tidak sah"
 
-#: dcpp/QueueManager.cpp:517 dcpp/QueueManager.cpp:525
+#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -313,11 +313,12 @@ msgstr "Pendengaran Socket telah gagal (anda kena mulakan DC++ semula): %1%"
 msgid "Maximum command length exceeded"
 msgstr "Saiz maximum untuk Kommand telah melebihi"
 
-#: dcpp/DownloadManager.cpp:282
-msgid "More data was sent than was expected"
+#: dcpp/Streams.h:140
+#, fuzzy
+msgid "More bytes written than requested"
 msgstr "Lebih data dihantar dari yang sepatutnya"
 
-#: dcpp/ShareManager.cpp:409
+#: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "Tiada direktori dispecifikasikan"
 
@@ -330,9 +331,9 @@ msgstr "Tidak ada slot"
 msgid "Not listening for connections - please restart %1%"
 msgstr "Tidak mendenggar untuk sambungan - sila memulakan semula DC++"
 
-#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:115
-#: dcpp/SearchManager.cpp:267 dcpp/SearchManager.cpp:329
-#: dcpp/SearchManager.cpp:331
+#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
+#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
+#: dcpp/SearchManager.cpp:274
 msgid "Offline"
 msgstr "Offline"
 
@@ -340,7 +341,7 @@ msgstr "Offline"
 msgid "Redirect user(s)"
 msgstr "Sila hantar pengguna ke tempat lain"
 
-#: dcpp/ShareManager.cpp:425
+#: dcpp/ShareManager.cpp:430
 msgid "Remove all subdirectories before adding this one"
 msgstr "Menyingkirkan semua subdirektori semula tambah direktori ini"
 
@@ -348,12 +349,12 @@ msgstr "Menyingkirkan semua subdirektori semula tambah direktori ini"
 msgid "Request to seek beyond the end of data"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:225
+#: dcpp/DownloadManager.cpp:224
 #, fuzzy
 msgid "Response does not match request"
 msgstr "Pokok penuh tidak sama dengan TTH root"
 
-#: dcpp/DCPlusPlus.cpp:104
+#: dcpp/DCPlusPlus.cpp:108
 msgid "Shared Files"
 msgstr "Fail Kongsian"
 
@@ -362,12 +363,12 @@ msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 "Pengesahan Server socks telah gagal (salah kata name/salah kata kunci?)"
 
-#: dcpp/CryptoManager.cpp:221
+#: dcpp/CryptoManager.cpp:222
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr "TLS telah ditutup, gagal untuk memperbaharui certifikasi: %1%"
 
-#: dcpp/CryptoManager.cpp:211
+#: dcpp/CryptoManager.cpp:212
 msgid "TLS disabled, no certificate file set"
 msgstr "TLS telah ditutup, tiada fail certifikasi"
 
@@ -375,11 +376,11 @@ msgstr "TLS telah ditutup, tiada fail certifikasi"
 msgid "TTH inconsistency"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:512 dcpp/QueueManager.cpp:521
+#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
 msgid "Target filename too long"
 msgstr "Nama fail target terlalu panjang"
 
-#: dcpp/QueueManager.cpp:800
+#: dcpp/QueueManager.cpp:824
 msgid "Target removed"
 msgstr "Target disingkirkan"
 
@@ -397,11 +398,11 @@ msgstr "Server socks gagal memulakan hubungan"
 msgid "The socks server requires authentication"
 msgstr "Server socks perlukan pengesahan"
 
-#: dcpp/ShareManager.cpp:413
+#: dcpp/ShareManager.cpp:418
 msgid "The temporary download directory cannot be shared"
 msgstr "Direktori muat turun sementara tidak boleh dikongsi"
 
-#: dcpp/QueueManager.cpp:469
+#: dcpp/QueueManager.cpp:470
 msgid "This file is already queued"
 msgstr "Fail ini sudah dalam barisan"
 
@@ -409,7 +410,7 @@ msgstr "Fail ini sudah dalam barisan"
 msgid "Unable to create thread"
 msgstr "Tidak boleh mencipta thread"
 
-#: dcpp/QueueManager.cpp:1002
+#: dcpp/QueueManager.cpp:1021
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Tidak boleh buka senarai fail: %1%"
@@ -418,7 +419,7 @@ msgstr "Tidak boleh buka senarai fail: %1%"
 msgid "Unable to read hash data file"
 msgstr "Tidak boleh baca data hash fail"
 
-#: dcpp/QueueManager.cpp:334
+#: dcpp/QueueManager.cpp:335
 #, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "Tidak boleh menama semula %1%: %2%"
@@ -433,14 +434,14 @@ msgstr "Gagal hantar fail %1%: %2%"
 msgid "Unknown error: 0x%1$x"
 msgstr "Ralat tidak ketahui : 0x%1$x"
 
-#: dcpp/QueueManager.cpp:419 dcpp/QueueManager.cpp:443
+#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
 msgid "You're trying to download from yourself!"
 msgstr "Kamu sedang cuba untuk muat turun dari sendiri!!!"
 
-#: dcpp/SettingsManager.cpp:155
+#: dcpp/SettingsManager.cpp:157
 msgid "downloaded from"
 msgstr "Dimuat turun dari"
 
-#: dcpp/SettingsManager.cpp:156
+#: dcpp/SettingsManager.cpp:158
 msgid "uploaded to"
 msgstr "Dimuat naik ke"

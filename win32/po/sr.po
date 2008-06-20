@@ -1,20 +1,21 @@
-# Icelandic translations for the DC++ package.
-# Copyright (C) 2008 The translators
-# This file is distributed under the same license as the DC++ package.
-#  <dd-hyper@users.sourceforge.net>, 2008.
+# Serbian translation for dcplusplus
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the dcplusplus package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: win32\n"
+"Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-06-16 22:09+0200\n"
-"PO-Revision-Date: 2008-04-30 18:03+0000\n"
-"Last-Translator: zorglubb <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2008-06-14 14:28+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Serbian <sr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
@@ -29,11 +30,11 @@ msgid ""
 msgstr ""
 
 #: win32/MainWindow.cpp:891
-#, fuzzy, boost-format
+#, boost-format
 msgid ""
 "%1%\n"
 "Open download page?"
-msgstr "Opna niðurhlaðs möppu"
+msgstr ""
 
 #: win32/TransferView.cpp:586
 #, boost-format
@@ -65,14 +66,14 @@ msgstr[1] ""
 #: win32/HashProgressDlg.cpp:103
 #, boost-format
 msgid "%1% left"
-msgstr "%1% eftir"
+msgstr ""
 
 #: win32/SearchFrame.cpp:541 win32/HubFrame.cpp:922
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% user"
 msgid_plural "%1% users"
-msgstr[0] "Engir notendur"
-msgstr[1] "Engir notendur"
+msgstr[0] ""
+msgstr[1] ""
 
 #: win32/TransferView.cpp:601 win32/TransferView.cpp:649
 #: win32/FinishedFrameBase.h:551
@@ -86,9 +87,8 @@ msgid "%1%/s, %2% left"
 msgstr ""
 
 #: win32/HubListsDlg.cpp:81 win32/UCPage.cpp:42
-#, fuzzy
 msgid "&Add"
-msgstr "Bætt við"
+msgstr ""
 
 #: win32/UploadPage.cpp:59 win32/FavoriteDirsPage.cpp:44
 msgid "&Add folder"
@@ -101,20 +101,17 @@ msgstr ""
 #: win32/DirectoryListingFrame.cpp:373 win32/SearchFrame.cpp:840
 #: win32/SearchFrame.cpp:870 win32/DownloadPage.cpp:54 win32/LogPage.cpp:40
 #: win32/Appearance2Page.cpp:52
-#, fuzzy
 msgid "&Browse..."
-msgstr "Velja..."
+msgstr ""
 
 #: win32/UCPage.cpp:43
-#, fuzzy
 msgid "&Change"
-msgstr "&Breyta"
+msgstr ""
 
 #: win32/PrivateFrame.cpp:378 win32/HubFrame.cpp:1194
 #: win32/MDIChildFrame.h:201
-#, fuzzy
 msgid "&Close"
-msgstr "Litir"
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:152
 msgid "&Configure"
@@ -122,9 +119,8 @@ msgstr ""
 
 #: win32/FavHubsFrame.cpp:71 win32/FavHubsFrame.cpp:283
 #: win32/PublicHubsFrame.cpp:460
-#, fuzzy
 msgid "&Connect"
-msgstr "&Tengjast"
+msgstr ""
 
 #: win32/HubFrame.cpp:1165
 msgid "&Copy"
@@ -132,37 +128,32 @@ msgstr ""
 
 #: win32/UsersFrame.cpp:188
 msgid "&Description"
-msgstr "&Lýsing"
+msgstr ""
 
 #: win32/TransferView.cpp:194
-#, fuzzy
 msgid "&Disconnect"
-msgstr "A&ftengjast"
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:315 win32/DirectoryListingFrame.cpp:340
 #: win32/DirectoryListingFrame.cpp:352 win32/SearchFrame.cpp:805
-#, fuzzy
 msgid "&Download"
-msgstr "&Hlaða niður"
+msgstr ""
 
 #: win32/MainWindow.cpp:217
-#, fuzzy
 msgid "&Download Queue\tCtrl+D"
-msgstr "Bið niðurhleðslu"
+msgstr ""
 
 #: win32/HubListsDlg.cpp:93
 msgid "&Edit"
-msgstr "&Breyta"
+msgstr ""
 
 #: win32/MainWindow.cpp:214
-#, fuzzy
 msgid "&Favorite Hubs\tCtrl+F"
-msgstr "Uppáhalds höbbar"
+msgstr ""
 
 #: win32/MainWindow.cpp:191
-#, fuzzy
 msgid "&File"
-msgstr "&Skrá"
+msgstr ""
 
 #: win32/TransferView.cpp:191
 msgid "&Force attempt"
@@ -174,53 +165,46 @@ msgid "&Get file list"
 msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:329
-#, fuzzy
 msgid "&Go to directory"
-msgstr "Niðurhlaða allri möppunni"
+msgstr ""
 
 #: win32/MainWindow.cpp:243 win32/ADLSearchFrame.cpp:97
 msgid "&Help"
-msgstr "&Hjálp"
+msgstr ""
 
 #: win32/PrivateFrame.cpp:371 win32/WinUtil.cpp:1132 win32/UserInfoBase.h:98
-#, fuzzy
 msgid "&Match queue"
-msgstr "Bera saman"
+msgstr ""
 
 #: win32/QueueFrame.cpp:952 win32/QueueFrame.cpp:970 win32/QueueFrame.cpp:980
-#, fuzzy
 msgid "&Move/Rename"
-msgstr "Endurskýra"
+msgstr ""
 
 #: win32/FavHubsFrame.cpp:77 win32/FavHubsFrame.cpp:285
 #: win32/ADLSearchFrame.cpp:67 win32/ADLSearchFrame.cpp:292
 msgid "&New..."
-msgstr "&Nýtt..."
+msgstr ""
 
 #: win32/MainWindow.cpp:226
-#, fuzzy
 msgid "&Notepad\tCtrl+N"
-msgstr "Skrifblokk"
+msgstr ""
 
 #: win32/FinishedFrameBase.h:449 win32/FinishedFrameBase.h:467
 msgid "&Open"
-msgstr "&Opna"
+msgstr ""
 
 #: win32/FavHubsFrame.cpp:83 win32/FavHubsFrame.cpp:286
 #: win32/ADLSearchFrame.cpp:73 win32/ADLSearchFrame.cpp:293
-#, fuzzy
 msgid "&Properties"
-msgstr "&Eiginleikar"
+msgstr ""
 
 #: win32/MainWindow.cpp:213
-#, fuzzy
 msgid "&Public Hubs\tCtrl+P"
-msgstr "Listi tengipunkta"
+msgstr ""
 
 #: win32/MainWindow.cpp:193
-#, fuzzy
 msgid "&Quick Connect ...\tCtrl+Q"
-msgstr "Beintenging"
+msgstr ""
 
 #: win32/MainWindow.cpp:194 win32/HubFrame.cpp:1189
 msgid "&Reconnect\tCtrl+R"
@@ -228,7 +212,7 @@ msgstr ""
 
 #: win32/PublicHubsFrame.cpp:158
 msgid "&Refresh"
-msgstr "&Uppfæra"
+msgstr ""
 
 #: win32/UploadPage.cpp:58 win32/QueueFrame.cpp:960 win32/QueueFrame.cpp:972
 #: win32/QueueFrame.cpp:982 win32/HubListsDlg.cpp:97
@@ -238,38 +222,34 @@ msgstr "&Uppfæra"
 #: win32/ADLSearchFrame.cpp:294 win32/UCPage.cpp:46 win32/UsersFrame.cpp:189
 #: win32/FinishedFrameBase.h:452 win32/FinishedFrameBase.h:470
 #: win32/FinishedFrameBase.h:489
-#, fuzzy
 msgid "&Remove"
-msgstr "&Fjarlægja"
+msgstr ""
 
 #: win32/SpyFrame.cpp:190
-#, fuzzy
 msgid "&Search"
-msgstr "&Leita"
+msgstr ""
 
 #: win32/MainWindow.cpp:222
-#, fuzzy
 msgid "&Search\tCtrl+S"
-msgstr "Leit"
+msgstr ""
 
 #: win32/QueueFrame.cpp:1005 win32/WaitingUsersFrame.cpp:84
 #: win32/WinUtil.cpp:1135 win32/UserInfoBase.h:99
 msgid "&Send private message"
-msgstr "&Senda einkaskilaboð"
+msgstr ""
 
 #: win32/MainWindow.cpp:211
-#, fuzzy
 msgid "&View"
-msgstr "&Sýna"
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:319 win32/SearchFrame.cpp:809
 #: win32/FinishedFrameBase.h:448 win32/FinishedFrameBase.h:466
 msgid "&View as text"
-msgstr "&Sýna sem texta"
+msgstr ""
 
 #: win32/MainWindow.cpp:233
 msgid "&Window"
-msgstr "&Gluggi"
+msgstr ""
 
 #: win32/HubFrame.cpp:489
 #, boost-format
@@ -293,15 +273,13 @@ msgstr ""
 
 #: win32/HashProgressDlg.cpp:88 win32/HashProgressDlg.cpp:98
 msgid "-:--:-- left"
-msgstr "-:--:--  eftir"
+msgstr ""
 
 #: win32/WinUtil.cpp:1048
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
 msgstr ""
-"TTH auðkennda slóðin innihélt ekki viðurkennt auðkenni til að nota á Direct "
-"Connect netinu. Engin adgerð verdur gerð"
 
 #: win32/UploadPage.cpp:266
 #, boost-format
@@ -312,15 +290,15 @@ msgstr ""
 
 #: win32/MainWindow.cpp:223 win32/MainWindow.cpp:301
 msgid "ADL Search"
-msgstr "Sjálfvirk skráarlista leit"
+msgstr ""
 
 #: win32/ADLSProperties.cpp:74
 msgid "ADLSearch Properties"
-msgstr "Valmöguleikar"
+msgstr ""
 
 #: win32/MainWindow.cpp:320 win32/MainWindow.cpp:596
 msgid "AWAY"
-msgstr "Í burtu"
+msgstr ""
 
 #: win32/AboutDlg.cpp:57
 msgid "About DC++"
@@ -328,44 +306,43 @@ msgstr ""
 
 #: win32/MainWindow.cpp:249
 msgid "About DC++..."
-msgstr "Um DC"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:40
 msgid "Accept custom user commands from hub"
-msgstr "Taka á móti óþekktum skipunum frá tengipunkti"
+msgstr ""
 
 #: win32/WaitingUsersFrame.cpp:83 win32/PrivateFrame.cpp:374
 #: win32/HubFrame.cpp:1186 win32/WinUtil.cpp:1138
 #: win32/PublicHubsFrame.cpp:461 win32/UserInfoBase.h:101
-#, fuzzy
 msgid "Add To &Favorites"
-msgstr "Uppáhalds höbbar"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:42
 msgid "Add finished files to share instantly (if shared)"
-msgstr "Bæta sóttum skrám í deilingu strax"
+msgstr ""
 
 #: win32/QueueFrame.cpp:47
 msgid "Added"
-msgstr "Bætt við"
+msgstr ""
 
 #: win32/FavHubProperties.cpp:74 win32/MainWindow.cpp:392
 #: win32/PublicHubsFrame.cpp:52
 msgid "Address"
-msgstr "Slóð"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:107
 msgid "Advanced"
-msgstr "Meira"
+msgstr ""
 
 #: win32/QueueFrame.cpp:1014 win32/QueueFrame.cpp:1023 win32/WinUtil.cpp:1086
 msgid "All"
-msgstr "Allt"
+msgstr ""
 
 #: win32/QueueFrame.cpp:438
-#, fuzzy, boost-format
+#, boost-format
 msgid "All %1% users offline"
-msgstr "Notandi ekki tengdur"
+msgstr ""
 
 #: win32/WinUtil.cpp:433 win32/WinUtil.cpp:441
 msgid "All files"
@@ -381,36 +358,36 @@ msgstr ""
 
 #: win32/CommandDlg.cpp:146
 msgid "Always open help file with this dialog"
-msgstr "Opna atriðahjálp við ræsingu"
+msgstr ""
 
 #: win32/SearchFrame.cpp:203 win32/HubFrame.cpp:122
 #: win32/PublicHubsFrame.cpp:139
 msgid "Any"
-msgstr "Eitthvað"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:100
 msgid "Appearance"
-msgstr "Útlit"
+msgstr ""
 
 #: win32/SearchFrame.cpp:174
 msgid "At least"
-msgstr "Minnst"
+msgstr ""
 
 #: win32/SearchFrame.cpp:175
 msgid "At most"
-msgstr "Mest"
+msgstr ""
 
 #: win32/SearchFrame.cpp:204
 msgid "Audio"
-msgstr "Hljóðskár"
+msgstr ""
 
 #: win32/FavHubsFrame.cpp:32
 msgid "Auto connect / Name"
-msgstr "Tengjast sjálfkrafa / Nafn"
+msgstr ""
 
 #: win32/UsersFrame.cpp:30
 msgid "Auto grant slot / Nick"
-msgstr "Gefa hleðsluhólf sjálvirkt / Notendanafn"
+msgstr ""
 
 #: win32/QueuePage.cpp:64
 msgid "Auto priority settings"
@@ -422,7 +399,7 @@ msgstr ""
 
 #: win32/AdvancedPage.cpp:28
 msgid "Auto-away on minimize (and back on restore)"
-msgstr "Sjálfkrafa í burtu þegar glugginn er niðri"
+msgstr ""
 
 #: win32/WindowsPage.cpp:28
 msgid "Auto-open at startup"
@@ -433,9 +410,8 @@ msgid "Auto-search limit"
 msgstr ""
 
 #: win32/QueuePage.cpp:73
-#, fuzzy
 msgid "Autodrop settings"
-msgstr "Tengingamöguleikar"
+msgstr ""
 
 #: win32/QueuePage.cpp:105
 msgid "Autodrop slow sources for all queue items (except filelists)"
@@ -443,29 +419,27 @@ msgstr ""
 
 #: win32/ADLSearchFrame.cpp:40
 msgid "Automatic Directory Listing Search"
-msgstr "Sjálfvirk skráarlista leit"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:35
 msgid "Automatically disconnect users who leave the hub"
 msgstr ""
-"Aftengir sjálfkrafa notendur sem yfirgefa tengipunktinn (aftengir ekki þegar "
-"höbburinn fer niður / þú yfirgefur hann)"
 
 #: win32/AdvancedPage.cpp:29
 msgid "Automatically follow redirects"
-msgstr "Fylgir sjálfkrafa áframsendingum"
+msgstr ""
 
 #: win32/QueuePage.cpp:109
 msgid "Automatically match queue for auto search hits"
-msgstr "Sjálvirk samsvörun við biðlista..."
+msgstr ""
 
 #: win32/UploadPage.cpp:61
 msgid "Automatically open an extra slot if speed is below (0 = disable)"
-msgstr "Opna sjálfkrafa hleðsluhólf að (0 = óvirkt)"
+msgstr ""
 
 #: win32/QueuePage.cpp:108
 msgid "Automatically search for alternative download locations"
-msgstr "Sjálfirk leit að öðrum niðurhalsstöðum"
+msgstr ""
 
 #: win32/SpyFrame.cpp:116
 #, boost-format
@@ -473,40 +447,39 @@ msgid "Average/s: %1%"
 msgstr ""
 
 #: win32/HubFrame.cpp:940
-#, fuzzy, boost-format
+#, boost-format
 msgid "Average: %1%"
-msgstr "Notendur"
+msgstr ""
 
 #: win32/WinUtil.cpp:283 win32/WinUtil.cpp:293
 msgid "Away mode off"
-msgstr "Í burtu gert óvirkt"
+msgstr ""
 
 #: win32/WinUtil.cpp:288
-#, fuzzy, boost-format
+#, boost-format
 msgid "Away mode on: %1%"
-msgstr "Í burtu gert óvirkt"
+msgstr ""
 
 #: win32/Advanced3Page.cpp:81 win32/Advanced3Page.cpp:83
 #: win32/SearchFrame.cpp:191 win32/ADLSProperties.cpp:99
 msgid "B"
-msgstr "B"
+msgstr ""
 
 #: win32/QueuePage.cpp:75
 msgid "B/s"
 msgstr ""
 
 #: win32/Advanced3Page.cpp:79
-#, fuzzy
 msgid "Bind address"
-msgstr "Slóð"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:38
 msgid "Break on first ADLSearch match"
-msgstr "Stöðva á fyrstu skráarlistunarleitar samsvörun"
+msgstr ""
 
 #: win32/DownloadPage.cpp:56
 msgid "Browse..."
-msgstr "Velja..."
+msgstr ""
 
 #: win32/SearchFrame.cpp:45 win32/HubFrame.cpp:44 win32/UsersFrame.cpp:34
 msgid "CID"
@@ -519,30 +492,26 @@ msgstr ""
 #: win32/QueueFrame.cpp:484
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr ""
-"SFV/CRC32 segir skránna sótta viltaust. Ef sfv/crc32 skráin í sömu möppu "
-"gildir ekki skaltu slökkva á þessum möguleika, en annars sækja hana aftur"
 
 #: win32/SettingsDialog.cpp:79 win32/CommandDlg.cpp:156
-#, fuzzy
 msgid "Cancel"
-msgstr "Listi breytinga"
+msgstr ""
 
 #: win32/MainWindow.cpp:248
 msgid "Change Log"
-msgstr "Listi breytinga"
+msgstr ""
 
 #: win32/CommandDlg.cpp:111
 msgid "Chat"
-msgstr "Spjall"
+msgstr ""
 
 #: win32/QueuePage.cpp:76
 msgid "Check every"
 msgstr ""
 
 #: win32/TransferView.cpp:46
-#, fuzzy
 msgid "Chunk"
-msgstr "Fjöldi"
+msgstr ""
 
 #: win32/TransferView.cpp:49
 msgid "Cipher"
@@ -550,7 +519,7 @@ msgstr ""
 
 #: win32/AdvancedPage.cpp:30
 msgid "Clear search box after each search"
-msgstr "Hreinsar leitarglugga eftir leit"
+msgstr ""
 
 #: win32/MainWindow.cpp:236
 msgid "Close all PM windows"
@@ -570,11 +539,11 @@ msgstr ""
 
 #: win32/MainWindow.cpp:235
 msgid "Close disconnected"
-msgstr "Loka óvirkum gluggum"
+msgstr ""
 
 #: win32/Appearance2Page.cpp:43
 msgid "Colors"
-msgstr "Litir"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:101
 msgid "Colors and sounds"
@@ -582,7 +551,7 @@ msgstr ""
 
 #: win32/UCPage.cpp:67 win32/CommandDlg.cpp:97
 msgid "Command"
-msgstr "Skipun"
+msgstr ""
 
 #: win32/CommandDlg.cpp:93
 msgid "Command Type"
@@ -590,32 +559,31 @@ msgstr ""
 
 #: win32/SearchFrame.cpp:205
 msgid "Compressed"
-msgstr "Þjappað"
+msgstr ""
 
 #: win32/DownloadPage.cpp:63
 msgid "Configure Public Hub Lists"
-msgstr "Stilla notkun lista tengipunkta"
+msgstr ""
 
 #: win32/HubListsDlg.cpp:61 win32/PublicHubsFrame.cpp:171
 msgid "Configured Public Hub Lists"
-msgstr "Listar tengipunkta"
+msgstr ""
 
 #: win32/WindowsPage.cpp:64
 msgid "Confirm application exit"
-msgstr "Staðfestingarskilaboð við lokun forrits"
+msgstr ""
 
 #: win32/WindowsPage.cpp:30
-#, fuzzy
 msgid "Confirm dialog options"
-msgstr "Staðfestingarskilaboð við lokun forrits"
+msgstr ""
 
 #: win32/WindowsPage.cpp:65
 msgid "Confirm favorite hub removal"
-msgstr "Staðfesta fjarlægingu uppáhalds tengipunkts"
+msgstr ""
 
 #: win32/WindowsPage.cpp:66
 msgid "Confirm item removal in download queue"
-msgstr "Staðfesta fjarlægingu skráar úr biðlista"
+msgstr ""
 
 #: win32/UserInfoBase.h:104
 msgid "Connect to hub"
@@ -623,75 +591,68 @@ msgstr ""
 
 #: win32/HubFrame.cpp:499
 msgid "Connected"
-msgstr "Tengdur"
+msgstr ""
 
 #: win32/TransferView.cpp:658 win32/TransferView.cpp:665
-#, fuzzy
 msgid "Connecting"
-msgstr "Tenging"
+msgstr ""
 
 #: win32/TransferView.cpp:278
-#, fuzzy
 msgid "Connecting (forced)"
-msgstr "Tengdur"
+msgstr ""
 
 #: win32/HubFrame.cpp:818
-#, fuzzy, boost-format
+#, boost-format
 msgid "Connecting to %1%..."
-msgstr "Tenging"
+msgstr ""
 
 #: win32/SearchFrame.cpp:40 win32/HubFrame.cpp:41
 msgid "Connection"
-msgstr "Tenging"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:89
 msgid "Connection settings"
-msgstr "Tengingamöguleikar"
+msgstr ""
 
 #: win32/TransferView.cpp:90
-#, fuzzy
 msgid "Connections"
-msgstr "Tenging"
+msgstr ""
 
 #: win32/CommandDlg.cpp:94
 msgid "Context"
 msgstr ""
 
 #: win32/HubFrame.cpp:1190 win32/PublicHubsFrame.cpp:462
-#, fuzzy
 msgid "Copy &address to clipboard"
-msgstr "Afrita tth auðkennda slóð"
+msgstr ""
 
 #: win32/TransferView.cpp:192
-#, fuzzy
 msgid "Copy &nick to clipboard"
-msgstr "Afrita tth auðkennda slóð"
+msgstr ""
 
 #: win32/WaitingUsersFrame.cpp:80
-#, fuzzy
 msgid "Copy Filename"
-msgstr "Skráarheiti"
+msgstr ""
 
 #: win32/WinUtil.cpp:392
 msgid "Copy magnet link to clipboard"
-msgstr "Afrita tth auðkennda slóð"
+msgstr ""
 
 #: win32/SpyFrame.cpp:37
 msgid "Count"
-msgstr "Fjöldi"
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:53
 msgid "Country"
-msgstr "Land"
+msgstr ""
 
 #: win32/CommandDlg.cpp:92
-#, fuzzy
 msgid "Create / Modify User Command"
-msgstr "Viðbótarskipanir notenda"
+msgstr ""
 
 #: win32/HashProgressDlg.cpp:43
 msgid "Creating file index..."
-msgstr "Bý til auðkenni...."
+msgstr ""
 
 #: win32/MainWindow.cpp:599
 #, boost-format
@@ -705,15 +666,15 @@ msgstr ""
 
 #: win32/WinUtil.cpp:842
 msgid "DC++"
-msgstr "DC++"
+msgstr ""
 
 #: win32/MainWindow.cpp:251
 msgid "DC++ Homepage"
-msgstr "Heimasíða DC++"
+msgstr ""
 
 #: win32/MainWindow.cpp:256
 msgid "DC++ discussion forum"
-msgstr "DC++ spjallið"
+msgstr ""
 
 #: win32/MagnetDlg.cpp:45
 msgid ""
@@ -727,77 +688,72 @@ msgstr ""
 
 #: win32/AppearancePage.cpp:43
 msgid "Default away message"
-msgstr "Sjálfvirk í burtu skilaboð"
+msgstr ""
 
 #: win32/DownloadPage.cpp:53
 msgid "Default download directory"
-msgstr "Sjálfvirk mappa niðurhals"
+msgstr ""
 
 #: win32/FavHubProperties.cpp:75 win32/FavHubProperties.cpp:78
 #: win32/GeneralPage.cpp:46 win32/FavHubsFrame.cpp:33 win32/HubFrame.cpp:39
 #: win32/PublicHubsFrame.cpp:50 win32/UsersFrame.cpp:33
 #: win32/UsersFrame.cpp:145
 msgid "Description"
-msgstr "Lýsing"
+msgstr ""
 
 #: win32/ADLSearchFrame.cpp:34 win32/ADLSProperties.cpp:80
 msgid "Destination Directory"
-msgstr "Setja undir"
+msgstr ""
 
 #: win32/NetworkPage.cpp:58 win32/NetworkPage.cpp:59
-#, fuzzy
 msgid "Direct connection"
-msgstr "Tenging"
+msgstr ""
 
 #: win32/DownloadPage.cpp:52
 msgid "Directories"
-msgstr "Möppur"
+msgstr ""
 
 #: win32/UploadPage.cpp:88 win32/FavoriteDirsPage.cpp:60
 #: win32/SearchFrame.cpp:210 win32/SearchFrame.cpp:534 win32/LogPage.cpp:39
 #: win32/ADLSProperties.cpp:88
 msgid "Directory"
-msgstr "Mappa"
+msgstr ""
 
 #: win32/FavoriteDirsPage.cpp:137 win32/FavoriteDirsPage.cpp:171
 msgid "Directory or directory name already exists"
-msgstr "Mappa eða heiti möppu þegar til staðar"
+msgstr ""
 
 #: win32/MagnetDlg.cpp:62
 msgid "Do nothing"
-msgstr "Gera ekki neitt"
+msgstr ""
 
 #: win32/SearchFrame.cpp:206
 msgid "Document"
-msgstr "Texti"
+msgstr ""
 
 #: win32/NetworkPage.cpp:63
 msgid "Don't allow hub/UPnP to override"
 msgstr ""
 
 #: win32/AdvancedPage.cpp:44
-#, fuzzy
 msgid "Don't automatically disconnect favorite users who leave the hub"
 msgstr ""
-"Aftengir sjálfkrafa notendur sem yfirgefa tengipunktinn (aftengir ekki þegar "
-"höbburinn fer niður / þú yfirgefur hann)"
 
 #: win32/AdvancedPage.cpp:34
 msgid "Don't delete file lists when exiting"
-msgstr "Halda skráarlistum við lokun forritsinns"
+msgstr ""
 
 #: win32/QueuePage.cpp:111
 msgid "Don't download files already in share"
-msgstr "Ekki sækja skrár sem eru þegar til í deilingu"
+msgstr ""
 
 #: win32/QueuePage.cpp:112
-#, fuzzy
 msgid "Don't download files already in the queue"
-msgstr "Ekki sækja skrár sem eru þegar til í deilingu"
+msgstr ""
 
 #: win32/HubFrame.cpp:393
 msgid "Don't remove /password before your password"
-msgstr "Vinsamlegast ekki fjarlægja /password á undan lykilorði þínu"
+msgstr ""
 
 #: win32/QueuePage.cpp:107
 msgid "Don't remove the source when autodropping, only disconnect"
@@ -805,11 +761,11 @@ msgstr ""
 
 #: win32/AdvancedPage.cpp:37
 msgid "Don't send the away message to bots"
-msgstr "Ekki senda í burtu skilaboðin til botta"
+msgstr ""
 
 #: win32/MainWindow.cpp:259
 msgid "Donate (paypal)"
-msgstr "Gefa €€€/$$$ (paypal)"
+msgstr ""
 
 #: win32/Appearance2Page.cpp:46
 msgid "Donate €€€:s! (ok, dirty dollars are fine as well =) (see help menu)"
@@ -817,51 +773,50 @@ msgstr ""
 
 #: win32/TransferView.cpp:59 win32/HashProgressDlg.cpp:108
 msgid "Done"
-msgstr "Búið"
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:362
-#, fuzzy
 msgid "Download &to..."
-msgstr "Niðurhlaða til..."
+msgstr ""
 
 #: win32/ADLSProperties.cpp:113
 msgid "Download Matches"
-msgstr "Sækja samsvörun"
+msgstr ""
 
 #: win32/QueueFrame.cpp:59 win32/TabsPage.cpp:37 win32/WindowsPage.cpp:37
 #: win32/MainWindow.cpp:295
 msgid "Download Queue"
-msgstr "Bið niðurhleðslu"
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:334
-#, fuzzy, boost-format
+#, boost-format
 msgid "Download failed: %1%"
-msgstr "Niðurhlaðið"
+msgstr ""
 
 #: win32/WinUtil.cpp:843
 msgid "Download files from the Direct Connect network"
-msgstr "Sækja skrár frá tengipunkti"
+msgstr ""
 
 #: win32/SearchFrame.cpp:830
 msgid "Download to..."
-msgstr "Niðurhlaða til..."
+msgstr ""
 
 #: win32/SearchFrame.cpp:807
 msgid "Download whole directory"
-msgstr "Niðurhlaða allri möppunni"
+msgstr ""
 
 #: win32/SearchFrame.cpp:860
 msgid "Download whole directory to..."
-msgstr "Niðurhlaða allri möppunni til..."
+msgstr ""
 
 #: win32/QueueFrame.cpp:41
 msgid "Downloaded"
-msgstr "Niðurhlaðið"
+msgstr ""
 
 #: win32/TransferView.cpp:747
-#, fuzzy, boost-format
+#, boost-format
 msgid "Downloading %1%"
-msgstr "Niðurhleð..."
+msgstr ""
 
 #: win32/TransferView.cpp:647
 #, boost-format
@@ -871,27 +826,26 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: win32/DirectoryListingFrame.cpp:699
-#, fuzzy
 msgid "Downloading list..."
-msgstr "Niðurhleð..."
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:195 win32/PublicHubsFrame.cpp:471
 msgid "Downloading public hub list..."
-msgstr "Sæki lista tengipunkta..."
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:331
-#, fuzzy, boost-format
+#, boost-format
 msgid "Downloading public hub list... (%1%)"
-msgstr "Sæki lista tengipunkta..."
+msgstr ""
 
 #: win32/AboutDlg.cpp:73
 msgid "Downloading..."
-msgstr "Niðurhleð..."
+msgstr ""
 
 #: win32/SettingsDialog.cpp:92 win32/MainWindow.cpp:252
 #: win32/TransferView.cpp:99 win32/Appearance2Page.cpp:50
 msgid "Downloads"
-msgstr "Niðurhöl"
+msgstr ""
 
 #: win32/QueuePage.cpp:74
 msgid "Drop sources below"
@@ -903,7 +857,7 @@ msgstr ""
 
 #: win32/GeneralPage.cpp:45 win32/HubFrame.cpp:43
 msgid "E-Mail"
-msgstr "Netfang"
+msgstr ""
 
 #: win32/HubListsDlg.cpp:167
 msgid "Edit the hublist"
@@ -911,11 +865,11 @@ msgstr ""
 
 #: win32/AdvancedPage.cpp:36
 msgid "Enable automatic SFV checking"
-msgstr "Virkja flutningsathugun við .sfv skrár"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:39
 msgid "Enable safe and compressed transfers"
-msgstr "Gerir virkan þjappaðan og öruggan flutning (bætir hraða niðurhals)"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:48
 msgid "Enable segmented downloads"
@@ -923,15 +877,15 @@ msgstr ""
 
 #: win32/ADLSProperties.cpp:109
 msgid "Enabled"
-msgstr "Virkja leit"
+msgstr ""
 
 #: win32/ADLSearchFrame.cpp:32
 msgid "Enabled / Search String"
-msgstr "Virkja / Leitarstengur"
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:801
 msgid "Enter search string"
-msgstr "Settu inn leitarstreng"
+msgstr ""
 
 #: win32/WinUtil.cpp:750
 msgid "Error creating adc registry key"
@@ -947,26 +901,24 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:46
 msgid "Errors"
-msgstr "Villur"
+msgstr ""
 
 #: win32/Appearance2Page.cpp:57
-#, fuzzy
 msgid "Every time a main chat message is received"
-msgstr "Spila hljóð í hvert skipti sem einka skilaboð eru mótekin"
+msgstr ""
 
 #: win32/Appearance2Page.cpp:58
-#, fuzzy
 msgid "Every time a private message is received"
-msgstr "Spila hljóð í hvert skipti sem einka skilaboð eru mótekin"
+msgstr ""
 
 #: win32/QueueFrame.cpp:45 win32/DirectoryListingFrame.cpp:42
 #: win32/SearchFrame.cpp:42
 msgid "Exact size"
-msgstr "Nákvæm Stærð"
+msgstr ""
 
 #: win32/SearchFrame.cpp:207
 msgid "Executable"
-msgstr "exe skrár"
+msgstr ""
 
 #: win32/MainWindow.cpp:1023
 msgid "Exit"
@@ -985,86 +937,81 @@ msgid "External / WAN IP"
 msgstr ""
 
 #: win32/PublicHubsFrame.cpp:167
-#, fuzzy
 msgid "F&ilter"
-msgstr "Skrá"
+msgstr ""
 
 #: win32/MainWindow.cpp:678 win32/MainWindow.cpp:679
 msgid "Failed to create port mappings. Please set up your NAT yourself."
-msgstr "UPnP mistókst að búa til port fyrir forritið"
+msgstr ""
 
 #: win32/MainWindow.cpp:697 win32/MainWindow.cpp:698
 msgid "Failed to get external IP via  UPnP. Please set it yourself."
-msgstr "UPnP mistókst að ná í ytra IP vistfang"
+msgstr ""
 
 #: win32/MainWindow.cpp:711 win32/MainWindow.cpp:719
 msgid "Failed to remove port mappings"
-msgstr "UPnP mistókst að fjarlægja port fyrir forritið"
+msgstr ""
 
 #: win32/MainWindow.cpp:215
-#, fuzzy
 msgid "Favorite &Users\tCtrl+U"
-msgstr "Uppáhalds notendur"
+msgstr ""
 
 #: win32/FavHubProperties.cpp:70
 msgid "Favorite Hub Properties"
-msgstr "Valmöguleikar"
+msgstr ""
 
 #: win32/WindowsPage.cpp:45 win32/MainWindow.cpp:292 win32/FavHubsFrame.cpp:41
 msgid "Favorite Hubs"
-msgstr "Uppáhalds höbbar"
+msgstr ""
 
 #: win32/WindowsPage.cpp:36 win32/MainWindow.cpp:293 win32/UsersFrame.cpp:38
 msgid "Favorite Users"
-msgstr "Uppáhalds notendur"
+msgstr ""
 
 #: win32/FavoriteDirsPage.cpp:41
 msgid "Favorite download directories"
-msgstr "Uppáhalds niðurhals möppur"
+msgstr ""
 
 #: win32/HubFrame.cpp:967
 msgid "Favorite hub added"
-msgstr "Uppáhalds höbb bætt við"
+msgstr ""
 
 #: win32/HubFrame.cpp:977
-#, fuzzy
 msgid "Favorite hub removed"
-msgstr "Uppáhalds höbb bætt við"
+msgstr ""
 
 #: win32/FavoriteDirsPage.cpp:59 win32/FavoriteDirsPage.cpp:131
 #: win32/FavoriteDirsPage.cpp:162
 msgid "Favorite name"
-msgstr "Nafn"
+msgstr ""
 
 #: win32/PrivateFrame.cpp:299
 msgid "Favorite user added"
-msgstr "Uppáhalds notanda bættt við"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:93
-#, fuzzy
 msgid "Favorites"
-msgstr "Uppáhalds höbbar"
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:40 win32/SearchFrame.cpp:34
 msgid "File"
-msgstr "Skrá"
+msgstr ""
 
 #: win32/MagnetDlg.cpp:46
 msgid "File Hash:"
 msgstr ""
 
 #: win32/WinUtil.cpp:440
-#, fuzzy
 msgid "File Lists"
-msgstr "Skráarsnið"
+msgstr ""
 
 #: win32/QueueFrame.cpp:480
 msgid "File not available"
-msgstr "Skrá ekki til"
+msgstr ""
 
 #: win32/SearchFrame.cpp:130
 msgid "File type"
-msgstr "Skráarsnið"
+msgstr ""
 
 #: win32/CommandDlg.cpp:128
 msgid "Filelist Menu"
@@ -1073,16 +1020,15 @@ msgstr ""
 #: win32/QueueFrame.cpp:38 win32/TransferView.cpp:54 win32/LogPage.cpp:42
 #: win32/ADLSProperties.cpp:87 win32/FinishedFrameBase.h:669
 msgid "Filename"
-msgstr "Skráarheiti"
+msgstr ""
 
 #: win32/MagnetDlg.cpp:48
 msgid "Filename:"
-msgstr "Nafn skráar:"
+msgstr ""
 
 #: win32/FinishedFrameBase.h:704
-#, fuzzy
 msgid "Files"
-msgstr "Skrá"
+msgstr ""
 
 #: win32/QueueFrame.cpp:294 win32/DirectoryListingFrame.cpp:640
 #: win32/DirectoryListingFrame.cpp:656
@@ -1096,17 +1042,17 @@ msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:172 win32/DirectoryListingFrame.cpp:188
 msgid "Find"
-msgstr "Finna"
+msgstr ""
 
 #: win32/TabsPage.cpp:38 win32/WindowsPage.cpp:38 win32/MainWindow.cpp:218
 #: win32/MainWindow.cpp:296 win32/FinishedDLFrame.cpp:25
 msgid "Finished Downloads"
-msgstr "Kláruð niðurhöl"
+msgstr ""
 
 #: win32/TabsPage.cpp:40 win32/WindowsPage.cpp:40 win32/MainWindow.cpp:220
 #: win32/MainWindow.cpp:298 win32/FinishedULFrame.cpp:25
 msgid "Finished Uploads"
-msgstr "Kláruð upphöl"
+msgstr ""
 
 #: win32/NetworkPage.cpp:62
 msgid "Firewall (passive, last resort)"
@@ -1130,19 +1076,19 @@ msgstr ""
 
 #: win32/LogPage.cpp:41
 msgid "Format"
-msgstr "Format"
+msgstr ""
 
 #: win32/MainWindow.cpp:254
 msgid "Frequently asked questions"
-msgstr "FAQ (Tíðar spurningar)"
+msgstr ""
 
 #: win32/ADLSProperties.cpp:89
 msgid "Full Path"
-msgstr "Nákvæm slóð"
+msgstr ""
 
 #: win32/QueueFrame.cpp:486
 msgid "Full tree does not match TTH root"
-msgstr "Sótt auðkenni passar ekki við TTH auðkenningu"
+msgstr ""
 
 #: win32/CertificatesPage.cpp:46
 msgid "Generate certificates"
@@ -1180,11 +1126,11 @@ msgstr ""
 
 #: win32/AppearancePage.cpp:67
 msgid "Guess user country from IP"
-msgstr "Finna land notanda"
+msgstr ""
 
 #: win32/DownloadPage.cpp:64
 msgid "HTTP Proxy (for hublist only)"
-msgstr "Vefslóð internetþjóns (einungis fyrir lista tengipunkta)"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:83 win32/CommandDlg.cpp:160
 msgid "Help"
@@ -1196,16 +1142,15 @@ msgstr ""
 
 #: win32/MainWindow.cpp:255
 msgid "Help forum"
-msgstr "Hjálpar spjallið"
+msgstr ""
 
 #: win32/SearchFrame.cpp:221
-#, fuzzy
 msgid "Hide files already in share"
-msgstr "Ekki sækja skrár sem eru þegar til í deilingu"
+msgstr ""
 
 #: win32/QueueFrame.cpp:461 win32/QueueFrame.cpp:992
 msgid "High"
-msgstr "Hár"
+msgstr ""
 
 #: win32/QueuePage.cpp:67
 msgid "High prio max size"
@@ -1213,7 +1158,7 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:462 win32/QueueFrame.cpp:993
 msgid "Highest"
-msgstr "Hæstur"
+msgstr ""
 
 #: win32/QueuePage.cpp:65
 msgid "Highest prio max size"
@@ -1233,7 +1178,7 @@ msgstr ""
 #: win32/SearchFrame.cpp:41 win32/TransferView.cpp:43 win32/UCPage.cpp:68
 #: win32/FinishedFrameBase.h:701
 msgid "Hub"
-msgstr "Hub"
+msgstr ""
 
 #: win32/UsersFrame.cpp:31
 msgid "Hub (last seen in, if offline)"
@@ -1245,7 +1190,7 @@ msgstr ""
 
 #: win32/CommandDlg.cpp:119
 msgid "Hub Menu"
-msgstr "Spjalli tengipunkts"
+msgstr ""
 
 #: win32/FavHubProperties.cpp:142
 msgid "Hub address cannot be empty"
@@ -1265,27 +1210,26 @@ msgid "Hub list loaded from cache..."
 msgstr ""
 
 #: win32/HubListsDlg.cpp:167
-#, fuzzy
 msgid "Hublist"
-msgstr "Hubs"
+msgstr ""
 
 #: win32/SearchFrame.cpp:137
 msgid "Hubs"
-msgstr "Hubs"
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:281
-#, fuzzy, boost-format
+#, boost-format
 msgid "Hubs: %1%"
-msgstr "Hubs"
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:279
-#, fuzzy, boost-format
+#, boost-format
 msgid "Hubs: %1% / %2%"
-msgstr "Hubs"
+msgstr ""
 
 #: win32/SearchFrame.cpp:43 win32/TransferView.cpp:50 win32/HubFrame.cpp:42
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: win32/HubFrame.cpp:343
 #, boost-format
@@ -1302,17 +1246,15 @@ msgstr ""
 
 #: win32/SpyFrame.cpp:66
 msgid "Ignore TTH searches"
-msgstr "Sía TTH leit út"
+msgstr ""
 
 #: win32/WindowsPage.cpp:57
-#, fuzzy
 msgid "Ignore private messages from bots"
-msgstr "Opnar einka skilaboð í sér glugga"
+msgstr ""
 
 #: win32/WindowsPage.cpp:56
-#, fuzzy
 msgid "Ignore private messages from the hub"
-msgstr "Opnar einka skilaboð í sér glugga"
+msgstr ""
 
 #: win32/HubFrame.cpp:537 win32/HubFrame.cpp:545
 #, boost-format
@@ -1325,7 +1267,7 @@ msgstr ""
 
 #: win32/MainWindow.cpp:229
 msgid "Indexing progress"
-msgstr "Staða auðkenningar"
+msgstr ""
 
 #: win32/MainWindow.cpp:735
 msgid "Invalid file list name"
@@ -1333,7 +1275,7 @@ msgstr ""
 
 #: win32/WinUtil.cpp:269
 msgid "Invalid number of slots"
-msgstr "Óraunhæfur fjöldi af hleðsluhólfum"
+msgstr ""
 
 #: win32/QueueFrame.cpp:290
 #, boost-format
@@ -1342,24 +1284,23 @@ msgstr ""
 
 #: win32/HubFrame.cpp:336
 msgid "Join/part of favorite users showing off"
-msgstr "Tengist/aftengist skilaboð óvirk"
+msgstr ""
 
 #: win32/HubFrame.cpp:334
 msgid "Join/part of favorite users showing on"
-msgstr "Tengist/aftengist skilaboð virk"
+msgstr ""
 
 #: win32/HubFrame.cpp:329
 msgid "Join/part showing off"
-msgstr "Tengist/aftengist skilaboð af"
+msgstr ""
 
 #: win32/HubFrame.cpp:327
 msgid "Join/part showing on"
-msgstr "Tengist/aftengist skilaboð á"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:31
 msgid "Keep duplicate files in your file list"
 msgstr ""
-"Heldur líkum skrám í skráarlista (verða aldrei reiknaðir í heildardeilingu)"
 
 #: win32/QueuePage.cpp:66 win32/QueuePage.cpp:68 win32/QueuePage.cpp:70
 #: win32/QueuePage.cpp:72 win32/QueuePage.cpp:84 win32/Advanced3Page.cpp:70
@@ -1373,9 +1314,8 @@ msgid "KiB/s"
 msgstr ""
 
 #: win32/AppearancePage.cpp:45
-#, fuzzy
 msgid "Language"
-msgstr "Þýðingar skrá"
+msgstr ""
 
 #: win32/AboutDlg.cpp:66
 msgid "Latest stable version"
@@ -1383,12 +1323,11 @@ msgstr ""
 
 #: win32/DownloadPage.cpp:57
 msgid "Limits"
-msgstr "Takmörk"
+msgstr ""
 
 #: win32/GeneralPage.cpp:47
-#, fuzzy
 msgid "Line speed (upload)"
-msgstr "Kláruð upphöl"
+msgstr ""
 
 #: win32/SplashWindow.cpp:77
 #, boost-format
@@ -1397,52 +1336,51 @@ msgstr ""
 
 #: win32/LogPage.cpp:54
 msgid "Log downloads"
-msgstr "Skrá niðurhöl"
+msgstr ""
 
 #: win32/LogPage.cpp:58
 msgid "Log filelist transfers"
-msgstr "Skrá niður upphöl skráarlista"
+msgstr ""
 
 #: win32/LogPage.cpp:52
 msgid "Log main chat"
-msgstr "Skrá spjall"
+msgstr ""
 
 #: win32/LogPage.cpp:53
 msgid "Log private chat"
-msgstr "Skrá einkaskilaboð"
+msgstr ""
 
 #: win32/LogPage.cpp:57
 msgid "Log status messages"
-msgstr "Skrá stöðuskilaboð"
+msgstr ""
 
 #: win32/LogPage.cpp:56
 msgid "Log system messages"
-msgstr "Skrá villuskilaboð"
+msgstr ""
 
 #: win32/LogPage.cpp:55
 msgid "Log uploads"
-msgstr "Skrá upphöl"
+msgstr ""
 
 #: win32/LogPage.cpp:38
 msgid "Logging"
-msgstr "Skráning"
+msgstr ""
 
 #: win32/NetworkPage.cpp:72
 msgid "Login"
-msgstr "Notendanafn"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:108
-#, fuzzy
 msgid "Logs"
-msgstr "Notendanafn"
+msgstr ""
 
 #: win32/WinUtil.cpp:391
 msgid "Lookup TTH at Bitzi.com"
-msgstr "Flettu upp TTH auðkenningu á Bitzi.com"
+msgstr ""
 
 #: win32/QueueFrame.cpp:459 win32/QueueFrame.cpp:990
 msgid "Low"
-msgstr "Lár"
+msgstr ""
 
 #: win32/QueuePage.cpp:71
 msgid "Low prio max size"
@@ -1450,16 +1388,16 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:458 win32/QueueFrame.cpp:989
 msgid "Lowest"
-msgstr "Lægstur"
+msgstr ""
 
 #: win32/MagnetDlg.cpp:44 win32/WinUtil.cpp:1048
 msgid "MAGNET Link detected"
-msgstr "tth auðkennd slóð fundin"
+msgstr ""
 
 #: win32/WinUtil.cpp:995
-#, fuzzy, boost-format
+#, boost-format
 msgid "MAGNET Link detected: %1%"
-msgstr "tth auðkennd slóð fundin"
+msgstr ""
 
 #: win32/MainWindow.cpp:200
 msgid "Match downloaded lists"
@@ -1467,7 +1405,7 @@ msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:167 win32/DirectoryListingFrame.cpp:187
 msgid "Match queue"
-msgstr "Bera saman"
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:264
 #, boost-format
@@ -1482,25 +1420,23 @@ msgstr ""
 
 #: win32/PublicHubsFrame.cpp:57
 msgid "Max Hubs"
-msgstr "Hámark tengipunkta"
+msgstr ""
 
 #: win32/ADLSearchFrame.cpp:36
-#, fuzzy
 msgid "Max Size"
-msgstr "Stærð"
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:58
 msgid "Max Users"
-msgstr "Hámark notenda"
+msgstr ""
 
 #: win32/Advanced3Page.cpp:71
-#, fuzzy
 msgid "Max filelist size"
-msgstr "Skrá niður upphöl skráarlista"
+msgstr ""
 
 #: win32/Advanced3Page.cpp:66
 msgid "Max hash speed"
-msgstr "Hraði auðkenningar"
+msgstr ""
 
 #: win32/QueuePage.cpp:80
 msgid "Max inactivity"
@@ -1508,7 +1444,7 @@ msgstr ""
 
 #: win32/DownloadPage.cpp:58
 msgid "Maximum simultaneous downloads (0 = infinite)"
-msgstr "Hámarks niðurhleðsluhólf (0 = óvirkt)"
+msgstr ""
 
 #: win32/Advanced3Page.cpp:72 win32/SearchFrame.cpp:193 win32/WinUtil.cpp:1161
 #: win32/ADLSProperties.cpp:101
@@ -1529,39 +1465,35 @@ msgstr ""
 
 #: win32/PublicHubsFrame.cpp:55
 msgid "Min Share"
-msgstr "Lámarks deiling"
+msgstr ""
 
 #: win32/ADLSearchFrame.cpp:35
-#, fuzzy
 msgid "Min Size"
-msgstr "Lámarks deiling"
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:56
 msgid "Min Slots"
-msgstr "Lámark hólfa"
+msgstr ""
 
 #: win32/QueuePage.cpp:78
-#, fuzzy
 msgid "Min elapsed"
-msgstr "Lámark hólfa"
+msgstr ""
 
 #: win32/QueuePage.cpp:83
 msgid "Min filesize"
 msgstr ""
 
 #: win32/QueuePage.cpp:82
-#, fuzzy
 msgid "Min sources online"
-msgstr "Bíð (Notandi tengdur)"
+msgstr ""
 
 #: win32/Advanced3Page.cpp:69
-#, fuzzy
 msgid "Mini slot size"
-msgstr "Lámark hólfa"
+msgstr ""
 
 #: win32/AppearancePage.cpp:59
 msgid "Minimize to tray"
-msgstr "Minka að verkstiku"
+msgstr ""
 
 #: win32/HubListsDlg.cpp:89 win32/FavHubsFrame.cpp:95
 #: win32/FavHubsFrame.cpp:288 win32/ADLSearchFrame.cpp:85 win32/UCPage.cpp:45
@@ -1576,7 +1508,7 @@ msgstr ""
 #: win32/FavHubProperties.cpp:73 win32/UCPage.cpp:66
 #: win32/PublicHubsFrame.cpp:49 win32/CommandDlg.cpp:96
 msgid "Name"
-msgstr "Nafn"
+msgstr ""
 
 #: win32/CommandDlg.cpp:240
 msgid "Name and command must not be empty"
@@ -1584,30 +1516,29 @@ msgstr ""
 
 #: win32/UploadPage.cpp:216 win32/UploadPage.cpp:262
 msgid "Name under which the others see the directory"
-msgstr "Möppuheiti sem aðrir sjá"
+msgstr ""
 
 #: win32/WindowsPage.cpp:42 win32/MainWindow.cpp:228 win32/StatsFrame.cpp:27
 msgid "Network Statistics"
-msgstr "Staða tengingar"
+msgstr ""
 
 #: win32/UploadPage.cpp:225
 msgid "New virtual name matches old name, skipping..."
-msgstr "Nýtt stafrænt nafn er hið sama og það gamla, hunsa...."
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:177 win32/DirectoryListingFrame.cpp:189
 msgid "Next"
-msgstr "Næsta"
+msgstr ""
 
 #: win32/FavHubProperties.cpp:76 win32/GeneralPage.cpp:44
 #: win32/FavHubsFrame.cpp:34 win32/HubFrame.cpp:37
 #: win32/FinishedFrameBase.h:700
 msgid "Nick"
-msgstr "Notendanafn"
+msgstr ""
 
 #: win32/FinishedFrameBase.h:671
-#, fuzzy
 msgid "Nicks"
-msgstr "Notendanafn"
+msgstr ""
 
 #: win32/FinishedFrameBase.h:262
 msgid "No"
@@ -1615,15 +1546,15 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:495
 msgid "No errors"
-msgstr "Engar villur"
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:866
 msgid "No matches"
-msgstr "Eingin samsvörun"
+msgstr ""
 
 #: win32/DownloadPage.cpp:59
 msgid "No new downloads if speed exceeds (KiB/s, 0 = disable)"
-msgstr "Engin ný niðurhöl ef hraði nær (kB/s, 0 = óvirkt)"
+msgstr ""
 
 #: win32/AboutDlg.cpp:71
 msgid "No transfers yet"
@@ -1631,15 +1562,15 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:422
 msgid "No users"
-msgstr "Engir notendur"
+msgstr ""
 
 #: win32/QueueFrame.cpp:434
 msgid "No users to download from"
-msgstr "Engir notendur til að sækja frá"
+msgstr ""
 
 #: win32/QueueFrame.cpp:460 win32/QueueFrame.cpp:991 win32/SearchFrame.cpp:173
 msgid "Normal"
-msgstr "Venjulegt"
+msgstr ""
 
 #: win32/QueuePage.cpp:69
 msgid "Normal prio max size"
@@ -1647,20 +1578,20 @@ msgstr ""
 
 #: win32/UploadPage.cpp:64
 msgid "Note; Files appear in the share only after they've been hashed!"
-msgstr "ATH; Nýjar skrár verða ekki settar inn fyrr en þær verða auðkenndar!"
+msgstr ""
 
 #: win32/DownloadPage.cpp:60
 #, no-c-format
 msgid "Note; because of changing download speeds, this is not 100% accurate..."
-msgstr "ATH; vegna breytinga á niðurhalshraða er þetta ekki 100% nákvæmt..."
+msgstr ""
 
 #: win32/Appearance2Page.cpp:47 win32/AppearancePage.cpp:46
 msgid "Note; most of these options require that you restart DC++"
-msgstr "ATH; flestir af þessum möguleikum virka ekki nema að DC++ sé endurræst"
+msgstr ""
 
 #: win32/WindowsPage.cpp:43 win32/NotepadFrame.cpp:27 win32/MainWindow.cpp:307
 msgid "Notepad"
-msgstr "Skrifblokk"
+msgstr ""
 
 #: win32/Appearance2Page.cpp:51
 msgid "Notification sound"
@@ -1672,23 +1603,23 @@ msgstr ""
 
 #: win32/WinUtil.cpp:352
 msgid "Offline"
-msgstr "Aftengdur"
+msgstr ""
 
 #: win32/UsersFrame.cpp:110 win32/UsersFrame.cpp:125
 msgid "Online"
-msgstr "Tengdur"
+msgstr ""
 
 #: win32/AppearancePage.cpp:63
 msgid "Only show joins / parts for favorite users"
-msgstr "Aðeins sýna tengist/aftengist skilaboð fyrir uppáhalds notendur"
+msgstr ""
 
 #: win32/SearchFrame.cpp:215
 msgid "Only users with free slots"
-msgstr "Aðeins notendur með laus hleðsluhólf"
+msgstr ""
 
 #: win32/SearchFrame.cpp:242
 msgid "Only where I'm op"
-msgstr "Aðeins þar sem ég er op"
+msgstr ""
 
 #: win32/FinishedFrameBase.h:450 win32/FinishedFrameBase.h:468
 msgid "Open &folder"
@@ -1696,12 +1627,11 @@ msgstr ""
 
 #: win32/MainWindow.cpp:202 win32/MainWindow.cpp:1024
 msgid "Open downloads directory"
-msgstr "Opna niðurhlaðs möppu"
+msgstr ""
 
 #: win32/MainWindow.cpp:304
-#, fuzzy
 msgid "Open file list..."
-msgstr "Opna egin lista"
+msgstr ""
 
 #: win32/MainWindow.cpp:198
 msgid "Open file list...\tCtrl+L"
@@ -1709,47 +1639,43 @@ msgstr ""
 
 #: win32/WindowsPage.cpp:53
 msgid "Open new file list windows in the background"
-msgstr "Opna nýja skráarlista í bakrunni"
+msgstr ""
 
 #: win32/WindowsPage.cpp:54
 msgid "Open new private message windows in the background"
-msgstr "Opna nýja einka skilaboðs glugga í bakrunni"
+msgstr ""
 
 #: win32/WindowsPage.cpp:55
 msgid "Open new window when using /join"
-msgstr "Opna nýjan glugga þegar /join skipunin er notuð"
+msgstr ""
 
 #: win32/MainWindow.cpp:199
 msgid "Open own list"
-msgstr "Opna egin lista"
+msgstr ""
 
 #: win32/WindowsPage.cpp:51
-#, fuzzy
 msgid "Open private messages from bots in their own window"
-msgstr "Opnar einka skilaboð í sér glugga"
+msgstr ""
 
 #: win32/WindowsPage.cpp:52
-#, fuzzy
 msgid "Open private messages from the hub in their own window"
-msgstr "Opnar einka skilaboð í sér glugga"
+msgstr ""
 
 #: win32/WindowsPage.cpp:50
 msgid "Open private messages in their own window"
-msgstr "Opnar einka skilaboð í sér glugga"
+msgstr ""
 
 #: win32/AppearancePage.cpp:42
 msgid "Options"
-msgstr "Valmöguleikar"
+msgstr ""
 
 #: win32/QueuePage.cpp:85
-#, fuzzy
 msgid "Other queue options"
-msgstr "Leitarmöguleikar"
+msgstr ""
 
 #: win32/NetworkPage.cpp:76
-#, fuzzy
 msgid "Outgoing connection settings"
-msgstr "Tengingamöguleikar"
+msgstr ""
 
 #: win32/CertificatesPage.cpp:44
 msgid "Own certificate file"
@@ -1761,11 +1687,11 @@ msgstr ""
 
 #: win32/CommandDlg.cpp:115
 msgid "PM"
-msgstr "Einkaskilaboð"
+msgstr ""
 
 #: win32/Advanced3Page.cpp:68
 msgid "PM history"
-msgstr "Skrá PM fjölda"
+msgstr ""
 
 #: win32/CommandDlg.cpp:95
 msgid "Parameters"
@@ -1773,29 +1699,29 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:482
 msgid "Passive user"
-msgstr "Óvirkur"
+msgstr ""
 
 #: win32/NetworkPage.cpp:73 win32/FavHubProperties.cpp:77
 #: win32/FavHubsFrame.cpp:35
 msgid "Password"
-msgstr "Lykilorð"
+msgstr ""
 
 #: win32/QueueFrame.cpp:44 win32/SearchFrame.cpp:38 win32/TransferView.cpp:55
 #: win32/FinishedFrameBase.h:670
 msgid "Path"
-msgstr "Staðsetning"
+msgstr ""
 
 #: win32/QueueFrame.cpp:457 win32/QueueFrame.cpp:988
 msgid "Paused"
-msgstr "Stoppað"
+msgstr ""
 
 #: win32/GeneralPage.cpp:43
 msgid "Personal Information"
-msgstr "Persónulegar upplýsingar"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:87
 msgid "Personal information"
-msgstr "Persónulegar upplýsingar"
+msgstr ""
 
 #: win32/WinUtil.cpp:1155
 msgid "PiB"
@@ -1803,15 +1729,15 @@ msgstr ""
 
 #: win32/SearchFrame.cpp:208
 msgid "Picture"
-msgstr "Mynd"
+msgstr ""
 
 #: win32/FavHubsFrame.cpp:326 win32/PublicHubsFrame.cpp:509
 msgid "Please enter a nickname in the settings dialog!"
-msgstr "Vinsamlegast settu notendanafn inn í stillingunum!"
+msgstr ""
 
 #: win32/HubFrame.cpp:523
 msgid "Please enter a password"
-msgstr "Vinsamlegast tilgreindu lykilorð"
+msgstr ""
 
 #: win32/HashProgressDlg.cpp:44
 msgid ""
@@ -1825,12 +1751,11 @@ msgstr ""
 
 #: win32/NetworkPage.cpp:71
 msgid "Port"
-msgstr "Port"
+msgstr ""
 
 #: win32/NetworkPage.cpp:65
-#, fuzzy
 msgid "Ports"
-msgstr "Port"
+msgstr ""
 
 #: win32/HubFrame.cpp:847
 #, boost-format
@@ -1839,7 +1764,7 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:42
 msgid "Priority"
-msgstr "Forgangur"
+msgstr ""
 
 #: win32/CertificatesPage.cpp:43
 msgid "Private key file"
@@ -1857,19 +1782,19 @@ msgstr ""
 #: win32/WindowsPage.cpp:44 win32/MainWindow.cpp:287
 #: win32/PublicHubsFrame.cpp:93
 msgid "Public Hubs"
-msgstr "Listi tengipunkta"
+msgstr ""
 
 #: win32/DownloadPage.cpp:61
 msgid "Public Hubs list"
-msgstr "Höbbalisti"
+msgstr ""
 
 #: win32/DownloadPage.cpp:62
 msgid "Public Hubs list URL"
-msgstr "Vefslóð lista tengipunkta"
+msgstr ""
 
 #: win32/SearchFrame.cpp:156
 msgid "Purge"
-msgstr "Hreinsa"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:94
 msgid "Queue"
@@ -1881,11 +1806,11 @@ msgstr ""
 
 #: win32/MainWindow.cpp:392
 msgid "Quick Connect"
-msgstr "Beintenging"
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:60
 msgid "Rating"
-msgstr "Einkunn"
+msgstr ""
 
 #: win32/AboutDlg.cpp:69
 #, c-format, boost-format
@@ -1894,33 +1819,32 @@ msgstr ""
 
 #: win32/CommandDlg.cpp:107
 msgid "Raw"
-msgstr "Raw"
+msgstr ""
 
 #: win32/QueueFrame.cpp:1012
 msgid "Re-add source"
-msgstr "Les uppruna"
+msgstr ""
 
 #: win32/SearchFrame.cpp:1102
 msgid "Ready to search..."
-msgstr "Tilbúin til að leita..."
+msgstr ""
 
 #: win32/MainWindow.cpp:505
 msgid "Really exit?"
-msgstr "Ertu viss um að þú viljir hætta?"
+msgstr ""
 
 #: win32/QueueFrame.cpp:699 win32/QueueFrame.cpp:704
 #: win32/FavHubsFrame.cpp:237
 msgid "Really remove?"
-msgstr "Viltu virkilega fjarlægja ?"
+msgstr ""
 
 #: win32/MainWindow.cpp:289
-#, fuzzy
 msgid "Reconnect"
-msgstr "Tengdur"
+msgstr ""
 
 #: win32/HubFrame.cpp:840 win32/HubFrame.cpp:1396
 msgid "Redirect request received to a hub that's already connected"
-msgstr "Beiðni um áframsendingu á höbb sem þú ert þegar tengd/ur"
+msgstr ""
 
 #: win32/MainWindow.cpp:201
 msgid "Refresh file list\tCtrl+E"
@@ -1929,16 +1853,14 @@ msgstr ""
 #: win32/AdvancedPage.cpp:32
 msgid "Register with Windows to handle dchub:// and adc:// URL links"
 msgstr ""
-"Setur upp URL viðbót við ræsingu (til að opna dchub:// og adc:// tengla)"
 
 #: win32/AdvancedPage.cpp:33
 msgid "Register with Windows to handle magnet: URI links"
 msgstr ""
-"Skrá DC til að sja um TTH auðkenndar slóðir og leita að skrám með slóðina"
 
 #: win32/PublicHubsFrame.cpp:59
 msgid "Reliability"
-msgstr "Tengdur neti"
+msgstr ""
 
 #: win32/QueueFrame.cpp:490 win32/TransferView.cpp:677
 msgid "Remote client does not fully support TTH - cannot download"
@@ -1955,23 +1877,23 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:1022
 msgid "Remove source"
-msgstr "Fjarlægja uppruna"
+msgstr ""
 
 #: win32/QueueFrame.cpp:1031 win32/WinUtil.cpp:1145 win32/UserInfoBase.h:106
 msgid "Remove user from queue"
-msgstr "Fjarlægja notanda frá biðlista"
+msgstr ""
 
 #: win32/UploadPage.cpp:60 win32/FavoriteDirsPage.cpp:42
 msgid "Rename"
-msgstr "Endurskýra"
+msgstr ""
 
 #: win32/MainWindow.cpp:258
 msgid "Report a bug"
-msgstr "Tilkynna villu"
+msgstr ""
 
 #: win32/MainWindow.cpp:257
 msgid "Request a feature"
-msgstr "Biðja um eiginleika"
+msgstr ""
 
 #: win32/TransferView.cpp:719
 #, boost-format
@@ -1980,64 +1902,63 @@ msgstr ""
 
 #: win32/HashProgressDlg.cpp:51
 msgid "Run in background"
-msgstr "Keyra í bakrunni"
+msgstr ""
 
 #: win32/QueueFrame.cpp:442
 msgid "Running..."
-msgstr "Í gangi..."
+msgstr ""
 
 #: win32/NetworkPage.cpp:64
 msgid "SOCKS5"
-msgstr "SOCKS5"
+msgstr ""
 
 #: win32/TabsPage.cpp:35 win32/MainWindow.cpp:300 win32/SearchFrame.cpp:90
 #: win32/SearchFrame.cpp:162
 msgid "Search"
-msgstr "Leit"
+msgstr ""
 
 #: win32/SearchFrame.cpp:1068 win32/SearchFrame.cpp:1083
 #: win32/SearchFrame.cpp:1098
-#, fuzzy, boost-format
+#, boost-format
 msgid "Search - %1%"
-msgstr "Leit"
+msgstr ""
 
 #: win32/SearchFrame.cpp:1103
-#, fuzzy
 msgid "Search - Ready to search..."
-msgstr "Tilbúin til að leita..."
+msgstr ""
 
 #: win32/CommandDlg.cpp:125
 msgid "Search Menu"
-msgstr "Leit"
+msgstr ""
 
 #: win32/WindowsPage.cpp:41 win32/MainWindow.cpp:224 win32/MainWindow.cpp:302
 #: win32/SpyFrame.cpp:42
 msgid "Search Spy"
-msgstr "Leitarspæjari"
+msgstr ""
 
 #: win32/SpyFrame.cpp:36 win32/ADLSProperties.cpp:75
 msgid "Search String"
-msgstr "Leitarstrengur"
+msgstr ""
 
 #: win32/SearchFrame.cpp:122
 msgid "Search for"
-msgstr "Leita að"
+msgstr ""
 
 #: win32/WinUtil.cpp:390
 msgid "Search for alternates"
-msgstr "Leita að eins skrám"
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:801 win32/DirectoryListingFrame.cpp:866
 msgid "Search for file"
-msgstr "Leita að skrá"
+msgstr ""
 
 #: win32/Advanced3Page.cpp:78
 msgid "Search history"
-msgstr "Skrá leitarniðurstöður"
+msgstr ""
 
 #: win32/SearchFrame.cpp:134
 msgid "Search options"
-msgstr "Leitarmöguleikar"
+msgstr ""
 
 #: win32/HubFrame.cpp:896
 #, boost-format
@@ -2045,9 +1966,9 @@ msgid "Search spam detected from %1%"
 msgstr ""
 
 #: win32/SearchFrame.cpp:1062
-#, fuzzy, boost-format
+#, boost-format
 msgid "Searching for %1%..."
-msgstr "Leita að"
+msgstr ""
 
 #: win32/SearchFrame.cpp:1077 win32/SearchFrame.cpp:1096
 #, boost-format
@@ -2070,19 +1991,19 @@ msgstr ""
 
 #: win32/CommandDlg.cpp:141
 msgid "Send once per nick"
-msgstr "Senda einu sinni á hvert notendanafn"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:41
 msgid "Send unknown /commands to the hub"
-msgstr "Senda óþekktar /skipanir til tengipunktarinns"
+msgstr ""
 
 #: win32/UCPage.cpp:136 win32/UCPage.cpp:194 win32/CommandDlg.cpp:103
 msgid "Separator"
-msgstr "Separator"
+msgstr ""
 
 #: win32/FavHubsFrame.cpp:36
 msgid "Server"
-msgstr "Þjónn"
+msgstr ""
 
 #: win32/QueuePage.cpp:104
 msgid "Set lowest prio for newly added files larger than Low prio size"
@@ -2090,44 +2011,44 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:987
 msgid "Set priority"
-msgstr "Setja forgang"
+msgstr ""
 
 #: win32/AppearancePage.cpp:44
 msgid "Set timestamps"
-msgstr "Tegund tímastimpla"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:68 win32/SettingsDialog.cpp:155
 #: win32/MainWindow.cpp:306
 msgid "Settings"
-msgstr "Stillingar"
+msgstr ""
 
 #: win32/MainWindow.cpp:205 win32/MainWindow.cpp:1025
 msgid "Settings..."
-msgstr "Stillingar..."
+msgstr ""
 
 #: win32/UploadPage.cpp:57
 msgid "Share hidden files"
-msgstr "Deila földum skrám"
+msgstr ""
 
 #: win32/HubFrame.cpp:38 win32/PublicHubsFrame.cpp:54
 msgid "Shared"
-msgstr "Deiling"
+msgstr ""
 
 #: win32/UploadPage.cpp:55
 msgid "Shared directories"
-msgstr "Deildar möppur"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:97
 msgid "Sharing"
-msgstr "Deiling"
+msgstr ""
 
 #: win32/MainWindow.cpp:1022
 msgid "Show"
-msgstr "Sýna"
+msgstr ""
 
 #: win32/AppearancePage.cpp:62
 msgid "Show joins / parts in chat by default"
-msgstr "Virkja tengist / aftengist í spjalli sjálfvirkt"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:45
 msgid "Show shell menu where possible"
@@ -2135,13 +2056,13 @@ msgstr ""
 
 #: win32/AppearancePage.cpp:60
 msgid "Show timestamps in chat by default"
-msgstr "Sýnir tímastimpla í spjalli"
+msgstr ""
 
 #: win32/UploadPage.cpp:89 win32/QueueFrame.cpp:40
 #: win32/DirectoryListingFrame.cpp:43 win32/SearchFrame.cpp:37
 #: win32/SearchFrame.cpp:126 win32/TransferView.cpp:60
 msgid "Size"
-msgstr "Stærð"
+msgstr ""
 
 #: win32/ADLSProperties.cpp:79
 msgid "Size Type"
@@ -2149,25 +2070,25 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:291 win32/QueueFrame.cpp:295
 #: win32/DirectoryListingFrame.cpp:641 win32/DirectoryListingFrame.cpp:658
-#, fuzzy, boost-format
+#, boost-format
 msgid "Size: %1%"
-msgstr "Stærð"
+msgstr ""
 
 #: win32/QueuePage.cpp:110
 msgid "Skip zero-byte files"
-msgstr "Sleppa tómum skrám"
+msgstr ""
 
 #: win32/PrivateFrame.cpp:294
 msgid "Slot granted"
-msgstr "Hleðsluhólf gefið"
+msgstr ""
 
 #: win32/SearchFrame.cpp:39
 msgid "Slots"
-msgstr "Hleðsluhólf"
+msgstr ""
 
 #: win32/WinUtil.cpp:266
 msgid "Slots set"
-msgstr "Hleðsluhólf stillt"
+msgstr ""
 
 #: win32/MainWindow.cpp:598
 #, boost-format
@@ -2184,25 +2105,23 @@ msgstr ""
 
 #: win32/NetworkPage.cpp:70
 msgid "Socks IP"
-msgstr "IP vistfang Socks þjóns"
+msgstr ""
 
 #: win32/AppearancePage.cpp:57
-#, fuzzy
 msgid "Sort all downloads first"
-msgstr "Engir notendur til að sækja frá"
+msgstr ""
 
 #: win32/AppearancePage.cpp:64
-#, fuzzy
 msgid "Sort favorite users first"
-msgstr "Tengist/aftengist skilaboð virk"
+msgstr ""
 
 #: win32/Appearance2Page.cpp:49
 msgid "Sounds"
-msgstr "Hljóð"
+msgstr ""
 
 #: win32/ADLSearchFrame.cpp:33 win32/ADLSProperties.cpp:76
 msgid "Source Type"
-msgstr "Flokkur"
+msgstr ""
 
 #: win32/QueueFrame.cpp:488
 msgid "Source too slow"
@@ -2214,16 +2133,16 @@ msgstr ""
 
 #: win32/WinUtil.cpp:275 win32/WinUtil.cpp:296 win32/WinUtil.cpp:302
 msgid "Specify a search string"
-msgstr "Setja inn leitarstreng"
+msgstr ""
 
 #: win32/HubFrame.cpp:309
 msgid "Specify a server to connect to"
-msgstr "sjálfvelja þjón sem á að tengjast"
+msgstr ""
 
 #: win32/TransferView.cpp:45 win32/TransferView.cpp:58
 #: win32/FinishedFrameBase.h:673 win32/FinishedFrameBase.h:703
 msgid "Speed"
-msgstr "Hraði"
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:642
 #, boost-format
@@ -2232,7 +2151,7 @@ msgstr ""
 
 #: win32/MagnetDlg.cpp:57
 msgid "Start a search for this file"
-msgstr "Byrja leit fyrir þessa skrá"
+msgstr ""
 
 #: win32/HashProgressDlg.cpp:45
 msgid "Statistics"
@@ -2240,11 +2159,11 @@ msgstr ""
 
 #: win32/QueueFrame.cpp:39 win32/TransferView.cpp:44 win32/TransferView.cpp:56
 msgid "Status"
-msgstr "Staða"
+msgstr ""
 
 #: win32/HubFrame.cpp:515
 msgid "Stored password sent..."
-msgstr "Lykilorð sent..."
+msgstr ""
 
 #: win32/DirectoryListingFrame.cpp:162 win32/DirectoryListingFrame.cpp:186
 msgid "Subtract list"
@@ -2257,7 +2176,7 @@ msgstr ""
 
 #: win32/NetworkPage.cpp:67
 msgid "TCP"
-msgstr "TCP Port"
+msgstr ""
 
 #: win32/NetworkPage.cpp:69
 msgid "TLS"
@@ -2270,7 +2189,7 @@ msgstr ""
 #: win32/QueueFrame.cpp:48 win32/DirectoryListingFrame.cpp:44
 #: win32/SearchFrame.cpp:44
 msgid "TTH Root"
-msgstr "TTH Rót"
+msgstr ""
 
 #: win32/AboutDlg.cpp:63
 msgid "TTH:"
@@ -2291,7 +2210,7 @@ msgstr ""
 
 #: win32/HubFrame.cpp:40
 msgid "Tag"
-msgstr "Tag"
+msgstr ""
 
 #: win32/CommandDlg.cpp:100
 msgid "Text sent to hub"
@@ -2308,23 +2227,23 @@ msgstr ""
 #: win32/SpyFrame.cpp:38 win32/FinishedFrameBase.h:675
 #: win32/FinishedFrameBase.h:705
 msgid "Time"
-msgstr "Tími"
+msgstr ""
 
 #: win32/UsersFrame.cpp:32
 msgid "Time last seen"
-msgstr "Sást seinast"
+msgstr ""
 
 #: win32/TransferView.cpp:57
 msgid "Time left"
-msgstr "Tími eftir"
+msgstr ""
 
 #: win32/HubFrame.cpp:318
 msgid "Timestamps disabled"
-msgstr "Tímastimplar gerðir óvirkir"
+msgstr ""
 
 #: win32/HubFrame.cpp:316
 msgid "Timestamps enabled"
-msgstr "Tímastimplar virkjaðir"
+msgstr ""
 
 #: win32/CommandDlg.cpp:99
 msgid "To"
@@ -2332,11 +2251,11 @@ msgstr ""
 
 #: win32/WindowsPage.cpp:58
 msgid "Toggle window when selecting an active tab"
-msgstr "Toggle window when selecting an active tab"
+msgstr ""
 
 #: win32/UploadPage.cpp:56
 msgid "Total size:"
-msgstr "Stærð samtals"
+msgstr ""
 
 #: win32/SpyFrame.cpp:160
 #, boost-format
@@ -2362,7 +2281,7 @@ msgstr ""
 #: win32/QueueFrame.cpp:49 win32/DirectoryListingFrame.cpp:41
 #: win32/SearchFrame.cpp:36
 msgid "Type"
-msgstr "Gerð"
+msgstr ""
 
 #: win32/MainWindow.cpp:600
 #, boost-format
@@ -2376,11 +2295,11 @@ msgstr ""
 
 #: win32/NetworkPage.cpp:68
 msgid "UDP"
-msgstr "UDP Port"
+msgstr ""
 
 #: win32/WinUtil.cpp:826
 msgid "URL:MAGNET URI"
-msgstr "URL:MAGNET URI"
+msgstr ""
 
 #: win32/MainWindow.cpp:657
 msgid ""
@@ -2401,15 +2320,15 @@ msgstr ""
 
 #: win32/FavoriteDirsPage.cpp:131 win32/FavoriteDirsPage.cpp:162
 msgid "Under what name you see the directory"
-msgstr "Nafn uppáhalds möppu"
+msgstr ""
 
 #: win32/DownloadPage.cpp:55
 msgid "Unfinished downloads directory"
-msgstr "Mappa fyrir ókláruð niðurhöl  (tómt = niðurhleður beint á stað)"
+msgstr ""
 
 #: win32/QueueFrame.cpp:446 win32/QueueFrame.cpp:447
 msgid "Unknown"
-msgstr "Óþekkt"
+msgstr ""
 
 #: win32/HubFrame.cpp:388
 #, boost-format
@@ -2418,7 +2337,7 @@ msgstr ""
 
 #: win32/UploadPage.cpp:63
 msgid "Upload slots"
-msgstr "Upphleðsluhólf"
+msgstr ""
 
 #: win32/AboutDlg.cpp:62
 #, boost-format
@@ -2426,17 +2345,17 @@ msgid "Upload: %1%, Download: %2%"
 msgstr ""
 
 #: win32/TransferView.cpp:825
-#, fuzzy, boost-format
+#, boost-format
 msgid "Uploading %1%"
-msgstr "Upphleðsla"
+msgstr ""
 
 #: win32/Appearance2Page.cpp:48
 msgid "Uploads"
-msgstr "Upphleðsla"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:43
 msgid "Use CTRL for line history"
-msgstr "Use CTRL for line history"
+msgstr ""
 
 #: win32/AdvancedPage.cpp:47
 msgid "Use Coral network when downloading hub lists (improves reliability)"
@@ -2444,11 +2363,11 @@ msgstr ""
 
 #: win32/AppearancePage.cpp:66
 msgid "Use OEM monospaced font for viewing text files"
-msgstr "Notar OEM monospaced stafastærð til að skoða textaskjöl"
+msgstr ""
 
 #: win32/NetworkPage.cpp:74
 msgid "Use SOCKS5 server to resolve host names"
-msgstr "Nota SOCKS5 þjón til að finna slóð"
+msgstr ""
 
 #: win32/CertificatesPage.cpp:60
 msgid "Use TLS when remote client supports it"
@@ -2460,69 +2379,67 @@ msgstr ""
 
 #: win32/AppearancePage.cpp:65
 msgid "Use system icons when browsing files (slows browsing down a bit)"
-msgstr "Nota skráartákn þegar verið er að skoða skrár (hægir á skoðun)"
+msgstr ""
 
 #: win32/SearchFrame.cpp:35 win32/TransferView.cpp:42
 msgid "User"
-msgstr "Notandi"
+msgstr ""
 
 #: win32/SettingsDialog.cpp:110
-#, fuzzy
 msgid "User Commands"
-msgstr "Skipun"
+msgstr ""
 
 #: win32/FavHubsFrame.cpp:37
 msgid "User Description"
-msgstr "Lýsing notanda"
+msgstr ""
 
 #: win32/CommandDlg.cpp:122
 msgid "User Menu"
-msgstr "Notendalisti"
+msgstr ""
 
 #: win32/QueueFrame.cpp:436 win32/DirectoryListingFrame.cpp:704
 msgid "User offline"
-msgstr "Notandi ekki tengdur"
+msgstr ""
 
 #: win32/PrivateFrame.cpp:317
 msgid "User went offline"
-msgstr "Notandinn aftengdist"
+msgstr ""
 
 #: win32/QueueFrame.cpp:43 win32/PublicHubsFrame.cpp:51
 msgid "Users"
-msgstr "Notendur"
+msgstr ""
 
 #: win32/PublicHubsFrame.cpp:282
-#, fuzzy, boost-format
+#, boost-format
 msgid "Users: %1%"
-msgstr "Notendur"
+msgstr ""
 
 #: win32/SearchFrame.cpp:209
 msgid "Video"
-msgstr "Video"
+msgstr ""
 
 #: win32/AppearancePage.cpp:61
 msgid "View status messages in main chat"
-msgstr "Sýnir stöðu í spjalli"
+msgstr ""
 
 #: win32/UploadPage.cpp:87 win32/UploadPage.cpp:216 win32/UploadPage.cpp:262
 msgid "Virtual name"
-msgstr "Stafrænt nafn"
+msgstr ""
 
 #: win32/QueueFrame.cpp:430
-#, fuzzy, boost-format
+#, boost-format
 msgid "Waiting (%1% of %2% users online)"
-msgstr "Bíð (Notandi tengdur)"
+msgstr ""
 
 #: win32/QueueFrame.cpp:428
 msgid "Waiting (User online)"
-msgstr "Bíð (Notandi tengdur)"
+msgstr ""
 
 #: win32/TabsPage.cpp:39 win32/WindowsPage.cpp:39
 #: win32/WaitingUsersFrame.cpp:33 win32/MainWindow.cpp:219
 #: win32/MainWindow.cpp:297
-#, fuzzy
 msgid "Waiting Users"
-msgstr "Bíð (Notandi tengdur)"
+msgstr ""
 
 #: win32/TransferView.cpp:643
 msgid "Waiting for slot"
@@ -2537,9 +2454,8 @@ msgid "What's This?"
 msgstr ""
 
 #: win32/Appearance2Page.cpp:59
-#, fuzzy
 msgid "When a private message window is opened"
-msgstr "Spila hljóð í hvert skipti sem einka skilaboðs gluggi er opnaður"
+msgstr ""
 
 #: win32/WindowsPage.cpp:29
 msgid "Window options"
@@ -2551,7 +2467,7 @@ msgstr ""
 
 #: win32/Advanced3Page.cpp:75
 msgid "Write buffer size"
-msgstr "minkun skrifstærðar"
+msgstr ""
 
 #: win32/FinishedFrameBase.h:262
 msgid "Yes"
@@ -2559,7 +2475,7 @@ msgstr ""
 
 #: win32/HubFrame.cpp:892
 msgid "Your nick was already taken, please change to something else!"
-msgstr "Notendanafnið þitt er þegar í notkun, vinsamlegast breyttu því"
+msgstr ""
 
 #: win32/MainWindow.cpp:149
 msgid ""
@@ -2576,44 +2492,3 @@ msgstr ""
 #: win32/QueuePage.cpp:77 win32/QueuePage.cpp:79 win32/QueuePage.cpp:81
 msgid "s"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Advanced\\Logs"
-#~ msgstr "Meira"
-
-#, fuzzy
-#~ msgid "Appearance\\Tabs"
-#~ msgstr "Útlit"
-
-#, fuzzy
-#~ msgid "Appearance\\Windows"
-#~ msgstr "Útlit"
-
-#~ msgid "Create / Modify Command"
-#~ msgstr "Viðbótarskipanir notenda"
-
-#, fuzzy
-#~ msgid "Downloads\\Favorites"
-#~ msgstr "Sækja samsvörun"
-
-#, fuzzy
-#~ msgid "Downloads\\Queue"
-#~ msgstr "Bið niðurhleðslu"
-
-#~ msgid "Language file"
-#~ msgstr "Þýðingar skrá"
-
-#~ msgid "Make an annoying sound every time a private message is received"
-#~ msgstr "Spila hljóð í hvert skipti sem einka skilaboð eru mótekin"
-
-#~ msgid "Make an annoying sound when a private message window is opened"
-#~ msgstr "Spila hljóð í hvert skipti sem einka skilaboðs gluggi er opnaður"
-
-#~ msgid "Show progress bars for transfers"
-#~ msgstr "Sýna súlurit fyrir hleðslur (notar smá af örgjafanum)"
-
-#~ msgid "Use antifragmentation method for downloads"
-#~ msgstr "Setur niðurhlaðnar skrár á einn stað á drifinu"
-
-#~ msgid "Choose folder"
-#~ msgstr "Velja möppu"

@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-04-23 17:22+0200\n"
+"POT-Creation-Date: 2008-06-20 23:05+0200\n"
 "PO-Revision-Date: 2008-03-13 23:13+0000\n"
 "Last-Translator: Jacek Sieka <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-04-23 11:12+0000\n"
+"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:381
+#: dcpp/Util.cpp:387
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr ""
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:349
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr ""
 
-#: dcpp/Util.cpp:339
+#: dcpp/Util.cpp:345
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr ""
 
-#: dcpp/Util.cpp:341
+#: dcpp/Util.cpp:347
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr ""
 
-#: dcpp/Util.cpp:347
+#: dcpp/Util.cpp:353
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr ""
 
-#: dcpp/Util.cpp:345
+#: dcpp/Util.cpp:351
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr ""
@@ -63,7 +63,7 @@ msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr ""
 
-#: dcpp/QueueManager.cpp:332
+#: dcpp/QueueManager.cpp:333
 #, boost-format
 msgid "%1% renamed to %2%"
 msgstr ""
@@ -83,29 +83,29 @@ msgstr ""
 msgid "%1%: File not available"
 msgstr "檔案無法取得"
 
-#: dcpp/Util.cpp:337
+#: dcpp/Util.cpp:343
 #, c-format, boost-format
 msgid "%d B"
 msgstr ""
 
-#: dcpp/Util.cpp:377
+#: dcpp/Util.cpp:383
 #, c-format, boost-format
 msgid "%s B"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:534
+#: dcpp/QueueManager.cpp:535
 msgid "A file of equal or larger size already exists at the target location"
 msgstr "存在更大目標檔案"
 
-#: dcpp/QueueManager.cpp:477
+#: dcpp/QueueManager.cpp:478
 msgid "A file with a different size already exists in the queue"
 msgstr "擁有不同大小的檔案"
 
-#: dcpp/QueueManager.cpp:480
+#: dcpp/QueueManager.cpp:481
 msgid "A file with different tth root already exists in the queue"
 msgstr "擁有不同TTH值的檔案"
 
-#: dcpp/QueueManager.cpp:449
+#: dcpp/QueueManager.cpp:450
 #, fuzzy
 msgid "A file with the same hash already exists in your share"
 msgstr "擁有不同大小的檔案"
@@ -137,12 +137,12 @@ msgstr "連線逾時"
 msgid "Connection timeout"
 msgstr "連線逾時"
 
-#: dcpp/DownloadManager.cpp:232
+#: dcpp/DownloadManager.cpp:231
 #, boost-format
 msgid "Could not open target file: %1%"
 msgstr ""
 
-#: dcpp/ShareManager.cpp:422
+#: dcpp/ShareManager.cpp:427
 msgid "Directory already shared"
 msgstr "已分享資料夾"
 
@@ -150,7 +150,7 @@ msgstr "已分享資料夾"
 msgid "Discard"
 msgstr ""
 
-#: dcpp/BufferedSocket.cpp:404
+#: dcpp/BufferedSocket.cpp:405
 msgid "Disconnected"
 msgstr "失去連線"
 
@@ -159,18 +159,18 @@ msgstr "失去連線"
 msgid "Disconnected user leaving the hub: %1%"
 msgstr ""
 
-#: dcpp/DCPlusPlus.cpp:107
+#: dcpp/DCPlusPlus.cpp:111
 msgid "Download Queue"
 msgstr "下載排隊佇列"
 
-#: dcpp/ShareManager.cpp:802
+#: dcpp/ShareManager.cpp:805
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1%%2% (Size: %3% B) Dupe matched "
 "against: %4%%5%"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:547 dcpp/QueueManager.cpp:551
+#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr ""
@@ -186,8 +186,8 @@ msgid "Error during compression"
 msgstr "壓縮錯誤"
 
 #: dcpp/ZUtils.cpp:100 dcpp/ZUtils.cpp:123 dcpp/BZUtils.cpp:72
-#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:342
-#: dcpp/CryptoManager.cpp:361 dcpp/CryptoManager.cpp:375
+#: dcpp/BZUtils.cpp:94 dcpp/BZUtils.cpp:97 dcpp/CryptoManager.cpp:343
+#: dcpp/CryptoManager.cpp:362 dcpp/CryptoManager.cpp:376
 msgid "Error during decompression"
 msgstr "解壓錯誤"
 
@@ -201,13 +201,13 @@ msgstr ""
 msgid "Error saving hash data: %1%"
 msgstr ""
 
-#: dcpp/CryptoManager.cpp:226 dcpp/CryptoManager.cpp:230
-#: dcpp/CryptoManager.cpp:235 dcpp/CryptoManager.cpp:239
+#: dcpp/CryptoManager.cpp:227 dcpp/CryptoManager.cpp:231
+#: dcpp/CryptoManager.cpp:236 dcpp/CryptoManager.cpp:240
 msgid "Failed to load certificate file"
 msgstr ""
 
-#: dcpp/CryptoManager.cpp:244 dcpp/CryptoManager.cpp:248
-#: dcpp/CryptoManager.cpp:253 dcpp/CryptoManager.cpp:257
+#: dcpp/CryptoManager.cpp:245 dcpp/CryptoManager.cpp:249
+#: dcpp/CryptoManager.cpp:254 dcpp/CryptoManager.cpp:258
 msgid "Failed to load private key"
 msgstr ""
 
@@ -221,27 +221,27 @@ msgid ""
 "port)"
 msgstr "Socket安裝失敗"
 
-#: dcpp/ShareManager.cpp:837
+#: dcpp/ShareManager.cpp:840
 #, fuzzy, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "檔案列表刷新中"
 
-#: dcpp/ShareManager.cpp:882
+#: dcpp/ShareManager.cpp:885
 #, fuzzy
 msgid "File list refresh finished"
 msgstr "檔案列表刷新中"
 
-#: dcpp/ShareManager.cpp:817
+#: dcpp/ShareManager.cpp:820
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
 msgstr ""
 
-#: dcpp/ShareManager.cpp:858
+#: dcpp/ShareManager.cpp:861
 msgid "File list refresh initiated"
 msgstr "檔案列表刷新中"
 
-#: dcpp/DirectoryListing.cpp:102
+#: dcpp/DirectoryListing.cpp:101
 msgid "File not available"
 msgstr "檔案無法取得"
 
@@ -259,11 +259,11 @@ msgstr ""
 msgid "Full tree does not match TTH root"
 msgstr ""
 
-#: dcpp/CryptoManager.cpp:219
+#: dcpp/CryptoManager.cpp:220
 msgid "Generated new TLS certificate"
 msgstr ""
 
-#: dcpp/DCPlusPlus.cpp:101
+#: dcpp/DCPlusPlus.cpp:105
 msgid "Hash database"
 msgstr "細切值資料庫"
 
@@ -282,11 +282,11 @@ msgid ""
 "upgrade"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:220
+#: dcpp/DownloadManager.cpp:219
 msgid "Invalid size"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:517 dcpp/QueueManager.cpp:525
+#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -305,11 +305,11 @@ msgstr ""
 msgid "Maximum command length exceeded"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:282
-msgid "More data was sent than was expected"
+#: dcpp/Streams.h:140
+msgid "More bytes written than requested"
 msgstr ""
 
-#: dcpp/ShareManager.cpp:409
+#: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "無特定資料夾"
 
@@ -322,9 +322,9 @@ msgstr "無可使用通路"
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
 
-#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:115
-#: dcpp/SearchManager.cpp:267 dcpp/SearchManager.cpp:329
-#: dcpp/SearchManager.cpp:331
+#: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
+#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
+#: dcpp/SearchManager.cpp:274
 msgid "Offline"
 msgstr "離線"
 
@@ -332,7 +332,7 @@ msgstr "離線"
 msgid "Redirect user(s)"
 msgstr "將使用者轉址"
 
-#: dcpp/ShareManager.cpp:425
+#: dcpp/ShareManager.cpp:430
 msgid "Remove all subdirectories before adding this one"
 msgstr "移除所有子資料夾"
 
@@ -340,11 +340,11 @@ msgstr "移除所有子資料夾"
 msgid "Request to seek beyond the end of data"
 msgstr ""
 
-#: dcpp/DownloadManager.cpp:225
+#: dcpp/DownloadManager.cpp:224
 msgid "Response does not match request"
 msgstr ""
 
-#: dcpp/DCPlusPlus.cpp:104
+#: dcpp/DCPlusPlus.cpp:108
 msgid "Shared Files"
 msgstr "已分享檔案"
 
@@ -352,12 +352,12 @@ msgstr "已分享檔案"
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr "Socket授權失敗"
 
-#: dcpp/CryptoManager.cpp:221
+#: dcpp/CryptoManager.cpp:222
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr ""
 
-#: dcpp/CryptoManager.cpp:211
+#: dcpp/CryptoManager.cpp:212
 msgid "TLS disabled, no certificate file set"
 msgstr ""
 
@@ -365,11 +365,11 @@ msgstr ""
 msgid "TTH inconsistency"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:512 dcpp/QueueManager.cpp:521
+#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
 msgid "Target filename too long"
 msgstr "目標檔案名稱太長"
 
-#: dcpp/QueueManager.cpp:800
+#: dcpp/QueueManager.cpp:824
 msgid "Target removed"
 msgstr ""
 
@@ -386,11 +386,11 @@ msgstr "Socket失敗"
 msgid "The socks server requires authentication"
 msgstr "Socket需要授權"
 
-#: dcpp/ShareManager.cpp:413
+#: dcpp/ShareManager.cpp:418
 msgid "The temporary download directory cannot be shared"
 msgstr "請勿分享暫存資料夾"
 
-#: dcpp/QueueManager.cpp:469
+#: dcpp/QueueManager.cpp:470
 msgid "This file is already queued"
 msgstr ""
 
@@ -398,7 +398,7 @@ msgstr ""
 msgid "Unable to create thread"
 msgstr "無法開啟話題"
 
-#: dcpp/QueueManager.cpp:1002
+#: dcpp/QueueManager.cpp:1021
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr ""
@@ -408,7 +408,7 @@ msgstr ""
 msgid "Unable to read hash data file"
 msgstr "無法開啟話題"
 
-#: dcpp/QueueManager.cpp:334
+#: dcpp/QueueManager.cpp:335
 #, fuzzy, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "無法開啟話題"
@@ -423,14 +423,14 @@ msgstr ""
 msgid "Unknown error: 0x%1$x"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:419 dcpp/QueueManager.cpp:443
+#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
 msgid "You're trying to download from yourself!"
 msgstr "無法從自己下載"
 
-#: dcpp/SettingsManager.cpp:155
+#: dcpp/SettingsManager.cpp:157
 msgid "downloaded from"
 msgstr ""
 
-#: dcpp/SettingsManager.cpp:156
+#: dcpp/SettingsManager.cpp:158
 msgid "uploaded to"
 msgstr ""
