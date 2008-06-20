@@ -49,7 +49,7 @@ class HttpConnection : BufferedSocketListener, public Speaker<HttpConnectionList
 {
 public:
 	void downloadFile(const string& aUrl);
-	HttpConnection() : ok(false), port(80), size(-1), moved302(false), socket(NULL) { }
+	HttpConnection() : ok(false), port(80), size(-1), moved302(false), coralizeState(ST_DEFAULT), socket(NULL) { }
 	virtual ~HttpConnection() throw() {
 		if(socket) {
 			socket->removeListener(this);
@@ -69,6 +69,9 @@ private:
 	uint16_t port;
 	int64_t size;
 	bool moved302;
+
+	enum CoralizeStates {ST_DEFAULT, ST_CONNECTED, ST_NOCORALIZE};
+	CoralizeStates coralizeState;
 
 	BufferedSocket* socket;
 

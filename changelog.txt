@@ -29,6 +29,7 @@
 * Double-click on status bars to open corresponding log files (poy)
 * The number of filtered items shown in public hubs (emtee)
 * [L#225592] Fix file corruption when partially downloaded file is corrupted (part emtee)
+* [L#239793] Automagically retry if coral fails (thanks emtee)
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
