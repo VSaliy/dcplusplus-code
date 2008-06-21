@@ -104,6 +104,7 @@ SettingsManager::SettingsManager()
 	connectionSpeeds.push_back("20");
 	connectionSpeeds.push_back("50");
 	connectionSpeeds.push_back("100");
+	connectionSpeeds.push_back("1000");
 
 	for(int i=0; i<SETTINGS_LAST; i++)
 		isSet[i] = false;
