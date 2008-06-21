@@ -34,6 +34,7 @@
   Arabic, Norwegian, Dutch, Ukranian, Czech, Spanish, Estonian, Brazilian,
   Hungarian, French, UK English, Romanian, Hebrew, Swedish, Russian,
   Portuguese and Slovenian translations (thanks to the respective translators)
+* [L#228271] Right-click selects user in waiting users
 
 -- 0.706 2008-04-24 --
 * [L#202563] Fixed some missing translations
