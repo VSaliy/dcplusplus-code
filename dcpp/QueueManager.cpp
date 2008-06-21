@@ -758,7 +758,9 @@ Download* QueueManager::getDownload(UserConnection& aSource, bool supportsTrees)
 			if(tempSize != q->getSize()) {
 				if(tempSize > 0 && tempSize < q->getSize()) {
 					// Probably started with <=0.699 or with 0.705 without antifrag enabled...
-					File(q->getTempTarget(), File::WRITE, File::OPEN).setSize(q->getSize()); 
+					try {
+						File(q->getTempTarget(), File::WRITE, File::OPEN).setSize(q->getSize()); 
+					} catch(const FileException&) { }		
 				} else {
 					// Temp target gone?
 					q->resetDownloaded();
