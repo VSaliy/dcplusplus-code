@@ -98,15 +98,17 @@ void AboutDlg::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const 
 
 void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&) throw() {
 	if(!downBuf.empty()) {
-		SimpleXML xml;
-		xml.fromXML(downBuf);
-		if(xml.findChild("DCUpdate")) {
-			xml.stepIn();
-			if(xml.findChild("Version")) {
-				tstring* x = new tstring(Text::toT(xml.getChildData()));
-				speak(SPEAK_VERSIONDATA, reinterpret_cast<LPARAM>(x));
+		try {
+			SimpleXML xml;
+			xml.fromXML(downBuf);
+			if(xml.findChild("DCUpdate")) {
+				xml.stepIn();
+				if(xml.findChild("Version")) {
+					tstring* x = new tstring(Text::toT(xml.getChildData()));
+					speak(SPEAK_VERSIONDATA, reinterpret_cast<LPARAM>(x));
+				}
 			}
-		}
+		} catch(const SimpleXMLException&) { }		
 	}
 	conn->removeListener(this);
 }
