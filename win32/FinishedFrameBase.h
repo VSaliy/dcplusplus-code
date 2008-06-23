@@ -63,7 +63,7 @@ protected:
 		usersWindow(0)
 	{
 		{
-			dwt::TabView::Seed cs;
+			dwt::TabView::Seed cs(0);
 			cs.location = this->getBounds();
 			tabs = this->addChild(cs);
 		}

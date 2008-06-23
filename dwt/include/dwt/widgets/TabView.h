@@ -78,10 +78,11 @@ public:
 
 		FontPtr font;
 
+		unsigned maxLength; // max chars per tab; any value <= 3 means infinite
 		bool toggleActive;
 
 		/// Fills with default parameters
-		Seed(bool toggleActive_ = false);
+		Seed(unsigned maxLength_ = 20, bool toggleActive_ = false);
 	};
 
 	void add(ContainerPtr w, const IconPtr& icon = IconPtr());
@@ -119,8 +120,6 @@ protected:
 	virtual ~TabView() { }
 
 private:
-	enum { MAX_TITLE_LENGTH = 20 };
-
 	struct TabInfo {
 		TabInfo(ContainerPtr w_) : w(w_) { }
 		ContainerPtr w;
@@ -131,6 +130,8 @@ private:
 
 	TitleChangedFunction titleChangedFunction;
 
+	// these can be set through the Seed
+	unsigned maxLength; // max chars per tab; either 0 (infinite) or > 3
 	bool toggleActive;
 
 	bool inTab;
