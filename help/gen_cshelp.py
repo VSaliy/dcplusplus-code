@@ -5,6 +5,9 @@
 def gen_cshelp(target, source, env):
 	from HTMLParser import HTMLParser
 	from htmlentitydefs import entitydefs
+	import re
+
+	spaces = re.compile("\s+")
 
 	# will hold [id, text] pairs
 	output = []
@@ -48,7 +51,7 @@ def gen_cshelp(target, source, env):
 					self.count -= 1
 					if self.count == 0:
 						# reached the end of the current tag
-						output[-1].append(self.text.replace("\r", " ").replace("\n", " ").strip().replace("  ", " "))
+						output[-1].append(spaces.sub(" ", self.text).strip())
 						self.text = ""
 						self.current_tag = ""
 
