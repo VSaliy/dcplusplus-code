@@ -31,6 +31,7 @@ public:
 	virtual void write();
 
 private:
+	static Item items[];
 	static TextItem texts[];
 	static ListItem listItems[];
 

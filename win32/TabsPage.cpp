@@ -23,10 +23,26 @@
 #include "TabsPage.h"
 
 #include <dcpp/SettingsManager.h>
+#include "WinUtil.h"
+
+#include <dwt/widgets/Spinner.h>
+
+static const WinUtil::HelpItem helpItems[] = {
+	{ IDC_SETTINGS_MAX_TAB_CHARS, IDH_SETTINGS_MAX_TAB_CHARS },
+	{ IDC_MAX_TAB_CHARS, IDH_SETTINGS_MAX_TAB_CHARS },
+	{ IDC_MAX_TAB_CHARS_SPIN, IDH_SETTINGS_MAX_TAB_CHARS },
+	{ 0, 0 }
+};
 
 PropPage::TextItem TabsPage::texts[] = {
 	{ IDC_SETTINGS_BOLD_CONTENTS, N_("Tab highlight on content change") },
+	{ IDC_SETTINGS_MAX_TAB_CHARS, N_("Max characters per tab (0 = infinite)") },
 	{ 0, 0 }
+};
+
+PropPage::Item TabsPage::items[] = {
+	{ IDC_MAX_TAB_CHARS, SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN },
+	{ 0, 0, PropPage::T_END }
 };
 
 PropPage::ListItem TabsPage::listItems[] = {
@@ -45,15 +61,20 @@ TabsPage::TabsPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_TABSPAGE);
 	setHelpId(IDH_TABSPAGE);
 
+	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
+	PropPage::read(handle(), items);
 
 	attachChild(options, IDC_BOLD_BOOLEANS);
 	PropPage::read(listItems, options);
+
+	attachChild<Spinner>(IDC_MAX_TAB_CHARS_SPIN)->setRange(0, UD_MAXVAL);
 }
 
 TabsPage::~TabsPage() {
 }
 
 void TabsPage::write() {
+	PropPage::write(handle(), items);
 	PropPage::write(listItems, options);
 }

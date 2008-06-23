@@ -41,10 +41,11 @@
 
 namespace dwt {
 
-TabView::Seed::Seed(bool toggleActive_) :
+TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_) :
 	BaseType::Seed(WC_TABCONTROL, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
 		 TCS_HOTTRACK | TCS_MULTILINE | TCS_RAGGEDRIGHT | TCS_TOOLTIPS | TCS_FOCUSNEVER),
 	font(new Font(DefaultGuiFont)),
+	maxLength(maxLength_),
 	toggleActive(toggleActive_)
 {
 	static bool first = true;
@@ -92,6 +93,9 @@ TabView::TabView(Widget* w) :
 
 void TabView::create(const Seed & cs) {
 	PolicyType::create(cs);
+	maxLength = cs.maxLength;
+	if(maxLength <= 3)
+		maxLength = 0;
 	toggleActive = cs.toggleActive;
 
 	if(cs.font)
@@ -300,8 +304,8 @@ void TabView::handleTextChanging(ContainerPtr w, const tstring& newText) {
 }
 
 tstring TabView::formatTitle(tstring title) {
-	if(title.length() > MAX_TITLE_LENGTH)
-		title = title.substr(0, MAX_TITLE_LENGTH - 3) + _T("...");
+	if(maxLength && title.length() > maxLength)
+		title = title.substr(0, maxLength - 3) + _T("...");
 	return util::escapeMenu(title);
 }
 
