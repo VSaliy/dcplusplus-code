@@ -1,4 +1,5 @@
 * Added setting for max characters per tab (poy)
+* [L#234458] Added "File size" and "% transferred" columns in finished windows (poy)
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice

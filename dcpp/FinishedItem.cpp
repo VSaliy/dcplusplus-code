@@ -55,10 +55,12 @@ FinishedFileItem::FinishedFileItem(
 	int64_t transferred_,
 	int64_t milliSeconds_,
 	time_t time_,
+	int64_t fileSize_,
 	bool crc32Checked_,
 	const UserPtr& user
 	) :
 FinishedItemBase(transferred_, milliSeconds_, time_),
+fileSize(fileSize_),
 crc32Checked(crc32Checked_)
 {
 	users.push_back(user);
@@ -77,6 +79,10 @@ void FinishedFileItem::update(
 		crc32Checked = true;
 	if(find(users.begin(), users.end(), user) == users.end())
 		users.push_back(user);
+}
+
+double FinishedFileItem::getTransferredPercentage() const {
+	return fileSize > 0 ? (getTransferred() * 100. / fileSize) : 0;
 }
 
 FinishedUserItem::FinishedUserItem(

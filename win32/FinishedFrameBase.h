@@ -217,6 +217,8 @@ private:
 		FILES_COLUMN_PATH,
 		FILES_COLUMN_NICKS,
 		FILES_COLUMN_TRANSFERRED,
+		FILES_COLUMN_FILESIZE,
+		FILES_COLUMN_PERCENTAGE,
 		FILES_COLUMN_SPEED,
 		FILES_COLUMN_CRC32,
 		FILES_COLUMN_TIME,
@@ -247,6 +249,8 @@ private:
 		FileInfo(const string& file_, const FinishedFileItemPtr& entry_) : file(file_), entry(entry_) {
 			columns[FILES_COLUMN_FILE] = Text::toT(Util::getFileName(file));
 			columns[FILES_COLUMN_PATH] = Text::toT(Util::getFilePath(file));
+			columns[FILES_COLUMN_FILESIZE] = Text::toT(Util::formatBytes(entry->getFileSize()));
+
 			update();
 		}
 
@@ -258,6 +262,7 @@ private:
 				columns[FILES_COLUMN_NICKS] = Text::toT(Util::toString(nicks));
 			}
 			columns[FILES_COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(entry->getTransferred()));
+			columns[FILES_COLUMN_PERCENTAGE] = Text::toT(Util::toString(entry->getTransferredPercentage()) + '%');
 			columns[FILES_COLUMN_SPEED] = Text::toT(Util::formatBytes(entry->getAverageSpeed()) + "/s");
 			columns[FILES_COLUMN_CRC32] = entry->getCrc32Checked() ? T_("Yes") : T_("No");
 			columns[FILES_COLUMN_TIME] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
@@ -273,6 +278,8 @@ private:
 		static int compareItems(FileInfo* a, FileInfo* b, int col) {
 			switch(col) {
 				case FILES_COLUMN_TRANSFERRED: return compare(a->entry->getTransferred(), b->entry->getTransferred());
+				case FILES_COLUMN_FILESIZE: return compare(a->entry->getFileSize(), b->entry->getFileSize());
+				case FILES_COLUMN_PERCENTAGE: return compare(a->entry->getTransferredPercentage(), b->entry->getTransferredPercentage());
 				case FILES_COLUMN_SPEED: return compare(a->entry->getAverageSpeed(), b->entry->getAverageSpeed());
 				default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
 			}
@@ -648,6 +655,8 @@ int FinishedFrameBase<T, in_UL>::filesIndexes[] = {
 	FILES_COLUMN_PATH,
 	FILES_COLUMN_NICKS,
 	FILES_COLUMN_TRANSFERRED,
+	FILES_COLUMN_FILESIZE,
+	FILES_COLUMN_PERCENTAGE,
 	FILES_COLUMN_SPEED,
 	FILES_COLUMN_CRC32,
 	FILES_COLUMN_TIME
@@ -661,6 +670,8 @@ int FinishedFrameBase<T, in_UL>::filesSizes[] = {
 	100,
 	100,
 	80,
+	100,
+	80,
 	125
 };
 
@@ -670,6 +681,8 @@ const char* FinishedFrameBase<T, in_UL>::filesNames[] = {
 	N_("Path"),
 	N_("Nicks"),
 	N_("Transferred"),
+	N_("File size"),
+	N_("% transferred"),
 	N_("Speed"),
 	N_("CRC Checked"),
 	N_("Time")

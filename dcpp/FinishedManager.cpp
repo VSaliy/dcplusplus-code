@@ -26,6 +26,7 @@
 #include "Download.h"
 #include "Upload.h"
 #include "DownloadManager.h"
+#include "QueueManager.h"
 #include "UploadManager.h"
 
 namespace dcpp {
@@ -130,6 +131,7 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 					t->getPos(),
 					GET_TICK() - t->getStart(),
 					GET_TIME(),
+					upload ? File::getSize(file) : QueueManager::getInstance()->getSize(file),
 					crc32Checked,
 					user
 					);
