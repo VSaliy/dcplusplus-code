@@ -51,6 +51,7 @@ public:
 		int64_t transferred_,
 		int64_t milliSeconds_,
 		time_t time_,
+		int64_t fileSize_,
 		bool crc32Checked_,
 		const UserPtr& user
 		);
@@ -62,6 +63,8 @@ public:
 		bool crc32Checked_,
 		const UserPtr& user
 		);
+
+	double getTransferredPercentage() const;
 
 	GETSET(UserList, users, Users);
 	GETSET(int64_t, fileSize, FileSize);
