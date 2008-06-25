@@ -392,11 +392,6 @@ private:
 
 /** Case insensitive hash function for strings */
 struct noCaseStringHash {
-#ifdef _MSC_VER
-	static const size_t bucket_size = 4;
-	static const size_t min_buckets = 8;
-#endif
-
 	size_t operator()(const string* s) const {
 		return operator()(*s);
 	}

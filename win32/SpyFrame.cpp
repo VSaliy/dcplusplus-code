@@ -28,7 +28,7 @@
 
 int SpyFrame::columnSizes[] = { 305, 70, 85 };
 int SpyFrame::columnIndexes[] = { COLUMN_STRING, COLUMN_COUNT, COLUMN_TIME };
-#ifndef _MSC_VER
+#ifdef __MINGW32__
 const size_t SpyFrame::AVG_TIME; // TODO gcc needs this - why?
 #endif
 
