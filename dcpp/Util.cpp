@@ -127,6 +127,7 @@ void Util::initialize() {
 	if(!File::isAbsolute(configPath)) {
 		configPath = systemPath + configPath;
 	}
+	configPath = Util::validateFileName(configPath);
 
 #if _MSC_VER == 1400
 	_set_invalid_parameter_handler(reinterpret_cast<_invalid_parameter_handler>(invalidParameterHandler));
