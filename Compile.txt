@@ -21,7 +21,7 @@ How to compile in n easy steps:
 
           To compile DC++ in debug mode, OpenSSL libraries have to be compiled in debug mode too
           (read their instructions file; it's a matter of adding "debug" in the do_* file you use).
-          Rename debug libraries to libeary32d.lib and ssleay32d.lib and put them in openssl/lib.
+          Rename debug libraries to libeay32d.lib and ssleay32d.lib; put them in openssl/lib.
 
 Note; If you get errors about a missing file "natupnp.h", you need to download the Platform SDK from MS
 and copy the file to the include directory of your compiler (or add it to the include path...).
