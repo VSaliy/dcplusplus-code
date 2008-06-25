@@ -60,7 +60,7 @@ extern "C" {
 
 /* Version number: (major<<16) + (minor<<8) + subminor */
 #define LIBINTL_VERSION 0x001100
-extern LIBINTL_DLL_EXPORTED __declspec (dllimport) int libintl_version;
+extern LIBINTL_DLL_EXPORTED DLL_VARIABLE int libintl_version;
 
 
 /* We redirect the functions to those prefixed with "libintl_".  This is
