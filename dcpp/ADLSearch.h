@@ -21,12 +21,8 @@
  * Henrik Engstr�m, henrikengstrom at home se
  */
 
-#if !defined(ADL_SEARCH_H)
-#define ADL_SEARCH_H
-
-#if _MSC_VER > 1000
-#pragma once
-#endif
+#ifndef DCPLUSPLUS_DCPP_A_D_L_SEARCH_H
+#define DCPLUSPLUS_DCPP_A_D_L_SEARCH_H
 
 #include "Util.h"
 
@@ -297,4 +293,4 @@ private:
 
 } // namespace dcpp
 
-#endif // !defined(ADL_SEARCH_H)
+#endif // !defined(DCPLUSPLUS_DCPP_A_D_L_SEARCH_H)
