@@ -437,6 +437,14 @@ private:
 		UserList users;
 	};
 
+	struct FileExistenceChecker {
+		FileExistenceChecker() : allFilesExist(true) { }
+		void operator()(FileInfo* data) {
+			allFilesExist &= File::getSize(data->file) != -1;
+		}
+		bool allFilesExist;
+	};
+
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 		if(files->hasSelected()) {
 			if(pt.x() == -1 && pt.y() == -1) {
@@ -479,6 +487,10 @@ private:
 			menu->appendSeparatorItem();
 			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
 			menu->setDefaultItem(IDC_OPEN_FILE);
+
+			bool status = files->forEachSelectedT(FileExistenceChecker()).allFilesExist;
+			menu->setItemEnabled(IDC_VIEW_AS_TEXT, false, status);
+			menu->setItemEnabled(IDC_OPEN_FILE, false, status);
 
 			menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 			return true;
