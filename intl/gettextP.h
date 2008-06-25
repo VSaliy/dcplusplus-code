@@ -114,7 +114,7 @@ extern char *libintl_dcigettext (const char *__domainname,
 # define SWAP(i) bswap_32 (i)
 #else
 static inline nls_uint32
-# ifdef __cplusplus
+# if defined(__cplusplus) || defined(SWAP_NEW_STYLE_DECL)
 SWAP (nls_uint32 i)
 # else
 SWAP (i)

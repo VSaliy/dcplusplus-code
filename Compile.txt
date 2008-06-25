@@ -2,17 +2,26 @@ The most important thing about compiling: It works for me.
 
 How to compile in n easy steps:
 
-1a) Either install Mingw from www.mingw.org. You'll need w32api, binutils, mingw-runtime, gcc-core 
-    and gcc-g++, see their site for installation instructions. I just untar the files into a folder named
-    mingw and add mingw\bin to my path. I've never used the installer, but that maybe
-    works as well. GCC 4.2+ is required (Technology preview release currently). I use the dw2 variant of gcc,
-    but if you want to experiment you can try the potentially slower sjlj. After installing gcc, you will
-    need to go to the bin folder of your mingw installation and copy g++-dw2/sjlj.exe and gcc-dw2/sjlj.exe to g++.exe
-    and gcc.exe respectively.
+1a) With GCC:
+    Install Mingw from www.mingw.org. You'll need w32api, binutils, mingw-runtime, gcc-core and
+    gcc-g++, see their site for installation instructions. I just untar the files into a folder
+    named mingw and add mingw\bin to my path. I've never used the installer, but that maybe works
+    as well. GCC 4.2+ is required (Technology preview release currently). I use the dw2 variant of
+    gcc, but if you want to experiment you can try the potentially slower sjlj. After installing
+    gcc, you will need to go to the bin folder of your mingw installation and copy g++-dw2/sjlj.exe
+    and gcc-dw2/sjlj.exe to g++.exe and gcc.exe respectively.
     Note; Make sure gcc/g++ is in your path and before any cygwin installation.
 
-1b) or install Microsoft Visual C++ 9.0 along with the "Visual C++ 2008 Feature Pack Release" from:
-    http://www.microsoft.com/downloads/details.aspx?FamilyId=D466226B-8DAB-445F-A7B4-448B326C48E7
+1b) Or with Microsoft Visual C++ 9.0 (2008):
+    1b-1) Install the "Visual C++ 2008 Feature Pack Release" from:
+          http://www.microsoft.com/downloads/details.aspx?FamilyId=D466226B-8DAB-445F-A7B4-448B326C48E7
+
+    1b-2) Download OpenSSL from www.openssl.org and compile it. You should get libraries called
+          libeay32.lib and ssleay32.lib; copy them in openssl/lib.
+
+          To compile DC++ in debug mode, OpenSSL libraries have to be compiled in debug mode too
+          (read their instructions file; it's a matter of adding "debug" in the do_* file you use).
+          Rename debug libraries to libeary32d.lib and ssleay32d.lib and put them in openssl/lib.
 
 Note; If you get errors about a missing file "natupnp.h", you need to download the Platform SDK from MS
 and copy the file to the include directory of your compiler (or add it to the include path...).
@@ -49,7 +58,7 @@ and copy the file to the include directory of your compiler (or add it to the in
 Note; If you have problems, use google. It works for me.
 
 Note; DC++ requires tr1 containers to be compiled. Those are already provided when using MinGW;
-however, MSVC doesn't include them by default. Hence, you need that feature pack mentioned in 1b)
+however, MSVC doesn't include them by default. Hence, you need that feature pack mentioned in 1b-1)
 in order to get tr1 containers in MSVC 9. Other ways of getting tr1 containers are using boost or
 STLPort (make sure to turn off nativestl (see "scons -h") and compile/install STLPort in the
 stlport directory), but in these cases you will probably encounter compile problems.

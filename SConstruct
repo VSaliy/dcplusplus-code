@@ -43,7 +43,7 @@ gcc_link_flags = {
 }
 
 msvc_link_flags = {
-	'common' : ['/DEBUG', '/FIXED:NO', '/INCREMENTAL:NO', '/SUBSYSTEM:WINDOWS', '/NODEFAULTLIB:libcmt', '/MANIFEST:NO'],
+	'common' : ['/DEBUG', '/FIXED:NO', '/INCREMENTAL:NO', '/SUBSYSTEM:WINDOWS', '/MANIFEST:NO'],
 	'debug' : [],
 	'release' : []
 }

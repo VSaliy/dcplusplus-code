@@ -14,9 +14,16 @@ elif 'gcc' in env['TOOLS'] and env['gch']:
 res = env.RES(dev.get_sources(source_path, '*.rc'))
 env.Depends(res, 'resource.h')
 
-env.Prepend(LIBS=["ssl", "crypto", "comctl32", "ws2_32", "ole32", "gdi32", "comdlg32", "winmm", "shlwapi", "htmlhelp", "oleaut32", "uuid"])
+if env['CC'] == 'cl': # MSVC
+	if dev.mode == 'debug':
+		env.Prepend(LIBS = ['ssleay32d', 'libeay32d'])
+	else:
+		env.Prepend(LIBS = ['ssleay32', 'libeay32'])
+else:
+	env.Prepend(LIBS = ['ssl', 'crypto'])
+env.Append(LIBS=["comctl32", "ws2_32", "ole32", "gdi32", "comdlg32", "winmm", "shlwapi", "htmlhelp", "oleaut32", "uuid"])
 env.Append(CPPPATH=['#/openssl/include', "#/dwt/include", "#/"])
-env.Append(LIBPATH=["#/openssl/lib"])
+env.Append(LIBPATH=['#/openssl/lib/'])
 
 headers=dev.get_sources(source_path, "*.h")
 dev.i18n(source_path, env, [sources,headers], 'dcpp-win32')

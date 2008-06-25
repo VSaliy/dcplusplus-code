@@ -5,6 +5,7 @@
 ./.settings
 custom.py
 *.gch
+*.lib
 *.obj
 *.pch
 *.pdb

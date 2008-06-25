@@ -612,6 +612,13 @@
 # ifndef SUBLANG_SERBIAN_CYRILLIC
 # define SUBLANG_SERBIAN_CYRILLIC 0x03
 # endif
+// MSVC defines the following to the same values
+# ifdef SUBLANG_SINDHI_PAKISTAN
+# undef SUBLANG_SINDHI_PAKISTAN
+# endif
+# ifdef SUBLANG_SINDHI_AFGHANISTAN
+# undef SUBLANG_SINDHI_AFGHANISTAN
+# endif
 # ifndef SUBLANG_SINDHI_PAKISTAN
 # define SUBLANG_SINDHI_PAKISTAN 0x01
 # endif

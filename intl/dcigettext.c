@@ -39,6 +39,7 @@
 # ifdef _MSC_VER
 #  include <malloc.h>
 #  define alloca _alloca
+#  define HAVE_ALLOCA 1
 # else
 #  if defined HAVE_ALLOCA_H || defined _LIBC
 #   include <alloca.h>
