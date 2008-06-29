@@ -42,6 +42,9 @@ Notification::~Notification() {
 void Notification::create(const Notification::Seed& seed) {
 	icon = seed.icon;
 	tip = seed.tip;
+
+	// TODO Allow more than one icon per window
+	parent->setCallback(Message(message), std::tr1::bind(&Notification::trayHandler, this, _1, _2));
 }
 
 void Notification::setVisible(bool visible_) {
@@ -72,6 +75,58 @@ void Notification::setVisible(bool visible_) {
 	} else {
 		::Shell_NotifyIcon(NIM_DELETE, &nid);
 	}
+}
+
+void Notification::setTooltip(const tstring& tip_) {
+	tip = tip_;
+	lastTick = ::GetTickCount();
+
+	if(visible) {
+		NOTIFYICONDATA nid = { sizeof(NOTIFYICONDATA) };
+		nid.hWnd = parent->handle();
+		nid.uFlags = NIF_TIP;
+		tip.copy(nid.szTip, (sizeof(nid.szTip) / sizeof(nid.szTip[0])) - 1);
+		::Shell_NotifyIcon(NIM_MODIFY, &nid);
+	}
+}
+
+#ifndef NIN_BALLOONUSERCLICK
+#define NIN_BALLOONUSERCLICK (WM_USER + 5)
+#endif
+
+bool Notification::trayHandler(const MSG& msg, LPARAM& result) {
+	switch(msg.lParam) {
+	case WM_LBUTTONUP: {
+		if(iconClicked) {
+			iconClicked();
+		}
+	} break;
+	case WM_RBUTTONUP: {
+		if(contextMenu) {
+			// Work-around for windows bug (KB135788)
+			::SetForegroundWindow(parent->handle());
+			contextMenu();
+			parent->postMessage(WM_NULL);
+		}
+	} break;
+	case WM_MOUSEMOVE: {
+		if(updateTip) {
+			DWORD now = ::GetTickCount();
+			if(now - 1000 > lastTick) {
+				updateTip();
+				lastTick = now;
+			}
+		}
+	}
+
+	case NIN_BALLOONUSERCLICK: {
+		if(notificationClicked) {
+			notificationClicked();
+		}
+	} break;
+	}
+
+	return true;
 }
 
 }

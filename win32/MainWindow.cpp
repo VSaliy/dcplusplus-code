@@ -51,22 +51,21 @@
 #include <dcpp/Download.h>
 
 #include <dwt/widgets/ToolBar.h>
+#include <dwt/widgets/Notification.h>
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/StringUtils.h>
 
 MainWindow::MainWindow() :
-	WidgetFactory<dwt::Window>(0), 
-	paned(0), 
-	transfers(0), 
+	WidgetFactory<dwt::Window>(0),
+	paned(0),
+	transfers(0),
 	toolbar(0),
-	tabs(0), 
-	trayIcon(false), 
+	tabs(0),
 	maximized(false),
-	lastMove(0), 
-	c(0), 
-	stopperThread(NULL), 
-	lastUp(0), 
-	lastDown(0), 
+	c(0),
+	stopperThread(NULL),
+	lastUp(0),
+	lastDown(0),
 	lastTick(GET_TICK()),
 	UPnP_TCPConnection(0),
 	UPnP_UDPConnection(0)
@@ -80,7 +79,7 @@ MainWindow::MainWindow() :
 	links.features = links.homepage + _T("featurereq/");
 	links.bugs = links.homepage + _T("bugs/");
 	links.donate = _T("https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=arnetheduck%40gmail%2ecom&item_name=DCPlusPlus&no_shipping=1&return=http%3a%2f%2fdcplusplus%2esf%2enet%2f&cancel_return=http%3a%2f%2fdcplusplus%2esf%2enet%2f&cn=Greeting&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8");
-	
+
 	initWindow();
 	initMenu();
 	initToolbar();
@@ -88,13 +87,12 @@ MainWindow::MainWindow() :
 	initTabs();
 	initTransfers();
 	initSecond();
+	initTray();
 
 	onActivate(std::tr1::bind(&MainWindow::handleActivate, this, _1));
 	onSized(std::tr1::bind(&MainWindow::handleSized, this, _1));
 	onSpeaker(std::tr1::bind(&MainWindow::handleSpeaker, this, _1, _2));
 	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
-	onRaw(std::tr1::bind(&MainWindow::handleTrayIcon, this, _2), dwt::Message(WM_APP + 242));
-	
 	updateStatus();
 	layout();
 
@@ -107,7 +105,10 @@ MainWindow::MainWindow() :
 	onRaw(std::tr1::bind(&MainWindow::handleEndSession, this), dwt::Message(WM_ENDSESSION));
 	onRaw(std::tr1::bind(&MainWindow::handleCopyData, this, _2), dwt::Message(WM_COPYDATA));
 	onRaw(std::tr1::bind(&MainWindow::handleWhereAreYou, this), dwt::Message(SingleInstance::WMU_WHERE_ARE_YOU));
-	
+
+	filterIter = dwt::Application::instance().addFilter(std::tr1::bind(&MainWindow::filter, this, _1));
+	accel = dwt::AcceleratorPtr(new dwt::Accelerator(this, IDR_MAINFRAME));
+
 	TimerManager::getInstance()->start();
 
 	c = new HttpConnection;
@@ -131,17 +132,14 @@ MainWindow::MainWindow() :
 
 	if (!WinUtil::isShift())
 		speak(AUTO_CONNECT);
-	
+
 	speak(PARSE_COMMAND_LINE);
 
 	if(SETTING(NICK).empty()) {
 		WinUtil::help(handle(), IDH_GET_STARTED);
 		postMessage(WM_COMMAND, IDC_SETTINGS);
 	}
-	
-	filterIter = dwt::Application::instance().addFilter(std::tr1::bind(&MainWindow::filter, this, _1));	
-	accel = dwt::AcceleratorPtr(new dwt::Accelerator(this, IDR_MAINFRAME));
-	
+
 	int cmdShow = dwt::Application::instance().getCmdShow();
 	::ShowWindow(handle(), ((cmdShow == SW_SHOWDEFAULT) || (cmdShow == SW_SHOWNORMAL)) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
 
@@ -172,7 +170,7 @@ void MainWindow::initWindow() {
 	cs.icon = dwt::IconPtr(new dwt::Icon(IDR_MAINFRAME));
 	cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 	create(cs);
-	
+
 	setHelpId(IDH_MAIN);
 
 	paned = addChild(WidgetHPaned::Seed(0.7));
@@ -272,17 +270,17 @@ void MainWindow::initToolbar() {
 		dwt::ImageListPtr list(new dwt::ImageList(20, 20, ILC_COLOR32 | ILC_MASK));
 		dwt::Bitmap bmp(IDB_TOOLBAR20);
 		list->add(bmp, RGB(255, 0, 255));
-		
+
 		toolbar->setNormalImageList(list);
 	}
 	{
 		dwt::ImageListPtr list(new dwt::ImageList(20, 20, ILC_COLOR32 | ILC_MASK));
 		dwt::Bitmap bmp(IDB_TOOLBAR20_HOT);
 		list->add(bmp, RGB(255, 0, 255));
-		
+
 		toolbar->setHotImageList(list);
 	}
-	
+
 	int image = 0;
 	toolbar->appendItem(image++, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS, std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_PUBLIC_HUBS));
 	toolbar->appendSeparator();
@@ -336,11 +334,20 @@ void MainWindow::initTransfers() {
 	paned->setSecond(transfers);
 }
 
+void MainWindow::initTray() {
+	dcdebug("initTray\n");
+	notify = dwt::NotificationPtr(new dwt::Notification(this));
+	notify->create(dwt::Notification::Seed::Seed(dwt::IconPtr(new dwt::Icon(IDR_MAINFRAME))));
+	notify->onContextMenu(std::tr1::bind(&MainWindow::handleTrayContextMenu, this));
+	notify->onIconClicked(std::tr1::bind(&MainWindow::handleTrayClicked, this));
+	notify->onUpdateTip(std::tr1::bind(&MainWindow::handleTrayUpdate, this));
+}
+
 bool MainWindow::filter(MSG& msg) {
 	if(tabs && tabs->filter(msg)) {
 		return true;
 	}
-	
+
 	if(accel && accel->translate(msg)) {
 		return true;
 	}
@@ -409,7 +416,7 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 			Util::setAway(true);
 		}
 		if(BOOLSETTING(MINIMIZE_TRAY) != WinUtil::isShift()) {
-			updateTray(true);
+			notify->setVisible(true);
 			setVisible(false);
 		}
 		maximized = isZoomed();
@@ -417,9 +424,7 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 		if(BOOLSETTING(AUTO_AWAY) && !Util::getManualAway()) {
 			Util::setAway(false);
 		}
-		if(trayIcon) {
-			updateTray(false);
-		}
+		notify->setVisible(false);
 		layout();
 	}
 }
@@ -489,7 +494,7 @@ void MainWindow::saveWindowSettings() {
 	WINDOWPLACEMENT wp = { sizeof(wp)};
 
 	::GetWindowPlacement(this->handle(), &wp);
-	
+
 	if(wp.showCmd == SW_SHOW || wp.showCmd == SW_SHOWNORMAL) {
 		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_X, static_cast<int>(wp.rcNormalPosition.left));
 		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_Y, static_cast<int>(wp.rcNormalPosition.top));
@@ -516,9 +521,6 @@ bool MainWindow::closing() {
 			LogManager::getInstance()->removeListener(this);
 			QueueManager::getInstance()->removeListener(this);
 
-			if(trayIcon) {
-				updateTray(false);
-			}
 			SearchManager::getInstance()->disconnect();
 			ConnectionManager::getInstance()->disconnect();
 
@@ -529,7 +531,7 @@ bool MainWindow::closing() {
 			stopperThread = CreateThread(NULL, 0, &stopper, this, 0, &id);
 		}
 		return false;
-	} 
+	}
 
 	dcdebug("Waiting for stopper\n");
 	// This should end immediately, as it only should be the stopper that sends another WM_CLOSE
@@ -543,7 +545,7 @@ bool MainWindow::closing() {
 
 LRESULT MainWindow::handleTrayMessage() {
 	if(BOOLSETTING(MINIMIZE_TRAY) && isIconic())
-		updateTray(true);
+		notify->setVisible(true);
 	return 0;
 }
 
@@ -558,12 +560,12 @@ bool MainWindow::eachSecond() {
 
 void MainWindow::layout() {
 	dwt::Rectangle r(getClientAreaSize());
-	
+
 	toolbar->refresh();
 	dwt::Point pt = toolbar->getSize();
 	r.pos.y += pt.y;
 	r.size.y -= pt.y;
-	
+
 	layoutStatus(r);
 
 	paned->setRect(r);
@@ -584,7 +586,7 @@ void MainWindow::updateStatus() {
 	uint64_t down = Socket::getTotalDown();
 	uint64_t updiff = up - lastUp;
 	uint64_t downdiff = down - lastDown;
-	
+
 	lastTick = now;
 	lastUp = up;
 	lastDown = down;
@@ -743,32 +745,6 @@ void MainWindow::handleOpenOwnList() {
 	}
 }
 
-void MainWindow::updateTray(bool add /* = true */) {
-	if (add) {
-		NOTIFYICONDATA nid;
-		nid.cbSize = sizeof(NOTIFYICONDATA);
-		nid.hWnd = handle();
-		nid.uID = 0;
-		nid.uFlags = NIF_ICON | NIF_TIP | NIF_MESSAGE;
-		nid.uCallbackMessage = WM_APP + 242;
-		nid.hIcon = (HICON)::LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_MAINFRAME), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
-		_tcscpy(nid.szTip, _T("DC++"));
-		nid.szTip[63] = '\0';
-		lastMove = GET_TICK() - 1000;
-		::Shell_NotifyIcon(NIM_ADD, &nid);
-		trayIcon = true;
-	} else {
-		NOTIFYICONDATA nid;
-		nid.cbSize = sizeof(NOTIFYICONDATA);
-		nid.hWnd = handle();
-		nid.uID = 0;
-		nid.uFlags = 0;
-		::Shell_NotifyIcon(NIM_DELETE, &nid);
-		::ShowWindow(handle(), SW_SHOW);
-		trayIcon = false;
-	}
-}
-
 DWORD WINAPI MainWindow::stopper(void* p) {
 	MainWindow* mf = reinterpret_cast<MainWindow*>(p);
 	HWND wnd, wnd2 = NULL;
@@ -800,7 +776,7 @@ public:
 			DirectoryListing dl(u);
 			try {
 				dl.loadFile(*i);
-				LogManager::getInstance()->message(str(FN_("%1%: matched %2% file", "%1%: matched %2% files", QueueManager::getInstance()->matchListing(dl)) 
+				LogManager::getInstance()->message(str(FN_("%1%: matched %2% file", "%1%: matched %2% files", QueueManager::getInstance()->matchListing(dl))
 				% Util::toString(ClientManager::getInstance()->getNicks(u->getCID()))
 				% QueueManager::getInstance()->matchListing(dl)));
 			} catch(const Exception&) {
@@ -1012,37 +988,29 @@ bool MainWindow::tryFire(const MSG& msg, LRESULT& retVal) {
 	return handled;
 }
 
-LRESULT MainWindow::handleTrayIcon(LPARAM lParam)
-{
-	if (lParam == WM_LBUTTONUP) {
-		handleRestore();
-	} else if(lParam == WM_RBUTTONDOWN || lParam == WM_CONTEXTMENU) {
-		dwt::ScreenCoordinate pt;
-		MenuPtr trayMenu = addChild(WinUtil::Seeds::menu);
-		trayMenu->appendItem(IDC_TRAY_SHOW, T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_DCPP)));
-		trayMenu->appendItem(IDC_TRAY_QUIT, T_("Exit"), std::tr1::bind(&MainWindow::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
-		trayMenu->appendItem(IDC_OPEN_DOWNLOADS, T_("Open downloads directory"), dwt::BitmapPtr(new dwt::Bitmap(IDB_OPEN_DL_DIR)));
-		trayMenu->appendItem(IDC_SETTINGS, T_("Settings..."), dwt::BitmapPtr(new dwt::Bitmap(IDB_SETTINGS)));
-		trayMenu->setDefaultItem(0,TRUE);
-		::GetCursorPos(&pt.getPoint());
-		::SetForegroundWindow(handle());
-		trayMenu->trackPopupMenu(pt, TPM_BOTTOMALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON);
-		postMessage(WM_NULL);
-	} else if(lParam == WM_MOUSEMOVE && ((lastMove + 1000) < GET_TICK()) ) {
-		NOTIFYICONDATA nid;
-		nid.cbSize = sizeof(NOTIFYICONDATA);
-		nid.hWnd = handle();
-		nid.uID = 0;
-		nid.uFlags = NIF_TIP;
-		_tcsncpy(nid.szTip, Text::toT("D: " + Util::formatBytes(DownloadManager::getInstance()->getRunningAverage()) + "/s (" +
-				Util::toString(DownloadManager::getInstance()->getDownloadCount()) + ")\r\nU: " +
-				Util::formatBytes(UploadManager::getInstance()->getRunningAverage()) + "/s (" +
-				Util::toString(UploadManager::getInstance()->getUploadCount()) + ")").c_str(), 64);
+void MainWindow::handleTrayContextMenu() {
+	dwt::ScreenCoordinate pt;
+	MenuPtr trayMenu = addChild(WinUtil::Seeds::menu);
+	trayMenu->appendItem(IDC_TRAY_SHOW, T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_DCPP)));
+	trayMenu->appendItem(IDC_OPEN_DOWNLOADS, T_("Open downloads directory"), dwt::BitmapPtr(new dwt::Bitmap(IDB_OPEN_DL_DIR)));
+	trayMenu->appendItem(IDC_SETTINGS, T_("Settings..."), dwt::BitmapPtr(new dwt::Bitmap(IDB_SETTINGS)));
+	trayMenu->appendSeparatorItem();
+	trayMenu->appendItem(IDC_TRAY_QUIT, T_("Exit"), std::tr1::bind(&MainWindow::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
+	trayMenu->setDefaultItem(0,TRUE);
+	::GetCursorPos(&pt.getPoint());
+	trayMenu->trackPopupMenu(pt, TPM_BOTTOMALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON);
+}
 
-		::Shell_NotifyIcon(NIM_MODIFY, &nid);
-		lastMove = GET_TICK();
-	}
-	return 0;
+void MainWindow::handleTrayClicked() {
+	handleRestore();
+}
+
+void MainWindow::handleTrayUpdate() {
+	notify->setTooltip(Text::toT(str(F_("D: %1%/s (%2%)\r\nU: %3%/s (%4%)") %
+		Util::formatBytes(DownloadManager::getInstance()->getRunningAverage()) %
+		DownloadManager::getInstance()->getDownloadCount() %
+		Util::formatBytes(UploadManager::getInstance()->getRunningAverage()) %
+		UploadManager::getInstance()->getUploadCount())));
 }
 
 #ifdef PORT_ME

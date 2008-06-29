@@ -33,11 +33,11 @@
 class UPnP;
 class TransferView;
 
-class MainWindow : 
-	public WidgetFactory<dwt::Window>, 
+class MainWindow :
+	public WidgetFactory<dwt::Window>,
 	public AspectSpeaker<MainWindow>,
-	private HttpConnectionListener, 
-	private QueueManagerListener, 
+	private HttpConnectionListener,
+	private QueueManagerListener,
 	private LogManagerListener,
 	public AspectStatus<MainWindow>
 {
@@ -60,10 +60,10 @@ public:
 	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
 
 	MainWindow();
-	
+
 	virtual ~MainWindow();
 private:
-	
+
 	class DirectoryListInfo {
 	public:
 		DirectoryListInfo(const UserPtr& aUser, const tstring& aFile, const tstring& aDir, int64_t aSpeed) : user(aUser), file(aFile), dir(aDir), speed(aSpeed) { }
@@ -106,12 +106,9 @@ private:
 	TransferView* transfers;
 	ToolBarPtr toolbar;
 	dwt::TabViewPtr tabs;
-	
-	/** Is the tray icon visible? */
-	bool trayIcon;
+
 	/** Was the window maximized when minimizing it? */
 	bool maximized;
-	uint32_t lastMove;
 
 	HttpConnection* c;
 	string versionInfo;
@@ -129,6 +126,8 @@ private:
 	TStringList lastLinesList;
 	tstring lastLines;
 
+	dwt::NotificationPtr notify;
+
 	// UPnP connectors
 	UPnP* UPnP_TCPConnection;
 	UPnP* UPnP_UDPConnection;
@@ -140,7 +139,8 @@ private:
 	void initTabs();
 	void initTransfers();
 	void initSecond();
-	
+	void initTray();
+
 	// User actions
 	void handleExit();
 	void handleOpenWindow(unsigned id);
@@ -161,22 +161,24 @@ private:
 	void handleActivate(bool active);
 	void handleForward(WPARAM wParam);
 	LRESULT handleEndSession();
-	LRESULT handleTrayIcon(LPARAM lParam);
-	
+
 	// Other events
 	void handleSized(const dwt::SizedEvent& sz);
-	
+
 	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	LRESULT handleTrayMessage();
 	LRESULT handleCopyData(LPARAM lParam);
 	LRESULT handleWhereAreYou();
 
 	void handleTabsTitleChanged(const tstring& title);
-	
+
+	void handleTrayContextMenu();
+	void handleTrayClicked();
+	void handleTrayUpdate();
+
 	void layout();
 	bool eachSecond();
 	void updateStatus();
-	void updateTray(bool add = true);
 	void autoConnect(const FavoriteHubEntryList& fl);
 	void startSocket();
 	void startUPnP();
@@ -184,10 +186,10 @@ private:
 	void saveWindowSettings();
 	void parseCommandLine(const tstring& cmdLine);
 	bool filter(MSG& msg);
-	
+
 	bool closing();
 	void handleRestore();
-	
+
 	static DWORD WINAPI stopper(void* p);
 
 	// LogManagerListener
