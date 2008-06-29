@@ -8,11 +8,118 @@
 </head>
 <body>
 <h1>Main DC++ window</h1>
-<h2>Menus (top)</h2>
-...
+<h2>Main Menu bar (top)</h2>
+<dl style="margin-left: 40px;">
+	<a name="filemenu"></a>
+	<dt>File Menu</dt>
+	You can find the file input-output functions as well as the basic connection options and the settings in this menu.<br/><br/>
+		<dl style="margin-left: 30px;">
+			<dt>Quick Connect...</dt>
+			<dd>Allows you to connect to a hub by manually typing its address.</dd>
+			<dt>Reconnect</dt>
+			<dd>To reconnect (disconnect and connect again) the hub which is currently in the foreground. If the active window is not a hub, it does nothing.</dd>
+			<dt>Follow last redirect</dt>
+			<dd>You are able to follow the redirection offered by the hub which is currently in the foreground. If the active window is not a hub, it does nothing.</dd>
+			<dt>Open file list...</dt>
+			<dd>This menu is for opening a previously downloaded filelist. It defaults to the FileLists directory in your DC++ program folder.</dd>
+			<dt>Open own list</dt>
+			<dd>You can open and check how your own file list looks like. Useful to see what's displayed to others when they get your file list.</dd>
+			<dt>Match downloaded lists</dt>
+			<dd>This function is used to match your download queue for already downloaded file lists (they stored in the FileLists directory in your DC++ program folder).</dd>
+			<dt>Refresh file list</dt>
+			<dd>This will immediately rescan your shared directories for new or changed content and updates your file list.</dd>
+			<dt>Open downloads directory</dt>
+			<dd>Opens your downloads folder in Windows Explorer.</dd>
+			<dt>Settings...</dt>
+			<dd>Opens the Settings panel.</dd>
+			<dt>Exit</dt>
+			<dd>Closes DC++.</dd>
+		</dl>
+	<br/>
+	<a name="viewmenu"></a>
+	<dt>View Menu</dt>
+	You can open all DC++ tabs and windows with the sub-items of this menu. Some kind of tabbed windows can have only one instance opened while you are able to open more from others. If you try to open more from a tab which can't have more than one instance, the already opened one will be focused.<br/><br/>
+		<dl style="margin-left: 30px;">
+			<dt>Public Hubs</dt>
+			<dd>Opens the <a href="window_public_hubs.html">Public Hubs</a> window. You can retreive lists of available hubs and connect to them here.</dd>
+			<dt>Favorite Hubs</dt>
+			<dd>Opens the <a href="window_favorite_hubs.html">Favorite Hubs</a> window where you can store and manage you favorite places in the DC network as well as set to autoconnect any of them when you start DC++.</dd>
+			<dt>Favorite Users</dt>
+			<dd>Opens the <a href="window_favorite_users.html">Favorite Users</a> window. You can store and manage your favorite DC users here as well as grant extra access to your share for any of them.</dd>
+			<dt>Download Queue</dt>
+			<dd>Opens the <a href="window_download_queue.html">Download Queue</a> window. You can track and manage your files beeing downloaded here.</dd>
+			<dt>Finished Downloads</dt>
+			<dd>Opens the <a href="window_finished_downloads.html">Finished Downloads</a> window which lists your downloaded files in the current session. Right clicking the list items you are able to do anything with the (finished) files, just as in Windows Explorer.</dd>
+			<dt>Waiting Users</dt>
+			<dd>Opens the <a href="window_waiting_users.html">Waiting Users</a> window. It lists those users who are currently waiting for a free slot to be able to start downloading from you.</dd>
+			<dt>Finished Uploads</dt>
+			<dd>Opens the <a href="window_finished_uploads.html">Finished Uploads</a> window which lists the files uploaded from you in the current session. Right clicking the list items you are able to do anything with the files, just as in Windows Explorer.</dd>
+			<dt>Search</dt>
+			<dd>Open the <a href="window_search.html">Search</a> window. This is the place where you can search for files to download.</dd>
+			<dt>ADL Search</dt>
+			<dd>Opens the <a href="window_adlsearch.html">ADL Search</a> window. It incorporates a tool for filtering file lists downloaded from users.</dd>
+			<dt>Search Spy</dt>
+			<dd>Opens the <a href="window_search_spy.html">Search Spy</a> window where you are able to spy other users' searches.</dd>
+			<dt>Notepad</dt>
+			<dd>Opens the <a href="window_notepad.html">Notepad</a> window, where you can store random text. The text will be kept even if you close DC++.</dd>
+			<dt>System Log</dt>
+			<dd>Opens the <a href="window_system_log.html">System Log</a> window, where all system messages of the current session are logged.</dd>
+			<dt>Network Statistics</dt>
+			<dd>Opens the <a href="window_network_stats.html">Network Statistics</a> window, which displays a real-time chart of the avarage speed of data sent and received by DC++.</dd>
+			<dt>Indexing progress</dt>
+			<dd>Opens the <a href="dialog_indexing_progress.html">Indexing progess</a> dialog, which shows you the current state of file hashing operation and how much time there is left from it.</dd>
+		</dl>
+	<br/>
+	<dt>Window Menu</dt>
+	You can find options here to close all instance of specific groups of tabs by one click.<br/><br/>
+		<dl style="margin-left: 30px;">
+			<dt>Close disconnected</dt>
+			<dd>Closes all disconnected Hub windows.</dd>
+			<dt>Close all PM windows</dt>
+			<dd>Closes all private message windows regardless of their online status.</dd>
+			<dt>Close all offline PM windows</dt>
+			<dd>Closes all offline private message windows.</dd>
+			<dt>Close all file list windows</dt>
+			<dd>Closes all opened file list windows. Saved file lists can be reopened by selecting Open File List... from the <a href="#filemenu">File menu</a>.</dd>
+			<dt>Close all search windows</dt>
+			<dd>Closes all opened search windows.</dd>
+		</dl>
+	<br/>
+	<dt>Help Menu</dt>
+	Here you can access the built-in Help, FAQs, guides and some documentation. It also contains hotlinks to reach the different parts of the DC++ online community.<br/><br/>
+		<dl style="margin-left: 30px;">
+			<dt>Help Contents</dt>
+			<dd>Opens the Overview page of the built-in Help</dd>
+			<dt>Get Started</dt>
+			<dd>The best way to start here if you are new to DC++.</dd>
+			<dt>Change Log</dt>
+			<dd>You can follow what's been changed in the different DC++ versions since the development started.</dd>
+			<dt>About DC++...</dt>
+			<dd>You can see the copyrights, list of all names who ever contributed to DC++ as well as some useful statistical information about your up/download ratio. The About box also shows you the version number of the current stable release of DC++.</dd>
+			<dt>DC++ Homepage</dt>
+			<dd>Opens the DC++ home page in your web browser.</dd>
+			<dt>Downloads</dt>
+			<dd>Opens the trusted DC++ download page in your web browser.</dd>
+			<dt>GeoIP database update</dt>
+			<dd>Opens a web page where the latest GeoIP database can be obtained. The database file called GeoIPCountryWhoIs.csv and should be saved to the DC++ program folder. GeoIP is used to show what country uploaders and downloaders are from in the <a href="window_connections.html">Connections</a> window. The database file is frequently updated on the web page - the newer your GeoIP file is the more exact country information will be displayed in the Connections window.</dd>
+			<dt>Frequently asked questions</dt>
+			<dd>Opens the official Direct Connect FAQ page in your web browser.</dd>
+			<dt>Help forum</dt>
+			<dd>Points to the DC++ support forum.</dd>
+			<dt>DC++ discussion forum</dt>
+			<dd>Points to the DC++ discussion forum.</dd>
+			<dt>Request a feature</dt>
+			<dd>You can propose modifications or request new features here.</dd>
+			<dt>Report a bug</dt>
+			<dd>You can report problems (only) about DC++ here.</dd>
+			<dt>Donate (paypal)</dt>
+			<dd>Found this free program useful? Then you may consider donate the further development... You can do it here, through the author's Paypal account.</dd>
+		</dl>
+	
+</dl>
 <a name="toolbar"></a>
 <h2>Toolbar (top, icons below menus)</h2>
-From left to right:
+The toolbar provides quick access to some regularly used parts and functions of DC++. From left to right:
 <dl style="margin-left: 40px;">
 <dt>Public Hubs</dt>
 <dd cshelp="IDH_TOOLBAR_PUBLIC_HUBS">Open the <a href="window_public_hubs.html">Public Hubs</a> window.</dd>
@@ -51,17 +158,33 @@ Use the arrow placed on the right of the icon to easily connect to one of your f
 <dd cshelp="IDH_TOOLBAR_WHATS_THIS">You can get help on specific parts of DC++ by using the &quot;What's This?&quot; help button: click it once, and your mouse cursor will change into a help cursor; then click on the control you wish to get help for.</dd>
 </dl>
 <h2>Tabs</h2>
-Ctrl+Tab, switching, drag&drop, related options (open in background)...
+You can control all opened DC++ windows with their tabs. Tabs in DC++ are generally behave like in other Windows applications, except that they have several additional functions. You can select them or switch between them by the mouse or usinng Ctrl+Tab key combination. If more tabs opened they will automatically occupy more than one row. Every tab has its own right click menu where you may find additional functions for the window the tab belongs to. You can rearrange the tabs by drag & drop, or close them by middle click or by choosing Close from their right click menu.<br/>
+There are several options that you can use to customize the look and behavior of the tabs. You can find them in the <a href="settings_tabs.html">Tabs settings</a> and <a href="settings_windows.html">Windows settings</a> respectively.
 <h2>Status bar (bottom)</h2>
+The main status bar is always visible in the bottom of the DC++ window. You can get information from the current state of several parameters of DC++ here. The status bar is divided into sections for better visibility. Their meaning from left to right:
 <dl style="margin-left: 40px;">
-<dt>Messages</dt>
-<dd>...</dd>
-<dt>Away</dt>
-<dd>...</dd>
+<dt>System messages</dt>
+<dd>The first part of the status bar contains the last system message with a timestamp. To see more from the recent system messages you can move the mouse pointer above the statusbar - the last 10 lines of the messages will be shown as a tooltip shortly. To see all system messages of the current session open the <a href="window_system_log.html">System Log</a> window in the <a href="#viewmenu">View menu</a> or simply double click the status bar.</dd>
+<dt>Away indicator</dt>
+<dd>If your client is in away mode it shows &quot;AWAY&quot;. You can read more about away mode <a href="settings_appearance.html#awaymsg">here</a>. </dd>
 <dt>Hubs</dt>
-<dd>...</dd>
+<dd>It shows the number of hubs you are currently connected in the following format : x/y/z , where
+	<dl style="margin-left: 20px;">
+			x = number of connected hubs where you're not a registered user<br/>
+            y = number of connected hubs where you're registered in<br/>
+            z = number of connected hubs where you're an operator<br/>
+	</dl>
+    just the same way as in the <a href="faq_plusplus_tag.html">DC++ tags</a> of the users listed on a hub.	</dd>	
 <dt>Slots</dt>
-<dd>...</dd>
+<dd>Indicates the number of currently free upload slots out of the total number of slots opened.</dd>
+<dt>Total downloaded bytes</dt>
+<dd>Shows the total number of bytes received in the current session, including file transfers, hub-client communication and hublists.</dd>
+<dt>Total uploaded bytes</dt>
+<dd>Shows the total number of bytes sent in the current session, including file transfers and hub-client communication.</dd>
+<dt>Current download speed</dt>
+<dd>Shows the current overall download speed and the number of current download connections in parentheses (updated in every second).</dd>
+<dt>Cuurrent upload speed</dt>
+<dd>Shows the current overall upload speed and the number of current upload connections in parentheses (updated in every second).</dd>
 </dl>
 </body>
 </html>
