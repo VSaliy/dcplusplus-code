@@ -91,7 +91,7 @@ void DirectoryListing::loadFile(const string& name) throw(Exception) {
 			txt.append(&buf[0], len);
 			bytesRead += len;
 			if(SETTING(MAX_FILELIST_SIZE) && bytesRead > (size_t)SETTING(MAX_FILELIST_SIZE)*1024*1024)
-				break;
+				throw FileException(_("Greater than maximum filelist size"));
 			if(len < BUF_SIZE)
 				break;
 		}
