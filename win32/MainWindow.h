@@ -166,7 +166,6 @@ private:
 	void handleSized(const dwt::SizedEvent& sz);
 
 	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
-	LRESULT handleTrayMessage();
 	LRESULT handleCopyData(LPARAM lParam);
 	LRESULT handleWhereAreYou();
 

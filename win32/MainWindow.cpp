@@ -101,7 +101,6 @@ MainWindow::MainWindow() :
 
 	onClosing(std::tr1::bind(&MainWindow::closing, this));
 
-	onRaw(std::tr1::bind(&MainWindow::handleTrayMessage, this), dwt::Message(RegisterWindowMessage(_T("TaskbarCreated"))));
 	onRaw(std::tr1::bind(&MainWindow::handleEndSession, this), dwt::Message(WM_ENDSESSION));
 	onRaw(std::tr1::bind(&MainWindow::handleCopyData, this, _2), dwt::Message(WM_COPYDATA));
 	onRaw(std::tr1::bind(&MainWindow::handleWhereAreYou, this), dwt::Message(SingleInstance::WMU_WHERE_ARE_YOU));
@@ -341,6 +340,9 @@ void MainWindow::initTray() {
 	notify->onContextMenu(std::tr1::bind(&MainWindow::handleTrayContextMenu, this));
 	notify->onIconClicked(std::tr1::bind(&MainWindow::handleTrayClicked, this));
 	notify->onUpdateTip(std::tr1::bind(&MainWindow::handleTrayUpdate, this));
+	if(SETTING(ALWAYS_TRAY)) {
+		notify->setVisible(true);
+	}
 }
 
 bool MainWindow::filter(MSG& msg) {
@@ -416,7 +418,9 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 			Util::setAway(true);
 		}
 		if(BOOLSETTING(MINIMIZE_TRAY) != WinUtil::isShift()) {
-			notify->setVisible(true);
+			if(!SETTING(ALWAYS_TRAY)) {
+				notify->setVisible(true);
+			}
 			setVisible(false);
 		}
 		maximized = isZoomed();
@@ -424,7 +428,9 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 		if(BOOLSETTING(AUTO_AWAY) && !Util::getManualAway()) {
 			Util::setAway(false);
 		}
-		notify->setVisible(false);
+		if(!SETTING(ALWAYS_TRAY)) {
+			notify->setVisible(false);
+		}
 		layout();
 	}
 }
@@ -541,12 +547,6 @@ bool MainWindow::closing() {
 	::PostQuitMessage(0);
 	dcdebug("Quit message posted\n");
 	return true;
-}
-
-LRESULT MainWindow::handleTrayMessage() {
-	if(BOOLSETTING(MINIMIZE_TRAY) && isIconic())
-		notify->setVisible(true);
-	return 0;
 }
 
 void MainWindow::initSecond() {
@@ -1002,7 +1002,11 @@ void MainWindow::handleTrayContextMenu() {
 }
 
 void MainWindow::handleTrayClicked() {
-	handleRestore();
+	if(getVisible()) {
+		minimize();
+	} else {
+		handleRestore();
+	}
 }
 
 void MainWindow::handleTrayUpdate() {

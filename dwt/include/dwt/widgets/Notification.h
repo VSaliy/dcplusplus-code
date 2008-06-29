@@ -90,8 +90,9 @@ private:
 	/// Last tick that tip was updated
 	DWORD lastTick;
 	bool trayHandler(const MSG& msg, LRESULT& ret);
+	bool redisplay(const MSG& msg, LRESULT& ret);
 
-	static UINT message;
+	static const UINT message;
 };
 }
 

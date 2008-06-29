@@ -3,6 +3,7 @@
 * Fix absent country code for IPs > 128.0.0.0 in MSVC builds (poy)
 * Remove useless chars in some paths that could lead to a shell menu crash (poy)
 * [L#234458] Disable some menu commands in finished windows when files don't exist (poy)
+* Added option to always display tray icon and reorganized its menu
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
