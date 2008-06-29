@@ -121,6 +121,8 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 		string file = t->getPath();
 		const UserPtr& user = t->getUser();
 
+		int64_t size = upload ? File::getSize(file) : ( t->getType() == Transfer::TYPE_FULL_LIST ? t->getSize() : QueueManager::getInstance()->getSize(file));
+
 		Lock l(cs);
 
 		{
@@ -131,7 +133,7 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 					t->getPos(),
 					GET_TICK() - t->getStart(),
 					GET_TIME(),
-					upload ? File::getSize(file) : QueueManager::getInstance()->getSize(file),
+					size,
 					crc32Checked,
 					user
 					);
