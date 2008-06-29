@@ -1,5 +1,5 @@
 * Added setting for max characters per tab (poy)
-* [L#234458] Added "File size" and "% transferred" columns in finished windows (poy)
+* [L#234458] Added "File size" and "% transferred" columns in finished windows (poy, emtee)
 * Fix absent country code for IPs > 128.0.0.0 in MSVC builds (poy)
 * Remove useless chars in some paths that could lead to a shell menu crash (poy)
 * [L#234458] Disable some menu commands in finished windows when files don't exist (poy)
