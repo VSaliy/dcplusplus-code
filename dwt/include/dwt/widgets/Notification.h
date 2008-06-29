@@ -39,7 +39,7 @@ namespace dwt {
 /** A notification object represents a tray icon and a short message notification service */
 class Notification {
 public:
-	Notification(WindowPtr parent_) : parent(parent_) { }
+	Notification(WindowPtr parent_) : parent(parent_), lastTick(0) { }
 	~Notification();
 
 	struct Seed {
@@ -58,6 +58,21 @@ public:
 	void setTooltip(const tstring& tip);
 
 	void addNotification(const tstring& message);
+
+	// TODO Fix callback parameters
+	typedef std::tr1::function<void ()> Callback;
+
+	void onContextMenu(const Callback& callback_) { contextMenu = callback_; }
+
+	/// The icon was left-clicked / selected
+	void onIconClicked(const Callback& callback_) { iconClicked = callback_; }
+
+	/// The message added by addNotification was clicked
+	void onNotificationClicked(const Callback& callback_) { notificationClicked = callback_; }
+
+	/// This is sent when the tooltip text should be updated
+	void onUpdateTip(const Callback& callback_) { updateTip = callback_; }
+
 private:
 	WindowPtr parent;
 	IconPtr icon;
@@ -66,6 +81,15 @@ private:
 	tstring tip;
 	/** List of messages to display */
 	std::list<tstring> messages;
+
+	Callback contextMenu;
+	Callback iconClicked;
+	Callback notificationClicked;
+	Callback updateTip;
+
+	/// Last tick that tip was updated
+	DWORD lastTick;
+	bool trayHandler(const MSG& msg, LRESULT& ret);
 
 	static UINT message;
 };
