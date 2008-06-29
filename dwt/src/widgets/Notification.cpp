@@ -30,10 +30,13 @@
 */
 
 #include <dwt/widgets/Notification.h>
+#include <dwt/Application.h>
 
 namespace dwt {
 
-UINT Notification::message = ::RegisterWindowMessage(_T("dwt::Notification"));
+const UINT Notification::message = ::RegisterWindowMessage(_T("dwt::Notification"));
+
+static const UINT taskbar = ::RegisterWindowMessage(_T("TaskbarCreated"));
 
 Notification::~Notification() {
 	setVisible(false);
@@ -45,6 +48,7 @@ void Notification::create(const Notification::Seed& seed) {
 
 	// TODO Allow more than one icon per window
 	parent->setCallback(Message(message), std::tr1::bind(&Notification::trayHandler, this, _1, _2));
+	parent->setCallback(Message(taskbar), std::tr1::bind(&Notification::redisplay, this, _1, _2));
 }
 
 void Notification::setVisible(bool visible_) {
@@ -90,6 +94,15 @@ void Notification::setTooltip(const tstring& tip_) {
 	}
 }
 
+bool Notification::redisplay(const MSG& msg, LPARAM& result) {
+	if(visible) {
+		setVisible(false);
+		setVisible(true);
+	}
+	return false;
+}
+
+// Mingw headers miss this
 #ifndef NIN_BALLOONUSERCLICK
 #define NIN_BALLOONUSERCLICK (WM_USER + 5)
 #endif
