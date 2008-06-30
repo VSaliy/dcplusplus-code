@@ -27,9 +27,9 @@
 #include <dcpp/SearchManager.h>
 #include <dcpp/ClientManagerListener.h>
 
-class SearchFrame : 
-	public MDIChildFrame<SearchFrame>, 
-	private SearchManagerListener, 
+class SearchFrame :
+	public MDIChildFrame<SearchFrame>,
+	private SearchManagerListener,
 	private ClientManagerListener,
 	public AspectUserCommand<SearchFrame>
 {
@@ -49,7 +49,7 @@ public:
 private:
 	friend class MDIChildFrame<SearchFrame>;
 	friend class AspectUserCommand<SearchFrame>;
-	
+
 	enum Speakers {
 		SPEAK_ADD_RESULT,
 		SPEAK_FILTER_RESULT,
@@ -74,9 +74,6 @@ private:
 		COLUMN_CID,
 		COLUMN_LAST
 	};
-
-	static int columnIndexes[COLUMN_LAST];
-	static int columnSizes[COLUMN_LAST];
 
 	class SearchInfo {
 	public:
@@ -192,7 +189,7 @@ private:
 	CriticalSection cs;
 
 	StringMap ucLineParams;
-	
+
 	std::string token;
 
 	SearchFrame(dwt::TabView* mdiParent, const tstring& initialString_, LONGLONG initialSize_, SearchManager::SizeModes initialMode_, SearchManager::TypeModes initialType_);
@@ -219,7 +216,7 @@ private:
 	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	bool handleSearchKeyDown(int c);
 	bool handleSearchChar(int c);
-	
+
 	void layout();
 	bool preClosing();
 	void postClosing();
@@ -235,7 +232,7 @@ private:
 	void addTargetDirMenu(const MenuPtr& parent, const StringPairList& favoriteDirs);
 
 	WidgetResultsPtr getUserList() { return results; }
-	
+
 	// SearchManagerListener
 	virtual void on(SearchManagerListener::SR, const SearchResultPtr& aResult) throw();
 

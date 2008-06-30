@@ -30,9 +30,9 @@
 #include <dcpp/User.h>
 #include <dcpp/FavoriteManagerListener.h>
 
-class HubFrame : 
-	public MDIChildFrame<HubFrame>, 
-	private ClientListener, 
+class HubFrame :
+	public MDIChildFrame<HubFrame>,
+	private ClientListener,
 	private FavoriteManagerListener,
 	public AspectUserInfo<HubFrame>,
 	public AspectUserCommand<HubFrame>
@@ -51,11 +51,11 @@ public:
 		STATUS_SHOW_USERS,
 		STATUS_LAST
 	};
-	
+
 	static void openWindow(dwt::TabView* mdiParent, const string& url);
 	static void closeDisconnected();
 	static void resortUsers();
-	
+
 private:
 
 	enum FilterModes{
@@ -99,7 +99,7 @@ private:
 
 	struct PMTask : public StringTask {
 		PMTask(const OnlineUser& from_, const OnlineUser& to_, const OnlineUser& replyTo_, const string& m);
-		
+
 		UserPtr from;
 		UserPtr to;
 		UserPtr replyTo;
@@ -149,13 +149,13 @@ private:
 	ComboBoxPtr filterType;
 	WidgetVPanedPtr paned;
 	CheckBoxPtr showUsers;
-	
+
 	typedef TypedTable<UserInfo, false> WidgetUsers;
 	typedef WidgetUsers* WidgetUsersPtr;
 	WidgetUsersPtr users;
-	
+
 	UserMap userMap;
-	
+
 	Client* client;
 	string url;
 	string redirect;
@@ -165,7 +165,7 @@ private:
 	bool resort;
 	bool showJoins;
 	bool favShowJoins;
-	
+
 	TaskQueue tasks;
 
 	TStringList prevCommands;
@@ -185,36 +185,33 @@ private:
 	StringList tabCompleteNicks;
 	bool inTabComplete;
 
-	static int columnIndexes[COLUMN_LAST];
-	static int columnSizes[COLUMN_LAST];
-
 	typedef std::vector<HubFrame*> FrameList;
 	typedef FrameList::iterator FrameIter;
 	static FrameList frames;
 
 	HubFrame(dwt::TabView* mdiParent, const string& url);
 	virtual ~HubFrame();
-	
+
 	void layout();
 	bool preClosing();
 	void postClosing();
-	
+
 	bool enter();
 	bool tab();
-	
+
 	void addChat(const tstring& aLine);
 	void addStatus(const tstring& aLine, bool inChat = true);
 
 	WidgetUsersPtr getUserList() { return users; }
-	
+
 	tstring getStatusUsers() const;
 	tstring getStatusShared() const;
 	tstring getStatusAverageShared() const;
 	void updateStatus();
-	
+
 	void initSecond();
 	bool eachSecond();
-	
+
 	UserInfo* findUser(const tstring& nick);
 	bool updateUser(const UserTask& u);
 	void removeUser(const UserPtr& aUser);
@@ -228,7 +225,7 @@ private:
 	void addAsFavorite();
 	void removeFavoriteHub();
 	bool historyActive();
-	
+
 	void runUserCommand(const UserCommand& uc);
 
 	LRESULT handleMessageGetDlgCode();
@@ -247,7 +244,7 @@ private:
 	void handleReconnect();
 	void handleFollow();
 	void handleChatLButton();
-	
+
 	bool handleFilterKey(int c);
 	bool parseFilter(FilterModes& mode, int64_t& size);
 	bool matchFilter(const UserInfo& ui, int sel, bool doSizeCompare = false, FilterModes mode = NONE, int64_t size = 0);

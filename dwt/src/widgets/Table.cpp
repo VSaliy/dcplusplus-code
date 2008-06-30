@@ -5,27 +5,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -43,7 +43,7 @@ namespace dwt {
 
 bool Table::ComCtl6 = false;
 
-Table::Seed::Seed() : 
+Table::Seed::Seed() :
 	BaseType::Seed(WC_LISTVIEW, WS_CHILD | WS_TABSTOP | LVS_REPORT),
 	font(new Font(DefaultGuiFont)),
 	lvStyle(0)
@@ -116,7 +116,7 @@ void Table::updateArrow() {
 
 	if(!upArrow || !downArrow)
 		return;
-	
+
 	HBITMAP bitmap = (isAscending() ? upArrow : downArrow)->handle();
 
 	HWND header = ListView_GetHeader(this->handle());
@@ -152,23 +152,30 @@ void Table::clearSelection() {
 	}
 }
 
-void Table::createColumns( const std::vector< tstring > & colNames )
+void Table::createColumns(const std::vector<tstring>& names, const std::vector<int>& widths,
+	const std::vector<bool>& alignment, const std::vector<int>& order)
 {
 	// Deleting all data
 	clear();
 	while ( ListView_DeleteColumn( this->handle(), 0 ) == TRUE );
 
-	LVCOLUMN lvColumn = { LVCF_WIDTH | LVCF_TEXT };
+	for(size_t i = 0; i < names.size(); ++i) {
+		LVCOLUMN lvColumn = { LVCF_TEXT };
 
-	lvColumn.cx = 100;
-	int x = 0;
-	for ( std::vector< tstring >::const_iterator idx = colNames.begin();
-		idx != colNames.end();
-		++idx, ++x )
-	{
-		lvColumn.pszText = const_cast < TCHAR * >( idx->c_str() );
-		if ( ListView_InsertColumn( this->handle(), x, & lvColumn ) == - 1 )
-		{
+		lvColumn.pszText = const_cast < TCHAR * >( names[i].c_str() );
+		if(i < widths.size()) {
+			lvColumn.mask |= LVCF_WIDTH;
+			lvColumn.cx = widths[i];
+		}
+		if(i < alignment.size()) {
+			lvColumn.mask |= LVCF_FMT;
+			lvColumn.fmt |= alignment[i] ? LVCFMT_RIGHT : LVCFMT_LEFT;
+		}
+		if(i < order.size()) {
+			lvColumn.mask |= LVCF_ORDER;
+			lvColumn.iOrder = order[i];
+		}
+		if ( ListView_InsertColumn( this->handle(), i, &lvColumn) == - 1 ) {
 			throw Win32Exception("Error while trying to create Columns in list view" );
 		}
 	}
@@ -286,14 +293,14 @@ std::vector<int> Table::getColumnWidths() {
 	std::vector<int> ret(this->getColumnCount());
 	for(size_t i = 0; i < ret.size(); ++i) {
 		ret[i] = ::SendMessage(this->handle(), LVM_GETCOLUMNWIDTH, static_cast<WPARAM>(i), 0);
-	}			
+	}
 	return ret;
 }
 
 LPARAM Table::getDataImpl(int idx) {
 	LVITEM item = { LVIF_PARAM };
 	item.iItem = idx;
-	
+
 	if(!ListView_GetItem(handle(), &item)) {
 		return 0;
 	}
@@ -304,7 +311,7 @@ void Table::setDataImpl(int idx, LPARAM data) {
 	LVITEM item = { LVIF_PARAM };
 	item.iItem = idx;
 	item.lParam = data;
-	
+
 	ListView_SetItem(handle(), &item);
 }
 
@@ -378,16 +385,16 @@ int CALLBACK Table::compareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSor
 
 	int na = (int)lParam1;
 	int nb = (int)lParam2;
-	
+
 	int result = 0;
-	
+
 	SortType type = p->sortType;
 	if(type == SORT_CALLBACK) {
 		result = p->fun(p->getData(na), p->getData(nb));
 	} else {
 		ListView_GetItemText(p->handle(), na, p->sortColumn, buf, BUF_SIZE);
 		ListView_GetItemText(p->handle(), nb, p->sortColumn, buf2, BUF_SIZE);
-		
+
 		if(type == SORT_STRING) {
 			result = lstrcmp(buf, buf2);
 		} else if(type == SORT_STRING_NOCASE) {

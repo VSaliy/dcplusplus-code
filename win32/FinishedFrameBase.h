@@ -89,9 +89,8 @@ protected:
 			files->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
 			addWidget(files);
 
-			files->createColumns(WinUtil::getStrings(filesNames));
-			files->setColumnOrder(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_ORDER : SettingsManager::FINISHED_DL_FILES_ORDER), filesIndexes));
-			files->setColumnWidths(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_WIDTHS : SettingsManager::FINISHED_DL_FILES_WIDTHS), filesSizes));
+			WinUtil::makeColumns(files, filesColumns, FILES_COLUMN_LAST, SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_ORDER : SettingsManager::FINISHED_DL_FILES_ORDER),
+				SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_WIDTHS : SettingsManager::FINISHED_DL_FILES_WIDTHS));
 			files->setSort(FILES_COLUMN_TIME);
 
 			files->setSmallImageList(WinUtil::fileImages);
@@ -106,9 +105,8 @@ protected:
 			users->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
 			addWidget(users);
 
-			users->createColumns(WinUtil::getStrings(usersNames));
-			users->setColumnOrder(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_ORDER : SettingsManager::FINISHED_DL_USERS_ORDER), usersIndexes));
-			users->setColumnWidths(WinUtil::splitTokens(SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_WIDTHS : SettingsManager::FINISHED_DL_USERS_WIDTHS), usersSizes));
+			WinUtil::makeColumns(users, usersColumns, USERS_COLUMN_LAST, SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_ORDER : SettingsManager::FINISHED_DL_USERS_ORDER),
+				SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_WIDTHS : SettingsManager::FINISHED_DL_USERS_WIDTHS));
 			users->setSort(USERS_COLUMN_TIME);
 
 			users->setSmallImageList(WinUtil::userImages);
@@ -236,13 +234,9 @@ private:
 		USERS_COLUMN_LAST
 	};
 
-	static int filesSizes[FILES_COLUMN_LAST];
-	static int filesIndexes[FILES_COLUMN_LAST];
-	static const char* filesNames[FILES_COLUMN_LAST];
+	static const ColumnInfo filesColumns[FILES_COLUMN_LAST];
 
-	static int usersSizes[USERS_COLUMN_LAST];
-	static int usersIndexes[USERS_COLUMN_LAST];
-	static const char* usersNames[USERS_COLUMN_LAST];
+	static const ColumnInfo usersColumns[USERS_COLUMN_LAST];
 
 	class FileInfo : public FastAlloc<FileInfo> {
 	public:
@@ -662,72 +656,26 @@ private:
 };
 
 template<class T, bool in_UL>
-int FinishedFrameBase<T, in_UL>::filesIndexes[] = {
-	FILES_COLUMN_FILE,
-	FILES_COLUMN_PATH,
-	FILES_COLUMN_NICKS,
-	FILES_COLUMN_TRANSFERRED,
-	FILES_COLUMN_FILESIZE,
-	FILES_COLUMN_PERCENTAGE,
-	FILES_COLUMN_SPEED,
-	FILES_COLUMN_CRC32,
-	FILES_COLUMN_TIME
+const ColumnInfo FinishedFrameBase<T, in_UL>::filesColumns[] = {
+	{ N_("Filename"), 125, false },
+	{ N_("Path"), 250, false },
+	{ N_("Nicks"), 250, false },
+	{ N_("Transferred"), 80, true },
+	{ N_("File size"), 80, true },
+	{ N_("% transferred"), 80, true },
+	{ N_("Speed"), 100, true },
+	{ N_("CRC Checked"), 80, false },
+	{ N_("Time"), 125, false }
 };
 
 template<class T, bool in_UL>
-int FinishedFrameBase<T, in_UL>::filesSizes[] = {
-	125,
-	250,
-	250,
-	100,
-	100,
-	80,
-	100,
-	80,
-	125
-};
-
-template<class T, bool in_UL>
-const char* FinishedFrameBase<T, in_UL>::filesNames[] = {
-	N_("Filename"),
-	N_("Path"),
-	N_("Nicks"),
-	N_("Transferred"),
-	N_("File size"),
-	N_("% transferred"),
-	N_("Speed"),
-	N_("CRC Checked"),
-	N_("Time")
-};
-
-template<class T, bool in_UL>
-int FinishedFrameBase<T, in_UL>::usersIndexes[] = {
-	USERS_COLUMN_NICK,
-	USERS_COLUMN_HUB,
-	USERS_COLUMN_TRANSFERRED,
-	USERS_COLUMN_SPEED,
-	USERS_COLUMN_FILES,
-	USERS_COLUMN_TIME
-};
-
-template<class T, bool in_UL>
-int FinishedFrameBase<T, in_UL>::usersSizes[] = {
-	125,
-	125,
-	100,
-	100,
-	300,
-	125
-};
-
-template<class T, bool in_UL>
-const char* FinishedFrameBase<T, in_UL>::usersNames[] = {
-	N_("Nick"),
-	N_("Hub"),
-	N_("Transferred"),
-	N_("Speed"),
-	N_("Files"),
-	N_("Time")
+const ColumnInfo FinishedFrameBase<T, in_UL>::usersColumns[] = {
+	{ N_("Nick"), 125, false },
+	{ N_("Hub"), 125, false },
+	{ N_("Transferred"), 80, true },
+	{ N_("Speed"), 100, true },
+	{ N_("Files"), 300, false },
+	{ N_("Time"), 125, false }
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FINISHED_FRAME_BASE_H)

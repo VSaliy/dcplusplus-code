@@ -26,14 +26,12 @@
 #include "HoldRedraw.h"
 #include "ADLSProperties.h"
 
-int ADLSearchFrame::columnIndexes[] = { COLUMN_ACTIVE_SEARCH_STRING, COLUMN_SOURCE_TYPE, COLUMN_DEST_DIR, COLUMN_MIN_FILE_SIZE, COLUMN_MAX_FILE_SIZE };
-int ADLSearchFrame::columnSizes[] = { 120, 90, 90, 90, 90 };
-static const char* columnNames[] = {
-	N_("Enabled / Search String"),
-	N_("Source Type"),
-	N_("Destination Directory"),
-	N_("Min Size"),
-	N_("Max Size")
+static const ColumnInfo itemsColumns[] = {
+	{ N_("Enabled / Search String"), 120, false },
+	{ N_("Source Type"), 90, false },
+	{ N_("Destination Directory"), 90, false },
+	{ N_("Min Size"), 100, true },
+	{ N_("Max Size"), 100, true }
 };
 
 ADLSearchFrame::ADLSearchFrame(dwt::TabView* mdiParent) :
@@ -51,9 +49,7 @@ ADLSearchFrame::ADLSearchFrame(dwt::TabView* mdiParent) :
 		items = addChild(cs);
 		addWidget(items);
 
-		items->createColumns(WinUtil::getStrings(columnNames));
-		items->setColumnOrder(WinUtil::splitTokens(SETTING(ADLSEARCHFRAME_ORDER), columnIndexes));
-		items->setColumnWidths(WinUtil::splitTokens(SETTING(ADLSEARCHFRAME_WIDTHS), columnSizes));
+		WinUtil::makeColumns(items, itemsColumns, COLUMN_LAST, SETTING(ADLSEARCHFRAME_ORDER), SETTING(ADLSEARCHFRAME_WIDTHS));
 
 		items->onDblClicked(std::tr1::bind(&ADLSearchFrame::handleDoubleClick, this));
 		items->onKeyDown(std::tr1::bind(&ADLSearchFrame::handleKeyDown, this, _1));

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #include "stdafx.h"
 
 #include "QueueFrame.h"
@@ -29,30 +29,25 @@
 
 #include <dwt/util/StringUtils.h>
 
-int QueueFrame::columnIndexes[] = { COLUMN_TARGET, COLUMN_STATUS, COLUMN_SIZE, COLUMN_DOWNLOADED, COLUMN_PRIORITY,
-COLUMN_USERS, COLUMN_PATH, COLUMN_EXACT_SIZE, COLUMN_ERRORS, COLUMN_ADDED, COLUMN_TTH, COLUMN_TYPE };
-
-int QueueFrame::columnSizes[] = { 200, 300, 75, 110, 75, 200, 200, 75, 200, 100, 125, 75 };
-
-static const char* columnNames[] = {
-	N_("Filename"),
-	N_("Status"),
-	N_("Size"),
-	N_("Downloaded"),
-	N_("Priority"),
-	N_("Users"),
-	N_("Path"),
-	N_("Exact size"),
-	N_("Errors"),
-	N_("Added"),
-	N_("TTH Root"),
-	N_("Type")
+static const ColumnInfo filesColumns[] = {
+	{ N_("Filename"), 200, false },
+	{ N_("Status"), 300, false },
+	{ N_("Size"), 80, true },
+	{ N_("Downloaded"), 110, true },
+	{ N_("Priority"), 75, false },
+	{ N_("Users"), 200, false },
+	{ N_("Path"), 200, false },
+	{ N_("Exact size"), 100, true },
+	{ N_("Errors"), 200, false },
+	{ N_("Added"), 100, false },
+	{ N_("TTH"), 300, false },
+	{ N_("Type"), 60, false }
 };
 
 #define FILE_LIST_NAME _T("File Lists")
 
-void QueueFrame::QueueItemInfo::remove() { 
-	QueueManager::getInstance()->remove(getTarget()); 
+void QueueFrame::QueueItemInfo::remove() {
+	QueueManager::getInstance()->remove(getTarget());
 }
 
 QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
@@ -66,7 +61,7 @@ QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
 	queueSize(0),
 	queueItems(0),
 	fileLists(0)
-{		
+{
 	paned = addChild(WidgetVPaned::Seed(0.3));
 
 	{
@@ -80,23 +75,21 @@ QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
 		dirs->onKeyDown(std::tr1::bind(&QueueFrame::handleKeyDownDirs, this, _1));
 		dirs->onContextMenu(std::tr1::bind(&QueueFrame::handleDirsContextMenu, this, _1));
 	}
-	
+
 	{
 		files = addChild(WidgetFiles::Seed());
 		addWidget(files, true);
 		paned->setSecond(files);
 
 		files->setSmallImageList(WinUtil::fileImages);
-		files->createColumns(WinUtil::getStrings(columnNames));
-		files->setColumnOrder(WinUtil::splitTokens(SETTING(QUEUEFRAME_ORDER), columnIndexes));
-		files->setColumnWidths(WinUtil::splitTokens(SETTING(QUEUEFRAME_WIDTHS), columnSizes));
+		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(QUEUEFRAME_ORDER), SETTING(QUEUEFRAME_WIDTHS));
 		files->setSort(COLUMN_TARGET);
-		
+
 		files->onKeyDown(std::tr1::bind(&QueueFrame::handleKeyDownFiles, this, _1));
 		files->onSelectionChanged(std::tr1::bind(&QueueFrame::updateStatus, this));
 		files->onContextMenu(std::tr1::bind(&QueueFrame::handleFilesContextMenu, this, _1));
 	}
-	
+
 	{
 		CheckBox::Seed cs(_T("+/-"));
 		cs.style &= ~WS_TABSTOP;
@@ -105,7 +98,7 @@ QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
 		showTree->setChecked(BOOLSETTING(QUEUEFRAME_SHOW_TREE));
 		showTree->onClicked(std::tr1::bind(&QueueFrame::handleShowTreeClicked, this));
 	}
-	
+
 	initStatus();
 	statusSizes[STATUS_SHOW_TREE] = 16;
 
@@ -119,13 +112,13 @@ QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
 	QueueManager::getInstance()->addListener(this);
 
 	onSpeaker(std::tr1::bind(&QueueFrame::handleSpeaker, this));
-	
-	updateStatus();	
+
+	updateStatus();
 	layout();
 }
 
 QueueFrame::~QueueFrame() {
-	
+
 }
 
 LRESULT QueueFrame::handleSpeaker() {
@@ -136,7 +129,7 @@ LRESULT QueueFrame::handleSpeaker() {
 	for(TaskQueue::Iter ti = t.begin(); ti != t.end(); ++ti) {
 		if(ti->first == ADD_ITEM) {
 			boost::scoped_ptr<QueueItemInfoTask> iit(static_cast<QueueItemInfoTask*>(ti->second));
-			
+
 			dcassert(files->find(iit->ii) == -1);
 			addQueueItem(iit->ii, false);
 			updateStatus();
@@ -202,12 +195,12 @@ LRESULT QueueFrame::handleSpeaker() {
 }
 
 void QueueFrame::layout() {
-	dwt::Rectangle r(getClientAreaSize()); 
+	dwt::Rectangle r(getClientAreaSize());
 
 	layoutStatus(r);
 
 	mapWidget(STATUS_SHOW_TREE, showTree);
-	
+
 	bool checked = showTree->getChecked();
 	if(checked && !paned->getFirst()) {
 		paned->setFirst(dirs);
@@ -215,7 +208,7 @@ void QueueFrame::layout() {
 		paned->setFirst(0);
 	}
 	paned->setRect(r);
-	
+
 }
 
 bool QueueFrame::handleKeyDownDirs(int c) {
@@ -289,7 +282,7 @@ void QueueFrame::updateStatus() {
 
 	setStatus(STATUS_PARTIAL_COUNT, str(TF_("Items: %1%") % cnt));
 	setStatus(STATUS_PARTIAL_BYTES, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(total))));
-	
+
 	if(dirty) {
 		setStatus(STATUS_TOTAL_COUNT, str(TF_("Files: %1%") % queueItems));
 		setStatus(STATUS_TOTAL_BYTES, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(queueSize))));
@@ -308,7 +301,7 @@ void QueueFrame::postClosing() {
 		clearTree(ht);
 		ht = dirs->getNextSibling(ht);
 	}
-	
+
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_SHOW_TREE, showTree->getChecked());
 
 	for(DirectoryIter i = directories.begin(); i != directories.end(); ++i) {
@@ -316,7 +309,7 @@ void QueueFrame::postClosing() {
 	}
 	directories.clear();
 	files->clear();
-	
+
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
@@ -348,10 +341,10 @@ void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
 
 void QueueFrame::handleShowTreeClicked() {
 	bool checked = showTree->getChecked();
-	
+
 	dirs->setVisible(checked);
 	paned->setVisible(checked);
-	
+
 	layout();
 }
 
@@ -372,7 +365,7 @@ void QueueFrame::updateFiles() {
 		ii->update();
 		files->insert(files->size(), ii);
 	}
-	
+
 	files->resort();
 
 	curDir = getSelectedDir();
@@ -510,7 +503,7 @@ void QueueFrame::QueueItemInfo::update() {
 }
 
 QueueFrame::DirItemInfo::DirItemInfo(const string& dir_) : dir(dir_), text(dir_.empty() ? Util::emptyStringT : Text::toT(dir_.substr(0, dir_.length()-1))) {
-	
+
 }
 
 int QueueFrame::DirItemInfo::getImage() {
@@ -711,7 +704,7 @@ void QueueFrame::moveSelected() {
 		// Single file, get the full filename and move...
 		QueueItemInfo* ii = files->getSelectedData();
 		tstring target = Text::toT(ii->getTarget());
-		
+
 		if(WinUtil::browseSaveFile(createSaveDialog(), target)) {
 			QueueManager::getInstance()->move(ii->getTarget(), Text::fromT(target));
 		}
@@ -958,7 +951,7 @@ QueueFrame::MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	addRemoveMenu(menu, qii);
 	addRemoveSourcesMenu(menu, qii);
 	menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&QueueFrame::handleRemove, this));
-	
+
 	return menu;
 }
 
@@ -966,7 +959,7 @@ QueueFrame::MenuPtr QueueFrame::makeMultiMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	addPriorityMenu(menu);
-	
+
 	menu->appendItem(IDC_MOVE, T_("&Move/Rename"), std::tr1::bind(&QueueFrame::handleMove, this));
 	menu->appendSeparatorItem();
 	menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&QueueFrame::handleRemove, this));
@@ -1010,7 +1003,7 @@ void QueueFrame::addPMMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 void QueueFrame::addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 	unsigned int pos = parent->getCount();
 	MenuPtr menu = parent->appendPopup(T_("Re-add source"));
-	
+
 	menu->appendItem<Menu::SimpleDispatcher>(IDC_READD, T_("All"), std::tr1::bind(&QueueFrame::handleReadd, this, UserPtr()));
 	menu->appendSeparatorItem();
 	if(!addUsers(menu, IDC_READD + 1, &QueueFrame::handleReadd, qii->getBadSources(), true))
@@ -1053,7 +1046,7 @@ bool QueueFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 
 		usingDirMenu = false;
 		MenuPtr contextMenu;
-		
+
 		if(files->countSelected() == 1) {
 			QueueItemInfo* ii = files->getSelectedData();
 			contextMenu = makeSingleMenu(ii);
@@ -1073,7 +1066,7 @@ bool QueueFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 	} else {
 		dirs->select(pt);
 	}
-	
+
 	if(dirs->hasSelected()) {
 		usingDirMenu = true;
 		MenuPtr contextMenu = makeDirMenu();

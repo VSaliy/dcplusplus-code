@@ -24,17 +24,15 @@
 
 #include <dcpp/FavoriteManager.h>
 
-int UsersFrame::columnIndexes[] = { COLUMN_NICK, COLUMN_HUB, COLUMN_SEEN, COLUMN_DESCRIPTION, COLUMN_CID };
-int UsersFrame::columnSizes[] = { 200, 300, 150, 200, 125 };
-static const char* columnNames[] = {
-	N_("Auto grant slot / Nick"),
-	N_("Hub (last seen in, if offline)"),
-	N_("Time last seen"),
-	N_("Description"),
-	N_("CID")
+static const ColumnInfo usersColumns[] = {
+	{ N_("Auto grant slot / Nick"), 200, false },
+	{ N_("Hub (last seen in, if offline)"), 300, false },
+	{ N_("Time last seen"), 150, false },
+	{ N_("Description"), 200, false },
+	{ N_("CID"), 300, false }
 };
 
-UsersFrame::UsersFrame(dwt::TabView* mdiParent) : 
+UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("Favorite Users"), IDH_FAVUSERS, IDR_USERS),
 	users(0),
 	startup(true)
@@ -45,9 +43,7 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 		users = addChild(cs);
 		addWidget(users);
 
-		users->createColumns(WinUtil::getStrings(columnNames));
-		users->setColumnOrder(WinUtil::splitTokens(SETTING(HUBFRAME_ORDER), columnIndexes));
-		users->setColumnWidths(WinUtil::splitTokens(SETTING(HUBFRAME_WIDTHS), columnSizes));
+		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
 		users->setSort(COLUMN_NICK);
 
 		users->onDblClicked(std::tr1::bind(&UsersFrame::handleGetList, this));
@@ -187,7 +183,7 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		menu->appendSeparatorItem();
 		menu->appendItem(IDC_EDIT, T_("&Description"), std::tr1::bind(&UsersFrame::handleDescription, this));
 		menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&UsersFrame::handleRemove, this));
-		
+
 		menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 		return true;

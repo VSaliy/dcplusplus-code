@@ -91,7 +91,7 @@ void WinUtil::init() {
 
 	dirIconIndex = fileImageCount++;
 	dirMaskedIndex = fileImageCount++;
-	
+
 	if(BOOLSETTING(USE_SYSTEM_ICONS)) {
 		SHFILEINFO fi;
 		::SHGetFileInfo(_T("."), FILE_ATTRIBUTE_DIRECTORY, &fi, sizeof(fi), SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES);
@@ -112,7 +112,7 @@ void WinUtil::init() {
 		dwt::Bitmap tmp(IDB_USERS);
 		userImages->add(tmp, RGB(255, 0, 255));
 	}
-	
+
 	if(BOOLSETTING(URL_HANDLER)) {
 		registerDchubHandler();
 		registerADChubHandler();
@@ -122,7 +122,7 @@ void WinUtil::init() {
 		registerMagnetHandler();
 		urlMagnetRegistered = true;
 	}
-	
+
 	// Const so that noone else will change them after they've been initialized
 	dwt::Button::Seed& xbutton = const_cast<dwt::Button::Seed&>(Seeds::button);
 	ComboBox::Seed& xcomboBoxEdit = const_cast<ComboBox::Seed&>(Seeds::comboBoxEdit);
@@ -342,8 +342,8 @@ void WinUtil::openFolder(const tstring& file) {
 tstring WinUtil::getNicks(const CID& cid) throw() {
 	return Text::toT(Util::toString(ClientManager::getInstance()->getNicks(cid)));
 }
-tstring WinUtil::getNicks(const UserPtr& u) { 
-	return getNicks(u->getCID()); 
+tstring WinUtil::getNicks(const UserPtr& u) {
+	return getNicks(u->getCID());
 }
 
 pair<tstring, bool> WinUtil::getHubNames(const CID& cid) throw() {
@@ -355,8 +355,8 @@ pair<tstring, bool> WinUtil::getHubNames(const CID& cid) throw() {
 	}
 }
 
-pair<tstring, bool> WinUtil::getHubNames(const UserPtr& u) { 
-	return getHubNames(u->getCID()); 
+pair<tstring, bool> WinUtil::getHubNames(const UserPtr& u) {
+	return getHubNames(u->getCID());
 }
 
 int WinUtil::getIconIndex(const tstring& aFileName) {
@@ -411,7 +411,7 @@ void WinUtil::searchHash(const TTHValue& aHash) {
 }
 
 void WinUtil::addLastDir(const tstring& dir) {
-	TStringIter i = find(lastDirs.begin(), lastDirs.end(), dir); 
+	TStringIter i = find(lastDirs.begin(), lastDirs.end(), dir);
 	if(i != lastDirs.end()) {
 		lastDirs.erase(i);
 	}
@@ -424,7 +424,7 @@ void WinUtil::addLastDir(const tstring& dir) {
 bool WinUtil::browseSaveFile(dwt::SaveDialog dlg, tstring& file) {
 	tstring ext = Util::getFileExt(file);
 	tstring path = Util::getFilePath(file);
-	
+
 	if(!ext.empty()) {
 		ext = ext.substr(1); // remove leading dot so default extension works when browsing for file
 		dlg.addFilter(str(TF_("%1% files") % ext), _T("*.") + ext);
@@ -432,7 +432,7 @@ bool WinUtil::browseSaveFile(dwt::SaveDialog dlg, tstring& file) {
 	}
 	dlg.addFilter(T_("All files"), _T("*.*"));
 	dlg.setInitialDirectory(path);
-	
+
 	return dlg.open(file);
 }
 
@@ -470,7 +470,7 @@ int WinUtil::getOsMinor() {
 void WinUtil::setClipboard(const tstring& str) {
 	if(!mainWindow)
 		return;
-	
+
 	if(!::OpenClipboard(mainWindow->handle())) {
 		return;
 	}
@@ -600,23 +600,15 @@ bool WinUtil::getVersionInfo(OSVERSIONINFOEX& ver) {
 	return true;
 }
 
-#ifdef PORT_ME
-
-#define COMPILE_MULTIMON_STUBS 1
-#include <MultiMon.h>
-
-void WinUtil::splitTokens(int* array, const string& tokens, int maxItems /* = -1 */) throw() {
-	StringTokenizer<string> t(tokens, _T(','));
+void WinUtil::toInts(const string& str, std::vector<int>& array) {
+	StringTokenizer<string> t(str, _T(','));
 	StringList& l = t.getTokens();
-	if(maxItems == -1)
-		maxItems = l.size();
 
-	int k = 0;
-	for(StringList::const_iterator i = l.begin(); i != l.end() && k < maxItems; ++i, ++k) {
-		array[k] = Util::toInt(*i);
+	size_t k = 0;
+	for(size_t i = 0; i < l.size() && i < array.size(); ++i) {
+		array[k] = Util::toInt(l[i]);
 	}
 }
-#endif
 
 HLSCOLOR RGB2HLS (COLORREF rgb) {
 	unsigned char minval = min(GetRValue(rgb), min(GetGValue(rgb), GetBValue(rgb)));
@@ -1050,13 +1042,13 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 	}
 }
 
-// This is a hack - in gcc 4.2.3 at least, since UserPtr is in the boost namespace (boost::intrusive_ptr), 
+// This is a hack - in gcc 4.2.3 at least, since UserPtr is in the boost namespace (boost::intrusive_ptr),
 // std::tr1::bind has problem choosing the correct ref - std::ref or boost::ref so we bring it out of boost
 // using this holder as workaround
 struct X {
 	X(const UserPtr& user_) : user(user_) { }
 	operator UserPtr() const { return user; }
-	
+
 	UserPtr user;
 };
 
@@ -1072,23 +1064,23 @@ static void eachUser(const UserList& list, const UserFunction& f) {
 	}
 }
 
-static void addUsers(bool addSub, dwt::MenuPtr menu, const tstring& text, int id, 
-	const UserList& users, const UserFunction& f, const dwt::BitmapPtr& bitmap = dwt::BitmapPtr()) 
+static void addUsers(bool addSub, dwt::MenuPtr menu, const tstring& text, int id,
+	const UserList& users, const UserFunction& f, const dwt::BitmapPtr& bitmap = dwt::BitmapPtr())
 {
 	if(users.empty())
 		return;
-	
+
 	if(addSub) {
 		menu = menu->appendPopup(text, bitmap);
 	}
-	
+
 	if(users.size() > 1) {
 		menu->appendItem(id, T_("All"), std::tr1::bind(&eachUser, users, f), dwt::BitmapPtr());
-		
+
 		menu->appendSeparatorItem();
-		
+
 		for(size_t i = 0, iend = users.size(); i < iend; ++i) {
-			menu->appendItem(id + i + 1, WinUtil::getNicks(users[i]), 
+			menu->appendItem(id + i + 1, WinUtil::getNicks(users[i]),
 				std::tr1::bind(&eachUser, UserList(1, users[i]), f), dwt::BitmapPtr());
 		}
 	} else {
@@ -1120,31 +1112,50 @@ static bool isFav(const UserPtr& u) {
 
 void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const std::string& dir) {
 	bool addSub = users.size() > 1;
-	
+
 	QueueManager* qm = QueueManager::getInstance();
-	
-	addUsers(addSub, menu, T_("&Get file list"), IDC_GETLIST, users, 
+
+	addUsers(addSub, menu, T_("&Get file list"), IDC_GETLIST, users,
 		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW, dir));
-	
-	addUsers(addSub, menu, T_("&Browse file list"), IDC_BROWSELIST, filter(users, &isAdc), 
+
+	addUsers(addSub, menu, T_("&Browse file list"), IDC_BROWSELIST, filter(users, &isAdc),
 		std::tr1::bind(&QueueManager::addPfs, qm, _1, dir));
-	
+
 	addUsers(addSub, menu, T_("&Match queue"), IDC_MATCH_QUEUE, users,
 		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_MATCH_QUEUE, std::string()));
-	
+
 	addUsers(addSub, menu, T_("&Send private message"), IDC_PM, users,
 		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, tstring()));
 
 	addUsers(addSub, menu, T_("Add To &Favorites"), IDC_ADD_TO_FAVORITES, filter(users, &isFav),
 		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
-	
+
 	addUsers(addSub, menu, T_("Grant &extra slot"), IDC_GRANTSLOT, users,
 		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));
 
 	typedef void (QueueManager::*qmp)(const UserPtr&, int);
 	addUsers(addSub, menu, T_("Remove user from queue"), IDC_REMOVE_FROM_QUEUE, users,
-		std::tr1::bind((qmp)&QueueManager::removeSource, qm, _1, 
+		std::tr1::bind((qmp)&QueueManager::removeSource, qm, _1,
 			(int)QueueItem::Source::FLAG_REMOVED));
+}
+
+void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount,
+	const string& order, const string& widths)
+{
+	std::vector<tstring> n(columnCount);
+	std::vector<int> o(columnCount);
+	std::vector<int> w(columnCount);
+	std::vector<bool> a(columnCount);
+
+	for(size_t i = 0; i < columnCount; ++i) {
+		n[i] = T_(columnInfo[i].name);
+		o[i] = i;
+		w[i] = columnInfo[i].size;
+		a[i] = columnInfo[i].rightAlign;
+	}
+	toInts(order, o);
+	toInts(widths, w);
+	table->createColumns(n, w, a, o);
 }
 
 #ifdef PORT_ME

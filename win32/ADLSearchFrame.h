@@ -22,8 +22,8 @@
 #include "StaticFrame.h"
 #include <dcpp/ADLSearch.h>
 
-class ADLSearchFrame : 
-	public StaticFrame<ADLSearchFrame> 
+class ADLSearchFrame :
+	public StaticFrame<ADLSearchFrame>
 {
 	typedef StaticFrame<ADLSearchFrame> BaseType;
 public:
@@ -54,9 +54,6 @@ private:
 		COLUMN_MAX_FILE_SIZE,
 		COLUMN_LAST
 	};
-
-	static int columnSizes[COLUMN_LAST];
-	static int columnIndexes[COLUMN_LAST];
 
 	TablePtr items;
 	ButtonPtr add;

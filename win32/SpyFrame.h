@@ -64,9 +64,6 @@ private:
 		COLUMN_LAST
 	};
 
-	static int columnSizes[COLUMN_LAST];
-	static int columnIndexes[COLUMN_LAST];
-
 	TablePtr searches;
 
 	CheckBoxPtr ignoreTTH;

@@ -27,22 +27,19 @@
 #include <dcpp/ShareManager.h>
 #include <set>
 
-int SearchFrame::columnIndexes[] = { COLUMN_FILENAME, COLUMN_NICK, COLUMN_TYPE, COLUMN_SIZE,
-	COLUMN_PATH, COLUMN_SLOTS, COLUMN_CONNECTION, COLUMN_HUB, COLUMN_EXACT_SIZE, COLUMN_IP, COLUMN_TTH, COLUMN_CID };
-int SearchFrame::columnSizes[] = { 200, 100, 50, 80, 100, 40, 70, 150, 80, 100, 125, 125 };
-static const char* columnNames[] = {
-	N_("File"),
-	N_("User"),
-	N_("Type"),
-	N_("Size"),
-	N_("Path"),
-	N_("Slots"),
-	N_("Connection"),
-	N_("Hub"),
-	N_("Exact size"),
-	N_("IP"),
-	N_("TTH Root"),
-	N_("CID")
+static const ColumnInfo resultsColumns[] = {
+	{ N_("File"), 200, false },
+	{ N_("User"), 100, false },
+	{ N_("Type"), 60, false },
+	{ N_("Size"), 80, true },
+	{ N_("Path"), 100, false },
+	{ N_("Slots"), 40, true },
+	{ N_("Connection"), 70, false },
+	{ N_("Hub"), 150, false },
+	{ N_("Exact size"), 100, true },
+	{ N_("IP"), 100, false },
+	{ N_("TTH"), 300, false },
+	{ N_("CID"), 300, false }
 };
 
 TStringList SearchFrame::lastSearches;
@@ -57,7 +54,7 @@ int SearchFrame::SearchInfo::getImage() {
 int SearchFrame::SearchInfo::compareItems(SearchInfo* a, SearchInfo* b, int col) {
 
 	switch(col) {
-	case COLUMN_NICK: 
+	case COLUMN_NICK:
 		return compare(a->srs.size(), b->srs.size());
 	case COLUMN_TYPE:
 		if(a->srs[0]->getType() == b->srs[0]->getType())
@@ -143,7 +140,7 @@ SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString_,
 		searchBox = addChild(WinUtil::Seeds::comboBoxEdit);
 		searchBox->setHelpId(IDH_SEARCH_SEARCH_FOR);
 		addWidget(searchBox);
-		
+
 		for(TStringIter i = lastSearches.begin(); i != lastSearches.end(); ++i) {
 			searchBox->insertValue(0, *i);
 		}
@@ -247,11 +244,8 @@ SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString_,
 		results = addChild(WidgetResults::Seed());
 		addWidget(results);
 
-		results->createColumns(WinUtil::getStrings(columnNames));
-		results->setColumnOrder(WinUtil::splitTokens(SETTING(SEARCHFRAME_ORDER), columnIndexes));
-		results->setColumnWidths(WinUtil::splitTokens(SETTING(SEARCHFRAME_WIDTHS), columnSizes));
-
 		results->setSmallImageList(WinUtil::fileImages);
+		WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
 
 		results->onDblClicked(std::tr1::bind(&SearchFrame::handleDoubleClick, this));
 		results->onKeyDown(std::tr1::bind(&SearchFrame::handleKeyDown, this, _1));
@@ -268,7 +262,7 @@ SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString_,
 	}
 
 	initStatus();
-	
+
 	statusSizes[STATUS_SHOW_UI] = 16; ///@todo get real checkbox width
 
 	layout();
@@ -311,82 +305,82 @@ SearchFrame::~SearchFrame() {
 }
 
 void SearchFrame::layout() {
-	dwt::Rectangle r(getClientAreaSize()); 
-	
+	dwt::Rectangle r(getClientAreaSize());
+
 	layoutStatus(r);
 	mapWidget(STATUS_SHOW_UI, showUI);
 
 	if(showUI->getChecked()) {
 
 		const long width = 220, labelH = 16, margin = 4, spacing = 2, groupSpacing = 4;
-		
+
 		dwt::Rectangle rect = r;
-		
+
 		results->setBounds(rect.getRight(rect.width() - width));
-		
+
 		rect.size.x = width;
 
 		long yedit = size->getTextSize(_T("A")).y + 8;
 		long comboH = 5 * yedit;
-		
+
 		rect.pos.x += margin;
 		rect.size.x -= margin * 2;
-		
+
 		rect.size.y = labelH;
-		
+
 		// "Search for"
 		searchLabel->setBounds(rect);
-		
+
 		rect.pos.y += rect.size.y + spacing;
 		rect.size.y = comboH;
-		
+
 		searchBox->setBounds(rect);
-		
+
 		rect.pos.y += yedit + spacing;
-		
+
 		purge->setBounds(dwt::Rectangle(rect.x(), rect.y(), 75, yedit));
 		doSearch->setBounds(dwt::Rectangle(rect.right() - 100, rect.y(), 100, yedit));
-		
+
 		rect.pos.y += yedit + groupSpacing;
-		
+
 		rect.size.y = labelH;
 		sizeLabel->setBounds(rect);
-		
+
 		rect.pos.y += rect.size.y + spacing;
-		
+
 		long w2 = rect.size.x - 2 * spacing;
-		
+
 		dwt::Rectangle third = rect;
-		
+
 		third.size.y = comboH;
 		third.size.x = w2 / 3;
-		
+
 		mode->setBounds(third);
-		
+
 		third.pos.x += third.size.x + spacing;
 		third.size.y = yedit;
-		
+
 		size->setBounds(third);
-		
+
 		third.pos.x += third.size.x + spacing;
 		third.size.y = comboH;
-		
+
 		sizeMode->setBounds(third);
-		
+
 		rect.pos.y += yedit + groupSpacing;
 		rect.size.y = labelH;
-		
+
 		typeLabel->setBounds(rect);
-		
+
 		rect.pos.y += rect.size.y + spacing;
 		rect.size.y = comboH;
 		fileType->setBounds(rect);
 
 		rect.pos.y += yedit + groupSpacing;
 		rect.size.y = labelH;
-		
+
 		optionLabel->setBounds(rect);
-		
+
 		rect.pos.y += rect.size.y + spacing;
 		rect.size.y = yedit;
 		slots->setBounds(rect);
@@ -394,11 +388,11 @@ void SearchFrame::layout() {
 		rect.pos.y += rect.size.y + spacing;
 		rect.size.y = yedit;
 		filter->setBounds(rect);
-		
+
 		rect.pos.y += rect.size.y + groupSpacing;
 		rect.size.y = labelH;
 		hubsLabel->setBounds(rect);
-		
+
 		rect.pos.y += rect.size.y + spacing;
 		rect.size.y = std::min(yedit * 5, r.size.y - rect.pos.y - margin * 2);
 		hubs->setBounds(rect);
@@ -425,7 +419,7 @@ void SearchFrame::SearchInfo::view() {
 	try {
 		if(srs[0]->getType() == SearchResult::TYPE_FILE) {
 			QueueManager::getInstance()->add(Util::getTempPath() + srs[0]->getFileName(),
-				srs[0]->getSize(), srs[0]->getTTH(), srs[0]->getUser(), 
+				srs[0]->getSize(), srs[0]->getTTH(), srs[0]->getUser(),
 				QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_TEXT);
 		}
 	} catch(const Exception&) {
@@ -457,10 +451,10 @@ void SearchFrame::SearchInfo::DownloadWhole::operator()(SearchInfo* si) {
 		// TODO Add all users...
 		QueueItem::Priority prio = WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT;
 		if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
-			QueueManager::getInstance()->addDirectory(Text::fromT(si->columns[COLUMN_PATH]), 
+			QueueManager::getInstance()->addDirectory(Text::fromT(si->columns[COLUMN_PATH]),
 				si->srs[0]->getUser(), Text::fromT(tgt), prio);
 		} else {
-			QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), 
+			QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(),
 				Text::fromT(tgt), prio);
 		}
 	} catch(const Exception&) {
@@ -542,7 +536,7 @@ void SearchFrame::SearchInfo::update() {
 		columns[COLUMN_CONNECTION].clear();
 		columns[COLUMN_IP].clear();
 		columns[COLUMN_CID].clear();
-		
+
 		std::set<std::string> hubs;
 		for(SearchResultList::const_iterator i = srs.begin(), iend = srs.end(); i != iend; ++i) {
 			hubs.insert((*i)->getHubName());
@@ -561,7 +555,7 @@ void SearchFrame::SearchInfo::update() {
 		}
 		columns[COLUMN_HUB] = Text::toT(sr->getHubName());
 		columns[COLUMN_CID] = Text::toT(sr->getUser()->getCID().toBase32());
-	} 
+	}
 }
 
 LRESULT SearchFrame::handleSpeaker(WPARAM wParam, LPARAM lParam) {
@@ -789,7 +783,7 @@ struct UserCollector {
 	void operator()(T* si) {
 		for(SearchResultList::const_iterator i = si->srs.begin(), iend = si->srs.end(); i != iend; ++i) {
 			const SearchResultPtr& sr = *i;
-			if(std::find(users.begin(), users.end(), sr->getUser()) == users.end()) 
+			if(std::find(users.begin(), users.end(), sr->getUser()) == users.end())
 				users.push_back(sr->getUser());
 		}
 	}
@@ -813,10 +807,10 @@ SearchFrame::MenuPtr SearchFrame::makeMenu() {
 		WinUtil::addHashItems(menu, TTHValue(Text::fromT(checkTTH.tth)), si->getText(COLUMN_FILENAME));
 	}
 	menu->appendSeparatorItem();
-	
+
 	UserCollector users = results->forEachSelectedT(UserCollector());
 	WinUtil::addUserItems(menu, users.users, getParent());
-	
+
 	menu->appendSeparatorItem();
 	menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&SearchFrame::handleRemove, this));
 	prepareMenu(menu, UserCommand::CONTEXT_SEARCH, checkTTH.hubs);
@@ -883,7 +877,7 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 		if(currentSearch.empty()) {
 			return;
 		}
-		
+
 		if(!aResult->getToken().empty() && token != aResult->getToken()) {
 			droppedResults++;
 			speak(SPEAK_FILTER_RESULT);
@@ -989,7 +983,7 @@ void SearchFrame::runSearch() {
 		SettingsManager::getInstance()->set(SettingsManager::LAST_SEARCH_TYPE, fileType->getSelected());
 
 	tstring s = searchBox->getText();
-	
+
 	if(s.empty())
 		return;
 
@@ -1029,8 +1023,8 @@ void SearchFrame::runSearch() {
 				si = currentSearch.erase(si);
 				continue;
 			}
-			if ((*si)[0] != _T('-')) 
-				s += *si + _T(' ');	
+			if ((*si)[0] != _T('-'))
+				s += *si + _T(' ');
 			++si;
 		}
 
@@ -1097,11 +1091,11 @@ bool SearchFrame::eachSecond() {
 		setStatus(STATUS_STATUS, msg);
 		setText(str(TF_("Search - %1%") % msg));
 		return true;
-	} 
-	
+	}
+
 	setStatus(STATUS_STATUS, T_("Ready to search..."));
 	setText(T_("Search - Ready to search..."));
-	
+
 	return false;
 }
 

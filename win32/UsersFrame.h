@@ -28,8 +28,8 @@
 #include "UserInfoBase.h"
 #include "resource.h"
 
-class UsersFrame : 
-	public StaticFrame<UsersFrame>, 
+class UsersFrame :
+	public StaticFrame<UsersFrame>,
 	private FavoriteManagerListener,
 	public AspectUserInfo<UsersFrame>
 {
@@ -71,7 +71,7 @@ private:
 	class UserInfo : public UserInfoBase {
 	public:
 		UserInfo(const FavoriteUser& u);
-		
+
 		const tstring& getText(int col) const {
 			return columns[col];
 		}
@@ -90,13 +90,10 @@ private:
 
 		tstring columns[COLUMN_LAST];
 	};
-	
+
 	typedef TypedTable<UserInfo> WidgetUsers;
 	typedef WidgetUsers* WidgetUsersPtr;
 	WidgetUsersPtr users;
-
-	static int columnSizes[COLUMN_LAST];
-	static int columnIndexes[COLUMN_LAST];
 
 	bool startup;
 
