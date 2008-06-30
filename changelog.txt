@@ -5,6 +5,9 @@
 * [L#234458] Disable some menu commands in finished windows when files don't exist (poy)
 * Added option to always display tray icon and reorganized its menu
 * [L#234897] Improve error message when file list is too big (thanks steven sheehy)
+* [L#234529] Right-alight sizes
+* [L#243908] Better nick sorting in search results (thanks emtee)
+* [L#231447] Fix file list positioning from search
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
