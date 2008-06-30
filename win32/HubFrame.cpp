@@ -31,17 +31,15 @@
 #include <dcpp/ConnectionManager.h>
 #include <dcpp/SearchManager.h>
 
-int HubFrame::columnSizes[] = { 100, 75, 75, 100, 75, 100, 100, 125 };
-int HubFrame::columnIndexes[] = { COLUMN_NICK, COLUMN_SHARED, COLUMN_DESCRIPTION, COLUMN_TAG, COLUMN_CONNECTION, COLUMN_IP, COLUMN_EMAIL, COLUMN_CID };
-static const char* columnNames[] = {
-	N_("Nick"),
-	N_("Shared"),
-	N_("Description"),
-	N_("Tag"),
-	N_("Connection"),
-	N_("IP"),
-	N_("E-Mail"),
-	N_("CID")
+static const ColumnInfo usersColumns[] = {
+	{ N_("Nick"), 100, false },
+	{ N_("Shared"), 80, true },
+	{ N_("Description"), 75, false },
+	{ N_("Tag"), 100, false },
+	{ N_("Connection"), 75, false },
+	{ N_("IP"), 100, false },
+	{ N_("E-Mail"), 100, false },
+	{ N_("CID"), 300, false}
 };
 
 HubFrame::FrameList HubFrame::frames;
@@ -67,7 +65,7 @@ void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
 	new HubFrame(mdiParent, url);
 }
 
-HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) : 
+HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF),
 	chat(0),
 	message(0),
@@ -78,9 +76,9 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	users(0),
 	client(0),
 	url(url_),
-	timeStamps(BOOLSETTING(TIME_STAMPS)), 
-	updateUsers(false), 
-	waitingForPW(false), 
+	timeStamps(BOOLSETTING(TIME_STAMPS)),
+	updateUsers(false),
+	waitingForPW(false),
 	resort(false),
 	showJoins(BOOLSETTING(SHOW_JOINS)),
 	favShowJoins(BOOLSETTING(FAV_SHOW_JOINS)),
@@ -115,9 +113,9 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 		filterType = addChild(WinUtil::Seeds::comboBoxStatic);
 		filterType->setHelpId(IDH_HUB_FILTER);
 		addWidget(filterType);
-		
+
 		for(int j=0; j<COLUMN_LAST; j++) {
-			filterType->addValue(T_(columnNames[j]));
+			filterType->addValue(T_(usersColumns[j].name));
 		}
 		filterType->addValue(T_("Any"));
 		filterType->setSelected(COLUMN_LAST);
@@ -128,13 +126,11 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 		users = addChild(WidgetUsers::Seed());
 		addWidget(users);
 		paned->setSecond(users);
-		
+
 		users->setSmallImageList(WinUtil::userImages);
-		users->createColumns(WinUtil::getStrings(columnNames));
-		users->setColumnOrder(WinUtil::splitTokens(SETTING(HUBFRAME_ORDER), columnIndexes));
-		users->setColumnWidths(WinUtil::splitTokens(SETTING(HUBFRAME_WIDTHS), columnSizes));
+		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
 		users->setSort(COLUMN_NICK);
-		
+
 		users->onSelectionChanged(std::tr1::bind(&HubFrame::updateStatus, this));
 		users->onDblClicked(std::tr1::bind(&HubFrame::handleDoubleClickUsers, this));
 		users->onKeyDown(std::tr1::bind(&HubFrame::handleUsersKeyDown, this, _1));
@@ -151,7 +147,7 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 		paned->setFirst(chat);
 		chat->onContextMenu(std::tr1::bind(&HubFrame::handleChatContextMenu, this, _1));
 	}
-	
+
 	{
 		CheckBox::Seed cs(_T("+/-"));
 		cs.style &= ~WS_TABSTOP;
@@ -166,20 +162,20 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	statusSizes[STATUS_SHOW_USERS] = 16;
 
 	layout();
-	
+
 	initSecond();
-	
+
 	onSpeaker(std::tr1::bind(&HubFrame::handleSpeaker, this, _1, _2));
 	onTabContextMenu(std::tr1::bind(&HubFrame::handleTabContextMenu, this, _1));
 	onCommand(std::tr1::bind(&HubFrame::handleReconnect, this), IDC_RECONNECT);
 	onCommand(std::tr1::bind(&HubFrame::handleFollow, this), IDC_FOLLOW);
-	
+
 	client = ClientManager::getInstance()->getClient(url);
 	client->addListener(this);
 	client->connect();
-	
+
 	frames.push_back(this);
-	
+
 	showUsers->onClicked(std::tr1::bind(&HubFrame::handleShowUsersClicked, this));
 
 	FavoriteManager::getInstance()->addListener(this);
@@ -212,23 +208,23 @@ void HubFrame::layout() {
 	bool scroll = chat->scrollIsAtEnd();
 
 	const int border = 2;
-	
-	dwt::Rectangle r(getClientAreaSize()); 
+
+	dwt::Rectangle r(getClientAreaSize());
 
 	layoutStatus(r);
 	mapWidget(STATUS_SHOW_USERS, showUsers);
-	
+
 	int ymessage = message->getTextSize(_T("A")).y + 10;
 	int xfilter = showUsers->getChecked() ? std::min(r.width() / 4, 200l) : 0;
 	dwt::Rectangle rm(0, r.size.y - ymessage, r.width() - xfilter, ymessage);
 	message->setBounds(rm);
 
 	r.size.y -= rm.size.y + border;
-	
+
 	rm.pos.x += rm.width() + border;
 	rm.size.x = showUsers->getChecked() ? xfilter * 2 / 3 - border : 0;
 	filter->setBounds(rm);
-	
+
 	rm.pos.x += rm.width() + border;
 	rm.size.x = showUsers->getChecked() ? xfilter / 3 - border : 0;
 	rm.size.y += 140;
@@ -261,7 +257,7 @@ bool HubFrame::eachSecond() {
 		updateUsers = false;
 		speak();
 	}
-	
+
 	updateStatus();
 	return true;
 }
@@ -692,11 +688,11 @@ bool HubFrame::handleMessageKeyDown(int c) {
 		complete.clear(), inTabComplete = false;
 
 	switch(c) {
-	case VK_TAB: 
+	case VK_TAB:
 		if(tab())
 			return true;
 		break;
-	case VK_RETURN: 
+	case VK_RETURN:
 		if(enter())
 			return true;
 		break;
@@ -716,7 +712,7 @@ bool HubFrame::handleMessageKeyDown(int c) {
 			// move cursor to end of line
 			message->setSelection(message->length(), message->length());
 			return true;
-		} 
+		}
 		break;
 	case VK_DOWN:
 		if ( historyActive() ) {
@@ -735,7 +731,7 @@ bool HubFrame::handleMessageKeyDown(int c) {
 			// move cursor to end of line
 			message->setSelection(message->length(), message->length());
 			return true;
-		} 
+		}
 		break;
 	case VK_PRIOR: // page up
 		{
@@ -754,7 +750,7 @@ bool HubFrame::handleMessageKeyDown(int c) {
 
 			message->setText(prevCommands[curCommandPosition]);
 			return true;
-		} 
+		}
 		break;
 	case VK_END:
 		if (historyActive()) {
@@ -762,7 +758,7 @@ bool HubFrame::handleMessageKeyDown(int c) {
 
 			message->setText(currentCommand);
 			return true;
-		} 
+		}
 		break;
 	}
 	return false;
@@ -780,13 +776,13 @@ int HubFrame::UserInfo::getImage() const {
 	return image;
 }
 
-HubFrame::UserTask::UserTask(const OnlineUser& ou) : user(ou.getUser()), identity(ou.getIdentity()) { 
+HubFrame::UserTask::UserTask(const OnlineUser& ou) : user(ou.getUser()), identity(ou.getIdentity()) {
 
 }
 
-HubFrame::PMTask::PMTask(const OnlineUser& from_, const OnlineUser& to_, const OnlineUser& replyTo_, const string& m) : 
-	StringTask(m), from(from_.getUser()), to(to_.getUser()), replyTo(replyTo_.getUser()), 
-	hub(replyTo_.getIdentity().isHub()), bot(replyTo_.getIdentity().isBot()) 
+HubFrame::PMTask::PMTask(const OnlineUser& from_, const OnlineUser& to_, const OnlineUser& replyTo_, const string& m) :
+	StringTask(m), from(from_.getUser()), to(to_.getUser()), replyTo(replyTo_.getUser()),
+	hub(replyTo_.getIdentity().isHub()), bot(replyTo_.getIdentity().isBot())
 {
 
 }
@@ -1135,9 +1131,9 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 	if(pt.x() == -1 || pt.y() == -1) {
 		pt = chat->getContextMenuPos();
 	}
-		
+
 	tstring txt = chat->textUnderCursor(pt);
-	
+
 	if(!txt.empty()) {
 		// Possible nickname click, let's see if we can find one like it in the name list...
 		int pos = users->find(txt);
@@ -1148,7 +1144,7 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 			doMenu = true;
 		}
 	}
-	
+
 	return doMenu ? handleUsersContextMenu(pt) : false;
 }
 
@@ -1164,13 +1160,13 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 		menu->appendSeparatorItem();
 		MenuPtr copyMenu = menu->appendPopup(T_("&Copy"));
 		for(int j=0; j<COLUMN_LAST; j++) {
-			copyMenu->appendItem(IDC_MULTI_COPY + j, T_(columnNames[j]), std::tr1::bind(&HubFrame::handleMultiCopy, this, _1));
+			copyMenu->appendItem(IDC_MULTI_COPY + j, T_(usersColumns[j].name), std::tr1::bind(&HubFrame::handleMultiCopy, this, _1));
 		}
 		menu->setDefaultItem(IDC_GETLIST);
 		prepareMenu(menu, UserCommand::CONTEXT_CHAT, client->getHubUrl());
-		
+
 		inTabMenu = false;
-		
+
 		menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 		return true;
 	}
@@ -1185,7 +1181,7 @@ bool HubFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
 	if(!FavoriteManager::getInstance()->isFavoriteHub(url)) {
 		menu->appendItem(IDC_ADD_TO_FAVORITES, T_("Add To &Favorites"), std::tr1::bind(&HubFrame::addAsFavorite, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_HUBS)));
 	}
-	
+
 	menu->appendItem(IDC_RECONNECT, T_("&Reconnect\tCtrl+R"), std::tr1::bind(&HubFrame::handleReconnect, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_RECONNECT)));
 	menu->appendItem(IDC_COPY_HUB, T_("Copy &address to clipboard"), std::tr1::bind(&HubFrame::handleCopyHub, this));
 
@@ -1194,21 +1190,21 @@ bool HubFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
 	menu->appendItem(IDC_CLOSE_WINDOW, T_("&Close"), std::tr1::bind(&HubFrame::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
 
 	inTabMenu = true;
-	
+
 	menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 	return true;
 }
 
 void HubFrame::handleShowUsersClicked() {
 	bool checked = showUsers->getChecked();
-	
+
 	users->setVisible(checked);
 	paned->setVisible(checked);
-	
+
 	if(checked) {
 		updateUserList();
 	}
-	
+
 	SettingsManager::getInstance()->set(SettingsManager::GET_USER_INFO, checked);
 
 	layout();
@@ -1371,7 +1367,7 @@ bool HubFrame::tab() {
 			}
 
 			message->setSelection(textStart, -1);
-			
+
 			// no shift, use partial nick when appropriate
 			if(isShiftPressed()) {
 				message->replaceSelection(nick);

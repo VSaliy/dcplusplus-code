@@ -38,26 +38,26 @@ int TransferView::connectionSizes[] = { 125, 100, 375, 100, 125, 125, 75, 100, 1
 int TransferView::downloadIndexes[] = { DOWNLOAD_COLUMN_FILE, DOWNLOAD_COLUMN_PATH, DOWNLOAD_COLUMN_STATUS, DOWNLOAD_COLUMN_TIMELEFT, DOWNLOAD_COLUMN_SPEED, DOWNLOAD_COLUMN_DONE, DOWNLOAD_COLUMN_SIZE };
 int TransferView::downloadSizes[] = { 200, 300, 150, 200, 125, 100, 100 };
 
-static const char* connectionNames[] = {
-	N_("User"),
-	N_("Hub"),
-	N_("Status"),
-	N_("Speed"),
-	N_("Chunk"),
-	N_("Transferred (Ratio)"),
-	N_("Queued"),
-	N_("Cipher"),
-	N_("IP")
+static const ColumnInfo connectionColumns[] = {
+	{ N_("User"), 125, false },
+	{ N_("Hub"), 100, false },
+	{ N_("Status"), 375, false },
+	{ N_("Speed"), 100, true },
+	{ N_("Chunk"), 125, true },
+	{ N_("Transferred (Ratio)"), 125, true },
+	{ N_("Queued"), 80, true },
+	{ N_("Cipher"), 150, false },
+	{ N_("IP"), 100, false }
 };
 
-static const char* downloadNames[] = {
-	N_("Filename"),
-	N_("Path"),
-	N_("Status"),
-	N_("Time left"),
-	N_("Speed"),
-	N_("Done"),
-	N_("Size")
+static const ColumnInfo downloadColumns[] = {
+	{ N_("Filename"), 200, false },
+	{ N_("Path"), 300, false },
+	{ N_("Status"), 150, false },
+	{ N_("Time left"), 200, true },
+	{ N_("Speed"), 125, true },
+	{ N_("Done"), 80, true },
+	{ N_("Size"), 80, true }
 };
 
 static bool noClose() {
@@ -68,7 +68,7 @@ static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
 	control->setBounds(dwt::Rectangle(parent->getClientAreaSize()));
 }
 
-TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) : 
+TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	WidgetFactory<dwt::Container>(parent),
 	connections(0),
 	connectionsWindow(0),
@@ -77,13 +77,13 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	mdi(mdi_)
 {
 	create();
-	
+
 	{
 		TabView::Seed cs(0);
 		cs.location = getBounds();
 		tabs = addChild(cs);
 		tabs->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
-	}		
+	}
 
 	{
 		Container::Seed cs;
@@ -102,7 +102,7 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		downloadsWindow->onClosing(std::tr1::bind(&noClose));
 		tabs->add(downloadsWindow);
 	}
-	
+
 	{
 		arrows = dwt::ImageListPtr(new dwt::ImageList(16, 16, ILC_COLOR32 | ILC_MASK));
 		dwt::Bitmap tmp(IDB_ARROWS);
@@ -112,23 +112,21 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		connections = connectionsWindow->addChild(WidgetConnections::Seed());
 
 		connections->setSmallImageList(arrows);
-		connections->createColumns(WinUtil::getStrings(connectionNames));
-		connections->setColumnOrder(WinUtil::splitTokens(SETTING(CONNECTIONS_ORDER), connectionIndexes));
-		connections->setColumnWidths(WinUtil::splitTokens(SETTING(CONNECTIONS_WIDTHS), connectionSizes));
+		WinUtil::makeColumns(connections, connectionColumns, CONNECTION_COLUMN_LAST, SETTING(CONNECTIONS_ORDER), SETTING(CONNECTIONS_WIDTHS));
+
 		connections->setColor(WinUtil::textColor, WinUtil::bgColor);
 		connections->setSort(CONNECTION_COLUMN_USER);
+
 		connections->onContextMenu(std::tr1::bind(&TransferView::handleConnectionsMenu, this, _1));
 		connections->onKeyDown(std::tr1::bind(&TransferView::handleKeyDown, this, _1));
 		connections->onDblClicked(std::tr1::bind(&TransferView::handleDblClicked, this));
 		connections->onRaw(std::tr1::bind(&TransferView::handleCustomDraw, this, _1, _2), dwt::Message(WM_NOTIFY, NM_CUSTOMDRAW));
 	}
-	
+
 	{
 		downloads = downloadsWindow->addChild(WidgetDownloads::Seed());
 
-		downloads->createColumns(WinUtil::getStrings(downloadNames));
-		downloads->setColumnOrder(WinUtil::splitTokens(SETTING(DOWNLOADS_ORDER), downloadIndexes));
-		downloads->setColumnWidths(WinUtil::splitTokens(SETTING(DOWNLOADS_WIDTHS), downloadSizes));
+		WinUtil::makeColumns(downloads, downloadColumns, DOWNLOAD_COLUMN_LAST, SETTING(DOWNLOADS_ORDER), SETTING(DOWNLOADS_WIDTHS));
 		downloads->setSort(DOWNLOAD_COLUMN_STATUS);
 		downloads->setColor(WinUtil::textColor, WinUtil::bgColor);
 		downloads->setSmallImageList(WinUtil::fileImages);
@@ -136,7 +134,7 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		downloads->onContextMenu(std::tr1::bind(&TransferView::handleDownloadsMenu, this, _1));
 		downloads->onRaw(std::tr1::bind(&TransferView::handleCustomDraw, this, _1, _2), dwt::Message(WM_NOTIFY, NM_CUSTOMDRAW));
 	}
-	
+
 	connectionsWindow->onSized(std::tr1::bind(&fills, connectionsWindow, connections));
 	downloadsWindow->onSized(std::tr1::bind(&fills, downloadsWindow, downloads));
 
@@ -144,9 +142,9 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	onRaw(std::tr1::bind(&TransferView::handleDestroy, this, _1, _2), dwt::Message(WM_DESTROY));
 	onSpeaker(std::tr1::bind(&TransferView::handleSpeaker, this, _1, _2));
 	noEraseBackground();
-	
+
 	layout();
-	
+
 	ConnectionManager::getInstance()->addListener(this);
 	DownloadManager::getInstance()->addListener(this);
 	UploadManager::getInstance()->addListener(this);
@@ -178,16 +176,16 @@ HRESULT TransferView::handleDestroy(WPARAM wParam, LPARAM lParam) {
 
 	SettingsManager::getInstance()->set(SettingsManager::DOWNLOADS_ORDER, WinUtil::toString(downloads->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::DOWNLOADS_WIDTHS, WinUtil::toString(downloads->getColumnWidths()));
-	
+
 	return 0;
 }
 
 TransferView::MenuPtr TransferView::makeContextMenu(ConnectionInfo* ii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	
+
 	appendUserItems(mdi, menu);
 	menu->appendSeparatorItem();
-	
+
 	menu->appendItem(IDC_FORCE, T_("&Force attempt"), std::tr1::bind(&TransferView::handleForce, this));
 	menu->appendItem(IDC_COPY_NICK, T_("Copy &nick to clipboard"), std::tr1::bind(&TransferView::handleCopyNick, this));
 	menu->appendSeparatorItem();
@@ -295,10 +293,10 @@ static inline void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item,
 	COLORREF barBase = fgColor;
 	COLORREF bgBase = WinUtil::bgColor;
 	int mod = (HLS_L(RGB2HLS(bgBase)) >= 128) ? -30 : 30;
-	
+
 	// Dark, medium and light shades
 	COLORREF barPal[3] = { HLS_TRANSFORM(barBase, -40, 50), barBase, HLS_TRANSFORM(barBase, 40, -30) };
-	
+
 	// Two shades of the background color
 	COLORREF bgPal[2] = { HLS_TRANSFORM(bgBase, mod, 0), HLS_TRANSFORM(bgBase, mod/2, 0) };
 
@@ -307,19 +305,19 @@ static inline void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item,
 	// draw background
 	HGDIOBJ oldbr = ::SelectObject(hdc, ::CreateSolidBrush(bgPal[1]));
 	HGDIOBJ oldpen = ::SelectObject(hdc, ::CreatePen(PS_SOLID, 0, bgPal[0]));
-	
+
 	// TODO Don't draw where the finished part will be drawn
 	::Rectangle(hdc, rc.left(), rc.top() - 1, rc.right(), rc.bottom());
-	
+
 	rc.pos.x += 1;
 	rc.size.x -= 2;
 	rc.size.y -= 1;
-	
+
 	long w = rc.width();
-	
+
 	::DeleteObject(::SelectObject(hdc, ::CreateSolidBrush(barPal[1])));
 	::DeleteObject(::SelectObject(hdc, ::CreatePen(PS_SOLID, 0, barPal[0])));
-	
+
 	// "Finished" part
 	rc.size.x = (int) (w * pos);
 
@@ -367,7 +365,7 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 	LPNMLVCUSTOMDRAW cd = (LPNMLVCUSTOMDRAW)lParam;
 	int item = (int)cd->nmcd.dwItemSpec;
 	int column = cd->iSubItem;
-	
+
 	switch(cd->nmcd.dwDrawStage) {
 	case CDDS_PREPAINT:
 		return CDRF_NOTIFYITEMDRAW;
@@ -380,17 +378,17 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 		if(cd->nmcd.hdr.hwndFrom == connections->handle() && column == CONNECTION_COLUMN_STATUS) {
 			HDC hdc = cd->nmcd.hdc;
 			ConnectionInfo* ci = reinterpret_cast<ConnectionInfo*>(cd->nmcd.lItemlParam);
-			
+
 			if(ci->status == ConnectionInfo::STATUS_RUNNING && ci->chunk > 0 && ci->chunkPos >= 0) {
 				const tstring& text = ci->columns[column];
-	
+
 				RECT r;
 				ListView_GetSubItemRect( connections->handle(), item, column, LVIR_BOUNDS, &r );
-	
+
 				double pos = static_cast<double>(ci->chunkPos) / ci->chunk;
-				
+
 				drawProgress(hdc, r, item, column, text, pos, ci->download ? SETTING(DOWNLOAD_BAR_COLOR) : SETTING(UPLOAD_BAR_COLOR));
-				
+
 				return CDRF_SKIPDEFAULT;
 			}
 		} else if(cd->nmcd.hdr.hwndFrom == downloads->handle() && column == DOWNLOAD_COLUMN_STATUS) {
@@ -398,14 +396,14 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 			DownloadInfo* di = reinterpret_cast<DownloadInfo*>(cd->nmcd.lItemlParam);
 			if(di->size > 0 && di->done >= 0) {
 				const tstring& text = di->columns[column];
-	
+
 				RECT r;
 				ListView_GetSubItemRect( downloads->handle(), item, column, LVIR_BOUNDS, &r );
-	
+
 				double pos = static_cast<double>(di->done) / di->size;
-				
+
 				drawProgress(hdc, r, item, column, text, pos, SETTING(DOWNLOAD_BAR_COLOR));
-				
+
 				return CDRF_SKIPDEFAULT;
 			}
 		}
@@ -453,9 +451,9 @@ int TransferView::ConnectionInfo::compareItems(ConnectionInfo* a, ConnectionInfo
 HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 	TaskQueue::List t;
 	tasks.get(t);
-	
+
 	HoldRedraw hold(connections, t.size() > 1);
-	
+
 	for(TaskQueue::Iter i = t.begin(); i != t.end(); ++i) {
 		if(i->first == CONNECTIONS_ADD) {
 			boost::scoped_ptr<UpdateInfo> ui(static_cast<UpdateInfo*>(i->second));
@@ -507,7 +505,7 @@ HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 		} else if(i->first == DOWNLOADS_REMOVE_USER) {
 			boost::scoped_ptr<TickInfo> ti(static_cast<TickInfo*>(i->second));
 			int i = find(ti->path);
-			
+
 			if(i != -1) {
 				DownloadInfo* di = downloads->getData(i);
 				if(--di->users == 0) {
@@ -523,7 +521,7 @@ HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 				downloads->erase(i);
 			}
 		}
-	
+
 	}
 
 	if(!t.empty()) {
@@ -533,12 +531,12 @@ HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 	return 0;
 }
 
-TransferView::ConnectionInfo::ConnectionInfo(const UserPtr& u, bool aDownload) : 
-	UserInfoBase(u), 
-	download(aDownload), 
+TransferView::ConnectionInfo::ConnectionInfo(const UserPtr& u, bool aDownload) :
+	UserInfoBase(u),
+	download(aDownload),
 	transferFailed(false),
-	status(STATUS_WAITING), 
-	actual(0), 
+	status(STATUS_WAITING),
+	actual(0),
 	lastActual(0),
 	transfered(0),
 	lastTransfered(0),
@@ -574,7 +572,7 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 			columns[CONNECTION_COLUMN_STATUS] = ui.statusString;
 		transferFailed = ui.transferFailed;
 	}
-	
+
 	if(ui.updateMask & UpdateInfo::MASK_TRANSFERED) {
 		actual += ui.actual - lastActual;
 		lastActual = ui.actual;
@@ -583,18 +581,18 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 		if(actual == transfered) {
 			columns[CONNECTION_COLUMN_TRANSFERED] = Text::toT(Util::formatBytes(transfered));
 		} else {
-			columns[CONNECTION_COLUMN_TRANSFERED] = str(TF_("%1% (%2$0.2f)") 
+			columns[CONNECTION_COLUMN_TRANSFERED] = str(TF_("%1% (%2$0.2f)")
 				% Text::toT(Util::formatBytes(transfered))
 				% (static_cast<double>(actual) / transfered));
 		}
 	}
-	
+
 	if(ui.updateMask & UpdateInfo::MASK_CHUNK) {
 		chunkPos = ui.chunkPos;
 		chunk = ui.chunk;
 		columns[CONNECTION_COLUMN_CHUNK] = Text::toT(Util::formatBytes(chunkPos) + "/" + Util::formatBytes(chunk));
 	}
-	
+
 	if(ui.updateMask & UpdateInfo::MASK_SPEED) {
 		speed = ui.speed;
 		if (status == STATUS_RUNNING) {
@@ -603,20 +601,20 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 			columns[CONNECTION_COLUMN_SPEED] = Util::emptyStringT;
 		}
 	}
-	
+
 	if(ui.updateMask & UpdateInfo::MASK_IP) {
 		columns[CONNECTION_COLUMN_IP] = ui.ip;
 	}
-	
+
 	if(ui.updateMask & UpdateInfo::MASK_CIPHER) {
 		columns[CONNECTION_COLUMN_CIPHER] = ui.cipher;
 	}
 }
 
-TransferView::DownloadInfo::DownloadInfo(const string& target, int64_t size_, const TTHValue& tth_) : 
-	path(target), 
-	done(QueueManager::getInstance()->getPos(target)), 
-	size(size_), 
+TransferView::DownloadInfo::DownloadInfo(const string& target, int64_t size_, const TTHValue& tth_) :
+	path(target),
+	done(QueueManager::getInstance()->getPos(target)),
+	size(size_),
 	bps(0),
 	users(1),
 	tth(tth_)
@@ -624,7 +622,7 @@ TransferView::DownloadInfo::DownloadInfo(const string& target, int64_t size_, co
 	columns[DOWNLOAD_COLUMN_FILE] = Text::toT(Util::getFileName(target));
 	columns[DOWNLOAD_COLUMN_PATH] = Text::toT(Util::getFilePath(target));
 	columns[DOWNLOAD_COLUMN_SIZE] = Text::toT(Util::formatBytes(size));
-	
+
 	update();
 }
 
@@ -683,14 +681,14 @@ void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aC
 
 static tstring getFile(Transfer* t) {
 	tstring file;
-	
+
 	if(t->getType() == Transfer::TYPE_TREE) {
 		file = str(TF_("TTH: %1%") % Text::toT(Util::getFileName(t->getPath())));
 	} else if(t->getType() == Transfer::TYPE_FULL_LIST || t->getType() == Transfer::TYPE_PARTIAL_LIST) {
 		file = T_("file list");
 	} else {
-		file = Text::toT(Util::getFileName(t->getPath()) + 
-			" (" + Util::formatBytes(t->getStartPos()) + 
+		file = Text::toT(Util::getFileName(t->getPath()) +
+			" (" + Util::formatBytes(t->getStartPos()) +
 			" - " + Util::formatBytes(t->getStartPos() + t->getSize()) + ")");
 	}
 	return file;
@@ -713,19 +711,19 @@ void TransferView::starting(UpdateInfo* ui, Transfer* t) {
 
 void TransferView::on(DownloadManagerListener::Requesting, Download* d) throw() {
 	UpdateInfo* ui = new UpdateInfo(d->getUser(), true);
-	
+
 	starting(ui, d);
 
 	ui->setStatusString(str(TF_("Requesting %1%") % getFile(d)));
 
 	speak(CONNECTIONS_UPDATE, ui);
-	
+
 	speak(DOWNLOADS_ADD_USER, new TickInfo(d->getPath()));
 }
 
 void TransferView::on(DownloadManagerListener::Starting, Download* d) throw() {
 	UpdateInfo* ui = new UpdateInfo(d->getUser(), true);
-	
+
 	tstring statusString;
 
 	if(d->getUserConnection().isSecure()) {
@@ -745,7 +743,7 @@ void TransferView::on(DownloadManagerListener::Starting, Download* d) throw() {
 		statusString += _T(" ");
 	}
 	statusString += str(TF_("Downloading %1%") % getFile(d));
-	
+
 	ui->setStatusString(statusString);
 	speak(CONNECTIONS_UPDATE, ui);
 }
@@ -769,7 +767,7 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) thr
 		if(d->getType() != Transfer::TYPE_FILE) {
 			continue;
 		}
-		
+
 		TickInfo* ti = 0;
 		for(std::vector<TickInfo*>::iterator j = dis.begin(); j != dis.end(); ++j) {
 			TickInfo* ti2 = *j;
@@ -798,7 +796,7 @@ void TransferView::on(DownloadManagerListener::Failed, Download* d, const string
 	ui->setStatusString(Text::toT(aReason));
 
 	speak(CONNECTIONS_UPDATE, ui);
-	
+
 	speak(DOWNLOADS_REMOVE_USER, new TickInfo(d->getPath()));
 }
 
@@ -837,14 +835,14 @@ void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) throw()
 	speak();
 }
 
-void TransferView::on(DownloadManagerListener::Complete, Download* d) throw() { 
+void TransferView::on(DownloadManagerListener::Complete, Download* d) throw() {
 	onTransferComplete(d, true);
 
 	speak(DOWNLOADS_REMOVE_USER, new TickInfo(d->getPath()));
 }
 
-void TransferView::on(UploadManagerListener::Complete, Upload* aUpload) throw() { 
-	onTransferComplete(aUpload, false); 
+void TransferView::on(UploadManagerListener::Complete, Upload* aUpload) throw() {
+	onTransferComplete(aUpload, false);
 }
 
 void TransferView::onTransferComplete(Transfer* aTransfer, bool isDownload) {

@@ -28,6 +28,11 @@
 #include "WinUtil.h"
 #include "LineDlg.h"
 
+static const ColumnInfo dirColumns[] = {
+	{ N_("Favorite name"), 100, false },
+	{ N_("Directory"), 100, false }
+};
+
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_FAVORITE_DIRECTORIES, IDH_SETTINGS_FAVORITE_DIRS_FAVORITE_DIRECTORIES },
 	{ IDC_FAVORITE_DIRECTORIES, IDH_SETTINGS_FAVORITE_DIRS_FAVORITE_DIRECTORIES },
@@ -55,12 +60,7 @@ FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) : PropPage(parent) {
 	attachChild(directories, IDC_FAVORITE_DIRECTORIES);
 	directories->setTableStyle(LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT);
 
-	TStringList columns;
-	columns.push_back(T_("Favorite name"));
-	columns.push_back(T_("Directory"));
-	directories->createColumns(columns);
-	directories->setColumnWidth(0, 100);
-	directories->setColumnWidth(1, directories->getSize().x - 120);
+	WinUtil::makeColumns(directories, dirColumns, 2, "", "");
 
 	StringPairList dirs = FavoriteManager::getInstance()->getFavoriteDirs();
 	for(StringPairIter j = dirs.begin(); j != dirs.end(); j++) {

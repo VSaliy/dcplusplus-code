@@ -28,36 +28,19 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 
-int PublicHubsFrame::columnIndexes[] = {
-	COLUMN_NAME,
-	COLUMN_DESCRIPTION,
-	COLUMN_USERS,
-	COLUMN_SERVER,
-	COLUMN_COUNTRY,
-	COLUMN_SHARED,
-	COLUMN_MINSHARE,
-	COLUMN_MINSLOTS,
-	COLUMN_MAXHUBS,
-	COLUMN_MAXUSERS,
-	COLUMN_RELIABILITY,
-	COLUMN_RATING
- };
-
-int PublicHubsFrame::columnSizes[] = { 200, 290, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100 };
-
-static const char*  columnNames[] = {
-	N_("Name"),
-	N_("Description"),
-	N_("Users"),
-	N_("Address"),
-	N_("Country"),
-	N_("Shared"),
-	N_("Min Share"),
-	N_("Min Slots"),
-	N_("Max Hubs"),
-	N_("Max Users"),
-	N_("Reliability"),
-	N_("Rating")
+static const ColumnInfo hubsColumns[] = {
+	{ N_("Name"), 200, false },
+	{ N_("Description"), 290, false },
+	{ N_("Users"), 50, true },
+	{ N_("Address"), 100, false },
+	{ N_("Country"), 100, false },
+	{ N_("Shared"), 100, true },
+	{ N_("Min Share"), 100, true },
+	{ N_("Min Slots"), 100, true },
+	{ N_("Max Hubs"), 100, true },
+	{ N_("Max Users"), 100, true },
+	{ N_("Reliability"), 100, false },
+	{ N_("Rating"), 100, true }
 };
 
 PublicHubsFrame::HubInfo::HubInfo(const HubEntry* entry_) : entry(entry_) {
@@ -77,7 +60,7 @@ PublicHubsFrame::HubInfo::HubInfo(const HubEntry* entry_) : entry(entry_) {
 
 int PublicHubsFrame::HubInfo::compareItems(const HubInfo* a, const HubInfo* b, int col) {
 	switch(col) {
-	case COLUMN_USERS: return compare(a->entry->getUsers(), b->entry->getUsers()); 
+	case COLUMN_USERS: return compare(a->entry->getUsers(), b->entry->getUsers());
 	case COLUMN_MINSLOTS: return compare(a->entry->getMinSlots(), b->entry->getMinSlots());
 	case COLUMN_MAXHUBS: return compare(a->entry->getMaxHubs(), b->entry->getMaxHubs());
 	case COLUMN_MAXUSERS: return compare(a->entry->getMaxUsers(), b->entry->getMaxUsers());
@@ -107,12 +90,10 @@ PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 		cs.style |= LVS_SINGLESEL;
 		hubs = addChild(cs);
 		addWidget(hubs);
-		
-		hubs->createColumns(WinUtil::getStrings(columnNames));
-		hubs->setColumnOrder(WinUtil::splitTokens(SETTING(FAVHUBSFRAME_ORDER), columnIndexes));
-		hubs->setColumnWidths(WinUtil::splitTokens(SETTING(FAVHUBSFRAME_WIDTHS), columnSizes));
+
+		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
 		hubs->setSort(COLUMN_USERS, false);
-		
+
 		hubs->onDblClicked(std::tr1::bind(&PublicHubsFrame::openSelected, this));
 		hubs->onKeyDown(std::tr1::bind(&PublicHubsFrame::handleKeyDown, this, _1));
 		hubs->onContextMenu(std::tr1::bind(&PublicHubsFrame::handleContextMenu, this, _1));
@@ -134,7 +115,7 @@ PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 
 		//populate the filter list with the column names
 		for(int j=0; j<COLUMN_LAST; j++) {
-			filterSel->addValue(T_(columnNames[j]));
+			filterSel->addValue(T_(hubsColumns[j].name));
 		}
 		filterSel->addValue(T_("Any"));
 		filterSel->setSelected(COLUMN_LAST);
@@ -148,13 +129,13 @@ PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 
 	{
 		Button::Seed cs = WinUtil::Seeds::button;
-		
+
 		cs.caption = T_("&Configure");
 		configure = addChild(cs);
 		configure->setHelpId(IDH_PUBLIC_HUBS_LISTS);
 		addWidget(configure);
 		configure->onClicked(std::tr1::bind(&PublicHubsFrame::handleConfigure, this));
-		
+
 		cs.caption = T_("&Refresh");
 		refresh = addChild(cs);
 		refresh->setHelpId(IDH_PUBLIC_HUBS_REFRESH);
@@ -188,9 +169,9 @@ PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 	updateList();
 
 	layout();
-	
+
 	onSpeaker(std::tr1::bind(&PublicHubsFrame::handleSpeaker, this, _1, _2));
-	
+
 	if(FavoriteManager::getInstance()->isDownloading()) {
 		setStatus(STATUS_STATUS, T_("Downloading public hub list..."));
 	} else if(entries.empty()) {
@@ -215,8 +196,8 @@ void PublicHubsFrame::postClosing() {
 void PublicHubsFrame::layout() {
 	const int border = 2;
 
-	dwt::Rectangle r(getClientAreaSize()); 
-	
+	dwt::Rectangle r(getClientAreaSize());
+
 	layoutStatus(r);
 
 	int const comboH = 140;
@@ -229,7 +210,7 @@ void PublicHubsFrame::layout() {
 
 	r.pos.y += r.size.y + border;
 	r.size.y = ymessage * 2 + 8;
-	
+
 	// filter box
 	r.size.x = (r.width() - 100 - border * 2) / 2 ;
 	filterDesc->setBounds(r);
@@ -241,10 +222,10 @@ void PublicHubsFrame::layout() {
 	rc.pos.x += 16;
 	rc.size.x = rc.width() * 2 / 3 - 24 - border;
 	filter->setBounds(rc);
-	
+
 	//filter sel
 	rc.size.y += comboH;
-	
+
 	rc.pos.x += rc.width() + border;
 	rc.size.x = (rc.width() + 24 + border) / 2 - 8;
 	filterSel->setBounds(rc);
@@ -257,7 +238,7 @@ void PublicHubsFrame::layout() {
 	// lists dropdown
 	rc.pos.y += ymessage - 4;
 	rc.size.y = ymessage;
-	
+
 	rc.size.y += comboH;
 	rc.pos.x += 16;
 	rc.size.x -= 100 + 24 + border;
@@ -299,7 +280,7 @@ void PublicHubsFrame::updateList() {
 	visibleHubs = 0;
 
 	HoldRedraw hold(hubs);
-	
+
 	double size = -1;
 	FilterModes mode = NONE;
 
@@ -495,7 +476,7 @@ void PublicHubsFrame::handleAdd() {
 
 	if(hubs->hasSelected()) {
 		FavoriteManager::getInstance()->addFavorite(*hubs->getSelectedData()->entry);
-	}	
+	}
 }
 
 void PublicHubsFrame::handleCopyHub() {
@@ -516,7 +497,7 @@ bool PublicHubsFrame::checkNick() {
 void PublicHubsFrame::openSelected() {
 	if(!checkNick())
 		return;
-	
+
 	if(hubs->hasSelected()) {
 		HubFrame::openWindow(getParent(), hubs->getSelectedData()->entry->getServer());
 	}
@@ -526,7 +507,7 @@ bool PublicHubsFrame::handleKeyDown(int c) {
 	if(c == VK_RETURN) {
 		openSelected();
 	}
-	
+
 	return false;
 }
 
@@ -541,6 +522,6 @@ bool PublicHubsFrame::handleFilterKeyDown(int c) {
 		filterString = Text::fromT(filter->getText());
 		updateList();
 		return true;
-	} 
+	}
 	return false;
 }

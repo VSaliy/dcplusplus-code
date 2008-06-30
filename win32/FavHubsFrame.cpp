@@ -26,15 +26,13 @@
 #include "HubFrame.h"
 #include "FavHubProperties.h"
 
-int FavHubsFrame::columnIndexes[] = { COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_NICK, COLUMN_PASSWORD, COLUMN_SERVER, COLUMN_USERDESCRIPTION };
-int FavHubsFrame::columnSizes[] = { 200, 290, 125, 100, 100, 125 };
-static const char* columnNames[] = {
-	N_("Auto connect / Name"),
-	N_("Description"),
-	N_("Nick"),
-	N_("Password"),
-	N_("Server"),
-	N_("User Description")
+static const ColumnInfo hubsColumns[] = {
+	{ N_("Auto connect / Name"), 200, false },
+	{ N_("Description"), 290, false },
+	{ N_("Nick"), 125, false },
+	{ N_("Password"), 100, false },
+	{ N_("Server"), 100, false },
+	{ N_("User Description"), 125, false }
 };
 
 FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
@@ -55,9 +53,7 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 		hubs = addChild(cs);
 		addWidget(hubs);
 
-		hubs->createColumns(WinUtil::getStrings(columnNames));
-		hubs->setColumnOrder(WinUtil::splitTokens(SETTING(FAVHUBSFRAME_ORDER), columnIndexes));
-		hubs->setColumnWidths(WinUtil::splitTokens(SETTING(FAVHUBSFRAME_WIDTHS), columnSizes));
+		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
 
 		hubs->onDblClicked(std::tr1::bind(&FavHubsFrame::handleDoubleClick, this));
 		hubs->onKeyDown(std::tr1::bind(&FavHubsFrame::handleKeyDown, this, _1));

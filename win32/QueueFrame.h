@@ -48,7 +48,7 @@ public:
 private:
 	friend class StaticFrame<QueueFrame>;
 	friend class MDIChildFrame<QueueFrame>;
-	
+
 	enum {
 		COLUMN_FIRST,
 		COLUMN_TARGET = COLUMN_FIRST,
@@ -111,7 +111,7 @@ private:
 		QueueItemInfo(const QueueItem& aQI) : Flags(aQI), target(aQI.getTarget()),
 			path(Util::getFilePath(aQI.getTarget())),
 			size(aQI.getSize()), downloadedBytes(aQI.getDownloadedBytes()),
-			added(aQI.getAdded()), priority(aQI.getPriority()), running(aQI.isRunning()), tth(aQI.getTTH()), 
+			added(aQI.getAdded()), priority(aQI.getPriority()), running(aQI.isRunning()), tth(aQI.getTTH()),
 			sources(aQI.getSources()), badSources(aQI.getBadSources()), updateMask((uint32_t)-1), display(0)
 		{
 		}
@@ -184,7 +184,7 @@ private:
 
 	struct UpdateTask : public FastAlloc<UpdateTask>, public Task {
 		UpdateTask(const QueueItem& source) : target(source.getTarget()), priority(source.getPriority()),
-			running(source.isRunning()), downloadedBytes(source.getDownloadedBytes()), sources(source.getSources()), badSources(source.getBadSources()) 
+			running(source.isRunning()), downloadedBytes(source.getDownloadedBytes()), sources(source.getSources()), badSources(source.getBadSources())
 		{
 		}
 
@@ -202,7 +202,7 @@ private:
 	typedef TypedTree<DirItemInfo> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
 	WidgetDirsPtr dirs;
-	
+
 	typedef TypedTable<QueueItemInfo, false> WidgetFiles;
 	typedef WidgetFiles* WidgetFilesPtr;
 	WidgetFilesPtr files;
@@ -218,18 +218,15 @@ private:
 
 	bool dirty;
 	bool usingDirMenu;
-	
+
 	int64_t queueSize;
 	int queueItems;
 
 	HTREEITEM fileLists;
 
-	static int columnIndexes[COLUMN_LAST];
-	static int columnSizes[COLUMN_LAST];
-
 	QueueFrame(dwt::TabView* mdiParent);
 	virtual ~QueueFrame();
-	
+
 	void updateStatus();
 	void updateFiles();
 
@@ -265,7 +262,7 @@ private:
 	MenuPtr makeSingleMenu(QueueItemInfo* qii);
 	MenuPtr makeMultiMenu();
 	MenuPtr makeDirMenu();
-	
+
 	void addBrowseMenu(const MenuPtr& parent, QueueItemInfo* qii);
 	void addRemoveMenu(const MenuPtr& parent, QueueItemInfo* qii);
 	void addRemoveSourcesMenu(const MenuPtr& parent, QueueItemInfo* qii);
@@ -278,7 +275,7 @@ private:
 
 	bool preClosing();
 	void postClosing();
-	
+
 	void handleShowTreeClicked();
 	LRESULT handleSpeaker();
 	void handleMove();
@@ -293,7 +290,7 @@ private:
 	bool handleKeyDownDirs(int c);
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt);
 	bool handleDirsContextMenu(dwt::ScreenCoordinate pt);
-	
+
 	using MDIChildFrame<QueueFrame>::speak;
 	void speak(Tasks s, Task* t) { tasks.add(s, t); speak(); }
 	void speak(Tasks s, const string& msg) { tasks.add(s, new StringTask(msg)); speak(); }

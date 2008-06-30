@@ -29,7 +29,7 @@
 #include <dcpp/DirectoryListing.h>
 #include <dcpp/User.h>
 
-class DirectoryListingFrame : 
+class DirectoryListingFrame :
 	public MDIChildFrame<DirectoryListingFrame>,
 	public AspectUserCommand<DirectoryListingFrame>
 {
@@ -56,7 +56,7 @@ public:
 protected:
 	friend class MDIChildFrame<DirectoryListingFrame>;
 	friend class AspectUserCommand<DirectoryListingFrame>;
-	
+
 	void layout();
 	void postClosing();
 
@@ -64,8 +64,8 @@ private:
 	enum {
 		COLUMN_FILENAME,
 		COLUMN_TYPE,
-		COLUMN_EXACTSIZE,
 		COLUMN_SIZE,
+		COLUMN_EXACTSIZE,
 		COLUMN_TTH,
 		COLUMN_LAST
 	};
@@ -82,7 +82,7 @@ private:
 			DirectoryListing::File* file;
 			DirectoryListing::Directory* dir;
 		};
-		
+
 		ItemInfo(const tstring& nick, DirectoryListing::Directory* d) : type(USER), dir(d) {
 			columns[COLUMN_FILENAME] = nick;
 		}
@@ -98,17 +98,17 @@ private:
 			columns[COLUMN_TTH] = Text::toT(f->getTTH().toBase32());
 		}
 		ItemInfo(DirectoryListing::Directory* d) : type(DIRECTORY), dir(d) {
-			columns[COLUMN_FILENAME] = Text::toT(d->getName());			
+			columns[COLUMN_FILENAME] = Text::toT(d->getName());
 			columns[COLUMN_EXACTSIZE] = d->getComplete() ? Text::toT(Util::formatExactSize(d->getTotalSize())) : _T("?");
 			columns[COLUMN_SIZE] = d->getComplete() ? Text::toT(Util::formatBytes(d->getTotalSize())) : _T("?");
 		}
-		
+
 		const tstring& getText() const {
 			return columns[COLUMN_FILENAME];
 		}
-		
+
 		int getImage() const;
-		
+
 		int getSelectedImage() const {
 			return getImage();
 		}
@@ -127,13 +127,13 @@ private:
 	private:
 		tstring columns[COLUMN_LAST];
 	};
-	
+
 	typedef TypedTree<ItemInfo> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
 	WidgetDirsPtr dirs;
 	typedef TypedTable<ItemInfo> WidgetFiles;
 	typedef WidgetFiles* WidgetFilesPtr;
-	
+
 	WidgetFilesPtr files;
 	WidgetVPanedPtr paned;
 
@@ -141,11 +141,11 @@ private:
 	ButtonPtr findNext;
 	ButtonPtr listDiff;
 	ButtonPtr matchQueue;
-	
+
 	int64_t speed;		/**< Speed at which this file list was downloaded */
 
 	std::auto_ptr<DirectoryListing> dl;
-	
+
 	tstring error;
 	bool usingDirMenu;
 	StringList targets;
@@ -163,31 +163,28 @@ private:
 
 	StringMap ucLineParams;
 
-	static int columnIndexes[COLUMN_LAST];
-	static int columnSizes[COLUMN_LAST];
-
 	typedef unordered_map<UserPtr, DirectoryListingFrame*, User::Hash> UserMap;
 	typedef UserMap::iterator UserIter;
 
 	static UserMap lists;
-	
+
 	DirectoryListingFrame(dwt::TabView* mdiParent, const UserPtr& aUser, int64_t aSpeed);
 	virtual ~DirectoryListingFrame();
 
 	MenuPtr makeSingleMenu(ItemInfo* ii);
 	MenuPtr makeMultiMenu();
 	MenuPtr makeDirMenu();
-	
+
 	void runUserCommand(const UserCommand& uc);
-		
+
 	void addTargets(const MenuPtr& menu, ItemInfo* ii = 0);
 	void addUserCommands(const MenuPtr& menu);
-	
+
 	void handleFind();
 	void handleFindNext();
 	void handleListDiff();
 	void handleMatchQueue();
-	
+
 	void handleDownload();
 	void handleViewAsText();
 	void handleGoToDirectory();
@@ -196,25 +193,25 @@ private:
 	void handleDownloadFavorite(unsigned id);
 	void handleDownloadBrowse();
 	bool handleKeyDownFiles(int c);
-	
+
 	void handleDoubleClickFiles();
 	void handleSelectionChanged();
-	
+
 	void download(const string& aDir);
 	void download(ItemInfo* ii, const string& aDir, bool view = false);
 	void downloadFiles(const string& aTarget, bool view = false);
-	
+
 	bool handleDirsContextMenu(dwt::ScreenCoordinate pt);
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt);
 	void handleXMouseUp(const dwt::MouseEvent& mouseEvent);
-	
+
 	void changeDir(DirectoryListing::Directory* d);
 	void updateTree(DirectoryListing::Directory* tree, HTREEITEM treeItem);
 	HTREEITEM findItem(HTREEITEM ht, const tstring& name);
 	void selectItem(const tstring& name);
 	void clearList();
 	void setWindowTitle();
-	
+
 	void loadFile(const tstring& name, const tstring& dir);
 	void loadXML(const string& txt);
 	void refreshTree(const tstring& root);
@@ -226,7 +223,7 @@ private:
 
 	void initStatusText();
 	void updateStatus();
-	
+
 	void findFile(bool findNext);
 	HTREEITEM findFile(const StringSearch& str, HTREEITEM root, int &foundFile, int &skipHits);
 

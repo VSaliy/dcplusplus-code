@@ -27,7 +27,7 @@
 #include <dcpp/FavoriteManagerListener.h>
 #include "resource.h"
 
-class PublicHubsFrame : 
+class PublicHubsFrame :
 	public StaticFrame<PublicHubsFrame>,
 	public FavoriteManagerListener
 {
@@ -39,7 +39,7 @@ public:
 		STATUS_USERS,
 		STATUS_LAST
 	};
-	
+
 private:
 	friend class StaticFrame<PublicHubsFrame>;
 	friend class MDIChildFrame<PublicHubsFrame>;
@@ -80,11 +80,11 @@ private:
 		LESS,
 		NOT_EQUAL
 	};
-	
+
 	class HubInfo {
 	public:
 		HubInfo(const HubEntry* entry_);
-		
+
 		static int compareItems(const HubInfo* a, const HubInfo* b, int col);
 		const tstring& getText(int column) const { return columns[column]; }
 		int getImage() const { return 0; }
@@ -106,16 +106,13 @@ private:
 
 	int visibleHubs;
 	int users;
-	
+
 	string filterString;
 
 	HubEntryList entries;
-	
-	static int columnIndexes[];
-	static int columnSizes[];
 
 	using AspectSpeaker<PublicHubsFrame>::speak;
-	
+
 	void layout();
 	bool preClosing();
 	void postClosing();
@@ -129,7 +126,7 @@ private:
 	bool handleKeyDown(int c);
 	void handleListSelChanged();
 	bool handleFilterKeyDown(int c);
-	
+
 	bool checkNick();
 	void updateStatus();
 	void updateList();

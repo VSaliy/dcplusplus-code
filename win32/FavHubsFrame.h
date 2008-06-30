@@ -24,9 +24,9 @@
 #include <dcpp/FavoriteManagerListener.h>
 #include "resource.h"
 
-class FavHubsFrame : 
-	public StaticFrame<FavHubsFrame>, 
-	private FavoriteManagerListener 
+class FavHubsFrame :
+	public StaticFrame<FavHubsFrame>,
+	private FavoriteManagerListener
 {
 	typedef StaticFrame<FavHubsFrame> BaseType;
 public:
@@ -34,11 +34,11 @@ public:
 		STATUS_STATUS,
 		STATUS_LAST
 	};
-	
+
 protected:
 	friend class StaticFrame<FavHubsFrame>;
 	friend class MDIChildFrame<FavHubsFrame>;
-	
+
 	FavHubsFrame(dwt::TabView* mdiParent);
 	virtual ~FavHubsFrame();
 
@@ -58,9 +58,6 @@ private:
 		COLUMN_USERDESCRIPTION,
 		COLUMN_LAST
 	};
-
-	static int columnSizes[COLUMN_LAST];
-	static int columnIndexes[COLUMN_LAST];
 
 	TablePtr hubs;
 	ButtonPtr connect;

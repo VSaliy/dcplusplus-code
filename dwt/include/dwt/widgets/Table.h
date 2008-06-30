@@ -9,27 +9,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -89,7 +89,7 @@ class Table :
 		HeaderDispatcher(const F& f_) : f(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
-			LPNMLISTVIEW p = (LPNMLISTVIEW) msg.lParam; 
+			LPNMLISTVIEW p = (LPNMLISTVIEW) msg.lParam;
 			f(p->iSubItem);
 			return true;
 		}
@@ -114,7 +114,7 @@ public:
 	typedef ThisType* ObjectType;
 
 	typedef std::tr1::function<int (LPARAM a, LPARAM b)> SortFunction;
-	
+
 	/// Seed class
 	/** This class contains all of the values needed to create the widget. It also
 	  * knows the type of the class whose seed values it contains. Every widget
@@ -124,14 +124,14 @@ public:
 		typedef ThisType WidgetType;
 
 		FontPtr font;
-		
+
 		/// List view extended styles (LVS_EX_*)
 		DWORD lvStyle;
 
 		/// Fills with default parameters
 		Seed();
 	};
-	
+
 	enum SortType {
 		SORT_CALLBACK,
  		SORT_STRING,
@@ -171,7 +171,7 @@ public:
 	  * will NOT want to run a costly operation within this event handler.
 	  */
 	void onSortItems( const SortFunction& f );
-	
+
 	/// \ingroup EventHandlersTable
 	/// Event Handler for the Column Header Click event
 	/** This Event is raised whenever one of the headers is clicked, it is useful to
@@ -180,7 +180,7 @@ public:
 	  * indexed ) is being clicked!
 	  */
 	void onColumnClick( const HeaderDispatcher::F& f );
-	
+
 	/// Sorts the list
 	/** Call this function to sort the list, it's IMPERATIVE that you before calling
 	  * this function defines an event handler for the SortItems event. <br>
@@ -193,9 +193,9 @@ public:
 	void setSort(int aColumn, SortType aType, bool aAscending = true);
 
 	bool isAscending();
-	
+
 	int getSortColumn();
-	
+
 	SortType getSortType();
 
 	/// Returns the text of the given cell
@@ -267,12 +267,12 @@ public:
 	tstring getColumnName( unsigned col );
 
 	bool setColumnOrder(const std::vector<int>& columns);
-	
+
 	std::vector<int> getColumnOrder();
 
 	void setColumnWidths(const std::vector<int>& widths);
-	
-	std::vector<int> getColumnWidths();	
+
+	std::vector<int> getColumnWidths();
 
 	/// Create columns in the grid
 	/** Normally this would be called just after creation of the grid, it MUST be
@@ -281,7 +281,8 @@ public:
 	  * <br>
 	  * Columns will be added the way they sequentially appear in the vector.
 	  */
-	void createColumns( const std::vector< tstring > & colNames );
+	void createColumns( const std::vector< tstring > & colNames, const std::vector<int>& widths = std::vector<int>(),
+		const std::vector<bool>& alignment = std::vector<bool>(), const std::vector<int>& order = std::vector<int>());
 
 	/// Deletes the given column
 	/** Column zero CANNOT be deleted.
@@ -436,17 +437,17 @@ public:
 	void redraw( int firstRow = 0, int lastRow = -1 );
 
 	void setTableStyle(int style);
-	
+
 	int insert(int mask, int i, LPCTSTR text, UINT state, UINT stateMask, int image, LPARAM lparam);
-	
+
 	int getNext(int i, int type) const;
-	
+
     int find(const tstring& b, int start = -1, bool aPartial = false);
 
     void select(int row);
-    
+
 	ScreenCoordinate getContextMenuPos();
-	
+
 	void ensureVisible(int i, bool partial = false);
 
 	int hitTest(const ScreenCoordinate& pt);
@@ -487,7 +488,7 @@ private:
 	ImageListPtr itsNormalImageList;
 	ImageListPtr itsSmallImageList;
 	ImageListPtr itsStateImageList;
-	
+
 	// If true the grid is in "read only mode" meaning that cell values cannot be edited.
 	// A simpler version of defining a beenValidate always returning false
 	bool isReadOnly;
@@ -504,7 +505,7 @@ private:
 
 	static int CALLBACK compareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 	static int CALLBACK compareFuncCallback( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
-	
+
 	void createArrows();
 	void updateArrow();
 #ifdef PORT_ME
@@ -518,12 +519,12 @@ private:
 	int findDataImpl(LPARAM data, int start = -1);
 	LPARAM getDataImpl(int idx);
 	void setDataImpl(int i, LPARAM data);
-	
+
 	// AspectCollection
 	void eraseImpl( int row );
 	void clearImpl();
 	size_t sizeImpl() const;
-	
+
 	// AspectColor
 	void setColorImpl(COLORREF text, COLORREF background);
 
@@ -778,16 +779,16 @@ inline Rectangle Table::getRect( int item, int subitem, int code )
 	return r;
 }
 
-inline bool Table::isAscending() { 
-	return ascending; 
+inline bool Table::isAscending() {
+	return ascending;
 }
 
-inline int Table::getSortColumn() { 
-	return sortColumn; 
+inline int Table::getSortColumn() {
+	return sortColumn;
 }
 
-inline Table::SortType Table::getSortType() { 
-	return sortType; 
+inline Table::SortType Table::getSortType() {
+	return sortType;
 }
 
 inline bool Table::setColumnOrder(const std::vector<int>& columns) {

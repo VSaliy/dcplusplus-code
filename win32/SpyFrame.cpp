@@ -26,16 +26,14 @@
 
 #include "SearchFrame.h"
 
-int SpyFrame::columnSizes[] = { 305, 70, 85 };
-int SpyFrame::columnIndexes[] = { COLUMN_STRING, COLUMN_COUNT, COLUMN_TIME };
 #ifdef __MINGW32__
 const size_t SpyFrame::AVG_TIME; // TODO gcc needs this - why?
 #endif
 
-static const char* columnNames[] = {
-	N_("Search String"),
-	N_("Count"),
-	N_("Time")
+static const ColumnInfo searchesColumns[] = {
+	{ N_("Search String"), 305, false },
+	{ N_("Count"), 70, true },
+	{ N_("Time"), 85, false }
 };
 
 SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
@@ -54,10 +52,9 @@ SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
 		searches = addChild(cs);
 		addWidget(searches);
 
-		searches->createColumns(WinUtil::getStrings(columnNames));
-		searches->setColumnOrder(WinUtil::splitTokens(SETTING(SPYFRAME_ORDER), columnIndexes));
-		searches->setColumnWidths(WinUtil::splitTokens(SETTING(SPYFRAME_WIDTHS), columnSizes));
+		WinUtil::makeColumns(searches, searchesColumns, COLUMN_LAST, SETTING(SPYFRAME_ORDER), SETTING(SPYFRAME_WIDTHS));
 		searches->setSort(COLUMN_COUNT, dwt::Table::SORT_INT, false);
+
 		searches->onColumnClick(std::tr1::bind(&SpyFrame::handleColumnClick, this, _1));
 		searches->onContextMenu(std::tr1::bind(&SpyFrame::handleContextMenu, this, _1));
 	}
@@ -108,7 +105,7 @@ void SpyFrame::initSecond() {
 bool SpyFrame::eachSecond() {
 	size_t tot = std::accumulate(perSecond, perSecond + AVG_TIME, 0u);
 	size_t t = std::max(1u, std::min(cur, AVG_TIME));
-	
+
 	float x = static_cast<float>(tot)/t;
 
 	cur++;

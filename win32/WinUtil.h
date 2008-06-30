@@ -40,6 +40,12 @@ COLORREF HLS_TRANSFORM (COLORREF rgb, int percent_L, int percent_S);
 
 class MainWindow;
 
+struct ColumnInfo {
+	const char* name;
+	const int size;
+	const bool rightAlign;
+};
+
 class WinUtil {
 public:
 	static tstring tth;
@@ -60,11 +66,11 @@ public:
 	//static dwt::TabView* mdiParent;
 	static DWORD helpCookie;
 	static HWND helpPopup;
-	
+
 	typedef unordered_map<string, int> ImageMap;
 	typedef ImageMap::iterator ImageIter;
 	static ImageMap fileIndexes;
-	
+
 	struct Seeds {
 		static const dwt::Button::Seed button;
 		static const ComboBox::Seed comboBoxStatic;
@@ -108,6 +114,9 @@ public:
 	static void openFile(const tstring& file);
 	static void openFolder(const tstring& file);
 
+	static void makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount,
+		const string& order, const string& widths);
+
 	template<typename T>
 	static std::vector<int> splitTokens(const string& str, const T& defaults) {
 		const size_t n = sizeof(defaults) / sizeof(defaults[0]);
@@ -117,11 +126,11 @@ public:
 		for(size_t i = 0; i < std::min(ret.size(), l.size()); ++i) {
 			ret[i] = Util::toInt(l[i]);
 		}
-		return ret;			
+		return ret;
 	}
 	static std::string toString(const std::vector<int>& tokens);
-	static void splitTokens(int* array, const string& tokens, int maxItems = -1) throw();
-	
+	static void toInts(const string& str, std::vector<int>& tokens);
+
 	template<typename T>
 	static TStringList getStrings(const T& t) {
 		const size_t n = sizeof(t) / sizeof(t[0]);
@@ -157,14 +166,14 @@ public:
 	static void openLink(const tstring& url);
 	static bool browseSaveFile(dwt::SaveDialog dialog, tstring& file);
 	static bool browseFileList(dwt::LoadDialog dialog, tstring& file);
-	
+
 	static int getOsMajor();
 	static int getOsMinor();
 
 	static void setClipboard(const tstring& str);
 
 	static bool getUCParams(dwt::Widget* parent, const UserCommand& cmd, StringMap& sm) throw();
-	
+
 	static bool parseDBLClick(const tstring& aString);
 	static void parseDchubUrl(const tstring& /*aUrl*/);
 	static void parseADChubUrl(const tstring& /*aUrl*/);
@@ -189,7 +198,7 @@ public:
 		DWORD x = GetModuleFileName(NULL, buf, MAX_PATH);
 		return Text::fromT(tstring(buf, x));
 	}
-	
+
 	static void addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const string& dir = Util::emptyString);
 
 #ifdef PORT_ME
