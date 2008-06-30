@@ -55,7 +55,12 @@ int SearchFrame::SearchInfo::compareItems(SearchInfo* a, SearchInfo* b, int col)
 
 	switch(col) {
 	case COLUMN_NICK:
-		return compare(a->srs.size(), b->srs.size());
+		if(a->srs.size() > 1 && b->srs.size() > 1)
+			return compare(a->srs.size(), b->srs.size());
+		else if (a->srs.size() > 1 || b->srs.size() > 1)
+			return(a->srs.size() > 1) ? -1 : 1;
+		else
+			return lstrcmpi(a->columns[COLUMN_NICK].c_str(), b->columns[COLUMN_NICK].c_str());
 	case COLUMN_TYPE:
 		if(a->srs[0]->getType() == b->srs[0]->getType())
 			return lstrcmpi(a->columns[COLUMN_TYPE].c_str(), b->columns[COLUMN_TYPE].c_str());
@@ -802,14 +807,14 @@ SearchFrame::MenuPtr SearchFrame::makeMenu() {
 	addTargetDirMenu(menu, favoriteDirs);
 	menu->appendItem(IDC_VIEW_AS_TEXT, T_("&View as text"), std::tr1::bind(&SearchFrame::handleViewAsText, this));
 	menu->appendSeparatorItem();
+	SearchInfo* si = results->getSelectedData();
 	if(checkTTH.hasTTH) {
-		SearchInfo* si = results->getSelectedData();
 		WinUtil::addHashItems(menu, TTHValue(Text::fromT(checkTTH.tth)), si->getText(COLUMN_FILENAME));
 	}
 	menu->appendSeparatorItem();
 
 	UserCollector users = results->forEachSelectedT(UserCollector());
-	WinUtil::addUserItems(menu, users.users, getParent());
+	WinUtil::addUserItems(menu, users.users, getParent(), si ? Text::fromT(si->getText(COLUMN_PATH)) : "");
 
 	menu->appendSeparatorItem();
 	menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&SearchFrame::handleRemove, this));
