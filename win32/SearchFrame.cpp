@@ -672,7 +672,7 @@ void SearchFrame::handleDoubleClick() {
 
 bool SearchFrame::handleKeyDown(int c) {
 	if(c == VK_DELETE) {
-		postMessage(WM_COMMAND, IDC_REMOVE);
+		handleRemove();
 		return true;
 	}
 	return false;
