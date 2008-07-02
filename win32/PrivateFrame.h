@@ -78,8 +78,8 @@ private:
 
 	void openLog();
 	void readLog();
-	void addChat(const tstring& aLine);
-	void addStatus(const tstring& aLine, bool inChat = true);
+	void addChat(const tstring& aLine, bool log = true);
+	void addStatus(const tstring& aLine, bool log = true);
 	void updateTitle();
 	
 	void runUserCommand(const UserCommand& uc);
