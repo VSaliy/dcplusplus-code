@@ -45,7 +45,7 @@ protected:
 	friend class MDIChildFrame<UsersFrame>;
 	friend class AspectUserInfo<UsersFrame>;
 
-	UsersFrame(dwt::TabView* mdiParent);
+	UsersFrame();
 	virtual ~UsersFrame();
 
 	void layout();

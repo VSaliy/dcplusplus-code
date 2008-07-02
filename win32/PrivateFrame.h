@@ -37,8 +37,8 @@ public:
 		STATUS_LAST
 	};
 	
-	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage);
-	static void openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo, const tstring& aMessage = Util::emptyStringT);
+	static void gotMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage);
+	static void openWindow(const UserPtr& replyTo, const tstring& aMessage = Util::emptyStringT);
 	static bool isOpen(const UserPtr& u) { return frames.find(u) != frames.end(); }
 	static void closeAll();
 	static void closeAllOffline();
@@ -62,7 +62,7 @@ private:
 	typedef FrameMap::iterator FrameIter;
 	static FrameMap frames;
 
-	PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activte);
+	PrivateFrame(const UserPtr& replyTo_, bool activte);
 	virtual ~PrivateFrame();
 	
 	void layout();

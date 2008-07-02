@@ -56,6 +56,7 @@ int WinUtil::dirIconIndex;
 int WinUtil::dirMaskedIndex;
 TStringList WinUtil::lastDirs;
 MainWindow* WinUtil::mainWindow = 0;
+dwt::TabViewPtr WinUtil::mainTabs = 0;
 bool WinUtil::urlDcADCRegistered = false;
 bool WinUtil::urlMagnetRegistered = false;
 WinUtil::ImageMap WinUtil::fileIndexes;
@@ -270,7 +271,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("search")) == 0) {
 		if(!param.empty()) {
-			SearchFrame::openWindow(mainWindow->getTabView(), param);
+			SearchFrame::openWindow(param);
 		} else {
 			status = T_("Specify a search string");
 		}
@@ -407,7 +408,7 @@ void WinUtil::copyMagnet(const TTHValue& aHash, const tstring& aFile) {
 }
 
 void WinUtil::searchHash(const TTHValue& aHash) {
-	SearchFrame::openWindow(mainWindow->getTabView(), Text::toT(aHash.toBase32()), 0, SearchManager::SIZE_DONTCARE, SearchManager::TYPE_TTH);
+	SearchFrame::openWindow(Text::toT(aHash.toBase32()), 0, SearchManager::SIZE_DONTCARE, SearchManager::TYPE_TTH);
 }
 
 void WinUtil::addLastDir(const tstring& dir) {
@@ -951,7 +952,7 @@ void WinUtil::parseDchubUrl(const tstring& aUrl) {
 	uint16_t port = 411;
 	Util::decodeUrl(Text::fromT(aUrl), server, port, file);
 	if(!server.empty()) {
-		HubFrame::openWindow(mainWindow->getTabView(), server + ":" + Util::toString(port));
+		HubFrame::openWindow(server + ":" + Util::toString(port));
 	}
 	if(!file.empty()) {
 		if(file[0] == '/') // Remove any '/' in from of the file
@@ -972,7 +973,7 @@ void WinUtil::parseADChubUrl(const tstring& aUrl) {
 	uint16_t port = 0; //make sure we get a port since adc doesn't have a standard one
 	Util::decodeUrl(Text::fromT(aUrl), server, port, file);
 	if(!server.empty() && port > 0) {
-		HubFrame::openWindow(mainWindow->getTabView(), "adc://" + server + ":" + Util::toString(port));
+		HubFrame::openWindow("adc://" + server + ":" + Util::toString(port));
 	}
 }
 
@@ -1109,7 +1110,7 @@ static bool isFav(const UserPtr& u) {
 	return !FavoriteManager::getInstance()->isFavoriteUser(u);
 }
 
-void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const std::string& dir) {
+void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, const std::string& dir) {
 	bool addSub = users.size() > 1;
 
 	QueueManager* qm = QueueManager::getInstance();
@@ -1124,7 +1125,7 @@ void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabVie
 		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_MATCH_QUEUE, std::string()));
 
 	addUsers(addSub, menu, T_("&Send private message"), users,
-		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, tstring()));
+		std::tr1::bind(&PrivateFrame::openWindow, _1, tstring()));
 
 	addUsers(addSub, menu, T_("Add To &Favorites"), filter(users, &isFav),
 		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));

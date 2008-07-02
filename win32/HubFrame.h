@@ -52,7 +52,7 @@ public:
 		STATUS_LAST
 	};
 
-	static void openWindow(dwt::TabView* mdiParent, const string& url);
+	static void openWindow(const string& url);
 	static void closeDisconnected();
 	static void resortUsers();
 
@@ -189,7 +189,7 @@ private:
 	typedef FrameList::iterator FrameIter;
 	static FrameList frames;
 
-	HubFrame(dwt::TabView* mdiParent, const string& url);
+	HubFrame(const string& url);
 	virtual ~HubFrame();
 
 	void layout();

@@ -23,8 +23,8 @@
 #include <dcpp/Socket.h>
 #include <dcpp/TimerManager.h>
 
-StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Network Statistics"), IDH_NET_STATS, IDR_NET_STATS),
+StatsFrame::StatsFrame() :
+	BaseType(T_("Network Statistics"), IDH_NET_STATS, IDR_NET_STATS),
 	pen(new dwt::Pen(WinUtil::textColor)),
 	upPen(new dwt::Pen(SETTING(UPLOAD_BAR_COLOR))),
 	downPen(new dwt::Pen(SETTING(DOWNLOAD_BAR_COLOR))),

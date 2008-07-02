@@ -26,7 +26,7 @@ class FinishedDLFrame : public FinishedFrameBase<FinishedDLFrame, false>
 {
 	typedef FinishedFrameBase<FinishedDLFrame, false> BaseType;
 public:
-	FinishedDLFrame(dwt::TabView* mdiParent);
+	FinishedDLFrame();
 	virtual ~FinishedDLFrame() { }
 
 };

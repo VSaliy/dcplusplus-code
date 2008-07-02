@@ -39,7 +39,7 @@ protected:
 	friend class StaticFrame<FavHubsFrame>;
 	friend class MDIChildFrame<FavHubsFrame>;
 
-	FavHubsFrame(dwt::TabView* mdiParent);
+	FavHubsFrame();
 	virtual ~FavHubsFrame();
 
 	void layout();

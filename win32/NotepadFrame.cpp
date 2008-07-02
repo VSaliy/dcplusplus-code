@@ -23,8 +23,8 @@
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
 
-NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) : 
-	BaseType(mdiParent, T_("Notepad"), IDH_NOTEPAD, IDR_NOTEPAD),
+NotepadFrame::NotepadFrame() : 
+	BaseType(T_("Notepad"), IDH_NOTEPAD, IDR_NOTEPAD),
 	pad(0) 
 {
 	{
