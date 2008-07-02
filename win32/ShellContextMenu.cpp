@@ -24,6 +24,8 @@
 #include "stdafx.h"
 
 #include "ShellContextMenu.h"
+
+#include <dcpp/Text.h>
 #include "resource.h"
 
 IContextMenu3* CShellContextMenu::g_IContext3 = 0;
@@ -38,7 +40,7 @@ sel_id(0),
 sel_handle(0)
 {
 	parent->appendSeparator();
-	menu = parent->appendPopup(dwt::Menu::Seed(false), _T("Shell menu"));
+	menu = parent->appendPopup(dwt::Menu::Seed(false), T_("Shell menu"));
 
 	// get IShellFolder interface of Desktop(root of shell namespace)
 	IShellFolder* psfDesktop = NULL;

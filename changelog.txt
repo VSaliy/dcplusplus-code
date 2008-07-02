@@ -1,7 +1,7 @@
 * Added setting for max characters per tab (poy)
 * [L#234458] Added "File size" and "% transferred" columns in finished windows (poy, emtee)
 * Fix absent country code for IPs > 128.0.0.0 in MSVC builds (poy)
-* Remove useless chars in some paths that could lead to a shell menu crash (poy)
+* Remove useless chars in some paths that could lead to a Shell menu crash (poy)
 * [L#234458] Disable some menu commands in finished windows when files don't exist (poy)
 * Added option to always display tray icon and reorganized its menu
 * [L#234897] Improve error message when file list is too big (thanks steven sheehy)
@@ -19,7 +19,7 @@
 * [L#209419] Keep nick when user goes offline
 * [L#208615] Fix finished frames being spammed by segments (thanks poy)
 * Fixed a potential loss of connection with compressed transfers
-* Fixed crash on shell menu when browsing own file list (poy)
+* Fixed crash on Shell menu when browsing own file list (poy)
 * Help updates (emtee, poy, bsod, pseudonym)
 * [L#217878] Use system messages for file errors on nix (thanks individ)
 * [L#185549] Fix connection hang on local hub connection
@@ -250,7 +250,7 @@
 * [B#1139] Fixed download delay in some cases (thanks mikael eman)
 * [B#1144] Added possibility to add many hub lists in one go (use ; as separator) (thanks poy)
 * [B#1152] Only refresh if there are directories shared (thanks ullner)
-* [B#1153] More shell menus (thanks poy)
+* [B#1153] More Shell menus (thanks poy)
 * [B#1159] Removed unnecessary resume position reset (thanks cologic)
 * Removed rollback support - advanced TTH resume is now always used (thanks cologic)
 * Switched to mingw/stlport5.1
@@ -284,7 +284,7 @@
 * [B#1085] Better sound playing settings (thanks cologic / ullner)
 * [B#1111] OpenSSL compatibility and some unix fixes (thanks steven sheehy)
 * [B#1056] Added option to sort fav users above other users in hub frame (thanks poy)
-* [B#1063] Added option to show shell context menu in finished frame (thanks poy)
+* [B#1063] Added option to show Shell context menu in finished frame (thanks poy)
 * [B#1092] Fixed TTH tree being redownloaded (thanks stephan hohe)
 * [B#1097] Fixed waiting users being removed (thanks stephan hohe)
 * [B#1110] Added new adc hub list (thanks mafa_45)
