@@ -63,7 +63,7 @@ public:
 	static int dirMaskedIndex;
 	static TStringList lastDirs;
 	static MainWindow* mainWindow;
-	//static dwt::TabView* mdiParent;
+	static dwt::TabViewPtr mainTabs;
 	static DWORD helpCookie;
 	static HWND helpPopup;
 
@@ -199,7 +199,7 @@ public:
 		return Text::fromT(tstring(buf, x));
 	}
 
-	static void addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const string& dir = Util::emptyString);
+	static void addUserItems(dwt::MenuPtr menu, const UserList& users, const string& dir = Util::emptyString);
 
 #ifdef PORT_ME
 	static int getTextWidth(const tstring& str, HWND hWnd) {

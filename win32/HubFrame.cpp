@@ -53,7 +53,7 @@ void HubFrame::closeDisconnected() {
 	}
 }
 
-void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
+void HubFrame::openWindow(const string& url) {
 	for(FrameIter i = frames.begin(); i!= frames.end(); ++i) {
 		HubFrame* frame = *i;
 		if(frame->url == url) {
@@ -62,11 +62,11 @@ void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
 		}
 	}
 
-	new HubFrame(mdiParent, url);
+	new HubFrame(url);
 }
 
-HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
-	BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF),
+HubFrame::HubFrame(const string& url_) :
+	BaseType(Text::toT(url_), IDH_HUB, IDR_HUB_OFF),
 	chat(0),
 	message(0),
 	filter(0),
@@ -297,7 +297,7 @@ bool HubFrame::enter() {
 			if(!param.empty()) {
 				redirect = Text::fromT(param);
 				if(BOOLSETTING(JOIN_OPEN_NEW_WINDOW)) {
-					HubFrame::openWindow(getParent(), Text::fromT(param));
+					HubFrame::openWindow(Text::fromT(param));
 				} else {
 					handleFollow();
 				}
@@ -367,14 +367,14 @@ bool HubFrame::enter() {
 
 				if(ui) {
 					if(param.size() > j + 1)
-						PrivateFrame::openWindow(getParent(), ui->user, param.substr(j+1));
+						PrivateFrame::openWindow(ui->user, param.substr(j+1));
 					else
-						PrivateFrame::openWindow(getParent(), ui->user);
+						PrivateFrame::openWindow(ui->user);
 				}
 			} else if(!param.empty()) {
 				UserInfo* ui = findUser(param);
 				if(ui) {
-					PrivateFrame::openWindow(getParent(), ui->user);
+					PrivateFrame::openWindow(ui->user);
 				}
 			}
 		} else {
@@ -532,7 +532,7 @@ LRESULT HubFrame::handleSpeaker(WPARAM, LPARAM) {
 				if(BOOLSETTING(IGNORE_HUB_PMS)) {
 					addStatus(str(TF_("Ignored message: %1%") % Text::toT(pm.str)), false);
 				} else if(BOOLSETTING(POPUP_HUB_PMS) || PrivateFrame::isOpen(pm.replyTo)) {
-					PrivateFrame::gotMessage(getParent(), pm.from, pm.to, pm.replyTo, Text::toT(pm.str));
+					PrivateFrame::gotMessage(pm.from, pm.to, pm.replyTo, Text::toT(pm.str));
 				} else {
 					addChat(str(TF_("Private message from %1%: %2%") % getNick(pm.from) % Text::toT(pm.str)));
 				}
@@ -540,13 +540,13 @@ LRESULT HubFrame::handleSpeaker(WPARAM, LPARAM) {
 				if(BOOLSETTING(IGNORE_BOT_PMS)) {
 					addStatus(str(TF_("Ignored message: %1%") % Text::toT(pm.str)), false);
 				} else if(BOOLSETTING(POPUP_BOT_PMS) || PrivateFrame::isOpen(pm.replyTo)) {
-					PrivateFrame::gotMessage(getParent(), pm.from, pm.to, pm.replyTo, Text::toT(pm.str));
+					PrivateFrame::gotMessage(pm.from, pm.to, pm.replyTo, Text::toT(pm.str));
 				} else {
 					addChat(str(TF_("Private message from %1%: %2%") % getNick(pm.from) % Text::toT(pm.str)));
 				}
 			} else {
 				if(BOOLSETTING(POPUP_PMS) || PrivateFrame::isOpen(pm.replyTo) || pm.from == client->getMyIdentity().getUser()) {
-					PrivateFrame::gotMessage(getParent(), pm.from, pm.to, pm.replyTo, Text::toT(pm.str));
+					PrivateFrame::gotMessage(pm.from, pm.to, pm.replyTo, Text::toT(pm.str));
 				} else {
 					addChat(str(TF_("Private message from %1%: %2%") % getNick(pm.from) % Text::toT(pm.str)));
 				}
@@ -1155,7 +1155,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
-		appendUserItems(getParent(), menu);
+		appendUserItems(menu);
 
 		menu->appendSeparator();
 		MenuPtr copyMenu = menu->appendPopup(T_("&Copy"));
@@ -1175,7 +1175,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 bool HubFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	menu->setTitle(getParent()->getTabText(this));
+	menu->setTitle(WinUtil::mainTabs->getTabText(this));
 
 	if(!FavoriteManager::getInstance()->isFavoriteHub(url)) {
 		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&HubFrame::addAsFavorite, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_HUBS)));

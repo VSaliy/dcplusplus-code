@@ -55,8 +55,6 @@ public:
 		STATUS_LAST
 	};
 
-	dwt::TabViewPtr getTabView() { return tabs; }
-
 	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
 
 	MainWindow();
@@ -189,7 +187,7 @@ private:
 	bool closing();
 	void handleRestore();
 
-	static DWORD WINAPI stopper(void* p);
+	static DWORD WINAPI stopper(LPVOID);
 
 	// LogManagerListener
 	virtual void on(LogManagerListener::Message, time_t t, const string& m) throw() { speak(STATUS_MESSAGE, (LPARAM)new pair<time_t, tstring>(t, tstring(Text::toT(m)))); }

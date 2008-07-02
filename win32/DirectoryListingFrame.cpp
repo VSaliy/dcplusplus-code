@@ -73,7 +73,7 @@ int DirectoryListingFrame::ItemInfo::compareItems(ItemInfo* a, ItemInfo* b, int 
 	}
 }
 
-void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const UserPtr& aUser, int64_t aSpeed) {
+void DirectoryListingFrame::openWindow(const tstring& aFile, const tstring& aDir, const UserPtr& aUser, int64_t aSpeed) {
 	UserIter i = lists.find(aUser);
 	if(i != lists.end()) {
 		i->second->speed = aSpeed;
@@ -81,7 +81,7 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& a
 			//i->second->activate();
 		}
 	} else {
-		DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
+		DirectoryListingFrame* frame = new DirectoryListingFrame(aUser, aSpeed);
 		frame->loadFile(aFile, aDir);
 	}
 }
@@ -91,19 +91,19 @@ void DirectoryListingFrame::closeAll(){
 		::PostMessage(i->second->handle(), WM_CLOSE, 0, 0);
 }
 
-void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& aUser, const string& txt, int64_t aSpeed) {
+void DirectoryListingFrame::openWindow(const UserPtr& aUser, const string& txt, int64_t aSpeed) {
 	UserIter i = lists.find(aUser);
 	if(i != lists.end()) {
 		i->second->speed = aSpeed;
 		i->second->loadXML(txt);
 	} else {
-		DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
+		DirectoryListingFrame* frame = new DirectoryListingFrame(aUser, aSpeed);
 		frame->loadXML(txt);
 	}
 }
 
-DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const UserPtr& aUser, int64_t aSpeed) :
-	BaseType(mdiParent, _T(""), IDH_FILE_LIST, IDR_DIRECTORY, !BOOLSETTING(POPUNDER_FILELIST)),
+DirectoryListingFrame::DirectoryListingFrame(const UserPtr& aUser, int64_t aSpeed) :
+	BaseType(_T(""), IDH_FILE_LIST, IDR_DIRECTORY, !BOOLSETTING(POPUNDER_FILELIST)),
 	dirs(0),
 	files(0),
 	paned(0),

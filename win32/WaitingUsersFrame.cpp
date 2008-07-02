@@ -29,8 +29,8 @@
 #include <dcpp/UploadManager.h>
 
 // Constructor
-WaitingUsersFrame::WaitingUsersFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Waiting Users"), IDH_WAITING_USERS, IDR_WAITING_USERS)
+WaitingUsersFrame::WaitingUsersFrame() :
+	BaseType(T_("Waiting Users"), IDH_WAITING_USERS, IDR_WAITING_USERS)
 {
 	UploadManager::getInstance()->addListener(this);
 
@@ -121,7 +121,7 @@ void WaitingUsersFrame::loadAll()
 void WaitingUsersFrame::onPrivateMessage() {
 	UserPtr user = getSelectedUser();
 	if (user) {
-		PrivateFrame::openWindow(getParent(), user);
+		PrivateFrame::openWindow(user);
 	}
 }
 

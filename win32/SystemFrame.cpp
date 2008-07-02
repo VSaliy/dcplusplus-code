@@ -24,8 +24,8 @@
 #include "HoldRedraw.h"
 #include "WinUtil.h"
 
-SystemFrame::SystemFrame(dwt::TabView* mdiParent) : 
-	BaseType(mdiParent, T_("System Log"), IDH_SYSTEM_LOG, IDR_MAINFRAME),
+SystemFrame::SystemFrame() : 
+	BaseType(T_("System Log"), IDH_SYSTEM_LOG, IDR_MAINFRAME),
 	log(0) 
 {
 	{

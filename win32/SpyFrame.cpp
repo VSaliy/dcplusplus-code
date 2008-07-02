@@ -36,8 +36,8 @@ static const ColumnInfo searchesColumns[] = {
 	{ N_("Time"), 85, false }
 };
 
-SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Search Spy"), IDH_SEARCH_SPY, IDR_SPY),
+SpyFrame::SpyFrame() :
+	BaseType(T_("Search Spy"), IDH_SEARCH_SPY, IDR_SPY),
 	searches(0),
 	ignoreTTH(0),
 	bIgnoreTTH(BOOLSETTING(SPY_FRAME_IGNORE_TTH_SEARCHES)),
@@ -194,9 +194,9 @@ bool SpyFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 void SpyFrame::handleSearch(const tstring& searchString) {
 	if(Util::strnicmp(searchString.c_str(), _T("TTH:"), 4) == 0)
-		SearchFrame::openWindow(getParent(), searchString.substr(4), 0, SearchManager::SIZE_DONTCARE, SearchManager::TYPE_TTH);
+		SearchFrame::openWindow(searchString.substr(4), 0, SearchManager::SIZE_DONTCARE, SearchManager::TYPE_TTH);
 	else
-		SearchFrame::openWindow(getParent(), searchString);
+		SearchFrame::openWindow(searchString);
 }
 
 void SpyFrame::handleIgnoreTTHClicked() {

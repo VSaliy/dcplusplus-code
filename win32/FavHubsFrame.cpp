@@ -35,8 +35,8 @@ static const ColumnInfo hubsColumns[] = {
 	{ N_("User Description"), 125, false }
 };
 
-FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDR_FAVORITES),
+FavHubsFrame::FavHubsFrame() :
+	BaseType(T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDR_FAVORITES),
 	hubs(0),
 	connect(0),
 	add(0),
@@ -320,7 +320,7 @@ void FavHubsFrame::openSelected() {
 	std::vector<unsigned> items = hubs->getSelection();
 	for(std::vector<unsigned>::iterator i = items.begin(); i != items.end(); ++i) {
 		FavoriteHubEntryPtr entry = reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i));
-		HubFrame::openWindow(getParent(), entry->getServer());
+		HubFrame::openWindow(entry->getServer());
 	}
 }
 

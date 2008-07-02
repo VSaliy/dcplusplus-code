@@ -46,7 +46,7 @@ class TransferView :
 	public AspectUserCommand<TransferView>
 {
 public:
-	TransferView(dwt::Widget* parent, dwt::TabView* mdi);
+	TransferView(dwt::Widget* parent);
 
 	void prepareClose();
 
@@ -242,8 +242,7 @@ private:
 	ContainerPtr downloadsWindow;
 
 	TabViewPtr tabs;
-	
-	TabViewPtr mdi;
+
 	dwt::ImageListPtr arrows;
 
 	bool startup;

@@ -34,8 +34,8 @@ static const ColumnInfo itemsColumns[] = {
 	{ N_("Max Size"), 100, true }
 };
 
-ADLSearchFrame::ADLSearchFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Automatic Directory Listing Search"), IDH_ADL_SEARCH, IDR_ADLSEARCH),
+ADLSearchFrame::ADLSearchFrame() :
+	BaseType(T_("Automatic Directory Listing Search"), IDH_ADL_SEARCH, IDR_ADLSEARCH),
 	add(0),
 	properties(0),
 	up(0),

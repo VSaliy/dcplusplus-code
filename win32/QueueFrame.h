@@ -224,7 +224,7 @@ private:
 
 	HTREEITEM fileLists;
 
-	QueueFrame(dwt::TabView* mdiParent);
+	QueueFrame();
 	virtual ~QueueFrame();
 
 	void updateStatus();

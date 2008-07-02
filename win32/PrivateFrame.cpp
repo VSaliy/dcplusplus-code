@@ -35,11 +35,11 @@
 
 PrivateFrame::FrameMap PrivateFrame::frames;
 
-void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, const tstring& msg) {
+void PrivateFrame::openWindow(const UserPtr& replyTo_, const tstring& msg) {
 	PrivateFrame* pf = 0;
 	FrameIter i = frames.find(replyTo_);
 	if(i == frames.end()) {
-		pf = new PrivateFrame(mdiParent, replyTo_, true);
+		pf = new PrivateFrame(replyTo_, true);
 	} else {
 		pf = i->second;
 		pf->activate();
@@ -49,13 +49,13 @@ void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, 
 	
 }
 
-void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage) {
+void PrivateFrame::gotMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage) {
 	PrivateFrame* p = 0;
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
 
 	FrameIter i = frames.find(user);
 	if(i == frames.end()) {
-		p = new PrivateFrame(mdiParent, user, !BOOLSETTING(POPUNDER_PM));
+		p = new PrivateFrame(user, !BOOLSETTING(POPUNDER_PM));
 		p->addChat(aMessage);
 		if(Util::getAway()) {
 			if(!(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT)))
@@ -80,8 +80,8 @@ void PrivateFrame::closeAllOffline() {
 	}
 }
 
-PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate) : 
-	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
+PrivateFrame::PrivateFrame(const UserPtr& replyTo_, bool activate) : 
+	BaseType(_T(""), IDH_PM, IDR_PRIVATE, activate),
 	chat(0),
 	message(0),
 	replyTo(replyTo_)
@@ -364,7 +364,7 @@ void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aU
 bool PrivateFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	menu->setTitle(getParent()->getTabText(this));
+	menu->setTitle(WinUtil::mainTabs->getTabText(this));
 	
 	menu->appendItem(T_("&Get file list"), std::tr1::bind(&PrivateFrame::handleGetList, this));
 	menu->appendItem(T_("&Match queue"), std::tr1::bind(&PrivateFrame::handleMatchQueue, this));
