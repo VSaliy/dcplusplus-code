@@ -203,7 +203,7 @@ bool TransferView::handleConnectionsMenu(dwt::ScreenCoordinate pt) {
 		/// @todo Fix multiple selection menu...
 		ConnectionInfo* ii = connections->getSelectedData();
 		MenuPtr contextMenu = makeContextMenu(ii);
-		contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		contextMenu->open(pt);
 
 		return true;
 	}
@@ -219,7 +219,7 @@ bool TransferView::handleDownloadsMenu(dwt::ScreenCoordinate pt) {
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		DownloadInfo* di = downloads->getSelectedData();
 		WinUtil::addHashItems(menu, di->tth, di->columns[DOWNLOAD_COLUMN_FILE]);
-		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		menu->open(pt);
 
 		return true;
 	}

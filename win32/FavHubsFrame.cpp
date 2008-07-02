@@ -287,7 +287,7 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&FavHubsFrame::handleRemove, this), dwt::BitmapPtr(), hasSelected);
 
-	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	menu->open(pt);
 	return true;
 }
 

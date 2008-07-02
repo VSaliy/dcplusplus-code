@@ -291,7 +291,7 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	contextMenu->appendItem(T_("&Properties"), std::tr1::bind(&ADLSearchFrame::handleProperties, this), dwt::BitmapPtr(), hasSelected);
 	contextMenu->appendItem(T_("&Remove"), std::tr1::bind(&ADLSearchFrame::handleRemove, this), dwt::BitmapPtr(), hasSelected);
 
-	contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	contextMenu->open(pt);
 	return true;
 }
 

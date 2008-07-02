@@ -277,7 +277,7 @@ public:
 	* < li >TPM_VERPOSANIMATION : Animates the menu from top to bottom< /li >
 	* < /ul >
 	*/
-	unsigned open(const ScreenCoordinate& sc, unsigned flags = 0);
+	unsigned open(const ScreenCoordinate& sc, unsigned flags = TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 	/// Sets menu title
 	/** A Menu can have a title, this function sets that title

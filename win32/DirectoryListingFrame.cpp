@@ -416,9 +416,9 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 
 		usingDirMenu = false;
 		if(shellMenu)
-			shellMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+			shellMenu->open(pt);
 		else
-			menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+			menu->open(pt);
 		return true;
 	}
 	return false;
@@ -434,7 +434,7 @@ bool DirectoryListingFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 	if(dirs->getSelected()) {
 		MenuPtr contextMenu = makeDirMenu();
 		usingDirMenu = true;
-		contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		contextMenu->open(pt);
 
 		return true;
 	}

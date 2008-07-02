@@ -199,7 +199,7 @@ private:
 		dwt::Menu::ObjectType menu = addChild(WinUtil::Seeds::menu);
 		menu->setTitle(getParent()->getTabText(this));
 		menu->appendItem(T_("&Close"), std::tr1::bind(&ThisType::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
-		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		menu->open(pt);
 		return true;
 	}
 	

@@ -1053,7 +1053,7 @@ bool QueueFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 		} else {
 			contextMenu = makeMultiMenu();
 		}
-		contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		contextMenu->open(pt);
 
 		return true;
 	}
@@ -1070,7 +1070,7 @@ bool QueueFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 	if(dirs->hasSelected()) {
 		usingDirMenu = true;
 		MenuPtr contextMenu = makeDirMenu();
-		contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		contextMenu->open(pt);
 
 		return true;
 	}
