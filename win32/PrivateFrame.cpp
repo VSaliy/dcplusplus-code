@@ -127,7 +127,7 @@ PrivateFrame::~PrivateFrame() {
 	frames.erase(replyTo);
 }
 
-void PrivateFrame::addChat(const tstring& aLine) {
+void PrivateFrame::addChat(const tstring& aLine, bool log) {
 	tstring line;
 	if(BOOLSETTING(TIME_STAMPS)) {
 		line = Text::toT("\r\n[" + Util::getShortTimeString() + "] ");
@@ -145,7 +145,7 @@ void PrivateFrame::addChat(const tstring& aLine) {
 		chat->setSelection(0, chat->lineIndex(chat->lineFromChar(limit / 10)));
 		chat->replaceSelection(_T(""));
 	}
-	if(BOOLSETTING(LOG_PRIVATE_CHAT)) {
+	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		StringMap params;
 		params["message"] = Text::fromT(aLine);
 		params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo->getCID()));
@@ -163,14 +163,13 @@ void PrivateFrame::addChat(const tstring& aLine) {
 	setDirty(SettingsManager::BOLD_PM);
 }
 
-void PrivateFrame::addStatus(const tstring& aLine, bool inChat /* = true */) {
+void PrivateFrame::addStatus(const tstring& aLine, bool log) {
 	tstring line = Text::toT("[" + Util::getShortTimeString() + "] ") + aLine;
 
 	setStatus(STATUS_STATUS, line);
 
-	if(BOOLSETTING(STATUS_IN_CHAT) && inChat) {
-		addChat(_T("*** ") + aLine);
-	}
+	if(BOOLSETTING(STATUS_IN_CHAT))
+		addChat(_T("*** ") + aLine, log);
 }
 
 bool PrivateFrame::preClosing() {
@@ -221,7 +220,7 @@ void PrivateFrame::readLog() {
 
 	size_t linesCount = lines.size();
 	for(size_t i = std::max(static_cast<int>(linesCount) - SETTING(SHOW_LAST_LINES_LOG), 0); i < linesCount; ++i) {
-		addStatus(_T("- ") + Text::toT(lines[i]));
+		addStatus(_T("- ") + Text::toT(lines[i]), false);
 	}
 }
 

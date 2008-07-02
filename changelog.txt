@@ -11,6 +11,7 @@
 * Fix bogus menus when they contain more than 200 dynamic items (poy)
 * Shell menus are now sub-menus, loaded only when requested (poy)
 * [L#243728] Make Shell menus Vista-compliant (poy)
+* Don't re-log logs when opening PM windows (poy)
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
