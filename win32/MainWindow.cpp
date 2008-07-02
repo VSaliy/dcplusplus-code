@@ -105,6 +105,19 @@ MainWindow::MainWindow() :
 	onRaw(std::tr1::bind(&MainWindow::handleCopyData, this, _2), dwt::Message(WM_COPYDATA));
 	onRaw(std::tr1::bind(&MainWindow::handleWhereAreYou, this), dwt::Message(SingleInstance::WMU_WHERE_ARE_YOU));
 
+	// commands used in the accelerator table
+	onCommand(std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_QUEUE), IDC_QUEUE);
+	onCommand(std::tr1::bind(&MainWindow::handleRefreshFileList, this), IDC_REFRESH_FILE_LIST);
+	onCommand(std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_FAVORITE_HUBS), IDC_FAVORITE_HUBS);
+	onCommand(std::tr1::bind(&MainWindow::handleOpenFileList, this), IDC_OPEN_FILE_LIST);
+	onCommand(std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_NOTEPAD), IDC_NOTEPAD);
+	onCommand(std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_PUBLIC_HUBS), IDC_PUBLIC_HUBS);
+	onCommand(std::tr1::bind(&MainWindow::handleQuickConnect, this), IDC_QUICK_CONNECT);
+	onCommand(std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT), IDC_RECONNECT);
+	onCommand(std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_SEARCH), IDC_SEARCH);
+	onCommand(std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW), IDC_FOLLOW);
+	onCommand(std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_FAVUSERS), IDC_FAVUSERS);
+
 	filterIter = dwt::Application::instance().addFilter(std::tr1::bind(&MainWindow::filter, this, _1));
 	accel = dwt::AcceleratorPtr(new dwt::Accelerator(this, IDR_MAINFRAME));
 
@@ -134,13 +147,13 @@ MainWindow::MainWindow() :
 
 	speak(PARSE_COMMAND_LINE);
 
-	if(SETTING(NICK).empty()) {
-		WinUtil::help(handle(), IDH_GET_STARTED);
-		postMessage(WM_COMMAND, IDC_SETTINGS);
-	}
-
 	int cmdShow = dwt::Application::instance().getCmdShow();
 	::ShowWindow(handle(), ((cmdShow == SW_SHOWDEFAULT) || (cmdShow == SW_SHOWNORMAL)) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
+
+	if(SETTING(NICK).empty()) {
+		WinUtil::help(handle(), IDH_GET_STARTED);
+		handleSettings();
+	}
 
 	if(dwt::LibraryLoader::getCommonControlsVersion() < PACK_COMCTL_VERSION(5,80))
 		createMessageBox().show(T_("Your version of windows common controls is too old for DC++ to run correctly, and you will most probably experience problems with the user interface. You should download version 5.80 or higher from the DC++ homepage or from Microsoft directly."), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONEXCLAMATION);
@@ -393,7 +406,7 @@ void MainWindow::handleForward(WPARAM wParam) {
 
 void MainWindow::handleQuickConnect() {
 	if (SETTING(NICK).empty()) {
-        postMessage(WM_COMMAND, IDC_SETTINGS);
+		handleSettings();
 		return;
 	}
 
