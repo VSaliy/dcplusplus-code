@@ -188,9 +188,9 @@ private:
 	void handleDownload();
 	void handleViewAsText();
 	void handleGoToDirectory();
-	void handleDownloadLastDir(unsigned id);
-	void handleDownloadTarget(unsigned id);
-	void handleDownloadFavorite(unsigned id);
+	void handleDownloadLastDir(unsigned index);
+	void handleDownloadTarget(unsigned index);
+	void handleDownloadFavorite(unsigned index);
 	void handleDownloadBrowse();
 	bool handleKeyDownFiles(int c);
 

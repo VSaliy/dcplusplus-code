@@ -204,12 +204,12 @@ private:
 	bool handleKeyDown(int c);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	void handleDownload();
-	void handleDownloadFavoriteDirs(unsigned id);
+	void handleDownloadFavoriteDirs(unsigned index);
 	void handleDownloadTo();
-	void handleDownloadTarget(unsigned id);
+	void handleDownloadTarget(unsigned index);
 	void handleDownloadDir();
-	void handleDownloadWholeFavoriteDirs(unsigned id);
-	void handleDownloadWholeTarget(unsigned id);
+	void handleDownloadWholeFavoriteDirs(unsigned index);
+	void handleDownloadWholeTarget(unsigned index);
 	void handleDownloadDirTo();
 	void handleViewAsText();
 	void handleRemove();

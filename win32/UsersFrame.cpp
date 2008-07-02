@@ -180,11 +180,11 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		appendUserItems(getParent(), menu);
-		menu->appendSeparatorItem();
-		menu->appendItem(IDC_EDIT, T_("&Description"), std::tr1::bind(&UsersFrame::handleDescription, this));
-		menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&UsersFrame::handleRemove, this));
+		menu->appendSeparator();
+		menu->appendItem(T_("&Description"), std::tr1::bind(&UsersFrame::handleDescription, this));
+		menu->appendItem(T_("&Remove"), std::tr1::bind(&UsersFrame::handleRemove, this));
 
-		menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 		return true;
 	}

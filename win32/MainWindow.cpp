@@ -117,17 +117,17 @@ MainWindow::MainWindow() :
 	File::ensureDirectory(SETTING(LOG_DIRECTORY));
 	startSocket();
 
-	if(BOOLSETTING(OPEN_SYSTEM_LOG)) postMessage(WM_COMMAND, IDC_SYSTEM_LOG);
-	if(BOOLSETTING(OPEN_FAVORITE_USERS)) postMessage(WM_COMMAND, IDC_FAVUSERS);
-	if(BOOLSETTING(OPEN_QUEUE)) postMessage(WM_COMMAND, IDC_QUEUE);
-	if(BOOLSETTING(OPEN_FINISHED_DOWNLOADS)) postMessage(WM_COMMAND, IDC_FINISHED_DL);
-	if(BOOLSETTING(OPEN_WAITING_USERS)) postMessage(WM_COMMAND, IDC_WAITING_USERS);
-	if(BOOLSETTING(OPEN_FINISHED_UPLOADS)) postMessage(WM_COMMAND, IDC_FINISHED_UL);
-	if(BOOLSETTING(OPEN_SEARCH_SPY)) postMessage(WM_COMMAND, IDC_SEARCH_SPY);
-	if(BOOLSETTING(OPEN_NETWORK_STATISTICS)) postMessage(WM_COMMAND, IDC_NET_STATS);
-	if(BOOLSETTING(OPEN_NOTEPAD)) postMessage(WM_COMMAND, IDC_NOTEPAD);
-	if(BOOLSETTING(OPEN_PUBLIC)) postMessage(WM_COMMAND, IDC_PUBLIC_HUBS);
-	if(BOOLSETTING(OPEN_FAVORITE_HUBS)) postMessage(WM_COMMAND, IDC_FAVORITE_HUBS);
+	if(BOOLSETTING(OPEN_SYSTEM_LOG)) handleOpenWindow(IDC_SYSTEM_LOG);
+	if(BOOLSETTING(OPEN_FAVORITE_USERS)) handleOpenWindow(IDC_FAVUSERS);
+	if(BOOLSETTING(OPEN_QUEUE)) handleOpenWindow(IDC_QUEUE);
+	if(BOOLSETTING(OPEN_FINISHED_DOWNLOADS)) handleOpenWindow(IDC_FINISHED_DL);
+	if(BOOLSETTING(OPEN_WAITING_USERS)) handleOpenWindow(IDC_WAITING_USERS);
+	if(BOOLSETTING(OPEN_FINISHED_UPLOADS)) handleOpenWindow(IDC_FINISHED_UL);
+	if(BOOLSETTING(OPEN_SEARCH_SPY)) handleOpenWindow(IDC_SEARCH_SPY);
+	if(BOOLSETTING(OPEN_NETWORK_STATISTICS)) handleOpenWindow(IDC_NET_STATS);
+	if(BOOLSETTING(OPEN_NOTEPAD)) handleOpenWindow(IDC_NOTEPAD);
+	if(BOOLSETTING(OPEN_PUBLIC)) handleOpenWindow(IDC_PUBLIC_HUBS);
+	if(BOOLSETTING(OPEN_FAVORITE_HUBS)) handleOpenWindow(IDC_FAVORITE_HUBS);
 
 	if (!WinUtil::isShift())
 		speak(AUTO_CONNECT);
@@ -187,73 +187,73 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr file = mainMenu->appendPopup(T_("&File"));
 
-		file->appendItem(IDC_QUICK_CONNECT, T_("&Quick Connect ...\tCtrl+Q"), std::tr1::bind(&MainWindow::handleQuickConnect, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_HUB)));
-		file->appendItem(IDC_RECONNECT, T_("&Reconnect\tCtrl+R"), std::tr1::bind(&MainWindow::handleForward, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_RECONNECT)));
-		file->appendItem(IDC_FOLLOW, T_("Follow last redirec&t\tCtrl+T"), std::tr1::bind(&MainWindow::handleForward, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FOLLOW)));
-		file->appendSeparatorItem();
+		file->appendItem(T_("&Quick Connect ...\tCtrl+Q"), std::tr1::bind(&MainWindow::handleQuickConnect, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_HUB)));
+		file->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT), dwt::BitmapPtr(new dwt::Bitmap(IDB_RECONNECT)));
+		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW), dwt::BitmapPtr(new dwt::Bitmap(IDB_FOLLOW)));
+		file->appendSeparator();
 
-		file->appendItem(IDC_OPEN_FILE_LIST, T_("Open file list...\tCtrl+L"), std::tr1::bind(&MainWindow::handleOpenFileList, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_OPEN_FILE_LIST)));
-		file->appendItem(IDC_OPEN_OWN_LIST, T_("Open own list"), std::tr1::bind(&MainWindow::handleOpenOwnList, this));
-		file->appendItem(IDC_MATCH_ALL, T_("Match downloaded lists"), std::tr1::bind(&MainWindow::handleMatchAll, this));
-		file->appendItem(IDC_REFRESH_FILE_LIST, T_("Refresh file list\tCtrl+E"), std::tr1::bind(&MainWindow::handleRefreshFileList, this));
-		file->appendItem(IDC_OPEN_DOWNLOADS, T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_OPEN_DL_DIR)));
-		file->appendSeparatorItem();
+		file->appendItem(T_("Open file list...\tCtrl+L"), std::tr1::bind(&MainWindow::handleOpenFileList, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_OPEN_FILE_LIST)));
+		file->appendItem(T_("Open own list"), std::tr1::bind(&MainWindow::handleOpenOwnList, this));
+		file->appendItem(T_("Match downloaded lists"), std::tr1::bind(&MainWindow::handleMatchAll, this));
+		file->appendItem(T_("Refresh file list\tCtrl+E"), std::tr1::bind(&MainWindow::handleRefreshFileList, this));
+		file->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_OPEN_DL_DIR)));
+		file->appendSeparator();
 
-		file->appendItem(IDC_SETTINGS, T_("Settings..."), std::tr1::bind(&MainWindow::handleSettings, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_SETTINGS)));
-		file->appendSeparatorItem();
-		file->appendItem(IDC_EXIT, T_("E&xit"), std::tr1::bind(&MainWindow::handleExit, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
+		file->appendItem(T_("Settings..."), std::tr1::bind(&MainWindow::handleSettings, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_SETTINGS)));
+		file->appendSeparator();
+		file->appendItem(T_("E&xit"), std::tr1::bind(&MainWindow::handleExit, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
 	}
 
 	{
 		MenuPtr view = mainMenu->appendPopup(T_("&View"));
 
-		view->appendItem(IDC_PUBLIC_HUBS, T_("&Public Hubs\tCtrl+P"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_PUBLIC_HUBS)));
-		view->appendItem(IDC_FAVORITE_HUBS, T_("&Favorite Hubs\tCtrl+F"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_HUBS)));
-		view->appendItem(IDC_FAVUSERS, T_("Favorite &Users\tCtrl+U"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
-		view->appendSeparatorItem();
-		view->appendItem(IDC_QUEUE, T_("&Download Queue\tCtrl+D"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_DL_QUEUE)));
-		view->appendItem(IDC_FINISHED_DL, T_("Finished Downloads"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FINISHED_DL)));
-		view->appendItem(IDC_WAITING_USERS, T_("Waiting Users"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_WAITING_USERS)));
-		view->appendItem(IDC_FINISHED_UL, T_("Finished Uploads"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FINISHED_UL)));
-		view->appendSeparatorItem();
-		view->appendItem(IDC_SEARCH, T_("&Search\tCtrl+S"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_SEARCH)));
-		view->appendItem(IDC_ADL_SEARCH, T_("ADL Search"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_ADL_SEARCH)));
-		view->appendItem(IDC_SEARCH_SPY, T_("Search Spy"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_SEARCH_SPY)));
-		view->appendSeparatorItem();
-		view->appendItem(IDC_NOTEPAD, T_("&Notepad\tCtrl+N"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_NOTEPAD)));
-		view->appendItem(IDC_SYSTEM_LOG, T_("System Log"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1));
-		view->appendItem(IDC_NET_STATS, T_("Network Statistics"), std::tr1::bind(&MainWindow::handleOpenWindow, this, _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_NETWORK_STATS)));
-		view->appendItem(IDC_HASH_PROGRESS, T_("Indexing progress"), std::tr1::bind(&MainWindow::handleHashProgress, this));
+		view->appendItem(T_("&Public Hubs\tCtrl+P"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_PUBLIC_HUBS), dwt::BitmapPtr(new dwt::Bitmap(IDB_PUBLIC_HUBS)));
+		view->appendItem(T_("&Favorite Hubs\tCtrl+F"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_FAVORITE_HUBS), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_HUBS)));
+		view->appendItem(T_("Favorite &Users\tCtrl+U"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_FAVUSERS), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
+		view->appendSeparator();
+		view->appendItem(T_("&Download Queue\tCtrl+D"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_QUEUE), dwt::BitmapPtr(new dwt::Bitmap(IDB_DL_QUEUE)));
+		view->appendItem(T_("Finished Downloads"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_FINISHED_DL), dwt::BitmapPtr(new dwt::Bitmap(IDB_FINISHED_DL)));
+		view->appendItem(T_("Waiting Users"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_WAITING_USERS), dwt::BitmapPtr(new dwt::Bitmap(IDB_WAITING_USERS)));
+		view->appendItem(T_("Finished Uploads"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_FINISHED_UL), dwt::BitmapPtr(new dwt::Bitmap(IDB_FINISHED_UL)));
+		view->appendSeparator();
+		view->appendItem(T_("&Search\tCtrl+S"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_SEARCH), dwt::BitmapPtr(new dwt::Bitmap(IDB_SEARCH)));
+		view->appendItem(T_("ADL Search"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_ADL_SEARCH), dwt::BitmapPtr(new dwt::Bitmap(IDB_ADL_SEARCH)));
+		view->appendItem(T_("Search Spy"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_SEARCH_SPY), dwt::BitmapPtr(new dwt::Bitmap(IDB_SEARCH_SPY)));
+		view->appendSeparator();
+		view->appendItem(T_("&Notepad\tCtrl+N"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_NOTEPAD), dwt::BitmapPtr(new dwt::Bitmap(IDB_NOTEPAD)));
+		view->appendItem(T_("System Log"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_SYSTEM_LOG));
+		view->appendItem(T_("Network Statistics"), std::tr1::bind(&MainWindow::handleOpenWindow, this, IDC_NET_STATS), dwt::BitmapPtr(new dwt::Bitmap(IDB_NETWORK_STATS)));
+		view->appendItem(T_("Indexing progress"), std::tr1::bind(&MainWindow::handleHashProgress, this));
 	}
 
 	{
 		MenuPtr window = mainMenu->appendPopup(T_("&Window"));
 
-		window->appendItem(IDC_CLOSE_ALL_DISCONNECTED, T_("Close disconnected"), std::tr1::bind(&MainWindow::handleCloseWindows, this, _1));
-		window->appendItem(IDC_CLOSE_ALL_PM, T_("Close all PM windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, _1));
-		window->appendItem(IDC_CLOSE_ALL_OFFLINE_PM, T_("Close all offline PM windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, _1));
-		window->appendItem(IDC_CLOSE_ALL_DIR_LIST, T_("Close all file list windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, _1));
-		window->appendItem(IDC_CLOSE_ALL_SEARCH_FRAME, T_("Close all search windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, _1));
+		window->appendItem(T_("Close disconnected"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_DISCONNECTED));
+		window->appendItem(T_("Close all PM windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_PM));
+		window->appendItem(T_("Close all offline PM windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_OFFLINE_PM));
+		window->appendItem(T_("Close all file list windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_DIR_LIST));
+		window->appendItem(T_("Close all search windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_SEARCH_FRAME));
 	}
 
 	{
 		MenuPtr help = mainMenu->appendPopup(T_("&Help"));
 
-		help->appendItem(IDH_INDEX, T_("Help &Contents\tF1"), std::tr1::bind(&WinUtil::help, handle(), _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_HELP)));
-		help->appendItem(IDH_GET_STARTED, T_("Get started"), std::tr1::bind(&WinUtil::help, handle(), _1));
-		help->appendSeparatorItem();
-		help->appendItem(IDH_CHANGELOG, T_("Change Log"), std::tr1::bind(&WinUtil::help, handle(), _1));
-		help->appendItem(IDC_ABOUT, T_("About DC++..."), std::tr1::bind(&MainWindow::handleAbout, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_DCPP)));
-		help->appendSeparatorItem();
-		help->appendItem(IDC_HELP_HOMEPAGE, T_("DC++ Homepage"), std::tr1::bind(&MainWindow::handleLink, this, _1));
-		help->appendItem(IDC_HELP_DOWNLOADS, T_("Downloads"), std::tr1::bind(&MainWindow::handleLink, this, _1));
-		help->appendItem(IDC_HELP_GEOIPFILE, T_("GeoIP database update"), std::tr1::bind(&MainWindow::handleLink, this, _1));
-		help->appendItem(IDC_HELP_FAQ, T_("Frequently asked questions"), std::tr1::bind(&MainWindow::handleLink, this, _1));
-		help->appendItem(IDC_HELP_FORUM, T_("Help forum"), std::tr1::bind(&MainWindow::handleLink, this, _1));
-		help->appendItem(IDC_HELP_DISCUSS, T_("DC++ discussion forum"), std::tr1::bind(&MainWindow::handleLink, this, _1));
-		help->appendItem(IDC_HELP_REQUEST_FEATURE, T_("Request a feature"), std::tr1::bind(&MainWindow::handleLink, this, _1));
-		help->appendItem(IDC_HELP_REPORT_BUG, T_("Report a bug"), std::tr1::bind(&MainWindow::handleLink, this, _1));
-		help->appendItem(IDC_HELP_DONATE, T_("Donate (paypal)"), std::tr1::bind(&MainWindow::handleLink, this, _1));
+		help->appendItem(T_("Help &Contents\tF1"), std::tr1::bind(&WinUtil::help, handle(), IDH_INDEX), dwt::BitmapPtr(new dwt::Bitmap(IDB_HELP)));
+		help->appendItem(T_("Get started"), std::tr1::bind(&WinUtil::help, handle(), IDH_GET_STARTED));
+		help->appendSeparator();
+		help->appendItem(T_("Change Log"), std::tr1::bind(&WinUtil::help, handle(), IDH_CHANGELOG));
+		help->appendItem(T_("About DC++..."), std::tr1::bind(&MainWindow::handleAbout, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_DCPP)));
+		help->appendSeparator();
+		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_HOMEPAGE));
+		help->appendItem(T_("Downloads"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_DOWNLOADS));
+		help->appendItem(T_("GeoIP database update"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_GEOIPFILE));
+		help->appendItem(T_("Frequently asked questions"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_FAQ));
+		help->appendItem(T_("Help forum"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_FORUM));
+		help->appendItem(T_("DC++ discussion forum"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_DISCUSS));
+		help->appendItem(T_("Request a feature"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_REQUEST_FEATURE));
+		help->appendItem(T_("Report a bug"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_REPORT_BUG));
+		help->appendItem(T_("Donate (paypal)"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_DONATE));
 	}
 
 	mainMenu->setMenu();
@@ -371,14 +371,13 @@ void MainWindow::handleTabsTitleChanged(const tstring& title) {
 void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	unsigned id = 0;
 	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
 	for(FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i) {
 		FavoriteHubEntry* entry = *i;
-		menu->appendItem(id++, dwt::util::escapeMenu(Text::toT(entry->getName())), std::tr1::bind(&HubFrame::openWindow, getTabView(), entry->getServer()));
+		menu->appendItem(dwt::util::escapeMenu(Text::toT(entry->getName())), std::tr1::bind(&HubFrame::openWindow, getTabView(), entry->getServer()));
 	}
 
-	menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 }
 
 void MainWindow::handleExit() {
@@ -989,16 +988,17 @@ bool MainWindow::tryFire(const MSG& msg, LRESULT& retVal) {
 }
 
 void MainWindow::handleTrayContextMenu() {
-	dwt::ScreenCoordinate pt;
 	MenuPtr trayMenu = addChild(WinUtil::Seeds::menu);
-	trayMenu->appendItem(IDC_TRAY_SHOW, T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_DCPP)));
-	trayMenu->appendItem(IDC_OPEN_DOWNLOADS, T_("Open downloads directory"), dwt::BitmapPtr(new dwt::Bitmap(IDB_OPEN_DL_DIR)));
-	trayMenu->appendItem(IDC_SETTINGS, T_("Settings..."), dwt::BitmapPtr(new dwt::Bitmap(IDB_SETTINGS)));
-	trayMenu->appendSeparatorItem();
-	trayMenu->appendItem(IDC_TRAY_QUIT, T_("Exit"), std::tr1::bind(&MainWindow::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
-	trayMenu->setDefaultItem(0,TRUE);
+
+	trayMenu->appendItem(T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_DCPP)), true, true);
+	trayMenu->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_OPEN_DL_DIR)));
+	trayMenu->appendItem(T_("Settings..."), std::tr1::bind(&MainWindow::handleSettings, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_SETTINGS)));
+	trayMenu->appendSeparator();
+	trayMenu->appendItem(T_("Exit"), std::tr1::bind(&MainWindow::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
+
+	dwt::ScreenCoordinate pt;
 	::GetCursorPos(&pt.getPoint());
-	trayMenu->trackPopupMenu(pt, TPM_BOTTOMALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON);
+	trayMenu->open(pt, TPM_BOTTOMALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON);
 }
 
 void MainWindow::handleTrayClicked() {

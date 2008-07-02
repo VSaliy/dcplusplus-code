@@ -234,9 +234,9 @@ private:
 	bool handleUsersKeyDown(int c);
 	bool handleChatContextMenu(dwt::ScreenCoordinate pt);
 	bool handleUsersContextMenu(dwt::ScreenCoordinate pt);
-	HRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
+	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	void handleShowUsersClicked();
-	void handleMultiCopy(unsigned id);
+	void handleMultiCopy(unsigned index);
 	void handleDoubleClickUsers();
 	bool handleTabContextMenu(const dwt::ScreenCoordinate& pt);
 	void handleCopyHub();

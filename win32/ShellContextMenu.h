@@ -26,31 +26,33 @@
 
 class CShellContextMenu
 {
-	static IContextMenu2* g_IContext2;
 	static IContextMenu3* g_IContext3;
+	static CShellContextMenu* pShellMenu;
+	static WNDPROC OldWndProc;
 
 public:
-	CShellContextMenu();
+	CShellContextMenu(dwt::MenuPtr& parent_, const wstring& path);
 	~CShellContextMenu();
 
-	void SetPath(const wstring& strPath);
-
-	UINT ShowContextMenu(dwt::Menu::ObjectType& menu, const dwt::ScreenCoordinate& pt);
+	void open(const dwt::ScreenCoordinate& pt, unsigned flags = 0);
 
 private:
-	bool bDelete;
+	dwt::MenuPtr parent;
+	dwt::MenuPtr menu;
+
 	IShellFolder* m_psfFolder;
 	LPITEMIDLIST* m_pidlArray;
 
-	void FreePIDLArray(LPITEMIDLIST* pidlArray);
-	// this functions determines which version of IContextMenu is avaibale for those objects(always the highest one)
-	// and returns that interface
-	bool GetContextMenu(LPVOID* ppContextMenu, int& iMenuType);
+	unsigned sel_id;
+	LPARAM sel_handle;
 
-	void InvokeCommand(LPCONTEXTMENU pContextMenu, UINT idCommand);
+	void FreePIDLArray(LPITEMIDLIST* pidlArray);
+
+	void InvokeCommand(LPCONTEXTMENU pContextMenu, unsigned id);
 
 	static LRESULT CALLBACK HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	void handleInitMenuPopup(HMENU hMenu);
+	void handleUnInitMenuPopup(HMENU hMenu);
 };
-
 
 #endif // !defined(DCPLUSPLUS_WIN32_SHELL_CONTEXT_MENU_H)

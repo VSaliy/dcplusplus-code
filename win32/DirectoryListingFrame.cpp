@@ -307,36 +307,33 @@ void DirectoryListingFrame::setWindowTitle() {
 DirectoryListingFrame::MenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	menu->appendItem(IDC_DOWNLOAD, T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this));
+	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::BitmapPtr(), true, true);
 	addTargets(menu, ii);
 
 	if(ii->type == ItemInfo::FILE) {
-		menu->appendItem(IDC_VIEW_AS_TEXT, T_("&View as text"), std::tr1::bind(&DirectoryListingFrame::handleViewAsText, this));
+		menu->appendItem(T_("&View as text"), std::tr1::bind(&DirectoryListingFrame::handleViewAsText, this));
 
-		menu->appendSeparatorItem();
+		menu->appendSeparator();
 
 		WinUtil::addHashItems(menu, ii->file->getTTH(), Text::toT(ii->file->getName()));
 	}
 
 	if((ii->type == ItemInfo::FILE && ii->file->getAdls()) ||
 		(ii->type == ItemInfo::DIRECTORY && ii->dir->getAdls() && ii->dir->getParent() != dl->getRoot()) )	{
-		menu->appendSeparatorItem();
-		menu->appendItem(IDC_GO_TO_DIRECTORY, T_("&Go to directory"), std::tr1::bind(&DirectoryListingFrame::handleGoToDirectory, this));
+		menu->appendSeparator();
+		menu->appendItem(T_("&Go to directory"), std::tr1::bind(&DirectoryListingFrame::handleGoToDirectory, this));
 	}
 
 	addUserCommands(menu);
-	menu->setDefaultItem(IDC_DOWNLOAD);
 	return menu;
 }
 
 DirectoryListingFrame::MenuPtr DirectoryListingFrame::makeMultiMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	menu->appendItem(IDC_DOWNLOAD, T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this));
+	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::BitmapPtr(), true, true);
 	addTargets(menu);
 	addUserCommands(menu);
-
-	menu->setDefaultItem(IDC_DOWNLOAD);
 
 	return menu;
 }
@@ -344,7 +341,7 @@ DirectoryListingFrame::MenuPtr DirectoryListingFrame::makeMultiMenu() {
 DirectoryListingFrame::MenuPtr DirectoryListingFrame::makeDirMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	menu->appendItem(IDC_DOWNLOAD, T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this));
+	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this));
 	addTargets(menu);
 	return menu;
 }
@@ -358,45 +355,50 @@ void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
 	StringPairList spl = FavoriteManager::getInstance()->getFavoriteDirs();
 	size_t i = 0;
 	for(; i < spl.size(); ++i) {
-		menu->appendItem(IDC_DOWNLOAD_FAVORITE_DIRS + i, Text::toT(spl[i].second), std::tr1::bind(&DirectoryListingFrame::handleDownloadFavorite, this, _1));
+		menu->appendItem(Text::toT(spl[i].second), std::tr1::bind(&DirectoryListingFrame::handleDownloadFavorite, this, i));
 	}
 
 	if(i > 0) {
-		menu->appendSeparatorItem();
+		menu->appendSeparator();
 	}
 
-	menu->appendItem(IDC_DOWNLOAD_BROWSE, T_("&Browse..."), std::tr1::bind(&DirectoryListingFrame::handleDownloadBrowse, this));
+	menu->appendItem(T_("&Browse..."), std::tr1::bind(&DirectoryListingFrame::handleDownloadBrowse, this));
 
 	targets.clear();
 
 	if(ii && ii->type == ItemInfo::FILE) {
 		QueueManager::getInstance()->getTargets(ii->file->getTTH(), targets);
 		if(!targets.empty()) {
-			menu->appendSeparatorItem();
+			menu->appendSeparator();
 			for(i = 0; i < targets.size(); ++i) {
-				menu->appendItem(IDC_DOWNLOAD_TARGET + i, Text::toT(targets[i]), std::tr1::bind(&DirectoryListingFrame::handleDownloadTarget, this, _1));
+				menu->appendItem(Text::toT(targets[i]), std::tr1::bind(&DirectoryListingFrame::handleDownloadTarget, this, i));
 			}
 		}
 	}
 
 	if(WinUtil::lastDirs.size() > 0) {
-		menu->appendSeparatorItem();
+		menu->appendSeparator();
 
 		for(i = 0; i < WinUtil::lastDirs.size(); ++i) {
-			menu->appendItem(IDC_DOWNLOAD_LASTDIR + i, WinUtil::lastDirs[i], std::tr1::bind(&DirectoryListingFrame::handleDownloadLastDir, this, _1));
+			menu->appendItem(WinUtil::lastDirs[i], std::tr1::bind(&DirectoryListingFrame::handleDownloadLastDir, this, i));
 		}
 	}
 }
 
 bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
-	MenuPtr contextMenu;
 	if(files->hasSelected()) {
 		if(pt.x() == -1 && pt.y() == -1) {
 			pt = files->getContextMenuPos();
 		}
 
+		MenuPtr menu;
+		CShellContextMenu* shellMenu = 0;
+
 		if(files->countSelected() == 1) {
 			ItemInfo* ii = files->getSelectedData();
+
+			menu = makeSingleMenu(ii);
+
 			if(BOOLSETTING(SHOW_SHELL_MENU) && (dl->getUser() == ClientManager::getInstance()->getMe()) && ii->type == ItemInfo::FILE) {
 				string path;
 				try {
@@ -405,22 +407,18 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 					// Ignore
 				}
 				if(!path.empty() && (File::getSize(path) != -1)) {
-					Menu::Seed cs = WinUtil::Seeds::menu;
-					cs.ownerDrawn = false;
-					MenuPtr menu = addChild(cs);
-					CShellContextMenu shellMenu;
-					shellMenu.SetPath(Text::utf8ToWide(path));
-					shellMenu.ShowContextMenu(menu, pt);
-					return true;
+					shellMenu = new CShellContextMenu(menu, Text::utf8ToWide(path));
 				}
 			}
-
-			contextMenu = makeSingleMenu(ii);
 		} else {
-			contextMenu = makeMultiMenu();
+			menu = makeMultiMenu();
 		}
+
 		usingDirMenu = false;
-		contextMenu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		if(shellMenu)
+			shellMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		else
+			menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 		return true;
 	}
 	return false;
@@ -436,7 +434,7 @@ bool DirectoryListingFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 	if(dirs->getSelected()) {
 		MenuPtr contextMenu = makeDirMenu();
 		usingDirMenu = true;
-		contextMenu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 		return true;
 	}
@@ -518,26 +516,23 @@ void DirectoryListingFrame::handleDownloadBrowse() {
 	}
 }
 
-void DirectoryListingFrame::handleDownloadLastDir(unsigned id) {
-	size_t n = id - IDC_DOWNLOAD_LASTDIR;
-	if(n >= WinUtil::lastDirs.size()) {
+void DirectoryListingFrame::handleDownloadLastDir(unsigned index) {
+	if(index >= WinUtil::lastDirs.size()) {
 		return;
 	}
-	download(Text::fromT(WinUtil::lastDirs[n]));
+	download(Text::fromT(WinUtil::lastDirs[index]));
 }
 
-void DirectoryListingFrame::handleDownloadFavorite(unsigned id) {
-	size_t n = id - IDC_DOWNLOAD_FAVORITE_DIRS;
+void DirectoryListingFrame::handleDownloadFavorite(unsigned index) {
 	StringPairList spl = FavoriteManager::getInstance()->getFavoriteDirs();
-	if(n >= spl.size()) {
+	if(index >= spl.size()) {
 		return;
 	}
-	download(spl[n].first);
+	download(spl[index].first);
 }
 
-void DirectoryListingFrame::handleDownloadTarget(unsigned id) {
-	size_t n = id - IDC_DOWNLOAD_TARGET;
-	if(n >= targets.size()) {
+void DirectoryListingFrame::handleDownloadTarget(unsigned index) {
+	if(index >= targets.size()) {
 		return;
 	}
 
@@ -545,7 +540,7 @@ void DirectoryListingFrame::handleDownloadTarget(unsigned id) {
 		return;
 	}
 
-	const string& target = targets[n];
+	const string& target = targets[index];
 	ItemInfo* ii = files->getSelectedData();
 	try {
 		dl->download(ii->file, target, false, WinUtil::isShift());

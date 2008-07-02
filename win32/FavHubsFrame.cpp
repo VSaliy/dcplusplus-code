@@ -275,25 +275,19 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		pt = hubs->getContextMenuPos();
 	}
 
+	bool hasSelected = hubs->hasSelected();
+
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	menu->appendItem(IDC_CONNECT, T_("&Connect"), std::tr1::bind(&FavHubsFrame::openSelected, this));
-	menu->appendSeparatorItem();
-	menu->appendItem(IDC_ADD, T_("&New..."), std::tr1::bind(&FavHubsFrame::handleAdd, this));
-	menu->appendItem(IDC_EDIT, T_("&Properties"), std::tr1::bind(&FavHubsFrame::handleProperties, this));
-	menu->appendItem(IDC_MOVE_UP, T_("Move &Up"), std::tr1::bind(&FavHubsFrame::handleUp, this));
-	menu->appendItem(IDC_MOVE_DOWN, T_("Move &Down"), std::tr1::bind(&FavHubsFrame::handleDown, this));
-	menu->appendSeparatorItem();
-	menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&FavHubsFrame::handleRemove, this));
-	menu->setDefaultItem(IDC_CONNECT);
+	menu->appendItem(T_("&Connect"), std::tr1::bind(&FavHubsFrame::openSelected, this), dwt::BitmapPtr(), hasSelected, true);
+	menu->appendSeparator();
+	menu->appendItem(T_("&New..."), std::tr1::bind(&FavHubsFrame::handleAdd, this));
+	menu->appendItem(T_("&Properties"), std::tr1::bind(&FavHubsFrame::handleProperties, this), dwt::BitmapPtr(), hasSelected);
+	menu->appendItem(T_("Move &Up"), std::tr1::bind(&FavHubsFrame::handleUp, this), dwt::BitmapPtr(), hasSelected);
+	menu->appendItem(T_("Move &Down"), std::tr1::bind(&FavHubsFrame::handleDown, this), dwt::BitmapPtr(), hasSelected);
+	menu->appendSeparator();
+	menu->appendItem(T_("&Remove"), std::tr1::bind(&FavHubsFrame::handleRemove, this), dwt::BitmapPtr(), hasSelected);
 
-	bool status = hubs->hasSelected();
-	menu->setItemEnabled(IDC_CONNECT, false, status);
-	menu->setItemEnabled(IDC_EDIT, false, status);
-	menu->setItemEnabled(IDC_MOVE_UP, false, status);
-	menu->setItemEnabled(IDC_MOVE_DOWN, false, status);
-	menu->setItemEnabled(IDC_REMOVE, false, status);
-
-	menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 	return true;
 }
 

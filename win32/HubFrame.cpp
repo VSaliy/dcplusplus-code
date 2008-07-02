@@ -468,7 +468,7 @@ void HubFrame::addStatus(const tstring& aLine, bool inChat /* = true */) {
 	}
 }
 
-HRESULT HubFrame::handleSpeaker(WPARAM, LPARAM) {
+LRESULT HubFrame::handleSpeaker(WPARAM, LPARAM) {
 	updateUsers = false;
 	TaskQueue::List t;
 	tasks.get(t);
@@ -1157,17 +1157,16 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		appendUserItems(getParent(), menu);
 
-		menu->appendSeparatorItem();
+		menu->appendSeparator();
 		MenuPtr copyMenu = menu->appendPopup(T_("&Copy"));
 		for(int j=0; j<COLUMN_LAST; j++) {
-			copyMenu->appendItem(IDC_MULTI_COPY + j, T_(usersColumns[j].name), std::tr1::bind(&HubFrame::handleMultiCopy, this, _1));
+			copyMenu->appendItem(T_(usersColumns[j].name), std::tr1::bind(&HubFrame::handleMultiCopy, this, j));
 		}
-		menu->setDefaultItem(IDC_GETLIST);
 		prepareMenu(menu, UserCommand::CONTEXT_CHAT, client->getHubUrl());
 
 		inTabMenu = false;
 
-		menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 		return true;
 	}
 	return false;
@@ -1179,19 +1178,19 @@ bool HubFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
 	menu->setTitle(getParent()->getTabText(this));
 
 	if(!FavoriteManager::getInstance()->isFavoriteHub(url)) {
-		menu->appendItem(IDC_ADD_TO_FAVORITES, T_("Add To &Favorites"), std::tr1::bind(&HubFrame::addAsFavorite, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_HUBS)));
+		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&HubFrame::addAsFavorite, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_HUBS)));
 	}
 
-	menu->appendItem(IDC_RECONNECT, T_("&Reconnect\tCtrl+R"), std::tr1::bind(&HubFrame::handleReconnect, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_RECONNECT)));
-	menu->appendItem(IDC_COPY_HUB, T_("Copy &address to clipboard"), std::tr1::bind(&HubFrame::handleCopyHub, this));
+	menu->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&HubFrame::handleReconnect, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_RECONNECT)));
+	menu->appendItem(T_("Copy &address to clipboard"), std::tr1::bind(&HubFrame::handleCopyHub, this));
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
-	menu->appendSeparatorItem();
-	menu->appendItem(IDC_CLOSE_WINDOW, T_("&Close"), std::tr1::bind(&HubFrame::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
+	menu->appendSeparator();
+	menu->appendItem(T_("&Close"), std::tr1::bind(&HubFrame::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
 
 	inTabMenu = true;
 
-	menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 	return true;
 }
 
@@ -1210,10 +1209,8 @@ void HubFrame::handleShowUsersClicked() {
 	layout();
 }
 
-void HubFrame::handleMultiCopy(unsigned id) {
-	int n = (int)id - IDC_MULTI_COPY;
-
-	if(n < 0 || n > COLUMN_LAST) {
+void HubFrame::handleMultiCopy(unsigned index) {
+	if(index > COLUMN_LAST) {
 		return;
 	}
 
@@ -1221,7 +1218,7 @@ void HubFrame::handleMultiCopy(unsigned id) {
 	tstring tmpstr;
 
 	while( (i = users->getNext(i, LVNI_SELECTED)) != -1) {
-		tmpstr += users->getText(i, n);
+		tmpstr += users->getText(i, index);
 		tmpstr += _T(" / ");
 	}
 	if(!tmpstr.empty()) {

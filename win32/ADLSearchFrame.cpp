@@ -284,16 +284,14 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		pt = items->getContextMenuPos();
 	}
 
+	bool hasSelected = items->hasSelected();
+
 	MenuPtr contextMenu = addChild(WinUtil::Seeds::menu);
-	contextMenu->appendItem(IDC_ADD, T_("&New..."), std::tr1::bind(&ADLSearchFrame::handleAdd, this));
-	contextMenu->appendItem(IDC_EDIT, T_("&Properties"), std::tr1::bind(&ADLSearchFrame::handleProperties, this));
-	contextMenu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&ADLSearchFrame::handleRemove, this));
+	contextMenu->appendItem(T_("&New..."), std::tr1::bind(&ADLSearchFrame::handleAdd, this));
+	contextMenu->appendItem(T_("&Properties"), std::tr1::bind(&ADLSearchFrame::handleProperties, this), dwt::BitmapPtr(), hasSelected);
+	contextMenu->appendItem(T_("&Remove"), std::tr1::bind(&ADLSearchFrame::handleRemove, this), dwt::BitmapPtr(), hasSelected);
 
-	bool status = items->hasSelected();
-	contextMenu->setItemEnabled(IDC_EDIT, false, status);
-	contextMenu->setItemEnabled(IDC_REMOVE, false, status);
-
-	contextMenu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 	return true;
 }
 

@@ -387,9 +387,9 @@ int WinUtil::getIconIndex(const tstring& aFileName) {
 	}
 }
 void WinUtil::addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename) {
-	menu->appendItem(IDC_SEARCH_ALTERNATES, T_("Search for alternates"), std::tr1::bind(&WinUtil::searchHash, tth));
-	menu->appendItem(IDC_BITZI_LOOKUP, T_("Lookup TTH at Bitzi.com"), std::tr1::bind(WinUtil::bitziLink, tth));
-	menu->appendItem(IDC_COPY_MAGNET, T_("Copy magnet link to clipboard"), std::tr1::bind(&WinUtil::copyMagnet, tth, filename));
+	menu->appendItem(T_("Search for alternates"), std::tr1::bind(&WinUtil::searchHash, tth));
+	menu->appendItem(T_("Lookup TTH at Bitzi.com"), std::tr1::bind(WinUtil::bitziLink, tth));
+	menu->appendItem(T_("Copy magnet link to clipboard"), std::tr1::bind(&WinUtil::copyMagnet, tth, filename));
 }
 
 void WinUtil::bitziLink(const TTHValue& aHash) {
@@ -1064,7 +1064,7 @@ static void eachUser(const UserList& list, const UserFunction& f) {
 	}
 }
 
-static void addUsers(bool addSub, dwt::MenuPtr menu, const tstring& text, int id,
+static void addUsers(bool addSub, dwt::MenuPtr menu, const tstring& text,
 	const UserList& users, const UserFunction& f, const dwt::BitmapPtr& bitmap = dwt::BitmapPtr())
 {
 	if(users.empty())
@@ -1075,19 +1075,19 @@ static void addUsers(bool addSub, dwt::MenuPtr menu, const tstring& text, int id
 	}
 
 	if(users.size() > 1) {
-		menu->appendItem(id, T_("All"), std::tr1::bind(&eachUser, users, f), dwt::BitmapPtr());
+		menu->appendItem(T_("All"), std::tr1::bind(&eachUser, users, f), dwt::BitmapPtr());
 
-		menu->appendSeparatorItem();
+		menu->appendSeparator();
 
 		for(size_t i = 0, iend = users.size(); i < iend; ++i) {
-			menu->appendItem(id + i + 1, WinUtil::getNicks(users[i]),
+			menu->appendItem(WinUtil::getNicks(users[i]),
 				std::tr1::bind(&eachUser, UserList(1, users[i]), f), dwt::BitmapPtr());
 		}
 	} else {
 		if(addSub) {
-			menu->appendItem(id, WinUtil::getNicks(users[0]), std::tr1::bind(&eachUser, users, f), dwt::BitmapPtr());
+			menu->appendItem(WinUtil::getNicks(users[0]), std::tr1::bind(&eachUser, users, f), dwt::BitmapPtr());
 		} else {
-			menu->appendItem(id, text, std::tr1::bind(&eachUser, users, f), bitmap);
+			menu->appendItem(text, std::tr1::bind(&eachUser, users, f), bitmap);
 		}
 	}
 }
@@ -1115,26 +1115,26 @@ void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabVie
 
 	QueueManager* qm = QueueManager::getInstance();
 
-	addUsers(addSub, menu, T_("&Get file list"), IDC_GETLIST, users,
+	addUsers(addSub, menu, T_("&Get file list"), users,
 		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW, dir));
 
-	addUsers(addSub, menu, T_("&Browse file list"), IDC_BROWSELIST, filter(users, &isAdc),
+	addUsers(addSub, menu, T_("&Browse file list"), filter(users, &isAdc),
 		std::tr1::bind(&QueueManager::addPfs, qm, _1, dir));
 
-	addUsers(addSub, menu, T_("&Match queue"), IDC_MATCH_QUEUE, users,
+	addUsers(addSub, menu, T_("&Match queue"), users,
 		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_MATCH_QUEUE, std::string()));
 
-	addUsers(addSub, menu, T_("&Send private message"), IDC_PM, users,
+	addUsers(addSub, menu, T_("&Send private message"), users,
 		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, tstring()));
 
-	addUsers(addSub, menu, T_("Add To &Favorites"), IDC_ADD_TO_FAVORITES, filter(users, &isFav),
+	addUsers(addSub, menu, T_("Add To &Favorites"), filter(users, &isFav),
 		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
-
-	addUsers(addSub, menu, T_("Grant &extra slot"), IDC_GRANTSLOT, users,
+	
+	addUsers(addSub, menu, T_("Grant &extra slot"), users,
 		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));
 
 	typedef void (QueueManager::*qmp)(const UserPtr&, int);
-	addUsers(addSub, menu, T_("Remove user from queue"), IDC_REMOVE_FROM_QUEUE, users,
+	addUsers(addSub, menu, T_("Remove user from queue"), users,
 		std::tr1::bind((qmp)&QueueManager::removeSource, qm, _1,
 			(int)QueueItem::Source::FLAG_REMOVED));
 }

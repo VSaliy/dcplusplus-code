@@ -41,7 +41,6 @@
 #include "../resources/Font.h"
 #include "../CanvasClasses.h"
 #include "../Dispatchers.h"
-
 #include <memory>
 #include <vector>
 
@@ -99,10 +98,29 @@ struct MenuColorInfo
 * Window. <br>
 * Note for Desktop version only! <br>
 */
-class Menu : public boost::noncopyable
+class Menu : private boost::noncopyable
 {
 	// friends
 	friend class WidgetCreator< Menu >;
+
+	typedef Dispatchers::VoidVoid<> Dispatcher;
+
+	template<typename T>
+	struct PaintingDispatcherBase : Dispatchers::Base<bool (T)> {
+		typedef Dispatchers::Base<bool (T)> BaseType;
+		PaintingDispatcherBase(const typename BaseType::F& f_) : BaseType(f_) { }
+
+		bool operator()(const MSG& msg, LRESULT& ret) const {
+			if(msg.wParam != 0)
+				return false;
+			T t = reinterpret_cast<T>(msg.lParam);
+			if(t->CtlType != ODT_MENU)
+				return false;
+			return f(t);
+		}
+	};
+	typedef PaintingDispatcherBase<LPDRAWITEMSTRUCT> DrawItemDispatcher;
+	typedef PaintingDispatcherBase<LPMEASUREITEMSTRUCT> MeasureItemDispatcher;
 
 public:
 	/// Type of object
@@ -119,46 +137,6 @@ public:
 		bool ownerDrawn;
 		MenuColorInfo colorInfo;
 		FontPtr font;
-	};
-
-	struct IdDispatcher
-	{
-		typedef std::tr1::function<void (unsigned)> F;
-
-		IdDispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			f(LOWORD(msg.wParam));
-			return true;
-		}
-
-		F f;
-	};
-
-	typedef Dispatchers::VoidVoid<> SimpleDispatcher;
-
-	struct DrawItemDispatcher {
-		typedef std::tr1::function<bool (int, LPDRAWITEMSTRUCT)> F;
-
-		DrawItemDispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			return f(msg.wParam, reinterpret_cast<LPDRAWITEMSTRUCT>(msg.lParam));
-		}
-
-		F f;
-	};
-
-	struct MeasureItemDispatcher {
-		typedef std::tr1::function<bool (LPMEASUREITEMSTRUCT)> F;
-
-		MeasureItemDispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			return f(reinterpret_cast<LPMEASUREITEMSTRUCT>(msg.lParam));
-		}
-
-		F f;
 	};
 
 	/// Rendering settting settings
@@ -205,7 +183,10 @@ public:
 	* A popup is basically another branch in the menu hierarchy <br>
 	* See the Menu project for a demonstration.
 	*/
-	ObjectType appendPopup( const tstring & text, const BitmapPtr& image = BitmapPtr() );
+	ObjectType appendPopup(const Seed& cs, const tstring &text, const BitmapPtr& image = BitmapPtr());
+	ObjectType appendPopup(const tstring &text, const BitmapPtr& image = BitmapPtr()) {
+		return appendPopup(Seed(ownerDrawn, itsColorInfo, font), text, image);
+	}
 
 	/// Returns the "System Menu"
 	/** The system menu is a special menu that ( normally ) is accessed by pressing
@@ -230,7 +211,7 @@ public:
 	* Note! <br>
 	* If this event is handled you also MUST handle the Measure Item Event!!
 	*/
-	bool handleDrawItem(int id, LPDRAWITEMSTRUCT drawInfo);
+	bool handleDrawItem(LPDRAWITEMSTRUCT drawInfo);
 
 	/// Setting event handler for Measure Item Event
 	/** The Measure Item Event is nessecary to handle if you want to draw the menu
@@ -245,32 +226,10 @@ public:
 	/** A menu separator is basically just "air" between menu items.< br >
 	* A separator cannot be "clicked" or "chosen".
 	*/
-	void appendSeparatorItem();
+	void appendSeparator();
 
 	/// Appends a Menu Item
-	/** eventHandler is the function that will receive the "click" event from the
-	* menu item. <br>
-	* Event handler's signature must be "void foo( ObjectType, unsigned
-	* int )" and it must be contained as a member <br>
-	* of the class that is defined as the Widget, normally either the
-	* Window derived class or the class derived from Menu. <br>
-	* See e.g. Menu for an example. <br>
-	* The reason to why we have this "id" is because the same event handler can be
-	* defined for several menu items even in fact across menu objects, therefore
-	* this number should be unique across the application.
-	*/
-
-	void appendItem(unsigned int id, const tstring & text, BitmapPtr image = BitmapPtr());
-
-	template<typename DispatcherType>
-	void appendItem(unsigned int id, const tstring & text, const typename DispatcherType::F& f, BitmapPtr image = BitmapPtr()) {
-		itsParent->setCallback(Message(WM_COMMAND, id), DispatcherType(f));
-		appendItem(id, text, image);
-	}
-
-	void appendItem(unsigned int id, const tstring & text, const IdDispatcher::F& f, BitmapPtr image = BitmapPtr()) {
-		appendItem<IdDispatcher>(id, text, f, image);
-	}
+	void appendItem(const tstring & text, const Dispatcher::F& f = Dispatcher::F(), BitmapPtr image = BitmapPtr(), bool enabled = true, bool defaultItem = false);
 
 	/// Removes specified item from this menu
 	/** Call this function to actually DELETE a menu item from the menu hierarchy.
@@ -278,7 +237,7 @@ public:
 	* all subsequent items change positions. To remove a range of items, remove from
 	* end to start.
 	*/
-	void removeItem( unsigned itemIndex );
+	void removeItem(unsigned index);
 
 	/// Remove all items from the menu
 	/** Will also delete any submenus.
@@ -286,7 +245,7 @@ public:
 	void removeAllItems();
 
 	/// Return the number of items in the menu
-	int getCount() const;
+	unsigned getCount() const;
 
 	/// Displays and handles a menu which can appear anywhere in the window.
 	/** Typically called by a Right Mouse click. If both the x and the y coordinate
@@ -318,7 +277,7 @@ public:
 	* < li >TPM_VERPOSANIMATION : Animates the menu from top to bottom< /li >
 	* < /ul >
 	*/
-	unsigned trackPopupMenu( const ScreenCoordinate& sc, unsigned flags = 0 );
+	unsigned open(const ScreenCoordinate& sc, unsigned flags = 0);
 
 	/// Sets menu title
 	/** A Menu can have a title, this function sets that title
@@ -342,27 +301,27 @@ public:
 	  * If the "value" parameter is true the item will be checked, otherwise it will 
 	  * be unchecked       
 	  */
-	void checkItem( unsigned id, bool value = true );
+	void checkItem( unsigned index, bool value = true );
 
 	/// Enables (or disables) a specific menu item
 	/** Which menu item you wish to enable ( or disable ) is passed in as the "id"
 	  * parameter. <br>
 	  * If the "value" parameter is true the item becomes enabled, otherwise disabled       
 	  */
-	void setItemEnabled( unsigned id, bool byPosition = false, bool value = true );
+	void setItemEnabled( unsigned index, bool value = true );
 
-	UINT getMenuState(UINT id, bool byPosition = false);
+	UINT getMenuState(unsigned index);
 
 	/// Return true if the item is a separator (by position)
-	bool isSeparator(UINT id, bool byPosition = false);
+	bool isSeparator(unsigned index);
 	/// Return true if the menu item is checked
-	bool isChecked(UINT id, bool byPosition = false);
+	bool isChecked(unsigned index);
 	/// Return true if the menu item is a popup menu
-	bool isPopup(UINT id, bool byPosition = false);
+	bool isPopup(unsigned index);
 	/// Return true if the menu item is enabled (not grey and not disabled)
-	bool isEnabled(UINT id, bool byPosition = false);
+	bool isEnabled(unsigned index);
 
-	void setDefaultItem(UINT id, bool byPosition = false);
+	void setDefaultItem(unsigned index);
 
 	/// Returns true if menu is "system menu" (icon in top left of window)
 	bool isSystemMenu()
@@ -374,13 +333,13 @@ public:
 	/** Which menu item you wish to retrieve the text for is defined by the "id"
 	  * parameter of the function.
 	  */
-	tstring getText( unsigned idOrPos, bool byPos );
+	tstring getText(unsigned index);
 
 	/// Sets the text of a specific menu item
 	/** Which menu item you wish to set the text is defined by the "id"
 	  * parameter of the function.
 	  */
-	void setText( unsigned id, const tstring& text );
+	void setText(unsigned index, const tstring& text);
 
 	ObjectType getChild(UINT position);
 
@@ -407,10 +366,10 @@ private:
 		// are not unique (although Windows claims)
 		// e.g. we can have an item with ID 0,
 		// that is either separator or popup menu
-		int index;
+		unsigned index;
 
 		// Specifies if item is menu title
-		bool isMenuTitleItem;
+		bool isTitle;
 
 		/// Menu item text color
 		COLORREF textColor;
@@ -418,11 +377,16 @@ private:
 		/// Menu item image
 		BitmapPtr image;
 
-		// Wrapper  Constructor
-		ItemDataWrapper( const Menu* menu_, int itemIndex, bool isTitleItem = false, BitmapPtr image_ = BitmapPtr()) : 
-			menu( menu_ ), 
-			index( itemIndex ),
-			isMenuTitleItem( isTitleItem ),
+		// Wrapper Constructor
+		ItemDataWrapper(
+			const Menu* menu_,
+			unsigned index_,
+			bool isTitle_ = false,
+			BitmapPtr image_ = BitmapPtr()
+			) :
+		menu(menu_), 
+			index(index_),
+			isTitle(isTitle_),
 			textColor(::GetSysColor(COLOR_MENUTEXT)),
 			image(image_)
 		{}
@@ -464,10 +428,6 @@ private:
 	bool drawSidebar;
 
 	void createHelper(const Seed& cs);
-
-	// Returns item index in the menu item list
-	// If no item with specified id is found, - 1 is returned
-	int getItemIndex( unsigned int id );
 };
 
 }

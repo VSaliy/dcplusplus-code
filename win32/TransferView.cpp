@@ -183,14 +183,14 @@ HRESULT TransferView::handleDestroy(WPARAM wParam, LPARAM lParam) {
 TransferView::MenuPtr TransferView::makeContextMenu(ConnectionInfo* ii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	appendUserItems(mdi, menu);
-	menu->appendSeparatorItem();
+	appendUserItems(mdi, menu, false);
+	menu->appendSeparator();
 
-	menu->appendItem(IDC_FORCE, T_("&Force attempt"), std::tr1::bind(&TransferView::handleForce, this));
-	menu->appendItem(IDC_COPY_NICK, T_("Copy &nick to clipboard"), std::tr1::bind(&TransferView::handleCopyNick, this));
-	menu->appendSeparatorItem();
-	menu->appendItem(IDC_REMOVE, T_("&Disconnect"), std::tr1::bind(&TransferView::handleDisconnect, this));
-	menu->setDefaultItem(IDC_PM);
+	menu->appendItem(T_("&Force attempt"), std::tr1::bind(&TransferView::handleForce, this));
+	menu->appendItem(T_("Copy &nick to clipboard"), std::tr1::bind(&TransferView::handleCopyNick, this));
+	menu->appendSeparator();
+	menu->appendItem(T_("&Disconnect"), std::tr1::bind(&TransferView::handleDisconnect, this));
+
 	return menu;
 }
 
@@ -203,7 +203,7 @@ bool TransferView::handleConnectionsMenu(dwt::ScreenCoordinate pt) {
 		/// @todo Fix multiple selection menu...
 		ConnectionInfo* ii = connections->getSelectedData();
 		MenuPtr contextMenu = makeContextMenu(ii);
-		contextMenu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 		return true;
 	}
@@ -219,7 +219,7 @@ bool TransferView::handleDownloadsMenu(dwt::ScreenCoordinate pt) {
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		DownloadInfo* di = downloads->getSelectedData();
 		WinUtil::addHashItems(menu, di->tth, di->columns[DOWNLOAD_COLUMN_FILE]);
-		menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 		return true;
 	}
