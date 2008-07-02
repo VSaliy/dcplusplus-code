@@ -1166,7 +1166,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 
 		inTabMenu = false;
 
-		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		menu->open(pt);
 		return true;
 	}
 	return false;
@@ -1190,7 +1190,7 @@ bool HubFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
 
 	inTabMenu = true;
 
-	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	menu->open(pt);
 	return true;
 }
 

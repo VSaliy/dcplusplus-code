@@ -376,7 +376,7 @@ bool PrivateFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
 	menu->appendSeparator();
 	menu->appendItem(T_("&Close"), std::tr1::bind(&PrivateFrame::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
 
-	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	menu->open(pt);
 	return true;
 }
 

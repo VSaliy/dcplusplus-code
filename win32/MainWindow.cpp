@@ -390,7 +390,7 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 		menu->appendItem(dwt::util::escapeMenu(Text::toT(entry->getName())), std::tr1::bind(&HubFrame::openWindow, getTabView(), entry->getServer()));
 	}
 
-	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	menu->open(pt);
 }
 
 void MainWindow::handleExit() {

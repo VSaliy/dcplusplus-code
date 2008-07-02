@@ -685,7 +685,7 @@ bool SearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr contextMenu = makeMenu();
-		contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		contextMenu->open(pt);
 		return true;
 	}
 	return false;

@@ -442,7 +442,7 @@ bool PublicHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&PublicHubsFrame::handleAdd, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_HUBS)));
 		menu->appendItem(T_("Copy &address to clipboard"), std::tr1::bind(&PublicHubsFrame::handleCopyHub, this));
 
-		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		menu->open(pt);
 		return true;
 	}
 	return false;

@@ -184,7 +184,7 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		menu->appendItem(T_("&Description"), std::tr1::bind(&UsersFrame::handleDescription, this));
 		menu->appendItem(T_("&Remove"), std::tr1::bind(&UsersFrame::handleRemove, this));
 
-		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		menu->open(pt);
 
 		return true;
 	}

@@ -34,7 +34,7 @@ public:
 	CShellContextMenu(dwt::MenuPtr& parent_, const wstring& path);
 	~CShellContextMenu();
 
-	void open(const dwt::ScreenCoordinate& pt, unsigned flags = 0);
+	void open(const dwt::ScreenCoordinate& pt, unsigned flags = TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 private:
 	dwt::MenuPtr parent;

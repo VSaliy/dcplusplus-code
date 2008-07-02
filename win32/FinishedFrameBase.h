@@ -467,9 +467,9 @@ private:
 			}
 
 			if(shellMenu)
-				shellMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+				shellMenu->open(pt);
 			else
-				menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+				menu->open(pt);
 			return true;
 		}
 		return false;
@@ -487,7 +487,7 @@ private:
 			menu->appendSeparator();
 			WinUtil::addUserItems(menu, users->forEachSelectedT(UserCollector()).users, this->getParent());
 
-			menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+			menu->open(pt);
 			return true;
 		}
 		return false;
