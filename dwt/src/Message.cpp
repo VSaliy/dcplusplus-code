@@ -52,6 +52,7 @@ Message::Message( UINT msg_, LPARAM extraCode )
 	{
 	case WM_SYSCOMMAND :
 	case WM_COMMAND :
+	case WM_MENUCOMMAND:
 	case WM_TIMER:
 	case WM_NOTIFY :
 		param = extraCode;
@@ -80,6 +81,9 @@ Message::Message(const MSG& msg_ ) :
 		} else {
 			param = HIWORD(msg_.wParam);
 		}
+	} break;
+	case WM_MENUCOMMAND: {
+		param = msg_.wParam * 31 + msg_.lParam;
 	} break;
 	case WM_CTLCOLORBTN:
 	case WM_CTLCOLORDLG:

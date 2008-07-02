@@ -26,33 +26,19 @@
 #include "ShellContextMenu.h"
 #include "resource.h"
 
-IContextMenu2* CShellContextMenu::g_IContext2 = NULL;
-IContextMenu3* CShellContextMenu::g_IContext3 = NULL;
+IContextMenu3* CShellContextMenu::g_IContext3 = 0;
+CShellContextMenu* CShellContextMenu::pShellMenu = 0;
+WNDPROC CShellContextMenu::OldWndProc = 0;
 
-CShellContextMenu::CShellContextMenu() :
-	bDelete(false),
-	m_psfFolder(NULL),
-	m_pidlArray(NULL)
+CShellContextMenu::CShellContextMenu(dwt::MenuPtr& parent_, const wstring& path) :
+parent(parent_),
+m_psfFolder(NULL),
+m_pidlArray(NULL),
+sel_id(0),
+sel_handle(0)
 {
-}
-
-CShellContextMenu::~CShellContextMenu() {
-	// free all allocated datas
-	if(m_psfFolder && bDelete)
-		m_psfFolder->Release();
-	m_psfFolder = NULL;
-	FreePIDLArray(m_pidlArray);
-	m_pidlArray = NULL;
-}
-
-void CShellContextMenu::SetPath(const wstring& strPath)
-{
-	// free all allocated datas
-	if(m_psfFolder && bDelete)
-		m_psfFolder->Release();
-	m_psfFolder = NULL;
-	FreePIDLArray(m_pidlArray);
-	m_pidlArray = NULL;
+	parent->appendSeparator();
+	menu = parent->appendPopup(dwt::Menu::Seed(false), _T("Shell menu"));
 
 	// get IShellFolder interface of Desktop(root of shell namespace)
 	IShellFolder* psfDesktop = NULL;
@@ -62,7 +48,7 @@ void CShellContextMenu::SetPath(const wstring& strPath)
 	// but since we use the Desktop as our interface and the Desktop is the namespace root
 	// that means that it's a fully qualified PIDL, which is what we need
 	LPITEMIDLIST pidl = NULL;
-	psfDesktop->ParseDisplayName(NULL, NULL, (LPOLESTR)const_cast<WCHAR*>(strPath.c_str()), NULL, &pidl, NULL);
+	psfDesktop->ParseDisplayName(NULL, NULL, (LPOLESTR)const_cast<WCHAR*>(path.c_str()), NULL, &pidl, NULL);
 
 	// now we need the parent IShellFolder interface of pidl, and the relative PIDL to that interface
 	SHBindToParent(pidl, IID_IShellFolder, (LPVOID*)&m_psfFolder, NULL);
@@ -74,7 +60,7 @@ void CShellContextMenu::SetPath(const wstring& strPath)
 
 	// now we need the relative pidl
 	IShellFolder* psfFolder = NULL;
-	psfDesktop->ParseDisplayName (NULL, NULL, (LPOLESTR)const_cast<WCHAR*>(strPath.c_str()), NULL, &pidl, NULL);
+	psfDesktop->ParseDisplayName (NULL, NULL, (LPOLESTR)const_cast<WCHAR*>(path.c_str()), NULL, &pidl, NULL);
 	LPITEMIDLIST pidlItem = NULL;
 	SHBindToParent(pidl, IID_IShellFolder, (LPVOID*)&psfFolder, (LPCITEMIDLIST*)&pidlItem);
 
@@ -91,56 +77,59 @@ void CShellContextMenu::SetPath(const wstring& strPath)
 	CopyMemory(pidlRet, pidlItem, nSize);
 	m_pidlArray[0] = pidlRet;
 
-	free(pidlItem);
 	lpMalloc->Free(pidl);
 
 	lpMalloc->Release();
 	psfFolder->Release();
 	psfDesktop->Release();
 
-	bDelete = true;	// indicates that m_psfFolder should be deleted by CShellContextMenu
+	LPCONTEXTMENU pContextMenu = 0;
+	LPCONTEXTMENU icm1 = 0;
+	// first we retrieve the normal IContextMenu interface (every object should have it)
+	m_psfFolder->GetUIObjectOf(NULL, 1, (LPCITEMIDLIST *) m_pidlArray, IID_IContextMenu, NULL, (LPVOID*) &icm1);
+	if(icm1 && (icm1->QueryInterface(IID_IContextMenu3, (LPVOID*)&pContextMenu) == NOERROR) && pContextMenu) {
+		icm1->Release(); // we can now release version 1 interface, cause we got a higher one
+
+		g_IContext3 = (LPCONTEXTMENU3)pContextMenu;
+		pShellMenu = this;
+		OldWndProc = (WNDPROC)::SetWindowLongPtr(menu->getParent()->handle(), GWLP_WNDPROC, (LONG_PTR)&HookWndProc);
+	}
 }
 
-UINT CShellContextMenu::ShowContextMenu(dwt::Menu::ObjectType& menu, const dwt::ScreenCoordinate& pt)
-{
-	int iMenuType = 0;	// to know which version of IContextMenu is supported
-	LPCONTEXTMENU pContextMenu;	// common pointer to IContextMenu and higher version interface
+CShellContextMenu::~CShellContextMenu() {
+	if(OldWndProc)
+		::SetWindowLongPtr(menu->getParent()->handle(), GWLP_WNDPROC, (LONG_PTR)OldWndProc);
 
-	if(!GetContextMenu((LPVOID*)&pContextMenu, iMenuType))	
-		return 0;	// something went wrong
+	g_IContext3->Release();
 
-	// lets fill the popupmenu 
-	pContextMenu->QueryContextMenu(menu->handle(), menu->getCount(), ID_SHELLCONTEXTMENU_MIN, ID_SHELLCONTEXTMENU_MAX, CMF_NORMAL | CMF_EXPLORE);
+	// free all allocated datas
+	if(m_psfFolder)
+		m_psfFolder->Release();
+	m_psfFolder = NULL;
+	FreePIDLArray(m_pidlArray);
+	m_pidlArray = NULL;
+}
 
-	// attach window to handle menurelated messages in CShellContextMenu 
-	WNDPROC OldWndProc;
-	if(iMenuType > 1)	// only attach if its version 2 or 3
+void CShellContextMenu::open(const dwt::ScreenCoordinate& pt, unsigned flags) {
 	{
-		OldWndProc = (WNDPROC) SetWindowLong(menu->getParent()->handle(), GWL_WNDPROC, (DWORD) HookWndProc);
-		if(iMenuType == 2)
-			g_IContext2 = (LPCONTEXTMENU2) pContextMenu;
-		else	// version 3
-			g_IContext3 = (LPCONTEXTMENU3) pContextMenu;
+		// remove the MNS_NOTIFYBYPOS style
+		MENUINFO mi = { sizeof(MENUINFO), MIM_STYLE };
+		if(!::GetMenuInfo(parent->handle(), &mi))
+			return;
+		if(mi.dwStyle & MNS_NOTIFYBYPOS) {
+			mi.dwStyle &= ~MNS_NOTIFYBYPOS;
+			if(!::SetMenuInfo(parent->handle(), &mi))
+				return;
+		}
 	}
+
+	unsigned id = parent->open(pt, flags | TPM_RETURNCMD);
+	if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
+		InvokeCommand(g_IContext3, id - ID_SHELLCONTEXTMENU_MIN);
 	else
-		OldWndProc = NULL;
+		parent->getParent()->postMessage(WM_MENUCOMMAND, sel_id, sel_handle);
 
-	UINT idCommand = menu->trackPopupMenu(pt, TPM_RETURNCMD | TPM_LEFTALIGN);
-
-	if(OldWndProc) // unattach
-		SetWindowLong(menu->getParent()->handle(), GWL_WNDPROC, (DWORD) OldWndProc);
-
-	if(idCommand >= ID_SHELLCONTEXTMENU_MIN && idCommand <= ID_SHELLCONTEXTMENU_MAX)
-	{
-		InvokeCommand(pContextMenu, idCommand - ID_SHELLCONTEXTMENU_MIN);
-		idCommand = 0;
-	}
-
-	pContextMenu->Release();
-	g_IContext2 = NULL;
-	g_IContext3 = NULL;
-
-	return idCommand;
+	delete this;
 }
 
 void CShellContextMenu::FreePIDLArray(LPITEMIDLIST* pidlArray)
@@ -155,78 +144,96 @@ void CShellContextMenu::FreePIDLArray(LPITEMIDLIST* pidlArray)
 	free(pidlArray);
 }
 
-// this functions determines which version of IContextMenu is avaibale for those objects(always the highest one)
-// and returns that interface
-bool CShellContextMenu::GetContextMenu(LPVOID* ppContextMenu, int& iMenuType)
-{
-	*ppContextMenu = NULL;
-	LPCONTEXTMENU icm1 = NULL;
-
-	// first we retrieve the normal IContextMenu interface(every object should have it)
-	m_psfFolder->GetUIObjectOf(NULL, 1, (LPCITEMIDLIST *) m_pidlArray, IID_IContextMenu, NULL, (LPVOID*) &icm1);
-
-	if(icm1)
-	{	// since we got an IContextMenu interface we can now obtain the higher version interfaces via that
-		if(icm1->QueryInterface(IID_IContextMenu3, ppContextMenu) == NOERROR)
-			iMenuType = 3;
-		else if(icm1->QueryInterface(IID_IContextMenu2, ppContextMenu) == NOERROR)
-			iMenuType = 2;
-
-		if(*ppContextMenu) 
-			icm1->Release(); // we can now release version 1 interface, cause we got a higher one
-		else 
-		{	
-			iMenuType = 1;
-			*ppContextMenu = icm1;	// since no higher versions were found
-		}							// redirect ppContextMenu to version 1 interface
-
-		return true; // success
-	}
-
-	return false;	// something went wrong
-}
-
-void CShellContextMenu::InvokeCommand(LPCONTEXTMENU pContextMenu, UINT idCommand)
-{
-	CMINVOKECOMMANDINFO cmi = {0};
-	cmi.cbSize = sizeof(CMINVOKECOMMANDINFO);
-	cmi.lpVerb = (LPSTR) MAKEINTRESOURCE(idCommand);
+void CShellContextMenu::InvokeCommand(LPCONTEXTMENU pContextMenu, unsigned id) {
+	CMINVOKECOMMANDINFO cmi = { sizeof(CMINVOKECOMMANDINFO) };
+	cmi.lpVerb = (LPSTR)MAKEINTRESOURCE(id);
 	cmi.nShow = SW_SHOWNORMAL;
-
 	pContextMenu->InvokeCommand(&cmi);
 }
 
-LRESULT CALLBACK CShellContextMenu::HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch(message)
-	{ 
-	case WM_MENUCHAR:	// only supported by IContextMenu3
-		if(g_IContext3)
+LRESULT CALLBACK CShellContextMenu::HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch(message) {
+	case WM_MENUCHAR:
 		{
-			LRESULT lResult = 0;
-			g_IContext3->HandleMenuMsg2(message, wParam, lParam, &lResult);
-			return lResult;
+			LRESULT ret = 0;
+			g_IContext3->HandleMenuMsg2(message, wParam, lParam, &ret);
+			return ret;
 		}
-		break;
+
+	case WM_MEASUREITEM:
+		{
+			if(wParam == 0) {
+				unsigned id = reinterpret_cast<LPMEASUREITEMSTRUCT>(lParam)->itemID;
+				if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX) {
+					LRESULT ret = 0;
+					g_IContext3->HandleMenuMsg2(message, wParam, lParam, &ret);
+					return ret;
+				}
+			}
+			break;
+		}
 
 	case WM_DRAWITEM:
-	case WM_MEASUREITEM:
-		if(wParam) 
-			break; // if wParam != 0 then the message is not menu-related
+		{
+			if(wParam == 0) {
+				unsigned id = reinterpret_cast<LPDRAWITEMSTRUCT>(lParam)->itemID;
+				if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX) {
+					LRESULT ret = 0;
+					g_IContext3->HandleMenuMsg2(message, wParam, lParam, &ret);
+					return ret;
+				}
+			}
+			break;
+		}
 
 	case WM_INITMENUPOPUP:
-		if(g_IContext2)
-			g_IContext2->HandleMenuMsg(message, wParam, lParam);
-		else	// version 3
-			g_IContext3->HandleMenuMsg(message, wParam, lParam);
-		return (message == WM_INITMENUPOPUP) ? 0 : TRUE; // inform caller that we handled WM_INITPOPUPMENU by ourself
-		break;
+		{
+			pShellMenu->handleInitMenuPopup(reinterpret_cast<HMENU>(wParam));
 
-	default:
-		break;
+			LRESULT ret = 0;
+			g_IContext3->HandleMenuMsg2(message, wParam, lParam, &ret);
+			return ret;
+		}
+
+	case WM_UNINITMENUPOPUP:
+		{
+			pShellMenu->handleUnInitMenuPopup(reinterpret_cast<HMENU>(wParam));
+
+			LRESULT ret = 0;
+			g_IContext3->HandleMenuMsg2(message, wParam, lParam, &ret);
+			return ret;
+		}
+
+	case WM_MENUSELECT:
+		{
+			// make sure this isn't a "menu closed" signal
+			if((HIWORD(wParam) == 0xFFFF) && (lParam == 0))
+				break;
+
+			unsigned id = LOWORD(wParam);
+			if(id < ID_SHELLCONTEXTMENU_MIN || id > ID_SHELLCONTEXTMENU_MAX) {
+				/*
+				* this is not an item added by the Shell menu; save the id (which is an index,
+				* actually) and the handle in case we have to dispatch them with WM_MENUCOMMAND.
+				*/
+				pShellMenu->sel_id = id;
+				pShellMenu->sel_handle = lParam;
+			}
+			break;
+		}
 	}
 
-	// call original WndProc of window to prevent undefined bevhaviour of window
-	return ::CallWindowProc((WNDPROC) GetProp( hWnd, _T("OldWndProc")), hWnd, message, wParam, lParam);
+	return ::CallWindowProc(OldWndProc, hWnd, message, wParam, lParam);
 }
 
+void CShellContextMenu::handleInitMenuPopup(HMENU hMenu) {
+	if(hMenu == menu->handle()) {
+		g_IContext3->QueryContextMenu(menu->handle(), 0, ID_SHELLCONTEXTMENU_MIN, ID_SHELLCONTEXTMENU_MAX, CMF_NORMAL | CMF_EXPLORE);
+	}
+}
+
+void CShellContextMenu::handleUnInitMenuPopup(HMENU hMenu) {
+	if(hMenu == menu->handle()) {
+		menu->removeAllItems();
+	}
+}

@@ -445,48 +445,31 @@ private:
 				pt = files->getContextMenuPos();
 			}
 
+			bool allFilesExist = files->forEachSelectedT(FileExistenceChecker()).allFilesExist;
+
+			dwt::MenuPtr menu = this->addChild(WinUtil::Seeds::menu);
+
+			menu->appendItem(T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this), dwt::BitmapPtr(), allFilesExist);
+			menu->appendItem(T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this), dwt::BitmapPtr(), allFilesExist, true);
+			menu->appendItem(T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
+			menu->appendSeparator();
+			menu->appendItem(T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveFiles, this));
+			menu->appendItem(T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
+			menu->appendSeparator();
+			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
+
+			CShellContextMenu* shellMenu = 0;
 			if(BOOLSETTING(SHOW_SHELL_MENU) && files->countSelected() == 1) {
 				string path = files->getSelectedData()->file;
 				if(File::getSize(path) != -1) {
-					CShellContextMenu shellMenu;
-					shellMenu.SetPath(Text::utf8ToWide(path));
-
-					dwt::Menu::Seed cs = WinUtil::Seeds::menu;
-					cs.ownerDrawn = false;
-					dwt::MenuPtr menu = this->addChild(cs);
-					menu->appendItem(IDC_VIEW_AS_TEXT, T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this));
-					menu->appendItem(IDC_OPEN_FILE, T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this));
-					menu->appendItem(IDC_OPEN_FOLDER, T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
-					menu->appendSeparatorItem();
-					menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveFiles, this));
-					menu->appendItem(IDC_REMOVE_ALL, T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
-					menu->appendSeparatorItem();
-					WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
-					menu->appendSeparatorItem();
-
-					UINT idCommand = shellMenu.ShowContextMenu(menu, pt);
-					if(idCommand != 0)
-						this->postMessage(WM_COMMAND, idCommand);
-					return true;
+					shellMenu = new CShellContextMenu(menu, Text::utf8ToWide(path));
 				}
 			}
 
-			dwt::MenuPtr menu = this->addChild(WinUtil::Seeds::menu);
-			menu->appendItem(IDC_VIEW_AS_TEXT, T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this));
-			menu->appendItem(IDC_OPEN_FILE, T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this));
-			menu->appendItem(IDC_OPEN_FOLDER, T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
-			menu->appendSeparatorItem();
-			menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveFiles, this));
-			menu->appendItem(IDC_REMOVE_ALL, T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
-			menu->appendSeparatorItem();
-			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
-			menu->setDefaultItem(IDC_OPEN_FILE);
-
-			bool status = files->forEachSelectedT(FileExistenceChecker()).allFilesExist;
-			menu->setItemEnabled(IDC_VIEW_AS_TEXT, false, status);
-			menu->setItemEnabled(IDC_OPEN_FILE, false, status);
-
-			menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+			if(shellMenu)
+				shellMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+			else
+				menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 			return true;
 		}
 		return false;
@@ -499,12 +482,12 @@ private:
 			}
 
 			dwt::MenuPtr menu = this->addChild(WinUtil::Seeds::menu);
-			menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveUsers, this));
-			menu->appendItem(IDC_REMOVE_ALL, T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
-			menu->appendSeparatorItem();
+			menu->appendItem(T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveUsers, this));
+			menu->appendItem(T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
+			menu->appendSeparator();
 			WinUtil::addUserItems(menu, users->forEachSelectedT(UserCollector()).users, this->getParent());
 
-			menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+			menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 			return true;
 		}
 		return false;

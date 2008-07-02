@@ -685,7 +685,7 @@ bool SearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr contextMenu = makeMenu();
-		contextMenu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		contextMenu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 		return true;
 	}
 	return false;
@@ -695,16 +695,13 @@ void SearchFrame::handleDownload() {
 	results->forEachSelectedT(SearchInfo::Download(Text::toT(SETTING(DOWNLOAD_DIRECTORY))));
 }
 
-void SearchFrame::handleDownloadFavoriteDirs(unsigned id) {
-	dcassert(id >= IDC_DOWNLOAD_FAVORITE_DIRS);
-	size_t newId = (size_t)id - IDC_DOWNLOAD_FAVORITE_DIRS;
-
+void SearchFrame::handleDownloadFavoriteDirs(unsigned index) {
 	StringPairList spl = FavoriteManager::getInstance()->getFavoriteDirs();
-	if(newId < spl.size()) {
-		results->forEachSelectedT(SearchInfo::Download(Text::toT(spl[newId].first)));
+	if(index < spl.size()) {
+		results->forEachSelectedT(SearchInfo::Download(Text::toT(spl[index].first)));
 	} else {
-		dcassert((newId - spl.size()) < targets.size());
-		results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[newId - spl.size()])));
+		dcassert((index - spl.size()) < targets.size());
+		results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[index - spl.size()])));
 	}
 }
 
@@ -737,15 +734,12 @@ void SearchFrame::handleDownloadTo() {
 	}
 }
 
-void SearchFrame::handleDownloadTarget(unsigned id) {
-	dcassert(id >= IDC_DOWNLOAD_TARGET);
-	size_t newId = (size_t)id - IDC_DOWNLOAD_TARGET;
-
-	if(newId < WinUtil::lastDirs.size()) {
-		results->forEachSelectedT(SearchInfo::Download(WinUtil::lastDirs[newId]));
+void SearchFrame::handleDownloadTarget(unsigned index) {
+	if(index < WinUtil::lastDirs.size()) {
+		results->forEachSelectedT(SearchInfo::Download(WinUtil::lastDirs[index]));
 	} else {
-		dcassert((newId - WinUtil::lastDirs.size()) < targets.size());
-		results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[newId - WinUtil::lastDirs.size()])));
+		dcassert((index - WinUtil::lastDirs.size()) < targets.size());
+		results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[index - WinUtil::lastDirs.size()])));
 	}
 }
 
@@ -753,15 +747,15 @@ void SearchFrame::handleDownloadDir() {
 	results->forEachSelectedT(SearchInfo::DownloadWhole(Text::toT(SETTING(DOWNLOAD_DIRECTORY))));
 }
 
-void SearchFrame::handleDownloadWholeFavoriteDirs(unsigned id) {
+void SearchFrame::handleDownloadWholeFavoriteDirs(unsigned index) {
 	StringPairList spl = FavoriteManager::getInstance()->getFavoriteDirs();
-	dcassert((id-IDC_DOWNLOAD_WHOLE_FAVORITE_DIRS) < spl.size());
-	results->forEachSelectedT(SearchInfo::DownloadWhole(Text::toT(spl[id-IDC_DOWNLOAD_WHOLE_FAVORITE_DIRS].first)));
+	dcassert(index < spl.size());
+	results->forEachSelectedT(SearchInfo::DownloadWhole(Text::toT(spl[index].first)));
 }
 
-void SearchFrame::handleDownloadWholeTarget(unsigned id) {
-	dcassert((id-IDC_DOWNLOAD_WHOLE_TARGET) < WinUtil::lastDirs.size());
-	results->forEachSelectedT(SearchInfo::DownloadWhole(WinUtil::lastDirs[id-IDC_DOWNLOAD_WHOLE_TARGET]));
+void SearchFrame::handleDownloadWholeTarget(unsigned index) {
+	dcassert(index < WinUtil::lastDirs.size());
+	results->forEachSelectedT(SearchInfo::DownloadWhole(WinUtil::lastDirs[index]));
 }
 
 void SearchFrame::handleDownloadDirTo() {
@@ -801,26 +795,24 @@ SearchFrame::MenuPtr SearchFrame::makeMenu() {
 	StringPairList favoriteDirs = FavoriteManager::getInstance()->getFavoriteDirs();
 	SearchInfo::CheckTTH checkTTH = results->forEachSelectedT(SearchInfo::CheckTTH());
 
-	menu->appendItem(IDC_DOWNLOAD, T_("&Download"), std::tr1::bind(&SearchFrame::handleDownload, this));
+	menu->appendItem(T_("&Download"), std::tr1::bind(&SearchFrame::handleDownload, this), dwt::BitmapPtr(), true, true);
 	addTargetMenu(menu, favoriteDirs, checkTTH);
-	menu->appendItem(IDC_DOWNLOADDIR, T_("Download whole directory"), std::tr1::bind(&SearchFrame::handleDownloadDir, this));
+	menu->appendItem(T_("Download whole directory"), std::tr1::bind(&SearchFrame::handleDownloadDir, this));
 	addTargetDirMenu(menu, favoriteDirs);
-	menu->appendItem(IDC_VIEW_AS_TEXT, T_("&View as text"), std::tr1::bind(&SearchFrame::handleViewAsText, this));
-	menu->appendSeparatorItem();
+	menu->appendItem(T_("&View as text"), std::tr1::bind(&SearchFrame::handleViewAsText, this));
+	menu->appendSeparator();
 	SearchInfo* si = results->getSelectedData();
 	if(checkTTH.hasTTH) {
 		WinUtil::addHashItems(menu, TTHValue(Text::fromT(checkTTH.tth)), si->getText(COLUMN_FILENAME));
 	}
-	menu->appendSeparatorItem();
+	menu->appendSeparator();
 
 	UserCollector users = results->forEachSelectedT(UserCollector());
 	WinUtil::addUserItems(menu, users.users, getParent(), si ? Text::fromT(si->getText(COLUMN_PATH)) : "");
 
-	menu->appendSeparatorItem();
-	menu->appendItem(IDC_REMOVE, T_("&Remove"), std::tr1::bind(&SearchFrame::handleRemove, this));
+	menu->appendSeparator();
+	menu->appendItem(T_("&Remove"), std::tr1::bind(&SearchFrame::handleRemove, this));
 	prepareMenu(menu, UserCommand::CONTEXT_SEARCH, checkTTH.hubs);
-
-	menu->setDefaultItem(IDC_DOWNLOAD);
 
 	return menu;
 }
@@ -831,16 +823,16 @@ void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& fav
 	int n = 0;
 	if(favoriteDirs.size() > 0) {
 		for(StringPairList::const_iterator i = favoriteDirs.begin(); i != favoriteDirs.end(); i++)
-			menu->appendItem(IDC_DOWNLOAD_FAVORITE_DIRS + n++, Text::toT(i->second), std::tr1::bind(&SearchFrame::handleDownloadFavoriteDirs, this, _1));
-		menu->appendSeparatorItem();
+			menu->appendItem(Text::toT(i->second), std::tr1::bind(&SearchFrame::handleDownloadFavoriteDirs, this, n++));
+		menu->appendSeparator();
 	}
 
 	n = 0;
-	menu->appendItem(IDC_DOWNLOADTO, T_("&Browse..."), std::tr1::bind(&SearchFrame::handleDownloadTo, this));
+	menu->appendItem(T_("&Browse..."), std::tr1::bind(&SearchFrame::handleDownloadTo, this));
 	if(WinUtil::lastDirs.size() > 0) {
-		menu->appendSeparatorItem();
+		menu->appendSeparator();
 		for(TStringIter i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i)
-			menu->appendItem(IDC_DOWNLOAD_TARGET + n++, *i, std::tr1::bind(&SearchFrame::handleDownloadTarget, this, _1));
+			menu->appendItem(*i, std::tr1::bind(&SearchFrame::handleDownloadTarget, this, n++));
 	}
 
 	if(checkTTH.hasTTH) {
@@ -848,9 +840,9 @@ void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& fav
 
 		QueueManager::getInstance()->getTargets(TTHValue(Text::fromT(checkTTH.tth)), targets);
 		if(targets.size() > 0) {
-			menu->appendSeparatorItem();
+			menu->appendSeparator();
 			for(StringIter i = targets.begin(); i != targets.end(); ++i)
-				menu->appendItem(IDC_DOWNLOAD_TARGET + n++, Text::toT(*i), std::tr1::bind(&SearchFrame::handleDownloadTarget, this, _1));
+				menu->appendItem(Text::toT(*i), std::tr1::bind(&SearchFrame::handleDownloadTarget, this, n++));
 		}
 	}
 }
@@ -861,16 +853,16 @@ void SearchFrame::addTargetDirMenu(const MenuPtr& parent, const StringPairList& 
 	int n = 0;
 	if(favoriteDirs.size() > 0) {
 		for(StringPairList::const_iterator i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i)
-			menu->appendItem(IDC_DOWNLOAD_WHOLE_FAVORITE_DIRS + n++, Text::toT(i->second), std::tr1::bind(&SearchFrame::handleDownloadWholeFavoriteDirs, this, _1));
-		menu->appendSeparatorItem();
+			menu->appendItem(Text::toT(i->second), std::tr1::bind(&SearchFrame::handleDownloadWholeFavoriteDirs, this, n++));
+		menu->appendSeparator();
 	}
 
 	n = 0;
-	menu->appendItem(IDC_DOWNLOADDIRTO, T_("&Browse..."), std::tr1::bind(&SearchFrame::handleDownloadDirTo, this));
+	menu->appendItem(T_("&Browse..."), std::tr1::bind(&SearchFrame::handleDownloadDirTo, this));
 	if(WinUtil::lastDirs.size() > 0) {
-		menu->appendSeparatorItem();
+		menu->appendSeparator();
 		for(TStringIter i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i)
-			menu->appendItem(IDC_DOWNLOAD_WHOLE_TARGET + n++, *i, std::tr1::bind(&SearchFrame::handleDownloadWholeTarget, this, _1));
+			menu->appendItem(*i, std::tr1::bind(&SearchFrame::handleDownloadWholeTarget, this, n++));
 	}
 }
 

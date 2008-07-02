@@ -367,17 +367,17 @@ bool PrivateFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
 
 	menu->setTitle(getParent()->getTabText(this));
 	
-	menu->appendItem(IDC_GETLIST, T_("&Get file list"), std::tr1::bind(&PrivateFrame::handleGetList, this));
-	menu->appendItem(IDC_MATCH_QUEUE, T_("&Match queue"), std::tr1::bind(&PrivateFrame::handleMatchQueue, this));
-	menu->appendItem(IDC_GRANTSLOT, T_("Grant &extra slot"), std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), replyTo));
+	menu->appendItem(T_("&Get file list"), std::tr1::bind(&PrivateFrame::handleGetList, this));
+	menu->appendItem(T_("&Match queue"), std::tr1::bind(&PrivateFrame::handleMatchQueue, this));
+	menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), replyTo));
 	if(!FavoriteManager::getInstance()->isFavoriteUser(replyTo))
-		menu->appendItem(IDC_ADD_TO_FAVORITES, T_("Add To &Favorites"), std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), replyTo), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
+		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), replyTo), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
 
 	prepareMenu(menu, UserCommand::CONTEXT_CHAT, ClientManager::getInstance()->getHubs(replyTo->getCID()));
-	menu->appendSeparatorItem();
-	menu->appendItem(IDC_CLOSE_WINDOW, T_("&Close"), std::tr1::bind(&PrivateFrame::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
+	menu->appendSeparator();
+	menu->appendItem(T_("&Close"), std::tr1::bind(&PrivateFrame::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
 
-	menu->trackPopupMenu(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 	return true;
 }
 

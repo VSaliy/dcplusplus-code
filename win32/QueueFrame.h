@@ -269,7 +269,7 @@ private:
 	void addPMMenu(const MenuPtr& parent, QueueItemInfo* qii);
 	void addPriorityMenu(const MenuPtr& parent);
 	void addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii);
-	bool addUsers(const MenuPtr& menu, unsigned int startId, void (QueueFrame::*handler)(const UserPtr&), const QueueItem::SourceList& sources, bool offline);
+	bool addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const UserPtr&), const QueueItem::SourceList& sources, bool offline);
 
 	void layout();
 
