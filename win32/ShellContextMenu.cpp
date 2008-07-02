@@ -100,7 +100,8 @@ CShellContextMenu::~CShellContextMenu() {
 	if(OldWndProc)
 		::SetWindowLongPtr(menu->getParent()->handle(), GWLP_WNDPROC, (LONG_PTR)OldWndProc);
 
-	g_IContext3->Release();
+	if(g_IContext3)
+		g_IContext3->Release();
 
 	// free all allocated datas
 	if(m_psfFolder)
