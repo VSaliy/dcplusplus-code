@@ -604,9 +604,8 @@ void WinUtil::toInts(const string& str, std::vector<int>& array) {
 	StringTokenizer<string> t(str, _T(','));
 	StringList& l = t.getTokens();
 
-	size_t k = 0;
 	for(size_t i = 0; i < l.size() && i < array.size(); ++i) {
-		array[k] = Util::toInt(l[i]);
+		array[i] = Util::toInt(l[i]);
 	}
 }
 
