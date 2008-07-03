@@ -255,11 +255,11 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr window = mainMenu->appendPopup(T_("&Window"));
 
-		window->appendItem(T_("Close disconnected"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_DISCONNECTED));
-		window->appendItem(T_("Close all PM windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_PM));
-		window->appendItem(T_("Close all offline PM windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_OFFLINE_PM));
-		window->appendItem(T_("Close all file list windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_DIR_LIST));
-		window->appendItem(T_("Close all search windows"), std::tr1::bind(&MainWindow::handleCloseWindows, this, IDC_CLOSE_ALL_SEARCH_FRAME));
+		window->appendItem(T_("Close disconnected"), std::tr1::bind(&HubFrame::closeDisconnected));
+		window->appendItem(T_("Close all PM windows"), std::tr1::bind(&PrivateFrame::closeAll));
+		window->appendItem(T_("Close all offline PM windows"), std::tr1::bind(&PrivateFrame::closeAllOffline));
+		window->appendItem(T_("Close all file list windows"), std::tr1::bind(&DirectoryListingFrame::closeAll));
+		window->appendItem(T_("Close all search windows"), std::tr1::bind(&SearchFrame::closeAll));
 	}
 
 	{
@@ -1045,26 +1045,6 @@ LRESULT MainFrame::OnViewTransferView(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /
 	return 0;
 }
 #endif
-
-void MainWindow::handleCloseWindows(unsigned id) {
-	switch (id) {
-	case IDC_CLOSE_ALL_DISCONNECTED:
-		HubFrame::closeDisconnected();
-		break;
-	case IDC_CLOSE_ALL_PM:
-		PrivateFrame::closeAll();
-		break;
-	case IDC_CLOSE_ALL_OFFLINE_PM:
-		PrivateFrame::closeAllOffline();
-		break;
-	case IDC_CLOSE_ALL_DIR_LIST:
-		DirectoryListingFrame::closeAll();
-		break;
-	case IDC_CLOSE_ALL_SEARCH_FRAME:
-		SearchFrame::closeAll();
-		break;
-	}
-}
 
 void MainWindow::handleWhatsThis() {
 	sendMessage(WM_SYSCOMMAND, SC_CONTEXTHELP);

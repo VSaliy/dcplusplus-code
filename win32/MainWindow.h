@@ -151,7 +151,6 @@ private:
 	void handleOpenDownloadsDir();
 	void handleAbout();
 	void handleHashProgress();
-	void handleCloseWindows(unsigned id);
 	void handleWhatsThis();
 	void handleSize();
 	void handleActivate(bool active);
