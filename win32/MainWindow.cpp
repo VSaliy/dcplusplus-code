@@ -271,15 +271,15 @@ void MainWindow::initMenu() {
 		help->appendItem(T_("Change Log"), std::tr1::bind(&WinUtil::help, handle(), IDH_CHANGELOG));
 		help->appendItem(T_("About DC++..."), std::tr1::bind(&MainWindow::handleAbout, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_DCPP)));
 		help->appendSeparator();
-		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_HOMEPAGE));
-		help->appendItem(T_("Downloads"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_DOWNLOADS));
-		help->appendItem(T_("GeoIP database update"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_GEOIPFILE));
-		help->appendItem(T_("Frequently asked questions"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_FAQ));
-		help->appendItem(T_("Help forum"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_FORUM));
-		help->appendItem(T_("DC++ discussion forum"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_DISCUSS));
-		help->appendItem(T_("Request a feature"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_REQUEST_FEATURE));
-		help->appendItem(T_("Report a bug"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_REPORT_BUG));
-		help->appendItem(T_("Donate (paypal)"), std::tr1::bind(&MainWindow::handleLink, this, IDC_HELP_DONATE));
+		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&WinUtil::openLink, links.homepage));
+		help->appendItem(T_("Downloads"), std::tr1::bind(&WinUtil::openLink, links.downloads));
+		help->appendItem(T_("GeoIP database update"), std::tr1::bind(&WinUtil::openLink, links.geoipfile));
+		help->appendItem(T_("Frequently asked questions"), std::tr1::bind(&WinUtil::openLink, links.faq));
+		help->appendItem(T_("Help forum"), std::tr1::bind(&WinUtil::openLink, links.help));
+		help->appendItem(T_("DC++ discussion forum"), std::tr1::bind(&WinUtil::openLink, links.discuss));
+		help->appendItem(T_("Request a feature"), std::tr1::bind(&WinUtil::openLink, links.features));
+		help->appendItem(T_("Report a bug"), std::tr1::bind(&WinUtil::openLink, links.bugs));
+		help->appendItem(T_("Donate (paypal)"), std::tr1::bind(&WinUtil::openLink, links.donate));
 	}
 
 	mainMenu->setMenu();
@@ -951,44 +951,6 @@ LRESULT MainWindow::handleEndSession() {
 	SettingsManager::getInstance()->save();
 
 	return 0;
-}
-
-void MainWindow::handleLink(unsigned id) {
-
-	tstring site;
-	switch (id) {
-	case IDC_HELP_HOMEPAGE:
-		site = links.homepage;
-		break;
-	case IDC_HELP_DOWNLOADS:
-		site = links.downloads;
-		break;
-	case IDC_HELP_GEOIPFILE:
-		site = links.geoipfile;
-		break;
-	case IDC_HELP_FAQ:
-		site = links.faq;
-		break;
-	case IDC_HELP_FORUM:
-		site = links.help;
-		break;
-	case IDC_HELP_DISCUSS:
-		site = links.discuss;
-		break;
-	case IDC_HELP_REQUEST_FEATURE:
-		site = links.features;
-		break;
-	case IDC_HELP_REPORT_BUG:
-		site = links.bugs;
-		break;
-	case IDC_HELP_DONATE:
-		site = links.donate;
-		break;
-	default:
-		dcassert(0);
-	}
-
-	WinUtil::openLink(site);
 }
 
 void MainWindow::handleRefreshFileList() {
