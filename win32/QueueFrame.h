@@ -280,7 +280,7 @@ private:
 	LRESULT handleSpeaker();
 	void handleMove();
 	void handleRemove();
-	void handlePriority(unsigned id);
+	void handlePriority(QueueItem::Priority p);
 	void handlePM(const UserPtr& user);
 	void handleRemoveSource(const UserPtr& user);
 	void handleRemoveSources(const UserPtr& user);
