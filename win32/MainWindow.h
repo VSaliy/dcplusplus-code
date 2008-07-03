@@ -141,7 +141,6 @@ private:
 
 	// User actions
 	void handleExit();
-	void handleOpenWindow(unsigned id);
 	void handleFavHubsDropDown(const dwt::ScreenCoordinate& pt);
 	void handleQuickConnect();
 	void handleSettings();
