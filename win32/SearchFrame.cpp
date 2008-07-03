@@ -1005,6 +1005,21 @@ void SearchFrame::runSearch() {
 
 	results->clear();
 
+	// Add new searches to the last-search dropdown list
+	if(find(lastSearches.begin(), lastSearches.end(), s) == lastSearches.end())
+	{
+		int i = max(SETTING(SEARCH_HISTORY)-1, 0);
+
+		if(searchBox->size() > i)
+			searchBox->erase(i);
+		searchBox->insertValue(0, s);
+
+		while(lastSearches.size() > (TStringList::size_type)i) {
+			lastSearches.erase(lastSearches.begin());
+		}
+		lastSearches.push_back(s);
+	}
+	
 	{
 		Lock l(cs);
 		currentSearch = StringTokenizer<tstring>(s, ' ').getTokens();
@@ -1029,21 +1044,6 @@ void SearchFrame::runSearch() {
 		searchMode = SearchManager::SIZE_DONTCARE;
 
 	int ftype = fileType->getSelected();
-
-	// Add new searches to the last-search dropdown list
-	if(find(lastSearches.begin(), lastSearches.end(), s) == lastSearches.end())
-	{
-		int i = max(SETTING(SEARCH_HISTORY)-1, 0);
-
-		if(searchBox->size() > i)
-			searchBox->erase(i);
-		searchBox->insertValue(0, s);
-
-		while(lastSearches.size() > (TStringList::size_type)i) {
-			lastSearches.erase(lastSearches.begin());
-		}
-		lastSearches.push_back(s);
-	}
 
 	setStatus(STATUS_STATUS, str(TF_("Searching for %1%...") % s));
 	setStatus(STATUS_COUNT, Util::emptyStringT);
