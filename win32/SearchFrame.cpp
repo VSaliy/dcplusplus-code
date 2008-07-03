@@ -78,8 +78,8 @@ int SearchFrame::SearchInfo::compareItems(SearchInfo* a, SearchInfo* b, int col)
 }
 
 
-void SearchFrame::openWindow(const tstring& str /* = Util::emptyStringT */, LONGLONG size /* = 0 */, SearchManager::SizeModes mode /* = SearchManager::SIZE_ATLEAST */, SearchManager::TypeModes type /* = SearchManager::TYPE_ANY */) {
-	SearchFrame* pChild = new SearchFrame(str, size, mode, type);
+void SearchFrame::openWindow(const tstring& str /* = Util::emptyStringT */, SearchManager::TypeModes type /* = SearchManager::TYPE_ANY */) {
+	SearchFrame* pChild = new SearchFrame(str, type);
 	frames.insert(pChild);
 }
 
@@ -88,7 +88,7 @@ void SearchFrame::closeAll() {
 		(*i)->close(true);
 }
 
-SearchFrame::SearchFrame(const tstring& initialString_, LONGLONG initialSize_, SearchManager::SizeModes initialMode_, SearchManager::TypeModes initialType_) :
+SearchFrame::SearchFrame(const tstring& initialString, SearchManager::TypeModes initialType_) :
 	BaseType(T_("Search"), IDH_SEARCH, IDR_SEARCH),
 	searchLabel(0),
 	searchBox(0),
@@ -111,9 +111,6 @@ SearchFrame::SearchFrame(const tstring& initialString_, LONGLONG initialSize_, S
 	showUI(0),
 	bShowUI(true),
 	isHash(false),
-	initialString(initialString_),
-	initialSize(initialSize_),
-	initialMode(initialMode_),
 	initialType(initialType_),
 	droppedResults(0)
 {
@@ -194,7 +191,7 @@ SearchFrame::SearchFrame(const tstring& initialString_, LONGLONG initialSize_, S
 		sizeMode->addValue(T_("KiB"));
 		sizeMode->addValue(T_("MiB"));
 		sizeMode->addValue(T_("GiB"));
-		sizeMode->setSelected((initialSize == 0) ? 2 : 0);
+		sizeMode->setSelected(2);
 	}
 
 	{
@@ -295,8 +292,6 @@ SearchFrame::SearchFrame(const tstring& initialString_, LONGLONG initialSize_, S
 		lastSearches.push_back(initialString);
 		searchBox->insertValue(0, initialString);
 		searchBox->setSelected(0);
-		mode->setSelected(initialMode);
-		size->setText(Text::toT(Util::toString(initialSize)));
 		fileType->setSelected(initialType);
 		runSearch();
 	} else {

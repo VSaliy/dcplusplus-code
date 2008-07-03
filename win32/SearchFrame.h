@@ -43,7 +43,7 @@ public:
 		STATUS_LAST
 	};
 
-	static void openWindow(const tstring& str = Util::emptyStringT, LONGLONG size = 0, SearchManager::SizeModes mode = SearchManager::SIZE_ATLEAST, SearchManager::TypeModes type = SearchManager::TYPE_ANY);
+	static void openWindow(const tstring& str = Util::emptyStringT, SearchManager::TypeModes type = SearchManager::TYPE_ANY);
 	static void closeAll();
 
 private:
@@ -174,9 +174,6 @@ private:
 	bool bShowUI;
 	bool isHash;
 
-	tstring initialString;
-	int64_t initialSize;
-	SearchManager::SizeModes initialMode;
 	SearchManager::TypeModes initialType;
 
 	static TStringList lastSearches;
@@ -192,7 +189,7 @@ private:
 
 	std::string token;
 
-	SearchFrame(const tstring& initialString_, LONGLONG initialSize_, SearchManager::SizeModes initialMode_, SearchManager::TypeModes initialType_);
+	SearchFrame(const tstring& initialString, SearchManager::TypeModes initialType_);
 	virtual ~SearchFrame();
 
 	void handlePurgeClicked();

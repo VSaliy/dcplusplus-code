@@ -408,7 +408,7 @@ void WinUtil::copyMagnet(const TTHValue& aHash, const tstring& aFile) {
 }
 
 void WinUtil::searchHash(const TTHValue& aHash) {
-	SearchFrame::openWindow(Text::toT(aHash.toBase32()), 0, SearchManager::SIZE_DONTCARE, SearchManager::TYPE_TTH);
+	SearchFrame::openWindow(Text::toT(aHash.toBase32()), SearchManager::TYPE_TTH);
 }
 
 void WinUtil::addLastDir(const tstring& dir) {
@@ -1029,7 +1029,7 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 			//		case SettingsManager::MAGNET_AUTO_DOWNLOAD:
 			//			break;
 			//		case SettingsManager::MAGNET_AUTO_SEARCH:
-			//			SearchFrame::openWindow(fhash, 0, SearchManager::SIZE_DONTCARE, SearchManager::TYPE_HASH);
+			//			SearchFrame::openWindow(fhash, SearchManager::TYPE_TTH);
 			//			break;
 			//	};
 			//} else {
@@ -1125,7 +1125,7 @@ void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, const std::
 		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_MATCH_QUEUE, std::string()));
 
 	addUsers(addSub, menu, T_("&Send private message"), users,
-		std::tr1::bind(&PrivateFrame::openWindow, _1, tstring()));
+		std::tr1::bind(&PrivateFrame::openWindow, _1));
 
 	addUsers(addSub, menu, T_("Add To &Favorites"), filter(users, &isFav),
 		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
