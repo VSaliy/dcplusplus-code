@@ -150,7 +150,6 @@ private:
 	void handleRefreshFileList();
 	void handleMatchAll();
 	void handleOpenDownloadsDir();
-	void handleLink(unsigned id);
 	void handleAbout();
 	void handleHashProgress();
 	void handleCloseWindows(unsigned id);
