@@ -49,8 +49,8 @@ public:
 		STATUS_LAST
 	};
 
-	static void openWindow(const tstring& aFile, const tstring& aDir, const UserPtr& aUser, int64_t aSpeed);
-	static void openWindow(const UserPtr& aUser, const string& txt, int64_t aSpeed);
+	static void openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const UserPtr& aUser, int64_t aSpeed);
+	static void openWindow(dwt::TabView* mdiParent, const UserPtr& aUser, const string& txt, int64_t aSpeed);
 	static void closeAll();
 
 protected:
@@ -168,7 +168,7 @@ private:
 
 	static UserMap lists;
 
-	DirectoryListingFrame(const UserPtr& aUser, int64_t aSpeed);
+	DirectoryListingFrame(dwt::TabView* mdiParent, const UserPtr& aUser, int64_t aSpeed);
 	virtual ~DirectoryListingFrame();
 
 	MenuPtr makeSingleMenu(ItemInfo* ii);

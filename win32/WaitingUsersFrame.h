@@ -41,7 +41,7 @@ protected:
 	friend class MDIChildFrame<WaitingUsersFrame>;
 
 	// Constructor
-	WaitingUsersFrame();
+	WaitingUsersFrame(dwt::TabView* mdiParent);
 	virtual ~WaitingUsersFrame() { }
 
 	bool preClosing();

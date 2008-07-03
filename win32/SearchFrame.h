@@ -43,7 +43,7 @@ public:
 		STATUS_LAST
 	};
 
-	static void openWindow(const tstring& str = Util::emptyStringT, SearchManager::TypeModes type = SearchManager::TYPE_ANY);
+	static void openWindow(dwt::TabView* mdiParent, const tstring& str = Util::emptyStringT, SearchManager::TypeModes type = SearchManager::TYPE_ANY);
 	static void closeAll();
 
 private:
@@ -189,7 +189,7 @@ private:
 
 	std::string token;
 
-	SearchFrame(const tstring& initialString, SearchManager::TypeModes initialType_);
+	SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, SearchManager::TypeModes initialType_);
 	virtual ~SearchFrame();
 
 	void handlePurgeClicked();

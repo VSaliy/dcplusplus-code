@@ -27,8 +27,8 @@ template<class T>
 class StaticFrame : public MDIChildFrame<T> {
 public:
 
-	StaticFrame(const tstring& title, unsigned helpId, unsigned resourceId) : 
-		MDIChildFrame<T>(title, helpId, resourceId) 
+	StaticFrame(dwt::TabView* mdiClient, const tstring& title, unsigned helpId, unsigned resourceId) : 
+		MDIChildFrame<T>(mdiClient, title, helpId, resourceId) 
 	{ 
 	}
 
@@ -36,16 +36,16 @@ public:
 		frame = 0; 
 	}
 
-	static void openWindow() {
+	static void openWindow(dwt::TabView* mdiClient) {
 		if(frame) {
-			dwt::Widget* active = WinUtil::mainTabs->getActive();
+			dwt::Widget* active = mdiClient->getActive();
 			if(active != frame) {
 				frame->activate();
 			} else if(BOOLSETTING(TOGGLE_ACTIVE_WINDOW)) {
-				WinUtil::mainTabs->next();
+				mdiClient->next();
 			}
 		} else {
-			frame = new T();
+			frame = new T(mdiClient);
 		}
 	}
 	

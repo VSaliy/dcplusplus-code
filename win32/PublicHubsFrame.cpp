@@ -72,8 +72,8 @@ int PublicHubsFrame::HubInfo::compareItems(const HubInfo* a, const HubInfo* b, i
 	}
 }
 
-PublicHubsFrame::PublicHubsFrame() :
-	BaseType(T_("Public Hubs"), IDH_PUBLIC_HUBS, IDR_PUBLICHUBS),
+PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
+	BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDR_PUBLICHUBS),
 	hubs(0),
 	configure(0),
 	refresh(0),
@@ -466,7 +466,7 @@ void PublicHubsFrame::handleConnect() {
 		return;
 
 	if(hubs->hasSelected() == 1) {
-		HubFrame::openWindow(hubs->getSelectedData()->entry->getServer());
+		HubFrame::openWindow(getParent(), hubs->getSelectedData()->entry->getServer());
 	}
 }
 
@@ -499,7 +499,7 @@ void PublicHubsFrame::openSelected() {
 		return;
 
 	if(hubs->hasSelected()) {
-		HubFrame::openWindow(hubs->getSelectedData()->entry->getServer());
+		HubFrame::openWindow(getParent(), hubs->getSelectedData()->entry->getServer());
 	}
 }
 

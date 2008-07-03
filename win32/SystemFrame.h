@@ -39,7 +39,7 @@ private:
 	
 	TextBoxPtr log;
 	
-	SystemFrame();
+	SystemFrame(dwt::TabView* mdiParent);
 	virtual ~SystemFrame();
 
 	void layout();

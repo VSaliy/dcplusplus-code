@@ -54,8 +54,8 @@ protected:
 	friend class StaticFrame<T>;
 	friend class MDIChildFrame<T>;
 
-	FinishedFrameBase(const tstring& title, unsigned helpId, unsigned resourceId) :
-		BaseType(title, helpId, resourceId),
+	FinishedFrameBase(dwt::TabView* mdiParent, const tstring& title, unsigned helpId, unsigned resourceId) :
+		BaseType(mdiParent, title, helpId, resourceId),
 		tabs(0),
 		files(0),
 		filesWindow(0),
@@ -456,7 +456,7 @@ private:
 			menu->appendItem(T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveFiles, this));
 			menu->appendItem(T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
 			menu->appendSeparator();
-			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users);
+			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
 
 			CShellContextMenu* shellMenu = 0;
 			if(BOOLSETTING(SHOW_SHELL_MENU) && files->countSelected() == 1) {
@@ -485,7 +485,7 @@ private:
 			menu->appendItem(T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveUsers, this));
 			menu->appendItem(T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
 			menu->appendSeparator();
-			WinUtil::addUserItems(menu, users->forEachSelectedT(UserCollector()).users);
+			WinUtil::addUserItems(menu, users->forEachSelectedT(UserCollector()).users, this->getParent());
 
 			menu->open(pt);
 			return true;
@@ -496,7 +496,7 @@ private:
 	void handleViewAsText() {
 		int i = -1;
 		while((i = files->getNext(i, LVNI_SELECTED)) != -1)
-			new TextFrame(files->getData(i)->file);
+			new TextFrame(this->getParent(), files->getData(i)->file);
 	}
 
 	void handleOpenFile() {

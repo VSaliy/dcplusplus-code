@@ -39,7 +39,7 @@ private:
 	enum { LINE_HEIGHT = 10 };
 	enum { AVG_SIZE = 5 };
 
-	StatsFrame();
+	StatsFrame(dwt::TabView* mdiParent);
 	virtual ~StatsFrame();
 
 	dwt::PenPtr pen;

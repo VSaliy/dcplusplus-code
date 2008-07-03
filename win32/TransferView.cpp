@@ -68,12 +68,13 @@ static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
 	control->setBounds(dwt::Rectangle(parent->getClientAreaSize()));
 }
 
-TransferView::TransferView(dwt::Widget* parent) :
+TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	WidgetFactory<dwt::Container>(parent),
 	connections(0),
 	connectionsWindow(0),
 	downloads(0),
-	downloadsWindow(0)
+	downloadsWindow(0),
+	mdi(mdi_)
 {
 	create();
 
@@ -182,7 +183,7 @@ HRESULT TransferView::handleDestroy(WPARAM wParam, LPARAM lParam) {
 TransferView::MenuPtr TransferView::makeContextMenu(ConnectionInfo* ii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	appendUserItems(menu, false);
+	appendUserItems(mdi, menu, false);
 	menu->appendSeparator();
 
 	menu->appendItem(T_("&Force attempt"), std::tr1::bind(&TransferView::handleForce, this));
@@ -415,7 +416,7 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 void TransferView::handleDblClicked() {
 	ConnectionInfo* ii = connections->getSelectedData();
 	if(ii) {
-		ii->pm();
+		ii->pm(mdi);
 	}
 }
 

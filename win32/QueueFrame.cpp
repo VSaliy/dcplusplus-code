@@ -50,8 +50,8 @@ void QueueFrame::QueueItemInfo::remove() {
 	QueueManager::getInstance()->remove(getTarget());
 }
 
-QueueFrame::QueueFrame() :
-	BaseType(T_("Download Queue"), IDH_QUEUE, IDR_QUEUE),
+QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
+	BaseType(mdiParent, T_("Download Queue"), IDH_QUEUE, IDR_QUEUE),
 	dirs(0),
 	files(0),
 	paned(0),
@@ -812,7 +812,7 @@ void QueueFrame::handleRemoveSources(const UserPtr& user) {
 
 void QueueFrame::handlePM(const UserPtr& user) {
 	if(files->countSelected() == 1) {
-		PrivateFrame::openWindow(user);
+		PrivateFrame::openWindow(getParent(), user);
 	}
 }
 

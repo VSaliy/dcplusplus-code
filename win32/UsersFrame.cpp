@@ -32,8 +32,8 @@ static const ColumnInfo usersColumns[] = {
 	{ N_("CID"), 300, false }
 };
 
-UsersFrame::UsersFrame() :
-	BaseType(T_("Favorite Users"), IDH_FAVUSERS, IDR_USERS),
+UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
+	BaseType(mdiParent, T_("Favorite Users"), IDH_FAVUSERS, IDR_USERS),
 	users(0),
 	startup(true)
 {
@@ -179,7 +179,7 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
-		appendUserItems(menu);
+		appendUserItems(getParent(), menu);
 		menu->appendSeparator();
 		menu->appendItem(T_("&Description"), std::tr1::bind(&UsersFrame::handleDescription, this));
 		menu->appendItem(T_("&Remove"), std::tr1::bind(&UsersFrame::handleRemove, this));

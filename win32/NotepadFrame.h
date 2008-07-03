@@ -36,7 +36,7 @@ protected:
 	friend class StaticFrame<NotepadFrame>;
 	friend class MDIChildFrame<NotepadFrame>;
 	
-	NotepadFrame();
+	NotepadFrame(dwt::TabView* mdiParent);
 	virtual ~NotepadFrame();
 
 	void layout();
