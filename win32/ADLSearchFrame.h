@@ -36,7 +36,7 @@ protected:
 	friend class StaticFrame<ADLSearchFrame>;
 	friend class MDIChildFrame<ADLSearchFrame>;
 
-	ADLSearchFrame();
+	ADLSearchFrame(dwt::TabView* mdiParent);
 	virtual ~ADLSearchFrame();
 
 	void layout();

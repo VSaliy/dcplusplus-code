@@ -134,6 +134,7 @@ int SmartWinMain(dwt::Application& app) {
 		WinUtil::init();
 		MainWindow* wnd = new MainWindow;
 		WinUtil::mainWindow = wnd;
+		//WinUtil::mdiParent = wnd->getMDIParent();
 		splash->close();
 		ret = app.run();
 	} catch(const std::exception& e) {

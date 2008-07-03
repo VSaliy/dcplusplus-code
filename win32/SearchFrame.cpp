@@ -78,8 +78,8 @@ int SearchFrame::SearchInfo::compareItems(SearchInfo* a, SearchInfo* b, int col)
 }
 
 
-void SearchFrame::openWindow(const tstring& str /* = Util::emptyStringT */, SearchManager::TypeModes type /* = SearchManager::TYPE_ANY */) {
-	SearchFrame* pChild = new SearchFrame(str, type);
+void SearchFrame::openWindow(dwt::TabView* mdiParent, const tstring& str /* = Util::emptyStringT */, SearchManager::TypeModes type /* = SearchManager::TYPE_ANY */) {
+	SearchFrame* pChild = new SearchFrame(mdiParent, str, type);
 	frames.insert(pChild);
 }
 
@@ -88,8 +88,8 @@ void SearchFrame::closeAll() {
 		(*i)->close(true);
 }
 
-SearchFrame::SearchFrame(const tstring& initialString, SearchManager::TypeModes initialType_) :
-	BaseType(T_("Search"), IDH_SEARCH, IDR_SEARCH),
+SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, SearchManager::TypeModes initialType_) :
+	BaseType(mdiParent, T_("Search"), IDH_SEARCH, IDR_SEARCH),
 	searchLabel(0),
 	searchBox(0),
 	purge(0),
@@ -803,7 +803,7 @@ SearchFrame::MenuPtr SearchFrame::makeMenu() {
 	menu->appendSeparator();
 
 	UserCollector users = results->forEachSelectedT(UserCollector());
-	WinUtil::addUserItems(menu, users.users, si ? Text::fromT(si->getText(COLUMN_PATH)) : "");
+	WinUtil::addUserItems(menu, users.users, getParent(), si ? Text::fromT(si->getText(COLUMN_PATH)) : "");
 
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&SearchFrame::handleRemove, this));

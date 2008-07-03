@@ -38,8 +38,8 @@ public:
 	typedef MDIChildFrame<T> ThisType;
 protected:
 
-	MDIChildFrame(const tstring& title, unsigned helpId = 0, unsigned resourceId = 0, bool activate = true) :
-		BaseType(WinUtil::mainTabs),
+	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0, bool activate = true) :
+		BaseType(tabView),
 		lastFocus(NULL),
 		alwaysSameFocus(false),
 		reallyClose(false)
@@ -51,16 +51,16 @@ protected:
 		cs.caption = title;
 		cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 		cs.icon = icon;
-		cs.location = WinUtil::mainTabs->getClientSize();
+		cs.location = tabView->getClientSize();
 		this->create(cs);
 
 		if(helpId)
 			setHelpId(helpId);
 
-		WinUtil::mainTabs->add(this, icon);
+		tabView->add(this, icon);
 		
 		if(activate) {
-			WinUtil::mainTabs->setActive(this);
+			tabView->setActive(this);
 		}
 
 		this->onTabContextMenu(std::tr1::bind(&ThisType::handleContextMenu, this, _1));
@@ -75,7 +75,7 @@ protected:
 	}
 	
 	virtual ~MDIChildFrame() {
-		WinUtil::mainTabs->remove(this);
+		getParent()->remove(this);
 	}
 	
 	void handleFocus() {
@@ -113,20 +113,24 @@ protected:
 	
 	void setDirty(SettingsManager::IntSetting setting) {
 		if(SettingsManager::getInstance()->getBool(setting)) {
-			WinUtil::mainTabs->mark(this);
+			getParent()->mark(this);
 		}
 	}
 	
 	void onTabContextMenu(const std::tr1::function<bool (const dwt::ScreenCoordinate&)>& f) {
-		WinUtil::mainTabs->onTabContextMenu(this, f);
+		getParent()->onTabContextMenu(this, f);
 	}
 	
 	void activate() {
-		WinUtil::mainTabs->setActive(this);
+		getParent()->setActive(this);
+	}
+	
+	dwt::TabView* getParent() {
+		return static_cast<dwt::TabView*>(BaseType::getParent());
 	}
 
 	void setIcon(unsigned resourceId) {
-		WinUtil::mainTabs->setTabIcon(this, dwt::IconPtr(new dwt::Icon(resourceId)));
+		getParent()->setTabIcon(this, dwt::IconPtr(new dwt::Icon(resourceId)));
 	}
 
 private:
@@ -193,7 +197,7 @@ private:
 
 	bool handleContextMenu(const dwt::ScreenCoordinate& pt) {
 		dwt::Menu::ObjectType menu = addChild(WinUtil::Seeds::menu);
-		menu->setTitle(WinUtil::mainTabs->getTabText(this));
+		menu->setTitle(getParent()->getTabText(this));
 		menu->appendItem(T_("&Close"), std::tr1::bind(&ThisType::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
 		menu->open(pt);
 		return true;
@@ -202,9 +206,9 @@ private:
 	bool handleClosing() {
 		if(reallyClose) {
 			static_cast<T*>(this)->postClosing();
-			if(WinUtil::mainTabs->getActive() == this) {
+			if(getParent()->getActive() == this) {
 				// Prevent flicker by selecting the next tab - WM_DESTROY would already be too late
-				WinUtil::mainTabs->next();
+				getParent()->next();
 			}
 			return true;
 		} else if(static_cast<T*>(this)->preClosing()) {
