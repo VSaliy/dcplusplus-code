@@ -194,7 +194,7 @@ bool SpyFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 void SpyFrame::handleSearch(const tstring& searchString) {
 	if(Util::strnicmp(searchString.c_str(), _T("TTH:"), 4) == 0)
-		SearchFrame::openWindow(searchString.substr(4), 0, SearchManager::SIZE_DONTCARE, SearchManager::TYPE_TTH);
+		SearchFrame::openWindow(searchString.substr(4), SearchManager::TYPE_TTH);
 	else
 		SearchFrame::openWindow(searchString);
 }
