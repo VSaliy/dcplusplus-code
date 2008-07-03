@@ -816,19 +816,7 @@ void QueueFrame::handlePM(const UserPtr& user) {
 	}
 }
 
-void QueueFrame::handlePriority(unsigned id) {
-	QueueItem::Priority p;
-
-	switch(id) {
-		case IDC_PRIORITY_PAUSED: p = QueueItem::PAUSED; break;
-		case IDC_PRIORITY_LOWEST: p = QueueItem::LOWEST; break;
-		case IDC_PRIORITY_LOW: p = QueueItem::LOW; break;
-		case IDC_PRIORITY_NORMAL: p = QueueItem::NORMAL; break;
-		case IDC_PRIORITY_HIGH: p = QueueItem::HIGH; break;
-		case IDC_PRIORITY_HIGHEST: p = QueueItem::HIGHEST; break;
-		default: p = QueueItem::DEFAULT; break;
-	}
-
+void QueueFrame::handlePriority(QueueItem::Priority p) {
 	if(usingDirMenu) {
 		setPriority(dirs->getSelected(), p);
 	} else {
@@ -978,12 +966,12 @@ QueueFrame::MenuPtr QueueFrame::makeDirMenu() {
 
 void QueueFrame::addPriorityMenu(const MenuPtr& parent) {
 	MenuPtr menu = parent->appendPopup(T_("Set priority"));
-	menu->appendItem(T_("Paused"), std::tr1::bind(&QueueFrame::handlePriority, this, IDC_PRIORITY_PAUSED));
-	menu->appendItem(T_("Lowest"), std::tr1::bind(&QueueFrame::handlePriority, this, IDC_PRIORITY_LOWEST));
-	menu->appendItem(T_("Low"), std::tr1::bind(&QueueFrame::handlePriority, this, IDC_PRIORITY_LOW));
-	menu->appendItem(T_("Normal"), std::tr1::bind(&QueueFrame::handlePriority, this, IDC_PRIORITY_NORMAL));
-	menu->appendItem(T_("High"), std::tr1::bind(&QueueFrame::handlePriority, this, IDC_PRIORITY_HIGH));
-	menu->appendItem(T_("Highest"), std::tr1::bind(&QueueFrame::handlePriority, this, IDC_PRIORITY_HIGHEST));
+	menu->appendItem(T_("Paused"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::PAUSED));
+	menu->appendItem(T_("Lowest"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::LOWEST));
+	menu->appendItem(T_("Low"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::LOW));
+	menu->appendItem(T_("Normal"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::NORMAL));
+	menu->appendItem(T_("High"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::HIGH));
+	menu->appendItem(T_("Highest"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::HIGHEST));
 }
 
 void QueueFrame::addBrowseMenu(const MenuPtr& parent, QueueItemInfo* qii) {
