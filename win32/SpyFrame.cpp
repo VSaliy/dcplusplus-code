@@ -158,6 +158,8 @@ LRESULT SpyFrame::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 		setStatus(STATUS_HITS, str(TF_("Hits: %1%") % ShareManager::getInstance()->getHits()));
 		double ratio = total > 0 ? ((double)ShareManager::getInstance()->getHits()) / (double)total : 0.0;
 		setStatus(STATUS_HIT_RATIO, str(TF_("Hit Ratio: %1%") % ratio));
+
+		setDirty(SettingsManager::BOLD_SEARCH_SPY);
 	}
 	return 0;
 }
