@@ -14,6 +14,7 @@
 * Don't re-log logs when opening PM windows (poy)
 * [L#243201] Save excluded search terms correctly in search history (thanks emtee)
 * Search spy tab highlighting (poy)
+* Help updates (emtee, poy)
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
