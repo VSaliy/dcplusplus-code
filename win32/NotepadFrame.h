@@ -22,8 +22,8 @@
 #include "StaticFrame.h"
 #include "resource.h"
 
-class NotepadFrame : 
-	public StaticFrame<NotepadFrame> 
+class NotepadFrame :
+	public StaticFrame<NotepadFrame>
 {
 	typedef StaticFrame<NotepadFrame> BaseType;
 public:
@@ -31,11 +31,11 @@ public:
 		STATUS_STATUS,
 		STATUS_LAST
 	};
-	
+
 protected:
 	friend class StaticFrame<NotepadFrame>;
 	friend class MDIChildFrame<NotepadFrame>;
-	
+
 	NotepadFrame(dwt::TabView* mdiParent);
 	virtual ~NotepadFrame();
 

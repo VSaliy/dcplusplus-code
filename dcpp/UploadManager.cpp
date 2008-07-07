@@ -60,7 +60,7 @@ UploadManager::~UploadManager() throw() {
 
 bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, const string& aFile, int64_t aStartPos, int64_t aBytes, bool listRecursive) {
 	dcdebug("Preparing %s %s " I64_FMT " " I64_FMT " %d\n", aType.c_str(), aFile.c_str(), aStartPos, aBytes, listRecursive);
-	
+
 	if(aFile.empty() || aStartPos < 0 || aBytes < -1 || aBytes == 0) {
 		aSource.fileNotAvail("Invalid request");
 		return false;
@@ -75,7 +75,7 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 
 	string sourceFile;
 	Transfer::Type type;
-	
+
 	try {
 		if(aType == Transfer::names[Transfer::TYPE_FILE]) {
 			sourceFile = ShareManager::getInstance()->toReal(aFile);
@@ -361,7 +361,7 @@ void UploadManager::addFailedUpload(const UserConnection& source, string filenam
 			waitingUsers.push_back(WaitingUser(source.getUser(), GET_TICK()));
 		} else {
 			it->second = GET_TICK();
-		}	
+		}
 		waitingFiles[source.getUser()].insert(filename);		//files for which user's asked
 	}
 
@@ -465,7 +465,7 @@ void UploadManager::on(AdcCommand::GFI, UserConnection* aSource, const AdcComman
 		dcdebug("UM::onSend Bad state, ignoring\n");
 		return;
 	}
-	
+
 	if(c.getParameters().size() < 2) {
 		aSource->send(AdcCommand(AdcCommand::SEV_RECOVERABLE, AdcCommand::ERROR_PROTOCOL_GENERIC, "Missing parameters"));
 		return;

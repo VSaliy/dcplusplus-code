@@ -201,7 +201,7 @@ void AdcHub::handle(AdcCommand::SUP, AdcCommand& c) throw() {
 			tigrOk = true;
 		}
 	}
-	
+
 	if(!baseOk) {
 		fire(ClientListener::StatusMessage(), this, _("Failed to negotiate base protocol"));
 		disconnect(false);
@@ -276,9 +276,9 @@ void AdcHub::handle(AdcCommand::QUI, AdcCommand& c) throw() {
 		if(c.getParam("ID", 1, tmp2)) {
 			source = findUser(AdcCommand::toSID(tmp2));
 		}
-		
+
 		if(source) {
-			tmp = str(F_("%1% was kicked by %2%: %3%") % victim->getIdentity().getNick() % 
+			tmp = str(F_("%1% was kicked by %2%: %3%") % victim->getIdentity().getNick() %
 				source->getIdentity().getNick() % tmp);
 		} else {
 			tmp = str(F_("%1% was kicked: %2%") % victim->getIdentity().getNick() % tmp);
@@ -286,8 +286,8 @@ void AdcHub::handle(AdcCommand::QUI, AdcCommand& c) throw() {
 		fire(ClientListener::StatusMessage(), this, tmp, ClientListener::FLAG_IS_SPAM);
 	}
 
-	putUser(s, c.getParam("DI", 1, tmp)); 
-	
+	putUser(s, c.getParam("DI", 1, tmp));
+
 	if(s == sid) {
 		if(c.getParam("TL", 1, tmp)) {
 			if(tmp == "-1") {
@@ -312,11 +312,11 @@ void AdcHub::handle(AdcCommand::CTM, AdcCommand& c) throw() {
 
 	const string& protocol = c.getParam(0);
 	const string& port = c.getParam(1);
-	
+
 	string token;
 	if(c.getParameters().size() == 3) {
 		const string& tok = c.getParam(2);
-		
+
 		// 0.699 put TO before the token, keep this bug fix for a while
 		if(tok.compare(0, 2, "TO") == 0) {
 			token = tok.substr(2);
@@ -326,7 +326,7 @@ void AdcHub::handle(AdcCommand::CTM, AdcCommand& c) throw() {
 	} else {
 		// <= 0.703 would send an empty token for passive connections when replying to RCM
 	}
-	
+
 	bool secure = false;
 	if(protocol == CLIENT_PROTOCOL || protocol == CLIENT_PROTOCOL_TEST) {
 		// Nothing special
@@ -508,7 +508,7 @@ void AdcHub::handle(AdcCommand::GET, AdcCommand& c) throw() {
 		size_t m = Util::toUInt32(c.getParam(3)) * 8;
 		size_t k = Util::toUInt32(sk);
 		size_t h = Util::toUInt32(sh);
-		
+
 		if(k > 8 || k < 1) {
 			send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_TRANSFER_GENERIC, "Unsupported k"));
 			return;
@@ -518,13 +518,13 @@ void AdcHub::handle(AdcCommand::GET, AdcCommand& c) throw() {
 			return;
 		}
 		size_t n = ShareManager::getInstance()->getSharedFiles();
-		
+
 		// Ideal size for m is n * k / ln(2), but we allow some slack
 		if(m > (5 * n * k / log(2.)) || m > (1 << h)) {
 			send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_TRANSFER_GENERIC, "Unsupported m"));
 			return;
 		}
-		
+
 		ShareManager::getInstance()->getBloom(v, k, m, h);
 		AdcCommand cmd(AdcCommand::CMD_SND, AdcCommand::TYPE_HUB);
 		cmd.addParam(c.getParam(0));
@@ -544,7 +544,7 @@ void AdcHub::connect(const OnlineUser& user, const string& token) {
 void AdcHub::connect(const OnlineUser& user, string const& token, bool secure) {
 	if(state != STATE_NORMAL)
 		return;
-	
+
 	const string* proto;
 	if(secure) {
 		if(user.getUser()->isSet(User::NO_ADCS_0_10_PROTOCOL)) {
@@ -656,12 +656,12 @@ void AdcHub::password(const string& pwd) {
 
 static void addParam(StringMap& lastInfoMap, AdcCommand& c, const string& var, const string& value) {
 	StringMapIter i = lastInfoMap.find(var);
-	
+
 	if(i != lastInfoMap.end()) {
 		if(i->second != value) {
 			if(value.empty()) {
 				lastInfoMap.erase(i);
-			} else { 
+			} else {
 				i->second = value;
 			}
 			c.addParam(var, value);
@@ -765,7 +765,7 @@ void AdcHub::on(Connected c) throw() {
 
 	AdcCommand cmd(AdcCommand::CMD_SUP, AdcCommand::TYPE_HUB);
 	cmd.addParam(BAS0_SUPPORT).addParam(BASE_SUPPORT).addParam(TIGR_SUPPORT);
-	
+
 	if(BOOLSETTING(HUB_USER_COMMANDS)) {
 		cmd.addParam(UCM0_SUPPORT);
 	}

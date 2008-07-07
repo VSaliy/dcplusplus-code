@@ -26,12 +26,12 @@ class TypedTable : public dwt::Table
 {
 	typedef typename dwt::Table BaseType;
 	typedef TypedTable<ContentType, managed> ThisType;
-	
+
 public:
 	typedef ThisType* ObjectType;
 
-	explicit TypedTable( dwt::Widget * parent ) : BaseType(parent) { 
-		
+	explicit TypedTable( dwt::Widget * parent ) : BaseType(parent) {
+
 	}
 
 	struct Seed : public BaseType::Seed {
@@ -50,26 +50,26 @@ public:
 		if(managed)
 			this->clear();
 	}
-	
+
 	void create( const typename BaseType::Seed & cs = BaseType::Seed() ) {
 		BaseType::create(cs);
-		
+
 		this->addCallback(
 			dwt::Message( WM_NOTIFY, LVN_GETDISPINFO ), &ThisType::TypedTableDispatcher
 		);
 		this->onColumnClick(std::tr1::bind(&ThisType::handleColumnClick, this, _1));
 		this->onSortItems(std::tr1::bind(&ThisType::handleSort, this, _1, _2));
 	}
-	
+
 	int insert(ContentType* item) {
 		return insert(getSortPos(item), item);
 	}
-	
+
 	int insert(int i, ContentType* item) {
 		return BaseType::insert(LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE, i,
 			LPSTR_TEXTCALLBACK, 0, 0, I_IMAGECALLBACK, reinterpret_cast<LPARAM>(item));
 	}
-	
+
 	ContentType* getData(int iItem) {
 		return reinterpret_cast<ContentType*>(BaseType::getData(iItem));
 	}
@@ -87,19 +87,19 @@ public:
 	}
 
 	using BaseType::find;
-	
+
 	int find(ContentType* item) {
 		LVFINDINFO fi = { LVFI_PARAM, NULL, (LPARAM)item };
 		return ListView_FindItem(this->handle(), -1, &fi);
 	}
-	
+
 	struct CompFirst {
 		CompFirst() { }
 		bool operator()(ContentType& a, const tstring& b) {
 			return Util::stricmp(a.getText(0), b) < 0;
 		}
 	};
-	
+
 	void forEach(void (ContentType::*func)()) {
 		unsigned n = this->size();
 		for(unsigned i = 0; i < n; ++i)
@@ -128,12 +128,12 @@ public:
 	void update(int i) {
 		redraw(i, i);
 	}
-	
+
 	void update(ContentType* item) { int i = find(item); if(i != -1) update(i); }
 
 	void clear() { if(managed) this->forEachT(DeleteFunction()); this->BaseType::clear(); }
 	void erase(int i) { if(managed) delete getData(i); this->BaseType::erase(i); }
-	
+
 	void erase(ContentType* item) { int i = find(item); if(i != -1) this->erase(i); }
 
 	int getSortPos(ContentType* a) {
@@ -181,7 +181,7 @@ private:
 	int handleSort(LPARAM lhs, LPARAM rhs) {
 		return ContentType::compareItems(reinterpret_cast<ContentType*>(lhs), reinterpret_cast<ContentType*>(rhs), this->getSortColumn());
 	}
-	
+
 	static bool TypedTableDispatcher(const MSG& msg, HRESULT& res) {
 		NMLVDISPINFO * nm = reinterpret_cast< NMLVDISPINFO * >( msg.lParam );
 		if(nm->item.mask & LVIF_TEXT) {
@@ -198,7 +198,7 @@ private:
 		}
 		return true;
 	}
-	
+
 	void handleColumnClick(int column) {
 		if(column != this->getSortColumn()) {
 			this->setSort(column, true);

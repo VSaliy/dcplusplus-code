@@ -102,7 +102,7 @@ bool HubListsDlg::handleInitDialog() {
 	attachChild<Button>(IDCANCEL)->onClicked(std::tr1::bind(&HubListsDlg::endDialog, this, IDCANCEL));
 
 	centerWindow();
-	
+
 	return false;
 }
 

@@ -38,7 +38,7 @@ public:
 
 	UserPtr& getUser() { return user; }
 	UserPtr user;
-	
+
 	struct UserTraits {
 		UserTraits() : adcOnly(true), favOnly(true), nonFavOnly(true) { }
 		void operator()(UserInfoBase* ui);
@@ -54,7 +54,7 @@ template<class T>
 class AspectUserInfo {
 public:
 	typedef AspectUserInfo<T> ThisType;
-	
+
 	void handleMatchQueue() {
 		static_cast<T*>(this)->getUserList()->forEachSelected(&UserInfoBase::matchQueue);
 	}
@@ -75,7 +75,7 @@ public:
 		dwt::TabViewPtr parent;
 		void (UserInfoBase::*f)(dwt::TabViewPtr);
 	};
-	
+
 	void handlePrivateMessage(dwt::TabViewPtr parent) {
 		static_cast<T*>(this)->getUserList()->forEachSelectedT(Caller(parent, &UserInfoBase::pm));
 	}

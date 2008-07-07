@@ -71,7 +71,7 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 	for(StringIter i = SettingsManager::connectionSpeeds.begin(); i != SettingsManager::connectionSpeeds.end(); ++i, ++j) {
 		connections->addValue(Text::toT(*i).c_str());
 		if(selected == 0 && SETTING(UPLOAD_SPEED) == *i) {
-			selected = j; 
+			selected = j;
 		}
 	}
 

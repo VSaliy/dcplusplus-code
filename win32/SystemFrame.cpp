@@ -24,9 +24,9 @@
 #include "HoldRedraw.h"
 #include "WinUtil.h"
 
-SystemFrame::SystemFrame(dwt::TabView* mdiParent) : 
+SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("System Log"), IDH_SYSTEM_LOG, IDR_MAINFRAME),
-	log(0) 
+	log(0)
 {
 	{
 		TextBox::Seed cs = WinUtil::Seeds::textBox;
@@ -39,20 +39,20 @@ SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 	status->onDblClicked(std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
 
 	layout();
-	
+
 	LogManager::List oldMessages = LogManager::getInstance()->getLastLogs();
 	// Technically, we might miss a message or two here, but who cares...
 	LogManager::getInstance()->addListener(this);
 
 	onSpeaker(std::tr1::bind(&SystemFrame::handleSpeaker, this, _1));
-	
+
 	for(LogManager::List::const_iterator i = oldMessages.begin(); i != oldMessages.end(); ++i) {
 		addLine(i->first, Text::toT(i->second));
 	}
 }
 
 SystemFrame::~SystemFrame() {
-	
+
 }
 
 void SystemFrame::addLine(time_t t, const tstring& msg) {
@@ -94,9 +94,9 @@ LRESULT SystemFrame::handleSpeaker(WPARAM wp) {
 
 bool SystemFrame::preClosing() {
 	LogManager::getInstance()->removeListener(this);
-	return true;	
+	return true;
 }
 
-void SystemFrame::on(Message, time_t t, const string& message) throw() { 
-	speak(reinterpret_cast<WPARAM>(new LogManager::Pair(t, message))); 
+void SystemFrame::on(Message, time_t t, const string& message) throw() {
+	speak(reinterpret_cast<WPARAM>(new LogManager::Pair(t, message)));
 }

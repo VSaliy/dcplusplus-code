@@ -27,7 +27,7 @@ class ResourceManager : public Singleton<ResourceManager> {
 public:
 
 	bool isRTL() { return rtl; }
-	
+
 private:
 	friend class Singleton<ResourceManager>;
 

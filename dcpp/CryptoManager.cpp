@@ -51,10 +51,10 @@ CryptoManager::CryptoManager()
 	clientVerContext.reset(SSL_CTX_new(TLSv1_client_method()));
 	serverContext.reset(SSL_CTX_new(TLSv1_server_method()));
 	serverVerContext.reset(SSL_CTX_new(TLSv1_server_method()));
-	
+
 	if(clientContext && clientVerContext && serverContext && serverVerContext) {
 		dh.reset(DH_new());
-		
+
         static unsigned char dh4096_p[]={
                 0xCA,0x35,0xA8,0xBB,0x65,0x33,0x28,0xC6,0x3F,0xD7,0x21,0x55,
                 0x95,0xDF,0xC0,0xDC,0x11,0x10,0x23,0x2D,0x1E,0xD6,0x52,0x23,
@@ -100,7 +100,7 @@ CryptoManager::CryptoManager()
                 0xEB,0xE7,0xF4,0xAC,0xB6,0x37,0xCA,0xAB,0x4A,0x1E,0x4D,0x4E,
                 0xCF,0xFE,0x5D,0xEF,0x23,0x78,0xC6,0xBB,
                 };
-        
+
         static unsigned char dh4096_g[]={
                 0x02,
                 };
@@ -148,16 +148,16 @@ void CryptoManager::generateCertificate() throw(CryptoException) {
 	ssl::X509_NAME nm(X509_NAME_new());
 	const EVP_MD *digest = EVP_sha1();
 	ssl::X509 x509ss(X509_new());
-	
+
 	if(!bn || !rsa || !pkey || !nm || !x509ss) {
 		throw CryptoException("Error creating objects for cert generation");
 	}
-	
+
 	int days = 10;
 	int keylength = 2048;
 
 #define CHECK(n) if(!(n)) { throw CryptoException(#n); }
-	
+
 	// Generate key pair
 	CHECK((BN_set_word(bn, RSA_F4)))
 	CHECK((RSA_generate_key_ex(rsa, keylength, bn, NULL)))
@@ -173,7 +173,7 @@ void CryptoManager::generateCertificate() throw(CryptoException) {
 	CHECK((X509_gmtime_adj(X509_get_notBefore(x509ss), 0)))
 	CHECK((X509_gmtime_adj(X509_get_notAfter(x509ss), (long)60*60*24*days)))
 	CHECK((X509_set_pubkey(x509ss, pkey)))
-	
+
 	// Sign using own private key
 	CHECK((X509_sign(x509ss, pkey, digest)))
 
@@ -286,12 +286,12 @@ bool CryptoManager::checkCertificate() throw() {
 	X509* tmpx509 = NULL;
 	PEM_read_X509(f, &tmpx509, NULL, NULL);
 	fclose(f);
-	
+
 	if(!tmpx509) {
 		return false;
 	}
 	ssl::X509 x509(tmpx509);
-	
+
 	// Check subject name
 	X509_NAME* name = X509_get_subject_name(x509);
 	if(!name) {
@@ -306,7 +306,7 @@ bool CryptoManager::checkCertificate() throw() {
 	if(!str) {
 		return false;
 	}
-	
+
 	unsigned char* buf = 0;
 	i = ASN1_STRING_to_UTF8(&buf, str);
 	if(i < 0) {
@@ -314,11 +314,11 @@ bool CryptoManager::checkCertificate() throw() {
 	}
 	std::string cn((char*)buf, i);
 	OPENSSL_free(buf);
-	
+
 	if(cn != ClientManager::getInstance()->getMyCID().toBase32()) {
 		return false;
 	}
-	
+
 	ASN1_TIME* t = X509_get_notAfter(x509);
 	if(t) {
 		if(X509_cmp_current_time(t) < 0) {

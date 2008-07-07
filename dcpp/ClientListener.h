@@ -29,7 +29,7 @@ public:
 	typedef X<17> SearchFlood;
 	typedef X<18> NmdcSearch;
 	typedef X<19> AdcSearch;
-	
+
 	enum StatusFlags {
 		FLAG_NORMAL = 0x00,
 		FLAG_IS_SPAM = 0x01

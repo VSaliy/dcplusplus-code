@@ -79,7 +79,7 @@ public:
 		};
 		typedef vector<Ptr> List;
 		typedef List::iterator Iter;
-		
+
 		typedef unordered_set<TTHValue> TTHSet;
 
 		List directories;

@@ -189,12 +189,12 @@ void UserConnection::on(ModeChange) throw() {
 	fire(UserConnectionListener::ModeChange(), this);
 }
 
-void UserConnection::on(TransmitDone) throw() { 
-	fire(UserConnectionListener::TransmitDone(), this); 
+void UserConnection::on(TransmitDone) throw() {
+	fire(UserConnectionListener::TransmitDone(), this);
 }
 
-void UserConnection::on(Updated) throw() { 
-	fire(UserConnectionListener::Updated(), this); 
+void UserConnection::on(Updated) throw() {
+	fire(UserConnectionListener::Updated(), this);
 }
 
 void UserConnection::on(Failed, const string& aLine) throw() {
@@ -209,25 +209,25 @@ static const int64_t SEGMENT_TIME = 120*1000;
 static const int64_t MIN_CHUNK_SIZE = 64*1024;
 
 void UserConnection::updateChunkSize(int64_t leafSize, int64_t lastChunk, uint64_t ticks) {
-	
+
 	if(chunkSize == 0) {
 		chunkSize = std::max((int64_t)64*1024, std::min(lastChunk, (int64_t)1024*1024));
 		return;
 	}
-	
+
 	if(ticks <= 10) {
 		// Can't rely on such fast transfers - double
 		chunkSize *= 2;
 		return;
 	}
-	
+
 	double lastSpeed = (1000. * lastChunk) / ticks;
 
 	int64_t targetSize = chunkSize;
 
 	// How long current chunk size would take with the last speed...
 	double msecs = 1000 * targetSize / lastSpeed;
-	
+
 	if(msecs < SEGMENT_TIME / 4) {
 		targetSize *= 2;
 	} else if(msecs < SEGMENT_TIME / 1.25) {
@@ -239,7 +239,7 @@ void UserConnection::updateChunkSize(int64_t leafSize, int64_t lastChunk, uint64
 	} else {
 		targetSize = std::max(MIN_CHUNK_SIZE, targetSize / 2);
 	}
-	
+
 	chunkSize = targetSize;
 }
 

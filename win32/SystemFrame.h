@@ -32,13 +32,13 @@ public:
 		STATUS_STATUS,
 		STATUS_LAST
 	};
-	
+
 private:
 	friend class StaticFrame<SystemFrame>;
 	friend class MDIChildFrame<SystemFrame>;
-	
+
 	TextBoxPtr log;
-	
+
 	SystemFrame(dwt::TabView* mdiParent);
 	virtual ~SystemFrame();
 

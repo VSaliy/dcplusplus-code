@@ -30,15 +30,15 @@ public:
 		STATUS_STATUS,
 		STATUS_LAST
 	};
-	
+
 private:
 	friend class MDIChildFrame<TextFrame>;
 
 	TextBoxPtr pad;
-	
+
 	virtual ~TextFrame() { }
-	
+
 	void layout();
 };
 
-#endif 
+#endif

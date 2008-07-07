@@ -28,12 +28,12 @@
 
 namespace dcpp {
 
-SearchManager::SearchManager() : 
-	socket(NULL), 
-	port(0), 
-	stop(false), 
-	lastSearch(GET_TICK()) 
-{ 
+SearchManager::SearchManager() :
+	socket(NULL),
+	port(0),
+	stop(false),
+	lastSearch(GET_TICK())
+{
 
 }
 
@@ -218,7 +218,7 @@ void SearchManager::onData(const uint8_t* buf, size_t aLen, const string& remote
 		SearchResultPtr sr(new SearchResult(user, type, slots, freeSlots, size,
 			file, hubName, url, remoteIp, TTHValue(tth), Util::emptyString));
 		fire(SearchManagerListener::SR(), sr);
-		
+
 	} else if(x.compare(1, 4, "RES ") == 0 && x[x.length() - 1] == 0x0a) {
 		AdcCommand c(x.substr(0, x.length()-1));
 		if(c.getParameters().empty())

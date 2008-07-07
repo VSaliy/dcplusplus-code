@@ -48,7 +48,7 @@ public:
 		pos = pos_;
 		resizeChildren();
 	}
-	
+
 	dwt::Widget* getFirst() {
 		return children.first;
 	}
@@ -56,7 +56,7 @@ public:
 		children.first = child;
 		resizeChildren();
 	}
-	
+
 	dwt::Widget* getSecond() {
 		return children.second;
 	}
@@ -71,7 +71,7 @@ public:
 		rect = r;
 		resizeChildren();
 	}
-	
+
 protected:
 	// Constructor Taking pointer to parent
 	explicit WidgetPaned( dwt::Widget * parent );
@@ -83,16 +83,16 @@ protected:
 
 private:
 	std::pair<dwt::Widget*, dwt::Widget*> children;
-	
+
 	double pos;
-	
+
 	bool moving;
-	
+
 	dwt::Rectangle rect;
-	
+
 	dwt::Rectangle getSplitterRect();
 	void resizeChildren();
-	
+
 	void handleLButtonDown(const dwt::MouseEvent&) {
 		::SetCapture( this->handle() );
 		moving = true;
@@ -111,13 +111,13 @@ private:
 		::ReleaseCapture();
 		moving = false;
 	}
-	
-	static dwt::WindowClass windowClass; 
+
+	static dwt::WindowClass windowClass;
 };
 
 template<bool horizontal>
-dwt::WindowClass WidgetPaned<horizontal>::windowClass(horizontal ? _T("WidgetPanedH") : _T("WidgetPanedV"), 
-	&WidgetPaned<horizontal>::wndProc, NULL, ( HBRUSH )( COLOR_3DFACE + 1 ), 
+dwt::WindowClass WidgetPaned<horizontal>::windowClass(horizontal ? _T("WidgetPanedH") : _T("WidgetPanedV"),
+	&WidgetPaned<horizontal>::wndProc, NULL, ( HBRUSH )( COLOR_3DFACE + 1 ),
 	dwt::IconPtr(), dwt::IconPtr(), LoadCursor( 0, horizontal ? IDC_SIZENS : IDC_SIZEWE ));
 
 template< bool horizontal >
@@ -141,7 +141,7 @@ void WidgetPaned< horizontal >::create( const Seed & cs )
 {
 	pos = cs.pos;
 	BaseType::create(cs);
-	
+
 	onLeftMouseDown(std::tr1::bind(&ThisType::handleLButtonDown, this, _1));
 	onMouseMove(std::tr1::bind(&ThisType::handleMouseMove, this, _1));
 	onLeftMouseUp(std::tr1::bind(&ThisType::handleLButtonUp, this, _1));
@@ -156,7 +156,7 @@ dwt::Rectangle WidgetPaned< horizontal >::getSplitterRect()
 	} else if(pos > 1.0) {
 		pos = 1.0;
 	}
-	
+
 	dwt::Rectangle rc;
 	if(!children.first || !children.second) {
 		return rc;
@@ -174,7 +174,7 @@ dwt::Rectangle WidgetPaned< horizontal >::getSplitterRect()
 	} else {
 		rc.size.y = rect.size.y;
 		rc.pos.y = rect.pos.y;
-	
+
 		int cwidth = rect.width();
 		int swidth = ::GetSystemMetrics(SM_CXEDGE) + 2;
 		int realpos = static_cast<int>(pos * cwidth);
@@ -197,14 +197,14 @@ void WidgetPaned< horizontal >::resizeChildren( )
 		::MoveWindow(children.first->handle(), rect.x(), rect.y(), rect.width(), rect.height(), TRUE);
 		return;
 	}
-	
+
 	dwt::Rectangle left = rect, right = rect;
 	dwt::Rectangle rcSplit = getSplitterRect();
-	
+
 	if(horizontal) {
 		left.size.y = rcSplit.y() - left.y();
 		right.pos.y = rcSplit.y() + rcSplit.height();
-		right.size.y = rect.height() - rcSplit.height() - left.height();		
+		right.size.y = rect.height() - rcSplit.height() - left.height();
 	} else {
 		left.size.x = rcSplit.x() - left.x();
 		right.pos.x = rcSplit.x() + rcSplit.width();

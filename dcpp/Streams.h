@@ -47,7 +47,7 @@ public:
 	 * might not need it...
 	 */
 	virtual size_t flush() throw(Exception) = 0;
-	
+
 	/**
 	 * @return True if stream is at expected end
 	 */
@@ -142,11 +142,11 @@ public:
 		maxBytes -= len;
 		return s->write(buf, len);
 	}
-	
+
 	virtual size_t flush() throw(Exception) {
 		return s->flush();
 	}
-	
+
 	virtual bool eof() { return maxBytes == 0; }
 private:
 	OutputStream* s;

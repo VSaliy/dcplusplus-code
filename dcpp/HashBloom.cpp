@@ -53,15 +53,15 @@ size_t HashBloom::pos(const TTHValue& tth, size_t n) const {
 	if((n+1)*h > TTHValue::BITS) {
 		return 0;
 	}
-	
+
 	uint64_t x = 0;
-	
+
 	size_t start = n * h;
 	for(size_t i = 0; i < h; ++i) {
 		size_t bit = start + i;
 		size_t byte = bit / 8;
 		size_t pos = bit % 8;
-		
+
 		if(tth.data[byte] & (1 << pos)) {
 			x |= (1 << i);
 		}

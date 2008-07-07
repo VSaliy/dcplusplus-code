@@ -26,13 +26,13 @@
 
 namespace dcpp {
 
-Upload::Upload(UserConnection& conn, const string& path, const TTHValue& tth) : Transfer(conn, path, tth), stream(0) { 
+Upload::Upload(UserConnection& conn, const string& path, const TTHValue& tth) : Transfer(conn, path, tth), stream(0) {
 	conn.setUpload(this);
 }
 
-Upload::~Upload() { 
+Upload::~Upload() {
 	getUserConnection().setUpload(0);
-	delete stream; 
+	delete stream;
 }
 
 void Upload::getParams(const UserConnection& aSource, StringMap& params) {

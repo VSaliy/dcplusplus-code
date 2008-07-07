@@ -9,27 +9,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -48,7 +48,7 @@ template<typename Policy>
 class MessageMap : public Policy {
 protected:
 	typedef MessageMap<Policy> PolicyType;
-	
+
 	MessageMap(Widget* parent) : Policy(parent) { }
 
 	static LRESULT CALLBACK wndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -58,12 +58,12 @@ protected:
 		// We dispatch certain messages back to the child widget, so that their
 		// potential callbacks will die along with the child when the time comes
 		HWND handler = getHandler(hwnd, uMsg, wParam, lParam);
-		
+
 		MSG msg = { hwnd, uMsg, wParam, lParam };
-		
+
 		// Try to get the this pointer
 		Widget* w = hwnd_cast<Widget*>(handler);
-		
+
 		if(w) {
 #ifdef WINCE
 			if(uMsg == WM_DESTROY) {
@@ -73,29 +73,29 @@ protected:
 				w->kill();
 				return Policy::returnDestroyed(hwnd, uMsg, wParam, lParam);
 			}
-		
+
 			LRESULT res = 0;
 			if(w->tryFire(msg, res)) {
 				return Policy::returnHandled(res, hwnd, uMsg, wParam, lParam);
 			}
 		}
 		PolicyType* p;
-		
+
 		if(handler != hwnd) {
 			p = hwnd_cast<PolicyType*>(hwnd);
 		} else {
 			p = dynamic_cast<PolicyType*>(w);
 		}
-		
+
 		if(!p) {
 			return Policy::returnUnknown(hwnd, uMsg, wParam, lParam);
 		}
-		
+
 		return p->returnUnhandled(hwnd, uMsg, wParam, lParam);
 	}
 private:
 	friend class Policies::Subclassed;
-	
+
 	static HWND getHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		HWND handler;
 		// Check who should handle the message - parent or child
@@ -136,12 +136,12 @@ class ModelessDialog
 {
 protected:
 	ModelessDialog(Widget* parent) : Widget(parent) { }
-	
+
 	static LRESULT returnDestroyed(HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar) {
 		return FALSE;
 	}
-	
-	static LRESULT returnHandled(LRESULT, HWND, UINT, WPARAM, LPARAM) 
+
+	static LRESULT returnHandled(LRESULT, HWND, UINT, WPARAM, LPARAM)
 	{
 		// A dialog Widget should return TRUE to the windows internal dialog
 		// message handler procedure to tell windows that it have handled the
@@ -153,7 +153,7 @@ protected:
 	static LRESULT returnUnknown(HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar) {
 		return returnUnhandled(hWnd, msg, wPar, lPar);
 	}
-	
+
 	static LRESULT returnUnhandled( HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar )
 	{
 		// As opposed to a "normal" Widget the dialog Widget should NOT return
@@ -165,7 +165,7 @@ protected:
 			return TRUE;
 		return FALSE;
 	}
-	
+
 	static void initPolicy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		if ( uMsg == WM_INITDIALOG )
 		{
@@ -182,7 +182,7 @@ class ModalDialog
 {
 protected:
 	ModalDialog(Widget* parent) : ModelessDialog(parent) { }
-	
+
 	virtual void kill() {
 		// Modal dialogs are stack allocated, so no delete
 	}
@@ -198,11 +198,11 @@ class Normal
 {
 protected:
 	Normal(Widget* parent) : Widget(parent) { }
-	
+
 	static LRESULT returnDestroyed(HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar) {
 		return ::DefWindowProc( hWnd, msg, wPar, lPar );
 	}
-	
+
 	static LRESULT returnHandled( LRESULT hres, HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar ) {
 		return hres;
 	}
@@ -230,27 +230,27 @@ protected:
 class Subclassed : public Normal {
 protected:
 	Subclassed(Widget* parent) : Normal(parent), oldProc(0) { }
-	
+
 	LRESULT returnUnhandled(HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar) {
 		if(oldProc) {
 			return ::CallWindowProc(oldProc, hWnd, msg, wPar, lPar);
 		}
 		return Normal::returnUnhandled(hWnd, msg, wPar, lPar);
 	}
-	
+
 	HWND create(const Normal::Seed& seed) {
 		HWND hWnd = Normal::create(seed);
 		setHandle(hWnd);
 		return hWnd;
 	}
-	
+
 	virtual void setHandle(HWND hWnd) {
 		Normal::setHandle(hWnd);
 		oldProc = reinterpret_cast< WNDPROC >( ::SetWindowLongPtr( hWnd, GWL_WNDPROC, ( LONG_PTR ) &MessageMap<Subclassed>::wndProc ) );
 	}
 	using Widget::attach;
 private:
-	WNDPROC oldProc;	
+	WNDPROC oldProc;
 };
 
 #ifndef WINCE // MDI Widgets doesn't exist on CE
@@ -260,11 +260,11 @@ class MDIChild
 {
 protected:
 	MDIChild(Widget* parent) : Widget(parent) { }
-	
+
 	static LRESULT returnDestroyed(HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar) {
 		return ::DefMDIChildProc( hWnd, msg, wPar, lPar );
 	}
-	
+
 	static LRESULT returnHandled(HRESULT hres, HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar )
 	{
 		switch ( msg )
@@ -296,7 +296,7 @@ protected:
 			// extracting the this pointer and stuffing it into the Window with SetProp
 			CREATESTRUCT * cs = reinterpret_cast< CREATESTRUCT * >( lParam );
 			MDICREATESTRUCT * mcs = reinterpret_cast< MDICREATESTRUCT*>(cs->lpCreateParams);
-			
+
 			MDIChild* This = reinterpret_cast<MDIChild*>(mcs->lParam);
 			This->setHandle(hWnd);
 		}
@@ -307,7 +307,7 @@ template<typename WidgetType>
 class MDIFrame : public Normal {
 protected:
 	MDIFrame(Widget* parent) : Normal(parent) { }
-	
+
 	LRESULT returnUnhandled( HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar ) {
 		WidgetType* This = static_cast<WidgetType*>(this);
 		if(This->getMDIParent()) {
@@ -315,7 +315,7 @@ protected:
 		}
 		return Normal::returnUnhandled(hWnd, msg, wPar, lPar);
 	}
-	
+
 };
 #endif //! WINCE
 

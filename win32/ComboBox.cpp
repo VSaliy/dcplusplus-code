@@ -20,7 +20,7 @@
 
 #include "ComboBox.h"
 
-ComboBox::Seed::Seed() : 
+ComboBox::Seed::Seed() :
 	BaseType::Seed()
 {
 }

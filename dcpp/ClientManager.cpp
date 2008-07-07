@@ -481,30 +481,30 @@ void ClientManager::updateNick(const OnlineUser& user) throw() {
 	if(nicks.find(user.getUser()->getCID()) != nicks.end()) {
 		return;
 	}
-	
+
 	if(!user.getIdentity().getNick().empty()) {
 		nicks.insert(std::make_pair(user.getUser()->getCID(), user.getIdentity().getNick()));
 	}
 }
 
-void ClientManager::on(Connected, Client* c) throw() { 
-	fire(ClientManagerListener::ClientConnected(), c); 
+void ClientManager::on(Connected, Client* c) throw() {
+	fire(ClientManagerListener::ClientConnected(), c);
 }
 
 void ClientManager::on(UserUpdated, Client*, const OnlineUser& user) throw() {
 	updateNick(user);
-	fire(ClientManagerListener::UserUpdated(), user); 
+	fire(ClientManagerListener::UserUpdated(), user);
 }
 
 void ClientManager::on(UsersUpdated, Client* c, const OnlineUserList& l) throw() {
 	for(OnlineUserList::const_iterator i = l.begin(), iend = l.end(); i != iend; ++i) {
 		updateNick(*(*i));
-		fire(ClientManagerListener::UserUpdated(), *(*i)); 
+		fire(ClientManagerListener::UserUpdated(), *(*i));
 	}
 }
 
-void ClientManager::on(HubUpdated, Client* c) throw() { 
-	fire(ClientManagerListener::ClientUpdated(), c); 
+void ClientManager::on(HubUpdated, Client* c) throw() {
+	fire(ClientManagerListener::ClientUpdated(), c);
 }
 
 void ClientManager::on(Failed, Client* client, const string&) throw() {

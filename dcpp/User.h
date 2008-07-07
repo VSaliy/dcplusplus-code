@@ -100,7 +100,7 @@ public:
 		CT_OWNER = 16,
 		CT_HUB = 32
 	};
-	
+
 	Identity() : sid(0) { }
 	Identity(const UserPtr& ptr, uint32_t aSID) : user(ptr), sid(aSID) { }
 	Identity(const Identity& rhs) : Flags(), sid(0) { *this = rhs; } // Use operator= since we have to lock before reading...
@@ -135,7 +135,7 @@ public:
 	void set(const char* name, const string& val);
 	bool isSet(const char* name) const;
 	string getSIDString() const { return string((const char*)&sid, 4); }
-	
+
 	bool isClientType(ClientType ct) const;
 
 	void getParams(StringMap& map, const string& prefix, bool compatibility) const;

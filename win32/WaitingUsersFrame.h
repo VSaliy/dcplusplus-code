@@ -26,9 +26,9 @@
 #include <dcpp/UploadManagerListener.h>
 #include "resource.h"
 
-class WaitingUsersFrame : 
-	public StaticFrame<WaitingUsersFrame>, 
-	public UploadManagerListener 
+class WaitingUsersFrame :
+	public StaticFrame<WaitingUsersFrame>,
+	public UploadManagerListener
 {
 	typedef StaticFrame<WaitingUsersFrame> BaseType;
 public:

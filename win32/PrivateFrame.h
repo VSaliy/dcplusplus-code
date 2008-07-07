@@ -25,8 +25,8 @@
 #include <dcpp/ClientManagerListener.h>
 #include <dcpp/User.h>
 
-class PrivateFrame : 
-	public MDIChildFrame<PrivateFrame>, 
+class PrivateFrame :
+	public MDIChildFrame<PrivateFrame>,
 	private ClientManagerListener,
 	public AspectUserCommand<PrivateFrame>
 {
@@ -36,7 +36,7 @@ public:
 		STATUS_STATUS,
 		STATUS_LAST
 	};
-	
+
 	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage);
 	static void openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo, const tstring& aMessage = Util::emptyStringT);
 	static bool isOpen(const UserPtr& u) { return frames.find(u) != frames.end(); }
@@ -48,7 +48,7 @@ public:
 private:
 	friend class MDIChildFrame<PrivateFrame>;
 	friend class AspectUserCommand<PrivateFrame>;
-	
+
 	enum Tasks { USER_UPDATED
 	};
 
@@ -64,14 +64,14 @@ private:
 
 	PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activte);
 	virtual ~PrivateFrame();
-	
+
 	void layout();
 	LRESULT handleSpeaker(WPARAM wParam);
 	bool preClosing();
 	bool handleTabContextMenu(const dwt::ScreenCoordinate& pt);
 	void handleGetList();
 	void handleMatchQueue();
-	
+
 	bool handleChar(int c);
 	bool handleKeyDown(int c);
 	bool enter();
@@ -81,7 +81,7 @@ private:
 	void addChat(const tstring& aLine, bool log = true);
 	void addStatus(const tstring& aLine, bool log = true);
 	void updateTitle();
-	
+
 	void runUserCommand(const UserCommand& uc);
 
 	// ClientManagerListener

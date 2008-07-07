@@ -46,7 +46,7 @@ void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, 
 	}
 	if(!msg.empty())
 		pf->sendMessage(msg);
-	
+
 }
 
 void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage) {
@@ -80,7 +80,7 @@ void PrivateFrame::closeAllOffline() {
 	}
 }
 
-PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate) : 
+PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate) :
 	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
 	chat(0),
 	message(0),
@@ -95,7 +95,7 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 		message->onKeyDown(std::tr1::bind(&PrivateFrame::handleKeyDown, this, _1));
 		message->onChar(std::tr1::bind(&PrivateFrame::handleChar, this, _1));
 	}
-	
+
 	{
 		TextBox::Seed cs = WinUtil::Seeds::textBox;
 		cs.style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
@@ -104,22 +104,22 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 		chat->setTextLimit(0);
 		addWidget(chat);
 	}
-	
+
 	initStatus();
 	status->onDblClicked(std::tr1::bind(&PrivateFrame::openLog, this));
 
 	updateTitle();
 	layout();
-	
+
 	readLog();
-	
+
 	onSpeaker(std::tr1::bind(&PrivateFrame::handleSpeaker, this, _1));
 	onTabContextMenu(std::tr1::bind(&PrivateFrame::handleTabContextMenu, this, _1));
 
 	ClientManager::getInstance()->addListener(this);
-	
+
 	speak(USER_UPDATED);
-	
+
 	frames.insert(std::make_pair(replyTo, this));
 }
 
@@ -228,15 +228,15 @@ void PrivateFrame::layout() {
 	bool scroll = chat->scrollIsAtEnd();
 
 	const int border = 2;
-	
-	dwt::Rectangle r(getClientAreaSize()); 
+
+	dwt::Rectangle r(getClientAreaSize());
 
 	layoutStatus(r);
-	
+
 	int ymessage = message->getTextSize(_T("A")).y + 10;
 	dwt::Rectangle rm(0, r.size.y - ymessage, r.width() , ymessage);
 	message->setBounds(rm);
-	
+
 	r.size.y -= rm.size.y + border;
 	chat->setBounds(r);
 
@@ -263,7 +263,7 @@ bool PrivateFrame::enter() {
 	if(isShiftPressed() || isControlPressed() || isAltPressed()) {
 		return false;
 	}
-	
+
 	tstring s = message->getText();
 	if(s.empty()) {
 		::MessageBeep(MB_ICONEXCLAMATION);
@@ -308,7 +308,7 @@ bool PrivateFrame::enter() {
 	} else {
 		send = true;
 	}
-	
+
 	if(send) {
 		if(replyTo->isOnline()) {
 			sendMessage(s);
@@ -321,7 +321,7 @@ bool PrivateFrame::enter() {
 		message->setText(Util::emptyStringT);
 	}
 	return true;
-	
+
 }
 
 void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
@@ -334,7 +334,7 @@ LRESULT PrivateFrame::handleSpeaker(WPARAM wParam) {
 	return 0;
 }
 
-bool PrivateFrame::handleKeyDown(int c) {	
+bool PrivateFrame::handleKeyDown(int c) {
 	if(c == VK_RETURN && enter()) {
 		return true;
 	} else if(c == VK_PRIOR) { // page up
@@ -365,7 +365,7 @@ bool PrivateFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	menu->setTitle(getParent()->getTabText(this));
-	
+
 	menu->appendItem(T_("&Get file list"), std::tr1::bind(&PrivateFrame::handleGetList, this));
 	menu->appendItem(T_("&Match queue"), std::tr1::bind(&PrivateFrame::handleMatchQueue, this));
 	menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), replyTo));

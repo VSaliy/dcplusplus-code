@@ -15,20 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #include "stdafx.h"
 
 #include "LineDlg.h"
 
-LineDlg::LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& initial_, bool password_) : 
-	WidgetFactory<dwt::ModalDialog>(parent), 
-	title(title_), 
-	desc(desc_), 
-	initial(initial_), 
-	password(password_) 
+LineDlg::LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& initial_, bool password_) :
+	WidgetFactory<dwt::ModalDialog>(parent),
+	title(title_),
+	desc(desc_),
+	initial(initial_),
+	password(password_)
 {
 	onInitDialog(std::tr1::bind(&LineDlg::initDialog, this));
-	onFocus(std::tr1::bind(&LineDlg::focus, this));	
+	onFocus(std::tr1::bind(&LineDlg::focus, this));
 }
 
 bool LineDlg::initDialog() {
@@ -43,11 +43,11 @@ bool LineDlg::initDialog() {
 	if(password) {
 		line->setPassword();
 	}
-	
+
 	setText(title);
 
 	centerWindow();
-	
+
 	return false;
 }
 
@@ -57,7 +57,7 @@ void LineDlg::focus() {
 
 bool LineDlg::closing() {
 	endDialog(IDCANCEL);
-	return false;		
+	return false;
 }
 
 void LineDlg::okClicked() {

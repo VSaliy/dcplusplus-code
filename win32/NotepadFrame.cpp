@@ -23,9 +23,9 @@
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
 
-NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) : 
+NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("Notepad"), IDH_NOTEPAD, IDR_NOTEPAD),
-	pad(0) 
+	pad(0)
 {
 	{
 		TextBox::Seed cs = WinUtil::Seeds::textBox;
@@ -33,16 +33,16 @@ NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) :
 		pad = addChild(cs);
 		addWidget(pad);
 	}
-	
+
 	initStatus();
-	
+
 	pad->setTextLimit(0);
 	try {
 		pad->setText(Text::toT(File(Util::getNotepadFile(), File::READ, File::OPEN).read()));
 	} catch(const FileException& e) {
-		// Ignore		
+		// Ignore
 	}
-	
+
 	pad->setModify(false);
 
 	layout();
@@ -59,7 +59,7 @@ bool NotepadFrame::preClosing() {
 			File(Util::getNotepadFile(), File::WRITE, File::CREATE | File::TRUNCATE).write(Text::fromT(pad->getText()));
 		} catch(const FileException& e) {
 			dcdebug("Writing failed: %s\n", e.getError().c_str());
-			///@todo Notify user			
+			///@todo Notify user
 		}
 	}
 	return true;

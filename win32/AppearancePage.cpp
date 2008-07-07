@@ -84,9 +84,9 @@ AppearancePage::AppearancePage(dwt::Widget* parent) : PropPage(parent), language
 	StringList dirs = File::findFiles(Util::getLocalePath(), "*");
 
 	TStringList langs;
-	
+
 	langs.push_back(_T("en"));
-	
+
 	for(StringList::const_iterator i = dirs.begin(); i != dirs.end(); ++i) {
 		string dir = *i + "LC_MESSAGES" PATH_SEPARATOR_STR;
 		StringList files = File::findFiles(dir, "*.mo");
@@ -96,21 +96,21 @@ AppearancePage::AppearancePage(dwt::Widget* parent) : PropPage(parent), language
 		// TODO Convert to real language name?
 		langs.push_back(Text::toT(Util::getLastDir(*i)));
 	}
-	
+
 	std::sort(langs.begin(), langs.end(), noCaseStringLess());
-	
+
 	languages->addValue(T_("Default"));
-	
+
 	int selected = 0, j = 1;
 	const tstring cur = Text::toT(SETTING(LANGUAGE));
 	for(TStringList::const_iterator i = langs.begin(); i != langs.end(); ++i, ++j) {
 		languages->addValue(*i);
-		
+
 		if(selected == 0 && (*i == cur || (*i == _T("en") && cur == _T("C")))) {
 			selected = j;
 		}
 	}
-	
+
 	languages->setSelected(selected);
 
 	attachChild<TextBox>(IDC_DEFAULT_AWAY_MESSAGE);
@@ -126,7 +126,7 @@ void AppearancePage::write()
 	PropPage::write(listItems, options);
 
 	tstring lang = languages->getText();
-	
+
 	if(lang == T_("Default")) {
 		SettingsManager::getInstance()->set(SettingsManager::LANGUAGE, "");
 	} else if(lang == _T("en")) {

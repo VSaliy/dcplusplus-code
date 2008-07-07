@@ -35,10 +35,10 @@
 
 #include "UserInfoBase.h"
 
-class TransferView : 
-	public WidgetFactory<dwt::Container>, 
-	private DownloadManagerListener, 
-	private UploadManagerListener, 
+class TransferView :
+	public WidgetFactory<dwt::Container>,
+	private DownloadManagerListener,
+	private UploadManagerListener,
 	private ConnectionManagerListener,
 	private QueueManagerListener,
 	public AspectSpeaker<TransferView>,
@@ -51,10 +51,10 @@ public:
 	void prepareClose();
 
 	virtual ~TransferView();
-	
+
 private:
 	friend class AspectUserInfo<TransferView>;
-	
+
 	enum {
 		DOWNLOAD_COLUMN_FIRST,
 		DOWNLOAD_COLUMN_FILE = DOWNLOAD_COLUMN_FIRST,
@@ -66,7 +66,7 @@ private:
 		DOWNLOAD_COLUMN_SIZE,
 		DOWNLOAD_COLUMN_LAST
 	};
-	
+
 	enum {
 		DOWNLOADS_ADD_USER,
 		DOWNLOADS_TICK,
@@ -97,7 +97,7 @@ private:
 	};
 
 	struct UpdateInfo;
-	
+
 	class ConnectionInfo : public UserInfoBase {
 	public:
 		enum Status {
@@ -109,9 +109,9 @@ private:
 
 		bool download;
 		bool transferFailed;
-		
+
 		Status status;
-		
+
 		int64_t actual;
 		int64_t lastActual;
 		int64_t transfered;
@@ -120,7 +120,7 @@ private:
 		int64_t speed;
 		int64_t chunk;
 		int64_t chunkPos;
-		
+
 		tstring columns[CONNECTION_COLUMN_LAST];
 		void update(const UpdateInfo& ui);
 
@@ -158,11 +158,11 @@ private:
 		UserPtr user;
 		bool download;
 		bool transferFailed;
-		
+
 		void setStatus(ConnectionInfo::Status aStatus) { status = aStatus; updateMask |= MASK_STATUS; }
 		ConnectionInfo::Status status;
 		void setTransfered(int64_t aTransfered, int64_t aActual) {
-			transfered = aTransfered; actual = aActual; updateMask |= MASK_TRANSFERED; 
+			transfered = aTransfered; actual = aActual; updateMask |= MASK_TRANSFERED;
 		}
 		int64_t actual;
 		int64_t transfered;
@@ -173,7 +173,7 @@ private:
 		void setChunk(int64_t aChunkPos, int64_t aChunk) { chunkPos = aChunkPos; chunk = aChunk; updateMask |= MASK_CHUNK; }
 		int64_t chunkPos;
 		int64_t chunk;
-		
+
 		void setIP(const tstring& aIp) { ip = aIp; updateMask |= MASK_IP; }
 		tstring ip;
 		void setCipher(const tstring& aCipher) { cipher = aCipher; updateMask |= MASK_CIPHER; }
@@ -182,20 +182,20 @@ private:
 
 	struct TickInfo : public Task {
 		TickInfo(const string& path_) : path(path_), done(0), bps(0) { }
-		
+
 		string path;
 		int64_t done;
 		double bps;
 	};
 
-	
+
 	static int connectionIndexes[CONNECTION_COLUMN_LAST];
 	static int connectionSizes[CONNECTION_COLUMN_LAST];
-	
+
 	class DownloadInfo {
 	public:
 		DownloadInfo(const string& filename, int64_t size, const TTHValue& tth);
-		
+
 		const tstring& getText(int col) const {
 			return columns[col];
 		}
@@ -212,10 +212,10 @@ private:
 			default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
 			}
 		}
-		
+
 		void update();
 		void update(const TickInfo& ti);
-		
+
 		int64_t timeleft() { return bps == 0 ? 0 : (size - done) / bps; }
 		string path;
 		int64_t done;
@@ -223,10 +223,10 @@ private:
 		double bps;
 		int users;
 		TTHValue tth;
-		
+
 		tstring columns[DOWNLOAD_COLUMN_LAST];
 	};
-	
+
 
 	static int downloadIndexes[DOWNLOAD_COLUMN_LAST];
 	static int downloadSizes[DOWNLOAD_COLUMN_LAST];
@@ -235,14 +235,14 @@ private:
 	typedef WidgetConnections* WidgetConnectionsPtr;
 	WidgetConnectionsPtr connections;
 	ContainerPtr connectionsWindow;
-	
+
 	typedef TypedTable<DownloadInfo> WidgetDownloads;
 	typedef WidgetDownloads* WidgetDownloadsPtr;
 	WidgetDownloadsPtr downloads;
 	ContainerPtr downloadsWindow;
 
 	TabViewPtr tabs;
-	
+
 	TabViewPtr mdi;
 	dwt::ImageListPtr arrows;
 
@@ -262,17 +262,17 @@ private:
 	void runUserCommand(const UserCommand& uc);
 	bool handleKeyDown(int c);
 	void handleDblClicked();
-	
+
 	MenuPtr makeContextMenu(ConnectionInfo* ii);
 
 	WidgetConnectionsPtr getUserList() { return connections; }
-	
+
 	int find(const string& path);
-	
+
 	void layout();
 
 	using AspectSpeaker<TransferView>::speak;
-	
+
 	void speak(int type, Task* ui) { tasks.add(type, ui); speak(); }
 
 	virtual void on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) throw();
@@ -295,7 +295,7 @@ private:
 	void onTransferTick(Transfer* aTransfer, bool isDownload);
 	void onTransferComplete(Transfer* aTransfer, bool isDownload);
 	void starting(UpdateInfo* ui, Transfer* t);
-	
+
 	LRESULT handleCustomDraw(WPARAM wParam, LPARAM lParam);
 };
 

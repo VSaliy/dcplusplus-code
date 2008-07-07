@@ -81,7 +81,7 @@ bool FavHubProperties::handleInitDialog() {
 	name->setText(Text::toT(entry->getName()));
 	name->setFocus();
 	name->setSelection();
-	
+
 	address = attachChild<TextBox>(IDC_HUBADDR);
 	address->setText(Text::toT(entry->getServer()));
 
@@ -109,7 +109,7 @@ bool FavHubProperties::handleInitDialog() {
 	button->onClicked(std::tr1::bind(&FavHubProperties::endDialog, this, IDCANCEL));
 
 	centerWindow();
-	
+
 	return false;
 }
 

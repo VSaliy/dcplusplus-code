@@ -677,7 +677,7 @@ string fixedftime(const string& format, struct tm* t) {
 		tmp[1] = '#';
 		tmp[2] = codes[i];
 		strftime(&buf[0], BUF_SIZE-1, tmp, t);
-		sm[tmp] = &buf[0]; 
+		sm[tmp] = &buf[0];
 	}
 
 	for(StringMapIter i = sm.begin(); i != sm.end(); ++i) {
@@ -702,7 +702,7 @@ string Util::formatTime(const string &msg, const time_t t) {
 		tstring buf(bufsize, 0);
 
 		buf.resize(_tcsftime(&buf[0], buf.size()-1, Text::toT(msg).c_str(), loc));
-		
+
 		if(buf.empty()) {
 			return fixedftime(msg, loc);
 		}
@@ -714,7 +714,7 @@ string Util::formatTime(const string &msg, const time_t t) {
 		string buf(bufsize, 0);
 
 		buf.resize(strftime(&buf[0], bufsize-1, msg.c_str(), loc));
-		
+
 		while(buf.empty()) {
 			bufsize+=64;
 			buf.resize(bufsize);

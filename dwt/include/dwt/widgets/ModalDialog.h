@@ -9,27 +9,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -45,22 +45,22 @@ namespace dwt {
 /** \ingroup WidgetControls
   * \image html dialog.PNG
   * Class for creating a Modal Dialog based optionally on an embedded resource. <br>
-  * Use createDialog( unsigned resourceId ) if you define the dialog in a .rc file, 
+  * Use createDialog( unsigned resourceId ) if you define the dialog in a .rc file,
   * and use createDialog() if you define the dialog completly in C++ source. <br>
   * Use the createDialog function to actually create a dialog. <br>
-  * Class is a public superclass of Frame and therefore can use all 
+  * Class is a public superclass of Frame and therefore can use all
   * features of Frame. <br>
   * Note! <br>
   * Usually you create a ModalDialog on the stack. <br>
-  * This Widget does NOT have selfdestructive semantics and should normally be 
+  * This Widget does NOT have selfdestructive semantics and should normally be
   * constructed on the stack! <br>
   * The createDialog function does NOT return before the Widget is destroyed! <br>
-  * Thus, you must declare the "onInitDialog" event handler before calling the 
-  * "createDialog()", either in the contructor, or in some intialization routine 
-  * called before createDialog();   
+  * Thus, you must declare the "onInitDialog" event handler before calling the
+  * "createDialog()", either in the contructor, or in some intialization routine
+  * called before createDialog();
   */
 
-class ModalDialog : 
+class ModalDialog :
 	public Frame< Policies::ModalDialog >,
 	public AspectDialog<ModalDialog >
 {
@@ -68,7 +68,7 @@ class ModalDialog :
 	struct Dispatcher
 	{
 		typedef std::tr1::function<bool ()> F;
-		
+
 		Dispatcher(const F& f_) : f(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
@@ -80,7 +80,7 @@ class ModalDialog :
 	};
 
 public:
-	
+
 	/// Class type
 	typedef ModalDialog ThisType;
 
@@ -93,15 +93,15 @@ public:
 	/** This version creates a window from a Dialog Resource ID. <br>
 	  * To be called by the invoker of the dialog. <br>
 	  * The return comes from the parameter to endDialog() <br>
-	  * You must call onInitDialog( &MyDialogWidget::initDialog ); or similar either 
+	  * You must call onInitDialog( &MyDialogWidget::initDialog ); or similar either
 	  * in the constructor of your dialog or right before calling this function. <br>
-	  * And in your initDialog, you must call attachXxxx for all of the controls 
-	  * you wish to use, and set the event handlers for all controls and events you 
+	  * And in your initDialog, you must call attachXxxx for all of the controls
+	  * you wish to use, and set the event handlers for all controls and events you
 	  * wish to handle. <br>
 	  * Example : <br>
 	  * LabelPtr prompt = attachLabel( IDC_PROMPT ); <br>
 	  * prompt->onClicked( &X::myClickMethod ); <br>
-	  * ...etc... 
+	  * ...etc...
 	  */
 	virtual int createDialog( unsigned resourceId );
 
@@ -109,35 +109,35 @@ public:
 	/** This version creates a dialog window without using a Dialog Resource ID. <br>
 	  * To be called by the invoker of the dialog. <br>
 	  * The return comes from the parameter to endDialog() <br>
-	  * You must call onInitDialog( &MyModalDialogWidget::initDialog ); in the 
+	  * You must call onInitDialog( &MyModalDialogWidget::initDialog ); in the
 	  * constructor of your dialog, <br>
 	  * and in your initDialog you create the dialog's Widgets yourself. <br>
 	  * Example : <br>
 	  * LabelPtr prompt = createLabel(); <br>
 	  * prompt->setBounds( 10, 100, 100, 50 ); <br>
-	  * prompt->setText( _T("testing") ); 
+	  * prompt->setText( _T("testing") );
 	  */
 	int createDialog();
 
 	/// Ends the Modal Dialog Window started with createDialog().
 	/** Pass a return value for createDialog() and close the dialog. <br>
 	  * To be called by the dialog class when it should close. <br>
-	  * Note that the member variables of the ModalDialog class still exist, 
-	  * but not any subwindows or Control Widgets.       
+	  * Note that the member variables of the ModalDialog class still exist,
+	  * but not any subwindows or Control Widgets.
 	  */
 	void endDialog( int returnValue );
 
 	/// Dialog Init Event Handler setter
 	/** This would normally be the event handler where you attach your Widget
 	  * controls and do all the initializing etc... <br>
-	  * It's important that you declare this event handler BEFORE calling the 
-	  * createDialog function since that function doesn't actually return before the 
+	  * It's important that you declare this event handler BEFORE calling the
+	  * createDialog function since that function doesn't actually return before the
 	  * dialog is destroyed! <br>
 	  * Method signature must be bool foo(); <br>
-	  * If you return true from your Event Handler the system will NOT mess up the 
-	  * initial focus you have chosen, if you return false the system will decide 
-	  * which control to initially have focus according to the tab order of the 
-	  * controls!       
+	  * If you return true from your Event Handler the system will NOT mess up the
+	  * initial focus you have chosen, if you return false the system will decide
+	  * which control to initially have focus according to the tab order of the
+	  * controls!
 	  */
 	void onInitDialog(const Dispatcher::F& f) {
 		addCallback(
@@ -156,7 +156,7 @@ protected:
 	/** The derived pure dialog class can control the DLGTEMPLATE parameters used in
 	  * createDialog() with this protected call. <br>
 	  * The calling layer is prevented from doing so. <br>
-	  * See DLGTEMPLATE as used in ::DialogBoxIndirectParam for details. 
+	  * See DLGTEMPLATE as used in ::DialogBoxIndirectParam for details.
 	  */
 	void setDlgTemplate( DLGTEMPLATE inTemplate );
 
@@ -165,7 +165,7 @@ protected:
 		endDialog(IDCANCEL);
 		return true;
 	}
-	
+
 private:
 	DLGTEMPLATE itsDefaultDlgTemplate; // For pure modal dialogs without resource files
 };
@@ -189,7 +189,7 @@ inline ModalDialog::ModalDialog( Widget * parent )
 	itsDefaultDlgTemplate.cy = 160; // 8 vertical units are the height of one character
 	itsDefaultDlgTemplate.x = 0;
 	itsDefaultDlgTemplate.y = 0;
-	
+
 	onClosing(std::tr1::bind(&ThisType::defaultClosing, this));
 }
 

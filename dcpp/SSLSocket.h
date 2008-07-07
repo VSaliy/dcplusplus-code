@@ -52,7 +52,7 @@ public:
 	virtual bool isTrusted() const throw();
 	virtual std::string getCipherName() const throw();
 	virtual std::string getDigest() const throw();
-	
+
 private:
 	friend class CryptoManager;
 

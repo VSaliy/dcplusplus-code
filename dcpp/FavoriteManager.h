@@ -72,7 +72,7 @@ public:
 	void userUpdated(const OnlineUser& info);
 	time_t getLastSeen(const UserPtr& aUser) const;
 	std::string getUserURL(const UserPtr& aUser) const;
-	
+
 // Favorite Hubs
 	FavoriteHubEntryList& getFavoriteHubs() { return favoriteHubs; }
 

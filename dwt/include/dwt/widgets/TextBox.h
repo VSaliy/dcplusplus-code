@@ -9,27 +9,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -148,7 +148,7 @@ public:
 	void setReadOnly( bool value = true );
 
 	bool isReadOnly();
-	
+
 	/// Adds (or removes) a border surrounding the control
 	/** If you pass false you REMOVE the border of the control ( if there is on )
 	  * <br>
@@ -160,24 +160,24 @@ public:
 	/** Although this prevents user from entering more maxChars, Paste can overrun the limit.
 	  */
 	void setTextLimit( int maxChars );
-	 
+	
 	/// Returns the maximum number of characters that can be entered.
 	/** Note that the maxChars returned will vary by OS if left unset.
 	  */
 	int getTextLimit() const ;
 
 	int lineIndex(int l = -1);
-	
+
 	int lineFromChar(int c = -1);
-	
+
 	int lineLength(int c);
-	
+
 	void setModify(bool modify = false);
-	
+
 	bool getModify();
 
 	ScreenCoordinate getContextMenuPos();
-	
+
 protected:
 	// Constructor Taking pointer to parent
 	explicit TextBoxBase( dwt::Widget * parent );
@@ -193,15 +193,15 @@ private:
 
 };
 
-class TextBox : 
-	public TextBoxBase 
+class TextBox :
+	public TextBoxBase
 {
 	typedef TextBoxBase BaseType;
 public:
 	typedef TextBox ThisType;
-	
+
 	typedef ThisType* ObjectType;
-	
+
 	/// Info for creation
 	/** This class contains all of the values needed to create the widget. It also
 	  * knows the type of the class whose seed values it contains. Every widget
@@ -209,13 +209,13 @@ public:
 	  */
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
-		
+
 		FontPtr font;
 
 		/// Fills with default parameters
 		Seed(const tstring& caption = tstring());
 	};
-	
+
 	/// Adds (or removes) the numbers property
 	/** If you pass false you remove this ability <br>
 	  * If you pass true or call function without arguments you force the control to
@@ -247,15 +247,15 @@ public:
 	void setLowerCase( bool value = true );
 
 	int charFromPos(const ScreenCoordinate& pt);
-	
+
 	int lineFromPos(const ScreenCoordinate& pt);
-	
+
 	int lineIndex(int line);
-	
+
 	tstring getLine(int line);
 
 	tstring textUnderCursor(const ScreenCoordinate& p);
-	
+
 	/// Actually creates the TextBox
 	/** You should call WidgetFactory::createTextBox if you instantiate class
 	  * directly. <br>
@@ -297,7 +297,7 @@ inline void TextBoxBase::replaceSelection( const tstring & txt, bool canUndo )
 inline void TextBoxBase::addText( const tstring & addtxt )
 {
 	setSelection( length() );
-	replaceSelection( addtxt ); 
+	replaceSelection( addtxt );
 }
 
 inline int TextBoxBase::findText( const tstring & txt, unsigned offset ) const
@@ -341,7 +341,7 @@ inline void TextBoxBase::setReadOnly( bool value ) {
 	this->sendMessage(EM_SETREADONLY, static_cast< WPARAM >( value ) );
 }
 
-inline bool TextBoxBase::isReadOnly( ) {	
+inline bool TextBoxBase::isReadOnly( ) {
 	return hasStyle(ES_READONLY);
 }
 
@@ -349,11 +349,11 @@ inline void TextBoxBase::setBorder( bool value ) {
 	this->Widget::addRemoveStyle( WS_BORDER, value );
 }
 
-inline void TextBoxBase::setTextLimit( int maxChars ) { 
-	this->sendMessage(EM_LIMITTEXT, static_cast< WPARAM >(maxChars) ); 
-} 
- 
-inline int TextBoxBase::getTextLimit() const { 
+inline void TextBoxBase::setTextLimit( int maxChars ) {
+	this->sendMessage(EM_LIMITTEXT, static_cast< WPARAM >(maxChars) );
+}
+
+inline int TextBoxBase::getTextLimit() const {
 	return static_cast< int >( this->sendMessage(EM_GETLIMITTEXT) );
 }
 
@@ -401,7 +401,7 @@ inline void TextBox::setUpperCase( bool value ) {
 	this->Widget::addRemoveStyle( ES_UPPERCASE, value );
 }
 
-inline int TextBox::charFromPos(const ScreenCoordinate& pt) {	
+inline int TextBox::charFromPos(const ScreenCoordinate& pt) {
 	ClientCoordinate cc(pt, this);
 	LPARAM lp = MAKELPARAM(cc.x(), cc.y());
 	return LOWORD(::SendMessage(this->handle(), EM_CHARFROMPOS, 0, lp));

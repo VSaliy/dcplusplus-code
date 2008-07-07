@@ -73,7 +73,7 @@ public:
 		Lock l(cs);
 		ExpectMap::iterator i = expectedConnections.find(aNick);
 
-		if(i == expectedConnections.end()) 
+		if(i == expectedConnections.end())
 			return make_pair(Util::emptyString, Util::emptyString);
 
 		StringPair tmp = i->second;

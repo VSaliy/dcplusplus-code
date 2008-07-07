@@ -80,7 +80,7 @@ public:
 
 	string getShareSizeString() const { return Util::toString(getShareSize()); }
 	string getShareSizeString(const string& aDir) const { return Util::toString(getShareSize(aDir)); }
-	
+
 	void getBloom(ByteVector& v, size_t k, size_t m, size_t h) const;
 
 	SearchManager::TypeModes getType(const string& fileName) const throw();
@@ -180,7 +180,7 @@ private:
 		File::Set::const_iterator findFile(const string& aFile) const { return find_if(files.begin(), files.end(), Directory::File::StringComp(aFile)); }
 
 		void merge(Directory* source);
-		
+
 		GETSET(string, name, Name);
 		GETSET(Directory*, parent, Parent);
 	private:
@@ -261,7 +261,7 @@ private:
 
 	/** Map real name to virtual name - multiple real names may be mapped to a single virtual one */
 	StringMap shares;
-	
+
 	typedef unordered_map<TTHValue, Directory::File::Set::const_iterator> HashFileMap;
 	typedef HashFileMap::iterator HashFileIter;
 
@@ -277,13 +277,13 @@ private:
 
 	void updateIndices(Directory& aDirectory);
 	void updateIndices(Directory& dir, const Directory::File::Set::iterator& i);
-	
+
 	Directory* merge(Directory* directory);
-	
+
 	void generateXmlList();
 	bool loadCache() throw();
 	DirList::const_iterator getByVirtual(const string& virtualName) const throw();
-	
+
 	string findRealRoot(const string& virtualRoot, const string& virtualLeaf) const throw(ShareException);
 
 	Directory* getDirectory(const string& fname);

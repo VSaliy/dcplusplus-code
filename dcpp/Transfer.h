@@ -37,7 +37,7 @@ public:
 		TYPE_TREE,
 		TYPE_LAST
 	};
-	
+
 	static const string names[TYPE_LAST];
 
 	static const string USER_LIST_NAME;
@@ -53,7 +53,7 @@ public:
 	void addPos(int64_t aBytes, int64_t aActual) { pos += aBytes; actual+= aActual; }
 
 	enum { MIN_SAMPLES = 15, MIN_SECS = 15 };
-	
+
 	/** Record a sample for average calculation */
 	void tick();
 
@@ -77,7 +77,7 @@ public:
 
 	UserPtr getUser();
 	const UserPtr getUser() const;
-	
+
 	const string& getPath() const { return path; }
 	const TTHValue& getTTH() const { return tth; }
 
@@ -88,13 +88,13 @@ public:
 	GETSET(Type, type, Type);
 	GETSET(uint64_t, start, Start);
 private:
-	
+
 	typedef std::pair<uint64_t, int64_t> Sample;
 	typedef deque<Sample> SampleList;
-	
+
 	SampleList samples;
 	mutable CriticalSection cs;
-	
+
 	/** The file being transferred */
 	string path;
 	/** TTH of the file being transferred */

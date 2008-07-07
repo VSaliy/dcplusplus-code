@@ -26,26 +26,26 @@ class SettingsDialog : public WidgetFactory<dwt::ModalDialog>
 {
 public:
 	SettingsDialog(dwt::Widget* parent);
-	
+
 	int run();
-	
+
 	virtual ~SettingsDialog();
-	
+
 private:
 	typedef std::vector<PropPage*> PageList;
 	PageList pages;
 	PropPage* currentPage;
-	
+
 	TreePtr pageTree;
-	
+
 	HTREEITEM addPage(const tstring& title, PropPage* page, HTREEITEM parent = TVI_ROOT);
 	void updateTitle();
 	void write();
-	
+
 	bool initDialog();
 	void handleHelp(HWND hWnd, unsigned id);
 	void handleSelectionChanged();
 	void handleOKClicked();
 };
 
-#endif 
+#endif

@@ -149,11 +149,11 @@
 
 /**
   * \page samplecode1  Hello World (small)
-   * 
+   *
    * This is a program to show the basics of SmartWin++
    *
    * \include main.cpp
-   * 
+   *
    * This program compiles into an executable of 155 KB without any extra DLLs needed.
    * Here is a screen shot of two instances running:
    *
@@ -180,7 +180,7 @@
    * This is a program to show most of the features being used together.
    *
    * \include hello.cpp
-   * 
+   *
    * This program compiles into an executable of 268 KB without any extra DLLs needed.
    *
    * \image html helloSmartWin.jpg

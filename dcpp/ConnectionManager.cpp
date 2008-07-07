@@ -164,7 +164,7 @@ void ConnectionManager::on(TimerManagerListener::Second, uint32_t aTick) throw()
 					}
 
 					bool startDown = DownloadManager::getInstance()->startDownload(prio);
-                    
+
 					if(cqi->getState() == ConnectionQueueItem::WAITING) {
 						if(startDown) {
 							cqi->setState(ConnectionQueueItem::CONNECTING);
@@ -320,7 +320,7 @@ void ConnectionManager::on(AdcCommand::SUP, UserConnection* aSource, const AdcCo
 
 	bool baseOk = false;
 	bool tigrOk = false;
-	
+
 	for(StringIterC i = cmd.getParameters().begin(); i != cmd.getParameters().end(); ++i) {
 		if(i->compare(0, 2, "AD") == 0) {
 			string feat = i->substr(2);
@@ -626,10 +626,10 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 	{
 		Lock l(cs);
 		ConnectionQueueItem::Iter i = find(downloads.begin(), downloads.end(), aSource->getUser());
-		
+
 		if(i != downloads.end()) {
 			const string& to = (*i)->getToken();
-			
+
 			// 0.698 would send an empty token in some cases...remove this bugfix at some point
 			if(to == token || token.empty()) {
 				down = true;

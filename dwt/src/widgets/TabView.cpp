@@ -5,27 +5,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -59,7 +59,7 @@ TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_) :
 		* register a new window class without these bits and
 		* implement special code that damages only the exposed
 		* area.
-		* 
+		*
 		* NOTE:  Screen readers look for the exact class name
 		* of the control in order to provide the correct kind
 		* of assistance.  Therefore, it is critical that the
@@ -72,11 +72,11 @@ TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_) :
 		*/
 		WNDCLASSEX cls = { sizeof(WNDCLASSEX) };
 		::GetClassInfoEx(NULL, WC_TABCONTROL, &cls);
-		
+
 		cls.lpszClassName = WC_TABCONTROL;
 		cls.hInstance = ::GetModuleHandle(NULL);
 		cls.style &= ~(CS_HREDRAW | CS_VREDRAW | CS_GLOBALCLASS);
-		
+
 		::RegisterClassEx(&cls);
 		first = false;
 	}
@@ -102,7 +102,7 @@ void TabView::create(const Seed & cs) {
 		setFont( cs.font );
 
 	imageList = new ImageList(16, 16, ILC_COLOR32 | ILC_MASK);
-	
+
 	TabCtrl_SetImageList(handle(), imageList->handle());
 
 	onSelectionChanged(std::tr1::bind(&TabView::handleTabSelected, this));
@@ -124,7 +124,7 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 	size_t tabs = size();
 	TabInfo* ti = new TabInfo(w);
 	tstring title = formatTitle(w->getText());
-	
+
 	TCITEM item = { 0 };
 	item.mask = TCIF_TEXT | TCIF_PARAM;
 	item.pszText = const_cast < TCHAR * >( title.c_str() );
@@ -134,7 +134,7 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 		item.mask |= TCIF_IMAGE;
 		item.iImage = image;
 	}
-	
+
 	int newIdx = TabCtrl_InsertItem( handle(), tabs, &item );
 	if ( newIdx == - 1 ) {
 		throw Win32Exception("Error while trying to add page into Tab Sheet");
@@ -150,7 +150,7 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 		}
 		setActive(tabs);
 	}
-	
+
 	layout();
 
 	w->onTextChanging(std::tr1::bind(&TabView::handleTextChanging, this, w, _1));
@@ -166,13 +166,13 @@ void TabView::remove(ContainerPtr w) {
 	if(i == -1) {
 		return;
 	}
-	
+
 	int cur = getSelected();
-	
+
 	if(viewOrder.size() > 1 && i == cur) {
 		next();
 	}
-	
+
 	viewOrder.remove(w);
 
 	if(w == dragging)
@@ -180,7 +180,7 @@ void TabView::remove(ContainerPtr w) {
 
 	delete getTabInfo(i);
 	erase(i);
-	
+
 	if(size() == 0) {
 		active = -1;
 		if(titleChangedFunction)
@@ -243,20 +243,20 @@ void TabView::handleTabSelected() {
 	if(i == active) {
 		return;
 	}
-	
+
 	TabInfo* old = getTabInfo(active);
 
 	TabInfo* ti = getTabInfo(i);
-	
+
 	if(ti == old)
 		return;
-	
+
 	swapWidgets(old ? old->w : 0, ti->w);
-	
+
 	if(!inTab)
 		setTop(ti->w);
 	active = i;
-	
+
 	TabCtrl_HighlightItem(handle(), i, FALSE);
 
 	if(titleChangedFunction)
@@ -332,14 +332,14 @@ void TabView::next(bool reverse) {
 	if(!wnd) {
 		return;
 	}
-	
+
 	WindowIter i;
 	if(inTab) {
 		i = std::find(viewOrder.begin(), viewOrder.end(), wnd);
 		if(i == viewOrder.end()) {
 			return;
 		}
-		
+
 		if(!reverse) {
 			if(i == viewOrder.begin()) {
 				i = viewOrder.end();
@@ -358,7 +358,7 @@ void TabView::next(bool reverse) {
 			i = ++viewOrder.begin();
 		}
 	}
-	
+
 	setActive(*i);
 	return;
 }
@@ -443,7 +443,7 @@ void TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		TCHAR buf[1024] = { 0 };
 		item.pszText = buf;
 		item.cchTextMax = (sizeof(buf) / sizeof(TCHAR)) - 1;
-		
+
 		TabCtrl_GetItem( this->handle(), dragPos, & item );
 
 		erase(dragPos);
@@ -460,7 +460,7 @@ bool TabView::handleContextMenu(ScreenCoordinate pt) {
 	TabInfo* ti = 0;
 	if(pt.x() == -1 && pt.y() == -1) {
 		int i = getSelected();
-		
+
 		RECT rc;
 		if(i == -1 || !TabCtrl_GetItemRect(handle(), i, &rc)) {
 			return false;
@@ -474,11 +474,11 @@ bool TabView::handleContextMenu(ScreenCoordinate pt) {
 		}
 		ti = getTabInfo(i);
 	}
-	
+
 	if(ti->handleContextMenu && ti->handleContextMenu(pt)) {
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -569,17 +569,17 @@ int TabView::hitTest(const ScreenCoordinate& pt) {
 
 bool TabView::tryFire( const MSG & msg, LRESULT & retVal ) {
 	bool handled = BaseType::tryFire(msg, retVal);
-	
+
 	if(msg.message == WM_SIZE) {
 		// We need to let the tab control window proc handle this first, otherwise getUsableArea will not return
 		// correct values on mulitrow tabs (since the number of rows might change with the size)
 		retVal = returnUnhandled(msg.hwnd, msg.message, msg.wParam, msg.lParam);
-		
+
 		handleSized(SizedEvent(msg));
-		
+
 		return true;
 	}
-	
+
 	if(!handled && msg.message == WM_COMMAND && getActive()) {
 		// Forward commands to the active tab
 		handled = getActive()->tryFire(msg, retVal);

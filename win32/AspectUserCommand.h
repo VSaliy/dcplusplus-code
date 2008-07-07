@@ -37,18 +37,18 @@ public:
 
 	void prepareMenu(dwt::MenuPtr menu, int ctx, const StringList& hubs) {
 		userCommands = FavoriteManager::getInstance()->getUserCommands(ctx, hubs);
-		
+
 		if(!userCommands.empty()) {
 			menu->appendSeparator();
 			dwt::MenuPtr cur = menu;
 			for(size_t n = 0; n < userCommands.size(); ++n) {
-				
+
 				UserCommand* uc = &userCommands[n];
-				
+
 				if(uc->getType() == UserCommand::TYPE_SEPARATOR) {
 					// Avoid double separators...
 					size_t count = cur->getCount();
-					
+
 					if( count > 0 && cur->isSeparator(count-1)) {
 						cur->appendSeparator();
 					}
