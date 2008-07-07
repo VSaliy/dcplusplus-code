@@ -103,7 +103,7 @@ int SmartWinMain(dwt::Application& app) {
 
 	// For debugging
 	::LoadLibrary(_T("exchndl.dll"));
-	
+
 	// For SHBrowseForFolder, UPnP
 	HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 	if(FAILED(hr))
@@ -118,15 +118,15 @@ int SmartWinMain(dwt::Application& app) {
 	} catch(const FileException&) {
 		dcdebug("Failed reading exe\n");
 	}
-	
+
 	int ret = 255;
 	try {
 		SplashWindow* splash(new SplashWindow);
 		startup(&callBack, splash);
-		
+
 		bindtextdomain(PACKAGE, LOCALEDIR);
 		textdomain(PACKAGE);
-		
+
 		if(ResourceManager::getInstance()->isRTL()) {
 			SetProcessDefaultLayout(LAYOUT_RTL);
 		}
@@ -143,7 +143,7 @@ int SmartWinMain(dwt::Application& app) {
 		printf("Unknown exception");
 	}
 	WinUtil::uninit();
-	
+
 	shutdown();
 
 	::CoUninitialize();

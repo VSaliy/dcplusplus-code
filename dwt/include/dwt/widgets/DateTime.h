@@ -9,27 +9,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -49,9 +49,9 @@ namespace dwt {
   * \WidgetUsageInfo
   * \image html datetimepicker.PNG
   * Class for creating a DateTimePicker control. <br>
-  * A datetimepicker is a control for choosing a date consisting of year, month and 
-  * day. It resembles a calender and is quite neat to use if you need to specifically 
-  * declare a point in time within 1800 - 2100   
+  * A datetimepicker is a control for choosing a date consisting of year, month and
+  * day. It resembles a calender and is quite neat to use if you need to specifically
+  * declare a point in time within 1800 - 2100
   */
 class DateTime :
 	public CommonControl,
@@ -64,7 +64,7 @@ class DateTime :
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< DateTime >;
 	friend class AspectClickable<DateTime>;
-	
+
 	struct Dispatcher
 	{
 		typedef std::tr1::function<void (const SYSTEMTIME &)> F;
@@ -85,15 +85,15 @@ public:
 
 	/// Object type
 	typedef ThisType* ObjectType;
-	
+
 	/// Seed class
 	/** This class contains all of the values needed to create the widget. It also
 	  * knows the type of the class whose seed values it contains. Every widget
-	  * should define one of these.       
+	  * should define one of these.
 	  */
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
-		
+
 		FontPtr font;
 
 		tstring format;
@@ -104,7 +104,7 @@ public:
 		COLORREF titleTextColor;
 		COLORREF trailingTextColor;
 		SYSTEMTIME initialDateTime;
-	
+
 		/// Fills with default parameters
 		Seed();
 	};
@@ -113,8 +113,8 @@ public:
 	/** The event handler must have the signature "void foo( DateTimePtr
 	  * date, const SYSTEMTIME & st )" <br>
 	  * where the date is the DateTime that triggered the event. <br>
-	  * If you supply an event handler for this event your handler will be called 
-	  * when the DateTime date value is changed. 
+	  * If you supply an event handler for this event your handler will be called
+	  * when the DateTime date value is changed.
 	  */
 	void onDateTimeChanged(const Dispatcher::F& f) {
 		addCallback(Message( WM_NOTIFY, DTN_DATETIMECHANGE ), Dispatcher(f));
@@ -153,8 +153,8 @@ public:
 	  * < li >"yy" The last two digits of the year ( that is, 1996 would be displayed as "96" ).< /li >
 	  * < li >"yyyy" The full year ( that is, 1996 would be displayed as "1996" ).< /li >
 	  * < /ul >
-	  * E.g. if you send in "yyyy - MM - dd HH:mm:ss" the control would show e.g.: 
-	  * "2004 - 12 - 24 17:50:14"       
+	  * E.g. if you send in "yyyy - MM - dd HH:mm:ss" the control would show e.g.:
+	  * "2004 - 12 - 24 17:50:14"
 	  */
 	void setFormat( const tstring & format );
 
@@ -193,7 +193,7 @@ public:
 	/// Actually creates the Date Time Picker Control
 	/** You should call WidgetFactory::createDateTimePicker if you instantiate class
 	  * directly. <br>
-	  * Only if you DERIVE from class you should call this function directly.       
+	  * Only if you DERIVE from class you should call this function directly.
 	  */
 	void create( const Seed & cs = Seed() );
 
@@ -205,7 +205,7 @@ protected:
 	// WidgetFactory class which is friend
 	virtual ~DateTime()
 	{}
-	
+
 private:
 	// Aspect expectation implementation
 	static Message getClickMessage();
@@ -219,7 +219,7 @@ inline Message DateTime::getClickMessage() {
 	return Message( WM_NOTIFY, DTN_DROPDOWN );
 }
 
-inline SYSTEMTIME DateTime::getDateTime() 
+inline SYSTEMTIME DateTime::getDateTime()
 {
 	SYSTEMTIME st;
 	DateTime_GetSystemtime( this->handle(), & st );

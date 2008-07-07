@@ -465,7 +465,7 @@ void NmdcHub::onLine(const string& aLine) throw() {
 			i = param.find(' ');
 			if(i == string::npos) {
 				getHubIdentity().setNick(unescape(param));
-				getHubIdentity().setDescription(Util::emptyString);			
+				getHubIdentity().setDescription(Util::emptyString);
 			} else {
 				getHubIdentity().setNick(unescape(param.substr(0, i)));
 				getHubIdentity().setDescription(unescape(param.substr(i+1)));
@@ -799,7 +799,7 @@ void NmdcHub::myInfo(bool alwaysSend) {
 		tmp1 + VERSIONSTRING + tmp2 + modeChar + tmp3 + getCounts() + tmp4 + Util::toString(SETTING(SLOTS)) + uMin +
 		">$ $" + SETTING(UPLOAD_SPEED) + "\x01$" + fromUtf8(escape(SETTING(EMAIL))) + '$';
 	string myInfoB = ShareManager::getInstance()->getShareSizeString() + "$|";
- 
+
  	if(lastMyInfoA != myInfoA || alwaysSend || (lastMyInfoB != myInfoB && lastUpdate + 15*60*1000 < GET_TICK()) ){
  		dcdebug("MyInfo %s...\n", getMyNick().c_str());
  		send(myInfoA + myInfoB);

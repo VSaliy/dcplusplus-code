@@ -27,13 +27,13 @@ template<class T>
 class StaticFrame : public MDIChildFrame<T> {
 public:
 
-	StaticFrame(dwt::TabView* mdiClient, const tstring& title, unsigned helpId, unsigned resourceId) : 
-		MDIChildFrame<T>(mdiClient, title, helpId, resourceId) 
-	{ 
+	StaticFrame(dwt::TabView* mdiClient, const tstring& title, unsigned helpId, unsigned resourceId) :
+		MDIChildFrame<T>(mdiClient, title, helpId, resourceId)
+	{
 	}
 
-	virtual ~StaticFrame() { 
-		frame = 0; 
+	virtual ~StaticFrame() {
+		frame = 0;
 	}
 
 	static void openWindow(dwt::TabView* mdiClient) {
@@ -48,7 +48,7 @@ public:
 			frame = new T(mdiClient);
 		}
 	}
-	
+
 private:
 	friend class MDIChildFrame<T>;
 	static T* frame;

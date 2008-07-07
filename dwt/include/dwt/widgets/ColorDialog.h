@@ -9,27 +9,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -46,12 +46,12 @@ namespace dwt {
   * Class for showing a common ChooseColorDialog box. <br>
   * Either derive from it or call WidgetFactory::createColorDialog. <br>
   * Note! <br>
-  * If you wish to use this class with EventHandlerClass classes other than those from 
-  * SmartWin you need to expose a public function called "parent" taking no arguments 
+  * If you wish to use this class with EventHandlerClass classes other than those from
+  * SmartWin you need to expose a public function called "parent" taking no arguments
   * returning an HWND. <br>
   * the complete signature of the function will then be "HWND parent()" <br>
-  * This is one of few Widgets in SmartWin++ which can be used without linking in the 
-  * actual library!   
+  * This is one of few Widgets in SmartWin++ which can be used without linking in the
+  * actual library!
   */
 class ColorDialog
 {
@@ -99,13 +99,13 @@ public:
 	/** Returns a ColorParams object, if user presses Ok the userPressedOk will be
 	  * true, else if user pressed Cancel the userPressedOk obviously will be false.
 	  * <br>
-	  * This dialog "remembers" its state from call to call. If you manipulate the 
-	  * Custom Colors, the next time it displays, it will have the same Custom 
+	  * This dialog "remembers" its state from call to call. If you manipulate the
+	  * Custom Colors, the next time it displays, it will have the same Custom
 	  * Colors. <br>
 	  * Note! <br>
 	  * This is true even across DIFFERENT instances of the dialog!! <br>
-	  * If basic is true dialog will be showed with only basic functionality, if 
-	  * allowFullOpen is true dialog will allow the user to show "more info".       
+	  * If basic is true dialog will be showed with only basic functionality, if
+	  * allowFullOpen is true dialog will allow the user to show "more info".
 	  */
 	bool open( ColorParams& params, bool basic = true, bool allowFullOpen = true );
 
@@ -117,7 +117,7 @@ public:
 private:
 	ColorParams itsColorParams;
 	Widget* itsParent;
-	
+
 	HWND getParentHandle() { return itsParent ? itsParent->handle() : NULL; }
 };
 

@@ -64,7 +64,7 @@ void StatsFrame::handlePaint(dwt::PaintCanvas& canvas) {
 	canvas.setTextColor(WinUtil::textColor);
 	canvas.setBkColor(WinUtil::bgColor);
 	canvas.selectFont(WinUtil::font);
-	
+
 	long fontHeight = getTextSize(_T("A")).y;
 	int lines = height / (fontHeight * LINE_HEIGHT);
 	int lheight = height / (lines+1);

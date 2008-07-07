@@ -99,7 +99,7 @@ void DirectoryListing::loadFile(const string& name) throw(Exception) {
 		int64_t sz = dcpp::File::getSize(name);
 		if(sz == -1 || sz >= static_cast<int64_t>(txt.max_size()))
 			throw FileException(_("File not available"));
-		
+
 		txt.resize((size_t) sz);
 		size_t n = txt.length();
 		dcpp::File(name, dcpp::File::READ, dcpp::File::OPEN).read(&txt[0], n);

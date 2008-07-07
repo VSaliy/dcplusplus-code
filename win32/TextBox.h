@@ -25,7 +25,7 @@ class TextBox : public dwt::TextBox {
 	friend class dwt::WidgetCreator<TextBox>;
 public:
 	typedef TextBox ThisType;
-	
+
 	typedef ThisType* ObjectType;
 
 	struct Seed : public BaseType::Seed {

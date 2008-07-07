@@ -26,7 +26,7 @@ class ComboBox : public dwt::ComboBox {
 	friend class dwt::WidgetCreator<ComboBox>;
 public:
 	typedef ComboBox ThisType;
-	
+
 	typedef ThisType* ObjectType;
 
 	struct Seed : public BaseType::Seed {

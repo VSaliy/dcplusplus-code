@@ -65,7 +65,7 @@ private:
 	ssl::SSL_CTX serverVerContext;
 
 	ssl::DH dh;
-	
+
 	bool certsLoaded;
 
 	const string lock;

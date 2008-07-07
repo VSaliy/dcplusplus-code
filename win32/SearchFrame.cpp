@@ -1019,7 +1019,7 @@ void SearchFrame::runSearch() {
 		}
 		lastSearches.push_back(s);
 	}
-	
+
 	{
 		Lock l(cs);
 		currentSearch = StringTokenizer<tstring>(s, ' ').getTokens();

@@ -68,7 +68,7 @@ namespace Text {
 		string tmp;
 		return wideToAcp(str, tmp);
 	}
-	
+
 	const string& wideToUtf8(const wstring& str, string& tmp) throw();
 	inline string wideToUtf8(const wstring& str) throw() {
 		string tmp;
@@ -81,7 +81,7 @@ namespace Text {
 #ifdef UNICODE
 	inline const tstring& toT(const string& str, tstring& tmp) throw() { return utf8ToWide(str, tmp); }
 	inline tstring toT(const string& str) throw() { return utf8ToWide(str); }
-	
+
 	inline const string& fromT(const tstring& str, string& tmp) throw() { return wideToUtf8(str, tmp); }
 	inline string fromT(const tstring& str) throw() { return wideToUtf8(str); }
 #else
@@ -94,19 +94,19 @@ namespace Text {
 
 	inline bool isAscii(const string& str) throw() { return isAscii(str.c_str()); }
 	bool isAscii(const char* str) throw();
-	
+
 	bool validateUtf8(const string& str) throw();
 
 	inline char asciiToLower(char c) { dcassert((((uint8_t)c) & 0x80) == 0); return (char)tolower(c); }
 
 	wchar_t toLower(wchar_t c) throw();
-	
+
 	const wstring& toLower(const wstring& str, wstring& tmp) throw();
 	inline wstring toLower(const wstring& str) throw() {
 		wstring tmp;
 		return toLower(str, tmp);
 	}
-	
+
 	const string& toLower(const string& str, string& tmp) throw();
 	inline string toLower(const string& str) throw() {
 		string tmp;
@@ -124,13 +124,13 @@ namespace Text {
 		string tmp;
 		return toUtf8(str, fromCharset, tmp);
 	}
-	
+
 	const string& fromUtf8(const string& str, const string& toCharset, string& tmp) throw();
 	inline string fromUtf8(const string& str, const string& toCharset = systemCharset) throw() {
 		string tmp;
 		return fromUtf8(str, toCharset, tmp);
 	}
-	
+
 	string toDOS(string tmp);
 	wstring toDOS(wstring tmp);
 

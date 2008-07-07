@@ -705,7 +705,7 @@ void FavoriteManager::on(Failed, HttpConnection*, const string& aLine) throw() {
 	if(useHttp){
 		downloadBuf = Util::emptyString;
 		fire(FavoriteManagerListener::DownloadFailed(), aLine);
-	}	    
+	}
 }
 void FavoriteManager::on(Complete, HttpConnection*, const string& aLine) throw() {
 	c->removeListener(this);

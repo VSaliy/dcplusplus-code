@@ -25,9 +25,9 @@
 
 static const size_t MAX_TEXT_LEN = 64*1024;
 
-TextFrame::TextFrame(dwt::TabView* mdiParent, const string& fileName) : 
+TextFrame::TextFrame(dwt::TabView* mdiParent, const string& fileName) :
 	BaseType(mdiParent, Text::toT(Util::getFileName(fileName))),
-	pad(0) 
+	pad(0)
 {
 	TextBox::Seed cs = WinUtil::Seeds::textBox;
 	cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
@@ -36,7 +36,7 @@ TextFrame::TextFrame(dwt::TabView* mdiParent, const string& fileName) :
 	addWidget(pad);
 
 	pad->setTextLimit(0);
-	
+
 	try {
 		pad->setText(Text::toT(Text::toDOS(File(fileName, File::READ, File::OPEN).read(MAX_TEXT_LEN))));
 	} catch(const FileException& e) {

@@ -149,11 +149,11 @@ void AdcCommand::parse(const string& aLine, bool nmdc /* = false */) throw(Parse
 	if((type == TYPE_BROADCAST || type == TYPE_DIRECT || type == TYPE_ECHO || type == TYPE_FEATURE) && !fromSet) {
 		throw ParseException("Missing from_sid");
 	}
-	
+
 	if(type == TYPE_FEATURE && !featureSet) {
 		throw ParseException("Missing feature");
 	}
-	
+
 	if((type == TYPE_DIRECT || type == TYPE_ECHO) && !toSet) {
 		throw ParseException("Missing to_sid");
 	}

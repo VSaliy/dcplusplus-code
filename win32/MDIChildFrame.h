@@ -28,9 +28,9 @@
 #include "resource.h"
 
 template<typename T>
-class MDIChildFrame : 
+class MDIChildFrame :
 	public WidgetFactory< dwt::Container >,
-	public AspectSpeaker<T>, 
+	public AspectSpeaker<T>,
 	public AspectStatus<T>
 {
 	typedef WidgetFactory< dwt::Container > BaseType;
@@ -58,7 +58,7 @@ protected:
 			setHelpId(helpId);
 
 		tabView->add(this, icon);
-		
+
 		if(activate) {
 			tabView->setActive(this);
 		}
@@ -71,19 +71,19 @@ protected:
 		onActivate(std::tr1::bind(&ThisType::handleActivate, this, _1));
 		onCommand(std::tr1::bind(&ThisType::close, this, true), IDC_CLOSE_WINDOW);
 		addDlgCodeMessage(this);
-		
+
 	}
-	
+
 	virtual ~MDIChildFrame() {
 		getParent()->remove(this);
 	}
-	
+
 	void handleFocus() {
 		if(lastFocus != NULL) {
 			::SetFocus(lastFocus);
 		}
 	}
-	
+
 	/**
 	 * The first of two close phases, used to disconnect from other threads that might affect this window.
 	 * This is where all stuff that might be affected by other threads goes - it should make sure
@@ -93,13 +93,13 @@ protected:
 	bool preClosing() { return true; }
 	/** Second close phase, perform any cleanup that depends only on the UI thread */
 	void postClosing() { }
-	
+
 	template<typename W>
 	void addWidget(W* widget, bool alwaysFocus = false, bool autoTab = true) {
 		if(autoTab) {
 			addDlgCodeMessage(widget);
 		}
-		
+
 		addColor(widget);
 
 		if(alwaysFocus || (lastFocus == NULL)) {
@@ -110,21 +110,21 @@ protected:
 		if(alwaysFocus)
 			alwaysSameFocus = true;
 	}
-	
+
 	void setDirty(SettingsManager::IntSetting setting) {
 		if(SettingsManager::getInstance()->getBool(setting)) {
 			getParent()->mark(this);
 		}
 	}
-	
+
 	void onTabContextMenu(const std::tr1::function<bool (const dwt::ScreenCoordinate&)>& f) {
 		getParent()->onTabContextMenu(this, f);
 	}
-	
+
 	void activate() {
 		getParent()->setActive(this);
 	}
-	
+
 	dwt::TabView* getParent() {
 		return static_cast<dwt::TabView*>(BaseType::getParent());
 	}
@@ -167,16 +167,16 @@ private:
 	void addColor(dwt::AspectColor<A>* widget) {
 		widget->setColor(WinUtil::textColor, WinUtil::bgColor);
 	}
-	
+
 	// Catch-rest for the above
 	void addColor(void* w) {
-		
+
 	}
 
-	void handleSized(const dwt::SizedEvent& sz) { 
+	void handleSized(const dwt::SizedEvent& sz) {
 		static_cast<T*>(this)->layout();
 	}
-	
+
 	void handleActivate(bool active) {
 		if(active) {
 			if(lastFocus) {
@@ -202,7 +202,7 @@ private:
 		menu->open(pt);
 		return true;
 	}
-	
+
 	bool handleClosing() {
 		if(reallyClose) {
 			static_cast<T*>(this)->postClosing();

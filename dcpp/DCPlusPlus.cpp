@@ -60,7 +60,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 #endif
 
 	Util::initialize();
-	
+
 	bindtextdomain(PACKAGE, LOCALEDIR);
 
 	ResourceManager::newInstance();
@@ -82,7 +82,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 	ADLSearchManager::newInstance();
 
 	SettingsManager::getInstance()->load();
-	
+
 	if(!SETTING(LANGUAGE).empty()) {
 #ifdef _WIN32
 		string language = "LANGUAGE=" + SETTING(LANGUAGE);
@@ -93,7 +93,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 		// Apparently this is supposted to make gettext reload the message catalog...
 		_nl_msg_cat_cntr++;
 	}
-	
+
 	FavoriteManager::getInstance()->load();
 	CryptoManager::getInstance()->loadCertificates();
 
@@ -134,7 +134,7 @@ void shutdown() {
 	TimerManager::deleteInstance();
 	ResourceManager::deleteInstance();
 
-#ifdef _WIN32	
+#ifdef _WIN32
 	::WSACleanup();
 #endif
 }

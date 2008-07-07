@@ -51,7 +51,7 @@ protected:
 		tip = W().addChild(dwt::ToolTip::Seed());
 		tip->setTool(status, std::tr1::bind(&ThisType::handleToolTip, this, _1));
 	}
-	
+
 	void setStatus(int s, const tstring& text) {
 		if(s != WidgetType::STATUS_STATUS) {
 			int w = status->getTextSize(text).x + 12;
@@ -80,10 +80,10 @@ protected:
 		r.size.y -= sz.y;
 		layoutSections(sz);
 	}
-	
+
 	void layoutSections(const dwt::Point& sz) {
 		statusSizes[WidgetType::STATUS_STATUS] = 0;
-		statusSizes[WidgetType::STATUS_STATUS] = sz.x - std::accumulate(statusSizes.begin(), statusSizes.end(), 0); 
+		statusSizes[WidgetType::STATUS_STATUS] = sz.x - std::accumulate(statusSizes.begin(), statusSizes.end(), 0);
 
 		status->setSections(statusSizes);
 	}
@@ -95,7 +95,7 @@ protected:
 		::MapWindowPoints(status->handle(), H(), (POINT*)p, 2);
 		widget->setBounds(p[0].x, p[0].y, p[1].x - p[0].x, p[1].y - p[0].y);
 	}
-	
+
 	dwt::StatusBarPtr status;
 
 	std::vector<unsigned> statusSizes;

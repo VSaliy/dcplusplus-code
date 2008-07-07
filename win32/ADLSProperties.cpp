@@ -120,7 +120,7 @@ bool ADLSProperties::handleInitDialog() {
 	button->onClicked(std::tr1::bind(&ADLSProperties::endDialog, this, IDCANCEL));
 
 	centerWindow();
-	
+
 	return false;
 }
 
@@ -135,10 +135,10 @@ void ADLSProperties::handleOKClicked() {
 
 	tstring minFileSize = minSize->getText();
 	search->minFileSize = minFileSize.empty() ? -1 : Util::toInt64(Text::fromT(minFileSize));
-	
+
 	tstring maxFileSize = maxSize->getText();
 	search->maxFileSize = maxFileSize.empty() ? -1 : Util::toInt64(Text::fromT(maxFileSize));
-	
+
 	search->typeFileSize = ADLSearch::SizeType(sizeType->getSelected());
 
 	search->destDir = Text::fromT(destDir->getText());

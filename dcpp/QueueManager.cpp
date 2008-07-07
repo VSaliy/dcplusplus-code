@@ -750,14 +750,14 @@ Download* QueueManager::getDownload(UserConnection& aSource, bool supportsTrees)
 			std::string antifrag = q->getTempTarget() + ".antifrag";
 			if(File::getSize(antifrag) > 0) {
 				File::renameFile(antifrag, q->getTempTarget());
-				tempSize = File::getSize(q->getTempTarget());	
-			}	
+				tempSize = File::getSize(q->getTempTarget());
+			}
 			if(tempSize != q->getSize()) {
 				if(tempSize > 0 && tempSize < q->getSize()) {
 					// Probably started with <=0.699 or with 0.705 without antifrag enabled...
 					try {
-						File(q->getTempTarget(), File::WRITE, File::OPEN).setSize(q->getSize()); 
-					} catch(const FileException&) { }		
+						File(q->getTempTarget(), File::WRITE, File::OPEN).setSize(q->getSize());
+					} catch(const FileException&) { }
 				} else {
 					// Temp target gone?
 					q->resetDownloaded();

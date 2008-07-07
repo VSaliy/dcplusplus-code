@@ -55,7 +55,7 @@ AboutDlg::~AboutDlg() {
 
 bool AboutDlg::handleInitDialog() {
 	setText(T_("About DC++"));
-	
+
 	setItemText(IDC_VERSION, Text::toT(APPNAME " " VERSIONSTRING) + T_("\n(c) Copyright 2001-2008 Jacek Sieka\nEx-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL\nhttp://dcplusplus.sourceforge.net/"));
 	attachChild<TextBox>(IDC_TTH)->setText(WinUtil::tth);
 	attachChild<TextBox>(IDC_THANKS)->setText(Text::toT(thanks));
@@ -64,7 +64,7 @@ bool AboutDlg::handleInitDialog() {
 	setItemText(IDC_GREETZ, T_("Greetz and Contributors"));
 	setItemText(IDC_TOTALS, T_("Totals"));
 	setItemText(IDC_LATEST_VERSION, T_("Latest stable version"));
-	
+
 	if(SETTING(TOTAL_DOWNLOAD) > 0) {
 		setItemText(IDC_RATIO, str(TF_("Ratio (up/down): %1$0.2f") % (((double)SETTING(TOTAL_UPLOAD)) / ((double)SETTING(TOTAL_DOWNLOAD)))));
 	} else {
@@ -108,7 +108,7 @@ void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const 
 					speak(SPEAK_VERSIONDATA, reinterpret_cast<LPARAM>(x));
 				}
 			}
-		} catch(const SimpleXMLException&) { }		
+		} catch(const SimpleXMLException&) { }
 	}
 	conn->removeListener(this);
 }

@@ -39,7 +39,7 @@ separator(aSeparator), mode(MODE_LINE), dataBytes(0), rollback(0), state(STARTIN
 disconnecting(false)
 {
 	start();
-	
+
 	Thread::safeInc(sockets);
 }
 
@@ -65,7 +65,7 @@ void BufferedSocket::setMode (Modes aMode, size_t aRollback) {
 		case MODE_DATA:
 			break;
 	}
-	mode = aMode;	
+	mode = aMode;
 }
 
 void BufferedSocket::setSocket(std::auto_ptr<Socket> s) {
@@ -77,19 +77,19 @@ void BufferedSocket::setSocket(std::auto_ptr<Socket> s) {
 	s->setBlocking(false);
 
 	inbuf.resize(s->getSocketOptInt(SO_RCVBUF));
-	
+
 	sock = s;
 }
 
 void BufferedSocket::accept(const Socket& srv, bool secure, bool allowUntrusted) throw(SocketException) {
 	dcdebug("BufferedSocket::accept() %p\n", (void*)this);
-	
+
 	std::auto_ptr<Socket> s(secure ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : new Socket);
 
 	s->accept(srv);
-	
+
 	setSocket(s);
-	
+
 	Lock l(cs);
 	addTask(ACCEPTED, 0);
 }
@@ -100,9 +100,9 @@ void BufferedSocket::connect(const string& aAddress, uint16_t aPort, bool secure
 
 	s->create();
 	s->bind(0, SETTING(BIND_ADDRESS));
-	
+
 	setSocket(s);
-	
+
 	Lock l(cs);
 	addTask(CONNECT, new ConnectInfo(aAddress, aPort, proxy && (SETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5)));
 }
@@ -113,7 +113,7 @@ void BufferedSocket::threadConnect(const string& aAddr, uint16_t aPort, bool pro
 
 	dcdebug("threadConnect %s:%d\n", aAddr.c_str(), (int)aPort);
 	fire(BufferedSocketListener::Connecting());
-	
+
 	state = RUNNING;
 
 	uint64_t startTime = GET_TICK();
@@ -138,7 +138,7 @@ void BufferedSocket::threadConnect(const string& aAddr, uint16_t aPort, bool pro
 void BufferedSocket::threadRead() throw(SocketException) {
 	if(state != RUNNING)
 		return;
-	
+
 	int left = sock->read(&inbuf[0], (int)inbuf.size());
 	if(left == -1) {
 		// EWOULDBLOCK, no data received...
@@ -241,7 +241,7 @@ void BufferedSocket::threadRead() throw(SocketException) {
 void BufferedSocket::threadSendFile(InputStream* file) throw(Exception) {
 	if(state != RUNNING)
 		return;
-	
+
 	if(disconnecting)
 		return;
 	dcassert(file != NULL);
@@ -337,7 +337,7 @@ void BufferedSocket::write(const char* aBuf, size_t aLen) throw() {
 void BufferedSocket::threadSendData() {
 	if(state != RUNNING)
 		return;
-	
+
 	{
 		Lock l(cs);
 		if(writeBuf.empty())
@@ -379,14 +379,14 @@ bool BufferedSocket::checkEvents() {
 			p = tasks.front();
 			tasks.erase(tasks.begin());
 		}
-		
+
 		if(p.first == SHUTDOWN) {
 			return false;
 		} else if(p.first == UPDATED) {
 			fire(BufferedSocketListener::Updated());
 			continue;
 		}
-		
+
 		if(state == STARTING) {
 			if(p.first == CONNECT) {
 				ConnectInfo* ci = static_cast<ConnectInfo*>(p.second.get());
@@ -444,7 +444,7 @@ int BufferedSocket::run() {
 
 void BufferedSocket::fail(const string& aError) {
 	sock->disconnect();
-	
+
 	if(state == RUNNING) {
 		state = FAILED;
 		fire(BufferedSocketListener::Failed(), aError);
@@ -457,7 +457,7 @@ void BufferedSocket::shutdown() {
 	addTask(SHUTDOWN, 0);
 }
 
-void BufferedSocket::addTask(Tasks task, TaskData* data) { 
+void BufferedSocket::addTask(Tasks task, TaskData* data) {
 	dcassert(task == SHUTDOWN || sock.get());
 	tasks.push_back(make_pair(task, data)); taskSem.signal();
 }

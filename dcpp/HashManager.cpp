@@ -628,7 +628,7 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 				if(lastRead + minTime > now) {
 					uint32_t diff = now - lastRead;
 					Thread::sleep(minTime - diff);
-				} 
+				}
 				lastRead = lastRead + minTime;
 			} else {
 				lastRead = GET_TICK();

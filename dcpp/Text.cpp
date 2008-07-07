@@ -167,7 +167,7 @@ const wstring& acpToWide(const string& str, wstring& tmp) throw() {
 	wchar_t wc;
 	const char *src = str.c_str();
 	size_t n = str.length() + 1;
-	
+
 	tmp.clear();
 	tmp.reserve(n);
 
@@ -184,7 +184,7 @@ const wstring& acpToWide(const string& str, wstring& tmp) throw() {
 			src += rv;
 			n -= rv;
 		}
-	}	
+	}
 	return tmp;
 #endif
 }
@@ -193,7 +193,7 @@ const string& wideToUtf8(const wstring& str, string& tgt) throw() {
 	if(str.empty()) {
 		return Util::emptyString;
 	}
-	
+
 	string::size_type n = str.length();
 	tgt.clear();
 	for(string::size_type i = 0; i < n; ++i) {
@@ -354,7 +354,7 @@ const string& convert(const string& str, string& tmp, const string& fromCharset,
 	dcdebug("Unknown conversion from %s to %s\n", fromCharset.c_str(), toCharset.c_str());
 	return str;
 #else
- 
+
 	// Initialize the converter
 	iconv_t cd = iconv_open(toCharset.c_str(), fromCharset.c_str());
 	if(cd == (iconv_t)-1)

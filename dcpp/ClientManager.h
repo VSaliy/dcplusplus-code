@@ -101,7 +101,7 @@ private:
 
 	typedef unordered_map<CID, UserPtr> UserMap;
 	typedef UserMap::iterator UserIter;
-	
+
 	typedef unordered_map<CID, std::string> NickMap;
 
 	typedef unordered_multimap<CID, OnlineUser*> OnlineMap;
@@ -134,7 +134,7 @@ private:
 	}
 
 	void updateNick(const OnlineUser& user) throw();
-	
+
 	// ClientListener
 	virtual void on(Connected, Client* c) throw();
 	virtual void on(UserUpdated, Client*, const OnlineUser& user) throw();

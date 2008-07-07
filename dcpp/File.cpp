@@ -42,7 +42,7 @@ File::File(const string& aFileName, int access, int mode) throw(FileException) {
 		}
 	}
 	DWORD shared = FILE_SHARE_READ | (mode & SHARED ? FILE_SHARE_WRITE : 0);
-	
+
 	h = ::CreateFile(Text::toT(aFileName).c_str(), access, shared, NULL, m, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
 	if(h == INVALID_HANDLE_VALUE) {
@@ -430,7 +430,7 @@ StringList File::findFiles(const string& path, const string& pattern) {
 	hFind = ::FindFirstFile(Text::toT(path + pattern).c_str(), &data);
 	if(hFind != INVALID_HANDLE_VALUE) {
 		do {
-			const char* extra = (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? "\\" : ""; 
+			const char* extra = (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? "\\" : "";
 			ret.push_back(path + Text::fromT(data.cFileName) + extra);
 		} while(::FindNextFile(hFind, &data));
 
@@ -441,7 +441,7 @@ StringList File::findFiles(const string& path, const string& pattern) {
 	if (dir) {
 		while (struct dirent* ent = readdir(dir)) {
 			if (fnmatch(pattern.c_str(), ent->d_name, 0) == 0) {
-				const char* extra = (ent->d_type & DT_DIR) ? "/" : ""; 
+				const char* extra = (ent->d_type & DT_DIR) ? "/" : "";
 				ret.push_back(path + Text::toUtf8(ent->d_name) + extra);
 			}
 		}

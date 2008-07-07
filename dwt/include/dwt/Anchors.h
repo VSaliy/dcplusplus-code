@@ -26,24 +26,24 @@ struct AnchoredItem {
 	HWND wnd;
 	HWND parent;
 	int anchors;
-	::RECT edgeDistances;	
+	::RECT edgeDistances;
 };
 
 /// Anchor fixed sized widgets to the sides of their parent window.
 /** \ingroup WidgetLayout
-* A helper class to do some auto-resizings of widgets in SmartWin++. 
-*  
-* Take for example the common dialog Open File. 
+* A helper class to do some auto-resizings of widgets in SmartWin++.
+*
+* Take for example the common dialog Open File.
 * Whenever resized, the "Open" and "Cancel" buttons remain in the same location relative
 * to the lower-right corner of the dialog.  On the other hand, the control that lists all
-* the files in the current directory, grows or shrinks according to the size of the dialog. 
-*  
+* the files in the current directory, grows or shrinks according to the size of the dialog.
+*
 * That's what Anchors does. After the widgets were created, you add them to a special list,
 * and in the event handler of OnSize (of your Window), you call a special method that
-* resizes all the widgets you've added before.  
-*  
-* Supposed to be simple. 
-* Credit Carmi Grushko (venndigram) - 2006-10-02 20:38  
+* resizes all the widgets you've added before.
+*
+* Supposed to be simple.
+* Credit Carmi Grushko (venndigram) - 2006-10-02 20:38
 *
 */
 class AnchorManager {
@@ -62,15 +62,15 @@ public:
   */
 void addAnchored( dwt::Widget* widget, int anchors )
 {
-	if( widget == NULL || widget->handle() == 0 || 
+	if( widget == NULL || widget->handle() == 0 ||
 		widget->getParent() == NULL || widget->getParent()->handle() == 0 )
 		throw std::runtime_error( "AnchorManager: Invalid widget" );
-		
+
 	AnchoredItem item;
 	item.wnd = widget->handle();
 	item.parent = widget->getParent()->handle();
 	item.anchors = anchors;
-	
+
 	// Calculating edgeDistances
 	::RECT r1, r2;
 	::POINT p1, p2;
@@ -86,12 +86,12 @@ void addAnchored( dwt::Widget* widget, int anchors )
 	r2.top = p1.y;
 	r2.right = p2.x;
 	r2.bottom = p2.y;
-	
+
 	item.edgeDistances.top = r1.top - r2.top;
 	item.edgeDistances.left = r1.left - r2.left;
 	item.edgeDistances.bottom = r2.bottom - r1.bottom;
 	item.edgeDistances.right = r2.right - r1.right;
-	
+
 	anchored.push_back( item );
 }
 
@@ -116,26 +116,26 @@ void resizeAnchored()
 private:
 	std::vector<AnchoredItem> anchored;
 
-	
+
 void resizeAnchoredItem( const AnchoredItem& item )
 {
 	::RECT r1, r2, newR;
 
 	int flags = SWP_NOZORDER;
-	if( ( (item.anchors & (AnchoredItem::left | AnchoredItem::right) ) == 0) && 
+	if( ( (item.anchors & (AnchoredItem::left | AnchoredItem::right) ) == 0) &&
 		( (item.anchors & (AnchoredItem::top | AnchoredItem::bottom) ) == 0) )
 		flags |= SWP_NOSIZE;
 	if( (item.anchors & AnchoredItem::left) && (item.anchors & AnchoredItem::top) )
 		flags |= SWP_NOMOVE;
-		
+
 	if( (flags & SWP_NOSIZE) && (flags & SWP_NOMOVE) )
 		return; // Nothing to do
-		
+
 	GetClientRect( item.parent, &r1 );
 	GetWindowRect( item.wnd, &r2 );
 	r2.right -= r2.left;
-	r2.bottom -= r2.top;	
-	
+	r2.bottom -= r2.top;
+
 	if( item.anchors & AnchoredItem::left )
 	{
 		if( item.anchors & AnchoredItem::right )
@@ -158,7 +158,7 @@ void resizeAnchoredItem( const AnchoredItem& item )
 		}
 		else
 		{
-		
+
 		}
 	}
 
@@ -184,12 +184,12 @@ void resizeAnchoredItem( const AnchoredItem& item )
 		}
 		else
 		{
-		
+
 		}
 	}
 
-	
-	SetWindowPos( item.wnd, 0, 
+
+	SetWindowPos( item.wnd, 0,
 		newR.left, newR.top, newR.right, newR.bottom,
 		flags );
 }
@@ -199,12 +199,12 @@ void resizeAnchoredItem( const AnchoredItem& item )
 
 /*
 * An example project (working with the Sally IDE & with a mingw32 makefile) is available online.
-*  
+*
 * (The anchors-sample.zip contains everything needed to compile, including the anchors source, and a compiled exe.
-*  
-* http://t2.technion.ac.il/~scg/anchors-sample.zip 
-* http://t2.technion.ac.il/~scg/anchors-source.zip 
-* By: Carmi Grushko (venndigram) - 2006-10-02 20:38  
+*
+* http://t2.technion.ac.il/~scg/anchors-sample.zip
+* http://t2.technion.ac.il/~scg/anchors-source.zip
+* By: Carmi Grushko (venndigram) - 2006-10-02 20:38
 */
 
 }

@@ -45,7 +45,7 @@ WaitingUsersFrame::WaitingUsersFrame(dwt::TabView* mdiParent) :
 	initStatus();
 
 	layout();
-	
+
 	onSpeaker(std::tr1::bind(&WaitingUsersFrame::handleSpeaker, this, _1, _2));
 	// Load all waiting users & files.
 	loadAll();
@@ -77,7 +77,7 @@ bool WaitingUsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	} else {
 		queued->select(pt);
 	}
-	
+
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 	menu->appendItem(T_("&Get file list"), std::tr1::bind(&WaitingUsersFrame::onGetList, this));
 	menu->appendItem(T_("Copy Filename"), std::tr1::bind(&WaitingUsersFrame::onCopyFilename, this));
@@ -161,7 +161,7 @@ void WaitingUsersFrame::onCopyFilename() {
 
 	if (!selectedItem || !parentItem || selectedItem == parentItem)
 		return;
-	
+
 	tstring txt = queued->getText(selectedItem);
 	tstring::size_type i = txt.find(_T('('));
 	if(i != tstring::npos && i > 0) {
@@ -217,13 +217,13 @@ void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
 	HTREEITEM userNode = queued->getRoot();
 
 	string fname = aFile.substr(0, aFile.find(_T('(')));
-	
+
 	while (userNode) {
 		if (aUser == *reinterpret_cast<UserPtr *>(queued->getData(userNode))) {
 			HTREEITEM childNode = queued->getChild(userNode);
 			while (childNode) {
 				tstring buf = queued->getText(childNode);
-				
+
 				if (fname == Text::fromT(buf.substr(0, buf.find(_T('('))))) {
 					delete reinterpret_cast<UserPtr *>(queued->getData(childNode));
 					queued->erase(childNode);

@@ -50,7 +50,7 @@ public:
 	static const string FEATURE_ADC_BASE;
 	static const string FEATURE_ADC_BZIP;
 	static const string FEATURE_ADC_TIGR;
-	
+
 	static const string FILE_NOT_AVAILABLE;
 
 	enum Modes {
@@ -144,7 +144,7 @@ public:
 	bool isSecure() const { return socket && socket->isSecure(); }
 	bool isTrusted() const { return socket && socket->isTrusted(); }
 	std::string getCipherName() const { return socket ? socket->getCipherName() : Util::emptyString; }
-	
+
 	string getRemoteIp() const { return socket->getIp(); }
 	Download* getDownload() { dcassert(isSet(FLAG_DOWNLOAD)); return download; }
 	void setDownload(Download* d) { dcassert(isSet(FLAG_DOWNLOAD)); download = d; }
@@ -164,7 +164,7 @@ public:
 
 	int64_t getChunkSize() const { return chunkSize; }
 	void updateChunkSize(int64_t leafSize, int64_t lastChunk, uint64_t ticks);
-	
+
 	GETSET(string, hubUrl, HubUrl);
 	GETSET(string, token, Token);
 	GETSET(string, encoding, Encoding);
@@ -192,7 +192,7 @@ private:
 	virtual ~UserConnection() throw() {
 		BufferedSocket::putSocket(socket);
 	}
-	
+
 	friend struct DeleteFunction;
 
 	void setUser(const UserPtr& aUser) {

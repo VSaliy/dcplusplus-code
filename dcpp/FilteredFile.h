@@ -144,7 +144,7 @@ public:
 		}
 		return written;
 	}
-	
+
 	virtual bool eof() { return !more; }
 
 private:

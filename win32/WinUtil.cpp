@@ -1128,7 +1128,7 @@ void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabVie
 
 	addUsers(addSub, menu, T_("Add To &Favorites"), filter(users, &isFav),
 		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
-	
+
 	addUsers(addSub, menu, T_("Grant &extra slot"), users,
 		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));
 

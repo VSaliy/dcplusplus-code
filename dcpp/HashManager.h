@@ -68,7 +68,7 @@ public:
 	TTHValue getTTH(const string& aFileName, int64_t aSize) throw(HashException);
 
 	bool getTree(const TTHValue& root, TigerTree& tt);
-	
+
 	/** Return block size of the tree associated with root, or 0 if no such tree is in the store */
 	size_t getBlockSize(const TTHValue& root);
 
@@ -88,7 +88,7 @@ public:
 
 	void startup() { hasher.start(); store.load(); }
 
-	void shutdown() { 
+	void shutdown() {
 		hasher.shutdown();
 		hasher.join();
 		Lock l(cs);

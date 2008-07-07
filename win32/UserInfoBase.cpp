@@ -69,8 +69,8 @@ void UserInfoBase::removeFromQueue() {
 	QueueManager::getInstance()->removeSource(user, QueueItem::Source::FLAG_REMOVED);
 }
 
-void UserInfoBase::UserTraits::operator()(UserInfoBase* ui) { 
-	if(ui->getUser()->isSet(User::NMDC)) 
+void UserInfoBase::UserTraits::operator()(UserInfoBase* ui) {
+	if(ui->getUser()->isSet(User::NMDC))
 		adcOnly = false;
 	bool fav = FavoriteManager::getInstance()->isFavoriteUser(ui->getUser());
 	if(fav)

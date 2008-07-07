@@ -26,7 +26,7 @@ class TypedTree : public dwt::Tree
 {
 	typedef typename dwt::Tree BaseType;
 	typedef TypedTree<ContentType> ThisType;
-	
+
 public:
 	typedef ThisType* ObjectType;
 
@@ -58,24 +58,24 @@ public:
 		item.itemex.lParam = reinterpret_cast<LPARAM>(data);
 		return this->insert(&item);
 	}
-	
+
 	HTREEITEM insert(TVINSERTSTRUCT* tvis) {
 		return TreeView_InsertItem(this->handle(), tvis);
 	}
-	
+
 	ContentType* getData(HTREEITEM item) {
 		return reinterpret_cast<ContentType*>(BaseType::getData(item));
 	}
-	
+
 	void getItem(TVITEMEX* item) {
 		TreeView_GetItem(this->handle(), item);
 	}
-	
+
 	ContentType* getSelectedData() {
 		HTREEITEM item = this->getSelected();
 		return item == NULL ? 0 : getData(item);
 	}
-	
+
 	void setItemState(HTREEITEM item, int state, int mask) {
 		TreeView_SetItemState(this->handle(), item, state, mask);
 	}

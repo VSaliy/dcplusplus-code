@@ -9,27 +9,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -77,17 +77,17 @@ bool RegKey::open(HKEY hKey, tstring lpSubKey,REGSAM samDesired,bool createIfNot
 	}
 	if(lResult != ERROR_SUCCESS) return false;
 	lResult = RegQueryInfoKey(
-		m_hKeyHandle,						// key handle 
-		REGKEYINFO.achClass,                // buffer for class name 
-		&REGKEYINFO.cchClassName,           // size of class string 
-		NULL,								// reserved 
-		&REGKEYINFO.cSubKeys,               // number of subkeys 
-		&REGKEYINFO.cbMaxSubKey,            // longest subkey size 
-		&REGKEYINFO.cchMaxClass,            // longest class string 
-		&REGKEYINFO.cValues,                // number of values for this key 
-		&REGKEYINFO.cchMaxValue,            // longest value name 
-		&REGKEYINFO.cbMaxValueData,         // longest value data 
-		&REGKEYINFO.cbSecurityDescriptor,   // security descriptor 
+		m_hKeyHandle,						// key handle
+		REGKEYINFO.achClass,                // buffer for class name
+		&REGKEYINFO.cchClassName,           // size of class string
+		NULL,								// reserved
+		&REGKEYINFO.cSubKeys,               // number of subkeys
+		&REGKEYINFO.cbMaxSubKey,            // longest subkey size
+		&REGKEYINFO.cchMaxClass,            // longest class string
+		&REGKEYINFO.cValues,                // number of values for this key
+		&REGKEYINFO.cchMaxValue,            // longest value name
+		&REGKEYINFO.cbMaxValueData,         // longest value data
+		&REGKEYINFO.cbSecurityDescriptor,   // security descriptor
 		&REGKEYINFO.ftLastWriteTime);       // last write time
 	return true;
 }
@@ -147,12 +147,12 @@ std::vector<tstring> RegKey::getValues(void)
 			memset(tmp,0,(REGKEYINFO.cchMaxValue + 1) * sizeof(TCHAR));
 			cbName = 16383;
 			lResult = RegEnumValue(m_hKeyHandle, i,
-                 tmp, 
-                 &cbName, 
-                 NULL, 
-                 NULL, 
-                 NULL, 
-                 NULL); 
+                 tmp,
+                 &cbName,
+                 NULL,
+                 NULL,
+                 NULL,
+                 NULL);
 			if(lResult == ERROR_SUCCESS) v.push_back(tmp);
 		}
 		free(tmp);
@@ -181,12 +181,12 @@ std::vector<tstring> RegKey::getSubkeys(void)
 			memset(tmp,0,(REGKEYINFO.cbMaxSubKey + 1) * sizeof(TCHAR));
 			cbName = 255;
 			lResult = RegEnumKeyEx(m_hKeyHandle, i,
-                 tmp, 
-                 &cbName, 
-                 NULL, 
-                 NULL, 
-                 NULL, 
-                 &ftLastWriteTime); 
+                 tmp,
+                 &cbName,
+                 NULL,
+                 NULL,
+                 NULL,
+                 &ftLastWriteTime);
 			if(lResult == ERROR_SUCCESS) v.push_back(tmp);
 		}
 		free(tmp);

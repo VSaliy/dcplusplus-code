@@ -51,14 +51,14 @@ SplashWindow::SplashWindow() : dwt::WidgetFactory<dwt::Window>(0) {
 	}
 
 	text->setFont(dwt::DefaultGuiFont);
-	
+
 	dwt::Point textSize(text->getTextSize(caption));
 	dwt::Point desktopSize(getDesktopSize());
 	int xmid = desktopSize.x / 2;
 	int ymid = desktopSize.y / 2;
 	int xtext = 300;
 	int ytext = textSize.y + 6;
-	
+
 	dwt::Rectangle r(xmid - xtext/2, ymid - ytext/2, xtext, ytext);
 	setBounds(r);
 	text->setBounds(0, 0, xtext, ytext);

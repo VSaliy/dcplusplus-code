@@ -9,27 +9,27 @@
 
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without modification, 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, 
+      * Redistributions of source code must retain the above copyright notice,
         this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors 
-        may be used to endorse or promote products derived from this software 
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+        may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -84,7 +84,7 @@ public:
 	  * a ::SendMessage from the Windows API
 	  */
 	LRESULT sendMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0) const;
-	
+
 	bool postMessage(UINT msg, WPARAM wParam = 0, LPARAM lParam = 0) const;
 
 	/// Returns the parent Widget of the Widget
@@ -100,7 +100,7 @@ public:
 	  * style (if true add style, else remove)
 	  */
 	void addRemoveStyle( DWORD addStyle, bool add );
-	
+
 	bool hasStyle(DWORD style);
 
 	/// Use this function to add or remove windows exStyles.
@@ -109,22 +109,22 @@ public:
 	  * style (if true add style, else remove)
 	  */
 	void addRemoveExStyle( DWORD addStyle, bool add );
-	
+
 	typedef std::tr1::function<bool(const MSG& msg, LRESULT& ret)> CallbackType;
 	typedef std::list<CallbackType> CallbackList;
 	typedef std::tr1::unordered_map<Message, CallbackList> CallbackCollectionType;
-	
+
 	/// Adds a new callback - multiple callbacks for the same message will be called in the order they were added
 	void addCallback(const Message& msg, const CallbackType& callback );
 
 	/// Sets the callback for msg - clears any other callbacks registered for the same message
 	void setCallback(const Message& msg, const CallbackType& callback );
-	
+
 	CallbackCollectionType & getCallbacks();
 
 	/// Returns true if fired, else false
 	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
-		
+
 	/** This will be called when it's time to delete the widget */
 	virtual void kill();
 
@@ -168,13 +168,13 @@ protected:
 		HMENU menuHandle;
 
 		/// Constructor initializing all member variables to default values
-		Seed(LPCTSTR className_, DWORD style_ = WS_VISIBLE, DWORD exStyle_ = 0, 
-			const tstring& caption_ = tstring(), 
+		Seed(LPCTSTR className_, DWORD style_ = WS_VISIBLE, DWORD exStyle_ = 0,
+			const tstring& caption_ = tstring(),
 			const Rectangle& location_ = letTheSystemDecide, HMENU menuHandle_ = NULL)
 			: className(className_), caption(caption_), style( style_ ), exStyle( exStyle_ ), location( location_ ), menuHandle( menuHandle_ )
 		{}
 	};
-	
+
 	Widget(Widget * parent);
 
 	virtual ~Widget();
@@ -188,7 +188,7 @@ protected:
 private:
 	friend class Application;
 	template<typename T> friend T hwnd_cast(HWND hwnd);
-	
+
 	// Contains the list of signals we're (this window) processing
 	CallbackCollectionType itsCallbacks;
 
@@ -201,7 +201,7 @@ private:
 };
 
 inline Widget::Widget( Widget * parent ) : itsParent(parent), itsHandle(NULL) {
-	
+
 }
 
 inline LRESULT Widget::sendMessage( UINT msg, WPARAM wParam, LPARAM lParam) const {
@@ -212,19 +212,19 @@ inline bool Widget::postMessage(UINT msg, WPARAM wParam, LPARAM lParam) const {
 	return ::PostMessage(handle(), msg, wParam, lParam);
 }
 
-inline HWND Widget::handle() const { 
+inline HWND Widget::handle() const {
 	return itsHandle;
 }
 
-inline Widget* Widget::getParent() const { 
-	return itsParent; 
+inline Widget* Widget::getParent() const {
+	return itsParent;
 }
 
 inline bool Widget::hasStyle(DWORD style) {
-	return (::GetWindowLong(this->handle(), GWL_STYLE) & style) == style;	
+	return (::GetWindowLong(this->handle(), GWL_STYLE) & style) == style;
 }
 
-inline Widget::CallbackCollectionType& Widget::getCallbacks() { 
+inline Widget::CallbackCollectionType& Widget::getCallbacks() {
 	return itsCallbacks;
 }
 
