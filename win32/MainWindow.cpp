@@ -380,6 +380,10 @@ bool MainWindow::filter(MSG& msg) {
 		return true;
 	}
 
+	if(::HtmlHelp(NULL, NULL, HH_PRETRANSLATEMESSAGE, reinterpret_cast<DWORD_PTR>(&msg))) {
+		return true;
+	}
+
 	Container* active = getTabView()->getActive();
 	if(active) {
 		if(::IsDialogMessage( active->handle(), & msg )) {
