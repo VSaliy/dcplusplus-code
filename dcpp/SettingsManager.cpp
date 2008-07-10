@@ -80,7 +80,7 @@ const string SettingsManager::settingTags[] =
 	"UseTLS", "AutoSearchLimit", "AltSortOrder", "AutoKickNoFavs", "PromptPassword", "SpyFrameIgnoreTthSearches",
 	"DontDlAlreadyQueued", "MaxCommandLength", "AllowUntrustedHubs", "AllowUntrustedClients",
 	"TLSPort", "FastHash", "SortFavUsersFirst", "ShowShellMenu", "SegmentedDL", "FollowLinks",
-	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "MaxTabChars",
+	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "MaxTabChars", "FinishedDLOnlyFull",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -279,6 +279,7 @@ SettingsManager::SettingsManager()
 	setDefault(OWNER_DRAWN_MENUS, true);
 	setDefault(CORAL, true);
 	setDefault(MAX_TAB_CHARS, 20);
+	setDefault(FINISHED_DL_ONLY_FULL, true);
 
 #ifdef _WIN32
 	setDefault(MAIN_WINDOW_STATE, SW_SHOWNORMAL);

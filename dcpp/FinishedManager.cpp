@@ -147,7 +147,8 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 					crc32Checked,
 					user
 					);
-				fire(FinishedManagerListener::UpdatedFile(), upload, file);
+				// we still dispatch a FinishedFileItem pointer in case previous ones were ignored
+				fire(FinishedManagerListener::UpdatedFile(), upload, file, it->second);
 			}
 		}
 
@@ -180,8 +181,18 @@ void FinishedManager::on(DownloadManagerListener::Complete, Download* d) throw()
 	onComplete(d, false, d->isSet(Download::FLAG_CRC32_OK));
 }
 
+void FinishedManager::on(DownloadManagerListener::Failed, Download* d, const string&) throw() {
+	if(d->getPos() > 0)
+		onComplete(d, false, d->isSet(Download::FLAG_CRC32_OK));
+}
+
 void FinishedManager::on(UploadManagerListener::Complete, Upload* u) throw() {
 	onComplete(u, true);
+}
+
+void FinishedManager::on(UploadManagerListener::Failed, Upload* u, const string&) throw() {
+	if(u->getPos() > 0)
+		onComplete(u, true);
 }
 
 } // namespace dcpp

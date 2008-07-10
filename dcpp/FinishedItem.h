@@ -65,6 +65,7 @@ public:
 		);
 
 	double getTransferredPercentage() const;
+	bool isFull() const;
 
 	GETSET(UserList, users, Users);
 	GETSET(int64_t, fileSize, FileSize);
