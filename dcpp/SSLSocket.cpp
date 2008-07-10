@@ -48,29 +48,16 @@ bool SSLSocket::waitConnected(uint32_t millis) {
 			checkSSL(-1);
 
 		checkSSL(SSL_set_fd(ssl, sock));
-
 	}
 
 	while(true) {
-		int error = SSL_connect(ssl);
-		if(error < 0) {
-			int err = SSL_get_error(ssl, ret);
-			switch(err) {
-			case SSL_ERROR_WANT_READ: {
-				if(wait(millis, Socket::WAIT_READ) != Socket::WAIT_READ) {
-					return false;
-				}
-			} break;
-			case SSL_ERROR_WANT_WRITE: {
-				if(wait(millis, Socket::WAIT_WRITE) != Socket::WAIT_WRITE) {
-					return false;
-				}
-			} break;
-			default: checkSSL(error);
-			}
-		} else {
+		int ret = SSL_connect(ssl);
+		if(ret == 1) {
 			dcdebug("Connected to SSL server using %s\n", SSL_get_cipher(ssl));
 			return true;
+		}
+		if(!waitWant(ret, millis)) {
+			return false;
 		}
 	}
 }
@@ -94,29 +81,31 @@ bool SSLSocket::waitAccepted(uint32_t millis) {
 	}
 
 	while(true) {
-		int error = SSL_accept(ssl);
-		if(error < 0) {
-			int err = SSL_get_error(ssl, ret);
-			switch(err) {
-			case SSL_ERROR_WANT_READ: {
-				if(wait(millis, Socket::WAIT_READ) != Socket::WAIT_READ) {
-					return false;
-				}
-			} break;
-			case SSL_ERROR_WANT_WRITE: {
-				if(wait(millis, Socket::WAIT_WRITE) != Socket::WAIT_WRITE) {
-					return false;
-				}
-			} break;
-			default: checkSSL(error);
-			}
-		} else {
+		int ret = SSL_accept(ssl);
+		if(ret == 1) {
 			dcdebug("Connected to SSL client using %s\n", SSL_get_cipher(ssl));
 			return true;
+		}
+		if(!waitWant(ret, millis)) {
+			return false;
 		}
 	}
 }
 
+bool SSLSocket::waitWant(int ret, uint32_t millis) {
+	int err = SSL_get_error(ssl, ret);
+	switch(err) {
+	case SSL_ERROR_WANT_READ:
+		return wait(millis, Socket::WAIT_READ) == WAIT_READ;
+	case SSL_ERROR_WANT_WRITE:
+		return wait(millis, Socket::WAIT_WRITE) == WAIT_WRITE;
+	// Check if this is a fatal error...
+	default: checkSSL(ret);
+	}
+	dcdebug("SSL: Unexpected fallthrough");
+	// There was no error?
+	return true;
+}
 
 int SSLSocket::read(void* aBuffer, int aBufLen) throw(SocketException) {
 	if(!ssl) {

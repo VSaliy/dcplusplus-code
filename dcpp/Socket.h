@@ -112,7 +112,7 @@ public:
 	void disconnect() throw();
 
 	virtual bool waitConnected(uint32_t millis);
-	virtual bool waitAcceped(uint32_t millis);
+	virtual bool waitAccepted(uint32_t millis);
 
 	/**
 	 * Reads zero to aBufLen characters from this socket,

@@ -527,7 +527,7 @@ int Socket::wait(uint32_t millis, int waitFor) throw(SocketException) {
 }
 
 bool Socket::waitConnected(uint32_t millis) {
-	return wait(POLL_TIMEOUT, Socket::WAIT_CONNECT) == WAIT_CONNECT;
+	return wait(millis, Socket::WAIT_CONNECT) == WAIT_CONNECT;
 }
 
 bool Socket::waitAccepted(uint32_t millis) {
