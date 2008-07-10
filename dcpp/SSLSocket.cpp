@@ -49,6 +49,10 @@ bool SSLSocket::waitConnected(uint32_t millis) {
 		checkSSL(SSL_set_fd(ssl, sock));
 	}
 
+	if(SSL_is_init_finished(ssl)) {
+		return true;
+	}
+
 	while(true) {
 		int ret = SSL_connect(ssl);
 		if(ret == 1) {
@@ -77,6 +81,10 @@ bool SSLSocket::waitAccepted(uint32_t millis) {
 			checkSSL(-1);
 
 		checkSSL(SSL_set_fd(ssl, sock));
+	}
+
+	if(SSL_is_init_finished(ssl)) {
+		return true;
 	}
 
 	while(true) {
