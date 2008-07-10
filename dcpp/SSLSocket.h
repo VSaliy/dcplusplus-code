@@ -54,7 +54,7 @@ public:
 	virtual std::string getDigest() const throw();
 
 	virtual bool waitConnected(uint32_t millis);
-	virtual bool waitAcceped(uint32_t millis);
+	virtual bool waitAccepted(uint32_t millis);
 
 
 private:
@@ -68,6 +68,7 @@ private:
 	ssl::SSL ssl;
 
 	int checkSSL(int ret) throw(SocketException);
+	bool waitWant(int ret, uint32_t millis);
 };
 
 } // namespace dcpp
