@@ -432,9 +432,10 @@ void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) {
 			string target = Text::fromT(tgt + si->columns[COLUMN_FILENAME]);
 			for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
 				const SearchResultPtr& sr = *i;
-				QueueManager::getInstance()->add(target, sr->getSize(),
-					sr->getTTH(), sr->getUser());
-
+				try {
+					QueueManager::getInstance()->add(target, sr->getSize(),
+						sr->getTTH(), sr->getUser());
+				} catch(const QueueException&) {} 
 			}
 			if(WinUtil::isShift())
 				QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
@@ -467,8 +468,10 @@ void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) {
 			string target = Text::fromT(tgt);
 			for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
 				const SearchResultPtr& sr = *i;
-				QueueManager::getInstance()->add(target, sr->getSize(),
-					sr->getTTH(), sr->getUser());
+				try {
+					QueueManager::getInstance()->add(target, sr->getSize(),
+						sr->getTTH(), sr->getUser());
+				} catch(const QueueException&) {} 
 			}
 
 			if(WinUtil::isShift())
