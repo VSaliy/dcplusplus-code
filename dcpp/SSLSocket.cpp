@@ -35,28 +35,88 @@ void SSLSocket::connect(const string& aIp, uint16_t aPort) throw(SocketException
 	Socket::setBlocking(true);
 	Socket::connect(aIp, aPort);
 
-	ssl.reset(SSL_new(ctx));
-	if(!ssl)
-		checkSSL(-1);
+	waitConnected(0);
+}
 
-	checkSSL(SSL_set_fd(ssl, sock));
-	checkSSL(SSL_connect(ssl));
-	dcdebug("Connected to SSL server using %s\n", SSL_get_cipher(ssl));
-	Socket::setBlocking(false);
+bool SSLSocket::waitConnected(uint32_t millis) {
+	if(!ssl) {
+		if(!Socket::waitConnected(millis)) {
+			return false;
+		}
+		ssl.reset(SSL_new(ctx));
+		if(!ssl)
+			checkSSL(-1);
+
+		checkSSL(SSL_set_fd(ssl, sock));
+
+	}
+
+	while(true) {
+		int error = SSL_connect(ssl);
+		if(error < 0) {
+			int err = SSL_get_error(ssl, ret);
+			switch(err) {
+			case SSL_ERROR_WANT_READ: {
+				if(wait(millis, Socket::WAIT_READ) != Socket::WAIT_READ) {
+					return false;
+				}
+			} break;
+			case SSL_ERROR_WANT_WRITE: {
+				if(wait(millis, Socket::WAIT_WRITE) != Socket::WAIT_WRITE) {
+					return false;
+				}
+			} break;
+			default: checkSSL(error);
+			}
+		} else {
+			dcdebug("Connected to SSL server using %s\n", SSL_get_cipher(ssl));
+			return true;
+		}
+	}
 }
 
 void SSLSocket::accept(const Socket& listeningSocket) throw(SocketException) {
 	Socket::accept(listeningSocket);
 
-	ssl.reset(SSL_new(ctx));
-	if(!ssl)
-		checkSSL(-1);
-
-	checkSSL(SSL_set_fd(ssl, sock));
-	/// @todo fix blocking if accept fails
-	checkSSL(SSL_accept(ssl));
-	dcdebug("Connected to SSL client using %s\n", SSL_get_cipher(ssl));
+	waitAccepted(0);
 }
+
+bool SSLSocket::waitAccepted(uint32_t millis) {
+	if(!ssl) {
+		if(!Socket::waitAccepted(millis)) {
+			return false;
+		}
+		ssl.reset(SSL_new(ctx));
+		if(!ssl)
+			checkSSL(-1);
+
+		checkSSL(SSL_set_fd(ssl, sock));
+	}
+
+	while(true) {
+		int error = SSL_accept(ssl);
+		if(error < 0) {
+			int err = SSL_get_error(ssl, ret);
+			switch(err) {
+			case SSL_ERROR_WANT_READ: {
+				if(wait(millis, Socket::WAIT_READ) != Socket::WAIT_READ) {
+					return false;
+				}
+			} break;
+			case SSL_ERROR_WANT_WRITE: {
+				if(wait(millis, Socket::WAIT_WRITE) != Socket::WAIT_WRITE) {
+					return false;
+				}
+			} break;
+			default: checkSSL(error);
+			}
+		} else {
+			dcdebug("Connected to SSL client using %s\n", SSL_get_cipher(ssl));
+			return true;
+		}
+	}
+}
+
 
 int SSLSocket::read(void* aBuffer, int aBufLen) throw(SocketException) {
 	if(!ssl) {
@@ -89,7 +149,7 @@ int SSLSocket::checkSSL(int ret) throw(SocketException) {
 	}
 	if(ret <= 0) {
 		int err = SSL_get_error(ssl, ret);
-		switch(SSL_get_error(ssl, ret)) {
+		switch(err) {
 			case SSL_ERROR_NONE:		// Fallthrough - YaSSL doesn't for example return an openssl compatible error on recv fail
 			case SSL_ERROR_WANT_READ:	// Fallthrough
 			case SSL_ERROR_WANT_WRITE:

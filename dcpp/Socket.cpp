@@ -526,6 +526,15 @@ int Socket::wait(uint32_t millis, int waitFor) throw(SocketException) {
 	return waitFor;
 }
 
+bool Socket::waitConnected(uint32_t millis) {
+	return wait(POLL_TIMEOUT, Socket::WAIT_CONNECT) == WAIT_CONNECT;
+}
+
+bool Socket::waitAccepted(uint32_t millis) {
+	// Normal sockets are always connected after a call to accept
+	return true;
+}
+
 string Socket::resolve(const string& aDns) {
 	sockaddr_in sock_addr;
 

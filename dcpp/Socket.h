@@ -111,6 +111,9 @@ public:
 	virtual void close() throw();
 	void disconnect() throw();
 
+	virtual bool waitConnected(uint32_t millis);
+	virtual bool waitAcceped(uint32_t millis);
+
 	/**
 	 * Reads zero to aBufLen characters from this socket,
 	 * @param aBuffer A buffer to store the data in.

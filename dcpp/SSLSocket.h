@@ -53,6 +53,10 @@ public:
 	virtual std::string getCipherName() const throw();
 	virtual std::string getDigest() const throw();
 
+	virtual bool waitConnected(uint32_t millis);
+	virtual bool waitAcceped(uint32_t millis);
+
+
 private:
 	friend class CryptoManager;
 
