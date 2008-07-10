@@ -43,7 +43,7 @@ class FinishedFrameBase :
 
 public:
 	enum Status {
-		STATUS_IMPL,
+		STATUS_ONLY_FULL,
 		STATUS_STATUS,
 		STATUS_COUNT,
 		STATUS_BYTES,
@@ -133,7 +133,7 @@ protected:
 
 			filesWindow->onActivate(std::tr1::bind(&dwt::CheckBox::setVisible, onlyFull, _1));
 
-			this->statusSizes[STATUS_IMPL] = 200; ///@todo get real checkbox + text width
+			this->statusSizes[STATUS_ONLY_FULL] = 200; ///@todo get real checkbox + text width
 		}
 
 		this->initStatus();
@@ -162,7 +162,7 @@ protected:
 
 		this->layoutStatus(r);
 		if(onlyFull && onlyFull->getVisible())
-			mapWidget(STATUS_IMPL, onlyFull);
+			mapWidget(STATUS_ONLY_FULL, onlyFull);
 
 		tabs->setBounds(r);
 	}
