@@ -85,6 +85,10 @@ double FinishedFileItem::getTransferredPercentage() const {
 	return fileSize > 0 ? (getTransferred() * 100. / fileSize) : 0;
 }
 
+bool FinishedFileItem::isFull() const {
+	return getTransferred() >= fileSize;
+}
+
 FinishedUserItem::FinishedUserItem(
 	int64_t transferred_,
 	int64_t milliSeconds_,

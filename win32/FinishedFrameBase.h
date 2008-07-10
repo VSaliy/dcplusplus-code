@@ -43,6 +43,7 @@ class FinishedFrameBase :
 
 public:
 	enum Status {
+		STATUS_IMPL,
 		STATUS_STATUS,
 		STATUS_COUNT,
 		STATUS_BYTES,
@@ -60,7 +61,9 @@ protected:
 		files(0),
 		filesWindow(0),
 		users(0),
-		usersWindow(0)
+		usersWindow(0),
+		onlyFull(0),
+		bOnlyFull(false)
 	{
 		{
 			dwt::TabView::Seed cs(0);
@@ -118,6 +121,21 @@ protected:
 		filesWindow->onSized(std::tr1::bind(&ThisType::fills, filesWindow, files));
 		usersWindow->onSized(std::tr1::bind(&ThisType::fills, usersWindow, users));
 
+		if(!in_UL) {
+			bOnlyFull = BOOLSETTING(FINISHED_DL_ONLY_FULL);
+			{
+				dwt::CheckBox::Seed cs(T_("Only show fully downloaded files"));
+				onlyFull = this->addChild(cs);
+				onlyFull->setHelpId(IDH_FINISHED_DL_ONLY_FULL);
+				onlyFull->setChecked(bOnlyFull);
+				onlyFull->onClicked(std::tr1::bind(&ThisType::handleOnlyFullClicked, this));
+			}
+
+			filesWindow->onActivate(std::tr1::bind(&dwt::CheckBox::setVisible, onlyFull, _1));
+
+			this->statusSizes[STATUS_IMPL] = 200; ///@todo get real checkbox + text width
+		}
+
 		this->initStatus();
 		this->status->onDblClicked(std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(in_UL ? LogManager::UPLOAD : LogManager::DOWNLOAD)))));
 
@@ -134,22 +152,7 @@ protected:
 
 		FinishedManager::getInstance()->addListener(this);
 
-		FinishedManager::getInstance()->lockLists();
-		{
-			HoldRedraw hold(files);
-			const FinishedManager::MapByFile& map = FinishedManager::getInstance()->getMapByFile(in_UL);
-			for(FinishedManager::MapByFile::const_iterator i = map.begin(); i != map.end(); ++i)
-				addFile(i->first, i->second);
-		}
-		{
-			HoldRedraw hold(users);
-			const FinishedManager::MapByUser& map = FinishedManager::getInstance()->getMapByUser(in_UL);
-			for(FinishedManager::MapByUser::const_iterator i = map.begin(); i != map.end(); ++i)
-				addUser(i->first, i->second);
-		}
-		FinishedManager::getInstance()->unLockLists();
-
-		updateStatus();
+		updateLists();
 	}
 
 	virtual ~FinishedFrameBase() { }
@@ -158,6 +161,9 @@ protected:
 		dwt::Rectangle r(this->getClientAreaSize());
 
 		this->layoutStatus(r);
+		if(onlyFull && onlyFull->getVisible())
+			mapWidget(STATUS_IMPL, onlyFull);
+
 		tabs->setBounds(r);
 	}
 
@@ -176,6 +182,9 @@ protected:
 		saveColumns(users,
 			in_UL ? SettingsManager::FINISHED_UL_USERS_ORDER : SettingsManager::FINISHED_DL_USERS_ORDER,
 			in_UL ? SettingsManager::FINISHED_UL_USERS_WIDTHS : SettingsManager::FINISHED_DL_USERS_WIDTHS);
+
+		if(!in_UL)
+			SettingsManager::getInstance()->set(SettingsManager::FINISHED_DL_ONLY_FULL, bOnlyFull);
 	}
 
 private:
@@ -351,6 +360,9 @@ private:
 	WidgetUsersPtr users;
 	dwt::ContainerPtr usersWindow;
 
+	dwt::CheckBoxPtr onlyFull;
+	bool bOnlyFull;
+
 	TaskQueue tasks;
 
 	static bool noClose() {
@@ -367,9 +379,15 @@ private:
 		for(TaskQueue::Iter i = t.begin(); i != t.end(); ++i) {
 			if(i->first == ADD_FILE) {
 				FileItemTask& task = *static_cast<FileItemTask*>(i->second);
-				addFile(task.file, task.entry);
-				updateStatus();
-				this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
+				FileInfo* data = findFileInfo(task.file);
+				if(data) {
+					// this file already exists; simply update it
+					speak(UPDATE_FILE, new StringTask(task.file));
+				} else {
+					addFile(task.file, task.entry);
+					updateStatus();
+					this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
+				}
 			} else if(i->first == ADD_USER) {
 				UserItemTask& task = *static_cast<UserItemTask*>(i->second);
 				addUser(task.user, task.entry);
@@ -380,23 +398,27 @@ private:
 				if(data) {
 					data->update();
 					files->update(data);
+					updateStatus();
 				}
 			} else if(i->first == UPDATE_USER) {
 				UserInfo* data = findUserInfo(static_cast<UserTask*>(i->second)->user);
 				if(data) {
 					data->update();
 					users->update(data);
+					updateStatus();
 				}
 			} else if(i->first == REMOVE_FILE) {
 				FileInfo* data = findFileInfo(static_cast<StringTask*>(i->second)->str);
-				if(data)
+				if(data) {
 					files->erase(data);
-				updateStatus();
+					updateStatus();
+				}
 			} else if(i->first == REMOVE_USER) {
 				UserInfo* data = findUserInfo(static_cast<UserTask*>(i->second)->user);
-				if(data)
+				if(data) {
 					users->erase(data);
-				updateStatus();
+					updateStatus();
+				}
 			} else if(i->first == REMOVE_ALL) {
 				clearTables();
 				updateStatus();
@@ -519,6 +541,32 @@ private:
 		FinishedManager::getInstance()->removeAll(in_UL);
 	}
 
+	void handleOnlyFullClicked() {
+		bOnlyFull = onlyFull->getChecked();
+
+		clearTables();
+		updateLists();
+	}
+
+	void updateLists() {
+		FinishedManager::getInstance()->lockLists();
+		{
+			HoldRedraw hold(files);
+			const FinishedManager::MapByFile& map = FinishedManager::getInstance()->getMapByFile(in_UL);
+			for(FinishedManager::MapByFile::const_iterator i = map.begin(); i != map.end(); ++i)
+				addFile(i->first, i->second);
+		}
+		{
+			HoldRedraw hold(users);
+			const FinishedManager::MapByUser& map = FinishedManager::getInstance()->getMapByUser(in_UL);
+			for(FinishedManager::MapByUser::const_iterator i = map.begin(); i != map.end(); ++i)
+				addUser(i->first, i->second);
+		}
+		FinishedManager::getInstance()->unLockLists();
+
+		updateStatus();
+	}
+
 	void updateStatus(bool activate = true) {
 		if(!activate)
 			return;
@@ -548,6 +596,9 @@ private:
 	}
 
 	void addFile(const string& file, const FinishedFileItemPtr& entry) {
+		if(bOnlyFull && !entry->isFull())
+			return;
+
 		int loc = files->insert(new FileInfo(file, entry));
 		if(files->getVisible())
 			files->ensureVisible(loc);
@@ -612,9 +663,13 @@ private:
 			speak(ADD_USER, new UserItemTask(user, entry));
 	}
 
-	virtual void on(UpdatedFile, bool upload, const string& file) throw() {
-		if(upload == in_UL)
-			speak(UPDATE_FILE, new StringTask(file));
+	virtual void on(UpdatedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
+		if(upload == in_UL) {
+			if(bOnlyFull && entry->isFull())
+				speak(ADD_FILE, new FileItemTask(file, entry));
+			else
+				speak(UPDATE_FILE, new StringTask(file));
+		}
 	}
 
 	virtual void on(UpdatedUser, bool upload, const UserPtr& user) throw() {
