@@ -143,12 +143,6 @@ void BufferedSocket::threadAccept() throw(SocketException) {
 	state = RUNNING;
 
 	uint64_t startTime = GET_TICK();
-	if(proxy) {
-		sock->socksConnect(aAddr, aPort, CONNECT_TIMEOUT);
-	} else {
-		sock->connect(aAddr, aPort);
-	}
-
 	while(sock->waitAccepted(POLL_TIMEOUT)) {
 		if(disconnecting)
 			return;
