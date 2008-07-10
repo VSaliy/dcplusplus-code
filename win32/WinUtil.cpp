@@ -66,7 +66,7 @@ const dwt::Button::Seed WinUtil::Seeds::button;
 const ComboBox::Seed WinUtil::Seeds::comboBoxStatic;
 const ComboBox::Seed WinUtil::Seeds::comboBoxEdit;
 const dwt::Menu::Seed WinUtil::Seeds::menu;
-const dwt::Table::Seed WinUtil::Seeds::Table;
+const Table::Seed WinUtil::Seeds::Table;
 const TextBox::Seed WinUtil::Seeds::textBox;
 const dwt::Tree::Seed WinUtil::Seeds::treeView;
 
@@ -128,7 +128,7 @@ void WinUtil::init() {
 	ComboBox::Seed& xcomboBoxEdit = const_cast<ComboBox::Seed&>(Seeds::comboBoxEdit);
 	ComboBox::Seed& xcomboBoxStatic = const_cast<ComboBox::Seed&>(Seeds::comboBoxStatic);
 	dwt::Menu::Seed& xmenu = const_cast<dwt::Menu::Seed&>(Seeds::menu);
-	dwt::Table::Seed& xTable = const_cast<dwt::Table::Seed&>(Seeds::Table);
+	Table::Seed& xTable = const_cast<Table::Seed&>(Seeds::Table);
 	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&>(Seeds::textBox);
 	dwt::Tree::Seed& xtreeView =  const_cast<dwt::Tree::Seed&>(Seeds::treeView);
 

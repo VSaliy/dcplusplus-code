@@ -21,6 +21,7 @@
 
 #include "TextBox.h"
 #include "ComboBox.h"
+#include "Table.h"
 #include "WidgetPaned.h"
 
 /**
@@ -43,6 +44,12 @@ public:
 	/// ComboBox object type.
 	typedef typename ComboBox::ObjectType ComboBoxPtr;
 
+	/// Table class type.
+	typedef ::Table Table;
+
+	/// Table object type.
+	typedef typename Table::ObjectType TablePtr;
+
 	/// VPaned class type.
 	typedef WidgetPaned< false > WidgetVPaned;
 
@@ -62,7 +69,6 @@ public:
 	WidgetHPanedPtr createHPaned( const typename WidgetHPaned::Seed & cs = WidgetHPaned::Seed() ) {
 		return dwt::WidgetCreator< WidgetHPaned >::create( this, cs );
 	}
-
 };
 
 #endif /*WIDGETFACTORY2_H_*/
