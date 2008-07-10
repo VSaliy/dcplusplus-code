@@ -16,6 +16,8 @@
 * Search spy tab highlighting (poy)
 * Help updates (emtee, poy)
 * Enable keyboard shortcuts in the help file (poy)
+* [L#242365] Error message when getting version info fails (thanks emtee)
+* [L#203763] Ctrl-A selects all list view items again (thanks poy)
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice

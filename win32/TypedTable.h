@@ -19,12 +19,13 @@
 #ifndef DCPLUSPLUS_WIN32_TYPED_LIST_VIEW_H
 #define DCPLUSPLUS_WIN32_TYPED_LIST_VIEW_H
 
+#include "Table.h"
 #include "WinUtil.h"
 
 template<class ContentType, bool managed = true>
-class TypedTable : public dwt::Table
+class TypedTable : public Table
 {
-	typedef typename dwt::Table BaseType;
+	typedef Table BaseType;
 	typedef TypedTable<ContentType, managed> ThisType;
 
 public:
@@ -210,27 +211,5 @@ private:
 	}
 
 };
-
-#ifdef PORT_ME
-
-template<class T, class ContentType>
-class TypedTable : public T::Table,
-	TableArrows<TypedTable<T, ctrlId> >
-{
-
-	LRESULT onChar(UINT /*msg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled) {
-		if((GetKeyState(VkKeyScan('A') & 0xFF) & 0xFF00) > 0 && (GetKeyState(VK_CONTROL) & 0xFF00) > 0){
-			int count = GetItemCount();
-			for(int i = 0; i < count; ++i)
-				ListView_SetItemState(m_hWnd, i, LVIS_SELECTED, LVIS_SELECTED);
-
-			return 0;
-		}
-
-		bHandled = FALSE;
-		return 1;
-	}
-};
-#endif
 
 #endif // !defined(TYPED_LIST_VIEW_CTRL_H)

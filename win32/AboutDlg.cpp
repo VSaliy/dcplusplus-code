@@ -97,6 +97,7 @@ void AboutDlg::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const 
 }
 
 void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&) throw() {
+	tstring* x = 0;
 	if(!downBuf.empty()) {
 		try {
 			SimpleXML xml;
@@ -104,12 +105,15 @@ void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const 
 			if(xml.findChild("DCUpdate")) {
 				xml.stepIn();
 				if(xml.findChild("Version")) {
-					tstring* x = new tstring(Text::toT(xml.getChildData()));
-					speak(SPEAK_VERSIONDATA, reinterpret_cast<LPARAM>(x));
+					x = new tstring(Text::toT(xml.getChildData()));
 				}
 			}
 		} catch(const SimpleXMLException&) { }
 	}
+	if(!x)
+		x = new tstring(T_("Error processing version information"));
+	speak(SPEAK_VERSIONDATA, reinterpret_cast<LPARAM>(x));
+
 	conn->removeListener(this);
 }
 

@@ -76,7 +76,7 @@ public:
 		static const ComboBox::Seed comboBoxStatic;
 		static const ComboBox::Seed comboBoxEdit;
 		static const dwt::Menu::Seed menu;
-		static const dwt::Table::Seed Table;
+		static const Table::Seed Table;
 		static const TextBox::Seed textBox;
 		static const dwt::Tree::Seed treeView;
 	};
