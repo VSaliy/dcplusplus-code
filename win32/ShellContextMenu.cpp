@@ -36,8 +36,7 @@ CShellContextMenu::CShellContextMenu(dwt::MenuPtr& parent_, const wstring& path)
 parent(parent_),
 m_psfFolder(NULL),
 m_pidlArray(NULL),
-sel_id(0),
-sel_handle(0)
+sel_id(0)
 {
 	parent->appendSeparator();
 	menu = parent->appendPopup(dwt::Menu::Seed(false), T_("Shell menu"));
@@ -114,23 +113,13 @@ CShellContextMenu::~CShellContextMenu() {
 }
 
 void CShellContextMenu::open(const dwt::ScreenCoordinate& pt, unsigned flags) {
-	{
-		// remove the MNS_NOTIFYBYPOS style
-		MENUINFO mi = { sizeof(MENUINFO), MIM_STYLE };
-		if(!::GetMenuInfo(parent->handle(), &mi))
-			return;
-		if(mi.dwStyle & MNS_NOTIFYBYPOS) {
-			mi.dwStyle &= ~MNS_NOTIFYBYPOS;
-			if(!::SetMenuInfo(parent->handle(), &mi))
-				return;
-		}
+	parent->open(pt, flags);
+	if(sel_id >= ID_SHELLCONTEXTMENU_MIN && sel_id <= ID_SHELLCONTEXTMENU_MAX) {
+		CMINVOKECOMMANDINFO cmi = { sizeof(CMINVOKECOMMANDINFO) };
+		cmi.lpVerb = (LPSTR)MAKEINTRESOURCE(sel_id - ID_SHELLCONTEXTMENU_MIN);
+		cmi.nShow = SW_SHOWNORMAL;
+		g_IContext3->InvokeCommand(&cmi);
 	}
-
-	unsigned id = parent->open(pt, flags | TPM_RETURNCMD);
-	if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
-		InvokeCommand(g_IContext3, id - ID_SHELLCONTEXTMENU_MIN);
-	else
-		parent->getParent()->postMessage(WM_MENUCOMMAND, sel_id, sel_handle);
 
 	delete this;
 }
@@ -145,13 +134,6 @@ void CShellContextMenu::FreePIDLArray(LPITEMIDLIST* pidlArray)
 	for(int i = 0; i < iSize; i++)
 		free(pidlArray[i]);
 	free(pidlArray);
-}
-
-void CShellContextMenu::InvokeCommand(LPCONTEXTMENU pContextMenu, unsigned id) {
-	CMINVOKECOMMANDINFO cmi = { sizeof(CMINVOKECOMMANDINFO) };
-	cmi.lpVerb = (LPSTR)MAKEINTRESOURCE(id);
-	cmi.nShow = SW_SHOWNORMAL;
-	pContextMenu->InvokeCommand(&cmi);
 }
 
 LRESULT CALLBACK CShellContextMenu::HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -213,15 +195,8 @@ LRESULT CALLBACK CShellContextMenu::HookWndProc(HWND hWnd, UINT message, WPARAM 
 			if((HIWORD(wParam) == 0xFFFF) && (lParam == 0))
 				break;
 
-			unsigned id = LOWORD(wParam);
-			if(id < ID_SHELLCONTEXTMENU_MIN || id > ID_SHELLCONTEXTMENU_MAX) {
-				/*
-				* this is not an item added by the Shell menu; save the id (which is an index,
-				* actually) and the handle in case we have to dispatch them with WM_MENUCOMMAND.
-				*/
-				pShellMenu->sel_id = id;
-				pShellMenu->sel_handle = lParam;
-			}
+			// save the currently selected id in case we need to dispatch it later on
+			pShellMenu->sel_id = LOWORD(wParam);
 			break;
 		}
 	}
