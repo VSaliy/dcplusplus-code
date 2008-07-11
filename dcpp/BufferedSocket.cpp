@@ -143,7 +143,7 @@ void BufferedSocket::threadAccept() throw(SocketException) {
 	state = RUNNING;
 
 	uint64_t startTime = GET_TICK();
-	while(sock->waitAccepted(POLL_TIMEOUT)) {
+	while(!sock->waitAccepted(POLL_TIMEOUT)) {
 		if(disconnecting)
 			return;
 
