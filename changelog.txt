@@ -21,6 +21,7 @@
 * [L#245474] Error when adding multiple sources to queue (thanks emtee)
 * [L#234458] "Only show fully downloaded files" check-box in the finished DL status bar (poy)
 * Count transfers that have run then failed in finished windows (poy)
+* [L#247038] Improve SSL connection setup
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
