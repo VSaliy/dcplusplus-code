@@ -876,8 +876,6 @@ void Menu::appendItem(const tstring & text, const Dispatcher::F& f, BitmapPtr im
 	// set position to insert
 	unsigned index = getCount();
 
-	info.wID = index;
-
 	ItemDataWrapper * wrapper = NULL;
 	if(ownerDrawn) {
 		info.fMask |= MIIM_FTYPE | MIIM_DATA;

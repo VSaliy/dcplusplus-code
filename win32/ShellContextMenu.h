@@ -44,11 +44,8 @@ private:
 	LPITEMIDLIST* m_pidlArray;
 
 	unsigned sel_id;
-	LPARAM sel_handle;
 
 	void FreePIDLArray(LPITEMIDLIST* pidlArray);
-
-	void InvokeCommand(LPCONTEXTMENU pContextMenu, unsigned id);
 
 	static LRESULT CALLBACK HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	void handleInitMenuPopup(HMENU hMenu);
