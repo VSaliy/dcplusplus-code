@@ -74,7 +74,6 @@ void BufferedSocket::setSocket(std::auto_ptr<Socket> s) {
 		s->setSocketOpt(SO_RCVBUF, SETTING(SOCKET_IN_BUFFER));
 	if(SETTING(SOCKET_OUT_BUFFER) > 0)
 		s->setSocketOpt(SO_SNDBUF, SETTING(SOCKET_OUT_BUFFER));
-	s->setBlocking(false);
 
 	inbuf.resize(s->getSocketOptInt(SO_RCVBUF));
 
