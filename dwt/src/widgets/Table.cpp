@@ -171,13 +171,13 @@ void Table::createColumns(const std::vector<tstring>& names, const std::vector<i
 			lvColumn.mask |= LVCF_FMT;
 			lvColumn.fmt |= alignment[i] ? LVCFMT_RIGHT : LVCFMT_LEFT;
 		}
-		if(i < order.size()) {
-			lvColumn.mask |= LVCF_ORDER;
-			lvColumn.iOrder = order[i];
-		}
 		if ( ListView_InsertColumn( this->handle(), i, &lvColumn) == - 1 ) {
 			throw Win32Exception("Error while trying to create Columns in list view" );
 		}
+	}
+
+	if(order.size() == names.size()) {
+		setColumnOrder(order);
 	}
 }
 
