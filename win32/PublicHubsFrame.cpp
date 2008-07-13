@@ -91,7 +91,7 @@ PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 		hubs = addChild(cs);
 		addWidget(hubs);
 
-		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
+		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(PUBLICHUBSFRAME_ORDER), SETTING(PUBLICHUBSFRAME_WIDTHS));
 		hubs->setSort(COLUMN_USERS, false);
 
 		hubs->onDblClicked(std::tr1::bind(&PublicHubsFrame::openSelected, this));
