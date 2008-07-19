@@ -699,7 +699,7 @@ void WinUtil::registerDchubHandler() {
 
 	if(Util::stricmp(app.c_str(), Buf) != 0) {
 		if (::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL)) {
-			LogManager::getInstance()->message(_("Error creating dchub registry key"));
+			LogManager::getInstance()->message(_("Error registering dchub:// handler"));
 			return;
 		}
 
@@ -738,7 +738,7 @@ void WinUtil::registerDchubHandler() {
 
 	 if(Util::stricmp(app.c_str(), Buf) != 0) {
 		 if (::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL)) {
-			 LogManager::getInstance()->message(_("Error creating adc registry key"));
+			 LogManager::getInstance()->message(_("Error registering adc:// link handler"));
 			 return;
 		 }
 
@@ -798,7 +798,7 @@ void WinUtil::registerDchubHandler() {
 		} else {
 			// set Magnet\Location
 			if (::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL)) {
-				LogManager::getInstance()->message(_("Error creating magnet registry key"));
+				LogManager::getInstance()->message(_("Error registering Magnet link handler"));
 				return;
 			}
 
@@ -811,7 +811,7 @@ void WinUtil::registerDchubHandler() {
 	if(BOOLSETTING(MAGNET_REGISTER) && (Util::strnicmp(openCmd, magnetLoc, magnetLoc.size()) != 0 || !haveMagnet)) {
 		SHDeleteKey(HKEY_CLASSES_ROOT, _T("magnet"));
 		if (::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL)) {
-			LogManager::getInstance()->message(_("Error creating magnet registry key"));
+			LogManager::getInstance()->message(_("Error registering Magnet link handler"));
 			return;
 		}
 		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE)CT_("URL:MAGNET URI"), sizeof(TCHAR)*(T_("URL:MAGNET URI").length()+1));
