@@ -79,9 +79,7 @@ MainWindow::MainWindow() :
 	stopperThread(NULL),
 	lastUp(0),
 	lastDown(0),
-	lastTick(GET_TICK()),
-	UPnP_TCPConnection(0),
-	UPnP_UDPConnection(0)
+	lastTick(GET_TICK())
 {
 	links.homepage = _T("http://dcplusplus.sourceforge.net/");
 	links.downloads = links.homepage + _T("download/");
@@ -701,24 +699,28 @@ void MainWindow::startUPnP() {
 	stopUPnP();
 
 	if( SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP ) {
-		UPnP_TCPConnection = new UPnP( Util::getLocalIp(), "TCP", APPNAME " Download Port (" + Util::toString(ConnectionManager::getInstance()->getPort()) + " TCP)", ConnectionManager::getInstance()->getPort() );
-		UPnP_UDPConnection = new UPnP( Util::getLocalIp(), "UDP", APPNAME " Search Port (" + Util::toString(SearchManager::getInstance()->getPort()) + " UDP)", SearchManager::getInstance()->getPort() );
+		bool ok = true;
 
-		if ( FAILED(UPnP_UDPConnection->OpenPorts()) || FAILED(UPnP_TCPConnection->OpenPorts()) )
-		{
-			LogManager::getInstance()->message(_("Failed to create port mappings. Please set up your NAT yourself."));
-			createMessageBox().show(T_("Failed to create port mappings. Please set up your NAT yourself."), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
-
-			// We failed! thus reset the objects
-			delete UPnP_TCPConnection;
-			delete UPnP_UDPConnection;
-			UPnP_TCPConnection = UPnP_UDPConnection = NULL;
+		uint16_t port = ConnectionManager::getInstance()->getPort();
+		if(port != 0) {
+			UPnP_TCP.reset(new UPnP( Util::getLocalIp(), "TCP", str(F_(APPNAME " Transfer Port (%1% TCP)") % port), port));
+			ok &= UPnP_TCP->open();
 		}
-		else
-		{
+		port = ConnectionManager::getInstance()->getSecurePort();
+		if(ok && port != 0) {
+			UPnP_TLS.reset(new UPnP( Util::getLocalIp(), "TCP", str(F_(APPNAME " Encrypted Transfer Port (%1% TCP)") % port), port));
+			ok &= UPnP_TLS->open();
+		}
+		port = SearchManager::getInstance()->getPort();
+		if(ok && port != 0) {
+			UPnP_UDP.reset(new UPnP( Util::getLocalIp(), "UDP", str(F_(APPNAME " Search Port (%1% UDP)") % port), port));
+			ok &= UPnP_UDP->open();
+		}
+
+		if(ok) {
 			if(!BOOLSETTING(NO_IP_OVERRIDE)) {
 				// now lets configure the external IP (connect to me) address
-				string ExternalIP = UPnP_TCPConnection->GetExternalIP();
+				string ExternalIP = UPnP_TCP->GetExternalIP();
 				if ( !ExternalIP.empty() ) {
 					// woohoo, we got the external IP from the UPnP framework
 					SettingsManager::getInstance()->set(SettingsManager::EXTERNAL_IP, ExternalIP );
@@ -729,31 +731,34 @@ void MainWindow::startUPnP() {
 					createMessageBox().show(T_("Failed to get external IP via  UPnP. Please set it yourself."), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
 				}
 			}
+		} else {
+			LogManager::getInstance()->message(_("Failed to create port mappings. Please set up your NAT yourself."));
+			createMessageBox().show(T_("Failed to create port mappings. Please set up your NAT yourself."), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
+			stopUPnP();
 		}
 	}
 }
 
 void MainWindow::stopUPnP() {
 	// Just check if the port mapping objects are initialized (NOT NULL)
-	if ( UPnP_TCPConnection != NULL )
-	{
-		if (FAILED(UPnP_TCPConnection->ClosePorts()) )
-		{
+	if(UPnP_TCP.get()) {
+		if(!UPnP_TCP->close()) {
 			LogManager::getInstance()->message(_("Failed to remove port mappings"));
 		}
-		delete UPnP_TCPConnection;
+		UPnP_TCP.reset();
 	}
-	if ( UPnP_UDPConnection != NULL )
-	{
-		if (FAILED(UPnP_UDPConnection->ClosePorts()) )
-		{
+	if(UPnP_TLS.get()) {
+		if(!UPnP_TLS->close()) {
 			LogManager::getInstance()->message(_("Failed to remove port mappings"));
 		}
-		delete UPnP_UDPConnection;
+		UPnP_TLS.reset();
 	}
-	// Not sure this is required (i.e. Objects are checked later in execution)
-	// But its better being on the save side :P
-	UPnP_TCPConnection = UPnP_UDPConnection = NULL;
+	if(UPnP_UDP.get()) {
+		if(!UPnP_UDP->close()) {
+			LogManager::getInstance()->message(_("Failed to remove port mappings"));
+		}
+		UPnP_UDP.reset();
+	}
 }
 
 void MainWindow::handleOpenFileList() {

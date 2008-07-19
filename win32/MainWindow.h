@@ -129,8 +129,9 @@ private:
 	dwt::NotificationPtr notify;
 
 	// UPnP connectors
-	UPnP* UPnP_TCPConnection;
-	UPnP* UPnP_UDPConnection;
+	std::auto_ptr<UPnP> UPnP_TCP;
+	std::auto_ptr<UPnP> UPnP_TLS;
+	std::auto_ptr<UPnP> UPnP_UDP;
 
 	void initWindow();
 	void initMenu();

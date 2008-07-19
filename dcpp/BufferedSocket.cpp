@@ -460,7 +460,9 @@ int BufferedSocket::run() {
 }
 
 void BufferedSocket::fail(const string& aError) {
-	sock->disconnect();
+	if(sock.get()) {
+		sock->disconnect();
+	}
 
 	if(state == RUNNING) {
 		state = FAILED;
@@ -475,7 +477,7 @@ void BufferedSocket::shutdown() {
 }
 
 void BufferedSocket::addTask(Tasks task, TaskData* data) {
-	dcassert(task == SHUTDOWN || sock.get());
+	dcassert(task == DISCONNECT || task == SHUTDOWN || task == UPDATED || sock.get());
 	tasks.push_back(make_pair(task, data)); taskSem.signal();
 }
 

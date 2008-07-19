@@ -229,7 +229,7 @@ int ConnectionManager::Server::run() throw() {
 				}
 			}
 		} catch(const Exception& e) {
-			dcdebug("SearchManager::run Error: %s\n", e.getError().c_str());
+			dcdebug("ConnectionManager::Server::run Error: %s\n", e.getError().c_str());
 		}
 
 		bool failed = false;
