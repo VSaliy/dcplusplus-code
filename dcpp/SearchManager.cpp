@@ -25,11 +25,11 @@
 #include "ClientManager.h"
 #include "ShareManager.h"
 #include "SearchResult.h"
+#include "LogManager.h"
 
 namespace dcpp {
 
 SearchManager::SearchManager() :
-	socket(NULL),
 	port(0),
 	stop(false),
 	lastSearch(GET_TICK())
@@ -38,13 +38,12 @@ SearchManager::SearchManager() :
 }
 
 SearchManager::~SearchManager() throw() {
-	if(socket) {
+	if(socket.get()) {
 		stop = true;
 		socket->disconnect();
 #ifdef _WIN32
 		join();
 #endif
-		delete socket;
 	}
 }
 
@@ -66,21 +65,28 @@ void SearchManager::listen() throw(SocketException) {
 
 	disconnect();
 
-	socket = new Socket();
-	socket->create(Socket::TYPE_UDP);
-	socket->setBlocking(true);
-	port = socket->bind(static_cast<uint16_t>(SETTING(UDP_PORT)), SETTING(BIND_ADDRESS));
+	try {
+		socket.reset(new Socket);
+		socket->create(Socket::TYPE_UDP);
+		socket->setBlocking(true);
+		port = socket->bind(static_cast<uint16_t>(SETTING(UDP_PORT)), SETTING(BIND_ADDRESS));
 
-	start();
+		start();
+	} catch(...) {
+		socket.reset();
+		throw;
+	}
 }
 
 void SearchManager::disconnect() throw() {
-	if(socket != NULL) {
+	if(socket.get()) {
 		stop = true;
 		socket->disconnect();
 		port = 0;
 
 		join();
+
+		socket.reset();
 
 		stop = false;
 	}
@@ -88,35 +94,45 @@ void SearchManager::disconnect() throw() {
 
 #define BUFSIZE 8192
 int SearchManager::run() {
-
 	boost::scoped_array<uint8_t> buf(new uint8_t[BUFSIZE]);
 	int len;
+	string remoteAddr;
 
-	while(true) {
-
-		string remoteAddr;
+	while(!stop) {
 		try {
-			while( (len = socket->read(&buf[0], BUFSIZE, remoteAddr)) != 0) {
+			while( (len = socket->read(&buf[0], BUFSIZE, remoteAddr)) > 0) {
 				onData(&buf[0], len, remoteAddr);
 			}
 		} catch(const SocketException& e) {
 			dcdebug("SearchManager::run Error: %s\n", e.getError().c_str());
 		}
-		if(stop) {
-			return 0;
-		}
 
-		try {
-			socket->disconnect();
-			socket->create(Socket::TYPE_UDP);
-			socket->bind(port, SETTING(BIND_ADDRESS));
-		} catch(const SocketException& e) {
-			// Oops, fatal this time...
-			dcdebug("SearchManager::run Stopped listening: %s\n", e.getError().c_str());
-			return 1;
+		bool failed = false;
+		while(!stop) {
+			try {
+				socket->disconnect();
+				socket->create(Socket::TYPE_UDP);
+				socket->setBlocking(true);
+				socket->bind(port, SETTING(BIND_ADDRESS));
+				if(failed) {
+					LogManager::getInstance()->message("Search enabled again");
+					failed = false;
+				}
+			} catch(const SocketException& e) {
+				dcdebug("SearchManager::run Stopped listening: %s\n", e.getError().c_str());
+
+				if(!failed) {
+					LogManager::getInstance()->message(str(F_("Search disabled: %1%") % e.getError()));
+					failed = true;
+				}
+
+				// Spin for 60 seconds
+				for(int i = 0; i < 60 && !stop; ++i) {
+					Thread::sleep(1000);
+				}
+			}
 		}
 	}
-
 	return 0;
 }
 
