@@ -26,8 +26,8 @@ class UPnP
 public:
 	UPnP( const string, const string, const string, const unsigned short );
 	~UPnP();
-	HRESULT OpenPorts();
-	HRESULT ClosePorts();
+	bool open();
+	bool close();
 	string GetExternalIP();
 private:
 	bool PortsAreOpen;
@@ -37,8 +37,6 @@ private:
 	BSTR bstrProtocol;			// protocol (TCP or UDP)
 	BSTR bstrExternalIP;		// external IP address
 	IUPnPNAT* pUN;				// pointer to the UPnPNAT interface
-	IStaticPortMappingCollection* pSPMC; // pointer to the collection
-	IStaticPortMapping * pSPM;	// pointer to the port map
 };
 
 #endif // UPNP_H

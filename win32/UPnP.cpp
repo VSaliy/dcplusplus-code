@@ -40,7 +40,7 @@ UPnP::UPnP(const string theIPAddress, const string theProtocol, const string the
 }
 
 // Opens the UPnP ports defined when the object was created
-HRESULT UPnP::OpenPorts() {
+bool UPnP::open() {
 	// Lacking the __uuidof in mingw...
 	CLSID upnp;
 	OLECHAR upnps[] = L"{AE1E00AA-3FD5-403C-8A27-2BBDC30CD0E1}";
@@ -48,11 +48,8 @@ HRESULT UPnP::OpenPorts() {
 	IID iupnp;
 	OLECHAR iupnps[] = L"{B171C812-CC76-485A-94D8-B6B3A2794E99}";
 	CLSIDFromString(iupnps, &iupnp);
-	HRESULT hr = CoCreateInstance (upnp,
-		NULL,
-		CLSCTX_INPROC_SERVER,
-		iupnp,
-		(void**)&pUN);
+	HRESULT hr = CoCreateInstance (upnp, NULL, CLSCTX_INPROC_SERVER,
+		iupnp, (void**)&pUN);
 
 	if(SUCCEEDED(hr)) {
 		IStaticPortMappingCollection * pSPMC = NULL;
@@ -62,14 +59,9 @@ HRESULT UPnP::OpenPorts() {
 			// see comment in "else"
 			if(bstrProtocol && bstrInternalClient && bstrDescription) {
 				IStaticPortMapping * pSPM = NULL;
-				hr = pSPMC->Add(PortNumber,
-					bstrProtocol,
-					PortNumber,
-					bstrInternalClient,
-					VARIANT_TRUE,
-					bstrDescription,
-					&pSPM
-				);
+				hr = pSPMC->Add(PortNumber, bstrProtocol, PortNumber,
+					bstrInternalClient, VARIANT_TRUE, bstrDescription,
+					&pSPM);
 
 				if(SUCCEEDED(hr)) {
 					PortsAreOpen = true;
@@ -82,13 +74,13 @@ HRESULT UPnP::OpenPorts() {
 			// conditions, get_SPMC NULLs out the pointer, but incorrectly returns a success code.
 		}
 	}
-	return hr;
+	return SUCCEEDED(hr);
 }
 
 // Closes the UPnP ports defined when the object was created
-HRESULT UPnP::ClosePorts() {
+bool UPnP::close() {
 	if(PortsAreOpen == false) {
-		return S_OK;
+		return true;
 	}
 
 	HRESULT hr = E_FAIL;
@@ -100,11 +92,12 @@ HRESULT UPnP::ClosePorts() {
 
 		if(SUCCEEDED(hr2) && pSPMC) {
 			hr = pSPMC->Remove(PortNumber, bstrProtocol);
+			PortsAreOpen = false;
 			pSPMC->Release();
 		}
 
 	}
-	return hr;
+	return SUCCEEDED(hr);
 }
 
 // Returns the current external IP address
@@ -135,11 +128,7 @@ string UPnP::GetExternalIP() {
 
 	// Lets Query our mapping
 	IStaticPortMapping *pISM;
-	hr = pIMaps->get_Item(
-		PortNumber,
-		bstrProtocol,
-		&pISM
-	);
+	hr = pIMaps->get_Item(PortNumber, bstrProtocol, &pISM);
 
 	// Query failed!
 	if(!SUCCEEDED(hr)) {
@@ -177,6 +166,7 @@ string UPnP::GetExternalIP() {
 }
 
 UPnP::~UPnP() {
+	close();
 	if (pUN) {
 		pUN->Release();
 	}

@@ -23,6 +23,8 @@
 * Count transfers that have run then failed in finished windows (poy)
 * [L#247038] Improve SSL connection setup
 * [L#249692] Better magnet error message
+* UPnP works for TLS port too
+* [L#242329] Fix SSL assert
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
