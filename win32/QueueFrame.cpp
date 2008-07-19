@@ -502,7 +502,16 @@ void QueueFrame::QueueItemInfo::update() {
 	}
 }
 
-QueueFrame::DirItemInfo::DirItemInfo(const string& dir_) : dir(dir_), text(dir_.empty() ? Util::emptyStringT : Text::toT(dir_.substr(0, dir_.length()-1))) {
+static tstring getDisplayName(const string& name) {
+	if(name.empty())
+		return Util::emptyStringT;
+	if(name.length() == 3 && name[1] == ':') {
+		return Text::toT(name);
+	}
+	return Text::toT(name.substr(0, name.length() - 1));
+}
+
+QueueFrame::DirItemInfo::DirItemInfo(const string& dir_) : dir(dir_), text(getDisplayName(dir_)) {
 
 }
 
