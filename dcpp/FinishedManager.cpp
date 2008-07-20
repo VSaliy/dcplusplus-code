@@ -121,7 +121,13 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 		string file = t->getPath();
 		const UserPtr& user = t->getUser();
 
-		int64_t size = upload ? File::getSize(file) : ( t->getType() == Transfer::TYPE_FULL_LIST ? t->getSize() : QueueManager::getInstance()->getSize(file));
+		int64_t milliSeconds = GET_TICK() - t->getStart();
+		time_t time = GET_TIME();
+
+		int64_t size = 0;
+		// get downloads' file size here to avoid deadlocks
+		if(!upload)
+			size = (t->getType() == Transfer::TYPE_FULL_LIST) ? t->getSize() : QueueManager::getInstance()->getSize(file);
 
 		Lock l(cs);
 
@@ -131,9 +137,9 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 			if(it == map.end()) {
 				FinishedFileItemPtr p = new FinishedFileItem(
 					t->getPos(),
-					GET_TICK() - t->getStart(),
-					GET_TIME(),
-					size,
+					milliSeconds,
+					time,
+					upload ? File::getSize(file) : size,
 					crc32Checked,
 					user
 					);
@@ -142,8 +148,8 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 			} else {
 				it->second->update(
 					t->getPos(),
-					GET_TICK() - t->getStart(),
-					GET_TIME(),
+					milliSeconds,
+					time,
 					crc32Checked,
 					user
 					);
@@ -158,8 +164,8 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 			if(it == map.end()) {
 				FinishedUserItemPtr p = new FinishedUserItem(
 					t->getPos(),
-					GET_TICK() - t->getStart(),
-					GET_TIME(),
+					milliSeconds,
+					time,
 					file
 					);
 				map[user] = p;
@@ -167,8 +173,8 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 			} else {
 				it->second->update(
 					t->getPos(),
-					GET_TICK() - t->getStart(),
-					GET_TIME(),
+					milliSeconds,
+					time,
 					file
 					);
 				fire(FinishedManagerListener::UpdatedUser(), upload, user);
