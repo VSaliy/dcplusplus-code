@@ -97,7 +97,12 @@ public:
 		INT_LAST };
 
 	enum Int64Setting { INT64_FIRST = INT_LAST + 1,
-		TOTAL_UPLOAD = INT64_FIRST, TOTAL_DOWNLOAD, INT64_LAST, SETTINGS_LAST = INT64_LAST };
+		TOTAL_UPLOAD = INT64_FIRST, TOTAL_DOWNLOAD,
+		INT64_LAST };
+
+	enum FloatSetting { FLOAT_FIRST = INT64_LAST +1,
+		TRANSFERS_PANED_POS = FLOAT_FIRST, QUEUE_PANED_POS,
+		FLOAT_LAST, SETTINGS_LAST = FLOAT_LAST };
 
 	enum {	INCOMING_DIRECT, INCOMING_FIREWALL_UPNP, INCOMING_FIREWALL_NAT,
 		INCOMING_FIREWALL_PASSIVE };
@@ -114,6 +119,9 @@ public:
 	}
 	int64_t get(Int64Setting key, bool useDefault = true) const {
 		return (isSet[key] || !useDefault) ? int64Settings[key - INT64_FIRST] : int64Defaults[key - INT64_FIRST];
+	}
+	float get(FloatSetting key, bool useDefault = true) const {
+		return (isSet[key] || !useDefault) ? floatSettings[key - FLOAT_FIRST] : floatDefaults[key - FLOAT_FIRST];
 	}
 
 	bool getBool(IntSetting key, bool useDefault = true) const {
@@ -164,6 +172,16 @@ public:
 
 	void set(IntSetting key, bool value) { set(key, (int)value); }
 
+	void set(FloatSetting key, float value) {
+		floatSettings[key - FLOAT_FIRST] = value;
+		isSet[key] = true;
+	}
+	void set(FloatSetting key, double value) {
+		// yes, we loose precision here, but we're gonna loose even more when saving to the XML file...
+		floatSettings[key - FLOAT_FIRST] = value;
+		isSet[key] = true;
+	}
+
 	void setDefault(StrSetting key, string const& value) {
 		strDefaults[key - STR_FIRST] = value;
 	}
@@ -173,6 +191,9 @@ public:
 	}
 	void setDefault(Int64Setting key, int64_t value) {
 		int64Defaults[key - INT64_FIRST] = value;
+	}
+	void setDefault(FloatSetting key, float value) {
+		floatDefaults[key - FLOAT_FIRST] = value;
 	}
 
 	bool isDefault(int aSet) { return !isSet[aSet]; }
@@ -197,9 +218,13 @@ private:
 	string strSettings[STR_LAST - STR_FIRST];
 	int    intSettings[INT_LAST - INT_FIRST];
 	int64_t int64Settings[INT64_LAST - INT64_FIRST];
+	float floatSettings[FLOAT_LAST - FLOAT_FIRST];
+
 	string strDefaults[STR_LAST - STR_FIRST];
 	int    intDefaults[INT_LAST - INT_FIRST];
 	int64_t int64Defaults[INT64_LAST - INT64_FIRST];
+	float floatDefaults[FLOAT_LAST - FLOAT_FIRST];
+
 	bool isSet[SETTINGS_LAST];
 };
 

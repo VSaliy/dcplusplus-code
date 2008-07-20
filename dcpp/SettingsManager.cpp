@@ -84,6 +84,9 @@ const string SettingsManager::settingTags[] =
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
+	"SENTRY",
+	// Floats
+	"TransfersPanedPos", "QueuePanedPos",
 	"SENTRY"
 };
 
@@ -109,13 +112,17 @@ SettingsManager::SettingsManager()
 	for(int i=0; i<SETTINGS_LAST; i++)
 		isSet[i] = false;
 
-	for(int j=0; j<INT_LAST-INT_FIRST; j++) {
-		intDefaults[j] = 0;
-		intSettings[j] = 0;
+	for(int i=0; i<INT_LAST-INT_FIRST; i++) {
+		intDefaults[i] = 0;
+		intSettings[i] = 0;
 	}
-	for(int k=0; k<INT64_LAST-INT64_FIRST; k++) {
-		int64Defaults[k] = 0;
-		int64Settings[k] = 0;
+	for(int i=0; i<INT64_LAST-INT64_FIRST; i++) {
+		int64Defaults[i] = 0;
+		int64Settings[i] = 0;
+	}
+	for(int i=0; i<FLOAT_LAST-FLOAT_FIRST; i++) {
+		floatDefaults[i] = 0;
+		floatSettings[i] = 0;
 	}
 
 	setDefault(DOWNLOAD_DIRECTORY, Util::getConfigPath() + "Downloads" PATH_SEPARATOR_STR);
@@ -280,6 +287,8 @@ SettingsManager::SettingsManager()
 	setDefault(CORAL, true);
 	setDefault(MAX_TAB_CHARS, 20);
 	setDefault(FINISHED_DL_ONLY_FULL, true);
+	setDefault(TRANSFERS_PANED_POS, .7);
+	setDefault(QUEUE_PANED_POS, .3);
 
 #ifdef _WIN32
 	setDefault(MAIN_WINDOW_STATE, SW_SHOWNORMAL);
@@ -326,6 +335,15 @@ void SettingsManager::load(string const& aFileName)
 
 				if(xml.findChild(attr))
 					set(IntSetting(i), Util::toInt(xml.getChildData()));
+				xml.resetCurrentChild();
+			}
+			for(i=FLOAT_FIRST; i<FLOAT_LAST; i++)
+			{
+				const string& attr = settingTags[i];
+				dcassert(attr.find("SENTRY") == string::npos);
+
+				if(xml.findChild(attr))
+					set(FloatSetting(i), Util::toInt(xml.getChildData()) / 1000.);
 				xml.resetCurrentChild();
 			}
 			for(i=INT64_FIRST; i<INT64_LAST; i++)
@@ -420,6 +438,13 @@ void SettingsManager::save(string const& aFileName) {
 	{
 		if(isSet[i]) {
 			xml.addTag(settingTags[i], get(IntSetting(i), false));
+			xml.addChildAttrib(type, curType);
+		}
+	}
+	for(i=FLOAT_FIRST; i<FLOAT_LAST; i++)
+	{
+		if(isSet[i]) {
+			xml.addTag(settingTags[i], static_cast<int>(get(FloatSetting(i), false) * 1000.));
 			xml.addChildAttrib(type, curType);
 		}
 	}
