@@ -125,7 +125,7 @@ MainWindow::MainWindow() :
 	onCommand(std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()), IDC_PUBLIC_HUBS);
 	onCommand(std::tr1::bind(&MainWindow::handleQuickConnect, this), IDC_QUICK_CONNECT);
 	onCommand(std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT), IDC_RECONNECT);
-	onCommand(std::tr1::bind(&SearchFrame::openWindow, getTabView()), IDC_SEARCH);
+	onCommand(std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), IDC_SEARCH);
 	onCommand(std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW), IDC_FOLLOW);
 	onCommand(std::tr1::bind(&UsersFrame::openWindow, getTabView()), IDC_FAVUSERS);
 
@@ -240,7 +240,7 @@ void MainWindow::initMenu() {
 		view->appendItem(T_("Waiting Users"), std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()), dwt::BitmapPtr(new dwt::Bitmap(IDB_WAITING_USERS)));
 		view->appendItem(T_("Finished Uploads"), std::tr1::bind(&FinishedULFrame::openWindow, getTabView()), dwt::BitmapPtr(new dwt::Bitmap(IDB_FINISHED_UL)));
 		view->appendSeparator();
-		view->appendItem(T_("&Search\tCtrl+S"), std::tr1::bind(&SearchFrame::openWindow, getTabView()), dwt::BitmapPtr(new dwt::Bitmap(IDB_SEARCH)));
+		view->appendItem(T_("&Search\tCtrl+S"), std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), dwt::BitmapPtr(new dwt::Bitmap(IDB_SEARCH)));
 		view->appendItem(T_("ADL Search"), std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()), dwt::BitmapPtr(new dwt::Bitmap(IDB_ADL_SEARCH)));
 		view->appendItem(T_("Search Spy"), std::tr1::bind(&SpyFrame::openWindow, getTabView()), dwt::BitmapPtr(new dwt::Bitmap(IDB_SEARCH_SPY)));
 		view->appendSeparator();
@@ -318,7 +318,7 @@ void MainWindow::initToolbar() {
 	toolbar->appendItem(image++, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS, std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()));
 	toolbar->appendItem(image++, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL, std::tr1::bind(&FinishedULFrame::openWindow, getTabView()));
 	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_("Search"), IDH_TOOLBAR_SEARCH, std::tr1::bind(&SearchFrame::openWindow, getTabView()));
+	toolbar->appendItem(image++, T_("Search"), IDH_TOOLBAR_SEARCH, std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
 	toolbar->appendItem(image++, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH, std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()));
 	toolbar->appendItem(image++, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY, std::tr1::bind(&SpyFrame::openWindow, getTabView()));
 	toolbar->appendSeparator();

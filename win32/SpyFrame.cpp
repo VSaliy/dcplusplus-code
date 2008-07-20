@@ -198,7 +198,7 @@ void SpyFrame::handleSearch(const tstring& searchString) {
 	if(Util::strnicmp(searchString.c_str(), _T("TTH:"), 4) == 0)
 		SearchFrame::openWindow(getParent(), searchString.substr(4), SearchManager::TYPE_TTH);
 	else
-		SearchFrame::openWindow(getParent(), searchString);
+		SearchFrame::openWindow(getParent(), searchString, SearchManager::TYPE_ANY);
 }
 
 void SpyFrame::handleIgnoreTTHClicked() {
