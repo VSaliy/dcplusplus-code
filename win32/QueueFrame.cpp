@@ -62,7 +62,7 @@ QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
 	queueItems(0),
 	fileLists(0)
 {
-	paned = addChild(WidgetVPaned::Seed(0.3));
+	paned = addChild(WidgetVPaned::Seed(SETTING(QUEUE_PANED_POS)));
 
 	{
 		dirs = addChild(WidgetDirs::Seed());
@@ -303,6 +303,7 @@ void QueueFrame::postClosing() {
 	}
 
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_SHOW_TREE, showTree->getChecked());
+	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getRelativePos());
 
 	for(DirectoryIter i = directories.begin(); i != directories.end(); ++i) {
 		delete i->second;

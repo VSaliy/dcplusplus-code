@@ -25,6 +25,7 @@
 * [L#249692] Better magnet error message
 * UPnP works for TLS port too
 * [L#242329] Fix SSL assert
+* [L#217082] Remember the positions of transfers and queue splitters (poy)
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
