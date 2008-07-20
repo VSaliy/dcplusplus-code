@@ -78,7 +78,7 @@ int SearchFrame::SearchInfo::compareItems(SearchInfo* a, SearchInfo* b, int col)
 }
 
 
-void SearchFrame::openWindow(dwt::TabView* mdiParent, const tstring& str /* = Util::emptyStringT */, SearchManager::TypeModes type /* = SearchManager::TYPE_ANY */) {
+void SearchFrame::openWindow(dwt::TabView* mdiParent, const tstring& str, SearchManager::TypeModes type) {
 	SearchFrame* pChild = new SearchFrame(mdiParent, str, type);
 	frames.insert(pChild);
 }

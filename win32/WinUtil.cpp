@@ -270,7 +270,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("search")) == 0) {
 		if(!param.empty()) {
-			SearchFrame::openWindow(mainWindow->getTabView(), param);
+			SearchFrame::openWindow(mainWindow->getTabView(), param, SearchManager::TYPE_ANY);
 		} else {
 			status = T_("Specify a search string");
 		}
@@ -1028,7 +1028,7 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 			//		case SettingsManager::MAGNET_AUTO_DOWNLOAD:
 			//			break;
 			//		case SettingsManager::MAGNET_AUTO_SEARCH:
-			//			SearchFrame::openWindow(fhash, SearchManager::TYPE_TTH);
+			//			SearchFrame::openWindow(mainWindow->getTabView(), fhash, SearchManager::TYPE_TTH);
 			//			break;
 			//	};
 			//} else {

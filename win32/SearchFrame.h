@@ -43,7 +43,7 @@ public:
 		STATUS_LAST
 	};
 
-	static void openWindow(dwt::TabView* mdiParent, const tstring& str = Util::emptyStringT, SearchManager::TypeModes type = SearchManager::TYPE_ANY);
+	static void openWindow(dwt::TabView* mdiParent, const tstring& str, SearchManager::TypeModes type);
 	static void closeAll();
 
 private:
