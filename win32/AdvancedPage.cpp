@@ -46,6 +46,7 @@ AdvancedPage::ListItem AdvancedPage::listItems[] = {
 	{ SettingsManager::OWNER_DRAWN_MENUS, N_("Use extended menus with icons and titles"), IDH_SETTINGS_ADVANCED_OWNER_DRAWN_MENUS },
 	{ SettingsManager::CORAL, N_("Use Coral network when downloading hub lists (improves reliability)"), IDH_SETTINGS_ADVANCED_CORAL },
 	{ SettingsManager::SEGMENTED_DL, N_("Enable segmented downloads"), IDH_SETTINGS_ADVANCED_SEGMENTED_DL },
+	{ SettingsManager::FAST_HASH, N_("Use fast hashing method (disable if you have problems with hashing)"), IDH_SETTINGS_ADVANCED_FAST_HASH },
 	{ 0, 0 }
 };
 

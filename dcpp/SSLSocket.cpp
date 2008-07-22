@@ -151,13 +151,13 @@ int SSLSocket::checkSSL(int ret) throw(SocketException) {
 			case SSL_ERROR_WANT_WRITE:
 				return -1;
 			case SSL_ERROR_ZERO_RETURN:
-				throw SocketException("Connection closed");
+				throw SocketException(_("Connection closed"));
 			default:
 				{
 					ssl.reset();
 					// @todo replace 80 with MAX_ERROR_SZ or whatever's appropriate for yaSSL in some nice way...
 					char errbuf[80];
-					throw SocketException(string("SSL Error: ") + ERR_error_string(err, errbuf) + " (" + Util::toString(ret) + ", " + Util::toString(err) + ")"); // @todo Translate
+					throw SocketException(str(F_("SSL Error: %1% (%2%, %3%)") % ERR_error_string(err, errbuf) % ret % err));
 				}
 		}
 	}

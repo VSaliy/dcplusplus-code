@@ -828,7 +828,7 @@ void QueueManager::setFile(Download* d) {
 		if(d->getSegment().getStart() > 0) {
 			if(File::getSize(target) != qi->getSize()) {
 				// When trying the download the next time, the resume pos will be reset
-				throw QueueException("Target file is missing or wrong size");
+				throw QueueException(_("Target file is missing or wrong size"));
 			}
 		} else {
 			File::ensureDirectory(target);
