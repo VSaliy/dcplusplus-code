@@ -136,10 +136,10 @@ bool CryptoManager::TLSOk() const throw() {
 void CryptoManager::generateCertificate() throw(CryptoException) {
 	// Generate certificate using OpenSSL
 	if(SETTING(TLS_PRIVATE_KEY_FILE).empty()) {
-		throw CryptoException("No private key file chosen");
+		throw CryptoException(_("No private key file chosen"));
 	}
 	if(SETTING(TLS_CERTIFICATE_FILE).empty()) {
-		throw CryptoException("No certificate file chosen");
+		throw CryptoException(_("No certificate file chosen"));
 	}
 
 	ssl::BIGNUM bn(BN_new());
@@ -150,7 +150,7 @@ void CryptoManager::generateCertificate() throw(CryptoException) {
 	ssl::X509 x509ss(X509_new());
 
 	if(!bn || !rsa || !pkey || !nm || !x509ss) {
-		throw CryptoException("Error creating objects for cert generation");
+		throw CryptoException(_("Error generating certificate"));
 	}
 
 	int days = 10;

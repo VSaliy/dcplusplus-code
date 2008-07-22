@@ -161,7 +161,7 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 		} else if(name == sDirectory) {
 			const string& n = getAttrib(attribs, sName, 0);
 			if(n.empty()) {
-				throw SimpleXMLException("Directory missing name attribute");
+				throw SimpleXMLException(_("Directory missing name attribute"));
 			}
 			bool incomp = getAttrib(attribs, sIncomplete, 1) == "1";
 			DirectoryListing::Directory* d = NULL;

@@ -240,7 +240,7 @@ int ConnectionManager::Server::run() throw() {
 				sock.bind(port, ip);
 				sock.listen();
 				if(failed) {
-					LogManager::getInstance()->message("Connectivity restored");
+					LogManager::getInstance()->message(_("Connectivity restored"));
 					failed = false;
 				}
 			} catch(const SocketException& e) {
@@ -402,7 +402,7 @@ void ConnectionManager::on(AdcCommand::STA, UserConnection*, const AdcCommand& c
 void ConnectionManager::on(UserConnectionListener::Connected, UserConnection* aSource) throw() {
 	if(aSource->isSecure() && !aSource->isTrusted() && !BOOLSETTING(ALLOW_UNTRUSTED_CLIENTS)) {
 		putConnection(aSource);
-		LogManager::getInstance()->message(_("Certificate not trusted, unable to connect"));
+		QueueManager::getInstance()->removeSource(aSource->getUser(), QueueItem::Source::FLAG_UNTRUSTED);
 		return;
 	}
 

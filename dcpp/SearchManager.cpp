@@ -115,7 +115,7 @@ int SearchManager::run() {
 				socket->setBlocking(true);
 				socket->bind(port, SETTING(BIND_ADDRESS));
 				if(failed) {
-					LogManager::getInstance()->message("Search enabled again");
+					LogManager::getInstance()->message(_("Search enabled again"));
 					failed = false;
 				}
 			} catch(const SocketException& e) {

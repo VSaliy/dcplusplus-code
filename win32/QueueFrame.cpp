@@ -482,6 +482,8 @@ void QueueFrame::QueueItemInfo::update() {
 						tmp += T_("Source too slow");
 					} else if(j->isSet(QueueItem::Source::FLAG_NO_TTHF)) {
 						tmp += T_("Remote client does not fully support TTH - cannot download");
+					} else if(j->isSet(QueueItem::Source::FLAG_UNTRUSTED)) {
+						tmp += T_("User certificate not trusted");
 					}
 					tmp += ')';
 				}
