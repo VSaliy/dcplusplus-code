@@ -818,19 +818,13 @@ void NmdcHub::search(int aSizeType, int64_t aSize, int aFileType, const string& 
 	while((i = tmp.find(' ')) != string::npos) {
 		tmp[i] = '$';
 	}
-	size_t BUF_SIZE;
 	string tmp2;
 	if(ClientManager::getInstance()->isActive()) {
-		string x = getLocalIp();
-		BUF_SIZE = x.length() + aString.length() + 64;
-		tmp2.resize(BUF_SIZE);
-		tmp2.resize(snprintf(&tmp2[0], tmp2.size(), "$Search %s:%d %c?%c?%s?%d?%s|", x.c_str(), (int)SearchManager::getInstance()->getPort(), c1, c2, Util::toString(aSize).c_str(), aFileType+1, tmp.c_str()));
+		tmp2 = getLocalIp() + ':' + Util::toString(SearchManager::getInstance()->getPort());
 	} else {
-		BUF_SIZE = getMyNick().length() + aString.length() + 64;
-		tmp2.resize(BUF_SIZE);
-		tmp2.resize(snprintf(&tmp2[0], tmp2.size(), "$Search Hub:%s %c?%c?%s?%d?%s|", fromUtf8(getMyNick()).c_str(), c1, c2, Util::toString(aSize).c_str(), aFileType+1, tmp.c_str()));
+		tmp2 = "Hub:" + fromUtf8(getMyNick());
 	}
-	send(tmp2);
+	send("$Search " + tmp2 + ' ' + c1 + '?' + c2 + '?' + Util::toString(aSize) + '?' + Util::toString(aFileType+1) + '?' + tmp + '|');
 }
 
 string NmdcHub::validateMessage(string tmp, bool reverse) {
