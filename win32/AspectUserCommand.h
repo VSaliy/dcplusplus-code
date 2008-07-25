@@ -48,8 +48,7 @@ public:
 				if(uc->getType() == UserCommand::TYPE_SEPARATOR) {
 					// Avoid double separators...
 					size_t count = cur->getCount();
-
-					if( count > 0 && cur->isSeparator(count-1)) {
+					if( count > 0 && !cur->isSeparator(count-1)) {
 						cur->appendSeparator();
 					}
 				} else if(uc->getType() == UserCommand::TYPE_RAW || uc->getType() == UserCommand::TYPE_RAW_ONCE) {
