@@ -140,7 +140,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 		paned->setSecond(files);
 
 		files->setSmallImageList(WinUtil::fileImages);
-		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(QUEUEFRAME_ORDER), SETTING(QUEUEFRAME_WIDTHS));
+		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(DIRECTORYLISTINGFRAME_ORDER), SETTING(DIRECTORYLISTINGFRAME_WIDTHS));
 		files->setSort(COLUMN_FILENAME);
 
 		files->onSelectionChanged(std::tr1::bind(&DirectoryListingFrame::updateStatus, this));
@@ -236,8 +236,8 @@ void DirectoryListingFrame::layout() {
 void DirectoryListingFrame::postClosing() {
 	clearList();
 
-	SettingsManager::getInstance()->set(SettingsManager::DIRECTORLISTINGFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
-	SettingsManager::getInstance()->set(SettingsManager::DIRECTORLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
+	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
+	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
 
 void DirectoryListingFrame::handleFind() {
