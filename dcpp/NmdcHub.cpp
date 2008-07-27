@@ -545,8 +545,6 @@ void NmdcHub::onLine(const string& aLine) throw() {
 				feat.push_back("TTHSearch");
 				feat.push_back("ZPipe0");
 
-				if(BOOLSETTING(COMPRESS_TRANSFERS))
-					feat.push_back("GetZBlock");
 				supports(feat);
 			}
 

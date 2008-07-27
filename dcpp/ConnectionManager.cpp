@@ -499,7 +499,6 @@ void ConnectionManager::on(UserConnectionListener::CLock, UserConnection* aSourc
 		}
 		StringList defFeatures = features;
 		if(BOOLSETTING(COMPRESS_TRANSFERS)) {
-			defFeatures.push_back(UserConnection::FEATURE_GET_ZBLOCK);
 			defFeatures.push_back(UserConnection::FEATURE_ZLIB_GET);
 		}
 
@@ -753,9 +752,7 @@ void ConnectionManager::shutdown() {
 // UserConnectionListener
 void ConnectionManager::on(UserConnectionListener::Supports, UserConnection* conn, const StringList& feat) throw() {
 	for(StringList::const_iterator i = feat.begin(); i != feat.end(); ++i) {
-		if(*i == UserConnection::FEATURE_GET_ZBLOCK) {
-			conn->setFlag(UserConnection::FLAG_SUPPORTS_GETZBLOCK);
-		} else if(*i == UserConnection::FEATURE_MINISLOTS) {
+		if(*i == UserConnection::FEATURE_MINISLOTS) {
 			conn->setFlag(UserConnection::FLAG_SUPPORTS_MINISLOTS);
 		} else if(*i == UserConnection::FEATURE_XML_BZLIST) {
 			conn->setFlag(UserConnection::FLAG_SUPPORTS_XML_BZLIST);
