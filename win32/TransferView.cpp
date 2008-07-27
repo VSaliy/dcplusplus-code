@@ -452,7 +452,11 @@ HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 	TaskQueue::List t;
 	tasks.get(t);
 
+	bool sortConn = false;
+	bool sortDown = false;
+
 	HoldRedraw hold(connections, t.size() > 1);
+	HoldRedraw hold2(downloads, t.size() > 1);
 
 	for(TaskQueue::Iter i = t.begin(); i != t.end(); ++i) {
 		if(i->first == CONNECTIONS_ADD) {
@@ -478,6 +482,7 @@ HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 				if(ii->download == ui->download && ii->user == ui->user) {
 					ii->update(*ui);
 					connections->update(i);
+					sortConn = true;
 					break;
 				}
 			}
@@ -501,6 +506,7 @@ HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 				DownloadInfo* di = downloads->getData(i);
 				di->update(*ti);
 				downloads->update(i);
+				sortDown = true;
 			}
 		} else if(i->first == DOWNLOADS_REMOVE_USER) {
 			boost::scoped_ptr<TickInfo> ti(static_cast<TickInfo*>(i->second));
@@ -524,8 +530,11 @@ HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 
 	}
 
-	if(!t.empty()) {
+	if(sortConn) {
 		connections->resort();
+	}
+	if(sortDown) {
+		downloads->resort();
 	}
 
 	return 0;

@@ -204,7 +204,7 @@ private:
 
 		static int compareItems(DownloadInfo* a, DownloadInfo* b, int col) {
 			switch(col) {
-			case DOWNLOAD_COLUMN_STATUS: return compare(a->users, b->users);
+			case DOWNLOAD_COLUMN_STATUS: return compare(fraction(a->size, a->done), fraction(b->size, b->done));
 			case DOWNLOAD_COLUMN_TIMELEFT: return compare(a->timeleft(), b->timeleft());
 			case DOWNLOAD_COLUMN_SPEED: return compare(a->bps, b->bps);
 			case DOWNLOAD_COLUMN_SIZE: return compare(a->size, b->size);
