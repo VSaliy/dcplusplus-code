@@ -126,8 +126,21 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 
 		int64_t size = 0;
 		// get downloads' file size here to avoid deadlocks
-		if(!upload)
-			size = (t->getType() == Transfer::TYPE_FULL_LIST) ? t->getSize() : QueueManager::getInstance()->getSize(file);
+		if(!upload) {
+			if(t->getType() == Transfer::TYPE_FULL_LIST) {
+				// find the correct extension of the downloaded file list
+				file += ".xml";
+				if(File::getSize(file) == -1) {
+					file += ".bz2";
+					if(File::getSize(file) == -1) {
+						// no file list?
+						return;
+					}
+				}
+				size = t->getSize();
+			} else
+				size = QueueManager::getInstance()->getSize(file);
+		}
 
 		Lock l(cs);
 
