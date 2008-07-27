@@ -87,6 +87,8 @@ private:
 template<typename T1>
 inline int compare(const T1& v1, const T1& v2) { return (v1 < v2) ? -1 : ((v1 == v2) ? 0 : 1); }
 
+template<typename T1> inline double fraction(T1 a, T1 b) { return static_cast<double>(a) / b; }
+
 class Util
 {
 public:
