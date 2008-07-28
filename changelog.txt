@@ -34,6 +34,7 @@
 * [L#251486] Correct $GetZBlock support announcment
 * [L#228283] Sort downloads by % done when sorting by status, resort dynamically
 * Up-down control in the main status bar to change upload slots (poy)
+* Fix crash with the "unable to open ports" message (poy)
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
