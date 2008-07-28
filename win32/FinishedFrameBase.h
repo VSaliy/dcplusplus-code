@@ -517,8 +517,9 @@ private:
 
 	void handleViewAsText() {
 		int i = -1;
-		while((i = files->getNext(i, LVNI_SELECTED)) != -1)
-			new TextFrame(this->getParent(), files->getData(i)->file);
+		while((i = files->getNext(i, LVNI_SELECTED)) != -1) {
+			TextFrame::openWindow(this->getParent(), files->getData(i)->file);
+		}
 	}
 
 	void handleOpenFile() {

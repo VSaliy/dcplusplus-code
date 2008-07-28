@@ -104,7 +104,6 @@ MainWindow::MainWindow() :
 
 	onActivate(std::tr1::bind(&MainWindow::handleActivate, this, _1));
 	onSized(std::tr1::bind(&MainWindow::handleSized, this, _1));
-	onSpeaker(std::tr1::bind(&MainWindow::handleSpeaker, this, _1, _2));
 	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 	updateStatus();
 	layout();
@@ -155,10 +154,11 @@ MainWindow::MainWindow() :
 	if(BOOLSETTING(OPEN_PUBLIC)) PublicHubsFrame::openWindow(getTabView());
 	if(BOOLSETTING(OPEN_FAVORITE_HUBS)) FavHubsFrame::openWindow(getTabView());
 
-	if (!WinUtil::isShift())
-		speak(AUTO_CONNECT);
+	if (!WinUtil::isShift()) {
+		dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::autoConnect, this));
+	}
 
-	speak(PARSE_COMMAND_LINE);
+	dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::parseCommandLine, this, tstring(::GetCommandLine())));
 
 	int cmdShow = dwt::Application::instance().getCmdShow();
 	::ShowWindow(handle(), ((cmdShow == SW_SHOWDEFAULT) || (cmdShow == SW_SHOWNORMAL)) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
@@ -479,58 +479,19 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 	}
 }
 
-LRESULT MainWindow::handleSpeaker(WPARAM wParam, LPARAM lParam) {
-	Speaker s = static_cast<Speaker>(wParam);
-
-	switch (s) {
-	case DOWNLOAD_LISTING: {
-		boost::scoped_ptr<DirectoryListInfo> i(reinterpret_cast<DirectoryListInfo*>(lParam));
-		DirectoryListingFrame::openWindow(getTabView(), i->file, i->dir, i->user, i->speed);
-	}
-		break;
-	case BROWSE_LISTING: {
-		boost::scoped_ptr<DirectoryBrowseInfo> i(reinterpret_cast<DirectoryBrowseInfo*>(lParam));
-		DirectoryListingFrame::openWindow(getTabView(), i->user, i->text, 0);
-	}
-		break;
-	case AUTO_CONNECT: {
-		autoConnect(FavoriteManager::getInstance()->getFavoriteHubs());
-	}
-		break;
-	case PARSE_COMMAND_LINE: {
-		parseCommandLine(GetCommandLine());
-	}
-		break;
-	case VIEW_FILE_AND_DELETE: {
-		boost::scoped_ptr<std::string> file(reinterpret_cast<std::string*>(lParam));
-		new TextFrame(getTabView(), *file);
-		File::deleteFile(*file);
-	}
-		break;
-	case STATUS_MESSAGE: {
-		boost::scoped_ptr<pair<time_t, tstring> > msg(reinterpret_cast<std::pair<time_t, tstring>*>(lParam));
-		tstring line = Text::toT("[" + Util::getShortTimeString(msg->first) + "] ") + msg->second;
-
-		setStatus(STATUS_STATUS, line);
-		while (lastLinesList.size() + 1> MAX_CLIENT_LINES)
-			lastLinesList.erase(lastLinesList.begin());
-		if (line.find(_T('\r')) == tstring::npos) {
-			lastLinesList.push_back(line);
-		} else {
-			lastLinesList.push_back(line.substr(0, line.find(_T('\r'))));
-		}
-	}
-		break;
-	case LAYOUT: {
-		layout();
-	}
-		break;
-	}
-	return 0;
+void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
+	tstring line = Text::toT("[" + Util::getShortTimeString(t) + "] " + m);
+	dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::setStatus, this, STATUS_STATUS, line, true));
 }
 
-void MainWindow::autoConnect(const FavoriteHubEntryList& fl) {
-	for (FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i) {
+void MainWindow::viewAndDelete(const string& fileName) {
+	TextFrame::openWindow(getTabView(), fileName);
+	File::deleteFile(fileName);
+}
+
+void MainWindow::autoConnect() {
+	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
+	for(FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i) {
 		FavoriteHubEntry* entry = *i;
 		if (entry->getConnect()) {
 			if (!entry->getNick().empty() || !SETTING(NICK).empty()) {
@@ -1099,18 +1060,18 @@ void MainWindow::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, cons
 }
 
 void MainWindow::on(PartialList, const UserPtr& aUser, const string& text) throw() {
-	speak(BROWSE_LISTING, (LPARAM)new DirectoryBrowseInfo(aUser, text));
+	dwt::Application::instance().callAsync(
+		std::tr1::bind((void (*)(dwt::TabView*, const UserPtr&, const string&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
+		aUser, text, 0));
 }
 
 void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) throw() {
 	if (qi->isSet(QueueItem::FLAG_CLIENT_VIEW)) {
 		if (qi->isSet(QueueItem::FLAG_USER_LIST)) {
-			// This is a file listing, show it...
-			DirectoryListInfo* i = new DirectoryListInfo(qi->getDownloads()[0]->getUser(), Text::toT(qi->getListName()), Text::toT(dir), speed);
-
-			speak(DOWNLOAD_LISTING, (LPARAM)i);
+			dwt::Application::instance().callAsync(std::tr1::bind((void(*)(dwt::TabView*, const tstring&, const tstring&, const UserPtr&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
+				Text::toT(qi->getListName()), Text::toT(dir), qi->getDownloads()[0]->getUser(), speed));
 		} else if (qi->isSet(QueueItem::FLAG_TEXT)) {
-			speak(VIEW_FILE_AND_DELETE, reinterpret_cast<LPARAM>(new std::string(qi->getTarget())));
+			dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::viewAndDelete, this, qi->getTarget()));
 		}
 	}
 }

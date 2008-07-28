@@ -28,14 +28,12 @@
 
 #include "WidgetFactory.h"
 #include "AspectStatus.h"
-#include "AspectSpeaker.h"
 
 class UPnP;
 class TransferView;
 
 class MainWindow :
 	public WidgetFactory<dwt::Window>,
-	public AspectSpeaker<MainWindow>,
 	private HttpConnectionListener,
 	private QueueManagerListener,
 	private LogManagerListener,
@@ -82,16 +80,6 @@ private:
 		string text;
 	};
 
-	enum Speaker {
-		DOWNLOAD_LISTING,
-		BROWSE_LISTING,
-		AUTO_CONNECT,
-		PARSE_COMMAND_LINE,
-		VIEW_FILE_AND_DELETE,
-		STATUS_MESSAGE,
-		LAYOUT
-	};
-
 	struct {
 		tstring homepage;
 		tstring downloads;
@@ -125,11 +113,6 @@ private:
 
 	dwt::Application::FilterIter filterIter;
 	dwt::AcceleratorPtr accel;
-
-	enum { MAX_CLIENT_LINES = 10 };
-	TStringList lastLinesList;
-	tstring lastLines;
-
 	dwt::NotificationPtr notify;
 
 	// UPnP connectors
@@ -168,7 +151,6 @@ private:
 	// Other events
 	void handleSized(const dwt::SizedEvent& sz);
 
-	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	LRESULT handleCopyData(LPARAM lParam);
 	LRESULT handleWhereAreYou();
 
@@ -181,12 +163,14 @@ private:
 	void layout();
 	bool eachSecond();
 	void updateStatus();
-	void autoConnect(const FavoriteHubEntryList& fl);
+	void autoConnect();
 	void startSocket();
 	void startUPnP();
 	void stopUPnP();
 	void saveWindowSettings();
-	void parseCommandLine(const tstring& cmdLine);
+	void parseCommandLine(const tstring& line);
+	void viewAndDelete(const string& fileName);
+
 	bool filter(MSG& msg);
 
 	bool closing();
@@ -195,7 +179,7 @@ private:
 	static DWORD WINAPI stopper(void* p);
 
 	// LogManagerListener
-	virtual void on(LogManagerListener::Message, time_t t, const string& m) throw() { speak(STATUS_MESSAGE, (LPARAM)new pair<time_t, tstring>(t, tstring(Text::toT(m)))); }
+	virtual void on(LogManagerListener::Message, time_t t, const string& m) throw();
 
 	// HttpConnectionListener
 	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, string const& /*aLine*/) throw();

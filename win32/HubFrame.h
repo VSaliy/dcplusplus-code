@@ -172,10 +172,6 @@ private:
 	tstring currentCommand;
 	TStringList::size_type curCommandPosition;		//can't use an iterator because StringList is a vector, and vector iterators become invalid after resizing
 
-	enum { MAX_CLIENT_LINES = 5 };
-	TStringList lastLinesList;
-	tstring lastLines;
-
 	tstring filterString;
 
 	StringMap ucLineParams;
