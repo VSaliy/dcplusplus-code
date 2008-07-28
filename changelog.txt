@@ -30,7 +30,7 @@
 * [L#217082] Remember the positions of transfers and queue splitters (poy)
 * [L#251536] Fix file list columns (poy)
 * [L#234527] Fix possible crash when auto-downloading ADL Search matches (poy)
-* Fix user commands separators (poy)
+* [L#239901] Fix user commands separators (poy)
 * Downloaded file lists show up with their correct extension (poy)
 * [L#251486] Correct $GetZBlock support announcment
 * [L#228283] Sort downloads by % done when sorting by status, resort dynamically
