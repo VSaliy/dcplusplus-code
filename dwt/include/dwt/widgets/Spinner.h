@@ -40,6 +40,7 @@
 #include "../aspects/AspectPainting.h"
 #include "../aspects/AspectScrollable.h"
 #include "Control.h"
+#include "../Dispatchers.h"
 
 namespace dwt {
 
@@ -61,28 +62,40 @@ class Spinner :
 	public AspectPainting< Spinner >,
 	public AspectScrollable< Spinner >
 {
+	typedef CommonControl BaseType;
 	friend class WidgetCreator< Spinner >;
+
+	struct Dispatcher : Dispatchers::Base<bool (int, int)> {
+		typedef Dispatchers::Base<bool (int, int)> BaseType;
+		Dispatcher(const F& f_) : BaseType(f_) { }
+
+		bool operator()(const MSG& msg, LRESULT& ret) const {
+			LPNMUPDOWN lpnmud = reinterpret_cast<LPNMUPDOWN>(msg.lParam);
+			ret = !f(lpnmud->iPos, lpnmud->iDelta);
+			return true;
+		}
+	};
+
 public:
 	/// Class type
 	typedef Spinner ThisType;
 
 	/// Object type
 	typedef ThisType* ObjectType;
+
 	/// Seed class
 	/** This class contains all of the values needed to create the widget. It also
 	  * knows the type of the class whose seed values it contains. Every widget
 	  * should define one of these.
 	  */
-	class Seed
-		: public Widget::Seed
-	{
-	public:
-		int minValue;
+	struct Seed : public BaseType::Seed {
+		typedef ThisType WidgetType;
 
+		int minValue;
 		int maxValue;
 
 		/// Fills with default parameters
-		Seed();
+		Seed(int minValue_ = UD_MINVAL, int maxValue_ = UD_MAXVAL);
 	};
 
 	/// Sets the range of the Spinner
@@ -114,6 +127,8 @@ public:
 	  */
 	int setValue( int v );
 
+	void onUpdate(const Dispatcher::F& f);
+
 	/// Actually creates the Spinner Control
 	/** You should call WidgetFactory::createSpinner if you instantiate class
 	  * directly. <br>
@@ -137,40 +152,44 @@ protected:
 
 inline void Spinner::setRange( int minimum, int maximum )
 {
-	::SendMessage( this->handle(), UDM_SETRANGE32, static_cast< WPARAM >( minimum ), static_cast< LPARAM >( maximum ) );
+	sendMessage(UDM_SETRANGE32, static_cast< WPARAM >( minimum ), static_cast< LPARAM >( maximum ));
 }
 
 inline void Spinner::assignBuddy( Widget * buddy )
 {
 	assert( buddy && buddy->handle() );
-	::SendMessage( this->handle(), UDM_SETBUDDY, reinterpret_cast< WPARAM >( buddy->handle() ), 0 );
+	sendMessage(UDM_SETBUDDY, reinterpret_cast< WPARAM >( buddy->handle() ));
 }
 
 inline int Spinner::getValue()
 {
 #ifdef WINCE
-	LRESULT retVal = ::SendMessage( this->handle(), UDM_GETPOS, 0, 0 );
+	LRESULT retVal = sendMessage(UDM_GETPOS);
 	if ( HIWORD( retVal ) != 0 )
 	{
 		dwtWin32DebugFail(" Something went wrong while trying to retrieve value if Spinner");
 	}
 	return LOWORD( retVal );
 #else
-	return ::SendMessage( this->handle(), UDM_GETPOS32, 0, 0 );
+	return sendMessage(UDM_GETPOS32);
 #endif //! WINCE
 }
 
 inline int Spinner::setValue( int v )
 {
 #ifdef WINCE
-	return ::SendMessage( this->handle(), UDM_SETPOS, 0, v );
+	return sendMessage(UDM_SETPOS, 0, v);
 #else
-	return ::SendMessage( this->handle(), UDM_SETPOS32, 0, v );
+	return sendMessage(UDM_SETPOS32, 0, v);
 #endif
 }
 
+inline void Spinner::onUpdate(const Dispatcher::F& f) {
+	setCallback(Message(WM_NOTIFY, UDN_DELTAPOS), Dispatcher(f));
+}
+
 inline Spinner::Spinner( dwt::Widget * parent )
-	: ControlType( parent )
+	: BaseType( parent )
 {
 }
 
