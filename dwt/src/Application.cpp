@@ -52,7 +52,7 @@ namespace dwt {
 #endif //! _MSC_VER
 // Friend functions to Application
 
-Application * Application::itsInstance = 0;
+Application* Application::itsInstance = 0;
 HANDLE Application::itsMutex = 0;
 
 // Application implementation
@@ -100,7 +100,8 @@ void Application::checkCorruptOrMemleak(bool & corruptMemMemLeak) {
 }
 
 Application::Application(int nCmdShow) :
-	itsCmdShow(nCmdShow), taskMutex(::CreateMutex(NULL, FALSE, NULL)), quit(false)
+	itsCmdShow(nCmdShow), taskMutex(::CreateMutex(NULL, FALSE, NULL)), quit(false),
+	threadId(::GetCurrentThreadId())
 {
 }
 
@@ -108,7 +109,7 @@ Application::~Application() {
 	::CloseHandle(taskMutex);
 }
 
-const CommandLine & Application::getCommandLine() const {
+const CommandLine& Application::getCommandLine() const {
 	return itsCmdLine;
 }
 
@@ -206,7 +207,7 @@ int Application::run()
 #else
 
 void Application::run() {
-	while (sleep()) {
+	while(sleep()) {
 		dispatch();
 	}
 }
@@ -219,7 +220,7 @@ bool Application::sleep() {
 	while(true) {
 		size_t n = itsVHEvents.size();
 
-		DWORD ret = MsgWaitForMultipleObjectsEx(static_cast<DWORD> (n), itsVHEvents.empty() ? 0 : &itsVHEvents[0],
+		DWORD ret = ::MsgWaitForMultipleObjectsEx(static_cast<DWORD> (n), itsVHEvents.empty() ? 0 : &itsVHEvents[0],
 		    INFINITE, QS_ALLINPUT, MWMO_INPUTAVAILABLE);
 
 		if (ret == WAIT_OBJECT_0 + n) {
@@ -235,23 +236,19 @@ bool Application::sleep() {
 }
 
 bool Application::dispatch() {
-
 	MSG msg = { 0 };
 	if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == 0) {
 		return dispatchAsync();
 	}
 
 	if (msg.message == WM_QUIT) {
+		// Make sure outer message loops see it...
 		::PostQuitMessage(msg.wParam);
 		quit = true;
 		return false;
 	}
 
-//	if (::CallMsgFilter(msg, MSGF_SLEEPMSG)) {
-//		return true;
-//	}
-
-	for (FilterIter i = filters.begin(); i != filters.end(); ++i) {
+	for(FilterIter i = filters.begin(); i != filters.end(); ++i) {
 		if ((*i)(msg)) {
 			return true;
 		}
@@ -261,6 +258,10 @@ bool Application::dispatch() {
 	::DispatchMessage(&msg);
 
 	return true;
+}
+
+void Application::wake() {
+	::PostThreadMessage(threadId, WM_NULL, 0, 0);
 }
 
 int Application::getCmdShow() const {
@@ -292,7 +293,7 @@ bool Application::dispatchAsync() {
 	return true;
 }
 
-void Application::execAsync(const Callback& callback) {
+void Application::callAsync(const Callback& callback) {
 	MutexLock m(taskMutex);
 	tasks.push_back(callback);
 	wake();

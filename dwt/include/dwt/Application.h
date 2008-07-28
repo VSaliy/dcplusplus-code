@@ -133,7 +133,7 @@ public:
 	void removeFilter(const FilterIter& i);
 
 	/** Run a function on the GUI thread asynchronously */
-	void execAsync(const Callback& f);
+	void callAsync(const Callback& f);
 
 	/** Runs the message pump, and doesn't return until application should quit.
 	 * Normally this function will be called from your
@@ -227,6 +227,8 @@ private:
 
 	/// The application should quit
 	bool quit;
+
+	DWORD threadId;
 
 	// Private Constructor to ensure Singleton Implementation
 	Application( int nCmdShow );
