@@ -99,10 +99,12 @@ class Application
 	friend class Widget;
 	friend class Policies::ModelessDialog;
 public:
+	typedef std::tr1::function<void()> Callback;
+
 	/// Returns the Application object
 	/** Use this static function to access the Application object.
 	  */
-	static Application & instance();
+	static Application& instance();
 
 	/// Returns the path to the process
 	/** NOTE! <br>
@@ -121,21 +123,40 @@ public:
 	  */
 	tstring getModuleFileName() const;
 
+	/** A function that should return true if it processed the message and false otherwise */
 	typedef std::tr1::function<bool (MSG&)> FilterFunction;
-	// List becuse its iterators aren't invalidated on add/delete...
+	// List because its iterators aren't invalidated on add/delete...
 	typedef std::list<FilterFunction> FilterList;
 	typedef FilterList::iterator FilterIter;
 
 	FilterIter addFilter(const FilterFunction& f);
 	void removeFilter(const FilterIter& i);
 
-	/// Starts the application
-	/** Normally this function will be called from your
-	  * "SmartWinMain(SmartWin::Application & app )" function as the last function.
-	  * <br>
-	  * E.g. return myApp.run();
-	  */
-	int run();
+	/** Run a function on the GUI thread asynchronously */
+	void execAsync(const Callback& f);
+
+	/** Runs the message pump, and doesn't return until application should quit.
+	 * Normally this function will be called from your
+	 * "SmartWinMain(SmartWin::Application & app )" function as the last function.
+	 */
+	void run();
+
+	/**
+	 * Dispatch a single message.
+	 * @return true if there are more messages to dispatch, false otherwise
+	 */
+	bool dispatch();
+
+	/**
+	 * Block until the main GUI thread has something to do.
+	 * @return True if the application should keep running, false otherwise
+	 */
+	bool sleep();
+
+	/**
+	 * Wake up the main GUI thread.
+	 */
+	void wake();
 
 	/// The initialization that must be done first.
 	/** Used internally by the WinMain function, and externally for DLL initialization.
@@ -163,8 +184,6 @@ public:
 	/** Returns true if this application have another instance running!
 	  */
 	bool isAppAlreadyRunning();
-
-	typedef std::tr1::function<void()> Callback;
 
 	/// Adds a waitable event HANDLE and the according signal
 	/** You can feed in here HANDLEs of thread handles, console inputs, mutexes,
@@ -194,17 +213,28 @@ private:
 	// Command line parameters
 	CommandLine itsCmdLine;
 
-	// We want to be notified when certain event HANDLEs become signalled by Windows.
+	// We want to be notified when certain event HANDLEs become signaled by Windows.
 	// Those handles go in this vector.
-	std::vector< HANDLE > itsVHEvents;
+	std::vector<HANDLE> itsVHEvents;
 
 	// The according signals we must raise, go in this vector.
-	std::vector< Callback > itsVSignals;
+	std::vector<Callback> itsVSignals;
+
+	HANDLE taskMutex;
+	std::list<Callback> tasks;
 
 	FilterList filters;
 
+	/// The application should quit
+	bool quit;
+
 	// Private Constructor to ensure Singleton Implementation
 	Application( int nCmdShow );
+
+	~Application();
+
+	/// Dispatch a single asynchronous message
+	bool dispatchAsync();
 };
 
 }
