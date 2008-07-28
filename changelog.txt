@@ -15,7 +15,6 @@
 * [L#243201] Save excluded search terms correctly in search history (thanks emtee)
 * Search spy tab highlighting (poy)
 * Help updates (emtee, poy)
-* Enable keyboard shortcuts in the help file (poy)
 * [L#242365] Error message when getting version info fails (thanks emtee)
 * [L#203763] Ctrl-A selects all list view items again (thanks poy)
 * [L#245474] Error when adding multiple sources to queue (thanks emtee)
