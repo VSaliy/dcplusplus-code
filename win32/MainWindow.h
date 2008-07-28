@@ -47,6 +47,7 @@ public:
 		STATUS_AWAY,
 		STATUS_COUNTS,
 		STATUS_SLOTS,
+		STATUS_SLOTS_SPIN,
 		STATUS_DOWN_TOTAL,
 		STATUS_UP_TOTAL,
 		STATUS_DOWN_DIFF,
@@ -62,8 +63,10 @@ public:
 	MainWindow();
 
 	virtual ~MainWindow();
-private:
 
+	void updateSlotsSpin();
+
+private:
 	class DirectoryListInfo {
 	public:
 		DirectoryListInfo(const UserPtr& aUser, const tstring& aFile, const tstring& aDir, int64_t aSpeed) : user(aUser), file(aFile), dir(aDir), speed(aSpeed) { }
@@ -106,6 +109,7 @@ private:
 	TransferView* transfers;
 	ToolBarPtr toolbar;
 	dwt::TabViewPtr tabs;
+	dwt::SpinnerPtr slotsSpin;
 
 	/** Was the window maximized when minimizing it? */
 	bool maximized;
@@ -159,6 +163,7 @@ private:
 	void handleActivate(bool active);
 	void handleForward(WPARAM wParam);
 	LRESULT handleEndSession();
+	bool handleSlotsUpdate(int pos, int delta);
 
 	// Other events
 	void handleSized(const dwt::SizedEvent& sz);

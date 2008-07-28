@@ -52,13 +52,15 @@ protected:
 		tip->setTool(status, std::tr1::bind(&ThisType::handleToolTip, this, _1));
 	}
 
-	void setStatus(int s, const tstring& text) {
+	// returns true if the part has been resized
+	bool setStatus(int s, const tstring& text, bool layout = true) {
 		if(s != WidgetType::STATUS_STATUS) {
 			int w = status->getTextSize(text).x + 12;
-			if(w > static_cast<int>(statusSizes[s])) {
-				dcdebug("Setting status size %d to %d\n", s, w);
+			if(w != static_cast<int>(statusSizes[s])) {
 				statusSizes[s] = w;
-				layoutSections(status->getSize());
+				if(layout)
+					layoutSections(status->getSize());
+				return true;
 			}
 		} else {
 			lastLines.push_back(text);
@@ -67,6 +69,7 @@ protected:
 			}
 		}
 		status->setText(text, s);
+		return false;
 	}
 
 	void setStatusHelpId(int s, unsigned id) {
