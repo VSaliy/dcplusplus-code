@@ -64,6 +64,7 @@
 #include <dcpp/Download.h>
 
 #include <dwt/widgets/ToolBar.h>
+#include <dwt/widgets/Spinner.h>
 #include <dwt/widgets/Notification.h>
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/StringUtils.h>
@@ -74,6 +75,7 @@ MainWindow::MainWindow() :
 	transfers(0),
 	toolbar(0),
 	tabs(0),
+	slotsSpin(0),
 	maximized(false),
 	c(0),
 	stopperThread(NULL),
@@ -335,10 +337,15 @@ void MainWindow::initToolbar() {
 void MainWindow::initStatusBar() {
 	dcdebug("initStatusBar\n");
 
+	slotsSpin = addChild(Spinner::Seed(1));
+	updateSlotsSpin();
+	slotsSpin->onUpdate(std::tr1::bind(&MainWindow::handleSlotsUpdate, this, _1, _2));
+
 	initStatus(true);
 	status->onDblClicked(std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
 
 	statusSizes[STATUS_AWAY] = status->getTextSize(T_("AWAY")).x + 12;
+	statusSizes[STATUS_SLOTS_SPIN] = 20;
 	///@todo set to checkbox width + resizedrag width really
 	statusSizes[STATUS_DUMMY] = 32;
 }
@@ -594,6 +601,7 @@ void MainWindow::layout() {
 	r.size.y -= pt.y;
 
 	layoutStatus(r);
+	mapWidget(STATUS_SLOTS_SPIN, slotsSpin);
 
 	paned->setRect(r);
 }
@@ -622,17 +630,24 @@ void MainWindow::updateStatus() {
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_UPLOAD, SETTING(TOTAL_UPLOAD) + static_cast<int64_t>(updiff));
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_DOWNLOAD, SETTING(TOTAL_DOWNLOAD) + static_cast<int64_t>(downdiff));
 
-	setStatus(STATUS_AWAY, Util::getAway() ? T_("AWAY") : _T(""));
-	setStatus(STATUS_COUNTS, Text::toT(Client::getCounts()));
-	setStatus(STATUS_SLOTS, str(TF_("Slots: %1%/%2%") % UploadManager::getInstance()->getFreeSlots() % (SETTING(SLOTS))));
-	setStatus(STATUS_DOWN_TOTAL, str(TF_("D: %1%") % Text::toT(Util::formatBytes(down))));
-	setStatus(STATUS_UP_TOTAL, str(TF_("U: %1%") % Text::toT(Util::formatBytes(up))));
-	setStatus(STATUS_DOWN_DIFF, str(TF_("D: %1%/s (%2%)") % Text::toT(Util::formatBytes((downdiff*1000)/tdiff)) % DownloadManager::getInstance()->getDownloadCount()));
-	setStatus(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % Text::toT(Util::formatBytes((updiff*1000)/tdiff)) % UploadManager::getInstance()->getUploadCount()));
+	bool statusResized = false;
+	statusResized |= setStatus(STATUS_AWAY, Util::getAway() ? T_("AWAY") : _T(""), false);
+	statusResized |= setStatus(STATUS_COUNTS, Text::toT(Client::getCounts()), false);
+	statusResized |= setStatus(STATUS_SLOTS, str(TF_("Slots: %1%/%2%") % UploadManager::getInstance()->getFreeSlots() % (SETTING(SLOTS))), false);
+	statusResized |= setStatus(STATUS_DOWN_TOTAL, str(TF_("D: %1%") % Text::toT(Util::formatBytes(down))), false);
+	statusResized |= setStatus(STATUS_UP_TOTAL, str(TF_("U: %1%") % Text::toT(Util::formatBytes(up))), false);
+	statusResized |= setStatus(STATUS_DOWN_DIFF, str(TF_("D: %1%/s (%2%)") % Text::toT(Util::formatBytes((downdiff*1000)/tdiff)) % DownloadManager::getInstance()->getDownloadCount()), false);
+	statusResized |= setStatus(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % Text::toT(Util::formatBytes((updiff*1000)/tdiff)) % UploadManager::getInstance()->getUploadCount()), false);
+	if(statusResized)
+		layout();
 }
 
 MainWindow::~MainWindow() {
 	dwt::Application::instance().removeFilter(filterIter);
+}
+
+void MainWindow::updateSlotsSpin() {
+	slotsSpin->setValue(SETTING(SLOTS));
 }
 
 void MainWindow::handleSettings() {
@@ -643,7 +658,7 @@ void MainWindow::handleSettings() {
 	unsigned short lastTLS = static_cast<unsigned short>(SETTING(TLS_PORT));
 
 	int lastConn= SETTING(INCOMING_CONNECTIONS);
-
+	int lastSlots = SETTING(SLOTS);
 	bool lastSortFavUsersFirst= BOOLSETTING(SORT_FAVUSERS_FIRST);
 
 	if (dlg.run() == IDOK) {
@@ -652,6 +667,9 @@ void MainWindow::handleSettings() {
 			startSocket();
 		}
 		ClientManager::getInstance()->infoUpdated();
+
+		if(SETTING(SLOTS) != lastSlots)
+			updateSlotsSpin();
 
 		if(BOOLSETTING(SORT_FAVUSERS_FIRST) != lastSortFavUsersFirst)
 			HubFrame::resortUsers();
@@ -960,6 +978,12 @@ LRESULT MainWindow::handleEndSession() {
 	SettingsManager::getInstance()->save();
 
 	return 0;
+}
+
+bool MainWindow::handleSlotsUpdate(int pos, int delta) {
+	SettingsManager::getInstance()->set(SettingsManager::SLOTS, pos + delta);
+	updateStatus();
+	return true;
 }
 
 void MainWindow::handleRefreshFileList() {
