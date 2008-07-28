@@ -286,7 +286,7 @@ void Menu::setDefaultItem(unsigned index) {
 		throw Win32Exception("SetMenuDefaultItem in Menu::setDefaultItem fizzled...");
 }
 
-tstring Menu::getText(unsigned index) {
+tstring Menu::getText(unsigned index) const {
 	MENUITEMINFO mi = { sizeof(MENUITEMINFO), MIIM_STRING };
 	if ( ::GetMenuItemInfo( itsHandle, index, TRUE, & mi ) == FALSE )
 		throw Win32Exception( "Couldn't get item info 1 in Menu::getText" );
@@ -697,30 +697,10 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
 	// are we processing menu bar ?
 	const bool isMenuBar = ::GetMenu( wrapper->menu->getParent()->handle() ) == wrapper->menu->handle();
 
-	// compute text width and height by simulating write to dc
-	// get its DC
-	HDC hdc = ::GetDC( wrapper->menu->getParent()->handle() );
-
-	// get item text
-	const int length = info.cch + 1;
-	std::vector< TCHAR > buffer ( length );
-	int count = ::GetMenuString( wrapper->menu->handle(), wrapper->index, & buffer[0], length, MF_BYPOSITION );
-	tstring itemText ( buffer.begin(), buffer.begin() + count );
-
-	// now get text extents
-	SIZE textSize;
-	memset( & textSize, 0, sizeof( SIZE ) );
-
-	HGDIOBJ oldFont = ::SelectObject( hdc, wrapper->menu->font->handle() );
-	::GetTextExtentPoint32( hdc, itemText.c_str(), ( int ) itemText.size(), & textSize );
-	::SelectObject( hdc, oldFont );
-
-	// release DC
-	::ReleaseDC( reinterpret_cast<HWND>(wrapper->menu->handle()), hdc );
-
-	// adjust item size
-	itemWidth = textSize.cx + borderGap;
-	itemHeight = textSize.cy + borderGap;
+	SIZE textSize = { 0 };
+	wrapper->menu->getTextSize(textSize, wrapper->index);
+	itemWidth = textSize.cx;
+	itemHeight = textSize.cy;
 
 	// check to see if item has an image
 	Point imageSize = wrapper->image ? wrapper->image->getBitmapSize() : Point(0, 0);
@@ -769,12 +749,8 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
 	// adjust width for sidebar
 	if ( wrapper->menu->drawSidebar )
 	{
-		// get title text extents
-		SIZE textSize;
-		memset( & textSize, 0, sizeof( SIZE ) );
-
-		::GetTextExtentPoint32( hdc, wrapper->menu->itsTitle.c_str(), ( int ) wrapper->menu->itsTitle.size(), & textSize );
-
+		SIZE textSize = { 0 };
+		wrapper->menu->getTextSize(textSize, 0); // 0 is the title index
 		itemWidth += textSize.cy;
 	}
 
@@ -898,11 +874,17 @@ void Menu::appendItem(const tstring & text, const Dispatcher::F& f, BitmapPtr im
 unsigned Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 	long x = sc.getPoint().x, y = sc.getPoint().y;
 
-	if ( x == - 1 && y == - 1 )
-	{
+	if(x == - 1 && y == - 1) {
 		DWORD pos = ::GetMessagePos();
-		x = LOWORD( pos );
-		y = HIWORD( pos );
+		x = LOWORD(pos);
+		y = HIWORD(pos);
+	}
+
+	if(!itsTitle.empty()) {
+		// adjust "y" so that the first command ends up in front of the cursor, not the title
+		SIZE sz = { 0 };
+		getTextSize(sz, 0); // 0 is the title index
+		y -= std::max(static_cast<unsigned>(sz.cy), static_cast<unsigned>(::GetSystemMetrics(SM_CYMENU)));
 	}
 
 	return ::TrackPopupMenu(itsHandle, flags, x, y, 0, itsParent->handle(), 0);
@@ -917,6 +899,26 @@ Menu::ObjectType Menu::getChild( unsigned position ) {
 		}
 	}
 	return ObjectType();
+}
+
+void Menu::getTextSize(SIZE& sz, unsigned index) const {
+	// get item text
+	tstring itemText = getText(index);
+
+	// get its DC
+	HDC hdc = ::GetDC(getParent()->handle());
+
+	// now get text extents
+	HGDIOBJ oldFont = ::SelectObject(hdc, font->handle());
+	::GetTextExtentPoint32(hdc, itemText.c_str(), (int)itemText.size(), &sz);
+	::SelectObject(hdc, oldFont);
+
+	// release DC
+	::ReleaseDC(reinterpret_cast<HWND>(handle()), hdc);
+
+	// adjust item size
+	sz.cx += borderGap;
+	sz.cy += borderGap;
 }
 
 }
