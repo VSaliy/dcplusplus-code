@@ -271,15 +271,15 @@ void MainWindow::initMenu() {
 		help->appendItem(T_("Change Log"), std::tr1::bind(&WinUtil::help, handle(), IDH_CHANGELOG));
 		help->appendItem(T_("About DC++..."), std::tr1::bind(&MainWindow::handleAbout, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_DCPP)));
 		help->appendSeparator();
-		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&WinUtil::openLink, links.homepage));
-		help->appendItem(T_("Downloads"), std::tr1::bind(&WinUtil::openLink, links.downloads));
-		help->appendItem(T_("GeoIP database update"), std::tr1::bind(&WinUtil::openLink, links.geoipfile));
-		help->appendItem(T_("Frequently asked questions"), std::tr1::bind(&WinUtil::openLink, links.faq));
-		help->appendItem(T_("Help forum"), std::tr1::bind(&WinUtil::openLink, links.help));
-		help->appendItem(T_("DC++ discussion forum"), std::tr1::bind(&WinUtil::openLink, links.discuss));
-		help->appendItem(T_("Request a feature"), std::tr1::bind(&WinUtil::openLink, links.features));
-		help->appendItem(T_("Report a bug"), std::tr1::bind(&WinUtil::openLink, links.bugs));
-		help->appendItem(T_("Donate (paypal)"), std::tr1::bind(&WinUtil::openLink, links.donate));
+		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.homepage)));
+		help->appendItem(T_("Downloads"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.downloads)));
+		help->appendItem(T_("GeoIP database update"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.geoipfile)));
+		help->appendItem(T_("Frequently asked questions"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.faq)));
+		help->appendItem(T_("Help forum"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.help)));
+		help->appendItem(T_("DC++ discussion forum"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.discuss)));
+		help->appendItem(T_("Request a feature"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.features)));
+		help->appendItem(T_("Report a bug"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.bugs)));
+		help->appendItem(T_("Donate (paypal)"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.donate)));
 	}
 
 	mainMenu->setMenu();
