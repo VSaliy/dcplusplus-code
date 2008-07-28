@@ -57,7 +57,7 @@ protected:
 		bool ret = false;
 		if(s != WidgetType::STATUS_STATUS) {
 			int w = status->getTextSize(text).x + 12;
-			if(w != static_cast<int>(statusSizes[s])) {
+			if(w > static_cast<int>(statusSizes[s])) {
 				statusSizes[s] = w;
 				if(layout)
 					layoutSections(status->getSize());
