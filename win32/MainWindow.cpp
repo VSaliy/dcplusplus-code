@@ -338,6 +338,7 @@ void MainWindow::initStatusBar() {
 	dcdebug("initStatusBar\n");
 
 	slotsSpin = addChild(Spinner::Seed(1));
+	slotsSpin->setHelpId(IDH_MAIN_SLOTS_SPIN);
 	updateSlotsSpin();
 	slotsSpin->onUpdate(std::tr1::bind(&MainWindow::handleSlotsUpdate, this, _1, _2));
 
@@ -348,6 +349,15 @@ void MainWindow::initStatusBar() {
 	statusSizes[STATUS_SLOTS_SPIN] = 20;
 	///@todo set to checkbox width + resizedrag width really
 	statusSizes[STATUS_DUMMY] = 32;
+
+	setStatusHelpId(STATUS_STATUS, IDH_MAIN_STATUS);
+	setStatusHelpId(STATUS_AWAY, IDH_MAIN_AWAY);
+	setStatusHelpId(STATUS_COUNTS, IDH_MAIN_HUBS);
+	setStatusHelpId(STATUS_SLOTS, IDH_MAIN_SLOTS);
+	setStatusHelpId(STATUS_DOWN_TOTAL, IDH_MAIN_DOWN_TOTAL);
+	setStatusHelpId(STATUS_UP_TOTAL, IDH_MAIN_UP_TOTAL);
+	setStatusHelpId(STATUS_DOWN_DIFF, IDH_MAIN_DOWN_DIFF);
+	setStatusHelpId(STATUS_UP_DIFF, IDH_MAIN_UP_DIFF);
 }
 
 void MainWindow::initTabs() {
