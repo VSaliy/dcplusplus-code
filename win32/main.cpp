@@ -117,7 +117,6 @@ int SmartWinMain(dwt::Application& app) {
 		dcdebug("Failed reading exe\n");
 	}
 
-	int ret = 255;
 	try {
 		SplashWindow* splash(new SplashWindow);
 		startup(&callBack, splash);
@@ -134,7 +133,7 @@ int SmartWinMain(dwt::Application& app) {
 		WinUtil::mainWindow = wnd;
 		//WinUtil::mdiParent = wnd->getMDIParent();
 		splash->close();
-		ret = app.run();
+		app.run();
 	} catch(const std::exception& e) {
 		printf("Exception: %s\n", e.what());
 	} catch(...) {
@@ -146,6 +145,6 @@ int SmartWinMain(dwt::Application& app) {
 
 	::CoUninitialize();
 
-	return ret;
+	return 0;
 }
 
