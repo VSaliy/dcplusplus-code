@@ -33,16 +33,16 @@
 
 namespace dwt {
 
-Spinner::Seed::Seed() :
-	Widget::Seed(UPDOWN_CLASS, WS_CHILD | WS_VISIBLE | WS_TABSTOP),
-	minValue(0),
-	maxValue(100)
+Spinner::Seed::Seed(int minValue_, int maxValue_) :
+	BaseType::Seed(UPDOWN_CLASS, WS_CHILD | WS_TABSTOP),
+	minValue(minValue_),
+	maxValue(maxValue_)
 {
 }
 
 void Spinner::create( const Seed & cs )
 {
-	ControlType::create(cs);
+	BaseType::create(cs);
 	setRange( cs.minValue, cs.maxValue );
 }
 
