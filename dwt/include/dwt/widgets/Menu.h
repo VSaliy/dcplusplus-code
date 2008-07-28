@@ -330,15 +330,9 @@ public:
 	}
 
 	/// Returns the text of a specific menu item
-	/** Which menu item you wish to retrieve the text for is defined by the "id"
-	  * parameter of the function.
-	  */
-	tstring getText(unsigned index);
+	tstring getText(unsigned index) const;
 
 	/// Sets the text of a specific menu item
-	/** Which menu item you wish to set the text is defined by the "id"
-	  * parameter of the function.
-	  */
 	void setText(unsigned index, const tstring& text);
 
 	ObjectType getChild(UINT position);
@@ -428,6 +422,8 @@ private:
 	bool drawSidebar;
 
 	void createHelper(const Seed& cs);
+
+	void getTextSize(SIZE& sz, unsigned index) const;
 };
 
 }
