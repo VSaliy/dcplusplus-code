@@ -54,13 +54,14 @@ protected:
 
 	// returns true if the part has been resized
 	bool setStatus(int s, const tstring& text, bool layout = true) {
+		bool ret = false;
 		if(s != WidgetType::STATUS_STATUS) {
 			int w = status->getTextSize(text).x + 12;
 			if(w != static_cast<int>(statusSizes[s])) {
 				statusSizes[s] = w;
 				if(layout)
 					layoutSections(status->getSize());
-				return true;
+				ret = true;
 			}
 		} else {
 			lastLines.push_back(text);
@@ -69,7 +70,7 @@ protected:
 			}
 		}
 		status->setText(text, s);
-		return false;
+		return ret;
 	}
 
 	void setStatusHelpId(int s, unsigned id) {
