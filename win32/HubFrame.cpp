@@ -152,6 +152,7 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 		CheckBox::Seed cs(_T("+/-"));
 		cs.style &= ~WS_TABSTOP;
 		showUsers = addChild(cs);
+		showUsers->setHelpId(IDH_HUB_SHOW_USERS);
 		showUsers->setChecked(BOOLSETTING(GET_USER_INFO));
 	}
 
@@ -160,6 +161,11 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 
 	///@todo get real resizer width
 	statusSizes[STATUS_SHOW_USERS] = 16;
+
+	setStatusHelpId(STATUS_STATUS, IDH_HUB_STATUS);
+	setStatusHelpId(STATUS_USERS, IDH_HUB_USERS_COUNT);
+	setStatusHelpId(STATUS_SHARED, IDH_HUB_SHARED);
+	setStatusHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
 
 	layout();
 
