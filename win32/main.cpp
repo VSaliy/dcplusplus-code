@@ -75,15 +75,13 @@ int SmartWinMain(dwt::Application& app) {
 	SingleInstance dcapp(_T("{DCPLUSPLUS-AEE8350A-B49A-4753-AB4B-E55479A48350}"));
 #endif
 	if(dcapp.isRunning()) {
-		tstring cmdLine = app.getCommandLine().getParamsRaw();
-
 		HWND hOther = NULL;
 		::EnumWindows(&searchOtherInstance, (LPARAM)&hOther);
 
 #ifndef _DEBUG
 		if( hOther != NULL ) {
 #else
-		if( hOther != NULL && !cmdLine.empty() ) {
+		if( hOther != NULL && app.getCommandLine().getParams().size() > 1 ) {
 #endif
 			// pop up
 			::SetForegroundWindow(hOther);
@@ -92,7 +90,7 @@ int SmartWinMain(dwt::Application& app) {
 				// restore
 				::ShowWindow(hOther, SW_RESTORE);
 			}
-			sendCmdLine(hOther, cmdLine);
+			sendCmdLine(hOther, app.getCommandLine().getParamsRaw());
 			return 1;
 		}
 	}
