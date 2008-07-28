@@ -61,7 +61,9 @@ class Slider :
 	public AspectPainting< Slider >,
 	public AspectScrollable< Slider >
 {
+	typedef CommonControl BaseType;
 	friend class WidgetCreator< Slider >;
+
 public:
 	/// Class type
 	typedef Slider ThisType;
@@ -74,10 +76,9 @@ public:
 	  * knows the type of the class whose seed values it contains. Every widget
 	  * should define one of these.
 	  */
-	class Seed
-		: public Widget::Seed
-	{
-	public:
+	struct Seed : public BaseType::Seed {
+		typedef ThisType WidgetType;
+
 		/// Fills with default parameters
 		Seed();
 	};
@@ -266,7 +267,7 @@ inline void Slider::assignBuddy( bool beginning, Widget * buddy )
 }
 
 inline Slider::Slider( dwt::Widget * parent )
-	: ControlType( parent )
+	: BaseType( parent )
 {
 }
 
