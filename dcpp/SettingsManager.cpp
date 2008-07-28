@@ -79,7 +79,7 @@ const string SettingsManager::settingTags[] =
 	"OpenWaitingUsers", "BoldWaitingUsers", "OpenSystemLog", "BoldSystemLog", "AutoRefreshTime",
 	"UseTLS", "AutoSearchLimit", "AltSortOrder", "AutoKickNoFavs", "PromptPassword", "SpyFrameIgnoreTthSearches",
 	"DontDlAlreadyQueued", "MaxCommandLength", "AllowUntrustedHubs", "AllowUntrustedClients",
-	"TLSPort", "FastHash", "SortFavUsersFirst", "ShowShellMenu", "SegmentedDL", "FollowLinks",
+	"TLSPort", "FastHash", "SortFavUsersFirst", "SegmentedDL", "FollowLinks",
 	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "MaxTabChars", "FinishedDLOnlyFull",
 	"SENTRY",
 	// Int64
@@ -279,7 +279,6 @@ SettingsManager::SettingsManager()
 	setDefault(ALLOW_UNTRUSTED_CLIENTS, true);
 	setDefault(FAST_HASH, true);
 	setDefault(SORT_FAVUSERS_FIRST, false);
-	setDefault(SHOW_SHELL_MENU, false);
 	setDefault(SEGMENTED_DL, true);
 	setDefault(FOLLOW_LINKS, false);
 	setDefault(SEND_BLOOM, true);

@@ -481,7 +481,7 @@ private:
 			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
 
 			CShellContextMenu* shellMenu = 0;
-			if(BOOLSETTING(SHOW_SHELL_MENU) && files->countSelected() == 1) {
+			if(files->countSelected() == 1) {
 				string path = files->getSelectedData()->file;
 				if(File::getSize(path) != -1) {
 					shellMenu = new CShellContextMenu(menu, Text::utf8ToWide(path));

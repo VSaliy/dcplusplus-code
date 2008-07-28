@@ -399,7 +399,7 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 
 			menu = makeSingleMenu(ii);
 
-			if(BOOLSETTING(SHOW_SHELL_MENU) && (dl->getUser() == ClientManager::getInstance()->getMe()) && ii->type == ItemInfo::FILE) {
+			if(dl->getUser() == ClientManager::getInstance()->getMe() && ii->type == ItemInfo::FILE) {
 				string path;
 				try {
 					path = ShareManager::getInstance()->toReal(Util::toAdcFile(dl->getPath(ii->file) + ii->file->getName()));
