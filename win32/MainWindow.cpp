@@ -993,6 +993,7 @@ LRESULT MainWindow::handleEndSession() {
 bool MainWindow::handleSlotsUpdate(int pos, int delta) {
 	SettingsManager::getInstance()->set(SettingsManager::SLOTS, pos + delta);
 	updateStatus();
+	ClientManager::getInstance()->infoUpdated();
 	return true;
 }
 
