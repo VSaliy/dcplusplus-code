@@ -25,7 +25,8 @@ class TextFrame : public MDIChildFrame<TextFrame>
 {
 	typedef MDIChildFrame<TextFrame> BaseType;
 public:
-	TextFrame(dwt::TabView* mdiParent, const string& fileName);
+	static TextFrame* openWindow(dwt::TabView* mdiParent, const string& fileName);
+
 	enum Status {
 		STATUS_STATUS,
 		STATUS_LAST
@@ -34,6 +35,7 @@ public:
 private:
 	friend class MDIChildFrame<TextFrame>;
 
+	TextFrame(dwt::TabView* mdiParent, const string& fileName);
 	TextBoxPtr pad;
 
 	virtual ~TextFrame() { }

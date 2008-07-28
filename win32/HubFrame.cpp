@@ -455,10 +455,6 @@ void HubFrame::addStatus(const tstring& aLine, bool inChat /* = true */) {
 
 	setStatus(STATUS_STATUS, line);
 
-	while(lastLinesList.size() + 1 > MAX_CLIENT_LINES)
-		lastLinesList.erase(lastLinesList.begin());
-	lastLinesList.push_back(line);
-
 	setDirty(SettingsManager::BOLD_HUB);
 
 	if(BOOLSETTING(STATUS_IN_CHAT) && inChat) {
