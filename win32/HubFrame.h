@@ -85,9 +85,8 @@ private:
 		COLUMN_LAST
 	};
 
-	enum Tasks { UPDATE_USER_JOIN, UPDATE_USER, REMOVE_USER, ADD_CHAT_LINE,
-		ADD_STATUS_LINE, ADD_SILENT_STATUS_LINE, SET_WINDOW_TITLE, GET_PASSWORD,
-		PRIVATE_MESSAGE, CONNECTED, DISCONNECTED, FOLLOW
+	enum Tasks {
+		UPDATE_USER_JOIN, UPDATE_USER, REMOVE_USER
 	};
 
 	struct UserTask : public Task {
@@ -95,17 +94,6 @@ private:
 
 		UserPtr user;
 		Identity identity;
-	};
-
-	struct PMTask : public StringTask {
-		PMTask(const OnlineUser& from_, const OnlineUser& to_, const OnlineUser& replyTo_, const string& m);
-
-		UserPtr from;
-		UserPtr to;
-		UserPtr replyTo;
-
-		bool hub;
-		bool bot;
 	};
 
 	class UserInfo : public UserInfoBase, public FastAlloc<UserInfo> {
@@ -249,11 +237,13 @@ private:
 	string stripNick(const string& nick) const;
 	tstring scanNickPrefix(const tstring& prefix);
 
-	void addTask(Tasks s);
-	void addTask(Tasks s, const string& msg);
 	void addTask(Tasks s, const OnlineUser& u);
-	void addTask(const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line);
 	void execTasks();
+
+	void onConnected();
+	void onDisconnected();
+	void onGetPassword();
+	void onPrivateMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, bool hub, bool bot, const tstring& m);
 
 	// FavoriteManagerListener
 	virtual void on(FavoriteManagerListener::UserAdded, const FavoriteUser& /*aUser*/) throw();
