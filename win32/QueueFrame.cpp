@@ -119,86 +119,6 @@ QueueFrame::~QueueFrame() {
 
 }
 
-void QueueFrame::addTask(Tasks s, Task* t) {
-	tasks.add(s, t);
-	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::execTasks, this));
-}
-
-void QueueFrame::addTask(Tasks s, const string& msg) {
-	tasks.add(s, new StringTask(msg));
-	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::execTasks, this));
-}
-
-void QueueFrame::execTasks() {
-	TaskQueue::List t;
-	tasks.get(t);
-
-	for(TaskQueue::Iter ti = t.begin(); ti != t.end(); ++ti) {
-		if(ti->first == ADD_ITEM) {
-			boost::scoped_ptr<QueueItemInfoTask> iit(static_cast<QueueItemInfoTask*>(ti->second));
-
-			dcassert(files->find(iit->ii) == -1);
-			addQueueItem(iit->ii, false);
-			updateStatus();
-		} else if(ti->first == REMOVE_ITEM) {
-			boost::scoped_ptr<StringTask> target(static_cast<StringTask*>(ti->second));
-			QueueItemInfo* ii = getItemInfo(target->str);
-			if(!ii) {
-				dcassert(ii);
-				continue;
-			}
-
-			if(!showTree->getChecked() || isCurDir(ii->getPath()) ) {
-				dcassert(files->find(ii) != -1);
-				files->erase(ii);
-			}
-
-			if(!ii->isSet(QueueItem::FLAG_USER_LIST)) {
-				queueSize-=ii->getSize();
-				dcassert(queueSize >= 0);
-			}
-			queueItems--;
-			dcassert(queueItems >= 0);
-
-			pair<DirectoryIter, DirectoryIter> i = directories.equal_range(ii->getPath());
-			DirectoryIter j;
-			for(j = i.first; j != i.second; ++j) {
-				if(j->second == ii)
-					break;
-			}
-			dcassert(j != i.second);
-			directories.erase(j);
-			if(directories.count(ii->getPath()) == 0) {
-				removeDirectory(ii->getPath(), ii->isSet(QueueItem::FLAG_USER_LIST));
-				if(isCurDir(ii->getPath()))
-					curDir.clear();
-			}
-
-			delete ii;
-			updateStatus();
-			setDirty(SettingsManager::BOLD_QUEUE);
-			dirty = true;
-		} else if(ti->first == UPDATE_ITEM) {
-			boost::scoped_ptr<UpdateTask> ui(reinterpret_cast<UpdateTask*>(ti->second));
-            QueueItemInfo* ii = getItemInfo(ui->target);
-
-			ii->setPriority(ui->priority);
-			ii->setRunning(ui->running);
-			ii->setDownloadedBytes(ui->downloadedBytes);
-			ii->setSources(ui->sources);
-			ii->setBadSources(ui->badSources);
-
-			ii->updateMask |= QueueItemInfo::MASK_PRIORITY | QueueItemInfo::MASK_USERS | QueueItemInfo::MASK_ERRORS | QueueItemInfo::MASK_STATUS | QueueItemInfo::MASK_DOWNLOADED;
-
-			if(!showTree->getChecked() || isCurDir(ii->getPath())) {
-				dcassert(files->find(ii) != -1);
-				ii->update();
-				files->update(ii);
-			}
-		}
-	}
-}
-
 void QueueFrame::layout() {
 	dwt::Rectangle r(getClientAreaSize());
 
@@ -376,25 +296,6 @@ void QueueFrame::updateFiles() {
 
 	curDir = getSelectedDir();
 	updateStatus();
-}
-
-void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) throw() {
-	QueueItemInfo* ii = new QueueItemInfo(*aQI);
-
-	addTask(ADD_ITEM, new QueueItemInfoTask(ii));
-}
-
-void QueueFrame::on(QueueManagerListener::Removed, QueueItem* aQI) throw() {
-	addTask(REMOVE_ITEM, aQI->getTarget());
-}
-
-void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw() {
-	addTask(REMOVE_ITEM, oldTarget);
-	addTask(ADD_ITEM, new QueueItemInfoTask(new QueueItemInfo(*aQI)));
-}
-
-void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw() {
-	addTask(UPDATE_ITEM, new UpdateTask(*aQI));
 }
 
 void QueueFrame::QueueItemInfo::update() {
@@ -1081,4 +982,84 @@ bool QueueFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 	}
 
 	return false;
+}
+
+void QueueFrame::onAdded(QueueItemInfo* ii) {
+	dcassert(files->find(ii) == -1);
+	addQueueItem(ii, false);
+	updateStatus();
+}
+
+void QueueFrame::onRemoved(const string& s) {
+	QueueItemInfo* ii = getItemInfo(s);
+	if(!ii) {
+		dcassert(ii);
+		return;
+	}
+
+	if(!showTree->getChecked() || isCurDir(ii->getPath()) ) {
+		dcassert(files->find(ii) != -1);
+		files->erase(ii);
+	}
+
+	if(!ii->isSet(QueueItem::FLAG_USER_LIST)) {
+		queueSize-=ii->getSize();
+		dcassert(queueSize >= 0);
+	}
+	queueItems--;
+	dcassert(queueItems >= 0);
+
+	pair<DirectoryIter, DirectoryIter> i = directories.equal_range(ii->getPath());
+	DirectoryIter j;
+	for(j = i.first; j != i.second; ++j) {
+		if(j->second == ii)
+			break;
+	}
+	dcassert(j != i.second);
+	directories.erase(j);
+	if(directories.count(ii->getPath()) == 0) {
+		removeDirectory(ii->getPath(), ii->isSet(QueueItem::FLAG_USER_LIST));
+		if(isCurDir(ii->getPath()))
+			curDir.clear();
+	}
+
+	delete ii;
+	updateStatus();
+	setDirty(SettingsManager::BOLD_QUEUE);
+	dirty = true;
+}
+
+void QueueFrame::onUpdated(const QueueItem& qi) {
+	QueueItemInfo* ii = getItemInfo(qi.getTarget());
+
+	ii->setPriority(qi.getPriority());
+	ii->setRunning(qi.isRunning());
+	ii->setDownloadedBytes(qi.getDownloadedBytes());
+	ii->setSources(qi.getSources());
+	ii->setBadSources(qi.getBadSources());
+
+	ii->updateMask |= QueueItemInfo::MASK_PRIORITY | QueueItemInfo::MASK_USERS | QueueItemInfo::MASK_ERRORS | QueueItemInfo::MASK_STATUS | QueueItemInfo::MASK_DOWNLOADED;
+
+	if(!showTree->getChecked() || isCurDir(ii->getPath())) {
+		dcassert(files->find(ii) != -1);
+		ii->update();
+		files->update(ii);
+	}
+}
+
+void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
+}
+
+void QueueFrame::on(QueueManagerListener::Removed, QueueItem* aQI) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onRemoved, this, aQI->getTarget()));
+}
+
+void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onRemoved, this, oldTarget));
+	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
+}
+
+void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onUpdated, this, *aQI));
 }

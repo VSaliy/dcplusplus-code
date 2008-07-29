@@ -166,7 +166,7 @@ private:
 	bool showJoins;
 	bool favShowJoins;
 
-	TaskQueue tasks;
+	TaskQueue tasks; // todo get rid of TaskQueue
 
 	TStringList prevCommands;
 	tstring currentCommand;

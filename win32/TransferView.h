@@ -246,7 +246,8 @@ private:
 
 	bool startup;
 
-	TaskQueue tasks;
+	TaskQueue tasks; // todo get rid of TaskQueue
+
 	StringMap ucLineParams;
 
 	void handleSized(const dwt::SizedEvent& sz);
