@@ -44,8 +44,6 @@ SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 	// Technically, we might miss a message or two here, but who cares...
 	LogManager::getInstance()->addListener(this);
 
-	onSpeaker(std::tr1::bind(&SystemFrame::handleSpeaker, this, _1));
-
 	for(LogManager::List::const_iterator i = oldMessages.begin(); i != oldMessages.end(); ++i) {
 		addLine(i->first, Text::toT(i->second));
 	}
@@ -86,17 +84,11 @@ void SystemFrame::layout() {
 		log->sendMessage(WM_VSCROLL, SB_BOTTOM);
 }
 
-LRESULT SystemFrame::handleSpeaker(WPARAM wp) {
-	boost::scoped_ptr<LogManager::Pair> msg(reinterpret_cast<LogManager::Pair*>(wp));
-	addLine(msg->first, Text::toT(msg->second));
-	return 0;
-}
-
 bool SystemFrame::preClosing() {
 	LogManager::getInstance()->removeListener(this);
 	return true;
 }
 
 void SystemFrame::on(Message, time_t t, const string& message) throw() {
-	speak(reinterpret_cast<WPARAM>(new LogManager::Pair(t, message)));
+	dwt::Application::instance().callAsync(std::tr1::bind(&SystemFrame::addLine, this, t, Text::toT(message)));
 }

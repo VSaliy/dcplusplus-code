@@ -111,8 +111,6 @@ QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
 	QueueManager::getInstance()->unlockQueue();
 	QueueManager::getInstance()->addListener(this);
 
-	onSpeaker(std::tr1::bind(&QueueFrame::handleSpeaker, this));
-
 	updateStatus();
 	layout();
 }
@@ -121,9 +119,18 @@ QueueFrame::~QueueFrame() {
 
 }
 
-LRESULT QueueFrame::handleSpeaker() {
-	TaskQueue::List t;
+void QueueFrame::addTask(Tasks s, Task* t) {
+	tasks.add(s, t);
+	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::execTasks, this));
+}
 
+void QueueFrame::addTask(Tasks s, const string& msg) {
+	tasks.add(s, new StringTask(msg));
+	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::execTasks, this));
+}
+
+void QueueFrame::execTasks() {
+	TaskQueue::List t;
 	tasks.get(t);
 
 	for(TaskQueue::Iter ti = t.begin(); ti != t.end(); ++ti) {
@@ -190,8 +197,6 @@ LRESULT QueueFrame::handleSpeaker() {
 			}
 		}
 	}
-
-	return 0;
 }
 
 void QueueFrame::layout() {
@@ -376,20 +381,20 @@ void QueueFrame::updateFiles() {
 void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) throw() {
 	QueueItemInfo* ii = new QueueItemInfo(*aQI);
 
-	speak(ADD_ITEM,	new QueueItemInfoTask(ii));
+	addTask(ADD_ITEM, new QueueItemInfoTask(ii));
 }
 
 void QueueFrame::on(QueueManagerListener::Removed, QueueItem* aQI) throw() {
-	speak(REMOVE_ITEM, aQI->getTarget());
+	addTask(REMOVE_ITEM, aQI->getTarget());
 }
 
 void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw() {
-	speak(REMOVE_ITEM, oldTarget);
-	speak(ADD_ITEM,	new QueueItemInfoTask(new QueueItemInfo(*aQI)));
+	addTask(REMOVE_ITEM, oldTarget);
+	addTask(ADD_ITEM, new QueueItemInfoTask(new QueueItemInfo(*aQI)));
 }
 
 void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw() {
-	speak(UPDATE_ITEM, new UpdateTask(*aQI));
+	addTask(UPDATE_ITEM, new UpdateTask(*aQI));
 }
 
 void QueueFrame::QueueItemInfo::update() {

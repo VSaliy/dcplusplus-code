@@ -139,8 +139,7 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	downloadsWindow->onSized(std::tr1::bind(&fills, downloadsWindow, downloads));
 
 	onSized(std::tr1::bind(&TransferView::handleSized, this, _1));
-	onRaw(std::tr1::bind(&TransferView::handleDestroy, this, _1, _2), dwt::Message(WM_DESTROY));
-	onSpeaker(std::tr1::bind(&TransferView::handleSpeaker, this, _1, _2));
+	onRaw(std::tr1::bind(&TransferView::handleDestroy, this), dwt::Message(WM_DESTROY));
 	noEraseBackground();
 
 	layout();
@@ -170,7 +169,7 @@ void TransferView::prepareClose() {
 	UploadManager::getInstance()->removeListener(this);
 }
 
-HRESULT TransferView::handleDestroy(WPARAM wParam, LPARAM lParam) {
+LRESULT TransferView::handleDestroy() {
 	SettingsManager::getInstance()->set(SettingsManager::CONNECTIONS_ORDER, WinUtil::toString(connections->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::CONNECTIONS_WIDTHS, WinUtil::toString(connections->getColumnWidths()));
 
@@ -448,7 +447,12 @@ int TransferView::ConnectionInfo::compareItems(ConnectionInfo* a, ConnectionInfo
 	}
 }
 
-HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
+void TransferView::addTask(int type, Task* ui) {
+	tasks.add(type, ui);
+	dwt::Application::instance().callAsync(std::tr1::bind(&TransferView::execTasks, this));
+}
+
+void TransferView::execTasks() {
 	TaskQueue::List t;
 	tasks.get(t);
 
@@ -536,8 +540,6 @@ HRESULT TransferView::handleSpeaker(WPARAM wParam, LPARAM lParam) {
 	if(sortDown) {
 		downloads->resort();
 	}
-
-	return 0;
 }
 
 TransferView::ConnectionInfo::ConnectionInfo(const UserPtr& u, bool aDownload) :
@@ -663,7 +665,7 @@ void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCq
 
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(T_("Connecting"));
-	speak(CONNECTIONS_ADD, ui);
+	addTask(CONNECTIONS_ADD, ui);
 }
 
 void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) throw() {
@@ -671,11 +673,11 @@ void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueI
 
 	ui->setStatusString((aCqi->getState() == ConnectionQueueItem::CONNECTING) ? T_("Connecting") : T_("Waiting to retry"));
 
-	speak(CONNECTIONS_UPDATE, ui);
+	addTask(CONNECTIONS_UPDATE, ui);
 }
 
 void TransferView::on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) throw() {
-	speak(CONNECTIONS_REMOVE, new UpdateInfo(aCqi->getUser(), aCqi->getDownload()));
+	addTask(CONNECTIONS_REMOVE, new UpdateInfo(aCqi->getUser(), aCqi->getDownload()));
 }
 
 void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) throw() {
@@ -685,7 +687,7 @@ void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aC
 	} else {
 		ui->setStatusString(Text::toT(aReason));
 	}
-	speak(CONNECTIONS_UPDATE, ui);
+	addTask(CONNECTIONS_UPDATE, ui);
 }
 
 static tstring getFile(Transfer* t) {
@@ -725,9 +727,9 @@ void TransferView::on(DownloadManagerListener::Requesting, Download* d) throw() 
 
 	ui->setStatusString(str(TF_("Requesting %1%") % getFile(d)));
 
-	speak(CONNECTIONS_UPDATE, ui);
+	addTask(CONNECTIONS_UPDATE, ui);
 
-	speak(DOWNLOADS_ADD_USER, new TickInfo(d->getPath()));
+	addTask(DOWNLOADS_ADD_USER, new TickInfo(d->getPath()));
 }
 
 void TransferView::on(DownloadManagerListener::Starting, Download* d) throw() {
@@ -754,7 +756,7 @@ void TransferView::on(DownloadManagerListener::Starting, Download* d) throw() {
 	statusString += str(TF_("Downloading %1%") % getFile(d));
 
 	ui->setStatusString(statusString);
-	speak(CONNECTIONS_UPDATE, ui);
+	addTask(CONNECTIONS_UPDATE, ui);
 }
 
 void TransferView::onTransferTick(Transfer* t, bool isDownload) {
@@ -796,7 +798,7 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) thr
 		tasks.add(DOWNLOADS_TICK, *i);
 	}
 
-	speak();
+	dwt::Application::instance().callAsync(std::tr1::bind(&TransferView::execTasks, this));
 }
 
 void TransferView::on(DownloadManagerListener::Failed, Download* d, const string& aReason) throw() {
@@ -804,9 +806,9 @@ void TransferView::on(DownloadManagerListener::Failed, Download* d, const string
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(Text::toT(aReason));
 
-	speak(CONNECTIONS_UPDATE, ui);
+	addTask(CONNECTIONS_UPDATE, ui);
 
-	speak(DOWNLOADS_REMOVE_USER, new TickInfo(d->getPath()));
+	addTask(DOWNLOADS_REMOVE_USER, new TickInfo(d->getPath()));
 }
 
 void TransferView::on(UploadManagerListener::Starting, Upload* u) throw() {
@@ -833,7 +835,7 @@ void TransferView::on(UploadManagerListener::Starting, Upload* u) throw() {
 
 	ui->setStatusString(statusString);
 
-	speak(CONNECTIONS_UPDATE, ui);
+	addTask(CONNECTIONS_UPDATE, ui);
 }
 
 void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) throw() {
@@ -841,13 +843,13 @@ void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) throw()
 		onTransferTick(*i, false);
 	}
 
-	speak();
+	dwt::Application::instance().callAsync(std::tr1::bind(&TransferView::execTasks, this));
 }
 
 void TransferView::on(DownloadManagerListener::Complete, Download* d) throw() {
 	onTransferComplete(d, true);
 
-	speak(DOWNLOADS_REMOVE_USER, new TickInfo(d->getPath()));
+	addTask(DOWNLOADS_REMOVE_USER, new TickInfo(d->getPath()));
 }
 
 void TransferView::on(UploadManagerListener::Complete, Upload* aUpload) throw() {
@@ -861,7 +863,7 @@ void TransferView::onTransferComplete(Transfer* aTransfer, bool isDownload) {
 	ui->setStatusString(T_("Idle"));
 	ui->setChunk(aTransfer->getPos(), aTransfer->getSize());
 
-	speak(CONNECTIONS_UPDATE, ui);
+	addTask(CONNECTIONS_UPDATE, ui);
 }
 
 void TransferView::ConnectionInfo::disconnect() {
@@ -869,5 +871,5 @@ void TransferView::ConnectionInfo::disconnect() {
 }
 
 void TransferView::on(QueueManagerListener::Removed, QueueItem* qi) throw() {
-	speak(DOWNLOADS_REMOVED, new TickInfo(qi->getTarget()));
+	addTask(DOWNLOADS_REMOVED, new TickInfo(qi->getTarget()));
 }

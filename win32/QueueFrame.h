@@ -277,7 +277,6 @@ private:
 	void postClosing();
 
 	void handleShowTreeClicked();
-	LRESULT handleSpeaker();
 	void handleMove();
 	void handleRemove();
 	void handlePriority(QueueItem::Priority p);
@@ -291,9 +290,9 @@ private:
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt);
 	bool handleDirsContextMenu(dwt::ScreenCoordinate pt);
 
-	using MDIChildFrame<QueueFrame>::speak;
-	void speak(Tasks s, Task* t) { tasks.add(s, t); speak(); }
-	void speak(Tasks s, const string& msg) { tasks.add(s, new StringTask(msg)); speak(); }
+	void addTask(Tasks s, Task* t);
+	void addTask(Tasks s, const string& msg);
+	void execTasks();
 
 	virtual void on(QueueManagerListener::Added, QueueItem* aQI) throw();
 	virtual void on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw();

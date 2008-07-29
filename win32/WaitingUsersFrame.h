@@ -54,7 +54,6 @@ protected:
 	void onCopyFilename();
 	void onRemove();
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
-	HRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	bool handleChar(int c);
 	void onPrivateMessage();
 	void onGrantSlot();
@@ -64,11 +63,6 @@ protected:
 	void onAddFile(const UserPtr&, const string&);
 
 private:
-	enum {
-		SPEAK_ADD_FILE,
-		SPEAK_REMOVE_USER
-	};
-
 	struct UserItem {
 		UserPtr u;
 		UserItem(UserPtr u) : u(u) { }
@@ -89,8 +83,8 @@ private:
 	void updateSearch(int index, BOOL doDelete = TRUE);
 
 	// UploadManagerListener
-	virtual void on(UploadManagerListener::WaitingRemoveUser, const UserPtr&) throw();
 	virtual void on(UploadManagerListener::WaitingAddFile, const UserPtr&, const string&) throw();
+	virtual void on(UploadManagerListener::WaitingRemoveUser, const UserPtr&) throw();
 };
 
 #endif	/* WAITING_QUEUE_FRAME_H */

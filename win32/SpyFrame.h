@@ -53,10 +53,6 @@ private:
 	static const size_t AVG_TIME = 60;
 
 	enum {
-		SPEAK_SEARCH
-	};
-
-	enum {
 		COLUMN_FIRST,
 		COLUMN_STRING = COLUMN_FIRST,
 		COLUMN_COUNT,
@@ -74,14 +70,14 @@ private:
 	void initSecond();
 	bool eachSecond();
 
-	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
-
 	void handleColumnClick(int column);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 
 	void handleSearch(const tstring& searchString);
 
 	void handleIgnoreTTHClicked();
+
+	void add(const tstring& x);
 
 	// ClientManagerListener
 	virtual void on(ClientManagerListener::IncomingSearch, const string& s) throw();

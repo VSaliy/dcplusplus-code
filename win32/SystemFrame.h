@@ -43,7 +43,6 @@ private:
 	virtual ~SystemFrame();
 
 	void layout();
-	LRESULT handleSpeaker(WPARAM wParam);
 	bool preClosing();
 
 	void addLine(time_t t, const tstring& msg);

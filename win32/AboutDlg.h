@@ -22,11 +22,9 @@
 #include <dcpp/HttpConnection.h>
 #include "resource.h"
 #include "WidgetFactory.h"
-#include "AspectSpeaker.h"
 
 class AboutDlg :
 	public WidgetFactory<dwt::ModalDialog>,
-	public AspectSpeaker<AboutDlg>,
 	private HttpConnectionListener
 {
 public:
@@ -36,16 +34,10 @@ public:
 	int run() { return createDialog(IDD_ABOUTBOX); }
 
 private:
-	enum Speakers {
-		SPEAK_VERSIONDATA
-	};
-
 	HttpConnection c;
-
 	string downBuf;
 
 	bool handleInitDialog();
-	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 
 	virtual void on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw();
 	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, const string&) throw();

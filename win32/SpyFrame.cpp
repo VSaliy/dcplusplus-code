@@ -77,8 +77,6 @@ SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
 
 	layout();
 
-	onSpeaker(std::tr1::bind(&SpyFrame::handleSpeaker, this, _1, _2)) ;
-
 	ShareManager::getInstance()->setHits(0);
 
 	ClientManager::getInstance()->addListener(this);
@@ -128,42 +126,6 @@ void SpyFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::SPY_FRAME_IGNORE_TTH_SEARCHES, bIgnoreTTH);
 }
 
-LRESULT SpyFrame::handleSpeaker(WPARAM wParam, LPARAM lParam) {
-	if(wParam == SPEAK_SEARCH) {
-		boost::scoped_ptr<tstring> x((tstring*)lParam);
-
-		total++;
-
-		// Not thread safe, but who cares really...
-		perSecond[cur % AVG_TIME]++;
-
-		int j = searches->find(*x);
-		if(j == -1) {
-			TStringList a;
-			a.push_back(*x);
-			a.push_back(Text::toT(Util::toString(1)));
-			a.push_back(Text::toT(Util::getTimeString()));
-			searches->insert(a);
-			if(searches->size() > 500) {
-				searches->erase(searches->size() - 1);
-			}
-		} else {
-			searches->setText(j, COLUMN_COUNT, Text::toT(Util::toString(Util::toInt(Text::fromT(searches->getText(j, COLUMN_COUNT))) + 1)));
-			searches->setText(j, COLUMN_TIME, Text::toT(Util::getTimeString()));
-			if(searches->getSortColumn() == COLUMN_COUNT || searches->getSortColumn() == COLUMN_TIME )
-				searches->resort();
-		}
-
-		setStatus(STATUS_TOTAL, str(TF_("Total: %1%") % total));
-		setStatus(STATUS_HITS, str(TF_("Hits: %1%") % ShareManager::getInstance()->getHits()));
-		double ratio = total > 0 ? ((double)ShareManager::getInstance()->getHits()) / (double)total : 0.0;
-		setStatus(STATUS_HIT_RATIO, str(TF_("Hit Ratio: %1%") % ratio));
-
-		setDirty(SettingsManager::BOLD_SEARCH_SPY);
-	}
-	return 0;
-}
-
 void SpyFrame::handleColumnClick(int column) {
 	if(column == searches->getSortColumn()) {
 		if (!searches->isAscending())
@@ -205,13 +167,44 @@ void SpyFrame::handleIgnoreTTHClicked() {
 	bIgnoreTTH = ignoreTTH->getChecked();
 }
 
+void SpyFrame::add(const tstring& x) {
+	total++;
+
+	// Not thread safe, but who cares really...
+	perSecond[cur % AVG_TIME]++;
+
+	int j = searches->find(x);
+	if(j == -1) {
+		TStringList a;
+		a.push_back(x);
+		a.push_back(Text::toT(Util::toString(1)));
+		a.push_back(Text::toT(Util::getTimeString()));
+		searches->insert(a);
+		if(searches->size() > 500) {
+			searches->erase(searches->size() - 1);
+		}
+	} else {
+		searches->setText(j, COLUMN_COUNT, Text::toT(Util::toString(Util::toInt(Text::fromT(searches->getText(j, COLUMN_COUNT))) + 1)));
+		searches->setText(j, COLUMN_TIME, Text::toT(Util::getTimeString()));
+		if(searches->getSortColumn() == COLUMN_COUNT || searches->getSortColumn() == COLUMN_TIME )
+			searches->resort();
+	}
+
+	setStatus(STATUS_TOTAL, str(TF_("Total: %1%") % total));
+	setStatus(STATUS_HITS, str(TF_("Hits: %1%") % ShareManager::getInstance()->getHits()));
+	double ratio = total > 0 ? ((double)ShareManager::getInstance()->getHits()) / (double)total : 0.0;
+	setStatus(STATUS_HIT_RATIO, str(TF_("Hit Ratio: %1%") % ratio));
+
+	setDirty(SettingsManager::BOLD_SEARCH_SPY);
+}
+
 void SpyFrame::on(ClientManagerListener::IncomingSearch, const string& s) throw() {
 	if(bIgnoreTTH && s.compare(0, 4, "TTH:") == 0)
 		return;
-	tstring* x = new tstring(Text::toT(s));
+	tstring x = Text::toT(s);
 	tstring::size_type i = 0;
-	while( (i=x->find(_T('$'))) != string::npos) {
-		(*x)[i] = _T(' ');
+	while( (i=x.find(_T('$'))) != string::npos) {
+		x[i] = _T(' ');
 	}
-	speak(SPEAK_SEARCH, reinterpret_cast<LPARAM>(x));
+	dwt::Application::instance().callAsync(std::tr1::bind(&SpyFrame::add, this, x));
 }
