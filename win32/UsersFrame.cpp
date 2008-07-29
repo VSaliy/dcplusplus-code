@@ -67,8 +67,6 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 	layout();
 
 	startup = false;
-
-	onSpeaker(std::tr1::bind(&UsersFrame::handleSpeaker, this, _1, _2));
 }
 
 UsersFrame::~UsersFrame() {
@@ -191,25 +189,14 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	return false;
 }
 
-LRESULT UsersFrame::handleSpeaker(WPARAM wParam, LPARAM lParam) {
-	if(wParam == USER_UPDATED) {
-		boost::scoped_ptr<UserInfoBase> uib(reinterpret_cast<UserInfoBase*>(lParam));
-		updateUser(uib->user);
-	} else if(wParam == REMOVE_USER) {
-		boost::scoped_ptr<UserInfoBase> uib(reinterpret_cast<UserInfoBase*>(lParam));
-		removeUser(uib->user);
-	}
-	return 0;
-}
-
 void UsersFrame::on(UserAdded, const FavoriteUser& aUser) throw() {
 	addUser(aUser);
 }
 
 void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) throw() {
-	speak(REMOVE_USER, reinterpret_cast<LPARAM>(new UserInfoBase(aUser.getUser())));
+	dwt::Application::instance().callAsync(std::tr1::bind(&UsersFrame::removeUser, this, aUser.getUser()));
 }
 
 void UsersFrame::on(StatusChanged, const UserPtr& aUser) throw() {
-	speak(USER_UPDATED, reinterpret_cast<LPARAM>(new UserInfoBase(aUser)));
+	dwt::Application::instance().callAsync(std::tr1::bind(&UsersFrame::updateUser, this, aUser));
 }

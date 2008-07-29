@@ -171,7 +171,6 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 
 	initSecond();
 
-	onSpeaker(std::tr1::bind(&HubFrame::handleSpeaker, this, _1, _2));
 	onTabContextMenu(std::tr1::bind(&HubFrame::handleTabContextMenu, this, _1));
 	onCommand(std::tr1::bind(&HubFrame::handleReconnect, this), IDC_RECONNECT);
 	onCommand(std::tr1::bind(&HubFrame::handleFollow, this), IDC_FOLLOW);
@@ -261,7 +260,7 @@ void HubFrame::initSecond() {
 bool HubFrame::eachSecond() {
 	if(updateUsers) {
 		updateUsers = false;
-		speak();
+		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
 	}
 
 	updateStatus();
@@ -470,7 +469,27 @@ void HubFrame::addStatus(const tstring& aLine, bool inChat /* = true */) {
 	}
 }
 
-LRESULT HubFrame::handleSpeaker(WPARAM, LPARAM) {
+void HubFrame::addTask(Tasks s) {
+	tasks.add(s, 0);
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
+}
+
+void HubFrame::addTask(Tasks s, const string& msg) {
+	tasks.add(s, new StringTask(msg));
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
+}
+
+void HubFrame::addTask(Tasks s, const OnlineUser& u) {
+	tasks.add(s, new UserTask(u));
+	updateUsers = true;
+}
+
+void HubFrame::addTask(const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line) {
+	tasks.add(PRIVATE_MESSAGE, new PMTask(from, to, replyTo, line));
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
+}
+
+void HubFrame::execTasks() {
 	updateUsers = false;
 	TaskQueue::List t;
 	tasks.get(t);
@@ -562,8 +581,6 @@ LRESULT HubFrame::handleSpeaker(WPARAM, LPARAM) {
 		users->resort();
 		resort = false;
 	}
-
-	return 0;
 }
 
 HubFrame::UserInfo* HubFrame::findUser(const tstring& nick) {
@@ -813,14 +830,14 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 }
 
 void HubFrame::on(Connecting, Client*) throw() {
-	speak(ADD_STATUS_LINE, str(F_("Connecting to %1%...") % client->getHubUrl()));
-	speak(SET_WINDOW_TITLE, client->getHubUrl());
+	addTask(ADD_STATUS_LINE, str(F_("Connecting to %1%...") % client->getHubUrl()));
+	addTask(SET_WINDOW_TITLE, client->getHubUrl());
 }
 void HubFrame::on(Connected, Client*) throw() {
-	speak(CONNECTED);
+	addTask(CONNECTED);
 }
 void HubFrame::on(UserUpdated, Client*, const OnlineUser& user) throw() {
-	speak(UPDATE_USER_JOIN, user);
+	addTask(UPDATE_USER_JOIN, user);
 }
 void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) throw() {
 	for(OnlineUserList::const_iterator i = aList.begin(); i != aList.end(); ++i) {
@@ -830,29 +847,29 @@ void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) throw() {
 }
 
 void HubFrame::on(ClientListener::UserRemoved, Client*, const OnlineUser& user) throw() {
-	speak(REMOVE_USER, user);
+	addTask(REMOVE_USER, user);
 }
 
 void HubFrame::on(Redirect, Client*, const string& line) throw() {
 	if(ClientManager::getInstance()->isConnected(line)) {
-		speak(ADD_STATUS_LINE, _("Redirect request received to a hub that's already connected"));
+		addTask(ADD_STATUS_LINE, _("Redirect request received to a hub that's already connected"));
 		return;
 	}
 	redirect = line;
 	if(BOOLSETTING(AUTO_FOLLOW)) {
-		speak(FOLLOW);
+		addTask(FOLLOW);
 	} else {
-		speak(ADD_STATUS_LINE, str(F_("Press the follow redirect button to connect to %1%") % line));
+		addTask(ADD_STATUS_LINE, str(F_("Press the follow redirect button to connect to %1%") % line));
 	}
 }
 
 void HubFrame::on(Failed, Client*, const string& line) throw() {
-	speak(ADD_STATUS_LINE, line);
-	speak(DISCONNECTED);
+	addTask(ADD_STATUS_LINE, line);
+	addTask(DISCONNECTED);
 }
 
 void HubFrame::on(GetPassword, Client*) throw() {
-	speak(GET_PASSWORD);
+	addTask(GET_PASSWORD);
 }
 
 void HubFrame::on(HubUpdated, Client*) throw() {
@@ -867,31 +884,31 @@ void HubFrame::on(HubUpdated, Client*) throw() {
 		hubName += " - " + version;
 	}
 #endif
-	speak(SET_WINDOW_TITLE, hubName);
+	addTask(SET_WINDOW_TITLE, hubName);
 }
 
 void HubFrame::on(Message, Client*, const OnlineUser& from, const string& msg, bool thirdPerson) throw() {
-	speak(ADD_CHAT_LINE, Util::formatMessage(from.getIdentity().getNick(), msg, thirdPerson));
+	addTask(ADD_CHAT_LINE, Util::formatMessage(from.getIdentity().getNick(), msg, thirdPerson));
 }
 
 void HubFrame::on(StatusMessage, Client*, const string& line, int statusFlags) throw() {
 	if(SETTING(FILTER_MESSAGES) && (statusFlags & ClientListener::FLAG_IS_SPAM)) {
-		speak(ADD_SILENT_STATUS_LINE, line);
+		addTask(ADD_SILENT_STATUS_LINE, line);
 	} else {
-		speak(ADD_STATUS_LINE, line);
+		addTask(ADD_STATUS_LINE, line);
 	}
 }
 
 void HubFrame::on(PrivateMessage, Client*, const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line, bool thirdPerson) throw() {
-	speak(from, to, replyTo, Util::formatMessage(from.getIdentity().getNick(), line, thirdPerson));
+	addTask(from, to, replyTo, Util::formatMessage(from.getIdentity().getNick(), line, thirdPerson));
 }
 
 void HubFrame::on(NickTaken, Client*) throw() {
-	speak(ADD_STATUS_LINE, _("Your nick was already taken, please change to something else!"));
+	addTask(ADD_STATUS_LINE, _("Your nick was already taken, please change to something else!"));
 }
 
 void HubFrame::on(SearchFlood, Client*, const string& line) throw() {
-	speak(ADD_STATUS_LINE, str(F_("Search spam detected from %1%") % line));
+	addTask(ADD_STATUS_LINE, str(F_("Search spam detected from %1%") % line));
 }
 
 tstring HubFrame::getStatusShared() const {
@@ -948,7 +965,7 @@ void HubFrame::on(FavoriteManagerListener::UserRemoved, const FavoriteUser& /*aU
 void HubFrame::resortForFavsFirst(bool justDoIt /* = false */) {
 	if(justDoIt || BOOLSETTING(SORT_FAVUSERS_FIRST)) {
 		resort = true;
-		speak();
+		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
 	}
 }
 

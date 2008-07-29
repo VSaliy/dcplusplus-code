@@ -64,13 +64,6 @@ private:
 		COLUMN_LAST
 	};
 
-	enum {
-		FINISHED,
-		LOADED_FROM_CACHE,
-		STARTING,
-		FAILED
-	};
-
 	enum FilterModes{
 		NONE,
 		EQUAL,
@@ -111,12 +104,9 @@ private:
 
 	HubEntryList entries;
 
-	using AspectSpeaker<PublicHubsFrame>::speak;
-
 	void layout();
 	bool preClosing();
 	void postClosing();
-	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	void handleConfigure();
 	void handleRefresh();
 	void handleConnect();
@@ -136,15 +126,12 @@ private:
 	bool parseFilter(FilterModes& mode, double& size);
 	bool matchFilter(const HubEntry& entry, const int& sel, bool doSizeCompare, const FilterModes& mode, const double& size);
 
-	virtual void on(DownloadStarting, const string& l) throw() { speak(STARTING, l); }
-	virtual void on(DownloadFailed, const string& l) throw() { speak(FAILED, l); }
-	virtual void on(DownloadFinished, const string& l) throw() { speak(FINISHED, l); }
-	virtual void on(LoadedFromCache, const string& l) throw() { speak(LOADED_FROM_CACHE, l); }
+	void onFinished(const tstring& s);
 
-	void speak(int x, const string& l) {
-		speak(static_cast<WPARAM>(x), reinterpret_cast<LPARAM>(new tstring(Text::toT(l))));
-	}
-
+	virtual void on(DownloadStarting, const string& l) throw();
+	virtual void on(DownloadFailed, const string& l) throw();
+	virtual void on(DownloadFinished, const string& l) throw();
+	virtual void on(LoadedFromCache, const string& l) throw();
 };
 
 #endif // !defined(PUBLIC_HUBS_FRM_H)

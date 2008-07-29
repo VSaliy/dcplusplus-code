@@ -50,14 +50,6 @@ private:
 	friend class MDIChildFrame<SearchFrame>;
 	friend class AspectUserCommand<SearchFrame>;
 
-	enum Speakers {
-		SPEAK_ADD_RESULT,
-		SPEAK_FILTER_RESULT,
-		SPEAK_HUB_ADDED,
-		SPEAK_HUB_CHANGED,
-		SPEAK_HUB_REMOVED
-	};
-
 	enum {
 		COLUMN_FIRST,
 		COLUMN_FILENAME = COLUMN_FIRST,
@@ -122,6 +114,8 @@ private:
 	struct HubInfo : public FastAlloc<HubInfo> {
 		HubInfo(const tstring& aUrl, const tstring& aName, bool aOp) : url(aUrl),
 			name(aName), op(aOp) { }
+		HubInfo(Client* client) : url(Text::toT(client->getHubUrl())),
+			name(Text::toT(client->getHubName())), op(client->getMyIdentity().isOp()) { }
 
 		const tstring& getText(int col) const {
 			return (col == 0) ? name : Util::emptyStringT;
@@ -210,7 +204,6 @@ private:
 	void handleDownloadDirTo();
 	void handleViewAsText();
 	void handleRemove();
-	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	bool handleSearchKeyDown(int c);
 	bool handleSearchChar(int c);
 
@@ -221,8 +214,8 @@ private:
 	bool eachSecond();
 
 	void runUserCommand(const UserCommand& uc);
-
 	void runSearch();
+	void updateStatusFiltered();
 
 	MenuPtr makeMenu();
 	void addTargetMenu(const MenuPtr& parent, const StringPairList& favoriteDirs, const SearchInfo::CheckTTH& checkTTH);
@@ -232,18 +225,16 @@ private:
 
 	// SearchManagerListener
 	virtual void on(SearchManagerListener::SR, const SearchResultPtr& aResult) throw();
+	void addResult(SearchInfo* si);
 
 	// ClientManagerListener
-	virtual void on(ClientConnected, Client* c) throw() { speak(SPEAK_HUB_ADDED, c); }
-	virtual void on(ClientUpdated, Client* c) throw() { speak(SPEAK_HUB_CHANGED, c); }
-	virtual void on(ClientDisconnected, Client* c) throw() { speak(SPEAK_HUB_REMOVED, c); }
+	virtual void on(ClientConnected, Client* c) throw();
+	virtual void on(ClientUpdated, Client* c) throw();
+	virtual void on(ClientDisconnected, Client* c) throw();
 
 	void onHubAdded(HubInfo* info);
 	void onHubChanged(HubInfo* info);
 	void onHubRemoved(HubInfo* info);
-
-	using AspectSpeaker<SearchFrame>::speak;
-	void speak(Speakers s, Client* aClient);
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_SEARCH_FRAME_H)

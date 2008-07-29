@@ -46,10 +46,6 @@
 #include <dwt/widgets/ToolTip.h>
 #include <dwt/widgets/Window.h>
 
-enum {
-	WM_SPEAKER  = WM_APP + 500
-};
-
 #ifdef PORT_ME
 
 // Fix nt4 startup

@@ -22,7 +22,6 @@
 #include "WinUtil.h"
 
 #include "WidgetFactory.h"
-#include "AspectSpeaker.h"
 #include "AspectStatus.h"
 #include <dcpp/SettingsManager.h>
 #include "resource.h"
@@ -30,7 +29,6 @@
 template<typename T>
 class MDIChildFrame :
 	public WidgetFactory< dwt::Container >,
-	public AspectSpeaker<T>,
 	public AspectStatus<T>
 {
 	typedef WidgetFactory< dwt::Container > BaseType;

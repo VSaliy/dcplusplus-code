@@ -46,7 +46,6 @@ WaitingUsersFrame::WaitingUsersFrame(dwt::TabView* mdiParent) :
 
 	layout();
 
-	onSpeaker(std::tr1::bind(&WaitingUsersFrame::handleSpeaker, this, _1, _2));
 	// Load all waiting users & files.
 	loadAll();
 }
@@ -87,19 +86,6 @@ bool WaitingUsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	menu->appendItem(T_("&Send private message"), std::tr1::bind(&WaitingUsersFrame::onPrivateMessage, this));
 	menu->open(pt);
 	return true;
-}
-
-HRESULT WaitingUsersFrame::handleSpeaker(WPARAM wParam, LPARAM lParam) {
-	if(wParam == SPEAK_ADD_FILE) {
-		boost::scoped_ptr<pair<UserPtr, string> > p((pair<UserPtr, string> *)lParam);
-		onAddFile(p->first, p->second);
-		setDirty(SettingsManager::BOLD_WAITING_USERS);
-	} else if(wParam == SPEAK_REMOVE_USER) {
-		boost::scoped_ptr<UserItem> p(reinterpret_cast<UserItem *>(lParam));
-		onRemoveUser(p->u);
-		setDirty(SettingsManager::BOLD_WAITING_USERS);
-	}
-	return 0;
 }
 
 // Load all searches from manager
@@ -182,12 +168,11 @@ void WaitingUsersFrame::onRemove()
 }
 
 // UploadManagerListener
-void WaitingUsersFrame::on(UploadManagerListener::WaitingRemoveUser, const UserPtr& aUser) throw() {
-	speak(SPEAK_REMOVE_USER, (LPARAM)new UserItem(aUser));
-}
-
 void WaitingUsersFrame::on(UploadManagerListener::WaitingAddFile, const UserPtr& aUser, const string& aFilename) throw() {
-	speak(SPEAK_ADD_FILE, (LPARAM)new pair<UserPtr, string>(aUser, aFilename));
+	dwt::Application::instance().callAsync(std::tr1::bind(&WaitingUsersFrame::onAddFile, this, aUser, aFilename));
+}
+void WaitingUsersFrame::on(UploadManagerListener::WaitingRemoveUser, const UserPtr& aUser) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&WaitingUsersFrame::onRemoveUser, this, aUser));
 }
 
 // Keyboard shortcuts
@@ -211,6 +196,8 @@ void WaitingUsersFrame::onRemoveUser(const UserPtr& aUser) {
 		}
 		userNode = queued->getNextSibling(userNode);
 	}
+
+	setDirty(SettingsManager::BOLD_WAITING_USERS);
 }
 
 void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
@@ -245,5 +232,7 @@ void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
 		NULL, (LPARAM)new UserPtr(aUser));
 	queued->insert(Text::toT(aFile), userNode);
 	queued->expand(userNode);
+
+	setDirty(SettingsManager::BOLD_WAITING_USERS);
 }
 

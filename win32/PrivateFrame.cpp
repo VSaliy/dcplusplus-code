@@ -113,12 +113,11 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 
 	readLog();
 
-	onSpeaker(std::tr1::bind(&PrivateFrame::handleSpeaker, this, _1));
 	onTabContextMenu(std::tr1::bind(&PrivateFrame::handleTabContextMenu, this, _1));
 
 	ClientManager::getInstance()->addListener(this);
 
-	speak(USER_UPDATED);
+	dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 
 	frames.insert(std::make_pair(replyTo, this));
 }
@@ -328,12 +327,6 @@ void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
 	ClientManager::getInstance()->privateMessage(replyTo, Text::fromT(msg), thirdPerson);
 }
 
-LRESULT PrivateFrame::handleSpeaker(WPARAM wParam) {
-	if(wParam == USER_UPDATED)
-		updateTitle();
-	return 0;
-}
-
 bool PrivateFrame::handleKeyDown(int c) {
 	if(c == VK_RETURN && enter()) {
 		return true;
@@ -350,15 +343,15 @@ bool PrivateFrame::handleKeyDown(int c) {
 
 void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
 	if(aUser.getUser() == replyTo)
-		speak(USER_UPDATED);
+		dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
 	if(aUser == replyTo)
-		speak(USER_UPDATED);
+		dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
 	if(aUser == replyTo)
-		speak(USER_UPDATED);
+		dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 
 bool PrivateFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {

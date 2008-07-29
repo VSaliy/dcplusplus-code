@@ -230,7 +230,6 @@ private:
 	bool handleUsersKeyDown(int c);
 	bool handleChatContextMenu(dwt::ScreenCoordinate pt);
 	bool handleUsersContextMenu(dwt::ScreenCoordinate pt);
-	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 	void handleShowUsersClicked();
 	void handleMultiCopy(unsigned index);
 	void handleDoubleClickUsers();
@@ -250,11 +249,11 @@ private:
 	string stripNick(const string& nick) const;
 	tstring scanNickPrefix(const tstring& prefix);
 
-	using MDIChildFrame<HubFrame>::speak;
-	void speak(Tasks s) { tasks.add(s, 0); speak(); }
-	void speak(Tasks s, const string& msg) { tasks.add(s, new StringTask(msg)); speak(); }
-	void speak(Tasks s, const OnlineUser& u) { tasks.add(s, new UserTask(u)); updateUsers = true; }
-	void speak(const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line) { tasks.add(PRIVATE_MESSAGE, new PMTask(from, to, replyTo, line));  speak(); }
+	void addTask(Tasks s);
+	void addTask(Tasks s, const string& msg);
+	void addTask(Tasks s, const OnlineUser& u);
+	void addTask(const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line);
+	void execTasks();
 
 	// FavoriteManagerListener
 	virtual void on(FavoriteManagerListener::UserAdded, const FavoriteUser& /*aUser*/) throw();

@@ -269,8 +269,6 @@ SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, 
 
 	layout();
 
-	onSpeaker(std::tr1::bind(&SearchFrame::handleSpeaker, this, _1, _2));
-
 	ClientManager* clientMgr = ClientManager::getInstance();
 	clientMgr->lock();
 	clientMgr->addListener(this);
@@ -280,7 +278,7 @@ SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, 
 		if(!client->isConnected())
 			continue;
 
-		onHubAdded(new HubInfo(Text::toT(client->getHubUrl()), Text::toT(client->getHubName()), client->getMyIdentity().isOp()));
+		onHubAdded(new HubInfo(client));
 	}
 	clientMgr->unlock();
 
@@ -561,59 +559,39 @@ void SearchFrame::SearchInfo::update() {
 	}
 }
 
-LRESULT SearchFrame::handleSpeaker(WPARAM wParam, LPARAM lParam) {
- 	switch(wParam) {
-	case SPEAK_ADD_RESULT:
-		{
-			bool added = false;
-			SearchInfo* si = reinterpret_cast<SearchInfo*>(lParam);
-			// Newly added ones always have just one result - we combine here
-			dcassert(si->srs.size() == 1);
-			const SearchResultPtr& sr = si->srs[0];
-			// Check previous search results for dupes
-			for(int i = 0, iend = results->size(); !added && i < iend; ++i) {
-				SearchInfo* si2 = results->getData(i);
-				for(SearchResultList::iterator j = si2->srs.begin(), jend = si2->srs.end(); j != jend; ++j) {
-					SearchResultPtr& sr2 = *j;
-					if((sr->getUser()->getCID() == sr2->getUser()->getCID()) && (sr->getFile() == sr2->getFile())) {
-						delete si;
-						return 0;
-					} else if(sr->getType() == SearchResult::TYPE_FILE && sr2->getType() == SearchResult::TYPE_FILE && sr->getTTH() == sr2->getTTH()) {
-						if(sr->getSize() != sr2->getSize()) {
-							delete si;
-							return 0;
-						}
-						si2->srs.push_back(sr);
-						si2->update();
-						delete si;
-						added = true;
-						results->update(i);
-						break;
-					}
+void SearchFrame::addResult(SearchInfo* si) {
+	bool added = false;
+	// Newly added ones always have just one result - we combine here
+	dcassert(si->srs.size() == 1);
+	const SearchResultPtr& sr = si->srs[0];
+	// Check previous search results for dupes
+	for(int i = 0, iend = results->size(); !added && i < iend; ++i) {
+		SearchInfo* si2 = results->getData(i);
+		for(SearchResultList::iterator j = si2->srs.begin(), jend = si2->srs.end(); j != jend; ++j) {
+			SearchResultPtr& sr2 = *j;
+			if((sr->getUser()->getCID() == sr2->getUser()->getCID()) && (sr->getFile() == sr2->getFile())) {
+				delete si;
+				return;
+			} else if(sr->getType() == SearchResult::TYPE_FILE && sr2->getType() == SearchResult::TYPE_FILE && sr->getTTH() == sr2->getTTH()) {
+				if(sr->getSize() != sr2->getSize()) {
+					delete si;
+					return;
 				}
+				si2->srs.push_back(sr);
+				si2->update();
+				delete si;
+				added = true;
+				results->update(i);
+				break;
 			}
-
-			if(!added) {
-				results->insert(si);
-			}
-			setStatus(STATUS_COUNT, str(TFN_("%1% item", "%1% items", results->size()) % results->size()));
-			setDirty(SettingsManager::BOLD_SEARCH);
 		}
-		break;
-	case SPEAK_FILTER_RESULT:
-		setStatus(STATUS_FILTERED, str(TF_("%1% filtered") % droppedResults));
-		break;
-	case SPEAK_HUB_ADDED:
-		onHubAdded(reinterpret_cast<HubInfo*>(lParam));
-		break;
-	case SPEAK_HUB_CHANGED:
-		onHubChanged(reinterpret_cast<HubInfo*>(lParam));
-		break;
-	case SPEAK_HUB_REMOVED:
- 		onHubRemoved(reinterpret_cast<HubInfo*>(lParam));
-		break;
- 	}
-	return 0;
+	}
+
+	if(!added) {
+		results->insert(si);
+	}
+	setStatus(STATUS_COUNT, str(TFN_("%1% item", "%1% items", results->size()) % results->size()));
+	setDirty(SettingsManager::BOLD_SEARCH);
 }
 
 void SearchFrame::handlePurgeClicked() {
@@ -875,14 +853,14 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 
 		if(!aResult->getToken().empty() && token != aResult->getToken()) {
 			droppedResults++;
-			speak(SPEAK_FILTER_RESULT);
+			dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 			return;
 		}
 
 		if(isHash) {
 			if(aResult->getType() != SearchResult::TYPE_FILE || TTHValue(Text::fromT(currentSearch[0])) != aResult->getTTH()) {
 				droppedResults++;
-				speak(SPEAK_FILTER_RESULT);
+				dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 				return;
 			}
 		} else {
@@ -893,7 +871,7 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 					)
 				{
 					droppedResults++;
-					speak(SPEAK_FILTER_RESULT);
+					dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 					return;
 				}
 			}
@@ -905,7 +883,7 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 		const TTHValue& t = aResult->getTTH();
 		if( ShareManager::getInstance()->isTTHShared(t) ) {
 			droppedResults++;
-			speak(SPEAK_FILTER_RESULT);
+			dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 			return;
 		}
 	}
@@ -914,12 +892,11 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 	if((onlyFree && aResult->getFreeSlots() < 1))
 	{
 		droppedResults++;
-		speak(SPEAK_FILTER_RESULT);
+		dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 		return;
 	}
 
-	SearchInfo* i = new SearchInfo(aResult);
-	speak(SPEAK_ADD_RESULT, reinterpret_cast<WPARAM>(i));
+	dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::addResult, this, new SearchInfo(aResult)));
 }
 
 void SearchFrame::onHubAdded(HubInfo* info) {
@@ -959,11 +936,6 @@ void SearchFrame::onHubRemoved(HubInfo* info) {
 
 	hubs->erase(nItem);
 	hubs->setColumnWidth(0, LVSCW_AUTOSIZE);
-}
-
-void SearchFrame::speak(Speakers s, Client* aClient) {
-	HubInfo* hubInfo = new HubInfo(Text::toT(aClient->getHubUrl()), Text::toT(aClient->getHubName()), aClient->getMyIdentity().isOp());
-	speak(s, reinterpret_cast<WPARAM>(hubInfo));
 }
 
 void SearchFrame::runSearch() {
@@ -1075,6 +1047,10 @@ void SearchFrame::runSearch() {
 	}
 }
 
+void SearchFrame::updateStatusFiltered() {
+	setStatus(STATUS_FILTERED, str(TF_("%1% filtered") % droppedResults));
+}
+
 void SearchFrame::initSecond() {
 	createTimer(std::tr1::bind(&SearchFrame::eachSecond, this), 1000);
 }
@@ -1144,4 +1120,16 @@ bool SearchFrame::handleSearchKeyDown(int c) {
 bool SearchFrame::handleSearchChar(int c) {
 	// avoid the "beep" sound when enter is pressed
 	return c == VK_RETURN;
+}
+
+void SearchFrame::on(ClientConnected, Client* c) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::onHubAdded, this, new HubInfo(c)));
+}
+
+void SearchFrame::on(ClientUpdated, Client* c) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::onHubChanged, this, new HubInfo(c)));
+}
+
+void SearchFrame::on(ClientDisconnected, Client* c) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::onHubRemoved, this, new HubInfo(c)));
 }

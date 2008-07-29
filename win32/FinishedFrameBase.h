@@ -26,7 +26,6 @@
 #include "HoldRedraw.h"
 
 #include <dcpp/File.h>
-#include <dcpp/TaskQueue.h>
 #include <dcpp/FinishedItem.h>
 #include <dcpp/FinishedManager.h>
 #include <dcpp/TimerManager.h>
@@ -148,8 +147,6 @@ protected:
 		filesWindow->onActivate(std::tr1::bind(&ThisType::updateStatus, this, _1));
 		usersWindow->onActivate(std::tr1::bind(&ThisType::updateStatus, this, _1));
 
-		onSpeaker(std::tr1::bind(&ThisType::handleSpeaker, this));
-
 		FinishedManager::getInstance()->addListener(this);
 
 		updateLists();
@@ -173,7 +170,6 @@ protected:
 	}
 
 	void postClosing() {
-		tasks.clear();
 		clearTables();
 
 		saveColumns(files,
@@ -188,36 +184,6 @@ protected:
 	}
 
 private:
-	enum Tasks {
-		ADD_FILE,
-		ADD_USER,
-		UPDATE_FILE,
-		UPDATE_USER,
-		REMOVE_FILE,
-		REMOVE_USER,
-		REMOVE_ALL
-	};
-
-	struct FileItemTask : public Task {
-		FileItemTask(const string& file_, const FinishedFileItemPtr& entry_) : file(file_), entry(entry_) { }
-
-		string file;
-		FinishedFileItemPtr entry;
-	};
-
-	struct UserItemTask : public Task {
-		UserItemTask(const UserPtr& user_, const FinishedUserItemPtr& entry_) : user(user_), entry(entry_) { }
-
-		UserPtr user;
-		FinishedUserItemPtr entry;
-	};
-
-	struct UserTask : public Task {
-		UserTask(const UserPtr& user_) : user(user_) { }
-
-		UserPtr user;
-	};
-
 	enum {
 		FILES_COLUMN_FIRST,
 		FILES_COLUMN_FILE = FILES_COLUMN_FIRST,
@@ -363,68 +329,12 @@ private:
 	dwt::CheckBoxPtr onlyFull;
 	bool bOnlyFull;
 
-	TaskQueue tasks;
-
 	static bool noClose() {
 		return false;
 	}
 
 	static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
 		control->setBounds(dwt::Rectangle(parent->getClientAreaSize()));
-	}
-
-	LRESULT handleSpeaker() {
-		TaskQueue::List t;
-		tasks.get(t);
-		for(TaskQueue::Iter i = t.begin(); i != t.end(); ++i) {
-			if(i->first == ADD_FILE) {
-				FileItemTask& task = *static_cast<FileItemTask*>(i->second);
-				FileInfo* data = findFileInfo(task.file);
-				if(data) {
-					// this file already exists; simply update it
-					speak(UPDATE_FILE, new StringTask(task.file));
-				} else {
-					addFile(task.file, task.entry);
-					updateStatus();
-					this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
-				}
-			} else if(i->first == ADD_USER) {
-				UserItemTask& task = *static_cast<UserItemTask*>(i->second);
-				addUser(task.user, task.entry);
-				updateStatus();
-				this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
-			} else if(i->first == UPDATE_FILE) {
-				FileInfo* data = findFileInfo(static_cast<StringTask*>(i->second)->str);
-				if(data) {
-					data->update();
-					files->update(data);
-					updateStatus();
-				}
-			} else if(i->first == UPDATE_USER) {
-				UserInfo* data = findUserInfo(static_cast<UserTask*>(i->second)->user);
-				if(data) {
-					data->update();
-					users->update(data);
-					updateStatus();
-				}
-			} else if(i->first == REMOVE_FILE) {
-				FileInfo* data = findFileInfo(static_cast<StringTask*>(i->second)->str);
-				if(data) {
-					files->erase(data);
-					updateStatus();
-				}
-			} else if(i->first == REMOVE_USER) {
-				UserInfo* data = findUserInfo(static_cast<UserTask*>(i->second)->user);
-				if(data) {
-					users->erase(data);
-					updateStatus();
-				}
-			} else if(i->first == REMOVE_ALL) {
-				clearTables();
-				updateStatus();
-			}
-		}
-		return 0;
 	}
 
 	bool handleFilesKeyDown(int c) {
@@ -643,54 +553,100 @@ private:
 		clearTable(users);
 	}
 
-	using BaseType::speak;
-	void speak(Tasks s) {
-		tasks.add(s, 0);
-		this->speak();
+	void onAddedFile(const string& file, const FinishedFileItemPtr& entry) {
+		FileInfo* data = findFileInfo(file);
+		if(data) {
+			// this file already exists; simply update it
+			onUpdatedFile(file);
+		} else {
+			addFile(file, entry);
+			updateStatus();
+			this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
+		}
 	}
-	template<typename TaskType>
-	void speak(Tasks s, TaskType task) {
-		tasks.add(s, task);
-		this->speak();
+
+	void onAddedUser(const UserPtr& user, const FinishedUserItemPtr& entry) {
+		addUser(user, entry);
+		updateStatus();
+		this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
+	}
+
+	void onUpdatedFile(const string& file) {
+		FileInfo* data = findFileInfo(file);
+		if(data) {
+			data->update();
+			files->update(data);
+			updateStatus();
+		}
+	}
+
+	void onUpdatedUser(const UserPtr& user) {
+		UserInfo* data = findUserInfo(user);
+		if(data) {
+			data->update();
+			users->update(data);
+			updateStatus();
+		}
+	}
+
+	void onRemovedFile(const string& file) {
+		FileInfo* data = findFileInfo(file);
+		if(data) {
+			files->erase(data);
+			updateStatus();
+		}
+	}
+
+	void onRemovedUser(const UserPtr& user) {
+		UserInfo* data = findUserInfo(user);
+		if(data) {
+			users->erase(data);
+			updateStatus();
+		}
+	}
+
+	void onRemovedAll() {
+		clearTables();
+		updateStatus();
 	}
 
 	virtual void on(AddedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
 		if(upload == in_UL)
-			speak(ADD_FILE, new FileItemTask(file, entry));
+			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
 	}
 
 	virtual void on(AddedUser, bool upload, const UserPtr& user, const FinishedUserItemPtr& entry) throw() {
 		if(upload == in_UL)
-			speak(ADD_USER, new UserItemTask(user, entry));
+			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onAddedUser, this, user, entry));
 	}
 
 	virtual void on(UpdatedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
 		if(upload == in_UL) {
 			if(bOnlyFull && entry->isFull())
-				speak(ADD_FILE, new FileItemTask(file, entry));
+				dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
 			else
-				speak(UPDATE_FILE, new StringTask(file));
+				dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onUpdatedFile, this, file));
 		}
 	}
 
 	virtual void on(UpdatedUser, bool upload, const UserPtr& user) throw() {
 		if(upload == in_UL)
-			speak(UPDATE_USER, new UserTask(user));
+			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onUpdatedUser, this, user));
 	}
 
 	virtual void on(RemovedFile, bool upload, const string& file) throw() {
 		if(upload == in_UL)
-			speak(REMOVE_FILE, new StringTask(file));
+			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onRemovedFile, this, file));
 	}
 
 	virtual void on(RemovedUser, bool upload, const UserPtr& user) throw() {
 		if(upload == in_UL)
-			speak(REMOVE_USER, new UserTask(user));
+			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onRemovedUser, this, user));
 	}
 
 	virtual void on(RemovedAll, bool upload) throw() {
 		if(upload == in_UL)
-			speak(REMOVE_ALL);
+			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onRemovedAll, this));
 	}
 };
 

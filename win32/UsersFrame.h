@@ -64,10 +64,6 @@ private:
 		COLUMN_LAST
 	};
 
-	enum {
-		USER_UPDATED, REMOVE_USER
-	};
-
 	class UserInfo : public UserInfoBase {
 	public:
 		UserInfo(const FavoriteUser& u);
@@ -106,7 +102,6 @@ private:
 	bool handleKeyDown(int c);
 	LRESULT handleItemChanged(LPARAM lParam);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
-	LRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
 
 	WidgetUsersPtr getUserList() { return users; }
 

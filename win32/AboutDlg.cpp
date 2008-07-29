@@ -47,7 +47,6 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 
 AboutDlg::AboutDlg(dwt::Widget* parent) : WidgetFactory<dwt::ModalDialog>(parent) {
 	onInitDialog(std::tr1::bind(&AboutDlg::handleInitDialog, this));
-	onSpeaker(std::tr1::bind(&AboutDlg::handleSpeaker, this, _1, _2));
 }
 
 AboutDlg::~AboutDlg() {
@@ -82,22 +81,12 @@ bool AboutDlg::handleInitDialog() {
 	return false;
 }
 
-LRESULT AboutDlg::handleSpeaker(WPARAM wParam, LPARAM lParam) {
- 	switch(wParam) {
- 	case SPEAK_VERSIONDATA: {
-  		boost::scoped_ptr<tstring> x(reinterpret_cast<tstring*>(lParam));
-		setItemText(IDC_LATEST, *x);
-	} break;
- 	}
-	return 0;
-}
-
 void AboutDlg::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw() {
 	downBuf.append((char*)buf, len);
 }
 
 void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&) throw() {
-	tstring* x = 0;
+	tstring x;
 	if(!downBuf.empty()) {
 		try {
 			SimpleXML xml;
@@ -105,20 +94,19 @@ void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const 
 			if(xml.findChild("DCUpdate")) {
 				xml.stepIn();
 				if(xml.findChild("Version")) {
-					x = new tstring(Text::toT(xml.getChildData()));
+					x = Text::toT(xml.getChildData());
 				}
 			}
 		} catch(const SimpleXMLException&) { }
 	}
-	if(!x)
-		x = new tstring(T_("Error processing version information"));
-	speak(SPEAK_VERSIONDATA, reinterpret_cast<LPARAM>(x));
+	if(x.empty())
+		x = T_("Error processing version information");
+	setItemText(IDC_LATEST, x);
 
 	conn->removeListener(this);
 }
 
 void AboutDlg::on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) throw() {
-	tstring* x = new tstring(Text::toT(aLine));
-	speak(SPEAK_VERSIONDATA, reinterpret_cast<LPARAM>(x));
+	setItemText(IDC_LATEST, Text::toT(aLine));
 	conn->removeListener(this);
 }

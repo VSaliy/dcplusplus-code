@@ -28,7 +28,6 @@
 #include <dcpp/MerkleTree.h>
 #include <dcpp/Util.h>
 
-#include "AspectSpeaker.h"
 #include "TypedTable.h"
 #include "WidgetFactory.h"
 #include "AspectUserCommand.h"
@@ -41,7 +40,6 @@ class TransferView :
 	private UploadManagerListener,
 	private ConnectionManagerListener,
 	private QueueManagerListener,
-	public AspectSpeaker<TransferView>,
 	public AspectUserInfo<TransferView>,
 	public AspectUserCommand<TransferView>
 {
@@ -254,8 +252,7 @@ private:
 	void handleSized(const dwt::SizedEvent& sz);
 	bool handleConnectionsMenu(dwt::ScreenCoordinate pt);
 	bool handleDownloadsMenu(dwt::ScreenCoordinate pt);
-	HRESULT handleSpeaker(WPARAM wParam, LPARAM lParam);
-	HRESULT handleDestroy(WPARAM wParam, LPARAM lParam);
+	LRESULT handleDestroy();
 	void handleForce();
 	void handleCopyNick();
 	void handleDisconnect();
@@ -271,9 +268,8 @@ private:
 
 	void layout();
 
-	using AspectSpeaker<TransferView>::speak;
-
-	void speak(int type, Task* ui) { tasks.add(type, ui); speak(); }
+	void addTask(int type, Task* ui);
+	void execTasks();
 
 	virtual void on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) throw();
 	virtual void on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) throw();

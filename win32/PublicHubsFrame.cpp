@@ -170,8 +170,6 @@ PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 
 	layout();
 
-	onSpeaker(std::tr1::bind(&PublicHubsFrame::handleSpeaker, this, _1, _2));
-
 	if(FavoriteManager::getInstance()->isDownloading()) {
 		setStatus(STATUS_STATUS, T_("Downloading public hub list..."));
 	} else if(entries.empty()) {
@@ -299,22 +297,6 @@ void PublicHubsFrame::updateList() {
 	hubs->resort();
 
 	updateStatus();
-}
-
-LRESULT PublicHubsFrame::handleSpeaker(WPARAM wParam, LPARAM lParam) {
-	if((wParam == FINISHED) || (wParam == LOADED_FROM_CACHE)) {
-		std::auto_ptr<tstring> x(reinterpret_cast<tstring*>(lParam));
-		entries = FavoriteManager::getInstance()->getPublicHubs();
-		updateList();
-		setStatus(STATUS_STATUS, ((wParam == LOADED_FROM_CACHE) ? T_("Hub list loaded from cache...") : str(TF_("Hub list downloaded... (%1%)") % (*x))));
-	} else if(wParam == STARTING) {
-		std::auto_ptr<tstring> x(reinterpret_cast<tstring*>(lParam));
-		setStatus(STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % (*x)));
-	} else if(wParam == FAILED) {
-		std::auto_ptr<tstring> x(reinterpret_cast<tstring*>(lParam));
-		setStatus(STATUS_STATUS, str(TF_("Download failed: %1%") % (*x)));
-	}
-	return 0;
 }
 
 bool PublicHubsFrame::parseFilter(FilterModes& mode, double& size) {
@@ -524,4 +506,26 @@ bool PublicHubsFrame::handleFilterKeyDown(int c) {
 		return true;
 	}
 	return false;
+}
+
+void PublicHubsFrame::onFinished(const tstring& s) {
+	entries = FavoriteManager::getInstance()->getPublicHubs();
+	updateList();
+	setStatus(STATUS_STATUS, s);
+}
+
+void PublicHubsFrame::on(DownloadStarting, const string& l) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), true));
+}
+
+void PublicHubsFrame::on(DownloadFailed, const string& l) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Download failed: %1%") % Text::toT(l)), true));
+}
+
+void PublicHubsFrame::on(DownloadFinished, const string& l) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, str(TF_("Hub list downloaded... (%1%)") % Text::toT(l))));
+}
+
+void PublicHubsFrame::on(LoadedFromCache, const string& l) throw() {
+	dwt::Application::instance().callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, T_("Hub list loaded from cache...")));
 }

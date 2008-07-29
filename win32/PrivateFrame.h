@@ -49,9 +49,6 @@ private:
 	friend class MDIChildFrame<PrivateFrame>;
 	friend class AspectUserCommand<PrivateFrame>;
 
-	enum Tasks { USER_UPDATED
-	};
-
 	TextBoxPtr chat;
 	TextBoxPtr message;
 
@@ -66,7 +63,6 @@ private:
 	virtual ~PrivateFrame();
 
 	void layout();
-	LRESULT handleSpeaker(WPARAM wParam);
 	bool preClosing();
 	bool handleTabContextMenu(const dwt::ScreenCoordinate& pt);
 	void handleGetList();
