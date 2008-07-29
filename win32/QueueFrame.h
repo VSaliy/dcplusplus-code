@@ -23,7 +23,6 @@
 #include "TypedTable.h"
 #include "TypedTree.h"
 
-#include <dcpp/TaskQueue.h>
 #include <dcpp/FastAlloc.h>
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/QueueItem.h>
@@ -64,11 +63,6 @@ private:
 		COLUMN_TTH,
 		COLUMN_TYPE,
 		COLUMN_LAST
-	};
-	enum Tasks {
-		ADD_ITEM,
-		REMOVE_ITEM,
-		UPDATE_ITEM
 	};
 
 	class DirItemInfo : public FastAlloc<DirItemInfo> {
@@ -177,28 +171,6 @@ private:
 		QueueItemInfo& operator=(const QueueItemInfo&);
 	};
 
-	struct QueueItemInfoTask : public FastAlloc<QueueItemInfoTask>, public Task {
-		QueueItemInfoTask(QueueItemInfo* ii_) : ii(ii_) { }
-		QueueItemInfo* ii;
-	};
-
-	struct UpdateTask : public FastAlloc<UpdateTask>, public Task {
-		UpdateTask(const QueueItem& source) : target(source.getTarget()), priority(source.getPriority()),
-			running(source.isRunning()), downloadedBytes(source.getDownloadedBytes()), sources(source.getSources()), badSources(source.getBadSources())
-		{
-		}
-
-		string target;
-		QueueItem::Priority priority;
-		bool running;
-		int64_t downloadedBytes;
-
-		QueueItem::SourceList sources;
-		QueueItem::SourceList badSources;
-	};
-
-	TaskQueue tasks;
-
 	typedef TypedTree<DirItemInfo> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
 	WidgetDirsPtr dirs;
@@ -290,9 +262,9 @@ private:
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt);
 	bool handleDirsContextMenu(dwt::ScreenCoordinate pt);
 
-	void addTask(Tasks s, Task* t);
-	void addTask(Tasks s, const string& msg);
-	void execTasks();
+	void onAdded(QueueItemInfo* ii);
+	void onRemoved(const string& s);
+	void onUpdated(const QueueItem& qi);
 
 	virtual void on(QueueManagerListener::Added, QueueItem* aQI) throw();
 	virtual void on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw();
