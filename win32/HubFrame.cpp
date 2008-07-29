@@ -469,24 +469,9 @@ void HubFrame::addStatus(const tstring& aLine, bool inChat /* = true */) {
 	}
 }
 
-void HubFrame::addTask(Tasks s) {
-	tasks.add(s, 0);
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
-}
-
-void HubFrame::addTask(Tasks s, const string& msg) {
-	tasks.add(s, new StringTask(msg));
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
-}
-
 void HubFrame::addTask(Tasks s, const OnlineUser& u) {
 	tasks.add(s, new UserTask(u));
 	updateUsers = true;
-}
-
-void HubFrame::addTask(const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line) {
-	tasks.add(PRIVATE_MESSAGE, new PMTask(from, to, replyTo, line));
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
 }
 
 void HubFrame::execTasks() {
@@ -512,74 +497,71 @@ void HubFrame::execTasks() {
 			if (showJoins || (favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
 				addStatus(str(TF_("*** Parts: %1%") % Text::toT(u.identity.getNick())));
 			}
-		} else if(i->first == CONNECTED) {
-			addStatus(T_("Connected"));
-			setIcon(IDR_HUB);
-		} else if(i->first == DISCONNECTED) {
-			clearUserList();
-			setIcon(IDR_HUB_OFF);
-		} else if(i->first == ADD_CHAT_LINE) {
-			addChat(Text::toT(static_cast<StringTask*>(i->second)->str));
-		} else if(i->first == ADD_STATUS_LINE) {
-			addStatus(Text::toT(static_cast<StringTask*>(i->second)->str));
-		} else if(i->first == ADD_SILENT_STATUS_LINE) {
-			addStatus(Text::toT(static_cast<StringTask*>(i->second)->str), false);
-		} else if(i->first == SET_WINDOW_TITLE) {
-			setText(Text::toT(static_cast<StringTask*>(i->second)->str));
-		} else if(i->first == GET_PASSWORD) {
-			if(client->getPassword().size() > 0) {
-				client->password(client->getPassword());
-				addStatus(T_("Stored password sent..."));
-			} else {
-				if(!BOOLSETTING(PROMPT_PASSWORD)) {
-					message->setText(_T("/password "));
-					message->setFocus();
-					message->setSelection(10, 10);
-					waitingForPW = true;
-				} else {
-					LineDlg linePwd(this, T_("Please enter a password"), T_("Please enter a password"), Util::emptyStringT, true);
-					if(linePwd.run() == IDOK) {
-						client->setPassword(Text::fromT(linePwd.getLine()));
-						client->password(Text::fromT(linePwd.getLine()));
-						waitingForPW = false;
-					} else {
-						client->disconnect(true);
-					}
-				}
-			}
-		} else if(i->first == PRIVATE_MESSAGE) {
-			PMTask& pm = *static_cast<PMTask*>(i->second);
-			if(pm.hub) {
-				if(BOOLSETTING(IGNORE_HUB_PMS)) {
-					addStatus(str(TF_("Ignored message: %1%") % Text::toT(pm.str)), false);
-				} else if(BOOLSETTING(POPUP_HUB_PMS) || PrivateFrame::isOpen(pm.replyTo)) {
-					PrivateFrame::gotMessage(getParent(), pm.from, pm.to, pm.replyTo, Text::toT(pm.str));
-				} else {
-					addChat(str(TF_("Private message from %1%: %2%") % getNick(pm.from) % Text::toT(pm.str)));
-				}
-			} else if(pm.bot) {
-				if(BOOLSETTING(IGNORE_BOT_PMS)) {
-					addStatus(str(TF_("Ignored message: %1%") % Text::toT(pm.str)), false);
-				} else if(BOOLSETTING(POPUP_BOT_PMS) || PrivateFrame::isOpen(pm.replyTo)) {
-					PrivateFrame::gotMessage(getParent(), pm.from, pm.to, pm.replyTo, Text::toT(pm.str));
-				} else {
-					addChat(str(TF_("Private message from %1%: %2%") % getNick(pm.from) % Text::toT(pm.str)));
-				}
-			} else {
-				if(BOOLSETTING(POPUP_PMS) || PrivateFrame::isOpen(pm.replyTo) || pm.from == client->getMyIdentity().getUser()) {
-					PrivateFrame::gotMessage(getParent(), pm.from, pm.to, pm.replyTo, Text::toT(pm.str));
-				} else {
-					addChat(str(TF_("Private message from %1%: %2%") % getNick(pm.from) % Text::toT(pm.str)));
-				}
-			}
-		} else if(i->first == FOLLOW) {
-			handleFollow();
 		}
 		delete i->second;
 	}
 	if(resort && showUsers->getChecked()) {
 		users->resort();
 		resort = false;
+	}
+}
+
+void HubFrame::onConnected() {
+	addStatus(T_("Connected"));
+	setIcon(IDR_HUB);
+}
+
+void HubFrame::onDisconnected() {
+	clearUserList();
+	setIcon(IDR_HUB_OFF);
+}
+
+void HubFrame::onGetPassword() {
+	if(client->getPassword().size() > 0) {
+		client->password(client->getPassword());
+		addStatus(T_("Stored password sent..."));
+	} else {
+		if(!BOOLSETTING(PROMPT_PASSWORD)) {
+			message->setText(_T("/password "));
+			message->setFocus();
+			message->setSelection(10, 10);
+			waitingForPW = true;
+		} else {
+			LineDlg linePwd(this, T_("Please enter a password"), T_("Please enter a password"), Util::emptyStringT, true);
+			if(linePwd.run() == IDOK) {
+				client->setPassword(Text::fromT(linePwd.getLine()));
+				client->password(Text::fromT(linePwd.getLine()));
+				waitingForPW = false;
+			} else {
+				client->disconnect(true);
+			}
+		}
+	}
+}
+
+void HubFrame::onPrivateMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, bool hub, bool bot, const tstring& m) {
+	if(hub) {
+		if(BOOLSETTING(IGNORE_HUB_PMS)) {
+			addStatus(str(TF_("Ignored message: %1%") % m), false);
+		} else if(BOOLSETTING(POPUP_HUB_PMS) || PrivateFrame::isOpen(replyTo)) {
+			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m);
+		} else {
+			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
+		}
+	} else if(bot) {
+		if(BOOLSETTING(IGNORE_BOT_PMS)) {
+			addStatus(str(TF_("Ignored message: %1%") % m), false);
+		} else if(BOOLSETTING(POPUP_BOT_PMS) || PrivateFrame::isOpen(replyTo)) {
+			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m);
+		} else {
+			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
+		}
+	} else {
+		if(BOOLSETTING(POPUP_PMS) || PrivateFrame::isOpen(replyTo) || from == client->getMyIdentity().getUser()) {
+			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m);
+		} else {
+			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
+		}
 	}
 }
 
@@ -799,13 +781,6 @@ HubFrame::UserTask::UserTask(const OnlineUser& ou) : user(ou.getUser()), identit
 
 }
 
-HubFrame::PMTask::PMTask(const OnlineUser& from_, const OnlineUser& to_, const OnlineUser& replyTo_, const string& m) :
-	StringTask(m), from(from_.getUser()), to(to_.getUser()), replyTo(replyTo_.getUser()),
-	hub(replyTo_.getIdentity().isHub()), bot(replyTo_.getIdentity().isBot())
-{
-
-}
-
 int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame::UserInfo* b, int col) {
 	if(col == COLUMN_NICK) {
 		bool a_isOp = a->getIdentity().isOp(),
@@ -830,11 +805,11 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 }
 
 void HubFrame::on(Connecting, Client*) throw() {
-	addTask(ADD_STATUS_LINE, str(F_("Connecting to %1%...") % client->getHubUrl()));
-	addTask(SET_WINDOW_TITLE, client->getHubUrl());
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Connecting to %1%...") % Text::toT(client->getHubUrl())), true));
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::setText, this, Text::toT(client->getHubUrl())));
 }
 void HubFrame::on(Connected, Client*) throw() {
-	addTask(CONNECTED);
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::onConnected, this));
 }
 void HubFrame::on(UserUpdated, Client*, const OnlineUser& user) throw() {
 	addTask(UPDATE_USER_JOIN, user);
@@ -852,24 +827,24 @@ void HubFrame::on(ClientListener::UserRemoved, Client*, const OnlineUser& user) 
 
 void HubFrame::on(Redirect, Client*, const string& line) throw() {
 	if(ClientManager::getInstance()->isConnected(line)) {
-		addTask(ADD_STATUS_LINE, _("Redirect request received to a hub that's already connected"));
+		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Redirect request received to a hub that's already connected"), true));
 		return;
 	}
 	redirect = line;
 	if(BOOLSETTING(AUTO_FOLLOW)) {
-		addTask(FOLLOW);
+		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::handleFollow, this));
 	} else {
-		addTask(ADD_STATUS_LINE, str(F_("Press the follow redirect button to connect to %1%") % line));
+		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Press the follow redirect button to connect to %1%") % Text::toT(line)), true));
 	}
 }
 
 void HubFrame::on(Failed, Client*, const string& line) throw() {
-	addTask(ADD_STATUS_LINE, line);
-	addTask(DISCONNECTED);
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), true));
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::onDisconnected, this));
 }
 
 void HubFrame::on(GetPassword, Client*) throw() {
-	addTask(GET_PASSWORD);
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::onGetPassword, this));
 }
 
 void HubFrame::on(HubUpdated, Client*) throw() {
@@ -884,31 +859,27 @@ void HubFrame::on(HubUpdated, Client*) throw() {
 		hubName += " - " + version;
 	}
 #endif
-	addTask(SET_WINDOW_TITLE, hubName);
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::setText, this, Text::toT(hubName)));
 }
 
 void HubFrame::on(Message, Client*, const OnlineUser& from, const string& msg, bool thirdPerson) throw() {
-	addTask(ADD_CHAT_LINE, Util::formatMessage(from.getIdentity().getNick(), msg, thirdPerson));
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addChat, this, Text::toT(Util::formatMessage(from.getIdentity().getNick(), msg, thirdPerson))));
 }
 
 void HubFrame::on(StatusMessage, Client*, const string& line, int statusFlags) throw() {
-	if(SETTING(FILTER_MESSAGES) && (statusFlags & ClientListener::FLAG_IS_SPAM)) {
-		addTask(ADD_SILENT_STATUS_LINE, line);
-	} else {
-		addTask(ADD_STATUS_LINE, line);
-	}
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), !BOOLSETTING(FILTER_MESSAGES) || !(statusFlags & ClientListener::FLAG_IS_SPAM)));
 }
 
 void HubFrame::on(PrivateMessage, Client*, const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line, bool thirdPerson) throw() {
-	addTask(from, to, replyTo, Util::formatMessage(from.getIdentity().getNick(), line, thirdPerson));
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::onPrivateMessage, this, from.getUser(), to.getUser(), replyTo.getUser(), replyTo.getIdentity().isHub(), replyTo.getIdentity().isBot(), Text::toT(Util::formatMessage(from.getIdentity().getNick(), line, thirdPerson))));
 }
 
 void HubFrame::on(NickTaken, Client*) throw() {
-	addTask(ADD_STATUS_LINE, _("Your nick was already taken, please change to something else!"));
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Your nick was already taken, please change to something else!"), true));
 }
 
 void HubFrame::on(SearchFlood, Client*, const string& line) throw() {
-	addTask(ADD_STATUS_LINE, str(F_("Search spam detected from %1%") % line));
+	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Search spam detected from %1%") % Text::toT(line)), true));
 }
 
 tstring HubFrame::getStatusShared() const {
