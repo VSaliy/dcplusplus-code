@@ -101,12 +101,12 @@ void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const 
 	}
 	if(x.empty())
 		x = T_("Error processing version information");
-	setItemText(IDC_LATEST, x);
+	dwt::Application::instance().callAsync(std::tr1::bind(&AboutDlg::setItemText, this, IDC_LATEST, x));
 
 	conn->removeListener(this);
 }
 
 void AboutDlg::on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) throw() {
-	setItemText(IDC_LATEST, Text::toT(aLine));
+	dwt::Application::instance().callAsync(std::tr1::bind(&AboutDlg::setItemText, this, IDC_LATEST, Text::toT(aLine)));
 	conn->removeListener(this);
 }
