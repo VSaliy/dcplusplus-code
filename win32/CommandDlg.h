@@ -28,7 +28,7 @@ public:
 	CommandDlg(dwt::Widget* parent, int type_ = 0, int ctx_ = 0, const tstring& name_ = Util::emptyStringT, const tstring& command_ = Util::emptyStringT, const tstring& hub_ = Util::emptyStringT);
 	virtual ~CommandDlg();
 
-	int run() { return createDialog(IDD_USER_COMMAND); }
+	int run() { createDialog(IDD_USER_COMMAND); return show(); }
 
 	int getType() { return type; }
 	int getCtx() { return ctx; }

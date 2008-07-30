@@ -29,7 +29,7 @@ class LineDlg : public WidgetFactory<dwt::ModalDialog>
 public:
 	LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& initial_ = Util::emptyStringT, bool password_ = false);
 
-	int run() { return createDialog(IDD_LINE); }
+	int run() { createDialog(IDD_LINE); return show(); }
 
 	tstring getLine() { return initial; }
 private:

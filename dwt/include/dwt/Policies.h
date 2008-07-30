@@ -141,8 +141,7 @@ protected:
 		return FALSE;
 	}
 
-	static LRESULT returnHandled(LRESULT, HWND, UINT, WPARAM, LPARAM)
-	{
+	static LRESULT returnHandled(LRESULT, HWND, UINT, WPARAM, LPARAM) {
 		// A dialog Widget should return TRUE to the windows internal dialog
 		// message handler procedure to tell windows that it have handled the
 		// message
@@ -154,8 +153,7 @@ protected:
 		return returnUnhandled(hWnd, msg, wPar, lPar);
 	}
 
-	static LRESULT returnUnhandled( HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar )
-	{
+	static LRESULT returnUnhandled( HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar ) {
 		// As opposed to a "normal" Widget the dialog Widget should NOT return
 		// ::DefaultMessageProc or something similar since this is done internally
 		// INSIDE windows but rather return FALSE to indicate it DID NOT handle the
@@ -167,10 +165,9 @@ protected:
 	}
 
 	static void initPolicy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-		if ( uMsg == WM_INITDIALOG )
-		{
+		if(uMsg == WM_INITDIALOG) {
 			// extracting the this pointer and stuffing it into the Window with SetProp
-			ModelessDialog* This = reinterpret_cast<ModelessDialog*>(lParam);
+			ModelessDialog* This = static_cast<ModelessDialog*>(Widget::fromLParam(lParam));
 			This->setHandle( hwnd );
 		}
 	}

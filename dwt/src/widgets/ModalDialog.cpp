@@ -31,40 +31,70 @@
 
 #include <dwt/widgets/ModalDialog.h>
 #include <dwt/DWTException.h>
+#include <dwt/Application.h>
 
 namespace dwt {
 
-int ModalDialog::createDialog( unsigned resourceId )
-{
-	// this will not return until the dialog is closed by calling endDialog() with
-	// a retv
-	INT_PTR retv = ::DialogBoxParam(::GetModuleHandle(NULL), MAKEINTRESOURCE( resourceId ),
-		this->getParent() ? this->getParent()->handle() : 0, (DLGPROC)&ThisType::wndProc,
-		reinterpret_cast< LPARAM >(static_cast< Widget * >( this ))	);
-	if ( retv == - 1 ) {
+static const DLGTEMPLATE defaultTemplate = {
+#ifdef WINCE
+	DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_CENTER,
+#else
+	DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_CENTER,
+#endif
+	0,	// cdit
+	280, // cx
+	140, // cy
+	0,	// x
+	0	// y
+};
+
+void ModalDialog::createDialog(unsigned resourceId) {
+	HWND dlg = ::CreateDialogParam(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId),
+		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
+
+	if(dlg == NULL) {
 		throw Win32Exception("Couldn't create modal dialog");
 	}
-	return static_cast< int >( retv );
 }
 
-int ModalDialog::createDialog()
-{
-	// Arrange so the DLGTEMPLATE is followed by 0000 for menu, winclass and title.
-	unsigned char dlg_menu_winclass_title[ sizeof( DLGTEMPLATE ) + 30 ];
-	memset( dlg_menu_winclass_title, 0, sizeof( dlg_menu_winclass_title ) );
-	memcpy( dlg_menu_winclass_title, & itsDefaultDlgTemplate, sizeof( DLGTEMPLATE ) );
+void ModalDialog::createDialog() {
+	// Default template followed by a bunch of 0's for menu, class, title and font
+	struct {
+		DLGTEMPLATE t;
+		char dummy[128];
+	} temp = { defaultTemplate, { 0 } };
 
-	// this will not return until the dialog is closed by calling endDialog() with
-	// a retv
-	//
-	INT_PTR retv = ::DialogBoxIndirectParam
-		( ::GetModuleHandle(NULL), ( DLGTEMPLATE * ) dlg_menu_winclass_title
-		, this->getParent() ? this->getParent()->handle() : 0 // HWND hWndParent
-		, (DLGPROC)&ThisType::wndProc // DLGPROC lpDialogFunc
-		, reinterpret_cast< LPARAM >( dynamic_cast< Widget * >( this ) )
-		); // LPARAM dwInitParam
+	HWND dlg = ::CreateDialogIndirectParam(::GetModuleHandle(NULL), &temp.t,
+		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
 
-	return static_cast< int >( retv );
+	if(dlg == NULL) {
+		throw Win32Exception("Couldn't create modal dialog");
+	}
+}
+
+int ModalDialog::show() {
+	bool enabled = false;
+
+	if(getParent()) {
+		enabled = !::EnableWindow(getParentHandle(), FALSE);
+	}
+
+	setVisible(true);
+
+	while(!quit) {
+		if(!Application::instance().dispatch()) {
+			quit |= !Application::instance().sleep();
+		}
+	}
+
+	if(enabled) {
+		::EnableWindow(getParentHandle(), TRUE);
+	}
+
+	::DestroyWindow(handle());
+
+	return ret;
 }
 
 }
+

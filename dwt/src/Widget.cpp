@@ -76,7 +76,7 @@ HWND Widget::create( const Seed & cs ) {
 		cs.caption.c_str(),
 		cs.style,
 		cs.location.x(), cs.location.y(), cs.location.width(), cs.location.height(),
-		itsParent ? itsParent->handle() : 0,
+		getParentHandle(),
 		cs.menuHandle,
 		::GetModuleHandle(NULL),
 		reinterpret_cast< LPVOID >( this )

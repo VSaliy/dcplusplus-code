@@ -103,7 +103,7 @@ public:
 	  * prompt->onClicked( &X::myClickMethod ); <br>
 	  * ...etc...
 	  */
-	virtual int createDialog( unsigned resourceId );
+	void createDialog(unsigned resourceId);
 
 	/// Creates a Modal Dialog Window defined in C++ alone.
 	/** This version creates a dialog window without using a Dialog Resource ID. <br>
@@ -117,7 +117,10 @@ public:
 	  * prompt->setBounds( 10, 100, 100, 50 ); <br>
 	  * prompt->setText( _T("testing") );
 	  */
-	int createDialog();
+	void createDialog();
+
+	/// Display the dialog and return only when the dialog has been dismissed
+	int show();
 
 	/// Ends the Modal Dialog Window started with createDialog().
 	/** Pass a return value for createDialog() and close the dialog. <br>
@@ -141,7 +144,7 @@ public:
 	  */
 	void onInitDialog(const Dispatcher::F& f) {
 		addCallback(
-			Message( WM_INITDIALOG ), Dispatcher(f)
+			Message(WM_INITDIALOG), Dispatcher(f)
 		);
 	}
 
@@ -167,7 +170,8 @@ protected:
 	}
 
 private:
-	DLGTEMPLATE itsDefaultDlgTemplate; // For pure modal dialogs without resource files
+	bool quit;
+	int ret;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,44 +179,14 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline ModalDialog::ModalDialog( Widget * parent )
-	: BaseType( parent )
+	: BaseType( parent ), quit(false), ret(0)
 {
-	// Default parameters for pure modal dialogs
-#ifdef WINCE
-		itsDefaultDlgTemplate.style = DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_CENTER;
-#else
-		itsDefaultDlgTemplate.style = DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_CENTER;
-#endif
-	itsDefaultDlgTemplate.dwExtendedStyle = 0;
-	itsDefaultDlgTemplate.cdit = 0; // No dialog items in the dialog
-	itsDefaultDlgTemplate.cx = 280; // 4 horizontal units are the width of one character
-	itsDefaultDlgTemplate.cy = 160; // 8 vertical units are the height of one character
-	itsDefaultDlgTemplate.x = 0;
-	itsDefaultDlgTemplate.y = 0;
-
 	onClosing(std::tr1::bind(&ThisType::defaultClosing, this));
 }
 
-// The derived pure dialog class can control the DLGTEMPLATE parameters used in
-// createDialog() with this protected call. The calling layer is prevented from
-// doing so.
-//
-
-inline void ModalDialog::setDlgTemplate( DLGTEMPLATE inTemplate )
-{
-	itsDefaultDlgTemplate = inTemplate;
-}
-
-// A Pure dialog created at runtime, without any help from a resource editer. The
-// derived dialog class can control the DLGTEMPLATE parameters. instead of the
-// calling layer.
-//
-
-inline void ModalDialog::endDialog( int retv )
-{
-	// Causes createDialog() to return with retv.
-	//
-	::EndDialog( this->handle(), static_cast< INT_PTR >( retv ) );
+inline void ModalDialog::endDialog(int retv) {
+	quit = true;
+	ret = retv;
 }
 
 }

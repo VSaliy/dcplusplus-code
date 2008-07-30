@@ -27,7 +27,7 @@ public:
 	HubListsDlg(dwt::Widget* parent);
 	virtual ~HubListsDlg();
 
-	int run() { return createDialog(IDD_HUB_LIST); }
+	int run() { createDialog(IDD_HUB_LIST); return show(); }
 
 private:
 	TextBoxPtr editBox;

@@ -31,7 +31,7 @@ public:
 	AboutDlg(dwt::Widget* parent);
 	virtual ~AboutDlg();
 
-	int run() { return createDialog(IDD_ABOUTBOX); }
+	int run() { createDialog(IDD_ABOUTBOX); return show(); }
 
 private:
 	HttpConnection c;

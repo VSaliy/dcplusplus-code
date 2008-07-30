@@ -31,6 +31,8 @@
 #include "CryptoManager.h"
 #include "LogManager.h"
 
+#include <math.h>
+
 namespace dcpp {
 
 const string AdcHub::CLIENT_PROTOCOL("ADC/1.0");

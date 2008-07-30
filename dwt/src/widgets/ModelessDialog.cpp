@@ -36,11 +36,8 @@ namespace dwt {
 
 void ModelessDialog::createDialog( unsigned resourceId )
 {
-	HWND wnd = ::CreateDialogParam( ::GetModuleHandle(NULL),
-		MAKEINTRESOURCE( resourceId ),
-		( this->getParent() ? this->getParent()->handle() : 0 ),
-		( (DLGPROC)&ThisType::wndProc ),
-		reinterpret_cast< LPARAM >( static_cast< Widget * >( this ) ) );
+	HWND wnd = ::CreateDialogParam( ::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId),
+		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
 
 	if ( !wnd ) {
 		throw Win32Exception( "CreateDialogParam failed.");

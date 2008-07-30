@@ -25,7 +25,7 @@ public:
 	HashProgressDlg(dwt::Widget* parent, bool aAutoClose);
 	virtual ~HashProgressDlg();
 
-	int run() { return createDialog(IDD_HASH_PROGRESS); }
+	int run() { createDialog(IDD_HASH_PROGRESS); return show(); }
 
 private:
 	ProgressBarPtr progress;

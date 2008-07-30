@@ -207,11 +207,9 @@ int Application::run()
 #else
 
 void Application::run() {
-	while(true) {
+	while(!quit) {
 		if(!dispatch()) {
-			if(!sleep()) {
-				return;
-			}
+			sleep();
 		}
 	}
 }
