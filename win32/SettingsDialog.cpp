@@ -61,7 +61,11 @@ SettingsDialog::~SettingsDialog() {
 }
 
 bool SettingsDialog::initDialog() {
-	// set this to IDH_INDEX so that clicking in an empty space of the dialog generates a WM_HELP message with no error; then SettingsDialog::handleHelp will convert IDH_INDEX to the current page's help id
+	/*
+	* set this to IDH_INDEX so that clicking in an empty space of the dialog generates a WM_HELP
+	* message with no error; then SettingsDialog::handleHelp will convert IDH_INDEX to the current
+	* page's help id.
+	*/
 	setHelpId(IDH_INDEX);
 
 	WinUtil::setHelpIds(this, helpItems);
