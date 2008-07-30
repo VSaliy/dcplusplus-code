@@ -52,7 +52,7 @@ void MDIParent::create( const Seed & cs )
 		cs.caption.c_str(),
 		cs.style,
 		cs.location.x(), cs.location.y(), cs.location.width(), cs.location.height(),
-		this->getParent() ? this->getParent()->handle() : 0,
+		getParentHandle(),
 		NULL,
 		::GetModuleHandle(NULL),
 		reinterpret_cast< LPVOID >( &ccs ) );

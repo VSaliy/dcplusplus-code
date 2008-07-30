@@ -185,6 +185,15 @@ protected:
 
 	virtual void setHandle(HWND wnd);
 
+	HWND getParentHandle();
+
+	/// Convert "this" to an LPARAM, suitable to be converted back into a Widget*.
+	/// Note; it's better to use this function than casting to make sure that the correct this pointer is used
+	/// for multiply inherited classes...
+	LPARAM toLParam();
+
+	/// Convert back from LPARAM to a Widget*
+	static Widget* fromLParam(LPARAM lParam);
 private:
 	friend class Application;
 	template<typename T> friend T hwnd_cast(HWND hwnd);
@@ -226,6 +235,18 @@ inline bool Widget::hasStyle(DWORD style) {
 
 inline Widget::CallbackCollectionType& Widget::getCallbacks() {
 	return itsCallbacks;
+}
+
+inline HWND Widget::getParentHandle() {
+	return getParent() ? getParent()->handle() : NULL;
+}
+
+inline LPARAM Widget::toLParam() {
+	return reinterpret_cast<LPARAM>(this);
+}
+
+inline Widget* Widget::fromLParam(LPARAM lParam) {
+	return reinterpret_cast<Widget*>(lParam);
 }
 
 template<typename T>

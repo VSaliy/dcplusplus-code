@@ -53,7 +53,8 @@ SettingsDialog::SettingsDialog(dwt::Widget* parent) : WidgetFactory<dwt::ModalDi
 }
 
 int SettingsDialog::run() {
-	return createDialog(IDD_SETTINGS);
+	createDialog(IDD_SETTINGS);
+	return show();
 }
 
 SettingsDialog::~SettingsDialog() {

@@ -33,7 +33,7 @@ public:
 	MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName);
 	virtual ~MagnetDlg();
 
-	int run() { return createDialog(IDD_MAGNET); }
+	int run() { createDialog(IDD_MAGNET); return show(); }
 
 private:
 	//RadioButtonPtr queue;

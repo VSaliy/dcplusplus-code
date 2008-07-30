@@ -28,7 +28,7 @@ public:
 	FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry);
 	virtual ~FavHubProperties();
 
-	int run() { return createDialog(IDD_FAVORITEHUB); }
+	int run() { createDialog(IDD_FAVORITEHUB); return show(); }
 
 private:
 	TextBoxPtr name;

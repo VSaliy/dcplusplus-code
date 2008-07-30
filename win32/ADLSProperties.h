@@ -28,7 +28,7 @@ public:
 	ADLSProperties(dwt::Widget* parent, ADLSearch *_search);
 	virtual ~ADLSProperties();
 
-	int run() { return createDialog(IDD_ADLS_PROPERTIES); }
+	int run() { createDialog(IDD_ADLS_PROPERTIES); return show(); }
 
 private:
 	TextBoxPtr searchString;
