@@ -38,6 +38,7 @@
 
 #include "../aspects/AspectDialog.h"
 #include "Frame.h"
+#include "../Application.h"
 
 namespace dwt {
 
@@ -152,8 +153,7 @@ protected:
 	// Protected since this Widget we HAVE to inherit from
 	explicit ModalDialog( Widget * parent = 0 );
 
-	virtual ~ModalDialog()
-	{}
+	virtual ~ModalDialog();
 
 	/// Specify how a resourceless dialog's window appears.
 	/** The derived pure dialog class can control the DLGTEMPLATE parameters used in
@@ -172,17 +172,14 @@ protected:
 private:
 	bool quit;
 	int ret;
+
+	Application::FilterIter filterIter;
+	bool filter(MSG& msg);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-inline ModalDialog::ModalDialog( Widget * parent )
-	: BaseType( parent ), quit(false), ret(0)
-{
-	onClosing(std::tr1::bind(&ThisType::defaultClosing, this));
-}
 
 inline void ModalDialog::endDialog(int retv) {
 	quit = true;
