@@ -48,6 +48,20 @@ static const DLGTEMPLATE defaultTemplate = {
 	0	// y
 };
 
+ModalDialog::ModalDialog(Widget* parent) :
+BaseType(parent),
+quit(false),
+ret(0)
+{
+	onClosing(std::tr1::bind(&ThisType::defaultClosing, this));
+
+	filterIter = dwt::Application::instance().addFilter(std::tr1::bind(&ThisType::filter, this, _1));
+}
+
+ModalDialog::~ModalDialog() {
+	dwt::Application::instance().removeFilter(filterIter);
+}
+
 void ModalDialog::createDialog(unsigned resourceId) {
 	HWND dlg = ::CreateDialogParam(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId),
 		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
@@ -94,6 +108,13 @@ int ModalDialog::show() {
 	::DestroyWindow(handle());
 
 	return ret;
+}
+
+bool ModalDialog::filter(MSG& msg) {
+	if(::IsDialogMessage(handle(), &msg)) {
+		return true;
+	}
+	return false;
 }
 
 }
