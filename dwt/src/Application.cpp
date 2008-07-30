@@ -207,8 +207,12 @@ int Application::run()
 #else
 
 void Application::run() {
-	while(sleep()) {
-		dispatch();
+	while(true) {
+		if(!dispatch()) {
+			if(!sleep()) {
+				return;
+			}
+		}
 	}
 }
 
@@ -226,7 +230,7 @@ bool Application::sleep() {
 		if (ret == WAIT_OBJECT_0 + n) {
 			return true;
 		} else if (ret < WAIT_OBJECT_0 + itsVHEvents.size()) {
-			// the wait event was signalled by Windows
+			// the wait event was signaled by Windows
 			// signal its handlers
 			itsVSignals[ret - WAIT_OBJECT_0]();
 		} else {
