@@ -481,7 +481,7 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 
 void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
 	tstring line = Text::toT("[" + Util::getShortTimeString(t) + "] " + m);
-	dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::setStatus, this, STATUS_STATUS, line, true));
+	dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::setStatus, this, STATUS_STATUS, line, true, false));
 }
 
 void MainWindow::viewAndDelete(const string& fileName) {
@@ -601,16 +601,18 @@ void MainWindow::updateStatus() {
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_UPLOAD, SETTING(TOTAL_UPLOAD) + static_cast<int64_t>(updiff));
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_DOWNLOAD, SETTING(TOTAL_DOWNLOAD) + static_cast<int64_t>(downdiff));
 
-	bool statusResized = false;
-	statusResized |= setStatus(STATUS_AWAY, Util::getAway() ? T_("AWAY") : _T(""), false);
-	statusResized |= setStatus(STATUS_COUNTS, Text::toT(Client::getCounts()), false);
-	statusResized |= setStatus(STATUS_SLOTS, str(TF_("Slots: %1%/%2%") % UploadManager::getInstance()->getFreeSlots() % (SETTING(SLOTS))), false);
-	statusResized |= setStatus(STATUS_DOWN_TOTAL, str(TF_("D: %1%") % Text::toT(Util::formatBytes(down))), false);
-	statusResized |= setStatus(STATUS_UP_TOTAL, str(TF_("U: %1%") % Text::toT(Util::formatBytes(up))), false);
-	statusResized |= setStatus(STATUS_DOWN_DIFF, str(TF_("D: %1%/s (%2%)") % Text::toT(Util::formatBytes((downdiff*1000)/tdiff)) % DownloadManager::getInstance()->getDownloadCount()), false);
-	statusResized |= setStatus(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % Text::toT(Util::formatBytes((updiff*1000)/tdiff)) % UploadManager::getInstance()->getUploadCount()), false);
-	if(statusResized)
-		layout();
+	setStatus(STATUS_AWAY, Util::getAway() ? T_("AWAY") : _T(""), false);
+	setStatus(STATUS_COUNTS, Text::toT(Client::getCounts()), false);
+	setStatus(STATUS_SLOTS, str(TF_("Slots: %1%/%2%") % UploadManager::getInstance()->getFreeSlots() % (SETTING(SLOTS))), false, true);
+	setStatus(STATUS_DOWN_TOTAL, str(TF_("D: %1%") % Text::toT(Util::formatBytes(down))), false);
+	setStatus(STATUS_UP_TOTAL, str(TF_("U: %1%") % Text::toT(Util::formatBytes(up))), false);
+	setStatus(STATUS_DOWN_DIFF, str(TF_("D: %1%/s (%2%)") % Text::toT(Util::formatBytes((downdiff*1000)/tdiff)) % DownloadManager::getInstance()->getDownloadCount()), false);
+	setStatus(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % Text::toT(Util::formatBytes((updiff*1000)/tdiff)) % UploadManager::getInstance()->getUploadCount()), false);
+	if(statusResized) {
+		layoutSections(status->getSize());
+		mapWidget(STATUS_SLOTS_SPIN, slotsSpin);
+		statusResized = false;
+	}
 }
 
 MainWindow::~MainWindow() {

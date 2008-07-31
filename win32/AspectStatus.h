@@ -33,7 +33,7 @@ class AspectStatus {
 	HWND H() const { return W().handle(); }
 
 protected:
-	AspectStatus() : status(0), tip(0) {
+	AspectStatus() : status(0), statusResized(false), tip(0) {
 		statusSizes.resize(WidgetType::STATUS_LAST);
 		filterIter = dwt::Application::instance().addFilter(std::tr1::bind(&ThisType::filter, this, _1));
 	}
@@ -52,16 +52,15 @@ protected:
 		tip->setTool(status, std::tr1::bind(&ThisType::handleToolTip, this, _1));
 	}
 
-	// returns true if the part has been resized
-	bool setStatus(int s, const tstring& text, bool layout = true) {
-		bool ret = false;
+	void setStatus(int s, const tstring& text, bool layout = true, bool alwaysResize = false) {
 		if(s != WidgetType::STATUS_STATUS) {
-			int w = status->getTextSize(text).x + 12;
-			if(w > static_cast<int>(statusSizes[s])) {
-				statusSizes[s] = w;
+			int oldW = statusSizes[s];
+			int newW = status->getTextSize(text).x + 12;
+			if(newW > oldW || (alwaysResize && newW != oldW)) {
+				statusSizes[s] = newW;
 				if(layout)
 					layoutSections(status->getSize());
-				ret = true;
+				statusResized = true;
 			}
 		} else {
 			lastLines.push_back(text);
@@ -70,7 +69,6 @@ protected:
 			}
 		}
 		status->setText(text, s);
-		return ret;
 	}
 
 	void setStatusHelpId(int s, unsigned id) {
@@ -103,6 +101,7 @@ protected:
 	dwt::StatusBarPtr status;
 
 	std::vector<unsigned> statusSizes;
+	bool statusResized;
 
 private:
 	dwt::Application::FilterIter filterIter;

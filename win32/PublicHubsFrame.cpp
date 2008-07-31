@@ -515,11 +515,11 @@ void PublicHubsFrame::onFinished(const tstring& s) {
 }
 
 void PublicHubsFrame::on(DownloadStarting, const string& l) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), true));
+	dwt::Application::instance().callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), true, false));
 }
 
 void PublicHubsFrame::on(DownloadFailed, const string& l) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Download failed: %1%") % Text::toT(l)), true));
+	dwt::Application::instance().callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Download failed: %1%") % Text::toT(l)), true, false));
 }
 
 void PublicHubsFrame::on(DownloadFinished, const string& l) throw() {
