@@ -50,7 +50,7 @@ tstring TextBox::getLine(int line) {
 	tmp.resize(std::max(2, lineLength(lineIndex(line))));
 
 	*reinterpret_cast<WORD*>(&tmp[0]) = static_cast<WORD>(tmp.size());
-	tmp.resize(::SendMessage(this->handle(), EM_GETLINE, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(&tmp[0])));
+	tmp.resize(sendMessage(EM_GETLINE, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(&tmp[0])));
 	return tmp;
 }
 

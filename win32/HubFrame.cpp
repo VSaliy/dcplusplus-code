@@ -310,7 +310,18 @@ bool HubFrame::enter() {
 				addStatus(T_("Specify a server to connect to"));
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("clear")) == 0) {
-			chat->setText(_T(""));
+			unsigned linesToKeep = 0;
+			if(!param.empty())
+				linesToKeep = Util::toInt(Text::fromT(param));
+			if(linesToKeep) {
+				unsigned lineCount = chat->getLineCount();
+				if(linesToKeep < lineCount) {
+					HoldRedraw hold(chat);
+					chat->setSelection(0, chat->lineIndex(lineCount - linesToKeep));
+					chat->replaceSelection(_T(""));
+				}
+			} else
+				chat->setText(_T(""));
 		} else if(Util::stricmp(cmd.c_str(), _T("ts")) == 0) {
 			timeStamps = !timeStamps;
 			if(timeStamps) {
@@ -363,7 +374,7 @@ bool HubFrame::enter() {
 			else if(Util::stricmp(param.c_str(), _T("status")) == 0)
 				openLog(true);
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /clear, /ts, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite"));
+			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /clear [lines to keep], /ts, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
 			string::size_type j = param.find(_T(' '));
 			if(j != string::npos) {
