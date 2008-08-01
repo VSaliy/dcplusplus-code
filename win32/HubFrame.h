@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_HUB_FRAME_H
 
 #include "MDIChildFrame.h"
+#include "AspectChat.h"
 #include "TypedTable.h"
 #include "AspectUserCommand.h"
 #include "UserInfoBase.h"
@@ -34,6 +35,7 @@ class HubFrame :
 	public MDIChildFrame<HubFrame>,
 	private ClientListener,
 	private FavoriteManagerListener,
+	public AspectChat<HubFrame>,
 	public AspectUserInfo<HubFrame>,
 	public AspectUserCommand<HubFrame>
 {
@@ -131,8 +133,6 @@ private:
 		}
 	};
 
-	TextBoxPtr chat;
-	TextBoxPtr message;
 	TextBoxPtr filter;
 	ComboBoxPtr filterType;
 	WidgetVPanedPtr paned;
