@@ -608,10 +608,10 @@ void MainWindow::updateStatus() {
 	setStatus(STATUS_UP_TOTAL, str(TF_("U: %1%") % Text::toT(Util::formatBytes(up))), false);
 	setStatus(STATUS_DOWN_DIFF, str(TF_("D: %1%/s (%2%)") % Text::toT(Util::formatBytes((downdiff*1000)/tdiff)) % DownloadManager::getInstance()->getDownloadCount()), false);
 	setStatus(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % Text::toT(Util::formatBytes((updiff*1000)/tdiff)) % UploadManager::getInstance()->getUploadCount()), false);
-	if(statusResized) {
+	if(statusNeedsLayout) {
 		layoutSections(status->getSize());
 		mapWidget(STATUS_SLOTS_SPIN, slotsSpin);
-		statusResized = false;
+		statusNeedsLayout = false;
 	}
 }
 
