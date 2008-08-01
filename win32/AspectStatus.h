@@ -33,7 +33,7 @@ class AspectStatus {
 	HWND H() const { return W().handle(); }
 
 protected:
-	AspectStatus() : status(0), statusResized(false), tip(0) {
+	AspectStatus() : status(0), statusNeedsLayout(false), tip(0) {
 		statusSizes.resize(WidgetType::STATUS_LAST);
 		filterIter = dwt::Application::instance().addFilter(std::tr1::bind(&ThisType::filter, this, _1));
 	}
@@ -60,7 +60,8 @@ protected:
 				statusSizes[s] = newW;
 				if(layout)
 					layoutSections(status->getSize());
-				statusResized = true;
+				else
+					statusNeedsLayout = true;
 			}
 		} else {
 			lastLines.push_back(text);
@@ -101,7 +102,7 @@ protected:
 	dwt::StatusBarPtr status;
 
 	std::vector<unsigned> statusSizes;
-	bool statusResized;
+	bool statusNeedsLayout;
 
 private:
 	dwt::Application::FilterIter filterIter;
