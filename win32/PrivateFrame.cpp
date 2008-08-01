@@ -286,7 +286,18 @@ bool PrivateFrame::enter() {
 				addStatus(status);
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("clear")) == 0) {
-			chat->setText(Util::emptyStringT);
+			unsigned linesToKeep = 0;
+			if(!param.empty())
+				linesToKeep = Util::toInt(Text::fromT(param));
+			if(linesToKeep) {
+				unsigned lineCount = chat->getLineCount();
+				if(linesToKeep < lineCount) {
+					HoldRedraw hold(chat);
+					chat->setSelection(0, chat->lineIndex(lineCount - linesToKeep));
+					chat->replaceSelection(_T(""));
+				}
+			} else
+				chat->setText(_T(""));
 		} else if(Util::stricmp(cmd.c_str(), _T("grant")) == 0) {
 			UploadManager::getInstance()->reserveSlot(replyTo);
 			addStatus(T_("Slot granted"));
@@ -300,7 +311,7 @@ bool PrivateFrame::enter() {
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addStatus(_T("*** ") + WinUtil::commands + _T(", /getlist, /clear, /grant, /close, /favorite, /log <system, downloads, uploads>"));
+			addStatus(_T("*** ") + WinUtil::commands + _T(", /getlist, /clear [lines to keep], /grant, /close, /favorite, /log <system, downloads, uploads>"));
 		} else {
 			send = true;
 		}

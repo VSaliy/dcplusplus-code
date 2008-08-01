@@ -172,6 +172,8 @@ public:
 
 	int lineLength(int c);
 
+	unsigned getLineCount();
+
 	void setModify(bool modify = false);
 
 	bool getModify();
@@ -404,21 +406,25 @@ inline void TextBox::setUpperCase( bool value ) {
 inline int TextBox::charFromPos(const ScreenCoordinate& pt) {
 	ClientCoordinate cc(pt, this);
 	LPARAM lp = MAKELPARAM(cc.x(), cc.y());
-	return LOWORD(::SendMessage(this->handle(), EM_CHARFROMPOS, 0, lp));
+	return LOWORD(sendMessage(EM_CHARFROMPOS, 0, lp));
 }
 
 inline int TextBox::lineFromPos(const ScreenCoordinate& pt) {
 	ClientCoordinate cc(pt, this);
 	LPARAM lp = MAKELPARAM(cc.x(), cc.y());
-	return HIWORD(::SendMessage(this->handle(), EM_CHARFROMPOS, 0, lp));
+	return HIWORD(sendMessage(EM_CHARFROMPOS, 0, lp));
 }
 
 inline int TextBox::lineIndex(int line) {
-	return static_cast<int>(::SendMessage(this->handle(), EM_LINEINDEX, static_cast<WPARAM>(line), 0));
+	return static_cast<int>(sendMessage(EM_LINEINDEX, static_cast<WPARAM>(line)));
 }
 
 inline int TextBoxBase::lineLength(int c) {
-	return static_cast<int>(::SendMessage(this->handle(), EM_LINELENGTH, static_cast<WPARAM>(c), 0));
+	return static_cast<int>(sendMessage(EM_LINELENGTH, static_cast<WPARAM>(c)));
+}
+
+inline unsigned TextBoxBase::getLineCount() {
+	return sendMessage(EM_GETLINECOUNT);
 }
 
 }
