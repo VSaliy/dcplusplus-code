@@ -128,7 +128,6 @@ void LogPage::handleSelectionChanged() {
 	getValues();
 
 	int sel = options->getSelected();
-
 	if(sel >= 0 && sel < LogManager::LAST) {
 		bool checkState = options->isChecked(sel);
 		logFormat->setEnabled(checkState);
@@ -136,9 +135,6 @@ void LogPage::handleSelectionChanged() {
 
 		logFile->setText(logOptions[sel].first);
 		logFormat->setText(logOptions[sel].second);
-
-		//save the old selection so we know where to save the values
-		oldSelection = sel;
 	} else {
 		logFormat->setEnabled(false);
 		logFile->setEnabled(false);
@@ -146,6 +142,8 @@ void LogPage::handleSelectionChanged() {
 		logFile->setText(Util::emptyStringT);
 		logFormat->setText(Util::emptyStringT);
 	}
+	if(sel < LogManager::LAST)
+		oldSelection = sel;
 }
 
 void LogPage::getValues() {
