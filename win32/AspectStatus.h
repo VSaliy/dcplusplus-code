@@ -52,17 +52,17 @@ protected:
 		tip->setTool(status, std::tr1::bind(&ThisType::handleToolTip, this, _1));
 	}
 
-	/*
-	* s: index of the part (section) to update.
-	* text: new text to put into "s".
-	* layout: if the part is resized, then the status bar needs a layout. when "layout" is true,
-	*         the setStatus function takes care of it; otherwise, "statusNeedsLayout" will be set
-	*         to true and it is the caller's responsibility to update the status bar's layout and
-	*         set "statusNeedsLayout" back to false.
-	* alwaysResize: if false, the part will be resized only if the new text is too big for the
-	*               current; if true, the size of the part will always be adjusted to the text it
-	*               contains. note: setting "alwaysResize" to true for often changing parts might
-	*               result in flickering.
+	/**
+	* change the text of a part of the status bar
+	* @param s index of the part (section) to update.
+	* @param text new text to put into "s".
+	* @param layout if the part is resized, then the status bar needs a layout. when "layout" is
+	* true, the setStatus function takes care of it; otherwise, "statusNeedsLayout" will be set to
+	* true and it is the caller's responsibility to update the status bar's layout and set
+	* "statusNeedsLayout" back to false.
+	* @param alwaysResize if false, the part will be resized only if the new text is too big for
+	* the current; if true, the size of the part will always be adjusted to the text it contains.
+	* note: setting "alwaysResize" to true for often changing parts might result in flickering.
 	*/
 	void setStatus(int s, const tstring& text, bool layout = true, bool alwaysResize = false) {
 		if(s != WidgetType::STATUS_STATUS) {
