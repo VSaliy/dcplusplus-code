@@ -91,7 +91,6 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 
 	message->setHelpId(IDH_HUB_MESSAGE);
 	addWidget(message, true, false);
-	message->onRaw(std::tr1::bind(&HubFrame::handleMessageGetDlgCode, this), dwt::Message(WM_GETDLGCODE));
 	message->onKeyDown(std::tr1::bind(&HubFrame::handleMessageKeyDown, this, _1));
 	message->onSysKeyDown(std::tr1::bind(&HubFrame::handleMessageKeyDown, this, _1));
 	message->onChar(std::tr1::bind(&HubFrame::handleMessageChar, this, _1));
@@ -605,11 +604,6 @@ bool HubFrame::handleUsersKeyDown(int c) {
 		return true;
 	}
 	return false;
-}
-
-LRESULT HubFrame::handleMessageGetDlgCode() {
-	// override the MDIChildFrame behavior, which tells the Dialog Manager to process Tab presses by itself
-	return DLGC_WANTMESSAGE;
 }
 
 bool HubFrame::handleMessageChar(int c) {
