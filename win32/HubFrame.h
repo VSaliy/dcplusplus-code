@@ -41,7 +41,9 @@ class HubFrame :
 {
 	typedef MDIChildFrame<HubFrame> BaseType;
 	typedef AspectChat<HubFrame> ChatType;
+
 	friend class MDIChildFrame<HubFrame>;
+	friend class AspectChat<HubFrame>;
 	friend class AspectUserInfo<HubFrame>;
 	friend class AspectUserCommand<HubFrame>;
 
@@ -176,7 +178,6 @@ private:
 	bool preClosing();
 	void postClosing();
 
-	bool enter();
 	bool tab();
 
 	void addChat(const tstring& aLine);
@@ -231,6 +232,9 @@ private:
 
 	string stripNick(const string& nick) const;
 	tstring scanNickPrefix(const tstring& prefix);
+
+	// AspectChat
+	void enterImpl(const tstring& s);
 
 	void addTask(Tasks s, const OnlineUser& u);
 	void execTasks();

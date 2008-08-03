@@ -252,11 +252,7 @@ bool HubFrame::eachSecond() {
 	return true;
 }
 
-bool HubFrame::enter() {
-	tstring s;
-	if(!ChatType::enter(s))
-		return false;
-
+void HubFrame::enterImpl(const tstring& s) {
 	// Special command
 	if(s[0] == _T('/')) {
 		tstring cmd = s;
@@ -367,7 +363,6 @@ bool HubFrame::enter() {
 		client->hubMessage(Text::fromT(s));
 		message->setText(_T(""));
 	}
-	return true;
 }
 
 void HubFrame::clearUserList() {
@@ -636,10 +631,6 @@ bool HubFrame::handleMessageKeyDown(int c) {
 	switch(c) {
 	case VK_TAB:
 		if(tab())
-			return true;
-		break;
-	case VK_RETURN:
-		if(enter())
 			return true;
 		break;
 	}
