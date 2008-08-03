@@ -794,15 +794,20 @@ void NmdcHub::myInfo(bool alwaysSend) {
 	string uMin = (SETTING(MIN_UPLOAD_SPEED) == 0) ? Util::emptyString : tmp5 + Util::toString(SETTING(MIN_UPLOAD_SPEED));
 	string myInfoA =
 		"$MyINFO $ALL " + fromUtf8(getMyNick()) + " " + fromUtf8(escape(getCurrentDescription())) +
-		tmp1 + VERSIONSTRING + tmp2 + modeChar + tmp3 + getCounts() + tmp4 + Util::toString(SETTING(SLOTS)) + uMin +
+		tmp1 + VERSIONSTRING + tmp2 + modeChar + tmp3 + getCounts();
+	string myInfoB = tmp4 + Util::toString(SETTING(SLOTS));
+	string myInfoC = uMin +
 		">$ $" + SETTING(UPLOAD_SPEED) + "\x01$" + fromUtf8(escape(SETTING(EMAIL))) + '$';
-	string myInfoB = ShareManager::getInstance()->getShareSizeString() + "$|";
-
- 	if(lastMyInfoA != myInfoA || alwaysSend || (lastMyInfoB != myInfoB && lastUpdate + 15*60*1000 < GET_TICK()) ){
+	string myInfoD = ShareManager::getInstance()->getShareSizeString() + "$|";
+	// we always send A and C; however, B (slots) and D (share size) can frequently change so we delay them if needed
+ 	if(lastMyInfoA != myInfoA || lastMyInfoC != myInfoC ||
+		alwaysSend || ((lastMyInfoB != myInfoB || lastMyInfoD != myInfoD) && lastUpdate + 15*60*1000 < GET_TICK())) {
  		dcdebug("MyInfo %s...\n", getMyNick().c_str());
- 		send(myInfoA + myInfoB);
+ 		send(myInfoA + myInfoB + myInfoC + myInfoD);
  		lastMyInfoA = myInfoA;
  		lastMyInfoB = myInfoB;
+		lastMyInfoC = myInfoC;
+		lastMyInfoD = myInfoD;
  		lastUpdate = GET_TICK();
 	}
 }
@@ -901,6 +906,8 @@ void NmdcHub::on(Connected) throw() {
 	supportFlags = 0;
 	lastMyInfoA.clear();
 	lastMyInfoB.clear();
+	lastMyInfoC.clear();
+	lastMyInfoD.clear();
 	lastUpdate = 0;
 }
 

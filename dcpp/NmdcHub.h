@@ -71,8 +71,12 @@ private:
 	NickMap users;
 
 	int supportFlags;
+
 	uint64_t lastUpdate;
-	string lastMyInfoA, lastMyInfoB;
+	string lastMyInfoA;
+	string lastMyInfoB;
+	string lastMyInfoC;
+	string lastMyInfoD;
 
 	typedef list<pair<string, uint32_t> > FloodMap;
 	typedef FloodMap::iterator FloodIter;
