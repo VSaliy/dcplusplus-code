@@ -506,13 +506,14 @@ private:
 		this->setStatus(STATUS_SPEED, str(TF_("%1%/s") % Text::toT(Util::formatBytes((time > 0) ? bytes * ((int64_t)1000) / time : 0))));
 	}
 
-	void addFile(const string& file, const FinishedFileItemPtr& entry) {
+	bool addFile(const string& file, const FinishedFileItemPtr& entry) {
 		if(bOnlyFull && !entry->isFull())
-			return;
+			return false;
 
 		int loc = files->insert(new FileInfo(file, entry));
 		if(files->getVisible())
 			files->ensureVisible(loc);
+		return true;
 	}
 
 	void addUser(const UserPtr& user, const FinishedUserItemPtr& entry) {
@@ -558,8 +559,7 @@ private:
 		if(data) {
 			// this file already exists; simply update it
 			onUpdatedFile(file);
-		} else {
-			addFile(file, entry);
+		} else if(addFile(file, entry)) {
 			updateStatus();
 			this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
 		}
@@ -568,7 +568,6 @@ private:
 	void onAddedUser(const UserPtr& user, const FinishedUserItemPtr& entry) {
 		addUser(user, entry);
 		updateStatus();
-		this->setDirty(in_UL ? SettingsManager::BOLD_FINISHED_UPLOADS : SettingsManager::BOLD_FINISHED_DOWNLOADS);
 	}
 
 	void onUpdatedFile(const string& file) {
