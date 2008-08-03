@@ -32,7 +32,8 @@ protected:
 	AspectChat() :
 	chat(0),
 	message(0),
-	timeStamps(BOOLSETTING(TIME_STAMPS))
+	timeStamps(BOOLSETTING(TIME_STAMPS)),
+	curCommandPosition(0)
 	{
 		{
 			TextBox::Seed cs = WinUtil::Seeds::textBox;
@@ -102,11 +103,110 @@ protected:
 		return true;
 	}
 
+	bool enter(tstring& s) {
+		if(t().isShiftPressed() || t().isControlPressed() || t().isAltPressed()) {
+			return false;
+		}
+		s = message->getText();
+		if(s.empty()) {
+			::MessageBeep(MB_ICONEXCLAMATION);
+			return false;
+		}
+
+		// save command in history, reset current buffer pointer to the newest command
+		curCommandPosition = prevCommands.size();		//this places it one position beyond a legal subscript
+		if (curCommandPosition == 0 || (curCommandPosition > 0 && prevCommands[curCommandPosition - 1] != s)) {
+			++curCommandPosition;
+			prevCommands.push_back(s);
+		}
+		currentCommand = _T("");
+
+		return true;
+	}
+
+	bool handleMessageKeyDown(int c) {
+		switch(c) {
+		case VK_UP:
+			if ( historyActive() ) {
+				//scroll up in chat command history
+				//currently beyond the last command?
+				if (curCommandPosition > 0) {
+					//check whether current command needs to be saved
+					if (curCommandPosition == prevCommands.size()) {
+						currentCommand = message->getText();
+					}
+
+					//replace current chat buffer with current command
+					message->setText(prevCommands[--curCommandPosition]);
+				}
+				// move cursor to end of line
+				message->setSelection(message->length(), message->length());
+				return true;
+			}
+			break;
+		case VK_DOWN:
+			if ( historyActive() ) {
+				//scroll down in chat command history
+
+				//currently beyond the last command?
+				if (curCommandPosition + 1 < prevCommands.size()) {
+					//replace current chat buffer with current command
+					message->setText(prevCommands[++curCommandPosition]);
+				} else if (curCommandPosition + 1 == prevCommands.size()) {
+					//revert to last saved, unfinished command
+
+					message->setText(currentCommand);
+					++curCommandPosition;
+				}
+				// move cursor to end of line
+				message->setSelection(message->length(), message->length());
+				return true;
+			}
+			break;
+		case VK_PRIOR: // page up
+			{
+				chat->sendMessage(WM_VSCROLL, SB_PAGEUP);
+				return true;
+			} break;
+		case VK_NEXT: // page down
+			{
+				chat->sendMessage(WM_VSCROLL, SB_PAGEDOWN);
+				return true;
+			} break;
+		case VK_HOME:
+			if (!prevCommands.empty() && historyActive() ) {
+				curCommandPosition = 0;
+				currentCommand = message->getText();
+
+				message->setText(prevCommands[curCommandPosition]);
+				return true;
+			}
+			break;
+		case VK_END:
+			if (historyActive()) {
+				curCommandPosition = prevCommands.size();
+
+				message->setText(currentCommand);
+				return true;
+			}
+			break;
+		}
+		return false;
+	}
+
 	dwt::TextBoxPtr chat;
 	dwt::TextBoxPtr message;
 
 private:
 	bool timeStamps;
+
+	TStringList prevCommands;
+	tstring currentCommand;
+	TStringList::size_type curCommandPosition; //can't use an iterator because StringList is a vector, and vector iterators become invalid after resizing
+
+	bool historyActive() {
+		return t().isAltPressed() || (BOOLSETTING(USE_CTRL_FOR_LINE_HISTORY) && t().isControlPressed());
+	}
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ASPECT_CHAT_H)

@@ -79,7 +79,6 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	resort(false),
 	showJoins(BOOLSETTING(SHOW_JOINS)),
 	favShowJoins(BOOLSETTING(FAV_SHOW_JOINS)),
-	curCommandPosition(0),
 	inTabMenu(false),
 	inTabComplete(false)
 {
@@ -254,22 +253,10 @@ bool HubFrame::eachSecond() {
 }
 
 bool HubFrame::enter() {
-	if(isShiftPressed() || isControlPressed() || isAltPressed()) {
+	tstring s;
+	if(!ChatType::enter(s))
 		return false;
-	}
-	tstring s = message->getText();
-	if(s.empty()) {
-		::MessageBeep(MB_ICONEXCLAMATION);
-		return false;
-	}
 
-	// save command in history, reset current buffer pointer to the newest command
-	curCommandPosition = prevCommands.size();		//this places it one position beyond a legal subscript
-	if (curCommandPosition == 0 || (curCommandPosition > 0 && prevCommands[curCommandPosition - 1] != s)) {
-		++curCommandPosition;
-		prevCommands.push_back(s);
-	}
-	currentCommand = _T("");
 	// Special command
 	if(s[0] == _T('/')) {
 		tstring cmd = s;
@@ -617,10 +604,6 @@ void HubFrame::removeUser(const UserPtr& aUser) {
 	delete ui;
 }
 
-bool HubFrame::historyActive() {
-	return isAltPressed() || (BOOLSETTING(USE_CTRL_FOR_LINE_HISTORY) && isControlPressed());
-}
-
 bool HubFrame::handleUsersKeyDown(int c) {
 	if(c == VK_RETURN && users->hasSelected()) {
 		handleGetList();
@@ -659,72 +642,9 @@ bool HubFrame::handleMessageKeyDown(int c) {
 		if(enter())
 			return true;
 		break;
-	case VK_UP:
-		if ( historyActive() ) {
-			//scroll up in chat command history
-			//currently beyond the last command?
-			if (curCommandPosition > 0) {
-				//check whether current command needs to be saved
-				if (curCommandPosition == prevCommands.size()) {
-					currentCommand = message->getText();
-				}
-
-				//replace current chat buffer with current command
-				message->setText(prevCommands[--curCommandPosition]);
-			}
-			// move cursor to end of line
-			message->setSelection(message->length(), message->length());
-			return true;
-		}
-		break;
-	case VK_DOWN:
-		if ( historyActive() ) {
-			//scroll down in chat command history
-
-			//currently beyond the last command?
-			if (curCommandPosition + 1 < prevCommands.size()) {
-				//replace current chat buffer with current command
-				message->setText(prevCommands[++curCommandPosition]);
-			} else if (curCommandPosition + 1 == prevCommands.size()) {
-				//revert to last saved, unfinished command
-
-				message->setText(currentCommand);
-				++curCommandPosition;
-			}
-			// move cursor to end of line
-			message->setSelection(message->length(), message->length());
-			return true;
-		}
-		break;
-	case VK_PRIOR: // page up
-		{
-			chat->sendMessage(WM_VSCROLL, SB_PAGEUP);
-			return true;
-		} break;
-	case VK_NEXT: // page down
-		{
-			chat->sendMessage(WM_VSCROLL, SB_PAGEDOWN);
-			return true;
-		} break;
-	case VK_HOME:
-		if (!prevCommands.empty() && historyActive() ) {
-			curCommandPosition = 0;
-			currentCommand = message->getText();
-
-			message->setText(prevCommands[curCommandPosition]);
-			return true;
-		}
-		break;
-	case VK_END:
-		if (historyActive()) {
-			curCommandPosition = prevCommands.size();
-
-			message->setText(currentCommand);
-			return true;
-		}
-		break;
 	}
-	return false;
+
+	return ChatType::handleMessageKeyDown(c);
 }
 
 int HubFrame::UserInfo::getImage() const {
