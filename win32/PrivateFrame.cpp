@@ -246,7 +246,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			FavoriteManager::getInstance()->addFavoriteUser(replyTo);
 			addStatus(T_("Favorite user added"));
 		} else if(Util::stricmp(cmd.c_str(), _T("getlist")) == 0) {
-			// TODO handleGetList();
+			handleGetList();
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
