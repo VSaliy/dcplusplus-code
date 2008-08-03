@@ -71,8 +71,6 @@ private:
 	void handleGetList();
 	void handleMatchQueue();
 
-	bool handleChar(int c);
-
 	void openLog();
 	void readLog();
 	void addChat(const tstring& aLine, bool log = true);

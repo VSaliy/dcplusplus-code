@@ -89,7 +89,7 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 	addWidget(message, true);
 	message->onKeyDown(std::tr1::bind(&PrivateFrame::handleMessageKeyDown, this, _1));
 	message->onSysKeyDown(std::tr1::bind(&PrivateFrame::handleMessageKeyDown, this, _1));
-	message->onChar(std::tr1::bind(&PrivateFrame::handleChar, this, _1));
+	message->onChar(std::tr1::bind(&PrivateFrame::handleMessageChar, this, _1));
 
 	initStatus();
 	status->onDblClicked(std::tr1::bind(&PrivateFrame::openLog, this));
@@ -214,15 +214,6 @@ void PrivateFrame::updateTitle() {
 	pair<tstring, bool> hubs = WinUtil::getHubNames(replyTo);
 	setText((WinUtil::getNicks(replyTo) + _T(" - ") + hubs.first));
 	setIcon(hubs.second ? IDR_PRIVATE : IDR_PRIVATE_OFF);
-}
-
-bool PrivateFrame::handleChar(int c) {
-	if(c == VK_RETURN) {
-		if(!(isShiftPressed() || isControlPressed() || isAltPressed())) {
-			return true;
-		}
-	}
-	return false;
 }
 
 void PrivateFrame::enterImpl(const tstring& s) {
