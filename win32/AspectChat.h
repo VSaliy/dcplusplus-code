@@ -195,6 +195,17 @@ protected:
 		return false;
 	}
 
+	bool handleMessageChar(int c) {
+		switch(c) {
+		case VK_RETURN: {
+			if(!(t().isShiftPressed() || t().isControlPressed() || t().isAltPressed())) {
+				return true;
+			}
+		} break;
+		}
+		return false;
+	}
+
 	dwt::TextBoxPtr chat;
 	dwt::TextBoxPtr message;
 

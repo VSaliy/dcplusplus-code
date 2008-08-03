@@ -615,13 +615,9 @@ LRESULT HubFrame::handleMessageGetDlgCode() {
 bool HubFrame::handleMessageChar(int c) {
 	switch(c) {
 	case VK_TAB: return true; break;
-	case VK_RETURN: {
-		if(!(isShiftPressed() || isControlPressed() || isAltPressed())) {
-			return true;
-		}
-	} break;
 	}
-	return false;
+
+	return ChatType::handleMessageChar(c);
 }
 
 bool HubFrame::handleMessageKeyDown(int c) {
