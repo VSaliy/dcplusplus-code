@@ -26,26 +26,71 @@ class AspectChat {
 	typedef AspectChat<T> ThisType;
 
 protected:
-	AspectChat() : message(0), chat(0) { }
+	AspectChat() :
+	chat(0),
+	message(0),
+	timeStamps(BOOLSETTING(TIME_STAMPS))
+	{
+	}
 	virtual ~AspectChat() { }
 
-	void clearChat(const tstring& param) {
-		unsigned linesToKeep = 0;
-		if(!param.empty())
-			linesToKeep = Util::toInt(Text::fromT(param));
-		if(linesToKeep) {
-			unsigned lineCount = chat->getLineCount();
-			if(linesToKeep < lineCount) {
-				HoldRedraw hold(chat);
-				chat->setSelection(0, chat->lineIndex(lineCount - linesToKeep));
-				chat->replaceSelection(_T(""));
-			}
-		} else
-			chat->setText(_T(""));
+	void addChat(const tstring& aLine) {
+		tstring line;
+		if(timeStamps) {
+			line = Text::toT("\r\n[" + Util::getShortTimeString() + "] ");
+		} else {
+			line = _T("\r\n");
+		}
+		line += Text::toDOS(aLine);
+
+		bool scroll = chat->scrollIsAtEnd();
+		HoldRedraw hold(chat, !scroll);
+
+		size_t limit = chat->getTextLimit();
+		if(chat->length() + line.size() > limit) {
+			HoldRedraw hold2(chat, scroll);
+			chat->setSelection(0, chat->lineIndex(chat->lineFromChar(limit / 10)));
+			chat->replaceSelection(_T(""));
+		}
+
+		chat->addText(line);
+
+		if(scroll)
+			chat->sendMessage(WM_VSCROLL, SB_BOTTOM);
 	}
 
-	dwt::TextBoxPtr message;
+	bool checkCommand(const tstring& cmd, const tstring& param, tstring& status) {
+		if(Util::stricmp(cmd.c_str(), _T("clear")) == 0) {
+			unsigned linesToKeep = 0;
+			if(!param.empty())
+				linesToKeep = Util::toInt(Text::fromT(param));
+			if(linesToKeep) {
+				unsigned lineCount = chat->getLineCount();
+				if(linesToKeep < lineCount) {
+					HoldRedraw hold(chat);
+					chat->setSelection(0, chat->lineIndex(lineCount - linesToKeep));
+					chat->replaceSelection(_T(""));
+				}
+			} else
+				chat->setText(_T(""));
+		} else if(Util::stricmp(cmd.c_str(), _T("ts")) == 0) {
+			timeStamps = !timeStamps;
+			if(timeStamps) {
+				status = T_("Timestamps enabled");
+			} else {
+				status = T_("Timestamps disabled");
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
+
 	dwt::TextBoxPtr chat;
+	dwt::TextBoxPtr message;
+
+private:
+	bool timeStamps;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ASPECT_CHAT_H)

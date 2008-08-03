@@ -228,7 +228,7 @@ _T("\r\n-- My client supports XML file lists, does yours?\r\n") LINE2
 
 #define MSGS 16
 
-tstring WinUtil::commands = _T("/refresh, /me <msg>, /slots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild");
+tstring WinUtil::commands = _T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts");
 
 bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson) {
 	string::size_type i = cmd.find(' ');

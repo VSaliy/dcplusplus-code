@@ -105,6 +105,7 @@ public:
 	 * @param param Set to any parameters.
 	 * @param message Message that should be sent to the chat.
 	 * @param status Message that should be shown in the status line.
+	 * @param thirdPerson True if the /me command was used.
 	 * @return True if the command was processed, false otherwise.
 	 */
 	static bool checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson);

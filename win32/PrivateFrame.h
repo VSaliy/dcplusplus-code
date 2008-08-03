@@ -33,6 +33,8 @@ class PrivateFrame :
 	public AspectUserCommand<PrivateFrame>
 {
 	typedef MDIChildFrame<PrivateFrame> BaseType;
+	typedef AspectChat<PrivateFrame> ChatType;
+
 public:
 	enum Status {
 		STATUS_STATUS,
