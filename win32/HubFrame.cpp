@@ -74,7 +74,6 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	users(0),
 	client(0),
 	url(url_),
-	timeStamps(BOOLSETTING(TIME_STAMPS)),
 	updateUsers(false),
 	waitingForPW(false),
 	resort(false),
@@ -296,6 +295,10 @@ bool HubFrame::enter() {
 			if(!status.empty()) {
 				addStatus(status);
 			}
+		} else if(ChatType::checkCommand(cmd, param, status)) {
+			if(!status.empty()) {
+				addStatus(status);
+			}
 		} else if(Util::stricmp(cmd.c_str(), _T("join"))==0) {
 			if(!param.empty()) {
 				redirect = Text::fromT(param);
@@ -306,15 +309,6 @@ bool HubFrame::enter() {
 				}
 			} else {
 				addStatus(T_("Specify a server to connect to"));
-			}
-		} else if(Util::stricmp(cmd.c_str(), _T("clear")) == 0) {
-			clearChat(param);
-		} else if(Util::stricmp(cmd.c_str(), _T("ts")) == 0) {
-			timeStamps = !timeStamps;
-			if(timeStamps) {
-				addStatus(T_("Timestamps enabled"));
-			} else {
-				addStatus(T_("Timestamps disabled"));
 			}
 		} else if( (Util::stricmp(cmd.c_str(), _T("password")) == 0) && waitingForPW ) {
 			client->setPassword(Text::fromT(param));
@@ -361,7 +355,7 @@ bool HubFrame::enter() {
 			else if(Util::stricmp(param.c_str(), _T("status")) == 0)
 				openLog(true);
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /clear [lines to keep], /ts, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite"));
+			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
 			string::size_type j = param.find(_T(' '));
 			if(j != string::npos) {
@@ -413,23 +407,8 @@ void HubFrame::clearTaskList() {
 }
 
 void HubFrame::addChat(const tstring& aLine) {
-	tstring line;
-	if(timeStamps) {
-		line = Text::toT("\r\n[" + Util::getShortTimeString() + "] ");
-	} else {
-		line = _T("\r\n");
-	}
-	line += Text::toDOS(aLine);
+	ChatType::addChat(aLine);
 
-	bool scroll = chat->scrollIsAtEnd();
-	HoldRedraw hold(chat, !scroll);
-
-	size_t limit = chat->getTextLimit();
-	if(chat->length() + line.size() > limit) {
-		HoldRedraw hold2(chat, scroll);
-		chat->setSelection(0, chat->lineIndex(chat->lineFromChar(limit / 10)));
-		chat->replaceSelection(_T(""));
-	}
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {
 		StringMap params;
 		params["message"] = Text::fromT(aLine);
@@ -438,10 +417,6 @@ void HubFrame::addChat(const tstring& aLine) {
 		client->getMyIdentity().getParams(params, "my", true);
 		LOG(LogManager::CHAT, params);
 	}
-	chat->addText(line);
-
-	if(scroll)
-		chat->sendMessage(WM_VSCROLL, SB_BOTTOM);
 
 	WinUtil::playSound(SettingsManager::SOUND_MAIN_CHAT);
 	setDirty(SettingsManager::BOLD_HUB);

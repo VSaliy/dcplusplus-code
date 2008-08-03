@@ -40,6 +40,7 @@ class HubFrame :
 	public AspectUserCommand<HubFrame>
 {
 	typedef MDIChildFrame<HubFrame> BaseType;
+	typedef AspectChat<HubFrame> ChatType;
 	friend class MDIChildFrame<HubFrame>;
 	friend class AspectUserInfo<HubFrame>;
 	friend class AspectUserCommand<HubFrame>;
@@ -147,7 +148,6 @@ private:
 	Client* client;
 	string url;
 	string redirect;
-	bool timeStamps;
 	bool updateUsers;
 	bool waitingForPW;
 	bool resort;

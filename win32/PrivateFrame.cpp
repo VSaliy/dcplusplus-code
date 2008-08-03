@@ -125,23 +125,8 @@ PrivateFrame::~PrivateFrame() {
 }
 
 void PrivateFrame::addChat(const tstring& aLine, bool log) {
-	tstring line;
-	if(BOOLSETTING(TIME_STAMPS)) {
-		line = Text::toT("\r\n[" + Util::getShortTimeString() + "] ");
-	} else {
-		line = _T("\r\n");
-	}
-	line += aLine;
+	ChatType::addChat(aLine);
 
-	bool scroll = chat->scrollIsAtEnd();
-	HoldRedraw hold(chat, !scroll);
-
-	size_t limit = chat->getTextLimit();
-	if(chat->length() + line.size() > limit) {
-		HoldRedraw hold2(chat, scroll);
-		chat->setSelection(0, chat->lineIndex(chat->lineFromChar(limit / 10)));
-		chat->replaceSelection(_T(""));
-	}
 	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		StringMap params;
 		params["message"] = Text::fromT(aLine);
@@ -152,10 +137,6 @@ void PrivateFrame::addChat(const tstring& aLine, bool log) {
 		params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
 		LOG(LogManager::PM, params);
 	}
-	chat->addText(line);
-
-	if(scroll)
-		chat->sendMessage(WM_VSCROLL, SB_BOTTOM);
 
 	setDirty(SettingsManager::BOLD_PM);
 }
@@ -283,8 +264,10 @@ bool PrivateFrame::enter() {
 			if(!status.empty()) {
 				addStatus(status);
 			}
-		} else if(Util::stricmp(cmd.c_str(), _T("clear")) == 0) {
-			clearChat(param);
+		} else if(ChatType::checkCommand(cmd, param, status)) {
+			if(!status.empty()) {
+				addStatus(status);
+			}
 		} else if(Util::stricmp(cmd.c_str(), _T("grant")) == 0) {
 			UploadManager::getInstance()->reserveSlot(replyTo);
 			addStatus(T_("Slot granted"));
@@ -298,7 +281,7 @@ bool PrivateFrame::enter() {
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addStatus(_T("*** ") + WinUtil::commands + _T(", /getlist, /clear [lines to keep], /grant, /close, /favorite, /log <system, downloads, uploads>"));
+			addStatus(_T("*** ") + WinUtil::commands + _T(", /getlist, /grant, /close, /favorite, /log <system, downloads, uploads>"));
 		} else {
 			send = true;
 		}
