@@ -35,6 +35,8 @@ class PrivateFrame :
 	typedef MDIChildFrame<PrivateFrame> BaseType;
 	typedef AspectChat<PrivateFrame> ChatType;
 
+	friend class AspectChat<PrivateFrame>;
+
 public:
 	enum Status {
 		STATUS_STATUS,
@@ -70,8 +72,6 @@ private:
 	void handleMatchQueue();
 
 	bool handleChar(int c);
-	bool handleKeyDown(int c);
-	bool enter();
 
 	void openLog();
 	void readLog();
@@ -80,6 +80,9 @@ private:
 	void updateTitle();
 
 	void runUserCommand(const UserCommand& uc);
+
+	// AspectChat
+	void enterImpl(const tstring& s);
 
 	// ClientManagerListener
 	virtual void on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw();

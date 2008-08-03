@@ -87,8 +87,8 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 
 	message->setHelpId(IDH_PM_MESSAGE);
 	addWidget(message, true);
-	message->onKeyDown(std::tr1::bind(&PrivateFrame::handleKeyDown, this, _1));
-	message->onSysKeyDown(std::tr1::bind(&PrivateFrame::handleKeyDown, this, _1));
+	message->onKeyDown(std::tr1::bind(&PrivateFrame::handleMessageKeyDown, this, _1));
+	message->onSysKeyDown(std::tr1::bind(&PrivateFrame::handleMessageKeyDown, this, _1));
 	message->onChar(std::tr1::bind(&PrivateFrame::handleChar, this, _1));
 
 	initStatus();
@@ -225,11 +225,7 @@ bool PrivateFrame::handleChar(int c) {
 	return false;
 }
 
-bool PrivateFrame::enter() {
-	tstring s;
-	if(!ChatType::enter(s))
-		return false;
-
+void PrivateFrame::enterImpl(const tstring& s) {
 	bool resetText = true;
 	bool send = false;
 	// Process special commands
@@ -282,20 +278,10 @@ bool PrivateFrame::enter() {
 	if(resetText) {
 		message->setText(Util::emptyStringT);
 	}
-	return true;
-
 }
 
 void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
 	ClientManager::getInstance()->privateMessage(replyTo, Text::fromT(msg), thirdPerson);
-}
-
-bool PrivateFrame::handleKeyDown(int c) {
-	if(c == VK_RETURN && enter()) {
-		return true;
-	}
-
-	return ChatType::handleMessageKeyDown(c);
 }
 
 void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {

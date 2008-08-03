@@ -103,29 +103,30 @@ protected:
 		return true;
 	}
 
-	bool enter(tstring& s) {
-		if(t().isShiftPressed() || t().isControlPressed() || t().isAltPressed()) {
-			return false;
-		}
-		s = message->getText();
-		if(s.empty()) {
-			::MessageBeep(MB_ICONEXCLAMATION);
-			return false;
-		}
-
-		// save command in history, reset current buffer pointer to the newest command
-		curCommandPosition = prevCommands.size();		//this places it one position beyond a legal subscript
-		if (curCommandPosition == 0 || (curCommandPosition > 0 && prevCommands[curCommandPosition - 1] != s)) {
-			++curCommandPosition;
-			prevCommands.push_back(s);
-		}
-		currentCommand = _T("");
-
-		return true;
-	}
-
 	bool handleMessageKeyDown(int c) {
 		switch(c) {
+		case VK_RETURN: {
+			if(t().isShiftPressed() || t().isControlPressed() || t().isAltPressed()) {
+				return false;
+			}
+			tstring s = message->getText();
+			if(s.empty()) {
+				::MessageBeep(MB_ICONEXCLAMATION);
+				return false;
+			}
+
+			// save command in history, reset current buffer pointer to the newest command
+			curCommandPosition = prevCommands.size();		//this places it one position beyond a legal subscript
+			if (curCommandPosition == 0 || (curCommandPosition > 0 && prevCommands[curCommandPosition - 1] != s)) {
+				++curCommandPosition;
+				prevCommands.push_back(s);
+			}
+			currentCommand = _T("");
+
+			t().enterImpl(s);
+
+			return true;
+		}
 		case VK_UP:
 			if ( historyActive() ) {
 				//scroll up in chat command history
