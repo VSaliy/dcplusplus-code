@@ -25,13 +25,29 @@ template<typename T>
 class AspectChat {
 	typedef AspectChat<T> ThisType;
 
+	T& t() { return *static_cast<T*>(this); }
+	const T& t() const { return *static_cast<const T*>(this); }
+
 protected:
 	AspectChat() :
 	chat(0),
 	message(0),
 	timeStamps(BOOLSETTING(TIME_STAMPS))
 	{
+		{
+			TextBox::Seed cs = WinUtil::Seeds::textBox;
+			cs.style |= WS_VSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
+			chat = t().addChild(cs);
+			chat->setTextLimit(0);
+		}
+
+		{
+			TextBox::Seed cs = WinUtil::Seeds::textBox;
+			cs.style |= WS_VSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE;
+			message = t().addChild(cs);
+		}
 	}
+
 	virtual ~AspectChat() { }
 
 	void addChat(const tstring& aLine) {

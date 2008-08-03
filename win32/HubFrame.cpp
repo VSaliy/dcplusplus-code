@@ -85,17 +85,17 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 {
 	paned = addChild(WidgetVPaned::Seed(0.7));
 
-	{
-		TextBox::Seed cs = WinUtil::Seeds::textBox;
-		cs.style |= WS_VSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE;
-		message = addChild(cs);
-		message->setHelpId(IDH_HUB_MESSAGE);
-		addWidget(message, true, false);
-		message->onRaw(std::tr1::bind(&HubFrame::handleMessageGetDlgCode, this), dwt::Message(WM_GETDLGCODE));
-		message->onKeyDown(std::tr1::bind(&HubFrame::handleMessageKeyDown, this, _1));
-		message->onSysKeyDown(std::tr1::bind(&HubFrame::handleMessageKeyDown, this, _1));
-		message->onChar(std::tr1::bind(&HubFrame::handleMessageChar, this, _1));
-	}
+	chat->setHelpId(IDH_HUB_CHAT);
+	addWidget(chat);
+	paned->setFirst(chat);
+	chat->onContextMenu(std::tr1::bind(&HubFrame::handleChatContextMenu, this, _1));
+
+	message->setHelpId(IDH_HUB_MESSAGE);
+	addWidget(message, true, false);
+	message->onRaw(std::tr1::bind(&HubFrame::handleMessageGetDlgCode, this), dwt::Message(WM_GETDLGCODE));
+	message->onKeyDown(std::tr1::bind(&HubFrame::handleMessageKeyDown, this, _1));
+	message->onSysKeyDown(std::tr1::bind(&HubFrame::handleMessageKeyDown, this, _1));
+	message->onChar(std::tr1::bind(&HubFrame::handleMessageChar, this, _1));
 
 	{
 		TextBox::Seed cs = WinUtil::Seeds::textBox;
@@ -132,17 +132,6 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 		users->onDblClicked(std::tr1::bind(&HubFrame::handleDoubleClickUsers, this));
 		users->onKeyDown(std::tr1::bind(&HubFrame::handleUsersKeyDown, this, _1));
 		users->onContextMenu(std::tr1::bind(&HubFrame::handleUsersContextMenu, this, _1));
-	}
-
-	{
-		TextBox::Seed cs = WinUtil::Seeds::textBox;
-		cs.style |= WS_VSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
-		chat = addChild(cs);
-		chat->setHelpId(IDH_HUB_CHAT);
-		chat->setTextLimit(0);
-		addWidget(chat);
-		paned->setFirst(chat);
-		chat->onContextMenu(std::tr1::bind(&HubFrame::handleChatContextMenu, this, _1));
 	}
 
 	{
