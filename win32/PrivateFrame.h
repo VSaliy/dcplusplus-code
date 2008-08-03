@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_PRIVATE_FRAME_H
 
 #include "MDIChildFrame.h"
+#include "AspectChat.h"
 #include "AspectUserCommand.h"
 
 #include <dcpp/ClientManagerListener.h>
@@ -28,6 +29,7 @@
 class PrivateFrame :
 	public MDIChildFrame<PrivateFrame>,
 	private ClientManagerListener,
+	public AspectChat<PrivateFrame>,
 	public AspectUserCommand<PrivateFrame>
 {
 	typedef MDIChildFrame<PrivateFrame> BaseType;
@@ -48,9 +50,6 @@ public:
 private:
 	friend class MDIChildFrame<PrivateFrame>;
 	friend class AspectUserCommand<PrivateFrame>;
-
-	TextBoxPtr chat;
-	TextBoxPtr message;
 
 	StringMap ucLineParams;
 	UserPtr replyTo;

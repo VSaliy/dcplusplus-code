@@ -82,8 +82,6 @@ void PrivateFrame::closeAllOffline() {
 
 PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate) :
 	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
-	chat(0),
-	message(0),
 	replyTo(replyTo_)
 {
 	{
@@ -286,18 +284,7 @@ bool PrivateFrame::enter() {
 				addStatus(status);
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("clear")) == 0) {
-			unsigned linesToKeep = 0;
-			if(!param.empty())
-				linesToKeep = Util::toInt(Text::fromT(param));
-			if(linesToKeep) {
-				unsigned lineCount = chat->getLineCount();
-				if(linesToKeep < lineCount) {
-					HoldRedraw hold(chat);
-					chat->setSelection(0, chat->lineIndex(lineCount - linesToKeep));
-					chat->replaceSelection(_T(""));
-				}
-			} else
-				chat->setText(_T(""));
+			clearChat(param);
 		} else if(Util::stricmp(cmd.c_str(), _T("grant")) == 0) {
 			UploadManager::getInstance()->reserveSlot(replyTo);
 			addStatus(T_("Slot granted"));
