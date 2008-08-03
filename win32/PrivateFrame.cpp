@@ -84,24 +84,13 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
 	replyTo(replyTo_)
 {
-	{
-		TextBox::Seed cs = WinUtil::Seeds::textBox;
-		cs.style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE;
-		message = addChild(cs);
-		message->setHelpId(IDH_PM_MESSAGE);
-		addWidget(message, true);
-		message->onKeyDown(std::tr1::bind(&PrivateFrame::handleKeyDown, this, _1));
-		message->onChar(std::tr1::bind(&PrivateFrame::handleChar, this, _1));
-	}
+	chat->setHelpId(IDH_PM_CHAT);
+	addWidget(chat);
 
-	{
-		TextBox::Seed cs = WinUtil::Seeds::textBox;
-		cs.style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
-		chat = addChild(cs);
-		chat->setHelpId(IDH_PM_CHAT);
-		chat->setTextLimit(0);
-		addWidget(chat);
-	}
+	message->setHelpId(IDH_PM_MESSAGE);
+	addWidget(message, true);
+	message->onKeyDown(std::tr1::bind(&PrivateFrame::handleKeyDown, this, _1));
+	message->onChar(std::tr1::bind(&PrivateFrame::handleChar, this, _1));
 
 	initStatus();
 	status->onDblClicked(std::tr1::bind(&PrivateFrame::openLog, this));
