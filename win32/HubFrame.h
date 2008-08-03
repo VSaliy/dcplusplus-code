@@ -156,10 +156,6 @@ private:
 
 	TaskQueue tasks; // todo get rid of TaskQueue
 
-	TStringList prevCommands;
-	tstring currentCommand;
-	TStringList::size_type curCommandPosition;		//can't use an iterator because StringList is a vector, and vector iterators become invalid after resizing
-
 	tstring filterString;
 
 	StringMap ucLineParams;
@@ -208,7 +204,6 @@ private:
 
 	void addAsFavorite();
 	void removeFavoriteHub();
-	bool historyActive();
 
 	void runUserCommand(const UserCommand& uc);
 

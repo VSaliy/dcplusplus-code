@@ -31,8 +31,6 @@
 #include <dcpp/QueueItem.h>
 #include <dcpp/QueueManager.h>
 
-#include <mmsystem.h>
-
 PrivateFrame::FrameMap PrivateFrame::frames;
 
 void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, const tstring& msg) {
@@ -90,6 +88,7 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 	message->setHelpId(IDH_PM_MESSAGE);
 	addWidget(message, true);
 	message->onKeyDown(std::tr1::bind(&PrivateFrame::handleKeyDown, this, _1));
+	message->onSysKeyDown(std::tr1::bind(&PrivateFrame::handleKeyDown, this, _1));
 	message->onChar(std::tr1::bind(&PrivateFrame::handleChar, this, _1));
 
 	initStatus();
@@ -227,15 +226,9 @@ bool PrivateFrame::handleChar(int c) {
 }
 
 bool PrivateFrame::enter() {
-	if(isShiftPressed() || isControlPressed() || isAltPressed()) {
+	tstring s;
+	if(!ChatType::enter(s))
 		return false;
-	}
-
-	tstring s = message->getText();
-	if(s.empty()) {
-		::MessageBeep(MB_ICONEXCLAMATION);
-		return false;
-	}
 
 	bool resetText = true;
 	bool send = false;
@@ -300,15 +293,9 @@ void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
 bool PrivateFrame::handleKeyDown(int c) {
 	if(c == VK_RETURN && enter()) {
 		return true;
-	} else if(c == VK_PRIOR) { // page up
-		chat->sendMessage(WM_VSCROLL, SB_PAGEUP);
-		return true;
-	} else if(c == VK_NEXT) { // page down
-		chat->sendMessage(WM_VSCROLL, SB_PAGEDOWN);
-		return true;
 	}
 
-	return false;
+	return ChatType::handleMessageKeyDown(c);
 }
 
 void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
