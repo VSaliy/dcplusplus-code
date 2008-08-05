@@ -346,7 +346,7 @@ void MainWindow::initStatusBar() {
 	status->onDblClicked(std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
 
 	statusSizes[STATUS_AWAY] = status->getTextSize(T_("AWAY")).x + 12;
-	statusSizes[STATUS_SLOTS_SPIN] = 20;
+	statusSizes[STATUS_SLOTS_SPIN] = 22;
 	///@todo set to checkbox width + resizedrag width really
 	statusSizes[STATUS_DUMMY] = 32;
 
@@ -572,9 +572,13 @@ void MainWindow::layout() {
 	r.size.y -= pt.y;
 
 	layoutStatus(r);
-	mapWidget(STATUS_SLOTS_SPIN, slotsSpin);
+	layoutSlotsSpin();
 
 	paned->setRect(r);
+}
+
+void MainWindow::layoutSlotsSpin() {
+	mapWidget(STATUS_SLOTS_SPIN, slotsSpin, dwt::Rectangle(0, 1, 3, 2));
 }
 
 LRESULT MainWindow::handleWhereAreYou() {
@@ -610,7 +614,7 @@ void MainWindow::updateStatus() {
 	setStatus(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % Text::toT(Util::formatBytes((updiff*1000)/tdiff)) % UploadManager::getInstance()->getUploadCount()), false);
 	if(statusNeedsLayout) {
 		layoutSections(status->getSize());
-		mapWidget(STATUS_SLOTS_SPIN, slotsSpin);
+		layoutSlotsSpin();
 		statusNeedsLayout = false;
 	}
 }

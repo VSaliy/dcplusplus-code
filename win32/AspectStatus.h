@@ -104,11 +104,16 @@ protected:
 	}
 
 	template<typename A>
-	void mapWidget(int s, dwt::AspectSizable<A>* widget) {
+	void mapWidget(int s, dwt::AspectSizable<A>* widget, const dwt::Rectangle& padding = dwt::Rectangle(0, 0, 0, 0)) {
 		POINT p[2];
 		status->sendMessage(SB_GETRECT, s, reinterpret_cast<LPARAM>(p));
 		::MapWindowPoints(status->handle(), H(), (POINT*)p, 2);
-		widget->setBounds(p[0].x, p[0].y, p[1].x - p[0].x, p[1].y - p[0].y);
+		widget->setBounds(
+			p[0].x + padding.left(),
+			p[0].y + padding.top(),
+			p[1].x - p[0].x - padding.right(),
+			p[1].y - p[0].y - padding.bottom()
+			);
 	}
 
 	dwt::StatusBarPtr status;

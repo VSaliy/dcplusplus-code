@@ -161,6 +161,7 @@ private:
 	void handleTrayUpdate();
 
 	void layout();
+	void layoutSlotsSpin();
 	bool eachSecond();
 	void updateStatus();
 	void autoConnect();
