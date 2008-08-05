@@ -73,6 +73,7 @@ private:
 
 	void openLog();
 	void readLog();
+	void fillLogParams(StringMap& params);
 	void addChat(const tstring& aLine, bool log = true);
 	void addStatus(const tstring& aLine, bool log = true);
 	void updateTitle();

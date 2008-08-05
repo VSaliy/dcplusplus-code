@@ -118,11 +118,7 @@ void PrivateFrame::addChat(const tstring& aLine, bool log) {
 	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		StringMap params;
 		params["message"] = Text::fromT(aLine);
-		params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo->getCID()));
-		params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo->getCID()));
-		params["userCID"] = replyTo->getCID().toBase32();
-		params["userNI"] = ClientManager::getInstance()->getNicks(replyTo->getCID())[0];
-		params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
+		fillLogParams(params);
 		LOG(LogManager::PM, params);
 	}
 
@@ -145,11 +141,7 @@ bool PrivateFrame::preClosing() {
 
 void PrivateFrame::openLog() {
 	StringMap params;
-	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo->getCID()));
-	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo->getCID()));
-	params["userCID"] = replyTo->getCID().toBase32();
-	params["userNI"] = ClientManager::getInstance()->getNicks(replyTo->getCID())[0];
-	params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
+	fillLogParams(params);
 	WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::PM, params))));
 }
 
@@ -158,11 +150,7 @@ void PrivateFrame::readLog() {
 		return;
 
 	StringMap params;
-	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo->getCID()));
-	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo->getCID()));
-	params["userCID"] = replyTo->getCID().toBase32();
-	params["userNI"] = ClientManager::getInstance()->getNicks(replyTo->getCID())[0];
-	params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
+	fillLogParams(params);
 	string path = Util::validateFileName(LogManager::getInstance()->getPath(LogManager::PM, params));
 
 	StringList lines;
@@ -188,6 +176,14 @@ void PrivateFrame::readLog() {
 	for(size_t i = std::max(static_cast<int>(linesCount) - SETTING(SHOW_LAST_LINES_LOG), 0); i < linesCount; ++i) {
 		addStatus(_T("- ") + Text::toT(lines[i]), false);
 	}
+}
+
+void PrivateFrame::fillLogParams(StringMap& params) {
+	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo->getCID()));
+	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo->getCID()));
+	params["userCID"] = replyTo->getCID().toBase32();
+	params["userNI"] = ClientManager::getInstance()->getNicks(replyTo->getCID())[0];
+	params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
 }
 
 void PrivateFrame::layout() {
