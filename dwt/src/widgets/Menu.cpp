@@ -116,24 +116,18 @@ void Menu::attach(HMENU hMenu, const Seed& cs) {
 
 	itsHandle = hMenu;
 
-	{
-		// set the MNS_NOTIFYBYPOS style to the whole menu
-		MENUINFO mi = { sizeof(MENUINFO), MIM_STYLE };
-		if(::GetMenuInfo(itsHandle, &mi)) {
-			mi.dwStyle |= MNS_NOTIFYBYPOS;
-			if(!::SetMenuInfo(itsHandle, &mi))
-				throw Win32Exception("SetMenuInfo in Menu::attach fizzled...");
-		} else
-			throw Win32Exception("GetMenuInfo in Menu::attach fizzled...");
-	}
-
 	if(ownerDrawn) {
 		// update all current items to be owner-drawn
-		// @todo update sub-menus too...
 		const unsigned count = getCount();
 		for(size_t i = 0; i < count; ++i) {
-			MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_FTYPE | MIIM_DATA };
+			MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_FTYPE | MIIM_SUBMENU | MIIM_DATA };
 			if(::GetMenuItemInfo(itsHandle, i, TRUE, &info)) {
+				if(info.hSubMenu) {
+					ObjectType subMenu(new Menu(itsParent));
+					subMenu->attach(info.hSubMenu, cs);
+					itsChildren.push_back(subMenu);
+				}
+
 				info.fMask |= MIIM_DATA;
 				info.fType |= MFT_OWNERDRAW;
 
