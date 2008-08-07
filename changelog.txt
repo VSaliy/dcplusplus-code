@@ -38,6 +38,7 @@
 * Fix crash with the "unable to open ports" message (poy)
 * Add an optional param to the /clear command that specifies the number of lines to keep (poy)
 * Add line history and /ts in private message windows, just like in hub windows (poy)
+* [L#255370] Fix "View as text" in own file list (thanks emtee)
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice

@@ -144,6 +144,9 @@ public:
 	string getPath(const Directory* d) const;
 	string getPath(const File* f) const { return getPath(f->getParent()); }
 
+	/** returns the local path to the file when browsing own file list */
+	string getLocalPath(const File* f) const;
+
 	int64_t getTotalSize(bool adls = false) { return root->getTotalSize(adls); }
 	size_t getTotalFileCount(bool adls = false) { return root->getTotalFileCount(adls); }
 

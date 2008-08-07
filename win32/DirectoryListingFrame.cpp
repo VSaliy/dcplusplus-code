@@ -20,6 +20,7 @@
 
 #include "DirectoryListingFrame.h"
 #include "LineDlg.h"
+#include "TextFrame.h"
 #include "HoldRedraw.h"
 #include "ShellContextMenu.h"
 
@@ -31,7 +32,6 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/StringSearch.h>
 #include <dcpp/ClientManager.h>
-#include <dcpp/ShareManager.h>
 
 static const ColumnInfo filesColumns[] = {
 	{ N_("File"), 300, false },
@@ -399,16 +399,10 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 
 			menu = makeSingleMenu(ii);
 
-			if(dl->getUser() == ClientManager::getInstance()->getMe() && ii->type == ItemInfo::FILE) {
-				string path;
-				try {
-					path = ShareManager::getInstance()->toReal(Util::toAdcFile(dl->getPath(ii->file) + ii->file->getName()));
-				} catch(const ShareException&) {
-					// Ignore
-				}
-				if(!path.empty() && (File::getSize(path) != -1)) {
-					shellMenu = new CShellContextMenu(menu, Text::utf8ToWide(path));
-				}
+			if(ii->type == ItemInfo::FILE) {
+				string localPath = dl->getLocalPath(ii->file);
+				if(!localPath.empty())
+					shellMenu = new CShellContextMenu(menu, Text::utf8ToWide(localPath));
 			}
 		} else {
 			menu = makeMultiMenu();
@@ -443,9 +437,16 @@ bool DirectoryListingFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 
 void DirectoryListingFrame::downloadFiles(const string& aTarget, bool view /* = false */) {
 	int i=-1;
-
-	while( (i = files->getNext(i, LVNI_SELECTED)) != -1) {
-		download(files->getData(i), aTarget, view);
+	while((i = files->getNext(i, LVNI_SELECTED)) != -1) {
+		ItemInfo* ii = files->getData(i);
+		if(view) {
+			string localPath = dl->getLocalPath(ii->file);
+			if(!localPath.empty()) {
+				TextFrame::openWindow(this->getParent(), localPath);
+				continue;
+			}
+		}
+		download(ii, aTarget, view);
 	}
 }
 
