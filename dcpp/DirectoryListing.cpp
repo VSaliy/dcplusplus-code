@@ -29,6 +29,7 @@
 #include "FilteredFile.h"
 #include "BZUtils.h"
 #include "CryptoManager.h"
+#include "ShareManager.h"
 
 #ifdef ff
 #undef ff
@@ -242,6 +243,22 @@ string DirectoryListing::getPath(const Directory* d) const {
 		cur = cur->getParent();
 	}
 	return dir;
+}
+
+string DirectoryListing::getLocalPath(const File* f) const {
+	if(getUser() == ClientManager::getInstance()->getMe()) {
+		string path;
+		try {
+			path = ShareManager::getInstance()->toReal(Util::toAdcFile(getPath(f) + f->getName()));
+		} catch(const ShareException&) {
+			// Ignore
+		}
+		if(!path.empty() && (dcpp::File::getSize(path) != -1)) {
+			return path;
+		}
+	}
+
+	return string();
 }
 
 void DirectoryListing::download(Directory* aDir, const string& aTarget, bool highPrio) {
