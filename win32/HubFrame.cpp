@@ -155,7 +155,6 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 
 	initSecond();
 
-	onTabContextMenu(std::tr1::bind(&HubFrame::handleTabContextMenu, this, _1));
 	onCommand(std::tr1::bind(&HubFrame::handleReconnect, this), IDC_RECONNECT);
 	onCommand(std::tr1::bind(&HubFrame::handleFollow, this), IDC_FOLLOW);
 
@@ -1025,26 +1024,19 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 	return false;
 }
 
-bool HubFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-
-	menu->setTitle(getParent()->getTabText(this));
-
+void HubFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 	if(!FavoriteManager::getInstance()->isFavoriteHub(url)) {
-		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&HubFrame::addAsFavorite, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_HUBS)));
+		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&HubFrame::addAsFavorite, this), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
 	}
 
-	menu->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&HubFrame::handleReconnect, this), dwt::BitmapPtr(new dwt::Bitmap(IDB_RECONNECT)));
+	menu->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&HubFrame::handleReconnect, this), dwt::IconPtr(new dwt::Icon(IDR_RECONNECT)));
 	menu->appendItem(T_("Copy &address to clipboard"), std::tr1::bind(&HubFrame::handleCopyHub, this));
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
+
 	menu->appendSeparator();
-	menu->appendItem(T_("&Close"), std::tr1::bind(&HubFrame::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
 
 	inTabMenu = true;
-
-	menu->open(pt);
-	return true;
 }
 
 void HubFrame::handleShowUsersClicked() {

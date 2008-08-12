@@ -33,7 +33,6 @@
 #define DWT_ACCELERATOR_H_
 
 #include "Handle.h"
-#include <boost/intrusive_ptr.hpp>
 
 namespace dwt {
 

@@ -39,14 +39,13 @@
 #include "../WindowsHeaders.h"
 #include "../tstring.h"
 #include "Handle.h"
-#include <boost/intrusive_ptr.hpp>
 
 namespace dwt {
 
-struct Point;
-
-// Forward declaration
+// Forward declarations
 class Bitmap;
+class Icon;
+struct Point;
 
 /// \ingroup GlobalStuff
 /// Bitmap pointer
@@ -91,6 +90,9 @@ public:
 	  * </ul>
 	  */
 	explicit Bitmap( const tstring & filePath, unsigned flags = LR_CREATEDIBSECTION );
+
+	/** create a Bitmap from an Icon */
+	static BitmapPtr fromIcon(const Icon& icon);
 
 	/// @deprecated, use handle
 	HBITMAP getBitmap() const;

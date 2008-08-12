@@ -38,7 +38,6 @@
 
 #include "../WindowsHeaders.h"
 #include "Handle.h"
-#include <boost/intrusive_ptr.hpp>
 
 namespace dwt {
 

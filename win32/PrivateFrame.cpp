@@ -99,8 +99,6 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 
 	readLog();
 
-	onTabContextMenu(std::tr1::bind(&PrivateFrame::handleTabContextMenu, this, _1));
-
 	ClientManager::getInstance()->addListener(this);
 
 	dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
@@ -284,23 +282,16 @@ void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aU
 		dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 
-bool PrivateFrame::handleTabContextMenu(const dwt::ScreenCoordinate& pt) {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-
-	menu->setTitle(getParent()->getTabText(this));
-
+void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 	menu->appendItem(T_("&Get file list"), std::tr1::bind(&PrivateFrame::handleGetList, this));
 	menu->appendItem(T_("&Match queue"), std::tr1::bind(&PrivateFrame::handleMatchQueue, this));
 	menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), replyTo));
 	if(!FavoriteManager::getInstance()->isFavoriteUser(replyTo))
-		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), replyTo), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
+		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), replyTo), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
 
 	prepareMenu(menu, UserCommand::CONTEXT_CHAT, ClientManager::getInstance()->getHubs(replyTo->getCID()));
-	menu->appendSeparator();
-	menu->appendItem(T_("&Close"), std::tr1::bind(&PrivateFrame::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
 
-	menu->open(pt);
-	return true;
+	menu->appendSeparator();
 }
 
 void PrivateFrame::runUserCommand(const UserCommand& uc) {

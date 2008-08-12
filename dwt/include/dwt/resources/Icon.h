@@ -37,6 +37,7 @@
 #define DWT_Icon_h
 
 #include "../WindowsHeaders.h"
+#include "../Point.h"
 #include "../tstring.h"
 #include "Handle.h"
 
@@ -67,21 +68,23 @@ public:
 	  * Class takes "control" of HICON meaning it will automatically free the
 	  * contained HICON upon destruction
 	  */
-	explicit Icon( HICON icon, bool own = true );
+	explicit Icon(HICON icon, bool own = true);
 
 	/// RAII Constructor loading a icon from a resource ID
 	/** Note! <br>
 	  * Class takes "control" of HICON meaning it will automatically free the
 	  * contained HICON upon destruction
+	  * @params size desired size, useful to pick up the correct image when the icon contains
+	  * multiple images. if 0, the system will figure out the size of the 1st image by itself.
 	  */
-	explicit Icon( unsigned resourceId );
+	explicit Icon(unsigned resourceId, const Point& size = Point(0, 0));
 
 	/// RAII Constructor loading a icon from a file on disc
 	/** Note! <br>
 	  * Class takes "control" of HICON meaning it will automatically free the
 	  * contained HICON upon destruction
 	  */
-	explicit Icon( const tstring & filePath );
+	explicit Icon(const tstring& filePath);
 
 	/// Deprecated, use handle()
 	HICON getIcon() const;

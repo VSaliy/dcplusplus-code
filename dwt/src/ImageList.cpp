@@ -78,8 +78,7 @@ void ImageList::add( const Icon & icon ) {
 }
 
 void ImageList::add(const ImageList& imageList, int image) {
-	Icon icon(ImageList_GetIcon(imageList.handle(), image, ILD_TRANSPARENT));
-	add(icon);
+	add(*imageList.getIcon(image));
 }
 
 void ImageList::add( const ImageList& imageList )
@@ -113,6 +112,10 @@ int ImageList::size() const
 
 int ImageList::getImageCount() const {
 	return size();
+}
+
+IconPtr ImageList::getIcon(unsigned i) const {
+	return IconPtr(new Icon(ImageList_GetIcon(handle(), i, ILD_TRANSPARENT)));
 }
 
 void ImageList::setBkColor(COLORREF color) {

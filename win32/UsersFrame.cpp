@@ -33,7 +33,7 @@ static const ColumnInfo usersColumns[] = {
 };
 
 UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Favorite Users"), IDH_FAVUSERS, IDR_USERS),
+	BaseType(mdiParent, T_("Favorite Users"), IDH_FAVUSERS, IDR_FAVORITE_USERS),
 	users(0),
 	startup(true)
 {

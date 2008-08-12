@@ -42,7 +42,7 @@ protected:
 		alwaysSameFocus(false),
 		reallyClose(false)
 	{
-		dwt::IconPtr icon = resourceId ? dwt::IconPtr(new dwt::Icon(resourceId)) : dwt::IconPtr();
+		dwt::IconPtr icon = resourceId ? dwt::IconPtr(new dwt::Icon(resourceId, dwt::Point(16, 16))) : dwt::IconPtr();
 
 		typename ThisType::Seed cs;
 		cs.style &= ~WS_VISIBLE;
@@ -195,8 +195,12 @@ private:
 
 	bool handleContextMenu(const dwt::ScreenCoordinate& pt) {
 		dwt::Menu::ObjectType menu = addChild(WinUtil::Seeds::menu);
-		menu->setTitle(getParent()->getTabText(this));
-		menu->appendItem(T_("&Close"), std::tr1::bind(&ThisType::close, this, true), dwt::BitmapPtr(new dwt::Bitmap(IDB_EXIT)));
+
+		menu->setTitle(getParent()->getTabText(this), getParent()->getTabIcon(this));
+
+		tabMenuImpl(menu);
+		menu->appendItem(T_("&Close"), std::tr1::bind(&ThisType::close, this, true), dwt::IconPtr(new dwt::Icon(IDR_EXIT)));
+
 		menu->open(pt);
 		return true;
 	}
@@ -215,6 +219,10 @@ private:
 			return false;
 		}
 		return false;
+	}
+
+	virtual void tabMenuImpl(dwt::MenuPtr& menu) {
+		// empty on purpose; implement this in the derived class to modify the tab menu.
 	}
 };
 

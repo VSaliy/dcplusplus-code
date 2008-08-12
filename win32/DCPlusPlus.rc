@@ -29,32 +29,11 @@ END
 // Bitmap
 //
 
-IDB_ADL_SEARCH          BITMAP                  "res/menu/ADLSearch.bmp"
 IDB_ARROWS              BITMAP                  "res/arrows.bmp"
-IDB_DCPP                BITMAP                  "res/menu/DCPlusPlus.bmp"
-IDB_DL_QUEUE            BITMAP                  "res/menu/DLQueue.bmp"
-IDB_EXIT                BITMAP                  "res/menu/Exit.bmp"
-IDB_FAVORITE_HUBS       BITMAP                  "res/menu/FavoriteHubs.bmp"
-IDB_FAVORITE_USERS      BITMAP                  "res/menu/FavoriteUsers.bmp"
-IDB_FINISHED_DL         BITMAP                  "res/menu/FinishedDL.bmp"
-IDB_FINISHED_UL         BITMAP                  "res/menu/FinishedUL.bmp"
 IDB_FOLDERS             BITMAP                  "res/folders.bmp"
-IDB_FOLLOW              BITMAP                  "res/menu/Follow.bmp"
-IDB_HELP                BITMAP                  "res/menu/Help.bmp"
-IDB_HUB                 BITMAP                  "res/menu/Hub.bmp"
-IDB_NETWORK_STATS       BITMAP                  "res/menu/NetworkStats.bmp"
-IDB_NOTEPAD             BITMAP                  "res/menu/Notepad.bmp"
-IDB_OPEN_DL_DIR         BITMAP                  "res/menu/OpenDLDir.bmp"
-IDB_OPEN_FILE_LIST      BITMAP                  "res/menu/OpenFileList.bmp"
-IDB_PUBLIC_HUBS         BITMAP                  "res/menu/PublicHubs.bmp"
-IDB_RECONNECT           BITMAP                  "res/menu/Reconnect.bmp"
-IDB_SEARCH              BITMAP                  "res/menu/Search.bmp"
-IDB_SEARCH_SPY          BITMAP                  "res/menu/SearchSpy.bmp"
-IDB_SETTINGS            BITMAP                  "res/menu/Settings.bmp"
 IDB_TOOLBAR20           BITMAP                  "res/toolbar20.bmp"
 IDB_TOOLBAR20_HOT       BITMAP                  "res/toolbar20-highlight.bmp"
 IDB_USERS               BITMAP                  "res/users.bmp"
-IDB_WAITING_USERS       BITMAP                  "res/menu/WaitingUsers.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -63,10 +42,10 @@ IDB_WAITING_USERS       BITMAP                  "res/menu/WaitingUsers.bmp"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res/DCPlusPlus.ico"
+IDR_DCPP                ICON                    "res/DCPlusPlus.ico"
 IDR_PUBLICHUBS          ICON                    "res/PublicHubs.ico"
 IDR_SEARCH              ICON                    "res/Search.ico"
-IDR_FAVORITES           ICON                    "res/Favorites.ico"
+IDR_FAVORITE_HUBS       ICON                    "res/FavoriteHubs.ico"
 IDR_PRIVATE             ICON                    "res/UserOn.ico"
 IDR_DIRECTORY           ICON                    "res/Directory.ico"
 IDR_HUB                 ICON                    "res/HubOn.ico"
@@ -75,10 +54,10 @@ IDR_QUEUE               ICON                    "res/Queue.ico"
 IDR_FINISHED_DL         ICON                    "res/FinishedDL.ico"
 IDR_ADLSEARCH           ICON                    "res/ADLSearch.ico"
 IDR_FINISHED_UL         ICON                    "res/FinishedUL.ico"
-IDR_USERS               ICON                    "res/FavoriteUser.ico"
+IDR_FAVORITE_USERS      ICON                    "res/FavoriteUsers.ico"
 IDR_SPY                 ICON                    "res/SearchSpy.ico"
 IDR_NET_STATS           ICON                    "res/NetStats.ico"
-IDR_WAITING_USERS       ICON                    "res/wuicon.ico"
+IDR_WAITING_USERS       ICON                    "res/WaitingUsers.ico"
 IDR_MAGNET              ICON                    "res/Magnet.ico"
 IDR_HUB_OFF             ICON                    "res/HubOff.ico"
 IDR_PRIVATE_OFF         ICON                    "res/UserOff.ico"
@@ -86,6 +65,13 @@ IDR_FINISHED_DL_BY_FILE ICON                    "res/FinishedDLByFile.ico"
 IDR_FINISHED_UL_BY_FILE ICON                    "res/FinishedULByFile.ico"
 IDR_FINISHED_DL_BY_USER ICON                    "res/FinishedDLByUser.ico"
 IDR_FINISHED_UL_BY_USER ICON                    "res/FinishedULByUser.ico"
+IDR_EXIT                ICON                    "res/Exit.ico"
+IDR_FOLLOW              ICON                    "res/Follow.ico"
+IDR_HELP                ICON                    "res/Help.ico"
+IDR_OPEN_DL_DIR         ICON                    "res/OpenDLDir.ico"
+IDR_OPEN_FILE_LIST      ICON                    "res/OpenFileList.ico"
+IDR_RECONNECT           ICON                    "res/Reconnect.ico"
+IDR_SETTINGS            ICON                    "res/Settings.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -98,7 +84,7 @@ CAPTION "About"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,96,266,50,14
-    ICON            IDR_MAINFRAME,IDC_ABOUT_ICON,110,15,21,20
+    ICON            IDR_DCPP,IDC_ABOUT_ICON,110,15,21,20
     GROUPBOX        "",IDC_ABOUT_GROUP,7,7,229,102
     EDITTEXT        IDC_TTH,35,93,196,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER
     LTEXT           "TTH:",IDC_ABOUT_TTH,13,93,18,12
@@ -876,7 +862,7 @@ END
 // Accelerator
 //
 
-IDR_MAINFRAME ACCELERATORS 
+IDR_DCPP ACCELERATORS 
 BEGIN
     "1",            IDC_VIEW_TOOLBAR,        VIRTKEY, CONTROL, NOINVERT
     "2",            IDC_VIEW_STATUS_BAR,     VIRTKEY, CONTROL, NOINVERT
@@ -914,7 +900,7 @@ BEGIN
     "R",            IDC_REMOVE,             VIRTKEY, ALT, NOINVERT
 END
 
-IDR_FAVORITES ACCELERATORS 
+IDR_FAVORITE_HUBS ACCELERATORS 
 BEGIN
     "N",            IDC_ADD,                VIRTKEY, ALT, NOINVERT
     "P",            IDC_EDIT,               VIRTKEY, ALT, NOINVERT

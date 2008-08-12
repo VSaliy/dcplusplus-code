@@ -37,6 +37,7 @@
 
 #include <dwt/widgets/Menu.h>
 
+#include <dwt/resources/Bitmap.h>
 #include <dwt/resources/Brush.h>
 #include <dwt/resources/Pen.h>
 #include <dwt/DWTException.h>
@@ -53,7 +54,7 @@ const int Menu::textIconGap = 8;
 const int Menu::textBorderGap = 4;
 const int Menu::separatorHeight = 8;
 const int Menu::minSysMenuItemWidth = 130;
-Point Menu::defaultImageSize = Point( 16, 16 );
+const Point Menu::defaultImageSize = Point( 16, 16 );
 
 Menu::Seed::Seed(bool ownerDrawn_, const MenuColorInfo& colorInfo_, FontPtr font_) :
 popup(true),
@@ -152,7 +153,7 @@ void Menu::setMenu() {
 		throw Win32Exception("SetMenu in Menu::setMenu fizzled...");
 }
 
-Menu::ObjectType Menu::appendPopup(const Seed& cs, const tstring& text, const BitmapPtr& image) {
+Menu::ObjectType Menu::appendPopup(const Seed& cs, const tstring& text, const IconPtr& icon) {
 	// create popup menu pointer
 	ObjectType retVal ( new Menu(itsParent) );
 	retVal->create(cs);
@@ -176,7 +177,7 @@ Menu::ObjectType Menu::appendPopup(const Seed& cs, const tstring& text, const Bi
 		info.fType = MFT_OWNERDRAW;
 
 		// create item data
-		wrapper = new ItemDataWrapper( this, position, false, image );
+		wrapper = new ItemDataWrapper( this, position, false, icon );
 		info.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
 	}
 
@@ -229,7 +230,6 @@ void Menu::destroyItemDataWrapper( ItemDataWrapper * wrapper )
 void Menu::setTitleFont( FontPtr font )
 {
 	itsTitleFont = font;
-	setTitle( itsTitle, drawSidebar ); // Easy for now, should be refactored...
 }
 
 void Menu::clearTitle( bool clearSidebar /* = false */)
@@ -298,32 +298,25 @@ void Menu::setText(unsigned index, const tstring& text) {
 		dwtWin32DebugFail("Couldn't set item info in Menu::setText");
 }
 
-void Menu::setTitle( const tstring & title, bool drawSidebar /* = false */)
-{
+void Menu::setTitle(const tstring& title, const IconPtr& icon, bool drawSidebar /* = false */) {
 	if(!ownerDrawn)
 		return;
 
 	this->drawSidebar = drawSidebar;
-	const bool hasTitle = !itsTitle.empty();
 
-	// set its title
+	const bool hasTitle = !itsTitle.empty();
+	// set the new title
 	itsTitle = title;
 
-	if ( !drawSidebar )
-	{
+	if(!drawSidebar) {
 		// init struct for title info
-		MENUITEMINFO info = { sizeof( MENUITEMINFO ) };
-
-		// set flags
-		info.fMask = MIIM_STATE | MIIM_STRING | MIIM_FTYPE | MIIM_DATA;
-		info.fType = MFT_OWNERDRAW;
-		info.fState = MF_DISABLED;
+		MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_STATE | MIIM_STRING | MIIM_FTYPE | MIIM_DATA, MFT_OWNERDRAW, MF_DISABLED };
 
 		// set title text
 		info.dwTypeData = const_cast< LPTSTR >( title.c_str() );
 
-		// created info for title item
-		ItemDataWrapper * wrapper = new ItemDataWrapper( this, 0, true );
+		// create wrapper for title item
+		ItemDataWrapper * wrapper = new ItemDataWrapper(this, 0, true, icon);
 
 		// set item data
 		info.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
@@ -345,7 +338,7 @@ void Menu::setTitle( const tstring & title, bool drawSidebar /* = false */)
 bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 	// get item data wrapper
 	ItemDataWrapper * wrapper = reinterpret_cast< ItemDataWrapper * >( drawInfo->itemData );
-	dwtassert( wrapper != 0, "Unsupported menu item in handleDrawItem" );
+	dwtassert( wrapper != 0, "Unsupported menu item in Menu::handleDrawItem" );
 
 	// if processing menu bar
 	const bool isMenuBar = ::GetMenu( wrapper->menu->getParent()->handle() ) == wrapper->menu->handle();
@@ -354,10 +347,10 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_CHECKMARKS | MIIM_FTYPE | MIIM_DATA | MIIM_STATE | MIIM_STRING };
 
 	if ( ::GetMenuItemInfo( wrapper->menu->handle(), wrapper->index, TRUE, & info ) == FALSE )
-		throw Win32Exception ( "Couldn't get menu item info in drawItem()" );
+		throw Win32Exception ( "Couldn't get menu item info in Menu::handleDrawItem" );
 
 	// check if item is owner drawn
-	dwtassert( ( info.fType & MFT_OWNERDRAW ) != 0, _T( "Not a owner - drawn item in drawItem()" ) );
+	dwtassert( ( info.fType & MFT_OWNERDRAW ) != 0, _T( "Not an owner-drawn item in Menu::handleDrawItem" ) );
 
 	// get state info
 	bool isGrayed = ( drawInfo->itemState & ODS_GRAYED ) == ODS_GRAYED;
@@ -366,25 +359,18 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 	bool isSelected = ( drawInfo->itemState & ODS_SELECTED ) == ODS_SELECTED;
 	bool isHighlighted = ( drawInfo->itemState & ODS_HOTLIGHT ) == ODS_HOTLIGHT;
 
-	// this will contain item image
-	HBITMAP image = NULL;
+	// find item image
+	BitmapPtr image =
+		(info.hbmpChecked && info.hbmpUnchecked) ? BitmapPtr(new Bitmap(isChecked ? info.hbmpChecked : info.hbmpUnchecked)) :
+		wrapper->icon ? Bitmap::fromIcon(*wrapper->icon) :
+		BitmapPtr()
+		;
 
-	// if checked/unchecked image is avaiable
-	if ( ( info.hbmpChecked != NULL ) && ( info.hbmpUnchecked != NULL ) ) {
-		image = isChecked ? info.hbmpChecked : info.hbmpUnchecked;
-	} else if(wrapper->image) {// get normal image
-		image = wrapper->image->handle();
-	}
+	// find image size
+	Point imageSize = image ? image->getBitmapSize() : Point(0, 0);
 
-	// this will contain image size
-	Point imageSize(0, 0);
-	if(wrapper->image) {
-		// TODO and if we use hbmpChecked etc?
-		imageSize = wrapper->image->getBitmapSize();
-	}
-
-	if ( ( imageSize.x == 0 ) && ( imageSize.y == 0 ) ) // no image
-		imageSize = defaultImageSize; // set default image size
+	if(!imageSize.x || !imageSize.y)
+		imageSize = defaultImageSize; // 0-sized image; set default image size
 
 	// compute strip width
 	int stripWidth = imageSize.x + textIconGap;
@@ -517,71 +503,70 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 		int count = ::GetMenuString( wrapper->menu->handle(), wrapper->index, & buffer[0], length, MF_BYPOSITION );
 		tstring itemText( buffer.begin(), buffer.begin() + count );
 
-		// index will contain accelerator position
-		size_t index = itemText.find_last_of( _T( '\t' ) );
+		if(!itemText.empty()) {
+			// index will contain accelerator position
+			size_t index = itemText.find_last_of( _T( '\t' ) );
 
-		// split item text to draw accelerator correctly
-		tstring text = itemText.substr( 0, index );
+			// split item text to draw accelerator correctly
+			tstring text = itemText.substr( 0, index );
 
-		// get accelerator
-		tstring accelerator;
+			// get accelerator
+			tstring accelerator;
 
-		if ( index != itemText.npos )
-			accelerator = itemText.substr( index + 1 );
+			if ( index != itemText.npos )
+				accelerator = itemText.substr( index + 1 );
 
-		// set mode to transparent
-		bool oldMode = canvas.setBkMode( true );
+			// set mode to transparent
+			bool oldMode = canvas.setBkMode( true );
 
-		// select item text color
-		canvas.setTextColor(
-			isGrayed ? ::GetSysColor(COLOR_GRAYTEXT) :
-			wrapper->isTitle ? colorInfo.colorTitleText :
-			highlight ? colorInfo.colorHighlightText :
-			wrapper->textColor
-			);
+			// select item text color
+			canvas.setTextColor(
+				isGrayed ? ::GetSysColor(COLOR_GRAYTEXT) :
+				wrapper->isTitle ? colorInfo.colorTitleText :
+				highlight ? colorInfo.colorHighlightText :
+				wrapper->textColor
+				);
 
-		// Select item font
-		FontPtr font =
-			(wrapper->isTitle || (::GetMenuDefaultItem(wrapper->menu->handle(), TRUE, GMDI_USEDISABLED) == wrapper->index))
-			? wrapper->menu->itsTitleFont
-			: wrapper->menu->font;
+			// Select item font
+			FontPtr font =
+				(wrapper->isTitle || (::GetMenuDefaultItem(wrapper->menu->handle(), TRUE, GMDI_USEDISABLED) == wrapper->index))
+				? wrapper->menu->itsTitleFont
+				: wrapper->menu->font;
 
-		HGDIOBJ oldFont = ::SelectObject( canvas.handle(), font->handle() );
+			HGDIOBJ oldFont = ::SelectObject( canvas.handle(), font->handle() );
 
-		unsigned drawTextFormat = DT_VCENTER | DT_SINGLELINE;
-		if((drawInfo->itemState & ODS_NOACCEL) == ODS_NOACCEL)
-			drawTextFormat |= DT_HIDEPREFIX;
+			unsigned drawTextFormat = DT_VCENTER | DT_SINGLELINE;
+			if((drawInfo->itemState & ODS_NOACCEL) == ODS_NOACCEL)
+				drawTextFormat |= DT_HIDEPREFIX;
 
-		if ( !isMenuBar && !wrapper->isTitle && !itemText.empty() ) // if menu item
-		{
-			// compute text rectangle
-			Rectangle textRectangle( itemRectangle );
+			if(isMenuBar || wrapper->isTitle) {
+				Rectangle textRectangle( itemRectangle );
 
-			// adjust rectangle
-			textRectangle.pos.x += stripWidth + textIconGap;
-			textRectangle.size.x -= stripWidth + textIconGap + borderGap;
+				if(image) // has icon
+					textRectangle.pos.x += textIconGap;
 
-			canvas.drawText( text, textRectangle, DT_LEFT | drawTextFormat );
+				canvas.drawText( text, textRectangle, DT_CENTER | drawTextFormat );
+			} else {
+				// compute text rectangle
+				Rectangle textRectangle( itemRectangle );
 
-			// draw accelerator
-			if ( !accelerator.empty() )
-				canvas.drawText( accelerator, textRectangle, DT_RIGHT | drawTextFormat );
-		} // end if
-		else if ( !itemText.empty() ) // draw menu bar item text
-		{
-			Rectangle textRectangle( itemRectangle );
+				// adjust rectangle
+				textRectangle.pos.x += stripWidth + textIconGap;
+				textRectangle.size.x -= stripWidth + textIconGap + borderGap;
 
-			if ( image != NULL ) // has icon
-				textRectangle.pos.x += textIconGap;
+				canvas.drawText( text, textRectangle, DT_LEFT | drawTextFormat );
 
-			canvas.drawText( text, textRectangle, DT_CENTER | drawTextFormat );
-		} // end if
+				// draw accelerator
+				if ( !accelerator.empty() )
+					canvas.drawText( accelerator, textRectangle, DT_RIGHT | drawTextFormat );
+			}
 
-		// set back old font
-		::SelectObject( canvas.handle(), oldFont );
+			// set back old font
+			::SelectObject( canvas.handle(), oldFont );
 
-		// reset old mode
-		canvas.setBkMode( oldMode );
+			// reset old mode
+			canvas.setBkMode( oldMode );
+		}
 
 		// set up image rectangle
 		Rectangle imageRectangle( itemRectangle.pos, imageSize );
@@ -590,35 +575,8 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 		imageRectangle.pos.x += ( stripWidth - imageSize.x ) / 2;
 		imageRectangle.pos.y += ( itemRectangle.height() - imageSize.y ) / 2;
 
-		if ( image == NULL ) // drawing item without icon
-		{
-			if ( isChecked ) // needs checkmark
-			{
-				// draw the check mark or radio bullet
-				// prepare background
-				Brush brush( colorInfo.colorStrip );
-				canvas.fillRectangle( imageRectangle, brush );
-
-				// create memory DC and set bitmap on it
-				HDC memoryDC = ::CreateCompatibleDC( canvas.handle() );
-				HGDIOBJ old = ::SelectObject( memoryDC, ::CreateCompatibleBitmap( canvas.handle(), imageSize.x, imageSize.y ) );
-
-				// draw into memory
-				RECT rc( Rectangle( 0, 0, imageSize.x, imageSize.y ) );
-				::DrawFrameControl( memoryDC, & rc, DFC_MENU, ( info.fType & MFT_RADIOCHECK ) == 0 ? DFCS_MENUCHECK : DFCS_MENUBULLET );
-
-				const int adjustment = 2; // adjustment for mark to be in the center
-
-				// bit - blast into out canvas
-				::BitBlt( canvas.handle(), imageRectangle.left() + adjustment, imageRectangle.top(), imageSize.x, imageSize.y, memoryDC, 0, 0, SRCAND );
-
-				// delete memory dc
-				::DeleteObject( ::SelectObject( memoryDC, old ) );
-				::DeleteDC( memoryDC );
-			}
-		}
-		else // drawing item with icon
-		{
+		if(image) {
+			// draw icon
 			if ( isSelected && !isDisabled ) // if selected and active, then imitate icon shadow
 			{
 				// adjust icon position for later drawing
@@ -637,11 +595,34 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 
 			// draw normal icon
 			canvas.drawBitmap( image, imageRectangle, colorInfo.colorImageBackground, isGrayed );
+
+		} else if(isChecked) {
+			// draw the check mark or radio bullet
+			// prepare background
+			Brush brush( colorInfo.colorStrip );
+			canvas.fillRectangle( imageRectangle, brush );
+
+			// create memory DC and set bitmap on it
+			HDC memoryDC = ::CreateCompatibleDC( canvas.handle() );
+			HGDIOBJ old = ::SelectObject( memoryDC, ::CreateCompatibleBitmap( canvas.handle(), imageSize.x, imageSize.y ) );
+
+			// draw into memory
+			RECT rc( Rectangle( 0, 0, imageSize.x, imageSize.y ) );
+			::DrawFrameControl( memoryDC, & rc, DFC_MENU, ( info.fType & MFT_RADIOCHECK ) == 0 ? DFCS_MENUCHECK : DFCS_MENUBULLET );
+
+			const int adjustment = 2; // adjustment for mark to be in the center
+
+			// bit - blast into out canvas
+			::BitBlt( canvas.handle(), imageRectangle.left() + adjustment, imageRectangle.top(), imageSize.x, imageSize.y, memoryDC, 0, 0, SRCAND );
+
+			// delete memory dc
+			::DeleteObject( ::SelectObject( memoryDC, old ) );
+			::DeleteDC( memoryDC );
 		}
 
 		if ( isChecked ) // draw surrounding rectangle for checked items
 		{
-			/*if ( image != NULL ) // adjust for icon
+			/*if(image) // adjust for icon
 			iconRectangle = iconRectangle.shrink( 1.20 );*/
 
 			// draw the surrounding rectangle
@@ -664,7 +645,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
 	// get item data wrapper
 	ItemDataWrapper * wrapper = reinterpret_cast< ItemDataWrapper * >( measureInfo->itemData );
-	dwtassert( wrapper != 0, "Unsupported menu item in handleMeasureItem" );
+	dwtassert( wrapper != 0, "Unsupported menu item in Menu::handleMeasureItem" );
 
 	// this will contain item size
 	UINT & itemWidth = measureInfo->itemWidth;
@@ -675,10 +656,10 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
 
 	// try to get item info
 	if ( ::GetMenuItemInfo( wrapper->menu->handle(), wrapper->index, TRUE, & info ) == FALSE )
-		throw DWTException ( "Couldn't get item info in measureItem()" );
+		throw DWTException ( "Couldn't get item info in Menu::handleMeasureItem" );
 
 	// check if item is owner drawn
-	dwtassert( ( info.fType & MFT_OWNERDRAW ) != 0, _T( "Not owner - drawn item encountered in measureItem()" ) );
+	dwtassert( ( info.fType & MFT_OWNERDRAW ) != 0, _T( "Not an owner-drawn item in Menu::handleMeasureItem" ) );
 
 	// check if separator
 	if ( info.fType & MFT_SEPARATOR )
@@ -696,34 +677,20 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
 	itemWidth = textSize.cx;
 	itemHeight = textSize.cy;
 
-	// check to see if item has an image
-	Point imageSize = wrapper->image ? wrapper->image->getBitmapSize() : Point(0, 0);
+	// find item image
+	BitmapPtr image =
+		(info.hbmpChecked && info.hbmpUnchecked) ? BitmapPtr(new Bitmap((info.fState & MFS_CHECKED) ? info.hbmpChecked : info.hbmpUnchecked)) :
+		wrapper->icon ? Bitmap::fromIcon(*wrapper->icon) :
+		BitmapPtr()
+		;
 
-	// this will contain checked/unchecked image size
-	Point checkImageSize;
+	// find image size
+	Point imageSize = image ? image->getBitmapSize() : Point(0, 0);
 
-	// if item has check/unchecked state images, then get their sizes
-	if ( ( info.hbmpChecked != NULL ) && ( info.hbmpUnchecked != NULL ) )
-		checkImageSize = ( info.fState & MFS_CHECKED ) == 0
-		? Bitmap::getBitmapSize( info.hbmpUnchecked )
-		: Bitmap::getBitmapSize( info.hbmpChecked );
+	bool hasImage = imageSize.x && imageSize.y; // make sure the image isn't 0-sized
 
-	// take the maximum of all available images or set default image size
-	imageSize.x = (std::max)( imageSize.x, checkImageSize.x );
-	imageSize.y = (std::max)( imageSize.y, checkImageSize.y );
-
-	bool hasImage = ( imageSize.x != 0 ) && ( imageSize.y != 0 );
-
-	// set default image size if no image is available
-	if ( !hasImage )
-	{
-		imageSize.x = (std::max)( defaultImageSize.x, (std::max)( imageSize.x, checkImageSize.x ) );
-		imageSize.y = (std::max)( defaultImageSize.y, (std::max)( imageSize.y, checkImageSize.y ) );
-	}
-
-	// adjust default image size
-	defaultImageSize.x = (std::max)( defaultImageSize.x, imageSize.x );
-	defaultImageSize.y = (std::max)( defaultImageSize.y, imageSize.y );
+	if(!hasImage)
+		imageSize = defaultImageSize; // 0-sized image; set default image size
 
 	// adjust width
 	if ( !isMenuBar || // if not menu bar item
@@ -827,7 +794,7 @@ unsigned Menu::getCount() const {
 	return count;
 }
 
-void Menu::appendItem(const tstring & text, const Dispatcher::F& f, BitmapPtr image, bool enabled, bool defaultItem) {
+void Menu::appendItem(const tstring& text, const Dispatcher::F& f, const IconPtr& icon, bool enabled, bool defaultItem) {
 	// init structure for new item
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_ID | MIIM_STRING };
 
@@ -852,7 +819,7 @@ void Menu::appendItem(const tstring & text, const Dispatcher::F& f, BitmapPtr im
 		info.fType = MFT_OWNERDRAW;
 
 		// set item data
-		wrapper = new ItemDataWrapper( this, index, false, image);
+		wrapper = new ItemDataWrapper(this, index, false, icon);
 		info.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
 	}
 

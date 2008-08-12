@@ -37,21 +37,20 @@
 
 namespace dwt {
 
-Icon::Icon( HICON icon, bool own )
-	: ResourceType(icon, own)
-{}
+Icon::Icon(HICON icon, bool own) :
+ResourceType(icon, own)
+{
+}
 
-Icon::Icon( unsigned resourceId )
-	: ResourceType(::LoadIcon(::GetModuleHandle(NULL), MAKEINTRESOURCE( resourceId ) ) )
-{}
+Icon::Icon(unsigned resourceId, const Point& size) :
+ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId), IMAGE_ICON, size.x, size.y, LR_DEFAULTCOLOR))
+{
+}
 
-Icon::Icon( const tstring & filePath )
-#ifdef WINCE
-	: itsIcon( ::LoadIcon(::GetModuleHandle(NULL), filePath.c_str() ) )
-#else
-	: ResourceType( (HICON)::LoadImage(::GetModuleHandle(NULL), filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE ) )
-#endif
-{}
+Icon::Icon(const tstring& filePath) :
+ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE))
+{
+}
 
 HICON Icon::getIcon() const {
 	return handle();

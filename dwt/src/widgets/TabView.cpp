@@ -194,6 +194,17 @@ void TabView::remove(ContainerPtr w) {
 	layout();
 }
 
+IconPtr TabView::getTabIcon(ContainerPtr w) {
+	int i = findTab(w);
+	if(i != -1) {
+		TCITEM item = { TCIF_IMAGE };
+		TabCtrl_GetItem(handle(), i, &item);
+		if(item.iImage >= 0 && item.iImage < imageList->size())
+			return imageList->getIcon(item.iImage);
+	}
+	return IconPtr();
+}
+
 void TabView::setTabIcon(ContainerPtr w, const IconPtr& icon) {
 	int i = findTab(w);
 	if(i != -1) {

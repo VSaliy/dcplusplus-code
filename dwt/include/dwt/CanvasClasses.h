@@ -173,8 +173,7 @@ public:
 	/** Bitmap background color should be the color of the image that should be
 	  * transparent
 	  */
-	void drawBitmap( HBITMAP bitmap, const Rectangle & imageRectangle, COLORREF bitmapBackgroundColor, bool drawDisabled )
-	{
+	void drawBitmap(const BitmapPtr& bitmap, const Rectangle& imageRectangle, COLORREF bitmapBackgroundColor, bool drawDisabled) {
 		// bitmap size
 		int width = imageRectangle.width();
 		int height = imageRectangle.height();
@@ -182,7 +181,7 @@ public:
 		// memory buffer for bitmap
 		HDC memoryDC = ::CreateCompatibleDC( this->CanvasType::itsHdc );
 		HGDIOBJ oldMemoryBitmap = ::SelectObject( memoryDC, ::CreateCompatibleBitmap( this->CanvasType::itsHdc, width, height ) );
-		HGDIOBJ oldBitmap = ::SelectObject( this->CanvasType::itsHdc, bitmap );
+		HGDIOBJ oldBitmap = ::SelectObject( this->CanvasType::itsHdc, bitmap->handle() );
 		::BitBlt( memoryDC, 0, 0, width, height, this->CanvasType::itsHdc, 0, 0, SRCCOPY );
 		::SelectObject( this->CanvasType::itsHdc, oldBitmap );
 
