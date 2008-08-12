@@ -771,7 +771,7 @@ SearchFrame::MenuPtr SearchFrame::makeMenu() {
 	StringPairList favoriteDirs = FavoriteManager::getInstance()->getFavoriteDirs();
 	SearchInfo::CheckTTH checkTTH = results->forEachSelectedT(SearchInfo::CheckTTH());
 
-	menu->appendItem(T_("&Download"), std::tr1::bind(&SearchFrame::handleDownload, this), dwt::BitmapPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::tr1::bind(&SearchFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargetMenu(menu, favoriteDirs, checkTTH);
 	menu->appendItem(T_("Download whole directory"), std::tr1::bind(&SearchFrame::handleDownloadDir, this));
 	addTargetDirMenu(menu, favoriteDirs);

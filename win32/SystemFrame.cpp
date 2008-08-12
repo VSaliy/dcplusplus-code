@@ -25,7 +25,7 @@
 #include "WinUtil.h"
 
 SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("System Log"), IDH_SYSTEM_LOG, IDR_MAINFRAME),
+	BaseType(mdiParent, T_("System Log"), IDH_SYSTEM_LOG, IDR_DCPP),
 	log(0)
 {
 	{

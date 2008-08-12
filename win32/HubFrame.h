@@ -216,7 +216,6 @@ private:
 	void handleShowUsersClicked();
 	void handleMultiCopy(unsigned index);
 	void handleDoubleClickUsers();
-	bool handleTabContextMenu(const dwt::ScreenCoordinate& pt);
 	void handleCopyHub();
 	void handleAddAsFavorite();
 	void handleReconnect();
@@ -231,6 +230,9 @@ private:
 
 	string stripNick(const string& nick) const;
 	tstring scanNickPrefix(const tstring& prefix);
+
+	// MDIChildFrame
+	void tabMenuImpl(dwt::MenuPtr& menu);
 
 	// AspectChat
 	void enterImpl(const tstring& s);

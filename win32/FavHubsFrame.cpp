@@ -36,7 +36,7 @@ static const ColumnInfo hubsColumns[] = {
 };
 
 FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDR_FAVORITES),
+	BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDR_FAVORITE_HUBS),
 	hubs(0),
 	connect(0),
 	add(0),
@@ -278,14 +278,14 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	bool hasSelected = hubs->hasSelected();
 
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	menu->appendItem(T_("&Connect"), std::tr1::bind(&FavHubsFrame::openSelected, this), dwt::BitmapPtr(), hasSelected, true);
+	menu->appendItem(T_("&Connect"), std::tr1::bind(&FavHubsFrame::openSelected, this), dwt::IconPtr(), hasSelected, true);
 	menu->appendSeparator();
 	menu->appendItem(T_("&New..."), std::tr1::bind(&FavHubsFrame::handleAdd, this));
-	menu->appendItem(T_("&Properties"), std::tr1::bind(&FavHubsFrame::handleProperties, this), dwt::BitmapPtr(), hasSelected);
-	menu->appendItem(T_("Move &Up"), std::tr1::bind(&FavHubsFrame::handleUp, this), dwt::BitmapPtr(), hasSelected);
-	menu->appendItem(T_("Move &Down"), std::tr1::bind(&FavHubsFrame::handleDown, this), dwt::BitmapPtr(), hasSelected);
+	menu->appendItem(T_("&Properties"), std::tr1::bind(&FavHubsFrame::handleProperties, this), dwt::IconPtr(), hasSelected);
+	menu->appendItem(T_("Move &Up"), std::tr1::bind(&FavHubsFrame::handleUp, this), dwt::IconPtr(), hasSelected);
+	menu->appendItem(T_("Move &Down"), std::tr1::bind(&FavHubsFrame::handleDown, this), dwt::IconPtr(), hasSelected);
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), std::tr1::bind(&FavHubsFrame::handleRemove, this), dwt::BitmapPtr(), hasSelected);
+	menu->appendItem(T_("&Remove"), std::tr1::bind(&FavHubsFrame::handleRemove, this), dwt::IconPtr(), hasSelected);
 
 	menu->open(pt);
 	return true;

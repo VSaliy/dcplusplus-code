@@ -96,6 +96,7 @@ public:
 	ContainerPtr getActive();
 	void setActive(ContainerPtr w) { setActive(findTab(w)); }
 
+	IconPtr getTabIcon(ContainerPtr w);
 	void setTabIcon(ContainerPtr w, const IconPtr& icon);
 
 	tstring getTabText(ContainerPtr w);

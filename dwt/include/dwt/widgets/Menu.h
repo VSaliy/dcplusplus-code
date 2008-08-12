@@ -37,8 +37,7 @@
 #ifndef DWT_Menu_h
 #define DWT_Menu_h
 
-#include "../resources/Bitmap.h"
-#include "../resources/Font.h"
+#include "../resources/Icon.h"
 #include "../CanvasClasses.h"
 #include "../Dispatchers.h"
 #include <memory>
@@ -139,14 +138,13 @@ public:
 		FontPtr font;
 	};
 
-	/// Rendering settting settings
 	static const int borderGap; /// Gap between the border and item
 	static const int pointerGap; /// Gap between item text and sub - menu pointer
 	static const int textIconGap; /// Gap between text and icon
 	static const int textBorderGap; /// Gap between text and rectangel border
 	static const int separatorHeight; /// Defines default height for rectangle containing separator
 	static const int minSysMenuItemWidth; /// Minimum width for system menu items
-	static Point defaultImageSize; /// Default image size, used when no image is available
+	static const Point defaultImageSize; /// Default image size, used when no image is available
 
 	HMENU handle() const {
 		return itsHandle;
@@ -183,9 +181,9 @@ public:
 	* A popup is basically another branch in the menu hierarchy <br>
 	* See the Menu project for a demonstration.
 	*/
-	ObjectType appendPopup(const Seed& cs, const tstring &text, const BitmapPtr& image = BitmapPtr());
-	ObjectType appendPopup(const tstring &text, const BitmapPtr& image = BitmapPtr()) {
-		return appendPopup(Seed(ownerDrawn, itsColorInfo, font), text, image);
+	ObjectType appendPopup(const Seed& cs, const tstring& text, const IconPtr& icon = IconPtr());
+	ObjectType appendPopup(const tstring& text, const IconPtr& icon = IconPtr()) {
+		return appendPopup(Seed(ownerDrawn, itsColorInfo, font), text, icon);
 	}
 
 	/// Returns the "System Menu"
@@ -229,7 +227,7 @@ public:
 	void appendSeparator();
 
 	/// Appends a Menu Item
-	void appendItem(const tstring & text, const Dispatcher::F& f = Dispatcher::F(), BitmapPtr image = BitmapPtr(), bool enabled = true, bool defaultItem = false);
+	void appendItem(const tstring& text, const Dispatcher::F& f = Dispatcher::F(), const IconPtr& icon = IconPtr(), bool enabled = true, bool defaultItem = false);
 
 	/// Removes specified item from this menu
 	/** Call this function to actually DELETE a menu item from the menu hierarchy.
@@ -282,7 +280,7 @@ public:
 	/// Sets menu title
 	/** A Menu can have a title, this function sets that title
 	*/
-	void setTitle( const tstring & title, bool drawSidebar = false );
+	void setTitle(const tstring& title, const IconPtr& icon = IconPtr(), bool drawSidebar = false);
 
 	/// Sets title font
 	/** Create a font through e.g. createFont in WidgetFactory or similar and set the
@@ -368,21 +366,21 @@ private:
 		/// Menu item text color
 		COLORREF textColor;
 
-		/// Menu item image
-		BitmapPtr image;
+		/// Menu item icon
+		const IconPtr icon;
 
 		// Wrapper Constructor
 		ItemDataWrapper(
 			const Menu* menu_,
 			unsigned index_,
 			bool isTitle_ = false,
-			BitmapPtr image_ = BitmapPtr()
+			const IconPtr& icon_ = IconPtr()
 			) :
 		menu(menu_),
 			index(index_),
 			isTitle(isTitle_),
 			textColor(::GetSysColor(COLOR_MENUTEXT)),
-			image(image_)
+			icon(icon_)
 		{}
 
 		~ItemDataWrapper()

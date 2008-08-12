@@ -288,8 +288,8 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 	MenuPtr contextMenu = addChild(WinUtil::Seeds::menu);
 	contextMenu->appendItem(T_("&New..."), std::tr1::bind(&ADLSearchFrame::handleAdd, this));
-	contextMenu->appendItem(T_("&Properties"), std::tr1::bind(&ADLSearchFrame::handleProperties, this), dwt::BitmapPtr(), hasSelected);
-	contextMenu->appendItem(T_("&Remove"), std::tr1::bind(&ADLSearchFrame::handleRemove, this), dwt::BitmapPtr(), hasSelected);
+	contextMenu->appendItem(T_("&Properties"), std::tr1::bind(&ADLSearchFrame::handleProperties, this), dwt::IconPtr(), hasSelected);
+	contextMenu->appendItem(T_("&Remove"), std::tr1::bind(&ADLSearchFrame::handleRemove, this), dwt::IconPtr(), hasSelected);
 
 	contextMenu->open(pt);
 	return true;

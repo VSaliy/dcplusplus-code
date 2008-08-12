@@ -92,16 +92,16 @@ public:
 	void appendUserItems(dwt::TabViewPtr parent, dwt::MenuPtr menu, bool defaultIsGetList = true) {
 		T* This = static_cast<T*>(this);
 		UserInfoBase::UserTraits traits = This->getUserList()->forEachSelectedT(UserInfoBase::UserTraits());
-		menu->appendItem(T_("&Get file list"), std::tr1::bind(&T::handleGetList, This), dwt::BitmapPtr(), true, defaultIsGetList);
+		menu->appendItem(T_("&Get file list"), std::tr1::bind(&T::handleGetList, This), dwt::IconPtr(), true, defaultIsGetList);
 		if(traits.adcOnly)
 			menu->appendItem(T_("&Browse file list"), std::tr1::bind(&T::handleBrowseList, This));
 		menu->appendItem(T_("&Match queue"), std::tr1::bind(&T::handleMatchQueue, This));
-		menu->appendItem(T_("&Send private message"), std::tr1::bind(&T::handlePrivateMessage, This, parent), dwt::BitmapPtr(), true, !defaultIsGetList);
+		menu->appendItem(T_("&Send private message"), std::tr1::bind(&T::handlePrivateMessage, This, parent), dwt::IconPtr(), true, !defaultIsGetList);
 		if(!traits.favOnly)
-			menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&T::handleAddFavorite, This), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
+			menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&T::handleAddFavorite, This), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
 		menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&T::handleGrantSlot, This));
 		if(!traits.nonFavOnly)
-			menu->appendItem(T_("Connect to hub"), std::tr1::bind(&T::handleConnectFav, This, parent), dwt::BitmapPtr(new dwt::Bitmap(IDB_HUB)));
+			menu->appendItem(T_("Connect to hub"), std::tr1::bind(&T::handleConnectFav, This, parent), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
 		menu->appendSeparator();
 		menu->appendItem(T_("Remove user from queue"), std::tr1::bind(&T::handleRemoveFromQueue, This));
 	}

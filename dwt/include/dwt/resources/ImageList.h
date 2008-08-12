@@ -130,6 +130,8 @@ public:
 	  */
 	Point getImageSize() const;
 
+	IconPtr getIcon(unsigned i) const;
+
 	void setBkColor(COLORREF color);
 
 	COLORREF getBkColor() const;

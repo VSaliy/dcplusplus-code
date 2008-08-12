@@ -140,11 +140,9 @@ void WinUtil::init() {
 	xcomboBoxEdit.style |= CBS_DROPDOWN | CBS_AUTOHSCROLL;
 	xcomboBoxEdit.font = font;
 
-	if(BOOLSETTING(OWNER_DRAWN_MENUS)) {
-		xmenu.colorInfo.colorImageBackground = RGB(255, 0, 255); // DC++ bitmaps use RGB(255, 0, 255) as their background (transparent) color
+	xmenu.ownerDrawn = BOOLSETTING(OWNER_DRAWN_MENUS);
+	if(xmenu.ownerDrawn)
 		xmenu.font = font;
-	} else
-		xmenu.ownerDrawn = false;
 
 	xTable.style |= WS_HSCROLL | WS_VSCROLL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS;
 	xTable.exStyle = WS_EX_CLIENTEDGE;
@@ -1065,29 +1063,29 @@ static void eachUser(const UserList& list, const UserFunction& f) {
 }
 
 static void addUsers(bool addSub, dwt::MenuPtr menu, const tstring& text,
-	const UserList& users, const UserFunction& f, const dwt::BitmapPtr& bitmap = dwt::BitmapPtr())
+	const UserList& users, const UserFunction& f, const dwt::IconPtr& icon = dwt::IconPtr())
 {
 	if(users.empty())
 		return;
 
 	if(addSub) {
-		menu = menu->appendPopup(text, bitmap);
+		menu = menu->appendPopup(text, icon);
 	}
 
 	if(users.size() > 1) {
-		menu->appendItem(T_("All"), std::tr1::bind(&eachUser, users, f), dwt::BitmapPtr());
+		menu->appendItem(T_("All"), std::tr1::bind(&eachUser, users, f));
 
 		menu->appendSeparator();
 
 		for(size_t i = 0, iend = users.size(); i < iend; ++i) {
 			menu->appendItem(WinUtil::getNicks(users[i]),
-				std::tr1::bind(&eachUser, UserList(1, users[i]), f), dwt::BitmapPtr());
+				std::tr1::bind(&eachUser, UserList(1, users[i]), f));
 		}
 	} else {
 		if(addSub) {
-			menu->appendItem(WinUtil::getNicks(users[0]), std::tr1::bind(&eachUser, users, f), dwt::BitmapPtr());
+			menu->appendItem(WinUtil::getNicks(users[0]), std::tr1::bind(&eachUser, users, f));
 		} else {
-			menu->appendItem(text, std::tr1::bind(&eachUser, users, f), bitmap);
+			menu->appendItem(text, std::tr1::bind(&eachUser, users, f), icon);
 		}
 	}
 }
@@ -1128,7 +1126,7 @@ void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabVie
 		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, tstring()));
 
 	addUsers(addSub, menu, T_("Add To &Favorites"), filter(users, &isFav),
-		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::BitmapPtr(new dwt::Bitmap(IDB_FAVORITE_USERS)));
+		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
 
 	addUsers(addSub, menu, T_("Grant &extra slot"), users,
 		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));

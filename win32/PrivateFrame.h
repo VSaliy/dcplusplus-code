@@ -35,7 +35,9 @@ class PrivateFrame :
 	typedef MDIChildFrame<PrivateFrame> BaseType;
 	typedef AspectChat<PrivateFrame> ChatType;
 
+	friend class MDIChildFrame<PrivateFrame>;
 	friend class AspectChat<PrivateFrame>;
+	friend class AspectUserCommand<PrivateFrame>;
 
 public:
 	enum Status {
@@ -52,9 +54,6 @@ public:
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
 
 private:
-	friend class MDIChildFrame<PrivateFrame>;
-	friend class AspectUserCommand<PrivateFrame>;
-
 	StringMap ucLineParams;
 	UserPtr replyTo;
 
@@ -67,7 +66,6 @@ private:
 
 	void layout();
 	bool preClosing();
-	bool handleTabContextMenu(const dwt::ScreenCoordinate& pt);
 	void handleGetList();
 	void handleMatchQueue();
 
@@ -79,6 +77,9 @@ private:
 	void updateTitle();
 
 	void runUserCommand(const UserCommand& uc);
+
+	// MDIChildFrame
+	void tabMenuImpl(dwt::MenuPtr& menu);
 
 	// AspectChat
 	void enterImpl(const tstring& s);

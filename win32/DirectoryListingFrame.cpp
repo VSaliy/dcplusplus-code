@@ -307,7 +307,7 @@ void DirectoryListingFrame::setWindowTitle() {
 DirectoryListingFrame::MenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::BitmapPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu, ii);
 
 	if(ii->type == ItemInfo::FILE) {
@@ -331,7 +331,7 @@ DirectoryListingFrame::MenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* i
 DirectoryListingFrame::MenuPtr DirectoryListingFrame::makeMultiMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::BitmapPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu);
 	addUserCommands(menu);
 

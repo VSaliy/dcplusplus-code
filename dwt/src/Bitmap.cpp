@@ -34,7 +34,8 @@
 */
 
 #include <dwt/resources/Bitmap.h>
-#include <dwt/Point.h>
+#include <dwt/resources/Icon.h>
+#include <dwt/DWTException.h>
 
 namespace dwt {
 
@@ -53,6 +54,15 @@ Bitmap::Bitmap( const tstring & filePath, unsigned flags )
 	: ResourceType( ( HBITMAP )::LoadImage( ::GetModuleHandle(NULL), filePath.c_str(), IMAGE_BITMAP, 0, 0, flags | LR_LOADFROMFILE ) )
 #endif
 {}
+
+BitmapPtr Bitmap::fromIcon(const Icon& icon) {
+	ICONINFO ii;
+	if(!::GetIconInfo(icon.handle(), &ii))
+		throw Win32Exception("GetIconInfo in Bitmap::fromIcon failed");
+
+	Bitmap mask(ii.hbmMask); // wrap it in Bitmap so it is destroyed properly
+	return BitmapPtr(new Bitmap(ii.hbmColor));
+}
 
 HBITMAP Bitmap::getBitmap() const
 {

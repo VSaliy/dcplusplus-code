@@ -148,7 +148,7 @@ bool SpyFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr contextMenu = addChild(WinUtil::Seeds::menu);
-		contextMenu->appendItem(T_("&Search"), std::tr1::bind(&SpyFrame::handleSearch, this, searches->getText(searches->getSelected(), COLUMN_STRING)), dwt::BitmapPtr(new dwt::Bitmap(IDB_SEARCH)));
+		contextMenu->appendItem(T_("&Search"), std::tr1::bind(&SpyFrame::handleSearch, this, searches->getText(searches->getSelected(), COLUMN_STRING)), dwt::IconPtr(new dwt::Icon(IDR_SEARCH)));
 
 		contextMenu->open(pt);
 		return true;

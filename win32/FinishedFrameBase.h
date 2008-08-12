@@ -381,8 +381,8 @@ private:
 
 			dwt::MenuPtr menu = this->addChild(WinUtil::Seeds::menu);
 
-			menu->appendItem(T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this), dwt::BitmapPtr(), allFilesExist);
-			menu->appendItem(T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this), dwt::BitmapPtr(), allFilesExist, true);
+			menu->appendItem(T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), allFilesExist);
+			menu->appendItem(T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), allFilesExist, true);
 			menu->appendItem(T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
 			menu->appendSeparator();
 			menu->appendItem(T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveFiles, this));
