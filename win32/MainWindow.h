@@ -150,6 +150,7 @@ private:
 
 	// Other events
 	void handleSized(const dwt::SizedEvent& sz);
+	void handleMinimized();
 
 	LRESULT handleCopyData(LPARAM lParam);
 	LRESULT handleWhereAreYou();

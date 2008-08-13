@@ -161,7 +161,9 @@ MainWindow::MainWindow() :
 	dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::parseCommandLine, this, tstring(::GetCommandLine())));
 
 	int cmdShow = dwt::Application::instance().getCmdShow();
-	::ShowWindow(handle(), ((cmdShow == SW_SHOWDEFAULT) || (cmdShow == SW_SHOWNORMAL)) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
+	::ShowWindow(handle(), (cmdShow == SW_SHOWDEFAULT || cmdShow == SW_SHOWNORMAL) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
+	if(cmdShow == SW_MINIMIZE || cmdShow == SW_SHOWMINIMIZED || cmdShow == SW_SHOWMINNOACTIVE)
+		handleMinimized();
 
 	if(SETTING(NICK).empty()) {
 		WinUtil::help(handle(), IDH_GET_STARTED);
@@ -458,16 +460,7 @@ void MainWindow::handleQuickConnect() {
 
 void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 	if(sz.isMinimized) {
-		if(BOOLSETTING(AUTO_AWAY) && !Util::getManualAway()) {
-			Util::setAway(true);
-		}
-		if(BOOLSETTING(MINIMIZE_TRAY) != WinUtil::isShift()) {
-			if(!SETTING(ALWAYS_TRAY)) {
-				notify->setVisible(true);
-			}
-			setVisible(false);
-		}
-		maximized = isZoomed();
+		handleMinimized();
 	} else if( sz.isMaximized || sz.isRestored ) {
 		if(BOOLSETTING(AUTO_AWAY) && !Util::getManualAway()) {
 			Util::setAway(false);
@@ -477,6 +470,19 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 		}
 		layout();
 	}
+}
+
+void MainWindow::handleMinimized() {
+	if(BOOLSETTING(AUTO_AWAY) && !Util::getManualAway()) {
+		Util::setAway(true);
+	}
+	if(BOOLSETTING(MINIMIZE_TRAY) != WinUtil::isShift()) {
+		if(!SETTING(ALWAYS_TRAY)) {
+			notify->setVisible(true);
+		}
+		setVisible(false);
+	}
+	maximized = isZoomed();
 }
 
 void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
