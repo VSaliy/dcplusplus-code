@@ -1050,43 +1050,39 @@ struct X {
 	UserPtr user;
 };
 
-typedef std::tr1::function<void (const X&)> UserFunction;
+typedef std::tr1::function<void (const X&, const string&)> UserFunction;
 
-static void eachUser(const UserList& list, const UserFunction& f) {
+static void eachUser(const UserList& list, const StringList& dirs, const UserFunction& f) {
+	size_t j = 0;
 	for(UserList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
 		try {
-			f(X(*i));
+			f(X(*i), (j < dirs.size()) ? dirs[j] : string());
 		} catch(const Exception& e) {
 			LogManager::getInstance()->message(e.getError());
 		}
+		j++;
 	}
 }
 
-static void addUsers(bool addSub, dwt::MenuPtr menu, const tstring& text,
-	const UserList& users, const UserFunction& f, const dwt::IconPtr& icon = dwt::IconPtr())
+static void addUsers(dwt::MenuPtr menu, const tstring& text,
+	const UserList& users, const UserFunction& f, const dwt::IconPtr& icon = dwt::IconPtr(),
+	const StringList& dirs = StringList())
 {
 	if(users.empty())
 		return;
 
-	if(addSub) {
-		menu = menu->appendPopup(text, icon);
-	}
-
 	if(users.size() > 1) {
-		menu->appendItem(T_("All"), std::tr1::bind(&eachUser, users, f));
+		menu = menu->appendPopup(text, icon);
+		menu->appendItem(T_("All"), std::tr1::bind(&eachUser, users, dirs, f));
 
 		menu->appendSeparator();
 
 		for(size_t i = 0, iend = users.size(); i < iend; ++i) {
 			menu->appendItem(WinUtil::getNicks(users[i]),
-				std::tr1::bind(&eachUser, UserList(1, users[i]), f));
+				std::tr1::bind(&eachUser, UserList(1, users[i]), StringList(1, (i < dirs.size()) ? dirs[i] : string()), f));
 		}
 	} else {
-		if(addSub) {
-			menu->appendItem(WinUtil::getNicks(users[0]), std::tr1::bind(&eachUser, users, f));
-		} else {
-			menu->appendItem(text, std::tr1::bind(&eachUser, users, f), icon);
-		}
+		menu->appendItem(text, std::tr1::bind(&eachUser, users, dirs, f), icon);
 	}
 }
 
@@ -1108,31 +1104,30 @@ static bool isFav(const UserPtr& u) {
 	return !FavoriteManager::getInstance()->isFavoriteUser(u);
 }
 
-void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const std::string& dir) {
-	bool addSub = users.size() > 1;
-
+void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const StringList& dirs) {
 	QueueManager* qm = QueueManager::getInstance();
 
-	addUsers(addSub, menu, T_("&Get file list"), users,
-		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW, dir));
+	addUsers(menu, T_("&Get file list"), users,
+		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW, _2),
+		dwt::IconPtr(), dirs);
 
-	addUsers(addSub, menu, T_("&Browse file list"), filter(users, &isAdc),
-		std::tr1::bind(&QueueManager::addPfs, qm, _1, dir));
+	addUsers(menu, T_("&Browse file list"), filter(users, &isAdc),
+		std::tr1::bind(&QueueManager::addPfs, qm, _1, _2), dwt::IconPtr(), dirs);
 
-	addUsers(addSub, menu, T_("&Match queue"), users,
+	addUsers(menu, T_("&Match queue"), users,
 		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_MATCH_QUEUE, std::string()));
 
-	addUsers(addSub, menu, T_("&Send private message"), users,
+	addUsers(menu, T_("&Send private message"), users,
 		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, tstring()));
 
-	addUsers(addSub, menu, T_("Add To &Favorites"), filter(users, &isFav),
+	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav),
 		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
 
-	addUsers(addSub, menu, T_("Grant &extra slot"), users,
+	addUsers(menu, T_("Grant &extra slot"), users,
 		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));
 
 	typedef void (QueueManager::*qmp)(const UserPtr&, int);
-	addUsers(addSub, menu, T_("Remove user from queue"), users,
+	addUsers(menu, T_("Remove user from queue"), users,
 		std::tr1::bind((qmp)&QueueManager::removeSource, qm, _1,
 			(int)QueueItem::Source::FLAG_REMOVED));
 }
