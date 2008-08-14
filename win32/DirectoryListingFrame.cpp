@@ -686,7 +686,7 @@ void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 		dcdebug("Directory incomplete\n");
 		if(dl->getUser()->isOnline()) {
 			try {
-				QueueManager::getInstance()->addPfs(dl->getUser(), dl->getPath(d));
+				QueueManager::getInstance()->addList(dl->getUser(), QueueItem::FLAG_PARTIAL_LIST, dl->getPath(d));
 				setStatus(STATUS_STATUS, T_("Downloading list..."));
 			} catch(const QueueException& e) {
 				setStatus(STATUS_STATUS, Text::toT(e.getError()));

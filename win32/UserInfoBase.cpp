@@ -47,7 +47,7 @@ void UserInfoBase::browseList() {
 	if(user->getCID().isZero())
 		return;
 	try {
-		QueueManager::getInstance()->addPfs(user, "");
+		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}

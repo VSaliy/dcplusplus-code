@@ -77,8 +77,6 @@ public:
 		int aFlags = 0, bool addBad = true) throw(QueueException, FileException);
 	/** Add a user's filelist to the queue. */
 	void addList(const UserPtr& aUser, int aFlags, const string& aInitialDir = Util::emptyString) throw(QueueException, FileException);
-	/** Queue a partial file list download */
-	void addPfs(const UserPtr& aUser, const string& aDir) throw(QueueException);
 	/** Readd a source that was removed */
 	void readd(const string& target, const UserPtr& aUser) throw(QueueException);
 	/** Add a directory to the queue (downloads filelist and matches the directory). */
@@ -139,9 +137,6 @@ private:
 		FileList files;
 		CriticalSection cs;
 	} mover;
-
-	typedef unordered_map<CID, string> PfsQueue;
-	typedef PfsQueue::iterator PfsIter;
 
 	/** All queue items by target */
 	class FileQueue {
@@ -207,8 +202,6 @@ private:
 
 	mutable CriticalSection cs;
 
-	/** Partial file list queue */
-	PfsQueue pfsQueue;
 	/** QueueItems by target */
 	FileQueue fileQueue;
 	/** QueueItems by user */
@@ -221,10 +214,8 @@ private:
 	bool dirty;
 	/** Next search */
 	uint32_t nextSearch;
-	/** map for storing initial dir for file lists */
-	StringMap dirMap;
 	/** Sanity check for the target filename */
-	static string checkTarget(const string& aTarget, int64_t aSize, int& flags) throw(QueueException, FileException);
+	static string checkTarget(const string& aTarget, int64_t aSize) throw(QueueException, FileException);
 	/** Add a source to an existing queue item */
 	bool addSource(QueueItem* qi, const UserPtr& aUser, Flags::MaskType addBad) throw(QueueException, FileException);
 
@@ -233,12 +224,9 @@ private:
 	void load(const SimpleXML& aXml);
 	void moveFile(const string& source, const string& target);
 
-	void setDirty() {
-		if(!dirty) {
-			dirty = true;
-			lastSave = GET_TICK();
-		}
-	}
+	void setDirty();
+
+	string getListPath(const UserPtr& user);
 
 	// TimerManagerListener
 	virtual void on(TimerManagerListener::Second, uint32_t aTick) throw();

@@ -1112,7 +1112,7 @@ void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabVie
 		dwt::IconPtr(), dirs);
 
 	addUsers(menu, T_("&Browse file list"), filter(users, &isAdc),
-		std::tr1::bind(&QueueManager::addPfs, qm, _1, _2), dwt::IconPtr(), dirs);
+		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, _2), dwt::IconPtr(), dirs);
 
 	addUsers(menu, T_("&Match queue"), users,
 		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_MATCH_QUEUE, std::string()));
