@@ -758,11 +758,14 @@ struct UserCollector {
 	void operator()(T* si) {
 		for(SearchResultList::const_iterator i = si->srs.begin(), iend = si->srs.end(); i != iend; ++i) {
 			const SearchResultPtr& sr = *i;
-			if(std::find(users.begin(), users.end(), sr->getUser()) == users.end())
+			if(std::find(users.begin(), users.end(), sr->getUser()) == users.end()) {
 				users.push_back(sr->getUser());
+				dirs.push_back(Util::getFilePath(sr->getFile()));
+			}
 		}
 	}
 	UserList users;
+	StringList dirs;
 };
 
 SearchFrame::MenuPtr SearchFrame::makeMenu() {
@@ -784,7 +787,7 @@ SearchFrame::MenuPtr SearchFrame::makeMenu() {
 	menu->appendSeparator();
 
 	UserCollector users = results->forEachSelectedT(UserCollector());
-	WinUtil::addUserItems(menu, users.users, getParent(), si ? Text::fromT(si->getText(COLUMN_PATH)) : "");
+	WinUtil::addUserItems(menu, users.users, getParent(), users.dirs);
 
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&SearchFrame::handleRemove, this));
