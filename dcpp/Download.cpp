@@ -27,19 +27,14 @@
 
 namespace dcpp {
 
-Download::Download(UserConnection& conn, const string& pfsDir) throw() : Transfer(conn, pfsDir, TTHValue()),
-	file(0), treeValid(false)
-{
-	conn.setDownload(this);
-	setType(TYPE_PARTIAL_LIST);
-}
-
-Download::Download(UserConnection& conn, QueueItem& qi, bool supportsTrees) throw() : Transfer(conn, qi.getTarget(), qi.getTTH()),
+Download::Download(UserConnection& conn, QueueItem& qi, const string& path, bool supportsTrees) throw() : Transfer(conn, path, qi.getTTH()),
 	tempTarget(qi.getTempTarget()), file(0), treeValid(false)
 {
 	conn.setDownload(this);
 
-	if(qi.isSet(QueueItem::FLAG_USER_LIST)) {
+	if(qi.isSet(QueueItem::FLAG_PARTIAL_LIST)) {
+		setType(TYPE_PARTIAL_LIST);
+	} else if(qi.isSet(QueueItem::FLAG_USER_LIST)) {
 		setType(TYPE_FULL_LIST);
 	}
 
