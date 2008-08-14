@@ -7,7 +7,7 @@
 * [L#234897] Improve error message when file list is too big (thanks steven sheehy)
 * [L#234529] Right-alight sizes
 * [L#243908] Better nick sorting in search results (thanks emtee)
-* [L#231447] Fix file list positioning from search
+* [L#231447] Fix file list positioning from search (arnetheduck, poy)
 * Fix bogus menus when they contain more than 200 dynamic items (poy)
 * Shell menus are now sub-menus, loaded only when requested (poy)
 * [L#243728] Make Shell menus Vista-compliant (poy)
@@ -41,6 +41,7 @@
 * [L#255370] Fix "View as text" in own file list (thanks emtee)
 * Add icons next to tab menu titles (poy)
 * [L#256895] Fix behavior when starting minimized (poy)
+* [L#257225] Automatch of search results always on
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice

@@ -1409,7 +1409,7 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) thro
 	bool added = false;
 	bool wantConnection = false;
 
-	if(BOOLSETTING(AUTO_SEARCH)) {
+	{
 		Lock l(cs);
 		QueueItem::List matches;
 
