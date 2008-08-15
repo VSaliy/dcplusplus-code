@@ -113,7 +113,7 @@
   */
 
 
-/** \mainpage Documentation for SmartWin++
+/** \page dwt Documentation for DWT
   * \htmlinclude guide.html
   */
 
