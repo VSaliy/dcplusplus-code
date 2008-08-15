@@ -88,10 +88,12 @@ public:
 
 	/// Deprecated, use handle()
 	HICON getIcon() const;
+
+	Point getSize() const;
+
 private:
 	friend class Handle<IconPolicy>;
 	typedef Handle<IconPolicy> ResourceType;
-
 };
 
 }

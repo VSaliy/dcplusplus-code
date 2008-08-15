@@ -174,6 +174,11 @@ bool Canvas::extFloodFill( int x, int y, COLORREF color, bool fillTilColorFound 
 }
 #endif //!WINCE
 
+void Canvas::drawIcon(const IconPtr& icon, const Rectangle& rectangle) {
+	if(!::DrawIconEx(itsHdc, rectangle.left(), rectangle.top(), icon->handle(), rectangle.width(), rectangle.height(), 0, 0, DI_NORMAL))
+		dwtWin32DebugFail("DrawIconEx failed in Canvas::drawIcon");
+}
+
 int Canvas::drawText( const tstring & text, const dwt::Rectangle & rect, unsigned format )
 {
 	RECT rc = rect;

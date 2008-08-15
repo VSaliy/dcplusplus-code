@@ -39,6 +39,7 @@
 #include "Widget.h"
 #include "resources/Bitmap.h"
 #include "resources/Font.h"
+#include "resources/Icon.h"
 
 namespace dwt {
 
@@ -410,6 +411,8 @@ public:
 	  */
 	bool extFloodFill( int x, int y, COLORREF color, bool fillTilColorFound );
 #endif //!WINCE
+
+	void drawIcon(const IconPtr& icon, const Rectangle& rectangle);
 
 	/// Draws given string within given Rectangle.
 	/** Draw text within a rectangle according to given format.<br>

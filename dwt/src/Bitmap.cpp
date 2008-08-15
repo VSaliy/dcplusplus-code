@@ -34,8 +34,7 @@
 */
 
 #include <dwt/resources/Bitmap.h>
-#include <dwt/resources/Icon.h>
-#include <dwt/DWTException.h>
+#include <dwt/Point.h>
 
 namespace dwt {
 
@@ -55,26 +54,17 @@ Bitmap::Bitmap( const tstring & filePath, unsigned flags )
 #endif
 {}
 
-BitmapPtr Bitmap::fromIcon(const Icon& icon) {
-	ICONINFO ii;
-	if(!::GetIconInfo(icon.handle(), &ii))
-		throw Win32Exception("GetIconInfo in Bitmap::fromIcon failed");
-
-	Bitmap mask(ii.hbmMask); // wrap it in Bitmap so it is destroyed properly
-	return BitmapPtr(new Bitmap(ii.hbmColor));
-}
-
 HBITMAP Bitmap::getBitmap() const
 {
 	return handle();
 }
 
-Point Bitmap::getBitmapSize() const
+Point Bitmap::getSize() const
 {
-	return getBitmapSize(handle());
+	return getSize(handle());
 }
 
-Point Bitmap::getBitmapSize( HBITMAP bitmap )
+Point Bitmap::getSize( HBITMAP bitmap )
 {
 	// init struct for bitmap info
 	BITMAP bm = { 0 };
@@ -94,7 +84,7 @@ BitmapPtr Bitmap::resize( const Point & newSize ) const
 	HBITMAP hBitmapNew = ::CreateCompatibleBitmap( hdc1, newSize.x, newSize.y );
 	HBITMAP hBitmapOld2 = ( HBITMAP )::SelectObject( hdc2, hBitmapNew );
 
-	const Point oldSize = getBitmapSize();
+	const Point oldSize = getSize();
 	::StretchBlt( hdc2, 0, 0, newSize.x, newSize.y, hdc1, 0, 0, oldSize.x, oldSize.y, SRCCOPY );
 
 	hBitmapNew = ( HBITMAP )::SelectObject( hdc2, hBitmapOld2 );
