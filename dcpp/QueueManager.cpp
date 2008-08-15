@@ -428,7 +428,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 	string tempTarget;
 	if((aFlags & QueueItem::FLAG_USER_LIST) == QueueItem::FLAG_USER_LIST) {
 		target = getListPath(aUser);
-		tempTarget = target;
+		tempTarget = aTarget;
 	} else {
 		target = checkTarget(aTarget, aSize);
 	}
