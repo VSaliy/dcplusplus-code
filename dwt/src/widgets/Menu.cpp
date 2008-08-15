@@ -37,7 +37,6 @@
 
 #include <dwt/widgets/Menu.h>
 
-#include <dwt/resources/Bitmap.h>
 #include <dwt/resources/Brush.h>
 #include <dwt/resources/Pen.h>
 #include <dwt/DWTException.h>
@@ -53,13 +52,15 @@ const int Menu::pointerGap = 5;
 const int Menu::textIconGap = 8;
 const int Menu::textBorderGap = 4;
 const int Menu::separatorHeight = 8;
-const int Menu::minSysMenuItemWidth = 130;
-const Point Menu::defaultImageSize = Point( 16, 16 );
 
-Menu::Seed::Seed(bool ownerDrawn_, const MenuColorInfo& colorInfo_, FontPtr font_) :
+Menu::Seed::Seed(bool ownerDrawn_,
+				 const MenuColorInfo& colorInfo_,
+				 const Point& iconSize_,
+				 FontPtr font_) :
 popup(true),
 ownerDrawn(ownerDrawn_),
 colorInfo(colorInfo_),
+iconSize(iconSize_),
 font(font_)
 {
 }
@@ -73,11 +74,11 @@ drawSidebar(false)
 }
 
 void Menu::createHelper(const Seed& cs) {
-	// save settings provided through the Seed
 	ownerDrawn = cs.ownerDrawn;
-	itsColorInfo = cs.colorInfo;
 
 	if(ownerDrawn) {
+		itsColorInfo = cs.colorInfo;
+		iconSize = cs.iconSize;
 		if(cs.font)
 			font = cs.font;
 		else
@@ -359,21 +360,15 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 	bool isSelected = ( drawInfo->itemState & ODS_SELECTED ) == ODS_SELECTED;
 	bool isHighlighted = ( drawInfo->itemState & ODS_HOTLIGHT ) == ODS_HOTLIGHT;
 
-	// find item image
-	BitmapPtr image =
-		(info.hbmpChecked && info.hbmpUnchecked) ? BitmapPtr(new Bitmap(isChecked ? info.hbmpChecked : info.hbmpUnchecked)) :
-		wrapper->icon ? Bitmap::fromIcon(*wrapper->icon) :
-		BitmapPtr()
-		;
+	// find item icon
+	/// @todo add support for HBITMAPs embedded in MENUITEMINFOs (hbmpChecked, hbmpUnchecked, hbmpItem)
+	const IconPtr& icon = wrapper->icon;
 
-	// find image size
-	Point imageSize = image ? image->getBitmapSize() : Point(0, 0);
-
-	if(!imageSize.x || !imageSize.y)
-		imageSize = defaultImageSize; // 0-sized image; set default image size
+	// find icon size
+	const Point& iconSize = wrapper->menu->iconSize;
 
 	// compute strip width
-	int stripWidth = imageSize.x + textIconGap;
+	int stripWidth = iconSize.x + textIconGap;
 
 	// prepare item rectangle
 	Rectangle itemRectangle = drawInfo->rcItem;
@@ -468,7 +463,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 		canvas.fillRectangle(itemRectangle, brush);
 	}
 
-	if(!highlight && !isMenuBar && !wrapper->isTitle) // strip bar (on the left, where bitmaps go)
+	if(!highlight && !isMenuBar && !wrapper->isTitle) // strip bar (on the left, where icons go)
 	{
 		// create rectangle for strip bar
 		Rectangle stripRectangle ( itemRectangle );
@@ -542,7 +537,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 			if(isMenuBar || wrapper->isTitle) {
 				Rectangle textRectangle( itemRectangle );
 
-				if(image) // has icon
+				if(icon) // has icon
 					textRectangle.pos.x += textIconGap;
 
 				canvas.drawText( text, textRectangle, DT_CENTER | drawTextFormat );
@@ -568,66 +563,52 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 			canvas.setBkMode( oldMode );
 		}
 
-		// set up image rectangle
-		Rectangle imageRectangle( itemRectangle.pos, imageSize );
+		// set up icon rectangle
+		Rectangle iconRectangle( itemRectangle.pos, iconSize );
 
 		// adjust icon rectangle
-		imageRectangle.pos.x += ( stripWidth - imageSize.x ) / 2;
-		imageRectangle.pos.y += ( itemRectangle.height() - imageSize.y ) / 2;
+		iconRectangle.pos.x += ( stripWidth - iconSize.x ) / 2;
+		iconRectangle.pos.y += ( itemRectangle.height() - iconSize.y ) / 2;
 
-		if(image) {
-			// draw icon
-			if ( isSelected && !isDisabled ) // if selected and active, then imitate icon shadow
-			{
-				// adjust icon position for later drawing
-				imageRectangle.pos.x--;
-				imageRectangle.pos.y--;
+		if(isSelected && !isDisabled && !isGrayed) {
+			// selected and active item; adjust icon position
+			iconRectangle.pos.x--;
+			iconRectangle.pos.y--;
+		}
 
-				// setup brush for shadow emulation
-				Brush brush( ColorUtilities::darkenColor( colorInfo.colorStrip, 0.2 ) );
-
-				// draw the icon shadow
-				Rectangle shadowRectangle( imageRectangle );
-				shadowRectangle.pos.x++;
-				shadowRectangle.pos.y++;
-				canvas.drawBitmap( image, shadowRectangle, colorInfo.colorImageBackground, true );
-			}
-
-			// draw normal icon
-			canvas.drawBitmap( image, imageRectangle, colorInfo.colorImageBackground, isGrayed );
+		if(icon) {
+			// the item has an icon; draw it
+			canvas.drawIcon(icon, iconRectangle);
 
 		} else if(isChecked) {
-			// draw the check mark or radio bullet
+			// the item has no icon set but it is checked; draw the check mark or radio bullet
+
 			// prepare background
-			Brush brush( colorInfo.colorStrip );
-			canvas.fillRectangle( imageRectangle, brush );
+			Brush brush(highlight ? colorInfo.colorHighlight : colorInfo.colorStrip);
+			canvas.fillRectangle(iconRectangle, brush);
 
 			// create memory DC and set bitmap on it
 			HDC memoryDC = ::CreateCompatibleDC( canvas.handle() );
-			HGDIOBJ old = ::SelectObject( memoryDC, ::CreateCompatibleBitmap( canvas.handle(), imageSize.x, imageSize.y ) );
+			HGDIOBJ old = ::SelectObject( memoryDC, ::CreateCompatibleBitmap( canvas.handle(), iconSize.x, iconSize.y ) );
 
 			// draw into memory
-			RECT rc( Rectangle( 0, 0, imageSize.x, imageSize.y ) );
+			RECT rc( Rectangle( 0, 0, iconSize.x, iconSize.y ) );
 			::DrawFrameControl( memoryDC, & rc, DFC_MENU, ( info.fType & MFT_RADIOCHECK ) == 0 ? DFCS_MENUCHECK : DFCS_MENUBULLET );
 
 			const int adjustment = 2; // adjustment for mark to be in the center
 
 			// bit - blast into out canvas
-			::BitBlt( canvas.handle(), imageRectangle.left() + adjustment, imageRectangle.top(), imageSize.x, imageSize.y, memoryDC, 0, 0, SRCAND );
+			::BitBlt( canvas.handle(), iconRectangle.left() + adjustment, iconRectangle.top(), iconSize.x, iconSize.y, memoryDC, 0, 0, SRCAND );
 
 			// delete memory dc
 			::DeleteObject( ::SelectObject( memoryDC, old ) );
 			::DeleteDC( memoryDC );
 		}
 
-		if ( isChecked ) // draw surrounding rectangle for checked items
-		{
-			/*if(image) // adjust for icon
-			iconRectangle = iconRectangle.shrink( 1.20 );*/
-
-			// draw the surrounding rectangle
+		if(isChecked) {
+			// draw surrounding rectangle for checked items
 			Canvas::Selector select(canvas, *PenPtr(new Pen(colorInfo.colorHighlight)));
-			canvas.line( imageRectangle );
+			canvas.line( iconRectangle );
 		}
 	}
 
@@ -677,35 +658,23 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
 	itemWidth = textSize.cx;
 	itemHeight = textSize.cy;
 
-	// find item image
-	BitmapPtr image =
-		(info.hbmpChecked && info.hbmpUnchecked) ? BitmapPtr(new Bitmap((info.fState & MFS_CHECKED) ? info.hbmpChecked : info.hbmpUnchecked)) :
-		wrapper->icon ? Bitmap::fromIcon(*wrapper->icon) :
-		BitmapPtr()
-		;
+	// find item icon
+	/// @todo add support for HBITMAPs embedded in MENUITEMINFOs (hbmpChecked, hbmpUnchecked, hbmpItem)
+	const IconPtr& icon = wrapper->icon;
 
-	// find image size
-	Point imageSize = image ? image->getBitmapSize() : Point(0, 0);
-
-	bool hasImage = imageSize.x && imageSize.y; // make sure the image isn't 0-sized
-
-	if(!hasImage)
-		imageSize = defaultImageSize; // 0-sized image; set default image size
+	// find icon size
+	const Point& iconSize = wrapper->menu->iconSize;
 
 	// adjust width
 	if ( !isMenuBar || // if not menu bar item
-		( isMenuBar && hasImage ) ) // or menu bar item with image
+		( isMenuBar && icon ) ) // or menu bar item with icon
 	{
 		// adjust item width
-		itemWidth += imageSize.x + textIconGap + pointerGap;
+		itemWidth += iconSize.x + textIconGap + pointerGap;
 
 		// adjust item height
-		itemHeight = (std::max)( itemHeight, ( UINT ) imageSize.y + borderGap );
+		itemHeight = (std::max)( itemHeight, ( UINT ) iconSize.y + borderGap );
 	}
-
-	// adjust width for system menu items
-	if ( wrapper->menu->isSysMenu )
-		itemWidth = (std::max)( ( UINT ) minSysMenuItemWidth, itemWidth );
 
 	// adjust width for sidebar
 	if ( wrapper->menu->drawSidebar )

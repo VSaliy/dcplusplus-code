@@ -34,6 +34,8 @@
 */
 
 #include <dwt/resources/Icon.h>
+#include <dwt/resources/Bitmap.h>
+#include <dwt/DWTException.h>
 
 namespace dwt {
 
@@ -54,6 +56,18 @@ ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), filePath.c_str(), IMAGE
 
 HICON Icon::getIcon() const {
 	return handle();
+}
+
+Point Icon::getSize() const {
+	ICONINFO ii;
+	if(!::GetIconInfo(handle(), &ii))
+		throw Win32Exception("GetIconInfo in Icon::getSize failed");
+
+	// wrap these in Bitmap so they get destroyed properly
+	Bitmap mask(ii.hbmMask);
+	Bitmap color(ii.hbmColor);
+
+	return color.getSize();
 }
 
 }

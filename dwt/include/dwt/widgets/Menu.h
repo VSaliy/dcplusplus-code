@@ -37,7 +37,6 @@
 #ifndef DWT_Menu_h
 #define DWT_Menu_h
 
-#include "../resources/Icon.h"
 #include "../CanvasClasses.h"
 #include "../Dispatchers.h"
 #include <memory>
@@ -66,9 +65,6 @@ struct MenuColorInfo
 	/// Title text color
 	COLORREF colorTitleText;
 
-	/// Item image background color, used for transparency effects
-	COLORREF colorImageBackground;
-
 	/// Constructs MenuColorInfo objects
 	/** If all the default arguments are used it will construct an object making
 	* menus look roughly like they do in MSVC++ 7.1 <br>
@@ -78,14 +74,12 @@ struct MenuColorInfo
 		COLORREF stripColor = ColorUtilities::darkenColor( ::GetSysColor( COLOR_3DFACE ), 0.02 ),
 		COLORREF highlightColor = ::GetSysColor( COLOR_HIGHLIGHT ),
 		COLORREF highlightTextColor = ::GetSysColor( COLOR_HIGHLIGHTTEXT ),
-		COLORREF titleTextColor = ::GetSysColor( COLOR_MENUTEXT ),
-		COLORREF imageBackground = RGB( 0, 0, 0 ) ) // black
+		COLORREF titleTextColor = ::GetSysColor( COLOR_MENUTEXT ) )
 		: colorMenu( menuColor ),
 		colorStrip( stripColor ),
 		colorHighlight( highlightColor ),
 		colorHighlightText( highlightTextColor ),
-		colorTitleText( titleTextColor ),
-		colorImageBackground( imageBackground )
+		colorTitleText( titleTextColor )
 	{}
 };
 
@@ -131,10 +125,14 @@ public:
 	struct Seed {
 		typedef ThisType WidgetType;
 
-		Seed(bool ownerDrawn_ = true, const MenuColorInfo& colorInfo_ = MenuColorInfo(), FontPtr font_ = 0);
+		Seed(bool ownerDrawn_ = true,
+			const MenuColorInfo& colorInfo_ = MenuColorInfo(),
+			const Point& iconSize_ = Point(16, 16),
+			FontPtr font_ = 0);
 		bool popup;
 		bool ownerDrawn;
 		MenuColorInfo colorInfo;
+		Point iconSize;
 		FontPtr font;
 	};
 
@@ -143,8 +141,6 @@ public:
 	static const int textIconGap; /// Gap between text and icon
 	static const int textBorderGap; /// Gap between text and rectangel border
 	static const int separatorHeight; /// Defines default height for rectangle containing separator
-	static const int minSysMenuItemWidth; /// Minimum width for system menu items
-	static const Point defaultImageSize; /// Default image size, used when no image is available
 
 	HMENU handle() const {
 		return itsHandle;
@@ -183,7 +179,7 @@ public:
 	*/
 	ObjectType appendPopup(const Seed& cs, const tstring& text, const IconPtr& icon = IconPtr());
 	ObjectType appendPopup(const tstring& text, const IconPtr& icon = IconPtr()) {
-		return appendPopup(Seed(ownerDrawn, itsColorInfo, font), text, icon);
+		return appendPopup(Seed(ownerDrawn, itsColorInfo, iconSize, font), text, icon);
 	}
 
 	/// Returns the "System Menu"
@@ -407,6 +403,8 @@ private:
 
 	// Contains information about menu colors
 	MenuColorInfo itsColorInfo;
+
+	Point iconSize;
 
 	FontPtr font;
 

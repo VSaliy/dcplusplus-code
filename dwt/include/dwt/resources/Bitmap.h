@@ -44,7 +44,6 @@ namespace dwt {
 
 // Forward declarations
 class Bitmap;
-class Icon;
 struct Point;
 
 /// \ingroup GlobalStuff
@@ -91,21 +90,18 @@ public:
 	  */
 	explicit Bitmap( const tstring & filePath, unsigned flags = LR_CREATEDIBSECTION );
 
-	/** create a Bitmap from an Icon */
-	static BitmapPtr fromIcon(const Icon& icon);
-
 	/// @deprecated, use handle
 	HBITMAP getBitmap() const;
 
 	/// Returns the Bitmaps size
 	/** Returns the size (width = x, height = y) in pixels of the Bitmap
 	  */
-	Point getBitmapSize() const;
+	Point getSize() const;
 
 	/// Returns the given HBITMAP size
 	/** Returns the size (width = x, height = y) in pixels of the HBITMAP
 	  */
-	static Point getBitmapSize( HBITMAP Bitmap );
+	static Point getSize( HBITMAP Bitmap );
 
 	/// Resize the given Bitmap
 	/** This function is IMMUTABLE meaning it will not modify the given bitmap at all
