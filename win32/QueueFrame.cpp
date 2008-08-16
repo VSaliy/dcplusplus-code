@@ -1002,7 +1002,9 @@ void QueueFrame::onRemoved(const string& s) {
 		files->erase(ii);
 	}
 
-	if(!ii->isSet(QueueItem::FLAG_USER_LIST)) {
+	bool userList = ii->isSet(QueueItem::FLAG_USER_LIST);
+
+	if(!userList) {
 		queueSize-=ii->getSize();
 		dcassert(queueSize >= 0);
 	}
@@ -1025,7 +1027,8 @@ void QueueFrame::onRemoved(const string& s) {
 
 	delete ii;
 	updateStatus();
-	setDirty(SettingsManager::BOLD_QUEUE);
+	if(!userList)
+		setDirty(SettingsManager::BOLD_QUEUE);
 	dirty = true;
 }
 

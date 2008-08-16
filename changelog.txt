@@ -43,6 +43,7 @@
 * [L#256895] Fix behavior when starting minimized (poy)
 * [L#257225] Automatch of search results always on
 * [L#246596] Partial file list requests visible in download queue
+* Queue frame is not marked dirty when file list finishes
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
