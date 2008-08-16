@@ -7,47 +7,47 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-06-20 23:05+0200\n"
+"POT-Creation-Date: 2008-08-16 10:33+0200\n"
 "PO-Revision-Date: 2008-05-04 16:18+0000\n"
 "Last-Translator: Anton Gladky <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
+"X-Launchpad-Export-Date: 2008-08-16 08:17+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:387
+#: dcpp/Util.cpp:378
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld Б"
 
-#: dcpp/Util.cpp:349
+#: dcpp/Util.cpp:340
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f ГБ"
 
-#: dcpp/Util.cpp:345
+#: dcpp/Util.cpp:336
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f КБ"
 
-#: dcpp/Util.cpp:347
+#: dcpp/Util.cpp:338
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f МБ"
 
-#: dcpp/Util.cpp:353
+#: dcpp/Util.cpp:344
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f ПБ"
 
-#: dcpp/Util.cpp:351
+#: dcpp/Util.cpp:342
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f ТБ"
 
-#: dcpp/AdcHub.cpp:139
+#: dcpp/AdcHub.cpp:141
 #, boost-format
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) має цей самий CID {%3%} як %4% (%5%), ігноровано"
@@ -57,24 +57,24 @@ msgstr "%1% (%2%) має цей самий CID {%3%} як %4% (%5%), ігнор�
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Нік невідомий)"
 
-#: dcpp/HashManager.cpp:767
+#: dcpp/HashManager.cpp:769
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr ""
 "%1% не розшарено; підрахована CRC32 не відповідає знайденій у SFV файлі."
 
-#: dcpp/QueueManager.cpp:333
+#: dcpp/QueueManager.cpp:329
 #, boost-format
 msgid "%1% renamed to %2%"
 msgstr "%1% перейменовано у %2%"
 
-#: dcpp/AdcHub.cpp:281
+#: dcpp/AdcHub.cpp:283
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr "%1% був відкинутий %2%: %3%"
 
-#: dcpp/AdcHub.cpp:284
+#: dcpp/AdcHub.cpp:286
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr "%1% був відкинутий: %2%"
@@ -84,29 +84,33 @@ msgstr "%1% був відкинутий: %2%"
 msgid "%1%: File not available"
 msgstr "%1%: Файл недоступний"
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:334
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d Б"
 
-#: dcpp/Util.cpp:383
+#: dcpp/Util.cpp:374
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s Б"
 
-#: dcpp/QueueManager.cpp:535
+#: dcpp/ADLSearch.h:48
+msgid "<Enter string>"
+msgstr ""
+
+#: dcpp/QueueManager.cpp:522
 msgid "A file of equal or larger size already exists at the target location"
 msgstr "Файл такого ж або більшого розміру вже існує в папці призначення"
 
-#: dcpp/QueueManager.cpp:478
+#: dcpp/QueueManager.cpp:458
 msgid "A file with a different size already exists in the queue"
 msgstr "Файл з іншим розміром уже існує в черзі"
 
-#: dcpp/QueueManager.cpp:481
+#: dcpp/QueueManager.cpp:461
 msgid "A file with different tth root already exists in the queue"
 msgstr "Файл з іншим tth коренем уже існує в черзі"
 
-#: dcpp/QueueManager.cpp:450
+#: dcpp/QueueManager.cpp:423
 msgid "A file with the same hash already exists in your share"
 msgstr "Файл з ідентичним хешом уже існує у вашому доступі"
 
@@ -123,18 +127,24 @@ msgstr "CRC32 несумісність (SFV перевірка ціліснос�
 msgid "CRC32 inconsistency (SFV-Check) (File: %1%)"
 msgstr "CRC32 несумісність (SFV перевірка цілісності файла %1%)"
 
-#: dcpp/ConnectionManager.cpp:376
-msgid "Certificate not trusted, unable to connect"
-msgstr "Сертифікат неперевірено, неможливо з'єднаться"
-
-#: dcpp/BufferedSocket.cpp:148
+#: dcpp/BufferedSocket.cpp:165 dcpp/SSLSocket.cpp:154
 msgid "Connection closed"
 msgstr "З'єднання закрито"
 
 #: dcpp/Socket.cpp:154 dcpp/ConnectionManager.cpp:182
-#: dcpp/BufferedSocket.cpp:131
+#: dcpp/BufferedSocket.cpp:130 dcpp/BufferedSocket.cpp:150
 msgid "Connection timeout"
 msgstr "Час з'єднання вичерпався"
+
+#: dcpp/ConnectionManager.cpp:250
+#, boost-format
+msgid "Connectivity error: %1%"
+msgstr ""
+
+#: dcpp/ConnectionManager.cpp:243
+#, fuzzy
+msgid "Connectivity restored"
+msgstr "З'єднання закрито"
 
 #: dcpp/DownloadManager.cpp:231
 #, boost-format
@@ -145,11 +155,15 @@ msgstr "Неможливо відкрити цільовий файл %1%"
 msgid "Directory already shared"
 msgstr "Директорія уже в доступі"
 
-#: dcpp/ADLSearch.h:281
+#: dcpp/DirectoryListing.cpp:165
+msgid "Directory missing name attribute"
+msgstr ""
+
+#: dcpp/ADLSearch.h:277
 msgid "Discard"
 msgstr "Не зважати"
 
-#: dcpp/BufferedSocket.cpp:405
+#: dcpp/BufferedSocket.cpp:422
 msgid "Disconnected"
 msgstr "Відключено"
 
@@ -158,7 +172,7 @@ msgstr "Відключено"
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Відключений користувач залишає хаб: %1%"
 
-#: dcpp/DCPlusPlus.cpp:111
+#: dcpp/DCPlusPlus.cpp:107
 msgid "Download Queue"
 msgstr "В черзі"
 
@@ -171,12 +185,12 @@ msgstr ""
 "Дублікат файла не буде розшарено: %1%%2% (Розмір: %3% Б) Копія співпала з: %"
 "4%%5%"
 
-#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
+#: dcpp/QueueManager.cpp:532 dcpp/QueueManager.cpp:536
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Джерело копії: %1%"
 
-#: dcpp/HashManager.cpp:456
+#: dcpp/HashManager.cpp:458
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Помилка створення файлу даних хеша: %1%"
@@ -192,12 +206,17 @@ msgstr "Помилка під час компресії"
 msgid "Error during decompression"
 msgstr "Помилка під час декомпресії"
 
-#: dcpp/HashManager.cpp:772
+#: dcpp/CryptoManager.cpp:153
+#, fuzzy
+msgid "Error generating certificate"
+msgstr "Новий TLS сертифікат згенеровано"
+
+#: dcpp/HashManager.cpp:774
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Помилка хешування %1%: %2%"
 
-#: dcpp/HashManager.cpp:118 dcpp/HashManager.cpp:333
+#: dcpp/HashManager.cpp:118 dcpp/HashManager.cpp:332
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Помилка зберігання хеш даних: %1%"
@@ -212,11 +231,11 @@ msgstr "Файл сертифікату не завантажено"
 msgid "Failed to load private key"
 msgstr "Особовий ключ не завантажено"
 
-#: dcpp/AdcHub.cpp:206
+#: dcpp/AdcHub.cpp:208
 msgid "Failed to negotiate base protocol"
 msgstr "Не вдалось визначити базовий протокол"
 
-#: dcpp/Socket.cpp:408
+#: dcpp/Socket.cpp:402
 msgid ""
 "Failed to set up the socks server for UDP relay (check socks address and "
 "port)"
@@ -245,7 +264,7 @@ msgstr ""
 msgid "File list refresh initiated"
 msgstr "Оновлення списку файлів розпочато"
 
-#: dcpp/DirectoryListing.cpp:101
+#: dcpp/DirectoryListing.cpp:102
 msgid "File not available"
 msgstr "Файл недоступний"
 
@@ -267,20 +286,24 @@ msgstr "Повне дерево не співпадає з TTH коренем"
 msgid "Generated new TLS certificate"
 msgstr "Новий TLS сертифікат згенеровано"
 
-#: dcpp/DCPlusPlus.cpp:105
+#: dcpp/DirectoryListing.cpp:95
+msgid "Greater than maximum filelist size"
+msgstr ""
+
+#: dcpp/DCPlusPlus.cpp:101
 msgid "Hash database"
 msgstr "Хешувати базу даних"
 
-#: dcpp/HashManager.cpp:677
+#: dcpp/HashManager.cpp:679
 msgid "Hash database rebuilt"
 msgstr "Хешувати перебудовану базу"
 
-#: dcpp/HashManager.cpp:73 dcpp/HashManager.cpp:277
+#: dcpp/HashManager.cpp:73 dcpp/HashManager.cpp:276
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Не вдалось виконати хешування: %1%"
 
-#: dcpp/AdcHub.cpp:212
+#: dcpp/AdcHub.cpp:214
 msgid ""
 "Hub probably uses an old version of ADC, please encourage the owner to "
 "upgrade"
@@ -292,7 +315,7 @@ msgstr ""
 msgid "Invalid size"
 msgstr "Невірний розмір"
 
-#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
+#: dcpp/QueueManager.cpp:505 dcpp/QueueManager.cpp:513
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -304,12 +327,7 @@ msgstr ""
 msgid "Kick user(s)"
 msgstr "Відкинути користувача"
 
-#: dcpp/ConnectionManager.cpp:230
-#, boost-format
-msgid "Listening socket failed (you need to restart %1%): %2%"
-msgstr "Не вдалось прослухати сокет (необхідно перезапустити %1%): %2%"
-
-#: dcpp/BufferedSocket.cpp:237
+#: dcpp/BufferedSocket.cpp:254
 msgid "Maximum command length exceeded"
 msgstr "Перевищена максимальна довжина команди"
 
@@ -318,22 +336,31 @@ msgstr "Перевищена максимальна довжина команд�
 msgid "More bytes written than requested"
 msgstr "Було надіслано більше даних, ніж очікувалось"
 
+#: dcpp/CryptoManager.cpp:142
+#, fuzzy
+msgid "No certificate file chosen"
+msgstr "TLS заборонений, не встановлено сертифікат файлу"
+
 #: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "Папка не вказана"
+
+#: dcpp/CryptoManager.cpp:139
+msgid "No private key file chosen"
+msgstr ""
 
 #: dcpp/DownloadManager.cpp:424
 msgid "No slots available"
 msgstr "Немає вільних слотів"
 
-#: dcpp/AdcHub.cpp:573
+#: dcpp/AdcHub.cpp:575
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "З'єднання не прослуховуються - будь ласка, перезапустіть %1%"
 
 #: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
-#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
-#: dcpp/SearchManager.cpp:274
+#: dcpp/SearchManager.cpp:227 dcpp/SearchManager.cpp:289
+#: dcpp/SearchManager.cpp:291
 msgid "Offline"
 msgstr "Поза мережею"
 
@@ -353,11 +380,25 @@ msgstr "Запит пошуку поза областю даних"
 msgid "Response does not match request"
 msgstr "Відгук не відповідає запиту"
 
-#: dcpp/DCPlusPlus.cpp:108
+#: dcpp/SSLSocket.cpp:160
+#, boost-format
+msgid "SSL Error: %1% (%2%, %3%)"
+msgstr ""
+
+#: dcpp/SearchManager.cpp:125
+#, fuzzy, boost-format
+msgid "Search disabled: %1%"
+msgstr "Не вдалось виконати хешування: %1%"
+
+#: dcpp/SearchManager.cpp:118
+msgid "Search enabled again"
+msgstr ""
+
+#: dcpp/DCPlusPlus.cpp:104
 msgid "Shared Files"
 msgstr "Файли у доступі"
 
-#: dcpp/Socket.cpp:269 dcpp/Socket.cpp:273
+#: dcpp/Socket.cpp:263 dcpp/Socket.cpp:267
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 "Сокет-сервер авторизація не вдалась (неправильне ім’я користувача / паролю?)"
@@ -375,24 +416,29 @@ msgstr "TLS заборонений, не встановлено сертифік
 msgid "TTH inconsistency"
 msgstr "Незбіг TTH"
 
-#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
+#: dcpp/QueueManager.cpp:809
+#, fuzzy
+msgid "Target file is missing or wrong size"
+msgstr "Назва файла призначення надто довге"
+
+#: dcpp/QueueManager.cpp:500 dcpp/QueueManager.cpp:509
 msgid "Target filename too long"
 msgstr "Назва файла призначення надто довге"
 
-#: dcpp/QueueManager.cpp:824
+#: dcpp/QueueManager.cpp:801
 msgid "Target removed"
 msgstr "Видалено"
 
-#: dcpp/Socket.cpp:255
+#: dcpp/Socket.cpp:249
 msgid "The socks server doesn't support login / password authentication"
 msgstr "Сокет-сервер на підтримує авторизацію користувач / пароль"
 
-#: dcpp/Socket.cpp:162 dcpp/Socket.cpp:173 dcpp/Socket.cpp:206
-#: dcpp/Socket.cpp:210 dcpp/Socket.cpp:237 dcpp/Socket.cpp:252
+#: dcpp/Socket.cpp:162 dcpp/Socket.cpp:170 dcpp/Socket.cpp:203
+#: dcpp/Socket.cpp:207 dcpp/Socket.cpp:231 dcpp/Socket.cpp:246
 msgid "The socks server failed establish a connection"
 msgstr "Сокет-серверу не вдалось встановити зв’язок"
 
-#: dcpp/Socket.cpp:241
+#: dcpp/Socket.cpp:235
 msgid "The socks server requires authentication"
 msgstr "Сокет-сервер вимагає авторизацію"
 
@@ -400,7 +446,7 @@ msgstr "Сокет-сервер вимагає авторизацію"
 msgid "The temporary download directory cannot be shared"
 msgstr "Тимчасова папка скачування не може бути в доступі"
 
-#: dcpp/QueueManager.cpp:470
+#: dcpp/QueueManager.cpp:450
 msgid "This file is already queued"
 msgstr "Цей файл вже є у черзі"
 
@@ -408,7 +454,7 @@ msgstr "Цей файл вже є у черзі"
 msgid "Unable to create thread"
 msgstr "Неможливо створити потік"
 
-#: dcpp/QueueManager.cpp:1021
+#: dcpp/QueueManager.cpp:999
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Неможливо відкрити список файлів: %1%"
@@ -417,7 +463,7 @@ msgstr "Неможливо відкрити список файлів: %1%"
 msgid "Unable to read hash data file"
 msgstr "Неможливо прочитати файл хеш даних"
 
-#: dcpp/QueueManager.cpp:335
+#: dcpp/QueueManager.cpp:331
 #, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "Неможливо перейменувати %1%: %2%"
@@ -432,15 +478,15 @@ msgstr "Неможливо відправити файл %1%: %2%"
 msgid "Unknown error: 0x%1$x"
 msgstr "Невідома помилка: 0x%1$x"
 
-#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
+#: dcpp/QueueManager.cpp:417
 msgid "You're trying to download from yourself!"
 msgstr "Ви намагаєтесь завантажити з себе!"
 
-#: dcpp/SettingsManager.cpp:157
+#: dcpp/SettingsManager.cpp:166
 msgid "downloaded from"
 msgstr "завантажено з"
 
-#: dcpp/SettingsManager.cpp:158
+#: dcpp/SettingsManager.cpp:167
 msgid "uploaded to"
 msgstr "передано в"
 

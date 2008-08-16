@@ -7,47 +7,47 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-06-20 23:05+0200\n"
-"PO-Revision-Date: 2008-06-09 22:39+0000\n"
-"Last-Translator: Tone Leskovec <Unknown>\n"
+"POT-Creation-Date: 2008-08-16 10:33+0200\n"
+"PO-Revision-Date: 2008-07-16 13:19+0000\n"
+"Last-Translator: Štefan Baebler <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
+"X-Launchpad-Export-Date: 2008-08-16 08:17+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:387
+#: dcpp/Util.cpp:378
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp/Util.cpp:349
+#: dcpp/Util.cpp:340
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp/Util.cpp:345
+#: dcpp/Util.cpp:336
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp/Util.cpp:347
+#: dcpp/Util.cpp:338
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp/Util.cpp:353
+#: dcpp/Util.cpp:344
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp/Util.cpp:351
+#: dcpp/Util.cpp:342
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
 
-#: dcpp/AdcHub.cpp:139
+#: dcpp/AdcHub.cpp:141
 #, boost-format
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) ima enak CID {%3%} kot %4% (%5%), preziram"
@@ -57,24 +57,24 @@ msgstr "%1% (%2%) ima enak CID {%3%} kot %4% (%5%), preziram"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Vzdevek neznan)"
 
-#: dcpp/HashManager.cpp:767
+#: dcpp/HashManager.cpp:769
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr ""
 "%1% ni v souporabi; izračunan CRC32 se ne ujema s tistim v datoteki SFV."
 
-#: dcpp/QueueManager.cpp:333
+#: dcpp/QueueManager.cpp:329
 #, boost-format
 msgid "%1% renamed to %2%"
 msgstr "%1% preimenovana v %2%"
 
-#: dcpp/AdcHub.cpp:281
+#: dcpp/AdcHub.cpp:283
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr "%1% je dobil brco od %2%: %3%"
 
-#: dcpp/AdcHub.cpp:284
+#: dcpp/AdcHub.cpp:286
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr "%1% je dobil brco: %2%"
@@ -84,29 +84,33 @@ msgstr "%1% je dobil brco: %2%"
 msgid "%1%: File not available"
 msgstr "%1%: Datoteka ni na voljo"
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:334
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp/Util.cpp:383
+#: dcpp/Util.cpp:374
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
 
-#: dcpp/QueueManager.cpp:535
+#: dcpp/ADLSearch.h:48
+msgid "<Enter string>"
+msgstr ""
+
+#: dcpp/QueueManager.cpp:522
 msgid "A file of equal or larger size already exists at the target location"
 msgstr "Enaka ali večja datoteka že obstaja v ciljni lokaciji"
 
-#: dcpp/QueueManager.cpp:478
+#: dcpp/QueueManager.cpp:458
 msgid "A file with a different size already exists in the queue"
 msgstr "Datoteka druge velikosti že obstaja v čakalni vrsti"
 
-#: dcpp/QueueManager.cpp:481
+#: dcpp/QueueManager.cpp:461
 msgid "A file with different tth root already exists in the queue"
 msgstr "Datoteka z drugim tthjem že obstaja v čakalni vrsti"
 
-#: dcpp/QueueManager.cpp:450
+#: dcpp/QueueManager.cpp:423
 msgid "A file with the same hash already exists in your share"
 msgstr "Datoteka z istim hashom je že v souporabi"
 
@@ -123,19 +127,25 @@ msgstr "CRC32 neskadnost (SFV-preverjanje)"
 msgid "CRC32 inconsistency (SFV-Check) (File: %1%)"
 msgstr "CRC32 neskadnost (SFV-preverjanje) (Datoteka: %1%)"
 
-#: dcpp/ConnectionManager.cpp:376
-msgid "Certificate not trusted, unable to connect"
-msgstr "Cerfitikat ni veljaven, ne morem povezati"
-
-#: dcpp/BufferedSocket.cpp:148
+#: dcpp/BufferedSocket.cpp:165 dcpp/SSLSocket.cpp:154
 #, fuzzy
 msgid "Connection closed"
 msgstr "Povezava prekinjena"
 
 #: dcpp/Socket.cpp:154 dcpp/ConnectionManager.cpp:182
-#: dcpp/BufferedSocket.cpp:131
+#: dcpp/BufferedSocket.cpp:130 dcpp/BufferedSocket.cpp:150
 msgid "Connection timeout"
 msgstr "Časovna omejitev za povezavo je potekla"
+
+#: dcpp/ConnectionManager.cpp:250
+#, boost-format
+msgid "Connectivity error: %1%"
+msgstr ""
+
+#: dcpp/ConnectionManager.cpp:243
+#, fuzzy
+msgid "Connectivity restored"
+msgstr "Povezava prekinjena"
 
 #: dcpp/DownloadManager.cpp:231
 #, boost-format
@@ -146,11 +156,15 @@ msgstr "Ne morem odpreti ciljne datoteke: %1%"
 msgid "Directory already shared"
 msgstr "Mapa že v souporabi"
 
-#: dcpp/ADLSearch.h:281
+#: dcpp/DirectoryListing.cpp:165
+msgid "Directory missing name attribute"
+msgstr ""
+
+#: dcpp/ADLSearch.h:277
 msgid "Discard"
 msgstr "Zavrzi"
 
-#: dcpp/BufferedSocket.cpp:405
+#: dcpp/BufferedSocket.cpp:422
 msgid "Disconnected"
 msgstr "Odklopljeno"
 
@@ -159,7 +173,7 @@ msgstr "Odklopljeno"
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Odklopljen uporabnik, ki je zapustil vozlišče (hub): %1%"
 
-#: dcpp/DCPlusPlus.cpp:111
+#: dcpp/DCPlusPlus.cpp:107
 msgid "Download Queue"
 msgstr "Čakalna vrsta"
 
@@ -172,12 +186,12 @@ msgstr ""
 "Duplikat datoteke ne bo v souporabi: %1%%2% (Velikost: %3% B) Prevara v "
 "primerjavi s: %4%%5%"
 
-#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
+#: dcpp/QueueManager.cpp:532 dcpp/QueueManager.cpp:536
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Podvojen vir: %1%"
 
-#: dcpp/HashManager.cpp:456
+#: dcpp/HashManager.cpp:458
 #, fuzzy, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Napaka pri kreiranju datoteke temeljitega preverjanja: %1%"
@@ -193,12 +207,16 @@ msgstr "Napaka med stiskanjem"
 msgid "Error during decompression"
 msgstr "Napaka med razširjevanjem"
 
-#: dcpp/HashManager.cpp:772
+#: dcpp/CryptoManager.cpp:153
+msgid "Error generating certificate"
+msgstr ""
+
+#: dcpp/HashManager.cpp:774
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Napaka pri temeljitem preverjanju %1%: %2%"
 
-#: dcpp/HashManager.cpp:118 dcpp/HashManager.cpp:333
+#: dcpp/HashManager.cpp:118 dcpp/HashManager.cpp:332
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Napaka pri shranjevanju datoteke temeljitega preverjanja: %1%"
@@ -213,11 +231,11 @@ msgstr "Napaka pri nalaganju datoteke s cerfitikati"
 msgid "Failed to load private key"
 msgstr "Napaka pri nalaganju zasebnega ključa"
 
-#: dcpp/AdcHub.cpp:206
+#: dcpp/AdcHub.cpp:208
 msgid "Failed to negotiate base protocol"
-msgstr ""
+msgstr "Dogovor o osnovnem protokolu ni bil mogoč"
 
-#: dcpp/Socket.cpp:408
+#: dcpp/Socket.cpp:402
 msgid ""
 "Failed to set up the socks server for UDP relay (check socks address and "
 "port)"
@@ -244,7 +262,7 @@ msgstr ""
 msgid "File list refresh initiated"
 msgstr "Osveževanje seznama datotek zagnano"
 
-#: dcpp/DirectoryListing.cpp:101
+#: dcpp/DirectoryListing.cpp:102
 msgid "File not available"
 msgstr "Datoteka ni na voljo"
 
@@ -264,22 +282,26 @@ msgstr "Celotno drevo se ne ujema v TTH"
 
 #: dcpp/CryptoManager.cpp:220
 msgid "Generated new TLS certificate"
+msgstr "Ustvarjeno novo potrdilo TLS"
+
+#: dcpp/DirectoryListing.cpp:95
+msgid "Greater than maximum filelist size"
 msgstr ""
 
-#: dcpp/DCPlusPlus.cpp:105
+#: dcpp/DCPlusPlus.cpp:101
 msgid "Hash database"
 msgstr "Hash baza"
 
-#: dcpp/HashManager.cpp:677
+#: dcpp/HashManager.cpp:679
 msgid "Hash database rebuilt"
 msgstr "Hash baza obnovljena"
 
-#: dcpp/HashManager.cpp:73 dcpp/HashManager.cpp:277
+#: dcpp/HashManager.cpp:73 dcpp/HashManager.cpp:276
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Temeljito preverjanje datotek spodletelo: %1%"
 
-#: dcpp/AdcHub.cpp:212
+#: dcpp/AdcHub.cpp:214
 msgid ""
 "Hub probably uses an old version of ADC, please encourage the owner to "
 "upgrade"
@@ -289,22 +311,19 @@ msgstr ""
 msgid "Invalid size"
 msgstr "Napačna velikost"
 
-#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
+#: dcpp/QueueManager.cpp:505 dcpp/QueueManager.cpp:513
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
 msgstr ""
+"Neveljavna ciljna datoteka (neobstoječa mapa, preverite privzeto mapo za "
+"snemanje)"
 
 #: dcpp/FavoriteManager.cpp:438
 msgid "Kick user(s)"
 msgstr "Brcni uporabnika(e)"
 
-#: dcpp/ConnectionManager.cpp:230
-#, boost-format
-msgid "Listening socket failed (you need to restart %1%): %2%"
-msgstr ""
-
-#: dcpp/BufferedSocket.cpp:237
+#: dcpp/BufferedSocket.cpp:254
 msgid "Maximum command length exceeded"
 msgstr "Max dolžina za ukaz presežena"
 
@@ -313,22 +332,31 @@ msgstr "Max dolžina za ukaz presežena"
 msgid "More bytes written than requested"
 msgstr "Več podatkov je bilo poslano kot pričakovano"
 
+#: dcpp/CryptoManager.cpp:142
+#, fuzzy
+msgid "No certificate file chosen"
+msgstr "TLS onemogočen, nastavi listo z cerfitikati"
+
 #: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "Ni izbrane mape"
+
+#: dcpp/CryptoManager.cpp:139
+msgid "No private key file chosen"
+msgstr ""
 
 #: dcpp/DownloadManager.cpp:424
 msgid "No slots available"
 msgstr "Ni prostih rež (slotov)"
 
-#: dcpp/AdcHub.cpp:573
+#: dcpp/AdcHub.cpp:575
 #, fuzzy, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Ne sprejemam povezav - potreben je ponovni zagon %1%"
 
 #: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
-#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
-#: dcpp/SearchManager.cpp:274
+#: dcpp/SearchManager.cpp:227 dcpp/SearchManager.cpp:289
+#: dcpp/SearchManager.cpp:291
 msgid "Offline"
 msgstr "Odsoten"
 
@@ -349,11 +377,25 @@ msgstr ""
 msgid "Response does not match request"
 msgstr "Odziv se ne ujema z zahtevo"
 
-#: dcpp/DCPlusPlus.cpp:108
+#: dcpp/SSLSocket.cpp:160
+#, boost-format
+msgid "SSL Error: %1% (%2%, %3%)"
+msgstr ""
+
+#: dcpp/SearchManager.cpp:125
+#, fuzzy, boost-format
+msgid "Search disabled: %1%"
+msgstr "Temeljito preverjanje datotek spodletelo: %1%"
+
+#: dcpp/SearchManager.cpp:118
+msgid "Search enabled again"
+msgstr ""
+
+#: dcpp/DCPlusPlus.cpp:104
 msgid "Shared Files"
 msgstr "Datoteke v souporabi"
 
-#: dcpp/Socket.cpp:269 dcpp/Socket.cpp:273
+#: dcpp/Socket.cpp:263 dcpp/Socket.cpp:267
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 "Overjanje na socks strežniku spodletelo (napačno uporabniško ime / geslo?)"
@@ -371,24 +413,29 @@ msgstr "TLS onemogočen, nastavi listo z cerfitikati"
 msgid "TTH inconsistency"
 msgstr "TTH neskladnost"
 
-#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
+#: dcpp/QueueManager.cpp:809
+#, fuzzy
+msgid "Target file is missing or wrong size"
+msgstr "Ime ciljne datoteke je predolgo"
+
+#: dcpp/QueueManager.cpp:500 dcpp/QueueManager.cpp:509
 msgid "Target filename too long"
 msgstr "Ime ciljne datoteke je predolgo"
 
-#: dcpp/QueueManager.cpp:824
+#: dcpp/QueueManager.cpp:801
 msgid "Target removed"
 msgstr "Cilj odstranjen"
 
-#: dcpp/Socket.cpp:255
+#: dcpp/Socket.cpp:249
 msgid "The socks server doesn't support login / password authentication"
 msgstr "Socks strežnik ne podpira overjanja uporabnika / gesla"
 
-#: dcpp/Socket.cpp:162 dcpp/Socket.cpp:173 dcpp/Socket.cpp:206
-#: dcpp/Socket.cpp:210 dcpp/Socket.cpp:237 dcpp/Socket.cpp:252
+#: dcpp/Socket.cpp:162 dcpp/Socket.cpp:170 dcpp/Socket.cpp:203
+#: dcpp/Socket.cpp:207 dcpp/Socket.cpp:231 dcpp/Socket.cpp:246
 msgid "The socks server failed establish a connection"
 msgstr "Socks strežnik ni uspel vzpostaviti povezave"
 
-#: dcpp/Socket.cpp:241
+#: dcpp/Socket.cpp:235
 msgid "The socks server requires authentication"
 msgstr "Socks strežnik potrebuje overjanje"
 
@@ -396,7 +443,7 @@ msgstr "Socks strežnik potrebuje overjanje"
 msgid "The temporary download directory cannot be shared"
 msgstr "Mapo začasnega odjemanja ni mogoče deliti"
 
-#: dcpp/QueueManager.cpp:470
+#: dcpp/QueueManager.cpp:450
 msgid "This file is already queued"
 msgstr "Ta datoteka je že v čakalni vrsti"
 
@@ -404,7 +451,7 @@ msgstr "Ta datoteka je že v čakalni vrsti"
 msgid "Unable to create thread"
 msgstr "Niti ni možno ustvariti"
 
-#: dcpp/QueueManager.cpp:1021
+#: dcpp/QueueManager.cpp:999
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Nemogoče odpreti seznam datotek: %1%"
@@ -413,7 +460,7 @@ msgstr "Nemogoče odpreti seznam datotek: %1%"
 msgid "Unable to read hash data file"
 msgstr "Ne morem prebrati hash datoteke"
 
-#: dcpp/QueueManager.cpp:335
+#: dcpp/QueueManager.cpp:331
 #, fuzzy, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "Nemogoče je preimenovati %1%: %2%"
@@ -428,17 +475,20 @@ msgstr "Nemogoče je poslati datoteko %1%: %2%"
 msgid "Unknown error: 0x%1$x"
 msgstr "Neznana napaka: 0x%1$x"
 
-#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
+#: dcpp/QueueManager.cpp:417
 msgid "You're trying to download from yourself!"
 msgstr "Poizkušaš odjemati od samega sebe!"
 
-#: dcpp/SettingsManager.cpp:157
+#: dcpp/SettingsManager.cpp:166
 msgid "downloaded from"
 msgstr "odjemano od"
 
-#: dcpp/SettingsManager.cpp:158
+#: dcpp/SettingsManager.cpp:167
 msgid "uploaded to"
 msgstr "oddano k"
+
+#~ msgid "Certificate not trusted, unable to connect"
+#~ msgstr "Cerfitikat ni veljaven, ne morem povezati"
 
 #~ msgid "More data was sent than was expected"
 #~ msgstr "Več podatkov je bilo poslano kot pričakovano"

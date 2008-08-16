@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-06-16 22:09+0200\n"
+"POT-Creation-Date: 2008-08-16 10:33+0200\n"
 "PO-Revision-Date: 2008-03-13 22:31+0000\n"
 "Last-Translator: Jacek Sieka <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,10 +15,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
+"X-Launchpad-Export-Date: 2008-08-16 08:17+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: win32/AboutDlg.cpp:59
+#: win32/AboutDlg.cpp:58
 msgid ""
 "\n"
 "(c) Copyright 2001-2008 Jacek Sieka\n"
@@ -28,19 +28,39 @@ msgid ""
 "http://dcplusplus.sourceforge.net/"
 msgstr ""
 
-#: win32/MainWindow.cpp:891
+#: win32/MainWindow.cpp:712
+#, boost-format
+msgid " Encrypted Transfer Port (%1% TCP)"
+msgstr ""
+
+#: win32/MainWindow.cpp:717
+#, fuzzy, boost-format
+msgid " Search Port (%1% UDP)"
+msgstr "Cari"
+
+#: win32/MainWindow.cpp:707
+#, boost-format
+msgid " Transfer Port (%1% TCP)"
+msgstr ""
+
+#: win32/FinishedFrameBase.h:659
+#, fuzzy
+msgid "% transferred"
+msgstr "Terjemahan"
+
+#: win32/MainWindow.cpp:902
 #, fuzzy, boost-format
 msgid ""
 "%1%\n"
 "Open download page?"
 msgstr "Buka direktori unduh"
 
-#: win32/TransferView.cpp:586
+#: win32/TransferView.cpp:595
 #, boost-format
 msgid "%1% (%2$0.2f)"
 msgstr ""
 
-#: win32/WinUtil.cpp:430
+#: win32/WinUtil.cpp:429
 #, boost-format
 msgid "%1% files"
 msgstr ""
@@ -50,12 +70,12 @@ msgstr ""
 msgid "%1% files/h, %2% files left"
 msgstr ""
 
-#: win32/SearchFrame.cpp:607
+#: win32/SearchFrame.cpp:1054
 #, boost-format
 msgid "%1% filtered"
 msgstr ""
 
-#: win32/SearchFrame.cpp:602 win32/FinishedFrameBase.h:549
+#: win32/SearchFrame.cpp:593 win32/FinishedFrameBase.h:504
 #, boost-format
 msgid "%1% item"
 msgid_plural "%1% items"
@@ -67,14 +87,14 @@ msgstr[1] ""
 msgid "%1% left"
 msgstr ""
 
-#: win32/SearchFrame.cpp:541 win32/HubFrame.cpp:922
+#: win32/SearchFrame.cpp:536 win32/HubFrame.cpp:770
 #, fuzzy, boost-format
 msgid "%1% user"
 msgid_plural "%1% users"
 msgstr[0] "Tak ada pengguna"
 
-#: win32/TransferView.cpp:601 win32/TransferView.cpp:649
-#: win32/FinishedFrameBase.h:551
+#: win32/TransferView.cpp:610 win32/TransferView.cpp:658
+#: win32/FinishedFrameBase.h:506
 #, boost-format
 msgid "%1%/s"
 msgstr ""
@@ -89,16 +109,16 @@ msgstr ""
 msgid "&Add"
 msgstr "Telah Ditambah"
 
-#: win32/UploadPage.cpp:59 win32/FavoriteDirsPage.cpp:44
+#: win32/UploadPage.cpp:59 win32/FavoriteDirsPage.cpp:49
 msgid "&Add folder"
 msgstr ""
 
-#: win32/WinUtil.cpp:1129 win32/UserInfoBase.h:97
+#: win32/WinUtil.cpp:1114 win32/UserInfoBase.h:97
 msgid "&Browse file list"
 msgstr ""
 
-#: win32/DirectoryListingFrame.cpp:373 win32/SearchFrame.cpp:840
-#: win32/SearchFrame.cpp:870 win32/DownloadPage.cpp:54 win32/LogPage.cpp:40
+#: win32/DirectoryListingFrame.cpp:365 win32/SearchFrame.cpp:810
+#: win32/SearchFrame.cpp:840 win32/DownloadPage.cpp:54 win32/LogPage.cpp:40
 #: win32/Appearance2Page.cpp:52
 #, fuzzy
 msgid "&Browse..."
@@ -109,43 +129,42 @@ msgstr "Telusuri..."
 msgid "&Change"
 msgstr "Ubah Log"
 
-#: win32/PrivateFrame.cpp:378 win32/HubFrame.cpp:1194
-#: win32/MDIChildFrame.h:201
+#: win32/MDIChildFrame.h:202
 #, fuzzy
 msgid "&Close"
 msgstr "Warna"
 
-#: win32/PublicHubsFrame.cpp:152
+#: win32/PublicHubsFrame.cpp:133
 msgid "&Configure"
 msgstr ""
 
-#: win32/FavHubsFrame.cpp:71 win32/FavHubsFrame.cpp:283
-#: win32/PublicHubsFrame.cpp:460
+#: win32/FavHubsFrame.cpp:67 win32/FavHubsFrame.cpp:281
+#: win32/PublicHubsFrame.cpp:423
 #, fuzzy
 msgid "&Connect"
 msgstr "Tersambung"
 
-#: win32/HubFrame.cpp:1165
+#: win32/HubFrame.cpp:1013
 msgid "&Copy"
 msgstr ""
 
-#: win32/UsersFrame.cpp:188
+#: win32/UsersFrame.cpp:182
 #, fuzzy
 msgid "&Description"
 msgstr "Deskripsi"
 
-#: win32/TransferView.cpp:194
+#: win32/TransferView.cpp:191
 #, fuzzy
 msgid "&Disconnect"
 msgstr "Hubung Cepat"
 
-#: win32/DirectoryListingFrame.cpp:315 win32/DirectoryListingFrame.cpp:340
-#: win32/DirectoryListingFrame.cpp:352 win32/SearchFrame.cpp:805
+#: win32/DirectoryListingFrame.cpp:310 win32/DirectoryListingFrame.cpp:334
+#: win32/DirectoryListingFrame.cpp:344 win32/SearchFrame.cpp:777
 #, fuzzy
 msgid "&Download"
 msgstr "Unduh"
 
-#: win32/MainWindow.cpp:217
+#: win32/MainWindow.cpp:242
 #, fuzzy
 msgid "&Download Queue\tCtrl+D"
 msgstr "Antrian Unduh"
@@ -154,129 +173,128 @@ msgstr "Antrian Unduh"
 msgid "&Edit"
 msgstr ""
 
-#: win32/MainWindow.cpp:214
+#: win32/MainWindow.cpp:239
 #, fuzzy
 msgid "&Favorite Hubs\tCtrl+F"
 msgstr "Hub Kesukaan"
 
-#: win32/MainWindow.cpp:191
+#: win32/MainWindow.cpp:216
 #, fuzzy
 msgid "&File"
 msgstr "Arsip"
 
-#: win32/TransferView.cpp:191
+#: win32/TransferView.cpp:188
 msgid "&Force attempt"
 msgstr ""
 
-#: win32/QueueFrame.cpp:998 win32/WaitingUsersFrame.cpp:79
-#: win32/PrivateFrame.cpp:370 win32/WinUtil.cpp:1126 win32/UserInfoBase.h:95
+#: win32/QueueFrame.cpp:897 win32/WaitingUsersFrame.cpp:81
+#: win32/PrivateFrame.cpp:286 win32/WinUtil.cpp:1110 win32/UserInfoBase.h:95
 msgid "&Get file list"
 msgstr ""
 
-#: win32/DirectoryListingFrame.cpp:329
+#: win32/DirectoryListingFrame.cpp:324
 #, fuzzy
 msgid "&Go to directory"
 msgstr "Unduh semua direktori"
 
-#: win32/MainWindow.cpp:243 win32/ADLSearchFrame.cpp:97
+#: win32/MainWindow.cpp:268 win32/ADLSearchFrame.cpp:93
 msgid "&Help"
 msgstr ""
 
-#: win32/PrivateFrame.cpp:371 win32/WinUtil.cpp:1132 win32/UserInfoBase.h:98
+#: win32/PrivateFrame.cpp:287 win32/WinUtil.cpp:1117 win32/UserInfoBase.h:98
 #, fuzzy
 msgid "&Match queue"
 msgstr "Cocokkan antrian"
 
-#: win32/QueueFrame.cpp:952 win32/QueueFrame.cpp:970 win32/QueueFrame.cpp:980
+#: win32/QueueFrame.cpp:851 win32/QueueFrame.cpp:869 win32/QueueFrame.cpp:879
 #, fuzzy
 msgid "&Move/Rename"
 msgstr "Ganti nama"
 
-#: win32/FavHubsFrame.cpp:77 win32/FavHubsFrame.cpp:285
-#: win32/ADLSearchFrame.cpp:67 win32/ADLSearchFrame.cpp:292
+#: win32/FavHubsFrame.cpp:73 win32/FavHubsFrame.cpp:283
+#: win32/ADLSearchFrame.cpp:63 win32/ADLSearchFrame.cpp:290
 msgid "&New..."
 msgstr ""
 
-#: win32/MainWindow.cpp:226
+#: win32/MainWindow.cpp:251
 #, fuzzy
 msgid "&Notepad\tCtrl+N"
 msgstr "Notepad"
 
-#: win32/FinishedFrameBase.h:449 win32/FinishedFrameBase.h:467
+#: win32/FinishedFrameBase.h:385
 msgid "&Open"
 msgstr ""
 
-#: win32/FavHubsFrame.cpp:83 win32/FavHubsFrame.cpp:286
-#: win32/ADLSearchFrame.cpp:73 win32/ADLSearchFrame.cpp:293
+#: win32/FavHubsFrame.cpp:79 win32/FavHubsFrame.cpp:284
+#: win32/ADLSearchFrame.cpp:69 win32/ADLSearchFrame.cpp:291
 #, fuzzy
 msgid "&Properties"
 msgstr "ADLSearch Properties"
 
-#: win32/MainWindow.cpp:213
+#: win32/MainWindow.cpp:238
 #, fuzzy
 msgid "&Public Hubs\tCtrl+P"
 msgstr "Hub Publik"
 
-#: win32/MainWindow.cpp:193
+#: win32/MainWindow.cpp:218
 #, fuzzy
 msgid "&Quick Connect ...\tCtrl+Q"
 msgstr "Hubung Cepat"
 
-#: win32/MainWindow.cpp:194 win32/HubFrame.cpp:1189
+#: win32/MainWindow.cpp:219 win32/HubFrame.cpp:1032
 msgid "&Reconnect\tCtrl+R"
 msgstr ""
 
-#: win32/PublicHubsFrame.cpp:158
+#: win32/PublicHubsFrame.cpp:139
 msgid "&Refresh"
 msgstr ""
 
-#: win32/UploadPage.cpp:58 win32/QueueFrame.cpp:960 win32/QueueFrame.cpp:972
-#: win32/QueueFrame.cpp:982 win32/HubListsDlg.cpp:97
-#: win32/WaitingUsersFrame.cpp:81 win32/FavoriteDirsPage.cpp:43
-#: win32/SearchFrame.cpp:821 win32/FavHubsFrame.cpp:101
-#: win32/FavHubsFrame.cpp:290 win32/ADLSearchFrame.cpp:91
-#: win32/ADLSearchFrame.cpp:294 win32/UCPage.cpp:46 win32/UsersFrame.cpp:189
-#: win32/FinishedFrameBase.h:452 win32/FinishedFrameBase.h:470
-#: win32/FinishedFrameBase.h:489
+#: win32/UploadPage.cpp:58 win32/QueueFrame.cpp:859 win32/QueueFrame.cpp:871
+#: win32/QueueFrame.cpp:881 win32/HubListsDlg.cpp:97
+#: win32/WaitingUsersFrame.cpp:83 win32/FavoriteDirsPage.cpp:48
+#: win32/SearchFrame.cpp:793 win32/FavHubsFrame.cpp:97
+#: win32/FavHubsFrame.cpp:288 win32/ADLSearchFrame.cpp:87
+#: win32/ADLSearchFrame.cpp:292 win32/UCPage.cpp:46 win32/UsersFrame.cpp:183
+#: win32/FinishedFrameBase.h:388 win32/FinishedFrameBase.h:417
 #, fuzzy
 msgid "&Remove"
 msgstr "Ganti nama"
 
-#: win32/SpyFrame.cpp:190
+#: win32/SpyFrame.cpp:151
 #, fuzzy
 msgid "&Search"
 msgstr "Cari"
 
-#: win32/MainWindow.cpp:222
+#: win32/MainWindow.cpp:247
 #, fuzzy
 msgid "&Search\tCtrl+S"
 msgstr "Cari"
 
-#: win32/QueueFrame.cpp:1005 win32/WaitingUsersFrame.cpp:84
-#: win32/WinUtil.cpp:1135 win32/UserInfoBase.h:99
+#: win32/QueueFrame.cpp:904 win32/WaitingUsersFrame.cpp:86
+#: win32/WinUtil.cpp:1120 win32/UserInfoBase.h:99
 msgid "&Send private message"
 msgstr ""
 
-#: win32/MainWindow.cpp:211
+#: win32/MainWindow.cpp:236
 #, fuzzy
 msgid "&View"
 msgstr "Video"
 
-#: win32/DirectoryListingFrame.cpp:319 win32/SearchFrame.cpp:809
-#: win32/FinishedFrameBase.h:448 win32/FinishedFrameBase.h:466
+#: win32/DirectoryListingFrame.cpp:314 win32/SearchFrame.cpp:781
+#: win32/FinishedFrameBase.h:384
 msgid "&View as text"
 msgstr ""
 
-#: win32/MainWindow.cpp:233
+#: win32/MainWindow.cpp:258
 msgid "&Window"
 msgstr ""
 
-#: win32/HubFrame.cpp:489
+#: win32/HubFrame.cpp:433
 #, boost-format
 msgid "*** Joins: %1%"
 msgstr ""
 
-#: win32/HubFrame.cpp:496
+#: win32/HubFrame.cpp:440
 #, boost-format
 msgid "*** Parts: %1%"
 msgstr ""
@@ -295,7 +313,7 @@ msgstr ""
 msgid "-:--:-- left"
 msgstr ""
 
-#: win32/WinUtil.cpp:1048
+#: win32/WinUtil.cpp:1038
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -311,7 +329,7 @@ msgid ""
 "contents?"
 msgstr ""
 
-#: win32/MainWindow.cpp:223 win32/MainWindow.cpp:301
+#: win32/MainWindow.cpp:248 win32/MainWindow.cpp:326
 msgid "ADL Search"
 msgstr "Pencarian ADL"
 
@@ -319,15 +337,15 @@ msgstr "Pencarian ADL"
 msgid "ADLSearch Properties"
 msgstr "ADLSearch Properties"
 
-#: win32/MainWindow.cpp:320 win32/MainWindow.cpp:596
+#: win32/MainWindow.cpp:350 win32/MainWindow.cpp:614
 msgid "AWAY"
 msgstr "PERGI"
 
-#: win32/AboutDlg.cpp:57
+#: win32/AboutDlg.cpp:56
 msgid "About DC++"
 msgstr ""
 
-#: win32/MainWindow.cpp:249
+#: win32/MainWindow.cpp:274
 msgid "About DC++..."
 msgstr "Tentang DC++..."
 
@@ -335,9 +353,9 @@ msgstr "Tentang DC++..."
 msgid "Accept custom user commands from hub"
 msgstr "Terima perintah custom pengguna dari hub"
 
-#: win32/WaitingUsersFrame.cpp:83 win32/PrivateFrame.cpp:374
-#: win32/HubFrame.cpp:1186 win32/WinUtil.cpp:1138
-#: win32/PublicHubsFrame.cpp:461 win32/UserInfoBase.h:101
+#: win32/WaitingUsersFrame.cpp:85 win32/PrivateFrame.cpp:290
+#: win32/HubFrame.cpp:1029 win32/WinUtil.cpp:1123
+#: win32/PublicHubsFrame.cpp:424 win32/UserInfoBase.h:101
 #, fuzzy
 msgid "Add To &Favorites"
 msgstr "Hub Kesukaan"
@@ -346,29 +364,29 @@ msgstr "Hub Kesukaan"
 msgid "Add finished files to share instantly (if shared)"
 msgstr "Tambah arsip yang selesai langsung ke share (bila di-share)"
 
-#: win32/QueueFrame.cpp:47
+#: win32/QueueFrame.cpp:42
 msgid "Added"
 msgstr "Telah Ditambah"
 
-#: win32/FavHubProperties.cpp:74 win32/MainWindow.cpp:392
-#: win32/PublicHubsFrame.cpp:52
+#: win32/FavHubProperties.cpp:74 win32/MainWindow.cpp:447
+#: win32/PublicHubsFrame.cpp:35
 msgid "Address"
 msgstr "Alamat"
 
-#: win32/SettingsDialog.cpp:107
+#: win32/SettingsDialog.cpp:112
 msgid "Advanced"
 msgstr "Canggih"
 
-#: win32/QueueFrame.cpp:1014 win32/QueueFrame.cpp:1023 win32/WinUtil.cpp:1086
+#: win32/QueueFrame.cpp:912 win32/QueueFrame.cpp:921 win32/WinUtil.cpp:1076
 msgid "All"
 msgstr "Semua"
 
-#: win32/QueueFrame.cpp:438
+#: win32/QueueFrame.cpp:338
 #, fuzzy, boost-format
 msgid "All %1% users offline"
 msgstr "Pengguna terputus"
 
-#: win32/WinUtil.cpp:433 win32/WinUtil.cpp:441
+#: win32/WinUtil.cpp:432 win32/WinUtil.cpp:440
 msgid "All files"
 msgstr ""
 
@@ -380,36 +398,40 @@ msgstr ""
 msgid "Allow TLS connections to hubs without trusted certificate"
 msgstr ""
 
+#: win32/AppearancePage.cpp:60
+msgid "Always display tray icon"
+msgstr ""
+
 #: win32/CommandDlg.cpp:146
 msgid "Always open help file with this dialog"
 msgstr "Selalu buka arsip bantuan dengan dialog ini"
 
-#: win32/SearchFrame.cpp:203 win32/HubFrame.cpp:122
-#: win32/PublicHubsFrame.cpp:139
+#: win32/SearchFrame.cpp:202 win32/HubFrame.cpp:115
+#: win32/PublicHubsFrame.cpp:120
 msgid "Any"
 msgstr "Apa saja"
 
-#: win32/SettingsDialog.cpp:100
+#: win32/SettingsDialog.cpp:105
 msgid "Appearance"
 msgstr "Penampakan"
 
-#: win32/SearchFrame.cpp:174
+#: win32/SearchFrame.cpp:173
 msgid "At least"
 msgstr "Paling tidak"
 
-#: win32/SearchFrame.cpp:175
+#: win32/SearchFrame.cpp:174
 msgid "At most"
 msgstr "Paling banyak"
 
-#: win32/SearchFrame.cpp:204
+#: win32/SearchFrame.cpp:203
 msgid "Audio"
 msgstr "Audio"
 
-#: win32/FavHubsFrame.cpp:32
+#: win32/FavHubsFrame.cpp:30
 msgid "Auto connect / Name"
 msgstr "Sambung Otomatis / Nama"
 
-#: win32/UsersFrame.cpp:30
+#: win32/UsersFrame.cpp:28
 msgid "Auto grant slot / Nick"
 msgstr "Otomatis beri slot / Nick"
 
@@ -444,7 +466,7 @@ msgstr "Pengaturan sambungan"
 msgid "Autodrop slow sources for all queue items (except filelists)"
 msgstr ""
 
-#: win32/ADLSearchFrame.cpp:40
+#: win32/ADLSearchFrame.cpp:38
 msgid "Automatic Directory Listing Search"
 msgstr "Pencarian Otomatis Daftar Direktori"
 
@@ -468,27 +490,27 @@ msgstr "Otomatis buka slot ekstra bila kecepatan di bawah (0 = non-aktif)"
 msgid "Automatically search for alternative download locations"
 msgstr "Otomatis cari lokasi unduh alternatif"
 
-#: win32/SpyFrame.cpp:116
+#: win32/SpyFrame.cpp:111
 #, boost-format
 msgid "Average/s: %1%"
 msgstr ""
 
-#: win32/HubFrame.cpp:940
+#: win32/HubFrame.cpp:788
 #, fuzzy, boost-format
 msgid "Average: %1%"
 msgstr "Pengguna"
 
-#: win32/WinUtil.cpp:283 win32/WinUtil.cpp:293
+#: win32/WinUtil.cpp:282 win32/WinUtil.cpp:292
 msgid "Away mode off"
 msgstr "Mode pergi mati"
 
-#: win32/WinUtil.cpp:288
+#: win32/WinUtil.cpp:287
 #, fuzzy, boost-format
 msgid "Away mode on: %1%"
 msgstr "Mode pergi mati"
 
 #: win32/Advanced3Page.cpp:81 win32/Advanced3Page.cpp:83
-#: win32/SearchFrame.cpp:191 win32/ADLSProperties.cpp:99
+#: win32/SearchFrame.cpp:190 win32/ADLSProperties.cpp:99
 msgid "B"
 msgstr "B"
 
@@ -509,24 +531,24 @@ msgstr "Putuskan pada kecocokan pertama pencarian ADL"
 msgid "Browse..."
 msgstr "Telusuri..."
 
-#: win32/SearchFrame.cpp:45 win32/HubFrame.cpp:44 win32/UsersFrame.cpp:34
+#: win32/SearchFrame.cpp:42 win32/HubFrame.cpp:42 win32/UsersFrame.cpp:32
 msgid "CID"
 msgstr ""
 
-#: win32/FinishedFrameBase.h:674
+#: win32/FinishedFrameBase.h:661
 msgid "CRC Checked"
 msgstr ""
 
-#: win32/QueueFrame.cpp:484
+#: win32/QueueFrame.cpp:384
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "Inkonsistensi CRC32 (Pemeriksaan SFV)"
 
-#: win32/SettingsDialog.cpp:79 win32/CommandDlg.cpp:156
+#: win32/SettingsDialog.cpp:84 win32/CommandDlg.cpp:156
 #, fuzzy
 msgid "Cancel"
 msgstr "Ubah Log"
 
-#: win32/MainWindow.cpp:248
+#: win32/MainWindow.cpp:273
 msgid "Change Log"
 msgstr "Ubah Log"
 
@@ -551,23 +573,23 @@ msgstr ""
 msgid "Clear search box after each search"
 msgstr "Kosongkan kotak pencarian setelah tiap pencarian"
 
-#: win32/MainWindow.cpp:236
+#: win32/MainWindow.cpp:261
 msgid "Close all PM windows"
 msgstr ""
 
-#: win32/MainWindow.cpp:238
+#: win32/MainWindow.cpp:263
 msgid "Close all file list windows"
 msgstr ""
 
-#: win32/MainWindow.cpp:237
+#: win32/MainWindow.cpp:262
 msgid "Close all offline PM windows"
 msgstr ""
 
-#: win32/MainWindow.cpp:239
+#: win32/MainWindow.cpp:264
 msgid "Close all search windows"
 msgstr ""
 
-#: win32/MainWindow.cpp:235
+#: win32/MainWindow.cpp:260
 msgid "Close disconnected"
 msgstr "Tutup yang sudah putus"
 
@@ -575,7 +597,7 @@ msgstr "Tutup yang sudah putus"
 msgid "Colors"
 msgstr "Warna"
 
-#: win32/SettingsDialog.cpp:101
+#: win32/SettingsDialog.cpp:106
 msgid "Colors and sounds"
 msgstr ""
 
@@ -587,7 +609,7 @@ msgstr "Perintah"
 msgid "Command Type"
 msgstr ""
 
-#: win32/SearchFrame.cpp:205
+#: win32/SearchFrame.cpp:204
 msgid "Compressed"
 msgstr "Termampat"
 
@@ -595,7 +617,7 @@ msgstr "Termampat"
 msgid "Configure Public Hub Lists"
 msgstr "Atur Daftar Hub Publik"
 
-#: win32/HubListsDlg.cpp:61 win32/PublicHubsFrame.cpp:171
+#: win32/HubListsDlg.cpp:61 win32/PublicHubsFrame.cpp:152
 msgid "Configured Public Hub Lists"
 msgstr "Daftar Hub Publik"
 
@@ -620,30 +642,30 @@ msgstr "Konfirmasi penghapusan baris di antrian unduh"
 msgid "Connect to hub"
 msgstr ""
 
-#: win32/HubFrame.cpp:499
+#: win32/HubFrame.cpp:452
 msgid "Connected"
 msgstr "Tersambung"
 
-#: win32/TransferView.cpp:658 win32/TransferView.cpp:665
+#: win32/TransferView.cpp:667 win32/TransferView.cpp:674
 #, fuzzy
 msgid "Connecting"
 msgstr "Sambungan"
 
-#: win32/TransferView.cpp:278
+#: win32/TransferView.cpp:275
 #, fuzzy
 msgid "Connecting (forced)"
 msgstr "Tersambung"
 
-#: win32/HubFrame.cpp:818
+#: win32/HubFrame.cpp:670
 #, fuzzy, boost-format
 msgid "Connecting to %1%..."
 msgstr "Sambungan"
 
-#: win32/SearchFrame.cpp:40 win32/HubFrame.cpp:41
+#: win32/SearchFrame.cpp:37 win32/HubFrame.cpp:39
 msgid "Connection"
 msgstr "Sambungan"
 
-#: win32/SettingsDialog.cpp:89
+#: win32/SettingsDialog.cpp:94
 msgid "Connection settings"
 msgstr "Pengaturan sambungan"
 
@@ -656,30 +678,30 @@ msgstr "Sambungan"
 msgid "Context"
 msgstr ""
 
-#: win32/HubFrame.cpp:1190 win32/PublicHubsFrame.cpp:462
+#: win32/HubFrame.cpp:1033 win32/PublicHubsFrame.cpp:425
 #, fuzzy
 msgid "Copy &address to clipboard"
 msgstr "Salin pautan magnet ke clipboard"
 
-#: win32/TransferView.cpp:192
+#: win32/TransferView.cpp:189
 #, fuzzy
 msgid "Copy &nick to clipboard"
 msgstr "Salin pautan magnet ke clipboard"
 
-#: win32/WaitingUsersFrame.cpp:80
+#: win32/WaitingUsersFrame.cpp:82
 #, fuzzy
 msgid "Copy Filename"
 msgstr "Nama arsip"
 
-#: win32/WinUtil.cpp:392
+#: win32/WinUtil.cpp:391
 msgid "Copy magnet link to clipboard"
 msgstr "Salin pautan magnet ke clipboard"
 
-#: win32/SpyFrame.cpp:37
+#: win32/SpyFrame.cpp:35
 msgid "Count"
 msgstr "Hitungan"
 
-#: win32/PublicHubsFrame.cpp:53
+#: win32/PublicHubsFrame.cpp:36
 msgid "Country"
 msgstr "Negara"
 
@@ -692,25 +714,32 @@ msgstr "Buat / Modifikasi Perintah"
 msgid "Creating file index..."
 msgstr "Membuat indeks arsip..."
 
-#: win32/MainWindow.cpp:599
+#: win32/MainWindow.cpp:617
 #, boost-format
 msgid "D: %1%"
 msgstr ""
 
-#: win32/MainWindow.cpp:601
+#: win32/MainWindow.cpp:619
 #, boost-format
 msgid "D: %1%/s (%2%)"
 msgstr ""
 
-#: win32/WinUtil.cpp:842
+#: win32/MainWindow.cpp:1018
+#, boost-format
+msgid ""
+"D: %1%/s (%2%)\r\n"
+"U: %3%/s (%4%)"
+msgstr ""
+
+#: win32/WinUtil.cpp:832
 msgid "DC++"
 msgstr "DC++"
 
-#: win32/MainWindow.cpp:251
+#: win32/MainWindow.cpp:276
 msgid "DC++ Homepage"
 msgstr "Laman DC++"
 
-#: win32/MainWindow.cpp:256
+#: win32/MainWindow.cpp:281
 msgid "DC++ discussion forum"
 msgstr "Forum diskusi DC++"
 
@@ -720,7 +749,7 @@ msgid ""
 "the Direct Connect network.  What would you like to do?"
 msgstr ""
 
-#: win32/AppearancePage.cpp:102 win32/AppearancePage.cpp:130
+#: win32/AppearancePage.cpp:103 win32/AppearancePage.cpp:131
 msgid "Default"
 msgstr ""
 
@@ -733,13 +762,13 @@ msgid "Default download directory"
 msgstr "Direktori unduh default"
 
 #: win32/FavHubProperties.cpp:75 win32/FavHubProperties.cpp:78
-#: win32/GeneralPage.cpp:46 win32/FavHubsFrame.cpp:33 win32/HubFrame.cpp:39
-#: win32/PublicHubsFrame.cpp:50 win32/UsersFrame.cpp:33
-#: win32/UsersFrame.cpp:145
+#: win32/GeneralPage.cpp:46 win32/FavHubsFrame.cpp:31 win32/HubFrame.cpp:37
+#: win32/PublicHubsFrame.cpp:33 win32/UsersFrame.cpp:31
+#: win32/UsersFrame.cpp:139
 msgid "Description"
 msgstr "Deskripsi"
 
-#: win32/ADLSearchFrame.cpp:34 win32/ADLSProperties.cpp:80
+#: win32/ADLSearchFrame.cpp:32 win32/ADLSProperties.cpp:80
 msgid "Destination Directory"
 msgstr "Direktori Tujuan"
 
@@ -752,8 +781,8 @@ msgstr "Sambungan"
 msgid "Directories"
 msgstr "Direktori"
 
-#: win32/UploadPage.cpp:88 win32/FavoriteDirsPage.cpp:60
-#: win32/SearchFrame.cpp:210 win32/SearchFrame.cpp:534 win32/LogPage.cpp:39
+#: win32/UploadPage.cpp:88 win32/FavoriteDirsPage.cpp:33
+#: win32/SearchFrame.cpp:209 win32/SearchFrame.cpp:529 win32/LogPage.cpp:39
 #: win32/ADLSProperties.cpp:88
 msgid "Directory"
 msgstr "Direktori"
@@ -766,7 +795,7 @@ msgstr "Direktori atau nama direktori telah ada"
 msgid "Do nothing"
 msgstr "Diam saja"
 
-#: win32/SearchFrame.cpp:206
+#: win32/SearchFrame.cpp:205
 msgid "Document"
 msgstr "Dokumen"
 
@@ -792,7 +821,7 @@ msgstr "Jangan unduh arsip yang sudah ada di share"
 msgid "Don't download files already in the queue"
 msgstr "Jangan unduh arsip yang sudah ada di share"
 
-#: win32/HubFrame.cpp:393
+#: win32/HubFrame.cpp:356
 msgid "Don't remove /password before your password"
 msgstr "Jangan hapus \"/password\" sebelum password Anda"
 
@@ -804,7 +833,7 @@ msgstr ""
 msgid "Don't send the away message to bots"
 msgstr "Jangan kirim pesan \"pergi\" ke bot"
 
-#: win32/MainWindow.cpp:259
+#: win32/MainWindow.cpp:284
 msgid "Donate (paypal)"
 msgstr "Sumbang $$$ (paypal)"
 
@@ -816,7 +845,7 @@ msgstr ""
 msgid "Done"
 msgstr "Selesai"
 
-#: win32/DirectoryListingFrame.cpp:362
+#: win32/DirectoryListingFrame.cpp:354
 #, fuzzy
 msgid "Download &to..."
 msgstr "Unduh ke..."
@@ -825,66 +854,66 @@ msgstr "Unduh ke..."
 msgid "Download Matches"
 msgstr "Unduh Cocok"
 
-#: win32/QueueFrame.cpp:59 win32/TabsPage.cpp:37 win32/WindowsPage.cpp:37
-#: win32/MainWindow.cpp:295
+#: win32/QueueFrame.cpp:54 win32/TabsPage.cpp:54 win32/WindowsPage.cpp:37
+#: win32/MainWindow.cpp:320
 msgid "Download Queue"
 msgstr "Antrian Unduh"
 
-#: win32/PublicHubsFrame.cpp:334
+#: win32/PublicHubsFrame.cpp:522
 #, fuzzy, boost-format
 msgid "Download failed: %1%"
 msgstr "Telah Diunduh"
 
-#: win32/WinUtil.cpp:843
+#: win32/WinUtil.cpp:833
 msgid "Download files from the Direct Connect network"
 msgstr "Unduh arsip dari jaringan Direct Connect"
 
-#: win32/SearchFrame.cpp:830
+#: win32/SearchFrame.cpp:800
 msgid "Download to..."
 msgstr "Unduh ke..."
 
-#: win32/SearchFrame.cpp:807
+#: win32/SearchFrame.cpp:779
 msgid "Download whole directory"
 msgstr "Unduh semua direktori"
 
-#: win32/SearchFrame.cpp:860
+#: win32/SearchFrame.cpp:830
 msgid "Download whole directory to..."
 msgstr "Unduh semua direktori ke..."
 
-#: win32/QueueFrame.cpp:41
+#: win32/QueueFrame.cpp:36
 msgid "Downloaded"
 msgstr "Telah Diunduh"
 
-#: win32/TransferView.cpp:747
+#: win32/TransferView.cpp:756
 #, fuzzy, boost-format
 msgid "Downloading %1%"
 msgstr "Mengunduh..."
 
-#: win32/TransferView.cpp:647
+#: win32/TransferView.cpp:656
 #, boost-format
 msgid "Downloading from %1% user"
 msgid_plural "Downloading from %1% users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: win32/DirectoryListingFrame.cpp:699
+#: win32/DirectoryListingFrame.cpp:690
 msgid "Downloading list..."
 msgstr "Mengunduh daftar..."
 
-#: win32/PublicHubsFrame.cpp:195 win32/PublicHubsFrame.cpp:471
+#: win32/PublicHubsFrame.cpp:174 win32/PublicHubsFrame.cpp:434
 msgid "Downloading public hub list..."
 msgstr "Mengunduh daftar hub publik..."
 
-#: win32/PublicHubsFrame.cpp:331
+#: win32/PublicHubsFrame.cpp:518
 #, fuzzy, boost-format
 msgid "Downloading public hub list... (%1%)"
 msgstr "Mengunduh daftar hub publik..."
 
-#: win32/AboutDlg.cpp:73
+#: win32/AboutDlg.cpp:72
 msgid "Downloading..."
 msgstr "Mengunduh..."
 
-#: win32/SettingsDialog.cpp:92 win32/MainWindow.cpp:252
+#: win32/SettingsDialog.cpp:97 win32/MainWindow.cpp:277
 #: win32/TransferView.cpp:99 win32/Appearance2Page.cpp:50
 msgid "Downloads"
 msgstr "Unduh"
@@ -893,11 +922,11 @@ msgstr "Unduh"
 msgid "Drop sources below"
 msgstr ""
 
-#: win32/MainWindow.cpp:207
+#: win32/MainWindow.cpp:232
 msgid "E&xit"
 msgstr ""
 
-#: win32/GeneralPage.cpp:45 win32/HubFrame.cpp:43
+#: win32/GeneralPage.cpp:45 win32/HubFrame.cpp:41
 msgid "E-Mail"
 msgstr "E-Mail"
 
@@ -913,7 +942,7 @@ msgstr "Aktifkan pemeriksaan otomatis SFV"
 msgid "Enable safe and compressed transfers"
 msgstr "Aktifkan transfer termampat dan aman"
 
-#: win32/AdvancedPage.cpp:48
+#: win32/AdvancedPage.cpp:47
 msgid "Enable segmented downloads"
 msgstr ""
 
@@ -921,27 +950,32 @@ msgstr ""
 msgid "Enabled"
 msgstr "Aktif"
 
-#: win32/ADLSearchFrame.cpp:32
+#: win32/ADLSearchFrame.cpp:30
 msgid "Enabled / Search String"
 msgstr "Aktif / Teks Pencarian"
 
-#: win32/DirectoryListingFrame.cpp:801
+#: win32/DirectoryListingFrame.cpp:792
 msgid "Enter search string"
 msgstr "Masukkan teks pencarian"
 
-#: win32/WinUtil.cpp:750
-msgid "Error creating adc registry key"
+#: win32/AboutDlg.cpp:103
+#, fuzzy
+msgid "Error processing version information"
+msgstr "Informasi Personal"
+
+#: win32/WinUtil.cpp:800 win32/WinUtil.cpp:813
+msgid "Error registering Magnet link handler"
 msgstr ""
 
-#: win32/WinUtil.cpp:711
-msgid "Error creating dchub registry key"
+#: win32/WinUtil.cpp:740
+msgid "Error registering adc:// link handler"
 msgstr ""
 
-#: win32/WinUtil.cpp:810 win32/WinUtil.cpp:823
-msgid "Error creating magnet registry key"
+#: win32/WinUtil.cpp:701
+msgid "Error registering dchub:// handler"
 msgstr ""
 
-#: win32/QueueFrame.cpp:46
+#: win32/QueueFrame.cpp:41
 msgid "Errors"
 msgstr "Kesalahan-kesalahan"
 
@@ -955,16 +989,16 @@ msgstr "Keluarkan suara menyebalkan tiap kali menerima pesan pribadi"
 msgid "Every time a private message is received"
 msgstr "Keluarkan suara menyebalkan tiap kali menerima pesan pribadi"
 
-#: win32/QueueFrame.cpp:45 win32/DirectoryListingFrame.cpp:42
-#: win32/SearchFrame.cpp:42
+#: win32/QueueFrame.cpp:40 win32/DirectoryListingFrame.cpp:40
+#: win32/SearchFrame.cpp:39
 msgid "Exact size"
 msgstr "Ukuran persis"
 
-#: win32/SearchFrame.cpp:207
+#: win32/SearchFrame.cpp:206
 msgid "Executable"
 msgstr "Executable"
 
-#: win32/MainWindow.cpp:1023
+#: win32/MainWindow.cpp:1002
 msgid "Exit"
 msgstr ""
 
@@ -972,7 +1006,7 @@ msgstr ""
 msgid "Experimental feature, don't consider DC++ secure in any way"
 msgstr ""
 
-#: win32/SettingsDialog.cpp:109
+#: win32/SettingsDialog.cpp:114
 msgid "Experts only"
 msgstr ""
 
@@ -980,24 +1014,24 @@ msgstr ""
 msgid "External / WAN IP"
 msgstr ""
 
-#: win32/PublicHubsFrame.cpp:167
+#: win32/PublicHubsFrame.cpp:148
 #, fuzzy
 msgid "F&ilter"
 msgstr "Arsip"
 
-#: win32/MainWindow.cpp:678 win32/MainWindow.cpp:679
+#: win32/MainWindow.cpp:736 win32/MainWindow.cpp:737
 msgid "Failed to create port mappings. Please set up your NAT yourself."
 msgstr "Gagal membuat pemetaan port. Silakan atur NAT Anda sendiri."
 
-#: win32/MainWindow.cpp:697 win32/MainWindow.cpp:698
+#: win32/MainWindow.cpp:731 win32/MainWindow.cpp:732
 msgid "Failed to get external IP via  UPnP. Please set it yourself."
 msgstr "Gagal mendapatkan IP eksternal melalui UPnP. Silakan atur sendiri."
 
-#: win32/MainWindow.cpp:711 win32/MainWindow.cpp:719
+#: win32/MainWindow.cpp:747 win32/MainWindow.cpp:753 win32/MainWindow.cpp:759
 msgid "Failed to remove port mappings"
 msgstr "Gagal menghapus pemetaan port"
 
-#: win32/MainWindow.cpp:215
+#: win32/MainWindow.cpp:240
 #, fuzzy
 msgid "Favorite &Users\tCtrl+U"
 msgstr "Pengguna Kesukaan"
@@ -1006,42 +1040,42 @@ msgstr "Pengguna Kesukaan"
 msgid "Favorite Hub Properties"
 msgstr "Pengaturan Hub Kesukaan"
 
-#: win32/WindowsPage.cpp:45 win32/MainWindow.cpp:292 win32/FavHubsFrame.cpp:41
+#: win32/WindowsPage.cpp:45 win32/MainWindow.cpp:317 win32/FavHubsFrame.cpp:39
 msgid "Favorite Hubs"
 msgstr "Hub Kesukaan"
 
-#: win32/WindowsPage.cpp:36 win32/MainWindow.cpp:293 win32/UsersFrame.cpp:38
+#: win32/WindowsPage.cpp:36 win32/MainWindow.cpp:318 win32/UsersFrame.cpp:36
 msgid "Favorite Users"
 msgstr "Pengguna Kesukaan"
 
-#: win32/FavoriteDirsPage.cpp:41
+#: win32/FavoriteDirsPage.cpp:46
 msgid "Favorite download directories"
 msgstr "Direktori unduh kesukaan"
 
-#: win32/HubFrame.cpp:967
+#: win32/HubFrame.cpp:815
 msgid "Favorite hub added"
 msgstr "Hub kesukaan ditambah"
 
-#: win32/HubFrame.cpp:977
+#: win32/HubFrame.cpp:825
 #, fuzzy
 msgid "Favorite hub removed"
 msgstr "Hub kesukaan ditambah"
 
-#: win32/FavoriteDirsPage.cpp:59 win32/FavoriteDirsPage.cpp:131
+#: win32/FavoriteDirsPage.cpp:32 win32/FavoriteDirsPage.cpp:131
 #: win32/FavoriteDirsPage.cpp:162
 msgid "Favorite name"
 msgstr "Nama kesukaan"
 
-#: win32/PrivateFrame.cpp:299
+#: win32/PrivateFrame.cpp:241
 msgid "Favorite user added"
 msgstr "Pengguna kesukaan ditambah"
 
-#: win32/SettingsDialog.cpp:93
+#: win32/SettingsDialog.cpp:98
 #, fuzzy
 msgid "Favorites"
 msgstr "Hub Kesukaan"
 
-#: win32/DirectoryListingFrame.cpp:40 win32/SearchFrame.cpp:34
+#: win32/DirectoryListingFrame.cpp:37 win32/SearchFrame.cpp:31
 msgid "File"
 msgstr "Arsip"
 
@@ -1049,16 +1083,21 @@ msgstr "Arsip"
 msgid "File Hash:"
 msgstr ""
 
-#: win32/WinUtil.cpp:440
+#: win32/WinUtil.cpp:439
 #, fuzzy
 msgid "File Lists"
 msgstr "Menu Daftar arsip"
 
-#: win32/QueueFrame.cpp:480
+#: win32/QueueFrame.cpp:380
 msgid "File not available"
 msgstr "Arsip tidak tersedia"
 
-#: win32/SearchFrame.cpp:130
+#: win32/FinishedFrameBase.h:658
+#, fuzzy
+msgid "File size"
+msgstr "Arsip"
+
+#: win32/SearchFrame.cpp:129
 msgid "File type"
 msgstr "Jenis arsip"
 
@@ -1066,8 +1105,8 @@ msgstr "Jenis arsip"
 msgid "Filelist Menu"
 msgstr "Menu Daftar arsip"
 
-#: win32/QueueFrame.cpp:38 win32/TransferView.cpp:54 win32/LogPage.cpp:42
-#: win32/ADLSProperties.cpp:87 win32/FinishedFrameBase.h:669
+#: win32/QueueFrame.cpp:33 win32/TransferView.cpp:54 win32/LogPage.cpp:42
+#: win32/ADLSProperties.cpp:87 win32/FinishedFrameBase.h:654
 msgid "Filename"
 msgstr "Nama arsip"
 
@@ -1076,13 +1115,13 @@ msgstr "Nama arsip"
 msgid "Filename:"
 msgstr "Nama arsip"
 
-#: win32/FinishedFrameBase.h:704
+#: win32/FinishedFrameBase.h:671
 #, fuzzy
 msgid "Files"
 msgstr "Arsip"
 
-#: win32/QueueFrame.cpp:294 win32/DirectoryListingFrame.cpp:640
-#: win32/DirectoryListingFrame.cpp:656
+#: win32/QueueFrame.cpp:212 win32/DirectoryListingFrame.cpp:631
+#: win32/DirectoryListingFrame.cpp:647
 #, boost-format
 msgid "Files: %1%"
 msgstr ""
@@ -1092,17 +1131,17 @@ msgstr ""
 msgid "Filter kick messages"
 msgstr "Filter pesan tendang dan pesan debug NMDC"
 
-#: win32/DirectoryListingFrame.cpp:172 win32/DirectoryListingFrame.cpp:188
+#: win32/DirectoryListingFrame.cpp:167 win32/DirectoryListingFrame.cpp:183
 msgid "Find"
 msgstr "Cari"
 
-#: win32/TabsPage.cpp:38 win32/WindowsPage.cpp:38 win32/MainWindow.cpp:218
-#: win32/MainWindow.cpp:296 win32/FinishedDLFrame.cpp:25
+#: win32/TabsPage.cpp:55 win32/WindowsPage.cpp:38 win32/MainWindow.cpp:243
+#: win32/MainWindow.cpp:321 win32/FinishedDLFrame.cpp:25
 msgid "Finished Downloads"
 msgstr "Unduh Selesai"
 
-#: win32/TabsPage.cpp:40 win32/WindowsPage.cpp:40 win32/MainWindow.cpp:220
-#: win32/MainWindow.cpp:298 win32/FinishedULFrame.cpp:25
+#: win32/TabsPage.cpp:57 win32/WindowsPage.cpp:40 win32/MainWindow.cpp:245
+#: win32/MainWindow.cpp:323 win32/FinishedULFrame.cpp:25
 msgid "Finished Uploads"
 msgstr "Unggah Selesai"
 
@@ -1118,11 +1157,11 @@ msgstr ""
 msgid "Firewall with manual port forwarding"
 msgstr ""
 
-#: win32/MainWindow.cpp:195
+#: win32/MainWindow.cpp:220
 msgid "Follow last redirec&t\tCtrl+T"
 msgstr ""
 
-#: win32/MainWindow.cpp:290
+#: win32/MainWindow.cpp:315
 msgid "Follow last redirect"
 msgstr ""
 
@@ -1130,7 +1169,7 @@ msgstr ""
 msgid "Format"
 msgstr "Format"
 
-#: win32/MainWindow.cpp:254
+#: win32/MainWindow.cpp:279
 msgid "Frequently asked questions"
 msgstr "FAQ"
 
@@ -1138,7 +1177,7 @@ msgstr "FAQ"
 msgid "Full Path"
 msgstr "Path Lengkap"
 
-#: win32/QueueFrame.cpp:486
+#: win32/QueueFrame.cpp:386
 msgid "Full tree does not match TTH root"
 msgstr "Pohon yang diunduh tidak cocok dengan TTH root"
 
@@ -1146,37 +1185,37 @@ msgstr "Pohon yang diunduh tidak cocok dengan TTH root"
 msgid "Generate certificates"
 msgstr ""
 
-#: win32/MainWindow.cpp:253
+#: win32/MainWindow.cpp:278
 msgid "GeoIP database update"
 msgstr "Perbarui basis data GeoIP"
 
-#: win32/MainWindow.cpp:246
+#: win32/MainWindow.cpp:271
 msgid "Get started"
 msgstr ""
 
-#: win32/SearchFrame.cpp:194 win32/WinUtil.cpp:1159
+#: win32/SearchFrame.cpp:193 win32/WinUtil.cpp:1163
 #: win32/ADLSProperties.cpp:102
 msgid "GiB"
 msgstr "GiB"
 
-#: win32/WaitingUsersFrame.cpp:82 win32/PrivateFrame.cpp:372
-#: win32/WinUtil.cpp:1141 win32/UserInfoBase.h:102
+#: win32/WaitingUsersFrame.cpp:84 win32/PrivateFrame.cpp:288
+#: win32/WinUtil.cpp:1126 win32/UserInfoBase.h:102
 msgid "Grant &extra slot"
 msgstr ""
 
-#: win32/AboutDlg.cpp:64
+#: win32/AboutDlg.cpp:63
 msgid "Greetz and Contributors"
 msgstr ""
 
-#: win32/FinishedFrameBase.h:73
+#: win32/FinishedFrameBase.h:75
 msgid "Grouped by files"
 msgstr ""
 
-#: win32/FinishedFrameBase.h:81
+#: win32/FinishedFrameBase.h:83
 msgid "Grouped by users"
 msgstr ""
 
-#: win32/AppearancePage.cpp:67
+#: win32/AppearancePage.cpp:68
 msgid "Guess user country from IP"
 msgstr "Dapatkan Negara Pengguna"
 
@@ -1184,24 +1223,24 @@ msgstr "Dapatkan Negara Pengguna"
 msgid "HTTP Proxy (for hublist only)"
 msgstr "Proxy HTTP (untuk daftar hub saja)"
 
-#: win32/SettingsDialog.cpp:83 win32/CommandDlg.cpp:160
+#: win32/SettingsDialog.cpp:88 win32/CommandDlg.cpp:160
 msgid "Help"
 msgstr ""
 
-#: win32/MainWindow.cpp:245
+#: win32/MainWindow.cpp:270
 msgid "Help &Contents\tF1"
 msgstr ""
 
-#: win32/MainWindow.cpp:255
+#: win32/MainWindow.cpp:280
 msgid "Help forum"
 msgstr "Forum bantuan"
 
-#: win32/SearchFrame.cpp:221
+#: win32/SearchFrame.cpp:220
 #, fuzzy
 msgid "Hide files already in share"
 msgstr "Jangan unduh arsip yang sudah ada di share"
 
-#: win32/QueueFrame.cpp:461 win32/QueueFrame.cpp:992
+#: win32/QueueFrame.cpp:361 win32/QueueFrame.cpp:891
 msgid "High"
 msgstr "Tinggi"
 
@@ -1209,7 +1248,7 @@ msgstr "Tinggi"
 msgid "High prio max size"
 msgstr "Prioritas tinggi"
 
-#: win32/QueueFrame.cpp:462 win32/QueueFrame.cpp:993
+#: win32/QueueFrame.cpp:362 win32/QueueFrame.cpp:892
 msgid "Highest"
 msgstr "Puncak"
 
@@ -1217,23 +1256,23 @@ msgstr "Puncak"
 msgid "Highest prio max size"
 msgstr "Prioritas tertinggi"
 
-#: win32/SpyFrame.cpp:163
+#: win32/SpyFrame.cpp:196
 #, boost-format
 msgid "Hit Ratio: %1%"
 msgstr ""
 
-#: win32/SpyFrame.cpp:161
+#: win32/SpyFrame.cpp:194
 #, boost-format
 msgid "Hits: %1%"
 msgstr ""
 
-#: win32/FavHubProperties.cpp:71 win32/TabsPage.cpp:33
-#: win32/SearchFrame.cpp:41 win32/TransferView.cpp:43 win32/UCPage.cpp:68
-#: win32/FinishedFrameBase.h:701
+#: win32/FavHubProperties.cpp:71 win32/TabsPage.cpp:49
+#: win32/SearchFrame.cpp:38 win32/TransferView.cpp:43 win32/UCPage.cpp:68
+#: win32/FinishedFrameBase.h:668
 msgid "Hub"
 msgstr "Hub"
 
-#: win32/UsersFrame.cpp:31
+#: win32/UsersFrame.cpp:29
 msgid "Hub (last seen in, if offline)"
 msgstr ""
 
@@ -1249,16 +1288,16 @@ msgstr "Menu Hub"
 msgid "Hub address cannot be empty"
 msgstr ""
 
-#: win32/FavHubsFrame.cpp:173 win32/HubFrame.cpp:969
+#: win32/FavHubsFrame.cpp:169 win32/HubFrame.cpp:817
 msgid "Hub already exists as a favorite"
 msgstr ""
 
-#: win32/PublicHubsFrame.cpp:328
+#: win32/PublicHubsFrame.cpp:526
 #, boost-format
 msgid "Hub list downloaded... (%1%)"
 msgstr ""
 
-#: win32/PublicHubsFrame.cpp:328
+#: win32/PublicHubsFrame.cpp:530
 msgid "Hub list loaded from cache..."
 msgstr ""
 
@@ -1267,25 +1306,25 @@ msgstr ""
 msgid "Hublist"
 msgstr "Hub"
 
-#: win32/SearchFrame.cpp:137
+#: win32/SearchFrame.cpp:136
 msgid "Hubs"
 msgstr "Hub"
 
-#: win32/PublicHubsFrame.cpp:281
+#: win32/PublicHubsFrame.cpp:260
 #, fuzzy, boost-format
 msgid "Hubs: %1%"
 msgstr "Hub"
 
-#: win32/PublicHubsFrame.cpp:279
+#: win32/PublicHubsFrame.cpp:258
 #, fuzzy, boost-format
 msgid "Hubs: %1% / %2%"
 msgstr "Hub"
 
-#: win32/SearchFrame.cpp:43 win32/TransferView.cpp:50 win32/HubFrame.cpp:42
+#: win32/SearchFrame.cpp:40 win32/TransferView.cpp:50 win32/HubFrame.cpp:40
 msgid "IP"
 msgstr "IP"
 
-#: win32/HubFrame.cpp:343
+#: win32/HubFrame.cpp:306
 #, boost-format
 msgid "IP: %1%, Port: %2%/%3%/%4%"
 msgstr ""
@@ -1294,11 +1333,11 @@ msgstr ""
 msgid "Identification (leave blank for defaults)"
 msgstr ""
 
-#: win32/TransferView.cpp:552 win32/TransferView.cpp:854
+#: win32/TransferView.cpp:561 win32/TransferView.cpp:863
 msgid "Idle"
 msgstr ""
 
-#: win32/SpyFrame.cpp:66
+#: win32/SpyFrame.cpp:63
 msgid "Ignore TTH searches"
 msgstr "Acuhkan pencarian TTH"
 
@@ -1312,7 +1351,7 @@ msgstr "Buka pesan pribadi di jendelanya sendiri"
 msgid "Ignore private messages from the hub"
 msgstr "Buka pesan pribadi di jendelanya sendiri"
 
-#: win32/HubFrame.cpp:537 win32/HubFrame.cpp:545
+#: win32/HubFrame.cpp:487 win32/HubFrame.cpp:495
 #, boost-format
 msgid "Ignored message: %1%"
 msgstr ""
@@ -1321,36 +1360,36 @@ msgstr ""
 msgid "Incoming connection settings (see Help/FAQ if unsure)"
 msgstr ""
 
-#: win32/MainWindow.cpp:229
+#: win32/MainWindow.cpp:254
 msgid "Indexing progress"
 msgstr "Progres pengindeksan"
 
-#: win32/MainWindow.cpp:735
+#: win32/MainWindow.cpp:772
 msgid "Invalid file list name"
 msgstr ""
 
-#: win32/WinUtil.cpp:269
+#: win32/WinUtil.cpp:268
 msgid "Invalid number of slots"
 msgstr "Jumlat slot tidak valid"
 
-#: win32/QueueFrame.cpp:290
+#: win32/QueueFrame.cpp:208
 #, boost-format
 msgid "Items: %1%"
 msgstr ""
 
-#: win32/HubFrame.cpp:336
+#: win32/HubFrame.cpp:299
 msgid "Join/part of favorite users showing off"
 msgstr "Gabung/pisah pegguna kesukaan disembunyikan"
 
-#: win32/HubFrame.cpp:334
+#: win32/HubFrame.cpp:297
 msgid "Join/part of favorite users showing on"
 msgstr "Gabung/pisah pegguna kesukaan ditampilkan"
 
-#: win32/HubFrame.cpp:329
+#: win32/HubFrame.cpp:292
 msgid "Join/part showing off"
 msgstr "Gabung/pisah ditunjukkan"
 
-#: win32/HubFrame.cpp:327
+#: win32/HubFrame.cpp:290
 msgid "Join/part showing on"
 msgstr "Gabung/pisah disembunyikan"
 
@@ -1360,7 +1399,7 @@ msgstr "Pertahankan arsip duplikat di daftar arsip Anda"
 
 #: win32/QueuePage.cpp:66 win32/QueuePage.cpp:68 win32/QueuePage.cpp:70
 #: win32/QueuePage.cpp:72 win32/QueuePage.cpp:84 win32/Advanced3Page.cpp:70
-#: win32/Advanced3Page.cpp:76 win32/SearchFrame.cpp:192 win32/WinUtil.cpp:1163
+#: win32/Advanced3Page.cpp:76 win32/SearchFrame.cpp:191 win32/WinUtil.cpp:1167
 #: win32/ADLSProperties.cpp:100
 msgid "KiB"
 msgstr "KiB"
@@ -1374,7 +1413,7 @@ msgstr "KiB/s"
 msgid "Language"
 msgstr "Arsip bahasa"
 
-#: win32/AboutDlg.cpp:66
+#: win32/AboutDlg.cpp:65
 msgid "Latest stable version"
 msgstr ""
 
@@ -1428,16 +1467,16 @@ msgstr "Pencatatan"
 msgid "Login"
 msgstr "Username"
 
-#: win32/SettingsDialog.cpp:108
+#: win32/SettingsDialog.cpp:113
 #, fuzzy
 msgid "Logs"
 msgstr "Username"
 
-#: win32/WinUtil.cpp:391
+#: win32/WinUtil.cpp:390
 msgid "Lookup TTH at Bitzi.com"
 msgstr "Cari TTH di Bitzi.com"
 
-#: win32/QueueFrame.cpp:459 win32/QueueFrame.cpp:990
+#: win32/QueueFrame.cpp:359 win32/QueueFrame.cpp:889
 msgid "Low"
 msgstr "Rendah"
 
@@ -1445,28 +1484,28 @@ msgstr "Rendah"
 msgid "Low prio max size"
 msgstr "Prioritas rendah"
 
-#: win32/QueueFrame.cpp:458 win32/QueueFrame.cpp:989
+#: win32/QueueFrame.cpp:358 win32/QueueFrame.cpp:888
 msgid "Lowest"
 msgstr "Dasar"
 
-#: win32/MagnetDlg.cpp:44 win32/WinUtil.cpp:1048
+#: win32/MagnetDlg.cpp:44 win32/WinUtil.cpp:1038
 msgid "MAGNET Link detected"
 msgstr "Pautan MAGNET terdeteksi"
 
-#: win32/WinUtil.cpp:995
+#: win32/WinUtil.cpp:985
 #, fuzzy, boost-format
 msgid "MAGNET Link detected: %1%"
 msgstr "Pautan MAGNET terdeteksi"
 
-#: win32/MainWindow.cpp:200
+#: win32/MainWindow.cpp:225
 msgid "Match downloaded lists"
 msgstr ""
 
-#: win32/DirectoryListingFrame.cpp:167 win32/DirectoryListingFrame.cpp:187
+#: win32/DirectoryListingFrame.cpp:162 win32/DirectoryListingFrame.cpp:182
 msgid "Match queue"
 msgstr "Cocokkan antrian"
 
-#: win32/DirectoryListingFrame.cpp:264
+#: win32/DirectoryListingFrame.cpp:259
 #, boost-format
 msgid "Matched %1% file"
 msgid_plural "Matched %1% files"
@@ -1477,18 +1516,22 @@ msgstr[1] ""
 msgid "Max FileSize"
 msgstr ""
 
-#: win32/PublicHubsFrame.cpp:57
+#: win32/PublicHubsFrame.cpp:40
 msgid "Max Hubs"
 msgstr "Maksimum Hub"
 
-#: win32/ADLSearchFrame.cpp:36
+#: win32/ADLSearchFrame.cpp:34
 #, fuzzy
 msgid "Max Size"
 msgstr "Besar"
 
-#: win32/PublicHubsFrame.cpp:58
+#: win32/PublicHubsFrame.cpp:41
 msgid "Max Users"
 msgstr "Maksimum Pengguna"
+
+#: win32/TabsPage.cpp:39
+msgid "Max characters per tab (0 = infinite)"
+msgstr ""
 
 #: win32/Advanced3Page.cpp:71
 #, fuzzy
@@ -1507,7 +1550,7 @@ msgstr ""
 msgid "Maximum simultaneous downloads (0 = infinite)"
 msgstr "Maksimum unduh bersamaan (0 = tak terbatas)"
 
-#: win32/Advanced3Page.cpp:72 win32/SearchFrame.cpp:193 win32/WinUtil.cpp:1161
+#: win32/Advanced3Page.cpp:72 win32/SearchFrame.cpp:192 win32/WinUtil.cpp:1165
 #: win32/ADLSProperties.cpp:101
 msgid "MiB"
 msgstr "MiB"
@@ -1525,16 +1568,16 @@ msgstr "MiB/s"
 msgid "Min FileSize"
 msgstr ""
 
-#: win32/PublicHubsFrame.cpp:55
+#: win32/PublicHubsFrame.cpp:38
 msgid "Min Share"
 msgstr "Share Minimum"
 
-#: win32/ADLSearchFrame.cpp:35
+#: win32/ADLSearchFrame.cpp:33
 #, fuzzy
 msgid "Min Size"
 msgstr "Share Minimum"
 
-#: win32/PublicHubsFrame.cpp:56
+#: win32/PublicHubsFrame.cpp:39
 msgid "Min Slots"
 msgstr "Slot Minimum"
 
@@ -1561,18 +1604,18 @@ msgstr "Ukuran slot mini"
 msgid "Minimize to tray"
 msgstr "Minimalkan ke tray"
 
-#: win32/HubListsDlg.cpp:89 win32/FavHubsFrame.cpp:95
-#: win32/FavHubsFrame.cpp:288 win32/ADLSearchFrame.cpp:85 win32/UCPage.cpp:45
+#: win32/HubListsDlg.cpp:89 win32/FavHubsFrame.cpp:91
+#: win32/FavHubsFrame.cpp:286 win32/ADLSearchFrame.cpp:81 win32/UCPage.cpp:45
 msgid "Move &Down"
 msgstr ""
 
-#: win32/HubListsDlg.cpp:85 win32/FavHubsFrame.cpp:89
-#: win32/FavHubsFrame.cpp:287 win32/ADLSearchFrame.cpp:79 win32/UCPage.cpp:44
+#: win32/HubListsDlg.cpp:85 win32/FavHubsFrame.cpp:85
+#: win32/FavHubsFrame.cpp:285 win32/ADLSearchFrame.cpp:75 win32/UCPage.cpp:44
 msgid "Move &Up"
 msgstr ""
 
 #: win32/FavHubProperties.cpp:73 win32/UCPage.cpp:66
-#: win32/PublicHubsFrame.cpp:49 win32/CommandDlg.cpp:96
+#: win32/PublicHubsFrame.cpp:32 win32/CommandDlg.cpp:96
 msgid "Name"
 msgstr "Nama"
 
@@ -1584,7 +1627,7 @@ msgstr ""
 msgid "Name under which the others see the directory"
 msgstr "Nama direktori yang dilihat pengguna lain"
 
-#: win32/WindowsPage.cpp:42 win32/MainWindow.cpp:228 win32/StatsFrame.cpp:27
+#: win32/WindowsPage.cpp:42 win32/MainWindow.cpp:253 win32/StatsFrame.cpp:27
 msgid "Network Statistics"
 msgstr "Statistik Jaringan"
 
@@ -1592,30 +1635,30 @@ msgstr "Statistik Jaringan"
 msgid "New virtual name matches old name, skipping..."
 msgstr "Nama virtual baru cocok dengan nama lama, melewati..."
 
-#: win32/DirectoryListingFrame.cpp:177 win32/DirectoryListingFrame.cpp:189
+#: win32/DirectoryListingFrame.cpp:172 win32/DirectoryListingFrame.cpp:184
 msgid "Next"
 msgstr "Berikut"
 
 #: win32/FavHubProperties.cpp:76 win32/GeneralPage.cpp:44
-#: win32/FavHubsFrame.cpp:34 win32/HubFrame.cpp:37
-#: win32/FinishedFrameBase.h:700
+#: win32/FavHubsFrame.cpp:32 win32/HubFrame.cpp:35
+#: win32/FinishedFrameBase.h:667
 msgid "Nick"
 msgstr "Nick"
 
-#: win32/FinishedFrameBase.h:671
+#: win32/FinishedFrameBase.h:656
 #, fuzzy
 msgid "Nicks"
 msgstr "Nick"
 
-#: win32/FinishedFrameBase.h:262
+#: win32/FinishedFrameBase.h:236
 msgid "No"
 msgstr ""
 
-#: win32/QueueFrame.cpp:495
+#: win32/QueueFrame.cpp:397
 msgid "No errors"
 msgstr "Tak ada kesalahan"
 
-#: win32/DirectoryListingFrame.cpp:866
+#: win32/DirectoryListingFrame.cpp:857
 msgid "No matches"
 msgstr "Tak ada kecocokan"
 
@@ -1623,19 +1666,19 @@ msgstr "Tak ada kecocokan"
 msgid "No new downloads if speed exceeds (KiB/s, 0 = disable)"
 msgstr "Tidak ada unduh baru bila kecepatan melebihi (KiB/s, 0 = non-aktif)"
 
-#: win32/AboutDlg.cpp:71
+#: win32/AboutDlg.cpp:70
 msgid "No transfers yet"
 msgstr ""
 
-#: win32/QueueFrame.cpp:422
+#: win32/QueueFrame.cpp:322
 msgid "No users"
 msgstr "Tak ada pengguna"
 
-#: win32/QueueFrame.cpp:434
+#: win32/QueueFrame.cpp:334
 msgid "No users to download from"
 msgstr "Tidak ada pengguna untuk diunduh"
 
-#: win32/QueueFrame.cpp:460 win32/QueueFrame.cpp:991 win32/SearchFrame.cpp:173
+#: win32/QueueFrame.cpp:360 win32/QueueFrame.cpp:890 win32/SearchFrame.cpp:172
 msgid "Normal"
 msgstr "Normal"
 
@@ -1657,7 +1700,7 @@ msgstr "Catatan: akibat merubah kecepatan unduh, ini tidak 100% akurat..."
 msgid "Note; most of these options require that you restart DC++"
 msgstr "Catatan: kebanyakan opsi ini mengharuskan Anda me-restart DC++"
 
-#: win32/WindowsPage.cpp:43 win32/NotepadFrame.cpp:27 win32/MainWindow.cpp:307
+#: win32/WindowsPage.cpp:43 win32/NotepadFrame.cpp:27 win32/MainWindow.cpp:332
 msgid "Notepad"
 msgstr "Notepad"
 
@@ -1665,44 +1708,49 @@ msgstr "Notepad"
 msgid "Notification sound"
 msgstr ""
 
-#: win32/SettingsDialog.cpp:75 win32/CommandDlg.cpp:152
+#: win32/SettingsDialog.cpp:80 win32/CommandDlg.cpp:152
 msgid "OK"
 msgstr ""
 
-#: win32/WinUtil.cpp:352
+#: win32/WinUtil.cpp:351
 msgid "Offline"
 msgstr "Terputus"
 
-#: win32/UsersFrame.cpp:110 win32/UsersFrame.cpp:125
+#: win32/UsersFrame.cpp:104 win32/UsersFrame.cpp:119
 msgid "Online"
 msgstr "Tersambung"
 
-#: win32/AppearancePage.cpp:63
+#: win32/FinishedFrameBase.h:126
+#, fuzzy
+msgid "Only show fully downloaded files"
+msgstr "Tidak ada pengguna untuk diunduh"
+
+#: win32/AppearancePage.cpp:64
 msgid "Only show joins / parts for favorite users"
 msgstr "Hanya tampilkan gabung / pisah untuk pengguna kesukaan"
 
-#: win32/SearchFrame.cpp:215
+#: win32/SearchFrame.cpp:214
 msgid "Only users with free slots"
 msgstr "Hanya pengguna dengan slot bebas"
 
-#: win32/SearchFrame.cpp:242
+#: win32/SearchFrame.cpp:241
 msgid "Only where I'm op"
 msgstr "Hanya dimana saya op"
 
-#: win32/FinishedFrameBase.h:450 win32/FinishedFrameBase.h:468
+#: win32/FinishedFrameBase.h:386
 msgid "Open &folder"
 msgstr ""
 
-#: win32/MainWindow.cpp:202 win32/MainWindow.cpp:1024
+#: win32/MainWindow.cpp:227 win32/MainWindow.cpp:999
 msgid "Open downloads directory"
 msgstr "Buka direktori unduh"
 
-#: win32/MainWindow.cpp:304
+#: win32/MainWindow.cpp:329
 #, fuzzy
 msgid "Open file list..."
 msgstr "Buka daftar saya sendiri"
 
-#: win32/MainWindow.cpp:198
+#: win32/MainWindow.cpp:223
 msgid "Open file list...\tCtrl+L"
 msgstr ""
 
@@ -1718,7 +1766,7 @@ msgstr "Buka jendela pesan pribadi baru di latar"
 msgid "Open new window when using /join"
 msgstr "Buka jendela baru bila menggunakan \"/join\""
 
-#: win32/MainWindow.cpp:199
+#: win32/MainWindow.cpp:224
 msgid "Open own list"
 msgstr "Buka daftar saya sendiri"
 
@@ -1770,21 +1818,21 @@ msgstr "Sejarah Japri (pesan pribadi)"
 msgid "Parameters"
 msgstr ""
 
-#: win32/QueueFrame.cpp:482
+#: win32/QueueFrame.cpp:382
 msgid "Passive user"
 msgstr "Pengguna pasif"
 
 #: win32/NetworkPage.cpp:73 win32/FavHubProperties.cpp:77
-#: win32/FavHubsFrame.cpp:35
+#: win32/FavHubsFrame.cpp:33
 msgid "Password"
 msgstr "Password"
 
-#: win32/QueueFrame.cpp:44 win32/SearchFrame.cpp:38 win32/TransferView.cpp:55
-#: win32/FinishedFrameBase.h:670
+#: win32/QueueFrame.cpp:39 win32/SearchFrame.cpp:35 win32/TransferView.cpp:55
+#: win32/FinishedFrameBase.h:655
 msgid "Path"
 msgstr "Path"
 
-#: win32/QueueFrame.cpp:457 win32/QueueFrame.cpp:988
+#: win32/QueueFrame.cpp:357 win32/QueueFrame.cpp:887
 msgid "Paused"
 msgstr "Tunda"
 
@@ -1792,23 +1840,23 @@ msgstr "Tunda"
 msgid "Personal Information"
 msgstr "Informasi Personal"
 
-#: win32/SettingsDialog.cpp:87
+#: win32/SettingsDialog.cpp:92
 msgid "Personal information"
 msgstr "Informasi Personal"
 
-#: win32/WinUtil.cpp:1155
+#: win32/WinUtil.cpp:1159
 msgid "PiB"
 msgstr ""
 
-#: win32/SearchFrame.cpp:208
+#: win32/SearchFrame.cpp:207
 msgid "Picture"
 msgstr "Gambar"
 
-#: win32/FavHubsFrame.cpp:326 win32/PublicHubsFrame.cpp:509
+#: win32/FavHubsFrame.cpp:316 win32/PublicHubsFrame.cpp:472
 msgid "Please enter a nickname in the settings dialog!"
 msgstr "Silakan masukkan nickname di dialog pengelolaan!"
 
-#: win32/HubFrame.cpp:523
+#: win32/HubFrame.cpp:472
 msgid "Please enter a password"
 msgstr "Silakan masukkan password"
 
@@ -1831,12 +1879,12 @@ msgstr "Port"
 msgid "Ports"
 msgstr "Port"
 
-#: win32/HubFrame.cpp:847
+#: win32/HubFrame.cpp:699
 #, boost-format
 msgid "Press the follow redirect button to connect to %1%"
 msgstr ""
 
-#: win32/QueueFrame.cpp:42
+#: win32/QueueFrame.cpp:37
 msgid "Priority"
 msgstr "Prioritas"
 
@@ -1844,17 +1892,17 @@ msgstr "Prioritas"
 msgid "Private key file"
 msgstr ""
 
-#: win32/TabsPage.cpp:34
+#: win32/TabsPage.cpp:50
 msgid "Private message"
 msgstr ""
 
-#: win32/HubFrame.cpp:541 win32/HubFrame.cpp:549 win32/HubFrame.cpp:555
+#: win32/HubFrame.cpp:491 win32/HubFrame.cpp:499 win32/HubFrame.cpp:505
 #, boost-format
 msgid "Private message from %1%: %2%"
 msgstr ""
 
-#: win32/WindowsPage.cpp:44 win32/MainWindow.cpp:287
-#: win32/PublicHubsFrame.cpp:93
+#: win32/WindowsPage.cpp:44 win32/MainWindow.cpp:312
+#: win32/PublicHubsFrame.cpp:76
 msgid "Public Hubs"
 msgstr "Hub Publik"
 
@@ -1866,11 +1914,11 @@ msgstr "Daftar hub publik"
 msgid "Public Hubs list URL"
 msgstr "Daftar URL Hub Publik"
 
-#: win32/SearchFrame.cpp:156
+#: win32/SearchFrame.cpp:155
 msgid "Purge"
 msgstr "Kosongkan"
 
-#: win32/SettingsDialog.cpp:94
+#: win32/SettingsDialog.cpp:99
 msgid "Queue"
 msgstr ""
 
@@ -1878,15 +1926,15 @@ msgstr ""
 msgid "Queued"
 msgstr ""
 
-#: win32/MainWindow.cpp:392
+#: win32/MainWindow.cpp:447
 msgid "Quick Connect"
 msgstr "Hubung Cepat"
 
-#: win32/PublicHubsFrame.cpp:60
+#: win32/PublicHubsFrame.cpp:43
 msgid "Rating"
 msgstr "Rating"
 
-#: win32/AboutDlg.cpp:69
+#: win32/AboutDlg.cpp:68
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr ""
@@ -1895,33 +1943,33 @@ msgstr ""
 msgid "Raw"
 msgstr "Mentah"
 
-#: win32/QueueFrame.cpp:1012
+#: win32/QueueFrame.cpp:911
 msgid "Re-add source"
 msgstr "Tambah ulang sumber"
 
-#: win32/SearchFrame.cpp:1102
+#: win32/SearchFrame.cpp:1070
 msgid "Ready to search..."
 msgstr "Siap mencari..."
 
-#: win32/MainWindow.cpp:505
+#: win32/MainWindow.cpp:527
 msgid "Really exit?"
 msgstr "Betul-betul ada?"
 
-#: win32/QueueFrame.cpp:699 win32/QueueFrame.cpp:704
-#: win32/FavHubsFrame.cpp:237
+#: win32/QueueFrame.cpp:610 win32/QueueFrame.cpp:615
+#: win32/FavHubsFrame.cpp:233
 msgid "Really remove?"
 msgstr "Betul-betul hapus?"
 
-#: win32/MainWindow.cpp:289
+#: win32/MainWindow.cpp:314
 #, fuzzy
 msgid "Reconnect"
 msgstr "Tersambung"
 
-#: win32/HubFrame.cpp:840 win32/HubFrame.cpp:1396
+#: win32/HubFrame.cpp:692 win32/HubFrame.cpp:1234
 msgid "Redirect request received to a hub that's already connected"
 msgstr "Permintaan \"redirect\" diterima ke hub yang sudah terhubung"
 
-#: win32/MainWindow.cpp:201
+#: win32/MainWindow.cpp:226
 msgid "Refresh file list\tCtrl+E"
 msgstr ""
 
@@ -1933,16 +1981,15 @@ msgstr "Daftar ke Windows penanganan pautan URL dchub:// dan adc://"
 msgid "Register with Windows to handle magnet: URI links"
 msgstr "Daftar ke Windows untuk penanganan pautan URI magnet"
 
-#: win32/PublicHubsFrame.cpp:59
+#: win32/PublicHubsFrame.cpp:42
 msgid "Reliability"
 msgstr "Kehandalan"
 
-#: win32/QueueFrame.cpp:490 win32/TransferView.cpp:677
+#: win32/QueueFrame.cpp:390 win32/TransferView.cpp:686
 msgid "Remote client does not fully support TTH - cannot download"
 msgstr ""
 
-#: win32/FinishedFrameBase.h:453 win32/FinishedFrameBase.h:471
-#: win32/FinishedFrameBase.h:490
+#: win32/FinishedFrameBase.h:389 win32/FinishedFrameBase.h:418
 msgid "Remove &all"
 msgstr ""
 
@@ -1950,27 +1997,27 @@ msgstr ""
 msgid "Remove slow filelists"
 msgstr ""
 
-#: win32/QueueFrame.cpp:1022
+#: win32/QueueFrame.cpp:920
 msgid "Remove source"
 msgstr "Hapus sumber"
 
-#: win32/QueueFrame.cpp:1031 win32/WinUtil.cpp:1145 win32/UserInfoBase.h:106
+#: win32/QueueFrame.cpp:929 win32/WinUtil.cpp:1130 win32/UserInfoBase.h:106
 msgid "Remove user from queue"
 msgstr "Hapus pengguna dari antrian"
 
-#: win32/UploadPage.cpp:60 win32/FavoriteDirsPage.cpp:42
+#: win32/UploadPage.cpp:60 win32/FavoriteDirsPage.cpp:47
 msgid "Rename"
 msgstr "Ganti nama"
 
-#: win32/MainWindow.cpp:258
+#: win32/MainWindow.cpp:283
 msgid "Report a bug"
 msgstr "Laporkan bug"
 
-#: win32/MainWindow.cpp:257
+#: win32/MainWindow.cpp:282
 msgid "Request a feature"
 msgstr "Minta fitur"
 
-#: win32/TransferView.cpp:719
+#: win32/TransferView.cpp:728
 #, boost-format
 msgid "Requesting %1%"
 msgstr ""
@@ -1979,7 +2026,7 @@ msgstr ""
 msgid "Run in background"
 msgstr "Jalankan di latar belakang"
 
-#: win32/QueueFrame.cpp:442
+#: win32/QueueFrame.cpp:342
 msgid "Running..."
 msgstr "Berjalan..."
 
@@ -1987,18 +2034,18 @@ msgstr "Berjalan..."
 msgid "SOCKS5"
 msgstr "SOCKS5"
 
-#: win32/TabsPage.cpp:35 win32/MainWindow.cpp:300 win32/SearchFrame.cpp:90
-#: win32/SearchFrame.cpp:162
+#: win32/TabsPage.cpp:51 win32/MainWindow.cpp:325 win32/SearchFrame.cpp:92
+#: win32/SearchFrame.cpp:161
 msgid "Search"
 msgstr "Cari"
 
-#: win32/SearchFrame.cpp:1068 win32/SearchFrame.cpp:1083
-#: win32/SearchFrame.cpp:1098
+#: win32/SearchFrame.cpp:1032 win32/SearchFrame.cpp:1047
+#: win32/SearchFrame.cpp:1066
 #, fuzzy, boost-format
 msgid "Search - %1%"
 msgstr "Cari"
 
-#: win32/SearchFrame.cpp:1103
+#: win32/SearchFrame.cpp:1071
 #, fuzzy
 msgid "Search - Ready to search..."
 msgstr "Siap mencari..."
@@ -2007,24 +2054,24 @@ msgstr "Siap mencari..."
 msgid "Search Menu"
 msgstr "Menu Pencarian"
 
-#: win32/WindowsPage.cpp:41 win32/MainWindow.cpp:224 win32/MainWindow.cpp:302
-#: win32/SpyFrame.cpp:42
+#: win32/TabsPage.cpp:52 win32/WindowsPage.cpp:41 win32/MainWindow.cpp:249
+#: win32/MainWindow.cpp:327 win32/SpyFrame.cpp:40
 msgid "Search Spy"
 msgstr "Mata-mata Pencarian"
 
-#: win32/SpyFrame.cpp:36 win32/ADLSProperties.cpp:75
+#: win32/SpyFrame.cpp:34 win32/ADLSProperties.cpp:75
 msgid "Search String"
 msgstr "Cari Teks"
 
-#: win32/SearchFrame.cpp:122
+#: win32/SearchFrame.cpp:121
 msgid "Search for"
 msgstr "Pencarian untuk"
 
-#: win32/WinUtil.cpp:390
+#: win32/WinUtil.cpp:389
 msgid "Search for alternates"
 msgstr "Cari alternatif"
 
-#: win32/DirectoryListingFrame.cpp:801 win32/DirectoryListingFrame.cpp:866
+#: win32/DirectoryListingFrame.cpp:792 win32/DirectoryListingFrame.cpp:857
 msgid "Search for file"
 msgstr "Cari arsip"
 
@@ -2032,28 +2079,28 @@ msgstr "Cari arsip"
 msgid "Search history"
 msgstr "Sejarah pencarian"
 
-#: win32/SearchFrame.cpp:134
+#: win32/SearchFrame.cpp:133
 msgid "Search options"
 msgstr "Opsi pencarian"
 
-#: win32/HubFrame.cpp:896
+#: win32/HubFrame.cpp:744
 #, boost-format
 msgid "Search spam detected from %1%"
 msgstr ""
 
-#: win32/SearchFrame.cpp:1062
+#: win32/SearchFrame.cpp:1026
 #, fuzzy, boost-format
 msgid "Searching for %1%..."
 msgstr "Pencarian untuk"
 
-#: win32/SearchFrame.cpp:1077 win32/SearchFrame.cpp:1096
+#: win32/SearchFrame.cpp:1041 win32/SearchFrame.cpp:1064
 #, boost-format
 msgid "Searching too soon, next search in %1% second"
 msgid_plural "Searching too soon, next search in %1% seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: win32/SettingsDialog.cpp:111
+#: win32/SettingsDialog.cpp:116
 msgid "Security Certificates"
 msgstr ""
 
@@ -2077,7 +2124,7 @@ msgstr "Kirim perintah /misteri ke hub"
 msgid "Separator"
 msgstr "Separasi"
 
-#: win32/FavHubsFrame.cpp:36
+#: win32/FavHubsFrame.cpp:34
 msgid "Server"
 msgstr "Server"
 
@@ -2085,7 +2132,7 @@ msgstr "Server"
 msgid "Set lowest prio for newly added files larger than Low prio size"
 msgstr "Prioritas terendah aktif"
 
-#: win32/QueueFrame.cpp:987
+#: win32/QueueFrame.cpp:886
 msgid "Set priority"
 msgstr "Atur prioritas"
 
@@ -2093,12 +2140,12 @@ msgstr "Atur prioritas"
 msgid "Set timestamps"
 msgstr "Atur stempel waktu"
 
-#: win32/SettingsDialog.cpp:68 win32/SettingsDialog.cpp:155
-#: win32/MainWindow.cpp:306
+#: win32/SettingsDialog.cpp:73 win32/SettingsDialog.cpp:160
+#: win32/MainWindow.cpp:331
 msgid "Settings"
 msgstr "Pengaturan"
 
-#: win32/MainWindow.cpp:205 win32/MainWindow.cpp:1025
+#: win32/MainWindow.cpp:230 win32/MainWindow.cpp:1000
 msgid "Settings..."
 msgstr "Pengelolaan..."
 
@@ -2106,7 +2153,7 @@ msgstr "Pengelolaan..."
 msgid "Share hidden files"
 msgstr "Arsip hidden juga"
 
-#: win32/HubFrame.cpp:38 win32/PublicHubsFrame.cpp:54
+#: win32/HubFrame.cpp:36 win32/PublicHubsFrame.cpp:37
 msgid "Shared"
 msgstr "Shared"
 
@@ -2114,29 +2161,29 @@ msgstr "Shared"
 msgid "Shared directories"
 msgstr "Direktori share"
 
-#: win32/SettingsDialog.cpp:97
+#: win32/SettingsDialog.cpp:102
 msgid "Sharing"
 msgstr "Sharing"
 
-#: win32/MainWindow.cpp:1022
+#: win32/ShellContextMenu.cpp:42
+msgid "Shell menu"
+msgstr ""
+
+#: win32/MainWindow.cpp:998
 msgid "Show"
 msgstr "Tampil"
 
-#: win32/AppearancePage.cpp:62
+#: win32/AppearancePage.cpp:63
 msgid "Show joins / parts in chat by default"
 msgstr "Tampilkan gabung / pisah di obrolan secara default"
 
-#: win32/AdvancedPage.cpp:45
-msgid "Show shell menu where possible"
-msgstr ""
-
-#: win32/AppearancePage.cpp:60
+#: win32/AppearancePage.cpp:61
 msgid "Show timestamps in chat by default"
 msgstr "Tampilkan stempel waktu di obrolan secara default"
 
-#: win32/UploadPage.cpp:89 win32/QueueFrame.cpp:40
-#: win32/DirectoryListingFrame.cpp:43 win32/SearchFrame.cpp:37
-#: win32/SearchFrame.cpp:126 win32/TransferView.cpp:60
+#: win32/UploadPage.cpp:89 win32/QueueFrame.cpp:35
+#: win32/DirectoryListingFrame.cpp:39 win32/SearchFrame.cpp:34
+#: win32/SearchFrame.cpp:125 win32/TransferView.cpp:60
 msgid "Size"
 msgstr "Besar"
 
@@ -2144,8 +2191,8 @@ msgstr "Besar"
 msgid "Size Type"
 msgstr ""
 
-#: win32/QueueFrame.cpp:291 win32/QueueFrame.cpp:295
-#: win32/DirectoryListingFrame.cpp:641 win32/DirectoryListingFrame.cpp:658
+#: win32/QueueFrame.cpp:209 win32/QueueFrame.cpp:213
+#: win32/DirectoryListingFrame.cpp:632 win32/DirectoryListingFrame.cpp:649
 #, fuzzy, boost-format
 msgid "Size: %1%"
 msgstr "Besar"
@@ -2154,19 +2201,19 @@ msgstr "Besar"
 msgid "Skip zero-byte files"
 msgstr "Lewatkan arsip 0 byte"
 
-#: win32/PrivateFrame.cpp:294
+#: win32/PrivateFrame.cpp:236
 msgid "Slot granted"
 msgstr "Slot diberikan"
 
-#: win32/SearchFrame.cpp:39
+#: win32/SearchFrame.cpp:36
 msgid "Slots"
 msgstr "Slot"
 
-#: win32/WinUtil.cpp:266
+#: win32/WinUtil.cpp:264
 msgid "Slots set"
 msgstr "Slot di-set"
 
-#: win32/MainWindow.cpp:598
+#: win32/MainWindow.cpp:616
 #, boost-format
 msgid "Slots: %1%/%2%"
 msgstr ""
@@ -2188,7 +2235,7 @@ msgstr "Socks IP"
 msgid "Sort all downloads first"
 msgstr "Tidak ada pengguna untuk diunduh"
 
-#: win32/AppearancePage.cpp:64
+#: win32/AppearancePage.cpp:65
 #, fuzzy
 msgid "Sort favorite users first"
 msgstr "Gabung/pisah pegguna kesukaan ditampilkan"
@@ -2197,32 +2244,32 @@ msgstr "Gabung/pisah pegguna kesukaan ditampilkan"
 msgid "Sounds"
 msgstr "Suara"
 
-#: win32/ADLSearchFrame.cpp:33 win32/ADLSProperties.cpp:76
+#: win32/ADLSearchFrame.cpp:31 win32/ADLSProperties.cpp:76
 msgid "Source Type"
 msgstr "Jenis Sumber"
 
-#: win32/QueueFrame.cpp:488
+#: win32/QueueFrame.cpp:388
 msgid "Source too slow"
 msgstr ""
 
-#: win32/WinUtil.cpp:308
+#: win32/WinUtil.cpp:307
 msgid "Specify a URL"
 msgstr ""
 
-#: win32/WinUtil.cpp:275 win32/WinUtil.cpp:296 win32/WinUtil.cpp:302
+#: win32/WinUtil.cpp:274 win32/WinUtil.cpp:295 win32/WinUtil.cpp:301
 msgid "Specify a search string"
 msgstr "Sebutkan pencarian teks"
 
-#: win32/HubFrame.cpp:309
+#: win32/HubFrame.cpp:281
 msgid "Specify a server to connect to"
 msgstr "Sebutkan server untuk disambungkan"
 
 #: win32/TransferView.cpp:45 win32/TransferView.cpp:58
-#: win32/FinishedFrameBase.h:673 win32/FinishedFrameBase.h:703
+#: win32/FinishedFrameBase.h:660 win32/FinishedFrameBase.h:670
 msgid "Speed"
 msgstr "Kecepatan"
 
-#: win32/DirectoryListingFrame.cpp:642
+#: win32/DirectoryListingFrame.cpp:633
 #, boost-format
 msgid "Speed: %1%/s"
 msgstr ""
@@ -2235,20 +2282,20 @@ msgstr "Mulai pencarian untuk arsip ini"
 msgid "Statistics"
 msgstr ""
 
-#: win32/QueueFrame.cpp:39 win32/TransferView.cpp:44 win32/TransferView.cpp:56
+#: win32/QueueFrame.cpp:34 win32/TransferView.cpp:44 win32/TransferView.cpp:56
 msgid "Status"
 msgstr "Status"
 
-#: win32/HubFrame.cpp:515
+#: win32/HubFrame.cpp:464
 msgid "Stored password sent..."
 msgstr "Password simpanan terkirim..."
 
-#: win32/DirectoryListingFrame.cpp:162 win32/DirectoryListingFrame.cpp:186
+#: win32/DirectoryListingFrame.cpp:157 win32/DirectoryListingFrame.cpp:181
 msgid "Subtract list"
 msgstr ""
 
-#: win32/TabsPage.cpp:36 win32/WindowsPage.cpp:35 win32/SystemFrame.cpp:28
-#: win32/MainWindow.cpp:227
+#: win32/TabsPage.cpp:53 win32/WindowsPage.cpp:35 win32/SystemFrame.cpp:28
+#: win32/MainWindow.cpp:252
 msgid "System Log"
 msgstr ""
 
@@ -2260,33 +2307,29 @@ msgstr "TCP Port"
 msgid "TLS"
 msgstr ""
 
-#: win32/SearchFrame.cpp:211
+#: win32/QueueFrame.cpp:43 win32/DirectoryListingFrame.cpp:41
+#: win32/SearchFrame.cpp:41 win32/SearchFrame.cpp:210
 msgid "TTH"
 msgstr ""
 
-#: win32/QueueFrame.cpp:48 win32/DirectoryListingFrame.cpp:44
-#: win32/SearchFrame.cpp:44
-msgid "TTH Root"
-msgstr "TTH Root"
-
-#: win32/AboutDlg.cpp:63
+#: win32/AboutDlg.cpp:62
 msgid "TTH:"
 msgstr ""
 
-#: win32/TransferView.cpp:688
+#: win32/TransferView.cpp:697
 #, boost-format
 msgid "TTH: %1%"
 msgstr ""
 
-#: win32/TabsPage.cpp:28
+#: win32/TabsPage.cpp:38
 msgid "Tab highlight on content change"
 msgstr ""
 
-#: win32/SettingsDialog.cpp:102
+#: win32/SettingsDialog.cpp:107
 msgid "Tabs"
 msgstr ""
 
-#: win32/HubFrame.cpp:40
+#: win32/HubFrame.cpp:38
 msgid "Tag"
 msgstr "Tag"
 
@@ -2294,20 +2337,20 @@ msgstr "Tag"
 msgid "Text sent to hub"
 msgstr ""
 
-#: win32/HubFrame.cpp:979
+#: win32/HubFrame.cpp:827
 msgid "This hub is not a favorite hub"
 msgstr ""
 
-#: win32/WinUtil.cpp:1157
+#: win32/WinUtil.cpp:1161
 msgid "TiB"
 msgstr ""
 
-#: win32/SpyFrame.cpp:38 win32/FinishedFrameBase.h:675
-#: win32/FinishedFrameBase.h:705
+#: win32/SpyFrame.cpp:36 win32/FinishedFrameBase.h:662
+#: win32/FinishedFrameBase.h:672
 msgid "Time"
 msgstr "Waktu"
 
-#: win32/UsersFrame.cpp:32
+#: win32/UsersFrame.cpp:30
 msgid "Time last seen"
 msgstr "Waktu terakhir muncul"
 
@@ -2315,11 +2358,11 @@ msgstr "Waktu terakhir muncul"
 msgid "Time left"
 msgstr "Waktu sisa"
 
-#: win32/HubFrame.cpp:318
+#: win32/AspectChat.h:98
 msgid "Timestamps disabled"
 msgstr "Stempel waktu non-aktif"
 
-#: win32/HubFrame.cpp:316
+#: win32/AspectChat.h:96
 msgid "Timestamps enabled"
 msgstr "Stempel waktu aktif"
 
@@ -2335,16 +2378,16 @@ msgstr "Toggle jendela ssaat memilih tab aktif"
 msgid "Total size:"
 msgstr "Besar total:"
 
-#: win32/SpyFrame.cpp:160
+#: win32/SpyFrame.cpp:193
 #, boost-format
 msgid "Total: %1%"
 msgstr ""
 
-#: win32/AboutDlg.cpp:65
+#: win32/AboutDlg.cpp:64
 msgid "Totals"
 msgstr ""
 
-#: win32/FinishedFrameBase.h:672 win32/FinishedFrameBase.h:702
+#: win32/FinishedFrameBase.h:657 win32/FinishedFrameBase.h:669
 #, fuzzy
 msgid "Transferred"
 msgstr "Terjemahan"
@@ -2358,17 +2401,17 @@ msgstr "Terjemahan"
 msgid "Trusted certificates path"
 msgstr ""
 
-#: win32/QueueFrame.cpp:49 win32/DirectoryListingFrame.cpp:41
-#: win32/SearchFrame.cpp:36
+#: win32/QueueFrame.cpp:44 win32/DirectoryListingFrame.cpp:38
+#: win32/SearchFrame.cpp:33
 msgid "Type"
 msgstr "Tipe"
 
-#: win32/MainWindow.cpp:600
+#: win32/MainWindow.cpp:618
 #, boost-format
 msgid "U: %1%"
 msgstr ""
 
-#: win32/MainWindow.cpp:602
+#: win32/MainWindow.cpp:620
 #, boost-format
 msgid "U: %1%/s (%2%)"
 msgstr ""
@@ -2377,18 +2420,18 @@ msgstr ""
 msgid "UDP"
 msgstr "UDP Port"
 
-#: win32/WinUtil.cpp:826
+#: win32/WinUtil.cpp:816
 msgid "URL:MAGNET URI"
 msgstr "URL:MAGNET URI"
 
-#: win32/MainWindow.cpp:657
+#: win32/MainWindow.cpp:687
 msgid ""
 "Unable to open TCP/TLS port. File transfers will not work correctly until "
 "you change settings or turn off any application that might be using the TCP/"
 "TLS port"
 msgstr ""
 
-#: win32/MainWindow.cpp:662
+#: win32/MainWindow.cpp:692
 msgid ""
 "Unable to open UDP port. Searching will not work correctly until you change "
 "settings or turn off any application that might be using the UDP port"
@@ -2406,11 +2449,11 @@ msgstr "Anda melihat direktori ini dengan nama"
 msgid "Unfinished downloads directory"
 msgstr "Direktori untuk unduh yang belum selesai"
 
-#: win32/QueueFrame.cpp:446 win32/QueueFrame.cpp:447
+#: win32/QueueFrame.cpp:346 win32/QueueFrame.cpp:347
 msgid "Unknown"
 msgstr "Tidak diketahui"
 
-#: win32/HubFrame.cpp:388
+#: win32/HubFrame.cpp:351
 #, boost-format
 msgid "Unknown command: %1%"
 msgstr ""
@@ -2419,12 +2462,12 @@ msgstr ""
 msgid "Upload slots"
 msgstr "Slot unggah"
 
-#: win32/AboutDlg.cpp:62
+#: win32/AboutDlg.cpp:61
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr ""
 
-#: win32/TransferView.cpp:825
+#: win32/TransferView.cpp:834
 #, fuzzy, boost-format
 msgid "Uploading %1%"
 msgstr "Unggahan"
@@ -2437,11 +2480,11 @@ msgstr "Unggahan"
 msgid "Use CTRL for line history"
 msgstr "Gunakan CTRL untuk sejarah baris"
 
-#: win32/AdvancedPage.cpp:47
+#: win32/AdvancedPage.cpp:46
 msgid "Use Coral network when downloading hub lists (improves reliability)"
 msgstr ""
 
-#: win32/AppearancePage.cpp:66
+#: win32/AppearancePage.cpp:67
 msgid "Use OEM monospaced font for viewing text files"
 msgstr "Pakai OEM monospaced font untuk menilik arsip teks"
 
@@ -2453,24 +2496,28 @@ msgstr "Pakai SOCKS5 server untuk menjawab hostname"
 msgid "Use TLS when remote client supports it"
 msgstr ""
 
-#: win32/AdvancedPage.cpp:46
+#: win32/AdvancedPage.cpp:45
 msgid "Use extended menus with icons and titles"
 msgstr ""
 
-#: win32/AppearancePage.cpp:65
+#: win32/AdvancedPage.cpp:48
+msgid "Use fast hashing method (disable if you have problems with hashing)"
+msgstr ""
+
+#: win32/AppearancePage.cpp:66
 msgid "Use system icons when browsing files (slows browsing down a bit)"
 msgstr "Pakai icon sistem saat menelusuri arsip (sedikit memperlambat)"
 
-#: win32/SearchFrame.cpp:35 win32/TransferView.cpp:42
+#: win32/SearchFrame.cpp:32 win32/TransferView.cpp:42
 msgid "User"
 msgstr "Pengguna"
 
-#: win32/SettingsDialog.cpp:110
+#: win32/SettingsDialog.cpp:115
 #, fuzzy
 msgid "User Commands"
 msgstr "Perintah"
 
-#: win32/FavHubsFrame.cpp:37
+#: win32/FavHubsFrame.cpp:35
 msgid "User Description"
 msgstr "Deskripsi Pengguna"
 
@@ -2478,28 +2525,32 @@ msgstr "Deskripsi Pengguna"
 msgid "User Menu"
 msgstr "Menu Pengguna"
 
-#: win32/QueueFrame.cpp:436 win32/DirectoryListingFrame.cpp:704
+#: win32/QueueFrame.cpp:392
+msgid "User certificate not trusted"
+msgstr ""
+
+#: win32/QueueFrame.cpp:336 win32/DirectoryListingFrame.cpp:695
 msgid "User offline"
 msgstr "Pengguna terputus"
 
-#: win32/PrivateFrame.cpp:317
+#: win32/PrivateFrame.cpp:259
 msgid "User went offline"
 msgstr "Pengguna sekarang terputus"
 
-#: win32/QueueFrame.cpp:43 win32/PublicHubsFrame.cpp:51
+#: win32/QueueFrame.cpp:38 win32/PublicHubsFrame.cpp:34
 msgid "Users"
 msgstr "Pengguna"
 
-#: win32/PublicHubsFrame.cpp:282
+#: win32/PublicHubsFrame.cpp:261
 #, fuzzy, boost-format
 msgid "Users: %1%"
 msgstr "Pengguna"
 
-#: win32/SearchFrame.cpp:209
+#: win32/SearchFrame.cpp:208
 msgid "Video"
 msgstr "Video"
 
-#: win32/AppearancePage.cpp:61
+#: win32/AppearancePage.cpp:62
 msgid "View status messages in main chat"
 msgstr "Tilik pesan status di obrolan utama"
 
@@ -2507,31 +2558,31 @@ msgstr "Tilik pesan status di obrolan utama"
 msgid "Virtual name"
 msgstr "Nama semu"
 
-#: win32/QueueFrame.cpp:430
+#: win32/QueueFrame.cpp:330
 #, fuzzy, boost-format
 msgid "Waiting (%1% of %2% users online)"
 msgstr "Menunggu (Pengguna online)"
 
-#: win32/QueueFrame.cpp:428
+#: win32/QueueFrame.cpp:328
 msgid "Waiting (User online)"
 msgstr "Menunggu (Pengguna online)"
 
-#: win32/TabsPage.cpp:39 win32/WindowsPage.cpp:39
-#: win32/WaitingUsersFrame.cpp:33 win32/MainWindow.cpp:219
-#: win32/MainWindow.cpp:297
+#: win32/TabsPage.cpp:56 win32/WindowsPage.cpp:39
+#: win32/WaitingUsersFrame.cpp:33 win32/MainWindow.cpp:244
+#: win32/MainWindow.cpp:322
 #, fuzzy
 msgid "Waiting Users"
 msgstr "Menunggu (Pengguna online)"
 
-#: win32/TransferView.cpp:643
+#: win32/TransferView.cpp:652
 msgid "Waiting for slot"
 msgstr ""
 
-#: win32/TransferView.cpp:665
+#: win32/TransferView.cpp:674
 msgid "Waiting to retry"
 msgstr ""
 
-#: win32/MainWindow.cpp:309
+#: win32/MainWindow.cpp:334
 msgid "What's This?"
 msgstr ""
 
@@ -2544,7 +2595,7 @@ msgstr "Keluarkan suara menyebalkan bila jendela pesan pribadi dibuka"
 msgid "Window options"
 msgstr "Opsi jendela"
 
-#: win32/SettingsDialog.cpp:103
+#: win32/SettingsDialog.cpp:108
 #, fuzzy
 msgid "Windows"
 msgstr "Opsi jendela"
@@ -2553,15 +2604,15 @@ msgstr "Opsi jendela"
 msgid "Write buffer size"
 msgstr "Ukuruan buffer tulis"
 
-#: win32/FinishedFrameBase.h:262
+#: win32/FinishedFrameBase.h:236
 msgid "Yes"
 msgstr ""
 
-#: win32/HubFrame.cpp:892
+#: win32/HubFrame.cpp:740
 msgid "Your nick was already taken, please change to something else!"
 msgstr "Nick Anda sudah dipakai, mohon ganti ke lainnya!"
 
-#: win32/MainWindow.cpp:149
+#: win32/MainWindow.cpp:174
 msgid ""
 "Your version of windows common controls is too old for DC++ to run "
 "correctly, and you will most probably experience problems with the user "
@@ -2569,7 +2620,7 @@ msgid ""
 "or from Microsoft directly."
 msgstr ""
 
-#: win32/TransferView.cpp:690
+#: win32/TransferView.cpp:699
 #, fuzzy
 msgid "file list"
 msgstr "Menu Daftar arsip"
@@ -2616,6 +2667,9 @@ msgstr ""
 
 #~ msgid "Show progress bars for transfers"
 #~ msgstr "Tampilkan batang progres untuk transfer (menggunakan sebagian CPU)"
+
+#~ msgid "TTH Root"
+#~ msgstr "TTH Root"
 
 #~ msgid "Translations"
 #~ msgstr "Terjemahan"
