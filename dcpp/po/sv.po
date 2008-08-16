@@ -7,47 +7,47 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-06-20 23:05+0200\n"
-"PO-Revision-Date: 2008-04-18 18:27+0000\n"
-"Last-Translator: Brandy <Unknown>\n"
+"POT-Creation-Date: 2008-08-16 10:33+0200\n"
+"PO-Revision-Date: 2008-08-14 10:28+0000\n"
+"Last-Translator: endator <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
+"X-Launchpad-Export-Date: 2008-08-16 08:17+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:387
+#: dcpp/Util.cpp:378
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp/Util.cpp:349
+#: dcpp/Util.cpp:340
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp/Util.cpp:345
+#: dcpp/Util.cpp:336
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp/Util.cpp:347
+#: dcpp/Util.cpp:338
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp/Util.cpp:353
+#: dcpp/Util.cpp:344
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp/Util.cpp:351
+#: dcpp/Util.cpp:342
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
 
-#: dcpp/AdcHub.cpp:139
+#: dcpp/AdcHub.cpp:141
 #, boost-format
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) har samma CID {%3%} som %4% (%5%), ignorerar"
@@ -57,23 +57,23 @@ msgstr "%1% (%2%) har samma CID {%3%} som %4% (%5%), ignorerar"
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Okänt användarnamn)"
 
-#: dcpp/HashManager.cpp:767
+#: dcpp/HashManager.cpp:769
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr "%1% inte utdelad; beräknad CRC32 matchar inte den i SFV-filen."
 
-#: dcpp/QueueManager.cpp:333
+#: dcpp/QueueManager.cpp:329
 #, boost-format
 msgid "%1% renamed to %2%"
 msgstr "%1% omdöpt till %2%"
 
-#: dcpp/AdcHub.cpp:281
+#: dcpp/AdcHub.cpp:283
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr "%1% kickades av %2%: %3%"
 
-#: dcpp/AdcHub.cpp:284
+#: dcpp/AdcHub.cpp:286
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr "%1% kickades: %2%"
@@ -83,29 +83,33 @@ msgstr "%1% kickades: %2%"
 msgid "%1%: File not available"
 msgstr "%1%: Filen ej tillgänglig"
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:334
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp/Util.cpp:383
+#: dcpp/Util.cpp:374
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
 
-#: dcpp/QueueManager.cpp:535
+#: dcpp/ADLSearch.h:48
+msgid "<Enter string>"
+msgstr "<Fyll i>"
+
+#: dcpp/QueueManager.cpp:522
 msgid "A file of equal or larger size already exists at the target location"
 msgstr "En fil med samma eller större storlek finns redan vid destinationen"
 
-#: dcpp/QueueManager.cpp:478
+#: dcpp/QueueManager.cpp:458
 msgid "A file with a different size already exists in the queue"
 msgstr "En fil med annan storlek finns redan i kön"
 
-#: dcpp/QueueManager.cpp:481
+#: dcpp/QueueManager.cpp:461
 msgid "A file with different tth root already exists in the queue"
 msgstr "En fil med annan tth-rot finns redan i kön"
 
-#: dcpp/QueueManager.cpp:450
+#: dcpp/QueueManager.cpp:423
 msgid "A file with the same hash already exists in your share"
 msgstr "Delar redan ut en fil med samma hash"
 
@@ -122,18 +126,23 @@ msgstr "CRC32 stämmer ej (kontrollera SFV)"
 msgid "CRC32 inconsistency (SFV-Check) (File: %1%)"
 msgstr "CRC32 stämmer ej (kontrollera SFV) (Fil: %1%)"
 
-#: dcpp/ConnectionManager.cpp:376
-msgid "Certificate not trusted, unable to connect"
-msgstr "Ej pålitligt certifikat, kan ej ansluta"
-
-#: dcpp/BufferedSocket.cpp:148
+#: dcpp/BufferedSocket.cpp:165 dcpp/SSLSocket.cpp:154
 msgid "Connection closed"
 msgstr "Anslutningen stängd"
 
 #: dcpp/Socket.cpp:154 dcpp/ConnectionManager.cpp:182
-#: dcpp/BufferedSocket.cpp:131
+#: dcpp/BufferedSocket.cpp:130 dcpp/BufferedSocket.cpp:150
 msgid "Connection timeout"
 msgstr "Inget svar på förbindelsen inom tidsgränsen"
+
+#: dcpp/ConnectionManager.cpp:250
+#, boost-format
+msgid "Connectivity error: %1%"
+msgstr "Fel vid anslutning: %1%"
+
+#: dcpp/ConnectionManager.cpp:243
+msgid "Connectivity restored"
+msgstr "Anslutning återställd"
 
 #: dcpp/DownloadManager.cpp:231
 #, boost-format
@@ -144,11 +153,15 @@ msgstr "Kunde ej öppna målfilen: %1%"
 msgid "Directory already shared"
 msgstr "Katalogen är redan utdelad"
 
-#: dcpp/ADLSearch.h:281
+#: dcpp/DirectoryListing.cpp:165
+msgid "Directory missing name attribute"
+msgstr "Katalogen saknar namn"
+
+#: dcpp/ADLSearch.h:277
 msgid "Discard"
 msgstr "Ignorera"
 
-#: dcpp/BufferedSocket.cpp:405
+#: dcpp/BufferedSocket.cpp:422
 msgid "Disconnected"
 msgstr "Frånkopplad"
 
@@ -157,7 +170,7 @@ msgstr "Frånkopplad"
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Frånkopplad användare lämnar hubben: %1%"
 
-#: dcpp/DCPlusPlus.cpp:111
+#: dcpp/DCPlusPlus.cpp:107
 msgid "Download Queue"
 msgstr "Nedladdningskö"
 
@@ -169,12 +182,12 @@ msgid ""
 msgstr ""
 "Dubblettfil kommer ej delas ut: %1%%2% (Storlek: %3% B) Dubblett av: %4%%5%"
 
-#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
+#: dcpp/QueueManager.cpp:532 dcpp/QueueManager.cpp:536
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Dubblerad källa: %1%"
 
-#: dcpp/HashManager.cpp:456
+#: dcpp/HashManager.cpp:458
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Fel under framställning av hashdatafil: %1%"
@@ -190,12 +203,16 @@ msgstr "Fel under komprimering"
 msgid "Error during decompression"
 msgstr "Fel under avkomprimering"
 
-#: dcpp/HashManager.cpp:772
+#: dcpp/CryptoManager.cpp:153
+msgid "Error generating certificate"
+msgstr "Fel vid skapandet av ceritikat"
+
+#: dcpp/HashManager.cpp:774
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Fel under hashning %1%: %2%"
 
-#: dcpp/HashManager.cpp:118 dcpp/HashManager.cpp:333
+#: dcpp/HashManager.cpp:118 dcpp/HashManager.cpp:332
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Fel under sparandet av hashdatan: %1%"
@@ -210,11 +227,11 @@ msgstr "Misslyckades att ladda certifikatfil"
 msgid "Failed to load private key"
 msgstr "Misslyckades att ladda privat nyckel"
 
-#: dcpp/AdcHub.cpp:206
+#: dcpp/AdcHub.cpp:208
 msgid "Failed to negotiate base protocol"
 msgstr "Misslyckades att förhandla basprotokoll"
 
-#: dcpp/Socket.cpp:408
+#: dcpp/Socket.cpp:402
 msgid ""
 "Failed to set up the socks server for UDP relay (check socks address and "
 "port)"
@@ -243,7 +260,7 @@ msgstr ""
 msgid "File list refresh initiated"
 msgstr "Uppdatering av fillistan påbörjad"
 
-#: dcpp/DirectoryListing.cpp:101
+#: dcpp/DirectoryListing.cpp:102
 msgid "File not available"
 msgstr "Filen är inte tillgänglig"
 
@@ -265,20 +282,24 @@ msgstr "Fullt träd matchar inte TTH-roten"
 msgid "Generated new TLS certificate"
 msgstr "Genererade nytt TLS-certifikat"
 
-#: dcpp/DCPlusPlus.cpp:105
+#: dcpp/DirectoryListing.cpp:95
+msgid "Greater than maximum filelist size"
+msgstr "Större än max storlek för fillista"
+
+#: dcpp/DCPlusPlus.cpp:101
 msgid "Hash database"
 msgstr "Hashdatabas"
 
-#: dcpp/HashManager.cpp:677
+#: dcpp/HashManager.cpp:679
 msgid "Hash database rebuilt"
 msgstr "Hashdatabasen ombyggd"
 
-#: dcpp/HashManager.cpp:73 dcpp/HashManager.cpp:277
+#: dcpp/HashManager.cpp:73 dcpp/HashManager.cpp:276
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Hashning misslyckades: %1%"
 
-#: dcpp/AdcHub.cpp:212
+#: dcpp/AdcHub.cpp:214
 msgid ""
 "Hub probably uses an old version of ADC, please encourage the owner to "
 "upgrade"
@@ -290,7 +311,7 @@ msgstr ""
 msgid "Invalid size"
 msgstr "Ogiltig storlek"
 
-#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
+#: dcpp/QueueManager.cpp:505 dcpp/QueueManager.cpp:513
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -302,36 +323,38 @@ msgstr ""
 msgid "Kick user(s)"
 msgstr "Sparka användare"
 
-#: dcpp/ConnectionManager.cpp:230
-#, boost-format
-msgid "Listening socket failed (you need to restart %1%): %2%"
-msgstr "Lyssnadssocket misslyckad (du måste starta om %1%): %2%"
-
-#: dcpp/BufferedSocket.cpp:237
+#: dcpp/BufferedSocket.cpp:254
 msgid "Maximum command length exceeded"
 msgstr "Högsta längden på kommando överstigen"
 
 #: dcpp/Streams.h:140
-#, fuzzy
 msgid "More bytes written than requested"
-msgstr "Skickade mer data än vad som förväntades"
+msgstr "Skrev fler byte än efterfrågat"
+
+#: dcpp/CryptoManager.cpp:142
+msgid "No certificate file chosen"
+msgstr "Ingen certifikatfil vald"
 
 #: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "Ingen katalog vald"
 
+#: dcpp/CryptoManager.cpp:139
+msgid "No private key file chosen"
+msgstr "Ingen privat nyckel vald"
+
 #: dcpp/DownloadManager.cpp:424
 msgid "No slots available"
 msgstr "Inga platser tillgängliga"
 
-#: dcpp/AdcHub.cpp:573
+#: dcpp/AdcHub.cpp:575
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Lyssnar inte efter anslutningar - var god starta om %1%"
 
 #: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
-#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
-#: dcpp/SearchManager.cpp:274
+#: dcpp/SearchManager.cpp:227 dcpp/SearchManager.cpp:289
+#: dcpp/SearchManager.cpp:291
 msgid "Offline"
 msgstr "Frånkopplad"
 
@@ -351,11 +374,25 @@ msgstr "Begäran till att söka efter slutet på data"
 msgid "Response does not match request"
 msgstr "Svaret matchar inte förfrågningen"
 
-#: dcpp/DCPlusPlus.cpp:108
+#: dcpp/SSLSocket.cpp:160
+#, boost-format
+msgid "SSL Error: %1% (%2%, %3%)"
+msgstr "SSL fel: %1% (%2%, %3%)"
+
+#: dcpp/SearchManager.cpp:125
+#, boost-format
+msgid "Search disabled: %1%"
+msgstr "Sökning inaktiverad: %1%"
+
+#: dcpp/SearchManager.cpp:118
+msgid "Search enabled again"
+msgstr "Sökning återaktiverad"
+
+#: dcpp/DCPlusPlus.cpp:104
 msgid "Shared Files"
 msgstr "Delade filer"
 
-#: dcpp/Socket.cpp:269 dcpp/Socket.cpp:273
+#: dcpp/Socket.cpp:263 dcpp/Socket.cpp:267
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 "Verifiering hos socks-servern misslyckades (fel användarnamn / lösenord?)"
@@ -373,24 +410,28 @@ msgstr "TLS avstängd, ingen certifikatsfil bestämd"
 msgid "TTH inconsistency"
 msgstr "TTH inkonsekvens"
 
-#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
+#: dcpp/QueueManager.cpp:809
+msgid "Target file is missing or wrong size"
+msgstr "Målfilen saknas eller har fel storlek"
+
+#: dcpp/QueueManager.cpp:500 dcpp/QueueManager.cpp:509
 msgid "Target filename too long"
 msgstr "Målets filnamn är för långt"
 
-#: dcpp/QueueManager.cpp:824
+#: dcpp/QueueManager.cpp:801
 msgid "Target removed"
 msgstr "Målet borttaget"
 
-#: dcpp/Socket.cpp:255
+#: dcpp/Socket.cpp:249
 msgid "The socks server doesn't support login / password authentication"
 msgstr "Socks-servern stöder inte användarnamns- / lösenordsverifiering"
 
-#: dcpp/Socket.cpp:162 dcpp/Socket.cpp:173 dcpp/Socket.cpp:206
-#: dcpp/Socket.cpp:210 dcpp/Socket.cpp:237 dcpp/Socket.cpp:252
+#: dcpp/Socket.cpp:162 dcpp/Socket.cpp:170 dcpp/Socket.cpp:203
+#: dcpp/Socket.cpp:207 dcpp/Socket.cpp:231 dcpp/Socket.cpp:246
 msgid "The socks server failed establish a connection"
 msgstr "Socks-servern misslyckades upprätta anslutning"
 
-#: dcpp/Socket.cpp:241
+#: dcpp/Socket.cpp:235
 msgid "The socks server requires authentication"
 msgstr "Socks-servern kräver verifiering"
 
@@ -398,7 +439,7 @@ msgstr "Socks-servern kräver verifiering"
 msgid "The temporary download directory cannot be shared"
 msgstr "Den tillfälliga nedladdningskatalogen kan ej delas ut"
 
-#: dcpp/QueueManager.cpp:470
+#: dcpp/QueueManager.cpp:450
 msgid "This file is already queued"
 msgstr "Filen finns redan i kön"
 
@@ -406,7 +447,7 @@ msgstr "Filen finns redan i kön"
 msgid "Unable to create thread"
 msgstr "Kan ej skapa tråd"
 
-#: dcpp/QueueManager.cpp:1021
+#: dcpp/QueueManager.cpp:999
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Kan ej öppna fillista: %1%"
@@ -415,7 +456,7 @@ msgstr "Kan ej öppna fillista: %1%"
 msgid "Unable to read hash data file"
 msgstr "Kan ej läsa hashdatafilen"
 
-#: dcpp/QueueManager.cpp:335
+#: dcpp/QueueManager.cpp:331
 #, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "Kan ej döpa om %1%: %2%"
@@ -430,17 +471,20 @@ msgstr "Kan ej skicka fil %1%: %2%"
 msgid "Unknown error: 0x%1$x"
 msgstr "Okänt fel: 0x%1$x"
 
-#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
+#: dcpp/QueueManager.cpp:417
 msgid "You're trying to download from yourself!"
 msgstr "Du försöker ladda ner från dig själv!"
 
-#: dcpp/SettingsManager.cpp:157
+#: dcpp/SettingsManager.cpp:166
 msgid "downloaded from"
 msgstr "nedladdad från"
 
-#: dcpp/SettingsManager.cpp:158
+#: dcpp/SettingsManager.cpp:167
 msgid "uploaded to"
 msgstr "uppladdad till"
+
+#~ msgid "Certificate not trusted, unable to connect"
+#~ msgstr "Ej pålitligt certifikat, kan ej ansluta"
 
 #~ msgid "More data was sent than was expected"
 #~ msgstr "Skickade mer data än vad som förväntades"

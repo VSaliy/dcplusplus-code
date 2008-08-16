@@ -7,47 +7,47 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-06-20 23:05+0200\n"
-"PO-Revision-Date: 2008-05-04 15:28+0000\n"
-"Last-Translator: Giannis K. <Unknown>\n"
+"POT-Creation-Date: 2008-08-16 10:33+0200\n"
+"PO-Revision-Date: 2008-07-27 23:02+0000\n"
+"Last-Translator: Τάσος Παπανικολάου <paptas@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-06-20 21:08+0000\n"
+"X-Launchpad-Export-Date: 2008-08-16 08:17+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp/Util.cpp:387
+#: dcpp/Util.cpp:378
 #, c-format, boost-format
 msgid "%'lld B"
-msgstr ""
+msgstr "%'lld B"
 
-#: dcpp/Util.cpp:349
+#: dcpp/Util.cpp:340
 #, c-format, boost-format
 msgid "%.02f GiB"
-msgstr ""
+msgstr "%.02f GiB"
 
-#: dcpp/Util.cpp:345
+#: dcpp/Util.cpp:336
 #, c-format, boost-format
 msgid "%.02f KiB"
-msgstr ""
+msgstr "%.02f KiB"
 
-#: dcpp/Util.cpp:347
+#: dcpp/Util.cpp:338
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr ""
 
-#: dcpp/Util.cpp:353
+#: dcpp/Util.cpp:344
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr ""
 
-#: dcpp/Util.cpp:351
+#: dcpp/Util.cpp:342
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr ""
 
-#: dcpp/AdcHub.cpp:139
+#: dcpp/AdcHub.cpp:141
 #, boost-format
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) έχει το ίδιο CID {%3%} με %4% (%5%), θα αγνοηθεί"
@@ -57,7 +57,7 @@ msgstr "%1% (%2%) έχει το ίδιο CID {%3%} με %4% (%5%), θα αγνο
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Άγνωστο ψευδώνυμο)"
 
-#: dcpp/HashManager.cpp:767
+#: dcpp/HashManager.cpp:769
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
@@ -65,17 +65,17 @@ msgstr ""
 "%1% δεν διαμοιράζεται, το CRC32 που υπολογίστηκε δεν ταιριάζει με αυτό που "
 "βρέθηκε στο SFV αρχείο."
 
-#: dcpp/QueueManager.cpp:333
+#: dcpp/QueueManager.cpp:329
 #, boost-format
 msgid "%1% renamed to %2%"
 msgstr "%1% μετονομάστηκε σε %2%"
 
-#: dcpp/AdcHub.cpp:281
+#: dcpp/AdcHub.cpp:283
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr "%1% αποβλήθηκε από %2%: %3%"
 
-#: dcpp/AdcHub.cpp:284
+#: dcpp/AdcHub.cpp:286
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr "%1% αποβλήθηκε: %2%"
@@ -85,30 +85,34 @@ msgstr "%1% αποβλήθηκε: %2%"
 msgid "%1%: File not available"
 msgstr "%1%: Το αρχείο δεν είναι διαθέσιμο"
 
-#: dcpp/Util.cpp:343
+#: dcpp/Util.cpp:334
 #, c-format, boost-format
 msgid "%d B"
-msgstr ""
+msgstr "%d B"
 
-#: dcpp/Util.cpp:383
+#: dcpp/Util.cpp:374
 #, c-format, boost-format
 msgid "%s B"
+msgstr "%s B"
+
+#: dcpp/ADLSearch.h:48
+msgid "<Enter string>"
 msgstr ""
 
-#: dcpp/QueueManager.cpp:535
+#: dcpp/QueueManager.cpp:522
 msgid "A file of equal or larger size already exists at the target location"
 msgstr ""
 "Ένα αρχείο ίσο ή μεγαλύτερο σε μέγεθος υπάρχει ήδη στην τοποθεσία προορισμού"
 
-#: dcpp/QueueManager.cpp:478
+#: dcpp/QueueManager.cpp:458
 msgid "A file with a different size already exists in the queue"
 msgstr "Υπάρχει ήδη ένα αρχείο με διαφορετικό μέγεθος στην σειρά αναμονής"
 
-#: dcpp/QueueManager.cpp:481
+#: dcpp/QueueManager.cpp:461
 msgid "A file with different tth root already exists in the queue"
 msgstr "Υπάρχει ήδη ένα αρχείο με διαφορετικό TTH στην σειρά αναμονής"
 
-#: dcpp/QueueManager.cpp:450
+#: dcpp/QueueManager.cpp:423
 msgid "A file with the same hash already exists in your share"
 msgstr "Ένα αρχείο με το ίδιο ΤΤΗ υπάρχει ήδη στα κοινόχρηστα αρχεία"
 
@@ -125,18 +129,24 @@ msgstr "Ασυνέχεια CRC32 (Έλεγχος-SFV)"
 msgid "CRC32 inconsistency (SFV-Check) (File: %1%)"
 msgstr "Ασυνέχεια CRC32 (Έλεγχος-SFV) (Αρχείο: %1%)"
 
-#: dcpp/ConnectionManager.cpp:376
-msgid "Certificate not trusted, unable to connect"
-msgstr "Μη ασφαλές πιστοποιητικό, αδύνατη η σύνδεση"
-
-#: dcpp/BufferedSocket.cpp:148
+#: dcpp/BufferedSocket.cpp:165 dcpp/SSLSocket.cpp:154
 msgid "Connection closed"
 msgstr "Η σύνδεση τερματίστηκε"
 
 #: dcpp/Socket.cpp:154 dcpp/ConnectionManager.cpp:182
-#: dcpp/BufferedSocket.cpp:131
+#: dcpp/BufferedSocket.cpp:130 dcpp/BufferedSocket.cpp:150
 msgid "Connection timeout"
 msgstr "Λήξη χρονικού ορίου σύνδεσης"
+
+#: dcpp/ConnectionManager.cpp:250
+#, boost-format
+msgid "Connectivity error: %1%"
+msgstr "Σφάλμα σύνδεσης: %1%"
+
+#: dcpp/ConnectionManager.cpp:243
+#, fuzzy
+msgid "Connectivity restored"
+msgstr "Η σύνδεση τερματίστηκε"
 
 #: dcpp/DownloadManager.cpp:231
 #, boost-format
@@ -147,11 +157,15 @@ msgstr "Δεν ήταν δυνατό να ανοιχτεί το αρχείο π�
 msgid "Directory already shared"
 msgstr "Ο κατάλογος είναι ήδη κοινόχρηστος"
 
-#: dcpp/ADLSearch.h:281
+#: dcpp/DirectoryListing.cpp:165
+msgid "Directory missing name attribute"
+msgstr ""
+
+#: dcpp/ADLSearch.h:277
 msgid "Discard"
 msgstr "Απόρριψη"
 
-#: dcpp/BufferedSocket.cpp:405
+#: dcpp/BufferedSocket.cpp:422
 msgid "Disconnected"
 msgstr "Αποσυνδέθηκε"
 
@@ -160,7 +174,7 @@ msgstr "Αποσυνδέθηκε"
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Αποσύνδεση χρήστη που αποχώρησε από την κυψέλη: %1%"
 
-#: dcpp/DCPlusPlus.cpp:111
+#: dcpp/DCPlusPlus.cpp:107
 msgid "Download Queue"
 msgstr "Αρχεία προς Λήψη"
 
@@ -173,12 +187,12 @@ msgstr ""
 "Το διπλό αρχείο δεν θα διαμοιραστεί: %1%%2% (Μέγεθος: %3% B) Το δεύτερο "
 "συνταίριαξε με το: %4%%5%"
 
-#: dcpp/QueueManager.cpp:548 dcpp/QueueManager.cpp:552
+#: dcpp/QueueManager.cpp:532 dcpp/QueueManager.cpp:536
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Διπλή πηγή: %1%"
 
-#: dcpp/HashManager.cpp:456
+#: dcpp/HashManager.cpp:458
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Σφάλμα κατά τη δημιουργία αρχείου με ta δεδομένα hash: %1%"
@@ -194,12 +208,17 @@ msgstr "Σφάλμα κατά την συμπίεση"
 msgid "Error during decompression"
 msgstr "Σφάλμα κατά την αποσυμπίεση"
 
-#: dcpp/HashManager.cpp:772
+#: dcpp/CryptoManager.cpp:153
+#, fuzzy
+msgid "Error generating certificate"
+msgstr "Δημιουργία νέου πιστοποιητικού TLS"
+
+#: dcpp/HashManager.cpp:774
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Σφάλμα κατά τη δεικτοποίηση %1%: %2%"
 
-#: dcpp/HashManager.cpp:118 dcpp/HashManager.cpp:333
+#: dcpp/HashManager.cpp:118 dcpp/HashManager.cpp:332
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Σφάλμα κατά την αποθήκευση των δεδομένων hash: %1%"
@@ -214,11 +233,11 @@ msgstr "Αποτυχία φόρτωσης του αρχείου του πιστ�
 msgid "Failed to load private key"
 msgstr "Αποτυχία φόρτωσης του ιδιωτικού κλειδιού"
 
-#: dcpp/AdcHub.cpp:206
+#: dcpp/AdcHub.cpp:208
 msgid "Failed to negotiate base protocol"
 msgstr "Αποτυχία κατά τη διαπραγμάτευση του βασικού πρωτοκόλλου."
 
-#: dcpp/Socket.cpp:408
+#: dcpp/Socket.cpp:402
 msgid ""
 "Failed to set up the socks server for UDP relay (check socks address and "
 "port)"
@@ -247,7 +266,7 @@ msgstr ""
 msgid "File list refresh initiated"
 msgstr "Έναρξη ανανέωσης της λίστας διαθέσιμων αρχείων"
 
-#: dcpp/DirectoryListing.cpp:101
+#: dcpp/DirectoryListing.cpp:102
 msgid "File not available"
 msgstr "Το αρχείο δεν είναι διαθέσιμο"
 
@@ -269,20 +288,24 @@ msgstr "Το δέντρο αρχείων δεν ταιριάζει στο TTH"
 msgid "Generated new TLS certificate"
 msgstr "Δημιουργία νέου πιστοποιητικού TLS"
 
-#: dcpp/DCPlusPlus.cpp:105
+#: dcpp/DirectoryListing.cpp:95
+msgid "Greater than maximum filelist size"
+msgstr "Μέγεθος λίστας φακέλων μεγαλύτερο από το μέγιστο"
+
+#: dcpp/DCPlusPlus.cpp:101
 msgid "Hash database"
 msgstr "Βάση Δεδομένων Hash"
 
-#: dcpp/HashManager.cpp:677
+#: dcpp/HashManager.cpp:679
 msgid "Hash database rebuilt"
 msgstr "Ανασυγκρότηση της Βάσης Δεδομένων Hash"
 
-#: dcpp/HashManager.cpp:73 dcpp/HashManager.cpp:277
+#: dcpp/HashManager.cpp:73 dcpp/HashManager.cpp:276
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Η δεικτοποίηση απέτυχε: %1%"
 
-#: dcpp/AdcHub.cpp:212
+#: dcpp/AdcHub.cpp:214
 msgid ""
 "Hub probably uses an old version of ADC, please encourage the owner to "
 "upgrade"
@@ -294,7 +317,7 @@ msgstr ""
 msgid "Invalid size"
 msgstr "Μη έγκυρο μέγεθος"
 
-#: dcpp/QueueManager.cpp:518 dcpp/QueueManager.cpp:526
+#: dcpp/QueueManager.cpp:505 dcpp/QueueManager.cpp:513
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -306,36 +329,39 @@ msgstr ""
 msgid "Kick user(s)"
 msgstr "Αποβολή χρήστη"
 
-#: dcpp/ConnectionManager.cpp:230
-#, boost-format
-msgid "Listening socket failed (you need to restart %1%): %2%"
-msgstr ""
-
-#: dcpp/BufferedSocket.cpp:237
+#: dcpp/BufferedSocket.cpp:254
 msgid "Maximum command length exceeded"
 msgstr "Υπέρβαση του μέγιστου μήκους εντολής"
 
 #: dcpp/Streams.h:140
-#, fuzzy
 msgid "More bytes written than requested"
-msgstr "Στάλθηκαν περισσότερα δεδομένα από τα αναμενόμενα"
+msgstr "Γράφτηκαν περισσότερα bytes από όσα ζητήθηκαν"
+
+#: dcpp/CryptoManager.cpp:142
+#, fuzzy
+msgid "No certificate file chosen"
+msgstr "TLS ανενεργό, δεν έχει οριστεί αρχείο πιστοποιητικού"
 
 #: dcpp/ShareManager.cpp:414
 msgid "No directory specified"
 msgstr "Δεν έχει καθοριστεί κατάλογος"
 
+#: dcpp/CryptoManager.cpp:139
+msgid "No private key file chosen"
+msgstr ""
+
 #: dcpp/DownloadManager.cpp:424
 msgid "No slots available"
 msgstr "Δεν υπάρχουν ελεύθερες θέσεις"
 
-#: dcpp/AdcHub.cpp:573
+#: dcpp/AdcHub.cpp:575
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
 
 #: dcpp/Transfer.cpp:81 dcpp/Transfer.cpp:85 dcpp/ClientManager.cpp:121
-#: dcpp/SearchManager.cpp:210 dcpp/SearchManager.cpp:272
-#: dcpp/SearchManager.cpp:274
+#: dcpp/SearchManager.cpp:227 dcpp/SearchManager.cpp:289
+#: dcpp/SearchManager.cpp:291
 msgid "Offline"
 msgstr "Αποσυνδεδεμένος"
 
@@ -355,11 +381,25 @@ msgstr "Αίτημα για έρευνα πέραν του τέλους των �
 msgid "Response does not match request"
 msgstr "Η απόκριση δεν ταιριάζει στο αίτημα"
 
-#: dcpp/DCPlusPlus.cpp:108
+#: dcpp/SSLSocket.cpp:160
+#, boost-format
+msgid "SSL Error: %1% (%2%, %3%)"
+msgstr ""
+
+#: dcpp/SearchManager.cpp:125
+#, boost-format
+msgid "Search disabled: %1%"
+msgstr "Απενεργοποίηση έρευνας %1%"
+
+#: dcpp/SearchManager.cpp:118
+msgid "Search enabled again"
+msgstr ""
+
+#: dcpp/DCPlusPlus.cpp:104
 msgid "Shared Files"
 msgstr "Διαμοιραζόμενα Αρχεία"
 
-#: dcpp/Socket.cpp:269 dcpp/Socket.cpp:273
+#: dcpp/Socket.cpp:263 dcpp/Socket.cpp:267
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 "Αποτυχία αυθεντικοποίησης με το Διακομιστή Socks (λάθος όνομα/συνθηματικό;)"
@@ -377,25 +417,30 @@ msgstr "TLS ανενεργό, δεν έχει οριστεί αρχείο πισ
 msgid "TTH inconsistency"
 msgstr "Ασυνέχεια TTH"
 
-#: dcpp/QueueManager.cpp:513 dcpp/QueueManager.cpp:522
+#: dcpp/QueueManager.cpp:809
+#, fuzzy
+msgid "Target file is missing or wrong size"
+msgstr "Το όνομα στο αρχείο προορισμού είναι υπερβολικά μεγάλο"
+
+#: dcpp/QueueManager.cpp:500 dcpp/QueueManager.cpp:509
 msgid "Target filename too long"
 msgstr "Το όνομα στο αρχείο προορισμού είναι υπερβολικά μεγάλο"
 
-#: dcpp/QueueManager.cpp:824
+#: dcpp/QueueManager.cpp:801
 msgid "Target removed"
 msgstr ""
 
-#: dcpp/Socket.cpp:255
+#: dcpp/Socket.cpp:249
 msgid "The socks server doesn't support login / password authentication"
 msgstr ""
 "Ο Διακομιστής Socks δεν υποστηρίζει αυθεντικοποίηση χρήστη/συνθηματικού"
 
-#: dcpp/Socket.cpp:162 dcpp/Socket.cpp:173 dcpp/Socket.cpp:206
-#: dcpp/Socket.cpp:210 dcpp/Socket.cpp:237 dcpp/Socket.cpp:252
+#: dcpp/Socket.cpp:162 dcpp/Socket.cpp:170 dcpp/Socket.cpp:203
+#: dcpp/Socket.cpp:207 dcpp/Socket.cpp:231 dcpp/Socket.cpp:246
 msgid "The socks server failed establish a connection"
 msgstr "Ο Διακομιστής Socks δεν κατάφερε να πραγματοποιήσει σύνδεση"
 
-#: dcpp/Socket.cpp:241
+#: dcpp/Socket.cpp:235
 msgid "The socks server requires authentication"
 msgstr "Ο Διακομιστής Socks απαιτεί αυθεντικοποίηση"
 
@@ -403,7 +448,7 @@ msgstr "Ο Διακομιστής Socks απαιτεί αυθεντικοποί�
 msgid "The temporary download directory cannot be shared"
 msgstr "Ο φάκελος ημιτελών αρχείων δεν μπορεί να διαμοιραστεί"
 
-#: dcpp/QueueManager.cpp:470
+#: dcpp/QueueManager.cpp:450
 msgid "This file is already queued"
 msgstr "Το αρχείο ήδη υπάρχει στην σειρά αναμονής"
 
@@ -411,7 +456,7 @@ msgstr "Το αρχείο ήδη υπάρχει στην σειρά αναμον
 msgid "Unable to create thread"
 msgstr "Αδύνατο να δημιουργηθεί \"thread\""
 
-#: dcpp/QueueManager.cpp:1021
+#: dcpp/QueueManager.cpp:999
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Αδύνατο το άνοιγμα της λίστας αρχείων: %1%"
@@ -420,7 +465,7 @@ msgstr "Αδύνατο το άνοιγμα της λίστας αρχείων: %
 msgid "Unable to read hash data file"
 msgstr "Αδύνατη η ανάγνωση του αρχείου δεδομένων hash"
 
-#: dcpp/QueueManager.cpp:335
+#: dcpp/QueueManager.cpp:331
 #, boost-format
 msgid "Unable to rename %1%: %2%"
 msgstr "Αδ'υνατη η μετονομασία %1%: %2%"
@@ -435,17 +480,20 @@ msgstr "Αδύνατη η αποστολή του αρχείου %1%: %2%"
 msgid "Unknown error: 0x%1$x"
 msgstr "Άγνωστο σφάλμα: 0x%1$x"
 
-#: dcpp/QueueManager.cpp:420 dcpp/QueueManager.cpp:444
+#: dcpp/QueueManager.cpp:417
 msgid "You're trying to download from yourself!"
 msgstr "Προσπαθείς να κατεβάσεις απ'τον εαυτό σου!!!"
 
-#: dcpp/SettingsManager.cpp:157
+#: dcpp/SettingsManager.cpp:166
 msgid "downloaded from"
 msgstr "κατέβηκε από"
 
-#: dcpp/SettingsManager.cpp:158
+#: dcpp/SettingsManager.cpp:167
 msgid "uploaded to"
 msgstr "ανέβηκε σε"
+
+#~ msgid "Certificate not trusted, unable to connect"
+#~ msgstr "Μη ασφαλές πιστοποιητικό, αδύνατη η σύνδεση"
 
 #~ msgid "More data was sent than was expected"
 #~ msgstr "Στάλθηκαν περισσότερα δεδομένα από τα αναμενόμενα"
