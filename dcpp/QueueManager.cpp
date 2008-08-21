@@ -821,7 +821,7 @@ void QueueManager::setFile(Download* d) {
 		f->setPos(d->getSegment().getStart());
 		d->setFile(f);
 	} else if(d->getType() == Transfer::TYPE_FULL_LIST) {
-		string target = d->getDownloadTarget();
+		string target = d->getPath();
 		File::ensureDirectory(target);
 
 		if(d->isSet(Download::FLAG_XML_BZ_LIST)) {
