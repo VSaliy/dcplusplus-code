@@ -66,6 +66,8 @@ class AspectText
 public:
 	/// Sets the text of the AspectText realizing class
 	/** The txt parameter is the new text to put into the realizing object.
+	  * note: the caller should make sure the string is correctly formatted for the current context
+	  * (eg, make sure there are no new lines in tab controls) - DWT won't do any runtime checking.
 	  */
 	void setText( const tstring & txt );
 
