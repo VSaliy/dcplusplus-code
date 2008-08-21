@@ -45,6 +45,12 @@ ResourceType(icon, own)
 }
 
 Icon::Icon(unsigned resourceId, const Point& size) :
+/*
+* we use ::LoadImage instead of ::LoadIcon in order to be able to pick up the correct image,
+* depending on the "size" argument. also, our call to ::LoadImage should use LR_SHARED to match
+* ::LoadIcon more closely, but we don't pass that flag since all our icons are managed and
+* destroyed by DWT.
+*/
 ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId), IMAGE_ICON, size.x, size.y, LR_DEFAULTCOLOR))
 {
 }
