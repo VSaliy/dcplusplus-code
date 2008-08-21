@@ -74,6 +74,7 @@ double Transfer::getAverageSpeed() const {
 }
 
 void Transfer::getParams(const UserConnection& aSource, StringMap& params) {
+	params["userCID"] = aSource.getUser()->getCID().toBase32();
 	params["userNI"] = Util::toString(ClientManager::getInstance()->getNicks(aSource.getUser()->getCID()));
 	params["userI4"] = aSource.getRemoteIp();
 	StringList hubNames = ClientManager::getInstance()->getHubNames(aSource.getUser()->getCID());
