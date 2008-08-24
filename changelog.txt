@@ -45,6 +45,7 @@
 * [L#246596] Partial file list requests visible in download queue
 * Queue frame is not marked dirty when file list finishes
 * Parse %userCID when logging finished transfers (poy)
+* Fix audio file type search filter (emtee)
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
