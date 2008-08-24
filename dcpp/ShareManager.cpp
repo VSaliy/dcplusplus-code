@@ -1102,7 +1102,7 @@ static bool checkType(const string& aString, int aType) {
 					return true;
 				}
 			}
-			if( IS_TYPE2(type2Audio[0]) || IS_TYPE2(type2Audio[1]) ) {
+			if( IS_TYPE2(type2Audio[0]) || IS_TYPE2(type2Audio[1]) || IS_TYPE2(type2Audio[2]) ) {
 				return true;
 			}
 		}
