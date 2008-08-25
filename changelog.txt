@@ -46,6 +46,11 @@
 * Queue frame is not marked dirty when file list finishes
 * Parse %userCID when logging finished transfers (poy)
 * Fix audio file type search filter (emtee)
+* Updated Slovenian, Estonian, Latvian, Australian, Greek, Norwegian,
+  Brazilian, Russian, Lithuanian, French, Portuguese, Traditional Chinese,
+  Turkish, Simplified Chinese, Finnish, Romanian, Telugu, Hebrew, UK English,
+  Bulgarian, Polish, Hungarian, Swedish, Croatian, Italian, German, Dutch,
+  Serbian and Spanish translations.
 
 -- 0.707 2008-06-22 --
 * Fixed crash when pressing F1 twice
