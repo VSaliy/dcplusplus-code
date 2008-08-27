@@ -87,6 +87,7 @@ msgstr "%1% filtered"
 msgid "%1% item"
 msgid_plural "%1% items"
 msgstr[0] "%1% item"
+msgstr[1] "%1% items"
 
 #: win32/HashProgressDlg.cpp:103
 #, boost-format
@@ -98,6 +99,7 @@ msgstr "%1% left"
 msgid "%1% user"
 msgid_plural "%1% users"
 msgstr[0] "%1% user"
+msgstr[1] "%1% users"
 
 #: win32/TransferView.cpp:610 win32/TransferView.cpp:658
 #: win32/FinishedFrameBase.h:506
