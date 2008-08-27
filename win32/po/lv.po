@@ -904,6 +904,7 @@ msgid "Downloading from %1% user"
 msgid_plural "Downloading from %1% users"
 msgstr[0] "Lejuplādē no %1% lietotāja"
 msgstr[1] "Lejuplādē no %1% lietotājiem"
+msgstr[2] ""
 
 #: win32/DirectoryListingFrame.cpp:690
 msgid "Downloading list..."
