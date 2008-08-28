@@ -1,3 +1,5 @@
+
+-- 0.708 2008-08-28 --
 * Added setting for max characters per tab (poy)
 * [L#234458] Added "File size" and "% transferred" columns in finished windows (poy, emtee)
 * Fix absent country code for IPs > 128.0.0.0 in MSVC builds (poy)
