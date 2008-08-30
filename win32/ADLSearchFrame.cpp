@@ -23,6 +23,7 @@
 #include "ADLSearchFrame.h"
 
 #include <dcpp/Client.h>
+#include <dcpp/version.h>
 #include "HoldRedraw.h"
 #include "ADLSProperties.h"
 
@@ -228,11 +229,13 @@ void ADLSearchFrame::handleDown() {
 }
 
 void ADLSearchFrame::handleRemove() {
-	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
-	int i;
-	while((i = items->getNext(-1, LVNI_SELECTED)) != -1) {
-		collection.erase(collection.begin() + i);
-		items->erase(i);
+	if(!BOOLSETTING(CONFIRM_ADLS_REMOVAL) || createMessageBox().show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_YESNO, MessageBox::BOX_ICONQUESTION) == IDYES) {
+		ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
+		int i;
+		while((i = items->getNext(-1, LVNI_SELECTED)) != -1) {
+			collection.erase(collection.begin() + i);
+			items->erase(i);
+		}
 	}
 }
 
