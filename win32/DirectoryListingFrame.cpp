@@ -143,7 +143,8 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(DIRECTORYLISTINGFRAME_ORDER), SETTING(DIRECTORYLISTINGFRAME_WIDTHS));
 		files->setSort(COLUMN_FILENAME);
 
-		files->onSelectionChanged(std::tr1::bind(&DirectoryListingFrame::updateStatus, this));
+		files->onSelectionChanged(std::tr1::bind(&dwt::Application::callAsync, &dwt::Application::instance(),
+			dwt::Application::Callback(std::tr1::bind(&DirectoryListingFrame::updateStatus, this))));
 		files->onDblClicked(std::tr1::bind(&DirectoryListingFrame::handleDoubleClickFiles, this));
 		files->onKeyDown(std::tr1::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));
 		files->onSysKeyDown(std::tr1::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));

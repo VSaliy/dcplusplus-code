@@ -126,7 +126,8 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
 		users->setSort(COLUMN_NICK);
 
-		users->onSelectionChanged(std::tr1::bind(&HubFrame::updateStatus, this));
+		users->onSelectionChanged(std::tr1::bind(&dwt::Application::callAsync, &dwt::Application::instance(),
+			dwt::Application::Callback(std::tr1::bind(&HubFrame::updateStatus, this))));
 		users->onDblClicked(std::tr1::bind(&HubFrame::handleDoubleClickUsers, this));
 		users->onKeyDown(std::tr1::bind(&HubFrame::handleUsersKeyDown, this, _1));
 		users->onContextMenu(std::tr1::bind(&HubFrame::handleUsersContextMenu, this, _1));

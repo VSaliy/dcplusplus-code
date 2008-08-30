@@ -86,7 +86,8 @@ QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
 		files->setSort(COLUMN_TARGET);
 
 		files->onKeyDown(std::tr1::bind(&QueueFrame::handleKeyDownFiles, this, _1));
-		files->onSelectionChanged(std::tr1::bind(&QueueFrame::updateStatus, this));
+		files->onSelectionChanged(std::tr1::bind(&dwt::Application::callAsync, &dwt::Application::instance(),
+			dwt::Application::Callback(std::tr1::bind(&QueueFrame::updateStatus, this))));
 		files->onContextMenu(std::tr1::bind(&QueueFrame::handleFilesContextMenu, this, _1));
 	}
 
