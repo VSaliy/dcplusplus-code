@@ -43,7 +43,7 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 		users = addChild(cs);
 		addWidget(users);
 
-		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
+		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(USERSFRAME_ORDER), SETTING(USERSFRAME_WIDTHS));
 		users->setSort(COLUMN_NICK);
 
 		users->onDblClicked(std::tr1::bind(&UsersFrame::handleGetList, this));
