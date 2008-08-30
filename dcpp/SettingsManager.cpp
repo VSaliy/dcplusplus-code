@@ -67,7 +67,7 @@ const string SettingsManager::settingTags[] =
 	"GetUserCountry", "FavShowJoins", "LogStatusMessages", "ShowStatusbar",
 	"ShowToolbar", "ShowTransferview", "PopunderPm", "PopunderFilelist", "MagnetAsk", "MagnetAction", "MagnetRegister",
 	"AddFinishedInstantly", "DontDLAlreadyShared", "UseCTRLForLineHistory", "ConfirmHubRemoval",
-	"OpenNewWindow", "UDPPort", "ShowLastLinesLog", "ConfirmItemRemoval",
+	"OpenNewWindow", "UDPPort", "ShowLastLinesLog", "ConfirmItemRemoval", "ConfirmADLSRemoval",
 	"AdcDebug", "ToggleActiveWindow", "SearchHistory", "SetMinislotSize", "MaxFilelistSize",
 	"HighestPrioSize", "HighPrioSize", "NormalPrioSize", "LowPrioSize", "LowestPrio",
 	"AutoDropSpeed", "AutoDropInterval", "AutoDropElapsed", "AutoDropInactivity", "AutoDropMinSources", "AutoDropFilesize",
@@ -218,6 +218,7 @@ SettingsManager::SettingsManager()
 	setDefault(JOIN_OPEN_NEW_WINDOW, false);
 	setDefault(SHOW_LAST_LINES_LOG, 0);
 	setDefault(CONFIRM_ITEM_REMOVAL, true);
+	setDefault(CONFIRM_ADLS_REMOVAL, true);
 	setDefault(ADC_DEBUG, false);
 	setDefault(TOGGLE_ACTIVE_WINDOW, true);
 	setDefault(SEARCH_HISTORY, 10);

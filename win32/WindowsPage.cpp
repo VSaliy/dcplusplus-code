@@ -64,6 +64,7 @@ WindowsPage::ListItem WindowsPage::confirmItems[] = {
 	{ SettingsManager::CONFIRM_EXIT, N_("Confirm application exit"), IDH_SETTINGS_WINDOWS_CONFIRM_EXIT },
 	{ SettingsManager::CONFIRM_HUB_REMOVAL, N_("Confirm favorite hub removal"), IDH_SETTINGS_WINDOWS_CONFIRM_HUB_REMOVAL },
 	{ SettingsManager::CONFIRM_ITEM_REMOVAL, N_("Confirm item removal in download queue"), IDH_SETTINGS_WINDOWS_CONFIRM_ITEM_REMOVAL },
+	{ SettingsManager::CONFIRM_ADLS_REMOVAL, N_("Confirm ADL Search removal"), IDH_SETTINGS_WINDOWS_CONFIRM_ADLS_REMOVAL },
 	{ 0, 0 }
 };
 
