@@ -569,11 +569,12 @@ void SearchFrame::addResult(SearchInfo* si) {
 		SearchInfo* si2 = results->getData(i);
 		for(SearchResultList::iterator j = si2->srs.begin(), jend = si2->srs.end(); j != jend; ++j) {
 			SearchResultPtr& sr2 = *j;
-			if((sr->getUser()->getCID() == sr2->getUser()->getCID()) && (sr->getFile() == sr2->getFile())) {
+			bool sameUser = sr->getUser()->getCID() == sr2->getUser()->getCID();
+			if(sameUser && (sr->getFile() == sr2->getFile())) {
 				delete si;
 				return;
 			} else if(sr->getType() == SearchResult::TYPE_FILE && sr2->getType() == SearchResult::TYPE_FILE && sr->getTTH() == sr2->getTTH()) {
-				if(sr->getSize() != sr2->getSize()) {
+				if(sameUser || (sr->getSize() != sr2->getSize())) {
 					delete si;
 					return;
 				}
@@ -779,13 +780,13 @@ SearchFrame::MenuPtr SearchFrame::makeMenu() {
 	menu->appendItem(T_("Download whole directory"), std::tr1::bind(&SearchFrame::handleDownloadDir, this));
 	addTargetDirMenu(menu, favoriteDirs);
 	menu->appendItem(T_("&View as text"), std::tr1::bind(&SearchFrame::handleViewAsText, this));
-	menu->appendSeparator();
-	SearchInfo* si = results->getSelectedData();
-	if(checkTTH.hasTTH) {
-		WinUtil::addHashItems(menu, TTHValue(Text::fromT(checkTTH.tth)), si->getText(COLUMN_FILENAME));
-	}
-	menu->appendSeparator();
 
+	if(checkTTH.hasTTH) {
+		menu->appendSeparator();
+		WinUtil::addHashItems(menu, TTHValue(Text::fromT(checkTTH.tth)), results->getSelectedData()->getText(COLUMN_FILENAME));
+	}
+
+	menu->appendSeparator();
 	UserCollector users = results->forEachSelectedT(UserCollector());
 	WinUtil::addUserItems(menu, users.users, getParent(), users.dirs);
 
