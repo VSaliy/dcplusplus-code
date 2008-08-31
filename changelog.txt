@@ -1,6 +1,7 @@
 * Fix favorite users columns (emtee)
 * [L#249159] Prevent UI freeze when selecting lots of items in list views (poy)
 * [L#261172] Add ADLS removal confirmation dialog (poy)
+* [L#263108] Execute user commands on all selected users in search (poy)
 
 -- 0.708 2008-08-28 --
 * Added setting for max characters per tab (poy)

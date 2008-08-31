@@ -791,6 +791,7 @@ SearchFrame::MenuPtr SearchFrame::makeMenu() {
 
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&SearchFrame::handleRemove, this));
+
 	prepareMenu(menu, UserCommand::CONTEXT_SEARCH, checkTTH.hubs);
 
 	return menu;
@@ -1083,32 +1084,35 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 
 	int sel = -1;
 	while((sel = results->getNext(sel, LVNI_SELECTED)) != -1) {
-		const SearchResultPtr& sr = results->getData(sel)->srs[0];
+		SearchInfo* si = results->getData(sel);
+		for(SearchResultList::const_iterator i = si->srs.begin(), iend = si->srs.end(); i != iend; ++i) {
+			const SearchResultPtr& sr = *i;
 
-		if(!sr->getUser()->isOnline())
-			continue;
-
-		if(uc.getType() == UserCommand::TYPE_RAW_ONCE) {
-			if(users.find(sr->getUser()->getCID()) != users.end())
+			if(!sr->getUser()->isOnline())
 				continue;
-			users.insert(sr->getUser()->getCID());
+
+			if(uc.getType() == UserCommand::TYPE_RAW_ONCE) {
+				if(users.find(sr->getUser()->getCID()) != users.end())
+					continue;
+				users.insert(sr->getUser()->getCID());
+			}
+
+			ucParams["fileFN"] = sr->getFile();
+			ucParams["fileSI"] = Util::toString(sr->getSize());
+			ucParams["fileSIshort"] = Util::formatBytes(sr->getSize());
+			if(sr->getType() == SearchResult::TYPE_FILE) {
+				ucParams["fileTR"] = sr->getTTH().toBase32();
+			}
+
+			// compatibility with 0.674 and earlier
+			ucParams["file"] = ucParams["fileFN"];
+			ucParams["filesize"] = ucParams["fileSI"];
+			ucParams["filesizeshort"] = ucParams["fileSIshort"];
+			ucParams["tth"] = ucParams["fileTR"];
+
+			StringMap tmp = ucParams;
+			ClientManager::getInstance()->userCommand(sr->getUser(), uc, tmp, true);
 		}
-
-		ucParams["fileFN"] = sr->getFile();
-		ucParams["fileSI"] = Util::toString(sr->getSize());
-		ucParams["fileSIshort"] = Util::formatBytes(sr->getSize());
-		if(sr->getType() == SearchResult::TYPE_FILE) {
-			ucParams["fileTR"] = sr->getTTH().toBase32();
-		}
-
-		// compatibility with 0.674 and earlier
-		ucParams["file"] = ucParams["fileFN"];
-		ucParams["filesize"] = ucParams["fileSI"];
-		ucParams["filesizeshort"] = ucParams["fileSIshort"];
-		ucParams["tth"] = ucParams["fileTR"];
-
-		StringMap tmp = ucParams;
-		ClientManager::getInstance()->userCommand(sr->getUser(), uc, tmp, true);
 	}
 }
 
