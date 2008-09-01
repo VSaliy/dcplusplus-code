@@ -122,7 +122,6 @@ private:
 	int lastServer;
 	HubTypes listType;
 	string downloadBuf;
-	bool coral;			///< Currently downloading from a coraled list
 
 	/** Used during loading to prevent saving. */
 	bool dontSave;
