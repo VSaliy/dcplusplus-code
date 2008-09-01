@@ -262,6 +262,10 @@ private:
 			WinUtil::openFolder(Text::toT(file));
 		}
 
+		void remove() {
+			FinishedManager::getInstance()->remove(in_UL, file);
+		}
+
 		string file;
 		FinishedFileItemPtr entry;
 
@@ -297,6 +301,10 @@ private:
 				case USERS_COLUMN_SPEED: return compare(a->entry->getAverageSpeed(), b->entry->getAverageSpeed());
 				default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
 			}
+		}
+
+		void remove() {
+			FinishedManager::getInstance()->remove(in_UL, user);
 		}
 
 		UserPtr user;
@@ -433,29 +441,15 @@ private:
 	}
 
 	void handleRemoveFiles() {
-		int i;
-		while((i = files->getNext(-1, LVNI_SELECTED)) != -1) {
-			FileInfo* data = files->getData(i);
-			FinishedManager::getInstance()->remove(in_UL, data->file);
-			files->erase(data);
-		}
-		updateStatus();
+		files->forEachSelected(&FileInfo::remove);
 	}
 
 	void handleRemoveUsers() {
-		int i;
-		while((i = users->getNext(-1, LVNI_SELECTED)) != -1) {
-			UserInfo* data = users->getData(i);
-			FinishedManager::getInstance()->remove(in_UL, data->user);
-			users->erase(data);
-		}
-		updateStatus();
+		users->forEachSelected(&UserInfo::remove);
 	}
 
 	void handleRemoveAll() {
 		FinishedManager::getInstance()->removeAll(in_UL);
-		clearTables();
-		updateStatus();
 	}
 
 	void handleOnlyFullClicked() {
@@ -594,6 +588,27 @@ private:
 		}
 	}
 
+	void onRemovedFile(const string& file) {
+		FileInfo* data = findFileInfo(file);
+		if(data) {
+			files->erase(data);
+			updateStatus();
+		}
+	}
+
+	void onRemovedUser(const UserPtr& user) {
+		UserInfo* data = findUserInfo(user);
+		if(data) {
+			users->erase(data);
+			updateStatus();
+		}
+	}
+
+	void onRemovedAll() {
+		clearTables();
+		updateStatus();
+	}
+
 	virtual void on(AddedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
 		if(upload == in_UL)
 			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
@@ -616,6 +631,21 @@ private:
 	virtual void on(UpdatedUser, bool upload, const UserPtr& user) throw() {
 		if(upload == in_UL)
 			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onUpdatedUser, this, user));
+	}
+
+	virtual void on(RemovedFile, bool upload, const string& file) throw() {
+		if(upload == in_UL)
+			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onRemovedFile, this, file));
+	}
+
+	virtual void on(RemovedUser, bool upload, const UserPtr& user) throw() {
+		if(upload == in_UL)
+			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onRemovedUser, this, user));
+	}
+
+	virtual void on(RemovedAll, bool upload) throw() {
+		if(upload == in_UL)
+			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onRemovedAll, this));
 	}
 };
 
