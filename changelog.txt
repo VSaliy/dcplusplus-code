@@ -1,6 +1,6 @@
 * Fix favorite users columns (emtee)
 * [L#249159] Prevent UI freeze when selecting lots of items in list views (poy)
-* [L#261172] Add ADLS removal confirmation dialog (poy)
+* [L#261172] Add favorite user & ADLS removal confirmation dialogs (poy)
 * [L#263108] Misc fixes related to search results grouping (poy)
 * [L#263390] Fix tray icon format (poy)
 * [L#261618] Fix crash when removing items from the finished transfers windows (poy)
