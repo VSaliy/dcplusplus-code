@@ -32,11 +32,17 @@ public:
 	typedef X<1> AddedUser;
 	typedef X<2> UpdatedFile;
 	typedef X<3> UpdatedUser;
+	typedef X<4> RemovedFile;
+	typedef X<5> RemovedUser;
+	typedef X<6> RemovedAll;
 
 	virtual void on(AddedFile, bool, const string&, const FinishedFileItemPtr&) throw() { }
 	virtual void on(AddedUser, bool, const UserPtr&, const FinishedUserItemPtr&) throw() { }
 	virtual void on(UpdatedFile, bool, const string&, const FinishedFileItemPtr&) throw() { }
 	virtual void on(UpdatedUser, bool, const UserPtr&) throw() { }
+	virtual void on(RemovedFile, bool, const string&) throw() { }
+	virtual void on(RemovedUser, bool, const UserPtr&) throw() { }
+	virtual void on(RemovedAll, bool) throw() { }
 };
 
 } // namespace dcpp

@@ -61,23 +61,31 @@ void FinishedManager::unLockLists() {
 }
 
 void FinishedManager::remove(bool upload, const string& file) {
-	Lock l(cs);
-	MapByFile& map = upload ? ULByFile : DLByFile;
-	MapByFile::iterator it = map.find(file);
-	if(it != map.end()) {
-		delete it->second;
-		map.erase(it);
+	{
+		Lock l(cs);
+		MapByFile& map = upload ? ULByFile : DLByFile;
+		MapByFile::iterator it = map.find(file);
+		if(it != map.end()) {
+			delete it->second;
+			map.erase(it);
+		} else
+			return;
 	}
+	fire(FinishedManagerListener::RemovedFile(), upload, file);
 }
 
 void FinishedManager::remove(bool upload, const UserPtr& user) {
-	Lock l(cs);
-	MapByUser& map = upload ? ULByUser : DLByUser;
-	MapByUser::iterator it = map.find(user);
-	if(it != map.end()) {
-		delete it->second;
-		map.erase(it);
+	{
+		Lock l(cs);
+		MapByUser& map = upload ? ULByUser : DLByUser;
+		MapByUser::iterator it = map.find(user);
+		if(it != map.end()) {
+			delete it->second;
+			map.erase(it);
+		} else
+			return;
 	}
+	fire(FinishedManagerListener::RemovedUser(), upload, user);
 }
 
 void FinishedManager::removeAll(bool upload) {
@@ -85,6 +93,7 @@ void FinishedManager::removeAll(bool upload) {
 		clearULs();
 	else
 		clearDLs();
+	fire(FinishedManagerListener::RemovedAll(), upload);
 }
 
 void FinishedManager::clearDLs() {
