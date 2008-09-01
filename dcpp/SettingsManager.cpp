@@ -54,7 +54,7 @@ const string SettingsManager::settingTags[] =
 	// Ints
 	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
 	"BackgroundColor", "TextColor", "UseOemMonoFont", "ShareHidden", "FilterMessages", "MinimizeToTray", "AlwaysTray",
-	"AutoSearch", "TimeStamps", "ConfirmExit", "PopupHubPms", "PopupBotPms", "IgnoreHubPms", "IgnoreBotPms",
+	"AutoSearch", "TimeStamps", "PopupHubPms", "PopupBotPms", "IgnoreHubPms", "IgnoreBotPms",
 	"ListDuplicates", "BufferSize", "DownloadSlots", "MaxDownloadSpeed", "LogMainChat", "LogPrivateChat",
 	"LogDownloads", "LogUploads", "StatusInChat", "ShowJoins",
 	"UseSystemIcons", "PopupPMs", "MinUploadSpeed", "GetUserInfo", "UrlHandler", "MainWindowState",
@@ -66,8 +66,8 @@ const string SettingsManager::settingTags[] =
 	"LogFilelistTransfers", "SendUnknownCommands", "MaxHashSpeed", "OpenUserCmdHelp",
 	"GetUserCountry", "FavShowJoins", "LogStatusMessages", "ShowStatusbar",
 	"ShowToolbar", "ShowTransferview", "PopunderPm", "PopunderFilelist", "MagnetAsk", "MagnetAction", "MagnetRegister",
-	"AddFinishedInstantly", "DontDLAlreadyShared", "UseCTRLForLineHistory", "ConfirmHubRemoval",
-	"OpenNewWindow", "UDPPort", "ShowLastLinesLog", "ConfirmItemRemoval", "ConfirmADLSRemoval",
+	"AddFinishedInstantly", "DontDLAlreadyShared", "UseCTRLForLineHistory",
+	"OpenNewWindow", "UDPPort", "ShowLastLinesLog",
 	"AdcDebug", "ToggleActiveWindow", "SearchHistory", "SetMinislotSize", "MaxFilelistSize",
 	"HighestPrioSize", "HighPrioSize", "NormalPrioSize", "LowPrioSize", "LowestPrio",
 	"AutoDropSpeed", "AutoDropInterval", "AutoDropElapsed", "AutoDropInactivity", "AutoDropMinSources", "AutoDropFilesize",
@@ -81,6 +81,7 @@ const string SettingsManager::settingTags[] =
 	"DontDlAlreadyQueued", "MaxCommandLength", "AllowUntrustedHubs", "AllowUntrustedClients",
 	"TLSPort", "FastHash", "SortFavUsersFirst", "SegmentedDL", "FollowLinks",
 	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "MaxTabChars", "FinishedDLOnlyFull",
+	"ConfirmExit", "ConfirmHubRemoval", "ConfirmUserRemoval", "ConfirmItemRemoval", "ConfirmADLSRemoval",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -141,7 +142,6 @@ SettingsManager::SettingsManager()
 	setDefault(ALWAYS_TRAY, true);
 	setDefault(AUTO_SEARCH, false);
 	setDefault(TIME_STAMPS, true);
-	setDefault(CONFIRM_EXIT, true);
 	setDefault(POPUP_HUB_PMS, true);
 	setDefault(POPUP_BOT_PMS, true);
 	setDefault(IGNORE_HUB_PMS, false);
@@ -213,12 +213,9 @@ SettingsManager::SettingsManager()
 	setDefault(MAGNET_ACTION, MAGNET_AUTO_SEARCH);
 	setDefault(ADD_FINISHED_INSTANTLY, false);
 	setDefault(DONT_DL_ALREADY_SHARED, false);
-	setDefault(CONFIRM_HUB_REMOVAL, true);
 	setDefault(USE_CTRL_FOR_LINE_HISTORY, true);
 	setDefault(JOIN_OPEN_NEW_WINDOW, false);
 	setDefault(SHOW_LAST_LINES_LOG, 0);
-	setDefault(CONFIRM_ITEM_REMOVAL, true);
-	setDefault(CONFIRM_ADLS_REMOVAL, true);
 	setDefault(ADC_DEBUG, false);
 	setDefault(TOGGLE_ACTIVE_WINDOW, true);
 	setDefault(SEARCH_HISTORY, 10);
@@ -287,6 +284,11 @@ SettingsManager::SettingsManager()
 	setDefault(CORAL, true);
 	setDefault(MAX_TAB_CHARS, 20);
 	setDefault(FINISHED_DL_ONLY_FULL, true);
+	setDefault(CONFIRM_EXIT, true);
+	setDefault(CONFIRM_HUB_REMOVAL, true);
+	setDefault(CONFIRM_USER_REMOVAL, true);
+	setDefault(CONFIRM_ITEM_REMOVAL, true);
+	setDefault(CONFIRM_ADLS_REMOVAL, true);
 	setDefault(TRANSFERS_PANED_POS, .7);
 	setDefault(QUEUE_PANED_POS, .3);
 

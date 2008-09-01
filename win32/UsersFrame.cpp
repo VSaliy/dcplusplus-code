@@ -23,6 +23,7 @@
 #include "HoldRedraw.h"
 
 #include <dcpp/FavoriteManager.h>
+#include <dcpp/version.h>
 
 static const ColumnInfo usersColumns[] = {
 	{ N_("Auto grant slot / Nick"), 200, false },
@@ -147,7 +148,8 @@ void UsersFrame::handleDescription() {
 }
 
 void UsersFrame::handleRemove() {
-	users->forEachSelected(&UsersFrame::UserInfo::remove);
+	if(!BOOLSETTING(CONFIRM_USER_REMOVAL) || createMessageBox().show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_YESNO, MessageBox::BOX_ICONQUESTION) == MessageBox::RETBOX_YES)
+		users->forEachSelected(&UsersFrame::UserInfo::remove);
 }
 
 bool UsersFrame::handleKeyDown(int c) {
