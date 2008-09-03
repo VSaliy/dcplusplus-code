@@ -121,9 +121,11 @@ protected:
 		usersWindow->onSized(std::tr1::bind(&ThisType::fills, usersWindow, users));
 
 		if(!in_UL) {
+			tstring text = T_("Only show fully downloaded files");
+
 			bOnlyFull = BOOLSETTING(FINISHED_DL_ONLY_FULL);
 			{
-				dwt::CheckBox::Seed cs(T_("Only show fully downloaded files"));
+				dwt::CheckBox::Seed cs(text);
 				onlyFull = this->addChild(cs);
 				onlyFull->setHelpId(IDH_FINISHED_DL_ONLY_FULL);
 				onlyFull->setChecked(bOnlyFull);
@@ -132,7 +134,7 @@ protected:
 
 			filesWindow->onActivate(std::tr1::bind(&dwt::CheckBox::setVisible, onlyFull, _1));
 
-			this->statusSizes[STATUS_ONLY_FULL] = 200; ///@todo get real checkbox + text width
+			this->statusSizes[STATUS_ONLY_FULL] = onlyFull->getTextSize(text).x + 16; ///@todo get real checkbox width
 		}
 
 		this->initStatus();
