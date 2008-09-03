@@ -60,15 +60,20 @@ SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
 	}
 
 	{
-		CheckBox::Seed cs(T_("Ignore TTH searches"));
-		ignoreTTH = addChild(cs);
-		ignoreTTH->setHelpId(IDH_SPY_IGNORE_TTH);
-		ignoreTTH->setChecked(bIgnoreTTH);
-		ignoreTTH->onClicked(std::tr1::bind(&SpyFrame::handleIgnoreTTHClicked, this));
+		tstring text = T_("Ignore TTH searches");
+
+		{
+			CheckBox::Seed cs(text);
+			ignoreTTH = addChild(cs);
+			ignoreTTH->setHelpId(IDH_SPY_IGNORE_TTH);
+			ignoreTTH->setChecked(bIgnoreTTH);
+			ignoreTTH->onClicked(std::tr1::bind(&SpyFrame::handleIgnoreTTHClicked, this));
+		}
+
+		statusSizes[STATUS_IGNORE_TTH] = ignoreTTH->getTextSize(text).x + 16; ///@todo get real checkbox width
 	}
 
 	initStatus();
-	statusSizes[STATUS_IGNORE_TTH] = 150; ///@todo get real checkbox + text width
 
 	setStatusHelpId(STATUS_TOTAL, IDH_SPY_TOTAL);
 	setStatusHelpId(STATUS_AVG_PER_SECOND, IDH_SPY_AVG_PER_SECOND);
