@@ -8,6 +8,34 @@
 </head>
 <body>
 <h1>Search</h1>
+<p>The Search window make possible searching for files in shares of the users of the connected hubs. You can provide 
+one or more keywords and optionally set some search filters described below and press the Search button to start a search.
+DC++ will send out the search request to the hub(s) you are connected and they will pass the request to all clients. </p>
+<p>When a client matches a serach request it'll send the results to the requester. The results will be displayed in the 
+search results list of the Search window.</p>
+<p>You can open several Search windows and you can define search keywords and set filters independently so you
+are able to start multiple searches simultaneously. However <b>search requests are sent out only once, when the Search
+button pressed</b>. After that - until the button pressed again - a Search window only listens for and displays search results.
+(It means that those clients who logged in <i>after</i> you pressed the Search button won't send you search results until
+you repeat the search.)</p>
+<p>You may not start or repeat searches as soon as you like. There is a few seconds of minimum interval between two searches
+defined in DC++. You will get a countdown message in the Status bar if you try to search sooner than allowed 
+and you are able to repeat the search only when the client is ready for search again. Hubs may also limit searches by checking
+for forbidden keywords or blocking repeated searches for the same terms in a certain amount of time. Some hubs have
+predefined minimum search intervals for all searches or they even totally block searches if you are in 
+<a href="settings_connection.html#connection">passive mode</a>.</p>
+<p>Note that if you search on NMDC hubs, results are transferred to all open Search windows. The windows
+then display only those results that match their search criteria. So when a similar search sent out from a new Search window,
+its normal that some hits displayed in some other Search windows opened before. The number of hits filtered out are shown 
+in the status bar of every window. In case of searches on ADC hubs every Search window will pick its own search results only.</p>
+<p>Search hits with TTH are always matched to the Download queue and the new sources are automatically added to the queue items
+unless they are removed or marked as "bad" sources before. The filelists of all newly discovered sources will be automatically
+matched for possible other queued files if <a href="settings_queue.html#automatchqueue">Automatically match queue for search hits</a>
+setting is enabled. This can generate lots of filelist traffic when large amount of new sources are found for queued files.</p>
+
+<p>If you often get too few search results or no results at all, refer to the <a href="faq_nosearch.html">Search troubleshooting FAQ.</a></p>
+
+
 <h2>Search Options</h2>
 <dl style="margin-left: 40px;">
   <dt>Search for</dt>
@@ -19,7 +47,9 @@
   <dt>Size</dt>
   <dd cshelp="IDH_SEARCH_SIZE">Filter away files depending on their file size.</dd>
   <dt>File type</dt>
-  <dd cshelp="IDH_SEARCH_TYPE">Filter away files depending on their file type (extension).</dd>
+  <dd cshelp="IDH_SEARCH_TYPE">Filter away files depending on their file type (extension). Not all the possible extensions will be filtered out
+  	in certain file type groups. If you search for newer or obscure file types then is recommended to use the <i>Any</i> option and include
+  	the file extension to the search string instead. Options other than <i>Any</i>, <i>Directory</i> & <i>TTH</i> are ignored for searches on ADC hubs.</dd>
   <dt>Only users with free slots</dt>
   <dd cshelp="IDH_SEARCH_SLOTS">Filter away files depending on the user's free slots.</dd>
   <dt>Hide files already in share</dt>
@@ -27,7 +57,7 @@
   <dt>Hubs</dt>
   <dd cshelp="IDH_SEARCH_HUBS">Search only selected hubs.</dd>
 </dl>
-<h2>Columns</h2>
+<h2>Search results columns</h2>
 <dl style="margin-left: 80px;">
   <dt>File</dt>
   <dd>The file name.</dd>

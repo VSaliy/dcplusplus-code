@@ -4,6 +4,7 @@
 * [L#263108] Misc fixes related to search results grouping (poy)
 * [L#263390] Fix tray icon format (poy)
 * Resize finished DL & search spy check-boxes correctly (poy)
+* Help updates (poy, emtee)
 
 -- 0.708 2008-08-28 --
 * Added setting for max characters per tab (poy)
