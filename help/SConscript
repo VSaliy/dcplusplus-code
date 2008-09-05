@@ -48,7 +48,6 @@ def new_spawn(*args, **kw):
 env['SPAWN'] = new_spawn
 
 # define which files can trigger a help rebuild
-# todo scan the [FILES] section of DCPlusPlus.hhp instead
 chm_sources = Glob('*.html')
 chm_sources.append('cshelp.h')
 chm_sources.append('cshelp.txt')
