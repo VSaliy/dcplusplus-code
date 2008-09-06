@@ -8,17 +8,24 @@
 </head>
 <body>
 <h1>How do I install DC++?</h1>
+<p>
 Just run the installer and fire up DC++, then enter the settings to set it up according to your preferences (most important is <a href="settings_general.html">nick</a>, <a href="settings_connection.html">connection mode</a>, <a href="settings_downloads.html">download location</a> and <a href="settings_sharing.html">shared folders</a>).<br/>
 You can also download the .zip file (Binary) and unpack it to any folder you like.
 By default DC++ will store its settings and create the downloads folder in the directory where it has been installed. You can configure DC++ to use another folder for settings by editing a file called dcppboot.xml located in the install folder. You can specify a path relative to the DC++ executable there.
+</p>
+<br/>
 <h1>How do I uninstall DC++?</h1>
+<p>
 Use the uninstaller that followed when you used the installer.<br/>
 If you didn't use the installer: You can delete your DC++ folder, but be aware that dchub://, adc:// and magnet: links will remain in the registry and will point to the nonexistent application. If you disable <a href="settings_advanced.html#registrydchubadc">Register with Windows to Handle dchub:// and adc:// URL Links</a> and <a href="settings_advanced.html#registrymagnet">Register with Windows to Handle manget: URI Links</a> options before uninstalling, these registry settings will be removed.
-<h1>How do I upgrade DC++?</h2>
+</p>
+<br/>
+<h1>How do I upgrade DC++?</h1>
+<p>
 Just install the new version (or unpack the .zip) in the folder your old version was in. Your old settings, queue, favorites will still be there and will be used by the new version. 
 <br/>
 <b>BEWARE : </b>There are some cases though when a feature upgrade makes impossible to reuse some some kind of settings or data created by an older version of DC++.  
-<br/>
+</p>
 <ul>
   <li>Old (ver &lt;= 0.163) Notepad notes will get lost, due to a format change in 0.17</li>
   <li>If you upgrade to 0.22, all old queue items that are missing a directory in the target file-name will be removed. Don't upgrade if your queue is precious to you, and you didn't have anything in the default download directory box in the settings (finish it with version 0.181 or edit your queue.xml file and add a directory to all targets without...).</li>
@@ -27,6 +34,5 @@ Just install the new version (or unpack the .zip) in the folder your old version
   <li>If you upgrade to 0.685, as user identification method is changed you will lost your favorite users and all sources from your queue.</li>
   <li>If you upgrade to 0.695, as compatibility with non-TTH clients are dropped, sources with no TTH support will no longer appear and files without TTH will be removed from your queue.</li>
 </ul>
-
 </body>
 </html>
