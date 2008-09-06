@@ -1,18 +1,22 @@
 Import('dev')
 env = dev.env.Clone()
 
+# HTML_sources holds static HTML pages, sorted alphabetically
+HTML_sources = Glob('*.html', strings = 1)
+HTML_sources.sort()
+
 # generate cshelp.h and cshelp.txt from all HTML files in the current folder
 # cshelp.h is included in resource.h, which in turn is included in the DC++
 # source; hence, we build it even when the help file is not being built.
 from gen_cshelp import gen_cshelp
 cshelp_targets = ['cshelp.h', 'cshelp.txt']
 env.Ignore(cshelp_targets, ['changelog.html', 'compile.html'])
-cshelp_sources = Glob('*.html', strings = 1)
-if 'changelog.html' in cshelp_sources:
-	cshelp_sources.remove('changelog.html')
-if 'compile.html' in cshelp_sources:
-	cshelp_sources.remove('compile.html')
-env.Command(cshelp_targets, cshelp_sources, Action(gen_cshelp, 'Building context-sensitive help files'))
+# changelog.html and compile.html are dynamically generated so we remove them from HTML_sources
+if 'changelog.html' in HTML_sources:
+	HTML_sources.remove('changelog.html')
+if 'compile.html' in HTML_sources:
+	HTML_sources.remove('compile.html')
+env.Command(cshelp_targets, HTML_sources, Action(gen_cshelp, 'Building context-sensitive help files'))
 env.Depends('resource.h', 'cshelp.h')
 
 if not env['help']:
@@ -25,6 +29,16 @@ env.Command('changelog.html', ['#/changelog.txt', 'template.html'], Action(gen_c
 # generate compile.html
 from gen_compile import gen_compile
 env.Command('compile.html', ['#/Compile.txt', 'template.html'], Action(gen_compile, 'Building compile.html'))
+
+# translation using po4a <http://po4a.alioth.debian.org/>
+if (env['mode'] == 'release' or env['i18n']) and env.WhereIs('po4a-gettextize'):
+	def gen_pot(target, source, env):
+		cmd = 'po4a-gettextize -f xhtml -M utf-8 -p "' + str(target[0]) + '"'
+		for node in source:
+			cmd += ' -m "' + str(node) + '"'
+		return env.Execute(cmd)
+	env.Append(BUILDERS = {'po4a_PotBuild' : Builder(action = Action(gen_pot, 'Extracting help texts to $TARGET'))})
+	env.po4a_PotBuild('po/dcpp-help.pot', HTML_sources)
 
 # the following is inspired by the NSIS build system
 

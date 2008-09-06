@@ -9,6 +9,7 @@ custom.py
 *.obj
 *.pch
 *.pdb
+*.pot
 ./htmlhelp/include/htmlhelp.h
 ./htmlhelp/lib/htmlhelp.lib
 natupnp.h
