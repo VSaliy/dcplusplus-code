@@ -1,7 +1,7 @@
 [OPTIONS]
 Auto Index=Yes
 Compatibility=1.1 or later
-Compiled file=..\build\help\DCPlusPlus.chm
+Compiled file=DCPlusPlus.chm
 Contents file=toc.hhc
 Default Window=main
 Default topic=index.html

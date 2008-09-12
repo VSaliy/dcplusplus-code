@@ -7,7 +7,7 @@ HTML_sources.sort()
 
 # generate cshelp.h and cshelp.txt from all HTML files in the current folder
 # cshelp.h is included in resource.h, which in turn is included in the DC++
-# source; hence, we build it even when the help file is not being built.
+# source; hence, we build it even when help files are not being built.
 from gen_cshelp import gen_cshelp
 cshelp_targets = ['cshelp.h', 'cshelp.txt']
 env.Ignore(cshelp_targets, ['changelog.html', 'compile.html'])
@@ -21,6 +21,20 @@ env.Depends('resource.h', 'cshelp.h')
 
 if not env['help']:
 	Return()
+
+if env.WhereIs('hhc') is None:
+	print 'hhc.exe not found, skipping help build...'
+	Return()
+
+# fix hhc.exe reverse return value - UGLY - taken from the NSIS build system
+old_spawn = env['SPAWN']
+def new_spawn(*args, **kw):
+	result = old_spawn(*args, **kw)
+	if 'hhc' in args[3]:
+		return not result
+	else:
+		return result
+env['SPAWN'] = new_spawn
 
 # generate changelog.html
 from gen_changelog import gen_changelog
@@ -40,40 +54,50 @@ if (env['mode'] == 'release' or env['i18n']) and env.WhereIs('po4a-gettextize'):
 	env.Append(BUILDERS = {'po4a_PotBuild' : Builder(action = Action(gen_pot, 'Extracting help texts to $TARGET'))})
 	env.po4a_PotBuild('po/dcpp-help.pot', HTML_sources)
 
-# the following is inspired by the NSIS build system
+# define which source files can trigger a help rebuild
+CHM_sources = Glob('*.html')
+CHM_sources.append('cshelp.h')
+CHM_sources.append('cshelp.txt')
+CHM_sources.append('DCPlusPlus.hhp')
+CHM_sources.append('external.png')
+CHM_sources.append('index.hhk')
+CHM_sources.append('logo.jpg')
+CHM_sources.append('office11.css')
+CHM_sources.append('resource.h')
+CHM_sources.append('style.css')
+CHM_sources.append('toc.hhc')
+CHM_sources.append('users.bmp')
 
-chm_builder = Builder(
-	action = [
-		Copy('users.bmp', '../res/users.bmp'),
-		Action('hhc DCPlusPlus.hhp > hhc.log', 'Building the help file'),
-		Delete('users.bmp')
-	], chdir = 'help'
-)
-env.Append(BUILDERS = {'CHMBuild' : chm_builder})
+# define our CHM builder
+def gen_CHM(target, source, env):
+	# create the build directory
+	build_dir = 'build/help'
+	env.Execute([Delete(build_dir), Mkdir(build_dir)])
 
-# fix hhc.exe reverse return value - UGLY
-old_spawn = env['SPAWN']
-def new_spawn(*args, **kw):
-	result = old_spawn(*args, **kw)
-	if 'hhc' in args[3]:
-		return not result
-	else:
-		return result
-env['SPAWN'] = new_spawn
+	# copy all the source files in the build directory
+	for node in source:
+		env.Execute(Copy(build_dir, node))
 
-# define which files can trigger a help rebuild
-chm_sources = Glob('*.html')
-chm_sources.append('cshelp.h')
-chm_sources.append('cshelp.txt')
-chm_sources.append('DCPlusPlus.hhp')
-chm_sources.append('external.png')
-chm_sources.append('index.hhk')
-chm_sources.append('logo.jpg')
-chm_sources.append('office11.css')
-chm_sources.append('resource.h')
-chm_sources.append('style.css')
-chm_sources.append('toc.hhc')
+	# compile the CHM file
+	build_path = build_dir + '/'
+	CHM_path = build_path + 'DCPlusPlus.chm'
+	log_path = build_path + 'hhc.log'
+	HHP_path = build_path + 'DCPlusPlus.hhp'
+	ret = env.Execute(Action('hhc "' + HHP_path + '" > "' + log_path + '"', 'Compiling the ' + CHM_path + ' help file; log output: ' + log_path))
 
-# build CHM
-ret = env.CHMBuild('#/build/help/DCPlusPlus.chm', chm_sources)
+	# copy the compiled file to its final target
+	env.Execute(Copy(target[0], CHM_path))
+
+	if not env['savetemps']:
+		# clean up
+		env.Execute(Delete(build_dir))
+
+	return ret
+env.Append(BUILDERS = {'CHMBuild' : Builder(action = Action(gen_CHM))})
+
+# update users.bmp
+env.Command('users.bmp', '#/res/users.bmp', Copy('$TARGET', '$SOURCE'))
+
+# compile the main (untranslated) help file
+ret = env.CHMBuild(dev.get_build_path('bin') + '/DCPlusPlus.chm', CHM_sources)
 Return('ret')
