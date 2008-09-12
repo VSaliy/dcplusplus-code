@@ -74,7 +74,7 @@ opts.AddOptions(
 	BoolOption('verbose', 'Show verbose command lines', 'no'),
 	BoolOption('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
 	BoolOption('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
-	BoolOption('help', 'Build the help file', defEnv.WhereIs('hhc') is not None),
+	BoolOption('help', 'Build help files', 'yes'),
 	BoolOption('i18n', 'Rebuild i18n files in debug build', 'no'),
 	('prefix', 'Prefix to use when cross compiling', 'i386-mingw32-')
 )
