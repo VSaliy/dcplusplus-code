@@ -237,9 +237,9 @@ uint8_t* TigerHash::finalize() {
 	((uint64_t*)(&(tmp[56])))[0] = pos<<3;
 	tiger_compress_macro(((uint64_t*)tmp), res);
 #ifdef TIGER_BIG_ENDIAN
-	for(j=0; j<HASH_SIZE; j++)
+	for(j = 0; j < BYTES; j++)
 		buf[j^7]=((uint8_t*)res)[j];
-	memcpy(res, buf, HASH_SIZE);
+	memcpy(res, buf, BYTES);
 #endif
 	return getResult();
 }
