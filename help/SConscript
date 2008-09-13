@@ -23,7 +23,7 @@ if not env['help']:
 	Return()
 
 if env.WhereIs('hhc') is None:
-	print 'hhc.exe not found, skipping help build...'
+	print 'hhc.exe not found, skipping help build'
 	Return()
 
 # fix hhc.exe reverse return value - UGLY - taken from the NSIS build system
@@ -44,16 +44,6 @@ env.Command('changelog.html', ['#/changelog.txt', 'template.html'], Action(gen_c
 from gen_compile import gen_compile
 env.Command('compile.html', ['#/Compile.txt', 'template.html'], Action(gen_compile, 'Building compile.html'))
 
-# translation using po4a <http://po4a.alioth.debian.org/>
-if (env['mode'] == 'release' or env['i18n']) and env.WhereIs('po4a-gettextize'):
-	def gen_pot(target, source, env):
-		cmd = 'po4a-gettextize -f xhtml -M utf-8 -p "' + str(target[0]) + '"'
-		for node in source:
-			cmd += ' -m "' + str(node) + '"'
-		return env.Execute(cmd)
-	env.Append(BUILDERS = {'po4a_PotBuild' : Builder(action = Action(gen_pot, 'Extracting help texts to $TARGET'))})
-	env.po4a_PotBuild('po/dcpp-help.pot', HTML_sources)
-
 # define which source files can trigger a help rebuild
 CHM_sources = Glob('*.html')
 CHM_sources.append('cshelp.h')
@@ -68,18 +58,36 @@ CHM_sources.append('style.css')
 CHM_sources.append('toc.hhc')
 CHM_sources.append('users.bmp')
 
+import os
+
 # define our CHM builder
 def gen_CHM(target, source, env):
-	# create the build directory
+	# create the temporary build directory
 	build_dir = 'build/help'
+	build_path = build_dir + '/'
 	env.Execute([Delete(build_dir), Mkdir(build_dir)])
 
-	# copy all the source files in the build directory
+	# find the translation file if one is provided
+	po_node = None
 	for node in source:
-		env.Execute(Copy(build_dir, node))
+		if node.path[-3:] == '.po':
+			po_node = node
+			source.remove(node)
 
-	# compile the CHM file
-	build_path = build_dir + '/'
+	if po_node is None:
+		# copy all the source files to the build directory
+		for node in source:
+			env.Execute(Copy(build_dir, node))
+
+	else:
+		# translate translatable source files, copy the others
+		for node in source:
+			if node.path[-5:] == '.html':
+				env.Execute('po4a-translate -f xhtml -M utf-8 -p "' + str(po_node) + '" -k 0 -m "' + str(node) + '" -l "' + build_path + os.path.basename(node.path) + '"')
+			else:
+				env.Execute(Copy(build_dir, node))
+
+	# compile the CHM file in the build directory
 	CHM_path = build_path + 'DCPlusPlus.chm'
 	log_path = build_path + 'hhc.log'
 	HHP_path = build_path + 'DCPlusPlus.hhp'
@@ -97,6 +105,28 @@ env.Append(BUILDERS = {'CHMBuild' : Builder(action = Action(gen_CHM))})
 
 # update users.bmp
 env.Command('users.bmp', '#/res/users.bmp', Copy('$TARGET', '$SOURCE'))
+
+# translation using po4a <http://po4a.alioth.debian.org/>
+if env['mode'] == 'release' or env['i18n']:
+
+	# create the translation template
+	if env.WhereIs('po4a-gettextize') is None:
+		print 'po4a-gettextize not found, the help translation template won\'t be created'
+	else:
+		def gen_pot(target, source, env):
+			cmd = 'po4a-gettextize -f xhtml -M utf-8 -p "' + str(target[0]) + '"'
+			for node in source:
+				cmd += ' -m "' + str(node) + '"'
+			return env.Execute(cmd)
+		env.Command('po/dcpp-help.pot', HTML_sources, Action(gen_pot, 'Extracting help texts to $TARGET'))
+
+	# compile translated help files using the .po's in help/po
+	if env.WhereIs('po4a-translate') is None:
+		print 'po4a-translate not found, translated help files won\'t be compiled'
+	else:
+		po_list = Glob('po/*.po')
+		for po_node in po_list:
+			env.CHMBuild(dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/DCPlusPlus.chm', [CHM_sources, po_node])
 
 # compile the main (untranslated) help file
 ret = env.CHMBuild(dev.get_build_path('bin') + '/DCPlusPlus.chm', CHM_sources)
