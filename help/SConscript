@@ -82,8 +82,9 @@ def gen_CHM(target, source, env):
 	else:
 		# translate translatable source files, copy the others
 		for node in source:
-			if node.path[-5:] == '.html':
-				env.Execute('po4a-translate -f xhtml -M utf-8 -p "' + str(po_node) + '" -k 0 -m "' + str(node) + '" -l "' + build_path + os.path.basename(node.path) + '"')
+			filename = os.path.basename(node.path)
+			if filename[-5:] == '.html' and filename != "changelog.html" and filename != "compile.html":
+				env.Execute('po4a-translate -f xhtml -M utf-8 -p "' + str(po_node) + '" -k 0 -m "' + str(node) + '" -l "' + build_path + filename + '"')
 			else:
 				env.Execute(Copy(build_dir, node))
 
