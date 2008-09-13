@@ -1,7 +1,7 @@
 def gen_changelog(target, source, env):
         import re, cgi
 
-	f_template = open(str(source[1]), "r")
+	f_template = open(str(source[1]), "rb")
 	template = f_template.read()
 	f_template.close()
 	template = template.split("<!-- contents -->", 1)
@@ -34,9 +34,9 @@ See the version history of DC++ below.
 	continue_change = re.compile("^\w*?(?P<change>.*?)$")
 	warning_change = re.compile("^(?P<change>[^ ].*?)$")
 
-	fp_txt = open(str(source[0]), 'r')
+	fp_txt = open(str(source[0]), 'rb')
 
-	fp_html = open(str(target[0]), 'w')
+	fp_html = open(str(target[0]), 'wb')
 	fp_html.write(start_head)
 
 	open_change_state = False
