@@ -1,6 +1,6 @@
-# this script browses through every files passed in the source argument, looking
-# for tags that have the "cshelp" argument; cshelp.h and cshelp.txt files are
-# then generated and used by the DC++ context-sensitive help system
+# this script browses through every HTML files passed in 'source', looking for
+# tags that have the "cshelp" argument; target files (cshelp.h and cshelp.txt)
+# are then generated and used by the DC++ context-sensitive help system.
 
 def gen_cshelp(target, source, env):
 	from HTMLParser import HTMLParser
@@ -65,7 +65,7 @@ def gen_cshelp(target, source, env):
 
 	output.sort()
 
-	# generate cshelp.h (target[0]) and cshelp.txt (target[1])
+	# generate cshelp.h (target[0]) and - optionally - cshelp.txt (target[1])
 	f_h = open(str(target[0]), "w")
 	f_h.write("""// this file contains help ids for field-level help tooltips
 
@@ -74,13 +74,16 @@ def gen_cshelp(target, source, env):
 
 """)
 	number = 11000
-	f_txt = open(str(target[1]), "w")
+	if len(target) >= 2:
+		f_txt = open(str(target[1]), "w")
 	for entry in output:
 		f_h.write("#define " + entry[0] + " " + str(number) + "\r\n")
 		number += 1
-		f_txt.write(".topic " + entry[0] + "\r\n" + entry[1] + "\r\n")
+		if len(target) >= 2:
+			f_txt.write(".topic " + entry[0] + "\r\n" + entry[1] + "\r\n")
 	f_h.write("""
 #endif
 """)
 	f_h.close()
-	f_txt.close()
+	if len(target) >= 2:
+		f_txt.close()

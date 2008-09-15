@@ -1,22 +1,18 @@
 Import('dev')
 env = dev.env.Clone()
 
-# HTML_sources holds static HTML pages, sorted alphabetically
-HTML_sources = Glob('*.html', strings = 1)
-HTML_sources.sort()
+# static_HTMLs holds static (not dynamically generated) HTML sources
+static_HTMLs = Glob('*.html', strings = 1)
+static_HTMLs.sort()
+if 'changelog.html' in static_HTMLs:
+	static_HTMLs.remove('changelog.html')
+if 'compile.html' in static_HTMLs:
+	static_HTMLs.remove('compile.html')
 
-# generate cshelp.h and cshelp.txt from all HTML files in the current folder
 # cshelp.h is included in resource.h, which in turn is included in the DC++
-# source; hence, we build it even when help files are not being built.
+# source; hence, we generate it even when help files are not being compiled.
 from gen_cshelp import gen_cshelp
-cshelp_targets = ['cshelp.h', 'cshelp.txt']
-env.Ignore(cshelp_targets, ['changelog.html', 'compile.html'])
-# changelog.html and compile.html are dynamically generated so we remove them from HTML_sources
-if 'changelog.html' in HTML_sources:
-	HTML_sources.remove('changelog.html')
-if 'compile.html' in HTML_sources:
-	HTML_sources.remove('compile.html')
-env.Command(cshelp_targets, HTML_sources, Action(gen_cshelp, 'Building context-sensitive help files'))
+env.Command('cshelp.h', static_HTMLs, Action(gen_cshelp, 'Generating $TARGET'))
 env.Depends('resource.h', 'cshelp.h')
 
 if not env['help']:
@@ -44,10 +40,8 @@ env.Command('changelog.html', ['#/changelog.txt', 'template.html'], Action(gen_c
 from gen_compile import gen_compile
 env.Command('compile.html', ['#/Compile.txt', 'template.html'], Action(gen_compile, 'Building compile.html'))
 
-# define which source files can trigger a help rebuild
+# define which source files need to be copied to the build directory
 CHM_sources = Glob('*.html')
-CHM_sources.append('cshelp.h')
-CHM_sources.append('cshelp.txt')
 CHM_sources.append('DCPlusPlus.hhp')
 CHM_sources.append('external.png')
 CHM_sources.append('index.hhk')
@@ -88,6 +82,18 @@ def gen_CHM(target, source, env):
 			else:
 				env.Execute(Copy(build_dir, node))
 
+	# generate context-sensitive help files (cshelp.h and cshelp.txt)
+	cshelp_sources = Glob(build_path + '*.html', strings = 1)
+	cshelp_sources.sort()
+	print 'Generating context-sensitive help files to ' + build_dir
+	gen_cshelp([build_path + 'cshelp.h', build_path + 'cshelp.txt'], cshelp_sources, env)
+
+	# make sure the generated cshelp.h is the same as the vanilla one
+	import filecmp
+	if not filecmp.cmp(build_path + 'cshelp.h', 'help/cshelp.h'):
+		print 'The generated cshelp.h file is not the same as the vanilla one; ' + str(target[0]) + ' won\'t be compiled.'
+		return 1
+
 	# compile the CHM file in the build directory
 	CHM_path = build_path + 'DCPlusPlus.chm'
 	log_path = build_path + 'hhc.log'
@@ -119,7 +125,7 @@ if env['mode'] == 'release' or env['i18n']:
 			for node in source:
 				cmd += ' -m "' + str(node) + '"'
 			return env.Execute(cmd)
-		env.Command('po/dcpp-help.pot', HTML_sources, Action(gen_pot, 'Extracting help texts to $TARGET'))
+		env.Command('po/dcpp-help.pot', static_HTMLs, Action(gen_pot, 'Extracting help texts to $TARGET'))
 
 	# compile translated help files using the .po's in help/po
 	if env.WhereIs('po4a-translate') is None:
