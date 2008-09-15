@@ -21,7 +21,7 @@
 </dl>
 <h2>Context</h2>
 <p cshelp="IDH_USER_COMMAND_CONTEXT">
-Contexts determine where the command is shown.<br/>
+Contexts determine where the command is shown.
 </p>
 <dl style="margin-left: 40px;">
   <dt>Hub Menu</dt>
@@ -50,12 +50,14 @@ where you're an operator, "adc://" = all ADC hubs, "adc://op" = ADC hubs where y
 files you've selected from that user</dd>
 </dl>
 <h2>Variables</h2>
+<p>
 In the parameters, you can use %[<span style="font-weight: bold;">xxx</span>]
 variables and <a href="settings_logs.html#timeformat">date/time
 specifiers</a> (%Y, %m, ...). The following variables are also
-available:<br/>
+available:
+</p>
 <ul style="margin-left: 40px;">
-  <li>%[fileFN]: Filename (search, file list, and&nbsp;transfer view contexts only)</li>
+  <li>%[fileFN]: Filename (search, file list, and transfer view contexts only)</li>
   <li>%[fileSIsize]: File size (search, file list contexts only)</li>
   <li>%[fileSIshort]: File size, short version including units
 (search, file list contexts only)</li>
@@ -63,10 +65,12 @@ available:<br/>
   <li>%[type]: "File" or "Directory" (directory context only)</li>
   <li>%[line:<span style="font-style: italic;">reason</span>]: Opens up a window asking for "<span style="font-style: italic;">reason</span>"</li>
 </ul>
-In addition to these variables, all of the ADC INF flags are available, with the following prefixes: <span style="font-weight: bold;">my</span>, <span style="font-weight: bold;">user</span>, and <span style="font-weight: bold;">hub</span>. &nbsp;Some may <span style="text-decoration: underline;">not</span> be available on NMDC hubs. &nbsp;Many&nbsp; useful ones are enumerated below:<br/>
+<p>
+In addition to these variables, all of the ADC INF flags are available, with the following prefixes: <span style="font-weight: bold;">my</span>, <span style="font-weight: bold;">user</span>, and <span style="font-weight: bold;">hub</span>. Some may <span style="text-decoration: underline;">not</span> be available on NMDC hubs. Many useful ones are enumerated below:
+</p>
 <div style="margin-left: 40px;">
 <ul>
-  <li>%[myNI]: Your&nbsp;nick</li>
+  <li>%[myNI]: Your nick</li>
   <li>%[myCID]: Your ADC CID</li>
   <li>%[userNI]: The user's nick</li>
   <li>%[userCID]: The user's ADC CID</li>
@@ -92,7 +96,7 @@ In addition to these variables, all of the ADC INF flags are available, with the
     <li>%[ip] = %[userI4]</li>
     <li>%[tag] = %[userTAG]</li>
     <li>%[description] = %[userDE]</li>
-    <li>%[email] &nbsp;= %[userEM]</li>
+    <li>%[email] = %[userEM]</li>
     <li>%[share] = %[userSS]</li>
     <li>%[shareshort] = %[userSSshort]</li>
   </ul>
