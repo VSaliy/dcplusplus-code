@@ -9,7 +9,7 @@
 <body>
 <h1>Advanced</h1>
 <dl style="margin-left: 40px;">
-  <dt><a name="autoaway"></a>Auto-away on Minimize</dt>
+  <dt id="autoaway">Auto-away on Minimize</dt>
   <dd cshelp="IDH_SETTINGS_ADVANCED_AUTO_AWAY">Switch to away mode whenever the client is minimized (and to back
 whenever restored).</dd>
   <dt>Automatically Follow Redirects</dt>
@@ -27,7 +27,7 @@ terms will be accessible through the drop-down. You can set how many terms that 
 list them but subtract their size from your total reported share size.
 Duplicate files never count towards your share size, no matter what
 this is set to.</dd>
-  <dt><a name="registrydchubadc"></a>Register with Windows to Handle dchub:// and adc:// URL Links</dt>
+  <dt id="registrydchubadc">Register with Windows to Handle dchub:// and adc:// URL Links</dt>
   <dd cshelp="IDH_SETTINGS_ADVANCED_URL_HANDLER">When set, DC++ will be the default handler for all dchub:// and
 adc://
 links. These links can appear on web pages, internet shortcuts on your
@@ -36,7 +36,7 @@ the Start Menu. Disable this if you prefer for a different
 application to handle Direct Connect hub links. Disabling will make
 DC++ remove the keys from the Windows registry.
   </dd>
-  <dt><a name="registrymagnet"></a>Register with Windows to Handle manget: URI Links</dt>
+  <dt id="registrymagnet">Register with Windows to Handle manget: URI Links</dt>
   <dd cshelp="IDH_SETTINGS_ADVANCED_MAGNET_REGISTER">When set, DC++ will register itself to handle magnet: links.
 These links will let you search the Direct Connect network for a file
 matching a given file hash, given that the magnet link contains
@@ -55,7 +55,7 @@ being out of date, but for users on slow connections, keeping file
 lists can save time. <em>Since the file list isn't curent, don't be
 surprised if the files you enqueue to download have been removed by the
 user, or moved.</em></dd>
-  <dt><a name="disconnect"></a>Automatically Disconnect Users Who
+  <dt id="disconnect">Automatically Disconnect Users Who
 Leave the Hub</dt>
   <dd cshelp="IDH_SETTINGS_ADVANCED_AUTO_KICK">The Direct Connect spirit is all about sharing. You are only
 sharing when you are connected to one or more hubs. In the past, users
@@ -69,7 +69,7 @@ might have opened up another slot for another user in the mean time.
 This could cause a situation where you have way more upload slots in
 use than you selected in the settings. Also, if you quit the hub,
 people downloading from you will not be disconnected.</em></dd>
-  <dt><a name="sfvcheck"></a>Enable Automatic SFV Checking</dt>
+  <dt id="sfvcheck">Enable Automatic SFV Checking</dt>
   <dd cshelp="IDH_SETTINGS_ADVANCED_SFV_CHECK">Simple File Verification (SFV) is a scheme in which a set of
 files are accompanied by a so-called sfv-file which contains CRC32
 checksums of each file. If there is an sfv-file included, DC++ will
@@ -82,7 +82,7 @@ get messages from bots that link chat from multiple users (the most
 well known example is the Operator Chat facility found in many hubs).
 Users are judged to be bots if they have an empty Connection type. <span style="font-style: italic;">Enable if unsure.</span></dd>
 
-  <dt><a name="break"></a>Break on First ADLSearch Match</dt>
+  <dt id="break">Break on First ADLSearch Match</dt>
   <dd cshelp="IDH_SETTINGS_ADVANCED_ADLS_BREAK_ON_FIRST">If you're using the <a href="window_adlsearch.html">ADLSearch</a>
 features, keeping this option enabled will make a file show up in only
 the first search it matches. If disabled, it may appear multiple times,
@@ -122,7 +122,7 @@ With this option enabled, DC++ uses
 connections.<br/>
 If the download fails, DC++ tries again with the non-Coralized address.
 </dd>
-  <dt><a name="segmented"></a>Enable segmented downloads</dt>
+  <dt id="segmented">Enable segmented downloads</dt>
   <dd cshelp="IDH_SETTINGS_ADVANCED_SEGMENTED_DL">With this option enabled, DC++ uses segmented downloading. i.e. it downloads each file in many parts simultaneously from all available sources.</dd>
   <dt>Use fast hashing method (disable if you have problems with hashing)</dt>
   <dd cshelp="IDH_SETTINGS_ADVANCED_FAST_HASH">When enabled, it will make DC++ use a newer, different disk reading strategy for hashing files. This should be potentially more compatible with some disk devices. 
