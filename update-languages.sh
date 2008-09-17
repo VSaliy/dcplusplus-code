@@ -36,4 +36,5 @@ scons i18n=true
 
 process libdcpp dcpp
 process dcpp-win32 win32
+process dcpp-help help
 
