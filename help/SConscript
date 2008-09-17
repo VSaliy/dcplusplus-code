@@ -36,11 +36,14 @@ env['SPAWN'] = new_spawn
 
 # generate changelog.html
 from gen_changelog import gen_changelog
-env.Command('changelog.html', ['#/changelog.txt', 'template.html'], Action(gen_changelog, 'Building changelog.html'))
+env.Command('changelog.html', ['#/changelog.txt', 'template.html'], Action(gen_changelog, 'Generating $TARGET'))
 
 # generate compile.html
 from gen_compile import gen_compile
-env.Command('compile.html', ['#/Compile.txt', 'template.html'], Action(gen_compile, 'Building compile.html'))
+env.Command('compile.html', ['#/Compile.txt', 'template.html'], Action(gen_compile, 'Generating $TARGET'))
+
+# update users.bmp
+env.Command('users.bmp', '#/res/users.bmp', Copy('$TARGET', '$SOURCE'))
 
 # define which source files need to be copied to the build directory
 CHM_sources = Glob('*.html')
@@ -53,6 +56,9 @@ CHM_sources.append('resource.h')
 CHM_sources.append('style.css')
 CHM_sources.append('toc.hhc')
 CHM_sources.append('users.bmp')
+
+# additional dependencies (that have to be built before the help file)
+CHM_dependencies = ['cshelp.h']
 
 import os
 import filecmp
@@ -98,7 +104,7 @@ def gen_CHM(target, source, env):
 	CHM_path = build_path + 'DCPlusPlus.chm'
 	log_path = build_path + 'hhc.log'
 	HHP_path = build_path + 'DCPlusPlus.hhp'
-	ret = env.Execute(Action('hhc "' + HHP_path + '" > "' + log_path + '"', 'Compiling the ' + CHM_path + ' help file; log output: ' + log_path))
+	ret = env.Execute(Action('hhc "' + HHP_path + '" > "' + log_path + '"', 'Compiling the ' + CHM_path + ' temporary help file; log output: ' + log_path))
 
 	# copy the compiled file to its final target
 	env.Execute(Copy(target[0], CHM_path))
@@ -108,33 +114,32 @@ def gen_CHM(target, source, env):
 		env.Execute(Delete(build_dir))
 
 	return ret
-env.Append(BUILDERS = {'CHMBuild' : Builder(action = Action(gen_CHM))})
-
-# update users.bmp
-env.Command('users.bmp', '#/res/users.bmp', Copy('$TARGET', '$SOURCE'))
+env.Append(BUILDERS = {'CHMBuild' : Builder(action = Action(gen_CHM, 'Compiling the $TARGET help file'))})
 
 # translation using po4a <http://po4a.alioth.debian.org/>
 if env['mode'] == 'release' or env['i18n']:
-
-	# create the translation template
-	if env.WhereIs('po4a-gettextize') is None:
-		print 'po4a-gettextize not found, the help translation template won\'t be created'
+	if env.WhereIs('po4a-gettextize') is None or env.WhereIs('po4a-translate') is None:
+		print 'po4a scripts not found, help translation is impossible'
 	else:
+		# create the translation template
 		def gen_pot(target, source, env):
 			cmd = 'po4a-gettextize -f xhtml -M iso-8859-1 -p "' + str(target[0]) + '"'
 			for node in source:
 				cmd += ' -m "' + str(node) + '"'
 			return env.Execute(cmd)
-		env.Command('po/dcpp-help.pot', static_HTMLs, Action(gen_pot, 'Extracting help texts to $TARGET'))
+		potfile = 'po/dcpp-help.pot'
+		env.Command(potfile, static_HTMLs, Action(gen_pot, 'Extracting help texts to $TARGET'))
 
-	# compile translated help files using the .po's in help/po
-	if env.WhereIs('po4a-translate') is None:
-		print 'po4a-translate not found, translated help files won\'t be compiled'
-	else:
+		# update .po's in help/po and compile translated help files
 		po_list = Glob('po/*.po')
 		for po_node in po_list:
-			env.CHMBuild(dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/DCPlusPlus.chm', [CHM_sources, po_node])
+			env.Precious(env.PoBuild(po_node, potfile))
+			target = dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/DCPlusPlus.chm'
+			env.Depends(target, CHM_dependencies)
+			env.CHMBuild(target, [CHM_sources, po_node])
 
 # compile the main (untranslated) help file
-ret = env.CHMBuild(dev.get_build_path('bin') + '/DCPlusPlus.chm', CHM_sources)
+target = dev.get_build_path('bin') + '/DCPlusPlus.chm'
+env.Depends(target, CHM_dependencies)
+ret = env.CHMBuild(target, CHM_sources)
 Return('ret')
