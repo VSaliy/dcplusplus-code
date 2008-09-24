@@ -12,6 +12,8 @@ process() {
 PREFIX=$1
 DIR=$2
 
+echo Processing $PREFIX...
+
 mv $SOURCE/$PREFIX/*.po $SOURCE
 
 cd $DIR/po
@@ -24,8 +26,7 @@ for a in $SOURCE/${PREFIX}-*.po ; do
 		msgmerge -U -C $FILE $a $PREFIX.pot
 	else
 		msgmerge -U $a $PREFIX.pot
-	fi
-	mv $a $FILE
+	fi && mv $a $FILE
 done
 
 cd ../..
