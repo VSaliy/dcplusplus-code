@@ -858,14 +858,14 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 
 		if(!aResult->getToken().empty() && token != aResult->getToken()) {
 			droppedResults++;
-			dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
+			callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 			return;
 		}
 
 		if(isHash) {
 			if(aResult->getType() != SearchResult::TYPE_FILE || TTHValue(Text::fromT(currentSearch[0])) != aResult->getTTH()) {
 				droppedResults++;
-				dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
+				callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 				return;
 			}
 		} else {
@@ -876,7 +876,7 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 					)
 				{
 					droppedResults++;
-					dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
+					callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 					return;
 				}
 			}
@@ -888,7 +888,7 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 		const TTHValue& t = aResult->getTTH();
 		if( ShareManager::getInstance()->isTTHShared(t) ) {
 			droppedResults++;
-			dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
+			callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 			return;
 		}
 	}
@@ -897,11 +897,11 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 	if((onlyFree && aResult->getFreeSlots() < 1))
 	{
 		droppedResults++;
-		dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
+		callAsync(std::tr1::bind(&SearchFrame::updateStatusFiltered, this));
 		return;
 	}
 
-	dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::addResult, this, new SearchInfo(aResult)));
+	callAsync(std::tr1::bind(&SearchFrame::addResult, this, new SearchInfo(aResult)));
 }
 
 void SearchFrame::onHubAdded(HubInfo* info) {
@@ -1131,13 +1131,13 @@ bool SearchFrame::handleSearchChar(int c) {
 }
 
 void SearchFrame::on(ClientConnected, Client* c) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::onHubAdded, this, new HubInfo(c)));
+	callAsync(std::tr1::bind(&SearchFrame::onHubAdded, this, new HubInfo(c)));
 }
 
 void SearchFrame::on(ClientUpdated, Client* c) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::onHubChanged, this, new HubInfo(c)));
+	callAsync(std::tr1::bind(&SearchFrame::onHubChanged, this, new HubInfo(c)));
 }
 
 void SearchFrame::on(ClientDisconnected, Client* c) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&SearchFrame::onHubRemoved, this, new HubInfo(c)));
+	callAsync(std::tr1::bind(&SearchFrame::onHubRemoved, this, new HubInfo(c)));
 }

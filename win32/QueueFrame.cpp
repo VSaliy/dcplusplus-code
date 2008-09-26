@@ -86,7 +86,7 @@ QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
 		files->setSort(COLUMN_TARGET);
 
 		files->onKeyDown(std::tr1::bind(&QueueFrame::handleKeyDownFiles, this, _1));
-		files->onSelectionChanged(std::tr1::bind(&dwt::Application::callAsync, &dwt::Application::instance(),
+		files->onSelectionChanged(std::tr1::bind(&QueueFrame::callAsync, this,
 			dwt::Application::Callback(std::tr1::bind(&QueueFrame::updateStatus, this))));
 		files->onContextMenu(std::tr1::bind(&QueueFrame::handleFilesContextMenu, this, _1));
 	}
@@ -1052,18 +1052,18 @@ void QueueFrame::onUpdated(const QueueItem& qi) {
 }
 
 void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
+	callAsync(std::tr1::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
 }
 
 void QueueFrame::on(QueueManagerListener::Removed, QueueItem* aQI) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onRemoved, this, aQI->getTarget()));
+	callAsync(std::tr1::bind(&QueueFrame::onRemoved, this, aQI->getTarget()));
 }
 
 void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onRemoved, this, oldTarget));
-	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
+	callAsync(std::tr1::bind(&QueueFrame::onRemoved, this, oldTarget));
+	callAsync(std::tr1::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
 }
 
 void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&QueueFrame::onUpdated, this, *aQI));
+	callAsync(std::tr1::bind(&QueueFrame::onUpdated, this, *aQI));
 }

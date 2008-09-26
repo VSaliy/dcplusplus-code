@@ -155,10 +155,10 @@ MainWindow::MainWindow() :
 	if(BOOLSETTING(OPEN_FAVORITE_HUBS)) FavHubsFrame::openWindow(getTabView());
 
 	if (!WinUtil::isShift()) {
-		dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::autoConnect, this));
+		callAsync(std::tr1::bind(&MainWindow::autoConnect, this));
 	}
 
-	dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::parseCommandLine, this, tstring(::GetCommandLine())));
+	callAsync(std::tr1::bind(&MainWindow::parseCommandLine, this, tstring(::GetCommandLine())));
 
 	int cmdShow = dwt::Application::instance().getCmdShow();
 	::ShowWindow(handle(), (cmdShow == SW_SHOWDEFAULT || cmdShow == SW_SHOWNORMAL) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
@@ -487,7 +487,7 @@ void MainWindow::handleMinimized() {
 
 void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
 	tstring line = Text::toT("[" + Util::getShortTimeString(t) + "] " + m);
-	dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::setStatus, this, STATUS_STATUS, line, true, false));
+	callAsync(std::tr1::bind(&MainWindow::setStatus, this, STATUS_STATUS, line, true, false));
 }
 
 void MainWindow::viewAndDelete(const string& fileName) {
@@ -1072,7 +1072,7 @@ void MainWindow::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, cons
 }
 
 void MainWindow::on(PartialList, const UserPtr& aUser, const string& text) throw() {
-	dwt::Application::instance().callAsync(
+	callAsync(
 		std::tr1::bind((void (*)(dwt::TabView*, const UserPtr&, const string&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
 		aUser, text, 0));
 }
@@ -1080,10 +1080,10 @@ void MainWindow::on(PartialList, const UserPtr& aUser, const string& text) throw
 void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) throw() {
 	if (qi->isSet(QueueItem::FLAG_CLIENT_VIEW)) {
 		if (qi->isSet(QueueItem::FLAG_USER_LIST)) {
-			dwt::Application::instance().callAsync(std::tr1::bind((void(*)(dwt::TabView*, const tstring&, const tstring&, const UserPtr&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
+			callAsync(std::tr1::bind((void(*)(dwt::TabView*, const tstring&, const tstring&, const UserPtr&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
 				Text::toT(qi->getListName()), Text::toT(dir), qi->getDownloads()[0]->getUser(), speed));
 		} else if (qi->isSet(QueueItem::FLAG_TEXT)) {
-			dwt::Application::instance().callAsync(std::tr1::bind(&MainWindow::viewAndDelete, this, qi->getTarget()));
+			callAsync(std::tr1::bind(&MainWindow::viewAndDelete, this, qi->getTarget()));
 		}
 	}
 }

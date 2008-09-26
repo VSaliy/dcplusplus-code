@@ -211,5 +211,5 @@ void SpyFrame::on(ClientManagerListener::IncomingSearch, const string& s) throw(
 	while( (i=x.find(_T('$'))) != string::npos) {
 		x[i] = _T(' ');
 	}
-	dwt::Application::instance().callAsync(std::tr1::bind(&SpyFrame::add, this, x));
+	callAsync(std::tr1::bind(&SpyFrame::add, this, x));
 }

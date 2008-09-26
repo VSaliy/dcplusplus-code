@@ -126,7 +126,7 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
 		users->setSort(COLUMN_NICK);
 
-		users->onSelectionChanged(std::tr1::bind(&dwt::Application::callAsync, &dwt::Application::instance(),
+		users->onSelectionChanged(std::tr1::bind(&HubFrame::callAsync, this,
 			dwt::Application::Callback(std::tr1::bind(&HubFrame::updateStatus, this))));
 		users->onDblClicked(std::tr1::bind(&HubFrame::handleDoubleClickUsers, this));
 		users->onKeyDown(std::tr1::bind(&HubFrame::handleUsersKeyDown, this, _1));
@@ -244,7 +244,7 @@ void HubFrame::initSecond() {
 bool HubFrame::eachSecond() {
 	if(updateUsers) {
 		updateUsers = false;
-		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
+		callAsync(std::tr1::bind(&HubFrame::execTasks, this));
 	}
 
 	updateStatus();
@@ -668,11 +668,11 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 }
 
 void HubFrame::on(Connecting, Client*) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Connecting to %1%...") % Text::toT(client->getHubUrl())), true));
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::setText, this, Text::toT(client->getHubUrl())));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Connecting to %1%...") % Text::toT(client->getHubUrl())), true));
+	callAsync(std::tr1::bind(&HubFrame::setText, this, Text::toT(client->getHubUrl())));
 }
 void HubFrame::on(Connected, Client*) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::onConnected, this));
+	callAsync(std::tr1::bind(&HubFrame::onConnected, this));
 }
 void HubFrame::on(UserUpdated, Client*, const OnlineUser& user) throw() {
 	addTask(UPDATE_USER_JOIN, user);
@@ -690,24 +690,24 @@ void HubFrame::on(ClientListener::UserRemoved, Client*, const OnlineUser& user) 
 
 void HubFrame::on(Redirect, Client*, const string& line) throw() {
 	if(ClientManager::getInstance()->isConnected(line)) {
-		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Redirect request received to a hub that's already connected"), true));
+		callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Redirect request received to a hub that's already connected"), true));
 		return;
 	}
 	redirect = line;
 	if(BOOLSETTING(AUTO_FOLLOW)) {
-		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::handleFollow, this));
+		callAsync(std::tr1::bind(&HubFrame::handleFollow, this));
 	} else {
-		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Press the follow redirect button to connect to %1%") % Text::toT(line)), true));
+		callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Press the follow redirect button to connect to %1%") % Text::toT(line)), true));
 	}
 }
 
 void HubFrame::on(Failed, Client*, const string& line) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), true));
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::onDisconnected, this));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), true));
+	callAsync(std::tr1::bind(&HubFrame::onDisconnected, this));
 }
 
 void HubFrame::on(GetPassword, Client*) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::onGetPassword, this));
+	callAsync(std::tr1::bind(&HubFrame::onGetPassword, this));
 }
 
 void HubFrame::on(HubUpdated, Client*) throw() {
@@ -722,27 +722,27 @@ void HubFrame::on(HubUpdated, Client*) throw() {
 		hubName += " - " + version;
 	}
 #endif
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::setText, this, Text::toT(hubName)));
+	callAsync(std::tr1::bind(&HubFrame::setText, this, Text::toT(hubName)));
 }
 
 void HubFrame::on(Message, Client*, const OnlineUser& from, const string& msg, bool thirdPerson) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addChat, this, Text::toT(Util::formatMessage(from.getIdentity().getNick(), msg, thirdPerson))));
+	callAsync(std::tr1::bind(&HubFrame::addChat, this, Text::toT(Util::formatMessage(from.getIdentity().getNick(), msg, thirdPerson))));
 }
 
 void HubFrame::on(StatusMessage, Client*, const string& line, int statusFlags) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), !BOOLSETTING(FILTER_MESSAGES) || !(statusFlags & ClientListener::FLAG_IS_SPAM)));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), !BOOLSETTING(FILTER_MESSAGES) || !(statusFlags & ClientListener::FLAG_IS_SPAM)));
 }
 
 void HubFrame::on(PrivateMessage, Client*, const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line, bool thirdPerson) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::onPrivateMessage, this, from.getUser(), to.getUser(), replyTo.getUser(), replyTo.getIdentity().isHub(), replyTo.getIdentity().isBot(), Text::toT(Util::formatMessage(from.getIdentity().getNick(), line, thirdPerson))));
+	callAsync(std::tr1::bind(&HubFrame::onPrivateMessage, this, from.getUser(), to.getUser(), replyTo.getUser(), replyTo.getIdentity().isHub(), replyTo.getIdentity().isBot(), Text::toT(Util::formatMessage(from.getIdentity().getNick(), line, thirdPerson))));
 }
 
 void HubFrame::on(NickTaken, Client*) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Your nick was already taken, please change to something else!"), true));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Your nick was already taken, please change to something else!"), true));
 }
 
 void HubFrame::on(SearchFlood, Client*, const string& line) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Search spam detected from %1%") % Text::toT(line)), true));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Search spam detected from %1%") % Text::toT(line)), true));
 }
 
 tstring HubFrame::getStatusShared() const {
@@ -799,7 +799,7 @@ void HubFrame::on(FavoriteManagerListener::UserRemoved, const FavoriteUser& /*aU
 void HubFrame::resortForFavsFirst(bool justDoIt /* = false */) {
 	if(justDoIt || BOOLSETTING(SORT_FAVUSERS_FIRST)) {
 		resort = true;
-		dwt::Application::instance().callAsync(std::tr1::bind(&HubFrame::execTasks, this));
+		callAsync(std::tr1::bind(&HubFrame::execTasks, this));
 	}
 }
 

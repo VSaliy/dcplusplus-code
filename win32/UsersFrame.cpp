@@ -196,9 +196,9 @@ void UsersFrame::on(UserAdded, const FavoriteUser& aUser) throw() {
 }
 
 void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&UsersFrame::removeUser, this, aUser.getUser()));
+	callAsync(std::tr1::bind(&UsersFrame::removeUser, this, aUser.getUser()));
 }
 
 void UsersFrame::on(StatusChanged, const UserPtr& aUser) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&UsersFrame::updateUser, this, aUser));
+	callAsync(std::tr1::bind(&UsersFrame::updateUser, this, aUser));
 }
