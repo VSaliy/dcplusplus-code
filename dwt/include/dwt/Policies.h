@@ -208,7 +208,7 @@ protected:
 		return ::DefWindowProc( hWnd, msg, wPar, lPar );
 	}
 
-	LRESULT returnUnhandled( HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar ) {
+	static LRESULT returnUnhandled( HWND hWnd, UINT msg, WPARAM wPar, LPARAM lPar ) {
 		return ::DefWindowProc( hWnd, msg, wPar, lPar );
 	}
 

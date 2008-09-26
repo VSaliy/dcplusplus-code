@@ -292,7 +292,6 @@ int PASCAL  WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 #endif
 {
 	unsigned int retVal = 0;
-	bool corruptMemMemLeak = false;
 
 	dwt::Application::init(nCmdShow);
 
