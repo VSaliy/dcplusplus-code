@@ -166,11 +166,6 @@ public:
 	/// Shut down operations
 	static void uninit();
 
-	/// Calls various leak and memory corruption routines.
-	/** Used after the message loop completes in WinMain.
-	  */
-	static void checkCorruptOrMemleak( bool & corruptMemMemLeak );
-
 	/// Returns the command line object
 	/** The command line object contains the parameters given to the process during
 	  * startup. <br>

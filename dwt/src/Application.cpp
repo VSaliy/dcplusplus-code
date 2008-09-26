@@ -37,6 +37,7 @@
 #include <dwt/tstring.h>
 #include <dwt/DWTException.h>
 #include <dwt/util/check.h>
+#include <assert.h>
 
 extern int SmartWinMain(dwt::Application & app);
 
@@ -73,30 +74,14 @@ void Application::init(int nCmdShow) {
 #endif
 
 	// Initializing Common Controls...
-	INITCOMMONCONTROLSEX init = { sizeof(INITCOMMONCONTROLSEX) };
-	init.dwICC = ICC_COOL_CLASSES | ICC_BAR_CLASSES | ICC_LISTVIEW_CLASSES | ICC_DATE_CLASSES | ICC_PROGRESS_CLASS
-	    | ICC_TREEVIEW_CLASSES;
+	INITCOMMONCONTROLSEX init = {
+		sizeof(INITCOMMONCONTROLSEX),
+		ICC_ANIMATE_CLASS | ICC_BAR_CLASSES | ICC_COOL_CLASSES | ICC_DATE_CLASSES | ICC_HOTKEY_CLASS |
+		ICC_INTERNET_CLASSES | ICC_LINK_CLASS | ICC_LISTVIEW_CLASSES | ICC_NATIVEFNTCTL_CLASS | ICC_PAGESCROLLER_CLASS |
+		ICC_PROGRESS_CLASS | ICC_STANDARD_CLASSES | ICC_TAB_CLASSES | ICC_TREEVIEW_CLASSES | ICC_UPDOWN_CLASS | ICC_USEREX_CLASSES
+	};
+
 	::InitCommonControlsEx(&init);
-
-#ifdef _MSC_VER
-#ifndef WINCE
-#ifdef _DEBUG
-	_CrtSetDbgFlag( _CRTDBG_LEAK_CHECK_DF | _CRTDBG_ALLOC_MEM_DF ); // Show heap leaks at exit, to debug window.
-#endif
-#endif
-#endif
-}
-
-void Application::checkCorruptOrMemleak(bool & corruptMemMemLeak) {
-	corruptMemMemLeak = false;
-#ifdef _MSC_VER
-#ifndef WINCE
-#ifdef _DEBUG
-	corruptMemMemLeak = _CrtCheckMemory() != TRUE; // Check for corruption right now.
-	dwtassert( ! corruptMemMemLeak, _T( "The application has corrupted its heap memory." ) );
-#endif
-#endif
-#endif
 }
 
 Application::Application(int nCmdShow) :
@@ -149,9 +134,7 @@ void Application::uninit() {
 }
 
 Application& Application::instance() {
-	if (0 == itsInstance) {
-		init(0);
-	}
+	assert(itsInstance);
 	return *itsInstance;
 }
 
@@ -316,7 +299,6 @@ int PASCAL  WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	retVal = SmartWinMain(dwt::Application::instance()); // Call library user's startup function.
 
 	dwt::Application::uninit();
-	dwt::Application::checkCorruptOrMemleak(corruptMemMemLeak);
 
 	return retVal;
 }
