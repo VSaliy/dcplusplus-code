@@ -43,6 +43,9 @@
 
 #include <dwt/DWTException.h>
 
+// def taken from <gettextP.h>
+extern "C" const char *_nl_locale_name_default (void);
+
 tstring WinUtil::tth;
 dwt::BrushPtr WinUtil::bgBrush;
 COLORREF WinUtil::textColor = 0;
@@ -555,13 +558,35 @@ void WinUtil::help(HWND hWnd, unsigned id) {
 	if(helpPopup && hWnd == helpPopup)
 		return;
 
-	string path = Util::getDataPath() + "DCPlusPlus.chm";
-	if(File::getSize(path) == -1) {
-		// todo also check that the file is up-to-date
-		// todo alert the user that the help file isn't found/up-to-date
-		return;
+	if(helpPath.empty()) {
+		// find the current locale
+		string lang = SETTING(LANGUAGE);
+		if(lang.empty())
+			lang = _nl_locale_name_default();
+
+		// find the path to the help file
+		string path;
+		if(!lang.empty() && lang != "C") {
+			path = Util::getLocalePath() + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
+			while(File::getSize(path) == -1) {
+				// if the lang has extra information (after '_' or '@'), try to remove it
+				string::size_type pos = lang.find_last_of("_@");
+				if(pos == string::npos)
+					break;
+				lang = lang.substr(0, pos);
+				path = Util::getLocalePath() + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
+			}
+		}
+		if(path.empty() || File::getSize(path) == -1) {
+			path = Util::getDataPath() + "DCPlusPlus.chm";
+			if(File::getSize(path) == -1) {
+				/// @todo also check that the file is up-to-date
+				/// @todo alert the user that the help file isn't found/up-to-date
+				return;
+			}
+		}
+		helpPath = Text::toT(path);
 	}
-	tstring helpFile = Text::toT(path);
 
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help; display a tooltip
@@ -578,11 +603,11 @@ void WinUtil::help(HWND hWnd, unsigned id) {
 		popup.rcMargins.right = -1;
 		popup.rcMargins.bottom = -1;
 
-		helpPopup = ::HtmlHelp(hWnd, helpFile.c_str(), HH_DISPLAY_TEXT_POPUP, reinterpret_cast<DWORD_PTR>(&popup));
+		helpPopup = ::HtmlHelp(hWnd, helpPath.c_str(), HH_DISPLAY_TEXT_POPUP, reinterpret_cast<DWORD_PTR>(&popup));
 	} else {
 		if(id < IDH_BEGIN || id > IDH_END)
 			id = IDH_INDEX;
-		::HtmlHelp(hWnd, helpFile.c_str(), HH_HELP_CONTEXT, id);
+		::HtmlHelp(hWnd, helpPath.c_str(), HH_HELP_CONTEXT, id);
 	}
 }
 
