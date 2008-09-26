@@ -113,22 +113,6 @@ const CommandLine& Application::getCommandLine() const {
 	return itsCmdLine;
 }
 
-bool Application::isAppAlreadyRunning() {
-	tstring appPath = getModulePath() + getModuleFileName();
-	itsMutex = ::CreateMutex(NULL, FALSE, appPath.c_str());
-	if (!itsMutex)
-		return false;
-	if (::GetLastError() == ERROR_ALREADY_EXISTS) {
-		::CloseHandle(itsMutex);
-		itsMutex = 0;
-		return true;
-	} else {
-		// We were the first one to create the mutex
-		// so that makes us the main instance.
-		return false;
-	}
-}
-
 bool Application::addWaitEvent(HANDLE hWaitEvent, const Application::Callback& pSignal) {
 	// in case the maximum number of objects is already achieved return false
 	if (itsVHEvents.size() >= MAXIMUM_WAIT_OBJECTS - 1)

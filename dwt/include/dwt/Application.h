@@ -180,11 +180,6 @@ public:
 
 	int getCmdShow() const;
 
-	/// Determine if is an application is already running or not
-	/** Returns true if this application have another instance running!
-	  */
-	bool isAppAlreadyRunning();
-
 	/// Adds a waitable event HANDLE and the according signal
 	/** You can feed in here HANDLEs of thread handles, console inputs, mutexes,
 	  * processes, semaphores etc. (see Win32-API on MsgWaitForMultipleObjects) you
