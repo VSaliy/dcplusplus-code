@@ -156,6 +156,17 @@ void Widget::setCallback( const Message& msg, const CallbackType& callback ) {
 	callbacks.push_back(callback);
 }
 
+/// Make sure that handle is still valid before calling f
+void checkCall(HWND handle, const Application::Callback& f) {
+	/// @todo this might fail when the handle has already been re-used elsewhere
+	if(::IsWindow(handle))
+		f();
+}
+
+void Widget::callAsync(const Application::Callback& f) {
+	Application::instance().callAsync(std::tr1::bind(&checkCall, handle(), f));
+}
+
 bool Widget::tryFire( const MSG & msg, LRESULT & retVal ) {
 	// First we must create a "comparable" message...
 	Message msgComparer( msg );

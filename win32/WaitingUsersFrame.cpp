@@ -169,10 +169,10 @@ void WaitingUsersFrame::onRemove()
 
 // UploadManagerListener
 void WaitingUsersFrame::on(UploadManagerListener::WaitingAddFile, const UserPtr& aUser, const string& aFilename) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&WaitingUsersFrame::onAddFile, this, aUser, aFilename));
+	callAsync(std::tr1::bind(&WaitingUsersFrame::onAddFile, this, aUser, aFilename));
 }
 void WaitingUsersFrame::on(UploadManagerListener::WaitingRemoveUser, const UserPtr& aUser) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&WaitingUsersFrame::onRemoveUser, this, aUser));
+	callAsync(std::tr1::bind(&WaitingUsersFrame::onRemoveUser, this, aUser));
 }
 
 // Keyboard shortcuts

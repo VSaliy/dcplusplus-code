@@ -101,7 +101,7 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 
 	ClientManager::getInstance()->addListener(this);
 
-	dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
+	callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 
 	frames.insert(std::make_pair(replyTo, this));
 }
@@ -271,15 +271,15 @@ void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
 
 void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
 	if(aUser.getUser() == replyTo)
-		dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
+		callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
 	if(aUser == replyTo)
-		dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
+		callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
 	if(aUser == replyTo)
-		dwt::Application::instance().callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
+		callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 
 void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {

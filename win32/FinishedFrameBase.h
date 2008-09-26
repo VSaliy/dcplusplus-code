@@ -613,41 +613,41 @@ private:
 
 	virtual void on(AddedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
 		if(upload == in_UL)
-			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
+			callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
 	}
 
 	virtual void on(AddedUser, bool upload, const UserPtr& user, const FinishedUserItemPtr& entry) throw() {
 		if(upload == in_UL)
-			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onAddedUser, this, user, entry));
+			callAsync(std::tr1::bind(&ThisType::onAddedUser, this, user, entry));
 	}
 
 	virtual void on(UpdatedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
 		if(upload == in_UL) {
 			if(bOnlyFull && entry->isFull())
-				dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
+				callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
 			else
-				dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onUpdatedFile, this, file));
+				callAsync(std::tr1::bind(&ThisType::onUpdatedFile, this, file));
 		}
 	}
 
 	virtual void on(UpdatedUser, bool upload, const UserPtr& user) throw() {
 		if(upload == in_UL)
-			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onUpdatedUser, this, user));
+			callAsync(std::tr1::bind(&ThisType::onUpdatedUser, this, user));
 	}
 
 	virtual void on(RemovedFile, bool upload, const string& file) throw() {
 		if(upload == in_UL)
-			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onRemovedFile, this, file));
+			callAsync(std::tr1::bind(&ThisType::onRemovedFile, this, file));
 	}
 
 	virtual void on(RemovedUser, bool upload, const UserPtr& user) throw() {
 		if(upload == in_UL)
-			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onRemovedUser, this, user));
+			callAsync(std::tr1::bind(&ThisType::onRemovedUser, this, user));
 	}
 
 	virtual void on(RemovedAll, bool upload) throw() {
 		if(upload == in_UL)
-			dwt::Application::instance().callAsync(std::tr1::bind(&ThisType::onRemovedAll, this));
+			callAsync(std::tr1::bind(&ThisType::onRemovedAll, this));
 	}
 };
 

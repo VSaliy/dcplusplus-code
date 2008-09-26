@@ -37,21 +37,16 @@
 #define DWT_Widget_h
 
 #include "forward.h"
+#include "Application.h"
 #include "Atom.h"
 #include "Rectangle.h"
 #include "Message.h"
-#include "tstring.h"
 #include "dwt_unordered_map.h"
-
-#include <boost/noncopyable.hpp>
-#include <list>
-#include <functional>
 
 namespace dwt {
 
 using namespace std::tr1::placeholders;
 
-class Application;
 class Widget;
 
 template<typename T>
@@ -119,6 +114,9 @@ public:
 
 	/// Sets the callback for msg - clears any other callbacks registered for the same message
 	void setCallback(const Message& msg, const CallbackType& callback );
+
+	/** Run a function bound to this widget asynchronously */
+	void callAsync(const Application::Callback& f);
 
 	CallbackCollectionType & getCallbacks();
 

@@ -7,6 +7,7 @@
 * Help updates (poy, emtee)
 * [L#268353] Fixed TigerHash regression on big-endian architectures (steven sheehy)
 * Upgraded to OpenSSL 0.9.8i (poy)
+* [L#262540] Fix crash when closing a busy window (poy, arnetheduck)
 
 -- 0.708 2008-08-28 --
 * Added setting for max characters per tab (poy)

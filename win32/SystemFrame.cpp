@@ -90,5 +90,5 @@ bool SystemFrame::preClosing() {
 }
 
 void SystemFrame::on(Message, time_t t, const string& message) throw() {
-	dwt::Application::instance().callAsync(std::tr1::bind(&SystemFrame::addLine, this, t, Text::toT(message)));
+	callAsync(std::tr1::bind(&SystemFrame::addLine, this, t, Text::toT(message)));
 }

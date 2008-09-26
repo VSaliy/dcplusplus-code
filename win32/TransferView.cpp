@@ -449,7 +449,7 @@ int TransferView::ConnectionInfo::compareItems(ConnectionInfo* a, ConnectionInfo
 
 void TransferView::addTask(int type, Task* ui) {
 	tasks.add(type, ui);
-	dwt::Application::instance().callAsync(std::tr1::bind(&TransferView::execTasks, this));
+	callAsync(std::tr1::bind(&TransferView::execTasks, this));
 }
 
 void TransferView::execTasks() {
@@ -798,7 +798,7 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) thr
 		tasks.add(DOWNLOADS_TICK, *i);
 	}
 
-	dwt::Application::instance().callAsync(std::tr1::bind(&TransferView::execTasks, this));
+	callAsync(std::tr1::bind(&TransferView::execTasks, this));
 }
 
 void TransferView::on(DownloadManagerListener::Failed, Download* d, const string& aReason) throw() {
@@ -843,7 +843,7 @@ void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) throw()
 		onTransferTick(*i, false);
 	}
 
-	dwt::Application::instance().callAsync(std::tr1::bind(&TransferView::execTasks, this));
+	callAsync(std::tr1::bind(&TransferView::execTasks, this));
 }
 
 void TransferView::on(DownloadManagerListener::Complete, Download* d) throw() {
