@@ -63,6 +63,7 @@ bool WinUtil::urlDcADCRegistered = false;
 bool WinUtil::urlMagnetRegistered = false;
 WinUtil::ImageMap WinUtil::fileIndexes;
 DWORD WinUtil::helpCookie = 0;
+tstring WinUtil::helpPath;
 HWND WinUtil::helpPopup = 0;
 
 const dwt::Button::Seed WinUtil::Seeds::button;
