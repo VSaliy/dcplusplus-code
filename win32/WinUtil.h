@@ -64,8 +64,6 @@ public:
 	static TStringList lastDirs;
 	static MainWindow* mainWindow;
 	//static dwt::TabView* mdiParent;
-	static DWORD helpCookie;
-	static HWND helpPopup;
 
 	typedef unordered_map<string, int> ImageMap;
 	typedef ImageMap::iterator ImageIter;
@@ -218,8 +216,12 @@ public:
 	static int textUnderCursor(POINT p, CEdit& ctrl, tstring& x);
 
 	static double toBytes(TCHAR* aSize);
-
 #endif
+
+private:
+	static DWORD helpCookie;
+	static tstring helpPath;
+	static HWND helpPopup;
 };
 
 #endif // !defined(WIN_UTIL_H)
