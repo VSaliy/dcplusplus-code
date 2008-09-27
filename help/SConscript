@@ -54,7 +54,6 @@ CHM_sources.append('logo.jpg')
 CHM_sources.append('office11.css')
 CHM_sources.append('resource.h')
 CHM_sources.append('style.css')
-CHM_sources.append('toc.hhc')
 CHM_sources.append('users.bmp')
 
 # additional dependencies (that have to be built before the help file)
@@ -62,6 +61,7 @@ CHM_dependencies = ['cshelp.h']
 
 import os
 import filecmp
+from gen_toc import gen_toc
 
 # define our CHM builder
 def gen_CHM(target, source, env):
@@ -92,13 +92,17 @@ def gen_CHM(target, source, env):
 				env.Execute(Copy(build_dir, node))
 
 	# generate context-sensitive help files (cshelp.h and cshelp.txt)
-	print 'Generating context-sensitive help files to ' + build_dir
+	print 'Generating context-sensitive help files in ' + build_dir
 	gen_cshelp([build_path + 'cshelp.h', build_path + 'cshelp.txt'], Glob(build_path + '*.html'), env)
 
 	# make sure the generated cshelp.h is the same as the vanilla one
 	if not filecmp.cmp(build_path + 'cshelp.h', 'help/cshelp.h'):
 		print 'The generated cshelp.h file is not the same as the vanilla one; ' + str(target[0]) + ' won\'t be compiled.'
 		return 1
+
+	# generate toc.hhc
+	print 'Generating toc.hhc in ' + build_dir
+	gen_toc(build_path + 'toc.hhc', build_path + 'index.html')
 
 	# compile the CHM file in the build directory
 	CHM_path = build_path + 'DCPlusPlus.chm'
