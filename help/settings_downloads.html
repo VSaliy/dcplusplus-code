@@ -14,7 +14,7 @@ that DC++ will use.</p>
 <h2>Directories</h2>
 <div style="margin-left: 40px;">
 <dl>
-  <dt>Default Download Directory</dt>
+  <dt>Default download directory</dt>
   <dd cshelp="IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR">After a download is complete, DC++ tries to move your
 just finished file to this directory. It defaults to the
 "Downloads\" subdirectory under where the DC++ executable is located. The directory will be automatically created if needed.
@@ -24,7 +24,7 @@ file on a FAT32 volume is 4 GiB).
 <br/>If the target volume runs out of space, DC++ will keep your downloaded files in the Unfinished Downloads Directory
 having renamed them to their original filename.
 </dd>
-  <dt>Unfinished Downloads Directory</dt>
+  <dt>Unfinished downloads directory</dt>
   <dd cshelp="IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY">
   All incomplete downloads will be stored in this directory.
 If you leave it empty, temporary downloads will be stored in the "Incomplete\"
@@ -55,28 +55,25 @@ of the limits are hit, DC++ shows <em>"All download slots taken"</em>
 next to each source in the status column of the Connections tab.</p>
 <div style="margin-left: 40px;">
 <dl>
-  <dt>Maximum Simultaneous Downloads</dt>
+  <dt>Maximum simultaneous downloads (0 = infinite)</dt>
   <dd cshelp="IDH_SETTINGS_DOWNLOAD_DOWNLOADS">This limits the number of simultaneous downloads.
 A value of 0 means no limit. (default: 3)</dd>
-  <dt>No New Downloads if Speed Exceeds</dt>
+  <dt>No new downloads if speed exceeds (KiB/s, 0 = disable)</dt>
   <dd cshelp="IDH_SETTINGS_DOWNLOAD_MAXSPEED">This is another method of limiting simultaneous downloads,
 designed to prevent new downloads if your existing downloads exceed a
 specific threshold. It's measured in kibibytes per second, and a
-value of zero will disable this limit. <span
- style="font-style: italic;">Note: because of changing download speeds,
-this is not 100% accurate</span></dd>
+value of zero will disable this limit. <div
+ style="font-style: italic;">Note; because of changing download speeds, this is not 100% accurate...</div></dd>
 </dl>
 </div>
-<h2 id="hublist">Public Hub List</h2>
-<div style="margin-left: 40px;">
-<dl>
-  <dt>Public Hub List URL</dt>
-  <dd><a href="dialog_public_hub_lists.html">Configured Public Hubs Lists</a></dd>
-  <dt>HTTP Proxy</dt>
+<h2 id="hublist">Public Hubs list</h2>
+<dl style="margin-left: 40px;">
+  <dt>Public Hubs list URL</dt>
+  <dd><a href="dialog_public_hub_lists.html">Configured Public Hub Lists</a></dd>
+  <dt>HTTP Proxy (for hublist only)</dt>
   <dd cshelp="IDH_SETTINGS_DOWNLOAD_PROXY">This HTTP proxy will <span style="text-decoration: underline">only</span> be used to request the Public
 Hub List specified above. It's <span style="text-decoration: underline">not</span> used for uploads,
 downloads, or connecting to a hub.</dd>
 </dl>
-</div>
 </body>
 </html>

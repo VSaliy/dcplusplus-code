@@ -72,7 +72,7 @@ PropPage::TextItem NetworkPage::texts[] = {
 	{ IDC_SETTINGS_SOCKS5_USERNAME, N_("Login") },
 	{ IDC_SETTINGS_SOCKS5_PASSWORD, N_("Password") },
 	{ IDC_SOCKS_RESOLVE, N_("Use SOCKS5 server to resolve host names") },
-	{ IDC_SETTINGS_INCOMING, N_("Incoming connection settings (see Help/FAQ if unsure)") },
+	{ IDC_SETTINGS_INCOMING, N_("Incoming connection settings") },
 	{ IDC_SETTINGS_OUTGOING, N_("Outgoing connection settings") },
 	{ 0, 0 }
 };

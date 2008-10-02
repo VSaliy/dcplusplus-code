@@ -6,18 +6,18 @@
 <link type="text/css" rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<h1 id="connection">Connection Settings</h1>
+<h1 id="connection">Connection settings</h1>
 <p>
-This page has options on it that will let you properly configure DC++'s
-options for incoming and outgoing connections. Your incoming connection
-type must be properly chosen for downloading to work. If you unsure
-about these settings you may want to follow the 
+Use these settings to properly configure DC++
+for incoming and outgoing connections. Your incoming connection
+type must be correctly chosen for downloads to work. If unsure
+about these settings, you may want to follow the 
 <a href="get_started.html#connection">connection setup part</a>
 of the <a href="get_started.html">Get Started guide</a>.
 </p>
 <h2>Incoming connection settings</h2>
 <dl style="margin-left: 40px;">
-  <dt>Direct Connection</dt>
+  <dt>Direct connection</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_DIRECT">Select this mode if your computer is hooked directly to the
 internet. Do <span style="text-decoration: underline;">not</span>
 select this mode if you have a router (external firewall).</dd>
@@ -50,18 +50,21 @@ ones. This mode carries some limitations:
 </dl>
 <h3 style="margin-left: 40px;">Options</h3>
 <dl style="margin-left: 80px;">
-  <dt>TCP Port</dt>
+<dt>Ports</dt>
+<dd><dl>
+  <dt>TCP</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_PORT_TCP">This is the port that DC++ listens on for incoming client
 connections. If this setting is blank, DC++ will use a random port
 between 1025 and 32000.</dd>
-  <dt>UDP Port</dt>
+  <dt>UDP</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_PORT_UDP">This is the port that DC++ listens on for incoming search
 results. If this setting is blank, DC++ will use a random port between
 1025 and 32000.</dd>
-  <dt>TLS Port</dt>
+  <dt>TLS</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_PORT_TLS">This is the port that DC++ listens on for <a href="settings_certs.html">TLS</a> connections.
  If this setting is blank, DC++ will use a random port between
-1025 and 32000. If specified, <b>it should be a different port value than TCP or UDP.</b></dd>
+ 1025 and 32000. If specified, <b>it should be a different port value than TCP or UDP.</b></dd>
+</dd></dl>
   <dt>External / WAN IP</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_EXTERNAL_IP">If you're directly connected to the internet, DC++ will tell remote users to connect to your local IP.
 Fill in this box <span style="font-weight: bold;">only</span> if you need to override the auto-detection.
