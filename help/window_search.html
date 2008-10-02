@@ -10,14 +10,13 @@
 <p>The Search window allows searching for files inside the shares of on-line users. You can search for
 one or more keywords and optionally use filters as described below. When your search query is ready, press the Search button to send out the search request to the hub(s) you are connected to; these hubs will then forward the search request to all of their connected users.</p>
 <p>When a client matches a search request, it sends the results back to the requester. These results then show up in the search results list of the Search window.</p>
-<p>You can open several independent Search windows and define different search arguments in each, thus allowing you to process multiple searches simultaneously. Be careful though, it sometimes happens that search results show up in the wrong window (this is a deficiency of the NMDC protocol, and should never happen with ADC hubs).
+<p>You can open several independent Search windows and define different search arguments in each, thus allowing you to process multiple searches simultaneously. Be careful though, it sometimes happens that search results show up in the wrong window (this is a deficiency of the NMDC protocol, and should never happen with ADC hubs).</p>
 <p>Note that <b>search requests are sent out only once, when the Search button is pressed</b>. After that - until that button is pressed again - the sole purpose of the Search window is to show results received by DC++ that: either match the search query (NMDC); or match the search ID (ADC).<br/>
 (This means that users who have logged in <i>after</i> you pressed the Search button won't send you any search result unless
 you repeat the search.)</p>
-<p>You may not start or repeat searches as fast as you like. There is minimum interval of a few seconds between two searches
+<p>You may not start or repeat searches as fast as you like. There is a minimum interval of a few seconds between two searches
 defined in DC++. You will get a countdown message in the Status bar if you try to search sooner than allowed 
-and you are able to repeat the search only when the client is ready to search again. Hubs may also limit searches by checking
-for forbidden keywords or blocking repeated searches for the same terms in a certain amount of time. Some hubs have
+and will be able to repeat the search only when the client is ready to search again. Besides, some hubs also limit searches by checking for forbidden keywords or by blocking repeated similar searches sent in a too small amount of time. Some hubs have
 predefined minimum search intervals for all searches or some even totally block searches if you are in 
 <a href="settings_connection.html#connection">passive mode</a>.</p>
 <p>Search hits with TTH are always matched to the Download queue and new sources are automatically added to the queue items
@@ -25,7 +24,7 @@ unless they were removed or marked as "bad" sources before. The filelists of all
 matched for possible other queued files if the <a href="settings_queue.html#automatchqueue">Automatically match queue for search hits</a>
 setting is enabled. Activating that option can generate lots of filelist traffic when large amount of new sources are found for queued files.</p>
 
-<p>If you often get too few search results or no results at all, refer to the <a href="faq_nosearch.html">Search troubleshooting FAQ.</a></p>
+<p>If you often get too few search results or no results at all, refer to the <a href="faq_nosearch.html">Search troubleshooting FAQ</a>.</p>
 
 <h2>Search options (left)</h2>
 <dl style="margin-left: 40px;">
