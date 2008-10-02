@@ -79,10 +79,10 @@ bool WaitingUsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 	menu->appendItem(T_("&Get file list"), std::tr1::bind(&WaitingUsersFrame::onGetList, this));
-	menu->appendItem(T_("Copy Filename"), std::tr1::bind(&WaitingUsersFrame::onCopyFilename, this));
+	menu->appendItem(T_("&Copy filename"), std::tr1::bind(&WaitingUsersFrame::onCopyFilename, this));
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&WaitingUsersFrame::onRemove, this));
 	menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&WaitingUsersFrame::onGrantSlot, this));
-	menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&WaitingUsersFrame::onAddToFavorites, this));
+	menu->appendItem(T_("Add to &favorites"), std::tr1::bind(&WaitingUsersFrame::onAddToFavorites, this));
 	menu->appendItem(T_("&Send private message"), std::tr1::bind(&WaitingUsersFrame::onPrivateMessage, this));
 	menu->open(pt);
 	return true;

@@ -35,10 +35,10 @@ static const ColumnInfo hubsColumns[] = {
 	{ N_("Address"), 100, false },
 	{ N_("Country"), 100, false },
 	{ N_("Shared"), 100, true },
-	{ N_("Min Share"), 100, true },
-	{ N_("Min Slots"), 100, true },
-	{ N_("Max Hubs"), 100, true },
-	{ N_("Max Users"), 100, true },
+	{ N_("Min share"), 100, true },
+	{ N_("Min slots"), 100, true },
+	{ N_("Max hubs"), 100, true },
+	{ N_("Max users"), 100, true },
 	{ N_("Reliability"), 100, false },
 	{ N_("Rating"), 100, true }
 };

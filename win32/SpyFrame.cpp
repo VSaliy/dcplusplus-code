@@ -31,7 +31,7 @@ const size_t SpyFrame::AVG_TIME; // TODO gcc needs this - why?
 #endif
 
 static const ColumnInfo searchesColumns[] = {
-	{ N_("Search String"), 305, false },
+	{ N_("Search string"), 305, false },
 	{ N_("Count"), 70, true },
 	{ N_("Time"), 85, false }
 };
