@@ -443,39 +443,43 @@ void Table::createArrows() {
 	if(ComCtl6)
 		return;
 
-	POINT triangle[3] = { {5, 0}, {0, 5}, {10, 5} };
+	const Point size(11, 6);
+	const Rectangle rect(size);
+	POINT triangle[3] = { { 5, 0 }, { 0, 6 }, { 10, 6 } };
 
-	FreeCanvas dc(this, ::CreateCompatibleDC(NULL));
+	UpdateCanvas dc(this);
+	FreeCanvas dc_compat(this, ::CreateCompatibleDC(dc.handle()));
 
-	const int bitmapWidth = 11;
-	const int bitmapHeight = 6;
-	const Rectangle rect(0, 0, bitmapWidth, bitmapHeight );
+	upArrow = BitmapPtr(new Bitmap(::CreateCompatibleBitmap(dc.handle(), size.x, size.y)));
+	downArrow = BitmapPtr(new Bitmap(::CreateCompatibleBitmap(dc.handle(), size.x, size.y)));
 
-	Brush brush(Brush::Face3D);
-
-	upArrow = BitmapPtr(new Bitmap(::CreateCompatibleBitmap(dc.handle(), bitmapWidth, bitmapHeight)));
-	downArrow = BitmapPtr(new Bitmap(::CreateCompatibleBitmap(dc.handle(), bitmapWidth, bitmapHeight)));
+	Brush brush_bg(Brush::BtnFace);
+	Brush brush_arrow(Brush::BtnShadow);
 
 	{
 		// create up arrow
-		Canvas::Selector select(dc, *upArrow);
+		Canvas::Selector select(dc_compat, *upArrow);
 
-		dc.fillRectangle(rect, brush);
+		dc_compat.fillRectangle(rect, brush_bg);
 
-		::InvertRgn(dc.handle(), ::CreatePolygonRgn(triangle, 3, WINDING));
+		HRGN region = ::CreatePolygonRgn(triangle, 3, WINDING);
+		::FillRgn(dc_compat.handle(), region, brush_arrow);
+		::DeleteObject(region);
 	}
 
 	{
 		// create down arrow
-		Canvas::Selector select(dc, *downArrow);
+		Canvas::Selector select(dc_compat, *downArrow);
 
-		dc.fillRectangle(rect, brush);
+		dc_compat.fillRectangle(rect, brush_bg);
 
 		for (size_t i = 0; i < sizeof(triangle)/sizeof(triangle[0]); ++i) {
 			POINT& pt = triangle[i];
-			pt.y = bitmapHeight - 1 - pt.y;
+			pt.y = size.y - 1 - pt.y;
 		}
-		::InvertRgn(dc.handle(), ::CreatePolygonRgn(triangle, 3, WINDING));
+		HRGN region = ::CreatePolygonRgn(triangle, 3, WINDING);
+		::FillRgn(dc_compat.handle(), region, brush_arrow);
+		::DeleteObject(region);
 	}
 }
 
