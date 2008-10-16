@@ -118,8 +118,9 @@ public:
 	}
 };
 
-// Forward declaration since Brush is used in Canvas class
+// Forward declarations
 class Brush;
+class Region;
 
 /// Buffered Canvas, useful for e.g. double buffering updates to a Widget
 /** A BufferedCanvas is a Canvas which you can draw upon but only resides in memory
@@ -376,12 +377,15 @@ public:
 	/// Fills a Rectangle in the Device Context with the given brush.
 	/** Fills a Rectangle from (left, top) to (right, bottom).
 	  */
-	void fillRectangle( int left, int top, int right, int bottom, Brush & brush );
+	void fill(int left, int top, int right, int bottom, const Brush& brush);
 
 	/// Fills a Rectangle in the Device Context with the given brush.
 	/** Fills a Rectangle within the given Rectangle.
 	  */
-	void fillRectangle( const dwt::Rectangle & rect, Brush & brush );
+	void fill(const Rectangle& rect, const Brush& brush);
+
+	/** Fills "region" with "brush". */
+	void fill(const Region& region, const Brush& brush);
 
 	/// Sets the pixel at (x,y) to be pixcolor. Returns the old pixel color.
 	/** Sets the pixel at (x,y) to be pixcol
