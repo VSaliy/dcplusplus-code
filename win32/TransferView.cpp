@@ -265,8 +265,9 @@ void TransferView::runUserCommand(const UserCommand& uc) {
 bool TransferView::handleKeyDown(int c) {
 	if(c == VK_DELETE) {
 		connections->forEachSelected(&ConnectionInfo::disconnect);
+		return true;
 	}
-	return true;
+	return false;
 }
 
 void TransferView::handleForce() {
