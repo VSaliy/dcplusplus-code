@@ -437,7 +437,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 		{
 			// draw background
 			Brush brush(colorInfo.colorStrip);
-			canvas.fillRectangle(textRectangle, brush);
+			canvas.fill(textRectangle, brush);
 		}
 
 		// draw title
@@ -460,7 +460,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 	{
 		// set item background
 		Brush brush(highlight ? colorInfo.colorHighlight : (wrapper->isTitle || isMenuBar) ? colorInfo.colorStrip : colorInfo.colorMenu);
-		canvas.fillRectangle(itemRectangle, brush);
+		canvas.fill(itemRectangle, brush);
 	}
 
 	if(!highlight && !isMenuBar && !wrapper->isTitle) // strip bar (on the left, where icons go)
@@ -471,7 +471,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 
 		// draw strip bar
 		Brush brush(colorInfo.colorStrip);
-		canvas.fillRectangle(stripRectangle, brush);
+		canvas.fill(stripRectangle, brush);
 	}
 
 	if ( !isMenuBar && info.fType & MFT_SEPARATOR ) // draw separator
@@ -585,7 +585,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 
 			// prepare background
 			Brush brush(highlight ? colorInfo.colorHighlight : colorInfo.colorStrip);
-			canvas.fillRectangle(iconRectangle, brush);
+			canvas.fill(iconRectangle, brush);
 
 			// create memory DC and set bitmap on it
 			HDC memoryDC = ::CreateCompatibleDC( canvas.handle() );

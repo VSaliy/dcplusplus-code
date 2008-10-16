@@ -8,10 +8,10 @@ env.Append(CPPPATH=["#dwt/include"])
 
 ret = []
 
-ret += env.StaticLibrary(target, sources)
-
 ret += dev.build('util/')
 ret += dev.build('widgets/')
+
+ret += env.StaticLibrary(target, [sources, ret])
 
 Return('ret')
 

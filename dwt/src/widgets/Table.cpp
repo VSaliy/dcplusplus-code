@@ -31,7 +31,7 @@
 
 #include <dwt/widgets/Table.h>
 
-#include <dwt/resources/Pen.h>
+#include <dwt/resources/Region.h>
 #include <dwt/CanvasClasses.h>
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/check.h>
@@ -445,7 +445,11 @@ void Table::createArrows() {
 
 	const Point size(11, 6);
 	const Rectangle rect(size);
-	POINT triangle[3] = { { 5, 0 }, { 0, 6 }, { 10, 6 } };
+
+	std::vector<Point> triangle;
+	triangle.push_back(Point(5, 0));
+	triangle.push_back(Point(0, 6));
+	triangle.push_back(Point(10, 6));
 
 	UpdateCanvas dc(this);
 	FreeCanvas dc_compat(this, ::CreateCompatibleDC(dc.handle()));
@@ -460,26 +464,24 @@ void Table::createArrows() {
 		// create up arrow
 		Canvas::Selector select(dc_compat, *upArrow);
 
-		dc_compat.fillRectangle(rect, brush_bg);
+		dc_compat.fill(rect, brush_bg);
 
-		HRGN region = ::CreatePolygonRgn(triangle, 3, WINDING);
-		::FillRgn(dc_compat.handle(), region, brush_arrow);
-		::DeleteObject(region);
+		Region region(triangle);
+		dc_compat.fill(region, brush_arrow);
 	}
 
 	{
 		// create down arrow
 		Canvas::Selector select(dc_compat, *downArrow);
 
-		dc_compat.fillRectangle(rect, brush_bg);
+		dc_compat.fill(rect, brush_bg);
 
-		for (size_t i = 0; i < sizeof(triangle)/sizeof(triangle[0]); ++i) {
-			POINT& pt = triangle[i];
+		for(std::vector<Point>::iterator i = triangle.begin(); i != triangle.end(); ++i) {
+			Point& pt = *i;
 			pt.y = size.y - 1 - pt.y;
 		}
-		HRGN region = ::CreatePolygonRgn(triangle, 3, WINDING);
-		::FillRgn(dc_compat.handle(), region, brush_arrow);
-		::DeleteObject(region);
+		Region region(triangle);
+		dc_compat.fill(region, brush_arrow);
 	}
 }
 

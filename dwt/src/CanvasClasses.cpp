@@ -32,6 +32,7 @@
 #include <dwt/CanvasClasses.h>
 #include <dwt/util/check.h>
 #include <dwt/resources/Brush.h>
+#include <dwt/resources/Region.h>
 
 namespace dwt {
 
@@ -134,21 +135,23 @@ void Canvas::ellipse( const dwt::Rectangle & rect )
 	}
 }
 
-void Canvas::fillRectangle( int left, int top, int right, int bottom, Brush & brush )
-{
+void Canvas::fill(int left, int top, int right, int bottom, const Brush& brush) {
 	RECT rc;
 	rc.bottom = bottom;
 	rc.left = left;
 	rc.right = right;
 	rc.top = top;
 
-	::FillRect( itsHdc, & rc, brush.handle() );
+	::FillRect(itsHdc, &rc, brush.handle());
 }
 
-void Canvas::fillRectangle( const dwt::Rectangle & rect, Brush & brush )
-{
+void Canvas::fill(const Rectangle& rect, const Brush& brush) {
 	RECT rc = rect;
-	::FillRect( itsHdc, & rc, brush.handle() );
+	::FillRect(itsHdc, &rc, brush.handle());
+}
+
+void Canvas::fill(const Region& region, const Brush& brush) {
+	::FillRgn(itsHdc, region, brush);
 }
 
 COLORREF Canvas::setPixel( int x, int y, COLORREF pixcolor )
