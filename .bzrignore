@@ -4,10 +4,7 @@
 ./.sconsign.dblite
 ./.settings
 custom.py
-*.gch
 *.lib
-*.obj
-*.pch
 *.pdb
 *.pot
 ./htmlhelp/include/htmlhelp.h

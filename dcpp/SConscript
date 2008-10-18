@@ -30,16 +30,20 @@ sources += dev.get_sources(source_path, "*.c")
 env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib'])
 
 for i, source in enumerate(sources):
-	if source.find("version.cpp") != -1:
+	if source.find('stdinc.cpp') != -1:
+		# the PCH/GCH builder will take care of this one
+		del sources[i]
+
+	elif source.find("version.cpp") != -1:
 		rev = ['DCPP_REVISION=' + getRevision()]
 		sources[i] = env.StaticObject(source, CPPDEFINES=env['CPPDEFINES'] + rev)
 
 # precompiled header
 if env['CC'] == 'cl': # MSVC
 	env['PCHSTOP'] = 'stdinc.h'
-	env['PCH'] = env.PCH('stdinc.cpp')[0]
+	env['PCH'] = env.PCH(dev.get_build_path('dcpp/stdinc.pch'), 'stdinc.cpp')[0]
 elif 'gcc' in env['TOOLS']:
-	env['Gch'] = env.Gch('stdinc.h')[0]
+	env['Gch'] = env.Gch(dev.get_build_path('dcpp/stdinc.gch'), 'stdinc.h')[0]
 
 env.Append(CPPDEFINES=["BUILDING_DCPP=1"])
 
