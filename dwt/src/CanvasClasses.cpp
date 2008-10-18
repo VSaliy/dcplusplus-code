@@ -142,16 +142,22 @@ void Canvas::fill(int left, int top, int right, int bottom, const Brush& brush) 
 	rc.right = right;
 	rc.top = top;
 
-	::FillRect(itsHdc, &rc, brush.handle());
+	if(!::FillRect(itsHdc, &rc, brush.handle())) {
+		dwtWin32DebugFail("Error in CanvasClasses fill from coordinates");
+	}
 }
 
 void Canvas::fill(const Rectangle& rect, const Brush& brush) {
 	RECT rc = rect;
-	::FillRect(itsHdc, &rc, brush.handle());
+	if(!::FillRect(itsHdc, &rc, brush.handle())) {
+		dwtWin32DebugFail("Error in CanvasClasses fill from rectangle");
+	}
 }
 
 void Canvas::fill(const Region& region, const Brush& brush) {
-	::FillRgn(itsHdc, region, brush);
+	if(!::FillRgn(itsHdc, region, brush)) {
+		dwtWin32DebugFail("Error in CanvasClasses fill from region");
+	}
 }
 
 COLORREF Canvas::setPixel( int x, int y, COLORREF pixcolor )

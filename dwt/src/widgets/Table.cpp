@@ -460,13 +460,14 @@ void Table::createArrows() {
 	Brush brush_bg(Brush::BtnFace);
 	Brush brush_arrow(Brush::BtnShadow);
 
+	Region region(triangle);
+
 	{
 		// create up arrow
 		Canvas::Selector select(dc_compat, *upArrow);
 
 		dc_compat.fill(rect, brush_bg);
 
-		Region region(triangle);
 		dc_compat.fill(region, brush_arrow);
 	}
 
@@ -476,12 +477,8 @@ void Table::createArrows() {
 
 		dc_compat.fill(rect, brush_bg);
 
-		for(std::vector<Point>::iterator i = triangle.begin(); i != triangle.end(); ++i) {
-			Point& pt = *i;
-			pt.y = size.y - 1 - pt.y;
-		}
-		Region region(triangle);
-		dc_compat.fill(region, brush_arrow);
+		XFORM xform = { 1, 0, 0, -1, 0, size.y }; // horizontal reflection then downwards translation
+		dc_compat.fill(*region.transform(&xform), brush_arrow);
 	}
 }
 
