@@ -46,7 +46,10 @@ typedef boost::intrusive_ptr<Region> RegionPtr;
 
 class Region : public Handle<GdiPolicy<HRGN> > {
 public:
-	/** filling mode when multiple polygonal regions intersect */
+	/**
+	* filling mode when multiple polygonal regions intersect.
+	* more information in the ::SetPolyFillMode doc.
+	*/
 	enum PolyFillMode {
 		Alternate = ALTERNATE,
 		Winding = WINDING
@@ -55,9 +58,17 @@ public:
 	explicit Region(HRGN h, bool own = true);
 
 	/**
-	* @param points vertices of the polygon that this region will represent
+	* creates a polygonal region; more information in the ::CreatePolygonRgn doc.
+	* @param points coordinates of the vertices of the polygon that this region will represent.
 	*/
 	explicit Region(const std::vector<Point>& points, PolyFillMode mode = Winding);
+
+	/// @todo make an XFORM creator in dwt to simplify basic transformations
+	/**
+	* returns a new transformed region; more information in the ::ExtCreateRegion doc.
+	* @param pxform pointer to an XFORM structure; check out its doc for more information.
+	*/
+	RegionPtr transform(const PXFORM pxform) const;
 
 private:
 	friend class Handle<GdiPolicy<HRGN> >;

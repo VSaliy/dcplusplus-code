@@ -30,6 +30,8 @@
 */
 
 #include <dwt/resources/Region.h>
+
+#include <dwt/DWTException.h>
 #include <dwt/Point.h>
 
 namespace dwt {
@@ -37,5 +39,21 @@ namespace dwt {
 Region::Region(HRGN h, bool own) : ResourceType(h, own) { }
 
 Region::Region(const std::vector<Point>& points, PolyFillMode mode) : ResourceType(::CreatePolygonRgn(&points[0], points.size(), mode), true) { }
+
+RegionPtr Region::transform(const PXFORM pxform) const {
+	DWORD bytes = ::GetRegionData(handle(), 0, NULL);
+	if(!bytes)
+		throw Win32Exception("1st GetRegionData in Region::transform fizzled...");
+
+	RGNDATA data[bytes];
+	if(!::GetRegionData(handle(), bytes, data))
+		throw Win32Exception("2nd GetRegionData in Region::transform fizzled...");
+
+	HRGN transformed = ::ExtCreateRegion(pxform, bytes, data);
+	if(!transformed)
+		throw Win32Exception("ExtCreateRegion in Region::transform fizzled...");
+
+	return RegionPtr(new Region(transformed));
+}
 
 }
