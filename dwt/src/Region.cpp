@@ -45,11 +45,11 @@ RegionPtr Region::transform(const PXFORM pxform) const {
 	if(!bytes)
 		throw Win32Exception("1st GetRegionData in Region::transform fizzled...");
 
-	RGNDATA data[bytes];
-	if(!::GetRegionData(handle(), bytes, data))
+	std::vector<char> data(bytes);
+	if(!::GetRegionData(handle(), bytes, reinterpret_cast<PRGNDATA>(&data[0])))
 		throw Win32Exception("2nd GetRegionData in Region::transform fizzled...");
 
-	HRGN transformed = ::ExtCreateRegion(pxform, bytes, data);
+	HRGN transformed = ::ExtCreateRegion(pxform, bytes, reinterpret_cast<PRGNDATA>(&data[0]));
 	if(!transformed)
 		throw Win32Exception("ExtCreateRegion in Region::transform fizzled...");
 
