@@ -64,12 +64,25 @@ class Dev:
 	def get_sources(self, source_path, source_glob):
 		return map(lambda x: self.get_build_path(source_path) + x, glob.glob(source_glob))
 		
-	def prepare_build(self, source_path, name, source_glob = '*.cpp', in_bin = True):
-		local_env = self.env.Clone()
-		
-		local_env.BuildDir(self.get_build_path(source_path), '.', duplicate = 0)
-		
-		return (local_env, self.get_target(source_path, name, in_bin), self.get_sources(source_path, source_glob))
+	def prepare_build(self, source_path, name, source_glob = '*.cpp', in_bin = True, precompiled_header = None):
+		env = self.env.Clone()
+		env.BuildDir(self.get_build_path(source_path), '.', duplicate = 0)
+
+		sources = self.get_sources(source_path, source_glob)
+
+		if precompiled_header is not None:
+			for i, source in enumerate(sources):
+				if source.find(precompiled_header + '.cpp') != -1:
+					# the PCH/GCH builder will take care of this one
+					del sources[i]
+
+			if env['CC'] == 'cl': # MSVC
+				env['PCHSTOP'] = precompiled_header + '.h'
+				env['PCH'] = env.PCH(self.get_target(source_path, precompiled_header + '.pch', False), precompiled_header + '.cpp')[0]
+			elif 'gcc' in env['TOOLS']:
+				env['Gch'] = env.Gch(self.get_target(source_path, precompiled_header + '.gch', False), precompiled_header + '.h')[0]
+
+		return (env, self.get_target(source_path, name, in_bin), sources)
 
 	def build(self, source_path, local_env = None):
 		if not local_env:
