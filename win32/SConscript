@@ -12,9 +12,9 @@ for i, source in enumerate(sources):
 # precompiled header
 if env['CC'] == 'cl': # MSVC
 	env['PCHSTOP'] = 'stdafx.h'
-	env['PCH'] = env.PCH(dev.get_build_path('dcpp/stdafx.pch'), 'stdafx.cpp')[0]
+	env['PCH'] = env.PCH(dev.get_build_path('win32/stdafx.pch'), 'stdafx.cpp')[0]
 elif 'gcc' in env['TOOLS']:
-	env['Gch'] = env.Gch(dev.get_build_path('dcpp/stdafx.gch'), 'stdafx.h')[0]
+	env['Gch'] = env.Gch(dev.get_build_path('win32/stdafx.gch'), 'stdafx.h')[0]
 
 res = env.RES(dev.get_sources(source_path, '*.rc'))
 env.Depends(res, 'resource.h')
