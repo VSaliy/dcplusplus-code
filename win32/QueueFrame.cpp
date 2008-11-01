@@ -438,7 +438,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 		// We assume we haven't added it yet, and that all filelists go to the same
 		// directory...
 		dcassert(fileLists == NULL);
-		fileLists = dirs->insert(NULL, new DirItemInfo(dir, FILE_LIST_NAME));
+		fileLists = dirs->insert(NULL, new DirItemInfo(dir, FILE_LIST_NAME), true);
 		return fileLists;
 	}
 
@@ -468,10 +468,10 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			// First addition, set commonStart to the dir minus the last part...
 			i = dir.rfind('\\', dir.length()-2);
 			if(i != string::npos) {
-				next = dirs->insert(NULL, new DirItemInfo(dir.substr(0, i+1)));
+				next = dirs->insert(NULL, new DirItemInfo(dir.substr(0, i+1)), true);
 			} else {
 				dcassert(dir.length() == 3);
-				next = dirs->insert(NULL, new DirItemInfo(dir, Text::toT(dir)));
+				next = dirs->insert(NULL, new DirItemInfo(dir, Text::toT(dir)), true);
 			}
 		}
 
@@ -495,7 +495,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			HTREEITEM oldRoot = next;
 
 			// Create a new root
-			HTREEITEM newRoot = dirs->insert(NULL, new DirItemInfo(rootStr.substr(0, i)));
+			HTREEITEM newRoot = dirs->insert(NULL, new DirItemInfo(rootStr.substr(0, i)), true);
 
 			parent = addDirectory(rootStr, false, newRoot);
 
@@ -519,8 +519,6 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 		dcassert(Util::strnicmp(getDir(parent), dir, i) == 0);
 	}
 
-	HTREEITEM firstParent = parent;
-
 	while( i < dir.length() ) {
 		while(next != NULL) {
 			if(next != fileLists) {
@@ -541,13 +539,11 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			// We didn't find it, add...
 			j = dir.find('\\', i);
 			dcassert(j != string::npos);
-			parent = dirs->insert(parent, new DirItemInfo(dir.substr(0, j+1), Text::toT(dir.substr(i, j-i))));
+			parent = dirs->insert(parent, new DirItemInfo(dir.substr(0, j+1), Text::toT(dir.substr(i, j-i))), true);
 			i = j + 1;
 		}
 	}
 
-	if(firstParent != NULL)
-		dirs->expand(firstParent);
 	return parent;
 }
 

@@ -50,8 +50,13 @@ public:
 		);
 	}
 
-	HTREEITEM insert(HTREEITEM parent, ContentType* data) {
-		TVINSERTSTRUCT item = { parent, TVI_SORT, {TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM | TVIF_TEXT} };
+	HTREEITEM insert(HTREEITEM parent, ContentType* data, bool expanded = false) {
+		TVINSERTSTRUCT item = { parent, TVI_SORT, { { TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM | TVIF_TEXT } } };
+		if(expanded) {
+			item.itemex.mask |= TVIF_STATE;
+			item.itemex.state = TVIS_EXPANDED;
+			item.itemex.stateMask = TVIS_EXPANDED;
+		}
 		item.itemex.pszText = LPSTR_TEXTCALLBACK;
 		item.itemex.iImage = I_IMAGECALLBACK;
 		item.itemex.iSelectedImage = I_IMAGECALLBACK;

@@ -10,6 +10,7 @@
 * [L#262540] Fix crash when closing a busy window (poy, arnetheduck)
 * Better header arrows for Common Controls < 6 (poy)
 * Fix keys in the "Connections" window (poy)
+* [L#289571] Fix non-responsiveness when the download queue has too many directories on Vista (poy)
 
 -- 0.708 2008-08-28 --
 * Added setting for max characters per tab (poy)
