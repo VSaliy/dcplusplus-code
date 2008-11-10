@@ -59,6 +59,9 @@ typedef CoolBar* CoolBarPtr;
 class DateTime;
 typedef DateTime* DateTimePtr;
 
+class Grid;
+typedef Grid* GridPtr;
+
 class GroupBox;
 typedef GroupBox* GroupBoxPtr;
 

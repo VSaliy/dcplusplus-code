@@ -135,6 +135,16 @@ void Canvas::ellipse( const dwt::Rectangle & rect )
 	}
 }
 
+void Canvas::getTextMetrics(TEXTMETRIC& tm) {
+	::GetTextMetrics(handle(), &tm);
+}
+
+Point Canvas::getTextExtent(const tstring& str) {
+	SIZE sz = { 0 };
+	::GetTextExtentPoint32(handle(), str.data(), str.size(), &sz);
+	return Point(sz.cx, sz.cy);
+}
+
 void Canvas::fill(int left, int top, int right, int bottom, const Brush& brush) {
 	RECT rc;
 	rc.bottom = bottom;

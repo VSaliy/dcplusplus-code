@@ -87,6 +87,7 @@ public:
 	template<typename SeedType>
 	void create(const SeedType& cs = SeedType());
 
+	virtual Point getPreferedSize();
 protected:
 	typedef Button ButtonType;
 

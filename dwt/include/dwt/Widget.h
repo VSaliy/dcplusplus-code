@@ -134,6 +134,9 @@ public:
 	  */
 	void attach( unsigned id );
 
+	// TODO Probably move somewhere else
+	virtual Point getPreferedSize();
+
 protected:
 	/** Most Widgets can override the creational parameters which sets the style and the
 	  * initial position of the Widget, those Widgets will take an object of this type to
@@ -192,6 +195,7 @@ protected:
 
 	/// Convert back from LPARAM to a Widget*
 	static Widget* fromLParam(LPARAM lParam);
+
 private:
 	friend class Application;
 	template<typename T> friend T hwnd_cast(HWND hwnd);

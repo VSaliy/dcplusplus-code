@@ -40,6 +40,8 @@
 
 #include "../Message.h"
 #include "../Point.h"
+#include "../tstring.h"
+
 #include <vector>
 #include <shellapi.h>
 

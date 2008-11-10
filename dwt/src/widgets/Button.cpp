@@ -30,6 +30,7 @@
 */
 
 #include <dwt/widgets/Button.h>
+#include <dwt/CanvasClasses.h>
 
 namespace dwt {
 
@@ -38,5 +39,19 @@ Button::Seed::Seed(const tstring& caption, DWORD style) :
 	font(new Font(DefaultGuiFont))
 {
 }
+
+Point Button::getPreferedSize() {
+	// TODO There must be a better way...
+	UpdateCanvas c(this);
+	c.selectFont(getFont());
+	TEXTMETRIC tm = { 0 };
+	c.getTextMetrics(tm);
+
+	Point ret = c.getTextExtent(getText());
+	ret.y = tm.tmHeight + 8;
+	ret.x += 8;
+	return ret;
+}
+
 
 }

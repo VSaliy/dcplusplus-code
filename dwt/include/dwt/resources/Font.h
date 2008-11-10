@@ -131,6 +131,7 @@ public:
 	Font( HFONT font, bool owner ) : ResourceType( font, owner ) {
 	}
 
+
 private:
 	friend class Handle<GdiPolicy<HFONT> >;
 	typedef Handle<GdiPolicy<HFONT> > ResourceType;

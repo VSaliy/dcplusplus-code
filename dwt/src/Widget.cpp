@@ -181,4 +181,8 @@ bool Widget::tryFire( const MSG & msg, LRESULT & retVal ) {
 	return handled;
 }
 
+Point Widget::getPreferedSize() {
+	return Point(0, 0);
+}
+
 }
