@@ -85,6 +85,8 @@ public:
 	typedef dwt::CoolBarPtr CoolBarPtr;
 	typedef dwt::DateTime DateTime;
 	typedef dwt::DateTimePtr DateTimePtr;
+	typedef dwt::Grid Grid;
+	typedef dwt::GridPtr GridPtr;
 	typedef dwt::GroupBox GroupBox;
 	typedef dwt::GroupBoxPtr GroupBoxPtr;
 	typedef dwt::Label Label;

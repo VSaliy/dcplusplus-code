@@ -501,6 +501,9 @@ public:
 	  */
 	unsigned setTextAlign( unsigned fMode );
 
+	void getTextMetrics(TEXTMETRIC& tm);
+
+	Point getTextExtent(const tstring& str);
 protected:
 	/// Not meant for directly instantiation
 	/** Class basically serves as an "abstract" base class for PaintCanvas and
