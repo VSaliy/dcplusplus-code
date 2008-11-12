@@ -127,7 +127,7 @@ if env['mode'] == 'release' or env['i18n']:
 	else:
 		# create the translation template
 		def gen_pot(target, source, env):
-			cmd = 'po4a-gettextize -f xhtml -M iso-8859-1 -p "' + str(target[0]) + '"'
+			cmd = 'po4a-gettextize -f xhtml -o "untranslated=<untranslated> <untranslated><li>" -M iso-8859-1 -p "' + str(target[0]) + '"'
 			for node in source:
 				cmd += ' -m "' + str(node) + '"'
 			return env.Execute(cmd)
