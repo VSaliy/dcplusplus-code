@@ -1,6 +1,7 @@
 # this script generates an HTML Help compatible table of contents
 
 def gen_toc(target, source):
+	import codecs
 	from HTMLParser import HTMLParser
 	from htmlentitydefs import entitydefs
 	import re
@@ -55,7 +56,7 @@ def gen_toc(target, source):
 			elif tag == "ul":
 				f_target.write("\r\n</ul>")
 
-	f_target = open(target, "w")
+	f_target = codecs.open(target, "w", "latin_1", "xmlcharrefreplace")
 	f_target.write("""<html>
 <head>
 </head>
@@ -66,7 +67,7 @@ def gen_toc(target, source):
 """)
 
 	parser = Parser()
-	f_source = open(source, "r")
+	f_source = codecs.open(source, "r", "utf_8")
 	parser.feed(f_source.read())
 	f_source.close()
 	parser.close()
