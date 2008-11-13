@@ -87,7 +87,7 @@ def gen_CHM(target, source, env):
 		for node in source:
 			filename = os.path.basename(node.path)
 			if filename[-5:] == '.html' and filename != 'changelog.html' and filename != 'compile.html' and filename != 'fdl.html':
-				env.Execute('po4a-translate -f xhtml -M iso-8859-1 -L iso-8859-1 -p "' + str(po_node) + '" -k 0 -m "' + str(node) + '" -l "' + build_path + filename + '"')
+				env.Execute('po4a-translate -f xhtml -M utf-8 -L utf-8 -p "' + str(po_node) + '" -k 0 -m "' + str(node) + '" -l "' + build_path + filename + '"')
 			else:
 				env.Execute(Copy(build_dir, node))
 
@@ -127,7 +127,7 @@ if env['mode'] == 'release' or env['i18n']:
 	else:
 		# create the translation template
 		def gen_pot(target, source, env):
-			cmd = 'po4a-gettextize -f xhtml -o "untranslated=<untranslated> <untranslated><li>" -M iso-8859-1 -p "' + str(target[0]) + '"'
+			cmd = 'po4a-gettextize -f xhtml -o "untranslated=<untranslated> <untranslated><li>" -M utf-8 -p "' + str(target[0]) + '"'
 			for node in source:
 				cmd += ' -m "' + str(node) + '"'
 			return env.Execute(cmd)

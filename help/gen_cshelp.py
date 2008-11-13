@@ -3,6 +3,7 @@
 # are then generated and used by the DC++ context-sensitive help system.
 
 def gen_cshelp(target, source, env):
+	import codecs
 	from HTMLParser import HTMLParser
 	from htmlentitydefs import entitydefs
 	import re
@@ -58,7 +59,7 @@ def gen_cshelp(target, source, env):
 	# parse all source files
 	for node in source:
 		parser = Parser()
-		f = open(str(node), "r")
+		f = codecs.open(str(node), "r", "utf_8")
 		parser.feed(f.read())
 		f.close()
 		parser.close()
@@ -75,7 +76,7 @@ def gen_cshelp(target, source, env):
 """)
 	number = 11000
 	if len(target) >= 2:
-		f_txt = open(str(target[1]), "w")
+		f_txt = codecs.open(str(target[1]), "w", "latin_1", "replace")
 	for entry in output:
 		f_h.write("#define " + entry[0] + " " + str(number) + "\r\n")
 		number += 1
