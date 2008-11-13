@@ -500,8 +500,8 @@ private:
 	SortFunction fun;
 
 	static bool ComCtl6; // Using Common Controls version >= 6.00
-	BitmapPtr upArrow;
-	BitmapPtr downArrow;
+	static BitmapPtr upArrow;
+	static BitmapPtr downArrow;
 
 	static int CALLBACK compareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 	static int CALLBACK compareFuncCallback( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );

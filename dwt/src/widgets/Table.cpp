@@ -42,6 +42,8 @@
 namespace dwt {
 
 bool Table::ComCtl6 = false;
+BitmapPtr Table::upArrow = 0;
+BitmapPtr Table::downArrow = 0;
 
 Table::Seed::Seed() :
 	BaseType::Seed(WC_LISTVIEW, WS_CHILD | WS_TABSTOP | LVS_REPORT),
@@ -440,7 +442,7 @@ int Table::xoffFromColumn( int column, int & logicalColumn )
 }
 
 void Table::createArrows() {
-	if(ComCtl6)
+	if(ComCtl6 || upArrow || downArrow)
 		return;
 
 	const Point size(11, 6);
