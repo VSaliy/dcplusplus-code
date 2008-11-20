@@ -51,7 +51,7 @@ CHM_sources.append('logo.jpg')
 CHM_sources.append('office11.css')
 CHM_sources.append('resource.h')
 CHM_sources.append('style.css')
-CHM_sources.append('#/res/users.bmp')
+CHM_sources.append(Glob('#/res/*.bmp'))
 CHM_sources.append(Glob('#/res/*.ico'))
 
 # additional dependencies (that have to be built before the help file)
