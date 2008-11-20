@@ -13,6 +13,5 @@ natupnp.h
 ./help/changelog.html
 ./help/compile.html
 ./help/cshelp.h
-./help/users.bmp
 ./.pydevproject
 ./doc
