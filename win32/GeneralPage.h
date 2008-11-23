@@ -27,6 +27,7 @@ public:
 	GeneralPage(dwt::Widget* parent);
 	virtual ~GeneralPage();
 
+	virtual void layout();
 	virtual void write();
 
 private:
@@ -34,6 +35,7 @@ private:
 	static TextItem texts[];
 
 	TextBoxPtr nick;
+	GridPtr grid;
 
 	void handleNickTextChanged();
 };

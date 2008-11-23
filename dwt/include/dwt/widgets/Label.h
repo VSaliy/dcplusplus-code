@@ -108,6 +108,7 @@ public:
 	  */
 	void setBitmap( const BitmapPtr& bitmap );
 
+	virtual Point getPreferedSize();
 protected:
 	// Constructor Taking pointer to parent
 	explicit Label( dwt::Widget * parent );
@@ -145,6 +146,7 @@ inline void Label::setBitmap( const BitmapPtr& bitmap ) {
 	addRemoveStyle( SS_BITMAP, true );
 	sendMessage(STM_SETIMAGE, ( WPARAM ) IMAGE_BITMAP, reinterpret_cast<LPARAM>(bitmap->handle()));
 }
+
 
 }
 

@@ -78,7 +78,7 @@ PropPage::TextItem NetworkPage::texts[] = {
 };
 
 PropPage::Item NetworkPage::items[] = {
-	{ IDC_EXTERNAL_IP,	SettingsManager::EXTERNAL_IP,	PropPage::T_STR },
+/*	{ IDC_EXTERNAL_IP,	SettingsManager::EXTERNAL_IP,	PropPage::T_STR },
 	{ IDC_PORT_TCP,		SettingsManager::TCP_PORT,		PropPage::T_INT },
 	{ IDC_PORT_UDP,		SettingsManager::UDP_PORT,		PropPage::T_INT },
 	{ IDC_PORT_TLS,		SettingsManager::TLS_PORT,		PropPage::T_INT },
@@ -87,7 +87,7 @@ PropPage::Item NetworkPage::items[] = {
 	{ IDC_SOCKS_PORT,	SettingsManager::SOCKS_PORT,	PropPage::T_INT },
 	{ IDC_SOCKS_USER,	SettingsManager::SOCKS_USER,	PropPage::T_STR },
 	{ IDC_SOCKS_PASSWORD, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR },
-	{ IDC_SOCKS_RESOLVE, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL },
+	{ IDC_SOCKS_RESOLVE, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL }, */
 	{ 0, 0, PropPage::T_END }
 };
 

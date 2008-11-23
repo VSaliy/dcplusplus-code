@@ -112,26 +112,24 @@ std::vector<size_t> Grid::calcSizes(const GridInfoList& x, const GridInfoList& y
 }
 
 void Grid::layout() {
-	// TODO find better way of keeping track of children
+	std::vector<HWND> children;
 
-	typedef std::vector<std::vector<size_t> > SizeList;
+	// TODO find better way of keeping track of children
+	for(HWND wnd = ::FindWindowEx(handle(), NULL, NULL, NULL); wnd; wnd = ::FindWindowEx(handle(), wnd, NULL, NULL)) {
+		WidgetInfo* wi = getWidgetInfo(wnd);
+		if(!wi)
+			continue;
+		children.push_back(wnd);
+	}
 
 	Point size = getSize();
 
 	std::vector<size_t> rowSize = calcSizes(rows, columns, size.y, true);
 	std::vector<size_t> colSize = calcSizes(columns, rows, size.x, false);
 
-	// TODO adjust for current size
-
-	std::vector<HWND> children;
-
-	for(HWND wnd = ::FindWindowEx(handle(), NULL, NULL, NULL); wnd; wnd = ::FindWindowEx(handle(), wnd, NULL, NULL)) {
-		children.push_back(wnd);
-	}
-
 	for(std::vector<HWND>::iterator i = children.begin(); i != children.end(); ++i) {
 		WidgetInfo* wi = getWidgetInfo(*i);
-		if(!wi)
+		if(!wi->w)
 			continue;
 
 		size_t r = wi->row;
@@ -149,7 +147,7 @@ void Grid::layout() {
 		size_t w = std::accumulate(colSize.begin() + c, colSize.begin() + c + cs, 0);
 		size_t h = std::accumulate(rowSize.begin() + r, rowSize.begin() + r + rs, 0);
 
-		::MoveWindow(*i, x, y, w, h, FALSE);
+		::MoveWindow(wi->w->handle(), x, y, w, h, TRUE);
 	}
 }
 

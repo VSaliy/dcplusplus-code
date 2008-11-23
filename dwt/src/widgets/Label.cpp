@@ -30,6 +30,7 @@
 */
 
 #include <dwt/widgets/Label.h>
+#include <dwt/CanvasClasses.h>
 
 namespace dwt {
 
@@ -45,5 +46,20 @@ void Label::create( const Seed & cs ) {
 	if(cs.font)
 		setFont( cs.font );
 }
+
+Point Label::getPreferedSize() {
+	// Taken from http://support.microsoft.com/kb/124315
+	UpdateCanvas c(this);
+
+	c.selectFont(getFont());
+	TEXTMETRIC tmNew = { 0 };
+	c.getTextMetrics(tmNew);
+
+	Point ret = c.getTextExtent(getText());
+	ret.y = tmNew.tmHeight;
+
+	return ret;
+}
+
 
 }
