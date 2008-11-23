@@ -21,8 +21,11 @@
 #include "resource.h"
 
 #include "GeneralPage.h"
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
 
 #include <dcpp/SettingsManager.h>
+
 #include "WinUtil.h"
 
 static const WinUtil::HelpItem helpItems[] = {
@@ -50,10 +53,10 @@ PropPage::TextItem GeneralPage::texts[] = {
 };
 
 PropPage::Item GeneralPage::items[] = {
-	{ IDC_NICK,			SettingsManager::NICK,			PropPage::T_STR },
-	{ IDC_EMAIL,		SettingsManager::EMAIL,			PropPage::T_STR },
-	{ IDC_DESCRIPTION,	SettingsManager::DESCRIPTION,	PropPage::T_STR },
-	{ IDC_CONNECTION,	SettingsManager::UPLOAD_SPEED,	PropPage::T_STR },
+	{ 0,			SettingsManager::NICK,			PropPage::T_STR },
+	{ 0,		SettingsManager::EMAIL,			PropPage::T_STR },
+	{ 0,	SettingsManager::DESCRIPTION,	PropPage::T_STR },
+	{ 0,	SettingsManager::UPLOAD_SPEED,	PropPage::T_STR },
 	{ 0, 0, PropPage::T_END }
 };
 
@@ -61,11 +64,30 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 	createDialog(IDD_GENERALPAGE);
 	setHelpId(IDH_GENERALPAGE);
 
+#ifdef PORT_ME
 	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
-	PropPage::read(handle(), items);
+#endif
+	GroupBoxPtr group = addChild(GroupBox::Seed(T_("Personal Information")));
 
-	ComboBoxPtr connections = attachChild<ComboBox>(IDC_CONNECTION);
+	grid = group->addChild(Grid::Seed(4, 2));
+	grid->column(1).mode = dwt::GridInfo::FILL;
+
+	grid->addChild(Label::Seed(T_("Nick")));
+	items[0].widget = nick = grid->addChild(TextBox::Seed());
+
+	grid->addChild(Label::Seed(T_("E-Mail")));
+	items[1].widget = grid->addChild(TextBox::Seed());
+
+	grid->addChild(Label::Seed(T_("Description")));
+	TextBoxPtr description = grid->addChild(TextBox::Seed());
+	description->setTextLimit(35);
+
+	items[2].widget = description;
+	grid->addChild(Label::Seed(T_("Line speed (upload)")));
+
+	ComboBoxPtr connections = grid->addChild(ComboBox::Seed());
+	items[3].widget = connections;
 
 	int selected = 0, j = 0;
 	for(StringIter i = SettingsManager::connectionSpeeds.begin(); i != SettingsManager::connectionSpeeds.end(); ++i, ++j) {
@@ -75,18 +97,27 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 		}
 	}
 
-	connections->setSelected(selected);
+	PropPage::read(handle(), items);
 
-	nick = attachChild<TextBox>(IDC_NICK);
 	nick->setTextLimit(35);
 	nick->onUpdated(std::tr1::bind(&GeneralPage::handleNickTextChanged, this));
 
-	attachChild<TextBox>(IDC_EMAIL);
+	connections->setSelected(selected);
 
-	attachChild<TextBox>(IDC_DESCRIPTION)->setTextLimit(35);
+	//attachChild<TextBox>(IDC_EMAIL);
+	group->setBounds(dwt::Point(0, 0), getClientAreaSize());
+	dwt::Point groupSize = group->getClientAreaSize();
+	groupSize.x -= 40;
+	groupSize.y -= 40;
+	grid->setBounds(dwt::Point(20, 20), groupSize);
+	grid->layout();
 }
 
 GeneralPage::~GeneralPage() {
+}
+
+void GeneralPage::layout() {
+	grid->layout();
 }
 
 void GeneralPage::write() {

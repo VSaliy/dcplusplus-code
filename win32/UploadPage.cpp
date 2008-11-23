@@ -66,9 +66,9 @@ PropPage::TextItem UploadPage::texts[] = {
 };
 
 PropPage::Item UploadPage::items[] = {
-	{ IDC_SLOTS, SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN },
+/*	{ IDC_SLOTS, SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN },
 	{ IDC_SHAREHIDDEN, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL },
-	{ IDC_MIN_UPLOAD_SPEED, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN },
+	{ IDC_MIN_UPLOAD_SPEED, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN }, */
 	{ 0, 0, PropPage::T_END }
 };
 

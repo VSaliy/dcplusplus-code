@@ -56,4 +56,25 @@ tstring ComboBox::getValue( int index ) {
 	return retVal;
 }
 
+Point ComboBox::getPreferedSize() {
+
+	// Taken from http://support.microsoft.com/kb/124315
+	UpdateCanvas c(this);
+
+	c.selectFont(FontPtr(new Font(SystemFont)));
+	TEXTMETRIC tmSys = { 0 };
+	c.getTextMetrics(tmSys);
+
+	c.selectFont(getFont());
+	TEXTMETRIC tmNew = { 0 };
+	c.getTextMetrics(tmNew);
+
+	// TODO Use biggest item
+	Point ret = c.getTextExtent(_T("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+	ret.y = tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2) + (GetSystemMetrics(SM_CYEDGE) * 2);
+	ret.x += GetSystemMetrics(SM_CXEDGE) * 2;
+	printf("Prefered textbox size: %dx%d\n", ret.x, ret.y);
+	return ret;
+}
+
 }
