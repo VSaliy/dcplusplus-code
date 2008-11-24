@@ -22,12 +22,13 @@
 #include "Util.h"
 #include "File.h"
 
-#include "SettingsManager.h"
 #include "StringTokenizer.h"
 #include "SettingsManager.h"
+#include "LogManager.h"
 #include "version.h"
 #include "File.h"
 #include "SimpleXML.h"
+#include "Socket.h"
 
 #ifndef _WIN32
 #include <sys/socket.h>
@@ -420,6 +421,24 @@ bool Util::isPrivateIp(string const& ip) {
 				(haddr & 0xffff0000) == 0xc0a80000);  // 192.168.0.0/16
 	}
 	return false;
+}
+
+bool Util::resolveNmdc(string& ip) {
+	ip = Socket::resolve(ip);
+
+	// Temporary fix to avoid spamming some servers
+	if(
+		ip == "70.85.55.252" || // hublist.org
+		ip == "207.44.220.108" || // dcpp.net
+		ip == "216.34.181.97" || // hubtracker.com
+		ip == "64.19.158.42" || // dchublist.com
+		ip == "174.133.138.93" // adchublist.com
+		) {
+		LogManager::getInstance()->message("Someone is trying to use your client to spam " + ip + ", please urge hub owner to fix this");
+		return false;
+	}
+
+	return true;
 }
 
 typedef const uint8_t* ccp;

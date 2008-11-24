@@ -422,6 +422,8 @@ void NmdcHub::onLine(const string& aLine) throw() {
 			return;
 		}
 		string server = param.substr(i, j-i);
+		if(!Util::resolveNmdc(server))
+			return;
 		if(j+1 >= param.size()) {
 			return;
 		}
