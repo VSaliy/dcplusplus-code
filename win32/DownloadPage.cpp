@@ -66,11 +66,11 @@ PropPage::TextItem DownloadPage::texts[] = {
 };
 
 PropPage::Item DownloadPage::items[] = {
-	{ IDC_TEMP_DOWNLOAD_DIRECTORY, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR },
+/*	{ IDC_TEMP_DOWNLOAD_DIRECTORY, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR },
 	{ IDC_DOWNLOADDIR,	SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR },
 	{ IDC_DOWNLOADS, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN },
 	{ IDC_MAXSPEED, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN },
-	{ IDC_PROXY, SettingsManager::HTTP_PROXY, PropPage::T_STR },
+	{ IDC_PROXY, SettingsManager::HTTP_PROXY, PropPage::T_STR }, */
 	{ 0, 0, PropPage::T_END }
 };
 

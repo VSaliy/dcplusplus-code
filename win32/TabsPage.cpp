@@ -41,7 +41,7 @@ PropPage::TextItem TabsPage::texts[] = {
 };
 
 PropPage::Item TabsPage::items[] = {
-	{ IDC_MAX_TAB_CHARS, SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN },
+/*	{ IDC_MAX_TAB_CHARS, SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN }, */
 	{ 0, 0, PropPage::T_END }
 };
 

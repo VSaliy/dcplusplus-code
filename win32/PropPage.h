@@ -29,6 +29,7 @@ public:
 	PropPage(dwt::Widget* parent);
 	virtual ~PropPage();
 
+	virtual void layout() { }
 	virtual void write() { }
 
 	enum Type {
@@ -40,7 +41,7 @@ public:
 	};
 
 	struct Item {
-		WORD itemID;
+		Widget* widget;
 		int setting;
 		Type type;
 	};
