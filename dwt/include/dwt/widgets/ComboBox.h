@@ -127,6 +127,8 @@ public:
 	  */
 	void create( const Seed & cs = Seed() );
 
+	virtual Point getPreferedSize();
+
 protected:
 	ComboBox(Widget* parent);
 

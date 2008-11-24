@@ -40,25 +40,25 @@ void PropPage::read(HWND page, const Item* items) {
 		{
 		case T_STR:
 			if(!settings->isDefault(i->setting)) {
-				::SetDlgItemText(page, i->itemID,
-					Text::toT(settings->get((SettingsManager::StrSetting)i->setting)).c_str());
+				i->widget->sendMessage(WM_SETTEXT, 0, reinterpret_cast<LPARAM>(
+					Text::toT(settings->get((SettingsManager::StrSetting)i->setting)).c_str()));
 			}
 			break;
 		case T_INT:
 			if(!settings->isDefault(i->setting)) {
-				::SetDlgItemInt(page, i->itemID,
-					settings->get((SettingsManager::IntSetting)i->setting), FALSE);
+				i->widget->sendMessage(WM_SETTEXT, 0, reinterpret_cast<LPARAM>(
+					Text::toT(Util::toString(settings->get((SettingsManager::IntSetting)i->setting))).c_str()));
 			}
 			break;
 		case T_INT_WITH_SPIN:
-			::SetDlgItemInt(page, i->itemID,
-				settings->get((SettingsManager::IntSetting)i->setting), FALSE);
+			i->widget->sendMessage(WM_SETTEXT, 0, reinterpret_cast<LPARAM>(
+				Text::toT(Util::toString(settings->get((SettingsManager::IntSetting)i->setting))).c_str()));
 			break;
 		case T_BOOL:
 			if(settings->getBool((SettingsManager::IntSetting)i->setting))
-				::CheckDlgButton(page, i->itemID, BST_CHECKED);
+				i->widget->sendMessage(BM_SETCHECK, BST_CHECKED);
 			else
-				::CheckDlgButton(page, i->itemID, BST_UNCHECKED);
+				i->widget->sendMessage(BM_SETCHECK, BST_UNCHECKED);
 			break;
 		}
 	}
@@ -91,36 +91,38 @@ void PropPage::initList(TablePtr list) {
 	list->createColumns(dummy);
 }
 
+static string text(const dwt::Widget* w) {
+	size_t textLength = static_cast<size_t>(w->sendMessage(WM_GETTEXTLENGTH));
+	if (textLength == 0)
+		return string();
+	tstring retVal(textLength + 1, 0);
+	retVal.resize(w->sendMessage(WM_GETTEXT, static_cast<WPARAM>(textLength + 1), reinterpret_cast<LPARAM>(&retVal[0])));
+	return Text::fromT(retVal);
+}
+
 void PropPage::write(HWND page, const Item* items) {
 	dcassert(page && items);
 	SettingsManager* settings = SettingsManager::getInstance();
-	tstring buf;
+
 	for(const Item* i = items; i->type != T_END; i++)
 	{
 		switch(i->type)
 		{
 		case T_STR:
 			{
-				buf.resize(SETTINGS_BUF_LEN);
-				buf.resize(::GetDlgItemText(page, i->itemID, &buf[0], buf.size()));
-				settings->set((SettingsManager::StrSetting)i->setting, Text::fromT(buf));
-
+				settings->set((SettingsManager::StrSetting)i->setting, text(i->widget));
 				break;
 			}
 		case T_INT:
 		case T_INT_WITH_SPIN:
 			{
-				buf.resize(SETTINGS_BUF_LEN);
-				buf.resize(::GetDlgItemText(page, i->itemID, &buf[0], buf.size()));
-				settings->set((SettingsManager::IntSetting)i->setting, Text::fromT(buf));
+				settings->set((SettingsManager::IntSetting)i->setting, text(i->widget));
 				break;
 			}
 		case T_BOOL:
 			{
-				if(::IsDlgButtonChecked(page, i->itemID) == BST_CHECKED)
-					settings->set((SettingsManager::IntSetting)i->setting, true);
-				else
-					settings->set((SettingsManager::IntSetting)i->setting, false);
+				settings->set((SettingsManager::IntSetting)i->setting,
+					i->widget->sendMessage(BM_GETCHECK) == BST_CHECKED);
 				break;
 			}
 		}

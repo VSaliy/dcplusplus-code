@@ -36,10 +36,6 @@
 #ifndef DWT_GroupBox_h
 #define DWT_GroupBox_h
 
-#include "Button.h"
-
-namespace dwt {
-
 /// Button Control class
 /** \ingroup WidgetControls
   * \WidgetUsageInfo
@@ -48,10 +44,30 @@ namespace dwt {
   * A Group Box Widget is a Widget which can contain other Widgets, normally you would
   * add up your RadioButtons into an object of this type
   */
+#include "../aspects/AspectColor.h"
+#include "../aspects/AspectClickable.h"
+#include "../aspects/AspectContainer.h"
+#include "../aspects/AspectDblClickable.h"
+#include "../aspects/AspectKeyboard.h"
+#include "../aspects/AspectFont.h"
+#include "../aspects/AspectPainting.h"
+#include "../aspects/AspectText.h"
+#include "Control.h"
+
+namespace dwt {
+
+/** Common stuff for all buttons */
 class GroupBox :
-	public Button
+	public CommonControl,
+	public AspectColor<GroupBox>,
+	public AspectColorCtlImpl<GroupBox>,
+	public AspectContainer<GroupBox>,
+	public AspectKeyboard< GroupBox >,
+	public AspectFont< GroupBox >,
+	public AspectPainting< GroupBox >,
+	public AspectText< GroupBox >
 {
-	typedef Button BaseType;
+	typedef CommonControl BaseType;
 
 	friend class WidgetCreator< GroupBox >;
 public:
@@ -69,9 +85,16 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
+		FontPtr font;
+
 		/// Fills with default parameters
 		Seed(const tstring& caption_ = tstring());
 	};
+
+	/// Actually creates the GroupBox
+	void create( const Seed & cs = Seed() );
+
+	virtual Point getPreferedSize();
 
 protected:
 	/// Constructor Taking pointer to parent

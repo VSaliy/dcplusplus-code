@@ -34,6 +34,7 @@
 
 #include "../aspects/AspectActivate.h"
 #include "../aspects/AspectCommand.h"
+#include "../aspects/AspectContainer.h"
 #include "../aspects/AspectDragDrop.h"
 #include "../aspects/AspectEraseBackground.h"
 #include "../aspects/AspectKeyboard.h"
@@ -56,6 +57,7 @@ class Composite :
 	// Aspects
 	public AspectActivate< Composite< Policy > >,
 	public AspectCommand< Composite< Policy > >,
+	public AspectContainer<Composite<Policy> >,
 	public AspectDragDrop< Composite< Policy > >,
 	public AspectEraseBackground< Composite< Policy > >,
 	public AspectKeyboard< Composite< Policy > >,
@@ -70,53 +72,6 @@ public:
 
 	typedef ThisType* ObjectType;
 
-	// TODO Maybe move this to a separate class?
-	// This brings these classes into the namespace of classes that inherit from Composite
-	// Note; only widgets that can be created with addChild should be here
-	typedef dwt::Button Button;
-	typedef dwt::ButtonPtr ButtonPtr;
-	typedef dwt::CheckBox CheckBox;
-	typedef dwt::CheckBoxPtr CheckBoxPtr;
-	typedef dwt::ComboBox ComboBox;
-	typedef dwt::ComboBoxPtr ComboBoxPtr;
-	typedef dwt::Container Container;
-	typedef dwt::ContainerPtr ContainerPtr;
-	typedef dwt::CoolBar CoolBar;
-	typedef dwt::CoolBarPtr CoolBarPtr;
-	typedef dwt::DateTime DateTime;
-	typedef dwt::DateTimePtr DateTimePtr;
-	typedef dwt::Grid Grid;
-	typedef dwt::GridPtr GridPtr;
-	typedef dwt::GroupBox GroupBox;
-	typedef dwt::GroupBoxPtr GroupBoxPtr;
-	typedef dwt::Label Label;
-	typedef dwt::LabelPtr LabelPtr;
-	typedef dwt::Menu Menu;
-	typedef dwt::MenuPtr MenuPtr;
-	typedef dwt::ProgressBar ProgressBar;
-	typedef dwt::ProgressBarPtr ProgressBarPtr;
-	typedef dwt::RadioButton RadioButton;
-	typedef dwt::RadioButtonPtr RadioButtonPtr;
-	typedef dwt::RichTextBox RichTextBox;
-	typedef dwt::RichTextBoxPtr RichTextBoxPtr;
-	typedef dwt::Slider Slider;
-	typedef dwt::SliderPtr SliderPtr;
-	typedef dwt::Spinner Spinner;
-	typedef dwt::SpinnerPtr SpinnerPtr;
-	typedef dwt::StatusBar StatusBar;
-	typedef dwt::StatusBarPtr StatusBarPtr;
-	typedef dwt::Table Table;
-	typedef dwt::TablePtr TablePtr;
-	typedef dwt::TabView TabView;
-	typedef dwt::TabViewPtr TabViewPtr;
-	typedef dwt::TextBox TextBox;
-	typedef dwt::TextBoxPtr TextBoxPtr;
-	typedef dwt::ToolBar ToolBar;
-	typedef dwt::ToolBarPtr ToolBarPtr;
-	typedef dwt::ToolTip ToolTip;
-	typedef dwt::ToolTipPtr ToolTipPtr;
-	typedef dwt::Tree Tree;
-	typedef dwt::TreePtr TreePtr;
 
 	/// Seed class
 	/** This class contains all of the values needed to create the widget. It also
@@ -134,16 +89,11 @@ public:
 		Seed(const tstring& caption, DWORD style, DWORD exStyle);
 	};
 
-	template<typename SeedType>
-	typename SeedType::WidgetType::ObjectType addChild(const SeedType& seed) {
-		return WidgetCreator<typename SeedType::WidgetType>::create(this, seed);
-	}
-
 	void create(const Seed& cs);
 protected:
 	friend class WidgetCreator<Composite<Policy> >;
 
-	explicit Composite( Widget * parent ) : BaseType( parent )
+	explicit Composite(Widget* parent) : BaseType( parent )
 	{};
 
 private:

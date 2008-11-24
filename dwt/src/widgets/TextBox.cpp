@@ -30,6 +30,7 @@
 */
 
 #include <dwt/widgets/TextBox.h>
+#include <dwt/CanvasClasses.h>
 
 namespace dwt {
 
@@ -86,6 +87,25 @@ ScreenCoordinate TextBoxBase::getContextMenuPos() {
 	RECT rc;
 	::GetClientRect(this->handle(), &rc);
 	return ClientCoordinate (Point(rc.right/2, rc.bottom/2), this);
+}
+
+Point TextBoxBase::getPreferedSize() {
+
+	// Taken from http://support.microsoft.com/kb/124315
+	UpdateCanvas c(this);
+
+	c.selectFont(FontPtr(new Font(SystemFont)));
+	TEXTMETRIC tmSys = { 0 };
+	c.getTextMetrics(tmSys);
+
+	c.selectFont(getFont());
+	TEXTMETRIC tmNew = { 0 };
+	c.getTextMetrics(tmNew);
+
+	Point ret = c.getTextExtent(_T("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+	ret.y = tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2) + (GetSystemMetrics(SM_CYEDGE) * 2);
+	ret.x += GetSystemMetrics(SM_CXEDGE) * 2;
+	return ret;
 }
 
 }

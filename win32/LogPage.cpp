@@ -44,7 +44,7 @@ PropPage::TextItem LogPage::texts[] = {
 };
 
 PropPage::Item LogPage::items[] = {
-	{ IDC_LOG_DIRECTORY, SettingsManager::LOG_DIRECTORY, PropPage::T_STR },
+/*	{ IDC_LOG_DIRECTORY, SettingsManager::LOG_DIRECTORY, PropPage::T_STR },*/
 	{ 0, 0, PropPage::T_END }
 };
 

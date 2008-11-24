@@ -160,7 +160,7 @@ public:
 	/** Although this prevents user from entering more maxChars, Paste can overrun the limit.
 	  */
 	void setTextLimit( int maxChars );
-	
+
 	/// Returns the maximum number of characters that can be entered.
 	/** Note that the maxChars returned will vary by OS if left unset.
 	  */
@@ -179,6 +179,8 @@ public:
 	bool getModify();
 
 	ScreenCoordinate getContextMenuPos();
+
+	virtual Point getPreferedSize();
 
 protected:
 	// Constructor Taking pointer to parent
