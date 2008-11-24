@@ -456,6 +456,7 @@ void HubFrame::onConnected() {
 
 void HubFrame::onDisconnected() {
 	clearUserList();
+	clearTaskList();
 	setIcon(IDR_HUB_OFF);
 }
 
