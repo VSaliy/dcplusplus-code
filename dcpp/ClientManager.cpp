@@ -28,7 +28,6 @@
 #include "FavoriteManager.h"
 #include "SimpleXML.h"
 #include "UserCommand.h"
-#include "LogManager.h"
 #include "SearchResult.h"
 
 #include "AdcHub.h"
@@ -372,14 +371,8 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 				string ip, file;
 				uint16_t port = 0;
 				Util::decodeUrl(aSeeker, ip, port, file);
-				ip = Socket::resolve(ip);
-
-				// Temporary fix to avoid spamming hublist.org and dcpp.net
-				if(ip == "70.85.55.252" || ip == "207.44.220.108") {
-					LogManager::getInstance()->message("Someone is trying to use your client to spam " + ip + ", please urge hub owner to fix this");
+				if(!Util::resolveNmdc(ip))
 					return;
-				}
-
 				if(port == 0)
 					port = 412;
 				for(SearchResultList::const_iterator i = l.begin(); i != l.end(); ++i) {
