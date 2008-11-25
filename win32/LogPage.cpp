@@ -42,12 +42,12 @@ PropPage::TextItem LogPage::texts[] = {
 	{ IDC_SETTINGS_FILE_NAME, N_("Filename") },
 	{ 0, 0 }
 };
-
+/*
 PropPage::Item LogPage::items[] = {
-/*	{ IDC_LOG_DIRECTORY, SettingsManager::LOG_DIRECTORY, PropPage::T_STR },*/
+	{ IDC_LOG_DIRECTORY, SettingsManager::LOG_DIRECTORY, PropPage::T_STR },
 	{ 0, 0, PropPage::T_END }
 };
-
+*/
 PropPage::ListItem LogPage::listItems[] = {
 	{ SettingsManager::LOG_MAIN_CHAT, N_("Log main chat"), IDH_SETTINGS_LOG_MAIN_CHAT },
 	{ SettingsManager::LOG_PRIVATE_CHAT, N_("Log private chat"), IDH_SETTINGS_LOG_PRIVATE_CHAT },
@@ -65,7 +65,7 @@ LogPage::LogPage(dwt::Widget* parent) : PropPage(parent), oldSelection(-1) {
 
 	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
-	PropPage::read(handle(), items);
+	PropPage::read(items);
 
 	attachChild(options, IDC_LOG_OPTIONS);
 	PropPage::read(listItems, options);
@@ -94,7 +94,7 @@ LogPage::~LogPage() {
 }
 
 void LogPage::write() {
-	PropPage::write(handle(), items);
+	PropPage::write(items);
 	PropPage::write(listItems, options);
 
 	const string& s = SETTING(LOG_DIRECTORY);

@@ -47,12 +47,13 @@ PropPage::TextItem AppearancePage::texts[] = {
 	{ 0, 0 }
 };
 
+/*
 PropPage::Item AppearancePage::items[] = {
-/*	{ IDC_DEFAULT_AWAY_MESSAGE, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR },
-	{ IDC_TIME_STAMPS_FORMAT, SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR },*/
+	{ IDC_DEFAULT_AWAY_MESSAGE, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR },
+	{ IDC_TIME_STAMPS_FORMAT, SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR },
 	{ 0, 0, PropPage::T_END }
 };
-
+*/
 PropPage::ListItem AppearancePage::listItems[] = {
 	{ SettingsManager::ALT_SORT_ORDER, N_("Sort all downloads first"), IDH_SETTINGS_APPEARANCE_ALT_SORT_ORDER },
 	{ SettingsManager::FILTER_MESSAGES, N_("Filter kick messages"), IDH_SETTINGS_APPEARANCE_FILTER_MESSAGES },
@@ -75,7 +76,7 @@ AppearancePage::AppearancePage(dwt::Widget* parent) : PropPage(parent), language
 
 	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
-	PropPage::read(handle(), items);
+	PropPage::read(items);
 
 	attachChild(options, IDC_APPEARANCE_BOOLEANS);
 	PropPage::read(listItems, options);
@@ -123,7 +124,7 @@ AppearancePage::~AppearancePage() {
 
 void AppearancePage::write()
 {
-	PropPage::write(handle(), items);
+	PropPage::write(items);
 	PropPage::write(listItems, options);
 
 	tstring lang = languages->getText();

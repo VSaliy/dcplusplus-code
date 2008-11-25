@@ -29,10 +29,7 @@ public:
 	UCPage(dwt::Widget* parent);
 	virtual ~UCPage();
 
-	virtual void write();
-
 private:
-	static Item items[];
 	static TextItem texts[];
 
 	TablePtr commands;

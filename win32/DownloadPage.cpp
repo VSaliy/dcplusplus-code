@@ -64,23 +64,23 @@ PropPage::TextItem DownloadPage::texts[] = {
 	{ IDC_SETTINGS_PUBLIC_HUB_LIST_HTTP_PROXY, N_("HTTP Proxy (for hublist only)") },
 	{ 0, 0 }
 };
-
+/*
 PropPage::Item DownloadPage::items[] = {
-/*	{ IDC_TEMP_DOWNLOAD_DIRECTORY, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR },
+	{ IDC_TEMP_DOWNLOAD_DIRECTORY, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR },
 	{ IDC_DOWNLOADDIR,	SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR },
 	{ IDC_DOWNLOADS, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN },
 	{ IDC_MAXSPEED, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN },
-	{ IDC_PROXY, SettingsManager::HTTP_PROXY, PropPage::T_STR }, */
+	{ IDC_PROXY, SettingsManager::HTTP_PROXY, PropPage::T_STR },
 	{ 0, 0, PropPage::T_END }
 };
-
+*/
 DownloadPage::DownloadPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_DOWNLOADPAGE);
 	setHelpId(IDH_DOWNLOADPAGE);
 
 	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
-	PropPage::read(handle(), items);
+	PropPage::read(items);
 
 	attachChild<Button>(IDC_BROWSEDIR)->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this));
 
@@ -104,10 +104,8 @@ DownloadPage::DownloadPage(dwt::Widget* parent) : PropPage(parent) {
 DownloadPage::~DownloadPage() {
 }
 
-void DownloadPage::write()
-{
-
-	PropPage::write(handle(), items);
+void DownloadPage::write() {
+	PropPage::write(items);
 
 	const string& s = SETTING(DOWNLOAD_DIRECTORY);
 	if(s.length() > 0 && s[s.length() - 1] != '\\') {

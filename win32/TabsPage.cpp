@@ -40,11 +40,12 @@ PropPage::TextItem TabsPage::texts[] = {
 	{ 0, 0 }
 };
 
+/*
 PropPage::Item TabsPage::items[] = {
-/*	{ IDC_MAX_TAB_CHARS, SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN }, */
+	{ IDC_MAX_TAB_CHARS, SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN },
 	{ 0, 0, PropPage::T_END }
 };
-
+*/
 PropPage::ListItem TabsPage::listItems[] = {
 	{ SettingsManager::BOLD_HUB, N_("Hub"), IDH_SETTINGS_TABS_BOLD_HUB },
 	{ SettingsManager::BOLD_PM, N_("Private message"), IDH_SETTINGS_TABS_BOLD_PM },
@@ -64,7 +65,7 @@ TabsPage::TabsPage(dwt::Widget* parent) : PropPage(parent) {
 
 	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
-	PropPage::read(handle(), items);
+	PropPage::read(items);
 
 	attachChild(options, IDC_BOLD_BOOLEANS);
 	PropPage::read(listItems, options);
@@ -76,6 +77,6 @@ TabsPage::~TabsPage() {
 }
 
 void TabsPage::write() {
-	PropPage::write(handle(), items);
+	PropPage::write(items);
 	PropPage::write(listItems, options);
 }

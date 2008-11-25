@@ -31,10 +31,9 @@ PropPage::PropPage(dwt::Widget* parent) : WidgetFactory<dwt::ModelessDialog>(par
 PropPage::~PropPage() {
 }
 
-void PropPage::read(HWND page, const Item* items) {
-	dcassert(page && items);
+void PropPage::read(const ItemList& items) {
 	SettingsManager* settings = SettingsManager::getInstance();
-	for(const Item* i = items; i->type != T_END; i++)
+	for(ItemList::const_iterator i = items.begin(); i != items.begin(); ++i)
 	{
 		switch(i->type)
 		{
@@ -100,12 +99,10 @@ static string text(const dwt::Widget* w) {
 	return Text::fromT(retVal);
 }
 
-void PropPage::write(HWND page, const Item* items) {
-	dcassert(page && items);
+void PropPage::write(const ItemList& items) {
 	SettingsManager* settings = SettingsManager::getInstance();
 
-	for(const Item* i = items; i->type != T_END; i++)
-	{
+	for(ItemList::const_iterator i = items.begin(); i != items.end(); ++i) {
 		switch(i->type)
 		{
 		case T_STR:

@@ -32,7 +32,7 @@ public:
 	virtual int getHelpId() { return IDD_UPLOADPAGE; }
 
 private:
-	static Item items[];
+	ItemList items;
 	static TextItem texts[];
 
 	TablePtr directories;
