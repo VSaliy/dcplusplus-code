@@ -48,14 +48,14 @@ PropPage::TextItem CertificatesPage::texts[] = {
 	{ IDC_CERTS_EXPERIMENTAL, N_("Experimental feature, don't consider DC++ secure in any way") },
 	{ 0, 0 }
 };
-
+/*
 PropPage::Item CertificatesPage::items[] = {
-/*	{ IDC_TLS_CERTIFICATE_FILE, SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR },
+	{ IDC_TLS_CERTIFICATE_FILE, SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR },
 	{ IDC_TLS_PRIVATE_KEY_FILE, SettingsManager::TLS_PRIVATE_KEY_FILE, PropPage::T_STR },
-	{ IDC_TLS_TRUSTED_CERTIFICATES_PATH, SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR }, */
+	{ IDC_TLS_TRUSTED_CERTIFICATES_PATH, SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR },
 	{ 0, 0, PropPage::T_END }
 };
-
+*/
 PropPage::ListItem CertificatesPage::listItems[] = {
 	{ SettingsManager::USE_TLS, N_("Use TLS when remote client supports it"), IDH_SETTINGS_CERTIFICATES_USE_TLS },
 	{ SettingsManager::ALLOW_UNTRUSTED_HUBS, N_("Allow TLS connections to hubs without trusted certificate"), IDH_SETTINGS_CERTIFICATES_ALLOW_UNTRUSTED_HUBS },
@@ -69,7 +69,7 @@ CertificatesPage::CertificatesPage(dwt::Widget* parent) : PropPage(parent) {
 
 	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
-	PropPage::read(handle(), items);
+	PropPage::read(items);
 
 	privateKeyFile = attachChild<TextBox>(IDC_TLS_PRIVATE_KEY_FILE);
 	attachChild<Button>(IDC_BROWSE_PRIVATE_KEY)->onClicked(std::tr1::bind(&CertificatesPage::handleBrowsePrivateKeyClicked, this));
@@ -90,7 +90,7 @@ CertificatesPage::~CertificatesPage() {
 }
 
 void CertificatesPage::write() {
-	PropPage::write(handle(), items);
+	PropPage::write(items);
 	PropPage::write(listItems, options);
 }
 

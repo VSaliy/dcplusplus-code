@@ -65,20 +65,21 @@ PropPage::TextItem UploadPage::texts[] = {
 	{ 0, 0 }
 };
 
+/*
 PropPage::Item UploadPage::items[] = {
-/*	{ IDC_SLOTS, SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN },
+	{ IDC_SLOTS, SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN },
 	{ IDC_SHAREHIDDEN, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL },
-	{ IDC_MIN_UPLOAD_SPEED, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN }, */
+	{ IDC_MIN_UPLOAD_SPEED, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN },
 	{ 0, 0, PropPage::T_END }
 };
-
+*/
 UploadPage::UploadPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_UPLOADPAGE);
 	setHelpId(IDH_UPLOADPAGE);
 
 	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
-	PropPage::read(handle(), items);
+	PropPage::read(items);
 
 	attachChild(directories, IDC_DIRECTORIES);
 	directories->setTableStyle(LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT);
@@ -138,7 +139,7 @@ UploadPage::~UploadPage() {
 
 void UploadPage::write()
 {
-	PropPage::write(handle(), items);
+	PropPage::write(items);
 
 	if(SETTING(SLOTS) < 1)
 		SettingsManager::getInstance()->set(SettingsManager::SLOTS, 1);

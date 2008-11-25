@@ -86,8 +86,9 @@ PropPage::TextItem QueuePage::texts[] = {
 	{ 0, 0 }
 };
 
+/*
 PropPage::Item QueuePage::items[] = {
-/*	{ IDC_PRIO_HIGHEST_SIZE, SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT },
+	{ IDC_PRIO_HIGHEST_SIZE, SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT },
 	{ IDC_PRIO_HIGH_SIZE, SettingsManager::PRIO_HIGH_SIZE, PropPage::T_INT },
 	{ IDC_PRIO_NORMAL_SIZE, SettingsManager::PRIO_NORMAL_SIZE, PropPage::T_INT },
 	{ IDC_PRIO_LOW_SIZE, SettingsManager::PRIO_LOW_SIZE, PropPage::T_INT },
@@ -96,10 +97,10 @@ PropPage::Item QueuePage::items[] = {
 	{ IDC_AUTODROP_ELAPSED, SettingsManager::AUTODROP_ELAPSED, PropPage::T_INT },
 	{ IDC_AUTODROP_INACTIVITY, SettingsManager::AUTODROP_INACTIVITY, PropPage::T_INT },
 	{ IDC_AUTODROP_MINSOURCES, SettingsManager::AUTODROP_MINSOURCES, PropPage::T_INT },
-	{ IDC_AUTODROP_FILESIZE, SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT },*/
+	{ IDC_AUTODROP_FILESIZE, SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT },
 	{ 0, 0, PropPage::T_END }
 };
-
+*/
 PropPage::ListItem QueuePage::optionItems[] = {
 	{ SettingsManager::PRIO_LOWEST, N_("Set lowest prio for newly added files larger than Low prio size"), IDH_SETTINGS_QUEUE_PRIO_LOWEST },
 	{ SettingsManager::AUTODROP_ALL, N_("Autodrop slow sources for all queue items (except filelists)"), IDH_SETTINGS_QUEUE_AUTODROP_ALL },
@@ -119,7 +120,7 @@ QueuePage::QueuePage(dwt::Widget* parent) : PropPage(parent) {
 
 	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
-	PropPage::read(handle(), items);
+	PropPage::read(items);
 
 	attachChild(otherOptions, IDC_OTHER_QUEUE_OPTIONS);
 	PropPage::read(optionItems, otherOptions);
@@ -140,7 +141,7 @@ QueuePage::~QueuePage() {
 }
 
 void QueuePage::write() {
-	PropPage::write(handle(), items);
+	PropPage::write(items);
 	PropPage::write(optionItems, otherOptions);
 
 	SettingsManager* settings = SettingsManager::getInstance();

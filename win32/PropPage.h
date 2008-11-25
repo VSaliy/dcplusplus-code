@@ -41,10 +41,14 @@ public:
 	};
 
 	struct Item {
+		Item() : widget(0), setting(0), type(T_STR) { }
+		Item(Widget* w, int s, Type t) : widget(w), setting(s), type(t) { }
 		Widget* widget;
 		int setting;
 		Type type;
 	};
+
+	typedef std::vector<Item> ItemList;
 
 	struct ListItem {
 		int setting;
@@ -58,10 +62,10 @@ public:
 	};
 
 protected:
-	void read(HWND page, const Item* items);
+	void read(const ItemList& items);
 	void read(const ListItem* listItems, TablePtr list);
 	void initList(TablePtr list);
-	void write(HWND page, const Item* items);
+	void write(const ItemList& items);
 	void write(const ListItem* listItems, TablePtr list);
 	void translate(HWND page, TextItem* items);
 

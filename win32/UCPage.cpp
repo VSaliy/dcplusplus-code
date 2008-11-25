@@ -47,17 +47,12 @@ PropPage::TextItem UCPage::texts[] = {
 	{ 0, 0 }
 };
 
-PropPage::Item UCPage::items[] = {
-	{ 0, 0, PropPage::T_END }
-};
-
 UCPage::UCPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_UCPAGE);
 	setHelpId(IDH_UCPAGE);
 
 	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
-	PropPage::read(handle(), items);
 
 	attachChild(commands, IDC_MENU_ITEMS);
 	commands->setTableStyle(LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT);
@@ -93,10 +88,6 @@ UCPage::UCPage(dwt::Widget* parent) : PropPage(parent) {
 }
 
 UCPage::~UCPage() {
-}
-
-void UCPage::write() {
-	PropPage::write(handle(), items);
 }
 
 void UCPage::handleDoubleClick() {

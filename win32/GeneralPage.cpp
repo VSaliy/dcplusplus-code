@@ -42,16 +42,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ 0, 0 }
 };
 
-PropPage::TextItem GeneralPage::texts[] = {
-	{ IDC_SETTINGS_PERSONAL_INFORMATION, N_("Personal Information") },
-	{ IDC_SETTINGS_NICK, N_("Nick") },
-	{ IDC_SETTINGS_EMAIL, N_("E-Mail") },
-	{ IDC_SETTINGS_DESCRIPTION, N_("Description") },
-	{ IDC_SETTINGS_UPLOAD_LINE_SPEED, N_("Line speed (upload)") },
-	{ IDC_SETTINGS_MEBIBITS, N_("MiBits/s") },
-	{ 0, 0 }
-};
-
+/*
 PropPage::Item GeneralPage::items[] = {
 	{ 0,			SettingsManager::NICK,			PropPage::T_STR },
 	{ 0,		SettingsManager::EMAIL,			PropPage::T_STR },
@@ -59,7 +50,7 @@ PropPage::Item GeneralPage::items[] = {
 	{ 0,	SettingsManager::UPLOAD_SPEED,	PropPage::T_STR },
 	{ 0, 0, PropPage::T_END }
 };
-
+*/
 GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 	createDialog(IDD_GENERALPAGE);
 	setHelpId(IDH_GENERALPAGE);
@@ -74,20 +65,22 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 	grid->column(1).mode = dwt::GridInfo::FILL;
 
 	grid->addChild(Label::Seed(T_("Nick")));
-	items[0].widget = nick = grid->addChild(TextBox::Seed());
+
+	nick = grid->addChild(TextBox::Seed());
+	items.push_back(Item(nick, SettingsManager::NICK, PropPage::T_STR));
 
 	grid->addChild(Label::Seed(T_("E-Mail")));
-	items[1].widget = grid->addChild(TextBox::Seed());
+	items.push_back(Item(grid->addChild(TextBox::Seed()), SettingsManager::EMAIL, PropPage::T_STR));
 
 	grid->addChild(Label::Seed(T_("Description")));
 	TextBoxPtr description = grid->addChild(TextBox::Seed());
 	description->setTextLimit(35);
 
-	items[2].widget = description;
+	items.push_back(Item(description, SettingsManager::DESCRIPTION, PropPage::T_STR));
 	grid->addChild(Label::Seed(T_("Line speed (upload)")));
 
 	ComboBoxPtr connections = grid->addChild(ComboBox::Seed());
-	items[3].widget = connections;
+	items.push_back(Item(connections, SettingsManager::UPLOAD_SPEED, PropPage::T_STR));
 
 	int selected = 0, j = 0;
 	for(StringIter i = SettingsManager::connectionSpeeds.begin(); i != SettingsManager::connectionSpeeds.end(); ++i, ++j) {
@@ -97,7 +90,7 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 		}
 	}
 
-	PropPage::read(handle(), items);
+	PropPage::read(items);
 
 	nick->setTextLimit(35);
 	nick->onUpdated(std::tr1::bind(&GeneralPage::handleNickTextChanged, this));
@@ -121,7 +114,7 @@ void GeneralPage::layout() {
 }
 
 void GeneralPage::write() {
-	PropPage::write(handle(), items);
+	PropPage::write(items);
 }
 
 void GeneralPage::handleNickTextChanged() {

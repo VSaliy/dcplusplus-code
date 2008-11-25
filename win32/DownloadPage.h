@@ -30,7 +30,7 @@ public:
 	virtual void write();
 
 private:
-	static Item items[];
+	ItemList items;
 	static TextItem texts[];
 
 	void handleBrowseDir();

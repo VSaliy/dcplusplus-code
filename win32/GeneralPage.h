@@ -31,8 +31,7 @@ public:
 	virtual void write();
 
 private:
-	static Item items[];
-	static TextItem texts[];
+	ItemList items;
 
 	TextBoxPtr nick;
 	GridPtr grid;
