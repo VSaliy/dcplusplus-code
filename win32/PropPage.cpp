@@ -33,7 +33,7 @@ PropPage::~PropPage() {
 
 void PropPage::read(const ItemList& items) {
 	SettingsManager* settings = SettingsManager::getInstance();
-	for(ItemList::const_iterator i = items.begin(); i != items.begin(); ++i)
+	for(ItemList::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		switch(i->type)
 		{
@@ -103,21 +103,17 @@ void PropPage::write(const ItemList& items) {
 	SettingsManager* settings = SettingsManager::getInstance();
 
 	for(ItemList::const_iterator i = items.begin(); i != items.end(); ++i) {
-		switch(i->type)
-		{
-		case T_STR:
-			{
+		switch(i->type) {
+		case T_STR: {
 				settings->set((SettingsManager::StrSetting)i->setting, text(i->widget));
 				break;
 			}
 		case T_INT:
-		case T_INT_WITH_SPIN:
-			{
+		case T_INT_WITH_SPIN: {
 				settings->set((SettingsManager::IntSetting)i->setting, text(i->widget));
 				break;
 			}
-		case T_BOOL:
-			{
+		case T_BOOL: {
 				settings->set((SettingsManager::IntSetting)i->setting,
 					i->widget->sendMessage(BM_GETCHECK) == BST_CHECKED);
 				break;
