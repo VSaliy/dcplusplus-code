@@ -1,0 +1,233 @@
+#! /usr/bin/perl
+eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
+    if $running_under_some_shell;
+
+# po4a-gettextize -- Convert an original file to a po file
+# $Id: po4a-gettextize,v 1.37 2006/10/07 21:15:10 nekral-guest Exp $
+#
+# Copyright 2002, 2003, 2004 by Martin Quinson (mquinson#debian.org)
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of GPL (see COPYING).
+
+=head1 NAME
+
+po4a-gettextize - convert an original file (and its translation) to a po file
+
+=head1 SYNOPSIS
+
+po4a-gettextize -f E<lt>fmtE<gt> -m E<lt>master.docE<gt> [-l E<lt>XX.docE<gt>] -p E<lt>XX.poE<gt>
+
+(XX.po is the output, all others are inputs)
+
+=head1 DESCRIPTION
+
+The po4a (po for anything) project goal is to ease translations (and more
+interestingly, the maintenance of translations) using gettext tools on
+areas where they were not expected like documentation.
+
+The C<po4a-gettextize> script is in charge of converting documentation
+files to po files.  If you start a new translation, C<po4a-gettextize>
+will extract the translatable strings from the documentation file and
+write a pot file from it.
+
+If you already have a translated file, C<po4a-gettextize> will try to
+extract the translations it contains and put them in place in the written
+po file. Be warned that very few intelligence is used in this process: the
+Nth string of the translated file is supposed to be the translation of the
+Nth string in the original. If it's not the case, you're dead. That's why
+it is very important that both files share exactly the same structure.
+
+However, C<po4a-gettextize> will diagnose your death by detecting any
+desynchronisation between files, and reporting where they occur. In that
+case, you should edit manually the files to solve the reported
+disparity. Even if no error were reported, you should check carefully that the
+generated po file is correct (ie, that each msgstr is the translation of
+the associated msgid, and not the one before or after).
+
+Even if the script manages to do its job without any apparent problem, it still
+marks all extracted translations as fuzzy, to make sure that the translator
+will have a look at them, and detect any remaining problem.
+
+If the master document has non-ascii characters, the new generated po file
+will be in utf-8, in order to allow non-standard characters in a culture
+independent way. Else (if the master document is completely in ascii), the
+generated po will use the encoding of the translated input document.
+
+=head1 OPTIONS
+
+=over 4
+
+=item -f, --format
+
+Format of the documentation you want to handle. Use the --help-format
+option to see the list of available formats.
+
+=item -m, --master
+
+File containing the master document to translate. You can use this option
+multiple times if you want to gettextize multiple documents.
+
+=item -M, --master-charset
+
+Charset of the file containing the document to translate.
+
+=item -l, --localized
+
+File containing the localized (translated) document. If you provided
+multiple master files, you may wish to provide multiple localized file by
+using this option more than once.
+
+=item -L, --localized-charset
+
+Charset of the file containing the localized document.
+
+=item -p, --po
+
+File where the message catalog should be written. If not given, the message
+catalog will be written to the standard output.
+
+=item -o, --option
+
+Extra option(s) to pass to the format plugin. Specify each option in the
+'name=value' format. See the documentation of each plugin for more
+information about the valid options and their meanings.
+
+=item -h, --help
+
+Show a short help message.
+
+=item --help-format
+
+List the documentation format understood by po4a.
+
+=item -V, --version
+
+Display the version of the script and exit.
+
+=item -v, --verbose
+
+Increase the verbosity of the program.
+
+=item -d, --debug
+
+Output some debugging information.
+
+=back
+
+=head1 SEE ALSO
+
+L<po4a(7)>, L<po4a-updatepo(1)>, L<po4a-translate(1)>, L<po4a-normalize(1)>.
+
+=head1 AUTHORS
+
+ Denis Barbier <barbier@linuxfr.org>
+ Martin Quinson (mquinson#debian.org)
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2002, 2003, 2004 by SPI, inc.
+
+This program is free software; you may redistribute it and/or modify it
+under the terms of GPL (see the COPYING file).
+
+=cut
+
+use 5.006;
+use strict;
+use warnings;
+
+use Getopt::Long qw(GetOptions);
+
+use Locale::Po4a::Chooser;
+use Locale::Po4a::TransTractor;
+use Locale::Po4a::Common;
+
+use Pod::Usage qw(pod2usage);
+
+Locale::Po4a::Common::textdomain('po4a');
+
+
+sub show_version {
+    Locale::Po4a::Common::show_version("po4a-gettextize");
+    exit 0;
+}
+
+my ($pofile)=('-');
+my (@masterfile,@locfile,$help_fmt,$help,$type,$debug,$verbose,@options);
+my ($mastchar,$locchar);
+Getopt::Long::config('bundling', 'no_getopt_compat', 'no_auto_abbrev');
+GetOptions(
+	'help|h'        => \$help,
+	'help-format'   => \$help_fmt,
+
+	'master|m=s'    => \@masterfile,
+	'localized|l=s' => \@locfile,
+	'po|p=s'        => \$pofile,
+	'format|f=s'    => \$type,
+
+	'master-charset|M=s'    => \$mastchar,
+	'localized-charset|L=s' => \$locchar,
+
+	'option|o=s'    => \@options,
+
+	'verbose|v'     => \$verbose,
+	'debug|d'       => \$debug,
+	'version|V'     => \&show_version
+) or pod2usage();
+
+# Argument check
+$help && pod2usage (-verbose => 1, -exitval => 0);
+$help_fmt && Locale::Po4a::Chooser::list(0);
+pod2usage () if (scalar @ARGV > 1) || (scalar @masterfile < 1);
+
+my %options = (
+    "verbose" => $verbose,
+    "debug" => $debug);
+
+foreach (@options) {
+    if (m/^([^=]*)=(.*)$/) {
+	$options{$1}="$2";
+    } else {
+	$options{$_}=1;
+    }
+}
+# Check file existence
+foreach my $file (@masterfile, @locfile) {
+    $file eq '-' || -e $file || die wrap_msg(gettext("File %s does not exist."), $file);
+}
+
+# Declare the TransTractor parsers
+my ($mastertt,$transtt)=(Locale::Po4a::Chooser::new($type,%options),
+			 Locale::Po4a::Chooser::new($type,%options));
+
+# Parse master file forcing conversion to utf if it's not in ascii
+foreach my $file (@masterfile) {
+  $mastertt->read($file);
+}
+$mastertt->{TT}{utf_mode} = 1;
+$mastertt->{TT}{file_in_charset} = $mastchar;
+$mastertt->parse;
+
+
+unless (scalar @locfile >= 1) {
+  # Ok, outputing the pot extracted from original is enough
+  $mastertt->writepo($pofile);
+} else {
+  # We have to merge two transtractor files
+
+  foreach my $file (@locfile) {
+    $transtt->read($file);
+  }
+  # We force the conversion to utf if the master document wasn't in ascii
+  $transtt->{TT}{utf_mode} = !$mastertt->{TT}{ascii_input};
+  $transtt->{TT}{file_in_charset} = $locchar;
+  $transtt->parse;
+
+  my $mergedpo = Locale::Po4a::Po->gettextize($mastertt->getpoout(),
+                                              $transtt->getpoout());
+
+  $mergedpo->write($pofile);
+}
+
+__END__
