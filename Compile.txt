@@ -31,10 +31,7 @@ and copy the file to the include directory of your compiler (or add it to the in
 
    If you want to compile help files, make sure hhc.exe is in your PATH.
 
-   If you want to compile translated help files, install po4a from http://po4a.alioth.debian.org/.
-   Tips for installing po4a 0.34 on :
-   http://sourceforge.net/mailarchive/forum.php?thread_name=E6149C0EF2B5474A98E49569136103B3%40Zouzou&forum_name=dcplusplus-devel
-   Make sure the various po4a scripts are in your PATH.
+   If you want to compile translated help files, get Perl and make sure it is in your PATH.
 
 4) Install gettext (http://www.gnu.org/software/gettext/). The easiest way to do this is to get the
    precompiled binaries from http://www.gimp.org/~tml/gimp/win32/downloads.html, you'll need 
