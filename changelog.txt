@@ -1,3 +1,6 @@
+* Fix packaging issues with regard to the settings dialog
+* Update translations
+
 -- 0.709 2008-11-27 --
 * Fix favorite users columns (emtee)
 * [L#249159] Prevent UI freeze when selecting lots of items in list views (poy)
