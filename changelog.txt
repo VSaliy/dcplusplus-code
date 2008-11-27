@@ -1,5 +1,11 @@
-* Fix packaging issues with regard to the settings dialog
-* Update translations
+-- 0.7091 2008-11-27 --
+* Fix packaging issues with regard to the settings dialog 
+* New GUI translations for Canadian English, Gujarati and Malayalam languages
+* Update existing GUI translations 
+* Help translation system using po4a (thanks poy)
+* Partial Help tanslations for Greek, Norwegian, Brazilian Portugese, Russian,
+  French, Romanian, UK English, Polish, Hungarian, Swedish, Italian, German, 
+  Turkish, Serbian and Galician languages (thanks to the respective translators)
 
 -- 0.709 2008-11-27 --
 * Fix favorite users columns (emtee)
