@@ -115,7 +115,16 @@ EXSTYLE WS_EX_STATICEDGE
 CAPTION "General"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-
+    GROUPBOX        "Personal information",IDC_SETTINGS_PERSONAL_INFORMATION,7,7,261,80
+    RTEXT           "Nick (Required)",IDC_SETTINGS_NICK,14,20,74,8
+    EDITTEXT        IDC_NICK,94,17,164,14,ES_AUTOHSCROLL
+    RTEXT           "E-Mail",IDC_SETTINGS_EMAIL,14,37,74,8
+    EDITTEXT        IDC_EMAIL,94,34,164,14,ES_AUTOHSCROLL
+    RTEXT           "Description",IDC_SETTINGS_DESCRIPTION,14,54,74,8
+    EDITTEXT        IDC_DESCRIPTION,94,51,164,14,ES_AUTOHSCROLL
+    RTEXT           "Line speed (upload)",IDC_SETTINGS_UPLOAD_LINE_SPEED,14,70,74,8
+    COMBOBOX        IDC_CONNECTION,94,68,58,95,CBS_DROPDOWNLIST | CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "idc_settings_mebibits",IDC_SETTINGS_MEBIBITS,156,71,102,8
 END
 
 IDD_ADVANCEDPAGE DIALOGEX 100, 0, 275, 225
@@ -815,8 +824,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,7,0,9
- PRODUCTVERSION 0,7,0,9
+ FILEVERSION 0,7,0,91
+ PRODUCTVERSION 0,7,0,91
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -833,12 +842,12 @@ BEGIN
         BEGIN
             VALUE "Comments", "http://dcplusplus.sourceforge.net"
             VALUE "FileDescription", "DC++"
-            VALUE "FileVersion", "0, 7, 0, 9"
+            VALUE "FileVersion", "0, 7, 0, 91"
             VALUE "InternalName", "DC++"
             VALUE "LegalCopyright", "Copyright 2001-2008 Jacek Sieka"
             VALUE "OriginalFilename", "DCPlusPlus.exe"
             VALUE "ProductName", "DC++"
-            VALUE "ProductVersion", "0, 7, 0, 9"
+            VALUE "ProductVersion", "0, 7, 0, 91"
         END
     END
     BLOCK "VarFileInfo"
