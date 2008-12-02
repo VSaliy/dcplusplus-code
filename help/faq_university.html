@@ -6,12 +6,13 @@
 <link type="text/css" rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<h1>My University blocks DC++</h1>
+<h1>My ISP, University, company, etc.. blocks or throttles DC++. What can I do?</h1>
 <h2>Blocking and Throttling</h2>
-<p>Many Universities have policies that limit the usage of peer to peer
-applications by students and employees. Typically, these policies block
-or limit the amount of bandwidth that <acronym title="peer to peer">p2p</acronym>
-applications can use, and are enforced by employing solutions from <a
+<p>Many <acronym title="Internet Service Provider">ISP</acronym>s, Universities,
+or other organizations have policies that limit the usage of peer to peer
+applications for their customers, students and employees. Typically, these policies block
+or limit the amount of bandwidth that <acronym title="peer to peer">P2P</acronym>
+applications can use, and are enforced by packet analizing solutions from <a
  target="_blank" href="http://www.packeteer.com/" class="external">Packeteer</a>,
 <a class="external" target="_blank"
  href="http://www.netlogicmicro.com/">NetLogic
@@ -20,29 +21,47 @@ software/hardware solution has the ability to look into a <acronym
  title="Transmission Control Protocol">TCP</acronym> packet, determine
 what class of application created it, then throttle or block it
 accordingly.</p>
-<p>If you're behind such a block, please learn to live with it.
-Circumventing the block by proxying is detectable, is probably against
-your <acronym title="Acceptable Use Policy">AUP</acronym>, is
+<p>If you use DC++ from an organization and you're behind such a block,
+please learn to live with it. Circumventing the block by proxying is detectable,
+is probably against your <acronym title="Acceptable Use Policy">AUP</acronym>, is
 technically difficult, and impossible to do without help from someone
 outside the firewall.</p>
+<p>If your ISP blocks or (heavily) throttles <acronym title="Peer to Peer">P2P</acronym>
+connections then you'd better to change to another available provider which isn't uses
+(unacceptable heavily) P2P throttling or blocking techniques.</p>
+<p>You can also try to log on to hubs using the 
+<acronym title="Advanced Direct Connect">ADC</acronym> protocol. Since this protocol is
+fairly new you have a high chance that the blocking hardware or software can't 
+recongnize it. You can find ADC hubs in the hublist maintained at <a
+ target="_blank" href="http://adchublist.com/" class="external">adchublist.com</a>.
+This hublist is among those ones added to the 
+<a href="window_public_hubs.html#confpublists">configured hublists</a> of DC++ by default.
+
 <h2>Network Address Translation</h2>
-<p>Other schools might have their network behind a <acronym
+<p>Other organizations might have their network behind a <acronym
  title="Network Address Translation">NAT</acronym> in which case an
-active connection is impossible. If you're inside a NAT, the IP
+active connection is impossible. There are also ISP's offering such
+kind of access mode (firewalled access). If you're inside a NAT, the IP
 reported by your computer will be in one of the <a
  href="non-routable.html">non-routable IP ranges</a>. In this case, try
 passive mode.</p>
 <p>If you cannot connect to DC hubs or cannot transfer files in passive
 mode, the above advice about proxying applies.</p>
+
 <h2>Port Blocking</h2>
-<p>A few schools use simple port blocking, where common ports used by
+<p>A few organizations use simple port blocking, where common ports used by
 DC++ and other p2p
 applications are blocked. DC++ uses a wide range of ports for outgoing
 traffic and incoming traffic by default. If the school blocks port 411
 outgoing connections, then that effectively cuts you off from all DC
 hubs since that is the default hub port. Hub lists contain the full
 address of many hubs and those that run on non-standard ports (<i>i.e.
-hub.example.com:1411</i>) may work.</p>
+hub.example.com:1411</i>) may work. Some ISPs (according to the 
+<a target="_blank" href="http://www.iana.org/assignments/port-numbers"
+class="external">IANA recommendations)</a> may not allow all ports
+for incoming P2P transfers. In this case you need to choose any port within the
+region of 49152 - 65535 for the port fields in the 
+<a href="settings_connection.html">Connection Settings</a>. </p>
 <p>If you appear to be completely blocked from the DC network, the
 above advice applies.</p>
 </body>
