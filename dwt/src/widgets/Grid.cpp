@@ -41,6 +41,9 @@ void Grid::create( const Seed & cs )
 {
 	BaseType::create(cs);
 	rows.resize(cs.rows);
+	for(size_t i = 0; i < rows.size(); ++i) {
+		rows[i].align = GridInfo::CENTER;	// Default to center for vertical alignment
+	}
 	columns.resize(cs.cols);
 }
 
@@ -111,7 +114,10 @@ std::vector<size_t> Grid::calcSizes(const GridInfoList& x, const GridInfoList& y
 	return ret;
 }
 
-void Grid::layout() {
+void Grid::layout(const Rectangle& r) {
+	// First, we set our own size
+	BaseType::layout(r);
+
 	std::vector<HWND> children;
 
 	// TODO find better way of keeping track of children
@@ -161,7 +167,7 @@ void Grid::layout() {
 		case GridInfo::CENTER: y += (h - ps.y) / 2;
 		}
 
-		::MoveWindow(wi->w->handle(), x, y, w, h, TRUE);
+		wi->w->layout(Rectangle(x, y, w, h));
 	}
 }
 

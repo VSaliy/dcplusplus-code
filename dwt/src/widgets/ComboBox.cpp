@@ -34,10 +34,14 @@
 namespace dwt {
 
 ComboBox::Seed::Seed() :
-	BaseType::Seed(WC_COMBOBOX, WS_CHILD | WS_TABSTOP | WS_VSCROLL),
+	BaseType::Seed(WC_COMBOBOX, CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_CHILD | WS_TABSTOP | WS_VSCROLL),
 	font(new Font(DefaultGuiFont)),
 	extended(true)
 {
+}
+
+ComboBox::ComboBox( Widget* parent ) : BaseType(parent), dropDownHeight(::GetSystemMetrics(SM_CYSCREEN) / 3) {
+
 }
 
 void ComboBox::create( const Seed & cs ) {
@@ -57,7 +61,6 @@ tstring ComboBox::getValue( int index ) {
 }
 
 Point ComboBox::getPreferedSize() {
-
 	// Taken from http://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
 
@@ -71,10 +74,15 @@ Point ComboBox::getPreferedSize() {
 
 	// TODO Use biggest item
 	Point ret = c.getTextExtent(_T("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
-	ret.y = tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2) + (GetSystemMetrics(SM_CYEDGE) * 2);
-	ret.x += GetSystemMetrics(SM_CXEDGE) * 2;
-	printf("Prefered textbox size: %dx%d\n", ret.x, ret.y);
+	ret.y = tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2) + (::GetSystemMetrics(SM_CYEDGE) * 2);
+	ret.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
 	return ret;
+}
+
+void ComboBox::layout(const Rectangle& r) {
+	Rectangle copy(r);
+	sendMessage(CB_SETITEMHEIGHT, static_cast<WPARAM>(-1), static_cast<LPARAM>(r.height()));
+	::SetWindowPos(handle(), NULL, r.left(), r.top(), r.width(), dropDownHeight, SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 }
 
 }

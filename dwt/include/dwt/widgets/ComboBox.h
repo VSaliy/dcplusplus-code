@@ -129,6 +129,11 @@ public:
 
 	virtual Point getPreferedSize();
 
+	/// Returns true if fired, else false
+	virtual void layout(const Rectangle& r);
+
+	void setDropDownHeight(size_t h);
+
 protected:
 	ComboBox(Widget* parent);
 
@@ -138,6 +143,7 @@ protected:
 	{}
 
 private:
+	size_t dropDownHeight;
 
 	// AspectSelection
 	int getSelectedImpl() const;
@@ -217,11 +223,6 @@ inline int ComboBox::insertValue( int pos, const tstring & val )
 
 inline size_t ComboBox::sizeImpl() const {
 	return static_cast<size_t>(ComboBox_GetCount( handle() )); // Number of items present.
-}
-
-
-inline ComboBox::ComboBox( Widget* parent ) : BaseType(parent) {
-
 }
 
 }

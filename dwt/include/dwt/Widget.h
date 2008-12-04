@@ -137,6 +137,9 @@ public:
 	// TODO Probably move somewhere else
 	virtual Point getPreferedSize();
 
+	/** Layout the widget in the specified rectangle (in client coordinates) */
+	virtual void layout(const Rectangle& rect);
+
 protected:
 	/** Most Widgets can override the creational parameters which sets the style and the
 	  * initial position of the Widget, those Widgets will take an object of this type to
