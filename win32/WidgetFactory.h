@@ -19,13 +19,13 @@
 #ifndef DCPLUSPLUS_WIN32_WIDGETFACTORY2_H_
 #define DCPLUSPLUS_WIN32_WIDGETFACTORY2_H_
 
-#include "TextBox.h"
 #include "ComboBox.h"
 #include "Table.h"
+#include "TextBox.h"
 #include "WidgetPaned.h"
 
 /**
- * This is where stuff that eventually should be moved to smartwin goes
+ * This is where stuff that possibly should be moved to dwt goes
  */
 template<typename ContainerWidgetType>
 class WidgetFactory : public dwt::WidgetFactory<ContainerWidgetType> {

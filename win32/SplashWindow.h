@@ -8,7 +8,7 @@ public:
 	void operator()(const string& str);
 private:
 	dwt::Window* tmp;
-	TextBoxPtr text;
+	dwt::TextBoxPtr text;
 };
 
 #endif /*SPLASHWINDOW_H_*/

@@ -44,7 +44,7 @@ SplashWindow::SplashWindow() : dwt::WidgetFactory<dwt::Window>(0) {
 	}
 	tstring caption = _T(APPNAME) _T(" ") _T(VERSIONSTRING);
 	{
-		TextBox::Seed cs;
+		dwt::TextBox::Seed cs;
 		cs.style = WS_CHILD | ES_CENTER | ES_READONLY;
 		cs.exStyle = WS_EX_STATICEDGE;
 		text = addChild(cs);
