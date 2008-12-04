@@ -97,12 +97,14 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 
 	connections->setSelected(selected);
 
+	dwt::Point gridSize = grid->getPreferedSize();
+
 	//attachChild<TextBox>(IDC_EMAIL);
-	group->setBounds(dwt::Point(0, 0), getClientAreaSize());
+	// TODO Height should be adjusted for font size
+	group->layout(dwt::Rectangle(5, 5, getClientAreaSize().x - 10, gridSize.y + 15));
+
 	dwt::Point groupSize = group->getClientAreaSize();
-	groupSize.x -= 40;
-	groupSize.y -= 40;
-	grid->layout(dwt::Rectangle(20, 20, groupSize.x, groupSize.y));
+	grid->layout(dwt::Rectangle(5, 5, groupSize.x - 10, groupSize.y - 10));
 }
 
 GeneralPage::~GeneralPage() {

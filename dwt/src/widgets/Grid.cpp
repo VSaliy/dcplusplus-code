@@ -48,10 +48,19 @@ void Grid::create( const Seed & cs )
 }
 
 Point Grid::getPreferedSize() {
+	// TODO find better way of keeping track of children
+	for(HWND wnd = ::FindWindowEx(handle(), NULL, NULL, NULL); wnd; wnd = ::FindWindowEx(handle(), wnd, NULL, NULL)) {
+		// Update widget info if it's missing for some children...
+		getWidgetInfo(wnd);
+	}
+
 	std::vector<size_t> rowSize = calcSizes(rows, columns, 0, true);
 	std::vector<size_t> colSize = calcSizes(columns, rows, 0, false);
-	Point p(std::accumulate(colSize.begin(), colSize.end(), 0), std::accumulate(rowSize.begin(), rowSize.end(), 0));
-	return p;
+	Point p(
+		std::accumulate(colSize.begin(), colSize.end(), 0),
+		std::accumulate(rowSize.begin(), rowSize.end(), 0));
+
+	return p - actualSpacing();
 }
 
 Point Grid::getPreferedSize(size_t row, size_t column) const {
@@ -114,6 +123,10 @@ std::vector<size_t> Grid::calcSizes(const GridInfoList& x, const GridInfoList& y
 	return ret;
 }
 
+Point Grid::actualSpacing() const {
+	return Point(columns.empty() ? 0 : (columns.size()-1) * spacing, rows.empty() ? 0 : (rows.size()-1)*spacing);
+}
+
 void Grid::layout(const Rectangle& r) {
 	// First, we set our own size
 	BaseType::layout(r);
@@ -129,13 +142,17 @@ void Grid::layout(const Rectangle& r) {
 	}
 
 	Point size = getSize();
+	Point as = actualSpacing();
+
+	if(as.x > size.x && as.y > size.y)
+		size -= as;
 
 	std::vector<size_t> rowSize = calcSizes(rows, columns, size.y, true);
 	std::vector<size_t> colSize = calcSizes(columns, rows, size.x, false);
 
 	for(std::vector<HWND>::iterator i = children.begin(); i != children.end(); ++i) {
 		WidgetInfo* wi = getWidgetInfo(*i);
-		if(!wi->w)
+		if(!wi || !wi->w)
 			continue;
 
 		size_t r = wi->row;
@@ -147,11 +164,18 @@ void Grid::layout(const Rectangle& r) {
 		if(r + rs > rowSize.size() || c + cs > colSize.size()) {
 			continue;
 		}
+
 		size_t x = std::accumulate(colSize.begin(), colSize.begin() + c, 0);
+		x += c * spacing;
+
 		size_t y = std::accumulate(rowSize.begin(), rowSize.begin() + r, 0);
+		y += r * spacing;
 
 		size_t w = std::accumulate(colSize.begin() + c, colSize.begin() + c + cs, 0);
+		w += (cs-1)*spacing;
+
 		size_t h = std::accumulate(rowSize.begin() + r, rowSize.begin() + r + rs, 0);
+		h += (cs-1)*spacing;
 
 		Point ps = wi->w->getPreferedSize();
 
