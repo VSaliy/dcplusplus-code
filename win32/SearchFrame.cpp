@@ -433,7 +433,7 @@ void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) {
 				try {
 					QueueManager::getInstance()->add(target, sr->getSize(),
 						sr->getTTH(), sr->getUser());
-				} catch(const QueueException&) {} 
+				} catch(const QueueException&) {}
 			}
 			if(WinUtil::isShift())
 				QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
@@ -469,7 +469,7 @@ void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) {
 				try {
 					QueueManager::getInstance()->add(target, sr->getSize(),
 						sr->getTTH(), sr->getUser());
-				} catch(const QueueException&) {} 
+				} catch(const QueueException&) {}
 			}
 
 			if(WinUtil::isShift())
@@ -769,7 +769,7 @@ struct UserCollector {
 	StringList dirs;
 };
 
-SearchFrame::MenuPtr SearchFrame::makeMenu() {
+MenuPtr SearchFrame::makeMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	StringPairList favoriteDirs = FavoriteManager::getInstance()->getFavoriteDirs();

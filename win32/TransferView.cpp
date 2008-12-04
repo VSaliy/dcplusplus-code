@@ -179,7 +179,7 @@ LRESULT TransferView::handleDestroy() {
 	return 0;
 }
 
-TransferView::MenuPtr TransferView::makeContextMenu(ConnectionInfo* ii) {
+MenuPtr TransferView::makeContextMenu(ConnectionInfo* ii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	appendUserItems(mdi, menu, false);

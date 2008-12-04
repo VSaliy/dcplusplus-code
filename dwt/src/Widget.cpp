@@ -182,7 +182,6 @@ bool Widget::tryFire( const MSG & msg, LRESULT & retVal ) {
 }
 
 Point Widget::getPreferedSize() {
-	printf("Prefered widget size: 0x0\n");
 	return Point(0, 0);
 }
 

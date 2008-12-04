@@ -147,6 +147,20 @@ void Grid::layout() {
 		size_t w = std::accumulate(colSize.begin() + c, colSize.begin() + c + cs, 0);
 		size_t h = std::accumulate(rowSize.begin() + r, rowSize.begin() + r + rs, 0);
 
+		Point ps = wi->w->getPreferedSize();
+
+		switch(columns[wi->column].align) {
+		case GridInfo::TOP_LEFT: break;
+		case GridInfo::BOTTOM_RIGHT: x += w - ps.x;
+		case GridInfo::CENTER: x += (w - ps.x) / 2;
+		}
+
+		switch(rows[wi->row].align) {
+		case GridInfo::TOP_LEFT: break;
+		case GridInfo::BOTTOM_RIGHT: y += h - ps.y;
+		case GridInfo::CENTER: y += (h - ps.y) / 2;
+		}
+
 		::MoveWindow(wi->w->handle(), x, y, w, h, TRUE);
 	}
 }

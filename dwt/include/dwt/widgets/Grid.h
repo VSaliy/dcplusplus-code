@@ -47,12 +47,20 @@ public:
 		AUTO
 	};
 
-	GridInfo(int size_ = 0, Modes mode_ = AUTO) : size(size_), mode(mode_) { }
+	enum Align {
+		TOP_LEFT,
+		BOTTOM_RIGHT,
+		CENTER
+	};
+
+	GridInfo(int size_ = 0, Modes mode_ = AUTO, Align align_ = TOP_LEFT) : size(size_), mode(mode_), align(align_) { }
 
 	/** Width or height */
 	size_t size;
 
 	Modes mode;
+
+	Align align;
 };
 
 /**

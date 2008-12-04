@@ -841,7 +841,7 @@ const string& QueueFrame::getDir(HTREEITEM item) {
 	return info == NULL ? Util::emptyString : info->getDir();
 }
 
-QueueFrame::MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
+MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	WinUtil::addHashItems(menu, qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())));
@@ -858,7 +858,7 @@ QueueFrame::MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	return menu;
 }
 
-QueueFrame::MenuPtr QueueFrame::makeMultiMenu() {
+MenuPtr QueueFrame::makeMultiMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	addPriorityMenu(menu);
@@ -869,7 +869,7 @@ QueueFrame::MenuPtr QueueFrame::makeMultiMenu() {
 	return menu;
 }
 
-QueueFrame::MenuPtr QueueFrame::makeDirMenu() {
+MenuPtr QueueFrame::makeDirMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	addPriorityMenu(menu);

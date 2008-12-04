@@ -55,6 +55,34 @@
 #endif
 
 using namespace dcpp;
+
+using dwt::Button;
+using dwt::ButtonPtr;
+using dwt::CheckBox;
+using dwt::CheckBoxPtr;
+using dwt::Label;
+using dwt::LabelPtr;
+using dwt::RadioButton;
+using dwt::RadioButtonPtr;
+using dwt::Menu;
+using dwt::MenuPtr;
+using dwt::Spinner;
+using dwt::SpinnerPtr;
+using dwt::Grid;
+using dwt::GridPtr;
+using dwt::GroupBox;
+using dwt::GroupBoxPtr;
+using dwt::ProgressBar;
+using dwt::ProgressBarPtr;
+using dwt::ToolBar;
+using dwt::ToolBarPtr;
+using dwt::Container;
+using dwt::ContainerPtr;
+using dwt::TabView;
+using dwt::TabViewPtr;
+using dwt::Tree;
+using dwt::TreePtr;
+
 using std::tr1::placeholders::_1;
 using std::tr1::placeholders::_2;
 
