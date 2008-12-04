@@ -94,6 +94,8 @@ public:
 
 	void setWidget(Widget* w, size_t row, size_t column, size_t rowSpan = 1, size_t colSpan = 1);
 
+	void setSpacing(size_t spacing);
+
 	GridInfo& row(size_t i);
 	GridInfo& column(size_t i);
 
@@ -103,7 +105,7 @@ public:
 protected:
 	friend class WidgetCreator<Grid>;
 
-	explicit Grid( Widget * parent ) : BaseType( parent ) { }
+	explicit Grid( Widget * parent ) : BaseType( parent ), spacing(3) { }
 
 private:
 
@@ -122,6 +124,8 @@ private:
 		bool inCell(size_t r, size_t c) const;
 	};
 
+	size_t spacing;
+
 	typedef std::vector<GridInfo> GridInfoList;
 	GridInfoList rows;
 	GridInfoList columns;
@@ -132,6 +136,8 @@ private:
 	Point getPreferedSize(size_t row, size_t column) const;
 
 	std::vector<size_t> calcSizes(const GridInfoList& x, const GridInfoList& y, size_t cur, bool row) const;
+
+	Point actualSpacing() const;
 
 	WidgetInfo* getWidgetInfo(HWND hwnd);
 };
