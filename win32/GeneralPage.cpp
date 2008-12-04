@@ -102,15 +102,14 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 	dwt::Point groupSize = group->getClientAreaSize();
 	groupSize.x -= 40;
 	groupSize.y -= 40;
-	grid->setBounds(dwt::Point(20, 20), groupSize);
-	grid->layout();
+	grid->layout(dwt::Rectangle(20, 20, groupSize.x, groupSize.y));
 }
 
 GeneralPage::~GeneralPage() {
 }
 
 void GeneralPage::layout() {
-	grid->layout();
+	grid->layout(grid->getBounds());
 }
 
 void GeneralPage::write() {
