@@ -50,7 +50,8 @@ public:
 	enum Align {
 		TOP_LEFT,
 		BOTTOM_RIGHT,
-		CENTER
+		CENTER,
+		STRETCH
 	};
 
 	GridInfo(int size_ = 0, Modes mode_ = AUTO, Align align_ = TOP_LEFT) : size(size_), mode(mode_), align(align_) { }

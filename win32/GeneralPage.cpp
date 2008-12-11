@@ -101,10 +101,10 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 
 	//attachChild<TextBox>(IDC_EMAIL);
 	// TODO Height should be adjusted for font size
-	group->layout(dwt::Rectangle(5, 5, getClientAreaSize().x - 10, gridSize.y + 15));
+	group->layout(dwt::Rectangle(7, 7, getClientAreaSize().x - 14, gridSize.y + 45));
 
 	dwt::Point groupSize = group->getClientAreaSize();
-	grid->layout(dwt::Rectangle(5, 5, groupSize.x - 10, groupSize.y - 10));
+	grid->layout(dwt::Rectangle(7, 18, groupSize.x - 14, gridSize.y));
 }
 
 GeneralPage::~GeneralPage() {
