@@ -160,7 +160,7 @@ protected:
 		dwt::Rectangle r(this->getClientAreaSize());
 
 		this->layoutStatus(r);
-		if(onlyFull && onlyFull->getVisible())
+		if(onlyFull)
 			mapWidget(STATUS_ONLY_FULL, onlyFull);
 
 		tabs->setBounds(r);
