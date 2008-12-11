@@ -45,6 +45,10 @@ void Grid::create( const Seed & cs )
 		rows[i].align = GridInfo::CENTER;	// Default to center for vertical alignment
 	}
 	columns.resize(cs.cols);
+	for(size_t i = 0; i < rows.size(); ++i) {
+		columns[i].align = GridInfo::STRETCH;	// Default to stretch for horizontal alignment
+	}
+
 }
 
 Point Grid::getPreferedSize() {
@@ -60,7 +64,7 @@ Point Grid::getPreferedSize() {
 		std::accumulate(colSize.begin(), colSize.end(), 0),
 		std::accumulate(rowSize.begin(), rowSize.end(), 0));
 
-	return p - actualSpacing();
+	return p + actualSpacing();
 }
 
 Point Grid::getPreferedSize(size_t row, size_t column) const {
@@ -180,15 +184,17 @@ void Grid::layout(const Rectangle& r) {
 		Point ps = wi->w->getPreferedSize();
 
 		switch(columns[wi->column].align) {
-		case GridInfo::TOP_LEFT: break;
-		case GridInfo::BOTTOM_RIGHT: x += w - ps.x;
-		case GridInfo::CENTER: x += (w - ps.x) / 2;
+		case GridInfo::TOP_LEFT: w = ps.x; break;
+		case GridInfo::BOTTOM_RIGHT: x += w - ps.x; w = ps.x; break;
+		case GridInfo::CENTER: x += (w - ps.x) / 2; w = ps.x; break;
+		case GridInfo::STRETCH: break; // Do nothing
 		}
 
 		switch(rows[wi->row].align) {
-		case GridInfo::TOP_LEFT: break;
-		case GridInfo::BOTTOM_RIGHT: y += h - ps.y;
-		case GridInfo::CENTER: y += (h - ps.y) / 2;
+		case GridInfo::TOP_LEFT: h = ps.y; break;
+		case GridInfo::BOTTOM_RIGHT: y += h - ps.y; h = ps.y; break;
+		case GridInfo::CENTER: y += (h - ps.y) / 2; h = ps.y; break;
+		case GridInfo::STRETCH: break; // Do nothing
 		}
 
 		wi->w->layout(Rectangle(x, y, w, h));
