@@ -82,6 +82,7 @@ const string SettingsManager::settingTags[] =
 	"TLSPort", "FastHash", "SortFavUsersFirst", "SegmentedDL", "FollowLinks",
 	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "MaxTabChars", "FinishedDLOnlyFull",
 	"ConfirmExit", "ConfirmHubRemoval", "ConfirmUserRemoval", "ConfirmItemRemoval", "ConfirmADLSRemoval",
+	"SearchMerge",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -289,6 +290,7 @@ SettingsManager::SettingsManager()
 	setDefault(CONFIRM_USER_REMOVAL, true);
 	setDefault(CONFIRM_ITEM_REMOVAL, true);
 	setDefault(CONFIRM_ADLS_REMOVAL, true);
+	setDefault(SEARCH_MERGE, true);
 	setDefault(TRANSFERS_PANED_POS, .7);
 	setDefault(QUEUE_PANED_POS, .3);
 

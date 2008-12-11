@@ -155,6 +155,9 @@ private:
 	CheckBoxPtr filter;
 	bool filterShared;
 
+	CheckBoxPtr merge;
+	bool bMerge;
+
 	LabelPtr hubsLabel;
 	typedef TypedTable<HubInfo> WidgetHubs;
 	typedef WidgetHubs* WidgetHubsPtr;
@@ -189,6 +192,7 @@ private:
 	void handlePurgeClicked();
 	void handleSlotsClicked();
 	void handleFilterClicked();
+	void handleMergeClicked();
 	void handleShowUIClicked();
 	LRESULT handleHubItemChanged(WPARAM wParam, LPARAM lParam);
 	void handleDoubleClick();

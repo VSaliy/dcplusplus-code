@@ -105,6 +105,8 @@ SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, 
 	onlyFree(BOOLSETTING(SEARCH_ONLY_FREE_SLOTS)),
 	filter(0),
 	filterShared(BOOLSETTING(SEARCH_FILTER_SHARED)),
+	merge(0),
+	bMerge(BOOLSETTING(SEARCH_MERGE)),
 	hubsLabel(0),
 	hubs(0),
 	results(0),
@@ -215,13 +217,19 @@ SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, 
 		slots = addChild(cs);
 		slots->setHelpId(IDH_SEARCH_SLOTS);
 		slots->setChecked(onlyFree);
-		slots->onClicked(std::tr1::bind(&SearchFrame::handleSlotsClicked, this)) ;
+		slots->onClicked(std::tr1::bind(&SearchFrame::handleSlotsClicked, this));
 
 		cs.caption = T_("Hide files already in share");
 		filter = addChild(cs);
 		filter->setHelpId(IDH_SEARCH_SHARE);
 		filter->setChecked(filterShared);
-		filter->onClicked(std::tr1::bind(&SearchFrame::handleFilterClicked, this)) ;
+		filter->onClicked(std::tr1::bind(&SearchFrame::handleFilterClicked, this));
+
+		cs.caption = T_("Merge results about the same file");
+		merge = addChild(cs);
+		merge->setHelpId(IDH_SEARCH_MERGE);
+		merge->setChecked(bMerge);
+		merge->onClicked(std::tr1::bind(&SearchFrame::handleMergeClicked, this));
 	}
 
 	{
@@ -386,6 +394,10 @@ void SearchFrame::layout() {
 		rect.pos.y += rect.size.y + spacing;
 		rect.size.y = yedit;
 		filter->setBounds(rect);
+
+		rect.pos.y += rect.size.y + spacing;
+		rect.size.y = yedit;
+		merge->setBounds(rect);
 
 		rect.pos.y += rect.size.y + groupSpacing;
 		rect.size.y = labelH;
@@ -561,28 +573,36 @@ void SearchFrame::SearchInfo::update() {
 
 void SearchFrame::addResult(SearchInfo* si) {
 	bool added = false;
+
 	// Newly added ones always have just one result - we combine here
 	dcassert(si->srs.size() == 1);
 	const SearchResultPtr& sr = si->srs[0];
+
 	// Check previous search results for dupes
 	for(int i = 0, iend = results->size(); !added && i < iend; ++i) {
 		SearchInfo* si2 = results->getData(i);
 		for(SearchResultList::iterator j = si2->srs.begin(), jend = si2->srs.end(); j != jend; ++j) {
 			SearchResultPtr& sr2 = *j;
+
 			bool sameUser = sr->getUser()->getCID() == sr2->getUser()->getCID();
 			if(sameUser && (sr->getFile() == sr2->getFile())) {
+				// dupe
 				delete si;
 				return;
 			} else if(sr->getType() == SearchResult::TYPE_FILE && sr2->getType() == SearchResult::TYPE_FILE && sr->getTTH() == sr2->getTTH()) {
 				if(sameUser || (sr->getSize() != sr2->getSize())) {
+					// dupe
 					delete si;
 					return;
 				}
-				si2->srs.push_back(sr);
-				si2->update();
-				delete si;
-				added = true;
-				results->update(i);
+
+				if(bMerge) {
+					si2->srs.push_back(sr);
+					si2->update();
+					delete si;
+					added = true;
+					results->update(i);
+				}
 				break;
 			}
 		}
@@ -606,6 +626,10 @@ void SearchFrame::handleSlotsClicked() {
 
 void SearchFrame::handleFilterClicked() {
 	filterShared = filter->getChecked();
+}
+
+void SearchFrame::handleMergeClicked() {
+	bMerge = merge->getChecked();
 }
 
 void SearchFrame::handleShowUIClicked() {
@@ -951,6 +975,8 @@ void SearchFrame::runSearch() {
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_ONLY_FREE_SLOTS, onlyFree);
 	if (filterShared != BOOLSETTING(SEARCH_FILTER_SHARED))
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_FILTER_SHARED, filterShared);
+	if (bMerge != BOOLSETTING(SEARCH_MERGE))
+		SettingsManager::getInstance()->set(SettingsManager::SEARCH_MERGE, bMerge);
 	if (!initialType && fileType->getSelected() != SETTING(LAST_SEARCH_TYPE))
 		SettingsManager::getInstance()->set(SettingsManager::LAST_SEARCH_TYPE, fileType->getSelected());
 
