@@ -1,5 +1,6 @@
-* [L#243727] "Merge results about the same file" check-box in search (poy)
+* [L#243727] "Merge results for the same file" check-box in search (poy)
 * [L#306209] [ADC] Send only 5 results to passive users (thanks sulan)
+* [L#300993] Status message when a download fails from search (poy)
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 
