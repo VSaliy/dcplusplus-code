@@ -68,7 +68,7 @@ public:
 	}
 	static string clean(const string& aSearchString);
 
-	void respond(const AdcCommand& cmd, const CID& cid);
+	void respond(const AdcCommand& cmd, const CID& cid,  bool isUdpActive);
 
 	uint16_t getPort()
 	{

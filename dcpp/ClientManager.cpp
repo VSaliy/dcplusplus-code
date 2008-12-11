@@ -401,7 +401,18 @@ void ClientManager::userCommand(const UserPtr& p, const UserCommand& uc, StringM
 }
 
 void ClientManager::on(AdcSearch, Client*, const AdcCommand& adc, const CID& from) throw() {
-	SearchManager::getInstance()->respond(adc, from);
+	bool isUdpActive = false;
+	{
+		Lock l(cs);
+		
+		OnlineIter i = onlineUsers.find(from);
+		if(i != onlineUsers.end()) {
+			OnlineUser& u = *i->second;
+			isUdpActive = u.getIdentity().isUdpActive();
+		}
+			
+	}	
+	SearchManager::getInstance()->respond(adc, from, isUdpActive);
 }
 
 void ClientManager::search(int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken) {
