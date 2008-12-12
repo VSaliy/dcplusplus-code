@@ -271,7 +271,7 @@ to override the default behavior specified by the global "wrap" option.
 Example: WE<lt>chapterE<gt>E<lt>titleE<gt>
 
 Note: This option is deprecated.
-You should use the B<translated> and B<untranslate> options instead.
+You should use the B<translated> and B<untranslated> options instead.
 
 =item attributes
 
@@ -306,18 +306,21 @@ Note: the preprocessor directives must only appear between tags
 
 =item translated
 
-=item unstranslated
-
-Space-separated list of the tags you want to translate or not.
+Space-separated list of the tags you want to translate.
 The tags must be in the form <aaa>, but you can join some (<bbb><aaa>) to
 indicate that the content of the tag <aaa> will only be translated when
-it’s into a <bbb> tag.
+it's into a <bbb> tag.
 
 You can also specify some tag options putting some characters in front of
-the tag hierarchy. For example, you can put ’w’ (wrap) or ’W’ (don’t wrap)
+the tag hierarchy. For example, you can put 'w' (wrap) or 'W' (don't wrap)
 to overide the default behavior specified by the global "wrap" option.
 
 Example: WE<lt>chapterE<gt>E<lt>titleE<gt>
+
+=item untranslated
+
+Space-separated list of the tags you do not want to translate or not. It
+uses the same format as the B<translated> option.
 
 =back
 
@@ -363,6 +366,11 @@ sub initialize {
 			$self->{options}{$opt} = $options{$opt};
 		}
 	}
+	# Default options set by modules. Forbidden for users.
+	$self->{options}{'_default_tags'}='';
+	$self->{options}{'_default_translated'}='';
+	$self->{options}{'_default_untranslated'}='';
+	$self->{options}{'_default_inline'}='';
 
 	#It will maintain the list of the translatable tags
 	$self->{tags}=();
@@ -716,7 +724,7 @@ sub tag_trans_close {
 
 sub CDATA_extract {
 	my ($self,$remove)=(shift,shift);
-        my ($eof, @tag) = $self->get_string_until(']]>',{include=>1,unquoted=>1,remove=>$remove});
+        my ($eof, @tag) = $self->get_string_until(']]>',{include=>1,unquoted=>0,remove=>$remove});
 
 	return ($eof, @tag);
 }
@@ -1443,6 +1451,13 @@ sub translate_paragraph {
 	my @paragraph = @_;
 	$translate = $self->get_translate_options($self->get_path);
 
+	while (    (scalar @paragraph)
+	       and ($paragraph[0] =~ m/^\s*\n/s)) {
+		$self->pushline($paragraph[0]);
+		shift @paragraph;
+		shift @paragraph;
+	}
+
 	my $comments;
 	while (@comments) {
 		my ($comment,$eoc);
@@ -1521,42 +1536,55 @@ or in the initialize function).
 sub treat_options {
 	my $self = shift;
         
-	$self->{options}{'nodefault'} =~ /\s*(.*)\s*/s;
+	$self->{options}{'nodefault'} =~ /^\s*(.*)\s*$/s;
 	my %list_nodefault;
 	foreach (split(/\s+/s,$1)) {
-	    $list_nodefault{$_} = 1;
+		$list_nodefault{$_} = 1;
 	}
 	$self->{nodefault} = \%list_nodefault;
 
-	$self->{options}{'tags'} =~ /\s*(.*)\s*/s;
-	my @list_tags;
+	$self->{options}{'tags'} =~ /^\s*(.*)\s*$/s;
+	my @list_tags = split(/\s+/s,$1);
+	$self->{options}{'_default_tags'} =~ /^\s*(.*)\s*$/s;
 	foreach my $tag (split(/\s+/s,$1)) {
 		push @list_tags, $tag
 			unless $list_nodefault{$tag};
 	}
 	$self->{tags} = \@list_tags;
 
-	$self->{options}{'translated'} =~ /\s*(.*)\s*/s;
+	$self->{options}{'translated'} =~ /^\s*(.*)\s*$/s;
 	my @list_translated = split(/\s+/s,$1);
+	$self->{options}{'_default_translated'} =~ /^\s*(.*)\s*$/s;
+	foreach my $tag (split(/\s+/s,$1)) {
+		push @list_translated, $tag
+			unless $list_nodefault{$tag};
+	}
 	$self->{translated} = \@list_translated;
 
-	$self->{options}{'untranslated'} =~ /\s*(.*)\s*/s;
+	$self->{options}{'untranslated'} =~ /^\s*(.*)\s*$/s;
 	my @list_untranslated = split(/\s+/s,$1);
+	$self->{options}{'_default_untranslated'} =~ /^\s*(.*)\s*$/s;
+	foreach my $tag (split(/\s+/s,$1)) {
+		push @list_untranslated, $tag
+			unless $list_nodefault{$tag};
+	}
 	$self->{untranslated} = \@list_untranslated;
 
-	$self->{options}{'attributes'} =~ /\s*(.*)\s*/s;
+	$self->{options}{'attributes'} =~ /^\s*(.*)\s*$/s;
 	my @list_attr = split(/\s+/s,$1);
 	$self->{attributes} = \@list_attr;
 
-	$self->{options}{'inline'} =~ /\s*(.*)\s*/s;
 	my @list_inline;
+	$self->{options}{'inline'} =~ /^\s*(.*)\s*$/s;
+	@list_inline = split(/\s+/s,$1);
+	$self->{options}{'_default_inline'} =~ /^\s*(.*)\s*$/s;
 	foreach my $tag (split(/\s+/s,$1)) {
 		push @list_inline, $tag
 			unless $list_nodefault{$tag};
 	}
 	$self->{inline} = \@list_inline;
 
-	$self->{options}{'placeholder'} =~ /\s*(.*)\s*/s;
+	$self->{options}{'placeholder'} =~ /^\s*(.*)\s*$/s;
 	my @list_placeholder = split(/\s+/s,$1);
 	$self->{placeholder} = \@list_placeholder;
 }
