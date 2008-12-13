@@ -561,10 +561,12 @@ dwt::Rectangle TabView::getUsableArea(bool cutBorders) const
 	if(cutBorders) {
 		Rectangle rctabs(getClientAreaSize());
 		// Get rid of ugly border...assume y border is the same as x border
-		long border = (rctabs.width() - rect.width()) / 2;
+		const long border = (rctabs.width() - rect.width()) / 2;
+		const long upTranslation = 2;
 		rect.pos.x = rctabs.x();
+		rect.pos.y -= upTranslation;
 		rect.size.x = rctabs.width();
-		rect.size.y += border;
+		rect.size.y += border + upTranslation;
 	}
 	return rect;
 }
