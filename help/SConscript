@@ -55,7 +55,7 @@ CHM_sources.append(Glob('#/res/*.bmp'))
 CHM_sources.append(Glob('#/res/*.ico'))
 
 # additional dependencies (that have to be built before the help file)
-CHM_dependencies = ['cshelp.h']
+CHM_dependencies = ['addendum.txt', 'cshelp.h']
 
 import os
 import filecmp
@@ -86,7 +86,7 @@ def gen_CHM(target, source, env):
 		for node in source:
 			filename = os.path.basename(node.path)
 			if filename[-5:] == '.html' and filename != 'changelog.html' and filename != 'compile.html' and filename != 'fdl.html':
-				env.Execute(Action('perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-translate" -f xhtml -M utf-8 -L utf-8 -p "' + str(po_node) + '" -k 0 -m "' + str(node) + '" -l "' + build_path + filename + '"', 'Translating ' + str(node)))
+				env.Execute(Action('perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-translate" -f xhtml -M utf-8 -L utf-8 -A utf-8 -p "' + str(po_node) + '" -k 0 -m "' + str(node) + '" -l "' + build_path + filename + '" -a help/addendum.txt', 'Translating ' + str(node)))
 			else:
 				env.Execute(Copy(build_dir, node))
 

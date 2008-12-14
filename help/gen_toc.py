@@ -12,10 +12,11 @@ def gen_toc(target, source):
 	class Parser(HTMLParser):
 		text = ""
 		link = ""
+		in_ul = 0
 		keep_data = 0
 
 		def handle_starttag(self, tag, attrs):
-			if tag == "a":
+			if tag == "a" and self.in_ul:
 				# attrs is a list of tuples; each tuple being an (attr-name, attr-content) pair
 				for attr in attrs:
 					if attr[0] == "href":
@@ -26,6 +27,7 @@ def gen_toc(target, source):
 				self.keep_data = 1
 			elif tag == "ul":
 				f_target.write("\r\n<ul>")
+				self.in_ul += 1
 
 		def handle_data(self, data):
 			if self.keep_data:
@@ -36,7 +38,7 @@ def gen_toc(target, source):
 				self.text += entitydefs[name]
 
 		def handle_endtag(self, tag):
-			if tag == "a":
+			if tag == "a" and self.in_ul:
 					# reached the end of the current link entry
 					f_target.write('\r\n<li> <object type="text/sitemap">\r\n<param name="Name" value="')
 					f_target.write(spaces.sub(" ", self.text).strip())
@@ -55,6 +57,7 @@ def gen_toc(target, source):
 				self.keep_data = 0
 			elif tag == "ul":
 				f_target.write("\r\n</ul>")
+				self.in_ul -= 1
 
 	f_target = codecs.open(target, "w", "latin_1", "xmlcharrefreplace")
 	f_target.write("""<html>
