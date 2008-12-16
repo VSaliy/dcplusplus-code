@@ -45,7 +45,7 @@ void Grid::create( const Seed & cs )
 		rows[i].align = GridInfo::CENTER;	// Default to center for vertical alignment
 	}
 	columns.resize(cs.cols);
-	for(size_t i = 0; i < rows.size(); ++i) {
+	for(size_t i = 0; i < columns.size(); ++i) {
 		columns[i].align = GridInfo::STRETCH;	// Default to stretch for horizontal alignment
 	}
 
