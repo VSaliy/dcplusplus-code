@@ -202,22 +202,32 @@ void Grid::layout(const Rectangle& r) {
 }
 
 Grid::WidgetInfo* Grid::getWidgetInfo(HWND hwnd) {
-	size_t maxc = 0;
-
 	for(WidgetInfoList::iterator i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
 		if(i->w->handle() == hwnd) {
 			return &(*i);
 		}
-		maxc = std::max(maxc, i->row * columns.size() + i->column);
 	}
 
-	if(!widgetInfo.empty())
-		maxc++;
+	bool taken = true;
+	size_t pos = 0;
 
-	size_t r = maxc / columns.size();
-	size_t c = maxc % columns.size();
+	while(taken) {
+		taken = false;
+		for(WidgetInfoList::const_iterator i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
+			size_t r = pos / columns.size();
+			size_t c = pos % columns.size();
+			if(i->inCell(r, c)) {
+				pos++;
+				taken = true;
+				break;
+			}
+		}
+	}
 
-	if(r >= rows.size() || c >= columns.size()) {
+	size_t r = pos / columns.size();
+	size_t c = pos % columns.size();
+
+	if(r >= rows.size()) {
 		return 0;
 	}
 
@@ -228,6 +238,20 @@ Grid::WidgetInfo* Grid::getWidgetInfo(HWND hwnd) {
 
 	widgetInfo.push_back(WidgetInfo(w, r, c, 1, 1));
 	return &widgetInfo.back();
+}
+
+void Grid::setWidget(Widget* w, size_t row, size_t column, size_t rowSpan, size_t colSpan) {
+	for(WidgetInfoList::iterator i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
+		if(i->w == w) {
+			i->row = row;
+			i->column = column;
+			i->rowSpan = rowSpan;
+			i->colSpan = colSpan;
+			return;
+		}
+	}
+
+	widgetInfo.push_back(WidgetInfo(w, row, column, rowSpan, colSpan));
 }
 
 }
