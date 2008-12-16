@@ -23,11 +23,11 @@
 #include "DownloadPage.h"
 
 #include <dcpp/SettingsManager.h>
-#include "WinUtil.h"
 #include "HubListsDlg.h"
 
 #include <dwt/widgets/Spinner.h>
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_DOWNLOAD_DIRECTORY, IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR },
 	{ IDC_DOWNLOADDIR, IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR },
@@ -47,6 +47,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_PROXY, IDH_SETTINGS_DOWNLOAD_PROXY },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem DownloadPage::texts[] = {
 	{ IDC_SETTINGS_DIRECTORIES, N_("Directories") },
@@ -78,7 +79,6 @@ DownloadPage::DownloadPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_DOWNLOADPAGE);
 	setHelpId(IDH_DOWNLOADPAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 	PropPage::read(items);
 

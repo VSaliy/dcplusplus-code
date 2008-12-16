@@ -25,6 +25,7 @@
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_COLORS, IDH_SETTINGS_APPEARANCE2_COLORS },
 	{ IDC_SELWINCOLOR, IDH_SETTINGS_APPEARANCE2_SELWINCOLOR },
@@ -38,6 +39,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_REQUIRES_RESTART, IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem Appearance2Page::texts[] = {
 	{ IDC_SETTINGS_COLORS, N_("Colors") },
@@ -64,7 +66,6 @@ Appearance2Page::Appearance2Page(dwt::Widget* parent) : PropPage(parent), oldSel
 	createDialog(IDD_APPEARANCE2PAGE);
 	setHelpId(IDH_APPEARANCE2PAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 
 	fg = SETTING(TEXT_COLOR);

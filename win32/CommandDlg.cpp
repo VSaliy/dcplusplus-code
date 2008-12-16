@@ -27,6 +27,7 @@
 #include <dcpp/version.h>
 #include "WinUtil.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_SEPARATOR, IDH_USER_COMMAND_SEPARATOR },
 	{ IDC_SETTINGS_RAW, IDH_USER_COMMAND_RAW },
@@ -51,6 +52,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDHELP, IDH_DCPP_HELP },
 	{ 0, 0 }
 };
+*/
 
 CommandDlg::CommandDlg(dwt::Widget* parent, int type_, int ctx_, const tstring& name_, const tstring& command_, const tstring& hub_) :
 	WidgetFactory<dwt::ModalDialog>(parent),
@@ -85,8 +87,6 @@ CommandDlg::~CommandDlg() {
 
 bool CommandDlg::handleInitDialog() {
 	setHelpId(IDH_USER_COMMAND);
-
-	WinUtil::setHelpIds(this, helpItems);
 
 	// Translate
 	setText(T_("Create / Modify User Command"));

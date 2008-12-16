@@ -33,6 +33,7 @@ static const ColumnInfo dirColumns[] = {
 	{ N_("Directory"), 100, false }
 };
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_FAVORITE_DIRECTORIES, IDH_SETTINGS_FAVORITE_DIRS_FAVORITE_DIRECTORIES },
 	{ IDC_FAVORITE_DIRECTORIES, IDH_SETTINGS_FAVORITE_DIRS_FAVORITE_DIRECTORIES },
@@ -41,6 +42,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_ADD, IDH_SETTINGS_FAVORITE_DIRS_ADD },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem FavoriteDirsPage::texts[] = {
 	{ IDC_SETTINGS_FAVORITE_DIRECTORIES, N_("Favorite download directories") },
@@ -54,7 +56,6 @@ FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_FAVORITE_DIRSPAGE);
 	setHelpId(IDH_FAVORITE_DIRSPAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 
 	attachChild(directories, IDC_FAVORITE_DIRECTORIES);

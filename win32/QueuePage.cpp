@@ -23,8 +23,8 @@
 #include "QueuePage.h"
 
 #include <dcpp/SettingsManager.h>
-#include "WinUtil.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_AUTOPRIO, IDH_SETTINGS_QUEUE_AUTOPRIO },
 	{ IDC_SETTINGS_PRIO_HIGHEST, IDH_SETTINGS_QUEUE_PRIO_HIGHEST },
@@ -59,6 +59,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_KB7, IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem QueuePage::texts[] = {
 	{ IDC_SETTINGS_AUTOPRIO, N_("Auto priority settings") },
@@ -118,7 +119,6 @@ QueuePage::QueuePage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_QUEUEPAGE);
 	setHelpId(IDH_QUEUEPAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 	PropPage::read(items);
 

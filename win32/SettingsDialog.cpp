@@ -39,6 +39,7 @@
 #include "UCPage.h"
 #include "CertificatesPage.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_PAGES, IDH_SETTINGS_TREE },
 	{ IDOK, IDH_DCPP_OK },
@@ -46,6 +47,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDHELP, IDH_DCPP_HELP },
 	{ 0, 0 }
 };
+*/
 
 SettingsDialog::SettingsDialog(dwt::Widget* parent) : WidgetFactory<dwt::ModalDialog>(parent), currentPage(0) {
 	onInitDialog(std::tr1::bind(&SettingsDialog::initDialog, this));
@@ -67,8 +69,6 @@ bool SettingsDialog::initDialog() {
 	* page's help id.
 	*/
 	setHelpId(IDH_INDEX);
-
-	WinUtil::setHelpIds(this, helpItems);
 
 	setText(T_("Settings"));
 
