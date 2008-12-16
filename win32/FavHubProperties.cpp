@@ -24,8 +24,8 @@
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
-#include "WinUtil.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_FH_NAME, IDH_FAVORITE_HUB_NAME },
 	{ IDC_HUBNAME, IDH_FAVORITE_HUB_NAME },
@@ -43,6 +43,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDCANCEL, IDH_DCPP_CANCEL },
 	{ 0, 0 }
 };
+*/
 
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
 	WidgetFactory<dwt::ModalDialog>(parent),
@@ -63,8 +64,6 @@ FavHubProperties::~FavHubProperties() {
 
 bool FavHubProperties::handleInitDialog() {
 	setHelpId(IDH_FAVORITE_HUB);
-
-	WinUtil::setHelpIds(this, helpItems);
 
 	// Translate dialog
 	setText(T_("Favorite Hub Properties"));

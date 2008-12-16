@@ -25,14 +25,15 @@
 #include <dcpp/SettingsManager.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/File.h>
-#include "WinUtil.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_LOG_DIR, IDH_SETTINGS_LOG_DIRECTORY },
 	{ IDC_LOG_DIRECTORY, IDH_SETTINGS_LOG_DIRECTORY },
 	{ IDC_BROWSE_LOG, IDH_SETTINGS_LOG_DIRECTORY },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem LogPage::texts[] = {
 	{ IDC_SETTINGS_LOGGING, N_("Logging") },
@@ -63,7 +64,6 @@ LogPage::LogPage(dwt::Widget* parent) : PropPage(parent), oldSelection(-1) {
 	createDialog(IDD_LOGPAGE);
 	setHelpId(IDH_LOGPAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 	PropPage::read(items);
 

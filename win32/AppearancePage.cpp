@@ -25,8 +25,7 @@
 #include <dcpp/SettingsManager.h>
 #include <dcpp/File.h>
 
-#include "WinUtil.h"
-
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_DEFAULT_AWAY_MSG, IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE },
 	{ IDC_DEFAULT_AWAY_MESSAGE, IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE },
@@ -37,6 +36,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_REQUIRES_RESTART, IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem AppearancePage::texts[] = {
 	{ IDC_SETTINGS_APPEARANCE_OPTIONS, N_("Options") },
@@ -74,7 +74,6 @@ AppearancePage::AppearancePage(dwt::Widget* parent) : PropPage(parent), language
 	createDialog(IDD_APPEARANCEPAGE);
 	setHelpId(IDH_APPEARANCEPAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 	PropPage::read(items);
 

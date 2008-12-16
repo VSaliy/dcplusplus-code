@@ -79,23 +79,11 @@ public:
 		static const dwt::Tree::Seed treeView;
 	};
 
-	struct HelpItem {
-		unsigned ctrlId;
-		unsigned helpId;
-	};
-
 	static void init();
 	static void uninit();
 
 	static tstring encodeFont(LOGFONT const& font);
 	static void decodeFont(const tstring& setting, LOGFONT &dest);
-
-	template<typename A>
-	static void setHelpIds(dwt::AspectDialog<A>* dialog, const HelpItem* items) {
-		dcassert(dialog && items);
-		for(size_t i = 0; items[i].ctrlId != 0; ++i)
-			::SetWindowContextHelpId(dialog->getItem(items[i].ctrlId), items[i].helpId);
-	}
 
 	/**
 	 * Check if this is a common /-command.

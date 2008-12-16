@@ -24,8 +24,8 @@
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/CryptoManager.h>
-#include "WinUtil.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_PRIVATE_KEY_FILE, IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE },
 	{ IDC_TLS_PRIVATE_KEY_FILE, IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE },
@@ -38,6 +38,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_BROWSE_TRUSTED_PATH, IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem CertificatesPage::texts[] = {
 	{ IDC_SETTINGS_PRIVATE_KEY_FILE, N_("Private key file") },
@@ -67,7 +68,6 @@ CertificatesPage::CertificatesPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_CERTIFICATESPAGE);
 	setHelpId(IDH_CERTIFICATESPAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 	PropPage::read(items);
 

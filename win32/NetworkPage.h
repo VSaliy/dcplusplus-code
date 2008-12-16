@@ -28,13 +28,29 @@ public:
 	NetworkPage(dwt::Widget* parent);
 	virtual ~NetworkPage();
 
+	virtual void layout();
 	virtual void write();
 
 private:
 	ItemList items;
 	static TextItem texts[];
 
-	void fixControls();
+	GridPtr grid;
+
+	RadioButtonPtr directIn;
+	RadioButtonPtr upnp;
+	RadioButtonPtr nat;
+	RadioButtonPtr passive;
+
+	TextBoxPtr tcp;
+	TextBoxPtr udp;
+	TextBoxPtr tls;
+
+	RadioButtonPtr directOut;
+	RadioButtonPtr socks5;
+
+	void fixControlsIn();
+	void fixControlsOut();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_NETWORK_PAGE_H)
