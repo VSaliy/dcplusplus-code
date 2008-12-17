@@ -87,13 +87,6 @@ public:
 	   */
 	void setChecked( bool value = true );
 
-	/// Actually creates the Button Control
-	/** You should call WidgetFactory::createRadioButton if you instantiate class
-	  * directly. <br>
-	  * Only if you DERIVE from class you should call this function directly.
-	  */
-	void create( const Seed & cs = Seed() );
-
 protected:
 	// Constructor Taking pointer to parent
 	explicit RadioButton( Widget * parent );

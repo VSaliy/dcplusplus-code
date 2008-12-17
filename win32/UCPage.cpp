@@ -26,8 +26,8 @@
 #include <dcpp/FavoriteManager.h>
 #include "CommandDlg.h"
 #include "HoldRedraw.h"
-#include "WinUtil.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_MENU_ITEMS, IDH_SETTINGS_UC_LIST },
 	{ IDC_ADD_MENU, IDH_SETTINGS_UC_ADD },
@@ -37,6 +37,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_REMOVE_MENU, IDH_SETTINGS_UC_REMOVE },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem UCPage::texts[] = {
 	{ IDC_ADD_MENU, N_("&Add") },
@@ -51,7 +52,6 @@ UCPage::UCPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_UCPAGE);
 	setHelpId(IDH_UCPAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 
 	attachChild(commands, IDC_MENU_ITEMS);
