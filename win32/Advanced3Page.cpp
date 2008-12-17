@@ -23,10 +23,10 @@
 #include "Advanced3Page.h"
 
 #include <dcpp/SettingsManager.h>
-#include "WinUtil.h"
 
 #include <dwt/widgets/Spinner.h>
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_MAX_HASH_SPEED, IDH_SETTINGS_ADVANCED3_MAX_HASH_SPEED },
 	{ IDC_MAX_HASH_SPEED, IDH_SETTINGS_ADVANCED3_MAX_HASH_SPEED },
@@ -61,6 +61,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_B3, IDH_SETTINGS_ADVANCED3_SOCKET_OUT_BUFFER },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem Advanced3Page::texts[] = {
 	{ IDC_SETTINGS_MAX_HASH_SPEED, N_("Max hash speed") },
@@ -105,7 +106,6 @@ Advanced3Page::Advanced3Page(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_ADVANCED3PAGE);
 	setHelpId(IDH_ADVANCED3PAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 	PropPage::read(items);
 

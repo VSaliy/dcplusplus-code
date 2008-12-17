@@ -24,8 +24,8 @@
 
 #include <dcpp/ADLSearch.h>
 #include <dcpp/FavoriteManager.h>
-#include "WinUtil.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_ADLSP_SEARCH, IDH_ADLSP_SEARCH_STRING },
 	{ IDC_SEARCH_STRING, IDH_ADLSP_SEARCH_STRING },
@@ -45,6 +45,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDCANCEL, IDH_DCPP_CANCEL },
 	{ 0, 0 }
 };
+*/
 
 ADLSProperties::ADLSProperties(dwt::Widget* parent, ADLSearch *_search) :
 	WidgetFactory<dwt::ModalDialog>(parent),
@@ -67,8 +68,6 @@ ADLSProperties::~ADLSProperties() {
 
 bool ADLSProperties::handleInitDialog() {
 	setHelpId(IDH_ADLSP);
-
-	WinUtil::setHelpIds(this, helpItems);
 
 	// Translate dialog
 	setText(T_("ADLSearch Properties"));

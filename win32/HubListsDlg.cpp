@@ -26,8 +26,8 @@
 #include <dcpp/StringTokenizer.h>
 #include "HoldRedraw.h"
 #include "LineDlg.h"
-#include "WinUtil.h"
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_LIST_EDIT_BOX, IDH_PUBLIC_HUB_LISTS_EDIT_BOX },
 	{ IDC_LIST_ADD, IDH_PUBLIC_HUB_LISTS_ADD },
@@ -40,6 +40,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDCANCEL, IDH_DCPP_CANCEL },
 	{ 0, 0 }
 };
+*/
 
 HubListsDlg::HubListsDlg(dwt::Widget* parent) :
 	WidgetFactory<dwt::ModalDialog>(parent),
@@ -55,8 +56,6 @@ HubListsDlg::~HubListsDlg() {
 
 bool HubListsDlg::handleInitDialog() {
 	setHelpId(IDH_PUBLIC_HUB_LISTS);
-
-	WinUtil::setHelpIds(this, helpItems);
 
 	setText(T_("Configured Public Hub Lists"));
 

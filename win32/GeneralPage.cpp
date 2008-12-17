@@ -26,8 +26,7 @@
 
 #include <dcpp/SettingsManager.h>
 
-#include "WinUtil.h"
-
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_PERSONAL_INFORMATION, IDH_SETTINGS_GENERAL_PERSONAL_INFORMATION },
 	{ IDC_SETTINGS_NICK, IDH_SETTINGS_GENERAL_NICK },
@@ -41,46 +40,47 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_MEBIBITS, IDH_SETTINGS_GENERAL_CONNECTION },
 	{ 0, 0 }
 };
-
-/*
-PropPage::Item GeneralPage::items[] = {
-	{ 0,			SettingsManager::NICK,			PropPage::T_STR },
-	{ 0,		SettingsManager::EMAIL,			PropPage::T_STR },
-	{ 0,	SettingsManager::DESCRIPTION,	PropPage::T_STR },
-	{ 0,	SettingsManager::UPLOAD_SPEED,	PropPage::T_STR },
-	{ 0, 0, PropPage::T_END }
-};
 */
+
 GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 	createDialog(IDD_GENERALPAGE);
 	setHelpId(IDH_GENERALPAGE);
 
-#ifdef PORT_ME
-	WinUtil::setHelpIds(this, helpItems);
-	PropPage::translate(handle(), texts);
-#endif
 	GroupBoxPtr group = addChild(GroupBox::Seed(T_("Personal Information")));
 
-	grid = group->addChild(Grid::Seed(4, 2));
+	grid = group->addChild(Grid::Seed(4, 3));
 	grid->column(1).mode = dwt::GridInfo::FILL;
 
 	grid->addChild(Label::Seed(T_("Nick")));
 
 	nick = grid->addChild(TextBox::Seed());
+	grid->setWidget(nick, 0, 1, 1, 2);
 	items.push_back(Item(nick, SettingsManager::NICK, PropPage::T_STR));
 
 	grid->addChild(Label::Seed(T_("E-Mail")));
-	items.push_back(Item(grid->addChild(TextBox::Seed()), SettingsManager::EMAIL, PropPage::T_STR));
+
+	TextBoxPtr box = grid->addChild(TextBox::Seed());
+	grid->setWidget(box, 1, 1, 1, 2);
+	items.push_back(Item(box, SettingsManager::EMAIL, PropPage::T_STR));
 
 	grid->addChild(Label::Seed(T_("Description")));
-	TextBoxPtr description = grid->addChild(TextBox::Seed());
-	description->setTextLimit(35);
 
-	items.push_back(Item(description, SettingsManager::DESCRIPTION, PropPage::T_STR));
+	box = grid->addChild(TextBox::Seed());
+	box->setTextLimit(35);
+	grid->setWidget(box, 2, 1, 1, 2);
+	items.push_back(Item(box, SettingsManager::DESCRIPTION, PropPage::T_STR));
+
 	grid->addChild(Label::Seed(T_("Line speed (upload)")));
 
 	ComboBoxPtr connections = grid->addChild(ComboBox::Seed());
 	items.push_back(Item(connections, SettingsManager::UPLOAD_SPEED, PropPage::T_STR));
+
+	grid->addChild(Label::Seed(T_("MiBits/s")));
+
+	PropPage::read(items);
+
+	nick->setTextLimit(35);
+	nick->onUpdated(std::tr1::bind(&GeneralPage::handleNickTextChanged, this));
 
 	int selected = 0, j = 0;
 	for(StringIter i = SettingsManager::connectionSpeeds.begin(); i != SettingsManager::connectionSpeeds.end(); ++i, ++j) {
@@ -89,12 +89,6 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 			selected = j;
 		}
 	}
-
-	PropPage::read(items);
-
-	nick->setTextLimit(35);
-	nick->onUpdated(std::tr1::bind(&GeneralPage::handleNickTextChanged, this));
-
 	connections->setSelected(selected);
 
 	dwt::Point gridSize = grid->getPreferedSize();

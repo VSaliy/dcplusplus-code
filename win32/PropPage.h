@@ -29,7 +29,6 @@ public:
 	PropPage(dwt::Widget* parent);
 	virtual ~PropPage();
 
-	virtual void layout() { }
 	virtual void write() { }
 
 	enum Type {

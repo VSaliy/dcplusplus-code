@@ -25,12 +25,12 @@
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/version.h>
-#include "WinUtil.h"
 #include "LineDlg.h"
 #include "HashProgressDlg.h"
 
 #include <dwt/widgets/Spinner.h>
 
+/** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_SHARED_DIRECTORIES, IDH_SETTINGS_UPLOAD_DIRECTORIES },
 	{ IDC_DIRECTORIES, IDH_SETTINGS_UPLOAD_DIRECTORIES },
@@ -50,6 +50,7 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SLOTSPIN, IDH_SETTINGS_UPLOAD_SLOTS },
 	{ 0, 0 }
 };
+*/
 
 PropPage::TextItem UploadPage::texts[] = {
 	{ IDC_SETTINGS_SHARED_DIRECTORIES, N_("Shared directories") },
@@ -77,7 +78,6 @@ UploadPage::UploadPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_UPLOADPAGE);
 	setHelpId(IDH_UPLOADPAGE);
 
-	WinUtil::setHelpIds(this, helpItems);
 	PropPage::translate(handle(), texts);
 	PropPage::read(items);
 
