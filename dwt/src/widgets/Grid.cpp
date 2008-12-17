@@ -148,7 +148,7 @@ void Grid::layout(const Rectangle& r) {
 	Point size = getSize();
 	Point as = actualSpacing();
 
-	if(as.x > size.x && as.y > size.y)
+	if(as.x < size.x && as.y < size.y)
 		size -= as;
 
 	std::vector<size_t> rowSize = calcSizes(rows, columns, size.y, true);
