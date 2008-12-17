@@ -42,12 +42,21 @@ private:
 	RadioButtonPtr nat;
 	RadioButtonPtr passive;
 
+	TextBoxPtr externalIP;
+	CheckBoxPtr overrideIP;
+
 	TextBoxPtr tcp;
 	TextBoxPtr udp;
 	TextBoxPtr tls;
 
 	RadioButtonPtr directOut;
 	RadioButtonPtr socks5;
+
+	TextBoxPtr socksServer;
+	TextBoxPtr socksPort;
+	TextBoxPtr socksLogin;
+	TextBoxPtr socksPass;
+	CheckBoxPtr socksResolve;
 
 	void fixControlsIn();
 	void fixControlsOut();
