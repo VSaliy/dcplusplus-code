@@ -78,14 +78,13 @@ NetworkPage::NetworkPage(dwt::Widget* parent) : PropPage(parent) {
 	items.push_back(Item(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL));
 	passive = gridIn->addChild(RadioButton::Seed(T_("Firewall (passive, last resort)")));
 
-	gridIn->setWidget(gridIn->addChild(Label::Seed(_T("here should be the ports grid"))), 0, 1, 7, 1);
-	/** @todo ports
 	GridPtr portsGrid = gridIn->addChild(Grid::Seed(4, 2));
 	gridIn->setWidget(portsGrid, 0, 1, 7, 1);
-	portsGrid->column(1).mode = dwt::GridInfo::FILL;
+	portsGrid->column(1).size = 30;
+	portsGrid->column(1).mode = dwt::GridInfo::STATIC;
 
-	portsGrid->addChild(Label::Seed()); /// @todo empty label, use span
-	portsGrid->addChild(Label::Seed(T_("Ports")));
+	LabelPtr portsLabel = portsGrid->addChild(Label::Seed(T_("Ports")));
+	portsGrid->setWidget(portsLabel, 0, 0, 1, 2);
 
 	portsGrid->addChild(Label::Seed(T_("TCP")));
 	tcp = portsGrid->addChild(TextBox::Seed());
@@ -98,7 +97,6 @@ NetworkPage::NetworkPage(dwt::Widget* parent) : PropPage(parent) {
 	portsGrid->addChild(Label::Seed(T_("TLS")));
 	tls = portsGrid->addChild(TextBox::Seed());
 	items.push_back(Item(tls, SettingsManager::TLS_PORT, PropPage::T_INT));
-	*/
 
 	GroupBoxPtr groupOut = grid->addChild(GroupBox::Seed(T_("Outgoing connection settings")));
 	GridPtr gridOut = groupOut->addChild(Grid::Seed(7, 2));

@@ -72,7 +72,22 @@ Point Grid::getPreferedSize(size_t row, size_t column) const {
 
 	for(WidgetInfoList::const_iterator i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
 		if(i->inCell(row, column)) {
-			return i->w->getPreferedSize();
+			ret = i->w->getPreferedSize();
+			// TODO consider fractions...
+			if(i->colSpan > 1) {
+				if(ret.x > i->colSpan*spacing) {
+					ret.x = (ret.x - i->colSpan*spacing) / i->colSpan;
+				} else {
+					ret.x = 0;
+				}
+			}
+			if(i->rowSpan > 1) {
+				if(ret.y > i->rowSpan*spacing) {
+					ret.y = (ret.y - i->rowSpan*spacing) / i->rowSpan;
+				} else {
+					ret.y = 0;
+				}
+			}
 		}
 	}
 	return ret;
