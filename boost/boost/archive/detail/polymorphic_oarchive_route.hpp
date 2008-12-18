@@ -1,5 +1,5 @@
-#ifndef BOOST_ARCHIVE_DETAIL_POLYMORPHIC_OARCHIVE_DISPATCH_HPP
-#define BOOST_ARCHIVE_DETAIL_POLYMORPHIC_OARCHIVE_DISPATCH_HPP
+#ifndef BOOST_ARCHIVE_DETAIL_POLYMORPHIC_OARCHIVE_ROUTE_HPP
+#define BOOST_ARCHIVE_DETAIL_POLYMORPHIC_OARCHIVE_ROUTE_HPP
 
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -7,7 +7,7 @@
 #endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// polymorphic_oarchive_dispatch.hpp
+// polymorphic_oarchive_route.hpp
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
@@ -33,8 +33,6 @@ namespace std{
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
-template<class T>
-class shared_ptr;
 namespace serialization {
     class extended_type_info;
 } // namespace serialization
@@ -45,7 +43,7 @@ class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oserializer;
 class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_oserializer;
 
 template<class ArchiveImplementation>
-class polymorphic_oarchive_dispatch :
+class polymorphic_oarchive_route :
     public polymorphic_oarchive,
     // note: gcc dynamic cross cast fails if the the derivation below is
     // not public.  I think this is a mistake.
@@ -168,12 +166,13 @@ public:
     }
     // all current archives take a stream as constructor argument
     template <class _Elem, class _Tr>
-    polymorphic_oarchive_dispatch(
+    polymorphic_oarchive_route(
         std::basic_ostream<_Elem, _Tr> & os,
         unsigned int flags = 0
     ) :
         ArchiveImplementation(os, flags)
     {}
+    virtual ~polymorphic_oarchive_route(){};
 };
 
 } // namespace detail

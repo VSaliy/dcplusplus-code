@@ -40,6 +40,7 @@
 #include "Application.h"
 #include "Atom.h"
 #include "Rectangle.h"
+#include "Point.h"
 #include "Message.h"
 #include "dwt_unordered_map.h"
 
@@ -139,6 +140,9 @@ public:
 
 	/** Layout the widget in the specified rectangle (in client coordinates) */
 	virtual void layout(const Rectangle& rect);
+
+	Point getWindowSize();
+	Point getClientSize();
 
 protected:
 	/** Most Widgets can override the creational parameters which sets the style and the
@@ -258,6 +262,19 @@ template<typename T>
 T hwnd_cast(HWND hwnd) {
 	Widget* w = reinterpret_cast<Widget*>(::GetProp(hwnd, Widget::propAtom));
 	return dynamic_cast<T>(w);
+}
+
+inline Point Widget::getWindowSize() {
+	RECT rc;
+	::GetWindowRect(handle(), &rc);
+	return Point(rc.right - rc.left, rc.bottom - rc.top);
+}
+
+inline Point Widget::getClientSize() {
+	RECT rc;
+	::GetClientRect(handle(), &rc);
+	// Left, top are always 0
+	return Point(rc.right, rc.bottom);
 }
 
 }

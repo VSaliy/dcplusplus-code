@@ -7,8 +7,12 @@
 #ifndef BOOST_MATH_TOOLS_MINIMA_HPP
 #define BOOST_MATH_TOOLS_MINIMA_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <utility>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/cstdint.hpp>
@@ -142,6 +146,7 @@ inline std::pair<T, T> brent_find_minima(F f, T min, T max, int digits)
 }}} // namespaces
 
 #endif
+
 
 
 

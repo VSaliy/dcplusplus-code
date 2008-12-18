@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_TEST_HPP
 #define BOOST_MATH_TOOLS_TEST_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -147,9 +151,19 @@ inline double relative_error<double>(double a, double b)
 }
 #endif
 
+template <class T>
+void set_output_precision(T)
+{
+   if(std::numeric_limits<T>::digits10)
+   {
+      std::cout << std::setprecision(std::numeric_limits<T>::digits10 + 2);
+   }
+}
+
 template <class Seq>
 void print_row(const Seq& row)
 {
+   set_output_precision(row[0]);
    for(unsigned i = 0; i < row.size(); ++i)
    {
       if(i)
@@ -239,4 +253,5 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
 } // namespace boost
 
 #endif
+
 

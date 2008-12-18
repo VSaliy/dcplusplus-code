@@ -145,7 +145,7 @@ void Grid::layout(const Rectangle& r) {
 		children.push_back(wnd);
 	}
 
-	Point size = getSize();
+	Point size = getClientSize();
 	Point as = actualSpacing();
 
 	if(as.x < size.x && as.y < size.y)
