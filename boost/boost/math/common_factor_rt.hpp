@@ -6,6 +6,10 @@
 //  without express or implied warranty, and with no claim as to its suitability
 //  for any purpose. 
 
+// boostinspect:nolicense (don't complain about the lack of a Boost license)
+// (Paul Moore hasn't been in contact for years, so there's no way to change the
+// license.)
+
 //  See http://www.boost.org for updates, documentation, and revision history. 
 
 #ifndef BOOST_MATH_COMMON_FACTOR_RT_HPP
@@ -303,7 +307,7 @@ namespace detail
     BOOST_PRIVATE_GCD_UF( unsigned long );
 
 #ifdef BOOST_HAS_LONG_LONG
-    BOOST_PRIVATE_GCD_UF( unsigned long long );
+    BOOST_PRIVATE_GCD_UF( boost::ulong_long_type );
 #elif defined(BOOST_HAS_MS_INT64)
     BOOST_PRIVATE_GCD_UF( unsigned __int64 );
 #endif
@@ -325,7 +329,7 @@ namespace detail
     BOOST_PRIVATE_GCD_SF( char, unsigned char ); // should work even if unsigned
 
 #ifdef BOOST_HAS_LONG_LONG
-    BOOST_PRIVATE_GCD_SF( long long, unsigned long long );
+    BOOST_PRIVATE_GCD_SF( boost::long_long_type, boost::ulong_long_type );
 #elif defined(BOOST_HAS_MS_INT64)
     BOOST_PRIVATE_GCD_SF( __int64, unsigned __int64 );
 #endif

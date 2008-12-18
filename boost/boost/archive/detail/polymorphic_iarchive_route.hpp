@@ -1,5 +1,5 @@
-#ifndef BOOST_ARCHIVE_DETAIL_POLYMORPHIC_IARCHIVE_DISPATCH_HPP
-#define BOOST_ARCHIVE_DETAIL_POLYMORPHIC_IARCHIVE_DISPATCH_HPP
+#ifndef BOOST_ARCHIVE_DETAIL_POLYMORPHIC_IARCHIVE_ROUTE_HPP
+#define BOOST_ARCHIVE_DETAIL_POLYMORPHIC_IARCHIVE_ROUTE_HPP
 
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -7,7 +7,7 @@
 #endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// polymorphic_iarchive_dispatch.hpp
+// polymorphic_iarchive_route.hpp
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
@@ -16,11 +16,9 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cstddef>
 #include <string>
 #include <ostream>
-#include <boost/noncopyable.hpp>
-#include <boost/cstdint.hpp>
+#include <cstddef>
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
@@ -29,12 +27,12 @@ namespace std{
 } // namespace std
 #endif
 
+#include <boost/noncopyable.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/archive/polymorphic_iarchive.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
-template<class T>
-class shared_ptr;
 namespace serialization {
     class extended_type_info;
 } // namespace serialization
@@ -45,7 +43,7 @@ class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iserializer;
 class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer;
 
 template<class ArchiveImplementation>
-class polymorphic_iarchive_dispatch :
+class polymorphic_iarchive_route :
     public polymorphic_iarchive,
     // note: gcc dynamic cross cast fails if the the derivation below is
     // not public.  I think this is a mistake.
@@ -180,12 +178,13 @@ public:
 
     // all current archives take a stream as constructor argument
     template <class _Elem, class _Tr>
-    polymorphic_iarchive_dispatch(
+    polymorphic_iarchive_route(
         std::basic_istream<_Elem, _Tr> & is,
         unsigned int flags = 0
     ) :
         ArchiveImplementation(is, flags)
     {}
+    virtual ~polymorphic_iarchive_route(){};
 };
 
 } // namespace detail

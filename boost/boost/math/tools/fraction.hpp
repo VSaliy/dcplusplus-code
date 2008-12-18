@@ -6,7 +6,11 @@
 #ifndef BOOST_MATH_TOOLS_FRACTION_INCLUDED
 #define BOOST_MATH_TOOLS_FRACTION_INCLUDED
 
-#include <cmath>
+#ifdef _MSC_VER
+#pragma once
+#endif
+
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/mpl/if.hpp>
@@ -257,3 +261,4 @@ typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, 
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_FRACTION_INCLUDED
+

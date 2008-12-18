@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SP_UC_FACTORIALS_HPP
 #define BOOST_MATH_SP_UC_FACTORIALS_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/array.hpp>
 #ifdef BOOST_MSVC
 #pragma warning(push) // Temporary until lexical cast fixed.
@@ -15,7 +19,7 @@
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
 namespace boost { namespace math
@@ -395,3 +399,4 @@ struct max_factorial
 } // namespace boost
 
 #endif // BOOST_MATH_SP_UC_FACTORIALS_HPP
+
