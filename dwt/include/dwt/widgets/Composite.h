@@ -105,7 +105,7 @@ Composite<Policy>::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle
 	BaseType::Seed(NULL, style | WS_CLIPCHILDREN, 0, caption),
 	background(( HBRUSH )( COLOR_3DFACE + 1 )),
 	menuName(NULL),
-	cursor(NULL)
+	cursor(::LoadCursor(0, IDC_ARROW))
 {
 }
 
