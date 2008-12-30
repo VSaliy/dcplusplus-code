@@ -22,7 +22,7 @@
 #include "StaticFrame.h"
 #include "TypedTable.h"
 #include "TextFrame.h"
-#include "ShellContextMenu.h"
+#include "ShellMenu.h"
 #include "HoldRedraw.h"
 
 #include <dcpp/File.h>
@@ -392,11 +392,11 @@ private:
 			menu->appendSeparator();
 			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
 
-			CShellContextMenu* shellMenu = 0;
+			ShellMenu* shellMenu = 0;
 			if(files->countSelected() == 1) {
 				string path = files->getSelectedData()->file;
 				if(File::getSize(path) != -1) {
-					shellMenu = new CShellContextMenu(menu, Text::utf8ToWide(path));
+					shellMenu = new ShellMenu(menu, Text::utf8ToWide(path));
 				}
 			}
 

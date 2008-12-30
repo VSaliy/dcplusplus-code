@@ -16,23 +16,32 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-/*
-* Based on a class by R. Engels
-* http://www.codeproject.com/shell/shellcontextmenu.asp
-*/
+// Based on <http://www.codeproject.com/shell/shellcontextmenu.asp> by R. Engels.
 
-#ifndef DCPLUSPLUS_WIN32_SHELL_CONTEXT_MENU_H
-#define DCPLUSPLUS_WIN32_SHELL_CONTEXT_MENU_H
+#ifndef DCPLUSPLUS_WIN32_SHELL_MENU_H
+#define DCPLUSPLUS_WIN32_SHELL_MENU_H
 
-class CShellContextMenu
+class ShellMenu
 {
-	static IContextMenu3* g_IContext3;
-	static CShellContextMenu* pShellMenu;
-	static WNDPROC OldWndProc;
+	struct Dispatcher : dwt::Dispatchers::Base<bool (const MSG&)> {
+		typedef dwt::Dispatchers::Base<bool (const MSG&)> BaseType;
+		Dispatcher(const BaseType::F& f_, LPCONTEXTMENU3 handler_) : BaseType(f_), handler(handler_) { }
+
+		bool operator()(const MSG& msg, LRESULT& ret) const {
+			if(f(msg)) {
+				handler->HandleMenuMsg2(msg.message, msg.wParam, msg.lParam, &ret);
+				return true;
+			}
+			return false;
+		}
+
+	private:
+		LPCONTEXTMENU3 handler;
+	};
 
 public:
-	CShellContextMenu(dwt::MenuPtr& parent_, const wstring& path);
-	~CShellContextMenu();
+	ShellMenu(dwt::MenuPtr& parent_, const wstring& path);
+	~ShellMenu();
 
 	void open(const dwt::ScreenCoordinate& pt, unsigned flags = TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
@@ -40,6 +49,7 @@ private:
 	dwt::MenuPtr parent;
 	dwt::MenuPtr menu;
 
+	LPCONTEXTMENU3 handler;
 	IShellFolder* m_psfFolder;
 	LPITEMIDLIST* m_pidlArray;
 
@@ -47,9 +57,12 @@ private:
 
 	void FreePIDLArray(LPITEMIDLIST* pidlArray);
 
-	static LRESULT CALLBACK HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	void handleInitMenuPopup(HMENU hMenu);
-	void handleUnInitMenuPopup(HMENU hMenu);
+	bool handleDrawItem(const MSG& msg);
+	bool handleMeasureItem(const MSG& msg);
+	bool handleMenuChar();
+	bool handleInitMenuPopup(const MSG& msg);
+	bool handleUnInitMenuPopup(const MSG& msg);
+	bool handleMenuSelect(const MSG& msg);
 };
 
-#endif // !defined(DCPLUSPLUS_WIN32_SHELL_CONTEXT_MENU_H)
+#endif // !defined(DCPLUSPLUS_WIN32_SHELL_MENU_H)

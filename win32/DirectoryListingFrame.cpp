@@ -22,7 +22,7 @@
 #include "LineDlg.h"
 #include "TextFrame.h"
 #include "HoldRedraw.h"
-#include "ShellContextMenu.h"
+#include "ShellMenu.h"
 
 #include "resource.h"
 
@@ -393,7 +393,7 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr menu;
-		CShellContextMenu* shellMenu = 0;
+		ShellMenu* shellMenu = 0;
 
 		if(files->countSelected() == 1) {
 			ItemInfo* ii = files->getSelectedData();
@@ -403,7 +403,7 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 			if(ii->type == ItemInfo::FILE) {
 				string localPath = dl->getLocalPath(ii->file);
 				if(!localPath.empty())
-					shellMenu = new CShellContextMenu(menu, Text::utf8ToWide(localPath));
+					shellMenu = new ShellMenu(menu, Text::utf8ToWide(localPath));
 			}
 		} else {
 			menu = makeMultiMenu();
