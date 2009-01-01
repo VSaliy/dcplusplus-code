@@ -20,9 +20,11 @@
 
 #include "SystemFrame.h"
 
+#include <dcpp/File.h>
 #include <dcpp/LogManager.h>
 #include "HoldRedraw.h"
 #include "WinUtil.h"
+#include "ShellMenu.h"
 
 SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("System Log"), IDH_SYSTEM_LOG, IDR_DCPP),
@@ -33,6 +35,7 @@ SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 		cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
 		log = addChild(cs);
 		addWidget(log);
+		log->onContextMenu(std::tr1::bind(&SystemFrame::handleContextMenu, this, _1));
 	}
 
 	initStatus();
@@ -87,6 +90,19 @@ void SystemFrame::layout() {
 bool SystemFrame::preClosing() {
 	LogManager::getInstance()->removeListener(this);
 	return true;
+}
+
+bool SystemFrame::handleContextMenu(const dwt::ScreenCoordinate& pt) {
+	string path = Text::fromT(log->textUnderCursor(pt));
+	if(File::getSize(path) != -1) {
+		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+		ShellMenu* shellMenu = new ShellMenu(menu, Text::utf8ToWide(path));
+		if(shellMenu) {
+			shellMenu->open(pt);
+			return true;
+		}
+	}
+	return false;
 }
 
 void SystemFrame::on(Message, time_t t, const string& message) throw() {

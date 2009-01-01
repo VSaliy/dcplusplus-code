@@ -76,17 +76,10 @@ void HashManager::hashDone(const string& aFileName, uint32_t aTimeStamp, const T
 
 	fire(HashManagerListener::TTHDone(), aFileName, tth.getRoot());
 
-	string fn = aFileName;
-	if (count(fn.begin(), fn.end(), PATH_SEPARATOR) >= 2) {
-		string::size_type i = fn.rfind(PATH_SEPARATOR);
-		i = fn.rfind(PATH_SEPARATOR, i - 1);
-		fn.erase(0, i);
-		fn.insert(0, "...");
-	}
 	if (speed > 0) {
-		LogManager::getInstance()->message(str(F_("Finished hashing: %1% (%2%/s)") % fn % Util::formatBytes(speed)));
+		LogManager::getInstance()->message(str(F_("Finished hashing: %1% (%2%/s)") % aFileName % Util::formatBytes(speed)));
 	} else {
-		LogManager::getInstance()->message(str(F_("Finished hashing: %1%") % fn));
+		LogManager::getInstance()->message(str(F_("Finished hashing: %1%") % aFileName));
 	}
 }
 
