@@ -389,6 +389,25 @@ int WinUtil::getIconIndex(const tstring& aFileName) {
 		return 2;
 	}
 }
+
+string WinUtil::reducePaths(const string& message) {
+	StringTokenizer<string> t(message, ' ');
+	StringList& l = t.getTokens();
+
+	string ret;
+	for(size_t i = 0; i < l.size(); ++i) {
+		string fn = l[i];
+		if(count(fn.begin(), fn.end(), PATH_SEPARATOR) >= 2) {
+			fn.erase(0, fn.rfind(PATH_SEPARATOR, fn.rfind(PATH_SEPARATOR) - 1));
+			fn.insert(0, "...");
+		}
+		if(i > 0)
+			ret += ' ';
+		ret += fn;
+	}
+	return ret;
+}
+
 void WinUtil::addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename) {
 	menu->appendItem(T_("Search for alternates"), std::tr1::bind(&WinUtil::searchHash, tth));
 	menu->appendItem(T_("Lookup TTH at Bitzi.com"), std::tr1::bind(WinUtil::bitziLink, tth));

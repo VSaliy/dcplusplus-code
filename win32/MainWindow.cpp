@@ -486,7 +486,7 @@ void MainWindow::handleMinimized() {
 }
 
 void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
-	tstring line = Text::toT("[" + Util::getShortTimeString(t) + "] " + m);
+	tstring line = Text::toT("[" + Util::getShortTimeString(t) + "] " + WinUtil::reducePaths(m));
 	callAsync(std::tr1::bind(&MainWindow::setStatus, this, STATUS_STATUS, line, true, false));
 }
 
