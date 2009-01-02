@@ -1,0 +1,149 @@
+Import('dev')
+env = dev.env.Clone()
+
+# static_HTMLs holds static (not dynamically generated) HTML sources
+static_HTMLs = Glob('*.html', strings = 1)
+static_HTMLs.sort()
+if 'changelog.html' in static_HTMLs:
+	static_HTMLs.remove('changelog.html')
+if 'compile.html' in static_HTMLs:
+	static_HTMLs.remove('compile.html')
+if 'fdl.html' in static_HTMLs:
+	static_HTMLs.remove('fdl.html')
+
+# cshelp.h is included in resource.h, which in turn is included in the DC++
+# source; hence, we generate it even when help files are not being compiled.
+from gen_cshelp import gen_cshelp
+env.Command('cshelp.h', static_HTMLs, Action(gen_cshelp, 'Generating $TARGET'))
+env.Depends('resource.h', 'cshelp.h')
+
+if not env['help']:
+	Return()
+
+if env.WhereIs('hhc') is None:
+	print 'hhc.exe not found, skipping help build'
+	Return()
+
+# fix hhc.exe reverse return value - UGLY - taken from the NSIS build system
+old_spawn = env['SPAWN']
+def new_spawn(*args, **kw):
+	result = old_spawn(*args, **kw)
+	if 'hhc' in args[3]:
+		return not result
+	else:
+		return result
+env['SPAWN'] = new_spawn
+
+# generate changelog.html
+from gen_changelog import gen_changelog
+env.Command('changelog.html', ['#/changelog.txt', 'template.html'], Action(gen_changelog, 'Generating $TARGET'))
+
+# generate compile.html
+from gen_compile import gen_compile
+env.Command('compile.html', ['#/Compile.txt', 'template.html'], Action(gen_compile, 'Generating $TARGET'))
+
+# define which source files need to be copied to the build directory
+CHM_sources = Glob('*.html')
+CHM_sources.append('DCPlusPlus.hhp')
+CHM_sources.append('external.png')
+CHM_sources.append('index.hhk')
+CHM_sources.append('logo.jpg')
+CHM_sources.append('office11.css')
+CHM_sources.append('resource.h')
+CHM_sources.append('style.css')
+CHM_sources.append(Glob('#/res/*.bmp'))
+CHM_sources.append(Glob('#/res/*.ico'))
+
+# additional dependencies (that have to be built before the help file)
+CHM_dependencies = ['addendum.txt', 'cshelp.h']
+
+import os
+import filecmp
+from gen_toc import gen_toc
+
+# define our CHM builder
+def gen_CHM(target, source, env):
+	# create the temporary build directory
+	build_dir = 'build/help'
+	build_path = build_dir + '/'
+	env.Execute([Delete(build_dir), Mkdir(build_dir)])
+
+	# find the translation file if one is provided
+	po_node = None
+	for node in source:
+		if node.path[-3:] == '.po':
+			po_node = node
+			source.remove(node)
+
+	if po_node is None:
+		# copy all the source files to the build directory
+		for node in source:
+			env.Execute(Copy(build_dir, node))
+
+	else:
+		# translate translatable source files, copy the others
+		po4a_path = Dir('#/po4a').abspath + '/'
+		for node in source:
+			filename = os.path.basename(node.path)
+			if filename[-5:] == '.html' and filename != 'changelog.html' and filename != 'compile.html' and filename != 'fdl.html':
+				env.Execute(Action('perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-translate" -f xhtml -M utf-8 -L utf-8 -A utf-8 -p "' + str(po_node) + '" -k 0 -m "' + str(node) + '" -l "' + build_path + filename + '" -a help/addendum.txt', 'Translating ' + str(node)))
+			else:
+				env.Execute(Copy(build_dir, node))
+
+	# generate context-sensitive help files (cshelp.h and cshelp.txt)
+	print 'Generating context-sensitive help files in ' + build_dir
+	gen_cshelp([build_path + 'cshelp.h', build_path + 'cshelp.txt'], Glob(build_path + '*.html'), env)
+
+	# make sure the generated cshelp.h is the same as the vanilla one
+	if not filecmp.cmp(build_path + 'cshelp.h', 'help/cshelp.h'):
+		print 'The generated cshelp.h file is not the same as the vanilla one; ' + str(target[0]) + ' won\'t be compiled.'
+		return 1
+
+	# generate toc.hhc
+	print 'Generating toc.hhc in ' + build_dir
+	gen_toc(build_path + 'toc.hhc', build_path + 'index.html')
+
+	# compile the CHM file in the build directory
+	CHM_path = build_path + 'DCPlusPlus.chm'
+	log_path = build_path + 'hhc.log'
+	HHP_path = build_path + 'DCPlusPlus.hhp'
+	ret = env.Execute(Action('hhc "' + HHP_path + '" > "' + log_path + '"', 'Compiling the ' + CHM_path + ' temporary help file; log output: ' + log_path))
+
+	# copy the compiled file to its final target
+	env.Execute(Copy(target[0], CHM_path))
+
+	if not env['savetemps']:
+		# clean up
+		env.Execute(Delete(build_dir))
+
+	return ret
+env.Append(BUILDERS = {'CHMBuild' : Builder(action = Action(gen_CHM, 'Compiling the $TARGET help file'))})
+
+# translation using po4a <http://po4a.alioth.debian.org/>
+if env['mode'] == 'release' or env['i18n']:
+	if env.WhereIs('perl') is None:
+		print 'Perl is required to run po4a scripts; help translation is impossible'
+	else:
+		# create the translation template
+		def gen_pot(target, source, env):
+			po4a_path = Dir('#/po4a').abspath + '/'
+			cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-gettextize" -f xhtml -o "untranslated=<untranslated> <untranslated><li>" -M utf-8 -p "' + str(target[0]) + '"'
+			for node in source:
+				cmd += ' -m "' + str(node) + '"'
+			return env.Execute(cmd)
+		potfile = 'po/dcpp-help.pot'
+		env.Command(potfile, static_HTMLs, Action(gen_pot, 'Extracting help texts to $TARGET'))
+
+		# update .po's in help/po and compile translated help files
+		po_list = Glob('po/*.po')
+		for po_node in po_list:
+			env.Precious(env.PoBuild(po_node, potfile))
+			target = dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/DCPlusPlus.chm'
+			env.Depends(target, CHM_dependencies)
+			env.CHMBuild(target, [CHM_sources, po_node])
+
+# compile the main (untranslated) help file
+target = dev.get_build_path('bin') + '/DCPlusPlus.chm'
+env.Depends(target, CHM_dependencies)
+ret = env.CHMBuild(target, CHM_sources)
+Return('ret')

@@ -1,0 +1,45 @@
+# vim: set filetype=py
+
+from os import popen4
+import re
+
+def getRevision():
+	cmd = 'svn info -R "' + env.Dir("#").abspath + '"'
+	stdin, stdout = popen4(cmd)
+	stdin.close()
+	maxver = 0
+	matcher = re.compile(ur'Revision: (\d+)')
+	for line in stdout.readlines():
+		match = matcher.match(line)
+		if not match:
+			continue
+		ver = int(match.group(1))
+		if ver > maxver:
+			maxver = ver
+	
+	stdout.close()
+	print "Building revision " + str(maxver)
+	
+	return str(maxver)
+ 
+Import('dev source_path')
+
+env, target, sources = dev.prepare_build(source_path, 'dcpp', in_bin = False, precompiled_header = 'stdinc')
+sources += dev.get_sources(source_path, "*.c")
+
+env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib'])
+
+for i, source in enumerate(sources):
+	if source.find("version.cpp") != -1:
+		rev = ['DCPP_REVISION=' + getRevision()]
+		sources[i] = env.StaticObject(source, CPPDEFINES=env['CPPDEFINES'] + rev)
+
+env.Append(CPPDEFINES=["BUILDING_DCPP=1"])
+
+headers=dev.get_sources(source_path, "*.h")
+
+dev.i18n(source_path, env, [sources, headers], 'libdcpp')
+
+ret = env.StaticLibrary(target, sources)
+
+Return('ret')

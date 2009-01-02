@@ -1,0 +1,215 @@
+/*
+ * Copyright (C) 2001-2008 Jacek Sieka, arnetheduck on gmail point com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#include "stdafx.h"
+#include "resource.h"
+
+#include "SpyFrame.h"
+
+#include <dcpp/ShareManager.h>
+#include <dcpp/ClientManager.h>
+
+#include "SearchFrame.h"
+
+#ifdef __MINGW32__
+const size_t SpyFrame::AVG_TIME; // TODO gcc needs this - why?
+#endif
+
+static const ColumnInfo searchesColumns[] = {
+	{ N_("Search string"), 305, false },
+	{ N_("Count"), 70, true },
+	{ N_("Time"), 85, false }
+};
+
+SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
+	BaseType(mdiParent, T_("Search Spy"), IDH_SEARCH_SPY, IDR_SPY),
+	searches(0),
+	ignoreTTH(0),
+	bIgnoreTTH(BOOLSETTING(SPY_FRAME_IGNORE_TTH_SEARCHES)),
+	total(0),
+	cur(0)
+{
+	memset(perSecond, 0, sizeof(perSecond));
+
+	{
+		Table::Seed cs = WinUtil::Seeds::Table;
+		cs.style |= LVS_SINGLESEL;
+		searches = addChild(cs);
+		addWidget(searches);
+
+		WinUtil::makeColumns(searches, searchesColumns, COLUMN_LAST, SETTING(SPYFRAME_ORDER), SETTING(SPYFRAME_WIDTHS));
+		searches->setSort(COLUMN_COUNT, dwt::Table::SORT_INT, false);
+
+		searches->onColumnClick(std::tr1::bind(&SpyFrame::handleColumnClick, this, _1));
+		searches->onContextMenu(std::tr1::bind(&SpyFrame::handleContextMenu, this, _1));
+	}
+
+	{
+		tstring text = T_("Ignore TTH searches");
+
+		{
+			CheckBox::Seed cs(text);
+			ignoreTTH = addChild(cs);
+			ignoreTTH->setHelpId(IDH_SPY_IGNORE_TTH);
+			ignoreTTH->setChecked(bIgnoreTTH);
+			ignoreTTH->onClicked(std::tr1::bind(&SpyFrame::handleIgnoreTTHClicked, this));
+		}
+
+		statusSizes[STATUS_IGNORE_TTH] = ignoreTTH->getTextSize(text).x + 16; ///@todo get real checkbox width
+	}
+
+	initStatus();
+
+	setStatusHelpId(STATUS_TOTAL, IDH_SPY_TOTAL);
+	setStatusHelpId(STATUS_AVG_PER_SECOND, IDH_SPY_AVG_PER_SECOND);
+	setStatusHelpId(STATUS_HITS, IDH_SPY_HITS);
+	setStatusHelpId(STATUS_HIT_RATIO, IDH_SPY_HIT_RATIO);
+
+	layout();
+
+	ShareManager::getInstance()->setHits(0);
+
+	ClientManager::getInstance()->addListener(this);
+
+	initSecond();
+}
+
+SpyFrame::~SpyFrame() {
+}
+
+void SpyFrame::layout() {
+	dwt::Rectangle r(this->getClientAreaSize());
+
+	layoutStatus(r);
+	mapWidget(STATUS_IGNORE_TTH, ignoreTTH);
+
+	searches->setBounds(r);
+}
+
+void SpyFrame::initSecond() {
+	createTimer(std::tr1::bind(&SpyFrame::eachSecond, this), 1000);
+}
+
+bool SpyFrame::eachSecond() {
+	size_t tot = std::accumulate(perSecond, perSecond + AVG_TIME, 0u);
+	size_t t = std::max(1u, std::min(cur, AVG_TIME));
+
+	float x = static_cast<float>(tot)/t;
+
+	cur++;
+	perSecond[cur % AVG_TIME] = 0;
+	setStatus(STATUS_AVG_PER_SECOND, str(TF_("Average/s: %1%") % x));
+	return true;
+}
+
+bool SpyFrame::preClosing() {
+	ClientManager::getInstance()->removeListener(this);
+	return true;
+}
+
+void SpyFrame::postClosing() {
+	searches->clear();
+
+	SettingsManager::getInstance()->set(SettingsManager::SPYFRAME_ORDER, WinUtil::toString(searches->getColumnOrder()));
+	SettingsManager::getInstance()->set(SettingsManager::SPYFRAME_WIDTHS, WinUtil::toString(searches->getColumnWidths()));
+
+	SettingsManager::getInstance()->set(SettingsManager::SPY_FRAME_IGNORE_TTH_SEARCHES, bIgnoreTTH);
+}
+
+void SpyFrame::handleColumnClick(int column) {
+	if(column == searches->getSortColumn()) {
+		if (!searches->isAscending())
+			searches->setSort(-1, searches->getSortType());
+		else
+			searches->setSort(searches->getSortColumn(), searches->getSortType(), false);
+	} else {
+		if(column == COLUMN_COUNT) {
+			searches->setSort(column, dwt::Table::SORT_INT);
+		} else {
+			searches->setSort(column, dwt::Table::SORT_STRING_NOCASE);
+		}
+	}
+}
+
+bool SpyFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
+	if(searches->countSelected() == 1) {
+		if(pt.x() == -1 && pt.y() == -1) {
+			pt = searches->getContextMenuPos();
+		}
+
+		MenuPtr contextMenu = addChild(WinUtil::Seeds::menu);
+		contextMenu->appendItem(T_("&Search"), std::tr1::bind(&SpyFrame::handleSearch, this, searches->getText(searches->getSelected(), COLUMN_STRING)), dwt::IconPtr(new dwt::Icon(IDR_SEARCH)));
+
+		contextMenu->open(pt);
+		return true;
+	}
+	return false;
+}
+
+void SpyFrame::handleSearch(const tstring& searchString) {
+	if(Util::strnicmp(searchString.c_str(), _T("TTH:"), 4) == 0)
+		SearchFrame::openWindow(getParent(), searchString.substr(4), SearchManager::TYPE_TTH);
+	else
+		SearchFrame::openWindow(getParent(), searchString, SearchManager::TYPE_ANY);
+}
+
+void SpyFrame::handleIgnoreTTHClicked() {
+	bIgnoreTTH = ignoreTTH->getChecked();
+}
+
+void SpyFrame::add(const tstring& x) {
+	total++;
+
+	// Not thread safe, but who cares really...
+	perSecond[cur % AVG_TIME]++;
+
+	int j = searches->find(x);
+	if(j == -1) {
+		TStringList a;
+		a.push_back(x);
+		a.push_back(Text::toT(Util::toString(1)));
+		a.push_back(Text::toT(Util::getTimeString()));
+		searches->insert(a);
+		if(searches->size() > 500) {
+			searches->erase(searches->size() - 1);
+		}
+	} else {
+		searches->setText(j, COLUMN_COUNT, Text::toT(Util::toString(Util::toInt(Text::fromT(searches->getText(j, COLUMN_COUNT))) + 1)));
+		searches->setText(j, COLUMN_TIME, Text::toT(Util::getTimeString()));
+		if(searches->getSortColumn() == COLUMN_COUNT || searches->getSortColumn() == COLUMN_TIME )
+			searches->resort();
+	}
+
+	setStatus(STATUS_TOTAL, str(TF_("Total: %1%") % total));
+	setStatus(STATUS_HITS, str(TF_("Hits: %1%") % ShareManager::getInstance()->getHits()));
+	double ratio = total > 0 ? ((double)ShareManager::getInstance()->getHits()) / (double)total : 0.0;
+	setStatus(STATUS_HIT_RATIO, str(TF_("Hit Ratio: %1%") % ratio));
+
+	setDirty(SettingsManager::BOLD_SEARCH_SPY);
+}
+
+void SpyFrame::on(ClientManagerListener::IncomingSearch, const string& s) throw() {
+	if(bIgnoreTTH && s.compare(0, 4, "TTH:") == 0)
+		return;
+	tstring x = Text::toT(s);
+	tstring::size_type i = 0;
+	while( (i=x.find(_T('$'))) != string::npos) {
+		x[i] = _T(' ');
+	}
+	callAsync(std::tr1::bind(&SpyFrame::add, this, x));
+}

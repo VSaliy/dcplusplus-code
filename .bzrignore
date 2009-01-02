@@ -1,0 +1,17 @@
+./build
+./.project
+./.cproject
+./.sconsign.dblite
+./.settings
+custom.py
+*.lib
+*.pdb
+*.pot
+./htmlhelp/include/htmlhelp.h
+./htmlhelp/lib/htmlhelp.lib
+natupnp.h
+./help/changelog.html
+./help/compile.html
+./help/cshelp.h
+./.pydevproject
+./doc

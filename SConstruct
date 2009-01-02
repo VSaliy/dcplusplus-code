@@ -1,0 +1,191 @@
+# vim: set filetype: py
+
+EnsureSConsVersion(0, 98)
+
+import os,sys
+from build_util import Dev
+
+gcc_flags = {
+	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-Wno-address', '-fexceptions', '-mthreads'],
+	'debug': [], 
+	'release' : ['-O2', '-mwindows']
+}
+
+gcc_xxflags = {
+	'common' : [],
+	'debug' : [],
+	'release' : ['-fno-enforce-eh-specs']
+}
+
+msvc_flags = {
+	# 4100: unreferenced formal parameter
+	# 4121: alignment of member sensitive to packing
+	# 4127: conditional expression is constant
+	# 4189: var init'd, unused
+	# 4510: no default constructor
+	# 4512: assn not generated
+	# 4610: no default constructor
+	# 4800: converting from BOOL to bool
+	# 4996: fn unsafe, use fn_s
+	'common' : ['/W4', '/EHsc', '/Zi', '/GR', '/wd4100', '/wd4121', '/wd4127', '/wd4189', '/wd4510', '/wd4512', '/wd4610', '/wd4800', '/wd4996'],
+	'debug' : ['/MTd'],
+	'release' : ['/O2', '/MT']
+}
+
+msvc_xxflags = {
+	'common' : [],
+	'debug' : [],
+	'release' : []
+}
+
+gcc_link_flags = {
+	'common' : ['-g', '-Wl,--no-undefined', '-time', '-mthreads'],
+	'debug' : [],
+	'release' : ['-mwindows']
+}
+
+msvc_link_flags = {
+	'common' : ['/DEBUG', '/FIXED:NO', '/INCREMENTAL:NO', '/SUBSYSTEM:WINDOWS', '/MANIFEST:NO'],
+	'debug' : [],
+	'release' : []
+}
+
+msvc_defs = {
+	'common' : ['_REENTRANT'],
+	'debug' : ['_DEBUG'],
+	'release' : ['NDEBUG']
+}
+
+gcc_defs = {
+	'common' : ['_REENTRANT'],
+	'debug' : ['_DEBUG'],
+	'release' : ['NDEBUG']
+}
+
+# --- cut ---
+
+defEnv = Environment(ENV = os.environ)
+opts = Options('custom.py', ARGUMENTS)
+opts.AddOptions(
+	EnumOption('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
+	EnumOption('mode', 'Compile mode', 'debug', ['debug', 'release']),
+	BoolOption('nativestl', 'Use native STL instead of STLPort', 'yes'),
+	BoolOption('gch', 'Use GCH when compiling GUI (disable if you have linking problems with mingw)', 'yes'),
+	BoolOption('verbose', 'Show verbose command lines', 'no'),
+	BoolOption('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
+	BoolOption('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
+	BoolOption('help', 'Build help files', 'yes'),
+	BoolOption('i18n', 'Rebuild i18n files in debug build', 'no'),
+	('prefix', 'Prefix to use when cross compiling', 'i386-mingw32-')
+)
+opts.Update(defEnv)
+Help(opts.GenerateHelpText(defEnv))
+
+env = Environment(ENV = os.environ, tools = [defEnv['tools']], options = opts)
+
+if 'mingw' not in env['TOOLS'] and 'gcc' in env['TOOLS']:
+	print "Non-mingw gcc builds not supported"
+	Exit(1)
+
+mode = env['mode']
+if mode not in gcc_flags:
+	print "Unknown mode, exiting"
+	Exit(1)
+
+dev = Dev(mode, env['tools'], env)
+dev.prepare()
+
+env.SConsignFile()
+
+env.Append(CPPPATH = ["#/boost/boost/tr1/tr1/", "#/boost/", "#/htmlhelp/include/", "#/intl/"])
+env.Append(LIBPATH = ["#/htmlhelp/lib/"])
+
+if env['nativestl']:
+	if 'gcc' in env['TOOLS']:
+		env.Append(CPPDEFINES = ['BOOST_HAS_GCC_TR1'])
+	# boost detects MSVC's tr1 automagically
+
+else:
+	env.Append(CPPPATH = ['#/stlport/stlport/'])
+	env.Append(LIBPATH = ['#/stlport/lib/'])
+	env.Append(CPPDEFINES = ['HAVE_STLPORT', '_STLP_USE_STATIC_LIB=1'])
+	if mode == 'debug':
+		env.Append(LIBS = ['stlportg.5.1'])
+	else:
+		env.Append(LIBS = ['stlport.5.1'])
+
+	# assume STLPort has tr1 containers
+	env.Append(CPPDEFINES = ['BOOST_HAS_TR1'])
+
+if 'gcc' in env['TOOLS']:
+	if env['savetemps']:
+		env.Append(CCFLAGS = ['-save-temps', '-fverbose-asm'])
+	else:
+		env.Append(CCFLAGS = ['-pipe'])
+
+if env['unicode']:
+	env.Append(CPPDEFINES = ['UNICODE', '_UNICODE'])
+
+if env['CC'] == 'cl': # MSVC
+	flags = msvc_flags
+	xxflags = msvc_xxflags
+	link_flags = msvc_link_flags
+	defs = msvc_defs
+	
+	env.Append(LIBS = ['User32', 'shell32', 'Advapi32'])
+else:
+	flags = gcc_flags
+	xxflags = gcc_xxflags
+	link_flags = gcc_link_flags
+	defs = gcc_defs
+
+	env.Tool("gch", toolpath=".")
+
+env.Append(CPPDEFINES = defs[mode])
+env.Append(CPPDEFINES = defs['common'])
+
+env.Append(CCFLAGS = flags[mode])
+env.Append(CCFLAGS = flags['common'])
+
+env.Append(LINKFLAGS = link_flags[mode])
+env.Append(LINKFLAGS = link_flags['common'])
+
+env.SourceCode('.', None)
+
+import SCons.Scanner
+SWIGScanner = SCons.Scanner.ClassicCPP(
+	"SWIGScan",
+	".i",
+	"CPPPATH",
+	'^[ \t]*[%,#][ \t]*(?:include|import)[ \t]*(<|")([^>"]+)(>|")'
+)
+env.Append(SCANNERS=[SWIGScanner])
+
+#
+# internationalization (ardour.org provided the initial idea)
+#
+
+po_args = ['msgmerge', '-q', '--update', '--backup=none', '--no-location', '$TARGET', '$SOURCE']
+po_bld = Builder (action = Action([po_args], 'Updating translation $TARGET from $SOURCES'))
+env.Append(BUILDERS = {'PoBuild' : po_bld})
+
+mo_args = ['msgfmt', '-c', '-o', '$TARGET', '$SOURCE']
+mo_bld = Builder (action = Action([mo_args], 'Compiling message catalog $TARGET from $SOURCES'))
+env.Append(BUILDERS = {'MoBuild' : mo_bld})
+
+pot_args = ['xgettext', '--from-code=UTF-8', '--foreign-user', '--package-name=$PACKAGE',
+		'--copyright-holder=Jacek Sieka', '--msgid-bugs-address=dcplusplus-devel@lists.sourceforge.net',
+		'--no-wrap', '--keyword=_', '--keyword=T_', '--keyword=TF_', '--keyword=TFN_:1,2',
+		'--keyword=F_', '--keyword=gettext_noop', '--keyword=N_', '--keyword=CT_', '--boost', '-s',
+		'--output=$TARGET', '$SOURCES']
+
+pot_bld = Builder (action = Action([pot_args], 'Extracting messages to $TARGET from $SOURCES'))
+env.Append(BUILDERS = {'PotBuild' : pot_bld})
+
+dev.zlib = dev.build('zlib/')
+dev.bzip2 = dev.build('bzip2/')
+dev.intl = dev.build('intl/')
+dev.dwt = dev.build('dwt/')
+dev.client = dev.build('dcpp/')
+dev.help = dev.build('help/')
+dev.win32 = dev.build('win32/')
