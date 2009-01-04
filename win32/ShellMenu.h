@@ -50,12 +50,8 @@ private:
 	dwt::MenuPtr menu;
 
 	LPCONTEXTMENU3 handler;
-	IShellFolder* m_psfFolder;
-	LPITEMIDLIST* m_pidlArray;
 
 	unsigned sel_id;
-
-	void FreePIDLArray(LPITEMIDLIST* pidlArray);
 
 	bool handleDrawItem(const MSG& msg);
 	bool handleMeasureItem(const MSG& msg);

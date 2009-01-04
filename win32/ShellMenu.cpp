@@ -28,8 +28,6 @@
 ShellMenu::ShellMenu(dwt::MenuPtr& parent_, const wstring& path) :
 parent(parent_),
 handler(0),
-m_psfFolder(NULL),
-m_pidlArray(NULL),
 sel_id(0)
 {
 	parent->appendSeparator();
@@ -46,7 +44,8 @@ sel_id(0)
 	psfDesktop->ParseDisplayName(NULL, NULL, const_cast<LPWSTR>(path.c_str()), NULL, &pidl, NULL);
 
 	// now we need the parent IShellFolder interface of pidl, and the relative PIDL to that interface
-	SHBindToParent(pidl, IID_IShellFolder, (LPVOID*)&m_psfFolder, NULL);
+	IShellFolder* folder;
+	SHBindToParent(pidl, IID_IShellFolder, reinterpret_cast<LPVOID*>(&folder), NULL);
 
 	// get interface to IMalloc (need to free the PIDLs allocated by the shell functions)
 	LPMALLOC lpMalloc = NULL;
@@ -56,21 +55,8 @@ sel_id(0)
 	// now we need the relative pidl
 	IShellFolder* psfFolder = NULL;
 	psfDesktop->ParseDisplayName (NULL, NULL, const_cast<LPWSTR>(path.c_str()), NULL, &pidl, NULL);
-	LPITEMIDLIST pidlItem = NULL;
-	SHBindToParent(pidl, IID_IShellFolder, (LPVOID*)&psfFolder, (LPCITEMIDLIST*)&pidlItem);
-
-	// copy pidlItem to m_pidlArray
-	m_pidlArray = (LPITEMIDLIST *) realloc(m_pidlArray, sizeof (LPITEMIDLIST));
-	int nSize = 0;
-	LPITEMIDLIST pidlTemp = pidlItem;
-	while(pidlTemp->mkid.cb)
-	{
-		nSize += pidlTemp->mkid.cb;
-		pidlTemp = (LPITEMIDLIST) (((LPBYTE) pidlTemp) + pidlTemp->mkid.cb);
-	}
-	LPITEMIDLIST pidlRet = (LPITEMIDLIST) calloc(nSize + sizeof (USHORT), sizeof (BYTE));
-	CopyMemory(pidlRet, pidlItem, nSize);
-	m_pidlArray[0] = pidlRet;
+	LPCITEMIDLIST pidlItem;
+	SHBindToParent(pidl, IID_IShellFolder, reinterpret_cast<LPVOID*>(&psfFolder), &pidlItem);
 
 	lpMalloc->Free(pidl);
 
@@ -81,7 +67,8 @@ sel_id(0)
 	LPCONTEXTMENU handlerBase = 0;
 	LPCONTEXTMENU handler1 = 0;
 	// first we retrieve the normal IContextMenu interface (every object should have it)
-	m_psfFolder->GetUIObjectOf(NULL, 1, (LPCITEMIDLIST *) m_pidlArray, IID_IContextMenu, NULL, reinterpret_cast<LPVOID*>(&handler1));
+	folder->GetUIObjectOf(NULL, 1, &pidlItem, IID_IContextMenu, NULL, reinterpret_cast<LPVOID*>(&handler1));
+	folder->Release();
 	if(handler1 && (handler1->QueryInterface(IID_IContextMenu3, reinterpret_cast<LPVOID*>(&handlerBase)) == NOERROR) && handlerBase) {
 		handler1->Release(); // we can now release version 1 interface, cause we got a higher one
 
@@ -99,13 +86,6 @@ sel_id(0)
 ShellMenu::~ShellMenu() {
 	if(handler)
 		handler->Release();
-
-	// free all allocated datas
-	if(m_psfFolder)
-		m_psfFolder->Release();
-	m_psfFolder = NULL;
-	FreePIDLArray(m_pidlArray);
-	m_pidlArray = NULL;
 }
 
 void ShellMenu::open(const dwt::ScreenCoordinate& pt, unsigned flags) {
@@ -118,18 +98,6 @@ void ShellMenu::open(const dwt::ScreenCoordinate& pt, unsigned flags) {
 	}
 
 	delete this;
-}
-
-void ShellMenu::FreePIDLArray(LPITEMIDLIST* pidlArray)
-{
-	if(!pidlArray)
-		return;
-
-	int iSize = _msize (pidlArray) / sizeof (LPITEMIDLIST);
-
-	for(int i = 0; i < iSize; i++)
-		free(pidlArray[i]);
-	free(pidlArray);
 }
 
 bool ShellMenu::handleMenuChar() {
