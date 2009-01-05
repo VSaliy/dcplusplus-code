@@ -96,6 +96,8 @@ public:
 	void removeSource(const string& aTarget, const UserPtr& aUser, int reason, bool removeConn = true) throw();
 	void removeSource(const UserPtr& aUser, int reason) throw();
 
+	void recheck(const string& aTarget);
+	
 	void setPriority(const string& aTarget, QueueItem::Priority p) throw();
 
 	void getTargets(const TTHValue& tth, StringList& sl);
@@ -137,6 +139,27 @@ private:
 		FileList files;
 		CriticalSection cs;
 	} mover;
+
+	class Rechecker : public Thread {
+		struct DummyOutputStream : OutputStream {
+			virtual size_t write(const void*, size_t n) throw(Exception) { return n; }
+			virtual size_t flush() throw(Exception) { return 0; }
+		};
+
+	public:
+		explicit Rechecker(QueueManager* qm_) : qm(qm_), active(false) { }
+		virtual ~Rechecker() { join(); }
+
+		void add(const string& file);
+		virtual int run();
+
+	private:
+		QueueManager* qm;
+		bool active;
+
+		StringList files;
+		CriticalSection cs;
+	} rechecker;
 
 	/** All queue items by target */
 	class FileQueue {
@@ -223,6 +246,8 @@ private:
 
 	void load(const SimpleXML& aXml);
 	void moveFile(const string& source, const string& target);
+	void moveStuckFile(QueueItem* qi);
+	void rechecked(QueueItem* qi);
 
 	void setDirty();
 

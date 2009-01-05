@@ -113,7 +113,7 @@ private:
 		~QueueItemInfo() { delete display; }
 
 		void update();
-
+		void recheck();
 		void remove();
 
 		// TypedTable functions
@@ -251,6 +251,7 @@ private:
 	void handleShowTreeClicked();
 	void handleMove();
 	void handleRemove();
+	void handleRecheck();
 	void handlePriority(QueueItem::Priority p);
 	void handlePM(const UserPtr& user);
 	void handleRemoveSource(const UserPtr& user);
@@ -265,12 +266,21 @@ private:
 	void onAdded(QueueItemInfo* ii);
 	void onRemoved(const string& s);
 	void onUpdated(const QueueItem& qi);
+	void onRechecked(QueueItem* qi, const tstring& message);
 
 	virtual void on(QueueManagerListener::Added, QueueItem* aQI) throw();
 	virtual void on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw();
 	virtual void on(QueueManagerListener::Removed, QueueItem* aQI) throw();
 	virtual void on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw();
 	virtual void on(QueueManagerListener::StatusUpdated, QueueItem* aQI) throw() { on(QueueManagerListener::SourcesUpdated(), aQI); }
+
+	virtual void on(QueueManagerListener::RecheckStarted, QueueItem* aQI) throw();
+	virtual void on(QueueManagerListener::RecheckNoFile, QueueItem* aQI) throw();
+	virtual void on(QueueManagerListener::RecheckFileTooSmall, QueueItem* aQI) throw();
+	virtual void on(QueueManagerListener::RecheckDownloadsRunning, QueueItem* aQI) throw();
+	virtual void on(QueueManagerListener::RecheckNoTree, QueueItem* aQI) throw();
+	virtual void on(QueueManagerListener::RecheckAlreadyFinished, QueueItem* aQI) throw();
+	virtual void on(QueueManagerListener::RecheckDone, QueueItem* aQI) throw();
 };
 
 #endif // !defined(QUEUE_FRAME_H)

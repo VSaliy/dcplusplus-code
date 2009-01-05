@@ -4,6 +4,7 @@
 * [L#264146] Fix the finished downloads check-box sometimes not appearing (poy)
 * Remove unsightly border below tab headers (poy)
 * Fix wrong mouse cursors (poy)
+* [L#312946] Add possibility to recheck unfinished downloads (emtee, poy)
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 
