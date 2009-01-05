@@ -46,10 +46,6 @@ static const ColumnInfo filesColumns[] = {
 
 #define FILE_LIST_NAME _T("File Lists")
 
-void QueueFrame::QueueItemInfo::remove() {
-	QueueManager::getInstance()->remove(getTarget());
-}
-
 QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("Download Queue"), IDH_QUEUE, IDR_QUEUE),
 	dirs(0),
@@ -412,6 +408,14 @@ void QueueFrame::QueueItemInfo::update() {
 	}
 }
 
+void QueueFrame::QueueItemInfo::recheck() {
+	QueueManager::getInstance()->recheck(getTarget());
+}
+
+void QueueFrame::QueueItemInfo::remove() {
+	QueueManager::getInstance()->remove(getTarget());
+}
+
 static tstring getDisplayName(const string& name) {
 	if(name.empty())
 		return Util::emptyStringT;
@@ -702,6 +706,10 @@ void QueueFrame::handleRemove() {
 	usingDirMenu ? removeSelectedDir() : removeSelected();
 }
 
+void QueueFrame::handleRecheck() {
+	files->forEachSelected(&QueueItemInfo::recheck);
+}
+
 void QueueFrame::handleMove() {
 	usingDirMenu ? moveSelectedDir() : moveSelected();
 }
@@ -846,6 +854,7 @@ MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 
 	WinUtil::addHashItems(menu, qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())));
 	menu->appendItem(T_("&Move/Rename"), std::tr1::bind(&QueueFrame::handleMove, this));
+	menu->appendItem(T_("Re&check integrity"), std::tr1::bind(&QueueFrame::handleRecheck, this));
 	addPriorityMenu(menu);
 	addBrowseMenu(menu, qii);
 	addPMMenu(menu, qii);
@@ -854,16 +863,14 @@ MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	addRemoveMenu(menu, qii);
 	addRemoveSourcesMenu(menu, qii);
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&QueueFrame::handleRemove, this));
-
 	return menu;
 }
 
 MenuPtr QueueFrame::makeMultiMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-
-	addPriorityMenu(menu);
-
 	menu->appendItem(T_("&Move/Rename"), std::tr1::bind(&QueueFrame::handleMove, this));
+	menu->appendItem(T_("Re&check integrity"), std::tr1::bind(&QueueFrame::handleRecheck, this));
+	addPriorityMenu(menu);
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&QueueFrame::handleRemove, this));
 	return menu;
@@ -1047,6 +1054,11 @@ void QueueFrame::onUpdated(const QueueItem& qi) {
 	}
 }
 
+void QueueFrame::onRechecked(QueueItem* qi, const tstring& message) {
+	callAsync(std::tr1::bind(&QueueFrame::setStatus, this, STATUS_STATUS,
+		str(TF_("Integrity check: %1% (%2%)") % message % Text::toT(qi->getTarget())), true, false));
+}
+
 void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) throw() {
 	callAsync(std::tr1::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
 }
@@ -1062,4 +1074,26 @@ void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& o
 
 void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw() {
 	callAsync(std::tr1::bind(&QueueFrame::onUpdated, this, *aQI));
+}
+
+void QueueFrame::on(QueueManagerListener::RecheckStarted, QueueItem* aQI) throw() {
+	onRechecked(aQI, T_("Started..."));
+}
+void QueueFrame::on(QueueManagerListener::RecheckNoFile, QueueItem* aQI) throw() {
+	onRechecked(aQI, T_("Unfinished file not found"));
+}
+void QueueFrame::on(QueueManagerListener::RecheckFileTooSmall, QueueItem* aQI) throw() {
+	onRechecked(aQI, T_("Unfinished file too small"));
+}
+void QueueFrame::on(QueueManagerListener::RecheckDownloadsRunning, QueueItem* aQI) throw() {
+	onRechecked(aQI, T_("Downloads running, please disconnect them"));
+}
+void QueueFrame::on(QueueManagerListener::RecheckNoTree, QueueItem* aQI) throw() {
+	onRechecked(aQI, T_("No full tree available"));
+}
+void QueueFrame::on(QueueManagerListener::RecheckAlreadyFinished, QueueItem* aQI) throw() {
+	onRechecked(aQI, T_("File is already finished"));
+}
+void QueueFrame::on(QueueManagerListener::RecheckDone, QueueItem* aQI) throw() {
+	onRechecked(aQI, T_("Done."));
 }
