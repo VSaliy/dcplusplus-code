@@ -33,7 +33,6 @@ public:
 
 private:
 	ItemList items;
-	static TextItem texts[];
 
 	GridPtr grid;
 

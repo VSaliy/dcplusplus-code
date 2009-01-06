@@ -22,10 +22,12 @@
 
 #include "DownloadPage.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+#include <dwt/widgets/Spinner.h>
+
 #include <dcpp/SettingsManager.h>
 #include "HubListsDlg.h"
-
-#include <dwt/widgets/Spinner.h>
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -49,59 +51,75 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-PropPage::TextItem DownloadPage::texts[] = {
-	{ IDC_SETTINGS_DIRECTORIES, N_("Directories") },
-	{ IDC_SETTINGS_DOWNLOAD_DIRECTORY, N_("Default download directory") },
-	{ IDC_BROWSEDIR, N_("&Browse...") },
-	{ IDC_SETTINGS_UNFINISHED_DOWNLOAD_DIRECTORY, N_("Unfinished downloads directory") },
-	{ IDC_BROWSETEMPDIR, N_("Browse...") },
-	{ IDC_SETTINGS_DOWNLOAD_LIMITS, N_("Limits") },
-	{ IDC_SETTINGS_DOWNLOADS_MAX, N_("Maximum simultaneous downloads (0 = infinite)") },
-	{ IDC_SETTINGS_DOWNLOADS_SPEED_PAUSE, N_("No new downloads if speed exceeds (KiB/s, 0 = disable)") },
-/*xgettext:no-c-format*/{ IDC_SETTINGS_SPEEDS_NOT_ACCURATE, N_("Note; because of changing download speeds, this is not 100% accurate...") },
-	{ IDC_SETTINGS_PUBLIC_HUB_LIST, N_("Public Hubs list") },
-	{ IDC_SETTINGS_PUBLIC_HUB_LIST_URL, N_("Public Hubs list URL") },
-	{ IDC_SETTINGS_LIST_CONFIG, N_("Configure Public Hub Lists") },
-	{ IDC_SETTINGS_PUBLIC_HUB_LIST_HTTP_PROXY, N_("HTTP Proxy (for hublist only)") },
-	{ 0, 0 }
-};
-/*
-PropPage::Item DownloadPage::items[] = {
-	{ IDC_TEMP_DOWNLOAD_DIRECTORY, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR },
-	{ IDC_DOWNLOADDIR,	SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR },
-	{ IDC_DOWNLOADS, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN },
-	{ IDC_MAXSPEED, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN },
-	{ IDC_PROXY, SettingsManager::HTTP_PROXY, PropPage::T_STR },
-	{ 0, 0, PropPage::T_END }
-};
-*/
 DownloadPage::DownloadPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_DOWNLOADPAGE);
 	setHelpId(IDH_DOWNLOADPAGE);
 
-	PropPage::translate(handle(), texts);
+	grid = addChild(Grid::Seed(3, 1));
+	grid->column(0).mode = GridInfo::FILL;
+
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Directories")))->addChild(Grid::Seed(4, 2));
+		cur->column(0).mode = GridInfo::FILL;
+
+		cur->setWidget(cur->addChild(Label::Seed(T_("Default download directory"))), 0, 0, 1, 2);
+		TextBoxPtr box = cur->addChild(TextBox::Seed());
+		items.push_back(Item(box, SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR));
+		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowse, this, box));
+
+		cur->setWidget(cur->addChild(Label::Seed(T_("Unfinished downloads directory"))), 2, 0, 1, 2);
+		box = cur->addChild(TextBox::Seed());
+		items.push_back(Item(box, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR));
+		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowse, this, box));
+	}
+
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Limits")))->addChild(Grid::Seed(3, 2));
+		cur->column(1).mode = GridInfo::FILL;
+
+		TextBoxPtr box = cur->addChild(TextBox::Seed());
+		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
+		box->setNumbersOnly();
+		cur->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")));
+
+		box = cur->addChild(TextBox::Seed());
+		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+		box->setNumbersOnly();
+		cur->addChild(Label::Seed(T_("No new downloads if speed exceeds (KiB/s, 0 = disable)")));
+
+		// xgettext:no-c-format
+		cur->setWidget(cur->addChild(Label::Seed(T_("Note; because of changing download speeds, this is not 100% accurate..."))), 2, 0, 1, 2);
+	}
+
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Public Hubs list")))->addChild(Grid::Seed(4, 1));
+
+		cur->addChild(Label::Seed(T_("Public Hubs list URL")));
+		cur->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
+		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::HTTP_PROXY, PropPage::T_STR));
+	}
+
 	PropPage::read(items);
 
-	attachChild<Button>(IDC_BROWSEDIR)->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this));
-
-	attachChild<Button>(IDC_BROWSETEMPDIR)->onClicked(std::tr1::bind(&DownloadPage::handleBrowseTempDir, this));
-
-	attachChild<Button>(IDC_SETTINGS_LIST_CONFIG)->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
+	/** @todo PropPage could add these automagically when T_INT_WITH_SPIN?
 
 	SpinnerPtr spinner = attachChild<Spinner>(IDC_SLOTSSPIN);
 	spinner->setRange(0, 100);
 
 	attachChild(spinner, IDC_SPEEDSPIN);
 	spinner->setRange(0, 10000);
-
-	attachChild<TextBox>(IDC_DOWNLOADDIR);
-	attachChild<TextBox>(IDC_TEMP_DOWNLOAD_DIRECTORY);
-	attachChild<TextBox>(IDC_DOWNLOADS);
-	attachChild<TextBox>(IDC_MAXSPEED);
-	attachChild<TextBox>(IDC_PROXY);
+	*/
 }
 
 DownloadPage::~DownloadPage() {
+}
+
+void DownloadPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point gridSize = grid->getPreferedSize();
+	grid->layout(dwt::Rectangle(7, 4, getClientAreaSize().x - 14, gridSize.y));
 }
 
 void DownloadPage::write() {
@@ -118,27 +136,14 @@ void DownloadPage::write() {
 
 }
 
-void DownloadPage::handleBrowseDir() {
-	tstring dir = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
-	if(createFolderDialog().open(dir))
-	{
+void DownloadPage::handleBrowse(TextBoxPtr box) {
+	tstring dir = box->getText();
+	if(createFolderDialog().open(dir)) {
 		// Adjust path string
 		if(dir.size() > 0 && dir[dir.size() - 1] != '\\')
 			dir += '\\';
 
-		setItemText(IDC_DOWNLOADDIR, dir);
-	}
-}
-
-void DownloadPage::handleBrowseTempDir() {
-	tstring dir = Text::toT(SETTING(TEMP_DOWNLOAD_DIRECTORY));
-	if(createFolderDialog().open(dir))
-	{
-		// Adjust path string
-		if(dir.size() > 0 && dir[dir.size() - 1] != '\\')
-			dir += '\\';
-
-		setItemText(IDC_TEMP_DOWNLOAD_DIRECTORY, dir);
+		box->setText(dir);
 	}
 }
 

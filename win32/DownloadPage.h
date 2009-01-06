@@ -27,14 +27,15 @@ public:
 	DownloadPage(dwt::Widget* parent);
 	virtual ~DownloadPage();
 
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-	static TextItem texts[];
 
-	void handleBrowseDir();
-	void handleBrowseTempDir();
+	GridPtr grid;
+
+	void handleBrowse(TextBoxPtr box);
 	void handleConfigHubLists();
 };
 
