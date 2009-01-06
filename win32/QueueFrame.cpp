@@ -676,7 +676,7 @@ void QueueFrame::handleBrowseList(const UserPtr& user) {
 
 	if(files->countSelected() == 1) {
 		try {
-			QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW);
+			QueueManager::getInstance()->addList(user, Util::emptyString, QueueItem::FLAG_CLIENT_VIEW);
 		} catch(const Exception&) {
 		}
 	}
@@ -690,11 +690,11 @@ void QueueFrame::handleReadd(const UserPtr& user) {
 		if(!user) {
 			// re-add all sources
 			for(QueueItem::SourceIter s = ii->getBadSources().begin(); s != ii->getBadSources().end(); ++s) {
-				QueueManager::getInstance()->readd(ii->getTarget(), s->getUser());
+				QueueManager::getInstance()->readd(ii->getTarget(), s->getUser(), Util::emptyString);
 			}
 		} else {
 			try {
-				QueueManager::getInstance()->readd(ii->getTarget(), user);
+				QueueManager::getInstance()->readd(ii->getTarget(), user, Util::emptyString);
 			} catch(const Exception& e) {
 				setStatus(STATUS_STATUS, Text::toT(e.getError()));
 			}

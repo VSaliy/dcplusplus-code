@@ -811,9 +811,10 @@ public:
 			DirectoryListing dl(u);
 			try {
 				dl.loadFile(*i);
-				LogManager::getInstance()->message(str(FN_("%1%: matched %2% file", "%1%: matched %2% files", QueueManager::getInstance()->matchListing(dl))
+				int matched = QueueManager::getInstance()->matchListing(dl, Util::emptyString);
+				LogManager::getInstance()->message(str(FN_("%1%: matched %2% file", "%1%: matched %2% files", matched)
 				% Util::toString(ClientManager::getInstance()->getNicks(u->getCID()))
-				% QueueManager::getInstance()->matchListing(dl)));
+				% matched));
 			} catch(const Exception&) {
 
 			}

@@ -33,11 +33,11 @@
 
 PrivateFrame::FrameMap PrivateFrame::frames;
 
-void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, const tstring& msg) {
+void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, const tstring& msg, const string& hubHint) {
 	PrivateFrame* pf = 0;
 	FrameIter i = frames.find(replyTo_);
 	if(i == frames.end()) {
-		pf = new PrivateFrame(mdiParent, replyTo_, true);
+		pf = new PrivateFrame(mdiParent, replyTo_, true, hubHint);
 	} else {
 		pf = i->second;
 		pf->activate();
@@ -47,13 +47,13 @@ void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, 
 
 }
 
-void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage) {
+void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage, const string& hubHint) {
 	PrivateFrame* p = 0;
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
 
 	FrameIter i = frames.find(user);
 	if(i == frames.end()) {
-		p = new PrivateFrame(mdiParent, user, !BOOLSETTING(POPUNDER_PM));
+		p = new PrivateFrame(mdiParent, user, !BOOLSETTING(POPUNDER_PM), hubHint);
 		p->addChat(aMessage);
 		if(Util::getAway()) {
 			if(!(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT)))
@@ -78,9 +78,10 @@ void PrivateFrame::closeAllOffline() {
 	}
 }
 
-PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate) :
+PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate, const string& hubHint_) :
 	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
-	replyTo(replyTo_)
+	replyTo(replyTo_),
+	hubHint(hubHint_)
 {
 	chat->setHelpId(IDH_PM_CHAT);
 	addWidget(chat);
@@ -232,7 +233,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 				addStatus(status);
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("grant")) == 0) {
-			UploadManager::getInstance()->reserveSlot(replyTo);
+			UploadManager::getInstance()->reserveSlot(replyTo, hubHint);
 			addStatus(T_("Slot granted"));
 		} else if(Util::stricmp(cmd.c_str(), _T("close")) == 0) {
 			postMessage(WM_CLOSE);
@@ -266,7 +267,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 }
 
 void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
-	ClientManager::getInstance()->privateMessage(replyTo, Text::fromT(msg), thirdPerson);
+	ClientManager::getInstance()->privateMessage(replyTo, Text::fromT(msg), thirdPerson, hubHint);
 }
 
 void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
@@ -285,7 +286,7 @@ void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aU
 void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 	menu->appendItem(T_("&Get file list"), std::tr1::bind(&PrivateFrame::handleGetList, this));
 	menu->appendItem(T_("&Match queue"), std::tr1::bind(&PrivateFrame::handleMatchQueue, this));
-	menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), replyTo));
+	menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), replyTo, hubHint));
 	if(!FavoriteManager::getInstance()->isFavoriteUser(replyTo))
 		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), replyTo), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
 
@@ -305,7 +306,7 @@ void PrivateFrame::runUserCommand(const UserCommand& uc) {
 
 void PrivateFrame::handleGetList() {
 	try {
-		QueueManager::getInstance()->addList(replyTo, QueueItem::FLAG_CLIENT_VIEW);
+		QueueManager::getInstance()->addList(replyTo, hubHint, QueueItem::FLAG_CLIENT_VIEW);
 	} catch(const Exception& e) {
 		addStatus(Text::toT(e.getError()));
 	}
@@ -313,7 +314,7 @@ void PrivateFrame::handleGetList() {
 
 void PrivateFrame::handleMatchQueue() {
 	try {
-		QueueManager::getInstance()->addList(replyTo, QueueItem::FLAG_MATCH_QUEUE);
+		QueueManager::getInstance()->addList(replyTo, hubHint, QueueItem::FLAG_MATCH_QUEUE);
 	} catch(const Exception& e) {
 		addStatus(Text::toT(e.getError()));
 	}

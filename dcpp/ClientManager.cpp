@@ -289,20 +289,38 @@ void ClientManager::putOffline(OnlineUser* ou, bool disconnect) throw() {
 	}
 }
 
-void ClientManager::connect(const UserPtr& p, const string& token) {
+void ClientManager::connect(const UserPtr& p, const string& token, const string& hintUrl) {
 	Lock l(cs);
-	OnlineIter i = onlineUsers.find(p->getCID());
-	if(i != onlineUsers.end()) {
-		OnlineUser* u = i->second;
+	OnlineUser* u = findOnlineUser(p->getCID(), hintUrl);
+
+	if(u) {
 		u->getClient().connect(*u, token);
 	}
 }
 
-void ClientManager::privateMessage(const UserPtr& p, const string& msg, bool thirdPerson) {
+OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl) throw() {
+	OnlinePair p = onlineUsers.equal_range(cid);
+	if(p.first == p.second)
+		return 0;
+
+	if(!hintUrl.empty()) {
+		for(OnlineIter i = p.first; i != p.second; ++i) {
+			OnlineUser* u = i->second;
+			if(u->getClient().getAddress() == hintUrl) {
+				return u;
+			}
+		}
+	}
+
+	// TODO maybe disallow non-hint urls, or maybe for some hints (secure?)
+	return p.first->second;
+}
+
+void ClientManager::privateMessage(const UserPtr& p, const string& msg, bool thirdPerson, const string& hintUrl) {
 	Lock l(cs);
-	OnlineIter i = onlineUsers.find(p->getCID());
-	if(i != onlineUsers.end()) {
-		OnlineUser* u = i->second;
+	OnlineUser* u = findOnlineUser(p->getCID(), hintUrl);
+
+	if(u) {
 		u->getClient().privateMessage(*u, msg, thirdPerson);
 	}
 }
@@ -404,14 +422,14 @@ void ClientManager::on(AdcSearch, Client*, const AdcCommand& adc, const CID& fro
 	bool isUdpActive = false;
 	{
 		Lock l(cs);
-		
+
 		OnlineIter i = onlineUsers.find(from);
 		if(i != onlineUsers.end()) {
 			OnlineUser& u = *i->second;
 			isUdpActive = u.getIdentity().isUdpActive();
 		}
-			
-	}	
+
+	}
 	SearchManager::getInstance()->respond(adc, from, isUdpActive);
 }
 

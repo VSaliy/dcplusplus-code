@@ -121,8 +121,11 @@ public:
 	template<class _Function>
 	_Function forEachSelectedT(_Function pred) {
 		int i = -1;
-		while( (i = ListView_GetNextItem(this->handle(), i, LVNI_SELECTED)) != -1)
-			pred(getData(i));
+		while( (i = ListView_GetNextItem(this->handle(), i, LVNI_SELECTED)) != -1) {
+			// Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=35569
+			ContentType* uib = getData(i);
+			pred(uib);
+		}
 		return pred;
 	}
 

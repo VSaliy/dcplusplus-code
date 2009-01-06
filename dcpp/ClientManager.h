@@ -79,9 +79,9 @@ public:
 
 	UserPtr& getMe();
 
-	void connect(const UserPtr& p, const string& token);
+	void connect(const UserPtr& p, const string& token, const string& hintUrl);
 	void send(AdcCommand& c, const CID& to);
-	void privateMessage(const UserPtr& p, const string& msg, bool thirdPerson);
+	void privateMessage(const UserPtr& p, const string& msg, bool thirdPerson, const string& hintUrl);
 
 	void userCommand(const UserPtr& p, const UserCommand& uc, StringMap& params, bool compatibility);
 
@@ -134,6 +134,8 @@ private:
 	}
 
 	void updateNick(const OnlineUser& user) throw();
+
+	OnlineUser* findOnlineUser(const CID& cid, const string& hintUrl) throw();
 
 	// ClientListener
 	virtual void on(Connected, Client* c) throw();

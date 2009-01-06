@@ -69,21 +69,21 @@ void ConnectionManager::listen() throw(SocketException){
  * for downloading.
  * @param aUser The user to connect to.
  */
-void ConnectionManager::getDownloadConnection(const UserPtr& aUser) {
+void ConnectionManager::getDownloadConnection(const UserPtr& aUser, const string& hubHint) {
 	dcassert((bool)aUser);
 	{
 		Lock l(cs);
 		ConnectionQueueItem::Iter i = find(downloads.begin(), downloads.end(), aUser);
 		if(i == downloads.end()) {
-			getCQI(aUser, true);
+			getCQI(aUser, true, hubHint);
 		} else {
 			DownloadManager::getInstance()->checkIdle(aUser);
 		}
 	}
 }
 
-ConnectionQueueItem* ConnectionManager::getCQI(const UserPtr& aUser, bool download) {
-	ConnectionQueueItem* cqi = new ConnectionQueueItem(aUser, download);
+ConnectionQueueItem* ConnectionManager::getCQI(const UserPtr& aUser, bool download, const string& hubHint) {
+	ConnectionQueueItem* cqi = new ConnectionQueueItem(aUser, download, hubHint);
 	if(download) {
 		dcassert(find(downloads.begin(), downloads.end(), aUser) == downloads.end());
 		downloads.push_back(cqi);
@@ -168,7 +168,7 @@ void ConnectionManager::on(TimerManagerListener::Second, uint32_t aTick) throw()
 					if(cqi->getState() == ConnectionQueueItem::WAITING) {
 						if(startDown) {
 							cqi->setState(ConnectionQueueItem::CONNECTING);
-							ClientManager::getInstance()->connect(cqi->getUser(), cqi->getToken());
+							ClientManager::getInstance()->connect(cqi->getUser(), cqi->getToken(), cqi->getHubHint());
 							fire(ConnectionManagerListener::StatusChanged(), cqi);
 							attemptDone = true;
 						} else {
@@ -581,7 +581,7 @@ void ConnectionManager::addUploadConnection(UserConnection* uc) {
 
 		ConnectionQueueItem::Iter i = find(uploads.begin(), uploads.end(), uc->getUser());
 		if(i == uploads.end()) {
-			ConnectionQueueItem* cqi = getCQI(uc->getUser(), false);
+			ConnectionQueueItem* cqi = getCQI(uc->getUser(), false, Util::emptyString);
 
 			cqi->setState(ConnectionQueueItem::ACTIVE);
 			uc->setFlag(UserConnection::FLAG_ASSOCIATED);

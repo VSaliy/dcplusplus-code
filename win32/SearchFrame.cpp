@@ -428,7 +428,7 @@ void SearchFrame::postClosing() {
 void SearchFrame::SearchInfo::view() {
 	if(srs[0]->getType() == SearchResult::TYPE_FILE) {
 		QueueManager::getInstance()->add(Util::getTempPath() + srs[0]->getFileName(),
-			srs[0]->getSize(), srs[0]->getTTH(), srs[0]->getUser(),
+			srs[0]->getSize(), srs[0]->getTTH(), srs[0]->getUser(), srs[0]->getHubURL(),
 			QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_TEXT);
 	}
 }
@@ -438,12 +438,12 @@ void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) {
 		string target = Text::fromT(tgt + si->columns[COLUMN_FILENAME]);
 		for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
 			const SearchResultPtr& sr = *i;
-			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser());
+			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
 		}
 		if(WinUtil::isShift())
 			QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
 	} else {
-		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), Text::fromT(tgt),
+		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
 			WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
 	}
 }
@@ -453,9 +453,9 @@ void SearchFrame::SearchInfo::DownloadWhole::operator()(SearchInfo* si) {
 	QueueItem::Priority prio = WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT;
 	if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
 		QueueManager::getInstance()->addDirectory(Text::fromT(si->columns[COLUMN_PATH]),
-			si->srs[0]->getUser(), Text::fromT(tgt), prio);
+			si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt), prio);
 	} else {
-		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(),
+		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(),
 			Text::fromT(tgt), prio);
 	}
 }
@@ -465,13 +465,13 @@ void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) {
 		string target = Text::fromT(tgt);
 		for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
 			const SearchResultPtr& sr = *i;
-			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser());
+			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
 		}
 
 		if(WinUtil::isShift())
 			QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
 	} else {
-		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), Text::fromT(tgt),
+		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
 			WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
 	}
 }

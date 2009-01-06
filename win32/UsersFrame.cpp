@@ -47,7 +47,8 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(USERSFRAME_ORDER), SETTING(USERSFRAME_WIDTHS));
 		users->setSort(COLUMN_NICK);
 
-		users->onDblClicked(std::tr1::bind(&UsersFrame::handleGetList, this));
+		// TODO check default (browse vs get)
+		users->onDblClicked(std::tr1::bind(&UsersFrame::handleGetList, this, Util::emptyString));
 		users->onKeyDown(std::tr1::bind(&UsersFrame::handleKeyDown, this, _1));
 		users->onRaw(std::tr1::bind(&UsersFrame::handleItemChanged, this, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 		users->onContextMenu(std::tr1::bind(&UsersFrame::handleContextMenu, this, _1));
@@ -179,7 +180,7 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
-		appendUserItems(getParent(), menu);
+		appendUserItems(getParent(), menu, Util::emptyString);
 		menu->appendSeparator();
 		menu->appendItem(T_("&Description"), std::tr1::bind(&UsersFrame::handleDescription, this));
 		menu->appendItem(T_("&Remove"), std::tr1::bind(&UsersFrame::handleRemove, this));

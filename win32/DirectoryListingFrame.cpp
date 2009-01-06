@@ -256,7 +256,8 @@ void DirectoryListingFrame::handleFindNext() {
 }
 
 void DirectoryListingFrame::handleMatchQueue() {
-	int matched = QueueManager::getInstance()->matchListing(*dl);
+	// TODO provide hubHint?
+	int matched = QueueManager::getInstance()->matchListing(*dl, Util::emptyString);
 	setStatus(STATUS_STATUS, str(TFN_("Matched %1% file", "Matched %1% files", matched) % matched));
 }
 
@@ -687,7 +688,8 @@ void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 		dcdebug("Directory incomplete\n");
 		if(dl->getUser()->isOnline()) {
 			try {
-				QueueManager::getInstance()->addList(dl->getUser(), QueueItem::FLAG_PARTIAL_LIST, dl->getPath(d));
+				// TODO provide hubHint?
+				QueueManager::getInstance()->addList(dl->getUser(), Util::emptyString, QueueItem::FLAG_PARTIAL_LIST, dl->getPath(d));
 				setStatus(STATUS_STATUS, T_("Downloading list..."));
 			} catch(const QueueException& e) {
 				setStatus(STATUS_STATUS, Text::toT(e.getError()));

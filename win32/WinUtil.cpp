@@ -975,8 +975,9 @@ void WinUtil::parseDchubUrl(const tstring& aUrl) {
 	string server, file;
 	uint16_t port = 411;
 	Util::decodeUrl(Text::fromT(aUrl), server, port, file);
+	string url = server + ":" + Util::toString(port);
 	if(!server.empty()) {
-		HubFrame::openWindow(mainWindow->getTabView(), server + ":" + Util::toString(port));
+		HubFrame::openWindow(mainWindow->getTabView(), url);
 	}
 	if(!file.empty()) {
 		if(file[0] == '/') // Remove any '/' in from of the file
@@ -984,7 +985,7 @@ void WinUtil::parseDchubUrl(const tstring& aUrl) {
 		try {
 			UserPtr user = ClientManager::getInstance()->findLegacyUser(file);
 			if(user)
-				QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW);
+				QueueManager::getInstance()->addList(user, url, QueueItem::FLAG_CLIENT_VIEW);
 			// @todo else report error
 		} catch(const Exception&) {
 			// ...
@@ -1130,27 +1131,28 @@ static bool isFav(const UserPtr& u) {
 	return !FavoriteManager::getInstance()->isFavoriteUser(u);
 }
 
+// TODO add hubhint
 void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const StringList& dirs) {
 	QueueManager* qm = QueueManager::getInstance();
 
 	addUsers(menu, T_("&Get file list"), users,
-		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW, _2),
+		std::tr1::bind(&QueueManager::addList, qm, _1, Util::emptyString, QueueItem::FLAG_CLIENT_VIEW, _2),
 		dwt::IconPtr(), dirs);
 
 	addUsers(menu, T_("&Browse file list"), filter(users, &isAdc),
-		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, _2), dwt::IconPtr(), dirs);
+		std::tr1::bind(&QueueManager::addList, qm, _1, Util::emptyString, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, _2), dwt::IconPtr(), dirs);
 
 	addUsers(menu, T_("&Match queue"), users,
-		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_MATCH_QUEUE, std::string()));
+		std::tr1::bind(&QueueManager::addList, qm, _1, Util::emptyString, QueueItem::FLAG_MATCH_QUEUE, Util::emptyString));
 
 	addUsers(menu, T_("&Send private message"), users,
-		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, tstring()));
+		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, Util::emptyStringT, Util::emptyString));
 
 	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav),
 		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
 
 	addUsers(menu, T_("Grant &extra slot"), users,
-		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));
+		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1, Util::emptyString));
 
 	typedef void (QueueManager::*qmp)(const UserPtr&, int);
 	addUsers(menu, T_("Remove user from queue"), users,
