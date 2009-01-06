@@ -16,12 +16,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#define APPNAME "DC++"
-#define VERSIONSTRING "0.7091"
-#define VERSIONFLOAT 0.7091
+#include "stdinc.h"
+#include "DCPlusPlus.h"
+
+#include "version.h"
+
+#ifndef DCPP_REVISION
+#define DCPP_REVISION 0
+#endif
+
+#define xstrver(s) strver(s)
+#define strver(s) #s
 
 namespace dcpp {
-extern const string fullVersionString;
+const string fullVersionString(APPNAME " v" VERSIONSTRING " (r" xstrver(DCPP_REVISION) ")");
 }
 
-/* Update the .rc file as well... */

@@ -26,6 +26,7 @@
 #include "File.h"
 #include "LogManager.h"
 #include "ClientManager.h"
+#include "version.h"
 
 #include <openssl/bn.h>
 
