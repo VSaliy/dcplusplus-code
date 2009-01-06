@@ -242,13 +242,13 @@ void UploadManager::removeUpload(Upload* aUpload) {
 	delete aUpload;
 }
 
-void UploadManager::reserveSlot(const UserPtr& aUser) {
+void UploadManager::reserveSlot(const UserPtr& aUser, const string& hubHint) {
 	{
 		Lock l(cs);
 		reservedSlots.insert(aUser);
 	}
 	if(aUser->isOnline())
-		ClientManager::getInstance()->connect(aUser, Util::toString(Util::rand()));
+		ClientManager::getInstance()->connect(aUser, Util::toString(Util::rand()), hubHint);
 }
 
 void UploadManager::on(UserConnectionListener::Get, UserConnection* aSource, const string& aFile, int64_t aResume) throw() {

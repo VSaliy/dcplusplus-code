@@ -73,16 +73,16 @@ class QueueManager : public Singleton<QueueManager>, public Speaker<QueueManager
 {
 public:
 	/** Add a file to the queue. */
-	void add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser,
+	void add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser, const string& hubHint,
 		int aFlags = 0, bool addBad = true) throw(QueueException, FileException);
 	/** Add a user's filelist to the queue. */
-	void addList(const UserPtr& aUser, int aFlags, const string& aInitialDir = Util::emptyString) throw(QueueException, FileException);
+	void addList(const UserPtr& aUser, const string& hubHint, int aFlags, const string& aInitialDir = Util::emptyString) throw(QueueException, FileException);
 	/** Readd a source that was removed */
-	void readd(const string& target, const UserPtr& aUser) throw(QueueException);
+	void readd(const string& target, const UserPtr& aUser, const string& hubHint) throw(QueueException);
 	/** Add a directory to the queue (downloads filelist and matches the directory). */
-	void addDirectory(const string& aDir, const UserPtr& aUser, const string& aTarget, QueueItem::Priority p = QueueItem::DEFAULT) throw();
+	void addDirectory(const string& aDir, const UserPtr& aUser, const string& hubHint, const string& aTarget, QueueItem::Priority p = QueueItem::DEFAULT) throw();
 
-	int matchListing(const DirectoryListing& dl) throw();
+	int matchListing(const DirectoryListing& dl, const string& hubHint) throw();
 
 	bool getTTH(const string& name, TTHValue& tth) throw();
 
@@ -97,7 +97,7 @@ public:
 	void removeSource(const UserPtr& aUser, int reason) throw();
 
 	void recheck(const string& aTarget);
-	
+
 	void setPriority(const string& aTarget, QueueItem::Priority p) throw();
 
 	void getTargets(const TTHValue& tth, StringList& sl);

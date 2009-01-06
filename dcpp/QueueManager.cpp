@@ -553,8 +553,8 @@ void QueueManager::on(TimerManagerListener::Minute, uint32_t aTick) throw() {
 	}
 }
 
-void QueueManager::addList(const UserPtr& aUser, int aFlags, const string& aInitialDir /* = Util::emptyString */) throw(QueueException, FileException) {
-	add(aInitialDir, -1, TTHValue(), aUser, QueueItem::FLAG_USER_LIST | aFlags);
+void QueueManager::addList(const UserPtr& aUser, const string& hubHint, int aFlags, const string& aInitialDir /* = Util::emptyString */) throw(QueueException, FileException) {
+	add(aInitialDir, -1, TTHValue(), aUser, hubHint, QueueItem::FLAG_USER_LIST | aFlags);
 }
 
 string QueueManager::getListPath(const UserPtr& user) {
@@ -563,7 +563,7 @@ string QueueManager::getListPath(const UserPtr& user) {
 	return checkTarget(Util::getListPath() + nick + user->getCID().toBase32(), -1);
 }
 
-void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser,
+void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser, const string& hubHint,
 	int aFlags /* = 0 */, bool addBad /* = true */) throw(QueueException, FileException)
 {
 	bool wantConnection = true;
@@ -627,10 +627,10 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 	}
 
 	if(wantConnection && aUser->isOnline())
-		ConnectionManager::getInstance()->getDownloadConnection(aUser);
+		ConnectionManager::getInstance()->getDownloadConnection(aUser, hubHint);
 }
 
-void QueueManager::readd(const string& target, const UserPtr& aUser) throw(QueueException) {
+void QueueManager::readd(const string& target, const UserPtr& aUser, const string& hubHint) throw(QueueException) {
 	bool wantConnection = false;
 	{
 		Lock l(cs);
@@ -640,7 +640,7 @@ void QueueManager::readd(const string& target, const UserPtr& aUser) throw(Queue
 		}
 	}
 	if(wantConnection && aUser->isOnline())
-		ConnectionManager::getInstance()->getDownloadConnection(aUser);
+		ConnectionManager::getInstance()->getDownloadConnection(aUser, hubHint);
 }
 
 void QueueManager::setDirty() {
@@ -707,7 +707,7 @@ bool QueueManager::addSource(QueueItem* qi, const UserPtr& aUser, Flags::MaskTyp
 	return wantConnection;
 }
 
-void QueueManager::addDirectory(const string& aDir, const UserPtr& aUser, const string& aTarget, QueueItem::Priority p /* = QueueItem::DEFAULT */) throw() {
+void QueueManager::addDirectory(const string& aDir, const UserPtr& aUser, const string& hubHint, const string& aTarget, QueueItem::Priority p /* = QueueItem::DEFAULT */) throw() {
 	bool needList;
 	{
 		Lock l(cs);
@@ -727,7 +727,7 @@ void QueueManager::addDirectory(const string& aDir, const UserPtr& aUser, const 
 
 	if(needList) {
 		try {
-			addList(aUser, QueueItem::FLAG_DIRECTORY_DOWNLOAD);
+			addList(aUser, hubHint, QueueItem::FLAG_DIRECTORY_DOWNLOAD);
 		} catch(const Exception&) {
 			// Ignore, we don't really care...
 		}
@@ -762,7 +762,7 @@ void buildMap(const DirectoryListing::Directory* dir) throw() {
 }
 }
 
-int QueueManager::matchListing(const DirectoryListing& dl) throw() {
+int QueueManager::matchListing(const DirectoryListing& dl, const string& hubHint) throw() {
 	int matches = 0;
 	{
 		Lock l(cs);
@@ -785,7 +785,7 @@ int QueueManager::matchListing(const DirectoryListing& dl) throw() {
 		}
 	}
 	if(matches > 0)
-		ConnectionManager::getInstance()->getDownloadConnection(dl.getUser());
+		ConnectionManager::getInstance()->getDownloadConnection(dl.getUser(), hubHint);
 	return matches;
 }
 
@@ -1157,7 +1157,8 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 	}
 
 	for(UserList::iterator i = getConn.begin(); i != getConn.end(); ++i) {
-		ConnectionManager::getInstance()->getDownloadConnection(*i);
+		// TODO provide hubhint
+		ConnectionManager::getInstance()->getDownloadConnection(*i, Util::emptyString);
 	}
 
 	if(!fname.empty()) {
@@ -1192,7 +1193,8 @@ void QueueManager::processList(const string& name, UserPtr& user, int flags) {
 		}
 	}
 	if(flags & QueueItem::FLAG_MATCH_QUEUE) {
-		size_t files = matchListing(dirList);
+		// TODO add hubHint?
+		size_t files = matchListing(dirList, Util::emptyString);
 		LogManager::getInstance()->message(str(FN_("%1%: Matched %2% file", "%1%: Matched %2% files", files) %
 			Util::toString(ClientManager::getInstance()->getNicks(user->getCID())) % files));
 	}
@@ -1361,7 +1363,8 @@ void QueueManager::setPriority(const string& aTarget, QueueItem::Priority p) thr
 	}
 
 	for(UserList::iterator i = ul.begin(); i != ul.end(); ++i) {
-		ConnectionManager::getInstance()->getDownloadConnection(*i);
+		// TODO provide hubhint
+		ConnectionManager::getInstance()->getDownloadConnection(*i, Util::emptyString);
 	}
 }
 
@@ -1543,7 +1546,8 @@ void QueueLoader::startTag(const string& name, StringPairList& attribs, bool sim
 
 			try {
 				if(qm->addSource(cur, user, 0) && user->isOnline())
-					ConnectionManager::getInstance()->getDownloadConnection(user);
+					// TODO save/load hubhint
+					ConnectionManager::getInstance()->getDownloadConnection(user, Util::emptyString);
 			} catch(const Exception&) {
 				return;
 			}
@@ -1590,13 +1594,14 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) thro
 
 	if(added && BOOLSETTING(AUTO_SEARCH_AUTO_MATCH)) {
 		try {
-			addList(sr->getUser(), QueueItem::FLAG_MATCH_QUEUE);
+			addList(sr->getUser(), sr->getHubURL(), QueueItem::FLAG_MATCH_QUEUE);
 		} catch(const Exception&) {
 			// ...
 		}
 	}
-	if(added && sr->getUser()->isOnline() && wantConnection)
-		ConnectionManager::getInstance()->getDownloadConnection(sr->getUser());
+	if(added && sr->getUser()->isOnline() && wantConnection) {
+		ConnectionManager::getInstance()->getDownloadConnection(sr->getUser(), sr->getHubURL());
+	}
 
 }
 
@@ -1616,8 +1621,10 @@ void QueueManager::on(ClientManagerListener::UserConnected, const UserPtr& aUser
 		}
 	}
 
-	if(hasDown)
-		ConnectionManager::getInstance()->getDownloadConnection(aUser);
+	if(hasDown) {
+		// TODO provide hubhint
+		ConnectionManager::getInstance()->getDownloadConnection(aUser, Util::emptyString);
+	}
 }
 
 void QueueManager::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {

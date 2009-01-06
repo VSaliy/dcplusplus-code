@@ -317,7 +317,7 @@ void HubFrame::enterImpl(const tstring& s) {
 			if( !param.empty() ){
 				UserInfo* ui = findUser(param);
 				if(ui) {
-					ui->getList();
+					ui->getList(url);
 				}
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
@@ -335,14 +335,14 @@ void HubFrame::enterImpl(const tstring& s) {
 
 				if(ui) {
 					if(param.size() > j + 1)
-						PrivateFrame::openWindow(getParent(), ui->user, param.substr(j+1));
+						PrivateFrame::openWindow(getParent(), ui->user, param.substr(j+1), url);
 					else
-						PrivateFrame::openWindow(getParent(), ui->user);
+						PrivateFrame::openWindow(getParent(), ui->user, Util::emptyStringT, url);
 				}
 			} else if(!param.empty()) {
 				UserInfo* ui = findUser(param);
 				if(ui) {
-					PrivateFrame::openWindow(getParent(), ui->user);
+					PrivateFrame::openWindow(getParent(), ui->user, Util::emptyStringT, url);
 				}
 			}
 		} else {
@@ -488,7 +488,7 @@ void HubFrame::onPrivateMessage(const UserPtr& from, const UserPtr& to, const Us
 		if(BOOLSETTING(IGNORE_HUB_PMS)) {
 			addStatus(str(TF_("Ignored message: %1%") % m), false);
 		} else if(BOOLSETTING(POPUP_HUB_PMS) || PrivateFrame::isOpen(replyTo)) {
-			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m);
+			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, url);
 		} else {
 			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
 		}
@@ -496,13 +496,13 @@ void HubFrame::onPrivateMessage(const UserPtr& from, const UserPtr& to, const Us
 		if(BOOLSETTING(IGNORE_BOT_PMS)) {
 			addStatus(str(TF_("Ignored message: %1%") % m), false);
 		} else if(BOOLSETTING(POPUP_BOT_PMS) || PrivateFrame::isOpen(replyTo)) {
-			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m);
+			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, url);
 		} else {
 			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
 		}
 	} else {
 		if(BOOLSETTING(POPUP_PMS) || PrivateFrame::isOpen(replyTo) || from == client->getMyIdentity().getUser()) {
-			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m);
+			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, url);
 		} else {
 			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
 		}
@@ -601,7 +601,7 @@ void HubFrame::removeUser(const UserPtr& aUser) {
 
 bool HubFrame::handleUsersKeyDown(int c) {
 	if(c == VK_RETURN && users->hasSelected()) {
-		handleGetList();
+		handleGetList(url);
 		return true;
 	}
 	return false;
@@ -1009,7 +1009,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
-		appendUserItems(getParent(), menu);
+		appendUserItems(getParent(), menu, url);
 
 		menu->appendSeparator();
 		MenuPtr copyMenu = menu->appendPopup(T_("&Copy"));
@@ -1081,7 +1081,7 @@ void HubFrame::handleCopyHub() {
 
 void HubFrame::handleDoubleClickUsers() {
 	if(users->hasSelected()) {
-		users->getSelectedData()->getList();
+		users->getSelectedData()->getList(url);
 	}
 }
 

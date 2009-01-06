@@ -416,7 +416,7 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 void TransferView::handleDblClicked() {
 	ConnectionInfo* ii = connections->getSelectedData();
 	if(ii) {
-		ii->pm(mdi);
+		ii->pm(mdi, Util::emptyString);
 	}
 }
 

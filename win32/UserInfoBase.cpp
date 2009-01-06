@@ -29,25 +29,25 @@
 #include "PrivateFrame.h"
 #include "HubFrame.h"
 
-void UserInfoBase::matchQueue() {
+void UserInfoBase::matchQueue(const string& hubHint) {
 	try {
-		QueueManager::getInstance()->addList(user, QueueItem::FLAG_MATCH_QUEUE);
+		QueueManager::getInstance()->addList(user, hubHint, QueueItem::FLAG_MATCH_QUEUE);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}
 }
-void UserInfoBase::getList() {
+void UserInfoBase::getList(const string& hubHint) {
 	try {
-		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW);
+		QueueManager::getInstance()->addList(user, hubHint, QueueItem::FLAG_CLIENT_VIEW);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}
 }
-void UserInfoBase::browseList() {
+void UserInfoBase::browseList(const string& hubHint) {
 	if(user->getCID().isZero())
 		return;
 	try {
-		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
+		QueueManager::getInstance()->addList(user, hubHint, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}
@@ -57,12 +57,12 @@ void UserInfoBase::addFav() {
 	FavoriteManager::getInstance()->addFavoriteUser(user);
 }
 
-void UserInfoBase::pm(dwt::TabView* mdiParent) {
-	PrivateFrame::openWindow(mdiParent, user);
+void UserInfoBase::pm(dwt::TabView* mdiParent, const string& hubHint) {
+	PrivateFrame::openWindow(mdiParent, user, Util::emptyStringT, hubHint);
 }
 
-void UserInfoBase::grant() {
-	UploadManager::getInstance()->reserveSlot(user);
+void UserInfoBase::grant(const string& hubHint) {
+	UploadManager::getInstance()->reserveSlot(user, hubHint);
 }
 
 void UserInfoBase::removeFromQueue() {

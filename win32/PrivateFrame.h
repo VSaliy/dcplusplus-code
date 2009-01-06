@@ -45,8 +45,8 @@ public:
 		STATUS_LAST
 	};
 
-	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage);
-	static void openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo, const tstring& aMessage = Util::emptyStringT);
+	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage, const string& hubHint);
+	static void openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo, const tstring& aMessage = Util::emptyStringT, const string& hubHint = Util::emptyString);
 	static bool isOpen(const UserPtr& u) { return frames.find(u) != frames.end(); }
 	static void closeAll();
 	static void closeAllOffline();
@@ -57,11 +57,13 @@ private:
 	StringMap ucLineParams;
 	UserPtr replyTo;
 
+	string hubHint;
+
 	typedef unordered_map<UserPtr, PrivateFrame*, User::Hash> FrameMap;
 	typedef FrameMap::iterator FrameIter;
 	static FrameMap frames;
 
-	PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activte);
+	PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activte, const string& hubHint);
 	virtual ~PrivateFrame();
 
 	void layout();

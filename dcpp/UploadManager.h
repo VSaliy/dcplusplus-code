@@ -53,7 +53,7 @@ public:
 	int getFreeExtraSlots() { return max(3 - getExtra(), 0); }
 
 	/** @param aUser Reserve an upload slot for this user and connect. */
-	void reserveSlot(const UserPtr& aUser);
+	void reserveSlot(const UserPtr& aUser, const string& hubHint);
 
 	typedef set<string> FileSet;
 	typedef unordered_map<UserPtr, FileSet, User::Hash> FilesMap;

@@ -114,7 +114,7 @@ void WaitingUsersFrame::onPrivateMessage() {
 void WaitingUsersFrame::onGrantSlot() {
 	UserPtr user = getSelectedUser();
 	if (user) {
-		UploadManager::getInstance()->reserveSlot(user);
+		UploadManager::getInstance()->reserveSlot(user, Util::emptyString);
 	}
 }
 
@@ -138,7 +138,7 @@ void WaitingUsersFrame::onGetList()
 {
 	UserPtr user = getSelectedUser();
 	if (user) {
-		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW);
+		QueueManager::getInstance()->addList(user, Util::emptyString, QueueItem::FLAG_CLIENT_VIEW);
 	}
 }
 
