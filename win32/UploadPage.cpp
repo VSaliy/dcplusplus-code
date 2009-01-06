@@ -58,7 +58,7 @@ PropPage::TextItem UploadPage::texts[] = {
 	{ IDC_SHAREHIDDEN, N_("Share hidden files") },
 	{ IDC_REMOVE, N_("&Remove") },
 	{ IDC_ADD, N_("&Add folder") },
-	{ IDC_RENAME, N_("Rename") },
+	{ IDC_RENAME, N_("Re&name") },
 	{ IDC_SETTINGS_UPLOADS_MIN_SPEED, N_("Automatically open an extra slot if speed is below (0 = disable)") },
 	{ IDC_SETTINGS_KBPS, N_("KiB/s") },
 	{ IDC_SETTINGS_UPLOADS_SLOTS, N_("Upload slots") },

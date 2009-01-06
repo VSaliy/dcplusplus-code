@@ -27,16 +27,18 @@ public:
 	FavoriteDirsPage(dwt::Widget* parent);
 	virtual ~FavoriteDirsPage();
 
-	virtual void write();
+	virtual void layout(const dwt::Rectangle& rc);
 
 private:
-	static TextItem texts[];
-
+	GroupBoxPtr group;
 	TablePtr directories;
+
+	ButtonPtr rename;
+	ButtonPtr remove;
 
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
-	LRESULT handleItemChanged(WPARAM wParam, LPARAM lParam);
+	void handleSelectionChanged();
 	void handleDragDrop(const TStringList& files);
 	void handleRenameClicked();
 	void handleRemoveClicked();

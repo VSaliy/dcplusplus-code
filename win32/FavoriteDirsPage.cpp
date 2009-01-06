@@ -22,6 +22,9 @@
 
 #include "FavoriteDirsPage.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
@@ -44,22 +47,25 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-PropPage::TextItem FavoriteDirsPage::texts[] = {
-	{ IDC_SETTINGS_FAVORITE_DIRECTORIES, N_("Favorite download directories") },
-	{ IDC_RENAME, N_("Rename") },
-	{ IDC_REMOVE, N_("&Remove") },
-	{ IDC_ADD, N_("&Add folder") },
-	{ 0, 0 }
-};
-
 FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_FAVORITE_DIRSPAGE);
 	setHelpId(IDH_FAVORITE_DIRSPAGE);
 
-	PropPage::translate(handle(), texts);
+	group = addChild(GroupBox::Seed(T_("Favorite download directories")));
 
-	attachChild(directories, IDC_FAVORITE_DIRECTORIES);
-	directories->setTableStyle(LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT);
+	GridPtr grid = group->addChild(Grid::Seed(2, 3));
+
+	Table::Seed seed;
+	seed.style |= LVS_SHOWSELALWAYS | LVS_NOSORTHEADER;
+	seed.lvStyle |= LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT;
+	directories = grid->addChild(seed);
+	grid->setWidget(directories, 0, 0, 1, 3);
+
+	rename = grid->addChild(Button::Seed(T_("Re&name")));
+	rename->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRenameClicked, this));
+	remove = grid->addChild(Button::Seed(T_("&Remove")));
+	remove->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRemoveClicked, this));
+	grid->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::tr1::bind(&FavoriteDirsPage::handleAddClicked, this));
 
 	WinUtil::makeColumns(directories, dirColumns, 2, "", "");
 
@@ -73,23 +79,19 @@ FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) : PropPage(parent) {
 
 	directories->onDblClicked(std::tr1::bind(&FavoriteDirsPage::handleDoubleClick, this));
 	directories->onKeyDown(std::tr1::bind(&FavoriteDirsPage::handleKeyDown, this, _1));
-	directories->onRaw(std::tr1::bind(&FavoriteDirsPage::handleItemChanged, this, _1, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
+	directories->onSelectionChanged(std::tr1::bind(&FavoriteDirsPage::handleSelectionChanged, this));
 
 	onDragDrop(std::tr1::bind(&FavoriteDirsPage::handleDragDrop, this, _1));
-
-	attachChild<Button>(IDC_RENAME)->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRenameClicked, this));
-
-	attachChild<Button>(IDC_REMOVE)->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRemoveClicked, this));
-
-	attachChild<Button>(IDC_ADD)->onClicked(std::tr1::bind(&FavoriteDirsPage::handleAddClicked, this));
 }
 
 FavoriteDirsPage::~FavoriteDirsPage() {
 }
 
-void FavoriteDirsPage::write()
-{
-//	PropPage::write(handle(), items);
+void FavoriteDirsPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point groupSize = group->getPreferedSize();
+	group->layout(dwt::Rectangle(7, 4, getClientAreaSize().x - 14, groupSize.y));
 }
 
 void FavoriteDirsPage::handleDoubleClick() {
@@ -112,11 +114,10 @@ bool FavoriteDirsPage::handleKeyDown(int c) {
 	return false;
 }
 
-LRESULT FavoriteDirsPage::handleItemChanged(WPARAM wParam, LPARAM lParam) {
-	BOOL hasSelected = directories->hasSelected() ? TRUE : FALSE;
-	::EnableWindow(::GetDlgItem(handle(), IDC_RENAME), hasSelected);
-	::EnableWindow(::GetDlgItem(handle(), IDC_REMOVE), hasSelected);
-	return 0;
+void FavoriteDirsPage::handleSelectionChanged() {
+	bool enable = directories->hasSelected();
+	rename->setEnabled(enable);
+	remove->setEnabled(enable);
 }
 
 void FavoriteDirsPage::handleDragDrop(const TStringList& files) {

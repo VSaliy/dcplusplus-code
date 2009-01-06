@@ -35,7 +35,7 @@ private:
 
 	GridPtr grid;
 
-	void handleBrowse(TextBoxPtr box);
+	void handleBrowse(const Item& i);
 	void handleConfigHubLists();
 };
 
