@@ -26,6 +26,7 @@
 #include "ShareManager.h"
 #include "CryptoManager.h"
 #include "ConnectionManager.h"
+#include "version.h"
 
 #include "Socket.h"
 #include "UserCommand.h"

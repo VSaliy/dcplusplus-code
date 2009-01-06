@@ -37,6 +37,7 @@
 #include "Download.h"
 #include "HashBloom.h"
 #include "SearchResult.h"
+#include "version.h"
 
 #ifndef _WIN32
 #include <sys/types.h>
