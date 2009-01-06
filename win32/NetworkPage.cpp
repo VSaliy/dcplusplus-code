@@ -125,12 +125,15 @@ NetworkPage::NetworkPage(dwt::Widget* parent) : PropPage(parent) {
 	gridOut->setWidget(socksResolve, 6, 0, 1, 2);
 	items.push_back(Item(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL));
 
-	/*
 	tcp->setNumbersOnly();
 	udp->setNumbersOnly();
 	tls->setNumbersOnly();
-	*/
 	socksPort->setNumbersOnly();
+
+	socksServer->setTextLimit(250);
+	socksPort->setTextLimit(250);
+	socksLogin->setTextLimit(250);
+	socksPass->setTextLimit(250);
 
 	if(!(WinUtil::getOsMajor() >= 5 && WinUtil::getOsMinor() >= 1 //WinXP & WinSvr2003
 		|| WinUtil::getOsMajor() >= 6 )) //Vista
@@ -161,22 +164,6 @@ NetworkPage::NetworkPage(dwt::Widget* parent) : PropPage(parent) {
 
 	directOut->onClicked(std::tr1::bind(&NetworkPage::fixControlsOut, this));
 	socks5->onClicked(std::tr1::bind(&NetworkPage::fixControlsOut, this));
-
-#define TEXTBOX_LIMIT(id) attachChild<TextBox>(id)->setTextLimit(250)
-	/*
-	TEXTBOX_LIMIT(IDC_SOCKS_SERVER);
-	TEXTBOX_LIMIT(IDC_SOCKS_PORT);
-	TEXTBOX_LIMIT(IDC_SOCKS_USER);
-	TEXTBOX_LIMIT(IDC_SOCKS_PASSWORD);
-	*/
-#undef TEXTBOX_LIMIT
-
-	/*
-	attachChild<TextBox>(IDC_PORT_TCP);
-	attachChild<TextBox>(IDC_PORT_UDP);
-	attachChild<TextBox>(IDC_PORT_TLS);
-	attachChild<TextBox>(IDC_EXTERNAL_IP);
-	*/
 }
 
 NetworkPage::~NetworkPage() {
