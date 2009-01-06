@@ -21,6 +21,7 @@
 #include "resource.h"
 
 #include "GeneralPage.h"
+
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/GroupBox.h>
 

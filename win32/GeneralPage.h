@@ -33,8 +33,8 @@ public:
 private:
 	ItemList items;
 
-	TextBoxPtr nick;
 	GroupBoxPtr group;
+	TextBoxPtr nick;
 
 	void handleNickTextChanged();
 };
