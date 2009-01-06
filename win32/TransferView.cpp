@@ -182,7 +182,7 @@ LRESULT TransferView::handleDestroy() {
 MenuPtr TransferView::makeContextMenu(ConnectionInfo* ii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	appendUserItems(mdi, menu, false);
+	appendUserItems(mdi, menu, Util::emptyString, false);
 	menu->appendSeparator();
 
 	menu->appendItem(T_("&Force attempt"), std::tr1::bind(&TransferView::handleForce, this));
