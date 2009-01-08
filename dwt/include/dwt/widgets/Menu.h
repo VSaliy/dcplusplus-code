@@ -333,10 +333,11 @@ public:
 
 	virtual ~Menu();
 
-private:
+protected:
 	/// Constructor Taking pointer to parent
 	explicit Menu( dwt::Widget * parent );
 
+private:
 	// ////////////////////////////////////////////////////////////////////////
 	// Menu item data wrapper, used internally
 	// MENUITEMINFO's dwItemData *should* point to it

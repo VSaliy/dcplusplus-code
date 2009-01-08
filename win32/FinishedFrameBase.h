@@ -22,7 +22,6 @@
 #include "StaticFrame.h"
 #include "TypedTable.h"
 #include "TextFrame.h"
-#include "ShellMenu.h"
 #include "HoldRedraw.h"
 
 #include <dcpp/File.h>
@@ -381,7 +380,7 @@ private:
 
 			bool allFilesExist = files->forEachSelectedT(FileExistenceChecker()).allFilesExist;
 
-			dwt::MenuPtr menu = this->addChild(WinUtil::Seeds::menu);
+			typename ThisType::ShellMenuPtr menu = this->addChild(ShellMenu::Seed());
 
 			menu->appendItem(T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), allFilesExist);
 			menu->appendItem(T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), allFilesExist, true);
@@ -392,18 +391,13 @@ private:
 			menu->appendSeparator();
 			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
 
-			ShellMenu* shellMenu = 0;
 			if(files->countSelected() == 1) {
 				string path = files->getSelectedData()->file;
-				if(File::getSize(path) != -1) {
-					shellMenu = new ShellMenu(menu, Text::utf8ToWide(path));
-				}
+				if(File::getSize(path) != -1)
+					menu->appendShellMenu(Text::utf8ToWide(path));
 			}
 
-			if(shellMenu)
-				shellMenu->open(pt);
-			else
-				menu->open(pt);
+			menu->open(pt);
 			return true;
 		}
 		return false;

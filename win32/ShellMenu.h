@@ -21,8 +21,10 @@
 #ifndef DCPLUSPLUS_WIN32_SHELL_MENU_H
 #define DCPLUSPLUS_WIN32_SHELL_MENU_H
 
-class ShellMenu
+class ShellMenu : public dwt::Menu
 {
+	typedef dwt::Menu BaseType;
+
 	struct Dispatcher : dwt::Dispatchers::Base<bool (const MSG&)> {
 		typedef dwt::Dispatchers::Base<bool (const MSG&)> BaseType;
 		Dispatcher(const BaseType::F& f_, LPCONTEXTMENU3 handler_) : BaseType(f_), handler(handler_) { }
@@ -40,17 +42,25 @@ class ShellMenu
 	};
 
 public:
-	ShellMenu(dwt::MenuPtr& parent_, const wstring& path);
+	typedef ShellMenu ThisType;
+
+	typedef std::tr1::shared_ptr<ShellMenu> ObjectType;
+
+	struct Seed : public BaseType::Seed {
+		typedef ThisType WidgetType;
+
+		Seed();
+	};
+
+	explicit ShellMenu( dwt::Widget * parent );
 	~ShellMenu();
 
+	void appendShellMenu(const wstring& path);
 	void open(const dwt::ScreenCoordinate& pt, unsigned flags = TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 private:
-	dwt::MenuPtr parent;
 	dwt::MenuPtr menu;
-
 	LPCONTEXTMENU3 handler;
-
 	unsigned sel_id;
 
 	bool handleDrawItem(const MSG& msg);

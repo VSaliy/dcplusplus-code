@@ -22,7 +22,6 @@
 #include "LineDlg.h"
 #include "TextFrame.h"
 #include "HoldRedraw.h"
-#include "ShellMenu.h"
 
 #include "resource.h"
 
@@ -306,8 +305,8 @@ void DirectoryListingFrame::setWindowTitle() {
 		setText(error);
 }
 
-MenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+DirectoryListingFrame::ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
+	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
 	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu, ii);
@@ -330,8 +329,8 @@ MenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 	return menu;
 }
 
-MenuPtr DirectoryListingFrame::makeMultiMenu() {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+DirectoryListingFrame::ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
+	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
 	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu);
@@ -393,8 +392,7 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 			pt = files->getContextMenuPos();
 		}
 
-		MenuPtr menu;
-		ShellMenu* shellMenu = 0;
+		ShellMenuPtr menu;
 
 		if(files->countSelected() == 1) {
 			ItemInfo* ii = files->getSelectedData();
@@ -404,17 +402,14 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 			if(ii->type == ItemInfo::FILE) {
 				string localPath = dl->getLocalPath(ii->file);
 				if(!localPath.empty())
-					shellMenu = new ShellMenu(menu, Text::utf8ToWide(localPath));
+					menu->appendShellMenu(Text::utf8ToWide(localPath));
 			}
 		} else {
 			menu = makeMultiMenu();
 		}
 
 		usingDirMenu = false;
-		if(shellMenu)
-			shellMenu->open(pt);
-		else
-			menu->open(pt);
+		menu->open(pt);
 		return true;
 	}
 	return false;
