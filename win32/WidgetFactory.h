@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_WIDGETFACTORY2_H_
 
 #include "ComboBox.h"
+#include "ShellMenu.h"
 #include "Table.h"
 #include "TextBox.h"
 #include "WidgetPaned.h"
@@ -43,6 +44,9 @@ public:
 
 	/// ComboBox object type.
 	typedef typename ComboBox::ObjectType ComboBoxPtr;
+
+	/// ShellMenu object type.
+	typedef typename ShellMenu::ObjectType ShellMenuPtr;
 
 	/// Table class type.
 	typedef ::Table Table;
