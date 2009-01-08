@@ -486,8 +486,10 @@ void MainWindow::handleMinimized() {
 }
 
 void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
-	tstring line = Text::toT("[" + Util::getShortTimeString(t) + "] " + m);
-	callAsync(std::tr1::bind(&MainWindow::setStatus, this, STATUS_STATUS, line, true, false));
+	string message(m);
+	WinUtil::reducePaths(message);
+	callAsync(std::tr1::bind(&MainWindow::setStatus, this, STATUS_STATUS,
+		Text::toT("[" + Util::getShortTimeString(t) + "] " + message), true, false));
 }
 
 void MainWindow::viewAndDelete(const string& fileName) {

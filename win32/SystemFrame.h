@@ -47,6 +47,8 @@ private:
 
 	void addLine(time_t t, const tstring& msg);
 
+	bool handleContextMenu(const dwt::ScreenCoordinate& pt);
+
 	// LogManagerListener
 	virtual void on(Message, time_t t, const string& message) throw();
 };

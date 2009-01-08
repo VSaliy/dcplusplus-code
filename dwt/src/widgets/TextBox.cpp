@@ -55,20 +55,20 @@ tstring TextBox::getLine(int line) {
 	return tmp;
 }
 
-tstring TextBox::textUnderCursor(const ScreenCoordinate& p) {
+tstring TextBox::textUnderCursor(const ScreenCoordinate& p, bool includeSpaces) {
 	int i = charFromPos(p);
 	int line = lineFromPos(p);
 	int c = (i - lineIndex(line)) & 0xFFFF;
 
 	tstring tmp = getLine(line);
 
-	tstring::size_type start = tmp.find_last_of(_T(" <\t\r\n"), c);
+	tstring::size_type start = tmp.find_last_of(includeSpaces ? _T("<\t\r\n") : _T(" <\t\r\n"), c);
 	if(start == tstring::npos)
 		start = 0;
 	else
 		start++;
 
-	tstring::size_type end = tmp.find_first_of(_T(" >\t\r\n"), start + 1);
+	tstring::size_type end = tmp.find_first_of(includeSpaces ? _T(">\t\r\n") : _T(" >\t\r\n"), start + 1);
 	if(end == tstring::npos)
 		end = tmp.size();
 
