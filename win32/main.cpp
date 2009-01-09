@@ -71,18 +71,15 @@ int SmartWinMain(dwt::Application& app) {
 
 #ifndef _DEBUG
 	SingleInstance dcapp(_T("{DCPLUSPLUS-AEE8350A-B49A-4753-AB4B-E55479A48351}"));
+	if(dcapp.isRunning()) {
 #else
 	SingleInstance dcapp(_T("{DCPLUSPLUS-AEE8350A-B49A-4753-AB4B-E55479A48350}"));
+	if(dcapp.isRunning() && app.getCommandLine().getParams().size() > 1) {
 #endif
-	if(dcapp.isRunning()) {
 		HWND hOther = NULL;
 		::EnumWindows(&searchOtherInstance, (LPARAM)&hOther);
 
-#ifndef _DEBUG
-		if( hOther != NULL ) {
-#else
-		if( hOther != NULL && app.getCommandLine().getParams().size() > 1 ) {
-#endif
+		if(hOther) {
 			// pop up
 			::SetForegroundWindow(hOther);
 
@@ -91,8 +88,9 @@ int SmartWinMain(dwt::Application& app) {
 				::ShowWindow(hOther, SW_RESTORE);
 			}
 			sendCmdLine(hOther, app.getCommandLine().getParamsRaw());
-			return 1;
 		}
+
+		return 1;
 	}
 
 #ifdef _DEBUG
