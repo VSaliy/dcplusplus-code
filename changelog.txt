@@ -11,6 +11,7 @@
 * Upgraded to OpenSSL 0.9.8j (poy)
 * [L#256358] Fix multiple instances (poy)
 * Fix encoding issues in translated help files (poy)
+* Help updates (emtee, poy)
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 
