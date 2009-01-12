@@ -2,7 +2,7 @@
 # tags that have the "cshelp" argument; target files (cshelp.h and cshelp.txt)
 # are then generated and used by the DC++ context-sensitive help system.
 
-def gen_cshelp(target, source, env):
+def gen_cshelp(target, source, lcid):
 	import codecs
 	from HTMLParser import HTMLParser
 	from htmlentitydefs import entitydefs
@@ -76,7 +76,8 @@ def gen_cshelp(target, source, env):
 """)
 	number = 11000
 	if len(target) >= 2:
-		f_txt = codecs.open(str(target[1]), "w", "latin_1", "replace")
+		from util import get_win_cp
+		f_txt = codecs.open(str(target[1]), "w", get_win_cp(lcid), "replace")
 	for entry in output:
 		f_h.write("#define " + entry[0] + " " + str(number) + "\r\n")
 		number += 1

@@ -1,10 +1,11 @@
 # this script generates an HTML Help compatible table of contents
 
-def gen_toc(target, source):
+def gen_toc(target, source, lcid):
 	import codecs
 	from HTMLParser import HTMLParser
 	from htmlentitydefs import entitydefs
 	import re
+	from util import get_win_cp
 
 	spaces = re.compile("\s+")
 
@@ -59,7 +60,7 @@ def gen_toc(target, source):
 				f_target.write("\r\n</ul>")
 				self.in_ul -= 1
 
-	f_target = codecs.open(target, "w", "latin_1", "xmlcharrefreplace")
+	f_target = codecs.open(target, "w", get_win_cp(lcid), "replace")
 	f_target.write("""<html>
 <head>
 </head>
