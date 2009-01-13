@@ -173,6 +173,10 @@ void AdcHub::handle(AdcCommand::INF, AdcCommand& c) throw() {
 		u->getUser()->setFlag(User::TLS);
 	}
 
+	if(!u->getIdentity().get("US").empty()) {
+		u->getIdentity().setConnection(str(F_("%1%/s") % Util::formatBytes(u->getIdentity().get("US"))));
+	}
+
 	if(u->getUser() == getMyIdentity().getUser()) {
 		state = STATE_NORMAL;
 		setAutoReconnect(true);
@@ -696,7 +700,7 @@ void AdcHub::info(bool /*alwaysSend*/) {
 	addParam(lastInfoMap, c, "HR", Util::toString(counts.registered));
 	addParam(lastInfoMap, c, "HO", Util::toString(counts.op));
 	addParam(lastInfoMap, c, "VE", "++ " VERSIONSTRING);
-	addParam(lastInfoMap, c, "US", Util::toString((long)(Util::toDouble(SETTING(UPLOAD_SPEED))*1024*1024)));
+	addParam(lastInfoMap, c, "US", Util::toString((long)(Util::toDouble(SETTING(UPLOAD_SPEED))*1024*1024/8)));
 	addParam(lastInfoMap, c, "AW", Util::getAway() ? "1" : Util::emptyString);
 
 	if(SETTING(MAX_DOWNLOAD_SPEED) > 0) {
