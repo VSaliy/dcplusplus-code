@@ -66,7 +66,6 @@ public:
 	void search(StringList& who, const string& aName, const string& aSize, TypeModes aTypeMode, SizeModes aSizeMode, const string& aToken) {
 		search(who, aName, Util::toInt64(aSize), aTypeMode, aSizeMode, aToken);
 	}
-	static string clean(const string& aSearchString);
 
 	void respond(const AdcCommand& cmd, const CID& cid,  bool isUdpActive);
 
@@ -101,6 +100,7 @@ private:
 
 	SearchManager();
 
+	static std::string normalizeWhitespace(const std::string& aString);
 	virtual int run();
 
 	virtual ~SearchManager() throw();
