@@ -12,6 +12,8 @@
 * [L#256358] Fix multiple instances (poy)
 * Fix encoding issues in translated help files (poy)
 * Help updates (emtee, poy)
+* [L#259100] Fix upload speed reporting
+* [L#275588] Clean up whitespace before sending search
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 

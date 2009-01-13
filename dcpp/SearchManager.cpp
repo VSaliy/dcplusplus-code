@@ -47,16 +47,26 @@ SearchManager::~SearchManager() throw() {
 	}
 }
 
+string SearchManager::normalizeWhitespace(const string& aString){
+	string::size_type found = 0;
+	string normalized = aString;
+	while((found = normalized.find_first_of("\t\n\r", found)) != string::npos) {
+		normalized[found] = ' ';
+		found++;
+	}
+	return normalized;
+}
+
 void SearchManager::search(const string& aName, int64_t aSize, TypeModes aTypeMode /* = TYPE_ANY */, SizeModes aSizeMode /* = SIZE_ATLEAST */, const string& aToken /* = Util::emptyString */) {
 	if(okToSearch()) {
-		ClientManager::getInstance()->search(aSizeMode, aSize, aTypeMode, aName, aToken);
+		ClientManager::getInstance()->search(aSizeMode, aSize, aTypeMode, normalizeWhitespace(aName), aToken);
 		lastSearch = GET_TICK();
 	}
 }
 
 void SearchManager::search(StringList& who, const string& aName, int64_t aSize /* = 0 */, TypeModes aTypeMode /* = TYPE_ANY */, SizeModes aSizeMode /* = SIZE_ATLEAST */, const string& aToken /* = Util::emptyString */) {
 	if(okToSearch()) {
-		ClientManager::getInstance()->search(who, aSizeMode, aSize, aTypeMode, aName, aToken);
+		ClientManager::getInstance()->search(who, aSizeMode, aSize, aTypeMode, normalizeWhitespace(aName), aToken);
 		lastSearch = GET_TICK();
 	}
 }
@@ -325,21 +335,6 @@ void SearchManager::respond(const AdcCommand& adc, const CID& from,  bool isUdpA
 			cmd.addParam("TO", token);
 		ClientManager::getInstance()->send(cmd, from);
 	}
-}
-
-string SearchManager::clean(const string& aSearchString) {
-	static const char* badChars = "$|.[]()-_+";
-	string::size_type i = aSearchString.find_first_of(badChars);
-	if(i == string::npos)
-		return aSearchString;
-
-	string tmp = aSearchString;
-	// Remove all strange characters from the search string
-	do {
-		tmp[i] = ' ';
-	} while ( (i = tmp.find_first_of(badChars, i)) != string::npos);
-
-	return tmp;
 }
 
 } // namespace dcpp
