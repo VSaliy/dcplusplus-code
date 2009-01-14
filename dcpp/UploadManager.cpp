@@ -146,7 +146,7 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 		aSource.fileNotAvail(e.getError());
 		return false;
 	} catch(const Exception& e) {
-		LogManager::getInstance()->message(str(F_("Unable to send file %1%: %2%") % sourceFile % e.getError()));
+		LogManager::getInstance()->message(str(F_("Unable to send file <%1%>: %2%") % sourceFile % e.getError()));
 		aSource.fileNotAvail();
 		return false;
 	}

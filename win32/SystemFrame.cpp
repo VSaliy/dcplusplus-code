@@ -35,6 +35,7 @@ SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 		log = addChild(cs);
 		addWidget(log);
 		log->onContextMenu(std::tr1::bind(&SystemFrame::handleContextMenu, this, _1));
+		log->onLeftMouseDblClick(std::tr1::bind(&SystemFrame::handleDoubleClick, this, _1));
 	}
 
 	initStatus();
@@ -92,14 +93,23 @@ bool SystemFrame::preClosing() {
 }
 
 bool SystemFrame::handleContextMenu(const dwt::ScreenCoordinate& pt) {
-	string path = Text::fromT(log->textUnderCursor(pt, true));
-	if(File::getSize(path) != -1) {
+	tstring path = log->textUnderCursor(pt, true);
+	string path_a = Text::fromT(path);
+	if(File::getSize(path_a) != -1) {
 		ShellMenuPtr menu = addChild(ShellMenu::Seed());
-		menu->appendShellMenu(Text::utf8ToWide(path));
+		menu->appendItem(T_("&Open"), std::tr1::bind(&WinUtil::openFile, path), dwt::IconPtr(), true, true);
+		menu->appendItem(T_("Open &folder"), std::tr1::bind(&WinUtil::openFolder, path));
+		menu->appendShellMenu(Text::utf8ToWide(path_a));
 		menu->open(pt);
 		return true;
 	}
 	return false;
+}
+
+void SystemFrame::handleDoubleClick(const dwt::MouseEvent& mouseEvent) {
+	tstring path = log->textUnderCursor(mouseEvent.pos, true);
+	if(File::getSize(Text::fromT(path)) != -1)
+		WinUtil::openFile(path);
 }
 
 void SystemFrame::on(Message, time_t t, const string& message) throw() {
