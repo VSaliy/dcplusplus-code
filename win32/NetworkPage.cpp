@@ -125,11 +125,6 @@ NetworkPage::NetworkPage(dwt::Widget* parent) : PropPage(parent) {
 	gridOut->setWidget(socksResolve, 6, 0, 1, 2);
 	items.push_back(Item(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL));
 
-	tcp->setNumbersOnly();
-	udp->setNumbersOnly();
-	tls->setNumbersOnly();
-	socksPort->setNumbersOnly();
-
 	socksServer->setTextLimit(250);
 	socksPort->setTextLimit(250);
 	socksLogin->setTextLimit(250);

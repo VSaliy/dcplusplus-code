@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_QUEUE_PAGE_H
 
 #include "PropPage.h"
-#include "WidgetFactory.h"
 
 class QueuePage : public PropPage
 {
@@ -28,13 +27,15 @@ public:
 	QueuePage(dwt::Widget* parent);
 	virtual ~QueuePage();
 
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-	static TextItem texts[];
-	static ListItem optionItems[];
 
+	GridPtr grid;
+
+	static ListItem optionItems[];
 	TablePtr otherOptions;
 };
 
