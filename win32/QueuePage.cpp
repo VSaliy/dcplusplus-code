@@ -22,6 +22,9 @@
 
 #include "QueuePage.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+
 #include <dcpp/SettingsManager.h>
 
 /** @todo cshelp
@@ -61,47 +64,6 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-PropPage::TextItem QueuePage::texts[] = {
-	{ IDC_SETTINGS_AUTOPRIO, N_("Auto priority settings") },
-	{ IDC_SETTINGS_PRIO_HIGHEST, N_("Highest prio max size") },
-	{ IDC_SETTINGS_KB3, N_("KiB") },
-	{ IDC_SETTINGS_PRIO_HIGH, N_("High prio max size") },
-	{ IDC_SETTINGS_KB4, N_("KiB") },
-	{ IDC_SETTINGS_PRIO_NORMAL, N_("Normal prio max size") },
-	{ IDC_SETTINGS_KB5, N_("KiB") },
-	{ IDC_SETTINGS_PRIO_LOW, N_("Low prio max size") },
-	{ IDC_SETTINGS_KB6, N_("KiB") },
-	{ IDC_SETTINGS_AUTODROP, N_("Autodrop settings") },
-	{ IDC_SETTINGS_AUTODROP_SPEED, N_("Drop sources below") },
-	{ IDC_SETTINGS_BPS, N_("B/s") },
-	{ IDC_SETTINGS_AUTODROP_INTERVAL, N_("Check every") },
-	{ IDC_SETTINGS_S1, N_("s") },
-	{ IDC_SETTINGS_AUTODROP_ELAPSED, N_("Min elapsed") },
-	{ IDC_SETTINGS_S2, N_("s") },
-	{ IDC_SETTINGS_AUTODROP_INACTIVITY, N_("Max inactivity") },
-	{ IDC_SETTINGS_S3, N_("s") },
-	{ IDC_SETTINGS_AUTODROP_MINSOURCES, N_("Min sources online") },
-	{ IDC_SETTINGS_AUTODROP_FILESIZE, N_("Min filesize") },
-	{ IDC_SETTINGS_KB7, N_("KiB") },
-	{ IDC_SETTINGS_OTHER_QUEUE_OPTIONS, N_("Other queue options") },
-	{ 0, 0 }
-};
-
-/*
-PropPage::Item QueuePage::items[] = {
-	{ IDC_PRIO_HIGHEST_SIZE, SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT },
-	{ IDC_PRIO_HIGH_SIZE, SettingsManager::PRIO_HIGH_SIZE, PropPage::T_INT },
-	{ IDC_PRIO_NORMAL_SIZE, SettingsManager::PRIO_NORMAL_SIZE, PropPage::T_INT },
-	{ IDC_PRIO_LOW_SIZE, SettingsManager::PRIO_LOW_SIZE, PropPage::T_INT },
-	{ IDC_AUTODROP_SPEED, SettingsManager::AUTODROP_SPEED, PropPage::T_INT },
-	{ IDC_AUTODROP_INTERVAL, SettingsManager::AUTODROP_INTERVAL, PropPage::T_INT },
-	{ IDC_AUTODROP_ELAPSED, SettingsManager::AUTODROP_ELAPSED, PropPage::T_INT },
-	{ IDC_AUTODROP_INACTIVITY, SettingsManager::AUTODROP_INACTIVITY, PropPage::T_INT },
-	{ IDC_AUTODROP_MINSOURCES, SettingsManager::AUTODROP_MINSOURCES, PropPage::T_INT },
-	{ IDC_AUTODROP_FILESIZE, SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT },
-	{ 0, 0, PropPage::T_END }
-};
-*/
 PropPage::ListItem QueuePage::optionItems[] = {
 	{ SettingsManager::PRIO_LOWEST, N_("Set lowest prio for newly added files larger than Low prio size"), IDH_SETTINGS_QUEUE_PRIO_LOWEST },
 	{ SettingsManager::AUTODROP_ALL, N_("Autodrop slow sources for all queue items (except filelists)"), IDH_SETTINGS_QUEUE_AUTODROP_ALL },
@@ -119,25 +81,75 @@ QueuePage::QueuePage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_QUEUEPAGE);
 	setHelpId(IDH_QUEUEPAGE);
 
-	PropPage::translate(handle(), texts);
+	grid = addChild(Grid::Seed(3, 1));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(2).mode = GridInfo::FILL;
+	grid->row(2).align = GridInfo::STRETCH;
+
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Auto priority settings")))->addChild(Grid::Seed(2, 6));
+
+		cur->addChild(Label::Seed(T_("Highest prio max size")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("KiB")));
+
+		cur->addChild(Label::Seed(T_("High prio max size")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::PRIO_HIGH_SIZE, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("KiB")));
+
+		cur->addChild(Label::Seed(T_("Normal prio max size")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::PRIO_NORMAL_SIZE, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("KiB")));
+
+		cur->addChild(Label::Seed(T_("Low prio max size")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::PRIO_LOW_SIZE, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("KiB")));
+	}
+
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Autodrop settings")))->addChild(Grid::Seed(3, 6));
+
+		cur->addChild(Label::Seed(T_("Drop sources below")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_SPEED, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("B/s")));
+
+		cur->addChild(Label::Seed(T_("Check every")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_INTERVAL, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("s")));
+
+		cur->addChild(Label::Seed(T_("Min elapsed")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_ELAPSED, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("s")));
+
+		cur->addChild(Label::Seed(T_("Max inactivity")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_INACTIVITY, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("s")));
+
+		cur->addChild(Label::Seed(T_("Min sources online")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_MINSOURCES, PropPage::T_INT));
+
+		cur->addChild(Label::Seed(T_("Min filesize")));
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("KiB")));
+	}
+
+	Table::Seed seed;
+	seed.style |= LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_NOCOLUMNHEADER | LVS_NOSORTHEADER;
+	seed.lvStyle |= LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT;
+	otherOptions = grid->addChild(GroupBox::Seed(T_("Other queue options")))->addChild(seed);
+
 	PropPage::read(items);
-
-	attachChild(otherOptions, IDC_OTHER_QUEUE_OPTIONS);
 	PropPage::read(optionItems, otherOptions);
-
-	attachChild<TextBox>(IDC_PRIO_HIGHEST_SIZE);
-	attachChild<TextBox>(IDC_PRIO_NORMAL_SIZE);
-	attachChild<TextBox>(IDC_PRIO_HIGH_SIZE);
-	attachChild<TextBox>(IDC_PRIO_LOW_SIZE);
-	attachChild<TextBox>(IDC_AUTODROP_SPEED);
-	attachChild<TextBox>(IDC_AUTODROP_ELAPSED);
-	attachChild<TextBox>(IDC_AUTODROP_MINSOURCES);
-	attachChild<TextBox>(IDC_AUTODROP_INTERVAL);
-	attachChild<TextBox>(IDC_AUTODROP_INACTIVITY);
-	attachChild<TextBox>(IDC_AUTODROP_FILESIZE);
 }
 
 QueuePage::~QueuePage() {
+}
+
+void QueuePage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point clientSize = getClientAreaSize();
+	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void QueuePage::write() {

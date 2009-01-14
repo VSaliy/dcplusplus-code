@@ -75,14 +75,10 @@ DownloadPage::DownloadPage(dwt::Widget* parent) : PropPage(parent) {
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Limits")))->addChild(Grid::Seed(3, 2));
 		cur->column(1).mode = GridInfo::FILL;
 
-		TextBoxPtr box = cur->addChild(TextBox::Seed());
-		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
-		box->setNumbersOnly();
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
 		cur->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")));
 
-		box = cur->addChild(TextBox::Seed());
-		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
-		box->setNumbersOnly();
+		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
 		cur->addChild(Label::Seed(T_("No new downloads if speed exceeds (KiB/s, 0 = disable)")));
 
 		// xgettext:no-c-format
