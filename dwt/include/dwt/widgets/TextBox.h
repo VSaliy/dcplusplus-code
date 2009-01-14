@@ -258,7 +258,7 @@ public:
 
 	tstring getLine(int line);
 
-	tstring textUnderCursor(const ScreenCoordinate& p);
+	tstring textUnderCursor(const ScreenCoordinate& p, bool includeSpaces = false);
 
 	/// Actually creates the TextBox
 	/** You should call WidgetFactory::createTextBox if you instantiate class

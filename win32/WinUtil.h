@@ -142,6 +142,8 @@ public:
 	static pair<tstring, bool> getHubNames(const CID& cid) throw();
 	static pair<tstring, bool> getHubNames(const UserPtr& u);
 
+	static void reducePaths(string& message);
+
 	// Hash related
 	static void addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename);
 	static void bitziLink(const TTHValue& /*aHash*/);

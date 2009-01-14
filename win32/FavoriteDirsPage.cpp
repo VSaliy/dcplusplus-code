@@ -54,7 +54,6 @@ FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) : PropPage(parent) {
 	group = addChild(GroupBox::Seed(T_("Favorite download directories")));
 
 	GridPtr grid = group->addChild(Grid::Seed(2, 3));
-	grid->row(0).size = 200; // shouldn't need this.
 	grid->row(0).mode = dwt::GridInfo::FILL;
 	grid->row(0).align = dwt::GridInfo::STRETCH;
 	grid->column(0).mode = dwt::GridInfo::FILL;
@@ -95,8 +94,8 @@ FavoriteDirsPage::~FavoriteDirsPage() {
 void FavoriteDirsPage::layout(const dwt::Rectangle& rc) {
 	PropPage::layout(rc);
 
-	dwt::Point groupSize = group->getPreferedSize();
-	group->layout(dwt::Rectangle(7, 4, getClientAreaSize().x - 14, groupSize.y));
+	dwt::Point clientSize = getClientAreaSize();
+	group->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void FavoriteDirsPage::handleDoubleClick() {

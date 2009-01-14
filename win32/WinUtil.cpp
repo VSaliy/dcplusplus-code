@@ -389,6 +389,24 @@ int WinUtil::getIconIndex(const tstring& aFileName) {
 		return 2;
 	}
 }
+
+void WinUtil::reducePaths(string& message) {
+	string::size_type start = 0;
+	while((start = message.find('<', start)) != string::npos) {
+		string::size_type end = message.find('>', start);
+		if(end == string::npos)
+			return;
+
+		if(count(message.begin() + start, message.begin() + end, PATH_SEPARATOR) >= 2) {
+			message.erase(end, 1);
+			message.erase(start, message.rfind(PATH_SEPARATOR, message.rfind(PATH_SEPARATOR, end) - 1) - start);
+			message.insert(start, "...");
+		}
+
+		start++;
+	}
+}
+
 void WinUtil::addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename) {
 	menu->appendItem(T_("Search for alternates"), std::tr1::bind(&WinUtil::searchHash, tth));
 	menu->appendItem(T_("Lookup TTH at Bitzi.com"), std::tr1::bind(WinUtil::bitziLink, tth));
