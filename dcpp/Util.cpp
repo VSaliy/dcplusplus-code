@@ -430,7 +430,8 @@ bool Util::resolveNmdc(string& ip) {
 	if(
 		ip == "70.85.55.252" || // hublist.org
 		ip == "207.44.220.108" || // dcpp.net
-		ip == "216.34.181.97" || // hubtracker.com
+		ip == "216.34.181.97" || // hubtracker.com -- this is old hosting
+		ip == "81.181.249.83" || //openhublist.org
 		ip == "64.19.158.42" || // dchublist.com
 		ip == "174.133.138.93" // adchublist.com
 		) {
