@@ -54,6 +54,11 @@ FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) : PropPage(parent) {
 	group = addChild(GroupBox::Seed(T_("Favorite download directories")));
 
 	GridPtr grid = group->addChild(Grid::Seed(2, 3));
+	grid->row(0).size = 200; // shouldn't need this.
+	grid->row(0).mode = dwt::GridInfo::FILL;
+	grid->row(0).align = dwt::GridInfo::STRETCH;
+	grid->column(0).mode = dwt::GridInfo::FILL;
+	grid->column(0).align = dwt::GridInfo::STRETCH;
 
 	Table::Seed seed;
 	seed.style |= LVS_SHOWSELALWAYS | LVS_NOSORTHEADER;
