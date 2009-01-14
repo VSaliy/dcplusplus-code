@@ -327,9 +327,9 @@ int QueueManager::FileMover::run() {
 				// Try to just rename it to the correct name at least
 				string newTarget = Util::getFilePath(next.first) + Util::getFileName(next.second);
 				File::renameFile(next.first, newTarget);
-				LogManager::getInstance()->message(str(F_("%1% renamed to %2%") % next.first % newTarget));
+				LogManager::getInstance()->message(str(F_("<%1%> renamed to <%2%>") % next.first % newTarget));
 			} catch(const FileException& e) {
-				LogManager::getInstance()->message(str(F_("Unable to rename %1%: %2%") % next.first % e.getError()));
+				LogManager::getInstance()->message(str(F_("Unable to rename <%1%>: <%2%>") % next.first % e.getError()));
 			}
 		}
 	}
@@ -1171,7 +1171,7 @@ void QueueManager::processList(const string& name, UserPtr& user, int flags) {
 	try {
 		dirList.loadFile(name);
 	} catch(const Exception&) {
-		LogManager::getInstance()->message(str(F_("Unable to open filelist: %1%") % name));
+		LogManager::getInstance()->message(str(F_("Unable to open filelist: <%1%>") % name));
 		return;
 	}
 

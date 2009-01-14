@@ -376,7 +376,7 @@ bool DownloadManager::checkSfv(UserConnection* aSource, Download* d) {
 		if(!crcMatch) {
 			File::deleteFile(d->getDownloadTarget());
 			dcdebug("DownloadManager: CRC32 mismatch for %s\n", d->getPath().c_str());
-			LogManager::getInstance()->message(str(F_("CRC32 inconsistency (SFV-Check) (File: %1%)") % d->getPath()));
+			LogManager::getInstance()->message(str(F_("CRC32 inconsistency (SFV-Check) <%1%>") % d->getPath()));
 			removeDownload(d);
 			fire(DownloadManagerListener::Failed(), d, _("CRC32 inconsistency (SFV-Check)"));
 
