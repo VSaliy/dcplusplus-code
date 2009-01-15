@@ -22,13 +22,16 @@
 
 #include "UploadPage.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+#include <dwt/widgets/Spinner.h>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/version.h>
 #include "LineDlg.h"
 #include "HashProgressDlg.h"
-
-#include <dwt/widgets/Spinner.h>
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -52,37 +55,54 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-PropPage::TextItem UploadPage::texts[] = {
-	{ IDC_SETTINGS_SHARED_DIRECTORIES, N_("Shared directories") },
-	{ IDC_SETTINGS_SHARE_SIZE, N_("Total size:") },
-	{ IDC_SHAREHIDDEN, N_("Share hidden files") },
-	{ IDC_REMOVE, N_("&Remove") },
-	{ IDC_ADD, N_("&Add folder") },
-	{ IDC_RENAME, N_("Re&name") },
-	{ IDC_SETTINGS_UPLOADS_MIN_SPEED, N_("Automatically open an extra slot if speed is below (0 = disable)") },
-	{ IDC_SETTINGS_KBPS, N_("KiB/s") },
-	{ IDC_SETTINGS_UPLOADS_SLOTS, N_("Upload slots") },
-	{ IDC_SETTINGS_ONLY_HASHED, N_("Note; Files appear in the share only after they've been hashed!") },
-	{ 0, 0 }
-};
-
-/*
-PropPage::Item UploadPage::items[] = {
-	{ IDC_SLOTS, SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN },
-	{ IDC_SHAREHIDDEN, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL },
-	{ IDC_MIN_UPLOAD_SPEED, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN },
-	{ 0, 0, PropPage::T_END }
-};
-*/
 UploadPage::UploadPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_UPLOADPAGE);
 	setHelpId(IDH_UPLOADPAGE);
 
-	PropPage::translate(handle(), texts);
-	PropPage::read(items);
+	grid = addChild(Grid::Seed(3, 3));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
 
-	attachChild(directories, IDC_DIRECTORIES);
-	directories->setTableStyle(LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT);
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Shared directories")));
+		grid->setWidget(group, 0, 0, 1, 3);
+
+		GridPtr cur = group->addChild(Grid::Seed(4, 5));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->row(0).mode = GridInfo::FILL;
+		cur->row(0).align = GridInfo::STRETCH;
+
+		Table::Seed seed = WinUtil::Seeds::Dialog::Table;
+		seed.exStyle |= WS_EX_ACCEPTFILES;
+		directories = cur->addChild(seed);
+		cur->setWidget(directories, 0, 0, 1, 5);
+
+		cur->setWidget(cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!"))), 1, 0, 1, 5);
+
+		CheckBoxPtr shareHidden = cur->addChild(CheckBox::Seed(T_("Share hidden files")));
+		cur->setWidget(shareHidden, 2, 0, 1, 5);
+		items.push_back(Item(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL));
+		shareHidden->onClicked(std::tr1::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden));
+
+		cur->addChild(Label::Seed(T_("Total size:")));
+		total = cur->addChild(Label::Seed(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize()))));
+		rename = cur->addChild(Button::Seed(T_("Re&name")));
+		rename->onClicked(std::tr1::bind(&UploadPage::handleRenameClicked, this));
+		remove = cur->addChild(Button::Seed(T_("&Remove")));
+		remove->onClicked(std::tr1::bind(&UploadPage::handleRemoveClicked, this));
+		cur->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
+	}
+
+	grid->addChild(Label::Seed(T_("Automatically open an extra slot if speed is below (0 = disable)")));
+	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+	grid->addChild(Label::Seed(T_("KiB/s")));
+
+	grid->addChild(Label::Seed(T_("Upload slots")));
+	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN));
+	grid->addChild(Label::Seed(tstring()));
+
+	PropPage::read(items);
 
 	TStringList columns;
 	columns.push_back(T_("Virtual name"));
@@ -108,20 +128,7 @@ UploadPage::UploadPage(dwt::Widget* parent) : PropPage(parent) {
 
 	onDragDrop(std::tr1::bind(&UploadPage::handleDragDrop, this, _1));
 
-	CheckBoxPtr shareHidden = attachChild<CheckBox>(IDC_SHAREHIDDEN);
-	shareHidden->onClicked(std::tr1::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden));
-
-	attachChild(total, IDC_TOTAL);
-	total->setText(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize())));
-
-	ButtonPtr button = attachChild<dwt::Button>(IDC_RENAME);
-	button->onClicked(std::tr1::bind(&UploadPage::handleRenameClicked, this));
-
-	attachChild(button, IDC_REMOVE);
-	button->onClicked(std::tr1::bind(&UploadPage::handleRemoveClicked, this));
-
-	attachChild(button, IDC_ADD);
-	button->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
+	/** @todo PropPage could add these automagically when T_INT_WITH_SPIN?
 
 	SpinnerPtr spinner;
 	attachChild(spinner, IDC_SLOTSPIN);
@@ -129,12 +136,17 @@ UploadPage::UploadPage(dwt::Widget* parent) : PropPage(parent) {
 
 	attachChild(spinner, IDC_MIN_UPLOAD_SPIN);
 	spinner->setRange(0, UD_MAXVAL);
-
-	attachChild<TextBox>(IDC_MIN_UPLOAD_SPEED);
-	attachChild<TextBox>(IDC_SLOTS);
+	*/
 }
 
 UploadPage::~UploadPage() {
+}
+
+void UploadPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point clientSize = getClientAreaSize();
+	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void UploadPage::write()
@@ -168,9 +180,9 @@ bool UploadPage::handleKeyDown(int c) {
 }
 
 LRESULT UploadPage::handleItemChanged() {
-	BOOL hasSelected = directories->hasSelected() ? TRUE : FALSE;
-	::EnableWindow(::GetDlgItem(handle(), IDC_RENAME), hasSelected);
-	::EnableWindow(::GetDlgItem(handle(), IDC_REMOVE), hasSelected);
+	bool enable = directories->hasSelected();
+	rename->setEnabled(enable);
+	remove->setEnabled(enable);
 	return 0;
 }
 

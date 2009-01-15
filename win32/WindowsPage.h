@@ -28,10 +28,12 @@ public:
 	WindowsPage(dwt::Widget* parent);
 	virtual ~WindowsPage();
 
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
-	static TextItem textItem[];
+	GridPtr grid;
+
 	static ListItem autoOpenItems[];
 	static ListItem optionItems[];
 	static ListItem confirmItems[];

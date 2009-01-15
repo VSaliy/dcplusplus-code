@@ -28,14 +28,18 @@ public:
 	LogPage(dwt::Widget* parent);
 	virtual ~LogPage();
 
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-	static TextItem texts[];
-	static ListItem listItems[];
 
+	GroupBoxPtr group;
+	TextBoxPtr dir;
+
+	static ListItem listItems[];
 	TablePtr options;
+
 	TextBoxPtr logFormat;
 	TextBoxPtr logFile;
 
@@ -46,7 +50,6 @@ private:
 	//.first is filename and .second is format
 	TStringPairList logOptions;
 
-	void handleBrowseClicked();
 	void handleSelectionChanged();
 
 	void getValues();

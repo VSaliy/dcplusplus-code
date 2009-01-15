@@ -21,6 +21,8 @@
 
 #define SETTINGS_BUF_LEN 1024
 
+#include <dwt/aspects/AspectChild.h>
+
 #include "WidgetFactory.h"
 
 class PropPage : public WidgetFactory<dwt::ModelessDialog>
@@ -67,6 +69,8 @@ protected:
 	void write(const ItemList& items);
 	void write(const ListItem* listItems, TablePtr list);
 	void translate(HWND page, TextItem* items);
+
+	void handleBrowseDir(const Item& i);
 
 private:
 	void handleListHelp(HWND hWnd, unsigned id, const ListItem* listItems, TablePtr list);

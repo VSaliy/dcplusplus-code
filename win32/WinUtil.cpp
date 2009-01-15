@@ -74,6 +74,11 @@ const Table::Seed WinUtil::Seeds::Table;
 const TextBox::Seed WinUtil::Seeds::textBox;
 const dwt::Tree::Seed WinUtil::Seeds::treeView;
 
+const TextBox::Seed WinUtil::Seeds::Dialog::TextBox;
+const TextBox::Seed WinUtil::Seeds::Dialog::intTextBox;
+const Table::Seed WinUtil::Seeds::Dialog::Table;
+const Table::Seed WinUtil::Seeds::Dialog::optionsTable;
+
 void WinUtil::init() {
 
 	SettingsManager::getInstance()->setDefault(SettingsManager::BACKGROUND_COLOR, (int)(GetSysColor(COLOR_WINDOW)));
@@ -135,6 +140,10 @@ void WinUtil::init() {
 	Table::Seed& xTable = const_cast<Table::Seed&>(Seeds::Table);
 	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&>(Seeds::textBox);
 	dwt::Tree::Seed& xtreeView =  const_cast<dwt::Tree::Seed&>(Seeds::treeView);
+	TextBox::Seed& xdTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::TextBox);
+	TextBox::Seed& xdintTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::intTextBox);
+	Table::Seed& xdTable = const_cast<Table::Seed&>(Seeds::Dialog::Table);
+	Table::Seed& xdoptionsTable = const_cast<Table::Seed&>(Seeds::Dialog::optionsTable);
 
 	xbutton.font = font;
 
@@ -159,6 +168,17 @@ void WinUtil::init() {
 	xtreeView.style |= TVS_HASBUTTONS | TVS_LINESATROOT | TVS_HASLINES | TVS_SHOWSELALWAYS | TVS_DISABLEDRAGDROP;
 	xtreeView.exStyle = WS_EX_CLIENTEDGE;
 	xtreeView.font = font;
+
+	xdTextBox.style |= ES_AUTOHSCROLL;
+
+	xdintTextBox = xdTextBox;
+	xdintTextBox.style |= ES_NUMBER;
+
+	xdTable.style |= WS_HSCROLL | WS_VSCROLL | LVS_SHOWSELALWAYS | LVS_NOSORTHEADER;
+	xdTable.lvStyle |= LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP;
+
+	xdoptionsTable = xdTable;
+	xdoptionsTable.style |= LVS_SINGLESEL | LVS_NOCOLUMNHEADER;
 
 	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR>(&helpCookie));
 }

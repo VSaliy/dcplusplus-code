@@ -22,6 +22,9 @@
 
 #include "Appearance2Page.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
@@ -41,20 +44,6 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-PropPage::TextItem Appearance2Page::texts[] = {
-	{ IDC_SETTINGS_COLORS, N_("Colors") },
-	{ IDC_SELWINCOLOR, N_("Select &window color") },
-	{ IDC_SELTEXT, N_("Select &text style") },
-	{ IDC_COLOREXAMPLE, N_("Donate \342\202\254\342\202\254\342\202\254:s! (ok, dirty dollars are fine as well =) (see help menu)") },
-	{ IDC_SETTINGS_REQUIRES_RESTART, N_("Note; most of these options require that you restart DC++") },
-	{ IDC_SETTINGS_UPLOAD_BAR_COLOR, N_("Uploads") },
-	{ IDC_SETTINGS_SOUNDS, N_("Sounds") },
-	{ IDC_SETTINGS_DOWNLOAD_BAR_COLOR, N_("Downloads") },
-	{ IDC_BEEP_NOTIFICATION, N_("Notification sound") },
-	{ IDC_BROWSE, N_("&Browse...") },
-	{ 0, 0 }
-};
-
 Appearance2Page::SoundOption Appearance2Page::soundOptions[] = {
 	{ N_("Every time a main chat message is received"), SettingsManager::SOUND_MAIN_CHAT, Util::emptyStringT, IDH_SETTINGS_APPEARANCE2_SOUND_MAIN_CHAT },
 	{ N_("Every time a private message is received"), SettingsManager::SOUND_PM, Util::emptyStringT, IDH_SETTINGS_APPEARANCE2_SOUND_PM },
@@ -66,7 +55,43 @@ Appearance2Page::Appearance2Page(dwt::Widget* parent) : PropPage(parent), oldSel
 	createDialog(IDD_APPEARANCE2PAGE);
 	setHelpId(IDH_APPEARANCE2PAGE);
 
-	PropPage::translate(handle(), texts);
+	grid = addChild(Grid::Seed(3, 1));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(1).mode = GridInfo::FILL;
+	grid->row(1).align = GridInfo::STRETCH;
+
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Colors")))->addChild(Grid::Seed(2, 3));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->row(0).align = GridInfo::STRETCH;
+
+		cur->addChild(Button::Seed(T_("Select &window color")))->onClicked(std::tr1::bind(&Appearance2Page::handleBackgroundClicked, this));
+
+		Label::Seed seed(T_("Donate \342\202\254\342\202\254\342\202\254:s! (ok, dirty dollars are fine as well =) (see help menu)"));
+		seed.style |= SS_NOPREFIX | SS_SUNKEN;
+		example = cur->addChild(seed);
+		cur->setWidget(example, 0, 1, 2, 1);
+
+		cur->addChild(Button::Seed(T_("Uploads")))->onClicked(std::tr1::bind(&Appearance2Page::handleULClicked, this));
+		cur->addChild(Button::Seed(T_("Select &text style")))->onClicked(std::tr1::bind(&Appearance2Page::handleTextClicked, this));
+		cur->addChild(Button::Seed(T_("Downloads")))->onClicked(std::tr1::bind(&Appearance2Page::handleDLClicked, this));
+	}
+
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Sounds")))->addChild(Grid::Seed(2, 3));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->row(0).mode = GridInfo::FILL;
+		cur->row(0).align = GridInfo::STRETCH;
+
+		sounds = cur->addChild(WinUtil::Seeds::Dialog::optionsTable);
+		cur->setWidget(sounds, 0, 0, 1, 3);
+
+		beepFileLabel = cur->addChild(Label::Seed(T_("Notification sound")));
+		beepFile = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		browse = cur->addChild(Button::Seed(T_("&Browse...")));
+	}
+
+	grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")));
 
 	fg = SETTING(TEXT_COLOR);
 	bg = SETTING(BACKGROUND_COLOR);
@@ -76,32 +101,11 @@ Appearance2Page::Appearance2Page(dwt::Widget* parent) : PropPage(parent), oldSel
 	WinUtil::decodeFont(Text::toT(SETTING(TEXT_FONT)), logFont);
 	font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&logFont), true));
 
-	attachChild(example, IDC_COLOREXAMPLE);
 	example->setColor(fg, bg);
 	example->setFont(font);
 
-	attachChild(sounds, IDC_SOUNDS);
 	PropPage::initList(sounds);
 
-	{
-		ButtonPtr button = attachChild<Button>(IDC_SELWINCOLOR);
-		button->onClicked(std::tr1::bind(&Appearance2Page::handleBackgroundClicked, this));
-
-		button = attachChild<Button>(IDC_SELTEXT);
-		button->onClicked(std::tr1::bind(&Appearance2Page::handleTextClicked, this));
-
-		button = attachChild<Button>(IDC_SETTINGS_UPLOAD_BAR_COLOR);
-		button->onClicked(std::tr1::bind(&Appearance2Page::handleULClicked, this));
-
-		button = attachChild<Button>(IDC_SETTINGS_DOWNLOAD_BAR_COLOR);
-		button->onClicked(std::tr1::bind(&Appearance2Page::handleDLClicked, this));
-	}
-
-	attachChild(beepFileLabel, IDC_BEEP_NOTIFICATION);
-
-	attachChild(beepFile, IDC_BEEPFILE);
-
-	attachChild(browse, IDC_BROWSE);
 	browse->onClicked(std::tr1::bind(&Appearance2Page::handleBrowseClicked, this));
 
 	setBeepEnabled(false);
@@ -123,6 +127,13 @@ Appearance2Page::Appearance2Page(dwt::Widget* parent) : PropPage(parent), oldSel
 }
 
 Appearance2Page::~Appearance2Page() {
+}
+
+void Appearance2Page::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point clientSize = getClientAreaSize();
+	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void Appearance2Page::write() {

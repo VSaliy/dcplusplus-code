@@ -27,14 +27,17 @@ public:
 	AppearancePage(dwt::Widget* parent);
 	virtual ~AppearancePage();
 
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-	static TextItem texts[];
-	static ListItem listItems[];
 
+	GridPtr grid;
+
+	static ListItem listItems[];
 	TablePtr options;
+
 	ComboBoxPtr languages;
 };
 
