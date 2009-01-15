@@ -65,11 +65,11 @@ DownloadPage::DownloadPage(dwt::Widget* parent) : PropPage(parent) {
 
 		cur->setWidget(cur->addChild(Label::Seed(T_("Default download directory"))), 0, 0, 1, 2);
 		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR));
-		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowse, this, items.back()));
+		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
 
 		cur->setWidget(cur->addChild(Label::Seed(T_("Unfinished downloads directory"))), 2, 0, 1, 2);
 		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR));
-		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowse, this, items.back()));
+		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
 	}
 
 	{
@@ -129,20 +129,6 @@ void DownloadPage::write() {
 		SettingsManager::getInstance()->set(SettingsManager::TEMP_DOWNLOAD_DIRECTORY, t + '\\');
 	}
 
-}
-
-void DownloadPage::handleBrowse(const Item& i) {
-	TextBoxPtr box = static_cast<TextBoxPtr>(i.widget);
-	tstring dir = box->getText();
-	if(dir.empty())
-		dir = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)i.setting));
-	if(createFolderDialog().open(dir)) {
-		// Adjust path string
-		if(dir.size() > 0 && dir[dir.size() - 1] != '\\')
-			dir += '\\';
-
-		box->setText(dir);
-	}
 }
 
 void DownloadPage::handleConfigHubLists() {

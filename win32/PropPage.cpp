@@ -136,6 +136,15 @@ void PropPage::translate(HWND page, TextItem* items) {
 			::SetDlgItemText(page, items[i].itemID, CT_(items[i].stringToTranslate));
 }
 
+void PropPage::handleBrowseDir(const Item& i) {
+	TextBoxPtr box = static_cast<TextBoxPtr>(i.widget);
+	tstring dir = box->getText();
+	if(dir.empty())
+		dir = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)i.setting));
+	if(createFolderDialog().open(dir))
+		box->setText(dir);
+}
+
 void PropPage::handleListHelp(HWND hWnd, unsigned id, const ListItem* listItems, TablePtr list) {
 	// we have the help id of the whole list-view; convert to the one of the specific option the user wants help for
 	int item =

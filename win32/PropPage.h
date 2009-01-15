@@ -70,6 +70,8 @@ protected:
 	void write(const ListItem* listItems, TablePtr list);
 	void translate(HWND page, TextItem* items);
 
+	void handleBrowseDir(const Item& i);
+
 private:
 	void handleListHelp(HWND hWnd, unsigned id, const ListItem* listItems, TablePtr list);
 };
