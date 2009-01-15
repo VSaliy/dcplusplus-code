@@ -22,8 +22,12 @@
 
 #include "AppearancePage.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/File.h>
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -38,22 +42,6 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-PropPage::TextItem AppearancePage::texts[] = {
-	{ IDC_SETTINGS_APPEARANCE_OPTIONS, N_("Options") },
-	{ IDC_SETTINGS_DEFAULT_AWAY_MSG, N_("Default away message") },
-	{ IDC_SETTINGS_TIME_STAMPS_FORMAT, N_("Set timestamps") },
-	{ IDC_SETTINGS_LANGUAGE, N_("Language") },
-	{ IDC_SETTINGS_REQUIRES_RESTART, N_("Note; most of these options require that you restart DC++") },
-	{ 0, 0 }
-};
-
-/*
-PropPage::Item AppearancePage::items[] = {
-	{ IDC_DEFAULT_AWAY_MESSAGE, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR },
-	{ IDC_TIME_STAMPS_FORMAT, SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR },
-	{ 0, 0, PropPage::T_END }
-};
-*/
 PropPage::ListItem AppearancePage::listItems[] = {
 	{ SettingsManager::ALT_SORT_ORDER, N_("Sort all downloads first"), IDH_SETTINGS_APPEARANCE_ALT_SORT_ORDER },
 	{ SettingsManager::FILTER_MESSAGES, N_("Filter kick messages"), IDH_SETTINGS_APPEARANCE_FILTER_MESSAGES },
@@ -74,13 +62,30 @@ AppearancePage::AppearancePage(dwt::Widget* parent) : PropPage(parent), language
 	createDialog(IDD_APPEARANCEPAGE);
 	setHelpId(IDH_APPEARANCEPAGE);
 
-	PropPage::translate(handle(), texts);
+	grid = addChild(Grid::Seed(4, 2));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Options")));
+		grid->setWidget(group, 0, 0, 1, 2);
+		options = group->addChild(WinUtil::Seeds::Dialog::optionsTable);
+	}
+
+	items.push_back(Item(grid->addChild(GroupBox::Seed(T_("Default away message")))->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
+	items.push_back(Item(grid->addChild(GroupBox::Seed(T_("Set timestamps")))->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
+
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Language")));
+		grid->setWidget(group, 2, 0, 1, 2);
+		languages = group->addChild(ComboBox::Seed());
+	}
+
+	grid->setWidget(grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++"))), 3, 0, 1, 2);
+
 	PropPage::read(items);
-
-	attachChild(options, IDC_APPEARANCE_BOOLEANS);
 	PropPage::read(listItems, options);
-
-	attachChild(languages, IDC_LANGUAGE);
 
 	StringList dirs = File::findFiles(Util::getLocalePath(), "*");
 
@@ -113,12 +118,16 @@ AppearancePage::AppearancePage(dwt::Widget* parent) : PropPage(parent), language
 	}
 
 	languages->setSelected(selected);
-
-	attachChild<TextBox>(IDC_DEFAULT_AWAY_MESSAGE);
-	attachChild<TextBox>(IDC_TIME_STAMPS_FORMAT);
 }
 
 AppearancePage::~AppearancePage() {
+}
+
+void AppearancePage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point clientSize = getClientAreaSize();
+	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void AppearancePage::write()
