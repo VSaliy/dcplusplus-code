@@ -22,10 +22,13 @@
 
 #include "UCPage.h"
 
+#include <dwt/widgets/Grid.h>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/FavoriteManager.h>
 #include "CommandDlg.h"
 #include "HoldRedraw.h"
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -39,23 +42,27 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-PropPage::TextItem UCPage::texts[] = {
-	{ IDC_ADD_MENU, N_("&Add") },
-	{ IDC_CHANGE_MENU, N_("&Change") },
-	{ IDC_MOVE_UP, N_("Move &Up") },
-	{ IDC_MOVE_DOWN, N_("Move &Down") },
-	{ IDC_REMOVE_MENU, N_("&Remove") },
-	{ 0, 0 }
-};
-
 UCPage::UCPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_UCPAGE);
 	setHelpId(IDH_UCPAGE);
 
-	PropPage::translate(handle(), texts);
+	grid = addChild(Grid::Seed(2, 5));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->column(1).mode = GridInfo::FILL;
+	grid->column(2).mode = GridInfo::FILL;
+	grid->column(3).mode = GridInfo::FILL;
+	grid->column(4).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
 
-	attachChild(commands, IDC_MENU_ITEMS);
-	commands->setTableStyle(LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT);
+	commands = grid->addChild(WinUtil::Seeds::Dialog::Table);
+	grid->setWidget(commands, 0, 0, 1, 5);
+
+	grid->addChild(Button::Seed(T_("&Add")))->onClicked(std::tr1::bind(&UCPage::handleAddClicked, this));
+	grid->addChild(Button::Seed(T_("&Change")))->onClicked(std::tr1::bind(&UCPage::handleChangeClicked, this));
+	grid->addChild(Button::Seed(T_("Move &Up")))->onClicked(std::tr1::bind(&UCPage::handleMoveUpClicked, this));
+	grid->addChild(Button::Seed(T_("Move &Down")))->onClicked(std::tr1::bind(&UCPage::handleMoveDownClicked, this));
+	grid->addChild(Button::Seed(T_("&Remove")))->onClicked(std::tr1::bind(&UCPage::handleRemoveClicked, this));
 
 	TStringList columns;
 	columns.push_back(T_("Name"));
@@ -75,19 +82,16 @@ UCPage::UCPage(dwt::Widget* parent) : PropPage(parent) {
 
 	commands->onDblClicked(std::tr1::bind(&UCPage::handleDoubleClick, this));
 	commands->onKeyDown(std::tr1::bind(&UCPage::handleKeyDown, this, _1));
-
-	attachChild<Button>(IDC_ADD_MENU)->onClicked(std::tr1::bind(&UCPage::handleAddClicked, this));
-
-	attachChild<Button>(IDC_CHANGE_MENU)->onClicked(std::tr1::bind(&UCPage::handleChangeClicked, this));
-
-	attachChild<Button>(IDC_MOVE_UP)->onClicked(std::tr1::bind(&UCPage::handleMoveUpClicked, this));
-
-	attachChild<Button>(IDC_MOVE_DOWN)->onClicked(std::tr1::bind(&UCPage::handleMoveDownClicked, this));
-
-	attachChild<Button>(IDC_REMOVE_MENU)->onClicked(std::tr1::bind(&UCPage::handleRemoveClicked, this));
 }
 
 UCPage::~UCPage() {
+}
+
+void UCPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point clientSize = getClientAreaSize();
+	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void UCPage::handleDoubleClick() {
