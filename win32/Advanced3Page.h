@@ -27,11 +27,13 @@ public:
 	Advanced3Page(dwt::Widget* parent);
 	virtual ~Advanced3Page();
 
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-	static TextItem texts[];
+
+	GridPtr grid;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ADVANCED_3_PAGE_H)
