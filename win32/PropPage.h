@@ -21,6 +21,8 @@
 
 #define SETTINGS_BUF_LEN 1024
 
+#include <dwt/aspects/AspectChild.h>
+
 #include "WidgetFactory.h"
 
 class PropPage : public WidgetFactory<dwt::ModelessDialog>

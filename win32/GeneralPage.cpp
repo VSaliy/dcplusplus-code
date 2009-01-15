@@ -26,6 +26,7 @@
 #include <dwt/widgets/GroupBox.h>
 
 #include <dcpp/SettingsManager.h>
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -54,19 +55,19 @@ GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
 
 	grid->addChild(Label::Seed(T_("Nick")));
 
-	nick = grid->addChild(TextBox::Seed());
+	nick = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
 	grid->setWidget(nick, 0, 1, 1, 2);
 	items.push_back(Item(nick, SettingsManager::NICK, PropPage::T_STR));
 
 	grid->addChild(Label::Seed(T_("E-Mail")));
 
-	TextBoxPtr box = grid->addChild(TextBox::Seed());
+	TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
 	grid->setWidget(box, 1, 1, 1, 2);
 	items.push_back(Item(box, SettingsManager::EMAIL, PropPage::T_STR));
 
 	grid->addChild(Label::Seed(T_("Description")));
 
-	box = grid->addChild(TextBox::Seed());
+	box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
 	box->setTextLimit(35);
 	grid->setWidget(box, 2, 1, 1, 2);
 	items.push_back(Item(box, SettingsManager::DESCRIPTION, PropPage::T_STR));

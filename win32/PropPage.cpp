@@ -47,7 +47,6 @@ void PropPage::read(const ItemList& items) {
 			if(!settings->isDefault(i->setting)) {
 				i->widget->sendMessage(WM_SETTEXT, 0, reinterpret_cast<LPARAM>(
 					Text::toT(Util::toString(settings->get((SettingsManager::IntSetting)i->setting))).c_str()));
-				/// @todo setNumbersOnly()
 			}
 			break;
 		case T_INT_WITH_SPIN:
