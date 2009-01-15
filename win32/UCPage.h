@@ -29,9 +29,10 @@ public:
 	UCPage(dwt::Widget* parent);
 	virtual ~UCPage();
 
-private:
-	static TextItem texts[];
+	virtual void layout(const dwt::Rectangle& rect);
 
+private:
+	GridPtr grid;
 	TablePtr commands;
 
 	void handleDoubleClick();
