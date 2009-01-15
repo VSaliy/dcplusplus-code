@@ -59,14 +59,16 @@ UploadPage::UploadPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_UPLOADPAGE);
 	setHelpId(IDH_UPLOADPAGE);
 
-	grid = addChild(Grid::Seed(3, 1));
+	grid = addChild(Grid::Seed(3, 3));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Shared directories")))->addChild(Grid::Seed(4, 5));
-		grid->setWidget(cur, 0, 0, 1, 3);
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Shared directories")));
+		grid->setWidget(group, 0, 0, 1, 3);
+
+		GridPtr cur = group->addChild(Grid::Seed(4, 5));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
