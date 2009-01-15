@@ -28,15 +28,18 @@ public:
 	UploadPage(dwt::Widget* parent);
 	virtual ~UploadPage();
 
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
-	virtual int getHelpId() { return IDD_UPLOADPAGE; }
 
 private:
 	ItemList items;
-	static TextItem texts[];
 
+	GridPtr grid;
 	TablePtr directories;
 	LabelPtr total;
+
+	ButtonPtr rename;
+	ButtonPtr remove;
 
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
