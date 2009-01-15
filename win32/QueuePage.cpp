@@ -26,6 +26,7 @@
 #include <dwt/widgets/GroupBox.h>
 
 #include <dcpp/SettingsManager.h>
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -90,19 +91,19 @@ QueuePage::QueuePage(dwt::Widget* parent) : PropPage(parent) {
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Auto priority settings")))->addChild(Grid::Seed(2, 6));
 
 		cur->addChild(Label::Seed(T_("Highest prio max size")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT));
 		cur->addChild(Label::Seed(T_("KiB")));
 
 		cur->addChild(Label::Seed(T_("High prio max size")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::PRIO_HIGH_SIZE, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIO_HIGH_SIZE, PropPage::T_INT));
 		cur->addChild(Label::Seed(T_("KiB")));
 
 		cur->addChild(Label::Seed(T_("Normal prio max size")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::PRIO_NORMAL_SIZE, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIO_NORMAL_SIZE, PropPage::T_INT));
 		cur->addChild(Label::Seed(T_("KiB")));
 
 		cur->addChild(Label::Seed(T_("Low prio max size")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::PRIO_LOW_SIZE, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIO_LOW_SIZE, PropPage::T_INT));
 		cur->addChild(Label::Seed(T_("KiB")));
 	}
 
@@ -110,33 +111,31 @@ QueuePage::QueuePage(dwt::Widget* parent) : PropPage(parent) {
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Autodrop settings")))->addChild(Grid::Seed(3, 6));
 
 		cur->addChild(Label::Seed(T_("Drop sources below")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_SPEED, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_SPEED, PropPage::T_INT));
 		cur->addChild(Label::Seed(T_("B/s")));
 
 		cur->addChild(Label::Seed(T_("Check every")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_INTERVAL, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_INTERVAL, PropPage::T_INT));
 		cur->addChild(Label::Seed(T_("s")));
 
 		cur->addChild(Label::Seed(T_("Min elapsed")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_ELAPSED, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_ELAPSED, PropPage::T_INT));
 		cur->addChild(Label::Seed(T_("s")));
 
 		cur->addChild(Label::Seed(T_("Max inactivity")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_INACTIVITY, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_INACTIVITY, PropPage::T_INT));
 		cur->addChild(Label::Seed(T_("s")));
 
 		cur->addChild(Label::Seed(T_("Min sources online")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_MINSOURCES, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_MINSOURCES, PropPage::T_INT));
+		cur->addChild(Label::Seed(tstring()));
 
 		cur->addChild(Label::Seed(T_("Min filesize")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT));
 		cur->addChild(Label::Seed(T_("KiB")));
 	}
 
-	Table::Seed seed;
-	seed.style |= LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_NOCOLUMNHEADER | LVS_NOSORTHEADER;
-	seed.lvStyle |= LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT;
-	otherOptions = grid->addChild(GroupBox::Seed(T_("Other queue options")))->addChild(seed);
+	otherOptions = grid->addChild(GroupBox::Seed(T_("Other queue options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
 
 	PropPage::read(items);
 	PropPage::read(optionItems, otherOptions);

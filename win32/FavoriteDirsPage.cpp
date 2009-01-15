@@ -59,10 +59,7 @@ FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) : PropPage(parent) {
 	grid->column(0).mode = dwt::GridInfo::FILL;
 	grid->column(0).align = dwt::GridInfo::STRETCH;
 
-	Table::Seed seed;
-	seed.style |= LVS_SHOWSELALWAYS | LVS_NOSORTHEADER;
-	seed.lvStyle |= LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT;
-	directories = grid->addChild(seed);
+	directories = grid->addChild(WinUtil::Seeds::Dialog::Table);
 	grid->setWidget(directories, 0, 0, 1, 3);
 
 	rename = grid->addChild(Button::Seed(T_("Re&name")));
