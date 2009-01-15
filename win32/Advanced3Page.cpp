@@ -70,12 +70,8 @@ Advanced3Page::Advanced3Page(dwt::Widget* parent) : PropPage(parent) {
 	setHelpId(IDH_ADVANCED3PAGE);
 
 	grid = addChild(Grid::Seed(6, 6));
-	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
-	grid->column(2).mode = GridInfo::FILL;
-	grid->column(3).mode = GridInfo::FILL;
 	grid->column(4).mode = GridInfo::FILL;
-	grid->column(5).mode = GridInfo::FILL;
 
 	grid->addChild(Label::Seed(T_("Max hash speed")));
 	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MAX_HASH_SPEED, PropPage::T_INT));
