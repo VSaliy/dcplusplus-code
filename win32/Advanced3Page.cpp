@@ -102,11 +102,11 @@ Advanced3Page::Advanced3Page(dwt::Widget* parent) : PropPage(parent) {
 	grid->addChild(Label::Seed(T_("MiB")));
 
 	grid->addChild(Label::Seed(T_("Bind address")));
-	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::BIND_ADDRESS, PropPage::T_STR));
+	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::BIND_ADDRESS, PropPage::T_STR));
 	grid->addChild(Label::Seed(tstring()));
 
 	grid->addChild(Label::Seed(T_("PID")));
-	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIVATE_ID, PropPage::T_STR));
+	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::PRIVATE_ID, PropPage::T_STR));
 	grid->addChild(Label::Seed(tstring()));
 
 	grid->addChild(Label::Seed(T_("Socket read buffer")));
