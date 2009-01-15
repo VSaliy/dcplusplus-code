@@ -22,9 +22,12 @@
 
 #include "TabsPage.h"
 
-#include <dcpp/SettingsManager.h>
-
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
 #include <dwt/widgets/Spinner.h>
+
+#include <dcpp/SettingsManager.h>
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -35,18 +38,6 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-PropPage::TextItem TabsPage::texts[] = {
-	{ IDC_SETTINGS_BOLD_CONTENTS, N_("Tab highlight on content change") },
-	{ IDC_SETTINGS_MAX_TAB_CHARS, N_("Max characters per tab (0 = infinite)") },
-	{ 0, 0 }
-};
-
-/*
-PropPage::Item TabsPage::items[] = {
-	{ IDC_MAX_TAB_CHARS, SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN },
-	{ 0, 0, PropPage::T_END }
-};
-*/
 PropPage::ListItem TabsPage::listItems[] = {
 	{ SettingsManager::BOLD_HUB, N_("Hub"), IDH_SETTINGS_TABS_BOLD_HUB },
 	{ SettingsManager::BOLD_PM, N_("Private message"), IDH_SETTINGS_TABS_BOLD_PM },
@@ -64,16 +55,36 @@ TabsPage::TabsPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_TABSPAGE);
 	setHelpId(IDH_TABSPAGE);
 
-	PropPage::translate(handle(), texts);
-	PropPage::read(items);
+	grid = addChild(Grid::Seed(2, 2));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
 
-	attachChild(options, IDC_BOLD_BOOLEANS);
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Tab highlight on content change")));
+		grid->setWidget(group, 0, 0, 1, 2);
+		options = group->addChild(WinUtil::Seeds::Dialog::optionsTable);
+	}
+
+	grid->addChild(Label::Seed(T_("Max characters per tab (0 = infinite)")));
+	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN));
+
+	PropPage::read(items);
 	PropPage::read(listItems, options);
 
+	/** @todo PropPage could add these automagically when T_INT_WITH_SPIN?
 	attachChild<Spinner>(IDC_MAX_TAB_CHARS_SPIN)->setRange(0, UD_MAXVAL);
+	*/
 }
 
 TabsPage::~TabsPage() {
+}
+
+void TabsPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point clientSize = getClientAreaSize();
+	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void TabsPage::write() {
