@@ -77,6 +77,13 @@ public:
 		static const Table::Seed Table;
 		static const TextBox::Seed textBox;
 		static const dwt::Tree::Seed treeView;
+
+		struct Dialog {
+			static const TextBox::Seed TextBox;
+			static const TextBox::Seed intTextBox;
+			static const Table::Seed Table;
+			static const Table::Seed optionsTable;
+		};
 	};
 
 	static void init();

@@ -28,6 +28,7 @@
 
 #include <dcpp/SettingsManager.h>
 #include "HubListsDlg.h"
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -63,22 +64,22 @@ DownloadPage::DownloadPage(dwt::Widget* parent) : PropPage(parent) {
 		cur->column(0).mode = GridInfo::FILL;
 
 		cur->setWidget(cur->addChild(Label::Seed(T_("Default download directory"))), 0, 0, 1, 2);
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR));
-		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowse, this, items.back()));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR));
+		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
 
 		cur->setWidget(cur->addChild(Label::Seed(T_("Unfinished downloads directory"))), 2, 0, 1, 2);
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR));
-		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowse, this, items.back()));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR));
+		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
 	}
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Limits")))->addChild(Grid::Seed(3, 2));
 		cur->column(1).mode = GridInfo::FILL;
 
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
 		cur->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")));
 
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
 		cur->addChild(Label::Seed(T_("No new downloads if speed exceeds (KiB/s, 0 = disable)")));
 
 		// xgettext:no-c-format
@@ -91,7 +92,7 @@ DownloadPage::DownloadPage(dwt::Widget* parent) : PropPage(parent) {
 		cur->addChild(Label::Seed(T_("Public Hubs list URL")));
 		cur->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
 		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")));
-		items.push_back(Item(cur->addChild(TextBox::Seed()), SettingsManager::HTTP_PROXY, PropPage::T_STR));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::HTTP_PROXY, PropPage::T_STR));
 	}
 
 	PropPage::read(items);
@@ -128,20 +129,6 @@ void DownloadPage::write() {
 		SettingsManager::getInstance()->set(SettingsManager::TEMP_DOWNLOAD_DIRECTORY, t + '\\');
 	}
 
-}
-
-void DownloadPage::handleBrowse(const Item& i) {
-	TextBoxPtr box = static_cast<TextBoxPtr>(i.widget);
-	tstring dir = box->getText();
-	if(dir.empty())
-		dir = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)i.setting));
-	if(createFolderDialog().open(dir)) {
-		// Adjust path string
-		if(dir.size() > 0 && dir[dir.size() - 1] != '\\')
-			dir += '\\';
-
-		box->setText(dir);
-	}
 }
 
 void DownloadPage::handleConfigHubLists() {

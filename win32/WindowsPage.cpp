@@ -22,14 +22,11 @@
 
 #include "WindowsPage.h"
 
-#include <dcpp/SettingsManager.h>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
 
-PropPage::TextItem WindowsPage::textItem[] = {
-	{ IDC_SETTINGS_AUTO_OPEN, N_("Auto-open at startup") },
-	{ IDC_SETTINGS_WINDOWS_OPTIONS, N_("Window options") },
-	{ IDC_SETTINGS_CONFIRM_OPTIONS, N_("Confirm dialog options") },
-	{ 0, 0 }
-};
+#include <dcpp/SettingsManager.h>
+#include "WinUtil.h"
 
 WindowsPage::ListItem WindowsPage::autoOpenItems[] = {
 	{ SettingsManager::OPEN_SYSTEM_LOG, N_("System Log"), IDH_SETTINGS_WINDOWS_OPEN_SYSTEM_LOG },
@@ -73,19 +70,32 @@ WindowsPage::WindowsPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_WINDOWSPAGE);
 	setHelpId(IDH_WINDOWSPAGE);
 
-	PropPage::translate(handle(), textItem);
+	grid = addChild(Grid::Seed(3, 1));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+	grid->row(1).mode = GridInfo::FILL;
+	grid->row(1).align = GridInfo::STRETCH;
+	grid->row(2).mode = GridInfo::FILL;
+	grid->row(2).align = GridInfo::STRETCH;
 
-	attachChild(autoOpen, IDC_WINDOWS_STARTUP);
+	autoOpen = grid->addChild(GroupBox::Seed(T_("Auto-open at startup")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
+	options = grid->addChild(GroupBox::Seed(T_("Window options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
+	confirm = grid->addChild(GroupBox::Seed(T_("Confirm dialog options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
+
 	PropPage::read(autoOpenItems, autoOpen);
-
-	attachChild(options, IDC_WINDOWS_OPTIONS);
 	PropPage::read(optionItems, options);
-
-	attachChild(confirm, IDC_CONFIRM_OPTIONS);
 	PropPage::read(confirmItems, confirm);
 }
 
 WindowsPage::~WindowsPage() {
+}
+
+void WindowsPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point clientSize = getClientAreaSize();
+	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void WindowsPage::write() {

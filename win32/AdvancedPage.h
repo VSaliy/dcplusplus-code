@@ -27,11 +27,11 @@ public:
 	AdvancedPage(dwt::Widget* parent);
 	virtual ~AdvancedPage();
 
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	static ListItem listItems[];
-
 	TablePtr options;
 };
 

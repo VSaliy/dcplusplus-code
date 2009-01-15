@@ -22,9 +22,13 @@
 
 #include "LogPage.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/File.h>
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -35,20 +39,6 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-PropPage::TextItem LogPage::texts[] = {
-	{ IDC_SETTINGS_LOGGING, N_("Logging") },
-	{ IDC_SETTINGS_LOG_DIR, N_("Directory") },
-	{ IDC_BROWSE_LOG, N_("&Browse...") },
-	{ IDC_SETTINGS_FORMAT, N_("Format") },
-	{ IDC_SETTINGS_FILE_NAME, N_("Filename") },
-	{ 0, 0 }
-};
-/*
-PropPage::Item LogPage::items[] = {
-	{ IDC_LOG_DIRECTORY, SettingsManager::LOG_DIRECTORY, PropPage::T_STR },
-	{ 0, 0, PropPage::T_END }
-};
-*/
 PropPage::ListItem LogPage::listItems[] = {
 	{ SettingsManager::LOG_MAIN_CHAT, N_("Log main chat"), IDH_SETTINGS_LOG_MAIN_CHAT },
 	{ SettingsManager::LOG_PRIVATE_CHAT, N_("Log private chat"), IDH_SETTINGS_LOG_PRIVATE_CHAT },
@@ -64,10 +54,30 @@ LogPage::LogPage(dwt::Widget* parent) : PropPage(parent), oldSelection(-1) {
 	createDialog(IDD_LOGPAGE);
 	setHelpId(IDH_LOGPAGE);
 
-	PropPage::translate(handle(), texts);
-	PropPage::read(items);
+	group = addChild(GroupBox::Seed(T_("Logging")));
 
-	attachChild(options, IDC_LOG_OPTIONS);
+	GridPtr grid = group->addChild(Grid::Seed(4, 3));
+	grid->column(1).mode = GridInfo::FILL;
+	grid->row(1).mode = GridInfo::FILL;
+	grid->row(1).align = GridInfo::STRETCH;
+
+	grid->addChild(Label::Seed(T_("Directory")));
+	dir = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+	items.push_back(Item(dir, SettingsManager::LOG_DIRECTORY, PropPage::T_STR));
+	grid->addChild(Button::Seed(T_("&Browse...")))->onClicked(std::tr1::bind(&LogPage::handleBrowseDir, this, items.back()));
+
+	options = grid->addChild(WinUtil::Seeds::Dialog::optionsTable);
+	grid->setWidget(options, 1, 0, 1, 3);
+
+	grid->addChild(Label::Seed(T_("Format")));
+	logFormat = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+	grid->setWidget(logFormat, 2, 1, 1, 2);
+
+	grid->addChild(Label::Seed(T_("Filename")));
+	logFile = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+	grid->setWidget(logFile, 3, 1, 1, 2);
+
+	PropPage::read(items);
 	PropPage::read(listItems, options);
 
 	for(int i = 0; i < LogManager::LAST; ++i) {
@@ -77,20 +87,20 @@ LogPage::LogPage(dwt::Widget* parent) : PropPage(parent), oldSelection(-1) {
 		logOptions.push_back(pair);
 	}
 
-	attachChild<TextBox>(IDC_LOG_DIRECTORY);
-
-	attachChild<Button>(IDC_BROWSE_LOG)->onClicked(std::tr1::bind(&LogPage::handleBrowseClicked, this));
-
-	logFormat = attachChild<TextBox>(IDC_LOG_FORMAT);
 	logFormat->setEnabled(false);
-
-	logFile = attachChild<TextBox>(IDC_LOG_FILE);
 	logFile->setEnabled(false);
 
 	options->onSelectionChanged(std::tr1::bind(&LogPage::handleSelectionChanged, this));
 }
 
 LogPage::~LogPage() {
+}
+
+void LogPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point clientSize = getClientAreaSize();
+	group->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void LogPage::write() {
@@ -114,13 +124,6 @@ void LogPage::write() {
 
 		LogManager::getInstance()->saveSetting(i, LogManager::FILE, tmp);
 		LogManager::getInstance()->saveSetting(i, LogManager::FORMAT, Text::fromT(logOptions[i].second));
-	}
-}
-
-void LogPage::handleBrowseClicked() {
-	tstring dir = Text::toT(SETTING(LOG_DIRECTORY));
-	if(createFolderDialog().open(dir)) {
-		setItemText(IDC_LOG_DIRECTORY, dir);
 	}
 }
 

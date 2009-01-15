@@ -23,6 +23,7 @@
 #include "AdvancedPage.h"
 
 #include <dcpp/SettingsManager.h>
+#include "WinUtil.h"
 
 AdvancedPage::ListItem AdvancedPage::listItems[] = {
 	{ SettingsManager::AUTO_AWAY, N_("Auto-away on minimize (and back on restore)"), IDH_SETTINGS_ADVANCED_AUTO_AWAY },
@@ -53,11 +54,18 @@ AdvancedPage::AdvancedPage(dwt::Widget* parent) : PropPage(parent) {
 	createDialog(IDD_ADVANCEDPAGE);
 	setHelpId(IDH_ADVANCEDPAGE);
 
-	attachChild(options, IDC_ADVANCED_BOOLEANS);
+	options = addChild(WinUtil::Seeds::Dialog::optionsTable);
 	PropPage::read(listItems, options);
 }
 
 AdvancedPage::~AdvancedPage() {
+}
+
+void AdvancedPage::layout(const dwt::Rectangle& rc) {
+	PropPage::layout(rc);
+
+	dwt::Point clientSize = getClientAreaSize();
+	options->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void AdvancedPage::write() {

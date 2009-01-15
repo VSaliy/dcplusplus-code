@@ -47,7 +47,6 @@ void PropPage::read(const ItemList& items) {
 			if(!settings->isDefault(i->setting)) {
 				i->widget->sendMessage(WM_SETTEXT, 0, reinterpret_cast<LPARAM>(
 					Text::toT(Util::toString(settings->get((SettingsManager::IntSetting)i->setting))).c_str()));
-				/// @todo setNumbersOnly()
 			}
 			break;
 		case T_INT_WITH_SPIN:
@@ -135,6 +134,15 @@ void PropPage::translate(HWND page, TextItem* items) {
 	if(items)
 		for(size_t i = 0; items[i].itemID != 0; ++i)
 			::SetDlgItemText(page, items[i].itemID, CT_(items[i].stringToTranslate));
+}
+
+void PropPage::handleBrowseDir(const Item& i) {
+	TextBoxPtr box = static_cast<TextBoxPtr>(i.widget);
+	tstring dir = box->getText();
+	if(dir.empty())
+		dir = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)i.setting));
+	if(createFolderDialog().open(dir))
+		box->setText(dir);
 }
 
 void PropPage::handleListHelp(HWND hWnd, unsigned id, const ListItem* listItems, TablePtr list) {
