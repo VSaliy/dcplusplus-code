@@ -167,6 +167,7 @@ public:
 	static void decodeUrl(const string& aUrl, string& aServer, uint16_t& aPort, string& aFile);
 	static string validateFileName(string aFile);
 	static string cleanPathChars(string aNick);
+	static string addBrackets(const string& s);
 
 	static string formatBytes(const string& aString) { return formatBytes(toInt64(aString)); }
 	static string formatMessage(const string& nick, const string& message, bool thirdPerson);

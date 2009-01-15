@@ -77,9 +77,9 @@ void HashManager::hashDone(const string& aFileName, uint32_t aTimeStamp, const T
 	fire(HashManagerListener::TTHDone(), aFileName, tth.getRoot());
 
 	if (speed > 0) {
-		LogManager::getInstance()->message(str(F_("Finished hashing: <%1%> (%2%/s)") % aFileName % Util::formatBytes(speed)));
+		LogManager::getInstance()->message(str(F_("Finished hashing: %1% (%2%/s)") % Util::addBrackets(aFileName) % Util::formatBytes(speed)));
 	} else {
-		LogManager::getInstance()->message(str(F_("Finished hashing: <%1%>") % aFileName));
+		LogManager::getInstance()->message(str(F_("Finished hashing: %1%") % Util::addBrackets(aFileName)));
 	}
 }
 
@@ -759,12 +759,12 @@ int HashManager::Hasher::run() {
 						speed = size * _LL(1000) / (end - start);
 					}
 					if(xcrc32 && xcrc32->getValue() != sfv.getCRC()) {
-						LogManager::getInstance()->message(str(F_("<%1%> not shared; calculated CRC32 does not match the one found in SFV file.") % fname));
+						LogManager::getInstance()->message(str(F_("%1% not shared; calculated CRC32 does not match the one found in SFV file.") % Util::addBrackets(fname)));
 					} else {
 						HashManager::getInstance()->hashDone(fname, timestamp, *tth, speed);
 					}
 				} catch(const FileException& e) {
-					LogManager::getInstance()->message(str(F_("Error hashing <%1%>: %2%") % fname % e.getError()));
+					LogManager::getInstance()->message(str(F_("Error hashing %1%: %2%") % Util::addBrackets(fname) % e.getError()));
 				}
 			}
 			{

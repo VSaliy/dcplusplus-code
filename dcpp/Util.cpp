@@ -267,6 +267,10 @@ string Util::cleanPathChars(string aNick) {
 	return aNick;
 }
 
+string Util::addBrackets(const string& s) {
+	return '<' + s + '>';
+}
+
 string Util::getShortTimeString(time_t t) {
 	char buf[255];
 	tm* _tm = localtime(&t);
