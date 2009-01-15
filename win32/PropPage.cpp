@@ -145,6 +145,15 @@ void PropPage::handleBrowseDir(const Item& i) {
 		box->setText(dir);
 }
 
+void PropPage::handleBrowseFile(const Item& i) {
+	TextBoxPtr box = static_cast<TextBoxPtr>(i.widget);
+	tstring target = box->getText();
+	if(target.empty())
+		target = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)i.setting));
+	if(createLoadDialog().setInitialDirectory(target).open(target))
+		box->setText(target);
+}
+
 void PropPage::handleListHelp(HWND hWnd, unsigned id, const ListItem* listItems, TablePtr list) {
 	// we have the help id of the whole list-view; convert to the one of the specific option the user wants help for
 	int item =
