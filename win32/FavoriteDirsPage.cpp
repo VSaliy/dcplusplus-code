@@ -53,15 +53,16 @@ FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) : PropPage(parent) {
 
 	group = addChild(GroupBox::Seed(T_("Favorite download directories")));
 
-	GridPtr grid = group->addChild(Grid::Seed(2, 4));
+	GridPtr grid = group->addChild(Grid::Seed(2, 3));
 	grid->column(0).mode = dwt::GridInfo::FILL;
+	grid->column(1).mode = dwt::GridInfo::FILL;
+	grid->column(2).mode = dwt::GridInfo::FILL;
 	grid->row(0).mode = dwt::GridInfo::FILL;
 	grid->row(0).align = dwt::GridInfo::STRETCH;
 
 	directories = grid->addChild(WinUtil::Seeds::Dialog::Table);
-	grid->setWidget(directories, 0, 0, 1, 4);
+	grid->setWidget(directories, 0, 0, 1, 3);
 
-	grid->addChild(Label::Seed(tstring()));
 	rename = grid->addChild(Button::Seed(T_("Re&name")));
 	rename->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRenameClicked, this));
 	remove = grid->addChild(Button::Seed(T_("&Remove")));

@@ -27,21 +27,17 @@ public:
 	CertificatesPage(dwt::Widget* parent);
 	virtual ~CertificatesPage();
 
+	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-	static TextItem texts[];
-	static ListItem listItems[];
 
-	TextBoxPtr privateKeyFile;
-	TextBoxPtr certificateFile;
-	TextBoxPtr trustedCertificatesPath;
+	GridPtr grid;
+
+	static ListItem listItems[];
 	TablePtr options;
 
-	void handleBrowsePrivateKeyClicked();
-	void handleBrowseCertificateClicked();
-	void handleBrowseTrustedPathClicked();
 	void handleGenerateCertsClicked();
 };
 
