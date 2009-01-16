@@ -58,7 +58,12 @@ PropPage::ListItem AppearancePage::listItems[] = {
 	{ 0, 0 }
 };
 
-AppearancePage::AppearancePage(dwt::Widget* parent) : PropPage(parent), languages(0) {
+AppearancePage::AppearancePage(dwt::Widget* parent) :
+PropPage(parent),
+grid(0),
+options(0),
+languages(0)
+{
 	createDialog(IDD_APPEARANCEPAGE);
 	setHelpId(IDH_APPEARANCEPAGE);
 

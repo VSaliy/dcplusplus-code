@@ -47,7 +47,13 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) : PropPage(parent) {
+FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) :
+PropPage(parent),
+group(0),
+directories(0),
+rename(0),
+remove(0)
+{
 	createDialog(IDD_FAVORITE_DIRSPAGE);
 	setHelpId(IDH_FAVORITE_DIRSPAGE);
 

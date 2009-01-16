@@ -78,7 +78,11 @@ PropPage::ListItem QueuePage::optionItems[] = {
 	{ 0, 0 }
 };
 
-QueuePage::QueuePage(dwt::Widget* parent) : PropPage(parent) {
+QueuePage::QueuePage(dwt::Widget* parent) :
+PropPage(parent),
+grid(0),
+otherOptions(0)
+{
 	createDialog(IDD_QUEUEPAGE);
 	setHelpId(IDH_QUEUEPAGE);
 

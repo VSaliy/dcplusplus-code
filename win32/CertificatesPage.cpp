@@ -50,7 +50,11 @@ PropPage::ListItem CertificatesPage::listItems[] = {
 	{ 0, 0 }
 };
 
-CertificatesPage::CertificatesPage(dwt::Widget* parent) : PropPage(parent) {
+CertificatesPage::CertificatesPage(dwt::Widget* parent) :
+PropPage(parent),
+grid(0),
+options(0)
+{
 	createDialog(IDD_CERTIFICATESPAGE);
 	setHelpId(IDH_CERTIFICATESPAGE);
 

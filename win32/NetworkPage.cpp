@@ -59,7 +59,27 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-NetworkPage::NetworkPage(dwt::Widget* parent) : PropPage(parent) {
+NetworkPage::NetworkPage(dwt::Widget* parent) :
+PropPage(parent),
+grid(0),
+directIn(0),
+upnp(0),
+nat(0),
+passive(0),
+externalIP(0),
+overrideIP(0),
+ports(0),
+tcp(0),
+udp(0),
+tls(0),
+directOut(0),
+socks5(0),
+socksServer(0),
+socksPort(0),
+socksLogin(0),
+socksPass(0),
+socksResolve(0)
+{
 	createDialog(IDD_NETWORKPAGE);
 	setHelpId(IDH_NETWORKPAGE);
 
