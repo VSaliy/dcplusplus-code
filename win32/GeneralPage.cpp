@@ -44,7 +44,11 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-GeneralPage::GeneralPage(dwt::Widget* parent) : PropPage(parent), nick(0) {
+GeneralPage::GeneralPage(dwt::Widget* parent) :
+PropPage(parent),
+group(0),
+nick(0)
+{
 	createDialog(IDD_GENERALPAGE);
 	setHelpId(IDH_GENERALPAGE);
 

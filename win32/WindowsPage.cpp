@@ -66,7 +66,13 @@ WindowsPage::ListItem WindowsPage::confirmItems[] = {
 	{ 0, 0 }
 };
 
-WindowsPage::WindowsPage(dwt::Widget* parent) : PropPage(parent) {
+WindowsPage::WindowsPage(dwt::Widget* parent) :
+PropPage(parent),
+grid(0),
+autoOpen(0),
+options(0),
+confirm(0)
+{
 	createDialog(IDD_WINDOWSPAGE);
 	setHelpId(IDH_WINDOWSPAGE);
 

@@ -51,7 +51,11 @@ PropPage::ListItem TabsPage::listItems[] = {
 	{ 0, 0 }
 };
 
-TabsPage::TabsPage(dwt::Widget* parent) : PropPage(parent) {
+TabsPage::TabsPage(dwt::Widget* parent) :
+PropPage(parent),
+grid(0),
+options(0)
+{
 	createDialog(IDD_TABSPAGE);
 	setHelpId(IDH_TABSPAGE);
 

@@ -51,7 +51,16 @@ Appearance2Page::SoundOption Appearance2Page::soundOptions[] = {
 	{ 0, 0, Util::emptyStringT }
 };
 
-Appearance2Page::Appearance2Page(dwt::Widget* parent) : PropPage(parent), oldSelection(-1) {
+Appearance2Page::Appearance2Page(dwt::Widget* parent) :
+PropPage(parent),
+grid(0),
+example(0),
+sounds(0),
+beepFileLabel(0),
+beepFile(0),
+browse(0),
+oldSelection(-1)
+{
 	createDialog(IDD_APPEARANCE2PAGE);
 	setHelpId(IDH_APPEARANCE2PAGE);
 
