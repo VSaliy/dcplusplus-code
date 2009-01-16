@@ -59,13 +59,8 @@ private:
 		COLUMN_LAST
 	};
 
+	GridPtr grid;
 	TablePtr hubs;
-	ButtonPtr connect;
-	ButtonPtr add;
-	ButtonPtr properties;
-	ButtonPtr up;
-	ButtonPtr down;
-	ButtonPtr remove;
 
 	bool nosave;
 
