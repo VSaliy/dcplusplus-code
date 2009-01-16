@@ -85,17 +85,15 @@ private:
 		tstring columns[COLUMN_LAST];
 	};
 
+	GridPtr grid;
+
 	typedef TypedTable<HubInfo> WidgetHubs;
 	typedef WidgetHubs* WidgetHubsPtr;
 	WidgetHubsPtr hubs;
 
-	ButtonPtr configure;
-	ButtonPtr refresh;
-	ButtonPtr lists;
-	ButtonPtr filterDesc;
 	TextBoxPtr filter;
-	ComboBoxPtr pubLists;
 	ComboBoxPtr filterSel;
+	ComboBoxPtr lists;
 
 	int visibleHubs;
 	int users;
