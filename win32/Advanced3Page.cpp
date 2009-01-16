@@ -65,7 +65,10 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-Advanced3Page::Advanced3Page(dwt::Widget* parent) : PropPage(parent) {
+Advanced3Page::Advanced3Page(dwt::Widget* parent) :
+PropPage(parent),
+grid(0)
+{
 	createDialog(IDD_ADVANCED3PAGE);
 	setHelpId(IDH_ADVANCED3PAGE);
 

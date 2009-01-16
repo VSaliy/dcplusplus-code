@@ -20,6 +20,9 @@
 
 #include "PublicHubsFrame.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+
 #include "resource.h"
 #include "HubFrame.h"
 #include "HoldRedraw.h"
@@ -73,22 +76,26 @@ int PublicHubsFrame::HubInfo::compareItems(const HubInfo* a, const HubInfo* b, i
 }
 
 PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDR_PUBLICHUBS),
-	hubs(0),
-	configure(0),
-	refresh(0),
-	lists(0),
-	filterDesc(0),
-	filter(0),
-	pubLists(0),
-	filterSel(0),
-	visibleHubs(0),
-	users(0)
+BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDR_PUBLICHUBS),
+grid(0),
+hubs(0),
+filter(0),
+filterSel(0),
+lists(0),
+visibleHubs(0),
+users(0)
 {
+	grid = addChild(Grid::Seed(2, 3));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->column(1).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+
 	{
 		WidgetHubs::Seed cs;
 		cs.style |= LVS_SINGLESEL;
-		hubs = addChild(cs);
+		hubs = grid->addChild(cs);
+		grid->setWidget(hubs, 0, 0, 1, 3);
 		addWidget(hubs);
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(PUBLICHUBSFRAME_ORDER), SETTING(PUBLICHUBSFRAME_WIDTHS));
@@ -100,58 +107,47 @@ PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 	}
 
 	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("F&ilter")));
+		group->setHelpId(IDH_PUBLIC_HUBS_FILTER);
+
+		GridPtr cur = group->addChild(Grid::Seed(1, 2));
+		cur->column(0).mode = GridInfo::FILL;
+
 		TextBox::Seed cs = WinUtil::Seeds::textBox;
 		cs.style |= ES_AUTOHSCROLL;
-		filter = addChild(cs);
-		filter->setHelpId(IDH_PUBLIC_HUBS_FILTER);
+		filter = cur->addChild(cs);
 		addWidget(filter);
 		filter->onKeyDown(std::tr1::bind(&PublicHubsFrame::handleFilterKeyDown, this, _1));
+
+		filterSel = cur->addChild(WinUtil::Seeds::comboBoxStatic);
+		addWidget(filterSel);
 	}
 
 	{
-		filterSel = addChild(WinUtil::Seeds::comboBoxStatic);
-		filterSel->setHelpId(IDH_PUBLIC_HUBS_FILTER);
-		addWidget(filterSel);
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Configured Public Hub Lists")));
+		group->setHelpId(IDH_PUBLIC_HUBS_LISTS);
 
-		//populate the filter list with the column names
-		for(int j=0; j<COLUMN_LAST; j++) {
-			filterSel->addValue(T_(hubsColumns[j].name));
-		}
-		filterSel->addValue(T_("Any"));
-		filterSel->setSelected(COLUMN_LAST);
-		filterSel->onSelectionChanged(std::tr1::bind(&PublicHubsFrame::updateList, this));
+		GridPtr cur = group->addChild(Grid::Seed(1, 2));
+		cur->column(0).mode = GridInfo::FILL;
 
-		pubLists = addChild(WinUtil::Seeds::comboBoxStatic);
-		pubLists->setHelpId(IDH_PUBLIC_HUBS_LISTS);
-		addWidget(pubLists);
-		pubLists->onSelectionChanged(std::tr1::bind(&PublicHubsFrame::handleListSelChanged, this));
+		lists = cur->addChild(WinUtil::Seeds::comboBoxStatic);
+		addWidget(lists);
+		lists->onSelectionChanged(std::tr1::bind(&PublicHubsFrame::handleListSelChanged, this));
+
+		Button::Seed cs = WinUtil::Seeds::button;
+		cs.caption = T_("&Configure");
+		ButtonPtr button = cur->addChild(cs);
+		addWidget(button);
+		button->onClicked(std::tr1::bind(&PublicHubsFrame::handleConfigure, this));
 	}
 
 	{
 		Button::Seed cs = WinUtil::Seeds::button;
-
-		cs.caption = T_("&Configure");
-		configure = addChild(cs);
-		configure->setHelpId(IDH_PUBLIC_HUBS_LISTS);
-		addWidget(configure);
-		configure->onClicked(std::tr1::bind(&PublicHubsFrame::handleConfigure, this));
-
 		cs.caption = T_("&Refresh");
-		refresh = addChild(cs);
-		refresh->setHelpId(IDH_PUBLIC_HUBS_REFRESH);
-		addWidget(refresh);
-		refresh->onClicked(std::tr1::bind(&PublicHubsFrame::handleRefresh, this));
-
-		cs.style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | BS_GROUPBOX;
-		cs.exStyle = WS_EX_TRANSPARENT;
-
-		cs.caption = T_("F&ilter");
-		filterDesc = addChild(cs);
-		filterDesc->setHelpId(IDH_PUBLIC_HUBS_FILTER);
-
-		cs.caption = T_("Configured Public Hub Lists");
-		lists = addChild(cs);
-		lists->setHelpId(IDH_PUBLIC_HUBS_LISTS);
+		ButtonPtr button = grid->addChild(cs);
+		button->setHelpId(IDH_PUBLIC_HUBS_REFRESH);
+		addWidget(button);
+		button->onClicked(std::tr1::bind(&PublicHubsFrame::handleRefresh, this));
 	}
 
 	initStatus();
@@ -159,6 +155,14 @@ PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 	setStatusHelpId(STATUS_STATUS, IDH_PUBLIC_HUBS_STATUS);
 	setStatusHelpId(STATUS_HUBS, IDH_PUBLIC_HUBS_HUBS);
 	setStatusHelpId(STATUS_USERS, IDH_PUBLIC_HUBS_USERS);
+
+	//populate the filter list with the column names
+	for(int j=0; j<COLUMN_LAST; j++) {
+		filterSel->addValue(T_(hubsColumns[j].name));
+	}
+	filterSel->addValue(T_("Any"));
+	filterSel->setSelected(COLUMN_LAST);
+	filterSel->onSelectionChanged(std::tr1::bind(&PublicHubsFrame::updateList, this));
 
 	FavoriteManager::getInstance()->addListener(this);
 
@@ -192,65 +196,11 @@ void PublicHubsFrame::postClosing() {
 }
 
 void PublicHubsFrame::layout() {
-	const int border = 2;
-
 	dwt::Rectangle r(getClientAreaSize());
 
 	layoutStatus(r);
 
-	int const comboH = 140;
-
-	// Table
-	int ymessage = filter->getTextSize(_T("A")).y + 10;
-
-	r.size.y -= ymessage*2 + 8 + border * 2;
-	hubs->setBounds(r);
-
-	r.pos.y += r.size.y + border;
-	r.size.y = ymessage * 2 + 8;
-
-	// filter box
-	r.size.x = (r.width() - 100 - border * 2) / 2 ;
-	filterDesc->setBounds(r);
-
-	dwt::Rectangle rc = r;
-	// filter edit
-	rc.pos.y += ymessage - 4;
-	rc.size.y = ymessage;
-	rc.pos.x += 16;
-	rc.size.x = rc.width() * 2 / 3 - 24 - border;
-	filter->setBounds(rc);
-
-	//filter sel
-	rc.size.y += comboH;
-
-	rc.pos.x += rc.width() + border;
-	rc.size.x = (rc.width() + 24 + border) / 2 - 8;
-	filterSel->setBounds(rc);
-
-	// lists box
-	r.pos.x = r.width() + border;
-	lists->setBounds(r);
-
-	rc = r;
-	// lists dropdown
-	rc.pos.y += ymessage - 4;
-	rc.size.y = ymessage;
-
-	rc.size.y += comboH;
-	rc.pos.x += 16;
-	rc.size.x -= 100 + 24 + border;
-	pubLists->setBounds(rc);
-
-	// configure button
-	rc.size.y -= comboH;
-	rc.pos.x += rc.width() + border;
-	rc.size.x = 100;
-	configure->setBounds(rc);
-
-	// refresh button
-	rc.pos.x += rc.width() + 8;
-	refresh->setBounds(rc);
+	grid->layout(r);
 }
 
 void PublicHubsFrame::updateStatus() {
@@ -262,12 +212,12 @@ void PublicHubsFrame::updateStatus() {
 }
 
 void PublicHubsFrame::updateDropDown() {
-	pubLists->clear();
-	StringList lists(FavoriteManager::getInstance()->getHubLists());
-	for(StringList::iterator idx = lists.begin(); idx != lists.end(); ++idx) {
-		pubLists->addValue(Text::toT(*idx).c_str());
+	lists->clear();
+	StringList l(FavoriteManager::getInstance()->getHubLists());
+	for(StringIterC idx = l.begin(); idx != l.end(); ++idx) {
+		lists->addValue(Text::toT(*idx).c_str());
 	}
-	pubLists->setSelected((FavoriteManager::getInstance()->getSelectedHubList()) % lists.size());
+	lists->setSelected((FavoriteManager::getInstance()->getSelectedHubList()) % l.size());
 }
 
 void PublicHubsFrame::updateList() {
@@ -494,7 +444,7 @@ bool PublicHubsFrame::handleKeyDown(int c) {
 }
 
 void PublicHubsFrame::handleListSelChanged() {
-	FavoriteManager::getInstance()->setHubList(pubLists->getSelected());
+	FavoriteManager::getInstance()->setHubList(lists->getSelected());
 	entries = FavoriteManager::getInstance()->getPublicHubs();
 	updateList();
 }

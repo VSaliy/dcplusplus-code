@@ -55,7 +55,14 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-UploadPage::UploadPage(dwt::Widget* parent) : PropPage(parent) {
+UploadPage::UploadPage(dwt::Widget* parent) :
+PropPage(parent),
+grid(0),
+directories(0),
+total(0),
+rename(0),
+remove(0)
+{
 	createDialog(IDD_UPLOADPAGE);
 	setHelpId(IDH_UPLOADPAGE);
 

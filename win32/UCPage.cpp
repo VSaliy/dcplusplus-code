@@ -42,7 +42,11 @@ static const WinUtil::HelpItem helpItems[] = {
 };
 */
 
-UCPage::UCPage(dwt::Widget* parent) : PropPage(parent) {
+UCPage::UCPage(dwt::Widget* parent) :
+PropPage(parent),
+grid(0),
+commands(0)
+{
 	createDialog(IDD_UCPAGE);
 	setHelpId(IDH_UCPAGE);
 

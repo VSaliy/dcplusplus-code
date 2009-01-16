@@ -19,32 +19,33 @@
 #ifndef DCPLUSPLUS_WIN32_LINE_DLG_H
 #define DCPLUSPLUS_WIN32_LINE_DLG_H
 
-#include "resource.h"
-
 #include <dcpp/Util.h>
 #include "WidgetFactory.h"
 
 class LineDlg : public WidgetFactory<dwt::ModalDialog>
 {
 public:
-	LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& initial_ = Util::emptyStringT, bool password_ = false);
+	LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& text_ = Util::emptyStringT, bool password_ = false);
 
-	int run() { createDialog(IDD_LINE); return show(); }
+	int run();
 
-	tstring getLine() { return initial; }
+	tstring getLine() const { return text; }
+
 private:
+	GridPtr grid;
 	TextBoxPtr line;
 
 	tstring title;
 	tstring desc;
-	tstring initial;
+	tstring text;
 	bool password;
 
-	void focus();
 	bool initDialog();
+	void focus();
 	bool closing();
 	void okClicked();
-	void cancelClicked();
+
+	void layout();
 };
 
 #endif // !defined(LINE_DLG_H)

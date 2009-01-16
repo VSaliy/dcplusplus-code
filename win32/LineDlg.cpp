@@ -18,35 +18,58 @@
 
 #include "stdafx.h"
 
+#include "resource.h"
+
 #include "LineDlg.h"
 
-LineDlg::LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& initial_, bool password_) :
-	WidgetFactory<dwt::ModalDialog>(parent),
-	title(title_),
-	desc(desc_),
-	initial(initial_),
-	password(password_)
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+
+#include "WinUtil.h"
+
+LineDlg::LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& text_, bool password_) :
+WidgetFactory<dwt::ModalDialog>(parent),
+grid(0),
+line(0),
+title(title_),
+desc(desc_),
+text(text_),
+password(password_)
 {
 	onInitDialog(std::tr1::bind(&LineDlg::initDialog, this));
 	onFocus(std::tr1::bind(&LineDlg::focus, this));
 }
 
-bool LineDlg::initDialog() {
-	attachChild<Button>(IDOK)->onClicked(std::tr1::bind(&LineDlg::okClicked, this));
-	attachChild<Button>(IDCANCEL)->onClicked(std::tr1::bind(&LineDlg::cancelClicked, this));
-	attachChild<Label>(IDC_DESCRIPTION)->setText(desc);
+int LineDlg::run() {
+	createDialog(IDD_LINE);
+	return show();
+}
 
-	line = attachChild<TextBox>(IDC_LINE);
-	line->setFocus();
-	line->setText(initial);
-	line->setSelection();
+bool LineDlg::initDialog() {
+	grid = addChild(Grid::Seed(2, 2));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->column(1).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(1).mode = GridInfo::FILL;
+
+	GroupBoxPtr group = grid->addChild(GroupBox::Seed(desc));
+	grid->setWidget(group, 0, 0, 2, 1);
+
+	line = group->addChild(WinUtil::Seeds::Dialog::TextBox);
 	if(password) {
 		line->setPassword();
 	}
+	line->setText(text);
+	line->setSelection();
+
+	grid->addChild(Button::Seed(T_("OK")))->onClicked(std::tr1::bind(&LineDlg::okClicked, this));
+	grid->addChild(Button::Seed(T_("Cancel")))->onClicked(std::tr1::bind(&LineDlg::endDialog, this, IDCANCEL));
 
 	setText(title);
 
+	layout();
 	centerWindow();
+	focus();
 
 	return false;
 }
@@ -61,9 +84,11 @@ bool LineDlg::closing() {
 }
 
 void LineDlg::okClicked() {
-	initial = line->getText();
+	text = line->getText();
 	endDialog(IDOK);
 }
-void LineDlg::cancelClicked() {
-	endDialog(IDCANCEL);
+
+void LineDlg::layout() {
+	dwt::Point sz = getClientSize();
+	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }

@@ -20,6 +20,8 @@
 
 #include "FavHubsFrame.h"
 
+#include <dwt/widgets/Grid.h>
+
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 #include "HoldRedraw.h"
@@ -37,20 +39,26 @@ static const ColumnInfo hubsColumns[] = {
 
 FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDR_FAVORITE_HUBS),
+	grid(0),
 	hubs(0),
-	connect(0),
-	add(0),
-	properties(0),
-	up(0),
-	down(0),
-	remove(0),
 	nosave(false)
 {
+	grid = addChild(Grid::Seed(2, 6));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->column(1).mode = GridInfo::FILL;
+	grid->column(2).mode = GridInfo::FILL;
+	grid->column(3).mode = GridInfo::FILL;
+	grid->column(4).mode = GridInfo::FILL;
+	grid->column(5).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+
 	{
 		Table::Seed cs = WinUtil::Seeds::Table;
 		cs.style |= LVS_NOSORTHEADER;
 		cs.lvStyle |= LVS_EX_CHECKBOXES;
-		hubs = addChild(cs);
+		hubs = grid->addChild(cs);
+		grid->setWidget(hubs, 0, 0, 1, 6);
 		addWidget(hubs);
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
@@ -62,43 +70,44 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 	}
 
 	{
+		ButtonPtr button;
 		Button::Seed cs = WinUtil::Seeds::button;
 
 		cs.caption = T_("&Connect");
-		connect = addChild(cs);
-		connect->setHelpId(IDH_FAVORITE_HUBS_CONNECT);
-		connect->onClicked(std::tr1::bind(&FavHubsFrame::openSelected, this));
-		addWidget(connect);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_FAVORITE_HUBS_CONNECT);
+		button->onClicked(std::tr1::bind(&FavHubsFrame::openSelected, this));
+		addWidget(button);
 
 		cs.caption = T_("&New...");
-		add = addChild(cs);
-		add->setHelpId(IDH_FAVORITE_HUBS_NEW);
-		add->onClicked(std::tr1::bind(&FavHubsFrame::handleAdd, this));
-		addWidget(add);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_FAVORITE_HUBS_NEW);
+		button->onClicked(std::tr1::bind(&FavHubsFrame::handleAdd, this));
+		addWidget(button);
 
 		cs.caption = T_("&Properties");
-		properties = addChild(cs);
-		properties->setHelpId(IDH_FAVORITE_HUBS_PROPERTIES);
-		properties->onClicked(std::tr1::bind(&FavHubsFrame::handleProperties, this));
-		addWidget(properties);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_FAVORITE_HUBS_PROPERTIES);
+		button->onClicked(std::tr1::bind(&FavHubsFrame::handleProperties, this));
+		addWidget(button);
 
 		cs.caption = T_("Move &Up");
-		up = addChild(cs);
-		up->setHelpId(IDH_FAVORITE_HUBS_MOVE_UP);
-		up->onClicked(std::tr1::bind(&FavHubsFrame::handleUp, this));
-		addWidget(up);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_FAVORITE_HUBS_MOVE_UP);
+		button->onClicked(std::tr1::bind(&FavHubsFrame::handleUp, this));
+		addWidget(button);
 
 		cs.caption = T_("Move &Down");
-		down = addChild(cs);
-		down->setHelpId(IDH_FAVORITE_HUBS_MOVE_DOWN);
-		down->onClicked(std::tr1::bind(&FavHubsFrame::handleDown, this));
-		addWidget(down);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_FAVORITE_HUBS_MOVE_DOWN);
+		button->onClicked(std::tr1::bind(&FavHubsFrame::handleDown, this));
+		addWidget(button);
 
 		cs.caption = T_("&Remove");
-		remove = addChild(cs);
-		remove->setHelpId(IDH_FAVORITE_HUBS_REMOVE);
-		remove->onClicked(std::tr1::bind(&FavHubsFrame::handleRemove, this));
-		addWidget(remove);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_FAVORITE_HUBS_REMOVE);
+		button->onClicked(std::tr1::bind(&FavHubsFrame::handleRemove, this));
+		addWidget(button);
 	}
 
 	initStatus();
@@ -121,32 +130,7 @@ void FavHubsFrame::layout() {
 
 	layoutStatus(r);
 
-	/// @todo dynamic width
-	const int ybutton = add->getTextSize(_T("A")).y + 10;
-	const int xbutton = 90;
-	const int xborder = 10;
-
-	dwt::Rectangle rb(r.getBottom(ybutton));
-	r.size.y -= ybutton;
-	hubs->setBounds(r);
-
-	rb.size.x = xbutton;
-	connect->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	add->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	properties->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	up->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	down->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	remove->setBounds(rb);
+	grid->layout(r);
 }
 
 bool FavHubsFrame::preClosing() {

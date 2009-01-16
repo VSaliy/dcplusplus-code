@@ -50,7 +50,15 @@ PropPage::ListItem LogPage::listItems[] = {
 	{ 0, 0 }
 };
 
-LogPage::LogPage(dwt::Widget* parent) : PropPage(parent), oldSelection(-1) {
+LogPage::LogPage(dwt::Widget* parent) :
+PropPage(parent),
+group(0),
+dir(0),
+options(0),
+logFormat(0),
+logFile(0),
+oldSelection(-1)
+{
 	createDialog(IDD_LOGPAGE);
 	setHelpId(IDH_LOGPAGE);
 
