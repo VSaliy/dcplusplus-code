@@ -14,6 +14,20 @@ click menu options. They offer general functions for the elements of the
 various list views. For commands unique to different windows refer to the
 Help page of the corresponding window.</p>
 <dl style="margin-left: 40px;">
+  <dt>Remove</dt>
+  <dd>Deletes the actual item from the list. If the corresponding setting in
+      <a href="settings_windows.html#confirmitem">Confirm dialog options</a> is enabled,
+      you will be prompted before the removal.</dd>
+  <dt>Remove all</dt>
+  <dd>Deletes all the selected items from the list. If the corresponding setting in
+      <a href="settings_windows.html#confirmitem">Confirm dialog options</a> is enabled,
+      you will be prompted before the removal.</dd>
+</dl>
+<h2>
+	File-related menu commands
+</h2>
+<p>These commands are available in the context menus of various lists containing files.</p>
+<dl style="margin-left: 40px;">
   <dt>Search for alternates</dt>
   <dd>Will open a new <a href="window_search.html">Search window</a> to search
   	  for alternate sources for the selected file.</dd>
@@ -23,19 +37,75 @@ Help page of the corresponding window.</p>
   <dt>Copy magnet link to clipboard</dt>
   <dd>Will copy the file's <a href="http://en.wikipedia.org/wiki/Magnet_link"
   	  target="_blank" class="external">magnet link</a> to the clipboard.</dd>
+  <dt>Download</dt>
+  <dd>Adds the selected file(s) or director(ies) to the Download Queue. They will
+      be downloaded to the <a href="settings_downloads.html#defdwnlddir">Default
+  	  download directory</a>.</dd>	  
+  <dt>Download to...</dt>
+  <dd>Adds the selected file(s) or director(ies) to the Download Queue. The download
+  	  target can be selected using the submenu elements : either a predefined place
+  	  from the <a href="settings_favoritedirs.html">Download Favorites</a> or any other
+  	  folder specified using the <i>Browse...</i> submenu.</dd>	  
+  <dt>Download whole directory</dt>
+  <dd>If one or more files selected from the same folder it will add the whole folder
+  	  to the Download Queue.</dd>	  
+  <dt>Download whole directory to...</dt>
+  <dd>Combines the function of <i>Download to...</i> and <i>Download whole directory</i> 
+  	  commands</dd>	  
+  <dt>View as text</dt>
+  <dd><p>In the <a href="window_search.html">Search window</a> or 
+  	  <a href="window_file_list.html">downloaded filelists</a> : It downloads the selected file
+  	  to the temporary folder of the operating system and opens
+  	  its contents in a text viewer window. The file will be deleted right after
+  	  its contents shown.</p>
+  	  <p>In the <a href="window_finished_downloads.html">Finished Downloads</a>, 
+  	  <a href="window_finished_uploads.html">Finished Uploads</a> window or in your <u>own</u>
+  	  filelist</u> : It will simply open the file (stored locally) in a text viewer window.</p>
+  	  <p>This function is useful for previewing small text based info
+  	  files as they may contain more information about other files in the same folder.
+  	  Note that only plain text files will be shown correctly. For files of other
+  	  format you must download and open them with their respective viewer application. 
+  	  You can open downloaded files from the
+  	  <a href="window_finished_downloads.html">Finished downloads</a> window using
+  	  the Open menu command.</p></dd>	  
+  <dt>Open</dt>
+  <dd>Opens the file with its respective external viewer software. You should have
+  	  the appropriate viewer / player software installed and correctly registered to be able
+  	  to open the file.</dd>	  
+  <dt>Open folder</dt>
+  <dd>Opens the selected folder (or the folder containing the selected file) in
+  	  Windows Explorer.</dd>	  
+  <dt>Shell menu</dt>
+  <dd>Opens the Windows shell menu as submenu items. This menu contains the same 
+  	  items as in the context menu of Windows Explorer. Note that the submenu elements will be
+  	  loaded the time when it is opened. If you have large number of context menu items
+  	  registered with Windows it may take a few seconds to show the full menu.</dd>	  
+</dl>
+<h2>
+	User-related menu commands
+</h2>
+<p>These commands are available in the context menus of various lists containing users.</p>
+<dl style="margin-left: 40px;">
   <dt>Get file list</dt>
   <dd>Get the file list of a user/source.</dd>
   <dt>Browse file list</dt>
   <dd>Allows to browse the file list of a user/source by getting only the required
   	  pieces of the list. Note that this feature is available only for users
   	  connected to ADC hubs.</dd>
+  <dt>Match queue</dt>
+  <dd>Matches the files of your download queue against the filelist of a 
+  	  user/source using TTH. The user will be added as a source for all the
+  	  matching files.</dd>
   <dt>Send private message</dt>
   <dd>Send a private message to a user/source.</dd>
-  <dt>Remove</dt>
-  <dd>Deletes the actual item from the list. If the corresponding setting in
-      <a href="settings_windows.html#confirmitem">Confirm dialog options</a> is enabled,
-      you will be prompted before the removal.</dd>
-</dl>
-
+  <dt>Add to favorites</dt>
+  <dd>Adds the user to your <a href="window_favorite_users.html">Favorite Users</a> list.</dd> 
+  <dt>Grant extra slot</dt>
+  <dd>Beyond your set slots an extra upload slot will be given to the selected user until the
+  	  end of the current DC++ session.</dd>
+  <dt>Remove user from queue</dt>
+  <dd>Removes the user from the source list of all queued files. Pending filelist requests
+  	  will be removed as well.</dd>
+</dl>	
 </body>
 </html>
