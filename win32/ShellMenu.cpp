@@ -78,8 +78,8 @@ void ShellMenu::appendShellMenu(const wstring& path) {
 	lpMalloc->Release();
 
 	check(hr == S_OK && dummyFolder && pidlItem);
-
 	dummyFolder->Release();
+
 	desktop->Release();
 
 	// first we retrieve the normal IContextMenu interface (every object should have it)
@@ -89,13 +89,9 @@ void ShellMenu::appendShellMenu(const wstring& path) {
 	check(hr == S_OK && handler1);
 
 	// then try to get the version 3 interface
-	LPCONTEXTMENU handler3 = 0;
-	hr = handler1->QueryInterface(IID_IContextMenu3, reinterpret_cast<LPVOID*>(&handler3));
-	check(hr == S_OK && handler3);
+	hr = handler1->QueryInterface(IID_IContextMenu3, reinterpret_cast<LPVOID*>(&handler));
 	handler1->Release();
-
-	handler = reinterpret_cast<LPCONTEXTMENU3>(handler3);
-	check(handler);
+	check(hr == S_OK && handler);
 
 	getParent()->addCallback(dwt::Message(WM_DRAWITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1), handler));
 	getParent()->addCallback(dwt::Message(WM_MEASUREITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1), handler));
