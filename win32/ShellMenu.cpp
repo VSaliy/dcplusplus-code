@@ -53,34 +53,21 @@ void ShellMenu::appendShellMenu(const wstring& path) {
 	// that means that it's a fully qualified PIDL, which is what we need
 	LPITEMIDLIST pidl = 0;
 	hr = desktop->ParseDisplayName(0, 0, const_cast<LPWSTR>(path.c_str()), 0, &pidl, 0);
+	desktop->Release();
 	check(hr == S_OK && pidl);
 
-	// get the parent IShellFolder interface of pidl
+	// get the parent IShellFolder interface of pidl and the relative PIDL
 	IShellFolder* folder = 0;
-	hr = ::SHBindToParent(pidl, IID_IShellFolder, reinterpret_cast<LPVOID*>(&folder), 0);
+	LPCITEMIDLIST pidlItem = 0;
+	hr = ::SHBindToParent(pidl, IID_IShellFolder, reinterpret_cast<LPVOID*>(&folder), &pidlItem);
 
-	// get interface to IMalloc used to free the PIDLs allocated by the Shell functions
+	// get interface to IMalloc used to free pidl
 	LPMALLOC lpMalloc = 0;
 	::SHGetMalloc(&lpMalloc);
 	lpMalloc->Free(pidl);
-
-	check(hr == S_OK && folder);
-
-	// get the relative PIDL
-	hr = desktop->ParseDisplayName(0, 0, const_cast<LPWSTR>(path.c_str()), 0, &pidl, 0);
-	check(hr == S_OK && pidl);
-
-	IShellFolder* dummyFolder = 0;
-	LPCITEMIDLIST pidlItem = 0;
-	hr = ::SHBindToParent(pidl, IID_IShellFolder, reinterpret_cast<LPVOID*>(&dummyFolder), &pidlItem);
-
-	lpMalloc->Free(pidl);
 	lpMalloc->Release();
 
-	check(hr == S_OK && dummyFolder && pidlItem);
-	dummyFolder->Release();
-
-	desktop->Release();
+	check(hr == S_OK && folder && pidlItem);
 
 	// first we retrieve the normal IContextMenu interface (every object should have it)
 	LPCONTEXTMENU handler1 = 0;
