@@ -42,7 +42,6 @@ private:
 
 	bool initDialog();
 	void focus();
-	bool closing();
 	void okClicked();
 
 	void layout();
