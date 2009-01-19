@@ -195,7 +195,7 @@ void Grid::layout(const Rectangle& r) {
 		w += (cs-1)*spacing;
 
 		size_t h = std::accumulate(rowSize.begin() + r, rowSize.begin() + r + rs, 0);
-		h += (cs-1)*spacing;
+		h += (rs-1)*spacing;
 
 		Point ps = wi->w->getPreferedSize();
 
