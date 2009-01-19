@@ -89,184 +89,170 @@ void SearchFrame::closeAll() {
 }
 
 SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, SearchManager::TypeModes initialType_) :
-	BaseType(mdiParent, T_("Search"), IDH_SEARCH, IDR_SEARCH),
-	searchLabel(0),
-	searchBox(0),
-	purge(0),
-	doSearch(0),
-	sizeLabel(0),
-	mode(0),
-	size(0),
-	sizeMode(0),
-	typeLabel(0),
-	fileType(0),
-	optionLabel(0),
-	slots(0),
-	onlyFree(BOOLSETTING(SEARCH_ONLY_FREE_SLOTS)),
-	filter(0),
-	filterShared(BOOLSETTING(SEARCH_FILTER_SHARED)),
-	merge(0),
-	bMerge(BOOLSETTING(SEARCH_MERGE)),
-	hubsLabel(0),
-	hubs(0),
-	results(0),
-	showUI(0),
-	bShowUI(true),
-	isHash(false),
-	initialType(initialType_),
-	droppedResults(0)
+BaseType(mdiParent, T_("Search"), IDH_SEARCH, IDR_SEARCH),
+grid(0),
+searchBox(0),
+isHash(false),
+mode(0),
+size(0),
+sizeMode(0),
+fileType(0),
+slots(0),
+onlyFree(BOOLSETTING(SEARCH_ONLY_FREE_SLOTS)),
+filter(0),
+filterShared(BOOLSETTING(SEARCH_FILTER_SHARED)),
+merge(0),
+bMerge(BOOLSETTING(SEARCH_MERGE)),
+hubs(0),
+results(0),
+showUI(0),
+initialType(initialType_),
+droppedResults(0)
 {
-	{
-		Label::Seed cs;
-		cs.exStyle = WS_EX_TRANSPARENT;
-
-		cs.caption = T_("Search for");
-		searchLabel = addChild(cs);
-		searchLabel->setHelpId(IDH_SEARCH_SEARCH_FOR);
-
-		cs.caption = T_("Size");
-		sizeLabel = addChild(cs);
-		sizeLabel->setHelpId(IDH_SEARCH_SIZE);
-
-		cs.caption = T_("File type");
-		typeLabel = addChild(cs);
-		typeLabel->setHelpId(IDH_SEARCH_TYPE);
-
-		cs.caption = T_("Search options");
-		optionLabel = addChild(cs);
-
-		cs.caption = T_("Hubs");
-		hubsLabel = addChild(cs);
-		hubsLabel->setHelpId(IDH_SEARCH_HUBS);
-	}
+	grid = addChild(Grid::Seed(1, 2));
+	grid->column(0).size = 220;
+	grid->column(0).mode = GridInfo::STATIC;
+	grid->column(1).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		searchBox = addChild(WinUtil::Seeds::comboBoxEdit);
-		searchBox->setHelpId(IDH_SEARCH_SEARCH_FOR);
-		addWidget(searchBox);
+		GridPtr left = grid->addChild(Grid::Seed(5, 1));
+		left->column(0).mode = GridInfo::FILL;
+		left->row(4).mode = GridInfo::FILL;
+		left->row(4).align = GridInfo::STRETCH;
 
-		for(TStringIter i = lastSearches.begin(); i != lastSearches.end(); ++i) {
-			searchBox->insertValue(0, *i);
+		{
+			GridPtr cur = left->addChild(GroupBox::Seed(T_("Search for")))->addChild(Grid::Seed(2, 2));
+			cur->column(0).mode = GridInfo::FILL;
+			cur->column(1).mode = GridInfo::FILL;
+			cur->setHelpId(IDH_SEARCH_SEARCH_FOR);
+
+			searchBox = cur->addChild(WinUtil::Seeds::comboBoxEdit);
+			cur->setWidget(searchBox, 0, 0, 1, 2);
+			addWidget(searchBox);
+
+			for(TStringIter i = lastSearches.begin(); i != lastSearches.end(); ++i) {
+				searchBox->insertValue(0, *i);
+			}
+			searchBox->getTextBox()->onKeyDown(std::tr1::bind(&SearchFrame::handleSearchKeyDown, this, _1));
+			searchBox->getTextBox()->onChar(std::tr1::bind(&SearchFrame::handleSearchChar, this, _1));
+
+			Button::Seed cs = WinUtil::Seeds::button;
+			cs.caption = T_("Purge");
+			ButtonPtr button = cur->addChild(cs);
+			button->setHelpId(IDH_SEARCH_PURGE);
+			button->onClicked(std::tr1::bind(&SearchFrame::handlePurgeClicked, this));
+
+			cs.style |= BS_DEFPUSHBUTTON;
+			cs.caption = T_("Search");
+			button = cur->addChild(cs);
+			button->setHelpId(IDH_SEARCH_SEARCH);
+			button->onClicked(std::tr1::bind(&SearchFrame::runSearch, this));
 		}
-		searchBox->getTextBox()->onKeyDown(std::tr1::bind(&SearchFrame::handleSearchKeyDown, this, _1));
-		searchBox->getTextBox()->onChar(std::tr1::bind(&SearchFrame::handleSearchChar, this, _1));
+
+		{
+			GridPtr cur = left->addChild(GroupBox::Seed(T_("Size")))->addChild(Grid::Seed(1, 3));
+			cur->setHelpId(IDH_SEARCH_SIZE);
+
+			mode = cur->addChild(WinUtil::Seeds::comboBoxStatic);
+			addWidget(mode);
+
+			mode->addValue(T_("Normal"));
+			mode->addValue(T_("At least"));
+			mode->addValue(T_("At most"));
+
+			TextBox::Seed cs = WinUtil::Seeds::textBox;
+			cs.style |= ES_AUTOHSCROLL | ES_NUMBER;
+			size = cur->addChild(cs);
+			addWidget(size);
+
+			sizeMode = cur->addChild(WinUtil::Seeds::comboBoxStatic);
+			addWidget(sizeMode);
+
+			sizeMode->addValue(T_("B"));
+			sizeMode->addValue(T_("KiB"));
+			sizeMode->addValue(T_("MiB"));
+			sizeMode->addValue(T_("GiB"));
+			sizeMode->setSelected(2);
+		}
+
+		{
+			GroupBoxPtr group = left->addChild(GroupBox::Seed(T_("File type")));
+			group->setHelpId(IDH_SEARCH_TYPE);
+
+			fileType = group->addChild(WinUtil::Seeds::comboBoxStatic);
+			addWidget(fileType);
+
+			fileType->addValue(T_("Any"));
+			fileType->addValue(T_("Audio"));
+			fileType->addValue(T_("Compressed"));
+			fileType->addValue(T_("Document"));
+			fileType->addValue(T_("Executable"));
+			fileType->addValue(T_("Picture"));
+			fileType->addValue(T_("Video"));
+			fileType->addValue(T_("Directory"));
+			fileType->addValue(T_("TTH"));
+		}
+
+		{
+			GridPtr cur = left->addChild(GroupBox::Seed(T_("Search options")))->addChild(Grid::Seed(3, 1));
+
+			CheckBox::Seed cs(T_("Only users with free slots"));
+			slots = cur->addChild(cs);
+			slots->setHelpId(IDH_SEARCH_SLOTS);
+			slots->setChecked(onlyFree);
+			slots->onClicked(std::tr1::bind(&SearchFrame::handleSlotsClicked, this));
+
+			cs.caption = T_("Hide files already in share");
+			filter = cur->addChild(cs);
+			filter->setHelpId(IDH_SEARCH_SHARE);
+			filter->setChecked(filterShared);
+			filter->onClicked(std::tr1::bind(&SearchFrame::handleFilterClicked, this));
+
+			cs.caption = T_("Merge results for the same file");
+			merge = cur->addChild(cs);
+			merge->setHelpId(IDH_SEARCH_MERGE);
+			merge->setChecked(bMerge);
+			merge->onClicked(std::tr1::bind(&SearchFrame::handleMergeClicked, this));
+		}
+
+		{
+			GroupBoxPtr group = left->addChild(GroupBox::Seed(T_("Hubs")));
+			group->setHelpId(IDH_SEARCH_HUBS);
+
+			WidgetHubs::Seed cs;
+			cs.style |= LVS_NOCOLUMNHEADER;
+			cs.lvStyle |= LVS_EX_CHECKBOXES;
+			hubs = group->addChild(cs);
+			addWidget(hubs);
+
+			TStringList dummy;
+			dummy.push_back(Util::emptyStringT);
+			hubs->createColumns(dummy);
+
+			hubs->onRaw(std::tr1::bind(&SearchFrame::handleHubItemChanged, this, _1, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
+
+			hubs->insert(new HubInfo(Util::emptyStringT, T_("Only where I'm op"), false));
+			hubs->setChecked(0, false);
+		}
 	}
 
-	{
-		Button::Seed cs = WinUtil::Seeds::button;
-		cs.caption = T_("Purge");
-		purge = addChild(cs);
-		purge->setHelpId(IDH_SEARCH_PURGE);
-		purge->onClicked(std::tr1::bind(&SearchFrame::handlePurgeClicked, this));
+	results = grid->addChild(WidgetResults::Seed());
+	addWidget(results);
 
-		cs.style |= BS_DEFPUSHBUTTON;
-		cs.caption = T_("Search");
-		doSearch = addChild(cs);
-		doSearch->setHelpId(IDH_SEARCH_SEARCH);
-		doSearch->onClicked(std::tr1::bind(&SearchFrame::runSearch, this));
-	}
+	results->setSmallImageList(WinUtil::fileImages);
+	WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
 
-	{
-		mode = addChild(WinUtil::Seeds::comboBoxStatic);
-		mode->setHelpId(IDH_SEARCH_SIZE);
-		addWidget(mode);
-
-		mode->addValue(T_("Normal"));
-		mode->addValue(T_("At least"));
-		mode->addValue(T_("At most"));
-	}
-
-	{
-		TextBox::Seed cs = WinUtil::Seeds::textBox;
-		cs.style |= ES_AUTOHSCROLL | ES_NUMBER;
-		size = addChild(cs);
-		size->setHelpId(IDH_SEARCH_SIZE);
-		addWidget(size);
-	}
-
-	{
-		sizeMode = addChild(WinUtil::Seeds::comboBoxStatic);
-		sizeMode->setHelpId(IDH_SEARCH_SIZE);
-		addWidget(sizeMode);
-
-		sizeMode->addValue(T_("B"));
-		sizeMode->addValue(T_("KiB"));
-		sizeMode->addValue(T_("MiB"));
-		sizeMode->addValue(T_("GiB"));
-		sizeMode->setSelected(2);
-	}
-
-	{
-		fileType = addChild(WinUtil::Seeds::comboBoxStatic);
-		fileType->setHelpId(IDH_SEARCH_TYPE);
-		addWidget(fileType);
-
-		fileType->addValue(T_("Any"));
-		fileType->addValue(T_("Audio"));
-		fileType->addValue(T_("Compressed"));
-		fileType->addValue(T_("Document"));
-		fileType->addValue(T_("Executable"));
-		fileType->addValue(T_("Picture"));
-		fileType->addValue(T_("Video"));
-		fileType->addValue(T_("Directory"));
-		fileType->addValue(T_("TTH"));
-	}
-
-	{
-		CheckBox::Seed cs(T_("Only users with free slots"));
-		slots = addChild(cs);
-		slots->setHelpId(IDH_SEARCH_SLOTS);
-		slots->setChecked(onlyFree);
-		slots->onClicked(std::tr1::bind(&SearchFrame::handleSlotsClicked, this));
-
-		cs.caption = T_("Hide files already in share");
-		filter = addChild(cs);
-		filter->setHelpId(IDH_SEARCH_SHARE);
-		filter->setChecked(filterShared);
-		filter->onClicked(std::tr1::bind(&SearchFrame::handleFilterClicked, this));
-
-		cs.caption = T_("Merge results for the same file");
-		merge = addChild(cs);
-		merge->setHelpId(IDH_SEARCH_MERGE);
-		merge->setChecked(bMerge);
-		merge->onClicked(std::tr1::bind(&SearchFrame::handleMergeClicked, this));
-	}
-
-	{
-		WidgetHubs::Seed cs;
-		cs.style |= LVS_NOCOLUMNHEADER;
-		cs.lvStyle |= LVS_EX_CHECKBOXES;
-		hubs = addChild(cs);
-		hubs->setHelpId(IDH_SEARCH_HUBS);
-		addWidget(hubs);
-
-		TStringList dummy;
-		dummy.push_back(Util::emptyStringT);
-		hubs->createColumns(dummy);
-
-		hubs->onRaw(std::tr1::bind(&SearchFrame::handleHubItemChanged, this, _1, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
-
-		hubs->insert(new HubInfo(Util::emptyStringT, T_("Only where I'm op"), false));
-		hubs->setChecked(0, false);
-	}
-
-	{
-		results = addChild(WidgetResults::Seed());
-		addWidget(results);
-
-		results->setSmallImageList(WinUtil::fileImages);
-		WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
-
-		results->onDblClicked(std::tr1::bind(&SearchFrame::handleDoubleClick, this));
-		results->onKeyDown(std::tr1::bind(&SearchFrame::handleKeyDown, this, _1));
-		results->onContextMenu(std::tr1::bind(&SearchFrame::handleContextMenu, this, _1));
-	}
+	results->onDblClicked(std::tr1::bind(&SearchFrame::handleDoubleClick, this));
+	results->onKeyDown(std::tr1::bind(&SearchFrame::handleKeyDown, this, _1));
+	results->onContextMenu(std::tr1::bind(&SearchFrame::handleContextMenu, this, _1));
 
 	{
 		CheckBox::Seed cs(_T("+/-"));
 		cs.style &= ~WS_TABSTOP;
 		showUI = addChild(cs);
-		showUI->setChecked(bShowUI);
+		showUI->setChecked(true);
 
 		showUI->onClicked(std::tr1::bind(&SearchFrame::handleShowUIClicked, this));
 	}
@@ -316,99 +302,7 @@ void SearchFrame::layout() {
 	layoutStatus(r);
 	mapWidget(STATUS_SHOW_UI, showUI);
 
-	if(showUI->getChecked()) {
-
-		const long width = 220, labelH = 16, margin = 4, spacing = 2, groupSpacing = 4;
-
-		dwt::Rectangle rect = r;
-
-		results->setBounds(rect.getRight(rect.width() - width));
-
-		rect.size.x = width;
-
-		long yedit = size->getTextSize(_T("A")).y + 8;
-		long comboH = 5 * yedit;
-
-		rect.pos.x += margin;
-		rect.size.x -= margin * 2;
-
-		rect.size.y = labelH;
-
-		// "Search for"
-		searchLabel->setBounds(rect);
-
-		rect.pos.y += rect.size.y + spacing;
-		rect.size.y = comboH;
-
-		searchBox->setBounds(rect);
-
-		rect.pos.y += yedit + spacing;
-
-		purge->setBounds(dwt::Rectangle(rect.x(), rect.y(), 75, yedit));
-		doSearch->setBounds(dwt::Rectangle(rect.right() - 100, rect.y(), 100, yedit));
-
-		rect.pos.y += yedit + groupSpacing;
-
-		rect.size.y = labelH;
-		sizeLabel->setBounds(rect);
-
-		rect.pos.y += rect.size.y + spacing;
-
-		long w2 = rect.size.x - 2 * spacing;
-
-		dwt::Rectangle third = rect;
-
-		third.size.y = comboH;
-		third.size.x = w2 / 3;
-
-		mode->setBounds(third);
-
-		third.pos.x += third.size.x + spacing;
-		third.size.y = yedit;
-
-		size->setBounds(third);
-
-		third.pos.x += third.size.x + spacing;
-		third.size.y = comboH;
-
-		sizeMode->setBounds(third);
-
-		rect.pos.y += yedit + groupSpacing;
-		rect.size.y = labelH;
-
-		typeLabel->setBounds(rect);
-
-		rect.pos.y += rect.size.y + spacing;
-		rect.size.y = comboH;
-		fileType->setBounds(rect);
-
-		rect.pos.y += yedit + groupSpacing;
-		rect.size.y = labelH;
-
-		optionLabel->setBounds(rect);
-
-		rect.pos.y += rect.size.y + spacing;
-		rect.size.y = yedit;
-		slots->setBounds(rect);
-
-		rect.pos.y += rect.size.y + spacing;
-		rect.size.y = yedit;
-		filter->setBounds(rect);
-
-		rect.pos.y += rect.size.y + spacing;
-		rect.size.y = yedit;
-		merge->setBounds(rect);
-
-		rect.pos.y += rect.size.y + groupSpacing;
-		rect.size.y = labelH;
-		hubsLabel->setBounds(rect);
-
-		rect.pos.y += rect.size.y + spacing;
-		rect.size.y = std::min(yedit * 5, r.size.y - rect.pos.y - margin * 2);
-		hubs->setBounds(rect);
-	} else {
-		results->setBounds(r);
-	}
+	grid->layout(r);
 }
 
 bool SearchFrame::preClosing() {
@@ -615,23 +509,7 @@ void SearchFrame::handleMergeClicked() {
 }
 
 void SearchFrame::handleShowUIClicked() {
-	bShowUI = showUI->getChecked();
-
-	searchLabel->setVisible(bShowUI);
-	searchBox->setVisible(bShowUI);
-	purge->setVisible(bShowUI);
-	doSearch->setVisible(bShowUI);
-	sizeLabel->setVisible(bShowUI);
-	mode->setVisible(bShowUI);
-	size->setVisible(bShowUI);
-	sizeMode->setVisible(bShowUI);
-	typeLabel->setVisible(bShowUI);
-	fileType->setVisible(bShowUI);
-	optionLabel->setVisible(bShowUI);
-	slots->setVisible(bShowUI);
-	hubsLabel->setVisible(bShowUI);
-	hubs->setVisible(bShowUI);
-
+	grid->column(0).size = showUI->getChecked() ? 220 : 0;
 	layout();
 }
 

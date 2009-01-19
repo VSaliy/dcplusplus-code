@@ -135,20 +135,18 @@ private:
 	typedef FrameSet::iterator FrameIter;
 	static FrameSet frames;
 
-	LabelPtr searchLabel;
-	ComboBoxPtr searchBox;
-	ButtonPtr purge;
-	ButtonPtr doSearch;
+	GridPtr grid;
 
-	LabelPtr sizeLabel;
+	ComboBoxPtr searchBox;
+	bool isHash;
+
 	ComboBoxPtr mode;
+
 	TextBoxPtr size;
 	ComboBoxPtr sizeMode;
 
-	LabelPtr typeLabel;
 	ComboBoxPtr fileType;
 
-	LabelPtr optionLabel;
 	CheckBoxPtr slots;
 	bool onlyFree;
 
@@ -158,7 +156,6 @@ private:
 	CheckBoxPtr merge;
 	bool bMerge;
 
-	LabelPtr hubsLabel;
 	typedef TypedTable<HubInfo> WidgetHubs;
 	typedef WidgetHubs* WidgetHubsPtr;
 	WidgetHubsPtr hubs;
@@ -168,8 +165,6 @@ private:
 	WidgetResultsPtr results;
 
 	CheckBoxPtr showUI;
-	bool bShowUI;
-	bool isHash;
 
 	SearchManager::TypeModes initialType;
 
