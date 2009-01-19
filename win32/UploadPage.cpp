@@ -22,8 +22,6 @@
 
 #include "UploadPage.h"
 
-#include <dwt/widgets/Grid.h>
-#include <dwt/widgets/GroupBox.h>
 #include <dwt/widgets/Spinner.h>
 
 #include <dcpp/SettingsManager.h>
@@ -66,16 +64,13 @@ remove(0)
 	createDialog(IDD_UPLOADPAGE);
 	setHelpId(IDH_UPLOADPAGE);
 
-	grid = addChild(Grid::Seed(3, 3));
+	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Shared directories")));
-		grid->setWidget(group, 0, 0, 1, 3);
-
-		GridPtr cur = group->addChild(Grid::Seed(4, 5));
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Shared directories")))->addChild(Grid::Seed(4, 5));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
@@ -101,13 +96,18 @@ remove(0)
 		cur->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
 	}
 
-	grid->addChild(Label::Seed(T_("Automatically open an extra slot if speed is below (0 = disable)")));
-	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
-	grid->addChild(Label::Seed(T_("KiB/s")));
+	{
+		GridPtr cur = grid->addChild(Grid::Seed(2, 3));
+		cur->column(1).mode = GridInfo::FILL;
 
-	grid->addChild(Label::Seed(T_("Upload slots")));
-	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN));
-	grid->addChild(Label::Seed(tstring()));
+		cur->addChild(Label::Seed(T_("Automatically open an extra slot if speed is below (0 = disable)")));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+		cur->addChild(Label::Seed(T_("KiB/s")));
+
+		cur->addChild(Label::Seed(T_("Upload slots")));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN));
+		cur->addChild(Label::Seed(tstring()));
+	}
 
 	PropPage::read(items);
 

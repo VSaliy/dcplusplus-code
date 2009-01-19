@@ -36,18 +36,25 @@ static const ColumnInfo itemsColumns[] = {
 };
 
 ADLSearchFrame::ADLSearchFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Automatic Directory Listing Search"), IDH_ADL_SEARCH, IDR_ADLSEARCH),
-	add(0),
-	properties(0),
-	up(0),
-	down(0),
-	remove(0),
-	help(0)
+BaseType(mdiParent, T_("Automatic Directory Listing Search"), IDH_ADL_SEARCH, IDR_ADLSEARCH),
+grid(0),
+items(0)
 {
+	grid = addChild(Grid::Seed(2, 6));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->column(1).mode = GridInfo::FILL;
+	grid->column(2).mode = GridInfo::FILL;
+	grid->column(3).mode = GridInfo::FILL;
+	grid->column(4).mode = GridInfo::FILL;
+	grid->column(5).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+
 	{
 		Table::Seed cs = WinUtil::Seeds::Table;
 		cs.lvStyle |= LVS_EX_CHECKBOXES;
-		items = addChild(cs);
+		items = grid->addChild(cs);
+		grid->setWidget(items, 0, 0, 1, 6);
 		addWidget(items);
 
 		WinUtil::makeColumns(items, itemsColumns, COLUMN_LAST, SETTING(ADLSEARCHFRAME_ORDER), SETTING(ADLSEARCHFRAME_WIDTHS));
@@ -59,43 +66,44 @@ ADLSearchFrame::ADLSearchFrame(dwt::TabView* mdiParent) :
 	}
 
 	{
+		ButtonPtr button;
 		Button::Seed cs = WinUtil::Seeds::button;
 
 		cs.caption = T_("&New...");
-		add = addChild(cs);
-		add->setHelpId(IDH_ADLS_NEW);
-		add->onClicked(std::tr1::bind(&ADLSearchFrame::handleAdd, this));
-		addWidget(add);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_ADLS_NEW);
+		button->onClicked(std::tr1::bind(&ADLSearchFrame::handleAdd, this));
+		addWidget(button);
 
 		cs.caption = T_("&Properties");
-		properties = addChild(cs);
-		properties->setHelpId(IDH_ADLS_PROPERTIES);
-		properties->onClicked(std::tr1::bind(&ADLSearchFrame::handleProperties, this));
-		addWidget(properties);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_ADLS_PROPERTIES);
+		button->onClicked(std::tr1::bind(&ADLSearchFrame::handleProperties, this));
+		addWidget(button);
 
 		cs.caption = T_("Move &Up");
-		up = addChild(cs);
-		up->setHelpId(IDH_ADLS_MOVE_UP);
-		up->onClicked(std::tr1::bind(&ADLSearchFrame::handleUp, this));
-		addWidget(up);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_ADLS_MOVE_UP);
+		button->onClicked(std::tr1::bind(&ADLSearchFrame::handleUp, this));
+		addWidget(button);
 
 		cs.caption = T_("Move &Down");
-		down = addChild(cs);
-		down->setHelpId(IDH_ADLS_MOVE_DOWN);
-		down->onClicked(std::tr1::bind(&ADLSearchFrame::handleDown, this));
-		addWidget(down);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_ADLS_MOVE_DOWN);
+		button->onClicked(std::tr1::bind(&ADLSearchFrame::handleDown, this));
+		addWidget(button);
 
 		cs.caption = T_("&Remove");
-		remove = addChild(cs);
-		remove->setHelpId(IDH_ADLS_REMOVE);
-		remove->onClicked(std::tr1::bind(&ADLSearchFrame::handleRemove, this));
-		addWidget(remove);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_ADLS_REMOVE);
+		button->onClicked(std::tr1::bind(&ADLSearchFrame::handleRemove, this));
+		addWidget(button);
 
 		cs.caption = T_("&Help");
-		help = addChild(cs);
-		help->setHelpId(IDH_DCPP_HELP);
-		help->onClicked(std::tr1::bind(&WinUtil::help, handle(), IDH_ADL_SEARCH));
-		addWidget(help);
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_DCPP_HELP);
+		button->onClicked(std::tr1::bind(&WinUtil::help, handle(), IDH_ADL_SEARCH));
+		addWidget(button);
 	}
 
 	initStatus();
@@ -112,36 +120,11 @@ ADLSearchFrame::~ADLSearchFrame() {
 }
 
 void ADLSearchFrame::layout() {
-	dwt::Rectangle r(dwt::Point(0, 0), getClientAreaSize());
+	dwt::Rectangle r(getClientAreaSize());
 
 	layoutStatus(r);
 
-	/// @todo dynamic width
-	const int ybutton = add->getTextSize(_T("A")).y + 10;
-	const int xbutton = 90;
-	const int xborder = 10;
-
-	dwt::Rectangle rb(r.getBottom(ybutton));
-	r.size.y -= ybutton;
-	items->setBounds(r);
-
-	rb.size.x = xbutton;
-	add->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	properties->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	up->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	down->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	remove->setBounds(rb);
-
-	rb.pos.x += xbutton + xborder;
-	help->setBounds(rb);
+	grid->layout(r);
 }
 
 bool ADLSearchFrame::preClosing() {

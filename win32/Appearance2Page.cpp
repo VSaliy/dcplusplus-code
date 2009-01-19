@@ -22,9 +22,6 @@
 
 #include "Appearance2Page.h"
 
-#include <dwt/widgets/Grid.h>
-#include <dwt/widgets/GroupBox.h>
-
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 

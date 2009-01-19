@@ -24,6 +24,7 @@
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -39,21 +40,20 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_HUBPASS, IDH_FAVORITE_HUB_PASSWORD },
 	{ IDC_FH_USER_DESC, IDH_FAVORITE_HUB_USER_DESC },
 	{ IDC_HUBUSERDESCR, IDH_FAVORITE_HUB_USER_DESC },
-	{ IDOK, IDH_DCPP_OK },
-	{ IDCANCEL, IDH_DCPP_CANCEL },
 	{ 0, 0 }
 };
 */
 
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
-	WidgetFactory<dwt::ModalDialog>(parent),
-	name(0),
-	address(0),
-	description(0),
-	nick(0),
-	password(0),
-	userDescription(0),
-	entry(_entry)
+WidgetFactory<dwt::ModalDialog>(parent),
+grid(0),
+name(0),
+address(0),
+description(0),
+nick(0),
+password(0),
+userDescription(0),
+entry(_entry)
 {
 	onInitDialog(std::tr1::bind(&FavHubProperties::handleInitDialog, this));
 	onFocus(std::tr1::bind(&FavHubProperties::handleFocus, this));
@@ -62,52 +62,79 @@ FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry
 FavHubProperties::~FavHubProperties() {
 }
 
+int FavHubProperties::run() {
+	createDialog(IDD_FAVORITEHUB);
+	return show();
+}
+
 bool FavHubProperties::handleInitDialog() {
 	setHelpId(IDH_FAVORITE_HUB);
 
-	// Translate dialog
+	grid = addChild(Grid::Seed(3, 2));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->column(1).mode = GridInfo::FILL;
+
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Hub")));
+		grid->setWidget(group, 0, 0, 1, 2);
+
+		GridPtr cur = group->addChild(Grid::Seed(3, 2));
+		cur->column(1).mode = GridInfo::FILL;
+
+		cur->addChild(Label::Seed(T_("Name")));
+		name = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		name->setText(Text::toT(entry->getName()));
+		name->setSelection();
+
+		cur->addChild(Label::Seed(T_("Address")));
+		address = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		address->setText(Text::toT(entry->getServer()));
+
+		cur->addChild(Label::Seed(T_("Description")));
+		description = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		description->setText(Text::toT(entry->getDescription()));
+	}
+
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Identification (leave blank for defaults)")));
+		grid->setWidget(group, 1, 0, 1, 2);
+
+		GridPtr cur = group->addChild(Grid::Seed(3, 2));
+		cur->column(1).mode = GridInfo::FILL;
+
+		cur->addChild(Label::Seed(T_("Nick")));
+		nick = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		nick->setTextLimit(35);
+		nick->setText(Text::toT(entry->getNick(false)));
+		nick->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, nick));
+
+		cur->addChild(Label::Seed(T_("Password")));
+		password = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		password->setPassword();
+		password->setText(Text::toT(entry->getPassword()));
+		password->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, password));
+
+		cur->addChild(Label::Seed(T_("Description")));
+		userDescription = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		userDescription->setTextLimit(35);
+		userDescription->setText(Text::toT(entry->getUserDescription()));
+	}
+
+	{
+		ButtonPtr button = grid->addChild(Button::Seed(T_("OK")));
+		button->setHelpId(IDH_DCPP_OK);
+		button->onClicked(std::tr1::bind(&FavHubProperties::handleOKClicked, this));
+
+		button = grid->addChild(Button::Seed(T_("Cancel")));
+		button->setHelpId(IDH_DCPP_CANCEL);
+		button->onClicked(std::tr1::bind(&FavHubProperties::endDialog, this, IDCANCEL));
+	}
+
 	setText(T_("Favorite Hub Properties"));
-	setItemText(IDC_FH_HUB, T_("Hub"));
-	setItemText(IDC_FH_IDENT, T_("Identification (leave blank for defaults)"));
-	setItemText(IDC_FH_NAME, T_("Name"));
-	setItemText(IDC_FH_ADDRESS, T_("Address"));
-	setItemText(IDC_FH_HUB_DESC, T_("Description"));
-	setItemText(IDC_FH_NICK, T_("Nick"));
-	setItemText(IDC_FH_PASSWORD, T_("Password"));
-	setItemText(IDC_FH_USER_DESC, T_("Description"));
 
-	name = attachChild<TextBox>(IDC_HUBNAME);
-	name->setText(Text::toT(entry->getName()));
-	name->setFocus();
-	name->setSelection();
-
-	address = attachChild<TextBox>(IDC_HUBADDR);
-	address->setText(Text::toT(entry->getServer()));
-
-	description = attachChild<TextBox>(IDC_HUBDESCR);
-	description->setText(Text::toT(entry->getDescription()));
-
-	nick = attachChild<TextBox>(IDC_HUBNICK);
-	nick->setTextLimit(35);
-	nick->setText(Text::toT(entry->getNick(false)));
-	nick->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, nick));
-
-	password = attachChild<TextBox>(IDC_HUBPASS);
-	password->setPassword();
-	password->setText(Text::toT(entry->getPassword()));
-	password->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, password));
-
-	userDescription = attachChild<TextBox>(IDC_HUBUSERDESCR);
-	userDescription->setTextLimit(35);
-	userDescription->setText(Text::toT(entry->getUserDescription()));
-
-	ButtonPtr button = attachChild<Button>(IDOK);
-	button->onClicked(std::tr1::bind(&FavHubProperties::handleOKClicked, this));
-
-	button = attachChild<Button>(IDCANCEL);
-	button->onClicked(std::tr1::bind(&FavHubProperties::endDialog, this, IDCANCEL));
-
+	layout();
 	centerWindow();
+	handleFocus();
 
 	return false;
 }
@@ -149,4 +176,9 @@ void FavHubProperties::handleOKClicked() {
 	entry->setUserDescription(Text::fromT(userDescription->getText()));
 	FavoriteManager::getInstance()->save();
 	endDialog(IDOK);
+}
+
+void FavHubProperties::layout() {
+	dwt::Point sz = getClientSize();
+	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }
