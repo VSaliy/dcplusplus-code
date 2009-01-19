@@ -22,7 +22,6 @@
 
 #include "Advanced3Page.h"
 
-#include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Spinner.h>
 
 #include <dcpp/SettingsManager.h>

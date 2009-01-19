@@ -22,8 +22,6 @@
 
 #include "CertificatesPage.h"
 
-#include <dwt/widgets/Grid.h>
-
 #include <dcpp/SettingsManager.h>
 #include <dcpp/CryptoManager.h>
 #include "WinUtil.h"

@@ -22,9 +22,6 @@
 
 #include "LineDlg.h"
 
-#include <dwt/widgets/Grid.h>
-#include <dwt/widgets/GroupBox.h>
-
 #include "WinUtil.h"
 
 LineDlg::LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& text_, bool password_) :

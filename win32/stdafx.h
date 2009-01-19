@@ -35,6 +35,8 @@
 #include <dwt/widgets/CheckBox.h>
 #include <dwt/widgets/ComboBox.h>
 #include <dwt/widgets/Container.h>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
 #include <dwt/widgets/Label.h>
 #include <dwt/widgets/ModalDialog.h>
 #include <dwt/widgets/ModelessDialog.h>
