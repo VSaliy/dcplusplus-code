@@ -90,6 +90,8 @@ otherOptions(0)
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Auto priority settings")))->addChild(Grid::Seed(2, 6));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->column(4).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Highest prio max size")));
 		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT));
@@ -110,6 +112,8 @@ otherOptions(0)
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Autodrop settings")))->addChild(Grid::Seed(3, 6));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->column(4).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Drop sources below")));
 		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_SPEED, PropPage::T_INT));

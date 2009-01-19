@@ -75,7 +75,7 @@ grid(0)
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Limits")))->addChild(Grid::Seed(3, 2));
-		cur->column(1).mode = GridInfo::FILL;
+		cur->column(0).mode = GridInfo::FILL;
 
 		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
 		cur->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")));
