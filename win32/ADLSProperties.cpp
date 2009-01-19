@@ -24,6 +24,7 @@
 
 #include <dcpp/ADLSearch.h>
 #include <dcpp/FavoriteManager.h>
+#include "WinUtil.h"
 
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
@@ -48,16 +49,17 @@ static const WinUtil::HelpItem helpItems[] = {
 */
 
 ADLSProperties::ADLSProperties(dwt::Widget* parent, ADLSearch *_search) :
-	WidgetFactory<dwt::ModalDialog>(parent),
-	searchString(0),
-	searchType(0),
-	minSize(0),
-	maxSize(0),
-	sizeType(0),
-	destDir(0),
-	active(0),
-	autoQueue(0),
-	search(_search)
+WidgetFactory<dwt::ModalDialog>(parent),
+grid(0),
+searchString(0),
+searchType(0),
+minSize(0),
+maxSize(0),
+sizeType(0),
+destDir(0),
+active(0),
+autoQueue(0),
+search(_search)
 {
 	onInitDialog(std::tr1::bind(&ADLSProperties::handleInitDialog, this));
 	onFocus(std::tr1::bind(&ADLSProperties::handleFocus, this));
@@ -66,59 +68,78 @@ ADLSProperties::ADLSProperties(dwt::Widget* parent, ADLSearch *_search) :
 ADLSProperties::~ADLSProperties() {
 }
 
+int ADLSProperties::run() {
+	createDialog(IDD_ADLS_PROPERTIES);
+	return show();
+}
+
 bool ADLSProperties::handleInitDialog() {
 	setHelpId(IDH_ADLSP);
 
-	// Translate dialog
-	setText(T_("ADLSearch Properties"));
-	setItemText(IDC_ADLSP_SEARCH, T_("Search String"));
-	setItemText(IDC_ADLSP_TYPE, T_("Source Type"));
-	setItemText(IDC_ADLSP_SIZE_MIN, T_("Min FileSize"));
-	setItemText(IDC_ADLSP_SIZE_MAX, T_("Max FileSize"));
-	setItemText(IDC_ADLSP_UNITS, T_("Size Type"));
-	setItemText(IDC_ADLSP_DESTINATION, T_("Destination Directory"));
+	grid = addChild(Grid::Seed(4, 2));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->column(1).mode = GridInfo::FILL;
 
-	searchString = attachChild<TextBox>(IDC_SEARCH_STRING);
+	GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Search String")));
+	searchString = group->addChild(WinUtil::Seeds::Dialog::TextBox);
 	searchString->setText(Text::toT(search->searchString));
-	searchString->setFocus();
 
-	searchType = attachChild<ComboBox>(IDC_SOURCE_TYPE);
+	group = grid->addChild(GroupBox::Seed(T_("Source Type")));
+	searchType = group->addChild(ComboBox::Seed());
 	searchType->addValue(T_("Filename"));
 	searchType->addValue(T_("Directory"));
 	searchType->addValue(T_("Full Path"));
 	searchType->setSelected(search->sourceType);
 
-	minSize = attachChild<TextBox>(IDC_MIN_FILE_SIZE);
-	minSize->setText((search->minFileSize > 0) ? Text::toT(Util::toString(search->minFileSize)) : Util::emptyStringT);
+	{
+		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->column(1).mode = GridInfo::FILL;
 
-	maxSize = attachChild<TextBox>(IDC_MAX_FILE_SIZE);
-	maxSize->setText((search->maxFileSize > 0) ? Text::toT(Util::toString(search->maxFileSize)) : Util::emptyStringT);
+		group = cur->addChild(GroupBox::Seed(T_("Min FileSize")));
+		minSize = group->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		minSize->setText((search->minFileSize > 0) ? Text::toT(Util::toString(search->minFileSize)) : Util::emptyStringT);
 
-	sizeType = attachChild<ComboBox>(IDC_SIZE_TYPE);
+		group = cur->addChild(GroupBox::Seed(T_("Max FileSize")));
+		maxSize = group->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		maxSize->setText((search->maxFileSize > 0) ? Text::toT(Util::toString(search->maxFileSize)) : Util::emptyStringT);
+	}
+
+	group = grid->addChild(GroupBox::Seed(T_("Size Type")));
+	sizeType = group->addChild(ComboBox::Seed());
 	sizeType->addValue(T_("B"));
 	sizeType->addValue(T_("KiB"));
 	sizeType->addValue(T_("MiB"));
 	sizeType->addValue(T_("GiB"));
 	sizeType->setSelected(search->typeFileSize);
 
-	destDir = attachChild<TextBox>(IDC_DEST_DIR);
+	group = grid->addChild(GroupBox::Seed(T_("Destination Directory")));
+	destDir = group->addChild(WinUtil::Seeds::Dialog::TextBox);
 	destDir->setText(Text::toT(search->destDir));
 
-	active = attachChild<CheckBox>(IDC_IS_ACTIVE);
-	active->setText(T_("Enabled"));
-	active->setChecked(search->isActive);
+	{
+		GridPtr cur = grid->addChild(Grid::Seed(2, 1));
 
-	autoQueue = attachChild<CheckBox>(IDC_AUTOQUEUE);
-	autoQueue->setText(T_("Download Matches"));
-	autoQueue->setChecked(search->isAutoQueue);
+		active = cur->addChild(CheckBox::Seed(T_("Enabled")));
+		active->setChecked(search->isActive);
 
-	ButtonPtr button = attachChild<Button>(IDOK);
-	button->onClicked(std::tr1::bind(&ADLSProperties::handleOKClicked, this));
+		autoQueue = cur->addChild(CheckBox::Seed(T_("Download Matches")));
+		autoQueue->setChecked(search->isAutoQueue);
+	}
 
-	button = attachChild<Button>(IDCANCEL);
-	button->onClicked(std::tr1::bind(&ADLSProperties::endDialog, this, IDCANCEL));
+	{
+		ButtonPtr button = grid->addChild(Button::Seed(T_("OK")));
+		button->onClicked(std::tr1::bind(&ADLSProperties::handleOKClicked, this));
 
+		button = grid->addChild(Button::Seed(T_("Cancel")));
+		button->onClicked(std::tr1::bind(&ADLSProperties::endDialog, this, IDCANCEL));
+	}
+
+	setText(T_("ADLSearch Properties"));
+
+	layout();
 	centerWindow();
+	handleFocus();
 
 	return false;
 }
@@ -147,4 +168,9 @@ void ADLSProperties::handleOKClicked() {
 	search->isAutoQueue = autoQueue->getChecked();
 
 	endDialog(IDOK);
+}
+
+void ADLSProperties::layout() {
+	dwt::Point sz = getClientSize();
+	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }

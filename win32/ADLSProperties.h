@@ -28,9 +28,10 @@ public:
 	ADLSProperties(dwt::Widget* parent, ADLSearch *_search);
 	virtual ~ADLSProperties();
 
-	int run() { createDialog(IDD_ADLS_PROPERTIES); return show(); }
+	int run();
 
 private:
+	GridPtr grid;
 	TextBoxPtr searchString;
 	ComboBoxPtr searchType;
 	TextBoxPtr minSize;
@@ -44,8 +45,9 @@ private:
 
 	bool handleInitDialog();
 	void handleFocus();
-
 	void handleOKClicked();
+
+	void layout();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_A_D_L_S_PROPERTIES_H)
