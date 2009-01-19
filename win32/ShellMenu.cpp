@@ -80,8 +80,8 @@ void ShellMenu::appendShellMenu(const wstring& path) {
 	handler1->Release();
 	check(hr == S_OK && handler);
 
-	getParent()->addCallback(dwt::Message(WM_DRAWITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1), handler));
-	getParent()->addCallback(dwt::Message(WM_MEASUREITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1), handler));
+	getParent()->setCallback(dwt::Message(WM_DRAWITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1), handler));
+	getParent()->setCallback(dwt::Message(WM_MEASUREITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1), handler));
 	getParent()->setCallback(dwt::Message(WM_MENUCHAR), Dispatcher(std::tr1::bind(&ShellMenu::handleMenuChar, this), handler));
 	getParent()->setCallback(dwt::Message(WM_INITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1), handler));
 	getParent()->setCallback(dwt::Message(WM_UNINITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1), handler));
@@ -117,10 +117,13 @@ bool ShellMenu::handleDrawItem(const MSG& msg) {
 	if(msg.wParam == 0) {
 		LPDRAWITEMSTRUCT t = reinterpret_cast<LPDRAWITEMSTRUCT>(msg.lParam);
 		if(t) {
+			if(t->CtlType != ODT_MENU)
+				return false;
 			unsigned id = t->itemID;
 			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX) {
 				return true;
 			}
+			BaseType::handleDrawItem(t);
 		}
 	}
 	return false;
@@ -130,10 +133,13 @@ bool ShellMenu::handleMeasureItem(const MSG& msg) {
 	if(msg.wParam == 0) {
 		LPMEASUREITEMSTRUCT t = reinterpret_cast<LPMEASUREITEMSTRUCT>(msg.lParam);
 		if(t) {
+			if(t->CtlType != ODT_MENU)
+				return false;
 			unsigned id = t->itemID;
 			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX) {
 				return true;
 			}
+			BaseType::handleMeasureItem(t);
 		}
 	}
 	return false;
