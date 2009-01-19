@@ -39,8 +39,6 @@
 #include "UCPage.h"
 #include "CertificatesPage.h"
 
-#include <dwt/widgets/Grid.h>
-
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_PAGES, IDH_SETTINGS_TREE },

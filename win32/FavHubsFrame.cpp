@@ -20,8 +20,6 @@
 
 #include "FavHubsFrame.h"
 
-#include <dwt/widgets/Grid.h>
-
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 #include "HoldRedraw.h"

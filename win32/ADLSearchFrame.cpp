@@ -22,8 +22,6 @@
 
 #include "ADLSearchFrame.h"
 
-#include <dwt/widgets/Grid.h>
-
 #include <dcpp/Client.h>
 #include <dcpp/version.h>
 #include "HoldRedraw.h"
