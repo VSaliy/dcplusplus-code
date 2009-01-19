@@ -61,38 +61,71 @@ grid(0)
 	grid->column(0).mode = GridInfo::FILL;
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Directories")))->addChild(Grid::Seed(4, 2));
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Directories")));
+		group->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);	
+
+		GridPtr cur = group->addChild(Grid::Seed(4, 2));
 		cur->column(0).mode = GridInfo::FILL;
 
-		cur->setWidget(cur->addChild(Label::Seed(T_("Default download directory"))), 0, 0, 1, 2);
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR));
-		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
-
-		cur->setWidget(cur->addChild(Label::Seed(T_("Unfinished downloads directory"))), 2, 0, 1, 2);
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR));
-		cur->addChild(Button::Seed(T_("Browse...")))->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
+		LabelPtr label = cur->addChild(Label::Seed(T_("Default download directory")));
+		cur->setWidget(label, 0, 0, 1, 2);
+		label->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);	
+		
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);	
+		items.push_back(Item(box, SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR));
+		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
+			
+		ButtonPtr browse = cur->addChild(Button::Seed(T_("Browse...")));
+		browse->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
+		browse->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
+		
+		label = cur->addChild(Label::Seed(T_("Unfinished downloads directory")));
+		cur->setWidget(label, 2, 0, 1, 2);
+		label->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
+		
+		box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(box, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR));
+		box->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
+			
+		browse = cur->addChild(Button::Seed(T_("Browse...")));
+		browse->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
+		browse->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);	
 	}
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Limits")))->addChild(Grid::Seed(3, 2));
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Limits")));
+		group->setHelpId(IDH_SETTINGS_DOWNLOAD_LIMITS);	
+
+		GridPtr cur = group->addChild(Grid::Seed(3, 2));
 		cur->column(0).mode = GridInfo::FILL;
 
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
-		cur->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")));
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
+		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);	
+		
+		cur->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
-		cur->addChild(Label::Seed(T_("No new downloads if speed exceeds (KiB/s, 0 = disable)")));
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+		box->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
+			
+		cur->addChild(Label::Seed(T_("No new downloads if speed exceeds (KiB/s, 0 = disable)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
 
 		// xgettext:no-c-format
-		cur->setWidget(cur->addChild(Label::Seed(T_("Note; because of changing download speeds, this is not 100% accurate..."))), 2, 0, 1, 2);
+		LabelPtr label = cur->addChild(Label::Seed(T_("Note; because of changing download speeds, this is not 100% accurate...")));
+		cur->setWidget(label, 2, 0, 1, 2);
+		label->setHelpId(IDH_SETTINGS_DOWNLOAD_LIMITS);
 	}
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Public Hubs list")))->addChild(Grid::Seed(4, 1));
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Public Hubs list")));
+		group->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);	
+		GridPtr cur = group->addChild(Grid::Seed(4, 1));
 
 		cur->addChild(Label::Seed(T_("Public Hubs list URL")));
 		cur->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
-		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")));
+		
+		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::HTTP_PROXY, PropPage::T_STR));
 	}
 
