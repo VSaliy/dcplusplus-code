@@ -22,9 +22,6 @@
 
 #include "LogPage.h"
 
-#include <dwt/widgets/Grid.h>
-#include <dwt/widgets/GroupBox.h>
-
 #include <dcpp/SettingsManager.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/File.h>

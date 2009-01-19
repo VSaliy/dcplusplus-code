@@ -55,13 +55,8 @@ private:
 		COLUMN_LAST
 	};
 
+	GridPtr grid;
 	TablePtr items;
-	ButtonPtr add;
-	ButtonPtr properties;
-	ButtonPtr up;
-	ButtonPtr down;
-	ButtonPtr remove;
-	ButtonPtr help;
 
 	void handleAdd();
 	void handleProperties();

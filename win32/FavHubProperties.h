@@ -28,9 +28,10 @@ public:
 	FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry);
 	virtual ~FavHubProperties();
 
-	int run() { createDialog(IDD_FAVORITEHUB); return show(); }
+	int run();
 
 private:
+	GridPtr grid;
 	TextBoxPtr name;
 	TextBoxPtr address;
 	TextBoxPtr description;
@@ -42,10 +43,10 @@ private:
 
 	bool handleInitDialog();
 	void handleFocus();
-
 	void handleTextChanged(TextBoxPtr textBox);
-
 	void handleOKClicked();
+
+	void layout();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H)
