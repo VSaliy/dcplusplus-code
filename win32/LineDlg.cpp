@@ -48,9 +48,6 @@ int LineDlg::run() {
 bool LineDlg::initDialog() {
 	grid = addChild(Grid::Seed(2, 2));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->column(1).mode = GridInfo::FILL; // shouldn't need this. if removed, buttons in column 1 disappear.
-	grid->row(0).mode = GridInfo::FILL; // shouldn't need this.
-	grid->row(1).mode = GridInfo::FILL; // shouldn't need this.
 
 	GroupBoxPtr group = grid->addChild(GroupBox::Seed(desc));
 	grid->setWidget(group, 0, 0, 2, 1);
