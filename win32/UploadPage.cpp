@@ -31,28 +31,6 @@
 #include "HashProgressDlg.h"
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_SETTINGS_SHARED_DIRECTORIES, IDH_SETTINGS_UPLOAD_DIRECTORIES },
-	{ IDC_DIRECTORIES, IDH_SETTINGS_UPLOAD_DIRECTORIES },
-	{ IDC_SETTINGS_ONLY_HASHED, IDH_SETTINGS_UPLOAD_DIRECTORIES },
-	{ IDC_SHAREHIDDEN, IDH_SETTINGS_UPLOAD_SHAREHIDDEN },
-	{ IDC_SETTINGS_SHARE_SIZE, IDH_SETTINGS_UPLOAD_DIRECTORIES },
-	{ IDC_TOTAL, IDH_SETTINGS_UPLOAD_DIRECTORIES },
-	{ IDC_RENAME, IDH_SETTINGS_UPLOAD_RENAME },
-	{ IDC_REMOVE, IDH_SETTINGS_UPLOAD_REMOVE },
-	{ IDC_ADD, IDH_SETTINGS_UPLOAD_ADD },
-	{ IDC_SETTINGS_UPLOADS_MIN_SPEED, IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED },
-	{ IDC_MIN_UPLOAD_SPEED, IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED },
-	{ IDC_MIN_UPLOAD_SPIN, IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED },
-	{ IDC_SETTINGS_KBPS, IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED },
-	{ IDC_SETTINGS_UPLOADS_SLOTS, IDH_SETTINGS_UPLOAD_SLOTS },
-	{ IDC_SLOTS, IDH_SETTINGS_UPLOAD_SLOTS },
-	{ IDC_SLOTSPIN, IDH_SETTINGS_UPLOAD_SLOTS },
-	{ 0, 0 }
-};
-*/
-
 UploadPage::UploadPage(dwt::Widget* parent) :
 PropPage(parent),
 grid(0),
@@ -70,42 +48,60 @@ remove(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Shared directories")))->addChild(Grid::Seed(4, 5));
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Shared directories")))->addChild(Grid::Seed(4, 5));			
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
+		cur->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);	
 
 		Table::Seed seed = WinUtil::Seeds::Dialog::Table;
 		seed.exStyle |= WS_EX_ACCEPTFILES;
 		directories = cur->addChild(seed);
 		cur->setWidget(directories, 0, 0, 1, 5);
+		directories->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 
-		cur->setWidget(cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!"))), 1, 0, 1, 5);
+		LabelPtr label = cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")));
+		cur->setWidget(label, 1, 0, 1, 5);
+		label->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);	
 
 		CheckBoxPtr shareHidden = cur->addChild(CheckBox::Seed(T_("Share hidden files")));
 		cur->setWidget(shareHidden, 2, 0, 1, 5);
 		items.push_back(Item(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL));
 		shareHidden->onClicked(std::tr1::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden));
+		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);	
 
-		cur->addChild(Label::Seed(T_("Total size:")));
+		cur->addChild(Label::Seed(T_("Total size:")))->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 		total = cur->addChild(Label::Seed(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize()))));
+		total->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
+			
 		rename = cur->addChild(Button::Seed(T_("Re&name")));
 		rename->onClicked(std::tr1::bind(&UploadPage::handleRenameClicked, this));
+		rename->setHelpId(IDH_SETTINGS_UPLOAD_RENAME);	
+		
 		remove = cur->addChild(Button::Seed(T_("&Remove")));
 		remove->onClicked(std::tr1::bind(&UploadPage::handleRemoveClicked, this));
-		cur->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
+		remove->setHelpId(IDH_SETTINGS_UPLOAD_REMOVE);	
+		
+		ButtonPtr add = cur->addChild(Button::Seed(T_("&Add folder")));
+		add->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));	
+		add->setHelpId(IDH_SETTINGS_UPLOAD_ADD);	
 	}
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(2, 3));
 		cur->column(1).mode = GridInfo::FILL;
 
-		cur->addChild(Label::Seed(T_("Automatically open an extra slot if speed is below (0 = disable)")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
-		cur->addChild(Label::Seed(T_("KiB/s")));
+		cur->addChild(Label::Seed(T_("Automatically open an extra slot if speed is below (0 = disable)")))->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+		box->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
+		cur->addChild(Label::Seed(T_("KiB/s")))->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 
-		cur->addChild(Label::Seed(T_("Upload slots")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN));
+		cur->addChild(Label::Seed(T_("Upload slots")))->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(box, SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN));
+		box->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
+			
 		cur->addChild(Label::Seed(tstring()));
 	}
 
