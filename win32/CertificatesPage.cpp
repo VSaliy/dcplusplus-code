@@ -58,6 +58,7 @@ options(0)
 
 	grid = addChild(Grid::Seed(7, 3));
 	grid->column(0).mode = GridInfo::FILL;
+	grid->column(1).mode = GridInfo::FILL;
 	grid->row(4).mode = GridInfo::FILL;
 	grid->row(4).align = GridInfo::STRETCH;
 
