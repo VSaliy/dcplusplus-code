@@ -126,9 +126,10 @@ bool CommandDlg::handleInitDialog() {
 		nameBox->setHelpId(IDH_USER_COMMAND_NAME);
 
 		cur->addChild(Label::Seed(T_("Command")))->setHelpId(IDH_USER_COMMAND_COMMAND);
-		commandBox = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		seed.style |= ES_MULTILINE | WS_VSCROLL;
+		commandBox = cur->addChild(seed);
 		commandBox->setHelpId(IDH_USER_COMMAND_COMMAND);
-		commandBox->setMultiline();
 		commandBox->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
 
 		cur->addChild(Label::Seed(T_("Hub IP / DNS (empty = all, 'op' = where operator)")))->setHelpId(IDH_USER_COMMAND_HUB);
