@@ -85,7 +85,7 @@ oldSelection(-1)
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Sounds")))->addChild(Grid::Seed(2, 3));
-		cur->column(0).mode = GridInfo::FILL;
+		cur->column(1).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
 
