@@ -220,6 +220,8 @@ public:
 		Seed(const tstring& caption = tstring());
 	};
 
+	void setMultiline(bool value = true);
+
 	/// Adds (or removes) the numbers property
 	/** If you pass false you remove this ability <br>
 	  * If you pass true or call function without arguments you force the control to
@@ -391,6 +393,10 @@ inline TextBox::TextBox( Widget * parent )
 
 inline void TextBox::setPassword( bool value, TCHAR pwdChar ) {
 	this->sendMessage(EM_SETPASSWORDCHAR, static_cast< WPARAM >( value ? pwdChar : 0 ));
+}
+
+inline void TextBox::setMultiline(bool value) {
+	this->Widget::addRemoveStyle(ES_MULTILINE, value);
 }
 
 inline void TextBox::setNumbersOnly( bool value ) {
