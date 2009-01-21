@@ -48,18 +48,24 @@ void Label::create( const Seed & cs ) {
 }
 
 Point Label::getPreferedSize() {
-	// Taken from http://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
-
 	c.selectFont(getFont());
-	TEXTMETRIC tmNew = { 0 };
-	c.getTextMetrics(tmNew);
 
-	Point ret = c.getTextExtent(getText());
-	ret.y = tmNew.tmHeight;
+	// split each line
+	tstring text = getText();
+	tstring::size_type i = 0, j;
+	Point ret;
+	while(true) {
+		j = text.find('\n', i);
+		Point pt = c.getTextExtent(text.substr(i, (j == tstring::npos) ? -1 : (j - i)));
+		ret.x = std::max(ret.x, pt.x);
+		ret.y += pt.y;
+		if(j == tstring::npos)
+			break;
+		i = j + 1;
+	}
 
 	return ret;
 }
-
 
 }

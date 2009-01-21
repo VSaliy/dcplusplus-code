@@ -27,137 +27,146 @@
 #include <dcpp/version.h>
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_SETTINGS_SEPARATOR, IDH_USER_COMMAND_SEPARATOR },
-	{ IDC_SETTINGS_RAW, IDH_USER_COMMAND_RAW },
-	{ IDC_SETTINGS_CHAT, IDH_USER_COMMAND_CHAT },
-	{ IDC_SETTINGS_PM, IDH_USER_COMMAND_PM },
-	{ IDC_SETTINGS_CONTEXT, IDH_USER_COMMAND_CONTEXT },
-	{ IDC_SETTINGS_HUB_MENU, IDH_USER_COMMAND_HUB_MENU },
-	{ IDC_SETTINGS_USER_MENU, IDH_USER_COMMAND_USER_MENU },
-	{ IDC_SETTINGS_SEARCH_MENU, IDH_USER_COMMAND_SEARCH_MENU },
-	{ IDC_SETTINGS_FILELIST_MENU, IDH_USER_COMMAND_FILELIST_MENU },
-	{ IDC_SETTINGS_NAME, IDH_USER_COMMAND_NAME },
-	{ IDC_NAME, IDH_USER_COMMAND_NAME },
-	{ IDC_SETTINGS_COMMAND, IDH_USER_COMMAND_COMMAND },
-	{ IDC_COMMAND, IDH_USER_COMMAND_COMMAND },
-	{ IDC_SETTINGS_HUB, IDH_USER_COMMAND_HUB },
-	{ IDC_HUB, IDH_USER_COMMAND_HUB },
-	{ IDC_SETTINGS_TO, IDH_USER_COMMAND_NICK },
-	{ IDC_NICK, IDH_USER_COMMAND_NICK },
-	{ IDC_SETTINGS_ONCE, IDH_USER_COMMAND_ONCE },
-	{ IDOK, IDH_DCPP_OK },
-	{ IDCANCEL, IDH_DCPP_CANCEL },
-	{ IDHELP, IDH_DCPP_HELP },
-	{ 0, 0 }
-};
-*/
-
 CommandDlg::CommandDlg(dwt::Widget* parent, int type_, int ctx_, const tstring& name_, const tstring& command_, const tstring& hub_) :
-	WidgetFactory<dwt::ModalDialog>(parent),
-	separator(0),
-	raw(0),
-	chat(0),
-	PM(0),
-	hubMenu(0),
-	userMenu(0),
-	searchMenu(0),
-	fileListMenu(0),
-	nameBox(0),
-	commandBox(0),
-	hubBox(0),
-	nick(0),
-	once(0),
-	result(0),
-	openHelp(0),
-	type(type_),
-	ctx(ctx_),
-	name(name_),
-	command(command_),
-	hub(hub_)
+WidgetFactory<dwt::ModalDialog>(parent),
+grid(0),
+separator(0),
+raw(0),
+chat(0),
+PM(0),
+hubMenu(0),
+userMenu(0),
+searchMenu(0),
+fileListMenu(0),
+nameBox(0),
+commandBox(0),
+hubBox(0),
+nick(0),
+once(0),
+result(0),
+openHelp(0),
+type(type_),
+ctx(ctx_),
+name(name_),
+command(command_),
+hub(hub_)
 {
 	onInitDialog(std::tr1::bind(&CommandDlg::handleInitDialog, this));
-	onFocus(std::tr1::bind(&CommandDlg::handleFocus, this));
 	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 }
 
 CommandDlg::~CommandDlg() {
 }
 
+int CommandDlg::run() {
+	createDialog(IDD_USER_COMMAND);
+	return show();
+}
+
 bool CommandDlg::handleInitDialog() {
 	setHelpId(IDH_USER_COMMAND);
 
-	// Translate
-	setText(T_("Create / Modify User Command"));
-	setItemText(IDC_SETTINGS_TYPE, T_("Command Type"));
-	setItemText(IDC_SETTINGS_CONTEXT, T_("Context"));
-	setItemText(IDC_SETTINGS_PARAMETERS, T_("Parameters"));
-	setItemText(IDC_SETTINGS_NAME, T_("Name"));
-	setItemText(IDC_SETTINGS_COMMAND, T_("Command"));
-	setItemText(IDC_SETTINGS_HUB, T_("Hub IP / DNS (empty = all, 'op' = where operator)"));
-	setItemText(IDC_SETTINGS_TO, T_("To"));
-	setItemText(IDC_USER_CMD_PREVIEW, T_("Text sent to hub"));
+	grid = addChild(Grid::Seed(6, 3));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->column(1).mode = GridInfo::FILL;
+	grid->column(2).mode = GridInfo::FILL;
 
-	attachChild(separator, IDC_SETTINGS_SEPARATOR);
-	separator->setText(T_("Separator"));
-	separator->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Command Type")));
+		grid->setWidget(group, 0, 0, 1, 3);
 
-	attachChild(raw, IDC_SETTINGS_RAW);
-	raw->setText(T_("Raw"));
-	raw->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
+		GridPtr cur = group->addChild(Grid::Seed(2, 2));
 
-	attachChild(chat, IDC_SETTINGS_CHAT);
-	chat->setText(T_("Chat"));
-	chat->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
+		separator = cur->addChild(RadioButton::Seed(T_("Separator")));
+		separator->setHelpId(IDH_USER_COMMAND_SEPARATOR);
+		separator->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
 
-	attachChild(PM, IDC_SETTINGS_PM);
-	PM->setText(T_("PM"));
-	PM->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
+		chat = cur->addChild(RadioButton::Seed(T_("Chat")));
+		chat->setHelpId(IDH_USER_COMMAND_CHAT);
+		chat->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
 
-	hubMenu = attachChild<CheckBox>(IDC_SETTINGS_HUB_MENU);
-	hubMenu->setText(T_("Hub Menu"));
+		raw = cur->addChild(RadioButton::Seed(T_("Raw")));
+		raw->setHelpId(IDH_USER_COMMAND_RAW);
+		raw->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
 
-	userMenu = attachChild<CheckBox>(IDC_SETTINGS_USER_MENU);
-	userMenu->setText(T_("User Menu"));
+		PM = cur->addChild(RadioButton::Seed(T_("PM")));
+		PM->setHelpId(IDH_USER_COMMAND_PM);
+		PM->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
+	}
 
-	searchMenu = attachChild<CheckBox>(IDC_SETTINGS_SEARCH_MENU);
-	searchMenu->setText(T_("Search Menu"));
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Context")));
+		grid->setWidget(group, 1, 0, 1, 3);
+		group->setHelpId(IDH_USER_COMMAND_CONTEXT);
 
-	fileListMenu = attachChild<CheckBox>(IDC_SETTINGS_FILELIST_MENU);
-	fileListMenu->setText(T_( "Filelist Menu"));
+		GridPtr cur = group->addChild(Grid::Seed(2, 2));
 
-	nameBox = attachChild<TextBox>(IDC_NAME);
+		hubMenu = cur->addChild(RadioButton::Seed(T_("Hub Menu")));
+		hubMenu->setHelpId(IDH_USER_COMMAND_HUB_MENU);
 
-	commandBox = attachChild<TextBox>(IDC_COMMAND);
-	commandBox->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
+		searchMenu = cur->addChild(RadioButton::Seed(T_("Search Menu")));
+		searchMenu->setHelpId(IDH_USER_COMMAND_SEARCH_MENU);
 
-	hubBox = attachChild<TextBox>(IDC_HUB);
+		userMenu = cur->addChild(RadioButton::Seed(T_("User Menu")));
+		userMenu->setHelpId(IDH_USER_COMMAND_USER_MENU);
 
-	nick = attachChild<TextBox>(IDC_NICK);
-	nick->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
+		fileListMenu = cur->addChild(RadioButton::Seed(T_("Filelist Menu")));
+		fileListMenu->setHelpId(IDH_USER_COMMAND_FILELIST_MENU);
+	}
 
-	once = attachChild<CheckBox>(IDC_SETTINGS_ONCE);
-	once->setText(T_("Send once per nick"));
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Parameters")));
+		grid->setWidget(group, 2, 0, 1, 3);
 
-	result = attachChild<TextBox>(IDC_RESULT);
+		GridPtr cur = group->addChild(Grid::Seed(9, 1));
+		cur->column(0).mode = GridInfo::FILL;
 
-	openHelp = attachChild<CheckBox>(IDC_USER_CMD_OPEN_HELP);
-	openHelp->setText(T_("Always open help file with this dialog"));
+		cur->addChild(Label::Seed(T_("Name")))->setHelpId(IDH_USER_COMMAND_NAME);
+		nameBox = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		nameBox->setHelpId(IDH_USER_COMMAND_NAME);
+
+		cur->addChild(Label::Seed(T_("Command")))->setHelpId(IDH_USER_COMMAND_COMMAND);
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		seed.style |= ES_MULTILINE | WS_VSCROLL;
+		commandBox = cur->addChild(seed);
+		commandBox->setHelpId(IDH_USER_COMMAND_COMMAND);
+		commandBox->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
+
+		cur->addChild(Label::Seed(T_("Hub IP / DNS (empty = all, 'op' = where operator)")))->setHelpId(IDH_USER_COMMAND_HUB);
+		hubBox = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		hubBox->setHelpId(IDH_USER_COMMAND_HUB);
+
+		cur->addChild(Label::Seed(T_("To")))->setHelpId(IDH_USER_COMMAND_NICK);
+		nick = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		nick->setHelpId(IDH_USER_COMMAND_NICK);
+		nick->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
+
+		once = cur->addChild(CheckBox::Seed(T_("Send once per nick")));
+		once->setHelpId(IDH_USER_COMMAND_ONCE);
+	}
+
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Text sent to hub")));
+		grid->setWidget(group, 3, 0, 1, 3);
+		result = group->addChild(WinUtil::Seeds::Dialog::TextBox);
+	}
+
+	openHelp = grid->addChild(CheckBox::Seed(T_("Always open help file with this dialog")));
+	grid->setWidget(openHelp, 4, 0, 1, 3);
 	bool bOpenHelp = BOOLSETTING(OPEN_USER_CMD_HELP);
 	openHelp->setChecked(bOpenHelp);
 
 	{
-		ButtonPtr button = attachChild<Button>(IDOK);
-		button->setText(T_("OK"));
+		ButtonPtr button = grid->addChild(Button::Seed(T_("OK")));
+		button->setHelpId(IDH_DCPP_OK);
 		button->onClicked(std::tr1::bind(&CommandDlg::handleOKClicked, this));
 
-		button = attachChild<Button>(IDCANCEL);
-		button->setText(T_("Cancel"));
+		button = grid->addChild(Button::Seed(T_("Cancel")));
+		button->setHelpId(IDH_DCPP_CANCEL);
 		button->onClicked(std::tr1::bind(&CommandDlg::endDialog, this, IDCANCEL));
 
-		button = attachChild<Button>(IDHELP);
-		button->setText(T_("Help"));
+		button = grid->addChild(Button::Seed(T_("Help")));
+		button->setHelpId(IDH_DCPP_HELP);
 		button->onClicked(std::tr1::bind(&WinUtil::help, handle(), IDH_USER_COMMAND));
 	}
 
@@ -218,14 +227,12 @@ bool CommandDlg::handleInitDialog() {
 	updateControls();
 	updateCommand();
 
-	separator->setFocus();
+	setText(T_("Create / Modify User Command"));
 
+	layout();
 	centerWindow();
-	return false;
-}
 
-void CommandDlg::handleFocus() {
-	nameBox->setFocus();
+	return false;
 }
 
 void CommandDlg::handleTypeChanged() {
@@ -305,4 +312,9 @@ void CommandDlg::updateControls() {
 			nick->setEnabled(true);
 			break;
 	}
+}
+
+void CommandDlg::layout() {
+	dwt::Point sz = getClientSize();
+	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }

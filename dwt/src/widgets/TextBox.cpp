@@ -102,7 +102,7 @@ Point TextBoxBase::getPreferedSize() {
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);
 
-	Point ret = c.getTextExtent(_T("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+	Point ret = c.getTextExtent(getText());
 	ret.y = tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2) + (GetSystemMetrics(SM_CYEDGE) * 2);
 	ret.x += GetSystemMetrics(SM_CXEDGE) * 2;
 	return ret;
