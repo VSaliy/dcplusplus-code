@@ -18,6 +18,8 @@
 
 #include "stdafx.h"
 
+#include "resource.h"
+
 #include "AboutDlg.h"
 
 #include <dcpp/SimpleXML.h>
@@ -45,40 +47,96 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 "pseudonym, crise. "
 "Keep it coming!";
 
-AboutDlg::AboutDlg(dwt::Widget* parent) : WidgetFactory<dwt::ModalDialog>(parent) {
+AboutDlg::AboutDlg(dwt::Widget* parent) :
+WidgetFactory<dwt::ModalDialog>(parent),
+grid(0),
+version(0)
+{
 	onInitDialog(std::tr1::bind(&AboutDlg::handleInitDialog, this));
 }
 
 AboutDlg::~AboutDlg() {
 }
 
+int AboutDlg::run() {
+	createDialog(IDD_ABOUTBOX);
+	return show();
+}
+
 bool AboutDlg::handleInitDialog() {
+	grid = addChild(Grid::Seed(5, 1));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(1).mode = GridInfo::FILL;
+	grid->row(1).align = GridInfo::STRETCH;
+
+	// horizontally centered seeds
+	GroupBox::Seed gs;
+	gs.style |= BS_CENTER;
+	Label::Seed ls;
+	ls.style |= SS_CENTER;
+
+	{
+		GridPtr cur = grid->addChild(gs)->addChild(Grid::Seed(3, 1));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->column(0).align = GridInfo::CENTER;
+
+		/// @todo ICON            IDR_DCPP,IDC_ABOUT_ICON,110,15,21,20
+		cur->addChild(Label::Seed(_T("icon here")));
+
+		ls.caption = Text::toT(dcpp::fullVersionString) + T_("\n(c) Copyright 2001-2008 Jacek Sieka\nEx-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL\nhttp://dcplusplus.sourceforge.net/");
+		cur->addChild(ls);
+
+		gs.caption = T_("TTH");
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		seed.style |= ES_READONLY;
+		/// @todo how to remove the surrounding border? "NOT WS_BORDER"
+		seed.caption = WinUtil::tth;
+		cur->addChild(gs)->addChild(seed);
+	}
+
+	{
+		gs.caption = T_("Greetz and Contributors");
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		seed.style &= ~ES_AUTOHSCROLL;
+		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_READONLY;
+		seed.caption = Text::toT(thanks);
+		grid->addChild(gs)->addChild(seed);
+	}
+
+	{
+		gs.caption = T_("Totals");
+		GridPtr cur = grid->addChild(gs)->addChild(Grid::Seed(2, 1));
+		cur->column(0).mode = GridInfo::FILL;
+
+		ls.caption = str(TF_("Upload: %1%, Download: %2%") % Text::toT(Util::formatBytes(SETTING(TOTAL_UPLOAD))) % Text::toT(Util::formatBytes(SETTING(TOTAL_DOWNLOAD))));
+		cur->addChild(ls);
+
+		ls.caption = (SETTING(TOTAL_DOWNLOAD) > 0)
+			? str(TF_("Ratio (up/down): %1$0.2f") % (((double)SETTING(TOTAL_UPLOAD)) / ((double)SETTING(TOTAL_DOWNLOAD))))
+			: T_("No transfers yet");
+		cur->addChild(ls);
+	}
+
+	gs.caption = T_("Latest stable version");
+	ls.caption = T_("Downloading...");
+	version = grid->addChild(gs)->addChild(ls);
+
+	grid->addChild(Button::Seed(T_("OK")))->onClicked(std::tr1::bind(&AboutDlg::endDialog, this, IDOK));
+
 	setText(T_("About DC++"));
 
-	setItemText(IDC_VERSION, Text::toT(dcpp::fullVersionString) + T_("\n(c) Copyright 2001-2008 Jacek Sieka\nEx-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL\nhttp://dcplusplus.sourceforge.net/"));
-	attachChild<TextBox>(IDC_TTH)->setText(WinUtil::tth);
-	attachChild<TextBox>(IDC_THANKS)->setText(Text::toT(thanks));
-	setItemText(IDC_UPDOWN, str(TF_("Upload: %1%, Download: %2%") % Text::toT(Util::formatBytes(SETTING(TOTAL_UPLOAD))) % Text::toT(Util::formatBytes(SETTING(TOTAL_DOWNLOAD)))));
-	setItemText(IDC_ABOUT_TTH, T_("TTH:"));
-	setItemText(IDC_GREETZ, T_("Greetz and Contributors"));
-	setItemText(IDC_TOTALS, T_("Totals"));
-	setItemText(IDC_LATEST_VERSION, T_("Latest stable version"));
-
-	if(SETTING(TOTAL_DOWNLOAD) > 0) {
-		setItemText(IDC_RATIO, str(TF_("Ratio (up/down): %1$0.2f") % (((double)SETTING(TOTAL_UPLOAD)) / ((double)SETTING(TOTAL_DOWNLOAD)))));
-	} else {
-		setItemText(IDC_RATIO, str(TF_("No transfers yet") % (((double)SETTING(TOTAL_UPLOAD)) / ((double)SETTING(TOTAL_DOWNLOAD)))));
-	}
-	setItemText(IDC_LATEST, T_("Downloading..."));
-
-	attachChild<Button>(IDOK)->onClicked(std::tr1::bind(&AboutDlg::endDialog, this, IDOK));
-
+	layout();
 	centerWindow();
 
 	c.addListener(this);
 	c.downloadFile("http://dcplusplus.sourceforge.net/version.xml");
 
 	return false;
+}
+
+void AboutDlg::layout() {
+	dwt::Point sz = getClientSize();
+	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }
 
 void AboutDlg::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw() {
@@ -101,12 +159,12 @@ void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const 
 	}
 	if(x.empty())
 		x = T_("Error processing version information");
-	callAsync(std::tr1::bind(&AboutDlg::setItemText, this, IDC_LATEST, x));
+	callAsync(std::tr1::bind(&Label::setText, version, x));
 
 	conn->removeListener(this);
 }
 
 void AboutDlg::on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) throw() {
-	callAsync(std::tr1::bind(&AboutDlg::setItemText, this, IDC_LATEST, Text::toT(aLine)));
+	callAsync(std::tr1::bind(&Label::setText, version, Text::toT(aLine)));
 	conn->removeListener(this);
 }

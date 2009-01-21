@@ -75,7 +75,15 @@ languages(0)
 		options = group->addChild(WinUtil::Seeds::Dialog::optionsTable);
 	}
 
-	items.push_back(Item(grid->addChild(GroupBox::Seed(T_("Default away message")))->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Default away message")));
+		//group->setHelpId(IDH_);
+
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		seed.style |= ES_MULTILINE | WS_VSCROLL;
+		items.push_back(Item(group->addChild(seed), SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
+	}
+
 	items.push_back(Item(grid->addChild(GroupBox::Seed(T_("Set timestamps")))->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
 
 	{

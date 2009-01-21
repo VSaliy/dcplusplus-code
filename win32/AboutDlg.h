@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_ABOUT_DLG_H
 
 #include <dcpp/HttpConnection.h>
-#include "resource.h"
 #include "WidgetFactory.h"
 
 class AboutDlg :
@@ -31,13 +30,18 @@ public:
 	AboutDlg(dwt::Widget* parent);
 	virtual ~AboutDlg();
 
-	int run() { createDialog(IDD_ABOUTBOX); return show(); }
+	int run();
 
 private:
+	GridPtr grid;
+	LabelPtr version;
+
 	HttpConnection c;
 	string downBuf;
 
 	bool handleInitDialog();
+
+	void layout();
 
 	virtual void on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw();
 	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, const string&) throw();
