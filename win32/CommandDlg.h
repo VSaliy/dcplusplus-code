@@ -28,7 +28,7 @@ public:
 	CommandDlg(dwt::Widget* parent, int type_ = 0, int ctx_ = 0, const tstring& name_ = Util::emptyStringT, const tstring& command_ = Util::emptyStringT, const tstring& hub_ = Util::emptyStringT);
 	virtual ~CommandDlg();
 
-	int run() { createDialog(IDD_USER_COMMAND); return show(); }
+	int run();
 
 	int getType() { return type; }
 	int getCtx() { return ctx; }
@@ -37,6 +37,7 @@ public:
 	tstring getHub() { return hub; }
 
 private:
+	GridPtr grid;
 	RadioButtonPtr separator;
 	RadioButtonPtr raw;
 	RadioButtonPtr chat;
@@ -60,13 +61,14 @@ private:
 	tstring hub;
 
 	bool handleInitDialog();
-	void handleFocus();
 	void handleTypeChanged();
 	void handleOKClicked();
 
 	void updateType();
 	void updateCommand();
 	void updateControls();
+
+	void layout();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_COMMAND_DLG_H)
