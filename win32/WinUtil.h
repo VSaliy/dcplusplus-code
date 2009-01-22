@@ -109,7 +109,7 @@ public:
 	static void openFolder(const tstring& file);
 
 	static void makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount,
-		const string& order, const string& widths);
+		const string& order = Util::emptyString, const string& widths = Util::emptyString);
 
 	template<typename T>
 	static std::vector<int> splitTokens(const string& str, const T& defaults) {
