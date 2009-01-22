@@ -25,13 +25,14 @@
 #include "WinUtil.h"
 
 MagnetDlg::MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName) :
-	WidgetFactory<dwt::ModalDialog>(parent),
-	//queue(0),
-	search(0),
-	doNothing(0),
-	//remember(0),
-	mHash(aHash),
-	mFileName(aFileName)
+WidgetFactory<dwt::ModalDialog>(parent),
+grid(0),
+//queue(0),
+search(0),
+//doNothing(0),
+//remember(0),
+mHash(aHash),
+mFileName(aFileName)
 {
 	onInitDialog(std::tr1::bind(&MagnetDlg::handleInitDialog, this));
 	onFocus(std::tr1::bind(&MagnetDlg::handleFocus, this));
@@ -40,41 +41,58 @@ MagnetDlg::MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& a
 MagnetDlg::~MagnetDlg() {
 }
 
+int MagnetDlg::run() {
+	createDialog(IDD_MAGNET);
+	return show();
+}
+
 bool MagnetDlg::handleInitDialog() {
-	setText(T_("MAGNET Link detected"));
-	setItemText(IDC_MAGNET_TEXT, T_("DC++ has detected a MAGNET link with a file hash that can be searched for on the Direct Connect network.  What would you like to do?"));
-	setItemText(IDC_MAGNET_HASH, T_("File Hash:"));
-	attachChild<TextBox>(IDC_MAGNET_DISP_HASH)->setText(mHash.c_str());
-	setItemText(IDC_MAGNET_NAME, T_("Filename:"));
-	attachChild<TextBox>(IDC_MAGNET_DISP_NAME)->setText(mFileName);
+	//grid = addChild(Grid::Seed(7, 2));
+	grid = addChild(Grid::Seed(5, 2));
+	grid->column(1).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
 
-	//queue = attachRadioButton(IDC_MAGNET_1_QUEUE);
-	//queue->setText(T_("Add this file to your download queue"));
+	/// @todo ICON            IDR_MAGNET,IDC_MAGNET_ICON,22,14,21,20
+	grid->addChild(Label::Seed(_T("icon here")));
+
+	grid->addChild(Label::Seed(T_("DC++ has detected a MAGNET link with a file hash that can be searched for on the Direct Connect network.  What would you like to do?")));
+
+	{
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		seed.style |= ES_READONLY;
+
+		grid->addChild(Label::Seed(T_("File Hash:")));
+		grid->addChild(seed)->setText(mHash);
+
+		grid->addChild(Label::Seed(T_("Filename:")));
+		grid->addChild(seed)->setText(mFileName);
+	}
+
+	//queue = grid->addChild(RadioButton::Seed(T_("Add this file to your download queue")));
+	//grid->setWidget(queue, 3, 0, 1, 2);
 	//queue->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, queue));
-	::ShowWindow(getItem(IDC_MAGNET_1_QUEUE), false);
 
-	attachChild(search, IDC_MAGNET_2_SEARCH);
-	search->setText(T_("Start a search for this file"));
-	search->setFocus();
+	search = grid->addChild(RadioButton::Seed(T_("Start a search for this file")));
+	search->setChecked();
 	//search->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, search));
 
-	attachChild(doNothing, IDC_MAGNET_3_NOTHING);
-	doNothing->setText(T_("Do nothing"));
+	grid->addChild(Button::Seed(T_("OK")))->onClicked(std::tr1::bind(&MagnetDlg::handleOKClicked, this));
+
+	//doNothing = grid->addChild(CheckBox::Seed(T_("Do nothing")));
 	//doNothing->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, doNothing));
+	grid->addChild(RadioButton::Seed(T_("Do nothing")));
 
-	//remember = attachChild<CheckBox>(IDC_MAGNET_REMEMBER);
-	//remember->setText(T_("Do the same action next time without asking"));
-	::ShowWindow(getItem(IDC_MAGNET_REMEMBER), false);
+	grid->addChild(Button::Seed(T_("Cancel")))->onClicked(std::tr1::bind(&MagnetDlg::endDialog, this, IDCANCEL));
 
-	::CheckRadioButton(handle(), IDC_MAGNET_1_QUEUE, IDC_MAGNET_3_NOTHING, IDC_MAGNET_2_SEARCH);
+	//remember = addChild(CheckBox::Seed(T_("Do the same action next time without asking")));
+	//grid->setWidget(remember, 6, 0, 1, 2);
 
-	ButtonPtr button = attachChild<Button>(IDOK);
-	button->onClicked(std::tr1::bind(&MagnetDlg::handleOKClicked, this));
+	setText(T_("MAGNET Link detected"));
 
-	button = attachChild<Button>(IDCANCEL);
-	button->onClicked(std::tr1::bind(&MagnetDlg::endDialog, this, IDCANCEL));
-
+	layout();
 	centerWindow();
+	handleFocus();
 
 	return false;
 }
@@ -110,4 +128,9 @@ void MagnetDlg::handleOKClicked() {
 	//}
 
 	endDialog(IDOK);
+}
+
+void MagnetDlg::layout() {
+	dwt::Point sz = getClientSize();
+	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }

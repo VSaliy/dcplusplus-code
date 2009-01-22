@@ -54,22 +54,25 @@ class ProgressBar :
 	// Aspects
 	public AspectPainting< ProgressBar >
 {
+	typedef CommonControl BaseType;
+
 	friend class WidgetCreator< ProgressBar >;
+
 public:
 	/// Class type
 	typedef ProgressBar ThisType;
 
 	/// Object type
 	typedef ThisType* ObjectType;
+
 	/// Seed class
 	/** This class contains all of the values needed to create the widget. It also
 	  * knows the type of the class whose seed values it contains. Every widget
 	  * should define one of these.
 	  */
-	class Seed
-		: public Widget::Seed
-	{
-	public:
+	struct Seed : public BaseType::Seed {
+		typedef ThisType WidgetType;
+
 		/// Fills with default parameters
 		Seed();
 	};
@@ -203,8 +206,8 @@ inline int ProgressBar::getPosition()
 	return this->sendMessage(PBM_GETPOS );
 }
 
-inline ProgressBar::ProgressBar( dwt::Widget * parent )
-	: ControlType( parent )
+inline ProgressBar::ProgressBar( dwt::Widget * parent ) :
+BaseType( parent )
 {
 }
 
