@@ -25,21 +25,6 @@
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_SETTINGS_COLORS, IDH_SETTINGS_APPEARANCE2_COLORS },
-	{ IDC_SELWINCOLOR, IDH_SETTINGS_APPEARANCE2_SELWINCOLOR },
-	{ IDC_SELTEXT, IDH_SETTINGS_APPEARANCE2_SELTEXT },
-	{ IDC_COLOREXAMPLE, IDH_SETTINGS_APPEARANCE2_COLORS },
-	{ IDC_SETTINGS_UPLOAD_BAR_COLOR, IDH_SETTINGS_APPEARANCE2_UPLOAD_BAR_COLOR },
-	{ IDC_SETTINGS_DOWNLOAD_BAR_COLOR, IDH_SETTINGS_APPEARANCE2_DOWNLOAD_BAR_COLOR },
-	{ IDC_BEEP_NOTIFICATION, IDH_SETTINGS_APPEARANCE2_BEEPFILE },
-	{ IDC_BEEPFILE, IDH_SETTINGS_APPEARANCE2_BEEPFILE },
-	{ IDC_BROWSE, IDH_SETTINGS_APPEARANCE2_BEEPFILE },
-	{ IDC_SETTINGS_REQUIRES_RESTART, IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART },
-	{ 0, 0 }
-};
-*/
 
 Appearance2Page::SoundOption Appearance2Page::soundOptions[] = {
 	{ N_("Every time a main chat message is received"), SettingsManager::SOUND_MAIN_CHAT, Util::emptyStringT, IDH_SETTINGS_APPEARANCE2_SOUND_MAIN_CHAT },
@@ -70,17 +55,29 @@ oldSelection(-1)
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Colors")))->addChild(Grid::Seed(2, 3));
 		cur->column(1).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
+		cur->setHelpId(IDH_SETTINGS_APPEARANCE2_COLORS);	
 
-		cur->addChild(Button::Seed(T_("Select &window color")))->onClicked(std::tr1::bind(&Appearance2Page::handleBackgroundClicked, this));
+		ButtonPtr windowColor = cur->addChild(Button::Seed(T_("Select &window color")));
+		windowColor->onClicked(std::tr1::bind(&Appearance2Page::handleBackgroundClicked, this));
+		windowColor->setHelpId(IDH_SETTINGS_APPEARANCE2_SELWINCOLOR);	
 
 		Label::Seed seed(T_("Donate \342\202\254\342\202\254\342\202\254:s! (ok, dirty dollars are fine as well =) (see help menu)"));
 		seed.style |= SS_NOPREFIX | SS_SUNKEN;
 		example = cur->addChild(seed);
 		cur->setWidget(example, 0, 1, 2, 1);
+		example->setHelpId(IDH_SETTINGS_APPEARANCE2_COLORS);	
 
-		cur->addChild(Button::Seed(T_("Uploads")))->onClicked(std::tr1::bind(&Appearance2Page::handleULClicked, this));
-		cur->addChild(Button::Seed(T_("Select &text style")))->onClicked(std::tr1::bind(&Appearance2Page::handleTextClicked, this));
-		cur->addChild(Button::Seed(T_("Downloads")))->onClicked(std::tr1::bind(&Appearance2Page::handleDLClicked, this));
+		ButtonPtr uploads = cur->addChild(Button::Seed(T_("Uploads")));
+		uploads->onClicked(std::tr1::bind(&Appearance2Page::handleULClicked, this));
+		uploads->setHelpId(IDH_SETTINGS_APPEARANCE2_UPLOAD_BAR_COLOR);	
+		
+		ButtonPtr textStyle	= cur->addChild(Button::Seed(T_("Select &text style")));
+		textStyle->onClicked(std::tr1::bind(&Appearance2Page::handleTextClicked, this));
+		textStyle->setHelpId(IDH_SETTINGS_APPEARANCE2_SELTEXT);	
+		
+		ButtonPtr downloads	= cur->addChild(Button::Seed(T_("Downloads")));
+		downloads->onClicked(std::tr1::bind(&Appearance2Page::handleDLClicked, this));
+		downloads->setHelpId(IDH_SETTINGS_APPEARANCE2_DOWNLOAD_BAR_COLOR);	
 	}
 
 	{
@@ -88,16 +85,23 @@ oldSelection(-1)
 		cur->column(1).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
+		cur->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
 
 		sounds = cur->addChild(WinUtil::Seeds::Dialog::optionsTable);
 		cur->setWidget(sounds, 0, 0, 1, 3);
+		sounds->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
 
 		beepFileLabel = cur->addChild(Label::Seed(T_("Notification sound")));
+		beepFileLabel->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
+			
 		beepFile = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		beepFile->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
+			
 		browse = cur->addChild(Button::Seed(T_("&Browse...")));
+		browse->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
 	}
 
-	grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")));
+	grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")))->setHelpId(IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART);
 
 	fg = SETTING(TEXT_COLOR);
 	bg = SETTING(BACKGROUND_COLOR);
