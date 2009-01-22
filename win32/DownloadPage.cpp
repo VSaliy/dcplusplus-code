@@ -89,6 +89,7 @@ grid(0)
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Public Hubs list")))->addChild(Grid::Seed(4, 1));
+		cur->column(0).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Public Hubs list URL")));
 		cur->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));

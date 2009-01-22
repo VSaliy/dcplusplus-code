@@ -26,21 +26,7 @@
 #include <dcpp/StringTokenizer.h>
 #include "HoldRedraw.h"
 #include "LineDlg.h"
-
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_LIST_EDIT_BOX, IDH_PUBLIC_HUB_LISTS_EDIT_BOX },
-	{ IDC_LIST_ADD, IDH_PUBLIC_HUB_LISTS_ADD },
-	{ IDC_LIST_LIST, IDH_PUBLIC_HUB_LISTS_LIST },
-	{ IDC_LIST_UP, IDH_PUBLIC_HUB_LISTS_MOVE_UP },
-	{ IDC_LIST_DOWN, IDH_PUBLIC_HUB_LISTS_MOVE_DOWN },
-	{ IDC_LIST_EDIT, IDH_PUBLIC_HUB_LISTS_EDIT },
-	{ IDC_LIST_REMOVE, IDH_PUBLIC_HUB_LISTS_REMOVE },
-	{ IDOK, IDH_DCPP_OK },
-	{ IDCANCEL, IDH_DCPP_CANCEL },
-	{ 0, 0 }
-};
-*/
+#include "WinUtil.h"
 
 HubListsDlg::HubListsDlg(dwt::Widget* parent) :
 	WidgetFactory<dwt::ModalDialog>(parent),
@@ -48,26 +34,80 @@ HubListsDlg::HubListsDlg(dwt::Widget* parent) :
 	hubLists(0)
 {
 	onInitDialog(std::tr1::bind(&HubListsDlg::handleInitDialog, this));
-	onFocus(std::tr1::bind(&HubListsDlg::handleFocus, this));
 }
 
 HubListsDlg::~HubListsDlg() {
 }
 
+int HubListsDlg::run() {
+	createDialog(IDD_HUB_LIST);
+	return show();
+}
+
 bool HubListsDlg::handleInitDialog() {
 	setHelpId(IDH_PUBLIC_HUB_LISTS);
 
-	setText(T_("Configured Public Hub Lists"));
+	grid = addChild(Grid::Seed(2, 2));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(1).mode = GridInfo::FILL;
+	grid->row(1).align = GridInfo::STRETCH;
 
-	editBox = attachChild<TextBox>(IDC_LIST_EDIT_BOX);
+	editBox = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+	editBox->setHelpId(IDH_PUBLIC_HUB_LISTS_EDIT_BOX);
 
-	attachChild(hubLists, IDC_LIST_LIST);
-	hubLists->setTableStyle(LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT);
+	{
+		ButtonPtr add = grid->addChild(Button::Seed(T_("&Add")));
+		add->setHelpId(IDH_PUBLIC_HUB_LISTS_ADD);
+		add->onClicked(std::tr1::bind(&HubListsDlg::handleAddClicked, this));
+	}
 
-	TStringList columns;
-	columns.push_back(Util::emptyStringT);
-	hubLists->createColumns(columns);
-	hubLists->setColumnWidth(0, hubLists->getSize().x - 20);
+	{
+		Table::Seed seed = WinUtil::Seeds::Dialog::Table;
+		seed.style |= LVS_NOCOLUMNHEADER;
+		hubLists = grid->addChild(seed);
+		hubLists->setHelpId(IDH_PUBLIC_HUB_LISTS_LIST);
+	}
+
+	{
+		GridPtr cur = grid->addChild(Grid::Seed(6, 1));
+		cur->row(4).mode = GridInfo::FILL;
+		cur->row(4).align = GridInfo::BOTTOM_RIGHT;
+
+		ButtonPtr button;
+		Button::Seed seed;
+
+		seed.caption = T_("Move &Up");
+		button = cur->addChild(seed);
+		button->setHelpId(IDH_PUBLIC_HUB_LISTS_MOVE_UP);
+		button->onClicked(std::tr1::bind(&HubListsDlg::handleMoveUpClicked, this));
+
+		seed.caption = T_("Move &Down");
+		button = cur->addChild(seed);
+		button->setHelpId(IDH_PUBLIC_HUB_LISTS_MOVE_DOWN);
+		button->onClicked(std::tr1::bind(&HubListsDlg::handleMoveDownClicked, this));
+
+		seed.caption = T_("&Edit");
+		button = cur->addChild(seed);
+		button->setHelpId(IDH_PUBLIC_HUB_LISTS_EDIT);
+		button->onClicked(std::tr1::bind(&HubListsDlg::handleEditClicked, this));
+
+		seed.caption = T_("&Remove");
+		button = cur->addChild(seed);
+		button->setHelpId(IDH_PUBLIC_HUB_LISTS_REMOVE);
+		button->onClicked(std::tr1::bind(&HubListsDlg::handleRemoveClicked, this));
+
+		seed.caption = T_("OK");
+		button = cur->addChild(seed);
+		button->setHelpId(IDH_DCPP_OK);
+		button->onClicked(std::tr1::bind(&HubListsDlg::handleOKClicked, this));
+
+		seed.caption = T_("Cancel");
+		button = cur->addChild(seed);
+		button->setHelpId(IDH_DCPP_CANCEL);
+		button->onClicked(std::tr1::bind(&HubListsDlg::endDialog, this, IDCANCEL));
+	}
+
+	hubLists->createColumns(TStringList(1));
 
 	StringList lists(FavoriteManager::getInstance()->getHubLists());
 	for(StringIterC idx = lists.begin(); idx != lists.end(); ++idx)
@@ -76,37 +116,12 @@ bool HubListsDlg::handleInitDialog() {
 	hubLists->onDblClicked(std::tr1::bind(&HubListsDlg::handleDoubleClick, this));
 	hubLists->onKeyDown(std::tr1::bind(&HubListsDlg::handleKeyDown, this, _1));
 
-	ButtonPtr button = attachChild<Button>(IDC_LIST_ADD);
-	button->setText(T_("&Add"));
-	button->onClicked(std::tr1::bind(&HubListsDlg::handleAddClicked, this));
+	setText(T_("Configured Public Hub Lists"));
 
-	button = attachChild<Button>(IDC_LIST_UP);
-	button->setText(T_("Move &Up"));
-	button->onClicked(std::tr1::bind(&HubListsDlg::handleMoveUpClicked, this));
-
-	button = attachChild<Button>(IDC_LIST_DOWN);
-	button->setText(T_("Move &Down"));
-	button->onClicked(std::tr1::bind(&HubListsDlg::handleMoveDownClicked, this));
-
-	button = attachChild<Button>(IDC_LIST_EDIT);
-	button->setText(T_("&Edit"));
-	button->onClicked(std::tr1::bind(&HubListsDlg::handleEditClicked, this));
-
-	button = attachChild<Button>(IDC_LIST_REMOVE);
-	button->setText(T_("&Remove"));
-	button->onClicked(std::tr1::bind(&HubListsDlg::handleRemoveClicked, this));
-
-	attachChild<Button>(IDOK)->onClicked(std::tr1::bind(&HubListsDlg::handleOKClicked, this));
-
-	attachChild<Button>(IDCANCEL)->onClicked(std::tr1::bind(&HubListsDlg::endDialog, this, IDCANCEL));
-
+	layout();
 	centerWindow();
 
 	return false;
-}
-
-void HubListsDlg::handleFocus() {
-	editBox->setFocus();
 }
 
 void HubListsDlg::handleDoubleClick() {
@@ -194,4 +209,11 @@ void HubListsDlg::addHubList(const tstring& address, int index) {
 	if(index == -1)
 		index = itemCount;
 	hubLists->ensureVisible(index);
+}
+
+void HubListsDlg::layout() {
+	dwt::Point sz = getClientSize();
+	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
+
+	hubLists->setColumnWidth(0, hubLists->getSize().x - 20);
 }
