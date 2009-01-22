@@ -28,6 +28,12 @@
 #include "HoldRedraw.h"
 #include "WinUtil.h"
 
+static const ColumnInfo columns[] = {
+	{ N_("Name"), 100, false },
+	{ N_("Command"), 100, false },
+	{ N_("Hub"), 100, false }
+};
+
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_MENU_ITEMS, IDH_SETTINGS_UC_LIST },
@@ -66,14 +72,7 @@ commands(0)
 	grid->addChild(Button::Seed(T_("Move &Down")))->onClicked(std::tr1::bind(&UCPage::handleMoveDownClicked, this));
 	grid->addChild(Button::Seed(T_("&Remove")))->onClicked(std::tr1::bind(&UCPage::handleRemoveClicked, this));
 
-	TStringList columns;
-	columns.push_back(T_("Name"));
-	columns.push_back(T_("Command"));
-	columns.push_back(T_("Hub"));
-	commands->createColumns(columns);
-	commands->setColumnWidth(0, 100);
-	commands->setColumnWidth(1, commands->getSize().x - 220);
-	commands->setColumnWidth(2, 100);
+	WinUtil::makeColumns(commands, columns, 3);
 
 	UserCommand::List lst = FavoriteManager::getInstance()->getUserCommands();
 	for(UserCommand::List::const_iterator i = lst.begin(); i != lst.end(); ++i) {
@@ -94,6 +93,8 @@ void UCPage::layout(const dwt::Rectangle& rc) {
 
 	dwt::Point clientSize = getClientAreaSize();
 	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
+
+	commands->setColumnWidth(1, commands->getSize().x - 220);
 }
 
 void UCPage::handleDoubleClick() {

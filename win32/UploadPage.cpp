@@ -31,6 +31,12 @@
 #include "HashProgressDlg.h"
 #include "WinUtil.h"
 
+static const ColumnInfo columns[] = {
+	{ N_("Virtual name"), 100, false },
+	{ N_("Directory"), 100, false },
+	{ N_("Size"), 100, true }
+};
+
 /** @todo cshelp
 static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_SETTINGS_SHARED_DIRECTORIES, IDH_SETTINGS_UPLOAD_DIRECTORIES },
@@ -111,14 +117,7 @@ remove(0)
 
 	PropPage::read(items);
 
-	TStringList columns;
-	columns.push_back(T_("Virtual name"));
-	columns.push_back(T_("Directory"));
-	columns.push_back(T_("Size"));
-	directories->createColumns(columns);
-	directories->setColumnWidth(0, 100);
-	directories->setColumnWidth(1, directories->getSize().x - 220);
-	directories->setColumnWidth(2, 100);
+	WinUtil::makeColumns(directories, columns, 3);
 
 	StringPairList dirs = ShareManager::getInstance()->getDirectories();
 	for(StringPairIter j = dirs.begin(); j != dirs.end(); j++) {
@@ -154,6 +153,8 @@ void UploadPage::layout(const dwt::Rectangle& rc) {
 
 	dwt::Point clientSize = getClientAreaSize();
 	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
+
+	directories->setColumnWidth(1, directories->getSize().x - 220);
 }
 
 void UploadPage::write()
