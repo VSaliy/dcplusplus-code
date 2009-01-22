@@ -153,6 +153,9 @@ droppedResults(0)
 
 		{
 			GridPtr cur = left->addChild(GroupBox::Seed(T_("Size")))->addChild(Grid::Seed(1, 3));
+			cur->column(0).mode = GridInfo::FILL;
+			cur->column(1).mode = GridInfo::FILL;
+			cur->column(2).mode = GridInfo::FILL;
 			cur->setHelpId(IDH_SEARCH_SIZE);
 
 			mode = cur->addChild(WinUtil::Seeds::comboBoxStatic);
