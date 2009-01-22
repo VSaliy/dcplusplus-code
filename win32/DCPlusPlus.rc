@@ -201,14 +201,6 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CONTEXTHELP | WS_POPUP | WS_
 CAPTION "Creating file index..."
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    LTEXT           "Please wait while DC++ indexes your files (they won't be shared until they've been indexed)...",IDC_HASH_INDEXING,7,7,416,8
-    LTEXT           "Current file...",IDC_CURRENT_FILE,7,19,416,8
-    GROUPBOX        "Statistics",IDC_STATISTICS,7,30,416,40
-    LTEXT           "0.0 files/hour",IDC_FILES_PER_HOUR,14,39,376,8
-    LTEXT           "0.0 MiB/s",IDC_HASH_SPEED,14,48,376,8
-    LTEXT           "0:00:00 left",IDC_TIME_LEFT,14,57,376,8
-    CONTROL         "",IDC_HASH_PROGRESS,"msctls_progress32",WS_BORDER | 0x1,7,74,416,14
-    DEFPUSHBUTTON   "Run in background",IDOK,147,92,109,14
 END
 
 IDD_HUB_LIST DIALOGEX 0, 0, 262, 185

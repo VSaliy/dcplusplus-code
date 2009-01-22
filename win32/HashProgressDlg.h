@@ -25,9 +25,14 @@ public:
 	HashProgressDlg(dwt::Widget* parent, bool aAutoClose);
 	virtual ~HashProgressDlg();
 
-	int run() { createDialog(IDD_HASH_PROGRESS); return show(); }
+	int run();
 
 private:
+	GridPtr grid;
+	LabelPtr file;
+	LabelPtr stat;
+	LabelPtr speed;
+	LabelPtr left;
 	ProgressBarPtr progress;
 
 	bool autoClose;
@@ -38,6 +43,8 @@ private:
 	bool handleInitDialog();
 
 	bool updateStats();
+
+	void layout();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_HASH_PROGESS_DLG_H)
