@@ -26,19 +26,6 @@
 #include <dcpp/File.h>
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_SETTINGS_DEFAULT_AWAY_MSG, IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE },
-	{ IDC_DEFAULT_AWAY_MESSAGE, IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE },
-	{ IDC_SETTINGS_TIME_STAMPS_FORMAT, IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT },
-	{ IDC_TIME_STAMPS_FORMAT, IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT },
-	{ IDC_SETTINGS_LANGUAGE, IDH_SETTINGS_APPEARANCE_LANGUAGE },
-	{ IDC_LANGUAGE, IDH_SETTINGS_APPEARANCE_LANGUAGE },
-	{ IDC_SETTINGS_REQUIRES_RESTART, IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART },
-	{ 0, 0 }
-};
-*/
-
 PropPage::ListItem AppearancePage::listItems[] = {
 	{ SettingsManager::ALT_SORT_ORDER, N_("Sort all downloads first"), IDH_SETTINGS_APPEARANCE_ALT_SORT_ORDER },
 	{ SettingsManager::FILTER_MESSAGES, N_("Filter kick messages"), IDH_SETTINGS_APPEARANCE_FILTER_MESSAGES },
@@ -77,22 +64,36 @@ languages(0)
 
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Default away message")));
-		//group->setHelpId(IDH_);
+		group->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
 
 		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
 		seed.style |= ES_MULTILINE | WS_VSCROLL;
-		items.push_back(Item(group->addChild(seed), SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
+		TextBoxPtr box=group->addChild(seed);
+		box->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);	
+		items.push_back(Item(box, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
 	}
 
-	items.push_back(Item(grid->addChild(GroupBox::Seed(T_("Set timestamps")))->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Set timestamps")));
+		group->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);
+			
+		TextBoxPtr box = group->addChild(WinUtil::Seeds::Dialog::TextBox);	
+		box->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);	
+		items.push_back(Item(box, SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
+	}		
 
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Language")));
 		grid->setWidget(group, 2, 0, 1, 2);
+		group->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
+		
 		languages = group->addChild(ComboBox::Seed());
+		languages->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);	
 	}
 
-	grid->setWidget(grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++"))), 3, 0, 1, 2);
+	LabelPtr label = grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")));
+	label->setHelpId(IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART);
+	grid->setWidget(label, 3, 0, 1, 2);
 
 	PropPage::read(items);
 	PropPage::read(listItems, options);
