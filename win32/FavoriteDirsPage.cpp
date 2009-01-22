@@ -28,7 +28,7 @@
 #include "WinUtil.h"
 #include "LineDlg.h"
 
-static const ColumnInfo dirColumns[] = {
+static const ColumnInfo columns[] = {
 	{ N_("Favorite name"), 100, false },
 	{ N_("Directory"), 100, false }
 };
@@ -72,7 +72,7 @@ remove(0)
 	remove->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRemoveClicked, this));
 	grid->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::tr1::bind(&FavoriteDirsPage::handleAddClicked, this));
 
-	WinUtil::makeColumns(directories, dirColumns, 2, "", "");
+	WinUtil::makeColumns(directories, columns, 2);
 
 	StringPairList dirs = FavoriteManager::getInstance()->getFavoriteDirs();
 	for(StringPairIter j = dirs.begin(); j != dirs.end(); j++) {
@@ -97,6 +97,8 @@ void FavoriteDirsPage::layout(const dwt::Rectangle& rc) {
 
 	dwt::Point clientSize = getClientAreaSize();
 	group->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
+
+	directories->setColumnWidth(1, directories->getSize().x - 120);
 }
 
 void FavoriteDirsPage::handleDoubleClick() {

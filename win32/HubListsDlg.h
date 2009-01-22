@@ -27,9 +27,10 @@ public:
 	HubListsDlg(dwt::Widget* parent);
 	virtual ~HubListsDlg();
 
-	int run() { createDialog(IDD_HUB_LIST); return show(); }
+	int run();
 
 private:
+	GridPtr grid;
 	TextBoxPtr editBox;
 	TablePtr hubLists;
 
@@ -45,6 +46,8 @@ private:
 	void handleOKClicked();
 
 	void addHubList(const tstring& address, int index = -1);
+
+	void layout();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_HUB_LISTS_DLG_H)

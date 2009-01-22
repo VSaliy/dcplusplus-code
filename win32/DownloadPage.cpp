@@ -96,9 +96,9 @@ grid(0)
 	}
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Public Hubs list")));
-		group->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);	
-		GridPtr cur = group->addChild(Grid::Seed(4, 1));
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Public Hubs list")))->addChild(Grid::Seed(4, 1));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);	
 
 		cur->addChild(Label::Seed(T_("Public Hubs list URL")));
 		cur->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
