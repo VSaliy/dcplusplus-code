@@ -29,9 +29,10 @@
 #include "WinUtil.h"
 
 HubListsDlg::HubListsDlg(dwt::Widget* parent) :
-	WidgetFactory<dwt::ModalDialog>(parent),
-	editBox(0),
-	hubLists(0)
+WidgetFactory<dwt::ModalDialog>(parent),
+grid(0),
+editBox(0),
+hubLists(0)
 {
 	onInitDialog(std::tr1::bind(&HubListsDlg::handleInitDialog, this));
 }

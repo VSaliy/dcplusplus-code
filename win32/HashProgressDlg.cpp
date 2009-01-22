@@ -26,9 +26,14 @@
 #include <dwt/widgets/ProgressBar.h>
 
 HashProgressDlg::HashProgressDlg(dwt::Widget* parent, bool aAutoClose) :
-	dwt::WidgetFactory<dwt::ModalDialog>(parent),
-	progress(0),
-	autoClose(aAutoClose)
+dwt::WidgetFactory<dwt::ModalDialog>(parent),
+grid(0),
+file(0),
+stat(0),
+speed(0),
+left(0),
+progress(0),
+autoClose(aAutoClose)
 {
 	onInitDialog(std::tr1::bind(&HashProgressDlg::handleInitDialog, this));
 }
@@ -37,40 +42,60 @@ HashProgressDlg::~HashProgressDlg() {
 	HashManager::getInstance()->setPriority(Thread::IDLE);
 }
 
+int HashProgressDlg::run() {
+	createDialog(IDD_HASH_PROGRESS);
+	return show();
+}
+
 bool HashProgressDlg::handleInitDialog() {
 	setHelpId(IDH_HASH_PROGRESS);
 
-	setText(T_("Creating file index..."));
-	setItemText(IDC_HASH_INDEXING, T_("Please wait while DC++ indexes your files (they won't be shared until they've been indexed)..."));
-	setItemText(IDC_STATISTICS, T_("Statistics"));
+	grid = addChild(Grid::Seed(5, 1));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(3).size = 14;
+	grid->row(3).mode = GridInfo::STATIC;
 
-	attachChild(progress, IDC_HASH_PROGRESS);
+	grid->addChild(Label::Seed(T_("Please wait while DC++ indexes your files (they won't be shared until they've been indexed)...")));
+
+	file = grid->addChild(Label::Seed());
+
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Statistics")))->addChild(Grid::Seed(3, 1));
+
+		Label::Seed seed;
+		stat = cur->addChild(seed);
+		speed = cur->addChild(seed);
+		left = cur->addChild(seed);
+	}
+
+	progress = grid->addChild(ProgressBar::Seed());
+	/// @todo the progress bar doesn't show up.
 	progress->setRange(0, 10000);
 
-	ButtonPtr ok = attachChild<Button>(IDOK);
-	ok->setText(T_("Run in background"));
-	ok->onClicked(std::tr1::bind(&HashProgressDlg::endDialog, this, IDOK));
+	grid->addChild(Button::Seed(T_("Run in background")))->onClicked(std::tr1::bind(&HashProgressDlg::endDialog, this, IDOK));
 
 	string tmp;
 	startTime = GET_TICK();
 	HashManager::getInstance()->getStats(tmp, startBytes, startFiles);
-
 	updateStats();
 
 	HashManager::getInstance()->setPriority(Thread::NORMAL);
-
 	createTimer(std::tr1::bind(&HashProgressDlg::updateStats, this), 1000);
+
+	setText(T_("Creating file index..."));
+
+	layout();
 
 	return false;
 }
 
 bool HashProgressDlg::updateStats() {
-	string file;
+	string path;
 	int64_t bytes = 0;
 	size_t files = 0;
 	uint32_t tick = GET_TICK();
 
-	HashManager::getInstance()->getStats(file, bytes, files);
+	HashManager::getInstance()->getStats(path, bytes, files);
 	if(bytes > startBytes)
 		startBytes = bytes;
 
@@ -83,31 +108,30 @@ bool HashProgressDlg::updateStats() {
 	}
 	double diff = tick - startTime;
 	if(diff < 1000 || files == 0 || bytes == 0) {
-		setItemText(IDC_FILES_PER_HOUR, str(TF_("-.-- files/h, %1% files left") % (uint32_t)files));
-		setItemText(IDC_HASH_SPEED, str(TF_("-.-- B/s, %1% left") % Text::toT(Util::formatBytes(bytes))));
-		setItemText(IDC_TIME_LEFT, T_("-:--:-- left"));
+		stat->setText(str(TF_("-.-- files/h, %1% files left") % (uint32_t)files));
+		speed->setText(str(TF_("-.-- B/s, %1% left") % Text::toT(Util::formatBytes(bytes))));
+		left->setText(T_("-:--:-- left"));
 		progress->setPosition(0);
 	} else {
 		double filestat = (((double)(startFiles - files)) * 60 * 60 * 1000) / diff;
 		double speedStat = (((double)(startBytes - bytes)) * 1000) / diff;
 
-		setItemText(IDC_FILES_PER_HOUR, str(TF_("%1% files/h, %2% files left") % filestat % (uint32_t)files));
-		setItemText(IDC_HASH_SPEED, str(TF_("%1%/s, %2% left") % Text::toT(Util::formatBytes((int64_t)speedStat)) % Text::toT(Util::formatBytes(bytes))));
+		stat->setText(str(TF_("%1% files/h, %2% files left") % filestat % (uint32_t)files));
+		speed->setText(str(TF_("%1%/s, %2% left") % Text::toT(Util::formatBytes((int64_t)speedStat)) % Text::toT(Util::formatBytes(bytes))));
 
 		if(filestat == 0 || speedStat == 0) {
-			setItemText(IDC_TIME_LEFT, T_("-:--:-- left"));
+			left->setText(T_("-:--:-- left"));
 		} else {
 			double fs = files * 60 * 60 / filestat;
 			double ss = bytes / speedStat;
-
-			setItemText(IDC_TIME_LEFT, str(TF_("%1% left") % Text::toT(Util::formatSeconds((int64_t)(fs + ss) / 2))));
+			left->setText(str(TF_("%1% left") % Text::toT(Util::formatSeconds((int64_t)(fs + ss) / 2))));
 		}
 	}
 
 	if(files == 0) {
-		setItemText(IDC_CURRENT_FILE, T_("Done"));
+		file->setText(T_("Done"));
 	} else {
-		setItemText(IDC_CURRENT_FILE, Text::toT(file));
+		file->setText(Text::toT(path));
 	}
 
 	if(startFiles == 0 || startBytes == 0) {
@@ -117,4 +141,9 @@ bool HashProgressDlg::updateStats() {
 	}
 
 	return true;
+}
+
+void HashProgressDlg::layout() {
+	dwt::Point sz = getClientSize();
+	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }
