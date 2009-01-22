@@ -33,12 +33,13 @@ public:
 	MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName);
 	virtual ~MagnetDlg();
 
-	int run() { createDialog(IDD_MAGNET); return show(); }
+	int run();
 
 private:
+	GridPtr grid;
 	//RadioButtonPtr queue;
 	RadioButtonPtr search;
-	RadioButtonPtr doNothing;
+	//RadioButtonPtr doNothing;
 	//CheckBoxPtr remember;
 
 	tstring mHash;
@@ -48,6 +49,8 @@ private:
 	void handleFocus();
 	//void handleRadioButtonClicked(RadioButtonPtr radioButton);
 	void handleOKClicked();
+
+	void layout();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_MAGNET_DLG_H)
