@@ -28,14 +28,15 @@
 GeneralPage::GeneralPage(dwt::Widget* parent) :
 PropPage(parent),
 group(0),
-nick(0)
+nick(0),
+connections(0)
 {
 	createDialog(IDD_GENERALPAGE);
 	setHelpId(IDH_GENERALPAGE);
 
 	group = addChild(GroupBox::Seed(T_("Personal Information")));
 	group->setHelpId(IDH_SETTINGS_GENERAL_PERSONAL_INFORMATION);
-	
+
 	GridPtr grid = group->addChild(Grid::Seed(4, 3));
 	grid->column(1).mode = dwt::GridInfo::FILL;
 
@@ -45,14 +46,14 @@ nick(0)
 	grid->setWidget(nick, 0, 1, 1, 2);
 	items.push_back(Item(nick, SettingsManager::NICK, PropPage::T_STR));
 	nick->setHelpId(IDH_SETTINGS_GENERAL_NICK);
-	
+
 	grid->addChild(Label::Seed(T_("E-Mail")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
 
 	TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
 	grid->setWidget(box, 1, 1, 1, 2);
 	items.push_back(Item(box, SettingsManager::EMAIL, PropPage::T_STR));
-    box->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
-    
+	box->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
+
 	grid->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
 
 	box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
@@ -60,13 +61,12 @@ nick(0)
 	grid->setWidget(box, 2, 1, 1, 2);
 	items.push_back(Item(box, SettingsManager::DESCRIPTION, PropPage::T_STR));
 	box->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
-	
+
 	grid->addChild(Label::Seed(T_("Line speed (upload)")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
-	ComboBoxPtr connections = grid->addChild(ComboBox::Seed());
-	items.push_back(Item(connections, SettingsManager::UPLOAD_SPEED, PropPage::T_STR));
+	connections = grid->addChild(WinUtil::Seeds::comboBoxStatic);
 	connections->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
-	
+
 	grid->addChild(Label::Seed(T_("MiBits/s")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
 	PropPage::read(items);
@@ -96,6 +96,8 @@ void GeneralPage::layout(const dwt::Rectangle& rc) {
 
 void GeneralPage::write() {
 	PropPage::write(items);
+
+	SettingsManager::getInstance()->set(SettingsManager::UPLOAD_SPEED, Text::fromT(connections->getText()));
 }
 
 void GeneralPage::handleNickTextChanged() {

@@ -39,17 +39,12 @@
 #include "UCPage.h"
 #include "CertificatesPage.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_SETTINGS_PAGES, IDH_SETTINGS_TREE },
-	{ IDOK, IDH_DCPP_OK },
-	{ IDCANCEL, IDH_DCPP_CANCEL },
-	{ IDHELP, IDH_DCPP_HELP },
-	{ 0, 0 }
-};
-*/
-
-SettingsDialog::SettingsDialog(dwt::Widget* parent) : WidgetFactory<dwt::ModalDialog>(parent), currentPage(0) {
+SettingsDialog::SettingsDialog(dwt::Widget* parent) :
+WidgetFactory<dwt::ModalDialog>(parent),
+currentPage(0),
+grid(0),
+pageTree(0)
+{
 	onInitDialog(std::tr1::bind(&SettingsDialog::initDialog, this));
 	onHelp(std::tr1::bind(&SettingsDialog::handleHelp, this, _1, _2));
 	onSized(std::tr1::bind(&SettingsDialog::handleSized, this, _1));
@@ -71,8 +66,6 @@ bool SettingsDialog::initDialog() {
 	*/
 	setHelpId(IDH_INDEX);
 
-	setText(T_("Settings"));
-
 	grid = addChild(Grid::Seed(2, 1));
 
 	grid->row(0).mode = GridInfo::FILL;
@@ -84,12 +77,12 @@ bool SettingsDialog::initDialog() {
 	upper->row(0).mode = GridInfo::FILL;
 	upper->row(0).align = GridInfo::STRETCH;
 
-	upper->column(0).size = 90;
+	upper->column(0).size = 120;
 	upper->column(0).mode = GridInfo::STATIC;
 	upper->column(1).mode = GridInfo::FILL;
 
 	pageTree = upper->addChild(Tree::Seed());
-
+	pageTree->setHelpId(IDH_SETTINGS_TREE);
 	pageTree->onSelectionChanged(std::tr1::bind(&SettingsDialog::handleSelectionChanged, this));
 
 	addPage(T_("Personal information"), upper, new GeneralPage(upper));
@@ -119,22 +112,29 @@ bool SettingsDialog::initDialog() {
 		addPage(T_("Security Certificates"), upper, new CertificatesPage(upper), item);
 	}
 
-	GridPtr lower = grid->addChild(Grid::Seed(1, 3));
-
 	{
-		ButtonPtr button = lower->addChild(Button::Seed());
-		button->setText(T_("OK"));
+		GridPtr lower = grid->addChild(Grid::Seed(1, 3));
+		lower->column(0).mode = GridInfo::FILL;
+		lower->column(0).align = GridInfo::BOTTOM_RIGHT;
+
+		ButtonPtr button;
+		Button::Seed seed;
+
+		seed.caption = T_("OK");
+		button = lower->addChild(seed);
+		button->setHelpId(IDH_DCPP_OK);
 		button->onClicked(std::tr1::bind(&SettingsDialog::handleOKClicked, this));
 
-		button = lower->addChild(Button::Seed());
-		button->setText(T_("Cancel"));
+		seed.caption = T_("Cancel");
+		button = lower->addChild(seed);
+		button->setHelpId(IDH_DCPP_CANCEL);
 		button->onClicked(std::tr1::bind(&SettingsDialog::endDialog, this, IDCANCEL));
 
-		button = lower->addChild(Button::Seed());
-		button->setText(T_("Help"));
+		seed.caption = T_("Help");
+		button = lower->addChild(seed);
+		button->setHelpId(IDH_DCPP_HELP);
 		button->onClicked(std::tr1::bind(&SettingsDialog::handleHelp, this, handle(), IDH_INDEX));
 	}
-
 
 	updateTitle();
 
@@ -145,12 +145,8 @@ bool SettingsDialog::initDialog() {
 
 HTREEITEM SettingsDialog::addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent) {
 	upper->setWidget(page, 0, 1);
-
 	pages.push_back(page);
-
-	HTREEITEM item = pageTree->insert(title, parent, reinterpret_cast<LPARAM>(page));
-	pageTree->expand(parent);
-	return item;
+	return pageTree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
 }
 
 void SettingsDialog::handleHelp(HWND hWnd, unsigned id) {

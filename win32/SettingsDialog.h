@@ -36,8 +36,8 @@ private:
 	PageList pages;
 	PropPage* currentPage;
 
-	TreePtr pageTree;
 	GridPtr grid;
+	TreePtr pageTree;
 
 	HTREEITEM addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent = TVI_ROOT);
 	void updateTitle();

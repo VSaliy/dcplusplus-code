@@ -134,10 +134,10 @@ socksResolve(0)
 	items.push_back(Item(socksPort, SettingsManager::SOCKS_PORT, PropPage::T_INT));
 	gridOut->addChild(Label::Seed(T_("Login")));
 	gridOut->addChild(Label::Seed(T_("Password")));
-	socksLogin = gridOut->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(socksLogin, SettingsManager::SOCKS_USER, PropPage::T_INT));
-	socksPass = gridOut->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(socksPass, SettingsManager::SOCKS_PASSWORD, PropPage::T_INT));
+	socksLogin = gridOut->addChild(WinUtil::Seeds::Dialog::TextBox);
+	items.push_back(Item(socksLogin, SettingsManager::SOCKS_USER, PropPage::T_STR));
+	socksPass = gridOut->addChild(WinUtil::Seeds::Dialog::TextBox);
+	items.push_back(Item(socksPass, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR));
 	socksResolve = gridOut->addChild(CheckBox::Seed(T_("Use SOCKS5 server to resolve host names")));
 	gridOut->setWidget(socksResolve, 6, 0, 1, 2);
 	items.push_back(Item(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL));

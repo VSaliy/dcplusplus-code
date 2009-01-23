@@ -140,7 +140,7 @@ public:
 	  * The "selectedIconIndex" optionally specifies the icon index of the item in the
 	  * selected state (if not specified or -1, it defaults to the iconIndex)
 	  */
-	HTREEITEM insert( const tstring & text, HTREEITEM parent = NULL, LPARAM param = 0, int iconIndex = - 1, int selectedIconIndex = - 1 );
+	HTREEITEM insert(const tstring& text, HTREEITEM parent = NULL, LPARAM param = 0, bool expanded = false, int iconIndex = - 1, int selectedIconIndex = - 1);
 
 	HTREEITEM getNext(HTREEITEM node, unsigned flag);
 

@@ -106,9 +106,11 @@ public:
 	/** Use the Bitmap class and the BitmapPtr to load a Bitmap and call this
 	  * function to assign that Bitmap to your Label
 	  */
-	void setBitmap( const BitmapPtr& bitmap );
+	void setBitmap(const BitmapPtr& bitmap);
+	void setIcon(const IconPtr& icon);
 
 	virtual Point getPreferedSize();
+
 protected:
 	// Constructor Taking pointer to parent
 	explicit Label( dwt::Widget * parent );
@@ -119,8 +121,6 @@ protected:
 	{}
 
 private:
-	BitmapPtr itsBitmap;
-
 	// Contract needed by AspectClickable Aspect class
 	static Message getClickMessage();
 
@@ -140,13 +140,6 @@ inline Label::Label( Widget * parent )
 	: BaseType( parent )
 {
 }
-
-inline void Label::setBitmap( const BitmapPtr& bitmap ) {
-	itsBitmap = bitmap;
-	addRemoveStyle( SS_BITMAP, true );
-	sendMessage(STM_SETIMAGE, ( WPARAM ) IMAGE_BITMAP, reinterpret_cast<LPARAM>(bitmap->handle()));
-}
-
 
 }
 

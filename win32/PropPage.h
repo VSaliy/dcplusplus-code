@@ -65,10 +65,9 @@ public:
 protected:
 	void read(const ItemList& items);
 	void read(const ListItem* listItems, TablePtr list);
-	void initList(TablePtr list);
+
 	void write(const ItemList& items);
 	void write(const ListItem* listItems, TablePtr list);
-	void translate(HWND page, TextItem* items);
 
 	void handleBrowseDir(const Item& i);
 	void handleBrowseFile(const Item& i);

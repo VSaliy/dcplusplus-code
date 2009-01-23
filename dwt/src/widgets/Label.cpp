@@ -47,6 +47,16 @@ void Label::create( const Seed & cs ) {
 		setFont( cs.font );
 }
 
+void Label::setBitmap(const BitmapPtr& bitmap) {
+	addRemoveStyle(SS_BITMAP, true);
+	sendMessage(STM_SETIMAGE, IMAGE_BITMAP, reinterpret_cast<LPARAM>(bitmap->handle()));
+}
+
+void Label::setIcon(const IconPtr& icon) {
+	addRemoveStyle(SS_ICON, true);
+	sendMessage(STM_SETICON, reinterpret_cast<WPARAM>(icon->handle()), 0);
+}
+
 Point Label::getPreferedSize() {
 	UpdateCanvas c(this);
 	c.selectFont(getFont());

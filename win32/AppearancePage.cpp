@@ -87,7 +87,7 @@ languages(0)
 		grid->setWidget(group, 2, 0, 1, 2);
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
 		
-		languages = group->addChild(ComboBox::Seed());
+		languages = group->addChild(WinUtil::Seeds::comboBoxStatic);
 		languages->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);	
 	}
 
