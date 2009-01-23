@@ -55,29 +55,29 @@ oldSelection(-1)
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Colors")))->addChild(Grid::Seed(2, 3));
 		cur->column(1).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
-		cur->setHelpId(IDH_SETTINGS_APPEARANCE2_COLORS);	
+		cur->setHelpId(IDH_SETTINGS_APPEARANCE2_COLORS);
 
 		ButtonPtr windowColor = cur->addChild(Button::Seed(T_("Select &window color")));
 		windowColor->onClicked(std::tr1::bind(&Appearance2Page::handleBackgroundClicked, this));
-		windowColor->setHelpId(IDH_SETTINGS_APPEARANCE2_SELWINCOLOR);	
+		windowColor->setHelpId(IDH_SETTINGS_APPEARANCE2_SELWINCOLOR);
 
 		Label::Seed seed(T_("Donate \342\202\254\342\202\254\342\202\254:s! (ok, dirty dollars are fine as well =) (see help menu)"));
 		seed.style |= SS_NOPREFIX | SS_SUNKEN;
 		example = cur->addChild(seed);
 		cur->setWidget(example, 0, 1, 2, 1);
-		example->setHelpId(IDH_SETTINGS_APPEARANCE2_COLORS);	
+		example->setHelpId(IDH_SETTINGS_APPEARANCE2_COLORS);
 
 		ButtonPtr uploads = cur->addChild(Button::Seed(T_("Uploads")));
 		uploads->onClicked(std::tr1::bind(&Appearance2Page::handleULClicked, this));
-		uploads->setHelpId(IDH_SETTINGS_APPEARANCE2_UPLOAD_BAR_COLOR);	
-		
+		uploads->setHelpId(IDH_SETTINGS_APPEARANCE2_UPLOAD_BAR_COLOR);
+
 		ButtonPtr textStyle	= cur->addChild(Button::Seed(T_("Select &text style")));
 		textStyle->onClicked(std::tr1::bind(&Appearance2Page::handleTextClicked, this));
-		textStyle->setHelpId(IDH_SETTINGS_APPEARANCE2_SELTEXT);	
-		
+		textStyle->setHelpId(IDH_SETTINGS_APPEARANCE2_SELTEXT);
+
 		ButtonPtr downloads	= cur->addChild(Button::Seed(T_("Downloads")));
 		downloads->onClicked(std::tr1::bind(&Appearance2Page::handleDLClicked, this));
-		downloads->setHelpId(IDH_SETTINGS_APPEARANCE2_DOWNLOAD_BAR_COLOR);	
+		downloads->setHelpId(IDH_SETTINGS_APPEARANCE2_DOWNLOAD_BAR_COLOR);
 	}
 
 	{
@@ -85,20 +85,21 @@ oldSelection(-1)
 		cur->column(1).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
-		cur->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
+		cur->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);
 
 		sounds = cur->addChild(WinUtil::Seeds::Dialog::optionsTable);
 		cur->setWidget(sounds, 0, 0, 1, 3);
-		sounds->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
+		sounds->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);
 
 		beepFileLabel = cur->addChild(Label::Seed(T_("Notification sound")));
-		beepFileLabel->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
-			
+		beepFileLabel->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);
+
 		beepFile = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
-		beepFile->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
-			
+		beepFile->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);
+
 		browse = cur->addChild(Button::Seed(T_("&Browse...")));
-		browse->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);	
+		browse->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);
+		browse->onClicked(std::tr1::bind(&Appearance2Page::handleBrowseClicked, this));
 	}
 
 	grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")))->setHelpId(IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART);
@@ -114,11 +115,9 @@ oldSelection(-1)
 	example->setColor(fg, bg);
 	example->setFont(font);
 
-	PropPage::initList(sounds);
-
-	browse->onClicked(std::tr1::bind(&Appearance2Page::handleBrowseClicked, this));
-
 	setBeepEnabled(false);
+
+	sounds->createColumns(TStringList(1));
 
 	for(size_t i = 0; soundOptions[i].setting != 0; ++i) {
 		soundOptions[i].file = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)soundOptions[i].setting));

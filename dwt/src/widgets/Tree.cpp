@@ -46,13 +46,17 @@ void Tree::create( const Seed & cs )
 		setFont( cs.font );
 }
 
-HTREEITEM Tree::insert( const tstring & text, HTREEITEM parent, LPARAM param, int iconIndex, int selectedIconIndex )
-{
+HTREEITEM Tree::insert(const tstring& text, HTREEITEM parent, LPARAM param, bool expanded, int iconIndex, int selectedIconIndex) {
 	TVITEMEX t = { TVIF_TEXT };
 	if ( param != 0 )
 	{
 		t.mask |= TVIF_PARAM;
 		t.lParam = param;
+	}
+	if(expanded) {
+		t.mask |= TVIF_STATE;
+		t.state = TVIS_EXPANDED;
+		t.stateMask = TVIS_EXPANDED;
 	}
 	if ( itsNormalImageList )
 	{
@@ -68,11 +72,11 @@ HTREEITEM Tree::insert( const tstring & text, HTREEITEM parent, LPARAM param, in
 #else
 	tv.itemex = t;
 #endif
-	return TreeView_InsertItem(this->handle(), &tv);
+	return TreeView_InsertItem(handle(), &tv);
 }
 
 tstring Tree::getSelectedText() {
-	return getText(TreeView_GetSelection(this->handle()));
+	return getText(TreeView_GetSelection(handle()));
 }
 
 tstring Tree::getText( HTREEITEM node )
@@ -86,7 +90,7 @@ tstring Tree::getText( HTREEITEM node )
 	buffer[0] = '\0';
 	item.cchTextMax = 1022;
 	item.pszText = buffer;
-	if ( TreeView_GetItem( this->handle(), & item ) )
+	if ( TreeView_GetItem(handle(), &item) )
 	{
 		return buffer;
 	}
@@ -111,17 +115,17 @@ void Tree::eraseChildren( HTREEITEM node )
 
 void Tree::setNormalImageList( ImageListPtr imageList ) {
 	  itsNormalImageList = imageList;
-	  TreeView_SetImageList( this->Widget::handle(), imageList->getImageList(), TVSIL_NORMAL );
+	  TreeView_SetImageList(handle(), imageList->getImageList(), TVSIL_NORMAL);
 }
 
 void Tree::setStateImageList( ImageListPtr imageList ) {
 	  itsStateImageList = imageList;
-	  TreeView_SetImageList( this->Widget::handle(), imageList->getImageList(), TVSIL_STATE );
+	  TreeView_SetImageList(handle(), imageList->getImageList(), TVSIL_STATE);
 }
 
 LPARAM Tree::getDataImpl(HTREEITEM item) {
 	TVITEM tvitem = { TVIF_PARAM | TVIF_HANDLE, item };
-	if(!TreeView_GetItem(this->handle(), &tvitem)) {
+	if(!TreeView_GetItem(handle(), &tvitem)) {
 		return 0;
 	}
 	return tvitem.lParam;
@@ -130,14 +134,14 @@ LPARAM Tree::getDataImpl(HTREEITEM item) {
 void Tree::setDataImpl(HTREEITEM item, LPARAM lParam) {
 	TVITEM tvitem = { TVIF_PARAM | TVIF_HANDLE, item };
 	tvitem.lParam = lParam;
-	TreeView_SetItem(this->handle(), &tvitem);
+	TreeView_SetItem(handle(), &tvitem);
 }
 
 ScreenCoordinate Tree::getContextMenuPos() {
 	HTREEITEM item = getSelected();
 	POINT pt = { 0 };
 	if(item) {
-		RECT trc = this->getItemRect(item);
+		RECT trc = getItemRect(item);
 		pt.x = trc.left;
 		pt.y = trc.top + ((trc.bottom - trc.top) / 2);
 	}
@@ -145,9 +149,9 @@ ScreenCoordinate Tree::getContextMenuPos() {
 }
 
 void Tree::select(const ScreenCoordinate& pt) {
-	HTREEITEM ht = this->hitTest(pt);
-	if(ht != NULL && ht != this->getSelected()) {
-		this->setSelected(ht);
+	HTREEITEM ht = hitTest(pt);
+	if(ht != NULL && ht != getSelected()) {
+		setSelected(ht);
 	}
 }
 

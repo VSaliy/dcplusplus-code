@@ -35,6 +35,7 @@ private:
 
 	GroupBoxPtr group;
 	TextBoxPtr nick;
+	ComboBoxPtr connections;
 
 	void handleNickTextChanged();
 };

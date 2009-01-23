@@ -179,6 +179,7 @@ void WinUtil::init() {
 
 	xdoptionsTable = xdTable;
 	xdoptionsTable.style |= LVS_SINGLESEL | LVS_NOCOLUMNHEADER;
+	xdoptionsTable.lvStyle |= LVS_EX_CHECKBOXES;
 
 	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR>(&helpCookie));
 }
