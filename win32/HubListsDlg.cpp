@@ -97,8 +97,7 @@ bool HubListsDlg::handleInitDialog() {
 		button->setHelpId(IDH_PUBLIC_HUB_LISTS_REMOVE);
 		button->onClicked(std::tr1::bind(&HubListsDlg::handleRemoveClicked, this));
 
-		seed.caption = T_("OK");
-		button = cur->addChild(seed);
+		button = cur->addChild(WinUtil::Seeds::Dialog::defButton);
 		button->setHelpId(IDH_DCPP_OK);
 		button->onClicked(std::tr1::bind(&HubListsDlg::handleOKClicked, this));
 

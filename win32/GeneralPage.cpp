@@ -64,7 +64,7 @@ connections(0)
 
 	grid->addChild(Label::Seed(T_("Line speed (upload)")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
-	connections = grid->addChild(WinUtil::Seeds::comboBoxStatic);
+	connections = grid->addChild(WinUtil::Seeds::Dialog::ComboBox);
 	connections->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
 	grid->addChild(Label::Seed(T_("MiBits/s")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);

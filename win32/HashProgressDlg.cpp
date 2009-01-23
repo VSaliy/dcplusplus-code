@@ -22,8 +22,10 @@
 
 #include "HashProgressDlg.h"
 
-#include <dcpp/HashManager.h>
 #include <dwt/widgets/ProgressBar.h>
+
+#include <dcpp/HashManager.h>
+#include "WinUtil.h"
 
 HashProgressDlg::HashProgressDlg(dwt::Widget* parent, bool aAutoClose) :
 dwt::WidgetFactory<dwt::ModalDialog>(parent),
@@ -72,7 +74,11 @@ bool HashProgressDlg::handleInitDialog() {
 	/// @todo the progress bar doesn't show up.
 	progress->setRange(0, 10000);
 
-	grid->addChild(Button::Seed(T_("Run in background")))->onClicked(std::tr1::bind(&HashProgressDlg::endDialog, this, IDOK));
+	{
+		Button::Seed seed = WinUtil::Seeds::Dialog::defButton;
+		seed.caption = T_("Run in background");
+		grid->addChild(seed)->onClicked(std::tr1::bind(&HashProgressDlg::endDialog, this, IDOK));
+	}
 
 	string tmp;
 	startTime = GET_TICK();

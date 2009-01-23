@@ -121,7 +121,7 @@ bool AboutDlg::handleInitDialog() {
 	ls.caption = T_("Downloading...");
 	version = grid->addChild(gs)->addChild(ls);
 
-	grid->addChild(Button::Seed(T_("OK")))->onClicked(std::tr1::bind(&AboutDlg::endDialog, this, IDOK));
+	grid->addChild(WinUtil::Seeds::Dialog::defButton)->onClicked(std::tr1::bind(&AboutDlg::endDialog, this, IDOK));
 
 	setText(T_("About DC++"));
 

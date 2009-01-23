@@ -70,15 +70,17 @@ public:
 	static ImageMap fileIndexes;
 
 	struct Seeds {
-		static const dwt::Button::Seed button;
+		static const Button::Seed button;
 		static const ComboBox::Seed comboBoxStatic;
 		static const ComboBox::Seed comboBoxEdit;
-		static const dwt::Menu::Seed menu;
+		static const Menu::Seed menu;
 		static const Table::Seed Table;
 		static const TextBox::Seed textBox;
-		static const dwt::Tree::Seed treeView;
+		static const Tree::Seed treeView;
 
 		struct Dialog {
+			static const Button::Seed defButton;
+			static const ComboBox::Seed ComboBox;
 			static const TextBox::Seed TextBox;
 			static const TextBox::Seed intTextBox;
 			static const Table::Seed Table;
