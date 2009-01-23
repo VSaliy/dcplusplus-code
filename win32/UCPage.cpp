@@ -34,18 +34,6 @@ static const ColumnInfo columns[] = {
 	{ N_("Hub"), 100, false }
 };
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_MENU_ITEMS, IDH_SETTINGS_UC_LIST },
-	{ IDC_ADD_MENU, IDH_SETTINGS_UC_ADD },
-	{ IDC_CHANGE_MENU, IDH_SETTINGS_UC_CHANGE },
-	{ IDC_MOVE_UP, IDH_SETTINGS_UC_MOVE_UP },
-	{ IDC_MOVE_DOWN, IDH_SETTINGS_UC_MOVE_DOWN },
-	{ IDC_REMOVE_MENU, IDH_SETTINGS_UC_REMOVE },
-	{ 0, 0 }
-};
-*/
-
 UCPage::UCPage(dwt::Widget* parent) :
 PropPage(parent),
 grid(0),
@@ -62,15 +50,30 @@ commands(0)
 	grid->column(4).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
+	grid->setHelpId(IDH_SETTINGS_UC_LIST);	
 
 	commands = grid->addChild(WinUtil::Seeds::Dialog::Table);
 	grid->setWidget(commands, 0, 0, 1, 5);
 
-	grid->addChild(Button::Seed(T_("&Add")))->onClicked(std::tr1::bind(&UCPage::handleAddClicked, this));
-	grid->addChild(Button::Seed(T_("&Change")))->onClicked(std::tr1::bind(&UCPage::handleChangeClicked, this));
-	grid->addChild(Button::Seed(T_("Move &Up")))->onClicked(std::tr1::bind(&UCPage::handleMoveUpClicked, this));
-	grid->addChild(Button::Seed(T_("Move &Down")))->onClicked(std::tr1::bind(&UCPage::handleMoveDownClicked, this));
-	grid->addChild(Button::Seed(T_("&Remove")))->onClicked(std::tr1::bind(&UCPage::handleRemoveClicked, this));
+	ButtonPtr button = grid->addChild(Button::Seed(T_("&Add")));
+	button->onClicked(std::tr1::bind(&UCPage::handleAddClicked, this));
+	button->setHelpId(IDH_SETTINGS_UC_ADD);	
+	
+	button = grid->addChild(Button::Seed(T_("&Change")));
+	button->onClicked(std::tr1::bind(&UCPage::handleChangeClicked, this));
+	button->setHelpId(IDH_SETTINGS_UC_CHANGE);	
+
+	button = grid->addChild(Button::Seed(T_("Move &Up")));
+	button->onClicked(std::tr1::bind(&UCPage::handleMoveUpClicked, this));
+	button->setHelpId(IDH_SETTINGS_UC_MOVE_UP);	
+
+	button = grid->addChild(Button::Seed(T_("Move &Down")));
+	button->onClicked(std::tr1::bind(&UCPage::handleMoveDownClicked, this));
+	button->setHelpId(IDH_SETTINGS_UC_MOVE_DOWN);	
+
+	button = grid->addChild(Button::Seed(T_("&Remove")));
+	button->onClicked(std::tr1::bind(&UCPage::handleRemoveClicked, this));
+	button->setHelpId(IDH_SETTINGS_UC_REMOVE);	
 
 	WinUtil::makeColumns(commands, columns, 3);
 

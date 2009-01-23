@@ -26,26 +26,6 @@
 #include <dcpp/FavoriteManager.h>
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_ADLSP_SEARCH, IDH_ADLSP_SEARCH_STRING },
-	{ IDC_SEARCH_STRING, IDH_ADLSP_SEARCH_STRING },
-	{ IDC_ADLSP_TYPE, IDH_ADLSP_SOURCE_TYPE },
-	{ IDC_SOURCE_TYPE, IDH_ADLSP_SOURCE_TYPE },
-	{ IDC_ADLSP_SIZE_MIN, IDH_ADLSP_MIN_FILE_SIZE },
-	{ IDC_MIN_FILE_SIZE, IDH_ADLSP_MIN_FILE_SIZE },
-	{ IDC_ADLSP_SIZE_MAX, IDH_ADLSP_MAX_FILE_SIZE },
-	{ IDC_MAX_FILE_SIZE, IDH_ADLSP_MAX_FILE_SIZE },
-	{ IDC_ADLSP_UNITS, IDH_ADLSP_SIZE_TYPE },
-	{ IDC_SIZE_TYPE, IDH_ADLSP_SIZE_TYPE },
-	{ IDC_ADLSP_DESTINATION, IDH_ADLSP_DEST_DIR },
-	{ IDC_DEST_DIR, IDH_ADLSP_DEST_DIR },
-	{ IDC_IS_ACTIVE, IDH_ADLSP_ENABLED },
-	{ IDC_AUTOQUEUE, IDH_ADLSP_AUTOQUEUE },
-	{ 0, 0 }
-};
-*/
-
 ADLSProperties::ADLSProperties(dwt::Widget* parent, ADLSearch *_search) :
 WidgetFactory<dwt::ModalDialog>(parent),
 grid(0),
@@ -79,10 +59,12 @@ bool ADLSProperties::handleInitDialog() {
 	grid->column(1).mode = GridInfo::FILL;
 
 	GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Search String")));
+	group->setHelpId(IDH_ADLSP_SEARCH_STRING);
 	searchString = group->addChild(WinUtil::Seeds::Dialog::TextBox);
 	searchString->setText(Text::toT(search->searchString));
-
+	
 	group = grid->addChild(GroupBox::Seed(T_("Source Type")));
+	group->setHelpId(IDH_ADLSP_SOURCE_TYPE);
 	searchType = group->addChild(WinUtil::Seeds::comboBoxStatic);
 	searchType->addValue(T_("Filename"));
 	searchType->addValue(T_("Directory"));
@@ -95,15 +77,18 @@ bool ADLSProperties::handleInitDialog() {
 		cur->column(1).mode = GridInfo::FILL;
 
 		group = cur->addChild(GroupBox::Seed(T_("Min FileSize")));
+		group->setHelpId(IDH_ADLSP_MIN_FILE_SIZE);
 		minSize = group->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		minSize->setText((search->minFileSize > 0) ? Text::toT(Util::toString(search->minFileSize)) : Util::emptyStringT);
 
 		group = cur->addChild(GroupBox::Seed(T_("Max FileSize")));
+		group->setHelpId(IDH_ADLSP_MAX_FILE_SIZE);
 		maxSize = group->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		maxSize->setText((search->maxFileSize > 0) ? Text::toT(Util::toString(search->maxFileSize)) : Util::emptyStringT);
 	}
 
 	group = grid->addChild(GroupBox::Seed(T_("Size Type")));
+	group->setHelpId(IDH_ADLSP_SIZE_TYPE);
 	sizeType = group->addChild(WinUtil::Seeds::comboBoxStatic);
 	sizeType->addValue(T_("B"));
 	sizeType->addValue(T_("KiB"));
@@ -112,6 +97,7 @@ bool ADLSProperties::handleInitDialog() {
 	sizeType->setSelected(search->typeFileSize);
 
 	group = grid->addChild(GroupBox::Seed(T_("Destination Directory")));
+	group->setHelpId(IDH_ADLSP_DEST_DIR);		
 	destDir = group->addChild(WinUtil::Seeds::Dialog::TextBox);
 	destDir->setText(Text::toT(search->destDir));
 
@@ -120,9 +106,10 @@ bool ADLSProperties::handleInitDialog() {
 
 		active = cur->addChild(CheckBox::Seed(T_("Enabled")));
 		active->setChecked(search->isActive);
-
+		active->setHelpId(IDH_ADLSP_ENABLED);
 		autoQueue = cur->addChild(CheckBox::Seed(T_("Download Matches")));
 		autoQueue->setChecked(search->isAutoQueue);
+		autoQueue->setHelpId(IDH_ADLSP_AUTOQUEUE);
 	}
 
 	WinUtil::addDlgButtons(grid,
