@@ -35,7 +35,7 @@
 
 namespace dwt {
 
-Grid::Seed::Seed(size_t rows_, size_t cols_) : BaseType::Seed(_T(""), WS_CHILD | WS_VISIBLE, 0), rows(rows_), cols(cols_) { }
+Grid::Seed::Seed(size_t rows_, size_t cols_) : BaseType::Seed(_T(""), WS_CHILD | WS_VISIBLE, WS_EX_CONTROLPARENT), rows(rows_), cols(cols_) { }
 
 void Grid::create( const Seed & cs )
 {
@@ -48,7 +48,6 @@ void Grid::create( const Seed & cs )
 	for(size_t i = 0; i < columns.size(); ++i) {
 		columns[i].align = GridInfo::STRETCH;	// Default to stretch for horizontal alignment
 	}
-
 }
 
 Point Grid::getPreferedSize() {
