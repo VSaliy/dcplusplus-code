@@ -102,7 +102,7 @@ private:
 
 template<typename Policy>
 Composite<Policy>::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle) :
-	BaseType::Seed(NULL, style | WS_CLIPCHILDREN, 0, caption),
+	BaseType::Seed(NULL, style | WS_CLIPCHILDREN, exStyle, caption),
 	background(( HBRUSH )( COLOR_3DFACE + 1 )),
 	menuName(NULL),
 	cursor(::LoadCursor(0, IDC_ARROW))

@@ -103,6 +103,7 @@ public:
 	void create( const Seed & cs = Seed() );
 
 	Point getPreferedSize();
+
 protected:
 	friend class WidgetCreator<Grid>;
 

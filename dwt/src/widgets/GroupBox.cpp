@@ -43,7 +43,7 @@ namespace dwt {
 static const int PADDING = 3;
 
 GroupBox::Seed::Seed(const tstring& caption) :
-	BaseType::Seed(WC_BUTTON, BS_GROUPBOX | WS_CHILD, 0, caption),
+	BaseType::Seed(WC_BUTTON, BS_GROUPBOX | WS_CHILD, WS_EX_CONTROLPARENT, caption),
 	font(new Font(DefaultGuiFont))
 {
 }
