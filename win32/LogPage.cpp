@@ -27,15 +27,6 @@
 #include <dcpp/File.h>
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_SETTINGS_LOG_DIR, IDH_SETTINGS_LOG_DIRECTORY },
-	{ IDC_LOG_DIRECTORY, IDH_SETTINGS_LOG_DIRECTORY },
-	{ IDC_BROWSE_LOG, IDH_SETTINGS_LOG_DIRECTORY },
-	{ 0, 0 }
-};
-*/
-
 PropPage::ListItem LogPage::listItems[] = {
 	{ SettingsManager::LOG_MAIN_CHAT, N_("Log main chat"), IDH_SETTINGS_LOG_MAIN_CHAT },
 	{ SettingsManager::LOG_PRIVATE_CHAT, N_("Log private chat"), IDH_SETTINGS_LOG_PRIVATE_CHAT },
@@ -66,11 +57,15 @@ oldSelection(-1)
 	grid->row(1).mode = GridInfo::FILL;
 	grid->row(1).align = GridInfo::STRETCH;
 
-	grid->addChild(Label::Seed(T_("Directory")));
+	grid->addChild(Label::Seed(T_("Directory")))->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);	
 	dir = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
 	items.push_back(Item(dir, SettingsManager::LOG_DIRECTORY, PropPage::T_STR));
-	grid->addChild(Button::Seed(T_("&Browse...")))->onClicked(std::tr1::bind(&LogPage::handleBrowseDir, this, items.back()));
-
+	dir->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);	
+		
+	ButtonPtr browse = grid->addChild(Button::Seed(T_("&Browse...")));
+	browse->onClicked(std::tr1::bind(&LogPage::handleBrowseDir, this, items.back()));
+	browse->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
+	
 	options = grid->addChild(WinUtil::Seeds::Dialog::optionsTable);
 	grid->setWidget(options, 1, 0, 1, 3);
 

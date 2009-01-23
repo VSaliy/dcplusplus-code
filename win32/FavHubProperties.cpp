@@ -26,24 +26,6 @@
 #include <dcpp/version.h>
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_FH_NAME, IDH_FAVORITE_HUB_NAME },
-	{ IDC_HUBNAME, IDH_FAVORITE_HUB_NAME },
-	{ IDC_FH_ADDRESS, IDH_FAVORITE_HUB_ADDRESS },
-	{ IDC_HUBADDR, IDH_FAVORITE_HUB_ADDRESS },
-	{ IDC_FH_HUB_DESC, IDH_FAVORITE_HUB_DESC },
-	{ IDC_HUBDESCR, IDH_FAVORITE_HUB_DESC },
-	{ IDC_FH_NICK, IDH_FAVORITE_HUB_NICK },
-	{ IDC_HUBNICK, IDH_FAVORITE_HUB_NICK },
-	{ IDC_FH_PASSWORD, IDH_FAVORITE_HUB_PASSWORD },
-	{ IDC_HUBPASS, IDH_FAVORITE_HUB_PASSWORD },
-	{ IDC_FH_USER_DESC, IDH_FAVORITE_HUB_USER_DESC },
-	{ IDC_HUBUSERDESCR, IDH_FAVORITE_HUB_USER_DESC },
-	{ 0, 0 }
-};
-*/
-
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
 WidgetFactory<dwt::ModalDialog>(parent),
 grid(0),
@@ -81,18 +63,21 @@ bool FavHubProperties::handleInitDialog() {
 		GridPtr cur = group->addChild(Grid::Seed(3, 2));
 		cur->column(1).mode = GridInfo::FILL;
 
-		cur->addChild(Label::Seed(T_("Name")));
+		cur->addChild(Label::Seed(T_("Name")))->setHelpId(IDH_FAVORITE_HUB_NAME);
 		name = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		name->setText(Text::toT(entry->getName()));
 		name->setSelection();
-
-		cur->addChild(Label::Seed(T_("Address")));
+		name->setHelpId(IDH_FAVORITE_HUB_NAME);
+		
+		cur->addChild(Label::Seed(T_("Address")))->setHelpId(IDH_FAVORITE_HUB_ADDRESS);
 		address = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		address->setText(Text::toT(entry->getServer()));
-
-		cur->addChild(Label::Seed(T_("Description")));
+		address->setHelpId(IDH_FAVORITE_HUB_ADDRESS);
+		
+		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_DESC);
 		description = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		description->setText(Text::toT(entry->getDescription()));
+		description->setHelpId(IDH_FAVORITE_HUB_DESC);	
 	}
 
 	{
@@ -102,22 +87,25 @@ bool FavHubProperties::handleInitDialog() {
 		GridPtr cur = group->addChild(Grid::Seed(3, 2));
 		cur->column(1).mode = GridInfo::FILL;
 
-		cur->addChild(Label::Seed(T_("Nick")));
+		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
 		nick = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		nick->setTextLimit(35);
 		nick->setText(Text::toT(entry->getNick(false)));
 		nick->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, nick));
-
-		cur->addChild(Label::Seed(T_("Password")));
+		nick->setHelpId(IDH_FAVORITE_HUB_NICK);
+		
+		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
 		password = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		password->setPassword();
 		password->setText(Text::toT(entry->getPassword()));
 		password->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, password));
+		password->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
 
-		cur->addChild(Label::Seed(T_("Description")));
+		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
 		userDescription = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		userDescription->setTextLimit(35);
 		userDescription->setText(Text::toT(entry->getUserDescription()));
+		userDescription->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
 	}
 
 	WinUtil::addDlgButtons(grid,
