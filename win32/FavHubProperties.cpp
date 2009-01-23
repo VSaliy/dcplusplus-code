@@ -120,15 +120,9 @@ bool FavHubProperties::handleInitDialog() {
 		userDescription->setText(Text::toT(entry->getUserDescription()));
 	}
 
-	{
-		ButtonPtr button = grid->addChild(WinUtil::Seeds::Dialog::defButton);
-		button->setHelpId(IDH_DCPP_OK);
-		button->onClicked(std::tr1::bind(&FavHubProperties::handleOKClicked, this));
-
-		button = grid->addChild(Button::Seed(T_("Cancel")));
-		button->setHelpId(IDH_DCPP_CANCEL);
-		button->onClicked(std::tr1::bind(&FavHubProperties::endDialog, this, IDCANCEL));
-	}
+	WinUtil::addDlgButtons(grid,
+		std::tr1::bind(&FavHubProperties::handleOKClicked, this),
+		std::tr1::bind(&FavHubProperties::endDialog, this, IDCANCEL));
 
 	setText(T_("Favorite Hub Properties"));
 

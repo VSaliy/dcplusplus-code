@@ -144,6 +144,10 @@ void Widget::addRemoveExStyle( DWORD addStyle, bool add )
 	}
 }
 
+void Widget::setID(unsigned id) {
+	::SetWindowLong(handle(), GWL_ID, id);
+}
+
 GlobalAtom Widget::propAtom(_T("dwt::Widget*"));
 
 void Widget::addCallback( const Message& msg, const CallbackType& callback ) {

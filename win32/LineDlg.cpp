@@ -56,8 +56,9 @@ bool LineDlg::initDialog() {
 	line->setText(text);
 	line->setSelection();
 
-	grid->addChild(WinUtil::Seeds::Dialog::defButton)->onClicked(std::tr1::bind(&LineDlg::okClicked, this));
-	grid->addChild(Button::Seed(T_("Cancel")))->onClicked(std::tr1::bind(&LineDlg::endDialog, this, IDCANCEL));
+	WinUtil::addDlgButtons(grid,
+		std::tr1::bind(&LineDlg::okClicked, this),
+		std::tr1::bind(&LineDlg::endDialog, this, IDCANCEL));
 
 	setText(title);
 

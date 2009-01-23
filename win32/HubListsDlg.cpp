@@ -97,14 +97,9 @@ bool HubListsDlg::handleInitDialog() {
 		button->setHelpId(IDH_PUBLIC_HUB_LISTS_REMOVE);
 		button->onClicked(std::tr1::bind(&HubListsDlg::handleRemoveClicked, this));
 
-		button = cur->addChild(WinUtil::Seeds::Dialog::defButton);
-		button->setHelpId(IDH_DCPP_OK);
-		button->onClicked(std::tr1::bind(&HubListsDlg::handleOKClicked, this));
-
-		seed.caption = T_("Cancel");
-		button = cur->addChild(seed);
-		button->setHelpId(IDH_DCPP_CANCEL);
-		button->onClicked(std::tr1::bind(&HubListsDlg::endDialog, this, IDCANCEL));
+		WinUtil::addDlgButtons(cur,
+			std::tr1::bind(&HubListsDlg::handleOKClicked, this),
+			std::tr1::bind(&HubListsDlg::endDialog, this, IDCANCEL));
 	}
 
 	hubLists->createColumns(TStringList(1));

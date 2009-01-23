@@ -42,8 +42,6 @@ static const WinUtil::HelpItem helpItems[] = {
 	{ IDC_DEST_DIR, IDH_ADLSP_DEST_DIR },
 	{ IDC_IS_ACTIVE, IDH_ADLSP_ENABLED },
 	{ IDC_AUTOQUEUE, IDH_ADLSP_AUTOQUEUE },
-	{ IDOK, IDH_DCPP_OK },
-	{ IDCANCEL, IDH_DCPP_CANCEL },
 	{ 0, 0 }
 };
 */
@@ -127,13 +125,9 @@ bool ADLSProperties::handleInitDialog() {
 		autoQueue->setChecked(search->isAutoQueue);
 	}
 
-	{
-		ButtonPtr button = grid->addChild(WinUtil::Seeds::Dialog::defButton);
-		button->onClicked(std::tr1::bind(&ADLSProperties::handleOKClicked, this));
-
-		button = grid->addChild(Button::Seed(T_("Cancel")));
-		button->onClicked(std::tr1::bind(&ADLSProperties::endDialog, this, IDCANCEL));
-	}
+	WinUtil::addDlgButtons(grid,
+		std::tr1::bind(&ADLSProperties::handleOKClicked, this),
+		std::tr1::bind(&ADLSProperties::endDialog, this, IDCANCEL));
 
 	setText(T_("ADLSearch Properties"));
 

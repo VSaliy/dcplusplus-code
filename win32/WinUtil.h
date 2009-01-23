@@ -79,7 +79,6 @@ public:
 		static const Tree::Seed treeView;
 
 		struct Dialog {
-			static const Button::Seed defButton;
 			static const ComboBox::Seed ComboBox;
 			static const TextBox::Seed TextBox;
 			static const TextBox::Seed intTextBox;
@@ -136,6 +135,11 @@ public:
 		}
 		return ret;
 	}
+
+	static pair<ButtonPtr, ButtonPtr> addDlgButtons(
+		GridPtr grid,
+		const dwt::Application::Callback& f_ok,
+		const dwt::Application::Callback& f_cancel);
 
 	static int getIconIndex(const tstring& aFileName);
 	static int getDirIconIndex() { return dirIconIndex; }
