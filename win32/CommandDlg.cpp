@@ -156,16 +156,12 @@ bool CommandDlg::handleInitDialog() {
 	bool bOpenHelp = BOOLSETTING(OPEN_USER_CMD_HELP);
 	openHelp->setChecked(bOpenHelp);
 
+	WinUtil::addDlgButtons(grid,
+		std::tr1::bind(&CommandDlg::handleOKClicked, this),
+		std::tr1::bind(&CommandDlg::endDialog, this, IDCANCEL));
+
 	{
-		ButtonPtr button = grid->addChild(WinUtil::Seeds::Dialog::defButton);
-		button->setHelpId(IDH_DCPP_OK);
-		button->onClicked(std::tr1::bind(&CommandDlg::handleOKClicked, this));
-
-		button = grid->addChild(Button::Seed(T_("Cancel")));
-		button->setHelpId(IDH_DCPP_CANCEL);
-		button->onClicked(std::tr1::bind(&CommandDlg::endDialog, this, IDCANCEL));
-
-		button = grid->addChild(Button::Seed(T_("Help")));
+		ButtonPtr button = grid->addChild(Button::Seed(T_("Help")));
 		button->setHelpId(IDH_DCPP_HELP);
 		button->onClicked(std::tr1::bind(&WinUtil::help, handle(), IDH_USER_COMMAND));
 	}

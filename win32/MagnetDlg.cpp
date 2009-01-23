@@ -47,8 +47,7 @@ int MagnetDlg::run() {
 }
 
 bool MagnetDlg::handleInitDialog() {
-	//grid = addChild(Grid::Seed(7, 2));
-	grid = addChild(Grid::Seed(5, 2));
+	grid = addChild(Grid::Seed(4, 2));
 	grid->column(1).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
@@ -69,24 +68,27 @@ bool MagnetDlg::handleInitDialog() {
 		grid->addChild(seed)->setText(mFileName);
 	}
 
-	//queue = grid->addChild(RadioButton::Seed(T_("Add this file to your download queue")));
-	//grid->setWidget(queue, 3, 0, 1, 2);
-	//queue->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, queue));
+	{
+		//GridPtr cur = grid->addChild(Grid::Seed(4, 1));
+		GridPtr cur = grid->addChild(Grid::Seed(2, 1));
 
-	search = grid->addChild(RadioButton::Seed(T_("Start a search for this file")));
-	search->setChecked();
-	//search->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, search));
+		//queue = cur->addChild(RadioButton::Seed(T_("Add this file to your download queue")));
+		//queue->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, queue));
 
-	grid->addChild(WinUtil::Seeds::Dialog::defButton)->onClicked(std::tr1::bind(&MagnetDlg::handleOKClicked, this));
+		search = cur->addChild(RadioButton::Seed(T_("Start a search for this file")));
+		search->setChecked();
+		//search->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, search));
 
-	//doNothing = grid->addChild(CheckBox::Seed(T_("Do nothing")));
-	//doNothing->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, doNothing));
-	grid->addChild(RadioButton::Seed(T_("Do nothing")));
+		//doNothing = cur->addChild(CheckBox::Seed(T_("Do nothing")));
+		//doNothing->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, doNothing));
+		cur->addChild(RadioButton::Seed(T_("Do nothing")));
 
-	grid->addChild(Button::Seed(T_("Cancel")))->onClicked(std::tr1::bind(&MagnetDlg::endDialog, this, IDCANCEL));
+		//remember = cur->addChild(CheckBox::Seed(T_("Do the same action next time without asking")));
+	}
 
-	//remember = addChild(CheckBox::Seed(T_("Do the same action next time without asking")));
-	//grid->setWidget(remember, 6, 0, 1, 2);
+	WinUtil::addDlgButtons(grid->addChild(Grid::Seed(2, 1)),
+		std::tr1::bind(&MagnetDlg::handleOKClicked, this),
+		std::tr1::bind(&MagnetDlg::endDialog, this, IDCANCEL));
 
 	setText(T_("MAGNET Link detected"));
 

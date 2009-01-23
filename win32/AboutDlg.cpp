@@ -64,7 +64,7 @@ int AboutDlg::run() {
 }
 
 bool AboutDlg::handleInitDialog() {
-	grid = addChild(Grid::Seed(5, 1));
+	grid = addChild(Grid::Seed(6, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(1).mode = GridInfo::FILL;
 	grid->row(1).align = GridInfo::STRETCH;
@@ -121,7 +121,9 @@ bool AboutDlg::handleInitDialog() {
 	ls.caption = T_("Downloading...");
 	version = grid->addChild(gs)->addChild(ls);
 
-	grid->addChild(WinUtil::Seeds::Dialog::defButton)->onClicked(std::tr1::bind(&AboutDlg::endDialog, this, IDOK));
+	WinUtil::addDlgButtons(grid,
+		std::tr1::bind(&AboutDlg::endDialog, this, IDOK),
+		std::tr1::bind(&AboutDlg::endDialog, this, IDCANCEL)).second->setVisible(false);
 
 	setText(T_("About DC++"));
 

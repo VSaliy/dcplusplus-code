@@ -84,10 +84,10 @@ public:
 		Seed(const tstring& caption_ = tstring(), DWORD style = 0);
 	};
 
-	template<typename SeedType>
-	void create(const SeedType& cs = SeedType());
+	void create(const Seed& cs = Seed());
 
 	virtual Point getPreferedSize();
+
 protected:
 	typedef Button ButtonType;
 
@@ -112,13 +112,6 @@ inline Message Button::getDblClickMessage() {
 
 inline Button::Button(Widget* parent) : BaseType(parent) {
 
-}
-
-template<typename SeedType>
-void Button::create( const SeedType & cs ) {
-	BaseType::create(cs);
-	if(cs.font)
-		setFont( cs.font );
 }
 
 }

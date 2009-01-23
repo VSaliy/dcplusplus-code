@@ -52,7 +52,7 @@ int HashProgressDlg::run() {
 bool HashProgressDlg::handleInitDialog() {
 	setHelpId(IDH_HASH_PROGRESS);
 
-	grid = addChild(Grid::Seed(5, 1));
+	grid = addChild(Grid::Seed(6, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(3).size = 14;
 	grid->row(3).mode = GridInfo::STATIC;
@@ -75,9 +75,11 @@ bool HashProgressDlg::handleInitDialog() {
 	progress->setRange(0, 10000);
 
 	{
-		Button::Seed seed = WinUtil::Seeds::Dialog::defButton;
-		seed.caption = T_("Run in background");
-		grid->addChild(seed)->onClicked(std::tr1::bind(&HashProgressDlg::endDialog, this, IDOK));
+		pair<ButtonPtr, ButtonPtr> buttons = WinUtil::addDlgButtons(grid,
+			std::tr1::bind(&HashProgressDlg::endDialog, this, IDOK),
+			std::tr1::bind(&HashProgressDlg::endDialog, this, IDCANCEL));
+		buttons.first->setText(T_("Run in background"));
+		buttons.second->setVisible(false);
 	}
 
 	string tmp;

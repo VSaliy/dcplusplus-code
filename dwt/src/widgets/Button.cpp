@@ -40,6 +40,12 @@ Button::Seed::Seed(const tstring& caption, DWORD style) :
 {
 }
 
+void Button::create(const Seed& cs) {
+	BaseType::create(cs);
+	if(cs.font)
+		setFont(cs.font);
+}
+
 Point Button::getPreferedSize() {
 	// TODO Consider icons etc
 	// Taken from http://support.microsoft.com/kb/124315

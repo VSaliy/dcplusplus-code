@@ -74,7 +74,6 @@ const Table::Seed WinUtil::Seeds::Table;
 const TextBox::Seed WinUtil::Seeds::textBox;
 const Tree::Seed WinUtil::Seeds::treeView;
 
-const Button::Seed WinUtil::Seeds::Dialog::defButton;
 const ComboBox::Seed WinUtil::Seeds::Dialog::ComboBox;
 const TextBox::Seed WinUtil::Seeds::Dialog::TextBox;
 const TextBox::Seed WinUtil::Seeds::Dialog::intTextBox;
@@ -142,7 +141,6 @@ void WinUtil::init() {
 	Table::Seed& xTable = const_cast<Table::Seed&>(Seeds::Table);
 	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&>(Seeds::textBox);
 	Tree::Seed& xtreeView =  const_cast<Tree::Seed&>(Seeds::treeView);
-	Button::Seed& xddefButton = const_cast<Button::Seed&>(Seeds::Dialog::defButton);
 	ComboBox::Seed& xdComboBox = const_cast<ComboBox::Seed&>(Seeds::Dialog::ComboBox);
 	TextBox::Seed& xdTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::TextBox);
 	TextBox::Seed& xdintTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::intTextBox);
@@ -172,9 +170,6 @@ void WinUtil::init() {
 	xtreeView.style |= TVS_HASBUTTONS | TVS_LINESATROOT | TVS_HASLINES | TVS_SHOWSELALWAYS | TVS_DISABLEDRAGDROP;
 	xtreeView.exStyle = WS_EX_CLIENTEDGE;
 	xtreeView.font = font;
-
-	xddefButton.style |= BS_DEFPUSHBUTTON;
-	xddefButton.caption = T_("OK");
 
 	xdComboBox.style |= CBS_DROPDOWNLIST;
 
@@ -680,6 +675,24 @@ void WinUtil::toInts(const string& str, std::vector<int>& array) {
 	for(size_t i = 0; i < l.size() && i < array.size(); ++i) {
 		array[i] = Util::toInt(l[i]);
 	}
+}
+
+pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(
+	GridPtr grid,
+	const dwt::Application::Callback& f_ok,
+	const dwt::Application::Callback& f_cancel)
+{
+	ButtonPtr ok = grid->addChild(Button::Seed(T_("OK")));
+	ok->setID(IDOK);
+	ok->setHelpId(IDH_DCPP_OK);
+	ok->onClicked(f_ok);
+
+	ButtonPtr cancel = grid->addChild(Button::Seed(T_("Cancel")));
+	cancel->setID(IDCANCEL);
+	cancel->setHelpId(IDH_DCPP_CANCEL);
+	cancel->onClicked(f_cancel);
+
+	return make_pair(ok, cancel);
 }
 
 HLSCOLOR RGB2HLS (COLORREF rgb) {
