@@ -77,7 +77,7 @@ bool MagnetDlg::handleInitDialog() {
 	search->setChecked();
 	//search->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, search));
 
-	grid->addChild(Button::Seed(T_("OK")))->onClicked(std::tr1::bind(&MagnetDlg::handleOKClicked, this));
+	grid->addChild(WinUtil::Seeds::Dialog::defButton)->onClicked(std::tr1::bind(&MagnetDlg::handleOKClicked, this));
 
 	//doNothing = grid->addChild(CheckBox::Seed(T_("Do nothing")));
 	//doNothing->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, doNothing));

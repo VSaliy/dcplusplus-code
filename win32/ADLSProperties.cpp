@@ -128,7 +128,7 @@ bool ADLSProperties::handleInitDialog() {
 	}
 
 	{
-		ButtonPtr button = grid->addChild(Button::Seed(T_("OK")));
+		ButtonPtr button = grid->addChild(WinUtil::Seeds::Dialog::defButton);
 		button->onClicked(std::tr1::bind(&ADLSProperties::handleOKClicked, this));
 
 		button = grid->addChild(Button::Seed(T_("Cancel")));

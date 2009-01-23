@@ -157,7 +157,7 @@ bool CommandDlg::handleInitDialog() {
 	openHelp->setChecked(bOpenHelp);
 
 	{
-		ButtonPtr button = grid->addChild(Button::Seed(T_("OK")));
+		ButtonPtr button = grid->addChild(WinUtil::Seeds::Dialog::defButton);
 		button->setHelpId(IDH_DCPP_OK);
 		button->onClicked(std::tr1::bind(&CommandDlg::handleOKClicked, this));
 

@@ -117,14 +117,11 @@ bool SettingsDialog::initDialog() {
 		lower->column(0).mode = GridInfo::FILL;
 		lower->column(0).align = GridInfo::BOTTOM_RIGHT;
 
-		ButtonPtr button;
-		Button::Seed seed;
-
-		seed.caption = T_("OK");
-		button = lower->addChild(seed);
+		ButtonPtr button = lower->addChild(WinUtil::Seeds::Dialog::defButton);
 		button->setHelpId(IDH_DCPP_OK);
 		button->onClicked(std::tr1::bind(&SettingsDialog::handleOKClicked, this));
 
+		Button::Seed seed;
 		seed.caption = T_("Cancel");
 		button = lower->addChild(seed);
 		button->setHelpId(IDH_DCPP_CANCEL);
