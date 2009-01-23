@@ -48,6 +48,8 @@ void Grid::create( const Seed & cs )
 	for(size_t i = 0; i < columns.size(); ++i) {
 		columns[i].align = GridInfo::STRETCH;	// Default to stretch for horizontal alignment
 	}
+
+	onEnabled(std::tr1::bind(&Grid::handleEnabled, this, _1));
 }
 
 Point Grid::getPreferedSize() {
@@ -267,6 +269,13 @@ void Grid::setWidget(Widget* w, size_t row, size_t column, size_t rowSpan, size_
 	}
 
 	widgetInfo.push_back(WidgetInfo(w, row, column, rowSpan, colSpan));
+}
+
+void Grid::handleEnabled(bool enabled) {
+	// TODO find better way of keeping track of children
+	for(HWND wnd = ::FindWindowEx(handle(), NULL, NULL, NULL); wnd; wnd = ::FindWindowEx(handle(), wnd, NULL, NULL)) {
+		::EnableWindow(wnd, enabled ? TRUE : FALSE);
+	}
 }
 
 }

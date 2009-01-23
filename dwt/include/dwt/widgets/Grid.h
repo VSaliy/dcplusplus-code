@@ -142,6 +142,8 @@ private:
 	Point actualSpacing() const;
 
 	WidgetInfo* getWidgetInfo(HWND hwnd);
+
+	void handleEnabled(bool enabled);
 };
 
 }
