@@ -22,8 +22,6 @@
 
 #include "Advanced3Page.h"
 
-#include <dwt/widgets/Spinner.h>
-
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
@@ -70,7 +68,7 @@ grid(0)
 
 	grid->addChild(Label::Seed(T_("Search history")))->setHelpId(IDH_SETTINGS_ADVANCED3_SEARCH_HISTORY);
 	box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::SEARCH_HISTORY, PropPage::T_INT_WITH_SPIN));
+	items.push_back(Item(box, SettingsManager::SEARCH_HISTORY, PropPage::T_INT));
 	box->setHelpId(IDH_SETTINGS_ADVANCED3_SEARCH_HISTORY);
 	grid->addChild(Label::Seed(tstring()));
 
@@ -112,10 +110,6 @@ grid(0)
 
 	PropPage::read(items);
 
-	/** @todo PropPage could add these automagically when T_INT_WITH_SPIN?
-	SpinnerPtr spinner = attachChild<Spinner>(IDC_SEARCH_HISTORY_SPIN);
-	spinner->setRange(0, 100);
-	*/
 }
 
 Advanced3Page::~Advanced3Page() {

@@ -48,9 +48,6 @@ void PropPage::read(const ItemList& items) {
 				static_cast<TextBoxPtr>(i->widget)->setText(Text::toT(Util::toString(settings->get((SettingsManager::IntSetting)i->setting))));
 			}
 			break;
-		case T_INT_WITH_SPIN:
-			static_cast<TextBoxPtr>(i->widget)->setText(Text::toT(Util::toString(settings->get((SettingsManager::IntSetting)i->setting))));
-			break;
 		case T_BOOL:
 			static_cast<CheckBoxPtr>(i->widget)->setChecked(settings->getBool((SettingsManager::IntSetting)i->setting));
 			break;
@@ -84,7 +81,6 @@ void PropPage::write(const ItemList& items) {
 				settings->set((SettingsManager::StrSetting)i->setting, Text::fromT(static_cast<TextBoxPtr>(i->widget)->getText()));
 				break;
 		case T_INT:
-		case T_INT_WITH_SPIN:
 			settings->set((SettingsManager::IntSetting)i->setting, Text::fromT(static_cast<TextBoxPtr>(i->widget)->getText()));
 			break;
 		case T_BOOL:
