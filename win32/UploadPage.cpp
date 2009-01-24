@@ -22,8 +22,6 @@
 
 #include "UploadPage.h"
 
-#include <dwt/widgets/Spinner.h>
-
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/version.h>
@@ -99,13 +97,13 @@ remove(0)
 
 		cur->addChild(Label::Seed(T_("Automatically open an extra slot if speed is below (0 = disable)")))->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
-		items.push_back(Item(box, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+		items.push_back(Item(box, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT));
 		box->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 		cur->addChild(Label::Seed(T_("KiB/s")))->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 
 		cur->addChild(Label::Seed(T_("Upload slots")))->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN));
+		items.push_back(Item(box, SettingsManager::SLOTS, PropPage::T_INT));
 		box->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
 			
 		cur->addChild(Label::Seed(tstring()));
@@ -130,15 +128,6 @@ remove(0)
 
 	onDragDrop(std::tr1::bind(&UploadPage::handleDragDrop, this, _1));
 
-	/** @todo PropPage could add these automagically when T_INT_WITH_SPIN?
-
-	SpinnerPtr spinner;
-	attachChild(spinner, IDC_SLOTSPIN);
-	spinner->setRange(1, UD_MAXVAL);
-
-	attachChild(spinner, IDC_MIN_UPLOAD_SPIN);
-	spinner->setRange(0, UD_MAXVAL);
-	*/
 }
 
 UploadPage::~UploadPage() {

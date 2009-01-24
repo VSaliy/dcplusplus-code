@@ -22,8 +22,6 @@
 
 #include "DownloadPage.h"
 
-#include <dwt/widgets/Spinner.h>
-
 #include <dcpp/SettingsManager.h>
 #include "HubListsDlg.h"
 #include "WinUtil.h"
@@ -78,13 +76,13 @@ grid(0)
 		cur->column(0).mode = GridInfo::FILL;
 
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
+		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);	
 		
 		cur->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
 			
 		cur->addChild(Label::Seed(T_("No new downloads if speed exceeds (KiB/s, 0 = disable)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
@@ -109,14 +107,6 @@ grid(0)
 
 	PropPage::read(items);
 
-	/** @todo PropPage could add these automagically when T_INT_WITH_SPIN?
-
-	SpinnerPtr spinner = attachChild<Spinner>(IDC_SLOTSSPIN);
-	spinner->setRange(0, 100);
-
-	attachChild(spinner, IDC_SPEEDSPIN);
-	spinner->setRange(0, 10000);
-	*/
 }
 
 DownloadPage::~DownloadPage() {

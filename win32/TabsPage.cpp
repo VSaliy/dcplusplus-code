@@ -22,8 +22,6 @@
 
 #include "TabsPage.h"
 
-#include <dwt/widgets/Spinner.h>
-
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
@@ -69,14 +67,11 @@ options(0)
 	}
 
 	grid->addChild(Label::Seed(T_("Max characters per tab (0 = infinite)")));
-	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN));
+	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MAX_TAB_CHARS, PropPage::T_INT));
 
 	PropPage::read(items);
 	PropPage::read(listItems, options);
 
-	/** @todo PropPage could add these automagically when T_INT_WITH_SPIN?
-	attachChild<Spinner>(IDC_MAX_TAB_CHARS_SPIN)->setRange(0, UD_MAXVAL);
-	*/
 }
 
 TabsPage::~TabsPage() {
