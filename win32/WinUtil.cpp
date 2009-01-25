@@ -682,13 +682,17 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(
 	const dwt::Application::Callback& f_ok,
 	const dwt::Application::Callback& f_cancel)
 {
-	ButtonPtr ok = grid->addChild(Button::Seed(T_("OK")));
-	ok->setID(IDOK);
+	Button::Seed seed;
+
+	seed.caption = T_("OK");
+	seed.menuHandle = reinterpret_cast<HMENU>(IDOK);
+	ButtonPtr ok = grid->addChild(seed);
 	ok->setHelpId(IDH_DCPP_OK);
 	ok->onClicked(f_ok);
 
-	ButtonPtr cancel = grid->addChild(Button::Seed(T_("Cancel")));
-	cancel->setID(IDCANCEL);
+	seed.caption = T_("Cancel");
+	seed.menuHandle = reinterpret_cast<HMENU>(IDCANCEL);
+	ButtonPtr cancel = grid->addChild(seed);
 	cancel->setHelpId(IDH_DCPP_CANCEL);
 	cancel->onClicked(f_cancel);
 

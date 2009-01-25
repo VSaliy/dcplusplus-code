@@ -99,8 +99,6 @@ public:
 
 	bool hasStyle(DWORD style);
 
-	void setID(unsigned id);
-
 	/// Use this function to add or remove windows exStyles.
 	/** The first parameter is the type of style you wish to add/remove. <br>
 	  * The second argument is a boolean indicating if you wish to add or remove the
@@ -175,6 +173,7 @@ protected:
 		/// The initial position / size of the Widget
 		Rectangle location;
 
+		/// Menu handle or control ID, depending on context - see CreateWindowEx doc for more info.
 		HMENU menuHandle;
 
 		/// Constructor initializing all member variables to default values
