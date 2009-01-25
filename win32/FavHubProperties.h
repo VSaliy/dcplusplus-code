@@ -42,7 +42,6 @@ private:
 	FavoriteHubEntry *entry;
 
 	bool handleInitDialog();
-	void handleFocus();
 	void handleTextChanged(TextBoxPtr textBox);
 	void handleOKClicked();
 

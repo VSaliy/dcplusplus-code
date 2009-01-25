@@ -34,7 +34,6 @@ text(text_),
 password(password_)
 {
 	onInitDialog(std::tr1::bind(&LineDlg::initDialog, this));
-	onFocus(std::tr1::bind(&LineDlg::focus, this));
 }
 
 int LineDlg::run() {
@@ -64,13 +63,8 @@ bool LineDlg::initDialog() {
 
 	layout();
 	centerWindow();
-	focus();
 
 	return false;
-}
-
-void LineDlg::focus() {
-	line->setFocus();
 }
 
 void LineDlg::okClicked() {

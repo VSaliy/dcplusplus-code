@@ -41,7 +41,6 @@ private:
 	bool password;
 
 	bool initDialog();
-	void focus();
 	void okClicked();
 
 	void layout();
