@@ -38,7 +38,6 @@ userDescription(0),
 entry(_entry)
 {
 	onInitDialog(std::tr1::bind(&FavHubProperties::handleInitDialog, this));
-	onFocus(std::tr1::bind(&FavHubProperties::handleFocus, this));
 }
 
 FavHubProperties::~FavHubProperties() {
@@ -116,13 +115,8 @@ bool FavHubProperties::handleInitDialog() {
 
 	layout();
 	centerWindow();
-	handleFocus();
 
 	return false;
-}
-
-void FavHubProperties::handleFocus() {
-	name->setFocus();
 }
 
 void FavHubProperties::handleTextChanged(TextBoxPtr textBox) {

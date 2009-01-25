@@ -35,7 +35,6 @@ mHash(aHash),
 mFileName(aFileName)
 {
 	onInitDialog(std::tr1::bind(&MagnetDlg::handleInitDialog, this));
-	onFocus(std::tr1::bind(&MagnetDlg::handleFocus, this));
 }
 
 MagnetDlg::~MagnetDlg() {
@@ -94,13 +93,8 @@ bool MagnetDlg::handleInitDialog() {
 
 	layout();
 	centerWindow();
-	handleFocus();
 
 	return false;
-}
-
-void MagnetDlg::handleFocus() {
-	search->setFocus();
 }
 
 //void MagnetDlg::handleRadioButtonClicked(RadioButtonPtr radioButton) {

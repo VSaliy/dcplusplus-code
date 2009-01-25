@@ -46,7 +46,6 @@ private:
 	tstring mFileName;
 
 	bool handleInitDialog();
-	void handleFocus();
 	//void handleRadioButtonClicked(RadioButtonPtr radioButton);
 	void handleOKClicked();
 

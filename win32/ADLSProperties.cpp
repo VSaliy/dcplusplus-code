@@ -40,7 +40,6 @@ autoQueue(0),
 search(_search)
 {
 	onInitDialog(std::tr1::bind(&ADLSProperties::handleInitDialog, this));
-	onFocus(std::tr1::bind(&ADLSProperties::handleFocus, this));
 }
 
 ADLSProperties::~ADLSProperties() {
@@ -120,13 +119,8 @@ bool ADLSProperties::handleInitDialog() {
 
 	layout();
 	centerWindow();
-	handleFocus();
 
 	return false;
-}
-
-void ADLSProperties::handleFocus() {
-	searchString->setFocus();
 }
 
 void ADLSProperties::handleOKClicked() {

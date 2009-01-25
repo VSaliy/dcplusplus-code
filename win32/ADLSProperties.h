@@ -44,7 +44,6 @@ private:
 	ADLSearch* search;
 
 	bool handleInitDialog();
-	void handleFocus();
 	void handleOKClicked();
 
 	void layout();
