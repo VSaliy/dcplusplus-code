@@ -26,36 +26,6 @@
 #include <dcpp/Socket.h>
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_DIRECT, IDH_SETTINGS_NETWORK_DIRECT },
-	{ IDC_FIREWALL_UPNP, IDH_SETTINGS_NETWORK_FIREWALL_UPNP },
-	{ IDC_FIREWALL_NAT, IDH_SETTINGS_NETWORK_FIREWALL_NAT },
-	{ IDC_FIREWALL_PASSIVE, IDH_SETTINGS_NETWORK_FIREWALL_PASSIVE },
-	{ IDC_SETTINGS_PORT_TCP, IDH_SETTINGS_NETWORK_PORT_TCP },
-	{ IDC_PORT_TCP, IDH_SETTINGS_NETWORK_PORT_TCP },
-	{ IDC_SETTINGS_PORT_UDP, IDH_SETTINGS_NETWORK_PORT_UDP },
-	{ IDC_PORT_UDP, IDH_SETTINGS_NETWORK_PORT_UDP },
-	{ IDC_SETTINGS_PORT_TLS, IDH_SETTINGS_NETWORK_PORT_TLS },
-	{ IDC_PORT_TLS, IDH_SETTINGS_NETWORK_PORT_TLS },
-	{ IDC_SETTINGS_IP, IDH_SETTINGS_NETWORK_EXTERNAL_IP },
-	{ IDC_EXTERNAL_IP, IDH_SETTINGS_NETWORK_EXTERNAL_IP },
-	{ IDC_OVERRIDE, IDH_SETTINGS_NETWORK_OVERRIDE },
-	{ IDC_DIRECT_OUT, IDH_SETTINGS_NETWORK_DIRECT_OUT },
-	{ IDC_SOCKS5, IDH_SETTINGS_NETWORK_SOCKS5 },
-	{ IDC_SETTINGS_SOCKS5_IP, IDH_SETTINGS_NETWORK_SOCKS_SERVER },
-	{ IDC_SOCKS_SERVER, IDH_SETTINGS_NETWORK_SOCKS_SERVER },
-	{ IDC_SETTINGS_SOCKS5_PORT, IDH_SETTINGS_NETWORK_SOCKS_PORT },
-	{ IDC_SOCKS_PORT, IDH_SETTINGS_NETWORK_SOCKS_PORT },
-	{ IDC_SETTINGS_SOCKS5_USERNAME, IDH_SETTINGS_NETWORK_SOCKS_USER },
-	{ IDC_SOCKS_USER, IDH_SETTINGS_NETWORK_SOCKS_USER },
-	{ IDC_SETTINGS_SOCKS5_PASSWORD, IDH_SETTINGS_NETWORK_SOCKS_PASSWORD },
-	{ IDC_SOCKS_PASSWORD, IDH_SETTINGS_NETWORK_SOCKS_PASSWORD },
-	{ IDC_SOCKS_RESOLVE, IDH_SETTINGS_NETWORK_SOCKS_RESOLVE },
-	{ 0, 0 }
-};
-*/
-
 NetworkPage::NetworkPage(dwt::Widget* parent) :
 PropPage(parent),
 grid(0),
@@ -90,14 +60,21 @@ socksResolve(0)
 	GridPtr connType = gridIn->addChild(Grid::Seed(7, 1));
 
 	directIn = connType->addChild(RadioButton::Seed(T_("Direct connection")));
+	directIn->setHelpId(IDH_SETTINGS_NETWORK_DIRECT);	
 	upnp = connType->addChild(RadioButton::Seed(T_("Firewall with UPnP")));
+	upnp->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_UPNP);	
 	nat = connType->addChild(RadioButton::Seed(T_("Firewall with manual port forwarding")));
+	nat->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_NAT);	
 	connType->addChild(Label::Seed(T_("External / WAN IP")));
+	connType->setHelpId(IDH_SETTINGS_NETWORK_EXTERNAL_IP);	
 	externalIP = connType->addChild(WinUtil::Seeds::Dialog::TextBox);
 	items.push_back(Item(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR));
+	externalIP->setHelpId(IDH_SETTINGS_NETWORK_EXTERNAL_IP);	
 	overrideIP = connType->addChild(CheckBox::Seed(T_("Don't allow hub/UPnP to override")));
 	items.push_back(Item(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL));
+	overrideIP->setHelpId(IDH_SETTINGS_NETWORK_OVERRIDE);	
 	passive = connType->addChild(RadioButton::Seed(T_("Firewall (passive, last resort)")));
+	passive->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_PASSIVE);	
 
 	ports = gridIn->addChild(Grid::Seed(4, 2));
 
@@ -107,41 +84,51 @@ socksResolve(0)
 	LabelPtr portsLabel = ports->addChild(Label::Seed(T_("Ports")));
 	ports->setWidget(portsLabel, 0, 0, 1, 2);
 
-	ports->addChild(Label::Seed(T_("TCP")));
+	ports->addChild(Label::Seed(T_("TCP")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_TCP);	
 	tcp = ports->addChild(WinUtil::Seeds::Dialog::intTextBox);
 	items.push_back(Item(tcp, SettingsManager::TCP_PORT, PropPage::T_INT));
+	tcp->setHelpId(IDH_SETTINGS_NETWORK_PORT_TCP);	
 
-	ports->addChild(Label::Seed(T_("UDP")));
+	ports->addChild(Label::Seed(T_("UDP")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_UDP);
 	udp = ports->addChild(WinUtil::Seeds::Dialog::intTextBox);
 	items.push_back(Item(udp, SettingsManager::UDP_PORT, PropPage::T_INT));
+	udp->setHelpId(IDH_SETTINGS_NETWORK_PORT_UDP);	
 
-	ports->addChild(Label::Seed(T_("TLS")));
+	ports->addChild(Label::Seed(T_("TLS")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_TLS);
 	tls = ports->addChild(WinUtil::Seeds::Dialog::intTextBox);
 	items.push_back(Item(tls, SettingsManager::TLS_PORT, PropPage::T_INT));
+	tls->setHelpId(IDH_SETTINGS_NETWORK_PORT_TLS);	
 
 	GroupBoxPtr groupOut = grid->addChild(GroupBox::Seed(T_("Outgoing connection settings")));
 	GridPtr gridOut = groupOut->addChild(Grid::Seed(7, 2));
 
 	directOut = gridOut->addChild(RadioButton::Seed(T_("Direct connection")));
 	gridOut->setWidget(directOut, 0, 0, 1, 2);
+	directOut->setHelpId(IDH_SETTINGS_NETWORK_DIRECT_OUT);	
 	socks5 = gridOut->addChild(RadioButton::Seed(T_("SOCKS5")));
 	gridOut->setWidget(socks5, 1, 0, 1, 2);
-	gridOut->addChild(Label::Seed(T_("Socks IP")));
-	gridOut->addChild(Label::Seed(T_("Port")));
+	socks5->setHelpId(IDH_SETTINGS_NETWORK_SOCKS5);	
+	gridOut->addChild(Label::Seed(T_("Socks IP")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);
+	gridOut->addChild(Label::Seed(T_("Port")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);
 	socksServer = gridOut->addChild(WinUtil::Seeds::Dialog::TextBox);
 	items.push_back(Item(socksServer, SettingsManager::SOCKS_SERVER, PropPage::T_STR));
+	socksServer->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);	
 	socksPort = gridOut->addChild(WinUtil::Seeds::Dialog::intTextBox);
 	items.push_back(Item(socksPort, SettingsManager::SOCKS_PORT, PropPage::T_INT));
-	gridOut->addChild(Label::Seed(T_("Login")));
-	gridOut->addChild(Label::Seed(T_("Password")));
+	socksPort->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);	
+	gridOut->addChild(Label::Seed(T_("Login")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);
+	gridOut->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);
 	socksLogin = gridOut->addChild(WinUtil::Seeds::Dialog::TextBox);
 	items.push_back(Item(socksLogin, SettingsManager::SOCKS_USER, PropPage::T_STR));
+	socksLogin->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);	
 	socksPass = gridOut->addChild(WinUtil::Seeds::Dialog::TextBox);
 	items.push_back(Item(socksPass, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR));
+	socksPass->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);	
 	socksResolve = gridOut->addChild(CheckBox::Seed(T_("Use SOCKS5 server to resolve host names")));
 	gridOut->setWidget(socksResolve, 6, 0, 1, 2);
 	items.push_back(Item(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL));
-
+	socksResolve->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_RESOLVE);
+	
 	socksServer->setTextLimit(250);
 	socksPort->setTextLimit(250);
 	socksLogin->setTextLimit(250);
