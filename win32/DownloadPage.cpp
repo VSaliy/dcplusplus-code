@@ -22,6 +22,8 @@
 
 #include "DownloadPage.h"
 
+#include <dwt/widgets/Spinner.h>
+
 #include <dcpp/SettingsManager.h>
 #include "HubListsDlg.h"
 #include "WinUtil.h"
@@ -38,53 +40,61 @@ grid(0)
 
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Directories")));
-		group->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);	
+		group->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
 
 		GridPtr cur = group->addChild(Grid::Seed(4, 2));
 		cur->column(0).mode = GridInfo::FILL;
 
 		LabelPtr label = cur->addChild(Label::Seed(T_("Default download directory")));
 		cur->setWidget(label, 0, 0, 1, 2);
-		label->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);	
-		
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);	
+		label->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
+
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		items.push_back(Item(box, SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
-			
+
 		ButtonPtr browse = cur->addChild(Button::Seed(T_("Browse...")));
 		browse->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
 		browse->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
-		
+
 		label = cur->addChild(Label::Seed(T_("Unfinished downloads directory")));
 		cur->setWidget(label, 2, 0, 1, 2);
 		label->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
-		
+
 		box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		items.push_back(Item(box, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
-			
+
 		browse = cur->addChild(Button::Seed(T_("Browse...")));
 		browse->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
-		browse->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);	
+		browse->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
 	}
 
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Limits")));
-		group->setHelpId(IDH_SETTINGS_DOWNLOAD_LIMITS);	
+		group->setHelpId(IDH_SETTINGS_DOWNLOAD_LIMITS);
 
 		GridPtr cur = group->addChild(Grid::Seed(3, 2));
 		cur->column(0).mode = GridInfo::FILL;
 
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT));
-		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);	
-		
+		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
+		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
+
+		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, 100, box));
+		cur->setWidget(spin);
+		spin->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
+
 		cur->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT));
+		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
-			
+
+		spin = cur->addChild(Spinner::Seed(0, 10000, box));
+		cur->setWidget(spin);
+		spin->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
+
 		cur->addChild(Label::Seed(T_("No new downloads if speed exceeds (KiB/s, 0 = disable)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
 
 		// xgettext:no-c-format
@@ -96,17 +106,16 @@ grid(0)
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Public Hubs list")))->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
-		cur->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);	
+		cur->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 
 		cur->addChild(Label::Seed(T_("Public Hubs list URL")));
 		cur->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
-		
+
 		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::HTTP_PROXY, PropPage::T_STR));
 	}
 
 	PropPage::read(items);
-
 }
 
 DownloadPage::~DownloadPage() {

@@ -22,6 +22,8 @@
 
 #include "UploadPage.h"
 
+#include <dwt/widgets/Spinner.h>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/version.h>
@@ -52,11 +54,11 @@ remove(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Shared directories")))->addChild(Grid::Seed(4, 5));			
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Shared directories")))->addChild(Grid::Seed(4, 5));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
-		cur->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);	
+		cur->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 
 		Table::Seed seed = WinUtil::Seeds::Dialog::Table;
 		seed.exStyle |= WS_EX_ACCEPTFILES;
@@ -66,29 +68,29 @@ remove(0)
 
 		LabelPtr label = cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")));
 		cur->setWidget(label, 1, 0, 1, 5);
-		label->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);	
+		label->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 
 		CheckBoxPtr shareHidden = cur->addChild(CheckBox::Seed(T_("Share hidden files")));
 		cur->setWidget(shareHidden, 2, 0, 1, 5);
 		items.push_back(Item(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL));
 		shareHidden->onClicked(std::tr1::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden));
-		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);	
+		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);
 
 		cur->addChild(Label::Seed(T_("Total size:")))->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 		total = cur->addChild(Label::Seed(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize()))));
 		total->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
-			
+
 		rename = cur->addChild(Button::Seed(T_("Re&name")));
 		rename->onClicked(std::tr1::bind(&UploadPage::handleRenameClicked, this));
-		rename->setHelpId(IDH_SETTINGS_UPLOAD_RENAME);	
-		
+		rename->setHelpId(IDH_SETTINGS_UPLOAD_RENAME);
+
 		remove = cur->addChild(Button::Seed(T_("&Remove")));
 		remove->onClicked(std::tr1::bind(&UploadPage::handleRemoveClicked, this));
-		remove->setHelpId(IDH_SETTINGS_UPLOAD_REMOVE);	
-		
+		remove->setHelpId(IDH_SETTINGS_UPLOAD_REMOVE);
+
 		ButtonPtr add = cur->addChild(Button::Seed(T_("&Add folder")));
-		add->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));	
-		add->setHelpId(IDH_SETTINGS_UPLOAD_ADD);	
+		add->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
+		add->setHelpId(IDH_SETTINGS_UPLOAD_ADD);
 	}
 
 	{
@@ -96,16 +98,27 @@ remove(0)
 		cur->column(1).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Automatically open an extra slot if speed is below (0 = disable)")))->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
-		items.push_back(Item(box, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT));
+
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(box, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
 		box->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
+
+		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		cur->setWidget(spin);
+		spin->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
+
 		cur->addChild(Label::Seed(T_("KiB/s")))->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 
 		cur->addChild(Label::Seed(T_("Upload slots")))->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
+
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::SLOTS, PropPage::T_INT));
+		items.push_back(Item(box, SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN));
 		box->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
-			
+
+		spin = cur->addChild(Spinner::Seed(1, UD_MAXVAL, box));
+		cur->setWidget(spin);
+		spin->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
+
 		cur->addChild(Label::Seed(tstring()));
 	}
 
@@ -127,7 +140,6 @@ remove(0)
 	directories->onRaw(std::tr1::bind(&UploadPage::handleItemChanged, this), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 
 	onDragDrop(std::tr1::bind(&UploadPage::handleDragDrop, this, _1));
-
 }
 
 UploadPage::~UploadPage() {

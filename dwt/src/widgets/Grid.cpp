@@ -176,6 +176,11 @@ void Grid::layout(const Rectangle& r) {
 		if(!wi || !wi->w)
 			continue;
 
+		if(wi->noResize) {
+			wi->w->layout(Rectangle());
+			continue;
+		}
+
 		size_t r = wi->row;
 		size_t rs = wi->rowSpan;
 
@@ -269,6 +274,17 @@ void Grid::setWidget(Widget* w, size_t row, size_t column, size_t rowSpan, size_
 	}
 
 	widgetInfo.push_back(WidgetInfo(w, row, column, rowSpan, colSpan));
+}
+
+void Grid::setWidget(Widget* w) {
+	for(WidgetInfoList::iterator i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
+		if(i->w == w) {
+			i->noResize = true;
+			return;
+		}
+	}
+
+	widgetInfo.push_back(WidgetInfo(w));
 }
 
 void Grid::handleEnabled(bool enabled) {

@@ -22,6 +22,8 @@
 
 #include "Advanced3Page.h"
 
+#include <dwt/widgets/Spinner.h>
+
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
@@ -68,8 +70,13 @@ grid(0)
 
 	grid->addChild(Label::Seed(T_("Search history")))->setHelpId(IDH_SETTINGS_ADVANCED3_SEARCH_HISTORY);
 	box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::SEARCH_HISTORY, PropPage::T_INT));
+	items.push_back(Item(box, SettingsManager::SEARCH_HISTORY, PropPage::T_INT_WITH_SPIN));
 	box->setHelpId(IDH_SETTINGS_ADVANCED3_SEARCH_HISTORY);
+	{
+		SpinnerPtr spin = grid->addChild(Spinner::Seed(0, 100, box));
+		grid->setWidget(spin);
+		spin->setHelpId(IDH_SETTINGS_ADVANCED3_SEARCH_HISTORY);
+	}
 	grid->addChild(Label::Seed(tstring()));
 
 	grid->addChild(Label::Seed(T_("Max filelist size")))->setHelpId(IDH_SETTINGS_ADVANCED3_MAX_FILELIST_SIZE);
@@ -109,7 +116,6 @@ grid(0)
 	grid->addChild(Label::Seed(T_("B")))->setHelpId(IDH_SETTINGS_ADVANCED3_SOCKET_OUT_BUFFER);
 
 	PropPage::read(items);
-
 }
 
 Advanced3Page::~Advanced3Page() {

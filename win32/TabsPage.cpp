@@ -22,17 +22,10 @@
 
 #include "TabsPage.h"
 
+#include <dwt/widgets/Spinner.h>
+
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
-
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_SETTINGS_MAX_TAB_CHARS, IDH_SETTINGS_MAX_TAB_CHARS },
-	{ IDC_MAX_TAB_CHARS, IDH_SETTINGS_MAX_TAB_CHARS },
-	{ IDC_MAX_TAB_CHARS_SPIN, IDH_SETTINGS_MAX_TAB_CHARS },
-	{ 0, 0 }
-};
-*/
 
 PropPage::ListItem TabsPage::listItems[] = {
 	{ SettingsManager::BOLD_HUB, N_("Hub"), IDH_SETTINGS_TABS_BOLD_HUB },
@@ -66,12 +59,20 @@ options(0)
 		options = group->addChild(WinUtil::Seeds::Dialog::optionsTable);
 	}
 
-	grid->addChild(Label::Seed(T_("Max characters per tab (0 = infinite)")));
-	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::MAX_TAB_CHARS, PropPage::T_INT));
+	grid->addChild(Label::Seed(T_("Max characters per tab (0 = infinite)")))->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
+
+	{
+		TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(box, SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN));
+		box->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
+
+		SpinnerPtr spin = grid->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		grid->setWidget(spin);
+		spin->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
+	}
 
 	PropPage::read(items);
 	PropPage::read(listItems, options);
-
 }
 
 TabsPage::~TabsPage() {

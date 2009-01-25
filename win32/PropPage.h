@@ -36,6 +36,7 @@ public:
 	enum Type {
 		T_STR,
 		T_INT,
+		T_INT_WITH_SPIN, // fill even when the current value is the same as the default value (for controls with a spin buddy)
 		T_BOOL,
 		T_END
 	};
