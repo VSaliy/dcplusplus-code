@@ -89,7 +89,7 @@ bool AboutDlg::handleInitDialog() {
 		gs.caption = T_("TTH");
 		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
 		seed.style |= ES_READONLY;
-		/// @todo how to remove the surrounding border? "NOT WS_BORDER"
+		seed.exStyle &= ~WS_EX_CLIENTEDGE;
 		seed.caption = WinUtil::tth;
 		cur->addChild(gs)->addChild(seed);
 	}
