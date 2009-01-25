@@ -33,17 +33,27 @@
 
 namespace dwt {
 
-Spinner::Seed::Seed(int minValue_, int maxValue_) :
-	BaseType::Seed(UPDOWN_CLASS, WS_CHILD | WS_TABSTOP),
-	minValue(minValue_),
-	maxValue(maxValue_)
+Spinner::Seed::Seed(int minValue_, int maxValue_, Widget* buddy_) :
+BaseType::Seed(UPDOWN_CLASS, WS_CHILD | UDS_ARROWKEYS | UDS_NOTHOUSANDS),
+minValue(minValue_),
+maxValue(maxValue_),
+buddy(buddy_)
 {
+	if(buddy || (style & UDS_AUTOBUDDY))
+		style |= UDS_ALIGNRIGHT | UDS_SETBUDDYINT;
 }
 
-void Spinner::create( const Seed & cs )
-{
+void Spinner::create(const Seed& cs) {
 	BaseType::create(cs);
-	setRange( cs.minValue, cs.maxValue );
+	setRange(cs.minValue, cs.maxValue);
+	if(cs.buddy)
+		assignBuddy(cs.buddy);
+}
+
+void Spinner::layout(const dwt::Rectangle&) {
+	Widget* w = getBuddy();
+	if(w)
+		assignBuddy(w);
 }
 
 }

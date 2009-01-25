@@ -94,6 +94,7 @@ public:
 	void addColumn(const GridInfo& gp) { columns.push_back(gp); }
 
 	void setWidget(Widget* w, size_t row, size_t column, size_t rowSpan = 1, size_t colSpan = 1);
+	void setWidget(Widget* w);
 
 	void setSpacing(size_t spacing);
 
@@ -113,14 +114,19 @@ private:
 
 	struct WidgetInfo {
 		WidgetInfo(Widget* w_, size_t row_, size_t column_, size_t rowSpan_, size_t colSpan_) :
-			w(w_), row(row_), column(column_), rowSpan(rowSpan_), colSpan(colSpan_) { }
+			w(w_), row(row_), column(column_), rowSpan(rowSpan_), colSpan(colSpan_), noResize(false) { }
+		WidgetInfo(Widget* w_) :
+			w(w_), noResize(true) { }
 
 		Widget* w;
+
 		size_t row;
 		size_t column;
 
 		size_t rowSpan;
 		size_t colSpan;
+
+		bool noResize;
 
 		/** Does the widget appear in a certain row/column? */
 		bool inCell(size_t r, size_t c) const;

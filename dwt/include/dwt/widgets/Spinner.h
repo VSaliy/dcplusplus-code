@@ -94,8 +94,10 @@ public:
 		int minValue;
 		int maxValue;
 
+		Widget* buddy;
+
 		/// Fills with default parameters
-		Seed(int minValue_ = UD_MINVAL, int maxValue_ = UD_MAXVAL);
+		Seed(int minValue_ = UD_MINVAL, int maxValue_ = UD_MAXVAL, Widget* buddy_ = 0);
 	};
 
 	/// Sets the range of the Spinner
@@ -113,7 +115,9 @@ public:
 	  * And if you change the value of the buddy control the Spinner Control will
 	  * automatically also change its value.
 	  */
-	void assignBuddy( Widget * buddy );
+	void assignBuddy(Widget* buddy);
+
+	Widget* getBuddy() const;
 
 	/// Returns the value of the control
 	/** The value can be any value between the minimum and maximum range defined in
@@ -134,7 +138,9 @@ public:
 	  * directly. <br>
 	  * Only if you DERIVE from class you should call this function directly.
 	  */
-	void create( const Seed & cs = Seed() );
+	void create(const Seed &cs = Seed());
+
+	virtual void layout(const Rectangle&);
 
 protected:
 	// Constructor Taking pointer to parent
@@ -155,10 +161,13 @@ inline void Spinner::setRange( int minimum, int maximum )
 	sendMessage(UDM_SETRANGE32, static_cast< WPARAM >( minimum ), static_cast< LPARAM >( maximum ));
 }
 
-inline void Spinner::assignBuddy( Widget * buddy )
-{
-	assert( buddy && buddy->handle() );
+inline void Spinner::assignBuddy(Widget* buddy) {
+	assert(buddy && buddy->handle() && buddy->getParent() == getParent());
 	sendMessage(UDM_SETBUDDY, reinterpret_cast< WPARAM >( buddy->handle() ));
+}
+
+inline Widget* Spinner::getBuddy() const {
+	return hwnd_cast<Widget*>(reinterpret_cast<HWND>(sendMessage(UDM_GETBUDDY)));
 }
 
 inline int Spinner::getValue()
