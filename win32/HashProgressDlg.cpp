@@ -54,8 +54,9 @@ bool HashProgressDlg::handleInitDialog() {
 
 	grid = addChild(Grid::Seed(6, 1));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->row(3).size = 14;
+	grid->row(3).size = 20;
 	grid->row(3).mode = GridInfo::STATIC;
+	grid->row(3).align = GridInfo::STRETCH;
 
 	grid->addChild(Label::Seed(T_("Please wait while DC++ indexes your files (they won't be shared until they've been indexed)...")));
 
@@ -71,7 +72,6 @@ bool HashProgressDlg::handleInitDialog() {
 	}
 
 	progress = grid->addChild(ProgressBar::Seed());
-	/// @todo the progress bar doesn't show up.
 	progress->setRange(0, 10000);
 
 	{

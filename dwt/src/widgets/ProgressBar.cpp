@@ -34,7 +34,7 @@
 namespace dwt {
 
 ProgressBar::Seed::Seed() :
-BaseType::Seed(PROGRESS_CLASS, WS_CHILD | WS_BORDER)
+BaseType::Seed(PROGRESS_CLASS, WS_CHILD | PBS_SMOOTH)
 {
 }
 
