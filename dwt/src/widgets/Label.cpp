@@ -30,15 +30,20 @@
 */
 
 #include <dwt/widgets/Label.h>
-#include <dwt/CanvasClasses.h>
+
+#include <boost/lexical_cast.hpp>
 
 namespace dwt {
 
 Label::Seed::Seed(const tstring& caption) :
-	BaseType::Seed(WC_STATIC, WS_CHILD | SS_NOTIFY, 0, caption),
-	font(new Font(DefaultGuiFont))
+BaseType::Seed(WC_STATIC, WS_CHILD | SS_NOTIFY, 0, caption),
+font(new Font(DefaultGuiFont))
 {
+}
 
+Label::Seed::Seed(unsigned iconId) :
+BaseType::Seed(WC_STATIC, WS_CHILD | SS_NOTIFY | SS_ICON, 0, _T('#') + boost::lexical_cast<tstring>(iconId))
+{
 }
 
 void Label::create( const Seed & cs ) {
@@ -47,17 +52,23 @@ void Label::create( const Seed & cs ) {
 		setFont( cs.font );
 }
 
-void Label::setBitmap(const BitmapPtr& bitmap) {
-	addRemoveStyle(SS_BITMAP, true);
-	sendMessage(STM_SETIMAGE, IMAGE_BITMAP, reinterpret_cast<LPARAM>(bitmap->handle()));
-}
+void Label::layout(const Rectangle& r_) {
+	Rectangle r = r_;
 
-void Label::setIcon(const IconPtr& icon) {
-	addRemoveStyle(SS_ICON, true);
-	sendMessage(STM_SETICON, reinterpret_cast<WPARAM>(icon->handle()), 0);
+	if(hasStyle(SS_ICON)) {
+		// icon control; we don't want the size to change.
+		r.size = getSize();
+	}
+
+	BaseType::layout(r);
 }
 
 Point Label::getPreferedSize() {
+	if(hasStyle(SS_ICON)) {
+		// icon control; the control should have already resized itself to its preferred size.
+		return getSize();
+	}
+
 	UpdateCanvas c(this);
 	c.selectFont(getFont());
 

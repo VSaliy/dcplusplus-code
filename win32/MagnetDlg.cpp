@@ -51,8 +51,7 @@ bool MagnetDlg::handleInitDialog() {
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
-	/// @todo ICON            IDR_MAGNET,IDC_MAGNET_ICON,22,14,21,20
-	grid->addChild(Label::Seed(_T("icon here")));
+	grid->addChild(Label::Seed(IDR_MAGNET));
 
 	grid->addChild(Label::Seed(T_("DC++ has detected a MAGNET link with a file hash that can be searched for on the Direct Connect network.  What would you like to do?")));
 

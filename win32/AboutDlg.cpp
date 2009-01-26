@@ -80,8 +80,7 @@ bool AboutDlg::handleInitDialog() {
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::CENTER;
 
-		/// @todo ICON            IDR_DCPP,IDC_ABOUT_ICON,110,15,21,20
-		cur->addChild(Label::Seed(_T("icon here")));
+		cur->addChild(Label::Seed(IDR_DCPP));
 
 		ls.caption = Text::toT(dcpp::fullVersionString) + T_("\n(c) Copyright 2001-2008 Jacek Sieka\nEx-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL\nhttp://dcplusplus.sourceforge.net/");
 		cur->addChild(ls);

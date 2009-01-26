@@ -42,7 +42,6 @@
 #include "../aspects/AspectFont.h"
 #include "../aspects/AspectPainting.h"
 #include "../aspects/AspectText.h"
-#include "../resources/Bitmap.h"
 #include "Control.h"
 
 namespace dwt {
@@ -93,6 +92,9 @@ public:
 
 		/// Fills with default parameters
 		Seed(const tstring& caption_ = tstring());
+
+		/// Make the control display an icon. The control handles loading the icon and resizing by itself.
+		Seed(unsigned iconId);
 	};
 
 	/// Actually creates the Static Control
@@ -102,12 +104,7 @@ public:
 	  */
 	void create( const Seed & cs = Seed() );
 
-	/// Assigns a Bitmap (BMP) to the static control
-	/** Use the Bitmap class and the BitmapPtr to load a Bitmap and call this
-	  * function to assign that Bitmap to your Label
-	  */
-	void setBitmap(const BitmapPtr& bitmap);
-	void setIcon(const IconPtr& icon);
+	virtual void layout(const Rectangle& r_);
 
 	virtual Point getPreferedSize();
 
