@@ -55,7 +55,6 @@ bool ADLSProperties::handleInitDialog() {
 
 	grid = addChild(Grid::Seed(4, 2));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->column(1).mode = GridInfo::FILL;
 
 	GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Search String")));
 	group->setHelpId(IDH_ADLSP_SEARCH_STRING);
