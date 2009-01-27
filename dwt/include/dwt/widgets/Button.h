@@ -80,6 +80,9 @@ public:
 
 		FontPtr font;
 
+		/// Amount of space between text and border
+		Point padding;
+
 		/// Fills with default parameters
 		Seed(const tstring& caption_ = tstring(), DWORD style = 0);
 	};
@@ -94,6 +97,8 @@ protected:
 	Button(Widget* parent);
 
 private:
+	Point padding;
+
 	// Contract needed by AspectClickable Aspect class
 	static Message getClickMessage();
 

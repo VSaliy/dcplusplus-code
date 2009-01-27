@@ -38,13 +38,10 @@
 
 namespace dwt {
 
-// Amount of space between child and border
-// TODO make configurable or something
-static const int PADDING = 3;
-
 GroupBox::Seed::Seed(const tstring& caption) :
-	BaseType::Seed(WC_BUTTON, BS_GROUPBOX | WS_CHILD, WS_EX_CONTROLPARENT, caption),
-	font(new Font(DefaultGuiFont))
+BaseType::Seed(WC_BUTTON, BS_GROUPBOX | WS_CHILD, WS_EX_CONTROLPARENT, caption),
+font(new Font(DefaultGuiFont)),
+padding(6, 6)
 {
 }
 
@@ -52,6 +49,10 @@ void GroupBox::create( const GroupBox::Seed & cs ) {
 	BaseType::create(cs);
 	if(cs.font)
 		setFont( cs.font );
+
+	padding = cs.padding;
+	padding.x = ::GetSystemMetrics(SM_CXEDGE) * 2 + padding.x * 2;
+	padding.y = ::GetSystemMetrics(SM_CYEDGE) + padding.y * 2; // ignore the top border
 }
 
 Point GroupBox::getPreferedSize() {
@@ -84,22 +85,24 @@ Rectangle GroupBox::shrink(const Rectangle& client) {
 	const int h = tmNew.tmHeight;
 
 	return Rectangle(
-		client.width() > PADDING ? client.x() + PADDING : client.width(),
-		client.height() > PADDING + h ? client.y() + PADDING + h : client.height(),
-		client.width() > PADDING * 2 ? client.width() - PADDING * 2 : 0,
-		client.height() > PADDING * 2 + h ? client.height() - PADDING * 2 - h : 0
+		client.width() > padding.x / 2 ? client.x() + padding.x / 2 : client.width(),
+		client.height() > padding.y / 2 + h ? client.y() + padding.y / 2 + h : client.height(),
+		client.width() > padding.x ? client.width() - padding.x : 0,
+		client.height() > padding.y + h ? client.height() - padding.y - h : 0
 	);
 }
 
 Point GroupBox::expand(const Point& child) {
 	UpdateCanvas c(this);
-
 	c.selectFont(getFont());
+
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);
 	const int h = tmNew.tmHeight;
+
 	Point txt = c.getTextExtent(getText());
-	return Point(std::max(child.x, txt.x) + PADDING * 2, child.y + PADDING * 2 + h);
+
+	return Point(std::max(child.x, txt.x) + padding.x, child.y + padding.y + h);
 }
 
 }

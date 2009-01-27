@@ -179,6 +179,7 @@ void WinUtil::init() {
 	xdintTextBox.style |= ES_NUMBER;
 
 	xdTable.style |= WS_HSCROLL | WS_VSCROLL | LVS_SHOWSELALWAYS | LVS_NOSORTHEADER;
+	xdTable.exStyle = WS_EX_CLIENTEDGE;
 	xdTable.lvStyle |= LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP;
 
 	xdoptionsTable = xdTable;
@@ -686,12 +687,14 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(
 
 	seed.caption = T_("OK");
 	seed.menuHandle = reinterpret_cast<HMENU>(IDOK);
+	seed.padding.x = 20;
 	ButtonPtr ok = grid->addChild(seed);
 	ok->setHelpId(IDH_DCPP_OK);
 	ok->onClicked(f_ok);
 
 	seed.caption = T_("Cancel");
 	seed.menuHandle = reinterpret_cast<HMENU>(IDCANCEL);
+	seed.padding.x = 10;
 	ButtonPtr cancel = grid->addChild(seed);
 	cancel->setHelpId(IDH_DCPP_CANCEL);
 	cancel->onClicked(f_cancel);

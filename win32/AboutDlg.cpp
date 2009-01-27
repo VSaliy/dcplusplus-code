@@ -72,6 +72,7 @@ bool AboutDlg::handleInitDialog() {
 	// horizontally centered seeds
 	GroupBox::Seed gs;
 	gs.style |= BS_CENTER;
+	gs.padding.y = 2;
 	Label::Seed ls;
 	ls.style |= SS_CENTER;
 

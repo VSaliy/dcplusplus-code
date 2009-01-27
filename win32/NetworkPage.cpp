@@ -53,82 +53,82 @@ socksResolve(0)
 	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
 
-	GroupBoxPtr groupIn = grid->addChild(GroupBox::Seed(T_("Incoming connection settings")));
-	GridPtr gridIn = groupIn->addChild(Grid::Seed(1, 2));
-	gridIn->row(0).align = GridInfo::TOP_LEFT;
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Incoming connection settings")))->addChild(Grid::Seed(1, 2));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 
-	GridPtr connType = gridIn->addChild(Grid::Seed(7, 1));
+		GridPtr connType = cur->addChild(Grid::Seed(7, 1));
 
-	directIn = connType->addChild(RadioButton::Seed(T_("Direct connection")));
-	directIn->setHelpId(IDH_SETTINGS_NETWORK_DIRECT);	
-	upnp = connType->addChild(RadioButton::Seed(T_("Firewall with UPnP")));
-	upnp->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_UPNP);	
-	nat = connType->addChild(RadioButton::Seed(T_("Firewall with manual port forwarding")));
-	nat->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_NAT);	
-	connType->addChild(Label::Seed(T_("External / WAN IP")));
-	connType->setHelpId(IDH_SETTINGS_NETWORK_EXTERNAL_IP);	
-	externalIP = connType->addChild(WinUtil::Seeds::Dialog::TextBox);
-	items.push_back(Item(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR));
-	externalIP->setHelpId(IDH_SETTINGS_NETWORK_EXTERNAL_IP);	
-	overrideIP = connType->addChild(CheckBox::Seed(T_("Don't allow hub/UPnP to override")));
-	items.push_back(Item(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL));
-	overrideIP->setHelpId(IDH_SETTINGS_NETWORK_OVERRIDE);	
-	passive = connType->addChild(RadioButton::Seed(T_("Firewall (passive, last resort)")));
-	passive->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_PASSIVE);	
+		directIn = connType->addChild(RadioButton::Seed(T_("Direct connection")));
+		directIn->setHelpId(IDH_SETTINGS_NETWORK_DIRECT);
+		upnp = connType->addChild(RadioButton::Seed(T_("Firewall with UPnP")));
+		upnp->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_UPNP);
+		nat = connType->addChild(RadioButton::Seed(T_("Firewall with manual port forwarding")));
+		nat->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_NAT);
+		connType->addChild(Label::Seed(T_("External / WAN IP")));
+		connType->setHelpId(IDH_SETTINGS_NETWORK_EXTERNAL_IP);
+		externalIP = connType->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR));
+		externalIP->setHelpId(IDH_SETTINGS_NETWORK_EXTERNAL_IP);
+		overrideIP = connType->addChild(CheckBox::Seed(T_("Don't allow hub/UPnP to override")));
+		items.push_back(Item(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL));
+		overrideIP->setHelpId(IDH_SETTINGS_NETWORK_OVERRIDE);
+		passive = connType->addChild(RadioButton::Seed(T_("Firewall (passive, last resort)")));
+		passive->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_PASSIVE);
 
-	ports = gridIn->addChild(Grid::Seed(4, 2));
+		ports = cur->addChild(GroupBox::Seed(T_("Ports")))->addChild(Grid::Seed(3, 2));
 
-	ports->column(1).size = 30;
-	ports->column(1).mode = dwt::GridInfo::STATIC;
+		ports->column(1).size = 30;
+		ports->column(1).mode = GridInfo::STATIC;
 
-	LabelPtr portsLabel = ports->addChild(Label::Seed(T_("Ports")));
-	ports->setWidget(portsLabel, 0, 0, 1, 2);
+		ports->addChild(Label::Seed(T_("TCP")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_TCP);
+		tcp = ports->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(tcp, SettingsManager::TCP_PORT, PropPage::T_INT));
+		tcp->setHelpId(IDH_SETTINGS_NETWORK_PORT_TCP);
 
-	ports->addChild(Label::Seed(T_("TCP")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_TCP);	
-	tcp = ports->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(tcp, SettingsManager::TCP_PORT, PropPage::T_INT));
-	tcp->setHelpId(IDH_SETTINGS_NETWORK_PORT_TCP);	
+		ports->addChild(Label::Seed(T_("UDP")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_UDP);
+		udp = ports->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(udp, SettingsManager::UDP_PORT, PropPage::T_INT));
+		udp->setHelpId(IDH_SETTINGS_NETWORK_PORT_UDP);
 
-	ports->addChild(Label::Seed(T_("UDP")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_UDP);
-	udp = ports->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(udp, SettingsManager::UDP_PORT, PropPage::T_INT));
-	udp->setHelpId(IDH_SETTINGS_NETWORK_PORT_UDP);	
+		ports->addChild(Label::Seed(T_("TLS")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_TLS);
+		tls = ports->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(tls, SettingsManager::TLS_PORT, PropPage::T_INT));
+		tls->setHelpId(IDH_SETTINGS_NETWORK_PORT_TLS);
+	}
 
-	ports->addChild(Label::Seed(T_("TLS")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_TLS);
-	tls = ports->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(tls, SettingsManager::TLS_PORT, PropPage::T_INT));
-	tls->setHelpId(IDH_SETTINGS_NETWORK_PORT_TLS);	
+	{
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Outgoing connection settings")))->addChild(Grid::Seed(7, 2));
 
-	GroupBoxPtr groupOut = grid->addChild(GroupBox::Seed(T_("Outgoing connection settings")));
-	GridPtr gridOut = groupOut->addChild(Grid::Seed(7, 2));
+		directOut = cur->addChild(RadioButton::Seed(T_("Direct connection")));
+		cur->setWidget(directOut, 0, 0, 1, 2);
+		directOut->setHelpId(IDH_SETTINGS_NETWORK_DIRECT_OUT);
+		socks5 = cur->addChild(RadioButton::Seed(T_("SOCKS5")));
+		cur->setWidget(socks5, 1, 0, 1, 2);
+		socks5->setHelpId(IDH_SETTINGS_NETWORK_SOCKS5);
+		cur->addChild(Label::Seed(T_("Socks IP")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);
+		cur->addChild(Label::Seed(T_("Port")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);
+		socksServer = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(socksServer, SettingsManager::SOCKS_SERVER, PropPage::T_STR));
+		socksServer->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);
+		socksPort = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(socksPort, SettingsManager::SOCKS_PORT, PropPage::T_INT));
+		socksPort->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);
+		cur->addChild(Label::Seed(T_("Login")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);
+		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);
+		socksLogin = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(socksLogin, SettingsManager::SOCKS_USER, PropPage::T_STR));
+		socksLogin->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);
+		socksPass = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(socksPass, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR));
+		socksPass->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);
+		socksResolve = cur->addChild(CheckBox::Seed(T_("Use SOCKS5 server to resolve host names")));
+		cur->setWidget(socksResolve, 6, 0, 1, 2);
+		items.push_back(Item(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL));
+		socksResolve->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_RESOLVE);
+	}
 
-	directOut = gridOut->addChild(RadioButton::Seed(T_("Direct connection")));
-	gridOut->setWidget(directOut, 0, 0, 1, 2);
-	directOut->setHelpId(IDH_SETTINGS_NETWORK_DIRECT_OUT);	
-	socks5 = gridOut->addChild(RadioButton::Seed(T_("SOCKS5")));
-	gridOut->setWidget(socks5, 1, 0, 1, 2);
-	socks5->setHelpId(IDH_SETTINGS_NETWORK_SOCKS5);	
-	gridOut->addChild(Label::Seed(T_("Socks IP")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);
-	gridOut->addChild(Label::Seed(T_("Port")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);
-	socksServer = gridOut->addChild(WinUtil::Seeds::Dialog::TextBox);
-	items.push_back(Item(socksServer, SettingsManager::SOCKS_SERVER, PropPage::T_STR));
-	socksServer->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);	
-	socksPort = gridOut->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(socksPort, SettingsManager::SOCKS_PORT, PropPage::T_INT));
-	socksPort->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);	
-	gridOut->addChild(Label::Seed(T_("Login")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);
-	gridOut->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);
-	socksLogin = gridOut->addChild(WinUtil::Seeds::Dialog::TextBox);
-	items.push_back(Item(socksLogin, SettingsManager::SOCKS_USER, PropPage::T_STR));
-	socksLogin->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);	
-	socksPass = gridOut->addChild(WinUtil::Seeds::Dialog::TextBox);
-	items.push_back(Item(socksPass, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR));
-	socksPass->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);	
-	socksResolve = gridOut->addChild(CheckBox::Seed(T_("Use SOCKS5 server to resolve host names")));
-	gridOut->setWidget(socksResolve, 6, 0, 1, 2);
-	items.push_back(Item(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL));
-	socksResolve->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_RESOLVE);
-	
 	socksServer->setTextLimit(250);
 	socksPort->setTextLimit(250);
 	socksLogin->setTextLimit(250);
