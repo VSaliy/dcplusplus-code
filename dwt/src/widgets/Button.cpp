@@ -35,8 +35,9 @@
 namespace dwt {
 
 Button::Seed::Seed(const tstring& caption, DWORD style) :
-	BaseType::Seed(WC_BUTTON, style | WS_CHILD | WS_TABSTOP, 0, caption),
-	font(new Font(DefaultGuiFont))
+BaseType::Seed(WC_BUTTON, style | WS_CHILD | WS_TABSTOP, 0, caption),
+font(new Font(DefaultGuiFont)),
+padding(3, 2)
 {
 }
 
@@ -44,15 +45,17 @@ void Button::create(const Seed& cs) {
 	BaseType::create(cs);
 	if(cs.font)
 		setFont(cs.font);
+
+	padding = cs.padding;
+	padding.x = ::GetSystemMetrics(SM_CYFIXEDFRAME) * 2 + padding.x * 2;
+	padding.y = ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2 + padding.y * 2;
 }
 
 Point Button::getPreferedSize() {
 	// TODO Consider icons etc
 	UpdateCanvas c(this);
-	Point ret = c.getTextExtent(getText());
-	ret.x += ::GetSystemMetrics(SM_CYFIXEDFRAME) * 2;
-	ret.y += ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2;
-	return ret;
+	c.selectFont(getFont());
+	return c.getTextExtent(getText()) + padding;
 }
 
 }

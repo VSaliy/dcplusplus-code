@@ -87,6 +87,9 @@ public:
 
 		FontPtr font;
 
+		/// Amount of space between child and border
+		Point padding;
+
 		/// Fills with default parameters
 		Seed(const tstring& caption_ = tstring());
 	};
@@ -106,6 +109,9 @@ protected:
 	// WidgetFactory class which is friend
 	virtual ~GroupBox()
 	{}
+
+private:
+	Point padding;
 
 	Rectangle shrink(const Rectangle& client);
 	Point expand(const Point& child);

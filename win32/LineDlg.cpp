@@ -42,20 +42,17 @@ int LineDlg::run() {
 }
 
 bool LineDlg::initDialog() {
-	grid = addChild(Grid::Seed(2, 2));
+	grid = addChild(Grid::Seed(1, 2));
 	grid->column(0).mode = GridInfo::FILL;
 
-	GroupBoxPtr group = grid->addChild(GroupBox::Seed(desc));
-	grid->setWidget(group, 0, 0, 2, 1);
-
-	line = group->addChild(WinUtil::Seeds::Dialog::TextBox);
+	line = grid->addChild(GroupBox::Seed(desc))->addChild(WinUtil::Seeds::Dialog::TextBox);
 	if(password) {
 		line->setPassword();
 	}
 	line->setText(text);
 	line->setSelection();
 
-	WinUtil::addDlgButtons(grid,
+	WinUtil::addDlgButtons(grid->addChild(Grid::Seed(2, 1)),
 		std::tr1::bind(&LineDlg::okClicked, this),
 		std::tr1::bind(&LineDlg::endDialog, this, IDCANCEL));
 
