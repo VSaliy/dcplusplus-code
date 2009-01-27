@@ -25,43 +25,6 @@
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_SETTINGS_AUTOPRIO, IDH_SETTINGS_QUEUE_AUTOPRIO },
-	{ IDC_SETTINGS_PRIO_HIGHEST, IDH_SETTINGS_QUEUE_PRIO_HIGHEST },
-	{ IDC_PRIO_HIGHEST_SIZE, IDH_SETTINGS_QUEUE_PRIO_HIGHEST },
-	{ IDC_SETTINGS_KB3, IDH_SETTINGS_QUEUE_PRIO_HIGHEST },
-	{ IDC_SETTINGS_PRIO_NORMAL, IDH_SETTINGS_QUEUE_PRIO_NORMAL },
-	{ IDC_PRIO_NORMAL_SIZE, IDH_SETTINGS_QUEUE_PRIO_NORMAL },
-	{ IDC_SETTINGS_KB5, IDH_SETTINGS_QUEUE_PRIO_NORMAL },
-	{ IDC_SETTINGS_PRIO_HIGH, IDH_SETTINGS_QUEUE_PRIO_HIGH },
-	{ IDC_PRIO_HIGH_SIZE, IDH_SETTINGS_QUEUE_PRIO_HIGH },
-	{ IDC_SETTINGS_KB4, IDH_SETTINGS_QUEUE_PRIO_HIGH },
-	{ IDC_SETTINGS_PRIO_LOW, IDH_SETTINGS_QUEUE_PRIO_LOW },
-	{ IDC_PRIO_LOW_SIZE, IDH_SETTINGS_QUEUE_PRIO_LOW },
-	{ IDC_SETTINGS_KB6, IDH_SETTINGS_QUEUE_PRIO_LOW },
-	{ IDC_SETTINGS_AUTODROP, IDH_SETTINGS_QUEUE_AUTODROP },
-	{ IDC_SETTINGS_AUTODROP_SPEED, IDH_SETTINGS_QUEUE_AUTODROP_SPEED },
-	{ IDC_AUTODROP_SPEED, IDH_SETTINGS_QUEUE_AUTODROP_SPEED },
-	{ IDC_SETTINGS_BPS, IDH_SETTINGS_QUEUE_AUTODROP_SPEED },
-	{ IDC_SETTINGS_AUTODROP_ELAPSED, IDH_SETTINGS_QUEUE_AUTODROP_ELAPSED },
-	{ IDC_AUTODROP_ELAPSED, IDH_SETTINGS_QUEUE_AUTODROP_ELAPSED },
-	{ IDC_SETTINGS_S2, IDH_SETTINGS_QUEUE_AUTODROP_ELAPSED },
-	{ IDC_SETTINGS_AUTODROP_MINSOURCES, IDH_SETTINGS_QUEUE_AUTODROP_MINSOURCES },
-	{ IDC_AUTODROP_MINSOURCES, IDH_SETTINGS_QUEUE_AUTODROP_MINSOURCES },
-	{ IDC_SETTINGS_AUTODROP_INTERVAL, IDH_SETTINGS_QUEUE_AUTODROP_INTERVAL },
-	{ IDC_AUTODROP_INTERVAL, IDH_SETTINGS_QUEUE_AUTODROP_INTERVAL },
-	{ IDC_SETTINGS_S1, IDH_SETTINGS_QUEUE_AUTODROP_INTERVAL },
-	{ IDC_SETTINGS_AUTODROP_INACTIVITY, IDH_SETTINGS_QUEUE_AUTODROP_INACTIVITY },
-	{ IDC_AUTODROP_INACTIVITY, IDH_SETTINGS_QUEUE_AUTODROP_INACTIVITY },
-	{ IDC_SETTINGS_S3, IDH_SETTINGS_QUEUE_AUTODROP_INACTIVITY },
-	{ IDC_SETTINGS_AUTODROP_FILESIZE, IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE },
-	{ IDC_AUTODROP_FILESIZE, IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE },
-	{ IDC_SETTINGS_KB7, IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE },
-	{ 0, 0 }
-};
-*/
-
 PropPage::ListItem QueuePage::optionItems[] = {
 	{ SettingsManager::PRIO_LOWEST, N_("Set lowest prio for newly added files larger than Low prio size"), IDH_SETTINGS_QUEUE_PRIO_LOWEST },
 	{ SettingsManager::AUTODROP_ALL, N_("Autodrop slow sources for all queue items (except filelists)"), IDH_SETTINGS_QUEUE_AUTODROP_ALL },
@@ -94,25 +57,34 @@ otherOptions(0)
 		cur->column(1).size = 40;
 		cur->column(1).mode = GridInfo::STATIC;
 		cur->column(2).mode = GridInfo::FILL;
-		cur->column(3).align = GridInfo::BOTTOM_RIGHT;
+		cur->column(3).align = GridInfo::BOTTOM_RIGHT; 
 		cur->column(4).size = 40;
 		cur->column(4).mode = GridInfo::STATIC;
+		cur->setHelpId(IDH_SETTINGS_QUEUE_AUTOPRIO);	
 
-		cur->addChild(Label::Seed(T_("Highest prio max size")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT));
-		cur->addChild(Label::Seed(T_("KiB")));
+		cur->addChild(Label::Seed(T_("Highest prio max size")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGHEST);
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGHEST);
+		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGHEST);
 
-		cur->addChild(Label::Seed(T_("High prio max size")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIO_HIGH_SIZE, PropPage::T_INT));
-		cur->addChild(Label::Seed(T_("KiB")));
+		cur->addChild(Label::Seed(T_("High prio max size")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGH);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::PRIO_HIGH_SIZE, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGH);
+		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGH);
 
-		cur->addChild(Label::Seed(T_("Normal prio max size")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIO_NORMAL_SIZE, PropPage::T_INT));
-		cur->addChild(Label::Seed(T_("KiB")));
+		cur->addChild(Label::Seed(T_("Normal prio max size")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_NORMAL);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::PRIO_NORMAL_SIZE, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_PRIO_NORMAL);
+		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_NORMAL);
 
-		cur->addChild(Label::Seed(T_("Low prio max size")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::PRIO_LOW_SIZE, PropPage::T_INT));
-		cur->addChild(Label::Seed(T_("KiB")));
+		cur->addChild(Label::Seed(T_("Low prio max size")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_LOW);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::PRIO_LOW_SIZE, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_PRIO_LOW);
+		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_LOW);
 	}
 
 	{
@@ -121,33 +93,46 @@ otherOptions(0)
 		cur->column(1).size = 40;
 		cur->column(1).mode = GridInfo::STATIC;
 		cur->column(2).mode = GridInfo::FILL;
-		cur->column(3).align = GridInfo::BOTTOM_RIGHT;
+		cur->column(3).align = GridInfo::BOTTOM_RIGHT; 
 		cur->column(4).size = 40;
 		cur->column(4).mode = GridInfo::STATIC;
+		cur->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP);	
 
-		cur->addChild(Label::Seed(T_("Drop sources below")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_SPEED, PropPage::T_INT));
-		cur->addChild(Label::Seed(T_("B/s")));
+		cur->addChild(Label::Seed(T_("Drop sources below")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_SPEED);
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::AUTODROP_SPEED, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_SPEED);
+		cur->addChild(Label::Seed(T_("B/s")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_SPEED);
 
-		cur->addChild(Label::Seed(T_("Check every")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_INTERVAL, PropPage::T_INT));
-		cur->addChild(Label::Seed(T_("s")));
+		cur->addChild(Label::Seed(T_("Check every")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INTERVAL);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::AUTODROP_INTERVAL, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INTERVAL);
+		cur->addChild(Label::Seed(T_("s")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INTERVAL);
 
-		cur->addChild(Label::Seed(T_("Min elapsed")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_ELAPSED, PropPage::T_INT));
-		cur->addChild(Label::Seed(T_("s")));
+		cur->addChild(Label::Seed(T_("Min elapsed")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_ELAPSED);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::AUTODROP_ELAPSED, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_ELAPSED);
+		cur->addChild(Label::Seed(T_("s")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_ELAPSED);
 
-		cur->addChild(Label::Seed(T_("Max inactivity")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_INACTIVITY, PropPage::T_INT));
-		cur->addChild(Label::Seed(T_("s")));
+		cur->addChild(Label::Seed(T_("Max inactivity")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INACTIVITY);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::AUTODROP_INACTIVITY, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INACTIVITY);
+		cur->addChild(Label::Seed(T_("s")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INACTIVITY);
 
-		cur->addChild(Label::Seed(T_("Min sources online")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_MINSOURCES, PropPage::T_INT));
+		cur->addChild(Label::Seed(T_("Min sources online")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_MINSOURCES);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::AUTODROP_MINSOURCES, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_MINSOURCES);
 		cur->addChild(Label::Seed(tstring()));
 
-		cur->addChild(Label::Seed(T_("Min filesize")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::intTextBox), SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT));
-		cur->addChild(Label::Seed(T_("KiB")));
+		cur->addChild(Label::Seed(T_("Min filesize")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);	
+		items.push_back(Item(box, SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT));
+		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE);
+		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE);
 	}
 
 	otherOptions = grid->addChild(GroupBox::Seed(T_("Other queue options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
