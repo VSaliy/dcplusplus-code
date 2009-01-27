@@ -48,26 +48,26 @@ options(0)
 	createDialog(IDD_TABSPAGE);
 	setHelpId(IDH_TABSPAGE);
 
-	grid = addChild(Grid::Seed(2, 2));
+	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
-	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Tab highlight on content change")));
-		grid->setWidget(group, 0, 0, 1, 2);
-		options = group->addChild(WinUtil::Seeds::Dialog::optionsTable);
-	}
-
-	grid->addChild(Label::Seed(T_("Max characters per tab (0 = infinite)")))->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
+	options = grid->addChild(GroupBox::Seed(T_("Tab highlight on content change")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
 
 	{
-		TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		cur->column(1).size = 40;
+		cur->column(1).mode = GridInfo::STATIC;
+
+		cur->addChild(Label::Seed(T_("Max characters per tab (0 = infinite)")))->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
+
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN));
 		box->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
 
-		SpinnerPtr spin = grid->addChild(Spinner::Seed(0, UD_MAXVAL, box));
-		grid->setWidget(spin);
+		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		cur->setWidget(spin);
 		spin->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
 	}
 

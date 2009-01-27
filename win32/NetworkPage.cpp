@@ -78,8 +78,7 @@ socksResolve(0)
 		passive->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_PASSIVE);
 
 		ports = cur->addChild(GroupBox::Seed(T_("Ports")))->addChild(Grid::Seed(3, 2));
-
-		ports->column(1).size = 30;
+		ports->column(1).size = 40;
 		ports->column(1).mode = GridInfo::STATIC;
 
 		ports->addChild(Label::Seed(T_("TCP")))->setHelpId(IDH_SETTINGS_NETWORK_PORT_TCP);

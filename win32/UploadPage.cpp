@@ -95,7 +95,8 @@ remove(0)
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(2, 3));
-		cur->column(1).mode = GridInfo::FILL;
+		cur->column(1).size = 40;
+		cur->column(1).mode = GridInfo::STATIC;
 
 		cur->addChild(Label::Seed(T_("Automatically open an extra slot if speed is below (0 = disable)")))->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 

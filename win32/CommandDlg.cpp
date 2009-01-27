@@ -76,6 +76,8 @@ bool CommandDlg::handleInitDialog() {
 		grid->setWidget(group, 0, 0, 1, 3);
 
 		GridPtr cur = group->addChild(Grid::Seed(2, 2));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		separator = cur->addChild(RadioButton::Seed(T_("Separator")));
 		separator->setHelpId(IDH_USER_COMMAND_SEPARATOR);
@@ -100,6 +102,8 @@ bool CommandDlg::handleInitDialog() {
 		group->setHelpId(IDH_USER_COMMAND_CONTEXT);
 
 		GridPtr cur = group->addChild(Grid::Seed(2, 2));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		hubMenu = cur->addChild(RadioButton::Seed(T_("Hub Menu")));
 		hubMenu->setHelpId(IDH_USER_COMMAND_HUB_MENU);
