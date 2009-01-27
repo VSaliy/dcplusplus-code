@@ -35,7 +35,9 @@ grid(0)
 	setHelpId(IDH_ADVANCED3PAGE);
 
 	grid = addChild(Grid::Seed(6, 6));
+	grid->column(0).align = GridInfo::BOTTOM_RIGHT;
 	grid->column(1).mode = GridInfo::FILL;
+	grid->column(3).align = GridInfo::BOTTOM_RIGHT;
 	grid->column(4).mode = GridInfo::FILL;
 	grid->setSpacing(10);
 

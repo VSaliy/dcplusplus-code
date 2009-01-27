@@ -95,6 +95,8 @@ remove(0)
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(2, 3));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).size = 40;
 		cur->column(1).mode = GridInfo::STATIC;
 

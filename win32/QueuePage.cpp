@@ -90,9 +90,11 @@ otherOptions(0)
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Auto priority settings")))->addChild(Grid::Seed(2, 6));
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).size = 40;
 		cur->column(1).mode = GridInfo::STATIC;
 		cur->column(2).mode = GridInfo::FILL;
+		cur->column(3).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(4).size = 40;
 		cur->column(4).mode = GridInfo::STATIC;
 
@@ -115,9 +117,11 @@ otherOptions(0)
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Autodrop settings")))->addChild(Grid::Seed(3, 6));
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).size = 40;
 		cur->column(1).mode = GridInfo::STATIC;
 		cur->column(2).mode = GridInfo::FILL;
+		cur->column(3).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(4).size = 40;
 		cur->column(4).mode = GridInfo::STATIC;
 

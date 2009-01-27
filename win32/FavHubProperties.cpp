@@ -60,6 +60,7 @@ bool FavHubProperties::handleInitDialog() {
 		grid->setWidget(group, 0, 0, 1, 2);
 
 		GridPtr cur = group->addChild(Grid::Seed(3, 2));
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Name")))->setHelpId(IDH_FAVORITE_HUB_NAME);
@@ -84,6 +85,7 @@ bool FavHubProperties::handleInitDialog() {
 		grid->setWidget(group, 1, 0, 1, 2);
 
 		GridPtr cur = group->addChild(Grid::Seed(3, 2));
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
