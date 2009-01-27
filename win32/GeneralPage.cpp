@@ -37,37 +37,35 @@ connections(0)
 	group = addChild(GroupBox::Seed(T_("Personal Information")));
 	group->setHelpId(IDH_SETTINGS_GENERAL_PERSONAL_INFORMATION);
 
-	GridPtr grid = group->addChild(Grid::Seed(4, 3));
-	grid->column(1).mode = dwt::GridInfo::FILL;
+	{
+		GridPtr grid = group->addChild(Grid::Seed(4, 2));
+		grid->column(1).mode = dwt::GridInfo::FILL;
 
-	grid->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_SETTINGS_GENERAL_NICK);
+		grid->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_SETTINGS_GENERAL_NICK);
+		nick = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(nick, SettingsManager::NICK, PropPage::T_STR));
+		nick->setHelpId(IDH_SETTINGS_GENERAL_NICK);
 
-	nick = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
-	grid->setWidget(nick, 0, 1, 1, 2);
-	items.push_back(Item(nick, SettingsManager::NICK, PropPage::T_STR));
-	nick->setHelpId(IDH_SETTINGS_GENERAL_NICK);
+		grid->addChild(Label::Seed(T_("E-Mail")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
+		TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(box, SettingsManager::EMAIL, PropPage::T_STR));
+		box->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
 
-	grid->addChild(Label::Seed(T_("E-Mail")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
+		grid->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
+		box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+		box->setTextLimit(35);
+		items.push_back(Item(box, SettingsManager::DESCRIPTION, PropPage::T_STR));
+		box->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
 
-	TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
-	grid->setWidget(box, 1, 1, 1, 2);
-	items.push_back(Item(box, SettingsManager::EMAIL, PropPage::T_STR));
-	box->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
+		grid->addChild(Label::Seed(T_("Line speed (upload)")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
-	grid->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
+		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
 
-	box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
-	box->setTextLimit(35);
-	grid->setWidget(box, 2, 1, 1, 2);
-	items.push_back(Item(box, SettingsManager::DESCRIPTION, PropPage::T_STR));
-	box->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
+		connections = cur->addChild(WinUtil::Seeds::Dialog::ComboBox);
+		connections->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
-	grid->addChild(Label::Seed(T_("Line speed (upload)")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
-
-	connections = grid->addChild(WinUtil::Seeds::Dialog::ComboBox);
-	connections->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
-
-	grid->addChild(Label::Seed(T_("MiBits/s")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
+		cur->addChild(Label::Seed(T_("MiBits/s")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
+	}
 
 	PropPage::read(items);
 

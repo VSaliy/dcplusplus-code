@@ -61,6 +61,9 @@ tstring ComboBox::getValue( int index ) {
 }
 
 Point ComboBox::getPreferedSize() {
+	// Pixels between text and arrow
+	const int MARGIN = 2;
+
 	// Taken from http://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
 
@@ -72,10 +75,14 @@ Point ComboBox::getPreferedSize() {
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);
 
-	// TODO Use biggest item
-	Point ret = c.getTextExtent(_T("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
-	ret.y = tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2) + (::GetSystemMetrics(SM_CYEDGE) * 2);
-	ret.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
+	Point ret;
+	for(size_t i = 0; i < size(); ++i) {
+		Point ext = c.getTextExtent(getValue(i));
+		ret.x = std::max(ret.x, ext.x);
+	}
+
+	ret.x += ::GetSystemMetrics(SM_CYFIXEDFRAME) * 2 + ::GetSystemMetrics(SM_CXSMICON) + MARGIN;
+	ret.y = std::max(tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2), (long)::GetSystemMetrics(SM_CYSMICON)) + ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2;
 	return ret;
 }
 
