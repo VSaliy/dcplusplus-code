@@ -52,30 +52,39 @@ oldSelection(-1)
 
 	group = addChild(GroupBox::Seed(T_("Logging")));
 
-	GridPtr grid = group->addChild(Grid::Seed(4, 3));
-	grid->column(1).mode = GridInfo::FILL;
+	GridPtr grid = group->addChild(Grid::Seed(3, 1));
+	grid->column(0).mode = GridInfo::FILL;
 	grid->row(1).mode = GridInfo::FILL;
 	grid->row(1).align = GridInfo::STRETCH;
 
-	grid->addChild(Label::Seed(T_("Directory")))->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);	
-	dir = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
-	items.push_back(Item(dir, SettingsManager::LOG_DIRECTORY, PropPage::T_STR));
-	dir->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);	
-		
-	ButtonPtr browse = grid->addChild(Button::Seed(T_("&Browse...")));
-	browse->onClicked(std::tr1::bind(&LogPage::handleBrowseDir, this, items.back()));
-	browse->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
-	
+	{
+		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
+		cur->column(1).mode = GridInfo::FILL;
+
+		cur->addChild(Label::Seed(T_("Directory")))->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
+		dir = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(dir, SettingsManager::LOG_DIRECTORY, PropPage::T_STR));
+		dir->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
+
+		ButtonPtr browse = cur->addChild(Button::Seed(T_("&Browse...")));
+		browse->onClicked(std::tr1::bind(&LogPage::handleBrowseDir, this, items.back()));
+		browse->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
+	}
+
 	options = grid->addChild(WinUtil::Seeds::Dialog::optionsTable);
-	grid->setWidget(options, 1, 0, 1, 3);
 
-	grid->addChild(Label::Seed(T_("Format")));
-	logFormat = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
-	grid->setWidget(logFormat, 2, 1, 1, 2);
+	{
+		GridPtr cur = grid->addChild(Grid::Seed(2, 2));
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
+		cur->column(1).mode = GridInfo::FILL;
 
-	grid->addChild(Label::Seed(T_("Filename")));
-	logFile = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
-	grid->setWidget(logFile, 3, 1, 1, 2);
+		cur->addChild(Label::Seed(T_("Format")));
+		logFormat = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+
+		cur->addChild(Label::Seed(T_("Filename")));
+		logFile = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+	}
 
 	PropPage::read(items);
 	PropPage::read(listItems, options);

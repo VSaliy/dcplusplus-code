@@ -56,33 +56,48 @@ options(0)
 	createDialog(IDD_CERTIFICATESPAGE);
 	setHelpId(IDH_CERTIFICATESPAGE);
 
-	grid = addChild(Grid::Seed(7, 3));
+	grid = addChild(Grid::Seed(5, 1));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->column(1).mode = GridInfo::FILL;
-	grid->row(4).mode = GridInfo::FILL;
-	grid->row(4).align = GridInfo::STRETCH;
+	grid->row(2).mode = GridInfo::FILL;
+	grid->row(2).align = GridInfo::STRETCH;
 
-	grid->addChild(Label::Seed(T_("Private key file")));
-	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TLS_PRIVATE_KEY_FILE, PropPage::T_STR));
-	grid->addChild(Button::Seed(_T("...")))->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
+	{
+		GridPtr cur = grid->addChild(Grid::Seed(3, 3));
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
+		cur->column(1).mode = GridInfo::FILL;
 
-	grid->addChild(Label::Seed(T_("Own certificate file")));
-	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR));
-	grid->addChild(Button::Seed(_T("...")))->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
+		Button::Seed dots(_T("..."));
+		dots.padding.x = 10;
 
-	grid->addChild(Label::Seed(T_("Trusted certificates path")));
-	items.push_back(Item(grid->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR));
-	grid->addChild(Button::Seed(_T("...")))->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseDir, this, items.back()));
+		cur->addChild(Label::Seed(T_("Private key file")));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TLS_PRIVATE_KEY_FILE, PropPage::T_STR));
+		cur->addChild(dots)->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
 
-	ButtonPtr gen = grid->addChild(Button::Seed(T_("Generate certificates")));
-	grid->setWidget(gen, 3, 0, 1, 3);
-	gen->onClicked(std::tr1::bind(&CertificatesPage::handleGenerateCertsClicked, this));
+		cur->addChild(Label::Seed(T_("Own certificate file")));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR));
+		cur->addChild(dots)->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
+
+		cur->addChild(Label::Seed(T_("Trusted certificates path")));
+		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR));
+		cur->addChild(dots)->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseDir, this, items.back()));
+	}
+
+	{
+		GridPtr cur = grid->addChild(Grid::Seed(1, 1));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
+
+		ButtonPtr gen = cur->addChild(Button::Seed(T_("Generate certificates")));
+		gen->onClicked(std::tr1::bind(&CertificatesPage::handleGenerateCertsClicked, this));
+	}
 
 	options = grid->addChild(WinUtil::Seeds::Dialog::optionsTable);
-	grid->setWidget(options, 4, 0, 1, 3);
 
-	grid->setWidget(grid->addChild(Label::Seed(T_("Under construction, restart DC++ to see effects..."))), 5, 0, 1, 3);
-	grid->setWidget(grid->addChild(Label::Seed(T_("Experimental feature, don't consider DC++ secure in any way"))), 6, 0, 1, 3);
+	{
+		LabelPtr label = grid->addChild(Label::Seed(T_("Under construction, restart DC++ to see effects...")));
+
+		label = grid->addChild(Label::Seed(T_("Experimental feature, don't consider DC++ secure in any way")));
+	}
 
 	PropPage::read(items);
 	PropPage::read(listItems, options);

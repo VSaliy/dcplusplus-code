@@ -39,7 +39,8 @@ connections(0)
 
 	{
 		GridPtr grid = group->addChild(Grid::Seed(4, 2));
-		grid->column(1).mode = dwt::GridInfo::FILL;
+		grid->column(0).align = GridInfo::BOTTOM_RIGHT;
+		grid->column(1).mode = GridInfo::FILL;
 
 		grid->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_SETTINGS_GENERAL_NICK);
 		nick = grid->addChild(WinUtil::Seeds::Dialog::TextBox);

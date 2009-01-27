@@ -121,7 +121,9 @@ bool SettingsDialog::initDialog() {
 			std::tr1::bind(&SettingsDialog::handleOKClicked, this),
 			std::tr1::bind(&SettingsDialog::endDialog, this, IDCANCEL));
 
-		ButtonPtr button = lower->addChild(Button::Seed(T_("Help")));
+		Button::Seed seed(T_("Help"));
+		seed.padding.x = 10;
+		ButtonPtr button = lower->addChild(seed);
 		button->setHelpId(IDH_DCPP_HELP);
 		button->onClicked(std::tr1::bind(&SettingsDialog::handleHelp, this, handle(), IDH_INDEX));
 	}
