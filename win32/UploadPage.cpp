@@ -54,43 +54,46 @@ remove(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Shared directories")))->addChild(Grid::Seed(4, 5));
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Shared directories")))->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
+		cur->setSpacing(6);
 		cur->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 
 		Table::Seed seed = WinUtil::Seeds::Dialog::Table;
 		seed.exStyle |= WS_EX_ACCEPTFILES;
 		directories = cur->addChild(seed);
-		cur->setWidget(directories, 0, 0, 1, 5);
 		directories->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 
-		LabelPtr label = cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")));
-		cur->setWidget(label, 1, 0, 1, 5);
-		label->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
+		{
+			GridPtr row = cur->addChild(Grid::Seed(1, 5));
+			row->column(1).mode = GridInfo::FILL;
 
-		CheckBoxPtr shareHidden = cur->addChild(CheckBox::Seed(T_("Share hidden files")));
-		cur->setWidget(shareHidden, 2, 0, 1, 5);
+			row->addChild(Label::Seed(T_("Total size:")))->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
+			total = row->addChild(Label::Seed(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize()))));
+			total->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
+
+			rename = row->addChild(Button::Seed(T_("Re&name")));
+			rename->onClicked(std::tr1::bind(&UploadPage::handleRenameClicked, this));
+			rename->setHelpId(IDH_SETTINGS_UPLOAD_RENAME);
+
+			remove = row->addChild(Button::Seed(T_("&Remove")));
+			remove->onClicked(std::tr1::bind(&UploadPage::handleRemoveClicked, this));
+			remove->setHelpId(IDH_SETTINGS_UPLOAD_REMOVE);
+
+			ButtonPtr add = row->addChild(Button::Seed(T_("&Add folder")));
+			add->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
+			add->setHelpId(IDH_SETTINGS_UPLOAD_ADD);
+		}
+
+		cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")))->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
+
+		// dummy grid so that the check-box doesn't fill the whole row.
+		CheckBoxPtr shareHidden = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Share hidden files")));
 		items.push_back(Item(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL));
 		shareHidden->onClicked(std::tr1::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden));
 		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);
-
-		cur->addChild(Label::Seed(T_("Total size:")))->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
-		total = cur->addChild(Label::Seed(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize()))));
-		total->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
-
-		rename = cur->addChild(Button::Seed(T_("Re&name")));
-		rename->onClicked(std::tr1::bind(&UploadPage::handleRenameClicked, this));
-		rename->setHelpId(IDH_SETTINGS_UPLOAD_RENAME);
-
-		remove = cur->addChild(Button::Seed(T_("&Remove")));
-		remove->onClicked(std::tr1::bind(&UploadPage::handleRemoveClicked, this));
-		remove->setHelpId(IDH_SETTINGS_UPLOAD_REMOVE);
-
-		ButtonPtr add = cur->addChild(Button::Seed(T_("&Add folder")));
-		add->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
-		add->setHelpId(IDH_SETTINGS_UPLOAD_ADD);
 	}
 
 	{
