@@ -37,6 +37,7 @@ grid(0)
 	grid = addChild(Grid::Seed(6, 6));
 	grid->column(1).mode = GridInfo::FILL;
 	grid->column(4).mode = GridInfo::FILL;
+	grid->setSpacing(10);
 
 	grid->addChild(Label::Seed(T_("Max hash speed")))->setHelpId(IDH_SETTINGS_ADVANCED3_MAX_HASH_SPEED);
 	TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);

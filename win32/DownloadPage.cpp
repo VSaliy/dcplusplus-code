@@ -75,7 +75,8 @@ grid(0)
 		group->setHelpId(IDH_SETTINGS_DOWNLOAD_LIMITS);
 
 		GridPtr cur = group->addChild(Grid::Seed(3, 2));
-		cur->column(0).mode = GridInfo::FILL;
+		cur->column(0).size = 40;
+		cur->column(0).mode = GridInfo::STATIC;
 
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
