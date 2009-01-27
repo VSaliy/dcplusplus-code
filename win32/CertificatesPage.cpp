@@ -26,21 +26,6 @@
 #include <dcpp/CryptoManager.h>
 #include "WinUtil.h"
 
-/** @todo cshelp
-static const WinUtil::HelpItem helpItems[] = {
-	{ IDC_SETTINGS_PRIVATE_KEY_FILE, IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE },
-	{ IDC_TLS_PRIVATE_KEY_FILE, IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE },
-	{ IDC_BROWSE_PRIVATE_KEY, IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE },
-	{ IDC_SETTINGS_CERTIFICATE_FILE, IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE },
-	{ IDC_TLS_CERTIFICATE_FILE, IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE },
-	{ IDC_BROWSE_CERTIFICATE, IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE },
-	{ IDC_SETTINGS_TRUSTED_CERTIFICATES_PATH, IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH },
-	{ IDC_TLS_TRUSTED_CERTIFICATES_PATH, IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH },
-	{ IDC_BROWSE_TRUSTED_PATH, IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH },
-	{ 0, 0 }
-};
-*/
-
 PropPage::ListItem CertificatesPage::listItems[] = {
 	{ SettingsManager::USE_TLS, N_("Use TLS when remote client supports it"), IDH_SETTINGS_CERTIFICATES_USE_TLS },
 	{ SettingsManager::ALLOW_UNTRUSTED_HUBS, N_("Allow TLS connections to hubs without trusted certificate"), IDH_SETTINGS_CERTIFICATES_ALLOW_UNTRUSTED_HUBS },
@@ -69,17 +54,29 @@ options(0)
 		Button::Seed dots(_T("..."));
 		dots.padding.x = 10;
 
-		cur->addChild(Label::Seed(T_("Private key file")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TLS_PRIVATE_KEY_FILE, PropPage::T_STR));
-		cur->addChild(dots)->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
+		cur->addChild(Label::Seed(T_("Private key file")))->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(box, SettingsManager::TLS_PRIVATE_KEY_FILE, PropPage::T_STR));
+		box->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);	
+		ButtonPtr button = cur->addChild(dots);
+		button->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
+		button->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);			
 
-		cur->addChild(Label::Seed(T_("Own certificate file")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR));
-		cur->addChild(dots)->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
+		cur->addChild(Label::Seed(T_("Own certificate file")))->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);
+		box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(box, SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR));
+		box->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);	
+		button = cur->addChild(dots);
+		button->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
+		button->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);			
 
-		cur->addChild(Label::Seed(T_("Trusted certificates path")));
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR));
-		cur->addChild(dots)->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseDir, this, items.back()));
+		cur->addChild(Label::Seed(T_("Trusted certificates path")))->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);
+		box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);	
+		items.push_back(Item(box, SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR));
+		box->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);	
+		button = cur->addChild(dots);
+		button->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseDir, this, items.back()));
+		button->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);			
 	}
 
 	{
