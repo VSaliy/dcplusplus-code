@@ -107,13 +107,16 @@ grid(0)
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Public Hubs list")))->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
-		cur->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 
 		cur->addChild(Label::Seed(T_("Public Hubs list URL")));
-		cur->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
+
+		// dummy grid so that the button doesn't fill the whole row.
+		cur->addChild(Grid::Seed(1, 1))->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
 
 		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
-		items.push_back(Item(cur->addChild(WinUtil::Seeds::Dialog::TextBox), SettingsManager::HTTP_PROXY, PropPage::T_STR));
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		items.push_back(Item(box, SettingsManager::HTTP_PROXY, PropPage::T_STR));
+		box->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 	}
 
 	PropPage::read(items);

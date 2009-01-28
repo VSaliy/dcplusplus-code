@@ -46,9 +46,8 @@ void Button::create(const Seed& cs) {
 	if(cs.font)
 		setFont(cs.font);
 
-	padding = cs.padding;
-	padding.x = ::GetSystemMetrics(SM_CYFIXEDFRAME) * 2 + padding.x * 2;
-	padding.y = ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2 + padding.y * 2;
+	padding.x = ::GetSystemMetrics(SM_CYFIXEDFRAME) * 2 + cs.padding.x * 2;
+	padding.y = ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2 + cs.padding.y * 2;
 }
 
 Point Button::getPreferedSize() {

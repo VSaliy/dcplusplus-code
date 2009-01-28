@@ -35,7 +35,12 @@
 
 namespace dwt {
 
-Grid::Seed::Seed(size_t rows_, size_t cols_) : BaseType::Seed(_T(""), WS_CHILD | WS_VISIBLE, WS_EX_CONTROLPARENT), rows(rows_), cols(cols_) { }
+Grid::Seed::Seed(size_t rows_, size_t cols_) :
+BaseType::Seed(0, WS_EX_CONTROLPARENT),
+rows(rows_),
+cols(cols_)
+{
+}
 
 void Grid::create( const Seed & cs )
 {

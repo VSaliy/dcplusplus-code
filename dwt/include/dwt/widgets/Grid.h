@@ -32,10 +32,9 @@
 #ifndef DWT_GRID_H
 #define DWT_GRID_H
 
-#include "Composite.h"
+#include "Container.h"
 
 #include <vector>
-#include <map>
 
 namespace dwt {
 
@@ -68,9 +67,9 @@ public:
  * Lays out child items in a grid
  */
 class Grid :
-	public Composite<dwt::Policies::Normal>
+	public Container
 {
-	typedef Composite<dwt::Policies::Normal> BaseType;
+	typedef Container BaseType;
 public:
 	/// Class type
 	typedef Grid ThisType;
