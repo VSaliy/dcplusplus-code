@@ -39,7 +39,7 @@
 namespace dwt {
 
 GroupBox::Seed::Seed(const tstring& caption) :
-BaseType::Seed(WC_BUTTON, BS_GROUPBOX | WS_CHILD, WS_EX_CONTROLPARENT | WS_EX_TRANSPARENT, caption),
+BaseType::Seed(WC_BUTTON, BS_GROUPBOX | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_CONTROLPARENT | WS_EX_TRANSPARENT, caption),
 font(new Font(DefaultGuiFont)),
 padding(6, 6)
 {
@@ -50,9 +50,8 @@ void GroupBox::create( const GroupBox::Seed & cs ) {
 	if(cs.font)
 		setFont( cs.font );
 
-	padding = cs.padding;
-	padding.x = ::GetSystemMetrics(SM_CXEDGE) * 2 + padding.x * 2;
-	padding.y = ::GetSystemMetrics(SM_CYEDGE) + padding.y * 2; // ignore the top border
+	padding.x = ::GetSystemMetrics(SM_CXEDGE) * 2 + cs.padding.x * 2;
+	padding.y = ::GetSystemMetrics(SM_CYEDGE) + cs.padding.y * 2; // ignore the top border
 }
 
 Point GroupBox::getPreferedSize() {
@@ -67,12 +66,12 @@ Point GroupBox::getPreferedSize() {
 }
 
 void GroupBox::layout(const Rectangle& rect) {
-	BaseType::layout(rect);
-
 	Widget* child = getChild();
 	if(child) {
 		child->layout(shrink(Rectangle(0, 0, rect.width(), rect.height())));
 	}
+
+	BaseType::layout(rect);
 }
 
 Rectangle GroupBox::shrink(const Rectangle& client) {

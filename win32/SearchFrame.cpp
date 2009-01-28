@@ -123,10 +123,12 @@ droppedResults(0)
 		left->row(4).align = GridInfo::STRETCH;
 
 		{
-			GridPtr cur = left->addChild(GroupBox::Seed(T_("Search for")))->addChild(Grid::Seed(2, 2));
+			GroupBoxPtr group = left->addChild(GroupBox::Seed(T_("Search for")));
+			group->setHelpId(IDH_SEARCH_SEARCH_FOR);
+
+			GridPtr cur = group->addChild(Grid::Seed(2, 2));
 			cur->column(0).mode = GridInfo::FILL;
 			cur->column(1).mode = GridInfo::FILL;
-			cur->setHelpId(IDH_SEARCH_SEARCH_FOR);
 
 			searchBox = cur->addChild(WinUtil::Seeds::comboBoxEdit);
 			cur->setWidget(searchBox, 0, 0, 1, 2);
@@ -152,7 +154,10 @@ droppedResults(0)
 		}
 
 		{
-			GridPtr cur = left->addChild(GroupBox::Seed(T_("Size")))->addChild(Grid::Seed(1, 3));
+			GroupBoxPtr group = left->addChild(GroupBox::Seed(T_("Size")));
+			group->setHelpId(IDH_SEARCH_SIZE);
+
+			GridPtr cur = group->addChild(Grid::Seed(1, 3));
 			cur->column(1).mode = GridInfo::FILL;
 			cur->setHelpId(IDH_SEARCH_SIZE);
 

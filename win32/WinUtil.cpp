@@ -152,7 +152,6 @@ void WinUtil::init() {
 	xcomboBoxStatic.style |= CBS_DROPDOWNLIST;
 	xcomboBoxStatic.font = font;
 
-	xcomboBoxEdit.style |= CBS_DROPDOWN | CBS_AUTOHSCROLL;
 	xcomboBoxEdit.font = font;
 
 	xmenu.ownerDrawn = BOOLSETTING(OWNER_DRAWN_MENUS);

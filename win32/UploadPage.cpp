@@ -54,40 +54,36 @@ remove(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Shared directories")))->addChild(Grid::Seed(4, 1));
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Shared directories")));
+		group->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
+
+		GridPtr cur = group->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
 		cur->setSpacing(6);
-		cur->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 
 		Table::Seed seed = WinUtil::Seeds::Dialog::Table;
 		seed.exStyle |= WS_EX_ACCEPTFILES;
 		directories = cur->addChild(seed);
-		directories->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 
 		{
 			GridPtr row = cur->addChild(Grid::Seed(1, 5));
 			row->column(1).mode = GridInfo::FILL;
 
-			row->addChild(Label::Seed(T_("Total size:")))->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
+			row->addChild(Label::Seed(T_("Total size:")));
 			total = row->addChild(Label::Seed(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize()))));
-			total->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 
 			rename = row->addChild(Button::Seed(T_("Re&name")));
 			rename->onClicked(std::tr1::bind(&UploadPage::handleRenameClicked, this));
-			rename->setHelpId(IDH_SETTINGS_UPLOAD_RENAME);
 
 			remove = row->addChild(Button::Seed(T_("&Remove")));
 			remove->onClicked(std::tr1::bind(&UploadPage::handleRemoveClicked, this));
-			remove->setHelpId(IDH_SETTINGS_UPLOAD_REMOVE);
 
-			ButtonPtr add = row->addChild(Button::Seed(T_("&Add folder")));
-			add->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
-			add->setHelpId(IDH_SETTINGS_UPLOAD_ADD);
+			row->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
 		}
 
-		cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")))->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
+		cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")));
 
 		// dummy grid so that the check-box doesn't fill the whole row.
 		CheckBoxPtr shareHidden = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Share hidden files")));
@@ -158,6 +154,7 @@ void UploadPage::layout(const dwt::Rectangle& rc) {
 	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 
 	directories->setColumnWidth(1, directories->getSize().x - 220);
+	::InvalidateRect(ListView_GetHeader(directories->handle()), NULL, FALSE); /// @todo shouldn't need this...
 }
 
 void UploadPage::write()

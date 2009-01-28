@@ -53,7 +53,7 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		Seed();
+		Seed(DWORD style = 0, DWORD exStyle = 0);
 	};
 
 	// Use our seed type
@@ -63,8 +63,8 @@ protected:
 	Container(Widget* parent) : BaseType(parent) { }
 };
 
-inline Container::Seed::Seed() : BaseType::Seed(tstring(), WS_CHILD | WS_CLIPSIBLINGS, 0) {
-
+inline Container::Seed::Seed(DWORD style, DWORD exStyle) :
+BaseType::Seed(tstring(), style | WS_CHILD | WS_CLIPSIBLINGS, exStyle) {
 }
 
 inline void Container::create(const Seed& cs) {

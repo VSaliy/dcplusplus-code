@@ -68,16 +68,16 @@ bool FavHubProperties::handleInitDialog() {
 		name->setText(Text::toT(entry->getName()));
 		name->setSelection();
 		name->setHelpId(IDH_FAVORITE_HUB_NAME);
-		
+
 		cur->addChild(Label::Seed(T_("Address")))->setHelpId(IDH_FAVORITE_HUB_ADDRESS);
 		address = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		address->setText(Text::toT(entry->getServer()));
 		address->setHelpId(IDH_FAVORITE_HUB_ADDRESS);
-		
+
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_DESC);
 		description = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		description->setText(Text::toT(entry->getDescription()));
-		description->setHelpId(IDH_FAVORITE_HUB_DESC);	
+		description->setHelpId(IDH_FAVORITE_HUB_DESC);
 	}
 
 	{
@@ -94,7 +94,7 @@ bool FavHubProperties::handleInitDialog() {
 		nick->setText(Text::toT(entry->getNick(false)));
 		nick->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, nick));
 		nick->setHelpId(IDH_FAVORITE_HUB_NICK);
-		
+
 		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
 		password = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
 		password->setPassword();
