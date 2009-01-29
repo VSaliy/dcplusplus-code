@@ -73,6 +73,7 @@ public:
 		static const Button::Seed button;
 		static const ComboBox::Seed comboBoxStatic;
 		static const ComboBox::Seed comboBoxEdit;
+		static const GroupBox::Seed group;
 		static const Menu::Seed menu;
 		static const Table::Seed Table;
 		static const TextBox::Seed textBox;
