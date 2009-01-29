@@ -154,9 +154,7 @@ Point Grid::actualSpacing() const {
 }
 
 void Grid::layout(const Rectangle& r) {
-	// First, we set our own size
-	BaseType::layout(r);
-
+	// Layout children first.
 	std::vector<HWND> children;
 
 	// TODO find better way of keeping track of children
@@ -167,7 +165,7 @@ void Grid::layout(const Rectangle& r) {
 		children.push_back(wnd);
 	}
 
-	Point size = getClientSize();
+	Point size = r.size;
 	Point as = actualSpacing();
 
 	if(as.x < size.x && as.y < size.y)
@@ -226,6 +224,9 @@ void Grid::layout(const Rectangle& r) {
 
 		wi->w->layout(Rectangle(x, y, w, h));
 	}
+
+	// Layout the grid last.
+	BaseType::layout(r);
 }
 
 Grid::WidgetInfo* Grid::getWidgetInfo(HWND hwnd) {
