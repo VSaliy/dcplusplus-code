@@ -18,12 +18,12 @@ sources += dev.get_sources(source_path, "*.c")
 
 env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib'])
 
+env.Append(CPPDEFINES=["BUILDING_DCPP=1"])
+
 for i, source in enumerate(sources):
 	if source.find("version.cpp") != -1:
 		rev = ['DCPP_REVISION=' + str(getRevision(env))]
 		sources[i] = env.StaticObject(source, CPPDEFINES=env['CPPDEFINES'] + rev)
-
-env.Append(CPPDEFINES=["BUILDING_DCPP=1"])
 
 headers=dev.get_sources(source_path, "*.h")
 
