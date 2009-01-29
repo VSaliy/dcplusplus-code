@@ -160,7 +160,6 @@ droppedResults(0)
 
 		cur = group->addChild(Grid::Seed(1, 3));
 		cur->column(1).mode = GridInfo::FILL;
-		cur->setHelpId(IDH_SEARCH_SIZE);
 
 		mode = cur->addChild(WinUtil::Seeds::comboBoxStatic);
 		addWidget(mode);
