@@ -21,24 +21,17 @@
 #ifndef DCPLUSPLUS_WIN32_SHELL_MENU_H
 #define DCPLUSPLUS_WIN32_SHELL_MENU_H
 
-class ShellMenu : public dwt::Menu
+class ShellMenu : public Menu
 {
-	typedef dwt::Menu BaseType;
+	typedef Menu BaseType;
 
-	struct Dispatcher : dwt::Dispatchers::Base<bool (const MSG&)> {
-		typedef dwt::Dispatchers::Base<bool (const MSG&)> BaseType;
-		Dispatcher(const BaseType::F& f_, LPCONTEXTMENU3 handler_) : BaseType(f_), handler(handler_) { }
+	struct Dispatcher : dwt::Dispatchers::Base<bool (const MSG&, LRESULT& ret)> {
+		typedef dwt::Dispatchers::Base<bool (const MSG&, LRESULT& ret)> BaseType;
+		Dispatcher(const BaseType::F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
-			if(f(msg)) {
-				handler->HandleMenuMsg2(msg.message, msg.wParam, msg.lParam, &ret);
-				return true;
-			}
-			return false;
+			return f(msg, ret);
 		}
-
-	private:
-		LPCONTEXTMENU3 handler;
 	};
 
 public:
@@ -52,23 +45,27 @@ public:
 		Seed();
 	};
 
-	explicit ShellMenu( dwt::Widget * parent );
+	explicit ShellMenu(dwt::Widget* parent);
 	~ShellMenu();
 
-	void appendShellMenu(const wstring& path);
+	void appendShellMenu(const StringList& paths);
 	void open(const dwt::ScreenCoordinate& pt, unsigned flags = TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 private:
-	dwt::MenuPtr menu;
+	typedef std::pair<MenuPtr, LPCONTEXTMENU3> handlers_pair;
+	typedef std::vector<handlers_pair> handlers_type;
+	handlers_type handlers;
+
 	LPCONTEXTMENU3 handler;
 	unsigned sel_id;
 
-	bool handleDrawItem(const MSG& msg);
-	bool handleMeasureItem(const MSG& msg);
-	bool handleMenuChar();
-	bool handleInitMenuPopup(const MSG& msg);
-	bool handleUnInitMenuPopup(const MSG& msg);
+	bool handleDrawItem(const MSG& msg, LRESULT& ret);
+	bool handleMeasureItem(const MSG& msg, LRESULT& ret);
+	bool handleInitMenuPopup(const MSG& msg, LRESULT& ret);
+	bool handleUnInitMenuPopup(const MSG& msg, LRESULT& ret);
 	bool handleMenuSelect(const MSG& msg);
+
+	bool dispatch(const MSG& msg, LRESULT& ret);
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_SHELL_MENU_H)

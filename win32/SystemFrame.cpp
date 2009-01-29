@@ -99,7 +99,7 @@ bool SystemFrame::handleContextMenu(const dwt::ScreenCoordinate& pt) {
 		ShellMenuPtr menu = addChild(ShellMenu::Seed());
 		menu->appendItem(T_("&Open"), std::tr1::bind(&WinUtil::openFile, path), dwt::IconPtr(), true, true);
 		menu->appendItem(T_("Open &folder"), std::tr1::bind(&WinUtil::openFolder, path));
-		menu->appendShellMenu(Text::utf8ToWide(path_a));
+		menu->appendShellMenu(StringList(1, path_a));
 		menu->open(pt);
 		return true;
 	}

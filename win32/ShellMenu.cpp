@@ -22,6 +22,8 @@
 
 #include "ShellMenu.h"
 
+#include <dwt/util/StringUtils.h>
+
 #include "resource.h"
 #include "WinUtil.h"
 
@@ -33,14 +35,14 @@ BaseType::Seed()
 	font = WinUtil::Seeds::menu.font;
 }
 
-ShellMenu::ShellMenu( dwt::Widget * parent ) :
+ShellMenu::ShellMenu(dwt::Widget* parent) :
 BaseType(parent),
 handler(0),
 sel_id(0)
 {
 }
 
-void ShellMenu::appendShellMenu(const wstring& path) {
+void ShellMenu::appendShellMenu(const StringList& paths) {
 #define check(x) if(!(x)) { return; }
 
 	// get IShellFolder interface of Desktop (root of Shell namespace)
@@ -48,60 +50,83 @@ void ShellMenu::appendShellMenu(const wstring& path) {
 	HRESULT hr = ::SHGetDesktopFolder(&desktop);
 	check(hr == S_OK && desktop);
 
-	// ParseDisplayName creates a PIDL from a file system path relative to the IShellFolder interface
-	// but since we use the Desktop as our interface and the Desktop is the namespace root
-	// that means that it's a fully qualified PIDL, which is what we need
-	LPITEMIDLIST pidl = 0;
-	hr = desktop->ParseDisplayName(0, 0, const_cast<LPWSTR>(path.c_str()), 0, &pidl, 0);
-	desktop->Release();
-	check(hr == S_OK && pidl);
-
-	// get the parent IShellFolder interface of pidl and the relative PIDL
-	IShellFolder* folder = 0;
-	LPCITEMIDLIST pidlItem = 0;
-	hr = ::SHBindToParent(pidl, IID_IShellFolder, reinterpret_cast<LPVOID*>(&folder), &pidlItem);
-
-	// get interface to IMalloc used to free pidl
+	// get interface to IMalloc used to free PIDLs
 	LPMALLOC lpMalloc = 0;
-	::SHGetMalloc(&lpMalloc);
-	lpMalloc->Free(pidl);
-	lpMalloc->Release();
-
-	check(hr == S_OK && folder && pidlItem);
-
-	// first we retrieve the normal IContextMenu interface (every object should have it)
-	LPCONTEXTMENU handler1 = 0;
-	hr = folder->GetUIObjectOf(0, 1, &pidlItem, IID_IContextMenu, 0, reinterpret_cast<LPVOID*>(&handler1));
-	folder->Release();
-	check(hr == S_OK && handler1);
-
-	// then try to get the version 3 interface
-	hr = handler1->QueryInterface(IID_IContextMenu3, reinterpret_cast<LPVOID*>(&handler));
-	handler1->Release();
-	check(hr == S_OK && handler);
-
-	getParent()->setCallback(dwt::Message(WM_DRAWITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1), handler));
-	getParent()->setCallback(dwt::Message(WM_MEASUREITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1), handler));
-	getParent()->setCallback(dwt::Message(WM_MENUCHAR), Dispatcher(std::tr1::bind(&ShellMenu::handleMenuChar, this), handler));
-	getParent()->setCallback(dwt::Message(WM_INITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1), handler));
-	getParent()->setCallback(dwt::Message(WM_UNINITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1), handler));
-	getParent()->setCallback(dwt::Message(WM_MENUSELECT), Dispatcher(std::tr1::bind(&ShellMenu::handleMenuSelect, this, _1), handler));
-
-	appendSeparator();
-	menu = appendPopup(dwt::Menu::Seed(false), T_("Shell menu"));
+	hr = ::SHGetMalloc(&lpMalloc);
+	check(hr == S_OK && lpMalloc);
 
 #undef check
+#define check(x) if(!(x)) { continue; }
+
+	typedef std::pair<string, LPCONTEXTMENU3> valid_pair;
+	typedef std::vector<valid_pair> valid_type;
+	valid_type valid;
+
+	for(StringIterC i = paths.begin(); i != paths.end(); ++i) {
+		// ParseDisplayName creates a PIDL from a file system path relative to the IShellFolder interface
+		// but since we use the Desktop as our interface and the Desktop is the namespace root
+		// that means that it's a fully qualified PIDL, which is what we need
+		LPITEMIDLIST pidl = 0;
+		hr = desktop->ParseDisplayName(0, 0, const_cast<LPWSTR>(Text::utf8ToWide(*i).c_str()), 0, &pidl, 0);
+		check(hr == S_OK && pidl);
+
+		// get the parent IShellFolder interface of pidl and the relative PIDL
+		IShellFolder* folder = 0;
+		LPCITEMIDLIST pidlItem = 0;
+		hr = ::SHBindToParent(pidl, IID_IShellFolder, reinterpret_cast<LPVOID*>(&folder), &pidlItem);
+		lpMalloc->Free(pidl);
+		check(hr == S_OK && folder && pidlItem);
+
+		// first we retrieve the normal IContextMenu interface (every object should have it)
+		LPCONTEXTMENU handler1 = 0;
+		hr = folder->GetUIObjectOf(0, 1, &pidlItem, IID_IContextMenu, 0, reinterpret_cast<LPVOID*>(&handler1));
+		folder->Release();
+		check(hr == S_OK && handler1);
+
+		// then try to get the version 3 interface
+		LPCONTEXTMENU3 handler3 = 0;
+		hr = handler1->QueryInterface(IID_IContextMenu3, reinterpret_cast<LPVOID*>(&handler3));
+		handler1->Release();
+		check(hr == S_OK && handler3);
+
+		valid.push_back(make_pair(*i, handler3));
+	}
+
+#undef check
+
+	desktop->Release();
+	lpMalloc->Release();
+
+	if(valid.empty())
+		return;
+
+	getParent()->setCallback(dwt::Message(WM_DRAWITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_MEASUREITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_MENUCHAR), Dispatcher(std::tr1::bind(&ShellMenu::dispatch, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_INITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_UNINITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_MENUSELECT), Dispatcher(std::tr1::bind(&ShellMenu::handleMenuSelect, this, _1)));
+
+	appendSeparator();
+
+	if(valid.size() == 1)
+		handlers.push_back(make_pair(appendPopup(Menu::Seed(false), T_("Shell menu")), valid[0].second));
+	else {
+		MenuPtr popup = appendPopup(Menu::Seed(true), T_("Shell menus"));
+		for(valid_type::const_iterator i = valid.begin(); i != valid.end(); ++i)
+			handlers.push_back(make_pair(popup->appendPopup(Menu::Seed(false), dwt::util::escapeMenu(Text::toT(i->first))), i->second));
+	}
 }
 
 ShellMenu::~ShellMenu() {
-	if(handler)
-		handler->Release();
+	for(handlers_type::iterator i = handlers.begin(); i != handlers.end(); ++i)
+		i->second->Release();
 }
 
 void ShellMenu::open(const dwt::ScreenCoordinate& pt, unsigned flags) {
 	BaseType::open(pt, flags);
 
-	if(sel_id >= ID_SHELLCONTEXTMENU_MIN && sel_id <= ID_SHELLCONTEXTMENU_MAX) {
+	if(sel_id >= ID_SHELLCONTEXTMENU_MIN && sel_id <= ID_SHELLCONTEXTMENU_MAX && handler) {
 		CMINVOKECOMMANDINFO cmi = { sizeof(CMINVOKECOMMANDINFO) };
 		cmi.lpVerb = (LPSTR)MAKEINTRESOURCE(sel_id - ID_SHELLCONTEXTMENU_MIN);
 		cmi.nShow = SW_SHOWNORMAL;
@@ -109,54 +134,60 @@ void ShellMenu::open(const dwt::ScreenCoordinate& pt, unsigned flags) {
 	}
 }
 
-bool ShellMenu::handleMenuChar() {
-	return true;
-}
-
-bool ShellMenu::handleDrawItem(const MSG& msg) {
+bool ShellMenu::handleDrawItem(const MSG& msg, LRESULT& ret) {
 	if(msg.wParam == 0) {
 		LPDRAWITEMSTRUCT t = reinterpret_cast<LPDRAWITEMSTRUCT>(msg.lParam);
 		if(t) {
 			if(t->CtlType != ODT_MENU)
 				return false;
+
 			unsigned id = t->itemID;
-			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX) {
-				return true;
-			}
+			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
+				return dispatch(msg, ret);
+
 			BaseType::handleDrawItem(t);
 		}
 	}
 	return false;
 }
 
-bool ShellMenu::handleMeasureItem(const MSG& msg) {
+bool ShellMenu::handleMeasureItem(const MSG& msg, LRESULT& ret) {
 	if(msg.wParam == 0) {
 		LPMEASUREITEMSTRUCT t = reinterpret_cast<LPMEASUREITEMSTRUCT>(msg.lParam);
 		if(t) {
 			if(t->CtlType != ODT_MENU)
 				return false;
+
 			unsigned id = t->itemID;
-			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX) {
-				return true;
-			}
+			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
+				return dispatch(msg, ret);
+
 			BaseType::handleMeasureItem(t);
 		}
 	}
 	return false;
 }
 
-bool ShellMenu::handleInitMenuPopup(const MSG& msg) {
-	if(reinterpret_cast<HMENU>(msg.wParam) == menu->handle()) {
-		handler->QueryContextMenu(menu->handle(), 0, ID_SHELLCONTEXTMENU_MIN, ID_SHELLCONTEXTMENU_MAX, CMF_NORMAL | CMF_EXPLORE);
+bool ShellMenu::handleInitMenuPopup(const MSG& msg, LRESULT& ret) {
+	HMENU menu = reinterpret_cast<HMENU>(msg.wParam);
+	for(handlers_type::iterator i = handlers.begin(); i != handlers.end(); ++i) {
+		if(i->first->handle() == menu) {
+			handler = i->second;
+			handler->QueryContextMenu(i->first->handle(), 0, ID_SHELLCONTEXTMENU_MIN, ID_SHELLCONTEXTMENU_MAX, CMF_NORMAL | CMF_EXPLORE);
+			break;
+		}
 	}
-	return true;
+
+	return dispatch(msg, ret);
 }
 
-bool ShellMenu::handleUnInitMenuPopup(const MSG& msg) {
-	if(reinterpret_cast<HMENU>(msg.wParam) == menu->handle()) {
-		menu->removeAllItems();
-	}
-	return true;
+bool ShellMenu::handleUnInitMenuPopup(const MSG& msg, LRESULT& ret) {
+	HMENU menu = reinterpret_cast<HMENU>(msg.wParam);
+	for(handlers_type::iterator i = handlers.begin(); i != handlers.end(); ++i)
+		if(i->first->handle() == menu)
+			i->first->removeAllItems();
+
+	return dispatch(msg, ret);
 }
 
 bool ShellMenu::handleMenuSelect(const MSG& msg) {
@@ -166,5 +197,13 @@ bool ShellMenu::handleMenuSelect(const MSG& msg) {
 
 	// save the currently selected id in case we need to dispatch it later on
 	sel_id = LOWORD(msg.wParam);
+	return false;
+}
+
+bool ShellMenu::dispatch(const MSG& msg, LRESULT& ret) {
+	if(handler) {
+		handler->HandleMenuMsg2(msg.message, msg.wParam, msg.lParam, &ret);
+		return true;
+	}
 	return false;
 }

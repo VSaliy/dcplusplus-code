@@ -387,26 +387,30 @@ void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
 }
 
 bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
-	if(files->hasSelected()) {
+	std::vector<unsigned> selected = files->getSelection();
+	if(!selected.empty()) {
 		if(pt.x() == -1 && pt.y() == -1) {
 			pt = files->getContextMenuPos();
 		}
 
 		ShellMenuPtr menu;
 
-		if(files->countSelected() == 1) {
-			ItemInfo* ii = files->getSelectedData();
-
-			menu = makeSingleMenu(ii);
-
-			if(ii->type == ItemInfo::FILE) {
-				string localPath = dl->getLocalPath(ii->file);
-				if(!localPath.empty())
-					menu->appendShellMenu(Text::utf8ToWide(localPath));
-			}
+		if(selected.size() == 1) {
+			menu = makeSingleMenu(files->getData(selected[0]));
 		} else {
 			menu = makeMultiMenu();
 		}
+
+		StringList ShellMenuPaths;
+		for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
+			ItemInfo* ii = files->getData(*i);
+			if(ii->type == ItemInfo::FILE) {
+				string path = dl->getLocalPath(ii->file);
+				if(!path.empty())
+					ShellMenuPaths.push_back(path);
+			}
+		}
+		menu->appendShellMenu(ShellMenuPaths);
 
 		usingDirMenu = false;
 		menu->open(pt);
