@@ -373,7 +373,8 @@ private:
 	};
 
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt) {
-		if(files->hasSelected()) {
+		std::vector<unsigned> selected = files->getSelection();
+		if(!selected.empty()) {
 			if(pt.x() == -1 && pt.y() == -1) {
 				pt = files->getContextMenuPos();
 			}
@@ -391,11 +392,13 @@ private:
 			menu->appendSeparator();
 			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
 
-			if(files->countSelected() == 1) {
-				string path = files->getSelectedData()->file;
+			StringList ShellMenuPaths;
+			for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
+				string path = files->getData(*i)->file;
 				if(File::getSize(path) != -1)
-					menu->appendShellMenu(Text::utf8ToWide(path));
+					ShellMenuPaths.push_back(path);
 			}
+			menu->appendShellMenu(ShellMenuPaths);
 
 			menu->open(pt);
 			return true;
