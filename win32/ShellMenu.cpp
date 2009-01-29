@@ -100,13 +100,6 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 	if(valid.empty())
 		return;
 
-	getParent()->setCallback(dwt::Message(WM_DRAWITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_MEASUREITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_MENUCHAR), Dispatcher(std::tr1::bind(&ShellMenu::dispatch, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_INITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_UNINITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_MENUSELECT), Dispatcher(std::tr1::bind(&ShellMenu::handleMenuSelect, this, _1)));
-
 	appendSeparator();
 
 	if(valid.size() == 1)
@@ -116,6 +109,13 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 		for(valid_type::const_iterator i = valid.begin(); i != valid.end(); ++i)
 			handlers.push_back(make_pair(popup->appendPopup(Menu::Seed(false), dwt::util::escapeMenu(Text::toT(i->first))), i->second));
 	}
+
+	getParent()->setCallback(dwt::Message(WM_DRAWITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_MEASUREITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_MENUCHAR), Dispatcher(std::tr1::bind(&ShellMenu::dispatch, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_INITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_UNINITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1, _2)));
+	getParent()->setCallback(dwt::Message(WM_MENUSELECT), Dispatcher(std::tr1::bind(&ShellMenu::handleMenuSelect, this, _1)));
 }
 
 ShellMenu::~ShellMenu() {
