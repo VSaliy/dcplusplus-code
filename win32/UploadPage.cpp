@@ -154,7 +154,6 @@ void UploadPage::layout(const dwt::Rectangle& rc) {
 	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 
 	directories->setColumnWidth(1, directories->getSize().x - 220);
-	::InvalidateRect(ListView_GetHeader(directories->handle()), NULL, FALSE); /// @todo shouldn't need this...
 }
 
 void UploadPage::write()

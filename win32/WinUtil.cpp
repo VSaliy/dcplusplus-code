@@ -69,6 +69,7 @@ HWND WinUtil::helpPopup = 0;
 const Button::Seed WinUtil::Seeds::button;
 const ComboBox::Seed WinUtil::Seeds::comboBoxStatic;
 const ComboBox::Seed WinUtil::Seeds::comboBoxEdit;
+const GroupBox::Seed WinUtil::Seeds::group;
 const Menu::Seed WinUtil::Seeds::menu;
 const Table::Seed WinUtil::Seeds::Table;
 const TextBox::Seed WinUtil::Seeds::textBox;
@@ -137,6 +138,7 @@ void WinUtil::init() {
 	Button::Seed& xbutton = const_cast<Button::Seed&>(Seeds::button);
 	ComboBox::Seed& xcomboBoxEdit = const_cast<ComboBox::Seed&>(Seeds::comboBoxEdit);
 	ComboBox::Seed& xcomboBoxStatic = const_cast<ComboBox::Seed&>(Seeds::comboBoxStatic);
+	GroupBox::Seed& xgroup = const_cast<GroupBox::Seed&>(Seeds::group);
 	Menu::Seed& xmenu = const_cast<Menu::Seed&>(Seeds::menu);
 	Table::Seed& xTable = const_cast<Table::Seed&>(Seeds::Table);
 	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&>(Seeds::textBox);
@@ -153,6 +155,9 @@ void WinUtil::init() {
 	xcomboBoxStatic.font = font;
 
 	xcomboBoxEdit.font = font;
+
+	xgroup.exStyle |= WS_EX_TRANSPARENT;
+	xgroup.font = font;
 
 	xmenu.ownerDrawn = BOOLSETTING(OWNER_DRAWN_MENUS);
 	if(xmenu.ownerDrawn)

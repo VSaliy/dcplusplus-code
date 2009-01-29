@@ -104,36 +104,38 @@ users(0)
 	}
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("F&ilter")));
+		GroupBox::Seed gs = WinUtil::Seeds::group;
+
+		gs.caption = T_("F&ilter");
+		GroupBoxPtr group = grid->addChild(gs);
 		group->setHelpId(IDH_PUBLIC_HUBS_FILTER);
 
 		GridPtr cur = group->addChild(Grid::Seed(1, 2));
 		cur->column(0).mode = GridInfo::FILL;
 
-		TextBox::Seed cs = WinUtil::Seeds::textBox;
-		cs.style |= ES_AUTOHSCROLL;
-		filter = cur->addChild(cs);
+		TextBox::Seed ts = WinUtil::Seeds::textBox;
+		ts.style |= ES_AUTOHSCROLL;
+		filter = cur->addChild(ts);
 		addWidget(filter);
 		filter->onKeyDown(std::tr1::bind(&PublicHubsFrame::handleFilterKeyDown, this, _1));
 
 		filterSel = cur->addChild(WinUtil::Seeds::comboBoxStatic);
 		addWidget(filterSel);
-	}
 
-	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Configured Public Hub Lists")));
+		gs.caption = T_("Configured Public Hub Lists");
+		group = grid->addChild(gs);
 		group->setHelpId(IDH_PUBLIC_HUBS_LISTS);
 
-		GridPtr cur = group->addChild(Grid::Seed(1, 2));
+		cur = group->addChild(Grid::Seed(1, 2));
 		cur->column(0).mode = GridInfo::FILL;
 
 		lists = cur->addChild(WinUtil::Seeds::comboBoxStatic);
 		addWidget(lists);
 		lists->onSelectionChanged(std::tr1::bind(&PublicHubsFrame::handleListSelChanged, this));
 
-		Button::Seed cs = WinUtil::Seeds::button;
-		cs.caption = T_("&Configure");
-		ButtonPtr button = cur->addChild(cs);
+		Button::Seed bs = WinUtil::Seeds::button;
+		bs.caption = T_("&Configure");
+		ButtonPtr button = cur->addChild(bs);
 		addWidget(button);
 		button->onClicked(std::tr1::bind(&PublicHubsFrame::handleConfigure, this));
 	}
