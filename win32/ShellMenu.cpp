@@ -58,6 +58,11 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 #undef check
 #define check(x) if(!(x)) { continue; }
 
+	// stores allocated PIDLs to free them afterwards.
+	typedef std::vector<LPITEMIDLIST> pidls_type;
+	pidls_type pidls;
+
+	// stores paths for which we have managed to get a valid IContextMenu3 interface.
 	typedef std::pair<string, LPCONTEXTMENU3> valid_pair;
 	typedef std::vector<valid_pair> valid_type;
 	valid_type valid;
@@ -69,12 +74,12 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 		LPITEMIDLIST pidl = 0;
 		hr = desktop->ParseDisplayName(0, 0, const_cast<LPWSTR>(Text::utf8ToWide(*i).c_str()), 0, &pidl, 0);
 		check(hr == S_OK && pidl);
+		pidls.push_back(pidl);
 
 		// get the parent IShellFolder interface of pidl and the relative PIDL
 		IShellFolder* folder = 0;
 		LPCITEMIDLIST pidlItem = 0;
 		hr = ::SHBindToParent(pidl, IID_IShellFolder, reinterpret_cast<LPVOID*>(&folder), &pidlItem);
-		lpMalloc->Free(pidl);
 		check(hr == S_OK && folder && pidlItem);
 
 		// first we retrieve the normal IContextMenu interface (every object should have it)
@@ -94,8 +99,11 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 
 #undef check
 
-	desktop->Release();
+	for(pidls_type::iterator i = pidls.begin(); i != pidls.end(); ++i)
+		lpMalloc->Free(*i);
 	lpMalloc->Release();
+
+	desktop->Release();
 
 	if(valid.empty())
 		return;
