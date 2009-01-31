@@ -90,7 +90,8 @@ void SearchFrame::closeAll() {
 
 SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, SearchManager::TypeModes initialType_) :
 BaseType(mdiParent, T_("Search"), IDH_SEARCH, IDR_SEARCH),
-grid(0),
+paned(0),
+options(0),
 searchBox(0),
 isHash(false),
 mode(0),
@@ -109,23 +110,19 @@ showUI(0),
 initialType(initialType_),
 droppedResults(0)
 {
-	grid = addChild(Grid::Seed(1, 2));
-	grid->column(0).size = 220;
-	grid->column(0).mode = GridInfo::STATIC;
-	grid->column(1).mode = GridInfo::FILL;
-	grid->row(0).mode = GridInfo::FILL;
-	grid->row(0).align = GridInfo::STRETCH;
+	paned = addChild(WidgetVPaned::Seed(SETTING(SEARCH_PANED_POS)));
 
 	{
-		GridPtr left = grid->addChild(Grid::Seed(5, 1));
-		left->column(0).mode = GridInfo::FILL;
-		left->row(4).mode = GridInfo::FILL;
-		left->row(4).align = GridInfo::STRETCH;
+		options = addChild(Grid::Seed(5, 1));
+		options->column(0).mode = GridInfo::FILL;
+		options->row(4).mode = GridInfo::FILL;
+		options->row(4).align = GridInfo::STRETCH;
+		paned->setFirst(options);
 
 		GroupBox::Seed gs = WinUtil::Seeds::group;
 
 		gs.caption = T_("Search for");
-		GroupBoxPtr group = left->addChild(gs);
+		GroupBoxPtr group = options->addChild(gs);
 		group->setHelpId(IDH_SEARCH_SEARCH_FOR);
 
 		GridPtr cur = group->addChild(Grid::Seed(2, 2));
@@ -155,7 +152,7 @@ droppedResults(0)
 		button->onClicked(std::tr1::bind(&SearchFrame::runSearch, this));
 
 		gs.caption = T_("Size");
-		group = left->addChild(gs);
+		group = options->addChild(gs);
 		group->setHelpId(IDH_SEARCH_SIZE);
 
 		cur = group->addChild(Grid::Seed(1, 3));
@@ -183,7 +180,7 @@ droppedResults(0)
 		sizeMode->setSelected(2);
 
 		gs.caption = T_("File type");
-		group = left->addChild(gs);
+		group = options->addChild(gs);
 		group->setHelpId(IDH_SEARCH_TYPE);
 
 		fileType = group->addChild(WinUtil::Seeds::comboBoxStatic);
@@ -200,7 +197,7 @@ droppedResults(0)
 		fileType->addValue(T_("TTH"));
 
 		gs.caption = T_("Search options");
-		cur = left->addChild(gs)->addChild(Grid::Seed(3, 1));
+		cur = options->addChild(gs)->addChild(Grid::Seed(3, 1));
 
 		CheckBox::Seed cs(T_("Only users with free slots"));
 		slots = cur->addChild(cs);
@@ -221,7 +218,7 @@ droppedResults(0)
 		merge->onClicked(std::tr1::bind(&SearchFrame::handleMergeClicked, this));
 
 		gs.caption = T_("Hubs");
-		group = left->addChild(gs);
+		group = options->addChild(gs);
 		group->setHelpId(IDH_SEARCH_HUBS);
 
 		WidgetHubs::Seed ls;
@@ -238,8 +235,9 @@ droppedResults(0)
 		hubs->setChecked(0, false);
 	}
 
-	results = grid->addChild(WidgetResults::Seed());
+	results = addChild(WidgetResults::Seed());
 	addWidget(results);
+	paned->setSecond(results);
 
 	results->setSmallImageList(WinUtil::fileImages);
 	WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
@@ -302,7 +300,7 @@ void SearchFrame::layout() {
 	layoutStatus(r);
 	mapWidget(STATUS_SHOW_UI, showUI);
 
-	grid->layout(r);
+	paned->setRect(r);
 }
 
 bool SearchFrame::preClosing() {
@@ -315,6 +313,8 @@ bool SearchFrame::preClosing() {
 }
 
 void SearchFrame::postClosing() {
+	SettingsManager::getInstance()->set(SettingsManager::SEARCH_PANED_POS, paned->getRelativePos());
+
 	SettingsManager::getInstance()->set(SettingsManager::SEARCHFRAME_ORDER, WinUtil::toString(results->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::SEARCHFRAME_WIDTHS, WinUtil::toString(results->getColumnWidths()));
 }
@@ -509,7 +509,17 @@ void SearchFrame::handleMergeClicked() {
 }
 
 void SearchFrame::handleShowUIClicked() {
-	grid->column(0).size = showUI->getChecked() ? 220 : 0;
+	bool checked = showUI->getChecked();
+
+	if(checked && !paned->getFirst()) {
+		paned->setFirst(options);
+	} else if(!checked && paned->getFirst()) {
+		paned->setFirst(0);
+	}
+
+	options->setVisible(checked);
+	paned->setVisible(checked);
+
 	layout();
 }
 

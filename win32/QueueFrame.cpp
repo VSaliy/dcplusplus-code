@@ -47,16 +47,16 @@ static const ColumnInfo filesColumns[] = {
 #define FILE_LIST_NAME _T("File Lists")
 
 QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Download Queue"), IDH_QUEUE, IDR_QUEUE),
-	dirs(0),
-	files(0),
-	paned(0),
-	showTree(0),
-	dirty(true),
-	usingDirMenu(false),
-	queueSize(0),
-	queueItems(0),
-	fileLists(0)
+BaseType(mdiParent, T_("Download Queue"), IDH_QUEUE, IDR_QUEUE),
+paned(0),
+dirs(0),
+files(0),
+showTree(0),
+dirty(true),
+usingDirMenu(false),
+queueSize(0),
+queueItems(0),
+fileLists(0)
 {
 	paned = addChild(WidgetVPaned::Seed(SETTING(QUEUE_PANED_POS)));
 
@@ -120,17 +120,9 @@ void QueueFrame::layout() {
 	dwt::Rectangle r(getClientAreaSize());
 
 	layoutStatus(r);
-
 	mapWidget(STATUS_SHOW_TREE, showTree);
 
-	bool checked = showTree->getChecked();
-	if(checked && !paned->getFirst()) {
-		paned->setFirst(dirs);
-	} else if(!checked && paned->getFirst()) {
-		paned->setFirst(0);
-	}
 	paned->setRect(r);
-
 }
 
 bool QueueFrame::handleKeyDownDirs(int c) {
@@ -264,6 +256,12 @@ void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
 
 void QueueFrame::handleShowTreeClicked() {
 	bool checked = showTree->getChecked();
+
+	if(checked && !paned->getFirst()) {
+		paned->setFirst(dirs);
+	} else if(!checked && paned->getFirst()) {
+		paned->setFirst(0);
+	}
 
 	dirs->setVisible(checked);
 	paned->setVisible(checked);

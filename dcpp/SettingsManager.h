@@ -103,7 +103,7 @@ public:
 		INT64_LAST };
 
 	enum FloatSetting { FLOAT_FIRST = INT64_LAST +1,
-		TRANSFERS_PANED_POS = FLOAT_FIRST, QUEUE_PANED_POS,
+		TRANSFERS_PANED_POS = FLOAT_FIRST, QUEUE_PANED_POS, SEARCH_PANED_POS,
 		FLOAT_LAST, SETTINGS_LAST = FLOAT_LAST };
 
 	enum {	INCOMING_DIRECT, INCOMING_FIREWALL_UPNP, INCOMING_FIREWALL_NAT,
@@ -180,7 +180,7 @@ public:
 	}
 	void set(FloatSetting key, double value) {
 		// yes, we loose precision here, but we're gonna loose even more when saving to the XML file...
-		floatSettings[key - FLOAT_FIRST] = value;
+		floatSettings[key - FLOAT_FIRST] = static_cast<float>(value);
 		isSet[key] = true;
 	}
 

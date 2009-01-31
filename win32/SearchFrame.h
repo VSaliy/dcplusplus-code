@@ -135,7 +135,9 @@ private:
 	typedef FrameSet::iterator FrameIter;
 	static FrameSet frames;
 
-	GridPtr grid;
+	WidgetVPanedPtr paned;
+
+	GridPtr options;
 
 	ComboBoxPtr searchBox;
 	bool isHash;
