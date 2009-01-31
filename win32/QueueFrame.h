@@ -171,6 +171,8 @@ private:
 		QueueItemInfo& operator=(const QueueItemInfo&);
 	};
 
+	WidgetVPanedPtr paned;
+
 	typedef TypedTree<DirItemInfo> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
 	WidgetDirsPtr dirs;
@@ -178,7 +180,7 @@ private:
 	typedef TypedTable<QueueItemInfo, false> WidgetFiles;
 	typedef WidgetFiles* WidgetFilesPtr;
 	WidgetFilesPtr files;
-	WidgetVPanedPtr paned;
+
 	CheckBoxPtr showTree;
 
 	typedef unordered_multimap<string, QueueItemInfo*, noCaseStringHash, noCaseStringEq> DirectoryMap;

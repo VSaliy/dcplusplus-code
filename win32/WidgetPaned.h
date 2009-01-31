@@ -21,13 +21,9 @@
 
 template< bool horizontal >
 class WidgetPaned :
-	public dwt::MessageMap< dwt::Policies::Normal >,
-	public dwt::AspectMouse< WidgetPaned< horizontal > >,
-	public dwt::AspectSizable< WidgetPaned< horizontal > >,
-	public dwt::AspectVisible< WidgetPaned< horizontal > >,
-	public dwt::AspectRaw< WidgetPaned< horizontal > >
+	public Container
 {
-	typedef dwt::MessageMap< dwt::Policies::Normal > BaseType;
+	typedef Container BaseType;
 	friend class dwt::WidgetCreator< WidgetPaned >;
 public:
 	/// Class type
@@ -115,20 +111,14 @@ private:
 		::ReleaseCapture();
 		moving = false;
 	}
-
-	static dwt::WindowClass windowClass;
 };
-
-template<bool horizontal>
-dwt::WindowClass WidgetPaned<horizontal>::windowClass(horizontal ? _T("WidgetPanedH") : _T("WidgetPanedV"),
-	&WidgetPaned<horizontal>::wndProc, NULL, ( HBRUSH )( COLOR_3DFACE + 1 ),
-	dwt::IconPtr(), dwt::IconPtr(), LoadCursor( 0, horizontal ? IDC_SIZENS : IDC_SIZEWE ));
 
 template< bool horizontal >
 WidgetPaned< horizontal >::Seed::Seed(double pos_) :
-	BaseType::Seed(windowClass.getClassName(), WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS),
-	pos(pos_)
+BaseType::Seed(),
+pos(pos_)
 {
+	cursor = ::LoadCursor(0, horizontal ? IDC_SIZENS : IDC_SIZEWE);
 }
 
 template< bool horizontal >
@@ -193,12 +183,12 @@ void WidgetPaned< horizontal >::resizeChildren( )
 {
 	if(!children.first) {
 		if(children.second) {
-			::MoveWindow(children.second->handle(), rect.x(), rect.y(), rect.width(), rect.height(), TRUE);
+			children.second->layout(rect);
 		}
 		return;
 	}
 	if(!children.second) {
-		::MoveWindow(children.first->handle(), rect.x(), rect.y(), rect.width(), rect.height(), TRUE);
+		children.first->layout(rect);
 		return;
 	}
 
@@ -215,8 +205,8 @@ void WidgetPaned< horizontal >::resizeChildren( )
 		right.size.x = rect.width() - rcSplit.width() - left.width();
 	}
 
-	::MoveWindow(children.first->handle(), left.x(), left.y(), left.width(), left.height(), TRUE);
-	::MoveWindow(children.second->handle(), right.x(), right.y(), right.width(), right.height(), TRUE);
+	children.first->layout(left);
+	children.second->layout(right);
 
 	this->setBounds(rcSplit);
 	this->redraw(rcSplit);

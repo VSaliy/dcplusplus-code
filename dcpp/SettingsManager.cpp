@@ -88,7 +88,7 @@ const string SettingsManager::settingTags[] =
 	"TotalUpload", "TotalDownload",
 	"SENTRY",
 	// Floats
-	"TransfersPanedPos", "QueuePanedPos",
+	"TransfersPanedPos", "QueuePanedPos", "SearchPanedPos",
 	"SENTRY"
 };
 
@@ -293,6 +293,7 @@ SettingsManager::SettingsManager()
 	setDefault(SEARCH_MERGE, true);
 	setDefault(TRANSFERS_PANED_POS, .7);
 	setDefault(QUEUE_PANED_POS, .3);
+	setDefault(SEARCH_PANED_POS, .2);
 
 #ifdef _WIN32
 	setDefault(MAIN_WINDOW_STATE, SW_SHOWNORMAL);
