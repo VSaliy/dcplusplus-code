@@ -769,16 +769,24 @@ void AdcHub::on(Connected c) throw() {
 	lastInfoMap.clear();
 	sid = 0;
 
-	AdcCommand cmd(AdcCommand::CMD_SUP, AdcCommand::TYPE_HUB);
-	cmd.addParam(BAS0_SUPPORT).addParam(BASE_SUPPORT).addParam(TIGR_SUPPORT);
+	{
+		AdcCommand cmd(AdcCommand::CMD_SUP, AdcCommand::TYPE_HUB);
+		cmd.addParam(BAS0_SUPPORT).addParam(BASE_SUPPORT).addParam(TIGR_SUPPORT);
 
-	if(BOOLSETTING(HUB_USER_COMMANDS)) {
-		cmd.addParam(UCM0_SUPPORT);
+		if(BOOLSETTING(HUB_USER_COMMANDS)) {
+			cmd.addParam(UCM0_SUPPORT);
+		}
+		if(BOOLSETTING(SEND_BLOOM)) {
+			cmd.addParam(BLO0_SUPPORT);
+		}
+		send(cmd);
 	}
-	if(BOOLSETTING(SEND_BLOOM)) {
-		cmd.addParam(BLO0_SUPPORT);
+
+	{
+		AdcCommand cmd(AdcCommand::SEV_SUCCESS, AdcCommand::SUCCESS, Util::emptyString, AdcCommand::TYPE_HUB);
+		cmd.addParam("RF", getHubUrl());
+		send(cmd);
 	}
-	send(cmd);
 }
 
 void AdcHub::on(Line l, const string& aLine) throw() {
