@@ -95,10 +95,12 @@ int SmartWinMain(dwt::Application& app) {
 
 #ifdef _DEBUG
 	old_handler = set_terminate(&term_handler);
-#endif
 
+#ifdef __MINGW32__
 	// For debugging
 	::LoadLibrary(_T("exchndl.dll"));
+#endif
+#endif
 
 	// For SHBrowseForFolder, UPnP
 	HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
