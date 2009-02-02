@@ -100,10 +100,6 @@ void NmdcHub::supports(const StringList& feat) {
 	for(StringList::const_iterator i = feat.begin(); i != feat.end(); ++i) {
 		x+= *i + ' ';
 	}
-
-	x += "Ref=";
-	x += getHubUrl();
-
 	send("$Supports " + x + '|');
 }
 
