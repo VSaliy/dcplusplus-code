@@ -44,7 +44,7 @@ CryptoManager::CryptoManager()
 :
 	certsLoaded(false),
 	lock("EXTENDEDPROTOCOLABCABCABCABCABCABC"),
-	pk("DCPLUSPLUS" VERSIONSTRING "ABCABC")
+	pk("DCPLUSPLUS" VERSIONSTRING)
 {
 	SSL_library_init();
 
