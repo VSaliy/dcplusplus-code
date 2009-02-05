@@ -108,4 +108,24 @@ Point TextBoxBase::getPreferedSize() {
 	return ret;
 }
 
+bool TextBox::tryFire(const MSG& msg, LRESULT& retVal) {
+	if(BaseType::tryFire(msg, retVal))
+		return true;
+
+	if(msg.message == WM_GETDLGCODE) {
+		/*
+		* multiline edit controls add the DLGC_WANTALLKEYS flag but go haywire when they actually
+		* try to handle keys like tab/enter/escape; especially when hosted in a modeless dialog or
+		* when one of their parents has the WS_EX_CONTROLPARENT style.
+		*/
+		retVal = returnUnhandled(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+		if(retVal & DLGC_WANTALLKEYS)
+			retVal &= ~DLGC_WANTALLKEYS;
+
+		return true;
+	}
+
+	return false;
+}
+
 }
