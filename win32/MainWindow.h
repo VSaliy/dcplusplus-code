@@ -63,6 +63,7 @@ public:
 	virtual ~MainWindow();
 
 	void updateSlotsSpin();
+	bool closing() const { return stopperThread != 0; }
 
 private:
 	class DirectoryListInfo {
@@ -175,7 +176,7 @@ private:
 
 	bool filter(MSG& msg);
 
-	bool closing();
+	bool handleClosing();
 	void handleRestore();
 
 	static DWORD WINAPI stopper(void* p);
