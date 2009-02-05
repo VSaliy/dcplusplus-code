@@ -1136,6 +1136,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 
 							if(downloaded > 0) {
 								q->addSegment(Segment(aDownload->getStartPos(), downloaded));
+								setDirty();
 							}
 						}
 					}
