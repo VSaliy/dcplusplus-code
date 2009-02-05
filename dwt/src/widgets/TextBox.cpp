@@ -119,8 +119,12 @@ bool TextBox::tryFire(const MSG& msg, LRESULT& retVal) {
 		* when one of their parents has the WS_EX_CONTROLPARENT style.
 		*/
 		retVal = returnUnhandled(msg.hwnd, msg.message, msg.wParam, msg.lParam);
-		if(retVal & DLGC_WANTALLKEYS)
+		if(retVal & DLGC_WANTALLKEYS) {
 			retVal &= ~DLGC_WANTALLKEYS;
+
+			if(msg.wParam == VK_RETURN)
+				retVal |= DLGC_WANTMESSAGE;
+		}
 
 		return true;
 	}

@@ -67,7 +67,7 @@ languages(0)
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
 
 		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
-		seed.style |= ES_MULTILINE | WS_VSCROLL;
+		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
 		TextBoxPtr box=group->addChild(seed);
 		box->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);	
 		items.push_back(Item(box, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
