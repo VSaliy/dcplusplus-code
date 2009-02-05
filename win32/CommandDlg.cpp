@@ -131,7 +131,7 @@ bool CommandDlg::handleInitDialog() {
 
 		cur->addChild(Label::Seed(T_("Command")))->setHelpId(IDH_USER_COMMAND_COMMAND);
 		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
-		seed.style |= ES_MULTILINE | WS_VSCROLL;
+		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
 		commandBox = cur->addChild(seed);
 		commandBox->setHelpId(IDH_USER_COMMAND_COMMAND);
 		commandBox->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
