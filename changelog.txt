@@ -18,6 +18,7 @@
 * [L#195047] Auto-resizable UI (arnetheduck, poy, emtee)
 * Shell menus for multiple selections (poy)
 * [L#256357] Fix painting issues (poy)
+* Add hub closing confirmation dialog (poy)
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 

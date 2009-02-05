@@ -111,7 +111,7 @@ MainWindow::MainWindow() :
 	QueueManager::getInstance()->addListener(this);
 	LogManager::getInstance()->addListener(this);
 
-	onClosing(std::tr1::bind(&MainWindow::closing, this));
+	onClosing(std::tr1::bind(&MainWindow::handleClosing, this));
 
 	onRaw(std::tr1::bind(&MainWindow::handleEndSession, this), dwt::Message(WM_ENDSESSION));
 	onRaw(std::tr1::bind(&MainWindow::handleCopyData, this, _2), dwt::Message(WM_COPYDATA));
@@ -524,8 +524,8 @@ void MainWindow::saveWindowSettings() {
 	SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_STATE, (int)wp.showCmd);
 }
 
-bool MainWindow::closing() {
-	if (stopperThread == NULL) {
+bool MainWindow::handleClosing() {
+	if(!closing()) {
 		if ( !BOOLSETTING(CONFIRM_EXIT) || (createMessageBox().show(T_("Really exit?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_YESNO, MessageBox::BOX_ICONQUESTION) == IDYES)) {
 			if (c != NULL) {
 				c->removeListener(this);

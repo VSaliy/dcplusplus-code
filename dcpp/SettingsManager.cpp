@@ -81,7 +81,7 @@ const string SettingsManager::settingTags[] =
 	"DontDlAlreadyQueued", "MaxCommandLength", "AllowUntrustedHubs", "AllowUntrustedClients",
 	"TLSPort", "FastHash", "SortFavUsersFirst", "SegmentedDL", "FollowLinks",
 	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "MaxTabChars", "FinishedDLOnlyFull",
-	"ConfirmExit", "ConfirmHubRemoval", "ConfirmUserRemoval", "ConfirmItemRemoval", "ConfirmADLSRemoval",
+	"ConfirmExit", "ConfirmHubClosing", "ConfirmHubRemoval", "ConfirmUserRemoval", "ConfirmItemRemoval", "ConfirmADLSRemoval",
 	"SearchMerge",
 	"SENTRY",
 	// Int64
@@ -286,6 +286,7 @@ SettingsManager::SettingsManager()
 	setDefault(MAX_TAB_CHARS, 20);
 	setDefault(FINISHED_DL_ONLY_FULL, true);
 	setDefault(CONFIRM_EXIT, true);
+	setDefault(CONFIRM_HUB_CLOSING, true);
 	setDefault(CONFIRM_HUB_REMOVAL, true);
 	setDefault(CONFIRM_USER_REMOVAL, true);
 	setDefault(CONFIRM_ITEM_REMOVAL, true);
