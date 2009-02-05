@@ -470,14 +470,14 @@ int QueueManager::Rechecker::run() {
 		if(!q)
 			continue;
 
-		for(Sizes::const_iterator i = sizes.begin(); i != sizes.end(); ++i)
-			q->addSegment(Segment(i->first, i->second));
-
 		//If no bad blocks then the file probably got stuck in the temp folder for some reason
 		if(!hasBadBlocks) {
 			qm->moveStuckFile(q);
 			continue;
 		}
+
+		for(Sizes::const_iterator i = sizes.begin(); i != sizes.end(); ++i)
+			q->addSegment(Segment(i->first, i->second));
 
 		qm->rechecked(q);
 	}
