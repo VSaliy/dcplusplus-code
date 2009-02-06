@@ -360,6 +360,9 @@ public:
 		if (away)
 			awayTime = time(NULL);
 	}
+	static void switchAway() {
+		setAway(!away);
+	}
 
 	static bool getManualAway() { return manualAway; }
 	static void setManualAway(bool aManualAway) { manualAway = aManualAway;	}
