@@ -43,7 +43,6 @@
 #include "Control.h"
 
 #include <vector>
-#include "../dwt_unordered_map.h"
 
 namespace dwt {
 
@@ -148,15 +147,18 @@ protected:
 	static Message getDblClickMessage() { return Message(WM_NOTIFY, NM_DBLCLK); }
 
 private:
-	std::vector<unsigned> sizes;
-	unsigned fill;
+	struct Part {
+		Part() : size(0), fill(false), helpId(0) { }
+		unsigned size;
+		bool fill;
+		unsigned helpId;
+	};
+	typedef std::vector<Part> Parts;
+	Parts parts;
 
 	ToolTipPtr tip;
 	std::vector<tstring> lastLines;
 	enum { MAX_LINES = 10 }; /// @todo configurable?
-
-	typedef std::tr1::unordered_map<unsigned, unsigned> HelpIdsMap;
-	HelpIdsMap helpIds;
 
 	void layoutSections(const Point& sz);
 
