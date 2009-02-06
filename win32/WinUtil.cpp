@@ -260,7 +260,7 @@ _T("\r\n-- My client supports XML file lists, does yours?\r\n") LINE2
 
 #define MSGS 16
 
-tstring WinUtil::commands = _T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts");
+tstring WinUtil::commands = _T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts");
 
 bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson) {
 	string::size_type i = cmd.find(' ');
@@ -298,6 +298,14 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 			status = T_("Slots set");
 			ClientManager::getInstance()->infoUpdated();
 			mainWindow->updateSlotsSpin();
+		} else {
+			status = T_("Invalid number of slots");
+		}
+	} else if(Util::stricmp(cmd.c_str(), _T("dslots"))==0) {
+		int j = Util::toInt(Text::fromT(param));
+		if(j >= 0) {
+			SettingsManager::getInstance()->set(SettingsManager::DOWNLOAD_SLOTS, j);
+			status = T_("Download slots set");
 		} else {
 			status = T_("Invalid number of slots");
 		}
