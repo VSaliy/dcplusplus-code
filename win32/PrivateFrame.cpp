@@ -192,7 +192,7 @@ void PrivateFrame::layout() {
 
 	dwt::Rectangle r(getClientAreaSize());
 
-	layoutStatus(r);
+	status->layout(r);
 
 	int ymessage = message->getTextSize(_T("A")).y + 10;
 	dwt::Rectangle rm(0, r.size.y - ymessage, r.width() , ymessage);

@@ -151,9 +151,9 @@ users(0)
 
 	initStatus();
 
-	setStatusHelpId(STATUS_STATUS, IDH_PUBLIC_HUBS_STATUS);
-	setStatusHelpId(STATUS_HUBS, IDH_PUBLIC_HUBS_HUBS);
-	setStatusHelpId(STATUS_USERS, IDH_PUBLIC_HUBS_USERS);
+	status->setHelpId(STATUS_STATUS, IDH_PUBLIC_HUBS_STATUS);
+	status->setHelpId(STATUS_HUBS, IDH_PUBLIC_HUBS_HUBS);
+	status->setHelpId(STATUS_USERS, IDH_PUBLIC_HUBS_USERS);
 
 	//populate the filter list with the column names
 	for(int j=0; j<COLUMN_LAST; j++) {
@@ -197,7 +197,7 @@ void PublicHubsFrame::postClosing() {
 void PublicHubsFrame::layout() {
 	dwt::Rectangle r(getClientAreaSize());
 
-	layoutStatus(r);
+	status->layout(r);
 
 	grid->layout(r);
 }
@@ -464,11 +464,11 @@ void PublicHubsFrame::onFinished(const tstring& s) {
 }
 
 void PublicHubsFrame::on(DownloadStarting, const string& l) throw() {
-	callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), true, false));
+	callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), false));
 }
 
 void PublicHubsFrame::on(DownloadFailed, const string& l) throw() {
-	callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Download failed: %1%") % Text::toT(l)), true, false));
+	callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Download failed: %1%") % Text::toT(l)), false));
 }
 
 void PublicHubsFrame::on(DownloadFinished, const string& l) throw() {

@@ -43,6 +43,7 @@
 #include "Control.h"
 
 #include <vector>
+#include "../dwt_unordered_map.h"
 
 namespace dwt {
 
@@ -58,13 +59,7 @@ namespace dwt {
   * with a status bar is for instance Internet Explorer which ( unless you have made
   * it invisible ) has a strip of status information at the bottom showing for
   * instance the security settings of the current page and how far in the download
-  * process you are currently etc... <br>
-  * Note that there are TWO DIFFERENT status bar controls though, one which does have
-  * "sections" which sub divide< TypeOfStatusBar >s the status bar into several smaller sections which
-  * are independant of eachother and another type which is a "flat strip" containing
-  * only one large portion of text. <br>
-  * The default one is the flat one, use Section as the last template parameter to
-  * use the one with sections!
+  * process you are currently etc...
   */
 class StatusBar :
 	public CommonControl,
@@ -96,40 +91,47 @@ public:
 
 		FontPtr font;
 
+		unsigned parts;
+
+		/// index of the part that fills all the remaining space of the bar.
+		unsigned fill;
+
 		/// Fills with default parameters
-		explicit Seed(bool sizeGrip = true);
+		explicit Seed(unsigned parts_ = 1, unsigned fill_ = 0, bool sizeGrip = true);
 	};
 
-	/// Refreshes the status bar, must be called after main window has been resized
-	/** Refreshes the status bar, call this one whenever you need to redraw the
-	  * status bar, typical example is when you have resized the container Widget.
-	  * <br>
-	  * Normally you would call this function after _EVERY_ single resize the main
-	  * Window which owns the status bar gets. <br>
-	  * Call this one in the onSized event handler for your Window.
-	  */
-	void refresh();
+	/// Sets the initial size of the given part
+	void setSize(unsigned part, unsigned size);
 
-	/// Initializes the sections of the StatusBar
-	/** Use this one to set the number of sections and the width of them
-	  */
-	void setSections( const std::vector< unsigned > & width );
+	/**
+	* Sets the text of the given part
+	* @param part index of the part to update.
+	* @param text new text to put into "s".
+	* @param alwaysResize if false, the part will be resized only if the new text is too big for
+	* the current; if true, the size of the part will always be adjusted to the text it contains.
+	* note: setting "alwaysResize" to true for often changing parts might result in flickering.
+	*/
+	void setText(unsigned part, const tstring& text, bool alwaysResize = false);
 
-	/// Sets the text of the given section number
-	/** Use this one to set the text of a specific section of the StatusBar
-	  */
-	void setText( const tstring & newText, unsigned partNo = 0);
+	/// Sets the help id of the given part. If not set, the help id of the whole status bar is used instead.
+	void setHelpId(unsigned part, unsigned id);
+
+	void mapWidget(unsigned part, Widget* widget, const Rectangle& padding = Rectangle(0, 0, 0, 0));
+
+	unsigned getSize(unsigned part) const;
 
 	/// Actually creates the StatusBar
 	/** You should call WidgetFactory::createStatusBar if you instantiate class
 	  * directly. <br>
 	  * Only if you DERIVE from class you should call this function directly.
 	  */
-	void create( const Seed & cs = Seed() );
+	void create(const Seed& cs = Seed());
+
+	void layout(Rectangle& r);
 
 protected:
 	// Constructor Taking pointer to parent
-	explicit StatusBar( dwt::Widget * parent );
+	explicit StatusBar(Widget* parent);
 
 	// Protected to avoid direct instantiation, you can inherit and use
 	// WidgetFactory class which is friend
@@ -137,54 +139,23 @@ protected:
 	{}
 
 	// Contract needed by AspectClickable Aspect class
-	static Message getClickMessage();
+	static Message getClickMessage() { return Message(WM_NOTIFY, NM_CLICK); }
 
 	// Contract needed by AspectDblClickable Aspect class
-	static Message getDblClickMessage();
+	static Message getDblClickMessage() { return Message(WM_NOTIFY, NM_DBLCLK); }
+
+private:
+	std::vector<unsigned> sizes;
+	unsigned fill;
+
+	typedef std::tr1::unordered_map<unsigned, unsigned> HelpIdsMap;
+	HelpIdsMap helpIds;
+
+	void layoutSections(const Point& sz);
+
+	// AspectHelp
+	void helpImpl(unsigned& id);
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-inline StatusBar::Seed::Seed(bool sizeGrip) : BaseType::Seed(STATUSCLASSNAME, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS) {
-	if(sizeGrip) {
-		style |= SBARS_SIZEGRIP;
-	}
-}
-
-inline void StatusBar::setText( const tstring & newText, unsigned partNo ) {
-	sendMessage(SB_SETTEXT, static_cast< WPARAM >( partNo ), reinterpret_cast< LPARAM >( newText.c_str() ) );
-}
-
-inline void StatusBar::refresh() {
-	// A status bar can't really be resized since its size is controlled by the
-	// parent window. But to not let the status bar "hang" we need to refresh its
-	// size after the main window is being resized.
-	if ( ::MoveWindow( this->handle(), 0, 0, 0, 0, TRUE ) == 0 )
-	{
-		dwtWin32DebugFail("Couldn't reposition windows");
-	}
-}
-
-inline Message StatusBar::getClickMessage() {
-	return Message( WM_NOTIFY, NM_CLICK );
-}
-
-inline Message StatusBar::getDblClickMessage() {
-	return Message( WM_NOTIFY, NM_DBLCLK );
-}
-
-inline StatusBar::StatusBar( Widget * parent )
-	: BaseType( parent )
-{
-}
-
-inline void StatusBar::create( const Seed & cs ) {
-	BaseType::create(cs);
-	if(cs.font)
-		setFont( cs.font );
-}
 
 // end namespace dwt
 }

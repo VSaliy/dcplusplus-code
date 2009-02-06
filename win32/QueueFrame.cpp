@@ -97,12 +97,12 @@ fileLists(0)
 	}
 
 	initStatus();
-	statusSizes[STATUS_SHOW_TREE] = 16;
+	status->setSize(STATUS_SHOW_TREE, showTree->getPreferedSize().x);
 
-	setStatusHelpId(STATUS_PARTIAL_COUNT, IDH_QUEUE_PARTIAL_COUNT);
-	setStatusHelpId(STATUS_PARTIAL_BYTES, IDH_QUEUE_PARTIAL_BYTES);
-	setStatusHelpId(STATUS_TOTAL_COUNT, IDH_QUEUE_TOTAL_COUNT);
-	setStatusHelpId(STATUS_TOTAL_BYTES, IDH_QUEUE_TOTAL_BYTES);
+	status->setHelpId(STATUS_PARTIAL_COUNT, IDH_QUEUE_PARTIAL_COUNT);
+	status->setHelpId(STATUS_PARTIAL_BYTES, IDH_QUEUE_PARTIAL_BYTES);
+	status->setHelpId(STATUS_TOTAL_COUNT, IDH_QUEUE_TOTAL_COUNT);
+	status->setHelpId(STATUS_TOTAL_BYTES, IDH_QUEUE_TOTAL_BYTES);
 
 	addQueueList(QueueManager::getInstance()->lockQueue());
 	QueueManager::getInstance()->unlockQueue();
@@ -119,8 +119,8 @@ QueueFrame::~QueueFrame() {
 void QueueFrame::layout() {
 	dwt::Rectangle r(getClientAreaSize());
 
-	layoutStatus(r);
-	mapWidget(STATUS_SHOW_TREE, showTree);
+	status->layout(r);
+	status->mapWidget(STATUS_SHOW_TREE, showTree);
 
 	paned->setRect(r);
 }
@@ -1054,7 +1054,7 @@ void QueueFrame::onUpdated(const QueueItem& qi) {
 
 void QueueFrame::onRechecked(QueueItem* qi, const tstring& message) {
 	callAsync(std::tr1::bind(&QueueFrame::setStatus, this, STATUS_STATUS,
-		str(TF_("Integrity check: %1% (%2%)") % message % Text::toT(qi->getTarget())), true, false));
+		str(TF_("Integrity check: %1% (%2%)") % message % Text::toT(qi->getTarget())), false));
 }
 
 void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) throw() {

@@ -145,15 +145,13 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	}
 
 	initStatus();
+	status->setSize(STATUS_SHOW_USERS, showUsers->getPreferedSize().x);
 	status->onDblClicked(std::tr1::bind(&HubFrame::openLog, this, false));
 
-	///@todo get real resizer width
-	statusSizes[STATUS_SHOW_USERS] = 16;
-
-	setStatusHelpId(STATUS_STATUS, IDH_HUB_STATUS);
-	setStatusHelpId(STATUS_USERS, IDH_HUB_USERS_COUNT);
-	setStatusHelpId(STATUS_SHARED, IDH_HUB_SHARED);
-	setStatusHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
+	status->setHelpId(STATUS_STATUS, IDH_HUB_STATUS);
+	status->setHelpId(STATUS_USERS, IDH_HUB_USERS_COUNT);
+	status->setHelpId(STATUS_SHARED, IDH_HUB_SHARED);
+	status->setHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
 
 	layout();
 
@@ -207,8 +205,8 @@ void HubFrame::layout() {
 
 	dwt::Rectangle r(getClientAreaSize());
 
-	layoutStatus(r);
-	mapWidget(STATUS_SHOW_USERS, showUsers);
+	status->layout(r);
+	status->mapWidget(STATUS_SHOW_USERS, showUsers);
 
 	int ymessage = message->getTextSize(_T("A")).y + 10;
 	int xfilter = showUsers->getChecked() ? std::min(r.width() / 4, 200l) : 0;

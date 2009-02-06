@@ -79,7 +79,7 @@ void SystemFrame::layout() {
 
 	dwt::Rectangle r(this->getClientAreaSize());
 
-	layoutStatus(r);
+	status->layout(r);
 
 	log->setBounds(r);
 

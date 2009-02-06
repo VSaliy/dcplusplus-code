@@ -223,12 +223,12 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 void DirectoryListingFrame::layout() {
 	dwt::Rectangle r(getClientAreaSize());
 
-	layoutStatus(r);
+	status->layout(r);
 
-	mapWidget(STATUS_FILE_LIST_DIFF, listDiff);
-	mapWidget(STATUS_MATCH_QUEUE, matchQueue);
-	mapWidget(STATUS_FIND, find);
-	mapWidget(STATUS_NEXT, findNext);
+	status->mapWidget(STATUS_FILE_LIST_DIFF, listDiff);
+	status->mapWidget(STATUS_MATCH_QUEUE, matchQueue);
+	status->mapWidget(STATUS_FIND, find);
+	status->mapWidget(STATUS_NEXT, findNext);
 
 	paned->setRect(r);
 }

@@ -120,7 +120,7 @@ void StatsFrame::handlePaint(dwt::PaintCanvas& canvas) {
 void StatsFrame::layout() {
 	dwt::Rectangle r(getClientAreaSize());
 
-	layoutStatus(r);
+	status->layout(r);
 
 	width = r.width();
 	height = r.size.y - 1;

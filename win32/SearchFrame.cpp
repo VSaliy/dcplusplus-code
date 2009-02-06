@@ -256,8 +256,7 @@ droppedResults(0)
 	}
 
 	initStatus();
-
-	statusSizes[STATUS_SHOW_UI] = 16; ///@todo get real checkbox width
+	status->setSize(STATUS_SHOW_UI, showUI->getPreferedSize().x);
 
 	layout();
 
@@ -297,8 +296,8 @@ SearchFrame::~SearchFrame() {
 void SearchFrame::layout() {
 	dwt::Rectangle r(getClientAreaSize());
 
-	layoutStatus(r);
-	mapWidget(STATUS_SHOW_UI, showUI);
+	status->layout(r);
+	status->mapWidget(STATUS_SHOW_UI, showUI);
 
 	paned->setRect(r);
 }

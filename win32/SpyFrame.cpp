@@ -59,26 +59,18 @@ SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
 		searches->onContextMenu(std::tr1::bind(&SpyFrame::handleContextMenu, this, _1));
 	}
 
-	{
-		tstring text = T_("Ignore TTH searches");
-
-		{
-			CheckBox::Seed cs(text);
-			ignoreTTH = addChild(cs);
-			ignoreTTH->setHelpId(IDH_SPY_IGNORE_TTH);
-			ignoreTTH->setChecked(bIgnoreTTH);
-			ignoreTTH->onClicked(std::tr1::bind(&SpyFrame::handleIgnoreTTHClicked, this));
-		}
-
-		statusSizes[STATUS_IGNORE_TTH] = ignoreTTH->getTextSize(text).x + 16; ///@todo get real checkbox width
-	}
+	ignoreTTH = addChild(CheckBox::Seed(T_("Ignore TTH searches")));
+	ignoreTTH->setHelpId(IDH_SPY_IGNORE_TTH);
+	ignoreTTH->setChecked(bIgnoreTTH);
+	ignoreTTH->onClicked(std::tr1::bind(&SpyFrame::handleIgnoreTTHClicked, this));
 
 	initStatus();
+	status->setSize(STATUS_IGNORE_TTH, ignoreTTH->getPreferedSize().x);
 
-	setStatusHelpId(STATUS_TOTAL, IDH_SPY_TOTAL);
-	setStatusHelpId(STATUS_AVG_PER_SECOND, IDH_SPY_AVG_PER_SECOND);
-	setStatusHelpId(STATUS_HITS, IDH_SPY_HITS);
-	setStatusHelpId(STATUS_HIT_RATIO, IDH_SPY_HIT_RATIO);
+	status->setHelpId(STATUS_TOTAL, IDH_SPY_TOTAL);
+	status->setHelpId(STATUS_AVG_PER_SECOND, IDH_SPY_AVG_PER_SECOND);
+	status->setHelpId(STATUS_HITS, IDH_SPY_HITS);
+	status->setHelpId(STATUS_HIT_RATIO, IDH_SPY_HIT_RATIO);
 
 	layout();
 
@@ -95,8 +87,8 @@ SpyFrame::~SpyFrame() {
 void SpyFrame::layout() {
 	dwt::Rectangle r(this->getClientAreaSize());
 
-	layoutStatus(r);
-	mapWidget(STATUS_IGNORE_TTH, ignoreTTH);
+	status->layout(r);
+	status->mapWidget(STATUS_IGNORE_TTH, ignoreTTH);
 
 	searches->setBounds(r);
 }
