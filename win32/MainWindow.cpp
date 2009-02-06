@@ -349,7 +349,14 @@ void MainWindow::initStatusBar() {
 	status->setSize(STATUS_SLOTS_SPIN, 22);
 	///@todo set to checkbox width + resizedrag width really
 	status->setSize(STATUS_DUMMY, 32);
-	status->onDblClicked(std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
+	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
+	{
+		dwt::Dispatchers::VoidVoid<>::F f = std::tr1::bind(&StatsFrame::openWindow, getTabView());
+		status->onDblClicked(STATUS_DOWN_TOTAL, f);
+		status->onDblClicked(STATUS_UP_TOTAL, f);
+		status->onDblClicked(STATUS_DOWN_DIFF, f);
+		status->onDblClicked(STATUS_UP_DIFF, f);
+	}
 
 	status->setHelpId(STATUS_STATUS, IDH_MAIN_STATUS);
 	status->setHelpId(STATUS_AWAY, IDH_MAIN_AWAY);

@@ -67,6 +67,9 @@ void StatusBar::create(const Seed& cs) {
 		tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
 		tip->setTool(this, std::tr1::bind(&StatusBar::handleToolTip, this, _1));
 	}
+
+	ClickType::onClicked(std::tr1::bind(&StatusBar::handleClicked, this));
+	DblClickType::onDblClicked(std::tr1::bind(&StatusBar::handleDblClicked, this));
 }
 
 void StatusBar::setSize(unsigned part, unsigned size) {
@@ -110,6 +113,16 @@ void StatusBar::mapWidget(unsigned part, Widget* widget, const Rectangle& paddin
 		p[1].y - p[0].y - padding.bottom(), TRUE);
 }
 
+void StatusBar::onClicked(unsigned part, const F& f) {
+	dwtassert(part < parts.size(), _T("Invalid part number."));
+	parts[part].clickF = f;
+}
+
+void StatusBar::onDblClicked(unsigned part, const F& f) {
+	dwtassert(part < parts.size(), _T("Invalid part number."));
+	parts[part].dblClickF = f;
+}
+
 void StatusBar::layout(Rectangle& r) {
 	setBounds(0, 0, 0, 0);
 
@@ -151,6 +164,18 @@ void StatusBar::layoutSections(const Point& sz) {
 	sendMessage(SB_SETPARTS, static_cast< WPARAM >( size ), reinterpret_cast< LPARAM >( intArr ) );
 }
 
+StatusBar::Part* StatusBar::getClickedPart() {
+	unsigned x = ClientCoordinate(ScreenCoordinate(Point::fromLParam(::GetMessagePos())), this).x();
+	unsigned total = 0;
+	for(Parts::iterator i = parts.begin(); i != parts.end(); ++i) {
+		total += i->size;
+		if(total > x)
+			return &*i;
+	}
+
+	return 0;
+}
+
 void StatusBar::handleToolTip(tstring& text) {
 	for(Parts::const_iterator i = parts.begin(); i != parts.end(); ++i) {
 		if(i->fill) {
@@ -168,22 +193,23 @@ void StatusBar::handleToolTip(tstring& text) {
 	}
 }
 
+void StatusBar::handleClicked() {
+	Part* part = getClickedPart();
+	if(part && part->clickF)
+		part->clickF();
+}
+
+void StatusBar::handleDblClicked() {
+	Part* part = getClickedPart();
+	if(part && part->dblClickF)
+		part->dblClickF();
+}
+
 void StatusBar::helpImpl(unsigned& id) {
 	// we have the help id of the whole status bar; convert to the one of the specific part the user just clicked on
-	Point pt(Point::fromLParam(::GetMessagePos()));
-	RECT rect = getBounds(false);
-	if(::PtInRect(&rect, pt)) {
-		unsigned x = ClientCoordinate(ScreenCoordinate(pt), this).x();
-		unsigned total = 0;
-		for(Parts::const_iterator i = parts.begin(); i != parts.end(); ++i) {
-			total += i->size;
-			if(total > x) {
-				if(i->helpId)
-					id = i->helpId;
-				break;
-			}
-		}
-	}
+	Part* part = getClickedPart();
+	if(part && part->helpId)
+		id = part->helpId;
 }
 
 }

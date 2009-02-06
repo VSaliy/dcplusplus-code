@@ -64,15 +64,21 @@ class StatusBar :
 	public CommonControl,
 
 	// Aspects
-	public AspectClickable< StatusBar >,
-	public AspectDblClickable< StatusBar >,
-	public AspectFont< StatusBar >,
-	public AspectPainting< StatusBar >
+	public AspectClickable<StatusBar>,
+	public AspectDblClickable<StatusBar>,
+	public AspectFont<StatusBar>,
+	public AspectPainting<StatusBar>
 {
 	typedef CommonControl BaseType;
-	friend class WidgetCreator< StatusBar >;
-	friend class AspectClickable< StatusBar>;
-	friend class AspectDblClickable< StatusBar >;
+	typedef AspectClickable<StatusBar> ClickType;
+	typedef AspectDblClickable<StatusBar> DblClickType;
+
+	friend class WidgetCreator<StatusBar>;
+	friend class AspectClickable<StatusBar>;
+	friend class AspectDblClickable<StatusBar>;
+
+	typedef Dispatchers::VoidVoid<>::F F;
+
 public:
 	/// Class type
 	typedef StatusBar ThisType;
@@ -120,6 +126,9 @@ public:
 
 	void mapWidget(unsigned part, Widget* widget, const Rectangle& padding = Rectangle(0, 0, 0, 0));
 
+	void onClicked(unsigned part, const F& f);
+	void onDblClicked(unsigned part, const F& f);
+
 	/// Actually creates the StatusBar
 	/** You should call WidgetFactory::createStatusBar if you instantiate class
 	  * directly. <br>
@@ -148,10 +157,15 @@ protected:
 
 private:
 	struct Part {
-		Part() : size(0), fill(false), helpId(0) { }
+		Part() : size(0), fill(false), helpId(0), clickF(0), dblClickF(0) { }
+
 		unsigned size;
 		bool fill;
+
 		unsigned helpId;
+
+		F clickF;
+		F dblClickF;
 	};
 	typedef std::vector<Part> Parts;
 	Parts parts;
@@ -161,8 +175,11 @@ private:
 	enum { MAX_LINES = 10 }; /// @todo configurable?
 
 	void layoutSections(const Point& sz);
+	Part* getClickedPart();
 
 	void handleToolTip(tstring& text);
+	void handleClicked();
+	void handleDblClicked();
 
 	// AspectHelp
 	void helpImpl(unsigned& id);

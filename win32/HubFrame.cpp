@@ -146,7 +146,7 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 
 	initStatus();
 	status->setSize(STATUS_SHOW_USERS, showUsers->getPreferedSize().x);
-	status->onDblClicked(std::tr1::bind(&HubFrame::openLog, this, false));
+	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&HubFrame::openLog, this, false));
 
 	status->setHelpId(STATUS_STATUS, IDH_HUB_STATUS);
 	status->setHelpId(STATUS_USERS, IDH_HUB_USERS_COUNT);
