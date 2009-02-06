@@ -34,9 +34,6 @@
 #include <dwt/WidgetCreator.h>
 #include <dwt/widgets/ToolTip.h>
 
-#include <numeric>
-#include <boost/lambda/lambda.hpp>
-
 namespace dwt {
 
 StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip, bool tooltip_) :
@@ -59,8 +56,8 @@ tip(0)
 }
 
 void StatusBar::create(const Seed& cs) {
-	sizes.resize(cs.parts);
-	fill = cs.fill;
+	parts.resize(cs.parts);
+	parts[cs.fill].fill = true;
 
 	BaseType::create(cs);
 	if(cs.font)
@@ -73,17 +70,18 @@ void StatusBar::create(const Seed& cs) {
 }
 
 void StatusBar::setSize(unsigned part, unsigned size) {
-	dwtassert(part < sizes.size(), _T("Invalid part number."));
-	sizes[part] = size;
+	dwtassert(part < parts.size(), _T("Invalid part number."));
+	parts[part].size = size;
 }
 
 void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
-	dwtassert(part < sizes.size(), _T("Invalid part number."));
-	if(part != fill) {
-		unsigned oldW = sizes[part];
+	dwtassert(part < parts.size(), _T("Invalid part number."));
+	Part& info = parts[part];
+	if(!info.fill) {
+		unsigned oldW = info.size;
 		unsigned newW = getTextSize(text).x + 12;
 		if(newW > oldW || (alwaysResize && newW != oldW)) {
-			sizes[part] = newW;
+			info.size = newW;
 			layoutSections(BaseType::getSize());
 		}
 	} else if(tip) {
@@ -96,12 +94,12 @@ void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 }
 
 void StatusBar::setHelpId(unsigned part, unsigned id) {
-	dwtassert(part < sizes.size(), _T("Invalid part number."));
-	helpIds[part] = id;
+	dwtassert(part < parts.size(), _T("Invalid part number."));
+	parts[part].helpId = id;
 }
 
 void StatusBar::mapWidget(unsigned part, Widget* widget, const Rectangle& padding) {
-	dwtassert(part < sizes.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), _T("Invalid part number."));
 	POINT p[2];
 	sendMessage(SB_GETRECT, part, reinterpret_cast<LPARAM>(p));
 	::MapWindowPoints(handle(), getParent()->handle(), (POINT*)p, 2);
@@ -128,8 +126,18 @@ bool StatusBar::tryFire(const MSG& msg, LRESULT& retVal) {
 }
 
 void StatusBar::layoutSections(const Point& sz) {
-	sizes[fill] = 0;
-	sizes[fill] = sz.x - std::accumulate(sizes.begin(), sizes.end(), 0);
+	std::vector<unsigned> sizes;
+	unsigned fillSize = sz.x;
+	unsigned fillIndex = 0;
+	size_t count = 0;
+	for(Parts::const_iterator i = parts.begin(); i != parts.end(); ++i, ++count) {
+		if(i->fill)
+			fillIndex = count;
+		else
+			fillSize -= i->size;
+		sizes.push_back(i->size);
+	}
+	parts[fillIndex].size = sizes[fillIndex] = fillSize;
 
 	std::vector< unsigned > newVec( sizes );
 	std::vector< unsigned >::const_iterator origIdx = sizes.begin();
@@ -144,7 +152,13 @@ void StatusBar::layoutSections(const Point& sz) {
 }
 
 void StatusBar::handleToolTip(tstring& text) {
-	tip->setMaxTipWidth(sizes[fill]);
+	for(Parts::const_iterator i = parts.begin(); i != parts.end(); ++i) {
+		if(i->fill) {
+			tip->setMaxTipWidth(i->size);
+			break;
+		}
+	}
+
 	text.clear();
 	for(size_t i = 0; i < lastLines.size(); ++i) {
 		if(i > 0) {
@@ -161,10 +175,14 @@ void StatusBar::helpImpl(unsigned& id) {
 	if(::PtInRect(&rect, pt)) {
 		unsigned x = ClientCoordinate(ScreenCoordinate(pt), this).x();
 		unsigned total = 0;
-		boost::lambda::var_type<unsigned>::type v(boost::lambda::var(total));
-		HelpIdsMap::const_iterator i = helpIds.find(find_if(sizes.begin(), sizes.end(), (v += boost::lambda::_1, v > x)) - sizes.begin());
-		if(i != helpIds.end())
-			id = i->second;
+		for(Parts::const_iterator i = parts.begin(); i != parts.end(); ++i) {
+			total += i->size;
+			if(total > x) {
+				if(i->helpId)
+					id = i->helpId;
+				break;
+			}
+		}
 	}
 }
 
