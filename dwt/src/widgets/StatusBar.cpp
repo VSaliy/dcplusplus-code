@@ -31,11 +31,91 @@
 
 #include <dwt/widgets/StatusBar.h>
 
+#include <numeric>
+#include <boost/lambda/lambda.hpp>
+
 namespace dwt {
 
-void StatusBar::setSections( const std::vector< unsigned > & width ) {
-	std::vector< unsigned > newVec( width );
-	std::vector< unsigned >::const_iterator origIdx = width.begin();
+StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip) :
+BaseType::Seed(STATUSCLASSNAME, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
+parts(parts_),
+fill(fill_)
+{
+	assert(fill < parts);
+
+	if(sizeGrip) {
+		style |= SBARS_SIZEGRIP;
+	}
+}
+
+StatusBar::StatusBar(Widget* parent) :
+BaseType(parent)
+{
+}
+
+void StatusBar::create(const Seed& cs) {
+	sizes.resize(cs.parts);
+	fill = cs.fill;
+
+	BaseType::create(cs);
+	if(cs.font)
+		setFont(cs.font);
+}
+
+void StatusBar::setSize(unsigned part, unsigned size) {
+	dwtassert(part < sizes.size(), _T("Invalid part number."));
+	sizes[part] = size;
+}
+
+void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
+	dwtassert(part < sizes.size(), _T("Invalid part number."));
+	if(part != fill) {
+		unsigned oldW = sizes[part];
+		unsigned newW = getTextSize(text).x + 12;
+		if(newW > oldW || (alwaysResize && newW != oldW)) {
+			sizes[part] = newW;
+			layoutSections(BaseType::getSize());
+		}
+	}
+	sendMessage(SB_SETTEXT, static_cast<WPARAM>(part), reinterpret_cast<LPARAM>(text.c_str()));
+}
+
+void StatusBar::setHelpId(unsigned part, unsigned id) {
+	dwtassert(part < sizes.size(), _T("Invalid part number."));
+	helpIds[part] = id;
+}
+
+void StatusBar::mapWidget(unsigned part, Widget* widget, const Rectangle& padding) {
+	dwtassert(part < sizes.size(), _T("Invalid part number."));
+	POINT p[2];
+	sendMessage(SB_GETRECT, part, reinterpret_cast<LPARAM>(p));
+	::MapWindowPoints(handle(), getParent()->handle(), (POINT*)p, 2);
+	::MoveWindow(widget->handle(),
+		p[0].x + padding.left(),
+		p[0].y + padding.top(),
+		p[1].x - p[0].x - padding.right(),
+		p[1].y - p[0].y - padding.bottom(), TRUE);
+}
+
+unsigned StatusBar::getSize(unsigned part) const {
+	dwtassert(part < sizes.size(), _T("Invalid part number."));
+	return sizes[part];
+}
+
+void StatusBar::layout(Rectangle& r) {
+	setBounds(0, 0, 0, 0);
+
+	Point sz(BaseType::getSize());
+	r.size.y -= sz.y;
+	layoutSections(sz);
+}
+
+void StatusBar::layoutSections(const Point& sz) {
+	sizes[fill] = 0;
+	sizes[fill] = sz.x - std::accumulate(sizes.begin(), sizes.end(), 0);
+
+	std::vector< unsigned > newVec( sizes );
+	std::vector< unsigned >::const_iterator origIdx = sizes.begin();
 	unsigned offset = 0;
 	for ( std::vector< unsigned >::iterator idx = newVec.begin(); idx != newVec.end(); ++idx, ++origIdx ) {
 		* idx = ( * origIdx ) + offset;
@@ -44,6 +124,20 @@ void StatusBar::setSections( const std::vector< unsigned > & width ) {
 	const unsigned * intArr = & newVec[0];
 	const size_t size = newVec.size();
 	sendMessage(SB_SETPARTS, static_cast< WPARAM >( size ), reinterpret_cast< LPARAM >( intArr ) );
+}
+
+void StatusBar::helpImpl(unsigned& id) {
+	// we have the help id of the whole status bar; convert to the one of the specific part the user just clicked on
+	Point pt(Point::fromLParam(::GetMessagePos()));
+	RECT rect = getBounds(false);
+	if(::PtInRect(&rect, pt)) {
+		unsigned x = ClientCoordinate(ScreenCoordinate(pt), this).x();
+		unsigned total = 0;
+		boost::lambda::var_type<unsigned>::type v(boost::lambda::var(total));
+		HelpIdsMap::const_iterator i = helpIds.find(find_if(sizes.begin(), sizes.end(), (v += boost::lambda::_1, v > x)) - sizes.begin());
+		if(i != helpIds.end())
+			id = i->second;
+	}
 }
 
 }

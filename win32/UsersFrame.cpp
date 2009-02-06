@@ -77,7 +77,7 @@ UsersFrame::~UsersFrame() {
 void UsersFrame::layout() {
 	dwt::Rectangle r(dwt::Point(0, 0), getClientAreaSize());
 
-	layoutStatus(r);
+	status->layout(r);
 
 	users->setBounds(r);
 }

@@ -132,16 +132,16 @@ protected:
 			}
 
 			filesWindow->onActivate(std::tr1::bind(&dwt::CheckBox::setVisible, onlyFull, _1));
-
-			this->statusSizes[STATUS_ONLY_FULL] = onlyFull->getTextSize(text).x + 16; ///@todo get real checkbox width
 		}
 
 		this->initStatus();
+		if(onlyFull)
+			this->status->setSize(STATUS_ONLY_FULL, onlyFull->getPreferedSize().x);
 		this->status->onDblClicked(std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(in_UL ? LogManager::UPLOAD : LogManager::DOWNLOAD)))));
 
-		this->setStatusHelpId(STATUS_COUNT, in_UL ? IDH_FINISHED_UL_COUNT : IDH_FINISHED_DL_COUNT);
-		this->setStatusHelpId(STATUS_BYTES, in_UL ? IDH_FINISHED_UL_BYTES : IDH_FINISHED_DL_BYTES);
-		this->setStatusHelpId(STATUS_SPEED, in_UL ? IDH_FINISHED_UL_SPEED : IDH_FINISHED_DL_SPEED);
+		this->status->setHelpId(STATUS_COUNT, in_UL ? IDH_FINISHED_UL_COUNT : IDH_FINISHED_DL_COUNT);
+		this->status->setHelpId(STATUS_BYTES, in_UL ? IDH_FINISHED_UL_BYTES : IDH_FINISHED_DL_BYTES);
+		this->status->setHelpId(STATUS_SPEED, in_UL ? IDH_FINISHED_UL_SPEED : IDH_FINISHED_DL_SPEED);
 
 		layout();
 
@@ -158,9 +158,9 @@ protected:
 	void layout() {
 		dwt::Rectangle r(this->getClientAreaSize());
 
-		this->layoutStatus(r);
+		this->status->layout(r);
 		if(onlyFull)
-			mapWidget(STATUS_ONLY_FULL, onlyFull);
+			this->status->mapWidget(STATUS_ONLY_FULL, onlyFull);
 
 		tabs->setBounds(r);
 	}

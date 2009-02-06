@@ -54,7 +54,7 @@ WaitingUsersFrame::WaitingUsersFrame(dwt::TabView* mdiParent) :
 void WaitingUsersFrame::layout() {
 	dwt::Rectangle r(this->getClientAreaSize());
 
-	layoutStatus(r);
+	status->layout(r);
 
 	queued->setBounds(r);
 }

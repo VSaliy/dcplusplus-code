@@ -126,7 +126,7 @@ FavHubsFrame::~FavHubsFrame() {
 void FavHubsFrame::layout() {
 	dwt::Rectangle r(getClientAreaSize());
 
-	layoutStatus(r);
+	status->layout(r);
 
 	grid->layout(r);
 }

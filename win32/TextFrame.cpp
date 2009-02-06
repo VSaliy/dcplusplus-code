@@ -53,7 +53,7 @@ TextFrame::TextFrame(dwt::TabView* mdiParent, const string& fileName) :
 void TextFrame::layout() {
 	dwt::Rectangle r(this->getClientAreaSize());
 
-	layoutStatus(r);
+	status->layout(r);
 
 	pad->setBounds(r);
 }
