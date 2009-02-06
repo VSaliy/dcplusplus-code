@@ -32,60 +32,16 @@ class AspectStatus {
 	HWND H() const { return W().handle(); }
 
 protected:
-	AspectStatus() : status(0), tip(0) {
-		filterIter = dwt::Application::instance().addFilter(std::tr1::bind(&ThisType::filter, this, _1));
-	}
-
-	~AspectStatus() {
-		dwt::Application::instance().removeFilter(filterIter);
-	}
+	AspectStatus() : status(0) { }
 
 	void initStatus(bool sizeGrip = false) {
 		dwt::StatusBar::Seed cs(WidgetType::STATUS_LAST, WidgetType::STATUS_STATUS, sizeGrip);
 		cs.font = WinUtil::font;
 		status = W().addChild(cs);
 		status->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
-
-		tip = W().addChild(dwt::ToolTip::Seed());
-		tip->setTool(status, std::tr1::bind(&ThisType::handleToolTip, this, _1));
-	}
-
-	void setStatus(unsigned part, const tstring& text, bool alwaysResize = false) {
-		/// @todo move this to dwt
-		if(part == WidgetType::STATUS_STATUS) {
-			lastLines.push_back(text);
-			while(lastLines.size() > MAX_LINES) {
-				lastLines.erase(lastLines.begin());
-			}
-		}
-
-		status->setText(part, text, alwaysResize);
 	}
 
 	dwt::StatusBarPtr status;
-
-private:
-	dwt::Application::FilterIter filterIter;
-	dwt::ToolTipPtr tip;
-	TStringList lastLines;
-
-	enum { MAX_LINES = 10 };
-
-	bool filter(const MSG& msg) {
-		tip->relayEvent(msg);
-		return false;
-	}
-
-	void handleToolTip(tstring& text) {
-		tip->setMaxTipWidth(status->getSize(WidgetType::STATUS_STATUS));
-		text.clear();
-		for(size_t i = 0; i < lastLines.size(); ++i) {
-			if(i > 0) {
-				text += _T("\r\n");
-			}
-			text += lastLines[i];
-		}
-	}
 };
 
 #endif /*ASPECTSTATUS_H_*/

@@ -31,15 +31,19 @@
 
 #include <dwt/widgets/StatusBar.h>
 
+#include <dwt/WidgetCreator.h>
+#include <dwt/widgets/ToolTip.h>
+
 #include <numeric>
 #include <boost/lambda/lambda.hpp>
 
 namespace dwt {
 
-StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip) :
+StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip, bool tooltip_) :
 BaseType::Seed(STATUSCLASSNAME, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
 parts(parts_),
-fill(fill_)
+fill(fill_),
+tooltip(tooltip_)
 {
 	assert(fill < parts);
 
@@ -49,7 +53,8 @@ fill(fill_)
 }
 
 StatusBar::StatusBar(Widget* parent) :
-BaseType(parent)
+BaseType(parent),
+tip(0)
 {
 }
 
@@ -60,6 +65,11 @@ void StatusBar::create(const Seed& cs) {
 	BaseType::create(cs);
 	if(cs.font)
 		setFont(cs.font);
+
+	if(cs.tooltip) {
+		tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
+		tip->setTool(this, std::tr1::bind(&StatusBar::handleToolTip, this, _1));
+	}
 }
 
 void StatusBar::setSize(unsigned part, unsigned size) {
@@ -75,6 +85,11 @@ void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 		if(newW > oldW || (alwaysResize && newW != oldW)) {
 			sizes[part] = newW;
 			layoutSections(BaseType::getSize());
+		}
+	} else if(tip) {
+		lastLines.push_back(text);
+		while(lastLines.size() > MAX_LINES) {
+			lastLines.erase(lastLines.begin());
 		}
 	}
 	sendMessage(SB_SETTEXT, static_cast<WPARAM>(part), reinterpret_cast<LPARAM>(text.c_str()));
@@ -97,17 +112,19 @@ void StatusBar::mapWidget(unsigned part, Widget* widget, const Rectangle& paddin
 		p[1].y - p[0].y - padding.bottom(), TRUE);
 }
 
-unsigned StatusBar::getSize(unsigned part) const {
-	dwtassert(part < sizes.size(), _T("Invalid part number."));
-	return sizes[part];
-}
-
 void StatusBar::layout(Rectangle& r) {
 	setBounds(0, 0, 0, 0);
 
 	Point sz(BaseType::getSize());
 	r.size.y -= sz.y;
 	layoutSections(sz);
+}
+
+bool StatusBar::tryFire(const MSG& msg, LRESULT& retVal) {
+	if(tip)
+		tip->relayEvent(msg);
+
+	return BaseType::tryFire(msg, retVal);
 }
 
 void StatusBar::layoutSections(const Point& sz) {
@@ -124,6 +141,17 @@ void StatusBar::layoutSections(const Point& sz) {
 	const unsigned * intArr = & newVec[0];
 	const size_t size = newVec.size();
 	sendMessage(SB_SETPARTS, static_cast< WPARAM >( size ), reinterpret_cast< LPARAM >( intArr ) );
+}
+
+void StatusBar::handleToolTip(tstring& text) {
+	tip->setMaxTipWidth(sizes[fill]);
+	text.clear();
+	for(size_t i = 0; i < lastLines.size(); ++i) {
+		if(i > 0) {
+			text += _T("\r\n");
+		}
+		text += lastLines[i];
+	}
 }
 
 void StatusBar::helpImpl(unsigned& id) {

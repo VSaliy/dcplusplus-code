@@ -178,10 +178,10 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 	initStatus();
 
 	// This will set the widths correctly
-	setStatus(STATUS_FILE_LIST_DIFF, T_("Subtract list"));
-	setStatus(STATUS_MATCH_QUEUE, T_("Match queue"));
-	setStatus(STATUS_FIND, T_("Find"));
-	setStatus(STATUS_NEXT, T_("Next"));
+	status->setText(STATUS_FILE_LIST_DIFF, T_("Subtract list"));
+	status->setText(STATUS_MATCH_QUEUE, T_("Match queue"));
+	status->setText(STATUS_FIND, T_("Find"));
+	status->setText(STATUS_NEXT, T_("Next"));
 
 	string nick = ClientManager::getInstance()->getNicks(dl->getUser()->getCID())[0];
 	treeRoot = dirs->insert(NULL, new ItemInfo(Text::toT(nick), dl->getRoot()));
@@ -257,7 +257,7 @@ void DirectoryListingFrame::handleFindNext() {
 void DirectoryListingFrame::handleMatchQueue() {
 	// TODO provide hubHint?
 	int matched = QueueManager::getInstance()->matchListing(*dl, Util::emptyString);
-	setStatus(STATUS_STATUS, str(TFN_("Matched %1% file", "Matched %1% files", matched) % matched));
+	status->setText(STATUS_STATUS, str(TFN_("Matched %1% file", "Matched %1% files", matched) % matched));
 }
 
 void DirectoryListingFrame::handleListDiff() {
@@ -463,7 +463,7 @@ void DirectoryListingFrame::download(ItemInfo* ii, const string& dir, bool view)
 		}
 
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -506,7 +506,7 @@ void DirectoryListingFrame::handleDownloadBrowse() {
 					}
 				}
 			} catch(const Exception& e) {
-				setStatus(STATUS_STATUS, Text::toT(e.getError()));
+				status->setText(STATUS_STATUS, Text::toT(e.getError()));
 			}
 		} else {
 			tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
@@ -547,7 +547,7 @@ void DirectoryListingFrame::handleDownloadTarget(unsigned index) {
 	try {
 		dl->download(ii->file, target, false, WinUtil::isShift());
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -629,9 +629,9 @@ void DirectoryListingFrame::updateTree(DirectoryListing::Directory* aTree, HTREE
 }
 
 void DirectoryListingFrame::initStatusText() {
-	setStatus(STATUS_TOTAL_FILES, str(TF_("Files: %1%") % dl->getTotalFileCount(true)));
-	setStatus(STATUS_TOTAL_SIZE, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(dl->getTotalSize(true)))));
-	setStatus(STATUS_SPEED, str(TF_("Speed: %1%/s") % Text::toT(Util::formatBytes(speed))));
+	status->setText(STATUS_TOTAL_FILES, str(TF_("Files: %1%") % dl->getTotalFileCount(true)));
+	status->setText(STATUS_TOTAL_SIZE, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(dl->getTotalSize(true)))));
+	status->setText(STATUS_SPEED, str(TF_("Speed: %1%/s") % Text::toT(Util::formatBytes(speed))));
 }
 
 void DirectoryListingFrame::updateStatus() {
@@ -645,9 +645,9 @@ void DirectoryListingFrame::updateStatus() {
 			total = files->forEachSelectedT(ItemInfo::TotalSize()).total;
 		}
 
-		setStatus(STATUS_SELECTED_FILES, str(TF_("Files: %1%") % cnt));
+		status->setText(STATUS_SELECTED_FILES, str(TF_("Files: %1%") % cnt));
 
-		setStatus(STATUS_SELECTED_SIZE, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(total))));
+		status->setText(STATUS_SELECTED_SIZE, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(total))));
 	}
 }
 
@@ -689,12 +689,12 @@ void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 			try {
 				// TODO provide hubHint?
 				QueueManager::getInstance()->addList(dl->getUser(), Util::emptyString, QueueItem::FLAG_PARTIAL_LIST, dl->getPath(d));
-				setStatus(STATUS_STATUS, T_("Downloading list..."));
+				status->setText(STATUS_STATUS, T_("Downloading list..."));
 			} catch(const QueueException& e) {
-				setStatus(STATUS_STATUS, Text::toT(e.getError()));
+				status->setText(STATUS_STATUS, Text::toT(e.getError()));
 			}
 		} else {
-			setStatus(STATUS_STATUS, T_("User offline"));
+			status->setText(STATUS_STATUS, T_("User offline"));
 		}
 	}
 }
@@ -914,7 +914,7 @@ void DirectoryListingFrame::handleDoubleClickFiles() {
 			try {
 				dl->download(ii->file, SETTING(DOWNLOAD_DIRECTORY) + Text::fromT(ii->getText(COLUMN_FILENAME)), false, WinUtil::isShift());
 			} catch(const Exception& e) {
-				setStatus(STATUS_STATUS, Text::toT(e.getError()));
+				status->setText(STATUS_STATUS, Text::toT(e.getError()));
 			}
 		} else {
 			HTREEITEM ht = dirs->getChild(t);

@@ -237,9 +237,9 @@ void HubFrame::layout() {
 }
 
 void HubFrame::updateStatus() {
-	setStatus(STATUS_USERS, getStatusUsers());
-	setStatus(STATUS_SHARED, getStatusShared());
-	setStatus(STATUS_AVERAGE_SHARED, getStatusAverageShared());
+	status->setText(STATUS_USERS, getStatusUsers());
+	status->setText(STATUS_SHARED, getStatusShared());
+	status->setText(STATUS_AVERAGE_SHARED, getStatusAverageShared());
 }
 
 void HubFrame::initSecond() {
@@ -400,7 +400,7 @@ void HubFrame::addChat(const tstring& aLine) {
 void HubFrame::addStatus(const tstring& aLine, bool inChat /* = true */) {
 	tstring line = Text::toT("[" + Util::getShortTimeString() + "] ") + aLine;
 
-	setStatus(STATUS_STATUS, line);
+	status->setText(STATUS_STATUS, line);
 
 	setDirty(SettingsManager::BOLD_HUB);
 

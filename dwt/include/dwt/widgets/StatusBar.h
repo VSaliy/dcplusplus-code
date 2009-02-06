@@ -96,8 +96,11 @@ public:
 		/// index of the part that fills all the remaining space of the bar.
 		unsigned fill;
 
+		/// associate a tooltip to the part marked by the "fill" parameter.
+		bool tooltip;
+
 		/// Fills with default parameters
-		explicit Seed(unsigned parts_ = 1, unsigned fill_ = 0, bool sizeGrip = true);
+		explicit Seed(unsigned parts_ = 1, unsigned fill_ = 0, bool sizeGrip = true, bool tooltip_ = true);
 	};
 
 	/// Sets the initial size of the given part
@@ -118,8 +121,6 @@ public:
 
 	void mapWidget(unsigned part, Widget* widget, const Rectangle& padding = Rectangle(0, 0, 0, 0));
 
-	unsigned getSize(unsigned part) const;
-
 	/// Actually creates the StatusBar
 	/** You should call WidgetFactory::createStatusBar if you instantiate class
 	  * directly. <br>
@@ -128,6 +129,8 @@ public:
 	void create(const Seed& cs = Seed());
 
 	void layout(Rectangle& r);
+
+	virtual bool tryFire(const MSG& msg, LRESULT& retVal);
 
 protected:
 	// Constructor Taking pointer to parent
@@ -148,10 +151,16 @@ private:
 	std::vector<unsigned> sizes;
 	unsigned fill;
 
+	ToolTipPtr tip;
+	std::vector<tstring> lastLines;
+	enum { MAX_LINES = 10 }; /// @todo configurable?
+
 	typedef std::tr1::unordered_map<unsigned, unsigned> HelpIdsMap;
 	HelpIdsMap helpIds;
 
 	void layoutSections(const Point& sz);
+
+	void handleToolTip(tstring& text);
 
 	// AspectHelp
 	void helpImpl(unsigned& id);

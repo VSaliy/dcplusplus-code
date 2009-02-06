@@ -486,7 +486,7 @@ void SearchFrame::addResult(SearchInfo* si) {
 	if(!added) {
 		results->insert(si);
 	}
-	setStatus(STATUS_COUNT, str(TFN_("%1% item", "%1% items", results->size()) % results->size()));
+	status->setText(STATUS_COUNT, str(TFN_("%1% item", "%1% items", results->size()) % results->size()));
 	setDirty(SettingsManager::BOLD_SEARCH);
 }
 
@@ -540,7 +540,7 @@ void SearchFrame::handleDoubleClick() {
 	try {
 		results->forEachSelectedT(SearchInfo::Download(Text::toT(SETTING(DOWNLOAD_DIRECTORY))));
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -569,7 +569,7 @@ void SearchFrame::handleDownload() {
 	try {
 		results->forEachSelectedT(SearchInfo::Download(Text::toT(SETTING(DOWNLOAD_DIRECTORY))));
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -583,7 +583,7 @@ void SearchFrame::handleDownloadFavoriteDirs(unsigned index) {
 			results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[index - spl.size()])));
 		}
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -601,7 +601,7 @@ void SearchFrame::handleDownloadTo() {
 				try {
 					results->forEachSelectedT(SearchInfo::DownloadTarget(target));
 				} catch(const Exception& e) {
-					setStatus(STATUS_STATUS, Text::toT(e.getError()));
+					status->setText(STATUS_STATUS, Text::toT(e.getError()));
 				}
 			}
 		} else {
@@ -611,7 +611,7 @@ void SearchFrame::handleDownloadTo() {
 				try {
 					results->forEachSelectedT(SearchInfo::Download(target));
 				} catch(const Exception& e) {
-					setStatus(STATUS_STATUS, Text::toT(e.getError()));
+					status->setText(STATUS_STATUS, Text::toT(e.getError()));
 				}
 			}
 		}
@@ -622,7 +622,7 @@ void SearchFrame::handleDownloadTo() {
 			try {
 				results->forEachSelectedT(SearchInfo::Download(target));
 			} catch(const Exception& e) {
-				setStatus(STATUS_STATUS, Text::toT(e.getError()));
+				status->setText(STATUS_STATUS, Text::toT(e.getError()));
 			}
 		}
 	}
@@ -637,7 +637,7 @@ void SearchFrame::handleDownloadTarget(unsigned index) {
 			results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[index - WinUtil::lastDirs.size()])));
 		}
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -645,7 +645,7 @@ void SearchFrame::handleDownloadDir() {
 	try {
 		results->forEachSelectedT(SearchInfo::DownloadWhole(Text::toT(SETTING(DOWNLOAD_DIRECTORY))));
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -655,7 +655,7 @@ void SearchFrame::handleDownloadWholeFavoriteDirs(unsigned index) {
 	try {
 		results->forEachSelectedT(SearchInfo::DownloadWhole(Text::toT(spl[index].first)));
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -664,7 +664,7 @@ void SearchFrame::handleDownloadWholeTarget(unsigned index) {
 	try {
 		results->forEachSelectedT(SearchInfo::DownloadWhole(WinUtil::lastDirs[index]));
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -675,7 +675,7 @@ void SearchFrame::handleDownloadDirTo() {
 		try {
 			results->forEachSelectedT(SearchInfo::DownloadWhole(target));
 		} catch(const Exception& e) {
-			setStatus(STATUS_STATUS, Text::toT(e.getError()));
+			status->setText(STATUS_STATUS, Text::toT(e.getError()));
 		}
 	}
 }
@@ -684,7 +684,7 @@ void SearchFrame::handleViewAsText() {
 	try {
 		results->forEachSelected(&SearchInfo::view);
 	} catch(const Exception& e) {
-		setStatus(STATUS_STATUS, Text::toT(e.getError()));
+		status->setText(STATUS_STATUS, Text::toT(e.getError()));
 	}
 }
 
@@ -968,9 +968,9 @@ void SearchFrame::runSearch() {
 
 	int ftype = fileType->getSelected();
 
-	setStatus(STATUS_STATUS, str(TF_("Searching for %1%...") % s));
-	setStatus(STATUS_COUNT, Util::emptyStringT);
-	setStatus(STATUS_FILTERED, Util::emptyStringT);
+	status->setText(STATUS_STATUS, str(TF_("Searching for %1%...") % s));
+	status->setText(STATUS_COUNT, Util::emptyStringT);
+	status->setText(STATUS_FILTERED, Util::emptyStringT);
 	droppedResults = 0;
 	isHash = (ftype == SearchManager::TYPE_TTH);
 
@@ -985,9 +985,9 @@ void SearchFrame::runSearch() {
 		int32_t waitFor = SearchManager::getInstance()->timeToSearch();
 		tstring msg = str(TFN_("Searching too soon, next search in %1% second", "Searching too soon, next search in %1% seconds", waitFor) % waitFor);
 
-		setStatus(STATUS_STATUS, msg);
-		setStatus(STATUS_COUNT, Util::emptyStringT);
-		setStatus(STATUS_FILTERED, Util::emptyStringT);
+		status->setText(STATUS_STATUS, msg);
+		status->setText(STATUS_COUNT, Util::emptyStringT);
+		status->setText(STATUS_FILTERED, Util::emptyStringT);
 
 		setText(str(TF_("Search - %1%") % msg));
 		// Start the countdown timer
@@ -996,7 +996,7 @@ void SearchFrame::runSearch() {
 }
 
 void SearchFrame::updateStatusFiltered() {
-	setStatus(STATUS_FILTERED, str(TF_("%1% filtered") % droppedResults));
+	status->setText(STATUS_FILTERED, str(TF_("%1% filtered") % droppedResults));
 }
 
 void SearchFrame::initSecond() {
@@ -1007,12 +1007,12 @@ bool SearchFrame::eachSecond() {
 	int32_t waitFor = SearchManager::getInstance()->timeToSearch();
 	if(waitFor > 0) {
 		tstring msg = str(TFN_("Searching too soon, next search in %1% second", "Searching too soon, next search in %1% seconds", waitFor) % waitFor);
-		setStatus(STATUS_STATUS, msg);
+		status->setText(STATUS_STATUS, msg);
 		setText(str(TF_("Search - %1%") % msg));
 		return true;
 	}
 
-	setStatus(STATUS_STATUS, T_("Ready to search..."));
+	status->setText(STATUS_STATUS, T_("Ready to search..."));
 	setText(T_("Search - Ready to search..."));
 
 	return false;
