@@ -77,7 +77,7 @@ bool SettingsDialog::initDialog() {
 	upper->row(0).mode = GridInfo::FILL;
 	upper->row(0).align = GridInfo::STRETCH;
 
-	upper->column(0).size = 120;
+	upper->column(0).size = 155;
 	upper->column(0).mode = GridInfo::STATIC;
 	upper->column(1).mode = GridInfo::FILL;
 
