@@ -350,6 +350,7 @@ void MainWindow::initStatusBar() {
 	///@todo set to checkbox width + resizedrag width really
 	status->setSize(STATUS_DUMMY, 32);
 	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
+	status->onDblClicked(STATUS_AWAY, std::tr1::bind(&Util::switchAway));
 	{
 		dwt::Dispatchers::VoidVoid<>::F f = std::tr1::bind(&StatsFrame::openWindow, getTabView());
 		status->onDblClicked(STATUS_DOWN_TOTAL, f);
