@@ -21,6 +21,7 @@
 * Add hub closing confirmation dialog (poy)
 * [L#317339] Fix non-segmented downloads (thanks psychicsword)
 * [L#324960] Make sure downloaded chunks are always saved (thanks emtee)
+* [L#264479] Double-click on main status bar stats to open the network stats window (poy)
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 

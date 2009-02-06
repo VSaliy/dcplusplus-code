@@ -93,7 +93,7 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 	message->onChar(std::tr1::bind(&PrivateFrame::handleMessageChar, this, _1));
 
 	initStatus();
-	status->onDblClicked(std::tr1::bind(&PrivateFrame::openLog, this));
+	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&PrivateFrame::openLog, this));
 
 	updateTitle();
 	layout();
