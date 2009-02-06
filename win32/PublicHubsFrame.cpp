@@ -174,7 +174,7 @@ users(0)
 	layout();
 
 	if(FavoriteManager::getInstance()->isDownloading()) {
-		setStatus(STATUS_STATUS, T_("Downloading public hub list..."));
+		status->setText(STATUS_STATUS, T_("Downloading public hub list..."));
 	} else if(entries.empty()) {
 		FavoriteManager::getInstance()->refresh();
 	}
@@ -204,10 +204,10 @@ void PublicHubsFrame::layout() {
 
 void PublicHubsFrame::updateStatus() {
 	if (entries.size() > visibleHubs)
-		setStatus(STATUS_HUBS, str(TF_("Hubs: %1% / %2%") % visibleHubs % entries.size()));
+		status->setText(STATUS_HUBS, str(TF_("Hubs: %1% / %2%") % visibleHubs % entries.size()));
 	else
-		setStatus(STATUS_HUBS, str(TF_("Hubs: %1%") % visibleHubs));
-	setStatus(STATUS_USERS, str(TF_("Users: %1%") % users));
+		status->setText(STATUS_HUBS, str(TF_("Hubs: %1%") % visibleHubs));
+	status->setText(STATUS_USERS, str(TF_("Users: %1%") % users));
 }
 
 void PublicHubsFrame::updateDropDown() {
@@ -380,7 +380,7 @@ bool PublicHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 }
 
 void PublicHubsFrame::handleRefresh() {
-	setStatus(STATUS_STATUS, T_("Downloading public hub list..."));
+	status->setText(STATUS_STATUS, T_("Downloading public hub list..."));
 	FavoriteManager::getInstance()->refresh(true);
 	updateDropDown();
 }
@@ -460,15 +460,15 @@ bool PublicHubsFrame::handleFilterKeyDown(int c) {
 void PublicHubsFrame::onFinished(const tstring& s) {
 	entries = FavoriteManager::getInstance()->getPublicHubs();
 	updateList();
-	setStatus(STATUS_STATUS, s);
+	status->setText(STATUS_STATUS, s);
 }
 
 void PublicHubsFrame::on(DownloadStarting, const string& l) throw() {
-	callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), false));
+	callAsync(std::tr1::bind(&dwt::StatusBar::setText, status, STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), false));
 }
 
 void PublicHubsFrame::on(DownloadFailed, const string& l) throw() {
-	callAsync(std::tr1::bind(&PublicHubsFrame::setStatus, this, STATUS_STATUS, str(TF_("Download failed: %1%") % Text::toT(l)), false));
+	callAsync(std::tr1::bind(&dwt::StatusBar::setText, status, STATUS_STATUS, str(TF_("Download failed: %1%") % Text::toT(l)), false));
 }
 
 void PublicHubsFrame::on(DownloadFinished, const string& l) throw() {

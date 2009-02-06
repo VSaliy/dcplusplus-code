@@ -127,7 +127,7 @@ void PrivateFrame::addChat(const tstring& aLine, bool log) {
 void PrivateFrame::addStatus(const tstring& aLine, bool log) {
 	tstring line = Text::toT("[" + Util::getShortTimeString() + "] ") + aLine;
 
-	setStatus(STATUS_STATUS, line);
+	status->setText(STATUS_STATUS, line);
 
 	if(BOOLSETTING(STATUS_IN_CHAT))
 		addChat(_T("*** ") + aLine, log);

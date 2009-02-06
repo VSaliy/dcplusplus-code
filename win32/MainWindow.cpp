@@ -487,7 +487,7 @@ void MainWindow::handleMinimized() {
 void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
 	string message(m);
 	WinUtil::reducePaths(message);
-	callAsync(std::tr1::bind(&MainWindow::setStatus, this, STATUS_STATUS,
+	callAsync(std::tr1::bind(&dwt::StatusBar::setText, status, STATUS_STATUS,
 		Text::toT("[" + Util::getShortTimeString(t) + "] " + message), false));
 }
 
@@ -612,13 +612,13 @@ void MainWindow::updateStatus() {
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_UPLOAD, SETTING(TOTAL_UPLOAD) + static_cast<int64_t>(updiff));
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_DOWNLOAD, SETTING(TOTAL_DOWNLOAD) + static_cast<int64_t>(downdiff));
 
-	setStatus(STATUS_AWAY, Util::getAway() ? T_("AWAY") : _T(""));
-	setStatus(STATUS_COUNTS, Text::toT(Client::getCounts()));
-	setStatus(STATUS_SLOTS, str(TF_("Slots: %1%/%2%") % UploadManager::getInstance()->getFreeSlots() % (SETTING(SLOTS))), true);
-	setStatus(STATUS_DOWN_TOTAL, str(TF_("D: %1%") % Text::toT(Util::formatBytes(down))));
-	setStatus(STATUS_UP_TOTAL, str(TF_("U: %1%") % Text::toT(Util::formatBytes(up))));
-	setStatus(STATUS_DOWN_DIFF, str(TF_("D: %1%/s (%2%)") % Text::toT(Util::formatBytes((downdiff*1000)/tdiff)) % DownloadManager::getInstance()->getDownloadCount()));
-	setStatus(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % Text::toT(Util::formatBytes((updiff*1000)/tdiff)) % UploadManager::getInstance()->getUploadCount()));
+	status->setText(STATUS_AWAY, Util::getAway() ? T_("AWAY") : _T(""));
+	status->setText(STATUS_COUNTS, Text::toT(Client::getCounts()));
+	status->setText(STATUS_SLOTS, str(TF_("Slots: %1%/%2%") % UploadManager::getInstance()->getFreeSlots() % (SETTING(SLOTS))), true);
+	status->setText(STATUS_DOWN_TOTAL, str(TF_("D: %1%") % Text::toT(Util::formatBytes(down))));
+	status->setText(STATUS_UP_TOTAL, str(TF_("U: %1%") % Text::toT(Util::formatBytes(up))));
+	status->setText(STATUS_DOWN_DIFF, str(TF_("D: %1%/s (%2%)") % Text::toT(Util::formatBytes((downdiff*1000)/tdiff)) % DownloadManager::getInstance()->getDownloadCount()));
+	status->setText(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % Text::toT(Util::formatBytes((updiff*1000)/tdiff)) % UploadManager::getInstance()->getUploadCount()));
 	layoutSlotsSpin();
 }
 

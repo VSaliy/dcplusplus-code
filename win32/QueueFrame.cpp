@@ -194,12 +194,12 @@ void QueueFrame::updateStatus() {
 		}
 	}
 
-	setStatus(STATUS_PARTIAL_COUNT, str(TF_("Items: %1%") % cnt));
-	setStatus(STATUS_PARTIAL_BYTES, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(total))));
+	status->setText(STATUS_PARTIAL_COUNT, str(TF_("Items: %1%") % cnt));
+	status->setText(STATUS_PARTIAL_BYTES, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(total))));
 
 	if(dirty) {
-		setStatus(STATUS_TOTAL_COUNT, str(TF_("Files: %1%") % queueItems));
-		setStatus(STATUS_TOTAL_BYTES, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(queueSize))));
+		status->setText(STATUS_TOTAL_COUNT, str(TF_("Files: %1%") % queueItems));
+		status->setText(STATUS_TOTAL_BYTES, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(queueSize))));
 		dirty = false;
 	}
 }
@@ -694,7 +694,7 @@ void QueueFrame::handleReadd(const UserPtr& user) {
 			try {
 				QueueManager::getInstance()->readd(ii->getTarget(), user, Util::emptyString);
 			} catch(const Exception& e) {
-				setStatus(STATUS_STATUS, Text::toT(e.getError()));
+				status->setText(STATUS_STATUS, Text::toT(e.getError()));
 			}
 		}
 	}
@@ -1053,7 +1053,7 @@ void QueueFrame::onUpdated(const QueueItem& qi) {
 }
 
 void QueueFrame::onRechecked(QueueItem* qi, const tstring& message) {
-	callAsync(std::tr1::bind(&QueueFrame::setStatus, this, STATUS_STATUS,
+	callAsync(std::tr1::bind(&dwt::StatusBar::setText, status, STATUS_STATUS,
 		str(TF_("Integrity check: %1% (%2%)") % message % Text::toT(qi->getTarget())), false));
 }
 

@@ -500,9 +500,9 @@ private:
 			}
 		}
 
-		this->setStatus(STATUS_COUNT, str(TFN_("%1% item", "%1% items", count) % count));
-		this->setStatus(STATUS_BYTES, Text::toT(Util::formatBytes(bytes)));
-		this->setStatus(STATUS_SPEED, str(TF_("%1%/s") % Text::toT(Util::formatBytes((time > 0) ? bytes * ((int64_t)1000) / time : 0))));
+		this->status->setText(STATUS_COUNT, str(TFN_("%1% item", "%1% items", count) % count));
+		this->status->setText(STATUS_BYTES, Text::toT(Util::formatBytes(bytes)));
+		this->status->setText(STATUS_SPEED, str(TF_("%1%/s") % Text::toT(Util::formatBytes((time > 0) ? bytes * ((int64_t)1000) / time : 0))));
 	}
 
 	bool addFile(const string& file, const FinishedFileItemPtr& entry) {
