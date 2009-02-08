@@ -351,7 +351,7 @@ void BufferedSocket::write(const char* aBuf, size_t aLen) throw() {
 	writeBuf.insert(writeBuf.end(), aBuf, aBuf+aLen);
 }
 
-void BufferedSocket::threadSendData() throw(Excpetion) {
+void BufferedSocket::threadSendData() throw(Exception) {
 	if(state != RUNNING)
 		return;
 
