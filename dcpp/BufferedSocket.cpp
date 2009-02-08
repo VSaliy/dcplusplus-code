@@ -152,7 +152,7 @@ void BufferedSocket::threadAccept() throw(SocketException) {
 	}
 }
 
-void BufferedSocket::threadRead() throw(SocketException) {
+void BufferedSocket::threadRead() throw(Exception) {
 	if(state != RUNNING)
 		return;
 
@@ -351,7 +351,7 @@ void BufferedSocket::write(const char* aBuf, size_t aLen) throw() {
 	writeBuf.insert(writeBuf.end(), aBuf, aBuf+aLen);
 }
 
-void BufferedSocket::threadSendData() {
+void BufferedSocket::threadSendData() throw(Excpetion) {
 	if(state != RUNNING)
 		return;
 
@@ -387,7 +387,7 @@ void BufferedSocket::threadSendData() {
 	sendBuf.clear();
 }
 
-bool BufferedSocket::checkEvents() {
+bool BufferedSocket::checkEvents() throw(Exception) {
 	while(state == RUNNING ? taskSem.wait(0) : taskSem.wait()) {
 		pair<Tasks, std::tr1::shared_ptr<TaskData> > p;
 		{
@@ -428,7 +428,7 @@ bool BufferedSocket::checkEvents() {
 	return true;
 }
 
-void BufferedSocket::checkSocket() {
+void BufferedSocket::checkSocket() throw(Exception) {
 	int waitFor = sock->wait(POLL_TIMEOUT, Socket::WAIT_READ);
 
 	if(waitFor & Socket::WAIT_READ) {
