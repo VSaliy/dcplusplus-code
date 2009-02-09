@@ -34,6 +34,8 @@
 #include <dwt/WidgetCreator.h>
 #include <dwt/widgets/ToolTip.h>
 
+#include <numeric>
+
 namespace dwt {
 
 StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip, bool tooltip_) :
@@ -51,13 +53,14 @@ tooltip(tooltip_)
 
 StatusBar::StatusBar(Widget* parent) :
 BaseType(parent),
+fill(0),
 tip(0)
 {
 }
 
 void StatusBar::create(const Seed& cs) {
 	parts.resize(cs.parts);
-	parts[cs.fill].fill = true;
+	fill = cs.fill;
 
 	BaseType::create(cs);
 	if(cs.font)
@@ -79,8 +82,8 @@ void StatusBar::setSize(unsigned part, unsigned size) {
 
 void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
-	Part& info = parts[part];
-	if(!info.fill) {
+	if(part != fill) {
+		Part& info = parts[part];
 		unsigned oldW = info.size;
 		unsigned newW = getTextSize(text).x + 12;
 		if(newW > oldW || (alwaysResize && newW != oldW)) {
@@ -140,17 +143,11 @@ bool StatusBar::tryFire(const MSG& msg, LRESULT& retVal) {
 
 void StatusBar::layoutSections(const Point& sz) {
 	std::vector<unsigned> sizes;
-	unsigned fillSize = sz.x;
-	unsigned fillIndex = 0;
-	size_t count = 0;
-	for(Parts::const_iterator i = parts.begin(); i != parts.end(); ++i, ++count) {
-		if(i->fill)
-			fillIndex = count;
-		else
-			fillSize -= i->size;
+	for(Parts::const_iterator i = parts.begin(); i != parts.end(); ++i)
 		sizes.push_back(i->size);
-	}
-	parts[fillIndex].size = sizes[fillIndex] = fillSize;
+
+	sizes[fill] = 0;
+	parts[fill].size = sizes[fill] = sz.x - std::accumulate(sizes.begin(), sizes.end(), 0);
 
 	std::vector< unsigned > newVec( sizes );
 	std::vector< unsigned >::const_iterator origIdx = sizes.begin();
@@ -177,12 +174,7 @@ StatusBar::Part* StatusBar::getClickedPart() {
 }
 
 void StatusBar::handleToolTip(tstring& text) {
-	for(Parts::const_iterator i = parts.begin(); i != parts.end(); ++i) {
-		if(i->fill) {
-			tip->setMaxTipWidth(i->size);
-			break;
-		}
-	}
+	tip->setMaxTipWidth(parts[fill].size);
 
 	text.clear();
 	for(size_t i = 0; i < lastLines.size(); ++i) {
