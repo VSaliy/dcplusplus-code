@@ -64,17 +64,8 @@ Point ComboBox::getPreferedSize() {
 	// Pixels between text and arrow
 	const int MARGIN = 2;
 
-	// Taken from http://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
-
-	c.selectFont(FontPtr(new Font(SystemFont)));
-	TEXTMETRIC tmSys = { 0 };
-	c.getTextMetrics(tmSys);
-
 	c.selectFont(getFont());
-	TEXTMETRIC tmNew = { 0 };
-	c.getTextMetrics(tmNew);
-
 	Point ret;
 	for(size_t i = 0; i < size(); ++i) {
 		Point ext = c.getTextExtent(getValue(i));
@@ -82,14 +73,14 @@ Point ComboBox::getPreferedSize() {
 	}
 
 	ret.x += ::GetSystemMetrics(SM_CYFIXEDFRAME) * 2 + ::GetSystemMetrics(SM_CXSMICON) + MARGIN;
-	ret.y = std::max(tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2), (long)::GetSystemMetrics(SM_CYSMICON)) + ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2;
+	ret.y = sendMessage(CB_GETITEMHEIGHT, -1) + ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2;
 	return ret;
 }
 
 void ComboBox::layout(const Rectangle& r) {
 	Rectangle copy(r);
-	sendMessage(CB_SETITEMHEIGHT, static_cast<WPARAM>(-1), static_cast<LPARAM>(r.height()));
-	::SetWindowPos(handle(), NULL, r.left(), r.top(), r.width(), dropDownHeight, SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+	copy.size.y = dropDownHeight;
+	BaseType::layout(copy);
 }
 
 }
