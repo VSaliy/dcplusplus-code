@@ -157,10 +157,9 @@ protected:
 
 private:
 	struct Part {
-		Part() : size(0), fill(false), helpId(0), clickF(0), dblClickF(0) { }
+		Part() : size(0), helpId(0), clickF(0), dblClickF(0) { }
 
 		unsigned size;
-		bool fill;
 
 		unsigned helpId;
 
@@ -169,6 +168,7 @@ private:
 	};
 	typedef std::vector<Part> Parts;
 	Parts parts;
+	unsigned fill;
 
 	ToolTipPtr tip;
 	std::vector<tstring> lastLines;
