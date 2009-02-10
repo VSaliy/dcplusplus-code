@@ -94,9 +94,7 @@ protected:
 
 	template<typename W>
 	void addWidget(W* widget, bool alwaysFocus = false, bool autoTab = true) {
-		if(autoTab) {
-			addDlgCodeMessage(widget);
-		}
+		addDlgCodeMessage(widget, autoTab);
 
 		addColor(widget);
 
@@ -137,16 +135,16 @@ private:
 
 	bool reallyClose;
 
-	void addDlgCodeMessage(ComboBox* widget) {
-		widget->onRaw(std::tr1::bind(&ThisType::handleGetDlgCode, this, _1), dwt::Message(WM_GETDLGCODE));
+	void addDlgCodeMessage(ComboBox* widget, bool autoTab = true) {
+		widget->onRaw(std::tr1::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
 		TextBox* text = widget->getTextBox();
 		if(text)
-			text->onRaw(std::tr1::bind(&ThisType::handleGetDlgCode, this, _1), dwt::Message(WM_GETDLGCODE));
+			text->onRaw(std::tr1::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
 	}
 
 	template<typename W>
-	void addDlgCodeMessage(W* widget) {
-		widget->onRaw(std::tr1::bind(&ThisType::handleGetDlgCode, this, _1), dwt::Message(WM_GETDLGCODE));
+	void addDlgCodeMessage(W* widget, bool autoTab = true) {
+		widget->onRaw(std::tr1::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
 	}
 
 	void addColor(ComboBox* widget) {
@@ -187,10 +185,10 @@ private:
 		}
 	}
 
-	LRESULT handleGetDlgCode(WPARAM wParam) {
-		 if(wParam != VK_TAB)
-			return DLGC_WANTMESSAGE;
-		return 0;
+	LRESULT handleGetDlgCode(WPARAM wParam, bool autoTab) {
+		if(autoTab && wParam == VK_TAB)
+			return 0;
+		return DLGC_WANTMESSAGE;
 	}
 
 	bool handleContextMenu(const dwt::ScreenCoordinate& pt) {
