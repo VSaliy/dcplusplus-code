@@ -24,6 +24,7 @@
 * [L#264479] Double-click on main status bar stats to open the network stats window (poy)
 * Double-click on the "AWAY" indicator to switch away mode on/off (poy)
 * Add "/dslots <number>" chat command (thanks fusbar)
+* [L#316475] Fix crash on decompression errors
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 
