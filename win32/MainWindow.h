@@ -23,6 +23,7 @@
 
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/LogManagerListener.h>
+#include <dcpp/WindowsManagerListener.h>
 #include <dcpp/HttpConnection.h>
 #include <dcpp/User.h>
 
@@ -37,6 +38,7 @@ class MainWindow :
 	private HttpConnectionListener,
 	private QueueManagerListener,
 	private LogManagerListener,
+	private WindowsManagerListener,
 	public AspectStatus<MainWindow>
 {
 public:
@@ -166,7 +168,6 @@ private:
 	void layoutSlotsSpin();
 	bool eachSecond();
 	void updateStatus();
-	void autoConnect();
 	void startSocket();
 	void startUPnP();
 	void stopUPnP();
@@ -192,6 +193,9 @@ private:
 	virtual void on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) throw();
 	virtual void on(PartialList, const UserPtr&, const string& text) throw();
 
+	// WindowsManagerListener
+	virtual void on(WindowsManagerListener::Window, const string& id) throw();
+	virtual void on(WindowsManagerListener::Hub, const string& /*name*/, const string& address) throw();
 };
 
 #endif // !defined(MAIN_FRM_H)
