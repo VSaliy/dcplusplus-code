@@ -1,0 +1,61 @@
+/*
+ * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#ifndef DCPLUSPLUS_DCPP_WINDOWS_MANAGER_H
+#define DCPLUSPLUS_DCPP_WINDOWS_MANAGER_H
+
+#include "forward.h"
+#include "SettingsManager.h"
+#include "WindowsManagerListener.h"
+
+namespace dcpp {
+
+class WindowsManager :
+	public Singleton<WindowsManager>,
+	public Speaker<WindowsManagerListener>,
+	private SettingsManagerListener
+{
+public:
+	void autoOpen(bool skipHubs);
+
+	void lock();
+	void unlock();
+
+	void add(const string& id);
+	void add(const string& name, const string& address);
+
+	void clear();
+
+private:
+	friend class Singleton<WindowsManager>;
+
+	CriticalSection cs;
+
+	typedef std::vector<WindowInfo> WindowInfoList;
+	WindowInfoList list;
+
+	WindowsManager();
+	virtual ~WindowsManager() throw();
+
+	virtual void on(SettingsManagerListener::Load, SimpleXML& xml) throw();
+	virtual void on(SettingsManagerListener::Save, SimpleXML& xml) throw();
+};
+
+} // namespace dcpp
+
+#endif // !defined(DCPLUSPLUS_DCPP_WINDOWS_MANAGER_H)

@@ -48,6 +48,7 @@
 #include "WaitingUsersFrame.h"
 
 #include <dcpp/SettingsManager.h>
+#include <dcpp/WindowsManager.h>
 #include <dcpp/ResourceManager.h>
 #include <dcpp/version.h>
 #include <dcpp/DownloadManager.h>
@@ -110,6 +111,7 @@ MainWindow::MainWindow() :
 
 	QueueManager::getInstance()->addListener(this);
 	LogManager::getInstance()->addListener(this);
+	WindowsManager::getInstance()->addListener(this);
 
 	onClosing(std::tr1::bind(&MainWindow::handleClosing, this));
 
@@ -142,21 +144,7 @@ MainWindow::MainWindow() :
 	File::ensureDirectory(SETTING(LOG_DIRECTORY));
 	startSocket();
 
-	if(BOOLSETTING(OPEN_SYSTEM_LOG)) SystemFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_FAVORITE_USERS)) UsersFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_QUEUE)) QueueFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_FINISHED_DOWNLOADS)) FinishedDLFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_WAITING_USERS)) WaitingUsersFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_FINISHED_UPLOADS)) FinishedULFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_SEARCH_SPY)) SpyFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_NETWORK_STATISTICS)) StatsFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_NOTEPAD)) NotepadFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_PUBLIC)) PublicHubsFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_FAVORITE_HUBS)) FavHubsFrame::openWindow(getTabView());
-
-	if (!WinUtil::isShift()) {
-		callAsync(std::tr1::bind(&MainWindow::autoConnect, this));
-	}
+	WindowsManager::getInstance()->autoOpen(WinUtil::isShift());
 
 	callAsync(std::tr1::bind(&MainWindow::parseCommandLine, this, tstring(::GetCommandLine())));
 
@@ -504,19 +492,27 @@ void MainWindow::viewAndDelete(const string& fileName) {
 	File::deleteFile(fileName);
 }
 
-void MainWindow::autoConnect() {
-	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
-	for(FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i) {
-		FavoriteHubEntry* entry = *i;
-		if (entry->getConnect()) {
-			if (!entry->getNick().empty() || !SETTING(NICK).empty()) {
-				HubFrame::openWindow(getTabView(), entry->getServer());
+void MainWindow::saveWindowSettings() {
+	{
+		WindowsManager* wm = WindowsManager::getInstance();
+		wm->lock();
+		wm->clear();
+
+		const dwt::TabView::WindowList& views = tabs->getChildren();
+		const type_info& hub_type = typeid(HubFrame);
+		for(dwt::TabView::WindowList::const_iterator i = views.begin(); i != views.end(); ++i) {
+			const type_info& type = typeid(**i);
+			if(type == hub_type) {
+				Client* client = static_cast<HubFrame*>(*i)->client;
+				wm->add(client->getHubName(), client->getHubUrl());
+			} else {
+				wm->add(type.name());
 			}
 		}
-	}
-}
 
-void MainWindow::saveWindowSettings() {
+		wm->unlock();
+	}
+
 	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_PANED_POS, paned->getRelativePos());
 
 	WINDOWPLACEMENT wp = { sizeof(wp)};
@@ -544,6 +540,7 @@ bool MainWindow::handleClosing() {
 			setVisible(false);
 			transfers->prepareClose();
 
+			WindowsManager::getInstance()->removeListener(this);
 			LogManager::getInstance()->removeListener(this);
 			QueueManager::getInstance()->removeListener(this);
 
@@ -1092,4 +1089,31 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 			callAsync(std::tr1::bind(&MainWindow::viewAndDelete, this, qi->getTarget()));
 		}
 	}
+}
+
+void MainWindow::on(WindowsManagerListener::Window, const string& id) throw() {
+	printf("mainwin on listener window: id=%s\n", id.c_str());
+	if(false) { }
+#define compare_id(frame) else if(typeid(frame).name() == id) callAsync(std::tr1::bind(&frame::openWindow, getTabView()))
+
+	compare_id(PublicHubsFrame);
+	compare_id(FavHubsFrame);
+	compare_id(UsersFrame);
+	compare_id(QueueFrame);
+	compare_id(FinishedDLFrame);
+	compare_id(WaitingUsersFrame);
+	compare_id(FinishedULFrame);
+	compare_id(ADLSearchFrame);
+	compare_id(SpyFrame);
+	compare_id(NotepadFrame);
+	compare_id(SystemFrame);
+	compare_id(StatsFrame);
+
+	///@todo handle search & PMs
+
+#undef compare_id
+}
+
+void MainWindow::on(WindowsManagerListener::Hub, const string& /*name*/, const string& address) throw() {
+	callAsync(std::tr1::bind(&HubFrame::openWindow, getTabView(), address));
 }

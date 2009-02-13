@@ -70,12 +70,12 @@ void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
 
 HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF),
+	client(0),
 	filter(0),
 	filterType(0),
 	paned(0),
 	showUsers(0),
 	users(0),
-	client(0),
 	url(url_),
 	updateUsers(false),
 	waitingForPW(false),
