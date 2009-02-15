@@ -19,7 +19,6 @@
 * Shell menus for multiple selections (poy)
 * [L#256357] Fix painting issues (poy)
 * Add hub closing confirmation dialog (poy)
-* [L#317339] Fix non-segmented downloads (thanks psychicsword)
 * [L#324960] Make sure downloaded chunks are always saved (thanks emtee)
 * [L#264479] Double-click on main status bar stats to open the network stats window (poy)
 * Double-click on the "AWAY" indicator to switch away mode on/off (poy)
