@@ -61,6 +61,8 @@ public:
 	static void closeDisconnected();
 	static void resortUsers();
 
+	Client* client;
+
 private:
 
 	enum FilterModes{
@@ -147,7 +149,6 @@ private:
 
 	UserMap userMap;
 
-	Client* client;
 	string url;
 	string redirect;
 	bool updateUsers;
