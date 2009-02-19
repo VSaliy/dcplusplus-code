@@ -34,6 +34,7 @@
 #include "FinishedManager.h"
 #include "ResourceManager.h"
 #include "ADLSearch.h"
+#include "WindowManager.h"
 
 #include "StringTokenizer.h"
 
@@ -80,6 +81,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 	QueueManager::newInstance();
 	FinishedManager::newInstance();
 	ADLSearchManager::newInstance();
+	WindowManager::newInstance();
 
 	SettingsManager::getInstance()->load();
 
@@ -117,6 +119,7 @@ void shutdown() {
 
 	SettingsManager::getInstance()->save();
 
+	WindowManager::deleteInstance();
 	ADLSearchManager::deleteInstance();
 	FinishedManager::deleteInstance();
 	ShareManager::deleteInstance();

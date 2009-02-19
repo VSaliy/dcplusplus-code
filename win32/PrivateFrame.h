@@ -51,6 +51,8 @@ public:
 	static void closeAll();
 	static void closeAllOffline();
 
+	StringMap getWindowParams() const;
+
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
 
 private:
