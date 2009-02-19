@@ -61,6 +61,8 @@ public:
 	static void closeDisconnected();
 	static void resortUsers();
 
+	StringMap getWindowParams() const;
+
 private:
 
 	enum FilterModes{

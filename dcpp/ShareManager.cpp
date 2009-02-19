@@ -285,6 +285,7 @@ bool ShareManager::hasVirtual(const string& virtualName) const throw() {
 void ShareManager::load(SimpleXML& aXml) {
 	Lock l(cs);
 
+	aXml.resetCurrentChild();
 	if(aXml.findChild("Share")) {
 		aXml.stepIn();
 		while(aXml.findChild("Directory")) {

@@ -32,10 +32,9 @@ class MDIChildFrame :
 	public AspectStatus<T>
 {
 	typedef WidgetFactory< dwt::Container > BaseType;
-public:
 	typedef MDIChildFrame<T> ThisType;
-protected:
 
+protected:
 	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0, bool activate = true) :
 		BaseType(tabView),
 		lastFocus(NULL),
@@ -127,6 +126,11 @@ protected:
 
 	void setIcon(unsigned resourceId) {
 		getParent()->setTabIcon(this, dwt::IconPtr(new dwt::Icon(resourceId)));
+	}
+
+public:
+	virtual StringMap getWindowParams() const {
+		return StringMap();
 	}
 
 private:
