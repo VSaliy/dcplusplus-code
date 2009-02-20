@@ -306,7 +306,7 @@ OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl)
 	if(!hintUrl.empty()) {
 		for(OnlineIter i = p.first; i != p.second; ++i) {
 			OnlineUser* u = i->second;
-			if(u->getClient().getAddress() == hintUrl) {
+			if(u->getClient().getHubUrl() == hintUrl) {
 				return u;
 			}
 		}
