@@ -24,6 +24,7 @@
 * Double-click on the "AWAY" indicator to switch away mode on/off (poy)
 * Add "/dslots <number>" chat command (thanks fusbar)
 * [L#316475] Fix crash on decompression errors
+* [L#317339] Fix round-off issue when segmented downloads are disabled
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 

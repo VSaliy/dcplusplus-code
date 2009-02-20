@@ -185,6 +185,9 @@ void DownloadManager::checkDownloads(UserConnection* aConn) {
 		downloads.push_back(d);
 	}
 	fire(DownloadManagerListener::Requesting(), d);
+
+	dcdebug("Requesting " I64_FMT "/" I64_FMT "\n", d->getStartPos(), d->getSize());
+
 	aConn->send(d->getCommand(aConn->isSet(UserConnection::FLAG_SUPPORTS_ZLIB_GET)));
 }
 
