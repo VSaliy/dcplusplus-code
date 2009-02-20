@@ -47,8 +47,10 @@ public:
 	}
 
 	static void putSocket(BufferedSocket* aSock) {
-		aSock->removeListeners();
-		aSock->shutdown();
+		if(aSock) {
+			aSock->removeListeners();
+			aSock->shutdown();
+		}
 	}
 
 	static void waitShutdown() {
