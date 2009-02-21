@@ -57,6 +57,9 @@ struct FastAlloc : public FastAllocBase {
 			deallocate((uint8_t*)m);
 		}
 	}
+protected:
+	~FastAlloc() { }
+
 private:
 
 	static void* allocate() {
