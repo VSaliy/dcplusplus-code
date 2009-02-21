@@ -76,20 +76,23 @@ private:
 
 		struct Download {
 			Download(const tstring& aTarget) : tgt(aTarget) { }
-			void operator()(SearchInfo* si);
+			void operator()(SearchInfo* si) const;
 
 		protected:
 			const tstring& tgt;
+
+			void addFile(SearchInfo* si, const string& target) const;
+			void addDir(SearchInfo* si) const;
 		};
 
 		struct DownloadWhole : Download {
 			DownloadWhole(const tstring& aTarget) : Download(aTarget) { }
-			void operator()(SearchInfo* si);
+			void operator()(SearchInfo* si) const;
 		};
 
 		struct DownloadTarget : Download {
 			DownloadTarget(const tstring& aTarget) : Download(aTarget) { }
-			void operator()(SearchInfo* si);
+			void operator()(SearchInfo* si) const;
 		};
 
 		struct CheckTTH {

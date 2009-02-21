@@ -326,61 +326,55 @@ void SearchFrame::SearchInfo::view() {
 	}
 }
 
-void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) {
+void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) const {
 	if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
-		unsigned ignored = 0;
-
-		string target = Text::fromT(tgt + si->columns[COLUMN_FILENAME]);
-		for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
-			const SearchResultPtr& sr = *i;
-			try {
-				QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
-			} catch(const Exception& e) { ignored++; }
-		}
-
-		if(WinUtil::isShift())
-			QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
-
-		if(ignored)
-			throw Exception(str(F_("%1% / %2% sources ignored") % ignored % si->srs.size()));
+		addFile(si, Text::fromT(tgt + si->columns[COLUMN_FILENAME]));
 	} else {
-		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
-			WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
+		addDir(si);
 	}
 }
 
-void SearchFrame::SearchInfo::DownloadWhole::operator()(SearchInfo* si) {
-	// TODO Add all users...
-	QueueItem::Priority prio = WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT;
+void SearchFrame::SearchInfo::Download::addFile(SearchInfo* si, const string& target) const {
+	unsigned ignored = 0;
+	string error;
+
+	for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
+		const SearchResultPtr& sr = *i;
+		try {
+			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
+		} catch(const Exception& e) {
+			ignored++;
+			error = e.getError();
+		}
+	}
+
+	if(WinUtil::isShift())
+		QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
+
+	if(ignored)
+		throw Exception(str(F_("%1% / %2% sources ignored: %3%") % ignored % si->srs.size() % error));
+}
+
+void SearchFrame::SearchInfo::Download::addDir(SearchInfo* si) const {
+	QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
+		WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
+}
+
+void SearchFrame::SearchInfo::DownloadWhole::operator()(SearchInfo* si) const {
 	if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
-		QueueManager::getInstance()->addDirectory(Text::fromT(si->columns[COLUMN_PATH]),
-			si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt), prio);
+		// TODO Add all users...
+		QueueManager::getInstance()->addDirectory(Text::fromT(si->columns[COLUMN_PATH]), si->srs[0]->getUser(),
+			si->srs[0]->getHubURL(), Text::fromT(tgt), WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
 	} else {
-		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(),
-			Text::fromT(tgt), prio);
+		addDir(si);
 	}
 }
 
-void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) {
+void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) const {
 	if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
-		unsigned ignored = 0;
-
-		string target = Text::fromT(tgt);
-		for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
-			const SearchResultPtr& sr = *i;
-			try {
-				QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
-			} catch(const Exception& e) { ignored++; }
-		}
-
-		if(WinUtil::isShift())
-			QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
-
-		if(ignored)
-			throw Exception(str(F_("%1% / %2% sources ignored") % ignored % si->srs.size()));
+		addFile(si, Text::fromT(tgt));
 	} else {
-		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
-			WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
+		addDir(si);
 	}
 }
 
