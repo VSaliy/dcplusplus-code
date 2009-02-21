@@ -328,13 +328,21 @@ void SearchFrame::SearchInfo::view() {
 
 void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) {
 	if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
+		unsigned ignored = 0;
+
 		string target = Text::fromT(tgt + si->columns[COLUMN_FILENAME]);
 		for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
 			const SearchResultPtr& sr = *i;
-			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
+			try {
+				QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
+			} catch(const Exception& e) { ignored++; }
 		}
+
 		if(WinUtil::isShift())
 			QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
+
+		if(ignored)
+			throw Exception(str(F_("%1% / %2% sources ignored") % ignored % si->srs.size()));
 	} else {
 		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
 			WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
@@ -355,14 +363,21 @@ void SearchFrame::SearchInfo::DownloadWhole::operator()(SearchInfo* si) {
 
 void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) {
 	if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
+		unsigned ignored = 0;
+
 		string target = Text::fromT(tgt);
 		for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
 			const SearchResultPtr& sr = *i;
-			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
+			try {
+				QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
+			} catch(const Exception& e) { ignored++; }
 		}
 
 		if(WinUtil::isShift())
 			QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
+
+		if(ignored)
+			throw Exception(str(F_("%1% / %2% sources ignored") % ignored % si->srs.size()));
 	} else {
 		QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
 			WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
