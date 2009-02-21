@@ -73,21 +73,25 @@ private:
 		~SearchInfo() {	}
 
 		void view();
+
 		struct Download {
 			Download(const tstring& aTarget) : tgt(aTarget) { }
 			void operator()(SearchInfo* si);
+
+		protected:
 			const tstring& tgt;
 		};
-		struct DownloadWhole {
-			DownloadWhole(const tstring& aTarget) : tgt(aTarget) { }
+
+		struct DownloadWhole : Download {
+			DownloadWhole(const tstring& aTarget) : Download(aTarget) { }
 			void operator()(SearchInfo* si);
-			const tstring& tgt;
 		};
-		struct DownloadTarget {
-			DownloadTarget(const tstring& aTarget) : tgt(aTarget) { }
+
+		struct DownloadTarget : Download {
+			DownloadTarget(const tstring& aTarget) : Download(aTarget) { }
 			void operator()(SearchInfo* si);
-			const tstring& tgt;
 		};
+
 		struct CheckTTH {
 			CheckTTH() : firstHubs(true), op(true), hasTTH(false), firstTTH(true) { }
 			void operator()(SearchInfo* si);
