@@ -46,29 +46,45 @@ int MagnetDlg::run() {
 }
 
 bool MagnetDlg::handleInitDialog() {
-	grid = addChild(Grid::Seed(4, 2));
-	grid->column(1).mode = GridInfo::FILL;
+	grid = addChild(Grid::Seed(3, 1));
+	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
-	grid->addChild(Label::Seed(IDR_MAGNET));
-
-	grid->addChild(Label::Seed(T_("DC++ has detected a MAGNET link with a file hash that can be searched for on the Direct Connect network.  What would you like to do?")));
-
 	{
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
-		seed.style |= ES_READONLY;
+		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->row(0).mode = GridInfo::FILL;
+		cur->row(0).align = GridInfo::STRETCH;
+		cur->setSpacing(10);
 
-		grid->addChild(Label::Seed(T_("File Hash:")));
-		grid->addChild(seed)->setText(mHash);
+		cur->addChild(Label::Seed(IDR_MAGNET));
 
-		grid->addChild(Label::Seed(T_("Filename:")));
-		grid->addChild(seed)->setText(mFileName);
+		cur->addChild(Label::Seed(T_("DC++ has detected a MAGNET link with a file hash that can be searched for on the Direct Connect network.  What would you like to do?")));
 	}
 
 	{
-		//GridPtr cur = grid->addChild(Grid::Seed(4, 1));
-		GridPtr cur = grid->addChild(Grid::Seed(2, 1));
+		GridPtr cur = grid->addChild(Grid::Seed(2, 2));
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
+		cur->column(1).mode = GridInfo::FILL;
+
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		seed.style |= ES_READONLY;
+
+		cur->addChild(Label::Seed(T_("File Hash:")));
+		cur->addChild(seed)->setText(mHash);
+
+		cur->addChild(Label::Seed(T_("Filename:")));
+		cur->addChild(seed)->setText(mFileName);
+	}
+
+	{
+		GridPtr bottom = grid->addChild(Grid::Seed(1, 2));
+		bottom->column(1).mode = GridInfo::FILL;
+		bottom->column(1).align = GridInfo::BOTTOM_RIGHT;
+
+		//GridPtr cur = bottom->addChild(Grid::Seed(4, 1));
+		GridPtr cur = bottom->addChild(Grid::Seed(2, 1));
 
 		//queue = cur->addChild(RadioButton::Seed(T_("Add this file to your download queue")));
 		//queue->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, queue));
@@ -82,11 +98,11 @@ bool MagnetDlg::handleInitDialog() {
 		cur->addChild(RadioButton::Seed(T_("Do nothing")));
 
 		//remember = cur->addChild(CheckBox::Seed(T_("Do the same action next time without asking")));
-	}
 
-	WinUtil::addDlgButtons(grid->addChild(Grid::Seed(2, 1)),
-		std::tr1::bind(&MagnetDlg::handleOKClicked, this),
-		std::tr1::bind(&MagnetDlg::endDialog, this, IDCANCEL));
+		WinUtil::addDlgButtons(bottom->addChild(Grid::Seed(2, 1)),
+			std::tr1::bind(&MagnetDlg::handleOKClicked, this),
+			std::tr1::bind(&MagnetDlg::endDialog, this, IDCANCEL));
+	}
 
 	setText(T_("MAGNET Link detected"));
 
