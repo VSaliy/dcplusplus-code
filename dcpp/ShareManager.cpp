@@ -795,7 +795,7 @@ void ShareManager::updateIndices(Directory& dir, const Directory::File::Set::ite
 	} else {
 		if(!SETTING(LIST_DUPES)) {
 			LogManager::getInstance()->message(str(F_("Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %3%")
-			% Util::addBrackets(dir.getFullName() + f.getName()) % Util::toString(f.getSize()) % Util::addBrackets(j->second->getParent()->getFullName() + j->second->getName())));
+			% Util::addBrackets(dir.getRealPath(f.getName())) % Util::toString(f.getSize()) % Util::addBrackets(j->second->getParent()->getRealPath(j->second->getName()))));
 			dir.files.erase(i);
 			return;
 		}
