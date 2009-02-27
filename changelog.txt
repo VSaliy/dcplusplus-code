@@ -26,6 +26,7 @@
 * [L#316475] Fix crash on decompression errors
 * [L#317339] Fix round-off issue when segmented downloads are disabled
 * [L#253702] Fix crash on too many connections
+* [L#261618] Fix crash when finished transfers lists are too busy (poy)
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 
