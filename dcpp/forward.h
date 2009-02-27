@@ -52,10 +52,10 @@ class FavoriteUser;
 class File;
 
 class FinishedFileItem;
-typedef FinishedFileItem* FinishedFileItemPtr;
+typedef boost::intrusive_ptr<FinishedFileItem> FinishedFileItemPtr;
 
 class FinishedUserItem;
-typedef FinishedUserItem* FinishedUserItemPtr;
+typedef boost::intrusive_ptr<FinishedUserItem> FinishedUserItemPtr;
 
 class FinishedManager;
 
