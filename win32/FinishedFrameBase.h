@@ -381,7 +381,7 @@ private:
 
 			bool allFilesExist = files->forEachSelectedT(FileExistenceChecker()).allFilesExist;
 
-			typename ThisType::ShellMenuPtr menu = this->addChild(ShellMenu::Seed());
+			typename ThisType::ShellMenuPtr menu = filesWindow->addChild(ShellMenu::Seed());
 
 			menu->appendItem(T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), allFilesExist);
 			menu->appendItem(T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), allFilesExist, true);
@@ -412,7 +412,7 @@ private:
 				pt = users->getContextMenuPos();
 			}
 
-			dwt::MenuPtr menu = this->addChild(WinUtil::Seeds::menu);
+			dwt::MenuPtr menu = usersWindow->addChild(WinUtil::Seeds::menu);
 			menu->appendItem(T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveUsers, this));
 			menu->appendItem(T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
 			menu->appendSeparator();
