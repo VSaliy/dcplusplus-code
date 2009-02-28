@@ -68,8 +68,6 @@ bool AboutDlg::handleInitDialog() {
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(1).mode = GridInfo::FILL;
 	grid->row(1).align = GridInfo::STRETCH;
-	grid->row(5).size = 0; /// @todo shouldn't be needed; remove when the grid handles hidden controls.
-	grid->row(5).mode = GridInfo::STATIC;
 
 	// horizontally centered seeds
 	GroupBox::Seed gs;
