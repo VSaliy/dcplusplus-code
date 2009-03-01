@@ -146,18 +146,23 @@ void Widget::addRemoveExStyle( DWORD addStyle, bool add )
 
 GlobalAtom Widget::propAtom(_T("dwt::Widget*"));
 
-void Widget::addCallback( const Message& msg, const CallbackType& callback ) {
-	itsCallbacks[msg].push_back(callback);
+Widget::CallbackIter Widget::addCallback(const Message& msg, const CallbackType& callback) {
+	CallbackList& callbacks = itsCallbacks[msg];
+	callbacks.push_back(callback);
+	return --callbacks.end();
 }
 
-void Widget::setCallback( const Message& msg, const CallbackType& callback ) {
+Widget::CallbackIter Widget::setCallback(const Message& msg, const CallbackType& callback) {
 	CallbackList& callbacks = itsCallbacks[msg];
 	callbacks.clear();
 	callbacks.push_back(callback);
+	return --callbacks.end();
 }
 
-void Widget::clearCallbacks(const Message& msg) {
-	itsCallbacks[msg].clear();
+void Widget::clearCallback(const Message& msg, CallbackIter& i) {
+	CallbackList& callbacks = itsCallbacks[msg];
+	if(i != callbacks.end())
+		callbacks.erase(i);
 }
 
 /// Make sure that handle is still valid before calling f
