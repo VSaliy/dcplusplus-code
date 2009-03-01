@@ -108,16 +108,17 @@ public:
 
 	typedef std::tr1::function<bool(const MSG& msg, LRESULT& ret)> CallbackType;
 	typedef std::list<CallbackType> CallbackList;
+	typedef CallbackList::iterator CallbackIter;
 	typedef std::tr1::unordered_map<Message, CallbackList> CallbackCollectionType;
 
 	/// Adds a new callback - multiple callbacks for the same message will be called in the order they were added
-	void addCallback(const Message& msg, const CallbackType& callback );
+	CallbackIter addCallback(const Message& msg, const CallbackType& callback);
 
 	/// Sets the callback for msg - clears any other callbacks registered for the same message
-	void setCallback(const Message& msg, const CallbackType& callback );
+	CallbackIter setCallback(const Message& msg, const CallbackType& callback);
 
-	/// Clears all callbacks registered to msg
-	void clearCallbacks(const Message& msg);
+	/// Clear a callback registered to msg
+	void clearCallback(const Message& msg, CallbackIter& i);
 
 	/** Run a function bound to this widget asynchronously */
 	void callAsync(const Application::Callback& f);

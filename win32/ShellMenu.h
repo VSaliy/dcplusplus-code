@@ -59,6 +59,10 @@ private:
 	LPCONTEXTMENU3 handler;
 	unsigned sel_id;
 
+	typedef std::pair<dwt::Message, dwt::Widget::CallbackIter> callbacks_pair;
+	typedef std::vector<callbacks_pair> callbacks_type;
+	callbacks_type callbacks;
+
 	bool handleDrawItem(const MSG& msg, LRESULT& ret);
 	bool handleMeasureItem(const MSG& msg, LRESULT& ret);
 	bool handleInitMenuPopup(const MSG& msg, LRESULT& ret);

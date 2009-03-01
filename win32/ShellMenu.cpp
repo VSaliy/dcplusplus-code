@@ -118,21 +118,24 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 			handlers.push_back(make_pair(popup->appendPopup(Menu::Seed(false), dwt::util::escapeMenu(Text::toT(i->first))), i->second));
 	}
 
-	getParent()->setCallback(dwt::Message(WM_DRAWITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_MEASUREITEM), Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_MENUCHAR), Dispatcher(std::tr1::bind(&ShellMenu::dispatch, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_INITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_UNINITMENUPOPUP), Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1, _2)));
-	getParent()->setCallback(dwt::Message(WM_MENUSELECT), Dispatcher(std::tr1::bind(&ShellMenu::handleMenuSelect, this, _1)));
+	callbacks.clear();
+	callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->setCallback(dwt::Message(WM_DRAWITEM),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_MEASUREITEM), getParent()->setCallback(dwt::Message(WM_MEASUREITEM),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_MENUCHAR), getParent()->setCallback(dwt::Message(WM_MENUCHAR),
+		Dispatcher(std::tr1::bind(&ShellMenu::dispatch, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_INITMENUPOPUP), getParent()->setCallback(dwt::Message(WM_INITMENUPOPUP),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_UNINITMENUPOPUP), getParent()->setCallback(dwt::Message(WM_UNINITMENUPOPUP),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_MENUSELECT), getParent()->setCallback(dwt::Message(WM_MENUSELECT),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleMenuSelect, this, _1)))));
 }
 
 ShellMenu::~ShellMenu() {
-	getParent()->clearCallbacks(dwt::Message(WM_DRAWITEM));
-	getParent()->clearCallbacks(dwt::Message(WM_MEASUREITEM));
-	getParent()->clearCallbacks(dwt::Message(WM_MENUCHAR));
-	getParent()->clearCallbacks(dwt::Message(WM_INITMENUPOPUP));
-	getParent()->clearCallbacks(dwt::Message(WM_UNINITMENUPOPUP));
-	getParent()->clearCallbacks(dwt::Message(WM_MENUSELECT));
+	for(callbacks_type::iterator i = callbacks.begin(); i != callbacks.end(); ++i)
+		getParent()->clearCallback(i->first, i->second);
 
 	for(handlers_type::iterator i = handlers.begin(); i != handlers.end(); ++i)
 		i->second->Release();
