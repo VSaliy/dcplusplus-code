@@ -116,6 +116,9 @@ public:
 	/// Sets the callback for msg - clears any other callbacks registered for the same message
 	void setCallback(const Message& msg, const CallbackType& callback );
 
+	/// Clears all callbacks registered to msg
+	void clearCallbacks(const Message& msg);
+
 	/** Run a function bound to this widget asynchronously */
 	void callAsync(const Application::Callback& f);
 

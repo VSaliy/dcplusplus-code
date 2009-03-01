@@ -127,6 +127,13 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 }
 
 ShellMenu::~ShellMenu() {
+	getParent()->clearCallbacks(dwt::Message(WM_DRAWITEM));
+	getParent()->clearCallbacks(dwt::Message(WM_MEASUREITEM));
+	getParent()->clearCallbacks(dwt::Message(WM_MENUCHAR));
+	getParent()->clearCallbacks(dwt::Message(WM_INITMENUPOPUP));
+	getParent()->clearCallbacks(dwt::Message(WM_UNINITMENUPOPUP));
+	getParent()->clearCallbacks(dwt::Message(WM_MENUSELECT));
+
 	for(handlers_type::iterator i = handlers.begin(); i != handlers.end(); ++i)
 		i->second->Release();
 }
