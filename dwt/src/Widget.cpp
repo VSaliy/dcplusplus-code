@@ -156,6 +156,10 @@ void Widget::setCallback( const Message& msg, const CallbackType& callback ) {
 	callbacks.push_back(callback);
 }
 
+void Widget::clearCallbacks(const Message& msg) {
+	itsCallbacks[msg].clear();
+}
+
 /// Make sure that handle is still valid before calling f
 void checkCall(HWND handle, const Application::Callback& f) {
 	/// @todo this might fail when the handle has already been re-used elsewhere
