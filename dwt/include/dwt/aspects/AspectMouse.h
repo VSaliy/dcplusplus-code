@@ -53,8 +53,18 @@ class AspectMouse
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	typedef Dispatchers::ConvertBase<MouseEvent> Dispatcher;
-	typedef Dispatchers::ConvertBase<MouseEvent, Dispatchers::convert<MouseEvent>, TRUE> XDispatcher;
+	template<LRESULT value = 0>
+	struct DispatcherBase : Dispatchers::Base<bool (const MouseEvent&)> {
+		typedef Dispatchers::Base<bool (const MouseEvent&)> BaseType;
+		DispatcherBase(const F& f_) : BaseType(f_) { }
+
+		bool operator()(const MSG& msg, LRESULT& ret) const {
+			ret = value;
+			return f(MouseEvent(msg));
+		}
+	};
+	typedef DispatcherBase<> Dispatcher;
+	typedef DispatcherBase<TRUE> XDispatcher;
 
 public:
 	/// \ingroup EventHandlersAspectMouse
