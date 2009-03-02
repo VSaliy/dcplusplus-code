@@ -55,7 +55,9 @@ Section "DC++ (required)"
 no_backup:
   ; Put file there
   File "changelog.txt"
-  File "dcppboot.xml"
+  
+  ; TODO make an installer option to use localmode xml file?
+  File "dcppboot.nonlocal.xml" /oname="dcppboot.xml"
   File "DCPlusPlus.chm"
   File "DCPlusPlus.exe"
   File "License.txt"

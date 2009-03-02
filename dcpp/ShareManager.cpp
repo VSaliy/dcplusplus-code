@@ -69,7 +69,7 @@ ShareManager::~ShareManager() {
 
 	join();
 
-	StringList lists = File::findFiles(Util::getConfigPath(), "files?*.xml.bz2");
+	StringList lists = File::findFiles(Util::getPath(Util::PATH_USER_CONFIG), "files?*.xml.bz2");
 	for_each(lists.begin(), lists.end(), File::deleteFile);
 }
 
@@ -365,7 +365,7 @@ bool ShareManager::loadCache() throw() {
 	try {
 		ShareLoader loader(directories);
 		string txt;
-		dcpp::File ff(Util::getConfigPath() + "files.xml.bz2", dcpp::File::READ, dcpp::File::OPEN);
+		dcpp::File ff(Util::getPath(Util::PATH_USER_CONFIG) + "files.xml.bz2", dcpp::File::READ, dcpp::File::OPEN);
 		FilteredInputStream<UnBZFilter, false> f(&ff);
 		const size_t BUF_SIZE = 64*1024;
 		boost::scoped_array<char> buf(new char[BUF_SIZE]);
@@ -904,7 +904,7 @@ void ShareManager::generateXmlList() {
 			string tmp2;
 			string indent;
 
-			string newXmlName = Util::getConfigPath() + "files" + Util::toString(listN) + ".xml.bz2";
+			string newXmlName = Util::getPath(Util::PATH_USER_CONFIG) + "files" + Util::toString(listN) + ".xml.bz2";
 			{
 				File f(newXmlName, File::WRITE, File::TRUNCATE | File::CREATE);
 				// We don't care about the leaves...
@@ -936,8 +936,8 @@ void ShareManager::generateXmlList() {
 			}
 
 			try {
-				File::renameFile(newXmlName, Util::getConfigPath() + "files.xml.bz2");
-				newXmlName = Util::getConfigPath() + "files.xml.bz2";
+				File::renameFile(newXmlName, Util::getPath(Util::PATH_USER_CONFIG) + "files.xml.bz2");
+				newXmlName =Util::getPath(Util::PATH_USER_CONFIG) + "files.xml.bz2";
 			} catch(const FileException&) {
 				// Ignore, this is for caching only...
 			}

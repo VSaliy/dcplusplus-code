@@ -76,7 +76,7 @@ opts.AddOptions(
 	BoolOption('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
 	BoolOption('help', 'Build help files', 'yes'),
 	BoolOption('i18n', 'Rebuild i18n files in debug build', 'no'),
-	('prefix', 'Prefix to use when cross compiling', 'i386-mingw32-')
+	('prefix', 'Prefix to use when cross compiling', '')
 )
 opts.Update(defEnv)
 Help(opts.GenerateHelpText(defEnv))

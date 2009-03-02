@@ -201,10 +201,11 @@ public:
 	bool isDefault(int aSet) { return !isSet[aSet]; }
 
 	void load() {
-		load(Util::getConfigPath() + "DCPlusPlus.xml");
+		Util::migrate(getConfigFile());
+		load(getConfigFile());
 	}
 	void save() {
-		save(Util::getConfigPath() + "DCPlusPlus.xml");
+		save(getConfigFile());
 	}
 
 	void load(const string& aFileName);
@@ -228,6 +229,8 @@ private:
 	float floatDefaults[FLOAT_LAST - FLOAT_FIRST];
 
 	bool isSet[SETTINGS_LAST];
+
+	string getConfigFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "DCPlusPlus.xml"; }
 };
 
 // Shorthand accessor macros

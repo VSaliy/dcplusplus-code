@@ -183,7 +183,7 @@ extern void shutdown();
 
 #ifdef BUILDING_DCPP
 #define PACKAGE "libdcpp"
-#define LOCALEDIR Util::getLocalePath().c_str()
+#define LOCALEDIR Util::getPath(Util::PATH_LOCALE).c_str()
 #define _(String) dgettext(PACKAGE, String)
 #define F_(String) dcpp_fmt(dgettext(PACKAGE, String))
 #define FN_(String1,String2, N) dcpp_fmt(dngettext(PACKAGE, String1, String2, N))
