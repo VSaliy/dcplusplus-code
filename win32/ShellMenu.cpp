@@ -163,7 +163,10 @@ bool ShellMenu::handleDrawItem(const MSG& msg, LRESULT& ret) {
 			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
 				return dispatch(msg, ret);
 
-			BaseType::handleDrawItem(t);
+			/// @todo this is taken from Menu::PaintingDispatcherBase - refactor
+			ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
+			dwtassert(wrapper, "Unsupported menu item wrapper");
+			return wrapper->menu->BaseType::handleDrawItem(t, wrapper);
 		}
 	}
 	return false;
@@ -180,7 +183,10 @@ bool ShellMenu::handleMeasureItem(const MSG& msg, LRESULT& ret) {
 			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
 				return dispatch(msg, ret);
 
-			BaseType::handleMeasureItem(t);
+			/// @todo this is taken from Menu::PaintingDispatcherBase - refactor
+			ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
+			dwtassert(wrapper, "Unsupported menu item wrapper");
+			return wrapper->menu->BaseType::handleMeasureItem(t, wrapper);
 		}
 	}
 	return false;

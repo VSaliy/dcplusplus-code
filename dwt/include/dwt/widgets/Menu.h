@@ -39,6 +39,7 @@
 
 #include "../CanvasClasses.h"
 #include "../Dispatchers.h"
+#include "../util/check.h"
 #include <memory>
 #include <vector>
 
@@ -98,9 +99,12 @@ class Menu : private boost::noncopyable
 
 	typedef Dispatchers::VoidVoid<> Dispatcher;
 
+protected:
+	struct ItemDataWrapper;
+private:
 	template<typename T>
-	struct PaintingDispatcherBase : Dispatchers::Base<bool (T)> {
-		typedef Dispatchers::Base<bool (T)> BaseType;
+	struct PaintingDispatcherBase : Dispatchers::Base<bool (Menu*, T, ItemDataWrapper*)> {
+		typedef Dispatchers::Base<bool (Menu*, T, ItemDataWrapper*)> BaseType;
 		PaintingDispatcherBase(const typename BaseType::F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
@@ -109,7 +113,9 @@ class Menu : private boost::noncopyable
 			T t = reinterpret_cast<T>(msg.lParam);
 			if(t->CtlType != ODT_MENU)
 				return false;
-			return f(t);
+			ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
+			dwtassert(wrapper, "Unsupported menu item wrapper");
+			return f(wrapper->menu, t, wrapper);
 		}
 	};
 	typedef PaintingDispatcherBase<LPDRAWITEMSTRUCT> DrawItemDispatcher;
@@ -179,7 +185,7 @@ public:
 	*/
 	ObjectType appendPopup(const Seed& cs, const tstring& text, const IconPtr& icon = IconPtr());
 	ObjectType appendPopup(const tstring& text, const IconPtr& icon = IconPtr()) {
-		return appendPopup(Seed(ownerDrawn, itsColorInfo, iconSize, font), text, icon);
+		return appendPopup(Seed(ownerDrawn, colorInfo, iconSize, font), text, icon);
 	}
 
 	/// Returns the "System Menu"
@@ -205,7 +211,7 @@ public:
 	* Note! <br>
 	* If this event is handled you also MUST handle the Measure Item Event!!
 	*/
-	bool handleDrawItem(LPDRAWITEMSTRUCT drawInfo);
+	bool handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper);
 
 	/// Setting event handler for Measure Item Event
 	/** The Measure Item Event is nessecary to handle if you want to draw the menu
@@ -214,7 +220,7 @@ public:
 	* Note! <br>
 	* If this event is handled you also MUST handle the Draw Item Event!!
 	*/
-	bool handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo);
+	bool handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrapper);
 
 	/// Appends a separator item to the menu
 	/** A menu separator is basically just "air" between menu items.< br >
@@ -337,7 +343,6 @@ protected:
 	/// Constructor Taking pointer to parent
 	explicit Menu( dwt::Widget * parent );
 
-private:
 	// ////////////////////////////////////////////////////////////////////////
 	// Menu item data wrapper, used internally
 	// MENUITEMINFO's dwItemData *should* point to it
@@ -348,7 +353,7 @@ private:
 		// For some messages (e.g. WM_MEASUREITEM),
 		// Windows doesn't specify it, so
 		// we need to keep this
-		const Menu* menu;
+		Menu* menu;
 
 		// Item index in the menu
 		// This is needed, because ID's for items
@@ -368,7 +373,7 @@ private:
 
 		// Wrapper Constructor
 		ItemDataWrapper(
-			const Menu* menu_,
+			Menu* menu_,
 			unsigned index_,
 			bool isTitle_ = false,
 			const IconPtr& icon_ = IconPtr()
@@ -384,6 +389,7 @@ private:
 		{}
 	};
 
+private:
 	// This is used during menu destruction
 	static void destroyItemDataWrapper( ItemDataWrapper * wrapper );
 
@@ -403,7 +409,7 @@ private:
 	bool ownerDrawn;
 
 	// Contains information about menu colors
-	MenuColorInfo itsColorInfo;
+	MenuColorInfo colorInfo;
 
 	Point iconSize;
 
@@ -420,7 +426,7 @@ private:
 
 	void createHelper(const Seed& cs);
 
-	void getTextSize(SIZE& sz, unsigned index) const;
+	Point getTextSize(unsigned index) const;
 };
 
 }

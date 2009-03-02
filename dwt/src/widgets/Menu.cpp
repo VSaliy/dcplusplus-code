@@ -40,7 +40,6 @@
 #include <dwt/resources/Brush.h>
 #include <dwt/resources/Pen.h>
 #include <dwt/DWTException.h>
-#include <dwt/util/check.h>
 
 #include <algorithm>
 #include <boost/scoped_array.hpp>
@@ -77,7 +76,7 @@ void Menu::createHelper(const Seed& cs) {
 	ownerDrawn = cs.ownerDrawn;
 
 	if(ownerDrawn) {
-		itsColorInfo = cs.colorInfo;
+		colorInfo = cs.colorInfo;
 		iconSize = cs.iconSize;
 		if(cs.font)
 			font = cs.font;
@@ -91,8 +90,8 @@ void Menu::createHelper(const Seed& cs) {
 			itsTitleFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		}
 
-		itsParent->setCallback(Message(WM_DRAWITEM), DrawItemDispatcher(std::tr1::bind(&Menu::handleDrawItem, this, _1)));
-		itsParent->setCallback(Message(WM_MEASUREITEM), MeasureItemDispatcher(std::tr1::bind(&Menu::handleMeasureItem, this, _1)));
+		itsParent->setCallback(Message(WM_DRAWITEM), DrawItemDispatcher(std::tr1::bind(&Menu::handleDrawItem, _1, _2, _3)));
+		itsParent->setCallback(Message(WM_MEASUREITEM), MeasureItemDispatcher(std::tr1::bind(&Menu::handleMeasureItem, _1, _2, _3)));
 	}
 }
 
@@ -336,18 +335,14 @@ void Menu::setTitle(const tstring& title, const IconPtr& icon, bool drawSidebar 
 	}
 }
 
-bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
-	// get item data wrapper
-	ItemDataWrapper * wrapper = reinterpret_cast< ItemDataWrapper * >( drawInfo->itemData );
-	dwtassert( wrapper != 0, "Unsupported menu item in Menu::handleDrawItem" );
-
+bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	// if processing menu bar
-	const bool isMenuBar = ::GetMenu( wrapper->menu->getParent()->handle() ) == wrapper->menu->handle();
+	const bool isMenuBar = ::GetMenu(getParent()->handle()) == handle();
 
 	// init struct for menu item info
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_CHECKMARKS | MIIM_FTYPE | MIIM_DATA | MIIM_STATE | MIIM_STRING };
 
-	if ( ::GetMenuItemInfo( wrapper->menu->handle(), wrapper->index, TRUE, & info ) == FALSE )
+	if(::GetMenuItemInfo(handle(), wrapper->index, TRUE, &info) == FALSE)
 		throw Win32Exception ( "Couldn't get menu item info in Menu::handleDrawItem" );
 
 	// check if item is owner drawn
@@ -364,9 +359,6 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 	/// @todo add support for HBITMAPs embedded in MENUITEMINFOs (hbmpChecked, hbmpUnchecked, hbmpItem)
 	const IconPtr& icon = wrapper->icon;
 
-	// find icon size
-	const Point& iconSize = wrapper->menu->iconSize;
-
 	// compute strip width
 	int stripWidth = iconSize.x + textIconGap;
 
@@ -374,86 +366,61 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 	Rectangle itemRectangle = drawInfo->rcItem;
 
 	// setup buffered canvas
-	BufferedCanvas< FreeCanvas > canvas(reinterpret_cast<HWND>(wrapper->menu->handle()), drawInfo->hDC, itemRectangle.left(), itemRectangle.top());
+	BufferedCanvas< FreeCanvas > canvas(reinterpret_cast<HWND>(handle()), drawInfo->hDC, itemRectangle.left(), itemRectangle.top());
 
 	// this will contain adjusted sidebar width
 	int sidebarWidth = 0;
 
-	// this will contain adjusted(rotated) title font for sidebar
-	HFONT titleFont = NULL;
-
-	// get title font info and adjust item rectangle
-	if ( wrapper->menu->drawSidebar )
-	{
-		// get title font
-		FontPtr font = wrapper->menu->itsTitleFont;
-
+	if(drawSidebar) {
 		// get logical info for title font
 		LOGFONT lf;
-		::GetObject(font->handle(), sizeof(lf), &lf);
+		::GetObject(itsTitleFont->handle(), sizeof(lf), &lf);
 
 		// 90 degree rotation and bold
 		lf.lfOrientation = lf.lfEscapement = 900;
 
-		// create title font from logical info
-		titleFont = ::CreateFontIndirect( & lf );
-
-		// get title text size
-		SIZE textSize;
-		memset( & textSize, 0, sizeof( SIZE ) );
-
-		HGDIOBJ oldFont = ::SelectObject( canvas.handle(), titleFont );
-		::GetTextExtentPoint32( canvas.handle(), wrapper->menu->itsTitle.c_str(), ( int ) wrapper->menu->itsTitle.size(), & textSize );
-		::SelectObject( canvas.handle(), oldFont );
+		// create title font from logical info and select it
+		Canvas::Selector select(canvas, *FontPtr(new Font(::CreateFontIndirect(&lf), true)));
 
 		// set sidebar width to text height
-		sidebarWidth = textSize.cy;
+		sidebarWidth = canvas.getTextExtent(itsTitle).y;
 
 		// adjust item rectangle and item background
 		itemRectangle.pos.x += sidebarWidth;
 		itemRectangle.size.x -= sidebarWidth;
-	}
 
-	const MenuColorInfo& colorInfo = wrapper->menu->itsColorInfo;
+		if((drawInfo->itemAction & ODA_DRAWENTIRE) && !itsTitle.empty()) {
+			// draw sidebar with menu title
 
-	// draw sidebar with menu title
-	if ( ( drawInfo->itemAction & ODA_DRAWENTIRE ) && ( wrapper->menu->drawSidebar ) && !wrapper->menu->itsTitle.empty() )
-	{
-		// select title font and color
-		HGDIOBJ oldFont = ::SelectObject ( canvas.handle(), titleFont );
-		COLORREF oldColor = canvas.setTextColor( colorInfo.colorTitleText );
+			// select title color
+			COLORREF oldColor = canvas.setTextColor( colorInfo.colorTitleText );
 
-		// set background mode to transparent
-		bool oldMode = canvas.setBkMode( true );
+			// set background mode to transparent
+			bool oldMode = canvas.setBkMode( true );
 
-		// get rect for sidebar
-		RECT rect;
-		::GetClipBox( drawInfo->hDC, & rect );
-		//rect.left -= borderGap;
+			// get rect for sidebar
+			RECT rect;
+			::GetClipBox( drawInfo->hDC, & rect );
+			//rect.left -= borderGap;
 
-		// set title rectangle
-		Rectangle textRectangle( 0, 0, sidebarWidth, rect.bottom - rect.top );
+			// set title rectangle
+			Rectangle textRectangle( 0, 0, sidebarWidth, rect.bottom - rect.top );
 
-		{
-			// draw background
-			Brush brush(colorInfo.colorStrip);
-			canvas.fill(textRectangle, brush);
+			{
+				// draw background
+				Brush brush(colorInfo.colorStrip);
+				canvas.fill(textRectangle, brush);
+			}
+
+			// draw title
+			textRectangle.pos.y += 10;
+			canvas.drawText(itsTitle, textRectangle, DT_BOTTOM | DT_SINGLELINE);
+
+			// clear
+			canvas.setTextColor( oldColor );
+			canvas.setBkMode( oldMode );
 		}
-
-		// draw title
-		textRectangle.pos.y += 10;
-		canvas.drawText( wrapper->menu->itsTitle, textRectangle, DT_BOTTOM | DT_SINGLELINE );
-
-		// clear
-		canvas.setTextColor( oldColor );
-		canvas.setBkMode( oldMode );
-
-		// set back old font
-		::SelectObject( canvas.handle(), oldFont );
 	}
-
-	// destroy title font
-	::DeleteObject( titleFont );
 
 	bool highlight = (isSelected || isHighlighted) && !isDisabled;
 
@@ -495,7 +462,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 		// get item text
 		const int length = info.cch + 1;
 		std::vector< TCHAR > buffer( length );
-		int count = ::GetMenuString( wrapper->menu->handle(), wrapper->index, & buffer[0], length, MF_BYPOSITION );
+		int count = ::GetMenuString(handle(), wrapper->index, &buffer[0], length, MF_BYPOSITION);
 		tstring itemText( buffer.begin(), buffer.begin() + count );
 
 		if(!itemText.empty()) {
@@ -523,12 +490,9 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 				);
 
 			// Select item font
-			FontPtr font =
-				(wrapper->isTitle || (::GetMenuDefaultItem(wrapper->menu->handle(), TRUE, GMDI_USEDISABLED) == wrapper->index))
-				? wrapper->menu->itsTitleFont
-				: wrapper->menu->font;
-
-			HGDIOBJ oldFont = ::SelectObject( canvas.handle(), font->handle() );
+			Canvas::Selector select(canvas, *((wrapper->isTitle || (::GetMenuDefaultItem(handle(), TRUE, GMDI_USEDISABLED) == wrapper->index))
+				? itsTitleFont
+				: font));
 
 			unsigned drawTextFormat = DT_VCENTER | DT_SINGLELINE;
 			if((drawInfo->itemState & ODS_NOACCEL) == ODS_NOACCEL)
@@ -555,9 +519,6 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 				if ( !accelerator.empty() )
 					canvas.drawText( accelerator, textRectangle, DT_RIGHT | drawTextFormat );
 			}
-
-			// set back old font
-			::SelectObject( canvas.handle(), oldFont );
 
 			// reset old mode
 			canvas.setBkMode( oldMode );
@@ -613,8 +574,8 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 	}
 
 	// blast buffer into screen
-	if ( ( drawInfo->itemAction & ODA_DRAWENTIRE ) && wrapper->menu->drawSidebar ) // adjustment for sidebar
-	{
+	if((drawInfo->itemAction & ODA_DRAWENTIRE) && drawSidebar) {
+		// adjust for sidebar
 		itemRectangle.pos.x -= sidebarWidth;
 		itemRectangle.size.x += sidebarWidth;
 	}
@@ -623,11 +584,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo) {
 	return true;
 }
 
-bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
-	// get item data wrapper
-	ItemDataWrapper * wrapper = reinterpret_cast< ItemDataWrapper * >( measureInfo->itemData );
-	dwtassert( wrapper != 0, "Unsupported menu item in Menu::handleMeasureItem" );
-
+bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrapper) {
 	// this will contain item size
 	UINT & itemWidth = measureInfo->itemWidth;
 	UINT & itemHeight = measureInfo->itemHeight;
@@ -636,7 +593,7 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_FTYPE | MIIM_DATA | MIIM_CHECKMARKS | MIIM_STRING };
 
 	// try to get item info
-	if ( ::GetMenuItemInfo( wrapper->menu->handle(), wrapper->index, TRUE, & info ) == FALSE )
+	if(::GetMenuItemInfo(handle(), wrapper->index, TRUE, &info) == FALSE)
 		throw DWTException ( "Couldn't get item info in Menu::handleMeasureItem" );
 
 	// check if item is owner drawn
@@ -651,19 +608,15 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
 	}
 
 	// are we processing menu bar ?
-	const bool isMenuBar = ::GetMenu( wrapper->menu->getParent()->handle() ) == wrapper->menu->handle();
+	const bool isMenuBar = ::GetMenu(getParent()->handle()) == handle();
 
-	SIZE textSize = { 0 };
-	wrapper->menu->getTextSize(textSize, wrapper->index);
-	itemWidth = textSize.cx;
-	itemHeight = textSize.cy;
+	Point textSize = getTextSize(wrapper->index);
+	itemWidth = textSize.x;
+	itemHeight = textSize.y;
 
 	// find item icon
 	/// @todo add support for HBITMAPs embedded in MENUITEMINFOs (hbmpChecked, hbmpUnchecked, hbmpItem)
 	const IconPtr& icon = wrapper->icon;
-
-	// find icon size
-	const Point& iconSize = wrapper->menu->iconSize;
 
 	// adjust width
 	if ( !isMenuBar || // if not menu bar item
@@ -677,12 +630,8 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo) {
 	}
 
 	// adjust width for sidebar
-	if ( wrapper->menu->drawSidebar )
-	{
-		SIZE textSize = { 0 };
-		wrapper->menu->getTextSize(textSize, 0); // 0 is the title index
-		itemWidth += textSize.cy;
-	}
+	if(drawSidebar)
+		itemWidth += getTextSize(0).y; // 0 is the title index
 
 	// adjust item height
 	itemHeight = (std::max)( itemHeight, ( UINT )::GetSystemMetrics( SM_CYMENU ) );
@@ -812,9 +761,9 @@ unsigned Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 
 	if(!itsTitle.empty()) {
 		// adjust "y" so that the first command ends up in front of the cursor, not the title
-		SIZE sz = { 0 };
-		getTextSize(sz, 0); // 0 is the title index
-		y -= std::max(static_cast<unsigned>(sz.cy), static_cast<unsigned>(::GetSystemMetrics(SM_CYMENU)));
+		// 0 is the title index
+		/// @todo fix for menus that open upwards
+		y -= std::max(static_cast<unsigned>(getTextSize(0).y), static_cast<unsigned>(::GetSystemMetrics(SM_CYMENU)));
 	}
 
 	return ::TrackPopupMenu(itsHandle, flags, x, y, 0, itsParent->handle(), 0);
@@ -831,24 +780,10 @@ Menu::ObjectType Menu::getChild( unsigned position ) {
 	return ObjectType();
 }
 
-void Menu::getTextSize(SIZE& sz, unsigned index) const {
-	// get item text
-	tstring itemText = getText(index);
-
-	// get its DC
-	HDC hdc = ::GetDC(getParent()->handle());
-
-	// now get text extents
-	HGDIOBJ oldFont = ::SelectObject(hdc, font->handle());
-	::GetTextExtentPoint32(hdc, itemText.c_str(), (int)itemText.size(), &sz);
-	::SelectObject(hdc, oldFont);
-
-	// release DC
-	::ReleaseDC(reinterpret_cast<HWND>(handle()), hdc);
-
-	// adjust item size
-	sz.cx += borderGap;
-	sz.cy += borderGap;
+Point Menu::getTextSize(unsigned index) const {
+	UpdateCanvas canvas(getParent());
+	Canvas::Selector select(canvas, *font);
+	return canvas.getTextExtent(getText(index)) + Point(borderGap, borderGap);
 }
 
 }
