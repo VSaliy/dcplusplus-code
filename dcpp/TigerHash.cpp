@@ -156,7 +156,7 @@ void TigerHash::tigerCompress(const uint64_t *str, uint64_t state[3]) {
 }
 
 void TigerHash::update(const void* data, size_t length) {
-	size_t tmppos = (uint32_t)(pos & BLOCK_SIZE-1);
+	size_t tmppos = (uint32_t)(pos & (BLOCK_SIZE - 1));
 #ifdef TIGER_BIG_ENDIAN
 	uint8_t buf[BLOCK_SIZE];
 	int j;
@@ -205,7 +205,7 @@ void TigerHash::update(const void* data, size_t length) {
 }
 
 uint8_t* TigerHash::finalize() {
-	size_t tmppos = (size_t)(pos & BLOCK_SIZE-1);
+	size_t tmppos = (size_t)(pos & (BLOCK_SIZE - 1));
 #ifdef TIGER_BIG_ENDIAN
 	uint8_t buf[BLOCK_SIZE];
 	int j;

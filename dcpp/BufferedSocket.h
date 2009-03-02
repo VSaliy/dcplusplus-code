@@ -129,7 +129,7 @@ private:
 	CriticalSection cs;
 
 	Semaphore taskSem;
-	deque<pair<Tasks, std::tr1::shared_ptr<TaskData> > > tasks;
+	deque<pair<Tasks, boost::shared_ptr<TaskData> > > tasks;
 
 	Modes mode;
 	std::auto_ptr<UnZFilter> filterIn;
