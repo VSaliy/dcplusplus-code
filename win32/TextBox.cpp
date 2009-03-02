@@ -40,8 +40,8 @@ TextBox::TextBox( dwt::Widget * parent ) : BaseType(parent) {
 	this->onRaw(std::tr1::bind(&TextBox::handleMenuSelect, this, _1, _2), dwt::Message(WM_MENUSELECT));
 }
 
-void TextBox::handleLeftDblClick(const dwt::MouseEvent& ev) {
-	WinUtil::parseDBLClick(textUnderCursor(ev.pos));
+bool TextBox::handleLeftDblClick(const dwt::MouseEvent& ev) {
+	return WinUtil::parseDBLClick(textUnderCursor(ev.pos));
 }
 
 LRESULT TextBox::handleEnterIdle(WPARAM wParam, LPARAM lParam) {

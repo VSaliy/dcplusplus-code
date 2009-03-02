@@ -106,10 +106,13 @@ bool SystemFrame::handleContextMenu(const dwt::ScreenCoordinate& pt) {
 	return false;
 }
 
-void SystemFrame::handleDoubleClick(const dwt::MouseEvent& mouseEvent) {
+bool SystemFrame::handleDoubleClick(const dwt::MouseEvent& mouseEvent) {
 	tstring path = log->textUnderCursor(mouseEvent.pos, true);
-	if(File::getSize(Text::fromT(path)) != -1)
+	if(File::getSize(Text::fromT(path)) != -1) {
 		WinUtil::openFile(path);
+		return true;
+	}
+	return false;
 }
 
 void SystemFrame::on(Message, time_t t, const string& message) throw() {

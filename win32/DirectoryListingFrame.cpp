@@ -929,11 +929,12 @@ void DirectoryListingFrame::handleDoubleClickFiles() {
 	}
 }
 
-void DirectoryListingFrame::handleXMouseUp(const dwt::MouseEvent& mouseEvent) {
+bool DirectoryListingFrame::handleXMouseUp(const dwt::MouseEvent& mouseEvent) {
 	switch(mouseEvent.ButtonPressed) {
 	case dwt::MouseEvent::X1: back(); break;
 	case dwt::MouseEvent::X2: forward(); break;
 	}
+	return true;
 }
 
 bool DirectoryListingFrame::handleKeyDownFiles(int c) {

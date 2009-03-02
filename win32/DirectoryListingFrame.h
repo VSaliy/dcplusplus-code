@@ -203,7 +203,7 @@ private:
 
 	bool handleDirsContextMenu(dwt::ScreenCoordinate pt);
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt);
-	void handleXMouseUp(const dwt::MouseEvent& mouseEvent);
+	bool handleXMouseUp(const dwt::MouseEvent& mouseEvent);
 
 	void changeDir(DirectoryListing::Directory* d);
 	void updateTree(DirectoryListing::Directory* tree, HTREEITEM treeItem);
