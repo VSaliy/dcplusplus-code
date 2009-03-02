@@ -27,7 +27,7 @@ TextBox::Seed::Seed(const tstring& caption) :
 {
 }
 
-TextBox::TextBox( dwt::Widget * parent ) : BaseType(parent), menuOpened(false) {
+TextBox::TextBox( dwt::Widget * parent ) : BaseType(parent) {
 	this->onLeftMouseDblClick(std::tr1::bind(&TextBox::handleLeftDblClick, this, _1));
 
 	/*
@@ -45,26 +45,12 @@ void TextBox::handleLeftDblClick(const dwt::MouseEvent& ev) {
 }
 
 LRESULT TextBox::handleEnterIdle(WPARAM wParam, LPARAM lParam) {
-	if(wParam == MSGF_MENU && !menuOpened) {
+	if(wParam == MSGF_MENU && !menu) {
 		GUITHREADINFO gti = { sizeof(gti) };
 		if(::GetGUIThreadInfo(NULL, &gti) && (gti.flags & GUI_POPUPMENUMODE) && (gti.hwndMenuOwner == handle())) {
 			HMENU hMenu = reinterpret_cast<HMENU>(::SendMessage(reinterpret_cast<HWND>(lParam), MN_GETHMENU, 0, 0));
 			if(!hMenu)
 				return 0;
-
-			menuOpened = true;
-
-			{
-				// make sure we're not sub-classing the scrollbar context menu...
-				DWORD messagePos = ::GetMessagePos();
-				POINT pt = { GET_X_LPARAM(messagePos), GET_Y_LPARAM(messagePos) };
-				SCROLLBARINFO sbi = { sizeof(sbi) };
-				if(::GetScrollBarInfo(handle(), OBJID_HSCROLL, &sbi) && ::PtInRect(&sbi.rcScrollBar, pt))
-					return 0;
-				if(::GetScrollBarInfo(handle(), OBJID_VSCROLL, &sbi) && ::PtInRect(&sbi.rcScrollBar, pt))
-					return 0;
-			}
-
 			menu = dwt::WidgetCreator<dwt::Menu>::attach(this, hMenu, WinUtil::Seeds::menu);
 		}
 	}
@@ -73,6 +59,6 @@ LRESULT TextBox::handleEnterIdle(WPARAM wParam, LPARAM lParam) {
 
 LRESULT TextBox::handleMenuSelect(WPARAM wParam, LPARAM lParam) {
 	if((HIWORD(wParam) == 0xFFFF) && (lParam == 0))
-		menuOpened = false;
+		menu.reset();
 	return 0;
 }
