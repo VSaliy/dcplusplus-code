@@ -389,7 +389,7 @@ void BufferedSocket::threadSendData() throw(Exception) {
 
 bool BufferedSocket::checkEvents() throw(Exception) {
 	while(state == RUNNING ? taskSem.wait(0) : taskSem.wait()) {
-		pair<Tasks, std::tr1::shared_ptr<TaskData> > p;
+		pair<Tasks, boost::shared_ptr<TaskData> > p;
 		{
 			Lock l(cs);
 			dcassert(tasks.size() > 0);
