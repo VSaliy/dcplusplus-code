@@ -624,18 +624,18 @@ void WinUtil::help(HWND hWnd, unsigned id) {
 		// find the path to the help file
 		string path;
 		if(!lang.empty() && lang != "C") {
-			path = Util::getLocalePath() + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
+			path = Util::getPath(Util::PATH_LOCALE) + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
 			while(File::getSize(path) == -1) {
 				// if the lang has extra information (after '_' or '@'), try to remove it
 				string::size_type pos = lang.find_last_of("_@");
 				if(pos == string::npos)
 					break;
 				lang = lang.substr(0, pos);
-				path = Util::getLocalePath() + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
+				path = Util::getPath(Util::PATH_LOCALE) + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
 			}
 		}
 		if(path.empty() || File::getSize(path) == -1) {
-			path = Util::getDataPath() + "DCPlusPlus.chm";
+			path = Util::getPath(Util::PATH_RESOURCES) + "DCPlusPlus.chm";
 			if(File::getSize(path) == -1) {
 				/// @todo also check that the file is up-to-date
 				/// @todo alert the user that the help file isn't found/up-to-date
@@ -895,7 +895,7 @@ void WinUtil::registerDchubHandler() {
 	}
 	// check for the existence of magnet.exe
 	if(File::getSize(Text::fromT(magnetExe)) == -1) {
-		magnetExe = Text::toT(Util::getDataPath() + "magnet.exe");
+		magnetExe = Text::toT(Util::getPath(Util::PATH_RESOURCES) + "magnet.exe");
 		if(File::getSize(Text::fromT(magnetExe)) == -1) {
 			// gracefully fall back to registering DC++ to handle magnets
 			magnetExe = Text::toT(getAppName());

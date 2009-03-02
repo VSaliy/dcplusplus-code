@@ -7,8 +7,8 @@
 	When LocalMode is disabled, ConfigPath is ignored.
 	Set to 1 to enable, 0 to disable
 	
-	<LocalMode>1</LocalMode>
 	-->
+	<LocalMode>0</LocalMode>
 
 	<!-- 
 	ConfigPath specifies where settings, queue and other runtime data should be saved.

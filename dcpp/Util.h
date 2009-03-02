@@ -96,6 +96,28 @@ public:
 	static string emptyString;
 	static wstring emptyStringW;
 
+	enum Paths {
+		/** Global configuration */
+		PATH_GLOBAL_CONFIG,
+		/** Per-user configuration (queue, favorites, ...) */
+		PATH_USER_CONFIG,
+		/** Per-user local data (cache, temp files, ...) */
+		PATH_USER_LOCAL,
+		/** Various resources (help files etc) */
+		PATH_RESOURCES,
+		/** Translations */
+		PATH_LOCALE,
+		/** Default download location */
+		PATH_DOWNLOADS,
+		/** Default file list location */
+		PATH_FILE_LISTS,
+		/** Default hub list cache */
+		PATH_HUB_LISTS,
+		/** Where the notepad file is stored */
+		PATH_NOTEPAD,
+		PATH_LAST
+	};
+
 	static void initialize();
 
 	/** Path of temporary storage */
@@ -110,17 +132,17 @@ public:
 	}
 
 	/** Path of configuration files */
-	static const string& getConfigPath() { return configPath; }
-	static const string& getDataPath() { return dataPath; }
-	static const string& getSystemPath() { return systemPath; }
-	static const string& getLocalePath() { return localePath; }
+	static const string& getPath(Paths path) { return paths[path]; }
+
+	/** Migrate from pre-localmode config location */
+	static void migrate(const string& file);
 
 	/** Path of file lists */
-	static string getListPath() { return getConfigPath() + "FileLists" PATH_SEPARATOR_STR; }
+	static string getListPath() { return getPath(PATH_FILE_LISTS); }
 	/** Path of hub lists */
-	static string getHubListsPath() { return getConfigPath() + "HubLists" PATH_SEPARATOR_STR; }
+	static string getHubListsPath() { return getPath(PATH_HUB_LISTS); }
 	/** Notepad filename */
-	static string getNotepadFile() { return getConfigPath() + "Notepad.txt"; }
+	static string getNotepadFile() { return getPath(PATH_NOTEPAD); }
 
 	static string translateError(int aError);
 
@@ -376,14 +398,10 @@ public:
 	static double randd() { return ((double)rand()) / ((double)0xffffffff); }
 
 private:
-	/** Per-user configuration */
-	static string configPath;
-	/** Global configuration */
-	static string systemPath;
-	/** Various resources (help files etc) */
-	static string dataPath;
-	/** Translations */
-	static string localePath;
+	/** In local mode, all config and temp files are kept in the same dir as the executable */
+	static bool localMode;
+
+	static string paths[PATH_LAST];
 
 	static bool away;
 	static bool manualAway;
@@ -395,6 +413,7 @@ private:
 
 	static CountryList countries;
 
+	static void loadBootConfig();
 };
 
 /** Case insensitive hash function for strings */

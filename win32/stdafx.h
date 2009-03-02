@@ -89,7 +89,7 @@ using dwt::TreePtr;
 using std::tr1::placeholders::_1;
 using std::tr1::placeholders::_2;
 
-#define LOCALEDIR dcpp::Util::getLocalePath().c_str()
+#define LOCALEDIR dcpp::Util::getPath(Util::PATH_LOCALE).c_str()
 #define PACKAGE "dcpp-win32"
 #define _(String) gettext(String)
 #define gettext_noop(String) String

@@ -69,26 +69,26 @@ languages(0)
 		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
 		TextBoxPtr box=group->addChild(seed);
-		box->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);	
+		box->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
 		items.push_back(Item(box, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
 	}
 
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Set timestamps")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);
-			
-		TextBoxPtr box = group->addChild(WinUtil::Seeds::Dialog::TextBox);	
-		box->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);	
+
+		TextBoxPtr box = group->addChild(WinUtil::Seeds::Dialog::TextBox);
+		box->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);
 		items.push_back(Item(box, SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
-	}		
+	}
 
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Language")));
 		grid->setWidget(group, 2, 0, 1, 2);
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
-		
+
 		languages = group->addChild(WinUtil::Seeds::Dialog::ComboBox);
-		languages->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);	
+		languages->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
 	}
 
 	LabelPtr label = grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")));
@@ -98,7 +98,7 @@ languages(0)
 	PropPage::read(items);
 	PropPage::read(listItems, options);
 
-	StringList dirs = File::findFiles(Util::getLocalePath(), "*");
+	StringList dirs = File::findFiles(Util::getPath(Util::PATH_LOCALE), "*");
 
 	TStringList langs;
 
