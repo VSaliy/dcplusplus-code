@@ -410,7 +410,7 @@ LRESULT TabView::handleToolTip(LPARAM lParam) {
 	return 0;
 }
 
-void TabView::handleLeftMouseDown(const MouseEvent& mouseEvent) {
+bool TabView::handleLeftMouseDown(const MouseEvent& mouseEvent) {
 	TabInfo* ti = getTabInfo(hitTest(mouseEvent.pos));
 	if(ti) {
 		if(mouseEvent.isShiftPressed)
@@ -420,9 +420,10 @@ void TabView::handleLeftMouseDown(const MouseEvent& mouseEvent) {
 			::SetCapture(handle());
 		}
 	}
+	return true;
 }
 
-void TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
+bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 	::ReleaseCapture();
 
 	if(dragging) {
@@ -430,7 +431,7 @@ void TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		dragging = 0;
 
 		if(dragPos == -1)
-			return;
+			return true;
 
 		int dropPos = hitTest(mouseEvent.pos);
 
@@ -446,7 +447,7 @@ void TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 					next();
 			} else
 				setActive(dropPos);
-			return;
+			return true;
 		}
 
 		// save some information about the tab before we erase it
@@ -465,6 +466,8 @@ void TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 
 		layout();
 	}
+
+	return true;
 }
 
 bool TabView::handleContextMenu(ScreenCoordinate pt) {
@@ -493,17 +496,19 @@ bool TabView::handleContextMenu(ScreenCoordinate pt) {
 	return false;
 }
 
-void TabView::handleMiddleMouseDown(const MouseEvent& mouseEvent) {
+bool TabView::handleMiddleMouseDown(const MouseEvent& mouseEvent) {
 	TabInfo* ti = getTabInfo(hitTest(mouseEvent.pos));
 	if(ti)
 		ti->w->close();
+	return true;
 }
 
-void TabView::handleXMouseUp(const MouseEvent& mouseEvent) {
+bool TabView::handleXMouseUp(const MouseEvent& mouseEvent) {
 	switch(mouseEvent.ButtonPressed) {
 	case MouseEvent::X1: next(true); break;
 	case MouseEvent::X2: next(); break;
 	}
+	return true;
 }
 
 void TabView::helpImpl(unsigned& id) {

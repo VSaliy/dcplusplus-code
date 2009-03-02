@@ -37,7 +37,7 @@ public:
 	explicit TextBox( dwt::Widget * parent );
 
 private:
-	void handleLeftDblClick(const dwt::MouseEvent& ev);
+	bool handleLeftDblClick(const dwt::MouseEvent& ev);
 
 	LRESULT handleEnterIdle(WPARAM wParam, LPARAM lParam);
 	LRESULT handleMenuSelect(WPARAM wParam, LPARAM lParam);

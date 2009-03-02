@@ -93,23 +93,26 @@ private:
 	dwt::Rectangle getSplitterRect();
 	void resizeChildren();
 
-	void handleLButtonDown(const dwt::MouseEvent&) {
+	bool handleLButtonDown() {
 		::SetCapture( this->handle() );
 		moving = true;
+		return true;
 	}
-	void handleMouseMove(const dwt::MouseEvent& event) {
-		if ( event.ButtonPressed == dwt::MouseEvent::LEFT && moving )
+	bool handleMouseMove(const dwt::MouseEvent& mouseEvent) {
+		if ( mouseEvent.ButtonPressed == dwt::MouseEvent::LEFT && moving )
 		{
-			dwt::ClientCoordinate cc(event.pos, getParent());
+			dwt::ClientCoordinate cc(mouseEvent.pos, getParent());
 			int x = horizontal ? cc.y() : cc.x();
 			int w = horizontal ? rect.size.y : rect.width();
 			pos = 1. - (static_cast<double>(w - x) / static_cast<double>(w));
 			resizeChildren();
 		}
+		return true;
 	}
-	void handleLButtonUp(const dwt::MouseEvent&) {
+	bool handleLButtonUp() {
 		::ReleaseCapture();
 		moving = false;
+		return true;
 	}
 };
 
@@ -136,9 +139,9 @@ void WidgetPaned< horizontal >::create( const Seed & cs )
 	pos = cs.pos;
 	BaseType::create(cs);
 
-	onLeftMouseDown(std::tr1::bind(&ThisType::handleLButtonDown, this, _1));
+	onLeftMouseDown(std::tr1::bind(&ThisType::handleLButtonDown, this));
 	onMouseMove(std::tr1::bind(&ThisType::handleMouseMove, this, _1));
-	onLeftMouseUp(std::tr1::bind(&ThisType::handleLButtonUp, this, _1));
+	onLeftMouseUp(std::tr1::bind(&ThisType::handleLButtonUp, this));
 }
 
 template< bool horizontal >
