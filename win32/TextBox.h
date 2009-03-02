@@ -43,7 +43,6 @@ private:
 	LRESULT handleMenuSelect(WPARAM wParam, LPARAM lParam);
 
 	dwt::Menu::ObjectType menu;
-	bool menuOpened;
 };
 
 #endif /*TextBox_H_*/
