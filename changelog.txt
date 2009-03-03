@@ -30,6 +30,7 @@
 * [L#316096] Send base hub address when connecting to other peers
 * Fix errors and warnings when compiling with g++ (steven sheehy)
 * [L#241995] Restore word selection in text-boxes on double-click (poy)
+* [L#220499] Optionally use system paths for queue etc
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 
