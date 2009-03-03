@@ -50,6 +50,10 @@ void UserConnection::on(BufferedSocketListener::Line, const string& aLine) throw
 		return;
 
 	if(aLine[0] == 'C' && !isSet(FLAG_NMDC)) {
+		if(!Text::validateUtf8(aLine)) {
+			// @todo Report to user?
+			return;
+		}
 		dispatch(aLine);
 		return;
 	} else if(aLine[0] == '$') {

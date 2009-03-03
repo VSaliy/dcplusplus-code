@@ -784,6 +784,11 @@ void AdcHub::on(Connected c) throw() {
 void AdcHub::on(Line l, const string& aLine) throw() {
 	Client::on(l, aLine);
 
+	if(!Text::validateUtf8(aLine)) {
+		// @todo report to user?
+		return;
+	}
+
 	if(BOOLSETTING(ADC_DEBUG)) {
 		fire(ClientListener::StatusMessage(), this, "<ADC>" + aLine + "</ADC>");
 	}
