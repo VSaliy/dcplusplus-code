@@ -50,6 +50,7 @@ class HubFrame :
 public:
 	enum Status {
 		STATUS_STATUS,
+		STATUS_CIPHER,
 		STATUS_USERS,
 		STATUS_SHARED,
 		STATUS_AVERAGE_SHARED,

@@ -57,6 +57,7 @@ public:
 	bool isConnected() const { return state != STATE_DISCONNECTED; }
 	bool isSecure() const;
 	bool isTrusted() const;
+	std::string getCipherName() const;
 
 	bool isOp() const { return getMyIdentity().isOp(); }
 
