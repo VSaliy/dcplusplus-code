@@ -20,10 +20,6 @@ env.Depends('resource.h', 'cshelp.h')
 if not env['help']:
 	Return()
 
-if env.WhereIs('hhc') is None:
-	print 'hhc.exe not found, skipping help build'
-	Return()
-
 # fix hhc.exe reverse return value - UGLY - taken from the NSIS build system
 old_spawn = env['SPAWN']
 def new_spawn(*args, **kw):
@@ -127,6 +123,8 @@ def gen_CHM(target, source, env):
 	return ret
 env.Append(BUILDERS = {'CHMBuild' : Builder(action = Action(gen_CHM, 'Compiling the $TARGET help file'))})
 
+hasHHC = env.WhereIs('hhc') is not None
+
 # translation using po4a <http://po4a.alioth.debian.org/>
 if env['mode'] == 'release' or env['i18n']:
 	if env.WhereIs('perl') is None:
@@ -146,9 +144,14 @@ if env['mode'] == 'release' or env['i18n']:
 		po_list = Glob('po/*.po')
 		for po_node in po_list:
 			env.Precious(env.PoBuild(po_node, potfile))
-			target = dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/DCPlusPlus.chm'
-			env.Depends(target, CHM_dependencies)
-			env.CHMBuild(target, [CHM_sources, po_node])
+			if hasHHC:
+				target = dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/DCPlusPlus.chm'
+				env.Depends(target, CHM_dependencies)
+				env.CHMBuild(target, [CHM_sources, po_node])
+
+if not hasHHC:
+	print 'hhc.exe not found, skipping chm build'
+	Return()
 
 # compile the main (untranslated) help file
 target = dev.get_build_path('bin') + '/DCPlusPlus.chm'

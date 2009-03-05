@@ -33,6 +33,11 @@
 * [L#241995] Restore word selection in text-boxes on double-click (poy)
 * [L#220499] Optionally use system paths for queue etc
 * [L#300268] [ADC] Validate utf8 before processing messages
+* Updated Polish, German, Finnish, Romanian, Swedish, Brazilian Portuguese,
+  French, Bosnian, UK English, Hungarian, Korean, Serbian, Russian, Turkish,
+  Portuguese, Latvian, Bulgarian, Norwegian and Estonian translations (thank 
+  you all translators)
+* Added secure connection status to hub title
 
 -- 0.7091 2008-11-27 --
 * Fix packaging issues with regard to the settings dialog 
