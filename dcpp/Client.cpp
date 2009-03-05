@@ -151,6 +151,10 @@ bool Client::isTrusted() const {
 	return sock && sock->isTrusted();
 }
 
+std::string Client::getCipherName() const {
+	return sock ? sock->getCipherName() : Util::emptyString;
+}
+
 void Client::updateCounts(bool aRemove) {
 	// We always remove the count and then add the correct one if requested...
 	if(countType == COUNT_NORMAL) {

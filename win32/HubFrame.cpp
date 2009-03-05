@@ -457,6 +457,7 @@ void HubFrame::execTasks() {
 void HubFrame::onConnected() {
 	addStatus(T_("Connected"));
 	setIcon(IDR_HUB);
+	status->setText(STATUS_CIPHER, Text::toT(client->getCipherName()));
 }
 
 void HubFrame::onDisconnected() {
