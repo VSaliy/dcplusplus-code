@@ -717,7 +717,15 @@ void HubFrame::on(GetPassword, Client*) throw() {
 }
 
 void HubFrame::on(HubUpdated, Client*) throw() {
-	string hubName = client->getHubName();
+	string hubName;
+	if(client->isTrusted()) {
+		hubName = "[S] ";
+	} else if(client->isSecure()) {
+		hubName = "[U] ";
+	}
+
+	hubName += client->getHubName();
+
 	if(!client->getHubDescription().empty()) {
 		hubName += " - " + client->getHubDescription();
 	}

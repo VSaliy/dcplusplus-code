@@ -143,6 +143,14 @@ void Client::disconnect(bool graceLess) {
 		sock->disconnect(graceLess);
 }
 
+bool Client::isSecure() const {
+	return sock && sock->isSecure();
+}
+
+bool Client::isTrusted() const {
+	return sock && sock->isTrusted();
+}
+
 void Client::updateCounts(bool aRemove) {
 	// We always remove the count and then add the correct one if requested...
 	if(countType == COUNT_NORMAL) {
