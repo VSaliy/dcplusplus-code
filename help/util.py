@@ -1,3 +1,6 @@
+def nixify(path):
+	return path.replace('\\', '/')
+
 def get_lcid(lang):
 	from locale import windows_locale
 
