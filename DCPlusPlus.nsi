@@ -57,7 +57,7 @@ no_backup:
   File "changelog.txt"
   
   ; TODO make an installer option to use localmode xml file?
-  File "dcppboot.nonlocal.xml" /oname="dcppboot.xml"
+  File /oname=dcppboot.xml "dcppboot.nonlocal.xml" 
   File "DCPlusPlus.chm"
   File "DCPlusPlus.exe"
   File "License.txt"
@@ -65,9 +65,11 @@ no_backup:
   File "LICENSE-OpenSSL.txt"
   File "mingwm10.dll"
   File "magnet.exe"
-  SetOutPath "$INSTDIR\locale\ar\LC_MESSAGES\"
+SetOutPath "$INSTDIR\locale\ar\LC_MESSAGES\"
 File "locale\ar\LC_MESSAGES\dcpp-win32.mo"
 File "locale\ar\LC_MESSAGES\libdcpp.mo"
+SetOutPath "$INSTDIR\locale\be\LC_MESSAGES\"
+File "locale\be\LC_MESSAGES\dcpp-win32.mo"
 SetOutPath "$INSTDIR\locale\bg\LC_MESSAGES\"
 File "locale\bg\LC_MESSAGES\dcpp-win32.mo"
 File "locale\bg\LC_MESSAGES\libdcpp.mo"
@@ -96,13 +98,18 @@ SetOutPath "$INSTDIR\locale\en_AU\LC_MESSAGES\"
 File "locale\en_AU\LC_MESSAGES\dcpp-win32.mo"
 SetOutPath "$INSTDIR\locale\en_CA\LC_MESSAGES\"
 File "locale\en_CA\LC_MESSAGES\dcpp-win32.mo"
-
+File "locale\en_CA\LC_MESSAGES\libdcpp.mo"
 SetOutPath "$INSTDIR\locale\en_GB\LC_MESSAGES\"
 File "locale\en_GB\LC_MESSAGES\dcpp-win32.mo"
 File "locale\en_GB\LC_MESSAGES\libdcpp.mo"
 SetOutPath "$INSTDIR\locale\es\LC_MESSAGES\"
 File "locale\es\LC_MESSAGES\dcpp-win32.mo"
 File "locale\es\LC_MESSAGES\libdcpp.mo"
+SetOutPath "$INSTDIR\locale\et\LC_MESSAGES\"
+File "locale\et\LC_MESSAGES\dcpp-win32.mo"
+File "locale\et\LC_MESSAGES\libdcpp.mo"
+SetOutPath "$INSTDIR\locale\eu\LC_MESSAGES\"
+File "locale\eu\LC_MESSAGES\dcpp-win32.mo"
 SetOutPath "$INSTDIR\locale\fa\LC_MESSAGES\"
 File "locale\fa\LC_MESSAGES\dcpp-win32.mo"
 SetOutPath "$INSTDIR\locale\fi\LC_MESSAGES\"
@@ -157,12 +164,15 @@ File "locale\mk\LC_MESSAGES\libdcpp.mo"
 SetOutPath "$INSTDIR\locale\ml\LC_MESSAGES\"
 File "locale\ml\LC_MESSAGES\dcpp-win32.mo"
 File "locale\ml\LC_MESSAGES\libdcpp.mo"
+SetOutPath "$INSTDIR\locale\mr\LC_MESSAGES\"
+File "locale\mr\LC_MESSAGES\dcpp-win32.mo"
 SetOutPath "$INSTDIR\locale\ms\LC_MESSAGES\"
-
 File "locale\ms\LC_MESSAGES\libdcpp.mo"
 SetOutPath "$INSTDIR\locale\nb\LC_MESSAGES\"
 File "locale\nb\LC_MESSAGES\dcpp-win32.mo"
 File "locale\nb\LC_MESSAGES\libdcpp.mo"
+SetOutPath "$INSTDIR\locale\nds\LC_MESSAGES\"
+File "locale\nds\LC_MESSAGES\dcpp-win32.mo"
 SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES\"
 File "locale\nl\LC_MESSAGES\dcpp-win32.mo"
 File "locale\nl\LC_MESSAGES\libdcpp.mo"
@@ -200,7 +210,6 @@ File "locale\sv\LC_MESSAGES\dcpp-win32.mo"
 File "locale\sv\LC_MESSAGES\libdcpp.mo"
 SetOutPath "$INSTDIR\locale\te\LC_MESSAGES\"
 File "locale\te\LC_MESSAGES\dcpp-win32.mo"
-
 SetOutPath "$INSTDIR\locale\tr\LC_MESSAGES\"
 File "locale\tr\LC_MESSAGES\dcpp-win32.mo"
 File "locale\tr\LC_MESSAGES\libdcpp.mo"
@@ -213,14 +222,26 @@ File "locale\zh_CN\LC_MESSAGES\libdcpp.mo"
 SetOutPath "$INSTDIR\locale\zh_TW\LC_MESSAGES\"
 File "locale\zh_TW\LC_MESSAGES\dcpp-win32.mo"
 File "locale\zh_TW\LC_MESSAGES\libdcpp.mo"
-
-
+SetOutPath "$INSTDIR\locale\ar\help"
+File "locale\ar\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\bg\help"
+File "locale\bg\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\bs\help"
+File "locale\bs\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\cs\help"
+File "locale\cs\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\de\help"
 File "locale\de\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\el\help"
 File "locale\el\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\en_GB\help"
 File "locale\en_GB\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\es\help"
+File "locale\es\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\et\help"
+File "locale\et\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\fi\help"
+File "locale\fi\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\fr\help"
 File "locale\fr\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\gl\help"
@@ -229,14 +250,24 @@ SetOutPath "$INSTDIR\locale\hu\help"
 File "locale\hu\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\it\help"
 File "locale\it\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\ko\help"
+File "locale\ko\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\lv\help"
+File "locale\lv\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\ml\help"
+File "locale\ml\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\nb\help"
 File "locale\nb\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\nl\help"
+File "locale\nl\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\pl\help"
 File "locale\pl\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\pt_BR\help"
 File "locale\pt_BR\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\ro\help"
 File "locale\ro\help\DCPlusPlus.chm"
+SetOutPath "$INSTDIR\locale\ru\help"
+File "locale\ru\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\sr\help"
 File "locale\sr\help\DCPlusPlus.chm"
 SetOutPath "$INSTDIR\locale\sv\help"
@@ -306,8 +337,9 @@ Section "un.Uninstall"
   Delete "$INSTDIR\GeoIPCountryWhois.csv"
   Delete "$INSTDIR\mingwm10.dll"
 
- Delete "$INSTDIR\locale\ar\LC_MESSAGES\dcpp-win32.mo"
+Delete "$INSTDIR\locale\ar\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\ar\LC_MESSAGES\libdcpp.mo"
+Delete "$INSTDIR\locale\be\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\bg\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\bg\LC_MESSAGES\libdcpp.mo"
 Delete "$INSTDIR\locale\bs\LC_MESSAGES\dcpp-win32.mo"
@@ -326,10 +358,12 @@ Delete "$INSTDIR\locale\en_GB\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\en_GB\LC_MESSAGES\libdcpp.mo"
 Delete "$INSTDIR\locale\en_AU\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\en_CA\LC_MESSAGES\dcpp-win32.mo"
+Delete "$INSTDIR\locale\en_CA\LC_MESSAGES\libdcpp.mo"
 Delete "$INSTDIR\locale\es\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\es\LC_MESSAGES\libdcpp.mo"
 Delete "$INSTDIR\locale\et\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\et\LC_MESSAGES\libdcpp.mo"
+Delete "$INSTDIR\locale\eu\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\fa\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\fi\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\fi\LC_MESSAGES\libdcpp.mo"
@@ -366,10 +400,12 @@ Delete "$INSTDIR\locale\mk\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\mk\LC_MESSAGES\libdcpp.mo"
 Delete "$INSTDIR\locale\ml\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\ml\LC_MESSAGES\libdcpp.mo"
+Delete "$INSTDIR\locale\mr\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\ms\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\ms\LC_MESSAGES\libdcpp.mo"
 Delete "$INSTDIR\locale\nb\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\nb\LC_MESSAGES\libdcpp.mo"
+Delete "$INSTDIR\locale\nds\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\nl\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\nl\LC_MESSAGES\libdcpp.mo"
 Delete "$INSTDIR\locale\nn\LC_MESSAGES\dcpp-win32.mo"
@@ -404,33 +440,59 @@ Delete "$INSTDIR\locale\zh_TW\LC_MESSAGES\dcpp-win32.mo"
 Delete "$INSTDIR\locale\zh_TW\LC_MESSAGES\libdcpp.mo"
 
 
+
+Delete "$INSTDIR\locale\ar\help\DCPlusPlus.chm"
+ 
+Delete "$INSTDIR\locale\bg\help\DCPlusPlus.chm"
+ 
+Delete "$INSTDIR\locale\bs\help\DCPlusPlus.chm"
+ 
+Delete "$INSTDIR\locale\cs\help\DCPlusPlus.chm"
+ 
 Delete "$INSTDIR\locale\de\help\DCPlusPlus.chm"
-
+ 
 Delete "$INSTDIR\locale\el\help\DCPlusPlus.chm"
-
+ 
 Delete "$INSTDIR\locale\en_GB\help\DCPlusPlus.chm"
+ 
+Delete "$INSTDIR\locale\es\help\DCPlusPlus.chm"
+ 
+Delete "$INSTDIR\locale\et\help\DCPlusPlus.chm"
 
+Delete "$INSTDIR\locale\fi\help\DCPlusPlus.chm"
+ 
 Delete "$INSTDIR\locale\fr\help\DCPlusPlus.chm"
-
+ 
 Delete "$INSTDIR\locale\gl\help\DCPlusPlus.chm"
-
+ 
 Delete "$INSTDIR\locale\hu\help\DCPlusPlus.chm"
-
+ 
 Delete "$INSTDIR\locale\it\help\DCPlusPlus.chm"
-
+ 
+Delete "$INSTDIR\locale\ko\help\DCPlusPlus.chm"
+ 
+Delete "$INSTDIR\locale\lv\help\DCPlusPlus.chm"
+ 
+Delete "$INSTDIR\locale\ml\help\DCPlusPlus.chm"
+ 
 Delete "$INSTDIR\locale\nb\help\DCPlusPlus.chm"
-
+ 
+Delete "$INSTDIR\locale\nl\help\DCPlusPlus.chm"
+ 
 Delete "$INSTDIR\locale\pl\help\DCPlusPlus.chm"
-
+ 
 Delete "$INSTDIR\locale\pt_BR\help\DCPlusPlus.chm"
-
+ 
 Delete "$INSTDIR\locale\ro\help\DCPlusPlus.chm"
-
+ 
+Delete "$INSTDIR\locale\ru\help\DCPlusPlus.chm"
+ 
 Delete "$INSTDIR\locale\sr\help\DCPlusPlus.chm"
-
+ 
 Delete "$INSTDIR\locale\sv\help\DCPlusPlus.chm"
-
+ 
 Delete "$INSTDIR\locale\tr\help\DCPlusPlus.chm"
+ 
 
   ; Remove registry entries
   ;  dchub is likely only to be registered to us

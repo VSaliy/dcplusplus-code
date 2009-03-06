@@ -1,4 +1,4 @@
--- 0.75 --
+-- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
 * [L#306209] [ADC] Send only 5 results to passive users (thanks sulan)
 * [L#300993] Status message when a download fails from search (poy)
