@@ -1,3 +1,0 @@
-This is a watered-down version of boost 1.35, with the parts that DC++/dwt needs...
-Essentially, all libraries that require compiling or are not used have been
-removed.
