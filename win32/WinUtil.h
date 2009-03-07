@@ -75,15 +75,15 @@ public:
 		static const ComboBox::Seed comboBoxEdit;
 		static const GroupBox::Seed group;
 		static const Menu::Seed menu;
-		static const Table::Seed Table;
+		static const Table::Seed table;
 		static const TextBox::Seed textBox;
 		static const Tree::Seed treeView;
 
 		struct Dialog {
-			static const ComboBox::Seed ComboBox;
-			static const TextBox::Seed TextBox;
+			static const ComboBox::Seed comboBox;
+			static const TextBox::Seed textBox;
 			static const TextBox::Seed intTextBox;
-			static const Table::Seed Table;
+			static const Table::Seed table;
 			static const Table::Seed optionsTable;
 		};
 	};

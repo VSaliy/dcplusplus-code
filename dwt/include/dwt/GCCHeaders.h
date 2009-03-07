@@ -40,9 +40,6 @@
 
 	static const dwt::Platform CurrentPlatform = dwt::dwtDesktop;
 
-	#define SMARTWIN_WNDCLASSEX WNDCLASSEX
-	#define SmartWinRegisterClass RegisterClassEx
-
 	// Windows API files...
 	#include <errno.h>
 	#include <windows.h>
@@ -61,6 +58,8 @@
 	BOOL CommandBar_AddAdornments( HWND hwndCB, DWORD dwFlags, DWORD dwReserved );
 	void CommandBar_Destroy( HWND hwndCB );
 
+#ifndef BUTTON_IMAGELIST_ALIGN_CENTER
+
 	// mingw misses this functions
 	typedef struct
 	{
@@ -70,6 +69,7 @@
 	} BUTTON_IMAGELIST, * PBUTTON_IMAGELIST;
 
 	#define BUTTON_IMAGELIST_ALIGN_CENTER   4       // Doesn't draw text
+#endif
 
 	#define COLOR_MENUHILIGHT       29
 	#define COLOR_MENUBAR           30

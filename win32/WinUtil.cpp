@@ -71,14 +71,14 @@ const ComboBox::Seed WinUtil::Seeds::comboBoxStatic;
 const ComboBox::Seed WinUtil::Seeds::comboBoxEdit;
 const GroupBox::Seed WinUtil::Seeds::group;
 const Menu::Seed WinUtil::Seeds::menu;
-const Table::Seed WinUtil::Seeds::Table;
+const Table::Seed WinUtil::Seeds::table;
 const TextBox::Seed WinUtil::Seeds::textBox;
 const Tree::Seed WinUtil::Seeds::treeView;
 
-const ComboBox::Seed WinUtil::Seeds::Dialog::ComboBox;
-const TextBox::Seed WinUtil::Seeds::Dialog::TextBox;
+const ComboBox::Seed WinUtil::Seeds::Dialog::comboBox;
+const TextBox::Seed WinUtil::Seeds::Dialog::textBox;
 const TextBox::Seed WinUtil::Seeds::Dialog::intTextBox;
-const Table::Seed WinUtil::Seeds::Dialog::Table;
+const Table::Seed WinUtil::Seeds::Dialog::table;
 const Table::Seed WinUtil::Seeds::Dialog::optionsTable;
 
 void WinUtil::init() {
@@ -140,13 +140,13 @@ void WinUtil::init() {
 	ComboBox::Seed& xcomboBoxStatic = const_cast<ComboBox::Seed&>(Seeds::comboBoxStatic);
 	GroupBox::Seed& xgroup = const_cast<GroupBox::Seed&>(Seeds::group);
 	Menu::Seed& xmenu = const_cast<Menu::Seed&>(Seeds::menu);
-	Table::Seed& xTable = const_cast<Table::Seed&>(Seeds::Table);
+	Table::Seed& xTable = const_cast<Table::Seed&>(Seeds::table);
 	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&>(Seeds::textBox);
 	Tree::Seed& xtreeView =  const_cast<Tree::Seed&>(Seeds::treeView);
-	ComboBox::Seed& xdComboBox = const_cast<ComboBox::Seed&>(Seeds::Dialog::ComboBox);
-	TextBox::Seed& xdTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::TextBox);
+	ComboBox::Seed& xdComboBox = const_cast<ComboBox::Seed&>(Seeds::Dialog::comboBox);
+	TextBox::Seed& xdTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::textBox);
 	TextBox::Seed& xdintTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::intTextBox);
-	Table::Seed& xdTable = const_cast<Table::Seed&>(Seeds::Dialog::Table);
+	Table::Seed& xdTable = const_cast<Table::Seed&>(Seeds::Dialog::table);
 	Table::Seed& xdoptionsTable = const_cast<Table::Seed&>(Seeds::Dialog::optionsTable);
 
 	xbutton.font = font;

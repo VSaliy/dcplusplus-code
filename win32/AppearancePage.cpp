@@ -66,7 +66,7 @@ languages(0)
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Default away message")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
 
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
 		TextBoxPtr box=group->addChild(seed);
 		box->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
@@ -77,7 +77,7 @@ languages(0)
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Set timestamps")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);
 
-		TextBoxPtr box = group->addChild(WinUtil::Seeds::Dialog::TextBox);
+		TextBoxPtr box = group->addChild(WinUtil::Seeds::Dialog::textBox);
 		box->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);
 		items.push_back(Item(box, SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
 	}
@@ -87,7 +87,7 @@ languages(0)
 		grid->setWidget(group, 2, 0, 1, 2);
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
 
-		languages = group->addChild(WinUtil::Seeds::Dialog::ComboBox);
+		languages = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 		languages->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
 	}
 

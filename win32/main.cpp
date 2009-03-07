@@ -41,7 +41,7 @@ static void sendCmdLine(HWND hOther, const tstring& cmdLine) {
 }
 
 BOOL CALLBACK searchOtherInstance(HWND hWnd, LPARAM lParam) {
-	DWORD result;
+	ULONG_PTR result;
 	if(::SendMessageTimeout(hWnd, SingleInstance::WMU_WHERE_ARE_YOU, 0, 0, SMTO_BLOCK | SMTO_ABORTIFHUNG, 5000, &result) &&
 		result == SingleInstance::WMU_WHERE_ARE_YOU) {
 		// found it

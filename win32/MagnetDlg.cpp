@@ -68,7 +68,7 @@ bool MagnetDlg::handleInitDialog() {
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_READONLY;
 
 		cur->addChild(Label::Seed(T_("File Hash:")));

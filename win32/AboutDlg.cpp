@@ -87,7 +87,7 @@ bool AboutDlg::handleInitDialog() {
 		cur->addChild(ls);
 
 		gs.caption = T_("TTH");
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_READONLY;
 		seed.exStyle &= ~WS_EX_CLIENTEDGE;
 		seed.caption = WinUtil::tth;
@@ -96,7 +96,7 @@ bool AboutDlg::handleInitDialog() {
 
 	{
 		gs.caption = T_("Greetz and Contributors");
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style &= ~ES_AUTOHSCROLL;
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_READONLY;
 		seed.caption = Text::toT(thanks);

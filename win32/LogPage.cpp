@@ -63,7 +63,7 @@ oldSelection(-1)
 		cur->column(1).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Directory")))->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
-		dir = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		dir = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(dir, SettingsManager::LOG_DIRECTORY, PropPage::T_STR));
 		dir->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
 
@@ -80,10 +80,10 @@ oldSelection(-1)
 		cur->column(1).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Format")));
-		logFormat = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		logFormat = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 
 		cur->addChild(Label::Seed(T_("Filename")));
-		logFile = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		logFile = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 	}
 
 	PropPage::read(items);

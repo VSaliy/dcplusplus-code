@@ -89,13 +89,13 @@ grid(0)
 	grid->addChild(Label::Seed(T_("MiB")))->setHelpId(IDH_SETTINGS_ADVANCED3_MAX_FILELIST_SIZE);
 
 	grid->addChild(Label::Seed(T_("Bind address")))->setHelpId(IDH_SETTINGS_ADVANCED3_BIND_ADDRESS);
-	box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+	box = grid->addChild(WinUtil::Seeds::Dialog::textBox);
 	items.push_back(Item(box, SettingsManager::BIND_ADDRESS, PropPage::T_STR));
 	box->setHelpId(IDH_SETTINGS_ADVANCED3_BIND_ADDRESS);
 	grid->addChild(Label::Seed(tstring()));
 
 	grid->addChild(Label::Seed(T_("PID")))->setHelpId(IDH_SETTINGS_ADVANCED3_PRIVATE_ID);
-	box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+	box = grid->addChild(WinUtil::Seeds::Dialog::textBox);
 	items.push_back(Item(box, SettingsManager::PRIVATE_ID, PropPage::T_STR));
 	box->setHelpId(IDH_SETTINGS_ADVANCED3_PRIVATE_ID);
 	grid->addChild(Label::Seed(tstring()));

@@ -68,7 +68,7 @@ socksResolve(0)
 		nat->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_NAT);
 		connType->addChild(Label::Seed(T_("External / WAN IP")));
 		connType->setHelpId(IDH_SETTINGS_NETWORK_EXTERNAL_IP);
-		externalIP = connType->addChild(WinUtil::Seeds::Dialog::TextBox);
+		externalIP = connType->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR));
 		externalIP->setHelpId(IDH_SETTINGS_NETWORK_EXTERNAL_IP);
 		overrideIP = connType->addChild(CheckBox::Seed(T_("Don't allow hub/UPnP to override")));
@@ -108,7 +108,7 @@ socksResolve(0)
 		socks5->setHelpId(IDH_SETTINGS_NETWORK_SOCKS5);
 		cur->addChild(Label::Seed(T_("Socks IP")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);
 		cur->addChild(Label::Seed(T_("Port")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);
-		socksServer = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		socksServer = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(socksServer, SettingsManager::SOCKS_SERVER, PropPage::T_STR));
 		socksServer->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);
 		socksPort = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
@@ -116,10 +116,10 @@ socksResolve(0)
 		socksPort->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);
 		cur->addChild(Label::Seed(T_("Login")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);
 		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);
-		socksLogin = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		socksLogin = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(socksLogin, SettingsManager::SOCKS_USER, PropPage::T_STR));
 		socksLogin->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);
-		socksPass = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		socksPass = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(socksPass, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR));
 		socksPass->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);
 		socksResolve = cur->addChild(CheckBox::Seed(T_("Use SOCKS5 server to resolve host names")));

@@ -58,7 +58,7 @@ bool ADLSProperties::handleInitDialog() {
 
 	GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Search String")));
 	group->setHelpId(IDH_ADLSP_SEARCH_STRING);
-	searchString = group->addChild(WinUtil::Seeds::Dialog::TextBox);
+	searchString = group->addChild(WinUtil::Seeds::Dialog::textBox);
 	searchString->setText(Text::toT(search->searchString));
 	
 	group = grid->addChild(GroupBox::Seed(T_("Source Type")));
@@ -96,7 +96,7 @@ bool ADLSProperties::handleInitDialog() {
 
 	group = grid->addChild(GroupBox::Seed(T_("Destination Directory")));
 	group->setHelpId(IDH_ADLSP_DEST_DIR);		
-	destDir = group->addChild(WinUtil::Seeds::Dialog::TextBox);
+	destDir = group->addChild(WinUtil::Seeds::Dialog::textBox);
 	destDir->setText(Text::toT(search->destDir));
 
 	{
