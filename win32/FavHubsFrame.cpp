@@ -52,7 +52,7 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		Table::Seed cs = WinUtil::Seeds::Table;
+		Table::Seed cs = WinUtil::Seeds::table;
 		cs.style |= LVS_NOSORTHEADER;
 		cs.lvStyle |= LVS_EX_CHECKBOXES;
 		hubs = grid->addChild(cs);

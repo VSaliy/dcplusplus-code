@@ -94,7 +94,7 @@ oldSelection(-1)
 		beepFileLabel = cur->addChild(Label::Seed(T_("Notification sound")));
 		beepFileLabel->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);
 
-		beepFile = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		beepFile = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		beepFile->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);
 
 		browse = cur->addChild(Button::Seed(T_("&Browse...")));

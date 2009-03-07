@@ -63,7 +63,7 @@ remove(0)
 		cur->row(0).align = GridInfo::STRETCH;
 		cur->setSpacing(6);
 
-		Table::Seed seed = WinUtil::Seeds::Dialog::Table;
+		Table::Seed seed = WinUtil::Seeds::Dialog::table;
 		seed.exStyle |= WS_EX_ACCEPTFILES;
 		directories = cur->addChild(seed);
 

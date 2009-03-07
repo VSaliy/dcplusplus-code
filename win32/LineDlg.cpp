@@ -45,7 +45,7 @@ bool LineDlg::initDialog() {
 	grid = addChild(Grid::Seed(1, 2));
 	grid->column(0).mode = GridInfo::FILL;
 
-	line = grid->addChild(GroupBox::Seed(desc))->addChild(WinUtil::Seeds::Dialog::TextBox);
+	line = grid->addChild(GroupBox::Seed(desc))->addChild(WinUtil::Seeds::Dialog::textBox);
 	if(password) {
 		line->setPassword();
 	}

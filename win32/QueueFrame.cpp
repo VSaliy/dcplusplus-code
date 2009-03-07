@@ -741,8 +741,8 @@ void QueueFrame::handlePriority(QueueItem::Priority p) {
 	if(usingDirMenu) {
 		setPriority(dirs->getSelected(), p);
 	} else {
-		std::vector<size_t> selected = files->getSelection();
-		for(std::vector<size_t>::iterator i = selected.begin(); i != selected.end(); ++i) {
+		std::vector<unsigned> selected = files->getSelection();
+		for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
 			QueueManager::getInstance()->setPriority(files->getData(*i)->getTarget(), p);
 		}
 	}
@@ -767,8 +767,8 @@ void QueueFrame::removeDir(HTREEITEM ht) {
  * @param inc True = increase, False = decrease
  */
 void QueueFrame::changePriority(bool inc){
-	std::vector<size_t> selected = files->getSelection();
-	for(std::vector<size_t>::iterator i = selected.begin(); i != selected.end(); ++i) {
+	std::vector<unsigned> selected = files->getSelection();
+	for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
 		QueueItemInfo* ii = files->getData(*i);
 		QueueItem::Priority p = ii->getPriority();
 

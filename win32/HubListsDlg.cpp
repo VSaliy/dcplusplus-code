@@ -53,7 +53,7 @@ bool HubListsDlg::handleInitDialog() {
 	grid->row(1).mode = GridInfo::FILL;
 	grid->row(1).align = GridInfo::STRETCH;
 
-	editBox = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+	editBox = grid->addChild(WinUtil::Seeds::Dialog::textBox);
 	editBox->setHelpId(IDH_PUBLIC_HUB_LISTS_EDIT_BOX);
 
 	{
@@ -63,7 +63,7 @@ bool HubListsDlg::handleInitDialog() {
 	}
 
 	{
-		Table::Seed seed = WinUtil::Seeds::Dialog::Table;
+		Table::Seed seed = WinUtil::Seeds::Dialog::table;
 		seed.style |= LVS_NOCOLUMNHEADER;
 		hubLists = grid->addChild(seed);
 		hubLists->setHelpId(IDH_PUBLIC_HUB_LISTS_LIST);

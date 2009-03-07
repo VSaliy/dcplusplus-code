@@ -126,22 +126,22 @@ bool CommandDlg::handleInitDialog() {
 		cur->column(0).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Name")))->setHelpId(IDH_USER_COMMAND_NAME);
-		nameBox = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		nameBox = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		nameBox->setHelpId(IDH_USER_COMMAND_NAME);
 
 		cur->addChild(Label::Seed(T_("Command")))->setHelpId(IDH_USER_COMMAND_COMMAND);
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::TextBox;
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
 		commandBox = cur->addChild(seed);
 		commandBox->setHelpId(IDH_USER_COMMAND_COMMAND);
 		commandBox->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
 
 		cur->addChild(Label::Seed(T_("Hub IP / DNS (empty = all, 'op' = where operator)")))->setHelpId(IDH_USER_COMMAND_HUB);
-		hubBox = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		hubBox = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		hubBox->setHelpId(IDH_USER_COMMAND_HUB);
 
 		cur->addChild(Label::Seed(T_("To")))->setHelpId(IDH_USER_COMMAND_NICK);
-		nick = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		nick->setHelpId(IDH_USER_COMMAND_NICK);
 		nick->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
 
@@ -152,7 +152,7 @@ bool CommandDlg::handleInitDialog() {
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Text sent to hub")));
 		grid->setWidget(group, 3, 0, 1, 3);
-		result = group->addChild(WinUtil::Seeds::Dialog::TextBox);
+		result = group->addChild(WinUtil::Seeds::Dialog::textBox);
 	}
 
 	openHelp = grid->addChild(CheckBox::Seed(T_("Always open help file with this dialog")));

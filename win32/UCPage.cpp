@@ -52,7 +52,7 @@ commands(0)
 	grid->row(0).align = GridInfo::STRETCH;
 	grid->setHelpId(IDH_SETTINGS_UC_LIST);	
 
-	commands = grid->addChild(WinUtil::Seeds::Dialog::Table);
+	commands = grid->addChild(WinUtil::Seeds::Dialog::table);
 	grid->setWidget(commands, 0, 0, 1, 5);
 
 	ButtonPtr button = grid->addChild(Button::Seed(T_("&Add")));

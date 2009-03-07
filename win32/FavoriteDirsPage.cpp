@@ -52,7 +52,7 @@ remove(0)
 	grid->row(0).mode = dwt::GridInfo::FILL;
 	grid->row(0).align = dwt::GridInfo::STRETCH;
 
-	directories = grid->addChild(WinUtil::Seeds::Dialog::Table);
+	directories = grid->addChild(WinUtil::Seeds::Dialog::table);
 	grid->setWidget(directories, 0, 0, 1, 3);
 
 	rename = grid->addChild(Button::Seed(T_("Re&name")));

@@ -49,7 +49,7 @@ grid(0)
 		cur->setWidget(label, 0, 0, 1, 2);
 		label->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
 
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(box, SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
 
@@ -61,7 +61,7 @@ grid(0)
 		cur->setWidget(label, 2, 0, 1, 2);
 		label->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
 
-		box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(box, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
 
@@ -114,7 +114,7 @@ grid(0)
 		cur->addChild(Grid::Seed(1, 1))->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
 
 		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(box, SettingsManager::HTTP_PROXY, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 	}

@@ -86,7 +86,7 @@ public:
 	}
 private:
 
-	static bool TypedTreeDispatcher(const MSG& msg, HRESULT& res) {
+	static bool TypedTreeDispatcher(const MSG& msg, LRESULT& res) {
 		NMTVDISPINFO * nm = reinterpret_cast< NMTVDISPINFO * >( msg.lParam );
 		if(nm->item.mask & TVIF_TEXT) {
 			ContentType* content = reinterpret_cast<ContentType*>(nm->item.lParam);

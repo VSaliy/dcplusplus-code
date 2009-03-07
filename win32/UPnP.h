@@ -19,6 +19,11 @@
 #ifndef DCPLUSPLUS_WIN32_UPNP_H
 #define DCPLUSPLUS_WIN32_UPNP_H
 
+// for mingw64
+#ifndef interface
+#define interface struct
+#endif
+
 #include <natupnp.h>
 
 class UPnP

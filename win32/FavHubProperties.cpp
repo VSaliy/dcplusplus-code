@@ -64,18 +64,18 @@ bool FavHubProperties::handleInitDialog() {
 		cur->column(1).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Name")))->setHelpId(IDH_FAVORITE_HUB_NAME);
-		name = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		name = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		name->setText(Text::toT(entry->getName()));
 		name->setSelection();
 		name->setHelpId(IDH_FAVORITE_HUB_NAME);
 
 		cur->addChild(Label::Seed(T_("Address")))->setHelpId(IDH_FAVORITE_HUB_ADDRESS);
-		address = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		address = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		address->setText(Text::toT(entry->getServer()));
 		address->setHelpId(IDH_FAVORITE_HUB_ADDRESS);
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_DESC);
-		description = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		description = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		description->setText(Text::toT(entry->getDescription()));
 		description->setHelpId(IDH_FAVORITE_HUB_DESC);
 	}
@@ -89,21 +89,21 @@ bool FavHubProperties::handleInitDialog() {
 		cur->column(1).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
-		nick = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		nick->setTextLimit(35);
 		nick->setText(Text::toT(entry->getNick(false)));
 		nick->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, nick));
 		nick->setHelpId(IDH_FAVORITE_HUB_NICK);
 
 		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
-		password = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		password = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		password->setPassword();
 		password->setText(Text::toT(entry->getPassword()));
 		password->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, password));
 		password->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
-		userDescription = cur->addChild(WinUtil::Seeds::Dialog::TextBox);
+		userDescription = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		userDescription->setTextLimit(35);
 		userDescription->setText(Text::toT(entry->getUserDescription()));
 		userDescription->setHelpId(IDH_FAVORITE_HUB_USER_DESC);

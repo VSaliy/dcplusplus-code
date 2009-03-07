@@ -51,7 +51,7 @@ items(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		Table::Seed cs = WinUtil::Seeds::Table;
+		Table::Seed cs = WinUtil::Seeds::table;
 		cs.lvStyle |= LVS_EX_CHECKBOXES;
 		items = grid->addChild(cs);
 		grid->setWidget(items, 0, 0, 1, 6);

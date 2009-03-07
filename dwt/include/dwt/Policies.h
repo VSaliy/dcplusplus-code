@@ -243,7 +243,7 @@ protected:
 
 	virtual void setHandle(HWND hWnd) {
 		Normal::setHandle(hWnd);
-		oldProc = reinterpret_cast< WNDPROC >( ::SetWindowLongPtr( hWnd, GWL_WNDPROC, ( LONG_PTR ) &MessageMap<Subclassed>::wndProc ) );
+		oldProc = reinterpret_cast< WNDPROC >( ::SetWindowLongPtr( hWnd, GWLP_WNDPROC, ( LONG_PTR ) &MessageMap<Subclassed>::wndProc ) );
 	}
 	using Widget::attach;
 private:

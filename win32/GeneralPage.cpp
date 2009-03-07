@@ -43,17 +43,17 @@ connections(0)
 		grid->column(1).mode = GridInfo::FILL;
 
 		grid->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_SETTINGS_GENERAL_NICK);
-		nick = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+		nick = grid->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(nick, SettingsManager::NICK, PropPage::T_STR));
 		nick->setHelpId(IDH_SETTINGS_GENERAL_NICK);
 
 		grid->addChild(Label::Seed(T_("E-Mail")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
-		TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+		TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(box, SettingsManager::EMAIL, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
 
 		grid->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
-		box = grid->addChild(WinUtil::Seeds::Dialog::TextBox);
+		box = grid->addChild(WinUtil::Seeds::Dialog::textBox);
 		box->setTextLimit(35);
 		items.push_back(Item(box, SettingsManager::DESCRIPTION, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
@@ -62,7 +62,7 @@ connections(0)
 
 		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
 
-		connections = cur->addChild(WinUtil::Seeds::Dialog::ComboBox);
+		connections = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
 		connections->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
 		cur->addChild(Label::Seed(T_("MiBits/s")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);

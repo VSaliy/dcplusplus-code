@@ -104,6 +104,7 @@ typedef unsigned __int64 uint64_t;
 #include <sys/types.h>
 #include <time.h>
 #include <locale.h>
+#include <stdint.h>
 
 #include <algorithm>
 #include <vector>

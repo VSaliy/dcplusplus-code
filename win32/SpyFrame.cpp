@@ -47,7 +47,7 @@ SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
 	memset(perSecond, 0, sizeof(perSecond));
 
 	{
-		Table::Seed cs = WinUtil::Seeds::Table;
+		Table::Seed cs = WinUtil::Seeds::table;
 		cs.style |= LVS_SINGLESEL;
 		searches = addChild(cs);
 		addWidget(searches);
@@ -99,7 +99,7 @@ void SpyFrame::initSecond() {
 
 bool SpyFrame::eachSecond() {
 	size_t tot = std::accumulate(perSecond, perSecond + AVG_TIME, 0u);
-	size_t t = std::max(1u, std::min(cur, AVG_TIME));
+	size_t t = std::max(static_cast<size_t>(1), std::min(cur, AVG_TIME));
 
 	float x = static_cast<float>(tot)/t;
 
