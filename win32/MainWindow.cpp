@@ -194,7 +194,8 @@ void MainWindow::initWindow() {
 	if (ResourceManager::getInstance()->isRTL())
 		cs.exStyle |= WS_EX_RTLREADING;
 
-	cs.icon = dwt::IconPtr(new dwt::Icon(IDR_DCPP));
+	cs.icon = dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(32, 32)));
+	cs.smallIcon = dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16)));
 	cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 	create(cs);
 
