@@ -15,8 +15,8 @@ Windows Server and Vista. To take advantage of UPnP, you must have support
 enabled in Windows and UPnP capable hardware (typically a broadband
 router using <acronym title="Network Address Translation">NAT</acronym>
 traversal). If you meet both of these requirements, setting up DC++ is
-normally a simple process. <span style="font-weight: bold;">UPnP
-support introduced in DC++ 0.4033</span>. For using DC++ with UPnP 
+normally a simple process. <b>UPnP
+support introduced in DC++ 0.4033</b>. For using DC++ with UPnP 
 <b>under Vista you need version 0.695 or newer</b>.</p>
 <p style="text-decoration: underline">To enable UPnP in DC++:</p>
 <ul>
@@ -67,15 +67,14 @@ the Internet Gateway category.</li>
   <li>Reboot both your PC and your UPnP device (router).</li>
   <li>If you do not see your router as a network device in "My Network
 Places" after several minutes, UPnPTest will fail to create an UPnP
-mapping to the router, resulting in something looking like: <span
- style="font-style: italic;">INFO: Adapter #0 - 192.168.8.17 - UPnP
-Disabled</span><i>.</i> Make sure the windows firewall or your third
+mapping to the router, resulting in something looking like: <i>INFO: Adapter #0 - 192.168.8.17 - UPnP
+Disabled</i>. Make sure the windows firewall or your third
 party firewall is not blocking UPnP packets. To do this, go to Control
 Panels -&gt; Windows Firewall -&gt; Advanced Tab -&gt; Security Logging
--&gt; Settings. Enable <span style="font-style: italic;">Log Dropped
-Packets</span>. The log file is located at: C:\WINDOWS\pfirewall.log.
+-&gt; Settings. Enable <i>Log Dropped
+Packets</i>. The log file is located at: C:\WINDOWS\pfirewall.log.
 If you see any packets being dropped with the port 1900 or 2869, the
-the firewall is misconfigured and <span style="font-weight: bold;">is</span>
+the firewall is misconfigured and <b>is</b>
 preventing UPnP from working. In case of a third party firewall checking 
 this setting varies widely between firewalls. Most decent firewalls have
 some sort of logging function, where one can see what the firewall is blocking.
