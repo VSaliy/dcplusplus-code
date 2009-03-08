@@ -83,10 +83,11 @@ def gen_CHM(target, source, env):
 	else:
 		# translate translatable source files, copy the others
 		po4a_path = Dir('#/po4a').abspath + '/'
+		cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-translate" -f xhtml -o foldattributes -M utf-8 -L utf-8 -A utf-8 -p "' + nixify(str(po_node)) + '" -k 0 -a help/addendum.txt'
 		for node in source:
 			filename = os.path.basename(node.path)
 			if filename[-5:] == '.html' and filename != 'changelog.html' and filename != 'compile.html' and filename != 'fdl.html':
-				env.Execute(Action('perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-translate" -f xhtml -M utf-8 -L utf-8 -A utf-8 -p "' + nixify(str(po_node)) + '" -k 0 -m "' + nixify(str(node)) + '" -l "' + nixify(build_path) + filename + '" -a help/addendum.txt', 'Translating ' + nixify(str(node))))
+				env.Execute(Action(cmd + ' -m "' + nixify(str(node)) + '" -l "' + nixify(build_path) + filename + '"', 'Translating ' + nixify(str(node))))
 			else:
 				env.Execute(Copy(build_dir, node))
 
@@ -133,7 +134,7 @@ if env['mode'] == 'release' or env['i18n']:
 		# create the translation template
 		def gen_pot(target, source, env):
 			po4a_path = Dir('#/po4a').abspath + '/'
-			cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-gettextize" -f xhtml -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -M utf-8 -p "' + nixify(str(target[0])) + '"'
+			cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-gettextize" -f xhtml -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -o foldattributes -M utf-8 -p "' + nixify(str(target[0])) + '"'
 			for node in source:
 				cmd += ' -m "' + nixify(str(node)) + '"'
 			return env.Execute(cmd)
