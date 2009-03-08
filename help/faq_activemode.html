@@ -57,18 +57,16 @@ in the user manual came with your device.</li>
 or different ones. Select one or two numbers between 1024 -
 65535, they should mostly all be free. Make sure both UDP and TCP is
 being forwarded on the port(s) you chose. </li>
-  <li>The IP that you are forwarding to should be the <span
- style="font-weight: bold;">internal</span> IP address of your computer running DC++.
+  <li>The IP that you are forwarding to should be the <b>internal</b> IP address of your computer running DC++.
  It usually begins with <a href="non-routable.html">"192.168",
 "172.16." or "10.x."</a>. To see your internal IP address go to the command prompt and type:
-<span style="font-style: italic;">ipconfig</span> (Start Menu -&gt; Run
--&gt; <span style="font-style: italic;">cmd /k ipconfig</span>)</li>
+<i>ipconfig</i> (Start Menu -&gt; Run
+-&gt; <i>cmd /k ipconfig</i>)</li>
   <li>When you have mapped the port(s) on the router, open up DC++ and
 go to <a href="settings_connection.html">Connection Settings</a>. 
 Select <b>Firewall with manual port forwarding</b>. In the port fields, enter the port
 number(s) that you forwarded on the router. </li>
-  <li>In the External / WAN IP field, you need to enter the <span
- style="font-weight: bold;">external</span> IP address of your router.
+  <li>In the External / WAN IP field, you need to enter the <b>external</b> IP address of your router.
 Your external IP can be checked on 
 <a href="http://www.dslreports.com/ip" target="_blank" class="external">DSLReport's
 IP page</a> or at <a
@@ -84,10 +82,8 @@ IP page</a> or at <a
  You can find some more how-to's for popular router models at the <a href="http://www.dslreports.com/faq/dc/3.2_Hardware_Firewalls___Routers" target="_blank" class="external">DSLReport FAQ page</a> as well.
 </p>
 
-<p>If active mode is working for a while, but <span style="text-decoration: underline">the next time when you use DC++</span>, you only get <i>Connection Timeout</i>s or no
-results when searching, your IP (either <span
- style="font-weight: bold;">external</span> or <span
- style="font-weight: bold;">internal</span>) is likely to have changed. Of course you can update your IP settings manually each time 
+<p>If active mode is working for a while, but <u>the next time when you use DC++</u>, you only get <i>Connection Timeout</i>s or no
+results when searching, your IP (either <b>external</b> or <b>internal</b>) is likely to have changed. Of course you can update your IP settings manually each time 
  they changed, but there are better solutions to avoid constant IP address updates:
 </p> 
 <ul>
@@ -106,21 +102,21 @@ Another option to ensure you'll always have the same internal IP address is to s
 </ul>    
 <h2>Windows XP?</h2>
 <ul>
-  <li><span style="text-decoration: underline;">Service Pack 1</span>:
+  <li><u>Service Pack 1</u>:
 Its strongly recommended that you do not use the SP1 firewall and
 instead use a third party one.
 Make sure to disable the XP firewall if you do choose this option. If
 you really must use it, then check out <a
  href="http://www.microsoft.com/security/protect/ports.asp"
  target="_blank" class="external"> this guide</a>  on how to set it up.</li>
-  <li><span style="text-decoration: underline;">Service Pack 2 or 3</span>:
+  <li><u>Service Pack 2 or 3</u>:
 The firewall in SP2 & SP3 is a lot more robust than its original incarnation.
 While it does not offer a plethora of options, its suitable to use by
 itself for protection. Its wise to enable logging of packets that the
 firewall drops for troubleshooting applications. To do this, go to
 Control Panels -&gt; Windows Firewall -&gt; Advanced Tab -&gt; Security
-Logging -&gt; Settings. Enable <span style="font-style: italic;">Log
-Dropped Packets</span>. The log file is located at:
+Logging -&gt; Settings. Enable <i>Log
+Dropped Packets</i>. The log file is located at:
 C:\WINDOWS\pfirewall.log. Here's a complete guide <a
  href="http://www.microsoft.com/technet/security/smallbusiness/prodtech/windowsxp/cfgfwall.mspx"
  target="_blank" class="external">How to Configure Windows Firewall on Windows XP SP2 & SP3</a>.</li>
