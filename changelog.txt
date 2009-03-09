@@ -1,3 +1,4 @@
+* Better handle of filelist items in Finished windows (emtee, poy)
 * Help updates (emtee)
 * [L#263390] Fix main icon format (poy)
 

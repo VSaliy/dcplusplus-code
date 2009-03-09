@@ -1,4 +1,4 @@
-/*
+/*	
 * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
 *
 * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 #include "TypedTable.h"
 #include "TextFrame.h"
 #include "HoldRedraw.h"
+#include "DirectoryListingFrame.h"
 
 #include <dcpp/File.h>
 #include <dcpp/FinishedItem.h>
@@ -30,6 +31,9 @@
 #include <dcpp/TimerManager.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/LogManager.h>
+#include <dcpp/DirectoryListing.h>
+#include <dcpp/ShareManager.h>
+#include <dcpp/ClientManager.h>
 
 template<class T, bool in_UL>
 class FinishedFrameBase :
@@ -255,10 +259,6 @@ private:
 			}
 		}
 
-		void openFile() {
-			WinUtil::openFile(Text::toT(file));
-		}
-
 		void openFolder() {
 			WinUtil::openFolder(Text::toT(file));
 		}
@@ -364,12 +364,14 @@ private:
 		UserList users;
 	};
 
-	struct FileExistenceChecker {
-		FileExistenceChecker() : allFilesExist(true) { }
+	struct FileChecker {
+		FileChecker() : allFilesExist(true), isBz2(false) { }
 		void operator()(FileInfo* data) {
 			allFilesExist &= File::getSize(data->file) != -1;
-		}
+ 			isBz2 |= Util::getFileExt(data->file) == ".bz2";
+ 		}
 		bool allFilesExist;
+		bool isBz2;
 	};
 
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt) {
@@ -379,12 +381,12 @@ private:
 				pt = files->getContextMenuPos();
 			}
 
-			bool allFilesExist = files->forEachSelectedT(FileExistenceChecker()).allFilesExist;
+			FileChecker checker = files->forEachSelectedT(FileChecker());
 
 			typename ThisType::ShellMenuPtr menu = filesWindow->addChild(ShellMenu::Seed());
 
-			menu->appendItem(T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), allFilesExist);
-			menu->appendItem(T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), allFilesExist, true);
+			menu->appendItem(T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), checker.allFilesExist && !checker.isBz2);
+			menu->appendItem(T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), checker.allFilesExist, true);
 			menu->appendItem(T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
 			menu->appendSeparator();
 			menu->appendItem(T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveFiles, this));
@@ -432,7 +434,24 @@ private:
 	}
 
 	void handleOpenFile() {
-		files->forEachSelected(&FileInfo::openFile);
+		int i = -1;
+		UserPtr u;
+		string ownList = in_UL ? ShareManager::getInstance()->getOwnListFile() : Util::emptyString;
+		string file;
+		while((i = files->getNext(i, LVNI_SELECTED)) != -1) {
+			file = files->getData(i)->file;
+
+			if (in_UL && file == ownList) {
+				DirectoryListingFrame::openWindow(this->getParent(), Text::toT(ownList), Text::toT(Util::emptyString), ClientManager::getInstance()->getMe(), 0);
+				continue;
+			}
+
+			u = DirectoryListing::getUserFromFilename(file);
+			if (u)
+				DirectoryListingFrame::openWindow(this->getParent(), Text::toT(file), Text::toT(Util::emptyString), u, 0);
+			else
+				WinUtil::openFile(Text::toT(file));
+		}
 	}
 
 	void handleOpenFolder() {
