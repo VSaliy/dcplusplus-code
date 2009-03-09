@@ -29,7 +29,6 @@ msgstr "Közös chat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:13
-#, fuzzy
 msgid ""
 "Joins &lt;hub-ip&gt;. See also <a po4a-id=0>Open new window when using /"
 "join</a>."
@@ -63,7 +62,6 @@ msgstr "Ki-be kapcsolja a felhasználó lista megjelenítését az aktuális hub
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:26
-#, fuzzy
 msgid ""
 "Displays the IP and port that DC++ will tell users to connect to. If either "
 "the IP or port is not correct, you will be unable to download from some "
@@ -77,7 +75,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:32
-#, fuzzy
 msgid ""
 "Adds the current hub (along with your nickname and password, if used) to the "
 "list of <a po4a-id=0>Favorite Hubs</a>."
@@ -87,7 +84,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:36
-#, fuzzy
 msgid ""
 "Removes the current hub from the list of <a po4a-id=0>Favorite Hubs</a>."
 msgstr ""
@@ -129,7 +125,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:52
-#, fuzzy
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr ""
 "Az aktuális felhasználót a <a po4a-id=0>Kedvenc Felhasználók</a> listájához "
@@ -175,7 +170,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:71
-#, fuzzy
 msgid ""
 "Opens a new search window with the specified search string.  It does <u>not</"
 "u> automatically send the search."
@@ -209,7 +203,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:83
-#, fuzzy
 msgid ""
 "Sets Away status. New private message windows will be responded to, once, "
 "with the message you specified, or the default away message configured in "
@@ -296,7 +289,6 @@ msgstr "Segítség fájl szerzői és licensz"
 
 #. type: Content of: <html><body><p>
 #: help/credits.html:15
-#, fuzzy
 msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the GNU Free Documentation License, Version 1.2 or any later "
@@ -399,7 +391,6 @@ msgstr "3. Írd be : <i>patch -[parameter] &lt; my-patch.diff</i>"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:23
-#, fuzzy
 msgid "4. The file <i>my-patch.diff</i> is the actual patch you want to apply."
 msgstr "4. A <i>my-patch.diff</i> fájl is a folt amelyet hozzá kívánsz adni."
 
@@ -424,7 +415,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/dev_applypatch.html:31 help/dev_createpatch.html:44
-#, fuzzy
 msgid ""
 "Parameters and more information on how to use GNU Diff can be found in the "
 "documentation for GNU Diff which should have come included with GNU Diff. "
@@ -608,7 +598,6 @@ msgstr "Min. Fájlméret"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:26 help/window_adlsearch.html:40
-#, fuzzy
 msgid ""
 "Sets the lower limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
@@ -623,7 +612,6 @@ msgstr "Max. Fájlméret"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:28 help/window_adlsearch.html:42
-#, fuzzy
 msgid ""
 "Sets the upper limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
@@ -674,7 +662,6 @@ msgstr "Találatok letöltése"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:38
-#, fuzzy
 msgid ""
 "When checked, matches to this search will be put into your <a po4a-"
 "id=0>Download Queue</a>."
@@ -1047,7 +1034,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:42
-#, fuzzy
 msgid ""
 "Hub ip as typed when connecting (empty = all NMDC hubs, \"op\" = NMDC hubs "
 "where you're an operator, \"adc://\" = all ADC hubs, \"adc://op\" = ADC hubs "
@@ -1090,7 +1076,6 @@ msgstr "Változók"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:53
-#, fuzzy
 msgid ""
 "In the parameters, you can use %[<b>xxx</b>] variables and <a po4a-id=0>date/"
 "time specifiers</a> (%Y, %m, ...). The following variables are also "
@@ -1137,14 +1122,12 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/dialog_user_command.html:65
-#, fuzzy
 msgid "%[line:<i>reason</i>]: Opens up a window asking for \"<i>reason</i>\""
 msgstr ""
 "%[line:<i>kérdés</i>]: Megnyit egy felugró ablakot a \"<i>kérdéssel</i>\""
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:68
-#, fuzzy
 msgid ""
 "In addition to these variables, all of the ADC INF flags are available, with "
 "the following prefixes: <b>my</b>, <b>user</b>, and <b>hub</b>. Some may "
@@ -1287,7 +1270,6 @@ msgstr "Aktív mód beállítása"
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:10
-#, fuzzy
 msgid ""
 "For DC++ to work properly in active mode, it requires access on <acronym "
 "po4a-id=0>TCP</acronym> and <acronym po4a-id=1>UDP</acronym> listening "
@@ -1305,7 +1287,6 @@ msgstr "Ha NEM router mögött vagy"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:18 help/faq_upnp.html:24
-#, fuzzy
 msgid ""
 "Click on File menu and then Settings. Click on <a po4a-id=0>Connection "
 "Settings</a>."
@@ -1344,7 +1325,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:30
-#, fuzzy
 msgid ""
 "You may need to allow DC++ in your <a po4a-id=0>software firewall</a>. "
 "Consult its documentation on how to do this."
@@ -1355,7 +1335,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:33
-#, fuzzy
 msgid ""
 "Test active mode by joining several hubs and doing a search for a common "
 "term. You should get results back. If not, then you are likely behind a "
@@ -1374,7 +1353,6 @@ msgstr "Ha router mögött vagy"
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:39
-#, fuzzy
 msgid ""
 "You can simplify the process of setting up active mode if your router and "
 "operating system is <acronym po4a-id=0>UPnP </acronym> compatible (UPnP is "
@@ -1394,7 +1372,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:46
-#, fuzzy
 msgid ""
 "The second option for using active mode behind a router or a gateway is to "
 "<i>set up port forwarding manually</i>.  For an in-depth, but still easy to "
@@ -1413,7 +1390,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:51
-#, fuzzy
 msgid ""
 "First you need to set up the router to forward the connections to the "
 "computer with DC++. This is could be called Port mapping, port redirecting, "
@@ -1443,7 +1419,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:60
-#, fuzzy
 msgid ""
 "The IP that you are forwarding to should be the <b>internal</b> IP address "
 "of your computer running DC++.  It usually begins with <a po4a-id=0>\"192.168"
@@ -1459,7 +1434,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:65
-#, fuzzy
 msgid ""
 "When you have mapped the port(s) on the router, open up DC++ and go to <a "
 "po4a-id=0>Connection Settings</a>.  Select <b>Firewall with manual port "
@@ -1473,7 +1447,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:69
-#, fuzzy
 msgid ""
 "In the External / WAN IP field, you need to enter the <b>external</b> IP "
 "address of your router.  Your external IP can be checked on <a po4a-"
@@ -1485,7 +1458,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:74
-#, fuzzy
 msgid ""
 "Active mode should now be working. For checking or troubleshooting if you "
 "have properly forwarded the port(s) to DC++, use <a po4a-id=0>www."
@@ -1508,7 +1480,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:78
-#, fuzzy
 msgid ""
 "You may find detailed how-to guides with screen shots for various router "
 "models at <a po4a-id=0>www.portforward.com</a>. There is a huge list of "
@@ -1529,7 +1500,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:85
-#, fuzzy
 msgid ""
 "If active mode is working for a while, but <u>the next time when you use DC+"
 "+</u>, you only get <i>Connection Timeout</i>s or no results when searching, "
@@ -1547,7 +1517,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:91
-#, fuzzy
 msgid ""
 "If you find the external IP is constantly changing, you can sign up to a "
 "free dynamic DNS service such as <a po4a-id=0>No-IP</a> , <a po4a-"
@@ -1577,7 +1546,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:99
-#, fuzzy
 msgid ""
 "If you find that your internal IP changes when you restart your computer "
 "then your operating system is obtaining an IP address from your router at "
@@ -1600,7 +1568,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:100
-#, fuzzy
 msgid ""
 "Another option to ensure you'll always have the same internal IP address is "
 "to set up static IP address for your computer. Here's a <a po4a-id=0>FAQ</a> "
@@ -1618,7 +1585,6 @@ msgstr "Windows XP?"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:105
-#, fuzzy
 msgid ""
 "<u>Service Pack 1</u>: Its strongly recommended that you do not use the SP1 "
 "firewall and instead use a third party one.  Make sure to disable the XP "
@@ -1633,7 +1599,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:112
-#, fuzzy
 msgid ""
 "<u>Service Pack 2 or 3</u>: The firewall in SP2 & SP3 is a lot more robust "
 "than its original incarnation.  While it does not offer a plethora of "
@@ -1716,7 +1681,6 @@ msgstr "Hogyan telepítsem a DC++-t?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:11
-#, fuzzy
 msgid ""
 "Just run the installer and fire up DC++, then enter the settings to set it "
 "up according to your preferences (most important is <a po4a-id=0>nick</a>, "
@@ -1761,7 +1725,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:19
-#, fuzzy
 msgid ""
 "If you didn't use the installer: You can delete your DC++ folder, but be "
 "aware that dchub://, adc:// and magnet: links will remain in the registry "
@@ -2361,7 +2324,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:17
-#, fuzzy
 msgid ""
 "If you are in passive connection mode some hubs may won't allow you to "
 "search as it stresses the hub a lot. Try to set up active mode following the "
@@ -2384,7 +2346,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:24
-#, fuzzy
 msgid ""
 "Some hubs have predefined search interval rule to avoid hub overloading with "
 "passive searches. It means you have to wait some time before you can start a "
@@ -2408,7 +2369,6 @@ msgstr "Ha nincs keresési eredmény egyetlen hubtól sem"
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:35
-#, fuzzy
 msgid ""
 "If you use one of the active connection modes, enter your external <acronym "
 "po4a-id=0>IP</acronym> address to the <i>External/WAN IP</i> field in the <a "
@@ -2422,7 +2382,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:41
-#, fuzzy
 msgid ""
 "Check your router/gateway/firewall configuration. You need to make sure it's "
 "allowing or forwarding incoming connections on the port specified in the "
@@ -2440,7 +2399,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:48
-#, fuzzy
 msgid ""
 "Your school or work might be blocking DC traffic. Read the FAQ on types of "
 "blocks, and what you <a po4a-id=0>might be able to do about it</a>."
@@ -2460,7 +2418,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:54
-#, fuzzy
 msgid ""
 "If you still can't search (in passive mode) then probably your DC++ blocked "
 "by a software firewall. Please follow the <a po4a-id=0>Firewall settings "
@@ -2472,7 +2429,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:58
-#, fuzzy
 msgid ""
 "An anti-flood protector software / network device can (partially)  block "
 "your searches as well. You can suspect that you have a problem of this kind "
@@ -2497,7 +2453,6 @@ msgstr "Jelmagyarázat"
 
 #. type: Content of: <html><body>
 #: help/faq_plusplus_tag.html:13
-#, fuzzy
 msgid ""
 "The following information appears in the <a po4a-id=0>Tag column</a> for "
 "every user in the user list of the <a po4a-id=1>Hub window</a>: &lt;++ V:x,M:"
@@ -2700,7 +2655,6 @@ msgstr "A fülek fogd és vidd módszerrel bármilyen sorrendben átrendezetőek
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_secret.html:20
-#, fuzzy
 msgid ""
 "You can see who wants to download from you and what they want to download by "
 "opening the <a po4a-id=0>Waiting users frame</a>."
@@ -2710,7 +2664,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_secret.html:21
-#, fuzzy
 msgid ""
 "You can drag folders from Windows Explorer and drop them in the <a po4a-"
 "id=0>Sharing</a>page in Settings."
@@ -2780,7 +2733,6 @@ msgstr "Ez a következő okok miatt történhet :"
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:19
-#, fuzzy
 msgid ""
 "The upload bandwidth of the person(s) you're downloading from is maxed out. "
 "Don't pay attention to the value of the <a po4a-id=0>Connection</a> column "
@@ -2795,7 +2747,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:25
-#, fuzzy
 msgid ""
 "The peer you're downloading from is too far from you (maybe in another "
 "continent) and there's too many <a po4a-id=0>hops</a> in the connection "
@@ -2827,7 +2778,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li><ul><li>
 #: help/faq_slowdownload.html:39
-#, fuzzy
 msgid ""
 "Often the clients with limiting capability have set download and upload "
 "speed ratios in place to avoid abuse. (ex. If the upload speed limit is set "
@@ -2847,7 +2797,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li><ul><li>
 #: help/faq_slowdownload.html:47
-#, fuzzy
 msgid ""
 "Users could also be using a third-party program to limit the speed of "
 "traffic. This type of speed limiting is absolute; it will limit the speed of "
@@ -2880,7 +2829,6 @@ msgstr "Megoldás : keress több forrást a letöltendő fájlodhoz :"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_slowdownload.html:64
-#, fuzzy
 msgid ""
 "To gain more possible sources for your download select your download either "
 "in the <a po4a-id=0>Download Queue</a> or in the <a po4a-id=1>Downloads "
@@ -2903,7 +2851,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_slowdownload.html:74
-#, fuzzy
 msgid ""
 "More sources for queued files can be discovered and automatically added if "
 "you enable <a po4a-id=0>Automatically Match Queue for Search Hits</a> in "
@@ -2915,7 +2862,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_slowdownload.html:78
-#, fuzzy
 msgid ""
 "Automatic discovery for additional sources is also possible if you enable <a "
 "po4a-id=0>Automatically Search for Alternative Download Locations</a> in "
@@ -2931,7 +2877,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_slowdownload.html:85
-#, fuzzy
 msgid ""
 "To minimize the download time make sure you have checked <a po4a-id=0>Enable "
 "segmented downloads</a> in Advanced settings. With segmented downloads "
@@ -2958,7 +2903,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:96
-#, fuzzy
 msgid ""
 "Your Internet connection is shared with others on your <acronym po4a-"
 "id=0>LAN</acronym> and they are using up all the available bandwidth. Tell "
@@ -2980,7 +2924,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:106
-#, fuzzy
 msgid ""
 "Your ISP may be limiting your P2P traffic via some method of packet shaping. "
 "Call up the ISP and inquire if they do anything with P2P traffic. You can "
@@ -3004,7 +2947,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:115
-#, fuzzy
 msgid ""
 "You haven't set up your third party firewall or internet monitor software "
 "correctly. Some of these security applications may treat p2p transfer as a "
@@ -3030,7 +2972,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:125
-#, fuzzy
 msgid ""
 "You need to optimize your operating system for your current connection "
 "speed. First, <b>close <u>all</u></b> <acronym po4a-id=0>P2P</acronym> "
@@ -3064,7 +3005,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:145
-#, fuzzy
 msgid ""
 "Your Internet connection is <acronym po4a-id=0>DSL</acronym>, cable, or "
 "satellite one with an asymmetrical connection speed, such as 768/128 Kib/s "
@@ -3091,7 +3031,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:158
-#, fuzzy
 msgid ""
 "Your copy of Windows XP, Server or Vista has the \"<acronym po4a-id=0>QoS</"
 "acronym> Packet Scheduler\" enabled so you are not able to use some reserved "
@@ -3113,7 +3052,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:169
-#, fuzzy
 msgid ""
 "Your computer is infected with malicious software which altered the low "
 "level network settings of your operating system. This is common when your "
@@ -3274,7 +3212,6 @@ msgstr "10<sup>15</sup>"
 
 #. type: Content of: <html><body><p>
 #: help/faq_units.html:62
-#, fuzzy
 msgid ""
 "For more information about the binary units see the <a po4a-id=0>National "
 "Institute of Standards and Technology</a>."
@@ -3295,7 +3232,6 @@ msgstr "Blokkolás és lassítás"
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:11
-#, fuzzy
 msgid ""
 "Many <acronym po4a-id=0>ISP</acronym>s, Universities, or other organizations "
 "have policies that limit the usage of peer to peer applications for their "
@@ -3320,7 +3256,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:24
-#, fuzzy
 msgid ""
 "If you use DC++ from an organization and you're behind such a block, please "
 "learn to live with it. Circumventing the block by proxying is detectable, is "
@@ -3336,7 +3271,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:29
-#, fuzzy
 msgid ""
 "If your ISP blocks or (heavily) throttles <acronym po4a-id=0>P2P</acronym> "
 "connections then you'd better to change to another available provider which "
@@ -3349,7 +3283,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:33
-#, fuzzy
 msgid ""
 "You can also try to log on to hubs using the <acronym po4a-id=0>ADC</"
 "acronym> protocol. Since this protocol is fairly new you have a high chance "
@@ -3372,7 +3305,6 @@ msgstr "Hálózati cím fordítás (Network Address Translation - NAT)"
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:43
-#, fuzzy
 msgid ""
 "Other organizations might have their network behind a <acronym po4a-"
 "id=0>NAT</acronym> in which case an active connection is impossible. There "
@@ -3404,7 +3336,6 @@ msgstr "Port blokkolás"
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:54
-#, fuzzy
 msgid ""
 "A few organizations use simple port blocking, where common ports used by DC+"
 "+ and other p2p applications are blocked. DC++ uses a wide range of ports "
@@ -3446,7 +3377,6 @@ msgstr "Hogyan kell az UPnP-t beállítani?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_upnp.html:10
-#, fuzzy
 msgid ""
 "Universal Plug And Play (UPnP) is a technology to allow, among other things, "
 "Internet applications to configure home routers and gateways, bypassing "
@@ -3505,7 +3435,6 @@ msgstr "Hibaelhárítás"
 
 #. type: Content of: <html><body><p>
 #: help/faq_upnp.html:39
-#, fuzzy
 msgid ""
 "If you are having trouble getting this all to work (or see messages in the DC"
 "++ <a po4a-id=0>System Log</a> like <i>\"Failed To Create Port Mappings\"</"
@@ -3524,7 +3453,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_upnp.html:47
-#, fuzzy
 msgid ""
 "Alternatively, to test your UPnP functionality, you can run the web based <a "
 "po4a-id=0>Internet Connectivity Evaluation Tool</a> from Microsoft."
@@ -3592,7 +3520,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_upnp.html:68
-#, fuzzy
 msgid ""
 "If you do not see your router as a network device in \"My Network Places\" "
 "after several minutes, UPnPTest will fail to create an UPnP mapping to the "
@@ -3640,7 +3567,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_upnp.html:87
-#, fuzzy
 msgid ""
 "If your router still fails the UPnP test follow the guide on <a po4a-"
 "id=0>Manual port forwarding</a> to be able to use DC++ in active mode."
@@ -3655,7 +3581,6 @@ msgstr "Miért érdemes az aktív módot használni?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_whyactive.html:11
-#, fuzzy
 msgid ""
 "In passive connection mode, DC++ will only make outbound connections to "
 "other users. All searches will be sent through the hub, and search results "
@@ -3680,7 +3605,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_whyactive.html:14
-#, fuzzy
 msgid ""
 "That being said, active mode on DC++ will make inbound and outbound "
 "connections to other users. While all searches will be sent through the hub, "
@@ -3727,7 +3651,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:18
-#, fuzzy
 msgid ""
 "Deletes the actual item from the list. If the corresponding setting in <a "
 "po4a-id=0>Confirm dialog options</a> is enabled, you will be prompted before "
@@ -3744,7 +3667,6 @@ msgstr "Összes eltávolítása"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:22
-#, fuzzy
 msgid ""
 "Deletes all the selected items from the list. If the corresponding setting "
 "in <a po4a-id=0>Confirm dialog options</a> is enabled, you will be prompted "
@@ -3775,7 +3697,6 @@ msgstr "Alternatívák keresése"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:32
-#, fuzzy
 msgid ""
 "Will open a new <a po4a-id=0>Search window</a> to search for alternate "
 "sources for the selected file."
@@ -3804,7 +3725,6 @@ msgstr "Magnet link másolása a vágólapra"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:38
-#, fuzzy
 msgid "Will copy the file's <a po4a-id=0>magnet link</a> to the clipboard."
 msgstr "A kiejölt fájl <a po4a-id=0>magnet link-jét</a> a vágólapra helyezi."
 
@@ -3815,7 +3735,6 @@ msgstr "Letöltés"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:41
-#, fuzzy
 msgid ""
 "Adds the selected file(s) or director(ies) to the Download Queue. They will "
 "be downloaded to the <a po4a-id=0>Default download directory</a>."
@@ -3830,7 +3749,6 @@ msgstr "Letöltés ide..."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:45
-#, fuzzy
 msgid ""
 "Adds the selected file(s) or director(ies) to the Download Queue. The "
 "download target can be selected using the submenu elements : either a "
@@ -3877,7 +3795,6 @@ msgstr "Megtekintés szövegként"
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/general_menu_commands.html:56
-#, fuzzy
 msgid ""
 "In the <a po4a-id=0>Search window</a> or <a po4a-id=1>downloaded filelists</"
 "a> : It downloads the selected file to the temporary folder of the operating "
@@ -3891,7 +3808,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/general_menu_commands.html:61
-#, fuzzy
 msgid ""
 "In the <a po4a-id=0>Finished Downloads</a>, <a po4a-id=1>Finished Uploads</"
 "a> window or in your <u>own</u> filelist : It will simply open the file "
@@ -3904,7 +3820,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/general_menu_commands.html:64
-#, fuzzy
 msgid ""
 "This function is useful for previewing small text based info files as they "
 "may contain more information about other files in the same folder.  Note "
@@ -4044,7 +3959,6 @@ msgstr "Kedvencekhez ad"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:102
-#, fuzzy
 msgid "Adds the user to your <a po4a-id=0>Favorite Users</a> list."
 msgstr ""
 "A <a po4a-id=0>Kedvenc felhasználók</a> listájához adja a felhasználót."
@@ -4085,7 +3999,6 @@ msgstr "Kezdőknek"
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:13
-#, fuzzy
 msgid ""
 "Hello and welcome! DC++ is a free, open-source client for Direct Connect "
 "file sharing networks. It is fully compatible with and supports connection "
@@ -4103,7 +4016,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:18
-#, fuzzy
 msgid ""
 "The newest version of DC++ should work well on any modern Windows NT-based "
 "operating system, including 2000, XP, and Vista.  Some older versions will "
@@ -4223,7 +4135,6 @@ msgstr "Kapcsolódás a DC hubokra a DC++ segítségével"
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:65
-#, fuzzy
 msgid ""
 "DC++ has a few public <b>hublist servers</b> configured by default. They are "
 "the most popular and reliable ones so they are available most of the time. "
@@ -4260,7 +4171,6 @@ msgstr "Alapvető beállítások és használat"
 
 #. type: Content of: <html><body>
 #: help/get_started.html:79
-#, fuzzy
 msgid ""
 "<a po4a-id=0>TheParanoidOne's beginners guide</a> is easy to understand and "
 "contains plenty of screenshots.  It explains basic DC++ usage and the "
@@ -4287,7 +4197,6 @@ msgstr "A szoftveres tűzfal beálítások ellenőrzése"
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:87
-#, fuzzy
 msgid ""
 "Software firewalls often cause problems as they can completely prevent DC++ "
 "from connecting to the Internet. You can skip this section if you can "
@@ -4323,7 +4232,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:101
-#, fuzzy
 msgid ""
 "If you use Windows XP with third party software firewall installed then make "
 "sure you have the <a po4a-id=0>internal Windows firewall disabled</a>.  On "
@@ -4353,7 +4261,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:112
-#, fuzzy
 msgid ""
 "The method for unblocking programs in firewalls varies from product to "
 "product.  Check your firewall's help or manual for instructions. The best "
@@ -4377,7 +4284,6 @@ msgstr "A kapcsolat beállítása"
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:121
-#, fuzzy
 msgid ""
 "To make your life easier while using DC++ you should find out what "
 "connection mode works for you. From a protocol perspective, there are two "
@@ -4396,7 +4302,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:129
-#, fuzzy
 msgid ""
 "It is very important to decide what <i>active connection mode</i> is "
 "available for you. It depends on your network structure, so you need to know "
@@ -4414,7 +4319,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:136
-#, fuzzy
 msgid ""
 "If you're still unsure what network devices you use to connect to the "
 "Internet, then use <a po4a-id=0>Google</a>! It can give you information on "
@@ -4458,7 +4362,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:152
-#, fuzzy
 msgid ""
 "To see your <i>external IP address</i> go to one of the following websites : "
 "<a po4a-id=0>www.whatismyip.com</a>, <a po4a-id=1>www.dslreports.com/ip</a>, "
@@ -4479,7 +4382,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:159
-#, fuzzy
 msgid ""
 "When you look at the <a po4a-id=0>Connection Settings</a> you will find 3 "
 "options for active mode and the last option for being passive as a last "
@@ -4509,7 +4411,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:173
-#, fuzzy
 msgid ""
 "For setting up any of the three active mode options follow the <a po4a-"
 "id=0>active mode setup FAQ</a>."
@@ -4519,7 +4420,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:175
-#, fuzzy
 msgid ""
 "If none of the above helped or you are not able to use active mode in your "
 "network (e.g. you have no access to the configuration page of the router/"
@@ -4547,7 +4447,6 @@ msgstr "További segítségre van szükséged?"
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:186
-#, fuzzy
 msgid ""
 "You can find <a po4a-id=0>FAQs</a> and explanation of ALL settings in the "
 "built-in context sensitive Help of DC++. Just move the question mark icon "
@@ -4563,7 +4462,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:190
-#, fuzzy
 msgid ""
 "There is a complete <a po4a-id=0>Direct Connect FAQ</a> maintained at "
 "dslreports.com."
@@ -4574,7 +4472,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:193
-#, fuzzy
 msgid ""
 "There are more answers to the most frequent support problems at the <a po4a-"
 "id=0>FAQ section of the DC++ Launchpad page</a>."
@@ -4584,7 +4481,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:198
-#, fuzzy
 msgid ""
 "There is an online <u>support forum and a bug &amp; feature tracker</u> also "
 "available. You can access these pages through the Help menu of DC++ or from "
@@ -4602,7 +4498,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:205
-#, fuzzy
 msgid ""
 "<u>Important :</u> before asking for support please keep in mind that DC++ "
 "is a <u>client for connecting to a network and developers of DC++ have no "
@@ -4636,13 +4531,11 @@ msgstr "A Segítség fájl tartalma :"
 
 #. type: Content of: <html><body><ul><li>
 #: help/index.html:14
-#, fuzzy
 msgid "<a po4a-id=0>Overview</a>"
 msgstr "<a po4a-id=0>Áttekintés</a>"
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:16
-#, fuzzy
 msgid "<a po4a-id=0>Get started</a>"
 msgstr "<a po4a-id=0>Kezdőknek</a>"
 
@@ -4678,7 +4571,6 @@ msgstr "Ablakok"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:28
-#, fuzzy
 msgid "<a po4a-id=0>Main DC++ window</a>"
 msgstr "<a po4a-id=0>A DC++ főablaka</a>"
 
@@ -4689,7 +4581,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:30
-#, fuzzy
 msgid "<a po4a-id=0>Private Message</a>"
 msgstr "<a po4a-id=0>Privát üzenet</a>"
 
@@ -4705,37 +4596,31 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:33
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hubs</a>"
 msgstr "Kedvenc Hubok"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:34
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Users</a>"
 msgstr "Kedvenc Felhasználók"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:35
-#, fuzzy
 msgid "<a po4a-id=0>Download Queue</a>"
 msgstr "Letöltési sor"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:36
-#, fuzzy
 msgid "<a po4a-id=0>Finished Downloads</a>"
 msgstr "Befejezett letöltések"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:37
-#, fuzzy
 msgid "<a po4a-id=0>Waiting Users</a>"
 msgstr "Várakozó felhasználók"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:38
-#, fuzzy
 msgid "<a po4a-id=0>Finished Uploads</a>"
 msgstr "Befejezett feltöltések"
 
@@ -4766,7 +4651,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:44
-#, fuzzy
 msgid "<a po4a-id=0>Network Statistics</a>"
 msgstr "Hálózati Statisztika"
 
@@ -4782,7 +4666,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:50
-#, fuzzy
 msgid "<a po4a-id=0> General Menu Commands</a>"
 msgstr "<a po4a-id=0>Általános menü parancsok</a>"
 
@@ -4793,7 +4676,6 @@ msgstr "Párbeszédablakok"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:60
-#, fuzzy
 msgid "<a po4a-id=0>Indexing progress</a>"
 msgstr "Indexelés folyamata"
 
@@ -4804,19 +4686,16 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:62
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hub Properties</a>"
 msgstr "Kedvenc Hub Tulajdonságai"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:63
-#, fuzzy
 msgid "<a po4a-id=0>ADLSearch Properties</a>"
 msgstr "ADL Keresés Tulajdonságai"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/index.html:64 help/settings_downloads.html:81
-#, fuzzy
 msgid "<a po4a-id=0>Configured Public Hub Lists</a>"
 msgstr "Publikus hublisták"
 
@@ -4827,13 +4706,11 @@ msgstr "Beállítások"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:70
-#, fuzzy
 msgid "<a po4a-id=0>Personal information</a>"
 msgstr "Személyes Információk"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:71
-#, fuzzy
 msgid "<a po4a-id=0>Connection settings</a>"
 msgstr "Kapcsolat beállításai"
 
@@ -4859,7 +4736,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:83
-#, fuzzy
 msgid "<a po4a-id=0>Colors and sounds</a>"
 msgstr "Színek és hangok"
 
@@ -4890,13 +4766,11 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:93
-#, fuzzy
 msgid "<a po4a-id=0>User Commands</a>"
 msgstr "Felhasználói parancsok"
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:94
-#, fuzzy
 msgid "<a po4a-id=0>Security Certificates</a>"
 msgstr "Biztonsági Tanúsítványok"
 
@@ -4907,73 +4781,61 @@ msgstr "Gyakran ismételt kérdések"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:102
-#, fuzzy
 msgid "<a po4a-id=0>Why do I need active mode?</a>"
 msgstr "Miért érdemes az aktív módot használni?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:103
-#, fuzzy
 msgid "<a po4a-id=0>How to set up active mode?</a>"
 msgstr "<a po4a-id=0>Hogyan kell az aktív módot beállítani?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:104
-#, fuzzy
 msgid "<a po4a-id=0>How to set up UPnP?</a>"
 msgstr "Hogyan kell az UPnP-t beállítani?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:105
-#, fuzzy
 msgid "<a po4a-id=0>My ISP or University blocks DC++</a>"
 msgstr "<a po4a-id=0>A szolgáltatóm blokkolja vagy lassítja a DC++-t</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:106
-#, fuzzy
 msgid "<a po4a-id=0>Why don't I get any search results?</a>"
 msgstr "Miért nem kapok semmilyen keresési eredményt?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:107
-#, fuzzy
 msgid "<a po4a-id=0>Why am I getting slow download speeds?</a>"
 msgstr "<a po4a-id=0>Túl lassú a letöltésem. Mi lehet az oka?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:108
-#, fuzzy
 msgid "<a po4a-id=0>Which keyboard shortcuts are available?</a>"
 msgstr "<a po4a-id=0>Mely gyorsbillentyűk használhatóak?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:110
-#, fuzzy
 msgid "<a po4a-id=0>What do the different icons mean?</a>"
 msgstr "Mit jelentenek a különböző ikonok?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:111
-#, fuzzy
 msgid "<a po4a-id=0>What do the units mean?</a>"
 msgstr "Mit jelentenek a különböző mértékegységek?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:112
-#, fuzzy
 msgid "<a po4a-id=0>How do I install/uninstall/upgrade DC++?</a>"
 msgstr "<a po4a-id=0>Hogyan telepítsem, töröljem vagy frissítsem a DC++-t?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:113
-#, fuzzy
 msgid "<a po4a-id=0>What secret stuff are there?</a>"
 msgstr "<a po4a-id=0>Milyen titkos dolgok léteznek a DC++-ban?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:114
-#, fuzzy
 msgid "<a po4a-id=0>What do the DC++ tags mean?</a>"
 msgstr "Mit jelent a DC++ stílusú tag?"
 
@@ -4984,25 +4846,21 @@ msgstr "Fejlesztés"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:120
-#, fuzzy
 msgid "<a po4a-id=0>Compile instructions</a>"
 msgstr "<a po4a-id=0>A programkód fordítása</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:121
-#, fuzzy
 msgid "<a po4a-id=0>Applying patches</a>"
 msgstr "Foltok (patch-ek) hozzáadása"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:122
-#, fuzzy
 msgid "<a po4a-id=0>Creating patches</a>"
 msgstr "Foltok (patch-ek) készítése"
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:126
-#, fuzzy
 msgid "<a po4a-id=0>Chat Commands</a>"
 msgstr "<a po4a-id=0>Chat parancsok</a>"
 
@@ -5048,7 +4906,6 @@ msgstr "Különböző, a DC++-hoz tartozó hivatkozások listája"
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:143
-#, fuzzy
 msgid "<a po4a-id=0>Help File Credits</a>"
 msgstr "<a po4a-id=0>Segítség fájl szerzői</a>"
 
@@ -5344,19 +5201,16 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/non-routable.html:26
-#, fuzzy
 msgid "<b>10.0.0.0</b> through <b>10.255.255.255</b> (10/8 prefix)"
 msgstr "<b>10.0.0.0</b>-tól <b>10.255.255.255</b>-ig (10/8 prefix)"
 
 #. type: Content of: <html><body><p>
 #: help/non-routable.html:29
-#, fuzzy
 msgid "<b>172.16.0.0</b> through <b>172.31.255.255</b> (172.16/12 prefix)"
 msgstr "<b>172.16.0.0</b>-tól <b>172.31.255.255</b>-ig  (172.16/12 prefix)"
 
 #. type: Content of: <html><body><p>
 #: help/non-routable.html:32
-#, fuzzy
 msgid "<b>192.168.0.0</b> through <b>192.168.255.255</b> (192.168/16 prefix)"
 msgstr "<b>192.168.0.0</b>-tól <b>192.168.255.255</b>-ig (192.168/16 prefix)"
 
@@ -5409,7 +5263,6 @@ msgstr "Törölje a keresési mezőt minden keresés után"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:22
-#, fuzzy
 msgid ""
 "After each search, your search terms will be cleared. The last terms will be "
 "accessible through the drop-down. You can set how many terms that you want "
@@ -5569,7 +5422,6 @@ msgstr "Ne küldjön away-üzenetet botoknak"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:77
-#, fuzzy
 msgid ""
 "When in away mode, don't send the away message to users that appear to be "
 "bots. Having this option disabled is very annoying if you get messages from "
@@ -5590,7 +5442,6 @@ msgstr "ADL keresés megállítása az első találatnál"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:84
-#, fuzzy
 msgid ""
 "If you're using the <a po4a-id=0>ADLSearch</a> features, keeping this option "
 "enabled will make a file show up in only the first search it matches. If "
@@ -5609,7 +5460,6 @@ msgstr "Biztonságos és tömörített átvitel engedélyezése"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:90
-#, fuzzy
 msgid ""
 "When transfering data with a compatible client, DC++ will try to use ZLIB "
 "compression with integrity checks. This uses some CPU cycles, but can "
@@ -5652,7 +5502,6 @@ msgstr "Ismeretlen /parancsok elküldése a hubnak"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:101
-#, fuzzy
 msgid ""
 "Enable this to send <a po4a-id=0>/commands</a> that DC++ does not recognize "
 "to the hub as normal chat."
@@ -5703,7 +5552,6 @@ msgstr "Ne kapcsolja szét a hubról kilépő kedvenc felhasználókat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:112
-#, fuzzy
 msgid ""
 "With this option enabled, and <a po4a-id=0>Automatically disconnect users "
 "who leave the hub</a>, users who are in your <a po4a-id=1>Favorite users</a> "
@@ -5734,7 +5582,6 @@ msgstr "A Coral hálózat használata a HTTP letöltésekhez (megbízhatóbb)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_advanced.html:117
-#, fuzzy
 msgid ""
 "With this option enabled, DC++ uses <a po4a-id=0>The Coral Content "
 "Distribution Network</a> when establishing HTTP connections."
@@ -5880,7 +5727,6 @@ msgstr "Időbélyegzők megjelenítése a chaten alapértelmezés szerint"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:30
-#, fuzzy
 msgid ""
 "This option will show time stamps on chat lined in newly opened hubs. In "
 "order to show them in an already open hub, use the <a po4a-id=0>/ts chat "
@@ -5900,7 +5746,6 @@ msgstr "Állapotüzenetek megjelenítése a közös chaten"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:36
-#, fuzzy
 msgid ""
 "Show some messages destined for the Status Bar in main chat as well. <i>It's "
 "generally a good idea to leave this enabled.</i>"
@@ -5916,7 +5761,6 @@ msgstr "Felhasználók be/kilépésének megjelenítése alapértelmezés szerin
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:40
-#, fuzzy
 msgid ""
 "Show an entry in main chat whenever someone joins or leaves the hub. Use the "
 "<a po4a-id=0>/showjoins chat command</a> to enable or disable it on already "
@@ -5934,7 +5778,6 @@ msgstr "Csak a kedvenc felhasználók ki/be lépésének megjelenítése"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:45
-#, fuzzy
 msgid ""
 "With this option enabled, only the joining and parting of <a po4a-"
 "id=0>Favorite Users</a> are shown."
@@ -5949,7 +5792,6 @@ msgstr "Kedvenc felhasználók rendezése a lista elejére"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:48
-#, fuzzy
 msgid ""
 "With this option enabled, those users who are <a po4a-id=0>favorite users</"
 "a> will be sorted first in user lists."
@@ -5964,7 +5806,6 @@ msgstr "Rendszerikonok használata fájlok tallózásánál"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:50
-#, fuzzy
 msgid ""
 "If you have this option on, DC++ will use the per-extension icons from "
 "Windows Explorer. <i>Turning on this option slows browsing file lists a bit."
@@ -5998,7 +5839,6 @@ msgstr "Ország kijelzése IP cím alapján"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:58
-#, fuzzy
 msgid ""
 "When selected, country codes for your uploaders and downloaders appear in "
 "the <a po4a-id=0>Connections</a> window. This function uses the <a po4a-"
@@ -6015,7 +5855,6 @@ msgstr "Alapértelmezett away-üzenet"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:65
-#, fuzzy
 msgid ""
 "This is the default away message that will appear when someone PMs you for "
 "the first time while you are in the away mode. You can activate away mode by "
@@ -6047,7 +5886,6 @@ msgstr "Időbélyeg"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:74
-#, fuzzy
 msgid ""
 "This lets you select the format of the time stamps that can appear in the "
 "chat and private message windows. For the available formatting variables, "
@@ -6090,7 +5928,6 @@ msgstr "Személyes kulcs fájl"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_certs.html:12
-#, fuzzy
 msgid ""
 "This file is your personal and private certificate file. <b>Do not share "
 "this with other users or hubs.</b> If you do, you risk allowing others to "
@@ -6328,7 +6165,6 @@ msgstr "Kapcsolat beállításai"
 
 #. type: Content of: <html><body><p>
 #: help/settings_connection.html:11
-#, fuzzy
 msgid ""
 "Use these settings to properly configure DC++ for incoming and outgoing "
 "connections. Your incoming connection type must be correctly chosen for "
@@ -6354,7 +6190,6 @@ msgstr "Közvetlen kapcsolat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connection.html:21
-#, fuzzy
 msgid ""
 "Select this mode if your computer is hooked directly to the internet. Do "
 "<u>not</u> select this mode if you have a router (external firewall)."
@@ -6369,7 +6204,6 @@ msgstr "Tűzfal UPnP-vel"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connection.html:25
-#, fuzzy
 msgid ""
 "Select this mode if you are behind a firewall that supports the UPnP "
 "standard for program auto-configuration. DC++ will automatically open the "
@@ -6393,7 +6227,6 @@ msgstr "Tűzfal kézi port továbbítással"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connection.html:36
-#, fuzzy
 msgid ""
 "Select this mode if you are behind a firewall (router), and will set up the "
 "TCP and UDP port forwarding on your own. You <u>will</u> need to specify the "
@@ -6472,7 +6305,6 @@ msgstr "TLS"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/settings_connection.html:64
-#, fuzzy
 msgid ""
 "This is the port that DC++ listens on for <a po4a-id=0>TLS</a> connections.  "
 "If this setting is blank, DC++ will use a random port between 1025 and "
@@ -6490,7 +6322,6 @@ msgstr "Külső / WAN IP"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connection.html:69
-#, fuzzy
 msgid ""
 "If you're directly connected to the internet, DC++ will tell remote users to "
 "connect to your local IP.  Fill in this box <b>only</b> if you need to "
@@ -6541,7 +6372,6 @@ msgstr "SOCKS5"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_connection.html:83
-#, fuzzy
 msgid ""
 "Select this mode if you want to make outbound connections through a SOCKS "
 "proxy. The caveats for Firewall (passive) mode also apply here.  SOCKS5 "
@@ -6712,7 +6542,6 @@ msgstr ""
 
 #. type: Content of: <html><body><div><dl><dd>
 #: help/settings_downloads.html:42
-#, fuzzy
 msgid ""
 "You can use the <b>%[targetdrive]</b> variable in order to have unfinished "
 "download directories in all of your target drives. This way, unfinished "
@@ -6727,7 +6556,6 @@ msgstr ""
 
 #. type: Content of: <html><body><div><dl><dd>
 #: help/settings_downloads.html:46
-#, fuzzy
 msgid ""
 "<u>Example</u>: when %[targetdrive]DCUnfinished\\ is set as the unfinished "
 "downloads directory, DC++ creates incomplete files in E:\\DCUnfinished\\ "
@@ -6838,7 +6666,6 @@ msgstr "HTTP Proxy (csak hublistákhoz)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_downloads.html:83
-#, fuzzy
 msgid ""
 "This HTTP proxy will <u>only</u> be used to request the Public Hub List "
 "specified above. It's <u>not</u> used for uploads, downloads, or connecting "
@@ -6893,7 +6720,6 @@ msgstr "Minislot mérete"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:22
-#, fuzzy
 msgid ""
 "This defines the size of the <a po4a-id=0>mini slot</a>. The minimum value "
 "for this setting is 64 KiB. (default: 64 KiB)"
@@ -6928,7 +6754,6 @@ msgstr "PID"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:32
-#, fuzzy
 msgid ""
 "This is your unique private ID (PID). This will later with an algorithm be "
 "used to identify you on ADC hubs. <b>Do not share this with other users.</b>"
@@ -7027,7 +6852,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_expert.html:55
-#, fuzzy
 msgid "<i> This feature requires a restart to be fully effective.</i>"
 msgstr ""
 "<i>A változások teljes életbe lépéséhez a DC++-t újra kell indítani.</i>"
@@ -7067,7 +6891,6 @@ msgstr "Kedvenc letöltési könyvtárak"
 
 #. type: Content of: <html><body><p>
 #: help/settings_favoritedirs.html:11
-#, fuzzy
 msgid ""
 "To add directories to your \"Download to\" menu (file context menu in the <a "
 "po4a-id=0>Search</a> window), you can use the Add and Remove buttons, or "
@@ -7123,7 +6946,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_general.html:16
-#, fuzzy
 msgid ""
 "This nickname, or handle, will identify you when you join a hub.  It can be "
 "overridden on a per-hub basis in the <a po4a-id=0>Favorite Hub</a> "
@@ -7144,7 +6966,6 @@ msgstr "Ebben a mezőben (nem kötelező jelleggel) megadhatod az e-mail címed.
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_general.html:21
-#, fuzzy
 msgid ""
 "This description will show in the user list. It can be overridden on a per-"
 "hub basis in the <a po4a-id=0>Favorite Hub</a> Properties."
@@ -7183,7 +7004,6 @@ msgstr "Minden a DC++ által készített naplófájl ebbe az alkönyvtárba ker�
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:14
-#, fuzzy
 msgid ""
 "<b>Default:</b> The \"Logs\" subdirectory under where you've installed the "
 "application."
@@ -7213,7 +7033,6 @@ msgstr "%[message] - közös chat üzenet"
 
 #. type: Content of: <html><body><dl><dd><div>
 #: help/settings_logs.html:21 help/settings_logs.html:28
-#, fuzzy
 msgid "<b>Default format:</b> [%Y-%m-%d %H:%M] %[message]"
 msgstr "<b>Alapértelmezett formátum:</b> [%Y-%m-%d %H:%M] %[message]"
 
@@ -7244,7 +7063,6 @@ msgstr "Letöltések naplózása"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:31
-#, fuzzy
 msgid ""
 "Enables logging of completed downloads. File list downloads may not be "
 "logged if you've <a po4a-id=0>disabled them</a>."
@@ -7259,7 +7077,6 @@ msgstr "Feltöltések naplózása"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:35
-#, fuzzy
 msgid ""
 "Enables logging of completed uploads.  File list uploads may not be logged "
 "if you've <a po4a-id=0>disabled them</a>."
@@ -7393,7 +7210,6 @@ msgstr "Rendszerüzenetek naplózása"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:64
-#, fuzzy
 msgid ""
 "Enables logging of system-level messages. Examples of such messages are: "
 "notifications of files that have finished hashing, share refreshes, "
@@ -7417,7 +7233,6 @@ msgstr "%[message] - Rendszerüzenet"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:71 help/settings_logs.html:80
-#, fuzzy
 msgid "<b>Default: </b>[%Y-%m-%d %H:%M] %[message]"
 msgstr "<b>Alapértelmezett : </b>[%Y-%m-%d %H:%M] %[message]"
 
@@ -7454,7 +7269,6 @@ msgstr "Fájl-lista átvitelek naplózása"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:82
-#, fuzzy
 msgid ""
 "Add successful file list transfers to your upload and download logs. If this "
 "option is disabled, file list transfers do not appear in the <a po4a-"
@@ -7988,7 +7802,6 @@ msgstr "Alternatív letöltési helyek automatikus keresése"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_queue.html:89
-#, fuzzy
 msgid ""
 "Every few minutes, the client will search for files in your Download Queue "
 "to find more download locations (more users/sources).  The autosearch will "
@@ -8015,7 +7828,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_queue.html:99
-#, fuzzy
 msgid ""
 "Enable to automatically download a user's list and match them as sources for "
 "files in your Download Queue when they've been discovered as a source for "
@@ -8090,7 +7902,6 @@ msgstr "Megosztott könyvtárak"
 
 #. type: Content of: <html><body><p>
 #: help/settings_sharing.html:12
-#, fuzzy
 msgid ""
 "To add directories to your share, you can use the Add and Remove buttons, or "
 "drag and drop folders from a Windows Explorer window.  <em po4a-"
@@ -8192,7 +8003,6 @@ msgstr "Feltöltési slotok"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing.html:51
-#, fuzzy
 msgid ""
 "Configure the number of slots that other users can occupy to download files "
 "from you. A remote user can use only one slot for each hub that they're on "
@@ -8209,7 +8019,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_sharing.html:59
-#, fuzzy
 msgid ""
 "Note: If a user leaves the hub, DC++ will close his slots; if the user is "
 "back within 10 minutes, DC++ will grant him a slot. (This will only happen "
@@ -8246,7 +8055,6 @@ msgstr "A fül kiemelése a tartalom változásakor"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:14
-#, fuzzy
 msgid ""
 "When a chat message appears in a <a po4a-id=0>Hub</a> window that's not "
 "focused, the tab will be highlighted if you have this option selected."
@@ -8262,7 +8070,6 @@ msgstr "Privát üzenet"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:17
-#, fuzzy
 msgid ""
 "When a private message appears in a <a po4a-id=0>Private message</a> window "
 "that's not focused, the tab will be highlighted if you have this option "
@@ -8282,7 +8089,6 @@ msgstr "Keresés"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:20
-#, fuzzy
 msgid ""
 "When a search result is received in a <a po4a-id=0>Search</a> window that's "
 "not focused, the tab will be highlighted if you have this option selected."
@@ -8300,7 +8106,6 @@ msgstr "Keresések megfigyelése"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:23
-#, fuzzy
 msgid ""
 "When an entry is added to the <a po4a-id=0>Search Spy</a> window while it is "
 "out of focus, the tab will be highlighted if you have this option selected."
@@ -8316,7 +8121,6 @@ msgstr "Rendszernapló"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:26
-#, fuzzy
 msgid ""
 "When an entry is added to the <a po4a-id=0>System Log</a> window while it is "
 "out of focus, the tab will be highlighted if you have this option selected."
@@ -8334,7 +8138,6 @@ msgstr "Letöltési sor"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:29
-#, fuzzy
 msgid ""
 "This option controls whether or not the <a po4a-id=0>Download Queue</a>'s "
 "tab will highlight itself when a queue item changes state or finishes."
@@ -8352,7 +8155,6 @@ msgstr "Befejezett letöltések"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:32
-#, fuzzy
 msgid ""
 "When a download completes, the <a po4a-id=0>Finished Downloads</a> tab will "
 "be highlighted if this option is selected."
@@ -8368,7 +8170,6 @@ msgstr "Várakozó felhasználók"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:35
-#, fuzzy
 msgid ""
 "When a user or an item is added or removed to the <a po4a-id=0>Waiting "
 "Users</a> window while it is out of focus, the tab will be highlighted if "
@@ -8387,7 +8188,6 @@ msgstr "Befejezett feltöltések"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:38
-#, fuzzy
 msgid ""
 "When an upload completes, the <a po4a-id=0>Finished Uploads</a> tab will be "
 "highlighted if this option is selected."
@@ -8561,7 +8361,6 @@ msgstr "Publikus Hubok"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:31
-#, fuzzy
 msgid ""
 "Opens the Public Hub window at startup, and automatically loads the <a po4a-"
 "id=0>configured public hub list</a>."
@@ -8592,7 +8391,6 @@ msgstr "Privát üzenetek megnyitása a saját ablakukban"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:40
-#, fuzzy
 msgid ""
 "If you disable this option, a private message from a user appears as a "
 "status line in main chat instead of in a separate window. This could cause "
@@ -8619,7 +8417,6 @@ msgstr "Botoktól érkező privát üzenetek megnyitása a saját ablakukban"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:49
-#, fuzzy
 msgid ""
 "Enable this if you want messages from hub bots in their own window. When "
 "disabled they get sent as a status message in main chat instead which is "
@@ -8639,7 +8436,6 @@ msgstr "A hubtól érkező privát üzenetek megnyitása a saját ablakukban"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:54
-#, fuzzy
 msgid ""
 "Enable this if you want messages from the hub in their own window. When "
 "disabled they get sent as a status message in main chat instead which is "
@@ -8659,7 +8455,6 @@ msgstr "Új fájl-lista ablakok megnyitása a háttérben"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:59
-#, fuzzy
 msgid ""
 "Keep this disabled if you want newly downloaded file lists to pop up in "
 "front of other windows. <i>It can be very annoying to have a new window pop "
@@ -8782,7 +8577,6 @@ msgstr "Megerősítés hub ablak bezárásakor"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:85
-#, fuzzy
 msgid ""
 "Enabling this option will cause DC++ to prompt before you close a <a po4a-"
 "id=0>hub</a> window."
@@ -8822,7 +8616,6 @@ msgstr "Megerősítés kérése a letöltési sorból való eltávolításkor"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:93
-#, fuzzy
 msgid ""
 "Enabling this option will cause DC++ to prompt before you remove a file (or "
 "files) from the <a po4a-id=0>download queue</a>."
@@ -8837,7 +8630,6 @@ msgstr "Megerősítés ADL keresés eltávolításakor"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:96
-#, fuzzy
 msgid ""
 "Enabling this option will cause DC++ to prompt before you remove an ADL "
 "Search item from the <a po4a-id=0>ADL Search</a> window."
@@ -8856,7 +8648,6 @@ msgstr "Mi az Automatikus Könyvtárlistázó (ADL) keresés?"
 
 #. type: Content of: <html><body>
 #: help/window_adlsearch.html:14
-#, fuzzy
 msgid ""
 "Automatic Directory Listing Search (ADLSearch) is a tool for searching of "
 "file lists downloaded from users. Create a new ADLSearch entering 'avi' as "
@@ -8969,7 +8760,6 @@ msgstr "Megnyitja ezt a Segítség oldalt."
 #. type: Content of: <html><body><p>
 #: help/window_adlsearch.html:59 help/window_connections.html:47
 #: help/window_download_queue.html:74 help/window_favorite_users.html:34
-#, fuzzy
 msgid ""
 "Description of some other common context menu options are listed in the <a "
 "po4a-id=0> General Menu Commands</a> page."
@@ -8995,7 +8785,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/window_adlsearch.html:66
-#, fuzzy
 msgid ""
 "If you use <a po4a-id=0>time formatting</a> variables, they will be replaced "
 "by today's date. If you use %[nick] it will be replaced by the nick of the "
@@ -9017,7 +8806,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/window_adlsearch.html:73
-#, fuzzy
 msgid ""
 "There is a setting called <a po4a-id=0>Break on First ADLSearch Match</a>. "
 "If enabled, ADLSearch will stop after the first match for a specific file/"
@@ -9235,7 +9023,6 @@ msgstr "Fontossági sorrend beállítása"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:18
-#, fuzzy
 msgid ""
 "This will set the priority of all files in the directory. If a file is "
 "paused, it will not begin to download and it will not be <a po4a-"
@@ -9257,7 +9044,6 @@ msgstr "Átmozgatja és/vagy átnevezi a sorban lévő könyvtárt."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:22
-#, fuzzy
 msgid ""
 "Deletes the queued directory from the queue. If <a po4a-id=0>Confirm item "
 "removal in download queue</a> is enabled, you will be prompted."
@@ -9311,7 +9097,6 @@ msgstr "Fontossági sorrend"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:36 help/window_download_queue.html:66
-#, fuzzy
 msgid ""
 "The file's priority. If a file is paused, it will not begin to download and "
 "it will not be <a po4a-id=0>automatically searched</a> for."
@@ -9479,7 +9264,6 @@ msgstr "Névtelen jelölőnégyzet"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:79
-#, fuzzy
 msgid "This will toggle the appearance of the <a po4a-id=0>left screen</a>."
 msgstr ""
 "A <a po4a-id=0>bal oldali könyvtár fastruktúra</a> megjelenítésének ki-be "
@@ -9588,7 +9372,6 @@ msgstr "Az éppen töltött fájl teljes mérete."
 #: help/window_finished_downloads.html:35 help/window_finished_uploads.html:35
 #: help/window_hub.html:45 help/window_search.html:89
 #: help/window_waiting_users.html:22
-#, fuzzy
 msgid ""
 "Description of the context menu options are listed in the <a po4a-id=0> "
 "General Menu Commands</a> page."
@@ -9648,7 +9431,6 @@ msgstr "A kedvenc hub már meglévő tulajdonságainak változtatása"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_hubs.html:37
-#, fuzzy
 msgid ""
 "Move up selected hubs in the list. If several hubs have <a po4a-id=0>auto "
 "connect</a> enabled, the highest hub will be connected to first."
@@ -9659,7 +9441,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_hubs.html:39
-#, fuzzy
 msgid ""
 "Move down selected hubs in the list. If several hubs have <a po4a-id=0>auto "
 "connect</a> enabled, the lowest hub will be connected to last."
@@ -9947,7 +9728,6 @@ msgstr "Befejezett letöltések"
 
 #. type: Content of: <html><body>
 #: help/window_finished_downloads.html:13 help/window_finished_uploads.html:13
-#, fuzzy
 msgid ""
 "Note that <a po4a-id=0>file list logging</a> must be enabled for them to "
 "appear in this window."
@@ -10004,7 +9784,6 @@ msgstr "CRC ellenőrizve"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:31 help/window_finished_uploads.html:31
-#, fuzzy
 msgid ""
 "Whether or not the file was CRC checked. Note that <a po4a-id=0>Enable "
 "automatic SFV checking</a> must be enabled, and the file needs to have an "
@@ -10021,7 +9800,6 @@ msgstr "Csak a teljesen letöltődött fájlokat mutassa"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:42
-#, fuzzy
 msgid ""
 "When this check-box is checked (which is the case in the default "
 "configuration), only files that are fully downloaded (which are not anymore "
@@ -10793,7 +10571,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:152
-#, fuzzy
 msgid "Open the <a po4a-id=0>Public Hubs</a> window."
 msgstr ""
 "Eltávolítja az aktuális hubot a <a po4a-id=0>Kedvenc Hubok</a> listájáról."
@@ -10814,7 +10591,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:162
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Hubs</a> window."
 msgstr ""
 "Eltávolítja az aktuális hubot a <a po4a-id=0>Kedvenc Hubok</a> listájáról."
@@ -10829,31 +10605,26 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:167
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Users</a> window."
 msgstr "Megnyitja a Kedvenc felhasználók ablakot indításkor"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:170
-#, fuzzy
 msgid "Open the <a po4a-id=0>Download Queue</a> window."
 msgstr "Megnyitja a Letöltési sor ablakot indításkor"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:173
-#, fuzzy
 msgid "Open the <a po4a-id=0>Finished Downloads</a> window."
 msgstr "Megnyitja a Befejezett letöltések ablakot indításkor"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:176
-#, fuzzy
 msgid "Open the <a po4a-id=0>Waiting Users</a> window."
 msgstr "Megnyitja a Várakozó felhasználók ablakot indításkor"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:179
-#, fuzzy
 msgid "Open the <a po4a-id=0>Finished Uploads</a> window."
 msgstr "Megnyitja a Befejezett feltöltések ablakot indításkor"
 
@@ -10869,7 +10640,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:188
-#, fuzzy
 msgid "Open the <a po4a-id=0>Search Spy</a> window."
 msgstr "Megnyitja a Keresések megfigyelése ablakot indításkor"
 
@@ -11328,7 +11098,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_public_hubs.html:46
-#, fuzzy
 msgid "Will add the selected hub to the <a po4a-id=0>Favorite hubs</a>."
 msgstr ""
 "Eltávolítja az aktuális hubot a <a po4a-id=0>Kedvenc Hubok</a> listájáról."
@@ -11836,7 +11605,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "Privát üzenet"
 
@@ -11858,7 +11626,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:20
-#, fuzzy
 msgid "File list refresh finished"
 msgstr "Fájl-lista menü"
 
@@ -11923,7 +11690,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:31
-#, fuzzy
 msgid "Disconnected user leaving the hub: [nick]"
 msgstr "A hubról lelépő felhasználók szétkapcsolása"
 
@@ -11960,7 +11726,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:41
-#, fuzzy
 msgid "Error messages"
 msgstr "Privát üzenet"
 
@@ -12042,7 +11807,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:55
-#, fuzzy
 msgid "Not listening for connections - please restart DC++"
 msgstr "A változtatások életbe léptetéséhez újra kell indítani a DC++-t."
 
@@ -12090,7 +11854,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:63
-#, fuzzy
 msgid "Failed to load certificate file"
 msgstr "Saját tanúsítvány fájl"
 
@@ -12129,7 +11892,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:69
-#, fuzzy
 msgid "TLS disabled, no certificate file set"
 msgstr "Saját tanúsítvány fájl"
 

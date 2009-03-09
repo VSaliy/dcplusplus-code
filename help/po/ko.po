@@ -29,7 +29,6 @@ msgstr "전체 대화"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:13
-#, fuzzy
 msgid ""
 "Joins &lt;hub-ip&gt;. See also <a po4a-id=0>Open new window when using /"
 "join</a>."
@@ -78,7 +77,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:36
-#, fuzzy
 msgid ""
 "Removes the current hub from the list of <a po4a-id=0>Favorite Hubs</a>."
 msgstr "<a po4a-id=0>Favorite Hubs</a>중심표적을 리스트에서 제거"
@@ -118,7 +116,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:52
-#, fuzzy
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr "<a po4a-id=0>Favorite Users</a> 현재의 유저리스트를 더한다."
 
@@ -333,7 +330,6 @@ msgstr "쓰기 <i>patch -[parameter] &lt; my-patch.diff</i>"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:23
-#, fuzzy
 msgid "4. The file <i>my-patch.diff</i> is the actual patch you want to apply."
 msgstr "파일 <i>my-patch.diff</i> 는 현재패치에 적용한다."
 
@@ -3199,7 +3195,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:102
-#, fuzzy
 msgid "Adds the user to your <a po4a-id=0>Favorite Users</a> list."
 msgstr "<a po4a-id=0>Favorite Users</a> 현재의 유저리스트를 더한다."
 
@@ -3637,7 +3632,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:30
-#, fuzzy
 msgid "<a po4a-id=0>Private Message</a>"
 msgstr "사적인 메시지"
 
@@ -3908,7 +3902,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:121
-#, fuzzy
 msgid "<a po4a-id=0>Applying patches</a>"
 msgstr "패치 적용"
 
@@ -9820,7 +9813,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "사적인 메시지"
 
