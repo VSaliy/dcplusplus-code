@@ -106,7 +106,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:52
-#, fuzzy
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr "Dodaje trenutnu listu korisnika u red za preuzimanje."
 
@@ -2937,7 +2936,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:21
-#, fuzzy
 msgid "Remove all"
 msgstr "Ukloni"
 
@@ -2997,7 +2995,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:40
-#, fuzzy
 msgid "Download"
 msgstr "Rezultati preuzimanja"
 
@@ -3010,7 +3007,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:44
-#, fuzzy
 msgid "Download to..."
 msgstr "Rezultati preuzimanja"
 
@@ -3622,7 +3618,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:30
-#, fuzzy
 msgid "<a po4a-id=0>Private Message</a>"
 msgstr "<a po4a-id=0>Privatna poruka</a>"
 
@@ -3718,7 +3713,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:60
-#, fuzzy
 msgid "<a po4a-id=0>Indexing progress</a>"
 msgstr "Napredovanje popisa"
 
@@ -3729,19 +3723,16 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:62
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hub Properties</a>"
 msgstr "Podešavanja omiljenog haba"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:63
-#, fuzzy
 msgid "<a po4a-id=0>ADLSearch Properties</a>"
 msgstr "ADLS pretraga podešavanja"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/index.html:64 help/settings_downloads.html:81
-#, fuzzy
 msgid "<a po4a-id=0>Configured Public Hub Lists</a>"
 msgstr "Podešavanje javne liste habova"
 
@@ -3907,7 +3898,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:126
-#, fuzzy
 msgid "<a po4a-id=0>Chat Commands</a>"
 msgstr "Naredbe razgovora"
 
@@ -9809,7 +9799,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "Privatna poruka"
 
@@ -9931,7 +9920,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:41
-#, fuzzy
 msgid "Error messages"
 msgstr "Privatna poruka"
 

@@ -29,7 +29,6 @@ msgstr "Haupt Chat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:13
-#, fuzzy
 msgid ""
 "Joins &lt;hub-ip&gt;. See also <a po4a-id=0>Open new window when using /"
 "join</a>."
@@ -63,7 +62,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:26
-#, fuzzy
 msgid ""
 "Displays the IP and port that DC++ will tell users to connect to. If either "
 "the IP or port is not correct, you will be unable to download from some "
@@ -77,7 +75,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:32
-#, fuzzy
 msgid ""
 "Adds the current hub (along with your nickname and password, if used) to the "
 "list of <a po4a-id=0>Favorite Hubs</a>."
@@ -87,7 +84,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:36
-#, fuzzy
 msgid ""
 "Removes the current hub from the list of <a po4a-id=0>Favorite Hubs</a>."
 msgstr ""
@@ -151,7 +147,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:63
-#, fuzzy
 msgid ""
 "Sets the current number of upload slots to the number you specify. If this "
 "is less than the current number of slots, no uploads are cancelled."
@@ -161,7 +156,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:67
-#, fuzzy
 msgid ""
 "Sets the current number of download slots to the number you specify. If this "
 "is less than the current number of slots, no downloads are cancelled."
@@ -171,7 +165,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:71
-#, fuzzy
 msgid ""
 "Opens a new search window with the specified search string.  It does <u>not</"
 "u> automatically send the search."
@@ -204,7 +197,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:83
-#, fuzzy
 msgid ""
 "Sets Away status. New private message windows will be responded to, once, "
 "with the message you specified, or the default away message configured in "
@@ -385,7 +377,6 @@ msgstr "3. Schreibe <i>patch -[parameter] &lt; my-patch.diff</i>"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:23
-#, fuzzy
 msgid "4. The file <i>my-patch.diff</i> is the actual patch you want to apply."
 msgstr ""
 "4. Die Datei <i>my-patch.diff</i> ist der aktuelle patch welcher eingespielt "
@@ -411,7 +402,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/dev_applypatch.html:31 help/dev_createpatch.html:44
-#, fuzzy
 msgid ""
 "Parameters and more information on how to use GNU Diff can be found in the "
 "documentation for GNU Diff which should have come included with GNU Diff. "
@@ -483,7 +473,6 @@ msgstr "C:\\Program Files\\GNU Diff ist dort, wo GNU Diff installiert ist."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:30
-#, fuzzy
 msgid ""
 "The parameter <i po4a-id=0>u</i> means the diff will be unified. <i po4a-"
 "id=1>N</i> means that GNU Diff will show output even if a file doesn't exist "
@@ -598,7 +587,6 @@ msgstr "Min. Dateigröße"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:26 help/window_adlsearch.html:40
-#, fuzzy
 msgid ""
 "Sets the lower limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
@@ -613,7 +601,6 @@ msgstr "Max. Größe"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:28 help/window_adlsearch.html:42
-#, fuzzy
 msgid ""
 "Sets the upper limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
@@ -664,7 +651,6 @@ msgstr "Treffer im Download"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:38
-#, fuzzy
 msgid ""
 "When checked, matches to this search will be put into your <a po4a-"
 "id=0>Download Queue</a>."
@@ -1035,7 +1021,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:42
-#, fuzzy
 msgid ""
 "Hub ip as typed when connecting (empty = all NMDC hubs, \"op\" = NMDC hubs "
 "where you're an operator, \"adc://\" = all ADC hubs, \"adc://op\" = ADC hubs "
@@ -1077,7 +1062,6 @@ msgstr "Variablen"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:53
-#, fuzzy
 msgid ""
 "In the parameters, you can use %[<b>xxx</b>] variables and <a po4a-id=0>date/"
 "time specifiers</a> (%Y, %m, ...). The following variables are also "
@@ -1122,7 +1106,6 @@ msgstr "%[type]: \"Datei\" or \"Verzeichniss\" (Nur Verzeichniss)"
 
 #. type: Content of: <html><body><ul><li>
 #: help/dialog_user_command.html:65
-#, fuzzy
 msgid "%[line:<i>reason</i>]: Opens up a window asking for \"<i>reason</i>\""
 msgstr ""
 "%[line:<i>reason</i>]: Öffnet ein Dialogfenster welches nach dem \"<i>Grund?"
@@ -1130,7 +1113,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:68
-#, fuzzy
 msgid ""
 "In addition to these variables, all of the ADC INF flags are available, with "
 "the following prefixes: <b>my</b>, <b>user</b>, and <b>hub</b>. Some may "
@@ -1321,7 +1303,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:33
-#, fuzzy
 msgid ""
 "Test active mode by joining several hubs and doing a search for a common "
 "term. You should get results back. If not, then you are likely behind a "
@@ -1340,7 +1321,6 @@ msgstr "Wenn Du hinter einem Router bist:"
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:39
-#, fuzzy
 msgid ""
 "You can simplify the process of setting up active mode if your router and "
 "operating system is <acronym po4a-id=0>UPnP </acronym> compatible (UPnP is "
@@ -1574,7 +1554,6 @@ msgstr "Wie installiere ich DC++?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:11
-#, fuzzy
 msgid ""
 "Just run the installer and fire up DC++, then enter the settings to set it "
 "up according to your preferences (most important is <a po4a-id=0>nick</a>, "
@@ -1588,7 +1567,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:12
-#, fuzzy
 msgid ""
 "You can also download the .zip file (Binary) and unpack it to any folder you "
 "like.  By default DC++ will store its settings and create the downloads "
@@ -1630,7 +1608,6 @@ msgstr "Wie upgrade ich DC++? [neue Version installieren]"
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:24
-#, fuzzy
 msgid ""
 "Just install the new version (or unpack the .zip) in the folder your old "
 "version was in. Your old settings, queue, favorites will still be there and "
@@ -1645,7 +1622,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:26
-#, fuzzy
 msgid ""
 "<b>BEWARE : </b>There are some cases though when a feature upgrade makes "
 "impossible to reuse some some kind of settings or data created by an older "
@@ -3141,7 +3117,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:21
-#, fuzzy
 msgid "Remove all"
 msgstr "Entfernen"
 
@@ -3201,7 +3176,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:40
-#, fuzzy
 msgid "Download"
 msgstr "Treffer im Download"
 
@@ -3214,7 +3188,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:44
-#, fuzzy
 msgid "Download to..."
 msgstr "Treffer im Download"
 
@@ -3299,7 +3272,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:75
-#, fuzzy
 msgid "Open folder"
 msgstr "Dateiliste Öffnen"
 
@@ -3349,7 +3321,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:91
-#, fuzzy
 msgid "Browse file list"
 msgstr "Dateiliste Öffnen"
 
@@ -3391,7 +3362,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:102
-#, fuzzy
 msgid "Adds the user to your <a po4a-id=0>Favorite Users</a> list."
 msgstr "Fügt den aktuellen Benutzer zur Liste der Bevorzugten Benutzern"
 
@@ -3786,13 +3756,11 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/index.html:14
-#, fuzzy
 msgid "<a po4a-id=0>Overview</a>"
 msgstr "<a po4a-id=0>Überblick</a>"
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:16
-#, fuzzy
 msgid "<a po4a-id=0>Get started</a>"
 msgstr "<a po4a-id=0>Erste Schritte</a>"
 
@@ -3821,7 +3789,6 @@ msgstr "Fenster"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:28
-#, fuzzy
 msgid "<a po4a-id=0>Main DC++ window</a>"
 msgstr "<a po4a-id=0>Haupt DC++ Fenster</a>"
 
@@ -3832,7 +3799,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:30
-#, fuzzy
 msgid "<a po4a-id=0>Private Message</a>"
 msgstr "<a po4a-id=0>Private Nachricht</a>"
 
@@ -3848,37 +3814,31 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:33
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hubs</a>"
 msgstr "Bevorzugte Hubs"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:34
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Users</a>"
 msgstr "Bevorzugte Benutzer"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:35
-#, fuzzy
 msgid "<a po4a-id=0>Download Queue</a>"
 msgstr "Download Warteschlange"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:36
-#, fuzzy
 msgid "<a po4a-id=0>Finished Downloads</a>"
 msgstr "Beendete Downloads"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:37
-#, fuzzy
 msgid "<a po4a-id=0>Waiting Users</a>"
 msgstr "Wartende Benutzer"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:38
-#, fuzzy
 msgid "<a po4a-id=0>Finished Uploads</a>"
 msgstr "Beendete Uploads"
 
@@ -3909,7 +3869,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:44
-#, fuzzy
 msgid "<a po4a-id=0>Network Statistics</a>"
 msgstr "Netzwerkstatistik"
 
@@ -3935,7 +3894,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:60
-#, fuzzy
 msgid "<a po4a-id=0>Indexing progress</a>"
 msgstr "Indizierungsfortschritt"
 
@@ -3946,19 +3904,16 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:62
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hub Properties</a>"
 msgstr "Bevorzugte Hubs Einstellungen"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:63
-#, fuzzy
 msgid "<a po4a-id=0>ADLSearch Properties</a>"
 msgstr "ADLSuche Eigenschaften"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/index.html:64 help/settings_downloads.html:81
-#, fuzzy
 msgid "<a po4a-id=0>Configured Public Hub Lists</a>"
 msgstr "Konfigurierte Hublisten"
 
@@ -3974,7 +3929,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:71
-#, fuzzy
 msgid "<a po4a-id=0>Connection settings</a>"
 msgstr "Verbindungseinstellungen"
 
@@ -4000,7 +3954,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:83
-#, fuzzy
 msgid "<a po4a-id=0>Colors and sounds</a>"
 msgstr "Farben und Töne"
 
@@ -4031,13 +3984,11 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:93
-#, fuzzy
 msgid "<a po4a-id=0>User Commands</a>"
 msgstr "Benutzerbefehle"
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:94
-#, fuzzy
 msgid "<a po4a-id=0>Security Certificates</a>"
 msgstr "Sicherheitszertifikate"
 
@@ -4048,7 +3999,6 @@ msgstr "Häufig gestellte Fragen"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:102
-#, fuzzy
 msgid "<a po4a-id=0>Why do I need active mode?</a>"
 msgstr "Warum brauche ich den aktiven Modus?"
 
@@ -4069,7 +4019,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:106
-#, fuzzy
 msgid "<a po4a-id=0>Why don't I get any search results?</a>"
 msgstr "Warum bekomme ich keine Suchergebnisse?"
 
@@ -4085,7 +4034,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:110
-#, fuzzy
 msgid "<a po4a-id=0>What do the different icons mean?</a>"
 msgstr "Was bedeuten die unterschiedlichen Icons?"
 
@@ -4096,7 +4044,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:112
-#, fuzzy
 msgid "<a po4a-id=0>How do I install/uninstall/upgrade DC++?</a>"
 msgstr "<a po4a-id=0>Wie installiere/deinstalliere/aktualisiere ich DC++?</a>"
 
@@ -4122,19 +4069,16 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:121
-#, fuzzy
 msgid "<a po4a-id=0>Applying patches</a>"
 msgstr "Softwarekorrekturen (Patches) einspielen"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:122
-#, fuzzy
 msgid "<a po4a-id=0>Creating patches</a>"
 msgstr "Aktualisierungen erzeugen"
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:126
-#, fuzzy
 msgid "<a po4a-id=0>Chat Commands</a>"
 msgstr "<a po4a-id=0>Chat-Befehle</a>"
 
@@ -5867,7 +5811,6 @@ msgstr "%[message] - Haupt-Chat Nachricht"
 
 #. type: Content of: <html><body><dl><dd><div>
 #: help/settings_logs.html:21 help/settings_logs.html:28
-#, fuzzy
 msgid "<b>Default format:</b> [%Y-%m-%d %H:%M] %[message]"
 msgstr "<b>Standard: </b>[%Y-%m-%d %H:%M] %[message]"
 
@@ -6047,7 +5990,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_logs.html:71 help/settings_logs.html:80
-#, fuzzy
 msgid "<b>Default: </b>[%Y-%m-%d %H:%M] %[message]"
 msgstr "<b>Standard: </b>[%Y-%m-%d %H:%M] %[message]"
 
@@ -7530,7 +7472,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_connections.html:44
-#, fuzzy
 msgid "Disconnect"
 msgstr "Neu Verbinden"
 
@@ -9022,7 +8963,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:152
-#, fuzzy
 msgid "Open the <a po4a-id=0>Public Hubs</a> window."
 msgstr ""
 "Entferne den aktuellen Hub von der Liste der <a po4a-id=0>Favorite Hubs</a>."
@@ -9043,7 +8983,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:162
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Hubs</a> window."
 msgstr ""
 "Entferne den aktuellen Hub von der Liste der <a po4a-id=0>Favorite Hubs</a>."
@@ -9058,7 +8997,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:167
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Users</a> window."
 msgstr ""
 "Entferne den aktuellen Hub von der Liste der <a po4a-id=0>Favorite Hubs</a>."
@@ -9553,7 +9491,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_public_hubs.html:46
-#, fuzzy
 msgid "Will add the selected hub to the <a po4a-id=0>Favorite hubs</a>."
 msgstr ""
 "Entferne den aktuellen Hub von der Liste der <a po4a-id=0>Favorite Hubs</a>."
@@ -10061,7 +9998,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "Private Nachricht"
 
@@ -10083,7 +10019,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:20
-#, fuzzy
 msgid "File list refresh finished"
 msgstr "Dateiliste Menu"
 
@@ -10148,7 +10083,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:31
-#, fuzzy
 msgid "Disconnected user leaving the hub: [nick]"
 msgstr "Automatisch Benutzer trennen, die den Hub verlassen"
 
@@ -10185,7 +10119,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:41
-#, fuzzy
 msgid "Error messages"
 msgstr "Private Nachricht"
 
@@ -10314,7 +10247,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:63
-#, fuzzy
 msgid "Failed to load certificate file"
 msgstr "Eigenes Zertifikat"
 
@@ -10353,7 +10285,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:69
-#, fuzzy
 msgid "TLS disabled, no certificate file set"
 msgstr "Eigenes Zertifikat"
 

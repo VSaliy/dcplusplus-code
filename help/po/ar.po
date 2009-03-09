@@ -9799,7 +9799,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "رسالة خاصة"
 

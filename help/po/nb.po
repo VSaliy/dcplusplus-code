@@ -29,7 +29,6 @@ msgstr "Hoved Nettprat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:13
-#, fuzzy
 msgid ""
 "Joins &lt;hub-ip&gt;. See also <a po4a-id=0>Open new window when using /"
 "join</a>."
@@ -62,7 +61,6 @@ msgstr "Aktiverer eller deaktiverer synlighet av brukerlisten på denne hubben."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:26
-#, fuzzy
 msgid ""
 "Displays the IP and port that DC++ will tell users to connect to. If either "
 "the IP or port is not correct, you will be unable to download from some "
@@ -75,7 +73,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:32
-#, fuzzy
 msgid ""
 "Adds the current hub (along with your nickname and password, if used) to the "
 "list of <a po4a-id=0>Favorite Hubs</a>."
@@ -85,7 +82,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:36
-#, fuzzy
 msgid ""
 "Removes the current hub from the list of <a po4a-id=0>Favorite Hubs</a>."
 msgstr "Fjerner nåværende hub fra <a po4a-id=0>Favoritt hubber</a>."
@@ -125,7 +121,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:52
-#, fuzzy
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr "Legger til aktuelle brukeren i <a po4a-id=0>Favoritt Brukere</a>."
 
@@ -162,7 +157,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:71
-#, fuzzy
 msgid ""
 "Opens a new search window with the specified search string.  It does <u>not</"
 "u> automatically send the search."
@@ -195,7 +189,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:83
-#, fuzzy
 msgid ""
 "Sets Away status. New private message windows will be responded to, once, "
 "with the message you specified, or the default away message configured in "
@@ -279,7 +272,6 @@ msgstr "Hjelpefil Bidrag og Lisens"
 
 #. type: Content of: <html><body><p>
 #: help/credits.html:15
-#, fuzzy
 msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the GNU Free Documentation License, Version 1.2 or any later "
@@ -379,7 +371,6 @@ msgstr "Skriv <i>patch -[parameter] &lt; min-oppdatering.diff</i>"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:23
-#, fuzzy
 msgid "4. The file <i>my-patch.diff</i> is the actual patch you want to apply."
 msgstr ""
 "Filen <i>min-oppdatering.diff</i>er den oppdateringen du ønsker å legge til."
@@ -405,7 +396,6 @@ msgstr "p1 gir hele filen navnet unmodified, uten skråstrek foran."
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/dev_applypatch.html:31 help/dev_createpatch.html:44
-#, fuzzy
 msgid ""
 "Parameters and more information on how to use GNU Diff can be found in the "
 "documentation for GNU Diff which should have come included with GNU Diff. "
@@ -473,7 +463,6 @@ msgstr "C:\\Programfiler\\GNU Diff er hvor GNU Diff er innstallert."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:30
-#, fuzzy
 msgid ""
 "The parameter <i po4a-id=0>u</i> means the diff will be unified. <i po4a-"
 "id=1>N</i> means that GNU Diff will show output even if a file doesn't exist "
@@ -583,7 +572,6 @@ msgstr "Minimum filstørrelse"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:26 help/window_adlsearch.html:40
-#, fuzzy
 msgid ""
 "Sets the lower limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
@@ -598,7 +586,6 @@ msgstr "Maksimum Filstørrelse"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:28 help/window_adlsearch.html:42
-#, fuzzy
 msgid ""
 "Sets the upper limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
@@ -649,7 +636,6 @@ msgstr "Nedlastningstreff"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:38
-#, fuzzy
 msgid ""
 "When checked, matches to this search will be put into your <a po4a-"
 "id=0>Download Queue</a>."
@@ -1016,7 +1002,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:42
-#, fuzzy
 msgid ""
 "Hub ip as typed when connecting (empty = all NMDC hubs, \"op\" = NMDC hubs "
 "where you're an operator, \"adc://\" = all ADC hubs, \"adc://op\" = ADC hubs "
@@ -1059,7 +1044,6 @@ msgstr "Variabler"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:53
-#, fuzzy
 msgid ""
 "In the parameters, you can use %[<b>xxx</b>] variables and <a po4a-id=0>date/"
 "time specifiers</a> (%Y, %m, ...). The following variables are also "
@@ -1103,13 +1087,11 @@ msgstr "%[type]: \"Fil\" eller \"Mappe\" (kun mappe kontekst)"
 
 #. type: Content of: <html><body><ul><li>
 #: help/dialog_user_command.html:65
-#, fuzzy
 msgid "%[line:<i>reason</i>]: Opens up a window asking for \"<i>reason</i>\""
 msgstr "%[line:<i>grunn</i>]: Åpner et vindu som spør etter \"<i>grunn</i>\""
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:68
-#, fuzzy
 msgid ""
 "In addition to these variables, all of the ADC INF flags are available, with "
 "the following prefixes: <b>my</b>, <b>user</b>, and <b>hub</b>. Some may "
@@ -1251,7 +1233,6 @@ msgstr "Setter opp aktiv modus"
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:10
-#, fuzzy
 msgid ""
 "For DC++ to work properly in active mode, it requires access on <acronym "
 "po4a-id=0>TCP</acronym> and <acronym po4a-id=1>UDP</acronym> listening "
@@ -1268,7 +1249,6 @@ msgstr "Hvis du IKKE er bak en router."
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:18 help/faq_upnp.html:24
-#, fuzzy
 msgid ""
 "Click on File menu and then Settings. Click on <a po4a-id=0>Connection "
 "Settings</a>."
@@ -1305,7 +1285,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:30
-#, fuzzy
 msgid ""
 "You may need to allow DC++ in your <a po4a-id=0>software firewall</a>. "
 "Consult its documentation on how to do this."
@@ -1314,7 +1293,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:33
-#, fuzzy
 msgid ""
 "Test active mode by joining several hubs and doing a search for a common "
 "term. You should get results back. If not, then you are likely behind a "
@@ -1331,7 +1309,6 @@ msgstr "Hvis du er bak en ruter:"
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:39
-#, fuzzy
 msgid ""
 "You can simplify the process of setting up active mode if your router and "
 "operating system is <acronym po4a-id=0>UPnP </acronym> compatible (UPnP is "
@@ -1349,7 +1326,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:46
-#, fuzzy
 msgid ""
 "The second option for using active mode behind a router or a gateway is to "
 "<i>set up port forwarding manually</i>.  For an in-depth, but still easy to "
@@ -1366,7 +1342,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:51
-#, fuzzy
 msgid ""
 "First you need to set up the router to forward the connections to the "
 "computer with DC++. This is could be called Port mapping, port redirecting, "
@@ -1395,7 +1370,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:60
-#, fuzzy
 msgid ""
 "The IP that you are forwarding to should be the <b>internal</b> IP address "
 "of your computer running DC++.  It usually begins with <a po4a-id=0>\"192.168"
@@ -1411,7 +1385,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:65
-#, fuzzy
 msgid ""
 "When you have mapped the port(s) on the router, open up DC++ and go to <a "
 "po4a-id=0>Connection Settings</a>.  Select <b>Firewall with manual port "
@@ -1425,7 +1398,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:69
-#, fuzzy
 msgid ""
 "In the External / WAN IP field, you need to enter the <b>external</b> IP "
 "address of your router.  Your external IP can be checked on <a po4a-"
@@ -1437,7 +1409,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_activemode.html:74
-#, fuzzy
 msgid ""
 "Active mode should now be working. For checking or troubleshooting if you "
 "have properly forwarded the port(s) to DC++, use <a po4a-id=0>www."
@@ -1457,7 +1428,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:78
-#, fuzzy
 msgid ""
 "You may find detailed how-to guides with screen shots for various router "
 "models at <a po4a-id=0>www.portforward.com</a>. There is a huge list of "
@@ -1477,7 +1447,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:85
-#, fuzzy
 msgid ""
 "If active mode is working for a while, but <u>the next time when you use DC+"
 "+</u>, you only get <i>Connection Timeout</i>s or no results when searching, "
@@ -1494,7 +1463,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:91
-#, fuzzy
 msgid ""
 "If you find the external IP is constantly changing, you can sign up to a "
 "free dynamic DNS service such as <a po4a-id=0>No-IP</a> , <a po4a-"
@@ -1523,7 +1491,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:99
-#, fuzzy
 msgid ""
 "If you find that your internal IP changes when you restart your computer "
 "then your operating system is obtaining an IP address from your router at "
@@ -1545,7 +1512,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:100
-#, fuzzy
 msgid ""
 "Another option to ensure you'll always have the same internal IP address is "
 "to set up static IP address for your computer. Here's a <a po4a-id=0>FAQ</a> "
@@ -1562,7 +1528,6 @@ msgstr "Windows XP?"
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:105
-#, fuzzy
 msgid ""
 "<u>Service Pack 1</u>: Its strongly recommended that you do not use the SP1 "
 "firewall and instead use a third party one.  Make sure to disable the XP "
@@ -1577,7 +1542,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:112
-#, fuzzy
 msgid ""
 "<u>Service Pack 2 or 3</u>: The firewall in SP2 & SP3 is a lot more robust "
 "than its original incarnation.  While it does not offer a plethora of "
@@ -1655,7 +1619,6 @@ msgstr "Hvordan installerer jeg DC++?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:11
-#, fuzzy
 msgid ""
 "Just run the installer and fire up DC++, then enter the settings to set it "
 "up according to your preferences (most important is <a po4a-id=0>nick</a>, "
@@ -1699,7 +1662,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:19
-#, fuzzy
 msgid ""
 "If you didn't use the installer: You can delete your DC++ folder, but be "
 "aware that dchub://, adc:// and magnet: links will remain in the registry "
@@ -2292,7 +2254,6 @@ msgstr "Hvis du ikke kan få noen søkeresultat på en hubb mens du kan på andr
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:17
-#, fuzzy
 msgid ""
 "If you are in passive connection mode some hubs may won't allow you to "
 "search as it stresses the hub a lot. Try to set up active mode following the "
@@ -2314,7 +2275,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:24
-#, fuzzy
 msgid ""
 "Some hubs have predefined search interval rule to avoid hub overloading with "
 "passive searches. It means you have to wait some time before you can start a "
@@ -2337,7 +2297,6 @@ msgstr "Hvis du ikke kan søke på alle hubbene"
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:35
-#, fuzzy
 msgid ""
 "If you use one of the active connection modes, enter your external <acronym "
 "po4a-id=0>IP</acronym> address to the <i>External/WAN IP</i> field in the <a "
@@ -2351,7 +2310,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:41
-#, fuzzy
 msgid ""
 "Check your router/gateway/firewall configuration. You need to make sure it's "
 "allowing or forwarding incoming connections on the port specified in the "
@@ -2369,7 +2327,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:48
-#, fuzzy
 msgid ""
 "Your school or work might be blocking DC traffic. Read the FAQ on types of "
 "blocks, and what you <a po4a-id=0>might be able to do about it</a>."
@@ -2388,7 +2345,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:54
-#, fuzzy
 msgid ""
 "If you still can't search (in passive mode) then probably your DC++ blocked "
 "by a software firewall. Please follow the <a po4a-id=0>Firewall settings "
@@ -2400,7 +2356,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:58
-#, fuzzy
 msgid ""
 "An anti-flood protector software / network device can (partially)  block "
 "your searches as well. You can suspect that you have a problem of this kind "
@@ -2424,7 +2379,6 @@ msgstr "Notasjon"
 
 #. type: Content of: <html><body>
 #: help/faq_plusplus_tag.html:13
-#, fuzzy
 msgid ""
 "The following information appears in the <a po4a-id=0>Tag column</a> for "
 "every user in the user list of the <a po4a-id=1>Hub window</a>: &lt;++ V:x,M:"
@@ -2620,7 +2574,6 @@ msgstr "Du kan dra og slippe arkfaner til den posisjonen du ønsker."
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_secret.html:20
-#, fuzzy
 msgid ""
 "You can see who wants to download from you and what they want to download by "
 "opening the <a po4a-id=0>Waiting users frame</a>."
@@ -2630,7 +2583,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_secret.html:21
-#, fuzzy
 msgid ""
 "You can drag folders from Windows Explorer and drop them in the <a po4a-"
 "id=0>Sharing</a>page in Settings."
@@ -3341,7 +3293,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:21
-#, fuzzy
 msgid "Remove all"
 msgstr "Fjern"
 
@@ -3401,7 +3352,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:40
-#, fuzzy
 msgid "Download"
 msgstr "Nedlastinger"
 
@@ -3414,7 +3364,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:44
-#, fuzzy
 msgid "Download to..."
 msgstr "Nedlastinger"
 
@@ -3429,7 +3378,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:49
-#, fuzzy
 msgid "Download whole directory"
 msgstr "Standard mappe for nedlastning"
 
@@ -3442,7 +3390,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:52
-#, fuzzy
 msgid "Download whole directory to..."
 msgstr "Standard mappe for nedlastning"
 
@@ -3501,7 +3448,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:75
-#, fuzzy
 msgid "Open folder"
 msgstr "Legg til mappe"
 
@@ -3529,7 +3475,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/general_menu_commands.html:85
-#, fuzzy
 msgid "User-related menu commands"
 msgstr "Brukerkommandoer"
 
@@ -3552,7 +3497,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:91
-#, fuzzy
 msgid "Browse file list"
 msgstr "Åpne filliste..."
 
@@ -3584,7 +3528,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:100
-#, fuzzy
 msgid "Send a private message to a user/source."
 msgstr "Når ett privat beksjed vindu er åpnet"
 
@@ -3595,7 +3538,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:102
-#, fuzzy
 msgid "Adds the user to your <a po4a-id=0>Favorite Users</a> list."
 msgstr ""
 "Legg til den aktuelle brukeren i listen over <a po4a-id=0>Favoritt hubber</"
@@ -4035,7 +3977,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:30
-#, fuzzy
 msgid "<a po4a-id=0>Private Message</a>"
 msgstr "Privat Melding"
 
@@ -4051,37 +3992,31 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:33
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hubs</a>"
 msgstr "Favoritthubber"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:34
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Users</a>"
 msgstr "Favorittbrukere"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:35
-#, fuzzy
 msgid "<a po4a-id=0>Download Queue</a>"
 msgstr "Nedlastingskø"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:36
-#, fuzzy
 msgid "<a po4a-id=0>Finished Downloads</a>"
 msgstr "Ferdige nedlastinger"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:37
-#, fuzzy
 msgid "<a po4a-id=0>Waiting Users</a>"
 msgstr "Ventende brukere"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:38
-#, fuzzy
 msgid "<a po4a-id=0>Finished Uploads</a>"
 msgstr "Ferdige opplastinger"
 
@@ -4112,7 +4047,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:44
-#, fuzzy
 msgid "<a po4a-id=0>Network Statistics</a>"
 msgstr "Nettverksstatistikk"
 
@@ -4138,7 +4072,6 @@ msgstr "Dialogvinduer"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:60
-#, fuzzy
 msgid "<a po4a-id=0>Indexing progress</a>"
 msgstr "Indekseringsprosess"
 
@@ -4149,19 +4082,16 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:62
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hub Properties</a>"
 msgstr "Favoritthubb innstillinger"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:63
-#, fuzzy
 msgid "<a po4a-id=0>ADLSearch Properties</a>"
 msgstr "ADL Søke Innstillinger"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/index.html:64 help/settings_downloads.html:81
-#, fuzzy
 msgid "<a po4a-id=0>Configured Public Hub Lists</a>"
 msgstr "Konfigurer offentlige hubblister"
 
@@ -4172,13 +4102,11 @@ msgstr "Alternativer"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:70
-#, fuzzy
 msgid "<a po4a-id=0>Personal information</a>"
 msgstr "Personlig informasjon"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:71
-#, fuzzy
 msgid "<a po4a-id=0>Connection settings</a>"
 msgstr "Tilkoblingsinnstillinger"
 
@@ -4204,7 +4132,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:83
-#, fuzzy
 msgid "<a po4a-id=0>Colors and sounds</a>"
 msgstr "Farger og lyder"
 
@@ -4235,13 +4162,11 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:93
-#, fuzzy
 msgid "<a po4a-id=0>User Commands</a>"
 msgstr "Brukerkommandoer"
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:94
-#, fuzzy
 msgid "<a po4a-id=0>Security Certificates</a>"
 msgstr "Sikkerhetssertifikater"
 
@@ -4252,74 +4177,62 @@ msgstr "Ofte stilte spørsmål"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:102
-#, fuzzy
 msgid "<a po4a-id=0>Why do I need active mode?</a>"
 msgstr "<a po4a-id=0>Hvorfor trenger jeg Aktiv Modus?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:103
-#, fuzzy
 msgid "<a po4a-id=0>How to set up active mode?</a>"
 msgstr "<a po4a-id=0>Hvordan setter jeg opp Aktiv Modus?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:104
-#, fuzzy
 msgid "<a po4a-id=0>How to set up UPnP?</a>"
 msgstr "<a po4a-id=0>Hvordan setter jeg opp UPnP?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:105
-#, fuzzy
 msgid "<a po4a-id=0>My ISP or University blocks DC++</a>"
 msgstr "<a po4a-id=0>Min tilbyder eller Universitet blokkerer DC++</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:106
-#, fuzzy
 msgid "<a po4a-id=0>Why don't I get any search results?</a>"
 msgstr "Hvorfor får jeg ingen søkeresultat?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:107
-#, fuzzy
 msgid "<a po4a-id=0>Why am I getting slow download speeds?</a>"
 msgstr "<a po4a-id=0>Hvorfor får jeg så lave nedlastingshastigheter?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:108
-#, fuzzy
 msgid "<a po4a-id=0>Which keyboard shortcuts are available?</a>"
 msgstr "<a po4a-id=0>Hvilke tastatursnarveier er tilgjengelige?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:110
-#, fuzzy
 msgid "<a po4a-id=0>What do the different icons mean?</a>"
 msgstr "Hva betyr de forskjellige ikonene?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:111
-#, fuzzy
 msgid "<a po4a-id=0>What do the units mean?</a>"
 msgstr "Hva betyr enhetene?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:112
-#, fuzzy
 msgid "<a po4a-id=0>How do I install/uninstall/upgrade DC++?</a>"
 msgstr ""
 "<a po4a-id=0>Hvordan installerer/avinstallerer/oppgraderer jeg DC++?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:113
-#, fuzzy
 msgid "<a po4a-id=0>What secret stuff are there?</a>"
 msgstr "<a po4a-id=0>Hvilke hemmeligheter er der?</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:114
-#, fuzzy
 msgid "<a po4a-id=0>What do the DC++ tags mean?</a>"
 msgstr "Hva betyr DC++-style tags?"
 
@@ -4330,25 +4243,21 @@ msgstr "Utvikling"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:120
-#, fuzzy
 msgid "<a po4a-id=0>Compile instructions</a>"
 msgstr "<a po4a-id=0>Kompilerings Instrukser</a>"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:121
-#, fuzzy
 msgid "<a po4a-id=0>Applying patches</a>"
 msgstr "Legger til oppdateringer"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:122
-#, fuzzy
 msgid "<a po4a-id=0>Creating patches</a>"
 msgstr "Oppretter oppdateringer"
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:126
-#, fuzzy
 msgid "<a po4a-id=0>Chat Commands</a>"
 msgstr "<a po4a-id=0>Chat Kommandoer</a>"
 
@@ -4392,7 +4301,6 @@ msgstr "Vis de forskjellige linkene i DC++"
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:143
-#, fuzzy
 msgid "<a po4a-id=0>Help File Credits</a>"
 msgstr "<a po4a-id=0>Hjelpefil Utviklere</a>"
 
@@ -6708,7 +6616,6 @@ msgstr "Forkast trege kilder for alle enheter i kø (unntatt fillister)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_queue.html:73
-#, fuzzy
 msgid ""
 "This option removes the slow sources for all queue items (except file lists)."
 msgstr "Forkast trege kilder for alle enheter i kø (unntatt fillister)"
@@ -7745,7 +7652,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_connections.html:44
-#, fuzzy
 msgid "Disconnect"
 msgstr "Koble til på nytt"
 
@@ -8237,7 +8143,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_users.html:29
-#, fuzzy
 msgid "Connect to hub"
 msgstr "Koble til"
 
@@ -8782,7 +8687,6 @@ msgstr ""
 
 #. type: Attribute 'alt' of: <html><body><h1><img>
 #: help/window_main.html:11
-#, fuzzy
 msgid "DC++"
 msgstr "DC++ Logo"
 
@@ -9239,7 +9143,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:152
-#, fuzzy
 msgid "Open the <a po4a-id=0>Public Hubs</a> window."
 msgstr ""
 "Fjern den den aktuelle hubben fra listen over <a po4a-id=0>Favoritt hubber</"
@@ -9261,7 +9164,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:162
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Hubs</a> window."
 msgstr ""
 "Fjern den den aktuelle hubben fra listen over <a po4a-id=0>Favoritt hubber</"
@@ -9277,7 +9179,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:167
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Users</a> window."
 msgstr ""
 "Fjern den den aktuelle hubben fra listen over <a po4a-id=0>Favoritt hubber</"
@@ -9773,7 +9674,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_public_hubs.html:46
-#, fuzzy
 msgid "Will add the selected hub to the <a po4a-id=0>Favorite hubs</a>."
 msgstr ""
 "Fjern den den aktuelle hubben fra listen over <a po4a-id=0>Favoritt hubber</"
@@ -10282,7 +10182,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "Privat Melding"
 
@@ -10304,7 +10203,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:20
-#, fuzzy
 msgid "File list refresh finished"
 msgstr "Filliste meny"
 
@@ -10369,7 +10267,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:31
-#, fuzzy
 msgid "Disconnected user leaving the hub: [nick]"
 msgstr "Automatisk frakobling av brukere som forlater hubben"
 
@@ -10406,7 +10303,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:41
-#, fuzzy
 msgid "Error messages"
 msgstr "Privat Melding"
 
@@ -10535,7 +10431,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:63
-#, fuzzy
 msgid "Failed to load certificate file"
 msgstr "Egen sertifikat fil"
 
@@ -10574,7 +10469,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:69
-#, fuzzy
 msgid "TLS disabled, no certificate file set"
 msgstr "Egen sertifikat fil"
 

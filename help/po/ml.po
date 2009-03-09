@@ -3618,7 +3618,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:30
-#, fuzzy
 msgid "<a po4a-id=0>Private Message</a>"
 msgstr "സ്വകാര്യ സന്ദേശം"
 
@@ -9800,7 +9799,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "സ്വകാര്യ സന്ദേശം"
 

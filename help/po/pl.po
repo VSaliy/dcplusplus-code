@@ -29,7 +29,6 @@ msgstr "Główny chat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:13
-#, fuzzy
 msgid ""
 "Joins &lt;hub-ip&gt;. See also <a po4a-id=0>Open new window when using /"
 "join</a>."
@@ -63,7 +62,6 @@ msgstr "Przełącznik widoczności listy użytkowników huba."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:26
-#, fuzzy
 msgid ""
 "Displays the IP and port that DC++ will tell users to connect to. If either "
 "the IP or port is not correct, you will be unable to download from some "
@@ -77,7 +75,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:32
-#, fuzzy
 msgid ""
 "Adds the current hub (along with your nickname and password, if used) to the "
 "list of <a po4a-id=0>Favorite Hubs</a>."
@@ -87,7 +84,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:36
-#, fuzzy
 msgid ""
 "Removes the current hub from the list of <a po4a-id=0>Favorite Hubs</a>."
 msgstr "Usuwa hub z listy <a po4a-id=0>Ulubione Huby</a>."
@@ -127,7 +123,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:52
-#, fuzzy
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr "Dodaje użytkownika do listy <a po4a-id=0>Ulubieni Użytkownicy</a>."
 
@@ -170,7 +165,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:71
-#, fuzzy
 msgid ""
 "Opens a new search window with the specified search string.  It does <u>not</"
 "u> automatically send the search."
@@ -203,7 +197,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:83
-#, fuzzy
 msgid ""
 "Sets Away status. New private message windows will be responded to, once, "
 "with the message you specified, or the default away message configured in "
@@ -374,7 +367,6 @@ msgstr "3.Wpisz <i>patch -[parameter] &lt; my-patch.diff</i>"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:23
-#, fuzzy
 msgid "4. The file <i>my-patch.diff</i> is the actual patch you want to apply."
 msgstr "4.Potrzebujesz odniesienia do pliku <i>my-patch.diff</i>"
 
@@ -398,7 +390,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/dev_applypatch.html:31 help/dev_createpatch.html:44
-#, fuzzy
 msgid ""
 "Parameters and more information on how to use GNU Diff can be found in the "
 "documentation for GNU Diff which should have come included with GNU Diff. "
@@ -576,7 +567,6 @@ msgstr "Minimalny Rozmiar Pliku"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:26 help/window_adlsearch.html:40
-#, fuzzy
 msgid ""
 "Sets the lower limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
@@ -591,7 +581,6 @@ msgstr "Maksymalny rozmiar pliku"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:28 help/window_adlsearch.html:42
-#, fuzzy
 msgid ""
 "Sets the upper limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
@@ -1003,7 +992,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:42
-#, fuzzy
 msgid ""
 "Hub ip as typed when connecting (empty = all NMDC hubs, \"op\" = NMDC hubs "
 "where you're an operator, \"adc://\" = all ADC hubs, \"adc://op\" = ADC hubs "
@@ -1046,7 +1034,6 @@ msgstr "Zmienne"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:53
-#, fuzzy
 msgid ""
 "In the parameters, you can use %[<b>xxx</b>] variables and <a po4a-id=0>date/"
 "time specifiers</a> (%Y, %m, ...). The following variables are also "
@@ -1095,13 +1082,11 @@ msgstr "%[type]: \"Plik\" lub \"Folder\" (jedynie w kontekście folderu)"
 
 #. type: Content of: <html><body><ul><li>
 #: help/dialog_user_command.html:65
-#, fuzzy
 msgid "%[line:<i>reason</i>]: Opens up a window asking for \"<i>reason</i>\""
 msgstr "%[line:<i>reason</i>]: Otwiera okno z zapytaniem \"<i>reason</i>\""
 
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:68
-#, fuzzy
 msgid ""
 "In addition to these variables, all of the ADC INF flags are available, with "
 "the following prefixes: <b>my</b>, <b>user</b>, and <b>hub</b>. Some may "
@@ -1530,7 +1515,6 @@ msgstr "Jak zainstalować DC++?"
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:11
-#, fuzzy
 msgid ""
 "Just run the installer and fire up DC++, then enter the settings to set it "
 "up according to your preferences (most important is <a po4a-id=0>nick</a>, "
@@ -1571,7 +1555,6 @@ msgstr "Użyj pliku odinstalowania, który jest załączony do instalera."
 
 #. type: Content of: <html><body><p>
 #: help/faq_install.html:19
-#, fuzzy
 msgid ""
 "If you didn't use the installer: You can delete your DC++ folder, but be "
 "aware that dchub://, adc:// and magnet: links will remain in the registry "
@@ -2165,7 +2148,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:17
-#, fuzzy
 msgid ""
 "If you are in passive connection mode some hubs may won't allow you to "
 "search as it stresses the hub a lot. Try to set up active mode following the "
@@ -2187,7 +2169,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:24
-#, fuzzy
 msgid ""
 "Some hubs have predefined search interval rule to avoid hub overloading with "
 "passive searches. It means you have to wait some time before you can start a "
@@ -2210,7 +2191,6 @@ msgstr "Jeżeli nie możesz ściągać na żadnym hubie"
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:35
-#, fuzzy
 msgid ""
 "If you use one of the active connection modes, enter your external <acronym "
 "po4a-id=0>IP</acronym> address to the <i>External/WAN IP</i> field in the <a "
@@ -2224,7 +2204,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:41
-#, fuzzy
 msgid ""
 "Check your router/gateway/firewall configuration. You need to make sure it's "
 "allowing or forwarding incoming connections on the port specified in the "
@@ -2242,7 +2221,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:48
-#, fuzzy
 msgid ""
 "Your school or work might be blocking DC traffic. Read the FAQ on types of "
 "blocks, and what you <a po4a-id=0>might be able to do about it</a>."
@@ -2262,7 +2240,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:54
-#, fuzzy
 msgid ""
 "If you still can't search (in passive mode) then probably your DC++ blocked "
 "by a software firewall. Please follow the <a po4a-id=0>Firewall settings "
@@ -2274,7 +2251,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_nosearch.html:58
-#, fuzzy
 msgid ""
 "An anti-flood protector software / network device can (partially)  block "
 "your searches as well. You can suspect that you have a problem of this kind "
@@ -2299,7 +2275,6 @@ msgstr "Oznaczenie"
 
 #. type: Content of: <html><body>
 #: help/faq_plusplus_tag.html:13
-#, fuzzy
 msgid ""
 "The following information appears in the <a po4a-id=0>Tag column</a> for "
 "every user in the user list of the <a po4a-id=1>Hub window</a>: &lt;++ V:x,M:"
@@ -2495,7 +2470,6 @@ msgstr "Metodą \"przeciągnij i upuść\" możesz zmieniać pozcję zakładek."
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_secret.html:20
-#, fuzzy
 msgid ""
 "You can see who wants to download from you and what they want to download by "
 "opening the <a po4a-id=0>Waiting users frame</a>."
@@ -2505,7 +2479,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_secret.html:21
-#, fuzzy
 msgid ""
 "You can drag folders from Windows Explorer and drop them in the <a po4a-"
 "id=0>Sharing</a>page in Settings."
@@ -2925,7 +2898,6 @@ msgstr "10<sup>15</sup>"
 
 #. type: Content of: <html><body><p>
 #: help/faq_units.html:62
-#, fuzzy
 msgid ""
 "For more information about the binary units see the <a po4a-id=0>National "
 "Institute of Standards and Technology</a>."
@@ -2948,7 +2920,6 @@ msgstr "Blokowanie i zwalnianie prędkości"
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:11
-#, fuzzy
 msgid ""
 "Many <acronym po4a-id=0>ISP</acronym>s, Universities, or other organizations "
 "have policies that limit the usage of peer to peer applications for their "
@@ -2972,7 +2943,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:24
-#, fuzzy
 msgid ""
 "If you use DC++ from an organization and you're behind such a block, please "
 "learn to live with it. Circumventing the block by proxying is detectable, is "
@@ -2996,7 +2966,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:33
-#, fuzzy
 msgid ""
 "You can also try to log on to hubs using the <acronym po4a-id=0>ADC</"
 "acronym> protocol. Since this protocol is fairly new you have a high chance "
@@ -3019,7 +2988,6 @@ msgstr "Tłumaczenie adresów sieciowych"
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:43
-#, fuzzy
 msgid ""
 "Other organizations might have their network behind a <acronym po4a-"
 "id=0>NAT</acronym> in which case an active connection is impossible. There "
@@ -3050,7 +3018,6 @@ msgstr "Blokowanie Portów"
 
 #. type: Content of: <html><body><p>
 #: help/faq_university.html:54
-#, fuzzy
 msgid ""
 "A few organizations use simple port blocking, where common ports used by DC+"
 "+ and other p2p applications are blocked. DC++ uses a wide range of ports "
@@ -3274,7 +3241,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:18
-#, fuzzy
 msgid ""
 "Deletes the actual item from the list. If the corresponding setting in <a "
 "po4a-id=0>Confirm dialog options</a> is enabled, you will be prompted before "
@@ -3291,7 +3257,6 @@ msgstr "Usuń wszystko"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:22
-#, fuzzy
 msgid ""
 "Deletes all the selected items from the list. If the corresponding setting "
 "in <a po4a-id=0>Confirm dialog options</a> is enabled, you will be prompted "
@@ -3320,7 +3285,6 @@ msgstr "Szukaj alternatywy"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:32
-#, fuzzy
 msgid ""
 "Will open a new <a po4a-id=0>Search window</a> to search for alternate "
 "sources for the selected file."
@@ -3347,7 +3311,6 @@ msgstr "Kopiuj magnet link do schowka"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:38
-#, fuzzy
 msgid "Will copy the file's <a po4a-id=0>magnet link</a> to the clipboard."
 msgstr "Skopiuje <a po4a-id=0>magnet link</a> pliku do schowka."
 
@@ -3358,7 +3321,6 @@ msgstr "Pobieranie"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:41
-#, fuzzy
 msgid ""
 "Adds the selected file(s) or director(ies) to the Download Queue. They will "
 "be downloaded to the <a po4a-id=0>Default download directory</a>."
@@ -3382,7 +3344,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:49
-#, fuzzy
 msgid "Download whole directory"
 msgstr "Otwórz katalog pobierań"
 
@@ -3395,7 +3356,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:52
-#, fuzzy
 msgid "Download whole directory to..."
 msgstr "Otwórz katalog pobierań"
 
@@ -3454,7 +3414,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:75
-#, fuzzy
 msgid "Open folder"
 msgstr "Otwiera listę plików."
 
@@ -3467,7 +3426,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:78
-#, fuzzy
 msgid "Shell menu"
 msgstr "Menu Pomoc"
 
@@ -3500,13 +3458,11 @@ msgstr "Pobierz listę plików"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:90
-#, fuzzy
 msgid "Get the file list of a user/source."
 msgstr "Pobierz listę plików ze źródła."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/general_menu_commands.html:91
-#, fuzzy
 msgid "Browse file list"
 msgstr "Pobierz listę plików"
 
@@ -3538,7 +3494,6 @@ msgstr "Wyślij prywatną wiadomość"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:100
-#, fuzzy
 msgid "Send a private message to a user/source."
 msgstr "Wyślij prywatną wiadomość"
 
@@ -3549,7 +3504,6 @@ msgstr "Dodaj do ulubionych"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:102
-#, fuzzy
 msgid "Adds the user to your <a po4a-id=0>Favorite Users</a> list."
 msgstr "Dodaj użytkownika do listy <a po4a-id=0>ulubionych użytkowników</a>."
 
@@ -3584,7 +3538,6 @@ msgstr "Początek"
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:13
-#, fuzzy
 msgid ""
 "Hello and welcome! DC++ is a free, open-source client for Direct Connect "
 "file sharing networks. It is fully compatible with and supports connection "
@@ -3602,7 +3555,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:18
-#, fuzzy
 msgid ""
 "The newest version of DC++ should work well on any modern Windows NT-based "
 "operating system, including 2000, XP, and Vista.  Some older versions will "
@@ -3739,7 +3691,6 @@ msgstr "Podstawowe ustawienia i użycie"
 
 #. type: Content of: <html><body>
 #: help/get_started.html:79
-#, fuzzy
 msgid ""
 "<a po4a-id=0>TheParanoidOne's beginners guide</a> is easy to understand and "
 "contains plenty of screenshots.  It explains basic DC++ usage and the "
@@ -3761,7 +3712,6 @@ msgstr "Sprawdzanie ustawień programu zapory"
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:87
-#, fuzzy
 msgid ""
 "Software firewalls often cause problems as they can completely prevent DC++ "
 "from connecting to the Internet. You can skip this section if you can "
@@ -3819,7 +3769,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:112
-#, fuzzy
 msgid ""
 "The method for unblocking programs in firewalls varies from product to "
 "product.  Check your firewall's help or manual for instructions. The best "
@@ -3842,7 +3791,6 @@ msgstr "Ustawianie połączenia"
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:121
-#, fuzzy
 msgid ""
 "To make your life easier while using DC++ you should find out what "
 "connection mode works for you. From a protocol perspective, there are two "
@@ -3871,7 +3819,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:136
-#, fuzzy
 msgid ""
 "If you're still unsure what network devices you use to connect to the "
 "Internet, then use <a po4a-id=0>Google</a>! It can give you information on "
@@ -3908,7 +3855,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:152
-#, fuzzy
 msgid ""
 "To see your <i>external IP address</i> go to one of the following websites : "
 "<a po4a-id=0>www.whatismyip.com</a>, <a po4a-id=1>www.dslreports.com/ip</a>, "
@@ -3929,7 +3875,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:159
-#, fuzzy
 msgid ""
 "When you look at the <a po4a-id=0>Connection Settings</a> you will find 3 "
 "options for active mode and the last option for being passive as a last "
@@ -3959,7 +3904,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:173
-#, fuzzy
 msgid ""
 "For setting up any of the three active mode options follow the <a po4a-"
 "id=0>active mode setup FAQ</a>."
@@ -3969,7 +3913,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:175
-#, fuzzy
 msgid ""
 "If none of the above helped or you are not able to use active mode in your "
 "network (e.g. you have no access to the configuration page of the router/"
@@ -3997,7 +3940,6 @@ msgstr "Potrzebujesz pomocy?"
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:186
-#, fuzzy
 msgid ""
 "You can find <a po4a-id=0>FAQs</a> and explanation of ALL settings in the "
 "built-in context sensitive Help of DC++. Just move the question mark icon "
@@ -4011,7 +3953,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:190
-#, fuzzy
 msgid ""
 "There is a complete <a po4a-id=0>Direct Connect FAQ</a> maintained at "
 "dslreports.com."
@@ -4021,7 +3962,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:193
-#, fuzzy
 msgid ""
 "There are more answers to the most frequent support problems at the <a po4a-"
 "id=0>FAQ section of the DC++ Launchpad page</a>."
@@ -4031,7 +3971,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:198
-#, fuzzy
 msgid ""
 "There is an online <u>support forum and a bug &amp; feature tracker</u> also "
 "available. You can access these pages through the Help menu of DC++ or from "
@@ -4048,7 +3987,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:205
-#, fuzzy
 msgid ""
 "<u>Important :</u> before asking for support please keep in mind that DC++ "
 "is a <u>client for connecting to a network and developers of DC++ have no "
@@ -4085,7 +4023,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:16
-#, fuzzy
 msgid "<a po4a-id=0>Get started</a>"
 msgstr "<a po4a-id=0>Początek</a>"
 
@@ -4114,7 +4051,6 @@ msgstr "Okna"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:28
-#, fuzzy
 msgid "<a po4a-id=0>Main DC++ window</a>"
 msgstr "Główne okno DC++"
 
@@ -4125,7 +4061,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:30
-#, fuzzy
 msgid "<a po4a-id=0>Private Message</a>"
 msgstr "Prywatna Widomość"
 
@@ -4141,37 +4076,31 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:33
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hubs</a>"
 msgstr "Ulubione Huby"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:34
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Users</a>"
 msgstr "Ulubieni Użytkownicy"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:35
-#, fuzzy
 msgid "<a po4a-id=0>Download Queue</a>"
 msgstr "Kolejka pobierania"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:36
-#, fuzzy
 msgid "<a po4a-id=0>Finished Downloads</a>"
 msgstr "Pobrane pliki"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:37
-#, fuzzy
 msgid "<a po4a-id=0>Waiting Users</a>"
 msgstr "Oczekujący użytkownicy"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:38
-#, fuzzy
 msgid "<a po4a-id=0>Finished Uploads</a>"
 msgstr "Plik wysyłane"
 
@@ -4202,7 +4131,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:44
-#, fuzzy
 msgid "<a po4a-id=0>Network Statistics</a>"
 msgstr "Statystyki sieci"
 
@@ -4218,7 +4146,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:50
-#, fuzzy
 msgid "<a po4a-id=0> General Menu Commands</a>"
 msgstr "Menu komend ogólnych"
 
@@ -4229,7 +4156,6 @@ msgstr "Okna dialogowe"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:60
-#, fuzzy
 msgid "<a po4a-id=0>Indexing progress</a>"
 msgstr "Postęp indeksowania"
 
@@ -4240,19 +4166,16 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:62
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hub Properties</a>"
 msgstr "Właściwości ulubionych hubów"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:63
-#, fuzzy
 msgid "<a po4a-id=0>ADLSearch Properties</a>"
 msgstr "Właściwości wyszukiwania ADL"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/index.html:64 help/settings_downloads.html:81
-#, fuzzy
 msgid "<a po4a-id=0>Configured Public Hub Lists</a>"
 msgstr "Skonfigurowano Publiczną Listę Hubów"
 
@@ -4323,7 +4246,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li>
 #: help/index.html:93
-#, fuzzy
 msgid "<a po4a-id=0>User Commands</a>"
 msgstr "Polecenia użytkownika"
 
@@ -4339,7 +4261,6 @@ msgstr "Najczęściej zadawane pytania"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:102
-#, fuzzy
 msgid "<a po4a-id=0>Why do I need active mode?</a>"
 msgstr "Dlaczego potrzebuję trybu aktywnego?"
 
@@ -4360,7 +4281,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:106
-#, fuzzy
 msgid "<a po4a-id=0>Why don't I get any search results?</a>"
 msgstr "Czemu nie mam żadnych rezultatów wyszukiwań?"
 
@@ -4376,13 +4296,11 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:110
-#, fuzzy
 msgid "<a po4a-id=0>What do the different icons mean?</a>"
 msgstr "Co oznaczają różne ikony użytkowników?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:111
-#, fuzzy
 msgid "<a po4a-id=0>What do the units mean?</a>"
 msgstr "Co oznaczają jednostki?"
 
@@ -4393,13 +4311,11 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:113
-#, fuzzy
 msgid "<a po4a-id=0>What secret stuff are there?</a>"
 msgstr "Jakie są tu tajemnice?"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:114
-#, fuzzy
 msgid "<a po4a-id=0>What do the DC++ tags mean?</a>"
 msgstr "Co oznaczają wartości w tagu DC++?"
 
@@ -4415,7 +4331,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:121
-#, fuzzy
 msgid "<a po4a-id=0>Applying patches</a>"
 msgstr "Dodawanie łatek"
 
@@ -4426,7 +4341,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:126
-#, fuzzy
 msgid "<a po4a-id=0>Chat Commands</a>"
 msgstr "Komendy głównego okna."
 
@@ -6640,7 +6554,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/settings_queue.html:15
-#, fuzzy
 msgid ""
 "Priority conditions are checked from the Highest to the Lowest priority, "
 "when assigning a priority to a new queue item. A zero means that the given "
@@ -6720,7 +6633,6 @@ msgstr "Ustawienia automatycznego porzucenia"
 
 #. type: Content of: <html><body><p>
 #: help/settings_queue.html:39
-#, fuzzy
 msgid ""
 "Autodrop allows automatical removal (or disconnecting) of slow download "
 "sources. By default, slow sources are removed."
@@ -6732,7 +6644,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/settings_queue.html:41
-#, fuzzy
 msgid ""
 "All of these autodrop options are necessary to estimate and disconnect/drop "
 "sources properly."
@@ -6857,7 +6768,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_queue.html:75 help/settings_queue.html:82
-#, fuzzy
 msgid ""
 "To enable autodrop, turn on either \"Autodrop slow sources for all queue "
 "items\" or \"Remove slow file lists\" (or both of them)."
@@ -6899,7 +6809,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_queue.html:89
-#, fuzzy
 msgid ""
 "Every few minutes, the client will search for files in your Download Queue "
 "to find more download locations (more users/sources).  The autosearch will "
@@ -6924,7 +6833,6 @@ msgstr "Automatycznie przypisuj w kolejce nowo wyszukane pozycje"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_queue.html:99
-#, fuzzy
 msgid ""
 "Enable to automatically download a user's list and match them as sources for "
 "files in your Download Queue when they've been discovered as a source for "
@@ -7378,7 +7286,6 @@ msgstr "Publiczne Huby"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:31
-#, fuzzy
 msgid ""
 "Opens the Public Hub window at startup, and automatically loads the <a po4a-"
 "id=0>configured public hub list</a>."
@@ -7454,7 +7361,6 @@ msgstr "Otwórz nowe okno listy plików w tle"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:59
-#, fuzzy
 msgid ""
 "Keep this disabled if you want newly downloaded file lists to pop up in "
 "front of other windows. <i>It can be very annoying to have a new window pop "
@@ -7572,7 +7478,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:85
-#, fuzzy
 msgid ""
 "Enabling this option will cause DC++ to prompt before you close a <a po4a-"
 "id=0>hub</a> window."
@@ -7615,7 +7520,6 @@ msgstr "Potwierdzaj usuwanie elementu z kolejki"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:93
-#, fuzzy
 msgid ""
 "Enabling this option will cause DC++ to prompt before you remove a file (or "
 "files) from the <a po4a-id=0>download queue</a>."
@@ -7630,7 +7534,6 @@ msgstr "Potwierdź usunięcie ADL Search"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_windows.html:96
-#, fuzzy
 msgid ""
 "Enabling this option will cause DC++ to prompt before you remove an ADL "
 "Search item from the <a po4a-id=0>ADL Search</a> window."
@@ -7963,7 +7866,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_connections.html:44
-#, fuzzy
 msgid "Disconnect"
 msgstr "Połącz ponownie"
 
@@ -7999,7 +7901,6 @@ msgstr "Ustaw priorytet"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:18
-#, fuzzy
 msgid ""
 "This will set the priority of all files in the directory. If a file is "
 "paused, it will not begin to download and it will not be <a po4a-"
@@ -8020,7 +7921,6 @@ msgstr "Prznosi i/lub zmienia nazwę"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:22
-#, fuzzy
 msgid ""
 "Deletes the queued directory from the queue. If <a po4a-id=0>Confirm item "
 "removal in download queue</a> is enabled, you will be prompted."
@@ -8074,7 +7974,6 @@ msgstr "Priorytet"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:36 help/window_download_queue.html:66
-#, fuzzy
 msgid ""
 "The file's priority. If a file is paused, it will not begin to download and "
 "it will not be <a po4a-id=0>automatically searched</a> for."
@@ -8233,7 +8132,6 @@ msgstr "Nieoznaczony kwadrat."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:79
-#, fuzzy
 msgid "This will toggle the appearance of the <a po4a-id=0>left screen</a>."
 msgstr "Wyłączy lub włączy <a po4a-id=0>okno po lewej</a>."
 
@@ -8394,7 +8292,6 @@ msgstr "Zmień istniejące właściwości wybranego huba."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_hubs.html:37
-#, fuzzy
 msgid ""
 "Move up selected hubs in the list. If several hubs have <a po4a-id=0>auto "
 "connect</a> enabled, the highest hub will be connected to first."
@@ -8405,7 +8302,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_hubs.html:39
-#, fuzzy
 msgid ""
 "Move down selected hubs in the list. If several hubs have <a po4a-id=0>auto "
 "connect</a> enabled, the lowest hub will be connected to last."
@@ -8483,7 +8379,6 @@ msgstr "ID klienta użytkownika."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_users.html:29
-#, fuzzy
 msgid "Connect to hub"
 msgstr "Połączenie"
 
@@ -8683,7 +8578,6 @@ msgstr "Pobrane pliki"
 
 #. type: Content of: <html><body>
 #: help/window_finished_downloads.html:13 help/window_finished_uploads.html:13
-#, fuzzy
 msgid ""
 "Note that <a po4a-id=0>file list logging</a> must be enabled for them to "
 "appear in this window."
@@ -8739,7 +8633,6 @@ msgstr "CRC Sprawdzone"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:31 help/window_finished_uploads.html:31
-#, fuzzy
 msgid ""
 "Whether or not the file was CRC checked. Note that <a po4a-id=0>Enable "
 "automatic SFV checking</a> must be enabled, and the file needs to have an "
@@ -8756,7 +8649,6 @@ msgstr "Pokazuj tylko całkowicie pobrane pliki"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:42
-#, fuzzy
 msgid ""
 "When this check-box is checked (which is the case in the default "
 "configuration), only files that are fully downloaded (which are not anymore "
@@ -8864,7 +8756,6 @@ msgstr "Główne okno czatu (po lewej)"
 
 #. type: Content of: <html><body><p>
 #: help/window_hub.html:15
-#, fuzzy
 msgid ""
 "The main chat window displays messages sent by the hub. You can chat with "
 "other users in this \"public area\" by writing a message in the field below "
@@ -8873,16 +8764,9 @@ msgid ""
 "available). You can right click to the users' nicks to bring up the user "
 "context menu described below."
 msgstr ""
-"Główne okno czatu wyświetla wiadomości wysłane od huba. Możesz tu rozmawiać "
-"z innymi użytkownikami w tej \"publicznej strefie\" przez pisanie wiadomości "
-"w okienku poniżej głównego czata i wciśnięciu klawisza Enter lub Alt+S by "
-"wysłać wiadomość. Możesz również użyć <a po4a-id=0>/commands</a> (send /help "
-"to list those available).<br/> Zauważ'; to nie jest miejsce na wyszukiwanie "
-"plików. By szukać plików otwórz okno <a po4a-id=1>Szukaj</a>."
 
 #. type: Content of: <html><body><p>
 #: help/window_hub.html:16
-#, fuzzy
 msgid ""
 "Note; this is not the place to search for files. Open a <a po4a-id=0>Search "
 "window</a> to do that."
@@ -8906,7 +8790,6 @@ msgstr ""
 
 #. type: Content of: <html><body>
 #: help/window_hub.html:20
-#, fuzzy
 msgid "<a po4a-id=0>Follow this link to see what the different icons mean</a>."
 msgstr ""
 "<a po4a-id=0>Podążaj za linkiem, by sprawdzić co oznaczają różne ikony "
@@ -8951,7 +8834,6 @@ msgstr "Tag"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_hub.html:32
-#, fuzzy
 msgid ""
 "This shows information about what client they are using, how it's setup and "
 "how many hubs they are in. For example a tag like this &lt;++ V:705,M:A,"
@@ -9009,7 +8891,6 @@ msgstr "Okno wpisywania wiadomości (w dole po lewej)"
 
 #. type: Content of: <html><body><p>
 #: help/window_hub.html:50
-#, fuzzy
 msgid ""
 "Write a message here to chat with other users connected to the hub. You can "
 "press either Enter or Alt+S to send your message. You may also use <a po4a-"
@@ -9277,7 +9158,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:48
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Public Hubs</a> window. You can retreive lists of "
 "available hubs and connect to them here."
@@ -9287,7 +9167,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:50
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Favorite Hubs</a> window where you can store and "
 "manage you favorite places in the DC network as well as set to autoconnect "
@@ -9299,7 +9178,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:52
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Favorite Users</a> window. You can store and manage "
 "your favorite DC users here as well as grant extra access to your share for "
@@ -9311,7 +9189,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:54
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Download Queue</a> window. You can track and manage "
 "your files beeing downloaded here."
@@ -9321,7 +9198,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:56
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Finished Downloads</a> window which lists your "
 "downloaded files in the current session. Right clicking the list items you "
@@ -9334,7 +9210,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:58
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Waiting Users</a> window. It lists those users who "
 "are currently waiting for a free slot to be able to start downloading from "
@@ -9346,7 +9221,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:60
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Finished Uploads</a> window which lists the files "
 "uploaded from you in the current session. Right clicking the list items you "
@@ -9358,7 +9232,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:62
-#, fuzzy
 msgid ""
 "Open the <a po4a-id=0>Search</a> window. This is the place where you can "
 "search for files to download."
@@ -9374,7 +9247,6 @@ msgstr "Wyszkiwanie ADL"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:64
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>ADL Search</a> window. It incorporates a tool for "
 "filtering file lists downloaded from users."
@@ -9384,7 +9256,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:66
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Search Spy</a> window where you are able to spy other "
 "users' searches."
@@ -9394,7 +9265,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:68
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Notepad</a> window, where you can store random text. "
 "The text will be kept even if you close DC++."
@@ -9404,7 +9274,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:70
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>System Log</a> window, where all system messages of "
 "the current session are logged."
@@ -9414,7 +9283,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:72
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Network Statistics</a> window, which displays a real-"
 "time chart of the avarage speed of data sent and received by DC++."
@@ -9425,7 +9293,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:74
-#, fuzzy
 msgid ""
 "Opens the <a po4a-id=0>Indexing progess</a> dialog, which shows you the "
 "current state of file hashing operation and how much time there is left from "
@@ -9485,7 +9352,6 @@ msgstr "Zamknij wszystkie okna list plików"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:88
-#, fuzzy
 msgid ""
 "Closes all opened file list windows. Saved file lists can be reopened by "
 "selecting Open File List... from the <a po4a-id=0>File menu</a>."
@@ -9577,7 +9443,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:110
-#, fuzzy
 msgid ""
 "Opens a web page where the latest GeoIP database can be obtained. The "
 "database file called GeoIPCountryWhoIs.csv and should be saved to the DC++ "
@@ -9648,7 +9513,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:152
-#, fuzzy
 msgid "Open the <a po4a-id=0>Public Hubs</a> window."
 msgstr "Otwiera okno <a po4a-id=0>Publiczne Huby</a>."
 
@@ -9672,13 +9536,11 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:162
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Hubs</a> window."
 msgstr "Otwórz okno <a po4a-id=0>Ulubione Huby</a>."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:163
-#, fuzzy
 msgid ""
 "Use the arrow placed on the right of the icon to easily connect to one of "
 "your favorite hubs without having to open the <a po4a-id=0>Favorite Hubs</a> "
@@ -9690,49 +9552,41 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:167
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Users</a> window."
 msgstr "Otwiera okno <a po4a-id=0>Ulubieni Użytkownicy</a>."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:170
-#, fuzzy
 msgid "Open the <a po4a-id=0>Download Queue</a> window."
 msgstr "Otwiera okno <a po4a-id=0>Kolejka pobierania</a>."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:173
-#, fuzzy
 msgid "Open the <a po4a-id=0>Finished Downloads</a> window."
 msgstr "Otwiera okno Pobranych plików przy starcie."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:176
-#, fuzzy
 msgid "Open the <a po4a-id=0>Waiting Users</a> window."
 msgstr "Otwiera okno<a po4a-id=0>Oczekujący użytkownicy</a>."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:179
-#, fuzzy
 msgid "Open the <a po4a-id=0>Finished Uploads</a> window."
 msgstr "Otwiera okno <a po4a-id=0>Pliki wysłane</a>."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:182
-#, fuzzy
 msgid "Open the <a po4a-id=0>Search</a> window."
 msgstr "Otwiera okno <a po4a-id=0>Szukaj</a>."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:185
-#, fuzzy
 msgid "Open the <a po4a-id=0>ADL Search</a> window."
 msgstr "Otwiera okno <a po4a-id=0>Szukaj ADL</a>."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:188
-#, fuzzy
 msgid "Open the <a po4a-id=0>Search Spy</a> window."
 msgstr "Otórz okno <a po4a-id=0>Szpieg wyszukiwań</a>"
 
@@ -9752,7 +9606,6 @@ msgstr "Otwiera okno Ustawień."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:199
-#, fuzzy
 msgid ""
 "Open the <a po4a-id=0>Notepad</a> window, where you can store random text."
 msgstr ""
@@ -9855,7 +9708,6 @@ msgstr "Ctrl+F4"
 
 #. type: Content of: <html><body>
 #: help/window_main.html:226
-#, fuzzy
 msgid ""
 "You can customize the look and behavior of tabs from the <a po4a-id=0>Tabs "
 "settings</a> and <a po4a-id=1>Windows settings</a> respectively."
@@ -9882,7 +9734,6 @@ msgstr "Widomości systemowe"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:233
-#, fuzzy
 msgid ""
 "The first part of the status bar contains the last system message with a "
 "timestamp. To see more from the recent system messages you can move the "
@@ -9905,7 +9756,6 @@ msgstr "Wskaźnik away"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:236
-#, fuzzy
 msgid "Shows &quot;AWAY&quot; when DC++ is in <a po4a-id=0>away mode</a>."
 msgstr ""
 "Pokazuje tryb &quot;AWAY&quot;, gdy DC++ jest w <a po4a-id=0>trybie "
@@ -9951,7 +9801,6 @@ msgstr "z = to ilość hubów z którymi jesteś połączony jako operator;"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:246
-#, fuzzy
 msgid ""
 "just the same way as in the <a po4a-id=0>DC++ tags</a> of the users listed "
 "on a hub."
@@ -10002,7 +9851,6 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:257 help/window_main.html:261
 #: help/window_main.html:265 help/window_main.html:269
-#, fuzzy
 msgid "Double-click to open the <a po4a-id=0>Network Statistics</a> window."
 msgstr "Otórz okno <a po4a-id=0>Szpieg wyszukiwań</a>"
 
@@ -10055,7 +9903,6 @@ msgstr "Statystyki sieci"
 
 #. type: Content of: <html><body>
 #: help/window_network_stats.html:13
-#, fuzzy
 msgid ""
 "This window will display the avarage speed of files sent and received by DC+"
 "+. The colors are decided by the <a po4a-id=0>upload and download colors in "
@@ -10082,7 +9929,6 @@ msgstr "Okno prywatnych wiadomości (u góry)"
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:15
-#, fuzzy
 msgid ""
 "The private chat window displays messages sent during your private "
 "conversation with a specific user (to know which one, take a look at the "
@@ -10105,7 +9951,6 @@ msgstr "Miejsce do wpisania wiadomości (w dole)"
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:19
-#, fuzzy
 msgid ""
 "Write a message here to chat with the user you are currently in private "
 "conversation with (to know which one, take a look at the title bar of the "
@@ -10125,7 +9970,6 @@ msgstr "Pokazuje status aktualnej wiadomości."
 
 #. type: Content of: <html><body><p>
 #: help/window_pm.html:24
-#, fuzzy
 msgid ""
 "If private chat <a po4a-id=0>logging</a> is enabled and if the <a po4a-"
 "id=1>PM history</a> setting is not zero, also contains the latest lines of "
@@ -10279,7 +10123,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_public_hubs.html:46
-#, fuzzy
 msgid "Will add the selected hub to the <a po4a-id=0>Favorite hubs</a>."
 msgstr "Dodaj użytkownika do listy <a po4a-id=0>ulubionych użytkowników</a>."
 
@@ -10317,7 +10160,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/window_public_hubs.html:57
-#, fuzzy
 msgid ""
 "If you click on 'Configure', you will be able to change, add and remove "
 "hublists. The order in <a po4a-id=0>Configured Public Hub Lists</a> "
@@ -10340,7 +10182,6 @@ msgstr "Odśwież"
 
 #. type: Content of: <html><body><p>
 #: help/window_public_hubs.html:62
-#, fuzzy
 msgid ""
 "Download a fresh version of the hublist. If the download fails click Refresh "
 "again to get the next available hublist in the dropdown.  DC++ uses <a po4a-"
@@ -10483,7 +10324,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/window_search.html:20
-#, fuzzy
 msgid ""
 "You may not start or repeat searches as fast as you like. There is a minimum "
 "interval of a few seconds between two searches defined in DC++. You will get "
@@ -10508,7 +10348,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/window_search.html:25
-#, fuzzy
 msgid ""
 "Search hits with TTH are always matched to the Download queue and new "
 "sources are automatically added to the queue items unless they were removed "
@@ -10529,7 +10368,6 @@ msgstr ""
 
 #. type: Content of: <html><body><p>
 #: help/window_search.html:30
-#, fuzzy
 msgid ""
 "If you often get too few search results or no results at all, refer to the "
 "<a po4a-id=0>Search troubleshooting FAQ</a>."
@@ -10563,7 +10401,6 @@ msgstr "Wyczyść"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:37
-#, fuzzy
 msgid "Clear the contents of the <a po4a-id=0>search history</a>."
 msgstr "Wyczyść zawartość  w oknie<a po4a-id=0>historia wyszukiwań</a>."
 
@@ -10624,7 +10461,6 @@ msgstr "Odfiltrowuje pliki znajdujące sie już w udostępnionych."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:50
-#, fuzzy
 msgid "Merge results for the same file"
 msgstr "Średnia prędkość dla pliku."
 
@@ -10684,7 +10520,6 @@ msgstr "Ścieżka na liście plików użytkownika, gdzie znajduje się plik."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:75
-#, fuzzy
 msgid "The user's possible <a po4a-id=0>line speed in upload</a>."
 msgstr "Przypuszczalna wielkość <a po4a-id=0>predkości ściągania</a>."
 
@@ -10846,7 +10681,6 @@ msgstr "Współczynnik ilości wyszukiwań do trafień."
 
 #. type: Content of: <html><body><p>
 #: help/window_system_log.html:10
-#, fuzzy
 msgid ""
 "This window displays important and current information about DC++ and your "
 "interactions with the program. If DC++ behaves unexpectedly, you can look in "
@@ -10888,7 +10722,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "Widomości systemowe"
 
@@ -10910,7 +10743,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:20
-#, fuzzy
 msgid "File list refresh finished"
 msgstr "Menu listy plików"
 
@@ -11011,7 +10843,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:41
-#, fuzzy
 msgid "Error messages"
 msgstr "Widomości systemowe"
 

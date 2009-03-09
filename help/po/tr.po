@@ -29,7 +29,6 @@ msgstr "Ana Sohbet Bölümü"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:13
-#, fuzzy
 msgid ""
 "Joins &lt;hub-ip&gt;. See also <a po4a-id=0>Open new window when using /"
 "join</a>."
@@ -62,7 +61,6 @@ msgstr "Mevcut hubdaki kullanıcıların listesini açıp kapatır."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:26
-#, fuzzy
 msgid ""
 "Displays the IP and port that DC++ will tell users to connect to. If either "
 "the IP or port is not correct, you will be unable to download from some "
@@ -76,7 +74,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:32
-#, fuzzy
 msgid ""
 "Adds the current hub (along with your nickname and password, if used) to the "
 "list of <a po4a-id=0>Favorite Hubs</a>."
@@ -86,7 +83,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:36
-#, fuzzy
 msgid ""
 "Removes the current hub from the list of <a po4a-id=0>Favorite Hubs</a>."
 msgstr "Bu odayı <a po4a-id=0>Favori Hub'lar</a> listenizden çıkartır."
@@ -125,7 +121,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:52
-#, fuzzy
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr "Bu kullanıcıyı <a po4a-id=0>Favori Kullanıcılar</a> listesine ekler."
 
@@ -3217,7 +3212,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:102
-#, fuzzy
 msgid "Adds the user to your <a po4a-id=0>Favorite Users</a> list."
 msgstr "Bu kullanıcıyı <a po4a-id=0>Favori Kullanıcılar</a> listesine ekler."
 
@@ -3655,7 +3649,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:30
-#, fuzzy
 msgid "<a po4a-id=0>Private Message</a>"
 msgstr "Özel mesaj"
 
@@ -3751,7 +3744,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:60
-#, fuzzy
 msgid "<a po4a-id=0>Indexing progress</a>"
 msgstr "İndeksleme İşlemi"
 
@@ -3762,7 +3754,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:62
-#, fuzzy
 msgid "<a po4a-id=0>Favorite Hub Properties</a>"
 msgstr "Favori Hub Özellikleri"
 
@@ -3773,7 +3764,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/index.html:64 help/settings_downloads.html:81
-#, fuzzy
 msgid "<a po4a-id=0>Configured Public Hub Lists</a>"
 msgstr "Genel Hub Listeleri"
 
@@ -3929,7 +3919,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:121
-#, fuzzy
 msgid "<a po4a-id=0>Applying patches</a>"
 msgstr "Yamaları kuruyor"
 
@@ -3940,7 +3929,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:126
-#, fuzzy
 msgid "<a po4a-id=0>Chat Commands</a>"
 msgstr "Sohbet Komutları"
 
@@ -9842,7 +9830,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "Özel mesaj"
 

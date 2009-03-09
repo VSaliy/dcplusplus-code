@@ -29,7 +29,6 @@ msgstr "Huvud Chatt"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:13
-#, fuzzy
 msgid ""
 "Joins &lt;hub-ip&gt;. See also <a po4a-id=0>Open new window when using /"
 "join</a>."
@@ -62,7 +61,6 @@ msgstr "Växlar synligheten av listan över användare för den aktuella hubben.
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:26
-#, fuzzy
 msgid ""
 "Displays the IP and port that DC++ will tell users to connect to. If either "
 "the IP or port is not correct, you will be unable to download from some "
@@ -76,7 +74,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:32
-#, fuzzy
 msgid ""
 "Adds the current hub (along with your nickname and password, if used) to the "
 "list of <a po4a-id=0>Favorite Hubs</a>."
@@ -86,7 +83,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:36
-#, fuzzy
 msgid ""
 "Removes the current hub from the list of <a po4a-id=0>Favorite Hubs</a>."
 msgstr ""
@@ -126,7 +122,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:52
-#, fuzzy
 msgid "Adds the current user to the list of <a po4a-id=0>Favorite Users</a>."
 msgstr ""
 "Tar bort den aktuella hubben från listan över <a po4a-id=0> favorit Hubbar </"
@@ -3234,7 +3229,6 @@ msgstr "Lägg till i favoriter"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/general_menu_commands.html:102
-#, fuzzy
 msgid "Adds the user to your <a po4a-id=0>Favorite Users</a> list."
 msgstr ""
 "Tar bort den aktuella hubben från listan över <a po4a-id=0> favorit Hubbar </"
@@ -3674,7 +3668,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/index.html:30
-#, fuzzy
 msgid "<a po4a-id=0>Private Message</a>"
 msgstr "Privat meddelande"
 
@@ -3955,7 +3948,6 @@ msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
 #: help/index.html:126
-#, fuzzy
 msgid "<a po4a-id=0>Chat Commands</a>"
 msgstr "Chatt Kommandon"
 
@@ -8831,7 +8823,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:152
-#, fuzzy
 msgid "Open the <a po4a-id=0>Public Hubs</a> window."
 msgstr ""
 "Tar bort den aktuella hubben från listan över <a po4a-id=0> favorit Hubbar </"
@@ -8853,7 +8844,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:162
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Hubs</a> window."
 msgstr ""
 "Tar bort den aktuella hubben från listan över <a po4a-id=0> favorit Hubbar </"
@@ -8869,7 +8859,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:167
-#, fuzzy
 msgid "Open the <a po4a-id=0>Favorite Users</a> window."
 msgstr ""
 "Tar bort den aktuella hubben från listan över <a po4a-id=0> favorit Hubbar </"
@@ -9365,7 +9354,6 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_public_hubs.html:46
-#, fuzzy
 msgid "Will add the selected hub to the <a po4a-id=0>Favorite hubs</a>."
 msgstr ""
 "Tar bort den aktuella hubben från listan över <a po4a-id=0> favorit Hubbar </"
@@ -9874,7 +9862,6 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:15
-#, fuzzy
 msgid "Event messages"
 msgstr "Privat meddelande"
 
