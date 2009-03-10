@@ -259,6 +259,23 @@ private:
 			}
 		}
 
+		void viewAsText(dwt::TabViewPtr parent) {
+			TextFrame::openWindow(parent, file);
+		}
+
+		void open(dwt::TabViewPtr parent, const string& ownList) {
+			if (in_UL && file == ownList) {
+				DirectoryListingFrame::openWindow(parent, Text::toT(ownList), Util::emptyStringT, ClientManager::getInstance()->getMe(), 0);
+				return;
+			}
+
+			UserPtr u = DirectoryListing::getUserFromFilename(file);
+			if (u)
+				DirectoryListingFrame::openWindow(parent, Text::toT(file), Util::emptyStringT, u, entry->getAverageSpeed());
+			else
+				WinUtil::openFile(Text::toT(file));
+		}
+
 		void openFolder() {
 			WinUtil::openFolder(Text::toT(file));
 		}
@@ -369,14 +386,16 @@ private:
 		void operator()(FileInfo* data) {
 			allFilesExist &= File::getSize(data->file) != -1;
  			isBz2 |= Util::getFileExt(data->file) == ".bz2";
+			if(File::getSize(data->file) != -1)
+				ShellMenuPaths.push_back(data->file);
  		}
 		bool allFilesExist;
 		bool isBz2;
+		StringList ShellMenuPaths;
 	};
 
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt) {
-		std::vector<unsigned> selected = files->getSelection();
-		if(!selected.empty()) {
+		if(files->hasSelected()) {
 			if(pt.x() == -1 && pt.y() == -1) {
 				pt = files->getContextMenuPos();
 			}
@@ -393,14 +412,7 @@ private:
 			menu->appendItem(T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
 			menu->appendSeparator();
 			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
-
-			StringList ShellMenuPaths;
-			for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
-				string path = files->getData(*i)->file;
-				if(File::getSize(path) != -1)
-					ShellMenuPaths.push_back(path);
-			}
-			menu->appendShellMenu(ShellMenuPaths);
+			menu->appendShellMenu(checker.ShellMenuPaths);
 
 			menu->open(pt);
 			return true;
@@ -427,31 +439,12 @@ private:
 	}
 
 	void handleViewAsText() {
-		int i = -1;
-		while((i = files->getNext(i, LVNI_SELECTED)) != -1) {
-			TextFrame::openWindow(this->getParent(), files->getData(i)->file);
-		}
+		files->forEachSelectedT(std::tr1::bind(&FileInfo::viewAsText, _1, this->getParent()));
 	}
 
 	void handleOpenFile() {
-		int i = -1;
-		UserPtr u;
-		string ownList = in_UL ? ShareManager::getInstance()->getOwnListFile() : Util::emptyString;
-		string file;
-		while((i = files->getNext(i, LVNI_SELECTED)) != -1) {
-			file = files->getData(i)->file;
-
-			if (in_UL && file == ownList) {
-				DirectoryListingFrame::openWindow(this->getParent(), Text::toT(ownList), Text::toT(Util::emptyString), ClientManager::getInstance()->getMe(), 0);
-				continue;
-			}
-
-			u = DirectoryListing::getUserFromFilename(file);
-			if (u)
-				DirectoryListingFrame::openWindow(this->getParent(), Text::toT(file), Text::toT(Util::emptyString), u, 0);
-			else
-				WinUtil::openFile(Text::toT(file));
-		}
+		files->forEachSelectedT(std::tr1::bind(&FileInfo::open, _1, this->getParent(),
+			in_UL ? ShareManager::getInstance()->getOwnListFile() : Util::emptyString));
 	}
 
 	void handleOpenFolder() {
