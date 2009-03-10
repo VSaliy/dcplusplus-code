@@ -1,6 +1,6 @@
-* Better handle of filelist items in Finished windows (emtee, poy)
-* Help updates (emtee)
 * [L#263390] Fix main icon format (poy)
+* Help updates (emtee, poy)
+* Handle file lists better in finished windows (emtee, poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
