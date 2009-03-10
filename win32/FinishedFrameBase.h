@@ -384,14 +384,15 @@ private:
 	struct FileChecker {
 		FileChecker() : allFilesExist(true), isBz2(false) { }
 		void operator()(FileInfo* data) {
-			allFilesExist &= File::getSize(data->file) != -1;
- 			isBz2 |= Util::getFileExt(data->file) == ".bz2";
 			if(File::getSize(data->file) != -1)
 				ShellMenuPaths.push_back(data->file);
+			else
+				allFilesExist = false;
+ 			isBz2 |= Util::getFileExt(data->file) == ".bz2";
  		}
 		bool allFilesExist;
-		bool isBz2;
 		StringList ShellMenuPaths;
+		bool isBz2;
 	};
 
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt) {
