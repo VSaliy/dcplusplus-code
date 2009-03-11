@@ -88,16 +88,6 @@ public:
 	  */
 	void setSelection( int start = 0, int end = - 1 );
 
-	/// Returns the current selected text from the text box
-	/** The selected text of the text box is the return value from this.
-	  */
-	tstring getSelection() const;
-
-	/// Appends text to the text box
-	/** The txt parameter is the new text to append to the text box.
-	  */
-	void addText( const tstring & txt );
-
 	/// Replaces the currently selected text in the text box with the given text parameter
 	/** If canUndo is true this operation is stacked into the undo que ( can be
 	  * undone ), else this operation cannot be undone. <br>
@@ -114,7 +104,7 @@ public:
 	int getCaretPos();
 
 	/// Returns the currently selected text offset range
-	std::pair<long, long> getCaretPosRange() const;
+	std::pair<int, int> getCaretPosRange() const;
 
 	/// Return first visible line of edit control
 	long getFirstVisibleLine();
@@ -219,6 +209,16 @@ public:
 		/// Fills with default parameters
 		Seed(const tstring& caption = tstring());
 	};
+	
+	/// Appends text to the text box
+	/** The txt parameter is the new text to append to the text box.
+	  */
+	void addText( const tstring & txt );
+
+	/// Returns the current selected text from the text box
+	/** The selected text of the text box is the return value from this.
+	  */
+	tstring getSelection() const;
 
 	/// Adds (or removes) the numbers property
 	/** If you pass false you remove this ability <br>
@@ -300,7 +300,7 @@ inline void TextBoxBase::replaceSelection( const tstring & txt, bool canUndo )
 	this->sendMessage(EM_REPLACESEL, static_cast< WPARAM >( canUndo ? TRUE : FALSE ), reinterpret_cast< LPARAM >( txt.c_str() ) );
 }
 
-inline void TextBoxBase::addText( const tstring & addtxt )
+inline void TextBox::addText( const tstring & addtxt )
 {
 	setSelection( length() );
 	replaceSelection( addtxt );
@@ -321,10 +321,10 @@ inline int TextBoxBase::getCaretPos() {
 	return static_cast< int >( end );
 }
 
-inline std::pair<long, long> TextBoxBase::getCaretPosRange() const {
+inline std::pair<int, int> TextBoxBase::getCaretPosRange() const {
 	DWORD start, end;
 	this->sendMessage(EM_GETSEL, reinterpret_cast< WPARAM >( & start ), reinterpret_cast< LPARAM >( & end ) );
-	return std::make_pair(static_cast< long >( start ), static_cast< long >( end ));
+	return std::make_pair(static_cast< int >( start ), static_cast< int >( end ));
 }
 
 inline long TextBoxBase::getFirstVisibleLine() {

@@ -75,7 +75,7 @@ tstring TextBox::textUnderCursor(const ScreenCoordinate& p, bool includeSpaces) 
 	return tmp.substr(start, end-start);
 }
 
-tstring TextBoxBase::getSelection() const
+tstring TextBox::getSelection() const
 {
 	DWORD start, end;
 	this->sendMessage( EM_GETSEL, reinterpret_cast< WPARAM >( & start ), reinterpret_cast< LPARAM >( & end ) );

@@ -16,12 +16,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_HOLDREDRAW_H_
-#define DCPLUSPLUS_WIN32_HOLDREDRAW_H_
+#ifndef DWT_HOLDREDRAW_H_
+#define DWT_HOLDREDRAW_H_
+
+namespace dwt { namespace util {
 
 class HoldRedraw {
 public:
-	HoldRedraw(dwt::Widget* w_, bool reallyHold = true) : w(w_) {
+	HoldRedraw(Widget* w_, bool reallyHold = true) : w(w_) {
 		if(reallyHold) {
 			::SendMessage(w->handle(), WM_SETREDRAW, FALSE, 0);
 		} else {
@@ -33,7 +35,9 @@ public:
 			::SendMessage(w->handle(), WM_SETREDRAW, TRUE, 0);
 	}
 private:
-	dwt::Widget* w;
+	Widget* w;
 };
 
-#endif /*DCPLUSPLUS_WIN32_HOLDREDRAW_H_*/
+} }
+
+#endif /* DWT_HOLDREDRAW_H_*/
