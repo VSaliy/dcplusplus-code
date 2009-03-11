@@ -85,6 +85,8 @@ public:
 		Seed(unsigned maxLength_ = 20, bool toggleActive_ = false);
 	};
 
+	typedef std::list<ContainerPtr> WindowList;
+
 	void add(ContainerPtr w, const IconPtr& icon = IconPtr());
 
 	void mark(ContainerPtr w);
@@ -110,6 +112,7 @@ public:
 	bool filter(const MSG& msg);
 
 	const Rectangle& getClientSize() const { return clientSize; }
+	const WindowList& getChildren() const { return viewOrder; }
 
 	void create( const Seed & cs = Seed() );
 
@@ -137,8 +140,8 @@ private:
 
 	bool inTab;
 
-	typedef std::list<ContainerPtr> WindowList;
 	typedef WindowList::iterator WindowIter;
+
 	WindowList viewOrder;
 	Rectangle clientSize;
 	ImageListPtr imageList;

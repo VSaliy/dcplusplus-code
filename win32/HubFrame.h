@@ -62,6 +62,9 @@ public:
 	static void closeDisconnected();
 	static void resortUsers();
 
+	const StringMap getWindowParams() const;
+	static void parseWindowParams(dwt::TabView* parent, const StringMap& params);
+
 private:
 
 	enum FilterModes{

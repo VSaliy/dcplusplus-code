@@ -78,6 +78,21 @@ void PrivateFrame::closeAllOffline() {
 	}
 }
 
+const StringMap PrivateFrame::getWindowParams() const {
+	StringMap ret;
+	ret["CID"] = replyTo->getCID().toBase32();
+	ret["Hub"] = hubHint;
+	return ret;
+}
+
+void PrivateFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
+	StringMap::const_iterator cid = params.find("CID");
+	StringMap::const_iterator hub = params.find("Hub");
+	if(cid != params.end() && hub != params.end()) {
+		openWindow(parent, ClientManager::getInstance()->getUser(CID(cid->second)), Util::emptyStringT, hub->second);
+	}
+}
+
 PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate, const string& hubHint_) :
 	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
 	replyTo(replyTo_),
