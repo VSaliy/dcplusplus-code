@@ -31,15 +31,21 @@
 
 #include <algorithm>
 #include <boost/lambda/lambda.hpp>
+#include <boost/format.hpp>
+#include <boost/scoped_array.hpp>
+
 #include <dwt/widgets/RichTextBox.h>
+#include <dwt/Point.h>
+#include <dwt/util/HoldRedraw.h>
 
 #include <dwt/LibraryLoader.h>
 
 namespace dwt {
 
 RichTextBox::Seed::Seed() :
-	BaseType::Seed(RICHEDIT_CLASS, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | WS_HSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_MULTILINE | WS_BORDER | ES_WANTRETURN),
+	BaseType::Seed(RICHEDIT_CLASS, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_MULTILINE | WS_BORDER | ES_NOHIDESEL),
 	font(new Font(DefaultGuiFont)),
+	foregroundColor(RGB( 0, 0, 0 )),
 	backgroundColor(RGB( 255, 255, 255 )),
 	scrollBarHorizontallyFlag(false),
 	scrollBarVerticallyFlag(false)
@@ -55,9 +61,20 @@ void RichTextBox::create( const Seed & cs )
 	PolicyType::create( cs );
 	if(cs.font)
 		setFont( cs.font );
+
 	setBackgroundColor( cs.backgroundColor );
+
+	CHARFORMAT textFormat;
+	textFormat.cbSize = sizeof(textFormat);
+	textFormat.dwMask = CFM_COLOR;
+	textFormat.dwEffects = 0;
+	textFormat.crTextColor = cs.foregroundColor;
+	setDefaultCharFormat(textFormat);
+
 	setScrollBarHorizontally( cs.scrollBarHorizontallyFlag );
 	setScrollBarVertically( cs.scrollBarVerticallyFlag );
+
+	sendMessage( EM_AUTOURLDETECT, FALSE, 0 );
 }
 
 inline int RichTextBox::charFromPos(const ScreenCoordinate& pt) {
@@ -71,22 +88,47 @@ inline int RichTextBox::charFromPos(const ScreenCoordinate& pt) {
 	return ::SendMessage(this->handle(), EM_CHARFROMPOS, 0, (LPARAM)&lp);
 }
 
+inline Point RichTextBox::posFromChar(int charOffset)
+{
+	POINTL pt;
+	sendMessage(EM_POSFROMCHAR, (WPARAM)&pt, (LPARAM)charOffset);
+	return Point(pt.x, pt.y);
+}
+
 inline int RichTextBox::lineFromPos(const ScreenCoordinate& pt) {
 	ClientCoordinate cc(pt, this);
 	return ::SendMessage(this->handle(), EM_EXLINEFROMCHAR, 0, charFromPos(pt));
 }
 
-tstring RichTextBox::textUnderCursor(const ScreenCoordinate& p) {
-	int i = charFromPos(p), cur = 0;
+tstring RichTextBox::getSelection() const { 
+	std::pair<int, int> range = getCaretPosRange();
 	tstring tmp = getText();
 
-	// http://rubyforge.org/pipermail/wxruby-users/2006-August/002116.html
-	// Otherwise charFromPos will be increasingly off from getText with each new
-	// line by one character.
-	i = std::find_if(tmp.begin(), tmp.end(),
-		(cur += (boost::lambda::_1 != _T('\r')), boost::lambda::var(cur) >= i)) - tmp.begin();
+	// This is uglier than it has to be because of the
+	// \r\n vs \r handling - note that WINE, for example,
+	// uses consistent line endings between the internal
+	// and external buffer representations, but Windows does	
+	// not - so it cannot even assume getText() consistently
+	// is broken.
+	int realS = fixupLineEndings(tmp.begin(), tmp.end(), range.first),
+	    realE = fixupLineEndings(tmp.begin() + realS, tmp.end(), range.second - range.first);
+	return tmp.substr(realS, realE);
+}
 
-	tstring::size_type start = tmp.find_last_of(_T(" <\t\r\n"), i);
+Point RichTextBox::getScrollPos() const {
+	POINT scrollPos;
+	sendMessage(EM_GETSCROLLPOS, 0, reinterpret_cast< LPARAM >(&scrollPos));
+	return scrollPos;
+}
+
+void RichTextBox::setScrollPos(Point& scrollPos) {
+	sendMessage(EM_SETSCROLLPOS, 0, reinterpret_cast< LPARAM >(&scrollPos));
+}
+
+tstring RichTextBox::textUnderCursor(const ScreenCoordinate& p) {
+	tstring tmp = getText();
+
+	tstring::size_type start = tmp.find_last_of(_T(" <\t\r\n"), fixupLineEndings(tmp.begin(), tmp.end(), charFromPos(p)));
 	if(start == tstring::npos)
 		start = 0;
 	else
@@ -99,8 +141,129 @@ tstring RichTextBox::textUnderCursor(const ScreenCoordinate& p) {
 	return tmp.substr(start, end - start);
 }
 
-LONG RichTextBox::streamIn(UINT uFormat, EDITSTREAM& es) {
-	return static_cast<LONG>(sendMessage(EM_STREAMIN, uFormat, (LPARAM)&es));
+int RichTextBox::fixupLineEndings(tstring::const_iterator begin, tstring::const_iterator end, tstring::difference_type ibo) const {
+	// http://rubyforge.org/pipermail/wxruby-users/2006-August/002116.html
+	// ("TE_RICH2 RichEdit control"). Otherwise charFromPos will be increasingly
+	// off from getText with each new line by one character. 
+	int cur = 0;
+	return std::find_if(begin, end, (cur += (boost::lambda::_1 != static_cast< TCHAR >('\r')),
+		boost::lambda::var(cur) > ibo)) - begin;
+}
+
+void RichTextBox::addText(const std::string & txt) {
+	SETTEXTEX config = {ST_SELECTION, CP_ACP};
+	setSelection(-1, -1);
+	sendMessage(EM_SETTEXTEX, reinterpret_cast< WPARAM >(&config), reinterpret_cast< LPARAM >(txt.c_str()));
+}
+
+void RichTextBox::addTextSteady( const tstring & txtRaw, std::size_t len ) {
+	Point scrollPos = getScrollPos();
+	bool scroll = scrollIsAtEnd();
+
+	{
+		util::HoldRedraw hold(this, !scroll);
+		std::pair<int, int> cr = getCaretPosRange();
+		std::string txt = escapeUnicode(txtRaw);
+	
+		unsigned charsRemoved = 0;
+		int multipler = 1;
+	
+		size_t limit = getTextLimit();
+		if(length() + len > limit) {
+			util::HoldRedraw hold2(this, scroll);
+			if(len >= limit) {
+				charsRemoved = length();
+			} else {
+				while (charsRemoved < len)
+					charsRemoved = lineIndex(lineFromChar(multipler++ * limit / 10));
+			}
+	
+			scrollPos.y -= posFromChar(charsRemoved).y;
+			setSelection(0, charsRemoved);
+			replaceSelection(_T(""));
+		}
+	
+		addText(txt);
+		setSelection(cr.first-charsRemoved, cr.second-charsRemoved);
+	
+		if(scroll)
+			sendMessage(WM_VSCROLL, SB_BOTTOM);
+		else
+			setScrollPos(scrollPos);
+	}
+	redraw();
+}
+
+void RichTextBox::findText(tstring const& needle) throw() {
+	// The code here is slightly longer than a pure getText/STL approach
+	// might allow, but it also ducks entirely the line-endings debacle.
+	int max = length();
+
+	// a new search? reset cursor to bottom
+	if(needle != currentNeedle || currentNeedlePos == -1) {
+		currentNeedle = needle;
+		currentNeedlePos = max;
+	}
+
+	// set current selection
+	FINDTEXT ft = { {currentNeedlePos, 0}, NULL };	// reversed
+	tstring::size_type len = needle.size();
+	boost::scoped_array< TCHAR > needleCTstr( new TCHAR[len+1] );
+	needleCTstr[len] = 0;
+	copy(needle.begin(), needle.begin()+len, needleCTstr.get());
+	ft.lpstrText = needleCTstr.get();
+
+	// empty search? stop
+	if(needle.empty())
+		return;
+
+	// find upwards
+	currentNeedlePos = sendMessage(EM_FINDTEXTW, 0, reinterpret_cast< LPARAM >(&ft));
+
+	// not found? try again on full range
+	if(currentNeedlePos == -1 && ft.chrg.cpMin != max) { // no need to search full range twice
+		currentNeedlePos = max;
+		ft.chrg.cpMin = currentNeedlePos;
+		currentNeedlePos = sendMessage(EM_FINDTEXTW, 0, reinterpret_cast< LPARAM >(&ft));
+	}
+
+	// found? set selection
+	if(currentNeedlePos != -1) {
+		ft.chrg.cpMin = currentNeedlePos;
+		ft.chrg.cpMax = currentNeedlePos + needle.length();
+		setFocus();
+		sendMessage(EM_EXSETSEL, 0, reinterpret_cast< LPARAM >(&ft.chrg));
+	} else {
+#ifdef PORT_ME
+		addStatus(T_("String not found: ") + needle);
+#endif
+		clearCurrentNeedle();
+	}
+}
+
+void RichTextBox::clearCurrentNeedle()
+{
+	currentNeedle.clear();
+}
+
+LRESULT RichTextBox::onUnsuppRtf(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled) {
+#ifdef PORT_ME
+	ENLOWFIRTF *pLow = (ENLOWFIRTF *)pnmh;
+	LogManager::getInstance()->message("Unsupported RTF code: " + string(pLow->szControl));
+	bHandled = FALSE;
+#endif
+	return 0;
+}
+
+std::string RichTextBox::unicodeEscapeFormatter(const tstring_range& match) {
+	return (boost::format("\\u%04X")%(int(*match.begin()))).str();
+}
+
+std::string RichTextBox::escapeUnicode(const tstring& str) {
+	std::string ret;
+	boost::find_format_all_copy(std::back_inserter(ret), str,
+		boost::first_finder(L"\x7f", std::greater<TCHAR>()), unicodeEscapeFormatter);
+	return ret;
 }
 
 }

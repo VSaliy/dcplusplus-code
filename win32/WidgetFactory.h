@@ -23,6 +23,7 @@
 #include "ShellMenu.h"
 #include "Table.h"
 #include "TextBox.h"
+#include "RichTextBox.h"
 #include "WidgetPaned.h"
 
 /**
@@ -38,6 +39,12 @@ public:
 
 	/// TextBox object type.
 	typedef typename TextBox::ObjectType TextBoxPtr;
+
+	/// RichTextBox class type.
+	typedef ::RichTextBox RichTextBox;
+
+	/// RichTextBox object type.
+	typedef typename RichTextBox::ObjectType RichTextBoxPtr;
 
 	/// ComboBox class type.
 	typedef ::ComboBox ComboBox;

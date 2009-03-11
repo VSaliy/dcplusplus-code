@@ -39,8 +39,10 @@
 #ifndef WINCE // Doesn't exist in Windows CE based systems
 
 #include "TextBox.h"
-
+#include "../tstring.h"
 #include <richedit.h>
+
+#include <boost/algorithm/string.hpp>
 
 namespace dwt {
 
@@ -78,6 +80,7 @@ public:
 		typedef RichTextBox::ThisType WidgetType;
 
 		FontPtr font;
+		COLORREF foregroundColor;
 		COLORREF backgroundColor;
 		bool scrollBarHorizontallyFlag;
 		bool scrollBarVerticallyFlag;
@@ -106,10 +109,41 @@ public:
 
 	int lineFromPos(const ScreenCoordinate& pt);
 
+	Point posFromChar(int charOffset);
+
+	tstring getSelection() const;
+
+	Point getScrollPos() const;
+
+	void setScrollPos(Point& scrollPos);
+
 	tstring textUnderCursor(const ScreenCoordinate& p);
 
-	LONG streamIn(UINT uFormat, EDITSTREAM& es);
+	/// Appends text to the richtext box
+	/** The txt parameter is the new text to append to the text box.
+	  */
+	void addText( const std::string & txt );
+
+	void addTextSteady ( const tstring & txtRaw, std::size_t len );
+
+	void findText(tstring const& needle) throw();
+
+	void clearCurrentNeedle();
+
 protected:
+	tstring currentNeedle;		// search in chat window
+	int currentNeedlePos;		// search in chat window
+
+	LRESULT onUnsuppRtf(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled);
+
+	int fixupLineEndings(tstring::const_iterator begin, tstring::const_iterator end,
+		tstring::difference_type ibo) const;
+
+	typedef boost::iterator_range<boost::range_const_iterator<tstring>::type> tstring_range;
+
+	std::string static unicodeEscapeFormatter(const tstring_range& match);
+	std::string escapeUnicode(const tstring& str);
+
 	// Constructor Taking pointer to parent
 	explicit RichTextBox( dwt::Widget * parent );
 
