@@ -29,7 +29,7 @@ END
 #elif defined ia64
 1 24 "res/DCPlusPlus.manifest.ia64"
 #else
-1 24 "res/DCPlusPlus.manifest"
+#error "manifest: unknown arch"
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
