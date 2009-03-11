@@ -76,7 +76,8 @@ opts.AddOptions(
 	BoolOption('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
 	BoolOption('help', 'Build help files', 'yes'),
 	BoolOption('i18n', 'Rebuild i18n files in debug build', 'no'),
-	('prefix', 'Prefix to use when cross compiling', '')
+	('prefix', 'Prefix to use when cross compiling', ''),
+	EnumOption('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64'])
 )
 opts.Update(defEnv)
 Help(opts.GenerateHelpText(defEnv))
@@ -97,8 +98,7 @@ dev.prepare()
 
 env.SConsignFile()
 
-env.Append(CPPPATH = ["#/boost/boost/tr1/tr1/", "#/boost/", "#/htmlhelp/include/", "#/intl/"])
-env.Append(LIBPATH = ["#/htmlhelp/lib/"])
+env.Append(CPPPATH = ["#/boost/boost/tr1/tr1/", "#/boost/", "#/intl/"])
 
 if env['nativestl']:
 	if 'gcc' in env['TOOLS']:

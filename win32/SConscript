@@ -4,9 +4,6 @@ Import('dev source_path')
 
 env, target, sources = dev.prepare_build(source_path, 'DCPlusPlus', precompiled_header = 'stdafx')
 
-res = env.RES(dev.get_sources(source_path, '*.rc'))
-env.Depends(res, 'resource.h')
-
 if env['CC'] == 'cl': # MSVC
 	if dev.mode == 'debug':
 		env.Prepend(LIBS = ['ssleay32d', 'libeay32d'])
@@ -14,9 +11,24 @@ if env['CC'] == 'cl': # MSVC
 		env.Prepend(LIBS = ['ssleay32', 'libeay32'])
 else:
 	env.Prepend(LIBS = ['ssl', 'crypto'])
+	env.Append(CPPPATH = ['#/htmlhelp/include/'])
+	env.Append(LIBPATH = ['#/htmlhelp/lib/'])
 env.Append(LIBS=["comctl32", "ws2_32", "ole32", "gdi32", "comdlg32", "winmm", "shlwapi", "htmlhelp", "oleaut32", "uuid"])
 env.Append(CPPPATH=['#/openssl/include', "#/dwt/include", "#/"])
-env.Append(LIBPATH=['#/openssl/lib/'])
+openssl_lib = '#/openssl/lib/'
+if env['arch'] != 'x86':
+	openssl_lib += env['arch'] + '/'
+env.Append(LIBPATH=[openssl_lib])
+
+if env['RC'] == 'rc': # MSVC
+	env.Append(RCFLAGS = ['/d' + env['arch']])
+elif env['RC'] == 'windres': # MinGW
+	env.Append(RCFLAGS = ['-D' + env['arch']])
+else:
+	print 'Unknown resource compiler.'
+	Return()
+res = env.RES(dev.get_sources(source_path, '*.rc'))
+env.Depends(res, 'resource.h')
 
 headers=dev.get_sources(source_path, "*.h")
 dev.i18n(source_path, env, [sources,headers], 'dcpp-win32')
