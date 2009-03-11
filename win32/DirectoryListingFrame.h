@@ -51,7 +51,11 @@ public:
 
 	static void openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const UserPtr& aUser, int64_t aSpeed);
 	static void openWindow(dwt::TabView* mdiParent, const UserPtr& aUser, const string& txt, int64_t aSpeed);
+	static void openOwnList(dwt::TabView* parent);
 	static void closeAll();
+
+	const StringMap getWindowParams() const;
+	static void parseWindowParams(dwt::TabView* parent, const StringMap& params);
 
 protected:
 	friend class MDIChildFrame<DirectoryListingFrame>;
@@ -145,6 +149,7 @@ private:
 	int64_t speed;		/**< Speed at which this file list was downloaded */
 
 	std::auto_ptr<DirectoryListing> dl;
+	tstring path;
 
 	tstring error;
 	bool usingDirMenu;

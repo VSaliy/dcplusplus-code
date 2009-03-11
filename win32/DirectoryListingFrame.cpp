@@ -31,6 +31,7 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/StringSearch.h>
 #include <dcpp/ClientManager.h>
+#include <dcpp/ShareManager.h>
 
 static const ColumnInfo filesColumns[] = {
 	{ N_("File"), 300, false },
@@ -85,9 +86,37 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& a
 	}
 }
 
+void DirectoryListingFrame::openOwnList(dwt::TabView* parent) {
+	string ownListFile = ShareManager::getInstance()->getOwnListFile();
+	if(!ownListFile.empty()) {
+		openWindow(parent, Text::toT(ownListFile), Util::emptyStringT, ClientManager::getInstance()->getMe(), 0);
+	}
+}
+
 void DirectoryListingFrame::closeAll(){
 	for(UserIter i = lists.begin(); i != lists.end(); ++i)
 		::PostMessage(i->second->handle(), WM_CLOSE, 0, 0);
+}
+
+const StringMap DirectoryListingFrame::getWindowParams() const {
+	StringMap ret;
+	ret["Path"] = dl->getUser() == ClientManager::getInstance()->getMe() ? "OwnList" : Text::fromT(path);
+	ret["Speed"] = Util::toString(speed);
+	return ret;
+}
+
+void DirectoryListingFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
+	StringMap::const_iterator path = params.find("Path");
+	StringMap::const_iterator speed = params.find("Speed");
+	if(path != params.end() && speed != params.end()) {
+		if(path->second == "OwnList") {
+			openOwnList(parent);
+		} else {
+			UserPtr u = DirectoryListing::getUserFromFilename(path->second);
+			if(u)
+				openWindow(parent, Text::toT(path->second), Util::emptyStringT, u, Util::toInt64(speed->second));
+		}
+	}
 }
 
 void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& aUser, const string& txt, int64_t aSpeed) {
@@ -201,6 +230,7 @@ DirectoryListingFrame::~DirectoryListingFrame() {
 void DirectoryListingFrame::loadFile(const tstring& name, const tstring& dir) {
 	try {
 		dl->loadFile(Text::fromT(name));
+		path = name;
 		ADLSearchManager::getInstance()->matchListing(*dl);
 		refreshTree(dir);
 	} catch(const Exception& e) {
@@ -405,9 +435,9 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 		for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
 			ItemInfo* ii = files->getData(*i);
 			if(ii->type == ItemInfo::FILE) {
-				string path = dl->getLocalPath(ii->file);
-				if(!path.empty())
-					ShellMenuPaths.push_back(path);
+				string localPath = dl->getLocalPath(ii->file);
+				if(!localPath.empty())
+					ShellMenuPaths.push_back(localPath);
 			}
 		}
 		menu->appendShellMenu(ShellMenuPaths);

@@ -265,7 +265,7 @@ private:
 
 		void open(dwt::TabViewPtr parent, const string& ownList) {
 			if (in_UL && file == ownList) {
-				DirectoryListingFrame::openWindow(parent, Text::toT(ownList), Util::emptyStringT, ClientManager::getInstance()->getMe(), 0);
+				DirectoryListingFrame::openOwnList(parent);
 				return;
 			}
 
