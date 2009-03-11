@@ -8,6 +8,11 @@ class Dev:
 		self.mode = mode
 		self.tools = tools
 		self.env = env
+
+		self.build_root = '#/build/' + self.mode + '-' + self.tools
+		if env['arch'] != 'x86':
+			self.build_root += '-' + env['arch']
+		self.build_root += '/'
 	
 	def prepare(self):
 		if not self.env['verbose']:
@@ -53,7 +58,7 @@ class Dev:
 		return sys.platform == 'win32' or 'mingw' in self.env['TOOLS']
 
 	def get_build_root(self):
-		return '#/build/' + self.mode + '-' + self.tools + '/'
+		return self.build_root
 
 	def get_build_path(self, source_path):
 		return self.get_build_root() + source_path
