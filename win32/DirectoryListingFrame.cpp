@@ -186,7 +186,8 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 	string nick = ClientManager::getInstance()->getNicks(dl->getUser()->getCID())[0];
 	treeRoot = dirs->insert(NULL, new ItemInfo(Text::toT(nick), dl->getRoot()));
 
-	setWindowTitle();
+	ClientManager::getInstance()->addListener(this);
+	updateTitle();
 
 	layout();
 
@@ -204,7 +205,7 @@ void DirectoryListingFrame::loadFile(const tstring& name, const tstring& dir) {
 		ADLSearchManager::getInstance()->matchListing(*dl);
 		refreshTree(dir);
 	} catch(const Exception& e) {
-		error = WinUtil::getNicks(dl->getUser()) + Text::toT(": " + e.getError());
+		error = Text::toT(": " + e.getError());
 	}
 
 	initStatusText();
@@ -214,7 +215,7 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 	try {
 		refreshTree(Text::toT(Util::toNmdcFile(dl->loadXML(txt, true))));
 	} catch(const Exception& e) {
-		error = WinUtil::getNicks(dl->getUser()) + Text::toT(": " + e.getError());
+		error = Text::toT(": " + e.getError());
 	}
 
 	initStatusText();
@@ -231,6 +232,11 @@ void DirectoryListingFrame::layout() {
 	status->mapWidget(STATUS_NEXT, findNext);
 
 	paned->setRect(r);
+}
+
+bool DirectoryListingFrame::preClosing() {
+	ClientManager::getInstance()->removeListener(this);
+	return true;
 }
 
 void DirectoryListingFrame::postClosing() {
@@ -298,11 +304,13 @@ void DirectoryListingFrame::refreshTree(const tstring& root) {
 	dirs->expand(treeRoot);
 }
 
-void DirectoryListingFrame::setWindowTitle() {
+void DirectoryListingFrame::updateTitle() {
+	tstring text = WinUtil::getNicks(dl->getUser());
 	if(error.empty())
-		setText(WinUtil::getNicks(dl->getUser()) + _T(" - ") + WinUtil::getHubNames(dl->getUser()).first);
+		text += _T(" - ") + WinUtil::getHubNames(dl->getUser()).first;
 	else
-		setText(error);
+		text += _T(": ") + error;
+	setText(text);
 }
 
 DirectoryListingFrame::ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
@@ -971,4 +979,17 @@ bool DirectoryListingFrame::handleKeyDownFiles(int c) {
 		return true;
 	}
 	return false;
+}
+
+void DirectoryListingFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
+	if(aUser.getUser() == dl->getUser())
+		callAsync(std::tr1::bind(&DirectoryListingFrame::updateTitle, this));
+}
+void DirectoryListingFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
+	if(aUser == dl->getUser())
+		callAsync(std::tr1::bind(&DirectoryListingFrame::updateTitle, this));
+}
+void DirectoryListingFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
+	if(aUser == dl->getUser())
+		callAsync(std::tr1::bind(&DirectoryListingFrame::updateTitle, this));
 }
