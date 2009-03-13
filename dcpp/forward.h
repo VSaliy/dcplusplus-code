@@ -103,6 +103,8 @@ class UserConnection;
 typedef UserConnection* UserConnectionPtr;
 typedef std::vector<UserConnectionPtr> UserConnectionList;
 
+class WindowInfo;
+
 } // namespace dcpp
 
 #endif /*DCPLUSPLUS_DCPP_FORWARD_H_*/
