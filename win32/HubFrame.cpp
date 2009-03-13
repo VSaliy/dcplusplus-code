@@ -68,6 +68,18 @@ void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
 	new HubFrame(mdiParent, url);
 }
 
+const StringMap HubFrame::getWindowParams() const {
+	StringMap ret;
+	ret["Address"] = url;
+	return ret;
+}
+
+void HubFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
+	StringMap::const_iterator i = params.find("Address");
+	if(i != params.end())
+		openWindow(parent, i->second);
+}
+
 HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF),
 	filter(0),
