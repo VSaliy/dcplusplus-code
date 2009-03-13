@@ -27,13 +27,19 @@
 #include <dcpp/forward.h>
 #include <dcpp/FastAlloc.h>
 #include <dcpp/DirectoryListing.h>
+#include <dcpp/ClientManagerListener.h>
 #include <dcpp/User.h>
 
 class DirectoryListingFrame :
 	public MDIChildFrame<DirectoryListingFrame>,
+	private ClientManagerListener,
 	public AspectUserCommand<DirectoryListingFrame>
 {
 	typedef MDIChildFrame<DirectoryListingFrame> BaseType;
+
+	friend class MDIChildFrame<DirectoryListingFrame>;
+	friend class AspectUserCommand<DirectoryListingFrame>;
+
 public:
 	enum Status {
 		STATUS_STATUS,
@@ -52,13 +58,6 @@ public:
 	static void openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const UserPtr& aUser, int64_t aSpeed);
 	static void openWindow(dwt::TabView* mdiParent, const UserPtr& aUser, const string& txt, int64_t aSpeed);
 	static void closeAll();
-
-protected:
-	friend class MDIChildFrame<DirectoryListingFrame>;
-	friend class AspectUserCommand<DirectoryListingFrame>;
-
-	void layout();
-	void postClosing();
 
 private:
 	enum {
@@ -171,6 +170,10 @@ private:
 	DirectoryListingFrame(dwt::TabView* mdiParent, const UserPtr& aUser, int64_t aSpeed);
 	virtual ~DirectoryListingFrame();
 
+	void layout();
+	bool preClosing();
+	void postClosing();
+
 	ShellMenuPtr makeSingleMenu(ItemInfo* ii);
 	ShellMenuPtr makeMultiMenu();
 	MenuPtr makeDirMenu();
@@ -210,7 +213,7 @@ private:
 	HTREEITEM findItem(HTREEITEM ht, const tstring& name);
 	void selectItem(const tstring& name);
 	void clearList();
-	void setWindowTitle();
+	void updateTitle();
 
 	void loadFile(const tstring& name, const tstring& dir);
 	void loadXML(const string& txt);
@@ -227,6 +230,10 @@ private:
 	void findFile(bool findNext);
 	HTREEITEM findFile(const StringSearch& str, HTREEITEM root, int &foundFile, int &skipHits);
 
+	// ClientManagerListener
+	virtual void on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw();
+	virtual void on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw();
+	virtual void on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw();
 };
 
 #endif
