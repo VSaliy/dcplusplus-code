@@ -58,14 +58,12 @@ confirm(0)
 	createDialog(IDD_WINDOWSPAGE);
 	setHelpId(IDH_WINDOWSPAGE);
 
-	grid = addChild(Grid::Seed(3, 1));
+	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 	grid->row(1).mode = GridInfo::FILL;
 	grid->row(1).align = GridInfo::STRETCH;
-	grid->row(2).mode = GridInfo::FILL;
-	grid->row(2).align = GridInfo::STRETCH;
 
 	options = grid->addChild(GroupBox::Seed(T_("Window options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
 	confirm = grid->addChild(GroupBox::Seed(T_("Confirm dialog options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
