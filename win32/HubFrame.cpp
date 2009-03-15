@@ -68,6 +68,18 @@ void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
 	new HubFrame(mdiParent, url);
 }
 
+const StringMap HubFrame::getWindowParams() const {
+	StringMap ret;
+	ret["Address"] = url;
+	return ret;
+}
+
+void HubFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
+	StringMap::const_iterator i = params.find("Address");
+	if(i != params.end())
+		openWindow(parent, i->second);
+}
+
 HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF),
 	filter(0),
@@ -825,7 +837,6 @@ void HubFrame::addAsFavorite() {
 		aEntry.setServer(url);
 		aEntry.setName(client->getHubName());
 		aEntry.setDescription(client->getHubDescription());
-		aEntry.setConnect(false);
 		aEntry.setNick(client->getMyNick());
 		FavoriteManager::getInstance()->addFavorite(aEntry);
 		addStatus(T_("Favorite hub added"));

@@ -16,29 +16,22 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_WINDOWS_PAGE_H
-#define DCPLUSPLUS_WIN32_WINDOWS_PAGE_H
+#ifndef DCPLUSPLUS_DCPP_WINDOW_INFO_H
+#define DCPLUSPLUS_DCPP_WINDOW_INFO_H
 
-#include "PropPage.h"
-#include "WidgetFactory.h"
+#include "forward.h"
+#include "Util.h"
 
-class WindowsPage : public PropPage
-{
+namespace dcpp {
+
+class WindowInfo {
 public:
-	WindowsPage(dwt::Widget* parent);
-	virtual ~WindowsPage();
+	explicit WindowInfo(const string& id_, const StringMap& params_);
 
-	virtual void layout(const dwt::Rectangle& rect);
-	virtual void write();
-
-private:
-	GridPtr grid;
-
-	static ListItem optionItems[];
-	static ListItem confirmItems[];
-
-	TablePtr options;
-	TablePtr confirm;
+	GETSET(string, id, Id);
+	GETSET(StringMap, params, Params);
 };
 
-#endif // !defined(DCPLUSPLUS_WIN32_WINDOWS_PAGE_H)
+} // namespace dcpp
+
+#endif // !defined(DCPLUSPLUS_DCPP_WINDOW_INFO_H)

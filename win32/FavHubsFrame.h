@@ -71,7 +71,6 @@ private:
 	void handleRemove();
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
-	LRESULT handleItemChanged(WPARAM /*wParam*/, LPARAM lParam);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 
 	void addEntry(const FavoriteHubEntryPtr entry, int index = -1, bool scroll = true);

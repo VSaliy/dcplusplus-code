@@ -25,21 +25,6 @@
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
-WindowsPage::ListItem WindowsPage::autoOpenItems[] = {
-	{ SettingsManager::OPEN_SYSTEM_LOG, N_("System Log"), IDH_SETTINGS_WINDOWS_OPEN_SYSTEM_LOG },
-	{ SettingsManager::OPEN_FAVORITE_USERS, N_("Favorite Users"), IDH_SETTINGS_WINDOWS_OPEN_FAVORITE_USERS },
-	{ SettingsManager::OPEN_QUEUE, N_("Download Queue"), IDH_SETTINGS_WINDOWS_OPEN_QUEUE },
-	{ SettingsManager::OPEN_FINISHED_DOWNLOADS, N_("Finished Downloads"), IDH_SETTINGS_WINDOWS_OPEN_FINISHED_DOWNLOADS },
-	{ SettingsManager::OPEN_WAITING_USERS, N_("Waiting Users"), IDH_SETTINGS_WINDOWS_OPEN_WAITING_USERS },
-	{ SettingsManager::OPEN_FINISHED_UPLOADS, N_("Finished Uploads"), IDH_SETTINGS_WINDOWS_OPEN_FINISHED_UPLOADS },
-	{ SettingsManager::OPEN_SEARCH_SPY, N_("Search Spy"), IDH_SETTINGS_WINDOWS_OPEN_SEARCH_SPY },
-	{ SettingsManager::OPEN_NETWORK_STATISTICS, N_("Network Statistics"), IDH_SETTINGS_WINDOWS_OPEN_NETWORK_STATISTICS },
-	{ SettingsManager::OPEN_NOTEPAD, N_("Notepad"), IDH_SETTINGS_WINDOWS_OPEN_NOTEPAD },
-	{ SettingsManager::OPEN_PUBLIC, N_("Public Hubs"), IDH_SETTINGS_WINDOWS_OPEN_PUBLIC },
-	{ SettingsManager::OPEN_FAVORITE_HUBS, N_("Favorite Hubs"), IDH_SETTINGS_WINDOWS_OPEN_FAVORITE_HUBS },
-	{ 0, 0 }
-};
-
 WindowsPage::ListItem WindowsPage::optionItems[] = {
 	{ SettingsManager::POPUP_PMS, N_("Open private messages in their own window"), IDH_SETTINGS_WINDOWS_POPUP_PMS },
 	{ SettingsManager::POPUP_HUB_PMS, N_("Open private messages from bots in their own window"), IDH_SETTINGS_WINDOWS_POPUP_HUB_PMS },
@@ -67,7 +52,6 @@ WindowsPage::ListItem WindowsPage::confirmItems[] = {
 WindowsPage::WindowsPage(dwt::Widget* parent) :
 PropPage(parent),
 grid(0),
-autoOpen(0),
 options(0),
 confirm(0)
 {
@@ -83,11 +67,9 @@ confirm(0)
 	grid->row(2).mode = GridInfo::FILL;
 	grid->row(2).align = GridInfo::STRETCH;
 
-	autoOpen = grid->addChild(GroupBox::Seed(T_("Auto-open at startup")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
 	options = grid->addChild(GroupBox::Seed(T_("Window options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
 	confirm = grid->addChild(GroupBox::Seed(T_("Confirm dialog options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
 
-	PropPage::read(autoOpenItems, autoOpen);
 	PropPage::read(optionItems, options);
 	PropPage::read(confirmItems, confirm);
 }
@@ -103,7 +85,6 @@ void WindowsPage::layout(const dwt::Rectangle& rc) {
 }
 
 void WindowsPage::write() {
-	PropPage::write(autoOpenItems, autoOpen);
 	PropPage::write(optionItems, options);
 	PropPage::write(confirmItems, confirm);
 }

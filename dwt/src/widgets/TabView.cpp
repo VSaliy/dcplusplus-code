@@ -231,6 +231,14 @@ void TabView::onTabContextMenu(ContainerPtr w, const ContextMenuFunction& f) {
 	}
 }
 
+const TabView::ChildList TabView::getChildren() const {
+	ChildList ret;
+	for(size_t i = 0; i < size(); ++i) {
+		ret.push_back(getTabInfo(i)->w);
+	}
+	return ret;
+}
+
 void TabView::setActive(int i) {
 	if(i == -1)
 		return;
@@ -281,7 +289,7 @@ void TabView::mark(ContainerPtr w) {
 	}
 }
 
-int TabView::findTab(ContainerPtr w) {
+int TabView::findTab(ContainerPtr w) const {
 	for(size_t i = 0; i < size(); ++i) {
 		if(getTabInfo(i)->w == w) {
 			return static_cast<int>(i);
@@ -290,11 +298,11 @@ int TabView::findTab(ContainerPtr w) {
 	return -1;
 }
 
-TabView::TabInfo* TabView::getTabInfo(ContainerPtr w) {
+TabView::TabInfo* TabView::getTabInfo(ContainerPtr w) const {
 	return getTabInfo(findTab(w));
 }
 
-TabView::TabInfo* TabView::getTabInfo(int i) {
+TabView::TabInfo* TabView::getTabInfo(int i) const {
 	if(i != -1) {
 		TCITEM item = { TCIF_PARAM };
 		TabCtrl_GetItem(handle(), i, &item);

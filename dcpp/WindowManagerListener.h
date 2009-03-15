@@ -16,29 +16,23 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_WINDOWS_PAGE_H
-#define DCPLUSPLUS_WIN32_WINDOWS_PAGE_H
+#ifndef DCPLUSPLUS_DCPP_WINDOW_MANAGER_LISTENER_H
+#define DCPLUSPLUS_DCPP_WINDOW_MANAGER_LISTENER_H
 
-#include "PropPage.h"
-#include "WidgetFactory.h"
+#include "forward.h"
 
-class WindowsPage : public PropPage
-{
+namespace dcpp {
+
+class WindowManagerListener {
 public:
-	WindowsPage(dwt::Widget* parent);
-	virtual ~WindowsPage();
+	virtual ~WindowManagerListener() { }
+	template<int I>	struct X { enum { TYPE = I }; };
 
-	virtual void layout(const dwt::Rectangle& rect);
-	virtual void write();
+	typedef X<0> Window;
 
-private:
-	GridPtr grid;
-
-	static ListItem optionItems[];
-	static ListItem confirmItems[];
-
-	TablePtr options;
-	TablePtr confirm;
+	virtual void on(Window, const string&, const StringMap&, bool) throw() { }
 };
 
-#endif // !defined(DCPLUSPLUS_WIN32_WINDOWS_PAGE_H)
+} // namespace dcpp
+
+#endif // !defined(DCPLUSPLUS_DCPP_WINDOW_MANAGER_LISTENER_H)

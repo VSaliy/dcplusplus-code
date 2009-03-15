@@ -507,10 +507,18 @@ QueueManager::~QueueManager() throw() {
 
 	if(!BOOLSETTING(KEEP_LISTS)) {
 		string path = Util::getListPath();
+
+		std::sort(protectedFileLists.begin(), protectedFileLists.end());
+
 		StringList filelists = File::findFiles(path, "*.xml.bz2");
-		std::for_each(filelists.begin(), filelists.end(), &File::deleteFile);
+		std::sort(filelists.begin(), filelists.end());
+		std::for_each(filelists.begin(), std::set_difference(filelists.begin(), filelists.end(),
+			protectedFileLists.begin(), protectedFileLists.end(), filelists.begin()), &File::deleteFile);
+
 		filelists = File::findFiles(path, "*.DcLst");
-		std::for_each(filelists.begin(), filelists.end(), &File::deleteFile);
+		std::sort(filelists.begin(), filelists.end());
+		std::for_each(filelists.begin(), std::set_difference(filelists.begin(), filelists.end(),
+			protectedFileLists.begin(), protectedFileLists.end(), filelists.begin()), &File::deleteFile);
 	}
 }
 
@@ -1563,6 +1571,12 @@ void QueueLoader::endTag(const string& name, const string&) {
 			cur = NULL;
 		else if(name == "Downloads")
 			inDownloads = false;
+	}
+}
+
+void QueueManager::noDeleteFileList(const string& path) {
+	if(!BOOLSETTING(KEEP_LISTS)) {
+		protectedFileLists.push_back(path);
 	}
 }
 

@@ -111,6 +111,9 @@ public:
 
 	const Rectangle& getClientSize() const { return clientSize; }
 
+	typedef std::vector<ContainerPtr> ChildList;
+	const ChildList getChildren() const;
+
 	void create( const Seed & cs = Seed() );
 
 	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
@@ -147,11 +150,11 @@ private:
 	ContainerPtr dragging;
 	tstring tipText;
 
-	int findTab(ContainerPtr w);
+	int findTab(ContainerPtr w) const;
 
 	void setActive(int i);
-	TabInfo* getTabInfo(ContainerPtr w);
-	TabInfo* getTabInfo(int i);
+	TabInfo* getTabInfo(ContainerPtr w) const;
+	TabInfo* getTabInfo(int i) const;
 
 	void setTop(ContainerPtr w);
 

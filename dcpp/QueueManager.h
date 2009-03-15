@@ -118,6 +118,8 @@ public:
 	void loadQueue() throw();
 	void saveQueue() throw();
 
+	void noDeleteFileList(const string& path);
+
 	GETSET(uint64_t, lastSave, LastSave);
 	GETSET(string, queueFile, QueueFile);
 private:
@@ -237,6 +239,8 @@ private:
 	bool dirty;
 	/** Next search */
 	uint32_t nextSearch;
+	/** File lists not to delete */
+	StringList protectedFileLists;
 	/** Sanity check for the target filename */
 	static string checkTarget(const string& aTarget, int64_t aSize) throw(QueueException, FileException);
 	/** Add a source to an existing queue item */
