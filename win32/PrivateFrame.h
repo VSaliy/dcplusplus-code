@@ -46,10 +46,13 @@ public:
 	};
 
 	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage, const string& hubHint);
-	static void openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo, const tstring& aMessage = Util::emptyStringT, const string& hubHint = Util::emptyString);
+	static void openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo, const tstring& msg = Util::emptyStringT, const string& hubHint = Util::emptyString);
 	static bool isOpen(const UserPtr& u) { return frames.find(u) != frames.end(); }
 	static void closeAll();
 	static void closeAllOffline();
+
+	const StringMap getWindowParams() const;
+	static void parseWindowParams(dwt::TabView* parent, const StringMap& params);
 
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
 

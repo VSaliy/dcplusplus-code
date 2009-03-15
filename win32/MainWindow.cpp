@@ -48,6 +48,7 @@
 #include "WaitingUsersFrame.h"
 
 #include <dcpp/SettingsManager.h>
+#include <dcpp/WindowManager.h>
 #include <dcpp/ResourceManager.h>
 #include <dcpp/version.h>
 #include <dcpp/DownloadManager.h>
@@ -110,6 +111,7 @@ MainWindow::MainWindow() :
 
 	QueueManager::getInstance()->addListener(this);
 	LogManager::getInstance()->addListener(this);
+	WindowManager::getInstance()->addListener(this);
 
 	onClosing(std::tr1::bind(&MainWindow::handleClosing, this));
 
@@ -142,21 +144,7 @@ MainWindow::MainWindow() :
 	File::ensureDirectory(SETTING(LOG_DIRECTORY));
 	startSocket();
 
-	if(BOOLSETTING(OPEN_SYSTEM_LOG)) SystemFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_FAVORITE_USERS)) UsersFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_QUEUE)) QueueFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_FINISHED_DOWNLOADS)) FinishedDLFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_WAITING_USERS)) WaitingUsersFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_FINISHED_UPLOADS)) FinishedULFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_SEARCH_SPY)) SpyFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_NETWORK_STATISTICS)) StatsFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_NOTEPAD)) NotepadFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_PUBLIC)) PublicHubsFrame::openWindow(getTabView());
-	if(BOOLSETTING(OPEN_FAVORITE_HUBS)) FavHubsFrame::openWindow(getTabView());
-
-	if (!WinUtil::isShift()) {
-		callAsync(std::tr1::bind(&MainWindow::autoConnect, this));
-	}
+	WindowManager::getInstance()->autoOpen(WinUtil::isShift());
 
 	callAsync(std::tr1::bind(&MainWindow::parseCommandLine, this, tstring(::GetCommandLine())));
 
@@ -166,6 +154,8 @@ MainWindow::MainWindow() :
 		handleMinimized();
 
 	if(SETTING(NICK).empty()) {
+		SystemFrame::openWindow(getTabView());
+
 		WinUtil::help(handle(), IDH_GET_STARTED);
 		handleSettings();
 	}
@@ -222,7 +212,7 @@ void MainWindow::initMenu() {
 		file->appendSeparator();
 
 		file->appendItem(T_("Open file list...\tCtrl+L"), std::tr1::bind(&MainWindow::handleOpenFileList, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_FILE_LIST)));
-		file->appendItem(T_("Open own list"), std::tr1::bind(&MainWindow::handleOpenOwnList, this));
+		file->appendItem(T_("Open own list"), std::tr1::bind(&DirectoryListingFrame::openOwnList, getTabView()));
 		file->appendItem(T_("Match downloaded lists"), std::tr1::bind(&MainWindow::handleMatchAll, this));
 		file->appendItem(T_("Refresh file list\tCtrl+E"), std::tr1::bind(&MainWindow::handleRefreshFileList, this));
 		file->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_DL_DIR)));
@@ -505,19 +495,20 @@ void MainWindow::viewAndDelete(const string& fileName) {
 	File::deleteFile(fileName);
 }
 
-void MainWindow::autoConnect() {
-	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
-	for(FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i) {
-		FavoriteHubEntry* entry = *i;
-		if (entry->getConnect()) {
-			if (!entry->getNick().empty() || !SETTING(NICK).empty()) {
-				HubFrame::openWindow(getTabView(), entry->getServer());
-			}
-		}
-	}
-}
-
 void MainWindow::saveWindowSettings() {
+	{
+		WindowManager* wm = WindowManager::getInstance();
+		wm->lock();
+		wm->clear();
+
+		const dwt::TabView::ChildList& views = tabs->getChildren();
+		for(dwt::TabView::ChildList::const_iterator i = views.begin(); i != views.end(); ++i) {
+			wm->add(typeid(**i).name(), static_cast<MDIChildFrame<dwt::Container>*>(*i)->getWindowParams());
+		}
+
+		wm->unlock();
+	}
+
 	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_PANED_POS, paned->getRelativePos());
 
 	WINDOWPLACEMENT wp = { sizeof(wp)};
@@ -545,6 +536,7 @@ bool MainWindow::handleClosing() {
 			setVisible(false);
 			transfers->prepareClose();
 
+			WindowManager::getInstance()->removeListener(this);
 			LogManager::getInstance()->removeListener(this);
 			QueueManager::getInstance()->removeListener(this);
 
@@ -777,12 +769,6 @@ void MainWindow::handleOpenFileList() {
 		} else {
 			createMessageBox().show(T_("Invalid file list name"), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
 		}
-	}
-}
-
-void MainWindow::handleOpenOwnList() {
-	if (!ShareManager::getInstance()->getOwnListFile().empty()) {
-		DirectoryListingFrame::openWindow(getTabView(), Text::toT(ShareManager::getInstance()->getOwnListFile()), Text::toT(Util::emptyString), ClientManager::getInstance()->getMe(), 0);
 	}
 }
 
@@ -1093,4 +1079,29 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 			callAsync(std::tr1::bind(&MainWindow::viewAndDelete, this, qi->getTarget()));
 		}
 	}
+}
+
+void MainWindow::on(WindowManagerListener::Window, const string& id, const StringMap& params, bool skipHubs) throw() {
+	if(typeid(HubFrame).name() == id) {
+		if(!skipHubs) {
+			callAsync(std::tr1::bind(&HubFrame::parseWindowParams, getTabView(), params));
+		}
+	}
+
+#define compare_id(frame) else if(typeid(frame).name() == id) callAsync(std::tr1::bind(&frame::parseWindowParams, getTabView(), params))
+	compare_id(PrivateFrame);
+	compare_id(DirectoryListingFrame);
+	compare_id(PublicHubsFrame);
+	compare_id(FavHubsFrame);
+	compare_id(UsersFrame);
+	compare_id(QueueFrame);
+	compare_id(FinishedDLFrame);
+	compare_id(WaitingUsersFrame);
+	compare_id(FinishedULFrame);
+	compare_id(ADLSearchFrame);
+	compare_id(SpyFrame);
+	compare_id(NotepadFrame);
+	compare_id(SystemFrame);
+	compare_id(StatsFrame);
+#undef compare_id
 }

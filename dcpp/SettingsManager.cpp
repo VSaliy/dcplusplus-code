@@ -72,11 +72,10 @@ const string SettingsManager::settingTags[] =
 	"HighestPrioSize", "HighPrioSize", "NormalPrioSize", "LowPrioSize", "LowestPrio",
 	"AutoDropSpeed", "AutoDropInterval", "AutoDropElapsed", "AutoDropInactivity", "AutoDropMinSources", "AutoDropFilesize",
 	"AutoDropAll", "AutoDropFilelists", "AutoDropDisconnect",
-	"OpenPublic", "OpenFavoriteHubs", "OpenFavoriteUsers", "OpenQueue", "OpenFinishedDownloads",
-	"OpenFinishedUploads", "OpenSearchSpy", "OpenNetworkStatistics", "OpenNotepad", "OutgoingConnections",
+	"OutgoingConnections",
 	"NoIpOverride", "SearchOnlyFreeSlots", "LastSearchType", "BoldFinishedDownloads", "BoldFinishedUploads", "BoldQueue",
 	"BoldHub", "BoldPm", "BoldSearch", "BoldSearchSpy", "SocketInBuffer", "SocketOutBuffer",
-	"OpenWaitingUsers", "BoldWaitingUsers", "OpenSystemLog", "BoldSystemLog", "AutoRefreshTime",
+	"BoldWaitingUsers", "BoldSystemLog", "AutoRefreshTime",
 	"UseTLS", "AutoSearchLimit", "AltSortOrder", "AutoKickNoFavs", "PromptPassword", "SpyFrameIgnoreTthSearches",
 	"DontDlAlreadyQueued", "MaxCommandLength", "AllowUntrustedHubs", "AllowUntrustedClients",
 	"TLSPort", "FastHash", "SortFavUsersFirst", "SegmentedDL", "FollowLinks",
@@ -236,23 +235,12 @@ SettingsManager::SettingsManager()
 	setDefault(AUTODROP_ALL, false);
 	setDefault(AUTODROP_FILELISTS, false);
 	setDefault(AUTODROP_DISCONNECT, false);
-	setDefault(OPEN_PUBLIC, false);
-	setDefault(OPEN_FAVORITE_HUBS, false);
-	setDefault(OPEN_FAVORITE_USERS, false);
-	setDefault(OPEN_QUEUE, false);
-	setDefault(OPEN_FINISHED_DOWNLOADS, false);
-	setDefault(OPEN_FINISHED_UPLOADS, false);
-	setDefault(OPEN_SEARCH_SPY, false);
-	setDefault(OPEN_NETWORK_STATISTICS, false);
-	setDefault(OPEN_NOTEPAD, false);
 	setDefault(NO_IP_OVERRIDE, false);
 	setDefault(SEARCH_ONLY_FREE_SLOTS, false);
 	setDefault(SEARCH_FILTER_SHARED, true);
 	setDefault(LAST_SEARCH_TYPE, 0);
 	setDefault(SOCKET_IN_BUFFER, 64*1024);
 	setDefault(SOCKET_OUT_BUFFER, 64*1024);
-	setDefault(OPEN_WAITING_USERS, false);
-	setDefault(OPEN_SYSTEM_LOG, true);
 	setDefault(TLS_TRUSTED_CERTIFICATES_PATH, Util::getPath(Util::PATH_USER_CONFIG) + "Certificates" PATH_SEPARATOR_STR);
 	setDefault(TLS_PRIVATE_KEY_FILE, Util::getPath(Util::PATH_USER_CONFIG) + "Certificates" PATH_SEPARATOR_STR "client.key");
 	setDefault(TLS_CERTIFICATE_FILE, Util::getPath(Util::PATH_USER_CONFIG) + "Certificates" PATH_SEPARATOR_STR "client.crt");

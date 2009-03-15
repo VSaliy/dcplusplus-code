@@ -27,7 +27,7 @@
 #include "FavHubProperties.h"
 
 static const ColumnInfo hubsColumns[] = {
-	{ N_("Auto connect / Name"), 200, false },
+	{ N_("Name"), 200, false },
 	{ N_("Description"), 290, false },
 	{ N_("Nick"), 125, false },
 	{ N_("Password"), 100, false },
@@ -54,7 +54,6 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 	{
 		Table::Seed cs = WinUtil::Seeds::table;
 		cs.style |= LVS_NOSORTHEADER;
-		cs.lvStyle |= LVS_EX_CHECKBOXES;
 		hubs = grid->addChild(cs);
 		grid->setWidget(hubs, 0, 0, 1, 6);
 		addWidget(hubs);
@@ -63,7 +62,6 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 
 		hubs->onDblClicked(std::tr1::bind(&FavHubsFrame::handleDoubleClick, this));
 		hubs->onKeyDown(std::tr1::bind(&FavHubsFrame::handleKeyDown, this, _1));
-		hubs->onRaw(std::tr1::bind(&FavHubsFrame::handleItemChanged, this, _1, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 		hubs->onContextMenu(std::tr1::bind(&FavHubsFrame::handleContextMenu, this, _1));
 	}
 
@@ -242,16 +240,6 @@ bool FavHubsFrame::handleKeyDown(int c) {
 	return false;
 }
 
-LRESULT FavHubsFrame::handleItemChanged(WPARAM /*wParam*/, LPARAM lParam) {
-	LPNMITEMACTIVATE l = reinterpret_cast<LPNMITEMACTIVATE>(lParam);
-	if(!nosave && l->iItem != -1 && ((l->uNewState & LVIS_STATEIMAGEMASK) != (l->uOldState & LVIS_STATEIMAGEMASK))) {
-		FavoriteHubEntryPtr f = reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(l->iItem));
-		f->setConnect(hubs->isChecked(l->iItem));
-		FavoriteManager::getInstance()->save();
-	}
-	return 0;
-}
-
 bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	if(pt.x() == -1 && pt.y() == -1) {
 		pt = hubs->getContextMenuPos();
@@ -281,11 +269,9 @@ void FavHubsFrame::addEntry(const FavoriteHubEntryPtr entry, int index, bool scr
 	l.push_back(tstring(entry->getPassword().size(), '*'));
 	l.push_back(Text::toT(entry->getServer()));
 	l.push_back(Text::toT(entry->getUserDescription()));
-	bool b = entry->getConnect();
 	int itemCount = hubs->insert(l, reinterpret_cast<LPARAM>(entry), index);
 	if(index == -1)
 		index = itemCount;
-	hubs->setChecked(index, b);
 	if (scroll)
 		hubs->ensureVisible(index);
 }
