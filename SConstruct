@@ -64,6 +64,8 @@ gcc_defs = {
 
 # --- cut ---
 
+# defEnv will hold a temporary Environment used to get options that can't be set after the actual
+# Environment has been created
 defEnv = Environment(ENV = os.environ)
 opts = Options('custom.py', ARGUMENTS)
 opts.AddOptions(
@@ -82,7 +84,13 @@ opts.AddOptions(
 opts.Update(defEnv)
 Help(opts.GenerateHelpText(defEnv))
 
-env = Environment(ENV = os.environ, tools = [defEnv['tools']], options = opts)
+# workaround for SCons 1.2 which hard-codes possible archs (only allows 'x86' and 'amd64'...)
+# TODO remove when SCons knows about all available archs
+MSVS_ARCH = defEnv['arch']
+if MSVS_ARCH == 'x64':
+	MSVS_ARCH = 'amd64'
+
+env = Environment(ENV = os.environ, tools = [defEnv['tools']], options = opts, MSVS_ARCH = MSVS_ARCH)
 
 if 'mingw' not in env['TOOLS'] and 'gcc' in env['TOOLS']:
 	print "Non-mingw gcc builds not supported"
