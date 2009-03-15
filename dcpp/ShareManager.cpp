@@ -69,8 +69,10 @@ ShareManager::~ShareManager() {
 
 	join();
 
-	StringList lists = File::findFiles(Util::getPath(Util::PATH_USER_CONFIG), "files?*.xml.bz2");
-	for_each(lists.begin(), lists.end(), File::deleteFile);
+	if(bzXmlRef.get()) {
+		bzXmlRef.reset();
+		File::deleteFile(getBZXmlFile());
+	}
 }
 
 ShareManager::Directory::Directory(const string& aName, const ShareManager::Directory::Ptr& aParent) :
