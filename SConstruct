@@ -65,19 +65,19 @@ gcc_defs = {
 # defEnv will hold a temporary Environment used to get options that can't be set after the actual
 # Environment has been created
 defEnv = Environment(ENV = os.environ)
-opts = Options('custom.py', ARGUMENTS)
-opts.AddOptions(
-	EnumOption('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
-	EnumOption('mode', 'Compile mode', 'debug', ['debug', 'release']),
-	BoolOption('nativestl', 'Use native STL instead of STLPort', 'yes'),
-	BoolOption('gch', 'Use GCH when compiling GUI (disable if you have linking problems with mingw)', 'yes'),
-	BoolOption('verbose', 'Show verbose command lines', 'no'),
-	BoolOption('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
-	BoolOption('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
-	BoolOption('help', 'Build help files', 'yes'),
-	BoolOption('i18n', 'Rebuild i18n files in debug build', 'no'),
+opts = Variables('custom.py', ARGUMENTS)
+opts.AddVariables(
+	EnumVariable('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
+	EnumVariable('mode', 'Compile mode', 'debug', ['debug', 'release']),
+	BoolVariable('nativestl', 'Use native STL instead of STLPort', 'yes'),
+	BoolVariable('gch', 'Use GCH when compiling GUI (disable if you have linking problems with mingw)', 'yes'),
+	BoolVariable('verbose', 'Show verbose command lines', 'no'),
+	BoolVariable('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
+	BoolVariable('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
+	BoolVariable('help', 'Build help files', 'yes'),
+	BoolVariable('i18n', 'Rebuild i18n files in debug build', 'no'),
 	('prefix', 'Prefix to use when cross compiling', ''),
-	EnumOption('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64'])
+	EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64'])
 )
 
 opts.Update(defEnv)

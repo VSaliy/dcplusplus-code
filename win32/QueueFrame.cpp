@@ -294,7 +294,7 @@ void QueueFrame::updateFiles() {
 }
 
 void QueueFrame::QueueItemInfo::update() {
-	if(display != NULL) {
+	if(display.get()) {
 		int colMask = updateMask;
 		updateMask = 0;
 
