@@ -22,7 +22,7 @@ env.Append(LIBPATH=[openssl_lib])
 
 if env['RC'] == 'rc': # MSVC
 	env.Append(RCFLAGS = ['/d' + env['arch']])
-elif env['RC'] == 'windres': # MinGW
+elif env['RC'].find('windres') != -1: # MinGW
 	env.Append(RCFLAGS = ['-D' + env['arch']])
 else:
 	print 'Unknown resource compiler.'

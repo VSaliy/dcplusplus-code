@@ -110,8 +110,6 @@ private:
 		{
 		}
 
-		~QueueItemInfo() { delete display; }
-
 		void update();
 		void recheck();
 		void remove();
@@ -120,9 +118,11 @@ private:
 		const tstring& getText(int col) {
 			return getDisplay()->columns[col];
 		}
+
 		int getImage() const {
 			return WinUtil::getIconIndex(Text::toT(getTarget()));
 		}
+
 		static int compareItems(QueueItemInfo* a, QueueItemInfo* b, int col) {
 			switch(col) {
 				case COLUMN_SIZE: case COLUMN_EXACT_SIZE: return compare(a->getSize(), b->getSize());
@@ -137,11 +137,12 @@ private:
 		QueueItem::SourceList& getBadSources() { return badSources; }
 
 		Display* getDisplay() {
-			if(!display) {
-				display = new Display;
+			if(!display.get()) {
+				display.reset(new Display);
 				update();
 			}
-			return display;
+
+			return display.get();
 		}
 
 		bool isSource(const UserPtr& u) {
@@ -165,7 +166,7 @@ private:
 
 	private:
 
-		Display* display;
+		std::auto_ptr<Display> display;
 
 		QueueItemInfo(const QueueItemInfo&);
 		QueueItemInfo& operator=(const QueueItemInfo&);
