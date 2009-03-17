@@ -31,6 +31,7 @@ class Dev:
 		self.env.SConsignFile()
 		self.env.SetOption('implicit_cache', '1')
 		self.env.SetOption('max_drift', 60*10)
+		self.env.Decider('MD5-timestamp')
 
 		if 'mingw' in self.env['TOOLS']:
 			self.env.Append(LINKFLAGS=["-Wl,--enable-runtime-pseudo-reloc"])
