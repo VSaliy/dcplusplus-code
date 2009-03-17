@@ -1,6 +1,4 @@
-# vim: set filetype: py
-
-EnsureSConsVersion(0, 98)
+EnsureSConsVersion(1, 2)
 
 import os,sys
 from build_util import Dev
@@ -81,6 +79,7 @@ opts.AddOptions(
 	('prefix', 'Prefix to use when cross compiling', ''),
 	EnumOption('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64'])
 )
+
 opts.Update(defEnv)
 Help(opts.GenerateHelpText(defEnv))
 
@@ -101,6 +100,19 @@ if mode not in gcc_flags:
 	print "Unknown mode, exiting"
 	Exit(1)
 
+# vim: set filetype: py
+
+# filter out boost from dependencies to get a speedier rebuild scan
+# this means that if boost changes, scons -c needs to be run
+# delete .sconsign.dblite to see the effects of this if you're upgrading
+def filterBoost(x):
+	return [y for y in x if str(y).find('boost') == -1]
+
+SourceFileScanner.function['.c'].recurse_nodes = filterBoost
+SourceFileScanner.function['.cpp'].recurse_nodes = filterBoost
+SourceFileScanner.function['.h'].recurse_nodes = filterBoost
+SourceFileScanner.function['.hpp'].recurse_nodes = filterBoost
+
 dev = Dev(mode, env['tools'], env)
 dev.prepare()
 
@@ -112,7 +124,6 @@ if env['nativestl']:
 	if 'gcc' in env['TOOLS']:
 		env.Append(CPPDEFINES = ['BOOST_HAS_GCC_TR1'])
 	# boost detects MSVC's tr1 automagically
-
 else:
 	env.Append(CPPPATH = ['#/stlport/stlport/'])
 	env.Append(LIBPATH = ['#/stlport/lib/'])
