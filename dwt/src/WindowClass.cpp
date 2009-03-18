@@ -45,8 +45,10 @@ WindowClass::WindowClass(const tstring& className, WNDPROC wndProc, LPCTSTR menu
 	wc.lpfnWndProc = wndProc;
 	wc.lpszMenuName = menu;
 	wc.hbrBackground = background;
-	wc.hIcon = icon ? icon->handle() : NULL;
-	wc.hIconSm = smallIcon ? icon->handle() : NULL;
+	if(icon)
+		wc.hIcon = icon->handle();
+	if(smallIcon)
+		wc.hIconSm = smallIcon->handle();
 	wc.hCursor = cursor;
 	wc.hInstance = ::GetModuleHandle(NULL);
 	wc.lpszClassName = className.c_str();
