@@ -77,6 +77,7 @@ public:
 		static const Menu::Seed menu;
 		static const Table::Seed table;
 		static const TextBox::Seed textBox;
+		static const RichTextBox::Seed richTextBox;
 		static const Tree::Seed treeView;
 
 		struct Dialog {
