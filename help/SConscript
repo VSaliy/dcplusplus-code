@@ -62,6 +62,9 @@ CHM_sources.append('style.css')
 CHM_sources.append(Glob('#/res/*.bmp'))
 CHM_sources.append(Glob('#/res/*.ico'))
 CHM_sources.sort()
+for CHM_source in CHM_sources:
+	if str(CHM_source) == 'commands_user_base.html':
+		CHM_sources.remove(CHM_source)
 
 # additional dependencies (that have to be built before the help file)
 CHM_dependencies = ['addendum.txt', 'cshelp.h']
@@ -97,9 +100,9 @@ def gen_CHM(target, source, env):
 
 	# translate translatable source files, copy the others
 	po4a_path = Dir('#/po4a').abspath + '/'
-	cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-translate" -f xhtml -o foldattributes -M utf-8 -L utf-8 -A utf-8 -p "' + nixify(str(po_node)) + '" -k 0'
+	cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-translate" -f xhtml -o foldattributes -o "includessi=' + nixify(Dir('#/help').abspath) + '/" -M utf-8 -L utf-8 -p "' + nixify(str(po_node)) + '" -k 0'
 	if not template:
-		cmd += ' -a help/addendum.txt'
+		cmd += ' -A utf-8 -a help/addendum.txt'
 	for node in source:
 		filename = os.path.basename(node.path)
 		if filename[-5:] == '.html' and filename != 'changelog.html' and filename != 'compile.html' and filename != 'fdl.html':
@@ -145,7 +148,7 @@ hasHHC = env.WhereIs('hhc') is not None
 # create the translation template
 def gen_pot(target, source, env):
 	po4a_path = Dir('#/po4a').abspath + '/'
-	cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-gettextize" -f xhtml -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -o foldattributes -M utf-8 -p "' + nixify(str(target[0])) + '"'
+	cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-gettextize" -f xhtml -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -o foldattributes -o "includessi=' + nixify(Dir('#/help').abspath) + '/" -M utf-8 -p "' + nixify(str(target[0])) + '"'
 	for node in source:
 		cmd += ' -m "' + nixify(str(node)) + '"'
 	return env.Execute(cmd)
