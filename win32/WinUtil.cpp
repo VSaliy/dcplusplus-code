@@ -73,6 +73,7 @@ const GroupBox::Seed WinUtil::Seeds::group;
 const Menu::Seed WinUtil::Seeds::menu;
 const Table::Seed WinUtil::Seeds::table;
 const TextBox::Seed WinUtil::Seeds::textBox;
+const RichTextBox::Seed WinUtil::Seeds::richTextBox;
 const Tree::Seed WinUtil::Seeds::treeView;
 
 const ComboBox::Seed WinUtil::Seeds::Dialog::comboBox;
@@ -142,6 +143,7 @@ void WinUtil::init() {
 	Menu::Seed& xmenu = const_cast<Menu::Seed&>(Seeds::menu);
 	Table::Seed& xTable = const_cast<Table::Seed&>(Seeds::table);
 	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&>(Seeds::textBox);
+	RichTextBox::Seed& xRichTextBox = const_cast<RichTextBox::Seed&>(Seeds::richTextBox);
 	Tree::Seed& xtreeView =  const_cast<Tree::Seed&>(Seeds::treeView);
 	ComboBox::Seed& xdComboBox = const_cast<ComboBox::Seed&>(Seeds::Dialog::comboBox);
 	TextBox::Seed& xdTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::textBox);
@@ -170,6 +172,11 @@ void WinUtil::init() {
 
 	xtextBox.exStyle = WS_EX_CLIENTEDGE;
 	xtextBox.font = font;
+
+	xRichTextBox.exStyle = WS_EX_CLIENTEDGE;
+	xRichTextBox.font = font;
+	xRichTextBox.foregroundColor = textColor;
+	xRichTextBox.backgroundColor = bgColor;
 
 	xtreeView.style |= TVS_HASBUTTONS | TVS_LINESATROOT | TVS_HASLINES | TVS_SHOWSELALWAYS | TVS_DISABLEDRAGDROP;
 	xtreeView.exStyle = WS_EX_CLIENTEDGE;
