@@ -12,6 +12,9 @@ How to compile in n easy steps:
     and gcc-dw2/sjlj.exe to g++.exe and gcc.exe respectively.
     Note; Make sure gcc/g++ is in your path and before any cygwin installation.
 
+    Download HTML Help Workshop from <http://msdn2.microsoft.com/en-us/library/ms670169.aspx>. Copy
+    the include and library files to the respective directories in the htmlhelp folder.
+
 1b) Or with Microsoft Visual C++ 9.0 (2008) with at least Service Pack 1:
     Download OpenSSL from www.openssl.org and compile it. You should get libraries called
     libeay32.lib and ssleay32.lib; copy them in openssl/lib.
@@ -26,21 +29,17 @@ and copy the file to the include directory of your compiler (or add it to the in
 2) Install recent stable release (at least version 0.98) of SCons (www.scons.org).
    Make sure SCons and Python are in your PATH.
 
-3) Download HTML help workshop from http://msdn2.microsoft.com/en-us/library/ms670169.aspx. Copy the
-   include and library files to the respective directories in the htmlhelp folder.
-
-   If you want to compile help files, make sure hhc.exe is in your PATH.
-
-   If you want to compile translated help files, get Perl and make sure it is in your PATH.
-
-4) Install gettext (http://www.gnu.org/software/gettext/). The easiest way to do this is to get the
+3) Install gettext (http://www.gnu.org/software/gettext/). The easiest way to do this is to get the
    precompiled binaries from http://www.gimp.org/~tml/gimp/win32/downloads.html, you'll need 
    gettext-runtime and gettext-tools, at least version 0.17. These links should work:
    http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime-0.17.zip
    http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-tools-0.17.zip
 
    Make sure gettext is in your PATH.
-   
+
+4) If you want to compile help files, make sure you have HTML Help Workshop (link in 1a) with
+   hhc.exe in your PATH, and Perl.
+
 5) Open a command prompt and type "scons" followed by some options:
 	"tools=mingw" - Use mingw for building (default)
 	"tools=default" - Use msvc for building (yes, the option value is strange)
