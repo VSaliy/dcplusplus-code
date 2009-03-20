@@ -225,7 +225,6 @@ tstring Client::rtfEscape(const tstring& str) {
 	tstring escaped;
 	boost::find_format_all_copy(std::back_inserter(escaped), str,
 		boost::first_finder(L"\x7f", _1 == '{' || _1 == '}' || _1 == '\\' || _1 == '\n'), rtfEscapeFormatter);
-	printf("%s\n\n", Text::fromT(escaped).c_str());
 	return escaped;
 }
 
