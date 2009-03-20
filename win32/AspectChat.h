@@ -20,6 +20,8 @@
 #define DCPLUSPLUS_WIN32_ASPECT_CHAT_H
 
 #include "HoldRedraw.h"
+#include "RichTextBox.h"
+#include <dcpp/Client.h>
 
 template<typename T>
 class AspectChat {
@@ -36,10 +38,10 @@ protected:
 	curCommandPosition(0)
 	{
 		{
-			TextBox::Seed cs = WinUtil::Seeds::textBox;
-			cs.style |= WS_VSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
+			RichTextBox::Seed cs = WinUtil::Seeds::richTextBox;
+			cs.style |= ES_READONLY;
 			chat = t().addChild(cs);
-			chat->setTextLimit(0);
+			chat->setTextLimit(32768);
 		}
 
 		{
@@ -51,7 +53,7 @@ protected:
 
 	virtual ~AspectChat() { }
 
-	void addChat(const tstring& aLine) {
+	void addChat(Client* aClient, const tstring& aLine) {
 		tstring line;
 		if(timeStamps) {
 			line = Text::toT("\r\n[" + Util::getShortTimeString() + "] ");
@@ -59,21 +61,7 @@ protected:
 			line = _T("\r\n");
 		}
 		line += Text::toDOS(aLine);
-
-		bool scroll = chat->scrollIsAtEnd();
-		HoldRedraw hold(chat, !scroll);
-
-		size_t limit = chat->getTextLimit();
-		if(chat->length() + line.size() > limit) {
-			HoldRedraw hold2(chat, scroll);
-			chat->setSelection(0, chat->lineIndex(chat->lineFromChar(limit / 10)));
-			chat->replaceSelection(_T(""));
-		}
-
-		chat->addText(line);
-
-		if(scroll)
-			chat->sendMessage(WM_VSCROLL, SB_BOTTOM);
+		chat->addTextSteady(aClient->formatChatMessage(line), line.size());
 	}
 
 	bool checkCommand(const tstring& cmd, const tstring& param, tstring& status) {
@@ -103,6 +91,22 @@ protected:
 		return true;
 	}
 
+	bool handleChatKeyDown(int c) {
+		switch(c) {
+			case VK_F3:
+				chat->findTextNext();
+				break;
+			case VK_ESCAPE:
+				chat->setSelection(-1, -1);
+				chat->sendMessage(WM_VSCROLL, SB_BOTTOM);
+				message->setFocus();
+				chat->clearCurrentNeedle();
+				break;
+		}
+
+		return false;
+	}
+	
 	bool handleMessageKeyDown(int c) {
 		switch(c) {
 		case VK_RETURN: {
@@ -206,7 +210,7 @@ protected:
 		return false;
 	}
 
-	dwt::TextBoxPtr chat;
+	RichTextBox* chat;
 	dwt::TextBoxPtr message;
 
 private:

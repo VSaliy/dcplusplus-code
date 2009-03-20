@@ -127,7 +127,10 @@ PrivateFrame::~PrivateFrame() {
 }
 
 void PrivateFrame::addChat(const tstring& aLine, bool log) {
-	ChatType::addChat(aLine);
+	StringList sl = ClientManager::getInstance()->getHubs(*replyTo);
+	if (sl.empty()) return;
+
+	ChatType::addChat(ClientManager::getInstance()->getClient(sl[0]), aLine);
 
 	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		StringMap params;

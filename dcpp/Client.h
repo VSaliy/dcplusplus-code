@@ -27,7 +27,11 @@
 #include "TimerManager.h"
 #include "ClientListener.h"
 
+#include <boost/algorithm/string.hpp>
+
 namespace dcpp {
+
+typedef boost::iterator_range<boost::range_const_iterator<tstring>::type> tstring_range;
 
 /** Yes, this should probably be called a Hub */
 class Client : public Speaker<ClientListener>, public BufferedSocketListener, protected TimerManagerListener {
@@ -88,6 +92,8 @@ public:
 	void send(const string& aMessage) { send(aMessage.c_str(), aMessage.length()); }
 	void send(const char* aMessage, size_t aLen);
 
+	tstring formatChatMessage(const tstring& aLine);
+
 	string getMyNick() const { return getMyIdentity().getNick(); }
 	string getHubName() const { return getHubIdentity().getNick().empty() ? getHubUrl() : getHubIdentity().getNick(); }
 	string getHubDescription() const { return getHubIdentity().getDescription(); }
@@ -139,6 +145,9 @@ protected:
 
 	/** Reload details from favmanager or settings */
 	void reloadSettings(bool updateNick);
+
+	tstring static rtfEscapeFormatter(const tstring_range& match);
+	tstring rtfEscape(const tstring& str);
 
 	virtual string checkNick(const string& nick) = 0;
 
