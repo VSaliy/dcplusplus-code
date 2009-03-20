@@ -62,9 +62,6 @@ CHM_sources.append('style.css')
 CHM_sources.append(Glob('#/res/*.bmp'))
 CHM_sources.append(Glob('#/res/*.ico'))
 CHM_sources.sort()
-for CHM_source in CHM_sources:
-	if str(CHM_source) == 'commands_user_base.html':
-		CHM_sources.remove(CHM_source)
 
 # additional dependencies (that have to be built before the help file)
 CHM_dependencies = ['addendum.txt', 'cshelp.h']
