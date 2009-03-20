@@ -26,7 +26,7 @@ How to compile in n easy steps:
 Note; If you get errors about a missing file "natupnp.h", you need to download the Platform SDK from MS
 and copy the file to the include directory of your compiler (or add it to the include path...).
 
-2) Install recent stable release (at least version 0.98) of SCons (www.scons.org).
+2) Install recent stable release (at least version 0.98.5) of SCons (www.scons.org).
    Make sure SCons and Python are in your PATH.
 
 3) Install gettext (http://www.gnu.org/software/gettext/). The easiest way to do this is to get the
