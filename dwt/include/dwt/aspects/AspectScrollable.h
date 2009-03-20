@@ -92,7 +92,7 @@ bool AspectScrollable< WidgetType >::scrollIsAtEnd()
 	SCROLLINFO scrollInfo = { sizeof(SCROLLINFO), SIF_RANGE | SIF_PAGE | SIF_POS };
 	BOOL ret = ::GetScrollInfo(static_cast<WidgetType*>(this)->handle(), SB_VERT, &scrollInfo);
 	dwtassert(ret != FALSE, _T("Can't get scroll info in scrollIsAtEnd"));
-	return (scrollInfo.nPos == static_cast<int>(scrollInfo.nMax - std::max(scrollInfo.nPage - 1, 0u)));
+	return !scrollInfo.nPage || scrollInfo.nPos+5 >= static_cast<int>(scrollInfo.nMax - std::max(scrollInfo.nPage - 1, 0u));
 }
 
 }

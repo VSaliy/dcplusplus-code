@@ -394,7 +394,7 @@ void HubFrame::clearTaskList() {
 }
 
 void HubFrame::addChat(const tstring& aLine) {
-	ChatType::addChat(aLine);
+	ChatType::addChat(client, aLine);
 
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {
 		StringMap params;
