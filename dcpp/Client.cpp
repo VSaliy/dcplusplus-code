@@ -229,11 +229,10 @@ tstring Client::rtfEscape(const tstring& str) {
 }
 
 tstring Client::formatChatMessage(const tstring& aLine) {
-	// Richedit doesn't take tstring input directly. It's encoded elsewhere.
 	uint32_t color = SETTING(TEXT_COLOR);
 	// {, }, and \ need escaping, because they're Richedit control characters.
 	// \n becomes \line.
-	string prologue =  "{\\urtf1 \\ul0\\b0\\i0 \n {\\colortbl;\\red" + Util::toString(color & 0xFF) +
+	string prologue =  "{\\urtf1\\ul0\\b0\\i0 \n {\\colortbl;\\red" + Util::toString(color & 0xFF) +
 	  "\\green" + Util::toString((color >> 8) & 0xFF) + "\\blue" +
 	  Util::toString((color >> 16) & 0xFF) + ";}\n \\cf1 ";
 
