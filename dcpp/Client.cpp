@@ -216,15 +216,15 @@ void Client::on(Second, uint32_t aTick) throw() {
 
 tstring Client::rtfEscapeFormatter(const tstring_range& match) {
 	tstring s(1, *match.begin());
-	if (s == _T("\n"))
-		return _T("\\line");
+	if (s == _T("\r")) return _T("");
+	if (s == _T("\n")) return _T("\\line\n");
 	return _T("\\") + s;
 }
 
 tstring Client::rtfEscape(const tstring& str) {
 	tstring escaped;
 	boost::find_format_all_copy(std::back_inserter(escaped), str,
-		boost::first_finder(L"\x7f", _1 == '{' || _1 == '}' || _1 == '\\' || _1 == '\n'), rtfEscapeFormatter);
+		boost::first_finder(L"\x7f", _1 == '{' || _1 == '}' || _1 == '\\' || _1 == '\n' || _1 == '\r'), rtfEscapeFormatter);
 	return escaped;
 }
 
