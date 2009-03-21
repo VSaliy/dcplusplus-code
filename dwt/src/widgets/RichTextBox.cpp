@@ -256,7 +256,7 @@ LRESULT RichTextBox::onUnsuppRtf(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled) {
 }
 
 std::string RichTextBox::unicodeEscapeFormatter(const tstring_range& match) {
-	return (boost::format("\\u%04X")%(int(*match.begin()))).str();
+	return (boost::format("\\uc1\\u%dh ")%(int(*match.begin()))).str();
 }
 
 std::string RichTextBox::escapeUnicode(const tstring& str) {
