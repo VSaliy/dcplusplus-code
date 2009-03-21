@@ -1,4 +1,4 @@
-EnsureSConsVersion(0, 98)
+EnsureSConsVersion(0, 98, 5)
 
 import os,sys
 from build_util import Dev
