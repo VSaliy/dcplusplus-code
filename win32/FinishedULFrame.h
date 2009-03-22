@@ -26,9 +26,11 @@ class FinishedULFrame : public FinishedFrameBase<FinishedULFrame, true>
 {
 	typedef FinishedFrameBase<FinishedULFrame, true> BaseType;
 public:
+	static const string id;
+	const string& getId() const;
+
 	FinishedULFrame(dwt::TabView* mdiParent);
 	virtual ~FinishedULFrame() { }
-
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FINISHED_UL_FRAME_H)

@@ -479,7 +479,7 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			if (aXml.getBoolChildAttrib("Connect")) {
 				StringMap map;
 				map["Address"] = e->getServer();
-				WindowManager::getInstance()->add("8HubFrame", map);
+				WindowManager::getInstance()->add("Hub", map);
 			}
 
 		}

@@ -25,6 +25,9 @@ class TextFrame : public MDIChildFrame<TextFrame>
 {
 	typedef MDIChildFrame<TextFrame> BaseType;
 public:
+	static const string id;
+	const string& getId() const;
+
 	static TextFrame* openWindow(dwt::TabView* mdiParent, const string& fileName);
 
 	enum Status {

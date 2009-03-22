@@ -36,6 +36,10 @@ public:
 		STATUS_STATUS,
 		STATUS_LAST
 	};
+
+	static const string id;
+	const string& getId() const;
+
 protected:
 	friend class StaticFrame<WaitingUsersFrame>;
 	friend class MDIChildFrame<WaitingUsersFrame>;

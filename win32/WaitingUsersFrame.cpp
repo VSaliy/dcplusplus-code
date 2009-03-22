@@ -28,6 +28,9 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/UploadManager.h>
 
+const string WaitingUsersFrame::id = "WaitingUsers";
+const string& WaitingUsersFrame::getId() const { return id; }
+
 // Constructor
 WaitingUsersFrame::WaitingUsersFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("Waiting Users"), IDH_WAITING_USERS, IDR_WAITING_USERS)

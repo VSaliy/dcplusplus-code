@@ -45,6 +45,9 @@ public:
 		STATUS_LAST
 	};
 
+	static const string id;
+	const string& getId() const;
+
 	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage, const string& hubHint);
 	static void openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo, const tstring& msg = Util::emptyStringT, const string& hubHint = Util::emptyString);
 	static bool isOpen(const UserPtr& u) { return frames.find(u) != frames.end(); }

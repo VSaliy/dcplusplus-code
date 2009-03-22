@@ -29,6 +29,9 @@
 
 #include <dwt/util/StringUtils.h>
 
+const string QueueFrame::id = "Queue";
+const string& QueueFrame::getId() const { return id; }
+
 static const ColumnInfo filesColumns[] = {
 	{ N_("Filename"), 200, false },
 	{ N_("Status"), 300, false },

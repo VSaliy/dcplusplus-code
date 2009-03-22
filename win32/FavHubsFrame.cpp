@@ -26,6 +26,9 @@
 #include "HubFrame.h"
 #include "FavHubProperties.h"
 
+const string FavHubsFrame::id = "FavHubs";
+const string& FavHubsFrame::getId() const { return id; }
+
 static const ColumnInfo hubsColumns[] = {
 	{ N_("Name"), 200, false },
 	{ N_("Description"), 290, false },

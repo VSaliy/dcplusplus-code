@@ -25,6 +25,9 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 
+const string UsersFrame::id = "FavUsers";
+const string& UsersFrame::getId() const { return id; }
+
 static const ColumnInfo usersColumns[] = {
 	{ N_("Auto grant slot / Nick"), 200, false },
 	{ N_("Hub (last seen in, if offline)"), 300, false },
