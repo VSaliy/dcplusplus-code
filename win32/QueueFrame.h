@@ -44,6 +44,9 @@ public:
 		STATUS_LAST
 	};
 
+	static const string id;
+	const string& getId() const;
+
 private:
 	friend class StaticFrame<QueueFrame>;
 	friend class MDIChildFrame<QueueFrame>;

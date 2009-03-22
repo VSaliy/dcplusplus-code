@@ -129,6 +129,10 @@ protected:
 	}
 
 public:
+	virtual const string& getId() const {
+		return Util::emptyString;
+	}
+
 	virtual const StringMap getWindowParams() const {
 		return StringMap();
 	}

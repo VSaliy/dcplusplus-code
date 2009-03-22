@@ -37,6 +37,9 @@ public:
 		STATUS_LAST
 	};
 
+	static const string id;
+	const string& getId() const;
+
 protected:
 	friend class StaticFrame<SpyFrame>;
 	friend class MDIChildFrame<SpyFrame>;

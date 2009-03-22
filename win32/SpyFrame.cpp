@@ -26,6 +26,9 @@
 
 #include "SearchFrame.h"
 
+const string SpyFrame::id = "SearchSpy";
+const string& SpyFrame::getId() const { return id; }
+
 #ifdef __MINGW32__
 const size_t SpyFrame::AVG_TIME; // TODO gcc needs this - why?
 #endif

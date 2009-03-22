@@ -32,6 +32,9 @@ public:
 		STATUS_LAST
 	};
 
+	static const string id;
+	const string& getId() const;
+
 protected:
 	friend class StaticFrame<NotepadFrame>;
 	friend class MDIChildFrame<NotepadFrame>;

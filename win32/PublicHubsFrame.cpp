@@ -28,6 +28,9 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 
+const string PublicHubsFrame::id = "PublicHubs";
+const string& PublicHubsFrame::getId() const { return id; }
+
 static const ColumnInfo hubsColumns[] = {
 	{ N_("Name"), 200, false },
 	{ N_("Description"), 290, false },

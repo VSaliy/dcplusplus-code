@@ -23,6 +23,9 @@
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
 
+const string TextFrame::id = "TextPad";
+const string& TextFrame::getId() const { return id; }
+
 static const size_t MAX_TEXT_LEN = 64*1024;
 
 TextFrame* TextFrame::openWindow(dwt::TabView* mdiParent, const string& fileName) {

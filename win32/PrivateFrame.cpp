@@ -31,6 +31,9 @@
 #include <dcpp/QueueItem.h>
 #include <dcpp/QueueManager.h>
 
+const string PrivateFrame::id = "PM";
+const string& PrivateFrame::getId() const { return id; }
+
 PrivateFrame::FrameMap PrivateFrame::frames;
 
 void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, const tstring& msg, const string& hubHint) {

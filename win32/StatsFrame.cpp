@@ -23,6 +23,9 @@
 #include <dcpp/Socket.h>
 #include <dcpp/TimerManager.h>
 
+const string StatsFrame::id = "Stats";
+const string& StatsFrame::getId() const { return id; }
+
 StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("Network Statistics"), IDH_NET_STATS, IDR_NET_STATS),
 	pen(new dwt::Pen(WinUtil::textColor)),

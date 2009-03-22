@@ -25,6 +25,9 @@
 #include "HoldRedraw.h"
 #include "WinUtil.h"
 
+const string SystemFrame::id = "SystemLog";
+const string& SystemFrame::getId() const { return id; }
+
 SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("System Log"), IDH_SYSTEM_LOG, IDR_DCPP),
 	log(0)

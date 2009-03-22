@@ -27,6 +27,9 @@
 #include <dcpp/ShareManager.h>
 #include <set>
 
+const string SearchFrame::id = "Search";
+const string& SearchFrame::getId() const { return id; }
+
 static const ColumnInfo resultsColumns[] = {
 	{ N_("File"), 200, false },
 	{ N_("User"), 100, false },

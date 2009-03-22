@@ -58,6 +58,9 @@ public:
 		STATUS_LAST
 	};
 
+	static const string id;
+	const string& getId() const;
+
 	static void openWindow(dwt::TabView* mdiParent, const string& url);
 	static void closeDisconnected();
 	static void resortUsers();

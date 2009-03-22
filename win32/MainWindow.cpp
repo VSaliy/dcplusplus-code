@@ -503,7 +503,8 @@ void MainWindow::saveWindowSettings() {
 
 		const dwt::TabView::ChildList& views = tabs->getChildren();
 		for(dwt::TabView::ChildList::const_iterator i = views.begin(); i != views.end(); ++i) {
-			wm->add(typeid(**i).name(), static_cast<MDIChildFrame<dwt::Container>*>(*i)->getWindowParams());
+			MDIChildFrame<dwt::Container>* child = static_cast<MDIChildFrame<dwt::Container>*>(*i);
+			wm->add(child->getId(), child->getWindowParams());
 		}
 
 		wm->unlock();
@@ -1082,13 +1083,13 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 }
 
 void MainWindow::on(WindowManagerListener::Window, const string& id, const StringMap& params, bool skipHubs) throw() {
-	if(typeid(HubFrame).name() == id) {
+	if(HubFrame::id == id) {
 		if(!skipHubs) {
 			callAsync(std::tr1::bind(&HubFrame::parseWindowParams, getTabView(), params));
 		}
 	}
 
-#define compare_id(frame) else if(typeid(frame).name() == id) callAsync(std::tr1::bind(&frame::parseWindowParams, getTabView(), params))
+#define compare_id(frame) else if(frame::id == id) callAsync(std::tr1::bind(&frame::parseWindowParams, getTabView(), params))
 	compare_id(PrivateFrame);
 	compare_id(DirectoryListingFrame);
 	compare_id(PublicHubsFrame);

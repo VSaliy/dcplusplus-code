@@ -27,6 +27,9 @@
 #include "HoldRedraw.h"
 #include "ADLSProperties.h"
 
+const string ADLSearchFrame::id = "ADLSearch";
+const string& ADLSearchFrame::getId() const { return id; }
+
 static const ColumnInfo itemsColumns[] = {
 	{ N_("Enabled / Search String"), 120, false },
 	{ N_("Source Type"), 90, false },

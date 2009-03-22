@@ -33,6 +33,9 @@
 #include <dcpp/ClientManager.h>
 #include <dcpp/ShareManager.h>
 
+const string DirectoryListingFrame::id = "DirectoryListing";
+const string& DirectoryListingFrame::getId() const { return id; }
+
 static const ColumnInfo filesColumns[] = {
 	{ N_("File"), 300, false },
 	{ N_("Type"), 60, false },

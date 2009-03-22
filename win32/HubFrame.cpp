@@ -34,6 +34,9 @@
 #include <dcpp/SearchManager.h>
 #include <dcpp/version.h>
 
+const string HubFrame::id = "Hub";
+const string& HubFrame::getId() const { return id; }
+
 static const ColumnInfo usersColumns[] = {
 	{ N_("Nick"), 100, false },
 	{ N_("Shared"), 80, true },

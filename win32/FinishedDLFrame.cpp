@@ -21,6 +21,9 @@
 
 #include "FinishedDLFrame.h"
 
+const string FinishedDLFrame::id = "FinishedDL";
+const string& FinishedDLFrame::getId() const { return id; }
+
 FinishedDLFrame::FinishedDLFrame(dwt::TabView* mdiParent) :
 	BaseType(mdiParent, T_("Finished Downloads"), IDH_FINISHED_DL, IDR_FINISHED_DL)
 {

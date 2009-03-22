@@ -26,9 +26,11 @@ class FinishedDLFrame : public FinishedFrameBase<FinishedDLFrame, false>
 {
 	typedef FinishedFrameBase<FinishedDLFrame, false> BaseType;
 public:
+	static const string id;
+	const string& getId() const;
+
 	FinishedDLFrame(dwt::TabView* mdiParent);
 	virtual ~FinishedDLFrame() { }
-
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FINISHED_DL_FRAME_H)
