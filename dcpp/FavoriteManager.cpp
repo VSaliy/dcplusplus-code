@@ -29,6 +29,9 @@
 #include "SimpleXML.h"
 #include "UserCommand.h"
 
+/// @todo remove after version with windowmanager is released
+#include "WindowManager.h"
+
 namespace dcpp {
 
 FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), c(NULL), lastServer(0), listType(TYPE_NORMAL), dontSave(false) {
@@ -471,6 +474,14 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			e->setUserDescription(aXml.getChildAttrib("UserDescription"));
 			e->setEncoding(aXml.getChildAttrib("Encoding"));
 			favoriteHubs.push_back(e);
+
+			/// @todo remove after version with windowmanager is released
+			if (aXml.getBoolChildAttrib("Connect")) {
+				StringMap map;
+				map["Address"] = e->getServer();
+				WindowManager::getInstance()->add("8HubFrame", map);
+			}
+
 		}
 		aXml.stepOut();
 	}
