@@ -33,7 +33,18 @@ Shows the contents of the folder selected in the folder list (window on the left
 </dl>
 
 <h2>Context menu commands</h2>
-<p>Description of the context menu options are listed in the <a href="commands_file.html">File-related menu commands</a> page.</p>
+<!--#include virtual="commands_file_download.inc" --> 
+<!--#include virtual="commands_file_general.inc" --> 
+<!--#include virtual="commands_file_management.inc" --> 
+<dl style="margin-left: 40px;">
+  <dt>View as text</dt>
+  <dd>
+  	 <p>Using in downloaded filelists, this command downloads the selected file to the temporary folder of the operating system and opens
+  	its contents in a text viewer window. The file will be deleted right after its contents shown.</p>
+  	<p>If you browse your <u>own</u> filelist this will open the selected file (stored locally) in a text viewer window.</p>  	
+    <!--#include virtual="commands_viewastext.inc" --> 
+  </dd>
+</dl>
 
 <h2>Status bar (bottom)</h2>
 <h3>Indicators:</h3>

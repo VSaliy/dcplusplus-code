@@ -86,10 +86,25 @@ setting is enabled. Activating that option can generate lots of filelist traffic
 </dl>
 
 <h3>Context menu commands</h3>
-<p>Description of available context menu options for this window are listed in <a href="commands_listview.html">
-Listview-related menu commands</a>, <a href="commands_file.html">File-related menu commands</a> 
-	and <a href="commands_user.html">User-related menu commands</a> pages.</p>
-		
+<!--#include virtual="commands_file_download.inc" --> 
+<dl style="margin-left: 40px;">
+  <dt>Download whole directory</dt>
+  <dd>If one or more files selected from the same folder it will add the whole folder
+  	  to the Download Queue.</dd>	  
+  <dt>Download whole directory to...</dt>
+  <dd>Combines the function of <i>Download to...</i> and <i>Download whole directory</i> 
+  	  commands</dd>	  
+  <dt>View as text</dt>
+  <dd><p>It downloads the selected file to the temporary folder of the operating system and opens
+  	  its contents in a text viewer window. The file will be deleted right after its contents shown.</p>
+  	  <!--#include virtual="commands_viewastext.inc" --> 
+  </dd>
+</dl>
+<!--#include virtual="commands_file_general.inc" --> 
+<!--#include virtual="commands_user_general.inc" --> 
+<!--#include virtual="commands_user_favorites.inc" --> 
+<!--#include virtual="commands_listview.inc" --> 
+
 <h2>Status bar</h2>
 <dl style="margin-left: 40px;">
   <dt>Unnamed checkbox</dt>
