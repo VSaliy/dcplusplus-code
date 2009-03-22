@@ -27,12 +27,7 @@
 #include "TimerManager.h"
 #include "ClientManager.h"
 
-#include <boost/format.hpp>
-#include <boost/lambda/lambda.hpp>
-
 namespace dcpp {
-
-using namespace boost::lambda;
 
 Client::Counts Client::counts;
 
@@ -212,31 +207,6 @@ void Client::on(Second, uint32_t aTick) throw() {
 		// Try to reconnect...
 		connect();
 	}
-}
-
-tstring Client::rtfEscapeFormatter(const tstring_range& match) {
-	tstring s(1, *match.begin());
-	if (s == _T("\r")) return _T("");
-	if (s == _T("\n")) return _T("\\line\n");
-	return _T("\\") + s;
-}
-
-tstring Client::rtfEscape(const tstring& str) {
-	tstring escaped;
-	boost::find_format_all_copy(std::back_inserter(escaped), str,
-		boost::first_finder(L"\x7f", _1 == '{' || _1 == '}' || _1 == '\\' || _1 == '\n' || _1 == '\r'), rtfEscapeFormatter);
-	return escaped;
-}
-
-tstring Client::formatChatMessage(const tstring& aLine) {
-	uint32_t color = SETTING(TEXT_COLOR);
-	// {, }, and \ need escaping, because they're Richedit control characters.
-	// \n becomes \line.
-	string prologue =  "{\\urtf1\\ul0\\b0\\i0 \n {\\colortbl;\\red" + Util::toString(color & 0xFF) +
-	  "\\green" + Util::toString((color >> 8) & 0xFF) + "\\blue" +
-	  Util::toString((color >> 16) & 0xFF) + ";}\n \\cf1 ";
-
-	return Text::toT(prologue) + rtfEscape(aLine) + Text::toT("}\n");
 }
 
 

@@ -23,6 +23,12 @@
 #include "RichTextBox.h"
 #include <dcpp/Client.h>
 
+#include <boost/algorithm/string.hpp>
+#include <boost/format.hpp>
+#include <boost/lambda/lambda.hpp>
+
+typedef boost::iterator_range<boost::range_const_iterator<tstring>::type> tstring_range;
+
 template<typename T>
 class AspectChat {
 	typedef AspectChat<T> ThisType;
@@ -53,6 +59,32 @@ protected:
 
 	virtual ~AspectChat() { }
 
+	tstring static rtfEscapeFormatter(const tstring_range& match) {
+		tstring s(1, *match.begin());
+		if (s == _T("\r")) return _T("");
+		if (s == _T("\n")) return _T("\\line\n");
+		return _T("\\") + s;
+	}
+	
+	tstring rtfEscape(const tstring& str) {
+		using namespace boost::lambda;
+		tstring escaped;
+		boost::find_format_all_copy(std::back_inserter(escaped), str,
+		  boost::first_finder(L"\x7f", boost::lambda::_1 == '{' || boost::lambda::_1 == '}' || boost::lambda::_1 == '\\' || boost::lambda::_1 == '\n' || boost::lambda::_1 == '\r'), rtfEscapeFormatter);
+		return escaped;
+	}
+
+	tstring formatChatMessage(Client* aClient, const tstring& aLine) {
+		uint32_t color = SETTING(TEXT_COLOR);
+		// {, }, and \ need escaping, because they're Richedit control characters.
+		// \n becomes \line.
+		string prologue =  "{\\urtf1\\ul0\\b0\\i0 \n {\\colortbl;\\red" + Util::toString(color & 0xFF) +
+		  "\\green" + Util::toString((color >> 8) & 0xFF) + "\\blue" +
+		  Util::toString((color >> 16) & 0xFF) + ";}\n \\cf1 ";
+		
+		return Text::toT(prologue) + rtfEscape(aLine) + Text::toT("}\n");
+	}
+
 	void addChat(Client* aClient, const tstring& aLine) {
 		tstring line;
 		if(timeStamps) {
@@ -61,7 +93,7 @@ protected:
 			line = _T("\r\n");
 		}
 		line += Text::toDOS(aLine);
-		chat->addTextSteady(aClient->formatChatMessage(line), line.size());
+		chat->addTextSteady(formatChatMessage(aClient, line), line.size());
 	}
 
 	bool checkCommand(const tstring& cmd, const tstring& param, tstring& status) {
