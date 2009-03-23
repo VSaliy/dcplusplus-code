@@ -5,6 +5,7 @@
 * Update the file list window title bar when the user online status changes (poy)
 * Re-open previous windows - no auto-connect/auto-open setting anymore (poy)
 * Fix own file list not deleted on closure
+* Fix menu title size (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)

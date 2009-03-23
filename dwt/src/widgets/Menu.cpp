@@ -87,7 +87,7 @@ void Menu::createHelper(const Seed& cs) {
 			LOGFONT lf;
 			::GetObject(font->handle(), sizeof(lf), &lf);
 			lf.lfWeight = FW_BOLD;
-			itsTitleFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
+			itsTitleFont = boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		}
 
 		itsParent->setCallback(Message(WM_DRAWITEM), DrawItemDispatcher(std::tr1::bind(&Menu::handleDrawItem, _1, _2, _3)));
@@ -118,6 +118,8 @@ void Menu::attach(HMENU hMenu, const Seed& cs) {
 	itsHandle = hMenu;
 
 	if(ownerDrawn) {
+		int defaultItem = ::GetMenuDefaultItem(itsHandle, TRUE, GMDI_USEDISABLED);
+
 		// update all current items to be owner-drawn
 		const unsigned count = getCount();
 		for(size_t i = 0; i < count; ++i) {
@@ -134,6 +136,8 @@ void Menu::attach(HMENU hMenu, const Seed& cs) {
 
 				// create item data wrapper
 				ItemDataWrapper * wrapper = new ItemDataWrapper( this, i );
+				if(i == defaultItem)
+					wrapper->isDefault = true;
 				info.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
 
 				if(::SetMenuItemInfo(itsHandle, i, TRUE, &info)) {
@@ -486,39 +490,34 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 				isGrayed ? ::GetSysColor(COLOR_GRAYTEXT) :
 				wrapper->isTitle ? colorInfo.colorTitleText :
 				highlight ? colorInfo.colorHighlightText :
-				wrapper->textColor
-				);
+				wrapper->textColor);
 
 			// Select item font
-			Canvas::Selector select(canvas, *((wrapper->isTitle || (::GetMenuDefaultItem(handle(), TRUE, GMDI_USEDISABLED) == wrapper->index))
-				? itsTitleFont
-				: font));
+			Canvas::Selector select(canvas, *(
+				wrapper->isTitle ? itsTitleFont :
+				wrapper->isDefault ? boldFont :
+				font));
+
+			// compute text rectangle
+			Rectangle textRectangle(itemRectangle);
+			if(!isMenuBar) {
+				if(!wrapper->isTitle || icon) {
+					textRectangle.pos.x += stripWidth + textIconGap;
+					textRectangle.size.x -= stripWidth + textIconGap;
+				}
+				textRectangle.size.x -= borderGap;
+			}
 
 			unsigned drawTextFormat = DT_VCENTER | DT_SINGLELINE;
 			if((drawInfo->itemState & ODS_NOACCEL) == ODS_NOACCEL)
 				drawTextFormat |= DT_HIDEPREFIX;
 
-			if(isMenuBar || wrapper->isTitle) {
-				Rectangle textRectangle( itemRectangle );
+			// draw text
+			canvas.drawText(text, textRectangle, ((isMenuBar || wrapper->isTitle) ? DT_CENTER : DT_LEFT) | drawTextFormat);
 
-				if(icon) // has icon
-					textRectangle.pos.x += textIconGap;
-
-				canvas.drawText( text, textRectangle, DT_CENTER | drawTextFormat );
-			} else {
-				// compute text rectangle
-				Rectangle textRectangle( itemRectangle );
-
-				// adjust rectangle
-				textRectangle.pos.x += stripWidth + textIconGap;
-				textRectangle.size.x -= stripWidth + textIconGap + borderGap;
-
-				canvas.drawText( text, textRectangle, DT_LEFT | drawTextFormat );
-
-				// draw accelerator
-				if ( !accelerator.empty() )
-					canvas.drawText( accelerator, textRectangle, DT_RIGHT | drawTextFormat );
-			}
+			// draw accelerator
+			if ( !accelerator.empty() )
+				canvas.drawText( accelerator, textRectangle, DT_RIGHT | drawTextFormat );
 
 			// reset old mode
 			canvas.setBkMode( oldMode );
@@ -610,7 +609,10 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* w
 	// are we processing menu bar ?
 	const bool isMenuBar = ::GetMenu(getParent()->handle()) == handle();
 
-	Point textSize = getTextSize(wrapper->index);
+	Point textSize = getTextSize(getText(wrapper->index),
+		wrapper->isTitle ? itsTitleFont :
+		wrapper->isDefault ? boldFont :
+		font);
 	itemWidth = textSize.x;
 	itemHeight = textSize.y;
 
@@ -631,7 +633,7 @@ bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* w
 
 	// adjust width for sidebar
 	if(drawSidebar)
-		itemWidth += getTextSize(0).y; // 0 is the title index
+		itemWidth += getTextSize(getText(0), itsTitleFont).y; // 0 is the title index
 
 	// adjust item height
 	itemHeight = (std::max)( itemHeight, ( UINT )::GetSystemMetrics( SM_CYMENU ) );
@@ -738,6 +740,8 @@ void Menu::appendItem(const tstring& text, const Dispatcher::F& f, const IconPtr
 
 		// set item data
 		wrapper = new ItemDataWrapper(this, index, false, icon);
+		if(defaultItem)
+			wrapper->isDefault = true;
 		info.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
 	}
 
@@ -761,9 +765,9 @@ unsigned Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 
 	if(!itsTitle.empty()) {
 		// adjust "y" so that the first command ends up in front of the cursor, not the title
-		// 0 is the title index
 		/// @todo fix for menus that open upwards
-		y -= std::max(static_cast<unsigned>(getTextSize(0).y), static_cast<unsigned>(::GetSystemMetrics(SM_CYMENU)));
+		y -= std::max(static_cast<unsigned>(getTextSize(getText(0), itsTitleFont).y), // 0 is the title index
+			static_cast<unsigned>(::GetSystemMetrics(SM_CYMENU)));
 	}
 
 	return ::TrackPopupMenu(itsHandle, flags, x, y, 0, itsParent->handle(), 0);
@@ -780,10 +784,10 @@ Menu::ObjectType Menu::getChild( unsigned position ) {
 	return ObjectType();
 }
 
-Point Menu::getTextSize(unsigned index) const {
+Point Menu::getTextSize(const tstring& text, const FontPtr& font_) const {
 	UpdateCanvas canvas(getParent());
-	Canvas::Selector select(canvas, *font);
-	return canvas.getTextExtent(getText(index)) + Point(borderGap, borderGap);
+	Canvas::Selector select(canvas, *font_);
+	return canvas.getTextExtent(text) + Point(borderGap, borderGap);
 }
 
 }
