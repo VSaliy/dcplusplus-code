@@ -362,6 +362,9 @@ protected:
 		// that is either separator or popup menu
 		unsigned index;
 
+		/// Default menu item; draw with a bold font
+		bool isDefault;
+
 		// Specifies if item is menu title
 		bool isTitle;
 
@@ -380,6 +383,7 @@ protected:
 			) :
 		menu(menu_),
 			index(index_),
+			isDefault(false),
 			isTitle(isTitle_),
 			textColor(::GetSysColor(COLOR_MENUTEXT)),
 			icon(icon_)
@@ -414,6 +418,7 @@ private:
 	Point iconSize;
 
 	FontPtr font;
+	FontPtr boldFont; // for default items
 
 	// Menu title
 	tstring itsTitle;
@@ -426,7 +431,7 @@ private:
 
 	void createHelper(const Seed& cs);
 
-	Point getTextSize(unsigned index) const;
+	Point getTextSize(const tstring& text, const FontPtr& font_) const;
 };
 
 }
