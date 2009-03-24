@@ -60,6 +60,8 @@ public:
 	string findHub(const string& ipPort) const;
 	string findHubEncoding(const string& aUrl) const;
 
+	OnlineUser* findOnlineUser(const CID& cid, const string& hintUrl) throw();
+
 	UserPtr findUser(const string& aNick, const string& aHubUrl) const throw() { return findUser(makeCid(aNick, aHubUrl)); }
 	UserPtr findUser(const CID& cid) const throw();
 	UserPtr findLegacyUser(const string& aNick) const throw();
@@ -134,8 +136,6 @@ private:
 	}
 
 	void updateNick(const OnlineUser& user) throw();
-
-	OnlineUser* findOnlineUser(const CID& cid, const string& hintUrl) throw();
 
 	// ClientListener
 	virtual void on(Connected, Client* c) throw();
