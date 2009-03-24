@@ -130,10 +130,11 @@ PrivateFrame::~PrivateFrame() {
 }
 
 void PrivateFrame::addChat(const tstring& aLine, bool log) {
-	StringList sl = ClientManager::getInstance()->getHubs(*replyTo);
-	if (sl.empty()) return;
+	OnlineUser *ou = ClientManager::getInstance()->findOnlineUser(*replyTo, Util::emptyString);
+	if (!ou) return;
 
-	ChatType::addChat(ClientManager::getInstance()->getClient(sl[0]), aLine);
+	// getClient actually retuns a ref.
+	ChatType::addChat(&(ou->getClient()), aLine);
 
 	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		StringMap params;
