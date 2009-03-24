@@ -46,7 +46,7 @@ ADLSProperties::~ADLSProperties() {
 }
 
 int ADLSProperties::run() {
-	createDialog(IDD_ADLS_PROPERTIES);
+	createDialog();
 	return show();
 }
 
@@ -60,7 +60,7 @@ bool ADLSProperties::handleInitDialog() {
 	group->setHelpId(IDH_ADLSP_SEARCH_STRING);
 	searchString = group->addChild(WinUtil::Seeds::Dialog::textBox);
 	searchString->setText(Text::toT(search->searchString));
-	
+
 	group = grid->addChild(GroupBox::Seed(T_("Source Type")));
 	group->setHelpId(IDH_ADLSP_SOURCE_TYPE);
 	searchType = group->addChild(WinUtil::Seeds::comboBoxStatic);
@@ -95,7 +95,7 @@ bool ADLSProperties::handleInitDialog() {
 	sizeType->setSelected(search->typeFileSize);
 
 	group = grid->addChild(GroupBox::Seed(T_("Destination Directory")));
-	group->setHelpId(IDH_ADLSP_DEST_DIR);		
+	group->setHelpId(IDH_ADLSP_DEST_DIR);
 	destDir = group->addChild(WinUtil::Seeds::Dialog::textBox);
 	destDir->setText(Text::toT(search->destDir));
 

@@ -43,6 +43,7 @@ private:
 	void updateTitle();
 	void write();
 
+	using Widget::layout;
 	void layout();
 
 	bool initDialog();

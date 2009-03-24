@@ -48,7 +48,6 @@ grid(0),
 options(0),
 languages(0)
 {
-	createDialog(IDD_APPEARANCEPAGE);
 	setHelpId(IDH_APPEARANCEPAGE);
 
 	grid = addChild(Grid::Seed(4, 2));

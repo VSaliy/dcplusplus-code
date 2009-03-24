@@ -67,6 +67,8 @@ public:
 	  */
 	void createDialog( unsigned resourceId );
 
+	void createDialog();
+
 protected:
 	// Protected since this Widget we HAVE to inherit from
 	explicit ModelessDialog( Widget * parent = 0 );

@@ -51,7 +51,6 @@ AdvancedPage::ListItem AdvancedPage::listItems[] = {
 };
 
 AdvancedPage::AdvancedPage(dwt::Widget* parent) : PropPage(parent) {
-	createDialog(IDD_ADVANCEDPAGE);
 	setHelpId(IDH_ADVANCEDPAGE);
 
 	options = addChild(WinUtil::Seeds::Dialog::optionsTable);

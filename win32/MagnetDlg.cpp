@@ -41,7 +41,7 @@ MagnetDlg::~MagnetDlg() {
 }
 
 int MagnetDlg::run() {
-	createDialog(IDD_MAGNET);
+	createDialog();
 	return show();
 }
 

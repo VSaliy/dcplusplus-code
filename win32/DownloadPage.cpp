@@ -32,7 +32,6 @@ DownloadPage::DownloadPage(dwt::Widget* parent) :
 PropPage(parent),
 grid(0)
 {
-	createDialog(IDD_DOWNLOADPAGE);
 	setHelpId(IDH_DOWNLOADPAGE);
 
 	grid = addChild(Grid::Seed(3, 1));

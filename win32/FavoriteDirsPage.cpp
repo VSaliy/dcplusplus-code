@@ -40,11 +40,10 @@ directories(0),
 rename(0),
 remove(0)
 {
-	createDialog(IDD_FAVORITE_DIRSPAGE);
 	setHelpId(IDH_FAVORITE_DIRSPAGE);
 
 	group = addChild(GroupBox::Seed(T_("Favorite download directories")));
-	group->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_FAVORITE_DIRECTORIES);	
+	group->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_FAVORITE_DIRECTORIES);
 	GridPtr grid = group->addChild(Grid::Seed(2, 3));
 	grid->column(0).mode = dwt::GridInfo::FILL;
 	grid->column(1).mode = dwt::GridInfo::FILL;
@@ -57,13 +56,13 @@ remove(0)
 
 	rename = grid->addChild(Button::Seed(T_("Re&name")));
 	rename->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRenameClicked, this));
-	rename->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_RENAME);	
+	rename->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_RENAME);
 	remove = grid->addChild(Button::Seed(T_("&Remove")));
 	remove->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRemoveClicked, this));
-	remove->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_REMOVE);	
+	remove->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_REMOVE);
 	ButtonPtr add = grid->addChild(Button::Seed(T_("&Add folder")));
 	add->onClicked(std::tr1::bind(&FavoriteDirsPage::handleAddClicked, this));
-	add->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_ADD);	
+	add->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_ADD);
 
 	WinUtil::makeColumns(directories, columns, 2);
 

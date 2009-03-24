@@ -38,7 +38,6 @@ PropPage(parent),
 grid(0),
 options(0)
 {
-	createDialog(IDD_CERTIFICATESPAGE);
 	setHelpId(IDH_CERTIFICATESPAGE);
 
 	grid = addChild(Grid::Seed(5, 1));
@@ -57,26 +56,26 @@ options(0)
 		cur->addChild(Label::Seed(T_("Private key file")))->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(box, SettingsManager::TLS_PRIVATE_KEY_FILE, PropPage::T_STR));
-		box->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);	
+		box->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);
 		ButtonPtr button = cur->addChild(dots);
 		button->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
-		button->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);			
+		button->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);
 
 		cur->addChild(Label::Seed(T_("Own certificate file")))->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);
 		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(box, SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR));
-		box->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);	
+		box->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);
 		button = cur->addChild(dots);
 		button->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
-		button->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);			
+		button->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);
 
 		cur->addChild(Label::Seed(T_("Trusted certificates path")))->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);
-		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);	
+		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(box, SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR));
-		box->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);	
+		box->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);
 		button = cur->addChild(dots);
 		button->onClicked(std::tr1::bind(&CertificatesPage::handleBrowseDir, this, items.back()));
-		button->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);			
+		button->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);
 	}
 
 	{

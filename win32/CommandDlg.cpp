@@ -59,7 +59,7 @@ CommandDlg::~CommandDlg() {
 }
 
 int CommandDlg::run() {
-	createDialog(IDD_USER_COMMAND);
+	createDialog();
 	return show();
 }
 

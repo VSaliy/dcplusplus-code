@@ -47,7 +47,6 @@ socksLogin(0),
 socksPass(0),
 socksResolve(0)
 {
-	createDialog(IDD_NETWORKPAGE);
 	setHelpId(IDH_NETWORKPAGE);
 
 	grid = addChild(Grid::Seed(2, 1));
