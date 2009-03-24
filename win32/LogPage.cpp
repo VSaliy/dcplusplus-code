@@ -47,7 +47,6 @@ logFormat(0),
 logFile(0),
 oldSelection(-1)
 {
-	createDialog(IDD_LOGPAGE);
 	setHelpId(IDH_LOGPAGE);
 
 	group = addChild(GroupBox::Seed(T_("Logging")));

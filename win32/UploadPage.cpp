@@ -45,7 +45,6 @@ total(0),
 rename(0),
 remove(0)
 {
-	createDialog(IDD_UPLOADPAGE);
 	setHelpId(IDH_UPLOADPAGE);
 
 	grid = addChild(Grid::Seed(2, 1));

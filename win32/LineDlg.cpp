@@ -37,7 +37,7 @@ password(password_)
 }
 
 int LineDlg::run() {
-	createDialog(IDD_LINE);
+	createDialog();
 	return show();
 }
 

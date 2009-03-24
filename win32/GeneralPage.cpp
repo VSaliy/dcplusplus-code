@@ -31,7 +31,6 @@ group(0),
 nick(0),
 connections(0)
 {
-	createDialog(IDD_GENERALPAGE);
 	setHelpId(IDH_GENERALPAGE);
 
 	group = addChild(GroupBox::Seed(T_("Personal Information")));

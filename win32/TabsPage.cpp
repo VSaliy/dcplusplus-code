@@ -45,7 +45,6 @@ PropPage(parent),
 grid(0),
 options(0)
 {
-	createDialog(IDD_TABSPAGE);
 	setHelpId(IDH_TABSPAGE);
 
 	grid = addChild(Grid::Seed(2, 1));

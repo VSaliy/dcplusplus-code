@@ -30,9 +30,50 @@
 */
 
 #include <dwt/widgets/ModelessDialog.h>
+#include <dwt/widgets/ModalDialog.h>
 #include <dwt/DWTException.h>
 
 namespace dwt {
+
+static struct DLGTEMPLATEEX {
+    WORD dlgVer;
+    WORD signature;
+    DWORD helpID;
+    DWORD exStyle;
+    DWORD style;
+    WORD cDlgItems;
+    short x;
+    short y;
+    short cx;
+    short cy;
+    WORD menu;
+    WORD windowClass;
+    WORD title;
+    WORD pointsize;
+    WORD weight;
+    BYTE italic;
+    BYTE charset;
+    WCHAR typeface[13];
+} defaultTemplate = {
+	1,
+	0xffff,
+	0,
+	0,
+	DS_SHELLFONT | DS_CONTROL | WS_CHILD | WS_CAPTION,
+	0,
+	0,
+	0,
+	100,
+	100,
+	0,
+	0,
+	0,
+	8,
+	0,
+	0,
+	0,
+	L"MS Shell Dlg"
+};
 
 void ModelessDialog::createDialog( unsigned resourceId )
 {
@@ -40,7 +81,19 @@ void ModelessDialog::createDialog( unsigned resourceId )
 		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
 
 	if ( !wnd ) {
-		throw Win32Exception( "CreateDialogParam failed.");
+		throw Win32Exception("CreateDialogParam failed");
+	}
+}
+
+void ModelessDialog::createDialog() {
+	// Default template followed by a bunch of 0's for menu, class, title and font
+	DLGTEMPLATEEX t = defaultTemplate;
+
+	HWND dlg = ::CreateDialogIndirectParam(::GetModuleHandle(NULL), (DLGTEMPLATE*)&t,
+		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
+
+	if(dlg == NULL) {
+		throw Win32Exception("CreateDialogIndirectParam failed");
 	}
 }
 

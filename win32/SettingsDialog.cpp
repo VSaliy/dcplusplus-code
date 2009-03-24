@@ -51,7 +51,7 @@ pageTree(0)
 }
 
 int SettingsDialog::run() {
-	createDialog(IDD_SETTINGS);
+	createDialog();
 	return show();
 }
 
@@ -130,7 +130,7 @@ bool SettingsDialog::initDialog() {
 
 	updateTitle();
 
-	layout();
+	layout(dwt::Rectangle(0, 0, 640, 480));
 
 	return false;
 }

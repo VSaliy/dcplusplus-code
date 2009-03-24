@@ -34,18 +34,45 @@
 #include <dwt/Application.h>
 
 namespace dwt {
-
-static const DLGTEMPLATE defaultTemplate = {
-#ifdef WINCE
-	DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_CENTER,
-#else
-	DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_CENTER,
-#endif
-	0,	// cdit
-	280, // cx
-	140, // cy
-	0,	// x
-	0	// y
+/// @todo move to a better place
+static struct DLGTEMPLATEEX {
+    WORD dlgVer;
+    WORD signature;
+    DWORD helpID;
+    DWORD exStyle;
+    DWORD style;
+    WORD cDlgItems;
+    short x;
+    short y;
+    short cx;
+    short cy;
+    WORD menu;
+    WORD windowClass;
+    WORD title;
+    WORD pointsize;
+    WORD weight;
+    BYTE italic;
+    BYTE charset;
+    WCHAR typeface[13];
+} defaultTemplate = {
+	1,
+	0xffff,
+	0,
+	0,
+	DS_CONTEXTHELP | DS_MODALFRAME | DS_SHELLFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_CENTER | WS_THICKFRAME,
+	0,
+	0,
+	0,
+	100,
+	100,
+	0,
+	0,
+	0,
+	8,
+	0,
+	0,
+	0,
+	L"MS Shell Dlg"
 };
 
 ModalDialog::ModalDialog(Widget* parent) :
@@ -73,12 +100,9 @@ void ModalDialog::createDialog(unsigned resourceId) {
 
 void ModalDialog::createDialog() {
 	// Default template followed by a bunch of 0's for menu, class, title and font
-	struct {
-		DLGTEMPLATE t;
-		char dummy[128];
-	} temp = { defaultTemplate, { 0 } };
+	DLGTEMPLATEEX temp = defaultTemplate;
 
-	HWND dlg = ::CreateDialogIndirectParam(::GetModuleHandle(NULL), &temp.t,
+	HWND dlg = ::CreateDialogIndirectParam(::GetModuleHandle(NULL), (DLGTEMPLATE*)&temp,
 		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
 
 	if(dlg == NULL) {

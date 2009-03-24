@@ -44,7 +44,7 @@ FavHubProperties::~FavHubProperties() {
 }
 
 int FavHubProperties::run() {
-	createDialog(IDD_FAVORITEHUB);
+	createDialog();
 	return show();
 }
 

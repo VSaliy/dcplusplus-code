@@ -45,7 +45,7 @@ HashProgressDlg::~HashProgressDlg() {
 }
 
 int HashProgressDlg::run() {
-	createDialog(IDD_HASH_PROGRESS);
+	createDialog();
 	return show();
 }
 

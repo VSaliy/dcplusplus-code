@@ -55,7 +55,6 @@ grid(0),
 options(0),
 confirm(0)
 {
-	createDialog(IDD_WINDOWSPAGE);
 	setHelpId(IDH_WINDOWSPAGE);
 
 	grid = addChild(Grid::Seed(2, 1));

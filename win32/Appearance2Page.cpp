@@ -43,7 +43,6 @@ beepFile(0),
 browse(0),
 oldSelection(-1)
 {
-	createDialog(IDD_APPEARANCE2PAGE);
 	setHelpId(IDH_APPEARANCE2PAGE);
 
 	grid = addChild(Grid::Seed(3, 1));

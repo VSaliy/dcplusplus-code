@@ -41,7 +41,7 @@ HubListsDlg::~HubListsDlg() {
 }
 
 int HubListsDlg::run() {
-	createDialog(IDD_HUB_LIST);
+	createDialog();
 	return show();
 }
 
