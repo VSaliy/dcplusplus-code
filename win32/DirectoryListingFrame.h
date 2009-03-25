@@ -178,6 +178,8 @@ private:
 	DirectoryListingFrame(dwt::TabView* mdiParent, const UserPtr& aUser, int64_t aSpeed);
 	virtual ~DirectoryListingFrame();
 
+	const StringMap getWindowParams_() const;
+
 	void layout();
 	bool preClosing();
 	void postClosing();

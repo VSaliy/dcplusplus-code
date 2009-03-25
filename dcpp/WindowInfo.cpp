@@ -23,10 +23,33 @@
 
 namespace dcpp {
 
+string WindowInfo::title = "Title";
+
 WindowInfo::WindowInfo(const string& id_, const StringMap& params_) :
 id(id_),
 params(params_)
 {
+}
+
+bool WindowInfo::operator==(const WindowInfo& rhs) {
+	if(id != rhs.id)
+		return false;
+
+	if(params.size() != rhs.params.size())
+		return false;
+
+	// compare each param, except "Title" which is not used for identification.
+	for(StringMap::const_iterator i = params.begin(); i != params.end(); ++i) {
+		if(i->first == title)
+			continue;
+		StringMap::const_iterator ri = rhs.params.find(i->first);
+		if(ri == rhs.params.end())
+			return false;
+		if(i->second != ri->second)
+			return false;
+	}
+
+	return true;
 }
 
 } // namespace dcpp

@@ -30,6 +30,7 @@
 #include <dcpp/UploadManager.h>
 #include <dcpp/QueueItem.h>
 #include <dcpp/QueueManager.h>
+#include <dcpp/WindowInfo.h>
 
 const string PrivateFrame::id = "PM";
 const string& PrivateFrame::getId() const { return id; }
@@ -83,6 +84,7 @@ void PrivateFrame::closeAllOffline() {
 
 const StringMap PrivateFrame::getWindowParams() const {
 	StringMap ret;
+	ret[WindowInfo::title] = Text::fromT(getText());
 	ret["CID"] = replyTo->getCID().toBase32();
 	ret["Hub"] = hubHint;
 	return ret;
@@ -123,6 +125,8 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 	callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 
 	frames.insert(std::make_pair(replyTo, this));
+
+	WindowManager::getInstance()->addRecent(id, getWindowParams());
 }
 
 PrivateFrame::~PrivateFrame() {

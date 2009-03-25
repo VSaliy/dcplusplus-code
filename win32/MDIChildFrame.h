@@ -24,6 +24,7 @@
 #include "WidgetFactory.h"
 #include "AspectStatus.h"
 #include <dcpp/SettingsManager.h>
+#include <dcpp/WindowManager.h>
 #include "resource.h"
 
 template<typename T>
@@ -33,6 +34,9 @@ class MDIChildFrame :
 {
 	typedef WidgetFactory< dwt::Container > BaseType;
 	typedef MDIChildFrame<T> ThisType;
+
+	T& t() { return *static_cast<T*>(this); }
+	const T& t() const { return *static_cast<const T*>(this); }
 
 protected:
 	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0, bool activate = true) :
@@ -128,6 +132,11 @@ protected:
 		getParent()->setTabIcon(this, dwt::IconPtr(new dwt::Icon(resourceId)));
 	}
 
+	void setText(const tstring& text) {
+		BaseType::setText(text);
+		WindowManager::getInstance()->updateRecent(t().getId(), t().getWindowParams());
+	}
+
 public:
 	virtual const string& getId() const {
 		return Util::emptyString;
@@ -182,7 +191,7 @@ private:
 	}
 
 	void handleSized(const dwt::SizedEvent& sz) {
-		static_cast<T*>(this)->layout();
+		t().layout();
 	}
 
 	void handleActivate(bool active) {
@@ -192,7 +201,7 @@ private:
 			}
 		} else if(!alwaysSameFocus) {
 			HWND focus = ::GetFocus();
-			if(focus != NULL && ::IsChild(static_cast<T*>(this)->handle(), focus))
+			if(focus != NULL && ::IsChild(t().handle(), focus))
 				lastFocus = focus;
 		}
 	}
@@ -217,13 +226,13 @@ private:
 
 	bool handleClosing() {
 		if(reallyClose) {
-			static_cast<T*>(this)->postClosing();
+			t().postClosing();
 			if(getParent()->getActive() == this) {
 				// Prevent flicker by selecting the next tab - WM_DESTROY would already be too late
 				getParent()->next();
 			}
 			return true;
-		} else if(static_cast<T*>(this)->preClosing()) {
+		} else if(t().preClosing()) {
 			reallyClose = true;
 			this->close(true);
 			return false;

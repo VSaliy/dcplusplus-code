@@ -31,6 +31,9 @@ class WindowManager :
 	private SettingsManagerListener
 {
 public:
+	typedef std::vector<WindowInfo> WindowInfoList;
+	typedef std::tr1::unordered_map<string, WindowInfoList> RecentList;
+
 	void autoOpen(bool skipHubs);
 
 	void lock();
@@ -39,16 +42,27 @@ public:
 	void add(const string& id, const StringMap& params);
 	void clear();
 
+	/// adds the referenced window if it doesn't exist, and moves it to the top of the stack.
+	void addRecent(const string& id, const StringMap& params);
+	/// updates the title of the referenced window without changing its position in the stack.
+	void updateRecent(const string& id, const StringMap& params);
+	const RecentList& getRecent() const { return recent; }
+
 private:
 	friend class Singleton<WindowManager>;
 
 	CriticalSection cs;
-
-	typedef std::vector<WindowInfo> WindowInfoList;
 	WindowInfoList list;
+	RecentList recent;
 
 	WindowManager();
 	virtual ~WindowManager() throw();
+
+	void addRecent_(const string& id, const StringMap& params);
+
+	typedef void (WindowManager::*handler_type)(const std::string&, const StringMap&);
+	void parseTags(SimpleXML& xml, handler_type handler);
+	void addTag(SimpleXML& xml, const WindowInfo& info) const;
 
 	virtual void on(SettingsManagerListener::Load, SimpleXML& xml) throw();
 	virtual void on(SettingsManagerListener::Save, SimpleXML& xml) throw();

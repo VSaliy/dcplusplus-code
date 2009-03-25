@@ -33,6 +33,7 @@
 #include <dcpp/ConnectionManager.h>
 #include <dcpp/SearchManager.h>
 #include <dcpp/version.h>
+#include <dcpp/WindowInfo.h>
 
 const string HubFrame::id = "Hub";
 const string& HubFrame::getId() const { return id; }
@@ -73,6 +74,7 @@ void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
 
 const StringMap HubFrame::getWindowParams() const {
 	StringMap ret;
+	ret[WindowInfo::title] = Text::fromT(getText());
 	ret["Address"] = url;
 	return ret;
 }
@@ -184,6 +186,8 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	showUsers->onClicked(std::tr1::bind(&HubFrame::handleShowUsersClicked, this));
 
 	FavoriteManager::getInstance()->addListener(this);
+
+	WindowManager::getInstance()->addRecent(id, getWindowParams());
 }
 
 HubFrame::~HubFrame() {
