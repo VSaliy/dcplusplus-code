@@ -57,34 +57,90 @@ void WindowManager::clear() {
 	list.clear();
 }
 
+void WindowManager::addRecent(const string& id, const StringMap& params) {
+	Lock l(cs);
+	addRecent_(id, params);
+}
+
+void WindowManager::addRecent_(const string& id, const StringMap& params) {
+	WindowInfo info(id, params);
+
+	if(recent.find(id) == recent.end()) {
+		recent[id] = WindowInfoList(1, info);
+		return;
+	}
+
+	WindowInfoList& infoList = recent[id];
+	WindowInfoList::iterator i = std::find(infoList.begin(), infoList.end(), info);
+	if(i == infoList.end()) {
+		infoList.insert(infoList.begin(), info);
+		if(infoList.size() > 10) /// @todo configurable?
+			infoList.erase(infoList.end() - 1);
+	} else {
+		infoList.erase(i);
+		infoList.insert(infoList.begin(), info);
+	}
+}
+
+void WindowManager::updateRecent(const string& id, const StringMap& params) {
+	Lock l(cs);
+	RecentList::iterator ri = recent.find(id);
+	if(ri != recent.end()) {
+		WindowInfo info(id, params);
+		WindowInfoList::iterator i = std::find(ri->second.begin(), ri->second.end(), info);
+		if(i != ri->second.end())
+			i->setParams(params);
+	}
+}
+
+void WindowManager::parseTags(SimpleXML& xml, handler_type handler) {
+	xml.stepIn();
+
+	while(xml.findChild("Window")) {
+		const string& id = xml.getChildAttrib("Id");
+		if(id.empty())
+			continue;
+
+		StringMap params;
+		xml.stepIn();
+		while(xml.findChild("Param")) {
+			const string& id_ = xml.getChildAttrib("Id");
+			if(id_.empty())
+				continue;
+			params[id_] = xml.getChildData();
+		}
+		xml.stepOut();
+
+		(this->*handler)(id, params);
+	}
+
+	xml.stepOut();
+}
+
+void WindowManager::addTag(SimpleXML& xml, const WindowInfo& info) const {
+	xml.addTag("Window");
+	xml.addChildAttrib("Id", info.getId());
+
+	if(!info.getParams().empty()) {
+		xml.stepIn();
+		for(StringMap::const_iterator i = info.getParams().begin(); i != info.getParams().end(); ++i) {
+			xml.addTag("Param", i->second);
+			xml.addChildAttrib("Id", i->first);
+		}
+		xml.stepOut();
+	}
+}
+
 void WindowManager::on(SettingsManagerListener::Load, SimpleXML& xml) throw() {
 	Lock l(cs);
 	clear();
 
 	xml.resetCurrentChild();
-	if(xml.findChild("Windows")) {
-		xml.stepIn();
+	if(xml.findChild("Windows"))
+		parseTags(xml, &WindowManager::add);
 
-		while(xml.findChild("Window")) {
-			const string& id = xml.getChildAttrib("Id");
-			if(id.empty())
-				continue;
-
-			StringMap params;
-			xml.stepIn();
-			while(xml.findChild("Param")) {
-				const string& id_ = xml.getChildAttrib("Id");
-				if(id_.empty())
-					continue;
-				params[id_] = xml.getChildData();
-			}
-			xml.stepOut();
-
-			add(id, params);
-		}
-
-		xml.stepOut();
-	}
+	if(xml.findChild("Recent"))
+		parseTags(xml, &WindowManager::addRecent_);
 }
 
 void WindowManager::on(SettingsManagerListener::Save, SimpleXML& xml) throw() {
@@ -92,21 +148,17 @@ void WindowManager::on(SettingsManagerListener::Save, SimpleXML& xml) throw() {
 
 	xml.addTag("Windows");
 	xml.stepIn();
+	for(WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i)
+		addTag(xml, *i);
+	xml.stepOut();
 
-	for(WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
-		xml.addTag("Window");
-		xml.addChildAttrib("Id", i->getId());
-
-		if(!i->getParams().empty()) {
-			xml.stepIn();
-			for(StringMap::const_iterator j = i->getParams().begin(); j != i->getParams().end(); ++j) {
-				xml.addTag("Param", j->second);
-				xml.addChildAttrib("Id", j->first);
-			}
-			xml.stepOut();
-		}
+	xml.addTag("Recent");
+	xml.stepIn();
+	for(RecentList::const_iterator ri = recent.begin(); ri != recent.end(); ++ri) {
+		const WindowInfoList& infoList = ri->second;
+		for(WindowInfoList::const_iterator i = infoList.begin(); i != infoList.end(); ++i)
+			addTag(xml, *i);
 	}
-
 	xml.stepOut();
 }
 

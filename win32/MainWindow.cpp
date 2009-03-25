@@ -48,7 +48,6 @@
 #include "WaitingUsersFrame.h"
 
 #include <dcpp/SettingsManager.h>
-#include <dcpp/WindowManager.h>
 #include <dcpp/ResourceManager.h>
 #include <dcpp/version.h>
 #include <dcpp/DownloadManager.h>
@@ -63,6 +62,7 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/Download.h>
+#include <dcpp/WindowInfo.h>
 
 #include <dwt/widgets/ToolBar.h>
 #include <dwt/widgets/Spinner.h>
@@ -318,6 +318,7 @@ void MainWindow::initToolbar() {
 	toolbar->appendItem(image++, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY, std::tr1::bind(&SpyFrame::openWindow, getTabView()));
 	toolbar->appendSeparator();
 	toolbar->appendItem(image++, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST, std::tr1::bind(&MainWindow::handleOpenFileList, this));
+	toolbar->appendItem(image++, T_("Recent windows"), IDH_TOOLBAR_RECENT, 0, std::tr1::bind(&MainWindow::handleRecent, this, _1));
 	toolbar->appendSeparator();
 	toolbar->appendItem(image++, T_("Settings"), IDH_TOOLBAR_SETTINGS, std::tr1::bind(&MainWindow::handleSettings, this));
 	toolbar->appendItem(image++, T_("Notepad"), IDH_TOOLBAR_NOTEPAD, std::tr1::bind(&NotepadFrame::openWindow, getTabView()));
@@ -420,6 +421,60 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 	for(FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i) {
 		FavoriteHubEntry* entry = *i;
 		menu->appendItem(dwt::util::escapeMenu(Text::toT(entry->getName())), std::tr1::bind(&HubFrame::openWindow, getTabView(), entry->getServer()));
+	}
+
+	menu->open(pt);
+}
+
+void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
+	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+
+	{
+		WindowManager* wm = WindowManager::getInstance();
+		wm->lock();
+
+		const WindowManager::RecentList& recent = wm->getRecent();
+
+		{
+			WindowManager::RecentList::const_iterator it = recent.find(HubFrame::id);
+			if(it != recent.end()) {
+				MenuPtr popup = menu->appendPopup(T_("Recent hubs"), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
+				const WindowManager::WindowInfoList& list = it->second;
+				for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
+					StringMap params = i->getParams();
+					popup->appendItem(dwt::util::escapeMenu(Text::toT(params[WindowInfo::title])),
+						std::tr1::bind(&HubFrame::parseWindowParams, getTabView(), params));
+				}
+			}
+		}
+
+		{
+			WindowManager::RecentList::const_iterator it = recent.find(PrivateFrame::id);
+			if(it != recent.end()) {
+				MenuPtr popup = menu->appendPopup(T_("Recent PMs"), dwt::IconPtr(new dwt::Icon(IDR_PRIVATE)));
+				const WindowManager::WindowInfoList& list = it->second;
+				for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
+					StringMap params = i->getParams();
+					popup->appendItem(dwt::util::escapeMenu(Text::toT(params[WindowInfo::title])),
+						std::tr1::bind(&PrivateFrame::parseWindowParams, getTabView(), params));
+				}
+			}
+		}
+
+		{
+			WindowManager::RecentList::const_iterator it = recent.find(DirectoryListingFrame::id);
+			if(it != recent.end()) {
+				MenuPtr popup = menu->appendPopup(T_("Recent file lists"), dwt::IconPtr(new dwt::Icon(IDR_DIRECTORY)));
+				const WindowManager::WindowInfoList& list = it->second;
+				for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
+					StringMap params = i->getParams();
+					popup->appendItem(dwt::util::escapeMenu(Text::toT(params[WindowInfo::title])),
+						std::tr1::bind(&DirectoryListingFrame::parseWindowParams, getTabView(), params));
+				}
+			}
+		}
+
+		wm->unlock();
 	}
 
 	menu->open(pt);

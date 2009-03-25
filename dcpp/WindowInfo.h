@@ -27,9 +27,15 @@ namespace dcpp {
 class WindowInfo {
 public:
 	explicit WindowInfo(const string& id_, const StringMap& params_);
+	WindowInfo(const WindowInfo& rhs) : id(rhs.id), params(rhs.params) { }
 
 	GETSET(string, id, Id);
 	GETSET(StringMap, params, Params);
+
+	bool operator==(const WindowInfo& rhs);
+
+	/// special param used for displaying; ignored for identification.
+	static string title;
 };
 
 } // namespace dcpp

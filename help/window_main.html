@@ -140,11 +140,12 @@
 	<area shape="rect" coords="200,0,220,20" href="window_adlsearch.html" alt="ADL Search"/>
 	<area shape="rect" coords="220,0,240,20" href="window_search_spy.html" alt="Search Spy"/>
 	<area shape="rect" coords="240,0,260,20" href="#tb_openfl" alt="Open file list..."/>
-	<area shape="rect" coords="260,0,280,20" href="#tb_settings" alt="Settings"/>
-	<area shape="rect" coords="280,0,300,20" href="window_notepad.html" alt="Notepad"/>
-	<area shape="rect" coords="300,0,320,20" href="#tb_whats_this" alt="What's This?"/>
+	<area shape="rect" coords="260,0,280,20" href="#tb_recent" alt="Recent windows"/>
+	<area shape="rect" coords="280,0,300,20" href="#tb_settings" alt="Settings"/>
+	<area shape="rect" coords="300,0,320,20" href="window_notepad.html" alt="Notepad"/>
+	<area shape="rect" coords="320,0,340,20" href="#tb_whats_this" alt="What's This?"/>
 </map>
-<img src="toolbar20.bmp" width="320" height="20" alt="" usemap="#map_toolbar"/>
+<img src="toolbar20.bmp" width="340" height="20" alt="" usemap="#map_toolbar"/>
 </p>
 <p>The toolbar provides quick access to some regularly used parts and functions of DC++. From left to right:</p>
 <dl style="margin-left: 40px;">
@@ -188,9 +189,14 @@
     <dd cshelp="IDH_TOOLBAR_SEARCH_SPY">Open the <a href="window_search_spy.html">Search Spy</a> window.</dd>
 
     <dt id="tb_openfl">Open file list...</dt>
-    <dd cshelp="IDH_TOOLBAR_FILE_LIST">
-        Open a file list previously saved on your disk (a dialog will appear so you can pick the one you wish to open).
-    </dd>
+	<dd cshelp="IDH_TOOLBAR_FILE_LIST">
+	Open a file list previously saved on your disk (a dialog will appear so you can pick the one you wish to open).
+	</dd>
+
+	<dt id="#tb_recent">Recent windows</dt>
+	<dd cshelp="IDH_TOOLBAR_RECENT">
+	Open menus with <acronym title="Most Recently Used">MRU</acronym> lists of recently opened windows. The list is saved across DC++ restarts.
+	</dd>
 
     <dt id="tb_settings">Settings</dt>
     <dd cshelp="IDH_TOOLBAR_SETTINGS">Open the Settings dialog.</dd>

@@ -135,6 +135,7 @@ private:
 	// User actions
 	void handleExit();
 	void handleFavHubsDropDown(const dwt::ScreenCoordinate& pt);
+	void handleRecent(const dwt::ScreenCoordinate& pt);
 	void handleQuickConnect();
 	void handleSettings();
 	void handleOpenFileList();

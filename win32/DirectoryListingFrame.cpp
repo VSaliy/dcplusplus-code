@@ -32,6 +32,7 @@
 #include <dcpp/StringSearch.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/ShareManager.h>
+#include <dcpp/WindowInfo.h>
 
 const string DirectoryListingFrame::id = "DirectoryListing";
 const string& DirectoryListingFrame::getId() const { return id; }
@@ -105,7 +106,12 @@ const StringMap DirectoryListingFrame::getWindowParams() const {
 	if(!path.empty() && dl->getUser() != ClientManager::getInstance()->getMe())
 		QueueManager::getInstance()->noDeleteFileList(path);
 
+	return getWindowParams_();
+}
+
+const StringMap DirectoryListingFrame::getWindowParams_() const {
 	StringMap ret;
+	ret[WindowInfo::title] = Text::fromT(getText());
 	ret["Path"] = dl->getUser() == ClientManager::getInstance()->getMe() ? "OwnList" : path;
 	ret["Speed"] = Util::toString(speed);
 	return ret;
@@ -238,6 +244,7 @@ void DirectoryListingFrame::loadFile(const tstring& name, const tstring& dir) {
 	try {
 		dl->loadFile(Text::fromT(name));
 		path = Text::fromT(name);
+		WindowManager::getInstance()->addRecent(id, getWindowParams_());
 		ADLSearchManager::getInstance()->matchListing(*dl);
 		refreshTree(dir);
 	} catch(const Exception& e) {
