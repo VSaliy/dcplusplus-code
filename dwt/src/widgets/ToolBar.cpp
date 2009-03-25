@@ -64,21 +64,9 @@ void ToolBar::appendItem(int image, const tstring& toolTip, DWORD_PTR data, cons
 {
 	int id = -1;
 
-	if(f) {
-		for(id = 0; id < (int)commands.size(); ++id) {
-			if(!commands[id])
-				break;
-		}
-		if(id == (int)commands.size()) {
-			commands.push_back(f);
-		} else {
-			commands[id] = f;
-		}
-	}
-
-	if(dropDownF) {
-		dwtassert(f, _T("You must provide a dispatcher for button presses."));
-		dropDownCommands[id] = dropDownF;
+	if(f || dropDownF) {
+		id = static_cast<int>(commands.size());
+		commands.push_back(std::make_pair(f, dropDownF));
 	}
 
 	// Adding button
@@ -88,7 +76,7 @@ void ToolBar::appendItem(int image, const tstring& toolTip, DWORD_PTR data, cons
 	tb.fsState = TBSTATE_ENABLED;
 	tb.fsStyle = BTNS_AUTOSIZE;
 	if(dropDownF)
-		tb.fsStyle |= BTNS_DROPDOWN;
+		tb.fsStyle |= f ? BTNS_DROPDOWN : BTNS_WHOLEDROPDOWN;
 	tb.dwData = data;
 	tb.iString = reinterpret_cast<INT_PTR>(toolTip.c_str());
 	if ( this->sendMessage(TB_ADDBUTTONS, 1, reinterpret_cast< LPARAM >( &tb ) ) == FALSE )
@@ -105,9 +93,12 @@ int ToolBar::hitTest(const ScreenCoordinate& pt) {
 bool ToolBar::tryFire( const MSG & msg, LRESULT & retVal ) {
 	if(msg.message == WM_COMMAND && msg.lParam == reinterpret_cast<LPARAM>(handle())) {
 		size_t id = LOWORD(msg.wParam);
-		if(id < commands.size() && commands[id]) {
-			commands[id]();
-			return true;
+		if(id < commands.size()) {
+			const Dispatcher::F& f = commands[id].first;
+			if(f) {
+				f();
+				return true;
+			}
 		}
 	}
 	return PolicyType::tryFire(msg, retVal);
@@ -115,10 +106,13 @@ bool ToolBar::tryFire( const MSG & msg, LRESULT & retVal ) {
 
 LRESULT ToolBar::handleDropDown(LPARAM lParam) {
 	LPNMTOOLBAR lpnmtb = reinterpret_cast<LPNMTOOLBAR>(lParam);
-	const DropDownFunction& f = dropDownCommands[lpnmtb->iItem];
-	if(f) {
-		f(ScreenCoordinate(ClientCoordinate(Point(lpnmtb->rcButton.left, lpnmtb->rcButton.bottom), this)));
-		return TBDDRET_DEFAULT;
+	size_t id = lpnmtb->iItem;
+	if(id < commands.size()) {
+		const DropDownFunction& f = commands[id].second;
+		if(f) {
+			f(ScreenCoordinate(ClientCoordinate(Point(lpnmtb->rcButton.left, lpnmtb->rcButton.bottom), this)));
+			return TBDDRET_DEFAULT;
+		}
 	}
 	return TBDDRET_NODEFAULT;
 }

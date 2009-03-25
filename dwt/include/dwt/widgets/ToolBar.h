@@ -43,7 +43,6 @@
 #include "../aspects/AspectFont.h"
 #include "../resources/ImageList.h"
 #include "../DWTException.h"
-#include "../dwt_unordered_map.h"
 #include "Control.h"
 
 #include <vector>
@@ -112,7 +111,7 @@ public:
 	  */
 	void appendSeparator();
 
-	void appendItem(int image, const tstring& toolTip, DWORD_PTR data = 0, const Dispatcher::F& f = Dispatcher::F(), const DropDownFunction& dropDownF = 0);
+	void appendItem(int image, const tstring& toolTip, DWORD_PTR data = 0, const Dispatcher::F& f = 0, const DropDownFunction& dropDownF = 0);
 
 	/// Set the image list with the normal button images.
 	/** normalImageList is the image list that contains the images
@@ -186,8 +185,8 @@ private:
 	ImageListPtr itsHotImageList;
 	ImageListPtr itsDisabledImageList;
 
-	std::vector<Dispatcher::F> commands;
-	std::tr1::unordered_map<int, DropDownFunction> dropDownCommands;
+	typedef std::pair<Dispatcher::F, DropDownFunction> command_pair;
+	std::vector<command_pair> commands;
 
 	LRESULT handleDropDown(LPARAM lParam);
 
