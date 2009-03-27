@@ -426,53 +426,33 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 	menu->open(pt);
 }
 
+template<typename T>
+static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, dwt::TabView* parent,
+						  const tstring& text, unsigned iconId)
+{
+	WindowManager::RecentList::const_iterator it = recent.find(T::id);
+	if(it != recent.end()) {
+		MenuPtr popup = menu->appendPopup(text, dwt::IconPtr(new dwt::Icon(iconId)));
+		const WindowManager::WindowInfoList& list = it->second;
+		for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
+			StringMap params = i->getParams();
+			popup->appendItem(dwt::util::escapeMenu(Text::toT(params[WindowInfo::title])),
+				std::tr1::bind(&T::parseWindowParams, parent, params));
+		}
+	}
+}
+
 void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	{
 		WindowManager* wm = WindowManager::getInstance();
 		wm->lock();
-
 		const WindowManager::RecentList& recent = wm->getRecent();
 
-		{
-			WindowManager::RecentList::const_iterator it = recent.find(HubFrame::id);
-			if(it != recent.end()) {
-				MenuPtr popup = menu->appendPopup(T_("Recent hubs"), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
-				const WindowManager::WindowInfoList& list = it->second;
-				for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
-					StringMap params = i->getParams();
-					popup->appendItem(dwt::util::escapeMenu(Text::toT(params[WindowInfo::title])),
-						std::tr1::bind(&HubFrame::parseWindowParams, getTabView(), params));
-				}
-			}
-		}
-
-		{
-			WindowManager::RecentList::const_iterator it = recent.find(PrivateFrame::id);
-			if(it != recent.end()) {
-				MenuPtr popup = menu->appendPopup(T_("Recent PMs"), dwt::IconPtr(new dwt::Icon(IDR_PRIVATE)));
-				const WindowManager::WindowInfoList& list = it->second;
-				for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
-					StringMap params = i->getParams();
-					popup->appendItem(dwt::util::escapeMenu(Text::toT(params[WindowInfo::title])),
-						std::tr1::bind(&PrivateFrame::parseWindowParams, getTabView(), params));
-				}
-			}
-		}
-
-		{
-			WindowManager::RecentList::const_iterator it = recent.find(DirectoryListingFrame::id);
-			if(it != recent.end()) {
-				MenuPtr popup = menu->appendPopup(T_("Recent file lists"), dwt::IconPtr(new dwt::Icon(IDR_DIRECTORY)));
-				const WindowManager::WindowInfoList& list = it->second;
-				for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
-					StringMap params = i->getParams();
-					popup->appendItem(dwt::util::escapeMenu(Text::toT(params[WindowInfo::title])),
-						std::tr1::bind(&DirectoryListingFrame::parseWindowParams, getTabView(), params));
-				}
-			}
-		}
+		addRecentMenu<HubFrame>(recent, menu, getTabView(), T_("Recent hubs"), IDR_HUB);
+		addRecentMenu<PrivateFrame>(recent, menu, getTabView(), T_("Recent PMs"), IDR_PRIVATE);
+		addRecentMenu<DirectoryListingFrame>(recent, menu, getTabView(), T_("Recent file lists"), IDR_DIRECTORY);
 
 		wm->unlock();
 	}
