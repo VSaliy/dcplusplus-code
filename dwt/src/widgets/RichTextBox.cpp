@@ -43,7 +43,7 @@
 namespace dwt {
 
 RichTextBox::Seed::Seed() :
-	BaseType::Seed(RICHEDIT_CLASS, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_MULTILINE | WS_BORDER | ES_NOHIDESEL),
+	BaseType::Seed(RICHEDIT_CLASS, WS_CHILD | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL),
 	font(new Font(DefaultGuiFont)),
 	foregroundColor(RGB( 0, 0, 0 )),
 	backgroundColor(RGB( 255, 255, 255 )),
