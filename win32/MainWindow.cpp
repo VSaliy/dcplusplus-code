@@ -430,18 +430,16 @@ template<typename T>
 static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, dwt::TabView* parent,
 						  const tstring& text, unsigned iconId)
 {
-	MenuPtr popup = menu->appendPopup(text, dwt::IconPtr(new dwt::Icon(iconId)));
-
 	WindowManager::RecentList::const_iterator it = recent.find(T::id);
 	if(it != recent.end()) {
+		MenuPtr popup = menu->appendPopup(text, dwt::IconPtr(new dwt::Icon(iconId)));
 		const WindowManager::WindowInfoList& list = it->second;
 		for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
 			StringMap params = i->getParams();
 			popup->appendItem(dwt::util::escapeMenu(Text::toT(params[WindowInfo::title])),
 				std::tr1::bind(&T::parseWindowParams, parent, params));
 		}
-	} else
-		popup->appendItem(T_("No recent window yet"), 0, 0, false);
+	}
 }
 
 void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
