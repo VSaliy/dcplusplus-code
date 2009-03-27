@@ -16,7 +16,7 @@ How to compile in n easy steps:
     the include and library files to the respective directories in the htmlhelp folder.
 
 1b) Or with Microsoft Visual C++ 9.0 (2008) with at least Service Pack 1:
-	Get <https://connect.microsoft.com/VisualStudio/Downloads/DownloadDetails.aspx?DownloadID=17034>,
+	Get <https://connect.microsoft.com/VisualStudio/Downloads/DownloadDetails.aspx?DownloadID=17034&amp;wa=wsignin1.0>,
 	a hotfixed-hotfix which fixes SP1.
 
     Download OpenSSL from www.openssl.org and compile it. You should get libraries called
