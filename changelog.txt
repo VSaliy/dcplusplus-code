@@ -7,6 +7,7 @@
 * Fix own file list not deleted on closure
 * Fix menu title size (poy)
 * "Recent windows" button in the toolbar (poy)
+* Upgraded to OpenSSL 0.9.8k (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
