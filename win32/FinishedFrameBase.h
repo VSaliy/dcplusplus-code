@@ -228,7 +228,12 @@ private:
 			update();
 		}
 
-		void update() {
+		/// @return whether the list needs to be re-sorted.
+		bool update(int sortCol = -1) {
+			tstring old;
+			if(sortCol != -1)
+				old = columns[sortCol];
+
 			{
 				StringList nicks;
 				for(UserList::const_iterator i = entry->getUsers().begin(); i != entry->getUsers().end(); ++i)
@@ -240,6 +245,8 @@ private:
 			columns[FILES_COLUMN_SPEED] = Text::toT(Util::formatBytes(entry->getAverageSpeed()) + "/s");
 			columns[FILES_COLUMN_CRC32] = entry->getCrc32Checked() ? T_("Yes") : T_("No");
 			columns[FILES_COLUMN_TIME] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
+
+			return old != columns[sortCol];
 		}
 
 		const tstring& getText(int col) const {
@@ -299,11 +306,18 @@ private:
 			update();
 		}
 
-		void update() {
+		/// @return whether the list needs to be re-sorted.
+		bool update(int sortCol = -1) {
+			tstring old;
+			if(sortCol != -1)
+				old = columns[sortCol];
+
 			columns[USERS_COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(entry->getTransferred()));
 			columns[USERS_COLUMN_SPEED] = Text::toT(Util::formatBytes(entry->getAverageSpeed()) + "/s");
 			columns[USERS_COLUMN_FILES] = Text::toT(Util::toString(entry->getFiles()));
 			columns[USERS_COLUMN_TIME] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
+
+			return old != columns[sortCol];
 		}
 
 		const tstring& getText(int col) const {
@@ -585,8 +599,10 @@ private:
 	void onUpdatedFile(const string& file) {
 		FileInfo* data = findFileInfo(file);
 		if(data) {
-			data->update();
+			bool resort = data->update(files->getSortColumn());
 			files->update(data);
+			if(resort)
+				files->resort();
 			updateStatus();
 		}
 	}
@@ -594,8 +610,10 @@ private:
 	void onUpdatedUser(const UserPtr& user) {
 		UserInfo* data = findUserInfo(user);
 		if(data) {
-			data->update();
+			bool resort = data->update(users->getSortColumn());
 			users->update(data);
+			if(resort)
+				users->resort();
 			updateStatus();
 		}
 	}
