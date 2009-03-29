@@ -23,7 +23,7 @@
 
 namespace dcpp {
 
-string WindowInfo::title = "Title";
+const string WindowInfo::title = "Title";
 
 WindowInfo::WindowInfo(const string& id_, const StringMap& params_) :
 id(id_),
