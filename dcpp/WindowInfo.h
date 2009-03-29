@@ -35,7 +35,7 @@ public:
 	bool operator==(const WindowInfo& rhs);
 
 	/// special param used for displaying; ignored for identification.
-	static string title;
+	static const string title;
 };
 
 } // namespace dcpp
