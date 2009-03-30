@@ -730,7 +730,11 @@ void NmdcHub::onLine(const string& aLine) throw() {
 	} else if(cmd == "$BadPass") {
 		setPassword(Util::emptyString);
 	} else if(cmd == "$ZOn") {
-		sock->setMode(BufferedSocket::MODE_ZPIPE);
+		try {
+			sock->setMode(BufferedSocket::MODE_ZPIPE);
+		} catch (const Exception& e) {
+			dcdebug("NmdcHub::onLine %s failed with error: %s\n", cmd.c_str(), e.getError().c_str());
+		}
 	} else {
 		dcassert(cmd[0] == '$');
 		dcdebug("NmdcHub::onLine Unknown command %s\n", aLine.c_str());
