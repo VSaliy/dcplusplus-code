@@ -105,16 +105,16 @@ bool CommandDlg::handleInitDialog() {
 		cur->column(1).mode = GridInfo::FILL;
 		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 
-		hubMenu = cur->addChild(RadioButton::Seed(T_("Hub Menu")));
+		hubMenu = cur->addChild(CheckBox::Seed(T_("Hub Menu")));
 		hubMenu->setHelpId(IDH_USER_COMMAND_HUB_MENU);
 
-		searchMenu = cur->addChild(RadioButton::Seed(T_("Search Menu")));
+		searchMenu = cur->addChild(CheckBox::Seed(T_("Search Menu")));
 		searchMenu->setHelpId(IDH_USER_COMMAND_SEARCH_MENU);
 
-		userMenu = cur->addChild(RadioButton::Seed(T_("User Menu")));
+		userMenu = cur->addChild(CheckBox::Seed(T_("User Menu")));
 		userMenu->setHelpId(IDH_USER_COMMAND_USER_MENU);
 
-		fileListMenu = cur->addChild(RadioButton::Seed(T_("Filelist Menu")));
+		fileListMenu = cur->addChild(CheckBox::Seed(T_("Filelist Menu")));
 		fileListMenu->setHelpId(IDH_USER_COMMAND_FILELIST_MENU);
 	}
 
