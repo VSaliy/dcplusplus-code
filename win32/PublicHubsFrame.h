@@ -98,7 +98,7 @@ private:
 	ComboBoxPtr filterSel;
 	ComboBoxPtr lists;
 
-	int visibleHubs;
+	size_t visibleHubs;
 	int users;
 
 	string filterString;
