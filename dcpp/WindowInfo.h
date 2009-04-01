@@ -27,7 +27,6 @@ namespace dcpp {
 class WindowInfo {
 public:
 	explicit WindowInfo(const string& id_, const StringMap& params_);
-	WindowInfo(const WindowInfo& rhs) : id(rhs.id), params(rhs.params) { }
 
 	GETSET(string, id, Id);
 	GETSET(StringMap, params, Params);
