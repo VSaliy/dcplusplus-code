@@ -85,9 +85,8 @@ lists(0),
 visibleHubs(0),
 users(0)
 {
-	grid = addChild(Grid::Seed(2, 3));
+	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->column(1).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
@@ -95,7 +94,6 @@ users(0)
 		WidgetHubs::Seed cs;
 		cs.style |= LVS_SINGLESEL;
 		hubs = grid->addChild(cs);
-		grid->setWidget(hubs, 0, 0, 1, 3);
 		addWidget(hubs);
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(PUBLICHUBSFRAME_ORDER), SETTING(PUBLICHUBSFRAME_WIDTHS));
@@ -107,10 +105,23 @@ users(0)
 	}
 
 	{
+		GridPtr lower = grid->addChild(Grid::Seed(2, 4));
+		// columns 0 and 3, and row 1, are just here to have proper margins.
+		lower->column(0).size = 0;
+		lower->column(0).mode = GridInfo::STATIC;
+		lower->column(1).mode = GridInfo::FILL;
+		lower->column(2).mode = GridInfo::FILL;
+		lower->column(3).size = 0;
+		lower->column(3).mode = GridInfo::STATIC;
+		lower->row(1).size = 0;
+		lower->row(1).mode = GridInfo::STATIC;
+		lower->setSpacing(6);
+
 		GroupBox::Seed gs = WinUtil::Seeds::group;
 
 		gs.caption = T_("F&ilter");
-		GroupBoxPtr group = grid->addChild(gs);
+		GroupBoxPtr group = lower->addChild(gs);
+		lower->setWidget(group, 0, 1);
 		group->setHelpId(IDH_PUBLIC_HUBS_FILTER);
 
 		GridPtr cur = group->addChild(Grid::Seed(1, 2));
@@ -126,10 +137,11 @@ users(0)
 		addWidget(filterSel);
 
 		gs.caption = T_("Configured Public Hub Lists");
-		group = grid->addChild(gs);
+		group = lower->addChild(gs);
+		lower->setWidget(group, 0, 2);
 		group->setHelpId(IDH_PUBLIC_HUBS_LISTS);
 
-		cur = group->addChild(Grid::Seed(1, 2));
+		cur = group->addChild(Grid::Seed(1, 3));
 		cur->column(0).mode = GridInfo::FILL;
 
 		lists = cur->addChild(WinUtil::Seeds::comboBoxStatic);
@@ -137,16 +149,14 @@ users(0)
 		lists->onSelectionChanged(std::tr1::bind(&PublicHubsFrame::handleListSelChanged, this));
 
 		Button::Seed bs = WinUtil::Seeds::button;
+
 		bs.caption = T_("&Configure");
 		ButtonPtr button = cur->addChild(bs);
 		addWidget(button);
 		button->onClicked(std::tr1::bind(&PublicHubsFrame::handleConfigure, this));
-	}
 
-	{
-		Button::Seed cs = WinUtil::Seeds::button;
-		cs.caption = T_("&Refresh");
-		ButtonPtr button = grid->addChild(cs);
+		bs.caption = T_("&Refresh");
+		button = cur->addChild(bs);
 		button->setHelpId(IDH_PUBLIC_HUBS_REFRESH);
 		addWidget(button);
 		button->onClicked(std::tr1::bind(&PublicHubsFrame::handleRefresh, this));
