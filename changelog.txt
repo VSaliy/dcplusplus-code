@@ -7,7 +7,7 @@
 * Fix own file list not deleted on closure
 * Fix menu title size (poy)
 * "Recent windows" button in the toolbar (poy)
-* Upgraded to OpenSSL 0.9.8k (poy)
+* Upgraded to OpenSSL 1.0.0-beta1 (poy)
 * [L#350585] Fix sorting issues in finished windows (poy)
 * [L#339872] Fix crash when decompression initialization fails (steven sheehy)
 * Restore check-boxes in the "Context" user command group (poy)
