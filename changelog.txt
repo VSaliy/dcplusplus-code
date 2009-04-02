@@ -6,6 +6,7 @@
 * Re-open previous windows - no auto-connect/auto-open setting anymore (poy)
 * Fix own file list not deleted on closure
 * Fix menu title size (poy)
+* [L#239895] Display ISTA
 * "Recent windows" button in the toolbar (poy)
 * Upgraded to OpenSSL 1.0.0-beta1 (poy)
 * [L#350585] Fix sorting issues in finished windows (poy)
