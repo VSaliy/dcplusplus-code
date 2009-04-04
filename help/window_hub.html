@@ -13,8 +13,12 @@
 <h2>Main chat window (left)</h2>
 <p cshelp="IDH_HUB_CHAT">
 The main chat window displays messages sent by the hub. You can chat with other users in this "public area" by writing a message in the field below the main chat and pressing either Enter or Alt+S to send your message. You may also use <a href="chat_commands.html">/commands</a> (send /help to list those available). You can right click to the users' nicks to bring up the user context menu described below.<br/>
-Note; this is not the place to search for files. Open a <a href="window_search.html">Search window</a> to do that.
-</p>
+Note; this is not the place to search for files. Open a <a href="window_search.html">Search window</a> to do that.</p>
+
+<h3>Main chat messages</h3>
+<p>Using <a href="settings_appearance.html">Appearance settings</a> you can set what kind of messages should appear in the main chat window and how should they look like. It is possible to get <a href="settings_appearance.html#viewstatus">status messages printed also to the main chat window</a> (enabled by default) while there is a setting to <a href="settings_appearance.html#filterkick">filter out unwanted kick messages</a> as well. Note that status messages are <i>generated locally</i> so they aren't come from the hub. Regardless of the settings status messages are always shown in the <a href="#statusbar">status bar of the hub window</a>.</p>
+<p>You can easily distinguish between status messages or the ones came from the hub: status messages are start with three asterisk (&#42;&#42;&#42;) while normal messages came from the hub usually contain a nick (either the name of an online user or a hubbot) printed between &lt; and &gt;. The possible kind of status messages are listed in the description of the status bar <a href="#messages">below</a>.</p>
+
 <h2>Users list (right)</h2>
 List of users connected to the hub. You can right-click them to see the menu options available for each.<br/>
 <a href="faq_different_icons.html">Follow this link to see what the different icons mean</a>.<br/>
@@ -54,10 +58,19 @@ Write a message here to chat with other users connected to the hub. You can pres
 Here, you can filter the users list so you will only see specific users. Eg, selecting 'Nick' in the drop down, and writing "foo" in the filter, will only display users that have "foo" in their nick.<br/>
 Note; users will only be visually filtered, not disconnected. You can revert to showing all users at any time by cleaning the text you have written in the filter.
 </p>
-<h2>Status bar</h2>
+<h2 id="statusbar">Status bar</h2>
 <dl style="margin-left: 40px;">
-  <dt>Messages part (left)</dt>
-  <dd cshelp="IDH_HUB_STATUS">You can see here the last kick or status message the hub sent. To see more from the recent status messages you can move the mouse pointer above the status bar - the last few messages will be shown as a tooltip shortly.</dd>
+  <dt id="messages">Messages part (left)</dt>
+  <dd cshelp="IDH_HUB_STATUS">You can see here the last status message or a kick message sent by the hub. To see more from the recent kick/status messages you can move the mouse pointer above the status bar - the last few messages will be shown as a tooltip shortly. The possible kind of status messages include:
+    <ul>
+    	<li>Messages about connecting, disconecting and redirecting to/from hubs and related problems</li>
+    	<li>Joins and parts of (favorite) users according to the <a href="settings_appearance.html#showjoins">Show joins...</a> settings</li>
+    	<li>Results of <a href="chat_commands.html">chat commands</a> issued</li>
+    	<li>Private messages when you set to <a href="settings_windows.html">display them in the mainchat window instead of a new window</a></li>
+    	<li><a href="http://everything2.com/title/Windows%2520Error%25200x00002620%2520-%25200x00002B0F" target="_blank" class="external">Standard windows socket error messages</a> in case of problems connecting to a hub or eg. when a hub disconnects unexpectedly (note that as these messages came directly from the operating system, they always appear in the language specified in your Windows locale settings regardless of what locale set for DC++)</li>
+    	<li>Everything which comes from the hub and does not start with a valid nick (NMDC hubs only)</li>
+    </ul>	
+  </dd>
   <dt>Users</dt>
   <dd cshelp="IDH_HUB_USERS_COUNT">Shows the number of users connected to the hub.</dd>
   <dt>Total shared</dt>
