@@ -19,6 +19,8 @@
 #include "stdafx.h"
 
 #include "DirectoryListingFrame.h"
+
+#include "MainWindow.h"
 #include "LineDlg.h"
 #include "TextFrame.h"
 #include "HoldRedraw.h"
@@ -100,12 +102,6 @@ void DirectoryListingFrame::openOwnList(dwt::TabView* parent) {
 void DirectoryListingFrame::closeAll(){
 	for(UserIter i = lists.begin(); i != lists.end(); ++i)
 		i->second->close(true);
-}
-
-void DirectoryListingFrame::protectOpened() {
-	for(UserIter i = lists.begin(); i != lists.end(); ++i)
-		if(!i->second->path.empty() && i->second->dl->getUser() != ClientManager::getInstance()->getMe())
-			QueueManager::getInstance()->noDeleteFileList(i->second->path);
 }
 
 const StringMap DirectoryListingFrame::getWindowParams() const {
@@ -286,6 +282,9 @@ void DirectoryListingFrame::postClosing() {
 
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
+
+	if(WinUtil::mainWindow->closing() && !path.empty() && dl->getUser() != ClientManager::getInstance()->getMe())
+		QueueManager::getInstance()->noDeleteFileList(path);
 }
 
 void DirectoryListingFrame::handleFind() {

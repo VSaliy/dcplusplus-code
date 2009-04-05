@@ -67,9 +67,6 @@ public:
 	static void openOwnList(dwt::TabView* parent);
 	static void closeAll();
 
-	/// mark currently opened lists as non-deletable.
-	static void protectOpened();
-
 	const StringMap getWindowParams() const;
 	static void parseWindowParams(dwt::TabView* parent, const StringMap& params);
 

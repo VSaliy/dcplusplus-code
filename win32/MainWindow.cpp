@@ -545,8 +545,6 @@ void MainWindow::saveWindowSettings() {
 		wm->unlock();
 	}
 
-	DirectoryListingFrame::protectOpened();
-
 	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_PANED_POS, paned->getRelativePos());
 
 	WINDOWPLACEMENT wp = { sizeof(wp)};
