@@ -18,6 +18,7 @@ Note; this is not the place to search for files. Open a <a href="window_search.h
 <h3>Main chat messages</h3>
 <p>Using <a href="settings_appearance.html">Appearance settings</a> you can set what kind of messages should appear in the main chat window and how should they look like. It is possible to get <a href="settings_appearance.html#viewstatus">status messages printed also to the main chat window</a> (enabled by default) while there is a setting to <a href="settings_appearance.html#filterkick">filter out unwanted kick messages</a> as well. Note that status messages are <i>generated locally</i> so they aren't come from the hub. Regardless of the settings status messages are always shown in the <a href="#statusbar">status bar of the hub window</a>.</p>
 <p>You can easily distinguish between status messages or the ones came from the hub: status messages are start with three asterisk (&#42;&#42;&#42;) while normal messages came from the hub usually contain a nick (either the name of an online user or a hubbot) printed between &lt; and &gt;. The possible kind of status messages are listed in the description of the status bar <a href="#messages">below</a>.</p>
+<p>Double click to any registered URL type (http://, ftp://, etc...) will open them in their respective registered browser/viewer software.</p>	
 
 <h2>Users list (right)</h2>
 List of users connected to the hub. You can right-click them to see the menu options available for each.<br/>
@@ -69,7 +70,7 @@ Note; users will only be visually filtered, not disconnected. You can revert to 
     	<li>Joins and parts of (favorite) users according to the <a href="settings_appearance.html#showjoins">Show joins...</a> settings</li>
     	<li>Results of <a href="chat_commands.html">chat commands</a> issued</li>
     	<li>Private messages when you set to <a href="settings_windows.html">display them in the mainchat window instead of a new window</a></li>
-    	<li><a href="http://msdn.microsoft.com/en-us/library/ms740668(VS.85).aspx" target="_blank" class="external">Standard Windows Socket error messages</a> in case of problems connecting to a hub or eg. when a hub disconnects unexpectedly (note that as these messages come directly from the operating system, they always appear in the language specified in your Windows locale settings regardless of what locale is set for DC++)</li>
+    	<li><a href="http://support.microsoft.com/kb/819124" target="_blank" class="external">Standard Windows Socket error messages</a> in case of problems connecting to a hub or eg. when a hub disconnects unexpectedly (note that as these messages come directly from the operating system, they always appear in the language specified in your Windows locale settings regardless of what locale is set for DC++)</li>
     	<li>Everything which comes from the hub and does not start with a valid nick (NMDC hubs only)</li>
     </ul>	
   </dd>
