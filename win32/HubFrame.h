@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_HUB_FRAME_H
 
 #include "MDIChildFrame.h"
+#include "IRecent.h"
 #include "AspectChat.h"
 #include "TypedTable.h"
 #include "AspectUserCommand.h"
@@ -33,6 +34,7 @@
 
 class HubFrame :
 	public MDIChildFrame<HubFrame>,
+	public IRecent<HubFrame>,
 	private ClientListener,
 	private FavoriteManagerListener,
 	public AspectChat<HubFrame>,
@@ -46,6 +48,8 @@ class HubFrame :
 	friend class AspectChat<HubFrame>;
 	friend class AspectUserInfo<HubFrame>;
 	friend class AspectUserCommand<HubFrame>;
+
+	using IRecent<HubFrame>::setText;
 
 public:
 	enum Status {

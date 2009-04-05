@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_PRIVATE_FRAME_H
 
 #include "MDIChildFrame.h"
+#include "IRecent.h"
 #include "AspectChat.h"
 #include "AspectUserCommand.h"
 
@@ -28,6 +29,7 @@
 
 class PrivateFrame :
 	public MDIChildFrame<PrivateFrame>,
+	public IRecent<PrivateFrame>,
 	private ClientManagerListener,
 	public AspectChat<PrivateFrame>,
 	public AspectUserCommand<PrivateFrame>
@@ -38,6 +40,8 @@ class PrivateFrame :
 	friend class MDIChildFrame<PrivateFrame>;
 	friend class AspectChat<PrivateFrame>;
 	friend class AspectUserCommand<PrivateFrame>;
+
+	using IRecent<PrivateFrame>::setText;
 
 public:
 	enum Status {

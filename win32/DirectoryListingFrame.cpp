@@ -99,17 +99,16 @@ void DirectoryListingFrame::openOwnList(dwt::TabView* parent) {
 
 void DirectoryListingFrame::closeAll(){
 	for(UserIter i = lists.begin(); i != lists.end(); ++i)
-		::PostMessage(i->second->handle(), WM_CLOSE, 0, 0);
+		i->second->close(true);
+}
+
+void DirectoryListingFrame::protectOpened() {
+	for(UserIter i = lists.begin(); i != lists.end(); ++i)
+		if(!i->second->path.empty() && i->second->dl->getUser() != ClientManager::getInstance()->getMe())
+			QueueManager::getInstance()->noDeleteFileList(i->second->path);
 }
 
 const StringMap DirectoryListingFrame::getWindowParams() const {
-	if(!path.empty() && dl->getUser() != ClientManager::getInstance()->getMe())
-		QueueManager::getInstance()->noDeleteFileList(path);
-
-	return getWindowParams_();
-}
-
-const StringMap DirectoryListingFrame::getWindowParams_() const {
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
 	ret["Path"] = dl->getUser() == ClientManager::getInstance()->getMe() ? "OwnList" : path;
@@ -244,7 +243,7 @@ void DirectoryListingFrame::loadFile(const tstring& name, const tstring& dir) {
 	try {
 		dl->loadFile(Text::fromT(name));
 		path = Text::fromT(name);
-		WindowManager::getInstance()->addRecent(id, getWindowParams_());
+		addRecent();
 		ADLSearchManager::getInstance()->matchListing(*dl);
 		refreshTree(dir);
 	} catch(const Exception& e) {

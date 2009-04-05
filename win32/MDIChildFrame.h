@@ -24,7 +24,6 @@
 #include "WidgetFactory.h"
 #include "AspectStatus.h"
 #include <dcpp/SettingsManager.h>
-#include <dcpp/WindowManager.h>
 #include "resource.h"
 
 template<typename T>
@@ -130,11 +129,6 @@ protected:
 
 	void setIcon(unsigned resourceId) {
 		getParent()->setTabIcon(this, dwt::IconPtr(new dwt::Icon(resourceId)));
-	}
-
-	void setText(const tstring& text) {
-		BaseType::setText(text);
-		WindowManager::getInstance()->updateRecent(t().getId(), t().getWindowParams());
 	}
 
 public:
