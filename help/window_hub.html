@@ -61,13 +61,15 @@ Note; users will only be visually filtered, not disconnected. You can revert to 
 <h2 id="statusbar">Status bar</h2>
 <dl style="margin-left: 40px;">
   <dt id="messages">Messages part (left)</dt>
-  <dd cshelp="IDH_HUB_STATUS">You can see here the last status message or a kick message sent by the hub. To see more from the recent kick/status messages you can move the mouse pointer above the status bar - the last few messages will be shown as a tooltip shortly. The possible kind of status messages include:
+  <dd>
+  <div cshelp="IDH_HUB_STATUS">You can see here the last status message or a kick message sent by the hub. To see more from the recent kick/status messages you can move the mouse pointer above the status bar - the last few messages will be shown as a tooltip shortly.</div>
+  Common status messages:
     <ul>
     	<li>Messages about connecting, disconecting and redirecting to/from hubs and related problems</li>
     	<li>Joins and parts of (favorite) users according to the <a href="settings_appearance.html#showjoins">Show joins...</a> settings</li>
     	<li>Results of <a href="chat_commands.html">chat commands</a> issued</li>
     	<li>Private messages when you set to <a href="settings_windows.html">display them in the mainchat window instead of a new window</a></li>
-    	<li><a href="http://everything2.com/title/Windows%2520Error%25200x00002620%2520-%25200x00002B0F" target="_blank" class="external">Standard windows socket error messages</a> in case of problems connecting to a hub or eg. when a hub disconnects unexpectedly (note that as these messages came directly from the operating system, they always appear in the language specified in your Windows locale settings regardless of what locale set for DC++)</li>
+    	<li><a href="http://msdn.microsoft.com/en-us/library/ms740668(VS.85).aspx" target="_blank" class="external">Standard Windows Socket error messages</a> in case of problems connecting to a hub or eg. when a hub disconnects unexpectedly (note that as these messages come directly from the operating system, they always appear in the language specified in your Windows locale settings regardless of what locale is set for DC++)</li>
     	<li>Everything which comes from the hub and does not start with a valid nick (NMDC hubs only)</li>
     </ul>	
   </dd>
