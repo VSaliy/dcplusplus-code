@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_DIRECTORY_LISTING_FRAME_H
 
 #include "MDIChildFrame.h"
+#include "IRecent.h"
 #include "TypedTable.h"
 #include "TypedTree.h"
 #include "AspectUserCommand.h"
@@ -32,6 +33,7 @@
 
 class DirectoryListingFrame :
 	public MDIChildFrame<DirectoryListingFrame>,
+	public IRecent<DirectoryListingFrame>,
 	private ClientManagerListener,
 	public AspectUserCommand<DirectoryListingFrame>
 {
@@ -39,6 +41,8 @@ class DirectoryListingFrame :
 
 	friend class MDIChildFrame<DirectoryListingFrame>;
 	friend class AspectUserCommand<DirectoryListingFrame>;
+
+	using IRecent<DirectoryListingFrame>::setText;
 
 public:
 	enum Status {
@@ -62,6 +66,9 @@ public:
 	static void openWindow(dwt::TabView* mdiParent, const UserPtr& aUser, const string& txt, int64_t aSpeed);
 	static void openOwnList(dwt::TabView* parent);
 	static void closeAll();
+
+	/// mark currently opened lists as non-deletable.
+	static void protectOpened();
 
 	const StringMap getWindowParams() const;
 	static void parseWindowParams(dwt::TabView* parent, const StringMap& params);
@@ -177,8 +184,6 @@ private:
 
 	DirectoryListingFrame(dwt::TabView* mdiParent, const UserPtr& aUser, int64_t aSpeed);
 	virtual ~DirectoryListingFrame();
-
-	const StringMap getWindowParams_() const;
 
 	void layout();
 	bool preClosing();

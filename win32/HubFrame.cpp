@@ -55,7 +55,7 @@ void HubFrame::closeDisconnected() {
 	for(FrameIter i=frames.begin(); i!= frames.end(); ++i) {
 		HubFrame* frame = *i;
 		if (!(frame->client->isConnected())) {
-			::PostMessage(frame->handle(), WM_CLOSE, 0, 0);
+			frame->close(true);
 		}
 	}
 }
@@ -187,7 +187,7 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 
 	FavoriteManager::getInstance()->addListener(this);
 
-	WindowManager::getInstance()->addRecent(id, getWindowParams());
+	addRecent();
 }
 
 HubFrame::~HubFrame() {

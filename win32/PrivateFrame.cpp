@@ -72,13 +72,13 @@ void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, cons
 
 void PrivateFrame::closeAll(){
 	for(FrameIter i = frames.begin(); i != frames.end(); ++i)
-		::PostMessage(i->second->handle(), WM_CLOSE, 0, 0);
+		i->second->close(true);
 }
 
 void PrivateFrame::closeAllOffline() {
 	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
 		if(!i->first->isOnline())
-			::PostMessage(i->second->handle(), WM_CLOSE, 0, 0);
+			i->second->close(true);
 	}
 }
 
@@ -126,7 +126,7 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 
 	frames.insert(std::make_pair(replyTo, this));
 
-	WindowManager::getInstance()->addRecent(id, getWindowParams());
+	addRecent();
 }
 
 PrivateFrame::~PrivateFrame() {
