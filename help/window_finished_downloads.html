@@ -10,7 +10,9 @@
 		<img src="FinishedDL.ico" width="16" height="16" alt="Finished downloads"/>
 		Finished downloads
 	</h1>
-Note that <a href="settings_logs.html#filelist">file list logging</a> must be enabled for them to appear in this window.
+<p>Note that <a href="settings_logs.html#filelist">file list logging</a> must be enabled for them to appear in this window.</p>
+<p>The list of finished files are grouped in two ways: by files and by users. You can select between the two grouped lists using tabs that appear in the top of the window. In both lists a new item will appear right away when the first chunk of a file downloaded.</p>
+
 <h2>Columns</h2>
 <dl style="margin-left: 40px;">
   <dt>Time</dt>
@@ -19,16 +21,22 @@ Note that <a href="settings_logs.html#filelist">file list logging</a> must be en
   <dd>The name of the downloaded file.</dd>
   <dt>Path</dt>
   <dd>The path to the downloaded file.</dd>
-  <dt>Nick</dt>
-  <dd>The source's nick name.</dd>
-  <dt>Hub</dt>
-  <dd>Which hub the source was on.</dd>
-  <dt>Size</dt>
+  <dt>Nicks</dt>
+  <dd>The sources' nick name.</dd>
+  <dt>File size</dt>
   <dd>The size of the file downloaded.</dd>
+  <dt>Transferred</dt>
+  <dd>The number of transferred bytes.</dd>
+  <dt>% transferred</dt>
+  <dd>Shows how many percent of the file transferred.</dd>
   <dt>Speed</dt>
   <dd>The average speed for the file.</dd>
   <dt>CRC Checked</dt>
   <dd>Whether or not the file was CRC checked. Note that <a href="settings_advanced.html#sfvcheck">Enable automatic SFV checking</a> must be enabled, and the file needs to have an accompanying SFV file.</dd>
+  <dt>Hub</dt>
+  <dd>Which hub the source was on.</dd>
+  <dt>Files</dt>
+  <dd>Which files were downloded from the user.</dd>
 </dl>
 
 <h2>Context menu commands</h2>
