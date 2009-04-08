@@ -337,12 +337,20 @@ sub new {
     ## initialize the plugin
     # prevent the plugin from croaking on the options intended for Po.pm
     $self->{options}{'porefs'} = '';
+    $self->{options}{'msgid-bugs-address'}= '';
+    $self->{options}{'copyright-holder'}= '';
+    $self->{options}{'package-name'}= '';
+    $self->{options}{'package-version'}= '';
     # let the plugin parse the options and such
     $self->initialize(%options);
 
     ## Create our private data
     my %po_options;
     $po_options{'porefs'} = $self->{options}{'porefs'};
+    $po_options{'msgid-bugs-address'} = $self->{options}{'msgid-bugs-address'};
+    $po_options{'copyright-holder'} = $self->{options}{'copyright-holder'};
+    $po_options{'package-name'} = $self->{options}{'package-name'};
+    $po_options{'package-version'} = $self->{options}{'package-version'};
     
     # private data
     $self->{TT}=(); 
