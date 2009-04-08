@@ -145,7 +145,7 @@ hasHHC = env.WhereIs('hhc') is not None
 # create the translation template
 def gen_pot(target, source, env):
 	po4a_path = Dir('#/po4a').abspath + '/'
-	cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-gettextize" -f xhtml -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -o foldattributes -o "includessi=' + nixify(Dir('#/help').abspath) + '/" -M utf-8 -p "' + nixify(str(target[0])) + '"'
+	cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-gettextize" -f xhtml -o "package-name=dcpp-help" -o "copyright-holder=Jacek Sieka" -o "msgid-bugs-address=dcplusplus-devel@lists.sourceforge.net" -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -o foldattributes -o "includessi=' + nixify(Dir('#/help').abspath) + '/" -M utf-8 -p "' + nixify(str(target[0])) + '"'
 	for node in source:
 		cmd += ' -m "' + nixify(str(node)) + '"'
 	return env.Execute(cmd)
