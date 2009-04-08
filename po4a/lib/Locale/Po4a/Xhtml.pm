@@ -149,8 +149,6 @@ sub tag_extract_SSI {
                         my ($ir, $il) = (pop @include, pop @include);
                         $self->unshiftline($il,$ir);
                 }
-                $t =~ s/<!--#include/<!-- SSI included by po4a: /;
-                $self->unshiftline($t, $r);
         }
         return ($eof,@tag);
 }

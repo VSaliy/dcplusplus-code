@@ -1370,14 +1370,13 @@ sub treat_content {
 	NEXT_TAG:
 		my @text;
 		my $type = $self->tag_type;
-		my $f_extract = $tag_types[$type]->{'f_extract'};
-		if (    defined($f_extract)
-		    and $f_extract eq \&tag_extract_comment) {
+		if ($tag_types[$type]->{'beginning'} eq "!--" or $tag_types[$type]->{'beginning'} eq "!--#") {
 			# Remove the content of the comments
 			($eof, @text) = $self->extract_tag($type,1);
 			$text[$#text-1] .= "\0";
 			if ($tag_types[$type]->{'beginning'} eq "!--#") {
-				$text[0] = "#".$text[0];
+				# Convert SSIs into standard comments
+				$text[0] = " [SSI comment parsed by po4a] ".$text[0];
 			}
 			push @comments, @text;
 		} else {
