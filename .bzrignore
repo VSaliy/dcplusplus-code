@@ -6,7 +6,6 @@
 custom.py
 *.lib
 *.pdb
-*.pot
 ./htmlhelp/include/htmlhelp.h
 ./htmlhelp/lib/htmlhelp.lib
 natupnp.h
