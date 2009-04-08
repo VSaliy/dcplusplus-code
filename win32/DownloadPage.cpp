@@ -73,34 +73,34 @@ grid(0)
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Limits")));
 		group->setHelpId(IDH_SETTINGS_DOWNLOAD_LIMITS);
 
-		GridPtr cur = group->addChild(Grid::Seed(3, 2));
-		cur->column(0).size = 40;
-		cur->column(0).mode = GridInfo::STATIC;
+		GridPtr cur = group->addChild(Grid::Seed(2, 1));
 
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		GridPtr cur2 = cur->addChild(Grid::Seed(2, 2));
+		cur2->column(0).size = 40;
+		cur2->column(0).mode = GridInfo::STATIC;
+
+		TextBoxPtr box = cur2->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 
-		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, 100, box));
-		cur->setWidget(spin);
+		SpinnerPtr spin = cur2->addChild(Spinner::Seed(0, 100, box));
+		cur2->setWidget(spin);
 		spin->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 
-		cur->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
+		cur2->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 
-		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		box = cur2->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
 
-		spin = cur->addChild(Spinner::Seed(0, 10000, box));
-		cur->setWidget(spin);
+		spin = cur2->addChild(Spinner::Seed(0, 10000, box));
+		cur2->setWidget(spin);
 		spin->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
 
-		cur->addChild(Label::Seed(T_("No new downloads if speed exceeds (KiB/s, 0 = disable)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
+		cur2->addChild(Label::Seed(T_("No new downloads if speed exceeds (KiB/s, 0 = disable)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
 
 		// xgettext:no-c-format
-		LabelPtr label = cur->addChild(Label::Seed(T_("Note; because of changing download speeds, this is not 100% accurate...")));
-		cur->setWidget(label, 2, 0, 1, 2);
-		label->setHelpId(IDH_SETTINGS_DOWNLOAD_LIMITS);
+		cur->addChild(Label::Seed(T_("Note; because of changing download speeds, this is not 100% accurate...")))->setHelpId(IDH_SETTINGS_DOWNLOAD_LIMITS);
 	}
 
 	{
