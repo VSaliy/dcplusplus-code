@@ -45,7 +45,7 @@ HashProgressDlg::~HashProgressDlg() {
 }
 
 int HashProgressDlg::run() {
-	create();
+	create(Seed(dwt::Point(430, 103), DS_CONTEXTHELP));
 	return show();
 }
 

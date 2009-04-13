@@ -41,7 +41,7 @@ HubListsDlg::~HubListsDlg() {
 }
 
 int HubListsDlg::run() {
-	create();
+	create(Seed(dwt::Point(262, 185), DS_CONTEXTHELP));
 	return show();
 }
 

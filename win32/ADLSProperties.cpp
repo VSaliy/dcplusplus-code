@@ -46,7 +46,7 @@ ADLSProperties::~ADLSProperties() {
 }
 
 int ADLSProperties::run() {
-	create();
+	create(Seed(dwt::Point(190, 124), DS_CONTEXTHELP));
 	return show();
 }
 
