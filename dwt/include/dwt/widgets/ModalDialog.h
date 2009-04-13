@@ -46,19 +46,19 @@ namespace dwt {
 /** \ingroup WidgetControls
   * \image html dialog.PNG
   * Class for creating a Modal Dialog based optionally on an embedded resource. <br>
-  * Use createDialog( unsigned resourceId ) if you define the dialog in a .rc file,
-  * and use createDialog() if you define the dialog completly in C++ source. <br>
-  * Use the createDialog function to actually create a dialog. <br>
+  * Use create( unsigned resourceId ) if you define the dialog in a .rc file,
+  * and use create() if you define the dialog completly in C++ source. <br>
+  * Use the create function to actually create a dialog. <br>
   * Class is a public superclass of Frame and therefore can use all
   * features of Frame. <br>
   * Note! <br>
   * Usually you create a ModalDialog on the stack. <br>
   * This Widget does NOT have selfdestructive semantics and should normally be
   * constructed on the stack! <br>
-  * The createDialog function does NOT return before the Widget is destroyed! <br>
+  * The create function does NOT return before the Widget is destroyed! <br>
   * Thus, you must declare the "onInitDialog" event handler before calling the
-  * "createDialog()", either in the contructor, or in some intialization routine
-  * called before createDialog();
+  * "create()", either in the contructor, or in some intialization routine
+  * called before create();
   */
 
 class ModalDialog :
@@ -81,7 +81,6 @@ class ModalDialog :
 	};
 
 public:
-
 	/// Class type
 	typedef ModalDialog ThisType;
 
@@ -89,6 +88,20 @@ public:
 	/** Note, not a pointer!!!!
 	  */
 	typedef ThisType ObjectType;
+
+	struct Seed {
+		typedef ThisType WidgetType;
+
+		/// size specified in dialog units
+		Point size;
+
+		/// additional dialog styles
+		DWORD styles;
+
+		tstring caption;
+
+		Seed(const Point& size_, DWORD styles_ = 0, const tstring& caption_ = tstring());
+	};
 
 	/// Creates a Modal Dialog Window from a resource id.
 	/** This version creates a window from a Dialog Resource ID. <br>
@@ -104,7 +117,7 @@ public:
 	  * prompt->onClicked( &X::myClickMethod ); <br>
 	  * ...etc...
 	  */
-	void createDialog(unsigned resourceId);
+	void create(unsigned resourceId);
 
 	/// Creates a Modal Dialog Window defined in C++ alone.
 	/** This version creates a dialog window without using a Dialog Resource ID. <br>
@@ -118,13 +131,13 @@ public:
 	  * prompt->setBounds( 10, 100, 100, 50 ); <br>
 	  * prompt->setText( _T("testing") );
 	  */
-	void createDialog();
+	void create(const Seed& cs = Seed());
 
 	/// Display the dialog and return only when the dialog has been dismissed
 	int show();
 
-	/// Ends the Modal Dialog Window started with createDialog().
-	/** Pass a return value for createDialog() and close the dialog. <br>
+	/// Ends the Modal Dialog Window started with create().
+	/** Pass a return value for create() and close the dialog. <br>
 	  * To be called by the dialog class when it should close. <br>
 	  * Note that the member variables of the ModalDialog class still exist,
 	  * but not any subwindows or Control Widgets.
@@ -135,7 +148,7 @@ public:
 	/** This would normally be the event handler where you attach your Widget
 	  * controls and do all the initializing etc... <br>
 	  * It's important that you declare this event handler BEFORE calling the
-	  * createDialog function since that function doesn't actually return before the
+	  * create function since that function doesn't actually return before the
 	  * dialog is destroyed! <br>
 	  * Method signature must be bool foo(); <br>
 	  * If you return true from your Event Handler the system will NOT mess up the
@@ -157,7 +170,7 @@ protected:
 
 	/// Specify how a resourceless dialog's window appears.
 	/** The derived pure dialog class can control the DLGTEMPLATE parameters used in
-	  * createDialog() with this protected call. <br>
+	  * create() with this protected call. <br>
 	  * The calling layer is prevented from doing so. <br>
 	  * See DLGTEMPLATE as used in ::DialogBoxIndirectParam for details.
 	  */

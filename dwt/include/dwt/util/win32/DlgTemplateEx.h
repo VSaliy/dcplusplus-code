@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   All rights reserved.
 
@@ -13,7 +13,7 @@
       * Redistributions in binary form must reproduce the above copyright notice,
         this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor the names of its contributors
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
         may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
@@ -29,35 +29,48 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <dwt/widgets/ModelessDialog.h>
-#include <dwt/widgets/ModalDialog.h>
-#include <dwt/DWTException.h>
-#include <dwt/util/win32/DlgTemplateEx.h>
+// as stated in the DLGTEMPLATEEX doc, this struct is not to be found in any standard header, so we declare it here.
 
-namespace dwt {
+namespace dwt { namespace util { namespace win32 {
 
-void ModelessDialog::create( unsigned resourceId )
-{
-	HWND wnd = ::CreateDialogParam( ::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId),
-		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
+static struct DLGTEMPLATEEX {
+    WORD dlgVer;
+    WORD signature;
+    DWORD helpID;
+    DWORD exStyle;
+    DWORD style;
+    WORD cDlgItems;
+    short x;
+    short y;
+    short cx;
+    short cy;
+    WORD menu;
+    WORD windowClass;
+    WORD title;
+    WORD pointsize;
+    WORD weight;
+    BYTE italic;
+    BYTE charset;
+    WCHAR typeface[13];
+} defaultTemplate = {
+	1,
+	0xffff,
+	0,
+	0,
+	DS_SHELLFONT | WS_CHILD | WS_CAPTION,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	8,
+	0,
+	0,
+	0,
+	L"MS Shell Dlg"
+};
 
-	if ( !wnd ) {
-		throw Win32Exception("CreateDialogParam failed");
-	}
-}
-
-void ModelessDialog::create(const Seed& cs) {
-	util::win32::DLGTEMPLATEEX t = util::win32::defaultTemplate;
-	t.style |= DS_CONTROL | cs.styles;
-	t.cx = cs.size.x;
-	t.cy = cs.size.y;
-
-	HWND dlg = ::CreateDialogIndirectParam(::GetModuleHandle(NULL), (DLGTEMPLATE*)&t,
-		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
-
-	if(dlg == NULL) {
-		throw Win32Exception("CreateDialogIndirectParam failed");
-	}
-}
-
-}
+} } }

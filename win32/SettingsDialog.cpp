@@ -51,7 +51,7 @@ pageTree(0)
 }
 
 int SettingsDialog::run() {
-	createDialog();
+	create(Seed(dwt::Point(428, 281), DS_CONTEXTHELP));
 	return show();
 }
 
@@ -130,7 +130,7 @@ bool SettingsDialog::initDialog() {
 
 	updateTitle();
 
-	layout(dwt::Rectangle(0, 0, 640, 480));
+	layout();
 
 	return false;
 }

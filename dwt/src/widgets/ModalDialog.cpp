@@ -32,48 +32,16 @@
 #include <dwt/widgets/ModalDialog.h>
 #include <dwt/DWTException.h>
 #include <dwt/Application.h>
+#include <dwt/util/win32/DlgTemplateEx.h>
 
 namespace dwt {
-/// @todo move to a better place
-static struct DLGTEMPLATEEX {
-    WORD dlgVer;
-    WORD signature;
-    DWORD helpID;
-    DWORD exStyle;
-    DWORD style;
-    WORD cDlgItems;
-    short x;
-    short y;
-    short cx;
-    short cy;
-    WORD menu;
-    WORD windowClass;
-    WORD title;
-    WORD pointsize;
-    WORD weight;
-    BYTE italic;
-    BYTE charset;
-    WCHAR typeface[13];
-} defaultTemplate = {
-	1,
-	0xffff,
-	0,
-	0,
-	DS_CONTEXTHELP | DS_MODALFRAME | DS_SHELLFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_CENTER | WS_THICKFRAME,
-	0,
-	0,
-	0,
-	100,
-	100,
-	0,
-	0,
-	0,
-	8,
-	0,
-	0,
-	0,
-	L"MS Shell Dlg"
-};
+
+ModalDialog::Seed::Seed(const Point& size_, DWORD styles_, const tstring& caption_) :
+size(size_),
+styles(styles_),
+caption(caption_)
+{
+}
 
 ModalDialog::ModalDialog(Widget* parent) :
 BaseType(parent),
@@ -89,7 +57,7 @@ ModalDialog::~ModalDialog() {
 	dwt::Application::instance().removeFilter(filterIter);
 }
 
-void ModalDialog::createDialog(unsigned resourceId) {
+void ModalDialog::create(unsigned resourceId) {
 	HWND dlg = ::CreateDialogParam(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId),
 		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
 
@@ -98,11 +66,13 @@ void ModalDialog::createDialog(unsigned resourceId) {
 	}
 }
 
-void ModalDialog::createDialog() {
-	// Default template followed by a bunch of 0's for menu, class, title and font
-	DLGTEMPLATEEX temp = defaultTemplate;
+void ModalDialog::create(const Seed& cs) {
+	util::win32::DLGTEMPLATEEX t = util::win32::defaultTemplate;
+	t.style |= DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | cs.styles;
+	t.cx = cs.size.x;
+	t.cy = cs.size.y;
 
-	HWND dlg = ::CreateDialogIndirectParam(::GetModuleHandle(NULL), (DLGTEMPLATE*)&temp,
+	HWND dlg = ::CreateDialogIndirectParam(::GetModuleHandle(NULL), (DLGTEMPLATE*)&t,
 		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
 
 	if(dlg == NULL) {
