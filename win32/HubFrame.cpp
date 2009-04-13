@@ -702,7 +702,7 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 
 void HubFrame::on(Connecting, Client*) throw() {
 	callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Connecting to %1%...") % Text::toT(client->getHubUrl())), true));
-	callAsync(std::tr1::bind(&HubFrame::setText, this, Text::toT(client->getHubUrl())));
+	callAsync(std::tr1::bind(&RecentType::setText, this, Text::toT(client->getHubUrl())));
 }
 void HubFrame::on(Connected, Client*) throw() {
 	callAsync(std::tr1::bind(&HubFrame::onConnected, this));
@@ -763,7 +763,7 @@ void HubFrame::on(HubUpdated, Client*) throw() {
 		hubName += " - " + version;
 	}
 #endif
-	callAsync(std::tr1::bind(&HubFrame::setText, this, Text::toT(hubName)));
+	callAsync(std::tr1::bind(&RecentType::setText, this, Text::toT(hubName)));
 }
 
 void HubFrame::on(Message, Client*, const OnlineUser& from, const string& msg, bool thirdPerson) throw() {
