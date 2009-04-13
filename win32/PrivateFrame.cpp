@@ -98,6 +98,16 @@ void PrivateFrame::parseWindowParams(dwt::TabView* parent, const StringMap& para
 	}
 }
 
+bool PrivateFrame::isFavorite(const StringMap& params) {
+	StringMap::const_iterator cid = params.find("CID");
+	if(cid != params.end()) {
+		UserPtr u = ClientManager::getInstance()->getUser(CID(cid->second));
+		if(u)
+			return FavoriteManager::getInstance()->isFavoriteUser(u);
+	}
+	return false;
+}
+
 PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate, const string& hubHint_) :
 	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
 	replyTo(replyTo_),

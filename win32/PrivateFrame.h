@@ -60,6 +60,7 @@ public:
 
 	const StringMap getWindowParams() const;
 	static void parseWindowParams(dwt::TabView* parent, const StringMap& params);
+	static bool isFavorite(const StringMap& params);
 
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
 
