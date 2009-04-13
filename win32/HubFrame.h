@@ -49,7 +49,8 @@ class HubFrame :
 	friend class AspectUserInfo<HubFrame>;
 	friend class AspectUserCommand<HubFrame>;
 
-	using IRecent<HubFrame>::setText;
+	typedef IRecent<HubFrame> RecentType;
+	using RecentType::setText;
 
 public:
 	enum Status {
