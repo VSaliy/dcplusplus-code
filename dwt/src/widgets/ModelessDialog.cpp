@@ -36,6 +36,13 @@
 
 namespace dwt {
 
+ModelessDialog::Seed::Seed(const Point& size_, DWORD styles_, const tstring& caption_) :
+size(size_),
+styles(styles_),
+caption(caption_)
+{
+}
+
 void ModelessDialog::create( unsigned resourceId )
 {
 	HWND wnd = ::CreateDialogParam( ::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId),
