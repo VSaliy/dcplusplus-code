@@ -71,9 +71,7 @@ public:
 		/// additional dialog styles
 		DWORD styles;
 
-		tstring caption;
-
-		Seed(const Point& size_ = Point(), DWORD styles_ = 0, const tstring& caption_ = tstring());
+		Seed(const Point& size_ = Point(), DWORD styles_ = 0);
 	};
 
 	/// Creates a Dialog Window

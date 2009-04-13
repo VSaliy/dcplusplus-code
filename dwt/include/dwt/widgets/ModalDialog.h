@@ -98,9 +98,7 @@ public:
 		/// additional dialog styles
 		DWORD styles;
 
-		tstring caption;
-
-		Seed(const Point& size_, DWORD styles_ = 0, const tstring& caption_ = tstring());
+		Seed(const Point& size_, DWORD styles_ = 0);
 	};
 
 	/// Creates a Modal Dialog Window from a resource id.
