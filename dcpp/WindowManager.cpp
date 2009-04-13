@@ -59,10 +59,10 @@ void WindowManager::clear() {
 
 void WindowManager::addRecent(const string& id, const StringMap& params) {
 	Lock l(cs);
-	addRecent_(id, params);
+	addRecent_(id, params, true);
 }
 
-void WindowManager::addRecent_(const string& id, const StringMap& params) {
+void WindowManager::addRecent_(const string& id, const StringMap& params, bool top) {
 	WindowInfo info(id, params);
 
 	if(recent.find(id) == recent.end()) {
@@ -71,15 +71,18 @@ void WindowManager::addRecent_(const string& id, const StringMap& params) {
 	}
 
 	WindowInfoList& infoList = recent[id];
-	WindowInfoList::iterator i = std::find(infoList.begin(), infoList.end(), info);
-	if(i == infoList.end()) {
-		infoList.insert(infoList.begin(), info);
-		if(infoList.size() > 10) /// @todo configurable?
-			infoList.erase(infoList.end() - 1);
-	} else {
-		infoList.erase(i);
-		infoList.insert(infoList.begin(), info);
-	}
+	if(top) {
+		WindowInfoList::iterator i = std::find(infoList.begin(), infoList.end(), info);
+		if(i == infoList.end()) {
+			infoList.insert(infoList.begin(), info);
+			if(infoList.size() > 10) /// @todo configurable?
+				infoList.erase(infoList.end() - 1);
+		} else {
+			infoList.erase(i);
+			infoList.insert(infoList.begin(), info);
+		}
+	} else if(infoList.size() < 10) /// @todo configurable?
+		infoList.push_back(info);
 }
 
 void WindowManager::updateRecent(const string& id, const StringMap& params) {

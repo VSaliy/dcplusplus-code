@@ -58,7 +58,8 @@ private:
 	WindowManager();
 	virtual ~WindowManager() throw();
 
-	void addRecent_(const string& id, const StringMap& params);
+	inline void addRecent_(const string& id, const StringMap& params) { addRecent_(id, params, false); }
+	void addRecent_(const string& id, const StringMap& params, bool top);
 
 	typedef void (WindowManager::*handler_type)(const std::string&, const StringMap&);
 	void parseTags(SimpleXML& xml, handler_type handler);
