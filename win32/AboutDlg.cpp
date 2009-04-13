@@ -59,7 +59,7 @@ AboutDlg::~AboutDlg() {
 }
 
 int AboutDlg::run() {
-	create();
+	create(dwt::Point(243, 287));
 	return show();
 }
 

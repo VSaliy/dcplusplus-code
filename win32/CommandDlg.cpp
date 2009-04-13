@@ -59,7 +59,7 @@ CommandDlg::~CommandDlg() {
 }
 
 int CommandDlg::run() {
-	create();
+	create(Seed(dwt::Point(195, 279), DS_CONTEXTHELP));
 	return show();
 }
 

@@ -131,7 +131,7 @@ public:
 	  * prompt->setBounds( 10, 100, 100, 50 ); <br>
 	  * prompt->setText( _T("testing") );
 	  */
-	void create(const Seed& cs = Seed());
+	void create(const Seed& cs);
 
 	/// Display the dialog and return only when the dialog has been dismissed
 	int show();
