@@ -36,10 +36,9 @@
 
 namespace dwt {
 
-ModalDialog::Seed::Seed(const Point& size_, DWORD styles_, const tstring& caption_) :
+ModalDialog::Seed::Seed(const Point& size_, DWORD styles_) :
 size(size_),
-styles(styles_),
-caption(caption_)
+styles(styles_)
 {
 }
 
