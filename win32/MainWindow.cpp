@@ -428,16 +428,25 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 
 template<typename T>
 static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, dwt::TabView* parent,
-						  const tstring& text, unsigned iconId)
+						  const tstring& text, unsigned iconId, unsigned favIconId)
 {
 	WindowManager::RecentList::const_iterator it = recent.find(T::id);
 	if(it != recent.end()) {
 		MenuPtr popup = menu->appendPopup(text, dwt::IconPtr(new dwt::Icon(iconId)));
+
+		dwt::IconPtr favIcon = dwt::IconPtr(new dwt::Icon(favIconId));
+
 		const WindowManager::WindowInfoList& list = it->second;
 		for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
 			StringMap params = i->getParams();
-			popup->appendItem(dwt::util::escapeMenu(Text::toT(params[WindowInfo::title])),
-				std::tr1::bind(&T::parseWindowParams, parent, params));
+
+			StringMap::const_iterator title = params.find(WindowInfo::title);
+			if(title == params.end() || title->second.empty())
+				continue;
+
+			popup->appendItem(dwt::util::escapeMenu(Text::toT(title->second)),
+				std::tr1::bind(&T::parseWindowParams, parent, params),
+				T::isFavorite(params) ? favIcon : 0);
 		}
 	}
 }
@@ -450,9 +459,9 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 		wm->lock();
 		const WindowManager::RecentList& recent = wm->getRecent();
 
-		addRecentMenu<HubFrame>(recent, menu, getTabView(), T_("Recent hubs"), IDR_HUB);
-		addRecentMenu<PrivateFrame>(recent, menu, getTabView(), T_("Recent PMs"), IDR_PRIVATE);
-		addRecentMenu<DirectoryListingFrame>(recent, menu, getTabView(), T_("Recent file lists"), IDR_DIRECTORY);
+		addRecentMenu<HubFrame>(recent, menu, getTabView(), T_("Recent hubs"), IDR_HUB, IDR_FAVORITE_HUBS);
+		addRecentMenu<PrivateFrame>(recent, menu, getTabView(), T_("Recent PMs"), IDR_PRIVATE, IDR_FAVORITE_USERS);
+		addRecentMenu<DirectoryListingFrame>(recent, menu, getTabView(), T_("Recent file lists"), IDR_DIRECTORY, IDR_FAVORITE_USERS);
 
 		wm->unlock();
 	}

@@ -126,6 +126,16 @@ void DirectoryListingFrame::parseWindowParams(dwt::TabView* parent, const String
 	}
 }
 
+bool DirectoryListingFrame::isFavorite(const StringMap& params) {
+	StringMap::const_iterator path = params.find("Path");
+	if(path != params.end() && path->second != "OwnList" && File::getSize(path->second) != -1) {
+		UserPtr u = DirectoryListing::getUserFromFilename(path->second);
+		if(u)
+			return FavoriteManager::getInstance()->isFavoriteUser(u);
+	}
+	return false;
+}
+
 void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& aUser, const string& txt, int64_t aSpeed) {
 	UserIter i = lists.find(aUser);
 	if(i != lists.end()) {
