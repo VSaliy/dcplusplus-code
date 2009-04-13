@@ -46,7 +46,7 @@ namespace dwt {
   * \WidgetUsageInfo
   * \image html dialog.PNG
   * Class for creating a Modeless Dialog based upon an embedded resource. <br>
-  * Use the createDialog function to actually create a dialog. <br>
+  * Use the create function to actually create a dialog. <br>
   * Class is a public superclass of Frame and therefor can use all features
   * of Frame.
   */
@@ -62,12 +62,26 @@ public:
 	/// Object type
 	typedef ThisType * ObjectType;
 
+	struct Seed {
+		typedef ThisType WidgetType;
+
+		/// size specified in dialog units
+		Point size;
+
+		/// additional dialog styles
+		DWORD styles;
+
+		tstring caption;
+
+		Seed(const Point& size_ = Point(), DWORD styles_ = 0, const tstring& caption_ = tstring());
+	};
+
 	/// Creates a Dialog Window
 	/** This version creates a window from the given Dialog Resource Id.
 	  */
-	void createDialog( unsigned resourceId );
+	void create( unsigned resourceId );
 
-	void createDialog();
+	void create(const Seed& cs = Seed());
 
 protected:
 	// Protected since this Widget we HAVE to inherit from

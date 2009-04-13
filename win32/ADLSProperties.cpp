@@ -46,7 +46,7 @@ ADLSProperties::~ADLSProperties() {
 }
 
 int ADLSProperties::run() {
-	createDialog();
+	create();
 	return show();
 }
 

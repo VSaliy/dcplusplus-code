@@ -59,7 +59,7 @@ AboutDlg::~AboutDlg() {
 }
 
 int AboutDlg::run() {
-	createDialog();
+	create();
 	return show();
 }
 
