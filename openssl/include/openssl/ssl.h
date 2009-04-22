@@ -324,8 +324,8 @@ extern "C" {
 /* The following cipher list is used by default.
  * It also is substituted when an application-defined cipher list string
  * starts with 'DEFAULT'. */
-#define SSL_DEFAULT_CIPHER_LIST	"ALL:!aNULL:!eNULL"
-/* As of OpenSSL 0.9.9, ssl_create_cipher_list() in ssl/ssl_ciph.c always
+#define SSL_DEFAULT_CIPHER_LIST	"ALL:!aNULL:!eNULL:!SSlv2"
+/* As of OpenSSL 1.0.0, ssl_create_cipher_list() in ssl/ssl_ciph.c always
  * starts with a reasonable order, and all we have to do for DEFAULT is
  * throwing out anonymous and unencrypted ciphersuites!
  * (The latter are not actually enabled by ALL, but "ALL:RSA" would enable
@@ -542,6 +542,8 @@ typedef struct ssl_session_st
 #define SSL_OP_COOKIE_EXCHANGE              0x00002000L
 /* Don't use RFC4507 ticket extension */
 #define SSL_OP_NO_TICKET	            0x00004000L
+/* Use Cisco's "speshul" version of DTLS_BAD_VER (as client)  */
+#define SSL_OP_CISCO_ANYCONNECT		    0x00008000L
 
 /* As server, disallow session resumption on renegotiation */
 #define SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION	0x00010000L
@@ -1595,9 +1597,11 @@ const char *SSL_get_version(const SSL *s);
 /* This sets the 'default' SSL version that SSL_new() will create */
 int SSL_CTX_set_ssl_version(SSL_CTX *ctx, const SSL_METHOD *meth);
 
+#ifndef OPENSSL_NO_SSL2
 const SSL_METHOD *SSLv2_method(void);		/* SSLv2 */
 const SSL_METHOD *SSLv2_server_method(void);	/* SSLv2 */
 const SSL_METHOD *SSLv2_client_method(void);	/* SSLv2 */
+#endif
 
 const SSL_METHOD *SSLv3_method(void);		/* SSLv3 */
 const SSL_METHOD *SSLv3_server_method(void);	/* SSLv3 */
@@ -1784,7 +1788,6 @@ void ERR_load_SSL_strings(void);
 #define SSL_F_CLIENT_HELLO				 101
 #define SSL_F_CLIENT_MASTER_KEY				 102
 #define SSL_F_D2I_SSL_SESSION				 103
-#define SSL_F_DIGEST_CACHED_RECORDS			 293
 #define SSL_F_DO_DTLS1_WRITE				 245
 #define SSL_F_DO_SSL3_WRITE				 104
 #define SSL_F_DTLS1_ACCEPT				 246
@@ -1848,6 +1851,7 @@ void ERR_load_SSL_strings(void);
 #define SSL_F_SSL3_CONNECT				 132
 #define SSL_F_SSL3_CTRL					 213
 #define SSL_F_SSL3_CTX_CTRL				 133
+#define SSL_F_SSL3_DIGEST_CACHED_RECORDS		 293
 #define SSL_F_SSL3_DO_CHANGE_CIPHER_SPEC		 292
 #define SSL_F_SSL3_ENC					 134
 #define SSL_F_SSL3_GENERATE_KEY_BLOCK			 238
