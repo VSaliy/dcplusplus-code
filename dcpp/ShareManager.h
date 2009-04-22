@@ -196,6 +196,8 @@ private:
 	friend class Directory;
 	friend struct ShareLoader;
 
+	friend class HashManager;
+
 	friend class Singleton<ShareManager>;
 	ShareManager();
 
@@ -281,7 +283,7 @@ private:
 
 	Directory::Ptr merge(const Directory::Ptr& directory);
 
-	void generateXmlList();
+	void generateXmlList(bool force = false);
 	bool loadCache() throw();
 	DirList::const_iterator getByVirtual(const string& virtualName) const throw();
 

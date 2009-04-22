@@ -853,6 +853,8 @@ int ShareManager::run() {
 		refreshDirs = false;
 
 	if(refreshDirs) {
+		HashManager::getInstance()->stopHashing();
+
 		LogManager::getInstance()->message(_("File list refresh initiated"));
 
 		lastFullUpdate = GET_TICK();
@@ -898,9 +900,9 @@ void ShareManager::getBloom(ByteVector& v, size_t k, size_t m, size_t h) const {
 	bloom.copy_to(v);
 }
 
-void ShareManager::generateXmlList() {
+void ShareManager::generateXmlList(bool force) {
 	Lock l(cs);
-	if(xmlDirty && (lastXmlUpdate + 15 * 60 * 1000 < GET_TICK() || lastXmlUpdate < lastFullUpdate)) {
+	if(force || (xmlDirty && (lastXmlUpdate + 15 * 60 * 1000 < GET_TICK() || lastXmlUpdate < lastFullUpdate))) {
 		listN++;
 
 		try {
@@ -953,6 +955,7 @@ void ShareManager::generateXmlList() {
 
 		xmlDirty = false;
 		lastXmlUpdate = GET_TICK();
+		LogManager::getInstance()->message(_("XML file list generated"));
 	}
 }
 
