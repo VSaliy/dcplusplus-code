@@ -20,6 +20,7 @@
 #include "DCPlusPlus.h"
 
 #include "HashManager.h"
+#include "ShareManager.h"
 #include "SimpleXML.h"
 #include "LogManager.h"
 #include "File.h"
@@ -464,6 +465,11 @@ void HashManager::Hasher::hashFile(const string& fileName, int64_t size) {
 	}
 }
 
+void HashManager::Hasher::stopHashing() {
+	Lock l(cs);
+	w.clear();
+}
+
 void HashManager::Hasher::stopHashing(const string& baseDir) {
 	Lock l(cs);
 	for (WorkIter i = w.begin(); i != w.end();) {
@@ -780,6 +786,9 @@ int HashManager::Hasher::run() {
 				currentSize = 0;
 			}
 			running = false;
+			if(last) {
+				ShareManager::getInstance()->generateXmlList(true);
+			}
 			if(buf != NULL && (last || stop)) {
 				if(virtualBuf) {
 #ifdef _WIN32
