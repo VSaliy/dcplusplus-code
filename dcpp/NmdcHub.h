@@ -83,6 +83,9 @@ private:
 	FloodMap seekers;
 	FloodMap flooders;
 
+	uint32_t lastProtectedIPsUpdate;
+	StringList protectedIPs;
+
 	NmdcHub(const string& aHubURL);
 	virtual ~NmdcHub() throw();
 
@@ -109,6 +112,7 @@ private:
 	void myInfo(bool alwaysSend);
 	void supports(const StringList& feat);
 	void clearFlooders(uint64_t tick);
+	bool isProtectedIP(const string& ip);
 
 	void updateFromTag(Identity& id, const string& tag);
 
@@ -116,6 +120,7 @@ private:
 
 	// TimerManagerListener
 	virtual void on(Second, uint32_t aTick) throw();
+	virtual void on(Minute, uint32_t aTick) throw();
 
 	virtual void on(Connected) throw();
 	virtual void on(Line, const string& l) throw();
