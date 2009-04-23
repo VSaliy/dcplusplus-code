@@ -343,7 +343,6 @@ public:
 	static string encodeURI(const string& /*aString*/, bool reverse = false);
 	static string getLocalIp();
 	static bool isPrivateIp(string const& ip);
-	static bool resolveNmdc(string& ip);
 	/**
 	 * Case insensitive substring search.
 	 * @return First position found or string::npos

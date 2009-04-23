@@ -28,7 +28,6 @@
 #include "version.h"
 #include "File.h"
 #include "SimpleXML.h"
-#include "Socket.h"
 
 #ifndef _WIN32
 #include <sys/socket.h>
