@@ -13,6 +13,7 @@
 * [L#339872] Fix crash when decompression initialization fails (steven sheehy)
 * Restore check-boxes in the "Context" user command group (poy)
 * CTM protection by domain name instead of ip (thanks poy)
+* [L#362598] Fix share crash (thanks emtee)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
