@@ -20,12 +20,12 @@
 #define DCPLUSPLUS_WIN32_WAITING_USERS_FRAME_H
 
 #include "StaticFrame.h"
-#include "WinUtil.h"
 
 #include <dcpp/forward.h>
 #include <dcpp/UploadManagerListener.h>
 #include "resource.h"
 
+/// @todo derive from UserInfoBase
 class WaitingUsersFrame :
 	public StaticFrame<WaitingUsersFrame>,
 	public UploadManagerListener

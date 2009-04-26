@@ -21,12 +21,10 @@
 #include "resource.h"
 
 #include "WaitingUsersFrame.h"
-#include "PrivateFrame.h"
 
-#include <dcpp/Client.h>
-#include <dcpp/QueueManager.h>
-#include <dcpp/FavoriteManager.h>
 #include <dcpp/UploadManager.h>
+#include "UserInfoBase.h"
+#include "WinUtil.h"
 
 const string WaitingUsersFrame::id = "WaitingUsers";
 const string& WaitingUsersFrame::getId() const { return id; }
@@ -110,21 +108,21 @@ void WaitingUsersFrame::loadAll()
 void WaitingUsersFrame::onPrivateMessage() {
 	UserPtr user = getSelectedUser();
 	if (user) {
-		PrivateFrame::openWindow(getParent(), user);
+		UserInfoBase(user).pm(getParent(), Util::emptyString);
 	}
 }
 
 void WaitingUsersFrame::onGrantSlot() {
 	UserPtr user = getSelectedUser();
 	if (user) {
-		UploadManager::getInstance()->reserveSlot(user, Util::emptyString);
+		UserInfoBase(user).grant(Util::emptyString);
 	}
 }
 
 void WaitingUsersFrame::onAddToFavorites() {
 	UserPtr user = getSelectedUser();
 	if (user) {
-		FavoriteManager::getInstance()->addFavoriteUser(user);
+		UserInfoBase(user).addFav();
 	}
 }
 
@@ -141,7 +139,7 @@ void WaitingUsersFrame::onGetList()
 {
 	UserPtr user = getSelectedUser();
 	if (user) {
-		QueueManager::getInstance()->addList(user, Util::emptyString, QueueItem::FLAG_CLIENT_VIEW);
+		UserInfoBase(user).getList(Util::emptyString);
 	}
 }
 
@@ -238,4 +236,3 @@ void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
 
 	setDirty(SettingsManager::BOLD_WAITING_USERS);
 }
-
