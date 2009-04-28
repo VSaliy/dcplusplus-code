@@ -43,6 +43,8 @@ class TransferView :
 	public AspectUserInfo<TransferView>,
 	public AspectUserCommand<TransferView>
 {
+	friend class AspectUserInfo<TransferView>;
+
 public:
 	TransferView(dwt::Widget* parent, dwt::TabView* mdi);
 
@@ -51,8 +53,6 @@ public:
 	virtual ~TransferView();
 
 private:
-	friend class AspectUserInfo<TransferView>;
-
 	enum {
 		DOWNLOAD_COLUMN_FIRST,
 		DOWNLOAD_COLUMN_FILE = DOWNLOAD_COLUMN_FIRST,
@@ -147,7 +147,7 @@ private:
 			MASK_CHUNK = 1 << 6
 		};
 
-		bool operator==(const ConnectionInfo& ii) { return download == ii.download && user == ii.user; }
+		bool operator==(const ConnectionInfo& ii) { return download == ii.download && user == ii.getUser(); }
 
 		UpdateInfo(const UserPtr& aUser, bool isDownload, bool isTransferFailed = false) : updateMask(0), user(aUser), download(isDownload), transferFailed(isTransferFailed) { }
 
@@ -263,11 +263,12 @@ private:
 
 	MenuPtr makeContextMenu(ConnectionInfo* ii);
 
-	WidgetConnectionsPtr getUserList() { return connections; }
-
 	int find(const string& path);
 
 	void layout();
+
+	// AspectUserInfo
+	UserInfoList selectedUsersImpl() const;
 
 	void addTask(int type, Task* ui);
 	void execTasks();

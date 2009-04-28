@@ -22,6 +22,7 @@
 #include "MDIChildFrame.h"
 #include "IRecent.h"
 #include "AspectChat.h"
+#include "UserInfoBase.h"
 #include "AspectUserCommand.h"
 
 #include <dcpp/ClientManagerListener.h>
@@ -32,6 +33,7 @@ class PrivateFrame :
 	public IRecent<PrivateFrame>,
 	private ClientManagerListener,
 	public AspectChat<PrivateFrame>,
+	public AspectUserInfo<PrivateFrame>,
 	public AspectUserCommand<PrivateFrame>
 {
 	typedef MDIChildFrame<PrivateFrame> BaseType;
@@ -39,6 +41,7 @@ class PrivateFrame :
 
 	friend class MDIChildFrame<PrivateFrame>;
 	friend class AspectChat<PrivateFrame>;
+	friend class AspectUserInfo<PrivateFrame>;
 	friend class AspectUserCommand<PrivateFrame>;
 
 	using IRecent<PrivateFrame>::setText;
@@ -66,7 +69,7 @@ public:
 
 private:
 	StringMap ucLineParams;
-	UserPtr replyTo;
+	UserInfoBase replyTo;
 
 	string hubHint;
 
@@ -79,8 +82,6 @@ private:
 
 	void layout();
 	bool preClosing();
-	void handleGetList();
-	void handleMatchQueue();
 
 	void openLog();
 	void readLog();
@@ -96,6 +97,9 @@ private:
 
 	// AspectChat
 	void enterImpl(const tstring& s);
+
+	// AspectUserInfo
+	UserInfoList selectedUsersImpl();
 
 	// ClientManagerListener
 	virtual void on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw();

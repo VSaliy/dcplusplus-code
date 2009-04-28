@@ -249,7 +249,7 @@ void TransferView::runUserCommand(const UserCommand& uc) {
 	int i = -1;
 	while((i = connections->getNext(i, LVNI_SELECTED)) != -1) {
 		ConnectionInfo* itemI = connections->getData(i);
-		if(!itemI->user->isOnline())
+		if(!itemI->getUser()->isOnline())
 			continue;
 
 		StringMap tmp = ucParams;
@@ -258,7 +258,7 @@ void TransferView::runUserCommand(const UserCommand& uc) {
 		// compatibility with 0.674 and earlier
 		ucParams["file"] = ucParams["fileFN"];
 
-		ClientManager::getInstance()->userCommand(itemI->user, uc, tmp, true);
+		ClientManager::getInstance()->userCommand(itemI->getUser(), uc, tmp, true);
 	}
 }
 
@@ -275,7 +275,7 @@ void TransferView::handleForce() {
 	while( (i = connections->getNext(i, LVNI_SELECTED)) != -1) {
 		connections->getData(i)->columns[CONNECTION_COLUMN_STATUS] = T_("Connecting (forced)");
 		connections->update(i);
-		ConnectionManager::getInstance()->force(connections->getData(i)->user);
+		ConnectionManager::getInstance()->force(connections->getData(i)->getUser());
 	}
 }
 
@@ -284,7 +284,7 @@ void TransferView::handleCopyNick() {
 
 	/// @todo Fix when more items are selected
 	while( (i = connections->getNext(i, LVNI_SELECTED)) != -1) {
-		WinUtil::setClipboard(WinUtil::getNicks(connections->getData(i)->user));
+		WinUtil::setClipboard(WinUtil::getNicks(connections->getData(i)->getUser()));
 	}
 }
 
@@ -420,6 +420,10 @@ void TransferView::handleDblClicked() {
 	}
 }
 
+TransferView::UserInfoList TransferView::selectedUsersImpl() const {
+	return usersFromTable(connections);
+}
+
 int TransferView::ConnectionInfo::compareItems(ConnectionInfo* a, ConnectionInfo* b, int col) {
 	if(BOOLSETTING(ALT_SORT_ORDER)) {
 		if(a->download == b->download) {
@@ -484,7 +488,7 @@ void TransferView::execTasks() {
 			int ic = connections->size();
 			for(int i = 0; i < ic; ++i) {
 				ConnectionInfo* ii = connections->getData(i);
-				if(ii->download == ui->download && ii->user == ui->user) {
+				if(ii->download == ui->download && ii->getUser() == ui->user) {
 					ii->update(*ui);
 					connections->update(i);
 					sortConn = true;

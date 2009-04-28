@@ -69,7 +69,14 @@ void UserInfoBase::removeFromQueue() {
 	QueueManager::getInstance()->removeSource(user, QueueItem::Source::FLAG_REMOVED);
 }
 
-void UserInfoBase::UserTraits::operator()(UserInfoBase* ui) {
+void UserInfoBase::connectFav(dwt::TabView* mdiParent) {
+	std::string url = FavoriteManager::getInstance()->getUserURL(user);
+	if(!url.empty()) {
+		HubFrame::openWindow(mdiParent, url);
+	}
+}
+
+void UserInfoBase::UserTraits::parse(UserInfoBase* ui) {
 	if(ui->getUser()->isSet(User::NMDC))
 		adcOnly = false;
 	bool fav = FavoriteManager::getInstance()->isFavoriteUser(ui->getUser());
@@ -77,11 +84,4 @@ void UserInfoBase::UserTraits::operator()(UserInfoBase* ui) {
 		nonFavOnly = false;
 	else
 		favOnly = false;
-}
-
-void UserInfoBase::connectFav(dwt::TabView* mdiParent) {
-	std::string url = FavoriteManager::getInstance()->getUserURL(user);
-	if(!url.empty()) {
-		HubFrame::openWindow(mdiParent, url);
-	}
 }

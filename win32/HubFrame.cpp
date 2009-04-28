@@ -366,14 +366,14 @@ void HubFrame::enterImpl(const tstring& s) {
 
 				if(ui) {
 					if(param.size() > j + 1)
-						PrivateFrame::openWindow(getParent(), ui->user, param.substr(j+1), url);
+						PrivateFrame::openWindow(getParent(), ui->getUser(), param.substr(j+1), url);
 					else
-						PrivateFrame::openWindow(getParent(), ui->user, Util::emptyStringT, url);
+						PrivateFrame::openWindow(getParent(), ui->getUser(), Util::emptyStringT, url);
 				}
 			} else if(!param.empty()) {
 				UserInfo* ui = findUser(param);
 				if(ui) {
-					PrivateFrame::openWindow(getParent(), ui->user, Util::emptyStringT, url);
+					PrivateFrame::openWindow(getParent(), ui->getUser(), Util::emptyStringT, url);
 				}
 			}
 		} else {
@@ -1301,4 +1301,8 @@ bool HubFrame::handleFilterKey(int) {
 		updateUserList();
 	}
 	return true;
+}
+
+HubFrame::UserInfoList HubFrame::selectedUsersImpl() const {
+	return usersFromTable(users);
 }

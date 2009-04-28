@@ -34,6 +34,11 @@ class UsersFrame :
 	public AspectUserInfo<UsersFrame>
 {
 	typedef StaticFrame<UsersFrame> BaseType;
+
+	friend class StaticFrame<UsersFrame>;
+	friend class MDIChildFrame<UsersFrame>;
+	friend class AspectUserInfo<UsersFrame>;
+
 public:
 	enum Status {
 		STATUS_STATUS,
@@ -44,10 +49,6 @@ public:
 	const string& getId() const;
 
 protected:
-	friend class StaticFrame<UsersFrame>;
-	friend class MDIChildFrame<UsersFrame>;
-	friend class AspectUserInfo<UsersFrame>;
-
 	UsersFrame(dwt::TabView* mdiParent);
 	virtual ~UsersFrame();
 
@@ -106,7 +107,8 @@ private:
 	LRESULT handleItemChanged(LPARAM lParam);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 
-	WidgetUsersPtr getUserList() { return users; }
+	// AspectUserInfo
+	UserInfoList selectedUsersImpl() const;
 
 	// FavoriteManagerListener
 	virtual void on(UserAdded, const FavoriteUser& aUser) throw();
