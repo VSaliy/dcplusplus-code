@@ -196,8 +196,6 @@ private:
 	void addChat(const tstring& aLine);
 	void addStatus(const tstring& aLine, bool inChat = true);
 
-	WidgetUsersPtr getUserList() { return users; }
-
 	tstring getStatusUsers() const;
 	tstring getStatusShared() const;
 	tstring getStatusAverageShared() const;
@@ -249,6 +247,9 @@ private:
 
 	// AspectChat
 	void enterImpl(const tstring& s);
+
+	// AspectUserInfo
+	UserInfoList selectedUsersImpl() const;
 
 	void addTask(Tasks s, const OnlineUser& u);
 	void execTasks();

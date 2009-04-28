@@ -67,7 +67,7 @@ bool WaitingUsersFrame::preClosing() {
 
 void WaitingUsersFrame::postClosing() {
 	for(HTREEITEM userNode = queued->getRoot(); userNode; userNode = queued->getNextSibling(userNode)) {
-		delete reinterpret_cast<UserItem *>(queued->getData(userNode));
+		delete reinterpret_cast<UserInfoBase*>(queued->getData(userNode));
 	}
 }
 
@@ -79,12 +79,11 @@ bool WaitingUsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	}
 
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	menu->appendItem(T_("&Get file list"), std::tr1::bind(&WaitingUsersFrame::onGetList, this));
+	appendUserItems(getParent(), menu, Util::emptyString);
+	menu->appendSeparator();
 	menu->appendItem(T_("&Copy filename"), std::tr1::bind(&WaitingUsersFrame::onCopyFilename, this));
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&WaitingUsersFrame::onRemove, this));
-	menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&WaitingUsersFrame::onGrantSlot, this));
-	menu->appendItem(T_("Add to &favorites"), std::tr1::bind(&WaitingUsersFrame::onAddToFavorites, this));
-	menu->appendItem(T_("&Send private message"), std::tr1::bind(&WaitingUsersFrame::onPrivateMessage, this));
+
 	menu->open(pt);
 	return true;
 }
@@ -97,7 +96,7 @@ void WaitingUsersFrame::loadAll()
 	for (UserList::iterator uit = users.begin(); uit != users.end(); ++uit) {
 		HTREEITEM lastInserted = queued->insert(
 			(WinUtil::getNicks(*uit) + _T(" - ") + WinUtil::getHubNames(*uit).first),
-			NULL, (LPARAM)(new UserPtr(*uit)));
+			NULL, (LPARAM)(new UserInfoBase(*uit)));
 		UploadManager::FileSet files = UploadManager::getInstance()->getWaitingUserFiles(*uit);
 		for (UploadManager::FileSet::const_iterator fit = files.begin(); fit != files.end(); ++fit) {
 			queued->insert(Text::toT(*fit), lastInserted);
@@ -105,28 +104,7 @@ void WaitingUsersFrame::loadAll()
 	}
 }
 
-void WaitingUsersFrame::onPrivateMessage() {
-	UserPtr user = getSelectedUser();
-	if (user) {
-		UserInfoBase(user).pm(getParent(), Util::emptyString);
-	}
-}
-
-void WaitingUsersFrame::onGrantSlot() {
-	UserPtr user = getSelectedUser();
-	if (user) {
-		UserInfoBase(user).grant(Util::emptyString);
-	}
-}
-
-void WaitingUsersFrame::onAddToFavorites() {
-	UserPtr user = getSelectedUser();
-	if (user) {
-		UserInfoBase(user).addFav();
-	}
-}
-
-HTREEITEM WaitingUsersFrame::getParentItem() {
+HTREEITEM WaitingUsersFrame::getParentItem() const {
 	HTREEITEM sel = queued->getSelected();
 	if(!sel) {
 		return NULL;
@@ -135,12 +113,9 @@ HTREEITEM WaitingUsersFrame::getParentItem() {
 	return parent ? parent : sel;
 }
 
-void WaitingUsersFrame::onGetList()
-{
-	UserPtr user = getSelectedUser();
-	if (user) {
-		UserInfoBase(user).getList(Util::emptyString);
-	}
+UserInfoBase* WaitingUsersFrame::getSelectedUser() const {
+	HTREEITEM selectedItem = getParentItem();
+	return selectedItem ? reinterpret_cast<UserInfoBase*>(queued->getData(selectedItem)) : 0;
 }
 
 void WaitingUsersFrame::onCopyFilename() {
@@ -162,10 +137,18 @@ void WaitingUsersFrame::onCopyFilename() {
 // Remove queued item
 void WaitingUsersFrame::onRemove()
 {
-	UserPtr user = getSelectedUser();
+	UserInfoBase* user = getSelectedUser();
 	if (user) {
-		UploadManager::getInstance()->clearUserFiles(user);
+		UploadManager::getInstance()->clearUserFiles(user->getUser());
 	}
+}
+
+WaitingUsersFrame::UserInfoList WaitingUsersFrame::selectedUsersImpl() const {
+	UserInfoList users;
+	UserInfoBase* user = getSelectedUser();
+	if(user)
+		users.push_back(user);
+	return users;
 }
 
 // UploadManagerListener
@@ -189,8 +172,8 @@ void WaitingUsersFrame::onRemoveUser(const UserPtr& aUser) {
 	HTREEITEM userNode = queued->getRoot();
 
 	while (userNode) {
-		UserPtr *u = reinterpret_cast<UserPtr *>(queued->getData(userNode));
-		if (aUser == *u) {
+		UserInfoBase* u = reinterpret_cast<UserInfoBase*>(queued->getData(userNode));
+		if (aUser == u->getUser()) {
 			delete u;
 			queued->erase(userNode);
 			return;
@@ -207,7 +190,7 @@ void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
 	string fname = aFile.substr(0, aFile.find(_T('(')));
 
 	while (userNode) {
-		if (aUser == *reinterpret_cast<UserPtr *>(queued->getData(userNode))) {
+		if (aUser == reinterpret_cast<UserInfoBase*>(queued->getData(userNode))->getUser()) {
 			HTREEITEM childNode = queued->getChild(userNode);
 			while (childNode) {
 				tstring buf = queued->getText(childNode);
@@ -221,7 +204,7 @@ void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
 			}
 
 			//file isn't already listed, add it
-			queued->insert(Text::toT(aFile), userNode, (LPARAM)new UserPtr(aUser));
+			queued->insert(Text::toT(aFile), userNode, (LPARAM)new UserInfoBase(aUser));
 
 			return;
 		}
@@ -230,7 +213,7 @@ void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
 	}
 
 	userNode = queued->insert(WinUtil::getNicks(aUser) + _T(" - ") + WinUtil::getHubNames(aUser).first,
-		NULL, (LPARAM)new UserPtr(aUser));
+		NULL, (LPARAM)new UserInfoBase(aUser));
 	queued->insert(Text::toT(aFile), userNode);
 	queued->expand(userNode);
 

@@ -36,65 +36,100 @@ public:
 	void removeFromQueue();
 	void connectFav(dwt::TabViewPtr);
 
-	UserPtr& getUser() { return user; }
-	UserPtr user;
+	const UserPtr& getUser() const { return user; }
 
 	struct UserTraits {
 		UserTraits() : adcOnly(true), favOnly(true), nonFavOnly(true) { }
-		void operator()(UserInfoBase* ui);
+
+		void parse(UserInfoBase* ui);
 
 		bool adcOnly;
 		bool favOnly;
 		bool nonFavOnly;
 	};
 
+protected:
+	UserPtr user;
 };
 
-template<class T>
+template<typename T>
 class AspectUserInfo {
-public:
 	typedef AspectUserInfo<T> ThisType;
 
-	void handleMatchQueue(const string& hubHint) {
-		static_cast<T*>(this)->getUserList()->forEachSelectedT(std::tr1::bind(&UserInfoBase::matchQueue, _1, hubHint));
-	}
-	void handleGetList(const string& hubHint) {
-		static_cast<T*>(this)->getUserList()->forEachSelectedT(std::tr1::bind(&UserInfoBase::getList, _1, hubHint));
-	}
-	void handleBrowseList(const string& hubHint) {
-		static_cast<T*>(this)->getUserList()->forEachSelectedT(std::tr1::bind(&UserInfoBase::browseList, _1, hubHint));
-	}
-	void handleAddFavorite() {
-		static_cast<T*>(this)->getUserList()->forEachSelected(&UserInfoBase::addFav);
-	}
-	void handlePrivateMessage(dwt::TabViewPtr parent, const string& hubHint) {
-		static_cast<T*>(this)->getUserList()->forEachSelectedT(std::tr1::bind(&UserInfoBase::pm, _1, parent, hubHint));
-	}
-	void handleGrantSlot(const string& hubHint) {
-		static_cast<T*>(this)->getUserList()->forEachSelectedT(std::tr1::bind(&UserInfoBase::grant, _1, hubHint));
-	}
-	void handleRemoveFromQueue() {
-		static_cast<T*>(this)->getUserList()->forEachSelected(&UserInfoBase::removeFromQueue);
-	}
-	void handleConnectFav(dwt::TabViewPtr parent) {
-		static_cast<T*>(this)->getUserList()->forEachSelectedT(std::tr1::bind(&UserInfoBase::connectFav, _1, parent));
+	T& t() { return *static_cast<T*>(this); }
+	const T& t() const { return *static_cast<const T*>(this); }
+
+protected:
+	typedef std::vector<UserInfoBase*> UserInfoList;
+
+private:
+	struct UserCollector {
+		void operator()(UserInfoBase* data) {
+			users.push_back(data);
+		}
+		UserInfoList users;
+	};
+
+protected:
+	template<typename TableType>
+	UserInfoList usersFromTable(TableType* table) const {
+		return table->forEachSelectedT(UserCollector()).users;
 	}
 
-	void appendUserItems(dwt::TabViewPtr parent, dwt::MenuPtr menu, const string& hubHint, bool defaultIsGetList = true) {
-		T* This = static_cast<T*>(this);
-		UserInfoBase::UserTraits traits = This->getUserList()->forEachSelectedT(UserInfoBase::UserTraits());
-		menu->appendItem(T_("&Get file list"), std::tr1::bind(&T::handleGetList, This, hubHint), dwt::IconPtr(), true, defaultIsGetList);
+private:
+	template<typename FunctionType>
+	void handleUserFunction(const FunctionType& userFunction) {
+		UserInfoList users = t().selectedUsersImpl();
+		for_each(users.begin(), users.end(), userFunction);
+	}
+
+protected:
+	void handleMatchQueue(const string& hubHint) {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::matchQueue, _1, hubHint));
+	}
+	void handleGetList(const string& hubHint) {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::getList, _1, hubHint));
+	}
+	void handleBrowseList(const string& hubHint) {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::browseList, _1, hubHint));
+	}
+	void handleAddFavorite() {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::addFav, _1));
+	}
+	void handlePrivateMessage(dwt::TabViewPtr parent, const string& hubHint) {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::pm, _1, parent, hubHint));
+	}
+	void handleGrantSlot(const string& hubHint) {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::grant, _1, hubHint));
+	}
+	void handleRemoveFromQueue() {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::removeFromQueue, _1));
+	}
+	void handleConnectFav(dwt::TabViewPtr parent) {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::connectFav, _1, parent));
+	}
+
+	void appendUserItems(dwt::TabViewPtr parent, dwt::MenuPtr menu, const string& hubHint, bool defaultIsGetList = true, bool includeSendPM = true) {
+		UserInfoList users = t().selectedUsersImpl();
+		if(users.empty())
+			return;
+
+		UserInfoBase::UserTraits traits;
+		for_each(users.begin(), users.end(), std::tr1::bind(&UserInfoBase::UserTraits::parse, &traits, _1));
+
+		menu->appendItem(T_("&Get file list"), std::tr1::bind(&ThisType::handleGetList, this, hubHint), dwt::IconPtr(), true, defaultIsGetList);
 		if(traits.adcOnly)
-			menu->appendItem(T_("&Browse file list"), std::tr1::bind(&T::handleBrowseList, This, hubHint));
-		menu->appendItem(T_("&Match queue"), std::tr1::bind(&T::handleMatchQueue, This, hubHint));
-		menu->appendItem(T_("&Send private message"), std::tr1::bind(&T::handlePrivateMessage, This, parent, hubHint), dwt::IconPtr(), true, !defaultIsGetList);
+			menu->appendItem(T_("&Browse file list"), std::tr1::bind(&ThisType::handleBrowseList, this, hubHint));
+		menu->appendItem(T_("&Match queue"), std::tr1::bind(&ThisType::handleMatchQueue, this, hubHint));
+		if(includeSendPM)
+			menu->appendItem(T_("&Send private message"), std::tr1::bind(&ThisType::handlePrivateMessage, this, parent, hubHint), dwt::IconPtr(), true, !defaultIsGetList);
 		if(!traits.favOnly)
-			menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&T::handleAddFavorite, This), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
-		menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&T::handleGrantSlot, This, hubHint));
+			menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&ThisType::handleAddFavorite, this), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
+		menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&ThisType::handleGrantSlot, this, hubHint));
 		if(!traits.nonFavOnly)
-			menu->appendItem(T_("Connect to hub"), std::tr1::bind(&T::handleConnectFav, This, parent), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
+			menu->appendItem(T_("Connect to hub"), std::tr1::bind(&ThisType::handleConnectFav, this, parent), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
 		menu->appendSeparator();
-		menu->appendItem(T_("Remove user from queue"), std::tr1::bind(&T::handleRemoveFromQueue, This));
+		menu->appendItem(T_("Remove user from queue"), std::tr1::bind(&ThisType::handleRemoveFromQueue, this));
 	}
 };
 

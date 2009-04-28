@@ -120,7 +120,7 @@ void UsersFrame::addUser(const FavoriteUser& aUser) {
 void UsersFrame::updateUser(const UserPtr& aUser) {
 	for(size_t i = 0; i < users->size(); ++i) {
 		UserInfo *ui = users->getData(i);
-		if(ui->user == aUser) {
+		if(ui->getUser() == aUser) {
 			ui->columns[COLUMN_SEEN] = aUser->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", FavoriteManager::getInstance()->getLastSeen(aUser)));
 			users->update(i);
 		}
@@ -130,7 +130,7 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 void UsersFrame::removeUser(const UserPtr& aUser) {
 	for(size_t i = 0; i < users->size(); ++i) {
 		UserInfo *ui = users->getData(i);
-		if(ui->user == aUser) {
+		if(ui->getUser() == aUser) {
 			users->erase(i);
 			return;
 		}
@@ -144,7 +144,7 @@ void UsersFrame::handleDescription() {
 		LineDlg dlg(this, ui->columns[COLUMN_NICK], T_("Description"), ui->columns[COLUMN_DESCRIPTION]);
 
 		if(dlg.run() == IDOK) {
-			FavoriteManager::getInstance()->setUserDescription(ui->user, Text::fromT(dlg.getLine()));
+			FavoriteManager::getInstance()->setUserDescription(ui->getUser(), Text::fromT(dlg.getLine()));
 			ui->columns[COLUMN_DESCRIPTION] = dlg.getLine();
 			users->update(i);
 		}
@@ -171,7 +171,7 @@ bool UsersFrame::handleKeyDown(int c) {
 LRESULT UsersFrame::handleItemChanged(LPARAM lParam) {
 	LPNMITEMACTIVATE l = reinterpret_cast<LPNMITEMACTIVATE>(lParam);
 	if(!startup && l->iItem != -1 && ((l->uNewState & LVIS_STATEIMAGEMASK) != (l->uOldState & LVIS_STATEIMAGEMASK))) {
-		FavoriteManager::getInstance()->setAutoGrant(users->getData(l->iItem)->user, users->isChecked(l->iItem));
+		FavoriteManager::getInstance()->setAutoGrant(users->getData(l->iItem)->getUser(), users->isChecked(l->iItem));
 	}
 	return 0;
 }
@@ -193,6 +193,10 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		return true;
 	}
 	return false;
+}
+
+UsersFrame::UserInfoList UsersFrame::selectedUsersImpl() const {
+	return usersFromTable(users);
 }
 
 void UsersFrame::on(UserAdded, const FavoriteUser& aUser) throw() {

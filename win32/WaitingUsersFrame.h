@@ -20,17 +20,24 @@
 #define DCPLUSPLUS_WIN32_WAITING_USERS_FRAME_H
 
 #include "StaticFrame.h"
+#include "UserInfoBase.h"
 
 #include <dcpp/forward.h>
 #include <dcpp/UploadManagerListener.h>
 #include "resource.h"
 
-/// @todo derive from UserInfoBase
+/// @todo use typed controls & auto-manage UserInfoBase pointers
 class WaitingUsersFrame :
 	public StaticFrame<WaitingUsersFrame>,
+	public AspectUserInfo<WaitingUsersFrame>,
 	public UploadManagerListener
 {
 	typedef StaticFrame<WaitingUsersFrame> BaseType;
+
+	friend class StaticFrame<WaitingUsersFrame>;
+	friend class MDIChildFrame<WaitingUsersFrame>;
+	friend class AspectUserInfo<WaitingUsersFrame>;
+
 public:
 	enum Status {
 		STATUS_STATUS,
@@ -41,17 +48,17 @@ public:
 	const string& getId() const;
 
 protected:
-	friend class StaticFrame<WaitingUsersFrame>;
-	friend class MDIChildFrame<WaitingUsersFrame>;
-
 	// Constructor
 	WaitingUsersFrame(dwt::TabView* mdiParent);
 	virtual ~WaitingUsersFrame() { }
 
+private:
+	// Contained controls
+	TreePtr queued;
+
+	void layout();
 	bool preClosing();
 	void postClosing();
-	// Update control layouts
-	void layout();
 
 	// Message handlers
 	void onGetList();
@@ -59,36 +66,22 @@ protected:
 	void onRemove();
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	bool handleChar(int c);
-	void onPrivateMessage();
-	void onGrantSlot();
-	void onAddToFavorites();
 
-	void onRemoveUser(const UserPtr&);
-	void onAddFile(const UserPtr&, const string&);
-
-private:
-	struct UserItem {
-		UserPtr u;
-		UserItem(UserPtr u) : u(u) { }
-	};
-
-	// Contained controls
-	TreePtr queued;
-
-	HTREEITEM getParentItem();
-
-	UserPtr getSelectedUser() {
-		HTREEITEM selectedItem = getParentItem();
-		return selectedItem ? reinterpret_cast<UserItem *>(queued->getData(selectedItem))->u : UserPtr(0);
-	}
+	HTREEITEM getParentItem() const;
+	UserInfoBase* getSelectedUser() const;
 
 	// Communication with manager
 	void loadAll();
 	void updateSearch(int index, BOOL doDelete = TRUE);
 
+	// AspectUserInfo
+	UserInfoList selectedUsersImpl() const;
+
 	// UploadManagerListener
 	virtual void on(UploadManagerListener::WaitingAddFile, const UserPtr&, const string&) throw();
 	virtual void on(UploadManagerListener::WaitingRemoveUser, const UserPtr&) throw();
+	void onRemoveUser(const UserPtr&);
+	void onAddFile(const UserPtr&, const string&);
 };
 
 #endif	/* WAITING_QUEUE_FRAME_H */

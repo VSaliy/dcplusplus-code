@@ -24,12 +24,9 @@
 
 #include <dcpp/ClientManager.h>
 #include <dcpp/Client.h>
+#include <dcpp/File.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/User.h>
-#include <dcpp/FavoriteManager.h>
-#include <dcpp/UploadManager.h>
-#include <dcpp/QueueItem.h>
-#include <dcpp/QueueManager.h>
 #include <dcpp/WindowInfo.h>
 
 const string PrivateFrame::id = "PM";
@@ -85,7 +82,7 @@ void PrivateFrame::closeAllOffline() {
 const StringMap PrivateFrame::getWindowParams() const {
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
-	ret["CID"] = replyTo->getCID().toBase32();
+	ret["CID"] = replyTo.getUser()->getCID().toBase32();
 	ret["Hub"] = hubHint;
 	return ret;
 }
@@ -134,17 +131,17 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 
 	callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 
-	frames.insert(std::make_pair(replyTo, this));
+	frames.insert(std::make_pair(replyTo.getUser(), this));
 
 	addRecent();
 }
 
 PrivateFrame::~PrivateFrame() {
-	frames.erase(replyTo);
+	frames.erase(replyTo.getUser());
 }
 
 void PrivateFrame::addChat(const tstring& aLine, bool log) {
-	OnlineUser *ou = ClientManager::getInstance()->findOnlineUser(*replyTo, Util::emptyString);
+	OnlineUser *ou = ClientManager::getInstance()->findOnlineUser(*replyTo.getUser(), Util::emptyString);
 	if (!ou) return;
 
 	// getClient actually retuns a ref.
@@ -214,10 +211,10 @@ void PrivateFrame::readLog() {
 }
 
 void PrivateFrame::fillLogParams(StringMap& params) {
-	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo->getCID()));
-	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo->getCID()));
-	params["userCID"] = replyTo->getCID().toBase32();
-	params["userNI"] = ClientManager::getInstance()->getNicks(replyTo->getCID())[0];
+	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo.getUser()->getCID()));
+	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo.getUser()->getCID()));
+	params["userCID"] = replyTo.getUser()->getCID().toBase32();
+	params["userNI"] = ClientManager::getInstance()->getNicks(replyTo.getUser()->getCID())[0];
 	params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
 }
 
@@ -242,8 +239,8 @@ void PrivateFrame::layout() {
 }
 
 void PrivateFrame::updateTitle() {
-	pair<tstring, bool> hubs = WinUtil::getHubNames(replyTo);
-	setText((WinUtil::getNicks(replyTo) + _T(" - ") + hubs.first));
+	pair<tstring, bool> hubs = WinUtil::getHubNames(replyTo.getUser());
+	setText((WinUtil::getNicks(replyTo.getUser()) + _T(" - ") + hubs.first));
 	setIcon(hubs.second ? IDR_PRIVATE : IDR_PRIVATE_OFF);
 }
 
@@ -269,15 +266,15 @@ void PrivateFrame::enterImpl(const tstring& s) {
 				addStatus(status);
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("grant")) == 0) {
-			UploadManager::getInstance()->reserveSlot(replyTo, hubHint);
+			handleGrantSlot(hubHint);
 			addStatus(T_("Slot granted"));
 		} else if(Util::stricmp(cmd.c_str(), _T("close")) == 0) {
 			postMessage(WM_CLOSE);
 		} else if((Util::stricmp(cmd.c_str(), _T("favorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("fav")) == 0)) {
-			FavoriteManager::getInstance()->addFavoriteUser(replyTo);
+			handleAddFavorite();
 			addStatus(T_("Favorite user added"));
 		} else if(Util::stricmp(cmd.c_str(), _T("getlist")) == 0) {
-			handleGetList();
+			handleGetList(hubHint);
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
@@ -290,7 +287,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 	}
 
 	if(send) {
-		if(replyTo->isOnline()) {
+		if(replyTo.getUser()->isOnline()) {
 			sendMessage(s);
 		} else {
 			addStatus(T_("User went offline"));
@@ -303,31 +300,29 @@ void PrivateFrame::enterImpl(const tstring& s) {
 }
 
 void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
-	ClientManager::getInstance()->privateMessage(replyTo, Text::fromT(msg), thirdPerson, hubHint);
+	ClientManager::getInstance()->privateMessage(replyTo.getUser(), Text::fromT(msg), thirdPerson, hubHint);
+}
+
+PrivateFrame::UserInfoList PrivateFrame::selectedUsersImpl() {
+	return UserInfoList(1, &replyTo);
 }
 
 void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
-	if(aUser.getUser() == replyTo)
+	if(aUser.getUser() == replyTo.getUser())
 		callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
-	if(aUser == replyTo)
+	if(aUser == replyTo.getUser())
 		callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
-	if(aUser == replyTo)
+	if(aUser == replyTo.getUser())
 		callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
 }
 
 void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {
-	menu->appendItem(T_("&Get file list"), std::tr1::bind(&PrivateFrame::handleGetList, this));
-	menu->appendItem(T_("&Match queue"), std::tr1::bind(&PrivateFrame::handleMatchQueue, this));
-	menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), replyTo, hubHint));
-	if(!FavoriteManager::getInstance()->isFavoriteUser(replyTo))
-		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), replyTo), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
-
-	prepareMenu(menu, UserCommand::CONTEXT_CHAT, ClientManager::getInstance()->getHubs(replyTo->getCID()));
-
+	appendUserItems(getParent(), menu, hubHint, false, false);
+	prepareMenu(menu, UserCommand::CONTEXT_CHAT, ClientManager::getInstance()->getHubs(replyTo.getUser()->getCID()));
 	menu->appendSeparator();
 }
 
@@ -337,21 +332,5 @@ void PrivateFrame::runUserCommand(const UserCommand& uc) {
 
 	StringMap ucParams = ucLineParams;
 
-	ClientManager::getInstance()->userCommand(replyTo, uc, ucParams, true);
-}
-
-void PrivateFrame::handleGetList() {
-	try {
-		QueueManager::getInstance()->addList(replyTo, hubHint, QueueItem::FLAG_CLIENT_VIEW);
-	} catch(const Exception& e) {
-		addStatus(Text::toT(e.getError()));
-	}
-}
-
-void PrivateFrame::handleMatchQueue() {
-	try {
-		QueueManager::getInstance()->addList(replyTo, hubHint, QueueItem::FLAG_MATCH_QUEUE);
-	} catch(const Exception& e) {
-		addStatus(Text::toT(e.getError()));
-	}
+	ClientManager::getInstance()->userCommand(replyTo.getUser(), uc, ucParams, true);
 }

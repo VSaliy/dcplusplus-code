@@ -29,8 +29,6 @@ public:
 	AspectUserCommand() { }
 	virtual ~AspectUserCommand() { }
 
-	typedef AspectUserCommand<T> ThisType;
-
 	void prepareMenu(dwt::MenuPtr menu, int ctx, const string& hubUrl) {
 		prepareMenu(menu, ctx, StringList(1, hubUrl));
 	}
