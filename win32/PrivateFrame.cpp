@@ -34,11 +34,13 @@ const string& PrivateFrame::getId() const { return id; }
 
 PrivateFrame::FrameMap PrivateFrame::frames;
 
-void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, const tstring& msg, const string& hubHint) {
+void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, const tstring& msg, const string& hubHint,
+							  const string& logPath)
+{
 	PrivateFrame* pf = 0;
 	FrameIter i = frames.find(replyTo_);
 	if(i == frames.end()) {
-		pf = new PrivateFrame(mdiParent, replyTo_, true, hubHint);
+		pf = new PrivateFrame(mdiParent, replyTo_, true, hubHint, logPath);
 	} else {
 		pf = i->second;
 		pf->activate();
@@ -84,6 +86,7 @@ const StringMap PrivateFrame::getWindowParams() const {
 	ret[WindowInfo::title] = Text::fromT(getText());
 	ret["CID"] = replyTo.getUser()->getCID().toBase32();
 	ret["Hub"] = hubHint;
+	ret["LogPath"] = getLogPath();
 	return ret;
 }
 
@@ -91,7 +94,9 @@ void PrivateFrame::parseWindowParams(dwt::TabView* parent, const StringMap& para
 	StringMap::const_iterator cid = params.find("CID");
 	StringMap::const_iterator hub = params.find("Hub");
 	if(cid != params.end() && hub != params.end()) {
-		openWindow(parent, ClientManager::getInstance()->getUser(CID(cid->second)), Util::emptyStringT, hub->second);
+		StringMap::const_iterator logPath = params.find("LogPath");
+		openWindow(parent, ClientManager::getInstance()->getUser(CID(cid->second)), Util::emptyStringT, hub->second,
+			logPath != params.end() ? logPath->second : Util::emptyString);
 	}
 }
 
@@ -105,7 +110,8 @@ bool PrivateFrame::isFavorite(const StringMap& params) {
 	return false;
 }
 
-PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate, const string& hubHint_) :
+PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate, const string& hubHint_,
+						   const string& logPath) :
 	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
 	replyTo(replyTo_),
 	hubHint(hubHint_)
@@ -125,7 +131,7 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 	updateTitle();
 	layout();
 
-	readLog();
+	readLog(logPath);
 
 	ClientManager::getInstance()->addListener(this);
 
@@ -141,11 +147,12 @@ PrivateFrame::~PrivateFrame() {
 }
 
 void PrivateFrame::addChat(const tstring& aLine, bool log) {
+	/// @todo null clients are allowed (eg to display log history on opening), fix later
+	Client* pClient = 0;
 	OnlineUser *ou = ClientManager::getInstance()->findOnlineUser(*replyTo.getUser(), Util::emptyString);
-	if (!ou) return;
+	if (ou) pClient = &(ou->getClient()); // getClient actually retuns a ref.
 
-	// getClient actually retuns a ref.
-	ChatType::addChat(&(ou->getClient()), aLine);
+	ChatType::addChat(pClient, aLine);
 
 	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		StringMap params;
@@ -171,24 +178,24 @@ bool PrivateFrame::preClosing() {
 	return true;
 }
 
-void PrivateFrame::openLog() {
+string PrivateFrame::getLogPath() const {
 	StringMap params;
 	fillLogParams(params);
-	WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::PM, params))));
+	return Util::validateFileName(LogManager::getInstance()->getPath(LogManager::PM, params));
 }
 
-void PrivateFrame::readLog() {
+void PrivateFrame::openLog() {
+	WinUtil::openFile(Text::toT(getLogPath()));
+}
+
+void PrivateFrame::readLog(const string& logPath) {
 	if(SETTING(SHOW_LAST_LINES_LOG) == 0)
 		return;
-
-	StringMap params;
-	fillLogParams(params);
-	string path = Util::validateFileName(LogManager::getInstance()->getPath(LogManager::PM, params));
 
 	StringList lines;
 
 	try {
-		File f(path, File::READ, File::OPEN);
+		File f(logPath.empty() ? getLogPath() : logPath, File::READ, File::OPEN);
 		if(f.getSize() > 32*1024) {
 			f.setEndPos(- 32*1024 + 1);
 		}
@@ -210,7 +217,7 @@ void PrivateFrame::readLog() {
 	}
 }
 
-void PrivateFrame::fillLogParams(StringMap& params) {
+void PrivateFrame::fillLogParams(StringMap& params) const {
 	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo.getUser()->getCID()));
 	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo.getUser()->getCID()));
 	params["userCID"] = replyTo.getUser()->getCID().toBase32();
