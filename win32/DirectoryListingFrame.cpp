@@ -158,6 +158,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 	matchQueue(0),
 	speed(aSpeed),
 	dl(new DirectoryListing(aUser)),
+	user(aUser),
 	usingDirMenu(false),
 	historyIndex(0),
 	treeRoot(NULL),
@@ -410,6 +411,10 @@ void DirectoryListingFrame::addUserCommands(const MenuPtr& parent) {
 	prepareMenu(parent, UserCommand::CONTEXT_FILELIST, ClientManager::getInstance()->getHubs(dl->getUser()->getCID()));
 }
 
+void DirectoryListingFrame::addUserMenu(const MenuPtr& menu) {
+	appendUserItems(getParent(), menu->appendPopup(T_("User")), Util::emptyString, true, true, false);
+}
+
 void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
 	MenuPtr menu = parent->appendPopup(T_("Download &to..."));
 	StringPairList spl = FavoriteManager::getInstance()->getFavoriteDirs();
@@ -471,6 +476,8 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 		}
 		menu->appendShellMenu(ShellMenuPaths);
 
+		addUserMenu(menu);
+
 		usingDirMenu = false;
 		menu->open(pt);
 		return true;
@@ -486,10 +493,12 @@ bool DirectoryListingFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 	}
 
 	if(dirs->getSelected()) {
-		MenuPtr contextMenu = makeDirMenu();
-		usingDirMenu = true;
-		contextMenu->open(pt);
+		MenuPtr menu = makeDirMenu();
 
+		addUserMenu(menu);
+
+		usingDirMenu = true;
+		menu->open(pt);
 		return true;
 	}
 	return false;
@@ -1030,6 +1039,15 @@ bool DirectoryListingFrame::handleKeyDownFiles(int c) {
 		return true;
 	}
 	return false;
+}
+
+void DirectoryListingFrame::tabMenuImpl(dwt::MenuPtr& menu) {
+	addUserMenu(menu);
+	menu->appendSeparator();
+}
+
+DirectoryListingFrame::UserInfoList DirectoryListingFrame::selectedUsersImpl() {
+	return UserInfoList(1, &user);
 }
 
 void DirectoryListingFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {

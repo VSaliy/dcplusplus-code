@@ -14,7 +14,8 @@
 * Restore check-boxes in the "Context" user command group (poy)
 * CTM protection by domain name instead of ip (thanks poy)
 * [L#362598] Fix share crash (thanks emtee)
-* [L#367186] Use standard user menus in PMs and waiting users (poy)
+* [L#367186] Fix crash in waiting users (poy)
+* [L#261185] Use standard user menus in PMs, waiting users, file lists (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
