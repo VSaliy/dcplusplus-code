@@ -1233,7 +1233,7 @@ void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabVie
 		std::tr1::bind(&QueueManager::addList, qm, _1, Util::emptyString, QueueItem::FLAG_MATCH_QUEUE, Util::emptyString));
 
 	addUsers(menu, T_("&Send private message"), users,
-		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, Util::emptyStringT, Util::emptyString));
+		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, Util::emptyStringT, Util::emptyString, Util::emptyString));
 
 	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav),
 		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
