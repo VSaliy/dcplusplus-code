@@ -97,9 +97,7 @@ private:
 			DirectoryListing::Directory* dir;
 		};
 
-		ItemInfo(const tstring& nick, DirectoryListing::Directory* d) : type(USER), dir(d) {
-			columns[COLUMN_FILENAME] = nick;
-		}
+		ItemInfo(bool root, DirectoryListing::Directory* d) : type(USER), dir(d) { }
 
 		ItemInfo(DirectoryListing::File* f) : type(FILE), file(f) {
 			columns[COLUMN_FILENAME] = Text::toT(f->getName());
@@ -129,6 +127,10 @@ private:
 
 		const tstring& getText(int col) const {
 			return columns[col];
+		}
+
+		void setText(const tstring& text, int col = COLUMN_FILENAME) {
+			columns[col] = text;
 		}
 
 		struct TotalSize {
