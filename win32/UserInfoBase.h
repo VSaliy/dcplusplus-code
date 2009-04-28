@@ -109,7 +109,9 @@ protected:
 		handleUserFunction(std::tr1::bind(&UserInfoBase::connectFav, _1, parent));
 	}
 
-	void appendUserItems(dwt::TabViewPtr parent, dwt::MenuPtr menu, const string& hubHint, bool defaultIsGetList = true, bool includeSendPM = true) {
+	void appendUserItems(dwt::TabViewPtr parent, dwt::MenuPtr menu, const string& hubHint,
+		bool defaultIsGetList = true, bool includeSendPM = true, bool includeGetList = true)
+	{
 		UserInfoList users = t().selectedUsersImpl();
 		if(users.empty())
 			return;
@@ -117,10 +119,12 @@ protected:
 		UserInfoBase::UserTraits traits;
 		for_each(users.begin(), users.end(), std::tr1::bind(&UserInfoBase::UserTraits::parse, &traits, _1));
 
-		menu->appendItem(T_("&Get file list"), std::tr1::bind(&ThisType::handleGetList, this, hubHint), dwt::IconPtr(), true, defaultIsGetList);
-		if(traits.adcOnly)
-			menu->appendItem(T_("&Browse file list"), std::tr1::bind(&ThisType::handleBrowseList, this, hubHint));
-		menu->appendItem(T_("&Match queue"), std::tr1::bind(&ThisType::handleMatchQueue, this, hubHint));
+		if(includeGetList) {
+			menu->appendItem(T_("&Get file list"), std::tr1::bind(&ThisType::handleGetList, this, hubHint), dwt::IconPtr(), true, defaultIsGetList);
+			if(traits.adcOnly)
+				menu->appendItem(T_("&Browse file list"), std::tr1::bind(&ThisType::handleBrowseList, this, hubHint));
+			menu->appendItem(T_("&Match queue"), std::tr1::bind(&ThisType::handleMatchQueue, this, hubHint));
+		}
 		if(includeSendPM)
 			menu->appendItem(T_("&Send private message"), std::tr1::bind(&ThisType::handlePrivateMessage, this, parent, hubHint), dwt::IconPtr(), true, !defaultIsGetList);
 		if(!traits.favOnly)

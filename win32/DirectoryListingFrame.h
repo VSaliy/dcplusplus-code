@@ -23,6 +23,7 @@
 #include "IRecent.h"
 #include "TypedTable.h"
 #include "TypedTree.h"
+#include "UserInfoBase.h"
 #include "AspectUserCommand.h"
 
 #include <dcpp/forward.h>
@@ -35,11 +36,13 @@ class DirectoryListingFrame :
 	public MDIChildFrame<DirectoryListingFrame>,
 	public IRecent<DirectoryListingFrame>,
 	private ClientManagerListener,
+	public AspectUserInfo<DirectoryListingFrame>,
 	public AspectUserCommand<DirectoryListingFrame>
 {
 	typedef MDIChildFrame<DirectoryListingFrame> BaseType;
 
 	friend class MDIChildFrame<DirectoryListingFrame>;
+	friend class AspectUserInfo<DirectoryListingFrame>;
 	friend class AspectUserCommand<DirectoryListingFrame>;
 
 	using IRecent<DirectoryListingFrame>::setText;
@@ -156,6 +159,7 @@ private:
 	int64_t speed;		/**< Speed at which this file list was downloaded */
 
 	std::auto_ptr<DirectoryListing> dl;
+	UserInfoBase user;
 	string path;
 
 	tstring error;
@@ -195,6 +199,7 @@ private:
 
 	void addTargets(const MenuPtr& menu, ItemInfo* ii = 0);
 	void addUserCommands(const MenuPtr& menu);
+	void addUserMenu(const MenuPtr& menu);
 
 	void handleFind();
 	void handleFindNext();
@@ -242,6 +247,12 @@ private:
 
 	void findFile(bool findNext);
 	HTREEITEM findFile(const StringSearch& str, HTREEITEM root, int &foundFile, int &skipHits);
+
+	// MDIChildFrame
+	void tabMenuImpl(dwt::MenuPtr& menu);
+
+	// AspectUserInfo
+	UserInfoList selectedUsersImpl();
 
 	// ClientManagerListener
 	virtual void on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw();
