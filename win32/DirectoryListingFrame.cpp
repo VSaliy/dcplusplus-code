@@ -230,8 +230,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const User
 	status->setText(STATUS_FIND, T_("Find"));
 	status->setText(STATUS_NEXT, T_("Next"));
 
-	string nick = ClientManager::getInstance()->getNicks(dl->getUser()->getCID())[0];
-	treeRoot = dirs->insert(NULL, new ItemInfo(Text::toT(nick), dl->getRoot()));
+	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
 
 	ClientManager::getInstance()->addListener(this);
 	updateTitle();
@@ -352,7 +351,6 @@ void DirectoryListingFrame::refreshTree(const tstring& root) {
 	dirs->setSelected(NULL);
 	selectItem(root);
 
-	dcdebug("setSelecteded");
 	dirs->expand(treeRoot);
 }
 
@@ -363,6 +361,9 @@ void DirectoryListingFrame::updateTitle() {
 	else
 		text += _T(": ") + error;
 	setText(text);
+
+	dirs->getData(treeRoot)->setText(text);
+	dirs->redraw();
 }
 
 DirectoryListingFrame::ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
