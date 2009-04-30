@@ -510,6 +510,56 @@ void ClientManager::updateNick(const OnlineUser& user) throw() {
 	}
 }
 
+void ClientManager::loadUsers() {
+	SimpleXML xml;
+
+	try {
+		xml.fromXML(File(getUsersFile(), File::READ, File::OPEN).read());
+	} catch(const FileException&) { }
+
+	if(xml.findChild("Users")) {
+		xml.stepIn();
+
+		{
+			Lock l(cs);
+			while(xml.findChild("User")) {
+				nicks[CID(xml.getChildAttrib("CID"))] = xml.getChildAttrib("Nick");
+			}
+		}
+
+		xml.stepOut();
+	}
+}
+
+void ClientManager::saveUsers() const {
+	SimpleXML xml;
+	xml.addTag("Users");
+	xml.stepIn();
+
+	{
+		Lock l(cs);
+		for(NickMap::const_iterator i = nicks.begin(), iend = nicks.end(); i != iend; ++i) {
+			xml.addTag("User");
+			xml.addChildAttrib("CID", i->first.toBase32());
+			xml.addChildAttrib("Nick", i->second);
+		}
+	}
+
+	xml.stepOut();
+
+	try {
+		const string fName = getUsersFile();
+		File out(fName + ".tmp", File::WRITE, File::CREATE | File::TRUNCATE);
+		BufferedOutputStream<false> f(&out);
+		f.write(SimpleXML::utf8Header);
+		xml.toXML(&f);
+		f.flush();
+		out.close();
+		File::deleteFile(fName);
+		File::renameFile(fName + ".tmp", fName);
+	} catch(const FileException&) { }
+}
+
 void ClientManager::on(Connected, Client* c) throw() {
 	fire(ClientManagerListener::ClientConnected(), c);
 }
