@@ -97,6 +97,9 @@ public:
 	CID getMyCID();
 	const CID& getMyPID();
 
+	void loadUsers();
+	void saveUsers() const;
+
 private:
 	typedef unordered_map<string, UserPtr> LegacyMap;
 	typedef LegacyMap::iterator LegacyIter;
@@ -136,6 +139,8 @@ private:
 	}
 
 	void updateNick(const OnlineUser& user) throw();
+
+	string getUsersFile() const { return Util::getPath(Util::PATH_USER_LOCAL) + "Users.xml"; }
 
 	// ClientListener
 	virtual void on(Connected, Client* c) throw();
