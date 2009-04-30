@@ -52,7 +52,7 @@
 namespace dcpp {
 
 ShareManager::ShareManager() : hits(0), xmlListLen(0), bzXmlListLen(0),
-	xmlDirty(true), refreshDirs(false), update(false), initial(true), listN(0), refreshing(0),
+	xmlDirty(true), forceXmlRefresh(false), refreshDirs(false), update(false), initial(true), listN(0), refreshing(0),
 	lastXmlUpdate(0), lastFullUpdate(GET_TICK()), bloom(1<<20)
 {
 	SettingsManager::getInstance()->addListener(this);
@@ -856,6 +856,8 @@ int ShareManager::run() {
 		refreshDirs = false;
 
 	if(refreshDirs) {
+		HashManager::getInstance()->stopHashing();
+
 		LogManager::getInstance()->message(_("File list refresh initiated"));
 
 		lastFullUpdate = GET_TICK();
@@ -903,7 +905,7 @@ void ShareManager::getBloom(ByteVector& v, size_t k, size_t m, size_t h) const {
 
 void ShareManager::generateXmlList() {
 	Lock l(cs);
-	if(xmlDirty && (lastXmlUpdate + 15 * 60 * 1000 < GET_TICK() || lastXmlUpdate < lastFullUpdate)) {
+	if(forceXmlRefresh || (xmlDirty && (lastXmlUpdate + 15 * 60 * 1000 < GET_TICK() || lastXmlUpdate < lastFullUpdate))) {
 		listN++;
 
 		try {
@@ -950,11 +952,13 @@ void ShareManager::generateXmlList() {
 			bzXmlRef = auto_ptr<File>(new File(newXmlName, File::READ, File::OPEN));
 			setBZXmlFile(newXmlName);
 			bzXmlListLen = File::getSize(newXmlName);
+			LogManager::getInstance()->message(str(F_("XML file list %1% generated") % Util::addBrackets(bzXmlFile)));
 		} catch(const Exception&) {
 			// No new file lists...
 		}
 
 		xmlDirty = false;
+		forceXmlRefresh = false;
 		lastXmlUpdate = GET_TICK();
 	}
 }

@@ -196,6 +196,8 @@ private:
 	friend class Directory;
 	friend struct ShareLoader;
 
+	friend class HashManager;
+
 	friend class Singleton<ShareManager>;
 	ShareManager();
 
@@ -243,6 +245,7 @@ private:
 	auto_ptr<File> bzXmlRef;
 
 	bool xmlDirty;
+	bool forceXmlRefresh; /// bypass the 15-minutes guard
 	bool refreshDirs;
 	bool update;
 	bool initial;
