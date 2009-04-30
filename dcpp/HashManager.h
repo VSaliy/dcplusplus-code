@@ -61,6 +61,7 @@ public:
 	 */
 	bool checkTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp);
 
+	void stopHashing() { hasher.stopHashing(); }
 	void stopHashing(const string& baseDir) { hasher.stopHashing(baseDir); }
 	void setPriority(Thread::Priority p) { hasher.setThreadPriority(p); }
 
@@ -102,6 +103,7 @@ private:
 
 		void hashFile(const string& fileName, int64_t size);
 
+		void stopHashing();
 		void stopHashing(const string& baseDir);
 		virtual int run();
 		bool fastHash(const string& fname, uint8_t* buf, TigerTree& tth, int64_t size, CRC32Filter* xcrc32);
