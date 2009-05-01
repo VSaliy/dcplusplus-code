@@ -727,71 +727,71 @@ int HashManager::Hasher::run() {
 #else
 				if(!BOOLSETTING(FAST_HASH) || !fastHash(fname, 0, fastTTH, size, xcrc32)) {
 #endif
-						tth = &slowTTH;
-						crc32 = CRC32Filter();
-						uint32_t lastRead = GET_TICK();
+					tth = &slowTTH;
+					crc32 = CRC32Filter();
+					uint32_t lastRead = GET_TICK();
 
-						do {
-							size_t bufSize = BUF_SIZE;
-							if(SETTING(MAX_HASH_SPEED)> 0) {
-								uint32_t now = GET_TICK();
-								uint32_t minTime = n * 1000LL / (SETTING(MAX_HASH_SPEED) * 1024LL * 1024LL);
-								if(lastRead + minTime> now) {
-									Thread::sleep(minTime - (now - lastRead));
-								}
-								lastRead = lastRead + minTime;
-							} else {
-								lastRead = GET_TICK();
+					do {
+						size_t bufSize = BUF_SIZE;
+						if(SETTING(MAX_HASH_SPEED)> 0) {
+							uint32_t now = GET_TICK();
+							uint32_t minTime = n * 1000LL / (SETTING(MAX_HASH_SPEED) * 1024LL * 1024LL);
+							if(lastRead + minTime> now) {
+								Thread::sleep(minTime - (now - lastRead));
 							}
-							n = f.read(buf, bufSize);
-							tth->update(buf, n);
-							if(xcrc32)
-								(*xcrc32)(buf, n);
+							lastRead = lastRead + minTime;
+						} else {
+							lastRead = GET_TICK();
+						}
+						n = f.read(buf, bufSize);
+						tth->update(buf, n);
+						if(xcrc32)
+							(*xcrc32)(buf, n);
 
-							{
-								Lock l(cs);
-								currentSize = max(static_cast<uint64_t>(currentSize - n), static_cast<uint64_t>(0));
-							}
-							sizeLeft -= n;
-						}while (n> 0 && !stop);
-					} else {
-						sizeLeft = 0;
-					}
-
-					f.close();
-					tth->finalize();
-					uint32_t end = GET_TICK();
-					int64_t speed = 0;
-					if(end> start) {
-						speed = size * _LL(1000) / (end - start);
-					}
-					if(xcrc32 && xcrc32->getValue() != sfv.getCRC()) {
-						LogManager::getInstance()->message(str(F_("%1% not shared; calculated CRC32 does not match the one found in SFV file.") % Util::addBrackets(fname)));
-					} else {
-						HashManager::getInstance()->hashDone(fname, timestamp, *tth, speed);
-					}
-				} catch(const FileException& e) {
-					LogManager::getInstance()->message(str(F_("Error hashing %1%: %2%") % Util::addBrackets(fname) % e.getError()));
-				}
-			}
-			{
-				Lock l(cs);
-				currentFile.clear();
-				currentSize = 0;
-			}
-			running = false;
-			if(buf != NULL && (last || stop)) {
-				if(virtualBuf) {
-#ifdef _WIN32
-					VirtualFree(buf, 0, MEM_RELEASE);
-#endif
+						{
+							Lock l(cs);
+							currentSize = max(static_cast<uint64_t>(currentSize - n), static_cast<uint64_t>(0));
+						}
+						sizeLeft -= n;
+					}while (n> 0 && !stop);
 				} else {
-					delete [] buf;
+					sizeLeft = 0;
 				}
-				buf = NULL;
+
+				f.close();
+				tth->finalize();
+				uint32_t end = GET_TICK();
+				int64_t speed = 0;
+				if(end> start) {
+					speed = size * _LL(1000) / (end - start);
+				}
+				if(xcrc32 && xcrc32->getValue() != sfv.getCRC()) {
+					LogManager::getInstance()->message(str(F_("%1% not shared; calculated CRC32 does not match the one found in SFV file.") % Util::addBrackets(fname)));
+				} else {
+					HashManager::getInstance()->hashDone(fname, timestamp, *tth, speed);
+				}
+			} catch(const FileException& e) {
+				LogManager::getInstance()->message(str(F_("Error hashing %1%: %2%") % Util::addBrackets(fname) % e.getError()));
 			}
 		}
-		return 0;
+		{
+			Lock l(cs);
+			currentFile.clear();
+			currentSize = 0;
+		}
+		running = false;
+		if(buf != NULL && (last || stop)) {
+			if(virtualBuf) {
+#ifdef _WIN32
+				VirtualFree(buf, 0, MEM_RELEASE);
+#endif
+			} else {
+				delete [] buf;
+			}
+			buf = NULL;
+		}
 	}
+	return 0;
+}
 
 } // namespace dcpp
