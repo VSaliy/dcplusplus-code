@@ -460,8 +460,22 @@ void HashManager::HashStore::createDataFile(const string& name) {
 void HashManager::Hasher::hashFile(const string& fileName, int64_t size) {
 	Lock l(cs);
 	if (w.insert(make_pair(fileName, size)).second) {
-		s.signal();
+		if(paused > 0)
+			paused++;
+		else
+			s.signal();
 	}
+}
+
+void HashManager::Hasher::pauseHashing() {
+	Lock l(cs);
+	paused++;
+}
+
+void HashManager::Hasher::resumeHashing() {
+	Lock l(cs);
+	while(--paused > 0)
+		s.signal();
 }
 
 void HashManager::Hasher::stopHashing(const string& baseDir) {
@@ -792,6 +806,24 @@ int HashManager::Hasher::run() {
 		}
 	}
 	return 0;
+}
+
+HashManager::HashPauser::HashPauser() {
+	HashManager::getInstance()->pauseHashing();
+}
+
+HashManager::HashPauser::~HashPauser() {
+	HashManager::getInstance()->resumeHashing();
+}
+
+void HashManager::pauseHashing() {
+	Lock l(cs);
+	hasher.pauseHashing();
+}
+
+void HashManager::resumeHashing() {
+	Lock l(cs);
+	hasher.resumeHashing();
 }
 
 } // namespace dcpp
