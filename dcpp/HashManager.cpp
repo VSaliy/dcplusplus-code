@@ -624,6 +624,7 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 	int64_t pos = 0;
 	int64_t size_read = 0;
 	void *buf = 0;
+	bool ok = false;
 
 	uint32_t lastRead = GET_TICK();
 	while(pos <= size && !stop) {
@@ -640,7 +641,7 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 			if(SETTING(MAX_HASH_SPEED) > 0) {
 				uint32_t now = GET_TICK();
 				uint32_t minTime = size_read * 1000LL / (SETTING(MAX_HASH_SPEED) * 1024LL * 1024LL);
-				if(lastRead + minTime> now) {
+				if(lastRead + minTime > now) {
 					uint32_t diff = now - lastRead;
 					Thread::sleep(minTime - diff);
 				}
@@ -661,7 +662,8 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 			currentSize = max(static_cast<uint64_t>(currentSize - size_read), static_cast<uint64_t>(0));
 		}
 
-		if(size_left <= 0) {
+		if(size_left == 0) {
+			ok = true;
 			break;
 		}
 
@@ -670,7 +672,7 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 		size_left -= size_read;
 	}
 	close(fd);
-	return true;
+	return ok;
 }
 
 #endif // !_WIN32
