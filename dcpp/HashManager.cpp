@@ -460,8 +460,22 @@ void HashManager::HashStore::createDataFile(const string& name) {
 void HashManager::Hasher::hashFile(const string& fileName, int64_t size) {
 	Lock l(cs);
 	if (w.insert(make_pair(fileName, size)).second) {
-		s.signal();
+		if(paused > 0)
+			paused++;
+		else
+			s.signal();
 	}
+}
+
+void HashManager::Hasher::pauseHashing() {
+	Lock l(cs);
+	paused++;
+}
+
+void HashManager::Hasher::resumeHashing() {
+	Lock l(cs);
+	while(--paused > 0)
+		s.signal();
 }
 
 void HashManager::Hasher::stopHashing(const string& baseDir) {
@@ -536,7 +550,7 @@ bool HashManager::Hasher::fastHash(const string& fname, uint8_t* buf, TigerTree&
 
 	over.Offset = hn;
 	size -= hn;
-	for (;;) {
+	while (!stop) {
 		if (size > 0) {
 			// Start a new overlapped read
 			ResetEvent(over.hEvent);
@@ -612,7 +626,7 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 	void *buf = 0;
 
 	uint32_t lastRead = GET_TICK();
-	while(pos <= size) {
+	while(pos <= size && !stop) {
 		if(size_left > 0) {
 			size_read = std::min(size_left, BUF_SIZE);
 			buf = mmap(0, size_read, PROT_READ, MAP_SHARED, fd, pos);
@@ -792,6 +806,24 @@ int HashManager::Hasher::run() {
 		}
 	}
 	return 0;
+}
+
+HashManager::HashPauser::HashPauser() {
+	HashManager::getInstance()->pauseHashing();
+}
+
+HashManager::HashPauser::~HashPauser() {
+	HashManager::getInstance()->resumeHashing();
+}
+
+void HashManager::pauseHashing() {
+	Lock l(cs);
+	hasher.pauseHashing();
+}
+
+void HashManager::resumeHashing() {
+	Lock l(cs);
+	hasher.resumeHashing();
 }
 
 } // namespace dcpp

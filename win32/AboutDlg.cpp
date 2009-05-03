@@ -44,7 +44,7 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 "krzysztof tyszecki, poison, mikejj, pur, bigmuscle, martin, jove, bart vullings, "
 "steven sheehy, tobias nygren, poy, dorian, stephan hohe, mafa_45, mikael eman, james ross, "
 "stanislav maslovski, david grundberg, pavel andreev, yakov suraev, kulmegil, smir, emtee, individ, "
-"pseudonym, crise. "
+"pseudonym, crise, ben. "
 "Keep it coming!";
 
 AboutDlg::AboutDlg(dwt::Widget* parent) :

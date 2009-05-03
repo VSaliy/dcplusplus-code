@@ -95,12 +95,20 @@ public:
 		store.save();
 	}
 
+	struct HashPauser {
+		HashPauser();
+		~HashPauser();
+	};
+
 private:
 	class Hasher : public Thread {
 	public:
-		Hasher() : stop(false), running(false), rebuild(false), currentSize(0) { }
+		Hasher() : stop(false), running(false), paused(0), rebuild(false), currentSize(0) { }
 
 		void hashFile(const string& fileName, int64_t size);
+
+		void pauseHashing();
+		void resumeHashing();
 
 		void stopHashing(const string& baseDir);
 		virtual int run();
@@ -121,12 +129,16 @@ private:
 
 		bool stop;
 		bool running;
+		unsigned paused;
 		bool rebuild;
 		string currentFile;
 		int64_t currentSize;
 	};
 
 	friend class Hasher;
+
+	void pauseHashing();
+	void resumeHashing();
 
 	class HashStore {
 	public:
