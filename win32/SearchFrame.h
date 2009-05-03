@@ -78,24 +78,29 @@ private:
 		void view();
 
 		struct Download {
-			Download(const tstring& aTarget) : tgt(aTarget) { }
-			void operator()(SearchInfo* si) const;
+			Download(const tstring& aTarget) : total(0), ignored(0), tgt(aTarget) { }
+			void operator()(SearchInfo* si);
+
+			unsigned total;
+
+			unsigned ignored;
+			string error;
 
 		protected:
 			const tstring& tgt;
 
-			void addFile(SearchInfo* si, const string& target) const;
-			void addDir(SearchInfo* si) const;
+			void addFile(SearchInfo* si, const string& target);
+			void addDir(SearchInfo* si, const string& target = Util::emptyString);
 		};
 
 		struct DownloadWhole : Download {
 			DownloadWhole(const tstring& aTarget) : Download(aTarget) { }
-			void operator()(SearchInfo* si) const;
+			void operator()(SearchInfo* si);
 		};
 
 		struct DownloadTarget : Download {
 			DownloadTarget(const tstring& aTarget) : Download(aTarget) { }
-			void operator()(SearchInfo* si) const;
+			void operator()(SearchInfo* si);
 		};
 
 		struct CheckTTH {
@@ -202,7 +207,6 @@ private:
 	void handleMergeClicked();
 	void handleShowUIClicked();
 	LRESULT handleHubItemChanged(WPARAM wParam, LPARAM lParam);
-	void handleDoubleClick();
 	bool handleKeyDown(int c);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	void handleDownload();
@@ -223,6 +227,8 @@ private:
 	void postClosing();
 	void initSecond();
 	bool eachSecond();
+
+	void treat(const SearchInfo::Download& dl);
 
 	void runUserCommand(const UserCommand& uc);
 	void runSearch();

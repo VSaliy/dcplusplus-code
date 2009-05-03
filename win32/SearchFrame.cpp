@@ -245,7 +245,7 @@ droppedResults(0)
 	results->setSmallImageList(WinUtil::fileImages);
 	WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
 
-	results->onDblClicked(std::tr1::bind(&SearchFrame::handleDoubleClick, this));
+	results->onDblClicked(std::tr1::bind(&SearchFrame::handleDownload, this));
 	results->onKeyDown(std::tr1::bind(&SearchFrame::handleKeyDown, this, _1));
 	results->onContextMenu(std::tr1::bind(&SearchFrame::handleContextMenu, this, _1));
 
@@ -329,7 +329,7 @@ void SearchFrame::SearchInfo::view() {
 	}
 }
 
-void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) const {
+void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) {
 	if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
 		addFile(si, Text::fromT(tgt + si->columns[COLUMN_FILENAME]));
 	} else {
@@ -337,11 +337,9 @@ void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) const {
 	}
 }
 
-void SearchFrame::SearchInfo::Download::addFile(SearchInfo* si, const string& target) const {
-	unsigned ignored = 0;
-	string error;
-
+void SearchFrame::SearchInfo::Download::addFile(SearchInfo* si, const string& target) {
 	for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
+		total++;
 		const SearchResultPtr& sr = *i;
 		try {
 			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
@@ -353,27 +351,25 @@ void SearchFrame::SearchInfo::Download::addFile(SearchInfo* si, const string& ta
 
 	if(WinUtil::isShift())
 		QueueManager::getInstance()->setPriority(target, QueueItem::HIGHEST);
-
-	if(ignored)
-		throw Exception(str(F_("%1% / %2% sources ignored: %3%") % ignored % si->srs.size() % error));
 }
 
-void SearchFrame::SearchInfo::Download::addDir(SearchInfo* si) const {
-	QueueManager::getInstance()->addDirectory(si->srs[0]->getFile(), si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
+void SearchFrame::SearchInfo::Download::addDir(SearchInfo* si, const string& target) {
+	total++;
+	// TODO Add all users...
+	QueueManager::getInstance()->addDirectory(target.empty() ? si->srs[0]->getFile() : target,
+		si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
 		WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
 }
 
-void SearchFrame::SearchInfo::DownloadWhole::operator()(SearchInfo* si) const {
+void SearchFrame::SearchInfo::DownloadWhole::operator()(SearchInfo* si) {
 	if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
-		// TODO Add all users...
-		QueueManager::getInstance()->addDirectory(Text::fromT(si->columns[COLUMN_PATH]), si->srs[0]->getUser(),
-			si->srs[0]->getHubURL(), Text::fromT(tgt), WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
+		addDir(si, Text::fromT(si->columns[COLUMN_PATH]));
 	} else {
 		addDir(si);
 	}
 }
 
-void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) const {
+void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) {
 	if(si->srs[0]->getType() == SearchResult::TYPE_FILE) {
 		addFile(si, Text::fromT(tgt));
 	} else {
@@ -548,14 +544,6 @@ LRESULT SearchFrame::handleHubItemChanged(WPARAM wParam, LPARAM lParam) {
 	return 0;
 }
 
-void SearchFrame::handleDoubleClick() {
-	try {
-		results->forEachSelectedT(SearchInfo::Download(Text::toT(SETTING(DOWNLOAD_DIRECTORY))));
-	} catch(const Exception& e) {
-		status->setText(STATUS_STATUS, Text::toT(e.getError()));
-	}
-}
-
 bool SearchFrame::handleKeyDown(int c) {
 	if(c == VK_DELETE) {
 		handleRemove();
@@ -578,24 +566,16 @@ bool SearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 }
 
 void SearchFrame::handleDownload() {
-	try {
-		results->forEachSelectedT(SearchInfo::Download(Text::toT(SETTING(DOWNLOAD_DIRECTORY))));
-	} catch(const Exception& e) {
-		status->setText(STATUS_STATUS, Text::toT(e.getError()));
-	}
+	treat(results->forEachSelectedT(SearchInfo::Download(Text::toT(SETTING(DOWNLOAD_DIRECTORY)))));
 }
 
 void SearchFrame::handleDownloadFavoriteDirs(unsigned index) {
 	StringPairList spl = FavoriteManager::getInstance()->getFavoriteDirs();
-	try {
-		if(index < spl.size()) {
-			results->forEachSelectedT(SearchInfo::Download(Text::toT(spl[index].first)));
-		} else {
-			dcassert((index - spl.size()) < targets.size());
-			results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[index - spl.size()])));
-		}
-	} catch(const Exception& e) {
-		status->setText(STATUS_STATUS, Text::toT(e.getError()));
+	if(index < spl.size()) {
+		treat(results->forEachSelectedT(SearchInfo::Download(Text::toT(spl[index].first))));
+	} else {
+		dcassert((index - spl.size()) < targets.size());
+		treat(results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[index - spl.size()]))));
 	}
 }
 
@@ -610,85 +590,53 @@ void SearchFrame::handleDownloadTo() {
 			tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY)) + si->columns[COLUMN_FILENAME];
 			if(WinUtil::browseSaveFile(createSaveDialog(), target)) {
 				WinUtil::addLastDir(Util::getFilePath(target));
-				try {
-					results->forEachSelectedT(SearchInfo::DownloadTarget(target));
-				} catch(const Exception& e) {
-					status->setText(STATUS_STATUS, Text::toT(e.getError()));
-				}
+				treat(results->forEachSelectedT(SearchInfo::DownloadTarget(target)));
 			}
 		} else {
 			tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
 			if(createFolderDialog().open(target)) {
 				WinUtil::addLastDir(target);
-				try {
-					results->forEachSelectedT(SearchInfo::Download(target));
-				} catch(const Exception& e) {
-					status->setText(STATUS_STATUS, Text::toT(e.getError()));
-				}
+				treat(results->forEachSelectedT(SearchInfo::Download(target)));
 			}
 		}
 	} else {
 		tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
 		if(createFolderDialog().open(target)) {
 			WinUtil::addLastDir(target);
-			try {
-				results->forEachSelectedT(SearchInfo::Download(target));
-			} catch(const Exception& e) {
-				status->setText(STATUS_STATUS, Text::toT(e.getError()));
-			}
+			treat(results->forEachSelectedT(SearchInfo::Download(target)));
 		}
 	}
 }
 
 void SearchFrame::handleDownloadTarget(unsigned index) {
-	try {
-		if(index < WinUtil::lastDirs.size()) {
-			results->forEachSelectedT(SearchInfo::Download(WinUtil::lastDirs[index]));
-		} else {
-			dcassert((index - WinUtil::lastDirs.size()) < targets.size());
-			results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[index - WinUtil::lastDirs.size()])));
-		}
-	} catch(const Exception& e) {
-		status->setText(STATUS_STATUS, Text::toT(e.getError()));
+	if(index < WinUtil::lastDirs.size()) {
+		treat(results->forEachSelectedT(SearchInfo::Download(WinUtil::lastDirs[index])));
+	} else {
+		dcassert((index - WinUtil::lastDirs.size()) < targets.size());
+		treat(results->forEachSelectedT(SearchInfo::DownloadTarget(Text::toT(targets[index - WinUtil::lastDirs.size()]))));
 	}
 }
 
 void SearchFrame::handleDownloadDir() {
-	try {
-		results->forEachSelectedT(SearchInfo::DownloadWhole(Text::toT(SETTING(DOWNLOAD_DIRECTORY))));
-	} catch(const Exception& e) {
-		status->setText(STATUS_STATUS, Text::toT(e.getError()));
-	}
+	treat(results->forEachSelectedT(SearchInfo::DownloadWhole(Text::toT(SETTING(DOWNLOAD_DIRECTORY)))));
 }
 
 void SearchFrame::handleDownloadWholeFavoriteDirs(unsigned index) {
 	StringPairList spl = FavoriteManager::getInstance()->getFavoriteDirs();
 	dcassert(index < spl.size());
-	try {
-		results->forEachSelectedT(SearchInfo::DownloadWhole(Text::toT(spl[index].first)));
-	} catch(const Exception& e) {
-		status->setText(STATUS_STATUS, Text::toT(e.getError()));
-	}
+	treat(results->forEachSelectedT(SearchInfo::DownloadWhole(Text::toT(spl[index].first))));
 }
 
 void SearchFrame::handleDownloadWholeTarget(unsigned index) {
 	dcassert(index < WinUtil::lastDirs.size());
-	try {
-		results->forEachSelectedT(SearchInfo::DownloadWhole(WinUtil::lastDirs[index]));
-	} catch(const Exception& e) {
-		status->setText(STATUS_STATUS, Text::toT(e.getError()));
-	}
+	treat(results->forEachSelectedT(SearchInfo::DownloadWhole(WinUtil::lastDirs[index])));
 }
 
 void SearchFrame::handleDownloadDirTo() {
 	tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
 	if(createFolderDialog().open(target)) {
 		WinUtil::addLastDir(target);
-		try {
-			results->forEachSelectedT(SearchInfo::DownloadWhole(target));
-		} catch(const Exception& e) {
-			status->setText(STATUS_STATUS, Text::toT(e.getError()));
-		}
+		treat(results->forEachSelectedT(SearchInfo::DownloadWhole(target)));
 	}
 }
 
@@ -1028,6 +976,14 @@ bool SearchFrame::eachSecond() {
 	setText(T_("Search - Ready to search..."));
 
 	return false;
+}
+
+void SearchFrame::treat(const SearchInfo::Download& dl) {
+	if(dl.total) {
+		status->setText(STATUS_STATUS,
+			dl.ignored ? str(TF_("%1% / %2% sources ignored: %3%") % dl.ignored % dl.total % Text::toT(dl.error))
+			: str(TF_("%1% sources added") % dl.total));
+	}
 }
 
 void SearchFrame::runUserCommand(const UserCommand& uc) {
