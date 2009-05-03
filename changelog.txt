@@ -16,6 +16,8 @@
 * [L#362598] Fix share crash (thanks emtee)
 * [L#367186] Fix crash in waiting users (poy)
 * [L#261185] Use standard user menus in PMs, waiting users, file lists (poy)
+* [L#210727] Solve file list refresh & hashing sync issues (thanks ben)
+* [L#264342] Stop hashing on shutdown (thanks steven sheehy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
