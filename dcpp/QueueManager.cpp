@@ -507,8 +507,6 @@ QueueManager::~QueueManager() throw() {
 	TimerManager::getInstance()->removeListener(this);
 	ClientManager::getInstance()->removeListener(this);
 
-	saveQueue();
-
 	if(!BOOLSETTING(KEEP_LISTS)) {
 		string path = Util::getListPath();
 
@@ -1381,13 +1379,14 @@ void QueueManager::setPriority(const string& aTarget, QueueItem::Priority p) thr
 	}
 }
 
-void QueueManager::saveQueue() throw() {
-	if(!dirty)
+void QueueManager::saveQueue(bool force) throw() {
+	if(!dirty && !force)
 		return;
 
-	Lock l(cs);
+	std::vector<CID> cids;
 
 	try {
+		Lock l(cs);
 
 		File ff(getQueueFile() + ".tmp", File::WRITE, File::CREATE | File::TRUNCATE);
 		BufferedOutputStream<false> f(&ff);
@@ -1427,6 +1426,8 @@ void QueueManager::saveQueue() throw() {
 					f.write(LIT("\t\t<Source CID=\""));
 					f.write(j->getUser()->getCID().toBase32());
 					f.write(LIT("\"/>\r\n"));
+
+					cids.push_back(j->getUser()->getCID());
 				}
 
 				f.write(LIT("\t</Download>\r\n"));
@@ -1445,6 +1446,9 @@ void QueueManager::saveQueue() throw() {
 	}
 	// Put this here to avoid very many saves tries when disk is full...
 	lastSave = GET_TICK();
+
+	ClientManager* cm = ClientManager::getInstance();
+	std::for_each(cids.begin(), cids.end(), std::tr1::bind(&ClientManager::saveUser, cm, std::tr1::placeholders::_1));
 }
 
 class QueueLoader : public SimpleXMLReader::CallBack {

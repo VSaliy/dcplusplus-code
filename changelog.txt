@@ -20,6 +20,7 @@
 * [L#264342] Stop hashing on shutdown (thanks steven sheehy)
 * [L#350994] Fix ignored downloads from search (poy)
 * [L#362878] Compilation fix for Mac OS X (thanks ximin luo)
+* Save user nicks (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)

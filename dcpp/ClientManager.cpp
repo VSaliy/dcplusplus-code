@@ -95,19 +95,22 @@ StringList ClientManager::getHubNames(const CID& cid) const {
 StringList ClientManager::getNicks(const CID& cid) const {
 	Lock l(cs);
 	StringSet ret;
+
 	OnlinePairC op = onlineUsers.equal_range(cid);
 	for(OnlineIterC i = op.first; i != op.second; ++i) {
 		ret.insert(i->second->getIdentity().getNick());
 	}
+
 	if(ret.empty()) {
+		// offline
 		NickMap::const_iterator i = nicks.find(cid);
 		if(i != nicks.end()) {
-			ret.insert(i->second);
+			ret.insert(i->second.first);
 		} else {
-			// Offline perhaps?
 			ret.insert('{' + cid.toBase32() + '}');
 		}
 	}
+
 	return StringList(ret.begin(), ret.end());
 }
 
@@ -500,14 +503,73 @@ CID ClientManager::getMyCID() {
 }
 
 void ClientManager::updateNick(const OnlineUser& user) throw() {
-	Lock l(cs);
-	if(nicks.find(user.getUser()->getCID()) != nicks.end()) {
-		return;
-	}
-
 	if(!user.getIdentity().getNick().empty()) {
-		nicks.insert(std::make_pair(user.getUser()->getCID(), user.getIdentity().getNick()));
+		Lock l(cs);
+		NickMap::iterator i = nicks.find(user.getUser()->getCID());
+		if(i == nicks.end()) {
+			nicks[user.getUser()->getCID()] = std::make_pair(user.getIdentity().getNick(), false);
+		} else {
+			i->second.first = user.getIdentity().getNick();
+		}
 	}
+}
+
+void ClientManager::loadUsers() {
+	try {
+		SimpleXML xml;
+		xml.fromXML(File(getUsersFile(), File::READ, File::OPEN).read());
+
+		if(xml.findChild("Users")) {
+			xml.stepIn();
+
+			{
+				Lock l(cs);
+				while(xml.findChild("User")) {
+					nicks[CID(xml.getChildAttrib("CID"))] = std::make_pair(xml.getChildAttrib("Nick"), false);
+				}
+			}
+
+			xml.stepOut();
+		}
+	} catch(const Exception&) { }
+}
+
+void ClientManager::saveUsers() const {
+	try {
+		SimpleXML xml;
+		xml.addTag("Users");
+		xml.stepIn();
+
+		{
+			Lock l(cs);
+			for(NickMap::const_iterator i = nicks.begin(), iend = nicks.end(); i != iend; ++i) {
+				if(i->second.second) {
+					xml.addTag("User");
+					xml.addChildAttrib("CID", i->first.toBase32());
+					xml.addChildAttrib("Nick", i->second.first);
+				}
+			}
+		}
+
+		xml.stepOut();
+
+		const string fName = getUsersFile();
+		File out(fName + ".tmp", File::WRITE, File::CREATE | File::TRUNCATE);
+		BufferedOutputStream<false> f(&out);
+		f.write(SimpleXML::utf8Header);
+		xml.toXML(&f);
+		f.flush();
+		out.close();
+		File::deleteFile(fName);
+		File::renameFile(fName + ".tmp", fName);
+	} catch(const Exception&) { }
+}
+
+void ClientManager::saveUser(const CID& cid) {
+	Lock l(cs);
+	NickMap::iterator i = nicks.find(cid);
+	if(i != nicks.end())
+		i->second.second = true;
 }
 
 void ClientManager::on(Connected, Client* c) throw() {

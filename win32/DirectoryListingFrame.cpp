@@ -105,6 +105,8 @@ void DirectoryListingFrame::closeAll(){
 }
 
 const StringMap DirectoryListingFrame::getWindowParams() const {
+	ClientManager::getInstance()->saveUser(dl->getUser()->getCID());
+
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
 	ret["Path"] = dl->getUser() == ClientManager::getInstance()->getMe() ? "OwnList" : path;
