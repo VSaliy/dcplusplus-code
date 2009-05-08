@@ -82,6 +82,8 @@ void PrivateFrame::closeAllOffline() {
 }
 
 const StringMap PrivateFrame::getWindowParams() const {
+	ClientManager::getInstance()->saveUser(replyTo.getUser()->getCID());
+
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
 	ret["CID"] = replyTo.getUser()->getCID().toBase32();

@@ -97,6 +97,10 @@ public:
 	CID getMyCID();
 	const CID& getMyPID();
 
+	void loadUsers();
+	void saveUsers() const;
+	void saveUser(const CID& cid);
+
 private:
 	typedef unordered_map<string, UserPtr> LegacyMap;
 	typedef LegacyMap::iterator LegacyIter;
@@ -104,7 +108,8 @@ private:
 	typedef unordered_map<CID, UserPtr> UserMap;
 	typedef UserMap::iterator UserIter;
 
-	typedef unordered_map<CID, std::string> NickMap;
+	typedef std::pair<std::string, bool> NickMapEntry; // the boolean being true means "save this".
+	typedef unordered_map<CID, NickMapEntry> NickMap;
 
 	typedef unordered_multimap<CID, OnlineUser*> OnlineMap;
 	typedef OnlineMap::iterator OnlineIter;
@@ -136,6 +141,8 @@ private:
 	}
 
 	void updateNick(const OnlineUser& user) throw();
+
+	string getUsersFile() const { return Util::getPath(Util::PATH_USER_LOCAL) + "Users.xml"; }
 
 	// ClientListener
 	virtual void on(Connected, Client* c) throw();

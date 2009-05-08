@@ -116,7 +116,7 @@ public:
 	int countOnlineSources(const string& aTarget);
 
 	void loadQueue() throw();
-	void saveQueue() throw();
+	void saveQueue(bool force = false) throw();
 
 	void noDeleteFileList(const string& path);
 
