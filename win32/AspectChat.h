@@ -60,6 +60,8 @@ protected:
 	virtual ~AspectChat() { }
 
 	tstring static rtfEscapeFormatter(const tstring_range& match) {
+		if(match.empty())
+			return Util::emptyStringT;
 		tstring s(1, *match.begin());
 		if (s == _T("\r")) return _T("");
 		if (s == _T("\n")) return _T("\\line\n");
