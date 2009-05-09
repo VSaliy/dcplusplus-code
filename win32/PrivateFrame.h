@@ -84,6 +84,7 @@ private:
 
 	void layout();
 	bool preClosing();
+	void postClosing();
 
 	string getLogPath() const;
 	void openLog();
