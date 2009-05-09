@@ -19,7 +19,9 @@
 #include "stdafx.h"
 
 #include "PrivateFrame.h"
+
 #include "HoldRedraw.h"
+#include "MainWindow.h"
 #include "resource.h"
 
 #include <dcpp/ClientManager.h>
@@ -82,8 +84,6 @@ void PrivateFrame::closeAllOffline() {
 }
 
 const StringMap PrivateFrame::getWindowParams() const {
-	ClientManager::getInstance()->saveUser(replyTo.getUser()->getCID());
-
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
 	ret["CID"] = replyTo.getUser()->getCID().toBase32();
@@ -178,6 +178,12 @@ void PrivateFrame::addStatus(const tstring& aLine, bool log) {
 bool PrivateFrame::preClosing() {
 	ClientManager::getInstance()->removeListener(this);
 	return true;
+}
+
+void PrivateFrame::postClosing() {
+	if(WinUtil::mainWindow->closing()) {
+		ClientManager::getInstance()->saveUser(replyTo.getUser()->getCID());
+	}
 }
 
 string PrivateFrame::getLogPath() const {

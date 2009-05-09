@@ -105,8 +105,6 @@ void DirectoryListingFrame::closeAll(){
 }
 
 const StringMap DirectoryListingFrame::getWindowParams() const {
-	ClientManager::getInstance()->saveUser(dl->getUser()->getCID());
-
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
 	ret["Path"] = dl->getUser() == ClientManager::getInstance()->getMe() ? "OwnList" : path;
@@ -295,8 +293,12 @@ void DirectoryListingFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 
-	if(WinUtil::mainWindow->closing() && !path.empty() && dl->getUser() != ClientManager::getInstance()->getMe())
-		QueueManager::getInstance()->noDeleteFileList(path);
+	if(WinUtil::mainWindow->closing()) {
+		if(!path.empty() && dl->getUser() != ClientManager::getInstance()->getMe())
+			QueueManager::getInstance()->noDeleteFileList(path);
+
+		ClientManager::getInstance()->saveUser(dl->getUser()->getCID());
+	}
 }
 
 void DirectoryListingFrame::handleFind() {
