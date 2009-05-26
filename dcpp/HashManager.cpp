@@ -50,7 +50,7 @@ TTHValue HashManager::getTTH(const string& aFileName, int64_t aSize) throw(HashE
 	const TTHValue* tth = store.getTTH(aFileName);
 	if (tth == NULL) {
 		hasher.hashFile(aFileName, aSize);
-		throw HashException(Util::emptyString);
+		throw HashException();
 	}
 	return *tth;
 }
