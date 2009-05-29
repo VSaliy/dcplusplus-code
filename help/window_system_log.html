@@ -26,7 +26,7 @@
 	<dt>Finished hashing: [path] ([speed])</dt>
 	<dd>Shown for each successfully hashed file including the full path and hashing speed. Speed value may won't be added for small files.</dd>
 	<dt>[Nick]: matched [x] files</dt>
-	<dd>This message is shown when someone's filelist has just matched to your share. [x] shows the number of found matches.</dd>
+	<dd>This message is shown when someone's filelist has just matched to your queue. [x] shows the number of found matches.</dd>
 	<dt>Duplicate file will not be shared: [path1] (Size: [size]) Dupe matched against: [path2]</dt>
 	<dd>This means that since you have <a href="settings_advanced.html#listdupes">Keep duplicate files in your file list</a>
 		setting disabled, a file ([path1]) beeing indexed and already shared (as [path2]) won't be added to your share again.</dd>
@@ -94,9 +94,12 @@
 	<dd>There were problems opening a downloaded filelist, its corrupted or its size is <a href="settings_expert.html#maxlistsize">bigger than the maximum size allowed to open</a>.</dd>
 	<dt>Unable to send file [path]: [error message]</dt>
 	<dd>There was a problem preparing file [path] upon an upload request by a peer.</dd>
+	
+	<!-- This can be reused when the message will go to the log again...
 	<dt>Someone is trying to use your client to spam [ip address], please urge hub owner to fix this</dt>
 	<dd>You are connected to an insecure DC hub where malicious people using your DC client to attack a web server. The owner the hub should
 	either upgrade the hubsoftware or set it up correctly to avoid this kind of attacks. As long as you are logged into this hub in its current state you help malicious people to block normal operation of victim servers; not to mention the extra strain the flood causes on <i>your</i> connection.</dd>
+	-->
 </dl>	
 
 </body>
