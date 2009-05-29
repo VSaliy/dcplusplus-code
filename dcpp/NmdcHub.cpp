@@ -912,7 +912,7 @@ void NmdcHub::clearFlooders(uint64_t aTick) {
 
 bool NmdcHub::isProtectedIP(const string& ip) {
 	if(find(protectedIPs.begin(), protectedIPs.end(), ip) != protectedIPs.end()) {
-		fire(ClientListener::StatusMessage(), this, "This hub is trying to use your client to spam " + ip + ", please urge hub owner to fix this");
+		fire(ClientListener::StatusMessage(), this, str(F_("This hub is trying to use your client to spam %1%, please urge hub owner to fix this") % ip));
 		return true;
 	}
 	return false;
