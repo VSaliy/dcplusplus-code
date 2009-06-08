@@ -21,6 +21,7 @@
 * [L#350994] Fix ignored downloads from search (poy)
 * [L#362878] Compilation fix for Mac OS X (thanks ximin luo)
 * Save user nicks (poy)
+* [L#384558] Don't share the temporary download directory (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
