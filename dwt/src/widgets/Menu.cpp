@@ -58,20 +58,14 @@ const COLORREF Menu::Colors::gray = ::GetSysColor(COLOR_GRAYTEXT);
 
 Menu::Colors::Colors() :
 background(::GetSysColor(COLOR_MENU)),
+highlightBackground(::GetSysColor(COLOR_HIGHLIGHT)),
+highlightText(::GetSysColor(COLOR_HIGHLIGHTTEXT)),
 titleText(::GetSysColor(COLOR_MENUTEXT))
 {
 	stripBar = ColorUtilities::darkenColor(background, 0.06);
 
-	if(LibraryLoader::onComCtl6()) {
-		menuBar = ::GetSysColor(COLOR_MENUBAR);
-		highlightBackground = ::GetSysColor(COLOR_MENUHILIGHT);
-		highlightText = text;
-	} else {
-		// Older Windows don't support COLOR_MENUBAR and friends.
-		menuBar = stripBar;
-		highlightBackground = ::GetSysColor(COLOR_HIGHLIGHT);
-		highlightText = ::GetSysColor(COLOR_HIGHLIGHTTEXT);
-	}
+	// Older Windows don't support COLOR_MENUBAR.
+	menuBar = LibraryLoader::onComCtl6() ? ::GetSysColor(COLOR_MENUBAR) : stripBar;
 }
 
 Menu::Seed::Seed(bool ownerDrawn_,
