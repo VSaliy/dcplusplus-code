@@ -41,7 +41,6 @@
 
 namespace dwt {
 
-bool Table::ComCtl6 = false;
 BitmapPtr Table::upArrow = 0;
 BitmapPtr Table::downArrow = 0;
 
@@ -50,7 +49,6 @@ Table::Seed::Seed() :
 	font(new Font(DefaultGuiFont)),
 	lvStyle(0)
 {
-	ComCtl6 = (LibraryLoader::getCommonControlsVersion() >= PACK_COMCTL_VERSION(6,00));
 }
 
 void Table::create( const Seed & cs )
@@ -99,7 +97,7 @@ void Table::setSort(int aColumn, SortType aType, bool aAscending) {
 }
 
 void Table::updateArrow() {
-	if(ComCtl6) {
+	if(LibraryLoader::onComCtl6()) {
 		int flag = isAscending() ? HDF_SORTUP : HDF_SORTDOWN;
 		HWND header = ListView_GetHeader(this->handle());
 		int count = Header_GetItemCount(header);
@@ -442,7 +440,7 @@ int Table::xoffFromColumn( int column, int & logicalColumn )
 }
 
 void Table::createArrows() {
-	if(ComCtl6 || upArrow || downArrow)
+	if(LibraryLoader::onComCtl6() || upArrow || downArrow)
 		return;
 
 	const Point size(11, 6);

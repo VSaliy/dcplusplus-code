@@ -45,45 +45,6 @@
 
 namespace dwt {
 
-/// Struct for coloring different areas of Menu
-/** Contains the different color settings of the Menu <br>
-* Default values to constructor makes menu look roughly like MSVC++7.1 menus
-*/
-struct MenuColorInfo
-{
-	/// Menu color
-	COLORREF colorMenu;
-
-	/// Strip bar color
-	COLORREF colorStrip;
-
-	/// Highlighted menu item color
-	COLORREF colorHighlight;
-
-	/// Text of highlighted menu item color
-	COLORREF colorHighlightText;
-
-	/// Title text color
-	COLORREF colorTitleText;
-
-	/// Constructs MenuColorInfo objects
-	/** If all the default arguments are used it will construct an object making
-	* menus look roughly like they do in MSVC++ 7.1 <br>
-	* Pass your own arguments to construct other color effects
-	*/
-	MenuColorInfo( COLORREF menuColor = ColorUtilities::darkenColor( ::GetSysColor( COLOR_WINDOW ), 0.02 ),
-		COLORREF stripColor = ColorUtilities::darkenColor( ::GetSysColor( COLOR_3DFACE ), 0.02 ),
-		COLORREF highlightColor = ::GetSysColor( COLOR_HIGHLIGHT ),
-		COLORREF highlightTextColor = ::GetSysColor( COLOR_HIGHLIGHTTEXT ),
-		COLORREF titleTextColor = ::GetSysColor( COLOR_MENUTEXT ) )
-		: colorMenu( menuColor ),
-		colorStrip( stripColor ),
-		colorHighlight( highlightColor ),
-		colorHighlightText( highlightTextColor ),
-		colorTitleText( titleTextColor )
-	{}
-};
-
 /// Menu class
 /** \ingroup WidgetControls
 * \WidgetUsageInfo
@@ -121,6 +82,19 @@ private:
 	typedef PaintingDispatcherBase<LPDRAWITEMSTRUCT> DrawItemDispatcher;
 	typedef PaintingDispatcherBase<LPMEASUREITEMSTRUCT> MeasureItemDispatcher;
 
+	/// Global colors, can be changed through the seed
+	struct Colors {
+		Colors();
+		static const COLORREF text;
+		static const COLORREF gray;
+		COLORREF background;
+		COLORREF menuBar;
+		COLORREF stripBar;
+		COLORREF highlightBackground;
+		COLORREF highlightText;
+		COLORREF titleText;
+	} colors;
+
 public:
 	/// Type of object
 	typedef Menu ThisType;
@@ -132,12 +106,12 @@ public:
 		typedef ThisType WidgetType;
 
 		Seed(bool ownerDrawn_ = true,
-			const MenuColorInfo& colorInfo_ = MenuColorInfo(),
+			const Colors& colors_ = Colors(),
 			const Point& iconSize_ = Point(16, 16),
 			FontPtr font_ = 0);
 		bool popup;
 		bool ownerDrawn;
-		MenuColorInfo colorInfo;
+		Colors colors;
 		Point iconSize;
 		FontPtr font;
 	};
@@ -185,7 +159,7 @@ public:
 	*/
 	ObjectType appendPopup(const Seed& cs, const tstring& text, const IconPtr& icon = IconPtr());
 	ObjectType appendPopup(const tstring& text, const IconPtr& icon = IconPtr()) {
-		return appendPopup(Seed(ownerDrawn, colorInfo, iconSize, font), text, icon);
+		return appendPopup(Seed(ownerDrawn, colors, iconSize, font), text, icon);
 	}
 
 	/// Returns the "System Menu"
@@ -385,7 +359,7 @@ protected:
 			index(index_),
 			isDefault(false),
 			isTitle(isTitle_),
-			textColor(::GetSysColor(COLOR_MENUTEXT)),
+			textColor(Colors::text),
 			icon(icon_)
 		{}
 
@@ -411,9 +385,6 @@ private:
 	Widget* itsParent;
 
 	bool ownerDrawn;
-
-	// Contains information about menu colors
-	MenuColorInfo colorInfo;
 
 	Point iconSize;
 
