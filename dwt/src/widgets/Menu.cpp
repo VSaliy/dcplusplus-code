@@ -40,6 +40,7 @@
 #include <dwt/resources/Brush.h>
 #include <dwt/resources/Pen.h>
 #include <dwt/DWTException.h>
+#include <dwt/LibraryLoader.h>
 
 #include <algorithm>
 #include <boost/scoped_array.hpp>
@@ -52,13 +53,34 @@ const int Menu::textIconGap = 8;
 const int Menu::textBorderGap = 4;
 const int Menu::separatorHeight = 8;
 
+const COLORREF Menu::Colors::text = ::GetSysColor(COLOR_MENUTEXT);
+const COLORREF Menu::Colors::gray = ::GetSysColor(COLOR_GRAYTEXT);
+
+Menu::Colors::Colors() :
+background(::GetSysColor(COLOR_MENU)),
+titleText(::GetSysColor(COLOR_MENUTEXT))
+{
+	stripBar = ColorUtilities::darkenColor(background, 0.06);
+
+	if(LibraryLoader::onComCtl6()) {
+		menuBar = ::GetSysColor(COLOR_MENUBAR);
+		highlightBackground = ::GetSysColor(COLOR_MENUHILIGHT);
+		highlightText = text;
+	} else {
+		// Older Windows don't support COLOR_MENUBAR and friends.
+		menuBar = stripBar;
+		highlightBackground = ::GetSysColor(COLOR_HIGHLIGHT);
+		highlightText = ::GetSysColor(COLOR_HIGHLIGHTTEXT);
+	}
+}
+
 Menu::Seed::Seed(bool ownerDrawn_,
-				 const MenuColorInfo& colorInfo_,
+				 const Colors& colors_,
 				 const Point& iconSize_,
 				 FontPtr font_) :
 popup(true),
 ownerDrawn(ownerDrawn_),
-colorInfo(colorInfo_),
+colors(colors_),
 iconSize(iconSize_),
 font(font_)
 {
@@ -76,7 +98,7 @@ void Menu::createHelper(const Seed& cs) {
 	ownerDrawn = cs.ownerDrawn;
 
 	if(ownerDrawn) {
-		colorInfo = cs.colorInfo;
+		colors = cs.colors;
 		iconSize = cs.iconSize;
 		if(cs.font)
 			font = cs.font;
@@ -118,7 +140,7 @@ void Menu::attach(HMENU hMenu, const Seed& cs) {
 	itsHandle = hMenu;
 
 	if(ownerDrawn) {
-		int defaultItem = ::GetMenuDefaultItem(itsHandle, TRUE, GMDI_USEDISABLED);
+		unsigned defaultItem = ::GetMenuDefaultItem(itsHandle, TRUE, GMDI_USEDISABLED);
 
 		// update all current items to be owner-drawn
 		const unsigned count = getCount();
@@ -397,7 +419,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			// draw sidebar with menu title
 
 			// select title color
-			COLORREF oldColor = canvas.setTextColor( colorInfo.colorTitleText );
+			COLORREF oldColor = canvas.setTextColor( colors.titleText );
 
 			// set background mode to transparent
 			bool oldMode = canvas.setBkMode( true );
@@ -410,11 +432,8 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			// set title rectangle
 			Rectangle textRectangle( 0, 0, sidebarWidth, rect.bottom - rect.top );
 
-			{
-				// draw background
-				Brush brush(colorInfo.colorStrip);
-				canvas.fill(textRectangle, brush);
-			}
+			// draw background
+			canvas.fill(textRectangle, Brush(colors.stripBar));
 
 			// draw title
 			textRectangle.pos.y += 10;
@@ -428,21 +447,18 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 	bool highlight = (isSelected || isHighlighted) && !isDisabled;
 
-	{
-		// set item background
-		Brush brush(highlight ? colorInfo.colorHighlight : (wrapper->isTitle || isMenuBar) ? colorInfo.colorStrip : colorInfo.colorMenu);
-		canvas.fill(itemRectangle, brush);
-	}
+	// set item background
+	canvas.fill(itemRectangle, Brush(
+		highlight ? colors.highlightBackground :
+		isMenuBar ? colors.menuBar :
+		wrapper->isTitle ? colors.stripBar :
+		colors.background));
 
-	if(!highlight && !isMenuBar && !wrapper->isTitle) // strip bar (on the left, where icons go)
-	{
-		// create rectangle for strip bar
-		Rectangle stripRectangle ( itemRectangle );
+	if(!highlight && !isMenuBar && !wrapper->isTitle) {
+		// paint the strip bar (on the left, where icons go)
+		Rectangle stripRectangle(itemRectangle);
 		stripRectangle.size.x = stripWidth;
-
-		// draw strip bar
-		Brush brush(colorInfo.colorStrip);
-		canvas.fill(stripRectangle, brush);
+		canvas.fill(stripRectangle, Brush(colors.stripBar));
 	}
 
 	if ( !isMenuBar && info.fType & MFT_SEPARATOR ) // draw separator
@@ -455,7 +471,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 		rectangle.pos.y += rectangle.height() / 2 - 1;
 
 		// select color
-		Canvas::Selector select(canvas, *PenPtr(new Pen(::GetSysColor( COLOR_GRAYTEXT ))));
+		Canvas::Selector select(canvas, *PenPtr(new Pen(Colors::gray)));
 
 		// draw separator
 		canvas.moveTo( rectangle.left(), rectangle.top() );
@@ -487,9 +503,9 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 			// select item text color
 			canvas.setTextColor(
-				isGrayed ? ::GetSysColor(COLOR_GRAYTEXT) :
-				wrapper->isTitle ? colorInfo.colorTitleText :
-				highlight ? colorInfo.colorHighlightText :
+				isGrayed ? Colors::gray :
+				wrapper->isTitle ? colors.titleText :
+				highlight ? colors.highlightText :
 				wrapper->textColor);
 
 			// Select item font
@@ -543,9 +559,8 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 		} else if(isChecked) {
 			// the item has no icon set but it is checked; draw the check mark or radio bullet
 
-			// prepare background
-			Brush brush(highlight ? colorInfo.colorHighlight : colorInfo.colorStrip);
-			canvas.fill(iconRectangle, brush);
+			// background color
+			canvas.fill(iconRectangle, Brush(highlight ? colors.highlightBackground : colors.stripBar));
 
 			// create memory DC and set bitmap on it
 			HDC memoryDC = ::CreateCompatibleDC( canvas.handle() );
@@ -567,7 +582,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 		if(isChecked) {
 			// draw surrounding rectangle for checked items
-			Canvas::Selector select(canvas, *PenPtr(new Pen(colorInfo.colorHighlight)));
+			Canvas::Selector select(canvas, *PenPtr(new Pen(colors.highlightBackground))); /// @todo is this the right color?
 			canvas.line( iconRectangle );
 		}
 	}

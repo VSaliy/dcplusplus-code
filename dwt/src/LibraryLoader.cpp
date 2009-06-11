@@ -99,4 +99,8 @@ DWORD LibraryLoader::getCommonControlsVersion() {
 	return version;
 }
 
+bool LibraryLoader::onComCtl6() {
+	return getCommonControlsVersion() >= PACK_COMCTL_VERSION(6, 00);
+}
+
 }

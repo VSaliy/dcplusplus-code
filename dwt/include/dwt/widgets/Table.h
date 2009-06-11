@@ -499,7 +499,6 @@ private:
 	bool ascending;
 	SortFunction fun;
 
-	static bool ComCtl6; // Using Common Controls version >= 6.00
 	static BitmapPtr upArrow;
 	static BitmapPtr downArrow;
 
