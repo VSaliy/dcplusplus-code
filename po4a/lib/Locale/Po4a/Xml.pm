@@ -205,11 +205,9 @@ sub pushline {
 		} else {
 			# TODO: It will be hard to identify the location.
 			#       => find a way to retrieve the reference.
-			die wrap_mod("po4a::xml", dgettext("po4a", "'po4a-id=%d' in the translation does not exist in the original string (or 'po4a-id=%d' used twice in the translation)."), $id, $id);
+			die wrap_mod("po4a::xml", dgettext("po4a", "'po4a-id=%d' in the translation does not exist in the original string (or 'po4a-id=%d' used twice in the translation). Translation: %s"), $id, $id, $translation);
 		}
 	}
-# TODO: check that %folded_attributes is empty at some time
-# => in translate_paragraph?
 
 	if (   ($#save_holders > 0)
 	    or ($translation =~ m/<placeholder\s+type="[^"]+"\s+id="(\d+)"\s*\/>/s)) {
@@ -1630,6 +1628,12 @@ sub translate_paragraph {
 	# numbered.
 	{
 		my $holder = $save_holders[$#save_holders];
+
+		# Make sure all folded attributes have been un-folded.
+		if (%{$holder->{folded_attributes}}) {
+			die wrap_ref_mod($paragraph[1], "po4a::xml", dgettext("po4a", "po4a-id attributes mis-match (path: %s; string: %s)"), $self->get_path, $para);
+		}
+
 		my $translation = $holder->{'translation'};
 
 		# Count the number of <placeholder ...> in $translation
