@@ -79,8 +79,9 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	create();
 
 	{
-		TabView::Seed cs(0);
+		TabView::Seed cs = WinUtil::Seeds::tabs;
 		cs.location = getBounds();
+		cs.maxLength = 0;
 		tabs = addChild(cs);
 		tabs->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 	}

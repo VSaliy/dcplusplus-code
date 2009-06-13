@@ -160,13 +160,9 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 		users->onContextMenu(std::tr1::bind(&HubFrame::handleUsersContextMenu, this, _1));
 	}
 
-	{
-		CheckBox::Seed cs(_T("+/-"));
-		cs.style &= ~WS_TABSTOP;
-		showUsers = addChild(cs);
-		showUsers->setHelpId(IDH_HUB_SHOW_USERS);
-		showUsers->setChecked(BOOLSETTING(GET_USER_INFO));
-	}
+	showUsers = addChild(WinUtil::Seeds::splitCheckBox);
+	showUsers->setHelpId(IDH_HUB_SHOW_USERS);
+	showUsers->setChecked(BOOLSETTING(GET_USER_INFO));
 
 	initStatus();
 	status->setSize(STATUS_SHOW_USERS, showUsers->getPreferedSize().x);

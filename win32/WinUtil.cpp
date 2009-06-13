@@ -69,11 +69,14 @@ HWND WinUtil::helpPopup = 0;
 const Button::Seed WinUtil::Seeds::button;
 const ComboBox::Seed WinUtil::Seeds::comboBoxStatic;
 const ComboBox::Seed WinUtil::Seeds::comboBoxEdit;
+const CheckBox::Seed WinUtil::Seeds::checkBox;
+const CheckBox::Seed WinUtil::Seeds::splitCheckBox;
 const GroupBox::Seed WinUtil::Seeds::group;
 const Menu::Seed WinUtil::Seeds::menu;
 const Table::Seed WinUtil::Seeds::table;
 const TextBox::Seed WinUtil::Seeds::textBox;
 const RichTextBox::Seed WinUtil::Seeds::richTextBox;
+const TabView::Seed WinUtil::Seeds::tabs;
 const Tree::Seed WinUtil::Seeds::treeView;
 
 const ComboBox::Seed WinUtil::Seeds::Dialog::comboBox;
@@ -139,11 +142,14 @@ void WinUtil::init() {
 	Button::Seed& xbutton = const_cast<Button::Seed&>(Seeds::button);
 	ComboBox::Seed& xcomboBoxEdit = const_cast<ComboBox::Seed&>(Seeds::comboBoxEdit);
 	ComboBox::Seed& xcomboBoxStatic = const_cast<ComboBox::Seed&>(Seeds::comboBoxStatic);
+	CheckBox::Seed& xCheckBox = const_cast<CheckBox::Seed&>(Seeds::checkBox);
+	CheckBox::Seed& xSplitCheckBox = const_cast<CheckBox::Seed&>(Seeds::splitCheckBox);
 	GroupBox::Seed& xgroup = const_cast<GroupBox::Seed&>(Seeds::group);
 	Menu::Seed& xmenu = const_cast<Menu::Seed&>(Seeds::menu);
 	Table::Seed& xTable = const_cast<Table::Seed&>(Seeds::table);
 	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&>(Seeds::textBox);
 	RichTextBox::Seed& xRichTextBox = const_cast<RichTextBox::Seed&>(Seeds::richTextBox);
+	TabView::Seed& xTabs = const_cast<TabView::Seed&>(Seeds::tabs);
 	Tree::Seed& xtreeView =  const_cast<Tree::Seed&>(Seeds::treeView);
 	ComboBox::Seed& xdComboBox = const_cast<ComboBox::Seed&>(Seeds::Dialog::comboBox);
 	TextBox::Seed& xdTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::textBox);
@@ -157,6 +163,12 @@ void WinUtil::init() {
 	xcomboBoxStatic.font = font;
 
 	xcomboBoxEdit.font = font;
+
+	xCheckBox.font = font;
+
+	xSplitCheckBox = xCheckBox;
+	xSplitCheckBox.caption = _T("+/-");
+	xSplitCheckBox.style &= ~WS_TABSTOP;
 
 	xgroup.exStyle |= WS_EX_TRANSPARENT;
 	xgroup.font = font;
@@ -177,6 +189,8 @@ void WinUtil::init() {
 	xRichTextBox.font = font;
 	xRichTextBox.foregroundColor = textColor;
 	xRichTextBox.backgroundColor = bgColor;
+
+	xTabs.font = font;
 
 	xtreeView.style |= TVS_HASBUTTONS | TVS_LINESATROOT | TVS_HASLINES | TVS_SHOWSELALWAYS | TVS_DISABLEDRAGDROP;
 	xtreeView.exStyle = WS_EX_CLIENTEDGE;

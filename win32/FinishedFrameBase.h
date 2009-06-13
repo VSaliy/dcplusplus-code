@@ -68,8 +68,9 @@ protected:
 		bOnlyFull(false)
 	{
 		{
-			dwt::TabView::Seed cs(0);
+			dwt::TabView::Seed cs = WinUtil::Seeds::tabs;
 			cs.location = this->getBounds();
+			cs.maxLength = 0;
 			tabs = this->addChild(cs);
 		}
 
@@ -126,12 +127,11 @@ protected:
 		usersWindow->onSized(std::tr1::bind(&ThisType::fills, usersWindow, users));
 
 		if(!in_UL) {
-			tstring text = T_("Only show fully downloaded files");
-
 			bOnlyFull = BOOLSETTING(FINISHED_DL_ONLY_FULL);
 			{
-				dwt::CheckBox::Seed cs(text);
-				onlyFull = this->addChild(cs);
+				CheckBox::Seed seed = WinUtil::Seeds::checkBox;
+				seed.caption = T_("Only show fully downloaded files");
+				onlyFull = this->addChild(seed);
 				onlyFull->setHelpId(IDH_FINISHED_DL_ONLY_FULL);
 				onlyFull->setChecked(bOnlyFull);
 				onlyFull->onClicked(std::tr1::bind(&ThisType::handleOnlyFullClicked, this));
