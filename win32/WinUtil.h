@@ -73,11 +73,14 @@ public:
 		static const Button::Seed button;
 		static const ComboBox::Seed comboBoxStatic;
 		static const ComboBox::Seed comboBoxEdit;
+		static const CheckBox::Seed checkBox;
+		static const CheckBox::Seed splitCheckBox; // +/-
 		static const GroupBox::Seed group;
 		static const Menu::Seed menu;
 		static const Table::Seed table;
 		static const TextBox::Seed textBox;
 		static const RichTextBox::Seed richTextBox;
+		static const TabView::Seed tabs;
 		static const Tree::Seed treeView;
 
 		struct Dialog {

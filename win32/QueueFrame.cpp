@@ -90,14 +90,10 @@ fileLists(0)
 		files->onContextMenu(std::tr1::bind(&QueueFrame::handleFilesContextMenu, this, _1));
 	}
 
-	{
-		CheckBox::Seed cs(_T("+/-"));
-		cs.style &= ~WS_TABSTOP;
-		showTree = addChild(cs);
-		showTree->setHelpId(IDH_QUEUE_SHOW_TREE);
-		showTree->setChecked(BOOLSETTING(QUEUEFRAME_SHOW_TREE));
-		showTree->onClicked(std::tr1::bind(&QueueFrame::handleShowTreeClicked, this));
-	}
+	showTree = addChild(WinUtil::Seeds::splitCheckBox);
+	showTree->setHelpId(IDH_QUEUE_SHOW_TREE);
+	showTree->setChecked(BOOLSETTING(QUEUEFRAME_SHOW_TREE));
+	showTree->onClicked(std::tr1::bind(&QueueFrame::handleShowTreeClicked, this));
 
 	initStatus();
 	status->setSize(STATUS_SHOW_TREE, showTree->getPreferedSize().x);

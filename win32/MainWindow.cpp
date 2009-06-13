@@ -363,7 +363,10 @@ void MainWindow::initStatusBar() {
 
 void MainWindow::initTabs() {
 	dcdebug("initTabs\n");
-	tabs = addChild(dwt::TabView::Seed(SETTING(MAX_TAB_CHARS), BOOLSETTING(TOGGLE_ACTIVE_WINDOW)));
+	dwt::TabView::Seed seed = WinUtil::Seeds::tabs;
+	seed.maxLength = SETTING(MAX_TAB_CHARS);
+	seed.toggleActive = BOOLSETTING(TOGGLE_ACTIVE_WINDOW);
+	tabs = addChild(seed);
 	tabs->onTitleChanged(std::tr1::bind(&MainWindow::handleTabsTitleChanged, this, _1));
 	tabs->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 	paned->setFirst(tabs);

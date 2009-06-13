@@ -62,10 +62,14 @@ SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
 		searches->onContextMenu(std::tr1::bind(&SpyFrame::handleContextMenu, this, _1));
 	}
 
-	ignoreTTH = addChild(CheckBox::Seed(T_("Ignore TTH searches")));
-	ignoreTTH->setHelpId(IDH_SPY_IGNORE_TTH);
-	ignoreTTH->setChecked(bIgnoreTTH);
-	ignoreTTH->onClicked(std::tr1::bind(&SpyFrame::handleIgnoreTTHClicked, this));
+	{
+		CheckBox::Seed seed = WinUtil::Seeds::checkBox;
+		seed.caption = T_("Ignore TTH searches");
+		ignoreTTH = addChild(seed);
+		ignoreTTH->setHelpId(IDH_SPY_IGNORE_TTH);
+		ignoreTTH->setChecked(bIgnoreTTH);
+		ignoreTTH->onClicked(std::tr1::bind(&SpyFrame::handleIgnoreTTHClicked, this));
+	}
 
 	initStatus();
 	status->setSize(STATUS_IGNORE_TTH, ignoreTTH->getPreferedSize().x);

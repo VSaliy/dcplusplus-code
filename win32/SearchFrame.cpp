@@ -202,7 +202,9 @@ droppedResults(0)
 		gs.caption = T_("Search options");
 		cur = options->addChild(gs)->addChild(Grid::Seed(3, 1));
 
-		CheckBox::Seed cs(T_("Only users with free slots"));
+		CheckBox::Seed cs = WinUtil::Seeds::checkBox;
+		
+		cs.caption = T_("Only users with free slots");
 		slots = cur->addChild(cs);
 		slots->setHelpId(IDH_SEARCH_SLOTS);
 		slots->setChecked(onlyFree);
@@ -249,14 +251,9 @@ droppedResults(0)
 	results->onKeyDown(std::tr1::bind(&SearchFrame::handleKeyDown, this, _1));
 	results->onContextMenu(std::tr1::bind(&SearchFrame::handleContextMenu, this, _1));
 
-	{
-		CheckBox::Seed cs(_T("+/-"));
-		cs.style &= ~WS_TABSTOP;
-		showUI = addChild(cs);
-		showUI->setChecked(true);
-
-		showUI->onClicked(std::tr1::bind(&SearchFrame::handleShowUIClicked, this));
-	}
+	showUI = addChild(WinUtil::Seeds::splitCheckBox);
+	showUI->setChecked(true);
+	showUI->onClicked(std::tr1::bind(&SearchFrame::handleShowUIClicked, this));
 
 	initStatus();
 	status->setSize(STATUS_SHOW_UI, showUI->getPreferedSize().x);
