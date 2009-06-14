@@ -72,6 +72,9 @@ from gen_toc import gen_toc
 from set_hhp_locale import set_hhp_locale
 from util import nixify, get_lcid
 
+po4a_path = Dir('#/po4a').abspath + '/'
+env['po4a_cmd'] = lambda prog, options: 'perl -I"' + po4a_path + 'lib" "' + po4a_path + prog + '" -f xhtml -o "translated=p<placeholder> p<placeholder><a>" -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -o foldattributes -o "includessi=' + nixify(Dir('#/help').abspath) + '/" -M utf-8 -L utf-8 ' + options
+
 # define our CHM builder
 def gen_CHM(target, source, env):
 	# create the temporary build directory
@@ -96,8 +99,7 @@ def gen_CHM(target, source, env):
 		lcid = get_lcid(os.path.basename(po_node.path).replace('.po', ''))
 
 	# translate translatable source files, copy the others
-	po4a_path = Dir('#/po4a').abspath + '/'
-	cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-translate" -f xhtml -o foldattributes -o "includessi=' + nixify(Dir('#/help').abspath) + '/" -M utf-8 -L utf-8 -p "' + nixify(str(po_node)) + '" -k 0'
+	cmd = env['po4a_cmd']('po4a-translate', '-p "' + nixify(str(po_node)) + '" -k 0')
 	if not template:
 		cmd += ' -A utf-8 -a help/addendum.txt'
 	for node in source:
@@ -142,8 +144,7 @@ hasHHC = env.WhereIs('hhc') is not None
 
 # create the translation template
 def gen_pot(target, source, env):
-	po4a_path = Dir('#/po4a').abspath + '/'
-	cmd = 'perl -I"' + po4a_path + 'lib" "' + po4a_path + 'po4a-gettextize" -f xhtml -o "package-name=dcpp-help" -o "copyright-holder=Jacek Sieka" -o "msgid-bugs-address=dcplusplus-devel@lists.sourceforge.net" -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -o foldattributes -o "includessi=' + nixify(Dir('#/help').abspath) + '/" -M utf-8 -p "' + nixify(str(target[0])) + '"'
+	cmd = env['po4a_cmd']('po4a-gettextize', '-o "package-name=dcpp-help" -o "copyright-holder=Jacek Sieka" -o "msgid-bugs-address=dcplusplus-devel@lists.sourceforge.net" -p "' + nixify(str(target[0])) + '"')
 	for node in source:
 		cmd += ' -m "' + nixify(str(node)) + '"'
 	return env.Execute(cmd)
