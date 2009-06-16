@@ -27,7 +27,7 @@ as outgoing access on all ports for both TCP and UDP.</p>
       Leave the Outgoing Connection settings set to Direct Connection. Click OK.  
 	</li>	
 	<li>	
-      You may need to allow DC++ in your <a href="http://www.dslreports.com/faq/dc/3.1_Software_Firewalls" target="_blank" class="external">software firewall</a>. Consult its documentation on how to do this.
+      You may need to allow DC++ in your <a href="#firewall">built-in</a> or third party made <a href="http://www.dslreports.com/faq/dc/3.1_Software_Firewalls" target="_blank" class="external">software firewall</a>. Consult its documentation on how to do this.
 	</li>	
 	<li>	
       Test active mode by joining several hubs and doing a search for a common term. You should get results back. If not, then you are likely behind a router, have an internal IP address or haven't properly configured your <a href="http://www.dslreports.com/faq/dc/3.1_Software_Firewalls" target="_blank" class="external">software firewall</a>.
@@ -53,10 +53,10 @@ the computer with DC++. This is could be called Port mapping, port
 redirecting, port forwarding or something like that in your router configuration. 
 Find out how to do this with your router / <acronym title="Network Address Translation">NAT</acronym>
 in the user manual came with your device.</li>
-  <li>You need to forward two ports, with either the same port number
-or different ones. Select one or two numbers between 1024 -
-65535, they should mostly all be free. Make sure both UDP and TCP is
-being forwarded on the port(s) you chose. </li>
+  <li>You need to forward a port for both TCP and UDP protocols. You can use the same port number for both protocol type
+or different ones for each. Select one or two numbers between 1024 - 65535, they should mostly all be free. 
+Make sure you select the corresponding protocol types (TCP, UDP or Both) when you create port forwarding rule(s).
+</li>
   <li>The IP that you are forwarding to should be the <b>internal</b> IP address of your computer running DC++.
  It usually begins with <a href="non-routable.html">"192.168",
 "172.16." or "10.x."</a>. To see your internal IP address go to the command prompt and type:
@@ -81,7 +81,6 @@ IP page</a> or at <a
  to access your router's configuration page and how to set up port forwarding for DC++. 
  You can find some more how-to's for popular router models at the <a href="http://www.dslreports.com/faq/dc/3.2_Hardware_Firewalls___Routers" target="_blank" class="external">DSLReport FAQ page</a> as well.
 </p>
-
 <p>If active mode is working for a while, but <u>the next time when you use DC++</u>, you only get <i>Connection Timeout</i>s or no
 results when searching, your IP (either <b>external</b> or <b>internal</b>) is likely to have changed. Of course you can update your IP settings manually each time 
  they changed, but there are better solutions to avoid constant IP address updates:
@@ -100,7 +99,10 @@ If you find that your internal IP changes when you restart your computer then yo
 Another option to ensure you'll always have the same internal IP address is to set up static IP address for your computer. Here's a <a href="http://www.portforward.com/networking/staticip.htm" target="_blank" class="external">FAQ</a> how to do this for different versions of Windows.
     </li>
 </ul>    
-<h2>Windows XP?</h2>
+<p>Besides normal file transfers DC++ is capable of <a href="settings_certs.html">secure</a> (<a href="http://en.wikipedia.org/wiki/Secure_Sockets_Layer" target="_blank" class="external">SSL encrypted</a>) way of receiving and transmitting files on ADC hubs. If you plan (or required) to use this feature and you <i>use DC++ in active mode with manual port forwarding</i> you should forward one more port for SSL handshake. You must choose and forward another free port between 1024 - 65535 for TLS which is <b>different than the one(s) you use for TCP and UDP</b>. In the port forwarding rule you should set the protocol type to <b>TCP or Both</b> for the TLS port. Finally you must put the port number to the TLS field in <a href="settings_connection.html">Incoming connections settings</a> to be able to download from users who have secure transfers enabled.</p>
+	
+
+<h2 id="firewall">Windows XP?</h2>
 <ul>
   <li><u>Service Pack 1</u>:
 Its strongly recommended that you do not use the SP1 firewall and
