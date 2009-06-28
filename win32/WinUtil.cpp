@@ -281,7 +281,7 @@ _T("\r\n-- My client supports XML file lists, does yours?\r\n") LINE2
 
 #define MSGS 16
 
-tstring WinUtil::commands = _T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts");
+tstring WinUtil::commands = _T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts, /download, /upload");
 
 bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson) {
 	string::size_type i = cmd.find(' ');
@@ -373,6 +373,30 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("rebuild")) == 0) {
 		HashManager::getInstance()->rebuild();
+	} else if(Util::stricmp(cmd.c_str(), _T("upload")) == 0) {
+		SettingsManager::getInstance()->set(SettingsManager::MAX_UPLOAD_SPEED_CURRENT, Util::toInt(Text::fromT(param)));
+		ClientManager::getInstance()->infoUpdated();
+		if (Util::toInt(Text::fromT(param))) {
+			TCHAR* temp;
+			temp = new TCHAR[T_("Upload limit set to %d KiB/s").size() + 32];
+			_stprintf(temp, T_("Upload limit set to %d KiB/s").c_str(), Util::toInt(Text::fromT(param)));
+			status = temp;
+			delete[] temp;
+		} else {
+			status = T_("Upload limit disabled").c_str();
+		}
+	} else if(Util::stricmp(cmd.c_str(), _T("download")) == 0) {
+		SettingsManager::getInstance()->set(SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT, Util::toInt(Text::fromT(param)));
+		ClientManager::getInstance()->infoUpdated();
+		if (Util::toInt(Text::fromT(param))) {
+			TCHAR* temp;
+			temp = new TCHAR[T_("Download limit set to %d KiB/s").size() + 32];
+			_stprintf(temp, T_("Download limit set to %d KiB/s").c_str(), Util::toInt(Text::fromT(param)));
+			status = temp;
+			delete[] temp;
+		} else {
+			status = T_("Download limit disabled");
+		}
 	} else {
 		return false;
 	}

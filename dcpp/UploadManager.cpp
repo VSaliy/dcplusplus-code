@@ -35,6 +35,7 @@
 #include "UserConnection.h"
 
 #include <functional>
+#include <cmath>
 
 namespace dcpp {
 
@@ -193,6 +194,7 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 
 	uploads.push_back(u);
 
+	throttleSetup();
 	if(!aSource.isSet(UserConnection::FLAG_HASSLOT)) {
 		if(extraSlot) {
 			if(!aSource.isSet(UserConnection::FLAG_HASEXTRASLOT)) {
@@ -239,6 +241,7 @@ void UploadManager::removeUpload(Upload* aUpload) {
 	Lock l(cs);
 	dcassert(find(uploads.begin(), uploads.end(), aUpload) != uploads.end());
 	uploads.erase(remove(uploads.begin(), uploads.end(), aUpload), uploads.end());
+	throttleSetup();
 	delete aUpload;
 }
 
@@ -390,7 +393,7 @@ UserList UploadManager::getWaitingUsers() {
 	return u;
 }
 
-const UploadManager::FileSet& UploadManager::getWaitingUserFiles(const UserPtr& u) {
+const UploadManager::FileSet& UploadManager::getWaitingUserFiles(const UserPtr &u) {
 	Lock l(cs);
 	return waitingFiles.find(u)->second;
 }
@@ -490,6 +493,8 @@ void UploadManager::on(TimerManagerListener::Second, uint32_t) throw() {
 	Lock l(cs);
 	UploadList ticks;
 
+	throttleSetup();
+
 	for(UploadList::iterator i = uploads.begin(); i != uploads.end(); ++i) {
 		if((*i)->getPos() > 0) {
 			ticks.push_back(*i);
@@ -505,6 +510,57 @@ void UploadManager::on(ClientManagerListener::UserDisconnected, const UserPtr& a
 	if(!aUser->isOnline()) {
 		clearUserFiles(aUser);
 	}
+}
+
+size_t UploadManager::throttleGetSlice()  {
+	if (mThrottleEnable) {
+		int64_t left = mUploadLimit - getRunningAverage();
+		if (-left >= mUploadLimit)  {
+			return 4; // must send > 0 bytes or threadSendFile thinks the transfer is complete
+		} else if (left <= 0) {
+			return mByteSlice*std::pow(1+double(left)/mUploadLimit, 0.25);
+		} else {
+			return mByteSlice;
+		}
+	} else {
+		return (size_t)-1;
+	}
+}
+
+size_t UploadManager::throttleCycleTime() {
+	if (mThrottleEnable)
+		return mCycleTime;
+	return 0;
+}
+
+void UploadManager::throttleSetup() {
+	// called once a second, plus when uploads start
+	// from the constructor to BufferedSocket
+	size_t OUTBUFSIZE = SETTING(SOCKET_OUT_BUFFER);
+	size_t numUploads = getUploadCount();
+
+	const int target_freq_s = 30;
+
+	mUploadLimit = SETTING(MAX_UPLOAD_SPEED_CURRENT)*1024;
+	mThrottleEnable = BOOLSETTING(THROTTLE_ENABLE) && (mUploadLimit > 0) && (numUploads > 0);
+	/* Two domains:
+	   (1) Can hit target upload rate at target limiting period. From 0 to
+	   1s /limiting_period * OUTBUFSIZE >= target_rate.
+
+	   (2) Can't hit target upload rate at target limiting period. From here
+	   out, have no choice but to peg the bytes per cycle at max (i.e.
+	   OUTBUFSIZE) and hope that the latency & etc doesn't kill transfers.
+	*/
+	if (mThrottleEnable) {
+		mCycleTime = 1000 / target_freq_s;
+		if (mUploadLimit <= target_freq_s * OUTBUFSIZE) {
+			mByteSlice = mUploadLimit / (target_freq_s * numUploads);
+		} else {
+			mByteSlice = OUTBUFSIZE;
+		}
+	}
+
+	// dcdebug("UM mByteSlice: %d; mCycleTime: %d\n", mByteSlice, mCycleTime);
 }
 
 } // namespace dcpp

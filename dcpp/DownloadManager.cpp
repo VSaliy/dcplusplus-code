@@ -33,6 +33,7 @@
 #include "ZUtils.h"
 
 #include <limits>
+#include <cmath>
 
 // some strange mac definition
 #ifdef ff
@@ -45,6 +46,7 @@ static const string DOWNLOAD_AREA = "Downloads";
 
 DownloadManager::DownloadManager() {
 	TimerManager::getInstance()->addListener(this);
+	mDownloadLimit = 0;
 }
 
 DownloadManager::~DownloadManager() throw() {
@@ -67,6 +69,7 @@ void DownloadManager::on(TimerManagerListener::Second, uint32_t aTick) throw() {
 		Lock l(cs);
 
 		DownloadList tickList;
+		throttleSetup();
 		// Tick each ongoing download
 		for(DownloadList::iterator i = downloads.begin(); i != downloads.end(); ++i) {
 			if((*i)->getPos() > 0) {
@@ -351,6 +354,56 @@ void DownloadManager::endData(UserConnection* aSource) {
 
 	QueueManager::getInstance()->putDownload(d, true);
 	checkDownloads(aSource);
+}
+
+size_t DownloadManager::throttleGetSlice()  {
+	if (mThrottleEnable) {
+		int64_t left = mDownloadLimit - getRunningAverage();
+		if (-left >= mDownloadLimit)  {
+			return 0;
+		} else if (left <= 0) {
+			return mByteSlice*std::pow(1+double(left)/mDownloadLimit, 0.25);
+		} else {
+			return mByteSlice;
+		}
+	} else {
+		return (size_t)-1;
+	}
+}
+
+size_t DownloadManager::throttleCycleTime() {
+	if (mThrottleEnable)
+		return mCycleTime;
+	return 0;
+}
+
+void DownloadManager::throttleSetup() {
+	// called once a second, plus when a download starts
+	// from the constructor to BufferedSocket
+	// with 64k, a few people get winsock error 0x2747
+	size_t INBUFSIZE = SETTING(SOCKET_IN_BUFFER);
+	size_t numDownloads = getDownloadCount();
+
+	const int target_freq_s = 30;
+
+	mDownloadLimit = SETTING(MAX_DOWNLOAD_SPEED_CURRENT)*1024;
+	mThrottleEnable = BOOLSETTING(THROTTLE_ENABLE) && (mDownloadLimit > 0) && (numDownloads > 0);
+	/* Two domains:
+	   (1) Can hit target download rate at target limiting period. From 0 to
+	   1s /limiting_period * INBUFSIZE >= target_rate.
+
+	   (2) Can't hit target upload rate at target limiting period. From here
+	   out, have no choice but to peg the bytes per cycle at max (i.e.
+	   INBUFSIZE) and hope that the latency & etc doesn't kill transfers.
+	*/
+	if (mThrottleEnable) {
+		mCycleTime = 1000 / target_freq_s;
+		if (mDownloadLimit <= target_freq_s * INBUFSIZE) {
+			mByteSlice = mDownloadLimit / (target_freq_s * numDownloads);
+		} else {
+			mByteSlice = INBUFSIZE;
+		}
+	}
 }
 
 uint32_t DownloadManager::calcCrc32(const string& file) throw(FileException) {

@@ -82,6 +82,7 @@ const string SettingsManager::settingTags[] =
 	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "MaxTabChars", "FinishedDLOnlyFull",
 	"ConfirmExit", "ConfirmHubClosing", "ConfirmHubRemoval", "ConfirmUserRemoval", "ConfirmItemRemoval", "ConfirmADLSRemoval",
 	"SearchMerge",
+	"ThrottleEnabled", "MaxUploadSpeedCurrent", "MaxDownloadSpeedCurrent",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -283,6 +284,9 @@ SettingsManager::SettingsManager()
 	setDefault(TRANSFERS_PANED_POS, .7);
 	setDefault(QUEUE_PANED_POS, .3);
 	setDefault(SEARCH_PANED_POS, .2);
+	setDefault(THROTTLE_ENABLE, false);
+	setDefault(MAX_UPLOAD_SPEED_CURRENT, 0);
+	setDefault(MAX_DOWNLOAD_SPEED_CURRENT, 0);
 
 #ifdef _WIN32
 	setDefault(MAIN_WINDOW_STATE, SW_SHOWNORMAL);

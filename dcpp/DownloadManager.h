@@ -56,7 +56,17 @@ public:
 	}
 
 	bool startDownload(QueueItem::Priority prio);
+	
+	bool throttle() { return mThrottleEnable; }
+	size_t throttleGetSlice();
+	size_t throttleCycleTime();
+
 private:
+	void throttleSetup();
+	bool mThrottleEnable;
+	size_t 	   mDownloadLimit,
+		   mCycleTime,
+		   mByteSlice; // download throttling
 
 	CriticalSection cs;
 	DownloadList downloads;
