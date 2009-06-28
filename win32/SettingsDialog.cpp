@@ -38,6 +38,7 @@
 #include "Advanced3Page.h"
 #include "UCPage.h"
 #include "CertificatesPage.h"
+#include "BandwidthLimitPage.h"
 
 SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 WidgetFactory<dwt::ModalDialog>(parent),
@@ -110,6 +111,7 @@ bool SettingsDialog::initDialog() {
 		addPage(T_("Experts only"), upper, new Advanced3Page(upper), item);
 		addPage(T_("User Commands"), upper, new UCPage(upper), item);
 		addPage(T_("Security Certificates"), upper, new CertificatesPage(upper), item);
+		addPage(T_("Bandwidth Limiting"), upper, new BandwidthLimitPage(upper), item);
 	}
 
 	{

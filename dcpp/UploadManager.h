@@ -67,7 +67,18 @@ public:
 	GETSET(int, running, Running);
 	GETSET(int, extra, Extra);
 	GETSET(uint64_t, lastGrant, LastGrant);
+
+	// Upload throttling
+	bool throttle() { return mThrottleEnable; }
+	size_t throttleGetSlice();
+	size_t throttleCycleTime();
 private:
+	void throttleSetup();
+	bool mThrottleEnable;
+	size_t 	   mUploadLimit,
+		   mCycleTime,
+		   mByteSlice;
+
 	UploadList uploads;
 	CriticalSection cs;
 

@@ -668,6 +668,13 @@ void MainWindow::updateStatus() {
 	status->setText(STATUS_UP_TOTAL, str(TF_("U: %1%") % Text::toT(Util::formatBytes(up))));
 	status->setText(STATUS_DOWN_DIFF, str(TF_("D: %1%/s (%2%)") % Text::toT(Util::formatBytes((downdiff*1000)/tdiff)) % DownloadManager::getInstance()->getDownloadCount()));
 	status->setText(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % Text::toT(Util::formatBytes((updiff*1000)/tdiff)) % UploadManager::getInstance()->getUploadCount()));
+	if BOOLSETTING(THROTTLE_ENABLE) {
+		status->setText(STATUS_DOWN_LIMIT, str(TF_("D Lim: %1%/s") % Text::toT(Util::formatBytes(SETTING(MAX_DOWNLOAD_SPEED_CURRENT)*1024))));
+		status->setText(STATUS_UP_LIMIT, str(TF_("U Lim: %1%/s") % Text::toT(Util::formatBytes(SETTING(MAX_UPLOAD_SPEED_CURRENT)*1024))));
+	} else {
+		status->setText(STATUS_DOWN_LIMIT, _T("D Lim: -"));
+		status->setText(STATUS_UP_LIMIT, _T("U Lim: -"));
+	}
 	layoutSlotsSpin();
 }
 
