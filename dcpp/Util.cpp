@@ -151,9 +151,9 @@ void Util::initialize() {
 #else
 	paths[PATH_GLOBAL_CONFIG] = "/etc/";
 	const char* home_ = getenv("HOME");
-	string home = home_ ? Text::toUtf8(home) : "/tmp/";
+	string home = home_ ? Text::toUtf8(home_) : "/tmp/";
 
-	paths[PATH_USER_CONFIG] = home + ".dc++/";
+	paths[PATH_USER_CONFIG] = home + "/.dc++/";
 
 	loadBootConfig();
 
