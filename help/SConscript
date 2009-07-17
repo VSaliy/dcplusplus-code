@@ -6,15 +6,14 @@
 Import('dev')
 env = dev.env.Clone()
 
+from util import array_remove
+
 # static_HTMLs holds static (not dynamically generated) HTML sources
 static_HTMLs = Glob('*.html', strings = 1)
 static_HTMLs.sort()
-if 'changelog.html' in static_HTMLs:
-	static_HTMLs.remove('changelog.html')
-if 'compile.html' in static_HTMLs:
-	static_HTMLs.remove('compile.html')
-if 'fdl.html' in static_HTMLs:
-	static_HTMLs.remove('fdl.html')
+array_remove(static_HTMLs, 'changelog.html')
+array_remove(static_HTMLs, 'compile.html')
+array_remove(static_HTMLs, 'fdl.html')
 
 # cshelp.h is included in resource.h, which in turn is included in the DC++
 # source; hence, we generate it even when help files are not being compiled.
@@ -70,7 +69,7 @@ import os
 import filecmp
 from gen_toc import gen_toc
 from set_hhp_locale import set_hhp_locale
-from util import nixify, get_lcid
+from util import nixify, scoped_cmd, get_lcid
 
 po4a_path = Dir('#/po4a').abspath + '/'
 env['po4a_cmd'] = lambda prog, options: 'perl -I"' + po4a_path + 'lib" "' + po4a_path + prog + '" -f xhtml -o "translated=p<placeholder> p<placeholder><a>" -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -o foldattributes -o "includessi=' + nixify(Dir('#/help').abspath) + '/" -M utf-8 -L utf-8 ' + options
@@ -81,6 +80,7 @@ def gen_CHM(target, source, env):
 	build_dir = 'build/help'
 	build_path = build_dir + '/'
 	env.Execute([Delete(build_dir), Mkdir(build_dir)])
+	dir_cleaner = scoped_cmd(lambda: env.Execute(Delete(build_dir)))
 
 	# find the translation file
 	po_node = None
@@ -94,9 +94,11 @@ def gen_CHM(target, source, env):
 
 	template = po_node.path[-4:] == '.pot'
 	if template:
-		lcid = 0x409 # default: en-US
+		lang = 'en-US'
+		lcid = 0x409
 	else:
-		lcid = get_lcid(os.path.basename(po_node.path).replace('.po', ''))
+		lang = os.path.basename(po_node.path).replace('.po', '')
+		lcid = get_lcid(lang)
 
 	# translate translatable source files, copy the others
 	cmd = env['po4a_cmd']('po4a-translate', '-p "' + nixify(str(po_node)) + '" -k 0')
@@ -110,6 +112,15 @@ def gen_CHM(target, source, env):
 			ret = env.Execute(Copy(build_dir, node))
 		if ret:
 			return ret
+
+	if env['webhelp']:
+		# gather files to copy now to avoid getting polluted by other generated files
+		web_files = Glob(build_path + '*', strings = 1)
+		web_files.sort()
+		array_remove(web_files, build_path + 'cshelp_stub.html')
+		array_remove(web_files, build_path + 'DCPlusPlus.hhp')
+		array_remove(web_files, build_path + 'index.hhk')
+		array_remove(web_files, build_path + 'resource.h')
 
 	# generate context-sensitive help files (cshelp.h and cshelp.txt)
 	print 'Generating context-sensitive help files in ' + build_dir
@@ -133,9 +144,18 @@ def gen_CHM(target, source, env):
 	log_path = build_path + 'hhc.log'
 	HHP_path = build_path + 'DCPlusPlus.hhp'
 	ret = env.Execute(Action('hhc "' + HHP_path + '" > "' + log_path + '"', 'Compiling the ' + CHM_path + ' temporary help file; log output: ' + log_path))
+	if ret:
+		return ret
 
 	# copy the compiled file to its final target
 	env.Execute(Copy(target[0], CHM_path))
+
+	if env['webhelp']:
+		web_dir = 'build/web/help/' + lang
+		env.Execute([Delete(web_dir), Mkdir(web_dir)])
+		print 'Copying web help files to ' + web_dir
+		for file in web_files:
+			env.Execute(Copy(web_dir, file))
 
 	return ret
 env.Append(BUILDERS = {'CHMBuild' : Builder(action = Action(gen_CHM, 'Compiling the $TARGET help file'))})

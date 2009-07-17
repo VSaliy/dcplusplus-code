@@ -74,8 +74,9 @@ opts.AddVariables(
 	BoolVariable('verbose', 'Show verbose command lines', 'no'),
 	BoolVariable('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
 	BoolVariable('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
-	BoolVariable('help', 'Build help files', 'yes'),
 	BoolVariable('i18n', 'Rebuild i18n files in debug build', 'no'),
+	BoolVariable('help', 'Build help files (requires i18n=1 or mode=release)', 'yes'),
+	BoolVariable('webhelp', 'Build help files for the web (requires help=1)', 'no'),
 	('prefix', 'Prefix to use when cross compiling', ''),
 	EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64'])
 )
