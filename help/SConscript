@@ -151,7 +151,7 @@ def gen_CHM(target, source, env):
 	env.Execute(Copy(target[0], CHM_path))
 
 	if env['webhelp']:
-		web_dir = 'build/web/help/' + lang
+		web_dir = 'build/webhelp/' + lang
 		env.Execute([Delete(web_dir), Mkdir(web_dir)])
 		print 'Copying web help files to ' + web_dir
 		for file in web_files:
