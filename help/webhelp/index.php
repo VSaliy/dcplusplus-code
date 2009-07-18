@@ -61,9 +61,11 @@ else
 }
 
 $name = str_replace('/webhelp/', '', $_SERVER['SCRIPT_URL']); // todo to be correct, one should strrev the last slash etc
-if ($name == '')
+$pos = strpos($name, '.');
+if ($name == '' || $pos === FALSE)
 {
 	$name = 'index.html';
+	$pos = 5;
 }
 
 $output = @file_get_contents("$language/$name");
@@ -72,7 +74,28 @@ if ($output === FALSE)
 	error();
 }
 
-if (substr($name, -5) != '.html' && substr($name, -4) != '.htm')
+$ext = substr($name, $pos + 1);
+switch ($ext)
+{
+case 'bmp':
+	$type = 'image/x-ms-bmp';
+	break;
+case 'css':
+	$type = 'text/css';
+	break;
+case 'ico':
+	$type = 'image/vnd.microsoft.icon';
+	break;
+case 'png':
+	$type = 'image/png';
+	break;
+default:
+	$type = 'text/html';
+	break;
+}
+header("Content-Type: $type");
+
+if ($ext == '.html' || $ext == '.htm')
 {
 	exit($output);
 }
