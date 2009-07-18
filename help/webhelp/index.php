@@ -95,7 +95,7 @@ default:
 }
 header("Content-Type: $type");
 
-if ($ext == '.html' || $ext == '.htm')
+if ($ext != 'html' && $ext != 'htm')
 {
 	exit($output);
 }
