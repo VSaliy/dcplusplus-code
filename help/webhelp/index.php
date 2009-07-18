@@ -60,13 +60,18 @@ else
 	}
 }
 
-$output = @file_get_contents(str_replace('/webhelp/', "$language/", $_SERVER['SCRIPT_URL']));
+$name = str_replace('/webhelp/', '', $_SERVER['SCRIPT_URL']); // todo to be correct, one should strrev the last slash etc
+if ($name == '')
+{
+	$name = 'index.html';
+}
+
+$output = @file_get_contents("$language/$name");
 if ($output === FALSE)
 {
 	error();
 }
 
-$name = str_replace('/webhelp/', '', $_SERVER['SCRIPT_URL']);
 if (substr($name, -5) != '.html' && substr($name, -4) != '.htm')
 {
 	exit($output);
