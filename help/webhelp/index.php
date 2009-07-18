@@ -5,7 +5,7 @@ function error()
 	exit('Error. <a href="http://dcplusplus.sourceforge.net/">Click here to go back to the main DC++ site.</a>');
 }
 
-if (!isset($_SERVER) || !isset($_SERVER['SCRIPT_NAME']))
+if (!isset($_SERVER) || !isset($_SERVER['SCRIPT_URL']))
 {
 	error();
 }
@@ -60,13 +60,13 @@ else
 	}
 }
 
-$output = @file_get_contents(str_replace('/webhelp/', "$language/", $_SERVER['SCRIPT_NAME']));
+$output = @file_get_contents(str_replace('/webhelp/', "$language/", $_SERVER['SCRIPT_URL']));
 if ($output === FALSE)
 {
 	error();
 }
 
-$name = str_replace('/webhelp/', '', $_SERVER['SCRIPT_NAME']);
+$name = str_replace('/webhelp/', '', $_SERVER['SCRIPT_URL']);
 if (substr($name, -5) != '.html' && substr($name, -4) != '.htm')
 {
 	exit($output);
