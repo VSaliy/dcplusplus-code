@@ -84,7 +84,14 @@ if ($pos === FALSE)
 $pos++;
 
 echo substr($output, 0, $pos);
+
+$toc = @file_get_contents("$language/toc.html");
+if ($toc !== FALSE)
+{
+	echo "\n<div style=\"float: right; width: 25%\">\n$toc;\n</div>";
+}
 ?>
+
 <form method="post" action="<?= $name ?>">
 	Language:
 	<select name="language">
@@ -108,4 +115,5 @@ foreach ($dirs as $dir)
 	</select>
 	<input type="submit" value="Change"/>
 </form>
+
 <?= substr($output, $pos); ?>

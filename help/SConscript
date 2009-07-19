@@ -132,12 +132,6 @@ def gen_CHM(target, source, env):
 		if ret:
 			return ret
 
-	if env['webhelp']:
-		# gather files to copy now to avoid getting polluted by other generated files
-		web_files = Glob(build_path + '*.html', strings = 1)
-		web_files.sort()
-		array_remove(web_files, build_path + 'cshelp_stub.html')
-
 	# generate context-sensitive help files (cshelp.h and cshelp.txt)
 	print 'Generating context-sensitive help files in ' + build_dir
 	gen_cshelp([build_path + 'cshelp.h', build_path + 'cshelp.txt'], Glob(build_path + '*.html'), lcid)
@@ -151,9 +145,15 @@ def gen_CHM(target, source, env):
 		# edit the project file so it is set to the correct locale
 		set_hhp_locale(build_path + 'DCPlusPlus.hhp', lcid)
 
-	# generate toc.hhc
-	print 'Generating toc.hhc in ' + build_dir
-	gen_toc(build_path + 'toc.hhc', build_path + 'index.html', lcid)
+	# generate tables of contents
+	toc_targets = [build_path + 'toc.hhc']
+	toc_sources = [build_path + 'index.html']
+	print 'Generating ' + toc_targets[0] + ' (HTML Help TOC)'
+	if env['webhelp']:
+		toc_targets.append(build_path + 'toc.html')
+		toc_sources.append(build_path + 'template.html')
+		print 'Generating ' + toc_targets[1] + ' (web help TOC)'
+	gen_toc(toc_targets, toc_sources, lcid)
 
 	# compile the CHM file in the build directory
 	CHM_path = build_path + 'DCPlusPlus.chm'
@@ -167,10 +167,12 @@ def gen_CHM(target, source, env):
 	env.Execute(Copy(target[0], CHM_path))
 
 	if env['webhelp']:
+		# copy newly translated files to the webhelp dir
 		web_dir = 'build/webhelp/' + lang
 		env.Execute([Delete(web_dir), Mkdir(web_dir)])
+
 		print 'Copying web help files to ' + web_dir
-		for file in web_files:
+		for file in Glob(build_path + '*.html'):
 			env.Execute(Copy(web_dir, file))
 
 	return ret
