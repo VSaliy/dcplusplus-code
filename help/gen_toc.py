@@ -1,4 +1,4 @@
-# this script generates an HTML Help compatible table of contents
+# this script browses through the index file to generate tables of contents.
 
 def gen_toc(target, source, lcid):
 	import codecs
@@ -27,7 +27,9 @@ def gen_toc(target, source, lcid):
 				# title of a new section
 				self.keep_data = 1
 			elif tag == "ul":
-				f_target.write("\r\n<ul>")
+				f_hhc.write("\r\n<ul>")
+				if len(target) >= 2:
+					f_html.write("\n<ul>")
 				self.in_ul += 1
 
 		def handle_data(self, data):
@@ -41,27 +43,41 @@ def gen_toc(target, source, lcid):
 		def handle_endtag(self, tag):
 			if tag == "a" and self.in_ul:
 					# reached the end of the current link entry
-					f_target.write('\r\n<li> <object type="text/sitemap">\r\n<param name="Name" value="')
-					f_target.write(spaces.sub(" ", self.text).strip())
-					f_target.write('">\r\n<param name="Local" value="')
-					f_target.write(self.link)
-					f_target.write('">\r\n</object>')
+					self.text = spaces.sub(" ", self.text).strip()
+					f_hhc.write('\r\n<li> <object type="text/sitemap">\r\n<param name="Name" value="')
+					f_hhc.write(self.text)
+					f_hhc.write('">\r\n<param name="Local" value="')
+					f_hhc.write(self.link)
+					f_hhc.write('">\r\n</object>')
+					if len(target) >= 2:
+						f_html.write('\n<li><a href="')
+						f_html.write(self.link)
+						f_html.write('">')
+						f_html.write(self.text)
+						f_html.write('</a></li>')
 					self.text = ""
 					self.link = ""
 					self.keep_data = 0
 			elif tag == "h3":
 				# title of a new section
-				f_target.write('\r\n<li> <object type="text/sitemap">\r\n<param name="Name" value="')
-				f_target.write(self.text)
-				f_target.write('">\r\n</object>')
+				f_hhc.write('\r\n<li> <object type="text/sitemap">\r\n<param name="Name" value="')
+				f_hhc.write(self.text)
+				f_hhc.write('">\r\n</object>')
+				if len(target) >= 2:
+					f_html.write('\n<li><b>')
+					f_html.write(self.text)
+					f_html.write('</b></li>')
 				self.text = ""
 				self.keep_data = 0
 			elif tag == "ul":
-				f_target.write("\r\n</ul>")
+				f_hhc.write("\r\n</ul>")
+				if len(target) >= 2:
+					f_html.write("\n</ul>")
 				self.in_ul -= 1
 
-	f_target = codecs.open(target, "w", get_win_cp(lcid), "replace")
-	f_target.write("""<html>
+	# create file pointers for toc.hhc (target[0]) and - optionally - toc.html (target[1])
+	f_hhc = codecs.open(target[0], "w", get_win_cp(lcid), "replace")
+	f_hhc.write("""<html>
 <head>
 </head>
 <body>
@@ -70,11 +86,17 @@ def gen_toc(target, source, lcid):
 </object>
 """)
 
+	if len(target) >= 2:
+		f_html = codecs.open(target[1], "w", "utf_8")
+
 	parser = Parser()
-	f_source = codecs.open(source, "r", "utf_8")
+	f_source = codecs.open(source[0], "r", "utf_8")
 	parser.feed(f_source.read())
 	f_source.close()
 	parser.close()
 
-	f_target.write("\r\n</body>\r\n</html>")
-	f_target.close()
+	f_hhc.write("\r\n</body>\r\n</html>")
+	f_hhc.close()
+
+	if len(target) >= 2:
+		f_html.close()
