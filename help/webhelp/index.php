@@ -1,7 +1,6 @@
 <?
 function error()
 {
-	// todo make error output dependent on the file type (error image for images, etc)
 	exit('Error. <a href="http://dcplusplus.sourceforge.net/">Click here to go back to the main DC++ site.</a>');
 }
 
@@ -61,43 +60,15 @@ else
 }
 
 $name = str_replace('/webhelp/', '', $_SERVER['SCRIPT_URL']); // todo to be correct, one should strrev the last slash etc
-$pos = strpos($name, '.');
-if ($name == '' || $pos === FALSE)
+if ($name == '')
 {
 	$name = 'index.html';
-	$pos = 5;
 }
 
 $output = @file_get_contents("$language/$name");
 if ($output === FALSE)
 {
 	error();
-}
-
-$ext = substr($name, $pos + 1);
-switch ($ext)
-{
-case 'bmp':
-	$type = 'image/x-ms-bmp';
-	break;
-case 'css':
-	$type = 'text/css';
-	break;
-case 'ico':
-	$type = 'image/vnd.microsoft.icon';
-	break;
-case 'png':
-	$type = 'image/png';
-	break;
-default:
-	$type = 'text/html';
-	break;
-}
-header("Content-Type: $type");
-
-if ($ext != 'html' && $ext != 'htm')
-{
-	exit($output);
 }
 
 $pos = strpos($output, '<body');

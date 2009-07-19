@@ -1,4 +1,0 @@
-RewriteEngine on
-RewriteBase /webhelp
-RewriteCond %{REQUEST_URI} !index\.php$
-RewriteRule .* index.php [L]
