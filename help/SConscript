@@ -6,6 +6,7 @@
 Import('dev')
 env = dev.env.Clone()
 
+import os
 from util import array_remove
 
 # static_HTMLs holds static (not dynamically generated) HTML sources
@@ -49,6 +50,25 @@ env.Command('changelog.html', ['#/changelog.txt', 'template.html'], Action(gen_c
 from gen_compile import gen_compile
 env.Command('compile.html', ['#/Compile.txt', 'template.html'], Action(gen_compile, 'Generating $TARGET'))
 
+if env['webhelp']:
+	# copy static webhelp files
+	web_files = Glob('webhelp/*')
+	web_files.append('external.png')
+	web_files.append('office11.css')
+	web_files.append('style.css')
+	for file in Glob('#/res/*.bmp'):
+		web_files.append(file)
+	for file in Glob('#/res/*.ico'):
+		web_files.append(file)
+	for file in Glob('#/res/*.png'):
+		web_files.append(file)
+
+	for file in web_files:
+		name = os.path.basename(str(file))
+		if name == 'htaccess': # otherwise, SCons' Glob ignores it
+			name = '.htaccess'
+		env.Command('#/build/webhelp/' + name, file, Copy('$TARGET', '$SOURCE'))
+
 # define which source files need to be copied to the build directory
 CHM_sources = Glob('*.html')
 CHM_sources.append('DCPlusPlus.hhp')
@@ -65,7 +85,6 @@ CHM_sources.sort()
 # additional dependencies (that have to be built before the help file)
 CHM_dependencies = ['addendum.txt', 'cshelp.h']
 
-import os
 import filecmp
 from gen_toc import gen_toc
 from set_hhp_locale import set_hhp_locale
@@ -115,12 +134,9 @@ def gen_CHM(target, source, env):
 
 	if env['webhelp']:
 		# gather files to copy now to avoid getting polluted by other generated files
-		web_files = Glob(build_path + '*', strings = 1)
+		web_files = Glob(build_path + '*.html', strings = 1)
 		web_files.sort()
 		array_remove(web_files, build_path + 'cshelp_stub.html')
-		array_remove(web_files, build_path + 'DCPlusPlus.hhp')
-		array_remove(web_files, build_path + 'index.hhk')
-		array_remove(web_files, build_path + 'resource.h')
 
 	# generate context-sensitive help files (cshelp.h and cshelp.txt)
 	print 'Generating context-sensitive help files in ' + build_dir
@@ -188,4 +204,5 @@ if not hasHHC:
 target = dev.get_build_path('bin') + '/DCPlusPlus.chm'
 env.Depends(target, CHM_dependencies)
 ret = env.CHMBuild(target, [CHM_sources, potfile])
+
 Return('ret')
