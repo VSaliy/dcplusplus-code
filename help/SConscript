@@ -121,7 +121,7 @@ def gen_CHM(target, source, env):
 
 	if env['webhelp']:
 		# create the dir for localized web help files
-		web_dir = 'build/webhelp/' + lang
+		web_dir = 'build/webhelp/' + lang.replace('_', '-')
 		env.Execute([Delete(web_dir), Mkdir(web_dir)])
 
 	# translate translatable source files, copy the others
