@@ -29,7 +29,7 @@ def gen_toc(target, source, lcid):
 			elif tag == "ul":
 				f_hhc.write("\r\n<ul>")
 				if len(target) >= 2:
-					f_html.write("\n<ul>")
+					f_inc.write("\n<ul>")
 				self.in_ul += 1
 
 		def handle_data(self, data):
@@ -50,11 +50,11 @@ def gen_toc(target, source, lcid):
 					f_hhc.write(self.link)
 					f_hhc.write('">\r\n</object>')
 					if len(target) >= 2:
-						f_html.write('\n<li><a href="')
-						f_html.write(self.link)
-						f_html.write('">')
-						f_html.write(self.text)
-						f_html.write('</a></li>')
+						f_inc.write('\n<li><a href="')
+						f_inc.write(self.link)
+						f_inc.write('">')
+						f_inc.write(self.text)
+						f_inc.write('</a></li>')
 					self.text = ""
 					self.link = ""
 					self.keep_data = 0
@@ -64,18 +64,18 @@ def gen_toc(target, source, lcid):
 				f_hhc.write(self.text)
 				f_hhc.write('">\r\n</object>')
 				if len(target) >= 2:
-					f_html.write('\n<li><b>')
-					f_html.write(self.text)
-					f_html.write('</b></li>')
+					f_inc.write('\n<li><b>')
+					f_inc.write(self.text)
+					f_inc.write('</b></li>')
 				self.text = ""
 				self.keep_data = 0
 			elif tag == "ul":
 				f_hhc.write("\r\n</ul>")
 				if len(target) >= 2:
-					f_html.write("\n</ul>")
+					f_inc.write("\n</ul>")
 				self.in_ul -= 1
 
-	# create file pointers for toc.hhc (target[0]) and - optionally - toc.html (target[1])
+	# create file pointers for toc.hhc (target[0]) and - optionally - toc.inc (target[1])
 	f_hhc = codecs.open(target[0], "w", get_win_cp(lcid), "replace")
 	f_hhc.write("""<html>
 <head>
@@ -87,10 +87,10 @@ def gen_toc(target, source, lcid):
 """)
 
 	if len(target) >= 2:
-		f_html = codecs.open(target[1], "w", "utf_8")
+		f_inc = codecs.open(target[1], "w", "utf_8")
 
 	parser = Parser()
-	f_source = codecs.open(source[0], "r", "utf_8")
+	f_source = codecs.open(source, "r", "utf_8")
 	parser.feed(f_source.read())
 	f_source.close()
 	parser.close()
@@ -99,4 +99,4 @@ def gen_toc(target, source, lcid):
 	f_hhc.close()
 
 	if len(target) >= 2:
-		f_html.close()
+		f_inc.close()

@@ -85,13 +85,14 @@ $pos++;
 
 echo substr($output, 0, $pos);
 
-$toc = @file_get_contents("$language/toc.html");
+$toc = @file_get_contents("$language/toc.inc");
 if ($toc !== FALSE)
 {
-	echo "\n<div style=\"float: right; width: 25%\">\n$toc;\n</div>";
+	echo "\n<div style=\"float: right; width: 25%; margin-left: 15px; padding: 10px 10px 10px 10px; background-color: #F0F0F0\">\n$toc\n</div>";
 }
 ?>
 
+<div style="margin-bottom: 15px; padding: 10px 10px 10px 10px; background-color: #F0F0F0">
 <form method="post" action="<?= $name ?>">
 	Language:
 	<select name="language">
@@ -115,5 +116,6 @@ foreach ($dirs as $dir)
 	</select>
 	<input type="submit" value="Change"/>
 </form>
+</div>
 
 <?= substr($output, $pos); ?>
