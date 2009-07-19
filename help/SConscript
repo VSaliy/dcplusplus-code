@@ -119,6 +119,11 @@ def gen_CHM(target, source, env):
 		lang = os.path.basename(po_node.path).replace('.po', '')
 		lcid = get_lcid(lang)
 
+	if env['webhelp']:
+		# create the dir for localized web help files
+		web_dir = 'build/webhelp/' + lang
+		env.Execute([Delete(web_dir), Mkdir(web_dir)])
+
 	# translate translatable source files, copy the others
 	cmd = env['po4a_cmd']('po4a-translate', '-p "' + nixify(str(po_node)) + '" -k 0')
 	if not template:
@@ -147,13 +152,11 @@ def gen_CHM(target, source, env):
 
 	# generate tables of contents
 	toc_targets = [build_path + 'toc.hhc']
-	toc_sources = [build_path + 'index.html']
 	print 'Generating ' + toc_targets[0] + ' (HTML Help TOC)'
 	if env['webhelp']:
-		toc_targets.append(build_path + 'toc.html')
-		toc_sources.append(build_path + 'template.html')
+		toc_targets.append(web_dir + '/toc.inc')
 		print 'Generating ' + toc_targets[1] + ' (web help TOC)'
-	gen_toc(toc_targets, toc_sources, lcid)
+	gen_toc(toc_targets, build_path + 'index.html', lcid)
 
 	# compile the CHM file in the build directory
 	CHM_path = build_path + 'DCPlusPlus.chm'
@@ -168,9 +171,6 @@ def gen_CHM(target, source, env):
 
 	if env['webhelp']:
 		# copy newly translated files to the webhelp dir
-		web_dir = 'build/webhelp/' + lang
-		env.Execute([Delete(web_dir), Mkdir(web_dir)])
-
 		print 'Copying web help files to ' + web_dir
 		for file in Glob(build_path + '*.html'):
 			env.Execute(Copy(web_dir, file))
