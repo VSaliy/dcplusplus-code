@@ -58,13 +58,13 @@ public:
 	bool startDownload(QueueItem::Priority prio);
 	
 	bool throttle() { return mThrottleEnable; }
-	size_t throttleGetSlice();
-	size_t throttleCycleTime();
+	int64_t throttleGetSlice();
+	uint32_t throttleCycleTime();
 
 private:
 	void throttleSetup();
 	bool mThrottleEnable;
-	size_t 	   mDownloadLimit,
+	uint32_t 	   mDownloadLimit,
 		   mCycleTime,
 		   mByteSlice; // download throttling
 

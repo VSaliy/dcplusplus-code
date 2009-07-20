@@ -164,16 +164,15 @@ void BufferedSocket::threadRead() throw(Exception) {
 	bool throttling = false;
 	if(mode == MODE_DATA)
 	{
-		uint32_t getMaximum;
 		throttling = dm->throttle();
 		if (throttling)
 		{
-			getMaximum = dm->throttleGetSlice();
-			readsize = static_cast<uint32_t>(min(inbuf.size(), getMaximum));
-			if (readsize <= 0) {
+			int64_t getMaximum = dm->throttleGetSlice();
+			if (getMaximum <= 0) {
 				sleep(dm->throttleCycleTime());
 				return;
 			}
+			readsize = min(inbuf.size(), static_cast<size_t>(getMaximum));
 		}
 	}
 	int left = sock->read(&inbuf[0], (int)readsize);
@@ -296,7 +295,8 @@ void BufferedSocket::threadSendFile(InputStream* file) throw(Exception) {
 	bool readDone = false;
 	dcdebug("Starting threadSend\n");
 	UploadManager *um = UploadManager::getInstance();
-	size_t sendMaximum, start = 0, current= 0;
+	int64_t sendMaximum;
+	size_t start = 0, current= 0;
 	bool throttling;
 	while(true) {
 		if(!readDone && readBuf.size() > readPos) {
@@ -332,14 +332,15 @@ void BufferedSocket::threadSendFile(InputStream* file) throw(Exception) {
 				return;
 				
 			throttling = BOOLSETTING(THROTTLE_ENABLE);
-			size_t writeSize;
 			if(throttling) {
 				start = TimerManager::getTick();
 				sendMaximum = um->throttleGetSlice();
-				writeSize = min(min(sockSize / 2, writeBuf.size() - writePos), sendMaximum);
-			} else {
-				writeSize = min(sockSize / 2, writeBuf.size() - writePos);
+				if(sendMaximum < 0)
+					sendMaximum = 0;
 			}
+			size_t writeSize = min(sockSize / 2, writeBuf.size() - writePos);
+			if(throttling)
+				writeSize = min(writeSize, static_cast<size_t>(sendMaximum));
 			
 			int written = sock->write(&writeBuf[writePos], writeSize);
 			if(written > 0) {
