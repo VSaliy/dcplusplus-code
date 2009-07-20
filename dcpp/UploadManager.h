@@ -70,12 +70,12 @@ public:
 
 	// Upload throttling
 	bool throttle() { return mThrottleEnable; }
-	size_t throttleGetSlice();
-	size_t throttleCycleTime();
+	int64_t throttleGetSlice();
+	uint32_t throttleCycleTime();
 private:
 	void throttleSetup();
 	bool mThrottleEnable;
-	size_t 	   mUploadLimit,
+	uint32_t 	   mUploadLimit,
 		   mCycleTime,
 		   mByteSlice;
 

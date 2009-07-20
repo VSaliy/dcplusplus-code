@@ -512,7 +512,7 @@ void UploadManager::on(ClientManagerListener::UserDisconnected, const UserPtr& a
 	}
 }
 
-size_t UploadManager::throttleGetSlice()  {
+int64_t UploadManager::throttleGetSlice()  {
 	if (mThrottleEnable) {
 		int64_t left = mUploadLimit - getRunningAverage();
 		if (-left >= mUploadLimit)  {
@@ -523,11 +523,11 @@ size_t UploadManager::throttleGetSlice()  {
 			return mByteSlice;
 		}
 	} else {
-		return (size_t)-1;
+		return -1;
 	}
 }
 
-size_t UploadManager::throttleCycleTime() {
+uint32_t UploadManager::throttleCycleTime() {
 	if (mThrottleEnable)
 		return mCycleTime;
 	return 0;
