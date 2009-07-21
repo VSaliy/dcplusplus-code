@@ -31,10 +31,13 @@ public:
 	GETSET(string, id, Id);
 	GETSET(StringMap, params, Params);
 
-	bool operator==(const WindowInfo& rhs);
+	bool operator==(const WindowInfo& rhs) const;
 
 	/// special param used for displaying; ignored for identification.
 	static const string title;
+
+	/// special param that indicates a CID for an user whose information shall be saved on exit.
+	static const string cid;
 };
 
 } // namespace dcpp
