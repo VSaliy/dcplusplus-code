@@ -38,6 +38,9 @@ public:
 
 	/// special param that indicates a CID for an user whose information shall be saved on exit.
 	static const string cid;
+
+	/// special param for paths to file lists that must not be deleted on exit.
+	static const string fileList;
 };
 
 } // namespace dcpp

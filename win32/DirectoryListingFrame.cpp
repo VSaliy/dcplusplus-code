@@ -108,16 +108,16 @@ const StringMap DirectoryListingFrame::getWindowParams() const {
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
 	ret[WindowInfo::cid] = dl->getUser()->getCID().toBase32();
-	ret["Path"] = dl->getUser() == ClientManager::getInstance()->getMe() ? "OwnList" : path;
+	ret[WindowInfo::fileList] = (dl->getUser() == ClientManager::getInstance()->getMe()) ? "" : path;
 	ret["Speed"] = Util::toString(speed);
 	return ret;
 }
 
 void DirectoryListingFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
-	StringMap::const_iterator path = params.find("Path");
+	StringMap::const_iterator path = params.find(WindowInfo::fileList);
 	StringMap::const_iterator speed = params.find("Speed");
 	if(path != params.end() && speed != params.end()) {
-		if(path->second == "OwnList") {
+		if(path->second.empty()) {
 			openOwnList(parent);
 		} else if(File::getSize(path->second) != -1) {
 			UserPtr u = DirectoryListing::getUserFromFilename(path->second);
@@ -128,7 +128,7 @@ void DirectoryListingFrame::parseWindowParams(dwt::TabView* parent, const String
 }
 
 bool DirectoryListingFrame::isFavorite(const StringMap& params) {
-	StringMap::const_iterator path = params.find("Path");
+	StringMap::const_iterator path = params.find(WindowInfo::fileList);
 	if(path != params.end() && path->second != "OwnList" && File::getSize(path->second) != -1) {
 		UserPtr u = DirectoryListing::getUserFromFilename(path->second);
 		if(u)
@@ -293,9 +293,6 @@ void DirectoryListingFrame::postClosing() {
 
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
-
-	if(WinUtil::mainWindow->closing() && !path.empty() && dl->getUser() != ClientManager::getInstance()->getMe())
-		QueueManager::getInstance()->noDeleteFileList(path);
 }
 
 void DirectoryListingFrame::handleFind() {

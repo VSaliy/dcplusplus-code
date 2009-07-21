@@ -123,8 +123,8 @@ void shutdown() {
 
 	BufferedSocket::waitShutdown();
 
+	WindowManager::getInstance()->prepareSave();
 	QueueManager::getInstance()->saveQueue(true);
-	WindowManager::getInstance()->saveUsers();
 	ClientManager::getInstance()->saveUsers();
 	SettingsManager::getInstance()->save();
 

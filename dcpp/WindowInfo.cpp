@@ -25,6 +25,7 @@ namespace dcpp {
 
 const string WindowInfo::title = "Title";
 const string WindowInfo::cid = "CID";
+const string WindowInfo::fileList = "FileList";
 
 WindowInfo::WindowInfo(const string& id_, const StringMap& params_) :
 id(id_),

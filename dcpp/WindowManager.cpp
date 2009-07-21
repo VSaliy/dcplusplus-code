@@ -24,6 +24,7 @@
 #include "WindowInfo.h"
 #include "SimpleXML.h"
 #include "ClientManager.h"
+#include "QueueManager.h"
 
 namespace dcpp {
 
@@ -97,18 +98,22 @@ void WindowManager::updateRecent(const string& id, const StringMap& params) {
 	}
 }
 
-void WindowManager::saveUsers() const {
+void WindowManager::prepareSave() const {
 	Lock l(cs);
-	saveUsers(list);
+	prepareSave(list);
 	for(RecentList::const_iterator i = recent.begin(); i != recent.end(); ++i)
-		saveUsers(i->second);
+		prepareSave(i->second);
 }
 
-void WindowManager::saveUsers(const WindowInfoList& infoList) const {
-	for(WindowInfoList::const_iterator i = infoList.begin(); i != infoList.end(); ++i) {
-		StringMap::const_iterator cid = i->getParams().find(WindowInfo::cid);
-		if(cid != i->getParams().end())
-			ClientManager::getInstance()->saveUser(CID(cid->second));
+void WindowManager::prepareSave(const WindowInfoList& infoList) const {
+	for(WindowInfoList::const_iterator wi = infoList.begin(); wi != infoList.end(); ++wi) {
+		StringMap::const_iterator i = wi->getParams().find(WindowInfo::cid);
+		if(i != wi->getParams().end())
+			ClientManager::getInstance()->saveUser(CID(i->second));
+
+		i = wi->getParams().find(WindowInfo::fileList);
+		if(i != wi->getParams().end() && !i->second.empty())
+			QueueManager::getInstance()->noDeleteFileList(i->second);
 	}
 }
 
