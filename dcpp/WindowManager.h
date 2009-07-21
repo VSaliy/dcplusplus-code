@@ -48,8 +48,8 @@ public:
 	void updateRecent(const string& id, const StringMap& params);
 	const RecentList& getRecent() const { return recent; }
 
-	/// tell ClientManager which users we want to save information about.
-	void saveUsers() const;
+	/// inform other classes about users and file lists that are of interest to us.
+	void prepareSave() const;
 
 private:
 	friend class Singleton<WindowManager>;
@@ -64,7 +64,7 @@ private:
 	inline void addRecent_(const string& id, const StringMap& params) { addRecent_(id, params, false); }
 	void addRecent_(const string& id, const StringMap& params, bool top);
 
-	void saveUsers(const WindowInfoList& infoList) const;
+	void prepareSave(const WindowInfoList& infoList) const;
 
 	typedef void (WindowManager::*handler_type)(const std::string&, const StringMap&);
 	void parseTags(SimpleXML& xml, handler_type handler);
