@@ -86,14 +86,14 @@ void PrivateFrame::closeAllOffline() {
 const StringMap PrivateFrame::getWindowParams() const {
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
-	ret["CID"] = replyTo.getUser()->getCID().toBase32();
+	ret[WindowInfo::cid] = replyTo.getUser()->getCID().toBase32();
 	ret["Hub"] = hubHint;
 	ret["LogPath"] = getLogPath();
 	return ret;
 }
 
 void PrivateFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
-	StringMap::const_iterator cid = params.find("CID");
+	StringMap::const_iterator cid = params.find(WindowInfo::cid);
 	StringMap::const_iterator hub = params.find("Hub");
 	if(cid != params.end() && hub != params.end()) {
 		StringMap::const_iterator logPath = params.find("LogPath");
@@ -103,7 +103,7 @@ void PrivateFrame::parseWindowParams(dwt::TabView* parent, const StringMap& para
 }
 
 bool PrivateFrame::isFavorite(const StringMap& params) {
-	StringMap::const_iterator cid = params.find("CID");
+	StringMap::const_iterator cid = params.find(WindowInfo::cid);
 	if(cid != params.end()) {
 		UserPtr u = ClientManager::getInstance()->getUser(CID(cid->second));
 		if(u)
@@ -178,12 +178,6 @@ void PrivateFrame::addStatus(const tstring& aLine, bool log) {
 bool PrivateFrame::preClosing() {
 	ClientManager::getInstance()->removeListener(this);
 	return true;
-}
-
-void PrivateFrame::postClosing() {
-	if(WinUtil::mainWindow->closing()) {
-		ClientManager::getInstance()->saveUser(replyTo.getUser()->getCID());
-	}
 }
 
 string PrivateFrame::getLogPath() const {

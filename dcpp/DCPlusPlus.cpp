@@ -124,6 +124,7 @@ void shutdown() {
 	BufferedSocket::waitShutdown();
 
 	QueueManager::getInstance()->saveQueue(true);
+	WindowManager::getInstance()->saveUsers();
 	ClientManager::getInstance()->saveUsers();
 	SettingsManager::getInstance()->save();
 

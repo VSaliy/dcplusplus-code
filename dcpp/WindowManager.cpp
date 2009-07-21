@@ -23,6 +23,7 @@
 
 #include "WindowInfo.h"
 #include "SimpleXML.h"
+#include "ClientManager.h"
 
 namespace dcpp {
 
@@ -93,6 +94,21 @@ void WindowManager::updateRecent(const string& id, const StringMap& params) {
 		WindowInfoList::iterator i = std::find(ri->second.begin(), ri->second.end(), info);
 		if(i != ri->second.end())
 			i->setParams(params);
+	}
+}
+
+void WindowManager::saveUsers() const {
+	Lock l(cs);
+	saveUsers(list);
+	for(RecentList::const_iterator i = recent.begin(); i != recent.end(); ++i)
+		saveUsers(i->second);
+}
+
+void WindowManager::saveUsers(const WindowInfoList& infoList) const {
+	for(WindowInfoList::const_iterator i = infoList.begin(); i != infoList.end(); ++i) {
+		StringMap::const_iterator cid = i->getParams().find(WindowInfo::cid);
+		if(cid != i->getParams().end())
+			ClientManager::getInstance()->saveUser(CID(cid->second));
 	}
 }
 

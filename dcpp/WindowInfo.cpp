@@ -24,6 +24,7 @@
 namespace dcpp {
 
 const string WindowInfo::title = "Title";
+const string WindowInfo::cid = "CID";
 
 WindowInfo::WindowInfo(const string& id_, const StringMap& params_) :
 id(id_),
@@ -31,7 +32,7 @@ params(params_)
 {
 }
 
-bool WindowInfo::operator==(const WindowInfo& rhs) {
+bool WindowInfo::operator==(const WindowInfo& rhs) const {
 	if(id != rhs.id)
 		return false;
 
