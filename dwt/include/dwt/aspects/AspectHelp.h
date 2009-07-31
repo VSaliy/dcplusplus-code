@@ -47,25 +47,24 @@ class AspectHelp {
 	struct Dispatcher {
 		typedef std::tr1::function<void (HWND, unsigned)> F;
 
-		Dispatcher(const F& f_) : f(f_) { }
+		Dispatcher(const F& f_, WidgetType* widget_) : f(f_), widget(widget_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(msg.lParam);
 			if(lphi->iContextType != HELPINFO_WINDOW)
 				return false;
 
-			HWND hWnd = reinterpret_cast<HWND>(lphi->hItemHandle);
 			unsigned id = lphi->dwContextId;
-			WidgetType* w = hwnd_cast<WidgetType*>(hWnd);
-			if(w)
-				w->helpImpl(id);
-			f(hWnd, id);
+			widget->helpImpl(id);
+			f(reinterpret_cast<HWND>(lphi->hItemHandle), id);
 
 			ret = TRUE;
 			return true;
 		}
 
+	private:
 		F f;
+		WidgetType* widget;
 	};
 
 public:
@@ -78,7 +77,7 @@ public:
 	}
 
 	void onHelp(const typename Dispatcher::F& f) {
-		W().addCallback(Message(WM_HELP), Dispatcher(f));
+		W().addCallback(Message(WM_HELP), Dispatcher(f, &W()));
 	}
 
 private:
