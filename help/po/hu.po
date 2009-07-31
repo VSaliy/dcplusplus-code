@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2009-06-14 17:43+0300\n"
-"PO-Revision-Date: 2009-07-10 19:56+0000\n"
+"PO-Revision-Date: 2009-07-30 13:15+0000\n"
 "Last-Translator: eMTee <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-07-12 21:49+0000\n"
+"X-Launchpad-Export-Date: 2009-07-31 18:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
@@ -861,7 +861,7 @@ msgstr "Keresett szöveg"
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:12
 msgid "This is the set of search strings to search for."
-msgstr "A szavak amelyekre keresünk"
+msgstr "A keresési kulcsszavak amelyekre a keresés történik."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:13 help/window_adlsearch.html:23
@@ -935,8 +935,8 @@ msgid ""
 "Sets the upper limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
 msgstr ""
-"Beállítható a fájl méret felső korlátja. Nem használt a <a po4a-"
-"id=0>Könyvtár</a> kereséseknél."
+"Itt beállítható a fájl méret felső korlátja. <a po4a-id=0>Könyvtár</a> "
+"típusú kereséseknél nem lesz figyelembe véve."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:29
@@ -985,8 +985,8 @@ msgid ""
 "When checked, matches to this search will be put into your <a po4a-"
 "id=0>Download Queue</a>."
 msgstr ""
-"Ha be van kapcsolva, ennek a keresésnek a találatai bekerülnek a <a po4a-"
-"id=0>Letöltési sorba</a>."
+"Ha engedélyezve van, akkor az adott ADL keresés a találatai automatikusan "
+"bekerülnek a <a po4a-id=0>Letöltési sorba</a>."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_favorite_hub.html:9 help/index.html:62
@@ -1078,8 +1078,9 @@ msgid ""
 "for a specific hub. Leave this blank for default."
 msgstr ""
 "Hasznos, ha szeretnél megadni saját felhasználói leírást, megjegyzést az "
-"egyes hubokhoz. Ezek megjelennek a hubon, a felhasználói lista Leírás "
-"oszlopában. Üresen hagyva az alapértelmezett felhasználói leírás jelenik meg."
+"egyes hubokhoz. Ezek megjelennek az adott hubon a felhasználók listájában a "
+"nicked mellett a Leírás oszlopban. Üresen hagyva az alapértelmezett "
+"felhasználói leírás jelenik meg."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/dialog_indexing_progress.html:9 help/index.html:60
@@ -1108,10 +1109,10 @@ msgid ""
 msgstr ""
 "Mikor az ablak látható, a DC++ \"normál\" CPU prioritással indexel. A "
 "háttérben indexelés \"legkisebb\" (a \"normál\" alatti) priorítással "
-"történik.. A priorítási szint befolyásolja, hogy a DC++ mennyi időt tölt a "
+"történik. A priorítási szint befolyásolja hogy a DC++ mennyi időt tölt el a "
 "fájlok indexelésével. Egy magasabb priorítás azt jelenti, hogy a DC++ több "
-"időt tölt el indexeléssel, de ezzel együtt jobban terheli a számítógépet ami "
-"ezért esetleg lassabb lesz a művelet idején."
+"időt tölt indexeléssel de ezzel együtt jobban terheli a számítógépet, ami "
+"ezért esetleg lassabbá válhat a művelet idejére."
 
 #. type: Content of: <html><body><p>
 #: help/dialog_indexing_progress.html:17
@@ -1447,8 +1448,9 @@ msgid ""
 "<u>not</u> be available on NMDC hubs. Many useful ones are enumerated below:"
 msgstr ""
 "Ezen változókon kívül az összes ADC INF flag elérhető, a következő "
-"előtagokkal: <b>my</b>, <b>user</b> és <b>hub</b>. Néhány  <u>nem</u> "
-"elérhető NMDC hubokon. Néhány hasznos változót felsorolunk az alábbiakban:"
+"előtagokkal: <b>my</b>, <b>user</b> és <b>hub</b>. Néhányuk  esetleg <u>nem</"
+"u> érhető el NMDC hubokon. Az alábbiakban felsorolunk néhány hasznos "
+"változót :"
 
 #. type: Content of: <html><body><div><ul><li>
 #: help/dialog_user_command.html:72
@@ -4643,19 +4645,6 @@ msgid ""
 "id=1>General settings</a>, etc...) or you won't be able to connect to any "
 "hub."
 msgstr ""
-"A <a po4a-id=0></a><a href=\"http://bcdc.dccafe.org/bcdc/hu/tutorials/"
-"bcdc_overview.asp#05Elsoinditas\" target=\"_blank\" class=\"external\">BCDC+"
-"+ kezdőknek szóló magyar nyelvű oldala</a> egy közérthető, rengeteg "
-"képernyőképet tartalmazó leírás. Bemutatja a DC++ működését és a szükséges "
-"minimális beállításokat, amelyek mindenképpen szükségesek a sikeres "
-"használathoz. (A leírás - lévén BCDC++-hoz készült - kis mértékben eltér a DC"
-"++-ban található beállításoktól, de az eltérés az alapvetően szükséges "
-"beállításokat nem érinti). Hasonlóan kitűnő, kezdőknek szóló leírás "
-"található a <a href=\"http://dcpp.hu\" target=\"_blank\" class=\"external"
-"\">dcpp.hu</a> portálon is. Semmiképpen ne hagyd ki az alapvető beállítások "
-"áttekintését (pl. nick megadása a <a po4a-id=1>Személyes beállításokban</a>, "
-"stb...), mivel ezek hiánya azt eredményezheti, hogy egyetlen hubhoz sem "
-"fogsz tudni kapcsolódni."
 
 #. type: Content of: <html><body><h2>
 #: help/get_started.html:85
@@ -4834,10 +4823,6 @@ msgid ""
 "<a po4a-id=0>www.whatismyip.com</a>, <a po4a-id=1>www.dslreports.com/ip</a>, "
 "<a po4a-id=2>www.ip2location.com</a>"
 msgstr ""
-"A <i>külső IP címed</i> megtekintéséhez látogasd meg a következő weboldalak "
-"egyikét : <a po4a-id=0></a><a href=\"http://azenipcimem.hu\" target=\"_blank"
-"\" class=\"external\">azenipcimem.hu</a>, <a po4a-id=1>www.dslreports.com/"
-"ip</a>, <a po4a-id=2>www.ip2location.com</a>"
 
 #. type: Content of: <html><body><p>
 #: help/get_started.html:156
@@ -4934,11 +4919,6 @@ msgid ""
 "There is a complete <a po4a-id=0>Direct Connect FAQ</a> maintained at "
 "dslreports.com."
 msgstr ""
-"További GYIK-ek, tippek és segítség található a <a href=\"http://bcdc.dccafe."
-"org/bcdc/hu/default.asp\" target=\"_blank\" class=\"external\">BCDC++ magyar "
-"honlapon</a>, a <a href=\"http://dcpp.hu\" target=\"_blank\" class=\"external"
-"\">Magyar Direct Connect portálon</a> és az angol nyelvű <a po4a-id=0>Direct "
-"Connect FAQ</a> oldalon."
 
 #. type: Content of: <html><body><ul><li>
 #: help/get_started.html:193
@@ -7480,7 +7460,7 @@ msgid ""
 "setting is a measure of how fast a source you are likely to be for other "
 "users."
 msgstr ""
-"A legördülő menü számos gyakori feltöltési sebesség-értéket tartalmaz MiB / "
+"A legördülő menü számos gyakori feltöltési sebesség-értéket tartalmaz MBit / "
 "mp-ben megadva. A saját feltöltési sávszélességedhez legközelebbi értéket "
 "válaszd. Ne a letöltésed sebességét add meg itt, ez az adat másoknak adja "
 "meg, hogy te mint forrás kb. mekkora sebességre vagy képes, ha letöltenek "
@@ -9221,12 +9201,12 @@ msgstr "[Z] - ZLib tömörített átvitel"
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/window_connections.html:22
 msgid "[S] - Trusted secure connection"
-msgstr "[S] - Megbízható tanúsítvvánnyal rendelkező biztonságos kapcsolat"
+msgstr "[S] - Megbízható tanúsítvánnyal rendelkező biztonságos kapcsolat"
 
 #. type: Content of: <html><body><dl><dd><ul><li>
 #: help/window_connections.html:23
 msgid "[U] - Untrusted secure connection"
-msgstr "[U] - Megbízható tanúsítvvánnyal nem rendelkező biztonságos kapcsolat"
+msgstr "[U] - Megbízható tanúsítvánnyal nem rendelkező biztonságos kapcsolat"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_connections.html:26 help/window_downloads.html:21
@@ -12537,8 +12517,8 @@ msgid ""
 "You have <a po4a-id=0>Automatically disconnect users who leave the hub</a> "
 "setting enabled and this message informs you about its effect."
 msgstr ""
-"A <a po4a-id=0>A hubról lelépő felhasználók automatikus szétkapcsolása</a> "
-"beállítás engedélyezve van és ez az üzenet jelzi egy ilyen felhasználó "
+"<a po4a-id=0>A hubról lelépő felhasználók automatikus szétkapcsolása</a> "
+"nevű beállítás engedélyezve van és ez az üzenet jelzi egy ilyen felhasználó "
 "letöltésének megszakítását."
 
 #. type: Content of: <html><body><dl><dt>
@@ -12585,10 +12565,10 @@ msgid ""
 msgstr ""
 "A naplóban megjelenő hibaüzenetek néha kiegészülnek az operációs rendszer "
 "által szolgáltatott további rendszerüzenetekkel. Ezek az üzenetek általában "
-"pontosabb információkat adnak az adott hibáról, a lehetséges naplóban "
-"megjelenő hibák következő felsorlásában ezen az üzenetek helye [hibaüzenet]-"
-"ként vannak jelölve. A rendszerüzenetek mindíg az operációs rendszer "
-"beállított nyelvén jelennek meg, függetlenül a DC++-ban beállított nyelvtől."
+"pontosabb információkat adnak az adott hibáról. A naplóban megjelenő hibák "
+"következő felsorolásában a rendszerüzenetek helye [hibaüzenet]-ként van "
+"jelölve. A rendszerüzenetek mindíg az operációs rendszer aktuális nyelvén "
+"jelennek meg, függetlenül a DC++-ban beállított nyelvtől."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:48
@@ -12931,7 +12911,7 @@ msgid ""
 "is <a po4a-id=0>bigger than the maximum size allowed to open</a>."
 msgstr ""
 "Probléma adódott egy letöltött fájl-lista megnyitásával, sérült vagy a "
-"mérete <a po4a-id=0>nagyobb, mint amekkora méretú lista megnyitása "
+"mérete <a po4a-id=0>nagyobb, mint amekkora méretű lista megnyitása "
 "engedélyezett</a>."
 
 #. type: Content of: <html><body><dl><dt>
@@ -12969,17 +12949,6 @@ msgstr ""
 "szabad feltöltési slotot kérni és mit szeretnének tölteni."
 
 #~ msgid ""
-#~ "After a download is complete, DC++ tries to move your just finished file "
-#~ "to this directory. It defaults to the \"Downloads\\\" subdirectory under "
-#~ "where the DC++ executable is located. The directory will be automatically "
-#~ "created if needed."
-#~ msgstr ""
-#~ "Amikor egy letöltés befejeződött, a DC++ megpróbálja a fájlt az itt "
-#~ "megadott könyvtárba mozgatni. Ha nincs megadva, akkor alapértelmezetten a "
-#~ "letöltések a DC++ programkönyvtár \"Downloads\" alkönyvtárába kerülnek. "
-#~ "Szükség esetén a megadott könyvtár automatikusan létrehozásra kerül."
-
-#~ msgid ""
 #~ "All incomplete downloads will be stored in this directory.  If you leave "
 #~ "it empty, temporary downloads will be stored in the \"Incomplete\\\" "
 #~ "subdirectory under where the DC++ executable is located. The directory "
@@ -12989,6 +12958,17 @@ msgstr ""
 #~ "megadva, akkor alapértelmezetten a befejezetlen fájlok a DC++ "
 #~ "programkönyvtár \"Incomplete\" alkönyvtárába kerülnek. Szükség esetén a "
 #~ "megadott könyvtár automatikusan létrehozásra kerül."
+
+#~ msgid ""
+#~ "After a download is complete, DC++ tries to move your just finished file "
+#~ "to this directory. It defaults to the \"Downloads\\\" subdirectory under "
+#~ "where the DC++ executable is located. The directory will be automatically "
+#~ "created if needed."
+#~ msgstr ""
+#~ "Amikor egy letöltés befejeződött, a DC++ megpróbálja a fájlt az itt "
+#~ "megadott könyvtárba mozgatni. Ha nincs megadva, akkor alapértelmezetten a "
+#~ "letöltések a DC++ programkönyvtár \"Downloads\" alkönyvtárába kerülnek. "
+#~ "Szükség esetén a megadott könyvtár automatikusan létrehozásra kerül."
 
 #~ msgid "<a po4a-id=0>Overview</a>"
 #~ msgstr "<a po4a-id=0>Áttekintés</a>"

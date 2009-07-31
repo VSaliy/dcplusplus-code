@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2009-06-14 17:43+0300\n"
-"PO-Revision-Date: 2009-06-02 21:35+0000\n"
-"Last-Translator: Nille <Unknown>\n"
+"PO-Revision-Date: 2009-07-28 12:09+0000\n"
+"Last-Translator: endator <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-07-12 21:48+0000\n"
+"X-Launchpad-Export-Date: 2009-07-31 18:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
@@ -163,6 +163,8 @@ msgid ""
 "Sets the current number of download slots to the number you specify. If this "
 "is less than the current number of slots, no downloads are cancelled."
 msgstr ""
+"Ställer in det aktuella antalet nedladdningsslottar till det antal du anger. "
+"Om dessa är färre än det aktuella antalet slottar,avbryts inga nedladdningar."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:71
@@ -184,6 +186,8 @@ msgid ""
 "Clears the current window of all text. Optionally, you can specify how many "
 "of the latest (most recent) lines should be kept."
 msgstr ""
+"Rensar det aktuella fönstret från all text. Alternativt kan du ange hur "
+"många av de senaste raderna som ska sparas."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:80
@@ -201,6 +205,9 @@ msgid ""
 "with the message you specified, or the default away message configured in "
 "the <a po4a-id=0>Appearance</a> settings page."
 msgstr ""
+"Sätter status till Borta. Nya fönster med privata meddelanden blir besvarade "
+"en gång med det meddelande du anger, eller med standardmeddelandet angett på "
+"fliken <a po4a-id=0>Appearance</a> i inställningarna."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:88
@@ -260,7 +267,7 @@ msgstr ""
 #. type: Content of: <html><body><h1>
 #: help/commands_file.html:10
 msgid "File-related menu commands"
-msgstr ""
+msgstr "Fil-relaterade menykommandon"
 
 #. type: Content of: <html><body><p>
 #: help/commands_file.html:12
@@ -281,6 +288,8 @@ msgid ""
 "Will open a new <a po4a-id=0>Search window</a> to search for alternate "
 "sources for the selected file."
 msgstr ""
+"Öppnar ett nytt <a po4a-id=0>sökfönster</a> för att söka efter altenativa "
+"källor till den valda filen."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_file_general.inc:5
@@ -302,7 +311,7 @@ msgstr "Kopiera magnetlänk till clipboard"
 #. type: Content of: <html><body><dl><dd>
 #: C:/Documents/Programmes/DC++/repo/help/commands_file_general.inc:9
 msgid "Will copy the file's <a po4a-id=0>magnet link</a> to the clipboard."
-msgstr ""
+msgstr "Kopierar filens <a po4a-id=0>magnet link</a> till urklipp."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_file_download.inc:2
@@ -315,6 +324,8 @@ msgid ""
 "Adds the selected file(s) or director(ies) to the Download Queue. They will "
 "be downloaded to the <a po4a-id=0>Default download directory</a>."
 msgstr ""
+"Lägger till de valda filerna eller katalogerna till nerladdningskön. De "
+"kommer att laddas ner till <a po4a-id=0>Default download directory</a>."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_file_download.inc:6
@@ -400,6 +411,9 @@ msgid ""
 "po4a-id=0>Confirm dialog options</a> is enabled, you will be prompted before "
 "the removal."
 msgstr ""
+"Tar bort markerat element från listan. Om motsvarande inställning i <a po4a-"
+"id=0>Confirm dialog options</a> är aktiverad kommer du att få bekräfta "
+"bortagningen."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_listview.inc:6
@@ -413,11 +427,14 @@ msgid ""
 "in <a po4a-id=0>Confirm dialog options</a> is enabled, you will be prompted "
 "before the removal."
 msgstr ""
+"Tar bort alla markerade element från listan. Om motsvarande inställning i <a "
+"po4a-id=0>Confirm dialog options</a> är aktiverad kommer du att få bekräfta "
+"borttagningen."
 
 #. type: Content of: <html><body><h1>
 #: help/commands_user.html:10
 msgid "User-related menu commands"
-msgstr ""
+msgstr "Användar-relaterade menykommandon"
 
 #. type: Content of: <html><body><p>
 #: help/commands_user.html:12
@@ -426,21 +443,24 @@ msgid ""
 "containing users.  For commands unique to each specific window, refer to the "
 "help page of the corresponding window."
 msgstr ""
+"Dessa kommandon är tillgängliga i kontextmenyer i olika listor som "
+"innehåller användare. För att se vilka kommandon som gäller i specifika "
+"fönster, se hjälpen för respektive fönster."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:2
 msgid "Get file list"
-msgstr ""
+msgstr "Hämta fillista"
 
 #. type: Content of: <html><body><dl><dd>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:3
 msgid "Download the file list of the selected users."
-msgstr ""
+msgstr "Ladda ner fillista från de valda användarna"
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:4
 msgid "Browse file list"
-msgstr ""
+msgstr "Bläddra i fillistan"
 
 #. type: Content of: <html><body><dl><dd>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:5
@@ -448,12 +468,14 @@ msgid ""
 "Download only the required pieces of the file lists of the selected users.  "
 "Only available in ADC hubs."
 msgstr ""
+"Ladda enbart ner de delar av fillistan som behövs av de valda användarna. "
+"Enbart tillgängligt i ADC-hubbar"
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:7
 #: help/window_file_list.html:67
 msgid "Match queue"
-msgstr ""
+msgstr "Matcha kön"
 
 #. type: Content of: <html><body><dl><dd>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:8
@@ -463,6 +485,10 @@ msgid ""
 "matches are found in one user's file list, she will be added as a source for "
 "the relevant downloads."
 msgstr ""
+"Matchar filerna i din nerladdningskö med fillistorna från de valda "
+"användarna. Två filer anses vara samma ifall deras TTH är samma. Om en träff "
+"hittas i en användares lista kommer han/hon att läggas till som källa för de "
+"matchande filerna."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:11
@@ -475,11 +501,13 @@ msgid ""
 "Open <a po4a-id=0>private message</a> windows to chat privately with the "
 "selected users."
 msgstr ""
+"Öppna ett <a po4a-id=0>private message</a> fönster för att samtala privat "
+"med de valda användarna."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:13
 msgid "Grant extra slot"
-msgstr ""
+msgstr "Bevilja extra slot"
 
 #. type: Content of: <html><body><dl><dd>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:14
@@ -487,6 +515,8 @@ msgid ""
 "Beyond your set slots an extra upload slot will be given to the selected "
 "users until the end of the current DC++ session."
 msgstr ""
+"Utöver dina ordinarie slottar kommer en extra uppladdningsslott ges till den "
+"valda användaren under denna DC++ sessionen."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_general.inc:16
@@ -562,6 +592,7 @@ msgstr ""
 "  Razze https://launchpad.net/~wallin1994\n"
 "  Umut https://launchpad.net/~umut1990\n"
 "  dreaming_tree https://launchpad.net/~dreaming-tree72\n"
+"  endator https://launchpad.net/~endator\n"
 "  ersi https://launchpad.net/~ersi\n"
 "  poy https://launchpad.net/~poy"
 

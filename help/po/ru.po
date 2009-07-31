@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2009-06-14 17:43+0300\n"
-"PO-Revision-Date: 2009-06-29 16:35+0000\n"
-"Last-Translator: Pavel Kurashov <pavell@mail.ru>\n"
+"PO-Revision-Date: 2009-07-30 07:24+0000\n"
+"Last-Translator: DePs <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-07-12 21:48+0000\n"
+"X-Launchpad-Export-Date: 2009-07-31 18:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
@@ -532,10 +532,10 @@ msgstr "Добавить в избранные"
 
 #. type: Content of: <html><body><dl><dd>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_favorites.inc:3
-#, fuzzy
 msgid "Adds the selected users to your <a po4a-id=0>Favorite Users</a> list."
 msgstr ""
-"Добавляет пользователя в список <a po4a-id=0>\"Избранных пользователей\"</a>."
+"Добавляет выбранных пользователей в список <a po4a-id=0>Избранные "
+"пользователи</a>."
 
 #. type: Content of: <html><body><h1>
 #: help/credits.html:9
@@ -590,9 +590,12 @@ msgstr ""
 "\n"
 "Launchpad Contributions:\n"
 "  .silent https://launchpad.net/~me-silentroach\n"
+"  Bruce Wayne https://launchpad.net/~bruce-wayne-deactivatedaccount\n"
 "  Chernousov Max https://launchpad.net/~max.askin\n"
+"  DePs https://launchpad.net/~pshenko\n"
 "  Egor Bushmelyov https://launchpad.net/~skipper95\n"
 "  Eugene Fedin https://launchpad.net/~eugfed\n"
+"  Fil0sOFF https://launchpad.net/~fil0soff\n"
 "  Kirill Nikitin https://launchpad.net/~locke23rus\n"
 "  Koptev Oleg https://launchpad.net/~koptev-oleg\n"
 "  Max Habets https://launchpad.net/~sky3\n"
@@ -600,7 +603,6 @@ msgstr ""
 "  Pavel Kurashov https://launchpad.net/~pavell\n"
 "  Pavlenty https://launchpad.net/~pavlenty\n"
 "  Roman Azarenko aka BasicXP https://launchpad.net/~basicxp\n"
-"  Rudenko Ruslan https://launchpad.net/~rudenko-ruslan-deactivatedaccount\n"
 "  ehpc https://launchpad.net/~ehpc\n"
 "  gore-spb https://launchpad.net/~gore-spb-yandex\n"
 "  hekp0maht https://launchpad.net/~ctatuct-gmail\n"
@@ -1309,6 +1311,9 @@ msgid ""
 "where you're an operator, \"adcs://\" = all <a po4a-id=0>TLS</a> enabled "
 "hubs)"
 msgstr ""
+"IP-адрес хаба как написан при подключении (пусто = все NMDC хабы, \"op\" = "
+"NMDC хабы, где я оператор, \"adc://\" = все ADC хабы, \"adc://op\" = ADC "
+"хабы, где я оператор, \"adcs://\" = все хабы с включённым <a po4a-id=0>TLS</a>)"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:45
@@ -2940,7 +2945,7 @@ msgstr ""
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/faq_settings_files.html:9 help/index.html:115
 msgid "DC++ settings files guide"
-msgstr ""
+msgstr "Справочник по файлам настройки DC++"
 
 #. type: Content of: <html><body><p>
 #: help/faq_settings_files.html:10
@@ -2978,7 +2983,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_settings_files.html:16
 msgid "DCPlusPlus.xml"
-msgstr ""
+msgstr "DCPlusPlus.xml"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_settings_files.html:17
@@ -2993,7 +2998,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_settings_files.html:18
 msgid "Favorites.xml"
-msgstr ""
+msgstr "Favorites.xml"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_settings_files.html:19
@@ -3001,11 +3006,13 @@ msgid ""
 "This file stores your favorite hubs and favorite users with all of their "
 "properties including login information and passwords."
 msgstr ""
+"Данный файл содержит информацию об избранных хабах и пользователях со всеми "
+"их свойствами, включая имена для подключения и пароли."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_settings_files.html:20
 msgid "Queue.xml"
-msgstr ""
+msgstr "Queue.xml"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_settings_files.html:21
@@ -3018,12 +3025,12 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_settings_files.html:22
 msgid "HashIndex.xml"
-msgstr ""
+msgstr "HashIndex.xml"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_settings_files.html:23
 msgid "HashData.dat"
-msgstr ""
+msgstr "HashData.dat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_settings_files.html:24
@@ -3035,7 +3042,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_settings_files.html:26
 msgid "ADLSearch.xml"
-msgstr ""
+msgstr "ADLSearch.xml"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_settings_files.html:27
@@ -3045,7 +3052,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/faq_settings_files.html:28
 msgid "Users.xml"
-msgstr ""
+msgstr "Users.xml"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/faq_settings_files.html:29
@@ -11122,7 +11129,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:91
 msgid "Unable to rename [path1]: [path2]"
-msgstr ""
+msgstr "Невозможно переименовать [path1]: [path2]"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:92
@@ -11136,7 +11143,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:93
 msgid "Unable to open filelist: [filename]"
-msgstr ""
+msgstr "Невзможно открыть список файлов: [filename]"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:94
@@ -11144,17 +11151,19 @@ msgid ""
 "There were problems opening a downloaded filelist, its corrupted or its size "
 "is <a po4a-id=0>bigger than the maximum size allowed to open</a>."
 msgstr ""
+"Произошли ошибки при открытии скачанного списка файлов,он поврежден или его "
+"размер <a po4a-id=0>больше чем максимальный разрешенный для открытия</a>."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:95
 msgid "Unable to send file [path]: [error message]"
-msgstr ""
+msgstr "Неврзможно послать файл [path]: [error message]"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:96
 msgid ""
 "There was a problem preparing file [path] upon an upload request by a peer."
-msgstr ""
+msgstr "Обнаружена ошибка при подготовке файла [path] для отдачи по запросу."
 
 #. type: Content of: <html><body><p>
 #: help/window_waiting_users.html:14
@@ -11170,6 +11179,8 @@ msgid ""
 "Note that this is not an upload queue, and just a visual representation of "
 "who have tried to get a slot for what."
 msgstr ""
+"Заметьте, это не очередь отдачи, а визуальное представление тех, кто пытался "
+"получить слот."
 
 #~ msgid "<a po4a-id=0>Get started</a>"
 #~ msgstr "<a po4a-id=0>Приступая к работе</a>"
