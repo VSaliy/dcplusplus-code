@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2009-06-14 17:43+0300\n"
-"PO-Revision-Date: 2009-07-11 19:43+0000\n"
+"PO-Revision-Date: 2009-07-16 15:52+0000\n"
 "Last-Translator: lyyser <logard.1961@gmail.com>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-07-12 21:49+0000\n"
+"X-Launchpad-Export-Date: 2009-07-31 18:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
@@ -7559,7 +7559,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:35
 msgid "Priority"
-msgstr ""
+msgstr "Prioriteet"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:36 help/window_download_queue.html:67
@@ -7572,7 +7572,7 @@ msgstr ""
 #: help/window_download_queue.html:37 help/window_hub.html:77
 #: help/window_public_hubs.html:19 help/window_public_hubs.html:81
 msgid "Users"
-msgstr ""
+msgstr "Kasutajad"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:38
@@ -7584,7 +7584,7 @@ msgstr ""
 #: help/window_finished_downloads.html:22 help/window_finished_uploads.html:22
 #: help/window_search.html:72
 msgid "Path"
-msgstr ""
+msgstr "Failitee"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:40
@@ -7595,17 +7595,17 @@ msgstr ""
 #: help/window_download_queue.html:41 help/window_file_list.html:27
 #: help/window_search.html:78
 msgid "Exact size"
-msgstr ""
+msgstr "Täpne suurus"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:42
 msgid "The exact file size in bytes."
-msgstr ""
+msgstr "Täpne faili suurus baitides"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:43
 msgid "Errors"
-msgstr ""
+msgstr "Tõrked"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:44
@@ -7615,7 +7615,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:45
 msgid "Added"
-msgstr ""
+msgstr "Lisatud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:46
@@ -7636,7 +7636,7 @@ msgstr ""
 #: help/window_download_queue.html:49 help/window_file_list.html:25
 #: help/window_search.html:66
 msgid "Type"
-msgstr ""
+msgstr "Tüüp"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:50
@@ -7681,7 +7681,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:68
 msgid "Re-add source"
-msgstr ""
+msgstr "Lisa allikas tagasi"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:69
@@ -7691,7 +7691,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:70
 msgid "Remove source"
-msgstr ""
+msgstr "Eemalda allikas"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:71
@@ -7709,7 +7709,7 @@ msgstr ""
 #: help/window_pm.html:21 help/window_public_hubs.html:66
 #: help/window_search.html:108 help/window_search_spy.html:28
 msgid "Status bar"
-msgstr ""
+msgstr "Olekuriba"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:80 help/window_search.html:110
@@ -7724,7 +7724,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:82
 msgid "Items"
-msgstr ""
+msgstr "Esemed"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:83
@@ -7734,7 +7734,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:84 help/window_file_list.html:56
 msgid "Size (left)"
-msgstr ""
+msgstr "Suurus (left)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:85
@@ -7745,7 +7745,7 @@ msgstr ""
 #: help/window_download_queue.html:86 help/window_finished_downloads.html:38
 #: help/window_finished_uploads.html:38
 msgid "Files"
-msgstr ""
+msgstr "Failid"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:87
@@ -7755,7 +7755,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_download_queue.html:88 help/window_file_list.html:60
 msgid "Size (right)"
-msgstr ""
+msgstr "Suurus (right)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_download_queue.html:89
@@ -7788,7 +7788,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_downloads.html:19
 msgid "Time left"
-msgstr ""
+msgstr "Aega jäänud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_downloads.html:20
@@ -7803,7 +7803,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_downloads.html:23
 msgid "Done"
-msgstr ""
+msgstr "Valmis"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_downloads.html:24
@@ -7823,17 +7823,17 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_hubs.html:23
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_hubs.html:25
 msgid "User Description"
-msgstr ""
+msgstr "Kasutaja Kirjeldus"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_hubs.html:30 help/window_public_hubs.html:43
 msgid "Connect"
-msgstr ""
+msgstr "Ühenda"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_hubs.html:31
@@ -7868,12 +7868,12 @@ msgstr ""
 #. type: Content of: <html><body><h1>
 #: help/window_favorite_users.html:10 help/window_favorite_users.html:11
 msgid "Favorite users"
-msgstr ""
+msgstr "Sõbrad kasutajad"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_users.html:15
 msgid "Auto grant slot / Nick"
-msgstr ""
+msgstr "Lubada Automaatselt Slot / Nimi"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_users.html:16
@@ -7896,7 +7896,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_users.html:19
 msgid "Time last seen"
-msgstr ""
+msgstr "VIimati nähtud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_users.html:20
@@ -7916,7 +7916,7 @@ msgstr ""
 #: help/window_favorite_users.html:23 help/window_hub.html:45
 #: help/window_search.html:84
 msgid "CID"
-msgstr ""
+msgstr "CID"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_users.html:24
@@ -7926,7 +7926,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_favorite_users.html:29
 msgid "Connect to hub"
-msgstr ""
+msgstr "Ühendu jaoturisse"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_favorite_users.html:30
@@ -7967,7 +7967,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:23 help/window_search.html:62
 msgid "File"
-msgstr ""
+msgstr "Fail"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:24
@@ -7992,7 +7992,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:31
 msgid "TTH"
-msgstr ""
+msgstr "TTH"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:32
@@ -8034,7 +8034,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_file_list.html:49 help/window_main.html:263
 msgid "Status bar (bottom)"
-msgstr ""
+msgstr "Olekuriba  (all)"
 
 #. type: Content of: <html><body><h3>
 #: help/window_file_list.html:50
@@ -8049,7 +8049,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:54
 msgid "Files (left)"
-msgstr ""
+msgstr "Failid (left)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:55
@@ -8066,7 +8066,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:58
 msgid "Files (right)"
-msgstr ""
+msgstr "Failid (right)"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:59
@@ -8085,7 +8085,7 @@ msgstr ""
 #. type: Content of: <html><body><h3>
 #: help/window_file_list.html:63
 msgid "Buttons:"
-msgstr ""
+msgstr "Nupud:"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:65
@@ -8109,7 +8109,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:69
 msgid "Find"
-msgstr ""
+msgstr "Leia"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:70
@@ -8119,7 +8119,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_file_list.html:71
 msgid "Next"
-msgstr ""
+msgstr "Järgmine"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_file_list.html:72
@@ -8132,7 +8132,7 @@ msgstr ""
 #: help/window_finished_downloads.html:10
 #: help/window_finished_downloads.html:11
 msgid "Finished downloads"
-msgstr ""
+msgstr "Lõpetatud allalaadimised"
 
 #. type: Content of: <html><body><p>
 #: help/window_finished_downloads.html:13 help/window_finished_uploads.html:13
@@ -8154,12 +8154,12 @@ msgstr ""
 #: help/window_finished_downloads.html:18 help/window_finished_uploads.html:18
 #: help/window_search_spy.html:20
 msgid "Time"
-msgstr ""
+msgstr "Aeg"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:19
 msgid "The date and time the file finished downloading."
-msgstr ""
+msgstr "Aeg millal faili allaladimine lõppes"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:21
@@ -8173,9 +8173,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_finished_downloads.html:24 help/window_finished_uploads.html:24
-#, fuzzy
 msgid "Nicks"
-msgstr "Hüüdnimi"
+msgstr "Nimed"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:25
@@ -8184,9 +8183,8 @@ msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_finished_downloads.html:26 help/window_finished_uploads.html:26
-#, fuzzy
 msgid "File size"
-msgstr "Faili tüüp"
+msgstr "Faili suurus"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:27
@@ -8196,7 +8194,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_finished_downloads.html:28 help/window_finished_uploads.html:28
 msgid "Transferred"
-msgstr ""
+msgstr "Edastamine"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:29 help/window_finished_uploads.html:29
@@ -8206,7 +8204,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_finished_downloads.html:30 help/window_finished_uploads.html:30
 msgid "% transferred"
-msgstr ""
+msgstr "% edastatud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:31
@@ -8221,7 +8219,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_finished_downloads.html:34 help/window_finished_uploads.html:34
 msgid "CRC Checked"
-msgstr ""
+msgstr "CRC Kontrollitud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_finished_downloads.html:35 help/window_finished_uploads.html:35
@@ -8460,7 +8458,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_hub.html:32 help/window_public_hubs.html:25
 msgid "Shared"
-msgstr ""
+msgstr "Jagatud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_hub.html:33
@@ -8475,7 +8473,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_hub.html:36
 msgid "Tag"
-msgstr ""
+msgstr "Silt"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_hub.html:37
@@ -8493,7 +8491,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_hub.html:39 help/window_search.html:74
 msgid "Connection"
-msgstr ""
+msgstr "Ühendus"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_hub.html:40
@@ -8650,7 +8648,7 @@ msgstr ""
 #. type: Attribute 'alt' of: <html><body><h1><img>
 #: help/window_main.html:11
 msgid "DC++"
-msgstr ""
+msgstr "DC++"
 
 #. type: Content of: <html><body><h2>
 #: help/window_main.html:14
@@ -8660,7 +8658,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:17
 msgid "File Menu"
-msgstr ""
+msgstr "Faili menüü"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:19
@@ -8683,7 +8681,7 @@ msgstr ""
 #: help/window_main.html:23 help/window_main.html:159
 #: help/window_main.html:183
 msgid "Reconnect"
-msgstr ""
+msgstr "Ühendu uuesti"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:24
@@ -8709,7 +8707,7 @@ msgstr ""
 #: help/window_main.html:27 help/window_main.html:170
 #: help/window_main.html:219
 msgid "Open file list..."
-msgstr ""
+msgstr "Ava faili loend..."
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:28
@@ -8721,7 +8719,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:29
 msgid "Open own list"
-msgstr ""
+msgstr "Ava enda loend"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:30
@@ -8746,7 +8744,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:33
 msgid "Refresh file list"
-msgstr ""
+msgstr "Uuenda failide nimekirja"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:34
@@ -8758,7 +8756,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:35
 msgid "Open downloads directory"
-msgstr ""
+msgstr "Ava allalaadimise kataloog"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:36
@@ -8768,27 +8766,27 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:37
 msgid "Settings..."
-msgstr ""
+msgstr "Seaded..."
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:38
 msgid "Opens the Settings panel."
-msgstr ""
+msgstr "Ava seadete paneel"
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:39
 msgid "Exit"
-msgstr ""
+msgstr "Välju"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:40
 msgid "Closes DC++."
-msgstr ""
+msgstr "Sulge DC++."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:43
 msgid "View Menu"
-msgstr ""
+msgstr "Menüü Vaade"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:45
@@ -8862,7 +8860,7 @@ msgstr ""
 #: help/window_main.html:80 help/window_main.html:81 help/window_main.html:168
 #: help/window_main.html:213 help/window_main.html:214
 msgid "ADL Search"
-msgstr ""
+msgstr "ADL Otsing"
 
 #. type: Content of: <html><body><dl><dd><dl><dd><div>
 #: help/window_main.html:82
@@ -8914,7 +8912,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:105
 msgid "Window Menu"
-msgstr ""
+msgstr "Aknamenüü"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:107
@@ -8926,7 +8924,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:109
 msgid "Close disconnected"
-msgstr ""
+msgstr "Sulge ühenduseta"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:110
@@ -8936,7 +8934,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:111
 msgid "Close all PM windows"
-msgstr ""
+msgstr "Sulge kõik PS aknad"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:112
@@ -8956,7 +8954,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:115
 msgid "Close all file list windows"
-msgstr ""
+msgstr "Sulge kõik faililisti aknad"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:116
@@ -8968,17 +8966,17 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:117
 msgid "Close all search windows"
-msgstr ""
+msgstr "Sulge kõik otsinguaknad"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:118
 msgid "Closes all opened search windows."
-msgstr ""
+msgstr "Sulge kõik avatud otsinguaknad"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:121
 msgid "Help Menu"
-msgstr ""
+msgstr "Menüü Abi"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:123
@@ -8991,7 +8989,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:125
 msgid "Help Contents"
-msgstr ""
+msgstr "Abiteabe sisukord"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:126
@@ -9006,7 +9004,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:129
 msgid "Change Log"
-msgstr ""
+msgstr "Muutuste logi"
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:130
@@ -9018,7 +9016,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/window_main.html:131
 msgid "About DC++..."
-msgstr ""
+msgstr "Programmist DC++..."
 
 #. type: Content of: <html><body><dl><dd><dl><dd>
 #: help/window_main.html:132
@@ -9095,7 +9093,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:174 help/window_main.html:235
 msgid "What's This?"
-msgstr ""
+msgstr "Mis see on?"
 
 #. type: Content of: <html><body><p>
 #: help/window_main.html:178
@@ -9216,12 +9214,12 @@ msgstr ""
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/window_main.html:256
 msgid "Ctrl+W"
-msgstr ""
+msgstr "Ctrl+W"
 
 #. type: Content of: <html><body><ul><li><ul><li>
 #: help/window_main.html:257
 msgid "Ctrl+F4"
-msgstr ""
+msgstr "Ctrl+F4"
 
 #. type: Content of: <html><body>
 #: help/window_main.html:260
@@ -9242,7 +9240,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:266
 msgid "System messages"
-msgstr ""
+msgstr "Süsteemi sõnumid"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:267
@@ -9274,7 +9272,7 @@ msgstr ""
 #: help/window_main.html:273 help/window_public_hubs.html:78
 #: help/window_search.html:56
 msgid "Hubs"
-msgstr ""
+msgstr "Hubid"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:274
@@ -9308,7 +9306,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:283 help/window_search.html:70
 msgid "Slots"
-msgstr ""
+msgstr "Pesad"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_main.html:284
@@ -9362,7 +9360,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:297
 msgid "Current download speed"
-msgstr ""
+msgstr "Aktiivne allalaadimise kiirus"
 
 #. type: Content of: <html><body><dl><dd><div>
 #: help/window_main.html:298
@@ -9374,7 +9372,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_main.html:301
 msgid "Current upload speed"
-msgstr ""
+msgstr "Aktiivne üleslaadimise kiirus"
 
 #. type: Content of: <html><body><dl><dd><div>
 #: help/window_main.html:302
@@ -9485,7 +9483,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_public_hubs.html:23
 msgid "Country"
-msgstr ""
+msgstr "Riik"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_public_hubs.html:24
@@ -9538,7 +9536,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_public_hubs.html:33
 msgid "Max users"
-msgstr ""
+msgstr "Maksimum  kasutajaid"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_public_hubs.html:34
@@ -9550,7 +9548,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_public_hubs.html:35
 msgid "Reliability"
-msgstr ""
+msgstr "Usaldusväärsus"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_public_hubs.html:36
@@ -9560,7 +9558,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_public_hubs.html:37
 msgid "Rating"
-msgstr ""
+msgstr "Hinnang"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_public_hubs.html:38
@@ -9582,7 +9580,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_public_hubs.html:49
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #. type: Content of: <html><body><p>
 #: help/window_public_hubs.html:51
@@ -9618,7 +9616,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_public_hubs.html:60
 msgid "Refresh"
-msgstr ""
+msgstr "Värskenda"
 
 #. type: Content of: <html><body><p>
 #: help/window_public_hubs.html:62
@@ -9763,7 +9761,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:34
 msgid "Search for"
-msgstr ""
+msgstr "Otsi"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:35
@@ -9775,7 +9773,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:36
 msgid "Purge"
-msgstr ""
+msgstr "Puhasta"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:37
@@ -9813,7 +9811,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:46
 msgid "Only users with free slots"
-msgstr ""
+msgstr "Ainult vabade slot'idega kasutajad"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:47
@@ -9862,12 +9860,12 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:63
 msgid "The file name."
-msgstr ""
+msgstr "Faili nimi"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:65
 msgid "The user's nick name."
-msgstr ""
+msgstr "Kasutaja tunnus nimi."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:67
@@ -9922,7 +9920,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:91
 msgid "Download whole directory"
-msgstr ""
+msgstr "Tõmba kogu kaust"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:92
@@ -9934,7 +9932,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search.html:94
 msgid "Download whole directory to..."
-msgstr ""
+msgstr "Tõmba kogu kaust asukohta..."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search.html:95
@@ -10001,7 +9999,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search_spy.html:18
 msgid "Count"
-msgstr ""
+msgstr "Loend"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search_spy.html:19
@@ -10033,7 +10031,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search_spy.html:32
 msgid "Total"
-msgstr ""
+msgstr "Kokku"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search_spy.html:33
@@ -10043,7 +10041,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search_spy.html:34
 msgid "Average/s"
-msgstr ""
+msgstr "Keskmine/sed"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search_spy.html:35
@@ -10067,7 +10065,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_search_spy.html:38
 msgid "Hit Ratio"
-msgstr ""
+msgstr "Tabamusmäär"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_search_spy.html:39
@@ -10113,12 +10111,12 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:19
 msgid "Event messages"
-msgstr ""
+msgstr "Sündmuse teated"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:21
 msgid "File list refresh initiated"
-msgstr ""
+msgstr "Faililisti värskendamine käivitatud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:22
@@ -10134,7 +10132,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:24
 msgid "File list refresh finished"
-msgstr ""
+msgstr "Faililisti värskendamine lõpetatud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:25
@@ -10186,7 +10184,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:33
 msgid "Hash database rebuilt"
-msgstr ""
+msgstr "Hashi andmebaas taasloodud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:34
@@ -10220,7 +10218,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:40
 msgid "Generated new TLS certificate"
-msgstr ""
+msgstr "Loodud uus TLS sertifikaat"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:41
@@ -10234,7 +10232,7 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_system_log.html:45
 msgid "Error messages"
-msgstr ""
+msgstr "Vea teated"
 
 #. type: Content of: <html><body><p>
 #: help/window_system_log.html:46
@@ -10332,7 +10330,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:62
 msgid "Connectivity restored"
-msgstr ""
+msgstr "Ühendus taastatud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:63
@@ -10345,12 +10343,12 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:64
 msgid "Search disabled: [error message]"
-msgstr ""
+msgstr "Otsin g keelatud: [vea teade]"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:65
 msgid "Search enabled again"
-msgstr ""
+msgstr "Otsing uuesti lubatud"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:66
@@ -10362,7 +10360,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:67
 msgid "Failed to load certificate file"
-msgstr ""
+msgstr "Sertifikaadi laadimine ebaõnnestus"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:68
@@ -10370,11 +10368,12 @@ msgid ""
 "There was a problem loading the certificate file, its contents are damaged "
 "or invalid."
 msgstr ""
+"Sertifikaadi faili laadimine esineb probleeme, Sisu on vigane või rikutud"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:69
 msgid "Failed to load private key"
-msgstr ""
+msgstr "Privaatvõtme laadimine ebaõnnestus"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:70
@@ -10382,6 +10381,8 @@ msgid ""
 "There was a problem loading the private key file, its contents are damaged "
 "or invalid."
 msgstr ""
+"Esineb probleem privaatvõtme faili laadimisega, selle sisu kas on vigane või "
+"rikutud"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:71
@@ -10400,7 +10401,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:73
 msgid "TLS disabled, no certificate file set"
-msgstr ""
+msgstr "TLS keelatud, sertifikaadi fail seadmata"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:74

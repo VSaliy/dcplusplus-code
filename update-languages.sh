@@ -14,7 +14,8 @@ DIR=$2
 
 echo Processing $PREFIX...
 
-mv $SOURCE/$PREFIX/*.po $SOURCE
+# move all files to the root dir
+find $SOURCE -type f -exec mv '{}' $SOURCE \;
 
 cd $DIR/po
 
