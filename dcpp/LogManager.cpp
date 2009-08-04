@@ -26,8 +26,8 @@
 
 namespace dcpp {
 
-void LogManager::log(Area area, StringMap& params) throw() {
-	log(getPath(area, params), Util::formatParams(getSetting(area, FORMAT), params, false));
+void LogManager::log(Area area, StringMap& params, const time_t timestamp) throw() {
+	log(getPath(area, params), Util::formatParams(getSetting(area, FORMAT), params, false, timestamp));
 }
 
 void LogManager::message(const string& msg) {
