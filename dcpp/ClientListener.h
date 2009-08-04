@@ -44,9 +44,9 @@ public:
 	virtual void on(Failed, Client*, const string&) throw() { }
 	virtual void on(GetPassword, Client*) throw() { }
 	virtual void on(HubUpdated, Client*) throw() { }
-	virtual void on(Message, Client*, const OnlineUser&, const string&, bool = false) throw() { }
+	virtual void on(Message, Client*, const OnlineUser&, const string&, bool = false, const time_t = time(0)) throw() { }
 	virtual void on(StatusMessage, Client*, const string&, int = FLAG_NORMAL) throw() { }
-	virtual void on(PrivateMessage, Client*, const OnlineUser&, const OnlineUser&, const OnlineUser&, const string&, bool = false) throw() { }
+	virtual void on(PrivateMessage, Client*, const OnlineUser&, const OnlineUser&, const OnlineUser&, const string&, bool = false, const time_t = time(0)) throw() { }
 	virtual void on(HubUserCommand, Client*, int, int, const string&, const string&) throw() { }
 	virtual void on(HubFull, Client*) throw() { }
 	virtual void on(NickTaken, Client*) throw() { }

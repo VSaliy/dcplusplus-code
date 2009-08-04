@@ -87,10 +87,10 @@ protected:
 		return Text::toT(prologue) + rtfEscape(aLine) + Text::toT("}\n");
 	}
 
-	void addChat(Client* aClient, const tstring& aLine) {
+	void addChat(Client* aClient, const tstring& aLine, const time_t timestamp) {
 		tstring line;
 		if(timeStamps) {
-			line = Text::toT("\r\n[" + Util::getShortTimeString() + "] ");
+			line = Text::toT("\r\n[" + Util::getShortTimeString(timestamp) + "] ");
 		} else {
 			line = _T("\r\n");
 		}
