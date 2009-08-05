@@ -67,7 +67,7 @@ void ModalDialog::create(unsigned resourceId) {
 
 void ModalDialog::create(const Seed& cs) {
 	util::win32::DLGTEMPLATEEX t = util::win32::defaultTemplate;
-	t.style |= DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | cs.styles;
+	t.style |= DS_MODALFRAME | WS_POPUP | WS_SYSMENU | cs.styles;
 	t.cx = cs.size.x;
 	t.cy = cs.size.y;
 
