@@ -54,7 +54,7 @@ void ModelessDialog::create( unsigned resourceId )
 
 void ModelessDialog::create(const Seed& cs) {
 	util::win32::DLGTEMPLATEEX t = util::win32::defaultTemplate;
-	t.style |= DS_CONTROL | cs.styles;
+	t.style |= DS_CONTROL | WS_CHILD | cs.styles;
 	t.cx = cs.size.x;
 	t.cy = cs.size.y;
 

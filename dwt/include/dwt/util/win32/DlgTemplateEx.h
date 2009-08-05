@@ -57,7 +57,7 @@ static struct DLGTEMPLATEEX {
 	0xffff,
 	0,
 	0,
-	DS_SHELLFONT | WS_CHILD | WS_CAPTION,
+	DS_SHELLFONT | WS_CAPTION,
 	0,
 	0,
 	0,
