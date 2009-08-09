@@ -105,10 +105,16 @@ private:
 			MASK_TYPE = 1 << COLUMN_TYPE
 		};
 
+		enum Status {
+			STATUS_WAITING,
+			STATUS_RUNNING,
+			STATUS_FINISHED
+		};
+
 		QueueItemInfo(const QueueItem& aQI) : Flags(aQI), target(aQI.getTarget()),
 			path(Util::getFilePath(aQI.getTarget())),
 			size(aQI.getSize()), downloadedBytes(aQI.getDownloadedBytes()),
-			added(aQI.getAdded()), priority(aQI.getPriority()), running(aQI.isRunning()), tth(aQI.getTTH()),
+			added(aQI.getAdded()), priority(aQI.getPriority()), status(getStatus(aQI)), tth(aQI.getTTH()),
 			sources(aQI.getSources()), badSources(aQI.getBadSources()), updateMask((uint32_t)-1), display(0)
 		{
 		}
@@ -136,6 +142,10 @@ private:
 			}
 		}
 
+		static Status getStatus(const QueueItem& qi) {
+			return qi.isRunning() ? STATUS_RUNNING : qi.isFinished() ? STATUS_FINISHED : STATUS_WAITING;
+		}
+
 		QueueItem::SourceList& getSources() { return sources; }
 		QueueItem::SourceList& getBadSources() { return badSources; }
 
@@ -161,7 +171,7 @@ private:
 		GETSET(int64_t, downloadedBytes, DownloadedBytes);
 		GETSET(time_t, added, Added);
 		GETSET(QueueItem::Priority, priority, Priority);
-		GETSET(bool, running, Running);
+		GETSET(Status, status, Status);
 		GETSET(TTHValue, tth, TTH);
 		GETSET(QueueItem::SourceList, sources, Sources);
 		GETSET(QueueItem::SourceList, badSources, BadSources);
@@ -271,7 +281,7 @@ private:
 
 	void onAdded(QueueItemInfo* ii);
 	void onRemoved(const string& s);
-	void onUpdated(const QueueItem& qi);
+	void onUpdated(QueueItem* qi);
 	void onRechecked(QueueItem* qi, const tstring& message);
 
 	virtual void on(QueueManagerListener::Added, QueueItem* aQI) throw();
@@ -279,6 +289,7 @@ private:
 	virtual void on(QueueManagerListener::Removed, QueueItem* aQI) throw();
 	virtual void on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw();
 	virtual void on(QueueManagerListener::StatusUpdated, QueueItem* aQI) throw() { on(QueueManagerListener::SourcesUpdated(), aQI); }
+	virtual void on(QueueManagerListener::Finished, QueueItem* aQI, const string&, int64_t) throw() { on(QueueManagerListener::SourcesUpdated(), aQI); }
 
 	virtual void on(QueueManagerListener::RecheckStarted, QueueItem* aQI) throw();
 	virtual void on(QueueManagerListener::RecheckNoFile, QueueItem* aQI) throw();

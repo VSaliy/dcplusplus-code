@@ -135,6 +135,9 @@ static QueueItem* findCandidate(QueueItem* cand, QueueItem::StringIter start, Qu
 		// We prefer to search for things that are not running...
 		if((cand != NULL) && q->isRunning())
 			continue;
+		// No finished files
+		if(q->isFinished())
+			continue;
 		// No user lists
 		if(q->isSet(QueueItem::FLAG_USER_LIST))
 			continue;
@@ -707,6 +710,8 @@ bool QueueManager::addSource(QueueItem* qi, const UserPtr& aUser, Flags::MaskTyp
 	if(aUser->isSet(User::PASSIVE) && !ClientManager::getInstance()->isActive() ) {
 		qi->removeSource(aUser, QueueItem::Source::FLAG_PASSIVE);
 		wantConnection = false;
+	} else if(qi->isFinished()) {
+		wantConnection = false;
 	} else {
 		userQueue.add(qi, aUser);
 	}
@@ -1120,10 +1125,14 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 							}
 
 							fire(QueueManagerListener::Finished(), q, dir, aDownload->getAverageSpeed());
-							fire(QueueManagerListener::Removed(), q);
 
 							userQueue.remove(q);
-							fileQueue.remove(q);
+
+							if(!BOOLSETTING(KEEP_FINISHED_FILES)) {
+								fire(QueueManagerListener::Removed(), q);
+								fileQueue.remove(q);
+							}
+
 						} else {
 							userQueue.removeDownload(q, aDownload->getUser());
 							fire(QueueManagerListener::StatusUpdated(), q);

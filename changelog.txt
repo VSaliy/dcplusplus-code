@@ -27,6 +27,8 @@
 * [L#213213] Implement bandwidth throttling (cologic)
 * New icon (thanks radox)
 * Fix dialog focus issues (poy)
+* Fix a crash in queue frame
+* Move finished downloads functionality into queue frame
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)

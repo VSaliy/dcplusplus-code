@@ -316,7 +316,7 @@ void QueueFrame::QueueItemInfo::update() {
 			display->columns[COLUMN_USERS] = tmp.empty() ? T_("No users") : tmp;
 		}
 		if(colMask & MASK_STATUS) {
-			if(!getRunning()) {
+			if(getStatus() == STATUS_WAITING) {
 				if(online > 0) {
 					if(getSources().size() == 1) {
 						display->columns[COLUMN_STATUS] = T_("Waiting (User online)");
@@ -332,8 +332,10 @@ void QueueFrame::QueueItemInfo::update() {
 						display->columns[COLUMN_STATUS] = str(TF_("All %1% users offline") % getSources().size());
 					}
 				}
-			} else {
+			} else if(getStatus() == STATUS_RUNNING) {
 				display->columns[COLUMN_STATUS] = T_("Running...");
+			} else if(getStatus() == STATUS_FINISHED) {
+				display->columns[COLUMN_STATUS] = T_("Finished");
 			}
 		}
 		if(colMask & MASK_SIZE) {
@@ -1033,14 +1035,14 @@ void QueueFrame::onRemoved(const string& s) {
 	dirty = true;
 }
 
-void QueueFrame::onUpdated(const QueueItem& qi) {
-	QueueItemInfo* ii = getItemInfo(qi.getTarget());
+void QueueFrame::onUpdated(QueueItem* qi) {
+	QueueItemInfo* ii = getItemInfo(qi->getTarget());
 
-	ii->setPriority(qi.getPriority());
-	ii->setRunning(qi.isRunning());
-	ii->setDownloadedBytes(qi.getDownloadedBytes());
-	ii->setSources(qi.getSources());
-	ii->setBadSources(qi.getBadSources());
+	ii->setPriority(qi->getPriority());
+	ii->setStatus(QueueItemInfo::getStatus(*qi));
+	ii->setDownloadedBytes(qi->getDownloadedBytes());
+	ii->setSources(qi->getSources());
+	ii->setBadSources(qi->getBadSources());
 
 	ii->updateMask |= QueueItemInfo::MASK_PRIORITY | QueueItemInfo::MASK_USERS | QueueItemInfo::MASK_ERRORS | QueueItemInfo::MASK_STATUS | QueueItemInfo::MASK_DOWNLOADED;
 
@@ -1049,6 +1051,8 @@ void QueueFrame::onUpdated(const QueueItem& qi) {
 		ii->update();
 		files->update(ii);
 	}
+
+	delete qi;
 }
 
 void QueueFrame::onRechecked(QueueItem* qi, const tstring& message) {
@@ -1070,7 +1074,7 @@ void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& o
 }
 
 void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw() {
-	callAsync(std::tr1::bind(&QueueFrame::onUpdated, this, *aQI));
+	callAsync(std::tr1::bind(&QueueFrame::onUpdated, this, new QueueItem(*aQI)));
 }
 
 void QueueFrame::on(QueueManagerListener::RecheckStarted, QueueItem* aQI) throw() {
