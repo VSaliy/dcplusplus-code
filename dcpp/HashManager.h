@@ -98,7 +98,15 @@ public:
 	struct HashPauser {
 		HashPauser();
 		~HashPauser();
+
+	private:
+		bool resume;
 	};
+
+	/// @return whether hashing was already paused
+	bool pauseHashing();
+	void resumeHashing();
+	bool isHashingPaused() const;
 
 private:
 	class Hasher : public Thread {
@@ -107,15 +115,17 @@ private:
 
 		void hashFile(const string& fileName, int64_t size);
 
-		void pauseHashing();
-		void resumeHashing();
+		/// @return whether hashing was already paused
+		bool pause();
+		void resume();
+		bool isPaused() const;
 
 		void stopHashing(const string& baseDir);
 		virtual int run();
 		bool fastHash(const string& fname, uint8_t* buf, TigerTree& tth, int64_t size, CRC32Filter* xcrc32);
 		void getStats(string& curFile, int64_t& bytesLeft, size_t& filesLeft);
-		void shutdown() { stop = true; s.signal(); }
-		void scheduleRebuild() { rebuild = true; s.signal(); }
+		void shutdown() { stop = true; if(paused) s.signal(); s.signal(); }
+		void scheduleRebuild() { rebuild = true; if(paused) s.signal(); s.signal(); }
 
 	private:
 		// Case-sensitive (faster), it is rather unlikely that case changes, and if it does it's harmless.
@@ -124,7 +134,7 @@ private:
 		typedef WorkMap::iterator WorkIter;
 
 		WorkMap w;
-		CriticalSection cs;
+		mutable CriticalSection cs;
 		Semaphore s;
 
 		bool stop;
@@ -133,12 +143,11 @@ private:
 		bool rebuild;
 		string currentFile;
 		int64_t currentSize;
+
+		void instantPause();
 	};
 
 	friend class Hasher;
-
-	void pauseHashing();
-	void resumeHashing();
 
 	class HashStore {
 	public:
@@ -214,7 +223,7 @@ private:
 	Hasher hasher;
 	HashStore store;
 
-	CriticalSection cs;
+	mutable CriticalSection cs;
 
 	/** Single node tree where node = root, no storage in HashData.dat */
 	static const int64_t SMALL_TREE = -1;
