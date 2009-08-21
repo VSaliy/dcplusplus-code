@@ -34,6 +34,7 @@ private:
 	LabelPtr speed;
 	LabelPtr left;
 	ProgressBarPtr progress;
+	ButtonPtr pauseResume;
 
 	bool autoClose;
 	int64_t startBytes;
@@ -45,6 +46,9 @@ private:
 	bool updateStats();
 
 	void layout();
+
+	void handlePauseResume();
+	void setButtonState();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_HASH_PROGESS_DLG_H)

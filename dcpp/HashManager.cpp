@@ -467,15 +467,20 @@ void HashManager::Hasher::hashFile(const string& fileName, int64_t size) {
 	}
 }
 
-void HashManager::Hasher::pauseHashing() {
+bool HashManager::Hasher::pause() {
 	Lock l(cs);
-	paused++;
+	return paused++;
 }
 
-void HashManager::Hasher::resumeHashing() {
+void HashManager::Hasher::resume() {
 	Lock l(cs);
 	while(--paused > 0)
 		s.signal();
+}
+
+bool HashManager::Hasher::isPaused() const {
+	Lock l(cs);
+	return paused > 0;
 }
 
 void HashManager::Hasher::stopHashing(const string& baseDir) {
@@ -500,6 +505,19 @@ void HashManager::Hasher::getStats(string& curFile, int64_t& bytesLeft, size_t& 
 		bytesLeft += i->second;
 	}
 	bytesLeft += currentSize;
+}
+
+void HashManager::Hasher::instantPause() {
+	bool wait = false;
+	{
+		Lock l(cs);
+		if(paused > 0) {
+			paused++;
+			wait = true;
+		}
+	}
+	if(wait)
+		s.wait();
 }
 
 #ifdef _WIN32
@@ -599,6 +617,8 @@ bool HashManager::Hasher::fastHash(const string& fname, uint8_t* buf, TigerTree&
 			}
 		}
 
+		instantPause();
+
 		*((uint64_t*)&over.Offset) += rn;
 		size -= rn;
 
@@ -666,6 +686,8 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 			ok = true;
 			break;
 		}
+
+		instantPause();
 
 		munmap(buf, size_read);
 		pos += size_read;
@@ -769,6 +791,8 @@ int HashManager::Hasher::run() {
 							currentSize = max(static_cast<uint64_t>(currentSize - n), static_cast<uint64_t>(0));
 						}
 						sizeLeft -= n;
+
+						instantPause();
 					}while (n> 0 && !stop);
 				} else {
 					sizeLeft = 0;
@@ -811,21 +835,27 @@ int HashManager::Hasher::run() {
 }
 
 HashManager::HashPauser::HashPauser() {
-	HashManager::getInstance()->pauseHashing();
+	resume = !HashManager::getInstance()->pauseHashing();
 }
 
 HashManager::HashPauser::~HashPauser() {
-	HashManager::getInstance()->resumeHashing();
+	if(resume)
+		HashManager::getInstance()->resumeHashing();
 }
 
-void HashManager::pauseHashing() {
+bool HashManager::pauseHashing() {
 	Lock l(cs);
-	hasher.pauseHashing();
+	return hasher.pause();
 }
 
 void HashManager::resumeHashing() {
 	Lock l(cs);
-	hasher.resumeHashing();
+	hasher.resume();
+}
+
+bool HashManager::isHashingPaused() const {
+	Lock l(cs);
+	return hasher.isPaused();
 }
 
 } // namespace dcpp

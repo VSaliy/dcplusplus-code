@@ -35,6 +35,7 @@ stat(0),
 speed(0),
 left(0),
 progress(0),
+pauseResume(0),
 autoClose(aAutoClose)
 {
 	onInitDialog(std::tr1::bind(&HashProgressDlg::handleInitDialog, this));
@@ -75,11 +76,19 @@ bool HashProgressDlg::handleInitDialog() {
 	progress->setRange(0, 10000);
 
 	{
-		pair<ButtonPtr, ButtonPtr> buttons = WinUtil::addDlgButtons(grid,
+		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
+		cur->column(2).mode = GridInfo::FILL;
+		cur->column(2).align = GridInfo::BOTTOM_RIGHT;
+
+		pair<ButtonPtr, ButtonPtr> buttons = WinUtil::addDlgButtons(cur,
 			std::tr1::bind(&HashProgressDlg::endDialog, this, IDOK),
 			std::tr1::bind(&HashProgressDlg::endDialog, this, IDCANCEL));
 		buttons.first->setText(T_("Run in background"));
 		buttons.second->setVisible(false);
+
+		pauseResume = cur->addChild(Button::Seed());
+		pauseResume->onClicked(std::tr1::bind(&HashProgressDlg::handlePauseResume, this));
+		setButtonState();
 	}
 
 	string tmp;
@@ -115,11 +124,16 @@ bool HashProgressDlg::updateStats() {
 		return true;
 	}
 	double diff = tick - startTime;
-	if(diff < 1000 || files == 0 || bytes == 0) {
+	bool paused = HashManager::getInstance()->isHashingPaused();
+	if(diff < 1000 || files == 0 || bytes == 0 || paused) {
 		stat->setText(str(TF_("-.-- files/h, %1% files left") % (uint32_t)files));
 		speed->setText(str(TF_("-.-- B/s, %1% left") % Text::toT(Util::formatBytes(bytes))));
-		left->setText(T_("-:--:-- left"));
-		progress->setPosition(0);
+		if(paused) {
+			left->setText(T_("Paused"));
+		} else {
+			left->setText(T_("-:--:-- left"));
+			progress->setPosition(0);
+		}
 	} else {
 		double filestat = (((double)(startFiles - files)) * 60 * 60 * 1000) / diff;
 		double speedStat = (((double)(startBytes - bytes)) * 1000) / diff;
@@ -154,4 +168,19 @@ bool HashProgressDlg::updateStats() {
 void HashProgressDlg::layout() {
 	dwt::Point sz = getClientSize();
 	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
+}
+
+void HashProgressDlg::handlePauseResume() {
+	if(HashManager::getInstance()->isHashingPaused()) {
+		HashManager::getInstance()->resumeHashing();
+	} else {
+		HashManager::getInstance()->pauseHashing();
+	}
+
+	setButtonState();
+	layout();
+}
+
+void HashProgressDlg::setButtonState() {
+	pauseResume->setText(HashManager::getInstance()->isHashingPaused() ? T_("Resume hashing") : T_("Pause hashing"));
 }
