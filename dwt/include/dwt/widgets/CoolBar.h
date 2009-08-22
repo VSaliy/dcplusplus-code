@@ -38,7 +38,6 @@
 
 #ifndef WINCE // Doesn't exist in Windows CE based systems
 
-#include "../Policies.h"
 #include "../aspects/AspectEnabled.h"
 #include "../aspects/AspectKeyboard.h"
 #include "../aspects/AspectFont.h"
@@ -63,7 +62,7 @@ namespace dwt {
   * @todo This class needs some love...
   */
 class CoolBar :
-	public MessageMap< Policies::Subclassed >,
+	public Widget,
 
 	// Aspects
 	public AspectEnabled< CoolBar >,
@@ -73,7 +72,7 @@ class CoolBar :
 	private AspectSizable< CoolBar >,
 	public AspectVisible< CoolBar >
 {
-	typedef MessageMap<Policies::Subclassed> BaseType;
+	typedef Widget BaseType;
 	typedef dwt::AspectSizable< CoolBar > AspectSizable;
 	friend class WidgetCreator< CoolBar >;
 public:
@@ -122,7 +121,7 @@ public:
 
 protected:
 	// CTOR
-	explicit CoolBar( dwt::Widget * parent );
+	explicit CoolBar(Widget *parent );
 
 	// To assure nobody accidentally deletes any heaped object of this type, parent
 	// is supposed to do so when parent is killed...
@@ -130,6 +129,9 @@ protected:
 	{}
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	// Adds up the given child to a new rebar band...
 	void addChild( Widget * child, unsigned width, unsigned height, const tstring & txt );
 };
@@ -137,14 +139,14 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 inline CoolBar::CoolBar( Widget * parent )
 	: BaseType( parent )
 {
 	// Can't have a text box without a parent...
 	dwtassert( parent, _T( "Can't have a Button without a parent..." ) );
 }
-
+*/
 inline void CoolBar::refresh() {
 	// This might look a bit stupid, but Windows API have some minor flaws. One of
 	// those flaws is that a Coolbar (and a Toolbar) control must be "resized" with

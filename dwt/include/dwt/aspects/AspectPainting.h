@@ -50,10 +50,10 @@ class AspectPainting
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct Dispatcher {
+	struct PaintDispatcher {
 		typedef std::tr1::function<void (PaintCanvas&)> F;
 
-		Dispatcher(const F& f_, Widget* widget_) : f(f_), widget(widget_) { }
+		PaintDispatcher(const F& f_, Widget* widget_) : f(f_), widget(widget_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			PaintCanvas canvas( widget->handle() );
@@ -72,8 +72,8 @@ public:
 	  * paint stuff onto the window with. <br>
 	  * Parameters passed is Canvas &
 	  */
-	void onPainting(const typename Dispatcher::F& f) {
-		W().addCallback(Message( WM_PAINT ), Dispatcher(f, &W()));
+	void onPainting(const typename PaintDispatcher::F& f) {
+		W().addCallback(Message( WM_PAINT ), PaintDispatcher(f, &W()));
 	}
 
 protected:

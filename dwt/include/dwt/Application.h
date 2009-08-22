@@ -39,11 +39,7 @@
 #include "WindowsHeaders.h"
 #include "tstring.h"
 #include "CommandLine.h"
-#include "ApplicationPlatform.h"
-#include <vector>
-#include <list>
 #include <functional>
-#include <boost/noncopyable.hpp>
 
 #ifdef _MSC_VER
 #ifndef WINCE
@@ -80,9 +76,7 @@ class ModelessDialog;
   * The Application class inherits from boost::noncopyable to indicate it's not to be
   * copied
   */
-class Application
-	: public ApplicationPlatform< CurrentPlatform >,
-	public boost::noncopyable
+class Application :public boost::noncopyable
 {
 #ifdef WINCE
 	friend int WINAPI ::WinMain( HINSTANCE hInstance,

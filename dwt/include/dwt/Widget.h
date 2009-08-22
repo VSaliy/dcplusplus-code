@@ -42,12 +42,11 @@
 #include "Point.h"
 #include "Message.h"
 #include "dwt_unordered_map.h"
+#include "Dispatcher.h"
 
 namespace dwt {
 
 using namespace std::tr1::placeholders;
-
-class Widget;
 
 template<typename T>
 T hwnd_cast(HWND hwnd);
@@ -147,14 +146,15 @@ public:
 	Point getWindowSize();
 	Point getClientSize();
 
+	Dispatcher& getDispatcher() { return dispatcher; }
+
+	virtual void setHandle(HWND wnd);
 protected:
 	/** Most Widgets can override the creational parameters which sets the style and the
 	  * initial position of the Widget, those Widgets will take an object of this type to
 	  * their creational function(s).
 	  */
 	struct Seed {
-		LPCTSTR className;
-
 		/// Initial caption
 		/** Windows with a title bar will use this string in the title bar. Controls with
 		  * caption (e.g. static control, edit control) will use it in the control. <br>
@@ -180,22 +180,20 @@ protected:
 		HMENU menuHandle;
 
 		/// Constructor initializing all member variables to default values
-		Seed(LPCTSTR className_, DWORD style_ = WS_VISIBLE, DWORD exStyle_ = 0,
+		Seed(DWORD style_ = WS_VISIBLE, DWORD exStyle_ = 0,
 			const tstring& caption_ = tstring(),
 			const Rectangle& location_ = letTheSystemDecide, HMENU menuHandle_ = NULL)
-			: className(className_), caption(caption_), style( style_ ), exStyle( exStyle_ ), location( location_ ), menuHandle( menuHandle_ )
+			: caption(caption_), style( style_ ), exStyle( exStyle_ ), location( location_ ), menuHandle( menuHandle_ )
 		{}
 	};
 
-	Widget(Widget * parent);
+	Widget(Widget* parent, Dispatcher& dispatcher);
 
 	virtual ~Widget();
 
 	// Creates the Widget, should not be called directly but overridden in the
 	// derived class - otherwise the wrong seed will be used
 	HWND create(const Seed & cs);
-
-	virtual void setHandle(HWND wnd);
 
 	HWND getParentHandle();
 
@@ -217,11 +215,10 @@ private:
 	Widget * itsParent;
 	HWND itsHandle;
 
+	Dispatcher& dispatcher;
 };
 
-inline Widget::Widget( Widget * parent ) : itsParent(parent), itsHandle(NULL) {
-
-}
+inline Widget::Widget(Widget* parent, Dispatcher& dispatcher_) : itsParent(parent), itsHandle(NULL), dispatcher(dispatcher_) { }
 
 inline LRESULT Widget::sendMessage( UINT msg, WPARAM wParam, LPARAM lParam) const {
 	return ::SendMessage(handle(), msg, wParam, lParam);

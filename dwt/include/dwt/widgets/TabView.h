@@ -124,6 +124,9 @@ protected:
 	virtual ~TabView() { }
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	struct TabInfo {
 		TabInfo(ContainerPtr w_) : w(w_) { }
 		ContainerPtr w;

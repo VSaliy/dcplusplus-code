@@ -149,8 +149,12 @@ protected:
 
 	// Protected to avoid direct instantiation, you can inherit and use
 	// WidgetFactory class which is friend
-	virtual ~RichTextBox()
-	{}
+	virtual ~RichTextBox() { }
+private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
+	static Dispatcher& makeDispatcher();
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,7 +162,7 @@ protected:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline RichTextBox::RichTextBox( dwt::Widget * parent )
-	: TextBoxBase( parent )
+	: TextBoxBase(parent, makeDispatcher())
 {
 }
 

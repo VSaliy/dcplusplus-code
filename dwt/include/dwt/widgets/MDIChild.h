@@ -40,7 +40,6 @@
 
 #include "../tstring.h"
 #include "../resources/Icon.h"
-#include "../Policies.h"
 #include "../WindowClass.h"
 #include "MDIParent.h"
 #include "Frame.h"
@@ -63,12 +62,12 @@ namespace dwt {
   * MDIParent
   */
 class MDIChild :
-	public Composite< Policies::MDIChild >,
+	public Composite,
 
 	public AspectMinMax<MDIChild>
 
 {
-	typedef Composite<Policies::MDIChild> BaseType;
+	typedef Composite BaseType;
 public:
 
 	/// Class type
@@ -100,7 +99,7 @@ public:
 
 	void activate();
 
-	MDIParent* getParent() { return static_cast<MDIParent*>(PolicyType::getParent()); }
+	MDIParent* getParent() { return static_cast<MDIParent*>(BaseType::getParent()); }
 protected:
 	virtual bool tryFire(const MSG& msg, LRESULT& retVal);
 
@@ -108,9 +107,6 @@ protected:
 	explicit MDIChild( Widget * parent );
 
 	virtual ~MDIChild();
-
-private:
-	boost::scoped_ptr<WindowClass> windowClass;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +118,7 @@ inline MDIChild::~MDIChild()
 }
 
 inline MDIChild::MDIChild( Widget * parent )
-	: BaseType( parent )
+	: BaseType(parent, NormalDispatcher::getDefault())
 {}
 
 }

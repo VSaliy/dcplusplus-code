@@ -33,8 +33,10 @@
 
 namespace dwt {
 
+const TCHAR ProgressBar::windowClass[] = PROGRESS_CLASS;
+
 ProgressBar::Seed::Seed() :
-BaseType::Seed(PROGRESS_CLASS, WS_CHILD | PBS_SMOOTH)
+BaseType::Seed(WS_CHILD | PBS_SMOOTH)
 {
 }
 

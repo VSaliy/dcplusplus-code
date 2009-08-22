@@ -61,7 +61,7 @@ class AspectVisible
 
 	static bool isVisible(const MSG& msg) { return msg.wParam > 0; }
 
-	typedef Dispatchers::ConvertBase<bool, &AspectVisible<WidgetType>::isVisible> Dispatcher;
+	typedef Dispatchers::ConvertBase<bool, &AspectVisible<WidgetType>::isVisible> VisibleDispatcher;
 	friend class Dispatchers::ConvertBase<bool, &AspectVisible<WidgetType>::isVisible>;
 
 public:
@@ -85,8 +85,8 @@ public:
 	  * If the boolean value is true, the Widget is visible, otherwise it is
 	  * invisible.
 	  */
-	void onVisibilityChanged(const typename Dispatcher::F& f) {
-		W().addCallback(Message( WM_SHOWWINDOW ), Dispatcher(f));
+	void onVisibilityChanged(const typename VisibleDispatcher::F& f) {
+		W().addCallback(Message( WM_SHOWWINDOW ), VisibleDispatcher(f));
 	}
 
 	/// Repaints the whole window

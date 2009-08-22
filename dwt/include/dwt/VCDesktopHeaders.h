@@ -36,11 +36,10 @@
 #ifndef DWT_VCDesktopHeaders_h
 #define DWT_VCDesktopHeaders_h
 
-#ifndef __GNUC__
-#ifndef WINCE
+#ifndef _MSC_VAR
+#error This file is only for MSVC
+#endif
 
-
-#ifdef _MSC_VER
 // We don't want the stupid "pointer trunctation" to 64 bit architecture warning.
 // The warnings aren't justified anyway since they are basically a bug in 7.1
 // release... E.g. the SetWindowLongPtr is defined as SetWindowLong in 32 bits mode
@@ -53,24 +52,12 @@
 
 #endif
 
-	static const dwt::Platform CurrentPlatform = dwt::dwtDesktop;
-
 	#define SMARTWIN_WNDCLASSEX WNDCLASSEX
 	#define SmartWinRegisterClass RegisterClassEx
 
-	// Windows API files...
-	#include <windows.h>
-	#include <tchar.h>
-	#include <winuser.h>
-	#include <windowsx.h>
-	#include <Shellapi.h>
-	#include <shlwapi.h>
-	#include <commctrl.h>
-	#include <commdlg.h>
-	#include <assert.h>
-
 #pragma comment( lib, "Comdlg32.lib" )
-	#pragma comment( lib, "comctl32.lib" )
+#pragma comment( lib, "comctl32.lib" )
+
 #ifdef DLL
 	#ifdef _DEBUG
 		#ifdef _UNICODE
@@ -85,8 +72,4 @@
 			#pragma comment( lib, "SmartWin.lib" )
 		#endif
 	#endif
-#endif
-#endif
-#endif
-
 #endif

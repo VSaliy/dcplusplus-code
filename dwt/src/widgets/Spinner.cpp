@@ -33,8 +33,10 @@
 
 namespace dwt {
 
+const TCHAR Spinner::windowClass[] = UPDOWN_CLASS;
+
 Spinner::Seed::Seed(int minValue_, int maxValue_, Widget* buddy_) :
-BaseType::Seed(UPDOWN_CLASS, WS_CHILD | UDS_ARROWKEYS | UDS_NOTHOUSANDS),
+BaseType::Seed(WS_CHILD | UDS_ARROWKEYS | UDS_NOTHOUSANDS),
 minValue(minValue_),
 maxValue(maxValue_),
 buddy(buddy_)

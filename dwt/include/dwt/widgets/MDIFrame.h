@@ -53,9 +53,9 @@ namespace dwt {
   * features of MDIFrameBase.
   */
 class MDIFrame
-	: public Frame< Policies::MDIFrame<MDIFrame> >
+	: public Frame
 {
-	typedef Frame< Policies::MDIFrame<MDIFrame> > BaseType;
+	typedef Frame BaseType;
 public:
 	/// Class type
 	typedef MDIFrame ThisType;
@@ -101,7 +101,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline MDIFrame::MDIFrame( Widget * parent )
-	: BaseType( parent ), mdi(0)
+	: BaseType(parent, NormalDispatcher::getDefault()), mdi(0)
 {}
 
 inline MDIFrame::~MDIFrame()

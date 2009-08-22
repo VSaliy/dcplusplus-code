@@ -51,7 +51,7 @@ class AspectSelection {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 
-	typedef Dispatchers::VoidVoid<> Dispatcher;
+	typedef Dispatchers::VoidVoid<> SelectionDispatcher;
 public:
 	/// \ingroup EventHandlersAspectSelection
 	/// Setting the event handler for the "selection changed" event
@@ -59,8 +59,8 @@ public:
 	  * changed either due to user interaction or due to some other reason. <br>
 	  * No parameters are passed.
 	  */
-	void onSelectionChanged(const typename Dispatcher::F& f) {
-		W().addCallback(WidgetType::getSelectionChangedMessage(), Dispatcher(f));
+	void onSelectionChanged(const typename SelectionDispatcher::F& f) {
+		W().addCallback(WidgetType::getSelectionChangedMessage(), SelectionDispatcher(f));
 	}
 
 	/// Sets the selected index of the Widget

@@ -34,7 +34,7 @@
 namespace dwt {
 
 Slider::Seed::Seed() :
-	BaseType::Seed(TRACKBAR_CLASS, WS_CHILD | WS_TABSTOP)
+	BaseType::Seed(WS_CHILD | WS_TABSTOP)
 {
 }
 

@@ -72,7 +72,7 @@ void Widget::kill() {
 
 HWND Widget::create( const Seed & cs ) {
 	HWND hWnd = ::CreateWindowEx( cs.exStyle,
-		cs.className,
+		getDispatcher().getClassName(),
 		cs.caption.c_str(),
 		cs.style,
 		cs.location.x(), cs.location.y(), cs.location.width(), cs.location.height(),

@@ -207,6 +207,9 @@ protected:
 	{}
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	// Aspect expectation implementation
 	static Message getClickMessage();
 };
@@ -237,7 +240,7 @@ inline void DateTime::setFormat( const tstring & format )
 }
 
 inline DateTime::DateTime( Widget* parent )
-	: BaseType( parent )
+	: BaseType(parent, ChainingDispatcher::superClass<DateTime>())
 {
 	// Can't have a text box without a parent...
 	dwtassert( parent, _T( "Can't have a TextBox without a parent..." ) );

@@ -63,8 +63,8 @@ class AspectMouse
 			return f(MouseEvent(msg));
 		}
 	};
-	typedef DispatcherBase<> Dispatcher;
-	typedef DispatcherBase<TRUE> XDispatcher;
+	typedef DispatcherBase<> MouseDispatcher;
+	typedef DispatcherBase<TRUE> XMouseDispatcher;
 
 public:
 	/// \ingroup EventHandlersAspectMouse
@@ -74,7 +74,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onLeftMouseDown(const typename Dispatcher::F& f) {
+	void onLeftMouseDown(const typename MouseDispatcher::F& f) {
 		onMouse(WM_LBUTTONDOWN, f);
 	}
 
@@ -85,7 +85,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onLeftMouseUp(const typename Dispatcher::F& f) {
+	void onLeftMouseUp(const typename MouseDispatcher::F& f) {
 		onMouse(WM_LBUTTONUP, f);
 	}
 
@@ -95,7 +95,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onLeftMouseDblClick(const typename Dispatcher::F& f) {
+	void onLeftMouseDblClick(const typename MouseDispatcher::F& f) {
 		onMouse(WM_LBUTTONDBLCLK, f);
 	}
 
@@ -106,7 +106,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onRightMouseDown(const typename Dispatcher::F& f) {
+	void onRightMouseDown(const typename MouseDispatcher::F& f) {
 		onMouse(WM_RBUTTONDOWN, f);
 	}
 
@@ -117,7 +117,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onRightMouseUp(const typename Dispatcher::F& f) {
+	void onRightMouseUp(const typename MouseDispatcher::F& f) {
 		onMouse(WM_RBUTTONUP, f);
 	}
 
@@ -128,7 +128,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onRightMouseDblClick(const typename Dispatcher::F& f) {
+	void onRightMouseDblClick(const typename MouseDispatcher::F& f) {
 		onMouse(WM_RBUTTONDBLCLK, f);
 	}
 
@@ -139,7 +139,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onMiddleMouseDown(const typename Dispatcher::F& f) {
+	void onMiddleMouseDown(const typename MouseDispatcher::F& f) {
 		onMouse(WM_MBUTTONDOWN, f);
 	}
 
@@ -150,7 +150,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onMiddleMouseUp(const typename Dispatcher::F& f) {
+	void onMiddleMouseUp(const typename MouseDispatcher::F& f) {
 		onMouse(WM_MBUTTONUP, f);
 	}
 
@@ -161,7 +161,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onMiddleDblClick(const typename Dispatcher::F& f) {
+	void onMiddleDblClick(const typename MouseDispatcher::F& f) {
 		onMouse(WM_MBUTTONDBLCLK, f);
 	}
 
@@ -172,7 +172,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onXMouseDown(const typename XDispatcher::F& f) {
+	void onXMouseDown(const typename XMouseDispatcher::F& f) {
 		onXMouse(WM_XBUTTONDOWN, f);
 	}
 
@@ -183,7 +183,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onXMouseUp(const typename XDispatcher::F& f) {
+	void onXMouseUp(const typename XMouseDispatcher::F& f) {
 		onXMouse(WM_XBUTTONUP, f);
 	}
 
@@ -193,7 +193,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onXMouseDblClick(const typename XDispatcher::F& f) {
+	void onXMouseDblClick(const typename XMouseDispatcher::F& f) {
 		onXMouse(WM_XBUTTONDBLCLK, f);
 	}
 
@@ -203,7 +203,7 @@ public:
 	* The parameter passed is const MouseEvent & which contains the state of
 	* the mouse.
 	*/
-	void onMouseMove(const typename Dispatcher::F& f) {
+	void onMouseMove(const typename MouseDispatcher::F& f) {
 		onMouse(WM_MOUSEMOVE, f);
 	}
 
@@ -211,12 +211,12 @@ protected:
 	virtual ~AspectMouse() { }
 
 private:
-	void onMouse(UINT msg, const typename Dispatcher::F& f) {
-		W().addCallback(Message(msg), Dispatcher(f));
+	void onMouse(UINT msg, const typename MouseDispatcher::F& f) {
+		W().addCallback(Message(msg), MouseDispatcher(f));
 	}
 
-	void onXMouse(UINT msg, const typename XDispatcher::F& f) {
-		W().addCallback(Message(msg), XDispatcher(f));
+	void onXMouse(UINT msg, const typename XMouseDispatcher::F& f) {
+		W().addCallback(Message(msg), XMouseDispatcher(f));
 	}
 };
 

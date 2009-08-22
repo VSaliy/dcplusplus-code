@@ -32,7 +32,7 @@
 #ifndef DWT_CONTROL_H_
 #define DWT_CONTROL_H_
 
-#include "../Policies.h"
+#include "../Widget.h"
 
 #include "../aspects/AspectBorder.h"
 #include "../aspects/AspectCloseable.h"
@@ -49,44 +49,41 @@
 namespace dwt {
 
 /** Base class for all windows */
-template<typename Policy>
 class Control:
-	public MessageMap<Policy>,
+	public Widget,
 
-	public AspectBorder<Control<Policy> >,
-	public AspectCloseable<Control<Policy> >,
-	public AspectContextMenu<Control<Policy> >,
-	public AspectEnabled<Control<Policy> >,
-	public AspectHelp<Control<Policy> >,
-	public AspectMouse<Control<Policy> >,
-	public AspectRaw<Control<Policy> >,
-	public AspectSizable<Control<Policy> >,
-	public AspectTimer<Control<Policy> >,
-	public AspectVisible<Control<Policy> >
+	public AspectBorder<Control>,
+	public AspectCloseable<Control>,
+	public AspectContextMenu<Control>,
+	public AspectEnabled<Control>,
+	public AspectHelp<Control>,
+	public AspectMouse<Control>,
+	public AspectRaw<Control>,
+	public AspectSizable<Control>,
+	public AspectTimer<Control>,
+	public AspectVisible<Control>
 {
-	typedef MessageMap<Policy> BaseType;
+	typedef Widget BaseType;
 public:
 
 protected:
 	struct Seed : public BaseType::Seed {
-		Seed(LPCTSTR className, DWORD style, DWORD exStyle = 0, const tstring& caption = tstring());
+		Seed(DWORD style, DWORD exStyle = 0, const tstring& caption = tstring());
 	};
 
-	typedef Control<Policy> ControlType;
+	typedef Control ControlType;
 
-	Control(Widget* parent);
+	Control(Widget* parent, Dispatcher& dispatcher);
 };
 
-typedef Control<Policies::Subclassed> CommonControl;
+typedef Control CommonControl;
 
-template<typename Policy>
-Control<Policy>::Control(Widget* parent) : BaseType(parent) {
+inline Control::Control(Widget* parent, Dispatcher& dispatcher) : BaseType(parent, dispatcher) {
 
 }
 
-template<typename Policy>
-Control<Policy>::Seed::Seed(LPCTSTR className, DWORD style, DWORD exStyle, const tstring& caption) :
-	BaseType::Seed(className, style | WS_VISIBLE, exStyle, caption)
+inline Control::Seed::Seed(DWORD style, DWORD exStyle, const tstring& caption) :
+	BaseType::Seed(style | WS_VISIBLE, exStyle, caption)
 {
 
 }

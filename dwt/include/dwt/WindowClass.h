@@ -35,6 +35,7 @@
 #include "WindowsHeaders.h"
 #include "resources/Icon.h"
 #include <boost/noncopyable.hpp>
+#include <memory>
 
 namespace dwt {
 
@@ -50,6 +51,7 @@ public:
 	/// Generate a new unique window class name
 	static tstring getNewClassName(Widget* widget);
 
+	WNDPROC getWndProc(LPCTSTR className);
 private:
 	static int itsInstanceNo;
 

@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_TextBox_H_
 #define DCPLUSPLUS_WIN32_TextBox_H_
 
+#include <dwt/widgets/Menu.h>
+
 /** Our own flavour of text boxes that handle double clicks and have fancy menus */
 class TextBox : public dwt::TextBox {
 	typedef dwt::TextBox BaseType;

@@ -40,10 +40,10 @@ template< class WidgetType >
 class AspectCloseable {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct Dispatcher {
+	struct CloseableDispatcher {
 		typedef std::tr1::function<bool ()> F;
 
-		Dispatcher(const F& f_) : f(f_) { }
+		CloseableDispatcher(const F& f_) : f(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			return !f();
@@ -74,7 +74,7 @@ public:
 	  * If you return true from your event handler the window is closed, otherwise
 	  * the window is NOT allowed to actually close!!
 	  */
-	void onClosing(const typename Dispatcher::F& f);
+	void onClosing(const typename CloseableDispatcher::F& f);
 };
 
 template< class WidgetType >
@@ -86,8 +86,8 @@ void AspectCloseable< WidgetType >::close( bool asyncron ) {
 }
 
 template<typename WidgetType>
-void AspectCloseable<WidgetType>::onClosing(const typename Dispatcher::F& f) {
-	W().addCallback(Message(WM_CLOSE), Dispatcher(f));
+void AspectCloseable<WidgetType>::onClosing(const typename CloseableDispatcher::F& f) {
+	W().addCallback(Message(WM_CLOSE), CloseableDispatcher(f));
 }
 
 }

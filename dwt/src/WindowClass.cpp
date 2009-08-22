@@ -73,4 +73,9 @@ tstring WindowClass::getNewClassName(Widget* widget)
 	return className.str();
 }
 
+WNDPROC WindowClass::getWndProc(LPCTSTR className) {
+	WNDCLASSEX cls = { sizeof(WNDCLASSEX) };
+	::GetClassInfoEx(::GetModuleHandle(NULL), className, &cls);
+	return cls.lpfnWndProc;
+}
 }

@@ -41,11 +41,13 @@
 
 namespace dwt {
 
+const TCHAR Table::windowClass[] = WC_LISTVIEW;
+
 BitmapPtr Table::upArrow = 0;
 BitmapPtr Table::downArrow = 0;
 
 Table::Seed::Seed() :
-	BaseType::Seed(WC_LISTVIEW, WS_CHILD | WS_TABSTOP | LVS_REPORT),
+	BaseType::Seed(WS_CHILD | WS_TABSTOP | LVS_REPORT),
 	font(new Font(DefaultGuiFont)),
 	lvStyle(0)
 {
@@ -54,7 +56,7 @@ Table::Seed::Seed() :
 void Table::create( const Seed & cs )
 {
 	dwtassert((cs.style & WS_CHILD) == WS_CHILD, _T("Widget must have WS_CHILD style"));
-	PolicyType::create(cs);
+	BaseType::create(cs);
 
 	if(cs.font)
 		setFont(cs.font);
@@ -70,7 +72,7 @@ void Table::create( const Seed & cs )
 }
 
 Table::Table( dwt::Widget * parent )
-	: BaseType( parent ),
+	: BaseType(parent, ChainingDispatcher::superClass<Table>()),
 	itsEditRow(0),
 	itsEditColumn(0),
 	itsXMousePosition(0),

@@ -38,8 +38,10 @@
 
 namespace dwt {
 
+const TCHAR GroupBox::windowClass[] = WC_BUTTON;
+
 GroupBox::Seed::Seed(const tstring& caption) :
-BaseType::Seed(WC_BUTTON, BS_GROUPBOX | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_CONTROLPARENT, caption),
+BaseType::Seed(BS_GROUPBOX | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_CONTROLPARENT, caption),
 font(new Font(DefaultGuiFont)),
 padding(6, 6)
 {

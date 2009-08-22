@@ -180,6 +180,9 @@ protected:
 	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	// Keep references
 	ImageListPtr itsNormalImageList;
 	ImageListPtr itsHotImageList;
@@ -289,7 +292,7 @@ inline bool ToolBar::getButtonChecked( unsigned int id )
 }
 
 inline ToolBar::ToolBar( dwt::Widget * parent )
-	: BaseType( parent )
+	: BaseType(parent, ChainingDispatcher::superClass<ToolBar>())
 {
 }
 

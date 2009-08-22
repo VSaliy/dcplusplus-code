@@ -34,6 +34,7 @@
 */
 
 #include <string>
+#include <vector>
 
 #ifndef DWT_tstring_smartwin_H
 #define DWT_tstring_smartwin_H
@@ -49,6 +50,8 @@ typedef std::wstring tstring;
 typedef std::string tstring;
 
 #endif //UNICODE
+
+typedef std::vector<tstring> tstring_vector;
 
 }
 

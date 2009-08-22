@@ -50,6 +50,19 @@
 
 namespace dwt {
 
+class Tree;
+
+class TreeItem : boost::noncopyable {
+public:
+
+private:
+	friend class Tree;
+
+	TreeItem(HTREEITEM handle);
+
+	HTREEITEM handle;
+};
+
 /// TreeView class
  /** \ingroup WidgetControls
    * \WidgetUsageInfo
@@ -60,7 +73,6 @@ namespace dwt {
    * Another good example of a tree view is the Explorer of Windows, it has a tree
    * view to the left where you can see the different directories.
    */
-
 class Tree :
 	public CommonControl,
 	// Aspects
@@ -268,6 +280,9 @@ protected:
 	{}
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	ImageListPtr itsNormalImageList;
 	ImageListPtr itsStateImageList;
 
@@ -415,7 +430,7 @@ inline size_t Tree::countSelectedImpl() const {
 }
 
 inline Tree::Tree( Widget * parent )
-	: BaseType( parent )
+	: BaseType(parent, ChainingDispatcher::superClass<Tree>())
 {
 }
 

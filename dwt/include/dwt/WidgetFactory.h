@@ -41,7 +41,7 @@
 #include "widgets/MessageBox.h"
 #include "widgets/LoadDialog.h"
 #include "widgets/SaveDialog.h"
-#include "WidgetFactoryPlatformImplementation.h"
+#include "widgets/FontDialog.h"
 
 namespace dwt {
 
@@ -73,7 +73,7 @@ namespace dwt {
   */
 template<typename ContainerWidgetType>
 class WidgetFactory
-	: public WidgetFactoryPlatformImplementation< ContainerWidgetType, CurrentPlatform >
+	: public ContainerWidgetType
 {
 public:
 	// Bring widgets into the namespace of the class that inherits from us
@@ -91,6 +91,9 @@ public:
 
 	/// ColorDialog class and object type.
 	typedef dwt::ColorDialog ColorDialog;
+
+	/// ChooseFont class and object type.
+	typedef dwt::FontDialog FontDialog;
 
 	/// Default Constructor creating a factory Widget
 	/** Default Constructor creating a factory Widget without a parent, if you need
@@ -124,6 +127,10 @@ public:
 	  */
 	MessageBox createMessageBox();
 
+	/// Creates a FontDialog and returns it.
+	/** Usable to let user choose font from the system installed fonts.
+	  */
+	FontDialog createFontDialog() ;
 protected:
 	// Protected to try to avoid stack creation...
 	virtual ~WidgetFactory()
@@ -136,7 +143,7 @@ protected:
 
 template<typename ContainerWidgetType>
 WidgetFactory< ContainerWidgetType >::WidgetFactory( dwt::Widget * parent )
-		: WidgetFactoryPlatformImplementation< ContainerWidgetType, CurrentPlatform >( parent )
+		: ContainerWidgetType(parent)
 {}
 
 template<typename ContainerWidgetType>
@@ -172,6 +179,13 @@ typename WidgetFactory< ContainerWidgetType >::MessageBox
 WidgetFactory< ContainerWidgetType >::createMessageBox()
 {
 	return MessageBox( this );
+}
+
+template<typename ContainerWidgetType>
+typename WidgetFactory< ContainerWidgetType >::FontDialog
+WidgetFactory< ContainerWidgetType >::createFontDialog()
+{
+	return FontDialog( this );
 }
 
 }

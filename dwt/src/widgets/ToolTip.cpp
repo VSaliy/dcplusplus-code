@@ -30,11 +30,14 @@
 */
 
 #include <dwt/widgets/ToolTip.h>
+#include <memory>
 
 namespace dwt {
 
+const TCHAR ToolTip::windowClass[] = TOOLTIPS_CLASS;
+
 ToolTip::Seed::Seed() :
-	BaseType::Seed(TOOLTIPS_CLASS, WS_POPUP | TTS_ALWAYSTIP | TTS_NOPREFIX, WS_EX_TRANSPARENT)
+	BaseType::Seed(WS_POPUP | TTS_ALWAYSTIP | TTS_NOPREFIX, WS_EX_TRANSPARENT)
 {
 }
 

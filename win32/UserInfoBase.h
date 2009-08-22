@@ -22,6 +22,7 @@
 #include <dcpp/forward.h>
 #include <dcpp/Text.h>
 #include "resource.h"
+#include <dwt/widgets/Menu.h>
 
 class UserInfoBase {
 public:

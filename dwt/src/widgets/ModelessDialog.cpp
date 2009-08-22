@@ -36,33 +36,53 @@
 
 namespace dwt {
 
+LPCTSTR ModelessDialog::windowClass = WC_DIALOG;
+
 ModelessDialog::Seed::Seed(const Point& size_, DWORD styles_) :
-size(size_),
-styles(styles_)
+	BaseType::Seed(tstring(), styles_, 0),
+size(size_)
 {
 }
 
 void ModelessDialog::create( unsigned resourceId )
 {
+	/*
 	HWND wnd = ::CreateDialogParam( ::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId),
-		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
+		getParentHandle(), (DLGPROC)&MessageMap<Policies::Dialog>::wndProc, toLParam());
 
 	if ( !wnd ) {
 		throw Win32Exception("CreateDialogParam failed");
 	}
+	*/
 }
 
 void ModelessDialog::create(const Seed& cs) {
-	util::win32::DLGTEMPLATEEX t = util::win32::defaultTemplate;
-	t.style |= DS_CONTROL | WS_CHILD | cs.styles;
-	t.cx = cs.size.x;
-	t.cy = cs.size.y;
+	Seed cs2 = cs;
 
-	HWND dlg = ::CreateDialogIndirectParam(::GetModuleHandle(NULL), (DLGTEMPLATE*)&t,
-		getParentHandle(), (DLGPROC)&ThisType::wndProc, toLParam());
+	if((cs.style & DS_MODALFRAME) == DS_MODALFRAME) {
+		cs2.exStyle |= WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE;
+	}
 
-	if(dlg == NULL) {
-		throw Win32Exception("CreateDialogIndirectParam failed");
+	if((cs.style & DS_CONTEXTHELP) == DS_CONTEXTHELP) {
+		cs2.exStyle |= WS_EX_CONTEXTHELP;
+	}
+
+	if((cs.style & DS_CONTROL) == DS_CONTROL) {
+		cs2.style &= ~WS_CAPTION;
+		cs2.style &= ~WS_SYSMENU;
+		cs2.exStyle |= WS_EX_CONTROLPARENT;
+	}
+
+	cs2.style &= ~WS_VISIBLE;
+
+	// TODO fix position
+	BaseType::create(cs2);
+
+	SetWindowLongPtr(handle(), DWLP_DLGPROC, (LPARAM)dialogProc);
+
+	HWND hwndDefaultFocus = GetNextDlgTabItem(handle(), NULL, FALSE);
+	if (sendMessage(WM_INITDIALOG, (WPARAM)hwndDefaultFocus)) {
+		 sendMessage(WM_NEXTDLGCTL, (WPARAM)hwndDefaultFocus, TRUE);
 	}
 }
 

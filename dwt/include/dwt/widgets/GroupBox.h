@@ -111,6 +111,9 @@ protected:
 	{}
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	Point padding;
 
 	Rectangle shrink(const Rectangle& client);
@@ -122,7 +125,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline GroupBox::GroupBox( Widget * parent )
-	: BaseType( parent )
+	: BaseType(parent, ChainingDispatcher::superClass<GroupBox>())
 {
 }
 

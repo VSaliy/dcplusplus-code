@@ -23,6 +23,7 @@
 
 #include "WidgetFactory.h"
 #include "AspectStatus.h"
+#include <dwt/widgets/Menu.h>
 #include <dcpp/SettingsManager.h>
 #include "resource.h"
 

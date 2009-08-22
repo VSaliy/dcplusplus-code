@@ -59,10 +59,10 @@ class AspectDragDrop
 
 	HWND H() const { return W().handle(); }
 
-	struct Dispatcher {
+	struct DragDropDispatcher {
 		typedef std::tr1::function<void (std::vector< tstring>, Point )> F;
 
-		Dispatcher(const F& f_) : f(f_) { }
+		DragDropDispatcher(const F& f_) : f(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			std::vector<tstring> files;
@@ -105,8 +105,8 @@ public:
 	  * 	int y = droppoint.y;
 	  * }
 	  */
-	void onDragDrop(const typename Dispatcher::F& f) {
-		W().addCallback(Message( WM_DROPFILES ), Dispatcher(f));
+	void onDragDrop(const typename DragDropDispatcher::F& f) {
+		W().addCallback(Message( WM_DROPFILES ), DragDropDispatcher(f));
 	}
 	/// Setup Drag & Drop for this dialog
 	/** This setup the ability to receive an WM_DROPFILES msg if you drop a file on dialog

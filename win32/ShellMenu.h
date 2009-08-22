@@ -21,6 +21,8 @@
 #ifndef DCPLUSPLUS_WIN32_SHELL_MENU_H
 #define DCPLUSPLUS_WIN32_SHELL_MENU_H
 
+#include <dwt/widgets/Menu.h>
+
 class ShellMenu : public Menu
 {
 	typedef Menu BaseType;

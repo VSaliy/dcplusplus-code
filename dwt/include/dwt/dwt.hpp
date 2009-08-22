@@ -66,6 +66,7 @@
 #include "widgets/DateTime.h"
 #include "widgets/GroupBox.h"
 #include "widgets/Label.h"
+#include "widgets/Menu.h"
 #include "widgets/MDIChild.h"
 #include "widgets/MDIFrame.h"
 #include "widgets/MDIParent.h"

@@ -38,8 +38,10 @@
 
 namespace dwt {
 
+const TCHAR StatusBar::windowClass[] = STATUSCLASSNAME;
+
 StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip, bool tooltip_) :
-BaseType::Seed(STATUSCLASSNAME, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
+BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
 parts(parts_),
 fill(fill_),
 tooltip(tooltip_)
@@ -52,7 +54,7 @@ tooltip(tooltip_)
 }
 
 StatusBar::StatusBar(Widget* parent) :
-BaseType(parent),
+BaseType(parent, ChainingDispatcher::superClass<StatusBar>()),
 fill(0),
 tip(0)
 {

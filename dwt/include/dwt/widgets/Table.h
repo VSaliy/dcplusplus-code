@@ -33,8 +33,8 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ListView_h
-#define DWT_ListView_h
+#ifndef DWT_TABLE_H
+#define DWT_TABLE_H
 
 #include "../Point.h"
 #include "../Rectangle.h"
@@ -478,6 +478,9 @@ protected:
 	Rectangle getRect( int item, int subitem, int code );
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	// Edit row index and Edit column index, only used when grid is in "edit mode"
 	int itsEditRow;
 	int itsEditColumn;
