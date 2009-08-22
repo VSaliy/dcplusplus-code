@@ -39,7 +39,7 @@ namespace dwt {
 LPCTSTR ModalDialog::windowClass = WC_DIALOG;
 
 ModalDialog::Seed::Seed(const Point& size_, DWORD styles_) :
-BaseType::Seed(tstring(), styles_, 0),
+BaseType::Seed(tstring(), styles_ | WS_OVERLAPPEDWINDOW, 0),
 size(size_)
 {
 }
@@ -56,17 +56,6 @@ ret(0)
 
 ModalDialog::~ModalDialog() {
 	dwt::Application::instance().removeFilter(filterIter);
-}
-
-void ModalDialog::create(unsigned resourceId) {
-	/*
-	HWND dlg = ::CreateDialogParam(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId),
-		getParentHandle(), (DLGPROC)&MessageMap<Policies::Dialog>::wndProc, toLParam());
-
-	if(dlg == NULL) {
-		throw Win32Exception("Couldn't create modal dialog");
-	}
-	*/
 }
 
 void ModalDialog::create(const Seed& cs) {

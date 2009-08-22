@@ -80,7 +80,6 @@ public:
 	/// Object type
 	typedef ThisType * ObjectType;
 
-#ifndef WINCE
 	/// Animates a window
 	/** Slides the window into view from either right or left depending on the
 	  * parameter "left". If "left" is true, then from the left,  otherwise from the
@@ -104,7 +103,6 @@ public:
 	  * The "time" parameter is the total duration of the function in milliseconds.
 	  */
 	void animateCollapse( bool show, int msTime );
-#endif
 
 	/// Adds or removes the minimize box from the Widget
 	void setMinimizeBox( bool value = true );
@@ -137,7 +135,7 @@ protected:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline Frame::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle) :
-	BaseType::Seed(caption, style | WS_OVERLAPPEDWINDOW, exStyle)
+	BaseType::Seed(caption, style, exStyle)
 {
 
 }

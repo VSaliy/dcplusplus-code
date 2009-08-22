@@ -44,18 +44,6 @@ size(size_)
 {
 }
 
-void ModelessDialog::create( unsigned resourceId )
-{
-	/*
-	HWND wnd = ::CreateDialogParam( ::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId),
-		getParentHandle(), (DLGPROC)&MessageMap<Policies::Dialog>::wndProc, toLParam());
-
-	if ( !wnd ) {
-		throw Win32Exception("CreateDialogParam failed");
-	}
-	*/
-}
-
 void ModelessDialog::create(const Seed& cs) {
 	Seed cs2 = cs;
 

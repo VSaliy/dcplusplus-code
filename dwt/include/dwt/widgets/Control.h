@@ -63,8 +63,35 @@ class Control:
 	public AspectTimer<Control>,
 	public AspectVisible<Control>
 {
+	struct CreateDispatcher
+	{
+		typedef std::tr1::function<void (const CREATESTRUCT&)> F;
+
+		CreateDispatcher(const F& f_) : f(f_) { }
+
+		bool operator()(const MSG& msg, LRESULT& ret) const {
+			const CREATESTRUCT* cs = reinterpret_cast<const CREATESTRUCT*>( msg.lParam );
+			f(*cs);
+			return false;
+		}
+
+		F f;
+	};
+
 	typedef Widget BaseType;
 public:
+
+	/// Setting the event handler for the "create" event
+	/** The event handler must have the signature "void foo( CREATESTRUCT * )" where
+	  * the WidgetType is the type of Widget that realizes the Aspect. <br>
+	  * If you supply an event handler for this event your handler will be called
+	  * when Widget is initially created. <br>
+	  */
+	void onCreate(const CreateDispatcher::F& f) {
+		addCallback(
+			Message( WM_CREATE ), CreateDispatcher(f)
+		);
+	}
 
 protected:
 	struct Seed : public BaseType::Seed {

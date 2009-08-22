@@ -71,11 +71,6 @@ public:
 		Seed(const Point& size_ = Point(), DWORD styles_ = 0);
 	};
 
-	/// Creates a Dialog Window
-	/** This version creates a window from the given Dialog Resource Id.
-	  */
-	void create( unsigned resourceId );
-
 	void create(const Seed& cs = Seed());
 
 protected:

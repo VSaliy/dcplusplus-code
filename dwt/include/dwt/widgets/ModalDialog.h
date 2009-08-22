@@ -98,22 +98,6 @@ public:
 		Seed(const Point& size_, DWORD styles_ = 0);
 	};
 
-	/// Creates a Modal Dialog Window from a resource id.
-	/** This version creates a window from a Dialog Resource ID. <br>
-	  * To be called by the invoker of the dialog. <br>
-	  * The return comes from the parameter to endDialog() <br>
-	  * You must call onInitDialog( &MyDialogWidget::initDialog ); or similar either
-	  * in the constructor of your dialog or right before calling this function. <br>
-	  * And in your initDialog, you must call attachXxxx for all of the controls
-	  * you wish to use, and set the event handlers for all controls and events you
-	  * wish to handle. <br>
-	  * Example : <br>
-	  * LabelPtr prompt = attachLabel( IDC_PROMPT ); <br>
-	  * prompt->onClicked( &X::myClickMethod ); <br>
-	  * ...etc...
-	  */
-	void create(unsigned resourceId);
-
 	/// Creates a Modal Dialog Window defined in C++ alone.
 	/** This version creates a dialog window without using a Dialog Resource ID. <br>
 	  * To be called by the invoker of the dialog. <br>
