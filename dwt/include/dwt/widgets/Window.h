@@ -55,24 +55,6 @@ namespace dwt {
 class Window
 	: public Frame
 {
-	struct CreateDispatcher
-	{
-		typedef std::tr1::function<void (const CREATESTRUCT&)> F;
-
-		CreateDispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-
-			CREATESTRUCT * cs = reinterpret_cast< CREATESTRUCT * >( msg.lParam );
-
-			f(*cs);
-
-			return false;
-		}
-
-		F f;
-	};
-
 public:
 	/// Class type
 	typedef Window ThisType;
@@ -102,31 +84,6 @@ public:
 	  * The seed is not taken a constant because the class name will be generated at registration.
 	  */
 	void create( const Seed& cs = Seed() );
-
-	// TODO: Check up if the CREATESTRUCT * actualy IS modyfiable...!!
-	/// Setting the event handler for the "create" event
-	/** The event handler must have the signature "void foo( CREATESTRUCT * )" where
-	  * the WidgetType is the type of Widget that realizes the Aspect. <br>
-	  * If you supply an event handler for this event your handler will be called
-	  * when Widget is initially created. <br>
-	  * The argument CREATESTRUCT sent into your handler is modifiable so that you
-	  * can add/remove styles and add remove EX styles etc.
-	  */
-	void onCreate(const CreateDispatcher::F& f) {
-		addCallback(
-			Message( WM_CREATE ), CreateDispatcher(f)
-		);
-	}
-
-
-	// TODO: Fix! This doesn't work if you have an application with multiple windows in addition to that it's a member method plus lots of other architectual issues!!
-	// TODO: Add support in the Seed class to override "class name" and then we can do a lookup upon that name given...??
-	// TODO: In addition make this a NON member function!!
-	/// Activates already running instance of an application
-	/** Note that this only works if you have only one SmartWin application running!
-	  */
-	void activatePreviousInstance();
-
 protected:
 	// Protected since this Widget we HAVE to inherit from
 	explicit Window( Widget * parent = 0 );
@@ -144,28 +101,6 @@ inline Window::Window( Widget * parent )
 
 inline Window::~Window()
 {
-}
-
-inline void Window::activatePreviousInstance()
-{
-#ifdef PORT_ME
-	int iTries = 5;
-	while ( iTries-- > 0 )
-	{
-		HWND hWnd = ::FindWindow( this->getNewClassName().c_str(), NULL );
-		if ( hWnd )
-		{
-			//Make sure the window is not minimized or maximized
-			::ShowWindow( hWnd, SW_SHOWNORMAL );
-			::SetForegroundWindow( hWnd );
-		}
-		else
-		{
-			// It's possible that the other window is in the process of being created...
-			::Sleep( 200 );
-		}
-	}
-#endif
 }
 
 }
