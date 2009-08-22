@@ -42,8 +42,10 @@
 
 namespace dwt {
 
+const TCHAR RichTextBox::windowClass[] = RICHEDIT_CLASS;
+
 RichTextBox::Seed::Seed() :
-	BaseType::Seed(RICHEDIT_CLASS, WS_CHILD | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL),
+	BaseType::Seed(WS_CHILD | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL),
 	font(new Font(DefaultGuiFont)),
 	foregroundColor(RGB( 0, 0, 0 )),
 	backgroundColor(RGB( 255, 255, 255 )),
@@ -52,13 +54,16 @@ RichTextBox::Seed::Seed() :
 {
 }
 
+Dispatcher& RichTextBox::makeDispatcher() {
+	// Need to load up RichEdit library!
+	static LibraryLoader richEditLibrary(_T("riched20.dll"));
+	return ChainingDispatcher::superClass<RichTextBox>();
+}
+
 void RichTextBox::create( const Seed & cs )
 {
-	// Need to load up RichEdit library!
-	static LibraryLoader richEditLibrary( _T( "riched20.dll" ) );
-
 	dwtassert((cs.style & WS_CHILD) == WS_CHILD, _T("Widget must have WS_CHILD style"));
-	PolicyType::create( cs );
+	BaseType::create( cs );
 	if(cs.font)
 		setFont( cs.font );
 
@@ -100,14 +105,14 @@ inline int RichTextBox::lineFromPos(const ScreenCoordinate& pt) {
 	return ::SendMessage(this->handle(), EM_EXLINEFROMCHAR, 0, charFromPos(pt));
 }
 
-tstring RichTextBox::getSelection() const { 
+tstring RichTextBox::getSelection() const {
 	std::pair<int, int> range = getCaretPosRange();
 	tstring tmp = getText();
 
 	// This is uglier than it has to be because of the
 	// \r\n vs \r handling - note that WINE, for example,
 	// uses consistent line endings between the internal
-	// and external buffer representations, but Windows does	
+	// and external buffer representations, but Windows does
 	// not - so it cannot even assume getText() consistently
 	// is broken.
 	int realS = fixupLineEndings(tmp.begin(), tmp.end(), range.first),
@@ -144,7 +149,7 @@ tstring RichTextBox::textUnderCursor(const ScreenCoordinate& p) {
 int RichTextBox::fixupLineEndings(tstring::const_iterator begin, tstring::const_iterator end, tstring::difference_type ibo) const {
 	// http://rubyforge.org/pipermail/wxruby-users/2006-August/002116.html
 	// ("TE_RICH2 RichEdit control"). Otherwise charFromPos will be increasingly
-	// off from getText with each new line by one character. 
+	// off from getText with each new line by one character.
 	int cur = 0;
 	return std::find_if(begin, end, (cur += (boost::lambda::_1 != static_cast< TCHAR >('\r')),
 		boost::lambda::var(cur) > ibo)) - begin;
@@ -164,10 +169,10 @@ void RichTextBox::addTextSteady( const tstring & txtRaw, std::size_t len ) {
 		util::HoldRedraw hold(this, !scroll);
 		std::pair<int, int> cr = getCaretPosRange();
 		std::string txt = escapeUnicode(txtRaw);
-	
+
 		unsigned charsRemoved = 0;
 		int multipler = 1;
-	
+
 		size_t limit = getTextLimit();
 		if(length() + len > limit) {
 			util::HoldRedraw hold2(this, scroll);
@@ -177,15 +182,15 @@ void RichTextBox::addTextSteady( const tstring & txtRaw, std::size_t len ) {
 				while (charsRemoved < len)
 					charsRemoved = lineIndex(lineFromChar(multipler++ * limit / 10));
 			}
-	
+
 			scrollPos.y -= posFromChar(charsRemoved).y;
 			setSelection(0, charsRemoved);
 			replaceSelection(_T(""));
 		}
-	
+
 		addText(txt);
 		setSelection(cr.first-charsRemoved, cr.second-charsRemoved);
-	
+
 		if(scroll)
 			sendMessage(WM_VSCROLL, SB_BOTTOM);
 		else

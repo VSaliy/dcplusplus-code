@@ -33,8 +33,10 @@
 
 namespace dwt {
 
+const TCHAR ToolBar::windowClass[] = TOOLBARCLASSNAME;
+
 ToolBar::Seed::Seed() :
-	BaseType::Seed(TOOLBARCLASSNAME, WS_CHILD | TBSTYLE_LIST | TBSTYLE_TOOLTIPS)
+	BaseType::Seed(WS_CHILD | TBSTYLE_LIST | TBSTYLE_TOOLTIPS)
 {
 }
 
@@ -101,7 +103,7 @@ bool ToolBar::tryFire( const MSG & msg, LRESULT & retVal ) {
 			}
 		}
 	}
-	return PolicyType::tryFire(msg, retVal);
+	return BaseType::tryFire(msg, retVal);
 }
 
 LRESULT ToolBar::handleDropDown(LPARAM lParam) {

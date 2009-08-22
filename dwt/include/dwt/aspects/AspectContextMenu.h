@@ -42,9 +42,9 @@ template<typename WidgetType>
 class AspectContextMenu {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct Dispatcher : Dispatchers::Base<bool (const ScreenCoordinate&)> {
+	struct ContextMenuDispatcher : Dispatchers::Base<bool (const ScreenCoordinate&)> {
 		typedef Dispatchers::Base<bool(const ScreenCoordinate&)> BaseType;
-		Dispatcher(const F& f_) : BaseType(f_) { }
+		ContextMenuDispatcher(const F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			bool shown = f(ScreenCoordinate(Point::fromLParam(msg.lParam)));
@@ -54,8 +54,8 @@ class AspectContextMenu {
 	};
 
 public:
-	void onContextMenu(const typename Dispatcher::F& f) {
-		W().addCallback(Message( WM_CONTEXTMENU ), Dispatcher(f));
+	void onContextMenu(const typename ContextMenuDispatcher::F& f) {
+		W().addCallback(Message( WM_CONTEXTMENU ), ContextMenuDispatcher(f));
 	}
 };
 

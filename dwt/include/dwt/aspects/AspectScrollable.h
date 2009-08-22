@@ -52,7 +52,7 @@ class AspectScrollable
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	typedef Dispatchers::VoidVoid<> Dispatcher;
+	typedef Dispatchers::VoidVoid<> ScrollableDispatcher;
 public:
 	bool scrollIsAtEnd();
 
@@ -63,8 +63,8 @@ public:
 	  * <br>
 	  * No parameters are passed.
 	  */
-	void onScrollHorz(const Dispatcher::F& f) {
-		W().addCallback(Message( WM_HSCROLL ), Dispatcher(f));
+	void onScrollHorz(const ScrollableDispatcher::F& f) {
+		W().addCallback(Message( WM_HSCROLL ), ScrollableDispatcher(f));
 	}
 
 	/// \ingroup EventHandlersAspectScrollable
@@ -74,8 +74,8 @@ public:
 	  * <br>
 	  * No parameters are passed.
 	  */
-	void onScrollVert(const Dispatcher::F& f) {
-		W().addCallback(Message( WM_VSCROLL ), Dispatcher(f));
+	void onScrollVert(const ScrollableDispatcher::F& f) {
+		W().addCallback(Message( WM_VSCROLL ), ScrollableDispatcher(f));
 	}
 
 protected:

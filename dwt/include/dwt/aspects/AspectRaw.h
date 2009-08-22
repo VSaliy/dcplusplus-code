@@ -54,10 +54,10 @@ template< class WidgetType >
 class AspectRaw
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	struct Dispatcher {
+	struct RawDispatcher {
 		typedef std::tr1::function<LRESULT (WPARAM, LPARAM)> F;
 
-		Dispatcher(const F& f_) : f(f_) { }
+		RawDispatcher(const F& f_) : f(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			ret = f(msg.wParam, msg.lParam);
@@ -86,8 +86,8 @@ public:
 	  */
 	/// WARNING, this function uses the natural wparam/lparam order, not the inverted that previous
 	/// smartwin versions did. The two functions above emulate the old behaviour though...
-	void onRaw(const typename Dispatcher::F& f, const Message & msg) {
-		W().addCallback(msg, Dispatcher(f));
+	void onRaw(const typename RawDispatcher::F& f, const Message & msg) {
+		W().addCallback(msg, RawDispatcher(f));
 	}
 
 protected:

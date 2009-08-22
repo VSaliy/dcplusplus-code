@@ -145,6 +145,10 @@ protected:
 	// WidgetFactory class which is friend
 	virtual ~ProgressBar()
 	{}
+
+private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,7 +211,7 @@ inline int ProgressBar::getPosition()
 }
 
 inline ProgressBar::ProgressBar( dwt::Widget * parent ) :
-BaseType( parent )
+BaseType(parent, ChainingDispatcher::superClass<ProgressBar>())
 {
 }
 

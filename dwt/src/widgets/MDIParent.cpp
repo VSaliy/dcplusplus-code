@@ -35,7 +35,7 @@
 namespace dwt {
 
 MDIParent::Seed::Seed() :
-	BaseType::Seed(_T("MDICLIENT"), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VSCROLL | WS_HSCROLL, WS_EX_CLIENTEDGE),
+	BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VSCROLL | WS_HSCROLL, WS_EX_CLIENTEDGE),
 	idFirstChild(0),
 	windowMenu(NULL)
 {
@@ -48,7 +48,7 @@ void MDIParent::create( const Seed & cs )
 	ccs.idFirstChild = cs.idFirstChild;
 
 	HWND wnd = ::CreateWindowEx( cs.exStyle,
-		cs.className,
+		getDispatcher().getClassName(),
 		cs.caption.c_str(),
 		cs.style,
 		cs.location.x(), cs.location.y(), cs.location.width(), cs.location.height(),

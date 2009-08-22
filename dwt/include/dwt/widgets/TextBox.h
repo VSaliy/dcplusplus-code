@@ -174,7 +174,7 @@ public:
 
 protected:
 	// Constructor Taking pointer to parent
-	explicit TextBoxBase( dwt::Widget * parent );
+	explicit TextBoxBase(Widget *parent, Dispatcher& dispatcher);
 
 	// To assure nobody accidentally deletes any heaped object of this type, parent
 	// is supposed to do so when parent is killed...
@@ -209,7 +209,7 @@ public:
 		/// Fills with default parameters
 		Seed(const tstring& caption = tstring());
 	};
-	
+
 	/// Appends text to the text box
 	/** The txt parameter is the new text to append to the text box.
 	  */
@@ -281,6 +281,9 @@ protected:
 	{}
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	// AspectScrollable
 	int scrollOffsetImpl() const {
 		return 1;
@@ -384,15 +387,15 @@ inline bool TextBoxBase::getModify( ) {
 	return this->sendMessage( EM_GETMODIFY ) > 0;
 }
 
-inline TextBoxBase::TextBoxBase( Widget * parent )
-	: BaseType( parent )
+inline TextBoxBase::TextBoxBase(Widget *parent, Dispatcher& dispatcher)
+	: BaseType(parent, dispatcher)
 {
 	// Can't have a text box without a parent...
 	dwtassert( parent, _T( "Cant have a TextBox without a parent..." ) );
 }
 
 inline TextBox::TextBox( Widget * parent )
-	: TextBoxBase( parent )
+	: TextBoxBase(parent, ChainingDispatcher::superClass<TextBox>())
 {
 }
 

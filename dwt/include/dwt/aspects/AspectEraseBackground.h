@@ -55,10 +55,10 @@ class AspectEraseBackground
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct Dispatcher {
+	struct EraseBackgroundDispatcher {
 		typedef std::tr1::function<void (Canvas&)> F;
 
-		Dispatcher(const F& f_, WidgetType* widget_) : f(f_), widget(widget_) { }
+		EraseBackgroundDispatcher(const F& f_, WidgetType* widget_) : f(f_), widget(widget_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			FreeCanvas canvas( widget->handle(), reinterpret_cast< HDC >( msg.wParam ) );
@@ -78,8 +78,8 @@ public:
 	  * background, the canvas passed can be used to draw upon etc to manipulate the
 	  * background property of the Widget.
 	  */
-	void onEraseBackground(const typename Dispatcher::F& f) {
-		W().setCallback(Message( WM_ERASEBKGND ), Dispatcher(f, &W() ) );
+	void onEraseBackground(const typename EraseBackgroundDispatcher::F& f) {
+		W().setCallback(Message( WM_ERASEBKGND ), EraseBackgroundDispatcher(f, &W() ) );
 	}
 
 	void noEraseBackground() {

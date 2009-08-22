@@ -51,10 +51,10 @@ namespace dwt {
   * of Frame.
   */
 class ModelessDialog :
-	public Frame< Policies::ModelessDialog >,
-	public AspectDialog<ModelessDialog >
+	public Frame,
+	public AspectDialog<ModelessDialog>
 {
-	typedef Frame< Policies::ModelessDialog > BaseType;
+	typedef Frame BaseType;
 public:
 	/// Class type
 	typedef ModelessDialog ThisType;
@@ -62,14 +62,11 @@ public:
 	/// Object type
 	typedef ThisType * ObjectType;
 
-	struct Seed {
+	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
 		/// size specified in dialog units
 		Point size;
-
-		/// additional dialog styles
-		DWORD styles;
 
 		Seed(const Point& size_ = Point(), DWORD styles_ = 0);
 	};
@@ -87,13 +84,17 @@ protected:
 
 	virtual ~ModelessDialog()
 	{}
+
+private:
+	friend class ChainingDispatcher;
+	static LPCTSTR windowClass;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 inline ModelessDialog::ModelessDialog( Widget * parent )
-	: BaseType( parent )
+	: BaseType(parent, ChainingDispatcher::superClass<ModelessDialog>())
 {}
 
 }

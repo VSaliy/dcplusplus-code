@@ -41,9 +41,9 @@
 namespace dwt {
 
 class Container :
-	public Composite<Policies::Normal>
+	public Composite
 {
-	typedef Composite<Policies::Normal> BaseType;
+	typedef Composite BaseType;
 	friend class WidgetCreator<Container>;
 public:
 	typedef Container ThisType;
@@ -60,7 +60,7 @@ public:
 	void create( const Seed& cs = Seed() );
 
 protected:
-	Container(Widget* parent) : BaseType(parent) { }
+	Container(Widget* parent) : BaseType(parent, NormalDispatcher::getDefault()) { }
 };
 
 inline Container::Seed::Seed(DWORD style, DWORD exStyle) :

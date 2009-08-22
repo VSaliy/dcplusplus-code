@@ -62,10 +62,10 @@ class WidgetCreator;
   * MDIChild
   */
 class MDIParent :
-	public Control< Policies::Subclassed >
+	public Control
 
 {
-	typedef Control<Policies::Subclassed> BaseType;
+	typedef Control BaseType;
 	friend class WidgetCreator< MDIParent >;
 public:
 	/// Class type
@@ -130,7 +130,7 @@ public:
 		getParent()->sendMessage(WM_SYSCOMMAND, SC_NEXTWINDOW, MAKELPARAM(0, -1));
 	}
 
-	MDIFrame* getParent() { return static_cast<MDIFrame*>(PolicyType::getParent()); }
+	MDIFrame* getParent() { return static_cast<MDIFrame*>(BaseType::getParent()); }
 protected:
 	/// Constructor Taking pointer to parent
 	explicit MDIParent( Widget * parent );
@@ -145,7 +145,7 @@ protected:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline MDIParent::MDIParent( Widget * parent )
-	: BaseType( parent )
+	: BaseType(parent, NormalDispatcher::getDefault())
 {
 	// Can't have a text box without a parent...
 	dwtassert( parent, _T( "Can't have a MDIParent without a parent..." ) );

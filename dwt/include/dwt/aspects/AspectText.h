@@ -61,7 +61,7 @@ class AspectText
 		return tstring( reinterpret_cast< TCHAR * >( msg.lParam ) );
 	}
 
-	typedef Dispatchers::ConvertBase<tstring, &AspectText<WidgetType>::getText, 0, false> Dispatcher;
+	typedef Dispatchers::ConvertBase<tstring, &AspectText<WidgetType>::getText, 0, false> TextDispatcher;
 	friend class Dispatchers::ConvertBase<tstring, &AspectText<WidgetType>::getText, 0, false>;
 public:
 	/// Sets the text of the AspectText realizing class
@@ -85,8 +85,8 @@ public:
 	  * The parameter passed is tstring & which is the new text of the
 	  * Widget.
 	  */
-	void onTextChanging(const typename Dispatcher::F& f) {
-		W().addCallback(Message( WM_SETTEXT ), Dispatcher(f));
+	void onTextChanging(const typename TextDispatcher::F& f) {
+		W().addCallback(Message( WM_SETTEXT ), TextDispatcher(f));
 	}
 protected:
 	virtual ~AspectText()

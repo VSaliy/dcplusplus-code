@@ -148,8 +148,10 @@ protected:
 
 	// Protected to avoid direct instantiation, you can inherit and use
 	// WidgetFactory class which is friend
-	virtual ~Spinner()
-	{}
+	virtual ~Spinner() { }
+private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,8 +199,8 @@ inline void Spinner::onUpdate(const Dispatcher::F& f) {
 	setCallback(Message(WM_NOTIFY, UDN_DELTAPOS), Dispatcher(f));
 }
 
-inline Spinner::Spinner( dwt::Widget * parent )
-	: BaseType( parent )
+inline Spinner::Spinner(dwt::Widget * parent )
+	: BaseType(parent, ChainingDispatcher::superClass<Spinner>())
 {
 }
 

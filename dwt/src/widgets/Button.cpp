@@ -34,8 +34,10 @@
 
 namespace dwt {
 
+const TCHAR Button::windowClass[] = WC_BUTTON;
+
 Button::Seed::Seed(const tstring& caption, DWORD style) :
-BaseType::Seed(WC_BUTTON, style | WS_CHILD | WS_TABSTOP, 0, caption),
+BaseType::Seed(style | WS_CHILD | WS_TABSTOP, 0, caption),
 font(new Font(DefaultGuiFont)),
 padding(3, 2)
 {

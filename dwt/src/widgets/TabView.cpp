@@ -41,49 +41,19 @@
 
 namespace dwt {
 
+const TCHAR TabView::windowClass[] = WC_TABCONTROL;
+
 TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_) :
-	BaseType::Seed(WC_TABCONTROL, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
+	BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
 		 TCS_HOTTRACK | TCS_MULTILINE | TCS_RAGGEDRIGHT | TCS_TOOLTIPS | TCS_FOCUSNEVER),
 	font(new Font(DefaultGuiFont)),
 	maxLength(maxLength_),
 	toggleActive(toggleActive_)
 {
-	static bool first = true;
-	if(first) {
-		// Flicker bugfix, as described in SWT:
-		/*
-		* Feature in Windows.  The tab control window class
-		* uses the CS_HREDRAW and CS_VREDRAW style bits to
-		* force a full redraw of the control and all children
-		* when resized.  This causes flashing.  The fix is to
-		* register a new window class without these bits and
-		* implement special code that damages only the exposed
-		* area.
-		*
-		* NOTE:  Screen readers look for the exact class name
-		* of the control in order to provide the correct kind
-		* of assistance.  Therefore, it is critical that the
-		* new window class have the same name.  It is possible
-		* to register a local window class with the same name
-		* as a global class.  Since bits that affect the class
-		* are being changed, it is possible that other native
-		* code, other than SWT, could create a control with
-		* this class name, and fail unexpectedly.
-		*/
-		WNDCLASSEX cls = { sizeof(WNDCLASSEX) };
-		::GetClassInfoEx(NULL, WC_TABCONTROL, &cls);
-
-		cls.lpszClassName = WC_TABCONTROL;
-		cls.hInstance = ::GetModuleHandle(NULL);
-		cls.style &= ~(CS_HREDRAW | CS_VREDRAW | CS_GLOBALCLASS);
-
-		::RegisterClassEx(&cls);
-		first = false;
-	}
 }
 
 TabView::TabView(Widget* w) :
-	BaseType(w),
+	BaseType(w, ChainingDispatcher::superClass<TabView>()),
 	tip(0),
 	toggleActive(false),
 	inTab(false),
@@ -92,7 +62,7 @@ TabView::TabView(Widget* w) :
 	{ }
 
 void TabView::create(const Seed & cs) {
-	PolicyType::create(cs);
+	BaseType::create(cs);
 	maxLength = cs.maxLength;
 	if(maxLength <= 3)
 		maxLength = 0;
@@ -599,7 +569,7 @@ bool TabView::tryFire( const MSG & msg, LRESULT & retVal ) {
 	if(msg.message == WM_SIZE) {
 		// We need to let the tab control window proc handle this first, otherwise getUsableArea will not return
 		// correct values on mulitrow tabs (since the number of rows might change with the size)
-		retVal = returnUnhandled(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+		// @todo retVal = returnUnhandled(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 
 		handleSized(SizedEvent(msg));
 

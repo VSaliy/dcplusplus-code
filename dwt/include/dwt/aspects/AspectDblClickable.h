@@ -50,7 +50,7 @@ template< class WidgetType >
 class AspectDblClickable
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	typedef Dispatchers::VoidVoid<> Dispatcher;
+	typedef Dispatchers::VoidVoid<> DblClickableDispatcher;
 public:
 	/// \ingroup EventHandlersAspectDblClickable
 	/// Setting the event handler for the "Double Clicked" event
@@ -58,8 +58,8 @@ public:
 	  * being Double Clicked. No parameters are passed.
 	  */
 
-	void onDblClicked(const Dispatcher::F& f) {
-		W().addCallback(WidgetType::getDblClickMessage(), Dispatcher(f));
+	void onDblClicked(const DblClickableDispatcher::F& f) {
+		W().addCallback(WidgetType::getDblClickMessage(), DblClickableDispatcher(f));
 	}
 
 protected:

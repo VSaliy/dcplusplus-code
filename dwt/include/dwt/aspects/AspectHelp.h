@@ -44,10 +44,10 @@ class AspectHelp {
 
 	HWND H() const { return W().handle(); }
 
-	struct Dispatcher {
+	struct HelpDispatcher {
 		typedef std::tr1::function<void (HWND, unsigned)> F;
 
-		Dispatcher(const F& f_, WidgetType* widget_) : f(f_), widget(widget_) { }
+		HelpDispatcher(const F& f_, WidgetType* widget_) : f(f_), widget(widget_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(msg.lParam);
@@ -76,8 +76,8 @@ public:
 		::SetWindowContextHelpId(H(), id);
 	}
 
-	void onHelp(const typename Dispatcher::F& f) {
-		W().addCallback(Message(WM_HELP), Dispatcher(f, &W()));
+	void onHelp(const typename HelpDispatcher::F& f) {
+		W().addCallback(Message(WM_HELP), HelpDispatcher(f, &W()));
 	}
 
 private:

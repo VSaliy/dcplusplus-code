@@ -63,8 +63,20 @@ public:
 		return WidgetCreator<T>::attach(&W(), id);
 	}
 
+protected:
+	static INT_PTR CALLBACK dialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
+/**
+ * Dummy dialog procedure - we superclass the dialog window class and handle the message
+ * loop outside of the dialog box procedure.
+ *
+ * This is similar to http://blogs.msdn.com/oldnewthing/archive/2003/11/13/55662.aspx
+ */
+template<typename WidgetType>
+INT_PTR CALLBACK AspectDialog<WidgetType>::dialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	return FALSE;
+}
 }
 
 #endif /*ASPECTDIALOG_H_*/

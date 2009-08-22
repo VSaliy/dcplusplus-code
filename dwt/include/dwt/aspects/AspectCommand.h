@@ -40,18 +40,18 @@ namespace dwt {
 template<typename WidgetType>
 class AspectCommand {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	typedef Dispatchers::VoidVoid<> Dispatcher;
+	typedef Dispatchers::VoidVoid<> CommandDispatcher;
 public:
-	void onCommand(const Dispatcher::F& f, unsigned id) {
-		W().addCallback(Message(WM_COMMAND, id), Dispatcher(f));
+	void onCommand(const CommandDispatcher::F& f, unsigned id) {
+		W().addCallback(Message(WM_COMMAND, id), CommandDispatcher(f));
 	}
 
-	void onCommand(const Dispatcher::F& f, unsigned controlId, unsigned code) {
-		W().addCallback(Message(WM_COMMAND, MAKEWPARAM(controlId, code)), Dispatcher(f));
+	void onCommand(const CommandDispatcher::F& f, unsigned controlId, unsigned code) {
+		W().addCallback(Message(WM_COMMAND, MAKEWPARAM(controlId, code)), CommandDispatcher(f));
 	}
 
-	void onSysCommand(const Dispatcher::F& f, unsigned id) {
-		W().addCallback(Message(WM_SYSCOMMAND, id), Dispatcher(f));
+	void onSysCommand(const CommandDispatcher::F& f, unsigned id) {
+		W().addCallback(Message(WM_SYSCOMMAND, id), CommandDispatcher(f));
 	}
 };
 

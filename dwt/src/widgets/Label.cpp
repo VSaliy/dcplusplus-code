@@ -35,14 +35,16 @@
 
 namespace dwt {
 
+const TCHAR Label::windowClass[] = WC_STATIC;
+
 Label::Seed::Seed(const tstring& caption) :
-BaseType::Seed(WC_STATIC, WS_CHILD | SS_NOTIFY, 0, caption),
+BaseType::Seed(WS_CHILD | SS_NOTIFY, 0, caption),
 font(new Font(DefaultGuiFont))
 {
 }
 
 Label::Seed::Seed(unsigned iconId) :
-BaseType::Seed(WC_STATIC, WS_CHILD | SS_NOTIFY | SS_ICON, 0, _T('#') + boost::lexical_cast<tstring>(iconId))
+BaseType::Seed(WS_CHILD | SS_NOTIFY | SS_ICON, 0, _T('#') + boost::lexical_cast<tstring>(iconId))
 {
 }
 

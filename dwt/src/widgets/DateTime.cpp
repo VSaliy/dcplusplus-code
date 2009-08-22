@@ -34,8 +34,10 @@
 
 namespace dwt {
 
+const TCHAR DateTime::windowClass[] = DATETIMEPICK_CLASS;
+
 DateTime::Seed::Seed() :
-	BaseType::Seed(DATETIMEPICK_CLASS, WS_CHILD | DTS_SHORTDATEFORMAT),
+	BaseType::Seed(WS_CHILD | DTS_SHORTDATEFORMAT),
 	font(new Font(DefaultGuiFont)),
 	format(_T( "yyyy.MM.dd" )),
 	backgroundColor(0x000080),

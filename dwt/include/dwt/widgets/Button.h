@@ -97,6 +97,9 @@ protected:
 	Button(Widget* parent);
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	Point padding;
 
 	// Contract needed by AspectClickable Aspect class
@@ -115,8 +118,9 @@ inline Message Button::getDblClickMessage() {
 	return Message( WM_COMMAND, MAKEWPARAM(0, BN_DBLCLK) );
 }
 
-inline Button::Button(Widget* parent) : BaseType(parent) {
-
+inline Button::Button(Widget* parent) :
+	BaseType(parent, ChainingDispatcher::superClass<ThisType>())
+{
 }
 
 }

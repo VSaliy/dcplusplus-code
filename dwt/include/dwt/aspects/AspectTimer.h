@@ -41,10 +41,10 @@ class AspectTimer {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	HWND H() { return W().handle(); }
 
-	struct Dispatcher {
+	struct TimerDispatcher {
 		typedef std::tr1::function<bool ()> F;
 
-		Dispatcher(const F& f_) : f(f_) { }
+		TimerDispatcher(const F& f_) : f(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			if(!f()) {
@@ -65,16 +65,16 @@ public:
 	  * If your event handler returns true, it will keep getting called periodically, otherwise
 	  * it will be removed.
 	  */
-	void createTimer(const typename Dispatcher::F& f, unsigned int milliSeconds, unsigned int id = 0);
+	void createTimer(const typename TimerDispatcher::F& f, unsigned int milliSeconds, unsigned int id = 0);
 
 };
 
 template< class WidgetType >
-void AspectTimer< WidgetType >::createTimer( const typename Dispatcher::F& f,
+void AspectTimer< WidgetType >::createTimer( const typename TimerDispatcher::F& f,
 	unsigned int milliSecond, unsigned int id)
 {
 	::SetTimer( H(), id, static_cast< UINT >( milliSecond ), NULL);
-	W().addCallback(Message( WM_TIMER, id ), Dispatcher(f));
+	W().addCallback(Message( WM_TIMER, id ), TimerDispatcher(f));
 }
 
 }

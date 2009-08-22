@@ -59,7 +59,7 @@ class AspectActivate
 		return LOWORD( msg.wParam ) == WA_ACTIVE || LOWORD( msg.wParam ) == WA_CLICKACTIVE;
 	}
 
-	typedef Dispatchers::ConvertBase<bool, &AspectActivate<WidgetType>::isActive> Dispatcher;
+	typedef Dispatchers::ConvertBase<bool, &AspectActivate<WidgetType>::isActive> ActivateDispatcher;
 	friend class Dispatchers::ConvertBase<bool, &AspectActivate<WidgetType>::isActive>;
 public:
 	/// Activates the Widget
@@ -82,8 +82,8 @@ public:
 	  * called with either true or false indicating the active state of the Widget.
 	  * Parameter passed is bool
 	  */
-	void onActivate(const typename Dispatcher::F& f) {
-		W().addCallback(Message(WM_ACTIVATE), Dispatcher(f));
+	void onActivate(const typename ActivateDispatcher::F& f) {
+		W().addCallback(Message(WM_ACTIVATE), ActivateDispatcher(f));
 	}
 
 protected:

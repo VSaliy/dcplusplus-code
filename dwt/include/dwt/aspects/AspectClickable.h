@@ -50,7 +50,7 @@ template< class WidgetType >
 class AspectClickable
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	typedef Dispatchers::VoidVoid<> Dispatcher;
+	typedef Dispatchers::VoidVoid<> ClickableDispatcher;
 
 public:
 	/// \ingroup EventHandlersAspectClickable
@@ -60,8 +60,8 @@ public:
 	  * pressing the button and releasing it, for another Widget it might be
 	  * something else. No parameters are passed.
 	  */
-	void onClicked(const typename Dispatcher::F& f) {
-		W().addCallback(WidgetType::getClickMessage(), Dispatcher(f));
+	void onClicked(const typename ClickableDispatcher::F& f) {
+		W().addCallback(WidgetType::getClickMessage(), ClickableDispatcher(f));
 	}
 
 protected:

@@ -1,11 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
-
-  SmartWin++
-
-  Copyright (c) 2005 Thomas Hansen
+  Copyright (c) 2007-2009, Jacek Sieka
 
   All rights reserved.
 
@@ -33,11 +29,64 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ApplicationPlatform_h
-#define DWT_ApplicationPlatform_h
+#ifndef DWT_DISPATCHER_H
+#define DWT_DISPATCHER_H
 
-#include "ApplicationPlatformCommon.h"
-#include "ApplicationPlatformDesktop.h"
-#include "ApplicationPlatformWinCE.h"
+#include "WindowsHeaders.h"
+#include <typeinfo>
+#include <sstream>
+#include <memory>
+
+namespace dwt {
+
+class Dispatcher {
+public:
+	virtual LRESULT chain(MSG& msg) = 0;
+
+	LPCTSTR getClassName() { return reinterpret_cast<LPCTSTR>(atom); }
+protected:
+	friend class std::auto_ptr<Dispatcher>;
+
+	Dispatcher(LPCTSTR className, WNDPROC initProc);
+	Dispatcher(WNDCLASSEX& cls);
+
+	~Dispatcher();
+
+	ATOM atom;
+};
+
+class NormalDispatcher : public Dispatcher {
+public:
+	static Dispatcher& getDefault();
+
+	NormalDispatcher(LPCTSTR className_);
+
+	virtual LRESULT chain(MSG& msg);
+};
+
+class ChainingDispatcher : public Dispatcher {
+public:
+	ChainingDispatcher(LPCTSTR className_, WNDPROC wndProc_);
+
+	template<typename T>
+	static Dispatcher& superClass() {
+		// Convert to wide
+		std::basic_stringstream<TCHAR> className;
+		className << typeid(T).name();
+
+		static std::auto_ptr<Dispatcher> dispatcher = superClass(T::windowClass, className.str().c_str());
+		return *dispatcher;
+	}
+
+	static std::auto_ptr<Dispatcher> superClass(LPCTSTR original, LPCTSTR newName);
+
+	virtual LRESULT chain(MSG& msg);
+private:
+	ChainingDispatcher(WNDCLASSEX& cls, WNDPROC wndProc_);
+
+	WNDPROC wndProc;
+};
+
+}
 
 #endif

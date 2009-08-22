@@ -33,8 +33,10 @@
 
 namespace dwt {
 
+const TCHAR Tree::windowClass[] = WC_TREEVIEW;
+
 Tree::Seed::Seed() :
-	BaseType::Seed(WC_TREEVIEW, WS_CHILD | WS_TABSTOP),
+	BaseType::Seed(WS_CHILD | WS_TABSTOP),
 	font(new Font(DefaultGuiFont))
 {
 }
@@ -157,7 +159,7 @@ void Tree::select(const ScreenCoordinate& pt) {
 
 /// Returns true if fired, else false
 bool Tree::tryFire( const MSG & msg, LRESULT & retVal ) {
-	bool handled = PolicyType::tryFire(msg, retVal);
+	bool handled = BaseType::tryFire(msg, retVal);
 	if(!handled && msg.message == WM_RBUTTONDOWN) {
 		// Tree view control does strange things to rbuttondown, preventing wm_contextmenu from reaching it
 		retVal = ::DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);

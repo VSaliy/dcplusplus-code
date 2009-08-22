@@ -62,10 +62,10 @@ namespace dwt {
   */
 
 class ModalDialog :
-	public Frame< Policies::ModalDialog >,
+	public Frame,
 	public AspectDialog<ModalDialog >
 {
-	typedef Frame< Policies::ModalDialog > BaseType;
+	typedef Frame BaseType;
 	struct Dispatcher
 	{
 		typedef std::tr1::function<bool ()> F;
@@ -89,14 +89,11 @@ public:
 	  */
 	typedef ThisType ObjectType;
 
-	struct Seed {
+	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
 		/// size specified in dialog units
 		Point size;
-
-		/// additional dialog styles
-		DWORD styles;
 
 		Seed(const Point& size_, DWORD styles_ = 0);
 	};
@@ -180,7 +177,11 @@ protected:
 		return true;
 	}
 
+	virtual void kill();
 private:
+	friend class ChainingDispatcher;
+	static LPCTSTR windowClass;
+
 	bool quit;
 	int ret;
 

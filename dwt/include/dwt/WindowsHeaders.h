@@ -33,22 +33,12 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/** @file
+ * This file contains all common DWT includes and also configures compiler-specific
+ * quirks etc.
+ */
 #ifndef DWT_WindowsHeaders_h
 #define DWT_WindowsHeaders_h
-
-// This file is supposed to contain (most at least) of the platform specific
-// defines and so on
-
-namespace dwt {
-
-// Enum containing the different platforms we're supposed to support,
-// SmartWinDesktop means BOTH Wine, MingW and VC++. SmartWinCE means Pocket PC or
-// Smart Phone 2003 and onwards!
- enum Platform
-{ dwtDesktop = 0, dwtCE = 1
-};
-
-}
 
 #ifndef _WIN32_WINNT
 	#define _WIN32_WINNT 0x0501
@@ -60,27 +50,43 @@ namespace dwt {
 	#define WINVER 0x501
 #endif
 
-// Removing windows.h max and min macro
-#undef NOMINMAX
-#define NOMINMAX
+// Try to remove min/max macros - we prefer the c++ equivalents
+#ifndef NOMINMAX
+#define NOMINMAX 1
+#endif
 
-// Including special GCC Stuff
+#ifndef STRICT
+#define STRICT
+#endif
+
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+// Windows API files...
+#include <errno.h>
+#include <windows.h>
+#include <tchar.h>
+#include <windowsx.h>
+#include <shellapi.h>
+#include <shlwapi.h>
+#include <commctrl.h>
+#include <commdlg.h>
+#include <assert.h>
+
+// Standard headers that most classes need
+#include <vector>
+#include <list>
+#include <boost/noncopyable.hpp>
+
+// GCC specific
 #ifdef __GNUC__
 #include "GCCHeaders.h"
 #endif //! __GNUC__
 
-// Including special VC Desktop Platform stuff
-#ifndef __GNUC__
-#ifndef WINCE
+// MSVC specific
+#ifdef _MSC_VER
 #include "VCDesktopHeaders.h"
-#endif
-#endif
-
-// Including special VC Pocket PC Platform stuff
-#ifndef __GNUC__
-#ifdef WINCE
-#include "VCPocketPCHeaders.h"
-#endif
 #endif
 
 #endif // !WindowsHeaders_h

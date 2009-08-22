@@ -151,28 +151,6 @@ tstring Application::getModuleFileName() const {
 	return tstring(retVal, GetModuleFileName(0, retVal, 2048));
 }
 
-#ifdef __WINE__
-// Because linux applications became stuck in the MsgWaitForMultipleObjectsEx call
-// when the WM_CLOSE was sent, we restore the simpler message loops for __WINE__.
-//
-int Application::run()
-{
-	MSG msg;
-	while ( ::GetMessage( & msg, 0, 0, 0 )> 0 )
-	{
-		if ( ::IsDialogMessage( GetParent( msg.hwnd ), & msg ) ||
-			TranslateMDISysAccel( msg.hwnd, & msg ) )
-		{
-			continue; // Allow Tab order
-		}
-
-		::TranslateMessage ( & msg );
-		::DispatchMessage ( & msg );
-	}
-	return static_cast< int>( msg.wParam );
-}
-#else
-
 void Application::run() {
 	while(!quit) {
 		if(!dispatch()) {
@@ -278,18 +256,7 @@ void Application::removeFilter(const FilterIter& i) {
 
 } // namespace dwt
 
-// Declaring (externally) the function needed to be supplied as entry point by Client Applications utilizing the library
-// This function is being called by the internal entry point (WinMain)
-#ifdef WINCE
-int WINAPI ::WinMain
-( HINSTANCE hInstance
-	, HINSTANCE hPrevInstance
-	, LPTSTR lpCmdLine
-	, int nCmdShow
-)
-#else
-int PASCAL  WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-#endif
+int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	unsigned int retVal = 0;
 
@@ -301,5 +268,3 @@ int PASCAL  WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	return retVal;
 }
-
-#endif // not __WINE__

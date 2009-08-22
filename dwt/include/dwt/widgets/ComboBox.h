@@ -143,6 +143,9 @@ protected:
 	{}
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	size_t dropDownHeight;
 
 	// AspectSelection

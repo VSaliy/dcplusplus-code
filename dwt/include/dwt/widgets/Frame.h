@@ -68,15 +68,14 @@ namespace dwt {
   * the library residing in the dwtUnitTests directory for an example of how to
   * use  this class with the factory class WidgetFactory.
   */
-template< class Policy >
 class Frame :
-	public Composite< Policy >,
-	public AspectMinMax<Frame<Policy> >
+	public Composite,
+	public AspectMinMax<Frame>
 {
-	typedef Composite< Policy > BaseType;
+	typedef Composite BaseType;
 public:
 	/// Class type
-	typedef Frame< Policy > ThisType;
+	typedef Frame ThisType;
 
 	/// Object type
 	typedef ThisType * ObjectType;
@@ -125,7 +124,7 @@ protected:
 	};
 
 	// Protected since this Widget we HAVE to inherit from
-	explicit Frame( Widget * parent = 0 );
+	Frame(Widget *parent, Dispatcher& dispatcher);
 
 	// Protected to avoid direct instantiation, you can inherit but NOT instantiate
 	// directly
@@ -137,16 +136,13 @@ protected:
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-template<typename Policy>
-Frame<Policy>::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle) :
+inline Frame::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle) :
 	BaseType::Seed(caption, style | WS_OVERLAPPEDWINDOW, exStyle)
 {
 
 }
 
-#ifndef WINCE
-template< class Policy >
-void Frame< Policy >::animateSlide( bool show, bool left, unsigned int time )
+inline void Frame::animateSlide( bool show, bool left, unsigned int time )
 {
 	::AnimateWindow( this->handle(), static_cast< DWORD >( time ),
 		show ?
@@ -158,47 +154,39 @@ void Frame< Policy >::animateSlide( bool show, bool left, unsigned int time )
 			);
 }
 
-//HC: This function gives problems with some non-Microsoft visual styles
-template< class Policy >
-void Frame< Policy >::animateBlend( bool show, int msTime )
+inline void Frame::animateBlend( bool show, int msTime )
 {
 	::AnimateWindow( this->handle(), static_cast< DWORD >( msTime ), show ? AW_BLEND : AW_HIDE | AW_BLEND );
 }
 
-template< class Policy >
-void Frame< Policy >::animateCollapse( bool show, int msTime )
+inline void Frame::animateCollapse( bool show, int msTime )
 {
 	::AnimateWindow( this->handle(), static_cast< DWORD >( msTime ), show ? AW_CENTER : AW_HIDE | AW_CENTER );
 }
-#endif
 
-template< class Policy >
-void Frame< Policy >::setMinimizeBox( bool value )
+inline void Frame::setMinimizeBox( bool value )
 {
 	Widget::addRemoveStyle( WS_MINIMIZEBOX, value );
 }
 
-template< class Policy >
-void Frame< Policy >::setMaximizeBox( bool value )
+inline void Frame::setMaximizeBox( bool value )
 {
 	Widget::addRemoveStyle( WS_MAXIMIZEBOX, value );
 }
 
-template< class Policy >
-void Frame< Policy >::setIconSmall( const IconPtr& icon )
+inline void Frame::setIconSmall( const IconPtr& icon )
 {
-	::SendMessage( this->handle(), WM_SETICON, ICON_SMALL, reinterpret_cast< LPARAM >( icon->handle() ) );
+	sendMessage(WM_SETICON, ICON_SMALL, reinterpret_cast< LPARAM >( icon->handle() ) );
 }
 
-template< class Policy >
-void Frame< Policy >::setIconLarge( const IconPtr& icon )
+
+inline void Frame::setIconLarge( const IconPtr& icon )
 {
-	::SendMessage( this->handle(), WM_SETICON, ICON_BIG, reinterpret_cast< LPARAM >( icon->handle() ) );
+	sendMessage(WM_SETICON, ICON_BIG, reinterpret_cast< LPARAM >( icon->handle() ) );
 }
 
-template< class Policy >
-Frame< Policy >::Frame( Widget * parent )
-	: Composite<Policy>( parent )
+inline Frame::Frame(Widget * parent, Dispatcher& dispatcher)
+	: Composite(parent, dispatcher)
 {
 }
 

@@ -1,4 +1,5 @@
 /*
+
   DC++ Widget Toolkit
 
   Copyright (c) 2007-2009, Jacek Sieka

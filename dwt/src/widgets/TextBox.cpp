@@ -34,8 +34,10 @@
 
 namespace dwt {
 
+const TCHAR TextBox::windowClass[] = WC_EDIT;
+
 TextBox::Seed::Seed(const tstring& caption) :
-	BaseType::Seed(WC_EDIT, WS_CHILD | WS_TABSTOP, WS_EX_CLIENTEDGE, caption),
+	BaseType::Seed(WS_CHILD | WS_TABSTOP, WS_EX_CLIENTEDGE, caption),
 	font(new Font(DefaultGuiFont))
 {
 }
@@ -118,7 +120,7 @@ bool TextBox::tryFire(const MSG& msg, LRESULT& retVal) {
 		* try to handle keys like tab/enter/escape; especially when hosted in a modeless dialog or
 		* when one of their parents has the WS_EX_CONTROLPARENT style.
 		*/
-		retVal = returnUnhandled(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+		// @todo retVal = returnUnhandled(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 		if(retVal & DLGC_WANTALLKEYS) {
 			retVal &= ~DLGC_WANTALLKEYS;
 

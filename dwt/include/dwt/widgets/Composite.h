@@ -42,7 +42,6 @@
 #include "../aspects/AspectPainting.h"
 #include "../aspects/AspectText.h"
 #include "../resources/Icon.h"
-#include "../Policies.h"
 #include "../WidgetCreator.h"
 #include "../WindowClass.h"
 #include "Control.h"
@@ -51,27 +50,25 @@
 
 namespace dwt {
 
-template<typename Policy>
 class Composite :
-	public Control<Policy>,
+	public Control,
 	// Aspects
-	public AspectActivate< Composite< Policy > >,
-	public AspectCommand< Composite< Policy > >,
-	public AspectContainer<Composite<Policy> >,
-	public AspectDragDrop< Composite< Policy > >,
-	public AspectEraseBackground< Composite< Policy > >,
-	public AspectKeyboard< Composite< Policy > >,
-	public AspectFont< Composite< Policy > >,
-	public AspectPainting< Composite< Policy > >,
-	public AspectText< Composite< Policy > >
+	public AspectActivate<Composite>,
+	public AspectCommand<Composite>,
+	public AspectContainer<Composite>,
+	public AspectDragDrop<Composite>,
+	public AspectEraseBackground<Composite>,
+	public AspectKeyboard<Composite>,
+	public AspectFont<Composite>,
+	public AspectPainting<Composite>,
+	public AspectText<Composite>
 {
-	typedef Control<Policy> BaseType;
+	typedef Control BaseType;
 
 public:
-	typedef Composite<Policy> ThisType;
+	typedef Composite ThisType;
 
 	typedef ThisType* ObjectType;
-
 
 	/// Seed class
 	/** This class contains all of the values needed to create the widget. It also
@@ -90,32 +87,25 @@ public:
 	};
 
 	void create(const Seed& cs);
+
 protected:
-	friend class WidgetCreator<Composite<Policy> >;
+	friend class WidgetCreator<Composite>;
 
-	explicit Composite(Widget* parent) : BaseType( parent )
+	Composite(Widget* parent, Dispatcher& dispatcher) : BaseType(parent, dispatcher)
 	{};
-
-private:
-	boost::scoped_ptr<WindowClass> windowClass;
 };
 
-template<typename Policy>
-Composite<Policy>::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle) :
-	BaseType::Seed(NULL, style | WS_CLIPCHILDREN, exStyle, caption),
+inline Composite::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle) :
+	BaseType::Seed(style | WS_CLIPCHILDREN, exStyle, caption),
 	background(( HBRUSH )( COLOR_3DFACE + 1 )),
 	menuName(NULL),
 	cursor(::LoadCursor(0, IDC_ARROW))
 {
 }
 
-template<typename Policy>
-void Composite<Policy>::create(const Seed& cs) {
-	windowClass.reset(new WindowClass(WindowClass::getNewClassName(this), &ThisType::wndProc, cs.menuName, cs.background, cs.icon, cs.smallIcon, cs.cursor));
-
-	Seed cs2 = cs;
-	cs2.className = windowClass->getClassName();
-	BaseType::create( cs2 );
+inline void Composite::create(const Seed& cs) {
+	// TODO icons, menus etc
+	BaseType::create(cs);
 }
 
 }

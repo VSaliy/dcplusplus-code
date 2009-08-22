@@ -33,14 +33,16 @@
 
 namespace dwt {
 
+const TCHAR ComboBox::windowClass[] = WC_COMBOBOX;
+
 ComboBox::Seed::Seed() :
-	BaseType::Seed(WC_COMBOBOX, CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_CHILD | WS_TABSTOP | WS_VSCROLL),
+	BaseType::Seed(CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_CHILD | WS_TABSTOP | WS_VSCROLL),
 	font(new Font(DefaultGuiFont)),
 	extended(true)
 {
 }
 
-ComboBox::ComboBox( Widget* parent ) : BaseType(parent), dropDownHeight(::GetSystemMetrics(SM_CYSCREEN) / 3) {
+ComboBox::ComboBox(Widget* parent ) : BaseType(parent, ChainingDispatcher::superClass<ComboBox>()), dropDownHeight(::GetSystemMetrics(SM_CYSCREEN) / 3) {
 
 }
 

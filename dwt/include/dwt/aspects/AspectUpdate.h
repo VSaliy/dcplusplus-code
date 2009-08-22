@@ -52,14 +52,14 @@ template< class WidgetType >
 class AspectUpdate
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	typedef Dispatchers::VoidVoid<> Dispatcher;
+	typedef Dispatchers::VoidVoid<> UpdateDispatcher;
 public:
 	/// \ingroup EventHandlersAspectUpdate
 	/// Sets the event handler for the Updated event.
 	/** When the Widget value/text is being updated this event will be raised.
 	  */
-	void onUpdated(const Dispatcher::F& f) {
-		W().addCallback(WidgetType::getUpdateMessage(), Dispatcher(f));
+	void onUpdated(const UpdateDispatcher::F& f) {
+		W().addCallback(WidgetType::getUpdateMessage(), UpdateDispatcher(f));
 	}
 
 protected:

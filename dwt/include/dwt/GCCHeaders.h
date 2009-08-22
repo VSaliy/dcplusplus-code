@@ -36,137 +36,123 @@
 #ifndef DWT_GCCHeaders_h
 #define DWT_GCCHeaders_h
 
-#ifdef __GNUC__
+#ifndef __GNUC__
+#error This file is only for GCC
+#endif
 
-	static const dwt::Platform CurrentPlatform = dwt::dwtDesktop;
-
-	// Windows API files...
-	#include <errno.h>
-	#include <windows.h>
-	#include <tchar.h>
-	#include <winuser.h>
-	#include <windowsx.h>
-	#include <shellapi.h>
-	#include <shlwapi.h>
-	#include <commctrl.h>
-	#include <commdlg.h>
-	#include <assert.h>
-
-	// Need to forward declare these since GCC does syntax checking of
-	// non-instantiated templates!
-	BOOL CommandBar_InsertMenubarEx( HWND hwndCB, HINSTANCE hInst, LPTSTR pszMenu, WORD iButton );
-	BOOL CommandBar_AddAdornments( HWND hwndCB, DWORD dwFlags, DWORD dwReserved );
-	void CommandBar_Destroy( HWND hwndCB );
+// Need to forward declare these since GCC does syntax checking of
+// non-instantiated templates!
+BOOL CommandBar_InsertMenubarEx( HWND hwndCB, HINSTANCE hInst, LPTSTR pszMenu, WORD iButton );
+BOOL CommandBar_AddAdornments( HWND hwndCB, DWORD dwFlags, DWORD dwReserved );
+void CommandBar_Destroy( HWND hwndCB );
 
 #ifndef BUTTON_IMAGELIST_ALIGN_CENTER
 
-	// mingw misses this functions
-	typedef struct
-	{
-		HIMAGELIST himl; // Index: Normal, hot pushed, disabled. If count is less than 4, we use index 1
-		RECT margin; // Margin around icon.
-		UINT uAlign;
-	} BUTTON_IMAGELIST, * PBUTTON_IMAGELIST;
+typedef struct
+{
+	HIMAGELIST himl; // Index: Normal, hot pushed, disabled. If count is less than 4, we use index 1
+	RECT margin; // Margin around icon.
+	UINT uAlign;
+} BUTTON_IMAGELIST, * PBUTTON_IMAGELIST;
 
-	#define BUTTON_IMAGELIST_ALIGN_CENTER   4       // Doesn't draw text
+#define BUTTON_IMAGELIST_ALIGN_CENTER   4       // Doesn't draw text
+
 #endif
 
-	#define COLOR_MENUHILIGHT       29
-	#define COLOR_MENUBAR           30
-	#define ODS_HOTLIGHT        0x0040
-	#define ODS_INACTIVE        0x0080
-	#ifndef MN_GETHMENU
-	#define MN_GETHMENU                     0x01E1
-	#endif
-	#if(_WIN32_WINNT >= 0x0500)
-	#ifndef ODS_NOACCEL
-	#define ODS_NOACCEL         0x0100
-	#endif
-	#ifndef DT_HIDEPREFIX
-	#define DT_HIDEPREFIX               0x00100000
-	#endif
-	#ifndef GET_KEYSTATE_WPARAM
-	#define GET_KEYSTATE_WPARAM(wParam)     (LOWORD(wParam))
-	#endif
-	#ifndef GET_XBUTTON_WPARAM
-	#define GET_XBUTTON_WPARAM(wParam)      (HIWORD(wParam))
-	#endif
-	#endif
+#define COLOR_MENUHILIGHT       29
+#define COLOR_MENUBAR           30
+#define ODS_HOTLIGHT        0x0040
+#define ODS_INACTIVE        0x0080
+#ifndef MN_GETHMENU
+#define MN_GETHMENU                     0x01E1
+#endif
+#if(_WIN32_WINNT >= 0x0500)
+#ifndef ODS_NOACCEL
+#define ODS_NOACCEL         0x0100
+#endif
+#ifndef DT_HIDEPREFIX
+#define DT_HIDEPREFIX               0x00100000
+#endif
+#ifndef GET_KEYSTATE_WPARAM
+#define GET_KEYSTATE_WPARAM(wParam)     (LOWORD(wParam))
+#endif
+#ifndef GET_XBUTTON_WPARAM
+#define GET_XBUTTON_WPARAM(wParam)      (HIWORD(wParam))
+#endif
+#endif
 
-	// Additional (gcc, normally) stuff
+// Additional (gcc, normally) stuff
 
-	#ifndef SPI_GETUIEFFECTS
-		#define SPI_GETUIEFFECTS 0x103E
-	#endif //! SPI_GETUIEFFECTS
+#ifndef SPI_GETUIEFFECTS
+	#define SPI_GETUIEFFECTS 0x103E
+#endif //! SPI_GETUIEFFECTS
 
-	#ifndef SPI_SETUIEFFECTS
-		#define SPI_SETUIEFFECTS 0x103F
-	#endif //! SPI_SETUIEFFECTS
+#ifndef SPI_SETUIEFFECTS
+	#define SPI_SETUIEFFECTS 0x103F
+#endif //! SPI_SETUIEFFECTS
 
 
-	#ifndef GCLP_HCURSOR
-		#define GCLP_HCURSOR (-12)
-	#endif //! GCLP_HCURSOR
+#ifndef GCLP_HCURSOR
+	#define GCLP_HCURSOR (-12)
+#endif //! GCLP_HCURSOR
 
-	#ifndef SetClassLong
-		DWORD WINAPI SetClassLongA( HWND, INT, LONG );
-		DWORD WINAPI SetClassLongW( HWND, INT, LONG );
+#ifndef SetClassLong
+	DWORD WINAPI SetClassLongA( HWND, INT, LONG );
+	DWORD WINAPI SetClassLongW( HWND, INT, LONG );
+	#ifdef UNICODE
+		#define SetClassLong  SetClassLongW
+	#else //! UNICODE
+		#define SetClassLong  SetClassLongA
+	#endif // !UNICODE
+#endif // !SetClassLong
+
+#ifndef SetClassLongPtr
+	#ifdef _WIN64
+		ULONG_PTR WINAPI SetClassLongPtrA( HWND, INT, LONG_PTR );
+		ULONG_PTR WINAPI SetClassLongPtrW( HWND, INT, LONG_PTR );
 		#ifdef UNICODE
-			#define SetClassLong  SetClassLongW
+			#define SetClassLongPtr  SetClassLongPtrW
 		#else //! UNICODE
-			#define SetClassLong  SetClassLongA
+			#define SetClassLongPtr  SetClassLongPtrA
 		#endif // !UNICODE
-	#endif // !SetClassLong
+	#else // !_WIN64
+		#define SetClassLongPtr  SetClassLong
+	#endif // !_WIN64
+#endif // !SetClassLongPtr
 
-	#ifndef SetClassLongPtr
-		#ifdef _WIN64
-			ULONG_PTR WINAPI SetClassLongPtrA( HWND, INT, LONG_PTR );
-			ULONG_PTR WINAPI SetClassLongPtrW( HWND, INT, LONG_PTR );
-			#ifdef UNICODE
-				#define SetClassLongPtr  SetClassLongPtrW
-			#else //! UNICODE
-				#define SetClassLongPtr  SetClassLongPtrA
-			#endif // !UNICODE
-		#else // !_WIN64
-			#define SetClassLongPtr  SetClassLong
-		#endif // !_WIN64
-	#endif // !SetClassLongPtr
+#ifndef GetWindowLongPtr
+	#ifdef _WIN64
+		ULONG_PTR WINAPI GetWindowLongPtrA( HWND, LONG_PTR );
+		ULONG_PTR WINAPI GetWindowLongPtrW( HWND, LONG_PTR );
+		#ifdef UNICODE
+			#define GetWindowLongPtr  GetWindowLongPtrW
+		#else //! UNICODE
+			#define GetWindowLongPtr  GetWindowLongPtrA
+		#endif // !UNICODE
+	#else //! _WIN64
+		#define GetWindowLongPtr  GetWindowLong
+	#endif // !_WIN64
+#endif // !GetWindowLongPtr
 
-	#ifndef GetWindowLongPtr
-		#ifdef _WIN64
-			ULONG_PTR WINAPI GetWindowLongPtrA( HWND, LONG_PTR );
-			ULONG_PTR WINAPI GetWindowLongPtrW( HWND, LONG_PTR );
-			#ifdef UNICODE
-				#define GetWindowLongPtr  GetWindowLongPtrW
-			#else //! UNICODE
-				#define GetWindowLongPtr  GetWindowLongPtrA
-			#endif // !UNICODE
-		#else //! _WIN64
-			#define GetWindowLongPtr  GetWindowLong
-		#endif // !_WIN64
-	#endif // !GetWindowLongPtr
+// these should be defined in CommCtrl.h, but the one in MinGW doesn't define them... (2007-11-06)
+#if (_WIN32_WINNT >= 0x0501)
+#ifndef HDF_SORTUP
+#define HDF_SORTUP              0x0400
+#endif
+#ifndef HDF_SORTDOWN
+#define HDF_SORTDOWN            0x0200
+#endif
+#ifndef LVS_EX_DOUBLEBUFFER
+#define LVS_EX_DOUBLEBUFFER     0x00010000
+#endif
+#endif
 
-	// these should be defined in CommCtrl.h, but the one in MinGW doesn't define them... (2007-11-06)
-	#if (_WIN32_WINNT >= 0x0501)
-	#ifndef HDF_SORTUP
-	#define HDF_SORTUP              0x0400
-	#endif
-	#ifndef HDF_SORTDOWN
-	#define HDF_SORTDOWN            0x0200
-	#endif
-	#ifndef LVS_EX_DOUBLEBUFFER
-	#define LVS_EX_DOUBLEBUFFER     0x00010000
-	#endif
-	#endif
+#ifdef max
+#undef max
+#endif
 
-	#ifdef max
-	#undef max
-	#endif
-
-	#ifdef min
-	#undef min
-	#endif
-
+#ifdef min
+#undef min
 #endif
 
 #endif

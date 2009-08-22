@@ -32,7 +32,7 @@
 #ifndef DWT_ToolTip_H_
 #define DWT_ToolTip_H_
 
-#include "../Policies.h"
+#include "../Widget.h"
 #include "../aspects/AspectEnabled.h"
 #include "../aspects/AspectFont.h"
 #include "../aspects/AspectRaw.h"
@@ -42,7 +42,7 @@
 namespace dwt {
 
 class ToolTip :
-	public MessageMap< Policies::Subclassed >,
+	public Widget,
 
 	// Aspects
 	public AspectEnabled< ToolTip >,
@@ -50,7 +50,7 @@ class ToolTip :
 	public AspectRaw< ToolTip >,
 	public AspectVisible< ToolTip >
 {
-	typedef MessageMap< Policies::Subclassed > BaseType;
+	typedef Widget BaseType;
 	friend class WidgetCreator< ToolTip >;
 
 	struct Dispatcher {
@@ -110,10 +110,14 @@ protected:
 	{}
 
 	tstring text;
+
+private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
 };
 
-inline ToolTip::ToolTip( Widget * parent )
-	: BaseType( parent )
+inline ToolTip::ToolTip(Widget *parent)
+	: BaseType(parent, ChainingDispatcher::superClass<ToolTip>())
 {
 	// Can't have a text box without a parent...
 	dwtassert( parent, _T( "Can't have a ToolTip without a parent..." ) );

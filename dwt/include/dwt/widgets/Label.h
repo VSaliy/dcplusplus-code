@@ -118,6 +118,9 @@ protected:
 	{}
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	// Contract needed by AspectClickable Aspect class
 	static Message getClickMessage();
 
@@ -134,7 +137,7 @@ inline Message Label::getDblClickMessage() {
 }
 
 inline Label::Label( Widget * parent )
-	: BaseType( parent )
+	: BaseType(parent, ChainingDispatcher::superClass<Label>())
 {
 }
 

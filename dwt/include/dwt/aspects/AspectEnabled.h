@@ -58,7 +58,7 @@ class AspectEnabled
 
 	static bool isEnabled(const MSG& msg) { return msg.wParam > 0; }
 
-	typedef Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled> Dispatcher;
+	typedef Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled> EnabledDispatcher;
 	friend class Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled>;
 
 public:
@@ -82,8 +82,8 @@ public:
 	  * been enabled or if it has been disabled! <br>
 	  * No parameters are passed.
 	  */
-	void onEnabled(const typename Dispatcher::F& f) {
-		W().addCallback(Message( WM_ENABLE ), Dispatcher(f));
+	void onEnabled(const typename EnabledDispatcher::F& f) {
+		W().addCallback(Message( WM_ENABLE ), EnabledDispatcher(f));
 	}
 
 protected:

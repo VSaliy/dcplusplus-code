@@ -186,8 +186,11 @@ protected:
 
 	// Protected to avoid direct instantiation, you can inherit and use
 	// WidgetFactory class which is friend
-	virtual ~Slider()
-	{}
+	virtual ~Slider() {}
+
+private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -267,7 +270,7 @@ inline void Slider::assignBuddy( bool beginning, Widget * buddy )
 }
 
 inline Slider::Slider( dwt::Widget * parent )
-	: BaseType( parent )
+	: BaseType(parent, ChainingDispatcher::superClass<Slider>())
 {
 }
 

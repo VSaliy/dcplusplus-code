@@ -41,11 +41,9 @@ MDIChild::Seed::Seed(const tstring& caption) :
 }
 
 void MDIChild::createMDIChild( const Seed& cs ) {
-	windowClass.reset(new WindowClass(WindowClass::getNewClassName(this), &ThisType::wndProc, NULL, cs.background, cs.icon, cs.smallIcon, cs.cursor));
-
 	getParent()->sendMessage(WM_SETREDRAW, FALSE);
 	HWND active = (HWND)(cs.activate ? NULL : getParent()->sendMessage(WM_MDIGETACTIVE));
-	HWND wnd = ::CreateMDIWindow( windowClass->getClassName(),
+	HWND wnd = ::CreateMDIWindow( getDispatcher().getClassName(),
 		cs.caption.c_str(),
 		cs.style,
 		cs.location.x(), cs.location.y(), cs.location.width(), cs.location.height(),

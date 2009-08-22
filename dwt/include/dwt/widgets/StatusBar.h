@@ -156,6 +156,9 @@ protected:
 	static Message getDblClickMessage() { return Message(WM_NOTIFY, NM_DBLCLK); }
 
 private:
+	friend class ChainingDispatcher;
+	static const TCHAR windowClass[];
+
 	struct Part {
 		Part() : size(0), helpId(0), clickF(0), dblClickF(0) { }
 

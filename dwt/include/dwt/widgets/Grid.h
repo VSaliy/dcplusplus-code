@@ -107,7 +107,7 @@ public:
 protected:
 	friend class WidgetCreator<Grid>;
 
-	explicit Grid( Widget * parent ) : BaseType( parent ), spacing(3) { }
+	explicit Grid( Widget * parent ) : BaseType(parent), spacing(3) { }
 
 private:
 
