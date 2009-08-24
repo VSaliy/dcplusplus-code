@@ -131,11 +131,7 @@ public:
 	}
 
 	void set(StrSetting key, string const& value) {
-		if(((key == DESCRIPTION) || (key == NICK)) && (value.size() > 35)) {
-			strSettings[key - STR_FIRST] = value.substr(0, 35);
-		} else {
-			strSettings[key - STR_FIRST] = value;
-		}
+		strSettings[key - STR_FIRST] = value;
 		isSet[key] = !value.empty();
 	}
 

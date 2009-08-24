@@ -53,7 +53,6 @@ connections(0)
 
 		grid->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
 		box = grid->addChild(WinUtil::Seeds::Dialog::textBox);
-		box->setTextLimit(35);
 		items.push_back(Item(box, SettingsManager::DESCRIPTION, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
 
@@ -69,7 +68,6 @@ connections(0)
 
 	PropPage::read(items);
 
-	nick->setTextLimit(35);
 	nick->onUpdated(std::tr1::bind(&GeneralPage::handleNickTextChanged, this));
 
 	int selected = 0, j = 0;
