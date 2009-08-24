@@ -90,7 +90,6 @@ bool FavHubProperties::handleInitDialog() {
 
 		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
 		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		nick->setTextLimit(35);
 		nick->setText(Text::toT(entry->getNick(false)));
 		nick->onUpdated(std::tr1::bind(&FavHubProperties::handleTextChanged, this, nick));
 		nick->setHelpId(IDH_FAVORITE_HUB_NICK);
@@ -104,7 +103,6 @@ bool FavHubProperties::handleInitDialog() {
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
 		userDescription = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		userDescription->setTextLimit(35);
 		userDescription->setText(Text::toT(entry->getUserDescription()));
 		userDescription->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
 	}
