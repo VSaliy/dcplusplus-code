@@ -252,9 +252,13 @@ void AdcHub::handle(AdcCommand::MSG, AdcCommand& c) throw() {
 		if(!replyTo)
 			return;
 
-		fire(ClientListener::PrivateMessage(), this, *from, *to, *replyTo, c.getParam(0), c.hasFlag("ME", 1));
+		string timestamp;
+		fire(ClientListener::PrivateMessage(), this, *from, *to, *replyTo,
+			c.getParam(0), c.hasFlag("ME", 1), c.getParam("TS", 1, timestamp) ? Util::toInt64(timestamp) : time(0));
 	} else {
-		fire(ClientListener::Message(), this, *from, c.getParam(0), c.hasFlag("ME", 1));
+		string timestamp;
+		fire(ClientListener::Message(), this, *from,
+			c.getParam(0), c.hasFlag("ME", 1), c.getParam("TS", 1, timestamp) ? Util::toInt64(timestamp) : time(0));
 	}
 }
 
