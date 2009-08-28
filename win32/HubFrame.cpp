@@ -403,8 +403,8 @@ void HubFrame::clearTaskList() {
 	tasks.clear();
 }
 
-void HubFrame::addChat(const tstring& aLine) {
-	ChatType::addChat(client, aLine);
+void HubFrame::addChat(const tstring& aLine, const time_t timestamp) {
+	ChatType::addChat(client, aLine, timestamp);
 
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {
 		StringMap params;
@@ -412,15 +412,15 @@ void HubFrame::addChat(const tstring& aLine) {
 		client->getHubIdentity().getParams(params, "hub", false);
 		params["hubURL"] = client->getHubUrl();
 		client->getMyIdentity().getParams(params, "my", true);
-		LOG(LogManager::CHAT, params);
+		LOG_T(LogManager::CHAT, params, timestamp);
 	}
 
 	WinUtil::playSound(SettingsManager::SOUND_MAIN_CHAT);
 	setDirty(SettingsManager::BOLD_HUB);
 }
 
-void HubFrame::addStatus(const tstring& aLine, bool inChat /* = true */) {
-	tstring line = Text::toT("[" + Util::getShortTimeString() + "] ") + aLine;
+void HubFrame::addStatus(const tstring& aLine, const time_t timestamp, bool inChat /* = true */) {
+	tstring line = Text::toT("[" + Util::getShortTimeString(timestamp) + "] ") + aLine;
 
 	status->setText(STATUS_STATUS, line);
 
@@ -435,7 +435,7 @@ void HubFrame::addStatus(const tstring& aLine, bool inChat /* = true */) {
 		params["hubURL"] = client->getHubUrl();
 		client->getMyIdentity().getParams(params, "my", true);
 		params["message"] = Text::fromT(aLine);
-		LOG(LogManager::STATUS, params);
+		LOG_T(LogManager::STATUS, params, timestamp);
 	}
 }
 
@@ -511,28 +511,28 @@ void HubFrame::onGetPassword() {
 	}
 }
 
-void HubFrame::onPrivateMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, bool hub, bool bot, const tstring& m) {
+void HubFrame::onPrivateMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, bool hub, bool bot, const tstring& m, time_t timestamp) {
 	if(hub) {
 		if(BOOLSETTING(IGNORE_HUB_PMS)) {
-			addStatus(str(TF_("Ignored message: %1%") % m), false);
+			addStatus(str(TF_("Ignored message: %1%") % m), timestamp, false);
 		} else if(BOOLSETTING(POPUP_HUB_PMS) || PrivateFrame::isOpen(replyTo)) {
-			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, url);
+			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, timestamp, url);
 		} else {
-			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
+			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m), timestamp);
 		}
 	} else if(bot) {
 		if(BOOLSETTING(IGNORE_BOT_PMS)) {
-			addStatus(str(TF_("Ignored message: %1%") % m), false);
+			addStatus(str(TF_("Ignored message: %1%") % m), timestamp, false);
 		} else if(BOOLSETTING(POPUP_BOT_PMS) || PrivateFrame::isOpen(replyTo)) {
-			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, url);
+			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, timestamp, url);
 		} else {
-			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
+			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m), timestamp);
 		}
 	} else {
 		if(BOOLSETTING(POPUP_PMS) || PrivateFrame::isOpen(replyTo) || from == client->getMyIdentity().getUser()) {
-			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, url);
+			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, timestamp, url);
 		} else {
-			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
+			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m), timestamp);
 		}
 	}
 }
@@ -697,7 +697,7 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 }
 
 void HubFrame::on(Connecting, Client*) throw() {
-	callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Connecting to %1%...") % Text::toT(client->getHubUrl())), true));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Connecting to %1%...") % Text::toT(client->getHubUrl())), time(0), true));
 	callAsync(std::tr1::bind(&RecentType::setText, this, Text::toT(client->getHubUrl())));
 }
 void HubFrame::on(Connected, Client*) throw() {
@@ -719,19 +719,19 @@ void HubFrame::on(ClientListener::UserRemoved, Client*, const OnlineUser& user) 
 
 void HubFrame::on(Redirect, Client*, const string& line) throw() {
 	if(ClientManager::getInstance()->isConnected(line)) {
-		callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Redirect request received to a hub that's already connected"), true));
+		callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Redirect request received to a hub that's already connected"), time(0), true));
 		return;
 	}
 	redirect = line;
 	if(BOOLSETTING(AUTO_FOLLOW)) {
 		callAsync(std::tr1::bind(&HubFrame::handleFollow, this));
 	} else {
-		callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Press the follow redirect button to connect to %1%") % Text::toT(line)), true));
+		callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Press the follow redirect button to connect to %1%") % Text::toT(line)), time(0), true));
 	}
 }
 
 void HubFrame::on(Failed, Client*, const string& line) throw() {
-	callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), true));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), time(0), true));
 	callAsync(std::tr1::bind(&HubFrame::onDisconnected, this));
 }
 
@@ -762,24 +762,27 @@ void HubFrame::on(HubUpdated, Client*) throw() {
 	callAsync(std::tr1::bind(&RecentType::setText, this, Text::toT(hubName)));
 }
 
-void HubFrame::on(Message, Client*, const OnlineUser& from, const string& msg, bool thirdPerson) throw() {
-	callAsync(std::tr1::bind(&HubFrame::addChat, this, Text::toT(Util::formatMessage(from.getIdentity().getNick(), msg, thirdPerson))));
+void HubFrame::on(Message, Client*, const OnlineUser& from, const string& msg, bool thirdPerson, time_t timestamp) throw() {
+	callAsync(std::tr1::bind(&HubFrame::addChat, this,
+		Text::toT(Util::formatMessage(from.getIdentity().getNick(), msg, thirdPerson)), timestamp));
 }
 
 void HubFrame::on(StatusMessage, Client*, const string& line, int statusFlags) throw() {
-	callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), !BOOLSETTING(FILTER_MESSAGES) || !(statusFlags & ClientListener::FLAG_IS_SPAM)));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), time(0), !BOOLSETTING(FILTER_MESSAGES) || !(statusFlags & ClientListener::FLAG_IS_SPAM)));
 }
 
-void HubFrame::on(PrivateMessage, Client*, const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line, bool thirdPerson) throw() {
-	callAsync(std::tr1::bind(&HubFrame::onPrivateMessage, this, from.getUser(), to.getUser(), replyTo.getUser(), replyTo.getIdentity().isHub(), replyTo.getIdentity().isBot(), Text::toT(Util::formatMessage(from.getIdentity().getNick(), line, thirdPerson))));
+void HubFrame::on(PrivateMessage, Client*, const OnlineUser& from, const OnlineUser& to, const OnlineUser& replyTo, const string& line, bool thirdPerson, time_t timestamp) throw() {
+	callAsync(std::tr1::bind(&HubFrame::onPrivateMessage, this, from.getUser(), to.getUser(),
+		replyTo.getUser(), replyTo.getIdentity().isHub(), replyTo.getIdentity().isBot(),
+		Text::toT(Util::formatMessage(from.getIdentity().getNick(), line, thirdPerson)), timestamp));
 }
 
 void HubFrame::on(NickTaken, Client*) throw() {
-	callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Your nick was already taken, please change to something else!"), true));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, T_("Your nick was already taken, please change to something else!"), time(0), true));
 }
 
 void HubFrame::on(SearchFlood, Client*, const string& line) throw() {
-	callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Search spam detected from %1%") % Text::toT(line)), true));
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Search spam detected from %1%") % Text::toT(line)), time(0), true));
 }
 
 tstring HubFrame::getStatusShared() const {

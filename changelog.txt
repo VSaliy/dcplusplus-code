@@ -31,6 +31,8 @@
 * Move finished downloads functionality into queue frame
 * [L#351393] Fix memory leak when indexing shared files (steven sheehy)
 * [L#415965] Hashing can be paused (bigmuscle, emtee, poy)
+* [L#414068] No 35-characters limit to nick and description (ullner)
+* [ADC] Support the TS param of MSG (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)

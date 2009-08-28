@@ -720,7 +720,7 @@ string Util::encodeURI(const string& aString, bool reverse) {
  * date/time and then finally written to the log file. If the parameter is not present at all,
  * it is removed from the string completely...
  */
-string Util::formatParams(const string& msg, StringMap& params, bool filter) {
+string Util::formatParams(const string& msg, StringMap& params, bool filter, const time_t timestamp) {
 	string result = msg;
 
 	string::size_type i, j, k;
@@ -759,7 +759,7 @@ string Util::formatParams(const string& msg, StringMap& params, bool filter) {
 		}
 	}
 
-	result = formatTime(result, time(NULL));
+	result = formatTime(result, timestamp);
 
 	return result;
 }
