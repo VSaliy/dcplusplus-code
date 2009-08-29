@@ -20,6 +20,8 @@
 #include "DCPlusPlus.h"
 
 #include "AdcHub.h"
+
+#include "ChatMessage.h"
 #include "ClientManager.h"
 #include "ShareManager.h"
 #include "StringTokenizer.h"
@@ -238,28 +240,28 @@ void AdcHub::handle(AdcCommand::MSG, AdcCommand& c) throw() {
 	if(c.getParameters().empty())
 		return;
 
-	OnlineUser* from = findUser(c.getFrom());
-	if(!from)
+	ChatMessage message = { c.getParam(0), findUser(c.getFrom()) };
+
+	if(!message.from)
 		return;
 
-	string pmFrom;
-	if(c.getParam("PM", 1, pmFrom)) { // add PM<group-cid> as well
-		OnlineUser* to = findUser(c.getTo());
-		if(!to)
+	string temp;
+	if(c.getParam("PM", 1, temp)) { // add PM<group-cid> as well
+		message.to = findUser(c.getTo());
+		if(!message.to)
 			return;
 
-		OnlineUser* replyTo = findUser(AdcCommand::toSID(pmFrom));
-		if(!replyTo)
+		message.replyTo = findUser(AdcCommand::toSID(temp));
+		if(!message.replyTo)
 			return;
-
-		string timestamp;
-		fire(ClientListener::PrivateMessage(), this, *from, *to, *replyTo,
-			c.getParam(0), c.hasFlag("ME", 1), c.getParam("TS", 1, timestamp) ? Util::toInt64(timestamp) : time(0));
-	} else {
-		string timestamp;
-		fire(ClientListener::Message(), this, *from,
-			c.getParam(0), c.hasFlag("ME", 1), c.getParam("TS", 1, timestamp) ? Util::toInt64(timestamp) : time(0));
 	}
+
+	message.thirdPerson = c.hasFlag("ME", 1);
+
+	if(c.getParam("TS", 1, temp))
+		message.timestamp = Util::toInt64(temp);
+
+	fire(ClientListener::Message(), this, message);
 }
 
 void AdcHub::handle(AdcCommand::GPA, AdcCommand& c) throw() {
@@ -483,7 +485,9 @@ void AdcHub::handle(AdcCommand::STA, AdcCommand& c) throw() {
 			ConnectionManager::getInstance()->force(u->getUser());
 		}
 	}
-	fire(ClientListener::Message(), this, *u, c.getParam(1));
+
+	ChatMessage message = { c.getParam(1), u };
+	fire(ClientListener::Message(), this, message);
 }
 
 void AdcHub::handle(AdcCommand::SCH, AdcCommand& c) throw() {

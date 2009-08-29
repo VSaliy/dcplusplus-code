@@ -720,7 +720,7 @@ string Util::encodeURI(const string& aString, bool reverse) {
  * date/time and then finally written to the log file. If the parameter is not present at all,
  * it is removed from the string completely...
  */
-string Util::formatParams(const string& msg, StringMap& params, bool filter, const time_t timestamp) {
+string Util::formatParams(const string& msg, StringMap& params, bool filter) {
 	string result = msg;
 
 	string::size_type i, j, k;
@@ -759,7 +759,7 @@ string Util::formatParams(const string& msg, StringMap& params, bool filter, con
 		}
 	}
 
-	result = formatTime(result, timestamp);
+	result = formatTime(result, time(NULL));
 
 	return result;
 }
@@ -999,25 +999,6 @@ string Util::getIpCountry (string IP) {
 	}
 
 	return Util::emptyString; //if doesn't returned anything already, something is wrong...
-}
-
-string Util::formatMessage(const string& nick, const string& message, bool thirdPerson) {
-	// let's *not* obey the spec here and add a space after the star. :P
-	string tmp = (thirdPerson ? "* " + nick + ' ' : '<' + nick + "> ") + message;
-
-	// Check all '<' and '[' after newlines as they're probably pasts...
-	size_t i = 0;
-	while( (i = tmp.find('\n', i)) != string::npos) {
-		if(i + 1 < tmp.length()) {
-			if(tmp[i+1] == '[' || tmp[i+1] == '<') {
-				tmp.insert(i+1, "- ");
-				i += 2;
-			}
-		}
-		i++;
-	}
-
-	return Text::toDOS(tmp);
 }
 
 string Util::getTimeString() {

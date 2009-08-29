@@ -52,22 +52,21 @@ void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, 
 
 }
 
-void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
-							  const tstring& aMessage, const time_t timestamp, const string& hubHint) {
+void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage, const string& hubHint) {
 	PrivateFrame* p = 0;
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
 
 	FrameIter i = frames.find(user);
 	if(i == frames.end()) {
 		p = new PrivateFrame(mdiParent, user, !BOOLSETTING(POPUNDER_PM), hubHint);
-		p->addChat(aMessage, true, timestamp);
+		p->addChat(aMessage);
 		if(Util::getAway()) {
 			if(!(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT)))
 				p->sendMessage(Text::toT(Util::getAwayMessage()));
 		}
 		WinUtil::playSound(SettingsManager::SOUND_PM_WINDOW);
 	} else {
-		i->second->addChat(aMessage, true, timestamp);
+		i->second->addChat(aMessage);
 		WinUtil::playSound(SettingsManager::SOUND_PM);
 	}
 }
@@ -149,19 +148,19 @@ PrivateFrame::~PrivateFrame() {
 	frames.erase(replyTo.getUser());
 }
 
-void PrivateFrame::addChat(const tstring& aLine, bool log, const time_t timestamp) {
+void PrivateFrame::addChat(const tstring& aLine, bool log) {
 	/// @todo null clients are allowed (eg to display log history on opening), fix later
 	Client* pClient = 0;
 	OnlineUser *ou = ClientManager::getInstance()->findOnlineUser(*replyTo.getUser(), Util::emptyString);
 	if (ou) pClient = &(ou->getClient()); // getClient actually retuns a ref.
 
-	ChatType::addChat(pClient, aLine, timestamp);
+	ChatType::addChat(pClient, aLine);
 
 	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		StringMap params;
 		params["message"] = Text::fromT(aLine);
 		fillLogParams(params);
-		LOG_T(LogManager::PM, params, timestamp);
+		LOG(LogManager::PM, params);
 	}
 
 	setDirty(SettingsManager::BOLD_PM);

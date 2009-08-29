@@ -31,6 +31,8 @@ class AdcCommand;
 
 class BufferedSocket;
 
+struct ChatMessage;
+
 class CID;
 
 class Client;
