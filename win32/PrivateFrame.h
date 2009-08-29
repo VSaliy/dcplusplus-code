@@ -55,8 +55,7 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
-		const tstring& aMessage, const time_t timestamp, const string& hubHint);
+	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage, const string& hubHint);
 	static void openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo, const tstring& msg = Util::emptyStringT,
 		const string& hubHint = Util::emptyString, const string& logPath = Util::emptyString);
 	static bool isOpen(const UserPtr& u) { return frames.find(u) != frames.end(); }
@@ -90,7 +89,7 @@ private:
 	void openLog();
 	void readLog(const string& logPath = Util::emptyString);
 	void fillLogParams(StringMap& params) const;
-	void addChat(const tstring& aLine, bool log = true, const time_t timestamp = time(0));
+	void addChat(const tstring& aLine, bool log = true);
 	void addStatus(const tstring& aLine, bool log = true);
 	void updateTitle();
 

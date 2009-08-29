@@ -35,7 +35,7 @@ public:
 	enum Area { CHAT, PM, DOWNLOAD, UPLOAD, SYSTEM, STATUS, LAST };
 	enum { FILE, FORMAT };
 
-	void log(Area area, StringMap& params, const time_t timestamp = time(0)) throw();
+	void log(Area area, StringMap& params) throw();
 	void message(const string& msg);
 
 	List getLastLogs();
@@ -59,7 +59,6 @@ private:
 };
 
 #define LOG(area, msg) LogManager::getInstance()->log(area, msg)
-#define LOG_T(area, msg, timestamp) LogManager::getInstance()->log(area, msg, timestamp)
 
 } // namespace dcpp
 

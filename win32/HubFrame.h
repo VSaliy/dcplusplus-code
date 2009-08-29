@@ -193,8 +193,8 @@ private:
 
 	bool tab();
 
-	void addChat(const tstring& aLine, const time_t timestamp = time(0));
-	void addStatus(const tstring& aLine, const time_t timestamp = time(0), bool inChat = true);
+	void addChat(const tstring& aLine);
+	void addStatus(const tstring& aLine, bool inChat = true);
 
 	tstring getStatusUsers() const;
 	tstring getStatusShared() const;
@@ -257,7 +257,7 @@ private:
 	void onConnected();
 	void onDisconnected();
 	void onGetPassword();
-	void onPrivateMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, bool hub, bool bot, const tstring& m, const time_t timestamp);
+	void onPrivateMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, bool hub, bool bot, const tstring& m);
 
 	// FavoriteManagerListener
 	virtual void on(FavoriteManagerListener::UserAdded, const FavoriteUser& /*aUser*/) throw();
@@ -274,9 +274,8 @@ private:
 	virtual void on(Failed, Client*, const string&) throw();
 	virtual void on(GetPassword, Client*) throw();
 	virtual void on(HubUpdated, Client*) throw();
-	virtual void on(Message, Client*, const OnlineUser&, const string&, bool, time_t) throw();
+	virtual void on(Message, Client*, const ChatMessage&) throw();
 	virtual void on(StatusMessage, Client*, const string&, int = ClientListener::FLAG_NORMAL) throw();
-	virtual void on(PrivateMessage, Client*, const OnlineUser&, const OnlineUser&, const OnlineUser&, const string&, bool, time_t) throw();
 	virtual void on(NickTaken, Client*) throw();
 	virtual void on(SearchFlood, Client*, const string&) throw();
 };
