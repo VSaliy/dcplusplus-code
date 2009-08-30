@@ -146,23 +146,23 @@ public:
 
 	static string translateError(int aError);
 
-	static string getFilePath(const string& path) {
-		string::size_type i = path.rfind(PATH_SEPARATOR);
+	static string getFilePath(const string& path, char separator = PATH_SEPARATOR) {
+		string::size_type i = path.rfind(separator);
 		return (i != string::npos) ? path.substr(0, i + 1) : path;
 	}
-	static string getFileName(const string& path) {
-		string::size_type i = path.rfind(PATH_SEPARATOR);
+	static string getFileName(const string& path, char separator = PATH_SEPARATOR) {
+		string::size_type i = path.rfind(separator);
 		return (i != string::npos) ? path.substr(i + 1) : path;
 	}
 	static string getFileExt(const string& path) {
 		string::size_type i = path.rfind('.');
 		return (i != string::npos) ? path.substr(i) : Util::emptyString;
 	}
-	static string getLastDir(const string& path) {
-		string::size_type i = path.rfind(PATH_SEPARATOR);
+	static string getLastDir(const string& path, char separator = PATH_SEPARATOR) {
+		string::size_type i = path.rfind(separator);
 		if(i == string::npos)
 			return Util::emptyString;
-		string::size_type j = path.rfind(PATH_SEPARATOR, i-1);
+		string::size_type j = path.rfind(separator, i-1);
 		return (j != string::npos) ? path.substr(j+1, i-j-1) : path;
 	}
 
