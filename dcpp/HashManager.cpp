@@ -637,8 +637,10 @@ static const int64_t BUF_SIZE = 0x1000000 - (0x1000000 % getpagesize());
 
 bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree& tth, int64_t size, CRC32Filter* xcrc32) {
 	int fd = open(Text::fromUtf8(filename).c_str(), O_RDONLY);
-	if(fd == -1)
+	if(fd == -1) {
+		dcdebug("Error opening file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
 		return false;
+	}
 
 	int64_t size_left = size;
 	int64_t pos = 0;
@@ -652,11 +654,14 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 			size_read = std::min(size_left, BUF_SIZE);
 			buf = mmap(0, size_read, PROT_READ, MAP_SHARED, fd, pos);
 			if(buf == MAP_FAILED) {
-				close(fd);
-				return false;
+				dcdebug("Error calling mmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+				break;
 			}
 
-			madvise(buf, size_read, MADV_SEQUENTIAL | MADV_WILLNEED);
+			if(madvise(buf, size_read, MADV_SEQUENTIAL | MADV_WILLNEED) == -1) {
+				dcdebug("Error calling madvise for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+				break;
+			}
 
 			if(SETTING(MAX_HASH_SPEED) > 0) {
 				uint32_t now = GET_TICK();
@@ -689,7 +694,10 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 
 		instantPause();
 
-		munmap(buf, size_read);
+		if(munmap(buf, size_read) == -1) {
+			dcdebug("Error calling munmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+			break;
+		}
 		pos += size_read;
 		size_left -= size_read;
 	}
