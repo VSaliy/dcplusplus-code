@@ -36,7 +36,7 @@
 #ifndef DWT_VCDesktopHeaders_h
 #define DWT_VCDesktopHeaders_h
 
-#ifndef _MSC_VAR
+#ifndef _MSC_VER
 #error This file is only for MSVC
 #endif
 
