@@ -120,7 +120,7 @@ bool TextBox::tryFire(const MSG& msg, LRESULT& retVal) {
 		* try to handle keys like tab/enter/escape; especially when hosted in a modeless dialog or
 		* when one of their parents has the WS_EX_CONTROLPARENT style.
 		*/
-		// @todo retVal = returnUnhandled(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+		retVal = getDispatcher().chain(msg);
 		if(retVal & DLGC_WANTALLKEYS) {
 			retVal &= ~DLGC_WANTALLKEYS;
 

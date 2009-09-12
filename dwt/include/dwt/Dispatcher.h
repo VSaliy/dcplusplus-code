@@ -41,7 +41,7 @@ namespace dwt {
 
 class Dispatcher {
 public:
-	virtual LRESULT chain(MSG& msg) = 0;
+	virtual LRESULT chain(const MSG& msg) = 0;
 
 	LPCTSTR getClassName() { return reinterpret_cast<LPCTSTR>(atom); }
 protected:
@@ -61,7 +61,7 @@ public:
 
 	NormalDispatcher(LPCTSTR className_);
 
-	virtual LRESULT chain(MSG& msg);
+	virtual LRESULT chain(const MSG& msg);
 };
 
 class ChainingDispatcher : public Dispatcher {
@@ -80,7 +80,7 @@ public:
 
 	static std::auto_ptr<Dispatcher> superClass(LPCTSTR original, LPCTSTR newName);
 
-	virtual LRESULT chain(MSG& msg);
+	virtual LRESULT chain(const MSG& msg);
 private:
 	ChainingDispatcher(WNDCLASSEX& cls, WNDPROC wndProc_);
 

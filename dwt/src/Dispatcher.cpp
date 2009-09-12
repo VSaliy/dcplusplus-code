@@ -192,7 +192,7 @@ struct Normal
 		return ::DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 	}
 
-	static LRESULT returnUnhandled(Widget* w, MSG& msg) {
+	static LRESULT returnUnhandled(Widget* w, const MSG& msg) {
 		return ::DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 	}
 
@@ -208,7 +208,7 @@ struct Normal
 };
 
 struct Chain : public Normal {
-	static LRESULT returnUnhandled(Widget* w, MSG& msg) {
+	static LRESULT returnUnhandled(Widget* w, const MSG& msg) {
 		return w->getDispatcher().chain(msg);
 	}
 };
@@ -312,7 +312,7 @@ Dispatcher& NormalDispatcher::getDefault() {
 	return dispatcher;
 }
 
-LRESULT NormalDispatcher::chain(MSG& msg) {
+LRESULT NormalDispatcher::chain(const MSG& msg) {
 	return ::DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 }
 
@@ -326,7 +326,7 @@ ChainingDispatcher::ChainingDispatcher(WNDCLASSEX& cls, WNDPROC wndProc_) :
 	wndProc(wndProc_)
 { }
 
-LRESULT ChainingDispatcher::chain(MSG& msg) {
+LRESULT ChainingDispatcher::chain(const MSG& msg) {
 	return ::CallWindowProc(wndProc, msg.hwnd, msg.message, msg.wParam, msg.lParam);
 }
 
