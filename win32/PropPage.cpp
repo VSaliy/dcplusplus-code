@@ -26,7 +26,7 @@
 #include "WinUtil.h"
 
 PropPage::PropPage(dwt::Widget* parent) : WidgetFactory<dwt::ModelessDialog>(parent) {
-	create(Seed(dwt::Point(), WS_CHILD));
+	create();
 }
 
 PropPage::~PropPage() {

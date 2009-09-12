@@ -43,15 +43,12 @@ private:
 	void updateTitle();
 	void write();
 
-	using Widget::layout;
 	void layout();
 
 	bool initDialog();
 	void handleHelp(HWND hWnd, unsigned id);
 	void handleSelectionChanged();
 	void handleOKClicked();
-	void handleSized(const dwt::SizedEvent& sz);
-
 };
 
 #endif
