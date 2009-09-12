@@ -43,10 +43,7 @@
 #include "../aspects/AspectText.h"
 #include "../resources/Icon.h"
 #include "../WidgetCreator.h"
-#include "../WindowClass.h"
 #include "Control.h"
-
-#include <boost/scoped_ptr.hpp>
 
 namespace dwt {
 
@@ -93,6 +90,10 @@ protected:
 
 	Composite(Widget* parent, Dispatcher& dispatcher) : BaseType(parent, dispatcher)
 	{};
+
+private:
+	template<typename T>
+	void setClassParam(int id, T param);
 };
 
 inline Composite::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle) :
@@ -104,8 +105,23 @@ inline Composite::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle)
 }
 
 inline void Composite::create(const Seed& cs) {
-	// TODO icons, menus etc
 	BaseType::create(cs);
+
+	if(cs.icon)
+		setClassParam(GCLP_HICON, cs.icon->handle());
+	if(cs.smallIcon)
+		setClassParam(GCLP_HICONSM, cs.smallIcon->handle());
+	if(cs.background)
+		setClassParam(GCLP_HBRBACKGROUND, cs.background);
+	if(cs.menuName)
+		setClassParam(GCLP_MENUNAME, cs.menuName);
+	if(cs.cursor)
+		setClassParam(GCLP_HCURSOR, cs.cursor);
+}
+
+template<typename T>
+void Composite::setClassParam(int id, T param) {
+	::SetClassLongPtr(handle(), id, reinterpret_cast<LONG_PTR>(param));
 }
 
 }
