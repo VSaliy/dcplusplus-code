@@ -41,7 +41,7 @@ MagnetDlg::~MagnetDlg() {
 }
 
 int MagnetDlg::run() {
-	create(dwt::Point(300, 100));
+	create(dwt::Point(458, 171));
 	return show();
 }
 

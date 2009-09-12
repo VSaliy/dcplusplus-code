@@ -51,7 +51,7 @@ pageTree(0)
 }
 
 int SettingsDialog::run() {
-	create(Seed(dwt::Point(428, 281), DS_CONTEXTHELP));
+	create(Seed(dwt::Point(653, 480), DS_CONTEXTHELP));
 	return show();
 }
 
