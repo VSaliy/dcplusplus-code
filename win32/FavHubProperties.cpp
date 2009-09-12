@@ -44,7 +44,7 @@ FavHubProperties::~FavHubProperties() {
 }
 
 int FavHubProperties::run() {
-	create(Seed(dwt::Point(201, 153), DS_CONTEXTHELP));
+	create(Seed(dwt::Point(307, 271), DS_CONTEXTHELP));
 	return show();
 }
 

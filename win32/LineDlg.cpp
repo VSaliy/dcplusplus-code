@@ -37,7 +37,7 @@ password(password_)
 }
 
 int LineDlg::run() {
-	create(dwt::Point(239, 39));
+	create(dwt::Point(365, 83));
 	return show();
 }
 
