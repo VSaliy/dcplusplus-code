@@ -40,11 +40,8 @@
 
 #include "../tstring.h"
 #include "../resources/Icon.h"
-#include "../WindowClass.h"
 #include "MDIParent.h"
 #include "Frame.h"
-
-#include <boost/scoped_ptr.hpp>
 
 namespace dwt {
 

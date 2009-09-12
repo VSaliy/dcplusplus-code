@@ -49,7 +49,6 @@
 #include "Resource.h"
 #include "Threads.h"
 #include "WidgetFactory.h"
-#include "WindowClass.h"
 #include "resources/Accelerator.h"
 #include "resources/Bitmap.h"
 #include "resources/Brush.h"
