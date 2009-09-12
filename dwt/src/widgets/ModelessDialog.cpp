@@ -30,26 +30,19 @@
 */
 
 #include <dwt/widgets/ModelessDialog.h>
-#include <dwt/widgets/ModalDialog.h>
-#include <dwt/DWTException.h>
-#include <dwt/util/win32/DlgTemplateEx.h>
 
 namespace dwt {
 
 LPCTSTR ModelessDialog::windowClass = WC_DIALOG;
 
-ModelessDialog::Seed::Seed(const Point& size_, DWORD styles_) :
-	BaseType::Seed(tstring(), styles_, 0),
-size(size_)
+ModelessDialog::Seed::Seed(const Point& size, DWORD styles_) :
+BaseType::Seed(tstring(), styles_ | DS_CONTROL | WS_CHILD, WS_EX_CONTROLPARENT)
 {
+	location.size = size;
 }
 
 void ModelessDialog::create(const Seed& cs) {
 	Seed cs2 = cs;
-
-	if((cs.style & DS_MODALFRAME) == DS_MODALFRAME) {
-		cs2.exStyle |= WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE;
-	}
 
 	if((cs.style & DS_CONTEXTHELP) == DS_CONTEXTHELP) {
 		cs2.exStyle |= WS_EX_CONTEXTHELP;
@@ -58,12 +51,10 @@ void ModelessDialog::create(const Seed& cs) {
 	if((cs.style & DS_CONTROL) == DS_CONTROL) {
 		cs2.style &= ~WS_CAPTION;
 		cs2.style &= ~WS_SYSMENU;
-		cs2.exStyle |= WS_EX_CONTROLPARENT;
 	}
 
 	cs2.style &= ~WS_VISIBLE;
 
-	// TODO fix position
 	BaseType::create(cs2);
 
 	SetWindowLongPtr(handle(), DWLP_DLGPROC, (LPARAM)dialogProc);

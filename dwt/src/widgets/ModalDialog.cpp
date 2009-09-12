@@ -30,18 +30,16 @@
 */
 
 #include <dwt/widgets/ModalDialog.h>
-#include <dwt/DWTException.h>
 #include <dwt/Application.h>
-#include <dwt/util/win32/DlgTemplateEx.h>
 
 namespace dwt {
 
 LPCTSTR ModalDialog::windowClass = WC_DIALOG;
 
-ModalDialog::Seed::Seed(const Point& size_, DWORD styles_) :
-BaseType::Seed(tstring(), styles_ | WS_OVERLAPPEDWINDOW, 0),
-size(size_)
+ModalDialog::Seed::Seed(const Point& size, DWORD styles_) :
+BaseType::Seed(tstring(), styles_ | WS_POPUP | WS_CAPTION | WS_SYSMENU, WS_EX_CONTROLPARENT | WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE)
 {
+	location.size = size;
 }
 
 ModalDialog::ModalDialog(Widget* parent) :
@@ -61,23 +59,12 @@ ModalDialog::~ModalDialog() {
 void ModalDialog::create(const Seed& cs) {
 	Seed cs2 = cs;
 
-	if((cs.style & DS_MODALFRAME) == DS_MODALFRAME) {
-		cs2.exStyle |= WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE;
-	}
-
 	if((cs.style & DS_CONTEXTHELP) == DS_CONTEXTHELP) {
 		cs2.exStyle |= WS_EX_CONTEXTHELP;
 	}
 
-	if((cs.style & DS_CONTROL) == DS_CONTROL) {
-		cs2.style &= ~WS_CAPTION;
-		cs2.style &= ~WS_SYSMENU;
-		cs2.exStyle |= WS_EX_CONTROLPARENT;
-	}
-
 	cs2.style &= ~WS_VISIBLE;
 
-	// TODO fix position
 	BaseType::create(cs2);
 
 	SetWindowLongPtr(handle(), DWLP_DLGPROC, (LPARAM)dialogProc);
