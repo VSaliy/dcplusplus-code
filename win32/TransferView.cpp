@@ -32,6 +32,8 @@
 #include <dcpp/Download.h>
 #include <dcpp/Upload.h>
 
+#include <boost/scoped_ptr.hpp>
+
 int TransferView::connectionIndexes[] = { CONNECTION_COLUMN_USER, CONNECTION_COLUMN_HUB, CONNECTION_COLUMN_STATUS, CONNECTION_COLUMN_SPEED, CONNECTION_COLUMN_CHUNK, CONNECTION_COLUMN_TRANSFERED, CONNECTION_COLUMN_QUEUED, CONNECTION_COLUMN_CIPHER, CONNECTION_COLUMN_IP };
 int TransferView::connectionSizes[] = { 125, 100, 375, 100, 125, 125, 75, 100, 100 };
 
