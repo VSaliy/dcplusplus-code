@@ -48,7 +48,6 @@ pageTree(0)
 {
 	onInitDialog(std::tr1::bind(&SettingsDialog::initDialog, this));
 	onHelp(std::tr1::bind(&SettingsDialog::handleHelp, this, _1, _2));
-	onSized(std::tr1::bind(&SettingsDialog::handleSized, this, _1));
 }
 
 int SettingsDialog::run() {
@@ -179,10 +178,6 @@ void SettingsDialog::write() {
 	for(PageList::iterator i = pages.begin(); i != pages.end(); ++i) {
 		(*i)->write();
 	}
-}
-
-void SettingsDialog::handleSized(const dwt::SizedEvent& sz) {
-	layout();
 }
 
 void SettingsDialog::layout() {
