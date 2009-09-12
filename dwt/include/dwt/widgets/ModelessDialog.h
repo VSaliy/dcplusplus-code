@@ -65,10 +65,7 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		/// size specified in dialog units
-		Point size;
-
-		Seed(const Point& size_ = Point(), DWORD styles_ = 0);
+		Seed(const Point& size = Point(), DWORD styles_ = 0);
 	};
 
 	void create(const Seed& cs = Seed());
