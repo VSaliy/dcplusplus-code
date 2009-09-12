@@ -92,10 +92,7 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		/// size specified in dialog units
-		Point size;
-
-		Seed(const Point& size_, DWORD styles_ = 0);
+		Seed(const Point& size, DWORD styles_ = 0);
 	};
 
 	/// Creates a Modal Dialog Window defined in C++ alone.
