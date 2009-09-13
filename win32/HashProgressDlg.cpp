@@ -53,7 +53,7 @@ int HashProgressDlg::run() {
 bool HashProgressDlg::handleInitDialog() {
 	setHelpId(IDH_HASH_PROGRESS);
 
-	grid = addChild(Grid::Seed(6, 1));
+	grid = addChild(Grid::Seed(5, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(3).size = 20;
 	grid->row(3).mode = GridInfo::STATIC;
@@ -102,6 +102,7 @@ bool HashProgressDlg::handleInitDialog() {
 	setText(T_("Creating file index..."));
 
 	layout();
+	centerWindow();
 
 	return false;
 }
