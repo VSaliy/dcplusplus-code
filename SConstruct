@@ -50,7 +50,7 @@ msvc_link_flags = {
 
 msvc_defs = {
 	'common' : ['_REENTRANT'],
-	'debug' : ['_DEBUG'],
+	'debug' : ['_DEBUG', '_HAS_ITERATOR_DEBUGGING=0', '_SECURE_SCL=0'],
 	'release' : ['NDEBUG']
 }
 
