@@ -33,6 +33,7 @@
 #define DWT_DISPATCHER_H
 
 #include "WindowsHeaders.h"
+#include "tstring.h"
 #include <typeinfo>
 #include <sstream>
 #include <memory>
@@ -43,6 +44,14 @@ class Dispatcher {
 public:
 	virtual LRESULT chain(const MSG& msg) = 0;
 
+	template<typename T>
+	static tstring className() {
+		// Convert to wide
+		std::basic_stringstream<TCHAR> stream;
+		stream << typeid(T).name();
+		return stream.str();
+	}
+
 	LPCTSTR getClassName() { return reinterpret_cast<LPCTSTR>(atom); }
 protected:
 	friend class std::auto_ptr<Dispatcher>;
@@ -50,7 +59,7 @@ protected:
 	Dispatcher(LPCTSTR className, WNDPROC initProc);
 	Dispatcher(WNDCLASSEX& cls);
 
-	~Dispatcher();
+	virtual ~Dispatcher();
 
 	ATOM atom;
 };
@@ -61,6 +70,12 @@ public:
 
 	NormalDispatcher(LPCTSTR className_);
 
+	template<typename T>
+	static Dispatcher& newClass() {
+		static std::auto_ptr<Dispatcher> dispatcher(new NormalDispatcher(className<T>().c_str()));
+		return *dispatcher;
+	}
+
 	virtual LRESULT chain(const MSG& msg);
 };
 
@@ -70,11 +85,7 @@ public:
 
 	template<typename T>
 	static Dispatcher& superClass() {
-		// Convert to wide
-		std::basic_stringstream<TCHAR> className;
-		className << typeid(T).name();
-
-		static std::auto_ptr<Dispatcher> dispatcher = superClass(T::windowClass, className.str().c_str());
+		static std::auto_ptr<Dispatcher> dispatcher = superClass(T::windowClass, className<T>().c_str());
 		return *dispatcher;
 	}
 

@@ -308,7 +308,7 @@ NormalDispatcher::NormalDispatcher(LPCTSTR className_) :
 { }
 
 Dispatcher& NormalDispatcher::getDefault() {
-	static NormalDispatcher dispatcher(_T("dwt::NormalDispatcher"));
+	static NormalDispatcher dispatcher(className<NormalDispatcher>().c_str());
 	return dispatcher;
 }
 
