@@ -60,7 +60,8 @@ public:
 	void create( const Seed& cs = Seed() );
 
 protected:
-	Container(Widget* parent) : BaseType(parent, NormalDispatcher::getDefault()) { }
+	Container(Widget* parent, Dispatcher& dispatcher = NormalDispatcher::getDefault()) :
+		 BaseType(parent, dispatcher) { }
 };
 
 inline Container::Seed::Seed(DWORD style, DWORD exStyle) :

@@ -96,7 +96,7 @@ protected:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline Window::Window( Widget * parent )
-	: BaseType(parent, NormalDispatcher::getDefault())
+: BaseType(parent, NormalDispatcher::newClass<Window>())
 {}
 
 inline Window::~Window()
