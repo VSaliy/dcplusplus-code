@@ -170,7 +170,6 @@ void WinUtil::init() {
 	xSplitCheckBox.caption = _T("+/-");
 	xSplitCheckBox.style &= ~WS_TABSTOP;
 
-	xgroup.exStyle |= WS_EX_TRANSPARENT;
 	xgroup.font = font;
 
 	xmenu.ownerDrawn = BOOLSETTING(OWNER_DRAWN_MENUS);

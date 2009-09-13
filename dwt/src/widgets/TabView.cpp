@@ -569,7 +569,7 @@ bool TabView::tryFire( const MSG & msg, LRESULT & retVal ) {
 	if(msg.message == WM_SIZE) {
 		// We need to let the tab control window proc handle this first, otherwise getUsableArea will not return
 		// correct values on mulitrow tabs (since the number of rows might change with the size)
-		// @todo retVal = returnUnhandled(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+		retVal = getDispatcher().chain(msg);
 
 		handleSized(SizedEvent(msg));
 
