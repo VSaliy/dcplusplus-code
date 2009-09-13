@@ -132,6 +132,7 @@ bool SettingsDialog::initDialog() {
 	updateTitle();
 
 	layout();
+	centerWindow();
 
 	return false;
 }
