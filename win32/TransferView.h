@@ -29,13 +29,12 @@
 #include <dcpp/Util.h>
 
 #include "TypedTable.h"
-#include "WidgetFactory.h"
 #include "AspectUserCommand.h"
 
 #include "UserInfoBase.h"
 
 class TransferView :
-	public WidgetFactory<dwt::Container>,
+	public dwt::Container,
 	private DownloadManagerListener,
 	private UploadManagerListener,
 	private ConnectionManagerListener,

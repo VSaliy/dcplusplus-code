@@ -33,6 +33,7 @@
 #define DWT_ACCELERATOR_H_
 
 #include "Handle.h"
+#include "../Widget.h"
 
 namespace dwt {
 

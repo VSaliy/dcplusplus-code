@@ -23,9 +23,7 @@
 
 #include <dwt/aspects/AspectChild.h>
 
-#include "WidgetFactory.h"
-
-class PropPage : public WidgetFactory<dwt::ModelessDialog>
+class PropPage : public dwt::ModelessDialog
 {
 public:
 	PropPage(dwt::Widget* parent);

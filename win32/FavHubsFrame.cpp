@@ -149,7 +149,7 @@ void FavHubsFrame::handleAdd() {
 		FavHubProperties dlg(this, &e);
 		if(dlg.run() == IDOK) {
 			if(FavoriteManager::getInstance()->isFavoriteHub(e.getServer())) {
-				createMessageBox().show(T_("Hub already exists as a favorite"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONEXCLAMATION);
+				dwt::MessageBox(this).show(T_("Hub already exists as a favorite"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 			} else {
 				FavoriteManager::getInstance()->addFavorite(e);
 				break;
@@ -213,7 +213,7 @@ void FavHubsFrame::handleDown() {
 }
 
 void FavHubsFrame::handleRemove() {
-	if(hubs->hasSelected() && (!BOOLSETTING(CONFIRM_HUB_REMOVAL) || createMessageBox().show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_YESNO, MessageBox::BOX_ICONQUESTION) == MessageBox::RETBOX_YES)) {
+	if(hubs->hasSelected() && (!BOOLSETTING(CONFIRM_HUB_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == dwt::MessageBox::RETBOX_YES)) {
 		int i;
 		while((i = hubs->getNext(-1, LVNI_SELECTED)) != -1)
 			FavoriteManager::getInstance()->removeFavorite(reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(i)));
@@ -284,7 +284,7 @@ void FavHubsFrame::openSelected() {
 		return;
 
 	if(SETTING(NICK).empty()) {
-		createMessageBox().show(T_("Please enter a nickname in the settings dialog!"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONSTOP);
+		dwt::MessageBox(this).show(T_("Please enter a nickname in the settings dialog!"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 		return;
 	}
 

@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_U_C_PAGE_H
 
 #include "PropPage.h"
-#include "WidgetFactory.h"
 #include <dcpp/UserCommand.h>
 
 class UCPage : public PropPage

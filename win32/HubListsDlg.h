@@ -19,9 +19,7 @@
 #ifndef DCPLUSPLUS_WIN32_HUB_LISTS_DLG_H
 #define DCPLUSPLUS_WIN32_HUB_LISTS_DLG_H
 
-#include "WidgetFactory.h"
-
-class HubListsDlg : public WidgetFactory<dwt::ModalDialog>
+class HubListsDlg : public dwt::ModalDialog
 {
 public:
 	HubListsDlg(dwt::Widget* parent);

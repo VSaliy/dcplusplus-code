@@ -25,9 +25,7 @@
 // and can take filename, size, etc. values from there.
 //                                                        - GargoyleMT
 
-#include "WidgetFactory.h"
-
-class MagnetDlg : public WidgetFactory<dwt::ModalDialog>
+class MagnetDlg : public dwt::ModalDialog
 {
 public:
 	MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName);

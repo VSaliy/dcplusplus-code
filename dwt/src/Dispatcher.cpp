@@ -67,9 +67,6 @@ public:
 		// Try to get the this pointer
 		Widget* w = hwnd_cast<Widget*>(handler);
 
-		TCHAR buf[400];
-		::GetClassName(hwnd, buf, 400);
-
 		if(w) {
 			if(uMsg == WM_NCDESTROY) {
 				w->kill();

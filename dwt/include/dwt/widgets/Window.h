@@ -84,8 +84,8 @@ public:
 	  * The seed is not taken a constant because the class name will be generated at registration.
 	  */
 	void create( const Seed& cs = Seed() );
-protected:
-	// Protected since this Widget we HAVE to inherit from
+
+
 	explicit Window( Widget * parent = 0 );
 
 	virtual ~Window();

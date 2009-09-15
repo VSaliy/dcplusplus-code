@@ -29,7 +29,7 @@
 #include "WinUtil.h"
 
 HubListsDlg::HubListsDlg(dwt::Widget* parent) :
-WidgetFactory<dwt::ModalDialog>(parent),
+dwt::ModalDialog(parent),
 grid(0),
 editBox(0),
 hubLists(0)

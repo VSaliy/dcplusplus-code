@@ -419,7 +419,7 @@ private:
 
 			FileChecker checker = files->forEachSelectedT(FileChecker());
 
-			typename ThisType::ShellMenuPtr menu = filesWindow->addChild(ShellMenu::Seed());
+			ShellMenuPtr menu = filesWindow->addChild(ShellMenu::Seed());
 
 			menu->appendItem(T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), checker.allFilesExist && !checker.isBz2);
 			menu->appendItem(T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), checker.allFilesExist, true);

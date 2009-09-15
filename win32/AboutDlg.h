@@ -20,10 +20,9 @@
 #define DCPLUSPLUS_WIN32_ABOUT_DLG_H
 
 #include <dcpp/HttpConnection.h>
-#include "WidgetFactory.h"
 
 class AboutDlg :
-	public WidgetFactory<dwt::ModalDialog>,
+	public dwt::ModalDialog,
 	private HttpConnectionListener
 {
 public:

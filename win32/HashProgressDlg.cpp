@@ -28,7 +28,7 @@
 #include "WinUtil.h"
 
 HashProgressDlg::HashProgressDlg(dwt::Widget* parent, bool aAutoClose) :
-dwt::WidgetFactory<dwt::ModalDialog>(parent),
+dwt::ModalDialog(parent),
 grid(0),
 file(0),
 stat(0),
@@ -65,6 +65,7 @@ bool HashProgressDlg::handleInitDialog() {
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Statistics")))->addChild(Grid::Seed(3, 1));
+		cur->column(0).mode = GridInfo::FILL;
 
 		Label::Seed seed;
 		stat = cur->addChild(seed);

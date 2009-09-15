@@ -71,7 +71,7 @@ static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
 }
 
 TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
-	WidgetFactory<dwt::Container>(parent),
+	dwt::Container(parent),
 	connections(0),
 	connectionsWindow(0),
 	downloads(0),

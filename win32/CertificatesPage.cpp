@@ -118,6 +118,6 @@ void CertificatesPage::handleGenerateCertsClicked() {
 	try {
 		CryptoManager::getInstance()->generateCertificate();
 	} catch(const CryptoException& e) {
-		createMessageBox().show(Text::toT(e.getError()), T_("Error generating certificate"), MessageBox::BOX_OK, MessageBox::BOX_ICONSTOP);
+		dwt::MessageBox(this).show(Text::toT(e.getError()), T_("Error generating certificate"), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 	}
 }

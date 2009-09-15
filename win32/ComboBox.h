@@ -19,8 +19,6 @@
 #ifndef DCPLUSPLUS_WIN32_ComboBox_H_
 #define DCPLUSPLUS_WIN32_ComboBox_H_
 
-#include "TextBox.h"
-
 class ComboBox : public dwt::ComboBox {
 	typedef dwt::ComboBox BaseType;
 	friend class dwt::WidgetCreator<ComboBox>;
@@ -37,11 +35,12 @@ public:
 
 	explicit ComboBox( dwt::Widget * parent );
 
-	typedef TextBox::ObjectType TextBoxPtr;
 	TextBoxPtr getTextBox();
 
 private:
 	TextBoxPtr textBox;
 };
+
+typedef ComboBox::ObjectType ComboBoxPtr;
 
 #endif /*ComboBox_H_*/

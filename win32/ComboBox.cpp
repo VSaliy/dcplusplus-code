@@ -28,7 +28,7 @@ ComboBox::Seed::Seed() :
 ComboBox::ComboBox( dwt::Widget * parent ) : BaseType(parent), textBox(0) {
 }
 
-ComboBox::TextBoxPtr ComboBox::getTextBox() {
+TextBoxPtr ComboBox::getTextBox() {
 	if(!textBox) {
 		LONG_PTR style = ::GetWindowLongPtr(handle(), GWL_STYLE);
 		if((style & CBS_SIMPLE)  == CBS_SIMPLE || (style & CBS_DROPDOWN) == CBS_DROPDOWN) {

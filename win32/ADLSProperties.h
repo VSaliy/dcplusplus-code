@@ -20,9 +20,8 @@
 #define DCPLUSPLUS_WIN32_A_D_L_S_PROPERTIES_H
 
 #include <dcpp/ADLSearch.h>
-#include "WidgetFactory.h"
 
-class ADLSProperties : public WidgetFactory<dwt::ModalDialog>
+class ADLSProperties : public dwt::ModalDialog
 {
 public:
 	ADLSProperties(dwt::Widget* parent, ADLSearch *_search);

@@ -135,7 +135,7 @@ void FavoriteDirsPage::handleRenameClicked() {
 			if (FavoriteManager::getInstance()->renameFavoriteDir(Text::fromT(old), Text::fromT(line))) {
 				directories->setText(i, 0, line);
 			} else {
-				createMessageBox().show(T_("Directory or directory name already exists"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONSTOP);
+				dwt::MessageBox(this).show(T_("Directory or directory name already exists"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 			}
 		}
 	}
@@ -150,7 +150,7 @@ void FavoriteDirsPage::handleRemoveClicked() {
 
 void FavoriteDirsPage::handleAddClicked() {
 	tstring target;
-	if(createFolderDialog().open(target)) {
+	if(FolderDialog(this).open(target)) {
 		addDirectory(target);
 	}
 }
@@ -169,7 +169,7 @@ void FavoriteDirsPage::addDirectory(const tstring& aPath) {
 			row.push_back(path);
 			directories->insert(row);
 		} else {
-			createMessageBox().show(T_("Directory or directory name already exists"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONSTOP);
+			dwt::MessageBox(this).show(T_("Directory or directory name already exists"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 		}
 	}
 }

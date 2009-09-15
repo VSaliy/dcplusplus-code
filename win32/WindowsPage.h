@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_WINDOWS_PAGE_H
 
 #include "PropPage.h"
-#include "WidgetFactory.h"
 
 class WindowsPage : public PropPage
 {

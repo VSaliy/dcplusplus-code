@@ -25,7 +25,7 @@
 #include "WinUtil.h"
 
 MagnetDlg::MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName) :
-WidgetFactory<dwt::ModalDialog>(parent),
+dwt::ModalDialog(parent),
 grid(0),
 //queue(0),
 search(0),

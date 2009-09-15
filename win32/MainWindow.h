@@ -27,14 +27,13 @@
 #include <dcpp/HttpConnection.h>
 #include <dcpp/User.h>
 
-#include "WidgetFactory.h"
 #include "AspectStatus.h"
 
 class UPnP;
 class TransferView;
 
 class MainWindow :
-	public WidgetFactory<dwt::Window>,
+	public dwt::Window,
 	private HttpConnectionListener,
 	private QueueManagerListener,
 	private LogManagerListener,

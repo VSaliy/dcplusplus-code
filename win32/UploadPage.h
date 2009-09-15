@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_UPLOAD_PAGE_H
 
 #include "PropPage.h"
-#include "WidgetFactory.h"
 
 class UploadPage : public PropPage
 {

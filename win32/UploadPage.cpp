@@ -241,11 +241,11 @@ void UploadPage::handleRenameClicked() {
 
 					setDirty = true;
 				} else {
-					createMessageBox().show(T_("New virtual name matches old name, skipping..."), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONINFORMATION);
+					dwt::MessageBox(this).show(T_("New virtual name matches old name, skipping..."), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
 				}
 			}
 		} catch(const ShareException& e) {
-			createMessageBox().show(Text::toT(e.getError()), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONSTOP);
+			dwt::MessageBox(this).show(Text::toT(e.getError()), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 		}
 	}
 
@@ -264,7 +264,7 @@ void UploadPage::handleRemoveClicked() {
 
 void UploadPage::handleAddClicked() {
 	tstring target;
-	if(createFolderDialog().open(target)) {
+	if(FolderDialog(this).open(target)) {
 		addDirectory(target);
 		HashProgressDlg(this, true).run();
 	}
@@ -282,8 +282,8 @@ void UploadPage::addDirectory(const tstring& aPath) {
 			if(dlg.run() == IDOK) {
 				tstring line = dlg.getLine();
 				if(sm->hasVirtual(sm->validateVirtual(Text::fromT(line)))) {
-					if(createMessageBox().show(str(TF_("A virtual directory named %1% already exists, do you wish to merge the contents?") % line),
-						_T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_YESNO, MessageBox::BOX_ICONQUESTION) == IDNO) {
+					if(dwt::MessageBox(this).show(str(TF_("A virtual directory named %1% already exists, do you wish to merge the contents?") % line),
+						_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDNO) {
 						continue;
 					}
 				}
@@ -298,6 +298,6 @@ void UploadPage::addDirectory(const tstring& aPath) {
 			break;
 		}
 	} catch(const ShareException& e) {
-		createMessageBox().show(Text::toT(e.getError()), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONSTOP);
+		dwt::MessageBox(this).show(Text::toT(e.getError()), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 	}
 }

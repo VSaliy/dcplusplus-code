@@ -41,7 +41,7 @@
 #include "BandwidthLimitPage.h"
 
 SettingsDialog::SettingsDialog(dwt::Widget* parent) :
-WidgetFactory<dwt::ModalDialog>(parent),
+dwt::ModalDialog(parent),
 currentPage(0),
 grid(0),
 pageTree(0)

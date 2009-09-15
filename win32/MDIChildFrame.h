@@ -21,7 +21,6 @@
 
 #include "WinUtil.h"
 
-#include "WidgetFactory.h"
 #include "AspectStatus.h"
 #include <dwt/widgets/Menu.h>
 #include <dcpp/SettingsManager.h>
@@ -29,10 +28,10 @@
 
 template<typename T>
 class MDIChildFrame :
-	public WidgetFactory< dwt::Container >,
+	public dwt::Container,
 	public AspectStatus<T>
 {
-	typedef WidgetFactory< dwt::Container > BaseType;
+	typedef dwt::Container BaseType;
 	typedef MDIChildFrame<T> ThisType;
 
 	T& t() { return *static_cast<T*>(this); }
@@ -40,7 +39,7 @@ class MDIChildFrame :
 
 protected:
 	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0, bool activate = true) :
-		BaseType(tabView),
+		BaseType(tabView, dwt::NormalDispatcher::newClass<ThisType>()),
 		lastFocus(NULL),
 		alwaysSameFocus(false),
 		reallyClose(false)

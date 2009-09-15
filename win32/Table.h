@@ -42,4 +42,6 @@ private:
 	bool handleKeyDown(int c);
 };
 
+typedef Table::ObjectType TablePtr;
+
 #endif /*Table_H_*/

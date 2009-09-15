@@ -26,13 +26,13 @@
 
 #include "WinUtil.h"
 
-SplashWindow::SplashWindow() : dwt::WidgetFactory<dwt::Window>(0) {
+SplashWindow::SplashWindow() : dwt::Window(0) {
 	{
 		Seed cs;
 		cs.style = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 		cs.exStyle = WS_EX_STATICEDGE;
 		cs.caption = _T(APPNAME);
-		tmp = new dwt::WidgetFactory<dwt::Window>(0);
+		tmp = new dwt::Window(0);
 		tmp->create(cs);
 	}
 	{

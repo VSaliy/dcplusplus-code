@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_NETWORK_PAGE_H
 
 #include "PropPage.h"
-#include "WidgetFactory.h"
 
 class NetworkPage : public PropPage
 {

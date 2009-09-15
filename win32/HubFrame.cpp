@@ -202,7 +202,7 @@ HubFrame::~HubFrame() {
 
 bool HubFrame::preClosing() {
 	if(BOOLSETTING(CONFIRM_HUB_CLOSING) && !WinUtil::mainWindow->closing() &&
-		createMessageBox().show(getText() + _T("\n\n") + T_("Really close?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_YESNO, MessageBox::BOX_ICONQUESTION) == IDNO)
+		dwt::MessageBox(this).show(getText() + _T("\n\n") + T_("Really close?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDNO)
 		return false;
 
 	FavoriteManager::getInstance()->removeListener(this);

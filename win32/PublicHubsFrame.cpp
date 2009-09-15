@@ -431,7 +431,7 @@ void PublicHubsFrame::handleCopyHub() {
 
 bool PublicHubsFrame::checkNick() {
 	if(SETTING(NICK).empty()) {
-		createMessageBox().show(T_("Please enter a nickname in the settings dialog!"), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
+		dwt::MessageBox(this).show(T_("Please enter a nickname in the settings dialog!"), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
 		return false;
 	}
 	return true;

@@ -19,7 +19,7 @@
 #ifndef DCPLUSPLUS_WIN32_HASH_PROGESS_DLG_H
 #define DCPLUSPLUS_WIN32_HASH_PROGESS_DLG_H
 
-class HashProgressDlg : public dwt::WidgetFactory<dwt::ModalDialog>
+class HashProgressDlg : public dwt::ModalDialog
 {
 public:
 	HashProgressDlg(dwt::Widget* parent, bool aAutoClose);
