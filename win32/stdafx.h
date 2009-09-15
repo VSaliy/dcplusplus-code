@@ -98,13 +98,6 @@ using dwt::ToolBarPtr;
 using dwt::Tree;
 using dwt::TreePtr;
 
-#include "TextBox.h"
-#include "ComboBox.h"
-#include "RichTextBox.h"
-#include "ShellMenu.h"
-#include "Table.h"
-#include "WidgetPaned.h"
-
 using std::tr1::placeholders::_1;
 using std::tr1::placeholders::_2;
 
@@ -125,3 +118,10 @@ using std::tr1::placeholders::_2;
 #define TFN_(String1,String2, N) dcpp_fmt(Text::toT(ngettext(String1, String2, N)))
 #endif
 #endif
+
+#include "TextBox.h"
+#include "ComboBox.h"
+#include "RichTextBox.h"
+#include "ShellMenu.h"
+#include "Table.h"
+#include "WidgetPaned.h"
