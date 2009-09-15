@@ -164,6 +164,10 @@ MainWindow::MainWindow() :
 		dwt::MessageBox(this).show(T_("Your version of windows common controls is too old for DC++ to run correctly, and you will most probably experience problems with the user interface. You should download version 5.80 or higher from the DC++ homepage or from Microsoft directly."), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 }
 
+static LRESULT handleGetIcon(WPARAM wParam, const dwt::IconPtr& icon, const dwt::IconPtr& smallIcon) {
+	return reinterpret_cast<LRESULT>(((wParam == ICON_BIG) ? icon : smallIcon)->handle());
+}
+
 void MainWindow::initWindow() {
 	// Create main window
 	dcdebug("initWindow\n");
@@ -188,6 +192,9 @@ void MainWindow::initWindow() {
 	cs.smallIcon = dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16)));
 	cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 	create(cs);
+
+	/// @todo shouldn't need this
+	onRaw(std::tr1::bind(&handleGetIcon, _1, cs.icon, cs.smallIcon), dwt::Message(WM_GETICON));
 
 	setHelpId(IDH_MAIN);
 
