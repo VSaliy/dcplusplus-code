@@ -1,7 +1,7 @@
 #ifndef SPLASHWINDOW_H_
 #define SPLASHWINDOW_H_
 
-class SplashWindow : public dwt::WidgetFactory<dwt::Window>  {
+class SplashWindow : public dwt::Window  {
 public:
 	SplashWindow();
 	~SplashWindow();

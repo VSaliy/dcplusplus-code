@@ -25,7 +25,7 @@
 #include "WinUtil.h"
 
 LineDlg::LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& text_, bool password_) :
-WidgetFactory<dwt::ModalDialog>(parent),
+dwt::ModalDialog(parent),
 grid(0),
 line(0),
 title(title_),

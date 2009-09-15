@@ -585,20 +585,20 @@ void SearchFrame::handleDownloadTo() {
 
 		if(sr->getType() == SearchResult::TYPE_FILE) {
 			tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY)) + si->columns[COLUMN_FILENAME];
-			if(WinUtil::browseSaveFile(createSaveDialog(), target)) {
+			if(WinUtil::browseSaveFile(SaveDialog(this), target)) {
 				WinUtil::addLastDir(Util::getFilePath(target));
 				treat(results->forEachSelectedT(SearchInfo::DownloadTarget(target)));
 			}
 		} else {
 			tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
-			if(createFolderDialog().open(target)) {
+			if(FolderDialog(this).open(target)) {
 				WinUtil::addLastDir(target);
 				treat(results->forEachSelectedT(SearchInfo::Download(target)));
 			}
 		}
 	} else {
 		tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
-		if(createFolderDialog().open(target)) {
+		if(FolderDialog(this).open(target)) {
 			WinUtil::addLastDir(target);
 			treat(results->forEachSelectedT(SearchInfo::Download(target)));
 		}
@@ -631,7 +631,7 @@ void SearchFrame::handleDownloadWholeTarget(unsigned index) {
 
 void SearchFrame::handleDownloadDirTo() {
 	tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
-	if(createFolderDialog().open(target)) {
+	if(FolderDialog(this).open(target)) {
 		WinUtil::addLastDir(target);
 		treat(results->forEachSelectedT(SearchInfo::DownloadWhole(target)));
 	}

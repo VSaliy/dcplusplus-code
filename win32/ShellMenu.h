@@ -74,4 +74,7 @@ private:
 	bool dispatch(const MSG& msg, LRESULT& ret);
 };
 
+typedef ShellMenu::ObjectType ShellMenuPtr;
+/// @todo rename to just Menu to override dwt::Menu
+
 #endif // !defined(DCPLUSPLUS_WIN32_SHELL_MENU_H)

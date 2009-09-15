@@ -152,7 +152,7 @@ void UsersFrame::handleDescription() {
 }
 
 void UsersFrame::handleRemove() {
-	if(!BOOLSETTING(CONFIRM_USER_REMOVAL) || createMessageBox().show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_YESNO, MessageBox::BOX_ICONQUESTION) == MessageBox::RETBOX_YES)
+	if(!BOOLSETTING(CONFIRM_USER_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == dwt::MessageBox::RETBOX_YES)
 		users->forEachSelected(&UsersFrame::UserInfo::remove);
 }
 

@@ -27,7 +27,7 @@
 #include "WinUtil.h"
 
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
-WidgetFactory<dwt::ModalDialog>(parent),
+dwt::ModalDialog(parent),
 grid(0),
 name(0),
 address(0),
@@ -141,7 +141,7 @@ void FavHubProperties::handleTextChanged(TextBoxPtr textBox) {
 void FavHubProperties::handleOKClicked() {
 	tstring addressText = address->getText();
 	if(addressText.empty()) {
-		createMessageBox().show(T_("Hub address cannot be empty"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONEXCLAMATION);
+		dwt::MessageBox(this).show(T_("Hub address cannot be empty"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 		return;
 	}
 	entry->setServer(Text::fromT(addressText));

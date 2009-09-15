@@ -20,9 +20,8 @@
 #define DCPLUSPLUS_WIN32_COMMAND_DLG_H
 
 #include <dcpp/Util.h>
-#include "WidgetFactory.h"
 
-class CommandDlg : public WidgetFactory<dwt::ModalDialog>
+class CommandDlg : public dwt::ModalDialog
 {
 public:
 	CommandDlg(dwt::Widget* parent, int type_ = 0, int ctx_ = 0, const tstring& name_ = Util::emptyStringT, const tstring& command_ = Util::emptyStringT, const tstring& hub_ = Util::emptyStringT);

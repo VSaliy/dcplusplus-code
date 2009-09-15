@@ -48,7 +48,6 @@
 #include "Rectangle.h"
 #include "Resource.h"
 #include "Threads.h"
-#include "WidgetFactory.h"
 #include "resources/Accelerator.h"
 #include "resources/Bitmap.h"
 #include "resources/Brush.h"

@@ -47,4 +47,6 @@ private:
 	void handleFind();
 };
 
+typedef RichTextBox::ObjectType RichTextBoxPtr;
+
 #endif /*RichTextBox_H_*/

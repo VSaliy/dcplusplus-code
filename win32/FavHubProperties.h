@@ -20,9 +20,8 @@
 #define DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H
 
 #include <dcpp/forward.h>
-#include "WidgetFactory.h"
 
-class FavHubProperties : public WidgetFactory<dwt::ModalDialog>
+class FavHubProperties : public dwt::ModalDialog
 {
 public:
 	FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry);

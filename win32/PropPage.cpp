@@ -25,7 +25,7 @@
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
-PropPage::PropPage(dwt::Widget* parent) : WidgetFactory<dwt::ModelessDialog>(parent) {
+PropPage::PropPage(dwt::Widget* parent) : dwt::ModelessDialog(parent) {
 	create();
 }
 
@@ -107,7 +107,7 @@ void PropPage::handleBrowseDir(const Item& i) {
 	tstring dir = box->getText();
 	if(dir.empty())
 		dir = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)i.setting));
-	if(createFolderDialog().open(dir))
+	if(FolderDialog(this).open(dir))
 		box->setText(dir);
 }
 
@@ -116,7 +116,7 @@ void PropPage::handleBrowseFile(const Item& i) {
 	tstring target = box->getText();
 	if(target.empty())
 		target = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)i.setting));
-	if(createLoadDialog().setInitialDirectory(target).open(target))
+	if(LoadDialog(this).setInitialDirectory(target).open(target))
 		box->setText(target);
 }
 

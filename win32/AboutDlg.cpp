@@ -48,7 +48,7 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 "Keep it coming!";
 
 AboutDlg::AboutDlg(dwt::Widget* parent) :
-WidgetFactory<dwt::ModalDialog>(parent),
+dwt::ModalDialog(parent),
 grid(0),
 version(0)
 {

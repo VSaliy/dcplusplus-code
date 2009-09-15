@@ -20,9 +20,8 @@
 #define DCPLUSPLUS_WIN32_SETTINGS_DIALOG_H
 
 #include "PropPage.h"
-#include "WidgetFactory.h"
 
-class SettingsDialog : public WidgetFactory<dwt::ModalDialog>
+class SettingsDialog : public dwt::ModalDialog
 {
 public:
 	SettingsDialog(dwt::Widget* parent);

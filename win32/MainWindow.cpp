@@ -71,7 +71,7 @@
 #include <dwt/util/StringUtils.h>
 
 MainWindow::MainWindow() :
-	WidgetFactory<dwt::Window>(0),
+	dwt::Window(0),
 	paned(0),
 	transfers(0),
 	toolbar(0),
@@ -161,7 +161,7 @@ MainWindow::MainWindow() :
 	}
 
 	if(dwt::LibraryLoader::getCommonControlsVersion() < PACK_COMCTL_VERSION(5,80))
-		createMessageBox().show(T_("Your version of windows common controls is too old for DC++ to run correctly, and you will most probably experience problems with the user interface. You should download version 5.80 or higher from the DC++ homepage or from Microsoft directly."), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONEXCLAMATION);
+		dwt::MessageBox(this).show(T_("Your version of windows common controls is too old for DC++ to run correctly, and you will most probably experience problems with the user interface. You should download version 5.80 or higher from the DC++ homepage or from Microsoft directly."), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 }
 
 void MainWindow::initWindow() {
@@ -573,7 +573,7 @@ void MainWindow::saveWindowSettings() {
 
 bool MainWindow::handleClosing() {
 	if(!closing()) {
-		if ( !BOOLSETTING(CONFIRM_EXIT) || (createMessageBox().show(T_("Really exit?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_YESNO, MessageBox::BOX_ICONQUESTION) == IDYES)) {
+		if ( !BOOLSETTING(CONFIRM_EXIT) || (dwt::MessageBox(this).show(T_("Really exit?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)) {
 			if (c != NULL) {
 				c->removeListener(this);
 				delete c;
@@ -737,12 +737,12 @@ void MainWindow::startSocket() {
 		try {
 			ConnectionManager::getInstance()->listen();
 		} catch(const Exception&) {
-			createMessageBox().show(T_("Unable to open TCP/TLS port. File transfers will not work correctly until you change settings or turn off any application that might be using the TCP/TLS port"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONSTOP);
+			dwt::MessageBox(this).show(T_("Unable to open TCP/TLS port. File transfers will not work correctly until you change settings or turn off any application that might be using the TCP/TLS port"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 		}
 		try {
 			SearchManager::getInstance()->listen();
 		} catch(const Exception&) {
-			createMessageBox().show(T_("Unable to open UDP port. Searching will not work correctly until you change settings or turn off any application that might be using the UDP port"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONSTOP);
+			dwt::MessageBox(this).show(T_("Unable to open UDP port. Searching will not work correctly until you change settings or turn off any application that might be using the UDP port"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 		}
 	}
 
@@ -782,12 +782,12 @@ void MainWindow::startUPnP() {
 					//:-( Looks like we have to rely on the user setting the external IP manually
 					// no need to do cleanup here because the mappings work
 					LogManager::getInstance()->message(_("Failed to get external IP via  UPnP. Please set it yourself."));
-					createMessageBox().show(T_("Failed to get external IP via  UPnP. Please set it yourself."), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
+					dwt::MessageBox(this).show(T_("Failed to get external IP via  UPnP. Please set it yourself."), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
 				}
 			}
 		} else {
 			LogManager::getInstance()->message(_("Failed to create port mappings. Please set up your NAT yourself."));
-			createMessageBox().show(T_("Failed to create port mappings. Please set up your NAT yourself."), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
+			dwt::MessageBox(this).show(T_("Failed to create port mappings. Please set up your NAT yourself."), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
 			stopUPnP();
 		}
 	}
@@ -817,12 +817,12 @@ void MainWindow::stopUPnP() {
 
 void MainWindow::handleOpenFileList() {
 	tstring file;
-	if(WinUtil::browseFileList(createLoadDialog(), file)) {
+	if(WinUtil::browseFileList(LoadDialog(this), file)) {
 		UserPtr u = DirectoryListing::getUserFromFilename(Text::fromT(file));
 		if (u) {
 			DirectoryListingFrame::openWindow(getTabView(), file, Text::toT(Util::emptyString), u, 0);
 		} else {
-			createMessageBox().show(T_("Invalid file list name"), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
+			dwt::MessageBox(this).show(T_("Invalid file list name"), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
 		}
 	}
 }
@@ -945,9 +945,9 @@ void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/,
 					if(xml.findChild("Message")) {
 						if(url.empty()) {
 							const string& msg = xml.getChildData();
-							createMessageBox().show(Text::toT(msg), Text::toT(title));
+							dwt::MessageBox(this).show(Text::toT(msg), Text::toT(title));
 						} else {
-							if(createMessageBox().show(str(TF_("%1%\nOpen download page?") % Text::toT(xml.getChildData())), Text::toT(title), MessageBox::BOX_YESNO, MessageBox::BOX_ICONQUESTION) == IDYES) {
+							if(dwt::MessageBox(this).show(str(TF_("%1%\nOpen download page?") % Text::toT(xml.getChildData())), Text::toT(title), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES) {
 								WinUtil::openLink(Text::toT(url));
 							}
 						}

@@ -317,7 +317,7 @@ void DirectoryListingFrame::handleMatchQueue() {
 
 void DirectoryListingFrame::handleListDiff() {
 	tstring file;
-	if(WinUtil::browseFileList(createLoadDialog(), file)) {
+	if(WinUtil::browseFileList(LoadDialog(this), file)) {
 		DirectoryListing dirList(dl->getUser());
 		try {
 			dirList.loadFile(Text::fromT(file));
@@ -364,7 +364,7 @@ void DirectoryListingFrame::updateTitle() {
 	dirs->redraw();
 }
 
-DirectoryListingFrame::ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
+ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
 	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
@@ -388,7 +388,7 @@ DirectoryListingFrame::ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemIn
 	return menu;
 }
 
-DirectoryListingFrame::ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
+ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
 	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
@@ -550,7 +550,7 @@ void DirectoryListingFrame::handleDownloadBrowse() {
 		ItemInfo* ii = dirs->getSelectedData();
 		if(ii) {
 			tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
-			if(createFolderDialog().open(target)) {
+			if(FolderDialog(this).open(target)) {
 				WinUtil::addLastDir(target);
 				download(ii, Text::fromT(target));
 			}
@@ -561,13 +561,13 @@ void DirectoryListingFrame::handleDownloadBrowse() {
 			try {
 				if(ii->type == ItemInfo::FILE) {
 					tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY)) + ii->getText(COLUMN_FILENAME);
-					if(createSaveDialog().open(target)) {
+					if(SaveDialog(this).open(target)) {
 						WinUtil::addLastDir(Util::getFilePath(target));
 						dl->download(ii->file, Text::fromT(target), false, WinUtil::isShift());
 					}
 				} else {
 					tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
-					if(createFolderDialog().open(target)) {
+					if(FolderDialog(this).open(target)) {
 						WinUtil::addLastDir(target);
 						dl->download(ii->dir, Text::fromT(target), WinUtil::isShift());
 					}
@@ -577,7 +577,7 @@ void DirectoryListingFrame::handleDownloadBrowse() {
 			}
 		} else {
 			tstring target = Text::toT(SETTING(DOWNLOAD_DIRECTORY));
-			if(createFolderDialog().open(target)) {
+			if(FolderDialog(this).open(target)) {
 				WinUtil::addLastDir(target);
 				downloadFiles(Text::fromT(target));
 			}
@@ -923,7 +923,7 @@ void DirectoryListingFrame::findFile(bool findNext)
 	} else {
 		dirs->setSelected(NULL);
 		dirs->setSelected(oldDir);
-		createMessageBox().show(T_("No matches"), T_("Search for file"));
+		dwt::MessageBox(this).show(T_("No matches"), T_("Search for file"));
 	}
 }
 

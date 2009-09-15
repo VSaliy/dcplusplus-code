@@ -76,8 +76,6 @@ protected:
 	// Constructor Taking pointer to parent
 	explicit WidgetPaned( dwt::Widget * parent );
 
-	/// Protected to avoid direct instantiation, you can inherit and use
-	/// WidgetFactory class which is friend
 	virtual ~WidgetPaned()
 	{}
 
@@ -115,6 +113,12 @@ private:
 		return true;
 	}
 };
+
+typedef WidgetPaned<false> WidgetVPaned;
+typedef WidgetVPaned::ObjectType WidgetVPanedPtr;
+
+typedef WidgetPaned<true>WidgetHPaned;
+typedef WidgetHPaned::ObjectType WidgetHPanedPtr;
 
 template< bool horizontal >
 WidgetPaned< horizontal >::Seed::Seed(double pos_) :

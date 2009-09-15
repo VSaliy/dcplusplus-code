@@ -20,9 +20,8 @@
 #define DCPLUSPLUS_WIN32_LINE_DLG_H
 
 #include <dcpp/Util.h>
-#include "WidgetFactory.h"
 
-class LineDlg : public WidgetFactory<dwt::ModalDialog>
+class LineDlg : public dwt::ModalDialog
 {
 public:
 	LineDlg(dwt::Widget* parent, const tstring& title_, const tstring& desc_, const tstring& text_ = Util::emptyStringT, bool password_ = false);

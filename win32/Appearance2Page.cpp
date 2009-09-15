@@ -25,7 +25,6 @@
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
-
 Appearance2Page::SoundOption Appearance2Page::soundOptions[] = {
 	{ N_("Every time a main chat message is received"), SettingsManager::SOUND_MAIN_CHAT, Util::emptyStringT, IDH_SETTINGS_APPEARANCE2_SOUND_MAIN_CHAT },
 	{ N_("Every time a private message is received"), SettingsManager::SOUND_PM, Util::emptyStringT, IDH_SETTINGS_APPEARANCE2_SOUND_PM },
@@ -160,7 +159,7 @@ void Appearance2Page::write() {
 
 void Appearance2Page::handleBackgroundClicked() {
 	ColorDialog::ColorParams colorParams(bg);
-	if(createColorDialog().open(colorParams)) {
+	if(ColorDialog(this).open(colorParams)) {
 		bg = colorParams.getColor();
 		example->setColor(fg, bg);
 		example->redraw();
@@ -170,7 +169,7 @@ void Appearance2Page::handleBackgroundClicked() {
 void Appearance2Page::handleTextClicked() {
 	LOGFONT logFont_ = logFont;
 	DWORD fg_ = fg;
-	if(createFontDialog().open(CF_EFFECTS | CF_SCREENFONTS, logFont_, fg_)) {
+	if(FontDialog(this).open(CF_EFFECTS | CF_SCREENFONTS, logFont_, fg_)) {
 		logFont = logFont_;
 		fg = fg_;
 		font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&logFont), true));
@@ -182,14 +181,14 @@ void Appearance2Page::handleTextClicked() {
 
 void Appearance2Page::handleULClicked() {
 	ColorDialog::ColorParams colorParams(upBar);
-	if(createColorDialog().open(colorParams)) {
+	if(ColorDialog(this).open(colorParams)) {
 		upBar = colorParams.getColor();
 	}
 }
 
 void Appearance2Page::handleDLClicked() {
 	ColorDialog::ColorParams colorParams(downBar);
-	if(createColorDialog().open(colorParams)) {
+	if(ColorDialog(this).open(colorParams)) {
 		downBar = colorParams.getColor();
 	}
 }
@@ -223,7 +222,7 @@ void Appearance2Page::handleSelectionChanged() {
 
 void Appearance2Page::handleBrowseClicked() {
 	tstring x = beepFile->getText();
-	if(createLoadDialog().open(x)) {
+	if(LoadDialog(this).open(x)) {
 		beepFile->setText(x);
 	}
 }

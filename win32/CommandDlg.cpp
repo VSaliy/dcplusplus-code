@@ -28,7 +28,7 @@
 #include "WinUtil.h"
 
 CommandDlg::CommandDlg(dwt::Widget* parent, int type_, int ctx_, const tstring& name_, const tstring& command_, const tstring& hub_) :
-WidgetFactory<dwt::ModalDialog>(parent),
+dwt::ModalDialog(parent),
 grid(0),
 separator(0),
 raw(0),
@@ -244,7 +244,7 @@ void CommandDlg::handleTypeChanged() {
 void CommandDlg::handleOKClicked() {
 	name = nameBox->getText();
 	if((type != 0) && (name.empty() || commandBox->getText().empty())) {
-		createMessageBox().show(T_("Name and command must not be empty"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), MessageBox::BOX_OK, MessageBox::BOX_ICONEXCLAMATION);
+		dwt::MessageBox(this).show(T_("Name and command must not be empty"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 		return;
 	}
 

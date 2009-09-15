@@ -27,7 +27,7 @@
 #include "WinUtil.h"
 
 ADLSProperties::ADLSProperties(dwt::Widget* parent, ADLSearch *_search) :
-WidgetFactory<dwt::ModalDialog>(parent),
+dwt::ModalDialog(parent),
 grid(0),
 searchString(0),
 searchType(0),
