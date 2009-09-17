@@ -85,6 +85,7 @@ CHM_sources.sort()
 # additional dependencies (that have to be built before the help file)
 CHM_dependencies = ['addendum.txt', 'cshelp.h']
 
+from build_util import gen_po_name
 import filecmp
 from gen_toc import gen_toc
 from set_hhp_locale import set_hhp_locale
@@ -174,6 +175,15 @@ def gen_CHM(target, source, env):
 		print 'Copying web help files to ' + web_dir
 		for file in Glob(build_path + '*.html'):
 			env.Execute(Copy(web_dir, file))
+
+		# generate name.txt
+		name_file = File(web_dir + '/name.txt')
+		print 'Generating ' + str(name_file)
+		if template:
+			open(str(name_file), 'wb').write('English (United States)')
+		else:
+			env['NAME_FILE'] = name_file
+			gen_po_name(po_node, env)
 
 	return ret
 env.Append(BUILDERS = {'CHMBuild' : Builder(action = Action(gen_CHM, 'Compiling the $TARGET help file'))})

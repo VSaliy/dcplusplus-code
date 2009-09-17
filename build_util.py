@@ -104,22 +104,36 @@ class Dev:
 			return
 
 		p_oze = glob.glob('po/*.po')
-		languages = [ os.path.basename(po).replace ('.po', '') for po in p_oze ]
+
 		potfile = 'po/' + name + '.pot'
 		buildenv['PACKAGE'] = name
 		ret = buildenv.PotBuild(potfile, sources)
-		
+
 		for po_file in p_oze:
 			buildenv.Precious(buildenv.PoBuild(po_file, [potfile]))
+
 			lang = os.path.basename(po_file)[:-3]
-			mo_file = self.get_target(source_path, "locale/" + lang + "/LC_MESSAGES/" + name + ".mo", True)
-			buildenv.MoBuild (mo_file, po_file)
-		
+			locale_path = self.get_target(source_path, 'locale/' + lang + '/')
+
+			buildenv.MoBuild(locale_path + 'LC_MESSAGES/' + name + '.mo', po_file,
+					NAME_FILE = buildenv.File(locale_path + 'name.txt'))
+
+#		languages = [ os.path.basename(po).replace ('.po', '') for po in p_oze ]
 #		for lang in languages:
 #			modir = (os.path.join (install_prefix, 'share/locale/' + lang + '/LC_MESSAGES/'))
 #			moname = domain + '.mo'
 #			installenv.Alias('install', installenv.InstallAs (os.path.join (modir, moname), lang + '.mo'))
+
 		return ret
+
+# source is *one* SCons file node (not a list!) designating the .po file
+# env must contain 'NAME_FILE', which is a SCons file node to the target file
+def gen_po_name(source, env):
+	# rely on the comments at the beginning of the po file to find the language name.
+	import codecs, re
+	match = re.compile('^# (.+) translation.*', re.I).search(codecs.open(str(source), 'rb', 'utf_8').readline())
+	if match:
+		codecs.open(str(env['NAME_FILE']), 'wb', 'utf_8').write(match.group(1))
 
 def CheckPKGConfig(context, version):
 	context.Message( 'Checking for pkg-config... ' )

@@ -110,7 +110,13 @@ foreach ($dirs as $dir)
 	{
 		echo ' selected="selected"';
 	}
-	echo ">$dir</option>\n"; // todo convert language code to actual name
+	echo ">$dir";
+	$name = @file_get_contents("$dir/name.txt");
+	if ($name !== FALSE)
+	{
+		echo ": $name";
+	}
+	echo "</option>\n";
 }
 ?>
 	</select>

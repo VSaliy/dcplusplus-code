@@ -97,32 +97,37 @@ languages(0)
 	PropPage::read(items);
 	PropPage::read(listItems, options);
 
+	typedef map<string, string, noCaseStringLess> lang_map;
+	lang_map langs;
+	langs["en"] = "English (United States)";
+
 	StringList dirs = File::findFiles(Util::getPath(Util::PATH_LOCALE), "*");
-
-	TStringList langs;
-
-	langs.push_back(_T("en"));
-
 	for(StringList::const_iterator i = dirs.begin(); i != dirs.end(); ++i) {
 		string dir = *i + "LC_MESSAGES" PATH_SEPARATOR_STR;
 		StringList files = File::findFiles(dir, "*.mo");
 		if(find(files.begin(), files.end(), dir + "dcpp.mo") == files.end() && find(files.begin(), files.end(), dir + "dcpp-win32.mo") == files.end()) {
 			continue;
 		}
-		// TODO Convert to real language name?
-		langs.push_back(Text::toT(Util::getLastDir(*i)));
-	}
 
-	std::sort(langs.begin(), langs.end(), noCaseStringLess());
+		string text = Util::getLastDir(*i);
+		try {
+			langs[text] = File(*i + "name.txt", File::READ, File::OPEN).read();
+		} catch(const FileException&) {
+			langs[text] = "";
+		}
+	}
 
 	languages->addValue(T_("Default"));
 
 	int selected = 0, j = 1;
-	const tstring cur = Text::toT(SETTING(LANGUAGE));
-	for(TStringList::const_iterator i = langs.begin(); i != langs.end(); ++i, ++j) {
-		languages->addValue(*i);
+	const string& cur = SETTING(LANGUAGE);
+	for(lang_map::const_iterator i = langs.begin(); i != langs.end(); ++i, ++j) {
+		string text = i->first;
+		if(!i->second.empty())
+			text += ": " + i->second;
+		languages->addValue(Text::toT(text));
 
-		if(selected == 0 && (*i == cur || (*i == _T("en") && cur == _T("C")))) {
+		if(selected == 0 && (i->first == cur || (i->first == "en" && cur == "C"))) {
 			selected = j;
 		}
 	}
@@ -146,6 +151,9 @@ void AppearancePage::write()
 	PropPage::write(listItems, options);
 
 	tstring lang = languages->getText();
+	size_t col = lang.find(':');
+	if(col != string::npos)
+		lang = lang.substr(0, col);
 
 	if(lang == T_("Default")) {
 		SettingsManager::getInstance()->set(SettingsManager::LANGUAGE, "");
