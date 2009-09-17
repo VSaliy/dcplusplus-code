@@ -1,7 +1,7 @@
 EnsureSConsVersion(0, 98, 5)
 
 import os,sys
-from build_util import Dev
+from build_util import Dev, gen_po_name
 
 gcc_flags = {
 	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-Wno-address', '-fexceptions', '-mthreads'],
@@ -190,7 +190,8 @@ po_bld = Builder (action = Action([po_args], 'Updating translation $TARGET from 
 env.Append(BUILDERS = {'PoBuild' : po_bld})
 
 mo_args = ['msgfmt', '-c', '-o', '$TARGET', '$SOURCE']
-mo_bld = Builder (action = Action([mo_args], 'Compiling message catalog $TARGET from $SOURCES'))
+mo_bld = Builder (action = [Action([mo_args], 'Compiling message catalog $TARGET from $SOURCES'),
+	Action(lambda target, source, env: gen_po_name(source[0], env), 'Generating $NAME_FILE')])
 env.Append(BUILDERS = {'MoBuild' : mo_bld})
 
 pot_args = ['xgettext', '--from-code=UTF-8', '--foreign-user', '--package-name=$PACKAGE',
