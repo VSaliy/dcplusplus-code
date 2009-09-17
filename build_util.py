@@ -133,7 +133,9 @@ def gen_po_name(source, env):
 	import codecs, re
 	match = re.compile('^# (.+) translation.*', re.I).search(codecs.open(str(source), 'rb', 'utf_8').readline())
 	if match:
-		codecs.open(str(env['NAME_FILE']), 'wb', 'utf_8').write(match.group(1))
+		name = match.group(1)
+		if name != "XXX":
+			codecs.open(str(env['NAME_FILE']), 'wb', 'utf_8').write(name)
 
 def CheckPKGConfig(context, version):
 	context.Message( 'Checking for pkg-config... ' )
