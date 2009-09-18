@@ -678,11 +678,11 @@ UserCommand::List FavoriteManager::getUserCommands(int ctx, const StringList& hu
 
 		for(size_t j = 0; j < hubs.size(); ++j) {
 			const string& hub = hubs[j];
-			bool hubAdc = hub.compare(0, 6, "adc://") == 0;
-			bool commandAdc = uc.getHub().compare(0, 6, "adc://") == 0;
+			bool hubAdc = hub.compare(0, 6, "adc://") == 0 || hub.compare(0, 7, "adcs://") == 0;
+			bool commandAdc = uc.getHub().compare(0, 6, "adc://") == 0 || uc.getHub().compare(0, 7, "adcs://") == 0;
 			if(hubAdc && commandAdc) {
-				if((uc.getHub().length() == 6) ||
-					(uc.getHub() == "adc://op" && isOp[j]) ||
+				if((uc.getHub() == "adc://" || uc.getHub() == "adcs://") ||
+					((uc.getHub() == "adc://op" || uc.getHub() == "adcs://op") && isOp[j]) ||
 					(uc.getHub() == hub) )
 				{
 					lst.push_back(*i);

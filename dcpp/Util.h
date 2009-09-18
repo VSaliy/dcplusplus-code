@@ -186,6 +186,8 @@ public:
 		return (j != wstring::npos) ? path.substr(j+1, i-j-1) : path;
 	}
 
+	static void replace(const string& search, const string& replacement, string& str);
+
 	static void decodeUrl(const string& aUrl, string& aServer, uint16_t& aPort, string& aFile);
 	static string validateFileName(string aFile);
 	static string cleanPathChars(string aNick);

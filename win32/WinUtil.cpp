@@ -640,7 +640,14 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 
 		string name = uc.getCommand().substr(i, j-i);
 		if(done.find(name) == done.end()) {
-			LineDlg dlg(parent, Text::toT(uc.getName()), Text::toT(name), Text::toT(sm["line:" + name]));
+			string caption = name;
+			/// @todo use the bool in UserCommand when we have one
+			if(uc.getHub().compare(0, 6, "adc://") == 0 || uc.getHub().compare(0, 7, "adcs://") == 0) {
+				Util::replace("\\\\", "\\", caption);
+				Util::replace("\\s", " ", caption);
+			}
+
+			LineDlg dlg(parent, Text::toT(uc.getName()), Text::toT(caption), Text::toT(sm["line:" + name]));
 			if(dlg.run() == IDOK) {
 				done[name] = sm["line:" + name] = Text::fromT(dlg.getLine());
 			} else {
