@@ -116,7 +116,7 @@ Point TextBoxBase::getPreferedSize() {
 
 	Point ret = c.getTextExtent(getText());
 	ret.x += GetSystemMetrics(SM_CXEDGE) * 2;
-	ret.y = lines * (tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2)) + (GetSystemMetrics(SM_CYEDGE) * 2);
+	ret.y = lines * tmNew.tmHeight + std::min(tmNew.tmHeight, tmSys.tmHeight) / 2 + GetSystemMetrics(SM_CYEDGE) * 2;
 	return ret;
 }
 

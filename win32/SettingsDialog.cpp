@@ -120,7 +120,7 @@ bool SettingsDialog::initDialog() {
 		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style &= ~ES_AUTOHSCROLL;
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_READONLY;
-		seed.lines = 4;
+		seed.lines = 6;
 		help = grid->addChild(seed);
 	}
 
