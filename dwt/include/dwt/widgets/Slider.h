@@ -36,7 +36,6 @@
 #ifndef DWT_Slider_h
 #define DWT_Slider_h
 
-#include "../aspects/AspectKeyboard.h"
 #include "../aspects/AspectPainting.h"
 #include "../aspects/AspectScrollable.h"
 #include "Control.h"
@@ -57,7 +56,6 @@ namespace dwt {
 class Slider :
 	public CommonControl,
 	// Aspects
-	public AspectKeyboard< Slider >,
 	public AspectPainting< Slider >,
 	public AspectScrollable< Slider >
 {
