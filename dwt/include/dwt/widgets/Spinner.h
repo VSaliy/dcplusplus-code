@@ -36,7 +36,6 @@
 #ifndef DWT_Spinner_h
 #define DWT_Spinner_h
 
-#include "../aspects/AspectKeyboard.h"
 #include "../aspects/AspectPainting.h"
 #include "../aspects/AspectScrollable.h"
 #include "Control.h"
@@ -58,7 +57,6 @@ namespace dwt {
 class Spinner :
 	public CommonControl,
 	// Aspects
-	public AspectKeyboard< Spinner >,
 	public AspectPainting< Spinner >,
 	public AspectScrollable< Spinner >
 {
