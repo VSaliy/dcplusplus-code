@@ -179,10 +179,20 @@ protected:
 	virtual ~TextBoxBase()
 	{}
 
+	struct Seed : public BaseType::Seed {
+		Seed(DWORD style, DWORD exStyle = 0, const tstring& caption = tstring());
+
+		/// number of lines this control occupies, used to guess its vertical size
+		unsigned lines;
+	};
+
+	void create(const Seed& cs);
+
 private:
 	// Contract needed by AspectUpdate Aspect class
 	static Message getUpdateMessage();
 
+	unsigned lines;
 };
 
 class TextBox :
@@ -385,8 +395,9 @@ inline bool TextBoxBase::getModify( ) {
 	return this->sendMessage( EM_GETMODIFY ) > 0;
 }
 
-inline TextBoxBase::TextBoxBase(Widget *parent, Dispatcher& dispatcher)
-	: BaseType(parent, dispatcher)
+inline TextBoxBase::TextBoxBase(Widget *parent, Dispatcher& dispatcher) :
+BaseType(parent, dispatcher),
+lines(1)
 {
 	// Can't have a text box without a parent...
 	dwtassert( parent, _T( "Cant have a TextBox without a parent..." ) );

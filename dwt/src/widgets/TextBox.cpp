@@ -36,6 +36,17 @@ namespace dwt {
 
 const TCHAR TextBox::windowClass[] = WC_EDIT;
 
+TextBoxBase::Seed::Seed(DWORD style, DWORD exStyle, const tstring& caption) :
+BaseType::Seed(style, exStyle, caption),
+lines(1)
+{
+}
+
+void TextBoxBase::create(const Seed& cs) {
+	lines = cs.lines;
+	BaseType::create(cs);
+}
+
 TextBox::Seed::Seed(const tstring& caption) :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP, WS_EX_CLIENTEDGE, caption),
 	font(new Font(DefaultGuiFont))
@@ -92,7 +103,6 @@ ScreenCoordinate TextBoxBase::getContextMenuPos() {
 }
 
 Point TextBoxBase::getPreferedSize() {
-
 	// Taken from http://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
 
@@ -105,8 +115,8 @@ Point TextBoxBase::getPreferedSize() {
 	c.getTextMetrics(tmNew);
 
 	Point ret = c.getTextExtent(getText());
-	ret.y = tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2) + (GetSystemMetrics(SM_CYEDGE) * 2);
 	ret.x += GetSystemMetrics(SM_CXEDGE) * 2;
+	ret.y = lines * (tmNew.tmHeight + (std::min(tmNew.tmHeight, tmSys.tmHeight)/2)) + (GetSystemMetrics(SM_CYEDGE) * 2);
 	return ret;
 }
 
