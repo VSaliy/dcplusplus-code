@@ -65,6 +65,7 @@ WinUtil::ImageMap WinUtil::fileIndexes;
 DWORD WinUtil::helpCookie = 0;
 tstring WinUtil::helpPath;
 HWND WinUtil::helpPopup = 0;
+StringList WinUtil::helpTexts;
 
 const Button::Seed WinUtil::Seeds::button;
 const ComboBox::Seed WinUtil::Seeds::comboBoxStatic;
@@ -210,7 +211,47 @@ void WinUtil::init() {
 	xdoptionsTable.style |= LVS_SINGLESEL | LVS_NOCOLUMNHEADER;
 	xdoptionsTable.lvStyle |= LVS_EX_CHECKBOXES;
 
+	init_helpPath();
+
+	if(!helpPath.empty()) {
+		// load up embedded help texts
+		helpTexts = StringTokenizer<string>(
+			File(Util::getFilePath(Text::fromT(helpPath)) + "emhelp.txt", File::READ, File::OPEN).read(),
+			"\r\n").getTokens();
+	}
+
 	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR>(&helpCookie));
+}
+
+void WinUtil::init_helpPath() {
+	// find the current locale
+	string lang = SETTING(LANGUAGE);
+	if(lang.empty())
+		lang = _nl_locale_name_default();
+
+	// find the path to the help file
+	string path;
+	if(!lang.empty() && lang != "C") {
+		while(true) {
+			path = Util::getPath(Util::PATH_LOCALE) + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
+			if(File::getSize(path) != -1)
+				break;
+			// if the lang has extra information (after '_' or '@'), try to remove it
+			string::size_type pos = lang.find_last_of("_@");
+			if(pos == string::npos)
+				break;
+			lang = lang.substr(0, pos);
+		}
+	}
+	if(path.empty() || File::getSize(path) == -1) {
+		path = Util::getPath(Util::PATH_RESOURCES) + "DCPlusPlus.chm";
+		if(File::getSize(path) == -1) {
+			/// @todo also check that the file is up-to-date
+			/// @todo alert the user that the help file isn't found/up-to-date
+			return;
+		}
+	}
+	helpPath = Text::toT(path);
 }
 
 void WinUtil::uninit() {
@@ -666,36 +707,6 @@ void WinUtil::help(HWND hWnd, unsigned id) {
 	if(helpPopup && hWnd == helpPopup)
 		return;
 
-	if(helpPath.empty()) {
-		// find the current locale
-		string lang = SETTING(LANGUAGE);
-		if(lang.empty())
-			lang = _nl_locale_name_default();
-
-		// find the path to the help file
-		string path;
-		if(!lang.empty() && lang != "C") {
-			path = Util::getPath(Util::PATH_LOCALE) + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
-			while(File::getSize(path) == -1) {
-				// if the lang has extra information (after '_' or '@'), try to remove it
-				string::size_type pos = lang.find_last_of("_@");
-				if(pos == string::npos)
-					break;
-				lang = lang.substr(0, pos);
-				path = Util::getPath(Util::PATH_LOCALE) + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
-			}
-		}
-		if(path.empty() || File::getSize(path) == -1) {
-			path = Util::getPath(Util::PATH_RESOURCES) + "DCPlusPlus.chm";
-			if(File::getSize(path) == -1) {
-				/// @todo also check that the file is up-to-date
-				/// @todo alert the user that the help file isn't found/up-to-date
-				return;
-			}
-		}
-		helpPath = Text::toT(path);
-	}
-
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help; display a tooltip
 		HH_POPUP popup = { sizeof(HH_POPUP) };
@@ -717,6 +728,17 @@ void WinUtil::help(HWND hWnd, unsigned id) {
 			id = IDH_INDEX;
 		::HtmlHelp(hWnd, helpPath.c_str(), HH_HELP_CONTEXT, id);
 	}
+}
+
+string WinUtil::getHelpText(unsigned id) {
+	if(id < IDH_CSHELP_BEGIN)
+		return Util::emptyString;
+	id -= IDH_CSHELP_BEGIN;
+
+	if(id >= helpTexts.size())
+		return Util::emptyString;
+
+	return helpTexts[id];
 }
 
 bool WinUtil::getVersionInfo(OSVERSIONINFOEX& ver) {

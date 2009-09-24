@@ -37,6 +37,7 @@ private:
 
 	GridPtr grid;
 	TreePtr pageTree;
+	TextBoxPtr help;
 
 	HTREEITEM addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent = TVI_ROOT);
 	void updateTitle();
@@ -45,6 +46,8 @@ private:
 	void layout();
 
 	bool initDialog();
+	static BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
+	void handleFocus(dwt::Control* widget);
 	void handleHelp(HWND hWnd, unsigned id);
 	void handleSelectionChanged();
 	void handleOKClicked();
