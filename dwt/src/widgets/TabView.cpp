@@ -338,7 +338,6 @@ void TabView::next(bool reverse) {
 			if(++i == viewOrder.end()) {
 				i = viewOrder.begin();
 			}
-			++i;
 		}
 	} else {
 		if(!reverse) {
