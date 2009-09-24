@@ -138,13 +138,14 @@ def gen_CHM(target, source, env):
 		if ret:
 			return ret
 
-	# generate context-sensitive help files (cshelp.h and cshelp.txt)
-	print 'Generating context-sensitive help files in ' + build_dir
-	gen_cshelp([build_path + 'cshelp.h', build_path + 'cshelp.txt'], Glob(build_path + '*.html'), lcid)
+	# generate context-sensitive help files (cshelp.h, cshelp.txt, emhelp.txt)
+	print 'Generating context-sensitive help files in ' + build_dir + ' as well as ' + str(target[1])
+	gen_cshelp([build_path + 'cshelp.h', build_path + 'cshelp.txt', str(target[1])], Glob(build_path + '*.html'), lcid)
 
 	# make sure the generated cshelp.h is the same as the vanilla one
 	if not filecmp.cmp(build_path + 'cshelp.h', 'help/cshelp.h'):
 		print 'The generated cshelp.h file is not the same as the vanilla one; ' + str(target[0]) + ' won\'t be compiled.'
+		env.Execute(Delete(target[1])) # remove the wrong emhelp.txt
 		return 1
 
 	if lcid != 0x409:
@@ -204,17 +205,19 @@ po_list = Glob('po/*.po')
 for po_node in po_list:
 	env.Precious(env.PoBuild(po_node, potfile))
 	if hasHHC:
-		target = dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/DCPlusPlus.chm'
-		env.Depends(target, CHM_dependencies)
-		env.CHMBuild(target, [CHM_sources, po_node])
+		target_path = dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/'
+		targets = [target_path + 'DCPlusPlus.chm', target_path + 'emhelp.txt']
+		env.Depends(targets, CHM_dependencies)
+		env.CHMBuild(targets, [CHM_sources, po_node])
 
 if not hasHHC:
 	print 'hhc.exe not found, skipping chm build'
 	Return()
 
 # compile the main (untranslated) help file
-target = dev.get_build_path('bin') + '/DCPlusPlus.chm'
-env.Depends(target, CHM_dependencies)
-ret = env.CHMBuild(target, [CHM_sources, potfile])
+target_path = dev.get_build_path('bin') + '/'
+targets = [target_path + 'DCPlusPlus.chm', target_path + 'emhelp.txt']
+env.Depends(targets, CHM_dependencies)
+ret = env.CHMBuild(targets, [CHM_sources, potfile])
 
 Return('ret')

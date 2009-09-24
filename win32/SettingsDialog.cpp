@@ -44,7 +44,8 @@ SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
 currentPage(0),
 grid(0),
-pageTree(0)
+pageTree(0),
+help(0)
 {
 	onInitDialog(std::tr1::bind(&SettingsDialog::initDialog, this));
 	onHelp(std::tr1::bind(&SettingsDialog::handleHelp, this, _1, _2));
@@ -66,68 +67,86 @@ bool SettingsDialog::initDialog() {
 	*/
 	setHelpId(IDH_INDEX);
 
-	grid = addChild(Grid::Seed(2, 1));
+	grid = addChild(Grid::Seed(3, 1));
 
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 	grid->column(0).mode = GridInfo::FILL;
 
-	GridPtr upper = grid->addChild(Grid::Seed(1, 2));
-
-	upper->row(0).mode = GridInfo::FILL;
-	upper->row(0).align = GridInfo::STRETCH;
-
-	upper->column(0).size = 155;
-	upper->column(0).mode = GridInfo::STATIC;
-	upper->column(1).mode = GridInfo::FILL;
-
-	pageTree = upper->addChild(Tree::Seed());
-	pageTree->setHelpId(IDH_SETTINGS_TREE);
-	pageTree->onSelectionChanged(std::tr1::bind(&SettingsDialog::handleSelectionChanged, this));
-
-	addPage(T_("Personal information"), upper, new GeneralPage(upper));
-
-	addPage(T_("Connection settings"), upper, new NetworkPage(upper));
-
 	{
-		HTREEITEM item = addPage(T_("Downloads"), upper, new DownloadPage(upper));
-		addPage(T_("Favorites"), upper, new FavoriteDirsPage(upper), item);
-		addPage(T_("Queue"), upper, new QueuePage(upper), item);
+		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+
+		cur->row(0).mode = GridInfo::FILL;
+		cur->row(0).align = GridInfo::STRETCH;
+
+		cur->column(0).size = 155;
+		cur->column(0).mode = GridInfo::STATIC;
+		cur->column(1).mode = GridInfo::FILL;
+
+		pageTree = cur->addChild(Tree::Seed());
+		pageTree->setHelpId(IDH_SETTINGS_TREE);
+		pageTree->onSelectionChanged(std::tr1::bind(&SettingsDialog::handleSelectionChanged, this));
+
+		addPage(T_("Personal information"), cur, new GeneralPage(cur));
+
+		addPage(T_("Connection settings"), cur, new NetworkPage(cur));
+
+		{
+			HTREEITEM item = addPage(T_("Downloads"), cur, new DownloadPage(cur));
+			addPage(T_("Favorites"), cur, new FavoriteDirsPage(cur), item);
+			addPage(T_("Queue"), cur, new QueuePage(cur), item);
+		}
+
+		addPage(T_("Sharing"), cur, new UploadPage(cur));
+
+		{
+			HTREEITEM item = addPage(T_("Appearance"),cur,  new AppearancePage(cur));
+			addPage(T_("Colors and sounds"), cur, new Appearance2Page(cur), item);
+			addPage(T_("Tabs"), cur, new TabsPage(cur), item);
+			addPage(T_("Windows"), cur, new WindowsPage(cur), item);
+		}
+
+		{
+			HTREEITEM item = addPage(T_("Advanced"), cur, new AdvancedPage(cur));
+			addPage(T_("Logs"), cur, new LogPage(cur), item);
+			addPage(T_("Experts only"), cur, new Advanced3Page(cur), item);
+			addPage(T_("User Commands"), cur, new UCPage(cur), item);
+			addPage(T_("Security Certificates"), cur, new CertificatesPage(cur), item);
+			addPage(T_("Bandwidth Limiting"), cur, new BandwidthLimitPage(cur), item);
+		}
 	}
 
-	addPage(T_("Sharing"), upper, new UploadPage(upper));
-
 	{
-		HTREEITEM item = addPage(T_("Appearance"),upper,  new AppearancePage(upper));
-		addPage(T_("Colors and sounds"), upper, new Appearance2Page(upper), item);
-		addPage(T_("Tabs"), upper, new TabsPage(upper), item);
-		addPage(T_("Windows"), upper, new WindowsPage(upper), item);
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
+		seed.style &= ~ES_AUTOHSCROLL;
+		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_READONLY;
+		seed.lines = 4;
+		help = grid->addChild(seed);
 	}
 
 	{
-		HTREEITEM item = addPage(T_("Advanced"), upper, new AdvancedPage(upper));
-		addPage(T_("Logs"), upper, new LogPage(upper), item);
-		addPage(T_("Experts only"), upper, new Advanced3Page(upper), item);
-		addPage(T_("User Commands"), upper, new UCPage(upper), item);
-		addPage(T_("Security Certificates"), upper, new CertificatesPage(upper), item);
-		addPage(T_("Bandwidth Limiting"), upper, new BandwidthLimitPage(upper), item);
-	}
+		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 
-	{
-		GridPtr lower = grid->addChild(Grid::Seed(1, 3));
-		lower->column(0).mode = GridInfo::FILL;
-		lower->column(0).align = GridInfo::BOTTOM_RIGHT;
-
-		WinUtil::addDlgButtons(lower,
+		WinUtil::addDlgButtons(cur,
 			std::tr1::bind(&SettingsDialog::handleOKClicked, this),
 			std::tr1::bind(&SettingsDialog::endDialog, this, IDCANCEL));
 
 		Button::Seed seed(T_("Help"));
 		seed.padding.x = 10;
-		ButtonPtr button = lower->addChild(seed);
+		ButtonPtr button = cur->addChild(seed);
 		button->setHelpId(IDH_DCPP_HELP);
 		button->onClicked(std::tr1::bind(&SettingsDialog::handleHelp, this, handle(), IDH_INDEX));
 	}
+
+	/*
+	* catch WM_SETFOCUS messages (onFocus events) sent to every children of this dialog. the normal
+	* way to do it would be to use an Application::Filter, but unfortunately these messages don't
+	* go through there but instead are sent directly to the control's wndproc.
+	*/
+	/// @todo when dwt has better tracking of children, improve this
+	::EnumChildWindows(handle(), EnumChildProc, reinterpret_cast<LPARAM>(this));
 
 	updateTitle();
 
@@ -135,6 +154,18 @@ bool SettingsDialog::initDialog() {
 	centerWindow();
 
 	return false;
+}
+
+BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
+	SettingsDialog* dialog = reinterpret_cast<SettingsDialog*>(lParam);
+	dwt::Control* widget = dwt::hwnd_cast<dwt::Control*>(hwnd);
+	if(widget && widget != dialog->help)
+		widget->onFocus(std::tr1::bind(&SettingsDialog::handleFocus, dialog, widget));
+	return TRUE;
+}
+
+void SettingsDialog::handleFocus(dwt::Control* widget) {
+	help->setText(Text::toT(WinUtil::getHelpText(widget->getHelpId())));
 }
 
 HTREEITEM SettingsDialog::addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent) {

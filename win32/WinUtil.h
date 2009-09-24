@@ -186,6 +186,7 @@ public:
 	static void parseMagnetUri(const tstring& /*aUrl*/, bool aOverride = false);
 
 	static void help(HWND hWnd, unsigned id);
+	static string getHelpText(unsigned id);
 
 	static bool getVersionInfo(OSVERSIONINFOEX& ver);
 
@@ -226,9 +227,12 @@ public:
 #endif
 
 private:
+	static void init_helpPath();
+
 	static DWORD helpCookie;
 	static tstring helpPath;
 	static HWND helpPopup;
+	static StringList helpTexts;
 };
 
 #endif // !defined(WIN_UTIL_H)
