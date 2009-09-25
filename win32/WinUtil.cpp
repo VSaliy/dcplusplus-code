@@ -215,9 +215,11 @@ void WinUtil::init() {
 
 	if(!helpPath.empty()) {
 		// load up embedded help texts
-		helpTexts = StringTokenizer<string>(
-			File(Util::getFilePath(Text::fromT(helpPath)) + "emhelp.txt", File::READ, File::OPEN).read(),
-			"\r\n").getTokens();
+		try {
+			helpTexts = StringTokenizer<string>(
+				File(Util::getFilePath(Text::fromT(helpPath)) + "emhelp.txt", File::READ, File::OPEN).read(),
+				"\r\n").getTokens();
+		} catch(const FileException&) { }
 	}
 
 	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR>(&helpCookie));
