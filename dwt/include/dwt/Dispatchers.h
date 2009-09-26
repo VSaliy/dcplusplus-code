@@ -44,6 +44,8 @@ struct Base {
 	typedef std::tr1::function<T> F;
 
 	Base(const F& f_) : f(f_) { }
+
+protected:
 	F f;
 };
 

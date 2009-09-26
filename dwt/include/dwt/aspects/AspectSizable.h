@@ -37,7 +37,6 @@
 #define DWT_AspectSizable_h
 
 #include "../Widget.h"
-#include "../Place.h"
 #include "../util/check.h"
 #include "../Dispatchers.h"
 #include "../Events.h"
@@ -104,59 +103,6 @@ public:
 	  */
 	void setBounds( int x, int y, int width, int height, bool updateWindow = true );
 
-	/// Given a bounding rectangle with rows, put this Widget in the rownum position
-	/** The rect defines a column made up of a number of rows.  The rownum specifies a
-	  * zero based index of the row to place the Widget.
-	  * [ row0 ]   <br>
-	  * [ row1 ]   <br>
-	  * ...        <br>
-	  * [ rownum ] <br>
-	  * [      ]   <br>
-	  * <br>
-	  * Of course you could just generate a new bounding rectangle, but this is easier.
-	  */
-	void setSizeAsCol( const Rectangle & rect, int rows, int rownum, int border = 0, bool updateWindow = true );
-
-	/// Given a bounding rectangle with cols, put this Widget in the colnum position
-	/** The rect defines a row made up of a number of columns.  The colnum specifies a
-	  * zero based index of the column to place the Widget.<br>
-	  * [ col0 ]  [ col1 ]  ... [ colnum ]  [   ]  [   ] <br>
-	  */
-	void setSizeAsRow( const Rectangle & rect, int cols, int colnum, int border = 0, bool updateWindow = true );
-
-	/// Given a bounding Place class, divided into rows and columns, resize and put
-	/// this Widget in the next cell.
-	/** Bound determines the bounding rectangle, and borders. <br>
-	  * rows and cols determine the size and position of each cell. <br>
-	  * The internal position of bound is updated. <br>
-	  * The Widgets are sized and placed according to the current cell, from left to
-	  * right until a row is full, and then continues with the next row.
-	  */
-	void setSizeAsGridPerPlace( Place & bound, int rows, int cols );
-
-	/// Given a bounding Place class, place this Widget and adjust to the next position.
-	/** This function places the Widget into the bounding rectangle specified by bound. <br>
-	  * The size of the Widget is preserved. <br>
-	  * The Widgets are sized and placed from left to right until
-	  * a row is full, and then continues with the next row. <br>
-	  * The internal position of bound is updated. <br>
-	  */
-	void setPositionPerPlace( Place & bound );
-
-	/// Place after sizing for the Widget's text, and adjust to the next position.
-	/** This function places the Widget into the bounding rectangle specified by
-	  * bound. <br>
-	  * The idea is that the size of certain Widgets should really be large enough to
-	  * show their text.  Buttons and text areas are examples. <br>
-	  * The size of the Widget is calculated from the size of getText(). <br>
-	  * It is optionally adjusted by the extraX and extraY. <br>
-	  * The Widgets are sized and placed from left to right until a row is full, and
-	  * then continues with the next row. <br>
-	  * The internal position of bound is updated.
-	  */
-	void setSizePerTextPerPlace( Place & bound, const tstring & text,
-								 int extraX = 0, int extraY = 0 );
-
 	/// Returns the screen size.
 	/** This is the screen size, and useful for making applications that must adapt
 	  * to different screen sizes.
@@ -187,20 +133,12 @@ public:
 	/// Returns the screen position of the window.
 	Point getScreenPosition() const;
 
-
 	/// Returns the size of the client area of the window.
 	/** This differs from getSize because it disregards the border and headers, this
 	  * function only returns the client area of the Widget meaning the area which it
 	  * is possible to draw on.
 	  */
 	Point getClientAreaSize() const;
-
-	/// Fills a Point with the size of text to be drawn in the Widget's font.
-	/** getTextSize determines the height and width that text will take. <br>
-	  * This is useful if you want to allocate enough space to fit known text. <br>
-	  * It accounts for the set font too.
-	  */
-	Point getTextSize( const tstring & text );
 
 	/// Brings the widget to the front
 	/** Makes the widget become the front most widget meaning it will not be obscured
@@ -279,67 +217,6 @@ void AspectSizable< WidgetType >::centerWindow( Widget* target ) {
 }
 
 template< class WidgetType >
-void AspectSizable< WidgetType >::setSizeAsCol( const Rectangle & rect, int rows, int rownum,
-	int border, bool updateWindow )
-{
-	int totBorder = border * ( rows + 1 ); // All borders together determine
-	int ySize = ( rect.size.y - totBorder ) / rows; // the space left for each row.
-
-	int yPos = rect.pos.y + border; // Start with current y and first border.
-	yPos += rownum * ( border + ySize ); // Accumulate other rows and borders
-
-	::MoveWindow( H(), rect.x(), yPos,
-					rect.width(), ySize, updateWindow ? TRUE : FALSE );
-}
-
-template< class WidgetType >
-void AspectSizable< WidgetType >::setSizeAsRow( const Rectangle & rect, int cols, int colnum,
-	int border, bool updateWindow )
-{
-	int totBorder = border * ( cols + 1 );
-	int xSize = ( rect.width() - totBorder ) / cols;
-	int xPos = rect.x() + border; // Start with current X and first border
-	xPos += colnum * ( border + xSize ); // Accumulate other columns and borders
-
-	::MoveWindow( H(), xPos, rect.y(), xSize, rect.height(), updateWindow ? TRUE : FALSE );
-}
-
-template< class WidgetType >
-void AspectSizable< WidgetType >::setSizeAsGridPerPlace( Place & bound, int rows, int cols )
-{
-	Rectangle posSize;
-	bound.sizeOfCell( rows, cols, posSize.size ); // Calculate the desired size.
-	bound.positionToRight( posSize ); // pos_size.pos= Current place position,
-													// and update Place's position
-	setBounds( posSize ); // Reposition with a new size.
-}
-
-template< class WidgetType >
-void AspectSizable< WidgetType >::setPositionPerPlace( Place & bound )
-{
-	Rectangle posSize( getSize() ); // Get the current size
-	bound.positionToRight( posSize ); // pos_size.pos= Current place position,
-											// and update Place's position
-	setBounds( posSize ); // Reposition with the same size.
-}
-
-template< class WidgetType >
-void AspectSizable< WidgetType >
-::setSizePerTextPerPlace( Place & bound, const tstring & text,
-						  int extraX, int extraY )
-{
-	Point textSize = getTextSize( text );
-	textSize.x += extraX;
-	textSize.y += extraY;
-
-	// Now Place the Widget according to the calculated size
-	Rectangle posSize( textSize ); // Use the  for text.
-	bound.positionToRight( posSize ); // pos_size.pos = Current place position,
-											// and update Place's position
-	setBounds( posSize ); // Reposition with the calculated size.
-}
-
-template< class WidgetType >
 Point AspectSizable< WidgetType >::getDesktopSize()
 {
 	RECT rc;
@@ -397,26 +274,6 @@ Point AspectSizable< WidgetType >::getClientAreaSize() const
 	RECT rc;
 	::GetClientRect( H(), & rc );
 	return Point( rc.right, rc.bottom );
-}
-
-template< class WidgetType >
-Point AspectSizable< WidgetType >
-::getTextSize( const tstring & text )
-{
-	// Some win32 api code to determine the actual size of the string
-	HWND hWnd = H();
-	HDC hDC = ::GetDC( hWnd );
-	HFONT hf = ( HFONT ) ::SendMessage( hWnd, WM_GETFONT, 0, 0 );
-	if ( 0 != hf )
-	{
-		SelectFont( hDC, hf );
-	}
-
-	RECT wRect = { 0, 0, 0, 0 };
-	DrawText( hDC, text.c_str(), ( int ) text.size(), & wRect, DT_CALCRECT );
-	::ReleaseDC( hWnd, hDC );
-
-	return(Point( wRect.right, wRect.bottom ) );
 }
 
 template< class WidgetType >

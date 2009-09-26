@@ -43,7 +43,6 @@
 #include "ClipBoard.h"
 #include "Cursor.h"
 #include "LibraryLoader.h"
-#include "Place.h"
 #include "Point.h"
 #include "Rectangle.h"
 #include "Resource.h"
