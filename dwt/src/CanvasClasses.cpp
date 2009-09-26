@@ -198,14 +198,15 @@ void Canvas::drawIcon(const IconPtr& icon, const Rectangle& rectangle) {
 		dwtWin32DebugFail("DrawIconEx failed in Canvas::drawIcon");
 }
 
-int Canvas::drawText( const tstring & text, const dwt::Rectangle & rect, unsigned format )
-{
+int Canvas::drawText(const tstring& text, Rectangle& rect, unsigned format) {
 	RECT rc = rect;
 	int retVal = ::DrawText( itsHdc, text.c_str(), ( int ) text.length(), & rc, format );
 	if ( 0 == retVal )
 	{
 		dwtWin32DebugFail("Error while trying to draw text to canvas");
 	}
+	if((format & DT_CALCRECT) == DT_CALCRECT)
+		rect = rc;
 	return retVal;
 }
 
