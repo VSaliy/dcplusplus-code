@@ -92,7 +92,8 @@ void StatsFrame::handlePaint(dwt::PaintCanvas& canvas) {
 				long tw = txtSize.x;
 				if(tw + 2 > twidth)
 					twidth = tw + 2;
-				canvas.drawText(txt, dwt::Rectangle(dwt::Point(1, ypos), txtSize), DT_LEFT | DT_TOP | DT_SINGLELINE);
+				dwt::Rectangle rect(dwt::Point(1, ypos), txtSize);
+				canvas.drawText(txt, rect, DT_LEFT | DT_TOP | DT_SINGLELINE);
 			}
 		}
 
@@ -102,7 +103,8 @@ void StatsFrame::handlePaint(dwt::PaintCanvas& canvas) {
 			long tw = txtSize.x;
 			if(tw + 2 > twidth)
 				twidth = tw + 2;
-			canvas.drawText(txt, dwt::Rectangle(dwt::Point(1, 1), txtSize), DT_LEFT | DT_TOP | DT_SINGLELINE);
+			dwt::Rectangle rect(dwt::Point(1, 1), txtSize);
+			canvas.drawText(txt, rect, DT_LEFT | DT_TOP | DT_SINGLELINE);
 		}
 
 	}

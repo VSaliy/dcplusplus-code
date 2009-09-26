@@ -46,7 +46,7 @@ class AspectHelp {
 
 	struct HelpDispatcher : Dispatchers::Base<void (WidgetType*, unsigned)> {
 		typedef Dispatchers::Base<void (WidgetType*, unsigned)> BaseType;
-		HelpDispatcher(const F& f) : BaseType(f) { }
+		HelpDispatcher(const typename BaseType::F& f) : BaseType(f) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(msg.lParam);
