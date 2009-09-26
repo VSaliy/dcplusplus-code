@@ -449,7 +449,7 @@ public:
 	  * </ul>
 	  * Google for or look at MSDN what their different meaning are.
 	  */
-	int drawText( const tstring & text, const dwt::Rectangle & rect, unsigned format );
+	int drawText(const tstring& text, Rectangle& rect, unsigned format);
 
 	/// Draws given text inside given Rectangle
 	/** Draw text within coordinates of given Rectangle according to <br>

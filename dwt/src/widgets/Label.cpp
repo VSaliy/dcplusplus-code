@@ -38,7 +38,7 @@ namespace dwt {
 const TCHAR Label::windowClass[] = WC_STATIC;
 
 Label::Seed::Seed(const tstring& caption) :
-BaseType::Seed(WS_CHILD | SS_NOTIFY, 0, caption),
+BaseType::Seed(WS_CHILD | SS_NOTIFY | SS_NOPREFIX, 0, caption),
 font(new Font(DefaultGuiFont))
 {
 }
@@ -74,21 +74,9 @@ Point Label::getPreferedSize() {
 	UpdateCanvas c(this);
 	c.selectFont(getFont());
 
-	// split each line
-	tstring text = getText();
-	tstring::size_type i = 0, j;
-	Point ret;
-	while(true) {
-		j = text.find('\n', i);
-		Point pt = c.getTextExtent(text.substr(i, (j == tstring::npos) ? -1 : (j - i)));
-		ret.x = std::max(ret.x, pt.x);
-		ret.y += pt.y;
-		if(j == tstring::npos)
-			break;
-		i = j + 1;
-	}
-
-	return ret;
+	Rectangle rect;
+	c.drawText(getText(), rect, DT_CALCRECT | DT_NOPREFIX);
+	return rect.size;
 }
 
 }
