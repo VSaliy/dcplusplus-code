@@ -87,6 +87,8 @@ public:
 
 	void relayEvent(const MSG& msg);
 
+	void setText(const tstring& text_);
+	void setText(Widget* widget, const tstring& text);
 	void setTool(Widget* widget, const Dispatcher::F& callback);
 
 	void setMaxTipWidth(int width);
@@ -112,6 +114,8 @@ protected:
 	tstring text;
 
 private:
+	void handleGetTip(tstring& ret);
+
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 };
@@ -119,7 +123,6 @@ private:
 inline ToolTip::ToolTip(Widget *parent)
 	: BaseType(parent, ChainingDispatcher::superClass<ToolTip>())
 {
-	// Can't have a text box without a parent...
 	dwtassert( parent, _T( "Can't have a ToolTip without a parent..." ) );
 }
 

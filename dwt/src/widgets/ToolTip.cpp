@@ -52,6 +52,15 @@ void ToolTip::relayEvent(const MSG& msg) {
 		sendMessage(TTM_RELAYEVENT, 0, reinterpret_cast<LPARAM>(&msg));
 }
 
+void ToolTip::setText(const tstring& text_) {
+	setText(getParent(), text_);
+}
+
+void ToolTip::setText(Widget* widget, const tstring& text_) {
+	text = text_;
+	setTool(widget, std::tr1::bind(&ToolTip::handleGetTip, this, _1));
+}
+
 void ToolTip::setTool(Widget* widget, const Dispatcher::F& f) {
 	onGetTip(f);
 
@@ -61,7 +70,10 @@ void ToolTip::setTool(Widget* widget, const Dispatcher::F& f) {
 	ti.uId = reinterpret_cast<UINT_PTR>(widget->handle());
 	ti.lpszText = LPSTR_TEXTCALLBACK;
 	sendMessage(TTM_ADDTOOL, 0, reinterpret_cast<LPARAM>(&ti));
+}
 
+void ToolTip::handleGetTip(tstring& ret) {
+	ret = text;
 }
 
 }
