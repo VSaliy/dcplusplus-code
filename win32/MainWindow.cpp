@@ -156,7 +156,7 @@ MainWindow::MainWindow() :
 	if(SETTING(NICK).empty()) {
 		SystemFrame::openWindow(getTabView());
 
-		WinUtil::help(handle(), IDH_GET_STARTED);
+		WinUtil::help(this, IDH_GET_STARTED);
 		handleSettings();
 	}
 
@@ -265,10 +265,10 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr help = mainMenu->appendPopup(T_("&Help"));
 
-		help->appendItem(T_("Help &Contents\tF1"), std::tr1::bind(&WinUtil::help, handle(), IDH_INDEX), dwt::IconPtr(new dwt::Icon(IDR_HELP)));
-		help->appendItem(T_("Get started"), std::tr1::bind(&WinUtil::help, handle(), IDH_GET_STARTED));
+		help->appendItem(T_("Help &Contents\tF1"), std::tr1::bind(&WinUtil::help, this, IDH_INDEX), dwt::IconPtr(new dwt::Icon(IDR_HELP)));
+		help->appendItem(T_("Get started"), std::tr1::bind(&WinUtil::help, this, IDH_GET_STARTED));
 		help->appendSeparator();
-		help->appendItem(T_("Change Log"), std::tr1::bind(&WinUtil::help, handle(), IDH_CHANGELOG));
+		help->appendItem(T_("Change Log"), std::tr1::bind(&WinUtil::help, this, IDH_CHANGELOG));
 		help->appendItem(T_("About DC++..."), std::tr1::bind(&MainWindow::handleAbout, this), dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16))));
 		help->appendSeparator();
 		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.homepage)));

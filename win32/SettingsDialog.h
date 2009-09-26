@@ -48,7 +48,7 @@ private:
 	bool initDialog();
 	static BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
 	void handleFocus(dwt::Control* widget);
-	void handleHelp(HWND hWnd, unsigned id);
+	void handleHelp(dwt::Control* widget, unsigned id);
 	void handleSelectionChanged();
 	void handleOKClicked();
 };

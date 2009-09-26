@@ -38,6 +38,7 @@
 #include "../aspects/AspectCloseable.h"
 #include "../aspects/AspectContextMenu.h"
 #include "../aspects/AspectEnabled.h"
+#include "../aspects/AspectFont.h"
 #include "../aspects/AspectHelp.h"
 #include "../aspects/AspectKeyboard.h"
 #include "../aspects/AspectMouse.h"
@@ -56,6 +57,7 @@ class Control:
 	public AspectCloseable<Control>,
 	public AspectContextMenu<Control>,
 	public AspectEnabled<Control>,
+	public AspectFont<Control>,
 	public AspectHelp<Control>,
 	public AspectKeyboard<Control>,
 	public AspectMouse<Control>,

@@ -55,7 +55,7 @@ private:
 	void handleTextClicked();
 	void handleULClicked();
 	void handleDLClicked();
-	void handleSoundsHelp(HWND hWnd, unsigned id);
+	void handleSoundsHelp(unsigned id);
 	void handleSelectionChanged();
 	void handleBrowseClicked();
 

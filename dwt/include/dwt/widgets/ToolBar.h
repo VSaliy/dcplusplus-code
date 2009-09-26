@@ -39,7 +39,6 @@
 #ifndef WINCE // Doesn't exist in Windows CE based systems
 
 #include "../Dispatchers.h"
-#include "../aspects/AspectFont.h"
 #include "../resources/ImageList.h"
 #include "../DWTException.h"
 #include "Control.h"
@@ -59,9 +58,7 @@ namespace dwt {
   * to view the log of URL's you have been to etc...
   */
 class ToolBar :
-	public CommonControl,
-	// Aspects
-	public AspectFont< ToolBar >
+	public CommonControl
 {
 	typedef CommonControl BaseType;
 	typedef Dispatchers::VoidVoid<> Dispatcher;

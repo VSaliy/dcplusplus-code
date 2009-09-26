@@ -137,7 +137,7 @@ bool SettingsDialog::initDialog() {
 		seed.padding.x = 10;
 		ButtonPtr button = cur->addChild(seed);
 		button->setHelpId(IDH_DCPP_HELP);
-		button->onClicked(std::tr1::bind(&SettingsDialog::handleHelp, this, handle(), IDH_INDEX));
+		button->onClicked(std::tr1::bind(&SettingsDialog::handleHelp, this, this, IDH_INDEX));
 	}
 
 	/*
@@ -174,10 +174,10 @@ HTREEITEM SettingsDialog::addPage(const tstring& title, GridPtr upper, PropPage*
 	return pageTree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
 }
 
-void SettingsDialog::handleHelp(HWND hWnd, unsigned id) {
+void SettingsDialog::handleHelp(dwt::Control* widget, unsigned id) {
 	if(id == IDH_INDEX && currentPage)
 		id = currentPage->getHelpId();
-	WinUtil::help(hWnd, id);
+	WinUtil::help(widget, id);
 }
 
 void SettingsDialog::handleSelectionChanged() {

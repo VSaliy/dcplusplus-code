@@ -60,7 +60,7 @@ oldSelection(-1)
 		windowColor->setHelpId(IDH_SETTINGS_APPEARANCE2_SELWINCOLOR);
 
 		Label::Seed seed(T_("Donate \342\202\254\342\202\254\342\202\254:s! (ok, dirty dollars are fine as well =) (see help menu)"));
-		seed.style |= SS_NOPREFIX | SS_SUNKEN;
+		seed.style |= SS_SUNKEN;
 		example = cur->addChild(seed);
 		cur->setWidget(example, 0, 1, 2, 1);
 		example->setHelpId(IDH_SETTINGS_APPEARANCE2_COLORS);
@@ -129,7 +129,7 @@ oldSelection(-1)
 
 	saveSoundOptions();
 
-	sounds->onHelp(std::tr1::bind(&Appearance2Page::handleSoundsHelp, this, _1, _2));
+	sounds->onHelp(std::tr1::bind(&Appearance2Page::handleSoundsHelp, this, _2));
 	sounds->onSelectionChanged(std::tr1::bind(&Appearance2Page::handleSelectionChanged, this));
 }
 
@@ -193,12 +193,12 @@ void Appearance2Page::handleDLClicked() {
 	}
 }
 
-void Appearance2Page::handleSoundsHelp(HWND hWnd, unsigned id) {
+void Appearance2Page::handleSoundsHelp(unsigned id) {
 	// same as PropPage::handleListHelp
 	int item = sounds->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
 	if(item >= 0 && soundOptions[item].helpId)
 		id = soundOptions[item].helpId;
-	WinUtil::help(hWnd, id);
+	WinUtil::help(sounds, id);
 }
 
 void Appearance2Page::handleSelectionChanged() {

@@ -37,7 +37,6 @@
 #define DWT_TextBox_h
 
 #include "../aspects/AspectColor.h"
-#include "../aspects/AspectFont.h"
 #include "../aspects/AspectScrollable.h"
 #include "../aspects/AspectText.h"
 #include "../aspects/AspectUpdate.h"
@@ -68,7 +67,6 @@ class TextBoxBase :
 	// Aspect classes
 	public AspectColor< TextBoxBase >,
 	public AspectColorCtlImpl<TextBoxBase>,
-	public AspectFont< TextBoxBase >,
 	public AspectScrollable< TextBoxBase >,
 	public AspectText< TextBoxBase >,
 	public AspectUpdate< TextBoxBase >

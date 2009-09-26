@@ -1,7 +1,7 @@
 # this script browses through every HTML files passed in 'source', looking for tags that have the
 # "cshelp" argument; target files are then generated for use by the DC++ help system.
 
-def gen_cshelp(target, source, lcid):
+def gen_cshelp(target, source):
 	import codecs
 	from HTMLParser import HTMLParser
 	from htmlentitydefs import entitydefs
@@ -65,7 +65,7 @@ def gen_cshelp(target, source, lcid):
 
 	output.sort()
 
-	# generate cshelp.h (target[0]) and - optionally - cshelp.txt (target[1]) and emhelp.txt (target[2])
+	# generate cshelp.h (target[0]) and - optionally - cshelp.txt (target[1])
 	f_h = open(str(target[0]), "w")
 	f_h.write("""// this file contains help ids for field-level help tooltips
 
@@ -76,18 +76,15 @@ def gen_cshelp(target, source, lcid):
 	number = 11000
 	if len(target) >= 2:
 		from util import get_win_cp
-		f_txt = codecs.open(str(target[1]), "w", get_win_cp(lcid), "replace")
-		f_embedded = codecs.open(str(target[2]), "w", "utf_8")
+		f_txt = codecs.open(str(target[1]), "w", "utf_8")
 	for entry in output:
 		f_h.write("#define " + entry[0] + " " + str(number) + "\r\n")
 		number += 1
 		if len(target) >= 2:
-			f_txt.write(".topic " + entry[0] + "\r\n" + entry[1] + "\r\n")
-			f_embedded.write(entry[1] + "\r\n")
+			f_txt.write(entry[1] + "\r\n")
 	f_h.write("""
 #endif
 """)
 	f_h.close()
 	if len(target) >= 2:
 		f_txt.close()
-		f_embedded.close()

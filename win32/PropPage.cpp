@@ -73,7 +73,7 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 
 	list->setColumnWidth(0, LVSCW_AUTOSIZE);
 
-	list->onHelp(std::tr1::bind(&PropPage::handleListHelp, this, _1, _2, listItems, list));
+	list->onHelp(std::tr1::bind(&PropPage::handleListHelp, this, list, _2, listItems));
 }
 
 void PropPage::write(const ItemList& items) {
@@ -120,12 +120,12 @@ void PropPage::handleBrowseFile(const Item& i) {
 		box->setText(target);
 }
 
-void PropPage::handleListHelp(HWND hWnd, unsigned id, const ListItem* listItems, TablePtr list) {
+void PropPage::handleListHelp(TablePtr list, unsigned id, const ListItem* listItems) {
 	// we have the help id of the whole list-view; convert to the one of the specific option the user wants help for
 	int item =
 		isKeyPressed(VK_F1) ? list->getSelected() :
 		list->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
 	if(item >= 0 && listItems[item].helpId)
 		id = listItems[item].helpId;
-	WinUtil::help(hWnd, id);
+	WinUtil::help(list, id);
 }
