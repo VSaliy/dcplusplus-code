@@ -40,6 +40,7 @@
 #include "../util/check.h"
 #include "../Dispatchers.h"
 #include "../Events.h"
+#include "../CanvasClasses.h"
 
 namespace dwt {
 
