@@ -64,7 +64,6 @@ bool WinUtil::urlMagnetRegistered = false;
 WinUtil::ImageMap WinUtil::fileIndexes;
 DWORD WinUtil::helpCookie = 0;
 tstring WinUtil::helpPath;
-HWND WinUtil::helpPopup = 0;
 StringList WinUtil::helpTexts;
 
 const Button::Seed WinUtil::Seeds::button;
@@ -214,10 +213,10 @@ void WinUtil::init() {
 	init_helpPath();
 
 	if(!helpPath.empty()) {
-		// load up embedded help texts
+		// load up context-sensitive help texts
 		try {
 			helpTexts = StringTokenizer<string>(
-				File(Util::getFilePath(Text::fromT(helpPath)) + "emhelp.txt", File::READ, File::OPEN).read(),
+				File(Util::getFilePath(Text::fromT(helpPath)) + "cshelp.txt", File::READ, File::OPEN).read(),
 				"\r\n").getTokens();
 		} catch(const FileException&) { }
 	}
@@ -702,33 +701,63 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 	return true;
 }
 
-void WinUtil::help(HWND hWnd, unsigned id) {
-	dcdebug("WinUtil::help; hWnd: %p; id: %u\n", hWnd, id);
+bool closeHelpWindow(dwt::WindowPtr window) {
+	::ReleaseCapture();
+	window->close(true);
+	return true;
+}
 
-	// make sure no further help is requested when a help popup is already opened...
-	if(helpPopup && hWnd == helpPopup)
-		return;
-
+void WinUtil::help(dwt::Control* widget, unsigned id) {
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help; display a tooltip
-		HH_POPUP popup = { sizeof(HH_POPUP) };
-		popup.idString = id;
 
-		RECT rect;
-		::GetWindowRect(hWnd, &rect);
-		popup.pt.x = (rect.left + rect.right) / 2;
-		popup.pt.y = rect.top;
+		// where to position the tooltip
+		dwt::Point pt;
+		if(widget->isKeyPressed(VK_F1)) {
+			dwt::Rectangle rect = widget->getBounds(false);
+			pt.x = rect.left() + rect.width() / 2;
+			pt.y = rect.top();
+		} else {
+			pt = dwt::Point::fromLParam(::GetMessagePos());
+		}
 
-		popup.rcMargins.left = -1;
-		popup.rcMargins.top = -1;
-		popup.rcMargins.right = -1;
-		popup.rcMargins.bottom = -1;
+		// create the popup container (invisible at first)
+		dwt::Window::Seed ws;
+		ws.style = WS_POPUP;
+		ws.exStyle = WS_EX_CLIENTEDGE;
+		ws.location = dwt::Rectangle(pt, dwt::Point()); // set the position but not the size
+		dwt::WindowPtr window = dwt::WidgetCreator<dwt::Window>::create(widget, ws);
+		window->onLeftMouseDown(std::tr1::bind(&closeHelpWindow, window));
+		window->onKeyDown(std::tr1::bind(&closeHelpWindow, window));
 
-		helpPopup = ::HtmlHelp(hWnd, helpPath.c_str(), HH_DISPLAY_TEXT_POPUP, reinterpret_cast<DWORD_PTR>(&popup));
+		tstring text = Text::toT(getHelpText(id));
+
+		Label::Seed ls(text);
+		ls.font = font;
+		LabelPtr label = window->addChild(ls);
+		label->setColor(::GetSysColor(COLOR_INFOTEXT), ::GetSysColor(COLOR_INFOBK));
+		{
+			// let Windows figure out what the best size is
+			dwt::UpdateCanvas canvas(label);
+			canvas.selectFont(font);
+			dwt::Rectangle rect(dwt::Point(400, 0));
+			canvas.drawText(text, rect, DT_CALCRECT | DT_NOPREFIX | DT_WORDBREAK);
+			label->layout(rect);
+		}
+
+		// now that the label is correctly sized, resize the container window
+		dwt::Rectangle rect = label->getBounds(false);
+		rect.size.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
+		rect.size.y += ::GetSystemMetrics(SM_CYEDGE) * 2;
+		window->setBounds(rect);
+
+		window->setVisible(true);
+		::SetCapture(window->handle());
+
 	} else {
 		if(id < IDH_BEGIN || id > IDH_END)
 			id = IDH_INDEX;
-		::HtmlHelp(hWnd, helpPath.c_str(), HH_HELP_CONTEXT, id);
+		::HtmlHelp(widget->handle(), helpPath.c_str(), HH_HELP_CONTEXT, id);
 	}
 }
 

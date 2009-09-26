@@ -185,7 +185,7 @@ public:
 	static void parseADChubUrl(const tstring& /*aUrl*/);
 	static void parseMagnetUri(const tstring& /*aUrl*/, bool aOverride = false);
 
-	static void help(HWND hWnd, unsigned id);
+	static void help(dwt::Control* widget, unsigned id);
 	static string getHelpText(unsigned id);
 
 	static bool getVersionInfo(OSVERSIONINFOEX& ver);
@@ -231,7 +231,6 @@ private:
 
 	static DWORD helpCookie;
 	static tstring helpPath;
-	static HWND helpPopup;
 	static StringList helpTexts;
 };
 

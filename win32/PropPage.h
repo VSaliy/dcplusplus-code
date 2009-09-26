@@ -71,7 +71,7 @@ protected:
 	void handleBrowseFile(const Item& i);
 
 private:
-	void handleListHelp(HWND hWnd, unsigned id, const ListItem* listItems, TablePtr list);
+	void handleListHelp(TablePtr list, unsigned id, const ListItem* listItems);
 };
 
 #endif // !defined(PROP_PAGE_H)

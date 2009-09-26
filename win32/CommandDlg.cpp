@@ -167,12 +167,12 @@ bool CommandDlg::handleInitDialog() {
 	{
 		ButtonPtr button = grid->addChild(Button::Seed(T_("Help")));
 		button->setHelpId(IDH_DCPP_HELP);
-		button->onClicked(std::tr1::bind(&WinUtil::help, handle(), IDH_USER_COMMAND));
+		button->onClicked(std::tr1::bind(&WinUtil::help, this, IDH_USER_COMMAND));
 	}
 
 	if(bOpenHelp) {
 		// launch the help file, instead of having the help in the dialog
-		WinUtil::help(handle(), IDH_USER_COMMAND);
+		WinUtil::help(this, IDH_USER_COMMAND);
 	}
 
 	if(type == UserCommand::TYPE_SEPARATOR) {

@@ -39,7 +39,6 @@
 #include "../aspects/AspectColor.h"
 #include "../aspects/AspectClickable.h"
 #include "../aspects/AspectDblClickable.h"
-#include "../aspects/AspectFont.h"
 #include "../aspects/AspectPainting.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
@@ -53,7 +52,6 @@ class Button :
 	public AspectColor<Button>,
 	public AspectColorCtlImpl<Button>,
 	public AspectDblClickable<Button>,
-	public AspectFont< Button >,
 	public AspectPainting< Button >,
 	public AspectText< Button >
 {

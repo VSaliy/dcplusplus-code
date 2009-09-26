@@ -71,8 +71,6 @@ IDH_TABSPAGE=settings_tabs.html
 #include resource.h
 
 [TEXT POPUPS]
-cshelp.h
-cshelp.txt
 
 [INFOTYPES]
 

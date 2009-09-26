@@ -37,7 +37,6 @@
 #include "../aspects/AspectContainer.h"
 #include "../aspects/AspectDragDrop.h"
 #include "../aspects/AspectEraseBackground.h"
-#include "../aspects/AspectFont.h"
 #include "../aspects/AspectPainting.h"
 #include "../aspects/AspectText.h"
 #include "../resources/Icon.h"
@@ -54,7 +53,6 @@ class Composite :
 	public AspectContainer<Composite>,
 	public AspectDragDrop<Composite>,
 	public AspectEraseBackground<Composite>,
-	public AspectFont<Composite>,
 	public AspectPainting<Composite>,
 	public AspectText<Composite>
 {

@@ -140,6 +140,13 @@ public:
 	  */
 	Point getClientAreaSize() const;
 
+	/// Fills a Point with the size of text to be drawn in the Widget's font.
+	/** getTextSize determines the height and width that text will take. <br>
+	  * This is useful if you want to allocate enough space to fit known text. <br>
+	  * It accounts for the set font too.
+	  */
+	Point getTextSize(const tstring& text);
+
 	/// Brings the widget to the front
 	/** Makes the widget become the front most widget meaning it will not be obscured
 	  * by other widgets which are contained in the same container widget. <br>
@@ -274,6 +281,19 @@ Point AspectSizable< WidgetType >::getClientAreaSize() const
 	RECT rc;
 	::GetClientRect( H(), & rc );
 	return Point( rc.right, rc.bottom );
+}
+
+template< class WidgetType >
+Point AspectSizable< WidgetType >
+::getTextSize( const tstring & text )
+{
+	UpdateCanvas c(&W());
+	c.selectFont(W().getFont());
+
+	Rectangle rect;
+	c.drawText(text, rect, DT_CALCRECT | DT_NOPREFIX);
+
+	return rect.size;
 }
 
 template< class WidgetType >

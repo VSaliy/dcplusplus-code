@@ -106,7 +106,7 @@ items(0)
 		cs.caption = T_("&Help");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_DCPP_HELP);
-		button->onClicked(std::tr1::bind(&WinUtil::help, handle(), IDH_ADL_SEARCH));
+		button->onClicked(std::tr1::bind(&WinUtil::help, this, IDH_ADL_SEARCH));
 		addWidget(button);
 	}
 

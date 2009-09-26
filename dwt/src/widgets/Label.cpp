@@ -71,12 +71,7 @@ Point Label::getPreferedSize() {
 		return getSize();
 	}
 
-	UpdateCanvas c(this);
-	c.selectFont(getFont());
-
-	Rectangle rect;
-	c.drawText(getText(), rect, DT_CALCRECT | DT_NOPREFIX);
-	return rect.size;
+	return getTextSize(getText());
 }
 
 }

@@ -19,7 +19,7 @@ array_remove(static_HTMLs, 'fdl.html')
 # cshelp.h is included in resource.h, which in turn is included in the DC++
 # source; hence, we generate it even when help files are not being compiled.
 from gen_cshelp import gen_cshelp
-env.Command('cshelp.h', static_HTMLs, Action(lambda target, source, env: gen_cshelp(target, source, 0), 'Generating $TARGET'))
+env.Command('cshelp.h', static_HTMLs, Action(lambda target, source, env: gen_cshelp(target, source), 'Generating $TARGET'))
 env.Depends('resource.h', 'cshelp.h')
 
 if not env['help']:
@@ -138,14 +138,14 @@ def gen_CHM(target, source, env):
 		if ret:
 			return ret
 
-	# generate context-sensitive help files (cshelp.h, cshelp.txt, emhelp.txt)
-	print 'Generating context-sensitive help files in ' + build_dir + ' as well as ' + str(target[1])
-	gen_cshelp([build_path + 'cshelp.h', build_path + 'cshelp.txt', str(target[1])], Glob(build_path + '*.html'), lcid)
+	# generate context-sensitive help files (cshelp.h and cshelp.txt)
+	print 'Generating ' + build_path + 'cshelp.h and ' + str(target[1])
+	gen_cshelp([build_path + 'cshelp.h', str(target[1])], Glob(build_path + '*.html'))
 
 	# make sure the generated cshelp.h is the same as the vanilla one
 	if not filecmp.cmp(build_path + 'cshelp.h', 'help/cshelp.h'):
 		print 'The generated cshelp.h file is not the same as the vanilla one; ' + str(target[0]) + ' won\'t be compiled.'
-		env.Execute(Delete(target[1])) # remove the wrong emhelp.txt
+		env.Execute(Delete(target[1])) # remove the wrong cshelp.txt
 		return 1
 
 	if lcid != 0x409:
@@ -206,7 +206,7 @@ for po_node in po_list:
 	env.Precious(env.PoBuild(po_node, potfile))
 	if hasHHC:
 		target_path = dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/'
-		targets = [target_path + 'DCPlusPlus.chm', target_path + 'emhelp.txt']
+		targets = [target_path + 'DCPlusPlus.chm', target_path + 'cshelp.txt']
 		env.Depends(targets, CHM_dependencies)
 		env.CHMBuild(targets, [CHM_sources, po_node])
 
@@ -216,7 +216,7 @@ if not hasHHC:
 
 # compile the main (untranslated) help file
 target_path = dev.get_build_path('bin') + '/'
-targets = [target_path + 'DCPlusPlus.chm', target_path + 'emhelp.txt']
+targets = [target_path + 'DCPlusPlus.chm', target_path + 'cshelp.txt']
 env.Depends(targets, CHM_dependencies)
 ret = env.CHMBuild(targets, [CHM_sources, potfile])
 
