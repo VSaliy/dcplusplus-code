@@ -719,7 +719,7 @@ public:
 		}
 
 		// create the popup container (invisible at first)
-		Seed cs(WS_POPUP, WS_EX_CLIENTEDGE);
+		Seed cs(WS_POPUP | WS_BORDER, WS_EX_CLIENTEDGE);
 		cs.location = dwt::Rectangle(pt, dwt::Point()); // set the position but not the size
 		cs.background = (HBRUSH)(COLOR_INFOBK + 1);
 		create(cs);
@@ -747,10 +747,18 @@ public:
 
 		// now that the label is correctly sized, resize the container window
 		dwt::Rectangle rect = label->getBounds(false);
-		rect.pos += margins + margins;
+		rect.pos -= margins;
 		rect.size += margins + margins;
 		rect.size.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
 		rect.size.y += ::GetSystemMetrics(SM_CYEDGE) * 2;
+
+		// make sure the window fits in within the screen
+		pt = getDesktopSize();
+		if(rect.right() > pt.x)
+			rect.pos.x -= rect.size.x;
+		if(rect.bottom() > pt.y)
+			rect.pos.y -= rect.size.y;
+
 		setBounds(rect);
 
 		// go live!
