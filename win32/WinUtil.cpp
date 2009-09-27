@@ -701,20 +701,17 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 	return true;
 }
 
-bool closeHelpWindow(dwt::WindowPtr window) {
-	::ReleaseCapture();
-	window->close(true);
-	return true;
-}
+class HelpPopup : public Container {
+	typedef Container BaseType;
 
-void WinUtil::help(dwt::Control* widget, unsigned id) {
-	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
-		// context-sensitive help; display a tooltip
-
+public:
+	explicit HelpPopup(dwt::Control* parent, const tstring& text) :
+	BaseType(parent, dwt::NormalDispatcher::newClass<HelpPopup>())
+	{
 		// where to position the tooltip
 		dwt::Point pt;
-		if(widget->isKeyPressed(VK_F1)) {
-			dwt::Rectangle rect = widget->getBounds(false);
+		if(isKeyPressed(VK_F1)) {
+			dwt::Rectangle rect = parent->getBounds(false);
 			pt.x = rect.left() + rect.width() / 2;
 			pt.y = rect.top();
 		} else {
@@ -722,38 +719,64 @@ void WinUtil::help(dwt::Control* widget, unsigned id) {
 		}
 
 		// create the popup container (invisible at first)
-		dwt::Window::Seed ws;
-		ws.style = WS_POPUP;
-		ws.exStyle = WS_EX_CLIENTEDGE;
-		ws.location = dwt::Rectangle(pt, dwt::Point()); // set the position but not the size
-		dwt::WindowPtr window = dwt::WidgetCreator<dwt::Window>::create(widget, ws);
-		window->onLeftMouseDown(std::tr1::bind(&closeHelpWindow, window));
-		window->onKeyDown(std::tr1::bind(&closeHelpWindow, window));
+		Seed cs(WS_POPUP, WS_EX_CLIENTEDGE);
+		cs.location = dwt::Rectangle(pt, dwt::Point()); // set the position but not the size
+		cs.background = (HBRUSH)(COLOR_INFOBK + 1);
+		create(cs);
+		onLeftMouseDown(std::tr1::bind(&HelpPopup::terminate, this));
+		onKeyDown(std::tr1::bind(&HelpPopup::terminate, this));
+		onHelp(std::tr1::bind(&HelpPopup::handleHelp, this));
 
-		tstring text = Text::toT(getHelpText(id));
-
+		// create the inner label
 		Label::Seed ls(text);
-		ls.font = font;
-		LabelPtr label = window->addChild(ls);
+		ls.font = WinUtil::font;
+		LabelPtr label = addChild(ls);
 		label->setColor(::GetSysColor(COLOR_INFOTEXT), ::GetSysColor(COLOR_INFOBK));
 		{
 			// let Windows figure out what the best size is
 			dwt::UpdateCanvas canvas(label);
-			canvas.selectFont(font);
+			canvas.selectFont(WinUtil::font);
 			dwt::Rectangle rect(dwt::Point(400, 0));
 			canvas.drawText(text, rect, DT_CALCRECT | DT_NOPREFIX | DT_WORDBREAK);
+
+			// take margins into account
+			rect.pos += margins;
+
 			label->layout(rect);
 		}
 
 		// now that the label is correctly sized, resize the container window
 		dwt::Rectangle rect = label->getBounds(false);
+		rect.pos += margins + margins;
+		rect.size += margins + margins;
 		rect.size.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
 		rect.size.y += ::GetSystemMetrics(SM_CYEDGE) * 2;
-		window->setBounds(rect);
+		setBounds(rect);
 
-		window->setVisible(true);
-		::SetCapture(window->handle());
+		// go live!
+		setVisible(true);
+		::SetCapture(handle());
+	}
 
+private:
+	bool terminate() {
+		::ReleaseCapture();
+		close(true);
+		return true;
+	}
+
+	void handleHelp() {
+		// someone pressed F1 while the popup was shown... do nothing.
+	}
+
+	static const dwt::Point margins;
+};
+const dwt::Point HelpPopup::margins(6, 6);
+
+void WinUtil::help(dwt::Control* widget, unsigned id) {
+	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
+		// context-sensitive help
+		new HelpPopup(widget, Text::toT(getHelpText(id)));
 	} else {
 		if(id < IDH_BEGIN || id > IDH_END)
 			id = IDH_INDEX;
