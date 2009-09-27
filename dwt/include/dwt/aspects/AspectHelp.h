@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   All rights reserved.
 
@@ -46,7 +46,10 @@ class AspectHelp {
 
 	struct HelpDispatcher : Dispatchers::Base<void (WidgetType*, unsigned)> {
 		typedef Dispatchers::Base<void (WidgetType*, unsigned)> BaseType;
-		HelpDispatcher(const typename BaseType::F& f) : BaseType(f) { }
+		HelpDispatcher(const typename BaseType::F& f, const WidgetType* const widget_) :
+		BaseType(f),
+		widget(widget_)
+		{ }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(msg.lParam);
@@ -54,6 +57,10 @@ class AspectHelp {
 				return false;
 
 			HWND hWnd = reinterpret_cast<HWND>(lphi->hItemHandle);
+			// make sure this handle is ours
+			if(!::IsChild(widget->handle(), hWnd))
+				return false;
+
 			WidgetType* w = hwnd_cast<WidgetType*>(hWnd);
 			if(!w)
 				return false;
@@ -66,6 +73,10 @@ class AspectHelp {
 			ret = TRUE;
 			return true;
 		}
+
+	private:
+		/// the widget that catches WM_HELP messages (not necessarily the one that sent them)
+		const WidgetType* const widget;
 	};
 
 public:
@@ -78,7 +89,7 @@ public:
 	}
 
 	void onHelp(const typename HelpDispatcher::F& f) {
-		W().addCallback(Message(WM_HELP), HelpDispatcher(f));
+		W().addCallback(Message(WM_HELP), HelpDispatcher(f, &W()));
 	}
 
 private:
