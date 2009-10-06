@@ -40,6 +40,7 @@ autoQueue(0),
 search(_search)
 {
 	onInitDialog(std::tr1::bind(&ADLSProperties::handleInitDialog, this));
+	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 }
 
 ADLSProperties::~ADLSProperties() {

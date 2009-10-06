@@ -41,3 +41,17 @@ def get_win_cp(lcid):
 	if buf.value != 0:
 		return 'cp' + str(buf.value)
 	return 'cp1252'
+
+def html_to_rtf(string):
+	# escape chars: \, {, }
+	# <br/> -> \line + remove surrounding spaces + append a space
+	# remove double new lines + remove new lines at beginning and at end
+	# <b>...</b> -> {\b ...}
+	# <i>...</i> -> {\i ...}
+	# <u>...</u> -> {\ul ...}
+	import re
+	line = r'\\line '
+	return re.sub('<([bi])>', r'{\\\1 ', re.sub('</[biu]>', '}',
+		re.sub('^(' + line + ')', '', re.sub('(' + line + ')$', '',
+		re.sub('(' + line + ')+', line, re.sub('\s*<br ?/?>\s*', line,
+		string.replace('\\', '\\\\').replace('{', '\\{').replace('}', '\\}'))))))).replace('<u>', '{\\ul ')

@@ -35,7 +35,7 @@
 * [ADC] Support the TS param of MSG (poy)
 * Convert language codes to real names in settings (poy)
 * Improve user command support in ADC hubs (poy)
-* Embedded context-sensitive help in settings (poy)
+* Improve context-sensitive help (poy)
 * Fix Ctrl+Shift+Tab (poy)
 
 -- 0.75 2009-03-06 --

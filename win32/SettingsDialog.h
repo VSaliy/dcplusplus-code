@@ -37,7 +37,7 @@ private:
 
 	GridPtr grid;
 	TreePtr pageTree;
-	TextBoxPtr help;
+	RichTextBoxPtr help;
 
 	HTREEITEM addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent = TVI_ROOT);
 	void updateTitle();
