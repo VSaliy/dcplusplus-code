@@ -82,6 +82,6 @@ void WindowsPage::layout(const dwt::Rectangle& rc) {
 }
 
 void WindowsPage::write() {
-	PropPage::write(optionItems, options);
-	PropPage::write(confirmItems, confirm);
+	PropPage::write(options);
+	PropPage::write(confirm);
 }

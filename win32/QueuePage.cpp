@@ -152,7 +152,7 @@ void QueuePage::layout(const dwt::Rectangle& rc) {
 
 void QueuePage::write() {
 	PropPage::write(items);
-	PropPage::write(optionItems, otherOptions);
+	PropPage::write(otherOptions);
 
 	SettingsManager* settings = SettingsManager::getInstance();
 	if(SETTING(AUTODROP_INTERVAL) < 1)

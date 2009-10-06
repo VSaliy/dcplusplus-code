@@ -148,7 +148,7 @@ void AppearancePage::layout(const dwt::Rectangle& rc) {
 void AppearancePage::write()
 {
 	PropPage::write(items);
-	PropPage::write(listItems, options);
+	PropPage::write(options);
 
 	tstring lang = languages->getText();
 	size_t col = lang.find(':');

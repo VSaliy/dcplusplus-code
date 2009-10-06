@@ -86,5 +86,5 @@ void TabsPage::layout(const dwt::Rectangle& rc) {
 
 void TabsPage::write() {
 	PropPage::write(items);
-	PropPage::write(listItems, options);
+	PropPage::write(options);
 }

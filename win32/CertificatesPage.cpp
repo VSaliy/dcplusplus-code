@@ -111,7 +111,7 @@ void CertificatesPage::layout(const dwt::Rectangle& rc) {
 
 void CertificatesPage::write() {
 	PropPage::write(items);
-	PropPage::write(listItems, options);
+	PropPage::write(options);
 }
 
 void CertificatesPage::handleGenerateCertsClicked() {

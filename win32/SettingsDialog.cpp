@@ -167,12 +167,16 @@ bool SettingsDialog::initDialog() {
 BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 	SettingsDialog* dialog = reinterpret_cast<SettingsDialog*>(lParam);
 	dwt::Control* widget = dwt::hwnd_cast<dwt::Control*>(hwnd);
-	if(widget && widget != dialog->help)
-		widget->onFocus(std::tr1::bind(&SettingsDialog::handleFocus, dialog, widget));
+	if(widget && widget != dialog->help) {
+		widget->onFocus(std::tr1::bind(&SettingsDialog::handleChildHelp, dialog, widget));
+		TablePtr table = dynamic_cast<TablePtr>(widget);
+		if(table)
+			table->onSelectionChanged(std::tr1::bind(&SettingsDialog::handleChildHelp, dialog, widget));
+	}
 	return TRUE;
 }
 
-void SettingsDialog::handleFocus(dwt::Control* widget) {
+void SettingsDialog::handleChildHelp(dwt::Control* widget) {
 	help->setText(Text::toT(WinUtil::getHelpText(widget->getHelpId())));
 }
 

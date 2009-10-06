@@ -113,7 +113,7 @@ void LogPage::layout(const dwt::Rectangle& rc) {
 
 void LogPage::write() {
 	PropPage::write(items);
-	PropPage::write(listItems, options);
+	PropPage::write(options);
 
 	const string& s = SETTING(LOG_DIRECTORY);
 	if(s.length() > 0 && s[s.length() - 1] != '\\') {

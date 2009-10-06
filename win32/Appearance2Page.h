@@ -55,8 +55,9 @@ private:
 	void handleTextClicked();
 	void handleULClicked();
 	void handleDLClicked();
-	void handleSoundsHelp(unsigned id);
 	void handleSelectionChanged();
+	void handleSoundsHelp(unsigned id);
+	void handleSoundsHelpId(unsigned& id);
 	void handleBrowseClicked();
 
 	void setBeepEnabled(bool enabled);
