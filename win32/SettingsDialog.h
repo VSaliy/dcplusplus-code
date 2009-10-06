@@ -31,6 +31,8 @@ public:
 	virtual ~SettingsDialog();
 
 private:
+	friend class PropPage;
+
 	typedef std::vector<PropPage*> PageList;
 	PageList pages;
 	PropPage* currentPage;
@@ -47,7 +49,7 @@ private:
 
 	bool initDialog();
 	static BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
-	void handleFocus(dwt::Control* widget);
+	void handleChildHelp(dwt::Control* widget);
 	void handleHelp(dwt::Control* widget, unsigned id);
 	void handleSelectionChanged();
 	void handleOKClicked();

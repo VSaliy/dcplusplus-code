@@ -68,5 +68,5 @@ void AdvancedPage::layout(const dwt::Rectangle& rc) {
 }
 
 void AdvancedPage::write() {
-	PropPage::write(listItems, options);
+	PropPage::write(options);
 }

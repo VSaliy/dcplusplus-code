@@ -79,13 +79,28 @@ class AspectHelp {
 		const WidgetType* const widget;
 	};
 
+	typedef std::tr1::function<void (unsigned&)> id_function_type;
+
 public:
 	unsigned getHelpId() {
-		return ::GetWindowContextHelpId(H());
+		unsigned ret = ::GetWindowContextHelpId(H());
+		if(id_function)
+			id_function(ret);
+		return ret;
 	}
 
 	void setHelpId(unsigned id) {
 		::SetWindowContextHelpId(H(), id);
+	}
+
+	/**
+	* set a callback function that can modify the id returned by getHelpId. note that the
+	* dispatcher used by onHelp doesn't call getHelpId, so this won't affect messages dispatched
+	* from WM_HELP. in order to modify help ids dispatched via the function defined in onHelp, use
+	* helpImpl.
+	*/
+	void setHelpId(const id_function_type& f) {
+		id_function = f;
 	}
 
 	void onHelp(const typename HelpDispatcher::F& f) {
@@ -93,9 +108,15 @@ public:
 	}
 
 private:
+	id_function_type id_function;
+
+	/** implement this in the derived widget in order to change the help id before it is
+	* dispatched. if you are not using onHelp to define callbacks but simply calling getHelpId when
+	* necessary, then it is the setHelpId overload which takes a function as input that you are
+	* looking for.
+	*/
 	virtual void helpImpl(unsigned& id) {
 		// empty on purpose.
-		// implement this in your widget if you wish to change the help id before it is dispatched
 	}
 };
 

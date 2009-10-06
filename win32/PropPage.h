@@ -55,23 +55,21 @@ public:
 		unsigned helpId;
 	};
 
-	struct TextItem {
-		WORD itemID;
-		const char* stringToTranslate;
-	};
-
 protected:
 	void read(const ItemList& items);
 	void read(const ListItem* listItems, TablePtr list);
 
 	void write(const ItemList& items);
-	void write(const ListItem* listItems, TablePtr list);
+	void write(TablePtr list);
 
 	void handleBrowseDir(const Item& i);
 	void handleBrowseFile(const Item& i);
 
 private:
-	void handleListHelp(TablePtr list, unsigned id, const ListItem* listItems);
+	unordered_map<TablePtr, const ListItem*> lists;
+
+	void handleListHelp(TablePtr list, unsigned id);
+	void handleListHelpId(TablePtr list, unsigned& id);
 };
 
 #endif // !defined(PROP_PAGE_H)

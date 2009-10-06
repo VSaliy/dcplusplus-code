@@ -61,6 +61,7 @@ void PropPage::read(const ItemList& items) {
 
 void PropPage::read(const ListItem* listItems, TablePtr list) {
 	dcassert(listItems && list);
+	lists[list] = listItems;
 
 	list->createColumns(TStringList(1));
 
@@ -73,7 +74,8 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 
 	list->setColumnWidth(0, LVSCW_AUTOSIZE);
 
-	list->onHelp(std::tr1::bind(&PropPage::handleListHelp, this, list, _2, listItems));
+	list->onHelp(std::tr1::bind(&PropPage::handleListHelp, this, list, _2));
+	list->setHelpId(std::tr1::bind(&PropPage::handleListHelpId, this, list, _1));
 }
 
 void PropPage::write(const ItemList& items) {
@@ -95,8 +97,9 @@ void PropPage::write(const ItemList& items) {
 	}
 }
 
-void PropPage::write(const ListItem* listItems, TablePtr list) {
-	dcassert(listItems && list);
+void PropPage::write(TablePtr list) {
+	dcassert(list);
+	const ListItem* listItems = lists[list];
 	SettingsManager* settings = SettingsManager::getInstance();
 	for(size_t i = 0; listItems[i].setting != 0; ++i)
 		settings->set(SettingsManager::IntSetting(listItems[i].setting), list->isChecked(i));
@@ -120,12 +123,21 @@ void PropPage::handleBrowseFile(const Item& i) {
 		box->setText(target);
 }
 
-void PropPage::handleListHelp(TablePtr list, unsigned id, const ListItem* listItems) {
+void PropPage::handleListHelp(TablePtr list, unsigned id) {
 	// we have the help id of the whole list-view; convert to the one of the specific option the user wants help for
 	int item =
 		isKeyPressed(VK_F1) ? list->getSelected() :
 		list->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
+	const ListItem* listItems = lists[list];
 	if(item >= 0 && listItems[item].helpId)
 		id = listItems[item].helpId;
 	WinUtil::help(list, id);
+}
+
+void PropPage::handleListHelpId(TablePtr list, unsigned& id) {
+	// we have the help id of the whole list-view; convert to the one of the specific option the user wants help for
+	int item = list->getSelected();
+	const ListItem* listItems = lists[list];
+	if(item >= 0 && listItems[item].helpId)
+		id = listItems[item].helpId;
 }

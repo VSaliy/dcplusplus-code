@@ -129,8 +129,10 @@ oldSelection(-1)
 
 	saveSoundOptions();
 
-	sounds->onHelp(std::tr1::bind(&Appearance2Page::handleSoundsHelp, this, _2));
 	sounds->onSelectionChanged(std::tr1::bind(&Appearance2Page::handleSelectionChanged, this));
+
+	sounds->onHelp(std::tr1::bind(&Appearance2Page::handleSoundsHelp, this, _2));
+	sounds->setHelpId(std::tr1::bind(&Appearance2Page::handleSoundsHelpId, this, _1));
 }
 
 Appearance2Page::~Appearance2Page() {
@@ -195,10 +197,19 @@ void Appearance2Page::handleDLClicked() {
 
 void Appearance2Page::handleSoundsHelp(unsigned id) {
 	// same as PropPage::handleListHelp
-	int item = sounds->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
+	int item =
+		isKeyPressed(VK_F1) ? sounds->getSelected() :
+		sounds->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
 	if(item >= 0 && soundOptions[item].helpId)
 		id = soundOptions[item].helpId;
 	WinUtil::help(sounds, id);
+}
+
+void Appearance2Page::handleSoundsHelpId(unsigned& id) {
+	// same as PropPage::handleListHelpId
+	int item = sounds->getSelected();
+	if(item >= 0 && soundOptions[item].helpId)
+		id = soundOptions[item].helpId;
 }
 
 void Appearance2Page::handleSelectionChanged() {
