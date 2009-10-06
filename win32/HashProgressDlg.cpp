@@ -39,6 +39,7 @@ pauseResume(0),
 autoClose(aAutoClose)
 {
 	onInitDialog(std::tr1::bind(&HashProgressDlg::handleInitDialog, this));
+	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 }
 
 HashProgressDlg::~HashProgressDlg() {

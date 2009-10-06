@@ -52,11 +52,17 @@ help(0)
 }
 
 int SettingsDialog::run() {
-	create(Seed(dwt::Point(653, 480), DS_CONTEXTHELP));
+	create(Seed(dwt::Point(660, 540), DS_CONTEXTHELP));
 	return show();
 }
 
 SettingsDialog::~SettingsDialog() {
+}
+
+static LRESULT helpDlgCode(WPARAM wParam) {
+	if(wParam == VK_TAB || wParam == VK_RETURN)
+		return 0;
+	return DLGC_WANTMESSAGE;
 }
 
 bool SettingsDialog::initDialog() {
@@ -117,11 +123,13 @@ bool SettingsDialog::initDialog() {
 	}
 
 	{
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
-		seed.style &= ~ES_AUTOHSCROLL;
-		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_READONLY;
+		RichTextBox::Seed seed;
+		seed.style |= ES_READONLY | ES_SUNKEN;
 		seed.lines = 6;
+		seed.foregroundColor = ::GetSysColor(COLOR_WINDOWTEXT);
+		seed.backgroundColor = ::GetSysColor(COLOR_3DFACE);
 		help = grid->addChild(seed);
+		help->onRaw(std::tr1::bind(&helpDlgCode, _1), dwt::Message(WM_GETDLGCODE));
 	}
 
 	{

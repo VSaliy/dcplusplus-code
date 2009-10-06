@@ -38,6 +38,7 @@ userDescription(0),
 entry(_entry)
 {
 	onInitDialog(std::tr1::bind(&FavHubProperties::handleInitDialog, this));
+	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 }
 
 FavHubProperties::~FavHubProperties() {

@@ -58,7 +58,7 @@ class AspectHelp {
 
 			HWND hWnd = reinterpret_cast<HWND>(lphi->hItemHandle);
 			// make sure this handle is ours
-			if(!::IsChild(widget->handle(), hWnd))
+			if(hWnd != widget->handle() && !::IsChild(widget->handle(), hWnd))
 				return false;
 
 			WidgetType* w = hwnd_cast<WidgetType*>(hWnd);

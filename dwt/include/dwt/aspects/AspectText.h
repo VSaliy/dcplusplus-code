@@ -69,7 +69,7 @@ public:
 	  * note: the caller should make sure the string is correctly formatted for the current context
 	  * (eg, make sure there are no new lines in tab controls) - DWT won't do any runtime checking.
 	  */
-	void setText( const tstring & txt );
+	virtual void setText( const tstring & txt );
 
 	/// Gets the text of the AspectText realizing class
 	/** The Return value is the text of the realizing class.

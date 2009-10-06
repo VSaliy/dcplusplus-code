@@ -119,6 +119,8 @@ public:
 
 	tstring textUnderCursor(const ScreenCoordinate& p);
 
+	void setText(const tstring& txt);
+
 	/// Appends text to the richtext box
 	/** The txt parameter is the new text to append to the text box.
 	  */
@@ -130,19 +132,13 @@ public:
 
 	void clearCurrentNeedle();
 
+	static std::string escapeUnicode(const tstring& str);
+	/// escape Rich Edit control chars: {, }, and \, as well as \n which becomes \line.
+	static tstring rtfEscape(const tstring& str);
+
 protected:
 	tstring currentNeedle;		// search in chat window
 	int currentNeedlePos;		// search in chat window
-
-	LRESULT onUnsuppRtf(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled);
-
-	int fixupLineEndings(tstring::const_iterator begin, tstring::const_iterator end,
-		tstring::difference_type ibo) const;
-
-	typedef boost::iterator_range<boost::range_const_iterator<tstring>::type> tstring_range;
-
-	std::string static unicodeEscapeFormatter(const tstring_range& match);
-	std::string escapeUnicode(const tstring& str);
 
 	// Constructor Taking pointer to parent
 	explicit RichTextBox( dwt::Widget * parent );
@@ -150,11 +146,24 @@ protected:
 	// Protected to avoid direct instantiation, you can inherit and use
 	// WidgetFactory class which is friend
 	virtual ~RichTextBox() { }
+
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
 	static Dispatcher& makeDispatcher();
+
+	LRESULT onUnsuppRtf(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled);
+
+	int fixupLineEndings(tstring::const_iterator begin, tstring::const_iterator end,
+		tstring::difference_type ibo) const;
+
+	typedef boost::iterator_range<boost::range_const_iterator<tstring>::type> tstring_range;
+	static std::string unicodeEscapeFormatter(const tstring_range& match);
+	static tstring rtfEscapeFormatter(const tstring_range& match);
+
+	void setText(const std::string& txt);
+	void setText_(const std::string& txt);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

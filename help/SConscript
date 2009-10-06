@@ -138,14 +138,14 @@ def gen_CHM(target, source, env):
 		if ret:
 			return ret
 
-	# generate context-sensitive help files (cshelp.h and cshelp.txt)
+	# generate context-sensitive help files (cshelp.h and cshelp.rtf)
 	print 'Generating ' + build_path + 'cshelp.h and ' + str(target[1])
 	gen_cshelp([build_path + 'cshelp.h', str(target[1])], Glob(build_path + '*.html'))
 
 	# make sure the generated cshelp.h is the same as the vanilla one
 	if not filecmp.cmp(build_path + 'cshelp.h', 'help/cshelp.h'):
 		print 'The generated cshelp.h file is not the same as the vanilla one; ' + str(target[0]) + ' won\'t be compiled.'
-		env.Execute(Delete(target[1])) # remove the wrong cshelp.txt
+		env.Execute(Delete(target[1])) # remove the wrong cshelp.rtf
 		return 1
 
 	if lcid != 0x409:
@@ -206,7 +206,7 @@ for po_node in po_list:
 	env.Precious(env.PoBuild(po_node, potfile))
 	if hasHHC:
 		target_path = dev.get_build_path('bin') + '/locale/' + os.path.basename(po_node.path).replace('.po', '') + '/help/'
-		targets = [target_path + 'DCPlusPlus.chm', target_path + 'cshelp.txt']
+		targets = [target_path + 'DCPlusPlus.chm', target_path + 'cshelp.rtf']
 		env.Depends(targets, CHM_dependencies)
 		env.CHMBuild(targets, [CHM_sources, po_node])
 
@@ -216,7 +216,7 @@ if not hasHHC:
 
 # compile the main (untranslated) help file
 target_path = dev.get_build_path('bin') + '/'
-targets = [target_path + 'DCPlusPlus.chm', target_path + 'cshelp.txt']
+targets = [target_path + 'DCPlusPlus.chm', target_path + 'cshelp.rtf']
 env.Depends(targets, CHM_dependencies)
 ret = env.CHMBuild(targets, [CHM_sources, potfile])
 

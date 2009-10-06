@@ -216,7 +216,7 @@ void WinUtil::init() {
 		// load up context-sensitive help texts
 		try {
 			helpTexts = StringTokenizer<string>(
-				File(Util::getFilePath(Text::fromT(helpPath)) + "cshelp.txt", File::READ, File::OPEN).read(),
+				File(Util::getFilePath(Text::fromT(helpPath)) + "cshelp.rtf", File::READ, File::OPEN).read(),
 				"\r\n").getTokens();
 		} catch(const FileException&) { }
 	}
@@ -705,8 +705,9 @@ class HelpPopup : public Container {
 	typedef Container BaseType;
 
 public:
-	explicit HelpPopup(dwt::Control* parent, const tstring& text) :
-	BaseType(parent, dwt::NormalDispatcher::newClass<HelpPopup>())
+	explicit HelpPopup(dwt::Control* parent, const tstring& text_) :
+	BaseType(parent, dwt::NormalDispatcher::newClass<HelpPopup>()),
+	text(text_)
 	{
 		// where to position the tooltip
 		dwt::Point pt;
@@ -727,33 +728,49 @@ public:
 		onKeyDown(std::tr1::bind(&HelpPopup::terminate, this));
 		onHelp(std::tr1::bind(&HelpPopup::handleHelp, this));
 
-		// create the inner label
-		Label::Seed ls(text);
-		ls.font = WinUtil::font;
-		LabelPtr label = addChild(ls);
-		label->setColor(::GetSysColor(COLOR_INFOTEXT), ::GetSysColor(COLOR_INFOBK));
+		// create the inner text control
+		ts = WinUtil::Seeds::richTextBox;
+		ts.style = WS_CHILD | WS_VISIBLE | ES_READONLY;
+		ts.exStyle = 0;
+		ts.location = dwt::Rectangle(margins, dwt::Point(maxWidth, 0));
+		ts.foregroundColor = ::GetSysColor(COLOR_INFOTEXT);
+		ts.backgroundColor = ::GetSysColor(COLOR_INFOBK);
+		createBox();
+	}
+
+private:
+	void createBox() {
+		box = addChild(ts);
+
+		// let the control figure out what the best size is
+		box->onRaw(std::tr1::bind(&HelpPopup::resize, this, _2), dwt::Message(WM_NOTIFY, EN_REQUESTRESIZE));
+		box->sendMessage(EM_SETEVENTMASK, 0, ENM_REQUESTRESIZE); ///@todo move to dwt
+		box->setText(text);
+	}
+
+	LRESULT resize(LPARAM lParam) {
 		{
-			// let Windows figure out what the best size is
-			dwt::UpdateCanvas canvas(label);
-			canvas.selectFont(WinUtil::font);
-			dwt::Rectangle rect(dwt::Point(400, 0));
-			canvas.drawText(text, rect, DT_CALCRECT | DT_NOPREFIX | DT_WORDBREAK);
+			dwt::Rectangle rect(reinterpret_cast<REQRESIZE*>(lParam)->rc);
+			if(rect.width() > maxWidth && (ts.style & ES_MULTILINE) != ES_MULTILINE) {
+				// can't add ES_MULTILINE at run time, so we create the control again
+				::DestroyWindow(box->handle());
+				ts.style |= ES_MULTILINE;
+				createBox();
+				return 0;
+			}
 
-			// take margins into account
-			rect.pos += margins;
-
-			label->layout(rect);
+			box->layout(rect);
 		}
 
-		// now that the label is correctly sized, resize the container window
-		dwt::Rectangle rect = label->getBounds(false);
+		// now that the text control is correctly sized, resize the container window
+		dwt::Rectangle rect = box->getBounds(false);
 		rect.pos -= margins;
 		rect.size += margins + margins;
 		rect.size.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
 		rect.size.y += ::GetSystemMetrics(SM_CYEDGE) * 2;
 
 		// make sure the window fits in within the screen
-		pt = getDesktopSize();
+		dwt::Point pt = getDesktopSize();
 		if(rect.right() > pt.x)
 			rect.pos.x -= rect.size.x;
 		if(rect.bottom() > pt.y)
@@ -764,9 +781,10 @@ public:
 		// go live!
 		setVisible(true);
 		::SetCapture(handle());
+
+		return 0;
 	}
 
-private:
 	bool terminate() {
 		::ReleaseCapture();
 		close(true);
@@ -778,6 +796,11 @@ private:
 	}
 
 	static const dwt::Point margins;
+	static const long maxWidth = 400;
+
+	RichTextBoxPtr box;
+	RichTextBox::Seed ts;
+	tstring text;
 };
 const dwt::Point HelpPopup::margins(6, 6);
 

@@ -25,14 +25,14 @@ class HoldRedraw {
 public:
 	HoldRedraw(Widget* w_, bool reallyHold = true) : w(w_) {
 		if(reallyHold) {
-			::SendMessage(w->handle(), WM_SETREDRAW, FALSE, 0);
+			w->sendMessage(WM_SETREDRAW, FALSE);
 		} else {
 			w = 0;
 		}
 	}
 	~HoldRedraw() {
 		if(w)
-			::SendMessage(w->handle(), WM_SETREDRAW, TRUE, 0);
+			w->sendMessage(WM_SETREDRAW, TRUE);
 	}
 private:
 	Widget* w;

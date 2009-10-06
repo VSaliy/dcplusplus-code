@@ -155,10 +155,28 @@ int RichTextBox::fixupLineEndings(tstring::const_iterator begin, tstring::const_
 		boost::lambda::var(cur) > ibo)) - begin;
 }
 
+void RichTextBox::setText(const std::string& txt) {
+	{
+		util::HoldRedraw hold(this);
+		setSelection();
+		setText_(txt);
+		sendMessage(WM_VSCROLL, SB_TOP);
+	}
+	redraw();
+}
+
+void RichTextBox::setText_(const std::string& txt) {
+	SETTEXTEX config = { ST_SELECTION, CP_ACP };
+	sendMessage(EM_SETTEXTEX, reinterpret_cast<WPARAM>(&config), reinterpret_cast<LPARAM>(txt.c_str()));
+}
+
+void RichTextBox::setText(const tstring& txt) {
+	setText("{\\urtf " + escapeUnicode(txt) + "}");
+}
+
 void RichTextBox::addText(const std::string & txt) {
-	SETTEXTEX config = {ST_SELECTION, CP_ACP};
 	setSelection(-1, -1);
-	sendMessage(EM_SETTEXTEX, reinterpret_cast< WPARAM >(&config), reinterpret_cast< LPARAM >(txt.c_str()));
+	setText_(txt);
 }
 
 void RichTextBox::addTextSteady( const tstring & txtRaw, std::size_t len ) {
@@ -271,6 +289,23 @@ std::string RichTextBox::escapeUnicode(const tstring& str) {
 	boost::find_format_all_copy(std::back_inserter(ret), str,
 		boost::first_finder(L"\x7f", std::greater<TCHAR>()), unicodeEscapeFormatter);
 	return ret;
+}
+
+tstring RichTextBox::rtfEscapeFormatter(const tstring_range& match) {
+	if(match.empty())
+		return tstring();
+	tstring s(1, *match.begin());
+	if (s == _T("\r")) return _T("");
+	if (s == _T("\n")) return _T("\\line\n");
+	return _T("\\") + s;
+}
+
+tstring RichTextBox::rtfEscape(const tstring& str) {
+	using boost::lambda::_1;
+	tstring escaped;
+	boost::find_format_all_copy(std::back_inserter(escaped), str,
+		boost::first_finder(L"\x7f", _1 == '{' || _1 == '}' || _1 == '\\' || _1 == '\n' || _1 == '\r'), rtfEscapeFormatter);
+	return escaped;
 }
 
 }

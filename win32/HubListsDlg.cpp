@@ -35,6 +35,7 @@ editBox(0),
 hubLists(0)
 {
 	onInitDialog(std::tr1::bind(&HubListsDlg::handleInitDialog, this));
+	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 }
 
 HubListsDlg::~HubListsDlg() {
