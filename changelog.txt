@@ -37,6 +37,7 @@
 * Improve user command support in ADC hubs (poy)
 * Improve context-sensitive help (poy)
 * Fix Ctrl+Shift+Tab (poy)
+* Update to boost 1.40
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
