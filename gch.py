@@ -54,9 +54,9 @@ GchBuilder = SCons.Builder.Builder(action = GchAction,
 
 
 def pch_emitter(target, source, env, emitter, gchstr):
-    if env.has_key(gchstr) and env[gchstr]:
-        emitter( target, source, env )
+    emitter(target, source, env)
 
+    if env.has_key(gchstr) and env[gchstr]:
         scanner = SCons.Scanner.C.CScanner()
         path = scanner.path(env)
 
