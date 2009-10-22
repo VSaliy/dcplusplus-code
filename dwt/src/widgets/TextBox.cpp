@@ -120,8 +120,8 @@ Point TextBoxBase::getPreferedSize() {
 	return ret;
 }
 
-bool TextBox::tryFire(const MSG& msg, LRESULT& retVal) {
-	if(BaseType::tryFire(msg, retVal))
+bool TextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
+	if(BaseType::handleMessage(msg, retVal))
 		return true;
 
 	if(msg.message == WM_GETDLGCODE) {

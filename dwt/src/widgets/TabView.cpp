@@ -562,8 +562,8 @@ int TabView::hitTest(const ScreenCoordinate& pt) {
 	return TabCtrl_HitTest(handle(), &tci);
 }
 
-bool TabView::tryFire( const MSG & msg, LRESULT & retVal ) {
-	bool handled = BaseType::tryFire(msg, retVal);
+bool TabView::handleMessage( const MSG & msg, LRESULT & retVal ) {
+	bool handled = BaseType::handleMessage(msg, retVal);
 
 	if(msg.message == WM_SIZE) {
 		// We need to let the tab control window proc handle this first, otherwise getUsableArea will not return
@@ -577,7 +577,7 @@ bool TabView::tryFire( const MSG & msg, LRESULT & retVal ) {
 
 	if(!handled && msg.message == WM_COMMAND && getActive()) {
 		// Forward commands to the active tab
-		handled = getActive()->tryFire(msg, retVal);
+		handled = getActive()->handleMessage(msg, retVal);
 	}
 
 	return handled;

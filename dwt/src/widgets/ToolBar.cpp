@@ -92,7 +92,7 @@ int ToolBar::hitTest(const ScreenCoordinate& pt) {
 	return sendMessage(TB_HITTEST, 0, reinterpret_cast<LPARAM>(&point));
 }
 
-bool ToolBar::tryFire( const MSG & msg, LRESULT & retVal ) {
+bool ToolBar::handleMessage( const MSG & msg, LRESULT & retVal ) {
 	if(msg.message == WM_COMMAND && msg.lParam == reinterpret_cast<LPARAM>(handle())) {
 		size_t id = LOWORD(msg.wParam);
 		if(id < commands.size()) {
@@ -103,7 +103,7 @@ bool ToolBar::tryFire( const MSG & msg, LRESULT & retVal ) {
 			}
 		}
 	}
-	return BaseType::tryFire(msg, retVal);
+	return BaseType::handleMessage(msg, retVal);
 }
 
 LRESULT ToolBar::handleDropDown(LPARAM lParam) {

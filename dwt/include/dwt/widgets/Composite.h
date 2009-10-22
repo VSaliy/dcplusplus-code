@@ -72,7 +72,6 @@ public:
 		IconPtr icon;
 		IconPtr smallIcon;
 		HBRUSH background;
-		LPCTSTR menuName;
 		HCURSOR cursor;
 
 		/// Fills with default parameters
@@ -84,8 +83,16 @@ public:
 protected:
 	friend class WidgetCreator<Composite>;
 
-	Composite(Widget* parent, Dispatcher& dispatcher) : BaseType(parent, dispatcher)
-	{};
+	HBRUSH background;
+
+	Composite(Widget* parent, Dispatcher& dispatcher) : BaseType(parent, dispatcher) {
+		onPainting(std::tr1::bind(&Composite::paint, this, _1));
+	};
+
+	void paint(PaintCanvas& canvas) {
+		RECT rc = canvas.getPaintRect();
+		::FillRect(canvas.handle(), &rc, background);
+	}
 
 private:
 	template<typename T>
@@ -95,12 +102,13 @@ private:
 inline Composite::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle) :
 	BaseType::Seed(style | WS_CLIPCHILDREN, exStyle, caption),
 	background(( HBRUSH )( COLOR_3DFACE + 1 )),
-	menuName(NULL),
 	cursor(::LoadCursor(0, IDC_ARROW))
 {
 }
 
 inline void Composite::create(const Seed& cs) {
+	// TODO icons, menus etc
+	background = cs.background;
 	BaseType::create(cs);
 
 	if(cs.icon)
@@ -109,8 +117,8 @@ inline void Composite::create(const Seed& cs) {
 		setClassParam(GCLP_HICONSM, cs.smallIcon->handle());
 	if(cs.background)
 		setClassParam(GCLP_HBRBACKGROUND, cs.background);
-	if(cs.menuName)
-		setClassParam(GCLP_MENUNAME, cs.menuName);
+	//if(cs.menuName)
+		//setClassParam(GCLP_MENUNAME, cs.menuName);
 	if(cs.cursor)
 		setClassParam(GCLP_HCURSOR, cs.cursor);
 }

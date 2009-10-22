@@ -172,7 +172,7 @@ protected:
 	virtual ~ToolBar()
 	{}
 
-	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
+	virtual bool handleMessage( const MSG & msg, LRESULT & retVal );
 
 private:
 	friend class ChainingDispatcher;

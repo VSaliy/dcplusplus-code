@@ -1039,10 +1039,10 @@ void MainWindow::handleRestore() {
 	}
 }
 
-bool MainWindow::tryFire(const MSG& msg, LRESULT& retVal) {
-	bool handled = dwt::Window::tryFire(msg, retVal);
+bool MainWindow::handleMessage(const MSG& msg, LRESULT& retVal) {
+	bool handled = dwt::Window::handleMessage(msg, retVal);
 	if(!handled && msg.message == WM_COMMAND && tabs) {
-		handled = tabs->tryFire(msg, retVal);
+		handled = tabs->handleMessage(msg, retVal);
 	}
 	return handled;
 }

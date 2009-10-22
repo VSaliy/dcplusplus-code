@@ -158,8 +158,8 @@ void Tree::select(const ScreenCoordinate& pt) {
 }
 
 /// Returns true if fired, else false
-bool Tree::tryFire( const MSG & msg, LRESULT & retVal ) {
-	bool handled = BaseType::tryFire(msg, retVal);
+bool Tree::handleMessage( const MSG & msg, LRESULT & retVal ) {
+	bool handled = BaseType::handleMessage(msg, retVal);
 	if(!handled && msg.message == WM_RBUTTONDOWN) {
 		// Tree view control does strange things to rbuttondown, preventing wm_contextmenu from reaching it
 		retVal = ::DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);

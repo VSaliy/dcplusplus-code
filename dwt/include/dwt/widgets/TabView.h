@@ -112,7 +112,7 @@ public:
 
 	void create( const Seed & cs = Seed() );
 
-	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
+	virtual bool handleMessage( const MSG & msg, LRESULT & retVal );
 
 protected:
 	explicit TabView(Widget* parent);

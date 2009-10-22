@@ -136,7 +136,7 @@ public:
 
 	void layout(Rectangle& r);
 
-	virtual bool tryFire(const MSG& msg, LRESULT& retVal);
+	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
 
 protected:
 	// Constructor Taking pointer to parent
