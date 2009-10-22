@@ -74,7 +74,7 @@ public:
 			}
 
 			LRESULT res = 0;
-			if(w->tryFire(msg, res)) {
+			if(w->handleMessage(msg, res)) {
 				return Policy::returnHandled(res, msg);
 			}
 		}

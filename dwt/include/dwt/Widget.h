@@ -51,7 +51,7 @@ using namespace std::tr1::placeholders;
 template<typename T>
 T hwnd_cast(HWND hwnd);
 
-/// Abstract Base class for all Widgets
+/// Base class for all Widgets
 /** Basically (almost) all Widgets derive from this class, this is the root class for
   * (almost) every single Widget type. <br>
   * This class contains the functionality that all Widgets must or should have
@@ -71,6 +71,8 @@ public:
 	  * retrieve the HWND of the Widget.
 	  */
 	HWND handle() const;
+
+	Dispatcher& getDispatcher();
 
 	/// Send a message to the Widget
 	/** If you need to be able to send a message to a Widget then use this function
@@ -93,7 +95,7 @@ public:
 	  * The second argument is a boolean indicating if you wish to add or remove the
 	  * style (if true add style, else remove)
 	  */
-	void addRemoveStyle( DWORD addStyle, bool add );
+	void addRemoveStyle(DWORD addStyle, bool add);
 
 	bool hasStyle(DWORD style);
 
@@ -102,7 +104,7 @@ public:
 	  * The second argument is a boolean indicating if you wish to add or remove the
 	  * style (if true add style, else remove)
 	  */
-	void addRemoveExStyle( DWORD addStyle, bool add );
+	void addRemoveExStyle(DWORD addStyle, bool add);
 
 	typedef std::tr1::function<bool(const MSG& msg, LRESULT& ret)> CallbackType;
 	typedef std::list<CallbackType> CallbackList;
@@ -121,34 +123,28 @@ public:
 	/** Run a function bound to this widget asynchronously */
 	void callAsync(const Application::Callback& f);
 
-	CallbackCollectionType & getCallbacks();
+	CallbackCollectionType &getCallbacks();
 
-	/// Returns true if fired, else false
-	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
+	/// Returns true if handled, else false
+	virtual bool handleMessage(const MSG &msg, LRESULT &retVal);
 
 	/** This will be called when it's time to delete the widget */
 	virtual void kill();
 
-	/// Subclasses the dialog item with the given dialog item id
-	/** Subclasses a dialog item, the id is the dialog item id from the resource
-	  * editor. <br>
-	  * Should normally not be called directly but rather called from e.g. one of the
-	  * creational functions found in the WidgetFactory class.
-	  */
-	void attach( unsigned id );
-
-	// TODO Probably move somewhere else
 	virtual Point getPreferedSize();
 
 	/** Layout the widget in the specified rectangle (in client coordinates) */
 	virtual void layout(const Rectangle& rect);
 
 	Point getWindowSize();
+
 	Point getClientSize();
 
-	Dispatcher& getDispatcher() { return dispatcher; }
+	/**
+	 * Attaches the instance to an existing window.
+	 */
+	void setHandle(HWND hwnd);
 
-	virtual void setHandle(HWND wnd);
 protected:
 	/** Most Widgets can override the creational parameters which sets the style and the
 	  * initial position of the Widget, those Widgets will take an object of this type to
@@ -191,11 +187,15 @@ protected:
 
 	virtual ~Widget();
 
-	// Creates the Widget, should not be called directly but overridden in the
-	// derived class - otherwise the wrong seed will be used
+	/**
+	 * Creates the Widget, should not be called directly but overridden in the
+	 * derived class - otherwise the wrong seed will be used.
+	 */
 	HWND create(const Seed & cs);
 
 	HWND getParentHandle();
+
+	void setParent(Widget* parent);
 
 	/// Convert "this" to an LPARAM, suitable to be converted back into a Widget*.
 	/// Note; it's better to use this function than casting to make sure that the correct this pointer is used
@@ -210,15 +210,14 @@ private:
 	template<typename T> friend T hwnd_cast(HWND hwnd);
 
 	// Contains the list of signals we're (this window) processing
-	CallbackCollectionType itsCallbacks;
+	CallbackCollectionType handlers;
 
-	Widget * itsParent;
-	HWND itsHandle;
+	HWND hwnd;
+
+	Widget *parent;
 
 	Dispatcher& dispatcher;
 };
-
-inline Widget::Widget(Widget* parent, Dispatcher& dispatcher_) : itsParent(parent), itsHandle(NULL), dispatcher(dispatcher_) { }
 
 inline LRESULT Widget::sendMessage( UINT msg, WPARAM wParam, LPARAM lParam) const {
 	return ::SendMessage(handle(), msg, wParam, lParam);
@@ -229,19 +228,23 @@ inline bool Widget::postMessage(UINT msg, WPARAM wParam, LPARAM lParam) const {
 }
 
 inline HWND Widget::handle() const {
-	return itsHandle;
+	return hwnd;
+}
+
+inline Dispatcher& Widget::getDispatcher() {
+	return dispatcher;
 }
 
 inline Widget* Widget::getParent() const {
-	return itsParent;
+	return parent;
 }
 
 inline bool Widget::hasStyle(DWORD style) {
-	return (::GetWindowLong(this->handle(), GWL_STYLE) & style) == style;
+	return (::GetWindowLong(handle(), GWL_STYLE) & style) == style;
 }
 
 inline Widget::CallbackCollectionType& Widget::getCallbacks() {
-	return itsCallbacks;
+	return handlers;
 }
 
 inline HWND Widget::getParentHandle() {
@@ -256,12 +259,6 @@ inline Widget* Widget::fromLParam(LPARAM lParam) {
 	return reinterpret_cast<Widget*>(lParam);
 }
 
-template<typename T>
-T hwnd_cast(HWND hwnd) {
-	Widget* w = reinterpret_cast<Widget*>(::GetWindowLongPtr(hwnd, GWLP_USERDATA));
-	return dynamic_cast<T>(w);
-}
-
 inline Point Widget::getWindowSize() {
 	RECT rc;
 	::GetWindowRect(handle(), &rc);
@@ -273,6 +270,12 @@ inline Point Widget::getClientSize() {
 	::GetClientRect(handle(), &rc);
 	// Left, top are always 0
 	return Point(rc.right, rc.bottom);
+}
+
+template<typename T>
+T hwnd_cast(HWND hwnd) {
+	Widget* w = reinterpret_cast<Widget*>(::GetWindowLongPtr(hwnd, GWLP_USERDATA));
+	return dynamic_cast<T>(w);
 }
 
 }

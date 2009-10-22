@@ -56,7 +56,7 @@ class AspectPainting
 		PaintDispatcher(const F& f_, Widget* widget_) : f(f_), widget(widget_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
-			PaintCanvas canvas( widget->handle() );
+			PaintCanvas canvas(widget);
 
 			f(canvas);
 			return true;
@@ -73,7 +73,7 @@ public:
 	  * Parameters passed is Canvas &
 	  */
 	void onPainting(const typename PaintDispatcher::F& f) {
-		W().addCallback(Message( WM_PAINT ), PaintDispatcher(f, &W()));
+		W().addCallback(Message(WM_PAINT), PaintDispatcher(f, &W()));
 	}
 
 protected:

@@ -48,12 +48,12 @@ void MDIFrame::create( const Seed& cs )
 	mdi = WidgetCreator<MDIParent>::create(this);
 }
 
-bool MDIFrame::tryFire(const MSG& msg, LRESULT& retVal) {
-	bool handled = BaseType::tryFire(msg, retVal);
+bool MDIFrame::handleMessage(const MSG& msg, LRESULT& retVal) {
+	bool handled = BaseType::handleMessage(msg, retVal);
 
 	if(!handled && msg.message == WM_COMMAND && getMDIParent()->getActive()) {
 		// Forward commands to the active tab
-		handled = getMDIParent()->getActive()->tryFire(msg, retVal);
+		handled = getMDIParent()->getActive()->handleMessage(msg, retVal);
 	}
 	return handled;
 }

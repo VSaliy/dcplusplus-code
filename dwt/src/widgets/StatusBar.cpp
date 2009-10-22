@@ -136,11 +136,11 @@ void StatusBar::layout(Rectangle& r) {
 	layoutSections(sz);
 }
 
-bool StatusBar::tryFire(const MSG& msg, LRESULT& retVal) {
+bool StatusBar::handleMessage(const MSG& msg, LRESULT& retVal) {
 	if(tip)
 		tip->relayEvent(msg);
 
-	return BaseType::tryFire(msg, retVal);
+	return BaseType::handleMessage(msg, retVal);
 }
 
 void StatusBar::layoutSections(const Point& sz) {

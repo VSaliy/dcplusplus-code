@@ -156,6 +156,7 @@ public:
 
 	HTREEITEM getNextSibling(HTREEITEM node);
 
+	using BaseType::getParent;
 	HTREEITEM getParent(HTREEITEM node);
 
 	HTREEITEM getRoot();
@@ -257,7 +258,7 @@ public:
 	}
 
 	/// Returns true if fired, else false
-	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
+	virtual bool handleMessage( const MSG & msg, LRESULT & retVal );
 
 	/// Actually creates the TreeView
 	/** You should call WidgetFactory::createTreeView if you instantiate class

@@ -98,7 +98,7 @@ public:
 
 	MDIParent* getParent() { return static_cast<MDIParent*>(BaseType::getParent()); }
 protected:
-	virtual bool tryFire(const MSG& msg, LRESULT& retVal);
+	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
 
 	// Protected since this Widget we HAVE to inherit from
 	explicit MDIChild( Widget * parent );

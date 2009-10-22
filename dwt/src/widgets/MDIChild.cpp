@@ -63,7 +63,7 @@ void MDIChild::createMDIChild( const Seed& cs ) {
 	redraw();
 }
 
-bool MDIChild::tryFire(const MSG& msg, LRESULT& retVal) {
+bool MDIChild::handleMessage(const MSG& msg, LRESULT& retVal) {
 	// Prevent some flicker...
     if(msg.message == WM_NCPAINT || msg.message == WM_SIZE)
     {
@@ -74,16 +74,16 @@ bool MDIChild::tryFire(const MSG& msg, LRESULT& retVal) {
 		    if(msg.message == WM_SIZE) // client area
 		    {
 			    if((msg.wParam == SIZE_MAXIMIZED || msg.wParam == SIZE_RESTORED) && getParent()->getActive() == this) // active and maximized
-			    	return BaseType::tryFire(msg, retVal);
+			    	return BaseType::handleMessage(msg, retVal);
 
 			    sendMessage(WM_SETREDRAW, FALSE);
-			    bool ret = BaseType::tryFire(msg, retVal);
+			    bool ret = BaseType::handleMessage(msg, retVal);
 			    sendMessage(WM_SETREDRAW, TRUE);
 			    return ret;
 		    }
 	    }
     }
-    return BaseType::tryFire(msg, retVal);
+    return BaseType::handleMessage(msg, retVal);
 }
 
 void MDIChild::activate() {

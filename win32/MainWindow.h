@@ -59,7 +59,7 @@ public:
 
 	dwt::TabViewPtr getTabView() { return tabs; }
 
-	virtual bool tryFire( const MSG & msg, LRESULT & retVal );
+	virtual bool handleMessage( const MSG & msg, LRESULT & retVal );
 
 	MainWindow();
 

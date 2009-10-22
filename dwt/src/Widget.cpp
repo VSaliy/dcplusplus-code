@@ -52,120 +52,92 @@
 
 namespace dwt {
 
-Widget::~Widget() {
+Widget::Widget(Widget* parent_, Dispatcher& dispatcher_) :
+	hwnd(NULL), parent(parent_), dispatcher(dispatcher_)
+{
 
 }
 
-// Subclasses a dialog item inside a dialog, usually used in combination with Dialog resources.
-void Widget::attach( unsigned id ) {
-	if ( !itsParent )
-		throw DWTException("Can't attach a Widget without a parent...");
-	HWND hWnd = ::GetDlgItem( itsParent->handle(), id );
-	if ( !hWnd )
-		throw Win32Exception("GetDlgItem failed.");
-	setHandle(hWnd);
+Widget::~Widget() {
+
 }
 
 void Widget::kill() {
 	delete this;
 }
 
-HWND Widget::create( const Seed & cs ) {
-	HWND hWnd = ::CreateWindowEx( cs.exStyle,
-		getDispatcher().getClassName(),
-		cs.caption.c_str(),
-		cs.style,
+HWND Widget::create(const Seed & cs) {
+	HWND hWnd = ::CreateWindowEx(cs.exStyle, getDispatcher().getClassName(), cs.caption.c_str(), cs.style,
 		cs.location.x(), cs.location.y(), cs.location.width(), cs.location.height(),
-		getParentHandle(),
-		cs.menuHandle,
-		::GetModuleHandle(NULL),
-		reinterpret_cast< LPVOID >( this )
-	);
-	if (!hWnd) {
+		getParentHandle(), cs.menuHandle, ::GetModuleHandle(NULL), reinterpret_cast<LPVOID>(this));
+
+	if(!hWnd) {
 		// The most common error is to forget WS_CHILD in the styles
-		throw Win32Exception( "CreateWindowEx in Widget::create fizzled ...");
+		throw Win32Exception("Unable to create widget");
 	}
+
 	return hWnd;
 }
 
-void Widget::setHandle(HWND hwnd) {
-	if(itsHandle) {
+void Widget::setHandle(HWND h) {
+	if(hwnd) {
 		throw DWTException("You may not attach to a widget that's already attached");
 	}
-	itsHandle = hwnd;
+
+	hwnd = h;
+
 	dwtassert((::GetWindowLongPtr(hwnd, GWLP_USERDATA) == 0), "Userdata already set");
+
 	::SetLastError(0);
-	LONG_PTR ret = ::SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+	LONG_PTR ret = ::SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR> (this));
 	if(ret == 0 && ::GetLastError() != 0) {
 		throw Win32Exception("Error while setting pointer");
 	}
 }
 
-void Widget::addRemoveStyle( DWORD addStyle, bool add )
-{
-	DWORD newStyle = GetWindowStyle( itsHandle );
+static void updateStyle(HWND hwnd, int which, DWORD style, bool add) {
+	DWORD newStyle = ::GetWindowLong(hwnd, which);
 	bool mustUpdate = false;
-	if ( add && ( newStyle & addStyle ) != addStyle )
-	{
+	if(add && (newStyle & style) != style) {
 		mustUpdate = true;
-		newStyle |= addStyle;
-	}
-	else if ( !add && ( newStyle & addStyle ) == addStyle )
-	{
+		newStyle |= style;
+	} else if(!add && (newStyle & style) == style) {
 		mustUpdate = true;
-		newStyle ^= addStyle;
+		newStyle ^= style;
 	}
-	if ( mustUpdate )
-	{
-		::SetWindowLong( itsHandle, GWL_STYLE, newStyle );
+
+	if(mustUpdate) {
+		::SetWindowLong(hwnd, which, newStyle);
 
 		// Faking a recheck in the window to read new style... (hack)
-		::SetWindowPos( itsHandle, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE |
-			SWP_NOZORDER | SWP_FRAMECHANGED );
+		::SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 	}
 }
 
-void Widget::addRemoveExStyle( DWORD addStyle, bool add )
-{
-	DWORD newStyle = ::GetWindowLong( itsHandle, GWL_EXSTYLE );
-	bool mustUpdate = false;
-	if ( add && ( newStyle & addStyle ) != addStyle )
-	{
-		mustUpdate = true;
-		newStyle |= addStyle;
-	}
-	else if ( !add && ( newStyle & addStyle ) == addStyle )
-	{
-		mustUpdate = true;
-		newStyle ^= addStyle;
-	}
-	if ( mustUpdate )
-	{
-		::SetWindowLong( itsHandle, GWL_EXSTYLE, newStyle );
+void Widget::addRemoveStyle(DWORD addStyle, bool add) {
+	updateStyle(handle(), GWL_STYLE, addStyle, add);
+}
 
-		// Faking a recheck in the window to read new style... (hack)
-		::SetWindowPos( itsHandle, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE |
-			SWP_NOZORDER | SWP_FRAMECHANGED );
-	}
+void Widget::addRemoveExStyle(DWORD addStyle, bool add) {
+	updateStyle(handle(), GWL_EXSTYLE, addStyle, add);
 }
 
 Widget::CallbackIter Widget::addCallback(const Message& msg, const CallbackType& callback) {
-	CallbackList& callbacks = itsCallbacks[msg];
+	CallbackList& callbacks = handlers[msg];
 	callbacks.push_back(callback);
 	return --callbacks.end();
 }
 
 Widget::CallbackIter Widget::setCallback(const Message& msg, const CallbackType& callback) {
-	CallbackList& callbacks = itsCallbacks[msg];
+	CallbackList& callbacks = handlers[msg];
 	callbacks.clear();
 	callbacks.push_back(callback);
 	return --callbacks.end();
 }
 
 void Widget::clearCallback(const Message& msg, CallbackIter& i) {
-	CallbackList& callbacks = itsCallbacks[msg];
-	if(i != callbacks.end())
-		callbacks.erase(i);
+	CallbackList& callbacks = handlers[msg];
+	callbacks.erase(i);
 }
 
 /// Make sure that handle is still valid before calling f
@@ -179,12 +151,12 @@ void Widget::callAsync(const Application::Callback& f) {
 	Application::instance().callAsync(std::tr1::bind(&checkCall, handle(), f));
 }
 
-bool Widget::tryFire( const MSG & msg, LRESULT & retVal ) {
+bool Widget::handleMessage(const MSG &msg, LRESULT &retVal) {
 	// First we must create a "comparable" message...
-	Message msgComparer( msg );
-	CallbackCollectionType::iterator i = itsCallbacks.find(msgComparer);
+	Message msgComparer(msg);
+	CallbackCollectionType::iterator i = handlers.find(msgComparer);
 	bool handled = false;
-	if(i != itsCallbacks.end()) {
+	if(i != handlers.end()) {
 		CallbackList& list = i->second;
 		for(CallbackList::iterator j = list.begin(); j != list.end(); ++j) {
 			handled |= (*j)(msg, retVal);
@@ -193,12 +165,18 @@ bool Widget::tryFire( const MSG & msg, LRESULT & retVal ) {
 	return handled;
 }
 
+void Widget::setParent(Widget* widget) {
+	::SetWindowLongPtr(handle(), GWLP_HWNDPARENT, widget->toLParam());
+	parent = widget;
+}
+
 Point Widget::getPreferedSize() {
 	return Point(0, 0);
 }
 
 void Widget::layout(const Rectangle& rc) {
-	::SetWindowPos(handle(), NULL, rc.left(), rc.top(), rc.width(), rc.height(), SWP_NOOWNERZORDER | SWP_NOACTIVATE | SWP_NOZORDER);
+	::SetWindowPos(handle(), NULL, rc.left(), rc.top(), rc.width(), rc.height(), SWP_NOOWNERZORDER | SWP_NOACTIVATE
+		| SWP_NOZORDER);
 }
 
 }
