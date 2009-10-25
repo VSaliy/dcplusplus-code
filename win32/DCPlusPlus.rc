@@ -22,6 +22,7 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
+#ifndef NO_MANIFEST
 #if defined x86
 1 24 "res/DCPlusPlus.manifest.x86"
 #elif defined x64
@@ -30,6 +31,7 @@ END
 1 24 "res/DCPlusPlus.manifest.ia64"
 #else
 #error "manifest: unknown arch"
+#endif
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
