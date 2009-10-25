@@ -21,7 +21,13 @@ if env['arch'] != 'x86':
 env.Append(LIBPATH=[openssl_lib])
 
 if env['RC'] == 'rc': # MSVC
-	env.Append(RCFLAGS = ['/d' + env['arch']])
+	env.Append(RCFLAGS = ['/dNO_MANIFEST'])
+	manifest_arch = env['arch']
+	if manifest_arch == 'x64':
+		manifest_arch = 'amd64'
+	env.Append(LINKFLAGS = ["/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls'\
+ version='6.0.0.0' processorArchitecture='" + manifest_arch + "' publicKeyToken='6595b64144ccf1df'\
+ language='*'"])
 elif env['RC'].find('windres') != -1: # MinGW
 	env.Append(RCFLAGS = ['-D' + env['arch']])
 else:

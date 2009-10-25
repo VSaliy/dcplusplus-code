@@ -44,10 +44,6 @@
 
 namespace dwt {
 
-#ifdef _MSC_VER
-#pragma warning( disable : 4101 )
-#endif
-
 /// Text Box Control class
 /** \ingroup WidgetControls
   * \WidgetUsageInfo
