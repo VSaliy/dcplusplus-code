@@ -39,6 +39,7 @@
 * Fix Ctrl+Shift+Tab (poy)
 * Readded WTL exception to the license (for mod developers)
 * Update to boost 1.40
+* [L#463723] Fixed download directory path on non-win32 (thanks Razzloss)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
