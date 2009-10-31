@@ -208,7 +208,7 @@ void PublicHubsFrame::postClosing() {
 }
 
 void PublicHubsFrame::layout() {
-	dwt::Rectangle r(getClientAreaSize());
+	dwt::Rectangle r(getClientSize());
 
 	status->layout(r);
 

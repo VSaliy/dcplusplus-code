@@ -109,7 +109,7 @@ void StatsFrame::handlePaint(dwt::PaintCanvas& canvas) {
 
 	}
 
-	long clientRight = getClientAreaSize().x;
+	long clientRight = getClientSize().x;
 
 	{
 		dwt::Canvas::Selector select(canvas, *upPen);
@@ -123,7 +123,7 @@ void StatsFrame::handlePaint(dwt::PaintCanvas& canvas) {
 }
 
 void StatsFrame::layout() {
-	dwt::Rectangle r(getClientAreaSize());
+	dwt::Rectangle r(getClientSize());
 
 	status->layout(r);
 
@@ -147,7 +147,7 @@ bool StatsFrame::eachSecond() {
 
 	scrollTick = scrollms - (scroll * 1000);
 
-	dwt::Point clientSize = getClientAreaSize();
+	dwt::Point clientSize = getClientSize();
 	RECT rect = { twidth, 0, clientSize.x, clientSize.y };
 	::ScrollWindow(handle(), -((int)scroll), 0, &rect, &rect);
 

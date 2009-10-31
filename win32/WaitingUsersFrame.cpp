@@ -53,11 +53,11 @@ WaitingUsersFrame::WaitingUsersFrame(dwt::TabView* mdiParent) :
 
 // Recalculate frame control layout
 void WaitingUsersFrame::layout() {
-	dwt::Rectangle r(this->getClientAreaSize());
+	dwt::Rectangle r(this->getClientSize());
 
 	status->layout(r);
 
-	queued->setBounds(r);
+	queued->layout(r);
 }
 
 bool WaitingUsersFrame::preClosing() {

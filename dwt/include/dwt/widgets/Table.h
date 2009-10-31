@@ -767,14 +767,14 @@ inline Rectangle Table::getRect( int item, int code )
 {
 	RECT r;
 	ListView_GetItemRect( this->handle(), item, &r, code );
-	return r;
+	return Rectangle(r);
 }
 
 inline Rectangle Table::getRect( int item, int subitem, int code )
 {
 	RECT r;
 	ListView_GetSubItemRect( this->handle(), item, subitem, code, &r );
-	return r;
+	return Rectangle(r);
 }
 
 inline bool Table::isAscending() {

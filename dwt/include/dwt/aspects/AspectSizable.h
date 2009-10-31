@@ -37,10 +37,8 @@
 #define DWT_AspectSizable_h
 
 #include "../Widget.h"
-#include "../util/check.h"
 #include "../Dispatchers.h"
 #include "../Events.h"
-#include "../CanvasClasses.h"
 
 namespace dwt {
 
@@ -74,79 +72,11 @@ class AspectSizable
 	typedef Dispatchers::ConvertBase<Point, &Point::fromMSG, 0, false> MoveDispatcher;
 
 public:
-	/// Sets the new size and position of the window
-	/** The input parameter Rectangle defines the new size (and position) of the
-	  * window. <br>
-	  * The pos member of the Rectangle is the position and the size member is the
-	  * size. <br>
-	  * So a call to this function will (probably) also MOVE your Widget too.
-	  *
-	  * For a top-level window, the position and dimensions are relative to the
-	  * upper-left corner of the screen. For a child window, they are relative
-	  * to the upper-left corner of the parent window's client area.
-	  */
-	void setBounds( const Rectangle & rect, bool updateWindow = true );
-
-	/// Sets the new size and position of the window
-	/** The input parameter newPos of type Point defines the new position of the
-	  * window. <br>
-	  * The newSize member of type Point is the new size of the window. <br>
-	  * A call to this function will (probably) also MOVE your Widget too.
-	  */
-	void setBounds( const Point & newPos, const Point & newSize, bool updateWindow = true );
-
-	/// Sets the new size and position of the window
-	/** x is the new horizontal position of your window. <br>
-	  * y is the new vertical position of your window. <br>
-	  * width is the new width and height is the new height of your window. <br>
-	  * Zenith is as in all other bounds function top/left. <br>
-	  * A call to this function will (probably) also MOVE your Widget too.
-	  */
-	void setBounds( int x, int y, int width, int height, bool updateWindow = true );
-
 	/// Returns the screen size.
 	/** This is the screen size, and useful for making applications that must adapt
-	  * to different screen sizes.
-	  */
+	 * to different screen sizes.
+	 */
 	static Point getDesktopSize();
-
-	/// Returns the position and size of the window.
-	/** Note that this is in screen coordinates meaning the position returned is
-	  * relative to the upper left corner  of the desktop screen, the function also
-	  * returns in the size member of the Rectangle the size of the window and not
-	  * the position of the lower right point. Values includes borders, frames and
-	  * toolbar etc of the window.
-	  * Note that if you don't override the default parameter adjustForParent it will
-	  * adjust for the parent meaning it will return in client coordinates instead of screen coordinates.
-	  */
-	Rectangle getBounds( bool adjustForParent = true ) const;
-
-	/// Returns the size of the window.
-	/** Includes the border, frame and toolbar etc of the window.
-	  */
-	Point getSize() const;
-
-	/// Returns the position of the window relative to the parent window.
-	/** Note that this is in client coordinates.
-	*/
-	Point getPosition() const;
-
-	/// Returns the screen position of the window.
-	Point getScreenPosition() const;
-
-	/// Returns the size of the client area of the window.
-	/** This differs from getSize because it disregards the border and headers, this
-	  * function only returns the client area of the Widget meaning the area which it
-	  * is possible to draw on.
-	  */
-	Point getClientAreaSize() const;
-
-	/// Fills a Point with the size of text to be drawn in the Widget's font.
-	/** getTextSize determines the height and width that text will take. <br>
-	  * This is useful if you want to allocate enough space to fit known text. <br>
-	  * It accounts for the set font too.
-	  */
-	Point getTextSize(const tstring& text);
 
 	/// Brings the widget to the front
 	/** Makes the widget become the front most widget meaning it will not be obscured
@@ -197,34 +127,6 @@ protected:
 };
 
 template< class WidgetType >
-void AspectSizable< WidgetType >::setBounds( const Rectangle & rect, bool updateWindow) {
-	setBounds(rect.x(), rect.y(), rect.width(), rect.height(), updateWindow);
-}
-
-template< class WidgetType >
-void AspectSizable< WidgetType >::setBounds( const Point & newPos, const Point & newSize, bool updateWindow ) {
-	setBounds(newPos.x, newPos.y, newSize.x, newSize.y, updateWindow);
-}
-
-template< class WidgetType >
-void AspectSizable< WidgetType >::setBounds( int x, int y, int width, int height, bool updateWindow ) {
-	if ( ::MoveWindow( H(), x, y, width, height, updateWindow ? TRUE : FALSE ) == 0 ) {
-		dwtDebugFail("Couldn't reposition windows");
-	}
-}
-
-template< class WidgetType >
-void AspectSizable< WidgetType >::centerWindow( Widget* target ) {
-	Point size = this->getSize();
-	RECT rc;
-	if(!target) {
-		target = static_cast<WidgetType*>(this)->getParent();
-	}
-	::GetWindowRect(target->handle(), &rc);
-	this->setBounds(rc.left + (rc.right - rc.left)/2 - size.x/2, rc.top + (rc.bottom - rc.top)/2 - size.y/2, size.x, size.y);
-}
-
-template< class WidgetType >
 Point AspectSizable< WidgetType >::getDesktopSize()
 {
 	RECT rc;
@@ -233,68 +135,14 @@ Point AspectSizable< WidgetType >::getDesktopSize()
 }
 
 template< class WidgetType >
-Rectangle AspectSizable< WidgetType >::getBounds( bool adjustForParent ) const
-{
-	int width, height;
+void AspectSizable< WidgetType >::centerWindow( Widget* target ) {
+	Point size = W().getWindowSize();
 	RECT rc;
-	POINT pt;
-	HWND hwnd = H();
-	::GetWindowRect( hwnd, & rc );
-	width = rc.right - rc.left;
-	height = rc.bottom - rc.top;
-	pt.x = rc.left;
-	pt.y = rc.top;
-	if( adjustForParent )
-	{
-		Widget* parent = W().getParent();
-		if( parent )
-		{
-			//if it's a child, adjust coordinates relative to parent
-			::ScreenToClient( parent->handle(), &pt );
-		}
+	if(!target) {
+		target = static_cast<WidgetType*>(this)->getParent();
 	}
-	return Rectangle( pt.x, pt.y, width, height );
-}
-
-template< class WidgetType >
-Point AspectSizable< WidgetType >::getSize() const
-{
-	return this->getBounds().size;
-}
-
-template< class WidgetType >
-Point AspectSizable< WidgetType >::getPosition() const
-{
-	return this->getBounds().pos;
-}
-
-template< class WidgetType >
-Point AspectSizable< WidgetType >::getScreenPosition() const
-{
-	RECT rc;
-	::GetWindowRect( H(), & rc );
-	return Point( rc.left, rc.top );
-}
-
-template< class WidgetType >
-Point AspectSizable< WidgetType >::getClientAreaSize() const
-{
-	RECT rc;
-	::GetClientRect( H(), & rc );
-	return Point( rc.right, rc.bottom );
-}
-
-template< class WidgetType >
-Point AspectSizable< WidgetType >
-::getTextSize( const tstring & text )
-{
-	UpdateCanvas c(&W());
-	c.selectFont(W().getFont());
-
-	Rectangle rect;
-	c.drawText(text, rect, DT_CALCRECT | DT_NOPREFIX);
-
-	return rect.size;
+	::GetWindowRect(target->handle(), &rc);
+	W().layout(Rectangle(rc.left + (rc.right - rc.left)/2 - size.x/2, rc.top + (rc.bottom - rc.top)/2 - size.y/2, size.x, size.y));
 }
 
 template< class WidgetType >

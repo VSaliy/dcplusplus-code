@@ -69,9 +69,9 @@ bool NotepadFrame::preClosing() {
 }
 
 void NotepadFrame::layout() {
-	dwt::Rectangle r(dwt::Point(0, 0), getClientAreaSize());
+	dwt::Rectangle r(dwt::Point(0, 0), getClientSize());
 
 	status->layout(r);
 
-	pad->setBounds(r);
+	pad->layout(r);
 }

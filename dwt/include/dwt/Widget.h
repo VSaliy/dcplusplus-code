@@ -136,9 +136,9 @@ public:
 	/** Layout the widget in the specified rectangle (in client coordinates) */
 	virtual void layout(const Rectangle& rect);
 
-	Point getWindowSize();
+	Point getWindowSize() const;
 
-	Point getClientSize();
+	Point getClientSize() const;
 
 	/**
 	 * Attaches the instance to an existing window.
@@ -259,13 +259,13 @@ inline Widget* Widget::fromLParam(LPARAM lParam) {
 	return reinterpret_cast<Widget*>(lParam);
 }
 
-inline Point Widget::getWindowSize() {
+inline Point Widget::getWindowSize() const {
 	RECT rc;
 	::GetWindowRect(handle(), &rc);
 	return Point(rc.right - rc.left, rc.bottom - rc.top);
 }
 
-inline Point Widget::getClientSize() {
+inline Point Widget::getClientSize() const {
 	RECT rc;
 	::GetClientRect(handle(), &rc);
 	// Left, top are always 0

@@ -271,7 +271,7 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 }
 
 void DirectoryListingFrame::layout() {
-	dwt::Rectangle r(getClientAreaSize());
+	dwt::Rectangle r(getClientSize());
 
 	status->layout(r);
 

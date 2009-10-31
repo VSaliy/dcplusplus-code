@@ -114,6 +114,8 @@ public:
 
 	virtual bool handleMessage( const MSG & msg, LRESULT & retVal );
 
+	using Widget::layout;
+
 protected:
 	explicit TabView(Widget* parent);
 

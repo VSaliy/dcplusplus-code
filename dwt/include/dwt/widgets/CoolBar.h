@@ -80,11 +80,6 @@ public:
 	// Note here that since we DON'T want the setBounds functions we must
 	// inherit privately from AspectSizable and include the stuff we WAN'T to
 	// expose from AspectSizable in a public block of the class.
-	using AspectSizable::getBounds;
-	using AspectSizable::getSize;
-	using AspectSizable::getPosition;
-	using AspectSizable::getClientAreaSize;
-	using AspectSizable::getTextSize;
 	using AspectSizable::bringToFront;
 	using AspectSizable::onSized;
 	using AspectSizable::onMoved;

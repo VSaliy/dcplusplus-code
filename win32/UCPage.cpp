@@ -93,10 +93,10 @@ UCPage::~UCPage() {
 void UCPage::layout(const dwt::Rectangle& rc) {
 	PropPage::layout(rc);
 
-	dwt::Point clientSize = getClientAreaSize();
+	dwt::Point clientSize = getClientSize();
 	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 
-	commands->setColumnWidth(1, commands->getSize().x - 220);
+	commands->setColumnWidth(1, commands->getWindowSize().x - 220);
 }
 
 void UCPage::handleDoubleClick() {

@@ -90,7 +90,7 @@ void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 		unsigned newW = getTextSize(text).x + 12;
 		if(newW > oldW || (alwaysResize && newW != oldW)) {
 			info.size = newW;
-			layoutSections(BaseType::getSize());
+			layoutSections(getWindowSize());
 		}
 	} else if(tip) {
 		lastLines.push_back(text);
@@ -129,9 +129,10 @@ void StatusBar::onDblClicked(unsigned part, const F& f) {
 }
 
 void StatusBar::layout(Rectangle& r) {
-	setBounds(0, 0, 0, 0);
+	// The status bar will auto-resize itself - all we need to do is to layout the sections
+	sendMessage(WM_SIZE);
 
-	Point sz(BaseType::getSize());
+	Point sz(BaseType::getWindowSize());
 	r.size.y -= sz.y;
 	layoutSections(sz);
 }

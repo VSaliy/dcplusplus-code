@@ -206,7 +206,7 @@ int Canvas::drawText(const tstring& text, Rectangle& rect, unsigned format) {
 		dwtWin32DebugFail("Error while trying to draw text to canvas");
 	}
 	if((format & DT_CALCRECT) == DT_CALCRECT)
-		rect = rc;
+		rect = Rectangle(rc);
 	return retVal;
 }
 
@@ -274,7 +274,7 @@ PaintCanvas::~PaintCanvas()
 
 Rectangle PaintCanvas::getPaintRect()
 {
-	return itsPaint.rcPaint;
+	return Rectangle(itsPaint.rcPaint);
 }
 
 void PaintCanvas::initialize()

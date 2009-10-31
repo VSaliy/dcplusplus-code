@@ -236,16 +236,16 @@ void PrivateFrame::layout() {
 
 	const int border = 2;
 
-	dwt::Rectangle r(getClientAreaSize());
+	dwt::Rectangle r(getClientSize());
 
 	status->layout(r);
 
 	int ymessage = message->getTextSize(_T("A")).y + 10;
 	dwt::Rectangle rm(0, r.size.y - ymessage, r.width() , ymessage);
-	message->setBounds(rm);
+	message->layout(rm);
 
 	r.size.y -= rm.size.y + border;
-	chat->setBounds(r);
+	chat->layout(r);
 
 	if(scroll)
 		chat->sendMessage(WM_VSCROLL, SB_BOTTOM);

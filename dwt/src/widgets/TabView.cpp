@@ -218,7 +218,7 @@ void TabView::setActive(int i) {
 }
 
 void TabView::swapWidgets(ContainerPtr oldW, ContainerPtr newW) {
-	newW->setBounds(clientSize, false);
+	newW->layout(clientSize);
 	newW->setVisible(true);
 	if(oldW) {
 		oldW->sendMessage(WM_ACTIVATE, WA_INACTIVE, reinterpret_cast<LPARAM>(newW->handle()));
@@ -307,7 +307,7 @@ void TabView::layout() {
 	if(!(tmp == clientSize)) {
 		int i = getSelected();
 		if(i != -1) {
-			getTabInfo(i)->w->setBounds(tmp);
+			getTabInfo(i)->w->layout(tmp);
 		}
 		clientSize = tmp;
 	}
@@ -533,7 +533,6 @@ tstring TabView::getText(unsigned idx) const
 	}
 	return buffer;
 }
-
 dwt::Rectangle TabView::getUsableArea(bool cutBorders) const
 {
 	RECT rc;
@@ -541,7 +540,7 @@ dwt::Rectangle TabView::getUsableArea(bool cutBorders) const
 	TabCtrl_AdjustRect( this->handle(), false, &rc );
 	Rectangle rect( rc );
 	if(cutBorders) {
-		Rectangle rctabs(getClientAreaSize());
+		Rectangle rctabs(Widget::getClientSize());
 		// Get rid of ugly border...assume y border is the same as x border
 		const long border = (rctabs.width() - rect.width()) / 2;
 		const long upTranslation = 2;

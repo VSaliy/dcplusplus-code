@@ -43,6 +43,7 @@
 #include "../aspects/AspectPainting.h"
 #include "../aspects/AspectSelection.h"
 #include "../aspects/AspectText.h"
+#include "../util/check.h"
 #include "Control.h"
 
 namespace dwt {

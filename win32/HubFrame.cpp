@@ -241,7 +241,7 @@ void HubFrame::layout() {
 
 	const int border = 2;
 
-	dwt::Rectangle r(getClientAreaSize());
+	dwt::Rectangle r(getClientSize());
 
 	status->layout(r);
 	status->mapWidget(STATUS_SHOW_USERS, showUsers);
@@ -249,18 +249,18 @@ void HubFrame::layout() {
 	int ymessage = message->getTextSize(_T("A")).y + 10;
 	int xfilter = showUsers->getChecked() ? std::min(r.width() / 4, 200l) : 0;
 	dwt::Rectangle rm(0, r.size.y - ymessage, r.width() - xfilter, ymessage);
-	message->setBounds(rm);
+	message->layout(rm);
 
 	r.size.y -= rm.size.y + border;
 
 	rm.pos.x += rm.width() + border;
 	rm.size.x = showUsers->getChecked() ? xfilter * 2 / 3 - border : 0;
-	filter->setBounds(rm);
+	filter->layout(rm);
 
 	rm.pos.x += rm.width() + border;
 	rm.size.x = showUsers->getChecked() ? xfilter / 3 - border : 0;
 	rm.size.y += 140;
-	filterType->setBounds(rm);
+	filterType->layout(rm);
 
 	bool checked = showUsers->getChecked();
 	if(checked && !paned->getSecond()) {
@@ -1258,7 +1258,7 @@ bool HubFrame::tab() {
 			if (tabCompleteNicks.empty()) return true;
 
 			// Maybe it found a unique match. If userlist showing, highlight.
-			if (showUsers->getChecked() && tabCompleteNicks.size() == 2) {
+			if(showUsers->getChecked() && tabCompleteNicks.size() == 2) {
 				int i = users->find(Text::toT(tabCompleteNicks[1]));
 				users->setSelected(i);
 				users->ensureVisible(i);

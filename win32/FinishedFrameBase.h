@@ -1,4 +1,4 @@
-/*	
+/*
 * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
 *
 * This program is free software; you can redistribute it and/or modify
@@ -69,7 +69,7 @@ protected:
 	{
 		{
 			dwt::TabView::Seed cs = WinUtil::Seeds::tabs;
-			cs.location = this->getBounds();
+			cs.location = dwt::Rectangle(this->getClientSize());
 			cs.maxLength = 0;
 			tabs = this->addChild(cs);
 		}
@@ -80,14 +80,14 @@ protected:
 			cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 			cs.location = tabs->getClientSize();
 			filesWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
-			filesWindow->setHelpId(in_UL ? IDH_FINISHED_UL : IDH_FINISHED_DL);	
+			filesWindow->setHelpId(in_UL ? IDH_FINISHED_UL : IDH_FINISHED_DL);
 			filesWindow->onClosing(std::tr1::bind(&noClose));
 			tabs->add(filesWindow, dwt::IconPtr(new dwt::Icon(in_UL ? IDR_FINISHED_UL_BY_FILE : IDR_FINISHED_DL_BY_FILE)));
 
 			cs.style &= ~WS_VISIBLE;
 			cs.caption = T_("Grouped by users");
 			usersWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
-			usersWindow->setHelpId(in_UL ? IDH_FINISHED_UL : IDH_FINISHED_DL);	
+			usersWindow->setHelpId(in_UL ? IDH_FINISHED_UL : IDH_FINISHED_DL);
 			usersWindow->onClosing(std::tr1::bind(&noClose));
 			tabs->add(usersWindow, dwt::IconPtr(new dwt::Icon(in_UL ? IDR_FINISHED_UL_BY_USER : IDR_FINISHED_DL_BY_USER)));
 		}
@@ -162,13 +162,13 @@ protected:
 	virtual ~FinishedFrameBase() { }
 
 	void layout() {
-		dwt::Rectangle r(this->getClientAreaSize());
+		dwt::Rectangle r(this->getClientSize());
 
 		this->status->layout(r);
 		if(onlyFull)
 			this->status->mapWidget(STATUS_ONLY_FULL, onlyFull);
 
-		tabs->setBounds(r);
+		tabs->layout(r);
 	}
 
 	bool preClosing() {
@@ -368,7 +368,7 @@ private:
 	}
 
 	static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
-		control->setBounds(dwt::Rectangle(parent->getClientAreaSize()));
+		control->layout(dwt::Rectangle(parent->getClientSize()));
 	}
 
 	bool handleFilesKeyDown(int c) {
