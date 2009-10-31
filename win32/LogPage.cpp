@@ -107,7 +107,7 @@ LogPage::~LogPage() {
 void LogPage::layout(const dwt::Rectangle& rc) {
 	PropPage::layout(rc);
 
-	dwt::Point clientSize = getClientAreaSize();
+	dwt::Point clientSize = getClientSize();
 	group->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 

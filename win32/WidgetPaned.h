@@ -215,7 +215,7 @@ void WidgetPaned< horizontal >::resizeChildren( )
 	children.first->layout(left);
 	children.second->layout(right);
 
-	this->setBounds(rcSplit);
+	this->layout(rcSplit);
 	this->redraw(rcSplit);
 }
 

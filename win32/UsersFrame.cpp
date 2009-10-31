@@ -78,11 +78,11 @@ UsersFrame::~UsersFrame() {
 }
 
 void UsersFrame::layout() {
-	dwt::Rectangle r(dwt::Point(0, 0), getClientAreaSize());
+	dwt::Rectangle r(dwt::Point(0, 0), getClientSize());
 
 	status->layout(r);
 
-	users->setBounds(r);
+	users->layout(r);
 }
 
 bool UsersFrame::preClosing() {

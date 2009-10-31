@@ -60,8 +60,8 @@ SplashWindow::SplashWindow() : dwt::Window(0) {
 	int ytext = textSize.y + 6;
 
 	dwt::Rectangle r(xmid - xtext/2, ymid - ytext/2, xtext, ytext);
-	setBounds(r);
-	text->setBounds(0, 0, xtext, ytext);
+	layout(r);
+	text->layout(dwt::Rectangle(0, 0, xtext, ytext));
 
 	::HideCaret(text->handle());
 	text->setVisible(true);

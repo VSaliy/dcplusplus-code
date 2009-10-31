@@ -50,7 +50,7 @@ struct Rectangle {
 	  */
 	Rectangle() { };
 
-	Rectangle(const ::RECT& rc) : pos(rc.left, rc.top), size(rc.right - rc.left, rc.bottom - rc.top) { }
+	explicit Rectangle(const ::RECT& rc) : pos(rc.left, rc.top), size(rc.right - rc.left, rc.bottom - rc.top) { }
 
 	/// Constructor initializing the rectangle with a position and size.
 	/** Note that the pSize is actually a size and NOT the lower right Point.

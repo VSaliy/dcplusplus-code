@@ -294,7 +294,7 @@ SearchFrame::~SearchFrame() {
 }
 
 void SearchFrame::layout() {
-	dwt::Rectangle r(getClientAreaSize());
+	dwt::Rectangle r(getClientSize());
 
 	status->layout(r);
 	status->mapWidget(STATUS_SHOW_UI, showUI);

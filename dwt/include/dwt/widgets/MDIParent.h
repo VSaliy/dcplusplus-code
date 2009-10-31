@@ -37,6 +37,7 @@
 #define DWT_MDIParent_h
 
 #include "Control.h"
+#include "../util/check.h"
 #include "MDIFrame.h"
 
 namespace dwt {

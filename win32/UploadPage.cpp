@@ -149,10 +149,10 @@ UploadPage::~UploadPage() {
 void UploadPage::layout(const dwt::Rectangle& rc) {
 	PropPage::layout(rc);
 
-	dwt::Point clientSize = getClientAreaSize();
+	dwt::Point clientSize = getClientSize();
 	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 
-	directories->setColumnWidth(1, directories->getSize().x - 220);
+	directories->setColumnWidth(1, directories->getWindowSize().x - 220);
 }
 
 void UploadPage::write()

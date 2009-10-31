@@ -67,7 +67,7 @@ static bool noClose() {
 }
 
 static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
-	control->setBounds(dwt::Rectangle(parent->getClientAreaSize()));
+	control->layout(dwt::Rectangle(parent->getClientSize()));
 }
 
 TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
@@ -82,7 +82,7 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 
 	{
 		TabView::Seed cs = WinUtil::Seeds::tabs;
-		cs.location = getBounds();
+		cs.location = dwt::Rectangle(getClientSize());
 		cs.maxLength = 0;
 		tabs = addChild(cs);
 		tabs->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
@@ -162,7 +162,7 @@ void TransferView::handleSized(const dwt::SizedEvent& sz) {
 }
 
 void TransferView::layout() {
-	tabs->setBounds(dwt::Point(0,0), getClientAreaSize());
+	tabs->layout(dwt::Rectangle(getClientSize()));
 }
 
 void TransferView::prepareClose() {
@@ -390,7 +390,7 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 
 				double pos = static_cast<double>(ci->chunkPos) / ci->chunk;
 
-				drawProgress(hdc, r, item, column, text, pos, ci->download ? SETTING(DOWNLOAD_BAR_COLOR) : SETTING(UPLOAD_BAR_COLOR));
+				drawProgress(hdc, dwt::Rectangle(r), item, column, text, pos, ci->download ? SETTING(DOWNLOAD_BAR_COLOR) : SETTING(UPLOAD_BAR_COLOR));
 
 				return CDRF_SKIPDEFAULT;
 			}
@@ -405,7 +405,7 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 
 				double pos = static_cast<double>(di->done) / di->size;
 
-				drawProgress(hdc, r, item, column, text, pos, SETTING(DOWNLOAD_BAR_COLOR));
+				drawProgress(hdc, dwt::Rectangle(r), item, column, text, pos, SETTING(DOWNLOAD_BAR_COLOR));
 
 				return CDRF_SKIPDEFAULT;
 			}

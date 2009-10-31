@@ -92,12 +92,12 @@ SpyFrame::~SpyFrame() {
 }
 
 void SpyFrame::layout() {
-	dwt::Rectangle r(this->getClientAreaSize());
+	dwt::Rectangle r(this->getClientSize());
 
 	status->layout(r);
 	status->mapWidget(STATUS_IGNORE_TTH, ignoreTTH);
 
-	searches->setBounds(r);
+	searches->layout(r);
 }
 
 void SpyFrame::initSecond() {

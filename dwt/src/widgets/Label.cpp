@@ -59,7 +59,7 @@ void Label::layout(const Rectangle& r_) {
 
 	if(hasStyle(SS_ICON)) {
 		// icon control; we don't want the size to change.
-		r.size = getSize();
+		r.size = getWindowSize();
 	}
 
 	BaseType::layout(r);
@@ -68,7 +68,7 @@ void Label::layout(const Rectangle& r_) {
 Point Label::getPreferedSize() {
 	if(hasStyle(SS_ICON)) {
 		// icon control; the control should have already resized itself to its preferred size.
-		return getSize();
+		return getWindowSize();
 	}
 
 	return getTextSize(getText());

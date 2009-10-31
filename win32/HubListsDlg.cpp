@@ -211,5 +211,5 @@ void HubListsDlg::layout() {
 	dwt::Point sz = getClientSize();
 	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 
-	hubLists->setColumnWidth(0, hubLists->getSize().x - 20);
+	hubLists->setColumnWidth(0, hubLists->getWindowSize().x - 20);
 }

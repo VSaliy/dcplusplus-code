@@ -80,11 +80,11 @@ void SystemFrame::addLine(time_t t, const tstring& msg) {
 void SystemFrame::layout() {
 	bool scroll = log->scrollIsAtEnd();
 
-	dwt::Rectangle r(this->getClientAreaSize());
+	dwt::Rectangle r(this->getClientSize());
 
 	status->layout(r);
 
-	log->setBounds(r);
+	log->layout(r);
 
 	if(scroll)
 		log->sendMessage(WM_VSCROLL, SB_BOTTOM);

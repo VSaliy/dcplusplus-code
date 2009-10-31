@@ -133,7 +133,7 @@ FavHubsFrame::~FavHubsFrame() {
 }
 
 void FavHubsFrame::layout() {
-	dwt::Rectangle r(getClientAreaSize());
+	dwt::Rectangle r(getClientSize());
 
 	status->layout(r);
 

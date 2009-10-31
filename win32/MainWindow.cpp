@@ -654,10 +654,10 @@ bool MainWindow::eachSecond() {
 }
 
 void MainWindow::layout() {
-	dwt::Rectangle r(getClientAreaSize());
+	dwt::Rectangle r(getClientSize());
 
 	toolbar->refresh();
-	dwt::Point pt = toolbar->getSize();
+	dwt::Point pt = toolbar->getWindowSize();
 	r.pos.y += pt.y;
 	r.size.y -= pt.y;
 

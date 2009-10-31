@@ -37,6 +37,7 @@
 #define DWT_AspectFont_h
 
 #include "../resources/Font.h"
+#include "../CanvasClasses.h"
 
 namespace dwt {
 
@@ -56,6 +57,13 @@ class AspectFont
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 public:
+	/// Fills a Point with the size of text to be drawn in the Widget's font.
+	/** getTextSize determines the height and width that text will take. <br>
+	  * This is useful if you want to allocate enough space to fit known text. <br>
+	  * It accounts for the set font too.
+	  */
+	Point getTextSize(const tstring& text);
+
 	/// Sets the font used by the Widget
 	/** Changes the font of the Widget to the given font. Use the class Font to
 	  * construct a font in which to set by this function.
@@ -81,6 +89,20 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+template< class WidgetType >
+Point AspectFont< WidgetType >::getTextSize( const tstring & text )
+{
+	UpdateCanvas c(&W());
+	c.selectFont(W().getFont());
+
+	Rectangle rect;
+	c.drawText(text, rect, DT_CALCRECT | DT_NOPREFIX);
+
+	return rect.size;
+}
+
+
 template< class WidgetType >
 void AspectFont< WidgetType >::setFont( const FontPtr& font_, bool forceUpdate )
 {

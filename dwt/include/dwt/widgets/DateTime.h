@@ -38,6 +38,7 @@
 
 #include "../aspects/AspectClickable.h"
 #include "../aspects/AspectPainting.h"
+#include "../util/check.h"
 #include "Control.h"
 
 namespace dwt {

@@ -383,7 +383,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	int stripWidth = iconSize.x + textIconGap;
 
 	// prepare item rectangle
-	Rectangle itemRectangle = drawInfo->rcItem;
+	Rectangle itemRectangle(drawInfo->rcItem);
 
 	// setup buffered canvas
 	BufferedCanvas< FreeCanvas > canvas(reinterpret_cast<HWND>(handle()), drawInfo->hDC, itemRectangle.left(), itemRectangle.top());
