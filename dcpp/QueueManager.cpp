@@ -636,7 +636,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 				return;
 		}
 
-		wantConnection = addSource(q, aUser, addBad ? QueueItem::Source::FLAG_MASK : 0);
+		wantConnection = addSource(q, aUser, addBad ? QueueItem::Source::FLAG_MASK : 0, hubHint);
 	}
 
 	if(wantConnection && aUser->isOnline())
@@ -649,7 +649,7 @@ void QueueManager::readd(const string& target, const UserPtr& aUser, const strin
 		Lock l(cs);
 		QueueItem* q = fileQueue.find(target);
 		if(q && q->isBadSource(aUser)) {
-			wantConnection = addSource(q, aUser, QueueItem::Source::FLAG_MASK);
+			wantConnection = addSource(q, aUser, QueueItem::Source::FLAG_MASK, hubHint);
 		}
 	}
 	if(wantConnection && aUser->isOnline())
@@ -694,7 +694,7 @@ string QueueManager::checkTarget(const string& aTarget, int64_t aSize) throw(Que
 }
 
 /** Add a source to an existing queue item */
-bool QueueManager::addSource(QueueItem* qi, const UserPtr& aUser, Flags::MaskType addBad) throw(QueueException, FileException) {
+bool QueueManager::addSource(QueueItem* qi, const UserPtr& aUser, Flags::MaskType addBad, const string& hubHint) throw(QueueException, FileException) {
 	bool wantConnection = (qi->getPriority() != QueueItem::PAUSED) && !userQueue.getRunning(aUser);
 
 	if(qi->isSource(aUser)) {
@@ -705,7 +705,7 @@ bool QueueManager::addSource(QueueItem* qi, const UserPtr& aUser, Flags::MaskTyp
 		throw QueueException(str(F_("Duplicate source: %1%") % Util::getFileName(qi->getTarget())));
 	}
 
-	qi->addSource(aUser);
+	qi->addSource(aUser, hubHint);
 
 	if(aUser->isSet(User::PASSIVE) && !ClientManager::getInstance()->isActive() ) {
 		qi->removeSource(aUser, QueueItem::Source::FLAG_PASSIVE);
@@ -791,7 +791,7 @@ int QueueManager::matchListing(const DirectoryListing& dl, const string& hubHint
 			TTHMap::iterator j = tthMap.find(qi->getTTH());
 			if(j != tthMap.end() && i->second->getSize() == qi->getSize()) {
 				try {
-					addSource(qi, dl.getUser(), QueueItem::Source::FLAG_FILE_NOT_AVAILABLE);
+					addSource(qi, dl.getUser(), QueueItem::Source::FLAG_FILE_NOT_AVAILABLE, hubHint);
 				} catch(...) {
 					// Ignore...
 				}
@@ -855,7 +855,7 @@ void QueueManager::move(const string& aSource, const string& aTarget) throw() {
 
 				for(QueueItem::SourceConstIter i = qs->getSources().begin(); i != qs->getSources().end(); ++i) {
 					try {
-						addSource(qt, i->getUser(), QueueItem::Source::FLAG_MASK);
+						addSource(qt, i->getUser(), QueueItem::Source::FLAG_MASK, i->getHubHint());
 					} catch(const Exception&) {
 					}
 				}
@@ -1434,6 +1434,10 @@ void QueueManager::saveQueue(bool force) throw() {
 				for(QueueItem::SourceConstIter j = qi->sources.begin(); j != qi->sources.end(); ++j) {
 					f.write(LIT("\t\t<Source CID=\""));
 					f.write(j->getUser()->getCID().toBase32());
+					if(!j->getHubHint().empty()) {
+						f.write(LIT("\" Hub=\""));
+						f.write(j->getHubHint());
+					}
 					f.write(LIT("\"/>\r\n"));
 
 					cids.push_back(j->getUser()->getCID());
@@ -1510,6 +1514,7 @@ static const string sDirectory = "Directory";
 static const string sAdded = "Added";
 static const string sTTH = "TTH";
 static const string sCID = "CID";
+static const string sHubHint = "HubHint";
 static const string sSegment = "Segment";
 static const string sStart = "Start";
 
@@ -1572,9 +1577,9 @@ void QueueLoader::startTag(const string& name, StringPairList& attribs, bool sim
 			UserPtr user = ClientManager::getInstance()->getUser(CID(cid));
 
 			try {
-				if(qm->addSource(cur, user, 0) && user->isOnline())
-					// TODO save/load hubhint
-					ConnectionManager::getInstance()->getDownloadConnection(user, Util::emptyString);
+				const string& hubHint = getAttrib(attribs, sHubHint, 1);
+				if(qm->addSource(cur, user, 0, hubHint) && user->isOnline())
+					ConnectionManager::getInstance()->getDownloadConnection(user, hubHint);
 			} catch(const Exception&) {
 				return;
 			}
@@ -1615,7 +1620,7 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) thro
 			if(qi->getSize() == sr->getSize() && !qi->isSource(sr->getUser())) {
 				try {
 					if(!BOOLSETTING(AUTO_SEARCH_AUTO_MATCH))
-						wantConnection = addSource(qi, sr->getUser(), 0);
+						wantConnection = addSource(qi, sr->getUser(), 0, sr->getHubURL());
 					added = true;
 				} catch(const Exception&) {
 					// ...

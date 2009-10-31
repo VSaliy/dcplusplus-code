@@ -37,12 +37,16 @@ private:
 	TextBoxPtr nick;
 	TextBoxPtr password;
 	TextBoxPtr userDescription;
+	ComboBoxPtr groups;
 
 	FavoriteHubEntry *entry;
 
 	bool handleInitDialog();
 	void handleTextChanged(TextBoxPtr textBox);
+	void handleGroups();
 	void handleOKClicked();
+
+	void fillGroups();
 
 	void layout();
 };

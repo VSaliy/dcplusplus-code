@@ -21,6 +21,7 @@
 #include "MainWindow.h"
 #include "resource.h"
 
+#include "ComboDlg.h"
 #include "LineDlg.h"
 #include "HashProgressDlg.h"
 #include "SettingsDialog.h"
@@ -255,10 +256,14 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr window = mainMenu->appendPopup(T_("&Window"));
 
-		window->appendItem(T_("Close disconnected"), std::tr1::bind(&HubFrame::closeDisconnected));
+		window->appendItem(T_("Close disconnected hubs"), std::tr1::bind(&HubFrame::closeDisconnected));
+		window->appendItem(T_("Close all hubs of a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this));
+		window->appendSeparator();
 		window->appendItem(T_("Close all PM windows"), std::tr1::bind(&PrivateFrame::closeAll));
 		window->appendItem(T_("Close all offline PM windows"), std::tr1::bind(&PrivateFrame::closeAllOffline));
+		window->appendSeparator();
 		window->appendItem(T_("Close all file list windows"), std::tr1::bind(&DirectoryListingFrame::closeAll));
+		window->appendSeparator();
 		window->appendItem(T_("Close all search windows"), std::tr1::bind(&SearchFrame::closeAll));
 	}
 
@@ -424,13 +429,35 @@ void MainWindow::handleTabsTitleChanged(const tstring& title) {
 	setText(title.empty() ? _T(APPNAME) _T(" ") _T(VERSIONSTRING) : _T(APPNAME) _T(" ") _T(VERSIONSTRING) _T(" - [") + title + _T("]"));
 }
 
+static void multiConnect(const string& group, dwt::TabView* parent) {
+	FavoriteHubEntryList hubs = FavoriteManager::getInstance()->getFavoriteHubs(group);
+	for(FavoriteHubEntryList::const_iterator i = hubs.begin(), iend = hubs.end(); i != iend; ++i)
+		HubFrame::openWindow(parent, (*i)->getServer());
+}
+
 void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
-	for(FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i) {
+	typedef map<string, MenuPtr, noCaseStringLess> GroupMenus;
+	GroupMenus groupMenus;
+
+	const FavHubGroups& groups = FavoriteManager::getInstance()->getFavHubGroups();
+	for(FavHubGroups::const_iterator i = groups.begin(), iend = groups.end(); i != iend; ++i)
+		groupMenus.insert(make_pair(i->first, MenuPtr()));
+
+	for(GroupMenus::iterator i = groupMenus.begin(); i != groupMenus.end(); ++i) {
+		i->second = menu->appendPopup(dwt::util::escapeMenu(Text::toT(i->first)));
+		i->second->appendItem(T_("Connect to all hubs in this group"), std::tr1::bind(&multiConnect, i->first, getTabView()));
+		i->second->appendSeparator();
+	}
+
+	const FavoriteHubEntryList& hubs = FavoriteManager::getInstance()->getFavoriteHubs();
+	for(FavoriteHubEntryList::const_iterator i = hubs.begin(), iend = hubs.end(); i != iend; ++i) {
 		FavoriteHubEntry* entry = *i;
-		menu->appendItem(dwt::util::escapeMenu(Text::toT(entry->getName())), std::tr1::bind(&HubFrame::openWindow, getTabView(), entry->getServer()));
+		GroupMenus::iterator groupMenu = groupMenus.find(entry->getGroup());
+		((groupMenu == groupMenus.end()) ? menu : groupMenu->second)->appendItem(
+			dwt::util::escapeMenu(Text::toT(entry->getName())),
+			std::tr1::bind(&HubFrame::openWindow, getTabView(), entry->getServer()));
 	}
 
 	menu->open(pt);
@@ -920,6 +947,24 @@ LRESULT MainWindow::handleCopyData(LPARAM lParam) {
 
 void MainWindow::handleHashProgress() {
 	HashProgressDlg(this, false).run();
+}
+
+void MainWindow::handleCloseFavGroup() {
+	set<tstring, noCaseStringLess> groups;
+
+	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
+	if(favHubGroups.empty()) {
+		dwt::MessageBox(this).show(T_("No favorite hub group found"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+			dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
+		return;
+	}
+
+	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
+		groups.insert(Text::toT(i->first));
+
+	ComboDlg dlg(this, T_("Close all hubs of a favorite group"), T_("Select a favorite hub group"), TStringList(groups.begin(), groups.end()));
+	if(dlg.run() == IDOK)
+		HubFrame::closeFavGroup(Text::fromT(dlg.getValue()));
 }
 
 void MainWindow::handleAbout() {

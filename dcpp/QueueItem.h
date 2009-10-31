@@ -91,12 +91,13 @@ public:
 				| FLAG_BAD_TREE | FLAG_NO_TREE | FLAG_SLOW_SOURCE | FLAG_UNTRUSTED
 		};
 
-		Source(const UserPtr& aUser) : user(aUser) { }
-		Source(const Source& aSource) : Flags(aSource), user(aSource.user) { }
+		Source(const UserPtr& aUser, const string& hubHint_) : user(aUser), hubHint(hubHint_) { }
+		Source(const Source& aSource) : Flags(aSource), user(aSource.user), hubHint(aSource.hubHint) { }
 
 		bool operator==(const UserPtr& aUser) const { return user == aUser; }
 		UserPtr& getUser() { return user; }
 		GETSET(UserPtr, user, User);
+		GETSET(string, hubHint, HubHint);
 	};
 
 	typedef std::vector<Source> SourceList;
@@ -200,7 +201,7 @@ private:
 	SourceList badSources;
 	string tempTarget;
 
-	void addSource(const UserPtr& aUser);
+	void addSource(const UserPtr& aUser, const string& hubHint);
 	void removeSource(const UserPtr& aUser, int reason);
 };
 

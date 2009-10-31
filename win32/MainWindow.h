@@ -144,6 +144,7 @@ private:
 	void handleRefreshFileList();
 	void handleMatchAll();
 	void handleOpenDownloadsDir();
+	void handleCloseFavGroup();
 	void handleAbout();
 	void handleHashProgress();
 	void handleWhatsThis();

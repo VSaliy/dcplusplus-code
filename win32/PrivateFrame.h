@@ -73,6 +73,8 @@ private:
 	UserInfoBase replyTo;
 
 	string hubHint;
+	const bool priv;
+	bool online;
 
 	typedef unordered_map<UserPtr, PrivateFrame*, User::Hash> FrameMap;
 	typedef FrameMap::iterator FrameIter;
@@ -91,7 +93,7 @@ private:
 	void fillLogParams(StringMap& params) const;
 	void addChat(const tstring& aLine, bool log = true);
 	void addStatus(const tstring& aLine, bool log = true);
-	void updateTitle();
+	void updateOnlineStatus();
 
 	void runUserCommand(const UserCommand& uc);
 

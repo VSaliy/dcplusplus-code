@@ -22,9 +22,11 @@
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
+
 #include "HoldRedraw.h"
 #include "HubFrame.h"
 #include "FavHubProperties.h"
+#include "FavHubGroupsDlg.h"
 
 const string FavHubsFrame::id = "FavHubs";
 const string& FavHubsFrame::getId() const { return id; }
@@ -35,7 +37,8 @@ static const ColumnInfo hubsColumns[] = {
 	{ N_("Nick"), 125, false },
 	{ N_("Password"), 100, false },
 	{ N_("Server"), 100, false },
-	{ N_("User Description"), 125, false }
+	{ N_("User Description"), 125, false },
+	{ N_("Group"), 100, false }
 };
 
 FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
@@ -44,13 +47,14 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 	hubs(0),
 	nosave(false)
 {
-	grid = addChild(Grid::Seed(2, 6));
+	grid = addChild(Grid::Seed(2, 7));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
 	grid->column(2).mode = GridInfo::FILL;
 	grid->column(3).mode = GridInfo::FILL;
 	grid->column(4).mode = GridInfo::FILL;
 	grid->column(5).mode = GridInfo::FILL;
+	grid->column(6).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
@@ -58,7 +62,7 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 		Table::Seed cs = WinUtil::Seeds::table;
 		cs.style |= LVS_NOSORTHEADER;
 		hubs = grid->addChild(cs);
-		grid->setWidget(hubs, 0, 0, 1, 6);
+		grid->setWidget(hubs, 0, 0, 1, 7);
 		addWidget(hubs);
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
@@ -107,15 +111,19 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 		button->setHelpId(IDH_FAVORITE_HUBS_REMOVE);
 		button->onClicked(std::tr1::bind(&FavHubsFrame::handleRemove, this));
 		addWidget(button);
+
+		cs.caption = T_("Manage &groups");
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_FAVORITE_HUBS_MANAGE_GROUPS);
+		button->onClicked(std::tr1::bind(&FavHubsFrame::handleGroups, this));
+		addWidget(button);
 	}
 
 	initStatus();
 
 	layout();
 
-	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
-	for(FavoriteHubEntryList::const_iterator i = fl.begin(); i != fl.end(); ++i)
-		addEntry(*i, /*itemCount*/ -1, /*scroll*/ false);
+	fillList();
 
 	FavoriteManager::getInstance()->addListener(this);
 }
@@ -172,6 +180,7 @@ void FavHubsFrame::handleProperties() {
 			hubs->setText(i, COLUMN_NICK, Text::toT(e->getNick(false)));
 			hubs->setText(i, COLUMN_PASSWORD, tstring(e->getPassword().size(), '*'));
 			hubs->setText(i, COLUMN_USERDESCRIPTION, Text::toT(e->getUserDescription()));
+			hubs->setText(i, COLUMN_GROUP, Text::toT(e->getGroup()));
 		}
 	}
 }
@@ -220,6 +229,14 @@ void FavHubsFrame::handleRemove() {
 	}
 }
 
+void FavHubsFrame::handleGroups() {
+	FavHubGroupsDlg(this).run();
+
+	HoldRedraw hold(hubs);
+	hubs->clear();
+	fillList();
+}
+
 void FavHubsFrame::handleDoubleClick() {
 	if(hubs->hasSelected()) {
 		openSelected();
@@ -259,9 +276,17 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	menu->appendItem(T_("Move &Down"), std::tr1::bind(&FavHubsFrame::handleDown, this), dwt::IconPtr(), hasSelected);
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&FavHubsFrame::handleRemove, this), dwt::IconPtr(), hasSelected);
+	menu->appendSeparator();
+	menu->appendItem(T_("Manage &groups"), std::tr1::bind(&FavHubsFrame::handleGroups, this));
 
 	menu->open(pt);
 	return true;
+}
+
+void FavHubsFrame::fillList() {
+	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
+	for(FavoriteHubEntryList::const_iterator i = fl.begin(), iend = fl.end(); i != iend; ++i)
+		addEntry(*i, /*itemCount*/ -1, /*scroll*/ false);
 }
 
 void FavHubsFrame::addEntry(const FavoriteHubEntryPtr entry, int index, bool scroll) {
@@ -272,6 +297,7 @@ void FavHubsFrame::addEntry(const FavoriteHubEntryPtr entry, int index, bool scr
 	l.push_back(tstring(entry->getPassword().size(), '*'));
 	l.push_back(Text::toT(entry->getServer()));
 	l.push_back(Text::toT(entry->getUserDescription()));
+	l.push_back(Text::toT(entry->getGroup()));
 	int itemCount = hubs->insert(l, reinterpret_cast<LPARAM>(entry), index);
 	if(index == -1)
 		index = itemCount;

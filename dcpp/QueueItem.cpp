@@ -47,14 +47,14 @@ int QueueItem::countOnlineUsers() const {
 	return n;
 }
 
-void QueueItem::addSource(const UserPtr& aUser) {
+void QueueItem::addSource(const UserPtr& aUser, const string& hubHint) {
 	dcassert(!isSource(aUser));
 	SourceIter i = getBadSource(aUser);
 	if(i != badSources.end()) {
 		sources.push_back(*i);
 		badSources.erase(i);
 	} else {
-		sources.push_back(Source(aUser));
+		sources.push_back(Source(aUser, hubHint));
 	}
 }
 

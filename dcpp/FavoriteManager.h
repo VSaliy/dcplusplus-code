@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2008 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include "ClientManagerListener.h"
 #include "FavoriteManagerListener.h"
 #include "HubEntry.h"
+#include "FavHubGroup.h"
 
 namespace dcpp {
 
@@ -74,12 +75,20 @@ public:
 	std::string getUserURL(const UserPtr& aUser) const;
 
 // Favorite Hubs
+	const FavoriteHubEntryList& getFavoriteHubs() const { return favoriteHubs; }
 	FavoriteHubEntryList& getFavoriteHubs() { return favoriteHubs; }
 
 	void addFavorite(const FavoriteHubEntry& aEntry);
 	void removeFavorite(FavoriteHubEntry* entry);
 	bool isFavoriteHub(const std::string& aUrl);
-	FavoriteHubEntryPtr getFavoriteHubEntry(const string& aUrl);
+	FavoriteHubEntryPtr getFavoriteHubEntry(const string& aServer) const;
+
+// Favorite hub groups
+	const FavHubGroups& getFavHubGroups() const { return favHubGroups; }
+	void setFavHubGroups(const FavHubGroups& favHubGroups_) { favHubGroups = favHubGroups_; }
+
+	FavoriteHubEntryList getFavoriteHubs(const string& group) const;
+	bool isPrivate(const string& url) const;
 
 // Favorite Directories
 	bool addFavoriteDir(const string& aDirectory, const string& aName);
@@ -105,6 +114,7 @@ public:
 
 private:
 	FavoriteHubEntryList favoriteHubs;
+	FavHubGroups favHubGroups;
 	StringPairList favoriteDirs;
 	UserCommand::List userCommands;
 	int lastId;

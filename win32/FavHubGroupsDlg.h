@@ -16,30 +16,44 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_LINE_DLG_H
-#define DCPLUSPLUS_WIN32_LINE_DLG_H
+#ifndef DCPLUSPLUS_WIN32_FAVHUBGROUPSDLG_H
+#define DCPLUSPLUS_WIN32_FAVHUBGROUPSDLG_H
 
-#include <dcpp/Util.h>
+#include <dcpp/forward.h>
 
-class LineDlg : public dwt::ModalDialog
+class FavHubGroupsDlg : public dwt::ModalDialog
 {
 public:
-	LineDlg(dwt::Widget* parent, const tstring& title, const tstring& desc, const tstring& text_ = Util::emptyStringT, bool password = false);
+	/// @param parentEntry_ entry currently being edited, to make sure we don't delete it
+	FavHubGroupsDlg(dwt::Widget* parent, FavoriteHubEntry* parentEntry_ = 0);
+	virtual ~FavHubGroupsDlg();
 
 	int run();
 
-	tstring getLine() const { return text; }
-
 private:
 	GridPtr grid;
-	TextBoxPtr line;
+	TablePtr groups;
+	ButtonPtr update;
+	ButtonPtr remove;
+	GroupBoxPtr properties;
+	TextBoxPtr edit;
+	CheckBoxPtr priv_box;
 
-	tstring text;
+	FavoriteHubEntry* parentEntry;
 
-	bool initDialog(const tstring& title, const tstring& desc, bool password);
-	void okClicked();
+	bool handleInitDialog();
+	bool handleKeyDown(int c);
+	void handleSelectionChanged();
+	void handleUpdate();
+	void handleRemove();
+	void handleAdd();
+	void handleClose();
+
+	void add(const tstring& name, bool priv);
+	bool isPrivate(size_t row) const;
+	bool addable(const tstring& name, int ignore = -1);
 
 	void layout();
 };
 
-#endif // !defined(LINE_DLG_H)
+#endif
