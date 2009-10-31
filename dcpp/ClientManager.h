@@ -44,8 +44,10 @@ public:
 	size_t getUserCount() const;
 	int64_t getAvailable() const;
 	StringList getHubs(const CID& cid) const;
-	StringList getHubNames(const CID& cid) const;
-	StringList getNicks(const CID& cid) const;
+	/// @param url only retrieve information for the specified client
+	StringList getHubNames(const CID& cid, const string& url = Util::emptyString);
+	/// @param url only retrieve information for the specified client
+	StringList getNicks(const CID& cid, const string& url = Util::emptyString);
 	string getConnection(const CID& cid) const;
 
 	bool isConnected(const string& aUrl) const;
@@ -141,6 +143,12 @@ private:
 	}
 
 	void updateNick(const OnlineUser& user) throw();
+
+	OnlineUser* findOnlineUser_hint(const CID& cid, const string& hintUrl) throw() {
+		OnlinePair p;
+		return findOnlineUser_hint(cid, hintUrl, p);
+	}
+	OnlineUser* findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p) throw();
 
 	string getUsersFile() const { return Util::getPath(Util::PATH_USER_LOCAL) + "Users.xml"; }
 

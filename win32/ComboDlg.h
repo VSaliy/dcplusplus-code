@@ -16,30 +16,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_LINE_DLG_H
-#define DCPLUSPLUS_WIN32_LINE_DLG_H
+#ifndef DCPLUSPLUS_WIN32_COMBODLG_H
+#define DCPLUSPLUS_WIN32_COMBODLG_H
 
-#include <dcpp/Util.h>
-
-class LineDlg : public dwt::ModalDialog
+class ComboDlg : public dwt::ModalDialog
 {
 public:
-	LineDlg(dwt::Widget* parent, const tstring& title, const tstring& desc, const tstring& text_ = Util::emptyStringT, bool password = false);
+	ComboDlg(dwt::Widget* parent, const tstring& title, const tstring& desc, const TStringList& values, size_t sel = 0);
 
 	int run();
 
-	tstring getLine() const { return text; }
+	tstring getValue() const { return value; }
 
 private:
 	GridPtr grid;
-	TextBoxPtr line;
+	ComboBoxPtr combo;
 
-	tstring text;
+	tstring value;
 
-	bool initDialog(const tstring& title, const tstring& desc, bool password);
+	bool initDialog(const tstring& title, const tstring& desc, const TStringList& values, size_t sel);
 	void okClicked();
 
 	void layout();
 };
 
-#endif // !defined(LINE_DLG_H)
+#endif

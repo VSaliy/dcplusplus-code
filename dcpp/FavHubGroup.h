@@ -16,30 +16,21 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_LINE_DLG_H
-#define DCPLUSPLUS_WIN32_LINE_DLG_H
+#ifndef DCPLUSPLUS_DCPP_FAVHUBGROUP_H
+#define DCPLUSPLUS_DCPP_FAVHUBGROUP_H
 
-#include <dcpp/Util.h>
+namespace dcpp {
 
-class LineDlg : public dwt::ModalDialog
-{
-public:
-	LineDlg(dwt::Widget* parent, const tstring& title, const tstring& desc, const tstring& text_ = Util::emptyStringT, bool password = false);
-
-	int run();
-
-	tstring getLine() const { return text; }
-
-private:
-	GridPtr grid;
-	TextBoxPtr line;
-
-	tstring text;
-
-	bool initDialog(const tstring& title, const tstring& desc, bool password);
-	void okClicked();
-
-	void layout();
+struct FavHubGroupProperties {
+	/**
+	* Designates a private group; hubs in a private group are not used when trying to match an
+	* online user, and are not shared with any peer.
+	*/
+	bool priv;
 };
 
-#endif // !defined(LINE_DLG_H)
+typedef std::tr1::unordered_map<string, FavHubGroupProperties> FavHubGroups;
+
+} // namespace dcpp
+
+#endif

@@ -20,38 +20,35 @@
 
 #include "resource.h"
 
-#include "LineDlg.h"
+#include "ComboDlg.h"
 
 #include "WinUtil.h"
 
-LineDlg::LineDlg(dwt::Widget* parent, const tstring& title, const tstring& desc, const tstring& text_, bool password) :
+ComboDlg::ComboDlg(dwt::Widget* parent, const tstring& title, const tstring& desc, const TStringList& values, size_t sel) :
 dwt::ModalDialog(parent),
 grid(0),
-line(0),
-text(text_)
+combo(0)
 {
-	onInitDialog(std::tr1::bind(&LineDlg::initDialog, this, title, desc, password));
+	onInitDialog(std::tr1::bind(&ComboDlg::initDialog, this, title, desc, values, sel));
 }
 
-int LineDlg::run() {
+int ComboDlg::run() {
 	create(dwt::Point(365, 83));
 	return show();
 }
 
-bool LineDlg::initDialog(const tstring& title, const tstring& desc, bool password) {
+bool ComboDlg::initDialog(const tstring& title, const tstring& desc, const TStringList& values, size_t sel) {
 	grid = addChild(Grid::Seed(1, 2));
 	grid->column(0).mode = GridInfo::FILL;
 
-	line = grid->addChild(GroupBox::Seed(desc))->addChild(WinUtil::Seeds::Dialog::textBox);
-	if(password) {
-		line->setPassword();
-	}
-	line->setText(text);
-	line->setSelection();
+	combo = grid->addChild(GroupBox::Seed(desc))->addChild(WinUtil::Seeds::Dialog::comboBox);
+	for(TStringList::const_iterator i = values.begin(), iend = values.end(); i != iend; ++i)
+		combo->addValue(*i);
+	combo->setSelected(sel);
 
 	WinUtil::addDlgButtons(grid->addChild(Grid::Seed(2, 1)),
-		std::tr1::bind(&LineDlg::okClicked, this),
-		std::tr1::bind(&LineDlg::endDialog, this, IDCANCEL));
+		std::tr1::bind(&ComboDlg::okClicked, this),
+		std::tr1::bind(&ComboDlg::endDialog, this, IDCANCEL));
 
 	setText(title);
 
@@ -61,12 +58,12 @@ bool LineDlg::initDialog(const tstring& title, const tstring& desc, bool passwor
 	return false;
 }
 
-void LineDlg::okClicked() {
-	text = line->getText();
+void ComboDlg::okClicked() {
+	value = combo->getText();
 	endDialog(IDOK);
 }
 
-void LineDlg::layout() {
+void ComboDlg::layout() {
 	dwt::Point sz = getClientSize();
 	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }

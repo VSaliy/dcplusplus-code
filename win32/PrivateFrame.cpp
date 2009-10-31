@@ -78,7 +78,7 @@ void PrivateFrame::closeAll(){
 
 void PrivateFrame::closeAllOffline() {
 	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
-		if(!i->first->isOnline())
+		if(!i->second->online)
 			i->second->close(true);
 	}
 }
@@ -116,7 +116,9 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 						   const string& logPath) :
 	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
 	replyTo(replyTo_),
-	hubHint(hubHint_)
+	hubHint(hubHint_),
+	priv(FavoriteManager::getInstance()->isPrivate(hubHint)),
+	online(replyTo.getUser()->isOnline())
 {
 	chat->setHelpId(IDH_PM_CHAT);
 	addWidget(chat);
@@ -130,14 +132,14 @@ PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, boo
 	initStatus();
 	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&PrivateFrame::openLog, this));
 
-	updateTitle();
+	updateOnlineStatus();
 	layout();
 
 	readLog(logPath);
 
 	ClientManager::getInstance()->addListener(this);
 
-	callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
+	callAsync(std::tr1::bind(&PrivateFrame::updateOnlineStatus, this));
 
 	frames.insert(std::make_pair(replyTo.getUser(), this));
 
@@ -220,10 +222,12 @@ void PrivateFrame::readLog(const string& logPath) {
 }
 
 void PrivateFrame::fillLogParams(StringMap& params) const {
-	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(replyTo.getUser()->getCID()));
-	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(replyTo.getUser()->getCID()));
+	params["hubNI"] = Util::toString(priv ? ClientManager::getInstance()->getHubNames(replyTo.getUser()->getCID(), hubHint) :
+		ClientManager::getInstance()->getHubNames(replyTo.getUser()->getCID()));
+	params["hubURL"] = priv ? hubHint : Util::toString(ClientManager::getInstance()->getHubs(replyTo.getUser()->getCID()));
 	params["userCID"] = replyTo.getUser()->getCID().toBase32();
-	params["userNI"] = ClientManager::getInstance()->getNicks(replyTo.getUser()->getCID())[0];
+	params["userNI"] = (priv ? ClientManager::getInstance()->getNicks(replyTo.getUser()->getCID(), hubHint) :
+		ClientManager::getInstance()->getNicks(replyTo.getUser()->getCID()))[0];
 	params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
 }
 
@@ -247,10 +251,13 @@ void PrivateFrame::layout() {
 		chat->sendMessage(WM_VSCROLL, SB_BOTTOM);
 }
 
-void PrivateFrame::updateTitle() {
-	pair<tstring, bool> hubs = WinUtil::getHubNames(replyTo.getUser());
-	setText((WinUtil::getNicks(replyTo.getUser()) + _T(" - ") + hubs.first));
-	setIcon(hubs.second ? IDR_PRIVATE : IDR_PRIVATE_OFF);
+void PrivateFrame::updateOnlineStatus() {
+	pair<tstring, bool> hubs = priv ? WinUtil::getHubNames(replyTo.getUser(), hubHint) : WinUtil::getHubNames(replyTo.getUser());
+
+	setText((priv ? WinUtil::getNicks(replyTo.getUser(), hubHint) : WinUtil::getNicks(replyTo.getUser())) + _T(" - ") + hubs.first);
+
+	online = hubs.second;
+	setIcon(online ? IDR_PRIVATE : IDR_PRIVATE_OFF);
 }
 
 void PrivateFrame::enterImpl(const tstring& s) {
@@ -296,7 +303,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 	}
 
 	if(send) {
-		if(replyTo.getUser()->isOnline()) {
+		if(online) {
 			sendMessage(s);
 		} else {
 			addStatus(T_("User went offline"));
@@ -318,15 +325,15 @@ PrivateFrame::UserInfoList PrivateFrame::selectedUsersImpl() {
 
 void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
 	if(aUser.getUser() == replyTo.getUser())
-		callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
+		callAsync(std::tr1::bind(&PrivateFrame::updateOnlineStatus, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
 	if(aUser == replyTo.getUser())
-		callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
+		callAsync(std::tr1::bind(&PrivateFrame::updateOnlineStatus, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
 	if(aUser == replyTo.getUser())
-		callAsync(std::tr1::bind(&PrivateFrame::updateTitle, this));
+		callAsync(std::tr1::bind(&PrivateFrame::updateOnlineStatus, this));
 }
 
 void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {

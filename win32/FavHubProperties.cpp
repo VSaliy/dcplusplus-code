@@ -24,6 +24,9 @@
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
+
+#include "FavHubGroupsDlg.h"
+#include "HoldRedraw.h"
 #include "WinUtil.h"
 
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
@@ -35,6 +38,7 @@ description(0),
 nick(0),
 password(0),
 userDescription(0),
+groups(0),
 entry(_entry)
 {
 	onInitDialog(std::tr1::bind(&FavHubProperties::handleInitDialog, this));
@@ -45,14 +49,14 @@ FavHubProperties::~FavHubProperties() {
 }
 
 int FavHubProperties::run() {
-	create(Seed(dwt::Point(307, 271), DS_CONTEXTHELP));
+	create(Seed(dwt::Point(320, 330), DS_CONTEXTHELP));
 	return show();
 }
 
 bool FavHubProperties::handleInitDialog() {
 	setHelpId(IDH_FAVORITE_HUB);
 
-	grid = addChild(Grid::Seed(3, 2));
+	grid = addChild(Grid::Seed(4, 2));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
 
@@ -108,9 +112,28 @@ bool FavHubProperties::handleInitDialog() {
 		userDescription->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
 	}
 
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Group")));
+		grid->setWidget(group, 2, 0, 1, 2);
+
+		GridPtr cur = group->addChild(Grid::Seed(1, 2));
+		cur->column(0).mode = GridInfo::FILL;
+
+		ComboBox::Seed seed = WinUtil::Seeds::Dialog::comboBox;
+		seed.style |= CBS_SORT;
+		groups = cur->addChild(seed);
+		groups->setHelpId(IDH_FAVORITE_HUB_GROUP);
+
+		ButtonPtr manage = cur->addChild(Button::Seed(T_("Manage &groups")));
+		manage->setHelpId(IDH_FAVORITE_HUBS_MANAGE_GROUPS);
+		manage->onClicked(std::tr1::bind(&FavHubProperties::handleGroups, this));
+	}
+
 	WinUtil::addDlgButtons(grid,
 		std::tr1::bind(&FavHubProperties::handleOKClicked, this),
 		std::tr1::bind(&FavHubProperties::endDialog, this, IDCANCEL));
+
+	fillGroups();
 
 	setText(T_("Favorite Hub Properties"));
 
@@ -151,8 +174,37 @@ void FavHubProperties::handleOKClicked() {
 	entry->setNick(Text::fromT(nick->getText()));
 	entry->setPassword(Text::fromT(password->getText()));
 	entry->setUserDescription(Text::fromT(userDescription->getText()));
+	entry->setGroup(Text::fromT(groups->getText()));
 	FavoriteManager::getInstance()->save();
 	endDialog(IDOK);
+}
+
+void FavHubProperties::handleGroups() {
+	FavHubGroupsDlg(this, entry).run();
+
+	HoldRedraw hold(groups);
+	groups->clear();
+	fillGroups();
+}
+
+void FavHubProperties::fillGroups() {
+	const string& entryGroup = entry->getGroup();
+	bool needSel = true;
+
+	groups->addValue(_T(""));
+
+	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
+	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
+		const string& name = i->first;
+		int pos = groups->addValue(Text::toT(name));
+
+		if(needSel && name == entryGroup) {
+			groups->setSelected(pos);
+			needSel = false;
+		}
+	}
+	if(needSel)
+		groups->setSelected(0);
 }
 
 void FavHubProperties::layout() {

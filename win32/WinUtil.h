@@ -153,11 +153,15 @@ public:
 	static bool isAlt() { return (::GetKeyState(VK_MENU) & 0x8000) > 0; }
 	static bool isCtrl() { return (::GetKeyState(VK_CONTROL) & 0x8000) > 0; }
 
-	static tstring getNicks(const CID& cid) throw();
-	static tstring getNicks(const UserPtr& u);
+	/// @param url only retrieve information for the specified client
+	static tstring getNicks(const CID& cid, const string& url = Util::emptyString) throw();
+	/// @param url only retrieve information for the specified client
+	static tstring getNicks(const UserPtr& u, const string& url = Util::emptyString);
 	/** @return Pair of hubnames as a string and a bool representing the user's online status */
-	static pair<tstring, bool> getHubNames(const CID& cid) throw();
-	static pair<tstring, bool> getHubNames(const UserPtr& u);
+	/// @param url only retrieve information for the specified client
+	static pair<tstring, bool> getHubNames(const CID& cid, const string& url = Util::emptyString) throw();
+	/// @param url only retrieve information for the specified client
+	static pair<tstring, bool> getHubNames(const UserPtr& u, const string& url = Util::emptyString);
 
 	static void reducePaths(string& message);
 

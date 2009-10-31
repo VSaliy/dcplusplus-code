@@ -52,15 +52,6 @@ static const ColumnInfo usersColumns[] = {
 
 HubFrame::FrameList HubFrame::frames;
 
-void HubFrame::closeDisconnected() {
-	for(FrameIter i=frames.begin(); i!= frames.end(); ++i) {
-		HubFrame* frame = *i;
-		if (!(frame->client->isConnected())) {
-			frame->close(true);
-		}
-	}
-}
-
 void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
 	for(FrameIter i = frames.begin(); i!= frames.end(); ++i) {
 		HubFrame* frame = *i;
@@ -71,6 +62,30 @@ void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
 	}
 
 	new HubFrame(mdiParent, url);
+}
+
+void HubFrame::closeDisconnected() {
+	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
+		HubFrame* frame = *i;
+		if(!(frame->client->isConnected())) {
+			frame->close(true);
+		}
+	}
+}
+
+void HubFrame::closeFavGroup(const string& group) {
+	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
+		HubFrame* frame = *i;
+		FavoriteHubEntry* fav = FavoriteManager::getInstance()->getFavoriteHubEntry(frame->url);
+		if(fav && fav->getGroup() == group) {
+			frame->close(true);
+		}
+	}
+}
+
+void HubFrame::resortUsers() {
+	for(FrameIter i = frames.begin(); i != frames.end(); ++i)
+		(*i)->resortForFavsFirst(true);
 }
 
 const StringMap HubFrame::getWindowParams() const {
@@ -1287,11 +1302,6 @@ void HubFrame::handleFollow() {
 		client->addListener(this);
 		client->connect();
 	}
-}
-
-void HubFrame::resortUsers() {
-	for(FrameIter i = frames.begin(); i != frames.end(); ++i)
-		(*i)->resortForFavsFirst(true);
 }
 
 bool HubFrame::handleFilterKey(int) {

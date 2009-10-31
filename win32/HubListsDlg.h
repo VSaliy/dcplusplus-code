@@ -33,7 +33,6 @@ private:
 	TablePtr hubLists;
 
 	bool handleInitDialog();
-	void handleFocus();
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
 	void handleAddClicked();

@@ -60,9 +60,11 @@ public:
 class FavoriteHubEntry {
 public:
 	FavoriteHubEntry() throw() : encoding(Text::systemCharset) { }
-	FavoriteHubEntry(const HubEntry& rhs) throw() : name(rhs.getName()), server(rhs.getServer()), description(rhs.getDescription()), encoding(Text::systemCharset) { }
-	FavoriteHubEntry(const FavoriteHubEntry& rhs) throw() : userdescription(rhs.userdescription), name(rhs.getName()), server(rhs.getServer()), description(rhs.getDescription()),
-		password(rhs.getPassword()), encoding(rhs.getEncoding()), nick(rhs.nick){ }
+	FavoriteHubEntry(const HubEntry& rhs) throw() : name(rhs.getName()), server(rhs.getServer()),
+		description(rhs.getDescription()), encoding(Text::systemCharset) { }
+	FavoriteHubEntry(const FavoriteHubEntry& rhs) throw() : userdescription(rhs.userdescription),
+		name(rhs.getName()), server(rhs.getServer()), description(rhs.getDescription()),
+		password(rhs.getPassword()), encoding(rhs.getEncoding()), group(rhs.getGroup()), nick(rhs.nick) { }
 	~FavoriteHubEntry() throw() { }
 
 	const string& getNick(bool useDefault = true) const {
@@ -77,6 +79,7 @@ public:
 	GETSET(string, description, Description);
 	GETSET(string, password, Password);
 	GETSET(string, encoding, Encoding);
+	GETSET(string, group, Group);
 
 private:
 	string nick;

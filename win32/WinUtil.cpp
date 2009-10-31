@@ -466,15 +466,15 @@ void WinUtil::openFolder(const tstring& file) {
 		::ShellExecute(NULL, NULL, Text::toT("explorer.exe").c_str(), Text::toT("/e, \"" + Util::getFilePath(Text::fromT(file)) + "\"").c_str(), NULL, SW_SHOWNORMAL);
 }
 
-tstring WinUtil::getNicks(const CID& cid) throw() {
-	return Text::toT(Util::toString(ClientManager::getInstance()->getNicks(cid)));
+tstring WinUtil::getNicks(const CID& cid, const string& url) throw() {
+	return Text::toT(Util::toString(ClientManager::getInstance()->getNicks(cid, url)));
 }
-tstring WinUtil::getNicks(const UserPtr& u) {
-	return getNicks(u->getCID());
+tstring WinUtil::getNicks(const UserPtr& u, const string& url) {
+	return getNicks(u->getCID(), url);
 }
 
-pair<tstring, bool> WinUtil::getHubNames(const CID& cid) throw() {
-	StringList hubs = ClientManager::getInstance()->getHubNames(cid);
+pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& url) throw() {
+	StringList hubs = ClientManager::getInstance()->getHubNames(cid, url);
 	if(hubs.empty()) {
 		return make_pair(T_("Offline"), false);
 	} else {
@@ -482,8 +482,8 @@ pair<tstring, bool> WinUtil::getHubNames(const CID& cid) throw() {
 	}
 }
 
-pair<tstring, bool> WinUtil::getHubNames(const UserPtr& u) {
-	return getHubNames(u->getCID());
+pair<tstring, bool> WinUtil::getHubNames(const UserPtr& u, const string& url) {
+	return getHubNames(u->getCID(), url);
 }
 
 int WinUtil::getIconIndex(const tstring& aFileName) {

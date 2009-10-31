@@ -83,16 +83,8 @@ public:
 protected:
 	friend class WidgetCreator<Composite>;
 
-	HBRUSH background;
-
 	Composite(Widget* parent, Dispatcher& dispatcher) : BaseType(parent, dispatcher) {
-		onPainting(std::tr1::bind(&Composite::paint, this, _1));
 	};
-
-	void paint(PaintCanvas& canvas) {
-		RECT rc = canvas.getPaintRect();
-		::FillRect(canvas.handle(), &rc, background);
-	}
 
 private:
 	template<typename T>
@@ -107,8 +99,6 @@ inline Composite::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle)
 }
 
 inline void Composite::create(const Seed& cs) {
-	// TODO icons, menus etc
-	background = cs.background;
 	BaseType::create(cs);
 
 	if(cs.icon)
@@ -117,8 +107,6 @@ inline void Composite::create(const Seed& cs) {
 		setClassParam(GCLP_HICONSM, cs.smallIcon->handle());
 	if(cs.background)
 		setClassParam(GCLP_HBRBACKGROUND, cs.background);
-	//if(cs.menuName)
-		//setClassParam(GCLP_MENUNAME, cs.menuName);
 	if(cs.cursor)
 		setClassParam(GCLP_HCURSOR, cs.cursor);
 }

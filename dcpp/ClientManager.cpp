@@ -82,23 +82,35 @@ StringList ClientManager::getHubs(const CID& cid) const {
 	return lst;
 }
 
-StringList ClientManager::getHubNames(const CID& cid) const {
+StringList ClientManager::getHubNames(const CID& cid, const string& url) {
 	Lock l(cs);
 	StringList lst;
-	OnlinePairC op = onlineUsers.equal_range(cid);
-	for(OnlineIterC i = op.first; i != op.second; ++i) {
-		lst.push_back(i->second->getClient().getHubName());
+	if(url.empty()) {
+		OnlinePairC op = onlineUsers.equal_range(cid);
+		for(OnlineIterC i = op.first; i != op.second; ++i) {
+			lst.push_back(i->second->getClient().getHubName());
+		}
+	} else {
+		OnlineUser* u = findOnlineUser_hint(cid, url);
+		if(u)
+			lst.push_back(u->getClient().getHubName());
 	}
 	return lst;
 }
 
-StringList ClientManager::getNicks(const CID& cid) const {
+StringList ClientManager::getNicks(const CID& cid, const string& url) {
 	Lock l(cs);
 	StringSet ret;
 
-	OnlinePairC op = onlineUsers.equal_range(cid);
-	for(OnlineIterC i = op.first; i != op.second; ++i) {
-		ret.insert(i->second->getIdentity().getNick());
+	if(url.empty()) {
+		OnlinePairC op = onlineUsers.equal_range(cid);
+		for(OnlineIterC i = op.first; i != op.second; ++i) {
+			ret.insert(i->second->getIdentity().getNick());
+		}
+	} else {
+		OnlineUser* u = findOnlineUser_hint(cid, url);
+		if(u)
+			ret.insert(u->getIdentity().getNick());
 	}
 
 	if(ret.empty()) {
@@ -301,21 +313,32 @@ void ClientManager::connect(const UserPtr& p, const string& token, const string&
 	}
 }
 
-OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl) throw() {
-	OnlinePair p = onlineUsers.equal_range(cid);
+OnlineUser* ClientManager::findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p) throw() {
+	p = onlineUsers.equal_range(cid);
 	if(p.first == p.second)
 		return 0;
 
 	if(!hintUrl.empty()) {
 		for(OnlineIter i = p.first; i != p.second; ++i) {
 			OnlineUser* u = i->second;
-			if(u->getClient().getHubUrl() == hintUrl) {
+			if(u->getClient().getAddress() == hintUrl) {
 				return u;
 			}
 		}
 	}
 
-	// TODO maybe disallow non-hint urls, or maybe for some hints (secure?)
+	return 0;
+}
+
+OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl) throw() {
+	OnlinePair p;
+	OnlineUser* u = findOnlineUser_hint(cid, hintUrl, p);
+	if(u)
+		return u;
+
+	if(FavoriteManager::getInstance()->isPrivate(hintUrl))
+		return 0;
+
 	return p.first->second;
 }
 

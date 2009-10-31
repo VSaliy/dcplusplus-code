@@ -59,6 +59,7 @@ private:
 		COLUMN_PASSWORD,
 		COLUMN_SERVER,
 		COLUMN_USERDESCRIPTION,
+		COLUMN_GROUP,
 		COLUMN_LAST
 	};
 
@@ -72,10 +73,12 @@ private:
 	void handleUp();
 	void handleDown();
 	void handleRemove();
+	void handleGroups();
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 
+	void fillList();
 	void addEntry(const FavoriteHubEntryPtr entry, int index = -1, bool scroll = true);
 	void openSelected();
 

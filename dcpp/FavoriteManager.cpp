@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2008 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -369,7 +369,13 @@ void FavoriteManager::save() {
 		xml.addTag("Hubs");
 		xml.stepIn();
 
-		for(FavoriteHubEntryList::const_iterator i = favoriteHubs.begin(); i != favoriteHubs.end(); ++i) {
+		for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
+			xml.addTag("Group");
+			xml.addChildAttrib("Name", i->first);
+			xml.addChildAttrib("Private", i->second.priv);
+		}
+
+		for(FavoriteHubEntryList::const_iterator i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i) {
 			xml.addTag("Hub");
 			xml.addChildAttrib("Name", (*i)->getName());
 			xml.addChildAttrib("Description", (*i)->getDescription());
@@ -378,38 +384,43 @@ void FavoriteManager::save() {
 			xml.addChildAttrib("Server", (*i)->getServer());
 			xml.addChildAttrib("UserDescription", (*i)->getUserDescription());
 			xml.addChildAttrib("Encoding", (*i)->getEncoding());
+			xml.addChildAttrib("Group", (*i)->getGroup());
 		}
+
 		xml.stepOut();
+
 		xml.addTag("Users");
 		xml.stepIn();
-		for(FavoriteMap::iterator j = users.begin(); j != users.end(); ++j) {
+		for(FavoriteMap::const_iterator i = users.begin(), iend = users.end(); i != iend; ++i) {
 			xml.addTag("User");
-			xml.addChildAttrib("LastSeen", j->second.getLastSeen());
-			xml.addChildAttrib("GrantSlot", j->second.isSet(FavoriteUser::FLAG_GRANTSLOT));
-			xml.addChildAttrib("UserDescription", j->second.getDescription());
-			xml.addChildAttrib("Nick", j->second.getNick());
-			xml.addChildAttrib("URL", j->second.getUrl());
-			xml.addChildAttrib("CID", j->first.toBase32());
+			xml.addChildAttrib("LastSeen", i->second.getLastSeen());
+			xml.addChildAttrib("GrantSlot", i->second.isSet(FavoriteUser::FLAG_GRANTSLOT));
+			xml.addChildAttrib("UserDescription", i->second.getDescription());
+			xml.addChildAttrib("Nick", i->second.getNick());
+			xml.addChildAttrib("URL", i->second.getUrl());
+			xml.addChildAttrib("CID", i->first.toBase32());
 		}
 		xml.stepOut();
+
 		xml.addTag("UserCommands");
 		xml.stepIn();
-		for(UserCommand::List::iterator k = userCommands.begin(); k != userCommands.end(); ++k) {
-			if(!k->isSet(UserCommand::FLAG_NOSAVE)) {
+		for(UserCommand::List::const_iterator i = userCommands.begin(), iend = userCommands.end(); i != iend; ++i) {
+			if(!i->isSet(UserCommand::FLAG_NOSAVE)) {
 				xml.addTag("UserCommand");
-				xml.addChildAttrib("Type", k->getType());
-				xml.addChildAttrib("Context", k->getCtx());
-				xml.addChildAttrib("Name", k->getName());
-				xml.addChildAttrib("Command", k->getCommand());
-				xml.addChildAttrib("Hub", k->getHub());
+				xml.addChildAttrib("Type", i->getType());
+				xml.addChildAttrib("Context", i->getCtx());
+				xml.addChildAttrib("Name", i->getName());
+				xml.addChildAttrib("Command", i->getCommand());
+				xml.addChildAttrib("Hub", i->getHub());
 			}
 		}
 		xml.stepOut();
+
 		//Favorite download to dirs
 		xml.addTag("FavoriteDirs");
 		xml.stepIn();
 		StringPairList spl = getFavoriteDirs();
-		for(StringPairIter i = spl.begin(); i != spl.end(); ++i) {
+		for(StringPairIter i = spl.begin(), iend = spl.end(); i != iend; ++i) {
 			xml.addTag("Directory", i->first);
 			xml.addChildAttrib("Name", i->second);
 		}
@@ -464,6 +475,16 @@ void FavoriteManager::load(SimpleXML& aXml) {
 	aXml.resetCurrentChild();
 	if(aXml.findChild("Hubs")) {
 		aXml.stepIn();
+
+		while(aXml.findChild("Group")) {
+			string name = aXml.getChildAttrib("Name");
+			if(name.empty())
+				continue;
+			FavHubGroupProperties props = { aXml.getBoolChildAttrib("Private") };
+			favHubGroups[name] = props;
+		}
+		aXml.resetCurrentChild();
+
 		while(aXml.findChild("Hub")) {
 			FavoriteHubEntry* e = new FavoriteHubEntry();
 			e->setName(aXml.getChildAttrib("Name"));
@@ -473,6 +494,7 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			e->setServer(aXml.getChildAttrib("Server"));
 			e->setUserDescription(aXml.getChildAttrib("UserDescription"));
 			e->setEncoding(aXml.getChildAttrib("Encoding"));
+			e->setGroup(aXml.getChildAttrib("Group"));
 			favoriteHubs.push_back(e);
 
 			/// @todo remove after version with windowmanager is released
@@ -546,14 +568,35 @@ void FavoriteManager::userUpdated(const OnlineUser& info) {
 	}
 }
 
-FavoriteHubEntry* FavoriteManager::getFavoriteHubEntry(const string& aServer) {
-	for(FavoriteHubEntryList::iterator i = favoriteHubs.begin(); i != favoriteHubs.end(); ++i) {
+FavoriteHubEntryPtr FavoriteManager::getFavoriteHubEntry(const string& aServer) const {
+	for(FavoriteHubEntryList::const_iterator i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i) {
 		FavoriteHubEntry* hub = *i;
 		if(Util::stricmp(hub->getServer(), aServer) == 0) {
 			return hub;
 		}
 	}
 	return NULL;
+}
+
+FavoriteHubEntryList FavoriteManager::getFavoriteHubs(const string& group) const {
+	FavoriteHubEntryList ret;
+	for(FavoriteHubEntryList::const_iterator i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i)
+		if((*i)->getGroup() == group)
+			ret.push_back(*i);
+	return ret;
+}
+
+bool FavoriteManager::isPrivate(const string& url) const {
+	FavoriteHubEntry* fav = getFavoriteHubEntry(url);
+	if(fav) {
+		const string& name = fav->getGroup();
+		if(!name.empty()) {
+			FavHubGroups::const_iterator group = favHubGroups.find(name);
+			if(group != favHubGroups.end())
+				return group->second.priv;
+		}
+	}
+	return false;
 }
 
 bool FavoriteManager::hasSlot(const UserPtr& aUser) const {
@@ -605,7 +648,6 @@ FavoriteHubEntryList::iterator FavoriteManager::getFavoriteHub(const string& aSe
 	}
 	return favoriteHubs.end();
 }
-
 
 void FavoriteManager::setHubList(int aHubList) {
 	lastServer = aHubList;
