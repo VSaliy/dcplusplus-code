@@ -137,12 +137,11 @@ Point AspectSizable< WidgetType >::getDesktopSize()
 template< class WidgetType >
 void AspectSizable< WidgetType >::centerWindow( Widget* target ) {
 	Point size = W().getWindowSize();
-	RECT rc;
 	if(!target) {
 		target = static_cast<WidgetType*>(this)->getParent();
 	}
-	::GetWindowRect(target->handle(), &rc);
-	W().layout(Rectangle(rc.left + (rc.right - rc.left)/2 - size.x/2, rc.top + (rc.bottom - rc.top)/2 - size.y/2, size.x, size.y));
+	Rectangle rc(target->getWindowRect());
+	W().layout(Rectangle(rc.left() + (rc.right() - rc.left())/2 - size.x/2, rc.top() + (rc.bottom() - rc.top())/2 - size.y/2, size.x, size.y)); /// @todo improve with methods of Rectangle like width() and height()?
 }
 
 template< class WidgetType >
