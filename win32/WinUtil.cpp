@@ -712,7 +712,7 @@ public:
 		// where to position the tooltip
 		dwt::Point pt;
 		if(isKeyPressed(VK_F1)) {
-			dwt::Rectangle rect; // TODO = parent->getBounds(false);
+			dwt::Rectangle rect = parent->getWindowRect();
 			pt.x = rect.left() + rect.width() / 2;
 			pt.y = rect.top();
 		} else {
@@ -763,7 +763,7 @@ private:
 		}
 
 		// now that the text control is correctly sized, resize the container window
-		dwt::Rectangle rect; // TODO = box->getBounds(false);
+		dwt::Rectangle rect = box->getWindowRect();
 		rect.pos -= margins;
 		rect.size += margins + margins;
 		rect.size.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
