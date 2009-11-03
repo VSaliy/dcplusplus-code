@@ -305,8 +305,10 @@ void ClientManager::putOffline(OnlineUser* ou, bool disconnect) throw() {
 }
 
 void ClientManager::connect(const UserPtr& p, const string& token, const string& hintUrl) {
+	bool priv = FavoriteManager::getInstance()->isPrivate(hintUrl);
+
 	Lock l(cs);
-	OnlineUser* u = findOnlineUser(p->getCID(), hintUrl);
+	OnlineUser* u = findOnlineUser(p->getCID(), hintUrl, priv);
 
 	if(u) {
 		u->getClient().connect(*u, token);
@@ -315,7 +317,7 @@ void ClientManager::connect(const UserPtr& p, const string& token, const string&
 
 OnlineUser* ClientManager::findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p) throw() {
 	p = onlineUsers.equal_range(cid);
-	if(p.first == p.second)
+	if(p.first == p.second) // no user found with the given CID.
 		return 0;
 
 	if(!hintUrl.empty()) {
@@ -330,21 +332,28 @@ OnlineUser* ClientManager::findOnlineUser_hint(const CID& cid, const string& hin
 	return 0;
 }
 
-OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl) throw() {
+OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl, bool priv) throw() {
 	OnlinePair p;
 	OnlineUser* u = findOnlineUser_hint(cid, hintUrl, p);
-	if(u)
+	if(u) // found an exact match (CID + hint).
 		return u;
 
-	if(FavoriteManager::getInstance()->isPrivate(hintUrl))
+	if(p.first == p.second) // no user found with the given CID.
 		return 0;
 
+	// if the hint hub is private, don't allow connecting to the same user from another hub.
+	if(priv)
+		return 0;
+
+	// ok, hub not private, return a random user that matches the given CID but not the hint.
 	return p.first->second;
 }
 
 void ClientManager::privateMessage(const UserPtr& p, const string& msg, bool thirdPerson, const string& hintUrl) {
+	bool priv = FavoriteManager::getInstance()->isPrivate(hintUrl);
+
 	Lock l(cs);
-	OnlineUser* u = findOnlineUser(p->getCID(), hintUrl);
+	OnlineUser* u = findOnlineUser(p->getCID(), hintUrl, priv);
 
 	if(u) {
 		u->getClient().privateMessage(*u, msg, thirdPerson);
