@@ -277,30 +277,32 @@ void AdcHub::handle(AdcCommand::QUI, AdcCommand& c) throw() {
 	uint32_t s = AdcCommand::toSID(c.getParam(0));
 
 	OnlineUser* victim = findUser(s);
-	if(!victim) {
-		return;
-	}
+	if(victim) {
 
-	string tmp;
-	if(c.getParam("MS", 1, tmp)) {
-		OnlineUser* source = 0;
-		string tmp2;
-		if(c.getParam("ID", 1, tmp2)) {
-			source = findUser(AdcCommand::toSID(tmp2));
+		string tmp;
+		if(c.getParam("MS", 1, tmp)) {
+			OnlineUser* source = 0;
+			string tmp2;
+			if(c.getParam("ID", 1, tmp2)) {
+				source = findUser(AdcCommand::toSID(tmp2));
+			}
+
+			if(source) {
+				tmp = str(F_("%1% was kicked by %2%: %3%") % victim->getIdentity().getNick() %
+					source->getIdentity().getNick() % tmp);
+			} else {
+				tmp = str(F_("%1% was kicked: %2%") % victim->getIdentity().getNick() % tmp);
+			}
+			fire(ClientListener::StatusMessage(), this, tmp, ClientListener::FLAG_IS_SPAM);
 		}
 
-		if(source) {
-			tmp = str(F_("%1% was kicked by %2%: %3%") % victim->getIdentity().getNick() %
-				source->getIdentity().getNick() % tmp);
-		} else {
-			tmp = str(F_("%1% was kicked: %2%") % victim->getIdentity().getNick() % tmp);
-		}
-		fire(ClientListener::StatusMessage(), this, tmp, ClientListener::FLAG_IS_SPAM);
+		putUser(s, c.getParam("DI", 1, tmp));
 	}
-
-	putUser(s, c.getParam("DI", 1, tmp));
 
 	if(s == sid) {
+		// this QUI is directed to us
+
+		string tmp;
 		if(c.getParam("TL", 1, tmp)) {
 			if(tmp == "-1") {
 				setAutoReconnect(false);
@@ -308,6 +310,9 @@ void AdcHub::handle(AdcCommand::QUI, AdcCommand& c) throw() {
 				setAutoReconnect(true);
 				setReconnDelay(Util::toUInt32(tmp));
 			}
+		}
+		if(!victim && c.getParam("MS", 1, tmp)) {
+			fire(ClientListener::StatusMessage(), this, tmp, ClientListener::FLAG_NORMAL);
 		}
 		if(c.getParam("RD", 1, tmp)) {
 			fire(ClientListener::Redirect(), this, tmp);
