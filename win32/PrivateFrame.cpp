@@ -153,8 +153,11 @@ PrivateFrame::~PrivateFrame() {
 void PrivateFrame::addChat(const tstring& aLine, bool log) {
 	/// @todo null clients are allowed (eg to display log history on opening), fix later
 	Client* pClient = 0;
+	/// @todo getting the client is disabled for now (no calling findOnlineUser outside the ClientManager lock)
+	/*
 	OnlineUser *ou = ClientManager::getInstance()->findOnlineUser(*replyTo.getUser(), Util::emptyString);
 	if (ou) pClient = &(ou->getClient()); // getClient actually retuns a ref.
+	*/
 
 	ChatType::addChat(pClient, aLine);
 
