@@ -25,7 +25,7 @@
 * [L#385818] More native menu colors (poy)
 * [L#385821] Apply the font to check-boxes and tabs (poy)
 * [L#213213] Implement bandwidth throttling (cologic)
-* New icon (thanks radox)
+* New icons (thanks radox)
 * Fix dialog focus issues (poy)
 * Fix a crash in queue frame
 * Move finished downloads functionality into queue frame
