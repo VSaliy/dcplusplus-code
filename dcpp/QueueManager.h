@@ -242,7 +242,7 @@ private:
 	/** File lists not to delete */
 	StringList protectedFileLists;
 	/** Sanity check for the target filename */
-	static string checkTarget(const string& aTarget, int64_t aSize) throw(QueueException, FileException);
+	static string checkTarget(const string& aTarget, bool checkExsistence) throw(QueueException, FileException);
 	/** Add a source to an existing queue item */
 	bool addSource(QueueItem* qi, const UserPtr& aUser, Flags::MaskType addBad, const string& hubHint) throw(QueueException, FileException);
 

@@ -573,7 +573,7 @@ void QueueManager::addList(const UserPtr& aUser, const string& hubHint, int aFla
 string QueueManager::getListPath(const UserPtr& user) {
 	StringList nicks = ClientManager::getInstance()->getNicks(*user);
 	string nick = nicks.empty() ? Util::emptyString : Util::cleanPathChars(nicks[0]) + ".";
-	return checkTarget(Util::getListPath() + nick + user->getCID().toBase32(), -1);
+	return checkTarget(Util::getListPath() + nick + user->getCID().toBase32(), /*checkExistence*/ false);
 }
 
 void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser, const string& hubHint,
@@ -599,7 +599,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 		target = getListPath(aUser);
 		tempTarget = aTarget;
 	} else {
-		target = checkTarget(aTarget, aSize);
+		target = checkTarget(aTarget, /*checkExistence*/ true);
 	}
 
 	// Check if it's a zero-byte file, if so, create and return...
@@ -663,7 +663,7 @@ void QueueManager::setDirty() {
 	}
 }
 
-string QueueManager::checkTarget(const string& aTarget, int64_t aSize) throw(QueueException, FileException) {
+string QueueManager::checkTarget(const string& aTarget, bool checkExistence) throw(QueueException, FileException) {
 #ifdef _WIN32
 	if(aTarget.length() > MAX_PATH) {
 		throw QueueException(_("Target filename too long"));
@@ -686,9 +686,8 @@ string QueueManager::checkTarget(const string& aTarget, int64_t aSize) throw(Que
 	string target = Util::validateFileName(aTarget);
 
 	// Check that the file doesn't already exist...
-	int64_t sz = File::getSize(target);
-	if( (aSize != -1) && (aSize <= sz) ) {
-		throw FileException(_("A file of equal or larger size already exists at the target location"));
+	if(checkExistence && File::getSize(target) != -1) {
+		throw FileException(_("File already exists at the target location"));
 	}
 	return target;
 }
@@ -1530,7 +1529,7 @@ void QueueLoader::startTag(const string& name, StringPairList& attribs, bool sim
 				return;
 			try {
 				const string& tgt = getAttrib(attribs, sTarget, 0);
-				target = QueueManager::checkTarget(tgt, size);
+				target = QueueManager::checkTarget(tgt,  /*checkExistence*/ true);
 				if(target.empty())
 					return;
 			} catch(const Exception&) {
