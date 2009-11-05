@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2008 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ namespace dcpp {
 
 class ListLoader;
 
-class DirectoryListing
+class DirectoryListing : boost::noncopyable
 {
 public:
 	class Directory;
@@ -126,12 +126,8 @@ public:
 		GETSET(string, fullPath, FullPath);
 	};
 
-	DirectoryListing(const UserPtr& aUser) : user(aUser), root(new Directory(NULL, Util::emptyString, false, false)) {
-	}
-
-	~DirectoryListing() {
-		delete root;
-	}
+	DirectoryListing(const HintedUser& aUser);
+	~DirectoryListing();
 
 	void loadFile(const string& name) throw(Exception);
 
@@ -155,18 +151,14 @@ public:
 
 	static UserPtr getUserFromFilename(const string& fileName);
 
-	GETSET(UserPtr, user, User);
+	GETSET(HintedUser, user, User);
 
 private:
 	friend class ListLoader;
 
-	DirectoryListing(const DirectoryListing&);
-	DirectoryListing& operator=(const DirectoryListing&);
-
 	Directory* root;
 
 	Directory* find(const string& aName, Directory* current);
-
 };
 
 inline bool operator==(DirectoryListing::Directory::Ptr a, const string& b) { return Util::stricmp(a->getName(), b) == 0; }

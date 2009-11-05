@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2006 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ private:
 			STATUS_WAITING		///< Idle
 		};
 
-		ConnectionInfo(const UserPtr& u, bool aDownload);
+		ConnectionInfo(const HintedUser& u, bool aDownload);
 
 		bool download;
 		bool transferFailed;
@@ -148,11 +148,12 @@ private:
 
 		bool operator==(const ConnectionInfo& ii) { return download == ii.download && user == ii.getUser(); }
 
-		UpdateInfo(const UserPtr& aUser, bool isDownload, bool isTransferFailed = false) : updateMask(0), user(aUser), download(isDownload), transferFailed(isTransferFailed) { }
+		UpdateInfo(const HintedUser& aUser, bool isDownload, bool isTransferFailed = false) :
+		updateMask(0), user(aUser), download(isDownload), transferFailed(isTransferFailed) { }
 
 		uint32_t updateMask;
 
-		UserPtr user;
+		HintedUser user;
 		bool download;
 		bool transferFailed;
 

@@ -43,11 +43,18 @@ public:
 
 	size_t getUserCount() const;
 	int64_t getAvailable() const;
-	StringList getHubs(const CID& cid) const;
-	/// @param url only retrieve information for the specified client
-	StringList getHubNames(const CID& cid, const string& url = Util::emptyString);
-	/// @param url only retrieve information for the specified client
-	StringList getNicks(const CID& cid, const string& url = Util::emptyString);
+
+	StringList getHubs(const CID& cid, const string& hintUrl);
+	StringList getHubNames(const CID& cid, const string& hintUrl);
+	StringList getNicks(const CID& cid, const string& hintUrl);
+
+	StringList getHubs(const CID& cid, const string& hintUrl, bool priv);
+	StringList getHubNames(const CID& cid, const string& hintUrl, bool priv);
+	StringList getNicks(const CID& cid, const string& hintUrl, bool priv);
+
+	StringList getNicks(const HintedUser& user) { return getNicks(user.user->getCID(), user.hint); }
+	StringList getHubNames(const HintedUser& user) { return getHubNames(user.user->getCID(), user.hint); }
+
 	string getConnection(const CID& cid) const;
 
 	bool isConnected(const string& aUrl) const;
@@ -87,9 +94,10 @@ public:
 
 	UserPtr& getMe();
 
-	void connect(const UserPtr& p, const string& token, const string& hintUrl);
 	void send(AdcCommand& c, const CID& to);
-	void privateMessage(const UserPtr& p, const string& msg, bool thirdPerson, const string& hintUrl);
+
+	void connect(const HintedUser& user, const string& token);
+	void privateMessage(const HintedUser& user, const string& msg, bool thirdPerson);
 
 	void userCommand(const UserPtr& p, const UserCommand& uc, StringMap& params, bool compatibility);
 

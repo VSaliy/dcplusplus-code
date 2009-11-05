@@ -51,7 +51,7 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 		users->setSort(COLUMN_NICK);
 
 		// TODO check default (browse vs get)
-		users->onDblClicked(std::tr1::bind(&UsersFrame::handleGetList, this, Util::emptyString));
+		users->onDblClicked(std::tr1::bind(&UsersFrame::handleGetList, this));
 		users->onKeyDown(std::tr1::bind(&UsersFrame::handleKeyDown, this, _1));
 		users->onRaw(std::tr1::bind(&UsersFrame::handleItemChanged, this, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 		users->onContextMenu(std::tr1::bind(&UsersFrame::handleContextMenu, this, _1));
@@ -95,7 +95,9 @@ void UsersFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::USERSFRAME_WIDTHS, WinUtil::toString(users->getColumnWidths()));
 }
 
-UsersFrame::UserInfo::UserInfo(const FavoriteUser& u) : UserInfoBase(u.getUser()) {
+UsersFrame::UserInfo::UserInfo(const FavoriteUser& u) :
+UserInfoBase(HintedUser(u.getUser(), Util::emptyString)) /// @todo fav users aren't aware of hub hints for now
+{
 	update(u);
 }
 
@@ -105,8 +107,8 @@ void UsersFrame::UserInfo::remove() {
 
 void UsersFrame::UserInfo::update(const FavoriteUser& u) {
 	columns[COLUMN_NICK] = Text::toT(u.getNick());
-	columns[COLUMN_HUB] = user->isOnline() ? WinUtil::getHubNames(u.getUser()).first : Text::toT(u.getUrl());
-	columns[COLUMN_SEEN] = user->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", u.getLastSeen()));
+	columns[COLUMN_HUB] = u.getUser()->isOnline() ? WinUtil::getHubNames(u.getUser(), Util::emptyString).first : Text::toT(u.getUrl());
+	columns[COLUMN_SEEN] = u.getUser()->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", u.getLastSeen()));
 	columns[COLUMN_DESCRIPTION] = Text::toT(u.getDescription());
 	columns[COLUMN_CID] = Text::toT(u.getUser()->getCID().toBase32());
 }
@@ -183,7 +185,7 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
-		appendUserItems(getParent(), menu, Util::emptyString);
+		appendUserItems(getParent(), menu);
 		menu->appendSeparator();
 		menu->appendItem(T_("&Description"), std::tr1::bind(&UsersFrame::handleDescription, this));
 		menu->appendItem(T_("&Remove"), std::tr1::bind(&UsersFrame::handleRemove, this));

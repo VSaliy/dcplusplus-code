@@ -194,7 +194,7 @@ private:
 
 	// QueueManagerListener
 	virtual void on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) throw();
-	virtual void on(PartialList, const UserPtr&, const string& text) throw();
+	virtual void on(PartialList, const HintedUser&, const string& text) throw();
 
 	// WindowManagerListener
 	virtual void on(WindowManagerListener::Window, const string& id, const StringMap& params, bool skipHubs) throw();

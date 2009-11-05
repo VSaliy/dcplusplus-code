@@ -78,10 +78,10 @@ private:
 	UserInfoList selectedUsersImpl() const;
 
 	// UploadManagerListener
-	virtual void on(UploadManagerListener::WaitingAddFile, const UserPtr&, const string&) throw();
-	virtual void on(UploadManagerListener::WaitingRemoveUser, const UserPtr&) throw();
+	virtual void on(UploadManagerListener::WaitingAddFile, const HintedUser&, const string&) throw();
+	virtual void on(UploadManagerListener::WaitingRemoveUser, const HintedUser&) throw();
 	void onRemoveUser(const UserPtr&);
-	void onAddFile(const UserPtr&, const string&);
+	void onAddFile(const HintedUser&, const string&);
 };
 
 #endif	/* WAITING_QUEUE_FRAME_H */

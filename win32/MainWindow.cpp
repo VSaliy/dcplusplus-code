@@ -854,7 +854,7 @@ void MainWindow::handleOpenFileList() {
 	if(WinUtil::browseFileList(LoadDialog(this), file)) {
 		UserPtr u = DirectoryListing::getUserFromFilename(Text::fromT(file));
 		if (u) {
-			DirectoryListingFrame::openWindow(getTabView(), file, Text::toT(Util::emptyString), u, 0);
+			DirectoryListingFrame::openWindow(getTabView(), file, Util::emptyStringT, HintedUser(u, Util::emptyString), 0);
 		} else {
 			dwt::MessageBox(this).show(T_("Invalid file list name"), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
 		}
@@ -889,12 +889,13 @@ public:
 			UserPtr u = DirectoryListing::getUserFromFilename(*i);
 			if (!u)
 				continue;
-			DirectoryListing dl(u);
+			HintedUser user(u, Util::emptyString);
+			DirectoryListing dl(user);
 			try {
 				dl.loadFile(*i);
-				int matched = QueueManager::getInstance()->matchListing(dl, Util::emptyString);
+				int matched = QueueManager::getInstance()->matchListing(dl);
 				LogManager::getInstance()->message(str(FN_("%1%: matched %2% file", "%1%: matched %2% files", matched)
-				% Util::toString(ClientManager::getInstance()->getNicks(u->getCID()))
+				% Util::toString(ClientManager::getInstance()->getNicks(user))
 				% matched));
 			} catch(const Exception&) {
 
@@ -1171,17 +1172,17 @@ void MainWindow::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, cons
 	versionInfo += string((const char*)buf, len);
 }
 
-void MainWindow::on(PartialList, const UserPtr& aUser, const string& text) throw() {
+void MainWindow::on(PartialList, const HintedUser& aUser, const string& text) throw() {
 	callAsync(
-		std::tr1::bind((void (*)(dwt::TabView*, const UserPtr&, const string&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
+		std::tr1::bind((void (*)(dwt::TabView*, const HintedUser&, const string&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
 		aUser, text, 0));
 }
 
 void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) throw() {
 	if (qi->isSet(QueueItem::FLAG_CLIENT_VIEW)) {
 		if (qi->isSet(QueueItem::FLAG_USER_LIST)) {
-			callAsync(std::tr1::bind((void(*)(dwt::TabView*, const tstring&, const tstring&, const UserPtr&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
-				Text::toT(qi->getListName()), Text::toT(dir), qi->getDownloads()[0]->getUser(), speed));
+			callAsync(std::tr1::bind((void(*)(dwt::TabView*, const tstring&, const tstring&, const HintedUser&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
+				Text::toT(qi->getListName()), Text::toT(dir), qi->getDownloads()[0]->getHintedUser(), speed));
 		} else if (qi->isSet(QueueItem::FLAG_TEXT)) {
 			callAsync(std::tr1::bind(&MainWindow::viewAndDelete, this, qi->getTarget()));
 		}

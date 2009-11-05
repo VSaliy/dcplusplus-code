@@ -65,8 +65,8 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const UserPtr& aUser, int64_t aSpeed);
-	static void openWindow(dwt::TabView* mdiParent, const UserPtr& aUser, const string& txt, int64_t aSpeed);
+	static void openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed);
+	static void openWindow(dwt::TabView* mdiParent, const HintedUser& aUser, const string& txt, int64_t aSpeed);
 	static void openOwnList(dwt::TabView* parent);
 	static void closeAll();
 
@@ -186,7 +186,7 @@ private:
 
 	static UserMap lists;
 
-	DirectoryListingFrame(dwt::TabView* mdiParent, const UserPtr& aUser, int64_t aSpeed);
+	DirectoryListingFrame(dwt::TabView* mdiParent, const HintedUser& aUser, int64_t aSpeed);
 	virtual ~DirectoryListingFrame();
 
 	void layout();

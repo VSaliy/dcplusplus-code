@@ -185,7 +185,7 @@ LRESULT TransferView::handleDestroy() {
 MenuPtr TransferView::makeContextMenu(ConnectionInfo* ii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	appendUserItems(mdi, menu, Util::emptyString, false);
+	appendUserItems(mdi, menu, false);
 	menu->appendSeparator();
 
 	menu->appendItem(T_("&Force attempt"), std::tr1::bind(&TransferView::handleForce, this));
@@ -252,7 +252,7 @@ void TransferView::runUserCommand(const UserCommand& uc) {
 	int i = -1;
 	while((i = connections->getNext(i, LVNI_SELECTED)) != -1) {
 		ConnectionInfo* itemI = connections->getData(i);
-		if(!itemI->getUser()->isOnline())
+		if(!itemI->getUser().user->isOnline())
 			continue;
 
 		StringMap tmp = ucParams;
@@ -419,7 +419,7 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 void TransferView::handleDblClicked() {
 	ConnectionInfo* ii = connections->getSelectedData();
 	if(ii) {
-		ii->pm(mdi, Util::emptyString);
+		ii->pm(mdi);
 	}
 }
 
@@ -550,7 +550,7 @@ void TransferView::execTasks() {
 	}
 }
 
-TransferView::ConnectionInfo::ConnectionInfo(const UserPtr& u, bool aDownload) :
+TransferView::ConnectionInfo::ConnectionInfo(const HintedUser& u, bool aDownload) :
 	UserInfoBase(u),
 	download(aDownload),
 	transferFailed(false),
@@ -669,7 +669,7 @@ void TransferView::DownloadInfo::update() {
 }
 
 void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) throw() {
-	UpdateInfo* ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
+	UpdateInfo* ui = new UpdateInfo(aCqi->getHintedUser(), aCqi->getDownload());
 
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(T_("Connecting"));
@@ -677,7 +677,7 @@ void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCq
 }
 
 void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) throw() {
-	UpdateInfo* ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
+	UpdateInfo* ui = new UpdateInfo(aCqi->getHintedUser(), aCqi->getDownload());
 
 	ui->setStatusString((aCqi->getState() == ConnectionQueueItem::CONNECTING) ? T_("Connecting") : T_("Waiting to retry"));
 
@@ -685,11 +685,11 @@ void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueI
 }
 
 void TransferView::on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) throw() {
-	addTask(CONNECTIONS_REMOVE, new UpdateInfo(aCqi->getUser(), aCqi->getDownload()));
+	addTask(CONNECTIONS_REMOVE, new UpdateInfo(aCqi->getHintedUser(), aCqi->getDownload()));
 }
 
 void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) throw() {
-	UpdateInfo* ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
+	UpdateInfo* ui = new UpdateInfo(aCqi->getHintedUser(), aCqi->getDownload());
 	if(aCqi->getUser()->isSet(User::OLD_CLIENT)) {
 		ui->setStatusString(T_("Remote client does not fully support TTH - cannot download"));
 	} else {
@@ -729,7 +729,7 @@ void TransferView::starting(UpdateInfo* ui, Transfer* t) {
 }
 
 void TransferView::on(DownloadManagerListener::Requesting, Download* d) throw() {
-	UpdateInfo* ui = new UpdateInfo(d->getUser(), true);
+	UpdateInfo* ui = new UpdateInfo(d->getHintedUser(), true);
 
 	starting(ui, d);
 
@@ -741,7 +741,7 @@ void TransferView::on(DownloadManagerListener::Requesting, Download* d) throw() 
 }
 
 void TransferView::on(DownloadManagerListener::Starting, Download* d) throw() {
-	UpdateInfo* ui = new UpdateInfo(d->getUser(), true);
+	UpdateInfo* ui = new UpdateInfo(d->getHintedUser(), true);
 
 	tstring statusString;
 
@@ -768,7 +768,7 @@ void TransferView::on(DownloadManagerListener::Starting, Download* d) throw() {
 }
 
 void TransferView::onTransferTick(Transfer* t, bool isDownload) {
-	UpdateInfo* ui = new UpdateInfo(t->getUser(), isDownload);
+	UpdateInfo* ui = new UpdateInfo(t->getHintedUser(), isDownload);
 	ui->setTransfered(t->getPos(), t->getActual());
 	ui->setSpeed(t->getAverageSpeed());
 	ui->setChunk(t->getPos(), t->getSize());
@@ -810,7 +810,7 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) thr
 }
 
 void TransferView::on(DownloadManagerListener::Failed, Download* d, const string& aReason) throw() {
-	UpdateInfo* ui = new UpdateInfo(d->getUser(), true, true);
+	UpdateInfo* ui = new UpdateInfo(d->getHintedUser(), true, true);
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(Text::toT(aReason));
 
@@ -820,7 +820,7 @@ void TransferView::on(DownloadManagerListener::Failed, Download* d, const string
 }
 
 void TransferView::on(UploadManagerListener::Starting, Upload* u) throw() {
-	UpdateInfo* ui = new UpdateInfo(u->getUser(), false);
+	UpdateInfo* ui = new UpdateInfo(u->getHintedUser(), false);
 
 	starting(ui, u);
 
@@ -865,7 +865,7 @@ void TransferView::on(UploadManagerListener::Complete, Upload* aUpload) throw() 
 }
 
 void TransferView::onTransferComplete(Transfer* aTransfer, bool isDownload) {
-	UpdateInfo* ui = new UpdateInfo(aTransfer->getUser(), isDownload);
+	UpdateInfo* ui = new UpdateInfo(aTransfer->getHintedUser(), isDownload);
 
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(T_("Idle"));

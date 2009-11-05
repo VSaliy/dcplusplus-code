@@ -321,7 +321,7 @@ void SearchFrame::postClosing() {
 void SearchFrame::SearchInfo::view() {
 	if(srs[0]->getType() == SearchResult::TYPE_FILE) {
 		QueueManager::getInstance()->add(Util::getTempPath() + srs[0]->getFileName(),
-			srs[0]->getSize(), srs[0]->getTTH(), srs[0]->getUser(), srs[0]->getHubURL(),
+			srs[0]->getSize(), srs[0]->getTTH(), HintedUser(srs[0]->getUser(), srs[0]->getHubURL()),
 			QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_TEXT);
 	}
 }
@@ -339,7 +339,7 @@ void SearchFrame::SearchInfo::Download::addFile(SearchInfo* si, const string& ta
 		total++;
 		const SearchResultPtr& sr = *i;
 		try {
-			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), sr->getUser(), sr->getHubURL());
+			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), HintedUser(sr->getUser(), sr->getHubURL()));
 		} catch(const Exception& e) {
 			ignored++;
 			error = e.getError();
@@ -354,7 +354,7 @@ void SearchFrame::SearchInfo::Download::addDir(SearchInfo* si, const string& tar
 	total++;
 	// TODO Add all users...
 	QueueManager::getInstance()->addDirectory(target.empty() ? si->srs[0]->getFile() : target,
-		si->srs[0]->getUser(), si->srs[0]->getHubURL(), Text::fromT(tgt),
+		HintedUser(si->srs[0]->getUser(), si->srs[0]->getHubURL()), Text::fromT(tgt),
 		WinUtil::isShift() ? QueueItem::HIGHEST : QueueItem::DEFAULT);
 }
 
@@ -386,10 +386,10 @@ void SearchFrame::SearchInfo::CheckTTH::operator()(SearchInfo* si) {
 	}
 
 	if(firstHubs && hubs.empty()) {
-		hubs = ClientManager::getInstance()->getHubs(si->srs[0]->getUser()->getCID());
+		hubs = ClientManager::getInstance()->getHubs(si->srs[0]->getUser()->getCID(), si->srs[0]->getHubURL());
 		firstHubs = false;
 	} else if(!hubs.empty()) {
-		Util::intersect(hubs, ClientManager::getInstance()->getHubs(si->srs[0]->getUser()->getCID()));
+		Util::intersect(hubs, ClientManager::getInstance()->getHubs(si->srs[0]->getUser()->getCID(), si->srs[0]->getHubURL()));
 	}
 }
 
@@ -436,7 +436,7 @@ void SearchFrame::SearchInfo::update() {
 		}
 		columns[COLUMN_HUB] = Text::toT(Util::toString(StringList(hubs.begin(), hubs.end())));
 	} else {
-		columns[COLUMN_NICK] = WinUtil::getNicks(sr->getUser());
+		columns[COLUMN_NICK] = WinUtil::getNicks(sr->getUser(), sr->getHubURL());
 		columns[COLUMN_CONNECTION] = Text::toT(ClientManager::getInstance()->getConnection(sr->getUser()->getCID()));
 		columns[COLUMN_SLOTS] = Text::toT(sr->getSlotString());
 		columns[COLUMN_IP] = Text::toT(sr->getIP());
@@ -658,12 +658,12 @@ struct UserCollector {
 		for(SearchResultList::const_iterator i = si->srs.begin(), iend = si->srs.end(); i != iend; ++i) {
 			const SearchResultPtr& sr = *i;
 			if(std::find(users.begin(), users.end(), sr->getUser()) == users.end()) {
-				users.push_back(sr->getUser());
+				users.push_back(HintedUser(sr->getUser(), sr->getHubURL()));
 				dirs.push_back(Util::getFilePath(sr->getFile()));
 			}
 		}
 	}
-	UserList users;
+	HintedUserList users;
 	StringList dirs;
 };
 
@@ -888,13 +888,13 @@ void SearchFrame::runSearch() {
 	// Add new searches to the last-search dropdown list
 	if(find(lastSearches.begin(), lastSearches.end(), s) == lastSearches.end())
 	{
-		int i = max(SETTING(SEARCH_HISTORY)-1, 0);
+		size_t i = max(SETTING(SEARCH_HISTORY)-1, 0);
 
 		if(searchBox->size() > i)
 			searchBox->erase(i);
 		searchBox->insertValue(0, s);
 
-		while(lastSearches.size() > (TStringList::size_type)i) {
+		while(lastSearches.size() > i) {
 			lastSearches.erase(lastSearches.begin());
 		}
 		lastSearches.push_back(s);

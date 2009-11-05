@@ -360,7 +360,7 @@ void HubFrame::enterImpl(const tstring& s) {
 			if( !param.empty() ){
 				UserInfo* ui = findUser(param);
 				if(ui) {
-					ui->getList(url);
+					ui->getList();
 				}
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
@@ -378,14 +378,14 @@ void HubFrame::enterImpl(const tstring& s) {
 
 				if(ui) {
 					if(param.size() > j + 1)
-						PrivateFrame::openWindow(getParent(), ui->getUser(), param.substr(j+1), url);
+						PrivateFrame::openWindow(getParent(), HintedUser(ui->getUser(), url), param.substr(j+1));
 					else
-						PrivateFrame::openWindow(getParent(), ui->getUser(), Util::emptyStringT, url);
+						PrivateFrame::openWindow(getParent(), HintedUser(ui->getUser(), url), Util::emptyStringT);
 				}
 			} else if(!param.empty()) {
 				UserInfo* ui = findUser(param);
 				if(ui) {
-					PrivateFrame::openWindow(getParent(), ui->getUser(), Util::emptyStringT, url);
+					PrivateFrame::openWindow(getParent(), HintedUser(ui->getUser(), url), Util::emptyStringT);
 				}
 			}
 		} else {
@@ -645,7 +645,7 @@ void HubFrame::removeUser(const UserPtr& aUser) {
 
 bool HubFrame::handleUsersKeyDown(int c) {
 	if(c == VK_RETURN && users->hasSelected()) {
-		handleGetList(url);
+		handleGetList();
 		return true;
 	}
 	return false;
@@ -685,8 +685,10 @@ int HubFrame::UserInfo::getImage() const {
 	return image;
 }
 
-HubFrame::UserTask::UserTask(const OnlineUser& ou) : user(ou.getUser()), identity(ou.getIdentity()) {
-
+HubFrame::UserTask::UserTask(const OnlineUser& ou) :
+user(ou.getUser(), ou.getClient().getHubUrl()),
+identity(ou.getIdentity())
+{
 }
 
 int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame::UserInfo* b, int col) {
@@ -1063,7 +1065,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
-		appendUserItems(getParent(), menu, url);
+		appendUserItems(getParent(), menu);
 
 		menu->appendSeparator();
 		MenuPtr copyMenu = menu->appendPopup(T_("&Copy"));
@@ -1135,7 +1137,7 @@ void HubFrame::handleCopyHub() {
 
 void HubFrame::handleDoubleClickUsers() {
 	if(users->hasSelected()) {
-		users->getSelectedData()->getList(url);
+		users->getSelectedData()->getList();
 	}
 }
 

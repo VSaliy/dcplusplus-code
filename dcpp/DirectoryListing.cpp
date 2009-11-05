@@ -37,6 +37,16 @@
 
 namespace dcpp {
 
+DirectoryListing::DirectoryListing(const HintedUser& aUser) :
+user(aUser),
+root(new Directory(NULL, Util::emptyString, false, false))
+{
+}
+
+DirectoryListing::~DirectoryListing() {
+	delete root;
+}
+
 UserPtr DirectoryListing::getUserFromFilename(const string& fileName) {
 	// General file list name format: [username].[CID].[xml|xml.bz2|DcLst]
 
@@ -296,8 +306,7 @@ void DirectoryListing::download(const string& aDir, const string& aTarget, bool 
 void DirectoryListing::download(File* aFile, const string& aTarget, bool view, bool highPrio) {
 	int flags = (view ? (QueueItem::FLAG_TEXT | QueueItem::FLAG_CLIENT_VIEW) : 0);
 
-	// TODO hubHint?
-	QueueManager::getInstance()->add(aTarget, aFile->getSize(), aFile->getTTH(), getUser(), Util::emptyString, flags);
+	QueueManager::getInstance()->add(aTarget, aFile->getSize(), aFile->getTTH(), getUser(), flags);
 
 	if(highPrio)
 		QueueManager::getInstance()->setPriority(aTarget, QueueItem::HIGHEST);

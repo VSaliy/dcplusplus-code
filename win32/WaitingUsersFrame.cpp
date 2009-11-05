@@ -79,7 +79,7 @@ bool WaitingUsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	}
 
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	appendUserItems(getParent(), menu, Util::emptyString);
+	appendUserItems(getParent(), menu);
 	menu->appendSeparator();
 	menu->appendItem(T_("&Copy filename"), std::tr1::bind(&WaitingUsersFrame::onCopyFilename, this));
 	menu->appendItem(T_("&Remove"), std::tr1::bind(&WaitingUsersFrame::onRemove, this));
@@ -89,17 +89,14 @@ bool WaitingUsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 }
 
 // Load all searches from manager
-void WaitingUsersFrame::loadAll()
-{
-	// Load queue
-	UserList users = UploadManager::getInstance()->getWaitingUsers();
-	for (UserList::iterator uit = users.begin(); uit != users.end(); ++uit) {
-		HTREEITEM lastInserted = queued->insert(
-			(WinUtil::getNicks(*uit) + _T(" - ") + WinUtil::getHubNames(*uit).first),
-			NULL, (LPARAM)(new UserInfoBase(*uit)));
-		UploadManager::FileSet files = UploadManager::getInstance()->getWaitingUserFiles(*uit);
-		for (UploadManager::FileSet::const_iterator fit = files.begin(); fit != files.end(); ++fit) {
-			queued->insert(Text::toT(*fit), lastInserted);
+void WaitingUsersFrame::loadAll() {
+	HintedUserList users = UploadManager::getInstance()->getWaitingUsers();
+	for(HintedUserList::const_iterator ui = users.begin(), uiend = users.end(); ui != uiend; ++ui) {
+		HTREEITEM lastInserted = queued->insert(WinUtil::getNicks(*ui) + _T(" - ") + WinUtil::getHubNames(*ui).first,
+			NULL, reinterpret_cast<LPARAM>(new UserInfoBase(*ui)));
+		UploadManager::FileSet files = UploadManager::getInstance()->getWaitingUserFiles(*ui);
+		for(UploadManager::FileSet::const_iterator fi = files.begin(), fiend = files.end(); fi != fiend; ++fi) {
+			queued->insert(Text::toT(*fi), lastInserted);
 		}
 	}
 }
@@ -152,10 +149,10 @@ WaitingUsersFrame::UserInfoList WaitingUsersFrame::selectedUsersImpl() const {
 }
 
 // UploadManagerListener
-void WaitingUsersFrame::on(UploadManagerListener::WaitingAddFile, const UserPtr& aUser, const string& aFilename) throw() {
+void WaitingUsersFrame::on(UploadManagerListener::WaitingAddFile, const HintedUser& aUser, const string& aFilename) throw() {
 	callAsync(std::tr1::bind(&WaitingUsersFrame::onAddFile, this, aUser, aFilename));
 }
-void WaitingUsersFrame::on(UploadManagerListener::WaitingRemoveUser, const UserPtr& aUser) throw() {
+void WaitingUsersFrame::on(UploadManagerListener::WaitingRemoveUser, const HintedUser& aUser) throw() {
 	callAsync(std::tr1::bind(&WaitingUsersFrame::onRemoveUser, this, aUser));
 }
 
@@ -171,9 +168,9 @@ bool WaitingUsersFrame::handleChar(int c) {
 void WaitingUsersFrame::onRemoveUser(const UserPtr& aUser) {
 	HTREEITEM userNode = queued->getRoot();
 
-	while (userNode) {
+	while(userNode) {
 		UserInfoBase* u = reinterpret_cast<UserInfoBase*>(queued->getData(userNode));
-		if (aUser == u->getUser()) {
+		if(u->getUser() == aUser) {
 			delete u;
 			queued->erase(userNode);
 			return;
@@ -184,13 +181,13 @@ void WaitingUsersFrame::onRemoveUser(const UserPtr& aUser) {
 	setDirty(SettingsManager::BOLD_WAITING_USERS);
 }
 
-void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
+void WaitingUsersFrame::onAddFile(const HintedUser& aUser, const string& aFile) {
 	HTREEITEM userNode = queued->getRoot();
 
 	string fname = aFile.substr(0, aFile.find(_T('(')));
 
-	while (userNode) {
-		if (aUser == reinterpret_cast<UserInfoBase*>(queued->getData(userNode))->getUser()) {
+	while(userNode) {
+		if(reinterpret_cast<UserInfoBase*>(queued->getData(userNode))->getUser() == aUser) {
 			HTREEITEM childNode = queued->getChild(userNode);
 			while (childNode) {
 				tstring buf = queued->getText(childNode);
@@ -204,7 +201,7 @@ void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
 			}
 
 			//file isn't already listed, add it
-			queued->insert(Text::toT(aFile), userNode, (LPARAM)new UserInfoBase(aUser));
+			queued->insert(Text::toT(aFile), userNode, reinterpret_cast<LPARAM>(new UserInfoBase(aUser)));
 
 			return;
 		}
@@ -213,7 +210,7 @@ void WaitingUsersFrame::onAddFile(const UserPtr& aUser, const string& aFile) {
 	}
 
 	userNode = queued->insert(WinUtil::getNicks(aUser) + _T(" - ") + WinUtil::getHubNames(aUser).first,
-		NULL, (LPARAM)new UserInfoBase(aUser));
+		NULL, reinterpret_cast<LPARAM>(new UserInfoBase(aUser)));
 	queued->insert(Text::toT(aFile), userNode);
 	queued->expand(userNode);
 

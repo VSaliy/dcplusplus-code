@@ -21,23 +21,24 @@
 
 #include <dcpp/forward.h>
 #include <dcpp/Text.h>
+#include <dcpp/User.h>
 #include "resource.h"
 #include <dwt/widgets/Menu.h>
 
 class UserInfoBase {
 public:
-	UserInfoBase(const UserPtr& u) : user(u) { }
+	UserInfoBase(const HintedUser& u) : user(u) { }
 
-	void getList(const string& hubHint);
-	void browseList(const string& hubHint);
-	void matchQueue(const string& hubHint);
-	void pm(dwt::TabViewPtr, const string& hubHint);
-	void grant(const string& hubHint);
+	void getList();
+	void browseList();
+	void matchQueue();
+	void pm(dwt::TabViewPtr);
+	void grant();
 	void addFav();
 	void removeFromQueue();
 	void connectFav(dwt::TabViewPtr);
 
-	const UserPtr& getUser() const { return user; }
+	const HintedUser& getUser() const { return user; }
 
 	struct UserTraits {
 		UserTraits() : adcOnly(true), favOnly(true), nonFavOnly(true) { }
@@ -50,7 +51,7 @@ public:
 	};
 
 protected:
-	UserPtr user;
+	HintedUser user;
 };
 
 template<typename T>
@@ -85,23 +86,23 @@ private:
 	}
 
 protected:
-	void handleMatchQueue(const string& hubHint) {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::matchQueue, _1, hubHint));
+	void handleMatchQueue() {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::matchQueue, _1));
 	}
-	void handleGetList(const string& hubHint) {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::getList, _1, hubHint));
+	void handleGetList() {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::getList, _1));
 	}
-	void handleBrowseList(const string& hubHint) {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::browseList, _1, hubHint));
+	void handleBrowseList() {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::browseList, _1));
 	}
 	void handleAddFavorite() {
 		handleUserFunction(std::tr1::bind(&UserInfoBase::addFav, _1));
 	}
-	void handlePrivateMessage(dwt::TabViewPtr parent, const string& hubHint) {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::pm, _1, parent, hubHint));
+	void handlePrivateMessage(dwt::TabViewPtr parent) {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::pm, _1, parent));
 	}
-	void handleGrantSlot(const string& hubHint) {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::grant, _1, hubHint));
+	void handleGrantSlot() {
+		handleUserFunction(std::tr1::bind(&UserInfoBase::grant, _1));
 	}
 	void handleRemoveFromQueue() {
 		handleUserFunction(std::tr1::bind(&UserInfoBase::removeFromQueue, _1));
@@ -110,7 +111,7 @@ protected:
 		handleUserFunction(std::tr1::bind(&UserInfoBase::connectFav, _1, parent));
 	}
 
-	void appendUserItems(dwt::TabViewPtr parent, dwt::MenuPtr menu, const string& hubHint,
+	void appendUserItems(dwt::TabViewPtr parent, dwt::MenuPtr menu,
 		bool defaultIsGetList = true, bool includeSendPM = true, bool includeGetList = true)
 	{
 		UserInfoList users = t().selectedUsersImpl();
@@ -121,16 +122,16 @@ protected:
 		for_each(users.begin(), users.end(), std::tr1::bind(&UserInfoBase::UserTraits::parse, &traits, _1));
 
 		if(includeGetList) {
-			menu->appendItem(T_("&Get file list"), std::tr1::bind(&ThisType::handleGetList, this, hubHint), dwt::IconPtr(), true, defaultIsGetList);
+			menu->appendItem(T_("&Get file list"), std::tr1::bind(&ThisType::handleGetList, this), dwt::IconPtr(), true, defaultIsGetList);
 			if(traits.adcOnly)
-				menu->appendItem(T_("&Browse file list"), std::tr1::bind(&ThisType::handleBrowseList, this, hubHint));
-			menu->appendItem(T_("&Match queue"), std::tr1::bind(&ThisType::handleMatchQueue, this, hubHint));
+				menu->appendItem(T_("&Browse file list"), std::tr1::bind(&ThisType::handleBrowseList, this));
+			menu->appendItem(T_("&Match queue"), std::tr1::bind(&ThisType::handleMatchQueue, this));
 		}
 		if(includeSendPM)
-			menu->appendItem(T_("&Send private message"), std::tr1::bind(&ThisType::handlePrivateMessage, this, parent, hubHint), dwt::IconPtr(), true, !defaultIsGetList);
+			menu->appendItem(T_("&Send private message"), std::tr1::bind(&ThisType::handlePrivateMessage, this, parent), dwt::IconPtr(), true, !defaultIsGetList);
 		if(!traits.favOnly)
 			menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&ThisType::handleAddFavorite, this), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
-		menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&ThisType::handleGrantSlot, this, hubHint));
+		menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&ThisType::handleGrantSlot, this));
 		if(!traits.nonFavOnly)
 			menu->appendItem(T_("Connect to hub"), std::tr1::bind(&ThisType::handleConnectFav, this, parent), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
 		menu->appendSeparator();

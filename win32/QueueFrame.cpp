@@ -308,7 +308,7 @@ void QueueFrame::QueueItemInfo::update() {
 				if(tmp.size() > 0)
 					tmp += _T(", ");
 
-				if(j->getUser()->isOnline())
+				if(j->getUser().user->isOnline())
 					online++;
 
 				tmp += WinUtil::getNicks(j->getUser());
@@ -671,29 +671,29 @@ void QueueFrame::moveDir(HTREEITEM ht, const string& target) {
 	}
 }
 
-void QueueFrame::handleBrowseList(const UserPtr& user) {
+void QueueFrame::handleBrowseList(const HintedUser& user) {
 
 	if(files->countSelected() == 1) {
 		try {
-			QueueManager::getInstance()->addList(user, Util::emptyString, QueueItem::FLAG_CLIENT_VIEW);
+			QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW);
 		} catch(const Exception&) {
 		}
 	}
 }
 
-void QueueFrame::handleReadd(const UserPtr& user) {
+void QueueFrame::handleReadd(const HintedUser& user) {
 
 	if(files->countSelected() == 1) {
 		QueueItemInfo* ii = files->getSelectedData();
 
-		if(!user) {
+		if(!user.user) {
 			// re-add all sources
 			for(QueueItem::SourceIter s = ii->getBadSources().begin(); s != ii->getBadSources().end(); ++s) {
-				QueueManager::getInstance()->readd(ii->getTarget(), s->getUser(), Util::emptyString);
+				QueueManager::getInstance()->readd(ii->getTarget(), s->getUser());
 			}
 		} else {
 			try {
-				QueueManager::getInstance()->readd(ii->getTarget(), user, Util::emptyString);
+				QueueManager::getInstance()->readd(ii->getTarget(), user);
 			} catch(const Exception& e) {
 				status->setText(STATUS_STATUS, Text::toT(e.getError()));
 			}
@@ -713,12 +713,12 @@ void QueueFrame::handleMove() {
 	usingDirMenu ? moveSelectedDir() : moveSelected();
 }
 
-void QueueFrame::handleRemoveSource(const UserPtr& user) {
+void QueueFrame::handleRemoveSource(const HintedUser& user) {
 
 	if(files->countSelected() == 1) {
 		QueueItemInfo* ii = files->getSelectedData();
 
-		if(!user) {
+		if(!user.user) {
 			for(QueueItem::SourceIter si = ii->getSources().begin(); si != ii->getSources().end(); ++si) {
 				QueueManager::getInstance()->removeSource(ii->getTarget(), si->getUser(), QueueItem::Source::FLAG_REMOVED);
 			}
@@ -728,11 +728,11 @@ void QueueFrame::handleRemoveSource(const UserPtr& user) {
 	}
 }
 
-void QueueFrame::handleRemoveSources(const UserPtr& user) {
+void QueueFrame::handleRemoveSources(const HintedUser& user) {
 	QueueManager::getInstance()->removeSource(user, QueueItem::Source::FLAG_REMOVED);
 }
 
-void QueueFrame::handlePM(const UserPtr& user) {
+void QueueFrame::handlePM(const HintedUser& user) {
 	if(files->countSelected() == 1) {
 		PrivateFrame::openWindow(getParent(), user);
 	}
@@ -912,7 +912,7 @@ void QueueFrame::addPMMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 void QueueFrame::addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 	unsigned int pos = parent->getCount();
 	MenuPtr menu = parent->appendPopup(T_("Re-add source"));
-	menu->appendItem(T_("All"), std::tr1::bind(&QueueFrame::handleReadd, this, UserPtr()));
+	menu->appendItem(T_("All"), std::tr1::bind(&QueueFrame::handleReadd, this, HintedUser(UserPtr(), Util::emptyString)));
 	menu->appendSeparator();
 	if(!addUsers(menu, &QueueFrame::handleReadd, qii->getBadSources(), true))
 		parent->setItemEnabled(pos, false);
@@ -921,7 +921,7 @@ void QueueFrame::addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 void QueueFrame::addRemoveMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 	unsigned int pos = parent->getCount();
 	MenuPtr menu = parent->appendPopup(T_("Remove source"));
-	menu->appendItem(T_("All"), std::tr1::bind(&QueueFrame::handleRemoveSource, this, UserPtr()));
+	menu->appendItem(T_("All"), std::tr1::bind(&QueueFrame::handleRemoveSource, this, HintedUser(UserPtr(), Util::emptyString)));
 	menu->appendSeparator();
 	if(!addUsers(menu, &QueueFrame::handleRemoveSource, qii->getSources(), true))
 		parent->setItemEnabled(pos, false);
@@ -934,13 +934,13 @@ void QueueFrame::addRemoveSourcesMenu(const MenuPtr& parent, QueueItemInfo* qii)
 		parent->setItemEnabled(pos, false);
 }
 
-bool QueueFrame::addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const UserPtr&), const QueueItem::SourceList& sources, bool offline) {
+bool QueueFrame::addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const HintedUser&), const QueueItem::SourceList& sources, bool offline) {
 	bool added = false;
 	for(QueueItem::SourceConstIter i = sources.begin(); i != sources.end(); ++i) {
 		const QueueItem::Source& source = *i;
-		if(offline || source.getUser()->isOnline()) {
-			tstring nick = dwt::util::escapeMenu(WinUtil::getNicks(source.getUser()));
-			menu->appendItem(nick, std::tr1::bind(handler, this, source.getUser()));
+		const HintedUser& user = source.getUser();
+		if(offline || user.user->isOnline()) {
+			menu->appendItem(dwt::util::escapeMenu(WinUtil::getNicks(user)), std::tr1::bind(handler, this, user));
 			added = true;
 		}
 	}

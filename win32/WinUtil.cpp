@@ -466,15 +466,19 @@ void WinUtil::openFolder(const tstring& file) {
 		::ShellExecute(NULL, NULL, Text::toT("explorer.exe").c_str(), Text::toT("/e, \"" + Util::getFilePath(Text::fromT(file)) + "\"").c_str(), NULL, SW_SHOWNORMAL);
 }
 
-tstring WinUtil::getNicks(const CID& cid, const string& url) throw() {
-	return Text::toT(Util::toString(ClientManager::getInstance()->getNicks(cid, url)));
-}
-tstring WinUtil::getNicks(const UserPtr& u, const string& url) {
-	return getNicks(u->getCID(), url);
+tstring WinUtil::getNicks(const CID& cid, const string& hintUrl) {
+	return Text::toT(Util::toString(ClientManager::getInstance()->getNicks(cid, hintUrl)));
 }
 
-pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& url) throw() {
-	StringList hubs = ClientManager::getInstance()->getHubNames(cid, url);
+tstring WinUtil::getNicks(const UserPtr& u, const string& hintUrl) {
+	return getNicks(u->getCID(), hintUrl);
+}
+
+tstring WinUtil::getNicks(const CID& cid, const string& hintUrl, bool priv) {
+	return Text::toT(Util::toString(ClientManager::getInstance()->getNicks(cid, hintUrl, priv)));
+}
+
+static pair<tstring, bool> formatHubNames(const StringList& hubs) {
 	if(hubs.empty()) {
 		return make_pair(T_("Offline"), false);
 	} else {
@@ -482,8 +486,16 @@ pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& url) thro
 	}
 }
 
-pair<tstring, bool> WinUtil::getHubNames(const UserPtr& u, const string& url) {
-	return getHubNames(u->getCID(), url);
+pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& hintUrl) {
+	return formatHubNames(ClientManager::getInstance()->getHubNames(cid, hintUrl));
+}
+
+pair<tstring, bool> WinUtil::getHubNames(const UserPtr& u, const string& hintUrl) {
+	return getHubNames(u->getCID(), hintUrl);
+}
+
+pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& hintUrl, bool priv) {
+	return formatHubNames(ClientManager::getInstance()->getHubNames(cid, hintUrl, priv));
 }
 
 int WinUtil::getIconIndex(const tstring& aFileName) {
@@ -1223,7 +1235,7 @@ void WinUtil::parseDchubUrl(const tstring& aUrl) {
 		try {
 			UserPtr user = ClientManager::getInstance()->findLegacyUser(file);
 			if(user)
-				QueueManager::getInstance()->addList(user, url, QueueItem::FLAG_CLIENT_VIEW);
+				QueueManager::getInstance()->addList(HintedUser(user, url), QueueItem::FLAG_CLIENT_VIEW);
 			// @todo else report error
 		} catch(const Exception&) {
 			// ...
@@ -1305,23 +1317,13 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 	}
 }
 
-// This is a hack - in gcc 4.2.3 at least, since UserPtr is in the boost namespace (boost::intrusive_ptr),
-// std::tr1::bind has problem choosing the correct ref - std::ref or boost::ref so we bring it out of boost
-// using this holder as workaround
-struct X {
-	X(const UserPtr& user_) : user(user_) { }
-	operator UserPtr() const { return user; }
+typedef std::tr1::function<void (const HintedUser&, const string&)> UserFunction;
 
-	UserPtr user;
-};
-
-typedef std::tr1::function<void (const X&, const string&)> UserFunction;
-
-static void eachUser(const UserList& list, const StringList& dirs, const UserFunction& f) {
+static void eachUser(const HintedUserList& list, const StringList& dirs, const UserFunction& f) {
 	size_t j = 0;
-	for(UserList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
+	for(HintedUserList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
 		try {
-			f(X(*i), (j < dirs.size()) ? dirs[j] : string());
+			f(*i, (j < dirs.size()) ? dirs[j] : string());
 		} catch(const Exception& e) {
 			LogManager::getInstance()->message(e.getError());
 		}
@@ -1329,8 +1331,8 @@ static void eachUser(const UserList& list, const StringList& dirs, const UserFun
 	}
 }
 
-static void addUsers(dwt::MenuPtr menu, const tstring& text,
-	const UserList& users, const UserFunction& f, const dwt::IconPtr& icon = dwt::IconPtr(),
+static void addUsers(MenuPtr menu, const tstring& text,
+	const HintedUserList& users, const UserFunction& f, const dwt::IconPtr& icon = dwt::IconPtr(),
 	const StringList& dirs = StringList())
 {
 	if(users.empty())
@@ -1344,7 +1346,7 @@ static void addUsers(dwt::MenuPtr menu, const tstring& text,
 
 		for(size_t i = 0, iend = users.size(); i < iend; ++i) {
 			menu->appendItem(WinUtil::getNicks(users[i]),
-				std::tr1::bind(&eachUser, UserList(1, users[i]), StringList(1, (i < dirs.size()) ? dirs[i] : string()), f));
+				std::tr1::bind(&eachUser, HintedUserList(1, users[i]), StringList(1, (i < dirs.size()) ? dirs[i] : string()), f));
 		}
 	} else {
 		menu->appendItem(text, std::tr1::bind(&eachUser, users, dirs, f), icon);
@@ -1352,10 +1354,10 @@ static void addUsers(dwt::MenuPtr menu, const tstring& text,
 }
 
 template<typename F>
-UserList filter(const UserList& l, F f) {
-	UserList ret;
-	for(UserList::const_iterator i = l.begin(), iend = l.end(); i != iend; ++i) {
-		if(f(*i)) {
+HintedUserList filter(const HintedUserList& l, F f) {
+	HintedUserList ret;
+	for(HintedUserList::const_iterator i = l.begin(), iend = l.end(); i != iend; ++i) {
+		if(f(i->user)) {
 			ret.push_back(*i);
 		}
 	}
@@ -1369,33 +1371,34 @@ static bool isFav(const UserPtr& u) {
 	return !FavoriteManager::getInstance()->isFavoriteUser(u);
 }
 
-// TODO add hubhint
-void WinUtil::addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const StringList& dirs) {
+void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, dwt::TabViewPtr parent, const StringList& dirs) {
 	QueueManager* qm = QueueManager::getInstance();
 
 	addUsers(menu, T_("&Get file list"), users,
-		std::tr1::bind(&QueueManager::addList, qm, _1, Util::emptyString, QueueItem::FLAG_CLIENT_VIEW, _2),
+		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW, _2),
 		dwt::IconPtr(), dirs);
 
 	addUsers(menu, T_("&Browse file list"), filter(users, &isAdc),
-		std::tr1::bind(&QueueManager::addList, qm, _1, Util::emptyString, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, _2), dwt::IconPtr(), dirs);
+		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, _2),
+		dwt::IconPtr(), dirs);
 
 	addUsers(menu, T_("&Match queue"), users,
-		std::tr1::bind(&QueueManager::addList, qm, _1, Util::emptyString, QueueItem::FLAG_MATCH_QUEUE, Util::emptyString));
+		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_MATCH_QUEUE, Util::emptyString));
 
 	addUsers(menu, T_("&Send private message"), users,
-		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, Util::emptyStringT, Util::emptyString, Util::emptyString));
+		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, Util::emptyStringT, Util::emptyString));
 
 	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav),
-		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
+		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1),
+		dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
 
 	addUsers(menu, T_("Grant &extra slot"), users,
-		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1, Util::emptyString));
+		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));
 
 	typedef void (QueueManager::*qmp)(const UserPtr&, int);
 	addUsers(menu, T_("Remove user from queue"), users,
 		std::tr1::bind((qmp)&QueueManager::removeSource, qm, _1,
-			(int)QueueItem::Source::FLAG_REMOVED));
+		(int)QueueItem::Source::FLAG_REMOVED));
 }
 
 void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount,

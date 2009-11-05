@@ -55,9 +55,10 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage, const string& hubHint);
-	static void openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo, const tstring& msg = Util::emptyStringT,
-		const string& hubHint = Util::emptyString, const string& logPath = Util::emptyString);
+	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
+		const tstring& aMessage, const string& hubHint);
+	static void openWindow(dwt::TabView* mdiParent, const HintedUser& replyTo, const tstring& msg = Util::emptyStringT,
+		const string& logPath = Util::emptyString);
 	static bool isOpen(const UserPtr& u) { return frames.find(u) != frames.end(); }
 	static void closeAll();
 	static void closeAllOffline();
@@ -70,9 +71,8 @@ public:
 
 private:
 	StringMap ucLineParams;
-	UserInfoBase replyTo;
 
-	string hubHint;
+	UserInfoBase replyTo;
 	const bool priv;
 	bool online;
 
@@ -80,8 +80,7 @@ private:
 	typedef FrameMap::iterator FrameIter;
 	static FrameMap frames;
 
-	PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activte, const string& hubHint,
-		const string& logPath = Util::emptyString);
+	PrivateFrame(dwt::TabView* mdiParent, const HintedUser& replyTo_, bool activte, const string& logPath = Util::emptyString);
 	virtual ~PrivateFrame();
 
 	void layout();

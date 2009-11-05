@@ -73,16 +73,17 @@ class QueueManager : public Singleton<QueueManager>, public Speaker<QueueManager
 {
 public:
 	/** Add a file to the queue. */
-	void add(const string& aTarget, int64_t aSize, const TTHValue& root, const UserPtr& aUser, const string& hubHint,
+	void add(const string& aTarget, int64_t aSize, const TTHValue& root, const HintedUser& aUser,
 		int aFlags = 0, bool addBad = true) throw(QueueException, FileException);
 	/** Add a user's filelist to the queue. */
-	void addList(const UserPtr& aUser, const string& hubHint, int aFlags, const string& aInitialDir = Util::emptyString) throw(QueueException, FileException);
+	void addList(const HintedUser& HintedUser, int aFlags, const string& aInitialDir = Util::emptyString) throw(QueueException, FileException);
 	/** Readd a source that was removed */
-	void readd(const string& target, const UserPtr& aUser, const string& hubHint) throw(QueueException);
+	void readd(const string& target, const HintedUser& aUser) throw(QueueException);
 	/** Add a directory to the queue (downloads filelist and matches the directory). */
-	void addDirectory(const string& aDir, const UserPtr& aUser, const string& hubHint, const string& aTarget, QueueItem::Priority p = QueueItem::DEFAULT) throw();
+	void addDirectory(const string& aDir, const HintedUser& aUser, const string& aTarget,
+		QueueItem::Priority p = QueueItem::DEFAULT) throw();
 
-	int matchListing(const DirectoryListing& dl, const string& hubHint) throw();
+	int matchListing(const DirectoryListing& dl) throw();
 
 	bool getTTH(const string& name, TTHValue& tth) throw();
 
@@ -244,9 +245,9 @@ private:
 	/** Sanity check for the target filename */
 	static string checkTarget(const string& aTarget, bool checkExsistence) throw(QueueException, FileException);
 	/** Add a source to an existing queue item */
-	bool addSource(QueueItem* qi, const UserPtr& aUser, Flags::MaskType addBad, const string& hubHint) throw(QueueException, FileException);
+	bool addSource(QueueItem* qi, const HintedUser& aUser, Flags::MaskType addBad) throw(QueueException, FileException);
 
-	void processList(const string& name, UserPtr& user, int flags);
+	void processList(const string& name, const HintedUser& user, int flags);
 
 	void load(const SimpleXML& aXml);
 	void moveFile(const string& source, const string& target);
@@ -255,7 +256,7 @@ private:
 
 	void setDirty();
 
-	string getListPath(const UserPtr& user);
+	string getListPath(const HintedUser& user);
 
 	// TimerManagerListener
 	virtual void on(TimerManagerListener::Second, uint32_t aTick) throw();

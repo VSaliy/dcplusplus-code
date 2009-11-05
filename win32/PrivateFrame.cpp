@@ -36,13 +36,12 @@ const string& PrivateFrame::getId() const { return id; }
 
 PrivateFrame::FrameMap PrivateFrame::frames;
 
-void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, const tstring& msg, const string& hubHint,
-							  const string& logPath)
+void PrivateFrame::openWindow(dwt::TabView* mdiParent, const HintedUser& replyTo_, const tstring& msg, const string& logPath)
 {
 	PrivateFrame* pf = 0;
 	FrameIter i = frames.find(replyTo_);
 	if(i == frames.end()) {
-		pf = new PrivateFrame(mdiParent, replyTo_, true, hubHint, logPath);
+		pf = new PrivateFrame(mdiParent, replyTo_, true, logPath);
 	} else {
 		pf = i->second;
 		pf->activate();
@@ -52,13 +51,15 @@ void PrivateFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& replyTo_, 
 
 }
 
-void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, const tstring& aMessage, const string& hubHint) {
+void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
+							  const tstring& aMessage, const string& hubHint)
+{
 	PrivateFrame* p = 0;
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
 
 	FrameIter i = frames.find(user);
 	if(i == frames.end()) {
-		p = new PrivateFrame(mdiParent, user, !BOOLSETTING(POPUNDER_PM), hubHint);
+		p = new PrivateFrame(mdiParent, HintedUser(user, hubHint), !BOOLSETTING(POPUNDER_PM));
 		p->addChat(aMessage);
 		if(Util::getAway()) {
 			if(!(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT)))
@@ -86,8 +87,8 @@ void PrivateFrame::closeAllOffline() {
 const StringMap PrivateFrame::getWindowParams() const {
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
-	ret[WindowInfo::cid] = replyTo.getUser()->getCID().toBase32();
-	ret["Hub"] = hubHint;
+	ret[WindowInfo::cid] = replyTo.getUser().user->getCID().toBase32();
+	ret["Hub"] = replyTo.getUser().hint;
 	ret["LogPath"] = getLogPath();
 	return ret;
 }
@@ -97,7 +98,7 @@ void PrivateFrame::parseWindowParams(dwt::TabView* parent, const StringMap& para
 	StringMap::const_iterator hub = params.find("Hub");
 	if(cid != params.end() && hub != params.end()) {
 		StringMap::const_iterator logPath = params.find("LogPath");
-		openWindow(parent, ClientManager::getInstance()->getUser(CID(cid->second)), Util::emptyStringT, hub->second,
+		openWindow(parent, HintedUser(ClientManager::getInstance()->getUser(CID(cid->second)), hub->second), Util::emptyStringT,
 			logPath != params.end() ? logPath->second : Util::emptyString);
 	}
 }
@@ -112,13 +113,11 @@ bool PrivateFrame::isFavorite(const StringMap& params) {
 	return false;
 }
 
-PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const UserPtr& replyTo_, bool activate, const string& hubHint_,
-						   const string& logPath) :
-	BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
-	replyTo(replyTo_),
-	hubHint(hubHint_),
-	priv(FavoriteManager::getInstance()->isPrivate(hubHint)),
-	online(replyTo.getUser()->isOnline())
+PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const HintedUser& replyTo_, bool activate, const string& logPath) :
+BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, activate),
+replyTo(replyTo_),
+priv(FavoriteManager::getInstance()->isPrivate(replyTo.getUser().hint)),
+online(replyTo.getUser().user->isOnline())
 {
 	chat->setHelpId(IDH_PM_CHAT);
 	addWidget(chat);
@@ -225,12 +224,12 @@ void PrivateFrame::readLog(const string& logPath) {
 }
 
 void PrivateFrame::fillLogParams(StringMap& params) const {
-	params["hubNI"] = Util::toString(priv ? ClientManager::getInstance()->getHubNames(replyTo.getUser()->getCID(), hubHint) :
-		ClientManager::getInstance()->getHubNames(replyTo.getUser()->getCID()));
-	params["hubURL"] = priv ? hubHint : Util::toString(ClientManager::getInstance()->getHubs(replyTo.getUser()->getCID()));
-	params["userCID"] = replyTo.getUser()->getCID().toBase32();
-	params["userNI"] = (priv ? ClientManager::getInstance()->getNicks(replyTo.getUser()->getCID(), hubHint) :
-		ClientManager::getInstance()->getNicks(replyTo.getUser()->getCID()))[0];
+	const CID& cid = replyTo.getUser().user->getCID();
+	const string& hint = replyTo.getUser().hint;
+	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(cid, hint, priv));
+	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(cid, hint, priv));
+	params["userCID"] = cid.toBase32();
+	params["userNI"] = ClientManager::getInstance()->getNicks(cid, hint, priv)[0];
 	params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
 }
 
@@ -255,9 +254,12 @@ void PrivateFrame::layout() {
 }
 
 void PrivateFrame::updateOnlineStatus() {
-	pair<tstring, bool> hubs = priv ? WinUtil::getHubNames(replyTo.getUser(), hubHint) : WinUtil::getHubNames(replyTo.getUser());
+	const CID& cid = replyTo.getUser().user->getCID();
+	const string& hint = replyTo.getUser().hint;
 
-	setText((priv ? WinUtil::getNicks(replyTo.getUser(), hubHint) : WinUtil::getNicks(replyTo.getUser())) + _T(" - ") + hubs.first);
+	pair<tstring, bool> hubs = WinUtil::getHubNames(cid, hint, priv);
+
+	setText(WinUtil::getNicks(cid, hint, priv) + _T(" - ") + hubs.first);
 
 	online = hubs.second;
 	setIcon(online ? IDR_PRIVATE : IDR_PRIVATE_OFF);
@@ -285,7 +287,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 				addStatus(status);
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("grant")) == 0) {
-			handleGrantSlot(hubHint);
+			handleGrantSlot();
 			addStatus(T_("Slot granted"));
 		} else if(Util::stricmp(cmd.c_str(), _T("close")) == 0) {
 			postMessage(WM_CLOSE);
@@ -293,7 +295,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			handleAddFavorite();
 			addStatus(T_("Favorite user added"));
 		} else if(Util::stricmp(cmd.c_str(), _T("getlist")) == 0) {
-			handleGetList(hubHint);
+			handleGetList();
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
@@ -319,7 +321,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 }
 
 void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
-	ClientManager::getInstance()->privateMessage(replyTo.getUser(), Text::fromT(msg), thirdPerson, hubHint);
+	ClientManager::getInstance()->privateMessage(replyTo.getUser(), Text::fromT(msg), thirdPerson);
 }
 
 PrivateFrame::UserInfoList PrivateFrame::selectedUsersImpl() {
@@ -327,21 +329,22 @@ PrivateFrame::UserInfoList PrivateFrame::selectedUsersImpl() {
 }
 
 void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
-	if(aUser.getUser() == replyTo.getUser())
+	if(replyTo.getUser() == aUser.getUser())
 		callAsync(std::tr1::bind(&PrivateFrame::updateOnlineStatus, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
-	if(aUser == replyTo.getUser())
+	if(replyTo.getUser() == aUser)
 		callAsync(std::tr1::bind(&PrivateFrame::updateOnlineStatus, this));
 }
 void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
-	if(aUser == replyTo.getUser())
+	if(replyTo.getUser() == aUser)
 		callAsync(std::tr1::bind(&PrivateFrame::updateOnlineStatus, this));
 }
 
 void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {
-	appendUserItems(getParent(), menu, hubHint, false, false);
-	prepareMenu(menu, UserCommand::CONTEXT_CHAT, ClientManager::getInstance()->getHubs(replyTo.getUser()->getCID()));
+	appendUserItems(getParent(), menu, false, false);
+	prepareMenu(menu, UserCommand::CONTEXT_CHAT, ClientManager::getInstance()->getHubs(replyTo.getUser().user->getCID(),
+		replyTo.getUser().hint, priv));
 	menu->appendSeparator();
 }
 

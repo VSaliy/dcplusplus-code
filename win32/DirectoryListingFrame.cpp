@@ -79,7 +79,7 @@ int DirectoryListingFrame::ItemInfo::compareItems(ItemInfo* a, ItemInfo* b, int 
 	}
 }
 
-void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const UserPtr& aUser, int64_t aSpeed) {
+void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed) {
 	UserIter i = lists.find(aUser);
 	if(i != lists.end()) {
 		i->second->speed = aSpeed;
@@ -95,7 +95,7 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& a
 void DirectoryListingFrame::openOwnList(dwt::TabView* parent) {
 	string ownListFile = ShareManager::getInstance()->getOwnListFile();
 	if(!ownListFile.empty()) {
-		openWindow(parent, Text::toT(ownListFile), Util::emptyStringT, ClientManager::getInstance()->getMe(), 0);
+		openWindow(parent, Text::toT(ownListFile), Util::emptyStringT, HintedUser(ClientManager::getInstance()->getMe(), Util::emptyString), 0);
 	}
 }
 
@@ -107,22 +107,26 @@ void DirectoryListingFrame::closeAll(){
 const StringMap DirectoryListingFrame::getWindowParams() const {
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
-	ret[WindowInfo::cid] = dl->getUser()->getCID().toBase32();
+	ret[WindowInfo::cid] = dl->getUser().user->getCID().toBase32();
 	ret[WindowInfo::fileList] = (dl->getUser() == ClientManager::getInstance()->getMe()) ? "" : path;
+	ret["Hub"] = dl->getUser().hint;
 	ret["Speed"] = Util::toString(speed);
 	return ret;
 }
 
 void DirectoryListingFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
 	StringMap::const_iterator path = params.find(WindowInfo::fileList);
+	StringMap::const_iterator hub = params.find("Hub");
 	StringMap::const_iterator speed = params.find("Speed");
 	if(path != params.end() && speed != params.end()) {
 		if(path->second.empty()) {
 			openOwnList(parent);
 		} else if(File::getSize(path->second) != -1) {
 			UserPtr u = DirectoryListing::getUserFromFilename(path->second);
-			if(u)
-				openWindow(parent, Text::toT(path->second), Util::emptyStringT, u, Util::toInt64(speed->second));
+			if(u) {
+				openWindow(parent, Text::toT(path->second), Util::emptyStringT, HintedUser(u,
+					(hub == params.end()) ? Util::emptyString : hub->second), Util::toInt64(speed->second));
+			}
 		}
 	}
 }
@@ -137,7 +141,7 @@ bool DirectoryListingFrame::isFavorite(const StringMap& params) {
 	return false;
 }
 
-void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& aUser, const string& txt, int64_t aSpeed) {
+void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const HintedUser& aUser, const string& txt, int64_t aSpeed) {
 	UserIter i = lists.find(aUser);
 	if(i != lists.end()) {
 		i->second->speed = aSpeed;
@@ -148,7 +152,7 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const UserPtr& a
 	}
 }
 
-DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const UserPtr& aUser, int64_t aSpeed) :
+DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const HintedUser& aUser, int64_t aSpeed) :
 	BaseType(mdiParent, _T(""), IDH_FILE_LIST, IDR_DIRECTORY, !BOOLSETTING(POPUNDER_FILELIST)),
 	dirs(0),
 	files(0),
@@ -310,8 +314,7 @@ void DirectoryListingFrame::handleFindNext() {
 }
 
 void DirectoryListingFrame::handleMatchQueue() {
-	// TODO provide hubHint?
-	int matched = QueueManager::getInstance()->matchListing(*dl, Util::emptyString);
+	int matched = QueueManager::getInstance()->matchListing(*dl);
 	status->setText(STATUS_STATUS, str(TFN_("Matched %1% file", "Matched %1% files", matched) % matched));
 }
 
@@ -407,11 +410,11 @@ MenuPtr DirectoryListingFrame::makeDirMenu() {
 }
 
 void DirectoryListingFrame::addUserCommands(const MenuPtr& parent) {
-	prepareMenu(parent, UserCommand::CONTEXT_FILELIST, ClientManager::getInstance()->getHubs(dl->getUser()->getCID()));
+	prepareMenu(parent, UserCommand::CONTEXT_FILELIST, ClientManager::getInstance()->getHubs(dl->getUser().user->getCID(), dl->getUser().hint));
 }
 
 void DirectoryListingFrame::addUserMenu(const MenuPtr& menu) {
-	appendUserItems(getParent(), menu->appendPopup(T_("User")), Util::emptyString, true, true, false);
+	appendUserItems(getParent(), menu->appendPopup(T_("User")), true, true, false);
 }
 
 void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
@@ -752,10 +755,9 @@ void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 
 	if(!d->getComplete()) {
 		dcdebug("Directory incomplete\n");
-		if(dl->getUser()->isOnline()) {
+		if(dl->getUser().user->isOnline()) {
 			try {
-				// TODO provide hubHint?
-				QueueManager::getInstance()->addList(dl->getUser(), Util::emptyString, QueueItem::FLAG_PARTIAL_LIST, dl->getPath(d));
+				QueueManager::getInstance()->addList(dl->getUser(), QueueItem::FLAG_PARTIAL_LIST, dl->getPath(d));
 				status->setText(STATUS_STATUS, T_("Downloading list..."));
 			} catch(const QueueException& e) {
 				status->setText(STATUS_STATUS, Text::toT(e.getError()));
@@ -943,7 +945,7 @@ void DirectoryListingFrame::runUserCommand(const UserCommand& uc) {
 				continue;
 			users.insert(dl->getUser());
 		}
-		if(!dl->getUser()->isOnline())
+		if(!dl->getUser().user->isOnline())
 			return;
 		ucParams["fileTR"] = "NONE";
 		if(ii->type == ItemInfo::FILE) {
@@ -1050,14 +1052,14 @@ DirectoryListingFrame::UserInfoList DirectoryListingFrame::selectedUsersImpl() {
 }
 
 void DirectoryListingFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
-	if(aUser.getUser() == dl->getUser())
+	if(aUser.getUser() == dl->getUser().user)
 		callAsync(std::tr1::bind(&DirectoryListingFrame::updateTitle, this));
 }
 void DirectoryListingFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
-	if(aUser == dl->getUser())
+	if(aUser == dl->getUser().user)
 		callAsync(std::tr1::bind(&DirectoryListingFrame::updateTitle, this));
 }
 void DirectoryListingFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
-	if(aUser == dl->getUser())
+	if(aUser == dl->getUser().user)
 		callAsync(std::tr1::bind(&DirectoryListingFrame::updateTitle, this));
 }
