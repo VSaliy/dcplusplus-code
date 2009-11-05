@@ -245,13 +245,13 @@ void UploadManager::removeUpload(Upload* aUpload) {
 	delete aUpload;
 }
 
-void UploadManager::reserveSlot(const UserPtr& aUser, const string& hubHint) {
+void UploadManager::reserveSlot(const HintedUser& aUser) {
 	{
 		Lock l(cs);
 		reservedSlots.insert(aUser);
 	}
-	if(aUser->isOnline())
-		ClientManager::getInstance()->connect(aUser, Util::toString(Util::rand()), hubHint);
+	if(aUser.user->isOnline())
+		ClientManager::getInstance()->connect(aUser, Util::toString(Util::rand()));
 }
 
 void UploadManager::on(UserConnectionListener::Get, UserConnection* aSource, const string& aFile, int64_t aResume) throw() {
@@ -361,14 +361,14 @@ void UploadManager::addFailedUpload(const UserConnection& source, string filenam
 		Lock l(cs);
 		WaitingUserList::iterator it = find_if(waitingUsers.begin(), waitingUsers.end(), CompareFirst<UserPtr, uint32_t>(source.getUser()));
 		if (it==waitingUsers.end()) {
-			waitingUsers.push_back(WaitingUser(source.getUser(), GET_TICK()));
+			waitingUsers.push_back(WaitingUser(source.getHintedUser(), GET_TICK()));
 		} else {
 			it->second = GET_TICK();
 		}
 		waitingFiles[source.getUser()].insert(filename);		//files for which user's asked
 	}
 
-	fire(UploadManagerListener::WaitingAddFile(), source.getUser(), filename);
+	fire(UploadManagerListener::WaitingAddFile(), source.getHintedUser(), filename);
 }
 
 void UploadManager::clearUserFiles(const UserPtr& source) {
@@ -384,10 +384,10 @@ void UploadManager::clearUserFiles(const UserPtr& source) {
 	waitingUsers.erase(sit);
 }
 
-UserList UploadManager::getWaitingUsers() {
+HintedUserList UploadManager::getWaitingUsers() const {
 	Lock l(cs);
-	UserList u;
-	for(WaitingUserList::const_iterator i = waitingUsers.begin(); i != waitingUsers.end(); ++i) {
+	HintedUserList u;
+	for(WaitingUserList::const_iterator i = waitingUsers.begin(), iend = waitingUsers.end(); i != iend; ++i) {
 		u.push_back(i->first);
 	}
 	return u;
@@ -453,7 +453,8 @@ void UploadManager::on(TimerManagerListener::Minute, uint32_t /* aTick */) throw
 	}
 
 	for(UserList::iterator i = disconnects.begin(); i != disconnects.end(); ++i) {
-		LogManager::getInstance()->message(str(F_("Disconnected user leaving the hub: %1%") % Util::toString(ClientManager::getInstance()->getNicks((*i)->getCID()))));
+		LogManager::getInstance()->message(str(F_("Disconnected user leaving the hub: %1%") %
+			Util::toString(ClientManager::getInstance()->getNicks((*i)->getCID(), Util::emptyString))));
 		ConnectionManager::getInstance()->disconnect(*i, false);
 	}
 }

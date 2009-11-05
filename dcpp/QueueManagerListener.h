@@ -52,7 +52,7 @@ public:
 	virtual void on(SourcesUpdated, QueueItem*) throw() { }
 	virtual void on(StatusUpdated, QueueItem*) throw() { }
 	virtual void on(SearchStringUpdated, QueueItem*) throw() { }
-	virtual void on(PartialList, const UserPtr&, const string&) throw() { }
+	virtual void on(PartialList, const HintedUser&, const string&) throw() { }
 
 	virtual void on(RecheckStarted, QueueItem*) throw() { }
 	virtual void on(RecheckNoFile, QueueItem*) throw() { }

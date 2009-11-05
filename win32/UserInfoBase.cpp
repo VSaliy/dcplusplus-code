@@ -29,25 +29,25 @@
 #include "PrivateFrame.h"
 #include "HubFrame.h"
 
-void UserInfoBase::matchQueue(const string& hubHint) {
+void UserInfoBase::matchQueue() {
 	try {
-		QueueManager::getInstance()->addList(user, hubHint, QueueItem::FLAG_MATCH_QUEUE);
+		QueueManager::getInstance()->addList(user, QueueItem::FLAG_MATCH_QUEUE);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}
 }
-void UserInfoBase::getList(const string& hubHint) {
+void UserInfoBase::getList() {
 	try {
-		QueueManager::getInstance()->addList(user, hubHint, QueueItem::FLAG_CLIENT_VIEW);
+		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}
 }
-void UserInfoBase::browseList(const string& hubHint) {
-	if(user->getCID().isZero())
+void UserInfoBase::browseList() {
+	if(user.user->getCID().isZero())
 		return;
 	try {
-		QueueManager::getInstance()->addList(user, hubHint, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
+		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}
@@ -57,12 +57,12 @@ void UserInfoBase::addFav() {
 	FavoriteManager::getInstance()->addFavoriteUser(user);
 }
 
-void UserInfoBase::pm(dwt::TabView* mdiParent, const string& hubHint) {
-	PrivateFrame::openWindow(mdiParent, user, Util::emptyStringT, hubHint);
+void UserInfoBase::pm(dwt::TabView* mdiParent) {
+	PrivateFrame::openWindow(mdiParent, user, Util::emptyStringT);
 }
 
-void UserInfoBase::grant(const string& hubHint) {
-	UploadManager::getInstance()->reserveSlot(user, hubHint);
+void UserInfoBase::grant() {
+	UploadManager::getInstance()->reserveSlot(user);
 }
 
 void UserInfoBase::removeFromQueue() {
@@ -70,14 +70,16 @@ void UserInfoBase::removeFromQueue() {
 }
 
 void UserInfoBase::connectFav(dwt::TabView* mdiParent) {
-	std::string url = FavoriteManager::getInstance()->getUserURL(user);
+	std::string url = user.hint;
+	if(url.empty())
+		url = FavoriteManager::getInstance()->getUserURL(user);
 	if(!url.empty()) {
 		HubFrame::openWindow(mdiParent, url);
 	}
 }
 
 void UserInfoBase::UserTraits::parse(UserInfoBase* ui) {
-	if(ui->getUser()->isSet(User::NMDC))
+	if(ui->getUser().user->isSet(User::NMDC))
 		adcOnly = false;
 	bool fav = FavoriteManager::getInstance()->isFavoriteUser(ui->getUser());
 	if(fav)

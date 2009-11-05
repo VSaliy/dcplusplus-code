@@ -238,8 +238,8 @@ private:
 
 			{
 				StringList nicks;
-				for(UserList::const_iterator i = entry->getUsers().begin(); i != entry->getUsers().end(); ++i)
-					nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks((*i)->getCID())));
+				for(HintedUserList::const_iterator i = entry->getUsers().begin(), iend = entry->getUsers().end(); i != iend; ++i)
+					nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks(*i)));
 				columns[FILES_COLUMN_NICKS] = Text::toT(Util::toString(nicks));
 			}
 			columns[FILES_COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(entry->getTransferred()));
@@ -279,8 +279,8 @@ private:
 			}
 
 			UserPtr u = DirectoryListing::getUserFromFilename(file);
-			if (u)
-				DirectoryListingFrame::openWindow(parent, Text::toT(file), Util::emptyStringT, u, entry->getAverageSpeed());
+			if(u)
+				DirectoryListingFrame::openWindow(parent, Text::toT(file), Util::emptyStringT, HintedUser(u, Util::emptyString), entry->getAverageSpeed());
 			else
 				WinUtil::openFile(Text::toT(file));
 		}
@@ -302,9 +302,7 @@ private:
 
 	class UserInfo : public FastAlloc<UserInfo> {
 	public:
-		UserInfo(const UserPtr& user_, const FinishedUserItemPtr& entry_) : user(user_), entry(entry_) {
-			columns[USERS_COLUMN_NICK] = WinUtil::getNicks(user);
-			columns[USERS_COLUMN_HUB] = Text::toT(Util::toString(ClientManager::getInstance()->getHubNames(user->getCID())));
+		UserInfo(const HintedUser& user_, const FinishedUserItemPtr& entry_) : user(user_), entry(entry_) {
 			update();
 		}
 
@@ -314,6 +312,8 @@ private:
 			if(sortCol != -1)
 				old = columns[sortCol];
 
+			columns[USERS_COLUMN_NICK] = WinUtil::getNicks(user);
+			columns[USERS_COLUMN_HUB] = Text::toT(Util::toString(ClientManager::getInstance()->getHubNames(user)));
 			columns[USERS_COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(entry->getTransferred()));
 			columns[USERS_COLUMN_SPEED] = Text::toT(Util::formatBytes(entry->getAverageSpeed()) + "/s");
 			columns[USERS_COLUMN_FILES] = Text::toT(Util::toString(entry->getFiles()));
@@ -341,7 +341,7 @@ private:
 			FinishedManager::getInstance()->remove(in_UL, user);
 		}
 
-		UserPtr user;
+		HintedUser user;
 		FinishedUserItemPtr entry;
 
 	private:
@@ -388,13 +388,13 @@ private:
 
 	struct UserCollector {
 		void operator()(FileInfo* data) {
-			const UserList& users_ = data->entry->getUsers();
+			const HintedUserList& users_ = data->entry->getUsers();
 			users.insert(users.end(), users_.begin(), users_.end());
 		}
 		void operator()(UserInfo* data) {
 			users.push_back(data->user);
 		}
-		UserList users;
+		HintedUserList users;
 	};
 
 	struct FileChecker {
@@ -544,7 +544,7 @@ private:
 		return true;
 	}
 
-	void addUser(const UserPtr& user, const FinishedUserItemPtr& entry) {
+	void addUser(const HintedUser& user, const FinishedUserItemPtr& entry) {
 		int loc = users->insert(new UserInfo(user, entry));
 		if(users->getVisible())
 			users->ensureVisible(loc);
@@ -559,7 +559,7 @@ private:
 		return 0;
 	}
 
-	UserInfo* findUserInfo(const UserPtr& user) {
+	UserInfo* findUserInfo(const HintedUser& user) {
 		for(size_t i = 0; i < users->size(); ++i) {
 			UserInfo* data = users->getData(i);
 			if(data->user == user)
@@ -593,7 +593,7 @@ private:
 		}
 	}
 
-	void onAddedUser(const UserPtr& user, const FinishedUserItemPtr& entry) {
+	void onAddedUser(const HintedUser& user, const FinishedUserItemPtr& entry) {
 		addUser(user, entry);
 		updateStatus();
 	}
@@ -609,7 +609,7 @@ private:
 		}
 	}
 
-	void onUpdatedUser(const UserPtr& user) {
+	void onUpdatedUser(const HintedUser& user) {
 		UserInfo* data = findUserInfo(user);
 		if(data) {
 			bool resort = data->update(users->getSortColumn());
@@ -628,7 +628,7 @@ private:
 		}
 	}
 
-	void onRemovedUser(const UserPtr& user) {
+	void onRemovedUser(const HintedUser& user) {
 		UserInfo* data = findUserInfo(user);
 		if(data) {
 			users->erase(data);
@@ -646,7 +646,7 @@ private:
 			callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
 	}
 
-	virtual void on(AddedUser, bool upload, const UserPtr& user, const FinishedUserItemPtr& entry) throw() {
+	virtual void on(AddedUser, bool upload, const HintedUser& user, const FinishedUserItemPtr& entry) throw() {
 		if(upload == in_UL)
 			callAsync(std::tr1::bind(&ThisType::onAddedUser, this, user, entry));
 	}
@@ -660,7 +660,7 @@ private:
 		}
 	}
 
-	virtual void on(UpdatedUser, bool upload, const UserPtr& user) throw() {
+	virtual void on(UpdatedUser, bool upload, const HintedUser& user) throw() {
 		if(upload == in_UL)
 			callAsync(std::tr1::bind(&ThisType::onUpdatedUser, this, user));
 	}
@@ -670,7 +670,7 @@ private:
 			callAsync(std::tr1::bind(&ThisType::onRemovedFile, this, file));
 	}
 
-	virtual void on(RemovedUser, bool upload, const UserPtr& user) throw() {
+	virtual void on(RemovedUser, bool upload, const HintedUser& user) throw() {
 		if(upload == in_UL)
 			callAsync(std::tr1::bind(&ThisType::onRemovedUser, this, user));
 	}

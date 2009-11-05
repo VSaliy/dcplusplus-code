@@ -257,7 +257,7 @@ private:
 	void addPMMenu(const MenuPtr& parent, QueueItemInfo* qii);
 	void addPriorityMenu(const MenuPtr& parent);
 	void addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii);
-	bool addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const UserPtr&), const QueueItem::SourceList& sources, bool offline);
+	bool addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const HintedUser&), const QueueItem::SourceList& sources, bool offline);
 
 	void layout();
 
@@ -269,11 +269,11 @@ private:
 	void handleRemove();
 	void handleRecheck();
 	void handlePriority(QueueItem::Priority p);
-	void handlePM(const UserPtr& user);
-	void handleRemoveSource(const UserPtr& user);
-	void handleRemoveSources(const UserPtr& user);
-	void handleBrowseList(const UserPtr& user);
-	void handleReadd(const UserPtr& user);
+	void handlePM(const HintedUser& user);
+	void handleRemoveSource(const HintedUser& user);
+	void handleRemoveSources(const HintedUser& user);
+	void handleBrowseList(const HintedUser& user);
+	void handleReadd(const HintedUser& user);
 	bool handleKeyDownFiles(int c);
 	bool handleKeyDownDirs(int c);
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt);

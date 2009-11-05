@@ -73,7 +73,7 @@ void FinishedManager::remove(bool upload, const string& file) {
 	fire(FinishedManagerListener::RemovedFile(), upload, file);
 }
 
-void FinishedManager::remove(bool upload, const UserPtr& user) {
+void FinishedManager::remove(bool upload, const HintedUser& user) {
 	{
 		Lock l(cs);
 		MapByUser& map = upload ? ULByUser : DLByUser;
@@ -109,7 +109,7 @@ void FinishedManager::clearULs() {
 void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 	if(t->getType() == Transfer::TYPE_FILE || (t->getType() == Transfer::TYPE_FULL_LIST && BOOLSETTING(LOG_FILELIST_TRANSFERS))) {
 		string file = t->getPath();
-		const UserPtr& user = t->getUser();
+		const HintedUser& user = t->getHintedUser();
 
 		int64_t milliSeconds = GET_TICK() - t->getStart();
 		time_t time = GET_TIME();

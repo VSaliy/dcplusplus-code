@@ -30,7 +30,7 @@
 namespace dcpp {
 
 /** A user connected to one or more hubs. */
-class User : public FastAlloc<User>, public intrusive_ptr_base<User>, public Flags
+class User : public FastAlloc<User>, public intrusive_ptr_base<User>, public Flags, private boost::noncopyable
 {
 public:
 	enum Bits {
@@ -75,10 +75,25 @@ public:
 	bool isNMDC() const { return isSet(NMDC); }
 
 private:
-	User(const User&);
-	User& operator=(const User&);
-
 	CID cid;
+};
+
+/** User pointer associated to a hub url */
+struct HintedUser {
+	UserPtr user;
+	string hint;
+
+	explicit HintedUser(const UserPtr& user_, const string& hint_) : user(user_), hint(hint_) { }
+
+	bool operator==(const UserPtr& rhs) const {
+		return user == rhs;
+	}
+	bool operator==(const HintedUser& rhs) const {
+		return user == rhs.user;
+		// ignore the hint, we don't want lists with multiple instances of the same user...
+	}
+
+	operator UserPtr() const { return user; }
 };
 
 /** One of possibly many identities of a user, mainly for UI purposes */
@@ -153,7 +168,7 @@ private:
 class Client;
 class NmdcHub;
 
-class OnlineUser : public FastAlloc<OnlineUser> {
+class OnlineUser : public FastAlloc<OnlineUser>, private boost::noncopyable {
 public:
 	typedef vector<OnlineUser*> List;
 	typedef List::iterator Iter;
@@ -172,9 +187,6 @@ public:
 	GETSET(Identity, identity, Identity);
 private:
 	friend class NmdcHub;
-
-	OnlineUser(const OnlineUser&);
-	OnlineUser& operator=(const OnlineUser&);
 
 	Client& client;
 };

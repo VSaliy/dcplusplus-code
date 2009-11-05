@@ -69,26 +69,26 @@ void ConnectionManager::listen() throw(SocketException){
  * for downloading.
  * @param aUser The user to connect to.
  */
-void ConnectionManager::getDownloadConnection(const UserPtr& aUser, const string& hubHint) {
-	dcassert((bool)aUser);
+void ConnectionManager::getDownloadConnection(const HintedUser& aUser) {
+	dcassert((bool)aUser.user);
 	{
 		Lock l(cs);
-		ConnectionQueueItem::Iter i = find(downloads.begin(), downloads.end(), aUser);
+		ConnectionQueueItem::Iter i = find(downloads.begin(), downloads.end(), aUser.user);
 		if(i == downloads.end()) {
-			getCQI(aUser, true, hubHint);
+			getCQI(aUser, true);
 		} else {
-			DownloadManager::getInstance()->checkIdle(aUser);
+			DownloadManager::getInstance()->checkIdle(aUser.user);
 		}
 	}
 }
 
-ConnectionQueueItem* ConnectionManager::getCQI(const UserPtr& aUser, bool download, const string& hubHint) {
-	ConnectionQueueItem* cqi = new ConnectionQueueItem(aUser, download, hubHint);
+ConnectionQueueItem* ConnectionManager::getCQI(const HintedUser& aUser, bool download) {
+	ConnectionQueueItem* cqi = new ConnectionQueueItem(aUser, download);
 	if(download) {
-		dcassert(find(downloads.begin(), downloads.end(), aUser) == downloads.end());
+		dcassert(find(downloads.begin(), downloads.end(), aUser.user) == downloads.end());
 		downloads.push_back(cqi);
 	} else {
-		dcassert(find(uploads.begin(), uploads.end(), aUser) == uploads.end());
+		dcassert(find(uploads.begin(), uploads.end(), aUser.user) == uploads.end());
 		uploads.push_back(cqi);
 	}
 
@@ -168,7 +168,7 @@ void ConnectionManager::on(TimerManagerListener::Second, uint32_t aTick) throw()
 					if(cqi->getState() == ConnectionQueueItem::WAITING) {
 						if(startDown) {
 							cqi->setState(ConnectionQueueItem::CONNECTING);
-							ClientManager::getInstance()->connect(cqi->getUser(), cqi->getToken(), cqi->getHubHint());
+							ClientManager::getInstance()->connect(HintedUser(cqi->getUser(), cqi->getHubHint()), cqi->getToken());
 							fire(ConnectionManagerListener::StatusChanged(), cqi);
 							attemptDone = true;
 						} else {
@@ -583,7 +583,7 @@ void ConnectionManager::addUploadConnection(UserConnection* uc) {
 
 		ConnectionQueueItem::Iter i = find(uploads.begin(), uploads.end(), uc->getUser());
 		if(i == uploads.end()) {
-			ConnectionQueueItem* cqi = getCQI(uc->getUser(), false, Util::emptyString);
+			ConnectionQueueItem* cqi = getCQI(uc->getHintedUser(), false);
 
 			cqi->setState(ConnectionQueueItem::ACTIVE);
 			uc->setFlag(UserConnection::FLAG_ASSOCIATED);

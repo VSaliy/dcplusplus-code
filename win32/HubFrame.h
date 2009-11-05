@@ -111,7 +111,7 @@ private:
 	struct UserTask : public Task {
 		UserTask(const OnlineUser& ou);
 
-		UserPtr user;
+		HintedUser user;
 		Identity identity;
 	};
 

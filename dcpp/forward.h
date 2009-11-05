@@ -61,6 +61,9 @@ typedef boost::intrusive_ptr<FinishedUserItem> FinishedUserItemPtr;
 
 class FinishedManager;
 
+struct HintedUser;
+typedef std::vector<HintedUser> HintedUserList;
+
 class HubEntry;
 typedef std::vector<HubEntry> HubEntryList;
 

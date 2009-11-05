@@ -72,43 +72,63 @@ size_t ClientManager::getUserCount() const {
 	return onlineUsers.size();
 }
 
-StringList ClientManager::getHubs(const CID& cid) const {
+StringList ClientManager::getHubs(const CID& cid, const string& hintUrl) {
+	return getHubs(cid, hintUrl, FavoriteManager::getInstance()->isPrivate(hintUrl));
+}
+
+StringList ClientManager::getHubNames(const CID& cid, const string& hintUrl) {
+	return getHubNames(cid, hintUrl, FavoriteManager::getInstance()->isPrivate(hintUrl));
+}
+
+StringList ClientManager::getNicks(const CID& cid, const string& hintUrl) {
+	return getNicks(cid, hintUrl, FavoriteManager::getInstance()->isPrivate(hintUrl));
+}
+
+StringList ClientManager::getHubs(const CID& cid, const string& hintUrl, bool priv) {
 	Lock l(cs);
 	StringList lst;
-	OnlinePairC op = onlineUsers.equal_range(cid);
-	for(OnlineIterC i = op.first; i != op.second; ++i) {
-		lst.push_back(i->second->getClient().getHubUrl());
+	if(!priv) {
+		OnlinePairC op = onlineUsers.equal_range(cid);
+		for(OnlineIterC i = op.first; i != op.second; ++i) {
+			lst.push_back(i->second->getClient().getHubUrl());
+		}
+	} else {
+		OnlineUser* u = findOnlineUser_hint(cid, hintUrl);
+		if(u)
+			lst.push_back(u->getClient().getHubUrl());
 	}
 	return lst;
 }
 
-StringList ClientManager::getHubNames(const CID& cid, const string& url) {
+StringList ClientManager::getHubNames(const CID& cid, const string& hintUrl, bool priv) {
 	Lock l(cs);
 	StringList lst;
-	if(url.empty()) {
+	if(!priv) {
 		OnlinePairC op = onlineUsers.equal_range(cid);
+unsigned found = 0;
 		for(OnlineIterC i = op.first; i != op.second; ++i) {
 			lst.push_back(i->second->getClient().getHubName());
+found++;
 		}
 	} else {
-		OnlineUser* u = findOnlineUser_hint(cid, url);
+		OnlineUser* u = findOnlineUser_hint(cid, hintUrl);
 		if(u)
 			lst.push_back(u->getClient().getHubName());
 	}
 	return lst;
 }
 
-StringList ClientManager::getNicks(const CID& cid, const string& url) {
+StringList ClientManager::getNicks(const CID& cid, const string& hintUrl, bool priv) {
 	Lock l(cs);
 	StringSet ret;
 
-	if(url.empty()) {
+	if(!priv) {
 		OnlinePairC op = onlineUsers.equal_range(cid);
 		for(OnlineIterC i = op.first; i != op.second; ++i) {
 			ret.insert(i->second->getIdentity().getNick());
 		}
 	} else {
-		OnlineUser* u = findOnlineUser_hint(cid, url);
+		OnlineUser* u = findOnlineUser_hint(cid, hintUrl);
 		if(u)
 			ret.insert(u->getIdentity().getNick());
 	}
@@ -304,17 +324,6 @@ void ClientManager::putOffline(OnlineUser* ou, bool disconnect) throw() {
 	}
 }
 
-void ClientManager::connect(const UserPtr& p, const string& token, const string& hintUrl) {
-	bool priv = FavoriteManager::getInstance()->isPrivate(hintUrl);
-
-	Lock l(cs);
-	OnlineUser* u = findOnlineUser(p->getCID(), hintUrl, priv);
-
-	if(u) {
-		u->getClient().connect(*u, token);
-	}
-}
-
 OnlineUser* ClientManager::findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p) throw() {
 	p = onlineUsers.equal_range(cid);
 	if(p.first == p.second) // no user found with the given CID.
@@ -349,11 +358,22 @@ OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl,
 	return p.first->second;
 }
 
-void ClientManager::privateMessage(const UserPtr& p, const string& msg, bool thirdPerson, const string& hintUrl) {
-	bool priv = FavoriteManager::getInstance()->isPrivate(hintUrl);
+void ClientManager::connect(const HintedUser& user, const string& token) {
+	bool priv = FavoriteManager::getInstance()->isPrivate(user.hint);
 
 	Lock l(cs);
-	OnlineUser* u = findOnlineUser(p->getCID(), hintUrl, priv);
+	OnlineUser* u = findOnlineUser(user.user->getCID(), user.hint, priv);
+
+	if(u) {
+		u->getClient().connect(*u, token);
+	}
+}
+
+void ClientManager::privateMessage(const HintedUser& user, const string& msg, bool thirdPerson) {
+	bool priv = FavoriteManager::getInstance()->isPrivate(user.hint);
+
+	Lock l(cs);
+	OnlineUser* u = findOnlineUser(user.user->getCID(), user.hint, priv);
 
 	if(u) {
 		u->getClient().privateMessage(*u, msg, thirdPerson);

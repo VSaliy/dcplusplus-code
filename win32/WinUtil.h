@@ -21,6 +21,7 @@
 
 #include <dcpp/StringTokenizer.h>
 #include <dcpp/Util.h>
+#include <dcpp/User.h>
 #include <dcpp/forward.h>
 #include <dcpp/MerkleTree.h>
 
@@ -153,15 +154,16 @@ public:
 	static bool isAlt() { return (::GetKeyState(VK_MENU) & 0x8000) > 0; }
 	static bool isCtrl() { return (::GetKeyState(VK_CONTROL) & 0x8000) > 0; }
 
-	/// @param url only retrieve information for the specified client
-	static tstring getNicks(const CID& cid, const string& url = Util::emptyString) throw();
-	/// @param url only retrieve information for the specified client
-	static tstring getNicks(const UserPtr& u, const string& url = Util::emptyString);
+	static tstring getNicks(const CID& cid, const string& hintUrl);
+	static tstring getNicks(const UserPtr& u, const string& hintUrl);
+	static tstring getNicks(const CID& cid, const string& hintUrl, bool priv);
+	static tstring getNicks(const HintedUser& user) { return getNicks(user.user->getCID(), user.hint); }
+
 	/** @return Pair of hubnames as a string and a bool representing the user's online status */
-	/// @param url only retrieve information for the specified client
-	static pair<tstring, bool> getHubNames(const CID& cid, const string& url = Util::emptyString) throw();
-	/// @param url only retrieve information for the specified client
-	static pair<tstring, bool> getHubNames(const UserPtr& u, const string& url = Util::emptyString);
+	static pair<tstring, bool> getHubNames(const CID& cid, const string& hintUrl);
+	static pair<tstring, bool> getHubNames(const UserPtr& u, const string& hintUrl);
+	static pair<tstring, bool> getHubNames(const CID& cid, const string& hintUrl, bool priv);
+	static pair<tstring, bool> getHubNames(const HintedUser& user) { return getHubNames(user.user->getCID(), user.hint); }
 
 	static void reducePaths(string& message);
 
@@ -210,7 +212,7 @@ public:
 		return Text::fromT(tstring(buf, x));
 	}
 
-	static void addUserItems(dwt::MenuPtr menu, const UserList& users, dwt::TabViewPtr parent, const StringList& dirs = StringList());
+	static void addUserItems(MenuPtr menu, const HintedUserList& users, dwt::TabViewPtr parent, const StringList& dirs = StringList());
 
 #ifdef PORT_ME
 	static int getTextWidth(const tstring& str, HWND hWnd) {
