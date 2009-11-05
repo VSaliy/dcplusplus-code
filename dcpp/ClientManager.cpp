@@ -105,10 +105,8 @@ StringList ClientManager::getHubNames(const CID& cid, const string& hintUrl, boo
 	StringList lst;
 	if(!priv) {
 		OnlinePairC op = onlineUsers.equal_range(cid);
-unsigned found = 0;
 		for(OnlineIterC i = op.first; i != op.second; ++i) {
 			lst.push_back(i->second->getClient().getHubName());
-found++;
 		}
 	} else {
 		OnlineUser* u = findOnlineUser_hint(cid, hintUrl);
