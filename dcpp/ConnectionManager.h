@@ -47,22 +47,17 @@ public:
 	};
 
 	ConnectionQueueItem(const HintedUser& aUser, bool aDownload) : token(Util::toString(Util::rand())),
-		hubHint(aUser.hint), lastAttempt(0), state(WAITING), download(aDownload), user(aUser.user) { }
-
-	/// @todo use HintedUser only, get rid of separate UserPtr / string hubHint
-	UserPtr& getUser() { return user; }
-	const UserPtr& getUser() const { return user; }
-
-	const HintedUser getHintedUser() const { return HintedUser(user, hubHint); }
+		lastAttempt(0), state(WAITING), download(aDownload), user(aUser) { }
 
 	GETSET(string, token, Token);
-	GETSET(string, hubHint, HubHint);
 	GETSET(uint64_t, lastAttempt, LastAttempt);
 	GETSET(State, state, State);
 	GETSET(bool, download, Download);
 
+	const HintedUser& getUser() const { return user; }
+
 private:
-	UserPtr user;
+	HintedUser user;
 };
 
 class ExpectedMap {

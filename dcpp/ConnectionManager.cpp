@@ -141,13 +141,13 @@ void ConnectionManager::on(TimerManagerListener::Second, uint32_t aTick) throw()
 			ConnectionQueueItem* cqi = *i;
 
 			if(cqi->getState() != ConnectionQueueItem::ACTIVE) {
-				if(!cqi->getUser()->isOnline()) {
+				if(!cqi->getUser().user->isOnline()) {
 					// Not online anymore...remove it from the pending...
 					removed.push_back(cqi);
 					continue;
 				}
 
-				if(cqi->getUser()->isSet(User::PASSIVE) && !ClientManager::getInstance()->isActive()) {
+				if(cqi->getUser().user->isSet(User::PASSIVE) && !ClientManager::getInstance()->isActive()) {
 					passiveUsers.push_back(cqi->getUser());
 					removed.push_back(cqi);
 					continue;
@@ -168,7 +168,7 @@ void ConnectionManager::on(TimerManagerListener::Second, uint32_t aTick) throw()
 					if(cqi->getState() == ConnectionQueueItem::WAITING) {
 						if(startDown) {
 							cqi->setState(ConnectionQueueItem::CONNECTING);
-							ClientManager::getInstance()->connect(HintedUser(cqi->getUser(), cqi->getHubHint()), cqi->getToken());
+							ClientManager::getInstance()->connect(cqi->getUser(), cqi->getToken());
 							fire(ConnectionManagerListener::StatusChanged(), cqi);
 							attemptDone = true;
 						} else {
@@ -455,7 +455,9 @@ void ConnectionManager::on(UserConnectionListener::MyNick, UserConnection* aSour
 		Lock l(cs);
 		for(ConnectionQueueItem::Iter i = downloads.begin(); i != downloads.end(); ++i) {
 			ConnectionQueueItem* cqi = *i;
-			if((cqi->getState() == ConnectionQueueItem::CONNECTING || cqi->getState() == ConnectionQueueItem::WAITING) && cqi->getUser()->getCID() == cid) {
+			if((cqi->getState() == ConnectionQueueItem::CONNECTING || cqi->getState() == ConnectionQueueItem::WAITING) &&
+				cqi->getUser().user->getCID() == cid)
+			{
 				aSource->setUser(cqi->getUser());
 				// Indicate that we're interested in this file...
 				aSource->setFlag(UserConnection::FLAG_DOWNLOAD);

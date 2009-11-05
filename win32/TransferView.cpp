@@ -669,7 +669,7 @@ void TransferView::DownloadInfo::update() {
 }
 
 void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) throw() {
-	UpdateInfo* ui = new UpdateInfo(aCqi->getHintedUser(), aCqi->getDownload());
+	UpdateInfo* ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
 
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(T_("Connecting"));
@@ -677,7 +677,7 @@ void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCq
 }
 
 void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) throw() {
-	UpdateInfo* ui = new UpdateInfo(aCqi->getHintedUser(), aCqi->getDownload());
+	UpdateInfo* ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
 
 	ui->setStatusString((aCqi->getState() == ConnectionQueueItem::CONNECTING) ? T_("Connecting") : T_("Waiting to retry"));
 
@@ -685,12 +685,12 @@ void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueI
 }
 
 void TransferView::on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) throw() {
-	addTask(CONNECTIONS_REMOVE, new UpdateInfo(aCqi->getHintedUser(), aCqi->getDownload()));
+	addTask(CONNECTIONS_REMOVE, new UpdateInfo(aCqi->getUser(), aCqi->getDownload()));
 }
 
 void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) throw() {
-	UpdateInfo* ui = new UpdateInfo(aCqi->getHintedUser(), aCqi->getDownload());
-	if(aCqi->getUser()->isSet(User::OLD_CLIENT)) {
+	UpdateInfo* ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
+	if(aCqi->getUser().user->isSet(User::OLD_CLIENT)) {
 		ui->setStatusString(T_("Remote client does not fully support TTH - cannot download"));
 	} else {
 		ui->setStatusString(Text::toT(aReason));
