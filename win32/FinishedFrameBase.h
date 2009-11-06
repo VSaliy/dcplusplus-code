@@ -77,7 +77,6 @@ protected:
 		{
 			dwt::Container::Seed cs;
 			cs.caption = T_("Grouped by files");
-			cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 			cs.location = tabs->getClientSize();
 			filesWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
 			filesWindow->setHelpId(in_UL ? IDH_FINISHED_UL : IDH_FINISHED_DL);

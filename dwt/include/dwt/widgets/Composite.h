@@ -63,57 +63,19 @@ public:
 
 	typedef ThisType* ObjectType;
 
-	/// Seed class
-	/** This class contains all of the values needed to create the widget. It also
-	  * knows the type of the class whose seed values it contains. Every widget
-	  * should define one of these.
-	  */
-	struct Seed : public BaseType::Seed {
-		IconPtr icon;
-		IconPtr smallIcon;
-		HBRUSH background;
-		HCURSOR cursor;
-
-		/// Fills with default parameters
-		Seed(const tstring& caption, DWORD style, DWORD exStyle);
-	};
-
-	void create(const Seed& cs);
-
 protected:
 	friend class WidgetCreator<Composite>;
 
-	Composite(Widget* parent, Dispatcher& dispatcher) : BaseType(parent, dispatcher) {
+	struct Seed : public BaseType::Seed {
+		Seed(const tstring& caption, DWORD style, DWORD exStyle);
 	};
 
-private:
-	template<typename T>
-	void setClassParam(int id, T param);
+	Composite(Widget* parent, Dispatcher& dispatcher) : BaseType(parent, dispatcher) { };
 };
 
 inline Composite::Seed::Seed(const tstring& caption, DWORD style, DWORD exStyle) :
-	BaseType::Seed(style | WS_CLIPCHILDREN, exStyle, caption),
-	background(( HBRUSH )( COLOR_3DFACE + 1 )),
-	cursor(::LoadCursor(0, IDC_ARROW))
+BaseType::Seed(style | WS_CLIPCHILDREN, exStyle, caption)
 {
-}
-
-inline void Composite::create(const Seed& cs) {
-	BaseType::create(cs);
-
-	if(cs.icon)
-		setClassParam(GCLP_HICON, cs.icon->handle());
-	if(cs.smallIcon)
-		setClassParam(GCLP_HICONSM, cs.smallIcon->handle());
-	if(cs.background)
-		setClassParam(GCLP_HBRBACKGROUND, cs.background);
-	if(cs.cursor)
-		setClassParam(GCLP_HCURSOR, cs.cursor);
-}
-
-template<typename T>
-void Composite::setClassParam(int id, T param) {
-	::SetClassLongPtr(handle(), id, reinterpret_cast<LONG_PTR>(param));
 }
 
 }

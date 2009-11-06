@@ -85,8 +85,7 @@ public:
 	  */
 	void create( const Seed& cs = Seed() );
 
-
-	explicit Window( Widget * parent = 0 );
+	explicit Window(Widget* parent = 0, Dispatcher& dispatcher = NormalDispatcher::getDefault());
 
 	virtual ~Window();
 };
@@ -95,9 +94,10 @@ public:
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline Window::Window( Widget * parent )
-: BaseType(parent, NormalDispatcher::newClass<Window>())
-{}
+inline Window::Window(Widget* parent, Dispatcher& dispatcher) :
+BaseType(parent, dispatcher)
+{
+}
 
 inline Window::~Window()
 {

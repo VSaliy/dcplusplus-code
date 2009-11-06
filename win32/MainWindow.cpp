@@ -71,19 +71,22 @@
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/StringUtils.h>
 
+static dwt::IconPtr mainIcon(new dwt::Icon(IDR_DCPP, dwt::Point(32, 32)));
+static dwt::IconPtr mainSmallIcon(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16)));
+
 MainWindow::MainWindow() :
-	dwt::Window(0),
-	paned(0),
-	transfers(0),
-	toolbar(0),
-	tabs(0),
-	slotsSpin(0),
-	maximized(false),
-	c(0),
-	stopperThread(NULL),
-	lastUp(0),
-	lastDown(0),
-	lastTick(GET_TICK())
+dwt::Window(0, dwt::NormalDispatcher::newClass<MainWindow>(mainIcon, mainSmallIcon)),
+paned(0),
+transfers(0),
+toolbar(0),
+tabs(0),
+slotsSpin(0),
+maximized(false),
+c(0),
+stopperThread(NULL),
+lastUp(0),
+lastDown(0),
+lastTick(GET_TICK())
 {
 	links.homepage = _T("http://dcplusplus.sourceforge.net/");
 	links.downloads = links.homepage + _T("download/");
@@ -165,10 +168,6 @@ MainWindow::MainWindow() :
 		dwt::MessageBox(this).show(T_("Your version of windows common controls is too old for DC++ to run correctly, and you will most probably experience problems with the user interface. You should download version 5.80 or higher from the DC++ homepage or from Microsoft directly."), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 }
 
-static LRESULT handleGetIcon(WPARAM wParam, const dwt::IconPtr& icon, const dwt::IconPtr& smallIcon) {
-	return reinterpret_cast<LRESULT>(((wParam == ICON_BIG) ? icon : smallIcon)->handle());
-}
-
 void MainWindow::initWindow() {
 	// Create main window
 	dcdebug("initWindow\n");
@@ -189,13 +188,7 @@ void MainWindow::initWindow() {
 	if (ResourceManager::getInstance()->isRTL())
 		cs.exStyle |= WS_EX_RTLREADING;
 
-	cs.icon = dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(32, 32)));
-	cs.smallIcon = dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16)));
-	cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 	create(cs);
-
-	/// @todo shouldn't need this
-	onRaw(std::tr1::bind(&handleGetIcon, _1, cs.icon, cs.smallIcon), dwt::Message(WM_GETICON));
 
 	setHelpId(IDH_MAIN);
 

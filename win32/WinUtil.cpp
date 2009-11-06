@@ -718,7 +718,8 @@ class HelpPopup : public Container {
 
 public:
 	explicit HelpPopup(dwt::Control* parent, const tstring& text_) :
-	BaseType(parent, dwt::NormalDispatcher::newClass<HelpPopup>()),
+	BaseType(parent, dwt::NormalDispatcher::newClass<HelpPopup>(0, 0, dwt::Dispatcher::getDefaultCursor(),
+		reinterpret_cast<HBRUSH>(COLOR_INFOBK + 1))),
 	text(text_)
 	{
 		// where to position the tooltip
@@ -734,7 +735,6 @@ public:
 		// create the popup container (invisible at first)
 		Seed cs(WS_POPUP | WS_BORDER, WS_EX_CLIENTEDGE);
 		cs.location = dwt::Rectangle(pt, dwt::Point()); // set the position but not the size
-		cs.background = (HBRUSH)(COLOR_INFOBK + 1);
 		create(cs);
 		onLeftMouseDown(std::tr1::bind(&HelpPopup::terminate, this));
 		onKeyDown(std::tr1::bind(&HelpPopup::terminate, this));

@@ -91,7 +91,6 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	{
 		Container::Seed cs;
 		cs.caption = T_("Connections");
-		cs.background = (HBRUSH)(COLOR_3DFACE + 1);
 		cs.location = tabs->getClientSize();
 		connectionsWindow = dwt::WidgetCreator<Container>::create(tabs, cs);
 		connectionsWindow->setHelpId(IDH_CONNECTIONS);
