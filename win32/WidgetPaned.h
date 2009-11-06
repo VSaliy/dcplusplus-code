@@ -125,12 +125,11 @@ WidgetPaned< horizontal >::Seed::Seed(double pos_) :
 BaseType::Seed(),
 pos(pos_)
 {
-	cursor = ::LoadCursor(0, horizontal ? IDC_SIZENS : IDC_SIZEWE);
 }
 
 template<bool horizontal>
 WidgetPaned<horizontal>::WidgetPaned(dwt::Widget* parent) :
-BaseType(parent, dwt::NormalDispatcher::newClass<ThisType>()),
+BaseType(parent, dwt::NormalDispatcher::newClass<ThisType>(0, 0, ::LoadCursor(0, horizontal ? IDC_SIZENS : IDC_SIZEWE))),
 pos(0.5),
 moving(false)
 {

@@ -275,11 +275,7 @@ struct MDIFrame : public Normal {
 }
 
 Dispatcher::Dispatcher(LPCTSTR className, WNDPROC initProc) : atom(0) {
-	WNDCLASSEX cls = { sizeof(WNDCLASSEX) };
-
-	cls.lpfnWndProc = initProc;
-	cls.hInstance = ::GetModuleHandle(NULL);
-	cls.lpszClassName = className;
+	WNDCLASSEX cls = makeWndClass(className, initProc);
 
 	atom = ::RegisterClassEx(&cls);
 	if(!atom) {
@@ -300,12 +296,35 @@ Dispatcher::~Dispatcher() {
 	}
 }
 
-NormalDispatcher::NormalDispatcher(LPCTSTR className_) :
-	Dispatcher(className_, WindowProc<Policies::Normal>::initProc)
+HCURSOR Dispatcher::getDefaultCursor() {
+	static HCURSOR cursor(::LoadCursor(0, IDC_ARROW));
+	return cursor;
+}
+
+HBRUSH Dispatcher::getDefaultBackground() {
+	static HBRUSH background(reinterpret_cast<HBRUSH>(COLOR_3DFACE + 1));
+	return background;
+}
+
+WNDCLASSEX Dispatcher::makeWndClass(LPCTSTR className, WNDPROC initProc) {
+	WNDCLASSEX cls = { sizeof(WNDCLASSEX) };
+
+	cls.lpfnWndProc = initProc ? initProc : WindowProc<Policies::Normal>::initProc;
+	cls.hInstance = ::GetModuleHandle(NULL);
+	cls.lpszClassName = className;
+	cls.hCursor = getDefaultCursor();
+	cls.hbrBackground = getDefaultBackground();
+
+	return cls;
+}
+
+NormalDispatcher::NormalDispatcher(WNDCLASSEX& cls) :
+Dispatcher(cls)
 { }
 
 Dispatcher& NormalDispatcher::getDefault() {
-	static NormalDispatcher dispatcher(className<NormalDispatcher>().c_str());
+	WNDCLASSEX cls = makeWndClass(className<NormalDispatcher>().c_str());
+	static NormalDispatcher dispatcher(cls);
 	return dispatcher;
 }
 
@@ -330,7 +349,7 @@ LRESULT ChainingDispatcher::chain(const MSG& msg) {
 std::auto_ptr<Dispatcher> ChainingDispatcher::superClass(LPCTSTR original, LPCTSTR newName) {
 	WNDCLASSEX orgClass = { sizeof(WNDCLASSEX) };
 
-	if(!::GetClassInfoEx(GetModuleHandle(NULL), original, &orgClass)) {
+	if(!::GetClassInfoEx(::GetModuleHandle(NULL), original, &orgClass)) {
 		throw Win32Exception("Unable to find information for class");
 	}
 

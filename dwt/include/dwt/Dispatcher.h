@@ -34,6 +34,7 @@
 
 #include "WindowsHeaders.h"
 #include "tstring.h"
+#include <dwt/resources/Icon.h>
 #include <typeinfo>
 #include <sstream>
 #include <memory>
@@ -52,7 +53,11 @@ public:
 		return stream.str();
 	}
 
-	LPCTSTR getClassName() { return reinterpret_cast<LPCTSTR>(atom); }
+	LPCTSTR getClassName() const { return reinterpret_cast<LPCTSTR>(atom); }
+
+	static HCURSOR getDefaultCursor();
+	static HBRUSH getDefaultBackground();
+
 protected:
 	friend class std::auto_ptr<Dispatcher>;
 
@@ -61,6 +66,8 @@ protected:
 
 	virtual ~Dispatcher();
 
+	static WNDCLASSEX makeWndClass(LPCTSTR className, WNDPROC initProc = 0);
+
 	ATOM atom;
 };
 
@@ -68,21 +75,30 @@ class NormalDispatcher : public Dispatcher {
 public:
 	static Dispatcher& getDefault();
 
-	NormalDispatcher(LPCTSTR className_);
-
 	template<typename T>
-	static Dispatcher& newClass() {
-		static std::auto_ptr<Dispatcher> dispatcher(new NormalDispatcher(className<T>().c_str()));
+	static Dispatcher& newClass(const IconPtr& icon = 0, const IconPtr& smallIcon = 0,
+		const HCURSOR& cursor = getDefaultCursor(), const HBRUSH& background = getDefaultBackground())
+	{
+		WNDCLASSEX cls = makeWndClass(className<T>().c_str());
+		if(icon)
+			cls.hIcon = icon->handle();
+		if(smallIcon)
+			cls.hIconSm = smallIcon->handle();
+		cls.hCursor = cursor;
+		cls.hbrBackground = background;
+
+		static std::auto_ptr<Dispatcher> dispatcher(new NormalDispatcher(cls));
 		return *dispatcher;
 	}
 
 	virtual LRESULT chain(const MSG& msg);
+
+private:
+	NormalDispatcher(WNDCLASSEX& cls);
 };
 
 class ChainingDispatcher : public Dispatcher {
 public:
-	ChainingDispatcher(LPCTSTR className_, WNDPROC wndProc_);
-
 	template<typename T>
 	static Dispatcher& superClass() {
 		static std::auto_ptr<Dispatcher> dispatcher = superClass(T::windowClass, className<T>().c_str());
@@ -92,7 +108,9 @@ public:
 	static std::auto_ptr<Dispatcher> superClass(LPCTSTR original, LPCTSTR newName);
 
 	virtual LRESULT chain(const MSG& msg);
+
 private:
+	ChainingDispatcher(LPCTSTR className_, WNDPROC wndProc_);
 	ChainingDispatcher(WNDCLASSEX& cls, WNDPROC wndProc_);
 
 	WNDPROC wndProc;

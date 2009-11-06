@@ -39,25 +39,21 @@ class MDIChildFrame :
 
 protected:
 	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0, bool activate = true) :
-		BaseType(tabView, dwt::NormalDispatcher::newClass<ThisType>()),
+		BaseType(tabView),
 		lastFocus(NULL),
 		alwaysSameFocus(false),
 		reallyClose(false)
 	{
-		dwt::IconPtr icon = resourceId ? dwt::IconPtr(new dwt::Icon(resourceId, dwt::Point(16, 16))) : dwt::IconPtr();
-
 		typename ThisType::Seed cs;
 		cs.style &= ~WS_VISIBLE;
 		cs.caption = title;
-		cs.background = (HBRUSH)(COLOR_3DFACE + 1);
-		cs.icon = icon;
 		cs.location = tabView->getClientSize();
 		this->create(cs);
 
 		if(helpId)
 			setHelpId(helpId);
 
-		tabView->add(this, icon);
+		tabView->add(this, resourceId ? dwt::IconPtr(new dwt::Icon(resourceId, dwt::Point(16, 16))) : dwt::IconPtr());
 
 		if(activate) {
 			tabView->setActive(this);
@@ -71,7 +67,6 @@ protected:
 		onActivate(std::tr1::bind(&ThisType::handleActivate, this, _1));
 		onCommand(std::tr1::bind(&ThisType::close, this, true), IDC_CLOSE_WINDOW);
 		addDlgCodeMessage(this);
-
 	}
 
 	virtual ~MDIChildFrame() {
