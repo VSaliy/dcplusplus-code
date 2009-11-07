@@ -320,7 +320,7 @@ void DirectoryListingFrame::handleMatchQueue() {
 
 void DirectoryListingFrame::handleListDiff() {
 	tstring file;
-	if(WinUtil::browseFileList(LoadDialog(this), file)) {
+	if(WinUtil::browseFileList(this, file)) {
 		DirectoryListing dirList(dl->getUser());
 		try {
 			dirList.loadFile(Text::fromT(file));

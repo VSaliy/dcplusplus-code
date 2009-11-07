@@ -176,11 +176,8 @@ public:
 	static void addLastDir(const tstring& dir);
 
 	static void openLink(const tstring& url);
-	static bool browseSaveFile(dwt::SaveDialog dialog, tstring& file);
-	static bool browseFileList(dwt::LoadDialog dialog, tstring& file);
-
-	static int getOsMajor();
-	static int getOsMinor();
+	static bool browseSaveFile(dwt::Widget* parent, tstring& file);
+	static bool browseFileList(dwt::Widget* parent, tstring& file);
 
 	static void setClipboard(const tstring& str);
 
@@ -193,8 +190,6 @@ public:
 
 	static void help(dwt::Control* widget, unsigned id);
 	static string getHelpText(unsigned id);
-
-	static bool getVersionInfo(OSVERSIONINFOEX& ver);
 
 	// URL related
 	static void registerDchubHandler();

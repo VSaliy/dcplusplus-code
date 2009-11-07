@@ -25,6 +25,7 @@
 #include <dcpp/SettingsManager.h>
 #include <dcpp/Socket.h>
 #include "WinUtil.h"
+#include <dwt/util/win32/Version.h>
 
 NetworkPage::NetworkPage(dwt::Widget* parent) :
 PropPage(parent),
@@ -132,9 +133,7 @@ socksResolve(0)
 	socksLogin->setTextLimit(250);
 	socksPass->setTextLimit(250);
 
-	if(!(WinUtil::getOsMajor() >= 5 && WinUtil::getOsMinor() >= 1 //WinXP & WinSvr2003
-		|| WinUtil::getOsMajor() >= 6 )) //Vista
-	{
+	if(!dwt::util::win32::ensureVersion(dwt::util::win32::XP)) {
 		upnp->setEnabled(false);
 	}
 	switch(SETTING(INCOMING_CONNECTIONS)) {

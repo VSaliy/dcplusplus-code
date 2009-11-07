@@ -6,7 +6,7 @@ env, target, sources = dev.prepare_build(source_path, 'dwt-util', in_bin=False)
 
 env.Append(CPPPATH=["#/dwt/include"])
 
-ret = env.StaticLibrary(target, sources)
+ret = [env.StaticLibrary(target, sources), dev.build('win32/')]
 
 Return('ret')
 
