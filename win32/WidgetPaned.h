@@ -92,21 +92,23 @@ private:
 	void resizeChildren();
 
 	bool handleLButtonDown() {
-		::SetCapture( this->handle() );
+		::SetCapture(handle());
 		moving = true;
 		return true;
 	}
+
 	bool handleMouseMove(const dwt::MouseEvent& mouseEvent) {
-		if ( mouseEvent.ButtonPressed == dwt::MouseEvent::LEFT && moving )
-		{
+		if(mouseEvent.ButtonPressed == dwt::MouseEvent::LEFT && moving) {
 			dwt::ClientCoordinate cc(mouseEvent.pos, getParent());
-			int x = horizontal ? cc.y() : cc.x();
-			int w = horizontal ? rect.size.y : rect.width();
-			pos = 1. - (static_cast<double>(w - x) / static_cast<double>(w));
+			double distance = horizontal ? cc.y() : cc.x();
+			double size = horizontal ? rect.size.y : rect.size.x;
+			double offset = horizontal ? rect.pos.y : rect.pos.x;
+			pos = (distance - offset) / size;
 			resizeChildren();
 		}
 		return true;
 	}
+
 	bool handleLButtonUp() {
 		::ReleaseCapture();
 		moving = false;
@@ -157,30 +159,20 @@ dwt::Rectangle WidgetPaned< horizontal >::getSplitterRect()
 		pos = 1.0;
 	}
 
-	dwt::Rectangle rc;
+	dwt::Rectangle rc = rect;
 	if(!children.first || !children.second) {
 		return rc;
 	}
 
+	double splitterSize = ::GetSystemMetrics(horizontal ? SM_CYEDGE : SM_CXEDGE) + 2;
 	if(horizontal) {
-		rc.size.x = rect.width();
-		rc.pos.x = rect.x();
-
-		int cwidth = rect.height();
-		int swidth = ::GetSystemMetrics(SM_CYEDGE) + 2;
-		int realpos = static_cast<int>(pos * cwidth);
-		rc.pos.y = realpos - swidth / 2;
-		rc.size.y = swidth;
+		rc.size.y = splitterSize;
+		rc.pos.y += pos * rect.height() - splitterSize / 2;
 	} else {
-		rc.size.y = rect.size.y;
-		rc.pos.y = rect.pos.y;
-
-		int cwidth = rect.width();
-		int swidth = ::GetSystemMetrics(SM_CXEDGE) + 2;
-		int realpos = static_cast<int>(pos * cwidth);
-		rc.pos.x = realpos - swidth / 2;
-		rc.size.x = swidth;
+		rc.size.x = splitterSize;
+		rc.pos.x += pos * rect.width() - splitterSize / 2;
 	}
+
 	return rc;
 }
 
@@ -214,8 +206,7 @@ void WidgetPaned< horizontal >::resizeChildren( )
 	children.first->layout(left);
 	children.second->layout(right);
 
-	this->layout(rcSplit);
-	this->redraw(rcSplit);
+	layout(rcSplit);
 }
 
 #endif

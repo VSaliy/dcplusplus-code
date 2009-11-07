@@ -44,6 +44,7 @@
 * [L#206778] Fix issues related to users online in multiple hubs (poy)
 * [L#460724] [ADC] Handle self-QUI when sent before INF (thanks sulan)
 * [L#431045] Don't overwrite downloaded files in some cases (thanks emtee)
+* Fix splitter positioning (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
