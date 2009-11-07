@@ -844,7 +844,7 @@ void MainWindow::stopUPnP() {
 
 void MainWindow::handleOpenFileList() {
 	tstring file;
-	if(WinUtil::browseFileList(LoadDialog(this), file)) {
+	if(WinUtil::browseFileList(this, file)) {
 		UserPtr u = DirectoryListing::getUserFromFilename(Text::fromT(file));
 		if (u) {
 			DirectoryListingFrame::openWindow(getTabView(), file, Util::emptyStringT, HintedUser(u, Util::emptyString), 0);

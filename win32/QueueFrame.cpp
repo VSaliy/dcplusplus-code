@@ -623,7 +623,7 @@ void QueueFrame::moveSelected() {
 		QueueItemInfo* ii = files->getSelectedData();
 		tstring target = Text::toT(ii->getTarget());
 
-		if(WinUtil::browseSaveFile(SaveDialog(this), target)) {
+		if(WinUtil::browseSaveFile(this, target)) {
 			QueueManager::getInstance()->move(ii->getTarget(), Text::fromT(target));
 		}
 	} else if(n > 1) {

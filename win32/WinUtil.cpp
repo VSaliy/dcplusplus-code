@@ -578,9 +578,11 @@ void WinUtil::addLastDir(const tstring& dir) {
 	lastDirs.push_back(dir);
 }
 
-bool WinUtil::browseSaveFile(dwt::SaveDialog dlg, tstring& file) {
+bool WinUtil::browseSaveFile(dwt::Widget* parent, tstring& file) {
 	tstring ext = Util::getFileExt(file);
 	tstring path = Util::getFilePath(file);
+
+	SaveDialog dlg(parent);
 
 	if(!ext.empty()) {
 		ext = ext.substr(1); // remove leading dot so default extension works when browsing for file
@@ -593,35 +595,11 @@ bool WinUtil::browseSaveFile(dwt::SaveDialog dlg, tstring& file) {
 	return dlg.open(file);
 }
 
-bool WinUtil::browseFileList(dwt::LoadDialog dialog, tstring& file) {
-	return dialog.addFilter(T_("File Lists"), _T("*.xml.bz2"))
+bool WinUtil::browseFileList(dwt::Widget* parent, tstring& file) {
+	return LoadDialog(parent).addFilter(T_("File Lists"), _T("*.xml.bz2"))
 		.addFilter(T_("All files"), _T("*.*"))
 		.setInitialDirectory(Text::toT(Util::getListPath()))
 		.open(file);
-}
-
-int WinUtil::getOsMajor() {
-	OSVERSIONINFOEX ver;
-	memset(&ver, 0, sizeof(OSVERSIONINFOEX));
-	if(!GetVersionEx((OSVERSIONINFO*)&ver))
-	{
-		ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	}
-	GetVersionEx((OSVERSIONINFO*)&ver);
-	ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	return ver.dwMajorVersion;
-}
-
-int WinUtil::getOsMinor() {
-	OSVERSIONINFOEX ver;
-	memset(&ver, 0, sizeof(OSVERSIONINFOEX));
-	if(!GetVersionEx((OSVERSIONINFO*)&ver))
-	{
-		ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	}
-	GetVersionEx((OSVERSIONINFO*)&ver);
-	ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	return ver.dwMinorVersion;
 }
 
 void WinUtil::setClipboard(const tstring& str) {
@@ -633,32 +611,6 @@ void WinUtil::setClipboard(const tstring& str) {
 	}
 
 	EmptyClipboard();
-
-#ifdef UNICODE
-	OSVERSIONINFOEX ver;
-	if( WinUtil::getVersionInfo(ver) ) {
-		if( ver.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS ) {
-			string tmp = Text::wideToAcp(str);
-
-			HGLOBAL hglbCopy = GlobalAlloc(GMEM_MOVEABLE, (tmp.size() + 1) * sizeof(char));
-			if (hglbCopy == NULL) {
-				CloseClipboard();
-				return;
-			}
-
-			// Lock the handle and copy the text to the buffer.
-			char* lptstrCopy = (char*)GlobalLock(hglbCopy);
-			strcpy(lptstrCopy, tmp.c_str());
-			GlobalUnlock(hglbCopy);
-
-			SetClipboardData(CF_TEXT, hglbCopy);
-
-			CloseClipboard();
-
-			return;
-		}
-	}
-#endif
 
 	// Allocate a global memory object for the text.
 	HGLOBAL hglbCopy = GlobalAlloc(GMEM_MOVEABLE, (str.size() + 1) * sizeof(TCHAR));
@@ -836,19 +788,6 @@ string WinUtil::getHelpText(unsigned id) {
 		return Util::emptyString;
 
 	return helpTexts[id];
-}
-
-bool WinUtil::getVersionInfo(OSVERSIONINFOEX& ver) {
-	memset(&ver, 0, sizeof(OSVERSIONINFOEX));
-	ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-
-	if(!GetVersionEx((OSVERSIONINFO*)&ver)) {
-		ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-		if(!GetVersionEx((OSVERSIONINFO*)&ver)) {
-			return false;
-		}
-	}
-	return true;
 }
 
 void WinUtil::toInts(const string& str, std::vector<int>& array) {

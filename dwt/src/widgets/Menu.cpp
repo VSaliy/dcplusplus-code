@@ -40,7 +40,7 @@
 #include <dwt/resources/Brush.h>
 #include <dwt/resources/Pen.h>
 #include <dwt/DWTException.h>
-#include <dwt/LibraryLoader.h>
+#include <dwt/util/win32/Version.h>
 
 #include <algorithm>
 #include <boost/scoped_array.hpp>
@@ -58,14 +58,12 @@ const COLORREF Menu::Colors::gray = ::GetSysColor(COLOR_GRAYTEXT);
 
 Menu::Colors::Colors() :
 background(::GetSysColor(COLOR_MENU)),
+menuBar(::GetSysColor(util::win32::ensureVersion(util::win32::VISTA) ? COLOR_MENUBAR : COLOR_3DFACE)),
+stripBar(ColorUtilities::darkenColor(background, 0.06)),
 highlightBackground(::GetSysColor(COLOR_HIGHLIGHT)),
 highlightText(::GetSysColor(COLOR_HIGHLIGHTTEXT)),
 titleText(::GetSysColor(COLOR_MENUTEXT))
 {
-	stripBar = ColorUtilities::darkenColor(background, 0.06);
-
-	// Older Windows don't support COLOR_MENUBAR.
-	menuBar = LibraryLoader::onComCtl6() ? ::GetSysColor(COLOR_MENUBAR) : stripBar;
 }
 
 Menu::Seed::Seed(bool ownerDrawn_,
