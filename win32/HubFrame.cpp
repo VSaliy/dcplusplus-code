@@ -36,7 +36,7 @@
 #include <dcpp/version.h>
 #include <dcpp/WindowInfo.h>
 
-const string HubFrame::id = "Hub";
+const string HubFrame::id = WindowManager::hub;
 const string& HubFrame::getId() const { return id; }
 
 static const ColumnInfo usersColumns[] = {
@@ -73,11 +73,11 @@ void HubFrame::closeDisconnected() {
 	}
 }
 
-void HubFrame::closeFavGroup(const string& group) {
+void HubFrame::closeFavGroup(const string& group, bool reversed) {
 	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
 		HubFrame* frame = *i;
 		FavoriteHubEntry* fav = FavoriteManager::getInstance()->getFavoriteHubEntry(frame->url);
-		if(fav && fav->getGroup() == group) {
+		if((fav && fav->getGroup() == group) ^ reversed) {
 			frame->close(true);
 		}
 	}
@@ -91,18 +91,18 @@ void HubFrame::resortUsers() {
 const StringMap HubFrame::getWindowParams() const {
 	StringMap ret;
 	ret[WindowInfo::title] = Text::fromT(getText());
-	ret["Address"] = url;
+	ret[WindowInfo::address] = url;
 	return ret;
 }
 
 void HubFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
-	StringMap::const_iterator i = params.find("Address");
+	StringMap::const_iterator i = params.find(WindowInfo::address);
 	if(i != params.end())
 		openWindow(parent, i->second);
 }
 
 bool HubFrame::isFavorite(const StringMap& params) {
-	StringMap::const_iterator i = params.find("Address");
+	StringMap::const_iterator i = params.find(WindowInfo::address);
 	if(i != params.end())
 		return FavoriteManager::getInstance()->isFavoriteHub(i->second);
 	return false;

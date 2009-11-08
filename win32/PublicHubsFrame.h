@@ -118,7 +118,6 @@ private:
 	void handleListSelChanged();
 	bool handleFilterKeyDown(int c);
 
-	bool checkNick();
 	void updateStatus();
 	void updateList();
 	void updateDropDown();

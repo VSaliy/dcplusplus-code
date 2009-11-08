@@ -301,6 +301,17 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 	}
 }
 
+bool WinUtil::checkNick() {
+	if(SETTING(NICK).empty()) {
+		dwt::MessageBox(mainWindow).show(T_("Please enter a nickname in the settings dialog!"),
+			_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+		mainWindow->handleSettings();
+		return false;
+	}
+
+	return true;
+}
+
 #define LINE2 _T("-- http://dcplusplus.sourceforge.net <DC++ ") _T(VERSIONSTRING) _T(">")
 const TCHAR *msgs[] = { _T("\r\n-- I'm a happy dc++ user. You could be happy too.\r\n") LINE2,
 _T("\r\n-- Neo-...what? Nope...never heard of it...\r\n") LINE2,

@@ -23,14 +23,13 @@
 
 #include "ClientManager.h"
 #include "CryptoManager.h"
+#include "WindowManager.h"
 
 #include "HttpConnection.h"
 #include "StringTokenizer.h"
 #include "SimpleXML.h"
 #include "UserCommand.h"
-
-/// @todo remove after version with windowmanager is released
-#include "WindowManager.h"
+#include "WindowInfo.h"
 
 namespace dcpp {
 
@@ -373,6 +372,7 @@ void FavoriteManager::save() {
 			xml.addTag("Group");
 			xml.addChildAttrib("Name", i->first);
 			xml.addChildAttrib("Private", i->second.priv);
+			xml.addChildAttrib("Connect", i->second.connect);
 		}
 
 		for(FavoriteHubEntryList::const_iterator i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i) {
@@ -471,6 +471,7 @@ void FavoriteManager::load() {
 
 void FavoriteManager::load(SimpleXML& aXml) {
 	dontSave = true;
+	bool needSave = false;
 
 	aXml.resetCurrentChild();
 	if(aXml.findChild("Hubs")) {
@@ -480,11 +481,11 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			string name = aXml.getChildAttrib("Name");
 			if(name.empty())
 				continue;
-			FavHubGroupProperties props = { aXml.getBoolChildAttrib("Private") };
+			FavHubGroupProperties props = { aXml.getBoolChildAttrib("Private"), aXml.getBoolChildAttrib("Connect") };
 			favHubGroups[name] = props;
 		}
-		aXml.resetCurrentChild();
 
+		aXml.resetCurrentChild();
 		while(aXml.findChild("Hub")) {
 			FavoriteHubEntry* e = new FavoriteHubEntry();
 			e->setName(aXml.getChildAttrib("Name"));
@@ -497,16 +498,33 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			e->setGroup(aXml.getChildAttrib("Group"));
 			favoriteHubs.push_back(e);
 
-			/// @todo remove after version with windowmanager is released
-			if (aXml.getBoolChildAttrib("Connect")) {
-				StringMap map;
-				map["Address"] = e->getServer();
-				WindowManager::getInstance()->add("Hub", map);
+			if(aXml.getBoolChildAttrib("Connect")) {
+				// this entry dates from before the window manager & fav hub groups; convert it.
+				static const string name = _("Auto-connect group (converted)");
+				if(favHubGroups.find(name) == favHubGroups.end()) {
+					FavHubGroupProperties props = { false, true };
+					favHubGroups[name] = props;
+				}
+				e->setGroup(name);
+				needSave = true;
 			}
-
 		}
+
 		aXml.stepOut();
 	}
+
+	// parse groups that have the "Connect" param and send their hubs to WindowManager
+	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
+		if(i->second.connect) {
+			FavoriteHubEntryList hubs = getFavoriteHubs(i->first);
+			for(FavoriteHubEntryList::const_iterator hub = hubs.begin(), hub_end = hubs.end(); hub != hub_end; ++hub) {
+				StringMap map;
+				map[WindowInfo::address] = (*hub)->getServer();
+				WindowManager::getInstance()->add(WindowManager::hub, map);
+			}
+		}
+	}
+
 	aXml.resetCurrentChild();
 	if(aXml.findChild("Users")) {
 		aXml.stepIn();
@@ -534,6 +552,7 @@ void FavoriteManager::load(SimpleXML& aXml) {
 		}
 		aXml.stepOut();
 	}
+
 	aXml.resetCurrentChild();
 	if(aXml.findChild("UserCommands")) {
 		aXml.stepIn();
@@ -543,6 +562,7 @@ void FavoriteManager::load(SimpleXML& aXml) {
 		}
 		aXml.stepOut();
 	}
+
 	//Favorite download to dirs
 	aXml.resetCurrentChild();
 	if(aXml.findChild("FavoriteDirs")) {
@@ -556,6 +576,8 @@ void FavoriteManager::load(SimpleXML& aXml) {
 	}
 
 	dontSave = false;
+	if(needSave)
+		save();
 }
 
 void FavoriteManager::userUpdated(const OnlineUser& info) {

@@ -51,6 +51,9 @@ public:
 	/// inform other classes about users and file lists that are of interest to us.
 	void prepareSave() const;
 
+	/// special id that designates a hub window
+	static const string hub;
+
 private:
 	friend class Singleton<WindowManager>;
 

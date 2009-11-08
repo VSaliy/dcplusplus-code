@@ -19,7 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_FAVHUBGROUPSDLG_H
 #define DCPLUSPLUS_WIN32_FAVHUBGROUPSDLG_H
 
-#include <dcpp/forward.h>
+#include <dcpp/FavHubGroup.h>
+
+#include "TypedTable.h"
 
 class FavHubGroupsDlg : public dwt::ModalDialog
 {
@@ -31,13 +33,46 @@ public:
 	int run();
 
 private:
+	enum {
+		COLUMN_NAME,
+		COLUMN_PRIVATE,
+		COLUMN_CONNECT,
+		COLUMN_LAST
+	};
+
+	class GroupInfo : public FastAlloc<GroupInfo> {
+	public:
+		GroupInfo(const FavHubGroup& group_);
+
+		const tstring& getText(int col) const;
+		int getImage() const;
+
+		static int compareItems(const GroupInfo* a, const GroupInfo* b, int col);
+
+		const FavHubGroup group;
+
+	private:
+		tstring columns[COLUMN_LAST];
+	};
+
+	struct GroupCollector {
+		void operator()(const GroupInfo* group) {
+			groups.insert(group->group);
+		}
+		FavHubGroups groups;
+	};
+
 	GridPtr grid;
-	TablePtr groups;
+
+	typedef TypedTable<const GroupInfo> Groups;
+	Groups* groups;
+
 	ButtonPtr update;
 	ButtonPtr remove;
 	GroupBoxPtr properties;
 	TextBoxPtr edit;
 	CheckBoxPtr priv_box;
+	CheckBoxPtr connect_box;
 
 	FavoriteHubEntry* parentEntry;
 
@@ -49,9 +84,10 @@ private:
 	void handleAdd();
 	void handleClose();
 
-	void add(const tstring& name, bool priv);
-	bool isPrivate(size_t row) const;
+	void add(const FavHubGroup& group, bool ensureVisible = true);
+	void add(const tstring& name, bool priv, bool connect);
 	bool addable(const tstring& name, int ignore = -1);
+	void removeGroup(const GroupInfo* group);
 
 	void layout();
 };

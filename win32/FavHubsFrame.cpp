@@ -157,7 +157,8 @@ void FavHubsFrame::handleAdd() {
 		FavHubProperties dlg(this, &e);
 		if(dlg.run() == IDOK) {
 			if(FavoriteManager::getInstance()->isFavoriteHub(e.getServer())) {
-				dwt::MessageBox(this).show(T_("Hub already exists as a favorite"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
+				dwt::MessageBox(this).show(T_("Hub already exists as a favorite"),
+					_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 			} else {
 				FavoriteManager::getInstance()->addFavorite(e);
 				break;
@@ -309,10 +310,8 @@ void FavHubsFrame::openSelected() {
 	if(!hubs->hasSelected())
 		return;
 
-	if(SETTING(NICK).empty()) {
-		dwt::MessageBox(this).show(T_("Please enter a nickname in the settings dialog!"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+	if(!WinUtil::checkNick())
 		return;
-	}
 
 	std::vector<unsigned> items = hubs->getSelection();
 	for(std::vector<unsigned>::iterator i = items.begin(); i != items.end(); ++i) {

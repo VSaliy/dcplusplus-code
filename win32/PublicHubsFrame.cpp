@@ -406,7 +406,7 @@ void PublicHubsFrame::handleConfigure() {
 }
 
 void PublicHubsFrame::handleConnect() {
-	if(!checkNick())
+	if(!WinUtil::checkNick())
 		return;
 
 	if(hubs->hasSelected() == 1) {
@@ -415,7 +415,7 @@ void PublicHubsFrame::handleConnect() {
 }
 
 void PublicHubsFrame::handleAdd() {
-	if(!checkNick())
+	if(!WinUtil::checkNick())
 		return;
 
 	if(hubs->hasSelected()) {
@@ -429,17 +429,8 @@ void PublicHubsFrame::handleCopyHub() {
 	}
 }
 
-bool PublicHubsFrame::checkNick() {
-	if(SETTING(NICK).empty()) {
-		dwt::MessageBox(this).show(T_("Please enter a nickname in the settings dialog!"), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
-		return false;
-	}
-	return true;
-}
-
-
 void PublicHubsFrame::openSelected() {
-	if(!checkNick())
+	if(!WinUtil::checkNick())
 		return;
 
 	if(hubs->hasSelected()) {

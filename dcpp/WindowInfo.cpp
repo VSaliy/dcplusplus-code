@@ -24,6 +24,8 @@
 namespace dcpp {
 
 const string WindowInfo::title = "Title";
+
+const string WindowInfo::address = "Address";
 const string WindowInfo::cid = "CID";
 const string WindowInfo::fileList = "FileList";
 

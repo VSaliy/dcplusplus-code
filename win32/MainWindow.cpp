@@ -131,6 +131,7 @@ lastTick(GET_TICK())
 	onCommand(std::tr1::bind(&NotepadFrame::openWindow, getTabView()), IDC_NOTEPAD);
 	onCommand(std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()), IDC_PUBLIC_HUBS);
 	onCommand(std::tr1::bind(&MainWindow::handleQuickConnect, this), IDC_QUICK_CONNECT);
+	onCommand(std::tr1::bind(&MainWindow::handleConnectFavHubGroup, this), IDC_CONNECT_GROUP);
 	onCommand(std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT), IDC_RECONNECT);
 	onCommand(std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), IDC_SEARCH);
 	onCommand(std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW), IDC_FOLLOW);
@@ -207,7 +208,10 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr file = mainMenu->appendPopup(T_("&File"));
 
-		file->appendItem(T_("&Quick Connect ...\tCtrl+Q"), std::tr1::bind(&MainWindow::handleQuickConnect, this), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
+		file->appendItem(T_("&Quick connect...\tCtrl+Q"), std::tr1::bind(&MainWindow::handleQuickConnect, this), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
+		file->appendItem(T_("Connect to a favorite hub &group...\tCtrl+G"), std::tr1::bind(&MainWindow::handleConnectFavHubGroup, this), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
+		file->appendSeparator();
+
 		file->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT), dwt::IconPtr(new dwt::Icon(IDR_RECONNECT)));
 		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW), dwt::IconPtr(new dwt::Icon(IDR_FOLLOW)));
 		file->appendSeparator();
@@ -219,7 +223,7 @@ void MainWindow::initMenu() {
 		file->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_DL_DIR)));
 		file->appendSeparator();
 
-		file->appendItem(T_("Settings..."), std::tr1::bind(&MainWindow::handleSettings, this), dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)));
+		file->appendItem(T_("Settings"), std::tr1::bind(&MainWindow::handleSettings, this), dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)));
 		file->appendSeparator();
 		file->appendItem(T_("E&xit"), std::tr1::bind(&MainWindow::handleExit, this), dwt::IconPtr(new dwt::Icon(IDR_EXIT)));
 	}
@@ -249,15 +253,19 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr window = mainMenu->appendPopup(T_("&Window"));
 
-		window->appendItem(T_("Close disconnected hubs"), std::tr1::bind(&HubFrame::closeDisconnected));
-		window->appendItem(T_("Close all hubs of a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this));
+		window->appendItem(T_("Close disconnected hubs"), std::tr1::bind(&HubFrame::closeDisconnected), dwt::IconPtr(new dwt::Icon(IDR_HUB_OFF)));
+		window->appendItem(T_("Close all hubs of a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this, false), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
+		window->appendItem(T_("Close hubs not in a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this, true), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
 		window->appendSeparator();
-		window->appendItem(T_("Close all PM windows"), std::tr1::bind(&PrivateFrame::closeAll));
-		window->appendItem(T_("Close all offline PM windows"), std::tr1::bind(&PrivateFrame::closeAllOffline));
+
+		window->appendItem(T_("Close all PM windows"), std::tr1::bind(&PrivateFrame::closeAll), dwt::IconPtr(new dwt::Icon(IDR_PRIVATE)));
+		window->appendItem(T_("Close all offline PM windows"), std::tr1::bind(&PrivateFrame::closeAllOffline), dwt::IconPtr(new dwt::Icon(IDR_PRIVATE_OFF)));
 		window->appendSeparator();
-		window->appendItem(T_("Close all file list windows"), std::tr1::bind(&DirectoryListingFrame::closeAll));
+
+		window->appendItem(T_("Close all file list windows"), std::tr1::bind(&DirectoryListingFrame::closeAll), dwt::IconPtr(new dwt::Icon(IDR_DIRECTORY)));
 		window->appendSeparator();
-		window->appendItem(T_("Close all search windows"), std::tr1::bind(&SearchFrame::closeAll));
+
+		window->appendItem(T_("Close all search windows"), std::tr1::bind(&SearchFrame::closeAll), dwt::IconPtr(new dwt::Icon(IDR_SEARCH)));
 	}
 
 	{
@@ -267,7 +275,7 @@ void MainWindow::initMenu() {
 		help->appendItem(T_("Get started"), std::tr1::bind(&WinUtil::help, this, IDH_GET_STARTED));
 		help->appendSeparator();
 		help->appendItem(T_("Change Log"), std::tr1::bind(&WinUtil::help, this, IDH_CHANGELOG));
-		help->appendItem(T_("About DC++..."), std::tr1::bind(&MainWindow::handleAbout, this), dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16))));
+		help->appendItem(T_("About DC++"), std::tr1::bind(&MainWindow::handleAbout, this), dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16))));
 		help->appendSeparator();
 		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.homepage)));
 		help->appendItem(T_("Downloads"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.downloads)));
@@ -511,10 +519,8 @@ void MainWindow::handleForward(WPARAM wParam) {
 }
 
 void MainWindow::handleQuickConnect() {
-	if (SETTING(NICK).empty()) {
-		handleSettings();
+	if(!WinUtil::checkNick())
 		return;
-	}
 
 	LineDlg dlg(this, T_("Quick Connect"), T_("Address"));
 
@@ -527,6 +533,19 @@ void MainWindow::handleQuickConnect() {
 			tmp.erase(i, 1);
 
 		HubFrame::openWindow(getTabView(), Text::fromT(tmp));
+	}
+}
+
+void MainWindow::handleConnectFavHubGroup() {
+	if(!WinUtil::checkNick())
+		return;
+
+	tstring group;
+	if(chooseFavHubGroup(T_("Connect to a favorite hub group"), group)) {
+		FavoriteHubEntryList hubs = FavoriteManager::getInstance()->getFavoriteHubs(Text::fromT(group));
+		for(FavoriteHubEntryList::const_iterator hub = hubs.begin(), hub_end = hubs.end(); hub != hub_end; ++hub) {
+			HubFrame::openWindow(getTabView(), (*hub)->getServer());
+		}
 	}
 }
 
@@ -567,6 +586,27 @@ void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) thro
 void MainWindow::viewAndDelete(const string& fileName) {
 	TextFrame::openWindow(getTabView(), fileName);
 	File::deleteFile(fileName);
+}
+
+bool MainWindow::chooseFavHubGroup(const tstring& title, tstring& group) {
+	set<tstring, noCaseStringLess> groups;
+
+	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
+	if(favHubGroups.empty()) {
+		dwt::MessageBox(this).show(T_("No favorite hub group found"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+			dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
+		return false;
+	}
+
+	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
+		groups.insert(Text::toT(i->first));
+
+	ComboDlg dlg(this, title, T_("Select a favorite hub group"), TStringList(groups.begin(), groups.end()));
+	if(dlg.run() == IDOK) {
+		group = dlg.getValue();
+		return true;
+	}
+	return false;
 }
 
 void MainWindow::saveWindowSettings() {
@@ -943,22 +983,10 @@ void MainWindow::handleHashProgress() {
 	HashProgressDlg(this, false).run();
 }
 
-void MainWindow::handleCloseFavGroup() {
-	set<tstring, noCaseStringLess> groups;
-
-	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
-	if(favHubGroups.empty()) {
-		dwt::MessageBox(this).show(T_("No favorite hub group found"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
-			dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
-		return;
-	}
-
-	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
-		groups.insert(Text::toT(i->first));
-
-	ComboDlg dlg(this, T_("Close all hubs of a favorite group"), T_("Select a favorite hub group"), TStringList(groups.begin(), groups.end()));
-	if(dlg.run() == IDOK)
-		HubFrame::closeFavGroup(Text::fromT(dlg.getValue()));
+void MainWindow::handleCloseFavGroup(bool reversed) {
+	tstring group;
+	if(chooseFavHubGroup(reversed ? T_("Close hubs not in a favorite group") : T_("Close all hubs of a favorite group"), group))
+		HubFrame::closeFavGroup(Text::fromT(group), reversed);
 }
 
 void MainWindow::handleAbout() {
@@ -1091,7 +1119,7 @@ void MainWindow::handleTrayContextMenu() {
 
 	trayMenu->appendItem(T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16))), true, true);
 	trayMenu->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_DL_DIR)));
-	trayMenu->appendItem(T_("Settings..."), std::tr1::bind(&MainWindow::handleSettings, this), dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)));
+	trayMenu->appendItem(T_("Settings"), std::tr1::bind(&MainWindow::handleSettings, this), dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)));
 	trayMenu->appendSeparator();
 	trayMenu->appendItem(T_("Exit"), std::tr1::bind(&MainWindow::close, this, true), dwt::IconPtr(new dwt::Icon(IDR_EXIT)));
 
@@ -1182,14 +1210,10 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 	}
 }
 
-void MainWindow::on(WindowManagerListener::Window, const string& id, const StringMap& params, bool skipHubs) throw() {
-	if(HubFrame::id == id) {
-		if(!skipHubs) {
-			callAsync(std::tr1::bind(&HubFrame::parseWindowParams, getTabView(), params));
-		}
-	}
-
+void MainWindow::on(WindowManagerListener::Window, const string& id, const StringMap& params) throw() {
+	if(0);
 #define compare_id(frame) else if(frame::id == id) callAsync(std::tr1::bind(&frame::parseWindowParams, getTabView(), params))
+	compare_id(HubFrame);
 	compare_id(PrivateFrame);
 	compare_id(DirectoryListingFrame);
 	compare_id(PublicHubsFrame);

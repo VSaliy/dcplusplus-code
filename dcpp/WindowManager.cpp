@@ -28,6 +28,8 @@
 
 namespace dcpp {
 
+const string WindowManager::hub = "Hub";
+
 WindowManager::WindowManager() {
 	SettingsManager::getInstance()->addListener(this);
 }
@@ -39,7 +41,10 @@ WindowManager::~WindowManager() throw() {
 void WindowManager::autoOpen(bool skipHubs) {
 	Lock l(cs);
 	for(WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
-		fire(WindowManagerListener::Window(), i->getId(), i->getParams(), skipHubs);
+		const string& id = i->getId();
+		if(skipHubs && id == hub)
+			continue;
+		fire(WindowManagerListener::Window(), id, i->getParams());
 	}
 }
 

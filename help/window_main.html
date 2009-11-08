@@ -18,8 +18,13 @@
 	<dd>
 	    You can find the file input-output functions as well as the basic connection options and the settings in this menu.
 		<dl style="margin-left: 30px;">
-			<dt><img src="HubOn.ico" width="16" height="16" alt="Quick Connect..."/> Quick Connect...</dt>
+			<dt><img src="HubOn.ico" width="16" height="16" alt="Quick connect..."/> Quick connect...</dt>
 			<dd>Allows you to connect to a hub by manually typing its address.</dd>
+			<dt id="connectfavgroup"><img src="FavoriteHubs.ico" width="16" height="16" alt="Connect to a favorite hub group"/> Connect to a favorite hub group</dt>
+			<dd>
+			<div>Opens a dialog asking to select a favorite hub group; after pressing "OK" in that dialog, <placeholder><a href="window_hub.html">Hub</a></placeholder> windows will be opened for every hub that is part of the selected favorite hub group.</div>
+			<div>More information about the use of favorite hub groups in the help topics associated to the <placeholder><a href="dialog_fav_hub_groups.html">Favorite hub groups</a></placeholder> dialog.</div>
+			</dd>
 			<dt><img src="Reconnect.ico" width="16" height="16" alt="Reconnect"/> Reconnect</dt>
 			<dd>To reconnect (disconnect and connect again) the hub which is currently in the foreground. If the active window is not a hub, it does nothing.</dd>
 			<dt><img src="Follow.ico" width="16" height="16" alt="Follow last redirect"/> Follow last redirect</dt>
@@ -34,7 +39,7 @@
 			<dd>This will immediately rescan your shared directories for new or changed content and updates your file list.</dd>
 			<dt><img src="OpenDLDir.ico" width="16" height="16" alt="Open downloads directory"/> Open downloads directory</dt>
 			<dd>Opens your downloads folder in Windows Explorer.</dd>
-			<dt><img src="Settings.ico" width="16" height="16" alt="Settings..."/> Settings...</dt>
+			<dt><img src="Settings.ico" width="16" height="16" alt="Settings"/> Settings</dt>
 			<dd>Opens the Settings panel.</dd>
 			<dt><img src="Exit.ico" width="16" height="16" alt="Exit"/> Exit</dt>
 			<dd>Closes DC++.</dd>
@@ -106,20 +111,25 @@
 	<dd>
 	    You can find options here to close all instance of specific groups of tabs by one click.
 		<dl style="margin-left: 30px;">
-			<dt>Close disconnected</dt>
+			<dt><img src="HubOff.ico" width="16" height="16" alt="Close disconnected hubs"/> Close disconnected hubs</dt>
 			<dd>Closes all disconnected <placeholder><a href="window_hub.html">Hub</a></placeholder> windows.</dd>
-			<dt id="closefavgroup">Close all hubs of a favorite group</dt>
+			<dt id="closefavgroup"><img src="FavoriteHubs.ico" width="16" height="16" alt="Close all hubs of a favorite group"/> Close all hubs of a favorite group</dt>
 			<dd>
 			<div>Opens a dialog asking to select a favorite hub group; after pressing "OK" in that dialog, all opened <placeholder><a href="window_hub.html">Hub</a></placeholder> windows that are part of the selected favorite hub group will be closed.</div>
 			<div>More information about the use of favorite hub groups in the help topics associated to the <placeholder><a href="dialog_fav_hub_groups.html">Favorite hub groups</a></placeholder> dialog.</div>
 			</dd>
-			<dt>Close all PM windows</dt>
+			<dt id="closenotfavgroup"><img src="FavoriteHubs.ico" width="16" height="16" alt="Close hubs not in a favorite group"/> Close hubs not in a favorite group</dt>
+			<dd>
+			<div>Opens a dialog asking to select a favorite hub group; after pressing "OK" in that dialog, all opened <placeholder><a href="window_hub.html">Hub</a></placeholder> windows that are <b>not</b> part of the selected favorite hub group will be closed.</div>
+			<div>More information about the use of favorite hub groups in the help topics associated to the <placeholder><a href="dialog_fav_hub_groups.html">Favorite hub groups</a></placeholder> dialog.</div>
+			</dd>
+			<dt><img src="UserOn.ico" width="16" height="16" alt="Close all PM windows"/> Close all PM windows</dt>
 			<dd>Closes all <placeholder><a href="window_pm.html">Private Message</a></placeholder> windows regardless of their online status.</dd>
-			<dt>Close all offline PM windows</dt>
+			<dt><img src="UserOff.ico" width="16" height="16" alt="Close all offline PM windows"/> Close all offline PM windows</dt>
 			<dd>Closes all offline <placeholder><a href="window_pm.html">Private Message</a></placeholder> windows.</dd>
-			<dt>Close all file list windows</dt>
+			<dt><img src="Directory.ico" width="16" height="16" alt="Close all file list windows"/> Close all file list windows</dt>
 			<dd>Closes all opened file list windows. Saved file lists can be reopened by selecting "<placeholder>Open file list...</placeholder>" from the <a href="#filemenu">File menu</a>.</dd>
-			<dt>Close all search windows</dt>
+			<dt><img src="Search.ico" width="16" height="16" alt="Close all search windows"/> Close all search windows</dt>
 			<dd>Closes all opened <placeholder><a href="window_search.html">Search</a></placeholder> windows.</dd>
 		</dl>
 	</dd>
@@ -133,7 +143,7 @@
 			<dd>The best way to start here if you are new to DC++.</dd>
 			<dt>Change Log</dt>
 			<dd>You can follow what's been changed in the different DC++ versions since the development started.</dd>
-			<dt><img src="DCPlusPlus.png" width="16" height="16" alt="About DC++..."/> About DC++...</dt>
+			<dt><img src="DCPlusPlus.png" width="16" height="16" alt="About DC++"/> About DC++</dt>
 			<dd>You can see the copyrights, list of all names who ever contributed to DC++ as well as some useful statistical information about your up/download ratio. The About box also shows you the version number of the current stable release of DC++.</dd>
 			<dt>DC++ Homepage</dt>
 			<dd>Opens the DC++ home page in your web browser.</dd>
