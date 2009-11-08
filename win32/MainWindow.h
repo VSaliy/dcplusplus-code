@@ -65,6 +65,7 @@ public:
 
 	virtual ~MainWindow();
 
+	void handleSettings();
 	void updateSlotsSpin();
 	bool closing() const { return stopperThread != 0; }
 
@@ -138,13 +139,13 @@ private:
 	void handleFavHubsDropDown(const dwt::ScreenCoordinate& pt);
 	void handleRecent(const dwt::ScreenCoordinate& pt);
 	void handleQuickConnect();
-	void handleSettings();
+	void handleConnectFavHubGroup();
 	void handleOpenFileList();
 	void handleOpenOwnList();
 	void handleRefreshFileList();
 	void handleMatchAll();
 	void handleOpenDownloadsDir();
-	void handleCloseFavGroup();
+	void handleCloseFavGroup(bool reversed);
 	void handleAbout();
 	void handleHashProgress();
 	void handleWhatsThis();
@@ -177,6 +178,7 @@ private:
 	void saveWindowSettings();
 	void parseCommandLine(const tstring& line);
 	void viewAndDelete(const string& fileName);
+	bool chooseFavHubGroup(const tstring& title, tstring& group);
 
 	bool filter(MSG& msg);
 
@@ -197,7 +199,7 @@ private:
 	virtual void on(PartialList, const HintedUser&, const string& text) throw();
 
 	// WindowManagerListener
-	virtual void on(WindowManagerListener::Window, const string& id, const StringMap& params, bool skipHubs) throw();
+	virtual void on(WindowManagerListener::Window, const string& id, const StringMap& params) throw();
 };
 
 #endif // !defined(MAIN_FRM_H)

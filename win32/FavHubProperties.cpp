@@ -27,7 +27,6 @@
 
 #include "FavHubGroupsDlg.h"
 #include "HoldRedraw.h"
-#include "WinUtil.h"
 
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
 dwt::ModalDialog(parent),

@@ -26,11 +26,11 @@
 #include <dcpp/version.h>
 
 #include "HoldRedraw.h"
-#include "WinUtil.h"
 
 static const ColumnInfo columns[] = {
 	{ N_("Group name"), 100, false },
-	{ N_("Private"), 50, false }
+	{ N_("Private"), 80, false },
+	{ N_("Connect"), 80, false }
 };
 
 FavHubGroupsDlg::FavHubGroupsDlg(dwt::Widget* parent, FavoriteHubEntry* parentEntry_) :
@@ -52,8 +52,26 @@ FavHubGroupsDlg::~FavHubGroupsDlg() {
 }
 
 int FavHubGroupsDlg::run() {
-	create(Seed(dwt::Point(300, 450), DS_CONTEXTHELP));
+	create(Seed(dwt::Point(400, 450), DS_CONTEXTHELP));
 	return show();
+}
+
+FavHubGroupsDlg::GroupInfo::GroupInfo(const FavHubGroup& group_) : group(group_) {
+	columns[COLUMN_NAME] = Text::toT(group.first);
+	columns[COLUMN_PRIVATE] = group.second.priv ? T_("Yes") : T_("No");
+	columns[COLUMN_CONNECT] = group.second.connect ? T_("Yes") : T_("No");
+}
+
+const tstring& FavHubGroupsDlg::GroupInfo::getText(int col) const {
+	return columns[col];
+}
+
+int FavHubGroupsDlg::GroupInfo::getImage() const {
+	return 0;
+}
+
+int FavHubGroupsDlg::GroupInfo::compareItems(const GroupInfo* a, const GroupInfo* b, int col) {
+	return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
 }
 
 bool FavHubGroupsDlg::handleInitDialog() {
@@ -65,8 +83,10 @@ bool FavHubGroupsDlg::handleInitDialog() {
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		Table::Seed seed = WinUtil::Seeds::Dialog::table;
-		seed.lvStyle |= LVS_EX_HEADERDRAGDROP;
+		Groups::Seed seed;
+		// remove some of the WinUtil styles that have been imported...
+		seed.exStyle &= ~WS_EX_CLIENTEDGE;
+		seed.font = 0;
 		groups = grid->addChild(seed);
 		groups->setHelpId(IDH_FAV_HUB_GROUPS_LIST);
 	}
@@ -102,11 +122,14 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		}
 
 		{
-			GridPtr cur2 = cur->addChild(Grid::Seed(2, 1));
+			GridPtr cur2 = cur->addChild(Grid::Seed(3, 1));
 			cur2->column(0).align = GridInfo::TOP_LEFT;
 
 			priv_box = cur2->addChild(CheckBox::Seed(T_("Mark hubs in this group as private hubs")));
 			priv_box->setHelpId(IDH_FAV_HUB_GROUPS_PRIVATE);
+
+			connect_box = cur2->addChild(CheckBox::Seed(T_("Connect to all hubs in this group when the program starts")));
+			connect_box->setHelpId(IDH_FAV_HUB_GROUPS_CONNECT);
 
 			ButtonPtr add = cur2->addChild(Button::Seed(T_("&Add to the list")));
 			add->setHelpId(IDH_FAV_HUB_GROUPS_ADD);
@@ -126,16 +149,16 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		buttons.second->setVisible(false);
 	}
 
-	WinUtil::makeColumns(groups, columns, 2);
+	WinUtil::makeColumns(groups, columns, COLUMN_LAST);
 
 	{
 		HoldRedraw hold(groups);
 
 		const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
 		for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
-			add(Text::toT(i->first), i->second.priv);
+			add(*i, false);
 
-		groups->setSort(0, Table::SORT_STRING_NOCASE);
+		groups->setSort(COLUMN_NAME);
 	}
 
 	groups->onKeyDown(std::tr1::bind(&FavHubGroupsDlg::handleKeyDown, this, _1));
@@ -167,15 +190,19 @@ void FavHubGroupsDlg::handleSelectionChanged() {
 
 	tstring text;
 	bool priv;
+	bool connect;
 	if(selected == 1) {
-		size_t sel = groups->getSelected();
-		text = groups->getText(sel, 0);
-		priv = isPrivate(sel);
+		const FavHubGroup& group = groups->getSelectedData()->group;
+		text = Text::toT(group.first);
+		priv = group.second.priv;
+		connect = group.second.connect;
 	} else {
 		priv = false;
+		connect = false;
 	}
 	edit->setText(text);
 	priv_box->setChecked(priv);
+	connect_box->setChecked(connect);
 }
 
 void FavHubGroupsDlg::handleUpdate() {
@@ -186,76 +213,50 @@ void FavHubGroupsDlg::handleUpdate() {
 	const size_t selected = groups->getSelected();
 	if(!addable(name, selected))
 		return;
-	const bool priv = priv_box->getChecked();
 
-	tstring oldName = groups->getText(selected, 0);
-	if(name != oldName) {
+	string oldName = groups->getData(selected)->group.first;
+	if(name != Text::toT(oldName)) {
 		// name of the group changed; propagate the change to hubs that are in this group
-		FavoriteHubEntryList hubs = FavoriteManager::getInstance()->getFavoriteHubs(Text::fromT(oldName));
+		FavoriteHubEntryList hubs = FavoriteManager::getInstance()->getFavoriteHubs(oldName);
 		for(FavoriteHubEntryList::iterator i = hubs.begin(); i != hubs.end(); ++i)
 			(*i)->setGroup(Text::fromT(name));
 	}
 
 	HoldRedraw hold(groups);
+	const bool priv = priv_box->getChecked();
+	const bool connect = connect_box->getChecked();
 	groups->erase(selected);
-	add(name, priv);
-	groups->resort();
+	add(name, priv, connect);
 }
 
 void FavHubGroupsDlg::handleRemove() {
-	int i;
-	while((i = groups->getNext(-1, LVNI_SELECTED)) != -1) {
-		tstring name = groups->getText(i, 0);
-		FavoriteHubEntryList hubs = FavoriteManager::getInstance()->getFavoriteHubs(Text::fromT(name));
-		size_t count = hubs.size();
-		if(count > 0) {
-			bool removeChildren = dwt::MessageBox(this).show(str(TF_(
-				"The group \"%1%\" contains %2% hubs; remove all of the hubs as well?\n\n"
-				"If you select 'Yes', all of these hubs are going to be deleted!\n\n"
-				"If you select 'No', these hubs will simply be moved to the main default group.") % name % count),
-				_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION)
-				== dwt::MessageBox::RETBOX_YES;
-			for(FavoriteHubEntryList::iterator j = hubs.begin(); j != hubs.end(); ++j) {
-				if(removeChildren && *j != parentEntry)
-					FavoriteManager::getInstance()->removeFavorite(*j);
-				else
-					(*j)->setGroup("");
-			}
-		}
-		groups->erase(i);
-	}
+	groups->forEachSelectedT(std::tr1::bind(&FavHubGroupsDlg::removeGroup, this, _1), true);
 }
 
 void FavHubGroupsDlg::handleAdd() {
-	tstring text = edit->getText();
-	if(addable(text)) {
+	tstring name = edit->getText();
+	if(addable(name)) {
 		HoldRedraw hold(groups);
-		add(text, priv_box->getChecked());
-		groups->resort();
+		add(name, priv_box->getChecked(), connect_box->getChecked());
 	}
 }
 
 void FavHubGroupsDlg::handleClose() {
-	FavHubGroups favHubGroups;
-	for(size_t i = 0, size = groups->size(); i < size; ++i) {
-		FavHubGroupProperties props = { isPrivate(i) };
-		favHubGroups[Text::fromT(groups->getText(i, 0))] = props;
-	}
-	FavoriteManager::getInstance()->setFavHubGroups(favHubGroups);
+	FavoriteManager::getInstance()->setFavHubGroups(groups->forEachT(GroupCollector()).groups);
 	FavoriteManager::getInstance()->save();
 
 	endDialog(IDOK);
 }
 
-void FavHubGroupsDlg::add(const tstring& name, bool priv) {
-	TStringList row;
-	row.push_back(name);
-	row.push_back(priv ? T_("Yes") : T_("No"));
-	groups->insert(row);
+void FavHubGroupsDlg::add(const FavHubGroup& group, bool ensureVisible) {
+	int pos = groups->insert(new GroupInfo(group));
+	if(ensureVisible)
+		groups->ensureVisible(pos);
 }
 
-bool FavHubGroupsDlg::isPrivate(size_t row) const {
-	return groups->getText(row, 1) == T_("Yes");
+void FavHubGroupsDlg::add(const tstring& name, bool priv, bool connect) {
+	FavHubGroupProperties props = { priv, connect };
+	add(FavHubGroup(Text::fromT(name), props));
 }
 
 bool FavHubGroupsDlg::addable(const tstring& name, int ignore) {
@@ -268,7 +269,7 @@ bool FavHubGroupsDlg::addable(const tstring& name, int ignore) {
 	for(size_t i = 0, size = groups->size(); i < size; ++i) {
 		if(ignore >= 0 && i == static_cast<size_t>(ignore))
 			continue;
-		if(groups->getText(i, 0) == name) {
+		if(Text::toT(groups->getData(i)->group.first) == name) {
 			dwt::MessageBox(this).show(str(TF_("Another group with the name \"%1%\" already exists") % name),
 				_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 			return false;
@@ -278,9 +279,29 @@ bool FavHubGroupsDlg::addable(const tstring& name, int ignore) {
 	return true;
 }
 
+void FavHubGroupsDlg::removeGroup(const GroupInfo* group) {
+	FavoriteHubEntryList hubs = FavoriteManager::getInstance()->getFavoriteHubs(group->group.first);
+	size_t count = hubs.size();
+	if(count > 0) {
+		bool removeChildren = dwt::MessageBox(this).show(str(TF_(
+			"The group \"%1%\" contains %2% hubs; remove all of the hubs as well?\n\n"
+			"If you select 'Yes', all of these hubs are going to be deleted!\n\n"
+			"If you select 'No', these hubs will simply be moved to the main default group.")
+			% Text::toT(group->group.first) % count), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+			dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == dwt::MessageBox::RETBOX_YES;
+		for(FavoriteHubEntryList::iterator j = hubs.begin(); j != hubs.end(); ++j) {
+			if(removeChildren && *j != parentEntry)
+				FavoriteManager::getInstance()->removeFavorite(*j);
+			else
+				(*j)->setGroup("");
+		}
+	}
+	groups->erase(group);
+}
+
 void FavHubGroupsDlg::layout() {
 	dwt::Point sz = getClientSize();
 	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 
-	groups->setColumnWidth(0, groups->getWindowSize().x - 80);
+	groups->setColumnWidth(0, groups->getWindowSize().x - 180);
 }

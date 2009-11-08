@@ -106,9 +106,9 @@ public:
 		for(unsigned i = 0; i < n; ++i)
 			(getData(i)->*func)();
 	}
-	void forEachSelected(void (ContentType::*func)()) {
+	void forEachSelected(void (ContentType::*func)(), bool removing = false) {
 		int i = -1;
-		while( (i = ListView_GetNextItem(this->handle(), i, LVNI_SELECTED)) != -1)
+		while((i = ListView_GetNextItem(this->handle(), removing ? -1 : i, LVNI_SELECTED)) != -1)
 			(getData(i)->*func)();
 	}
 	template<class _Function>
@@ -119,9 +119,9 @@ public:
 		return pred;
 	}
 	template<class _Function>
-	_Function forEachSelectedT(_Function pred) {
+	_Function forEachSelectedT(_Function pred, bool removing = false) {
 		int i = -1;
-		while( (i = ListView_GetNextItem(this->handle(), i, LVNI_SELECTED)) != -1) {
+		while((i = ListView_GetNextItem(this->handle(), removing ? -1 : i, LVNI_SELECTED)) != -1) {
 			// Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=35569
 			ContentType* uib = getData(i);
 			pred(uib);

@@ -68,6 +68,7 @@
 #define IDC_MOVE_UP 2023
 #define IDC_REMOVE 2024
 #define IDC_CONNECT 2025
+#define IDC_CONNECT_GROUP 2026
 
 // Stuff that uses multiple id's
 
