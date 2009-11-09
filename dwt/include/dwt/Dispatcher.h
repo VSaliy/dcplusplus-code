@@ -41,6 +41,17 @@
 
 namespace dwt {
 
+class WindowProc {
+public:
+	static LRESULT CALLBACK initProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK wndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+private:
+	static Widget* getInitWidget(const MSG& msg);
+	static LRESULT returnUnknown(const MSG& msg);
+	static HWND getHandler(const MSG& msg);
+};
+
 class Dispatcher {
 public:
 	virtual LRESULT chain(const MSG& msg) = 0;
@@ -61,12 +72,12 @@ public:
 protected:
 	friend class std::auto_ptr<Dispatcher>;
 
-	Dispatcher(LPCTSTR className, WNDPROC initProc);
 	Dispatcher(WNDCLASSEX& cls);
 
 	virtual ~Dispatcher();
 
-	static WNDCLASSEX makeWndClass(LPCTSTR className, WNDPROC initProc = 0);
+	static WNDCLASSEX makeWndClass(LPCTSTR className);
+	static void fillWndClass(WNDCLASSEX& cls, LPCTSTR className);
 
 	ATOM atom;
 };
@@ -110,7 +121,6 @@ public:
 	virtual LRESULT chain(const MSG& msg);
 
 private:
-	ChainingDispatcher(LPCTSTR className_, WNDPROC wndProc_);
 	ChainingDispatcher(WNDCLASSEX& cls, WNDPROC wndProc_);
 
 	WNDPROC wndProc;

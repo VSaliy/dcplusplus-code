@@ -266,8 +266,7 @@ inline Rectangle Widget::getWindowRect() const {
 }
 
 inline Point Widget::getWindowSize() const {
-	Rectangle rc(getWindowRect());
-	return rc.size;
+	return getWindowRect().size;
 }
 
 inline Point Widget::getClientSize() const {

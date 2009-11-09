@@ -89,10 +89,12 @@ void Widget::setHandle(HWND h) {
 	dwtassert((::GetWindowLongPtr(hwnd, GWLP_USERDATA) == 0), "Userdata already set");
 
 	::SetLastError(0);
-	LONG_PTR ret = ::SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR> (this));
+	LONG_PTR ret = ::SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 	if(ret == 0 && ::GetLastError() != 0) {
 		throw Win32Exception("Error while setting pointer");
 	}
+
+	::SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc::wndProc));
 }
 
 static void updateStyle(HWND hwnd, int which, DWORD style, bool add) {

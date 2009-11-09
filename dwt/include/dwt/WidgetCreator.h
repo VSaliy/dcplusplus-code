@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   SmartWin++
 
@@ -78,13 +78,6 @@ public:
 	{
 		typename WidgetType::ObjectType retVal( new WidgetType( parent ) );
 		retVal->create();
-		return retVal;
-	}
-
-	static typename WidgetType::ObjectType attach( Widget * parent, unsigned id )
-	{
-		typename WidgetType::ObjectType retVal(new WidgetType( parent ));
-		retVal->attach( id );
 		return retVal;
 	}
 
