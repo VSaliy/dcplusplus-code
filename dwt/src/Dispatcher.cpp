@@ -34,6 +34,9 @@
 #include <dwt/Widget.h>
 #include <dwt/DWTException.h>
 
+#include <sstream>
+#include <boost/shared_ptr.hpp>
+
 namespace dwt {
 
 LRESULT CALLBACK WindowProc::initProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -186,20 +189,35 @@ HBRUSH Dispatcher::getDefaultBackground() {
 	return background;
 }
 
-WNDCLASSEX Dispatcher::makeWndClass(LPCTSTR className) {
+WNDCLASSEX Dispatcher::makeWndClass(LPCTSTR name) {
 	WNDCLASSEX cls = { sizeof(WNDCLASSEX) };
-	fillWndClass(cls, className);
+	fillWndClass(cls, name);
 	return cls;
 }
 
-void Dispatcher::fillWndClass(WNDCLASSEX& cls, LPCTSTR className) {
+void Dispatcher::fillWndClass(WNDCLASSEX& cls, LPCTSTR name) {
 	cls.style = CS_DBLCLKS;
 	cls.lpfnWndProc = WindowProc::initProc;
 	cls.hInstance = ::GetModuleHandle(NULL);
 	cls.hCursor = getDefaultCursor();
 	cls.hbrBackground = getDefaultBackground();
 	cls.lpszMenuName = 0;
-	cls.lpszClassName = className;
+	cls.lpszClassName = name;
+}
+
+LPCTSTR Dispatcher::className(const std::string& name) {
+	typedef boost::shared_ptr<tstring> tstring_ptr;
+
+	// Convert to wide
+	std::basic_stringstream<TCHAR> stream;
+	stream << name.c_str();
+	tstring_ptr ret(new tstring(stream.str()));
+
+	// store class names
+	static std::vector<tstring_ptr> names;
+	names.push_back(ret);
+
+	return ret->c_str();
 }
 
 NormalDispatcher::NormalDispatcher(WNDCLASSEX& cls) :
@@ -207,7 +225,7 @@ Dispatcher(cls)
 { }
 
 Dispatcher& NormalDispatcher::getDefault() {
-	WNDCLASSEX cls = makeWndClass(className<NormalDispatcher>().c_str());
+	static WNDCLASSEX cls = makeWndClass(className<NormalDispatcher>());
 	static NormalDispatcher dispatcher(cls);
 	return dispatcher;
 }
