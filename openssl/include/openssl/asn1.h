@@ -230,6 +230,10 @@ typedef struct asn1_object_st
  */
 
 #define ASN1_STRING_FLAG_CONT 0x020 
+/* This flag is used by ASN1 code to indicate an ASN1_STRING is an MSTRING
+ * type.
+ */
+#define ASN1_STRING_FLAG_MSTRING 0x040 
 /* This is the base type that holds just about everything :-) */
 typedef struct asn1_string_st
 	{
@@ -887,12 +891,13 @@ int ASN1_TIME_check(ASN1_TIME *t);
 ASN1_GENERALIZEDTIME *ASN1_TIME_to_generalizedtime(ASN1_TIME *t, ASN1_GENERALIZEDTIME **out);
 int ASN1_TIME_set_string(ASN1_TIME *s, const char *str);
 
-int i2d_ASN1_SET(STACK_OF(BLOCK) *a, unsigned char **pp,
+int i2d_ASN1_SET(STACK_OF(OPENSSL_BLOCK) *a, unsigned char **pp,
 		 i2d_of_void *i2d, int ex_tag, int ex_class,
 		 int is_set);
-STACK_OF(BLOCK) *d2i_ASN1_SET(STACK_OF(BLOCK) **a, const unsigned char **pp,
+STACK_OF(OPENSSL_BLOCK) *d2i_ASN1_SET(STACK_OF(OPENSSL_BLOCK) **a,
+			      const unsigned char **pp,
 			      long length, d2i_of_void *d2i,
-			      void (*free_func)(BLOCK), int ex_tag,
+			      void (*free_func)(OPENSSL_BLOCK), int ex_tag,
 			      int ex_class);
 
 #ifndef OPENSSL_NO_BIO
@@ -947,7 +952,7 @@ int ASN1_put_eoc(unsigned char **pp);
 int ASN1_object_size(int constructed, int length, int tag);
 
 /* Used to implement other functions */
-void *ASN1_dup(i2d_of_void *i2d, d2i_of_void *d2i, char *x);
+void *ASN1_dup(i2d_of_void *i2d, d2i_of_void *d2i, void *x);
 
 #define ASN1_dup_of(type,i2d,d2i,x) \
     ((type*)ASN1_dup(CHECKED_I2D_OF(type, i2d), \
@@ -1045,9 +1050,9 @@ int ASN1_TYPE_set_int_octetstring(ASN1_TYPE *a, long num,
 int ASN1_TYPE_get_int_octetstring(ASN1_TYPE *a,long *num,
 	unsigned char *data, int max_len);
 
-STACK_OF(BLOCK) *ASN1_seq_unpack(const unsigned char *buf, int len,
-				 d2i_of_void *d2i, void (*free_func)(BLOCK));
-unsigned char *ASN1_seq_pack(STACK_OF(BLOCK) *safes, i2d_of_void *i2d,
+STACK_OF(OPENSSL_BLOCK) *ASN1_seq_unpack(const unsigned char *buf, int len,
+				 d2i_of_void *d2i, void (*free_func)(OPENSSL_BLOCK));
+unsigned char *ASN1_seq_pack(STACK_OF(OPENSSL_BLOCK) *safes, i2d_of_void *i2d,
 			     unsigned char **buf, int *len );
 void *ASN1_unpack_string(ASN1_STRING *oct, d2i_of_void *d2i);
 void *ASN1_item_unpack(ASN1_STRING *oct, const ASN1_ITEM *it);
@@ -1327,6 +1332,7 @@ void ERR_load_ASN1_strings(void);
 #define ASN1_R_INVALID_MIME_TYPE			 205
 #define ASN1_R_INVALID_MODIFIER				 186
 #define ASN1_R_INVALID_NUMBER				 187
+#define ASN1_R_INVALID_OBJECT_ENCODING			 216
 #define ASN1_R_INVALID_SEPARATOR			 131
 #define ASN1_R_INVALID_TIME_FORMAT			 132
 #define ASN1_R_INVALID_UNIVERSALSTRING_LENGTH		 133

@@ -20,9 +20,6 @@
 #ifndef OPENSSL_NO_MD2
 # define OPENSSL_NO_MD2
 #endif
-#ifndef OPENSSL_NO_MDC2
-# define OPENSSL_NO_MDC2
-#endif
 #ifndef OPENSSL_NO_RC5
 # define OPENSSL_NO_RC5
 #endif
@@ -37,6 +34,9 @@
 
 #ifndef OPENSSL_THREADS
 # define OPENSSL_THREADS
+#endif
+#ifndef OPENSSL_NO_ASM
+# define OPENSSL_NO_ASM
 #endif
 
 /* The OPENSSL_NO_* macros are also defined as NO_* if the application
@@ -56,9 +56,6 @@
 # if defined(OPENSSL_NO_MD2) && !defined(NO_MD2)
 #  define NO_MD2
 # endif
-# if defined(OPENSSL_NO_MDC2) && !defined(NO_MDC2)
-#  define NO_MDC2
-# endif
 # if defined(OPENSSL_NO_RC5) && !defined(NO_RC5)
 #  define NO_RC5
 # endif
@@ -69,8 +66,6 @@
 #  define NO_STORE
 # endif
 #endif
-
-#define OPENSSL_CPUID_OBJ
 
 /* crypto/opensslconf.h.in */
 
