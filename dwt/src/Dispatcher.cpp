@@ -193,6 +193,8 @@ HBRUSH Dispatcher::getDefaultBackground() {
 WNDCLASSEX Dispatcher::makeWndClass(LPCTSTR name) {
 	WNDCLASSEX cls = { sizeof(WNDCLASSEX) };
 	fillWndClass(cls, name);
+	cls.hCursor = getDefaultCursor();
+	cls.hbrBackground = getDefaultBackground();
 	return cls;
 }
 
@@ -200,8 +202,6 @@ void Dispatcher::fillWndClass(WNDCLASSEX& cls, LPCTSTR name) {
 	cls.style = CS_DBLCLKS;
 	cls.lpfnWndProc = WindowProc::initProc;
 	cls.hInstance = ::GetModuleHandle(NULL);
-	cls.hCursor = getDefaultCursor();
-	cls.hbrBackground = getDefaultBackground();
 	cls.lpszMenuName = 0;
 	cls.lpszClassName = name;
 }
