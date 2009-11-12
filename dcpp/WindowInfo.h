@@ -36,7 +36,7 @@ public:
 	/// special param used for displaying; ignored for identification.
 	static const string title;
 
-	/// special param for hub addresses
+	/// special param for hub addresses.
 	static const string address;
 
 	/// special param that indicates a CID for an user whose information shall be saved on exit.

@@ -28,6 +28,8 @@
 
 namespace dcpp {
 
+static const unsigned MAX_RECENTS_DEFAULT = 10;
+
 const string WindowManager::hub = "Hub";
 
 WindowManager::WindowManager() {
@@ -40,7 +42,7 @@ WindowManager::~WindowManager() throw() {
 
 void WindowManager::autoOpen(bool skipHubs) {
 	Lock l(cs);
-	for(WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
+	for(WindowInfoList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
 		const string& id = i->getId();
 		if(skipHubs && id == hub)
 			continue;
@@ -70,6 +72,18 @@ void WindowManager::addRecent(const string& id, const StringMap& params) {
 }
 
 void WindowManager::addRecent_(const string& id, const StringMap& params, bool top) {
+	unsigned max;
+	{
+		MaxRecentItems::const_iterator i = maxRecentItems.find(id);
+		if(i == maxRecentItems.end()) {
+			maxRecentItems[id] = max = MAX_RECENTS_DEFAULT;
+		} else {
+			max = i->second;
+		}
+	}
+	if(max == 0)
+		return;
+
 	WindowInfo info(id, params);
 
 	if(recent.find(id) == recent.end()) {
@@ -82,13 +96,13 @@ void WindowManager::addRecent_(const string& id, const StringMap& params, bool t
 		WindowInfoList::iterator i = std::find(infoList.begin(), infoList.end(), info);
 		if(i == infoList.end()) {
 			infoList.insert(infoList.begin(), info);
-			if(infoList.size() > 10) /// @todo configurable?
+			if(infoList.size() > max)
 				infoList.erase(infoList.end() - 1);
 		} else {
 			infoList.erase(i);
 			infoList.insert(infoList.begin(), info);
 		}
-	} else if(infoList.size() < 10) /// @todo configurable?
+	} else if(infoList.size() < max)
 		infoList.push_back(info);
 }
 
@@ -103,15 +117,38 @@ void WindowManager::updateRecent(const string& id, const StringMap& params) {
 	}
 }
 
+void WindowManager::setMaxRecentItems(const string& id, unsigned max) {
+	Lock l(cs);
+	maxRecentItems[id] = max;
+
+	RecentList::iterator i = recent.find(id);
+	if(i != recent.end()) {
+		if(max == 0) {
+			recent.erase(i);
+		} else {
+			while(i->second.size() > max)
+				i->second.erase(i->second.end() - 1);
+		}
+	}
+}
+
+unsigned WindowManager::getMaxRecentItems(const string& id) const {
+	Lock l(cs);
+	MaxRecentItems::const_iterator i = maxRecentItems.find(id);
+	if(i == maxRecentItems.end())
+		return MAX_RECENTS_DEFAULT;
+	return i->second;
+}
+
 void WindowManager::prepareSave() const {
 	Lock l(cs);
 	prepareSave(list);
-	for(RecentList::const_iterator i = recent.begin(); i != recent.end(); ++i)
+	for(RecentList::const_iterator i = recent.begin(), iend = recent.end(); i != iend; ++i)
 		prepareSave(i->second);
 }
 
 void WindowManager::prepareSave(const WindowInfoList& infoList) const {
-	for(WindowInfoList::const_iterator wi = infoList.begin(); wi != infoList.end(); ++wi) {
+	for(WindowInfoList::const_iterator wi = infoList.begin(), wiend = infoList.end(); wi != wiend; ++wi) {
 		StringMap::const_iterator i = wi->getParams().find(WindowInfo::cid);
 		if(i != wi->getParams().end())
 			ClientManager::getInstance()->saveUser(CID(i->second));
@@ -152,7 +189,7 @@ void WindowManager::addTag(SimpleXML& xml, const WindowInfo& info) const {
 
 	if(!info.getParams().empty()) {
 		xml.stepIn();
-		for(StringMap::const_iterator i = info.getParams().begin(); i != info.getParams().end(); ++i) {
+		for(StringMap::const_iterator i = info.getParams().begin(), iend = info.getParams().end(); i != iend; ++i) {
 			xml.addTag("Param", i->second);
 			xml.addChildAttrib("Id", i->first);
 		}
@@ -168,8 +205,17 @@ void WindowManager::on(SettingsManagerListener::Load, SimpleXML& xml) throw() {
 	if(xml.findChild("Windows"))
 		parseTags(xml, &WindowManager::add);
 
-	if(xml.findChild("Recent"))
+	if(xml.findChild("Recent")) {
+		xml.stepIn();
+		while(xml.findChild("Configuration")) {
+			const string& id = xml.getChildAttrib("Id");
+			if(id.empty())
+				continue;
+			setMaxRecentItems(id, xml.getIntChildAttrib("MaxItems"));
+		}
+		xml.stepOut();
 		parseTags(xml, &WindowManager::addRecent_);
+	}
 }
 
 void WindowManager::on(SettingsManagerListener::Save, SimpleXML& xml) throw() {
@@ -177,15 +223,20 @@ void WindowManager::on(SettingsManagerListener::Save, SimpleXML& xml) throw() {
 
 	xml.addTag("Windows");
 	xml.stepIn();
-	for(WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i)
+	for(WindowInfoList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i)
 		addTag(xml, *i);
 	xml.stepOut();
 
 	xml.addTag("Recent");
 	xml.stepIn();
-	for(RecentList::const_iterator ri = recent.begin(); ri != recent.end(); ++ri) {
+	for(MaxRecentItems::const_iterator i = maxRecentItems.begin(), iend = maxRecentItems.end(); i != iend; ++i) {
+		xml.addTag("Configuration");
+		xml.addChildAttrib("Id", i->first);
+		xml.addChildAttrib("MaxItems", i->second);
+	}
+	for(RecentList::const_iterator ri = recent.begin(), riend = recent.end(); ri != riend; ++ri) {
 		const WindowInfoList& infoList = ri->second;
-		for(WindowInfoList::const_iterator i = infoList.begin(); i != infoList.end(); ++i)
+		for(WindowInfoList::const_iterator i = infoList.begin(), iend = infoList.end(); i != iend; ++i)
 			addTag(xml, *i);
 	}
 	xml.stepOut();
