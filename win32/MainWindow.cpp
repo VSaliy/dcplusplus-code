@@ -464,12 +464,12 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 	menu->open(pt);
 }
 
-template<typename T>
+template<typename T, typename configureF>
 static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, MainWindow* mainWindow,
-						  const tstring& text, unsigned iconId, unsigned favIconId)
+						  const tstring& text, unsigned iconId, unsigned favIconId, configureF f)
 {
 	MenuPtr popup = menu->appendPopup(text, dwt::IconPtr(new dwt::Icon(iconId)));
-	popup->appendItem(T_("&Configure..."), std::tr1::bind(&MainWindow::handleConfigureRecent, mainWindow, T::id, text),
+	popup->appendItem(T_("&Configure..."), std::tr1::bind(f, mainWindow, T::id, text),
 		dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)), true, true);
 	popup->appendSeparator();
 
@@ -503,9 +503,11 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 		wm->lock();
 		const WindowManager::RecentList& recent = wm->getRecent();
 
-		addRecentMenu<HubFrame>(recent, menu, this, T_("Recent hubs"), IDR_HUB, IDR_FAVORITE_HUBS);
-		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDR_PRIVATE, IDR_FAVORITE_USERS);
-		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDR_DIRECTORY, IDR_FAVORITE_USERS);
+		typedef void (MainWindow::*configureF)(const string&, const tstring&);
+		configureF f = &MainWindow::handleConfigureRecent;
+		addRecentMenu<HubFrame>(recent, menu, this, T_("Recent hubs"), IDR_HUB, IDR_FAVORITE_HUBS, f);
+		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDR_PRIVATE, IDR_FAVORITE_USERS, f);
+		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDR_DIRECTORY, IDR_FAVORITE_USERS, f);
 
 		wm->unlock();
 	}
