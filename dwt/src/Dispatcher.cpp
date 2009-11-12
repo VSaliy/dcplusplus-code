@@ -35,7 +35,6 @@
 #include <dwt/DWTException.h>
 
 #include <sstream>
-#include <boost/shared_ptr.hpp>
 
 namespace dwt {
 
@@ -167,10 +166,12 @@ LRESULT MDIFrameDispatcher::chain(const MSG& msg) {
 #endif
 
 Dispatcher::Dispatcher(WNDCLASSEX& cls) : atom(0) {
-	atom = ::RegisterClassEx(&cls);
-	if(!atom) {
-		throw Win32Exception("Unable to register class");
-	}
+	registerClass(cls);
+}
+
+Dispatcher::Dispatcher(LPCTSTR name) {
+	WNDCLASSEX cls = makeWndClass(name);
+	registerClass(cls);
 }
 
 Dispatcher::~Dispatcher() {
@@ -206,27 +207,34 @@ void Dispatcher::fillWndClass(WNDCLASSEX& cls, LPCTSTR name) {
 }
 
 LPCTSTR Dispatcher::className(const std::string& name) {
-	typedef boost::shared_ptr<tstring> tstring_ptr;
-
 	// Convert to wide
 	std::basic_stringstream<TCHAR> stream;
 	stream << name.c_str();
-	tstring_ptr ret(new tstring(stream.str()));
 
 	// store class names
-	static std::vector<tstring_ptr> names;
-	names.push_back(ret);
+	static std::vector<tstring> names;
+	names.push_back(stream.str());
 
-	return ret->c_str();
+	return names.back().c_str();
+}
+
+void Dispatcher::registerClass(WNDCLASSEX& cls) {
+	atom = ::RegisterClassEx(&cls);
+	if(!atom) {
+		throw Win32Exception("Unable to register class");
+	}
 }
 
 NormalDispatcher::NormalDispatcher(WNDCLASSEX& cls) :
 Dispatcher(cls)
 { }
 
+NormalDispatcher::NormalDispatcher(LPCTSTR name) :
+Dispatcher(name)
+{ }
+
 Dispatcher& NormalDispatcher::getDefault() {
-	static WNDCLASSEX cls = makeWndClass(className<NormalDispatcher>());
-	static NormalDispatcher dispatcher(cls);
+	static NormalDispatcher dispatcher(className<NormalDispatcher>());
 	return dispatcher;
 }
 
