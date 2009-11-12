@@ -64,6 +64,8 @@ protected:
 	friend class std::auto_ptr<Dispatcher>;
 
 	Dispatcher(WNDCLASSEX& cls);
+	Dispatcher(LPCTSTR name);
+
 	virtual ~Dispatcher();
 
 	template<typename T>
@@ -76,6 +78,8 @@ protected:
 
 private:
 	static LPCTSTR className(const std::string& name);
+
+	void registerClass(WNDCLASSEX& cls);
 
 	ATOM atom;
 };
@@ -104,6 +108,7 @@ public:
 
 private:
 	NormalDispatcher(WNDCLASSEX& cls);
+	NormalDispatcher(LPCTSTR name);
 };
 
 class ChainingDispatcher : public Dispatcher {
