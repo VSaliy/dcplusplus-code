@@ -471,23 +471,38 @@ void AdcHub::handle(AdcCommand::STA, AdcCommand& c) throw() {
 		return;
 	}
 
-	int code = Util::toInt(c.getParam(0).substr(1));
+	switch(Util::toInt(c.getParam(0).substr(1))) {
 
-	if(code == AdcCommand::ERROR_BAD_PASSWORD) {
-		setPassword(Util::emptyString);
-	} else if(code == AdcCommand::ERROR_PROTOCOL_UNSUPPORTED) {
-		string tmp;
-		if(c.getParam("PR", 1, tmp)) {
-			if(tmp == CLIENT_PROTOCOL) {
-				u->getUser()->setFlag(User::NO_ADC_1_0_PROTOCOL);
-			} else if(tmp == CLIENT_PROTOCOL_TEST) {
-				u->getUser()->setFlag(User::NO_ADC_0_10_PROTOCOL);
-			} else if(tmp == SECURE_CLIENT_PROTOCOL_TEST) {
-				u->getUser()->setFlag(User::NO_ADCS_0_10_PROTOCOL);
-				u->getUser()->unsetFlag(User::TLS);
+	case AdcCommand::ERROR_BAD_PASSWORD:
+		{
+			setPassword(Util::emptyString);
+			break;
+		}
+
+	case AdcCommand::ERROR_COMMAND_ACCESS:
+		{
+			string tmp;
+			if(c.getParam("FC", 1, tmp) && tmp.size() == 4)
+				forbiddenCommands.insert(AdcCommand::toFourCC(tmp.c_str()));
+			break;
+		}
+
+	case AdcCommand::ERROR_PROTOCOL_UNSUPPORTED:
+		{
+			string tmp;
+			if(c.getParam("PR", 1, tmp)) {
+				if(tmp == CLIENT_PROTOCOL) {
+					u->getUser()->setFlag(User::NO_ADC_1_0_PROTOCOL);
+				} else if(tmp == CLIENT_PROTOCOL_TEST) {
+					u->getUser()->setFlag(User::NO_ADC_0_10_PROTOCOL);
+				} else if(tmp == SECURE_CLIENT_PROTOCOL_TEST) {
+					u->getUser()->setFlag(User::NO_ADCS_0_10_PROTOCOL);
+					u->getUser()->unsetFlag(User::TLS);
+				}
+				// Try again...
+				ConnectionManager::getInstance()->force(u->getUser());
 			}
-			// Try again...
-			ConnectionManager::getInstance()->force(u->getUser());
+			break;
 		}
 	}
 
@@ -771,9 +786,11 @@ string AdcHub::checkNick(const string& aNick) {
 }
 
 void AdcHub::send(const AdcCommand& cmd) {
-	if(cmd.getType() == AdcCommand::TYPE_UDP)
-		sendUDP(cmd);
-	send(cmd.toString(sid));
+	if(forbiddenCommands.find(AdcCommand::toFourCC(cmd.getFourCC().c_str())) == forbiddenCommands.end()) {
+		if(cmd.getType() == AdcCommand::TYPE_UDP)
+			sendUDP(cmd);
+		send(cmd.toString(sid));
+	}
 }
 
 void AdcHub::on(Connected c) throw() {
@@ -781,6 +798,7 @@ void AdcHub::on(Connected c) throw() {
 
 	lastInfoMap.clear();
 	sid = 0;
+	forbiddenCommands.clear();
 
 	AdcCommand cmd(AdcCommand::CMD_SUP, AdcCommand::TYPE_HUB);
 	cmd.addParam(BAS0_SUPPORT).addParam(BASE_SUPPORT).addParam(TIGR_SUPPORT);
