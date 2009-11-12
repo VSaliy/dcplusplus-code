@@ -30,6 +30,7 @@ class WindowManager :
 	public Speaker<WindowManagerListener>,
 	private SettingsManagerListener
 {
+	typedef std::tr1::unordered_map<string, unsigned> MaxRecentItems;
 public:
 	typedef std::vector<WindowInfo> WindowInfoList;
 	typedef std::tr1::unordered_map<string, WindowInfoList> RecentList;
@@ -47,11 +48,13 @@ public:
 	/// updates the title of the referenced window without changing its position in the stack.
 	void updateRecent(const string& id, const StringMap& params);
 	const RecentList& getRecent() const { return recent; }
+	void setMaxRecentItems(const string& id, unsigned max);
+	unsigned getMaxRecentItems(const string& id) const;
 
 	/// inform other classes about users and file lists that are of interest to us.
 	void prepareSave() const;
 
-	/// special id that designates a hub window
+	/// special id that designates a hub window.
 	static const string hub;
 
 private:
@@ -60,6 +63,7 @@ private:
 	mutable CriticalSection cs;
 	WindowInfoList list;
 	RecentList recent;
+	MaxRecentItems maxRecentItems;
 
 	WindowManager();
 	virtual ~WindowManager() throw();

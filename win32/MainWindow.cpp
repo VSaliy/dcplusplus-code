@@ -465,17 +465,23 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 }
 
 template<typename T>
-static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, dwt::TabView* parent,
+static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, MainWindow* mainWindow,
 						  const tstring& text, unsigned iconId, unsigned favIconId)
 {
+	MenuPtr popup = menu->appendPopup(text, dwt::IconPtr(new dwt::Icon(iconId)));
+	popup->appendItem(T_("&Configure..."), std::tr1::bind(&MainWindow::handleConfigureRecent, mainWindow, T::id, text),
+		dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)), true, true);
+	popup->appendSeparator();
+
 	WindowManager::RecentList::const_iterator it = recent.find(T::id);
-	if(it != recent.end()) {
-		MenuPtr popup = menu->appendPopup(text, dwt::IconPtr(new dwt::Icon(iconId)));
+	if(it == recent.end()) {
+		popup->appendItem(T_("(No recent item found)"), 0, 0, false);
+	} else {
 
 		dwt::IconPtr favIcon = dwt::IconPtr(new dwt::Icon(favIconId));
 
 		const WindowManager::WindowInfoList& list = it->second;
-		for(WindowManager::WindowInfoList::const_iterator i = list.begin(); i != list.end(); ++i) {
+		for(WindowManager::WindowInfoList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
 			StringMap params = i->getParams();
 
 			StringMap::const_iterator title = params.find(WindowInfo::title);
@@ -483,7 +489,7 @@ static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu
 				continue;
 
 			popup->appendItem(dwt::util::escapeMenu(Text::toT(title->second)),
-				std::tr1::bind(&T::parseWindowParams, parent, params),
+				std::tr1::bind(&T::parseWindowParams, mainWindow->getTabView(), params),
 				T::isFavorite(params) ? favIcon : 0);
 		}
 	}
@@ -497,14 +503,33 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 		wm->lock();
 		const WindowManager::RecentList& recent = wm->getRecent();
 
-		addRecentMenu<HubFrame>(recent, menu, getTabView(), T_("Recent hubs"), IDR_HUB, IDR_FAVORITE_HUBS);
-		addRecentMenu<PrivateFrame>(recent, menu, getTabView(), T_("Recent PMs"), IDR_PRIVATE, IDR_FAVORITE_USERS);
-		addRecentMenu<DirectoryListingFrame>(recent, menu, getTabView(), T_("Recent file lists"), IDR_DIRECTORY, IDR_FAVORITE_USERS);
+		addRecentMenu<HubFrame>(recent, menu, this, T_("Recent hubs"), IDR_HUB, IDR_FAVORITE_HUBS);
+		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDR_PRIVATE, IDR_FAVORITE_USERS);
+		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDR_DIRECTORY, IDR_FAVORITE_USERS);
 
 		wm->unlock();
 	}
 
 	menu->open(pt);
+}
+
+void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
+	LineDlg dlg(this, title, T_("Maximum number of recent items to save (0 = disable)"),
+		Text::toT(Util::toString(WindowManager::getInstance()->getMaxRecentItems(id))));
+	if(dlg.run() == IDOK) {
+		int max;
+		tstring s = dlg.getLine();
+		if(s.empty()) {
+			max = 0;
+		} else {
+			max = Util::toInt(Text::fromT(s));
+			if(max < 0)
+				max = 0;
+		}
+		dwt::MessageBox(this).show(str(TF_("%1% recent items will be saved from now on.") % max), title,
+			dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
+		WindowManager::getInstance()->setMaxRecentItems(id, max);
+	}
 }
 
 void MainWindow::handleExit() {

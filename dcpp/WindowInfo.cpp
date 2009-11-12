@@ -43,7 +43,7 @@ bool WindowInfo::operator==(const WindowInfo& rhs) const {
 		return false;
 
 	// compare each param, except "Title" which is not used for identification.
-	for(StringMap::const_iterator i = params.begin(); i != params.end(); ++i) {
+	for(StringMap::const_iterator i = params.begin(), iend = params.end(); i != iend; ++i) {
 		if(i->first == title)
 			continue;
 		StringMap::const_iterator ri = rhs.params.find(i->first);
