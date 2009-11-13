@@ -214,6 +214,23 @@ public:
 	static string formatParams(const string& msg, StringMap& params, bool filter);
 	static string formatTime(const string &msg, const time_t t);
 
+	static inline int64_t roundDown(int64_t size, int64_t blockSize) {
+		return ((size + blockSize / 2) / blockSize) * blockSize;
+	}
+
+	static inline int64_t roundUp(int64_t size, int64_t blockSize) {
+		return ((size + blockSize - 1) / blockSize) * blockSize;
+	}
+
+	static inline int roundDown(int size, int blockSize) {
+		return ((size + blockSize / 2) / blockSize) * blockSize;
+	}
+
+	static inline int roundUp(int size, int blockSize) {
+		return ((size + blockSize - 1) / blockSize) * blockSize;
+	}
+
+
 	static int64_t toInt64(const string& aString) {
 #ifdef _WIN32
 		return _atoi64(aString.c_str());

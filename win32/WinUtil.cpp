@@ -44,7 +44,7 @@
 #include <dwt/DWTException.h>
 
 // def taken from <gettextP.h>
-extern "C" const char *_nl_locale_name_default (void);
+extern "C" const char *_nl_locale_name_default(void);
 
 tstring WinUtil::tth;
 dwt::BrushPtr WinUtil::bgBrush;
@@ -87,15 +87,15 @@ const Table::Seed WinUtil::Seeds::Dialog::optionsTable;
 
 void WinUtil::init() {
 
-	SettingsManager::getInstance()->setDefault(SettingsManager::BACKGROUND_COLOR, (int)(GetSysColor(COLOR_WINDOW)));
-	SettingsManager::getInstance()->setDefault(SettingsManager::TEXT_COLOR, (int)(GetSysColor(COLOR_WINDOWTEXT)));
+	SettingsManager::getInstance()->setDefault(SettingsManager::BACKGROUND_COLOR, (int) (GetSysColor(COLOR_WINDOW)));
+	SettingsManager::getInstance()->setDefault(SettingsManager::TEXT_COLOR, (int) (GetSysColor(COLOR_WINDOWTEXT)));
 
 	textColor = SETTING(TEXT_COLOR);
 	bgColor = SETTING(BACKGROUND_COLOR);
 	bgBrush = dwt::BrushPtr(new dwt::Brush(bgColor));
 
 	LOGFONT lf;
-	::GetObject((HFONT)GetStockObject(DEFAULT_GUI_FONT), sizeof(lf), &lf);
+	::GetObject((HFONT) GetStockObject(DEFAULT_GUI_FONT), sizeof(lf), &lf);
 	SettingsManager::getInstance()->setDefault(SettingsManager::TEXT_FONT, Text::fromT(encodeFont(lf)));
 	decodeFont(Text::toT(SETTING(TEXT_FONT)), lf);
 
@@ -109,7 +109,8 @@ void WinUtil::init() {
 
 	if(BOOLSETTING(USE_SYSTEM_ICONS)) {
 		SHFILEINFO fi;
-		::SHGetFileInfo(_T("."), FILE_ATTRIBUTE_DIRECTORY, &fi, sizeof(fi), SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES);
+		::SHGetFileInfo(_T("."), FILE_ATTRIBUTE_DIRECTORY, &fi, sizeof(fi), SHGFI_ICON | SHGFI_SMALLICON
+			| SHGFI_USEFILEATTRIBUTES);
 		dwt::Icon tmp(fi.hIcon);
 		fileImages->add(tmp);
 		// @todo This one should be masked further for the incomplete folder thing
@@ -139,23 +140,23 @@ void WinUtil::init() {
 	}
 
 	// Const so that noone else will change them after they've been initialized
-	Button::Seed& xbutton = const_cast<Button::Seed&>(Seeds::button);
-	ComboBox::Seed& xcomboBoxEdit = const_cast<ComboBox::Seed&>(Seeds::comboBoxEdit);
-	ComboBox::Seed& xcomboBoxStatic = const_cast<ComboBox::Seed&>(Seeds::comboBoxStatic);
-	CheckBox::Seed& xCheckBox = const_cast<CheckBox::Seed&>(Seeds::checkBox);
-	CheckBox::Seed& xSplitCheckBox = const_cast<CheckBox::Seed&>(Seeds::splitCheckBox);
-	GroupBox::Seed& xgroup = const_cast<GroupBox::Seed&>(Seeds::group);
-	Menu::Seed& xmenu = const_cast<Menu::Seed&>(Seeds::menu);
-	Table::Seed& xTable = const_cast<Table::Seed&>(Seeds::table);
-	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&>(Seeds::textBox);
-	RichTextBox::Seed& xRichTextBox = const_cast<RichTextBox::Seed&>(Seeds::richTextBox);
-	TabView::Seed& xTabs = const_cast<TabView::Seed&>(Seeds::tabs);
-	Tree::Seed& xtreeView =  const_cast<Tree::Seed&>(Seeds::treeView);
-	ComboBox::Seed& xdComboBox = const_cast<ComboBox::Seed&>(Seeds::Dialog::comboBox);
-	TextBox::Seed& xdTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::textBox);
-	TextBox::Seed& xdintTextBox = const_cast<TextBox::Seed&>(Seeds::Dialog::intTextBox);
-	Table::Seed& xdTable = const_cast<Table::Seed&>(Seeds::Dialog::table);
-	Table::Seed& xdoptionsTable = const_cast<Table::Seed&>(Seeds::Dialog::optionsTable);
+	Button::Seed& xbutton = const_cast<Button::Seed&> (Seeds::button);
+	ComboBox::Seed& xcomboBoxEdit = const_cast<ComboBox::Seed&> (Seeds::comboBoxEdit);
+	ComboBox::Seed& xcomboBoxStatic = const_cast<ComboBox::Seed&> (Seeds::comboBoxStatic);
+	CheckBox::Seed& xCheckBox = const_cast<CheckBox::Seed&> (Seeds::checkBox);
+	CheckBox::Seed& xSplitCheckBox = const_cast<CheckBox::Seed&> (Seeds::splitCheckBox);
+	GroupBox::Seed& xgroup = const_cast<GroupBox::Seed&> (Seeds::group);
+	Menu::Seed& xmenu = const_cast<Menu::Seed&> (Seeds::menu);
+	Table::Seed& xTable = const_cast<Table::Seed&> (Seeds::table);
+	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&> (Seeds::textBox);
+	RichTextBox::Seed& xRichTextBox = const_cast<RichTextBox::Seed&> (Seeds::richTextBox);
+	TabView::Seed& xTabs = const_cast<TabView::Seed&> (Seeds::tabs);
+	Tree::Seed& xtreeView = const_cast<Tree::Seed&> (Seeds::treeView);
+	ComboBox::Seed& xdComboBox = const_cast<ComboBox::Seed&> (Seeds::Dialog::comboBox);
+	TextBox::Seed& xdTextBox = const_cast<TextBox::Seed&> (Seeds::Dialog::textBox);
+	TextBox::Seed& xdintTextBox = const_cast<TextBox::Seed&> (Seeds::Dialog::intTextBox);
+	Table::Seed& xdTable = const_cast<Table::Seed&> (Seeds::Dialog::table);
+	Table::Seed& xdoptionsTable = const_cast<Table::Seed&> (Seeds::Dialog::optionsTable);
 
 	xbutton.font = font;
 
@@ -215,13 +216,13 @@ void WinUtil::init() {
 	if(!helpPath.empty()) {
 		// load up context-sensitive help texts
 		try {
-			helpTexts = StringTokenizer<string>(
-				File(Util::getFilePath(Text::fromT(helpPath)) + "cshelp.rtf", File::READ, File::OPEN).read(),
-				"\r\n").getTokens();
-		} catch(const FileException&) { }
+			helpTexts = StringTokenizer<string> (File(Util::getFilePath(Text::fromT(helpPath)) + "cshelp.rtf",
+				File::READ, File::OPEN).read(), "\r\n").getTokens();
+		} catch (const FileException&) {
+		}
 	}
 
-	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR>(&helpCookie));
+	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR> (&helpCookie));
 }
 
 void WinUtil::init_helpPath() {
@@ -234,7 +235,8 @@ void WinUtil::init_helpPath() {
 	string path;
 	if(!lang.empty() && lang != "C") {
 		while(true) {
-			path = Util::getPath(Util::PATH_LOCALE) + lang + PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
+			path = Util::getPath(Util::PATH_LOCALE) + lang
+				+ PATH_SEPARATOR_STR "help" PATH_SEPARATOR_STR "DCPlusPlus.chm";
 			if(File::getSize(path) != -1)
 				break;
 			// if the lang has extra information (after '_' or '@'), try to remove it
@@ -259,8 +261,7 @@ void WinUtil::uninit() {
 	::HtmlHelp(NULL, NULL, HH_UNINITIALIZE, helpCookie);
 }
 
-tstring WinUtil::encodeFont(LOGFONT const& font)
-{
+tstring WinUtil::encodeFont(LOGFONT const& font) {
 	tstring res(font.lfFaceName);
 	res += _T(',');
 	res += Text::toT(Util::toString(font.lfHeight));
@@ -277,7 +278,7 @@ std::string WinUtil::toString(const std::vector<int>& tokens) {
 		ret += Util::toString(*i) + ',';
 	}
 	if(!ret.empty())
-		ret.erase(ret.size()-1);
+		ret.erase(ret.size() - 1);
 	return ret;
 }
 
@@ -285,14 +286,13 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 	StringTokenizer<tstring> st(setting, _T(','));
 	TStringList &sl = st.getTokens();
 
-	::GetObject((HFONT)GetStockObject(DEFAULT_GUI_FONT), sizeof(dest), &dest);
+	::GetObject((HFONT) GetStockObject(DEFAULT_GUI_FONT), sizeof(dest), &dest);
 	tstring face;
-	if(sl.size() == 4)
-	{
+	if(sl.size() == 4) {
 		face = sl[0];
 		dest.lfHeight = Util::toInt(Text::fromT(sl[1]));
 		dest.lfWeight = Util::toInt(Text::fromT(sl[2]));
-		dest.lfItalic = (BYTE)Util::toInt(Text::fromT(sl[3]));
+		dest.lfItalic = (BYTE) Util::toInt(Text::fromT(sl[3]));
 	}
 
 	if(!face.empty()) {
@@ -313,32 +313,35 @@ bool WinUtil::checkNick() {
 }
 
 #define LINE2 _T("-- http://dcplusplus.sourceforge.net <DC++ ") _T(VERSIONSTRING) _T(">")
-const TCHAR *msgs[] = { _T("\r\n-- I'm a happy dc++ user. You could be happy too.\r\n") LINE2,
-_T("\r\n-- Neo-...what? Nope...never heard of it...\r\n") LINE2,
-_T("\r\n-- Evolution of species: Ape --> Man\r\n-- Evolution of science: \"The Earth is Flat\" --> \"The Earth is Round\"\r\n-- Evolution of sharing: NMDC --> DC++\r\n") LINE2,
-_T("\r\n-- I share, therefore I am.\r\n") LINE2,
-_T("\r\n-- I came, I searched, I found...\r\n") LINE2,
-_T("\r\n-- I came, I shared, I sent...\r\n") LINE2,
-_T("\r\n-- I can set away mode, can't you?\r\n") LINE2,
-_T("\r\n-- I don't have to see any ads, do you?\r\n") LINE2,
-_T("\r\n-- I don't have to see those annoying kick messages, do you?\r\n") LINE2,
-_T("\r\n-- I can resume my files to a different filename, can you?\r\n") LINE2,
-_T("\r\n-- I can share huge amounts of files, can you?\r\n") LINE2,
-_T("\r\n-- My client doesn't spam the chat with useless debug messages, does yours?\r\n") LINE2,
-_T("\r\n-- I can add multiple users to the same download and have the client connect to another automatically when one goes offline, can you?\r\n") LINE2,
-_T("\r\n-- These addies are pretty annoying, aren't they? Get revenge by sending them yourself!\r\n") LINE2,
-_T("\r\n-- My client supports TTH hashes, does yours?\r\n") LINE2,
-_T("\r\n-- My client supports XML file lists, does yours?\r\n") LINE2
-};
+const TCHAR
+	*msgs[] = {
+		_T("\r\n-- I'm a happy dc++ user. You could be happy too.\r\n") LINE2,
+		_T("\r\n-- Neo-...what? Nope...never heard of it...\r\n") LINE2,
+		_T("\r\n-- Evolution of species: Ape --> Man\r\n-- Evolution of science: \"The Earth is Flat\" --> \"The Earth is Round\"\r\n-- Evolution of sharing: NMDC --> DC++\r\n") LINE2,
+		_T("\r\n-- I share, therefore I am.\r\n") LINE2,
+		_T("\r\n-- I came, I searched, I found...\r\n") LINE2,
+		_T("\r\n-- I came, I shared, I sent...\r\n") LINE2,
+		_T("\r\n-- I can set away mode, can't you?\r\n") LINE2,
+		_T("\r\n-- I don't have to see any ads, do you?\r\n") LINE2,
+		_T("\r\n-- I don't have to see those annoying kick messages, do you?\r\n") LINE2,
+		_T("\r\n-- I can resume my files to a different filename, can you?\r\n") LINE2,
+		_T("\r\n-- I can share huge amounts of files, can you?\r\n") LINE2,
+		_T("\r\n-- My client doesn't spam the chat with useless debug messages, does yours?\r\n") LINE2,
+		_T("\r\n-- I can add multiple users to the same download and have the client connect to another automatically when one goes offline, can you?\r\n") LINE2,
+		_T("\r\n-- These addies are pretty annoying, aren't they? Get revenge by sending them yourself!\r\n") LINE2,
+		_T("\r\n-- My client supports TTH hashes, does yours?\r\n") LINE2,
+		_T("\r\n-- My client supports XML file lists, does yours?\r\n") LINE2 };
 
 #define MSGS 16
 
-tstring WinUtil::commands = _T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts, /download, /upload");
+tstring
+	WinUtil::commands =
+		_T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts, /download, /upload");
 
 bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson) {
 	string::size_type i = cmd.find(' ');
 	if(i != string::npos) {
-		param = cmd.substr(i+1);
+		param = cmd.substr(i + 1);
 		cmd = cmd.substr(1, i - 1);
 	} else {
 		cmd = cmd.substr(1);
@@ -348,7 +351,8 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 		if(Util::stricmp(param.c_str(), _T("system")) == 0) {
 			WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM))));
 		} else if(Util::stricmp(param.c_str(), _T("downloads")) == 0) {
-			WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::DOWNLOAD))));
+			WinUtil::openFile(Text::toT(
+				Util::validateFileName(LogManager::getInstance()->getPath(LogManager::DOWNLOAD))));
 		} else if(Util::stricmp(param.c_str(), _T("uploads")) == 0) {
 			WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::UPLOAD))));
 		} else {
@@ -357,14 +361,14 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	} else if(Util::stricmp(cmd.c_str(), _T("me")) == 0) {
 		message = param;
 		thirdPerson = true;
-	} else if(Util::stricmp(cmd.c_str(), _T("refresh"))==0) {
+	} else if(Util::stricmp(cmd.c_str(), _T("refresh")) == 0) {
 		try {
 			ShareManager::getInstance()->setDirty();
 			ShareManager::getInstance()->refresh(true);
-		} catch(const ShareException& e) {
+		} catch (const ShareException& e) {
 			status = Text::toT(e.getError());
 		}
-	} else if(Util::stricmp(cmd.c_str(), _T("slots"))==0) {
+	} else if(Util::stricmp(cmd.c_str(), _T("slots")) == 0) {
 		int j = Util::toInt(Text::fromT(param));
 		if(j > 0) {
 			SettingsManager::getInstance()->set(SettingsManager::SLOTS, j);
@@ -374,7 +378,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 		} else {
 			status = T_("Invalid number of slots");
 		}
-	} else if(Util::stricmp(cmd.c_str(), _T("dslots"))==0) {
+	} else if(Util::stricmp(cmd.c_str(), _T("dslots")) == 0) {
 		int j = Util::toInt(Text::fromT(param));
 		if(j >= 0) {
 			SettingsManager::getInstance()->set(SettingsManager::DOWNLOAD_SLOTS, j);
@@ -418,7 +422,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 			WinUtil::openLink(_T("http://www.imdb.com/find?q=") + Text::toT(Util::encodeURI(Text::fromT(param))));
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("u")) == 0) {
-		if (param.empty()) {
+		if(param.empty()) {
 			status = T_("Specify a URL");
 		} else {
 			WinUtil::openLink(Text::toT(Util::encodeURI(Text::fromT(param))));
@@ -428,7 +432,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	} else if(Util::stricmp(cmd.c_str(), _T("upload")) == 0) {
 		SettingsManager::getInstance()->set(SettingsManager::MAX_UPLOAD_SPEED_CURRENT, Util::toInt(Text::fromT(param)));
 		ClientManager::getInstance()->infoUpdated();
-		if (Util::toInt(Text::fromT(param))) {
+		if(Util::toInt(Text::fromT(param))) {
 			TCHAR* temp;
 			temp = new TCHAR[T_("Upload limit set to %d KiB/s").size() + 32];
 			_stprintf(temp, T_("Upload limit set to %d KiB/s").c_str(), Util::toInt(Text::fromT(param)));
@@ -438,9 +442,10 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 			status = T_("Upload limit disabled").c_str();
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("download")) == 0) {
-		SettingsManager::getInstance()->set(SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT, Util::toInt(Text::fromT(param)));
+		SettingsManager::getInstance()->set(SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT,
+			Util::toInt(Text::fromT(param)));
 		ClientManager::getInstance()->infoUpdated();
-		if (Util::toInt(Text::fromT(param))) {
+		if(Util::toInt(Text::fromT(param))) {
 			TCHAR* temp;
 			temp = new TCHAR[T_("Download limit set to %d KiB/s").size() + 32];
 			_stprintf(temp, T_("Download limit set to %d KiB/s").c_str(), Util::toInt(Text::fromT(param)));
@@ -457,7 +462,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 }
 
 void WinUtil::playSound(int setting) {
-	string sound = SettingsManager::getInstance()->get((SettingsManager::StrSetting)setting);
+	string sound = SettingsManager::getInstance()->get((SettingsManager::StrSetting) setting);
 	if(!sound.empty()) {
 		if(sound == "beep")
 			::MessageBeep(MB_OK);
@@ -471,10 +476,12 @@ void WinUtil::openFile(const tstring& file) {
 }
 
 void WinUtil::openFolder(const tstring& file) {
-	if (File::getSize(Text::fromT(file)) != -1)
-		::ShellExecute(NULL, NULL, Text::toT("explorer.exe").c_str(), Text::toT("/e, /select, \"" + (Text::fromT(file)) + "\"").c_str(), NULL, SW_SHOWNORMAL);
+	if(File::getSize(Text::fromT(file)) != -1)
+		::ShellExecute(NULL, NULL, Text::toT("explorer.exe").c_str(), Text::toT("/e, /select, \"" + (Text::fromT(file))
+			+ "\"").c_str(), NULL, SW_SHOWNORMAL);
 	else
-		::ShellExecute(NULL, NULL, Text::toT("explorer.exe").c_str(), Text::toT("/e, \"" + Util::getFilePath(Text::fromT(file)) + "\"").c_str(), NULL, SW_SHOWNORMAL);
+		::ShellExecute(NULL, NULL, Text::toT("explorer.exe").c_str(), Text::toT("/e, \"" + Util::getFilePath(
+			Text::fromT(file)) + "\"").c_str(), NULL, SW_SHOWNORMAL);
 }
 
 tstring WinUtil::getNicks(const CID& cid, const string& hintUrl) {
@@ -519,7 +526,8 @@ int WinUtil::getIconIndex(const tstring& aFileName) {
 				return j->second;
 		}
 		tstring fn = Text::toT(Text::toLower(Util::getFileName(Text::fromT(aFileName))));
-		::SHGetFileInfo(fn.c_str(), FILE_ATTRIBUTE_NORMAL, &fi, sizeof(fi), SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES);
+		::SHGetFileInfo(fn.c_str(), FILE_ATTRIBUTE_NORMAL, &fi, sizeof(fi), SHGFI_ICON | SHGFI_SMALLICON
+			| SHGFI_USEFILEATTRIBUTES);
 		if(!fi.hIcon) {
 			return 2;
 		}
@@ -529,7 +537,7 @@ int WinUtil::getIconIndex(const tstring& aFileName) {
 
 			fileIndexes[x] = fileImageCount++;
 			return fileImageCount - 1;
-		} catch(const dwt::DWTException&) {
+		} catch (const dwt::DWTException&) {
 			return 2;
 		}
 	} else {
@@ -570,7 +578,8 @@ void WinUtil::bitziLink(const TTHValue& aHash) {
 
 void WinUtil::copyMagnet(const TTHValue& aHash, const tstring& aFile) {
 	if(!aFile.empty()) {
-		setClipboard(_T("magnet:?xt=urn:tree:tiger:") + Text::toT(aHash.toBase32()) + _T("&dn=") + Text::toT(Util::encodeURI(Text::fromT(aFile))));
+		setClipboard(_T("magnet:?xt=urn:tree:tiger:") + Text::toT(aHash.toBase32()) + _T("&dn=") + Text::toT(
+			Util::encodeURI(Text::fromT(aFile))));
 	}
 }
 
@@ -607,10 +616,8 @@ bool WinUtil::browseSaveFile(dwt::Widget* parent, tstring& file) {
 }
 
 bool WinUtil::browseFileList(dwt::Widget* parent, tstring& file) {
-	return LoadDialog(parent).addFilter(T_("File Lists"), _T("*.xml.bz2"))
-		.addFilter(T_("All files"), _T("*.*"))
-		.setInitialDirectory(Text::toT(Util::getListPath()))
-		.open(file);
+	return LoadDialog(parent).addFilter(T_("File Lists"), _T("*.xml.bz2")) .addFilter(T_("All files"), _T("*.*")) .setInitialDirectory(
+		Text::toT(Util::getListPath())) .open(file);
 }
 
 void WinUtil::setClipboard(const tstring& str) {
@@ -625,13 +632,13 @@ void WinUtil::setClipboard(const tstring& str) {
 
 	// Allocate a global memory object for the text.
 	HGLOBAL hglbCopy = GlobalAlloc(GMEM_MOVEABLE, (str.size() + 1) * sizeof(TCHAR));
-	if (hglbCopy == NULL) {
+	if(hglbCopy == NULL) {
 		CloseClipboard();
 		return;
 	}
 
 	// Lock the handle and copy the text to the buffer.
-	TCHAR* lptstrCopy = (TCHAR*)GlobalLock(hglbCopy);
+	TCHAR* lptstrCopy = (TCHAR*) GlobalLock(hglbCopy);
 	_tcscpy(lptstrCopy, str.c_str());
 	GlobalUnlock(hglbCopy);
 
@@ -645,17 +652,17 @@ void WinUtil::setClipboard(const tstring& str) {
 	CloseClipboard();
 }
 
-bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap& sm) throw() {
+bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap& sm) throw () {
 	string::size_type i = 0;
 	StringMap done;
 
-	while( (i = uc.getCommand().find("%[line:", i)) != string::npos) {
+	while((i = uc.getCommand().find("%[line:", i)) != string::npos) {
 		i += 7;
 		string::size_type j = uc.getCommand().find(']', i);
 		if(j == string::npos)
 			break;
 
-		string name = uc.getCommand().substr(i, j-i);
+		string name = uc.getCommand().substr(i, j - i);
 		if(done.find(name) == done.end()) {
 			string caption = name;
 			/// @todo use the bool in UserCommand when we have one
@@ -676,14 +683,13 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 	return true;
 }
 
-class HelpPopup : public Container {
+class HelpPopup: public Container {
 	typedef Container BaseType;
 
 public:
 	explicit HelpPopup(dwt::Control* parent, const tstring& text_) :
-	BaseType(parent, dwt::NormalDispatcher::newClass<HelpPopup>(0, 0, dwt::Dispatcher::getDefaultCursor(),
-		reinterpret_cast<HBRUSH>(COLOR_INFOBK + 1))),
-	text(text_)
+		BaseType(parent, dwt::NormalDispatcher::newClass<HelpPopup>(0, 0, dwt::Dispatcher::getDefaultCursor(),
+			reinterpret_cast<HBRUSH> (COLOR_INFOBK + 1))), text(text_)
 	{
 		// where to position the tooltip
 		dwt::Point pt;
@@ -725,7 +731,7 @@ private:
 
 	LRESULT resize(LPARAM lParam) {
 		{
-			dwt::Rectangle rect(reinterpret_cast<REQRESIZE*>(lParam)->rc);
+			dwt::Rectangle rect(reinterpret_cast<REQRESIZE*> (lParam)->rc);
 			if(rect.width() > maxWidth && (ts.style & ES_MULTILINE) != ES_MULTILINE) {
 				// can't add ES_MULTILINE at run time, so we create the control again
 				::DestroyWindow(box->handle());
@@ -810,22 +816,20 @@ void WinUtil::toInts(const string& str, std::vector<int>& array) {
 	}
 }
 
-pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(
-	GridPtr grid,
-	const dwt::Application::Callback& f_ok,
+pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid, const dwt::Application::Callback& f_ok,
 	const dwt::Application::Callback& f_cancel)
 {
 	Button::Seed seed;
 
 	seed.caption = T_("OK");
-	seed.menuHandle = reinterpret_cast<HMENU>(IDOK);
+	seed.menuHandle = reinterpret_cast<HMENU> (IDOK);
 	seed.padding.x = 20;
 	ButtonPtr ok = grid->addChild(seed);
 	ok->setHelpId(IDH_DCPP_OK);
 	ok->onClicked(f_ok);
 
 	seed.caption = T_("Cancel");
-	seed.menuHandle = reinterpret_cast<HMENU>(IDCANCEL);
+	seed.menuHandle = reinterpret_cast<HMENU> (IDCANCEL);
 	seed.padding.x = 10;
 	ButtonPtr cancel = grid->addChild(seed);
 	cancel->setHelpId(IDH_DCPP_CANCEL);
@@ -834,79 +838,90 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(
 	return make_pair(ok, cancel);
 }
 
-HLSCOLOR RGB2HLS (COLORREF rgb) {
+HLSCOLOR RGB2HLS(COLORREF rgb) {
 	unsigned char minval = min(GetRValue(rgb), min(GetGValue(rgb), GetBValue(rgb)));
 	unsigned char maxval = max(GetRValue(rgb), max(GetGValue(rgb), GetBValue(rgb)));
 	float mdiff = float(maxval) - float(minval);
-	float msum  = float(maxval) + float(minval);
+	float msum = float(maxval) + float(minval);
 
 	float luminance = msum / 510.0f;
 	float saturation = 0.0f;
 	float hue = 0.0f;
 
-	if ( maxval != minval ) {
-		float rnorm = (maxval - GetRValue(rgb) ) / mdiff;
-		float gnorm = (maxval - GetGValue(rgb) ) / mdiff;
-		float bnorm = (maxval - GetBValue(rgb) ) / mdiff;
+	if(maxval != minval) {
+		float rnorm = (maxval - GetRValue(rgb)) / mdiff;
+		float gnorm = (maxval - GetGValue(rgb)) / mdiff;
+		float bnorm = (maxval - GetBValue(rgb)) / mdiff;
 
 		saturation = (luminance <= 0.5f) ? (mdiff / msum) : (mdiff / (510.0f - msum));
 
-		if (GetRValue(rgb) == maxval) hue = 60.0f * (6.0f + bnorm - gnorm);
-		if (GetGValue(rgb) == maxval) hue = 60.0f * (2.0f + rnorm - bnorm);
-		if (GetBValue(rgb) == maxval) hue = 60.0f * (4.0f + gnorm - rnorm);
-		if (hue > 360.0f) hue = hue - 360.0f;
+		if(GetRValue(rgb) == maxval)
+			hue = 60.0f * (6.0f + bnorm - gnorm);
+		if(GetGValue(rgb) == maxval)
+			hue = 60.0f * (2.0f + rnorm - bnorm);
+		if(GetBValue(rgb) == maxval)
+			hue = 60.0f * (4.0f + gnorm - rnorm);
+		if(hue > 360.0f)
+			hue = hue - 360.0f;
 	}
 	return HLS ((hue*255)/360, luminance*255, saturation*255);
 }
 
-static inline BYTE _ToRGB (float rm1, float rm2, float rh) {
-	if		(rh > 360.0f) rh -= 360.0f;
-	else if (rh <   0.0f) rh += 360.0f;
+static inline BYTE _ToRGB(float rm1, float rm2, float rh) {
+	if(rh > 360.0f)
+		rh -= 360.0f;
+	else if(rh < 0.0f)
+		rh += 360.0f;
 
-	if		(rh <  60.0f) rm1 = rm1 + (rm2 - rm1) * rh / 60.0f;
-	else if (rh < 180.0f) rm1 = rm2;
-	else if (rh < 240.0f) rm1 = rm1 + (rm2 - rm1) * (240.0f - rh) / 60.0f;
+	if(rh < 60.0f)
+		rm1 = rm1 + (rm2 - rm1) * rh / 60.0f;
+	else if(rh < 180.0f)
+		rm1 = rm2;
+	else if(rh < 240.0f)
+		rm1 = rm1 + (rm2 - rm1) * (240.0f - rh) / 60.0f;
 
-	return (BYTE)(rm1 * 255);
+	return (BYTE) (rm1 * 255);
 }
 
-COLORREF HLS2RGB (HLSCOLOR hls) {
-	float hue        = ((int)HLS_H(hls)*360)/255.0f;
-	float luminance  = HLS_L(hls)/255.0f;
-	float saturation = HLS_S(hls)/255.0f;
+COLORREF HLS2RGB(HLSCOLOR hls) {
+	float hue = ((int) HLS_H(hls) * 360) / 255.0f;
+	float luminance = HLS_L(hls) / 255.0f;
+	float saturation = HLS_S(hls) / 255.0f;
 
-	if ( saturation == 0.0f ) {
+	if(saturation == 0.0f) {
 		return RGB (HLS_L(hls), HLS_L(hls), HLS_L(hls));
 	}
 	float rm1, rm2;
 
-	if ( luminance <= 0.5f ) rm2 = luminance + luminance * saturation;
-	else                     rm2 = luminance + saturation - luminance * saturation;
+	if(luminance <= 0.5f)
+		rm2 = luminance + luminance * saturation;
+	else
+		rm2 = luminance + saturation - luminance * saturation;
 	rm1 = 2.0f * luminance - rm2;
-	BYTE red   = _ToRGB (rm1, rm2, hue + 120.0f);
-	BYTE green = _ToRGB (rm1, rm2, hue);
-	BYTE blue  = _ToRGB (rm1, rm2, hue - 120.0f);
+	BYTE red = _ToRGB(rm1, rm2, hue + 120.0f);
+	BYTE green = _ToRGB(rm1, rm2, hue);
+	BYTE blue = _ToRGB(rm1, rm2, hue - 120.0f);
 
 	return RGB (red, green, blue);
 }
 
-COLORREF HLS_TRANSFORM (COLORREF rgb, int percent_L, int percent_S) {
-	HLSCOLOR hls = RGB2HLS (rgb);
+COLORREF HLS_TRANSFORM(COLORREF rgb, int percent_L, int percent_S) {
+	HLSCOLOR hls = RGB2HLS(rgb);
 	BYTE h = HLS_H(hls);
 	BYTE l = HLS_L(hls);
 	BYTE s = HLS_S(hls);
 
-	if ( percent_L > 0 ) {
+	if(percent_L > 0) {
 		l = BYTE(l + ((255 - l) * percent_L) / 100);
-	} else if ( percent_L < 0 )	{
-		l = BYTE((l * (100+percent_L)) / 100);
+	} else if(percent_L < 0) {
+		l = BYTE((l * (100 + percent_L)) / 100);
 	}
-	if ( percent_S > 0 ) {
+	if(percent_S > 0) {
 		s = BYTE(s + ((255 - s) * percent_S) / 100);
-	} else if ( percent_S < 0 ) {
-		s = BYTE((s * (100+percent_S)) / 100);
+	} else if(percent_S < 0) {
+		s = BYTE((s * (100 + percent_S)) / 100);
 	}
-	return HLS2RGB (HLS(h, l, s));
+	return HLS2RGB(HLS(h, l, s));
 }
 
 void WinUtil::registerDchubHandler() {
@@ -915,79 +930,90 @@ void WinUtil::registerDchubHandler() {
 	tstring app = _T("\"") + Text::toT(getAppName()) + _T("\" %1");
 	Buf[0] = 0;
 
-	if(::RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("dchub\\Shell\\Open\\Command"), 0, KEY_WRITE | KEY_READ, &hk) == ERROR_SUCCESS) {
+	if(::RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("dchub\\Shell\\Open\\Command"), 0, KEY_WRITE | KEY_READ, &hk)
+		== ERROR_SUCCESS)
+	{
 		DWORD bufLen = sizeof(Buf);
 		DWORD type;
-		::RegQueryValueEx(hk, NULL, 0, &type, (LPBYTE)Buf, &bufLen);
+		::RegQueryValueEx(hk, NULL, 0, &type, (LPBYTE) Buf, &bufLen);
 		::RegCloseKey(hk);
 	}
 
 	if(Util::stricmp(app.c_str(), Buf) != 0) {
-		if (::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL)) {
+		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk,
+			NULL))
+		{
 			LogManager::getInstance()->message(_("Error registering dchub:// handler"));
 			return;
 		}
 
 		TCHAR tmp[] = _T("URL:Direct Connect Protocol");
-		::RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE)tmp, sizeof(TCHAR) * (_tcslen(tmp) + 1));
-		::RegSetValueEx(hk, _T("URL Protocol"), 0, REG_SZ, (LPBYTE)_T(""), sizeof(TCHAR));
+		::RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE) tmp, sizeof(TCHAR) * (_tcslen(tmp) + 1));
+		::RegSetValueEx(hk, _T("URL Protocol"), 0, REG_SZ, (LPBYTE) _T(""), sizeof(TCHAR));
 		::RegCloseKey(hk);
 
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub\\Shell\\Open\\Command"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
-		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE)app.c_str(), sizeof(TCHAR) * (app.length() + 1));
+		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub\\Shell\\Open\\Command"), 0, NULL, REG_OPTION_NON_VOLATILE,
+			KEY_WRITE, NULL, &hk, NULL);
+		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
 		::RegCloseKey(hk);
 
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
+		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE,
+			NULL, &hk, NULL);
 		app = Text::toT(getAppName());
-		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE)app.c_str(), sizeof(TCHAR) * (app.length() + 1));
+		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
 		::RegCloseKey(hk);
 	}
 }
 
- void WinUtil::unRegisterDchubHandler() {
+void WinUtil::unRegisterDchubHandler() {
 	SHDeleteKey(HKEY_CLASSES_ROOT, _T("dchub"));
- }
+}
 
- void WinUtil::registerADChubHandler() {
-	 HKEY hk;
-	 TCHAR Buf[512];
-	 tstring app = _T("\"") + Text::toT(getAppName()) + _T("\" %1");
-	 Buf[0] = 0;
+void WinUtil::registerADChubHandler() {
+	HKEY hk;
+	TCHAR Buf[512];
+	tstring app = _T("\"") + Text::toT(getAppName()) + _T("\" %1");
+	Buf[0] = 0;
 
-	 if(::RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("adc\\Shell\\Open\\Command"), 0, KEY_WRITE | KEY_READ, &hk) == ERROR_SUCCESS) {
-		 DWORD bufLen = sizeof(Buf);
-		 DWORD type;
-		 ::RegQueryValueEx(hk, NULL, 0, &type, (LPBYTE)Buf, &bufLen);
-		 ::RegCloseKey(hk);
-	 }
+	if(::RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("adc\\Shell\\Open\\Command"), 0, KEY_WRITE | KEY_READ, &hk)
+		== ERROR_SUCCESS)
+	{
+		DWORD bufLen = sizeof(Buf);
+		DWORD type;
+		::RegQueryValueEx(hk, NULL, 0, &type, (LPBYTE) Buf, &bufLen);
+		::RegCloseKey(hk);
+	}
 
-	 if(Util::stricmp(app.c_str(), Buf) != 0) {
-		 if (::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL)) {
-			 LogManager::getInstance()->message(_("Error registering adc:// link handler"));
-			 return;
-		 }
+	if(Util::stricmp(app.c_str(), Buf) != 0) {
+		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL))
+		{
+			LogManager::getInstance()->message(_("Error registering adc:// link handler"));
+			return;
+		}
 
-		 TCHAR tmp[] = _T("URL:Direct Connect Protocol");
-		 ::RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE)tmp, sizeof(TCHAR) * (_tcslen(tmp) + 1));
-		 ::RegSetValueEx(hk, _T("URL Protocol"), 0, REG_SZ, (LPBYTE)_T(""), sizeof(TCHAR));
-		 ::RegCloseKey(hk);
+		TCHAR tmp[] = _T("URL:Direct Connect Protocol");
+		::RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE) tmp, sizeof(TCHAR) * (_tcslen(tmp) + 1));
+		::RegSetValueEx(hk, _T("URL Protocol"), 0, REG_SZ, (LPBYTE) _T(""), sizeof(TCHAR));
+		::RegCloseKey(hk);
 
-		 ::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc\\Shell\\Open\\Command"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
-		 ::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE)app.c_str(), sizeof(TCHAR) * (app.length() + 1));
-		 ::RegCloseKey(hk);
+		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc\\Shell\\Open\\Command"), 0, NULL, REG_OPTION_NON_VOLATILE,
+			KEY_WRITE, NULL, &hk, NULL);
+		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
+		::RegCloseKey(hk);
 
-		 ::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
-		 app = Text::toT(getAppName());
-		 ::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE)app.c_str(), sizeof(TCHAR) * (app.length() + 1));
-		 ::RegCloseKey(hk);
-	 }
- }
+		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
+			&hk, NULL);
+		app = Text::toT(getAppName());
+		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
+		::RegCloseKey(hk);
+	}
+}
 
- void WinUtil::unRegisterADChubHandler() {
+void WinUtil::unRegisterADChubHandler() {
 	SHDeleteKey(HKEY_CLASSES_ROOT, _T("adc"));
- }
+}
 
- void WinUtil::registerMagnetHandler() {
+void WinUtil::registerMagnetHandler() {
 	HKEY hk;
 	TCHAR buf[512];
 	tstring openCmd, magnetLoc, magnetExe;
@@ -997,7 +1023,7 @@ void WinUtil::registerDchubHandler() {
 	// what command is set up to handle magnets right now?
 	if(::RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\shell\\open\\command"), 0, KEY_READ, &hk) == ERROR_SUCCESS) {
 		DWORD bufLen = sizeof(TCHAR) * sizeof(buf);
-		::RegQueryValueEx(hk, NULL, NULL, NULL, (LPBYTE)buf, &bufLen);
+		::RegQueryValueEx(hk, NULL, NULL, NULL, (LPBYTE) buf, &bufLen);
 		::RegCloseKey(hk);
 	}
 	openCmd = buf;
@@ -1005,13 +1031,13 @@ void WinUtil::registerDchubHandler() {
 	// read the location of magnet.exe
 	if(::RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet"), NULL, KEY_READ, &hk) == ERROR_SUCCESS) {
 		DWORD bufLen = sizeof(buf) * sizeof(TCHAR);
-		::RegQueryValueEx(hk, _T("Location"), NULL, NULL, (LPBYTE)buf, &bufLen);
+		::RegQueryValueEx(hk, _T("Location"), NULL, NULL, (LPBYTE) buf, &bufLen);
 		::RegCloseKey(hk);
 	}
 	magnetLoc = buf;
 	string::size_type i;
-	if (magnetLoc[0]==_T('"') && string::npos != (i = magnetLoc.find(_T('"'), 1))) {
-		magnetExe = magnetLoc.substr(1, i-1);
+	if(magnetLoc[0] == _T('"') && string::npos != (i = magnetLoc.find(_T('"'), 1))) {
+		magnetExe = magnetLoc.substr(1, i - 1);
 	}
 	// check for the existence of magnet.exe
 	if(File::getSize(Text::fromT(magnetExe)) == -1) {
@@ -1022,12 +1048,15 @@ void WinUtil::registerDchubHandler() {
 			haveMagnet = false;
 		} else {
 			// set Magnet\Location
-			if (::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL)) {
+			if(::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet"), 0, NULL, REG_OPTION_NON_VOLATILE,
+				KEY_WRITE, NULL, &hk, NULL))
+			{
 				LogManager::getInstance()->message(_("Error registering Magnet link handler"));
 				return;
 			}
 
-			::RegSetValueEx(hk, _T("Location"), NULL, REG_SZ, (LPBYTE)magnetExe.c_str(), sizeof(TCHAR) * (magnetExe.length()+1));
+			::RegSetValueEx(hk, _T("Location"), NULL, REG_SZ, (LPBYTE) magnetExe.c_str(), sizeof(TCHAR)
+				* (magnetExe.length() + 1));
 			::RegCloseKey(hk);
 		}
 		magnetLoc = _T('"') + magnetExe + _T('"');
@@ -1035,34 +1064,42 @@ void WinUtil::registerDchubHandler() {
 	// (re)register the handler if magnet.exe isn't the default, or if DC++ is handling it
 	if(BOOLSETTING(MAGNET_REGISTER) && (Util::strnicmp(openCmd, magnetLoc, magnetLoc.size()) != 0 || !haveMagnet)) {
 		SHDeleteKey(HKEY_CLASSES_ROOT, _T("magnet"));
-		if (::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL)) {
+		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk,
+			NULL))
+		{
 			LogManager::getInstance()->message(_("Error registering Magnet link handler"));
 			return;
 		}
-		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE)CT_("URL:MAGNET URI"), sizeof(TCHAR)*(T_("URL:MAGNET URI").length()+1));
+		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) CT_("URL:MAGNET URI"), sizeof(TCHAR)
+			* (T_("URL:MAGNET URI").length() + 1));
 		::RegSetValueEx(hk, _T("URL Protocol"), NULL, REG_SZ, NULL, NULL);
 		::RegCloseKey(hk);
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
-		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE)magnetLoc.c_str(), sizeof(TCHAR)*(magnetLoc.length()+1));
+		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE,
+			NULL, &hk, NULL);
+		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) magnetLoc.c_str(), sizeof(TCHAR) * (magnetLoc.length() + 1));
 		::RegCloseKey(hk);
 		magnetLoc += _T(" %1");
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\shell\\open\\command"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
-		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE)magnetLoc.c_str(), sizeof(TCHAR)*(magnetLoc.length()+1));
+		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\shell\\open\\command"), 0, NULL, REG_OPTION_NON_VOLATILE,
+			KEY_WRITE, NULL, &hk, NULL);
+		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) magnetLoc.c_str(), sizeof(TCHAR) * (magnetLoc.length() + 1));
 		::RegCloseKey(hk);
 	}
 	// magnet-handler specific code
 	// clean out the DC++ tree first
 	SHDeleteKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"));
 	// add DC++ to magnet-handler's list of applications
-	::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
-	::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE)CT_("DC++"), sizeof(TCHAR) * (T_("DC++").size()+1));
-	::RegSetValueEx(hk, _T("Description"), NULL, REG_SZ, (LPBYTE)CT_("Download files from the Direct Connect network"), sizeof(TCHAR) * (T_("Download files from the Direct Connect network").size()+1));
+	::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"), 0, NULL, REG_OPTION_NON_VOLATILE,
+		KEY_WRITE, NULL, &hk, NULL);
+	::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) CT_("DC++"), sizeof(TCHAR) * (T_("DC++").size() + 1));
+	::RegSetValueEx(hk, _T("Description"), NULL, REG_SZ,
+		(LPBYTE) CT_("Download files from the Direct Connect network"), sizeof(TCHAR)
+			* (T_("Download files from the Direct Connect network").size() + 1));
 	// set ShellExecute
 	tstring app = Text::toT("\"" + getAppName() + "\" %URL");
-	::RegSetValueEx(hk, _T("ShellExecute"), NULL, REG_SZ, (LPBYTE)app.c_str(), sizeof(TCHAR) * (app.length()+1));
+	::RegSetValueEx(hk, _T("ShellExecute"), NULL, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
 	// set DefaultIcon
 	app = Text::toT('"' + getAppName() + '"');
-	::RegSetValueEx(hk, _T("DefaultIcon"), NULL, REG_SZ, (LPBYTE)app.c_str(), sizeof(TCHAR)*(app.length()+1));
+	::RegSetValueEx(hk, _T("DefaultIcon"), NULL, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
 	::RegCloseKey(hk);
 
 	// These two types contain a tth root, and are in common use.  The other two are variations picked up
@@ -1070,11 +1107,12 @@ void WinUtil::registerDchubHandler() {
 	// Reference: http://forums.shareaza.com/showthread.php?threadid=23731
 	// Note: the three part hash types require magnethandler >= 1.0.0.3
 	DWORD nothing = 0;
-	::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++\\Type"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
-	::RegSetValueEx(hk, _T("urn:bitprint"), NULL, REG_DWORD, (LPBYTE)&nothing, sizeof(nothing));
-	::RegSetValueEx(hk, _T("urn:tree:tiger"), NULL, REG_DWORD, (LPBYTE)&nothing, sizeof(nothing));
-	::RegSetValueEx(hk, _T("urn:tree:tiger/"), NULL, REG_DWORD, (LPBYTE)&nothing, sizeof(nothing));
-	::RegSetValueEx(hk, _T("urn:tree:tiger/1024"), NULL, REG_DWORD, (LPBYTE)&nothing, sizeof(nothing));
+	::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++\\Type"), 0, NULL,
+		REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
+	::RegSetValueEx(hk, _T("urn:bitprint"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
+	::RegSetValueEx(hk, _T("urn:tree:tiger"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
+	::RegSetValueEx(hk, _T("urn:tree:tiger/"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
+	::RegSetValueEx(hk, _T("urn:tree:tiger/1024"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
 	::RegCloseKey(hk);
 }
 
@@ -1119,7 +1157,7 @@ void WinUtil::openLink(const tstring& url) {
 					end = cmd.find(' ', 1);
 				}
 				if(end == string::npos)
-					end = cmd.length();
+				end = cmd.length();
 
 				tstring cmdLine(cmd);
 				cmd = cmd.substr(start, end-start);
@@ -1130,8 +1168,8 @@ void WinUtil::openLink(const tstring& url) {
 					cmdLine.append(_T(" \"") + url + _T('\"'));
 				}
 
-				STARTUPINFO si = { sizeof(si), 0 };
-				PROCESS_INFORMATION pi = { 0 };
+				STARTUPINFO si = {sizeof(si), 0};
+				PROCESS_INFORMATION pi = {0};
 				boost::scoped_ptr<TCHAR> buf(new TCHAR[cmdLine.length() + 1]);
 				_tcscpy(&buf[0], cmdLine.c_str());
 				if(::CreateProcess(cmd.c_str(), &buf[0], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
@@ -1147,12 +1185,10 @@ void WinUtil::openLink(const tstring& url) {
 }
 
 bool WinUtil::parseDBLClick(const tstring& aString) {
-	if( (Util::strnicmp(aString.c_str(), _T("http://"), 7) == 0) ||
-		(Util::strnicmp(aString.c_str(), _T("www."), 4) == 0) ||
-		(Util::strnicmp(aString.c_str(), _T("ftp://"), 6) == 0) ||
-		(Util::strnicmp(aString.c_str(), _T("irc://"), 6) == 0) ||
-		(Util::strnicmp(aString.c_str(), _T("https://"), 8) == 0) ||
-		(Util::strnicmp(aString.c_str(), _T("mailto:"), 7) == 0) )
+	if((Util::strnicmp(aString.c_str(), _T("http://"), 7) == 0)
+		|| (Util::strnicmp(aString.c_str(), _T("www."), 4) == 0) || (Util::strnicmp(aString.c_str(), _T("ftp://"), 6)
+		== 0) || (Util::strnicmp(aString.c_str(), _T("irc://"), 6) == 0) || (Util::strnicmp(aString.c_str(),
+		_T("https://"), 8) == 0) || (Util::strnicmp(aString.c_str(), _T("mailto:"), 7) == 0))
 	{
 
 		openLink(aString);
@@ -1170,7 +1206,6 @@ bool WinUtil::parseDBLClick(const tstring& aString) {
 	return false;
 }
 
-
 void WinUtil::parseDchubUrl(const tstring& aUrl) {
 	string server, file;
 	uint16_t port = 411;
@@ -1187,7 +1222,7 @@ void WinUtil::parseDchubUrl(const tstring& aUrl) {
 			if(user)
 				QueueManager::getInstance()->addList(HintedUser(user, url), QueueItem::FLAG_CLIENT_VIEW);
 			// @todo else report error
-		} catch(const Exception&) {
+		} catch (const Exception&) {
 			// ...
 		}
 	}
@@ -1208,7 +1243,7 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 	//  xs = exact substitute
 	//  as = acceptable substitute
 	//  dn = display name
-	if (Util::strnicmp(aUrl.c_str(), _T("magnet:?"), 8) == 0) {
+	if(Util::strnicmp(aUrl.c_str(), _T("magnet:?"), 8) == 0) {
 		LogManager::getInstance()->message(str(F_("MAGNET Link detected: %1%") % Text::fromT(aUrl)));
 		StringTokenizer<tstring> mag(aUrl.substr(8), _T('&'));
 		typedef map<tstring, tstring> MagMap;
@@ -1219,7 +1254,7 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 			string::size_type pos = idx->find(_T('='));
 			if(pos != string::npos) {
 				type = Text::toT(Text::toLower(Util::encodeURI(Text::fromT(idx->substr(0, pos)), true)));
-				param = Text::toT(Util::encodeURI(Text::fromT(idx->substr(pos+1)), true));
+				param = Text::toT(Util::encodeURI(Text::fromT(idx->substr(pos + 1)), true));
 			} else {
 				type = Text::toT(Util::encodeURI(Text::fromT(*idx), true));
 				param.clear();
@@ -1247,7 +1282,7 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 		if(hashes.find(_T("xt")) != hashes.end()) {
 			fhash = hashes[_T("xt")];
 		}
-		if(!fhash.empty()){
+		if(!fhash.empty()) {
 			// ok, we have a hash, and maybe a filename.
 			//if(!BOOLSETTING(MAGNET_ASK)) {
 			//	switch(SETTING(MAGNET_ACTION)) {
@@ -1259,31 +1294,32 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 			//	};
 			//} else {
 			// use aOverride to force the display of the dialog.  used for auto-updating
-				MagnetDlg(mainWindow, fhash, fname).run();
+			MagnetDlg(mainWindow, fhash, fname).run();
 			//}
 		} else {
-			dwt::MessageBox(mainWindow).show(T_("A MAGNET link was given to DC++, but it didn't contain a valid file hash for use on the Direct Connect network.  No action will be taken."), T_("MAGNET Link detected"), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
+			dwt::MessageBox(mainWindow).show(
+				T_("A MAGNET link was given to DC++, but it didn't contain a valid file hash for use on the Direct Connect network.  No action will be taken."),
+				T_("MAGNET Link detected"), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 		}
 	}
 }
 
-typedef std::tr1::function<void (const HintedUser&, const string&)> UserFunction;
+typedef std::tr1::function<void(const HintedUser&, const string&)> UserFunction;
 
 static void eachUser(const HintedUserList& list, const StringList& dirs, const UserFunction& f) {
 	size_t j = 0;
 	for(HintedUserList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
 		try {
 			f(*i, (j < dirs.size()) ? dirs[j] : string());
-		} catch(const Exception& e) {
+		} catch (const Exception& e) {
 			LogManager::getInstance()->message(e.getError());
 		}
 		j++;
 	}
 }
 
-static void addUsers(MenuPtr menu, const tstring& text,
-	const HintedUserList& users, const UserFunction& f, const dwt::IconPtr& icon = dwt::IconPtr(),
-	const StringList& dirs = StringList())
+static void addUsers(MenuPtr menu, const tstring& text, const HintedUserList& users, const UserFunction& f,
+	const dwt::IconPtr& icon = dwt::IconPtr(), const StringList& dirs = StringList())
 {
 	if(users.empty())
 		return;
@@ -1295,8 +1331,8 @@ static void addUsers(MenuPtr menu, const tstring& text,
 		menu->appendSeparator();
 
 		for(size_t i = 0, iend = users.size(); i < iend; ++i) {
-			menu->appendItem(WinUtil::getNicks(users[i]),
-				std::tr1::bind(&eachUser, HintedUserList(1, users[i]), StringList(1, (i < dirs.size()) ? dirs[i] : string()), f));
+			menu->appendItem(WinUtil::getNicks(users[i]), std::tr1::bind(&eachUser, HintedUserList(1, users[i]),
+				StringList(1, (i < dirs.size()) ? dirs[i] : string()), f));
 		}
 	} else {
 		menu->appendItem(text, std::tr1::bind(&eachUser, users, dirs, f), icon);
@@ -1324,35 +1360,31 @@ static bool isFav(const UserPtr& u) {
 void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, dwt::TabViewPtr parent, const StringList& dirs) {
 	QueueManager* qm = QueueManager::getInstance();
 
-	addUsers(menu, T_("&Get file list"), users,
-		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW, _2),
-		dwt::IconPtr(), dirs);
+	addUsers(menu, T_("&Get file list"), users, std::tr1::bind(&QueueManager::addList, qm, _1,
+		QueueItem::FLAG_CLIENT_VIEW, _2), dwt::IconPtr(), dirs);
 
-	addUsers(menu, T_("&Browse file list"), filter(users, &isAdc),
-		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, _2),
-		dwt::IconPtr(), dirs);
+	addUsers(menu, T_("&Browse file list"), filter(users, &isAdc), std::tr1::bind(&QueueManager::addList, qm, _1,
+		QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, _2), dwt::IconPtr(), dirs);
 
-	addUsers(menu, T_("&Match queue"), users,
-		std::tr1::bind(&QueueManager::addList, qm, _1, QueueItem::FLAG_MATCH_QUEUE, Util::emptyString));
+	addUsers(menu, T_("&Match queue"), users, std::tr1::bind(&QueueManager::addList, qm, _1,
+		QueueItem::FLAG_MATCH_QUEUE, Util::emptyString));
 
-	addUsers(menu, T_("&Send private message"), users,
-		std::tr1::bind(&PrivateFrame::openWindow, parent, _1, Util::emptyStringT, Util::emptyString));
+	addUsers(menu, T_("&Send private message"), users, std::tr1::bind(&PrivateFrame::openWindow, parent, _1,
+		Util::emptyStringT, Util::emptyString));
 
-	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav),
-		std::tr1::bind(&FavoriteManager::addFavoriteUser, FavoriteManager::getInstance(), _1),
-		dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
+	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav), std::tr1::bind(&FavoriteManager::addFavoriteUser,
+		FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
 
-	addUsers(menu, T_("Grant &extra slot"), users,
-		std::tr1::bind(&UploadManager::reserveSlot, UploadManager::getInstance(), _1));
+	addUsers(menu, T_("Grant &extra slot"), users, std::tr1::bind(&UploadManager::reserveSlot,
+		UploadManager::getInstance(), _1));
 
 	typedef void (QueueManager::*qmp)(const UserPtr&, int);
-	addUsers(menu, T_("Remove user from queue"), users,
-		std::tr1::bind((qmp)&QueueManager::removeSource, qm, _1,
-		(int)QueueItem::Source::FLAG_REMOVED));
+	addUsers(menu, T_("Remove user from queue"), users, std::tr1::bind((qmp) &QueueManager::removeSource, qm, _1,
+		(int) QueueItem::Source::FLAG_REMOVED));
 }
 
-void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount,
-	const string& order, const string& widths)
+void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount, const string& order,
+	const string& widths)
 {
 	std::vector<tstring> n(columnCount);
 	std::vector<int> o(columnCount);
