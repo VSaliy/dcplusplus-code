@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2008 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,22 +20,34 @@
 
 #include "ComboBox.h"
 
+const TCHAR ListBox::windowClass[] = WC_LISTBOX;
+
 ComboBox::Seed::Seed() :
-	BaseType::Seed()
+BaseType::Seed()
 {
 }
 
-ComboBox::ComboBox( dwt::Widget * parent ) : BaseType(parent), textBox(0) {
+ComboBox::ComboBox(dwt::Widget* parent) :
+BaseType(parent),
+listBox(0),
+textBox(0)
+{
+}
+
+ListBoxPtr ComboBox::getListBox() {
+	if(!listBox) {
+		COMBOBOXINFO info = { sizeof(COMBOBOXINFO) };
+		if(::GetComboBoxInfo(handle(), &info) && info.hwndList && info.hwndList != handle())
+			listBox = dwt::WidgetCreator<ListBox>::attach(this, info.hwndList);
+	}
+	return listBox;
 }
 
 TextBoxPtr ComboBox::getTextBox() {
 	if(!textBox) {
-		LONG_PTR style = ::GetWindowLongPtr(handle(), GWL_STYLE);
-		if((style & CBS_SIMPLE)  == CBS_SIMPLE || (style & CBS_DROPDOWN) == CBS_DROPDOWN) {
-			HWND wnd = ::FindWindowEx(handle(), NULL, _T("EDIT"), NULL);
-			if(wnd && wnd != handle())
-				textBox = dwt::WidgetCreator< TextBox >::attach(this, wnd);
-		}
+		COMBOBOXINFO info = { sizeof(COMBOBOXINFO) };
+		if(::GetComboBoxInfo(handle(), &info) && info.hwndItem && info.hwndItem != handle())
+			textBox = dwt::WidgetCreator<TextBox>::attach(this, info.hwndItem);
 	}
 	return textBox;
 }
