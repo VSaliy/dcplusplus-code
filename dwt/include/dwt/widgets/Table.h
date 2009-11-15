@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   SmartWin++
 
@@ -301,6 +301,16 @@ public:
 	  */
 	void setColumnWidth( unsigned columnNo, int width );
 
+	/**
+	* Enable group support (only for ComCtrl 6), and insert each given group.
+	* Group id used will be the position of the group in the vector.
+	*
+	* Group support is not fully implemented, use at your own risk!
+	*/
+	void setGroups(const std::vector<tstring>& groups);
+
+	bool isGrouped() const { return grouped; }
+
 	/// Returns the checked state of the given row
 	/** A list view can have checkboxes in each row, if the checkbox for the given
 	  * row is CHECKED this funtion returns true.
@@ -378,18 +388,16 @@ public:
 	  */
 	void setAlwaysShowSelection( bool value = true );
 
-	/// Inserts a row into the grid
-	/** The row parameter is a vector containing all the cells of the row. <br>
-	  * This vector must ( of course ) be the same size as the number of columns in
-	  * the grid. <br>
-	  * The index parameter ( optionally ) defines at which index the new row will be
-	  * inserted at. <br>
-	  * If omitted it defaults to - 1 ( which means at the "end" of the grid ) <br>
-	  * The iconIndex parameter ( optionally ) defines the index of the icon on the
-	  * image list that will be shown on the row. <br>
-	  * Call createColumns before inserting items.
-	  */
-	int insert( const std::vector< tstring > & row, LPARAM lPar = 0, int index = - 1, int iconIndex = - 1 );
+	/**
+	* Inserts a row into the grid. Call createColumns before inserting items.
+	* @param row vector containing all the cells of the row. This vector must (of course) be the
+	* same size as the number of columns in the grid.
+	* @param index defines at which index the new row will be inserted at, or the group identifier
+	* if in grouped mode (see setGroups and isGrouped). -1 means "at the bottom". must be >= 0 when
+	* in grouped mode.
+	* @param iconIndex defines the index of the icon on the image list that will be shown on the row.
+	*/
+	int insert(const std::vector<tstring>& row, LPARAM lPar = 0, int index = - 1, int iconIndex = - 1);
 
 	/// Reserves a number of items to the list
 	/** To be used in combination with the "onGetItem" event <br>
@@ -456,7 +464,7 @@ public:
 	void create( const Seed & cs = Seed() );
 
 	// Constructor Taking pointer to parent
-	explicit Table( dwt::Widget * parent );
+	explicit Table(dwt::Widget* parent);
 
 protected:
 	/// Adds or Removes extended list view styles from the list view
@@ -476,6 +484,8 @@ protected:
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
+
+	bool grouped;
 
 	// Edit row index and Edit column index, only used when grid is in "edit mode"
 	int itsEditRow;
@@ -643,10 +653,10 @@ inline void Table::onColumnClick( const HeaderDispatcher::F& f ) {
 inline void Table::resort() {
 	if(sortColumn != -1) {
 		if(sortType == SORT_CALLBACK) {
-			ListView_SortItems(this->handle(), &Table::compareFuncCallback, reinterpret_cast<LPARAM>(this));
+			ListView_SortItems(handle(), &Table::compareFuncCallback, reinterpret_cast<LPARAM>(this));
 		} else {
 			// Wine 0.9.48 doesn't support this
-			ListView_SortItemsEx(this->handle(), &Table::compareFunc, reinterpret_cast< LPARAM >(this));
+			ListView_SortItemsEx(handle(), &Table::compareFunc, reinterpret_cast< LPARAM >(this));
 		}
 	}
 }
@@ -656,11 +666,11 @@ inline int Table::getSelectedImpl() const {
 }
 
 inline size_t Table::countSelectedImpl() const {
-	return static_cast<size_t>(ListView_GetSelectedCount( this->handle() ));
+	return static_cast<size_t>(ListView_GetSelectedCount( handle() ));
 }
 
 inline void Table::setText( unsigned row, unsigned column, const tstring & newVal ) {
-	ListView_SetItemText( this->handle(), row, column, const_cast < TCHAR * >( newVal.c_str() ) );
+	ListView_SetItemText( handle(), row, column, const_cast < TCHAR * >( newVal.c_str() ) );
 }
 
 inline bool Table::getReadOnly() {
@@ -680,16 +690,16 @@ inline tstring Table::getColumnName( unsigned col ) {
 	colInfo.mask = LVCF_TEXT;
 	colInfo.cchTextMax = BUFFER_MAX;
 	colInfo.pszText = buffer;
-	ListView_GetColumn( this->handle(), col, & colInfo );
+	ListView_GetColumn( handle(), col, & colInfo );
 	return colInfo.pszText;
 }
 
 inline bool Table::isChecked( unsigned row ) {
-	return ListView_GetCheckState( this->handle(), row ) == TRUE;
+	return ListView_GetCheckState( handle(), row ) == TRUE;
 }
 
 inline void Table::setChecked( unsigned row, bool value ) {
-	ListView_SetCheckState( this->handle(), row, value );
+	ListView_SetCheckState( handle(), row, value );
 }
 
 inline void Table::setFullRowSelect( bool value ) {
@@ -697,7 +707,7 @@ inline void Table::setFullRowSelect( bool value ) {
 }
 
 inline void Table::resize( unsigned size ) {
-	ListView_SetItemCount( this->handle(), size );
+	ListView_SetItemCount( handle(), size );
 }
 
 inline void Table::setCheckBoxes( bool value ) {
@@ -733,25 +743,21 @@ inline void Table::setAlwaysShowSelection( bool value ) {
 
 inline void Table::eraseColumn( unsigned columnNo ) {
 	dwtassert( columnNo != 0, _T( "Can't delete the leftmost column" ) );
-	ListView_DeleteColumn( this->handle(), columnNo );
+	ListView_DeleteColumn( handle(), columnNo );
 }
 
 inline void Table::setColumnWidth( unsigned columnNo, int width ) {
-	if ( ListView_SetColumnWidth( this->handle(), columnNo, width ) == FALSE ) {
+	if ( ListView_SetColumnWidth( handle(), columnNo, width ) == FALSE ) {
 		dwtWin32DebugFail("Couldn't resize columns of Table");
 	}
 }
 
-inline void Table::clearImpl() {
-	ListView_DeleteAllItems( this->handle() );
-}
-
 inline void Table::eraseImpl( int row ) {
-	ListView_DeleteItem( this->handle(), row );
+	ListView_DeleteItem( handle(), row );
 }
 
 inline size_t Table::sizeImpl() const {
-	return ListView_GetItemCount( this->handle() );
+	return ListView_GetItemCount( handle() );
 }
 
 #ifdef PORT_ME
@@ -766,14 +772,14 @@ bool Table::defaultValidate( EventHandlerClass * parent, Table * list, unsigned 
 inline Rectangle Table::getRect( int item, int code )
 {
 	RECT r;
-	ListView_GetItemRect( this->handle(), item, &r, code );
+	ListView_GetItemRect( handle(), item, &r, code );
 	return Rectangle(r);
 }
 
 inline Rectangle Table::getRect( int item, int subitem, int code )
 {
 	RECT r;
-	ListView_GetSubItemRect( this->handle(), item, subitem, code, &r );
+	ListView_GetSubItemRect( handle(), item, subitem, code, &r );
 	return Rectangle(r);
 }
 
@@ -790,39 +796,39 @@ inline Table::SortType Table::getSortType() {
 }
 
 inline bool Table::setColumnOrder(const std::vector<int>& columns) {
-	return ::SendMessage(this->handle(), LVM_SETCOLUMNORDERARRAY, static_cast<WPARAM>(columns.size()), reinterpret_cast<LPARAM>(&columns[0])) > 0;
+	return ::SendMessage(handle(), LVM_SETCOLUMNORDERARRAY, static_cast<WPARAM>(columns.size()), reinterpret_cast<LPARAM>(&columns[0])) > 0;
 }
 
 inline void Table::setTableStyle(int style) {
-	ListView_SetExtendedListViewStyle(this->handle(), style);
+	ListView_SetExtendedListViewStyle(handle(), style);
 }
 
 inline int Table::getNext(int i, int type) const {
-	return ListView_GetNextItem(this->handle(), i, type);
+	return ListView_GetNextItem(handle(), i, type);
 }
 
 inline int Table::find(const tstring& b, int start, bool aPartial) {
     LVFINDINFO fi = { aPartial ? LVFI_PARTIAL : LVFI_STRING, b.c_str() };
-    return ListView_FindItem(this->handle(), start, &fi);
+    return ListView_FindItem(handle(), start, &fi);
 }
 
 inline int Table::findDataImpl(LPARAM data, int start) {
     LVFINDINFO fi = { LVFI_PARAM, NULL, data };
-    return ListView_FindItem(this->handle(), start, &fi);
+    return ListView_FindItem(handle(), start, &fi);
 }
 
 inline void Table::select(int i) {
-	ListView_SetItemState(this->handle(), i, LVIS_SELECTED, LVIS_SELECTED);
+	ListView_SetItemState(handle(), i, LVIS_SELECTED, LVIS_SELECTED);
 }
 
 inline void Table::ensureVisible(int i, bool partial) {
-	ListView_EnsureVisible(this->handle(), i, false);
+	ListView_EnsureVisible(handle(), i, false);
 }
 
 inline void Table::setColorImpl(COLORREF text, COLORREF background) {
-	ListView_SetTextColor(this->handle(), text);
-	ListView_SetTextBkColor(this->handle(), background);
-	ListView_SetBkColor(this->handle(), background);
+	ListView_SetTextColor(handle(), text);
+	ListView_SetTextBkColor(handle(), background);
+	ListView_SetBkColor(handle(), background);
 }
 
 #ifdef PORT_ME
@@ -854,9 +860,9 @@ LRESULT Table::sendWidgetMessage( HWND hWnd, UINT msg, WPARAM & wPar, LPARAM & l
 			if ( editRect.left > rowRect.left )
 			{
 				validRect = rowRect; validRect.right = editRect.left;
-				ValidateRect( this->handle(), & validRect );
+				ValidateRect( handle(), & validRect );
 			}
-			ValidateRect( this->handle(), & rowRect );
+			ValidateRect( handle(), & rowRect );
 		}
 		break;
 
@@ -879,11 +885,11 @@ LRESULT Table::sendWidgetMessage( HWND hWnd, UINT msg, WPARAM & wPar, LPARAM & l
 #ifndef WINCE // WinCE doesn't support repositioning the edit control anyway...
 					// Checking to see if we need to scroll
 					RECT cr;
-					::GetClientRect( this->handle(), & cr );
+					::GetClientRect( handle(), & cr );
 					if ( xOffset + r.left < 0 || xOffset + r.left > cr.right )
 					{
 						int x = xOffset - r.left;
-						ListView_Scroll( this->handle(), x, 0 );
+						ListView_Scroll( handle(), x, 0 );
 						r.left -= x;
 					}
 					// Get column alignment
@@ -891,7 +897,7 @@ LRESULT Table::sendWidgetMessage( HWND hWnd, UINT msg, WPARAM & wPar, LPARAM & l
 					{0
 					};
 					lv.mask = LVCF_FMT;
-					ListView_GetColumn( this->handle(), logicalColumn, & lv );
+					ListView_GetColumn( handle(), logicalColumn, & lv );
 					DWORD dwStyle;
 					if ( ( lv.fmt & LVCFMT_JUSTIFYMASK ) == LVCFMT_LEFT )
 						dwStyle = ES_LEFT;
@@ -900,14 +906,14 @@ LRESULT Table::sendWidgetMessage( HWND hWnd, UINT msg, WPARAM & wPar, LPARAM & l
 					else
 						dwStyle = ES_CENTER;
 					r.left += xOffset + 4;
-					r.right = r.left + ( ListView_GetColumnWidth( this->handle(), itsEditColumn ) - 3 );
+					r.right = r.left + ( ListView_GetColumnWidth( handle(), itsEditColumn ) - 3 );
 					if ( r.right > cr.right )
 						r.right = cr.right;
 					dwStyle |= WS_BORDER | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL;
 #endif
 
 					// Creating text Widget and placing it above cell
-					HWND editControl = ListView_GetEditControl( this->handle() );
+					HWND editControl = ListView_GetEditControl( handle() );
 					if ( editControl == 0 )
 					{
 						xCeption err( _T( "Couldn't attach to List View editcontrol" ) );
@@ -928,7 +934,7 @@ LRESULT Table::sendWidgetMessage( HWND hWnd, UINT msg, WPARAM & wPar, LPARAM & l
 					// Getting text of cell and inserting into text Widget
 					const int BUFFER_MAX = 260; // List view cells have a maximum of 260 characters
 					TCHAR buffer[BUFFER_MAX];
-					ListView_GetItemText( this->handle(), itsEditRow, itsEditColumn, buffer, BUFFER_MAX );
+					ListView_GetItemText( handle(), itsEditRow, itsEditColumn, buffer, BUFFER_MAX );
 					text->setText( buffer );
 
 					// Select all end give focus
@@ -960,26 +966,26 @@ LRESULT Table::sendWidgetMessage( HWND hWnd, UINT msg, WPARAM & wPar, LPARAM & l
 					LVHITTESTINFO info;
 					info.pt.x = itsXMousePosition;
 					info.pt.y = itsYMousePosition;
-					ListView_SubItemHitTest( this->handle(), & info );
+					ListView_SubItemHitTest( handle(), & info );
 					// User has clicked the Table
 					if ( info.iItem != - 1 )
 					{
 						// User has clicked an ITEM in Table
 						if ( info.iSubItem >= 0 )
 						{
-							UINT state = ListView_GetItemState( this->handle(), info.iItem, LVIS_FOCUSED );
+							UINT state = ListView_GetItemState( handle(), info.iItem, LVIS_FOCUSED );
 							if ( ! ( state & LVIS_FOCUSED ) )
 							{
 								//SetFocus( itsHandle );   // TODO: This was catched by devcpp ... what was intended?
-								SetFocus( this->handle() ); // ASW add
+								SetFocus( handle() ); // ASW add
 							}
 
 							// Check to verify items are editable
-							if ( ::GetWindowLong( this->handle(), GWL_STYLE ) & LVS_EDITLABELS )
+							if ( ::GetWindowLong( handle(), GWL_STYLE ) & LVS_EDITLABELS )
 							{
 								itsEditRow = info.iItem;
 								itsEditColumn = info.iSubItem;
-								ListView_EditLabel( this->handle(), info.iItem );
+								ListView_EditLabel( handle(), info.iItem );
 								return 0; // Processed
 							}
 						}

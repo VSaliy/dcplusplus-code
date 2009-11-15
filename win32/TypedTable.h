@@ -90,8 +90,7 @@ public:
 	using BaseType::find;
 
 	int find(ContentType* item) {
-		LVFINDINFO fi = { LVFI_PARAM, NULL, (LPARAM)item };
-		return ListView_FindItem(this->handle(), -1, &fi);
+		return findData(reinterpret_cast<LPARAM>(item));
 	}
 
 	struct CompFirst {

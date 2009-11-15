@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   All rights reserved.
 
@@ -71,17 +71,18 @@ void Table::create( const Seed & cs )
 #endif
 }
 
-Table::Table( dwt::Widget * parent )
-	: BaseType(parent, ChainingDispatcher::superClass<Table>()),
-	itsEditRow(0),
-	itsEditColumn(0),
-	itsXMousePosition(0),
-	itsYMousePosition(0),
-	isReadOnly( false ),
-	itsEditingCurrently( false ),
-	sortColumn(-1),
-	sortType(SORT_CALLBACK),
-	ascending(true)
+Table::Table(dwt::Widget* parent) :
+BaseType(parent, ChainingDispatcher::superClass<Table>()),
+grouped(false),
+itsEditRow(0),
+itsEditColumn(0),
+itsXMousePosition(0),
+itsYMousePosition(0),
+isReadOnly(false),
+itsEditingCurrently(false),
+sortColumn(-1),
+sortType(SORT_CALLBACK),
+ascending(true)
 {
 	createArrows();
 }
@@ -101,7 +102,7 @@ void Table::setSort(int aColumn, SortType aType, bool aAscending) {
 void Table::updateArrow() {
 	if(LibraryLoader::onComCtl6()) {
 		int flag = isAscending() ? HDF_SORTUP : HDF_SORTDOWN;
-		HWND header = ListView_GetHeader(this->handle());
+		HWND header = ListView_GetHeader(handle());
 		int count = Header_GetItemCount(header);
 		for (int i=0; i < count; ++i)
 		{
@@ -121,7 +122,7 @@ void Table::updateArrow() {
 
 	HBITMAP bitmap = (isAscending() ? upArrow : downArrow)->handle();
 
-	HWND header = ListView_GetHeader(this->handle());
+	HWND header = ListView_GetHeader(handle());
 	int count = Header_GetItemCount(header);
 	for (int i=0; i < count; ++i)
 	{
@@ -159,7 +160,7 @@ void Table::createColumns(const std::vector<tstring>& names, const std::vector<i
 {
 	// Deleting all data
 	clear();
-	while ( ListView_DeleteColumn( this->handle(), 0 ) == TRUE );
+	while ( ListView_DeleteColumn( handle(), 0 ) == TRUE );
 
 	for(size_t i = 0; i < names.size(); ++i) {
 		LVCOLUMN lvColumn = { LVCF_TEXT };
@@ -173,7 +174,7 @@ void Table::createColumns(const std::vector<tstring>& names, const std::vector<i
 			lvColumn.mask |= LVCF_FMT;
 			lvColumn.fmt |= alignment[i] ? LVCFMT_RIGHT : LVCFMT_LEFT;
 		}
-		if ( ListView_InsertColumn( this->handle(), i, &lvColumn) == - 1 ) {
+		if ( ListView_InsertColumn( handle(), i, &lvColumn) == - 1 ) {
 			throw Win32Exception("Error while trying to create Columns in list view" );
 		}
 	}
@@ -183,34 +184,47 @@ void Table::createColumns(const std::vector<tstring>& names, const std::vector<i
 	}
 }
 
-int Table::insert(const std::vector< tstring > & row, LPARAM lPar, int index, int iconIndex) {
-	if (index == - 1) {
-		// Appending at bottom
-		index = ListView_GetItemCount( this->handle() );
-	}
+int Table::insert(const std::vector<tstring>& row, LPARAM lPar, int index, int iconIndex) {
 	LVITEM lvi = { LVIF_TEXT | LVIF_PARAM };
-	if (itsNormalImageList || itsSmallImageList ) {
+
+	lvi.pszText = const_cast<LPTSTR>(row[0].c_str());
+
+	if(itsNormalImageList || itsSmallImageList) {
 		lvi.mask |= LVIF_IMAGE;
-		lvi.iImage = (iconIndex == - 1 ? I_IMAGECALLBACK : iconIndex );
+		lvi.iImage = (iconIndex == -1 ? I_IMAGECALLBACK : iconIndex);
 	}
 
-	lvi.pszText = const_cast < TCHAR * >(row[0].c_str() );
 	lvi.lParam = lPar;
-	lvi.iItem = index;
-	if ( ListView_InsertItem( this->handle(), & lvi ) == - 1) {
-		throw Win32Exception ( "Error while trying to insert row in Table");
+
+	if(grouped) {
+		dwtassert(index >= 0, _T("Table::insert in grouped mode: index must be >= 0 since it is a group id"));
+		lvi.mask |= LVIF_GROUPID;
+		lvi.iGroupId = index;
+
+	} else {
+		if(index == -1)
+			index = size();
+		lvi.iItem = index;
 	}
+
+	int ret = ListView_InsertItem(handle(), &lvi);
+	if(ret == - 1) {
+		throw Win32Exception("Error while trying to insert row in Table");
+	}
+
+	// now insert sub-items (for columns)
 	lvi.mask = LVIF_TEXT;
 	lvi.iSubItem = 1;
-	for (std::vector< tstring >::const_iterator idx = row.begin() + 1; idx != row.end(); ++idx ) {
-		lvi.pszText = const_cast < TCHAR * >(idx->c_str() );
-		lvi.cchTextMax = static_cast< int >(idx->size() );
-		if ( !ListView_SetItem( this->handle(), & lvi )) {
-			throw Win32Exception("Error while trying to insert row in Table");
+	for(std::vector<tstring>::const_iterator i = row.begin() + 1, iend = row.end(); i != iend; ++i) {
+		lvi.pszText = const_cast<LPTSTR>(i->c_str());
+		lvi.cchTextMax = static_cast<int>(i->size());
+		if(!ListView_SetItem(handle(), &lvi)) {
+			throw Win32Exception("Error while trying to insert row sub-item in Table");
 		}
 		lvi.iSubItem++;
 	}
-	return index;
+
+	return ret;
 }
 
 int Table::insert(int mask, int i, LPCTSTR text, UINT state, UINT stateMask, int image, LPARAM lparam) {
@@ -221,14 +235,14 @@ int Table::insert(int mask, int i, LPCTSTR text, UINT state, UINT stateMask, int
 	item.pszText = const_cast<LPTSTR>(text);
 	item.iImage = image;
 	item.lParam = lparam;
-	return ListView_InsertItem(this->handle(), &item);
+	return ListView_InsertItem(handle(), &item);
 }
 
 ScreenCoordinate Table::getContextMenuPos() {
 	int pos = getNext(-1, LVNI_SELECTED | LVNI_FOCUSED);
 	POINT pt = { 0 };
 	if(pos >= 0) {
-		RECT lrc = this->getRect(pos, LVIR_LABEL);
+		RECT lrc = getRect(pos, LVIR_LABEL);
 		pt.x = lrc.left;
 		pt.y = lrc.top + ((lrc.bottom - lrc.top) / 2);
 	}
@@ -241,7 +255,7 @@ tstring Table::getText( unsigned int row, unsigned int column )
 	const int BUFFER_MAX = 2048;
 	TCHAR buffer[BUFFER_MAX + 1];
 	buffer[0] = '\0';
-	ListView_GetItemText( this->handle(), row, column, buffer, BUFFER_MAX );
+	ListView_GetItemText(handle(), row, column, buffer, BUFFER_MAX);
 	return buffer;
 }
 
@@ -251,7 +265,7 @@ std::vector< unsigned > Table::getSelection() const
 	int tmpIdx = - 1;
 	while ( true )
 	{
-		tmpIdx = ListView_GetNextItem( this->handle(), tmpIdx, LVNI_SELECTED );
+		tmpIdx = ListView_GetNextItem( handle(), tmpIdx, LVNI_SELECTED );
 		if ( tmpIdx == - 1 )
 			break;
 		retVal.push_back( static_cast< unsigned >( tmpIdx ) );
@@ -265,7 +279,7 @@ unsigned Table::getColumnCount() {
 }
 
 void Table::addRemoveTableExtendedStyle( DWORD addStyle, bool add ) {
-	DWORD newStyle = ListView_GetExtendedListViewStyle( this->handle() );
+	DWORD newStyle = ListView_GetExtendedListViewStyle( handle() );
 	if ( add && ( newStyle & addStyle ) != addStyle )
 	{
 		newStyle |= addStyle;
@@ -274,12 +288,12 @@ void Table::addRemoveTableExtendedStyle( DWORD addStyle, bool add ) {
 	{
 		newStyle ^= addStyle;
 	}
-	ListView_SetExtendedListViewStyle( this->handle(), newStyle );
+	ListView_SetExtendedListViewStyle( handle(), newStyle );
 }
 
 std::vector<int> Table::getColumnOrder() {
 	std::vector<int> ret(this->getColumnCount());
-	if(!::SendMessage(this->handle(), LVM_GETCOLUMNORDERARRAY, static_cast<WPARAM>(ret.size()), reinterpret_cast<LPARAM>(&ret[0]))) {
+	if(!::SendMessage(handle(), LVM_GETCOLUMNORDERARRAY, static_cast<WPARAM>(ret.size()), reinterpret_cast<LPARAM>(&ret[0]))) {
 		ret.clear();
 	}
 	return ret;
@@ -294,9 +308,32 @@ void Table::setColumnWidths(const std::vector<int>& widths) {
 std::vector<int> Table::getColumnWidths() {
 	std::vector<int> ret(this->getColumnCount());
 	for(size_t i = 0; i < ret.size(); ++i) {
-		ret[i] = ::SendMessage(this->handle(), LVM_GETCOLUMNWIDTH, static_cast<WPARAM>(i), 0);
+		ret[i] = ::SendMessage(handle(), LVM_GETCOLUMNWIDTH, static_cast<WPARAM>(i), 0);
 	}
 	return ret;
+}
+
+void Table::setGroups(const std::vector<tstring>& groups) {
+	grouped = LibraryLoader::onComCtl6() && (ListView_EnableGroupView(handle(), TRUE) >= 0);
+	if(!grouped)
+		return;
+
+	LVGROUP group = { sizeof(LVGROUP) };
+	for(std::vector<tstring>::const_iterator i = groups.begin(), iend = groups.end(); i != iend; ++i) {
+		if(i->empty()) {
+			group.mask = LVGF_GROUPID;
+			group.pszHeader = 0;
+		} else {
+			group.mask = LVGF_GROUPID | LVGF_HEADER;
+			group.pszHeader = const_cast<LPWSTR>(i->c_str()); /// @todo this will fail when compiling in A mode
+		}
+		if(ListView_InsertGroup(handle(), -1, &group) == -1) {
+			throw DWTException("Group insertion failed in Table::setGroups");
+		}
+		group.iGroupId++;
+	}
+
+	grouped = true;
 }
 
 LPARAM Table::getDataImpl(int idx) {
@@ -317,29 +354,37 @@ void Table::setDataImpl(int idx, LPARAM data) {
 	ListView_SetItem(handle(), &item);
 }
 
+void Table::clearImpl() {
+	ListView_DeleteAllItems(handle());
+
+	if(grouped) {
+		ListView_RemoveAllGroups(handle());
+	}
+}
+
 void Table::setIcon( unsigned row, int newIconIndex ) {
 	LVITEM it = { LVIF_IMAGE };
 	it.iItem = row;
 	it.iImage = newIconIndex;
 	//Set item
-	if(ListView_SetItem( this->handle(), &it) != TRUE) {
+	if(ListView_SetItem( handle(), &it) != TRUE) {
 		dwtWin32DebugFail("Something went wrong while trying to change the selected item of the Table");
 	}
 }
 
 void Table::setNormalImageList( ImageListPtr imageList ) {
 	  itsNormalImageList = imageList;
-	  ListView_SetImageList( this->handle(), imageList->getImageList(), LVSIL_NORMAL );
+	  ListView_SetImageList( handle(), imageList->getImageList(), LVSIL_NORMAL );
 }
 
 void Table::setSmallImageList( ImageListPtr imageList ) {
 	  itsSmallImageList = imageList;
-	  ListView_SetImageList( this->handle(), imageList->getImageList(), LVSIL_SMALL );
+	  ListView_SetImageList( handle(), imageList->getImageList(), LVSIL_SMALL );
 }
 
 void Table::setStateImageList( ImageListPtr imageList ) {
 	  itsStateImageList = imageList;
-	  ListView_SetImageList( this->handle(), imageList->getImageList(), LVSIL_STATE );
+	  ListView_SetImageList( handle(), imageList->getImageList(), LVSIL_STATE );
 }
 
 void Table::setView( int view ) {
@@ -348,10 +393,10 @@ void Table::setView( int view ) {
 		dwtWin32DebugFail("Invalid View type");
 	}
 	//little hack because there is no way to do this with Widget::addRemoveStyle
-	int newStyle = GetWindowLong( this->handle(), GWL_STYLE );
+	int newStyle = GetWindowLong( handle(), GWL_STYLE );
 	if ( ( newStyle & LVS_TYPEMASK ) != view )
 	{
-		SetWindowLong( this->handle(), GWL_STYLE, ( newStyle & ~LVS_TYPEMASK ) | view );
+		SetWindowLong( handle(), GWL_STYLE, ( newStyle & ~LVS_TYPEMASK ) | view );
 	}
 }
 
@@ -359,7 +404,7 @@ void Table::redraw( int firstRow, int lastRow ) {
 	if(lastRow == -1) {
 		lastRow = size();
 	}
-	if( ListView_RedrawItems( this->handle(), firstRow, lastRow ) == FALSE )
+	if( ListView_RedrawItems( handle(), firstRow, lastRow ) == FALSE )
 	{
 		dwtWin32DebugFail("Error while redrawing items in Table");
 	}
@@ -417,7 +462,7 @@ int CALLBACK Table::compareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSor
 
 int Table::xoffFromColumn( int column, int & logicalColumn )
 {
-	HWND hWnd = this->handle();
+	HWND hWnd = handle();
 
 	// Now we must map a absolute column to a logical column
 	// Columnns can be moved but they keep their Column Number

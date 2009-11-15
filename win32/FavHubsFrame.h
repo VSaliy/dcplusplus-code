@@ -66,12 +66,9 @@ private:
 	GridPtr grid;
 	TablePtr hubs;
 
-	bool nosave;
-
 	void handleAdd();
 	void handleProperties();
-	void handleUp();
-	void handleDown();
+	void handleMove(bool up);
 	void handleRemove();
 	void handleGroups();
 	void handleDoubleClick();
@@ -79,7 +76,7 @@ private:
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 
 	void fillList();
-	void addEntry(const FavoriteHubEntryPtr entry, int index = -1, bool scroll = true);
+	void refresh();
 	void openSelected();
 
 	virtual void on(FavoriteAdded, const FavoriteHubEntryPtr e) throw();
