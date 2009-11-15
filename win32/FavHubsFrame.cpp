@@ -42,10 +42,9 @@ static const ColumnInfo hubsColumns[] = {
 };
 
 FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDR_FAVORITE_HUBS),
-	grid(0),
-	hubs(0),
-	nosave(false)
+BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDR_FAVORITE_HUBS),
+grid(0),
+hubs(0)
 {
 	grid = addChild(Grid::Seed(2, 7));
 	grid->column(0).mode = GridInfo::FILL;
@@ -63,7 +62,7 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 		cs.style |= LVS_NOSORTHEADER;
 		hubs = grid->addChild(cs);
 		grid->setWidget(hubs, 0, 0, 1, 7);
-		addWidget(hubs);
+		addWidget(hubs, false, true, false); /// @todo group headers never change colors so for now, we keep default Win colors
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
 
@@ -97,13 +96,13 @@ FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
 		cs.caption = T_("Move &Up");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_MOVE_UP);
-		button->onClicked(std::tr1::bind(&FavHubsFrame::handleUp, this));
+		button->onClicked(std::tr1::bind(&FavHubsFrame::handleMove, this, true));
 		addWidget(button);
 
 		cs.caption = T_("Move &Down");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_MOVE_DOWN);
-		button->onClicked(std::tr1::bind(&FavHubsFrame::handleDown, this));
+		button->onClicked(std::tr1::bind(&FavHubsFrame::handleMove, this, false));
 		addWidget(button);
 
 		cs.caption = T_("&Remove");
@@ -170,56 +169,48 @@ void FavHubsFrame::handleAdd() {
 
 void FavHubsFrame::handleProperties() {
 	if(hubs->countSelected() == 1) {
-		int i = hubs->getSelected();
-		FavoriteHubEntryPtr e = reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(i));
-		dcassert(e != NULL);
-		FavHubProperties dlg(this, e);
-		if(dlg.run() == IDOK) {
-			hubs->setText(i, COLUMN_NAME, Text::toT(e->getName()));
-			hubs->setText(i, COLUMN_DESCRIPTION, Text::toT(e->getDescription()));
-			hubs->setText(i, COLUMN_SERVER, Text::toT(e->getServer()));
-			hubs->setText(i, COLUMN_NICK, Text::toT(e->getNick(false)));
-			hubs->setText(i, COLUMN_PASSWORD, tstring(e->getPassword().size(), '*'));
-			hubs->setText(i, COLUMN_USERDESCRIPTION, Text::toT(e->getUserDescription()));
-			hubs->setText(i, COLUMN_GROUP, Text::toT(e->getGroup()));
-		}
+		FavHubProperties dlg(this, reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(hubs->getSelected())));
+		if(dlg.run() == IDOK)
+			refresh();
 	}
 }
 
-void FavHubsFrame::handleUp() {
-	nosave = true;
+void FavHubsFrame::handleMove(bool up) {
 	FavoriteHubEntryList& fh = FavoriteManager::getInstance()->getFavoriteHubs();
-	HoldRedraw hold(hubs);
-	std::vector<unsigned> selected = hubs->getSelection();
-	for(std::vector<unsigned>::const_iterator i = selected.begin(); i != selected.end(); ++i) {
-		if(*i > 0) {
-			FavoriteHubEntryPtr e = fh[*i];
-			swap(fh[*i], fh[*i - 1]);
-			hubs->erase(*i);
-			addEntry(e, *i - 1);
-			hubs->select(*i - 1);
-		}
-	}
-	FavoriteManager::getInstance()->save();
-	nosave = false;
-}
 
-void FavHubsFrame::handleDown() {
-	nosave = true;
-	FavoriteHubEntryList& fh = FavoriteManager::getInstance()->getFavoriteHubs();
 	HoldRedraw hold(hubs);
-	std::vector<unsigned> selected = hubs->getSelection();
-	for(std::vector<unsigned>::reverse_iterator i = selected.rbegin(); i != selected.rend(); ++i) {
-		if(*i < hubs->size() - 1) {
-			FavoriteHubEntryPtr e = fh[*i];
-			swap(fh[*i], fh[*i + 1]);
-			hubs->erase(*i);
-			addEntry(e, *i + 1);
-			hubs->select(*i + 1);
+
+	// in grouped mode, the indexes of each item are completely random, so use entry pointers instead
+	FavoriteHubEntryList selected;
+	std::vector<unsigned> selection = hubs->getSelection();
+	for(std::vector<unsigned>::const_iterator i = selection.begin(), iend = selection.end(); i != iend; ++i)
+		selected.push_back(reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i)));
+
+	FavoriteHubEntryList fh_copy = fh;
+	if(!up)
+		reverse(fh_copy.begin(), fh_copy.end());
+	for(FavoriteHubEntryList::iterator i = fh_copy.begin() + 1; i != fh_copy.end(); ++i) {
+		if(find(selected.begin(), selected.end(), *i) == selected.end())
+			continue;
+		const string& group = (*i)->getGroup();
+		for(FavoriteHubEntryList::iterator j = i - 1; ; --j) {
+			if((*j)->getGroup() == group) {
+				swap(*i, *j);
+				break;
+			}
+			if(j == fh_copy.begin())
+				break;
 		}
 	}
+	if(!up)
+		reverse(fh_copy.begin(), fh_copy.end());
+	fh = fh_copy;
 	FavoriteManager::getInstance()->save();
-	nosave = false;
+
+	refresh();
+	for(FavoriteHubEntryList::const_iterator i = selected.begin(), iend = selected.end(); i != iend; ++i) {
+		hubs->select(hubs->findData(reinterpret_cast<LPARAM>(*i)));
+	}
 }
 
 void FavHubsFrame::handleRemove() {
@@ -234,8 +225,7 @@ void FavHubsFrame::handleGroups() {
 	FavHubGroupsDlg(this).run();
 
 	HoldRedraw hold(hubs);
-	hubs->clear();
-	fillList();
+	refresh();
 }
 
 void FavHubsFrame::handleDoubleClick() {
@@ -266,17 +256,17 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		pt = hubs->getContextMenuPos();
 	}
 
-	bool hasSelected = hubs->hasSelected();
+	const size_t selected = hubs->countSelected();
 
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	menu->appendItem(T_("&Connect"), std::tr1::bind(&FavHubsFrame::openSelected, this), dwt::IconPtr(), hasSelected, true);
+	menu->appendItem(T_("&Connect"), std::tr1::bind(&FavHubsFrame::openSelected, this), dwt::IconPtr(), selected, true);
 	menu->appendSeparator();
 	menu->appendItem(T_("&New..."), std::tr1::bind(&FavHubsFrame::handleAdd, this));
-	menu->appendItem(T_("&Properties"), std::tr1::bind(&FavHubsFrame::handleProperties, this), dwt::IconPtr(), hasSelected);
-	menu->appendItem(T_("Move &Up"), std::tr1::bind(&FavHubsFrame::handleUp, this), dwt::IconPtr(), hasSelected);
-	menu->appendItem(T_("Move &Down"), std::tr1::bind(&FavHubsFrame::handleDown, this), dwt::IconPtr(), hasSelected);
+	menu->appendItem(T_("&Properties"), std::tr1::bind(&FavHubsFrame::handleProperties, this), dwt::IconPtr(), selected == 1);
+	menu->appendItem(T_("Move &Up"), std::tr1::bind(&FavHubsFrame::handleMove, this, true), dwt::IconPtr(), selected);
+	menu->appendItem(T_("Move &Down"), std::tr1::bind(&FavHubsFrame::handleMove, this, false), dwt::IconPtr(), selected);
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), std::tr1::bind(&FavHubsFrame::handleRemove, this), dwt::IconPtr(), hasSelected);
+	menu->appendItem(T_("&Remove"), std::tr1::bind(&FavHubsFrame::handleRemove, this), dwt::IconPtr(), selected);
 	menu->appendSeparator();
 	menu->appendItem(T_("Manage &groups"), std::tr1::bind(&FavHubsFrame::handleGroups, this));
 
@@ -285,25 +275,49 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 }
 
 void FavHubsFrame::fillList() {
+	// sort groups
+	set<tstring, noCaseStringLess> sorted_groups;
+	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
+	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
+		sorted_groups.insert(Text::toT(i->first));
+
+	TStringList groups(sorted_groups.begin(), sorted_groups.end());
+	groups.insert(groups.begin(), Util::emptyStringT); // default group (otherwise, hubs without group don't show up)
+	hubs->setGroups(groups);
+	bool grouped = hubs->isGrouped();
+
 	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
-	for(FavoriteHubEntryList::const_iterator i = fl.begin(), iend = fl.end(); i != iend; ++i)
-		addEntry(*i, /*itemCount*/ -1, /*scroll*/ false);
+	for(FavoriteHubEntryList::const_iterator i = fl.begin(), iend = fl.end(); i != iend; ++i) {
+		const FavoriteHubEntryPtr& entry = *i;
+		const string& group = entry->getGroup();
+
+		int index;
+		if(grouped) {
+			index = 0;
+			if(!group.empty()) {
+				TStringIterC groupI = find(groups.begin() + 1, groups.end(), Text::toT(group));
+				if(groupI != groups.end())
+					index = groupI - groups.begin();
+			}
+		} else
+			index = -1;
+
+		TStringList l;
+		l.push_back(Text::toT(entry->getName()));
+		l.push_back(Text::toT(entry->getDescription()));
+		l.push_back(Text::toT(entry->getNick(false)));
+		l.push_back(tstring(entry->getPassword().size(), '*'));
+		l.push_back(Text::toT(entry->getServer()));
+		l.push_back(Text::toT(entry->getUserDescription()));
+		l.push_back(Text::toT(group));
+
+		hubs->insert(l, reinterpret_cast<LPARAM>(entry), index);
+	}
 }
 
-void FavHubsFrame::addEntry(const FavoriteHubEntryPtr entry, int index, bool scroll) {
-	TStringList l;
-	l.push_back(Text::toT(entry->getName()));
-	l.push_back(Text::toT(entry->getDescription()));
-	l.push_back(Text::toT(entry->getNick(false)));
-	l.push_back(tstring(entry->getPassword().size(), '*'));
-	l.push_back(Text::toT(entry->getServer()));
-	l.push_back(Text::toT(entry->getUserDescription()));
-	l.push_back(Text::toT(entry->getGroup()));
-	int itemCount = hubs->insert(l, reinterpret_cast<LPARAM>(entry), index);
-	if(index == -1)
-		index = itemCount;
-	if (scroll)
-		hubs->ensureVisible(index);
+void FavHubsFrame::refresh() {
+	hubs->clear();
+	fillList();
 }
 
 void FavHubsFrame::openSelected() {
@@ -314,14 +328,14 @@ void FavHubsFrame::openSelected() {
 		return;
 
 	std::vector<unsigned> items = hubs->getSelection();
-	for(std::vector<unsigned>::iterator i = items.begin(); i != items.end(); ++i) {
-		FavoriteHubEntryPtr entry = reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i));
-		HubFrame::openWindow(getParent(), entry->getServer());
+	for(std::vector<unsigned>::const_iterator i = items.begin(), iend = items.end(); i != iend; ++i) {
+		HubFrame::openWindow(getParent(), reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i))->getServer());
 	}
 }
 
 void FavHubsFrame::on(FavoriteAdded, const FavoriteHubEntryPtr e) throw() {
-	addEntry(e);
+	refresh();
+	hubs->ensureVisible(hubs->findData(reinterpret_cast<LPARAM>(e)));
 }
 
 void FavHubsFrame::on(FavoriteRemoved, const FavoriteHubEntryPtr e) throw() {

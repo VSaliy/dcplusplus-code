@@ -90,10 +90,11 @@ protected:
 	void postClosing() { }
 
 	template<typename W>
-	void addWidget(W* widget, bool alwaysFocus = false, bool autoTab = true) {
+	void addWidget(W* widget, bool alwaysFocus = false, bool autoTab = true, bool customColor = true) {
 		addDlgCodeMessage(widget, autoTab);
 
-		addColor(widget);
+		if(customColor)
+			addColor(widget);
 
 		if(alwaysFocus || (lastFocus == NULL)) {
 			lastFocus = widget->handle();
