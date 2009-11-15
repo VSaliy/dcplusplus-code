@@ -19,6 +19,26 @@
 #ifndef DCPLUSPLUS_WIN32_ComboBox_H_
 #define DCPLUSPLUS_WIN32_ComboBox_H_
 
+/// @todo this should obviously be moved somewhere else
+/** Wraps the drop-down control of a ComboBox */
+class ListBox :
+	public dwt::Control,
+	public dwt::AspectColor<ListBox>,
+	public dwt::AspectColorCtlImpl<ListBox>
+{
+	typedef dwt::Control BaseType;
+	friend class dwt::WidgetCreator<ListBox>;
+public:
+	typedef ListBox ThisType;
+	typedef ThisType* ObjectType;
+	struct Seed : BaseType::Seed { typedef ThisType WidgetType; };
+	explicit ListBox(dwt::Widget* parent) : BaseType(parent, dwt::ChainingDispatcher::superClass<ListBox>()) { }
+private:
+	friend class dwt::ChainingDispatcher;
+	static const TCHAR windowClass[];
+};
+typedef ListBox::ObjectType ListBoxPtr;
+
 class ComboBox : public dwt::ComboBox {
 	typedef dwt::ComboBox BaseType;
 	friend class dwt::WidgetCreator<ComboBox>;
@@ -33,11 +53,13 @@ public:
 		Seed();
 	};
 
-	explicit ComboBox( dwt::Widget * parent );
+	explicit ComboBox(dwt::Widget* parent);
 
+	ListBoxPtr getListBox();
 	TextBoxPtr getTextBox();
 
 private:
+	ListBoxPtr listBox;
 	TextBoxPtr textBox;
 };
 

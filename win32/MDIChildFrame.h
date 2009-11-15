@@ -159,13 +159,18 @@ private:
 	}
 
 	void addColor(ComboBox* widget) {
-		widget->setColor(WinUtil::textColor, WinUtil::bgColor);
-		TextBox* text = widget->getTextBox();
+		// do not apply our custom colors to the combo itself, but apply it to its drop-down and edit controls
+
+		ListBoxPtr listBox = widget->getListBox();
+		if(listBox)
+			addColor(listBox);
+
+		TextBoxPtr text = widget->getTextBox();
 		if(text)
-			text->setColor(WinUtil::textColor, WinUtil::bgColor);
+			addColor(text);
 	}
 
-	// don't handle WM_CTLCOLOR* for Buttons or Button-derived controls
+	// do not apply our custom colors to Buttons and Button-derived controls
 	void addColor(dwt::Button* widget) {
 		// empty on purpose
 	}
