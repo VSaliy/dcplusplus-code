@@ -1,3 +1,5 @@
+# vim: set filetype: py
+
 EnsureSConsVersion(0, 98, 5)
 
 import os,sys
@@ -101,8 +103,6 @@ mode = env['mode']
 if mode not in gcc_flags:
 	print "Unknown mode, exiting"
 	Exit(1)
-
-# vim: set filetype: py
 
 # filter out boost from dependencies to get a speedier rebuild scan
 # this means that if boost changes, scons -c needs to be run
