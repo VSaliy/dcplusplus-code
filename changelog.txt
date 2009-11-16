@@ -46,6 +46,7 @@
 * [L#431045] Don't overwrite downloaded files in some cases (thanks emtee)
 * Fix splitter positioning (poy)
 * [ADC] Don't send commands that the hub has forbidden via STA (poy)
+* [L#458498] Fix bad bloom error message causing disconnects
 * Fix coloring of drop-down controls (poy)
 
 -- 0.75 2009-03-06 --
