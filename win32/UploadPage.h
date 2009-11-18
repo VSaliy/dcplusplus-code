@@ -45,9 +45,9 @@ private:
 	LRESULT handleItemChanged();
 	void handleDragDrop(const TStringList& files);
 	void handleShareHiddenClicked(CheckBoxPtr checkBox);
+	void handleAddClicked();
 	void handleRenameClicked();
 	void handleRemoveClicked();
-	void handleAddClicked();
 
 	void addDirectory(const tstring& aPath);
 };

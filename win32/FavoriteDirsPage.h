@@ -40,9 +40,9 @@ private:
 	bool handleKeyDown(int c);
 	void handleSelectionChanged();
 	void handleDragDrop(const TStringList& files);
+	void handleAddClicked();
 	void handleRenameClicked();
 	void handleRemoveClicked();
-	void handleAddClicked();
 
 	void addDirectory(const tstring& aPath);
 };

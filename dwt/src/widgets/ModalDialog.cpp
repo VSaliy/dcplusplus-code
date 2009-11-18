@@ -78,10 +78,10 @@ void ModalDialog::create(const Seed& cs) {
 int ModalDialog::show() {
 	bool enabled = false;
 
-	HWND root = ::GetAncestor(getParentHandle(), GA_ROOT);
+	Widget* root = hwnd_cast<Widget*>(::GetAncestor(getParentHandle(), GA_ROOT));
 
-	if(getParent()) {
-		enabled = !::EnableWindow(root, FALSE);
+	if(root) {
+		enabled = !root->setEnabled(false);
 	}
 
 	setVisible(true);
@@ -93,7 +93,7 @@ int ModalDialog::show() {
 	}
 
 	if(enabled) {
-		::EnableWindow(root, TRUE);
+		root->setEnabled(true);
 	}
 
 	::DestroyWindow(handle());

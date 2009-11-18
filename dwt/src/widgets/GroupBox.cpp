@@ -54,6 +54,8 @@ void GroupBox::create( const GroupBox::Seed & cs ) {
 
 	padding.x = ::GetSystemMetrics(SM_CXEDGE) * 2 + cs.padding.x * 2;
 	padding.y = ::GetSystemMetrics(SM_CYEDGE) + cs.padding.y * 2; // ignore the top border
+
+	onEnabled(std::tr1::bind(&GroupBox::handleEnabled, this, _1));
 }
 
 Point GroupBox::getPreferedSize() {
@@ -104,6 +106,12 @@ Point GroupBox::expand(const Point& child) {
 	Point txt = c.getTextExtent(getText());
 
 	return Point(std::max(child.x, txt.x) + padding.x, child.y + padding.y + h);
+}
+
+void GroupBox::handleEnabled(bool enabled) {
+	Widget* child = getChild();
+	if(child)
+		child->setEnabled(enabled);
 }
 
 }
