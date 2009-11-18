@@ -47,6 +47,7 @@
 * [ADC] Don't send commands that the hub has forbidden via STA (poy)
 * [L#458498] Fix bad bloom error message causing disconnects
 * Fix coloring of drop-down controls (poy)
+* Show last main chat lines, add a "History" settings category (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)

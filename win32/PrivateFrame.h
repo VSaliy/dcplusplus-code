@@ -88,7 +88,6 @@ private:
 
 	string getLogPath() const;
 	void openLog();
-	void readLog(const string& logPath = Util::emptyString);
 	void fillLogParams(StringMap& params) const;
 	void addChat(const tstring& aLine, bool log = true);
 	void addStatus(const tstring& aLine, bool log = true);

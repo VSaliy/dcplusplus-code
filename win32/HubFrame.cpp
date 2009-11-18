@@ -200,6 +200,8 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	client->addListener(this);
 	client->connect();
 
+	readLog(getLogPath(), SETTING(HUB_LAST_LOG_LINES));
+
 	frames.push_back(this);
 
 	showUsers->onClicked(std::tr1::bind(&HubFrame::handleShowUsersClicked, this));
@@ -1166,12 +1168,16 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 	}
 }
 
-void HubFrame::openLog(bool status) {
+string HubFrame::getLogPath(bool status) const {
 	StringMap params;
 	params["hubNI"] = client->getHubName();
 	params["hubURL"] = client->getHubUrl();
 	params["myNI"] = client->getMyNick();
-	WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(status ? LogManager::STATUS : LogManager::CHAT, params))));
+	return Util::validateFileName(LogManager::getInstance()->getPath(status ? LogManager::STATUS : LogManager::CHAT, params));
+}
+
+void HubFrame::openLog(bool status) {
+	WinUtil::openFile(Text::toT(getLogPath(status)));
 }
 
 string HubFrame::stripNick(const string& nick) const {

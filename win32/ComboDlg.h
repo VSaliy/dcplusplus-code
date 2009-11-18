@@ -26,7 +26,7 @@ public:
 
 	int run();
 
-	tstring getValue() const { return value; }
+	const tstring& getValue() const { return value; }
 
 private:
 	GridPtr grid;
