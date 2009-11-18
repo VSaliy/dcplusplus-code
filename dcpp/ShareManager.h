@@ -128,7 +128,7 @@ private:
 
 			File() : size(0), parent(0) { }
 			File(const string& aName, int64_t aSize, Directory::Ptr aParent, const TTHValue& aRoot) :
-			name(aName), tth(aRoot), size(aSize), parent(aParent.get()) { }
+			name(aName), tth(aRoot), size(aSize), parent(aParent) { }
 			File(const File& rhs) :
 			name(rhs.getName()), tth(rhs.getTTH()), size(rhs.getSize()), parent(rhs.getParent()) { }
 
@@ -150,7 +150,7 @@ private:
 			GETSET(string, name, Name);
 			GETSET(TTHValue, tth, TTH);
 			GETSET(int64_t, size, Size);
-			GETSET(Directory*, parent, Parent);
+			GETSET(Directory::Ptr, parent, Parent);
 		};
 
 		int64_t size;
@@ -181,7 +181,7 @@ private:
 		void merge(const Ptr& source);
 
 		GETSET(string, name, Name);
-		GETSET(Directory*, parent, Parent);
+		GETSET(Ptr, parent, Parent);
 	private:
 		friend void intrusive_ptr_release(intrusive_ptr_base<Directory>*);
 
