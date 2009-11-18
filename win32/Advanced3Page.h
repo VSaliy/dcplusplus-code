@@ -34,6 +34,8 @@ private:
 	ItemList items;
 
 	GridPtr grid;
+
+	void addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2 = _T(""));
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ADVANCED_3_PAGE_H)

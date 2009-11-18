@@ -70,15 +70,20 @@ fl_recents_init(WindowManager::getInstance()->getMaxRecentItems(DirectoryListing
 	grid = addChild(Grid::Seed(3, 1));
 	grid->setSpacing(10);
 
+	GroupBox::Seed gs;
+	gs.style |= BS_RIGHT;
+
 	{
-		GridPtr cur = addSubGrid(grid->addChild(GroupBox::Seed(T_("Chat lines to recall from history when opening a window"))), 2);
+		gs.caption = T_("Chat lines to recall from history when opening a window");
+		GridPtr cur = addSubGrid(grid->addChild(gs), 2);
 
 		items.push_back(Item(addBox(cur, T_("Hubs"), IDH_SETTINGS_HISTORY_CHAT_HUBS), SettingsManager::HUB_LAST_LOG_LINES, PropPage::T_INT_WITH_SPIN));
 		items.push_back(Item(addBox(cur, T_("Private messages"), IDH_SETTINGS_HISTORY_CHAT_PM), SettingsManager::PM_LAST_LOG_LINES, PropPage::T_INT_WITH_SPIN));
 	}
 
 	{
-		GridPtr cur = addSubGrid(grid->addChild(GroupBox::Seed(T_("Maximum number of recent items to save"))), 3);
+		gs.caption = T_("Maximum number of recent items to save");
+		GridPtr cur = addSubGrid(grid->addChild(gs), 3);
 
 		hub_recents = addBox(cur, T_("Recent hubs"), IDH_SETTINGS_HISTORY_RECENT_HUBS);
 		hub_recents->setText(Text::toT(Util::toString(hub_recents_init)));
