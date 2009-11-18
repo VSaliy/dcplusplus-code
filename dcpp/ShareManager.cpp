@@ -77,7 +77,7 @@ ShareManager::~ShareManager() {
 
 ShareManager::Directory::Directory(const string& aName, const ShareManager::Directory::Ptr& aParent) :
 	name(aName),
-	parent(aParent.get()),
+	parent(aParent),
 	fileTypes(1 << SearchManager::TYPE_DIRECTORY)
 {
 }

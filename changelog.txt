@@ -29,7 +29,6 @@
 * Fix dialog focus issues (poy)
 * Fix a crash in queue frame
 * Move finished downloads functionality into queue frame
-* [L#351393] Fix memory leak when indexing shared files (steven sheehy)
 * [L#415965] Hashing can be paused (bigmuscle, emtee, poy)
 * [L#414068] No 35-characters limit to nick and description (ullner)
 * [ADC] Support the TS param of MSG (poy)
