@@ -76,9 +76,9 @@ void startup(void (*f)(void*, const string&), void* p) {
 	ConnectionManager::newInstance();
 	DownloadManager::newInstance();
 	UploadManager::newInstance();
+	QueueManager::newInstance();
 	ShareManager::newInstance();
 	FavoriteManager::newInstance();
-	QueueManager::newInstance();
 	FinishedManager::newInstance();
 	ADLSearchManager::newInstance();
 	WindowManager::newInstance();
