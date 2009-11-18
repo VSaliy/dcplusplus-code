@@ -16,30 +16,32 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_LINE_DLG_H
-#define DCPLUSPLUS_WIN32_LINE_DLG_H
+#ifndef DCPLUSPLUS_WIN32_HISTORY_PAGE_H
+#define DCPLUSPLUS_WIN32_HISTORY_PAGE_H
 
-#include <dcpp/Util.h>
+#include "PropPage.h"
 
-class LineDlg : public dwt::ModalDialog
+class HistoryPage : public PropPage
 {
 public:
-	LineDlg(dwt::Widget* parent, const tstring& title, const tstring& desc, const tstring& text_ = Util::emptyStringT, bool password = false);
+	HistoryPage(dwt::Widget* parent);
+	virtual ~HistoryPage();
 
-	int run();
-
-	const tstring& getLine() const { return text; }
+	virtual void layout(const dwt::Rectangle& rect);
+	virtual void write();
 
 private:
+	ItemList items;
+
 	GridPtr grid;
-	TextBoxPtr line;
 
-	tstring text;
+	TextBoxPtr hub_recents;
+	TextBoxPtr pm_recents;
+	TextBoxPtr fl_recents;
 
-	bool initDialog(const tstring& title, const tstring& desc, bool password);
-	void okClicked();
-
-	void layout();
+	const unsigned hub_recents_init;
+	const unsigned pm_recents_init;
+	const unsigned fl_recents_init;
 };
 
-#endif // !defined(LINE_DLG_H)
+#endif // !defined(DCPLUSPLUS_WIN32_HISTORY_PAGE_H)

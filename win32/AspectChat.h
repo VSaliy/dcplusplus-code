@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2008 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_ASPECT_CHAT_H
 #define DCPLUSPLUS_WIN32_ASPECT_CHAT_H
 
+#include <dcpp/File.h>
+
 #include "HoldRedraw.h"
 #include "RichTextBox.h"
 
@@ -26,8 +28,8 @@ template<typename T>
 class AspectChat {
 	typedef AspectChat<T> ThisType;
 
-	T& t() { return *static_cast<T*>(this); }
 	const T& t() const { return *static_cast<const T*>(this); }
+	T& t() { return *static_cast<T*>(this); }
 
 protected:
 	AspectChat() :
@@ -70,6 +72,35 @@ protected:
 		}
 		line += Text::toDOS(aLine);
 		chat->addTextSteady(formatChatMessage(aClient, line), line.size());
+	}
+
+	void readLog(const string& logPath, const unsigned setting) {
+		if(setting == 0)
+			return;
+
+		StringList lines;
+
+		try {
+			const int MAX_SIZE = 32 * 1024;
+
+			File f(logPath.empty() ? t().getLogPath() : logPath, File::READ, File::OPEN);
+			if(f.getSize() > MAX_SIZE) {
+				f.setEndPos(-MAX_SIZE + 1);
+			}
+
+			lines = StringTokenizer<string>(f.read(MAX_SIZE), "\r\n").getTokens();
+		} catch(const FileException&) { }
+
+		if(lines.empty())
+			return;
+
+		// the last line in the log file is an empty line; remove it
+		lines.pop_back();
+
+		const size_t linesCount = lines.size();
+		for(size_t i = ((linesCount > setting) ? (linesCount - setting) : 0); i < linesCount; ++i) {
+			addChat(0, _T("- ") + Text::toT(lines[i]));
+		}
 	}
 
 	bool checkCommand(const tstring& cmd, const tstring& param, tstring& status) {

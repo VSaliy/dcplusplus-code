@@ -33,6 +33,7 @@
 #include "Appearance2Page.h"
 #include "TabsPage.h"
 #include "WindowsPage.h"
+#include "HistoryPage.h"
 #include "AdvancedPage.h"
 #include "LogPage.h"
 #include "Advanced3Page.h"
@@ -106,11 +107,13 @@ bool SettingsDialog::initDialog() {
 		addPage(T_("Sharing"), cur, new UploadPage(cur));
 
 		{
-			HTREEITEM item = addPage(T_("Appearance"),cur,  new AppearancePage(cur));
+			HTREEITEM item = addPage(T_("Appearance"), cur, new AppearancePage(cur));
 			addPage(T_("Colors and sounds"), cur, new Appearance2Page(cur), item);
 			addPage(T_("Tabs"), cur, new TabsPage(cur), item);
 			addPage(T_("Windows"), cur, new WindowsPage(cur), item);
 		}
+
+		addPage(T_("History"), cur, new HistoryPage(cur));
 
 		{
 			HTREEITEM item = addPage(T_("Advanced"), cur, new AdvancedPage(cur));

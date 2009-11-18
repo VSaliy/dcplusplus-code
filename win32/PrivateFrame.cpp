@@ -26,7 +26,6 @@
 
 #include <dcpp/ClientManager.h>
 #include <dcpp/Client.h>
-#include <dcpp/File.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/User.h>
 #include <dcpp/WindowInfo.h>
@@ -134,7 +133,7 @@ online(replyTo.getUser().user->isOnline())
 	updateOnlineStatus();
 	layout();
 
-	readLog(logPath);
+	readLog(logPath, SETTING(PM_LAST_LOG_LINES));
 
 	ClientManager::getInstance()->addListener(this);
 
@@ -192,35 +191,6 @@ string PrivateFrame::getLogPath() const {
 
 void PrivateFrame::openLog() {
 	WinUtil::openFile(Text::toT(getLogPath()));
-}
-
-void PrivateFrame::readLog(const string& logPath) {
-	if(SETTING(SHOW_LAST_LINES_LOG) == 0)
-		return;
-
-	StringList lines;
-
-	try {
-		File f(logPath.empty() ? getLogPath() : logPath, File::READ, File::OPEN);
-		if(f.getSize() > 32*1024) {
-			f.setEndPos(- 32*1024 + 1);
-		}
-
-		lines = StringTokenizer<string>(f.read(32*1024), "\r\n").getTokens();
-
-		f.close();
-	} catch(const FileException&) { }
-
-	if(lines.empty())
-		return;
-
-	// the last line in the log file is an empty line; remove it
-	lines.pop_back();
-
-	size_t linesCount = lines.size();
-	for(size_t i = std::max(static_cast<int>(linesCount) - SETTING(SHOW_LAST_LINES_LOG), 0); i < linesCount; ++i) {
-		addStatus(_T("- ") + Text::toT(lines[i]), false);
-	}
 }
 
 void PrivateFrame::fillLogParams(StringMap& params) const {

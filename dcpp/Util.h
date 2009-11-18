@@ -260,6 +260,15 @@ public:
 #endif
 	}
 
+	static unsigned toUInt(const string& s) {
+		if(s.empty())
+			return 0;
+		int ret = toInt(s);
+		if(ret < 0)
+			return 0;
+		return ret;
+	}
+
 	static double toDouble(const string& aString) {
 		// Work-around for atof and locales...
 		lconv* lv = localeconv();

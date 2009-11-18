@@ -500,7 +500,7 @@ void FavoriteManager::load(SimpleXML& aXml) {
 
 			if(aXml.getBoolChildAttrib("Connect")) {
 				// this entry dates from before the window manager & fav hub groups; convert it.
-				static const string name = _("Auto-connect group (converted)");
+				const string name = _("Auto-connect group (converted)");
 				if(favHubGroups.find(name) == favHubGroups.end()) {
 					FavHubGroupProperties props = { false, true };
 					favHubGroups[name] = props;
