@@ -31,72 +31,21 @@ grid(0)
 {
 	setHelpId(IDH_ADVANCED3PAGE);
 
-	grid = addChild(Grid::Seed(5, 6));
-	grid->column(0).align = GridInfo::BOTTOM_RIGHT;
+	grid = addChild(Grid::Seed(5, 2));
+	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
-	grid->column(3).align = GridInfo::BOTTOM_RIGHT;
-	grid->column(4).mode = GridInfo::FILL;
 	grid->setSpacing(10);
 
-	grid->addChild(Label::Seed(T_("Max hash speed")))->setHelpId(IDH_SETTINGS_ADVANCED3_MAX_HASH_SPEED);
-	TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::MAX_HASH_SPEED, PropPage::T_INT));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_MAX_HASH_SPEED);
-	grid->addChild(Label::Seed(T_("MiB/s")))->setHelpId(IDH_SETTINGS_ADVANCED3_MAX_HASH_SPEED);
-
-	grid->addChild(Label::Seed(T_("Write buffer size")))->setHelpId(IDH_SETTINGS_ADVANCED3_BUFFERSIZE);
-	box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::BUFFER_SIZE, PropPage::T_INT));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_BUFFERSIZE);
-	grid->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_ADVANCED3_BUFFERSIZE);
-
-	grid->addChild(Label::Seed(T_("Auto-search limit")))->setHelpId(IDH_SETTINGS_ADVANCED3_AUTO_SEARCH_LIMIT);
-	box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::AUTO_SEARCH_LIMIT, PropPage::T_INT));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_AUTO_SEARCH_LIMIT);
-	grid->addChild(Label::Seed(tstring()));
-
-	grid->addChild(Label::Seed(T_("Mini slot size")))->setHelpId(IDH_SETTINGS_ADVANCED3_MINISLOT_SIZE);
-	box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::SET_MINISLOT_SIZE, PropPage::T_INT));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_MINISLOT_SIZE);
-	grid->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_ADVANCED3_MINISLOT_SIZE);
-
-	grid->addChild(Label::Seed(T_("Max filelist size")))->setHelpId(IDH_SETTINGS_ADVANCED3_MAX_FILELIST_SIZE);
-	box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::MAX_FILELIST_SIZE, PropPage::T_INT));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_MAX_FILELIST_SIZE);
-	grid->addChild(Label::Seed(T_("MiB")))->setHelpId(IDH_SETTINGS_ADVANCED3_MAX_FILELIST_SIZE);
-
-	grid->addChild(Label::Seed(T_("Bind address")))->setHelpId(IDH_SETTINGS_ADVANCED3_BIND_ADDRESS);
-	box = grid->addChild(WinUtil::Seeds::Dialog::textBox);
-	items.push_back(Item(box, SettingsManager::BIND_ADDRESS, PropPage::T_STR));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_BIND_ADDRESS);
-	grid->addChild(Label::Seed(tstring()));
-
-	grid->addChild(Label::Seed(T_("PID")))->setHelpId(IDH_SETTINGS_ADVANCED3_PRIVATE_ID);
-	box = grid->addChild(WinUtil::Seeds::Dialog::textBox);
-	items.push_back(Item(box, SettingsManager::PRIVATE_ID, PropPage::T_STR));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_PRIVATE_ID);
-	grid->addChild(Label::Seed(tstring()));
-
-	grid->addChild(Label::Seed(T_("Socket read buffer")))->setHelpId(IDH_SETTINGS_ADVANCED3_SOCKET_IN_BUFFER);
-	box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::SOCKET_IN_BUFFER, PropPage::T_INT));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_SOCKET_IN_BUFFER);
-	grid->addChild(Label::Seed(T_("B")))->setHelpId(IDH_SETTINGS_ADVANCED3_SOCKET_IN_BUFFER);
-
-	grid->addChild(Label::Seed(T_("Auto refresh time")))->setHelpId(IDH_SETTINGS_ADVANCED3_AUTO_REFRESH_TIME);
-	box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::AUTO_REFRESH_TIME, PropPage::T_INT));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_AUTO_REFRESH_TIME);
-	grid->addChild(Label::Seed(tstring()));
-
-	grid->addChild(Label::Seed(T_("Socket write buffer")))->setHelpId(IDH_SETTINGS_ADVANCED3_SOCKET_OUT_BUFFER);
-	box = grid->addChild(WinUtil::Seeds::Dialog::intTextBox);
-	items.push_back(Item(box, SettingsManager::SOCKET_OUT_BUFFER, PropPage::T_INT));
-	box->setHelpId(IDH_SETTINGS_ADVANCED3_SOCKET_OUT_BUFFER);
-	grid->addChild(Label::Seed(T_("B")))->setHelpId(IDH_SETTINGS_ADVANCED3_SOCKET_OUT_BUFFER);
+	addItem(T_("Max hash speed"), SettingsManager::MAX_HASH_SPEED, true, IDH_SETTINGS_ADVANCED3_MAX_HASH_SPEED, T_("MiB/s"));
+	addItem(T_("Write buffer size"), SettingsManager::BUFFER_SIZE, true, IDH_SETTINGS_ADVANCED3_BUFFERSIZE, T_("KiB"));
+	addItem(T_("Auto-search limit"), SettingsManager::AUTO_SEARCH_LIMIT, true, IDH_SETTINGS_ADVANCED3_AUTO_SEARCH_LIMIT);
+	addItem(T_("Mini slot size"), SettingsManager::SET_MINISLOT_SIZE, true, IDH_SETTINGS_ADVANCED3_MINISLOT_SIZE, T_("KiB"));
+	addItem(T_("Max filelist size"), SettingsManager::MAX_FILELIST_SIZE, true, IDH_SETTINGS_ADVANCED3_MAX_FILELIST_SIZE, T_("MiB"));
+	addItem(T_("Bind address"), SettingsManager::BIND_ADDRESS, false, IDH_SETTINGS_ADVANCED3_BIND_ADDRESS);
+	addItem(T_("PID"), SettingsManager::PRIVATE_ID, false, IDH_SETTINGS_ADVANCED3_PRIVATE_ID);
+	addItem(T_("Socket read buffer"), SettingsManager::SOCKET_IN_BUFFER, true, IDH_SETTINGS_ADVANCED3_SOCKET_IN_BUFFER, T_("B"));
+	addItem(T_("Auto refresh time"), SettingsManager::AUTO_REFRESH_TIME, true, IDH_SETTINGS_ADVANCED3_AUTO_REFRESH_TIME);
+	addItem(T_("Socket write buffer"), SettingsManager::SOCKET_OUT_BUFFER, true, IDH_SETTINGS_ADVANCED3_SOCKET_OUT_BUFFER, T_("B"));
 
 	PropPage::read(items);
 }
@@ -121,4 +70,20 @@ void Advanced3Page::write() {
 		settings->set(SettingsManager::AUTO_SEARCH_LIMIT, 5);
 	else if(SETTING(AUTO_SEARCH_LIMIT) < 1)
 		settings->set(SettingsManager::AUTO_SEARCH_LIMIT, 1);
+}
+
+void Advanced3Page::addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2) {
+	GroupBoxPtr group = grid->addChild(GroupBox::Seed(text));
+	group->setHelpId(helpId);
+
+	GridPtr cur = group->addChild(Grid::Seed(1, 2));
+	cur->column(0).mode = GridInfo::FILL;
+
+	TextBoxPtr box = cur->addChild(isInt ? WinUtil::Seeds::Dialog::intTextBox : WinUtil::Seeds::Dialog::textBox);
+	items.push_back(Item(box, setting, isInt ? PropPage::T_INT : PropPage::T_STR));
+
+	if(text2.empty())
+		cur->setWidget(box, 0, 0, 1, 2);
+	else
+		cur->addChild(Label::Seed(text2));
 }
