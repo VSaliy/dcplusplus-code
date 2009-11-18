@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   SmartWin++
 
@@ -62,17 +62,6 @@ class AspectEnabled
 	friend class Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled>;
 
 public:
-	/// Sets the enabled property of the Widget
-	/** Changes the enabled property of the Widget. Use this function to change the
-	  * enabled property of the Widget
-	  */
-	void setEnabled( bool enabled );
-
-	/// Retrieves the enabled property of the Widget
-	/** Use this function to check if the Widget is Enabled or not. If the Widget is
-	  * enabled this function will return true.
-	  */
-	bool getEnabled() const;
 
 	/// \ingroup EventHandlersAspectEnabled
 	/// Setting the event handler for the "enabled" event
@@ -89,21 +78,6 @@ public:
 protected:
 	virtual ~AspectEnabled() { }
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template< class WidgetType >
-void AspectEnabled< WidgetType >::setEnabled( bool enabled )
-{
-	::EnableWindow( W().handle(), enabled ? TRUE : FALSE );
-}
-
-template< class WidgetType >
-bool AspectEnabled< WidgetType >::getEnabled() const
-{
-	return ::IsWindowEnabled( W().handle() ) != 0;
-}
 
 }
 

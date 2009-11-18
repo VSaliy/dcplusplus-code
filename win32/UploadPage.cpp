@@ -73,13 +73,13 @@ remove(0)
 			row->addChild(Label::Seed(T_("Total size:")));
 			total = row->addChild(Label::Seed(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize()))));
 
+			row->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
+
 			rename = row->addChild(Button::Seed(T_("Re&name")));
 			rename->onClicked(std::tr1::bind(&UploadPage::handleRenameClicked, this));
 
 			remove = row->addChild(Button::Seed(T_("&Remove")));
 			remove->onClicked(std::tr1::bind(&UploadPage::handleRemoveClicked, this));
-
-			row->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
 		}
 
 		cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")));
@@ -224,6 +224,14 @@ void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox) {
 	total->setText(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize())));
 }
 
+void UploadPage::handleAddClicked() {
+	tstring target;
+	if(FolderDialog(this).open(target)) {
+		addDirectory(target);
+		HashProgressDlg(this, true).run();
+	}
+}
+
 void UploadPage::handleRenameClicked() {
 	bool setDirty = false;
 
@@ -241,11 +249,13 @@ void UploadPage::handleRenameClicked() {
 
 					setDirty = true;
 				} else {
-					dwt::MessageBox(this).show(T_("New virtual name matches old name, skipping..."), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
+					dwt::MessageBox(this).show(T_("New virtual name matches old name, skipping..."), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+						dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
 				}
 			}
 		} catch(const ShareException& e) {
-			dwt::MessageBox(this).show(Text::toT(e.getError()), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+			dwt::MessageBox(this).show(Text::toT(e.getError()), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+				dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 		}
 	}
 
@@ -259,14 +269,6 @@ void UploadPage::handleRemoveClicked() {
 		ShareManager::getInstance()->removeDirectory(Text::fromT(directories->getText(i, 1)));
 		total->setText(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize())));
 		directories->erase(i);
-	}
-}
-
-void UploadPage::handleAddClicked() {
-	tstring target;
-	if(FolderDialog(this).open(target)) {
-		addDirectory(target);
-		HashProgressDlg(this, true).run();
 	}
 }
 
@@ -298,6 +300,7 @@ void UploadPage::addDirectory(const tstring& aPath) {
 			break;
 		}
 	} catch(const ShareException& e) {
-		dwt::MessageBox(this).show(Text::toT(e.getError()), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+		dwt::MessageBox(this).show(Text::toT(e.getError()), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+			dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 	}
 }

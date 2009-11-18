@@ -54,15 +54,15 @@ remove(0)
 	directories = grid->addChild(WinUtil::Seeds::Dialog::table);
 	grid->setWidget(directories, 0, 0, 1, 3);
 
+	ButtonPtr add = grid->addChild(Button::Seed(T_("&Add folder")));
+	add->onClicked(std::tr1::bind(&FavoriteDirsPage::handleAddClicked, this));
+	add->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_ADD);
 	rename = grid->addChild(Button::Seed(T_("Re&name")));
 	rename->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRenameClicked, this));
 	rename->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_RENAME);
 	remove = grid->addChild(Button::Seed(T_("&Remove")));
 	remove->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRemoveClicked, this));
 	remove->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_REMOVE);
-	ButtonPtr add = grid->addChild(Button::Seed(T_("&Add folder")));
-	add->onClicked(std::tr1::bind(&FavoriteDirsPage::handleAddClicked, this));
-	add->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_ADD);
 
 	WinUtil::makeColumns(directories, columns, 2);
 
@@ -125,6 +125,13 @@ void FavoriteDirsPage::handleDragDrop(const TStringList& files) {
 			addDirectory(*i);
 }
 
+void FavoriteDirsPage::handleAddClicked() {
+	tstring target;
+	if(FolderDialog(this).open(target)) {
+		addDirectory(target);
+	}
+}
+
 void FavoriteDirsPage::handleRenameClicked() {
 	int i = -1;
 	while((i = directories->getNext(i, LVNI_SELECTED)) != -1) {
@@ -135,7 +142,8 @@ void FavoriteDirsPage::handleRenameClicked() {
 			if (FavoriteManager::getInstance()->renameFavoriteDir(Text::fromT(old), Text::fromT(line))) {
 				directories->setText(i, 0, line);
 			} else {
-				dwt::MessageBox(this).show(T_("Directory or directory name already exists"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+				dwt::MessageBox(this).show(T_("Directory or directory name already exists"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+					dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 			}
 		}
 	}
@@ -146,13 +154,6 @@ void FavoriteDirsPage::handleRemoveClicked() {
 	while((i = directories->getNext(-1, LVNI_SELECTED)) != -1)
 		if(FavoriteManager::getInstance()->removeFavoriteDir(Text::fromT(directories->getText(i, 1))))
 			directories->erase(i);
-}
-
-void FavoriteDirsPage::handleAddClicked() {
-	tstring target;
-	if(FolderDialog(this).open(target)) {
-		addDirectory(target);
-	}
 }
 
 void FavoriteDirsPage::addDirectory(const tstring& aPath) {
@@ -169,7 +170,8 @@ void FavoriteDirsPage::addDirectory(const tstring& aPath) {
 			row.push_back(path);
 			directories->insert(row);
 		} else {
-			dwt::MessageBox(this).show(T_("Directory or directory name already exists"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+			dwt::MessageBox(this).show(T_("Directory or directory name already exists"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+				dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 		}
 	}
 }

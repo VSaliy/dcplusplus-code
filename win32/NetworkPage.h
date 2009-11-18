@@ -40,10 +40,10 @@ private:
 	RadioButtonPtr nat;
 	RadioButtonPtr passive;
 
+	GroupBoxPtr ipGroup;
 	TextBoxPtr externalIP;
-	CheckBoxPtr overrideIP;
 
-	GridPtr ports;
+	GroupBoxPtr ports;
 
 	TextBoxPtr tcp;
 	TextBoxPtr udp;
@@ -52,10 +52,8 @@ private:
 	RadioButtonPtr directOut;
 	RadioButtonPtr socks5;
 
+	GroupBoxPtr socksSettings;
 	TextBoxPtr socksServer;
-	TextBoxPtr socksPort;
-	TextBoxPtr socksLogin;
-	TextBoxPtr socksPass;
 	CheckBoxPtr socksResolve;
 
 	void fixControlsIn();

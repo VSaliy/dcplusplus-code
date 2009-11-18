@@ -140,6 +140,18 @@ public:
 	Point getWindowSize() const;
 	Point getClientSize() const;
 
+	/// Sets the enabled property of the Widget
+	/** Changes the enabled property of the Widget. Use this function to change the
+	  * enabled property of the Widget
+	  */
+	bool setEnabled(bool enabled);
+
+	/// Retrieves the enabled property of the Widget
+	/** Use this function to check if the Widget is Enabled or not. If the Widget is
+	  * enabled this function will return true.
+	  */
+	bool getEnabled() const;
+
 	/**
 	 * Attaches the instance to an existing window.
 	 */
@@ -274,6 +286,14 @@ inline Point Widget::getClientSize() const {
 	::GetClientRect(handle(), &rc);
 	// Left, top are always 0
 	return Point(rc.right, rc.bottom);
+}
+
+inline bool Widget::setEnabled(bool enabled) {
+	return ::EnableWindow(handle(), enabled ? TRUE : FALSE);
+}
+
+inline bool Widget::getEnabled() const {
+	return ::IsWindowEnabled(handle()) != 0;
 }
 
 template<typename T>
