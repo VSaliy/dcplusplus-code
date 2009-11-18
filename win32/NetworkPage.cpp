@@ -65,7 +65,7 @@ socksServer(0)
 		upnp = connType->addChild(RadioButton::Seed(T_("Try to use UPnP to let Windows automatically configure my router")));
 		upnp->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_UPNP);
 
-		nat = connType->addChild(RadioButton::Seed(T_("Manual port forwarding (i have configured my router by myself)")));
+		nat = connType->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
 		nat->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_NAT);
 
 		{

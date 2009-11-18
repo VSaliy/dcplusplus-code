@@ -23,7 +23,7 @@
 #include "SearchManager.h"
 #include "SettingsManager.h"
 #include "HashManagerListener.h"
-#include "DownloadManagerListener.h"
+#include "QueueManagerListener.h"
 
 #include "Exception.h"
 #include "CriticalSection.h"
@@ -46,7 +46,7 @@ class MemoryInputStream;
 
 struct ShareLoader;
 class ShareManager : public Singleton<ShareManager>, private SettingsManagerListener, private Thread, private TimerManagerListener,
-	private HashManagerListener, private DownloadManagerListener
+	private HashManagerListener, private QueueManagerListener
 {
 public:
 	/**
@@ -292,8 +292,8 @@ private:
 
 	virtual int run();
 
-	// DownloadManagerListener
-	virtual void on(DownloadManagerListener::Complete, Download* d) throw();
+	// QueueManagerListener
+	virtual void on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) throw();
 
 	// HashManagerListener
 	virtual void on(HashManagerListener::TTHDone, const string& fname, const TTHValue& root) throw();
