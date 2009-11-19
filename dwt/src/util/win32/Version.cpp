@@ -52,7 +52,7 @@ bool ensureVersion(Version version) {
 
 	switch(version) {
 	case XP: return (major == 5 && minor >= 1) || major > 5;
-	case VISTA: return major > 6;
+	case VISTA: return major >= 6;
 	default: return false;
 	}
 }
