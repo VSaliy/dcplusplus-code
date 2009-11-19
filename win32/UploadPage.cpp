@@ -127,20 +127,12 @@ remove(0)
 
 	WinUtil::makeColumns(directories, columns, 3);
 
-	StringPairList dirs = ShareManager::getInstance()->getDirectories();
-	for(StringPairIter j = dirs.begin(); j != dirs.end(); j++) {
-		TStringList row;
-		row.push_back(Text::toT(j->first));
-		row.push_back(Text::toT(j->second));
-		row.push_back(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize(j->second))));
-		directories->insert(row);
-	}
+	fillList();
 
 	directories->onDblClicked(std::tr1::bind(&UploadPage::handleDoubleClick, this));
 	directories->onKeyDown(std::tr1::bind(&UploadPage::handleKeyDown, this, _1));
 	directories->onRaw(std::tr1::bind(&UploadPage::handleItemChanged, this), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
-
-	onDragDrop(std::tr1::bind(&UploadPage::handleDragDrop, this, _1));
+	directories->onDragDrop(std::tr1::bind(&UploadPage::handleDragDrop, this, _1));
 }
 
 UploadPage::~UploadPage() {
@@ -210,18 +202,10 @@ void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox) {
 
 	// Clear the GUI list, for insertion of updated shares
 	directories->clear();
-	StringPairList dirs = ShareManager::getInstance()->getDirectories();
-	for(StringPairIter j = dirs.begin(); j != dirs.end(); j++)
-	{
-		TStringList row;
-		row.push_back(Text::toT(j->first));
-		row.push_back(Text::toT(j->second));
-		row.push_back(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize(j->second))));
-		directories->insert(row);
-	}
+	fillList();
 
 	// Display the new total share size
-	total->setText(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize())));
+	refreshTotalSize();
 }
 
 void UploadPage::handleAddClicked() {
@@ -264,12 +248,30 @@ void UploadPage::handleRenameClicked() {
 }
 
 void UploadPage::handleRemoveClicked() {
-	int i = -1;
+	int i;
 	while((i = directories->getNext(-1, LVNI_SELECTED)) != -1) {
 		ShareManager::getInstance()->removeDirectory(Text::fromT(directories->getText(i, 1)));
-		total->setText(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize())));
 		directories->erase(i);
+		refreshTotalSize();
 	}
+}
+
+void UploadPage::addRow(const string& virtualPath, const string& realPath) {
+	TStringList row;
+	row.push_back(Text::toT(virtualPath));
+	row.push_back(Text::toT(realPath));
+	row.push_back(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize(realPath))));
+	directories->insert(row);
+}
+
+void UploadPage::fillList() {
+	const StringPairList dirs = ShareManager::getInstance()->getDirectories();
+	for(StringPairList::const_iterator i = dirs.begin(), iend = dirs.end(); i != iend; ++i)
+		addRow(i->first, i->second);
+}
+
+void UploadPage::refreshTotalSize() {
+	total->setText(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize())));
 }
 
 void UploadPage::addDirectory(const tstring& aPath) {
@@ -282,20 +284,18 @@ void UploadPage::addDirectory(const tstring& aPath) {
 		while(true) {
 			LineDlg dlg(this, T_("Virtual name"), T_("Name under which the others see the directory"), Text::toT(sm->validateVirtual(Util::getLastDir(Text::fromT(path)))));
 			if(dlg.run() == IDOK) {
-				tstring line = dlg.getLine();
-				if(sm->hasVirtual(sm->validateVirtual(Text::fromT(line)))) {
+				const tstring& line = dlg.getLine();
+				const string aLine = Text::fromT(line);
+				if(sm->hasVirtual(sm->validateVirtual(aLine))) {
 					if(dwt::MessageBox(this).show(str(TF_("A virtual directory named %1% already exists, do you wish to merge the contents?") % line),
 						_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDNO) {
 						continue;
 					}
 				}
-				ShareManager::getInstance()->addDirectory(Text::fromT(path), Text::fromT(line));
-				TStringList row;
-				row.push_back(line);
-				row.push_back(path);
-				row.push_back(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize(Text::fromT(path)))));
-				directories->insert(row);
-				total->setText(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize())));
+				const string aPath = Text::fromT(path);
+				ShareManager::getInstance()->addDirectory(aPath, aLine);
+				addRow(aLine, aPath);
+				refreshTotalSize();
 			}
 			break;
 		}

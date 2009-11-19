@@ -37,6 +37,7 @@
 #include "../aspects/AspectBorder.h"
 #include "../aspects/AspectCloseable.h"
 #include "../aspects/AspectContextMenu.h"
+#include "../aspects/AspectDragDrop.h"
 #include "../aspects/AspectEnabled.h"
 #include "../aspects/AspectFont.h"
 #include "../aspects/AspectHelp.h"
@@ -56,6 +57,7 @@ class Control:
 	public AspectBorder<Control>,
 	public AspectCloseable<Control>,
 	public AspectContextMenu<Control>,
+	public AspectDragDrop<Control>,
 	public AspectEnabled<Control>,
 	public AspectFont<Control>,
 	public AspectHelp<Control>,
