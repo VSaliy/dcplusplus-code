@@ -49,6 +49,9 @@ private:
 	void handleRenameClicked();
 	void handleRemoveClicked();
 
+	void addRow(const string& virtualPath, const string& realPath);
+	void fillList();
+	void refreshTotalSize();
 	void addDirectory(const tstring& aPath);
 };
 

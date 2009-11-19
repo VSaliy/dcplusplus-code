@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   SmartWin++
 
@@ -36,14 +36,9 @@
 #ifndef DWT_AspectDragDrop_h
 #define DWT_AspectDragDrop_h
 
-#ifndef WINCE // Not supported on WINCE platform
-
 #include "../Message.h"
 #include "../Point.h"
 #include "../tstring.h"
-
-#include <vector>
-#include <shellapi.h>
 
 namespace dwt {
 
@@ -54,40 +49,35 @@ namespace dwt {
 template< class WidgetType >
 class AspectDragDrop
 {
-	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
+	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
 	HWND H() const { return W().handle(); }
 
-	struct DragDropDispatcher {
-		typedef std::tr1::function<void (std::vector< tstring>, Point )> F;
-
-		DragDropDispatcher(const F& f_) : f(f_) { }
+	struct DragDropDispatcher : Dispatchers::Base<void (std::vector<tstring>, Point)> {
+		typedef Dispatchers::Base<void (std::vector<tstring>, Point)> BaseType;
+		DragDropDispatcher(const F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			std::vector<tstring> files;
 			Point pt;
-			HDROP handle = (HDROP)msg.wParam;
-			if (handle) {
-				int iFiles = DragQueryFile(handle, (UINT)-1, NULL, 0);
+
+			HDROP handle = reinterpret_cast<HDROP>(msg.wParam);
+			if(handle) {
+				UINT iFiles = ::DragQueryFile(handle, 0xFFFFFFFF, 0, 0);
 				TCHAR pFilename[MAX_PATH];
-				for(int i=0;i<iFiles;i++) {
-					memset(pFilename,0,MAX_PATH * sizeof(TCHAR));
-					DragQueryFile(handle, i, pFilename, MAX_PATH);
+				for(UINT i = 0; i < iFiles; ++i) {
+					memset(pFilename, 0, MAX_PATH * sizeof(TCHAR));
+					::DragQueryFile(handle, i, pFilename, MAX_PATH);
 					files.push_back(pFilename);
 				}
-				POINT p;
-				DragQueryPoint(handle,&p);
-				pt = Point(p.x,p.y);
-				DragFinish(handle);
+				::DragQueryPoint(handle, &pt);
+				::DragFinish(handle);
 			}
-			handle = 0;
-			f(files, pt);
 
+			f(files, pt);
 			return false;
 		}
-
-		F f;
 	};
 
 public:
@@ -118,20 +108,11 @@ protected:
 	{}
 };
 
-
-template< class WidgetType >
-void AspectDragDrop< WidgetType >::setDragAcceptFiles(bool accept)
-{
-	DragAcceptFiles(H(), accept);
+template<class WidgetType>
+void AspectDragDrop<WidgetType>::setDragAcceptFiles(bool accept) {
+	::DragAcceptFiles(H(), accept);
 }
 
 }
-
-#else
-
-template< class EventHandlerClass, class WidgetType, class MessageMapType >
-class AspectDragDrop { };
-
-#endif
 
 #endif

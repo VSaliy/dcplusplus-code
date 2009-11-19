@@ -51,8 +51,12 @@ remove(0)
 	grid->row(0).mode = dwt::GridInfo::FILL;
 	grid->row(0).align = dwt::GridInfo::STRETCH;
 
-	directories = grid->addChild(WinUtil::Seeds::Dialog::table);
-	grid->setWidget(directories, 0, 0, 1, 3);
+	{
+		Table::Seed seed = WinUtil::Seeds::Dialog::table;
+		seed.exStyle |= WS_EX_ACCEPTFILES;
+		directories = grid->addChild(seed);
+		grid->setWidget(directories, 0, 0, 1, 3);
+	}
 
 	ButtonPtr add = grid->addChild(Button::Seed(T_("&Add folder")));
 	add->onClicked(std::tr1::bind(&FavoriteDirsPage::handleAddClicked, this));
@@ -67,18 +71,13 @@ remove(0)
 	WinUtil::makeColumns(directories, columns, 2);
 
 	StringPairList dirs = FavoriteManager::getInstance()->getFavoriteDirs();
-	for(StringPairIter j = dirs.begin(); j != dirs.end(); j++) {
-		TStringList row;
-		row.push_back(Text::toT(j->second));
-		row.push_back(Text::toT(j->first));
-		directories->insert(row);
-	}
+	for(StringPairIter j = dirs.begin(); j != dirs.end(); j++)
+		addRow(Text::toT(j->second), Text::toT(j->first));
 
 	directories->onDblClicked(std::tr1::bind(&FavoriteDirsPage::handleDoubleClick, this));
 	directories->onKeyDown(std::tr1::bind(&FavoriteDirsPage::handleKeyDown, this, _1));
 	directories->onSelectionChanged(std::tr1::bind(&FavoriteDirsPage::handleSelectionChanged, this));
-
-	onDragDrop(std::tr1::bind(&FavoriteDirsPage::handleDragDrop, this, _1));
+	directories->onDragDrop(std::tr1::bind(&FavoriteDirsPage::handleDragDrop, this, _1));
 }
 
 FavoriteDirsPage::~FavoriteDirsPage() {
@@ -150,10 +149,17 @@ void FavoriteDirsPage::handleRenameClicked() {
 }
 
 void FavoriteDirsPage::handleRemoveClicked() {
-	int i = -1;
+	int i;
 	while((i = directories->getNext(-1, LVNI_SELECTED)) != -1)
 		if(FavoriteManager::getInstance()->removeFavoriteDir(Text::fromT(directories->getText(i, 1))))
 			directories->erase(i);
+}
+
+void FavoriteDirsPage::addRow(const tstring& name, const tstring& path) {
+	TStringList row;
+	row.push_back(name);
+	row.push_back(path);
+	directories->insert(row);
 }
 
 void FavoriteDirsPage::addDirectory(const tstring& aPath) {
@@ -163,12 +169,9 @@ void FavoriteDirsPage::addDirectory(const tstring& aPath) {
 
 	LineDlg dlg(this, T_("Favorite name"), T_("Under what name you see the directory"), Util::getLastDir(path));
 	if(dlg.run() == IDOK) {
-		tstring line = dlg.getLine();
-		if (FavoriteManager::getInstance()->addFavoriteDir(Text::fromT(path), Text::fromT(line))) {
-			TStringList row;
-			row.push_back(line);
-			row.push_back(path);
-			directories->insert(row);
+		const tstring& line = dlg.getLine();
+		if(FavoriteManager::getInstance()->addFavoriteDir(Text::fromT(path), Text::fromT(line))) {
+			addRow(line, path);
 		} else {
 			dwt::MessageBox(this).show(T_("Directory or directory name already exists"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
 				dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
