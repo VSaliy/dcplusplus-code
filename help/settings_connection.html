@@ -16,14 +16,14 @@ about these settings, you may want to follow the
 of the <a href="get_started.html">Get Started guide</a>.
 </p>
 <h2>Incoming connection settings</h2>
-<dl style="margin-left: 40px;">
-  <p>Before set up the following settings make sure you familiar with the meaning of all connection modes, 
+  <p style="margin-left: 40px;">Before set up the following settings make sure you familiar with the meaning of all connection modes, 
   <a href="faq_whyactive.html">differences between active and passive mode and their effect on 
   your ability to search and download from users</a> of the DC network.</p> 
-  <h3><u>Active connection modes</u></h3>
-  <p>Active are the preferred connection modes in the DC network. In case of any problems with 
+  <h3 style="margin-left: 40px;"><u>Active connection modes</u></h3>
+  <p style="margin-left: 40px;">Active are the preferred connection modes in the DC network. In case of any problems with 
   setting up active connection modes please follow the detailed <a href="faq_activemode.html">
   Active mode FAQ</a> for help.</p>	  
+<dl style="margin-left: 40px;">
   <dt>My computer is directly connected to Internet (no router)</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_DIRECT">Select this mode if your computer is connected directly to the
 internet. <b>Do <u>not</u> select this mode if you have a router or any external firewall.</b> 
@@ -46,27 +46,29 @@ set up the TCP, UDP and TLS port forwarding on your own. You <u>will</u> need to
 external IP address of your router using the setting below if you want
 downloads to work properly. Use this mode only if the previous ones are not options for you. You can read the
 <a href="faq_activemode.html">Active mode guide</a> to get help how to set up manual port forwarding.</dd>
-  <h3><u>Passive connection mode</u></h3>
+</dl>
+  <h3 style="margin-left: 40px;"><u>Passive connection mode</u></h3> 
+<dl style="margin-left: 40px;">
   <dt>Passive mode (last resort - has serious limitations)</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_FIREWALL_PASSIVE">Select this mode if none of the previous Active mode options apply. In this
 mode, DC++ will not try to make inbound connections, only outbound
 ones. This mode carries some serious limitations:
-<ul style="margin-left: 80px;">
-  <li>only 5 results per user will be returned in response to searches;</li>
-  <li>you will not be able to download from other passive users.</li>
-  <li>you may won't be able to search and/or download on certain hubs.</li>
-</ul>
+  <ul style="margin-left: 80px;">
+    <li>only 5 results per user will be returned in response to searches;</li>
+    <li>you will not be able to download from other passive users.</li>
+    <li>you may won't be able to search and/or download on certain hubs.</li>
+  </ul>
 </dd>
 </dl>
+<h3 style="margin-left: 40px;"><u>Connection mode options</u></h3>
 <dl style="margin-left: 40px;">
-<h3><u>Connection mode options</u></h3>
 <dt>Ports</dt>
-<p>Here you can specify what communication ports should DC++ use to accept incoming connections. 
+<dd><p>Here you can specify what communication ports should DC++ use to accept incoming connections. 
 Generally you don't need to add specific ports unless you configured your port forwarding settings manually.
 If the ports not set DC++ will try to assgin them automatically in various ways depending on what connection
 mode used. So if you use any conncetion mode option other than 'Manual port forwarding (I have configured my router by myself)'
 then its best to leave the port fields empty. If port settings are left blank, DC++ will use a random port between 1025 and 32000.</p>
-<dd><dl>
+<dl>
   <dt>TCP</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_PORT_TCP">This is the port that DC++ listens on for incoming client
 connections. If this port incorrectly forwarded you won't be able to download. <i>If you unsure and use any conncetion mode option <u>other 
@@ -77,8 +79,9 @@ results. If this port incorrectly forwarded you won't be able to receive search 
   <dt>TLS</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_PORT_TLS">This is the port that DC++ listens on for <a href="settings_certs.html">TLS encrypted</a> connections.
   If this port incorrectly forwarded you won't be able to search and/or download on specific ADC hubs where secure connections required. <i>If you unsure and use any conncetion mode option <u>other than</u></i> 'Manual port forwarding (I have configured my router by myself)' <i>then leave this field blank.</i> However, if specified, <b>this port value should be different than the ones that used for TCP or UDP.</b></dd>
-</dl></dd>
-  <dt>External / WAN IP</dt>
+</dl>
+</dd>
+<dt>External / WAN IP</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_EXTERNAL_IP">This field specifies your external IP address. <i>If you unsure and use any conncetion mode option <u>other than</u></i> 'Manual port forwarding (I have configured my router by myself)' <i>then leave this field blank.</i> If your computer is directly connected to the internet, your internal and external IP is the same and can easily be automatically detected. Fill in this box <b>only</b> if you need to override the auto-detection. Ordinarily, only users behind a firewall/router (NAT device) may need to fill in this box. If you put a DNS name here, DC++ will try to resolve it into an IP address before use. To know how to determine your external IP address follow the 
 <a href="get_started.html#connection">connection setup part</a> of the <a href="get_started.html">Get Started guide</a> or the detailed <a href="faq_activemode.html">Active mode FAQ</a>.</dd>
   <dt>Don't allow hub/UPnP to override</dt>

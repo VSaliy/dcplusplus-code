@@ -8,20 +8,25 @@
 <body>
 <h1>How do I install DC++?</h1>
 <p>
-Just run the installer and fire up DC++, then enter the settings to set it up according to your preferences (most important is <a href="settings_general.html">nick</a>, <a href="settings_connection.html">connection mode</a>, <a href="settings_downloads.html">download location</a> and <a href="settings_sharing.html">shared folders</a>).<br/>
-You can also download the .zip file (Binary) and unpack it to any folder you like.
-By default DC++ will store its settings and create the downloads folder in the directory where it has been installed. You can configure DC++ to use another folder for settings by editing a file called dcppboot.xml located in the install folder. You can specify a path relative to the DC++ executable there.
+Just run the installer and fire up DC++, then enter the settings to set it up according to your preferences (most important is <a href="settings_general.html">nick</a>, <a href="settings_connection.html">connection mode</a>, <a href="settings_downloads.html">download location</a> and <a href="settings_sharing.html">shared folders</a>). When using the installer, DC++ will store its settings and create the default downloads folder in the current user's profile folders.
+</p>
+<p>
+You can also download the .zip file (Binary, portable version) and unpack it to any folder you like. If you use the portable version, all the settings and the downloads folder will be stored in the directory where DC++ has been unpacked. You can configure DC++ to use another folder for settings by editing a file called dcppboot.xml located besides the DC++ executable. You can read more about the storage of settings and downloaded files in <a href="faq_settings_files.html">this FAQ</a>.
+</p>
+<p>
+Note: if you use the portable (.zip) version of DC++ with Windows Vista or newer operating system then its not recommended to unpack it to the Program Files folder. Doing so may cause loss of settings and/or unfinished downloads.
 </p>
 <br/>
 <h1>How do I uninstall DC++?</h1>
 <p>
-Use the uninstaller that followed when you used the installer.<br/>
-If you didn't use the installer: You can delete your DC++ folder, but be aware that dchub://, adc:// and magnet: links will remain in the registry and will point to the nonexistent application. If you disable <a href="settings_advanced.html#registrydchubadc">Register with Windows to Handle dchub:// and adc:// URL Links</a> and <a href="settings_advanced.html#registrymagnet">Register with Windows to Handle magnet: URI Links</a> options before uninstalling, these registry settings will be removed.
+Use the uninstaller that followed when you used the installer. It will remove all installed the program files and (if you choose so) will delete all of your settings and unfinished downloads as well.<br/>
+If you didn't use the installer (portable version): You can safely delete your DC++ folder, but be aware that dchub://, adc:// and magnet: links will remain in the registry and will point to the nonexistent application. If you disable <a href="settings_advanced.html#registrydchubadc">Register with Windows to Handle dchub:// and adc:// URL Links</a> and <a href="settings_advanced.html#registrymagnet">Register with Windows to Handle magnet: URI Links</a> options before uninstalling, these registry settings will be removed.</p>
+<p>If you want to move your settings, unfinished downloads and another stored data of DC++ to another computer, follow the <a href="faq_settings_files.html">Settings files guide</a>.
 </p>
 <br/>
 <h1>How do I upgrade DC++?</h1>
 <p>
-Just install the new version (or unpack the .zip) in the folder your old version was in. Your old settings, queue, favorites will still be there and will be used by the new version. 
+Just install the new version (or unpack the .zip) in the folder your old version was in. Your old settings, queue, favorites will still be used by the new version. 
 <br/>
 <b>BEWARE : </b>There are some cases though when a feature upgrade makes impossible to reuse some some kind of settings or data created by an older version of DC++.  
 </p>
