@@ -39,8 +39,8 @@ namespace dwt {
 
 template<typename WidgetType>
 class AspectHelp {
-	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
+	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
 	HWND H() const { return W().handle(); }
 
@@ -82,8 +82,13 @@ class AspectHelp {
 	typedef std::tr1::function<void (unsigned&)> id_function_type;
 
 public:
-	unsigned getHelpId() {
+	unsigned getHelpId() const {
 		unsigned ret = ::GetWindowContextHelpId(H());
+		if(!ret) {
+			WidgetType* parent = dynamic_cast<WidgetType*>(W().getParent());
+			if(parent)
+				ret = parent->getHelpId();
+		}
 		if(id_function)
 			id_function(ret);
 		return ret;
