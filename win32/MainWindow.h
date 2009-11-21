@@ -154,6 +154,8 @@ private:
 	void handleActivate(bool active);
 	void handleForward(WPARAM wParam);
 	LRESULT handleEndSession();
+	void handleToolbarCustomized();
+	bool handleToolbarContextMenu(const dwt::ScreenCoordinate& pt);
 	bool handleSlotsUpdate(int pos, int delta);
 
 	// Other events

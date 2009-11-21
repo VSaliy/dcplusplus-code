@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   All rights reserved.
 
@@ -36,55 +36,110 @@ namespace dwt {
 const TCHAR ToolBar::windowClass[] = TOOLBARCLASSNAME;
 
 ToolBar::Seed::Seed() :
-	BaseType::Seed(WS_CHILD | TBSTYLE_LIST | TBSTYLE_TOOLTIPS)
+BaseType::Seed(WS_CHILD | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS | CCS_ADJUSTABLE)
 {
 }
 
-void ToolBar::create( const Seed & cs )
+ToolBar::ToolBar(Widget* parent) :
+BaseType(parent, ChainingDispatcher::superClass<ToolBar>()),
+customizing(false),
+customized(0),
+customizeHelp(0)
 {
+}
+
+void ToolBar::create(const Seed& cs) {
 	BaseType::create(cs);
 
-	this->sendMessage(TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_MIXEDBUTTONS);
+	sendMessage(TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_MIXEDBUTTONS);
 
-	//// Telling the toolbar what the size of TBBUTTON struct is
-	this->sendMessage(TB_BUTTONSTRUCTSIZE, ( WPARAM ) sizeof( TBBUTTON ));
+	//// Telling the toolbar what the size of the TBBUTTON struct is
+	sendMessage(TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON));
 
 	onRaw(std::tr1::bind(&ToolBar::handleDropDown, this, _2), Message(WM_NOTIFY, TBN_DROPDOWN));
-}
+	onRaw(std::tr1::bind(&ToolBar::handleToolTip, this, _2), Message(WM_NOTIFY, TBN_GETINFOTIP));
 
-void ToolBar::appendSeparator()
-{
-	TBBUTTON tb = { 0 };
-	tb.fsStyle = BTNS_SEP;
-	if ( this->sendMessage(TB_ADDBUTTONS, 1, reinterpret_cast< LPARAM >( &tb ) ) == FALSE )
-	{
-		throw Win32Exception("Error while trying to add a button to toolbar...");
+	if((cs.style & CCS_ADJUSTABLE) == CCS_ADJUSTABLE) {
+		// customization-related messages
+		onRaw(std::tr1::bind(&ToolBar::handleBeginAdjust, this), Message(WM_NOTIFY, TBN_BEGINADJUST));
+		onRaw(std::tr1::bind(&ToolBar::handleChange, this), Message(WM_NOTIFY, TBN_TOOLBARCHANGE));
+		onRaw(std::tr1::bind(&ToolBar::handleCustHelp, this), Message(WM_NOTIFY, TBN_CUSTHELP));
+		onRaw(std::tr1::bind(&ToolBar::handleEndAdjust, this), Message(WM_NOTIFY, TBN_ENDADJUST));
+		onRaw(std::tr1::bind(&ToolBar::handleGetButtonInfo, this, _2), Message(WM_NOTIFY, TBN_GETBUTTONINFO));
+		onRaw(std::tr1::bind(&ToolBar::handleInitCustomize, this), Message(WM_NOTIFY, TBN_INITCUSTOMIZE));
+		onRaw(std::tr1::bind(&ToolBar::handleQuery, this), Message(WM_NOTIFY, TBN_QUERYINSERT));
+		onRaw(std::tr1::bind(&ToolBar::handleQuery, this), Message(WM_NOTIFY, TBN_QUERYDELETE));
+		onRaw(std::tr1::bind(&ToolBar::handleReset, this), Message(WM_NOTIFY, TBN_RESET));
 	}
 }
 
-void ToolBar::appendItem(int image, const tstring& toolTip, DWORD_PTR data, const Dispatcher::F& f, const DropDownFunction& dropDownF)
+void ToolBar::addButton(const std::string& id, int image, const tstring& text, unsigned helpId,
+						const Dispatcher::F& f, const DropDownFunction& dropDownF)
 {
-	int id = -1;
-
-	if(f || dropDownF) {
-		id = static_cast<int>(commands.size());
-		commands.push_back(std::make_pair(f, dropDownF));
-	}
-
-	// Adding button
 	TBBUTTON tb = { 0 };
 	tb.iBitmap = image;
-	tb.idCommand = id;
+	tb.idCommand = id_offset + buttons.size();
 	tb.fsState = TBSTATE_ENABLED;
 	tb.fsStyle = BTNS_AUTOSIZE;
 	if(dropDownF)
 		tb.fsStyle |= f ? BTNS_DROPDOWN : BTNS_WHOLEDROPDOWN;
-	tb.dwData = data;
-	tb.iString = reinterpret_cast<INT_PTR>(toolTip.c_str());
-	if ( this->sendMessage(TB_ADDBUTTONS, 1, reinterpret_cast< LPARAM >( &tb ) ) == FALSE )
-	{
-		throw Win32Exception( "Error while trying to add a button to toolbar...");
+	/* we could pass the string to the toolbar and let it handle tooltips by itself; unfortunately
+	* it messes toolbar customization with shift + drag. so resort to handling TBN_GETINFOTIP... */
+	static tstring emptyString;
+	tb.iString = reinterpret_cast<INT_PTR>(emptyString.c_str());
+
+	Button button = { tb, id, text, helpId, f, dropDownF };
+	buttons.push_back(button);
+}
+
+std::vector<std::string> ToolBar::getLayout() const {
+	std::vector<std::string> ret;
+
+	// imitate getButton except we also care about separators and we cache the TBBUTTONINFO struct
+	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_BYINDEX | TBIF_COMMAND | TBIF_STYLE };
+	for(unsigned i = 0, iend = size(); i < iend; ++i) {
+		if(sendMessage(TB_GETBUTTONINFO, i, reinterpret_cast<LPARAM>(&tb)) != -1) {
+			if((tb.fsStyle & BTNS_SEP) == BTNS_SEP)
+				ret.push_back(std::string());
+			else {
+				size_t index = tb.idCommand - id_offset;
+				if(index < buttons.size())
+					ret.push_back(buttons[index].id);
+			}
+		}
 	}
+
+	return ret;
+}
+
+void ToolBar::setLayout(const std::vector<std::string>& ids) {
+	while(size() > 0)
+		removeButton(0);
+
+	for(std::vector<std::string>::const_iterator id = ids.begin(), id_end = ids.end(); id != id_end; ++id) {
+		const TBBUTTON* ptb = 0;
+		if(id->empty())
+			ptb = &getSeparator();
+		else {
+			for(Buttons::const_iterator button = buttons.begin(), button_end = buttons.end(); button != button_end; ++button) {
+				if(button->id == *id) {
+					ptb = &(button->button);
+				}
+			}
+		}
+
+		if(ptb && !sendMessage(TB_ADDBUTTONS, 1, reinterpret_cast<LPARAM>(ptb))) {
+			throw Win32Exception("Error when trying to add a button in ToolBar::setLayout");
+		}
+	}
+}
+
+void ToolBar::customize() {
+	sendMessage(TB_CUSTOMIZE);
+}
+
+unsigned ToolBar::size() const {
+	return sendMessage(TB_BUTTONCOUNT);
 }
 
 int ToolBar::hitTest(const ScreenCoordinate& pt) {
@@ -92,11 +147,15 @@ int ToolBar::hitTest(const ScreenCoordinate& pt) {
 	return sendMessage(TB_HITTEST, 0, reinterpret_cast<LPARAM>(&point));
 }
 
+void ToolBar::removeButton(unsigned index) {
+	sendMessage(TB_DELETEBUTTON, index);
+}
+
 bool ToolBar::handleMessage( const MSG & msg, LRESULT & retVal ) {
 	if(msg.message == WM_COMMAND && msg.lParam == reinterpret_cast<LPARAM>(handle())) {
-		size_t id = LOWORD(msg.wParam);
-		if(id < commands.size()) {
-			const Dispatcher::F& f = commands[id].first;
+		size_t index = LOWORD(msg.wParam) - id_offset;
+		if(index < buttons.size()) {
+			const Dispatcher::F& f = buttons[index].f;
 			if(f) {
 				f();
 				return true;
@@ -107,27 +166,102 @@ bool ToolBar::handleMessage( const MSG & msg, LRESULT & retVal ) {
 }
 
 LRESULT ToolBar::handleDropDown(LPARAM lParam) {
-	LPNMTOOLBAR lpnmtb = reinterpret_cast<LPNMTOOLBAR>(lParam);
-	size_t id = lpnmtb->iItem;
-	if(id < commands.size()) {
-		const DropDownFunction& f = commands[id].second;
+	LPNMTOOLBAR info = reinterpret_cast<LPNMTOOLBAR>(lParam);
+	size_t index = info->iItem - id_offset;
+	if(index < buttons.size()) {
+		const DropDownFunction& f = buttons[index].dropDownF;
 		if(f) {
-			f(ScreenCoordinate(ClientCoordinate(Point(lpnmtb->rcButton.left, lpnmtb->rcButton.bottom), this)));
+			f(ScreenCoordinate(ClientCoordinate(Point(info->rcButton.left, info->rcButton.bottom), this)));
 			return TBDDRET_DEFAULT;
 		}
 	}
 	return TBDDRET_NODEFAULT;
 }
 
+LRESULT ToolBar::handleToolTip(LPARAM lParam) {
+	LPNMTBGETINFOTIP info = reinterpret_cast<LPNMTBGETINFOTIP>(lParam);
+	size_t index = info->iItem - id_offset;
+	if(index < buttons.size()) {
+		_tcsncpy(info->pszText, buttons[index].text.c_str(), info->cchTextMax);
+	}
+	return 0;
+}
+
+LRESULT ToolBar::handleBeginAdjust() {
+	prevLayout = getLayout();
+	customizing = true;
+	return 0;
+}
+
+LRESULT ToolBar::handleChange() {
+	if(!customizing && customized)
+		customized();
+	return 0;
+}
+
+LRESULT ToolBar::handleCustHelp() {
+	if(customizeHelp)
+		customizeHelp();
+	return 0;
+}
+
+LRESULT ToolBar::handleEndAdjust() {
+	if(customized)
+		customized();
+	customizing = false;
+	prevLayout.clear();
+	return 0;
+}
+
+LRESULT ToolBar::handleGetButtonInfo(LPARAM lParam) {
+	LPTBNOTIFY info = reinterpret_cast<LPTBNOTIFY>(lParam);
+	size_t index = info->iItem; // no need to use id_offset here, this is already a 0-based index
+	if(index < buttons.size()) {
+		const Button& button = buttons[index];
+		info->tbButton = button.button;
+		_tcsncpy(info->pszText, button.text.c_str(), info->cchText);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+LRESULT ToolBar::handleInitCustomize() {
+	// hide the "Help" button of the dialog if no help function is defined.
+	return customizeHelp ? 0 : TBNRF_HIDEHELP;
+}
+
+LRESULT ToolBar::handleQuery() {
+	return TRUE;
+}
+
+LRESULT ToolBar::handleReset() {
+	setLayout(prevLayout);
+	return 0;
+}
+
 void ToolBar::helpImpl(unsigned& id) {
 	// we have the help id of the whole toolbar; convert to the one of the specific button the user just clicked on
-	int index = hitTest(ScreenCoordinate(Point::fromLParam(::GetMessagePos())));
-	if(index >= 0) {
-		// assume the extra info associated with the button is the help id
-		TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_BYINDEX | TBIF_LPARAM };
-		sendMessage(TB_GETBUTTONINFO, index, reinterpret_cast<LPARAM>(&tb));
-		id = tb.lParam;
+	int position = hitTest(ScreenCoordinate(Point::fromLParam(::GetMessagePos())));
+	if(position >= 0) {
+		const Button* button = getButton(position);
+		if(button)
+			id = button->helpId;
 	}
+}
+
+const TBBUTTON& ToolBar::getSeparator() const {
+	static TBBUTTON sep = { 0, 0, 0, BTNS_SEP };
+	return sep;
+}
+
+const ToolBar::Button* ToolBar::getButton(unsigned position) const {
+	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_BYINDEX | TBIF_COMMAND };
+	if(sendMessage(TB_GETBUTTONINFO, position, reinterpret_cast<LPARAM>(&tb)) != -1) {
+		size_t index = tb.idCommand - id_offset;
+		if(index < buttons.size())
+			return &buttons[index];
+	}
+	return 0;
 }
 
 }

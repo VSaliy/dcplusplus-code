@@ -146,6 +146,13 @@ typedef struct
 #define LVS_EX_DOUBLEBUFFER     0x00010000
 #endif
 #endif
+#ifndef TBN_GETINFOTIP
+#ifdef UNICODE
+#define TBN_GETINFOTIP          TBN_GETINFOTIPW
+#else
+#define TBN_GETINFOTIP          TBN_GETINFOTIPA
+#endif
+#endif
 
 // MinGW's CommCtrl.h has got some of the following defs wrong
 #undef LVIF_TEXT

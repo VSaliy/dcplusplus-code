@@ -294,9 +294,8 @@ void MainWindow::initMenu() {
 void MainWindow::initToolbar() {
 	dcdebug("initToolbar\n");
 
-	ToolBar::Seed cs;
-	cs.style |= TBSTYLE_FLAT;
-	toolbar = addChild(cs);
+	toolbar = addChild(ToolBar::Seed());
+
 	{
 		dwt::ImageListPtr list(new dwt::ImageList(20, 20, ILC_COLOR32 | ILC_MASK));
 		dwt::Bitmap bmp(IDB_TOOLBAR20);
@@ -313,30 +312,73 @@ void MainWindow::initToolbar() {
 	}
 
 	int image = 0;
-	toolbar->appendItem(image++, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS, std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()));
-	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_("Reconnect"), IDH_TOOLBAR_RECONNECT, std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT));
-	toolbar->appendItem(image++, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW, std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW));
-	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS, std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), std::tr1::bind(&MainWindow::handleFavHubsDropDown, this, _1));
-	toolbar->appendItem(image++, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS, std::tr1::bind(&UsersFrame::openWindow, getTabView()));
-	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_("Download Queue"), IDH_TOOLBAR_QUEUE, std::tr1::bind(&QueueFrame::openWindow, getTabView()));
-	toolbar->appendItem(image++, T_("Finished Downloads"), IDH_TOOLBAR_FINISHED_DL, std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()));
-	toolbar->appendItem(image++, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS, std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()));
-	toolbar->appendItem(image++, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL, std::tr1::bind(&FinishedULFrame::openWindow, getTabView()));
-	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_("Search"), IDH_TOOLBAR_SEARCH, std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
-	toolbar->appendItem(image++, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH, std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()));
-	toolbar->appendItem(image++, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY, std::tr1::bind(&SpyFrame::openWindow, getTabView()));
-	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST, std::tr1::bind(&MainWindow::handleOpenFileList, this));
-	toolbar->appendItem(image++, T_("Recent windows"), IDH_TOOLBAR_RECENT, 0, std::tr1::bind(&MainWindow::handleRecent, this, _1));
-	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_("Settings"), IDH_TOOLBAR_SETTINGS, std::tr1::bind(&MainWindow::handleSettings, this));
-	toolbar->appendItem(image++, T_("Notepad"), IDH_TOOLBAR_NOTEPAD, std::tr1::bind(&NotepadFrame::openWindow, getTabView()));
-	toolbar->appendSeparator();
-	toolbar->appendItem(image++, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS, std::tr1::bind(&MainWindow::handleWhatsThis, this));
+	toolbar->addButton(PublicHubsFrame::id, image++, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS,
+		std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()));
+	toolbar->addButton("Reconnect", image++, T_("Reconnect"), IDH_TOOLBAR_RECONNECT,
+		std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT));
+	toolbar->addButton("Redirect", image++, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW,
+		std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW));
+	toolbar->addButton(FavHubsFrame::id, image++, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
+		std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), std::tr1::bind(&MainWindow::handleFavHubsDropDown, this, _1));
+	toolbar->addButton(UsersFrame::id, image++, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
+		std::tr1::bind(&UsersFrame::openWindow, getTabView()));
+	toolbar->addButton(QueueFrame::id, image++, T_("Download Queue"), IDH_TOOLBAR_QUEUE,
+		std::tr1::bind(&QueueFrame::openWindow, getTabView()));
+	toolbar->addButton(FinishedDLFrame::id, image++, T_("Finished Downloads"), IDH_TOOLBAR_FINISHED_DL,
+		std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()));
+	toolbar->addButton(WaitingUsersFrame::id, image++, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS,
+		std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()));
+	toolbar->addButton(FinishedULFrame::id, image++, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL,
+		std::tr1::bind(&FinishedULFrame::openWindow, getTabView()));
+	toolbar->addButton(SearchFrame::id, image++, T_("Search"), IDH_TOOLBAR_SEARCH,
+		std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
+	toolbar->addButton(ADLSearchFrame::id, image++, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH,
+		std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()));
+	toolbar->addButton(SpyFrame::id, image++, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY,
+		std::tr1::bind(&SpyFrame::openWindow, getTabView()));
+	toolbar->addButton("OpenFL", image++, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST,
+		std::tr1::bind(&MainWindow::handleOpenFileList, this));
+	toolbar->addButton("Recents", image++, T_("Recent windows"), IDH_TOOLBAR_RECENT,
+		0, std::tr1::bind(&MainWindow::handleRecent, this, _1));
+	toolbar->addButton("Settings", image++, T_("Settings"), IDH_TOOLBAR_SETTINGS,
+		std::tr1::bind(&MainWindow::handleSettings, this));
+	toolbar->addButton(NotepadFrame::id, image++, T_("Notepad"), IDH_TOOLBAR_NOTEPAD,
+		std::tr1::bind(&NotepadFrame::openWindow, getTabView()));
+	toolbar->addButton("CSHelp", image++, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS,
+		std::tr1::bind(&MainWindow::handleWhatsThis, this));
+
+	if(SettingsManager::getInstance()->isDefault(SettingsManager::TOOLBAR)) {
+		// gotta create a default layout for the toolbar
+		const string comma(",");
+		SettingsManager::getInstance()->setDefault(SettingsManager::TOOLBAR,
+			PublicHubsFrame::id + comma +
+			comma +
+			"Reconnect" + comma +
+			"Redirect" + comma +
+			FavHubsFrame::id + comma +
+			UsersFrame::id + comma +
+			comma +
+			QueueFrame::id + comma +
+			FinishedDLFrame::id + comma +
+			WaitingUsersFrame::id + comma +
+			FinishedULFrame::id + comma +
+			comma +
+			SearchFrame::id + comma +
+			ADLSearchFrame::id + comma +
+			SpyFrame::id + comma +
+			comma +
+			"OpenFL" + comma +
+			"Recents" + comma +
+			comma +
+			"Settings" + comma +
+			NotepadFrame::id + comma +
+			comma +
+			"CSHelp");
+	}
+	toolbar->setLayout(StringTokenizer<string>(SETTING(TOOLBAR), ',').getTokens());
+	toolbar->onCustomized(std::tr1::bind(&MainWindow::handleToolbarCustomized, this));
+	toolbar->onCustomizeHelp(std::tr1::bind(&WinUtil::help, toolbar, IDH_CUSTOMIZE_TB));
+	toolbar->onContextMenu(std::tr1::bind(&MainWindow::handleToolbarContextMenu, this, _1));
 
 	toolbar->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 }
@@ -1102,6 +1144,26 @@ LRESULT MainWindow::handleEndSession() {
 	SettingsManager::getInstance()->save();
 
 	return 0;
+}
+
+void MainWindow::handleToolbarCustomized() {
+	string setting;
+	StringList list = toolbar->getLayout();
+	for(StringIterC i = list.begin(), iend = list.end(); i != iend; ++i) {
+		setting += *i;
+		if(i != iend - 1)
+			setting += ',';
+	}
+	SettingsManager::getInstance()->set(SettingsManager::TOOLBAR, setting);
+}
+
+bool MainWindow::handleToolbarContextMenu(const dwt::ScreenCoordinate& pt) {
+	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	menu->setTitle(T_("Toolbar"));
+	menu->appendItem(T_("&Customize\tDouble-click"), std::tr1::bind(&ToolBar::customize, toolbar),
+		dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)), true, true);
+	menu->open(pt);
+	return true;
 }
 
 bool MainWindow::handleSlotsUpdate(int pos, int delta) {
