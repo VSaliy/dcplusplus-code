@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   SmartWin++
 
@@ -36,14 +36,10 @@
 #ifndef DWT_ToolBar_h
 #define DWT_ToolBar_h
 
-#ifndef WINCE // Doesn't exist in Windows CE based systems
-
 #include "../Dispatchers.h"
 #include "../resources/ImageList.h"
 #include "../DWTException.h"
 #include "Control.h"
-
-#include <vector>
 
 namespace dwt {
 
@@ -58,12 +54,12 @@ namespace dwt {
   * to view the log of URL's you have been to etc...
   */
 class ToolBar :
-	public CommonControl
+	public Control
 {
-	typedef CommonControl BaseType;
+	typedef Control BaseType;
 	typedef Dispatchers::VoidVoid<> Dispatcher;
 	typedef std::tr1::function<void (const ScreenCoordinate&)> DropDownFunction;
-	friend class WidgetCreator< ToolBar >;
+	friend class WidgetCreator<ToolBar>;
 public:
 	/// Class type
 	typedef ToolBar ThisType;
@@ -99,14 +95,30 @@ public:
 	/** Loads a bitmap that is contained in a BitmapPtr. <br>
 	  * noButtonsInBitmap is how many buttons there actually exists in the bitmap
 	  */
-		//void addBitmap( BitmapPtr bitmap, unsigned int noButtonsInBitmap );
+	//void addBitmap( BitmapPtr bitmap, unsigned int noButtonsInBitmap );
 
-	/// Adds a separator to the toolbar
-	/** A separator is an "empty space" that adds air between buttons
-	  */
-	void appendSeparator();
+	/**
+	* add a button to the toolbar. this will only create the internal structures for holding the
+	* button; call setLayout when all buttons have been created to actually add them to the bar.
+	*/
+	void addButton(const std::string& id, int image, const tstring& text, unsigned helpId = 0,
+		const Dispatcher::F& f = 0, const DropDownFunction& dropDownF = 0);
 
-	void appendItem(int image, const tstring& toolTip, DWORD_PTR data = 0, const Dispatcher::F& f = 0, const DropDownFunction& dropDownF = 0);
+	/**
+	* fills a vector with ids of the current buttons, to represent the current state of the
+	* toolbar. an empty id represents a separator bar.
+	*/
+	std::vector<std::string> getLayout() const;
+
+	/**
+	* define a new layout; all previous buttons will be removed, and the buttons specified in the
+	* "ids" argument will then be added (provided they have been previously created, with
+	* addButton). an empty id represents a separator bar.
+	*/
+	void setLayout(const std::vector<std::string>& ids);
+
+	/// open the "Customize Toolbar" dialog.
+	void customize();
 
 	/// Set the image list with the normal button images.
 	/** normalImageList is the image list that contains the images
@@ -152,20 +164,39 @@ public:
 	  */
 	bool getButtonChecked( unsigned int id );
 
-	int size();
+	unsigned size() const;
 
 	int hitTest(const ScreenCoordinate& pt);
+
+	void removeButton(unsigned index);
+
+	/**
+	* define a function called after the toolbar has been customized:
+	* - after the "Customize Toolbar" dialog has been closed.
+	* - after an item has been moved with shift + click.
+	*/
+	void onCustomized(const Dispatcher::F& f) {
+		customized = f;
+	}
+
+	/**
+	* define a function called when the user presses the "Help" button of the "Customize Toolbar"
+	* dialog. if no function is defined, the "Help" button will be hidden.
+	*/
+	void onCustomizeHelp(const Dispatcher::F& f) {
+		customizeHelp = f;
+	}
 
 	/// Actually creates the Toolbar
 	/** You should call WidgetFactory::createToolbar if you instantiate class
 	  * directly. <br>
 	  * Only if you DERIVE from class you should call this function directly.
 	  */
-	void create( const Seed & cs = Seed() );
+	void create(const Seed& cs = Seed());
 
 protected:
 	// Constructor Taking pointer to parent
-	explicit ToolBar( Widget * parent );
+	explicit ToolBar(Widget* parent);
 
 	// To assure nobody accidentally deletes any heaped object of this type, parent
 	// is supposed to do so when parent is killed...
@@ -183,10 +214,40 @@ private:
 	ImageListPtr itsHotImageList;
 	ImageListPtr itsDisabledImageList;
 
-	typedef std::pair<Dispatcher::F, DropDownFunction> command_pair;
-	std::vector<command_pair> commands;
+	struct Button {
+		TBBUTTON button;
+		std::string id;
+		tstring text;
+		unsigned helpId;
+		Dispatcher::F f;
+		DropDownFunction dropDownF;
+	};
+	typedef std::vector<Button> Buttons;
+	Buttons buttons;
+	static const unsigned id_offset = 100; // because 0-based ids seem to confuse the toolbar...
+
+	// customization-related members
+	bool customizing; /// the "Customize Toolbar" dialog is opened
+	Dispatcher::F customized;
+	Dispatcher::F customizeHelp;
+	/// layout of the toolbar before the "Customize Toolbar" dialog was opened, in case the user hits "Reset"
+	std::vector<std::string> prevLayout;
 
 	LRESULT handleDropDown(LPARAM lParam);
+	LRESULT handleToolTip(LPARAM lParam);
+
+	// customization-related events
+	LRESULT handleBeginAdjust();
+	LRESULT handleChange();
+	LRESULT handleCustHelp();
+	LRESULT handleEndAdjust();
+	LRESULT handleGetButtonInfo(LPARAM lParam);
+	LRESULT handleInitCustomize();
+	LRESULT handleQuery();
+	LRESULT handleReset();
+
+	const TBBUTTON& getSeparator() const;
+	const Button* getButton(unsigned position) const;
 
 	// AspectHelp
 	void helpImpl(unsigned& id);
@@ -198,13 +259,13 @@ private:
 
 inline void ToolBar::refresh()
 {
-	this->sendMessage(TB_AUTOSIZE);
+	sendMessage(TB_AUTOSIZE);
 }
 
 inline void ToolBar::setButtonSize( unsigned int width, unsigned int height )
 {
-	if ( this->sendMessage(TB_SETBUTTONSIZE, 0, static_cast< LPARAM >( MAKELONG( width, height ) ) ) != TRUE ||
-		this->sendMessage(TB_SETBITMAPSIZE, 0, static_cast< LPARAM >( MAKELONG( width, height ) ) ) != TRUE )
+	if ( sendMessage(TB_SETBUTTONSIZE, 0, static_cast< LPARAM >( MAKELONG( width, height ) ) ) != TRUE ||
+		sendMessage(TB_SETBITMAPSIZE, 0, static_cast< LPARAM >( MAKELONG( width, height ) ) ) != TRUE )
 	{
 		throw Win32Exception( "Error while trying to set toolbar button size...");
 	}
@@ -217,7 +278,7 @@ void ToolBar::addBitmap( HBITMAP hBit, unsigned int noButtonsInBitmap )
 	TBADDBITMAP tb;
 	tb.hInst = NULL;
 	tb.nID = ( UINT_PTR )hBit;
-	if(this->sendMessage(TB_ADDBITMAP, static_cast< WPARAM >( noButtonsInBitmap ), reinterpret_cast< LPARAM >(&tb ) ) == - 1 )
+	if(sendMessage(TB_ADDBITMAP, static_cast< WPARAM >( noButtonsInBitmap ), reinterpret_cast< LPARAM >(&tb ) ) == - 1 )
 	{
 		xCeption x( _T("Error while trying to add a bitmap to toolbar...") );
 		throw x;
@@ -228,70 +289,60 @@ void ToolBar::addBitmap( HBITMAP hBit, unsigned int noButtonsInBitmap )
 	void ToolBar::addBitmap( BitmapPtr bitmap, unsigned int noButtonsInBitmap )
 {
 	itsBitmaps.push_back( bitmap );
-	this->addBitmap( bitmap->getBitmap(), noButtonsInBitmap );
+	addBitmap( bitmap->getBitmap(), noButtonsInBitmap );
 }
 */
 
 inline void ToolBar::setNormalImageList( ImageListPtr normalImageList )
 {
 	itsNormalImageList = normalImageList;
-	this->sendMessage(TB_SETIMAGELIST, 0, reinterpret_cast< LPARAM >( itsNormalImageList->getImageList() ) );
+	sendMessage(TB_SETIMAGELIST, 0, reinterpret_cast< LPARAM >( itsNormalImageList->getImageList() ) );
 }
 
 inline void ToolBar::setHotImageList( ImageListPtr hotImageList )
 {
 	itsHotImageList = hotImageList;
-	this->sendMessage(TB_SETHOTIMAGELIST, 0, reinterpret_cast< LPARAM >( itsHotImageList->getImageList() ) );
+	sendMessage(TB_SETHOTIMAGELIST, 0, reinterpret_cast< LPARAM >( itsHotImageList->getImageList() ) );
 }
 
 inline void ToolBar::setDisabledImageList( ImageListPtr disabledImageList )
 {
 	itsDisabledImageList = disabledImageList;
-	this->sendMessage(TB_SETDISABLEDIMAGELIST, 0, reinterpret_cast< LPARAM >( itsDisabledImageList->getImageList() ) );
+	sendMessage(TB_SETDISABLEDIMAGELIST, 0, reinterpret_cast< LPARAM >( itsDisabledImageList->getImageList() ) );
 }
 
 inline void ToolBar::setButtonVisible( unsigned int id, bool show )
 {
-	this->sendMessage(TB_HIDEBUTTON, static_cast< LPARAM >( id ), MAKELONG( ( show ? FALSE : TRUE ), 0 ) );
-}
-
-inline int ToolBar::size( )
-{
-	return this->sendMessage(TB_BUTTONCOUNT);
+	sendMessage(TB_HIDEBUTTON, static_cast< LPARAM >( id ), MAKELONG( ( show ? FALSE : TRUE ), 0 ) );
 }
 
 inline bool ToolBar::getButtonVisible( unsigned int id )
 {
 	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, id };
-	this->sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
+	sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
 	return ( tb.fsState & TBSTATE_HIDDEN ) == 0;
 }
 
 inline void ToolBar::setButtonEnabled( unsigned id, bool enable )
 {
-	this->sendMessage(TB_ENABLEBUTTON, static_cast< LPARAM >( id ), MAKELONG( ( enable ? TRUE : FALSE ), 0 ) );
+	sendMessage(TB_ENABLEBUTTON, static_cast< LPARAM >( id ), MAKELONG( ( enable ? TRUE : FALSE ), 0 ) );
 }
 
 inline bool ToolBar::getButtonEnabled( unsigned int id )
 {
 	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, id };
-	this->sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
+	sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
 	return ( tb.fsState & TBSTATE_ENABLED ) == TBSTATE_ENABLED;
 }
 
 inline bool ToolBar::getButtonChecked( unsigned int id )
 {
 	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, id };
-	this->sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
+	sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
 	return ( tb.fsState & TBSTATE_CHECKED ) == TBSTATE_CHECKED;
-}
-
-inline ToolBar::ToolBar( dwt::Widget * parent )
-	: BaseType(parent, ChainingDispatcher::superClass<ToolBar>())
-{
 }
 
 // end namespace dwt
 }
-#endif
+
 #endif

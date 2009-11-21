@@ -49,6 +49,7 @@
 * Fix coloring of drop-down controls (poy)
 * Show last main chat lines, add a "History" settings category (poy)
 * [L#483323] Fix share files instantly after downloaded (emtee)
+* Toolbar customization (shift+drag, double-click, right-click) (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
