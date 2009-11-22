@@ -36,7 +36,7 @@
 #include <dcpp/version.h>
 #include <dcpp/WindowInfo.h>
 
-const string HubFrame::id = WindowManager::hub;
+const string HubFrame::id = WindowManager::hub();
 const string& HubFrame::getId() const { return id; }
 
 static const ColumnInfo usersColumns[] = {

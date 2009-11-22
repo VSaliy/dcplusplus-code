@@ -30,7 +30,10 @@ namespace dcpp {
 
 static const unsigned MAX_RECENTS_DEFAULT = 10;
 
-const string WindowManager::hub = "Hub";
+const string& WindowManager::hub() {
+	static const string hub("Hub");
+	return hub;
+}
 
 WindowManager::WindowManager() {
 	SettingsManager::getInstance()->addListener(this);
@@ -44,7 +47,7 @@ void WindowManager::autoOpen(bool skipHubs) {
 	Lock l(cs);
 	for(WindowInfoList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
 		const string& id = i->getId();
-		if(skipHubs && id == hub)
+		if(skipHubs && id == hub())
 			continue;
 		fire(WindowManagerListener::Window(), id, i->getParams());
 	}
