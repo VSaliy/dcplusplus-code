@@ -154,7 +154,7 @@ public:
 
 	int lineLength(int c);
 
-	unsigned getLineCount();
+	unsigned getLineCount() const;
 
 	void setModify(bool modify = false);
 
@@ -182,10 +182,10 @@ protected:
 
 	void create(const Seed& cs);
 
-private:
 	// Contract needed by AspectUpdate Aspect class
 	static Message getUpdateMessage();
 
+private:
 	unsigned lines;
 };
 
@@ -216,6 +216,8 @@ public:
 	/** The txt parameter is the new text to append to the text box.
 	  */
 	void addText( const tstring & txt );
+
+	void setText(const tstring& txt);
 
 	/// Returns the current selected text from the text box
 	/** The selected text of the text box is the return value from this.
@@ -438,7 +440,7 @@ inline int TextBoxBase::lineLength(int c) {
 	return static_cast<int>(sendMessage(EM_LINELENGTH, static_cast<WPARAM>(c)));
 }
 
-inline unsigned TextBoxBase::getLineCount() {
+inline unsigned TextBoxBase::getLineCount() const {
 	return sendMessage(EM_GETLINECOUNT);
 }
 

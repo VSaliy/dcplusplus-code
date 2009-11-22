@@ -35,6 +35,7 @@ protected:
 	AspectChat() :
 	chat(0),
 	message(0),
+	messageLines(1),
 	timeStamps(BOOLSETTING(TIME_STAMPS)),
 	curCommandPosition(0)
 	{
@@ -49,6 +50,7 @@ protected:
 			TextBox::Seed cs = WinUtil::Seeds::textBox;
 			cs.style |= WS_VSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE;
 			message = t().addChild(cs);
+			message->onUpdated(std::tr1::bind(&ThisType::handleMessageUpdated, this));
 		}
 	}
 
@@ -252,6 +254,8 @@ protected:
 	RichTextBox* chat;
 	dwt::TextBoxPtr message;
 
+	unsigned messageLines;
+
 private:
 	bool timeStamps;
 
@@ -259,7 +263,25 @@ private:
 	tstring currentCommand;
 	TStringList::size_type curCommandPosition; //can't use an iterator because StringList is a vector, and vector iterators become invalid after resizing
 
-	bool historyActive() {
+	void handleMessageUpdated() {
+		unsigned lineCount = message->getLineCount();
+
+		// make sure we don't resize to 0 lines...
+		const unsigned min_setting = max(SETTING(MIN_MESSAGE_LINES), 1);
+		const unsigned max_setting = max(SETTING(MAX_MESSAGE_LINES), 1);
+
+		if(lineCount < min_setting)
+			lineCount = min_setting;
+		else if(lineCount > max_setting)
+			lineCount = max_setting;
+
+		if(lineCount != messageLines) {
+			messageLines = lineCount;
+			t().layout();
+		}
+	}
+
+	bool historyActive() const {
 		return t().isAltPressed() || (BOOLSETTING(USE_CTRL_FOR_LINE_HISTORY) && t().isControlPressed());
 	}
 };

@@ -109,21 +109,22 @@ bool HubFrame::isFavorite(const StringMap& params) {
 }
 
 HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
-	BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF),
-	filter(0),
-	filterType(0),
-	paned(0),
-	showUsers(0),
-	users(0),
-	client(0),
-	url(url_),
-	updateUsers(false),
-	waitingForPW(false),
-	resort(false),
-	showJoins(BOOLSETTING(SHOW_JOINS)),
-	favShowJoins(BOOLSETTING(FAV_SHOW_JOINS)),
-	inTabMenu(false),
-	inTabComplete(false)
+BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF),
+paned(0),
+userGrid(0),
+users(0),
+filter(0),
+filterType(0),
+showUsers(0),
+client(0),
+url(url_),
+updateUsers(false),
+waitingForPW(false),
+resort(false),
+showJoins(BOOLSETTING(SHOW_JOINS)),
+favShowJoins(BOOLSETTING(FAV_SHOW_JOINS)),
+inTabMenu(false),
+inTabComplete(false)
 {
 	paned = addChild(WidgetVPaned::Seed(0.7));
 
@@ -139,31 +140,15 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 	message->onChar(std::tr1::bind(&HubFrame::handleMessageChar, this, _1));
 
 	{
-		TextBox::Seed cs = WinUtil::Seeds::textBox;
-		cs.style |= ES_AUTOHSCROLL;
-		filter = addChild(cs);
-		filter->setHelpId(IDH_HUB_FILTER);
-		addWidget(filter);
-		filter->onKeyUp(std::tr1::bind(&HubFrame::handleFilterKey, this, _1));
-	}
+		userGrid = addChild(Grid::Seed(2, 2));
+		userGrid->column(0).mode = GridInfo::FILL;
+		userGrid->row(0).mode = GridInfo::FILL;
+		userGrid->row(0).align = GridInfo::STRETCH;
+		paned->setSecond(userGrid);
 
-	{
-		filterType = addChild(WinUtil::Seeds::comboBoxStatic);
-		filterType->setHelpId(IDH_HUB_FILTER);
-		addWidget(filterType);
-
-		for(int j=0; j<COLUMN_LAST; j++) {
-			filterType->addValue(T_(usersColumns[j].name));
-		}
-		filterType->addValue(T_("Any"));
-		filterType->setSelected(COLUMN_LAST);
-		filterType->onSelectionChanged(std::tr1::bind(&HubFrame::updateUserList, this, (UserInfo*)0));
-	}
-
-	{
-		users = addChild(WidgetUsers::Seed());
+		users = userGrid->addChild(WidgetUsers::Seed());
+		userGrid->setWidget(users, 0, 0, 1, 2);
 		addWidget(users);
-		paned->setSecond(users);
 
 		users->setSmallImageList(WinUtil::userImages);
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
@@ -174,6 +159,24 @@ HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
 		users->onDblClicked(std::tr1::bind(&HubFrame::handleDoubleClickUsers, this));
 		users->onKeyDown(std::tr1::bind(&HubFrame::handleUsersKeyDown, this, _1));
 		users->onContextMenu(std::tr1::bind(&HubFrame::handleUsersContextMenu, this, _1));
+
+		TextBox::Seed cs = WinUtil::Seeds::textBox;
+		cs.style |= ES_AUTOHSCROLL;
+		filter = userGrid->addChild(cs);
+		filter->setHelpId(IDH_HUB_FILTER);
+		addWidget(filter);
+		filter->onKeyUp(std::tr1::bind(&HubFrame::handleFilterKey, this, _1));
+
+		filterType = userGrid->addChild(WinUtil::Seeds::comboBoxStatic);
+		filterType->setHelpId(IDH_HUB_FILTER);
+		addWidget(filterType);
+
+		for(int j=0; j<COLUMN_LAST; j++) {
+			filterType->addValue(T_(usersColumns[j].name));
+		}
+		filterType->addValue(T_("Any"));
+		filterType->setSelected(COLUMN_LAST);
+		filterType->onSelectionChanged(std::tr1::bind(&HubFrame::updateUserList, this, (UserInfo*)0));
 	}
 
 	showUsers = addChild(WinUtil::Seeds::splitCheckBox);
@@ -248,25 +251,15 @@ void HubFrame::layout() {
 	status->layout(r);
 	status->mapWidget(STATUS_SHOW_USERS, showUsers);
 
-	int ymessage = message->getTextSize(_T("A")).y + 10;
-	int xfilter = showUsers->getChecked() ? std::min(r.width() / 4, 200l) : 0;
-	dwt::Rectangle rm(0, r.size.y - ymessage, r.width() - xfilter, ymessage);
+	int ymessage = message->getTextSize(_T("A")).y * messageLines + 10;
+	dwt::Rectangle rm(0, r.size.y - ymessage, r.width(), ymessage);
 	message->layout(rm);
 
 	r.size.y -= rm.size.y + border;
 
-	rm.pos.x += rm.width() + border;
-	rm.size.x = showUsers->getChecked() ? xfilter * 2 / 3 - border : 0;
-	filter->layout(rm);
-
-	rm.pos.x += rm.width() + border;
-	rm.size.x = showUsers->getChecked() ? xfilter / 3 - border : 0;
-	rm.size.y += 140;
-	filterType->layout(rm);
-
 	bool checked = showUsers->getChecked();
 	if(checked && !paned->getSecond()) {
-		paned->setSecond(users);
+		paned->setSecond(userGrid);
 	} else if(!checked && paned->getSecond()) {
 		paned->setSecond(0);
 	}

@@ -212,8 +212,8 @@ void PrivateFrame::layout() {
 
 	status->layout(r);
 
-	int ymessage = message->getTextSize(_T("A")).y + 10;
-	dwt::Rectangle rm(0, r.size.y - ymessage, r.width() , ymessage);
+	int ymessage = message->getTextSize(_T("A")).y * messageLines + 10;
+	dwt::Rectangle rm(0, r.size.y - ymessage, r.width(), ymessage);
 	message->layout(rm);
 
 	r.size.y -= rm.size.y + border;

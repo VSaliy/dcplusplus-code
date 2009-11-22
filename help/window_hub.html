@@ -50,15 +50,22 @@ The users list can be shown or hidden by using the checkbox available in the bot
 <!--#include virtual="commands_user_general.inc" -->
 <!--#include virtual="commands_user_favorites.inc" -->
 
-<h2>Field to write a message (bottom left)</h2>
-<p cshelp="IDH_HUB_MESSAGE">
-Write a message here to chat with other users connected to the hub. You can press either Enter or Alt+S to send your message. You may also use <a href="chat_commands.html">/commands</a> (send /help to list those available).
-</p>
 <h2>Users list filter (bottom right)</h2>
 <p cshelp="IDH_HUB_FILTER">
 Here, you can filter the users list so you will only see specific users. Eg, selecting 'Nick' in the drop down, and writing "foo" in the filter, will only display users that have "foo" in their nick.<br/>
 Note; users will only be visually filtered, not disconnected. You can revert to showing all users at any time by cleaning the text you have written in the filter.
 </p>
+
+<h2>Field to write a message (bottom left)</h2>
+<p cshelp="IDH_HUB_MESSAGE">
+<div>
+Write a message here to chat with other users connected to the hub. You can press either Enter or Alt+S to send your message. You may also use <a href="chat_commands.html">/commands</a> (send /help to list those available).
+</div>
+<div>
+When composing a multiline message, this box resizes itself automatically according to the <placeholder><a href="settings_appearance.html#messagelines">Height of the message editing box</a></placeholder> settings.
+</div>
+</p>
+
 <h2 id="statusbar">Status bar</h2>
 <dl style="margin-left: 40px;">
   <dt id="messages">Messages part (left)</dt>
