@@ -274,7 +274,8 @@ private:
 	Directory::File::Set::const_iterator findFile(const string& virtualFile) const throw(ShareException);
 
 	Directory::Ptr buildTree(const string& aName, const Directory::Ptr& aParent);
-
+	bool checkHidden(const string& aName) const;
+	
 	void rebuildIndices();
 
 	void updateIndices(Directory& aDirectory);

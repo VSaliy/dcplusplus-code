@@ -412,6 +412,10 @@ void ShareManager::addDirectory(const string& realPath, const string& virtualNam
 		throw ShareException(_("No directory specified"));
 	}
 
+	if (!checkHidden(realPath)) {
+		throw ShareException(_("Directory is hidden"));
+	}
+
 	if(Util::stricmp(SETTING(TEMP_DOWNLOAD_DIRECTORY), realPath) == 0) {
 		throw ShareException(_("The temporary download directory cannot be shared"));
 	}
@@ -521,7 +525,7 @@ void ShareManager::removeDirectory(const string& realPath) {
 
 	// Readd all directories with the same vName
 	for(i = shares.begin(); i != shares.end(); ++i) {
-		if(Util::stricmp(i->second, vName) == 0) {
+		if(Util::stricmp(i->second, vName) == 0 && checkHidden(i->first)) {
 			Directory::Ptr dp = buildTree(i->first, 0);
 			dp->setName(i->second);
 			merge(dp);
@@ -770,6 +774,10 @@ ShareManager::Directory::Ptr ShareManager::buildTree(const string& aName, const 
 	return dir;
 }
 
+bool ShareManager::checkHidden(const string& aName) const {
+	return (BOOLSETTING(SHARE_HIDDEN) || !FileFindIter(aName.substr(0, aName.size() - 1))->isHidden());
+}
+
 void ShareManager::updateIndices(Directory& dir) {
 	bloom.add(Text::toLower(dir.getName()));
 
@@ -868,9 +876,11 @@ int ShareManager::run() {
 
 		DirList newDirs;
 		for(StringPairIter i = dirs.begin(); i != dirs.end(); ++i) {
-			Directory::Ptr dp = buildTree(i->second, Directory::Ptr());
-			dp->setName(i->first);
-			newDirs.push_back(dp);
+			if (checkHidden(i->second)) {
+				Directory::Ptr dp = buildTree(i->second, Directory::Ptr());
+				dp->setName(i->first);
+				newDirs.push_back(dp);
+			}	
 		}
 
 		{
