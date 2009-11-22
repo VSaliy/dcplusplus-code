@@ -150,14 +150,17 @@ private:
 		}
 	};
 
-	TextBoxPtr filter;
-	ComboBoxPtr filterType;
 	WidgetVPanedPtr paned;
-	CheckBoxPtr showUsers;
+
+	GridPtr userGrid;
 
 	typedef TypedTable<UserInfo, false> WidgetUsers;
 	typedef WidgetUsers* WidgetUsersPtr;
 	WidgetUsersPtr users;
+
+	TextBoxPtr filter;
+	ComboBoxPtr filterType;
+	CheckBoxPtr showUsers;
 
 	UserMap userMap;
 

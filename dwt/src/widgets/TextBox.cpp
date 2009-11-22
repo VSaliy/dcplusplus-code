@@ -59,6 +59,16 @@ void TextBox::create( const Seed & cs ) {
 		setFont( cs.font );
 }
 
+void TextBox::setText(const tstring& txt) {
+	BaseType::setText(txt);
+
+	// multiline text-boxes don't fire EN_CHANGE / EN_UPDATE when they receive WM_SETTTEXT
+	if(hasStyle(ES_MULTILINE)) {
+		sendMessage(WM_COMMAND, MAKEWPARAM(0, EN_UPDATE), reinterpret_cast<LPARAM>(handle()));
+		sendMessage(WM_COMMAND, MAKEWPARAM(0, EN_CHANGE), reinterpret_cast<LPARAM>(handle()));
+	}
+}
+
 tstring TextBox::getLine(int line) {
 	tstring tmp;
 	tmp.resize(std::max(2, lineLength(lineIndex(line))));

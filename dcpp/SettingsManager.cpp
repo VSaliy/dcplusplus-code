@@ -83,6 +83,7 @@ const string SettingsManager::settingTags[] =
 	"ConfirmExit", "ConfirmHubClosing", "ConfirmHubRemoval", "ConfirmUserRemoval", "ConfirmItemRemoval", "ConfirmADLSRemoval",
 	"SearchMerge",
 	"ThrottleEnabled", "MaxUploadSpeedCurrent", "MaxDownloadSpeedCurrent", "KeepFinishedFiles",
+	"MinMessageLines", "MaxMessageLines",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -289,6 +290,8 @@ SettingsManager::SettingsManager()
 	setDefault(MAX_UPLOAD_SPEED_CURRENT, 0);
 	setDefault(MAX_DOWNLOAD_SPEED_CURRENT, 0);
 	setDefault(KEEP_FINISHED_FILES, true);
+	setDefault(MIN_MESSAGE_LINES, 1);
+	setDefault(MAX_MESSAGE_LINES, 10);
 
 #ifdef _WIN32
 	setDefault(MAIN_WINDOW_STATE, SW_SHOWNORMAL);

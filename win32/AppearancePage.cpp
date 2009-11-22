@@ -22,8 +22,11 @@
 
 #include "AppearancePage.h"
 
+#include <dwt/widgets/Spinner.h>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/File.h>
+
 #include "WinUtil.h"
 
 PropPage::ListItem AppearancePage::listItems[] = {
@@ -50,7 +53,7 @@ languages(0)
 {
 	setHelpId(IDH_APPEARANCEPAGE);
 
-	grid = addChild(Grid::Seed(4, 2));
+	grid = addChild(Grid::Seed(5, 2));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
@@ -67,7 +70,7 @@ languages(0)
 
 		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
-		TextBoxPtr box=group->addChild(seed);
+		TextBoxPtr box = group->addChild(seed);
 		box->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
 		items.push_back(Item(box, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
 	}
@@ -82,8 +85,36 @@ languages(0)
 	}
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Language")));
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Height of the message editing box")));
 		grid->setWidget(group, 2, 0, 1, 2);
+		group->setHelpId(IDH_SETTINGS_APPEARANCE_MESSAGE_LINES);
+
+		GridPtr cur = group->addChild(Grid::Seed(1, 5));
+		cur->column(1).size = 40;
+		cur->column(1).mode = GridInfo::STATIC;
+		cur->column(3).size = 40;
+		cur->column(3).mode = GridInfo::STATIC;
+
+		cur->addChild(Label::Seed(T_("Keep it between")));
+
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(box, SettingsManager::MIN_MESSAGE_LINES, PropPage::T_INT_WITH_SPIN));
+		SpinnerPtr spin = cur->addChild(Spinner::Seed(1, UD_MAXVAL, box));
+		cur->setWidget(spin);
+
+		cur->addChild(Label::Seed(T_("and")));
+
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		items.push_back(Item(box, SettingsManager::MAX_MESSAGE_LINES, PropPage::T_INT_WITH_SPIN));
+		spin = cur->addChild(Spinner::Seed(1, UD_MAXVAL, box));
+		cur->setWidget(spin);
+
+		cur->addChild(Label::Seed(T_("lines")));
+	}
+
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Language")));
+		grid->setWidget(group, 3, 0, 1, 2);
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
 
 		languages = group->addChild(WinUtil::Seeds::Dialog::comboBox);
@@ -92,7 +123,7 @@ languages(0)
 
 	LabelPtr label = grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")));
 	label->setHelpId(IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART);
-	grid->setWidget(label, 3, 0, 1, 2);
+	grid->setWidget(label, 4, 0, 1, 2);
 
 	PropPage::read(items);
 	PropPage::read(listItems, options);
