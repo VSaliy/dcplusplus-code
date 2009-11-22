@@ -55,7 +55,7 @@ public:
 	void prepareSave() const;
 
 	/// special id that designates a hub window.
-	static const string hub;
+	static const string& hub();
 
 private:
 	friend class Singleton<WindowManager>;

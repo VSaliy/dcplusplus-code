@@ -520,7 +520,7 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			for(FavoriteHubEntryList::const_iterator hub = hubs.begin(), hub_end = hubs.end(); hub != hub_end; ++hub) {
 				StringMap map;
 				map[WindowInfo::address] = (*hub)->getServer();
-				WindowManager::getInstance()->add(WindowManager::hub, map);
+				WindowManager::getInstance()->add(WindowManager::hub(), map);
 			}
 		}
 	}
