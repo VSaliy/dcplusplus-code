@@ -53,10 +53,14 @@ TextBox::Seed::Seed(const tstring& caption) :
 {
 }
 
-void TextBox::create( const Seed & cs ) {
+void TextBox::create(const Seed& cs) {
 	BaseType::create(cs);
 	if(cs.font)
-		setFont( cs.font );
+		setFont(cs.font);
+
+	// multiline text-boxes don't handle ctrl + A so we have do it ourselves...
+	if((cs.style & ES_MULTILINE) == ES_MULTILINE)
+		onKeyDown(std::tr1::bind(&TextBox::handleKeyDown, this, _1));
 }
 
 void TextBox::setText(const tstring& txt) {
@@ -151,6 +155,14 @@ bool TextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
 		return true;
 	}
 
+	return false;
+}
+
+bool TextBox::handleKeyDown(int c) {
+	if(c == 'A' && isControlPressed()) {
+		setSelection();
+		return true;
+	}
 	return false;
 }
 
