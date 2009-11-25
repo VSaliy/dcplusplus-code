@@ -98,8 +98,7 @@ public:
 
 	void connect(const HintedUser& user, const string& token);
 	void privateMessage(const HintedUser& user, const string& msg, bool thirdPerson);
-
-	void userCommand(const UserPtr& p, const UserCommand& uc, StringMap& params, bool compatibility);
+	void userCommand(const HintedUser& user, const UserCommand& uc, StringMap& params, bool compatibility);
 
 	bool isActive() { return SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_PASSIVE; }
 

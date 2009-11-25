@@ -1142,6 +1142,8 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 
 	StringMap ucParams = ucLineParams;
 
+	// imitate ClientManager::userCommand, except some params are cached for multiple selections
+
 	client->getMyIdentity().getParams(ucParams, "my", true);
 	client->getHubIdentity().getParams(ucParams, "hub", false);
 

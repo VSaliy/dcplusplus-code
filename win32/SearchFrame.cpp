@@ -1020,7 +1020,7 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 			ucParams["tth"] = ucParams["fileTR"];
 
 			StringMap tmp = ucParams;
-			ClientManager::getInstance()->userCommand(sr->getUser(), uc, tmp, true);
+			ClientManager::getInstance()->userCommand(HintedUser(sr->getUser(), sr->getHubURL()), uc, tmp, true);
 		}
 	}
 }
