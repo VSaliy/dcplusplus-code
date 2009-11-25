@@ -378,6 +378,24 @@ void ClientManager::privateMessage(const HintedUser& user, const string& msg, bo
 	}
 }
 
+void ClientManager::userCommand(const HintedUser& user, const UserCommand& uc, StringMap& params, bool compatibility) {
+	Lock l(cs);
+	/** @todo we allow wrong hints for now ("false" param of findOnlineUser) because users
+	 * extracted from search results don't always have a correct hint; see
+	 * SearchManager::onRES(const AdcCommand& cmd, ...). when that is done, and SearchResults are
+	 * switched to storing only reliable HintedUsers (found with the token of the ADC command),
+	 * change this call to findOnlineUser_hint. */
+	OnlineUser* ou = findOnlineUser(user.user->getCID(), user.hint, false);
+	if(!ou)
+		return;
+
+	ou->getIdentity().getParams(params, "user", compatibility);
+	ou->getClient().getHubIdentity().getParams(params, "hub", false);
+	ou->getClient().getMyIdentity().getParams(params, "my", compatibility);
+	ou->getClient().escapeParams(params);
+	ou->getClient().sendUserCmd(Util::formatParams(uc.getCommand(), params, false));
+}
+
 void ClientManager::send(AdcCommand& cmd, const CID& cid) {
 	Lock l(cs);
 	OnlineIter i = onlineUsers.find(cid);
@@ -456,20 +474,6 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 			}
 		}
 	}
-}
-
-void ClientManager::userCommand(const UserPtr& p, const UserCommand& uc, StringMap& params, bool compatibility) {
-	Lock l(cs);
-	OnlineIter i = onlineUsers.find(p->getCID());
-	if(i == onlineUsers.end())
-		return;
-
-	OnlineUser& ou = *i->second;
-	ou.getIdentity().getParams(params, "user", compatibility);
-	ou.getClient().getHubIdentity().getParams(params, "hub", false);
-	ou.getClient().getMyIdentity().getParams(params, "my", compatibility);
-	ou.getClient().escapeParams(params);
-	ou.getClient().sendUserCmd(Util::formatParams(uc.getCommand(), params, false));
 }
 
 void ClientManager::on(AdcSearch, Client*, const AdcCommand& adc, const CID& from) throw() {
