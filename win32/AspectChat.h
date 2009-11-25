@@ -48,7 +48,7 @@ protected:
 
 		{
 			TextBox::Seed cs = WinUtil::Seeds::textBox;
-			cs.style |= WS_VSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE;
+			cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL;
 			message = t().addChild(cs);
 			message->onUpdated(std::tr1::bind(&ThisType::handleMessageUpdated, this));
 		}
@@ -67,11 +67,10 @@ protected:
 
 	void addChat(Client* aClient, const tstring& aLine) {
 		tstring line;
-		if(timeStamps) {
-			line = Text::toT("\r\n[" + Util::getShortTimeString() + "] ");
-		} else {
-			line = _T("\r\n");
-		}
+		if(chat->length() > 0)
+			line += _T("\r\n");
+		if(timeStamps)
+			line += Text::toT("[" + Util::getShortTimeString() + "] ");
 		line += Text::toDOS(aLine);
 		chat->addTextSteady(formatChatMessage(aClient, line), line.size());
 	}
