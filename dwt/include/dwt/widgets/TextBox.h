@@ -288,6 +288,8 @@ private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
+	bool handleKeyDown(int c);
+
 	// AspectScrollable
 	int scrollOffsetImpl() const {
 		return 1;
