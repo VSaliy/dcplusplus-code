@@ -34,11 +34,11 @@ class MDIChildFrame :
 	typedef dwt::Container BaseType;
 	typedef MDIChildFrame<T> ThisType;
 
-	T& t() { return *static_cast<T*>(this); }
 	const T& t() const { return *static_cast<const T*>(this); }
+	T& t() { return *static_cast<T*>(this); }
 
 protected:
-	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0, bool activate = true) :
+	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0) :
 		BaseType(tabView),
 		lastFocus(NULL),
 		alwaysSameFocus(false),
@@ -54,10 +54,6 @@ protected:
 			setHelpId(helpId);
 
 		tabView->add(this, resourceId ? dwt::IconPtr(new dwt::Icon(resourceId, dwt::Point(16, 16))) : dwt::IconPtr());
-
-		if(activate) {
-			tabView->setActive(this);
-		}
 
 		this->onTabContextMenu(std::tr1::bind(&ThisType::handleContextMenu, this, _1));
 

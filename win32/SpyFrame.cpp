@@ -80,6 +80,7 @@ SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
 	status->setHelpId(STATUS_HIT_RATIO, IDH_SPY_HIT_RATIO);
 
 	layout();
+	activate();
 
 	ShareManager::getInstance()->setHits(0);
 

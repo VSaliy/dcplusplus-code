@@ -113,6 +113,7 @@ items(0)
 	initStatus();
 
 	layout();
+	activate();
 
 	// Load all searches
 	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;

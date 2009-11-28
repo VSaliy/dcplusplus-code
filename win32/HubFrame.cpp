@@ -193,6 +193,7 @@ inTabComplete(false)
 	status->setHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
 
 	layout();
+	activate();
 
 	initSecond();
 

@@ -121,6 +121,7 @@ hubs(0)
 	initStatus();
 
 	layout();
+	activate();
 
 	fillList();
 

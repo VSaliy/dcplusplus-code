@@ -185,6 +185,7 @@ users(0)
 	updateList();
 
 	layout();
+	activate();
 
 	if(FavoriteManager::getInstance()->isDownloading()) {
 		status->setText(STATUS_STATUS, T_("Downloading public hub list..."));

@@ -49,6 +49,7 @@ NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) :
 	pad->setModify(false);
 
 	layout();
+	activate();
 }
 
 NotepadFrame::~NotepadFrame() {

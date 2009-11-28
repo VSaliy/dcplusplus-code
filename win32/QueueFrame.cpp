@@ -108,7 +108,9 @@ fileLists(0)
 	QueueManager::getInstance()->addListener(this);
 
 	updateStatus();
+
 	layout();
+	activate();
 }
 
 QueueFrame::~QueueFrame() {

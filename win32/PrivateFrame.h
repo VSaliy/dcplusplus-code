@@ -80,7 +80,7 @@ private:
 	typedef FrameMap::iterator FrameIter;
 	static FrameMap frames;
 
-	PrivateFrame(dwt::TabView* mdiParent, const HintedUser& replyTo_, bool activte, const string& logPath = Util::emptyString);
+	PrivateFrame(dwt::TabView* mdiParent, const HintedUser& replyTo_, bool active, const string& logPath = Util::emptyString);
 	virtual ~PrivateFrame();
 
 	void layout();
