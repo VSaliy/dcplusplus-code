@@ -45,6 +45,7 @@ SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
 
 	layout();
+	activate();
 
 	LogManager::List oldMessages = LogManager::getInstance()->getLastLogs();
 	// Technically, we might miss a message or two here, but who cares...

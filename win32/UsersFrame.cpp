@@ -70,6 +70,7 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 	initStatus();
 
 	layout();
+	activate();
 
 	startup = false;
 }

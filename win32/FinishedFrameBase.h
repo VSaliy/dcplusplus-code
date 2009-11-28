@@ -149,6 +149,7 @@ protected:
 		this->status->setHelpId(STATUS_SPEED, in_UL ? IDH_FINISHED_UL_SPEED : IDH_FINISHED_DL_SPEED);
 
 		layout();
+		this->activate();
 
 		filesWindow->onActivate(std::tr1::bind(&ThisType::updateStatus, this, _1));
 		usersWindow->onActivate(std::tr1::bind(&ThisType::updateStatus, this, _1));

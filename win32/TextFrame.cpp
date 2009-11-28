@@ -49,8 +49,11 @@ TextFrame::TextFrame(dwt::TabView* mdiParent, const string& fileName) :
 	} catch(const FileException& e) {
 		pad->setText(Text::toT(e.getError()));
 	}
+
 	initStatus();
+
 	layout();
+	activate();
 }
 
 void TextFrame::layout() {

@@ -153,7 +153,7 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const HintedUser
 }
 
 DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const HintedUser& aUser, int64_t aSpeed) :
-	BaseType(mdiParent, _T(""), IDH_FILE_LIST, IDR_DIRECTORY, !BOOLSETTING(POPUNDER_FILELIST)),
+	BaseType(mdiParent, _T(""), IDH_FILE_LIST, IDR_DIRECTORY),
 	dirs(0),
 	files(0),
 	paned(0),
@@ -241,6 +241,8 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	updateTitle();
 
 	layout();
+	if(!BOOLSETTING(POPUNDER_FILELIST))
+		activate();
 
 	lists.insert(std::make_pair(aUser, this));
 }

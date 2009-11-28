@@ -259,6 +259,7 @@ droppedResults(0)
 	status->setSize(STATUS_SHOW_UI, showUI->getPreferedSize().x);
 
 	layout();
+	activate();
 
 	ClientManager* clientMgr = ClientManager::getInstance();
 	clientMgr->lock();

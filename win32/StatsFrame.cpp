@@ -45,7 +45,9 @@ StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
 	onPainting(std::tr1::bind(&StatsFrame::handlePaint, this, _1));
 
 	initStatus();
+
 	layout();
+	activate();
 
 	createTimer(std::tr1::bind(&StatsFrame::eachSecond, this), 1000);
 }

@@ -46,6 +46,7 @@ WaitingUsersFrame::WaitingUsersFrame(dwt::TabView* mdiParent) :
 	initStatus();
 
 	layout();
+	activate();
 
 	// Load all waiting users & files.
 	loadAll();
