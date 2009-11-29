@@ -1215,8 +1215,11 @@ void WinUtil::parseDchubUrl(const tstring& aUrl) {
 		HubFrame::openWindow(mainWindow->getTabView(), url);
 	}
 	if(!file.empty()) {
-		if(file[0] == '/') // Remove any '/' in from of the file
+		if(file[0] == '/') {
+			// Remove any '/' in from of the file
 			file = file.substr(1);
+			if(file.empty()) return;
+		}	
 		try {
 			UserPtr user = ClientManager::getInstance()->findLegacyUser(file);
 			if(user)
