@@ -821,16 +821,19 @@ void MainWindow::handleSettings() {
 	unsigned short lastUDP = static_cast<unsigned short>(SETTING(UDP_PORT));
 	unsigned short lastTLS = static_cast<unsigned short>(SETTING(TLS_PORT));
 
-	int lastConn= SETTING(INCOMING_CONNECTIONS);
+	int lastConn = SETTING(INCOMING_CONNECTIONS);
 	int lastSlots = SETTING(SLOTS);
-	bool lastSortFavUsersFirst= BOOLSETTING(SORT_FAVUSERS_FIRST);
+	bool lastSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
 
-	if (dlg.run() == IDOK) {
+	if(dlg.run() == IDOK) {
 		SettingsManager::getInstance()->save();
-		if (SETTING(INCOMING_CONNECTIONS) != lastConn || SETTING(TCP_PORT) != lastTCP || SETTING(UDP_PORT) != lastUDP || SETTING(TLS_PORT) != lastTLS) {
+
+		if(SETTING(INCOMING_CONNECTIONS) != lastConn || SETTING(TCP_PORT) != lastTCP || SETTING(UDP_PORT) != lastUDP || SETTING(TLS_PORT) != lastTLS) {
 			startSocket();
+		} else if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP && (!UPnP_TCP.get() || !UPnP_TLS.get() || !UPnP_UDP.get())) {
+			// previous UPnP mappings had failed; try again
+			startUPnP();
 		}
-		ClientManager::getInstance()->infoUpdated();
 
 		if(SETTING(SLOTS) != lastSlots)
 			updateSlotsSpin();
@@ -854,6 +857,8 @@ void MainWindow::handleSettings() {
 			WinUtil::unRegisterMagnetHandler();
 			WinUtil::urlMagnetRegistered = false;
 		}
+
+		ClientManager::getInstance()->infoUpdated();
 	}
 }
 
@@ -909,13 +914,15 @@ void MainWindow::startUPnP() {
 				} else {
 					//:-( Looks like we have to rely on the user setting the external IP manually
 					// no need to do cleanup here because the mappings work
-					LogManager::getInstance()->message(_("Failed to get external IP via  UPnP. Please set it yourself."));
-					dwt::MessageBox(this).show(T_("Failed to get external IP via  UPnP. Please set it yourself."), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
+					LogManager::getInstance()->message(_("Failed to get external IP via UPnP. Please set it yourself."));
+					dwt::MessageBox(this).show(T_("Failed to get external IP via UPnP. Please set it yourself."),
+						_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 				}
 			}
 		} else {
 			LogManager::getInstance()->message(_("Failed to create port mappings. Please set up your NAT yourself."));
-			dwt::MessageBox(this).show(T_("Failed to create port mappings. Please set up your NAT yourself."), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
+			dwt::MessageBox(this).show(T_("Failed to create port mappings. Please set up your NAT yourself."),
+				_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 			stopUPnP();
 		}
 	}

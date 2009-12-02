@@ -53,6 +53,7 @@
 * [L#338888] Fix sharing hidden directories (emtee)
 * Auto-resize the message editing box when composing a multiline message (poy)
 * Remove flicker when opening a window (poy)
+* Re-try UPnP mappings after closing settings (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
