@@ -62,8 +62,10 @@ socksServer(0)
 		directIn = connType->addChild(RadioButton::Seed(T_("My computer is directly connected to Internet (no router)")));
 		directIn->setHelpId(IDH_SETTINGS_NETWORK_DIRECT);
 
-		upnp = connType->addChild(RadioButton::Seed(T_("Try to use UPnP to let Windows automatically configure my router")));
+		upnp = connType->addChild(RadioButton::Seed(T_("Use UPnP to let DC++ configure my router")));
 		upnp->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_UPNP);
+
+		/// @todo add a combo which will be layout'd on the right of the UPnP radio button to select the UPnP lib to use
 
 		nat = connType->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
 		nat->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_NAT);

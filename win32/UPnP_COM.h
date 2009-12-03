@@ -16,37 +16,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_UPNP_H
-#define DCPLUSPLUS_WIN32_UPNP_H
+#ifndef DCPLUSPLUS_WIN32_UPNP_COM_H
+#define DCPLUSPLUS_WIN32_UPNP_COM_H
 
-class UPnP
+#include "UPnP.h"
+
+// for mingw64
+#ifndef interface
+#define interface struct
+#endif
+
+#include <natupnp.h>
+
+class UPnP_COM : public UPnP
 {
 public:
-	UPnP() { }
-	virtual ~UPnP() { }
+	UPnP_COM() : UPnP(), pUN(0), lastPort(0) { }
 
-	virtual bool init() = 0;
+	bool init();
 
-	enum Protocol {
-		PROTOCOL_TCP,
-		PROTOCOL_UDP,
-		PROTOCOL_LAST
-	};
+	bool open(const unsigned short port, const Protocol protocol, const string& description);
+	bool close(const unsigned short port, const Protocol protocol);
 
-	virtual bool open(const unsigned short port, const Protocol protocol, const string& description) = 0;
-	bool close();
-
-	virtual string getExternalIP() = 0;
-
-protected:
-	static const char* protocols[PROTOCOL_LAST];
-
-	void open(const unsigned short port, const Protocol protocol);
-	virtual bool close(const unsigned short port, const Protocol protocol) = 0;
+	string getExternalIP();
 
 private:
-	typedef std::pair<unsigned short, Protocol> rule;
-	std::vector<rule> rules;
+	IUPnPNAT* pUN;
+	// this one can become invalidated so we can't cache it
+	IStaticPortMappingCollection* getStaticPortMappingCollection();
+
+	// need to save these to get the external IP...
+	unsigned short lastPort;
+	Protocol lastProtocol;
 };
 
 #endif
