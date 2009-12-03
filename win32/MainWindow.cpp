@@ -28,7 +28,7 @@
 #include "TextFrame.h"
 #include "SingleInstance.h"
 #include "AboutDlg.h"
-#include "UPnP.h"
+#include "UPnP_COM.h"
 #include "TransferView.h"
 #include "HubFrame.h"
 #include "PrivateFrame.h"
@@ -830,7 +830,7 @@ void MainWindow::handleSettings() {
 
 		if(SETTING(INCOMING_CONNECTIONS) != lastConn || SETTING(TCP_PORT) != lastTCP || SETTING(UDP_PORT) != lastUDP || SETTING(TLS_PORT) != lastTLS) {
 			startSocket();
-		} else if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP && (!UPnP_TCP.get() || !UPnP_TLS.get() || !UPnP_UDP.get())) {
+		} else if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP && !pUPnP.get()) {
 			// previous UPnP mappings had failed; try again
 			startUPnP();
 		}
@@ -885,68 +885,63 @@ void MainWindow::startSocket() {
 void MainWindow::startUPnP() {
 	stopUPnP();
 
-	if( SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP ) {
-		bool ok = true;
+	if(SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_UPNP)
+		return;
 
-		uint16_t port = ConnectionManager::getInstance()->getPort();
-		if(port != 0) {
-			UPnP_TCP.reset(new UPnP( Util::getLocalIp(), "TCP", str(F_(APPNAME " Transfer Port (%1% TCP)") % port), port));
-			ok &= UPnP_TCP->open();
-		}
-		port = ConnectionManager::getInstance()->getSecurePort();
-		if(ok && port != 0) {
-			UPnP_TLS.reset(new UPnP( Util::getLocalIp(), "TCP", str(F_(APPNAME " Encrypted Transfer Port (%1% TCP)") % port), port));
-			ok &= UPnP_TLS->open();
-		}
-		port = SearchManager::getInstance()->getPort();
-		if(ok && port != 0) {
-			UPnP_UDP.reset(new UPnP( Util::getLocalIp(), "UDP", str(F_(APPNAME " Search Port (%1% UDP)") % port), port));
-			ok &= UPnP_UDP->open();
-		}
+	pUPnP.reset(new UPnP_COM());
 
-		if(ok) {
-			if(!BOOLSETTING(NO_IP_OVERRIDE)) {
-				// now lets configure the external IP (connect to me) address
-				string ExternalIP = UPnP_TCP->GetExternalIP();
-				if ( !ExternalIP.empty() ) {
-					// woohoo, we got the external IP from the UPnP framework
-					SettingsManager::getInstance()->set(SettingsManager::EXTERNAL_IP, ExternalIP );
-				} else {
-					//:-( Looks like we have to rely on the user setting the external IP manually
-					// no need to do cleanup here because the mappings work
-					LogManager::getInstance()->message(_("Failed to get external IP via UPnP. Please set it yourself."));
-					dwt::MessageBox(this).show(T_("Failed to get external IP via UPnP. Please set it yourself."),
-						_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
-				}
-			}
-		} else {
-			LogManager::getInstance()->message(_("Failed to create port mappings. Please set up your NAT yourself."));
-			dwt::MessageBox(this).show(T_("Failed to create port mappings. Please set up your NAT yourself."),
-				_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
-			stopUPnP();
-		}
+	if(!initUPnP()) {
+		/// @todo try again with a different impl if we have one
+
+		/// @todo the UPnP impl might return a meaningful error, show it to the user
+		LogManager::getInstance()->message(_("Failed to create port mappings. Please set up your NAT yourself."));
+		dwt::MessageBox(this).show(T_("Failed to create port mappings. Please set up your NAT yourself."),
+			_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
+
+		stopUPnP();
 	}
 }
 
+bool MainWindow::initUPnP() {
+	if(!pUPnP->init())
+		return false;
+
+	uint16_t port = ConnectionManager::getInstance()->getPort();
+	if(port != 0 && !pUPnP->open(port, UPnP::PROTOCOL_TCP, str(F_(APPNAME " Transfer Port (%1% TCP)") % port)))
+		return false;
+
+	port = ConnectionManager::getInstance()->getSecurePort();
+	if(port != 0 && !pUPnP->open(port, UPnP::PROTOCOL_TCP, str(F_(APPNAME " Encrypted Transfer Port (%1% TCP)") % port)))
+		return false;
+
+	port = SearchManager::getInstance()->getPort();
+	if(port != 0 && !pUPnP->open(port, UPnP::PROTOCOL_UDP, str(F_(APPNAME " Search Port (%1% TCP)") % port)))
+		return false;
+
+	if(!BOOLSETTING(NO_IP_OVERRIDE)) {
+		// now lets configure the external IP (connect to me) address
+		string ExternalIP = pUPnP->getExternalIP();
+		if(!ExternalIP.empty()) {
+			// woohoo, we got the external IP from the UPnP framework
+			SettingsManager::getInstance()->set(SettingsManager::EXTERNAL_IP, ExternalIP);
+		} else {
+			//:-( Looks like we have to rely on the user setting the external IP manually
+			// no need to do cleanup here because the mappings work
+			LogManager::getInstance()->message(_("Failed to get external IP via UPnP. Please set it yourself."));
+			dwt::MessageBox(this).show(T_("Failed to get external IP via UPnP. Please set it yourself."),
+				_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
+		}
+	}
+
+	return true;
+}
+
 void MainWindow::stopUPnP() {
-	// Just check if the port mapping objects are initialized (NOT NULL)
-	if(UPnP_TCP.get()) {
-		if(!UPnP_TCP->close()) {
+	if(pUPnP.get()) {
+		if(!pUPnP->close()) {
 			LogManager::getInstance()->message(_("Failed to remove port mappings"));
 		}
-		UPnP_TCP.reset();
-	}
-	if(UPnP_TLS.get()) {
-		if(!UPnP_TLS->close()) {
-			LogManager::getInstance()->message(_("Failed to remove port mappings"));
-		}
-		UPnP_TLS.reset();
-	}
-	if(UPnP_UDP.get()) {
-		if(!UPnP_UDP->close()) {
-			LogManager::getInstance()->message(_("Failed to remove port mappings"));
-		}
-		UPnP_UDP.reset();
+		pUPnP.reset();
 	}
 }
 

@@ -120,10 +120,7 @@ private:
 	dwt::AcceleratorPtr accel;
 	dwt::NotificationPtr notify;
 
-	// UPnP connectors
-	std::auto_ptr<UPnP> UPnP_TCP;
-	std::auto_ptr<UPnP> UPnP_TLS;
-	std::auto_ptr<UPnP> UPnP_UDP;
+	std::auto_ptr<UPnP> pUPnP;
 
 	void initWindow();
 	void initMenu();
@@ -177,6 +174,7 @@ private:
 	void updateStatus();
 	void startSocket();
 	void startUPnP();
+	bool initUPnP();
 	void stopUPnP();
 	void saveWindowSettings();
 	void parseCommandLine(const tstring& line);
