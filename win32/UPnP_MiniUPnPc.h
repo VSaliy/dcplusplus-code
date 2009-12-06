@@ -16,37 +16,23 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_UPNP_H
-#define DCPLUSPLUS_WIN32_UPNP_H
+#ifndef DCPLUSPLUS_WIN32_UPNP_MINIUPNPC_H
+#define DCPLUSPLUS_WIN32_UPNP_MINIUPNPC_H
 
-class UPnP
+#include <dcpp/UPnP.h>
+
+class UPnP_MiniUPnPc : public UPnP
 {
 public:
-	UPnP() { }
-	virtual ~UPnP() { }
-
-	virtual bool init() = 0;
-
-	enum Protocol {
-		PROTOCOL_TCP,
-		PROTOCOL_UDP,
-		PROTOCOL_LAST
-	};
-
-	virtual bool open(const unsigned short port, const Protocol protocol, const string& description) = 0;
-	bool close();
-
-	virtual string getExternalIP() = 0;
-
-protected:
-	static const char* protocols[PROTOCOL_LAST];
-
-	void open(const unsigned short port, const Protocol protocol);
-	virtual bool close(const unsigned short port, const Protocol protocol) = 0;
+	UPnP_MiniUPnPc() : UPnP() { }
 
 private:
-	typedef std::pair<unsigned short, Protocol> rule;
-	std::vector<rule> rules;
+	bool init();
+
+	bool add(const unsigned short port, const Protocol protocol, const string& description);
+	bool remove(const unsigned short port, const Protocol protocol);
+
+	string getExternalIP();
 };
 
 #endif

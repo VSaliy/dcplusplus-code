@@ -1,0 +1,9 @@
+Import('dev source_path')
+
+env, target, sources = dev.prepare_build(source_path, 'miniupnpc', source_glob = '*.c', in_bin = False)
+
+env.Append(CPPDEFINES = ['STATICLIB'])
+
+ret = env.StaticLibrary(target, sources)
+
+Return('ret')

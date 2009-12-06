@@ -28,7 +28,6 @@
 #include "TextFrame.h"
 #include "SingleInstance.h"
 #include "AboutDlg.h"
-#include "UPnP_COM.h"
 #include "TransferView.h"
 #include "HubFrame.h"
 #include "PrivateFrame.h"
@@ -62,6 +61,7 @@
 #include <dcpp/ShareManager.h>
 #include <dcpp/QueueManager.h>
 #include <dcpp/ClientManager.h>
+#include <dcpp/UPnPManager.h>
 #include <dcpp/Download.h>
 #include <dcpp/WindowInfo.h>
 
@@ -719,8 +719,6 @@ bool MainWindow::handleClosing() {
 			SearchManager::getInstance()->disconnect();
 			ConnectionManager::getInstance()->disconnect();
 
-			stopUPnP();
-
 			DWORD id;
 			dcdebug("Starting stopper\n");
 			stopperThread = CreateThread(NULL, 0, &stopper, this, 0, &id);
@@ -829,10 +827,12 @@ void MainWindow::handleSettings() {
 		SettingsManager::getInstance()->save();
 
 		if(SETTING(INCOMING_CONNECTIONS) != lastConn || SETTING(TCP_PORT) != lastTCP || SETTING(UDP_PORT) != lastUDP || SETTING(TLS_PORT) != lastTLS) {
+			if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP || lastConn == SettingsManager::INCOMING_FIREWALL_UPNP)
+				UPnPManager::getInstance()->close();
 			startSocket();
-		} else if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP && !pUPnP.get()) {
+		} else if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP && !UPnPManager::getInstance()->getOpened()) {
 			// previous UPnP mappings had failed; try again
-			startUPnP();
+			UPnPManager::getInstance()->open();
 		}
 
 		if(SETTING(SLOTS) != lastSlots)
@@ -866,7 +866,7 @@ void MainWindow::startSocket() {
 	SearchManager::getInstance()->disconnect();
 	ConnectionManager::getInstance()->disconnect();
 
-	if (ClientManager::getInstance()->isActive()) {
+	if(ClientManager::getInstance()->isActive()) {
 		try {
 			ConnectionManager::getInstance()->listen();
 		} catch(const Exception&) {
@@ -877,71 +877,10 @@ void MainWindow::startSocket() {
 		} catch(const Exception&) {
 			dwt::MessageBox(this).show(T_("Unable to open UDP port. Searching will not work correctly until you change settings or turn off any application that might be using the UDP port"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 		}
-	}
 
-	startUPnP();
-}
-
-void MainWindow::startUPnP() {
-	stopUPnP();
-
-	if(SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_UPNP)
-		return;
-
-	pUPnP.reset(new UPnP_COM());
-
-	if(!initUPnP()) {
-		/// @todo try again with a different impl if we have one
-
-		/// @todo the UPnP impl might return a meaningful error, show it to the user
-		LogManager::getInstance()->message(_("Failed to create port mappings. Please set up your NAT yourself."));
-		dwt::MessageBox(this).show(T_("Failed to create port mappings. Please set up your NAT yourself."),
-			_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
-
-		stopUPnP();
-	}
-}
-
-bool MainWindow::initUPnP() {
-	if(!pUPnP->init())
-		return false;
-
-	uint16_t port = ConnectionManager::getInstance()->getPort();
-	if(port != 0 && !pUPnP->open(port, UPnP::PROTOCOL_TCP, str(F_(APPNAME " Transfer Port (%1% TCP)") % port)))
-		return false;
-
-	port = ConnectionManager::getInstance()->getSecurePort();
-	if(port != 0 && !pUPnP->open(port, UPnP::PROTOCOL_TCP, str(F_(APPNAME " Encrypted Transfer Port (%1% TCP)") % port)))
-		return false;
-
-	port = SearchManager::getInstance()->getPort();
-	if(port != 0 && !pUPnP->open(port, UPnP::PROTOCOL_UDP, str(F_(APPNAME " Search Port (%1% TCP)") % port)))
-		return false;
-
-	if(!BOOLSETTING(NO_IP_OVERRIDE)) {
-		// now lets configure the external IP (connect to me) address
-		string ExternalIP = pUPnP->getExternalIP();
-		if(!ExternalIP.empty()) {
-			// woohoo, we got the external IP from the UPnP framework
-			SettingsManager::getInstance()->set(SettingsManager::EXTERNAL_IP, ExternalIP);
-		} else {
-			//:-( Looks like we have to rely on the user setting the external IP manually
-			// no need to do cleanup here because the mappings work
-			LogManager::getInstance()->message(_("Failed to get external IP via UPnP. Please set it yourself."));
-			dwt::MessageBox(this).show(T_("Failed to get external IP via UPnP. Please set it yourself."),
-				_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
-		}
-	}
-
-	return true;
-}
-
-void MainWindow::stopUPnP() {
-	if(pUPnP.get()) {
-		if(!pUPnP->close()) {
-			LogManager::getInstance()->message(_("Failed to remove port mappings"));
-		}
-		pUPnP.reset();
+		// must be done after listen calls; otherwise ports won't be set
+		if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP)
+			UPnPManager::getInstance()->open();
 	}
 }
 
