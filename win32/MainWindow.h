@@ -29,7 +29,6 @@
 
 #include "AspectStatus.h"
 
-class UPnP;
 class TransferView;
 
 class MainWindow :
@@ -120,8 +119,6 @@ private:
 	dwt::AcceleratorPtr accel;
 	dwt::NotificationPtr notify;
 
-	std::auto_ptr<UPnP> pUPnP;
-
 	void initWindow();
 	void initMenu();
 	void initToolbar();
@@ -173,9 +170,6 @@ private:
 	bool eachSecond();
 	void updateStatus();
 	void startSocket();
-	void startUPnP();
-	bool initUPnP();
-	void stopUPnP();
 	void saveWindowSettings();
 	void parseCommandLine(const tstring& line);
 	void viewAndDelete(const string& fileName);

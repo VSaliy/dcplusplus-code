@@ -40,7 +40,7 @@ bool UPnP_COM::init() {
 	return pUN;
 }
 
-bool UPnP_COM::open(const unsigned short port, const Protocol protocol, const string& description) {
+bool UPnP_COM::add(const unsigned short port, const Protocol protocol, const string& description) {
 	IStaticPortMappingCollection* pSPMC = getStaticPortMappingCollection();
 	if(!pSPMC)
 		return false;
@@ -64,13 +64,11 @@ bool UPnP_COM::open(const unsigned short port, const Protocol protocol, const st
 
 		lastPort = port;
 		lastProtocol = protocol;
-
-		UPnP::open(port, protocol);
 	}
 	return ret;
 }
 
-bool UPnP_COM::close(const unsigned short port, const Protocol protocol) {
+bool UPnP_COM::remove(const unsigned short port, const Protocol protocol) {
 	IStaticPortMappingCollection* pSPMC = getStaticPortMappingCollection();
 	if(!pSPMC)
 		return false;
