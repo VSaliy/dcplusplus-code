@@ -367,21 +367,12 @@ private:
 bool ShareManager::loadCache() throw() {
 	try {
 		ShareLoader loader(directories);
-		string txt;
+		SimpleXMLReader xml(&loader);
+
 		dcpp::File ff(Util::getPath(Util::PATH_USER_CONFIG) + "files.xml.bz2", dcpp::File::READ, dcpp::File::OPEN);
 		FilteredInputStream<UnBZFilter, false> f(&ff);
-		const size_t BUF_SIZE = 64*1024;
-		boost::scoped_array<char> buf(new char[BUF_SIZE]);
-		size_t len;
-		for(;;) {
-			size_t n = BUF_SIZE;
-			len = f.read(&buf[0], n);
-			txt.append(&buf[0], len);
-			if(len < BUF_SIZE)
-				break;
-		}
 
-		SimpleXMLReader(&loader).fromXML(txt);
+		xml.parse(f);
 
 		for(DirList::const_iterator i = directories.begin(); i != directories.end(); ++i) {
 			const Directory::Ptr& d = *i;
@@ -814,7 +805,7 @@ void ShareManager::updateIndices(Directory& dir, const Directory::File::Set::ite
 				% Util::addBrackets(dir.getRealPath(f.getName())) % Util::toString(f.getSize()) % Util::addBrackets(j->second->getParent()->getRealPath(j->second->getName()))));
 				dir.files.erase(i);
 			} catch (const ShareException&) {
-			}		
+			}
 			return;
 		}
 	}
@@ -880,7 +871,7 @@ int ShareManager::run() {
 				Directory::Ptr dp = buildTree(i->second, Directory::Ptr());
 				dp->setName(i->first);
 				newDirs.push_back(dp);
-			}	
+			}
 		}
 
 		{

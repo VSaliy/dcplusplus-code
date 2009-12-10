@@ -23,7 +23,6 @@
 #include "FastAlloc.h"
 
 #include "MerkleTree.h"
-#include "SimpleXML.h"
 #include "Streams.h"
 
 namespace dcpp {
@@ -131,7 +130,8 @@ public:
 
 	void loadFile(const string& name) throw(Exception);
 
-	string loadXML(const string& xml, bool updating);
+	string updateXML(const std::string&);
+	string loadXML(InputStream& xml, bool updating);
 
 	void download(const string& aDir, const string& aTarget, bool highPrio);
 	void download(Directory* aDir, const string& aTarget, bool highPrio);

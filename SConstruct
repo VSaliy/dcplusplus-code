@@ -79,6 +79,7 @@ opts.AddVariables(
 	BoolVariable('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
 	BoolVariable('i18n', 'Rebuild i18n files in debug build', 'no'),
 	BoolVariable('help', 'Build help files (requires i18n=1 or mode=release)', 'yes'),
+	BoolVariable('test', 'Build test suite', 'no'),
 	BoolVariable('webhelp', 'Build help files for the web (requires help=1)', 'no'),
 	('prefix', 'Prefix to use when cross compiling', ''),
 	EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64'])
@@ -211,4 +212,8 @@ dev.intl = dev.build('intl/')
 dev.dwt = dev.build('dwt/')
 dev.client = dev.build('dcpp/')
 dev.help = dev.build('help/')
-dev.win32 = dev.build('win32/')
+if env['test']:
+	dev.test = dev.build('test/')
+else:
+	dev.win32 = dev.build('win32/')
+	

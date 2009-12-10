@@ -353,7 +353,8 @@ void HashManager::HashStore::load() {
 		Util::migrate(getIndexFile());
 
 		HashLoader l(*this);
-		SimpleXMLReader(&l).fromXML(File(getIndexFile(), File::READ, File::OPEN).read());
+		File f(getIndexFile(), File::READ, File::OPEN);
+		SimpleXMLReader(&l).parse(f);
 	} catch (const Exception&) {
 		// ...
 	}
