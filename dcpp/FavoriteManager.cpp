@@ -30,6 +30,7 @@
 #include "SimpleXML.h"
 #include "UserCommand.h"
 #include "WindowInfo.h"
+#include "File.h"
 
 namespace dcpp {
 
@@ -348,7 +349,7 @@ private:
 void FavoriteManager::loadXmlList(const string& xml) {
 	try {
 		XmlListLoader loader(publicListMatrix[publicListServer]);
-		SimpleXMLReader(&loader).fromXML(xml);
+		SimpleXMLReader(&loader).parse(xml.data(), xml.size(), false);
 	} catch(const SimpleXMLException&) {
 
 	}

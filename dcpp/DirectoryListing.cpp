@@ -30,6 +30,8 @@
 #include "BZUtils.h"
 #include "CryptoManager.h"
 #include "ShareManager.h"
+#include "SimpleXMLReader.h"
+#include "File.h"
 
 #ifdef ff
 #undef ff
@@ -89,37 +91,16 @@ void DirectoryListing::loadFile(const string& name) throw(Exception) {
 	// For now, we detect type by ending...
 	string ext = Util::getFileExt(name);
 
+    dcpp::File ff(name, dcpp::File::READ, dcpp::File::OPEN);
 	if(Util::stricmp(ext, ".bz2") == 0) {
-		dcpp::File ff(name, dcpp::File::READ, dcpp::File::OPEN);
 		FilteredInputStream<UnBZFilter, false> f(&ff);
-		const size_t BUF_SIZE = 64*1024;
-		boost::scoped_array<char> buf(new char[BUF_SIZE]);
-		size_t len;
-		size_t bytesRead = 0;
-		for(;;) {
-			size_t n = BUF_SIZE;
-			len = f.read(&buf[0], n);
-			txt.append(&buf[0], len);
-			bytesRead += len;
-			if(SETTING(MAX_FILELIST_SIZE) && bytesRead > (size_t)SETTING(MAX_FILELIST_SIZE)*1024*1024)
-				throw FileException(_("Greater than maximum filelist size"));
-			if(len < BUF_SIZE)
-				break;
-		}
+		loadXML(f, false);
 	} else if(Util::stricmp(ext, ".xml") == 0) {
-		int64_t sz = dcpp::File::getSize(name);
-		if(sz == -1 || sz >= static_cast<int64_t>(txt.max_size()))
-			throw FileException(_("File not available"));
-
-		txt.resize((size_t) sz);
-		size_t n = txt.length();
-		dcpp::File(name, dcpp::File::READ, dcpp::File::OPEN).read(&txt[0], n);
+		loadXML(ff, false);
 	}
-
-	loadXML(txt, false);
 }
 
-class ListLoader : public SimpleXMLReader::CallBack {
+class ListLoader : public dcpp::SimpleXMLReader::CallBack {
 public:
 	ListLoader(DirectoryListing::Directory* root, bool aUpdating) : cur(root), base("/"), inListing(false), updating(aUpdating) {
 	}
@@ -139,9 +120,16 @@ private:
 	bool updating;
 };
 
-string DirectoryListing::loadXML(const string& xml, bool updating) {
+string DirectoryListing::updateXML(const string& xml) {
+	MemoryInputStream mis(xml);
+	return loadXML(mis, true);
+}
+
+string DirectoryListing::loadXML(InputStream& is, bool updating) {
 	ListLoader ll(getRoot(), updating);
-	SimpleXMLReader(&ll).fromXML(xml);
+
+	dcpp::SimpleXMLReader(&ll).parse(is);
+
 	return ll.getBase();
 }
 

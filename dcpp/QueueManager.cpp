@@ -1481,7 +1481,9 @@ void QueueManager::loadQueue() throw() {
 	try {
 		QueueLoader l;
 		Util::migrate(getQueueFile());
-		SimpleXMLReader(&l).fromXML(File(getQueueFile(), File::READ, File::OPEN).read());
+
+		File f(getQueueFile(), File::READ, File::OPEN);
+		SimpleXMLReader(&l).parse(f);
 		dirty = false;
 	} catch(const Exception&) {
 		// ...

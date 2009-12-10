@@ -64,6 +64,7 @@
 #include <dcpp/ClientManager.h>
 #include <dcpp/Download.h>
 #include <dcpp/WindowInfo.h>
+#include <dcpp/SimpleXML.h>
 
 #include <dwt/widgets/ToolBar.h>
 #include <dwt/widgets/Spinner.h>
