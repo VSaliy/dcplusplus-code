@@ -187,21 +187,15 @@ public:
 
 	static bool parseDBLClick(const tstring& aString);
 	static void parseDchubUrl(const tstring& /*aUrl*/);
-	static void parseADChubUrl(const tstring& /*aUrl*/);
+	static void parseADChubUrl(const tstring& /*aUrl*/, bool isSecure);
 	static void parseMagnetUri(const tstring& /*aUrl*/, bool aOverride = false);
 
 	static void help(dwt::Control* widget, unsigned id);
 	static string getHelpText(unsigned id);
 
 	// URL related
-	static void registerDchubHandler();
-	static void registerADChubHandler();
+	static void registerHubHandlers();
 	static void registerMagnetHandler();
-	static void unRegisterDchubHandler();
-	static void unRegisterADChubHandler();
-	static void unRegisterMagnetHandler();
-	static bool urlDcADCRegistered;
-	static bool urlMagnetRegistered;
 
 	static string getAppName() {
 		TCHAR buf[MAX_PATH+1];
@@ -235,6 +229,9 @@ private:
 	static DWORD helpCookie;
 	static tstring helpPath;
 	static StringList helpTexts;
+
+	static bool urlDcADCRegistered;
+	static bool urlMagnetRegistered;
 };
 
 #endif // !defined(WIN_UTIL_H)
