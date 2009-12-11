@@ -43,12 +43,12 @@
 </dl>	
 
 <h2>Error messages</h2>
-<p>Some errors shown in the log contain additional system messages provided by the operating system. These messages usually tell you more about the exact problem; they are marked as [error message] in the description of possible logged errors below. Note that system messages are always shown in the language of your operating system even if you set other locale for DC++.</p>
+<p>Some errors shown in the log contain additional system messages provided by the operating system. These messages usually tell you more about the exact problem; they are marked as [error message] in the description of possible logged errors below. Note that system messages are always shown in the language of your operating system even if you have chosen another one for DC++.</p>
 <dl style="margin-left: 40px;">
 	<dt>Error registering dchub:// link handler</dt>
-	<dt>Error registering adc:// link handler</dt>
+	<dt>Error registering adc(s):// link handler</dt>
 	<dt>Error registering Magnet link handler</dt>
-	<dd>These errors mean that DC++ was unable to register the appropriate link handler(s) to itself. When <a href="settings_advanced.html#registrymagnet">Register magnet link</a> and <a href="settings_advanced.html#registrydchubadc">Register adc:// and nmdc://</a> settings enabled, DC++ will try to register these handlers at startup. The most common reason of an unsuccesful registration is that the current user does not have appropriate rights for (write) access the required part of the Windows Registry.</dd>
+	<dd>These errors mean that DC++ was unable to register the appropriate link handler(s) in Windows, per the <a href="settings_advanced.html#registrymagnet">Register with Windows to handle magnet: URI links</a> and <a href="settings_advanced.html#registrydchubadc">Register with Windows to handle dchub://, adc:// and adcs:// URL links</a> settings. The most common reason of an unsuccesful registration is that the user account under which DC++ is running does not have appropriate rights for (write) access the required parts of the Windows Registry.</dd>
 	<dt>Failed to get external IP via UPnP. Please set it yourself</dt>
 	<dd>This error can appear at startup and means that while port mappings were successful, DC++ couldn't get external IP address from the UPnP device. If this message persists it may be because of broken UPnP support of the device.</dd>
 	<dt>Failed to create port mappings. Please set up your NAT yourself</dt>

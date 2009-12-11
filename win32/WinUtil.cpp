@@ -129,15 +129,8 @@ void WinUtil::init() {
 		userImages->add(tmp, RGB(255, 0, 255));
 	}
 
-	if(BOOLSETTING(URL_HANDLER)) {
-		registerDchubHandler();
-		registerADChubHandler();
-		urlDcADCRegistered = true;
-	}
-	if(BOOLSETTING(MAGNET_REGISTER)) {
-		registerMagnetHandler();
-		urlMagnetRegistered = true;
-	}
+	registerHubHandlers();
+	registerMagnetHandler();
 
 	// Const so that noone else will change them after they've been initialized
 	Button::Seed& xbutton = const_cast<Button::Seed&> (Seeds::button);
@@ -925,13 +918,12 @@ COLORREF HLS_TRANSFORM(COLORREF rgb, int percent_L, int percent_S) {
 	return HLS2RGB(HLS(h, l, s));
 }
 
-void WinUtil::registerDchubHandler() {
+bool registerHubHandler_(const tstring& name) {
 	HKEY hk;
 	TCHAR Buf[512];
-	tstring app = _T("\"") + Text::toT(getAppName()) + _T("\" %1");
 	Buf[0] = 0;
 
-	if(::RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("dchub\\Shell\\Open\\Command"), 0, KEY_WRITE | KEY_READ, &hk)
+	if(::RegOpenKeyEx(HKEY_CLASSES_ROOT, (name + _T("\\Shell\\Open\\Command")).c_str(), 0, KEY_WRITE | KEY_READ, &hk)
 		== ERROR_SUCCESS)
 	{
 		DWORD bufLen = sizeof(Buf);
@@ -940,81 +932,66 @@ void WinUtil::registerDchubHandler() {
 		::RegCloseKey(hk);
 	}
 
-	if(Util::stricmp(app.c_str(), Buf) != 0) {
-		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk,
-			NULL))
-		{
-			LogManager::getInstance()->message(_("Error registering dchub:// handler"));
-			return;
-		}
-
-		TCHAR tmp[] = _T("URL:Direct Connect Protocol");
-		::RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE) tmp, sizeof(TCHAR) * (_tcslen(tmp) + 1));
-		::RegSetValueEx(hk, _T("URL Protocol"), 0, REG_SZ, (LPBYTE) _T(""), sizeof(TCHAR));
-		::RegCloseKey(hk);
-
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub\\Shell\\Open\\Command"), 0, NULL, REG_OPTION_NON_VOLATILE,
-			KEY_WRITE, NULL, &hk, NULL);
-		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
-		::RegCloseKey(hk);
-
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("dchub\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE,
-			NULL, &hk, NULL);
-		app = Text::toT(getAppName());
-		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
-		::RegCloseKey(hk);
+	tstring app = _T("\"") + Text::toT(WinUtil::getAppName()) + _T("\" %1");
+	if(Util::stricmp(app.c_str(), Buf) == 0) {
+		// already registered to us
+		return true;
 	}
-}
 
-void WinUtil::unRegisterDchubHandler() {
-	SHDeleteKey(HKEY_CLASSES_ROOT, _T("dchub"));
-}
+	if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, name.c_str(), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL) != ERROR_SUCCESS)
+		return false;
 
-void WinUtil::registerADChubHandler() {
-	HKEY hk;
-	TCHAR Buf[512];
-	tstring app = _T("\"") + Text::toT(getAppName()) + _T("\" %1");
-	Buf[0] = 0;
+	TCHAR tmp[] = _T("URL:Direct Connect Protocol");
+	::RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE) tmp, sizeof(TCHAR) * (_tcslen(tmp) + 1));
+	::RegSetValueEx(hk, _T("URL Protocol"), 0, REG_SZ, (LPBYTE) _T(""), sizeof(TCHAR));
+	::RegCloseKey(hk);
 
-	if(::RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("adc\\Shell\\Open\\Command"), 0, KEY_WRITE | KEY_READ, &hk)
-		== ERROR_SUCCESS)
+	if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, (name + _T("\\Shell\\Open\\Command")).c_str(), 0, NULL, REG_OPTION_NON_VOLATILE,
+		KEY_WRITE, NULL, &hk, NULL) != ERROR_SUCCESS)
+		return false;
+	bool ret = ::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1)) == ERROR_SUCCESS;
+	::RegCloseKey(hk);
+
+	if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, (name + _T("\\DefaultIcon")).c_str(), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
+		&hk, NULL) != ERROR_SUCCESS)
 	{
-		DWORD bufLen = sizeof(Buf);
-		DWORD type;
-		::RegQueryValueEx(hk, NULL, 0, &type, (LPBYTE) Buf, &bufLen);
-		::RegCloseKey(hk);
-	}
-
-	if(Util::stricmp(app.c_str(), Buf) != 0) {
-		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL))
-		{
-			LogManager::getInstance()->message(_("Error registering adc:// link handler"));
-			return;
-		}
-
-		TCHAR tmp[] = _T("URL:Direct Connect Protocol");
-		::RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE) tmp, sizeof(TCHAR) * (_tcslen(tmp) + 1));
-		::RegSetValueEx(hk, _T("URL Protocol"), 0, REG_SZ, (LPBYTE) _T(""), sizeof(TCHAR));
-		::RegCloseKey(hk);
-
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc\\Shell\\Open\\Command"), 0, NULL, REG_OPTION_NON_VOLATILE,
-			KEY_WRITE, NULL, &hk, NULL);
-		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
-		::RegCloseKey(hk);
-
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("adc\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
-			&hk, NULL);
-		app = Text::toT(getAppName());
+		app = Text::toT(WinUtil::getAppName());
 		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
 		::RegCloseKey(hk);
 	}
+
+	return ret;
 }
 
-void WinUtil::unRegisterADChubHandler() {
-	SHDeleteKey(HKEY_CLASSES_ROOT, _T("adc"));
+bool registerHubHandler(const tstring& name) {
+	bool ret = registerHubHandler_(name);
+	if(!ret)
+		LogManager::getInstance()->message(str(F_("Error registering %1%:// link handler") % Text::fromT(name)));
+	return ret;
+}
+
+void WinUtil::registerHubHandlers() {
+	if(BOOLSETTING(URL_HANDLER)) {
+		if(!urlDcADCRegistered) {
+			urlDcADCRegistered = registerHubHandler(_T("dchub")) && registerHubHandler(_T("adc")) && registerHubHandler(_T("adcs"));
+		}
+	} else if(urlDcADCRegistered) {
+		::SHDeleteKey(HKEY_CLASSES_ROOT, _T("dchub"));
+		::SHDeleteKey(HKEY_CLASSES_ROOT, _T("adc"));
+		::SHDeleteKey(HKEY_CLASSES_ROOT, _T("adcs"));
+	}
 }
 
 void WinUtil::registerMagnetHandler() {
+	if(BOOLSETTING(MAGNET_REGISTER)) {
+		if(urlMagnetRegistered)
+			return;
+	} else if(urlMagnetRegistered) {
+		::SHDeleteKey(HKEY_CLASSES_ROOT, _T("magnet"));
+		::SHDeleteKey(HKEY_LOCAL_MACHINE, _T("magnet"));
+		return;
+	}
+
 	HKEY hk;
 	TCHAR buf[512];
 	tstring openCmd, magnetLoc, magnetExe;
@@ -1050,7 +1027,7 @@ void WinUtil::registerMagnetHandler() {
 		} else {
 			// set Magnet\Location
 			if(::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet"), 0, NULL, REG_OPTION_NON_VOLATILE,
-				KEY_WRITE, NULL, &hk, NULL))
+				KEY_WRITE, NULL, &hk, NULL) == ERROR_SUCCESS)
 			{
 				LogManager::getInstance()->message(_("Error registering Magnet link handler"));
 				return;
@@ -1063,8 +1040,8 @@ void WinUtil::registerMagnetHandler() {
 		magnetLoc = _T('"') + magnetExe + _T('"');
 	}
 	// (re)register the handler if magnet.exe isn't the default, or if DC++ is handling it
-	if(BOOLSETTING(MAGNET_REGISTER) && (Util::strnicmp(openCmd, magnetLoc, magnetLoc.size()) != 0 || !haveMagnet)) {
-		SHDeleteKey(HKEY_CLASSES_ROOT, _T("magnet"));
+	if(Util::strnicmp(openCmd, magnetLoc, magnetLoc.size()) != 0 || !haveMagnet) {
+		::SHDeleteKey(HKEY_CLASSES_ROOT, _T("magnet"));
 		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk,
 			NULL))
 		{
@@ -1075,51 +1052,55 @@ void WinUtil::registerMagnetHandler() {
 			* (T_("URL:MAGNET URI").length() + 1));
 		::RegSetValueEx(hk, _T("URL Protocol"), NULL, REG_SZ, NULL, NULL);
 		::RegCloseKey(hk);
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE,
-			NULL, &hk, NULL);
-		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) magnetLoc.c_str(), sizeof(TCHAR) * (magnetLoc.length() + 1));
-		::RegCloseKey(hk);
+		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\DefaultIcon"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE,
+			NULL, &hk, NULL) == ERROR_SUCCESS)
+		{
+			::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) magnetLoc.c_str(), sizeof(TCHAR) * (magnetLoc.length() + 1));
+			::RegCloseKey(hk);
+		}
 		magnetLoc += _T(" %1");
-		::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\shell\\open\\command"), 0, NULL, REG_OPTION_NON_VOLATILE,
-			KEY_WRITE, NULL, &hk, NULL);
-		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) magnetLoc.c_str(), sizeof(TCHAR) * (magnetLoc.length() + 1));
-		::RegCloseKey(hk);
-	}
+		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\shell\\open\\command"), 0, NULL, REG_OPTION_NON_VOLATILE,
+			KEY_WRITE, NULL, &hk, NULL) == ERROR_SUCCESS)
+		{
+			urlMagnetRegistered = ::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) magnetLoc.c_str(),
+				sizeof(TCHAR) * (magnetLoc.length() + 1)) == ERROR_SUCCESS;
+			::RegCloseKey(hk);
+		}
+	} else
+		urlMagnetRegistered = true;
 	// magnet-handler specific code
 	// clean out the DC++ tree first
-	SHDeleteKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"));
+	::SHDeleteKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"));
 	// add DC++ to magnet-handler's list of applications
-	::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"), 0, NULL, REG_OPTION_NON_VOLATILE,
-		KEY_WRITE, NULL, &hk, NULL);
-	::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) CT_("DC++"), sizeof(TCHAR) * (T_("DC++").size() + 1));
-	::RegSetValueEx(hk, _T("Description"), NULL, REG_SZ,
-		(LPBYTE) CT_("Download files from the Direct Connect network"), sizeof(TCHAR)
-			* (T_("Download files from the Direct Connect network").size() + 1));
-	// set ShellExecute
-	tstring app = Text::toT("\"" + getAppName() + "\" %URL");
-	::RegSetValueEx(hk, _T("ShellExecute"), NULL, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
-	// set DefaultIcon
-	app = Text::toT('"' + getAppName() + '"');
-	::RegSetValueEx(hk, _T("DefaultIcon"), NULL, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
-	::RegCloseKey(hk);
+	if(::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"), 0, NULL, REG_OPTION_NON_VOLATILE,
+		KEY_WRITE, NULL, &hk, NULL) == ERROR_SUCCESS)
+	{
+		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) CT_("DC++"), sizeof(TCHAR) * (T_("DC++").size() + 1));
+		::RegSetValueEx(hk, _T("Description"), NULL, REG_SZ, (LPBYTE) CT_("Download files from the Direct Connect network"),
+			sizeof(TCHAR) * (T_("Download files from the Direct Connect network").size() + 1));
+		// set ShellExecute
+		tstring app = Text::toT("\"" + getAppName() + "\" %URL");
+		::RegSetValueEx(hk, _T("ShellExecute"), NULL, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
+		// set DefaultIcon
+		app = Text::toT('"' + getAppName() + '"');
+		::RegSetValueEx(hk, _T("DefaultIcon"), NULL, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
+		::RegCloseKey(hk);
+	}
 
 	// These two types contain a tth root, and are in common use.  The other two are variations picked up
 	// from Shareaza's source, which come second hand from Gordon Mohr.  -GargoyleMT
 	// Reference: http://forums.shareaza.com/showthread.php?threadid=23731
 	// Note: the three part hash types require magnethandler >= 1.0.0.3
 	DWORD nothing = 0;
-	::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++\\Type"), 0, NULL,
-		REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL);
-	::RegSetValueEx(hk, _T("urn:bitprint"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
-	::RegSetValueEx(hk, _T("urn:tree:tiger"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
-	::RegSetValueEx(hk, _T("urn:tree:tiger/"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
-	::RegSetValueEx(hk, _T("urn:tree:tiger/1024"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
-	::RegCloseKey(hk);
-}
-
-void WinUtil::unRegisterMagnetHandler() {
-	SHDeleteKey(HKEY_CLASSES_ROOT, _T("magnet"));
-	SHDeleteKey(HKEY_LOCAL_MACHINE, _T("magnet"));
+	if(::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++\\Type"), 0, NULL,
+		REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL) == ERROR_SUCCESS)
+	{
+		::RegSetValueEx(hk, _T("urn:bitprint"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
+		::RegSetValueEx(hk, _T("urn:tree:tiger"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
+		::RegSetValueEx(hk, _T("urn:tree:tiger/"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
+		::RegSetValueEx(hk, _T("urn:tree:tiger/1024"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
+		::RegCloseKey(hk);
+	}
 }
 
 void WinUtil::openLink(const tstring& url) {
@@ -1201,7 +1182,10 @@ bool WinUtil::parseDBLClick(const tstring& aString) {
 		parseMagnetUri(aString);
 		return true;
 	} else if(Util::strnicmp(aString.c_str(), _T("adc://"), 6) == 0) {
-		parseADChubUrl(aString);
+		parseADChubUrl(aString, false);
+		return true;
+	} else if(Util::strnicmp(aString.c_str(), _T("adcs://"), 7) == 0) {
+		parseADChubUrl(aString, true);
 		return true;
 	}
 	return false;
@@ -1232,12 +1216,12 @@ void WinUtil::parseDchubUrl(const tstring& aUrl) {
 	}
 }
 
-void WinUtil::parseADChubUrl(const tstring& aUrl) {
+void WinUtil::parseADChubUrl(const tstring& aUrl, bool isSecure) {
 	string server, file;
 	uint16_t port = 0; //make sure we get a port since adc doesn't have a standard one
 	Util::decodeUrl(Text::fromT(aUrl), server, port, file);
 	if(!server.empty() && port > 0) {
-		HubFrame::openWindow(mainWindow->getTabView(), "adc://" + server + ":" + Util::toString(port));
+		HubFrame::openWindow(mainWindow->getTabView(), string(isSecure ? "adcs" : "adc") + "://" + server + ":" + Util::toString(port));
 	}
 }
 

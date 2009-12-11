@@ -825,6 +825,8 @@ void MainWindow::handleSettings() {
 	int lastConn = SETTING(INCOMING_CONNECTIONS);
 	int lastSlots = SETTING(SLOTS);
 	bool lastSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
+	bool lastURLReg = BOOLSETTING(URL_HANDLER);
+	bool lastMagnetReg = BOOLSETTING(MAGNET_REGISTER);
 
 	if(dlg.run() == IDOK) {
 		SettingsManager::getInstance()->save();
@@ -842,22 +844,10 @@ void MainWindow::handleSettings() {
 		if(BOOLSETTING(SORT_FAVUSERS_FIRST) != lastSortFavUsersFirst)
 			HubFrame::resortUsers();
 
-		if(BOOLSETTING(URL_HANDLER)) {
-			WinUtil::registerDchubHandler();
-			WinUtil::registerADChubHandler();
-			WinUtil::urlDcADCRegistered = true;
-		} else if(WinUtil::urlDcADCRegistered) {
-			WinUtil::unRegisterDchubHandler();
-			WinUtil::unRegisterADChubHandler();
-			WinUtil::urlDcADCRegistered = false;
-		}
-		if(BOOLSETTING(MAGNET_REGISTER)) {
+		if(BOOLSETTING(URL_HANDLER) != lastURLReg)
+			WinUtil::registerHubHandlers();
+		if(BOOLSETTING(MAGNET_REGISTER) != lastMagnetReg)
 			WinUtil::registerMagnetHandler();
-			WinUtil::urlMagnetRegistered = true;
-		} else if(WinUtil::urlMagnetRegistered) {
-			WinUtil::unRegisterMagnetHandler();
-			WinUtil::urlMagnetRegistered = false;
-		}
 
 		ClientManager::getInstance()->infoUpdated();
 	}
@@ -1031,7 +1021,10 @@ void MainWindow::parseCommandLine(const tstring& cmdLine)
 		WinUtil::parseDchubUrl(cmdLine.substr(j));
 	}
 	if( (j = cmdLine.find(_T("adc://"), i)) != string::npos) {
-		WinUtil::parseADChubUrl(cmdLine.substr(j));
+		WinUtil::parseADChubUrl(cmdLine.substr(j), false);
+	}
+	if( (j = cmdLine.find(_T("adcs://"), i)) != string::npos) {
+		WinUtil::parseADChubUrl(cmdLine.substr(j), true);
 	}
 	if( (j = cmdLine.find(_T("magnet:?"), i)) != string::npos) {
 		WinUtil::parseMagnetUri(cmdLine.substr(j));
