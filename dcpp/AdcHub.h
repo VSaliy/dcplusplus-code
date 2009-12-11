@@ -52,6 +52,7 @@ public:
 private:
 	friend class ClientManager;
 	friend class CommandHandler<AdcHub>;
+	friend class Identity;
 
 	AdcHub(const string& aHubURL, bool secure);
 

@@ -144,8 +144,8 @@ public:
 	bool isHidden() const { return isSet("HI"); }
 	bool isBot() const { return isClientType(CT_BOT) || isSet("BO"); }
 	bool isAway() const { return isSet("AW"); }
-	bool isTcpActive() const { return !getIp().empty() || (user->isSet(User::NMDC) && !user->isSet(User::PASSIVE)); }
-	bool isUdpActive() const { return !getIp().empty() && !getUdpPort().empty(); }
+	bool isTcpActive() const;
+	bool isUdpActive() const;
 	string get(const char* name) const;
 	void set(const char* name, const string& val);
 	bool isSet(const char* name) const;
