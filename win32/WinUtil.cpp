@@ -788,7 +788,8 @@ const dwt::Point HelpPopup::margins(6, 6);
 void WinUtil::help(dwt::Control* widget, unsigned id) {
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help
-		new HelpPopup(widget, Text::toT(getHelpText(id)));
+		tstring text(Text::toT(getHelpText(id)));
+		new HelpPopup(widget, text);
 	} else {
 		if(id < IDH_BEGIN || id > IDH_END)
 			id = IDH_INDEX;
