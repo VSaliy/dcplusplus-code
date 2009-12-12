@@ -379,6 +379,10 @@ bool SimpleXMLReader::comment() {
 }
 
 bool SimpleXMLReader::entref(string& d) {
+	if(d.size() + 1 >= MAX_VALUE_SIZE) {
+		error("Buffer overflow");
+	}
+
 	if(bufSize() > 6) {
 		if(charAt(1) == 'l' && charAt(2) == 't' && charAt(3) == ';') {
 			d.append(1, '<');
