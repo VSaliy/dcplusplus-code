@@ -23,6 +23,11 @@ public:
 	void parse(InputStream& is);
 	bool parse(const char* data, size_t len, bool more);
 private:
+
+	static const size_t MAX_NAME_SIZE = 256;
+	static const size_t MAX_VALUE_SIZE = 64*1024;
+	static const size_t MAX_NESTING = 16;
+
 	enum ParseState {
 		/// Start of document
 		STATE_START,

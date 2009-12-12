@@ -61,6 +61,20 @@ SimpleXMLReader::SimpleXMLReader(SimpleXMLReader::CallBack* callback) :
 	attribs.reserve(16);
 }
 
+void append(std::string& str, size_t maxLen, int c) {
+	if(str.size() + 1 > maxLen) {
+		error("Buffer overflow");
+	}
+	str.append(1, (std::string::value_type)c);
+}
+
+void append(std::string& str, size_t maxLen, std::string::const_iterator begin, std::string::const_iterator end) {
+	if(str.size() + (end - begin) > maxLen) {
+		error("Buffer overflow");
+	}
+	str.append(begin, end);
+}
+
 /// @todo This is cheating - we should be converting from the encoding, but since we simplify a few things
 /// this is ok
 int SimpleXMLReader::charAt(size_t n) const { return buf[bufPos + n]; }
@@ -111,9 +125,13 @@ bool SimpleXMLReader::element() {
 
 	int c = charAt(1);
 	if(charAt(0) == '<' && isNameStartChar(c)) {
+		if(elements.size() >= MAX_NESTING) {
+			error("Max nesting exceeded");
+		}
+
 		state = STATE_ELEMENT_NAME;
 		elements.push_back(std::string());
-		elements.back().append(1, (string::value_type)c);
+		append(elements.back(), MAX_NAME_SIZE, c);
 
 		advancePos(2);
 
@@ -124,31 +142,38 @@ bool SimpleXMLReader::element() {
 }
 
 bool SimpleXMLReader::elementName() {
-	while(bufSize() > 0) {
-		int c = charAt(0);
+	size_t i = 0;
+	for(size_t iend = bufSize(); i < iend; ++i) {
+		int c = charAt(i);
 
-		if(isNameChar(c)) {
-			elements.back().append(1, (string::value_type)c);
-			advancePos(1);
-		} else if(isSpace(c)) {
+		if(isSpace(c)) {
+			append(elements.back(), MAX_NAME_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+
 			state = STATE_ELEMENT_ATTR;
-			advancePos(1);
+			advancePos(i + 1);
 			return true;
 		} else if(c == '/') {
+			append(elements.back(), MAX_NAME_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+
 			state = STATE_ELEMENT_END_SIMPLE;
-			advancePos(1);
+			advancePos(i + 1);
 			return true;
 		} else if(c == '>') {
+			append(elements.back(), MAX_NAME_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+
 			cb->startTag(elements.back(), attribs, false);
 			attribs.clear();
 
 			state = STATE_CONTENT;
 			advancePos(1);
 			return true;
-		} else {
+		} else if(!isNameChar(c)) {
 			return false;
 		}
 	}
+
+	append(elements.back(), MAX_NAME_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+	advancePos(i);
 
 	return true;
 }
@@ -161,7 +186,7 @@ bool SimpleXMLReader::elementAttr() {
 	int c = charAt(0);
 	if(isNameStartChar(c)) {
 		attribs.push_back(StringPair());
-		attribs.back().first.append(1, (string::value_type)c);
+		append(attribs.back().first, MAX_NAME_SIZE, c);
 
 		state = STATE_ELEMENT_ATTR_NAME;
 		advancePos(1);
@@ -173,48 +198,56 @@ bool SimpleXMLReader::elementAttr() {
 }
 
 bool SimpleXMLReader::elementAttrName() {
-	while(bufSize() > 0) {
-		int c = charAt(0);
+	size_t i = 0;
+	for(size_t iend = bufSize(); i < iend; ++i) {
+		int c = charAt(i);
 
-		if(isNameChar(c)) {
-			attribs.back().first.append(1, (string::value_type)c);
-			advancePos(1);
-		} else if(isSpace(c)) {
+		if(isSpace(c)) {
+			append(attribs.back().first, MAX_NAME_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+
 			state = STATE_ELEMENT_ATTR_EQ;
-			advancePos(1);
+			advancePos(i + 1);
 			return true;
 		} else if(c == '=') {
+			append(attribs.back().first, MAX_NAME_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+
 			state = STATE_ELEMENT_ATTR_VALUE;
-			advancePos(1);
+			advancePos(i + 1);
 			return true;
-		} else {
+		} else if(!isNameChar(c)) {
 			return false;
 		}
 	}
 
+	append(attribs.back().first, MAX_NAME_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+	advancePos(i);
 	return true;
 }
 
 bool SimpleXMLReader::elementAttrValue() {
-	while(bufSize() > 0) {
-		int c = charAt(0);
+	size_t i = 0;
+	for(size_t iend = bufSize(); i < iend; ++i) {
+		int c = charAt(i);
+
 		if((state == STATE_ELEMENT_ATTR_VALUE_APOS && c == '\'') || (state == STATE_ELEMENT_ATTR_VALUE_QUOT && c == '"')) {
+			append(attribs.back().second, MAX_VALUE_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+
 			if(!encoding.empty() && encoding != Text::utf8) {
 				attribs.back().second = Text::toUtf8(attribs.back().second, encoding);
 			}
 
 			state = STATE_ELEMENT_ATTR;
-			advancePos(1);
+			advancePos(i + 1);
 			return true;
 		} else if(c == '&') {
-			if(!entref(attribs.back().second)) {
-				return false;
-			}
-		} else {
-			attribs.back().second.append(1, (string::value_type)c);
-			advancePos(1);
+			append(attribs.back().second, MAX_VALUE_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+			advancePos(i);
+			return entref(attribs.back().second);
 		}
 	}
+
+	append(attribs.back().second, MAX_VALUE_SIZE, buf.begin() + bufPos, buf.begin() + bufPos + i);
+	advancePos(i);
 
 	return true;
 }
@@ -315,7 +348,7 @@ bool SimpleXMLReader::declEncodingValue() {
 				return false;
 			}
 		} else {
-			encoding.append(1, (string::value_type)c);
+			append(encoding, MAX_VALUE_SIZE, c);
 			advancePos(1);
 		}
 	}
@@ -393,7 +426,7 @@ bool SimpleXMLReader::content() {
 	}
 
 	if(!value.empty() || !isSpace(c)) {
-		value.append(1, (string::value_type)c);
+		append(value, MAX_VALUE_SIZE, c);
 	}
 
 	advancePos(1);
