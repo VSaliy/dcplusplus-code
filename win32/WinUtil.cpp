@@ -982,16 +982,7 @@ void WinUtil::registerHubHandlers() {
 	}
 }
 
-void WinUtil::registerMagnetHandler() {
-	if(BOOLSETTING(MAGNET_REGISTER)) {
-		if(urlMagnetRegistered)
-			return;
-	} else if(urlMagnetRegistered) {
-		::SHDeleteKey(HKEY_CLASSES_ROOT, _T("magnet"));
-		::SHDeleteKey(HKEY_LOCAL_MACHINE, _T("magnet"));
-		return;
-	}
-
+bool registerMagnetHandler_() {
 	HKEY hk;
 	TCHAR buf[512];
 	tstring openCmd, magnetLoc, magnetExe;
@@ -1006,6 +997,7 @@ void WinUtil::registerMagnetHandler() {
 	}
 	openCmd = buf;
 	buf[0] = 0;
+
 	// read the location of magnet.exe
 	if(::RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet"), NULL, KEY_READ, &hk) == ERROR_SUCCESS) {
 		DWORD bufLen = sizeof(buf) * sizeof(TCHAR);
@@ -1017,37 +1009,32 @@ void WinUtil::registerMagnetHandler() {
 	if(magnetLoc[0] == _T('"') && string::npos != (i = magnetLoc.find(_T('"'), 1))) {
 		magnetExe = magnetLoc.substr(1, i - 1);
 	}
+
 	// check for the existence of magnet.exe
 	if(File::getSize(Text::fromT(magnetExe)) == -1) {
 		magnetExe = Text::toT(Util::getPath(Util::PATH_RESOURCES) + "magnet.exe");
 		if(File::getSize(Text::fromT(magnetExe)) == -1) {
 			// gracefully fall back to registering DC++ to handle magnets
-			magnetExe = Text::toT(getAppName());
+			magnetExe = Text::toT(WinUtil::getAppName());
 			haveMagnet = false;
 		} else {
 			// set Magnet\Location
 			if(::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet"), 0, NULL, REG_OPTION_NON_VOLATILE,
-				KEY_WRITE, NULL, &hk, NULL) == ERROR_SUCCESS)
-			{
-				LogManager::getInstance()->message(_("Error registering Magnet link handler"));
-				return;
-			}
-
+				KEY_WRITE, NULL, &hk, NULL) != ERROR_SUCCESS)
+				return false;
 			::RegSetValueEx(hk, _T("Location"), NULL, REG_SZ, (LPBYTE) magnetExe.c_str(), sizeof(TCHAR)
 				* (magnetExe.length() + 1));
 			::RegCloseKey(hk);
 		}
 		magnetLoc = _T('"') + magnetExe + _T('"');
 	}
+
 	// (re)register the handler if magnet.exe isn't the default, or if DC++ is handling it
 	if(Util::strnicmp(openCmd, magnetLoc, magnetLoc.size()) != 0 || !haveMagnet) {
 		::SHDeleteKey(HKEY_CLASSES_ROOT, _T("magnet"));
 		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk,
-			NULL))
-		{
-			LogManager::getInstance()->message(_("Error registering Magnet link handler"));
-			return;
-		}
+			NULL) != ERROR_SUCCESS)
+			return false;
 		::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) CT_("URL:MAGNET URI"), sizeof(TCHAR)
 			* (T_("URL:MAGNET URI").length() + 1));
 		::RegSetValueEx(hk, _T("URL Protocol"), NULL, REG_SZ, NULL, NULL);
@@ -1060,17 +1047,21 @@ void WinUtil::registerMagnetHandler() {
 		}
 		magnetLoc += _T(" %1");
 		if(::RegCreateKeyEx(HKEY_CLASSES_ROOT, _T("magnet\\shell\\open\\command"), 0, NULL, REG_OPTION_NON_VOLATILE,
-			KEY_WRITE, NULL, &hk, NULL) == ERROR_SUCCESS)
-		{
-			urlMagnetRegistered = ::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) magnetLoc.c_str(),
-				sizeof(TCHAR) * (magnetLoc.length() + 1)) == ERROR_SUCCESS;
-			::RegCloseKey(hk);
-		}
-	} else
-		urlMagnetRegistered = true;
+			KEY_WRITE, NULL, &hk, NULL) != ERROR_SUCCESS)
+			return false;
+		if(::RegSetValueEx(hk, NULL, NULL, REG_SZ, (LPBYTE) magnetLoc.c_str(),
+			sizeof(TCHAR) * (magnetLoc.length() + 1)) != ERROR_SUCCESS)
+			return false;
+		::RegCloseKey(hk);
+	}
+
 	// magnet-handler specific code
+
 	// clean out the DC++ tree first
 	::SHDeleteKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"));
+
+	bool ret = false;
+
 	// add DC++ to magnet-handler's list of applications
 	if(::RegCreateKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"), 0, NULL, REG_OPTION_NON_VOLATILE,
 		KEY_WRITE, NULL, &hk, NULL) == ERROR_SUCCESS)
@@ -1079,10 +1070,11 @@ void WinUtil::registerMagnetHandler() {
 		::RegSetValueEx(hk, _T("Description"), NULL, REG_SZ, (LPBYTE) CT_("Download files from the Direct Connect network"),
 			sizeof(TCHAR) * (T_("Download files from the Direct Connect network").size() + 1));
 		// set ShellExecute
-		tstring app = Text::toT("\"" + getAppName() + "\" %URL");
-		::RegSetValueEx(hk, _T("ShellExecute"), NULL, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
+		tstring app = Text::toT("\"" + WinUtil::getAppName() + "\" %URL");
+		ret = ::RegSetValueEx(hk, _T("ShellExecute"), NULL, REG_SZ, (LPBYTE) app.c_str(),
+			sizeof(TCHAR) * (app.length() + 1)) == ERROR_SUCCESS;
 		// set DefaultIcon
-		app = Text::toT('"' + getAppName() + '"');
+		app = Text::toT('"' + WinUtil::getAppName() + '"');
 		::RegSetValueEx(hk, _T("DefaultIcon"), NULL, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
 		::RegCloseKey(hk);
 	}
@@ -1100,6 +1092,22 @@ void WinUtil::registerMagnetHandler() {
 		::RegSetValueEx(hk, _T("urn:tree:tiger/"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
 		::RegSetValueEx(hk, _T("urn:tree:tiger/1024"), NULL, REG_DWORD, (LPBYTE) &nothing, sizeof(nothing));
 		::RegCloseKey(hk);
+	}
+
+	return ret;
+}
+
+void WinUtil::registerMagnetHandler() {
+	if(BOOLSETTING(MAGNET_REGISTER)) {
+		if(!urlMagnetRegistered) {
+			urlMagnetRegistered = registerMagnetHandler_();
+			if(!urlMagnetRegistered)
+				LogManager::getInstance()->message(_("Error registering Magnet link handler"));
+		}
+	} else if(urlMagnetRegistered) {
+		::SHDeleteKey(HKEY_CLASSES_ROOT, _T("magnet"));
+		::SHDeleteKey(HKEY_LOCAL_MACHINE, _T("magnet"));
+		::SHDeleteKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Magnet\\Handlers\\DC++"));
 	}
 }
 
