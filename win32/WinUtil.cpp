@@ -722,14 +722,18 @@ private:
 		box->setText(text);
 	}
 
+	void multilineBox() {
+		// can't add ES_MULTILINE at run time, so we create the control again
+		::DestroyWindow(box->handle());
+		ts.style |= ES_MULTILINE;
+		createBox();
+	}
+
 	LRESULT resize(LPARAM lParam) {
 		{
 			dwt::Rectangle rect(reinterpret_cast<REQRESIZE*> (lParam)->rc);
 			if(rect.width() > maxWidth && (ts.style & ES_MULTILINE) != ES_MULTILINE) {
-				// can't add ES_MULTILINE at run time, so we create the control again
-				::DestroyWindow(box->handle());
-				ts.style |= ES_MULTILINE;
-				createBox();
+				callAsync(std::tr1::bind(&HelpPopup::multilineBox, this));
 				return 0;
 			}
 
@@ -781,8 +785,7 @@ const dwt::Point HelpPopup::margins(6, 6);
 void WinUtil::help(dwt::Control* widget, unsigned id) {
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help
-		tstring text(Text::toT(getHelpText(id)));
-		new HelpPopup(widget, text);
+		new HelpPopup(widget, Text::toT(getHelpText(id)));
 	} else {
 		if(id < IDH_BEGIN || id > IDH_END)
 			id = IDH_INDEX;
