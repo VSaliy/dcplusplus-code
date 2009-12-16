@@ -121,13 +121,6 @@ void QueueManager::FileQueue::find(QueueItem::List& ql, const TTHValue& tth) {
 	}
 }
 
-bool QueueManager::FileQueue::exists(const TTHValue& tth) const {
-	for(QueueItem::StringMap::const_iterator i = queue.begin(); i != queue.end(); ++i)
-		if(i->second->getTTH() == tth)
-			return true;
-	return false;
-}
-
 static QueueItem* findCandidate(QueueItem* cand, QueueItem::StringIter start, QueueItem::StringIter end, const StringList& recent) {
 	for(QueueItem::StringIter i = start; i != end; ++i) {
 		QueueItem* q = i->second;
@@ -615,9 +608,33 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 		Lock l(cs);
 
 		// This will be pretty slow on large queues...
-		if(BOOLSETTING(DONT_DL_ALREADY_QUEUED) && !(aFlags & QueueItem::FLAG_USER_LIST) && fileQueue.exists(root))
-			throw QueueException(_("This file is already queued"));
-
+		if(BOOLSETTING(DONT_DL_ALREADY_QUEUED) && !(aFlags & QueueItem::FLAG_USER_LIST)) {
+			QueueItem::List ql;
+			fileQueue.find(ql, root);
+			if (ql.size() > 0) { 
+				// Found one or more existing queue items, lets see if we can add the source to them
+				bool sourceAdded = false;
+				for(QueueItem::Iter i = ql.begin(); i != ql.end(); ++i) {
+					if(!(*i)->isSource(aUser)) {
+						try {
+							wantConnection = addSource(*i, aUser, addBad ? QueueItem::Source::FLAG_MASK : 0);
+							sourceAdded = true;
+						} catch(...) { }
+					}
+				}
+	
+				if (sourceAdded) {
+					if (wantConnection && aUser.user->isOnline()) {
+						ConnectionManager::getInstance()->getDownloadConnection(aUser);
+					}	
+					return;			
+				} 
+				
+				throw QueueException(_("This file is already queued"));
+				
+			} 
+		}
+		
 		QueueItem* q = fileQueue.find(target);
 		if(q == NULL) {
 			q = fileQueue.add(target, aSize, aFlags, QueueItem::DEFAULT, tempTarget, GET_TIME(), root);

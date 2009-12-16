@@ -181,8 +181,6 @@ private:
 		void find(QueueItem::List& sl, int64_t aSize, const string& ext);
 		void find(QueueItem::List& ql, const TTHValue& tth);
 
-		bool exists(const TTHValue& tth) const;
-
 		QueueItem* findAutoSearch(StringList& recent);
 		size_t getSize() { return queue.size(); }
 		QueueItem::StringMap& getQueue() { return queue; }
