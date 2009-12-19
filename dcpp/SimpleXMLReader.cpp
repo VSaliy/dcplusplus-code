@@ -9,10 +9,6 @@
 
 namespace dcpp {
 
-static bool error(const char* e) {
-	throw SimpleXMLException(e);
-}
-
 static bool isSpace(int c) {
 	return c == 0x20 || c == 0x09 || c == 0x0d || c == 0x0a;
 }
@@ -55,20 +51,20 @@ static bool isNameChar(int c) {
 }
 
 SimpleXMLReader::SimpleXMLReader(SimpleXMLReader::CallBack* callback) :
-	bufPos(0), cb(callback), state(STATE_START)
+	bufPos(0), pos(0), cb(callback), state(STATE_START)
 {
 	elements.reserve(64);
 	attribs.reserve(16);
 }
 
-void append(std::string& str, size_t maxLen, int c) {
+void SimpleXMLReader::append(std::string& str, size_t maxLen, int c) {
 	if(str.size() + 1 > maxLen) {
 		error("Buffer overflow");
 	}
 	str.append(1, (std::string::value_type)c);
 }
 
-void append(std::string& str, size_t maxLen, std::string::const_iterator begin, std::string::const_iterator end) {
+void SimpleXMLReader::append(std::string& str, size_t maxLen, std::string::const_iterator begin, std::string::const_iterator end) {
 	if(str.size() + (end - begin) > maxLen) {
 		error("Buffer overflow");
 	}
@@ -78,8 +74,12 @@ void append(std::string& str, size_t maxLen, std::string::const_iterator begin, 
 /// @todo This is cheating - we should be converting from the encoding, but since we simplify a few things
 /// this is ok
 int SimpleXMLReader::charAt(size_t n) const { return buf[bufPos + n]; }
-void SimpleXMLReader::advancePos(size_t n) { bufPos += n; }
+void SimpleXMLReader::advancePos(size_t n) { bufPos += n; pos += n; }
 string::size_type SimpleXMLReader::bufSize() const { return buf.size() - bufPos; }
+
+bool SimpleXMLReader::error(const char* e) {
+	throw SimpleXMLException(Util::toString(pos) + ": " + e);
+}
 
 const string& SimpleXMLReader::CallBack::getAttrib(StringPairList& attribs, const string& name, size_t hint) {
 	hint = min(hint, attribs.size());
@@ -165,7 +165,7 @@ bool SimpleXMLReader::elementName() {
 			attribs.clear();
 
 			state = STATE_CONTENT;
-			advancePos(1);
+			advancePos(i + 1);
 			return true;
 		} else if(!isNameChar(c)) {
 			return false;
@@ -361,7 +361,7 @@ bool SimpleXMLReader::comment() {
 		int c = charAt(0);
 
 		// TODO We shouldn't allow ---> to end a comment
-		if(c != '-') {
+		if(c == '-') {
 			if(!needChars(3)) {
 				return true;
 			}
@@ -484,6 +484,9 @@ bool SimpleXMLReader::elementEndEnd() {
 }
 
 bool SimpleXMLReader::skipSpace() {
+	if(!needChars(1)) {
+		return true;
+	}
 	bool skipped = false;
 	while(needChars(1) && isSpace(charAt(0))) {
 		advancePos();
@@ -502,10 +505,11 @@ bool SimpleXMLReader::needChars(size_t n) const {
 void SimpleXMLReader::parse(InputStream& stream) {
 	const size_t BUF_SIZE = 64*1024;
 	do {
+		size_t old = buf.size();
 		buf.resize(BUF_SIZE);
 
-		size_t n = buf.size() - bufPos;
-		size_t len = stream.read(&buf[bufPos], n);
+		size_t n = buf.size() - old;
+		size_t len = stream.read(&buf[old], n);
 		if(len == 0) {
 			if(elements.size() == 0) {
 				// Fine...
@@ -513,10 +517,8 @@ void SimpleXMLReader::parse(InputStream& stream) {
 			}
 			error("Unexpected end of stream");
 		}
-		buf.resize(len);
-		process();
+		buf.resize(old + len);
 	} while(process());
-
 }
 
 bool SimpleXMLReader::parse(const char* data, size_t len, bool more) {
@@ -538,8 +540,8 @@ bool SimpleXMLReader::process() {
 		switch(state) {
 		case STATE_START:
 			literal(LITN("<?xml"), true, STATE_DECL_VERSION)
-			|| element()
 			|| literal(LITN("<!--"), false, STATE_COMMENT)
+			|| element()
 			|| spaceOrError("Expecting XML declaration, element or comment");
 			break;
 		case STATE_DECL_VERSION:
@@ -634,10 +636,11 @@ bool SimpleXMLReader::process() {
 			break;
 		case STATE_COMMENT:
 			comment()
-			|| spaceOrError("Error while parsing comment");
+			|| error("Error while parsing comment");
 			break;
 		case STATE_CONTENT:
-			element()
+			literal(LITN("<!--"), false, STATE_COMMENT)
+			|| element()
 			|| literal(LITN("</"), false, STATE_ELEMENT_END)
 			|| content()
 			|| error("Expecting content");
