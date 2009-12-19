@@ -102,6 +102,7 @@ private:
 
 	std::string buf;
 	std::string::size_type bufPos;
+	uint64_t pos;
 
 	dcpp::StringPairList attribs;
 	std::string value;
@@ -112,6 +113,9 @@ private:
 	ParseState state;
 
 	dcpp::StringList elements;
+
+	void append(std::string& str, size_t maxLen, int c);
+	void append(std::string& str, size_t maxLen, std::string::const_iterator begin, std::string::const_iterator end);
 
 	bool needChars(size_t n) const;
 	int charAt(size_t n) const;
@@ -143,6 +147,8 @@ private:
 
 	bool process();
 	bool spaceOrError(const char* error);
+
+	bool error(const char* message);
 };
 
 
