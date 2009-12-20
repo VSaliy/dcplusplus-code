@@ -539,7 +539,8 @@ bool SimpleXMLReader::process() {
 	while(true) {
 		switch(state) {
 		case STATE_START:
-			literal(LITN("<?xml"), true, STATE_DECL_VERSION)
+			literal(LITN("\xef\xbb\xbf"), false, STATE_START)	// Byte order mark
+			|| literal(LITN("<?xml"), true, STATE_DECL_VERSION)
 			|| literal(LITN("<!--"), false, STATE_COMMENT)
 			|| element()
 			|| spaceOrError("Expecting XML declaration, element or comment");
