@@ -1096,7 +1096,7 @@ void HubFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 void HubFrame::handleShowUsersClicked() {
 	bool checked = showUsers->getChecked();
 
-	users->setVisible(checked);
+	userGrid->setVisible(checked);
 	paned->setVisible(checked);
 
 	if(checked) {
