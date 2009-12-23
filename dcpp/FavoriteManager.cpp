@@ -31,6 +31,8 @@
 #include "UserCommand.h"
 #include "WindowInfo.h"
 #include "File.h"
+#include "BZUtils.h"
+#include "FilteredFile.h"
 
 namespace dcpp {
 
@@ -263,61 +265,6 @@ bool FavoriteManager::renameFavoriteDir(const string& aName, const string& anoth
 	return false;
 }
 
-void FavoriteManager::onHttpFinished(bool fromHttp) throw() {
-	string::size_type i, j;
-	string* x;
-	string bzlist;
-
-	if((listType == TYPE_BZIP2) && (!downloadBuf.empty())) {
-		try {
-			CryptoManager::getInstance()->decodeBZ2((uint8_t*)downloadBuf.data(), downloadBuf.size(), bzlist);
-		} catch(const CryptoException&) {
-			bzlist.clear();
-		}
-		x = &bzlist;
-	} else {
-		x = &downloadBuf;
-	}
-
-	{
-		Lock l(cs);
-		HubEntryList& list = publicListMatrix[publicListServer];
-		list.clear();
-
-		if(x->compare(0, 5, "<?xml") == 0 || x->compare(0, 8, "\xEF\xBB\xBF<?xml") == 0) {
-			loadXmlList(*x);
-		} else {
-			i = 0;
-
-			string utfText = Text::toUtf8(*x);
-
-			while( (i < utfText.size()) && ((j=utfText.find("\r\n", i)) != string::npos)) {
-				StringTokenizer<string> tok(utfText.substr(i, j-i), '|');
-				i = j + 2;
-				if(tok.getTokens().size() < 4)
-					continue;
-
-				StringList::const_iterator k = tok.getTokens().begin();
-				const string& name = *k++;
-				const string& server = *k++;
-				const string& desc = *k++;
-				const string& usersOnline = *k++;
-				list.push_back(HubEntry(name, server, desc, usersOnline));
-			}
-		}
-	}
-
-	if(fromHttp) {
-		try {
-			File f(Util::getHubListsPath() + Util::validateFileName(publicListServer), File::WRITE, File::CREATE | File::TRUNCATE);
-			f.write(downloadBuf);
-			f.close();
-		} catch(const FileException&) { }
-	}
-
-	downloadBuf = Util::emptyString;
-}
-
 class XmlListLoader : public SimpleXMLReader::CallBack {
 public:
 	XmlListLoader(HubEntryList& lst) : publicHubs(lst) { }
@@ -346,13 +293,35 @@ private:
 	HubEntryList& publicHubs;
 };
 
-void FavoriteManager::loadXmlList(const string& xml) {
-	try {
-		XmlListLoader loader(publicListMatrix[publicListServer]);
-		SimpleXMLReader(&loader).parse(xml.data(), xml.size(), false);
-	} catch(const SimpleXMLException&) {
+void FavoriteManager::onHttpFinished(bool fromHttp) throw() {
+	MemoryInputStream mis(downloadBuf);
 
+	Lock l(cs);
+	HubEntryList& list = publicListMatrix[publicListServer];
+	list.clear();
+
+	try {
+		XmlListLoader loader(list);
+
+		if((listType == TYPE_BZIP2) && (!downloadBuf.empty())) {
+			FilteredInputStream<UnBZFilter, false> f(&mis);
+			SimpleXMLReader(&loader).parse(f);
+		} else {
+			SimpleXMLReader(&loader).parse(mis);
+		}
+	} catch(const Exception&) {
+		// Do something?
 	}
+
+	if(fromHttp) {
+		try {
+			File f(Util::getHubListsPath() + Util::validateFileName(publicListServer), File::WRITE, File::CREATE | File::TRUNCATE);
+			f.write(downloadBuf);
+			f.close();
+		} catch(const FileException&) { }
+	}
+
+	downloadBuf = Util::emptyString;
 }
 
 void FavoriteManager::save() {

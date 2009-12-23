@@ -142,7 +142,6 @@ private:
 	virtual ~FavoriteManager() throw();
 
 	FavoriteHubEntryList::iterator getFavoriteHub(const string& aServer);
-	void loadXmlList(const string& xml);
 
 	// ClientManagerListener
 	virtual void on(UserUpdated, const OnlineUser& user) throw();
