@@ -181,7 +181,7 @@ private:
 		void merge(const Ptr& source);
 
 		GETSET(string, name, Name);
-		GETSET(Ptr, parent, Parent);
+		GETSET(Directory*, parent, Parent);
 	private:
 		friend void intrusive_ptr_release(intrusive_ptr_base<Directory>*);
 
@@ -275,7 +275,7 @@ private:
 
 	Directory::Ptr buildTree(const string& aName, const Directory::Ptr& aParent);
 	bool checkHidden(const string& aName) const;
-	
+
 	void rebuildIndices();
 
 	void updateIndices(Directory& aDirectory);

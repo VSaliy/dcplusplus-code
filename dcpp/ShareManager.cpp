@@ -77,7 +77,7 @@ ShareManager::~ShareManager() {
 
 ShareManager::Directory::Directory(const string& aName, const ShareManager::Directory::Ptr& aParent) :
 	name(aName),
-	parent(aParent),
+	parent(aParent.get()),
 	fileTypes(1 << SearchManager::TYPE_DIRECTORY)
 {
 }
@@ -467,6 +467,7 @@ void ShareManager::Directory::merge(const Directory::Ptr& source) {
 				dcdebug("File named the same as directory");
 			} else {
 				directories.insert(std::make_pair(subSource->getName(), subSource));
+				subSource->parent = this;
 			}
 		} else {
 			Directory::Ptr subTarget = ti->second;
