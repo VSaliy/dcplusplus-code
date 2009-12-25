@@ -486,8 +486,8 @@ void PublicHubsFrame::on(LoadedFromCache, const string& l) throw() {
 
 void PublicHubsFrame::on(Corrupted, const string& l) throw() {
 	if (l.empty()) {
-		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, T_("Cached hub list is corrupted or outdated...")));
+		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, T_("Cached hub list is corrupted or unsupported...")));
 	} else {	
-		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, str(TF_("Downloaded hub list is corrupted or outdated... (%1%)") % Text::toT(l))));
+		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, str(TF_("Downloaded hub list is corrupted or unsupported... (%1%)") % Text::toT(l))));
 	}
 }
