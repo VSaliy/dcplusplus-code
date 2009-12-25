@@ -483,3 +483,11 @@ void PublicHubsFrame::on(DownloadFinished, const string& l) throw() {
 void PublicHubsFrame::on(LoadedFromCache, const string& l) throw() {
 	callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, T_("Hub list loaded from cache...")));
 }
+
+void PublicHubsFrame::on(Corrupted, const string& l) throw() {
+	if (l.empty()) {
+		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, T_("Cached hub list is corrupted or outdated...")));
+	} else {	
+		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, str(TF_("Downloaded hub list is corrupted or outdated... (%1%)") % Text::toT(l))));
+	}
+}

@@ -37,7 +37,8 @@ public:
 	typedef X<6> UserRemoved;
 	typedef X<7> StatusChanged;
 	typedef X<8> LoadedFromCache;
-
+	typedef X<9> Corrupted;
+	
 	virtual void on(DownloadStarting, const string&) throw() { }
 	virtual void on(DownloadFailed, const string&) throw() { }
 	virtual void on(DownloadFinished, const string&) throw() { }
@@ -47,6 +48,7 @@ public:
 	virtual void on(UserRemoved, const FavoriteUser&) throw() { }
 	virtual void on(StatusChanged, const UserPtr&) throw() { }
 	virtual void on(LoadedFromCache, const string&) throw() { }
+	virtual void on(Corrupted, const string&) throw() { }
 };
 
 } // namespace dcpp

@@ -156,7 +156,7 @@ private:
 	virtual void on(TypeNormal, HttpConnection*) throw();
 	virtual void on(TypeBZ2, HttpConnection*) throw();
 
-	void onHttpFinished(bool fromHttp) throw();
+	bool onHttpFinished(bool fromHttp) throw();
 
 	// SettingsManagerListener
 	virtual void on(SettingsManagerListener::Load, SimpleXML& xml) throw() {
