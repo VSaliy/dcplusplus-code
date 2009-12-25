@@ -483,7 +483,10 @@ void ShareManager::Directory::merge(const Directory::Ptr& source) {
 			if(directories.find(i->getName()) != directories.end()) {
 				dcdebug("Directory named the same as file");
 			} else {
-				files.insert(*i);
+				std::pair<File::Set::iterator, bool> added = files.insert(*i);
+				if(added.second) {
+					const_cast<File&>(*added.first).setParent(this);
+				}
 			}
 		}
 	}

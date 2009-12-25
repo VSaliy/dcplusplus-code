@@ -127,8 +127,8 @@ private:
 			typedef set<File, FileLess> Set;
 
 			File() : size(0), parent(0) { }
-			File(const string& aName, int64_t aSize, Directory::Ptr aParent, const TTHValue& aRoot) :
-			name(aName), tth(aRoot), size(aSize), parent(aParent) { }
+			File(const string& aName, int64_t aSize, const Directory::Ptr& aParent, const TTHValue& aRoot) :
+			name(aName), tth(aRoot), size(aSize), parent(aParent.get()) { }
 			File(const File& rhs) :
 			name(rhs.getName()), tth(rhs.getTTH()), size(rhs.getSize()), parent(rhs.getParent()) { }
 
@@ -150,7 +150,7 @@ private:
 			GETSET(string, name, Name);
 			GETSET(TTHValue, tth, TTH);
 			GETSET(int64_t, size, Size);
-			GETSET(Directory::Ptr, parent, Parent);
+			GETSET(Directory*, parent, Parent);
 		};
 
 		int64_t size;
