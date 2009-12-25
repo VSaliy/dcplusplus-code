@@ -132,6 +132,7 @@ private:
 	virtual void on(DownloadFailed, const string& l) throw();
 	virtual void on(DownloadFinished, const string& l) throw();
 	virtual void on(LoadedFromCache, const string& l) throw();
+	virtual void on(Corrupted, const string& l) throw();
 };
 
 #endif // !defined(PUBLIC_HUBS_FRM_H)

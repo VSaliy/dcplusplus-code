@@ -293,8 +293,9 @@ private:
 	HubEntryList& publicHubs;
 };
 
-void FavoriteManager::onHttpFinished(bool fromHttp) throw() {
+bool FavoriteManager::onHttpFinished(bool fromHttp) throw() {
 	MemoryInputStream mis(downloadBuf);
+	bool success = true;
 
 	Lock l(cs);
 	HubEntryList& list = publicListMatrix[publicListServer];
@@ -310,7 +311,8 @@ void FavoriteManager::onHttpFinished(bool fromHttp) throw() {
 			SimpleXMLReader(&loader).parse(mis);
 		}
 	} catch(const Exception&) {
-		// Do something?
+		success = false;
+		fire(FavoriteManagerListener::Corrupted(), fromHttp ? publicListServer : Util::emptyString);
 	}
 
 	if(fromHttp) {
@@ -322,6 +324,8 @@ void FavoriteManager::onHttpFinished(bool fromHttp) throw() {
 	}
 
 	downloadBuf = Util::emptyString;
+	
+	return success;
 }
 
 void FavoriteManager::save() {
@@ -674,8 +678,9 @@ void FavoriteManager::refresh(bool forceDownload /* = false */) {
 				downloadBuf = Util::emptyString;
 			}
 			if(!downloadBuf.empty()) {
-				onHttpFinished(false);
-				fire(FavoriteManagerListener::LoadedFromCache(), publicListServer);
+				if (onHttpFinished(false)) {
+					fire(FavoriteManagerListener::LoadedFromCache(), publicListServer);
+				}		
 				return;
 			}
 		}
@@ -755,12 +760,16 @@ void FavoriteManager::on(Failed, HttpConnection*, const string& aLine) throw() {
 	}
 }
 void FavoriteManager::on(Complete, HttpConnection*, const string& aLine) throw() {
+	bool parseSuccess;
+
 	c->removeListener(this);
-	if(useHttp)
-		onHttpFinished(true);
+	if(useHttp) {
+		parseSuccess = onHttpFinished(true);
+	}	
 	running = false;
-	if(useHttp)
+	if(useHttp && parseSuccess) {
 		fire(FavoriteManagerListener::DownloadFinished(), aLine);
+	}
 }
 void FavoriteManager::on(Redirected, HttpConnection*, const string& aLine) throw() {
 	if(useHttp)
