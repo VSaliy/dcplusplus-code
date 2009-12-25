@@ -281,7 +281,7 @@ void QueueManager::UserQueue::remove(QueueItem* qi, bool removeRunning) {
 }
 
 void QueueManager::UserQueue::remove(QueueItem* qi, const UserPtr& aUser, bool removeRunning) {
-	if(removeRunning && qi->isRunning()) {
+	if(removeRunning && qi == getRunning(aUser)) {
 		removeDownload(qi, aUser);
 	}
 
@@ -611,7 +611,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 		if(BOOLSETTING(DONT_DL_ALREADY_QUEUED) && !(aFlags & QueueItem::FLAG_USER_LIST)) {
 			QueueItem::List ql;
 			fileQueue.find(ql, root);
-			if (ql.size() > 0) { 
+			if (ql.size() > 0) {
 				// Found one or more existing queue items, lets see if we can add the source to them
 				bool sourceAdded = false;
 				for(QueueItem::Iter i = ql.begin(); i != ql.end(); ++i) {
@@ -622,19 +622,19 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 						} catch(...) { }
 					}
 				}
-	
+
 				if (sourceAdded) {
 					if (wantConnection && aUser.user->isOnline()) {
 						ConnectionManager::getInstance()->getDownloadConnection(aUser);
-					}	
-					return;			
-				} 
-				
+					}
+					return;
+				}
+
 				throw QueueException(_("This file is already queued"));
-				
-			} 
+
+			}
 		}
-		
+
 		QueueItem* q = fileQueue.find(target);
 		if(q == NULL) {
 			q = fileQueue.add(target, aSize, aFlags, QueueItem::DEFAULT, tempTarget, GET_TIME(), root);
@@ -1054,7 +1054,9 @@ void QueueManager::moveStuckFile(QueueItem* qi) {
 
 	fire(QueueManagerListener::Removed(), qi);
 
-	userQueue.remove(qi);
+	if(qi->isFinished()) {
+		userQueue.remove(qi);
+	}
 	fileQueue.remove(qi);
 
 	fire(QueueManagerListener::RecheckAlreadyFinished(), qi);
@@ -1240,7 +1242,6 @@ void QueueManager::recheck(const string& aTarget) {
 
 void QueueManager::remove(const string& aTarget) throw() {
 	UserList x;
-
 	{
 		Lock l(cs);
 
@@ -1267,7 +1268,9 @@ void QueueManager::remove(const string& aTarget) throw() {
 
 		fire(QueueManagerListener::Removed(), q);
 
-		userQueue.remove(q);
+		if(!q->isFinished()) {
+			userQueue.remove(q);
+		}
 		fileQueue.remove(q);
 
 		setDirty();
