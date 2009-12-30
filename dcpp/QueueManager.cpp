@@ -604,6 +604,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 		return;
 	}
 
+	bool wasFinished = false;
 	{
 		Lock l(cs);
 
@@ -617,21 +618,16 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 				for(QueueItem::Iter i = ql.begin(); i != ql.end(); ++i) {
 					if(!(*i)->isSource(aUser)) {
 						try {
-							wantConnection = addSource(*i, aUser, addBad ? QueueItem::Source::FLAG_MASK : 0);
+							wantConnection = addSource(*i, aUser, addBad ? QueueItem::Source::FLAG_MASK : 0, false);
 							sourceAdded = true;
 						} catch(...) { }
 					}
 				}
 
-				if (sourceAdded) {
-					if (wantConnection && aUser.user->isOnline()) {
-						ConnectionManager::getInstance()->getDownloadConnection(aUser);
-					}
-					return;
+				if(!sourceAdded) {
+					throw QueueException(_("This file is already queued"));
 				}
-
-				throw QueueException(_("This file is already queued"));
-
+				goto connect;
 			}
 		}
 
@@ -644,18 +640,22 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 				throw QueueException(_("A file with a different size already exists in the queue"));
 			}
 			if(!(root == q->getTTH())) {
-				throw QueueException(_("A file with different tth root already exists in the queue"));
+				throw QueueException(_("A file with different TTH root already exists in the queue"));
 			}
-			q->setFlag(aFlags);
 
-			// We don't add any more sources to user list downloads, but we want their flags updated
-			if(q->isSet(QueueItem::FLAG_USER_LIST))
-				return;
+			if(q->isFinished()) {
+				// The queue item was finished but the file is gone - restart...
+				wasFinished = true;
+				q->resetDownloaded();
+			}
+
+			q->setFlag(aFlags);
 		}
 
-		wantConnection = addSource(q, aUser, addBad ? QueueItem::Source::FLAG_MASK : 0);
+		wantConnection = addSource(q, aUser, addBad ? QueueItem::Source::FLAG_MASK : 0, wasFinished);
 	}
 
+connect:
 	if(wantConnection && aUser.user->isOnline())
 		ConnectionManager::getInstance()->getDownloadConnection(aUser);
 }
@@ -666,7 +666,7 @@ void QueueManager::readd(const string& target, const HintedUser& aUser) throw(Qu
 		Lock l(cs);
 		QueueItem* q = fileQueue.find(target);
 		if(q && q->isBadSource(aUser)) {
-			wantConnection = addSource(q, aUser, QueueItem::Source::FLAG_MASK);
+			wantConnection = addSource(q, aUser, QueueItem::Source::FLAG_MASK, false);
 		}
 	}
 	if(wantConnection && aUser.user->isOnline())
@@ -710,10 +710,16 @@ string QueueManager::checkTarget(const string& aTarget, bool checkExistence) thr
 }
 
 /** Add a source to an existing queue item */
-bool QueueManager::addSource(QueueItem* qi, const HintedUser& aUser, Flags::MaskType addBad) throw(QueueException, FileException) {
+bool QueueManager::addSource(QueueItem* qi, const HintedUser& aUser, Flags::MaskType addBad, bool wasFinished) throw(QueueException, FileException) {
 	bool wantConnection = (qi->getPriority() != QueueItem::PAUSED) && !userQueue.getRunning(aUser);
 
 	if(qi->isSource(aUser)) {
+		if(wasFinished) {
+			userQueue.add(qi, aUser);
+			return wantConnection;
+		} else if(qi->isSet(QueueItem::FLAG_USER_LIST)) {
+			return wantConnection;
+		}
 		throw QueueException(str(F_("Duplicate source: %1%") % Util::getFileName(qi->getTarget())));
 	}
 
@@ -725,8 +731,6 @@ bool QueueManager::addSource(QueueItem* qi, const HintedUser& aUser, Flags::Mask
 
 	if(aUser.user->isSet(User::PASSIVE) && !ClientManager::getInstance()->isActive() ) {
 		qi->removeSource(aUser, QueueItem::Source::FLAG_PASSIVE);
-		wantConnection = false;
-	} else if(qi->isFinished()) {
 		wantConnection = false;
 	} else {
 		userQueue.add(qi, aUser);
@@ -807,7 +811,7 @@ int QueueManager::matchListing(const DirectoryListing& dl) throw() {
 			TTHMap::iterator j = tthMap.find(qi->getTTH());
 			if(j != tthMap.end() && i->second->getSize() == qi->getSize()) {
 				try {
-					addSource(qi, dl.getUser(), QueueItem::Source::FLAG_FILE_NOT_AVAILABLE);
+					addSource(qi, dl.getUser(), QueueItem::Source::FLAG_FILE_NOT_AVAILABLE, false);
 				} catch(...) {
 					// Ignore...
 				}
@@ -871,7 +875,7 @@ void QueueManager::move(const string& aSource, const string& aTarget) throw() {
 
 				for(QueueItem::SourceConstIter i = qs->getSources().begin(); i != qs->getSources().end(); ++i) {
 					try {
-						addSource(qt, i->getUser(), QueueItem::Source::FLAG_MASK);
+						addSource(qt, i->getUser(), QueueItem::Source::FLAG_MASK, false);
 					} catch(const Exception&) {
 					}
 				}
@@ -1129,14 +1133,12 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 						string dir;
 						if(aDownload->getType() == Transfer::TYPE_FULL_LIST) {
 							dir = q->getTempTarget();
-						}
-
-						if(aDownload->getType() == Transfer::TYPE_FILE) {
+							q->addSegment(Segment(0, q->getSize()));
+						} else if(aDownload->getType() == Transfer::TYPE_FILE) {
 							q->addSegment(aDownload->getSegment());
 						}
 
 						if(aDownload->getType() != Transfer::TYPE_FILE || q->isFinished()) {
-
 							// Check if we need to move the file
 							if( !aDownload->getTempTarget().empty() && (Util::stricmp(aDownload->getPath().c_str(), aDownload->getTempTarget().c_str()) != 0) ) {
 								moveFile(aDownload->getTempTarget(), aDownload->getPath());
@@ -1149,8 +1151,9 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 							if(!BOOLSETTING(KEEP_FINISHED_FILES)) {
 								fire(QueueManagerListener::Removed(), q);
 								fileQueue.remove(q);
+							} else {
+								fire(QueueManagerListener::StatusUpdated(), q);
 							}
-
 						} else {
 							userQueue.removeDownload(q, aDownload->getUser());
 							fire(QueueManagerListener::StatusUpdated(), q);
@@ -1601,7 +1604,7 @@ void QueueLoader::startTag(const string& name, StringPairList& attribs, bool sim
 			try {
 				const string& hubHint = getAttrib(attribs, sHubHint, 1);
 				HintedUser hintedUser(user, hubHint);
-				if(qm->addSource(cur, hintedUser, 0) && user->isOnline())
+				if(qm->addSource(cur, hintedUser, 0, false) && user->isOnline())
 					ConnectionManager::getInstance()->getDownloadConnection(hintedUser);
 			} catch(const Exception&) {
 				return;
@@ -1643,7 +1646,7 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) thro
 			if(qi->getSize() == sr->getSize() && !qi->isSource(sr->getUser())) {
 				try {
 					if(!BOOLSETTING(AUTO_SEARCH_AUTO_MATCH))
-						wantConnection = addSource(qi, HintedUser(sr->getUser(), sr->getHubURL()), 0);
+						wantConnection = addSource(qi, HintedUser(sr->getUser(), sr->getHubURL()), 0, false);
 					added = true;
 				} catch(const Exception&) {
 					// ...
