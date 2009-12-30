@@ -476,18 +476,18 @@ void PublicHubsFrame::on(DownloadFailed, const string& l) throw() {
 	callAsync(std::tr1::bind(&dwt::StatusBar::setText, status, STATUS_STATUS, str(TF_("Download failed: %1%") % Text::toT(l)), false));
 }
 
-void PublicHubsFrame::on(DownloadFinished, const string& l) throw() {
-	callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, str(TF_("Hub list downloaded... (%1%)") % Text::toT(l))));
+void PublicHubsFrame::on(DownloadFinished, const string& l, bool fromCoral) throw() {
+	callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, str(TF_("Hub list downloaded%1% (%2%)") % (fromCoral ? T_(" from Coral") : Util::emptyStringT) % Text::toT(l))));
 }
 
-void PublicHubsFrame::on(LoadedFromCache, const string& l) throw() {
-	callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, T_("Hub list loaded from cache...")));
+void PublicHubsFrame::on(LoadedFromCache, const string& l, const string& d) throw() {
+	callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, str(TF_("Locally cached (as of %1%) version of the hub list loaded (%2%)") % Text::toT(d) % Text::toT(l))));
 }
 
 void PublicHubsFrame::on(Corrupted, const string& l) throw() {
 	if (l.empty()) {
-		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, T_("Cached hub list is corrupted or unsupported...")));
-	} else {	
-		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, str(TF_("Downloaded hub list is corrupted or unsupported... (%1%)") % Text::toT(l))));
+		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, T_("Cached hub list is corrupted or unsupported")));
+	} else {
+		callAsync(std::tr1::bind(&PublicHubsFrame::onFinished, this, str(TF_("Downloaded hub list is corrupted or unsupported (%1%)") % Text::toT(l))));
 	}
 }

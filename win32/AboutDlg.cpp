@@ -145,7 +145,7 @@ void AboutDlg::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const 
 	downBuf.append((char*)buf, len);
 }
 
-void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&) throw() {
+void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) throw() {
 	tstring x;
 	if(!downBuf.empty()) {
 		try {

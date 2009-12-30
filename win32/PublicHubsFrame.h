@@ -130,8 +130,8 @@ private:
 
 	virtual void on(DownloadStarting, const string& l) throw();
 	virtual void on(DownloadFailed, const string& l) throw();
-	virtual void on(DownloadFinished, const string& l) throw();
-	virtual void on(LoadedFromCache, const string& l) throw();
+	virtual void on(DownloadFinished, const string& l, bool fromCoral) throw();
+	virtual void on(LoadedFromCache, const string& l, const string& d) throw();
 	virtual void on(Corrupted, const string& l) throw();
 };
 

@@ -667,20 +667,27 @@ void FavoriteManager::refresh(bool forceDownload /* = false */) {
 		string path = Util::getHubListsPath() + Util::validateFileName(publicListServer);
 		if(File::getSize(path) > 0) {
 			useHttp = false;
+			string fileDate;
 			{
 				Lock l(cs);
 				publicListMatrix[publicListServer].clear();
 			}
 			listType = (Util::stricmp(path.substr(path.size() - 4), ".bz2") == 0) ? TYPE_BZIP2 : TYPE_NORMAL;
 			try {
-				downloadBuf = File(path, File::READ, File::OPEN).read();
+				File cached(path, File::READ, File::OPEN);
+				downloadBuf = cached.read();
+				char buf[20];
+				time_t fd = cached.getLastModified();
+				if (strftime(buf, 20, "%x", localtime(&fd))) {
+					fileDate = string(buf);
+				}
 			} catch(const FileException&) {
 				downloadBuf = Util::emptyString;
 			}
 			if(!downloadBuf.empty()) {
 				if (onHttpFinished(false)) {
-					fire(FavoriteManagerListener::LoadedFromCache(), publicListServer);
-				}		
+					fire(FavoriteManagerListener::LoadedFromCache(), publicListServer, fileDate);
+				}
 				return;
 			}
 		}
@@ -759,7 +766,7 @@ void FavoriteManager::on(Failed, HttpConnection*, const string& aLine) throw() {
 		fire(FavoriteManagerListener::DownloadFailed(), aLine);
 	}
 }
-void FavoriteManager::on(Complete, HttpConnection*, const string& aLine) throw() {
+void FavoriteManager::on(Complete, HttpConnection*, const string& aLine, bool fromCoral) throw() {
 	bool parseSuccess;
 
 	c->removeListener(this);
@@ -768,7 +775,7 @@ void FavoriteManager::on(Complete, HttpConnection*, const string& aLine) throw()
 	}	
 	running = false;
 	if(useHttp && parseSuccess) {
-		fire(FavoriteManagerListener::DownloadFinished(), aLine);
+		fire(FavoriteManagerListener::DownloadFinished(), aLine, fromCoral);
 	}
 }
 void FavoriteManager::on(Redirected, HttpConnection*, const string& aLine) throw() {

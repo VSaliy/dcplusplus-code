@@ -192,7 +192,7 @@ private:
 	virtual void on(LogManagerListener::Message, time_t t, const string& m) throw();
 
 	// HttpConnectionListener
-	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, string const& /*aLine*/) throw();
+	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, string const& /*aLine*/, bool /*fromCoral*/) throw();
 	virtual void on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw();
 
 	// QueueManagerListener
