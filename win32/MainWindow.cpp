@@ -1054,7 +1054,7 @@ void MainWindow::handleOpenDownloadsDir() {
 	WinUtil::openFile(Text::toT(SETTING(DOWNLOAD_DIRECTORY)));
 }
 
-void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/, const string&) throw() {
+void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/, const string&, bool) throw() {
 	try {
 		SimpleXML xml;
 		xml.fromXML(versionInfo);

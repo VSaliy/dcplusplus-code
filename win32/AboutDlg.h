@@ -43,7 +43,7 @@ private:
 	void layout();
 
 	virtual void on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw();
-	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, const string&) throw();
+	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) throw();
 	virtual void on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) throw();
 };
 
