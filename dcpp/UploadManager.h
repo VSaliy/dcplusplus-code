@@ -69,7 +69,6 @@ public:
 	GETSET(uint64_t, lastGrant, LastGrant);
 	
 private:
-	int64_t bandwidthAvailable;
 
 	UploadList uploads;
 	mutable CriticalSection cs;

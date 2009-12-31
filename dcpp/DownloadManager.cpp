@@ -69,9 +69,6 @@ void DownloadManager::on(TimerManagerListener::Second, uint32_t aTick) throw() {
 
 		DownloadList tickList;
 
-		if(BOOLSETTING(THROTTLE_ENABLE) && SETTING(MAX_DOWNLOAD_SPEED_CURRENT) > 0)
-			bandwidthAvailable = SETTING(MAX_DOWNLOAD_SPEED_CURRENT) * 1024;
-
 		// Tick each ongoing download
 		for(DownloadList::iterator i = downloads.begin(); i != downloads.end(); ++i) {
 			if((*i)->getPos() > 0) {
@@ -82,7 +79,6 @@ void DownloadManager::on(TimerManagerListener::Second, uint32_t aTick) throw() {
 
 		if(tickList.size() > 0)
 			fire(DownloadManagerListener::Tick(), tickList);
-
 
 		// Automatically remove or disconnect slow sources
 		if((uint32_t)(aTick / 1000) % SETTING(AUTODROP_INTERVAL) == 0) {

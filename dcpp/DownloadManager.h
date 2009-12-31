@@ -59,7 +59,6 @@ public:
 	
 private:
 	
-	int64_t bandwidthAvailable;
 	CriticalSection cs;
 	DownloadList downloads;
 	UserConnectionList idlers;
