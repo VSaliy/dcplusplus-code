@@ -512,26 +512,4 @@ void UploadManager::on(ClientManagerListener::UserDisconnected, const UserPtr& a
 	}
 }
 
-// Upload throttling
-size_t UploadManager::throttle(size_t writeSize) {
-	Lock l(cs);
-
-	if(uploads.size() == 0)
-		return writeSize;
-		
-	if(bandwidthAvailable > 0)
-	{
-		size_t slice = (SETTING(MAX_UPLOAD_SPEED_CURRENT) * 1024) / uploads.size();
-		
-		writeSize = min(slice, min(writeSize, static_cast<size_t>(bandwidthAvailable)));
-		bandwidthAvailable -= writeSize;
-	}
-	else
-	{
-		writeSize = 0;
-	}
-	
-	return writeSize;
-}
-
 } // namespace dcpp
