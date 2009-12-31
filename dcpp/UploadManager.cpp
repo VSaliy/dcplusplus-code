@@ -41,7 +41,7 @@ namespace dcpp {
 
 static const string UPLOAD_AREA = "Uploads";
 
-UploadManager::UploadManager() throw() : running(0), extra(0), lastGrant(0),  bandwidthAvailable(0) {
+UploadManager::UploadManager() throw() : running(0), extra(0), lastGrant(0) {
 	ClientManager::getInstance()->addListener(this);
 	TimerManager::getInstance()->addListener(this);
 }
@@ -491,9 +491,6 @@ void UploadManager::on(AdcCommand::GFI, UserConnection* aSource, const AdcComman
 void UploadManager::on(TimerManagerListener::Second, uint32_t) throw() {
 	Lock l(cs);
 	UploadList ticks;
-
-	if(BOOLSETTING(THROTTLE_ENABLE) && SETTING(MAX_UPLOAD_SPEED_CURRENT) > 0)
-		bandwidthAvailable = SETTING(MAX_UPLOAD_SPEED_CURRENT) * 1024;
 
 	for(UploadList::iterator i = uploads.begin(); i != uploads.end(); ++i) {
 		if((*i)->getPos() > 0) {
