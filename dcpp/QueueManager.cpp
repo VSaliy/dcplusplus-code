@@ -640,7 +640,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 				throw QueueException(_("A file with a different size already exists in the queue"));
 			}
 			if(!(root == q->getTTH())) {
-				throw QueueException(_("A file with different TTH root already exists in the queue"));
+				throw QueueException(_("A file with a different TTH root already exists in the queue"));
 			}
 
 			if(q->isFinished()) {
