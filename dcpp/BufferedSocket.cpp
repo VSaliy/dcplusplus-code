@@ -29,8 +29,7 @@
 #include "CryptoManager.h"
 #include "ZUtils.h"
 
-#include "UploadManager.h"
-#include "DownloadManager.h"
+#include "ThrottleManager.h"
 
 namespace dcpp {
 
@@ -159,23 +158,7 @@ void BufferedSocket::threadRead() throw(Exception) {
 	if(state != RUNNING)
 		return;
 
-	DownloadManager *dm = DownloadManager::getInstance();
-	size_t readsize = inbuf.size();
-	bool throttling = false;
-	if(mode == MODE_DATA)
-	{
-		throttling = dm->throttle();
-		if (throttling)
-		{
-			int64_t getMaximum = dm->throttleGetSlice();
-			if (getMaximum <= 0) {
-				sleep(dm->throttleCycleTime());
-				return;
-			}
-			readsize = min(inbuf.size(), static_cast<size_t>(getMaximum));
-		}
-	}
-	int left = sock->read(&inbuf[0], (int)readsize);
+	int left = (mode == MODE_DATA) ? ThrottleManager::getInstance()->read(sock.get(), &inbuf[0], (int)inbuf.size()) : sock->read(&inbuf[0], (int)inbuf.size());
 	if(left == -1) {
 		// EWOULDBLOCK, no data received...
 		return;
@@ -212,7 +195,8 @@ void BufferedSocket::threadRead() throw(Exception) {
 					}
 					// process all lines
 					while ((pos = l.find(separator)) != string::npos) {
-						fire(BufferedSocketListener::Line(), l.substr(0, pos));
+                       	if(pos > 0) // check empty (only pipe) command and don't waste cpu with it ;o)
+							fire(BufferedSocketListener::Line(), l.substr(0, pos));
 						l.erase (0, pos + 1 /* separator char */);
 					}
 					// store remainder
@@ -231,7 +215,8 @@ void BufferedSocket::threadRead() throw(Exception) {
 				}
 				l = line + string ((char*)&inbuf[bufpos], left);
 				while ((pos = l.find(separator)) != string::npos) {
-					fire(BufferedSocketListener::Line(), l.substr(0, pos));
+	                if(pos > 0) // check empty (only pipe) command and don't waste cpu with it ;o)
+						fire(BufferedSocketListener::Line(), l.substr(0, pos));
 					l.erase (0, pos + 1 /* separator char */);
 					if (l.length() < (size_t)left) left = l.length();
 					if (mode != MODE_LINE) {
@@ -241,7 +226,7 @@ void BufferedSocket::threadRead() throw(Exception) {
 						break;
 					}
 				}
-				if (pos == string::npos)
+				if (pos == string::npos) 
 					left = 0;
 				line = l;
 				break;
@@ -263,9 +248,6 @@ void BufferedSocket::threadRead() throw(Exception) {
 							mode = MODE_LINE;
 							fire(BufferedSocketListener::ModeChange());
 						}
-					}
-					if (throttling) {
-						Thread::sleep(dm->throttleCycleTime());
 					}
 				}
 				break;
@@ -294,11 +276,7 @@ void BufferedSocket::threadSendFile(InputStream* file) throw(Exception) {
 
 	bool readDone = false;
 	dcdebug("Starting threadSend\n");
-	UploadManager *um = UploadManager::getInstance();
-	int64_t sendMaximum;
-	size_t start = 0, current= 0;
-	bool throttling;
-	while(true) {
+	while(!disconnecting) {
 		if(!readDone && readBuf.size() > readPos) {
 			// Fill read buffer
 			size_t bytesRead = readBuf.size() - readPos;
@@ -325,37 +303,26 @@ void BufferedSocket::threadSendFile(InputStream* file) throw(Exception) {
 		writeBuf.resize(readPos);
 		readPos = 0;
 
-		size_t writePos = 0;
+		size_t writePos = 0, writeSize = 0;
+		int written = 0;
 
 		while(writePos < writeBuf.size()) {
 			if(disconnecting)
 				return;
-				
-			throttling = BOOLSETTING(THROTTLE_ENABLE);
-			if(throttling) {
-				start = TimerManager::getTick();
-				sendMaximum = um->throttleGetSlice();
-				if(sendMaximum < 0)
-					sendMaximum = 0;
-			}
-			size_t writeSize = min(sockSize / 2, writeBuf.size() - writePos);
-			if(throttling)
-				writeSize = min(writeSize, static_cast<size_t>(sendMaximum));
 			
-			int written = sock->write(&writeBuf[writePos], writeSize);
+			if(written == -1) {
+				// workaround for OpenSSL (crashes when previous write failed and now retrying with different writeSize)
+				written = sock->write(&writeBuf[writePos], writeSize);
+			} else {
+				writeSize = min(sockSize / 2, writeBuf.size() - writePos);	
+				written = ThrottleManager::getInstance()->write(sock.get(), &writeBuf[writePos], writeSize);
+			}
+			
 			if(written > 0) {
 				writePos += written;
 
 				fire(BufferedSocketListener::BytesSent(), 0, written);
 
-				if(throttling) {
-					int32_t cycle_time = um->throttleCycleTime();
-					current = TimerManager::getTick();
-					int32_t sleep_time = cycle_time - (current - start);
-					if (sleep_time > 0 && sleep_time <= cycle_time) {
-						Thread::sleep(sleep_time);
-					}
-				}
 			} else if(written == -1) {
 				if(!readDone && readPos < readBuf.size()) {
 					// Read a little since we're blocking anyway...
@@ -453,7 +420,7 @@ bool BufferedSocket::checkEvents() throw(Exception) {
 		if(state == STARTING) {
 			if(p.first == CONNECT) {
 				ConnectInfo* ci = static_cast<ConnectInfo*>(p.second.get());
-					threadConnect(ci->addr, ci->port, ci->proxy);
+				threadConnect(ci->addr, ci->port, ci->proxy);
 			} else if(p.first == ACCEPTED) {
 				threadAccept();
 			} else {
@@ -494,7 +461,7 @@ int BufferedSocket::run() {
 				break;
 			}
 			if(state == RUNNING) {
-			checkSocket();
+				checkSocket();
 			}
 		} catch(const Exception& e) {
 			fail(e.getError());

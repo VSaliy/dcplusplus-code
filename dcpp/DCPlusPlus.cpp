@@ -35,6 +35,7 @@
 #include "ResourceManager.h"
 #include "ADLSearch.h"
 #include "WindowManager.h"
+#include "ThrottleManager.h"
 
 #include "StringTokenizer.h"
 
@@ -76,6 +77,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 	ConnectionManager::newInstance();
 	DownloadManager::newInstance();
 	UploadManager::newInstance();
+	ThrottleManager::newInstance();
 	QueueManager::newInstance();
 	ShareManager::newInstance();
 	FavoriteManager::newInstance();
@@ -133,6 +135,7 @@ void shutdown() {
 	FinishedManager::deleteInstance();
 	ShareManager::deleteInstance();
 	CryptoManager::deleteInstance();
+	ThrottleManager::deleteInstance();
 	DownloadManager::deleteInstance();
 	UploadManager::deleteInstance();
 	QueueManager::deleteInstance();

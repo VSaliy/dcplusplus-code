@@ -84,6 +84,9 @@ const string SettingsManager::settingTags[] =
 	"SearchMerge",
 	"ThrottleEnabled", "MaxUploadSpeedCurrent", "MaxDownloadSpeedCurrent", "KeepFinishedFiles",
 	"MinMessageLines", "MaxMessageLines",
+	"BandwidthLimitStart", "BandwidthLimitEnd", "TimeDependentThrottle", "MaxDownloadSpeedRealTime",
+	"MaxUploadSpeedTime", "MaxDownloadSpeedPrimary", "MaxUploadSpeedPrimary",
+	"SlotsAlternateLimiting", "SlotsPrimaryLimiting",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -292,6 +295,16 @@ SettingsManager::SettingsManager()
 	setDefault(KEEP_FINISHED_FILES, true);
 	setDefault(MIN_MESSAGE_LINES, 1);
 	setDefault(MAX_MESSAGE_LINES, 10);
+	setDefault(MAX_UPLOAD_SPEED_MAIN, 0);
+	setDefault(MAX_DOWNLOAD_SPEED_MAIN, 0);
+	setDefault(THROTTLE_ENABLE, false);
+	setDefault(TIME_DEPENDENT_THROTTLE, false);
+	setDefault(MAX_DOWNLOAD_SPEED_ALTERNATE, 0);
+	setDefault(MAX_UPLOAD_SPEED_ALTERNATE, 0);
+	setDefault(BANDWIDTH_LIMIT_START, 0);
+	setDefault(BANDWIDTH_LIMIT_END, 0);
+	setDefault(SLOTS_ALTERNATE_LIMITING, 1);
+	setDefault(SLOTS_PRIMARY, 1);
 
 #ifdef _WIN32
 	setDefault(MAIN_WINDOW_STATE, SW_SHOWNORMAL);

@@ -56,18 +56,13 @@ public:
 	}
 
 	bool startDownload(QueueItem::Priority prio);
+
+	// Download throttling
+	size_t throttle(size_t readSize);
 	
-	bool throttle() { return mThrottleEnable; }
-	int64_t throttleGetSlice();
-	uint32_t throttleCycleTime();
-
 private:
-	void throttleSetup();
-	bool mThrottleEnable;
-	uint32_t 	   mDownloadLimit,
-		   mCycleTime,
-		   mByteSlice; // download throttling
-
+	
+	int64_t bandwidthAvailable;
 	CriticalSection cs;
 	DownloadList downloads;
 	UserConnectionList idlers;
