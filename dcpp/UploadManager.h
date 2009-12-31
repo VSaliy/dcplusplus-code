@@ -67,9 +67,6 @@ public:
 	GETSET(int, running, Running);
 	GETSET(int, extra, Extra);
 	GETSET(uint64_t, lastGrant, LastGrant);
-
-	// Upload throttling
-	size_t throttle(size_t writeSize);
 	
 private:
 	int64_t bandwidthAvailable;

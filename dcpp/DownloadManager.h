@@ -56,9 +56,6 @@ public:
 	}
 
 	bool startDownload(QueueItem::Priority prio);
-
-	// Download throttling
-	size_t throttle(size_t readSize);
 	
 private:
 	

@@ -528,28 +528,6 @@ void DownloadManager::on(UserConnectionListener::Updated, UserConnection* aSourc
 	checkDownloads(aSource);
 }
 
-// Download throttling
-size_t DownloadManager::throttle(size_t readSize) {
-	Lock l(cs);
-	
-	if(downloads.size() == 0)
-		return readSize;
-
-	if(bandwidthAvailable > 0)
-	{
-		size_t slice = (SETTING(MAX_DOWNLOAD_SPEED_CURRENT) * 1024) / downloads.size();
-		
-		readSize = min(slice, min(readSize, static_cast<size_t>(bandwidthAvailable)));
-		bandwidthAvailable -= readSize;
-	}
-	else
-	{
-		readSize = 0;
-	}
-	
-	return readSize;
-}
-
 void DownloadManager::fileNotAvailable(UserConnection* aSource) {
 	if(aSource->getState() != UserConnection::STATE_SND) {
 		dcdebug("DM::fileNotAvailable Invalid state, disconnecting");
