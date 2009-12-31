@@ -61,6 +61,7 @@
 * Drop support for non-xml hub lists
 * [L#351393] Fix memory leak during share update
 * [L#400080] Improve hub list status messages (emtee)
+* Improve bandwidth limiting (bigmuscle, cologic)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)

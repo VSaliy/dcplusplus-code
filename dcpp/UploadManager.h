@@ -69,15 +69,10 @@ public:
 	GETSET(uint64_t, lastGrant, LastGrant);
 
 	// Upload throttling
-	bool throttle() { return mThrottleEnable; }
-	int64_t throttleGetSlice();
-	uint32_t throttleCycleTime();
+	size_t throttle(size_t writeSize);
+	
 private:
-	void throttleSetup();
-	bool mThrottleEnable;
-	uint32_t 	   mUploadLimit,
-		   mCycleTime,
-		   mByteSlice;
+	int64_t bandwidthAvailable;
 
 	UploadList uploads;
 	mutable CriticalSection cs;

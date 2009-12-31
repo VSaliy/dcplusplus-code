@@ -35,9 +35,14 @@ private:
 	ItemList items;
 
 	GridPtr grid;
+	GridPtr secondarySettingsToggleGrid;
 	GridPtr globalSettingsGrid;
+	GridPtr secondarySettingsGrid;
+
+	ComboBoxPtr timeBound[2];
 
 	CheckBoxPtr throttleEnable;
+	CheckBoxPtr throttleTime;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_BANDWIDTHLIMIT_PAGE_H)
