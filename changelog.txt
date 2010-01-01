@@ -24,7 +24,7 @@
 * [L#384558] Don't share the temporary download directory (poy)
 * [L#385818] More native menu colors (poy)
 * [L#385821] Apply the font to check-boxes and tabs (poy)
-* [L#213213] Implement bandwidth throttling (cologic)
+* [L#213213] Implement bandwidth throttling (cologic, bigmuscle)
 * New icons (thanks radox)
 * Fix dialog focus issues (poy)
 * Fix a crash in queue frame
@@ -61,7 +61,6 @@
 * Drop support for non-xml hub lists
 * [L#351393] Fix memory leak during share update
 * [L#400080] Improve hub list status messages (emtee)
-* Improve bandwidth limiting (bigmuscle, cologic)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
