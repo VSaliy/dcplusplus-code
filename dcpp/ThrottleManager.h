@@ -47,7 +47,7 @@ namespace dcpp
 		int read(Socket* sock, void* buffer, size_t len)
 		{
 			size_t downs = DownloadManager::getInstance()->getDownloadCount();
-			if(!BOOLSETTING(THROTTLE_ENABLE) || downs == 0)
+			if(!BOOLSETTING(THROTTLE_ENABLE) || downTokens == -1 || downs == 0)
 				return sock->read(buffer, len);
 			
 			{
@@ -80,7 +80,7 @@ namespace dcpp
 		int write(Socket* sock, void* buffer, size_t& len)
 		{
 			size_t ups = UploadManager::getInstance()->getUploadCount();
-			if(!BOOLSETTING(THROTTLE_ENABLE) || ups == 0)
+			if(!BOOLSETTING(THROTTLE_ENABLE) || upTokens == -1 || ups == 0)
 				return sock->write(buffer, len);
 			
 			{
@@ -159,16 +159,20 @@ namespace dcpp
 			} 
 
 			// readd tokens
-			if(downLimit > 0)
 			{
 				Lock l(downCS);
-				downTokens = downLimit * 1024;
+				if(downLimit > 0)
+					downTokens = downLimit * 1024;
+				else
+					downTokens = -1;
 			}
 
-			if(upLimit > 0)
 			{
 				Lock l(upCS);
-				upTokens = upLimit * 1024;
+				if(upLimit > 0)
+					upTokens = upLimit * 1024;
+				else
+					upTokens = -1;
 			}
 
 			SettingsManager::getInstance()->set(SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT, downLimit);
