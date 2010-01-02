@@ -113,7 +113,7 @@ remove(0)
 		cur->addChild(Label::Seed(T_("Upload slots")))->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
 
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::SLOTS, PropPage::T_INT_WITH_SPIN));
+		items.push_back(Item(box, SettingsManager::SLOTS_PRIMARY, PropPage::T_INT_WITH_SPIN));
 		box->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
 
 		spin = cur->addChild(Spinner::Seed(1, UD_MAXVAL, box));
