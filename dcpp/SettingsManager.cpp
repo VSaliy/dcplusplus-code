@@ -301,8 +301,8 @@ SettingsManager::SettingsManager()
 	setDefault(TIME_DEPENDENT_THROTTLE, false);
 	setDefault(MAX_DOWNLOAD_SPEED_ALTERNATE, 0);
 	setDefault(MAX_UPLOAD_SPEED_ALTERNATE, 0);
-	setDefault(BANDWIDTH_LIMIT_START, 0);
-	setDefault(BANDWIDTH_LIMIT_END, 0);
+	setDefault(BANDWIDTH_LIMIT_START, 1);
+	setDefault(BANDWIDTH_LIMIT_END, 1);
 	setDefault(SLOTS_ALTERNATE_LIMITING, 1);
 	setDefault(SLOTS_PRIMARY, 1);
 
