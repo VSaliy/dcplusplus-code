@@ -418,6 +418,9 @@ void HubFrame::clearTaskList() {
 void HubFrame::addChat(const tstring& aLine) {
 	ChatType::addChat(client, aLine);
 
+	WinUtil::playSound(SettingsManager::SOUND_MAIN_CHAT);
+	setDirty(SettingsManager::BOLD_HUB);
+
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {
 		StringMap params;
 		params["message"] = Text::fromT(aLine);
@@ -426,21 +429,20 @@ void HubFrame::addChat(const tstring& aLine) {
 		client->getMyIdentity().getParams(params, "my", true);
 		LOG(LogManager::CHAT, params);
 	}
-
-	WinUtil::playSound(SettingsManager::SOUND_MAIN_CHAT);
-	setDirty(SettingsManager::BOLD_HUB);
 }
 
-void HubFrame::addStatus(const tstring& aLine, bool inChat /* = true */) {
+void HubFrame::addStatus(const tstring& aLine, bool legitimate /* = true */) {
 	tstring line = Text::toT("[" + Util::getShortTimeString() + "] ") + aLine;
 
 	status->setText(STATUS_STATUS, line);
 
-	setDirty(SettingsManager::BOLD_HUB);
-
-	if(BOOLSETTING(STATUS_IN_CHAT) && inChat) {
-		addChat(_T("*** ") + aLine);
+	if(legitimate) {
+		if(BOOLSETTING(STATUS_IN_CHAT))
+			addChat(_T("*** ") + aLine);
+		else
+			setDirty(SettingsManager::BOLD_HUB);
 	}
+
 	if(BOOLSETTING(LOG_STATUS_MESSAGES)) {
 		StringMap params;
 		client->getHubIdentity().getParams(params, "hub", false);
@@ -788,7 +790,7 @@ void HubFrame::on(Message, Client*, const ChatMessage& message) throw() {
 }
 
 void HubFrame::on(StatusMessage, Client*, const string& line, int statusFlags) throw() {
-	callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line), !BOOLSETTING(FILTER_MESSAGES) || !(statusFlags & ClientListener::FLAG_IS_SPAM)));
+	onStatusMessage(line, statusFlags);
 }
 
 void HubFrame::on(NickTaken, Client*) throw() {
@@ -796,7 +798,12 @@ void HubFrame::on(NickTaken, Client*) throw() {
 }
 
 void HubFrame::on(SearchFlood, Client*, const string& line) throw() {
-	callAsync(std::tr1::bind(&HubFrame::addStatus, this, str(TF_("Search spam detected from %1%") % Text::toT(line)), true));
+	onStatusMessage(str(F_("Search spam detected from %1%") % line), ClientListener::FLAG_IS_SPAM);
+}
+
+void HubFrame::onStatusMessage(const string& line, int flags) {
+	callAsync(std::tr1::bind(&HubFrame::addStatus, this, Text::toT(line),
+		!(flags & ClientListener::FLAG_IS_SPAM) || !BOOLSETTING(FILTER_MESSAGES)));
 }
 
 tstring HubFrame::getStatusShared() const {
