@@ -31,11 +31,11 @@
 
 PropPage::ListItem AppearancePage::listItems[] = {
 	{ SettingsManager::ALT_SORT_ORDER, N_("Sort all downloads first"), IDH_SETTINGS_APPEARANCE_ALT_SORT_ORDER },
-	{ SettingsManager::FILTER_MESSAGES, N_("Filter kick messages"), IDH_SETTINGS_APPEARANCE_FILTER_MESSAGES },
 	{ SettingsManager::MINIMIZE_TRAY, N_("Minimize to tray"), IDH_SETTINGS_APPEARANCE_MINIMIZE_TRAY },
 	{ SettingsManager::ALWAYS_TRAY, N_("Always display tray icon"), IDH_SETTINGS_APPEARANCE_ALWAYS_TRAY },
 	{ SettingsManager::TIME_STAMPS, N_("Show timestamps in chat by default"), IDH_SETTINGS_APPEARANCE_TIME_STAMPS },
 	{ SettingsManager::STATUS_IN_CHAT, N_("View status messages in main chat"), IDH_SETTINGS_APPEARANCE_STATUS_IN_CHAT },
+	{ SettingsManager::FILTER_MESSAGES, N_("Filter spam messages"), IDH_SETTINGS_APPEARANCE_FILTER_MESSAGES },
 	{ SettingsManager::SHOW_JOINS, N_("Show joins / parts in chat by default"), IDH_SETTINGS_APPEARANCE_SHOW_JOINS },
 	{ SettingsManager::FAV_SHOW_JOINS, N_("Only show joins / parts for favorite users"), IDH_SETTINGS_APPEARANCE_FAV_SHOW_JOINS },
 	{ SettingsManager::SORT_FAVUSERS_FIRST, N_("Sort favorite users first"), IDH_SETTINGS_APPEARANCE_SORT_FAVUSERS_FIRST },
