@@ -261,6 +261,7 @@ void DirectoryListingFrame::loadFile(const tstring& name, const tstring& dir) {
 		refreshTree(dir);
 	} catch(const Exception& e) {
 		error = Text::toT(": " + e.getError());
+		updateTitle();
 	}
 
 	initStatusText();

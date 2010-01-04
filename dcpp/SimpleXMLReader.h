@@ -20,7 +20,7 @@ public:
 	SimpleXMLReader(CallBack* callback);
 	virtual ~SimpleXMLReader() { }
 
-	void parse(InputStream& is);
+	void parse(InputStream& is, size_t maxSize = 0);
 	bool parse(const char* data, size_t len, bool more);
 private:
 
