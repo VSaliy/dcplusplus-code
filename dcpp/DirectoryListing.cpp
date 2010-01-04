@@ -128,7 +128,7 @@ string DirectoryListing::updateXML(const string& xml) {
 string DirectoryListing::loadXML(InputStream& is, bool updating) {
 	ListLoader ll(getRoot(), updating);
 
-	dcpp::SimpleXMLReader(&ll).parse(is);
+	dcpp::SimpleXMLReader(&ll).parse(is, SETTING(MAX_FILELIST_SIZE) ? (size_t)SETTING(MAX_FILELIST_SIZE)*1024*1024 : 0);
 
 	return ll.getBase();
 }

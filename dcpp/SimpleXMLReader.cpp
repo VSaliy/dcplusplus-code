@@ -532,14 +532,19 @@ bool SimpleXMLReader::needChars(size_t n) const {
 
 #define LITN(x) x, sizeof(x)-1
 
-void SimpleXMLReader::parse(InputStream& stream) {
+void SimpleXMLReader::parse(InputStream& stream, size_t maxSize) {
 	const size_t BUF_SIZE = 64*1024;
+	size_t bytesRead = 0;
 	do {
 		size_t old = buf.size();
 		buf.resize(BUF_SIZE);
 
 		size_t n = buf.size() - old;
 		size_t len = stream.read(&buf[old], n);
+
+		if(maxSize > 0 && (bytesRead + len) > maxSize) 
+			error("Greater than maximum allowed size");
+
 		if(len == 0) {
 			if(elements.size() == 0) {
 				// Fine...
@@ -548,6 +553,7 @@ void SimpleXMLReader::parse(InputStream& stream) {
 			error("Unexpected end of stream");
 		}
 		buf.resize(old + len);
+		bytesRead += len;
 	} while(process());
 }
 
