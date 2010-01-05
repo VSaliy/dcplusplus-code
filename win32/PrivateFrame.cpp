@@ -162,14 +162,14 @@ void PrivateFrame::addChat(const tstring& aLine, bool log) {
 
 	ChatType::addChat(pClient, aLine);
 
+	setDirty(SettingsManager::BOLD_PM);
+
 	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		StringMap params;
 		params["message"] = Text::fromT(aLine);
 		fillLogParams(params);
 		LOG(LogManager::PM, params);
 	}
-
-	setDirty(SettingsManager::BOLD_PM);
 }
 
 void PrivateFrame::addStatus(const tstring& aLine, bool log) {
