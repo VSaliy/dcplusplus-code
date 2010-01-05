@@ -65,6 +65,7 @@
 #include <dcpp/Download.h>
 #include <dcpp/WindowInfo.h>
 #include <dcpp/SimpleXML.h>
+#include <dcpp/ThrottleManager.h>
 
 #include <dwt/widgets/ToolBar.h>
 #include <dwt/widgets/Spinner.h>
@@ -1163,7 +1164,7 @@ bool MainWindow::handleToolbarContextMenu(const dwt::ScreenCoordinate& pt) {
 }
 
 bool MainWindow::handleSlotsUpdate(int pos, int delta) {
-	SettingsManager::getInstance()->set(SettingsManager::SLOTS, pos + delta);
+	SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::SLOTS), pos + delta);
 	updateStatus();
 	ClientManager::getInstance()->infoUpdated();
 	return true;
