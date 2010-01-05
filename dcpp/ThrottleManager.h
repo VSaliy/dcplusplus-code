@@ -107,19 +107,20 @@ namespace dcpp
 			SettingsManager::IntSetting upLimit   = SettingsManager::MAX_UPLOAD_SPEED_MAIN;
 			SettingsManager::IntSetting slots     = SettingsManager::SLOTS_PRIMARY;
 
-			time_t currentTime;
-			time(&currentTime);
-			int currentHour = localtime(&currentTime)->tm_hour;
-			if (SETTING(TIME_DEPENDENT_THROTTLE) &&
-				((SETTING(BANDWIDTH_LIMIT_START) < SETTING(BANDWIDTH_LIMIT_END) &&
+			if(BOOLSETTING(TIME_DEPENDENT_THROTTLE)) {
+				time_t currentTime;
+				time(&currentTime);
+				int currentHour = localtime(&currentTime)->tm_hour;
+				if((SETTING(BANDWIDTH_LIMIT_START) < SETTING(BANDWIDTH_LIMIT_END) &&
 					currentHour >= SETTING(BANDWIDTH_LIMIT_START) && currentHour < SETTING(BANDWIDTH_LIMIT_END)) ||
-				(SETTING(BANDWIDTH_LIMIT_START) > SETTING(BANDWIDTH_LIMIT_END) &&
-					(currentHour >= SETTING(BANDWIDTH_LIMIT_START) || currentHour < SETTING(BANDWIDTH_LIMIT_END)))))
-			{
-				downLimit = SettingsManager::MAX_DOWNLOAD_SPEED_ALTERNATE;
-				upLimit   = SettingsManager::MAX_UPLOAD_SPEED_ALTERNATE;
-				slots     = SettingsManager::SLOTS_ALTERNATE_LIMITING;
-			} 
+					(SETTING(BANDWIDTH_LIMIT_START) > SETTING(BANDWIDTH_LIMIT_END) &&
+					(currentHour >= SETTING(BANDWIDTH_LIMIT_START) || currentHour < SETTING(BANDWIDTH_LIMIT_END))))
+				{
+					downLimit = SettingsManager::MAX_DOWNLOAD_SPEED_ALTERNATE;
+					upLimit   = SettingsManager::MAX_UPLOAD_SPEED_ALTERNATE;
+					slots     = SettingsManager::SLOTS_ALTERNATE_LIMITING;
+				}
+			}
 
 			switch (setting) {
 				case SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT:

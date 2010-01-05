@@ -35,9 +35,9 @@ private:
 	ItemList items;
 
 	GridPtr grid;
-	GridPtr secondarySettingsToggleGrid;
-	GridPtr globalSettingsGrid;
-	GridPtr secondarySettingsGrid;
+	GroupBoxPtr main;
+	GroupBoxPtr secondaryToggle;
+	GroupBoxPtr secondary;
 
 	ComboBoxPtr timeBound[2];
 
