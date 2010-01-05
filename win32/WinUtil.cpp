@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2010 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include <dcpp/File.h>
 #include <dcpp/UserCommand.h>
 #include <dcpp/UploadManager.h>
+#include <dcpp/ThrottleManager.h>
 
 #include "LineDlg.h"
 #include "MagnetDlg.h"
@@ -364,7 +365,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	} else if(Util::stricmp(cmd.c_str(), _T("slots")) == 0) {
 		int j = Util::toInt(Text::fromT(param));
 		if(j > 0) {
-			SettingsManager::getInstance()->set(SettingsManager::SLOTS_PRIMARY, j);
+			SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::SLOTS), j);
 			status = T_("Slots set");
 			ClientManager::getInstance()->infoUpdated();
 			mainWindow->updateSlotsSpin();
@@ -423,7 +424,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	} else if(Util::stricmp(cmd.c_str(), _T("rebuild")) == 0) {
 		HashManager::getInstance()->rebuild();
 	} else if(Util::stricmp(cmd.c_str(), _T("upload")) == 0) {
-		SettingsManager::getInstance()->set(SettingsManager::MAX_UPLOAD_SPEED_MAIN, Util::toInt(Text::fromT(param)));
+		SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::MAX_UPLOAD_SPEED_CURRENT), Util::toInt(Text::fromT(param)));
 		ClientManager::getInstance()->infoUpdated();
 		if(Util::toInt(Text::fromT(param))) {
 			TCHAR* temp;
@@ -435,7 +436,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 			status = T_("Upload limit disabled").c_str();
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("download")) == 0) {
-		SettingsManager::getInstance()->set(SettingsManager::MAX_DOWNLOAD_SPEED_MAIN,
+		SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT),
 			Util::toInt(Text::fromT(param)));
 		ClientManager::getInstance()->infoUpdated();
 		if(Util::toInt(Text::fromT(param))) {
