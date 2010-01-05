@@ -30,9 +30,9 @@
 BandwidthLimitPage::BandwidthLimitPage(dwt::Widget* parent) :
 PropPage(parent),
 grid(0),
-secondarySettingsToggleGrid(0),
-globalSettingsGrid(0),
-secondarySettingsGrid(0),
+main(0),
+secondaryToggle(0),
+secondary(0),
 throttleEnable(0),
 throttleTime(0)
 {
@@ -52,84 +52,87 @@ throttleTime(0)
 	throttleEnable->onClicked(std::tr1::bind(&BandwidthLimitPage::fixControls, this));
 
 	{
-		globalSettingsGrid = grid->addChild(GroupBox::Seed(T_("Transfer Rate Limiting")))->addChild(Grid::Seed(2, 2));
-		globalSettingsGrid->column(0).size = 50;
-		globalSettingsGrid->column(0).mode = GridInfo::STATIC;
+		main = grid->addChild(GroupBox::Seed(T_("Transfer Rate Limiting")));
+		GridPtr cur = main->addChild(Grid::Seed(2, 2));
+		cur->column(0).size = 50;
+		cur->column(0).mode = GridInfo::STATIC;
 
-		TextBoxPtr box = globalSettingsGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::MAX_UPLOAD_SPEED_MAIN, PropPage::T_INT_WITH_SPIN));
 
-		SpinnerPtr spin = globalSettingsGrid->addChild(Spinner::Seed(0, UD_MAXVAL, box));
-		globalSettingsGrid->setWidget(spin);
+		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		cur->setWidget(spin);
 
-		globalSettingsGrid->addChild(Label::Seed(T_("Maximum Upload Rate (KiB/s) (0 = infinite)")));
+		cur->addChild(Label::Seed(T_("Maximum Upload Rate (KiB/s) (0 = infinite)")));
 
-		box = globalSettingsGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED_MAIN, PropPage::T_INT_WITH_SPIN));
 
-		spin = globalSettingsGrid->addChild(Spinner::Seed(0, UD_MAXVAL, box));
-		globalSettingsGrid->setWidget(spin);
+		spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		cur->setWidget(spin);
 
-		globalSettingsGrid->addChild(Label::Seed(T_("Maximum Download Rate (KiB/s) (0 = infinite)")));
+		cur->addChild(Label::Seed(T_("Maximum Download Rate (KiB/s) (0 = infinite)")));
 	}
 
 	{
-		secondarySettingsToggleGrid = grid->addChild(GroupBox::Seed(T_("")))->addChild(Grid::Seed(1, 4));
-		secondarySettingsToggleGrid->column(0).mode = GridInfo::AUTO;
-		secondarySettingsToggleGrid->column(1).mode = GridInfo::FILL;
-		secondarySettingsToggleGrid->column(1).align = GridInfo::CENTER;
-		secondarySettingsToggleGrid->column(2).mode = GridInfo::FILL;
-		secondarySettingsToggleGrid->column(2).align = GridInfo::CENTER;
-		secondarySettingsToggleGrid->column(3).mode = GridInfo::FILL;
-		secondarySettingsToggleGrid->column(3).align = GridInfo::CENTER;
+		secondaryToggle = grid->addChild(GroupBox::Seed());
+		GridPtr cur = secondaryToggle->addChild(Grid::Seed(1, 4));
+		cur->column(0).mode = GridInfo::AUTO;
+		cur->column(1).mode = GridInfo::FILL;
+		cur->column(1).align = GridInfo::CENTER;
+		cur->column(2).mode = GridInfo::FILL;
+		cur->column(2).align = GridInfo::CENTER;
+		cur->column(3).mode = GridInfo::FILL;
+		cur->column(3).align = GridInfo::CENTER;
 
-		throttleTime = secondarySettingsToggleGrid->addChild(CheckBox::Seed(T_("Use second set of bandwidth limits from")));
+		throttleTime = cur->addChild(CheckBox::Seed(T_("Use second set of bandwidth limits from")));
 		items.push_back(Item(throttleTime, SettingsManager::TIME_DEPENDENT_THROTTLE, PropPage::T_BOOL));
 		throttleTime->onClicked(std::tr1::bind(&BandwidthLimitPage::fixControls, this));
 
-		timeBound[0] = secondarySettingsToggleGrid->addChild(WinUtil::Seeds::Dialog::comboBox);
-		secondarySettingsToggleGrid->addChild(Label::Seed(T_("to")));
-		timeBound[1] = secondarySettingsToggleGrid->addChild(WinUtil::Seeds::Dialog::comboBox);
+		timeBound[0] = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
+		cur->addChild(Label::Seed(T_("to")));
+		timeBound[1] = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
 	}
 
 	for (int i = 0; i < 2; ++i) {
 		timeBound[i]->addValue(T_("Midnight"));
 		for (int j = 1; j < 12; ++j)
-			timeBound[i]->addValue(Text::toT(Util::toString(j) +" AM").c_str());
+			timeBound[i]->addValue(Text::toT(Util::toString(j) +" AM").c_str()); ///@todo use the user locale
 	 	timeBound[i]->addValue(T_("Noon"));
 		for (int j = 1; j < 12; ++j)
-			timeBound[i]->addValue(Text::toT(Util::toString(j) +" PM").c_str());
+			timeBound[i]->addValue(Text::toT(Util::toString(j) +" PM").c_str()); ///@todo use the user locale
 		timeBound[i]->setSelected(i?SETTING(BANDWIDTH_LIMIT_END):SETTING(BANDWIDTH_LIMIT_START));
 	}
 
 	{
-		secondarySettingsGrid = grid->addChild(GroupBox::Seed(T_("Secondary Transfer Rate Limiting")))->addChild(Grid::Seed(3, 2));
-		secondarySettingsGrid->column(0).size = 50;
-		secondarySettingsGrid->column(0).mode = GridInfo::STATIC;
+		secondary = grid->addChild(GroupBox::Seed(T_("Secondary Transfer Rate Limiting")));
+		GridPtr cur = secondary->addChild(Grid::Seed(3, 2));
+		cur->column(0).size = 50;
+		cur->column(0).mode = GridInfo::STATIC;
 
-		TextBoxPtr box = secondarySettingsGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::MAX_UPLOAD_SPEED_ALTERNATE, PropPage::T_INT_WITH_SPIN));
 
-		SpinnerPtr spin = secondarySettingsGrid->addChild(Spinner::Seed(0, UD_MAXVAL, box));
-		secondarySettingsGrid->setWidget(spin);
+		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		cur->setWidget(spin);
 
-		secondarySettingsGrid->addChild(Label::Seed(T_("Maximum Upload Rate (KiB/s) (0 = infinite)")));
+		cur->addChild(Label::Seed(T_("Maximum Upload Rate (KiB/s) (0 = infinite)")));
 
-		box = secondarySettingsGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED_ALTERNATE, PropPage::T_INT_WITH_SPIN));
 
-		spin = secondarySettingsGrid->addChild(Spinner::Seed(0, UD_MAXVAL, box));
-		secondarySettingsGrid->setWidget(spin);
+		spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		cur->setWidget(spin);
 
-		secondarySettingsGrid->addChild(Label::Seed(T_("Maximum Download Rate (KiB/s) (0 = infinite)")));
+		cur->addChild(Label::Seed(T_("Maximum Download Rate (KiB/s) (0 = infinite)")));
 
-		box = secondarySettingsGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::SLOTS_ALTERNATE_LIMITING, PropPage::T_INT_WITH_SPIN));
 
-		spin = secondarySettingsGrid->addChild(Spinner::Seed(0, UD_MAXVAL, box));
-		secondarySettingsGrid->setWidget(spin);
+		spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		cur->setWidget(spin);
 
-		secondarySettingsGrid->addChild(Label::Seed(T_("Upload Slots")));
+		cur->addChild(Label::Seed(T_("Upload Slots")));
 	}
 
 	PropPage::read(items);
@@ -157,6 +160,7 @@ void BandwidthLimitPage::write() {
 void BandwidthLimitPage::fixControls() {
 	bool stateEnabled = throttleEnable->getChecked();
 	bool stateTime = throttleTime->getChecked();
-	globalSettingsGrid->setEnabled(stateEnabled);
-	secondarySettingsGrid->setEnabled(stateEnabled && stateTime);
+	main->setEnabled(stateEnabled);
+	secondaryToggle->setEnabled(stateEnabled);
+	secondary->setEnabled(stateEnabled && stateTime);
 }
