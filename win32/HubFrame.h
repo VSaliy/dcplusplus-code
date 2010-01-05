@@ -198,7 +198,7 @@ private:
 	bool tab();
 
 	void addChat(const tstring& aLine);
-	void addStatus(const tstring& aLine, bool inChat = true);
+	void addStatus(const tstring& aLine, bool legitimate = true);
 
 	tstring getStatusUsers() const;
 	tstring getStatusShared() const;
@@ -283,6 +283,7 @@ private:
 	virtual void on(StatusMessage, Client*, const string&, int = ClientListener::FLAG_NORMAL) throw();
 	virtual void on(NickTaken, Client*) throw();
 	virtual void on(SearchFlood, Client*, const string&) throw();
+	void onStatusMessage(const string& line, int flags);
 };
 
 #endif // !defined(HUB_FRAME_H)
