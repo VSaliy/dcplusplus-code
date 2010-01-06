@@ -390,7 +390,6 @@ void MainWindow::initStatusBar() {
 
 	slotsSpin = addChild(Spinner::Seed(1));
 	slotsSpin->setHelpId(IDH_MAIN_SLOTS_SPIN);
-	updateSlotsSpin();
 	slotsSpin->onUpdate(std::tr1::bind(&MainWindow::handleSlotsUpdate, this, _1, _2));
 
 	initStatus(true);
@@ -812,10 +811,6 @@ MainWindow::~MainWindow() {
 	dwt::Application::instance().removeFilter(filterIter);
 }
 
-void MainWindow::updateSlotsSpin() {
-	slotsSpin->setValue(SETTING(SLOTS));
-}
-
 void MainWindow::handleSettings() {
 	SettingsDialog dlg(this);
 
@@ -824,7 +819,6 @@ void MainWindow::handleSettings() {
 	unsigned short lastTLS = static_cast<unsigned short>(SETTING(TLS_PORT));
 
 	int lastConn = SETTING(INCOMING_CONNECTIONS);
-	int lastSlots = SETTING(SLOTS);
 	bool lastSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
 	bool lastURLReg = BOOLSETTING(URL_HANDLER);
 	bool lastMagnetReg = BOOLSETTING(MAGNET_REGISTER);
@@ -838,9 +832,6 @@ void MainWindow::handleSettings() {
 			// previous UPnP mappings had failed; try again
 			startUPnP();
 		}
-
-		if(SETTING(SLOTS) != lastSlots)
-			updateSlotsSpin();
 
 		if(BOOLSETTING(SORT_FAVUSERS_FIRST) != lastSortFavUsersFirst)
 			HubFrame::resortUsers();
@@ -1163,8 +1154,12 @@ bool MainWindow::handleToolbarContextMenu(const dwt::ScreenCoordinate& pt) {
 	return true;
 }
 
-bool MainWindow::handleSlotsUpdate(int pos, int delta) {
-	SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::SLOTS), pos + delta);
+bool MainWindow::handleSlotsUpdate(int /* pos */, int delta) {
+	// Prevent double-info-updated
+	int newSlots = SETTING(SLOTS) + delta;
+	SettingsManager::getInstance()->set(SettingsManager::SLOTS, newSlots);
+
+	SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::SLOTS), newSlots);
 	updateStatus();
 	ClientManager::getInstance()->infoUpdated();
 	return true;
