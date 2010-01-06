@@ -66,7 +66,6 @@ public:
 	virtual ~MainWindow();
 
 	void handleSettings();
-	void updateSlotsSpin();
 	bool closing() const { return stopperThread != 0; }
 
 private:

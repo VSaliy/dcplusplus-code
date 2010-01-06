@@ -368,7 +368,6 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 			SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::SLOTS), j);
 			status = T_("Slots set");
 			ClientManager::getInstance()->infoUpdated();
-			mainWindow->updateSlotsSpin();
 		} else {
 			status = T_("Invalid number of slots");
 		}
