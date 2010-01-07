@@ -82,7 +82,7 @@ const string SettingsManager::settingTags[] =
 	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "MaxTabChars", "FinishedDLOnlyFull",
 	"ConfirmExit", "ConfirmHubClosing", "ConfirmHubRemoval", "ConfirmUserRemoval", "ConfirmItemRemoval", "ConfirmADLSRemoval",
 	"SearchMerge",
-	"ThrottleEnabled", "MaxUploadSpeedCurrent", "MaxDownloadSpeedCurrent", "KeepFinishedFiles",
+	"ThrottleEnabled", "KeepFinishedFiles",
 	"MinMessageLines", "MaxMessageLines",
 	"BandwidthLimitStart", "BandwidthLimitEnd", "TimeDependentThrottle", "MaxDownloadSpeedRealTime",
 	"MaxUploadSpeedTime", "MaxDownloadSpeedPrimary", "MaxUploadSpeedPrimary",
@@ -289,9 +289,6 @@ SettingsManager::SettingsManager()
 	setDefault(TRANSFERS_PANED_POS, .7);
 	setDefault(QUEUE_PANED_POS, .3);
 	setDefault(SEARCH_PANED_POS, .2);
-	setDefault(THROTTLE_ENABLE, false);
-	setDefault(MAX_UPLOAD_SPEED_CURRENT, 0);
-	setDefault(MAX_DOWNLOAD_SPEED_CURRENT, 0);
 	setDefault(KEEP_FINISHED_FILES, true);
 	setDefault(MIN_MESSAGE_LINES, 1);
 	setDefault(MAX_MESSAGE_LINES, 10);

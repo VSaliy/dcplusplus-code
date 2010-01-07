@@ -52,7 +52,7 @@ int ThrottleManager::read(Socket* sock, void* buffer, size_t len)
 
 		if(downTokens > 0)
 		{
-			size_t slice = (SETTING(MAX_DOWNLOAD_SPEED_CURRENT) * 1024) / downs;
+			size_t slice = (getDownLimit() * 1024) / downs;
 			size_t readSize = min(slice, min(len, static_cast<size_t>(downTokens)));
 
 			// read from socket
@@ -85,7 +85,7 @@ int ThrottleManager::write(Socket* sock, void* buffer, size_t& len)
 
 		if(upTokens > 0)
 		{
-			size_t slice = (SETTING(MAX_UPLOAD_SPEED_CURRENT) * 1024) / ups;
+			size_t slice = (getUpLimit() * 1024) / ups;
 			len = min(slice, min(len, static_cast<size_t>(upTokens)));
 			upTokens -= len;
 
@@ -100,11 +100,11 @@ int ThrottleManager::write(Socket* sock, void* buffer, size_t& len)
 }
 
 SettingsManager::IntSetting ThrottleManager::getCurSetting(SettingsManager::IntSetting setting) {
-	SettingsManager::IntSetting downLimit = SettingsManager::MAX_DOWNLOAD_SPEED_MAIN;
 	SettingsManager::IntSetting upLimit   = SettingsManager::MAX_UPLOAD_SPEED_MAIN;
+	SettingsManager::IntSetting downLimit = SettingsManager::MAX_DOWNLOAD_SPEED_MAIN;
 	SettingsManager::IntSetting slots     = SettingsManager::SLOTS_PRIMARY;
 
-	if(BOOLSETTING(TIME_DEPENDENT_THROTTLE)) {
+	if(BOOLSETTING(THROTTLE_ENABLE) && BOOLSETTING(TIME_DEPENDENT_THROTTLE)) {
 		time_t currentTime;
 		time(&currentTime);
 		int currentHour = localtime(&currentTime)->tm_hour;
@@ -113,23 +113,31 @@ SettingsManager::IntSetting ThrottleManager::getCurSetting(SettingsManager::IntS
 			(SETTING(BANDWIDTH_LIMIT_START) > SETTING(BANDWIDTH_LIMIT_END) &&
 			(currentHour >= SETTING(BANDWIDTH_LIMIT_START) || currentHour < SETTING(BANDWIDTH_LIMIT_END))))
 		{
-			downLimit = SettingsManager::MAX_DOWNLOAD_SPEED_ALTERNATE;
 			upLimit   = SettingsManager::MAX_UPLOAD_SPEED_ALTERNATE;
+			downLimit = SettingsManager::MAX_DOWNLOAD_SPEED_ALTERNATE;
 			slots     = SettingsManager::SLOTS_ALTERNATE_LIMITING;
 		}
 	}
 
 	switch (setting) {
-		case SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT:
-			return downLimit;
-		case SettingsManager::MAX_UPLOAD_SPEED_CURRENT:
+		case SettingsManager::MAX_UPLOAD_SPEED_MAIN:
 			return upLimit;
+		case SettingsManager::MAX_DOWNLOAD_SPEED_MAIN:
+			return downLimit;
 		case SettingsManager::SLOTS:
 			return slots;
 		default:
 			return setting;
 	}
-} 
+}
+
+int ThrottleManager::getUpLimit() {
+	return SettingsManager::getInstance()->get(getCurSetting(SettingsManager::MAX_UPLOAD_SPEED_MAIN));
+}
+
+int ThrottleManager::getDownLimit() {
+	return SettingsManager::getInstance()->get(getCurSetting(SettingsManager::MAX_DOWNLOAD_SPEED_MAIN));
+}
 
 // TimerManagerListener
 void ThrottleManager::on(TimerManagerListener::Second, uint32_t /* aTick */) throw()
@@ -143,8 +151,8 @@ void ThrottleManager::on(TimerManagerListener::Second, uint32_t /* aTick */) thr
 	if(!BOOLSETTING(THROTTLE_ENABLE))
 		return;
 
-	int downLimit = SettingsManager::getInstance()->get(getCurSetting(SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT));
-	int upLimit   = SettingsManager::getInstance()->get(getCurSetting(SettingsManager::MAX_UPLOAD_SPEED_CURRENT));
+	int downLimit = getDownLimit();
+	int upLimit   = getUpLimit();
 
 	// readd tokens
 	{
@@ -162,9 +170,6 @@ void ThrottleManager::on(TimerManagerListener::Second, uint32_t /* aTick */) thr
 		else
 			upTokens = -1;
 	}
-
-	SettingsManager::getInstance()->set(SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT, downLimit);
-	SettingsManager::getInstance()->set(SettingsManager::MAX_UPLOAD_SPEED_CURRENT, upLimit);
 
 	PulseEvent(hEvent);
 }
