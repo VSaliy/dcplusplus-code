@@ -423,7 +423,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	} else if(Util::stricmp(cmd.c_str(), _T("rebuild")) == 0) {
 		HashManager::getInstance()->rebuild();
 	} else if(Util::stricmp(cmd.c_str(), _T("upload")) == 0) {
-		SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::MAX_UPLOAD_SPEED_CURRENT), Util::toInt(Text::fromT(param)));
+		SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::MAX_UPLOAD_SPEED_MAIN), Util::toInt(Text::fromT(param)));
 		ClientManager::getInstance()->infoUpdated();
 		if(Util::toInt(Text::fromT(param))) {
 			TCHAR* temp;
@@ -435,7 +435,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 			status = T_("Upload limit disabled").c_str();
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("download")) == 0) {
-		SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::MAX_DOWNLOAD_SPEED_CURRENT),
+		SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::MAX_DOWNLOAD_SPEED_MAIN),
 			Util::toInt(Text::fromT(param)));
 		ClientManager::getInstance()->infoUpdated();
 		if(Util::toInt(Text::fromT(param))) {

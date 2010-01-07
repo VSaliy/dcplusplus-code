@@ -48,6 +48,9 @@ namespace dcpp
 		int write(Socket* sock, void* buffer, size_t& len);
 
 		SettingsManager::IntSetting getCurSetting(SettingsManager::IntSetting setting);
+
+		int getUpLimit();
+		int getDownLimit();
 	private:
 
 		// download limiter
