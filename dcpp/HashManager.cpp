@@ -28,6 +28,8 @@
 
 #ifndef _WIN32
 #include <sys/mman.h> // mmap, munmap, madvise
+#include <signal.h>  // for handling read errors from previous trio
+#include <setjmp.h>
 #endif
 
 namespace dcpp {
@@ -635,6 +637,14 @@ bool HashManager::Hasher::fastHash(const string& fname, uint8_t* buf, TigerTree&
 
 #else // !_WIN32
 static const int64_t BUF_SIZE = 0x1000000 - (0x1000000 % getpagesize());
+static sigjmp_buf sb_env;
+
+static void sigbus_handler(int signum, siginfo_t* info, void* context) {
+	// Jump back to the fastHash which will return error. Apparently truncating
+	// a file in Solaris sets si_code to BUS_OBJERR
+	if (signum == SIGBUS && (info->si_code == BUS_ADRERR || info->si_code == BUS_OBJERR))
+		siglongjmp(sb_env, 1);
+}
 
 bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree& tth, int64_t size, CRC32Filter* xcrc32) {
 	int fd = open(Text::fromUtf8(filename).c_str(), O_RDONLY);
@@ -646,8 +656,26 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 	int64_t size_left = size;
 	int64_t pos = 0;
 	int64_t size_read = 0;
-	void *buf = 0;
+	void *buf = NULL;
 	bool ok = false;
+
+	// Prepare and setup a signal handler in case of SIGBUS during mmapped file reads.
+	// SIGBUS can be sent when the file is truncated or in case of read errors.	 
+	struct sigaction act, oldact;
+	sigset_t signalset;
+
+	sigemptyset(&signalset);
+
+	act.sa_handler = NULL;
+	act.sa_sigaction = sigbus_handler;
+	act.sa_mask = signalset;
+	act.sa_flags = SA_SIGINFO | SA_RESETHAND;
+
+	if (sigaction(SIGBUS, &act, &oldact) == -1) {
+		dcdebug("Failed to set signal handler for fastHash\n");
+		close(fd);
+		return false;	// Better luck with the slow hash.
+	}
 
 	uint32_t lastRead = GET_TICK();
 	while(pos <= size && !stop) {
@@ -656,6 +684,11 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 			buf = mmap(0, size_read, PROT_READ, MAP_SHARED, fd, pos);
 			if(buf == MAP_FAILED) {
 				dcdebug("Error calling mmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+				break;
+			}
+
+			if (sigsetjmp(sb_env, 1)) {
+				dcdebug("Caught SIGBUS for file %s\n", filename.c_str());
 				break;
 			}
 
@@ -699,10 +732,21 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 			dcdebug("Error calling munmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
 			break;
 		}
+		buf = NULL;
 		pos += size_read;
 		size_left -= size_read;
 	}
+
+	if (buf != NULL && buf != MAP_FAILED && munmap(buf, size_read) == -1) {
+		dcdebug("Error calling munmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+	}
+
 	close(fd);
+
+	if (sigaction(SIGBUS, &oldact, NULL) == -1) {
+		dcdebug("Failed to reset old signal handler for SIGBUS\n");
+	}
+
 	return ok;
 }
 
