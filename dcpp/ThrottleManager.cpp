@@ -43,6 +43,7 @@ namespace dcpp {
  */
 int ThrottleManager::read(Socket* sock, void* buffer, size_t len)
 {
+	int64_t readSize = -1;
 	size_t downs = DownloadManager::getInstance()->getDownloadCount();
 	if(!BOOLSETTING(THROTTLE_ENABLE) || downTokens == -1 || downs == 0)
 		return sock->read(buffer, len);
@@ -52,17 +53,21 @@ int ThrottleManager::read(Socket* sock, void* buffer, size_t len)
 
 		if(downTokens > 0)
 		{
-			size_t slice = (getDownLimit() * 1024) / downs;
-			size_t readSize = min(slice, min(len, static_cast<size_t>(downTokens)));
+			int64_t slice = (getDownLimit() * 1024) / downs;
+			readSize = min(slice, min(static_cast<int64_t>(len), downTokens));
 
 			// read from socket
-			readSize = sock->read(buffer, readSize);
+			readSize = sock->read(buffer, static_cast<size_t>(readSize));
 
 			if(readSize > 0)
 				downTokens -= readSize;
-
-			return readSize;
 		}
+	}
+
+	if(readSize != -1)
+	{
+		Thread::yield(); // give a chance to other transfers to get a token
+		return readSize;
 	}
 
 	// no tokens, wait for them
@@ -76,6 +81,7 @@ int ThrottleManager::read(Socket* sock, void* buffer, size_t len)
  */
 int ThrottleManager::write(Socket* sock, void* buffer, size_t& len)
 {
+	bool gotToken = false;
 	size_t ups = UploadManager::getInstance()->getUploadCount();
 	if(!BOOLSETTING(THROTTLE_ENABLE) || upTokens == -1 || ups == 0)
 		return sock->write(buffer, len);
@@ -89,9 +95,17 @@ int ThrottleManager::write(Socket* sock, void* buffer, size_t& len)
 			len = min(slice, min(len, static_cast<size_t>(upTokens)));
 			upTokens -= len;
 
-			// write to socket
-			return sock->write(buffer, len);
+			gotToken = true; // token successfuly assigned
 		}
+	}
+
+	if(gotToken)
+	{
+		// write to socket			
+		int sent = sock->write(buffer, len);
+
+		Thread::yield(); // give a chance to other transfers get a token
+		return sent;
 	}
 
 	// no tokens, wait for them

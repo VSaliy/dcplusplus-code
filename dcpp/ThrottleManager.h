@@ -43,7 +43,7 @@ namespace dcpp
 
 		/*
 		 * Limits a traffic and writes a packet to the network
-		 * We must handle this a little bit differently than downloads, because of that stupidity in OpenSSL
+		 * Handle this a little bit differently than downloads due to OpenSSL stupidity 
 		 */
 		int write(Socket* sock, void* buffer, size_t& len);
 
