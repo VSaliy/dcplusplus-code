@@ -28,7 +28,7 @@
 namespace dcpp
 {
 	/**
-	 * Manager for limiting traffic flow.
+	 * Manager for throttling traffic flow.
 	 * Inspired by Token Bucket algorithm: http://en.wikipedia.org/wiki/Token_bucket
 	 */
 	class ThrottleManager :
@@ -37,12 +37,12 @@ namespace dcpp
 	public:
 
 		/*
-		 * Limits a traffic and reads a packet from the network
+		 * Throttles traffic and reads a packet from the network
 		 */
 		int read(Socket* sock, void* buffer, size_t len);
 
 		/*
-		 * Limits a traffic and writes a packet to the network
+		 * Throttles traffic and writes a packet to the network
 		 * Handle this a little bit differently than downloads due to OpenSSL stupidity 
 		 */
 		int write(Socket* sock, void* buffer, size_t& len);
@@ -51,7 +51,13 @@ namespace dcpp
 
 		int getUpLimit();
 		int getDownLimit();
+
+		void shutdown();
 	private:
+		// stack up throttled read & write threads
+		CriticalSection stateCS;
+		CriticalSection waitCS[2];
+		long activeWaiter;
 
 		// download limiter
 		CriticalSection	downCS;
@@ -61,28 +67,20 @@ namespace dcpp
 		CriticalSection	upCS;
 		int64_t			upTokens;
 
-		HANDLE			hEvent;
-
 		friend class Singleton<ThrottleManager>;
 
-		// constructor
-		ThrottleManager(void) : downTokens(0), upTokens(0)
+		ThrottleManager(void) : activeWaiter(-1), downTokens(0), upTokens(0)
 		{
-			hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-
 			TimerManager::getInstance()->addListener(this);
 		}
 
-		// destructor
-		~ThrottleManager(void)
-		{
-			TimerManager::getInstance()->removeListener(this);
+		~ThrottleManager(void);
 
-			CloseHandle(hEvent);
-		}
+		bool getCurThrottling();
+		void waitToken();
 
 		// TimerManagerListener
-		void on(TimerManagerListener::Second, uint32_t aTick) throw();
+		void on(TimerManagerListener::Second, uint32_t /* aTick */) throw();
 	};
 
 }	// namespace dcpp

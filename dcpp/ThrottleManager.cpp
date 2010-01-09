@@ -34,18 +34,18 @@ namespace dcpp {
 #define POLL_TIMEOUT 250
 
 /**
- * Manager for limiting traffic flow.
+ * Manager for throttling traffic flow.
  * Inspired by Token Bucket algorithm: http://en.wikipedia.org/wiki/Token_bucket
  */
 
 /*
- * Limits a traffic and reads a packet from the network
+ * Throttles traffic and reads a packet from the network
  */
 int ThrottleManager::read(Socket* sock, void* buffer, size_t len)
 {
 	int64_t readSize = -1;
 	size_t downs = DownloadManager::getInstance()->getDownloadCount();
-	if(!BOOLSETTING(THROTTLE_ENABLE) || downTokens == -1 || downs == 0)
+	if(!getCurThrottling() || downTokens == -1 || downs == 0)
 		return sock->read(buffer, len);
 
 	{
@@ -70,20 +70,19 @@ int ThrottleManager::read(Socket* sock, void* buffer, size_t len)
 		return readSize;
 	}
 
-	// no tokens, wait for them
-	WaitForSingleObject(hEvent, POLL_TIMEOUT);
+	waitToken();
 	return -1;	// from BufferedSocket: -1 = retry, 0 = connection close
 }
 
 /*
- * Limits a traffic and writes a packet to the network
+ * Throttles traffic and writes a packet to the network
  * Handle this a little bit differently than downloads due to OpenSSL stupidity 
  */
 int ThrottleManager::write(Socket* sock, void* buffer, size_t& len)
 {
 	bool gotToken = false;
 	size_t ups = UploadManager::getInstance()->getUploadCount();
-	if(!BOOLSETTING(THROTTLE_ENABLE) || upTokens == -1 || ups == 0)
+	if(!getCurThrottling() || upTokens == -1 || ups == 0)
 		return sock->write(buffer, len);
 
 	{
@@ -108,8 +107,7 @@ int ThrottleManager::write(Socket* sock, void* buffer, size_t& len)
 		return sent;
 	}
 
-	// no tokens, wait for them
-	WaitForSingleObject(hEvent, POLL_TIMEOUT);
+	waitToken();
 	return 0;	// from BufferedSocket: -1 = failed, 0 = retry
 }
 
@@ -153,6 +151,41 @@ int ThrottleManager::getDownLimit() {
 	return SettingsManager::getInstance()->get(getCurSetting(SettingsManager::MAX_DOWNLOAD_SPEED_MAIN));
 }
 
+bool ThrottleManager::getCurThrottling() {
+	Lock l(stateCS);
+	return activeWaiter != -1;
+}
+
+void ThrottleManager::waitToken() {
+	// no tokens, wait for them, so long as throttling still active
+	// avoid keeping stateCS lock on whole function
+	CriticalSection *curCS = 0;
+	{
+		Lock l(stateCS);
+		if (activeWaiter != -1)
+			curCS = &waitCS[activeWaiter];
+	}
+	// possible post-CS aW shifts: 0->1/1->0: lock lands in wrong place, will
+	// either fall through immediately or wait depending on whether in
+	// stateCS-protected transition elsewhere; 0/1-> -1: falls through. Both harmless.
+	if (curCS)
+		Lock l(*curCS);
+}
+
+ThrottleManager::~ThrottleManager(void)
+{
+	shutdown();
+	TimerManager::getInstance()->removeListener(this);
+}
+
+void ThrottleManager::shutdown() {
+	Lock l(stateCS);
+	if (activeWaiter != -1) {
+		waitCS[activeWaiter].leave();
+		activeWaiter = -1;
+	}
+}
+
 // TimerManagerListener
 void ThrottleManager::on(TimerManagerListener::Second, uint32_t /* aTick */) throw()
 {
@@ -162,8 +195,16 @@ void ThrottleManager::on(TimerManagerListener::Second, uint32_t /* aTick */) thr
 		ClientManager::getInstance()->infoUpdated();
 	}
 
-	if(!BOOLSETTING(THROTTLE_ENABLE))
+	if(!BOOLSETTING(THROTTLE_ENABLE)) {
+		shutdown();
 		return;
+	} else {
+		Lock l(stateCS);
+		if (activeWaiter == -1)
+			// This will create slight weirdness for the read/write calls between
+			// here and the first activeWaiter-toggle below.
+			waitCS[activeWaiter = 0].enter();
+	}
 
 	int downLimit = getDownLimit();
 	int upLimit   = getUpLimit();
@@ -185,7 +226,17 @@ void ThrottleManager::on(TimerManagerListener::Second, uint32_t /* aTick */) thr
 			upTokens = -1;
 	}
 
-	PulseEvent(hEvent);
+	// let existing events drain out (fairness).
+	// www.cse.wustl.edu/~schmidt/win32-cv-1.html documents various
+	// fairer strategies, but when only broadcasting, irrelevant
+	{
+		Lock l(stateCS);
+
+		dcassert(activeWaiter == 0 || activeWaiter == 1);
+		waitCS[1-activeWaiter].enter();
+		Thread::safeExchange(activeWaiter, 1-activeWaiter);
+		waitCS[1-activeWaiter].leave();
+	}
 }
 
 }	// namespace dcpp

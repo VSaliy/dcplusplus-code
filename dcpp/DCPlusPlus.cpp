@@ -121,6 +121,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 void shutdown() {
 	TimerManager::getInstance()->shutdown();
 	HashManager::getInstance()->shutdown();
+	ThrottleManager::getInstance()->shutdown();
 	ConnectionManager::getInstance()->shutdown();
 
 	BufferedSocket::waitShutdown();
