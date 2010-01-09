@@ -248,7 +248,7 @@ private:
 			columns[FILES_COLUMN_CRC32] = entry->getCrc32Checked() ? T_("Yes") : T_("No");
 			columns[FILES_COLUMN_TIME] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
 
-			return sortCol == -1 || old != columns[sortCol];
+			return (sortCol != -1) ? (old != columns[sortCol]) : false;
 		}
 
 		const tstring& getText(int col) const {
@@ -319,7 +319,7 @@ private:
 			columns[USERS_COLUMN_FILES] = Text::toT(Util::toString(entry->getFiles()));
 			columns[USERS_COLUMN_TIME] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
 
-			return old != columns[sortCol];
+			return (sortCol != -1) ? (old != columns[sortCol]) : false;
 		}
 
 		const tstring& getText(int col) const {
