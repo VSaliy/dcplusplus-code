@@ -30,9 +30,6 @@
 #include "ClientManager.h"
 
 namespace dcpp {
-
-#define POLL_TIMEOUT 250
-
 /**
  * Manager for throttling traffic flow.
  * Inspired by Token Bucket algorithm: http://en.wikipedia.org/wiki/Token_bucket
