@@ -69,11 +69,21 @@ void term_handler() {
 int SmartWinMain(dwt::Application& app) {
 	dcdebug("StartWinMain\n");
 
+	Util::initialize();
+
+	string configPathHash;
+	{
+		std::string configPath = Util::getPath(Util::PATH_USER_CONFIG);
+		TigerTree tth(TigerTree::calcBlockSize(configPath.size(), 1));
+		tth.update(configPath.data(), configPath.size());
+		tth.finalize();
+		configPathHash = tth.getRoot().toBase32();
+	}
 #ifndef _DEBUG
-	SingleInstance dcapp(_T("{DCPLUSPLUS-AEE8350A-B49A-4753-AB4B-E55479A48351}"));
+	SingleInstance dcapp(Text::toT(string("{DCPLUSPLUS-AEE8350A-B49A-4753-AB4B-E55479A48351}") + configPathHash).c_str());
 	if(dcapp.isRunning()) {
 #else
-	SingleInstance dcapp(_T("{DCPLUSPLUS-AEE8350A-B49A-4753-AB4B-E55479A48350}"));
+	SingleInstance dcapp(Text::toT(string("{DCPLUSPLUS-AEE8350A-B49A-4753-AB4B-E55479A48350}") + configPathHash).c_str());
 	if(dcapp.isRunning() && app.getCommandLine().getParams().size() > 1) {
 #endif
 		HWND hOther = NULL;
