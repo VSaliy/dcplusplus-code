@@ -61,8 +61,6 @@ void startup(void (*f)(void*, const string&), void* p) {
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
 #endif
 
-	Util::initialize();
-
 	bindtextdomain(PACKAGE, LOCALEDIR);
 
 	ResourceManager::newInstance();
