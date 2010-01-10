@@ -41,6 +41,8 @@ FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), 
 	ClientManager::getInstance()->addListener(this);
 
 	File::ensureDirectory(Util::getHubListsPath());
+
+	blacklist.insert(make_pair("http://adchublist.com/hublist.xml.bz2", "Domain used for spam purposes."));
 }
 
 FavoriteManager::~FavoriteManager() throw() {
@@ -637,6 +639,21 @@ void FavoriteManager::setUserDescription(const UserPtr& aUser, const string& des
 StringList FavoriteManager::getHubLists() {
 	StringTokenizer<string> lists(SETTING(HUBLIST_SERVERS), ';');
 	return lists.getTokens();
+}
+
+const string& FavoriteManager::blacklisted() const {
+	if(publicListServer.empty())
+		return Util::emptyString;
+	StringMap::const_iterator i = blacklist.find(publicListServer);
+	if(i == blacklist.end())
+		return Util::emptyString;
+	return i->second;
+}
+
+void FavoriteManager::addBlacklist(const string& url, const string& reason) {
+	if(url.empty() || reason.empty())
+		return;
+	blacklist[url] = reason;
 }
 
 FavoriteHubEntryList::iterator FavoriteManager::getFavoriteHub(const string& aServer) {

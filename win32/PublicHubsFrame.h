@@ -90,6 +90,9 @@ private:
 
 	GridPtr grid;
 
+	GridPtr upper;
+	TextBoxPtr blacklist;
+
 	typedef TypedTable<HubInfo> WidgetHubs;
 	typedef WidgetHubs* WidgetHubsPtr;
 	WidgetHubsPtr hubs;
