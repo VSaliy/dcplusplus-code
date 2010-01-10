@@ -78,6 +78,8 @@ int PublicHubsFrame::HubInfo::compareItems(const HubInfo* a, const HubInfo* b, i
 PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDR_PUBLICHUBS),
 grid(0),
+upper(0),
+blacklist(0),
 hubs(0),
 filter(0),
 filterSel(0),
@@ -91,9 +93,18 @@ users(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
+		upper = grid->addChild(Grid::Seed(2, 1));
+		upper->setSpacing(0);
+		upper->column(0).mode = GridInfo::FILL;
+		upper->row(0).size = 0;
+		upper->row(0).mode = GridInfo::STATIC;
+		upper->row(1).mode = GridInfo::FILL;
+		upper->row(1).align = GridInfo::STRETCH;
+
 		WidgetHubs::Seed cs;
 		cs.style |= LVS_SINGLESEL;
-		hubs = grid->addChild(cs);
+		hubs = upper->addChild(cs);
+		upper->setWidget(hubs, 1, 0);
 		addWidget(hubs);
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(PUBLICHUBSFRAME_ORDER), SETTING(PUBLICHUBSFRAME_WIDTHS));
@@ -236,11 +247,33 @@ void PublicHubsFrame::updateDropDown() {
 void PublicHubsFrame::updateList() {
 	dcdebug("PublicHubsFrame::updateList\n");
 
-	hubs->clear();
+	if(blacklist) {
+		upper->row(0).mode = GridInfo::STATIC;
+		::DestroyWindow(blacklist->handle());
+		layout();
+	}
+	const string& blacklisted = FavoriteManager::getInstance()->blacklisted();
+	if(!blacklisted.empty()) {
+		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
+		seed.style &= ~ES_AUTOHSCROLL;
+		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_READONLY | WS_BORDER;
+		seed.caption = str(TF_(
+			"Warning: fraudulent hub list detected!\r\n\r\n"
+			"The current hub list (%1%) has been blacklisted by DC++ for the following reason:\r\n"
+			"%2%\r\n\r\n"
+			"It is strongly recommended that you do not connect to any of the hubs listed here "
+			"and that you remove this hub list from your collection by using the \"Configure\" "
+			"button below."
+			) % Text::toT(FavoriteManager::getInstance()->getCurrentHubList()) % Text::toT(blacklisted));
+		seed.lines = 8;
+		blacklist = upper->addChild(seed);
+		upper->setWidget(blacklist, 0, 0);
+		upper->row(0).mode = GridInfo::AUTO;
+		layout();
+	}
+
 	users = 0;
 	visibleHubs = 0;
-
-	HoldRedraw hold(hubs);
 
 	double size = -1;
 	FilterModes mode = NONE;
@@ -249,6 +282,8 @@ void PublicHubsFrame::updateList() {
 
 	bool doSizeCompare = parseFilter(mode, size);
 
+	HoldRedraw hold(hubs);
+	hubs->clear();
 	for(HubEntryList::const_iterator i = entries.begin(); i != entries.end(); ++i) {
 		if(matchFilter(*i, sel, doSizeCompare, mode, size)) {
 			hubs->insert(hubs->size(), new HubInfo(&(*i)));

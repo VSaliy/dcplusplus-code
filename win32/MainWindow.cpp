@@ -1078,6 +1078,7 @@ void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/,
 				}
 			}
 		}
+
 		xml.resetCurrentChild();
 		if(xml.findChild("Links")) {
 			xml.stepIn();
@@ -1114,6 +1115,22 @@ void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/,
 			}
 			xml.stepOut();
 		}
+
+		xml.resetCurrentChild();
+		if(xml.findChild("Blacklist")) {
+			xml.stepIn();
+			while(xml.findChild("Blacklisted")) {
+				const string& url = xml.getChildAttrib("Url");
+				if(url.empty())
+					continue;
+				const string& reason = xml.getChildAttrib("Reason");
+				if(reason.empty())
+					continue;
+				FavoriteManager::getInstance()->addBlacklist(url, reason);
+			}
+			xml.stepOut();
+		}
+
 		xml.stepOut();
 	} catch (const Exception&) {
 		// ...

@@ -58,6 +58,10 @@ public:
 		return publicListMatrix[publicListServer];
 	}
 	bool isDownloading() { return (useHttp && running); }
+	const string& getCurrentHubList() const { return publicListServer; }
+	/// @return ref to the reason string the current list is blacklisted; or empty string otherwise.
+	const string& blacklisted() const;
+	void addBlacklist(const string& url, const string& reason);
 
 // Favorite Users
 	typedef unordered_map<CID, FavoriteUser> FavoriteMap;
@@ -132,6 +136,7 @@ private:
 	int lastServer;
 	HubTypes listType;
 	string downloadBuf;
+	StringMap blacklist;
 
 	/** Used during loading to prevent saving. */
 	bool dontSave;
