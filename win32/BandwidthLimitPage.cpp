@@ -75,7 +75,7 @@ throttleTime(0)
 	}
 
 	{
-		secondaryToggle = grid->addChild(GroupBox::Seed());
+		secondaryToggle = grid->addChild(GroupBox::Seed(T_("Secondary Transfer Rate Limiting")));
 		GridPtr cur = secondaryToggle->addChild(Grid::Seed(1, 4));
 		cur->column(0).mode = GridInfo::AUTO;
 		cur->column(1).mode = GridInfo::FILL;
@@ -105,7 +105,7 @@ throttleTime(0)
 	}
 
 	{
-		secondary = grid->addChild(GroupBox::Seed(T_("Secondary Transfer Rate Limiting")));
+		secondary = grid->addChild(GroupBox::Seed(T_("Secondary Transfer Rate Limiting Settings")));
 		GridPtr cur = secondary->addChild(Grid::Seed(3, 2));
 		cur->column(0).size = 50;
 		cur->column(0).mode = GridInfo::STATIC;
