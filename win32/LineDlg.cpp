@@ -34,7 +34,7 @@ text(text_)
 }
 
 int LineDlg::run() {
-	create(dwt::Point(365, 83));
+	create(dwt::Point(365, 90));
 	return show();
 }
 

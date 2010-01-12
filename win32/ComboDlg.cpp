@@ -33,7 +33,7 @@ combo(0)
 }
 
 int ComboDlg::run() {
-	create(dwt::Point(365, 83));
+	create(dwt::Point(365, 90));
 	return show();
 }
 
