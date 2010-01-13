@@ -63,6 +63,7 @@
 * [L#400080] Improve hub list status messages (emtee)
 * [ADC] Allow hubs to send IPs of passive users via INF (poy)
 * [L#473173] Fix crash when hashing files on non-Windows systems (thanks razzloss)
+* Fix hub user list filter update with the mouse (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
