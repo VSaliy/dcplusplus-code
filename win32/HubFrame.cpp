@@ -165,7 +165,7 @@ inTabComplete(false)
 		filter = userGrid->addChild(cs);
 		filter->setHelpId(IDH_HUB_FILTER);
 		addWidget(filter);
-		filter->onKeyUp(std::tr1::bind(&HubFrame::handleFilterKey, this, _1));
+		filter->onUpdated(std::tr1::bind(&HubFrame::handleFilterUpdated, this));
 
 		filterType = userGrid->addChild(WinUtil::Seeds::comboBoxStatic);
 		filterType->setHelpId(IDH_HUB_FILTER);
@@ -1315,13 +1315,12 @@ void HubFrame::handleFollow() {
 	}
 }
 
-bool HubFrame::handleFilterKey(int) {
+void HubFrame::handleFilterUpdated() {
 	tstring newText = filter->getText();
 	if(newText != filterString) {
 		filterString = newText;
 		updateUserList();
 	}
-	return true;
 }
 
 HubFrame::UserInfoList HubFrame::selectedUsersImpl() const {
