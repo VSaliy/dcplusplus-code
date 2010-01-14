@@ -69,6 +69,7 @@ IDH_WINDOWSPAGE=settings_windows.html
 IDH_CERTIFICATESPAGE=settings_certs.html
 IDH_TABSPAGE=settings_tabs.html
 IDH_HISTORYPAGE=settings_history.html
+IDH_BWLIMITPAGE=settings_bwlimit.html
 
 [MAP]
 #include resource.h
