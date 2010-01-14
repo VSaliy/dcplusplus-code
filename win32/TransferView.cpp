@@ -877,6 +877,12 @@ void TransferView::ConnectionInfo::disconnect() {
 	ConnectionManager::getInstance()->disconnect(user, download);
 }
 
+void TransferView::on(QueueManagerListener::StatusUpdated, QueueItem* qi) throw() {
+	if(qi->isFinished() || qi->getPriority() == QueueItem::PAUSED || qi->countOnlineUsers() == 0) {
+		addTask(DOWNLOADS_REMOVED, new TickInfo(qi->getTarget()));
+	}
+}
+
 void TransferView::on(QueueManagerListener::Removed, QueueItem* qi) throw() {
 	addTask(DOWNLOADS_REMOVED, new TickInfo(qi->getTarget()));
 }

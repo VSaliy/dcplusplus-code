@@ -644,9 +644,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 			}
 
 			if(q->isFinished()) {
-				// The queue item was finished but the file is gone - restart...
-				wasFinished = true;
-				q->resetDownloaded();
+				throw QueueException(_("This file has already finished downloading"));
 			}
 
 			q->setFlag(aFlags);
@@ -806,6 +804,8 @@ int QueueManager::matchListing(const DirectoryListing& dl) throw() {
 
 		for(QueueItem::StringMap::const_iterator i = fileQueue.getQueue().begin(); i != fileQueue.getQueue().end(); ++i) {
 			QueueItem* qi = i->second;
+			if(qi->isFinished())
+				continue;
 			if(qi->isSet(QueueItem::FLAG_USER_LIST))
 				continue;
 			TTHMap::iterator j = tthMap.find(qi->getTTH());
@@ -1148,7 +1148,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 
 							userQueue.remove(q);
 
-							if(!BOOLSETTING(KEEP_FINISHED_FILES)) {
+							if(!BOOLSETTING(KEEP_FINISHED_FILES) || aDownload->getType() == Transfer::TYPE_FULL_LIST) {
 								fire(QueueManagerListener::Removed(), q);
 								fileQueue.remove(q);
 							} else {
@@ -1391,7 +1391,7 @@ void QueueManager::setPriority(const string& aTarget, QueueItem::Priority p) thr
 		Lock l(cs);
 
 		QueueItem* q = fileQueue.find(aTarget);
-		if( (q != NULL) && (q->getPriority() != p) ) {
+		if( (q != NULL) && (q->getPriority() != p) && !q->isFinished() ) {
 			if(q->getPriority() == QueueItem::PAUSED || p == QueueItem::HIGHEST) {
 				// Problem, we have to request connections to all these users...
 				q->getOnlineUsers(getConn);
