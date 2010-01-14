@@ -288,6 +288,7 @@ private:
 	virtual void on(UploadManagerListener::Tick, const UploadList& aUpload) throw();
 	virtual void on(UploadManagerListener::Complete, Upload* aUpload) throw();
 
+	virtual void on(QueueManagerListener::StatusUpdated, QueueItem*) throw();
 	virtual void on(QueueManagerListener::Removed, QueueItem*) throw();
 
 	void onTransferTick(Transfer* aTransfer, bool isDownload);
