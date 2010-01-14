@@ -58,6 +58,7 @@
 #define IDH_CERTIFICATESPAGE 10313
 #define IDH_TABSPAGE 10314
 #define IDH_HISTORYPAGE 10315
+#define IDH_BWLIMITPAGE 10316
 
 // reserved for cshelp ids
 #define IDH_CSHELP_BEGIN 11000
