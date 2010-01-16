@@ -87,9 +87,9 @@
 	<dt>[path] not shared; calculated CRC32 does not match the one found in SFV file.</dt>
 	<dd>Before sharing files DC++ will automatically check them against an .SFV file (if one exists in the same directory) to make sure that no corrupted files will be shared. If you get this error then either your file(s) are corrupted or the control data in the corresponding .SFV file is outdated or damaged.</dd>
 	<dt>[path1] renamed to [path2]</dt>
-	<dd>There was an error moving a large finished download [path1] from the unfinished folder to its target place [path2] so the file is left in its current folder but renamed to its orginal name.</dd>
-	<dt>Unable to rename [path1]: [path2]</dt>
-	<dd>There was an error moving a large finished download [path1] from the unfinished folder to its target place so the file is left in its current folder. DC++ tried to rename the file to its orginal name ([path2]) but the rename operation has failed as well.</dd>
+	<dd>There was an error moving a large finished download [path1] from the unfinished downloads folder to its target place [path2] so the file is left in its current folder but renamed to its orginal name.</dd>
+	<dt>Unable to rename [path]: [error message]</dt>
+	<dd>There was an error moving a large finished download [path] from the unfinished downloads folder to its target place so the file is left in the unfinished downloads folder. DC++ tried to rename the file to its orginal name but the rename operation has failed as well.</dd>
 	<dt>Unable to open filelist: [filename]</dt>
 	<dd>There were problems opening a downloaded filelist, its corrupted or its size is <a href="settings_expert.html#maxlistsize">bigger than the maximum size allowed to open</a>.</dd>
 	<dt>Unable to send file [path]: [error message]</dt>
