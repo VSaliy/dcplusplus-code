@@ -131,7 +131,7 @@ users(0)
 		ts.style |= ES_AUTOHSCROLL;
 		filter = cur->addChild(ts);
 		addWidget(filter);
-		filter->onKeyDown(std::tr1::bind(&PublicHubsFrame::handleFilterKeyDown, this, _1));
+		filter->onUpdated(std::tr1::bind(&PublicHubsFrame::handleFilterUpdated, this));
 
 		filterSel = cur->addChild(WinUtil::Seeds::comboBoxStatic);
 		addWidget(filterSel);
@@ -453,13 +453,12 @@ void PublicHubsFrame::handleListSelChanged() {
 	updateList();
 }
 
-bool PublicHubsFrame::handleFilterKeyDown(int c) {
-	if(c == VK_RETURN) {
-		filterString = Text::fromT(filter->getText());
+void PublicHubsFrame::handleFilterUpdated() {
+	string newText = Text::fromT(filter->getText());
+	if(newText != filterString) {
+		filterString = newText;
 		updateList();
-		return true;
 	}
-	return false;
 }
 
 void PublicHubsFrame::onFinished(const tstring& s) {
