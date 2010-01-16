@@ -116,7 +116,7 @@ private:
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	bool handleKeyDown(int c);
 	void handleListSelChanged();
-	bool handleFilterKeyDown(int c);
+	void handleFilterUpdated();
 
 	void updateStatus();
 	void updateList();
