@@ -64,6 +64,7 @@
 * [ADC] Allow hubs to send IPs of passive users via INF (poy)
 * [L#473173] Fix crash when hashing files on non-Windows systems (thanks razzloss)
 * Update list-view filters more often (poy)
+* Show multiple user-command params in the same dialog (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
