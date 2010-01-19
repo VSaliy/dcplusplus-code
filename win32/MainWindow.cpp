@@ -583,23 +583,6 @@ void MainWindow::handleQuickConnect() {
 	if(!WinUtil::checkNick())
 		return;
 
-	{
-		ParamDlg dlg(this, _T("test! :)"));
-		dlg.addTextBox(_T("blah blah"), _T("value1"));
-		TStringList vals;
-		vals.push_back(_T("val1"));
-		vals.push_back(_T("val2 - sel"));
-		dlg.addComboBox(_T("combo :"), vals, 1);
-		dlg.addTextBox(_T("xd"));
-		if(dlg.run() == IDOK) {
-			const TStringList& x = dlg.getValues();
-			for(TStringList::const_iterator i = x.begin(), iend=x.end();i!=iend;++i)
-				printf("value: %S\n", i->c_str());
-		}
-		return;
-	}
-	// -----
-
 	ParamDlg dlg(this, T_("Quick Connect"), T_("Address"));
 
 	if (dlg.run() == IDOK) {
