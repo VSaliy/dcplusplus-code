@@ -22,7 +22,7 @@
 
 #include "MainWindow.h"
 #include "PrivateFrame.h"
-#include "LineDlg.h"
+#include "ParamDlg.h"
 #include "HoldRedraw.h"
 
 #include <dcpp/ChatMessage.h>
@@ -513,10 +513,10 @@ void HubFrame::onGetPassword() {
 			message->setSelection(10, 10);
 			waitingForPW = true;
 		} else {
-			LineDlg linePwd(this, T_("Please enter a password"), T_("Please enter a password"), Util::emptyStringT, true);
+			ParamDlg linePwd(this, T_("Please enter a password"), T_("Please enter a password"), Util::emptyStringT, true);
 			if(linePwd.run() == IDOK) {
-				client->setPassword(Text::fromT(linePwd.getLine()));
-				client->password(Text::fromT(linePwd.getLine()));
+				client->setPassword(Text::fromT(linePwd.getValue()));
+				client->password(Text::fromT(linePwd.getValue()));
 				waitingForPW = false;
 			} else {
 				client->disconnect(true);

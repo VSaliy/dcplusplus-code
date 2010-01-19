@@ -21,7 +21,7 @@
 #include "DirectoryListingFrame.h"
 
 #include "MainWindow.h"
-#include "LineDlg.h"
+#include "ParamDlg.h"
 #include "TextFrame.h"
 #include "HoldRedraw.h"
 
@@ -863,12 +863,12 @@ void DirectoryListingFrame::findFile(bool findNext)
 {
 	if(!findNext) {
 		// Prompt for substring to find
-		LineDlg dlg(this, T_("Search for file"), T_("Enter search string"));
+		ParamDlg dlg(this, T_("Search for file"), T_("Enter search string"));
 
 		if(dlg.run() != IDOK)
 			return;
 
-		findStr = Text::fromT(dlg.getLine());
+		findStr = Text::fromT(dlg.getValue());
 		skipHits = 0;
 	} else {
 		skipHits++;

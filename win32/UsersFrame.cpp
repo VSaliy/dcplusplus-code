@@ -19,7 +19,7 @@
 #include "stdafx.h"
 
 #include "UsersFrame.h"
-#include "LineDlg.h"
+#include "ParamDlg.h"
 #include "HoldRedraw.h"
 
 #include <dcpp/FavoriteManager.h>
@@ -144,11 +144,11 @@ void UsersFrame::handleDescription() {
 	if(users->countSelected() == 1) {
 		int i = users->getSelected();
 		UserInfo* ui = users->getData(i);
-		LineDlg dlg(this, ui->columns[COLUMN_NICK], T_("Description"), ui->columns[COLUMN_DESCRIPTION]);
+		ParamDlg dlg(this, ui->columns[COLUMN_NICK], T_("Description"), ui->columns[COLUMN_DESCRIPTION]);
 
 		if(dlg.run() == IDOK) {
-			FavoriteManager::getInstance()->setUserDescription(ui->getUser(), Text::fromT(dlg.getLine()));
-			ui->columns[COLUMN_DESCRIPTION] = dlg.getLine();
+			FavoriteManager::getInstance()->setUserDescription(ui->getUser(), Text::fromT(dlg.getValue()));
+			ui->columns[COLUMN_DESCRIPTION] = dlg.getValue();
 			users->update(i);
 		}
 	}

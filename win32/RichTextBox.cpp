@@ -21,7 +21,7 @@
 #include "RichTextBox.h"
 
 #include "WinUtil.h"
-#include "LineDlg.h"
+#include "ParamDlg.h"
 
 RichTextBox::Seed::Seed() : 
 	BaseType::Seed()
@@ -57,9 +57,9 @@ bool RichTextBox::handleContextMenu(dwt::ScreenCoordinate pt)
 
 tstring RichTextBox::findTextPopup() {
 	tstring param = Util::emptyStringT;
-	LineDlg lineFind(this, T_("Search"), T_("Specify search string"), Util::emptyStringT, false);
+	ParamDlg lineFind(this, T_("Search"), T_("Specify search string"), Util::emptyStringT, false);
 	if(lineFind.run() == IDOK) {
-		param = lineFind.getLine();
+		param = lineFind.getValue();
 	}
 	return param;
 }

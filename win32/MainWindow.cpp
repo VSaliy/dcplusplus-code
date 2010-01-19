@@ -21,8 +21,7 @@
 #include "MainWindow.h"
 #include "resource.h"
 
-#include "ComboDlg.h"
-#include "LineDlg.h"
+#include "ParamDlg.h"
 #include "HashProgressDlg.h"
 #include "SettingsDialog.h"
 #include "TextFrame.h"
@@ -559,10 +558,10 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 }
 
 void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
-	LineDlg dlg(this, title, T_("Maximum number of recent items to save"),
+	ParamDlg dlg(this, title, T_("Maximum number of recent items to save"),
 		Text::toT(Util::toString(WindowManager::getInstance()->getMaxRecentItems(id))));
 	if(dlg.run() == IDOK) {
-		const unsigned max = Util::toUInt(Text::fromT(dlg.getLine()));
+		const unsigned max = Util::toUInt(Text::fromT(dlg.getValue()));
 		dwt::MessageBox(this).show(str(TF_("%1% recent items will be saved from now on.") % max), title,
 			dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
 		WindowManager::getInstance()->setMaxRecentItems(id, max);
@@ -584,11 +583,28 @@ void MainWindow::handleQuickConnect() {
 	if(!WinUtil::checkNick())
 		return;
 
-	LineDlg dlg(this, T_("Quick Connect"), T_("Address"));
+	{
+		ParamDlg dlg(this, _T("test! :)"));
+		dlg.addTextBox(_T("blah blah"), _T("value1"));
+		TStringList vals;
+		vals.push_back(_T("val1"));
+		vals.push_back(_T("val2 - sel"));
+		dlg.addComboBox(_T("combo :"), vals, 1);
+		dlg.addTextBox(_T("xd"));
+		if(dlg.run() == IDOK) {
+			const TStringList& x = dlg.getValues();
+			for(TStringList::const_iterator i = x.begin(), iend=x.end();i!=iend;++i)
+				printf("value: %S\n", i->c_str());
+		}
+		return;
+	}
+	// -----
+
+	ParamDlg dlg(this, T_("Quick Connect"), T_("Address"));
 
 	if (dlg.run() == IDOK) {
 
-		tstring tmp = dlg.getLine();
+		tstring tmp = dlg.getValue();
 		// Strip out all the spaces
 		string::size_type i;
 		while ((i = tmp.find(' ')) != string::npos)
@@ -663,7 +679,7 @@ bool MainWindow::chooseFavHubGroup(const tstring& title, tstring& group) {
 	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
 		groups.insert(Text::toT(i->first));
 
-	ComboDlg dlg(this, title, T_("Select a favorite hub group"), TStringList(groups.begin(), groups.end()));
+	ParamDlg dlg(this, title, T_("Select a favorite hub group"), TStringList(groups.begin(), groups.end()));
 	if(dlg.run() == IDOK) {
 		group = dlg.getValue();
 		return true;
