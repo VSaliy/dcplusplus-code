@@ -34,7 +34,7 @@ NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) :
 		TextBox::Seed cs = WinUtil::Seeds::textBox;
 		cs.style |= WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_NOHIDESEL | ES_WANTRETURN;
 		pad = addChild(cs);
-		addWidget(pad);
+		addWidget(pad, false, false);
 	}
 
 	initStatus();
