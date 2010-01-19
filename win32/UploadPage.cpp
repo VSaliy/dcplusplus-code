@@ -27,7 +27,7 @@
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/version.h>
-#include "LineDlg.h"
+#include "ParamDlg.h"
 #include "HashProgressDlg.h"
 #include "WinUtil.h"
 
@@ -224,9 +224,9 @@ void UploadPage::handleRenameClicked() {
 		tstring vName = directories->getText(i, 0);
 		tstring rPath = directories->getText(i, 1);
 		try {
-			LineDlg dlg(this, T_("Virtual name"), T_("Name under which the others see the directory"), vName);
+			ParamDlg dlg(this, T_("Virtual name"), T_("Name under which the others see the directory"), vName);
 			if(dlg.run() == IDOK) {
-				tstring line = dlg.getLine();
+				tstring line = dlg.getValue();
 				if (Util::stricmp(vName, line) != 0) {
 					ShareManager::getInstance()->renameDirectory(Text::fromT(rPath), Text::fromT(line));
 					directories->setText(i, 0, line);
@@ -282,9 +282,9 @@ void UploadPage::addDirectory(const tstring& aPath) {
 	ShareManager* sm = ShareManager::getInstance();
 	try {
 		while(true) {
-			LineDlg dlg(this, T_("Virtual name"), T_("Name under which the others see the directory"), Text::toT(sm->validateVirtual(Util::getLastDir(Text::fromT(path)))));
+			ParamDlg dlg(this, T_("Virtual name"), T_("Name under which the others see the directory"), Text::toT(sm->validateVirtual(Util::getLastDir(Text::fromT(path)))));
 			if(dlg.run() == IDOK) {
-				const tstring& line = dlg.getLine();
+				const tstring& line = dlg.getValue();
 				const string aLine = Text::fromT(line);
 				if(sm->hasVirtual(sm->validateVirtual(aLine))) {
 					if(dwt::MessageBox(this).show(str(TF_("A virtual directory named %1% already exists, do you wish to merge the contents?") % line),

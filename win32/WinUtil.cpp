@@ -35,7 +35,7 @@
 #include <dcpp/UploadManager.h>
 #include <dcpp/ThrottleManager.h>
 
-#include "LineDlg.h"
+#include "ParamDlg.h"
 #include "MagnetDlg.h"
 #include "HubFrame.h"
 #include "SearchFrame.h"
@@ -664,9 +664,9 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 				Util::replace("\\s", " ", caption);
 			}
 
-			LineDlg dlg(parent, Text::toT(uc.getName()), Text::toT(caption), Text::toT(sm["line:" + name]));
+			ParamDlg dlg(parent, Text::toT(uc.getName()), Text::toT(caption), Text::toT(sm["line:" + name]));
 			if(dlg.run() == IDOK) {
-				done[name] = sm["line:" + name] = Text::fromT(dlg.getLine());
+				done[name] = sm["line:" + name] = Text::fromT(dlg.getValue());
 			} else {
 				return false;
 			}

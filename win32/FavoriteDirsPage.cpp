@@ -26,7 +26,7 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 #include "WinUtil.h"
-#include "LineDlg.h"
+#include "ParamDlg.h"
 
 static const ColumnInfo columns[] = {
 	{ N_("Favorite name"), 100, false },
@@ -135,9 +135,9 @@ void FavoriteDirsPage::handleRenameClicked() {
 	int i = -1;
 	while((i = directories->getNext(i, LVNI_SELECTED)) != -1) {
 		tstring old = directories->getText(i, 0);
-		LineDlg dlg(this, T_("Favorite name"), T_("Under what name you see the directory"), old);
+		ParamDlg dlg(this, T_("Favorite name"), T_("Under what name you see the directory"), old);
 		if(dlg.run() == IDOK) {
-			tstring line = dlg.getLine();
+			tstring line = dlg.getValue();
 			if (FavoriteManager::getInstance()->renameFavoriteDir(Text::fromT(old), Text::fromT(line))) {
 				directories->setText(i, 0, line);
 			} else {
@@ -167,9 +167,9 @@ void FavoriteDirsPage::addDirectory(const tstring& aPath) {
 	if( path[ path.length() -1 ] != PATH_SEPARATOR )
 		path += PATH_SEPARATOR;
 
-	LineDlg dlg(this, T_("Favorite name"), T_("Under what name you see the directory"), Util::getLastDir(path));
+	ParamDlg dlg(this, T_("Favorite name"), T_("Under what name you see the directory"), Util::getLastDir(path));
 	if(dlg.run() == IDOK) {
-		const tstring& line = dlg.getLine();
+		const tstring& line = dlg.getValue();
 		if(FavoriteManager::getInstance()->addFavoriteDir(Text::fromT(path), Text::fromT(line))) {
 			addRow(line, path);
 		} else {

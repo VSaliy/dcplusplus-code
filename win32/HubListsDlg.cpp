@@ -25,7 +25,7 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/StringTokenizer.h>
 #include "HoldRedraw.h"
-#include "LineDlg.h"
+#include "ParamDlg.h"
 #include "WinUtil.h"
 
 HubListsDlg::HubListsDlg(dwt::Widget* parent) :
@@ -174,9 +174,9 @@ void HubListsDlg::handleMoveDownClicked() {
 void HubListsDlg::handleEditClicked() {
 	int i = -1;
 	while((i = hubLists->getNext(i, LVNI_SELECTED)) != -1) {
-		LineDlg dlg(this, T_("Hublist"), T_("Edit the hublist"), hubLists->getText(i, 0));
+		ParamDlg dlg(this, T_("Hublist"), T_("Edit the hublist"), hubLists->getText(i, 0));
 		if(dlg.run() == IDOK)
-			hubLists->setText(i, 0, dlg.getLine());
+			hubLists->setText(i, 0, dlg.getValue());
 	}
 }
 
