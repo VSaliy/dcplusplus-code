@@ -66,6 +66,7 @@
 * Update list-view filters more often (poy)
 * Show multiple user-command params in the same dialog (poy)
 * [L#509456] Fix pressing Tab in the notepad (poy)
+* Register in HKCU instead of HKLM to avoid UAC warnings; ditch magnet.exe (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)

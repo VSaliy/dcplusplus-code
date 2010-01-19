@@ -64,7 +64,6 @@ no_backup:
   File "LICENSE-GeoIP.txt"
   File "LICENSE-OpenSSL.txt"
   File "mingwm10.dll"
-  File "magnet.exe"
 SetOutPath "$INSTDIR\locale\ar\LC_MESSAGES\"
 File "locale\ar\LC_MESSAGES\dcpp-win32.mo"
 File "locale\ar\LC_MESSAGES\libdcpp.mo"
@@ -333,7 +332,6 @@ Section "un.Uninstall"
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\ChangeLog.txt"
   Delete "$INSTDIR\LICENSE-OpenSSL.tx"
-  Delete "$INSTDIR\Magnet.exe"
   Delete "$INSTDIR\GeoIPCountryWhois.csv"
   Delete "$INSTDIR\mingwm10.dll"
 
@@ -495,11 +493,11 @@ Delete "$INSTDIR\locale\tr\help\DCPlusPlus.chm"
  
 
   ; Remove registry entries
-  ;  dchub is likely only to be registered to us
-  ;  magnet is likely to be registere to other p2p apps
-  DeleteRegKey HKCR "dchub"
-  DeleteRegKey HKCR "adc"
-  DeleteRegKey HKLM "SOFTWARE\Magnet\Handlers\DC++"
+  ; Assume they are all registered to us
+  DeleteRegKey HKCU "Software\Classes\dchub"
+  DeleteRegKey HKCU "Software\Classes\adc"
+  DeleteRegKey HKCU "Software\Classes\adcs"
+  DeleteRegKey HKCU "Software\Classes\magnet"
   ; MUST REMOVE UNINSTALLER, too
   Delete $INSTDIR\uninstall.exe
   ; remove shortcuts, if any.
