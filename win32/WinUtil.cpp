@@ -646,8 +646,10 @@ void WinUtil::setClipboard(const tstring& str) {
 }
 
 bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap& sm) throw () {
+	ParamDlg dlg(parent, Text::toT(uc.getName()));
+
 	string::size_type i = 0;
-	StringMap done;
+	StringList names;
 
 	while((i = uc.getCommand().find("%[line:", i)) != string::npos) {
 		i += 7;
@@ -656,7 +658,7 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 			break;
 
 		string name = uc.getCommand().substr(i, j - i);
-		if(done.find(name) == done.end()) {
+		if(find(names.begin(), names.end(), name) == names.end()) {
 			string caption = name;
 			/// @todo use the bool in UserCommand when we have one
 			if(uc.getHub().compare(0, 6, "adc://") == 0 || uc.getHub().compare(0, 7, "adcs://") == 0) {
@@ -664,16 +666,23 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 				Util::replace("\\s", " ", caption);
 			}
 
-			ParamDlg dlg(parent, Text::toT(uc.getName()), Text::toT(caption), Text::toT(sm["line:" + name]));
-			if(dlg.run() == IDOK) {
-				done[name] = sm["line:" + name] = Text::fromT(dlg.getValue());
-			} else {
-				return false;
-			}
+			dlg.addTextBox(Text::toT(caption), Text::toT(sm["line:" + name]));
+			names.push_back(name);
 		}
 		i = j + 1;
 	}
-	return true;
+
+	if(names.empty())
+		return true;
+
+	if(dlg.run() == IDOK) {
+		const TStringList& values = dlg.getValues();
+		for(size_t i = 0, iend = values.size(); i < iend; ++i) {
+			sm["line:" + names[i]] = Text::fromT(values[i]);
+		}
+		return true;
+	}
+	return false;
 }
 
 class HelpPopup: public Container {
