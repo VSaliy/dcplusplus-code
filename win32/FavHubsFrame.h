@@ -63,6 +63,17 @@ private:
 		COLUMN_LAST
 	};
 
+	struct SelectionKeeper {
+		SelectionKeeper(TablePtr hubs_);
+		~SelectionKeeper();
+
+		const FavoriteHubEntryList& getSelection() const;
+
+	private:
+		TablePtr hubs;
+		FavoriteHubEntryList selected;
+	};
+
 	GridPtr grid;
 	TablePtr hubs;
 
@@ -77,6 +88,8 @@ private:
 
 	void fillList();
 	void refresh();
+	FavoriteHubEntryList getSelection() const;
+	void select(const FavoriteHubEntryList& entries);
 	void openSelected();
 
 	virtual void on(FavoriteAdded, const FavoriteHubEntryPtr e) throw();
