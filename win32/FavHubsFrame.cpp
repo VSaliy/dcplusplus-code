@@ -171,8 +171,10 @@ void FavHubsFrame::handleAdd() {
 void FavHubsFrame::handleProperties() {
 	if(hubs->countSelected() == 1) {
 		FavHubProperties dlg(this, reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(hubs->getSelected())));
-		if(dlg.run() == IDOK)
+		if(dlg.run() == IDOK) {
+			HoldRedraw hold(hubs);
 			refresh();
+		}
 	}
 }
 
@@ -335,7 +337,10 @@ void FavHubsFrame::openSelected() {
 }
 
 void FavHubsFrame::on(FavoriteAdded, const FavoriteHubEntryPtr e) throw() {
-	refresh();
+	{
+		HoldRedraw hold(hubs);
+		refresh();
+	}
 	hubs->ensureVisible(hubs->findData(reinterpret_cast<LPARAM>(e)));
 }
 
