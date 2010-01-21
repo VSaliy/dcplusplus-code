@@ -1540,7 +1540,7 @@ static const string sDirectory = "Directory";
 static const string sAdded = "Added";
 static const string sTTH = "TTH";
 static const string sCID = "CID";
-static const string sHubHint = "HubHint";
+static const string sHubHint = "Hub";
 static const string sSegment = "Segment";
 static const string sStart = "Start";
 
