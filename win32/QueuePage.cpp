@@ -35,6 +35,7 @@ PropPage::ListItem QueuePage::optionItems[] = {
 	{ SettingsManager::SKIP_ZERO_BYTE, N_("Skip zero-byte files"), IDH_SETTINGS_QUEUE_SKIP_ZERO_BYTE },
 	{ SettingsManager::DONT_DL_ALREADY_SHARED, N_("Don't download files already in share"), IDH_SETTINGS_QUEUE_DONT_DL_ALREADY_SHARED },
 	{ SettingsManager::DONT_DL_ALREADY_QUEUED, N_("Don't download files already in the queue"), IDH_SETTINGS_QUEUE_DONT_DL_ALREADY_QUEUED },
+	{ SettingsManager::KEEP_FINISHED_FILES, N_("Keep finished files in the queue"), IDH_SETTINGS_QUEUE_KEEP_FINISHED_FILES },
 	{ 0, 0 }
 };
 
