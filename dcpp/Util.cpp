@@ -129,10 +129,15 @@ void Util::initialize() {
 
 	if(localMode) {
 		paths[PATH_USER_LOCAL] = paths[PATH_USER_CONFIG];
+
+		paths[PATH_DOWNLOADS] = paths[PATH_USER_CONFIG] + "Downloads\\";
+
 	} else {
 		if(::SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, buf) == S_OK) {
 			paths[PATH_USER_CONFIG] = Text::fromT(buf) + "\\DC++\\";
 		}
+
+		paths[PATH_DOWNLOADS] = getDownloadsPath(paths[PATH_USER_CONFIG]);
 
 		paths[PATH_USER_LOCAL] = ::SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, buf) == S_OK ? Text::fromT(buf) + "\\DC++\\" : paths[PATH_USER_CONFIG];
 	}
@@ -146,7 +151,6 @@ void Util::initialize() {
 	::GetShortPathName(localePath_.c_str(), buf, sizeof(buf)/sizeof(TCHAR));
 
 	paths[PATH_LOCALE] = Text::fromT(buf);
-	paths[PATH_DOWNLOADS] = getDownloadsPath(paths[PATH_USER_CONFIG]);
 
 #else
 	paths[PATH_GLOBAL_CONFIG] = "/etc/";
