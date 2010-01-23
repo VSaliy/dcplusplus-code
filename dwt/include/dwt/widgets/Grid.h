@@ -95,6 +95,7 @@ public:
 	void setWidget(Widget* w, size_t row, size_t column, size_t rowSpan = 1, size_t colSpan = 1);
 	void setWidget(Widget* w);
 
+	size_t getSpacing() const { return spacing; }
 	void setSpacing(size_t spacing_) { spacing = spacing_; }
 
 	GridInfo& row(size_t i);
