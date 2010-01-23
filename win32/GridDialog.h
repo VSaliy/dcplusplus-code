@@ -23,7 +23,7 @@
 class GridDialog : public dwt::ModalDialog
 {
 public:
-	GridDialog(dwt::Widget* parent, const long width_);
+	GridDialog(dwt::Widget* parent, const long width_, const DWORD styles_ = 0);
 
 	int run();
 
@@ -34,6 +34,7 @@ protected:
 
 private:
 	const long width;
+	const DWORD styles;
 };
 
 #endif

@@ -27,8 +27,7 @@
 #include "WinUtil.h"
 
 ADLSProperties::ADLSProperties(dwt::Widget* parent, ADLSearch *_search) :
-dwt::ModalDialog(parent),
-grid(0),
+GridDialog(parent, 290, DS_CONTEXTHELP),
 searchString(0),
 searchType(0),
 minSize(0),
@@ -44,11 +43,6 @@ search(_search)
 }
 
 ADLSProperties::~ADLSProperties() {
-}
-
-int ADLSProperties::run() {
-	create(Seed(dwt::Point(290, 222), DS_CONTEXTHELP));
-	return show();
 }
 
 bool ADLSProperties::handleInitDialog() {
@@ -143,9 +137,4 @@ void ADLSProperties::handleOKClicked() {
 	search->isAutoQueue = autoQueue->getChecked();
 
 	endDialog(IDOK);
-}
-
-void ADLSProperties::layout() {
-	dwt::Point sz = getClientSize();
-	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }

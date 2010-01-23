@@ -19,9 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_PARAMDLG_H
 #define DCPLUSPLUS_WIN32_PARAMDLG_H
 
-#include "GridDialog.h"
-
 #include <dcpp/Util.h>
+
+#include "GridDialog.h"
 
 /// generic dialog that can have multiple input rows
 class ParamDlg : public GridDialog

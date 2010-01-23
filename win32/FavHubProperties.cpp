@@ -29,8 +29,7 @@
 #include "HoldRedraw.h"
 
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
-dwt::ModalDialog(parent),
-grid(0),
+GridDialog(parent, 320, DS_CONTEXTHELP),
 name(0),
 address(0),
 description(0),
@@ -45,11 +44,6 @@ entry(_entry)
 }
 
 FavHubProperties::~FavHubProperties() {
-}
-
-int FavHubProperties::run() {
-	create(Seed(dwt::Point(320, 330), DS_CONTEXTHELP));
-	return show();
 }
 
 bool FavHubProperties::handleInitDialog() {
@@ -204,9 +198,4 @@ void FavHubProperties::fillGroups() {
 	}
 	if(needSel)
 		groups->setSelected(0);
-}
-
-void FavHubProperties::layout() {
-	dwt::Point sz = getClientSize();
-	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }

@@ -20,15 +20,16 @@
 
 #include "GridDialog.h"
 
-GridDialog::GridDialog(dwt::Widget* parent, const long width_) :
+GridDialog::GridDialog(dwt::Widget* parent, const long width_, const DWORD styles_) :
 dwt::ModalDialog(parent),
 grid(0),
-width(width_)
+width(width_),
+styles(styles_)
 {
 }
 
 int GridDialog::run() {
-	create(dwt::Point(width, 0)); // the height will be set later on
+	create(Seed(dwt::Point(width, 0), styles)); // the height will be set later on
 	return show();
 }
 

@@ -28,8 +28,7 @@
 #include "WinUtil.h"
 
 HashProgressDlg::HashProgressDlg(dwt::Widget* parent, bool aAutoClose) :
-dwt::ModalDialog(parent),
-grid(0),
+GridDialog(parent, 657, DS_CONTEXTHELP),
 file(0),
 stat(0),
 speed(0),
@@ -44,11 +43,6 @@ autoClose(aAutoClose)
 
 HashProgressDlg::~HashProgressDlg() {
 	HashManager::getInstance()->setPriority(Thread::IDLE);
-}
-
-int HashProgressDlg::run() {
-	create(Seed(dwt::Point(657, 190), DS_CONTEXTHELP));
-	return show();
 }
 
 bool HashProgressDlg::handleInitDialog() {
@@ -166,11 +160,6 @@ bool HashProgressDlg::updateStats() {
 	}
 
 	return true;
-}
-
-void HashProgressDlg::layout() {
-	dwt::Point sz = getClientSize();
-	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }
 
 void HashProgressDlg::handlePauseResume() {
