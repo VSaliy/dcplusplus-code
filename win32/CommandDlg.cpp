@@ -28,8 +28,7 @@
 #include "WinUtil.h"
 
 CommandDlg::CommandDlg(dwt::Widget* parent, int type_, int ctx_, const tstring& name_, const tstring& command_, const tstring& hub_) :
-dwt::ModalDialog(parent),
-grid(0),
+GridDialog(parent, 298, DS_CONTEXTHELP),
 separator(0),
 raw(0),
 chat(0),
@@ -56,11 +55,6 @@ hub(hub_)
 }
 
 CommandDlg::~CommandDlg() {
-}
-
-int CommandDlg::run() {
-	create(Seed(dwt::Point(298, 476), DS_CONTEXTHELP));
-	return show();
 }
 
 bool CommandDlg::handleInitDialog() {
@@ -312,9 +306,4 @@ void CommandDlg::updateControls() {
 			nick->setEnabled(true);
 			break;
 	}
-}
-
-void CommandDlg::layout() {
-	dwt::Point sz = getClientSize();
-	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }

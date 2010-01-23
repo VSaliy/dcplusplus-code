@@ -21,16 +21,15 @@
 
 #include <dcpp/forward.h>
 
-class FavHubProperties : public dwt::ModalDialog
+#include "GridDialog.h"
+
+class FavHubProperties : public GridDialog
 {
 public:
 	FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry);
 	virtual ~FavHubProperties();
 
-	int run();
-
 private:
-	GridPtr grid;
 	TextBoxPtr name;
 	TextBoxPtr address;
 	TextBoxPtr description;
@@ -47,8 +46,6 @@ private:
 	void handleOKClicked();
 
 	void fillGroups();
-
-	void layout();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H)

@@ -21,16 +21,15 @@
 
 #include <dcpp/ADLSearch.h>
 
-class ADLSProperties : public dwt::ModalDialog
+#include "GridDialog.h"
+
+class ADLSProperties : public GridDialog
 {
 public:
 	ADLSProperties(dwt::Widget* parent, ADLSearch *_search);
 	virtual ~ADLSProperties();
 
-	int run();
-
 private:
-	GridPtr grid;
 	TextBoxPtr searchString;
 	ComboBoxPtr searchType;
 	TextBoxPtr minSize;
@@ -44,8 +43,6 @@ private:
 
 	bool handleInitDialog();
 	void handleOKClicked();
-
-	void layout();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_A_D_L_S_PROPERTIES_H)

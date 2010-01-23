@@ -19,16 +19,15 @@
 #ifndef DCPLUSPLUS_WIN32_HASH_PROGESS_DLG_H
 #define DCPLUSPLUS_WIN32_HASH_PROGESS_DLG_H
 
-class HashProgressDlg : public dwt::ModalDialog
+#include "GridDialog.h"
+
+class HashProgressDlg : public GridDialog
 {
 public:
 	HashProgressDlg(dwt::Widget* parent, bool aAutoClose);
 	virtual ~HashProgressDlg();
 
-	int run();
-
 private:
-	GridPtr grid;
 	LabelPtr file;
 	LabelPtr stat;
 	LabelPtr speed;
@@ -44,8 +43,6 @@ private:
 	bool handleInitDialog();
 
 	bool updateStats();
-
-	void layout();
 
 	void handlePauseResume();
 	void setButtonState();

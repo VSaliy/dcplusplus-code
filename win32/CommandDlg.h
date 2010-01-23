@@ -21,13 +21,13 @@
 
 #include <dcpp/Util.h>
 
-class CommandDlg : public dwt::ModalDialog
+#include "GridDialog.h"
+
+class CommandDlg : public GridDialog
 {
 public:
 	CommandDlg(dwt::Widget* parent, int type_ = 0, int ctx_ = 0, const tstring& name_ = Util::emptyStringT, const tstring& command_ = Util::emptyStringT, const tstring& hub_ = Util::emptyStringT);
 	virtual ~CommandDlg();
-
-	int run();
 
 	int getType() { return type; }
 	int getCtx() { return ctx; }
@@ -36,7 +36,6 @@ public:
 	tstring getHub() { return hub; }
 
 private:
-	GridPtr grid;
 	RadioButtonPtr separator;
 	RadioButtonPtr raw;
 	RadioButtonPtr chat;
@@ -66,8 +65,6 @@ private:
 	void updateType();
 	void updateCommand();
 	void updateControls();
-
-	void layout();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_COMMAND_DLG_H)
