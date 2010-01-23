@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2010 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,16 +25,14 @@
 #include "WinUtil.h"
 
 ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title) :
-dwt::ModalDialog(parent),
-grid(0),
+GridDialog(parent, width),
 left(0)
 {
 	onInitDialog(std::tr1::bind(&ParamDlg::initDialog, this, title));
 }
 
 ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title, const tstring& name, const tstring& value, bool password) :
-dwt::ModalDialog(parent),
-grid(0),
+GridDialog(parent, width),
 left(0)
 {
 	onInitDialog(std::tr1::bind(&ParamDlg::initDialog, this, title));
@@ -42,8 +40,7 @@ left(0)
 }
 
 ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title, const tstring& name, const TStringList& choices, size_t sel) :
-dwt::ModalDialog(parent),
-grid(0),
+GridDialog(parent, width),
 left(0)
 {
 	onInitDialog(std::tr1::bind(&ParamDlg::initDialog, this, title));
@@ -60,11 +57,6 @@ void ParamDlg::addIntTextBox(const tstring& name, const tstring& value, const in
 
 void ParamDlg::addComboBox(const tstring& name, const TStringList& choices, size_t sel) {
 	initFs.push_back(std::tr1::bind(&ParamDlg::initComboBox, this, name, choices, sel));
-}
-
-int ParamDlg::run() {
-	create(dwt::Point(365, 0)); // the height will be set later on
-	return show();
 }
 
 void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool password) {
@@ -128,15 +120,4 @@ void ParamDlg::okClicked() {
 	for(size_t i = 0; i < n; ++i)
 		values[i] = valueFs[i]();
 	endDialog(IDOK);
-}
-
-void ParamDlg::layout() {
-	dwt::Point sz = getClientSize();
-	sz.y = grid->getPreferedSize().y;
-	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y));
-
-	// now resize the dialog itself
-	sz.x = getWindowSize().x; // don't change the horizontal size
-	sz.y += 6 + ::GetSystemMetrics(SM_CYSIZE) + 2 * ::GetSystemMetrics(SM_CYEDGE) + 2 * ::GetSystemMetrics(SM_CXFIXEDFRAME);
-	dwt::ModalDialog::layout(dwt::Rectangle(sz));
 }

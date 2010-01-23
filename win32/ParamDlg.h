@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2010 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,12 @@
 #ifndef DCPLUSPLUS_WIN32_PARAMDLG_H
 #define DCPLUSPLUS_WIN32_PARAMDLG_H
 
+#include "GridDialog.h"
+
 #include <dcpp/Util.h>
 
-class ParamDlg : public dwt::ModalDialog
+/// generic dialog that can have multiple input rows
+class ParamDlg : public GridDialog
 {
 public:
 	ParamDlg(dwt::Widget* parent, const tstring& title);
@@ -35,13 +38,12 @@ public:
 	void addIntTextBox(const tstring& name, const tstring& value, const int min = UD_MINVAL, const int max = UD_MAXVAL);
 	void addComboBox(const tstring& name, const TStringList& choices, size_t sel = 0);
 
-	int run();
-
 	const TStringList& getValues() const { return values; }
 	const tstring& getValue() const { return values[0]; }
 
 private:
-	GridPtr grid;
+	enum { width = 365 };
+
 	GridPtr left;
 	std::vector<std::tr1::function<void ()> > initFs;
 	std::vector<std::tr1::function<tstring ()> > valueFs;
@@ -54,8 +56,6 @@ private:
 
 	bool initDialog(const tstring& title);
 	void okClicked();
-
-	void layout();
 };
 
 #endif
