@@ -20,6 +20,8 @@
 
 #include "ParamDlg.h"
 
+#include <dwt/widgets/Spinner.h>
+
 #include "WinUtil.h"
 
 ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title) :
@@ -48,17 +50,21 @@ left(0)
 	addComboBox(name, choices, sel);
 }
 
-int ParamDlg::run() {
-	create(dwt::Point(365, 0)); // the height will be set later on
-	return show();
-}
-
 void ParamDlg::addTextBox(const tstring& name, const tstring& value, bool password) {
 	initFs.push_back(std::tr1::bind(&ParamDlg::initTextBox, this, name, value, password));
 }
 
+void ParamDlg::addIntTextBox(const tstring& name, const tstring& value, const int min, const int max) {
+	initFs.push_back(std::tr1::bind(&ParamDlg::initIntTextBox, this, name, value, min, max));
+}
+
 void ParamDlg::addComboBox(const tstring& name, const TStringList& choices, size_t sel) {
 	initFs.push_back(std::tr1::bind(&ParamDlg::initComboBox, this, name, choices, sel));
+}
+
+int ParamDlg::run() {
+	create(dwt::Point(365, 0)); // the height will be set later on
+	return show();
 }
 
 void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool password) {
@@ -68,6 +74,20 @@ void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool passw
 	}
 	box->setText(value);
 	box->setSelection();
+	valueFs.push_back(std::tr1::bind((tstring (TextBox::*)() const)(&TextBox::getText), box));
+}
+
+void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const int min, const int max) {
+	GridPtr cur = left->addChild(GroupBox::Seed(name))->addChild(Grid::Seed(1, 1));
+	cur->column(0).mode = GridInfo::FILL;
+
+	TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+	box->setText(value);
+	box->setSelection();
+
+	SpinnerPtr spin = cur->addChild(Spinner::Seed(min, max, box));
+	cur->setWidget(spin);
+
 	valueFs.push_back(std::tr1::bind((tstring (TextBox::*)() const)(&TextBox::getText), box));
 }
 

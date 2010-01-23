@@ -558,8 +558,9 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 }
 
 void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
-	ParamDlg dlg(this, title, T_("Maximum number of recent items to save"),
-		Text::toT(Util::toString(WindowManager::getInstance()->getMaxRecentItems(id))));
+	ParamDlg dlg(this, title);
+	dlg.addIntTextBox(T_("Maximum number of recent items to save"),
+		Text::toT(Util::toString(WindowManager::getInstance()->getMaxRecentItems(id))), 0);
 	if(dlg.run() == IDOK) {
 		const unsigned max = Util::toUInt(Text::fromT(dlg.getValue()));
 		dwt::MessageBox(this).show(str(TF_("%1% recent items will be saved from now on.") % max), title,

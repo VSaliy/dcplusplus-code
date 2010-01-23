@@ -26,13 +26,16 @@ class ParamDlg : public dwt::ModalDialog
 public:
 	ParamDlg(dwt::Widget* parent, const tstring& title);
 
+	/// shorthand constructor that adds a text box
 	ParamDlg(dwt::Widget* parent, const tstring& title, const tstring& name, const tstring& value = Util::emptyStringT, bool password = false);
+	/// shorthand constructor that adds a combo box
 	ParamDlg(dwt::Widget* parent, const tstring& title, const tstring& name, const TStringList& choices, size_t sel = 0);
 
-	int run();
-
 	void addTextBox(const tstring& name, const tstring& value = Util::emptyStringT, bool password = false);
+	void addIntTextBox(const tstring& name, const tstring& value, const int min = UD_MINVAL, const int max = UD_MAXVAL);
 	void addComboBox(const tstring& name, const TStringList& choices, size_t sel = 0);
+
+	int run();
 
 	const TStringList& getValues() const { return values; }
 	const tstring& getValue() const { return values[0]; }
@@ -46,6 +49,7 @@ private:
 	TStringList values;
 
 	void initTextBox(const tstring& name, const tstring& value, bool password);
+	void initIntTextBox(const tstring& name, const tstring& value, const int min, const int max);
 	void initComboBox(const tstring& name, const TStringList& choices, size_t sel);
 
 	bool initDialog(const tstring& title);
