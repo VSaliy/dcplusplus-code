@@ -68,6 +68,7 @@
 * [L#509456] Fix pressing Tab in the notepad (poy)
 * Register in HKCU instead of HKLM to avoid UAC warnings; ditch magnet.exe (poy)
 * Don't use the Vista download dir when running in local mode
+* When a static window is opened, check its menu & toolbar buttons (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)

@@ -721,7 +721,7 @@ unsigned Menu::getCount() const {
 	return count;
 }
 
-void Menu::appendItem(const tstring& text, const Dispatcher::F& f, const IconPtr& icon, bool enabled, bool defaultItem) {
+unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const IconPtr& icon, bool enabled, bool defaultItem) {
 	// init structure for new item
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_ID | MIIM_STRING };
 
@@ -759,6 +759,8 @@ void Menu::appendItem(const tstring& text, const Dispatcher::F& f, const IconPtr
 
 	if(ownerDrawn)
 		itsItemData.push_back(wrapper);
+
+	return index;
 }
 
 unsigned Menu::open(const ScreenCoordinate& sc, unsigned flags) {

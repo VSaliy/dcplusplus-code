@@ -138,6 +138,16 @@ void ToolBar::customize() {
 	sendMessage(TB_CUSTOMIZE);
 }
 
+void ToolBar::setButtonChecked(unsigned id, bool check) {
+	sendMessage(TB_CHECKBUTTON, id, check ? TRUE : FALSE);
+}
+
+void ToolBar::setButtonChecked(const std::string& id, bool check) {
+	int intId = getIntId(id);
+	if(intId != -1)
+		setButtonChecked(intId, check);
+}
+
 unsigned ToolBar::size() const {
 	return sendMessage(TB_BUTTONCOUNT);
 }
@@ -262,6 +272,14 @@ const ToolBar::Button* ToolBar::getButton(unsigned position) const {
 			return &buttons[index];
 	}
 	return 0;
+}
+
+int ToolBar::getIntId(const std::string& id) const {
+	for(Buttons::const_iterator i = buttons.begin(), iend = buttons.end(); i != iend; ++i) {
+		if(i->id == id)
+			return i->button.idCommand;
+	}
+	return -1;
 }
 
 }

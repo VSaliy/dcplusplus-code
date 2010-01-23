@@ -66,6 +66,9 @@ public:
 	virtual ~MainWindow();
 
 	void handleSettings();
+
+	void setStaticWindowState(const string& id, bool open);
+
 	bool closing() const { return stopperThread != 0; }
 
 private:
@@ -98,10 +101,14 @@ private:
 
 	WidgetHPanedPtr paned;
 	MenuPtr mainMenu;
+	MenuPtr viewMenu;
 	TransferView* transfers;
 	ToolBarPtr toolbar;
 	dwt::TabViewPtr tabs;
 	dwt::SpinnerPtr slotsSpin;
+
+	typedef unordered_map<string, unsigned> StaticIndexes;
+	StaticIndexes staticIndexes; /// indexes of menu commands of the "View" menu that open static windows
 
 	/** Was the window maximized when minimizing it? */
 	bool maximized;

@@ -164,6 +164,9 @@ public:
 	  */
 	bool getButtonChecked( unsigned int id );
 
+	void setButtonChecked(unsigned id, bool check);
+	void setButtonChecked(const std::string& id, bool check);
+
 	unsigned size() const;
 
 	int hitTest(const ScreenCoordinate& pt);
@@ -248,6 +251,7 @@ private:
 
 	const TBBUTTON& getSeparator() const;
 	const Button* getButton(unsigned position) const;
+	int getIntId(const std::string& id) const;
 
 	// AspectHelp
 	void helpImpl(unsigned& id);

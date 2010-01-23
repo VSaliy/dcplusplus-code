@@ -203,7 +203,8 @@ public:
 	void appendSeparator();
 
 	/// Appends a Menu Item
-	void appendItem(const tstring& text, const Dispatcher::F& f = Dispatcher::F(), const IconPtr& icon = IconPtr(), bool enabled = true, bool defaultItem = false);
+	/// @return index of the newly appended item
+	unsigned appendItem(const tstring& text, const Dispatcher::F& f = Dispatcher::F(), const IconPtr& icon = IconPtr(), bool enabled = true, bool defaultItem = false);
 
 	/// Removes specified item from this menu
 	/** Call this function to actually DELETE a menu item from the menu hierarchy.

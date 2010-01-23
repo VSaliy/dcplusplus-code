@@ -98,6 +98,8 @@ public:
 	static tstring encodeFont(LOGFONT const& font);
 	static void decodeFont(const tstring& setting, LOGFONT &dest);
 
+	static void setStaticWindowState(const string& id, bool open);
+
 	static bool checkNick();
 
 	/**

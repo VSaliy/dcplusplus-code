@@ -295,6 +295,10 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 	}
 }
 
+void WinUtil::setStaticWindowState(const string& id, bool open) {
+	mainWindow->setStaticWindowState(id, open);
+}
+
 bool WinUtil::checkNick() {
 	if(SETTING(NICK).empty()) {
 		dwt::MessageBox(mainWindow).show(T_("Please enter a nickname in the settings dialog!"),

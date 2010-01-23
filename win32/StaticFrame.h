@@ -30,10 +30,12 @@ public:
 	StaticFrame(dwt::TabView* mdiClient, const tstring& title, unsigned helpId, unsigned resourceId) :
 		MDIChildFrame<T>(mdiClient, title, helpId, resourceId)
 	{
+		WinUtil::setStaticWindowState(T::id, true);
 	}
 
 	virtual ~StaticFrame() {
 		frame = 0;
+		WinUtil::setStaticWindowState(T::id, false);
 	}
 
 	static void openWindow(dwt::TabView* mdiClient) {
@@ -41,8 +43,6 @@ public:
 			dwt::Widget* active = mdiClient->getActive();
 			if(active != frame) {
 				frame->activate();
-			} else if(BOOLSETTING(TOGGLE_ACTIVE_WINDOW)) {
-				mdiClient->next();
 			}
 		} else {
 			frame = new T(mdiClient);
