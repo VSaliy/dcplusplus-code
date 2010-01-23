@@ -230,25 +230,37 @@ void MainWindow::initMenu() {
 	}
 
 	{
-		MenuPtr view = mainMenu->appendPopup(T_("&View"));
+		viewMenu = mainMenu->appendPopup(T_("&View"));
 
-		view->appendItem(T_("&Public Hubs\tCtrl+P"), std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_PUBLICHUBS)));
-		view->appendItem(T_("&Favorite Hubs\tCtrl+F"), std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
-		view->appendItem(T_("Favorite &Users\tCtrl+U"), std::tr1::bind(&UsersFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
-		view->appendSeparator();
-		view->appendItem(T_("&Download Queue\tCtrl+D"), std::tr1::bind(&QueueFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_QUEUE)));
-		view->appendItem(T_("Finished Downloads"), std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FINISHED_DL)));
-		view->appendItem(T_("Waiting Users"), std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_WAITING_USERS)));
-		view->appendItem(T_("Finished Uploads"), std::tr1::bind(&FinishedULFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FINISHED_UL)));
-		view->appendSeparator();
-		view->appendItem(T_("&Search\tCtrl+S"), std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), dwt::IconPtr(new dwt::Icon(IDR_SEARCH)));
-		view->appendItem(T_("ADL Search"), std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_ADLSEARCH)));
-		view->appendItem(T_("Search Spy"), std::tr1::bind(&SpyFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_SPY)));
-		view->appendSeparator();
-		view->appendItem(T_("&Notepad\tCtrl+N"), std::tr1::bind(&NotepadFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_NOTEPAD)));
-		view->appendItem(T_("System Log"), std::tr1::bind(&SystemFrame::openWindow, getTabView()));
-		view->appendItem(T_("Network Statistics"), std::tr1::bind(&StatsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_NET_STATS)));
-		view->appendItem(T_("Indexing progress"), std::tr1::bind(&MainWindow::handleHashProgress, this));
+		staticIndexes[PublicHubsFrame::id] = viewMenu->appendItem(T_("&Public Hubs\tCtrl+P"),
+			std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_PUBLICHUBS)));
+		staticIndexes[FavHubsFrame::id] = viewMenu->appendItem(T_("&Favorite Hubs\tCtrl+F"),
+			std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
+		staticIndexes[UsersFrame::id] = viewMenu->appendItem(T_("Favorite &Users\tCtrl+U"),
+			std::tr1::bind(&UsersFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
+		viewMenu->appendSeparator();
+		staticIndexes[QueueFrame::id] = viewMenu->appendItem(T_("&Download Queue\tCtrl+D"),
+			std::tr1::bind(&QueueFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_QUEUE)));
+		staticIndexes[FinishedDLFrame::id] = viewMenu->appendItem(T_("Finished Downloads"),
+			std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FINISHED_DL)));
+		staticIndexes[WaitingUsersFrame::id] = viewMenu->appendItem(T_("Waiting Users"),
+			std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_WAITING_USERS)));
+		staticIndexes[FinishedULFrame::id] = viewMenu->appendItem(T_("Finished Uploads"),
+			std::tr1::bind(&FinishedULFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FINISHED_UL)));
+		viewMenu->appendSeparator();
+		viewMenu->appendItem(T_("&Search\tCtrl+S"), std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), dwt::IconPtr(new dwt::Icon(IDR_SEARCH)));
+		staticIndexes[ADLSearchFrame::id] = viewMenu->appendItem(T_("ADL Search"),
+			std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_ADLSEARCH)));
+		staticIndexes[SpyFrame::id] = viewMenu->appendItem(T_("Search Spy"),
+			std::tr1::bind(&SpyFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_SPY)));
+		viewMenu->appendSeparator();
+		staticIndexes[NotepadFrame::id] = viewMenu->appendItem(T_("&Notepad\tCtrl+N"),
+			std::tr1::bind(&NotepadFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_NOTEPAD)));
+		staticIndexes[SystemFrame::id] = viewMenu->appendItem(T_("System Log"),
+			std::tr1::bind(&SystemFrame::openWindow, getTabView()));
+		staticIndexes[StatsFrame::id] = viewMenu->appendItem(T_("Network Statistics"),
+			std::tr1::bind(&StatsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_NET_STATS)));
+		viewMenu->appendItem(T_("Indexing progress"), std::tr1::bind(&MainWindow::handleHashProgress, this));
 	}
 
 	{
@@ -466,6 +478,13 @@ bool MainWindow::filter(MSG& msg) {
 	}
 
 	return false;
+}
+
+void MainWindow::setStaticWindowState(const string& id, bool open) {
+	toolbar->setButtonChecked(id, open);
+	StaticIndexes::const_iterator i = staticIndexes.find(id);
+	if(i != staticIndexes.end())
+		viewMenu->checkItem(i->second, open);
 }
 
 void MainWindow::handleTabsTitleChanged(const tstring& title) {
