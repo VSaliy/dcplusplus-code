@@ -222,6 +222,11 @@ void SearchManager::onData(const uint8_t* buf, size_t aLen, const string& remote
 		file = Text::toUtf8(file, encoding);
 		hubName = Text::toUtf8(hubName, encoding);
 
+		if(nick.empty() || file.empty() || hubName.empty()) {
+			dcdebug("Failed to convert search result to UTF-8: %s", x.c_str());
+			return;
+		}
+
 		UserPtr user = ClientManager::getInstance()->findUser(nick, url);
 		if(!user) {
 			// Could happen if hub has multiple URLs / IPs
