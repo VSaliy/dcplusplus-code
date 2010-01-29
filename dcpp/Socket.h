@@ -163,6 +163,7 @@ public:
 #endif
 
 	string getLocalIp() throw();
+	uint16_t getLocalPort() throw();
 
 	// Low level interface
 	virtual void create(int aType = TYPE_TCP) throw(SocketException);
