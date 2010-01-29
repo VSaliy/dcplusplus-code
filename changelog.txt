@@ -57,7 +57,7 @@
 * [L#485018] Handle adcs:// links (thanks emtee)
 * [L#484247] Fix memory usage when parsing (unreasonably) large file lists
 * [L#242259] Fix a few more cases when adding sources to the queue (emtee)
-* Display "has same CID" messages in the status bar only
+* [ADC] Filter some status messages
 * Drop support for non-xml hub lists
 * [L#351393] Fix memory leak during share update
 * [L#400080] Improve hub list status messages (emtee)
