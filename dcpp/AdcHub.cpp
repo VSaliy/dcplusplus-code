@@ -503,7 +503,7 @@ void AdcHub::handle(AdcCommand::STA, AdcCommand& c) throw() {
 				// Try again...
 				ConnectionManager::getInstance()->force(u->getUser());
 			}
-			break;
+			return;
 		}
 	}
 
