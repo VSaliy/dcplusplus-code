@@ -70,6 +70,7 @@
 * Don't use the Vista download dir when running in local mode
 * When a static window is opened, check its menu & toolbar buttons (poy)
 * [L#321246] Fix crash with debug builds on non-Windows systems (steven sheehy)
+* [L#510314] Fix a possible crash in rechecker (thanks poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)

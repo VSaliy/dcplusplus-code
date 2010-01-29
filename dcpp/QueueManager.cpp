@@ -369,18 +369,18 @@ int QueueManager::Rechecker::run() {
 			if(!q || q->isSet(QueueItem::FLAG_USER_LIST))
 				continue;
 
-			qm->fire(QueueManagerListener::RecheckStarted(), q);
+			qm->fire(QueueManagerListener::RecheckStarted(), q->getTarget());
 			dcdebug("Rechecking %s\n", file.c_str());
 
 			tempSize = File::getSize(q->getTempTarget());
 
 			if(tempSize == -1) {
-				qm->fire(QueueManagerListener::RecheckNoFile(), q);
+				qm->fire(QueueManagerListener::RecheckNoFile(), q->getTarget());
 				continue;
 			}
 
 			if(tempSize < 64*1024) {
-				qm->fire(QueueManagerListener::RecheckFileTooSmall(), q);
+				qm->fire(QueueManagerListener::RecheckFileTooSmall(), q->getTarget());
 				continue;
 			}
 
@@ -389,7 +389,7 @@ int QueueManager::Rechecker::run() {
 			}
 
 			if(q->isRunning()) {
-				qm->fire(QueueManagerListener::RecheckDownloadsRunning(), q);
+				qm->fire(QueueManagerListener::RecheckDownloadsRunning(), q->getTarget());
 				continue;
 			}
 
@@ -410,7 +410,7 @@ int QueueManager::Rechecker::run() {
 				continue;
 
 			if(!gotTree) {
-				qm->fire(QueueManagerListener::RecheckNoTree(), q);
+				qm->fire(QueueManagerListener::RecheckNoTree(), q->getTarget());
 				continue;
 			}
 
@@ -1061,11 +1061,11 @@ void QueueManager::moveStuckFile(QueueItem* qi) {
 	}
 	fileQueue.remove(qi);
 
-	fire(QueueManagerListener::RecheckAlreadyFinished(), qi);
+	fire(QueueManagerListener::RecheckAlreadyFinished(), qi->getTarget());
 }
 
 void QueueManager::rechecked(QueueItem* qi) {
-	fire(QueueManagerListener::RecheckDone(), qi);
+	fire(QueueManagerListener::RecheckDone(), qi->getTarget());
 	fire(QueueManagerListener::StatusUpdated(), qi);
 
 	setDirty();
