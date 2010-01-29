@@ -282,7 +282,7 @@ private:
 	void onAdded(QueueItemInfo* ii);
 	void onRemoved(const string& s);
 	void onUpdated(QueueItem* qi);
-	void onRechecked(QueueItem* qi, const tstring& message);
+	void onRechecked(const string& target, const tstring& message);
 
 	virtual void on(QueueManagerListener::Added, QueueItem* aQI) throw();
 	virtual void on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw();
@@ -291,13 +291,13 @@ private:
 	virtual void on(QueueManagerListener::StatusUpdated, QueueItem* aQI) throw() { on(QueueManagerListener::SourcesUpdated(), aQI); }
 	virtual void on(QueueManagerListener::Finished, QueueItem* aQI, const string&, int64_t) throw() { on(QueueManagerListener::SourcesUpdated(), aQI); }
 
-	virtual void on(QueueManagerListener::RecheckStarted, QueueItem* aQI) throw();
-	virtual void on(QueueManagerListener::RecheckNoFile, QueueItem* aQI) throw();
-	virtual void on(QueueManagerListener::RecheckFileTooSmall, QueueItem* aQI) throw();
-	virtual void on(QueueManagerListener::RecheckDownloadsRunning, QueueItem* aQI) throw();
-	virtual void on(QueueManagerListener::RecheckNoTree, QueueItem* aQI) throw();
-	virtual void on(QueueManagerListener::RecheckAlreadyFinished, QueueItem* aQI) throw();
-	virtual void on(QueueManagerListener::RecheckDone, QueueItem* aQI) throw();
+	virtual void on(QueueManagerListener::RecheckStarted, const string target) throw();
+	virtual void on(QueueManagerListener::RecheckNoFile, const string target) throw();
+	virtual void on(QueueManagerListener::RecheckFileTooSmall, const string target) throw();
+	virtual void on(QueueManagerListener::RecheckDownloadsRunning, const string target) throw();
+	virtual void on(QueueManagerListener::RecheckNoTree, const string target) throw();
+	virtual void on(QueueManagerListener::RecheckAlreadyFinished, const string target) throw();
+	virtual void on(QueueManagerListener::RecheckDone, const string target) throw();
 };
 
 #endif // !defined(QUEUE_FRAME_H)
