@@ -34,8 +34,8 @@
 #include "TabsPage.h"
 #include "WindowsPage.h"
 #include "HistoryPage.h"
-#include "AdvancedPage.h"
 #include "LogPage.h"
+#include "AdvancedPage.h"
 #include "Advanced3Page.h"
 #include "UCPage.h"
 #include "CertificatesPage.h"
@@ -113,11 +113,13 @@ bool SettingsDialog::initDialog() {
 			addPage(T_("Windows"), cur, new WindowsPage(cur), item);
 		}
 
-		addPage(T_("History"), cur, new HistoryPage(cur));
+		{
+			HTREEITEM item = addPage(T_("History"), cur, new HistoryPage(cur));
+			addPage(T_("Logs"), cur, new LogPage(cur), item);
+		}
 
 		{
 			HTREEITEM item = addPage(T_("Advanced"), cur, new AdvancedPage(cur));
-			addPage(T_("Logs"), cur, new LogPage(cur), item);
 			addPage(T_("Experts only"), cur, new Advanced3Page(cur), item);
 			addPage(T_("User Commands"), cur, new UCPage(cur), item);
 			addPage(T_("Security Certificates"), cur, new CertificatesPage(cur), item);
