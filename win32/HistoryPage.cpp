@@ -36,7 +36,7 @@ template<typename T>
 GridPtr addSubGrid(T parent, size_t rows) {
 	GridPtr grid = parent->addChild(Grid::Seed(rows, 2));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->column(0).align = GridInfo::TOP_LEFT;
+	grid->column(0).align = GridInfo::BOTTOM_RIGHT;
 	grid->column(1).size = 40;
 	grid->column(1).mode = GridInfo::STATIC;
 	return grid;
@@ -95,7 +95,8 @@ fl_recents_init(WindowManager::getInstance()->getMaxRecentItems(DirectoryListing
 		fl_recents->setText(Text::toT(Util::toString(fl_recents_init)));
 	}
 
-	items.push_back(Item(addBox(addSubGrid(grid, 1), T_("Search history"), IDH_SETTINGS_HISTORY_SEARCH_HISTORY), SettingsManager::SEARCH_HISTORY, PropPage::T_INT_WITH_SPIN));
+	gs.caption.clear();
+	items.push_back(Item(addBox(addSubGrid(grid->addChild(gs), 1), T_("Search history"), IDH_SETTINGS_HISTORY_SEARCH_HISTORY), SettingsManager::SEARCH_HISTORY, PropPage::T_INT_WITH_SPIN));
 
 	PropPage::read(items);
 }
