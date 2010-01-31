@@ -215,8 +215,10 @@ string ClientManager::findHubEncoding(const string& aUrl) const {
 }
 
 UserPtr ClientManager::findLegacyUser(const string& aNick) const throw() {
+	if (aNick.empty())
+		return UserPtr();
+
 	Lock l(cs);
-	dcassert(aNick.size() > 0);
 
 	for(OnlineMap::const_iterator i = onlineUsers.begin(); i != onlineUsers.end(); ++i) {
 		const OnlineUser* ou = i->second;
