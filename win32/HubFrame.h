@@ -227,7 +227,6 @@ private:
 	bool handleMessageKeyDown(int c);
 	bool handleUsersKeyDown(int c);
 	bool handleChatContextMenu(dwt::ScreenCoordinate pt);
-	bool handleChatKeyDown(int c);
 	bool handleUsersContextMenu(dwt::ScreenCoordinate pt);
 	void handleShowUsersClicked();
 	void handleMultiCopy(unsigned index);

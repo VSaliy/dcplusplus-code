@@ -42,9 +42,9 @@ protected:
 		{
 			RichTextBox::Seed cs = WinUtil::Seeds::richTextBox;
 			cs.style |= ES_READONLY;
-			cs.find = true;
 			chat = t().addChild(cs);
 			chat->setTextLimit(32768);
+			chat->onKeyDown(std::tr1::bind(&ThisType::handleChatKeyDown, this, _1));
 		}
 
 		{
@@ -133,21 +133,11 @@ protected:
 	}
 
 	bool handleChatKeyDown(int c) {
-		switch(c) {
-			case VK_F3:
-				chat->findTextNext();
-				break;
-			case VK_ESCAPE:
-				chat->setSelection(-1, -1);
-				chat->sendMessage(WM_VSCROLL, SB_BOTTOM);
-				message->setFocus();
-				chat->clearCurrentNeedle();
-				break;
-		}
-
+		if(c == VK_ESCAPE)
+			message->setFocus();
 		return false;
 	}
-	
+
 	bool handleMessageKeyDown(int c) {
 		switch(c) {
 		case VK_RETURN: {
