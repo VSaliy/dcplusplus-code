@@ -1041,12 +1041,17 @@ void QueueManager::moveFile_(const string& source, const string& target) {
 void QueueManager::moveStuckFile(QueueItem* qi) {
 	moveFile(qi->getTempTarget(), qi->getTarget());
 
-	fire(QueueManagerListener::Removed(), qi);
-
 	if(qi->isFinished()) {
 		userQueue.remove(qi);
 	}
-	fileQueue.remove(qi);
+
+	if(!BOOLSETTING(KEEP_FINISHED_FILES)) {
+		fire(QueueManagerListener::Removed(), qi);
+		fileQueue.remove(qi);
+	 } else {
+		qi->addSegment(Segment(0, qi->getSize()));
+		fire(QueueManagerListener::StatusUpdated(), qi);
+	}
 
 	fire(QueueManagerListener::RecheckAlreadyFinished(), qi->getTarget());
 }
