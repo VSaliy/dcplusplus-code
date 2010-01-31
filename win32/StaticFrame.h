@@ -40,9 +40,10 @@ public:
 
 	static void openWindow(dwt::TabView* mdiClient) {
 		if(frame) {
-			dwt::Widget* active = mdiClient->getActive();
-			if(active != frame) {
+			if(mdiClient->getActive() != frame) {
 				frame->activate();
+			} else {
+				frame->close();
 			}
 		} else {
 			frame = new T(mdiClient);
