@@ -1016,6 +1016,7 @@ void QueueManager::setFile(Download* d) {
 }
 
 void QueueManager::moveFile(const string& source, const string& target) {
+	File::ensureDirectory(target);
 	if(File::getSize(source) > MOVER_LIMIT) {
 		mover.moveFile(source, target);
 	} else {
@@ -1026,14 +1027,16 @@ void QueueManager::moveFile(const string& source, const string& target) {
 void QueueManager::moveFile_(const string& source, const string& target) {
 	try {
 		File::renameFile(source, target);
-	} catch(const FileException& e) {
+	} catch(const FileException& e1) {
+		// Try to just rename it to the correct name at least
+		string newTarget = Util::getFilePath(source) + Util::getFileName(target);
 		try {
-			// Try to just rename it to the correct name at least
-			string newTarget = Util::getFilePath(source) + Util::getFileName(target);
 			File::renameFile(source, newTarget);
-			LogManager::getInstance()->message(str(F_("%1% renamed to %2%") % Util::addBrackets(source) % Util::addBrackets(newTarget)));
-		} catch(const FileException&) {
-			LogManager::getInstance()->message(str(F_("Unable to rename %1%: %2%") % Util::addBrackets(source) % e.getError()));
+			LogManager::getInstance()->message(str(F_("Unable to move %1% to %2% (%3%); renamed to %4%") %
+				Util::addBrackets(source) % Util::addBrackets(target) % e1.getError() % Util::addBrackets(newTarget)));
+		} catch(const FileException& e2) {
+			LogManager::getInstance()->message(str(F_("Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)") %
+				Util::addBrackets(source) % Util::addBrackets(target) % e1.getError() % Util::addBrackets(newTarget) % e2.getError()));
 		}
 	}
 }
