@@ -32,25 +32,22 @@ public:
 		typedef ThisType WidgetType;
 
 		Seed();
-
-		bool find; /// support find functions
 	};
 
 	explicit RichTextBox(dwt::Widget* parent);
 
-	void create(const Seed& seed);
+	bool handleMessage(const MSG& msg, LRESULT& retVal);
 
 	tstring findTextPopup();
 	void findTextNext();
 
 private:
-	bool handleContextMenu(const dwt::ScreenCoordinate&);
+	bool handleKeyDown(int c);
+	bool handleContextMenu(const dwt::ScreenCoordinate& pt);
 	bool handleLeftDblClick(const dwt::MouseEvent& ev);
 
 	void handleCopy();
 	void handleFind();
-
-	bool find;
 };
 
 typedef RichTextBox::ObjectType RichTextBoxPtr;

@@ -24,18 +24,64 @@
 #include "ParamDlg.h"
 
 RichTextBox::Seed::Seed() : 
-BaseType::Seed(), find(false)
+BaseType::Seed()
 {
 }
 
-RichTextBox::RichTextBox(dwt::Widget* parent) : BaseType(parent), find(false) {
+RichTextBox::RichTextBox(dwt::Widget* parent) : BaseType(parent) {
 	onLeftMouseDblClick(std::tr1::bind(&RichTextBox::handleLeftDblClick, this, _1));
-	onContextMenu(std::tr1::bind(&RichTextBox::handleContextMenu, this, _1));
 }
 
-void RichTextBox::create(const Seed& seed) {
-	find = seed.find;
-	BaseType::create(seed);
+bool RichTextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
+	if(BaseType::handleMessage(msg, retVal))
+		return true;
+
+	switch(msg.message)
+	{
+		// we process these messages here to give the host a chance to handle them differently.
+
+	case WM_KEYDOWN:
+		{
+			// imitate AspectKeyboard
+			return handleKeyDown(static_cast<int>(msg.wParam));
+		}
+
+	case WM_CONTEXTMENU:
+		{
+			// imitate AspectContextMenu
+			bool shown = handleContextMenu(dwt::ScreenCoordinate(dwt::Point::fromLParam(msg.lParam)));
+			retVal = shown;
+			return shown;
+		}
+	}
+
+	return false;
+}
+
+bool RichTextBox::handleKeyDown(int c) {
+	switch(c) {
+	case VK_F3:
+		findTextNext();
+		return true;
+	case VK_ESCAPE:
+		setSelection(-1, -1);
+		sendMessage(WM_VSCROLL, SB_BOTTOM);
+		clearCurrentNeedle();
+		return true;
+	}
+	return false;
+}
+
+bool RichTextBox::handleContextMenu(const dwt::ScreenCoordinate& pt) {
+	// This context menu is specialized for non-user-modifiable controls.
+	/// @todo add other commands depending on whether the style has ES_READONLY
+	MenuPtr menu(dwt::WidgetCreator<Menu>::create(this, WinUtil::Seeds::menu));
+	menu->appendItem(T_("&Copy\tCtrl+C"), std::tr1::bind(&RichTextBox::handleCopy, this));
+	menu->appendSeparator();
+	menu->appendItem(T_("&Find...\tF3"), std::tr1::bind(&RichTextBox::handleFind, this));
+
+	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	return true;
 }
 
 void RichTextBox::handleCopy()
@@ -46,23 +92,6 @@ void RichTextBox::handleCopy()
 void RichTextBox::handleFind()
 {
 	findText(findTextPopup());
-}
-
-bool RichTextBox::handleContextMenu(const dwt::ScreenCoordinate& pt)
-{
-	// This context menu is specialized for non-user-modifiable controls.
-	/// @todo add other commands depending on whether the style has ES_READONLY
-	dwt::MenuPtr menu(dwt::WidgetCreator<dwt::Menu>::create(this, WinUtil::Seeds::menu));
-	menu->appendItem(T_("&Copy\tCtrl+C"), std::tr1::bind(&RichTextBox::handleCopy, this));
-
-	if(find) {
-		menu->appendSeparator();
-		menu->appendItem(T_("&Find...\tF3"), std::tr1::bind(&RichTextBox::handleFind, this));
-	}
-
-	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
-
-	return true;
 }
 
 tstring RichTextBox::findTextPopup() {

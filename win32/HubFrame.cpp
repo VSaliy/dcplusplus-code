@@ -132,7 +132,6 @@ inTabComplete(false)
 	addWidget(chat);
 	paned->setFirst(chat);
 	chat->onContextMenu(std::tr1::bind(&HubFrame::handleChatContextMenu, this, _1));
-	chat->onKeyDown(std::tr1::bind(&HubFrame::handleChatKeyDown, this, _1));
 
 	message->setHelpId(IDH_HUB_MESSAGE);
 	addWidget(message, true, false);
@@ -1045,8 +1044,6 @@ bool HubFrame::matchFilter(const UserInfo& ui, int sel, bool doSizeCompare, Filt
 }
 
 bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
-	bool doMenu = false;
-
 	if(pt.x() == -1 || pt.y() == -1) {
 		pt = chat->getContextMenuPos();
 	}
@@ -1060,15 +1057,11 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 			users->clearSelection();
 			users->setSelected(pos);
 			users->ensureVisible(pos);
-			doMenu = true;
+			return handleUsersContextMenu(pt);
 		}
 	}
 
-	return doMenu ? handleUsersContextMenu(pt) : false;
-}
-
-bool HubFrame::handleChatKeyDown(int c) {
-	return ChatType::handleChatKeyDown(c);
+	return false;
 }
 
 bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
