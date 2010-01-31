@@ -320,18 +320,7 @@ int QueueManager::FileMover::run() {
 			next = files.back();
 			files.pop_back();
 		}
-		try {
-			File::renameFile(next.first, next.second);
-		} catch(const FileException&) {
-			try {
-				// Try to just rename it to the correct name at least
-				string newTarget = Util::getFilePath(next.first) + Util::getFileName(next.second);
-				File::renameFile(next.first, newTarget);
-				LogManager::getInstance()->message(str(F_("%1% renamed to %2%") % Util::addBrackets(next.first) % Util::addBrackets(newTarget)));
-			} catch(const FileException& e) {
-				LogManager::getInstance()->message(str(F_("Unable to rename %1%: %2%") % Util::addBrackets(next.first) % e.getError()));
-			}
-		}
+		moveFile_(next.first, next.second);
 	}
 }
 
@@ -1027,26 +1016,24 @@ void QueueManager::setFile(Download* d) {
 }
 
 void QueueManager::moveFile(const string& source, const string& target) {
+	if(File::getSize(source) > MOVER_LIMIT) {
+		mover.moveFile(source, target);
+	} else {
+		moveFile_(source, target);
+	}
+}
+
+void QueueManager::moveFile_(const string& source, const string& target) {
 	try {
-		File::ensureDirectory(target);
-		if(File::getSize(source) > MOVER_LIMIT) {
-			mover.moveFile(source, target);
-		} else {
-			File::renameFile(source, target);
-		}
-	} catch(const FileException&) {
+		File::renameFile(source, target);
+	} catch(const FileException& e) {
 		try {
-			if(!SETTING(DOWNLOAD_DIRECTORY).empty()) {
-				File::renameFile(source, SETTING(DOWNLOAD_DIRECTORY) + Util::getFileName(target));
-			} else {
-				File::renameFile(source, Util::getFilePath(source) + Util::getFileName(target));
-			}
+			// Try to just rename it to the correct name at least
+			string newTarget = Util::getFilePath(source) + Util::getFileName(target);
+			File::renameFile(source, newTarget);
+			LogManager::getInstance()->message(str(F_("%1% renamed to %2%") % Util::addBrackets(source) % Util::addBrackets(newTarget)));
 		} catch(const FileException&) {
-			try {
-				File::renameFile(source, Util::getFilePath(source) + Util::getFileName(target));
-			} catch(const FileException&) {
-				// Ignore...
-			}
+			LogManager::getInstance()->message(str(F_("Unable to rename %1%: %2%") % Util::addBrackets(source) % e.getError()));
 		}
 	}
 }
