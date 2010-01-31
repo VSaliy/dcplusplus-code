@@ -132,6 +132,7 @@ inTabComplete(false)
 	addWidget(chat);
 	paned->setFirst(chat);
 	chat->onContextMenu(std::tr1::bind(&HubFrame::handleChatContextMenu, this, _1));
+	chat->onKeyDown(std::tr1::bind(&HubFrame::handleChatKeyDown, this, _1));
 
 	message->setHelpId(IDH_HUB_MESSAGE);
 	addWidget(message, true, false);
@@ -364,8 +365,13 @@ void HubFrame::enterImpl(const tstring& s) {
 				openLog();
 			else if(Util::stricmp(param.c_str(), _T("status")) == 0)
 				openLog(true);
+		} else if(Util::stricmp(cmd.c_str(), _T("f")) == 0) {
+			if(param.empty())
+				param = chat->findTextPopup();
+
+			chat->findText(param);
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite"));
+			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite, /f <text-to-find>"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
 			string::size_type j = param.find(_T(' '));
 			if(j != string::npos) {
@@ -1058,7 +1064,11 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 		}
 	}
 
-	return doMenu ? handleUsersContextMenu(pt) : false;
+	return doMenu ? handleUsersContextMenu(pt) : chat->handleContextMenu(pt);
+}
+
+bool HubFrame::handleChatKeyDown(int c) {
+	return ChatType::handleChatKeyDown(c);
 }
 
 bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
