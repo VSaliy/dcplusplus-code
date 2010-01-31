@@ -24,12 +24,18 @@
 #include "ParamDlg.h"
 
 RichTextBox::Seed::Seed() : 
-	BaseType::Seed()
+BaseType::Seed(), find(false)
 {
 }
 
-RichTextBox::RichTextBox( dwt::Widget * parent ) : BaseType(parent) {
-	this->onLeftMouseDblClick(std::tr1::bind(&RichTextBox::handleLeftDblClick, this, _1));
+RichTextBox::RichTextBox(dwt::Widget* parent) : BaseType(parent), find(false) {
+	onLeftMouseDblClick(std::tr1::bind(&RichTextBox::handleLeftDblClick, this, _1));
+	onContextMenu(std::tr1::bind(&RichTextBox::handleContextMenu, this, _1));
+}
+
+void RichTextBox::create(const Seed& seed) {
+	find = seed.find;
+	BaseType::create(seed);
 }
 
 void RichTextBox::handleCopy()
@@ -42,13 +48,17 @@ void RichTextBox::handleFind()
 	findText(findTextPopup());
 }
 
-bool RichTextBox::handleContextMenu(dwt::ScreenCoordinate pt)
+bool RichTextBox::handleContextMenu(const dwt::ScreenCoordinate& pt)
 {
 	// This context menu is specialized for non-user-modifiable controls.
+	/// @todo add other commands depending on whether the style has ES_READONLY
 	dwt::MenuPtr menu(dwt::WidgetCreator<dwt::Menu>::create(this, WinUtil::Seeds::menu));
 	menu->appendItem(T_("&Copy\tCtrl+C"), std::tr1::bind(&RichTextBox::handleCopy, this));
-	menu->appendSeparator();
-	menu->appendItem(T_("&Find...\tF3"), std::tr1::bind(&RichTextBox::handleFind, this));
+
+	if(find) {
+		menu->appendSeparator();
+		menu->appendItem(T_("&Find...\tF3"), std::tr1::bind(&RichTextBox::handleFind, this));
+	}
 
 	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 

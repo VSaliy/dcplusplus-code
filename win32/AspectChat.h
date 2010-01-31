@@ -42,6 +42,7 @@ protected:
 		{
 			RichTextBox::Seed cs = WinUtil::Seeds::richTextBox;
 			cs.style |= ES_READONLY;
+			cs.find = true;
 			chat = t().addChild(cs);
 			chat->setTextLimit(32768);
 		}

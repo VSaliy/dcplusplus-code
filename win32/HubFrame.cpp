@@ -1064,7 +1064,7 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 		}
 	}
 
-	return doMenu ? handleUsersContextMenu(pt) : chat->handleContextMenu(pt);
+	return doMenu ? handleUsersContextMenu(pt) : false;
 }
 
 bool HubFrame::handleChatKeyDown(int c) {
