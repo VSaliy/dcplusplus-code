@@ -54,9 +54,9 @@ bool SSLSocket::waitConnected(uint32_t millis) {
 	}
 
 	while(true) {
-		int ret = SSL_connect(ssl);
+		int ret = ssl->server?SSL_accept(ssl):SSL_connect(ssl);
 		if(ret == 1) {
-			dcdebug("Connected to SSL server using %s\n", SSL_get_cipher(ssl));
+			dcdebug("Connected to SSL server using %s as %s\n", SSL_get_cipher(ssl), ssl->server?"server":"client");
 			return true;
 		}
 		if(!waitWant(ret, millis)) {
