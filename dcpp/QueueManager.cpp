@@ -1048,6 +1048,8 @@ void QueueManager::moveStuckFile(QueueItem* qi) {
 		userQueue.remove(qi);
 	}
 
+	string target = qi->getTarget();
+
 	if(!BOOLSETTING(KEEP_FINISHED_FILES)) {
 		fire(QueueManagerListener::Removed(), qi);
 		fileQueue.remove(qi);
@@ -1056,7 +1058,7 @@ void QueueManager::moveStuckFile(QueueItem* qi) {
 		fire(QueueManagerListener::StatusUpdated(), qi);
 	}
 
-	fire(QueueManagerListener::RecheckAlreadyFinished(), qi->getTarget());
+	fire(QueueManagerListener::RecheckAlreadyFinished(), target);
 }
 
 void QueueManager::rechecked(QueueItem* qi) {
