@@ -531,28 +531,32 @@ void HubFrame::onGetPassword() {
 }
 
 void HubFrame::onPrivateMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, bool hub, bool bot, const tstring& m) {
+	bool ignore = false, window = false;
 	if(hub) {
 		if(BOOLSETTING(IGNORE_HUB_PMS)) {
-			addStatus(str(TF_("Ignored message: %1%") % m), false);
+			ignore = true;
 		} else if(BOOLSETTING(POPUP_HUB_PMS) || PrivateFrame::isOpen(replyTo)) {
-			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, url);
-		} else {
-			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
+			window = true;
 		}
 	} else if(bot) {
 		if(BOOLSETTING(IGNORE_BOT_PMS)) {
-			addStatus(str(TF_("Ignored message: %1%") % m), false);
+			ignore = true;
 		} else if(BOOLSETTING(POPUP_BOT_PMS) || PrivateFrame::isOpen(replyTo)) {
-			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, url);
-		} else {
-			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
+			window = true;
 		}
+	} else if(BOOLSETTING(POPUP_PMS) || PrivateFrame::isOpen(replyTo) || from == client->getMyIdentity().getUser()) {
+		window = true;
+	}
+
+	if(ignore) {
+		addStatus(str(TF_("Ignored message: %1%") % m), false);
 	} else {
-		if(BOOLSETTING(POPUP_PMS) || PrivateFrame::isOpen(replyTo) || from == client->getMyIdentity().getUser()) {
+		if(window) {
 			PrivateFrame::gotMessage(getParent(), from, to, replyTo, m, url);
 		} else {
 			addChat(str(TF_("Private message from %1%: %2%") % getNick(from) % m));
 		}
+		WinUtil::mainWindow->TrayPM();
 	}
 }
 

@@ -51,9 +51,10 @@ public:
 
 	void create(const Seed& seed = Seed());
 
-	void setIcon(const IconPtr& icon);
+	void setIcon(const IconPtr& icon_);
 
 	void setVisible(bool visible_);
+	bool isVisible() const { return visible; }
 
 	void setTooltip(const tstring& tip);
 
@@ -89,8 +90,8 @@ private:
 
 	/// Last tick that tip was updated
 	DWORD lastTick;
-	bool trayHandler(const MSG& msg, LRESULT& ret);
-	bool redisplay(const MSG& msg, LRESULT& ret);
+	bool trayHandler(const MSG& msg);
+	bool redisplay();
 
 	static const UINT message;
 };
