@@ -68,6 +68,7 @@ public:
 	void handleSettings();
 
 	void setStaticWindowState(const string& id, bool open);
+	void TrayPM();
 
 	bool closing() const { return stopperThread != 0; }
 
@@ -112,6 +113,7 @@ private:
 
 	/** Was the window maximized when minimizing it? */
 	bool maximized;
+	bool tray_pm;
 
 	HttpConnection* c;
 	string versionInfo;
@@ -164,7 +166,7 @@ private:
 	// Other events
 	void handleSized(const dwt::SizedEvent& sz);
 	void handleMinimized();
-
+	LRESULT handleActivateApp(WPARAM wParam);
 	LRESULT handleCopyData(LPARAM lParam);
 	LRESULT handleWhereAreYou();
 

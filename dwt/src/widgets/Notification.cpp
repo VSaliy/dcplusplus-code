@@ -47,8 +47,13 @@ void Notification::create(const Notification::Seed& seed) {
 	tip = seed.tip;
 
 	// TODO Allow more than one icon per window
-	parent->setCallback(Message(message), std::tr1::bind(&Notification::trayHandler, this, _1, _2));
-	parent->setCallback(Message(taskbar), std::tr1::bind(&Notification::redisplay, this, _1, _2));
+	parent->setCallback(Message(message), std::tr1::bind(&Notification::trayHandler, this, _1));
+	parent->setCallback(Message(taskbar), std::tr1::bind(&Notification::redisplay, this));
+}
+
+void Notification::setIcon(const IconPtr& icon_) {
+	icon = icon_;
+	redisplay();
 }
 
 void Notification::setVisible(bool visible_) {
@@ -94,7 +99,7 @@ void Notification::setTooltip(const tstring& tip_) {
 	}
 }
 
-bool Notification::redisplay(const MSG& msg, LPARAM& result) {
+bool Notification::redisplay() {
 	if(visible) {
 		setVisible(false);
 		setVisible(true);
@@ -107,7 +112,7 @@ bool Notification::redisplay(const MSG& msg, LPARAM& result) {
 #define NIN_BALLOONUSERCLICK (WM_USER + 5)
 #endif
 
-bool Notification::trayHandler(const MSG& msg, LPARAM& result) {
+bool Notification::trayHandler(const MSG& msg) {
 	switch(msg.lParam) {
 	case WM_LBUTTONUP: {
 		if(iconClicked) {

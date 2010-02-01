@@ -83,6 +83,7 @@ toolbar(0),
 tabs(0),
 slotsSpin(0),
 maximized(false),
+tray_pm(false),
 c(0),
 stopperThread(NULL),
 lastUp(0),
@@ -120,6 +121,7 @@ lastTick(GET_TICK())
 
 	onClosing(std::tr1::bind(&MainWindow::handleClosing, this));
 
+	onRaw(std::tr1::bind(&MainWindow::handleActivateApp, this, _1), dwt::Message(WM_ACTIVATEAPP));
 	onRaw(std::tr1::bind(&MainWindow::handleEndSession, this), dwt::Message(WM_ENDSESSION));
 	onRaw(std::tr1::bind(&MainWindow::handleCopyData, this, _2), dwt::Message(WM_COPYDATA));
 	onRaw(std::tr1::bind(&MainWindow::handleWhereAreYou, this), dwt::Message(SingleInstance::WMU_WHERE_ARE_YOU));
@@ -288,7 +290,7 @@ void MainWindow::initMenu() {
 		help->appendItem(T_("Get started"), std::tr1::bind(&WinUtil::help, this, IDH_GET_STARTED));
 		help->appendSeparator();
 		help->appendItem(T_("Change Log"), std::tr1::bind(&WinUtil::help, this, IDH_CHANGELOG));
-		help->appendItem(T_("About DC++"), std::tr1::bind(&MainWindow::handleAbout, this), dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16))));
+		help->appendItem(T_("About DC++"), std::tr1::bind(&MainWindow::handleAbout, this), mainSmallIcon);
 		help->appendSeparator();
 		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.homepage)));
 		help->appendItem(T_("Downloads"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.downloads)));
@@ -448,7 +450,7 @@ void MainWindow::initTransfers() {
 void MainWindow::initTray() {
 	dcdebug("initTray\n");
 	notify = dwt::NotificationPtr(new dwt::Notification(this));
-	notify->create(dwt::Notification::Seed::Seed(dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16)))));
+	notify->create(dwt::Notification::Seed::Seed(mainSmallIcon));
 	notify->onContextMenu(std::tr1::bind(&MainWindow::handleTrayContextMenu, this));
 	notify->onIconClicked(std::tr1::bind(&MainWindow::handleTrayClicked, this));
 	notify->onUpdateTip(std::tr1::bind(&MainWindow::handleTrayUpdate, this));
@@ -485,6 +487,14 @@ void MainWindow::setStaticWindowState(const string& id, bool open) {
 	StaticIndexes::const_iterator i = staticIndexes.find(id);
 	if(i != staticIndexes.end())
 		viewMenu->checkItem(i->second, open);
+}
+
+void MainWindow::TrayPM() {
+	if(!tray_pm && notify->isVisible() && ::GetForegroundWindow() != handle()) {
+		static dwt::IconPtr icon(new dwt::Icon(IDR_PRIVATE, dwt::Point(16, 16)));
+		notify->setIcon(icon);
+		tray_pm = true;
+	}
 }
 
 void MainWindow::handleTabsTitleChanged(const tstring& title) {
@@ -655,6 +665,14 @@ void MainWindow::handleMinimized() {
 		setVisible(false);
 	}
 	maximized = isZoomed();
+}
+
+LRESULT MainWindow::handleActivateApp(WPARAM wParam) {
+	if(wParam == TRUE && tray_pm) {
+		notify->setIcon(mainSmallIcon);
+		tray_pm = false;
+	}
+	return 0;
 }
 
 void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
@@ -1209,7 +1227,7 @@ bool MainWindow::handleMessage(const MSG& msg, LRESULT& retVal) {
 void MainWindow::handleTrayContextMenu() {
 	MenuPtr trayMenu = addChild(WinUtil::Seeds::menu);
 
-	trayMenu->appendItem(T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), dwt::IconPtr(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16))), true, true);
+	trayMenu->appendItem(T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), mainSmallIcon, true, true);
 	trayMenu->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_DL_DIR)));
 	trayMenu->appendItem(T_("Settings"), std::tr1::bind(&MainWindow::handleSettings, this), dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)));
 	trayMenu->appendSeparator();
