@@ -38,7 +38,6 @@
 namespace dcpp {
 
 const string AdcHub::CLIENT_PROTOCOL("ADC/1.0");
-const string AdcHub::CLIENT_PROTOCOL_TEST("ADC/0.10");
 const string AdcHub::SECURE_CLIENT_PROTOCOL_TEST("ADCS/0.10");
 const string AdcHub::ADCS_FEATURE("ADC0");
 const string AdcHub::TCP4_FEATURE("TCP4");
@@ -346,7 +345,7 @@ void AdcHub::handle(AdcCommand::CTM, AdcCommand& c) throw() {
 	}
 
 	bool secure = false;
-	if(protocol == CLIENT_PROTOCOL || protocol == CLIENT_PROTOCOL_TEST) {
+	if(protocol == CLIENT_PROTOCOL) {
 		// Nothing special
 	} else if(protocol == SECURE_CLIENT_PROTOCOL_TEST && CryptoManager::getInstance()->TLSOk()) {
 		secure = true;
@@ -389,7 +388,7 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 	}
 
 	bool secure;
-	if(protocol == CLIENT_PROTOCOL || protocol == CLIENT_PROTOCOL_TEST) {
+	if(protocol == CLIENT_PROTOCOL) {
 		secure = false;
 	} else if(protocol == SECURE_CLIENT_PROTOCOL_TEST && CryptoManager::getInstance()->TLSOk()) {
 		secure = true;
@@ -494,8 +493,6 @@ void AdcHub::handle(AdcCommand::STA, AdcCommand& c) throw() {
 			if(c.getParam("PR", 1, tmp)) {
 				if(tmp == CLIENT_PROTOCOL) {
 					u->getUser()->setFlag(User::NO_ADC_1_0_PROTOCOL);
-				} else if(tmp == CLIENT_PROTOCOL_TEST) {
-					u->getUser()->setFlag(User::NO_ADC_0_10_PROTOCOL);
 				} else if(tmp == SECURE_CLIENT_PROTOCOL_TEST) {
 					u->getUser()->setFlag(User::NO_ADCS_0_10_PROTOCOL);
 					u->getUser()->unsetFlag(User::TLS);
@@ -603,17 +600,11 @@ void AdcHub::connect(const OnlineUser& user, string const& token, bool secure) {
 		}
 		proto = &SECURE_CLIENT_PROTOCOL_TEST;
 	} else {
-		// dc++ <= 0.703 has a bug which makes it respond with CSTA to the hub if an unrecognised protocol is used *sigh*
-		// so we try 0.10 first...
-		if(user.getUser()->isSet(User::NO_ADC_0_10_PROTOCOL)) {
-			if(user.getUser()->isSet(User::NO_ADC_1_0_PROTOCOL)) {
-				/// @todo log
-				return;
-			}
-			proto = &CLIENT_PROTOCOL;
-		} else {
-			proto = &CLIENT_PROTOCOL_TEST;
+		if(user.getUser()->isSet(User::NO_ADC_1_0_PROTOCOL)) {
+			/// @todo log
+			return;
 		}
+		proto = &CLIENT_PROTOCOL;
 	}
 
 	if(ClientManager::getInstance()->isActive()) {
