@@ -226,6 +226,11 @@ protected:
 				return true;
 			}
 			break;
+		case VK_F3:
+			{
+				chat->findTextNext();
+				return true;
+			} break;
 		}
 		return false;
 	}
