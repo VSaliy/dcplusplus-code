@@ -160,7 +160,7 @@ lastTick(GET_TICK())
 		handleMinimized();
 
 	if(SETTING(NICK).empty()) {
-		SystemFrame::openWindow(getTabView());
+		callAsync(std::tr1::bind(&SystemFrame::openWindow, getTabView()));
 
 		WinUtil::help(this, IDH_GET_STARTED);
 		handleSettings();
