@@ -72,6 +72,7 @@
 * [L#321246] Fix crash with debug builds on non-Windows systems (steven sheehy)
 * [L#510314] Fix a possible crash in rechecker (thanks poy)
 * Don't move files <= 10 MB to weird places
+* [L#515646] Remove ADC 0.10 compatibility (not ADCS 0.10) (cologic)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
