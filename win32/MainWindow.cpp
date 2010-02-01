@@ -163,7 +163,7 @@ lastTick(GET_TICK())
 		callAsync(std::tr1::bind(&SystemFrame::openWindow, getTabView()));
 
 		WinUtil::help(this, IDH_GET_STARTED);
-		handleSettings();
+		callAsync(std::tr1::bind(&MainWindow::handleSettings, this));
 	}
 
 	if(dwt::LibraryLoader::getCommonControlsVersion() < PACK_COMCTL_VERSION(5,80))
