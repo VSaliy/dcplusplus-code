@@ -45,7 +45,7 @@ SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
 currentPage(0),
 grid(0),
-pageTree(0),
+tree(0),
 help(0)
 {
 	onInitDialog(std::tr1::bind(&SettingsDialog::initDialog, this));
@@ -90,9 +90,9 @@ bool SettingsDialog::initDialog() {
 		cur->column(0).mode = GridInfo::STATIC;
 		cur->column(1).mode = GridInfo::FILL;
 
-		pageTree = cur->addChild(Tree::Seed());
-		pageTree->setHelpId(IDH_SETTINGS_TREE);
-		pageTree->onSelectionChanged(std::tr1::bind(&SettingsDialog::handleSelectionChanged, this));
+		tree = cur->addChild(Tree::Seed());
+		tree->setHelpId(IDH_SETTINGS_TREE);
+		tree->onSelectionChanged(std::tr1::bind(&SettingsDialog::handleSelectionChanged, this));
 
 		addPage(T_("Personal information"), cur, new GeneralPage(cur));
 
@@ -161,6 +161,10 @@ bool SettingsDialog::initDialog() {
 	/// @todo when dwt has better tracking of children, improve this
 	::EnumChildWindows(handle(), EnumChildProc, reinterpret_cast<LPARAM>(this));
 
+	addAccel(FCONTROL, VK_TAB, std::tr1::bind(&SettingsDialog::handleCtrlTab, this, false));
+	addAccel(FCONTROL | FSHIFT, VK_TAB, std::tr1::bind(&SettingsDialog::handleCtrlTab, this, true));
+	initAccels();
+
 	updateTitle();
 
 	layout();
@@ -188,7 +192,7 @@ void SettingsDialog::handleChildHelp(dwt::Control* widget) {
 HTREEITEM SettingsDialog::addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent) {
 	upper->setWidget(page, 0, 1);
 	pages.push_back(page);
-	return pageTree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
+	return tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
 }
 
 void SettingsDialog::handleHelp(dwt::Control* widget, unsigned id) {
@@ -198,7 +202,7 @@ void SettingsDialog::handleHelp(dwt::Control* widget, unsigned id) {
 }
 
 void SettingsDialog::handleSelectionChanged() {
-	PropPage* page = reinterpret_cast<PropPage*>(pageTree->getData(pageTree->getSelected()));
+	PropPage* page = reinterpret_cast<PropPage*>(tree->getData(tree->getSelected()));
 	if(page) {
 		if(currentPage) {
 			currentPage->setVisible(false);
@@ -218,8 +222,23 @@ void SettingsDialog::handleOKClicked() {
 	endDialog(IDOK);
 }
 
+void SettingsDialog::handleCtrlTab(bool shift) {
+	HTREEITEM sel = tree->getSelected();
+	HTREEITEM next = 0;
+	if(!sel)
+		next = tree->getFirst();
+	else if(shift) {
+		if(sel == tree->getFirst())
+			next = tree->getLast();
+	} else if(sel == tree->getLast())
+		next = tree->getFirst();
+	if(!next)
+		next = tree->getNext(sel, shift ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
+	tree->setSelected(next);
+}
+
 void SettingsDialog::updateTitle() {
-	tstring title = pageTree->getSelectedText();
+	tstring title = tree->getSelectedText();
 	setText(title.empty() ? T_("Settings") : T_("Settings") + _T(" - [") + title + _T("]"));
 }
 

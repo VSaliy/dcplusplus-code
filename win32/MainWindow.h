@@ -31,6 +31,7 @@
 
 class UPnP;
 class TransferView;
+class HubFrame;
 
 class MainWindow :
 	public dwt::Window,
@@ -125,7 +126,6 @@ private:
 	uint64_t lastTick;
 
 	dwt::Application::FilterIter filterIter;
-	dwt::AcceleratorPtr accel;
 	dwt::NotificationPtr notify;
 
 	std::auto_ptr<UPnP> pUPnP;
@@ -157,11 +157,16 @@ private:
 	void handleWhatsThis();
 	void handleSize();
 	void handleActivate(bool active);
-	void handleForward(WPARAM wParam);
 	LRESULT handleEndSession();
 	void handleToolbarCustomized();
 	bool handleToolbarContextMenu(const dwt::ScreenCoordinate& pt);
+	void switchToolbar();
+	void switchTransfers();
+	void switchStatus();
 	bool handleSlotsUpdate(int pos, int delta);
+	void handleReconnect();
+	void handleRedirect();
+	void forwardHub(void (HubFrame::*f_t)());
 
 	// Other events
 	void handleSized(const dwt::SizedEvent& sz);
@@ -188,6 +193,7 @@ private:
 	void parseCommandLine(const tstring& line);
 	void viewAndDelete(const string& fileName);
 	bool chooseFavHubGroup(const tstring& title, tstring& group);
+	void statusMessage(time_t t, const string& m);
 
 	bool filter(MSG& msg);
 

@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2008, Jacek Sieka
+  Copyright (c) 2007-2009, Jacek Sieka
 
   All rights reserved.
 
@@ -29,43 +29,54 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ACCELERATOR_H_
-#define DWT_ACCELERATOR_H_
+#include <dwt/widgets/Control.h>
 
-#include "Handle.h"
-#include "../Widget.h"
+#include <dwt/DWTException.h>
+#include <dwt/util/check.h>
 
 namespace dwt {
 
-class Accelerator : public Handle<NullPolicy<HACCEL> > {
-public:
-	Accelerator(Widget* widget, unsigned int id);
-
-	bool translate(const MSG& msg);
-
-private:
-	typedef Handle<NullPolicy<HACCEL> > ResourceType;
-
-	Widget* widget;
-
-};
-
-typedef boost::intrusive_ptr< Accelerator > AcceleratorPtr;
-
-inline Accelerator::Accelerator(Widget* widget_, unsigned id) :
-	ResourceType(::LoadAccelerators(::GetModuleHandle(NULL), MAKEINTRESOURCE(id))),
-	widget(widget_)
+Control::Seed::Seed(DWORD style, DWORD exStyle, const tstring& caption) :
+BaseType::Seed(style | WS_VISIBLE, exStyle, caption)
 {
-
 }
 
-inline bool Accelerator::translate(const MSG& msg) {
-	if(!handle()) {
-		return false;
+Control::Control(Widget* parent, Dispatcher& dispatcher) :
+BaseType(parent, dispatcher),
+accel(0)
+{
+}
+
+void Control::addAccel(BYTE fVirt, WORD key, const CommandDispatcher::F& f) {
+	const size_t id = id_offset + accels.size();
+	ACCEL a = { fVirt | FVIRTKEY, key, id };
+	accels.push_back(a);
+	onCommand(f, id);
+}
+
+void Control::initAccels() {
+	accel = ::CreateAcceleratorTable(&accels[0], accels.size());
+	if(!accel) {
+		throw Win32Exception("Control::create: CreateAcceleratorTable failed");
 	}
-	return ::TranslateAccelerator(widget->handle(), handle(), const_cast<MSG*>(&msg)) > 0;
+}
+
+void Control::create(const Seed& seed) {
+	BaseType::create(seed);
+
+	if(!accels.empty()) {
+		initAccels();
+	}
+}
+
+Control::~Control() {
+	if(accel) {
+		::DestroyAcceleratorTable(accel);
+	}
+}
+
+bool Control::filter(MSG& msg) {
+	return accel && ::TranslateAccelerator(handle(), accel, &msg);
 }
 
 }
-
-#endif /*ACCELERATOR_H_*/

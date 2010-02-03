@@ -38,7 +38,7 @@ private:
 	PropPage* currentPage;
 
 	GridPtr grid;
-	TreePtr pageTree;
+	TreePtr tree;
 	RichTextBoxPtr help;
 
 	HTREEITEM addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent = TVI_ROOT);
@@ -53,6 +53,7 @@ private:
 	void handleHelp(dwt::Control* widget, unsigned id);
 	void handleSelectionChanged();
 	void handleOKClicked();
+	void handleCtrlTab(bool shift);
 };
 
 #endif

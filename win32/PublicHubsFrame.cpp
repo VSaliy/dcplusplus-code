@@ -76,7 +76,7 @@ int PublicHubsFrame::HubInfo::compareItems(const HubInfo* a, const HubInfo* b, i
 }
 
 PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
-BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDR_PUBLICHUBS),
+BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDR_PUBLICHUBS, false),
 grid(0),
 hubs(0),
 filter(0),
@@ -183,6 +183,9 @@ users(0)
 	// populate with values from the settings
 	updateDropDown();
 	updateList();
+
+	addAccel(FALT, 'I', std::tr1::bind(&dwt::Control::setFocus, filter));
+	initAccels();
 
 	layout();
 	activate();

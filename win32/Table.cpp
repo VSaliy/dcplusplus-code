@@ -21,20 +21,12 @@
 #include "Table.h"
 
 Table::Seed::Seed() :
-	BaseType::Seed()
+BaseType::Seed()
 {
 }
 
-Table::Table( dwt::Widget * parent ) : BaseType(parent) {
-	this->onKeyDown(std::tr1::bind(&Table::handleKeyDown, this, _1));
-}
-
-bool Table::handleKeyDown(int c) {
-	if(c == 'A' && isControlPressed()) {
-		const size_t itemCount = size();
-		for(size_t i = 0; i < itemCount; ++i)
-			select(i);
-		return true;
-	}
-	return false;
+Table::Table(dwt::Widget* parent) :
+BaseType(parent)
+{
+	addAccel(FCONTROL, 'A', std::tr1::bind(&Table::selectAll, this));
 }

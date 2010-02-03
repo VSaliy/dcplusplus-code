@@ -159,11 +159,12 @@ dwt::Rectangle WidgetPaned< horizontal >::getSplitterRect()
 		pos = 1.0;
 	}
 
-	dwt::Rectangle rc = rect;
+	dwt::Rectangle rc;
 	if(!children.first || !children.second) {
 		return rc;
 	}
 
+	rc = rect;
 	double splitterSize = ::GetSystemMetrics(horizontal ? SM_CYEDGE : SM_CXEDGE) + 2;
 	if(horizontal) {
 		rc.size.y = splitterSize;
@@ -183,10 +184,12 @@ void WidgetPaned< horizontal >::resizeChildren( )
 		if(children.second) {
 			children.second->layout(rect);
 		}
+		layout(getSplitterRect());
 		return;
 	}
 	if(!children.second) {
 		children.first->layout(rect);
+		layout(getSplitterRect());
 		return;
 	}
 

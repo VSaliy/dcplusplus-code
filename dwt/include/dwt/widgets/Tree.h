@@ -160,6 +160,8 @@ public:
 	HTREEITEM getParent(HTREEITEM node);
 
 	HTREEITEM getRoot();
+	HTREEITEM getFirst();
+	HTREEITEM getLast();
 
 	ScreenCoordinate getContextMenuPos();
 
@@ -315,64 +317,72 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline HTREEITEM Tree::getNext( HTREEITEM node, unsigned flag ) {
-	return TreeView_GetNextItem( this->handle(), node, flag );
+	return TreeView_GetNextItem( handle(), node, flag );
 }
 
 inline HTREEITEM Tree::getChild(HTREEITEM node) {
-	return TreeView_GetChild(this->handle(), node);
+	return TreeView_GetChild(handle(), node);
 }
 
 inline HTREEITEM Tree::getNextSibling(HTREEITEM node) {
-	return TreeView_GetNextSibling(this->handle(), node);
+	return TreeView_GetNextSibling(handle(), node);
 }
 
 inline HTREEITEM Tree::getParent(HTREEITEM node) {
-	return TreeView_GetParent(this->handle(), node);
+	return TreeView_GetParent(handle(), node);
 }
 
 inline HTREEITEM Tree::getRoot() {
-	return TreeView_GetRoot(this->handle());
+	return TreeView_GetRoot(handle());
+}
+
+inline HTREEITEM Tree::getFirst() {
+	return TreeView_GetFirstVisible(handle());
+}
+
+inline HTREEITEM Tree::getLast() {
+	return TreeView_GetLastVisible(handle());
 }
 
 inline void Tree::setColorImpl(COLORREF text, COLORREF background) {
-	TreeView_SetTextColor(this->handle(), text);
-	TreeView_SetBkColor(this->handle(), background);
+	TreeView_SetTextColor(handle(), text);
+	TreeView_SetBkColor(handle(), background);
 }
 
 inline Rectangle Tree::getItemRect(HTREEITEM item) {
 	RECT rc;
-	TreeView_GetItemRect(this->handle(), item, &rc, TRUE);
+	TreeView_GetItemRect(handle(), item, &rc, TRUE);
 	return Rectangle(rc);
 }
 
 inline HTREEITEM Tree::hitTest(const ScreenCoordinate& pt) {
 	ClientCoordinate cc(pt, this);
 	TVHITTESTINFO tvhti = { cc.getPoint() };
-	return TreeView_HitTest(this->handle(), &tvhti);
+	return TreeView_HitTest(handle(), &tvhti);
 }
 
 inline void Tree::expand(HTREEITEM node) {
-	TreeView_Expand(this->handle(), node, TVE_EXPAND);
+	TreeView_Expand(handle(), node, TVE_EXPAND);
 }
 
 inline void Tree::clearImpl() {
-	TreeView_DeleteAllItems( this->handle() );
+	TreeView_DeleteAllItems( handle() );
 }
 
 inline void Tree::eraseImpl( HTREEITEM node ) {
-	TreeView_DeleteItem( this->handle(), node );
+	TreeView_DeleteItem( handle(), node );
 }
 
 inline size_t Tree::sizeImpl() const {
-	return static_cast<size_t>(TreeView_GetCount(this->handle()));
+	return static_cast<size_t>(TreeView_GetCount(handle()));
 }
 
 inline void Tree::editLabel( HTREEITEM node ) {
-	static_cast<void>(TreeView_EditLabel( this->handle(), node ));
+	static_cast<void>(TreeView_EditLabel( handle(), node ));
 }
 
 inline void Tree::ensureVisible( HTREEITEM node ) {
-	TreeView_EnsureVisible( this->handle(), node );
+	TreeView_EnsureVisible( handle(), node );
 }
 
 inline void Tree::setHasButtons( bool value ) {
@@ -415,11 +425,11 @@ inline const Message & Tree::getDblClickMessage() {
 }
 
 inline HTREEITEM Tree::getSelectedImpl() const {
-	return TreeView_GetSelection( this->handle() );
+	return TreeView_GetSelection( handle() );
 }
 
 inline void Tree::setSelectedImpl(HTREEITEM item) {
-	TreeView_SelectItem( this->handle(), item );
+	TreeView_SelectItem( handle(), item );
 }
 
 inline size_t Tree::countSelectedImpl() const {

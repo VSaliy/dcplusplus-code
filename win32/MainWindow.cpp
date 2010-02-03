@@ -109,6 +109,22 @@ lastTick(GET_TICK())
 	initSecond();
 	initTray();
 
+	addAccel(FCONTROL, '1', std::tr1::bind(&MainWindow::switchToolbar, this));
+	addAccel(FCONTROL, '2', std::tr1::bind(&MainWindow::switchTransfers, this));
+	addAccel(FCONTROL, '3', std::tr1::bind(&MainWindow::switchStatus, this));
+	addAccel(FCONTROL, 'D', std::tr1::bind(&QueueFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, 'E', std::tr1::bind(&MainWindow::handleRefreshFileList, this));
+	addAccel(FCONTROL, 'F', std::tr1::bind(&FavHubsFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, 'G', std::tr1::bind(&MainWindow::handleConnectFavHubGroup, this));
+	addAccel(FCONTROL, 'L', std::tr1::bind(&MainWindow::handleOpenFileList, this));
+	addAccel(FCONTROL, 'N', std::tr1::bind(&NotepadFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, 'P', std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, 'Q', std::tr1::bind(&MainWindow::handleQuickConnect, this));
+	addAccel(FCONTROL, 'S', std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
+	addAccel(FCONTROL, 'U', std::tr1::bind(&UsersFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, VK_F3, std::tr1::bind(&MainWindow::handleSettings, this));
+	initAccels();
+
 	onActivate(std::tr1::bind(&MainWindow::handleActivate, this, _1));
 	onSized(std::tr1::bind(&MainWindow::handleSized, this, _1));
 	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
@@ -126,22 +142,7 @@ lastTick(GET_TICK())
 	onRaw(std::tr1::bind(&MainWindow::handleCopyData, this, _2), dwt::Message(WM_COPYDATA));
 	onRaw(std::tr1::bind(&MainWindow::handleWhereAreYou, this), dwt::Message(SingleInstance::WMU_WHERE_ARE_YOU));
 
-	// commands used in the accelerator table
-	onCommand(std::tr1::bind(&QueueFrame::openWindow, getTabView()), IDC_QUEUE);
-	onCommand(std::tr1::bind(&MainWindow::handleRefreshFileList, this), IDC_REFRESH_FILE_LIST);
-	onCommand(std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), IDC_FAVORITE_HUBS);
-	onCommand(std::tr1::bind(&MainWindow::handleOpenFileList, this), IDC_OPEN_FILE_LIST);
-	onCommand(std::tr1::bind(&NotepadFrame::openWindow, getTabView()), IDC_NOTEPAD);
-	onCommand(std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()), IDC_PUBLIC_HUBS);
-	onCommand(std::tr1::bind(&MainWindow::handleQuickConnect, this), IDC_QUICK_CONNECT);
-	onCommand(std::tr1::bind(&MainWindow::handleConnectFavHubGroup, this), IDC_CONNECT_GROUP);
-	onCommand(std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT), IDC_RECONNECT);
-	onCommand(std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), IDC_SEARCH);
-	onCommand(std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW), IDC_FOLLOW);
-	onCommand(std::tr1::bind(&UsersFrame::openWindow, getTabView()), IDC_FAVUSERS);
-
 	filterIter = dwt::Application::instance().addFilter(std::tr1::bind(&MainWindow::filter, this, _1));
-	accel = dwt::AcceleratorPtr(new dwt::Accelerator(this, IDR_DCPP));
 
 	TimerManager::getInstance()->start();
 
@@ -215,8 +216,8 @@ void MainWindow::initMenu() {
 		file->appendItem(T_("Connect to a favorite hub &group...\tCtrl+G"), std::tr1::bind(&MainWindow::handleConnectFavHubGroup, this), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
 		file->appendSeparator();
 
-		file->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT), dwt::IconPtr(new dwt::Icon(IDR_RECONNECT)));
-		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW), dwt::IconPtr(new dwt::Icon(IDR_FOLLOW)));
+		file->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&MainWindow::handleReconnect, this), dwt::IconPtr(new dwt::Icon(IDR_RECONNECT)));
+		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), std::tr1::bind(&MainWindow::handleRedirect, this), dwt::IconPtr(new dwt::Icon(IDR_FOLLOW)));
 		file->appendSeparator();
 
 		file->appendItem(T_("Open file list...\tCtrl+L"), std::tr1::bind(&MainWindow::handleOpenFileList, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_FILE_LIST)));
@@ -226,9 +227,9 @@ void MainWindow::initMenu() {
 		file->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_DL_DIR)));
 		file->appendSeparator();
 
-		file->appendItem(T_("Settings"), std::tr1::bind(&MainWindow::handleSettings, this), dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)));
+		file->appendItem(T_("Settings\tCtrl+F3"), std::tr1::bind(&MainWindow::handleSettings, this), dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)));
 		file->appendSeparator();
-		file->appendItem(T_("E&xit"), std::tr1::bind(&MainWindow::handleExit, this), dwt::IconPtr(new dwt::Icon(IDR_EXIT)));
+		file->appendItem(T_("E&xit\tAlt+F4"), std::tr1::bind(&MainWindow::handleExit, this), dwt::IconPtr(new dwt::Icon(IDR_EXIT)));
 	}
 
 	{
@@ -263,6 +264,13 @@ void MainWindow::initMenu() {
 		staticIndexes[StatsFrame::id] = viewMenu->appendItem(T_("Network Statistics"),
 			std::tr1::bind(&StatsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_NET_STATS)));
 		viewMenu->appendItem(T_("Indexing progress"), std::tr1::bind(&MainWindow::handleHashProgress, this));
+		viewMenu->appendSeparator();
+		staticIndexes["Toolbar"] = viewMenu->appendItem(T_("Toolbar\tCtrl+1"),
+			std::tr1::bind(&MainWindow::switchToolbar, this));
+		staticIndexes["Transfers"] = viewMenu->appendItem(T_("Transfer view\tCtrl+2"),
+			std::tr1::bind(&MainWindow::switchTransfers, this));
+		staticIndexes["Status"] = viewMenu->appendItem(T_("Status bar\tCtrl+3"),
+			std::tr1::bind(&MainWindow::switchStatus, this));
 	}
 
 	{
@@ -307,8 +315,10 @@ void MainWindow::initMenu() {
 }
 
 void MainWindow::initToolbar() {
-	dcdebug("initToolbar\n");
+	if(!BOOLSETTING(SHOW_TOOLBAR))
+		return;
 
+	dcdebug("initToolbar\n");
 	toolbar = addChild(ToolBar::Seed());
 
 	{
@@ -330,9 +340,9 @@ void MainWindow::initToolbar() {
 	toolbar->addButton(PublicHubsFrame::id, image++, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS,
 		std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()));
 	toolbar->addButton("Reconnect", image++, T_("Reconnect"), IDH_TOOLBAR_RECONNECT,
-		std::tr1::bind(&MainWindow::handleForward, this, IDC_RECONNECT));
+		std::tr1::bind(&MainWindow::handleReconnect, this));
 	toolbar->addButton("Redirect", image++, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW,
-		std::tr1::bind(&MainWindow::handleForward, this, IDC_FOLLOW));
+		std::tr1::bind(&MainWindow::handleRedirect, this));
 	toolbar->addButton(FavHubsFrame::id, image++, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
 		std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), std::tr1::bind(&MainWindow::handleFavHubsDropDown, this, _1));
 	toolbar->addButton(UsersFrame::id, image++, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
@@ -396,9 +406,14 @@ void MainWindow::initToolbar() {
 	toolbar->onContextMenu(std::tr1::bind(&MainWindow::handleToolbarContextMenu, this, _1));
 
 	toolbar->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+
+	viewMenu->checkItem(staticIndexes["Toolbar"], true);
 }
 
 void MainWindow::initStatusBar() {
+	if(!BOOLSETTING(SHOW_STATUSBAR))
+		return;
+
 	dcdebug("initStatusBar\n");
 
 	slotsSpin = addChild(Spinner::Seed(1));
@@ -428,6 +443,8 @@ void MainWindow::initStatusBar() {
 	status->setHelpId(STATUS_UP_TOTAL, IDH_MAIN_UP_TOTAL);
 	status->setHelpId(STATUS_DOWN_DIFF, IDH_MAIN_DOWN_DIFF);
 	status->setHelpId(STATUS_UP_DIFF, IDH_MAIN_UP_DIFF);
+
+	viewMenu->checkItem(staticIndexes["Status"], true);
 }
 
 void MainWindow::initTabs() {
@@ -442,9 +459,14 @@ void MainWindow::initTabs() {
 }
 
 void MainWindow::initTransfers() {
+	if(!BOOLSETTING(SHOW_TRANSFERVIEW))
+		return;
+
 	dcdebug("initTransfers\n");
 	transfers = new TransferView(this, getTabView());
 	paned->setSecond(transfers);
+
+	viewMenu->checkItem(staticIndexes["Transfers"], true);
 }
 
 void MainWindow::initTray() {
@@ -464,10 +486,6 @@ bool MainWindow::filter(MSG& msg) {
 		return true;
 	}
 
-	if(accel && accel->translate(msg)) {
-		return true;
-	}
-
 	if(::HtmlHelp(NULL, NULL, HH_PRETRANSLATEMESSAGE, reinterpret_cast<DWORD_PTR>(&msg))) {
 		return true;
 	}
@@ -483,7 +501,9 @@ bool MainWindow::filter(MSG& msg) {
 }
 
 void MainWindow::setStaticWindowState(const string& id, bool open) {
-	toolbar->setButtonChecked(id, open);
+	if(toolbar)
+		toolbar->setButtonChecked(id, open);
+
 	StaticIndexes::const_iterator i = staticIndexes.find(id);
 	if(i != staticIndexes.end())
 		viewMenu->checkItem(i->second, open);
@@ -602,10 +622,18 @@ void MainWindow::handleExit() {
 	close(true);
 }
 
-void MainWindow::handleForward(WPARAM wParam) {
-	Container* active = getTabView()->getActive();
+void MainWindow::handleReconnect() {
+	forwardHub(&HubFrame::handleReconnect);
+}
+
+void MainWindow::handleRedirect() {
+	forwardHub(&HubFrame::handleFollow);
+}
+
+void MainWindow::forwardHub(void (HubFrame::*f)()) {
+	HubFrame* active = dynamic_cast<HubFrame*>(getTabView()->getActive());
 	if(active) {
-		active->sendMessage(WM_COMMAND, wParam);
+		(active->*f)();
 	}
 }
 
@@ -675,11 +703,17 @@ LRESULT MainWindow::handleActivateApp(WPARAM wParam) {
 	return 0;
 }
 
-void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
+void MainWindow::statusMessage(time_t t, const string& m) {
+	if(!status)
+		return;
+
 	string message(m);
 	WinUtil::reducePaths(message);
-	callAsync(std::tr1::bind(&dwt::StatusBar::setText, status, STATUS_STATUS,
-		Text::toT("[" + Util::getShortTimeString(t) + "] " + message), false));
+	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString(t) + "] " + message));
+}
+
+void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
+	callAsync(std::tr1::bind(&MainWindow::statusMessage, this, t, m));
 }
 
 void MainWindow::viewAndDelete(const string& fileName) {
@@ -748,7 +782,8 @@ bool MainWindow::handleClosing() {
 			saveWindowSettings();
 
 			setVisible(false);
-			transfers->prepareClose();
+			if(transfers)
+				transfers->prepareClose();
 
 			WindowManager::getInstance()->removeListener(this);
 			LogManager::getInstance()->removeListener(this);
@@ -788,13 +823,17 @@ bool MainWindow::eachSecond() {
 void MainWindow::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	toolbar->refresh();
-	dwt::Point pt = toolbar->getWindowSize();
-	r.pos.y += pt.y;
-	r.size.y -= pt.y;
+	if(toolbar) {
+		toolbar->refresh();
+		dwt::Point pt = toolbar->getWindowSize();
+		r.pos.y += pt.y;
+		r.size.y -= pt.y;
+	}
 
-	status->layout(r);
-	layoutSlotsSpin();
+	if(status) {
+		status->layout(r);
+		layoutSlotsSpin();
+	}
 
 	paned->setRect(r);
 }
@@ -826,6 +865,9 @@ void MainWindow::updateStatus() {
 	/** @todo move this to client/ */
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_UPLOAD, SETTING(TOTAL_UPLOAD) + static_cast<int64_t>(updiff));
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_DOWNLOAD, SETTING(TOTAL_DOWNLOAD) + static_cast<int64_t>(downdiff));
+
+	if(!status)
+		return;
 
 	status->setText(STATUS_AWAY, Util::getAway() ? T_("AWAY") : _T(""));
 	status->setText(STATUS_COUNTS, Text::toT(Client::getCounts()));
@@ -935,7 +977,7 @@ bool MainWindow::initUPnP() {
 		return false;
 
 	port = SearchManager::getInstance()->getPort();
-	if(port != 0 && !pUPnP->open(port, UPnP::PROTOCOL_UDP, str(F_(APPNAME " Search Port (%1% TCP)") % port)))
+	if(port != 0 && !pUPnP->open(port, UPnP::PROTOCOL_UDP, str(F_(APPNAME " Search Port (%1% UDP)") % port)))
 		return false;
 
 	if(!BOOLSETTING(NO_IP_OVERRIDE)) {
@@ -1187,8 +1229,67 @@ bool MainWindow::handleToolbarContextMenu(const dwt::ScreenCoordinate& pt) {
 	menu->setTitle(T_("Toolbar"));
 	menu->appendItem(T_("&Customize\tDouble-click"), std::tr1::bind(&ToolBar::customize, toolbar),
 		dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)), true, true);
+	menu->appendItem(T_("&Hide\tCtrl+1"), std::tr1::bind(&MainWindow::switchToolbar, this));
 	menu->open(pt);
 	return true;
+}
+
+void MainWindow::switchToolbar() {
+	if(toolbar) {
+		::DestroyWindow(toolbar->handle());
+		toolbar = 0;
+
+		SettingsManager::getInstance()->set(SettingsManager::SHOW_TOOLBAR, false);
+		viewMenu->checkItem(staticIndexes["Toolbar"], false);
+
+	} else {
+		SettingsManager::getInstance()->set(SettingsManager::SHOW_TOOLBAR, true);
+		initToolbar();
+
+		// re-check currently opened static windows
+		const dwt::TabView::ChildList& views = tabs->getChildren();
+		for(dwt::TabView::ChildList::const_iterator i = views.begin(); i != views.end(); ++i) {
+			toolbar->setButtonChecked(static_cast<MDIChildFrame<dwt::Container>*>(*i)->getId(), true);
+		}
+	}
+
+	layout();
+}
+
+void MainWindow::switchTransfers() {
+	if(transfers) {
+		transfers->prepareClose();
+		::DestroyWindow(transfers->handle());
+		transfers = 0;
+
+		SettingsManager::getInstance()->set(SettingsManager::SHOW_TRANSFERVIEW, false);
+		viewMenu->checkItem(staticIndexes["Transfers"], false);
+
+	} else {
+		SettingsManager::getInstance()->set(SettingsManager::SHOW_TRANSFERVIEW, true);
+		initTransfers();
+	}
+
+	paned->setSecond(transfers);
+}
+
+void MainWindow::switchStatus() {
+	if(status) {
+		::DestroyWindow(status->handle());
+		status = 0;
+
+		::DestroyWindow(slotsSpin->handle());
+		slotsSpin = 0;
+
+		SettingsManager::getInstance()->set(SettingsManager::SHOW_STATUSBAR, false);
+		viewMenu->checkItem(staticIndexes["Status"], false);
+
+	} else {
+		SettingsManager::getInstance()->set(SettingsManager::SHOW_STATUSBAR, true);
+		initStatusBar();
+	}
+
+	layout();
 }
 
 bool MainWindow::handleSlotsUpdate(int /* pos */, int delta) {
@@ -1253,47 +1354,6 @@ void MainWindow::handleTrayUpdate() {
 		Util::formatBytes(UploadManager::getInstance()->getRunningAverage()) %
 		UploadManager::getInstance()->getUploadCount())));
 }
-
-#ifdef PORT_ME
-LRESULT MainFrame::OnViewToolBar(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
-{
-	static BOOL bVisible = TRUE; // initially visible
-	bVisible = !bVisible;
-	CReBarCtrl rebar = m_hWndToolBar;
-	int nBandIndex = rebar.IdToIndex(ATL_IDW_BAND_FIRST + 1); // toolbar is 2nd added band
-	rebar.ShowBand(nBandIndex, bVisible);
-	UISetCheck(ID_VIEW_TOOLBAR, bVisible);
-	UpdateLayout();
-	SettingsManager::getInstance()->set(SettingsManager::SHOW_TOOLBAR, bVisible);
-	return 0;
-}
-
-LRESULT MainFrame::OnViewStatusBar(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
-{
-	BOOL bVisible = !::IsWindowVisible(m_hWndStatusBar);
-	::ShowWindow(m_hWndStatusBar, bVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
-	UISetCheck(ID_VIEW_STATUS_BAR, bVisible);
-	UpdateLayout();
-	SettingsManager::getInstance()->set(SettingsManager::SHOW_STATUSBAR, bVisible);
-	return 0;
-}
-
-LRESULT MainFrame::OnViewTransferView(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
-{
-	BOOL bVisible = !transferView.IsWindowVisible();
-	if(!bVisible) {
-		if(GetSinglePaneMode() == SPLIT_PANE_NONE)
-		SetSinglePaneMode(SPLIT_PANE_TOP);
-	} else {
-		if(GetSinglePaneMode() != SPLIT_PANE_NONE)
-		SetSinglePaneMode(SPLIT_PANE_NONE);
-	}
-	UISetCheck(ID_VIEW_TRANSFER_VIEW, bVisible);
-	UpdateLayout();
-	SettingsManager::getInstance()->set(SettingsManager::SHOW_TRANSFERVIEW, bVisible);
-	return 0;
-}
-#endif
 
 void MainWindow::handleWhatsThis() {
 	sendMessage(WM_SYSCOMMAND, SC_CONTEXTHELP);

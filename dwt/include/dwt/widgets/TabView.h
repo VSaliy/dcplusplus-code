@@ -159,6 +159,7 @@ private:
 
 	void setTop(ContainerPtr w);
 
+	void handleCtrlTab(bool shift);
 	void handleTextChanging(ContainerPtr w, const tstring& newText);
 	void handleSized(const SizedEvent&);
 	void handleTabSelected();

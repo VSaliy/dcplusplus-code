@@ -36,6 +36,7 @@
 
 #include "../aspects/AspectBorder.h"
 #include "../aspects/AspectCloseable.h"
+#include "../aspects/AspectCommand.h"
 #include "../aspects/AspectContextMenu.h"
 #include "../aspects/AspectDragDrop.h"
 #include "../aspects/AspectEnabled.h"
@@ -56,6 +57,7 @@ class Control:
 
 	public AspectBorder<Control>,
 	public AspectCloseable<Control>,
+	public AspectCommand<Control>,
 	public AspectContextMenu<Control>,
 	public AspectDragDrop<Control>,
 	public AspectEnabled<Control>,
@@ -84,6 +86,7 @@ class Control:
 	};
 
 	typedef Widget BaseType;
+
 public:
 
 	/// Setting the event handler for the "create" event
@@ -98,6 +101,17 @@ public:
 		);
 	}
 
+	/**
+	* add a combination of keys that will launch a function when they are hit. see the ACCEL
+	* structure doc for information about the "fVirt" and "key" arguments.
+	* FVIRTKEY is always added to fVirt.
+	*
+	* may be called before calling create, in which case accels will be automatically initiated;
+	* or they can be initialized later on using the initAccels function.
+	*/
+	void addAccel(BYTE fVirt, WORD key, const CommandDispatcher::F& f);
+	void initAccels();
+
 protected:
 	struct Seed : public BaseType::Seed {
 		Seed(DWORD style, DWORD exStyle = 0, const tstring& caption = tstring());
@@ -106,19 +120,21 @@ protected:
 	typedef Control ControlType;
 
 	Control(Widget* parent, Dispatcher& dispatcher);
+	void create(const Seed& seed);
+
+	virtual ~Control();
+
+private:
+	friend class Application;
+
+	std::vector<ACCEL> accels;
+	HACCEL accel;
+	static const unsigned id_offset = 100; // better play safe and avoid 0-based ids...
+
+	bool filter(MSG& msg);
 };
 
 typedef Control CommonControl;
-
-inline Control::Control(Widget* parent, Dispatcher& dispatcher) : BaseType(parent, dispatcher) {
-
-}
-
-inline Control::Seed::Seed(DWORD style, DWORD exStyle, const tstring& caption) :
-	BaseType::Seed(style | WS_VISIBLE, exStyle, caption)
-{
-
-}
 
 }
 
