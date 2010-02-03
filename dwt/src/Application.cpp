@@ -34,9 +34,11 @@
  */
 
 #include <dwt/Application.h>
+
 #include <dwt/tstring.h>
 #include <dwt/DWTException.h>
 #include <dwt/util/check.h>
+#include <dwt/widgets/Control.h>
 #include <assert.h>
 
 extern int SmartWinMain(dwt::Application & app);
@@ -182,6 +184,7 @@ bool Application::sleep() {
 	}
 }
 
+#include <stdio.h>
 bool Application::dispatch() {
 	MSG msg = { 0 };
 	if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == 0) {
@@ -193,6 +196,26 @@ bool Application::dispatch() {
 		::PostQuitMessage(msg.wParam);
 		quit = true;
 		return false;
+	}
+
+	// heavily inspired by SWT (Display.java - filterMessage & findControl)
+	if(msg.message >= WM_KEYFIRST && msg.message <= WM_KEYLAST) {
+		HWND hwnd = msg.hwnd;
+		HWND owner = 0;
+		while(hwnd && hwnd != owner) {
+			{
+				// make sure the window is ours or hwnd_cast might crash.
+				TCHAR className[128];
+				if(!::GetClassName(hwnd, className, 128) || !Dispatcher::isRegistered(className))
+					break;
+			}
+			Control* control = hwnd_cast<Control*>(hwnd);
+			if(control && control->filter(msg)) {
+				return true;
+			}
+			owner = ::GetWindow(hwnd, GW_OWNER);
+			hwnd = ::GetParent(hwnd);
+		}
 	}
 
 	for(FilterIter i = filters.begin(); i != filters.end(); ++i) {

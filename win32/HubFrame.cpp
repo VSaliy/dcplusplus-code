@@ -109,7 +109,7 @@ bool HubFrame::isFavorite(const StringMap& params) {
 }
 
 HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
-BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF),
+BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF, false),
 paned(0),
 userGrid(0),
 users(0),
@@ -192,13 +192,17 @@ inTabComplete(false)
 	status->setHelpId(STATUS_SHARED, IDH_HUB_SHARED);
 	status->setHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
 
+	addAccel(FALT, 'G', std::tr1::bind(&HubFrame::handleGetList, this));
+	addAccel(FCONTROL, 'R', std::tr1::bind(&HubFrame::handleReconnect, this));
+	addAccel(FCONTROL, 'T', std::tr1::bind(&HubFrame::handleFollow, this));
+	addAccel(FALT, 'P', std::tr1::bind(&HubFrame::handlePrivateMessage, this, getParent()));
+	addAccel(FALT, 'U', std::tr1::bind(&dwt::Control::setFocus, users));
+	initAccels();
+
 	layout();
 	activate();
 
 	initSecond();
-
-	onCommand(std::tr1::bind(&HubFrame::handleReconnect, this), IDC_RECONNECT);
-	onCommand(std::tr1::bind(&HubFrame::handleFollow, this), IDC_FOLLOW);
 
 	client = ClientManager::getInstance()->getClient(url);
 	client->addListener(this);

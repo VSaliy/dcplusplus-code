@@ -448,7 +448,9 @@ public:
 
     int find(const tstring& b, int start = -1, bool aPartial = false);
 
-    void select(int row);
+	/// obsolete
+	inline void select(int i) { setSelected(i); }
+	void selectAll();
 
 	ScreenCoordinate getContextMenuPos();
 
@@ -815,10 +817,6 @@ inline int Table::find(const tstring& b, int start, bool aPartial) {
 inline int Table::findDataImpl(LPARAM data, int start) {
     LVFINDINFO fi = { LVFI_PARAM, NULL, data };
     return ListView_FindItem(handle(), start, &fi);
-}
-
-inline void Table::select(int i) {
-	ListView_SetItemState(handle(), i, LVIS_SELECTED, LVIS_SELECTED);
 }
 
 inline void Table::ensureVisible(int i, bool partial) {

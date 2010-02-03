@@ -38,7 +38,7 @@ class MDIChildFrame :
 	T& t() { return *static_cast<T*>(this); }
 
 protected:
-	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0) :
+	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0, bool manageAccels = true) :
 		BaseType(tabView),
 		lastFocus(NULL),
 		alwaysSameFocus(false),
@@ -61,8 +61,12 @@ protected:
 		onFocus(std::tr1::bind(&ThisType::handleFocus, this));
 		onSized(std::tr1::bind(&ThisType::handleSized, this, _1));
 		onActivate(std::tr1::bind(&ThisType::handleActivate, this, _1));
-		onCommand(std::tr1::bind(&ThisType::close, this, true), IDC_CLOSE_WINDOW);
 		addDlgCodeMessage(this);
+
+		addAccel(FCONTROL, 'W', std::tr1::bind(&ThisType::close, this, true));
+		addAccel(FCONTROL, VK_F4, std::tr1::bind(&ThisType::close, this, true));
+		if(manageAccels)
+			initAccels();
 	}
 
 	virtual ~MDIChildFrame() {

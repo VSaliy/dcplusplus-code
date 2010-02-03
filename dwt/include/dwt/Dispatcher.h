@@ -60,6 +60,8 @@ public:
 	static HCURSOR getDefaultCursor();
 	static HBRUSH getDefaultBackground();
 
+	static bool isRegistered(LPCTSTR className);
+
 protected:
 	friend class std::auto_ptr<Dispatcher>;
 
@@ -82,6 +84,8 @@ private:
 	void registerClass(WNDCLASSEX& cls);
 
 	ATOM atom;
+
+	static std::vector<tstring> classNames;
 };
 
 class NormalDispatcher : public Dispatcher {

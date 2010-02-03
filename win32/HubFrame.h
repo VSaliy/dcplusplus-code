@@ -76,6 +76,7 @@ public:
 	static bool isFavorite(const StringMap& params);
 
 private:
+	friend class MainWindow;
 
 	enum FilterModes{
 		NONE,
@@ -235,7 +236,6 @@ private:
 	void handleAddAsFavorite();
 	void handleReconnect();
 	void handleFollow();
-	void handleChatLButton();
 
 	void handleFilterUpdated();
 	bool parseFilter(FilterModes& mode, int64_t& size);

@@ -36,10 +36,7 @@ public:
 		Seed();
 	};
 
-	explicit Table( dwt::Widget * parent );
-
-private:
-	bool handleKeyDown(int c);
+	explicit Table(dwt::Widget* parent);
 };
 
 typedef Table::ObjectType TablePtr;

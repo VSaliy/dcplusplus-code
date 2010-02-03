@@ -113,7 +113,7 @@ bool PrivateFrame::isFavorite(const StringMap& params) {
 }
 
 PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const HintedUser& replyTo_, bool active, const string& logPath) :
-BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE),
+BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, false),
 replyTo(replyTo_),
 priv(FavoriteManager::getInstance()->isPrivate(replyTo.getUser().hint)),
 online(replyTo.getUser().user->isOnline())
@@ -131,6 +131,8 @@ online(replyTo.getUser().user->isOnline())
 	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&PrivateFrame::openLog, this));
 
 	updateOnlineStatus();
+
+	initAccels();
 
 	layout();
 	if(active)

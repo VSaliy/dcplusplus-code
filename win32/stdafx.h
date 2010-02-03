@@ -28,7 +28,6 @@
 #include <libintl.h>
 
 #include <dwt/Application.h>
-#include <dwt/resources/Accelerator.h>
 #include <dwt/resources/Pen.h>
 #include <dwt/widgets/Button.h>
 #include <dwt/widgets/CheckBox.h>

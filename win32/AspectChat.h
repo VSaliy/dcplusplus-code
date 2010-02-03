@@ -44,7 +44,6 @@ protected:
 			cs.style |= ES_READONLY;
 			chat = t().addChild(cs);
 			chat->setTextLimit(32768);
-			chat->onKeyDown(std::tr1::bind(&ThisType::handleChatKeyDown, this, _1));
 		}
 
 		{
@@ -53,6 +52,12 @@ protected:
 			message = t().addChild(cs);
 			message->onUpdated(std::tr1::bind(&ThisType::handleMessageUpdated, this));
 		}
+
+		t().addAccel(FALT, 'C', std::tr1::bind(&dwt::Control::setFocus, chat));
+		t().addAccel(FALT, 'M', std::tr1::bind(&dwt::Control::setFocus, message));
+		t().addAccel(FALT, 'S', std::tr1::bind(&ThisType::sendMessage_, this));
+		t().addAccel(0, VK_ESCAPE, std::tr1::bind(&ThisType::handleEscape, this));
+		t().addAccel(0, VK_F3, std::tr1::bind(&RichTextBox::findTextNext, chat));
 	}
 
 	virtual ~AspectChat() { }
@@ -132,36 +137,15 @@ protected:
 		return true;
 	}
 
-	bool handleChatKeyDown(int c) {
-		if(c == VK_ESCAPE)
-			message->setFocus();
-		return false;
-	}
-
 	bool handleMessageKeyDown(int c) {
 		switch(c) {
 		case VK_RETURN: {
 			if(t().isShiftPressed() || t().isControlPressed() || t().isAltPressed()) {
 				return false;
 			}
-			tstring s = message->getText();
-			if(s.empty()) {
-				::MessageBeep(MB_ICONEXCLAMATION);
-				return false;
-			}
-
-			// save command in history, reset current buffer pointer to the newest command
-			curCommandPosition = prevCommands.size();		//this places it one position beyond a legal subscript
-			if (curCommandPosition == 0 || (curCommandPosition > 0 && prevCommands[curCommandPosition - 1] != s)) {
-				++curCommandPosition;
-				prevCommands.push_back(s);
-			}
-			currentCommand = _T("");
-
-			t().enterImpl(s);
-
-			return true;
+			return sendMessage();
 		}
+
 		case VK_UP:
 			if ( historyActive() ) {
 				//scroll up in chat command history
@@ -226,11 +210,6 @@ protected:
 				return true;
 			}
 			break;
-		case VK_F3:
-			{
-				chat->findTextNext();
-				return true;
-			} break;
 		}
 		return false;
 	}
@@ -244,6 +223,11 @@ protected:
 		} break;
 		}
 		return false;
+	}
+
+	void handleEscape() {
+		chat->sendMessage(WM_KEYDOWN, VK_ESCAPE);
+		message->setFocus();
 	}
 
 	RichTextBox* chat;
@@ -279,6 +263,26 @@ private:
 	bool historyActive() const {
 		return t().isAltPressed() || (BOOLSETTING(USE_CTRL_FOR_LINE_HISTORY) && t().isControlPressed());
 	}
+
+	bool sendMessage() {
+		tstring s = message->getText();
+		if(s.empty()) {
+			::MessageBeep(MB_ICONEXCLAMATION);
+			return false;
+		}
+
+		// save command in history, reset current buffer pointer to the newest command
+		curCommandPosition = prevCommands.size();		//this places it one position beyond a legal subscript
+		if (curCommandPosition == 0 || (curCommandPosition > 0 && prevCommands[curCommandPosition - 1] != s)) {
+			++curCommandPosition;
+			prevCommands.push_back(s);
+		}
+		currentCommand = _T("");
+
+		t().enterImpl(s);
+		return true;
+	}
+	void sendMessage_() { sendMessage(); }
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ASPECT_CHAT_H)

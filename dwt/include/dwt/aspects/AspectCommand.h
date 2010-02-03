@@ -40,8 +40,8 @@ namespace dwt {
 template<typename WidgetType>
 class AspectCommand {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	typedef Dispatchers::VoidVoid<> CommandDispatcher;
 public:
+	typedef Dispatchers::VoidVoid<> CommandDispatcher;
 	void onCommand(const CommandDispatcher::F& f, unsigned id) {
 		W().addCallback(Message(WM_COMMAND, id), CommandDispatcher(f));
 	}

@@ -62,7 +62,11 @@ TabView::TabView(Widget* w) :
 	{ }
 
 void TabView::create(const Seed & cs) {
+	addAccel(FCONTROL, VK_TAB, std::tr1::bind(&TabView::handleCtrlTab, this, false));
+	addAccel(FCONTROL | FSHIFT, VK_TAB, std::tr1::bind(&TabView::handleCtrlTab, this, true));
+
 	BaseType::create(cs);
+
 	maxLength = cs.maxLength;
 	if(maxLength <= 3)
 		maxLength = 0;
@@ -495,22 +499,24 @@ void TabView::helpImpl(unsigned& id) {
 		id = ti->w->getHelpId();
 }
 
+void TabView::handleCtrlTab(bool shift) {
+	inTab = true;
+	next(shift);
+}
+
 bool TabView::filter(const MSG& msg) {
 	if(tip)
 		tip->relayEvent(msg);
 
-	if(msg.message == WM_KEYUP && msg.wParam == VK_CONTROL) {
+	if(inTab && msg.message == WM_KEYUP && msg.wParam == VK_CONTROL) {
 		inTab = false;
 
 		TabInfo* ti = getTabInfo(getSelected());
 		if(ti) {
 			setTop(ti->w);
 		}
-	} else if(msg.message == WM_KEYDOWN && msg.wParam == VK_TAB && ::GetKeyState(VK_CONTROL) < 0) {
-		inTab = true;
-		next(::GetKeyState(VK_SHIFT) < 0);
-		return true;
 	}
+
 	return false;
 }
 

@@ -145,6 +145,11 @@ void Table::setSelectedImpl(int item) {
 	ListView_SetItemState(handle(), item, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 }
 
+void Table::selectAll() {
+	for(size_t i = 0, n = size(); i < n; ++i)
+		setSelected(i);
+}
+
 void Table::clearSelection() {
 	int i = -1;
 	while((i = getNext(i, LVNI_SELECTED)) != -1) {

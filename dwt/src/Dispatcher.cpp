@@ -34,6 +34,7 @@
 #include <dwt/Widget.h>
 #include <dwt/DWTException.h>
 
+#include <algorithm>
 #include <sstream>
 
 namespace dwt {
@@ -165,6 +166,8 @@ LRESULT MDIFrameDispatcher::chain(const MSG& msg) {
 
 #endif
 
+std::vector<tstring> Dispatcher::classNames;
+
 Dispatcher::Dispatcher(WNDCLASSEX& cls) : atom(0) {
 	registerClass(cls);
 }
@@ -190,6 +193,10 @@ HBRUSH Dispatcher::getDefaultBackground() {
 	return background;
 }
 
+bool Dispatcher::isRegistered(LPCTSTR className) {
+	return find(classNames.begin(), classNames.end(), className) != classNames.end();
+}
+
 WNDCLASSEX Dispatcher::makeWndClass(LPCTSTR name) {
 	WNDCLASSEX cls = { sizeof(WNDCLASSEX) };
 	fillWndClass(cls, name);
@@ -211,11 +218,8 @@ LPCTSTR Dispatcher::className(const std::string& name) {
 	std::basic_stringstream<TCHAR> stream;
 	stream << name.c_str();
 
-	// store class names
-	static std::vector<tstring> names;
-	names.push_back(stream.str());
-
-	return names.back().c_str();
+	classNames.push_back(stream.str());
+	return classNames.back().c_str();
 }
 
 void Dispatcher::registerClass(WNDCLASSEX& cls) {

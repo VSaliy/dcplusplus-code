@@ -43,7 +43,7 @@ NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) :
 	try {
 		pad->setText(Text::toT(File(Util::getNotepadFile(), File::READ, File::OPEN).read()));
 	} catch(const FileException& e) {
-		// Ignore
+		status->setText(STATUS_STATUS, str(TF_("Error loading the notepad file: %1%") % Text::toT(e.getError())));
 	}
 
 	pad->setModify(false);
