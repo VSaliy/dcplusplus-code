@@ -153,8 +153,8 @@ SettingsManager::SettingsManager()
 	setDefault(IGNORE_BOT_PMS, false);
 	setDefault(LIST_DUPES, true);
 	setDefault(BUFFER_SIZE, 64);
-	setDefault(HUBLIST_SERVERS, "http://hublist.openhublist.org/hublist.xml.bz2;http://dchublist.com/hublist.xml.bz2;http://adchublist.com/hublist.xml.bz2;http://www.hublist.org/PublicHubList.xml.bz2;http://dclist.eu/hublist.xml.bz2;http://download.hublist.cz/hublist.xml.bz2;http://hublist.awenet.info/PublicHubList.xml.bz2");
-	setDefault(DOWNLOAD_SLOTS, 3);
+	setDefault(HUBLIST_SERVERS, "http://hublist.openhublist.org/hublist.xml.bz2;http://dchublist.com/hublist.xml.bz2;http://elite-hublist.sytes.net/hublist.xml.bz2");
+	setDefault(DOWNLOAD_SLOTS, 6);
 	setDefault(MAX_DOWNLOAD_SPEED, 0);
 	setDefault(LOG_DIRECTORY, Util::getPath(Util::PATH_USER_LOCAL) + "Logs" PATH_SEPARATOR_STR);
 	setDefault(LOG_UPLOADS, false);
@@ -289,7 +289,7 @@ SettingsManager::SettingsManager()
 	setDefault(TRANSFERS_PANED_POS, .7);
 	setDefault(QUEUE_PANED_POS, .3);
 	setDefault(SEARCH_PANED_POS, .2);
-	setDefault(KEEP_FINISHED_FILES, true);
+	setDefault(KEEP_FINISHED_FILES, false);
 	setDefault(MIN_MESSAGE_LINES, 1);
 	setDefault(MAX_MESSAGE_LINES, 10);
 	setDefault(MAX_UPLOAD_SPEED_MAIN, 0);
@@ -301,7 +301,7 @@ SettingsManager::SettingsManager()
 	setDefault(BANDWIDTH_LIMIT_START, 1);
 	setDefault(BANDWIDTH_LIMIT_END, 1);
 	setDefault(SLOTS_ALTERNATE_LIMITING, 1);
-	setDefault(SLOTS_PRIMARY, 1);
+	setDefault(SLOTS_PRIMARY, 3);
 
 #ifdef _WIN32
 	setDefault(MAIN_WINDOW_STATE, SW_SHOWNORMAL);
