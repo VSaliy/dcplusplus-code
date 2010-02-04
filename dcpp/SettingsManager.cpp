@@ -52,7 +52,7 @@ const string SettingsManager::settingTags[] =
 	"SoundMainChat", "SoundPM", "SoundPMWindow",
 	"SENTRY",
 	// Ints
-	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
+	"IncomingConnections", "InPort", "Slots", "AutoRedirect", "ClearSearch",
 	"BackgroundColor", "TextColor", "UseOemMonoFont", "ShareHidden", "FilterMessages", "MinimizeToTray", "AlwaysTray",
 	"AutoSearch", "TimeStamps", "PopupHubPms", "PopupBotPms", "IgnoreHubPms", "IgnoreBotPms",
 	"ListDuplicates", "BufferSize", "DownloadSlots", "MaxDownloadSpeed", "LogMainChat", "LogPrivateChat",
@@ -139,7 +139,7 @@ SettingsManager::SettingsManager()
 	setDefault(TLS_PORT, 0);
 	setDefault(INCOMING_CONNECTIONS, INCOMING_DIRECT);
 	setDefault(OUTGOING_CONNECTIONS, OUTGOING_DIRECT);
-	setDefault(AUTO_FOLLOW, true);
+	setDefault(AUTO_FOLLOW, false);
 	setDefault(CLEAR_SEARCH, true);
 	setDefault(SHARE_HIDDEN, false);
 	setDefault(FILTER_MESSAGES, true);
