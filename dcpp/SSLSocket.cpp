@@ -157,7 +157,7 @@ int SSLSocket::checkSSL(int ret) throw(SocketException) {
 					ssl.reset();
 					// @todo replace 80 with MAX_ERROR_SZ or whatever's appropriate for yaSSL in some nice way...
 					char errbuf[80];
-					throw SocketException(str(F_("SSL Error: %1% (%2%, %3%)") % ERR_error_string(err, errbuf) % ret % err));
+					throw SSLSocketException(str(F_("SSL Error: %1% (%2%, %3%)") % ERR_error_string(err, errbuf) % ret % err));
 				}
 		}
 	}
