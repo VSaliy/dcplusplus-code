@@ -1052,6 +1052,11 @@ bool HubFrame::matchFilter(const UserInfo& ui, int sel, bool doSizeCompare, Filt
 }
 
 bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
+	if(!showUsers->getChecked()) {
+		// the user list doesn't stay up-to-date when it is hidden
+		return false;
+	}
+
 	if(pt.x() == -1 || pt.y() == -1) {
 		pt = chat->getContextMenuPos();
 	}
