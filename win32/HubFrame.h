@@ -176,6 +176,8 @@ private:
 
 	TaskQueue tasks; // todo get rid of TaskQueue
 
+	UserInfo* currentUser; /// only for situations when the user list is hidden
+
 	tstring filterString;
 
 	StringMap ucLineParams;

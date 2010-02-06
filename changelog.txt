@@ -77,6 +77,7 @@
 * [L#195209] Revise keyboard shortcuts (poy)
 * Error message when loading the notepad file fails (poy)
 * Remove obsolete default hublists (emtee)
+* Chat actions should work better when the user list is hidden (poy)
 
 -- 0.75 2009-03-06 --
 * [L#243727] "Merge results for the same file" check-box in search (poy)
