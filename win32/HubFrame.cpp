@@ -1053,12 +1053,14 @@ bool HubFrame::matchFilter(const UserInfo& ui, int sel, bool doSizeCompare, Filt
 }
 
 bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
+	if(pt.x() == -1 || pt.y() == -1) {
+		pt = chat->getContextMenuPos();
+	}
 	tstring txt = chat->textUnderCursor(pt);
 	if(txt.empty())
 		return false;
 
 	// Possible nickname click, let's see if we can find one like it in the name list...
-	/// @todo make this work with shift+F10/etc
 	if(showUsers->getChecked()) {
 		int pos = users->find(txt);
 		if(pos == -1)
@@ -1070,9 +1072,6 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 		return false;
 	}
 
-	if(pt.x() == -1 || pt.y() == -1) {
-		pt = chat->getContextMenuPos();
-	}
 	return handleUsersContextMenu(pt);
 }
 

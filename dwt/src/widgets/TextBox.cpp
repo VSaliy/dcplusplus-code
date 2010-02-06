@@ -110,10 +110,13 @@ tstring TextBox::getSelection() const
 	return retVal;
 }
 
+ClientCoordinate TextBoxBase::ptFromPos(int pos) {
+	DWORD res = sendMessage(EM_POSFROMCHAR, pos);
+	return ClientCoordinate(Point(LOWORD(res), HIWORD(res)), this);
+}
+
 ScreenCoordinate TextBoxBase::getContextMenuPos() {
-	RECT rc;
-	::GetClientRect(this->handle(), &rc);
-	return ClientCoordinate (Point(rc.right/2, rc.bottom/2), this);
+	return ptFromPos(getCaretPos());
 }
 
 Point TextBoxBase::getPreferedSize() {

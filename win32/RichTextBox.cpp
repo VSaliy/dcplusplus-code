@@ -72,7 +72,11 @@ bool RichTextBox::handleKeyDown(int c) {
 	return false;
 }
 
-bool RichTextBox::handleContextMenu(const dwt::ScreenCoordinate& pt) {
+bool RichTextBox::handleContextMenu(dwt::ScreenCoordinate pt) {
+	if(pt.x() == -1 || pt.y() == -1) {
+		pt = getContextMenuPos();
+	}
+
 	// This context menu is specialized for non-user-modifiable controls.
 	/// @todo add other commands depending on whether the style has ES_READONLY
 	MenuPtr menu(dwt::WidgetCreator<Menu>::create(this, WinUtil::Seeds::menu));
