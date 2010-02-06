@@ -123,6 +123,7 @@ lastTick(GET_TICK())
 	addAccel(FCONTROL, 'S', std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
 	addAccel(FCONTROL, 'U', std::tr1::bind(&UsersFrame::openWindow, getTabView()));
 	addAccel(FCONTROL, VK_F3, std::tr1::bind(&MainWindow::handleSettings, this));
+	addAccel(0, VK_F5, std::tr1::bind(&MainWindow::handleRefreshFileList, this));
 	initAccels();
 
 	onActivate(std::tr1::bind(&MainWindow::handleActivate, this, _1));
@@ -223,7 +224,7 @@ void MainWindow::initMenu() {
 		file->appendItem(T_("Open file list...\tCtrl+L"), std::tr1::bind(&MainWindow::handleOpenFileList, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_FILE_LIST)));
 		file->appendItem(T_("Open own list"), std::tr1::bind(&DirectoryListingFrame::openOwnList, getTabView()));
 		file->appendItem(T_("Match downloaded lists"), std::tr1::bind(&MainWindow::handleMatchAll, this));
-		file->appendItem(T_("Refresh file list\tCtrl+E"), std::tr1::bind(&MainWindow::handleRefreshFileList, this));
+		file->appendItem(T_("Refresh file list\tF5"), std::tr1::bind(&MainWindow::handleRefreshFileList, this));
 		file->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_DL_DIR)));
 		file->appendSeparator();
 
