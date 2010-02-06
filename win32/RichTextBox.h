@@ -43,7 +43,7 @@ public:
 
 private:
 	bool handleKeyDown(int c);
-	bool handleContextMenu(const dwt::ScreenCoordinate& pt);
+	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	bool handleLeftDblClick(const dwt::MouseEvent& ev);
 
 	void handleCopy();

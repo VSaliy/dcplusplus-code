@@ -160,6 +160,7 @@ public:
 
 	bool getModify();
 
+	ClientCoordinate ptFromPos(int pos);
 	ScreenCoordinate getContextMenuPos();
 
 	virtual Point getPreferedSize();
