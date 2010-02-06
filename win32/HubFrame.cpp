@@ -123,6 +123,7 @@ waitingForPW(false),
 resort(false),
 showJoins(BOOLSETTING(SHOW_JOINS)),
 favShowJoins(BOOLSETTING(FAV_SHOW_JOINS)),
+currentUser(0),
 inTabMenu(false),
 inTabComplete(false)
 {
@@ -1052,33 +1053,31 @@ bool HubFrame::matchFilter(const UserInfo& ui, int sel, bool doSizeCompare, Filt
 }
 
 bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
-	if(!showUsers->getChecked()) {
-		// the user list doesn't stay up-to-date when it is hidden
+	tstring txt = chat->textUnderCursor(pt);
+	if(txt.empty())
+		return false;
+
+	// Possible nickname click, let's see if we can find one like it in the name list...
+	/// @todo make this work with shift+F10/etc
+	if(showUsers->getChecked()) {
+		int pos = users->find(txt);
+		if(pos == -1)
+			return false;
+		users->clearSelection();
+		users->setSelected(pos);
+		users->ensureVisible(pos);
+	} else if(!(currentUser = findUser(txt))) {
 		return false;
 	}
 
 	if(pt.x() == -1 || pt.y() == -1) {
 		pt = chat->getContextMenuPos();
 	}
-
-	tstring txt = chat->textUnderCursor(pt);
-
-	if(!txt.empty()) {
-		// Possible nickname click, let's see if we can find one like it in the name list...
-		int pos = users->find(txt);
-		if(pos != -1) {
-			users->clearSelection();
-			users->setSelected(pos);
-			users->ensureVisible(pos);
-			return handleUsersContextMenu(pt);
-		}
-	}
-
-	return false;
+	return handleUsersContextMenu(pt);
 }
 
 bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
-	if(users->hasSelected()) {
+	if(showUsers->getChecked() ? users->hasSelected() : (currentUser != 0)) {
 		if(pt.x() == -1 || pt.y() == -1) {
 			pt = users->getContextMenuPos();
 		}
@@ -1124,6 +1123,9 @@ void HubFrame::handleShowUsersClicked() {
 
 	if(checked) {
 		updateUserList();
+		currentUser = 0;
+	} else {
+		users->clear();
 	}
 
 	SettingsManager::getInstance()->set(SettingsManager::GET_USER_INFO, checked);
@@ -1136,11 +1138,10 @@ void HubFrame::handleMultiCopy(unsigned index) {
 		return;
 	}
 
-	int i=-1;
+	UserInfoList sel = selectedUsersImpl();
 	tstring tmpstr;
-
-	while( (i = users->getNext(i, LVNI_SELECTED)) != -1) {
-		tmpstr += users->getText(i, index);
+	for(UserInfoList::const_iterator i = sel.begin(), iend = sel.end(); i != iend; ++i) {
+		tmpstr += static_cast<UserInfo*>(*i)->getText(index);
 		tmpstr += _T(" / ");
 	}
 	if(!tmpstr.empty()) {
@@ -1175,12 +1176,10 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 		client->escapeParams(ucParams);
 		client->sendUserCmd(Util::formatParams(uc.getCommand(), ucParams, false));
 	} else {
-		int sel = -1;
-		while((sel = users->getNext(sel, LVNI_SELECTED)) != -1) {
-			UserInfo* u = users->getData(sel);
+		UserInfoList sel = selectedUsersImpl();
+		for(UserInfoList::const_iterator i = sel.begin(), iend = sel.end(); i != iend; ++i) {
 			StringMap tmp = ucParams;
-
-			u->getIdentity().getParams(tmp, "user", true);
+			static_cast<UserInfo*>(*i)->getIdentity().getParams(tmp, "user", true);
 			client->escapeParams(tmp);
 			client->sendUserCmd(Util::formatParams(uc.getCommand(), tmp, false));
 		}
@@ -1340,5 +1339,5 @@ void HubFrame::handleFilterUpdated() {
 }
 
 HubFrame::UserInfoList HubFrame::selectedUsersImpl() const {
-	return usersFromTable(users);
+	return showUsers->getChecked() ? usersFromTable(users) : (currentUser ? UserInfoList(1, currentUser) : UserInfoList());
 }
