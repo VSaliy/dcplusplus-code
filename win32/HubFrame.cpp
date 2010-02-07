@@ -418,6 +418,7 @@ void HubFrame::clearUserList() {
 	for(UserMapIter i = userMap.begin(); i != userMap.end(); ++i) {
 		delete i->second;
 	}
+	currentUser = 0;
 	userMap.clear();
 }
 
@@ -652,6 +653,8 @@ void HubFrame::removeUser(const UserPtr& aUser) {
 		users->erase(ui);
 
 	userMap.erase(i);
+	if(ui == currentUser)
+		currentUser = 0;
 	delete ui;
 }
 
