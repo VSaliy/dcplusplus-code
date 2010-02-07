@@ -121,8 +121,10 @@ bool UCPage::handleKeyDown(int c) {
 
 void UCPage::handleAddClicked() {
 	CommandDlg dlg(this);
-	if(dlg.run() == IDOK)
-		addEntry(FavoriteManager::getInstance()->addUserCommand(dlg.getType(), dlg.getCtx(), 0, Text::fromT(dlg.getName()), Text::fromT(dlg.getCommand()), Text::fromT(dlg.getHub())));
+	if(dlg.run() == IDOK) {
+		addEntry(FavoriteManager::getInstance()->addUserCommand(dlg.getType(), dlg.getCtx(), 0, Text::fromT(dlg.getName()),
+			Text::fromT(dlg.getCommand()), Text::fromT(dlg.getTo()), Text::fromT(dlg.getHub())));
+	}
 }
 
 void UCPage::handleChangeClicked() {
@@ -131,14 +133,15 @@ void UCPage::handleChangeClicked() {
 		UserCommand uc;
 		FavoriteManager::getInstance()->getUserCommand(commands->getData(i), uc);
 
-		CommandDlg dlg(this, uc.getType(), uc.getCtx(), Text::toT(uc.getName()), Text::toT(uc.getCommand()), Text::toT(uc.getHub()));
+		CommandDlg dlg(this, uc.getType(), uc.getCtx(), Text::toT(uc.getName()), Text::toT(uc.getCommand()), Text::toT(uc.getTo()), Text::toT(uc.getHub()));
 		if(dlg.run() == IDOK) {
-			commands->setText(0, i, (dlg.getType() == UserCommand::TYPE_SEPARATOR) ? T_("Separator") : dlg.getName());
-			commands->setText(1, i, dlg.getCommand());
-			commands->setText(2, i, dlg.getHub());
+			commands->setText(i, 0, (dlg.getType() == UserCommand::TYPE_SEPARATOR) ? T_("Separator") : dlg.getName());
+			commands->setText(i, 1, dlg.getCommand());
+			commands->setText(i, 2, dlg.getHub());
 
 			uc.setName(Text::fromT(dlg.getName()));
 			uc.setCommand(Text::fromT(dlg.getCommand()));
+			uc.setTo(Text::fromT(dlg.getTo()));
 			uc.setHub(Text::fromT(dlg.getHub()));
 			uc.setType(dlg.getType());
 			uc.setCtx(dlg.getCtx());

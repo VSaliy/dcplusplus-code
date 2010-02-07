@@ -26,14 +26,17 @@
 class CommandDlg : public GridDialog
 {
 public:
-	CommandDlg(dwt::Widget* parent, int type_ = 0, int ctx_ = 0, const tstring& name_ = Util::emptyStringT, const tstring& command_ = Util::emptyStringT, const tstring& hub_ = Util::emptyStringT);
+	CommandDlg(dwt::Widget* parent, int type_ = 0, int ctx_ = 0, const tstring& name_ = Util::emptyStringT,
+		const tstring& command_ = Util::emptyStringT, const tstring& to_ = Util::emptyStringT,
+		const tstring& hub_ = Util::emptyStringT);
 	virtual ~CommandDlg();
 
-	int getType() { return type; }
-	int getCtx() { return ctx; }
-	tstring getName() { return name; }
-	tstring getCommand() { return command; }
-	tstring getHub() { return hub; }
+	int getType() const { return type; }
+	int getCtx() const { return ctx; }
+	const tstring& getName() const { return name; }
+	const tstring& getCommand() const { return command; }
+	const tstring& getTo() const { return to; }
+	const tstring& getHub() const { return hub; }
 
 private:
 	RadioButtonPtr separator;
@@ -49,13 +52,13 @@ private:
 	TextBoxPtr hubBox;
 	TextBoxPtr nick;
 	CheckBoxPtr once;
-	TextBoxPtr result;
 	CheckBoxPtr openHelp;
 
 	int type;
 	int ctx;
 	tstring name;
 	tstring command;
+	tstring to;
 	tstring hub;
 
 	bool handleInitDialog();
@@ -64,7 +67,9 @@ private:
 
 	void updateType();
 	void updateCommand();
+	void updateHub();
 	void updateControls();
+	bool adc() const;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_COMMAND_DLG_H)

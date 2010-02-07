@@ -395,7 +395,7 @@ void ClientManager::userCommand(const HintedUser& user, const UserCommand& uc, S
 	ou->getClient().getHubIdentity().getParams(params, "hub", false);
 	ou->getClient().getMyIdentity().getParams(params, "my", compatibility);
 	ou->getClient().escapeParams(params);
-	ou->getClient().sendUserCmd(Util::formatParams(uc.getCommand(), params, false));
+	ou->getClient().sendUserCmd(uc, params);
 }
 
 void ClientManager::send(AdcCommand& cmd, const CID& cid) {
@@ -661,7 +661,7 @@ void ClientManager::on(HubUserCommand, Client* client, int aType, int ctx, const
 		} else if(aType == UserCommand::TYPE_CLEAR) {
  			FavoriteManager::getInstance()->removeHubUserCommands(ctx, client->getHubUrl());
  		} else {
- 			FavoriteManager::getInstance()->addUserCommand(aType, ctx, UserCommand::FLAG_NOSAVE, name, command, client->getHubUrl());
+ 			FavoriteManager::getInstance()->addUserCommand(aType, ctx, UserCommand::FLAG_NOSAVE, name, command, "", client->getHubUrl());
  		}
 	}
 }

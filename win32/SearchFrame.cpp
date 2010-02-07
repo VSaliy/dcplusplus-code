@@ -1001,7 +1001,7 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 			if(!sr->getUser()->isOnline())
 				continue;
 
-			if(uc.getType() == UserCommand::TYPE_RAW_ONCE) {
+			if(uc.once()) {
 				if(users.find(sr->getUser()->getCID()) != users.end())
 					continue;
 				users.insert(sr->getUser()->getCID());
