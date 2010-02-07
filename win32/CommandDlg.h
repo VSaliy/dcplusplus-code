@@ -69,7 +69,6 @@ private:
 	void updateCommand();
 	void updateHub();
 	void updateControls();
-	bool adc() const;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_COMMAND_DLG_H)

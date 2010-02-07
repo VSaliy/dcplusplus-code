@@ -389,14 +389,6 @@ string Util::getShortTimeString(time_t t) {
 	return Text::toUtf8(buf);
 }
 
-void Util::replace(const string& search, const string& replacement, string& str) {
-	string::size_type i = 0;
-	while((i = str.find(search, i)) != string::npos) {
-		str.replace(i, search.size(), replacement);
-		i += replacement.size();
-	}
-}
-
 /**
  * Decodes a URL the best it can...
  * Default ports:

@@ -132,7 +132,7 @@ bool CommandDlg::handleInitDialog() {
 		commandBox->setHelpId(IDH_USER_COMMAND_COMMAND);
 		commandBox->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
 
-		cur->addChild(Label::Seed(T_("Hub IP / DNS (empty = all, 'op' = where operator)")))->setHelpId(IDH_USER_COMMAND_HUB);
+		cur->addChild(Label::Seed(T_("Hub address (see help for usage)")))->setHelpId(IDH_USER_COMMAND_HUB);
 		hubBox = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		hubBox->setHelpId(IDH_USER_COMMAND_HUB);
 		hubBox->onUpdated(std::tr1::bind(&CommandDlg::updateHub, this));

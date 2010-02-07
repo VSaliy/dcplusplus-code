@@ -40,7 +40,6 @@ public:
 			menu->appendSeparator();
 			dwt::MenuPtr cur = menu;
 			for(size_t n = 0; n < userCommands.size(); ++n) {
-
 				UserCommand* uc = &userCommands[n];
 
 				if(uc->getType() == UserCommand::TYPE_SEPARATOR) {
@@ -49,28 +48,32 @@ public:
 					if( count > 0 && !cur->isSeparator(count-1)) {
 						cur->appendSeparator();
 					}
+
 				} else if(uc->isRaw() || uc->isChat()) {
 					cur = menu;
-					StringTokenizer<tstring> t(Text::toT(uc->getName()), _T('\\'));
-					for(TStringIter i = t.getTokens().begin(); i != t.getTokens().end(); ++i) {
+
+					tstring name = Text::toT(uc->getName());
+					Util::replace(_T("//"), _T("\\"), name);
+					StringTokenizer<tstring> t(name, _T('/'));
+					for(TStringList::const_iterator i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i) {
+						name = *i;
+						Util::replace(_T("\\"), _T("/"), name);
 						if(i+1 == t.getTokens().end()) {
-							cur->appendItem(*i, std::tr1::bind(&T::runUserCommand, static_cast<T*>(this), std::tr1::cref(*uc)));
+							cur->appendItem(name, std::tr1::bind(&T::runUserCommand, static_cast<T*>(this), std::tr1::cref(*uc)));
 						} else {
 							bool found = false;
 							// Let's see if we find an existing item...
 							for(size_t k = 0; k < cur->getCount(); k++) {
-								if(cur->isPopup(k) && Util::stricmp(cur->getText(k), *i) == 0) {
+								if(cur->isPopup(k) && Util::stricmp(cur->getText(k), name) == 0) {
 									found = true;
 									cur = cur->getChild(k);
 								}
 							}
 							if(!found) {
-								cur = cur->appendPopup(*i);
+								cur = cur->appendPopup(name);
 							}
 						}
 					}
-				} else {
-					dcasserta(0);
 				}
 			}
 		}
