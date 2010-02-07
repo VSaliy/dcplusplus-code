@@ -86,6 +86,7 @@ private:
 	bool handleKeyDown(int c);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 
+	TStringList getSortedGroups() const;
 	void fillList();
 	void refresh();
 	FavoriteHubEntryList getSelection() const;

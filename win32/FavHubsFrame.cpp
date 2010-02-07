@@ -198,6 +198,8 @@ void FavHubsFrame::handleProperties() {
 
 void FavHubsFrame::handleMove(bool up) {
 	FavoriteHubEntryList& fh = FavoriteManager::getInstance()->getFavoriteHubs();
+	if(fh.size() <= 1)
+		return;
 
 	HoldRedraw hold(hubs);
 	SelectionKeeper keeper(hubs);
@@ -206,17 +208,33 @@ void FavHubsFrame::handleMove(bool up) {
 	FavoriteHubEntryList fh_copy = fh;
 	if(!up)
 		reverse(fh_copy.begin(), fh_copy.end());
-	for(FavoriteHubEntryList::iterator i = fh_copy.begin() + 1; i != fh_copy.end(); ++i) {
+	FavoriteHubEntryList moved;
+	for(FavoriteHubEntryList::iterator i = fh_copy.begin(); i != fh_copy.end(); ++i) {
 		if(find(selected.begin(), selected.end(), *i) == selected.end())
 			continue;
+		if(find(moved.begin(), moved.end(), *i) != moved.end())
+			continue;
 		const string& group = (*i)->getGroup();
-		for(FavoriteHubEntryList::iterator j = i - 1; ; --j) {
-			if((*j)->getGroup() == group) {
+		for(FavoriteHubEntryList::iterator j = i; ;) {
+			if(j == fh_copy.begin()) {
+				// couldn't move within the same group; change group.
+				TStringList groups(getSortedGroups());
+				if(!up)
+					reverse(groups.begin(), groups.end());
+				TStringIterC ig = find(groups.begin(), groups.end(), Text::toT(group));
+				if(ig != groups.begin()) {
+					FavoriteHubEntryPtr f = *i;
+					f->setGroup(Text::fromT(*(ig - 1)));
+					i = fh_copy.erase(i);
+					fh_copy.push_back(f);
+					moved.push_back(f);
+				}
+				break;
+			}
+			if((*--j)->getGroup() == group) {
 				swap(*i, *j);
 				break;
 			}
-			if(j == fh_copy.begin())
-				break;
 		}
 	}
 	if(!up)
@@ -289,8 +307,7 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	return true;
 }
 
-void FavHubsFrame::fillList() {
-	// sort groups
+TStringList FavHubsFrame::getSortedGroups() const {
 	set<tstring, noCaseStringLess> sorted_groups;
 	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
 	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
@@ -298,6 +315,11 @@ void FavHubsFrame::fillList() {
 
 	TStringList groups(sorted_groups.begin(), sorted_groups.end());
 	groups.insert(groups.begin(), Util::emptyStringT); // default group (otherwise, hubs without group don't show up)
+	return groups;
+}
+
+void FavHubsFrame::fillList() {
+	TStringList groups(getSortedGroups());
 	hubs->setGroups(groups);
 	bool grouped = hubs->isGrouped();
 
