@@ -943,7 +943,7 @@ void DirectoryListingFrame::runUserCommand(const UserCommand& uc) {
 	int sel = -1;
 	while((sel = files->getNext(sel, LVNI_SELECTED)) != -1) {
 		ItemInfo* ii = files->getData(sel);
-		if(uc.getType() == UserCommand::TYPE_RAW_ONCE) {
+		if(uc.once()) {
 			if(users.find(dl->getUser()) != users.end())
 				continue;
 			users.insert(dl->getUser());

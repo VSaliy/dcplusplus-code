@@ -23,11 +23,13 @@
 #include "CommandDlg.h"
 
 #include <dcpp/UserCommand.h>
+#include <dcpp/AdcCommand.h>
 #include <dcpp/NmdcHub.h>
 #include <dcpp/version.h>
 #include "WinUtil.h"
 
-CommandDlg::CommandDlg(dwt::Widget* parent, int type_, int ctx_, const tstring& name_, const tstring& command_, const tstring& hub_) :
+CommandDlg::CommandDlg(dwt::Widget* parent, int type_, int ctx_, const tstring& name_, const tstring& command_,
+					   const tstring& to_, const tstring& hub_) :
 GridDialog(parent, 298, DS_CONTEXTHELP),
 separator(0),
 raw(0),
@@ -42,12 +44,12 @@ commandBox(0),
 hubBox(0),
 nick(0),
 once(0),
-result(0),
 openHelp(0),
 type(type_),
 ctx(ctx_),
 name(name_),
 command(command_),
+to(to_),
 hub(hub_)
 {
 	onInitDialog(std::tr1::bind(&CommandDlg::handleInitDialog, this));
@@ -60,7 +62,7 @@ CommandDlg::~CommandDlg() {
 bool CommandDlg::handleInitDialog() {
 	setHelpId(IDH_USER_COMMAND);
 
-	grid = addChild(Grid::Seed(6, 3));
+	grid = addChild(Grid::Seed(5, 3));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
 	grid->column(2).mode = GridInfo::FILL;
@@ -133,6 +135,7 @@ bool CommandDlg::handleInitDialog() {
 		cur->addChild(Label::Seed(T_("Hub IP / DNS (empty = all, 'op' = where operator)")))->setHelpId(IDH_USER_COMMAND_HUB);
 		hubBox = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		hubBox->setHelpId(IDH_USER_COMMAND_HUB);
+		hubBox->onUpdated(std::tr1::bind(&CommandDlg::updateHub, this));
 
 		cur->addChild(Label::Seed(T_("To")))->setHelpId(IDH_USER_COMMAND_NICK);
 		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
@@ -143,14 +146,8 @@ bool CommandDlg::handleInitDialog() {
 		once->setHelpId(IDH_USER_COMMAND_ONCE);
 	}
 
-	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Text sent to hub")));
-		grid->setWidget(group, 3, 0, 1, 3);
-		result = group->addChild(WinUtil::Seeds::Dialog::textBox);
-	}
-
 	openHelp = grid->addChild(CheckBox::Seed(T_("Always open help file with this dialog")));
-	grid->setWidget(openHelp, 4, 0, 1, 3);
+	grid->setWidget(openHelp, 3, 0, 1, 3);
 	bool bOpenHelp = BOOLSETTING(OPEN_USER_CMD_HELP);
 	openHelp->setChecked(bOpenHelp);
 
@@ -169,42 +166,30 @@ bool CommandDlg::handleInitDialog() {
 		WinUtil::help(this, IDH_USER_COMMAND);
 	}
 
+	int newType;
 	if(type == UserCommand::TYPE_SEPARATOR) {
 		separator->setChecked(true);
+		newType = 0;
 	} else {
-		// More difficult, determine type by what it seems to be...
-		if((_tcsncmp(command.c_str(), _T("$To: "), 5) == 0) &&
-			(command.find(_T(" From: %[myNI] $<%[myNI]> ")) != string::npos ||
-			command.find(_T(" From: %[mynick] $<%[mynick]> ")) != string::npos) &&
-			command.find(_T('|')) == command.length() - 1) // if it has | anywhere but the end, it is raw
-		{
-			string::size_type i = command.find(_T(' '), 5);
-			dcassert(i != string::npos);
-			tstring to = command.substr(5, i-5);
-			string::size_type cmd_pos = command.find(_T('>'), 5) + 2;
-			tstring cmd = Text::toT(NmdcHub::validateMessage(Text::fromT(command.substr(cmd_pos, command.length()-cmd_pos-1)), true));
-			PM->setChecked(true);
-			nick->setText(to);
-			commandBox->setText(cmd.c_str());
-		} else if(((_tcsncmp(command.c_str(), _T("<%[mynick]> "), 12) == 0) ||
-			(_tcsncmp(command.c_str(), _T("<%[myNI]> "), 10) == 0)) &&
-			command[command.length()-1] == '|')
-		{
-			// Looks like a chat thing...
-			string::size_type cmd_pos = command.find(_T('>')) + 2;
-			tstring cmd = Text::toT(NmdcHub::validateMessage(Text::fromT(command.substr(cmd_pos, command.length()-cmd_pos-1)), true));
-			chat->setChecked(true);
-			commandBox->setText(cmd);
-		} else {
-			tstring cmd = command;
+		commandBox->setText(Text::toDOS(command));
+		if(type == UserCommand::TYPE_RAW || type == UserCommand::TYPE_RAW_ONCE) {
 			raw->setChecked(true);
-			commandBox->setText(cmd);
+			newType = 1;
+		} else if(type == UserCommand::TYPE_CHAT || type == UserCommand::TYPE_CHAT_ONCE) {
+			if(to.empty()) {
+				chat->setChecked(true);
+				newType = 2;
+			} else {
+				PM->setChecked(true);
+				nick->setText(to);
+				newType = 3;
+			}
 		}
-		if(type == UserCommand::TYPE_RAW_ONCE) {
+		if(type == UserCommand::TYPE_RAW_ONCE || type == UserCommand::TYPE_CHAT_ONCE) {
 			once->setChecked(true);
-			type = 1;
 		}
 	}
+	type = newType;
 
 	hubBox->setText(hub);
 	nameBox->setText(name);
@@ -252,10 +237,21 @@ void CommandDlg::handleOKClicked() {
 	if(fileListMenu->getChecked())
 		ctx |= UserCommand::CONTEXT_FILELIST;
 
-	hub = hubBox->getText();
-
-	if(type != 0)
-		type = once->getChecked() ? 2 : 1;
+	switch(type) {
+	case 0:
+		type = UserCommand::TYPE_SEPARATOR;
+		break;
+	case 1:
+		type = once->getChecked() ? UserCommand::TYPE_RAW_ONCE : UserCommand::TYPE_RAW;
+		break;
+	case 2:
+		type = UserCommand::TYPE_CHAT;
+		break;
+	case 3:
+		type = once->getChecked() ? UserCommand::TYPE_CHAT_ONCE : UserCommand::TYPE_CHAT;
+		to = nick->getText();
+		break;
+	}
 
 	SettingsManager::getInstance()->set(SettingsManager::OPEN_USER_CMD_HELP, openHelp->getChecked());
 
@@ -277,14 +273,16 @@ void CommandDlg::updateType() {
 void CommandDlg::updateCommand() {
 	if(type == 0) {
 		command.clear();
-	} else if(type == 1) {
+	} else {
 		command = commandBox->getText();
-	} else if(type == 2) {
-		command = Text::toT("<%[myNI]> " + NmdcHub::validateMessage(Text::fromT(commandBox->getText()), false) + "|");
-	} else if(type == 3) {
-		command = _T("$To: ") + nick->getText() + _T(" From: %[myNI] $<%[myNI]> ") + Text::toT(NmdcHub::validateMessage(Text::fromT(commandBox->getText()), false)) + _T("|");
 	}
-	result->setText(command);
+	if(type == 1 && UserCommand::adc(Text::fromT(hub)) && !command.empty() && *(command.end() - 1) != '\n')
+		command += '\n';
+}
+
+void CommandDlg::updateHub() {
+	hub = hubBox->getText();
+	updateCommand();
 }
 
 void CommandDlg::updateControls() {

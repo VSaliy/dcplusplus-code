@@ -49,7 +49,7 @@ public:
 					if( count > 0 && !cur->isSeparator(count-1)) {
 						cur->appendSeparator();
 					}
-				} else if(uc->getType() == UserCommand::TYPE_RAW || uc->getType() == UserCommand::TYPE_RAW_ONCE) {
+				} else if(uc->isRaw() || uc->isChat()) {
 					cur = menu;
 					StringTokenizer<tstring> t(Text::toT(uc->getName()), _T('\\'));
 					for(TStringIter i = t.getTokens().begin(); i != t.getTokens().end(); ++i) {

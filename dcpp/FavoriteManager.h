@@ -97,7 +97,7 @@ public:
 	StringPairList getFavoriteDirs() { return favoriteDirs; }
 
 // User Commands
-	UserCommand addUserCommand(int type, int ctx, int flags, const string& name, const string& command, const string& hub);
+	UserCommand addUserCommand(int type, int ctx, int flags, const string& name, const string& command, const string& to, const string& hub);
 	bool getUserCommand(int cid, UserCommand& uc);
 	int findUserCommand(const string& aName, const string& aUrl);
 	bool moveUserCommand(int cid, int pos);

@@ -886,16 +886,34 @@ string NmdcHub::validateMessage(string tmp, bool reverse) {
 	return tmp;
 }
 
+void NmdcHub::privateMessage(const string& nick, const string& message) {
+	send("$To: " + fromUtf8(nick) + " From: " + fromUtf8(getMyNick()) + " $" + fromUtf8(escape("<" + getMyNick() + "> " + message)) + "|");
+}
+
 void NmdcHub::privateMessage(const OnlineUser& aUser, const string& aMessage, bool /*thirdPerson*/) {
 	checkstate();
 
-	send("$To: " + fromUtf8(aUser.getIdentity().getNick()) + " From: " + fromUtf8(getMyNick()) + " $" + fromUtf8(escape("<" + getMyNick() + "> " + aMessage)) + "|");
+	privateMessage(aUser.getIdentity().getNick(), aMessage);
 	// Emulate a returning message...
 	Lock l(cs);
 	OnlineUser* ou = findUser(getMyNick());
 	if(ou) {
 		ChatMessage message = { aMessage, ou, &aUser, ou };
 		fire(ClientListener::Message(), this, message);
+	}
+}
+
+void NmdcHub::sendUserCmd(const UserCommand& command, const StringMap& params) {
+	checkstate();
+	string cmd = Util::formatParams(command.getCommand(), params, false);
+	if(command.isChat()) {
+		if(command.getTo().empty()) {
+			hubMessage(cmd);
+		} else {
+			privateMessage(command.getTo(), cmd);
+		}
+	} else {
+		send(fromUtf8(cmd));
 	}
 }
 

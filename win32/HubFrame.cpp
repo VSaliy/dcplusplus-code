@@ -1176,14 +1176,14 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 
 	if(inTabMenu) {
 		client->escapeParams(ucParams);
-		client->sendUserCmd(Util::formatParams(uc.getCommand(), ucParams, false));
+		client->sendUserCmd(uc, ucParams);
 	} else {
 		UserInfoList sel = selectedUsersImpl();
 		for(UserInfoList::const_iterator i = sel.begin(), iend = sel.end(); i != iend; ++i) {
 			StringMap tmp = ucParams;
 			static_cast<UserInfo*>(*i)->getIdentity().getParams(tmp, "user", true);
 			client->escapeParams(tmp);
-			client->sendUserCmd(Util::formatParams(uc.getCommand(), tmp, false));
+			client->sendUserCmd(uc, ucParams);
 		}
 	}
 }
