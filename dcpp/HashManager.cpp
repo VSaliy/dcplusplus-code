@@ -67,7 +67,7 @@ size_t HashManager::getBlockSize(const TTHValue& root) {
 	return store.getBlockSize(root);
 }
 
-void HashManager::hashDone(const string& aFileName, uint32_t aTimeStamp, const TigerTree& tth, int64_t speed) {
+void HashManager::hashDone(const string& aFileName, uint32_t aTimeStamp, const TigerTree& tth, int64_t speed, int64_t size) {
 	try {
 		Lock l(cs);
 		store.addFile(aFileName, aTimeStamp, tth, true);
@@ -78,8 +78,12 @@ void HashManager::hashDone(const string& aFileName, uint32_t aTimeStamp, const T
 
 	fire(HashManagerListener::TTHDone(), aFileName, tth.getRoot());
 
-	if (speed > 0) {
-		LogManager::getInstance()->message(str(F_("Finished hashing: %1% (%2%/s)") % Util::addBrackets(aFileName) % Util::formatBytes(speed)));
+	if(speed > 0) {
+		LogManager::getInstance()->message(str(F_("Finished hashing: %1% (%2% at %3%/s)") % Util::addBrackets(aFileName) %
+			Util::formatBytes(size) % Util::formatBytes(speed)));
+	} else if(size >= 0) {
+		LogManager::getInstance()->message(str(F_("Finished hashing: %1% (%2%)") % Util::addBrackets(aFileName) %
+			Util::formatBytes(size)));
 	} else {
 		LogManager::getInstance()->message(str(F_("Finished hashing: %1%") % Util::addBrackets(aFileName)));
 	}
@@ -861,7 +865,7 @@ int HashManager::Hasher::run() {
 				if(xcrc32 && xcrc32->getValue() != sfv.getCRC()) {
 					LogManager::getInstance()->message(str(F_("%1% not shared; calculated CRC32 does not match the one found in SFV file.") % Util::addBrackets(fname)));
 				} else {
-					HashManager::getInstance()->hashDone(fname, timestamp, *tth, speed);
+					HashManager::getInstance()->hashDone(fname, timestamp, *tth, speed, size);
 				}
 			} catch(const FileException& e) {
 				LogManager::getInstance()->message(str(F_("Error hashing %1%: %2%") % Util::addBrackets(fname) % e.getError()));

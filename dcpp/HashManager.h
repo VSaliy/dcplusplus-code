@@ -73,7 +73,7 @@ public:
 	size_t getBlockSize(const TTHValue& root);
 
 	void addTree(const string& aFileName, uint32_t aTimeStamp, const TigerTree& tt) {
-		hashDone(aFileName, aTimeStamp, tt, -1);
+		hashDone(aFileName, aTimeStamp, tt, -1, -1);
 	}
 	void addTree(const TigerTree& tree) { Lock l(cs); store.addTree(tree); }
 
@@ -228,7 +228,7 @@ private:
 	/** Single node tree where node = root, no storage in HashData.dat */
 	static const int64_t SMALL_TREE = -1;
 
-	void hashDone(const string& aFileName, uint32_t aTimeStamp, const TigerTree& tth, int64_t speed);
+	void hashDone(const string& aFileName, uint32_t aTimeStamp, const TigerTree& tth, int64_t speed, int64_t size);
 
 	void doRebuild() {
 		Lock l(cs);
