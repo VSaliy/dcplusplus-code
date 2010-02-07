@@ -186,7 +186,18 @@ public:
 		return (j != wstring::npos) ? path.substr(j+1, i-j-1) : path;
 	}
 
-	static void replace(const string& search, const string& replacement, string& str);
+	template<typename string_t>
+	static void replace(const string_t& search, const string_t& replacement, string_t& str) {
+		typename string_t::size_type i = 0;
+		while((i = str.find(search, i)) != string_t::npos) {
+			str.replace(i, search.size(), replacement);
+			i += replacement.size();
+		}
+	}
+	template<typename string_t>
+	static inline void replace(const typename string_t::value_type* search, const typename string_t::value_type* replacement, string_t& str) {
+		replace(string_t(search), string_t(replacement), str);
+	}
 
 	static void decodeUrl(const string& aUrl, string& aServer, uint16_t& aPort, string& aFile);
 	static string validateFileName(string aFile);
