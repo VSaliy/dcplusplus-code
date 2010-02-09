@@ -63,15 +63,16 @@ private:
 		COLUMN_LAST
 	};
 
-	struct SelectionKeeper {
-		SelectionKeeper(TablePtr hubs_);
-		~SelectionKeeper();
+	struct StateKeeper {
+		StateKeeper(TablePtr hubs_, bool maintainScroll = true);
+		~StateKeeper();
 
 		const FavoriteHubEntryList& getSelection() const;
 
 	private:
 		TablePtr hubs;
 		FavoriteHubEntryList selected;
+		int scroll;
 	};
 
 	GridPtr grid;

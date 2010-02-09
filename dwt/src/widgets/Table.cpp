@@ -141,6 +141,10 @@ void Table::updateArrow() {
 	}
 }
 
+void Table::scroll(int x, int y) {
+	ListView_Scroll(handle(), x, y);
+}
+
 void Table::setSelectedImpl(int item) {
 	ListView_SetItemState(handle(), item, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 }
