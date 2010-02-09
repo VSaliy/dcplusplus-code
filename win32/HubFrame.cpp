@@ -1183,7 +1183,7 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 			StringMap tmp = ucParams;
 			static_cast<UserInfo*>(*i)->getIdentity().getParams(tmp, "user", true);
 			client->escapeParams(tmp);
-			client->sendUserCmd(uc, ucParams);
+			client->sendUserCmd(uc, tmp);
 		}
 	}
 }

@@ -516,6 +516,9 @@ void NmdcHub::onLine(const string& aLine) throw() {
 			if(j == string::npos)
 				return;
 			string name = unescape(param.substr(i, j-i));
+			// NMDC uses '\' as a separator but both ADC and our internal representation use '/'
+			Util::replace("/", "//", name);
+			Util::replace("\\", "/", name);
 			i = j+1;
 			string command = unescape(param.substr(i, param.length() - i));
 			fire(ClientListener::HubUserCommand(), this, type, ctx, name, command);
