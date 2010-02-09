@@ -82,6 +82,7 @@ IDR_OPEN_DL_DIR         ICON                    "res/OpenDLDir.ico"
 IDR_OPEN_FILE_LIST      ICON                    "res/OpenFileList.ico"
 IDR_RECONNECT           ICON                    "res/Reconnect.ico"
 IDR_SETTINGS            ICON                    "res/Settings.ico"
+IDR_TRAY_PM             ICON                    "res/TrayPM.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
