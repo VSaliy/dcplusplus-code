@@ -150,20 +150,26 @@ void FavHubsFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::FAVHUBSFRAME_WIDTHS, WinUtil::toString(hubs->getColumnWidths()));
 }
 
-FavHubsFrame::SelectionKeeper::SelectionKeeper(TablePtr hubs_) : hubs(hubs_) {
+FavHubsFrame::StateKeeper::StateKeeper(TablePtr hubs_, bool maintainScroll) : hubs(hubs_), scroll(0) {
 	// in grouped mode, the indexes of each item are completely random, so use entry pointers instead
 	std::vector<unsigned> selection = hubs->getSelection();
 	for(std::vector<unsigned>::const_iterator i = selection.begin(), iend = selection.end(); i != iend; ++i)
 		selected.push_back(reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i)));
+
+	if(maintainScroll)
+		scroll = hubs->getScrollInfo(SB_VERT, SIF_POS).nPos;
 }
 
-FavHubsFrame::SelectionKeeper::~SelectionKeeper() {
+FavHubsFrame::StateKeeper::~StateKeeper() {
 	for(FavoriteHubEntryList::const_iterator i = selected.begin(), iend = selected.end(); i != iend; ++i) {
 		hubs->select(hubs->findData(reinterpret_cast<LPARAM>(*i)));
 	}
+
+	if(scroll)
+		hubs->scroll(0, scroll);
 }
 
-const FavoriteHubEntryList& FavHubsFrame::SelectionKeeper::getSelection() const {
+const FavoriteHubEntryList& FavHubsFrame::StateKeeper::getSelection() const {
 	return selected;
 }
 
@@ -190,7 +196,7 @@ void FavHubsFrame::handleProperties() {
 		FavHubProperties dlg(this, reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(hubs->getSelected())));
 		if(dlg.run() == IDOK) {
 			HoldRedraw hold(hubs);
-			SelectionKeeper keeper(hubs);
+			StateKeeper keeper(hubs);
 			refresh();
 		}
 	}
@@ -202,7 +208,7 @@ void FavHubsFrame::handleMove(bool up) {
 		return;
 
 	HoldRedraw hold(hubs);
-	SelectionKeeper keeper(hubs);
+	StateKeeper keeper(hubs);
 	const FavoriteHubEntryList& selected = keeper.getSelection();
 
 	FavoriteHubEntryList fh_copy = fh;
@@ -257,7 +263,7 @@ void FavHubsFrame::handleGroups() {
 	FavHubGroupsDlg(this).run();
 
 	HoldRedraw hold(hubs);
-	SelectionKeeper keeper(hubs);
+	StateKeeper keeper(hubs);
 	refresh();
 }
 
@@ -373,7 +379,7 @@ void FavHubsFrame::openSelected() {
 void FavHubsFrame::on(FavoriteAdded, const FavoriteHubEntryPtr e) throw() {
 	{
 		HoldRedraw hold(hubs);
-		SelectionKeeper keeper(hubs);
+		StateKeeper keeper(hubs, false);
 		refresh();
 	}
 	hubs->ensureVisible(hubs->findData(reinterpret_cast<LPARAM>(e)));

@@ -50,11 +50,17 @@ namespace dwt {
 template< class WidgetType >
 class AspectScrollable
 {
+	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
+	HWND H() const { return W().handle(); }
+
 	typedef Dispatchers::VoidVoid<> ScrollableDispatcher;
+
 public:
-	bool scrollIsAtEnd();
+	/// @ refer to the ::GetScrollInfo doc for information on the params.
+	SCROLLINFO getScrollInfo(int fnBar, int mask = SIF_ALL) const;
+	bool scrollIsAtEnd() const;
 
 	/// \ingroup EventHandlersAspectScrollable
 	/// Setting the event handler for the "scrolling horizontally" event
@@ -89,15 +95,17 @@ private:
 	}
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template< class WidgetType >
-bool AspectScrollable< WidgetType >::scrollIsAtEnd()
-{
-	SCROLLINFO scrollInfo = { sizeof(SCROLLINFO), SIF_RANGE | SIF_PAGE | SIF_POS };
-	BOOL ret = ::GetScrollInfo(static_cast<WidgetType*>(this)->handle(), SB_VERT, &scrollInfo);
-	dwtassert(ret != FALSE, _T("Can't get scroll info in scrollIsAtEnd"));
+template<class WidgetType>
+SCROLLINFO AspectScrollable<WidgetType>::getScrollInfo(int fnBar, int mask) const {
+	SCROLLINFO info = { sizeof(SCROLLINFO), mask };
+	BOOL ret = ::GetScrollInfo(H(), fnBar, &info);
+	dwtassert(ret != FALSE, _T("AspectScrollable: Can't get scroll info"));
+	return info;
+}
+
+template<class WidgetType>
+bool AspectScrollable<WidgetType>::scrollIsAtEnd() const {
+	SCROLLINFO scrollInfo = getScrollInfo(SB_VERT, SIF_RANGE | SIF_PAGE | SIF_POS);
 	return !scrollInfo.nPage || scrollInfo.nPos >= static_cast<int>(scrollInfo.nMax - scrollInfo.nPage) + scrollOffsetImpl();
 }
 

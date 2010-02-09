@@ -448,6 +448,8 @@ public:
 
     int find(const tstring& b, int start = -1, bool aPartial = false);
 
+	void scroll(int x, int y);
+
 	/// obsolete
 	inline void select(int i) { setSelected(i); }
 	void selectAll();
