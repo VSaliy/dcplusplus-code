@@ -53,11 +53,11 @@ public:
 					cur = menu;
 
 					tstring name = Text::toT(uc->getName());
-					Util::replace(_T("//"), _T("\\"), name);
+					Util::replace(_T("//"), tstring(1, 0), name);
 					StringTokenizer<tstring> t(name, _T('/'));
 					for(TStringList::const_iterator i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i) {
 						name = *i;
-						Util::replace(_T("\\"), _T("/"), name);
+						Util::replace(tstring(1, 0), _T("/"), name);
 						if(i+1 == t.getTokens().end()) {
 							cur->appendItem(name, std::tr1::bind(&T::runUserCommand, static_cast<T*>(this), std::tr1::cref(*uc)));
 						} else {

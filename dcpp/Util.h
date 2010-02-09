@@ -194,8 +194,8 @@ public:
 			i += replacement.size();
 		}
 	}
-	template<typename string_t>
-	static inline void replace(const typename string_t::value_type* search, const typename string_t::value_type* replacement, string_t& str) {
+	template<typename search_t, typename replacement_t, typename string_t>
+	static inline void replace(const search_t& search, const replacement_t& replacement, string_t& str) {
 		replace(string_t(search), string_t(replacement), str);
 	}
 
