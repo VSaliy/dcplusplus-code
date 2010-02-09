@@ -512,7 +512,7 @@ void MainWindow::setStaticWindowState(const string& id, bool open) {
 
 void MainWindow::TrayPM() {
 	if(!tray_pm && notify->isVisible() && ::GetForegroundWindow() != handle()) {
-		static dwt::IconPtr icon(new dwt::Icon(IDR_PRIVATE, dwt::Point(16, 16)));
+		static dwt::IconPtr icon(new dwt::Icon(IDR_TRAY_PM, dwt::Point(16, 16)));
 		notify->setIcon(icon);
 		tray_pm = true;
 	}

@@ -35,6 +35,7 @@
 #define IDR_OPEN_FILE_LIST 127
 #define IDR_RECONNECT 128
 #define IDR_SETTINGS 129
+#define IDR_TRAY_PM 130
 
 #define IDB_ARROWS		150
 #define IDB_FOLDERS		151
