@@ -977,7 +977,7 @@ void NmdcHub::on(Minute, uint32_t aTick) throw() {
 		for(StringIter i = protectedIPs.begin(); i != protectedIPs.end();) {
 			*i = Socket::resolve(*i);
 			if(Util::isPrivateIp(*i))
-				protectedIPs.erase(i);
+				i = protectedIPs.erase(i);
 			else
 				i++;
 		}
