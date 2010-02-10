@@ -64,13 +64,14 @@ private:
 	};
 
 	struct StateKeeper {
-		StateKeeper(TablePtr hubs_, bool maintainScroll = true);
+		StateKeeper(TablePtr hubs_, bool ensureVisible_ = true);
 		~StateKeeper();
 
 		const FavoriteHubEntryList& getSelection() const;
 
 	private:
 		TablePtr hubs;
+		bool ensureVisible;
 		FavoriteHubEntryList selected;
 		int scroll;
 	};
