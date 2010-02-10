@@ -23,7 +23,6 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 
-#include "HoldRedraw.h"
 #include "HubFrame.h"
 #include "FavHubProperties.h"
 #include "FavHubGroupsDlg.h"
@@ -150,23 +149,32 @@ void FavHubsFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::FAVHUBSFRAME_WIDTHS, WinUtil::toString(hubs->getColumnWidths()));
 }
 
-FavHubsFrame::StateKeeper::StateKeeper(TablePtr hubs_, bool maintainScroll) : hubs(hubs_), scroll(0) {
+FavHubsFrame::StateKeeper::StateKeeper(TablePtr hubs_, bool ensureVisible_) :
+hubs(hubs_),
+ensureVisible(ensureVisible_)
+{
+	hubs->sendMessage(WM_SETREDRAW, FALSE);
+
 	// in grouped mode, the indexes of each item are completely random, so use entry pointers instead
 	std::vector<unsigned> selection = hubs->getSelection();
 	for(std::vector<unsigned>::const_iterator i = selection.begin(), iend = selection.end(); i != iend; ++i)
 		selected.push_back(reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i)));
 
-	if(maintainScroll)
-		scroll = hubs->getScrollInfo(SB_VERT, SIF_POS).nPos;
+	scroll = hubs->getScrollInfo(SB_VERT, SIF_POS).nPos;
 }
 
 FavHubsFrame::StateKeeper::~StateKeeper() {
-	for(FavoriteHubEntryList::const_iterator i = selected.begin(), iend = selected.end(); i != iend; ++i) {
-		hubs->select(hubs->findData(reinterpret_cast<LPARAM>(*i)));
-	}
+	// restore visual updating now, otherwise it doesn't always scroll
+	hubs->sendMessage(WM_SETREDRAW, TRUE);
 
-	if(scroll)
-		hubs->scroll(0, scroll);
+	hubs->scroll(0, scroll);
+
+	for(FavoriteHubEntryList::const_iterator i = selected.begin(), iend = selected.end(); i != iend; ++i) {
+		int pos = hubs->findData(reinterpret_cast<LPARAM>(*i));
+		hubs->select(pos);
+		if(ensureVisible)
+			hubs->ensureVisible(pos);
+	}
 }
 
 const FavoriteHubEntryList& FavHubsFrame::StateKeeper::getSelection() const {
@@ -195,7 +203,6 @@ void FavHubsFrame::handleProperties() {
 	if(hubs->countSelected() == 1) {
 		FavHubProperties dlg(this, reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(hubs->getSelected())));
 		if(dlg.run() == IDOK) {
-			HoldRedraw hold(hubs);
 			StateKeeper keeper(hubs);
 			refresh();
 		}
@@ -207,7 +214,6 @@ void FavHubsFrame::handleMove(bool up) {
 	if(fh.size() <= 1)
 		return;
 
-	HoldRedraw hold(hubs);
 	StateKeeper keeper(hubs);
 	const FavoriteHubEntryList& selected = keeper.getSelection();
 
@@ -262,7 +268,6 @@ void FavHubsFrame::handleRemove() {
 void FavHubsFrame::handleGroups() {
 	FavHubGroupsDlg(this).run();
 
-	HoldRedraw hold(hubs);
 	StateKeeper keeper(hubs);
 	refresh();
 }
@@ -378,7 +383,6 @@ void FavHubsFrame::openSelected() {
 
 void FavHubsFrame::on(FavoriteAdded, const FavoriteHubEntryPtr e) throw() {
 	{
-		HoldRedraw hold(hubs);
 		StateKeeper keeper(hubs, false);
 		refresh();
 	}
