@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2009, Jacek Sieka
+  Copyright (c) 2007-2010, Jacek Sieka
 
   SmartWin++
 
@@ -110,14 +110,24 @@ public:
 	void setSize(unsigned part, unsigned size);
 
 	/**
-	* Sets the text of the given part
+	* Sets the text of the given part.
 	* @param part index of the part to update.
-	* @param text new text to put into "s".
+	* @param text new text of the part.
 	* @param alwaysResize if false, the part will be resized only if the new text is too big for
 	* the current; if true, the size of the part will always be adjusted to the text it contains.
 	* note: setting "alwaysResize" to true for often changing parts might result in flickering.
 	*/
 	void setText(unsigned part, const tstring& text, bool alwaysResize = false);
+
+	/**
+	* Sets the icon of the given part.
+	* @param part index of the part to update.
+	* @param icon new icon of the part (or 0 to remove the icon).
+	* @param alwaysResize if false, the part will be resized only if the new text is too big for
+	* the current; if true, the size of the part will always be adjusted to the text it contains.
+	* note: setting "alwaysResize" to true for often changing parts might result in flickering.
+	*/
+	void setIcon(unsigned part, const IconPtr& icon, bool alwaysResize = false);
 
 	/// Sets the help id of the given part. If not set, the help id of the whole status bar is used instead.
 	void setHelpId(unsigned part, unsigned id);
@@ -158,14 +168,19 @@ private:
 	static const TCHAR windowClass[];
 
 	struct Part {
-		Part() : size(0), helpId(0), clickF(0), dblClickF(0) { }
+		Part() : size(0), icon(0), helpId(0), clickF(0), dblClickF(0) { }
 
 		unsigned size;
+
+		tstring text;
+		IconPtr icon;
 
 		unsigned helpId;
 
 		F clickF;
 		F dblClickF;
+
+		void updateSize(StatusBar* bar, bool alwaysResize);
 	};
 	typedef std::vector<Part> Parts;
 	Parts parts;
@@ -175,6 +190,7 @@ private:
 	std::vector<tstring> lastLines;
 	enum { MAX_LINES = 10 }; /// @todo configurable?
 
+	void layoutSections();
 	void layoutSections(const Point& sz);
 	Part* getClickedPart();
 

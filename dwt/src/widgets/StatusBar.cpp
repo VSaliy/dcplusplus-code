@@ -1,7 +1,7 @@
 /*
   DC++ Widget Toolkit
 
-  Copyright (c) 2007-2009, Jacek Sieka
+  Copyright (c) 2007-2010, Jacek Sieka
 
   All rights reserved.
 
@@ -84,14 +84,10 @@ void StatusBar::setSize(unsigned part, unsigned size) {
 
 void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
+	Part& info = parts[part];
+	info.text = text;
 	if(part != fill) {
-		Part& info = parts[part];
-		unsigned oldW = info.size;
-		unsigned newW = getTextSize(text).x + 12;
-		if(newW > oldW || (alwaysResize && newW != oldW)) {
-			info.size = newW;
-			layoutSections(getWindowSize());
-		}
+		info.updateSize(this, alwaysResize);
 	} else if(tip) {
 		lastLines.push_back(text);
 		while(lastLines.size() > MAX_LINES) {
@@ -99,6 +95,15 @@ void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 		}
 	}
 	sendMessage(SB_SETTEXT, static_cast<WPARAM>(part), reinterpret_cast<LPARAM>(text.c_str()));
+}
+
+void StatusBar::setIcon(unsigned part, const IconPtr& icon, bool alwaysResize) {
+	dwtassert(part < parts.size(), _T("Invalid part number."));
+	Part& info = parts[part];
+	info.icon = icon;
+	if(part != fill)
+		info.updateSize(this, alwaysResize);
+	sendMessage(SB_SETICON, part, icon ? reinterpret_cast<LPARAM>(icon->handle()) : 0);
 }
 
 void StatusBar::setHelpId(unsigned part, unsigned id) {
@@ -142,6 +147,24 @@ bool StatusBar::handleMessage(const MSG& msg, LRESULT& retVal) {
 		tip->relayEvent(msg);
 
 	return BaseType::handleMessage(msg, retVal);
+}
+
+void StatusBar::Part::updateSize(StatusBar* bar, bool alwaysResize) {
+	unsigned newSize = 0;
+	if(icon)
+		newSize += icon->getSize().x;
+	if(!text.empty())
+		newSize += bar->getTextSize(text).x;
+	if(newSize > 0)
+		newSize += 12; // add margins
+	if(newSize > size || (alwaysResize && newSize != size)) {
+		size = newSize;
+		bar->layoutSections();
+	}
+}
+
+void StatusBar::layoutSections() {
+	layoutSections(getWindowSize());
 }
 
 void StatusBar::layoutSections(const Point& sz) {

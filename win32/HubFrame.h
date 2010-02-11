@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2010 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ class HubFrame :
 public:
 	enum Status {
 		STATUS_STATUS,
-		STATUS_CIPHER,
+		STATUS_SECURE,
 		STATUS_USERS,
 		STATUS_SHARED,
 		STATUS_AVERAGE_SHARED,
@@ -207,6 +207,7 @@ private:
 	tstring getStatusShared() const;
 	tstring getStatusAverageShared() const;
 	void updateStatus();
+	void updateSecureStatus();
 
 	void initSecond();
 	bool eachSecond();

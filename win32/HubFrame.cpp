@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2010 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -281,6 +281,20 @@ void HubFrame::updateStatus() {
 	status->setText(STATUS_AVERAGE_SHARED, getStatusAverageShared());
 }
 
+void HubFrame::updateSecureStatus() {
+	dwt::IconPtr icon;
+	tstring text;
+	if(client->isTrusted()) {
+		icon = new dwt::Icon(IDR_TRUSTED, dwt::Point(16, 16));
+		text = _T("[T] ");
+	} else if(client->isSecure()) {
+		icon = new dwt::Icon(IDR_SECURE, dwt::Point(16, 16));
+		text = _T("[U] ");
+	}
+	status->setIcon(STATUS_SECURE, icon);
+	status->setText(STATUS_SECURE, text + Text::toT(client->getCipherName()), true);
+}
+
 void HubFrame::initSecond() {
 	createTimer(std::tr1::bind(&HubFrame::eachSecond, this), 1000);
 }
@@ -504,13 +518,14 @@ void HubFrame::execTasks() {
 void HubFrame::onConnected() {
 	addStatus(T_("Connected"));
 	setIcon(IDR_HUB);
-	status->setText(STATUS_CIPHER, Text::toT(client->getCipherName()));
+	updateSecureStatus();
 }
 
 void HubFrame::onDisconnected() {
 	clearUserList();
 	clearTaskList();
 	setIcon(IDR_HUB_OFF);
+	updateSecureStatus();
 }
 
 void HubFrame::onGetPassword() {
@@ -773,15 +788,7 @@ void HubFrame::on(GetPassword, Client*) throw() {
 }
 
 void HubFrame::on(HubUpdated, Client*) throw() {
-	string hubName;
-	if(client->isTrusted()) {
-		hubName = "[S] ";
-	} else if(client->isSecure()) {
-		hubName = "[U] ";
-	}
-
-	hubName += client->getHubName();
-
+	string hubName = client->getHubName();
 	if(!client->getHubDescription().empty()) {
 		hubName += " - " + client->getHubDescription();
 	}
@@ -1324,8 +1331,7 @@ void HubFrame::handleFollow() {
 		// the client is dead, long live the client!
 		client->removeListener(this);
 		ClientManager::getInstance()->putClient(client);
-		clearUserList();
-		clearTaskList();
+		onDisconnected();
 		client = ClientManager::getInstance()->getClient(url);
 		client->addListener(this);
 		client->connect();

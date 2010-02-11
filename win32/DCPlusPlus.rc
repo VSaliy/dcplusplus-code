@@ -83,6 +83,8 @@ IDR_OPEN_FILE_LIST      ICON                    "res/OpenFileList.ico"
 IDR_RECONNECT           ICON                    "res/Reconnect.ico"
 IDR_SETTINGS            ICON                    "res/Settings.ico"
 IDR_TRAY_PM             ICON                    "res/TrayPM.ico"
+IDR_TRUSTED             ICON                    "res/Trusted.ico"
+IDR_SECURE              ICON                    "res/Secure.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -90,8 +92,8 @@ IDR_TRAY_PM             ICON                    "res/TrayPM.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,7,5,0
- PRODUCTVERSION 0,7,5,0
+ FILEVERSION 0,7,6,0
+ PRODUCTVERSION 0,7,6,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -108,12 +110,12 @@ BEGIN
         BEGIN
             VALUE "Comments", "http://dcplusplus.sourceforge.net"
             VALUE "FileDescription", "DC++"
-            VALUE "FileVersion", "0, 7, 5, 0"
+            VALUE "FileVersion", "0, 7, 6, 0"
             VALUE "InternalName", "DC++"
-            VALUE "LegalCopyright", "Copyright 2001-2009 Jacek Sieka"
+            VALUE "LegalCopyright", "Copyright 2001-2010 Jacek Sieka"
             VALUE "OriginalFilename", "DCPlusPlus.exe"
             VALUE "ProductName", "DC++"
-            VALUE "ProductVersion", "0, 7, 5, 0"
+            VALUE "ProductVersion", "0, 7, 6, 0"
         END
     END
     BLOCK "VarFileInfo"

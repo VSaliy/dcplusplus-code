@@ -36,6 +36,8 @@
 #define IDR_RECONNECT 128
 #define IDR_SETTINGS 129
 #define IDR_TRAY_PM 130
+#define IDR_TRUSTED 131
+#define IDR_SECURE 132
 
 #define IDB_ARROWS		150
 #define IDB_FOLDERS		151
