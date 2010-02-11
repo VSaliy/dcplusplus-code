@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2009 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2010 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,9 @@ bool AboutDlg::handleInitDialog() {
 
 		cur->addChild(Label::Seed(IDR_DCPP));
 
-		ls.caption = Text::toT(dcpp::fullVersionString) + T_("\n(c) Copyright 2001-2009 Jacek Sieka\nEx-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL\nhttp://dcplusplus.sourceforge.net/");
+		ls.caption = Text::toT(dcpp::fullVersionString) + _T("\n(c) Copyright 2001-2010 Jacek Sieka\n");
+		ls.caption += T_("Ex-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL\n");
+		ls.caption += _T("http://dcplusplus.sourceforge.net/");
 		cur->addChild(ls);
 
 		gs.caption = T_("TTH");
