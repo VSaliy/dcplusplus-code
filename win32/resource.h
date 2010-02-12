@@ -40,8 +40,9 @@
 #define IDR_SECURE 132
 #define IDR_RECENTS 133
 #define IDR_WHATS_THIS 134
+#define IDR_DOWNLOAD 135
+#define IDR_UPLOAD 136
 
-#define IDB_ARROWS		150
 #define IDB_FOLDERS		151
 #define IDB_USERS		154
 
