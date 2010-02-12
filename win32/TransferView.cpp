@@ -106,14 +106,13 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	}
 
 	{
-		arrows = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
-		dwt::Bitmap tmp(IDB_ARROWS);
-		arrows->add(tmp, RGB(255, 0, 255));
-	}
-	{
 		connections = connectionsWindow->addChild(WidgetConnections::Seed());
 
+		arrows = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
+		arrows->add(*dwt::IconPtr(new dwt::Icon(IDR_DOWNLOAD)));
+		arrows->add(*dwt::IconPtr(new dwt::Icon(IDR_UPLOAD)));
 		connections->setSmallImageList(arrows);
+
 		WinUtil::makeColumns(connections, connectionColumns, CONNECTION_COLUMN_LAST, SETTING(CONNECTIONS_ORDER), SETTING(CONNECTIONS_WIDTHS));
 
 		connections->setColor(WinUtil::textColor, WinUtil::bgColor);
