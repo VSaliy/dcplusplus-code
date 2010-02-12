@@ -103,7 +103,7 @@ void WinUtil::init() {
 	font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&lf), true));
 	monoFont = dwt::FontPtr(new dwt::Font((BOOLSETTING(USE_OEM_MONOFONT) ? dwt::OemFixedFont : dwt::AnsiFixedFont)));
 
-	fileImages = dwt::ImageListPtr(new dwt::ImageList(16, 16, ILC_COLOR32 | ILC_MASK));
+	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 
 	dirIconIndex = fileImageCount++;
 	dirMaskedIndex = fileImageCount++;
@@ -125,7 +125,7 @@ void WinUtil::init() {
 	}
 
 	{
-		userImages = dwt::ImageListPtr(new dwt::ImageList(16, 16, ILC_COLOR32 | ILC_MASK));
+		userImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 		dwt::Bitmap tmp(IDB_USERS);
 		userImages->add(tmp, RGB(255, 0, 255));
 	}

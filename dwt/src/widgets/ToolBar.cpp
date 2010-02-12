@@ -42,6 +42,9 @@ BaseType::Seed(WS_CHILD | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS | CCS_A
 
 ToolBar::ToolBar(Widget* parent) :
 BaseType(parent, ChainingDispatcher::superClass<ToolBar>()),
+itsNormalImageList(0),
+itsHotImageList(0),
+itsDisabledImageList(0),
 customizing(false),
 customized(0),
 customizeHelp(0)
@@ -71,6 +74,23 @@ void ToolBar::create(const Seed& cs) {
 		onRaw(std::tr1::bind(&ToolBar::handleQuery, this), Message(WM_NOTIFY, TBN_QUERYDELETE));
 		onRaw(std::tr1::bind(&ToolBar::handleReset, this), Message(WM_NOTIFY, TBN_RESET));
 	}
+}
+
+void ToolBar::addButton(const std::string& id, const IconPtr& icon, const IconPtr& hotIcon, const tstring& text, unsigned helpId,
+						const Dispatcher::F& f, const DropDownFunction& dropDownF)
+{
+	if(icon) {
+		if(!itsNormalImageList)
+			setNormalImageList(new ImageList(icon->getSize()));
+		itsNormalImageList->add(*icon);
+	}
+	if(hotIcon) {
+		if(!itsHotImageList)
+			setHotImageList(new ImageList(hotIcon->getSize()));
+		itsHotImageList->add(*icon);
+	}
+
+	addButton(id, icon ? itsNormalImageList->size() - 1 : I_IMAGENONE, text, helpId, f, dropDownF);
 }
 
 void ToolBar::addButton(const std::string& id, int image, const tstring& text, unsigned helpId,

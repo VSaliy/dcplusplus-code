@@ -106,7 +106,7 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	}
 
 	{
-		arrows = dwt::ImageListPtr(new dwt::ImageList(16, 16, ILC_COLOR32 | ILC_MASK));
+		arrows = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 		dwt::Bitmap tmp(IDB_ARROWS);
 		arrows->add(tmp, RGB(255, 0, 255));
 	}

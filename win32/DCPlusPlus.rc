@@ -41,8 +41,6 @@ END
 
 IDB_ARROWS              BITMAP                  "res/arrows.bmp"
 IDB_FOLDERS             BITMAP                  "res/folders.bmp"
-IDB_TOOLBAR20           BITMAP                  "res/toolbar20.bmp"
-IDB_TOOLBAR20_HOT       BITMAP                  "res/toolbar20-highlight.bmp"
 IDB_USERS               BITMAP                  "res/users.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -85,6 +83,8 @@ IDR_SETTINGS            ICON                    "res/Settings.ico"
 IDR_TRAY_PM             ICON                    "res/TrayPM.ico"
 IDR_TRUSTED             ICON                    "res/Trusted.ico"
 IDR_SECURE              ICON                    "res/Secure.ico"
+IDR_RECENTS             ICON                    "res/Recents.ico"
+IDR_WHATS_THIS          ICON                    "res/WhatsThis.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

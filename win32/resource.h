@@ -38,11 +38,11 @@
 #define IDR_TRAY_PM 130
 #define IDR_TRUSTED 131
 #define IDR_SECURE 132
+#define IDR_RECENTS 133
+#define IDR_WHATS_THIS 134
 
 #define IDB_ARROWS		150
 #define IDB_FOLDERS		151
-#define IDB_TOOLBAR20		152
-#define IDB_TOOLBAR20_HOT	153
 #define IDB_USERS		154
 
 // Stuff that uses multiple id's

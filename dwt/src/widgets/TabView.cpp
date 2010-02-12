@@ -75,7 +75,7 @@ void TabView::create(const Seed & cs) {
 	if(cs.font)
 		setFont( cs.font );
 
-	imageList = new ImageList(16, 16, ILC_COLOR32 | ILC_MASK);
+	imageList = new ImageList(Point(16, 16));
 
 	TabCtrl_SetImageList(handle(), imageList->handle());
 
