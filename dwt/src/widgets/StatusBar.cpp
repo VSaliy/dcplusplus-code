@@ -153,10 +153,13 @@ void StatusBar::Part::updateSize(StatusBar* bar, bool alwaysResize) {
 	unsigned newSize = 0;
 	if(icon)
 		newSize += icon->getSize().x;
-	if(!text.empty())
+	if(!text.empty()) {
+		if(icon)
+			newSize += 4; // spacing between icon & text
 		newSize += bar->getTextSize(text).x;
+	}
 	if(newSize > 0)
-		newSize += 12; // add margins
+		newSize += 10; // add margins
 	if(newSize > size || (alwaysResize && newSize != size)) {
 		size = newSize;
 		bar->layoutSections();
