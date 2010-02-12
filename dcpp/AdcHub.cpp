@@ -42,6 +42,7 @@ const string AdcHub::SECURE_CLIENT_PROTOCOL_TEST("ADCS/0.10");
 const string AdcHub::ADCS_FEATURE("ADC0");
 const string AdcHub::TCP4_FEATURE("TCP4");
 const string AdcHub::UDP4_FEATURE("UDP4");
+const string AdcHub::NAT0_FEATURE("NAT0");
 const string AdcHub::BASE_SUPPORT("ADBASE");
 const string AdcHub::BAS0_SUPPORT("ADBAS0");
 const string AdcHub::TIGR_SUPPORT("ADTIGR");
@@ -350,12 +351,7 @@ void AdcHub::handle(AdcCommand::CTM, AdcCommand& c) throw() {
 	} else if(protocol == SECURE_CLIENT_PROTOCOL_TEST && CryptoManager::getInstance()->TLSOk()) {
 		secure = true;
 	} else {
-		AdcCommand cmd(AdcCommand::SEV_FATAL, AdcCommand::ERROR_PROTOCOL_UNSUPPORTED, "Protocol unknown", AdcCommand::TYPE_DIRECT);
-		cmd.setTo(c.getFrom());
-		cmd.addParam("PR", protocol);
-		cmd.addParam("TO", token);
-
-		send(cmd);
+		unknownProtocol(c.getFrom(), protocol, token);
 		return;
 	}
 
@@ -393,15 +389,10 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 	} else if(protocol == SECURE_CLIENT_PROTOCOL_TEST && CryptoManager::getInstance()->TLSOk()) {
 		secure = true;
 	} else {
-		AdcCommand cmd(AdcCommand::SEV_FATAL, AdcCommand::ERROR_PROTOCOL_UNSUPPORTED, "Protocol unknown", AdcCommand::TYPE_DIRECT);
-		cmd.setTo(c.getFrom());
-		cmd.addParam("PR", protocol);
-		cmd.addParam("TO", token);
-
-		send(cmd);
+		unknownProtocol(c.getFrom(), protocol, token);
 		return;
 	}
-    connect(*u, token, secure);
+	connect(*u, token, secure);
 }
 
 void AdcHub::handle(AdcCommand::CMD, AdcCommand& c) throw() {
@@ -582,6 +573,61 @@ void AdcHub::handle(AdcCommand::GET, AdcCommand& c) throw() {
 		send(cmd);
 		send((char*)&v[0], v.size());
 	}
+}
+
+void AdcHub::handle(AdcCommand::NAT, AdcCommand& c) throw() {
+	OnlineUser* u = findUser(c.getFrom());
+	if(!u || u->getUser() == ClientManager::getInstance()->getMe() || c.getParameters().size() < 3)
+		return;
+
+	const string& protocol = c.getParam(0);
+	const string& port = c.getParam(1);
+	const string& token = c.getParam(2);
+
+	// bool secure = secureAvail(c.getFrom(), protocol, token);
+	bool secure = false;
+	if(protocol == CLIENT_PROTOCOL) {
+		// Nothing special
+	} else if(protocol == SECURE_CLIENT_PROTOCOL_TEST && CryptoManager::getInstance()->TLSOk()) {
+		secure = true;
+	} else {
+		unknownProtocol(c.getFrom(), protocol, token);
+		return;
+	}
+
+	// Trigger connection attempt sequence locally ...
+	dcdebug("triggering connecting attempt in NAT: remote port = %s, local IP = %s, local port = %d\n", port.c_str(), sock->getLocalIp().c_str(), sock->getLocalPort());
+	ConnectionManager::getInstance()->adcConnect(*u, static_cast<uint16_t>(Util::toInt(port)), sock->getLocalPort(), BufferedSocket::NAT_CLIENT, token, secure);
+
+	// ... and signal other client to do likewise.
+	send(AdcCommand(AdcCommand::CMD_RNT, u->getIdentity().getSID(), AdcCommand::TYPE_DIRECT).addParam(protocol).
+		addParam(Util::toString(sock->getLocalPort())).addParam(token));
+}
+
+void AdcHub::handle(AdcCommand::RNT, AdcCommand& c) throw() {
+	// Sent request for NAT traversal cooperation, which
+	// was acknowledged (with requisite local port information).
+	OnlineUser* u = findUser(c.getFrom());
+	if(!u || u->getUser() == ClientManager::getInstance()->getMe() || c.getParameters().size() < 3)
+		return;
+
+	const string& protocol = c.getParam(0);
+	const string& port = c.getParam(1);
+	const string& token = c.getParam(2);
+
+	bool secure = false;
+	if(protocol == CLIENT_PROTOCOL) {
+		// Nothing special
+	} else if(protocol == SECURE_CLIENT_PROTOCOL_TEST && CryptoManager::getInstance()->TLSOk()) {
+		secure = true;
+	} else {
+		unknownProtocol(c.getFrom(), protocol, token);
+		return;
+	}
+
+	// Trigger connection attempt sequence locally
+	dcdebug("triggering connecting attempt in RNT: remote port = %s, local IP = %s, local port = %d\n", port.c_str(), sock->getLocalIp().c_str(), sock->getLocalPort());
+	ConnectionManager::getInstance()->adcConnect(*u, static_cast<uint16_t>(Util::toInt(port)), sock->getLocalPort(), BufferedSocket::NAT_SERVER, token, secure);
 }
 
 void AdcHub::connect(const OnlineUser& user, const string& token) {
@@ -820,6 +866,15 @@ void AdcHub::send(const AdcCommand& cmd) {
 			sendUDP(cmd);
 		send(cmd.toString(sid));
 	}
+}
+
+void AdcHub::unknownProtocol(uint32_t target, const string& protocol, const string& token) {
+	AdcCommand cmd(AdcCommand::SEV_FATAL, AdcCommand::ERROR_PROTOCOL_UNSUPPORTED, "Protocol unknown", AdcCommand::TYPE_DIRECT);
+	cmd.setTo(target);
+	cmd.addParam("PR", protocol);
+	cmd.addParam("TO", token);
+
+	send(cmd);
 }
 
 void AdcHub::on(Connected c) throw() {
