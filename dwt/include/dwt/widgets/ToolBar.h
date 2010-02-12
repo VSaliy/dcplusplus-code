@@ -101,6 +101,8 @@ public:
 	* add a button to the toolbar. this will only create the internal structures for holding the
 	* button; call setLayout when all buttons have been created to actually add them to the bar.
 	*/
+	void addButton(const std::string& id, const IconPtr& icon, const IconPtr& hotIcon, const tstring& text, unsigned helpId = 0,
+		const Dispatcher::F& f = 0, const DropDownFunction& dropDownF = 0);
 	void addButton(const std::string& id, int image, const tstring& text, unsigned helpId = 0,
 		const Dispatcher::F& f = 0, const DropDownFunction& dropDownF = 0);
 

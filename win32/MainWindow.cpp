@@ -322,55 +322,39 @@ void MainWindow::initToolbar() {
 	dcdebug("initToolbar\n");
 	toolbar = addChild(ToolBar::Seed());
 
-	{
-		dwt::ImageListPtr list(new dwt::ImageList(20, 20, ILC_COLOR32 | ILC_MASK));
-		dwt::Bitmap bmp(IDB_TOOLBAR20);
-		list->add(bmp, RGB(255, 0, 255));
-
-		toolbar->setNormalImageList(list);
-	}
-	{
-		dwt::ImageListPtr list(new dwt::ImageList(20, 20, ILC_COLOR32 | ILC_MASK));
-		dwt::Bitmap bmp(IDB_TOOLBAR20_HOT);
-		list->add(bmp, RGB(255, 0, 255));
-
-		toolbar->setHotImageList(list);
-	}
-
-	int image = 0;
-	toolbar->addButton(PublicHubsFrame::id, image++, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS,
+	toolbar->addButton(PublicHubsFrame::id, dwt::IconPtr(new dwt::Icon(IDR_PUBLICHUBS)), 0, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS,
 		std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()));
-	toolbar->addButton("Reconnect", image++, T_("Reconnect"), IDH_TOOLBAR_RECONNECT,
+	toolbar->addButton("Reconnect", dwt::IconPtr(new dwt::Icon(IDR_RECONNECT)), 0, T_("Reconnect"), IDH_TOOLBAR_RECONNECT,
 		std::tr1::bind(&MainWindow::handleReconnect, this));
-	toolbar->addButton("Redirect", image++, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW,
+	toolbar->addButton("Redirect", dwt::IconPtr(new dwt::Icon(IDR_FOLLOW)), 0, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW,
 		std::tr1::bind(&MainWindow::handleRedirect, this));
-	toolbar->addButton(FavHubsFrame::id, image++, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
+	toolbar->addButton(FavHubsFrame::id, dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)), 0, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
 		std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), std::tr1::bind(&MainWindow::handleFavHubsDropDown, this, _1));
-	toolbar->addButton(UsersFrame::id, image++, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
+	toolbar->addButton(UsersFrame::id, dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)), 0, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
 		std::tr1::bind(&UsersFrame::openWindow, getTabView()));
-	toolbar->addButton(QueueFrame::id, image++, T_("Download Queue"), IDH_TOOLBAR_QUEUE,
+	toolbar->addButton(QueueFrame::id, dwt::IconPtr(new dwt::Icon(IDR_QUEUE)), 0, T_("Download Queue"), IDH_TOOLBAR_QUEUE,
 		std::tr1::bind(&QueueFrame::openWindow, getTabView()));
-	toolbar->addButton(FinishedDLFrame::id, image++, T_("Finished Downloads"), IDH_TOOLBAR_FINISHED_DL,
+	toolbar->addButton(FinishedDLFrame::id, dwt::IconPtr(new dwt::Icon(IDR_FINISHED_DL)), 0, T_("Finished Downloads"), IDH_TOOLBAR_FINISHED_DL,
 		std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()));
-	toolbar->addButton(WaitingUsersFrame::id, image++, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS,
+	toolbar->addButton(WaitingUsersFrame::id, dwt::IconPtr(new dwt::Icon(IDR_WAITING_USERS)), 0, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS,
 		std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()));
-	toolbar->addButton(FinishedULFrame::id, image++, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL,
+	toolbar->addButton(FinishedULFrame::id, dwt::IconPtr(new dwt::Icon(IDR_FINISHED_UL)), 0, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL,
 		std::tr1::bind(&FinishedULFrame::openWindow, getTabView()));
-	toolbar->addButton(SearchFrame::id, image++, T_("Search"), IDH_TOOLBAR_SEARCH,
+	toolbar->addButton(SearchFrame::id, dwt::IconPtr(new dwt::Icon(IDR_SEARCH)), 0, T_("Search"), IDH_TOOLBAR_SEARCH,
 		std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
-	toolbar->addButton(ADLSearchFrame::id, image++, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH,
+	toolbar->addButton(ADLSearchFrame::id, dwt::IconPtr(new dwt::Icon(IDR_ADLSEARCH)), 0, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH,
 		std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()));
-	toolbar->addButton(SpyFrame::id, image++, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY,
+	toolbar->addButton(SpyFrame::id, dwt::IconPtr(new dwt::Icon(IDR_SPY)), 0, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY,
 		std::tr1::bind(&SpyFrame::openWindow, getTabView()));
-	toolbar->addButton("OpenFL", image++, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST,
+	toolbar->addButton("OpenFL", dwt::IconPtr(new dwt::Icon(IDR_OPEN_FILE_LIST)), 0, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST,
 		std::tr1::bind(&MainWindow::handleOpenFileList, this));
-	toolbar->addButton("Recents", image++, T_("Recent windows"), IDH_TOOLBAR_RECENT,
+	toolbar->addButton("Recents", dwt::IconPtr(new dwt::Icon(IDR_RECENTS)), 0, T_("Recent windows"), IDH_TOOLBAR_RECENT,
 		0, std::tr1::bind(&MainWindow::handleRecent, this, _1));
-	toolbar->addButton("Settings", image++, T_("Settings"), IDH_TOOLBAR_SETTINGS,
+	toolbar->addButton("Settings", dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)), 0, T_("Settings"), IDH_TOOLBAR_SETTINGS,
 		std::tr1::bind(&MainWindow::handleSettings, this));
-	toolbar->addButton(NotepadFrame::id, image++, T_("Notepad"), IDH_TOOLBAR_NOTEPAD,
+	toolbar->addButton(NotepadFrame::id, dwt::IconPtr(new dwt::Icon(IDR_NOTEPAD)), 0, T_("Notepad"), IDH_TOOLBAR_NOTEPAD,
 		std::tr1::bind(&NotepadFrame::openWindow, getTabView()));
-	toolbar->addButton("CSHelp", image++, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS,
+	toolbar->addButton("CSHelp", dwt::IconPtr(new dwt::Icon(IDR_WHATS_THIS)), 0, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS,
 		std::tr1::bind(&MainWindow::handleWhatsThis, this));
 
 	if(SettingsManager::getInstance()->isDefault(SettingsManager::TOOLBAR)) {

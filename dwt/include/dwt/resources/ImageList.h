@@ -81,7 +81,7 @@ public:
 	  * images on the list. e.g. (ILC_COLOR32 | ILC_MASK) [32 bits with mask];
 	  * (ILC_COLOR16) [16 bits, no mask].
 	  */
-	ImageList( int width, int height, unsigned flags );
+	ImageList(const Point& size, unsigned flags = ILC_COLOR32 | ILC_MASK);
 
 	/// Deprecated, use handle()
 	HIMAGELIST getImageList() const;

@@ -43,8 +43,8 @@ ImageList::ImageList( HIMAGELIST imageList, bool own )
 	: ResourceType( imageList, own )
 {}
 
-ImageList::ImageList( int width, int height, unsigned flags )
-	: ResourceType(ImageList_Create(width, height, flags, 0, 1))
+ImageList::ImageList(const Point& size, unsigned flags) :
+ResourceType(ImageList_Create(size.x, size.y, flags, 0, 1))
 {
 	if( handle() == NULL ) {
 		throw Win32Exception("Couldn't create ImageList");
