@@ -325,7 +325,7 @@ void AdcHub::handle(AdcCommand::CTM, AdcCommand& c) throw() {
 	OnlineUser* u = findUser(c.getFrom());
 	if(!u || u->getUser() == ClientManager::getInstance()->getMe())
 		return;
-	if(c.getParameters().size() < 2)
+	if(c.getParameters().size() < 3)
 		return;
 
 	const string& protocol = c.getParam(0);
