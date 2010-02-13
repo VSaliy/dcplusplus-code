@@ -330,20 +330,7 @@ void AdcHub::handle(AdcCommand::CTM, AdcCommand& c) throw() {
 
 	const string& protocol = c.getParam(0);
 	const string& port = c.getParam(1);
-
-	string token;
-	if(c.getParameters().size() == 3) {
-		const string& tok = c.getParam(2);
-
-		// 0.699 put TO before the token, keep this bug fix for a while
-		if(tok.compare(0, 2, "TO") == 0) {
-			token = tok.substr(2);
-		} else {
-			token = tok;
-		}
-	} else {
-		// <= 0.703 would send an empty token for passive connections when replying to RCM
-	}
+	const string& token = c.getParam(2);
 
 	bool secure = false;
 	if(protocol == CLIENT_PROTOCOL) {
@@ -374,14 +361,7 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 		return;
 
 	const string& protocol = c.getParam(0);
-	const string& tok = c.getParam(1);
-	string token;
-	// 0.699 sent a token with "TO" prefix
-	if(tok.compare(0, 2, "TO") == 0) {
-		token = tok.substr(2);
-	} else {
-		token = tok;
-	}
+	const string& token = c.getParam(1);
 
 	bool secure;
 	if(protocol == CLIENT_PROTOCOL) {
