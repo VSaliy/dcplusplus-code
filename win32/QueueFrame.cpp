@@ -50,7 +50,7 @@ static const ColumnInfo filesColumns[] = {
 #define FILE_LIST_NAME _T("File Lists")
 
 QueueFrame::QueueFrame(dwt::TabView* mdiParent) :
-BaseType(mdiParent, T_("Download Queue"), IDH_QUEUE, IDR_QUEUE),
+BaseType(mdiParent, T_("Download Queue"), IDH_QUEUE, IDI_QUEUE),
 paned(0),
 dirs(0),
 files(0),

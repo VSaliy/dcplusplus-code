@@ -27,7 +27,7 @@ const string StatsFrame::id = "Stats";
 const string& StatsFrame::getId() const { return id; }
 
 StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Network Statistics"), IDH_NET_STATS, IDR_NET_STATS),
+	BaseType(mdiParent, T_("Network Statistics"), IDH_NET_STATS, IDI_NET_STATS),
 	pen(new dwt::Pen(WinUtil::textColor)),
 	upPen(new dwt::Pen(SETTING(UPLOAD_BAR_COLOR))),
 	downPen(new dwt::Pen(SETTING(DOWNLOAD_BAR_COLOR))),

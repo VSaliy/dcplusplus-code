@@ -27,7 +27,7 @@ const string NotepadFrame::id = "Notepad";
 const string& NotepadFrame::getId() const { return id; }
 
 NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Notepad"), IDH_NOTEPAD, IDR_NOTEPAD),
+	BaseType(mdiParent, T_("Notepad"), IDH_NOTEPAD, IDI_NOTEPAD),
 	pad(0)
 {
 	{

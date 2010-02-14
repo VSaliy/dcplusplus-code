@@ -109,7 +109,7 @@ bool HubFrame::isFavorite(const StringMap& params) {
 }
 
 HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
-BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDR_HUB_OFF, false),
+BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDI_HUB_OFF, false),
 paned(0),
 userGrid(0),
 users(0),
@@ -284,15 +284,18 @@ void HubFrame::updateStatus() {
 void HubFrame::updateSecureStatus() {
 	dwt::IconPtr icon;
 	tstring text;
-	if(client->isTrusted()) {
-		icon = new dwt::Icon(IDR_TRUSTED, dwt::Point(16, 16));
-		text = _T("[T] ");
-	} else if(client->isSecure()) {
-		icon = new dwt::Icon(IDR_SECURE, dwt::Point(16, 16));
-		text = _T("[U] ");
+	if(client) {
+		if(client->isTrusted()) {
+			icon = WinUtil::statusIcon(IDI_TRUSTED);
+			text = _T("[T] ");
+		} else if(client->isSecure()) {
+			icon = WinUtil::statusIcon(IDI_SECURE);
+			text = _T("[U] ");
+		}
+		text += Text::toT(client->getCipherName());
 	}
 	status->setIcon(STATUS_SECURE, icon);
-	status->setText(STATUS_SECURE, text + Text::toT(client->getCipherName()), true);
+	status->setText(STATUS_SECURE, text, true);
 }
 
 void HubFrame::initSecond() {
@@ -517,14 +520,14 @@ void HubFrame::execTasks() {
 
 void HubFrame::onConnected() {
 	addStatus(T_("Connected"));
-	setIcon(IDR_HUB);
+	setIcon(IDI_HUB);
 	updateSecureStatus();
 }
 
 void HubFrame::onDisconnected() {
 	clearUserList();
 	clearTaskList();
-	setIcon(IDR_HUB_OFF);
+	setIcon(IDI_HUB_OFF);
 	updateSecureStatus();
 }
 
@@ -1111,10 +1114,10 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 
 void HubFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 	if(!FavoriteManager::getInstance()->isFavoriteHub(url)) {
-		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&HubFrame::addAsFavorite, this), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
+		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&HubFrame::addAsFavorite, this), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 	}
 
-	menu->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&HubFrame::handleReconnect, this), dwt::IconPtr(new dwt::Icon(IDR_RECONNECT)));
+	menu->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&HubFrame::handleReconnect, this), WinUtil::menuIcon(IDI_RECONNECT));
 	menu->appendItem(T_("Copy &address to clipboard"), std::tr1::bind(&HubFrame::handleCopyHub, this));
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
@@ -1331,6 +1334,7 @@ void HubFrame::handleFollow() {
 		// the client is dead, long live the client!
 		client->removeListener(this);
 		ClientManager::getInstance()->putClient(client);
+		client = 0;
 		onDisconnected();
 		client = ClientManager::getInstance()->getClient(url);
 		client->addListener(this);

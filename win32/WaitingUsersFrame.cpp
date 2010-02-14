@@ -31,7 +31,7 @@ const string& WaitingUsersFrame::getId() const { return id; }
 
 // Constructor
 WaitingUsersFrame::WaitingUsersFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Waiting Users"), IDH_WAITING_USERS, IDR_WAITING_USERS)
+	BaseType(mdiParent, T_("Waiting Users"), IDH_WAITING_USERS, IDI_WAITING_USERS)
 {
 	UploadManager::getInstance()->addListener(this);
 

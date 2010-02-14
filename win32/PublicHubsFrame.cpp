@@ -76,7 +76,7 @@ int PublicHubsFrame::HubInfo::compareItems(const HubInfo* a, const HubInfo* b, i
 }
 
 PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
-BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDR_PUBLICHUBS, false),
+BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDI_PUBLICHUBS, false),
 grid(0),
 hubs(0),
 filter(0),
@@ -387,7 +387,7 @@ bool PublicHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		menu->appendItem(T_("&Connect"), std::tr1::bind(&PublicHubsFrame::handleConnect, this), dwt::IconPtr(), true, true);
-		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&PublicHubsFrame::handleAdd, this), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
+		menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&PublicHubsFrame::handleAdd, this), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		menu->appendItem(T_("Copy &address to clipboard"), std::tr1::bind(&PublicHubsFrame::handleCopyHub, this));
 
 		menu->open(pt);

@@ -40,7 +40,7 @@ static const ColumnInfo itemsColumns[] = {
 };
 
 ADLSearchFrame::ADLSearchFrame(dwt::TabView* mdiParent) :
-BaseType(mdiParent, T_("Automatic Directory Listing Search"), IDH_ADL_SEARCH, IDR_ADLSEARCH),
+BaseType(mdiParent, T_("Automatic Directory Listing Search"), IDH_ADL_SEARCH, IDI_ADLSEARCH),
 grid(0),
 items(0)
 {

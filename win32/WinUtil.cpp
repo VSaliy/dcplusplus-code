@@ -1208,7 +1208,7 @@ void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, dwt::TabVi
 		Util::emptyStringT, Util::emptyString));
 
 	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav), std::tr1::bind(&FavoriteManager::addFavoriteUser,
-		FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
+		FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDI_FAVORITE_USERS)));
 
 	addUsers(menu, T_("Grant &extra slot"), users, std::tr1::bind(&UploadManager::reserveSlot,
 		UploadManager::getInstance(), _1));
@@ -1235,6 +1235,10 @@ void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, siz
 	toInts(order, o);
 	toInts(widths, w);
 	table->createColumns(n, w, a, o);
+}
+
+dwt::IconPtr WinUtil::createIcon(unsigned id, long size) {
+	return new dwt::Icon(id, dwt::Point(size, size));
 }
 
 #ifdef PORT_ME

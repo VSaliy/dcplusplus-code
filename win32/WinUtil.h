@@ -207,21 +207,14 @@ public:
 
 	static void addUserItems(MenuPtr menu, const HintedUserList& users, dwt::TabViewPtr parent, const StringList& dirs = StringList());
 
+	/* utility functions to create icons. use these throughout the prog to make it easier to change
+	sizes globally should the need arise to later on. */
+	static dwt::IconPtr createIcon(unsigned id, long size);
+	static inline dwt::IconPtr menuIcon(unsigned id) { return createIcon(id, 16); }
+	static inline dwt::IconPtr statusIcon(unsigned id) { return createIcon(id, 16); }
+	static inline dwt::IconPtr tabIcon(unsigned id) { return createIcon(id, 16); }
+
 #ifdef PORT_ME
-	static int getTextWidth(const tstring& str, HWND hWnd) {
-		HDC dc = ::GetDC(hWnd);
-		int sz = getTextWidth(str, dc);
-		::ReleaseDC(mainWnd, dc);
-		return sz;
-	}
-	static int getTextWidth(const tstring& str, HDC dc) {
-		SIZE sz = { 0, 0 };
-		::GetTextExtentPoint32(dc, str.c_str(), str.length(), &sz);
-		return sz.cx;
-	}
-
-	static int textUnderCursor(POINT p, CEdit& ctrl, tstring& x);
-
 	static double toBytes(TCHAR* aSize);
 #endif
 

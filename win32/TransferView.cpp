@@ -109,8 +109,8 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		connections = connectionsWindow->addChild(WidgetConnections::Seed());
 
 		arrows = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
-		arrows->add(*dwt::IconPtr(new dwt::Icon(IDR_DOWNLOAD)));
-		arrows->add(*dwt::IconPtr(new dwt::Icon(IDR_UPLOAD)));
+		arrows->add(*WinUtil::createIcon(IDI_DOWNLOAD, 16));
+		arrows->add(*WinUtil::createIcon(IDI_UPLOAD, 16));
 		connections->setSmallImageList(arrows);
 
 		WinUtil::makeColumns(connections, connectionColumns, CONNECTION_COLUMN_LAST, SETTING(CONNECTIONS_ORDER), SETTING(CONNECTIONS_WIDTHS));

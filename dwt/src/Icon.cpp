@@ -60,10 +60,6 @@ ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), filePath.c_str(), IMAGE
 {
 }
 
-HICON Icon::getIcon() const {
-	return handle();
-}
-
 Point Icon::getSize() const {
 	ICONINFO ii;
 	if(!::GetIconInfo(handle(), &ii))
