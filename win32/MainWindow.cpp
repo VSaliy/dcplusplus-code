@@ -410,6 +410,18 @@ void MainWindow::initStatusBar() {
 	status->setSize(STATUS_SLOTS_SPIN, 22);
 	///@todo set to checkbox width + resizedrag width really
 	status->setSize(STATUS_DUMMY, 32);
+
+	{
+		dwt::IconPtr icon_DL(WinUtil::statusIcon(IDI_DOWNLOAD));
+		dwt::IconPtr icon_UL(WinUtil::statusIcon(IDI_UPLOAD));
+		status->setIcon(STATUS_DOWN_TOTAL, icon_DL);
+		status->setIcon(STATUS_UP_TOTAL, icon_UL);
+		status->setIcon(STATUS_DOWN_DIFF, icon_DL);
+		status->setIcon(STATUS_UP_DIFF, icon_UL);
+		status->setIcon(STATUS_DOWN_LIMIT, icon_DL);
+		status->setIcon(STATUS_UP_LIMIT, icon_UL);
+	}
+
 	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
 	status->onDblClicked(STATUS_AWAY, std::tr1::bind(&Util::switchAway));
 	{
