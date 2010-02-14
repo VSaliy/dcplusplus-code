@@ -202,15 +202,13 @@ bool Application::dispatch() {
 		HWND hwnd = msg.hwnd;
 		HWND owner = 0;
 		while(hwnd && hwnd != owner) {
-			{
-				// make sure the window is ours or hwnd_cast might crash.
-				TCHAR className[128];
-				if(!::GetClassName(hwnd, className, 128) || !Dispatcher::isRegistered(className))
-					break;
-			}
-			Control* control = hwnd_cast<Control*>(hwnd);
-			if(control && control->filter(msg)) {
-				return true;
+			// make sure the window is ours or hwnd_cast might crash.
+			TCHAR className[128];
+			if(::GetClassName(hwnd, className, 128) && Dispatcher::isRegistered(className)) {
+				Control* control = hwnd_cast<Control*>(hwnd);
+				if(control && control->filter(msg)) {
+					return true;
+				}
 			}
 			owner = ::GetWindow(hwnd, GW_OWNER);
 			hwnd = ::GetParent(hwnd);
