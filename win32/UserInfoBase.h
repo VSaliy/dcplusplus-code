@@ -22,7 +22,10 @@
 #include <dcpp/forward.h>
 #include <dcpp/Text.h>
 #include <dcpp/User.h>
+
 #include "resource.h"
+#include "WinUtil.h"
+
 #include <dwt/widgets/Menu.h>
 
 class UserInfoBase {
@@ -130,10 +133,10 @@ protected:
 		if(includeSendPM)
 			menu->appendItem(T_("&Send private message"), std::tr1::bind(&ThisType::handlePrivateMessage, this, parent), dwt::IconPtr(), true, !defaultIsGetList);
 		if(!traits.favOnly)
-			menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&ThisType::handleAddFavorite, this), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
+			menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&ThisType::handleAddFavorite, this), WinUtil::menuIcon(IDI_FAVORITE_USERS));
 		menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&ThisType::handleGrantSlot, this));
 		if(!traits.nonFavOnly)
-			menu->appendItem(T_("Connect to hub"), std::tr1::bind(&ThisType::handleConnectFav, this, parent), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
+			menu->appendItem(T_("Connect to hub"), std::tr1::bind(&ThisType::handleConnectFav, this, parent), WinUtil::menuIcon(IDI_HUB));
 		menu->appendSeparator();
 		menu->appendItem(T_("Remove user from queue"), std::tr1::bind(&ThisType::handleRemoveFromQueue, this));
 	}

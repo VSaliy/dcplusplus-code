@@ -113,7 +113,7 @@ bool PrivateFrame::isFavorite(const StringMap& params) {
 }
 
 PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const HintedUser& replyTo_, bool active, const string& logPath) :
-BaseType(mdiParent, _T(""), IDH_PM, IDR_PRIVATE, false),
+BaseType(mdiParent, _T(""), IDH_PM, IDI_PRIVATE, false),
 replyTo(replyTo_),
 priv(FavoriteManager::getInstance()->isPrivate(replyTo.getUser().hint)),
 online(replyTo.getUser().user->isOnline())
@@ -237,7 +237,7 @@ void PrivateFrame::updateOnlineStatus() {
 	setText(WinUtil::getNicks(cid, hint, priv) + _T(" - ") + hubs.first);
 
 	online = hubs.second;
-	setIcon(online ? IDR_PRIVATE : IDR_PRIVATE_OFF);
+	setIcon(online ? IDI_PRIVATE : IDI_PRIVATE_OFF);
 }
 
 void PrivateFrame::enterImpl(const tstring& s) {

@@ -72,8 +72,8 @@
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/StringUtils.h>
 
-static dwt::IconPtr mainIcon(new dwt::Icon(IDR_DCPP, dwt::Point(32, 32)));
-static dwt::IconPtr mainSmallIcon(new dwt::Icon(IDR_DCPP, dwt::Point(16, 16)));
+static dwt::IconPtr mainIcon(WinUtil::createIcon(IDI_DCPP, 32));
+static dwt::IconPtr mainSmallIcon(WinUtil::createIcon(IDI_DCPP, 16));
 
 MainWindow::MainWindow() :
 dwt::Window(0, dwt::NormalDispatcher::newClass<MainWindow>(mainIcon, mainSmallIcon)),
@@ -213,93 +213,93 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr file = mainMenu->appendPopup(T_("&File"));
 
-		file->appendItem(T_("&Quick connect...\tCtrl+Q"), std::tr1::bind(&MainWindow::handleQuickConnect, this), dwt::IconPtr(new dwt::Icon(IDR_HUB)));
-		file->appendItem(T_("Connect to a favorite hub &group...\tCtrl+G"), std::tr1::bind(&MainWindow::handleConnectFavHubGroup, this), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
+		file->appendItem(T_("&Quick connect...\tCtrl+Q"), std::tr1::bind(&MainWindow::handleQuickConnect, this), WinUtil::menuIcon(IDI_HUB));
+		file->appendItem(T_("Connect to a favorite hub &group...\tCtrl+G"), std::tr1::bind(&MainWindow::handleConnectFavHubGroup, this), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		file->appendSeparator();
 
-		file->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&MainWindow::handleReconnect, this), dwt::IconPtr(new dwt::Icon(IDR_RECONNECT)));
-		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), std::tr1::bind(&MainWindow::handleRedirect, this), dwt::IconPtr(new dwt::Icon(IDR_FOLLOW)));
+		file->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&MainWindow::handleReconnect, this), WinUtil::menuIcon(IDI_RECONNECT));
+		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), std::tr1::bind(&MainWindow::handleRedirect, this), WinUtil::menuIcon(IDI_FOLLOW));
 		file->appendSeparator();
 
-		file->appendItem(T_("Open file list...\tCtrl+L"), std::tr1::bind(&MainWindow::handleOpenFileList, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_FILE_LIST)));
+		file->appendItem(T_("Open file list...\tCtrl+L"), std::tr1::bind(&MainWindow::handleOpenFileList, this), WinUtil::menuIcon(IDI_OPEN_FILE_LIST));
 		file->appendItem(T_("Open own list"), std::tr1::bind(&DirectoryListingFrame::openOwnList, getTabView()));
 		file->appendItem(T_("Match downloaded lists"), std::tr1::bind(&MainWindow::handleMatchAll, this));
 		file->appendItem(T_("Refresh file list\tF5"), std::tr1::bind(&MainWindow::handleRefreshFileList, this));
-		file->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_DL_DIR)));
+		file->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), WinUtil::menuIcon(IDI_OPEN_DL_DIR));
 		file->appendSeparator();
 
-		file->appendItem(T_("Settings\tCtrl+F3"), std::tr1::bind(&MainWindow::handleSettings, this), dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)));
+		file->appendItem(T_("Settings\tCtrl+F3"), std::tr1::bind(&MainWindow::handleSettings, this), WinUtil::menuIcon(IDI_SETTINGS));
 		file->appendSeparator();
-		file->appendItem(T_("E&xit\tAlt+F4"), std::tr1::bind(&MainWindow::handleExit, this), dwt::IconPtr(new dwt::Icon(IDR_EXIT)));
+		file->appendItem(T_("E&xit\tAlt+F4"), std::tr1::bind(&MainWindow::handleExit, this), WinUtil::menuIcon(IDI_EXIT));
 	}
 
 	{
 		viewMenu = mainMenu->appendPopup(T_("&View"));
 
-		staticIndexes[PublicHubsFrame::id] = viewMenu->appendItem(T_("&Public Hubs\tCtrl+P"),
-			std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_PUBLICHUBS)));
-		staticIndexes[FavHubsFrame::id] = viewMenu->appendItem(T_("&Favorite Hubs\tCtrl+F"),
-			std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
-		staticIndexes[UsersFrame::id] = viewMenu->appendItem(T_("Favorite &Users\tCtrl+U"),
-			std::tr1::bind(&UsersFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)));
+		viewIndexes[PublicHubsFrame::id] = viewMenu->appendItem(T_("&Public Hubs\tCtrl+P"),
+			std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_PUBLICHUBS));
+		viewIndexes[FavHubsFrame::id] = viewMenu->appendItem(T_("&Favorite Hubs\tCtrl+F"),
+			std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
+		viewIndexes[UsersFrame::id] = viewMenu->appendItem(T_("Favorite &Users\tCtrl+U"),
+			std::tr1::bind(&UsersFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FAVORITE_USERS));
 		viewMenu->appendSeparator();
-		staticIndexes[QueueFrame::id] = viewMenu->appendItem(T_("&Download Queue\tCtrl+D"),
-			std::tr1::bind(&QueueFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_QUEUE)));
-		staticIndexes[FinishedDLFrame::id] = viewMenu->appendItem(T_("Finished Downloads"),
-			std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FINISHED_DL)));
-		staticIndexes[WaitingUsersFrame::id] = viewMenu->appendItem(T_("Waiting Users"),
-			std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_WAITING_USERS)));
-		staticIndexes[FinishedULFrame::id] = viewMenu->appendItem(T_("Finished Uploads"),
-			std::tr1::bind(&FinishedULFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_FINISHED_UL)));
+		viewIndexes[QueueFrame::id] = viewMenu->appendItem(T_("&Download Queue\tCtrl+D"),
+			std::tr1::bind(&QueueFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_QUEUE));
+		viewIndexes[FinishedDLFrame::id] = viewMenu->appendItem(T_("Finished Downloads"),
+			std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FINISHED_DL));
+		viewIndexes[WaitingUsersFrame::id] = viewMenu->appendItem(T_("Waiting Users"),
+			std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_WAITING_USERS));
+		viewIndexes[FinishedULFrame::id] = viewMenu->appendItem(T_("Finished Uploads"),
+			std::tr1::bind(&FinishedULFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FINISHED_UL));
 		viewMenu->appendSeparator();
-		viewMenu->appendItem(T_("&Search\tCtrl+S"), std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), dwt::IconPtr(new dwt::Icon(IDR_SEARCH)));
-		staticIndexes[ADLSearchFrame::id] = viewMenu->appendItem(T_("ADL Search"),
-			std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_ADLSEARCH)));
-		staticIndexes[SpyFrame::id] = viewMenu->appendItem(T_("Search Spy"),
-			std::tr1::bind(&SpyFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_SPY)));
+		viewMenu->appendItem(T_("&Search\tCtrl+S"), std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), WinUtil::menuIcon(IDI_SEARCH));
+		viewIndexes[ADLSearchFrame::id] = viewMenu->appendItem(T_("ADL Search"),
+			std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_ADLSEARCH));
+		viewIndexes[SpyFrame::id] = viewMenu->appendItem(T_("Search Spy"),
+			std::tr1::bind(&SpyFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_SPY));
 		viewMenu->appendSeparator();
-		staticIndexes[NotepadFrame::id] = viewMenu->appendItem(T_("&Notepad\tCtrl+N"),
-			std::tr1::bind(&NotepadFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_NOTEPAD)));
-		staticIndexes[SystemFrame::id] = viewMenu->appendItem(T_("System Log"),
+		viewIndexes[NotepadFrame::id] = viewMenu->appendItem(T_("&Notepad\tCtrl+N"),
+			std::tr1::bind(&NotepadFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_NOTEPAD));
+		viewIndexes[SystemFrame::id] = viewMenu->appendItem(T_("System Log"),
 			std::tr1::bind(&SystemFrame::openWindow, getTabView()));
-		staticIndexes[StatsFrame::id] = viewMenu->appendItem(T_("Network Statistics"),
-			std::tr1::bind(&StatsFrame::openWindow, getTabView()), dwt::IconPtr(new dwt::Icon(IDR_NET_STATS)));
+		viewIndexes[StatsFrame::id] = viewMenu->appendItem(T_("Network Statistics"),
+			std::tr1::bind(&StatsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_NET_STATS));
 		viewMenu->appendItem(T_("Indexing progress"), std::tr1::bind(&MainWindow::handleHashProgress, this));
 		viewMenu->appendSeparator();
-		staticIndexes["Toolbar"] = viewMenu->appendItem(T_("Toolbar\tCtrl+1"),
+		viewIndexes["Toolbar"] = viewMenu->appendItem(T_("Toolbar\tCtrl+1"),
 			std::tr1::bind(&MainWindow::switchToolbar, this));
-		staticIndexes["Transfers"] = viewMenu->appendItem(T_("Transfer view\tCtrl+2"),
+		viewIndexes["Transfers"] = viewMenu->appendItem(T_("Transfer view\tCtrl+2"),
 			std::tr1::bind(&MainWindow::switchTransfers, this));
-		staticIndexes["Status"] = viewMenu->appendItem(T_("Status bar\tCtrl+3"),
+		viewIndexes["Status"] = viewMenu->appendItem(T_("Status bar\tCtrl+3"),
 			std::tr1::bind(&MainWindow::switchStatus, this));
 	}
 
 	{
 		MenuPtr window = mainMenu->appendPopup(T_("&Window"));
 
-		window->appendItem(T_("Close disconnected hubs"), std::tr1::bind(&HubFrame::closeDisconnected), dwt::IconPtr(new dwt::Icon(IDR_HUB_OFF)));
-		window->appendItem(T_("Close all hubs of a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this, false), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
-		window->appendItem(T_("Close hubs not in a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this, true), dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)));
+		window->appendItem(T_("Close disconnected hubs"), std::tr1::bind(&HubFrame::closeDisconnected), WinUtil::menuIcon(IDI_HUB_OFF));
+		window->appendItem(T_("Close all hubs of a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this, false), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
+		window->appendItem(T_("Close hubs not in a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this, true), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		window->appendSeparator();
 
-		window->appendItem(T_("Close all PM windows"), std::tr1::bind(&PrivateFrame::closeAll), dwt::IconPtr(new dwt::Icon(IDR_PRIVATE)));
-		window->appendItem(T_("Close all offline PM windows"), std::tr1::bind(&PrivateFrame::closeAllOffline), dwt::IconPtr(new dwt::Icon(IDR_PRIVATE_OFF)));
+		window->appendItem(T_("Close all PM windows"), std::tr1::bind(&PrivateFrame::closeAll), WinUtil::menuIcon(IDI_PRIVATE));
+		window->appendItem(T_("Close all offline PM windows"), std::tr1::bind(&PrivateFrame::closeAllOffline), WinUtil::menuIcon(IDI_PRIVATE_OFF));
 		window->appendSeparator();
 
-		window->appendItem(T_("Close all file list windows"), std::tr1::bind(&DirectoryListingFrame::closeAll), dwt::IconPtr(new dwt::Icon(IDR_DIRECTORY)));
+		window->appendItem(T_("Close all file list windows"), std::tr1::bind(&DirectoryListingFrame::closeAll), WinUtil::menuIcon(IDI_DIRECTORY));
 		window->appendSeparator();
 
-		window->appendItem(T_("Close all search windows"), std::tr1::bind(&SearchFrame::closeAll), dwt::IconPtr(new dwt::Icon(IDR_SEARCH)));
+		window->appendItem(T_("Close all search windows"), std::tr1::bind(&SearchFrame::closeAll), WinUtil::menuIcon(IDI_SEARCH));
 	}
 
 	{
 		MenuPtr help = mainMenu->appendPopup(T_("&Help"));
 
-		help->appendItem(T_("Help &Contents\tF1"), std::tr1::bind(&WinUtil::help, this, IDH_INDEX), dwt::IconPtr(new dwt::Icon(IDR_HELP)));
+		help->appendItem(T_("Help &Contents\tF1"), std::tr1::bind(&WinUtil::help, this, IDH_INDEX), WinUtil::menuIcon(IDI_HELP));
 		help->appendItem(T_("Get started"), std::tr1::bind(&WinUtil::help, this, IDH_GET_STARTED));
 		help->appendSeparator();
 		help->appendItem(T_("Change Log"), std::tr1::bind(&WinUtil::help, this, IDH_CHANGELOG));
-		help->appendItem(T_("About DC++"), std::tr1::bind(&MainWindow::handleAbout, this), mainSmallIcon);
+		help->appendItem(T_("About DC++"), std::tr1::bind(&MainWindow::handleAbout, this), WinUtil::menuIcon(IDI_DCPP));
 		help->appendSeparator();
 		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.homepage)));
 		help->appendItem(T_("Downloads"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.downloads)));
@@ -322,39 +322,39 @@ void MainWindow::initToolbar() {
 	dcdebug("initToolbar\n");
 	toolbar = addChild(ToolBar::Seed());
 
-	toolbar->addButton(PublicHubsFrame::id, dwt::IconPtr(new dwt::Icon(IDR_PUBLICHUBS)), 0, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS,
+	toolbar->addButton(PublicHubsFrame::id, toolbarIcon(IDI_PUBLICHUBS), 0, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS,
 		std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()));
-	toolbar->addButton("Reconnect", dwt::IconPtr(new dwt::Icon(IDR_RECONNECT)), 0, T_("Reconnect"), IDH_TOOLBAR_RECONNECT,
+	toolbar->addButton("Reconnect", toolbarIcon(IDI_RECONNECT), 0, T_("Reconnect"), IDH_TOOLBAR_RECONNECT,
 		std::tr1::bind(&MainWindow::handleReconnect, this));
-	toolbar->addButton("Redirect", dwt::IconPtr(new dwt::Icon(IDR_FOLLOW)), 0, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW,
+	toolbar->addButton("Redirect", toolbarIcon(IDI_FOLLOW), 0, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW,
 		std::tr1::bind(&MainWindow::handleRedirect, this));
-	toolbar->addButton(FavHubsFrame::id, dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_HUBS)), 0, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
+	toolbar->addButton(FavHubsFrame::id, toolbarIcon(IDI_FAVORITE_HUBS), 0, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
 		std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), std::tr1::bind(&MainWindow::handleFavHubsDropDown, this, _1));
-	toolbar->addButton(UsersFrame::id, dwt::IconPtr(new dwt::Icon(IDR_FAVORITE_USERS)), 0, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
+	toolbar->addButton(UsersFrame::id, toolbarIcon(IDI_FAVORITE_USERS), 0, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
 		std::tr1::bind(&UsersFrame::openWindow, getTabView()));
-	toolbar->addButton(QueueFrame::id, dwt::IconPtr(new dwt::Icon(IDR_QUEUE)), 0, T_("Download Queue"), IDH_TOOLBAR_QUEUE,
+	toolbar->addButton(QueueFrame::id, toolbarIcon(IDI_QUEUE), 0, T_("Download Queue"), IDH_TOOLBAR_QUEUE,
 		std::tr1::bind(&QueueFrame::openWindow, getTabView()));
-	toolbar->addButton(FinishedDLFrame::id, dwt::IconPtr(new dwt::Icon(IDR_FINISHED_DL)), 0, T_("Finished Downloads"), IDH_TOOLBAR_FINISHED_DL,
+	toolbar->addButton(FinishedDLFrame::id, toolbarIcon(IDI_FINISHED_DL), 0, T_("Finished Downloads"), IDH_TOOLBAR_FINISHED_DL,
 		std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()));
-	toolbar->addButton(WaitingUsersFrame::id, dwt::IconPtr(new dwt::Icon(IDR_WAITING_USERS)), 0, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS,
+	toolbar->addButton(WaitingUsersFrame::id, toolbarIcon(IDI_WAITING_USERS), 0, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS,
 		std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()));
-	toolbar->addButton(FinishedULFrame::id, dwt::IconPtr(new dwt::Icon(IDR_FINISHED_UL)), 0, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL,
+	toolbar->addButton(FinishedULFrame::id, toolbarIcon(IDI_FINISHED_UL), 0, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL,
 		std::tr1::bind(&FinishedULFrame::openWindow, getTabView()));
-	toolbar->addButton(SearchFrame::id, dwt::IconPtr(new dwt::Icon(IDR_SEARCH)), 0, T_("Search"), IDH_TOOLBAR_SEARCH,
+	toolbar->addButton(SearchFrame::id, toolbarIcon(IDI_SEARCH), 0, T_("Search"), IDH_TOOLBAR_SEARCH,
 		std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
-	toolbar->addButton(ADLSearchFrame::id, dwt::IconPtr(new dwt::Icon(IDR_ADLSEARCH)), 0, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH,
+	toolbar->addButton(ADLSearchFrame::id, toolbarIcon(IDI_ADLSEARCH), 0, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH,
 		std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()));
-	toolbar->addButton(SpyFrame::id, dwt::IconPtr(new dwt::Icon(IDR_SPY)), 0, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY,
+	toolbar->addButton(SpyFrame::id, toolbarIcon(IDI_SPY), 0, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY,
 		std::tr1::bind(&SpyFrame::openWindow, getTabView()));
-	toolbar->addButton("OpenFL", dwt::IconPtr(new dwt::Icon(IDR_OPEN_FILE_LIST)), 0, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST,
+	toolbar->addButton("OpenFL", toolbarIcon(IDI_OPEN_FILE_LIST), 0, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST,
 		std::tr1::bind(&MainWindow::handleOpenFileList, this));
-	toolbar->addButton("Recents", dwt::IconPtr(new dwt::Icon(IDR_RECENTS)), 0, T_("Recent windows"), IDH_TOOLBAR_RECENT,
+	toolbar->addButton("Recents", toolbarIcon(IDI_RECENTS), 0, T_("Recent windows"), IDH_TOOLBAR_RECENT,
 		0, std::tr1::bind(&MainWindow::handleRecent, this, _1));
-	toolbar->addButton("Settings", dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)), 0, T_("Settings"), IDH_TOOLBAR_SETTINGS,
+	toolbar->addButton("Settings", toolbarIcon(IDI_SETTINGS), 0, T_("Settings"), IDH_TOOLBAR_SETTINGS,
 		std::tr1::bind(&MainWindow::handleSettings, this));
-	toolbar->addButton(NotepadFrame::id, dwt::IconPtr(new dwt::Icon(IDR_NOTEPAD)), 0, T_("Notepad"), IDH_TOOLBAR_NOTEPAD,
+	toolbar->addButton(NotepadFrame::id, toolbarIcon(IDI_NOTEPAD), 0, T_("Notepad"), IDH_TOOLBAR_NOTEPAD,
 		std::tr1::bind(&NotepadFrame::openWindow, getTabView()));
-	toolbar->addButton("CSHelp", dwt::IconPtr(new dwt::Icon(IDR_WHATS_THIS)), 0, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS,
+	toolbar->addButton("CSHelp", toolbarIcon(IDI_WHATS_THIS), 0, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS,
 		std::tr1::bind(&MainWindow::handleWhatsThis, this));
 
 	if(SettingsManager::getInstance()->isDefault(SettingsManager::TOOLBAR)) {
@@ -392,7 +392,7 @@ void MainWindow::initToolbar() {
 
 	toolbar->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
 
-	viewMenu->checkItem(staticIndexes["Toolbar"], true);
+	viewMenu->checkItem(viewIndexes["Toolbar"], true);
 }
 
 void MainWindow::initStatusBar() {
@@ -429,7 +429,7 @@ void MainWindow::initStatusBar() {
 	status->setHelpId(STATUS_DOWN_DIFF, IDH_MAIN_DOWN_DIFF);
 	status->setHelpId(STATUS_UP_DIFF, IDH_MAIN_UP_DIFF);
 
-	viewMenu->checkItem(staticIndexes["Status"], true);
+	viewMenu->checkItem(viewIndexes["Status"], true);
 }
 
 void MainWindow::initTabs() {
@@ -451,7 +451,7 @@ void MainWindow::initTransfers() {
 	transfers = new TransferView(this, getTabView());
 	paned->setSecond(transfers);
 
-	viewMenu->checkItem(staticIndexes["Transfers"], true);
+	viewMenu->checkItem(viewIndexes["Transfers"], true);
 }
 
 void MainWindow::initTray() {
@@ -489,14 +489,14 @@ void MainWindow::setStaticWindowState(const string& id, bool open) {
 	if(toolbar)
 		toolbar->setButtonChecked(id, open);
 
-	StaticIndexes::const_iterator i = staticIndexes.find(id);
-	if(i != staticIndexes.end())
+	ViewIndexes::const_iterator i = viewIndexes.find(id);
+	if(i != viewIndexes.end())
 		viewMenu->checkItem(i->second, open);
 }
 
 void MainWindow::TrayPM() {
 	if(!tray_pm && notify->isVisible() && ::GetForegroundWindow() != handle()) {
-		static dwt::IconPtr icon(new dwt::Icon(IDR_TRAY_PM, dwt::Point(16, 16)));
+		static dwt::IconPtr icon(WinUtil::createIcon(IDI_TRAY_PM, 16));
 		notify->setIcon(icon);
 		tray_pm = true;
 	}
@@ -544,9 +544,9 @@ template<typename T, typename configureF>
 static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, MainWindow* mainWindow,
 						  const tstring& text, unsigned iconId, unsigned favIconId, configureF f)
 {
-	MenuPtr popup = menu->appendPopup(text, dwt::IconPtr(new dwt::Icon(iconId)));
+	MenuPtr popup = menu->appendPopup(text, WinUtil::menuIcon(iconId));
 	popup->appendItem(T_("&Configure..."), std::tr1::bind(f, mainWindow, T::id, text),
-		dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)), true, true);
+		WinUtil::menuIcon(IDI_SETTINGS), true, true);
 	popup->appendSeparator();
 
 	WindowManager::RecentList::const_iterator it = recent.find(T::id);
@@ -554,7 +554,7 @@ static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu
 		popup->appendItem(T_("(No recent item found)"), 0, 0, false);
 	} else {
 
-		dwt::IconPtr favIcon = dwt::IconPtr(new dwt::Icon(favIconId));
+		dwt::IconPtr favIcon = WinUtil::menuIcon(favIconId);
 
 		const WindowManager::WindowInfoList& list = it->second;
 		for(WindowManager::WindowInfoList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
@@ -581,9 +581,9 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 
 		typedef void (MainWindow::*configureF)(const string&, const tstring&);
 		configureF f = &MainWindow::handleConfigureRecent;
-		addRecentMenu<HubFrame>(recent, menu, this, T_("Recent hubs"), IDR_HUB, IDR_FAVORITE_HUBS, f);
-		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDR_PRIVATE, IDR_FAVORITE_USERS, f);
-		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDR_DIRECTORY, IDR_FAVORITE_USERS, f);
+		addRecentMenu<HubFrame>(recent, menu, this, T_("Recent hubs"), IDI_HUB, IDI_FAVORITE_HUBS, f);
+		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDI_PRIVATE, IDI_FAVORITE_USERS, f);
+		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDI_DIRECTORY, IDI_FAVORITE_USERS, f);
 
 		wm->unlock();
 	}
@@ -725,6 +725,10 @@ bool MainWindow::chooseFavHubGroup(const tstring& title, tstring& group) {
 		return true;
 	}
 	return false;
+}
+
+dwt::IconPtr MainWindow::toolbarIcon(unsigned id) const {
+	return WinUtil::createIcon(id, SETTING(TOOLBAR_SIZE));
 }
 
 void MainWindow::saveWindowSettings() {
@@ -1212,11 +1216,33 @@ void MainWindow::handleToolbarCustomized() {
 bool MainWindow::handleToolbarContextMenu(const dwt::ScreenCoordinate& pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 	menu->setTitle(T_("Toolbar"));
+
 	menu->appendItem(T_("&Customize\tDouble-click"), std::tr1::bind(&ToolBar::customize, toolbar),
-		dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)), true, true);
+		WinUtil::menuIcon(IDI_SETTINGS), true, true);
+
+	{
+		MenuPtr size = menu->appendPopup(T_("Size"));
+		int sizes[] = { 16, 20, 22, 24, 32 };
+		const int& setting = SETTING(TOOLBAR_SIZE);
+		for(size_t i = 0, iend = sizeof(sizes) / sizeof(int); i < iend; ++i) {
+			const int& n = sizes[i];
+			size->appendItem(Text::toT(Util::toString(n)), std::tr1::bind(&MainWindow::handleToolbarSize, this, n));
+			if(n == setting)
+				size->checkItem(i);
+		}
+	}
+
+	menu->appendSeparator();
 	menu->appendItem(T_("&Hide\tCtrl+1"), std::tr1::bind(&MainWindow::switchToolbar, this));
+
 	menu->open(pt);
 	return true;
+}
+
+void MainWindow::handleToolbarSize(int size) {
+	SettingsManager::getInstance()->set(SettingsManager::TOOLBAR_SIZE, size);
+	switchToolbar();
+	switchToolbar();
 }
 
 void MainWindow::switchToolbar() {
@@ -1225,7 +1251,7 @@ void MainWindow::switchToolbar() {
 		toolbar = 0;
 
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_TOOLBAR, false);
-		viewMenu->checkItem(staticIndexes["Toolbar"], false);
+		viewMenu->checkItem(viewIndexes["Toolbar"], false);
 
 	} else {
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_TOOLBAR, true);
@@ -1248,7 +1274,7 @@ void MainWindow::switchTransfers() {
 		transfers = 0;
 
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_TRANSFERVIEW, false);
-		viewMenu->checkItem(staticIndexes["Transfers"], false);
+		viewMenu->checkItem(viewIndexes["Transfers"], false);
 
 	} else {
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_TRANSFERVIEW, true);
@@ -1267,7 +1293,7 @@ void MainWindow::switchStatus() {
 		slotsSpin = 0;
 
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_STATUSBAR, false);
-		viewMenu->checkItem(staticIndexes["Status"], false);
+		viewMenu->checkItem(viewIndexes["Status"], false);
 
 	} else {
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_STATUSBAR, true);
@@ -1313,11 +1339,11 @@ bool MainWindow::handleMessage(const MSG& msg, LRESULT& retVal) {
 void MainWindow::handleTrayContextMenu() {
 	MenuPtr trayMenu = addChild(WinUtil::Seeds::menu);
 
-	trayMenu->appendItem(T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), mainSmallIcon, true, true);
-	trayMenu->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), dwt::IconPtr(new dwt::Icon(IDR_OPEN_DL_DIR)));
-	trayMenu->appendItem(T_("Settings"), std::tr1::bind(&MainWindow::handleSettings, this), dwt::IconPtr(new dwt::Icon(IDR_SETTINGS)));
+	trayMenu->appendItem(T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), WinUtil::menuIcon(IDI_DCPP), true, true);
+	trayMenu->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), WinUtil::menuIcon(IDI_OPEN_DL_DIR));
+	trayMenu->appendItem(T_("Settings"), std::tr1::bind(&MainWindow::handleSettings, this), WinUtil::menuIcon(IDI_SETTINGS));
 	trayMenu->appendSeparator();
-	trayMenu->appendItem(T_("Exit"), std::tr1::bind(&MainWindow::close, this, true), dwt::IconPtr(new dwt::Icon(IDR_EXIT)));
+	trayMenu->appendItem(T_("Exit"), std::tr1::bind(&MainWindow::close, this, true), WinUtil::menuIcon(IDI_EXIT));
 
 	dwt::ScreenCoordinate pt;
 	::GetCursorPos(&pt.getPoint());

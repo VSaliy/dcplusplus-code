@@ -92,7 +92,7 @@ void SearchFrame::closeAll() {
 }
 
 SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, SearchManager::TypeModes initialType_) :
-BaseType(mdiParent, T_("Search"), IDH_SEARCH, IDR_SEARCH),
+BaseType(mdiParent, T_("Search"), IDH_SEARCH, IDI_SEARCH),
 paned(0),
 options(0),
 searchBox(0),

@@ -41,7 +41,7 @@ static const ColumnInfo hubsColumns[] = {
 };
 
 FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
-BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDR_FAVORITE_HUBS),
+BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDI_FAVORITE_HUBS),
 grid(0),
 hubs(0)
 {

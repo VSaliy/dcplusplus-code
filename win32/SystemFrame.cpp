@@ -29,7 +29,7 @@ const string SystemFrame::id = "SystemLog";
 const string& SystemFrame::getId() const { return id; }
 
 SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("System Log"), IDH_SYSTEM_LOG, IDR_DCPP),
+	BaseType(mdiParent, T_("System Log"), IDH_SYSTEM_LOG, IDI_DCPP),
 	log(0)
 {
 	{

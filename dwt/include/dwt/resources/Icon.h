@@ -86,9 +86,6 @@ public:
 	  */
 	explicit Icon(const tstring& filePath);
 
-	/// Deprecated use handle()
-	HICON getIcon() const;
-
 	/**
 	* get the size of the icon, in pixels. note: icons can contain multiple images with different
 	* sizes; this will only give you the size of the first image! hence this function is useful

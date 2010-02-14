@@ -40,7 +40,7 @@ static const ColumnInfo searchesColumns[] = {
 };
 
 SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Search Spy"), IDH_SEARCH_SPY, IDR_SPY),
+	BaseType(mdiParent, T_("Search Spy"), IDH_SEARCH_SPY, IDI_SPY),
 	searches(0),
 	ignoreTTH(0),
 	bIgnoreTTH(BOOLSETTING(SPY_FRAME_IGNORE_TTH_SEARCHES)),
@@ -153,7 +153,8 @@ bool SpyFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		}
 
 		MenuPtr contextMenu = addChild(WinUtil::Seeds::menu);
-		contextMenu->appendItem(T_("&Search"), std::tr1::bind(&SpyFrame::handleSearch, this, searches->getText(searches->getSelected(), COLUMN_STRING)), dwt::IconPtr(new dwt::Icon(IDR_SEARCH)));
+		contextMenu->appendItem(T_("&Search"), std::tr1::bind(&SpyFrame::handleSearch, this,
+			searches->getText(searches->getSelected(), COLUMN_STRING)), WinUtil::menuIcon(IDI_SEARCH));
 
 		contextMenu->open(pt);
 		return true;

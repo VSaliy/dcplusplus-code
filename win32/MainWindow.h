@@ -109,8 +109,8 @@ private:
 	dwt::TabViewPtr tabs;
 	dwt::SpinnerPtr slotsSpin;
 
-	typedef unordered_map<string, unsigned> StaticIndexes;
-	StaticIndexes staticIndexes; /// indexes of menu commands of the "View" menu that open static windows
+	typedef unordered_map<string, unsigned> ViewIndexes;
+	ViewIndexes viewIndexes; /// indexes of menu commands of the "View" menu that open static windows
 
 	/** Was the window maximized when minimizing it? */
 	bool maximized;
@@ -160,6 +160,7 @@ private:
 	LRESULT handleEndSession();
 	void handleToolbarCustomized();
 	bool handleToolbarContextMenu(const dwt::ScreenCoordinate& pt);
+	void handleToolbarSize(int size);
 	void switchToolbar();
 	void switchTransfers();
 	void switchStatus();
@@ -194,6 +195,7 @@ private:
 	void viewAndDelete(const string& fileName);
 	bool chooseFavHubGroup(const tstring& title, tstring& group);
 	void statusMessage(time_t t, const string& m);
+	dwt::IconPtr toolbarIcon(unsigned id) const;
 
 	bool filter(MSG& msg);
 

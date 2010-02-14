@@ -38,7 +38,7 @@ class MDIChildFrame :
 	T& t() { return *static_cast<T*>(this); }
 
 protected:
-	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned resourceId = 0, bool manageAccels = true) :
+	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned iconId = 0, bool manageAccels = true) :
 		BaseType(tabView),
 		lastFocus(NULL),
 		alwaysSameFocus(false),
@@ -53,7 +53,7 @@ protected:
 		if(helpId)
 			setHelpId(helpId);
 
-		tabView->add(this, resourceId ? dwt::IconPtr(new dwt::Icon(resourceId, dwt::Point(16, 16))) : dwt::IconPtr());
+		tabView->add(this, iconId ? WinUtil::tabIcon(iconId) : dwt::IconPtr());
 
 		this->onTabContextMenu(std::tr1::bind(&ThisType::handleContextMenu, this, _1));
 
@@ -123,8 +123,8 @@ protected:
 		return static_cast<dwt::TabView*>(BaseType::getParent());
 	}
 
-	void setIcon(unsigned resourceId) {
-		getParent()->setTabIcon(this, dwt::IconPtr(new dwt::Icon(resourceId)));
+	void setIcon(unsigned iconId) {
+		getParent()->setTabIcon(this, WinUtil::tabIcon(iconId));
 	}
 
 public:
@@ -213,7 +213,7 @@ private:
 		menu->setTitle(getParent()->getTabText(this), getParent()->getTabIcon(this));
 
 		tabMenuImpl(menu);
-		menu->appendItem(T_("&Close"), std::tr1::bind(&ThisType::close, this, true), dwt::IconPtr(new dwt::Icon(IDR_EXIT)));
+		menu->appendItem(T_("&Close"), std::tr1::bind(&ThisType::close, this, true), WinUtil::menuIcon(IDI_EXIT));
 
 		menu->open(pt);
 		return true;
