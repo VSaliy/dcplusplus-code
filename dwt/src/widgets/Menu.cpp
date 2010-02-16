@@ -79,6 +79,7 @@ font(font_)
 }
 
 Menu::Menu( dwt::Widget* parent ) :
+ownerDrawn(true),
 isSysMenu(false),
 itsParent(parent),
 drawSidebar(false)
