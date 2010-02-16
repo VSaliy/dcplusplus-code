@@ -65,7 +65,6 @@ void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool passw
 		box->setPassword();
 	}
 	box->setText(value);
-	box->setSelection();
 	valueFs.push_back(std::tr1::bind((tstring (TextBox::*)() const)(&TextBox::getText), box));
 }
 
@@ -75,10 +74,8 @@ void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const i
 
 	TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 	box->setText(value);
-	box->setSelection();
 
-	SpinnerPtr spin = cur->addChild(Spinner::Seed(min, max, box));
-	cur->setWidget(spin);
+	cur->setWidget(cur->addChild(Spinner::Seed(min, max, box)));
 
 	valueFs.push_back(std::tr1::bind((tstring (TextBox::*)() const)(&TextBox::getText), box));
 }

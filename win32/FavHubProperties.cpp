@@ -64,7 +64,6 @@ bool FavHubProperties::handleInitDialog() {
 		cur->addChild(Label::Seed(T_("Name")))->setHelpId(IDH_FAVORITE_HUB_NAME);
 		name = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		name->setText(Text::toT(entry->getName()));
-		name->setSelection();
 		name->setHelpId(IDH_FAVORITE_HUB_NAME);
 
 		cur->addChild(Label::Seed(T_("Address")))->setHelpId(IDH_FAVORITE_HUB_ADDRESS);
