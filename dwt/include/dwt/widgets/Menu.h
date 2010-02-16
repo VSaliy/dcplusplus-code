@@ -368,6 +368,8 @@ protected:
 		{}
 	};
 
+	bool ownerDrawn;
+
 private:
 	// This is used during menu destruction
 	static void destroyItemDataWrapper( ItemDataWrapper * wrapper );
@@ -377,15 +379,11 @@ private:
 
 	// its sub menus
 	std::vector< ObjectType > itsChildren;
-
 	// its item data
 	std::vector < ItemDataWrapper * > itsItemData;
 
 	HMENU itsHandle;
-
 	Widget* itsParent;
-
-	bool ownerDrawn;
 
 	Point iconSize;
 
