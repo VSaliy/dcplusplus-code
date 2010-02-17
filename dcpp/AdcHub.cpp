@@ -32,6 +32,7 @@
 #include "UserCommand.h"
 #include "CryptoManager.h"
 #include "LogManager.h"
+#include "ThrottleManager.h"
 
 #include <math.h>
 
@@ -783,13 +784,20 @@ void AdcHub::info(bool /*alwaysSend*/) {
 	addParam(lastInfoMap, c, "HR", Util::toString(counts.registered));
 	addParam(lastInfoMap, c, "HO", Util::toString(counts.op));
 	addParam(lastInfoMap, c, "VE", "++ " VERSIONSTRING);
-	addParam(lastInfoMap, c, "US", Util::toString((long)(Util::toDouble(SETTING(UPLOAD_SPEED))*1024*1024/8)));
 	addParam(lastInfoMap, c, "AW", Util::getAway() ? "1" : Util::emptyString);
 
-	if(SETTING(MAX_DOWNLOAD_SPEED) > 0) {
-		addParam(lastInfoMap, c, "DS", Util::toString((SETTING(MAX_DOWNLOAD_SPEED)*1024*8)));
+	int limit = BOOLSETTING(THROTTLE_ENABLE) ? ThrottleManager::getInstance()->getDownLimit() : 0;
+	if (limit > 0) {
+		addParam(lastInfoMap, c, "DS", Util::toString(limit * 1024));
 	} else {
 		addParam(lastInfoMap, c, "DS", Util::emptyString);
+	}
+
+	limit = BOOLSETTING(THROTTLE_ENABLE) ? ThrottleManager::getInstance()->getUpLimit() : 0;
+	if (limit > 0) {
+		addParam(lastInfoMap, c, "US", Util::toString(limit * 1024));
+	} else {
+		addParam(lastInfoMap, c, "US", Util::toString((long)(Util::toDouble(SETTING(UPLOAD_SPEED))*1024*1024/8)));
 	}
 
 	string su;
