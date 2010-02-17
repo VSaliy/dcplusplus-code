@@ -55,33 +55,11 @@ namespace dwt {
 */
 class Menu : private boost::noncopyable
 {
-	// friends
-	friend class WidgetCreator< Menu >;
+	friend class WidgetCreator<Menu>;
 
 	typedef Dispatchers::VoidVoid<> Dispatcher;
 
-protected:
-	struct ItemDataWrapper;
 private:
-	template<typename T>
-	struct PaintingDispatcherBase : Dispatchers::Base<bool (Menu*, T, ItemDataWrapper*)> {
-		typedef Dispatchers::Base<bool (Menu*, T, ItemDataWrapper*)> BaseType;
-		PaintingDispatcherBase(const typename BaseType::F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			if(msg.wParam != 0)
-				return false;
-			T t = reinterpret_cast<T>(msg.lParam);
-			if(t->CtlType != ODT_MENU)
-				return false;
-			ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
-			dwtassert(wrapper, "Unsupported menu item wrapper");
-			return f(wrapper->menu, t, wrapper);
-		}
-	};
-	typedef PaintingDispatcherBase<LPDRAWITEMSTRUCT> DrawItemDispatcher;
-	typedef PaintingDispatcherBase<LPMEASUREITEMSTRUCT> MeasureItemDispatcher;
-
 	/// Global colors, can be changed through the seed
 	struct Colors {
 		Colors();
@@ -157,10 +135,7 @@ public:
 	* A popup is basically another branch in the menu hierarchy <br>
 	* See the Menu project for a demonstration.
 	*/
-	ObjectType appendPopup(const Seed& cs, const tstring& text, const IconPtr& icon = IconPtr());
-	ObjectType appendPopup(const tstring& text, const IconPtr& icon = IconPtr()) {
-		return appendPopup(Seed(ownerDrawn, colors, iconSize, font), text, icon);
-	}
+	ObjectType appendPopup(const tstring& text, const IconPtr& icon = IconPtr());
 
 	/// Returns the "System Menu"
 	/** The system menu is a special menu that ( normally ) is accessed by pressing
@@ -175,26 +150,6 @@ public:
 	* See the Menu sample project for a demonstration.
 	*/
 	ObjectType getSystemMenu();
-
-	/// Setting event handler for Draw Item Event
-	/** The Draw Item Event will be raised when the menu needs to draw itself, if you
-	* wish to truly be creative and be 100% in control you must handle this Event
-	* and do the actualy drawing of the Menu yourself, but for most people it will
-	* be enough to just manipulate the background colors etc of the MenuItemData
-	* given to the menu in the appendItem function <br>
-	* Note! <br>
-	* If this event is handled you also MUST handle the Measure Item Event!!
-	*/
-	bool handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper);
-
-	/// Setting event handler for Measure Item Event
-	/** The Measure Item Event is nessecary to handle if you want to draw the menu
-	* yourself since it is inside this Event Handler you're telling the system how
-	* much space you need to actually do the drawing <br>
-	* Note! <br>
-	* If this event is handled you also MUST handle the Draw Item Event!!
-	*/
-	bool handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrapper);
 
 	/// Appends a separator item to the menu
 	/** A menu separator is basically just "air" between menu items.< br >
@@ -316,7 +271,7 @@ public:
 
 protected:
 	/// Constructor Taking pointer to parent
-	explicit Menu( dwt::Widget * parent );
+	explicit Menu(Widget* parent);
 
 	// ////////////////////////////////////////////////////////////////////////
 	// Menu item data wrapper, used internally
@@ -368,12 +323,39 @@ protected:
 		{}
 	};
 
-	bool ownerDrawn;
-
 private:
+	friend class Control;
+	template<typename T>
+	static bool handlePainting(T t) {
+		ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
+		dwtassert(wrapper && wrapper->menu, "Unsupported menu item wrapper");
+		return wrapper->menu->handlePainting(t, wrapper);
+	}
+
+	/// Setting event handler for Draw Item Event
+	/** The Draw Item Event will be raised when the menu needs to draw itself, if you
+	* wish to truly be creative and be 100% in control you must handle this Event
+	* and do the actualy drawing of the Menu yourself, but for most people it will
+	* be enough to just manipulate the background colors etc of the MenuItemData
+	* given to the menu in the appendItem function <br>
+	* Note! <br>
+	* If this event is handled you also MUST handle the Measure Item Event!!
+	*/
+	bool handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper);
+
+	/// Setting event handler for Measure Item Event
+	/** The Measure Item Event is nessecary to handle if you want to draw the menu
+	* yourself since it is inside this Event Handler you're telling the system how
+	* much space you need to actually do the drawing <br>
+	* Note! <br>
+	* If this event is handled you also MUST handle the Draw Item Event!!
+	*/
+	bool handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrapper);
+
 	// This is used during menu destruction
 	static void destroyItemDataWrapper( ItemDataWrapper * wrapper );
 
+	bool ownerDrawn;
 	// True is menu is "system menu" (icon in top left of window)
 	bool isSysMenu;
 

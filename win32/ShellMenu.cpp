@@ -111,12 +111,26 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 	appendSeparator();
 
 	if(valid.size() == 1)
-		handlers.push_back(make_pair(appendPopup(Menu::Seed(false), T_("Shell menu")), valid[0].second));
+		handlers.push_back(make_pair(appendPopup(T_("Shell menu")), valid[0].second));
 	else {
-		MenuPtr popup = appendPopup(Menu::Seed(ownerDrawn), T_("Shell menus"));
+		MenuPtr popup = appendPopup(T_("Shell menus"));
 		for(valid_type::const_iterator i = valid.begin(); i != valid.end(); ++i)
-			handlers.push_back(make_pair(popup->appendPopup(Menu::Seed(false), dwt::util::escapeMenu(Text::toT(i->first))), i->second));
+			handlers.push_back(make_pair(popup->appendPopup(dwt::util::escapeMenu(Text::toT(i->first))), i->second));
 	}
+
+	callbacks.clear();
+	callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->addCallback(dwt::Message(WM_DRAWITEM),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_MEASUREITEM), getParent()->addCallback(dwt::Message(WM_MEASUREITEM),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_MENUCHAR), getParent()->addCallback(dwt::Message(WM_MENUCHAR),
+		Dispatcher(std::tr1::bind(&ShellMenu::dispatch, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_INITMENUPOPUP), getParent()->addCallback(dwt::Message(WM_INITMENUPOPUP),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_UNINITMENUPOPUP), getParent()->addCallback(dwt::Message(WM_UNINITMENUPOPUP),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1, _2)))));
+	callbacks.push_back(make_pair(dwt::Message(WM_MENUSELECT), getParent()->addCallback(dwt::Message(WM_MENUSELECT),
+		Dispatcher(std::tr1::bind(&ShellMenu::handleMenuSelect, this, _1)))));
 }
 
 ShellMenu::~ShellMenu() {
@@ -128,42 +142,6 @@ ShellMenu::~ShellMenu() {
 }
 
 void ShellMenu::open(const dwt::ScreenCoordinate& pt, unsigned flags) {
-	if(!handlers.empty()) {
-		/*
-		we must override dwt::Menu's callbacks because we want to handle the case where some items
-		of the Shell menu might be owner-drawn (and owner-drawn differently than by dwt). note that
-		not every Shell menu contains owner-drawn items, but this might be the case when running on
-		a system that has loaded some Shell extensions, and in particular, XP's "Send To" menu is
-		known to be owner-drawn.
-
-		we identify these owner-drawn items that we must ignore with their id, which will be in the
-		[ID_SHELLCONTEXTMENU_MIN, ID_SHELLCONTEXTMENU_MAX] span. all dwt menu items generally have
-		0 as their id.
-
-		we have to ignore these items owner-drawn by other Shell extensions and absolutely not try
-		to draw them! the structure that dwt uses to store the Menu pointer and so on for each
-		owner-drawn item will not match the one used by the third party extension, and we will most
-		likely crash if we try to interpret it.
-
-		this is also why we make sure that no other dwt::Menu has any active callback for
-		WM_DRAWITEM / WM_MEASUREITEM: we use setCallback to erase any dwt::Menu callback; however,
-		our custom draw handlers do forward back to dwt::Menu so there should be no problem there.
-		*/
-		callbacks.clear();
-		callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->setCallback(dwt::Message(WM_DRAWITEM),
-			Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1, _2)))));
-		callbacks.push_back(make_pair(dwt::Message(WM_MEASUREITEM), getParent()->setCallback(dwt::Message(WM_MEASUREITEM),
-			Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1, _2)))));
-		callbacks.push_back(make_pair(dwt::Message(WM_MENUCHAR), getParent()->setCallback(dwt::Message(WM_MENUCHAR),
-			Dispatcher(std::tr1::bind(&ShellMenu::dispatch, this, _1, _2)))));
-		callbacks.push_back(make_pair(dwt::Message(WM_INITMENUPOPUP), getParent()->setCallback(dwt::Message(WM_INITMENUPOPUP),
-			Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1, _2)))));
-		callbacks.push_back(make_pair(dwt::Message(WM_UNINITMENUPOPUP), getParent()->setCallback(dwt::Message(WM_UNINITMENUPOPUP),
-			Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1, _2)))));
-		callbacks.push_back(make_pair(dwt::Message(WM_MENUSELECT), getParent()->setCallback(dwt::Message(WM_MENUSELECT),
-			Dispatcher(std::tr1::bind(&ShellMenu::handleMenuSelect, this, _1)))));
-	}
-
 	BaseType::open(pt, flags);
 
 	if(sel_id >= ID_SHELLCONTEXTMENU_MIN && sel_id <= ID_SHELLCONTEXTMENU_MAX && handler) {
@@ -175,42 +153,36 @@ void ShellMenu::open(const dwt::ScreenCoordinate& pt, unsigned flags) {
 }
 
 bool ShellMenu::handleDrawItem(const MSG& msg, LRESULT& ret) {
-	if(msg.wParam == 0) {
-		LPDRAWITEMSTRUCT t = reinterpret_cast<LPDRAWITEMSTRUCT>(msg.lParam);
-		if(t) {
-			if(t->CtlType != ODT_MENU)
-				return false;
+	if(msg.wParam)
+		return false;
 
-			unsigned id = t->itemID;
-			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
-				return dispatch(msg, ret);
+	LPDRAWITEMSTRUCT t = reinterpret_cast<LPDRAWITEMSTRUCT>(msg.lParam);
+	if(!t)
+		return false;
+	if(t->CtlType != ODT_MENU)
+		return false;
 
-			/// @todo this is taken from Menu::PaintingDispatcherBase - refactor
-			ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
-			dwtassert(wrapper, "Unsupported menu item wrapper");
-			return wrapper->menu->BaseType::handleDrawItem(t, wrapper);
-		}
-	}
+	const unsigned& id = t->itemID;
+	if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
+		return dispatch(msg, ret);
+
 	return false;
 }
 
 bool ShellMenu::handleMeasureItem(const MSG& msg, LRESULT& ret) {
-	if(msg.wParam == 0) {
-		LPMEASUREITEMSTRUCT t = reinterpret_cast<LPMEASUREITEMSTRUCT>(msg.lParam);
-		if(t) {
-			if(t->CtlType != ODT_MENU)
-				return false;
+	if(msg.wParam)
+		return false;
 
-			unsigned id = t->itemID;
-			if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
-				return dispatch(msg, ret);
+	LPMEASUREITEMSTRUCT t = reinterpret_cast<LPMEASUREITEMSTRUCT>(msg.lParam);
+	if(!t)
+		return false;
+	if(t->CtlType != ODT_MENU)
+		return false;
 
-			/// @todo this is taken from Menu::PaintingDispatcherBase - refactor
-			ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
-			dwtassert(wrapper, "Unsupported menu item wrapper");
-			return wrapper->menu->BaseType::handleMeasureItem(t, wrapper);
-		}
-	}
+	const unsigned& id = t->itemID;
+	if(id >= ID_SHELLCONTEXTMENU_MIN && id <= ID_SHELLCONTEXTMENU_MAX)
+		return dispatch(msg, ret);
+
 	return false;
 }
 
