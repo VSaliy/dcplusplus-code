@@ -34,6 +34,8 @@
 #include <dwt/DWTException.h>
 #include <dwt/util/check.h>
 
+#include <dwt/widgets/Menu.h>
+
 namespace dwt {
 
 Control::Seed::Seed(DWORD style, DWORD exStyle, const tstring& caption) :
@@ -77,6 +79,32 @@ Control::~Control() {
 
 bool Control::filter(MSG& msg) {
 	return accel && ::TranslateAccelerator(handle(), accel, &msg);
+}
+
+bool Control::handleMessage(const MSG& msg, LRESULT& retVal) {
+	bool handled = BaseType::handleMessage(msg, retVal);
+	if(handled)
+		return handled;
+
+	switch(msg.message)
+	{
+	case WM_DRAWITEM:
+		{
+			LPDRAWITEMSTRUCT t = reinterpret_cast<LPDRAWITEMSTRUCT>(msg.lParam);
+			if(t && t->CtlType == ODT_MENU && msg.wParam == 0 && Menu::handlePainting(t))
+				return true;
+			break;
+		}
+	case WM_MEASUREITEM:
+		{
+			LPMEASUREITEMSTRUCT t = reinterpret_cast<LPMEASUREITEMSTRUCT>(msg.lParam);
+			if(t && t->CtlType == ODT_MENU && msg.wParam == 0 && Menu::handlePainting(t))
+				return true;
+			break;
+		}
+	}
+
+	return handled;
 }
 
 }

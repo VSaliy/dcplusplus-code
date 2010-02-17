@@ -45,6 +45,8 @@
 #include <algorithm>
 #include <boost/scoped_array.hpp>
 
+#include <dwt/widgets/Control.h>
+
 namespace dwt {
 
 const int Menu::borderGap = 3;
@@ -78,13 +80,13 @@ font(font_)
 {
 }
 
-Menu::Menu( dwt::Widget* parent ) :
+Menu::Menu(Widget* parent) :
 ownerDrawn(true),
 isSysMenu(false),
 itsParent(parent),
 drawSidebar(false)
 {
-	dwtassert(itsParent != NULL, _T("A Menu must have a parent"));
+	dwtassert(dynamic_cast<Control*>(itsParent), _T("A Menu must have a parent derived from dwt::Control"));
 }
 
 void Menu::createHelper(const Seed& cs) {
@@ -104,9 +106,6 @@ void Menu::createHelper(const Seed& cs) {
 			lf.lfWeight = FW_BOLD;
 			itsTitleFont = boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		}
-
-		itsParent->setCallback(Message(WM_DRAWITEM), DrawItemDispatcher(std::tr1::bind(&Menu::handleDrawItem, _1, _2, _3)));
-		itsParent->setCallback(Message(WM_MEASUREITEM), MeasureItemDispatcher(std::tr1::bind(&Menu::handleMeasureItem, _1, _2, _3)));
 	}
 }
 
@@ -172,10 +171,10 @@ void Menu::setMenu() {
 		throw Win32Exception("SetMenu in Menu::setMenu fizzled...");
 }
 
-Menu::ObjectType Menu::appendPopup(const Seed& cs, const tstring& text, const IconPtr& icon) {
+Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon) {
 	// create popup menu pointer
 	ObjectType retVal ( new Menu(itsParent) );
-	retVal->create(cs);
+	retVal->create(Seed(ownerDrawn, colors, iconSize, font));
 
 	// init structure for new item
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_SUBMENU | MIIM_STRING };
@@ -354,7 +353,7 @@ void Menu::setTitle(const tstring& title, const IconPtr& icon, bool drawSidebar 
 	}
 }
 
-bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
+bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	// if processing menu bar
 	const bool isMenuBar = ::GetMenu(getParent()->handle()) == handle();
 
@@ -591,7 +590,7 @@ bool Menu::handleDrawItem(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	return true;
 }
 
-bool Menu::handleMeasureItem(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrapper) {
+bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrapper) {
 	// this will contain item size
 	UINT & itemWidth = measureInfo->itemWidth;
 	UINT & itemHeight = measureInfo->itemHeight;

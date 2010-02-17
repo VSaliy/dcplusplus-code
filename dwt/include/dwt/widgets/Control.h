@@ -112,6 +112,8 @@ public:
 	void addAccel(BYTE fVirt, WORD key, const CommandDispatcher::F& f);
 	void initAccels();
 
+	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
+
 protected:
 	struct Seed : public BaseType::Seed {
 		Seed(DWORD style, DWORD exStyle = 0, const tstring& caption = tstring());
