@@ -27,6 +27,7 @@
 #include "ShareManager.h"
 #include "CryptoManager.h"
 #include "ConnectionManager.h"
+#include "ThrottleManager.h"
 #include "version.h"
 
 #include "Socket.h"
@@ -802,13 +803,21 @@ void NmdcHub::myInfo(bool alwaysSend) {
 	else
 		modeChar = 'P';
 
+	string uploadSpeed;
+	int upLimit = BOOLSETTING(THROTTLE_ENABLE) ? ThrottleManager::getInstance()->getUpLimit() : 0;
+	if (upLimit > 0) {
+		uploadSpeed = Util::toString(upLimit) + " KiB/s";
+	} else {
+		uploadSpeed = SETTING(UPLOAD_SPEED);
+	}
+		
 	string uMin = (SETTING(MIN_UPLOAD_SPEED) == 0) ? Util::emptyString : tmp5 + Util::toString(SETTING(MIN_UPLOAD_SPEED));
 	string myInfoA =
 		"$MyINFO $ALL " + fromUtf8(getMyNick()) + " " + fromUtf8(escape(getCurrentDescription())) +
 		tmp1 + VERSIONSTRING + tmp2 + modeChar + tmp3 + getCounts();
 	string myInfoB = tmp4 + Util::toString(SETTING(SLOTS));
 	string myInfoC = uMin +
-		">$ $" + SETTING(UPLOAD_SPEED) + "\x01$" + fromUtf8(escape(SETTING(EMAIL))) + '$';
+		">$ $" + uploadSpeed + "\x01$" + fromUtf8(escape(SETTING(EMAIL))) + '$';
 	string myInfoD = ShareManager::getInstance()->getShareSizeString() + "$|";
 	// we always send A and C; however, B (slots) and D (share size) can frequently change so we delay them if needed
  	if(lastMyInfoA != myInfoA || lastMyInfoC != myInfoC ||
