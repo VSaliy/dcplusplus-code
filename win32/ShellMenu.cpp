@@ -118,7 +118,6 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 			handlers.push_back(make_pair(popup->appendPopup(dwt::util::escapeMenu(Text::toT(i->first))), i->second));
 	}
 
-	callbacks.clear();
 	callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->addCallback(dwt::Message(WM_DRAWITEM),
 		Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1, _2)))));
 	callbacks.push_back(make_pair(dwt::Message(WM_MEASUREITEM), getParent()->addCallback(dwt::Message(WM_MEASUREITEM),

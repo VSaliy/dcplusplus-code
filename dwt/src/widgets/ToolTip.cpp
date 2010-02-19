@@ -64,12 +64,19 @@ void ToolTip::setText(Widget* widget, const tstring& text_) {
 void ToolTip::setTool(Widget* widget, const Dispatcher::F& f) {
 	onGetTip(f);
 
-	TOOLINFO ti = { sizeof(TOOLINFO) };
-	ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
-	ti.hwnd = getParent()->handle();
-	ti.uId = reinterpret_cast<UINT_PTR>(widget->handle());
+	TOOLINFO ti = { sizeof(TOOLINFO), TTF_IDISHWND | TTF_SUBCLASS, getParent()->handle(),
+		reinterpret_cast<UINT_PTR>(widget->handle()) };
 	ti.lpszText = LPSTR_TEXTCALLBACK;
 	sendMessage(TTM_ADDTOOL, 0, reinterpret_cast<LPARAM>(&ti));
+}
+
+void ToolTip::setActive(bool b) {
+	sendMessage(TTM_ACTIVATE, b ? TRUE : FALSE);
+}
+
+void ToolTip::refresh() {
+	setActive(false);
+	setActive(true);
 }
 
 void ToolTip::handleGetTip(tstring& ret) {

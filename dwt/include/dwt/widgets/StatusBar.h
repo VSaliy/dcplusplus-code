@@ -99,11 +99,8 @@ public:
 		/// index of the part that fills all the remaining space of the bar.
 		unsigned fill;
 
-		/// associate a tooltip to the part marked by the "fill" parameter.
-		bool tooltip;
-
 		/// Fills with default parameters
-		explicit Seed(unsigned parts_ = 1, unsigned fill_ = 0, bool sizeGrip = true, bool tooltip_ = true);
+		explicit Seed(unsigned parts_ = 1, unsigned fill_ = 0, bool sizeGrip = true);
 	};
 
 	/// Sets the initial size of the given part
@@ -128,6 +125,8 @@ public:
 	* note: setting "alwaysResize" to true for often changing parts might result in flickering.
 	*/
 	void setIcon(unsigned part, const IconPtr& icon, bool alwaysResize = false);
+
+	void setToolTip(unsigned part, const tstring& text);
 
 	/// Sets the help id of the given part. If not set, the help id of the whole status bar is used instead.
 	void setHelpId(unsigned part, unsigned id);
@@ -174,6 +173,7 @@ private:
 
 		tstring text;
 		IconPtr icon;
+		tstring tip;
 
 		unsigned helpId;
 
@@ -187,6 +187,7 @@ private:
 	unsigned fill;
 
 	ToolTipPtr tip;
+	Part* tipPart; /// part currently showing the tooltip
 	std::vector<tstring> lastLines;
 	enum { MAX_LINES = 10 }; /// @todo configurable?
 

@@ -295,7 +295,7 @@ void HubFrame::updateSecureStatus() {
 		text += Text::toT(client->getCipherName());
 	}
 	status->setIcon(STATUS_SECURE, icon);
-	status->setText(STATUS_SECURE, text, true);
+	status->setToolTip(STATUS_SECURE, text);
 }
 
 void HubFrame::initSecond() {

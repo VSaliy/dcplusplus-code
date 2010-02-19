@@ -93,6 +93,9 @@ public:
 
 	void setMaxTipWidth(int width);
 
+	void setActive(bool b);
+	void refresh();
+
 	void onGetTip(const Dispatcher::F& f);
 
 	/// Actually creates the Toolbar
