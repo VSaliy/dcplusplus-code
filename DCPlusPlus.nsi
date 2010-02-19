@@ -1,3 +1,5 @@
+!include "Sections.nsh"
+
 Function GetDCPlusPlusVersion
         Exch $0
 	GetDllVersion "$INSTDIR\$0" $R0 $R1
@@ -43,21 +45,30 @@ ComponentText "Welcome to the DC++ installer."
 DirText "Choose a directory to install in to:"
 
 ; The stuff to install
-Section "DC++ (required)"
+Section "DC++ (required)" dcpp
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
-  
+
+  ; Check for existing settings in the profile first
+  IfFileExists "$APPDATA\DC++\*.xml" 0 check_programdir
+  MessageBox MB_YESNO|MB_ICONQUESTION "A previous installation of DC++ has been found, backup settings and queue? (You can find them in $APPDATA\DC++\BACKUP later)" IDNO no_backup
+  CreateDirectory "$APPDATA\DC++\BACKUP\"
+  CopyFiles "$APPDATA\DC++\*.xml" "$APPDATA\DC++\BACKUP\"
+  goto no_backup
+
+check_programdir:
+  ; Maybe we're upgrading from an older version so lets check the program directory
+  ; Delete a possibly existing dcppboot.xml to be able to check for existing local settings 
+  Delete "$INSTDIR\dcppboot.xml"
   IfFileExists "$INSTDIR\*.xml" 0 no_backup
-  MessageBox MB_YESNO|MB_ICONQUESTION "A previous installation of DC++ has been found, backup settings and queue? (You can find it in $INSTDIR\BACKUP later)" IDNO no_backup
+  MessageBox MB_YESNO|MB_ICONQUESTION "A previous installation of DC++ has been found, backup settings and queue? (You can find them in $INSTDIR\BACKUP later)" IDNO no_backup
   CreateDirectory "$INSTDIR\BACKUP\"
   CopyFiles "$INSTDIR\*.xml" "$INSTDIR\BACKUP\"
 
 no_backup:
   ; Put file there
   File "changelog.txt"
-  
-  ; TODO make an installer option to use localmode xml file?
-  File /oname=dcppboot.xml "dcppboot.nonlocal.xml" 
+  File "dcppboot.xml"
   File "DCPlusPlus.chm"
   File "DCPlusPlus.exe"
   File "License.txt"
@@ -293,7 +304,7 @@ File "locale\tr\help\DCPlusPlus.chm"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "Publisher" "Jacek Sieka"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "URLInfoAbout" "http://dcplusplus.sourceforge.net/"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "URLUpdateInfo" "http://dcplusplus.sourceforge.net/download/"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "HelpLink" "http://dcpp.net/forum/"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "HelpLink" "http://dcpp.sf.net/webhelp/"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "NoModify" "1"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "NoRepair" "1"
   
@@ -314,6 +325,43 @@ Section "Start Menu Shortcuts"
   CreateShortCut "$SMPROGRAMS\DC++\Change Log.lnk" "$INSTDIR\ChangeLog.txt"
   CreateShortCut "$SMPROGRAMS\DC++\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 SectionEnd
+
+Section "Store settings in your user profile folder" loc
+  ; Change to nonlocal dcppboot if the checkbox left checked
+  File /oname=dcppboot.xml "dcppboot.nonlocal.xml" 
+SectionEnd
+
+Function .onSelChange
+  ; Do not show the warning on XP or older
+  StrCmp $R8 "0" skip
+  ; Show the warning only once
+  StrCmp $R9 "1" skip
+  SectionGetFlags ${loc} $0
+  IntOp $0 $0 & ${SF_SELECTED}
+  StrCmp $0 ${SF_SELECTED} skip
+    StrCpy $R9 "1"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "If you want to keep your settings in the program directory using Windows Vista or later make sure that you DO NOT install DC++ to the 'Program files' folder!!! This can lead to abnormal behaviour like loss of settings or downloads!"
+skip:
+FunctionEnd
+
+
+Function .onInit
+  ; Check for Vista+
+  ReadRegStr $R8 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
+  IfErrors xp_or_below nt
+nt:
+  StrCmp $R8 '6.0' vistaplus
+  StrCmp $R8 '6.1' 0 xp_or_below
+vistaplus:
+  StrCpy $R8 "1"
+  goto end
+xp_or_below:
+  StrCpy $R8 "0"
+end:
+  ; Set the program component really required (read only)
+  IntOp $0 ${SF_SELECTED} | ${SF_RO}
+  SectionSetFlags ${dcpp} $0
+FunctionEnd
 
 ; uninstall stuff
 
@@ -509,8 +557,14 @@ Delete "$INSTDIR\locale\tr\help\DCPlusPlus.chm"
 
   RMDir "$INSTDIR"
   goto end_uninstall
+
 kill_dir:
+  ; delete program directory
   RMDir /r "$INSTDIR"
+  ; delete profile data directories
+  RMDir /r "$APPDATA\DC++"
+  RMDir /r "$LOCALAPPDATA\DC++"  
+
 end_uninstall:
 
 SectionEnd
