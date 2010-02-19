@@ -40,11 +40,10 @@ namespace dwt {
 
 const TCHAR StatusBar::windowClass[] = STATUSCLASSNAME;
 
-StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip, bool tooltip_) :
+StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip) :
 BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
 parts(parts_),
-fill(fill_),
-tooltip(tooltip_)
+fill(fill_)
 {
 	assert(fill < parts);
 
@@ -56,7 +55,8 @@ tooltip(tooltip_)
 StatusBar::StatusBar(Widget* parent) :
 BaseType(parent, ChainingDispatcher::superClass<StatusBar>()),
 fill(0),
-tip(0)
+tip(0),
+tipPart(0)
 {
 }
 
@@ -68,10 +68,8 @@ void StatusBar::create(const Seed& cs) {
 	if(cs.font)
 		setFont(cs.font);
 
-	if(cs.tooltip) {
-		tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
-		tip->setTool(this, std::tr1::bind(&StatusBar::handleToolTip, this, _1));
-	}
+	tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
+	tip->setTool(this, std::tr1::bind(&StatusBar::handleToolTip, this, _1));
 
 	ClickType::onClicked(std::tr1::bind(&StatusBar::handleClicked, this));
 	DblClickType::onDblClicked(std::tr1::bind(&StatusBar::handleDblClicked, this));
@@ -88,10 +86,18 @@ void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 	info.text = text;
 	if(part != fill) {
 		info.updateSize(this, alwaysResize);
-	} else if(tip) {
+	} else {
 		lastLines.push_back(text);
 		while(lastLines.size() > MAX_LINES) {
 			lastLines.erase(lastLines.begin());
+		}
+		tstring& tip = info.tip;
+		tip.clear();
+		for(size_t i = 0; i < lastLines.size(); ++i) {
+			if(i > 0) {
+				tip += _T("\r\n");
+			}
+			tip += lastLines[i];
 		}
 	}
 	sendMessage(SB_SETTEXT, static_cast<WPARAM>(part), reinterpret_cast<LPARAM>(text.c_str()));
@@ -104,6 +110,11 @@ void StatusBar::setIcon(unsigned part, const IconPtr& icon, bool alwaysResize) {
 	if(part != fill)
 		info.updateSize(this, alwaysResize);
 	sendMessage(SB_SETICON, part, icon ? reinterpret_cast<LPARAM>(icon->handle()) : 0);
+}
+
+void StatusBar::setToolTip(unsigned part, const tstring& text) {
+	dwtassert(part < parts.size(), _T("Invalid part number."));
+	parts[part].tip = text;
 }
 
 void StatusBar::setHelpId(unsigned part, unsigned id) {
@@ -143,8 +154,16 @@ void StatusBar::layout(Rectangle& r) {
 }
 
 bool StatusBar::handleMessage(const MSG& msg, LRESULT& retVal) {
-	if(tip)
+	if(tip) {
+		if(msg.message == WM_MOUSEMOVE) {
+			Part* part = getClickedPart();
+			if(part && part != tipPart) {
+				tip->refresh();
+				tipPart = part;
+			}
+		}
 		tip->relayEvent(msg);
+	}
 
 	return BaseType::handleMessage(msg, retVal);
 }
@@ -203,14 +222,12 @@ StatusBar::Part* StatusBar::getClickedPart() {
 }
 
 void StatusBar::handleToolTip(tstring& text) {
-	tip->setMaxTipWidth(parts[fill].size);
-
-	text.clear();
-	for(size_t i = 0; i < lastLines.size(); ++i) {
-		if(i > 0) {
-			text += _T("\r\n");
-		}
-		text += lastLines[i];
+	Part* part = getClickedPart();
+	if(part) {
+		text = part->tip;
+		tip->setMaxTipWidth((text.find('\n') == tstring::npos) ? -1 : part->size);
+	} else {
+		text.clear();
 	}
 }
 
