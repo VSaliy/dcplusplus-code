@@ -184,9 +184,11 @@ void MainWindow::initWindow() {
 	int pos_y = SETTING(MAIN_WINDOW_POS_Y);
 	int size_x = SETTING(MAIN_WINDOW_SIZE_X);
 	int size_y = SETTING(MAIN_WINDOW_SIZE_Y);
-	if ( (pos_x != static_cast<int>(CW_USEDEFAULT)) &&(pos_y != static_cast<int>(CW_USEDEFAULT))&&(size_x
-	    != static_cast<int>(CW_USEDEFAULT))&&(size_y != static_cast<int>(CW_USEDEFAULT))&&(pos_x > 0&& pos_y > 0)
-	    &&(size_x > 10&& size_y > 10)) {
+	if(pos_x != static_cast<int>(CW_USEDEFAULT) && pos_y != static_cast<int>(CW_USEDEFAULT) &&
+		size_x != static_cast<int>(CW_USEDEFAULT) && size_y != static_cast<int>(CW_USEDEFAULT) &&
+		pos_x > 0 && pos_y > 0 && size_x > 10 && size_y > 10 &&
+		pos_x < getDesktopSize().x && pos_y < getDesktopSize().y)
+	{
 		cs.location = dwt::Rectangle(pos_x, pos_y, size_x, size_y);
 	}
 
