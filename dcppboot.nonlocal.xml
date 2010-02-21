@@ -2,8 +2,8 @@
 	<!--
 	LocalMode runs DC++ in local mode, where all defaults are relative to the ConfigPath set below.
 	This is useful when running DC++ off a USB stick or if you want to keep all in a single folder.
-	The default is to run in LocalMode, but the installer installs a dcppboot.xml file that overrides
-	the default.
+	The default is to run in LocalMode, but upon the user's choice the installer can install a
+	dcppboot.xml file that overrides the default.
 	When LocalMode is disabled, ConfigPath is ignored.
 	Set to 1 to enable, 0 to disable
 	
