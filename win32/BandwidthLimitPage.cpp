@@ -85,11 +85,11 @@ throttleTime(0)
 		secondaryToggle = grid->addChild(GroupBox::Seed(T_("Secondary Transfer Rate Limiting")));
 		GridPtr cur = secondaryToggle->addChild(Grid::Seed(1, 4));
 		cur->column(0).mode = GridInfo::AUTO;
-		cur->column(1).mode = GridInfo::FILL;
+		cur->column(1).mode = GridInfo::AUTO;
 		cur->column(1).align = GridInfo::CENTER;
 		cur->column(2).mode = GridInfo::FILL;
 		cur->column(2).align = GridInfo::CENTER;
-		cur->column(3).mode = GridInfo::FILL;
+		cur->column(3).mode = GridInfo::AUTO;
 		cur->column(3).align = GridInfo::CENTER;
 
 		throttleTime = cur->addChild(CheckBox::Seed(T_("Use second set of bandwidth limits from")));
