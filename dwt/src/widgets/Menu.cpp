@@ -40,6 +40,7 @@
 #include <dwt/resources/Brush.h>
 #include <dwt/resources/Pen.h>
 #include <dwt/DWTException.h>
+#include <dwt/util/check.h>
 #include <dwt/util/win32/Version.h>
 
 #include <algorithm>

@@ -35,6 +35,7 @@
 #include <dwt/util/check.h>
 
 #include <dwt/widgets/Menu.h>
+#include <dwt/widgets/TabView.h>
 
 namespace dwt {
 
@@ -81,6 +82,19 @@ bool Control::filter(MSG& msg) {
 	return accel && ::TranslateAccelerator(handle(), accel, &msg);
 }
 
+template<typename T>
+static bool forwardPainting(const MSG& msg) {
+	T t = reinterpret_cast<T>(msg.lParam);
+	if(!t)
+		return false;
+
+	switch(t->CtlType) {
+	case ODT_MENU: if(msg.wParam == 0) return Menu::handlePainting(t); break;
+	case ODT_TAB: return TabView::handlePainting(t); break;
+	}
+	return false;
+}
+
 bool Control::handleMessage(const MSG& msg, LRESULT& retVal) {
 	bool handled = BaseType::handleMessage(msg, retVal);
 	if(handled)
@@ -89,19 +103,17 @@ bool Control::handleMessage(const MSG& msg, LRESULT& retVal) {
 	switch(msg.message)
 	{
 	case WM_DRAWITEM:
-		{
-			LPDRAWITEMSTRUCT t = reinterpret_cast<LPDRAWITEMSTRUCT>(msg.lParam);
-			if(t && t->CtlType == ODT_MENU && msg.wParam == 0 && Menu::handlePainting(t))
-				return true;
-			break;
+		if(forwardPainting<LPDRAWITEMSTRUCT>(msg)) {
+			retVal = TRUE;
+			return true;
 		}
+		break;
 	case WM_MEASUREITEM:
-		{
-			LPMEASUREITEMSTRUCT t = reinterpret_cast<LPMEASUREITEMSTRUCT>(msg.lParam);
-			if(t && t->CtlType == ODT_MENU && msg.wParam == 0 && Menu::handlePainting(t))
-				return true;
-			break;
+		if(forwardPainting<LPMEASUREITEMSTRUCT>(msg)) {
+			retVal = TRUE;
+			return true;
 		}
+		break;
 	}
 
 	return handled;

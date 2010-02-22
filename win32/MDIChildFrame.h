@@ -124,7 +124,7 @@ protected:
 	}
 
 	void setIcon(unsigned iconId) {
-		getParent()->setTabIcon(this, WinUtil::tabIcon(iconId));
+		getParent()->setIcon(this, WinUtil::tabIcon(iconId));
 	}
 
 public:
@@ -210,7 +210,7 @@ private:
 	bool handleContextMenu(const dwt::ScreenCoordinate& pt) {
 		dwt::Menu::ObjectType menu = addChild(WinUtil::Seeds::menu);
 
-		menu->setTitle(getParent()->getTabText(this), getParent()->getTabIcon(this));
+		menu->setTitle(getParent()->getText(this), getParent()->getIcon(this));
 
 		tabMenuImpl(menu);
 		menu->appendItem(T_("&Close"), std::tr1::bind(&ThisType::close, this, true), WinUtil::menuIcon(IDI_EXIT));
