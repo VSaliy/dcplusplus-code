@@ -160,7 +160,7 @@ FunctionEnd
 
 ; uninstall stuff
 
-UninstallText "This will uninstall DC++. Hit next to continue."
+UninstallText "This will uninstall DC++ by removing installed program files and locale data. WARNING: the contents of the locale data folder ($INSTDIR\locale) will be completely erased!"
 
 ; special uninstall section.
 Section "un.Uninstall"
@@ -174,166 +174,12 @@ Section "un.Uninstall"
   Delete "$INSTDIR\License-GeoIP.txt"
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\ChangeLog.txt"
-  Delete "$INSTDIR\LICENSE-OpenSSL.tx"
+  Delete "$INSTDIR\LICENSE-OpenSSL.txt"
   Delete "$INSTDIR\GeoIPCountryWhois.csv"
   Delete "$INSTDIR\mingwm10.dll"
 
-Delete "$INSTDIR\locale\ar\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\ar\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\be\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\bg\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\bg\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\bs\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\bs\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\ca\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\ca\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\cs\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\cs\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\da\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\da\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\de\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\de\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\el\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\el\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\en_GB\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\en_GB\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\en_AU\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\en_CA\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\en_CA\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\es\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\es\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\et\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\et\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\eu\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\fa\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\fi\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\fi\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\fr\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\fr\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\gl\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\gl\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\gu\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\gu\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\he\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\he\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\hi\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\hr\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\hr\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\hu\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\hu\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\id\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\id\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\is\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\is\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\it\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\it\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\ja\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\ja\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\km\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\km\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\ko\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\ko\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\lt\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\lt\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\lv\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\lv\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\mk\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\mk\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\ml\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\ml\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\mr\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\ms\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\ms\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\nb\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\nb\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\nds\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\nl\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\nl\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\nn\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\pl\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\pl\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\pt\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\pt\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\pt_BR\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\pt_BR\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\ro\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\ro\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\ru\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\ru\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\sk\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\sk\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\sl\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\sl\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\sq\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\sq\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\sr\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\sr\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\sv\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\sv\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\te\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\tr\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\tr\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\uk\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\uk\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\zh_CN\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\zh_CN\LC_MESSAGES\libdcpp.mo"
-Delete "$INSTDIR\locale\zh_TW\LC_MESSAGES\dcpp-win32.mo"
-Delete "$INSTDIR\locale\zh_TW\LC_MESSAGES\libdcpp.mo"
-
-
-
-Delete "$INSTDIR\locale\ar\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\bg\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\bs\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\cs\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\de\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\el\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\en_GB\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\es\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\et\help\DCPlusPlus.chm"
-
-Delete "$INSTDIR\locale\fi\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\fr\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\gl\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\hu\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\it\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\ko\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\lv\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\ml\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\nb\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\nl\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\pl\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\pt_BR\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\ro\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\ru\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\sr\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\sv\help\DCPlusPlus.chm"
- 
-Delete "$INSTDIR\locale\tr\help\DCPlusPlus.chm"
- 
+  ; Delete the whole locale directory
+  RMDir /r "$INSTDIR\locale"
 
   ; Remove registry entries
   ; Assume they are all registered to us
