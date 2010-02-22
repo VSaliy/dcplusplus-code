@@ -51,7 +51,10 @@ namespace dwt {
 template< class WidgetType >
 class AspectMouse
 {
+	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+
+	HWND H() const { return W().handle(); }
 
 	template<LRESULT value = 0>
 	struct DispatcherBase : Dispatchers::Base<bool (const MouseEvent&)> {
@@ -205,6 +208,13 @@ public:
 	*/
 	void onMouseMove(const typename MouseDispatcher::F& f) {
 		onMouse(WM_MOUSEMOVE, f);
+	}
+
+	void onMouseLeave(const Dispatchers::VoidVoid<>::F& f) {
+		TRACKMOUSEEVENT t = { sizeof(TRACKMOUSEEVENT), TME_LEAVE, H() };
+		if(::TrackMouseEvent(&t)) {
+			W().setCallback(Message(WM_MOUSELEAVE), Dispatchers::VoidVoid<>(f));
+		}
 	}
 
 protected:

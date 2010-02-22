@@ -92,10 +92,10 @@ public:
 	ContainerPtr getActive();
 	void setActive(ContainerPtr w) { setActive(findTab(w)); }
 
-	IconPtr getTabIcon(ContainerPtr w);
-	void setTabIcon(ContainerPtr w, const IconPtr& icon);
+	IconPtr getIcon(ContainerPtr w) const;
+	void setIcon(ContainerPtr w, const IconPtr& icon);
 
-	tstring getTabText(ContainerPtr w);
+	tstring getText(ContainerPtr w) const;
 
 	void onTitleChanged(const TitleChangedFunction& f) {
 		titleChangedFunction = f;
@@ -116,6 +116,13 @@ public:
 
 	using Widget::layout;
 
+	// tab controls only use WM_DRAWITEM
+	static bool handlePainting(LPDRAWITEMSTRUCT t) {
+		TabInfo* ti = reinterpret_cast<TabInfo*>(t->itemData);
+		return ti->control->handlePainting(t, ti);
+	}
+	static bool handlePainting(LPMEASUREITEMSTRUCT) { return false; }
+
 protected:
 	explicit TabView(Widget* parent);
 
@@ -126,9 +133,11 @@ private:
 	static const TCHAR windowClass[];
 
 	struct TabInfo {
-		TabInfo(ContainerPtr w_) : w(w_) { }
+		TabView* control; // for painting messages
 		ContainerPtr w;
 		ContextMenuFunction handleContextMenu;
+		bool marked;
+		TabInfo(TabView* control_, ContainerPtr w_) : control(control_), w(w_), handleContextMenu(0), marked(false) { }
 	};
 
 	ToolTipPtr tip;
@@ -138,8 +147,11 @@ private:
 	// these can be set through the Seed
 	unsigned maxLength; // max chars per tab; either 0 (infinite) or > 3
 	bool toggleActive;
+	FontPtr font;
+	FontPtr boldFont;
 
 	bool inTab;
+	int highlighted;
 
 	typedef std::list<ContainerPtr> WindowList;
 	typedef WindowList::iterator WindowIter;
@@ -169,6 +181,10 @@ private:
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	bool handleMiddleMouseDown(const MouseEvent& mouseEvent);
 	bool handleXMouseUp(const MouseEvent& mouseEvent);
+	bool handleMouseMove(const MouseEvent& mouseEvent);
+	void handleMouseLeave();
+
+	bool handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti);
 
 	tstring formatTitle(tstring title);
 	void layout();
@@ -176,9 +192,10 @@ private:
 	int addIcon(const IconPtr& icon);
 	void swapWidgets(ContainerPtr oldW, ContainerPtr newW);
 
+	IconPtr getIcon(unsigned index) const;
 	tstring getText(unsigned idx) const;
-
 	void setText(unsigned idx, const tstring& text);
+	void redraw(unsigned index);
 
 	// AspectCollection
 	void eraseImpl( int row );

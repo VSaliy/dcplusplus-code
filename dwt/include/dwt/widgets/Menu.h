@@ -39,7 +39,6 @@
 
 #include "../CanvasClasses.h"
 #include "../Dispatchers.h"
-#include "../util/check.h"
 #include <memory>
 #include <vector>
 
@@ -59,7 +58,13 @@ class Menu : private boost::noncopyable
 
 	typedef Dispatchers::VoidVoid<> Dispatcher;
 
-private:
+public:
+	/// Type of object
+	typedef Menu ThisType;
+
+	/// Object type
+	typedef std::tr1::shared_ptr<Menu> ObjectType;
+
 	/// Global colors, can be changed through the seed
 	struct Colors {
 		Colors();
@@ -72,13 +77,6 @@ private:
 		COLORREF highlightText;
 		COLORREF titleText;
 	} colors;
-
-public:
-	/// Type of object
-	typedef Menu ThisType;
-
-	/// Object type
-	typedef std::tr1::shared_ptr<Menu> ObjectType;
 
 	struct Seed {
 		typedef ThisType WidgetType;
@@ -269,10 +267,17 @@ public:
 
 	virtual ~Menu();
 
+	template<typename T>
+	static bool handlePainting(T t) {
+		ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
+		return wrapper->menu->handlePainting(t, wrapper);
+	}
+
 protected:
 	/// Constructor Taking pointer to parent
 	explicit Menu(Widget* parent);
 
+private:
 	// ////////////////////////////////////////////////////////////////////////
 	// Menu item data wrapper, used internally
 	// MENUITEMINFO's dwItemData *should* point to it
@@ -318,19 +323,7 @@ protected:
 			textColor(Colors::text),
 			icon(icon_)
 		{}
-
-		~ItemDataWrapper()
-		{}
 	};
-
-private:
-	friend class Control;
-	template<typename T>
-	static bool handlePainting(T t) {
-		ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
-		dwtassert(wrapper && wrapper->menu, "Unsupported menu item wrapper");
-		return wrapper->menu->handlePainting(t, wrapper);
-	}
 
 	/// Setting event handler for Draw Item Event
 	/** The Draw Item Event will be raised when the menu needs to draw itself, if you
