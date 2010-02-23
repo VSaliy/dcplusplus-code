@@ -37,6 +37,7 @@
 #include <dwt/util/StringUtils.h>
 #include <dwt/DWTException.h>
 #include <dwt/resources/Brush.h>
+#include <dwt/dwt_vsstyle.h>
 
 #include <algorithm>
 
@@ -44,19 +45,17 @@ namespace dwt {
 
 const TCHAR TabView::windowClass[] = WC_TABCONTROL;
 
-TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_) :
+TabView::Seed::Seed(unsigned maxLength_) :
 BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
 	TCS_BUTTONS | TCS_FOCUSNEVER | TCS_MULTILINE | TCS_OWNERDRAWFIXED | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
 font(new Font(DefaultGuiFont)),
-maxLength(maxLength_),
-toggleActive(toggleActive_)
+maxLength(maxLength_)
 {
 }
 
 TabView::TabView(Widget* w) :
 BaseType(w, ChainingDispatcher::superClass<TabView>()),
 tip(0),
-toggleActive(false),
 font(0),
 boldFont(0),
 inTab(false),
@@ -75,7 +74,6 @@ void TabView::create(const Seed & cs) {
 	maxLength = cs.maxLength;
 	if(maxLength <= 3)
 		maxLength = 0;
-	toggleActive = cs.toggleActive;
 
 	if(cs.font)
 		font = cs.font;
@@ -90,6 +88,8 @@ void TabView::create(const Seed & cs) {
 		lf.lfWeight = FW_BOLD;
 		boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		setFont(boldFont); // so the control adjusts its size per the bold font
+
+		loadTheme(this, VSCLASS_TAB);
 
 		// TCS_HOTTRACK seems to have no effect in owner-drawn tabs, so do the tracking ourselves.
 		onMouseMove(std::tr1::bind(&TabView::handleMouseMove, this, _1));
@@ -223,6 +223,12 @@ tstring TabView::getText(ContainerPtr w) const {
 	if(i != -1)
 		return getText(i);
 	return tstring();
+}
+
+void TabView::closeActive(ContainerPtr w) {
+	TabInfo* ti = getTabInfo(w);
+	if(ti)
+		ti->closeActive = true;
 }
 
 void TabView::onTabContextMenu(ContainerPtr w, const ContextMenuFunction& f) {
@@ -458,8 +464,9 @@ bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		if(dropPos == dragPos) {
 			// the tab hasn't moved; handle the click
 			if(dropPos == active) {
-				if(toggleActive)
-					next();
+				TabInfo* ti = getTabInfo(dropPos);
+				if(ti->closeActive)
+					ti->w->close(true);
 			} else
 				setActive(dropPos);
 			return true;
@@ -549,14 +556,23 @@ void TabView::handleMouseLeave() {
 
 bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 	bool isSelected = (info->itemState & ODS_SELECTED) == ODS_SELECTED;
-	bool isHighlighted = info->itemID == highlighted || ti->marked;
+	bool isHighlighted = static_cast<int>(info->itemID) == highlighted || ti->marked;
 
 	FreeCanvas canvas(this, info->hDC);
 
 	Rectangle rect(info->rcItem);
 
 	canvas.setBkMode(true);
-	canvas.fill(rect, Brush(isSelected ? Brush::Window : isHighlighted ? Brush::HighLight : Brush::BtnFace));
+	if(theme) {
+		// remove some borders
+		rect.pos.x -= 1;
+		rect.pos.y -= 1;
+		rect.size.x += 2;
+		rect.size.y += 1;
+		drawThemeBackground(canvas, TABP_TABITEM, isSelected ? TIS_SELECTED : isHighlighted ? TIS_HOT : TIS_NORMAL, rect);
+	} else {
+		canvas.fill(rect, Brush(isSelected ? Brush::Window : isHighlighted ? Brush::HighLight : Brush::BtnFace));
+	}
 
 	const Point margin(4, 1);
 	rect.pos += margin;
@@ -572,9 +588,15 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 		rect.size.x -= size.x;
 	}
 
-	canvas.setTextColor(::GetSysColor(isSelected ? COLOR_WINDOWTEXT : isHighlighted ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
-	Canvas::Selector select(canvas, *(isSelected ? boldFont : font));
-	canvas.drawText(getText(info->itemID), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
+	const tstring text = getText(info->itemID);
+	Canvas::Selector select(canvas, *((isSelected || ti->marked) ? boldFont : font));
+	if(theme) {
+		drawThemeText(canvas, TABP_TABITEM, isSelected ? TIS_SELECTED : isHighlighted ? TIS_HOT : TIS_NORMAL,
+			text, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX, rect);
+	} else {
+		canvas.setTextColor(::GetSysColor(isSelected ? COLOR_WINDOWTEXT : isHighlighted ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
+		canvas.drawText(text, rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
+	}
 
 	return true;
 }
@@ -644,11 +666,11 @@ dwt::Rectangle TabView::getUsableArea(bool cutBorders) const
 		Rectangle rctabs(Widget::getClientSize());
 		// Get rid of ugly border...assume y border is the same as x border
 		const long border = (rctabs.width() - rect.width()) / 2;
-		const long upTranslation = 2;
+		const long upStretching = 4;
 		rect.pos.x = rctabs.x();
-		rect.pos.y -= upTranslation;
+		rect.pos.y -= upStretching;
 		rect.size.x = rctabs.width();
-		rect.size.y += border + upTranslation;
+		rect.size.y += border + upStretching;
 	}
 	return rect;
 }

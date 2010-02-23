@@ -34,7 +34,6 @@ WindowsPage::ListItem WindowsPage::optionItems[] = {
 	{ SettingsManager::JOIN_OPEN_NEW_WINDOW, N_("Open new window when using /join"), IDH_SETTINGS_WINDOWS_JOIN_OPEN_NEW_WINDOW },
 	{ SettingsManager::IGNORE_HUB_PMS, N_("Ignore private messages from the hub"), IDH_SETTINGS_WINDOWS_IGNORE_HUB_PMS },
 	{ SettingsManager::IGNORE_BOT_PMS, N_("Ignore private messages from bots"), IDH_SETTINGS_WINDOWS_IGNORE_BOT_PMS },
-	{ SettingsManager::TOGGLE_ACTIVE_WINDOW, N_("Toggle window when selecting an active tab"), IDH_SETTINGS_WINDOWS_TOGGLE_ACTIVE_WINDOW },
 	{ SettingsManager::PROMPT_PASSWORD, N_("Popup box to input password for hubs"), IDH_SETTINGS_WINDOWS_PROMPT_PASSWORD },
 	{ 0, 0 }
 };

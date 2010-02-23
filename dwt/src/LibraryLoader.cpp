@@ -39,14 +39,14 @@
 
 namespace dwt {
 
-LibraryLoader::LibraryLoader( const tstring & libraryName ) :
-	itsHMod(NULL)
+LibraryLoader::LibraryLoader(const tstring& libraryName, bool allowFailure) :
+itsHMod(NULL)
 {
-	load(libraryName);
+	load(libraryName, allowFailure);
 }
 
 LibraryLoader::LibraryLoader() :
-	itsHMod(NULL)
+itsHMod(NULL)
 {
 }
 
@@ -56,8 +56,7 @@ LibraryLoader::~LibraryLoader() {
 	}
 }
 
-void LibraryLoader::load( const tstring & libraryName )
-{
+void LibraryLoader::load(const tstring& libraryName, bool allowFailure) {
 	// VERY important we DON'T increase refcount or anything like that
 	if ( itsHMod != NULL ) {
 		dwtWin32DebugFail("Already called load on LibraryLoader object");
@@ -67,7 +66,9 @@ void LibraryLoader::load( const tstring & libraryName )
 	itsHMod = ::LoadLibrary( libraryName.c_str() );
 
 	// TODO: Rewrite xAssert to get support for submitting tstrings (could show library name)
-	dwtassert( itsHMod != 0, _T( "Error while trying to load library or dll!" ) );
+	if(!allowFailure) {
+		dwtassert( itsHMod != 0, _T( "Error while trying to load library or dll!" ) );
+	}
 }
 
 // Get procedure address from loaded library by name
