@@ -982,9 +982,9 @@ void NmdcHub::on(Minute, uint32_t aTick) throw() {
 
 		protectedIPs.push_back("dcpp.net");
 		protectedIPs.push_back("hublist.org");
-		protectedIPs.push_back("hubtracker.com");
+		protectedIPs.push_back("openhublist.org");
 		protectedIPs.push_back("dchublist.com");
-		protectedIPs.push_back("adchublist.com");
+		protectedIPs.push_back("hublista.hu");
 		protectedIPs.push_back("adcportal.com");
 		for(StringIter i = protectedIPs.begin(); i != protectedIPs.end();) {
 			*i = Socket::resolve(*i);
