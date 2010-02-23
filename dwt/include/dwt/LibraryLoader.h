@@ -78,7 +78,7 @@ public:
 	  * just allocate a static stack object of this type with the given library name
 	  * anywhere you need to ensure your library must be loaded!
 	  */
-	LibraryLoader( const tstring & libraryName );
+	LibraryLoader(const tstring& libraryName, bool allowFailure = false);
 
 	/// Argument free Constructor
 	/** Argument free Constructor, does NOTHING call load to actually load library!
@@ -89,7 +89,7 @@ public:
 	/** Call this one to actually load the given library or use Constructor taking
 	  * tstring argument which automatically loads library!
 	  */
-	void load( const tstring & libraryName );
+	void load(const tstring& libraryName, bool allowFailure = false);
 
 	/// Get procedure address from loaded library by name
 	/** Allows you get a procedure address from the dll.
@@ -105,6 +105,7 @@ public:
 	  */
 	FARPROC getProcAddress( long procedureOrdinal );
 
+	bool loaded() const { return itsHMod; }
 
 	/// DTOR freeing up library
 	/** Normally there's not much need of explicitly freeing up a library meaning you

@@ -39,6 +39,7 @@
 #include "../aspects/AspectSelection.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
+#include <dwt/Themed.h>
 
 #include <list>
 #include <vector>
@@ -53,7 +54,8 @@ class TabView :
 	private AspectCollection<TabView, int>,
 	public AspectPainting< TabView >,
 	public AspectSelection< TabView, int >,
-	public AspectText< TabView >
+	public AspectText< TabView >,
+	private Themed
 {
 	typedef CommonControl BaseType;
 	friend class AspectCollection<TabView, int>;
@@ -75,10 +77,9 @@ public:
 		FontPtr font;
 
 		unsigned maxLength; // max chars per tab; any value <= 3 means infinite
-		bool toggleActive;
 
 		/// Fills with default parameters
-		Seed(unsigned maxLength_ = 20, bool toggleActive_ = false);
+		Seed(unsigned maxLength_ = 20);
 	};
 
 	void add(ContainerPtr w, const IconPtr& icon = IconPtr());
@@ -96,6 +97,8 @@ public:
 	void setIcon(ContainerPtr w, const IconPtr& icon);
 
 	tstring getText(ContainerPtr w) const;
+
+	void closeActive(ContainerPtr w);
 
 	void onTitleChanged(const TitleChangedFunction& f) {
 		titleChangedFunction = f;
@@ -135,9 +138,17 @@ private:
 	struct TabInfo {
 		TabView* control; // for painting messages
 		ContainerPtr w;
+		bool closeActive;
 		ContextMenuFunction handleContextMenu;
 		bool marked;
-		TabInfo(TabView* control_, ContainerPtr w_) : control(control_), w(w_), handleContextMenu(0), marked(false) { }
+		TabInfo(TabView* control_, ContainerPtr w_) :
+		control(control_),
+		w(w_),
+		closeActive(false),
+		handleContextMenu(0),
+		marked(false)
+		{
+		}
 	};
 
 	ToolTipPtr tip;
@@ -146,7 +157,6 @@ private:
 
 	// these can be set through the Seed
 	unsigned maxLength; // max chars per tab; either 0 (infinite) or > 3
-	bool toggleActive;
 	FontPtr font;
 	FontPtr boldFont;
 
