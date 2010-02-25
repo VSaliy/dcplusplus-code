@@ -45,20 +45,27 @@ namespace dwt {
 */
 class Themed {
 protected:
-	Themed();
+	explicit Themed(Widget* w_);
 	virtual ~Themed();
 
-	void loadTheme(Widget* w, LPCWSTR classes);
+	void loadTheme(LPCWSTR classes);
 
-	void drawThemeBackground(Canvas& canvas, int part, int state, const Rectangle& rect);
+	/**
+	* @param drawParent if false, you have to call isThemeBackgroundPartiallyTransparent and handle
+	* drawing the transparent bits yourself.
+	*/
+	void drawThemeBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent = true);
 	void drawThemeText(Canvas& canvas, int part, int state, const tstring& text, DWORD flags, const Rectangle& rect);
+	bool isThemeBackgroundPartiallyTransparent(int part, int state);
 
 	HTHEME theme;
 
 private:
-	void openTheme(Widget* w, LPCWSTR classes);
+	void openTheme(LPCWSTR classes);
 	void closeTheme();
-	void themeChanged(Widget* w, LPCWSTR classes);
+	void themeChanged(LPCWSTR classes);
+
+	Widget* w;
 };
 
 }

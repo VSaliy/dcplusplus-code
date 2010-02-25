@@ -55,6 +55,7 @@ maxLength(maxLength_)
 
 TabView::TabView(Widget* w) :
 BaseType(w, ChainingDispatcher::superClass<TabView>()),
+Themed(this),
 tip(0),
 font(0),
 boldFont(0),
@@ -89,7 +90,7 @@ void TabView::create(const Seed & cs) {
 		boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		setFont(boldFont); // so the control adjusts its size per the bold font
 
-		loadTheme(this, VSCLASS_TAB);
+		loadTheme(VSCLASS_TAB);
 
 		// TCS_HOTTRACK seems to have no effect in owner-drawn tabs, so do the tracking ourselves.
 		onMouseMove(std::tr1::bind(&TabView::handleMouseMove, this, _1));
@@ -559,17 +560,23 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 	bool isHighlighted = static_cast<int>(info->itemID) == highlighted || ti->marked;
 
 	FreeCanvas canvas(this, info->hDC);
+	canvas.setBkMode(true);
 
 	Rectangle rect(info->rcItem);
 
-	canvas.setBkMode(true);
+	int part, state;
 	if(theme) {
+		part = TABP_TABITEM;
+		state = isSelected ? TIS_SELECTED : isHighlighted ? TIS_HOT : TIS_NORMAL;
+
 		// remove some borders
 		rect.pos.x -= 1;
 		rect.pos.y -= 1;
 		rect.size.x += 2;
 		rect.size.y += 1;
-		drawThemeBackground(canvas, TABP_TABITEM, isSelected ? TIS_SELECTED : isHighlighted ? TIS_HOT : TIS_NORMAL, rect);
+
+		drawThemeBackground(canvas, part, state, rect);
+
 	} else {
 		canvas.fill(rect, Brush(isSelected ? Brush::Window : isHighlighted ? Brush::HighLight : Brush::BtnFace));
 	}
@@ -591,8 +598,7 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 	const tstring text = getText(info->itemID);
 	Canvas::Selector select(canvas, *((isSelected || ti->marked) ? boldFont : font));
 	if(theme) {
-		drawThemeText(canvas, TABP_TABITEM, isSelected ? TIS_SELECTED : isHighlighted ? TIS_HOT : TIS_NORMAL,
-			text, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX, rect);
+		drawThemeText(canvas, part, state, text, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX, rect);
 	} else {
 		canvas.setTextColor(::GetSysColor(isSelected ? COLOR_WINDOWTEXT : isHighlighted ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
 		canvas.drawText(text, rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
