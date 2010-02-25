@@ -52,6 +52,8 @@
 #define MCB_BITMAP 3
 #define MPI_NORMAL 1
 #define MPI_HOT 2
+#define MPI_DISABLED 3
+#define MPI_DISABLEDHOT 4
 #endif
 
 #ifndef VSCLASS_TAB

@@ -577,7 +577,7 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 		canvas.fill(rect, Brush(isSelected ? Brush::Window : isHighlighted ? Brush::HighLight : Brush::BtnFace));
 	}
 
-	const Point margin(4, 1);
+	const Point margin(2, 1);
 	rect.pos += margin;
 	rect.size -= margin + margin;
 
@@ -668,7 +668,7 @@ dwt::Rectangle TabView::getUsableArea(bool cutBorders) const
 		Rectangle rctabs(Widget::getClientSize());
 		// Get rid of ugly border...assume y border is the same as x border
 		const long border = (rctabs.width() - rect.width()) / 2;
-		const long upStretching = 4;
+		const long upStretching = hasStyle(TCS_FLATBUTTONS) ? 2 : 4;
 		rect.pos.x = rctabs.x();
 		rect.pos.y -= upStretching;
 		rect.size.x = rctabs.width();

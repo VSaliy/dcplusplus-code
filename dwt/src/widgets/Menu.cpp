@@ -176,6 +176,9 @@ LRESULT Menu::handleNCPaint(UINT message, WPARAM wParam, long menuWidth) {
 	const MSG msg = { getParent()->handle(), message, wParam, 0 };
 	getParent()->getDispatcher().chain(msg);
 
+	if(!theme)
+		return TRUE;
+
 	HDC hDC = ::GetWindowDC(getParent()->handle());
 	FreeCanvas canvas(getParent(), hDC);
 
@@ -493,7 +496,8 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			state_bg = MB_ACTIVE;
 		} else {
 			part = MENU_POPUPITEM;
-			state = highlight ? MPI_HOT : MPI_NORMAL;
+			state = (isDisabled || isGrayed) ? ((isSelected || isHighlighted) ? MPI_DISABLEDHOT : MPI_DISABLED) :
+				highlight ? MPI_HOT : MPI_NORMAL;
 			part_bg = MENU_POPUPBACKGROUND;
 			state_bg = 0;
 		}
@@ -511,29 +515,18 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			colors.background));
 	}
 
-	if(!isMenuBar && !wrapper->isTitle) {
-		Rectangle stripRectangle(itemRectangle);
-		stripRectangle.size.x = stripWidth;
-		if(!highlight) {
-			// paint the strip bar (on the left, where icons go)
-			canvas.fill(stripRectangle, Brush(colors.stripBar));
-		}
+	Rectangle stripRectangle(itemRectangle);
+	stripRectangle.size.x = stripWidth;
 
-		if(isChecked) {
-			if(theme) {
-				drawThemeBackground(canvas, MENU_POPUPCHECKBACKGROUND, icon ? MCB_BITMAP : MCB_NORMAL, stripRectangle, false);
-				if(!icon)
-					drawThemeBackground(canvas, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, stripRectangle, false);
+	if(!(theme ? (isSelected || isHighlighted) : highlight) && !isMenuBar && !wrapper->isTitle) {
+		// paint the strip bar (on the left, where icons go)
+		canvas.fill(stripRectangle, Brush(colors.stripBar));
+	}
 
-			} else {
-				stripRectangle.pos.x += 1;
-				stripRectangle.pos.y += 1;
-				stripRectangle.size.x -= 2;
-				stripRectangle.size.y -= 2;
-				Canvas::Selector select(canvas, *PenPtr(new Pen(Colors::gray)));
-				canvas.line(stripRectangle);
-			}
-		}
+	if(isChecked && theme) {
+		drawThemeBackground(canvas, MENU_POPUPCHECKBACKGROUND, icon ? MCB_BITMAP : MCB_NORMAL, stripRectangle, false);
+		if(!icon)
+			drawThemeBackground(canvas, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, stripRectangle, false);
 	}
 
 	if(!isMenuBar && info.fType & MFT_SEPARATOR) {
@@ -658,6 +651,16 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			// delete memory dc
 			::DeleteObject( ::SelectObject( memoryDC, old ) );
 			::DeleteDC( memoryDC );
+		}
+
+		if(isChecked && !theme && !isMenuBar && !wrapper->isTitle) {
+			// must draw the surrounding rect after the check-mark
+			stripRectangle.pos.x += 1;
+			stripRectangle.pos.y += 1;
+			stripRectangle.size.x -= 2;
+			stripRectangle.size.y -= 2;
+			Canvas::Selector select(canvas, *PenPtr(new Pen(Colors::gray)));
+			canvas.line(stripRectangle);
 		}
 	}
 
