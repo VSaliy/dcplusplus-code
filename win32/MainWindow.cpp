@@ -894,13 +894,8 @@ void MainWindow::updateStatus() {
 	status->setText(STATUS_UP_DIFF, str(TF_("%1%/s") % s));
 	status->setToolTip(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % s % UploadManager::getInstance()->getUploadCount()));
 
-	if(BOOLSETTING(THROTTLE_ENABLE)) {
-		status->setText(STATUS_DOWN_LIMIT, str(TF_("D Lim: %1%/s") % Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getDownLimit()*1024))));
-		status->setText(STATUS_UP_LIMIT, str(TF_("U Lim: %1%/s") % Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getUpLimit()*1024))));
-	} else {
-		status->setText(STATUS_DOWN_LIMIT, _T("D Lim: -"));
-		status->setText(STATUS_UP_LIMIT, _T("U Lim: -"));
-	}
+	status->setText(STATUS_DOWN_LIMIT, str(TF_("D Lim: %1%/s") % Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getDownLimit()*1024))));
+	status->setText(STATUS_UP_LIMIT, str(TF_("U Lim: %1%/s") % Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getUpLimit()*1024))));
 
 	layoutSlotsSpin();
 }
