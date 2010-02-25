@@ -668,7 +668,7 @@ dwt::Rectangle TabView::getUsableArea(bool cutBorders) const
 		Rectangle rctabs(Widget::getClientSize());
 		// Get rid of ugly border...assume y border is the same as x border
 		const long border = (rctabs.width() - rect.width()) / 2;
-		const long upStretching = hasStyle(TCS_FLATBUTTONS) ? 2 : 4;
+		const long upStretching = hasStyle(TCS_BUTTONS) ? 4 : 2;
 		rect.pos.x = rctabs.x();
 		rect.pos.y -= upStretching;
 		rect.size.x = rctabs.width();
