@@ -786,14 +786,14 @@ void AdcHub::info(bool /*alwaysSend*/) {
 	addParam(lastInfoMap, c, "VE", "++ " VERSIONSTRING);
 	addParam(lastInfoMap, c, "AW", Util::getAway() ? "1" : Util::emptyString);
 
-	int limit = BOOLSETTING(THROTTLE_ENABLE) ? ThrottleManager::getInstance()->getDownLimit() : 0;
+	int limit = ThrottleManager::getInstance()->getDownLimit();
 	if (limit > 0) {
 		addParam(lastInfoMap, c, "DS", Util::toString(limit * 1024));
 	} else {
 		addParam(lastInfoMap, c, "DS", Util::emptyString);
 	}
 
-	limit = BOOLSETTING(THROTTLE_ENABLE) ? ThrottleManager::getInstance()->getUpLimit() : 0;
+	limit = ThrottleManager::getInstance()->getUpLimit();
 	if (limit > 0) {
 		addParam(lastInfoMap, c, "US", Util::toString(limit * 1024));
 	} else {

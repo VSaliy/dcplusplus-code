@@ -41,7 +41,6 @@ private:
 
 	ComboBoxPtr timeBound[2];
 
-	CheckBoxPtr throttleEnable;
 	CheckBoxPtr throttleTime;
 };
 

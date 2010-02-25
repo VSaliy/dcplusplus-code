@@ -33,7 +33,6 @@ grid(0),
 main(0),
 secondaryToggle(0),
 secondary(0),
-throttleEnable(0),
 throttleTime(0)
 {
 	setHelpId(IDH_BWLIMITPAGE);
@@ -48,11 +47,6 @@ throttleTime(0)
 	grid->row(2).align = GridInfo::STRETCH;
 	grid->row(3).mode = GridInfo::FILL;
 	grid->row(3).align = GridInfo::STRETCH;
-
-	throttleEnable = grid->addChild(CheckBox::Seed(T_("Enable Transfer Rate Limiting")));
-	throttleEnable->setHelpId(IDH_SETTINGS_BWLIMIT_ENABLE);
-	items.push_back(Item(throttleEnable, SettingsManager::THROTTLE_ENABLE, PropPage::T_BOOL));
-	throttleEnable->onClicked(std::tr1::bind(&BandwidthLimitPage::fixControls, this));
 
 	{
 		main = grid->addChild(GroupBox::Seed(T_("Transfer Rate Limiting")));
@@ -173,9 +167,5 @@ void BandwidthLimitPage::write() {
 }
 
 void BandwidthLimitPage::fixControls() {
-	bool stateEnabled = throttleEnable->getChecked();
-	bool stateTime = throttleTime->getChecked();
-	main->setEnabled(stateEnabled);
-	secondaryToggle->setEnabled(stateEnabled);
-	secondary->setEnabled(stateEnabled && stateTime);
+	secondary->setEnabled(throttleTime->getChecked());
 }
