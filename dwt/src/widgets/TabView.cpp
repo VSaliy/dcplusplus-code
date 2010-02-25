@@ -45,11 +45,12 @@ namespace dwt {
 
 const TCHAR TabView::windowClass[] = WC_TABCONTROL;
 
-TabView::Seed::Seed(unsigned maxLength_) :
+TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_) :
 BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
 	TCS_BUTTONS | TCS_FOCUSNEVER | TCS_MULTILINE | TCS_OWNERDRAWFIXED | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
 font(new Font(DefaultGuiFont)),
-maxLength(maxLength_)
+maxLength(maxLength_),
+toggleActive(toggleActive_)
 {
 }
 
@@ -57,6 +58,7 @@ TabView::TabView(Widget* w) :
 BaseType(w, ChainingDispatcher::superClass<TabView>()),
 Themed(this),
 tip(0),
+toggleActive(false),
 font(0),
 boldFont(0),
 inTab(false),
@@ -75,6 +77,7 @@ void TabView::create(const Seed & cs) {
 	maxLength = cs.maxLength;
 	if(maxLength <= 3)
 		maxLength = 0;
+	toggleActive = cs.toggleActive;
 
 	if(cs.font)
 		font = cs.font;
@@ -224,12 +227,6 @@ tstring TabView::getText(ContainerPtr w) const {
 	if(i != -1)
 		return getText(i);
 	return tstring();
-}
-
-void TabView::closeActive(ContainerPtr w) {
-	TabInfo* ti = getTabInfo(w);
-	if(ti)
-		ti->closeActive = true;
 }
 
 void TabView::onTabContextMenu(ContainerPtr w, const ContextMenuFunction& f) {
@@ -465,9 +462,8 @@ bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		if(dropPos == dragPos) {
 			// the tab hasn't moved; handle the click
 			if(dropPos == active) {
-				TabInfo* ti = getTabInfo(dropPos);
-				if(ti->closeActive)
-					ti->w->close(true);
+				if(toggleActive)
+					next();
 			} else
 				setActive(dropPos);
 			return true;
