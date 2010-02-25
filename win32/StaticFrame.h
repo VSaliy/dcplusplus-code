@@ -27,10 +27,9 @@ template<class T>
 class StaticFrame : public MDIChildFrame<T> {
 public:
 
-	StaticFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId, unsigned iconId, bool manageAccels = true) :
-		MDIChildFrame<T>(tabView, title, helpId, iconId, manageAccels)
+	StaticFrame(dwt::TabView* mdiClient, const tstring& title, unsigned helpId, unsigned iconId, bool manageAccels = true) :
+		MDIChildFrame<T>(mdiClient, title, helpId, iconId, manageAccels)
 	{
-		tabView->closeActive(this);
 		WinUtil::setStaticWindowState(T::id, true);
 	}
 
