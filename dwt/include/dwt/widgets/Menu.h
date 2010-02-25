@@ -39,6 +39,8 @@
 
 #include "../CanvasClasses.h"
 #include "../Dispatchers.h"
+#include <dwt/Themed.h>
+
 #include <memory>
 #include <vector>
 
@@ -52,7 +54,7 @@ namespace dwt {
 * Window. <br>
 * Note for Desktop version only! <br>
 */
-class Menu : private boost::noncopyable
+class Menu : private boost::noncopyable, private Themed
 {
 	friend class WidgetCreator<Menu>;
 
@@ -344,6 +346,8 @@ private:
 	* If this event is handled you also MUST handle the Draw Item Event!!
 	*/
 	bool handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrapper);
+
+	LRESULT handleNCPaint(UINT message, WPARAM wParam, long menuWidth);
 
 	// This is used during menu destruction
 	static void destroyItemDataWrapper( ItemDataWrapper * wrapper );

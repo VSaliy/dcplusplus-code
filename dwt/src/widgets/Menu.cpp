@@ -42,6 +42,7 @@
 #include <dwt/DWTException.h>
 #include <dwt/util/check.h>
 #include <dwt/util/win32/Version.h>
+#include <dwt/dwt_vsstyle.h>
 
 #include <algorithm>
 #include <boost/scoped_array.hpp>
@@ -82,6 +83,7 @@ font(font_)
 }
 
 Menu::Menu(Widget* parent) :
+Themed(parent),
 ownerDrawn(true),
 isSysMenu(false),
 itsParent(parent),
@@ -96,17 +98,19 @@ void Menu::createHelper(const Seed& cs) {
 	if(ownerDrawn) {
 		colors = cs.colors;
 		iconSize = cs.iconSize;
+
 		if(cs.font)
 			font = cs.font;
 		else
 			font = new Font(DefaultGuiFont);
-
 		{
 			LOGFONT lf;
 			::GetObject(font->handle(), sizeof(lf), &lf);
 			lf.lfWeight = FW_BOLD;
 			itsTitleFont = boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		}
+
+		loadTheme(VSCLASS_MENU);
 	}
 }
 
@@ -138,7 +142,7 @@ void Menu::attach(HMENU hMenu, const Seed& cs) {
 		// update all current items to be owner-drawn
 		const unsigned count = getCount();
 		for(size_t i = 0; i < count; ++i) {
-			MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_FTYPE | MIIM_SUBMENU | MIIM_DATA };
+			MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_FTYPE | MIIM_SUBMENU };
 			if(::GetMenuItemInfo(itsHandle, i, TRUE, &info)) {
 				if(info.hSubMenu) {
 					ObjectType subMenu(new Menu(itsParent));
@@ -167,9 +171,48 @@ void Menu::attach(HMENU hMenu, const Seed& cs) {
 	}
 }
 
+LRESULT Menu::handleNCPaint(UINT message, WPARAM wParam, long menuWidth) {
+	// forward to ::DefWindowProc
+	const MSG msg = { getParent()->handle(), message, wParam, 0 };
+	getParent()->getDispatcher().chain(msg);
+
+	HDC hDC = ::GetWindowDC(getParent()->handle());
+	FreeCanvas canvas(getParent(), hDC);
+
+	MENUBARINFO info = { sizeof(MENUBARINFO) };
+	if(::GetMenuBarInfo(getParent()->handle(), OBJID_MENU, 0, &info)) {
+		Rectangle rect(info.rcBar);
+		rect.pos -= getParent()->getWindowRect().pos; // convert to client coords
+
+		rect.pos.x += menuWidth;
+		rect.size.x -= menuWidth;
+
+		drawThemeBackground(canvas, MENU_BARBACKGROUND, MB_ACTIVE, rect, false);
+	}
+
+	::ReleaseDC(getParent()->handle(), hDC);
+
+	return TRUE;
+}
+
 void Menu::setMenu() {
-	if ( ::SetMenu( itsParent->handle(), itsHandle ) == FALSE )
-		throw Win32Exception("SetMenu in Menu::setMenu fizzled...");
+	if(!::SetMenu(getParent()->handle(), handle()))
+		throw Win32Exception("SetMenu in Menu::setMenu failed");
+
+	if(theme) {
+		// get the width that current items will occupy
+		long menuWidth = 0;
+		const unsigned count = getCount();
+		for(size_t i = 0; i < count; ++i) {
+			::RECT rect;
+			::GetMenuItemRect(getParent()->handle(), handle(), i, &rect);
+			menuWidth += Rectangle(rect).width();
+		}
+
+		Control* control = static_cast<Control*>(getParent());
+		control->onRaw(std::tr1::bind(&Menu::handleNCPaint, this, WM_NCPAINT, _1, menuWidth), Message(WM_NCPAINT));
+		control->onRaw(std::tr1::bind(&Menu::handleNCPaint, this, WM_NCACTIVATE, _1, menuWidth), Message(WM_NCACTIVATE));
+	}
 }
 
 Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon) {
@@ -440,38 +483,82 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 	bool highlight = (isSelected || isHighlighted) && !isDisabled;
 
-	// set item background
-	canvas.fill(itemRectangle, Brush(
-		highlight ? colors.highlightBackground :
-		isMenuBar ? colors.menuBar :
-		wrapper->isTitle ? colors.stripBar :
-		colors.background));
+	int part, state;
+	if(theme) {
+		int part_bg, state_bg;
+		if(isMenuBar || wrapper->isTitle) {
+			part = MENU_BARITEM;
+			state = (highlight && !wrapper->isTitle) ? MBI_HOT : MBI_NORMAL;
+			part_bg = MENU_BARBACKGROUND;
+			state_bg = MB_ACTIVE;
+		} else {
+			part = MENU_POPUPITEM;
+			state = highlight ? MPI_HOT : MPI_NORMAL;
+			part_bg = MENU_POPUPBACKGROUND;
+			state_bg = 0;
+		}
 
-	if(!highlight && !isMenuBar && !wrapper->isTitle) {
-		// paint the strip bar (on the left, where icons go)
-		Rectangle stripRectangle(itemRectangle);
-		stripRectangle.size.x = stripWidth;
-		canvas.fill(stripRectangle, Brush(colors.stripBar));
+		if(isThemeBackgroundPartiallyTransparent(part, state)) {
+			drawThemeBackground(canvas, part_bg, state_bg, itemRectangle, false);
+		}
+		drawThemeBackground(canvas, part, state, itemRectangle, false);
+
+	} else {
+		canvas.fill(itemRectangle, Brush(
+			highlight ? colors.highlightBackground :
+			isMenuBar ? colors.menuBar :
+			wrapper->isTitle ? colors.stripBar :
+			colors.background));
 	}
 
-	if ( !isMenuBar && info.fType & MFT_SEPARATOR ) // draw separator
-	{
-		// set up separator rectangle
-		Rectangle rectangle ( itemRectangle );
+	if(!isMenuBar && !wrapper->isTitle) {
+		Rectangle stripRectangle(itemRectangle);
+		stripRectangle.size.x = stripWidth;
+		if(!highlight) {
+			// paint the strip bar (on the left, where icons go)
+			canvas.fill(stripRectangle, Brush(colors.stripBar));
+		}
 
-		// center in the item rectangle
+		if(isChecked) {
+			if(theme) {
+				drawThemeBackground(canvas, MENU_POPUPCHECKBACKGROUND, icon ? MCB_BITMAP : MCB_NORMAL, stripRectangle, false);
+				if(!icon)
+					drawThemeBackground(canvas, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, stripRectangle, false);
+
+			} else {
+				stripRectangle.pos.x += 1;
+				stripRectangle.pos.y += 1;
+				stripRectangle.size.x -= 2;
+				stripRectangle.size.y -= 2;
+				Canvas::Selector select(canvas, *PenPtr(new Pen(Colors::gray)));
+				canvas.line(stripRectangle);
+			}
+		}
+	}
+
+	if(!isMenuBar && info.fType & MFT_SEPARATOR) {
+		// separator
+		Rectangle rectangle (itemRectangle);
 		rectangle.pos.x += stripWidth + textIconGap;
-		rectangle.pos.y += rectangle.height() / 2 - 1;
 
-		// select color
-		Canvas::Selector select(canvas, *PenPtr(new Pen(Colors::gray)));
+		if(theme) {
+			drawThemeBackground(canvas, MENU_POPUPSEPARATOR, 0, rectangle);
 
-		// draw separator
-		canvas.moveTo( rectangle.left(), rectangle.top() );
-		canvas.lineTo( rectangle.width(), rectangle.top() );
-	} // end if
-	else // not a seperator, then draw item text and icon
-	{
+		} else {
+			// center in the item rectangle
+			rectangle.pos.y += rectangle.height() / 2 - 1;
+
+			// select color
+			Canvas::Selector select(canvas, *PenPtr(new Pen(Colors::gray)));
+
+			// draw separator
+			canvas.moveTo( rectangle.left(), rectangle.top() );
+			canvas.lineTo( rectangle.width(), rectangle.top() );
+		}
+
+	} else {
+		// not a seperator, then draw item text and icon
+
 		// get item text
 		const int length = info.cch + 1;
 		std::vector< TCHAR > buffer( length );
@@ -490,16 +577,6 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 			if ( index != itemText.npos )
 				accelerator = itemText.substr( index + 1 );
-
-			// set mode to transparent
-			bool oldMode = canvas.setBkMode( true );
-
-			// select item text color
-			canvas.setTextColor(
-				isGrayed ? Colors::gray :
-				wrapper->isTitle ? colors.titleText :
-				highlight ? colors.highlightText :
-				wrapper->textColor);
 
 			// Select item font
 			Canvas::Selector select(canvas, *(
@@ -520,25 +597,35 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			unsigned drawTextFormat = DT_VCENTER | DT_SINGLELINE;
 			if((drawInfo->itemState & ODS_NOACCEL) == ODS_NOACCEL)
 				drawTextFormat |= DT_HIDEPREFIX;
+			unsigned drawAccelFormat = drawTextFormat | DT_RIGHT;
+			drawTextFormat |= (isMenuBar || wrapper->isTitle) ? DT_CENTER : DT_LEFT;
 
-			// draw text
-			canvas.drawText(text, textRectangle, ((isMenuBar || wrapper->isTitle) ? DT_CENTER : DT_LEFT) | drawTextFormat);
+			if(theme) {
+				drawThemeText(canvas, part, state, text, drawTextFormat, textRectangle);
+				if(!accelerator.empty())
+					drawThemeText(canvas, part, state, accelerator, drawAccelFormat, textRectangle);
 
-			// draw accelerator
-			if ( !accelerator.empty() )
-				canvas.drawText( accelerator, textRectangle, DT_RIGHT | drawTextFormat );
+			} else {
+				bool oldMode = canvas.setBkMode(true);
 
-			// reset old mode
-			canvas.setBkMode( oldMode );
+				canvas.setTextColor(
+					isGrayed ? Colors::gray :
+					wrapper->isTitle ? colors.titleText :
+					highlight ? colors.highlightText :
+					wrapper->textColor);
+
+				canvas.drawText(text, textRectangle, drawTextFormat);
+				if(!accelerator.empty())
+					canvas.drawText(accelerator, textRectangle, drawAccelFormat);
+
+				canvas.setBkMode(oldMode);
+			}
 		}
 
 		// set up icon rectangle
-		Rectangle iconRectangle( itemRectangle.pos, iconSize );
-
-		// adjust icon rectangle
-		iconRectangle.pos.x += ( stripWidth - iconSize.x ) / 2;
-		iconRectangle.pos.y += ( itemRectangle.height() - iconSize.y ) / 2;
-
+		Rectangle iconRectangle(itemRectangle.pos, iconSize);
+		iconRectangle.pos.x += (stripWidth - iconSize.x) / 2;
+		iconRectangle.pos.y += (itemRectangle.height() - iconSize.y) / 2;
 		if(isSelected && !isDisabled && !isGrayed) {
 			// selected and active item; adjust icon position
 			iconRectangle.pos.x--;
@@ -549,7 +636,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			// the item has an icon; draw it
 			canvas.drawIcon(icon, iconRectangle);
 
-		} else if(isChecked) {
+		} else if(isChecked && !theme) {
 			// the item has no icon set but it is checked; draw the check mark or radio bullet
 
 			// background color
@@ -572,12 +659,6 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			::DeleteObject( ::SelectObject( memoryDC, old ) );
 			::DeleteDC( memoryDC );
 		}
-
-		if(isChecked) {
-			// draw surrounding rectangle for checked items
-			Canvas::Selector select(canvas, *PenPtr(new Pen(colors.highlightBackground))); /// @todo is this the right color?
-			canvas.line( iconRectangle );
-		}
 	}
 
 	// blast buffer into screen
@@ -587,7 +668,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 		itemRectangle.size.x += sidebarWidth;
 	}
 
-	canvas.blast( itemRectangle );
+	canvas.blast(itemRectangle);
 	return true;
 }
 
@@ -607,8 +688,7 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 	dwtassert( ( info.fType & MFT_OWNERDRAW ) != 0, _T( "Not an owner-drawn item in Menu::handleMeasureItem" ) );
 
 	// check if separator
-	if ( info.fType & MFT_SEPARATOR )
-	{
+	if(info.fType & MFT_SEPARATOR) {
 		itemWidth = 60;
 		itemHeight = separatorHeight;
 		return true;

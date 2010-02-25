@@ -33,6 +33,7 @@
 
 #include <dwt/Dispatchers.h>
 #include <dwt/LibraryLoader.h>
+#include <dwt/util/check.h>
 
 namespace dwt {
 
@@ -41,8 +42,9 @@ static LibraryLoader& lib() {
 	return l;
 }
 
-Themed::Themed() : theme(0)
+Themed::Themed(Widget* w_) : theme(0), w(w_)
 {
+	dwtassert(w, _T("Themed: no widget set"));
 }
 
 Themed::~Themed() {
@@ -51,32 +53,37 @@ Themed::~Themed() {
 	}
 }
 
-void Themed::loadTheme(Widget* w, LPCWSTR classes) {
+void Themed::loadTheme(LPCWSTR classes) {
 	if(lib().loaded() && reinterpret_cast<BOOL (*)()>(lib().getProcAddress(_T("IsAppThemed")))()) {
-		openTheme(w, classes);
+		openTheme(classes);
 		if(theme) {
-			w->addCallback(Message(WM_THEMECHANGED), Dispatchers::VoidVoid<>(std::tr1::bind(&Themed::themeChanged, this, w, classes)));
+			w->addCallback(Message(WM_THEMECHANGED), Dispatchers::VoidVoid<>(std::tr1::bind(&Themed::themeChanged, this, classes)));
 		}
 	}
 }
 
-void Themed::drawThemeBackground(Canvas& canvas, int part, int state, const Rectangle& rect) {
-	if(theme) {
-		::RECT rc(rect);
-		reinterpret_cast<HRESULT (*)(HTHEME, HDC, int, int, const RECT*, const RECT*)>(
-			lib().getProcAddress(_T("DrawThemeBackground")))(theme, canvas.handle(), part, state, &rc, 0);
+void Themed::drawThemeBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent) {
+	::RECT rc = rect;
+	if(drawParent && isThemeBackgroundPartiallyTransparent(part, state)) {
+		reinterpret_cast<HRESULT (*)(HWND, HDC, const RECT*)>(
+			lib().getProcAddress(_T("DrawThemeParentBackground")))(w->handle(), canvas.handle(), &rc);
 	}
+	reinterpret_cast<HRESULT (*)(HTHEME, HDC, int, int, const RECT*, const RECT*)>(
+		lib().getProcAddress(_T("DrawThemeBackground")))(theme, canvas.handle(), part, state, &rc, 0);
 }
 
 void Themed::drawThemeText(Canvas& canvas, int part, int state, const tstring& text, DWORD flags, const Rectangle& rect) {
-	if(theme) {
-		::RECT rc(rect);
-		reinterpret_cast<HRESULT (*)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, DWORD, LPCRECT)>(
+	::RECT rc = rect;
+	reinterpret_cast<HRESULT (*)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, DWORD, LPCRECT)>(
 			lib().getProcAddress(_T("DrawThemeText")))(theme, canvas.handle(), part, state, text.c_str(), text.size(), flags, 0, &rc);
-	}
 }
 
-void Themed::openTheme(Widget* w, LPCWSTR classes) {
+bool Themed::isThemeBackgroundPartiallyTransparent(int part, int state) {
+	return reinterpret_cast<BOOL (*)(HTHEME, int, int)>(
+		lib().getProcAddress(_T("IsThemeBackgroundPartiallyTransparent")))(theme, part, state);
+}
+
+void Themed::openTheme(LPCWSTR classes) {
 	theme = reinterpret_cast<HWND (*)(HTHEME, LPCWSTR)>(lib().getProcAddress(_T("OpenThemeData")))(w->handle(), classes);
 }
 
@@ -84,10 +91,10 @@ void Themed::closeTheme() {
 	reinterpret_cast<HRESULT (*)(HTHEME)>(lib().getProcAddress(_T("CloseThemeData")))(theme);
 }
 
-void Themed::themeChanged(Widget* w, LPCWSTR classes) {
+void Themed::themeChanged(LPCWSTR classes) {
 	if(theme) {
 		closeTheme();
-		openTheme(w, classes);
+		openTheme(classes);
 	}
 }
 
