@@ -129,130 +129,59 @@ class Region;
   * which is an effect which might occur if your drawing operations are lengthy. <br>
   * Class does provide RAII semantics!
   */
-template< class CanvasType >
-class BufferedCanvas
-	: public CanvasType
+template<typename CanvasType>
+class BufferedCanvas : public CanvasType
 {
 public:
-	/// Constructor initializing the given source
-	BufferedCanvas( HWND window, HDC source, long width = 0, long height = 0 )
-		: CanvasType( window, source )
+	template<typename W>
+	BufferedCanvas(W widget, HDC source, long width = 0, long height = 0) :
+	CanvasType(widget, source)
 	{
-		init( source, width, height );
+		init(source, width, height);
 	}
 
-	/// Constructor initializing the given source
-	BufferedCanvas( HWND window )
-		: CanvasType( window )
+	template<typename W>
+	BufferedCanvas(W widget, long width = 0, long height = 0) :
+	CanvasType(widget)
 	{
-		init( this->CanvasType::itsHdc );
+		init(this->CanvasType::itsHdc, width, height);
 	}
 
 	/// Destructor will free up the contained HDC
 	/** Note!<br>
 	  * Destructor will not flush the contained operations to the contained Canvas
 	  */
-	virtual ~BufferedCanvas()
-	{
+	virtual ~BufferedCanvas() {
 		// delete buffer bitmap
-		::DeleteObject( ::SelectObject( this->CanvasType::itsHdc, itsOldBitmap ) );
+		::DeleteObject(::SelectObject(this->CanvasType::itsHdc, itsOldBitmap));
 
 		// delete buffer
-		::DeleteDC( this->CanvasType::itsHdc );
+		::DeleteDC(this->CanvasType::itsHdc);
 
 		// set back source
 		this->CanvasType::itsHdc = itsSource;
 	}
 
 	/// BitBlasts buffer into specified rectangle of source
-	void blast( const Rectangle & rectangle )
-	{
+	void blast(const Rectangle& rectangle) {
 		// note; ::BitBlt might fail with ERROR_INVALID_HANDLE when the desktop isn't visible
-		::BitBlt( itsSource, rectangle.x(), rectangle.y(), rectangle.width(), rectangle.height(), this->CanvasType::itsHdc, rectangle.x(), rectangle.y(), SRCCOPY );
-	}
-
-	/// Transparently draws bitmap
-	/** Bitmap background color should be the color of the image that should be
-	  * transparent
-	  */
-	void drawBitmap(const BitmapPtr& bitmap, const Rectangle& imageRectangle, COLORREF bitmapBackgroundColor, bool drawDisabled) {
-		// bitmap size
-		int width = imageRectangle.width();
-		int height = imageRectangle.height();
-
-		// memory buffer for bitmap
-		HDC memoryDC = ::CreateCompatibleDC( this->CanvasType::itsHdc );
-		HGDIOBJ oldMemoryBitmap = ::SelectObject( memoryDC, ::CreateCompatibleBitmap( this->CanvasType::itsHdc, width, height ) );
-		HGDIOBJ oldBitmap = ::SelectObject( this->CanvasType::itsHdc, bitmap->handle() );
-		::BitBlt( memoryDC, 0, 0, width, height, this->CanvasType::itsHdc, 0, 0, SRCCOPY );
-		::SelectObject( this->CanvasType::itsHdc, oldBitmap );
-
-		// memory buffer for AND mask
-		HDC maskDC = ::CreateCompatibleDC( this->CanvasType::itsHdc );
-		HGDIOBJ oldMaskBitmap = ::SelectObject( maskDC, ::CreateBitmap( width, height, 1, 1, NULL ) );
-
-		// create AND mask
-		COLORREF oldColor = ::SetBkColor( memoryDC, bitmapBackgroundColor );
-		::BitBlt( maskDC, 0, 0, width, height, memoryDC, 0, 0, SRCCOPY );
-		::SetBkColor( memoryDC, oldColor );
-
-		if ( drawDisabled )     // draw bitmap disabled
-		{
-			// BitBlt the black bits in the monochrome bitmap into COLOR_3DHILIGHT
-			// bits in the destination DC. The magic ROP comes from the Charles
-			// Petzold's book
-			HGDIOBJ oldBrush = ::SelectObject( this->CanvasType::itsHdc, ::CreateSolidBrush( ::GetSysColor( COLOR_3DHILIGHT ) ) );
-			::BitBlt( this->CanvasType::itsHdc, imageRectangle.left(), imageRectangle.top(), width, height, maskDC, 0, 0, 0xB8074A );
-
-			// BitBlt the black bits in the monochrome bitmap into COLOR_3DSHADOW
-			// bits in the destination DC
-			::DeleteObject( ::SelectObject( this->CanvasType::itsHdc, ::CreateSolidBrush( ::GetSysColor( COLOR_3DSHADOW ) ) ) );
-			::BitBlt( this->CanvasType::itsHdc, imageRectangle.left(), imageRectangle.top(), width, height, maskDC, 0, 0, 0xB8074A );
-			::DeleteObject( ::SelectObject( this->CanvasType::itsHdc, oldBrush ) );
-		}
-		else    // draw bitmap with transparency
-		{
-			// create memory buffer for another mask
-			HDC backMaskDC = ::CreateCompatibleDC( memoryDC );
-			HGDIOBJ oldBackMaskBitmap = ::SelectObject( backMaskDC, ::CreateBitmap( width, height, 1, 1, NULL ) );
-
-			// create that mask
-			::BitBlt( backMaskDC, 0, 0, width, height, maskDC, 0, 0, SRCCOPY );
-			::BitBlt( backMaskDC, 0, 0, width, height, backMaskDC, 0, 0, NOTSRCCOPY );
-
-			// set bitmap background to black
-			::BitBlt( memoryDC, 0, 0, width, height, backMaskDC, 0, 0, SRCAND );
-
-			::BitBlt( this->CanvasType::itsHdc, imageRectangle.left(), imageRectangle.top(), width, height, maskDC, 0, 0, SRCAND );
-			::BitBlt( this->CanvasType::itsHdc, imageRectangle.left(), imageRectangle.top(), width, height, memoryDC, 0, 0, SRCPAINT );
-
-			// clear
-			::DeleteObject( ::SelectObject( backMaskDC, oldBackMaskBitmap ) );
-			::DeleteDC( backMaskDC );
-		}
-
-		// clear
-		::DeleteObject( ::SelectObject( memoryDC, oldMemoryBitmap ) );
-		::DeleteObject( ::SelectObject( maskDC, oldMaskBitmap ) );
-
-		::DeleteDC( maskDC );
-		::DeleteDC( memoryDC );
+		::BitBlt(itsSource, rectangle.x(), rectangle.y(), rectangle.width(), rectangle.height(), this->CanvasType::itsHdc,
+			rectangle.x(), rectangle.y(), SRCCOPY);
 	}
 
 private:
 	/// Creates and inits back-buffer for the given source
-	void init( HDC source, long width = 0, long height = 0 )
-	{
+	void init(HDC source, long width, long height) {
 		// the buffer might have to be larger than the screen size
 		width += this->getDeviceCaps(HORZRES);
 		height += this->getDeviceCaps(VERTRES);
 
 		// create memory buffer for the source and reset itsHDC
 		itsSource = source;
-		this->CanvasType::itsHdc = ::CreateCompatibleDC( source );
+		this->CanvasType::itsHdc = ::CreateCompatibleDC(source);
 
 		// create and select bitmap for buffer
-		itsOldBitmap = ( HBITMAP )::SelectObject( this->CanvasType::itsHdc, ::CreateCompatibleBitmap( source, width, height ) );
+		itsOldBitmap = (HBITMAP)::SelectObject(this->CanvasType::itsHdc, ::CreateCompatibleBitmap(source, width, height));
 	}
 
 	HDC itsSource; /// Buffer source
@@ -556,14 +485,12 @@ class PaintCanvas : public Canvas
 {
 public:
 	/// Constructor, automatically calls BeginPaint
-	/** Takes the handle to the window we're supposed to paint.<br>
-	  */
-	explicit PaintCanvas( HWND hWnd );
-
-	/// Constructor, automatically calls BeginPaint
-	/** Takes a pointer to the Widget we're supposed to paint.<br>
-	  */
-	explicit PaintCanvas( Widget * widget );
+	template<typename W>
+	explicit PaintCanvas(W widget) :
+	Canvas(widget)
+	{
+		initialize();
+	}
 
 	/// DTOR, automatically calls EndPaint
 	/** Automatically calls end paint when object goes out of scope.
@@ -577,7 +504,6 @@ private:
 	PaintCanvas( const PaintCanvas & ); // Never defined, class cannot be copied!
 
 	// Initializes the object
-	// Common for all ConstructorS
 	void initialize();
 };
 
@@ -596,28 +522,27 @@ private:
   * <li> Pen</li>
   * </ul>
   */
-class UpdateCanvas : public Canvas
+template<bool windowDC>
+class UpdateCanvas_ : public Canvas
 {
 public:
-	/// Constructor, automatically calls GetDC
-	/** Takes the handle to the window we're supposed to paint.
-	  */
-	explicit UpdateCanvas( HWND hWnd );
-
-	/// Constructor, automatically calls GetDC
-	/** Takes a pointer to the Widget we're supposed to paint.
-	  */
-	UpdateCanvas( Widget * widget );
+	/// Constructor, automatically calls GetDC or GetWindowDC
+	template<typename W>
+	explicit UpdateCanvas_(W widget) :
+	Canvas(widget)
+	{
+		itsHdc = windowDC ? ::GetWindowDC(itsHandle) : ::GetDC(itsHandle);
+	}
 
 	/// DTOR, automatically calls ReleaseDC
 	/** Automtaically releases the Device Context
 	  */
-	virtual ~UpdateCanvas();
-
-private:
-	// Initializes the object, common for all Constructors
-	void initialize();
+	virtual ~UpdateCanvas_() {
+		::ReleaseDC(itsHandle, itsHdc);
+	}
 };
+typedef UpdateCanvas_<false> UpdateCanvas;
+typedef UpdateCanvas_<true> WindowUpdateCanvas;
 
 /// Class for painting on an already created canvas which we don't own ourself
 /** Note this class does NOT create or instantiate a HDC like the PaintCanvas and the
@@ -635,18 +560,15 @@ private:
 class FreeCanvas : public Canvas
 {
 public:
-	/// Constructor, assigns given HWND and HDC to object
-	/** Takes the handle to the window we're supposed to paint.
-	  */
-	FreeCanvas( HWND hWnd, HDC hdc );
-
 	/// Constructor, assigns the given HDC to the object
-	/** Takes a pointer to the Widget we're supposed to paint.
-	  */
-	FreeCanvas( Widget * widget, HDC hdc );
+	template<typename W>
+	FreeCanvas(W widget, HDC hdc) :
+	Canvas(widget)
+	{
+		itsHdc = hdc;
+	}
 
-	virtual ~FreeCanvas()
-	{}
+	virtual ~FreeCanvas() { }
 };
 
 #ifndef WINCE

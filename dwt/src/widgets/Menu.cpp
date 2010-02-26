@@ -179,9 +179,6 @@ LRESULT Menu::handleNCPaint(UINT message, WPARAM wParam, long menuWidth) {
 	if(!theme)
 		return TRUE;
 
-	HDC hDC = ::GetWindowDC(getParent()->handle());
-	FreeCanvas canvas(getParent(), hDC);
-
 	MENUBARINFO info = { sizeof(MENUBARINFO) };
 	if(::GetMenuBarInfo(getParent()->handle(), OBJID_MENU, 0, &info)) {
 		Rectangle rect(info.rcBar);
@@ -190,10 +187,16 @@ LRESULT Menu::handleNCPaint(UINT message, WPARAM wParam, long menuWidth) {
 		rect.pos.x += menuWidth;
 		rect.size.x -= menuWidth;
 
-		drawThemeBackground(canvas, MENU_BARBACKGROUND, MB_ACTIVE, rect, false);
-	}
+		BufferedCanvas<WindowUpdateCanvas> canvas(getParent(), rect.left(), rect.top());
 
-	::ReleaseDC(getParent()->handle(), hDC);
+		// avoid non-drawn left edge
+		Rectangle rect_bg = rect;
+		rect_bg.pos.x -= 1;
+		rect_bg.size.x += 1;
+		drawThemeBackground(canvas, MENU_BARBACKGROUND, MB_ACTIVE, rect_bg, false);
+
+		canvas.blast(rect);
+	}
 
 	return TRUE;
 }
@@ -431,7 +434,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	Rectangle itemRectangle(drawInfo->rcItem);
 
 	// setup buffered canvas
-	BufferedCanvas< FreeCanvas > canvas(reinterpret_cast<HWND>(handle()), drawInfo->hDC, itemRectangle.left(), itemRectangle.top());
+	BufferedCanvas<FreeCanvas> canvas(reinterpret_cast<HWND>(handle()), drawInfo->hDC, itemRectangle.left(), itemRectangle.top());
 
 	// this will contain adjusted sidebar width
 	int sidebarWidth = 0;
@@ -503,7 +506,13 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 		}
 
 		if(isThemeBackgroundPartiallyTransparent(part, state)) {
-			drawThemeBackground(canvas, part_bg, state_bg, itemRectangle, false);
+			Rectangle rect = itemRectangle;
+			if(part_bg == MENU_BARBACKGROUND) {
+				// avoid non-drawn edges
+				rect.pos.x -= 1;
+				rect.size.x += 2;
+			}
+			drawThemeBackground(canvas, part_bg, state_bg, rect, false);
 		}
 		drawThemeBackground(canvas, part, state, itemRectangle, false);
 
@@ -524,6 +533,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	}
 
 	if(isChecked && theme) {
+		/// @todo we should also support bullets
 		drawThemeBackground(canvas, MENU_POPUPCHECKBACKGROUND, icon ? MCB_BITMAP : MCB_NORMAL, stripRectangle, false);
 		if(!icon)
 			drawThemeBackground(canvas, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, stripRectangle, false);
@@ -535,7 +545,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 		rectangle.pos.x += stripWidth + textIconGap;
 
 		if(theme) {
-			drawThemeBackground(canvas, MENU_POPUPSEPARATOR, 0, rectangle);
+			drawThemeBackground(canvas, MENU_POPUPSEPARATOR, 0, rectangle, false);
 
 		} else {
 			// center in the item rectangle
