@@ -508,7 +508,7 @@ void MainWindow::setStaticWindowState(const string& id, bool open) {
 }
 
 void MainWindow::TrayPM() {
-	if(!tray_pm && notify->isVisible() && ::GetForegroundWindow() != handle()) {
+	if(!tray_pm && notify->isVisible() && ::GetAncestor(::GetForegroundWindow(), GA_ROOTOWNER) != handle()) {
 		static dwt::IconPtr icon(WinUtil::createIcon(IDI_TRAY_PM, 16));
 		notify->setIcon(icon);
 		tray_pm = true;
@@ -1377,10 +1377,10 @@ void MainWindow::handleTrayContextMenu() {
 }
 
 void MainWindow::handleTrayClicked() {
-	if(getVisible()) {
-		minimize();
-	} else {
+	if(::IsIconic(handle())) {
 		handleRestore();
+	} else {
+		minimize();
 	}
 }
 
