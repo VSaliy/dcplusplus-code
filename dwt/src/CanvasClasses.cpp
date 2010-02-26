@@ -255,18 +255,6 @@ Canvas::Canvas( Widget * widget )
 	: itsHandle( widget->handle() )
 {}
 
-PaintCanvas::PaintCanvas( HWND hWnd )
-	: Canvas( hWnd )
-{
-	initialize();
-}
-
-PaintCanvas::PaintCanvas( Widget * widget )
-	: Canvas( widget )
-{
-	initialize();
-}
-
 PaintCanvas::~PaintCanvas()
 {
 	::EndPaint( itsHandle, & itsPaint );
@@ -280,40 +268,6 @@ Rectangle PaintCanvas::getPaintRect()
 void PaintCanvas::initialize()
 {
 	itsHdc = ::BeginPaint( itsHandle, & itsPaint );
-}
-
-UpdateCanvas::UpdateCanvas( HWND hWnd )
-	: Canvas( hWnd )
-{
-	initialize();
-}
-
-UpdateCanvas::UpdateCanvas( Widget * widget )
-	: Canvas( widget )
-{
-	initialize();
-}
-
-UpdateCanvas::~UpdateCanvas()
-{
-	::ReleaseDC( itsHandle, itsHdc );
-}
-
-void UpdateCanvas::initialize()
-{
-	itsHdc = ::GetDC( itsHandle );
-}
-
-FreeCanvas::FreeCanvas( HWND hWnd, HDC hdc )
-	: Canvas( hWnd )
-{
-	itsHdc = hdc;
-}
-
-FreeCanvas::FreeCanvas( Widget * widget, HDC hdc )
-	: Canvas( widget )
-{
-	itsHdc = hdc;
 }
 
 #ifndef WINCE
