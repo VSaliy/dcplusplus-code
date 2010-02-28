@@ -657,7 +657,6 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 		return false;
 	}
 
-	int64_t size_left = size;
 	int64_t pos = 0;
 	int64_t size_read = 0;
 	void *buf = NULL;
@@ -681,43 +680,39 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 		return false;	// Better luck with the slow hash.
 	}
 
-	uint32_t lastRead = GET_TICK();
-	while(pos <= size && !stop) {
-		if(size_left > 0) {
-			size_read = std::min(size_left, BUF_SIZE);
-			buf = mmap(0, size_read, PROT_READ, MAP_SHARED, fd, pos);
-			if(buf == MAP_FAILED) {
-				dcdebug("Error calling mmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
-				break;
-			}
+	uint64_t lastRead = GET_TICK();
+	while (pos < size && !stop) {
+		size_read = std::min(size - pos, BUF_SIZE);
+		buf = mmap(0, size_read, PROT_READ, MAP_SHARED, fd, pos);
+		if (buf == MAP_FAILED) {
+			dcdebug("Error calling mmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+			break;
+		}
 
-			if (sigsetjmp(sb_env, 1)) {
-				dcdebug("Caught SIGBUS for file %s\n", filename.c_str());
-				break;
-			}
+		if (sigsetjmp(sb_env, 1)) {
+			dcdebug("Caught SIGBUS for file %s\n", filename.c_str());
+			break;
+		}
 
-			if(madvise(buf, size_read, MADV_SEQUENTIAL | MADV_WILLNEED) == -1) {
-				dcdebug("Error calling madvise for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
-				break;
-			}
+		if (madvise(buf, size_read, MADV_SEQUENTIAL | MADV_WILLNEED) == -1) {
+			dcdebug("Error calling madvise for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+			break;
+		}
 
-			if(SETTING(MAX_HASH_SPEED) > 0) {
-				uint32_t now = GET_TICK();
-				uint32_t minTime = size_read * 1000LL / (SETTING(MAX_HASH_SPEED) * 1024LL * 1024LL);
-				if(lastRead + minTime > now) {
-					uint32_t diff = now - lastRead;
-					Thread::sleep(minTime - diff);
-				}
-				lastRead = lastRead + minTime;
-			} else {
-				lastRead = GET_TICK();
+		if (SETTING(MAX_HASH_SPEED) > 0) {
+			uint64_t now = GET_TICK();
+			uint64_t minTime = size_read * 1000LL / (SETTING(MAX_HASH_SPEED) * 1024LL * 1024LL);
+			if (lastRead + minTime > now) {
+				uint64_t diff = now - lastRead;
+				Thread::sleep(minTime - diff);
 			}
+			lastRead = lastRead + minTime;
 		} else {
-			size_read = 0;
+			lastRead = GET_TICK();
 		}
 
 		tth.update(buf, size_read);
-		if(xcrc32)
+		if (xcrc32)
 			(*xcrc32)(buf, size_read);
 
 		{
@@ -725,20 +720,19 @@ bool HashManager::Hasher::fastHash(const string& filename, uint8_t* , TigerTree&
 			currentSize = max(static_cast<uint64_t>(currentSize - size_read), static_cast<uint64_t>(0));
 		}
 
-		if(size_left == 0) {
-			ok = true;
-			break;
-		}
-
-		instantPause();
-
-		if(munmap(buf, size_read) == -1) {
+		if (munmap(buf, size_read) == -1) {
 			dcdebug("Error calling munmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
 			break;
 		}
+
 		buf = NULL;
 		pos += size_read;
-		size_left -= size_read;
+
+		instantPause();
+
+		if (pos == size) {
+			ok = true;
+		}
 	}
 
 	if (buf != NULL && buf != MAP_FAILED && munmap(buf, size_read) == -1) {
