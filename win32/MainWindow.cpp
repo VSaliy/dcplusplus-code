@@ -450,6 +450,7 @@ void MainWindow::initTabs() {
 	dwt::TabView::Seed seed = WinUtil::Seeds::tabs;
 	seed.maxLength = SETTING(MAX_TAB_CHARS);
 	seed.toggleActive = BOOLSETTING(TOGGLE_ACTIVE_WINDOW);
+	seed.ctrlTab = true;
 	tabs = addChild(seed);
 	tabs->onTitleChanged(std::tr1::bind(&MainWindow::handleTabsTitleChanged, this, _1));
 	tabs->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));

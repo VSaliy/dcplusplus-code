@@ -76,11 +76,12 @@ public:
 
 		FontPtr font;
 
-		unsigned maxLength; // max chars per tab; any value <= 3 means infinite
-		bool toggleActive;
+		unsigned maxLength; /// max chars per tab; any value <= 3 means infinite
+		bool toggleActive; /// switch the active tab when clicking on the current active tab
+		bool ctrlTab; /// handle Ctrl+Tab and Ctrl+Shift+Tab
 
 		/// Fills with default parameters
-		Seed(unsigned maxLength_ = 20, bool toggleActive_ = false);
+		Seed(unsigned maxLength_ = 20, bool toggleActive_ = false, bool ctrlTab_ = false);
 	};
 
 	void add(ContainerPtr w, const IconPtr& icon = IconPtr());

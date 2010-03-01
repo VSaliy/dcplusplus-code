@@ -45,12 +45,13 @@ namespace dwt {
 
 const TCHAR TabView::windowClass[] = WC_TABCONTROL;
 
-TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_) :
+TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_, bool ctrlTab_) :
 BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
 	TCS_BUTTONS | TCS_FOCUSNEVER | TCS_MULTILINE | TCS_OWNERDRAWFIXED | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
 font(new Font(DefaultGuiFont)),
 maxLength(maxLength_),
-toggleActive(toggleActive_)
+toggleActive(toggleActive_),
+ctrlTab(ctrlTab_)
 {
 }
 
@@ -69,8 +70,10 @@ dragging(0)
 }
 
 void TabView::create(const Seed & cs) {
-	addAccel(FCONTROL, VK_TAB, std::tr1::bind(&TabView::handleCtrlTab, this, false));
-	addAccel(FCONTROL | FSHIFT, VK_TAB, std::tr1::bind(&TabView::handleCtrlTab, this, true));
+	if(cs.ctrlTab) {
+		addAccel(FCONTROL, VK_TAB, std::tr1::bind(&TabView::handleCtrlTab, this, false));
+		addAccel(FCONTROL | FSHIFT, VK_TAB, std::tr1::bind(&TabView::handleCtrlTab, this, true));
+	}
 
 	BaseType::create(cs);
 
