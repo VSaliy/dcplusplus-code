@@ -1014,11 +1014,11 @@ bool DirectoryListingFrame::handleKeyDownFiles(int c) {
 		up();
 		return true;
 	}
-	if(c == VK_LEFT && WinUtil::isAlt()) {
+	if(c == VK_LEFT && isControlPressed()) {
 		back();
 		return true;
 	}
-	if(c == VK_RIGHT && WinUtil::isAlt()) {
+	if(c == VK_RIGHT && isControlPressed()) {
 		forward();
 		return true;
 	}
