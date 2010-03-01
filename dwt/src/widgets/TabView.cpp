@@ -622,6 +622,25 @@ bool TabView::filter(const MSG& msg) {
 	if(tip)
 		tip->relayEvent(msg);
 
+	/* handle Alt+Left and Alt+Right here instead of setting up global accelerators in order to be
+	able to allow further dispatching if we can't move more to the left or to the right. */
+	if(msg.message == WM_SYSKEYDOWN && active != -1) {
+		switch(static_cast<int>(msg.wParam)) {
+		case VK_LEFT:
+			if(isAltPressed() && active > 0) {
+				setActive(active - 1);
+				return true;
+			}
+			break;
+		case VK_RIGHT:
+			if(isAltPressed() && active < size() - 1) {
+				setActive(active + 1);
+				return true;
+			}
+			break;
+		}
+	}
+
 	if(inTab && msg.message == WM_KEYUP && msg.wParam == VK_CONTROL) {
 		inTab = false;
 
