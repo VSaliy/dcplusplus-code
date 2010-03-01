@@ -77,7 +77,7 @@ Themed::~Themed() {
 void Themed::loadTheme(LPCWSTR classes) {
 	if(lib().loaded()) {
 
-#define get(name) if(!(name = reinterpret_cast<t_##name>(lib().getProcAddress(_T(#name))))) { return; }
+#define get(name) if(!name) { if(!(name = reinterpret_cast<t_##name>(lib().getProcAddress(_T(#name))))) { return; } }
 		get(CloseThemeData);
 		get(IsAppThemed);
 		get(IsThemeBackgroundPartiallyTransparent);
@@ -85,7 +85,7 @@ void Themed::loadTheme(LPCWSTR classes) {
 		get(DrawThemeParentBackground);
 		get(DrawThemeText);
 		get(OpenThemeData);
-#undef verify
+#undef get
 
 		if(IsAppThemed()) {
 			openTheme(classes);
