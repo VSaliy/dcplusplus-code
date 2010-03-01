@@ -53,7 +53,7 @@ socksServer(0)
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Incoming connection settings")))->addChild(Grid::Seed(1, 2));
-		cur->column(1).mode = GridInfo::FILL;
+		cur->column(0).mode = GridInfo::FILL;
 		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		GridPtr connType = cur->addChild(Grid::Seed(6, 1));
@@ -64,8 +64,6 @@ socksServer(0)
 
 		upnp = connType->addChild(RadioButton::Seed(T_("Use UPnP to let DC++ configure my router")));
 		upnp->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_UPNP);
-
-		/// @todo add a combo which will be layout'd on the right of the UPnP radio button to select the UPnP lib to use
 
 		nat = connType->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
 		nat->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_NAT);
