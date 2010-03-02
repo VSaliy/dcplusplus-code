@@ -343,11 +343,9 @@ tstring TabView::formatTitle(tstring title) {
 	return util::escapeMenu(title);
 }
 
-void TabView::handleSized(const SizedEvent& sz) {
-	layout();
-}
-
 void TabView::layout() {
+	BaseType::redraw(Rectangle(Widget::getClientSize()));
+
 	Rectangle tmp = getUsableArea(true);
 	if(!(tmp == clientSize)) {
 		int i = getSelected();
@@ -559,7 +557,7 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 	bool isHighlighted = static_cast<int>(info->itemID) == highlighted || ti->marked;
 
 	FreeCanvas canvas(this, info->hDC);
-	canvas.setBkMode(true);
+	bool oldMode = canvas.setBkMode(true);
 
 	Rectangle rect(info->rcItem);
 
@@ -603,6 +601,8 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 		canvas.drawText(text, rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
 	}
 
+	canvas.setBkMode(oldMode);
+
 	return true;
 }
 
@@ -633,7 +633,7 @@ bool TabView::filter(const MSG& msg) {
 			}
 			break;
 		case VK_RIGHT:
-			if(isAltPressed() && active < size() - 1) {
+			if(isAltPressed() && active < static_cast<int>(size()) - 1) {
 				setActive(active + 1);
 				return true;
 			}
@@ -716,7 +716,7 @@ bool TabView::handleMessage( const MSG & msg, LRESULT & retVal ) {
 		// correct values on mulitrow tabs (since the number of rows might change with the size)
 		retVal = getDispatcher().chain(msg);
 
-		handleSized(SizedEvent(msg));
+		layout();
 
 		return true;
 	}

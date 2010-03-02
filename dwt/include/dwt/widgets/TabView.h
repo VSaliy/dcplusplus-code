@@ -176,7 +176,6 @@ private:
 
 	void handleCtrlTab(bool shift);
 	void handleTextChanging(ContainerPtr w, const tstring& newText);
-	void handleSized(const SizedEvent&);
 	void handleTabSelected();
 	LRESULT handleToolTip(LPARAM lParam);
 	bool handleLeftMouseDown(const MouseEvent& mouseEvent);
