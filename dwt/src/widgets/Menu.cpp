@@ -494,7 +494,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 		int part_bg, state_bg;
 		if(isMenuBar || wrapper->isTitle) {
 			part = MENU_BARITEM;
-			state = (highlight && !wrapper->isTitle) ? MBI_HOT : MBI_NORMAL;
+			state = wrapper->isTitle ? MBI_NORMAL : isSelected ? MBI_PUSHED : isHighlighted ? MBI_HOT : MBI_NORMAL;
 			part_bg = MENU_BARBACKGROUND;
 			state_bg = MB_ACTIVE;
 		} else {
