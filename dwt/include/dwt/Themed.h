@@ -32,7 +32,6 @@
 #ifndef DWT_THEMED_H
 #define DWT_THEMED_H
 
-#include "Widget.h"
 #include "CanvasClasses.h"
 
 #include <uxtheme.h>
@@ -48,7 +47,7 @@ protected:
 	explicit Themed(Widget* w_);
 	virtual ~Themed();
 
-	void loadTheme(LPCWSTR classes);
+	void loadTheme(LPCWSTR classes, bool handleThemeChanges = true);
 
 	/**
 	* @param drawParent if false, you have to call isThemeBackgroundPartiallyTransparent and handle

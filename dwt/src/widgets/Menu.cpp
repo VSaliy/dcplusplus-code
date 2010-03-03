@@ -110,7 +110,7 @@ void Menu::createHelper(const Seed& cs) {
 			itsTitleFont = boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		}
 
-		loadTheme(VSCLASS_MENU);
+		loadTheme(VSCLASS_MENU, !cs.popup);
 	}
 }
 

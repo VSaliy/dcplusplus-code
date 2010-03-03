@@ -69,12 +69,10 @@ Themed::Themed(Widget* w_) : theme(0), w(w_)
 }
 
 Themed::~Themed() {
-	if(theme) {
-		closeTheme();
-	}
+	closeTheme();
 }
 
-void Themed::loadTheme(LPCWSTR classes) {
+void Themed::loadTheme(LPCWSTR classes, bool handleThemeChanges) {
 	if(lib().loaded()) {
 
 #define get(name) if(!name) { if(!(name = reinterpret_cast<t_##name>(lib().getProcAddress(_T(#name))))) { return; } }
@@ -89,8 +87,10 @@ void Themed::loadTheme(LPCWSTR classes) {
 
 		if(IsAppThemed()) {
 			openTheme(classes);
-			if(theme) {
-				w->addCallback(Message(WM_THEMECHANGED), Dispatchers::VoidVoid<>(std::tr1::bind(&Themed::themeChanged, this, classes)));
+
+			if(handleThemeChanges) {
+				w->addCallback(Message(WM_THEMECHANGED),
+					Dispatchers::VoidVoid<>(std::tr1::bind(&Themed::themeChanged, this, classes)));
 			}
 		}
 	}
@@ -118,14 +118,14 @@ void Themed::openTheme(LPCWSTR classes) {
 }
 
 void Themed::closeTheme() {
-	CloseThemeData(theme);
+	if(theme) {
+		CloseThemeData(theme);
+	}
 }
 
 void Themed::themeChanged(LPCWSTR classes) {
-	if(theme) {
-		closeTheme();
-		openTheme(classes);
-	}
+	closeTheme();
+	openTheme(classes);
 }
 
 }
