@@ -35,7 +35,6 @@
 #ifdef __GNUC__
 // MinGW lacks vsstyle.h, so define what we need here
 
-#ifndef VSCLASS_MENU
 #define VSCLASS_MENU	L"MENU"
 #define MENU_BARBACKGROUND 7
 #define MENU_BARITEM 8
@@ -47,6 +46,7 @@
 #define MB_ACTIVE 1
 #define MBI_NORMAL 1
 #define MBI_HOT 2
+#define MBI_PUSHED 3
 #define MC_CHECKMARKNORMAL 1
 #define MCB_NORMAL 2
 #define MCB_BITMAP 3
@@ -54,15 +54,12 @@
 #define MPI_HOT 2
 #define MPI_DISABLED 3
 #define MPI_DISABLEDHOT 4
-#endif
 
-#ifndef VSCLASS_TAB
 #define VSCLASS_TAB	L"TAB"
 #define TABP_TABITEM 1
 #define TIS_NORMAL 1
 #define TIS_HOT 2
 #define TIS_SELECTED 3
-#endif
 
 #else
 #include <vsstyle.h>
