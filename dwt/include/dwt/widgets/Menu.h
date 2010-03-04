@@ -98,7 +98,6 @@ public:
 	static const int pointerGap; /// Gap between item text and sub - menu pointer
 	static const int textIconGap; /// Gap between text and icon
 	static const int textBorderGap; /// Gap between text and rectangel border
-	static const int separatorHeight; /// Defines default height for rectangle containing separator
 
 	HMENU handle() const {
 		return itsHandle;

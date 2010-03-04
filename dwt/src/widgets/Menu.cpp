@@ -55,7 +55,6 @@ const int Menu::borderGap = 3;
 const int Menu::pointerGap = 5;
 const int Menu::textIconGap = 8;
 const int Menu::textBorderGap = 4;
-const int Menu::separatorHeight = 8;
 
 const COLORREF Menu::Colors::text = ::GetSysColor(COLOR_MENUTEXT);
 const COLORREF Menu::Colors::gray = ::GetSysColor(COLOR_GRAYTEXT);
@@ -702,8 +701,18 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 
 	// check if separator
 	if(info.fType & MFT_SEPARATOR) {
+		if(theme) {
+			UpdateCanvas canvas(getParent());
+			Point pt;
+			if(getThemePartSize(canvas, MENU_POPUPSEPARATOR, 0, pt)) {
+				itemWidth = pt.x;
+				itemHeight = pt.y;
+				return true;
+			}
+		}
+
 		itemWidth = 60;
-		itemHeight = separatorHeight;
+		itemHeight = 8;
 		return true;
 	}
 
