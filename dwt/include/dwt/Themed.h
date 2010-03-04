@@ -55,6 +55,7 @@ protected:
 	*/
 	void drawThemeBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent = true);
 	void drawThemeText(Canvas& canvas, int part, int state, const tstring& text, DWORD flags, const Rectangle& rect);
+	bool getThemePartSize(Canvas& canvas, int part, int state, Point& ret);
 	bool isThemeBackgroundPartiallyTransparent(int part, int state);
 
 	HTHEME theme;

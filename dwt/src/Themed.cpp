@@ -54,6 +54,9 @@ static t_DrawThemeParentBackground DrawThemeParentBackground;
 typedef HRESULT (*t_DrawThemeText)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, DWORD, LPCRECT);
 static t_DrawThemeText DrawThemeText;
 
+typedef HRESULT (*t_GetThemePartSize)(HTHEME, HDC, int, int, LPCRECT, THEMESIZE, SIZE*);
+static t_GetThemePartSize GetThemePartSize;
+
 typedef BOOL (*t_IsAppThemed)();
 static t_IsAppThemed IsAppThemed;
 
@@ -77,21 +80,20 @@ void Themed::loadTheme(LPCWSTR classes, bool handleThemeChanges) {
 
 #define get(name) if(!name) { if(!(name = reinterpret_cast<t_##name>(lib().getProcAddress(_T(#name))))) { return; } }
 		get(CloseThemeData);
-		get(IsAppThemed);
-		get(IsThemeBackgroundPartiallyTransparent);
 		get(DrawThemeBackground);
 		get(DrawThemeParentBackground);
 		get(DrawThemeText);
+		get(GetThemePartSize);
+		get(IsAppThemed);
+		get(IsThemeBackgroundPartiallyTransparent);
 		get(OpenThemeData);
 #undef get
 
-		if(IsAppThemed()) {
-			openTheme(classes);
+		openTheme(classes);
 
-			if(handleThemeChanges) {
-				w->addCallback(Message(WM_THEMECHANGED),
-					Dispatchers::VoidVoid<>(std::tr1::bind(&Themed::themeChanged, this, classes)));
-			}
+		if(handleThemeChanges) {
+			w->addCallback(Message(WM_THEMECHANGED),
+				Dispatchers::VoidVoid<>(std::tr1::bind(&Themed::themeChanged, this, classes)));
 		}
 	}
 }
@@ -109,17 +111,30 @@ void Themed::drawThemeText(Canvas& canvas, int part, int state, const tstring& t
 	DrawThemeText(theme, canvas.handle(), part, state, text.c_str(), text.size(), flags, 0, &rc);
 }
 
+bool Themed::getThemePartSize(Canvas& canvas, int part, int state, Point& ret) {
+	SIZE size;
+	if(GetThemePartSize(theme, canvas.handle(), part, state, 0, TS_TRUE, &size) == S_OK) {
+		ret.x = size.cx;
+		ret.y = size.cy;
+		return true;
+	}
+	return false;
+}
+
 bool Themed::isThemeBackgroundPartiallyTransparent(int part, int state) {
 	return IsThemeBackgroundPartiallyTransparent(theme, part, state);
 }
 
 void Themed::openTheme(LPCWSTR classes) {
-	theme = OpenThemeData(w->handle(), classes);
+	if(IsAppThemed()) {
+		theme = OpenThemeData(w->handle(), classes);
+	}
 }
 
 void Themed::closeTheme() {
 	if(theme) {
 		CloseThemeData(theme);
+		theme = 0;
 	}
 }
 
