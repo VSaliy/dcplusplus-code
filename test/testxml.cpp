@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE( test_simple )
 	Collector collector;
     SimpleXMLReader reader(&collector);
 
-    const char xml[] = "<?xml version='1.0' encoding='utf-8' ?><complex a='1'><simple b=\"2\"/><complex2> data </complex2></complex>";
+    const char xml[] = "<?xml version='1.0' encoding='utf-8' ?><complex a='1'> <simple b=\"2\"/><complex2> data </complex2></complex>";
     for(size_t i = 0, iend = sizeof(xml); i < iend; ++i) {
     	reader.parse(xml + i, 1, true);
     }
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE( test_simple )
     BOOST_CHECK_EQUAL(collector.attribValues["2"], 1);
     BOOST_CHECK_EQUAL(collector.startTags["complex2"], 1);
     BOOST_CHECK_EQUAL(collector.endTags["complex2"], 1);
-    BOOST_CHECK_EQUAL(collector.dataValues["data"], 1);
+    BOOST_CHECK_EQUAL(collector.dataValues[" data "], 1);
 }
 
 BOOST_AUTO_TEST_CASE(test_entref)

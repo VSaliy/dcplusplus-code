@@ -119,7 +119,7 @@ private:
 
 	bool needChars(size_t n) const;
 	int charAt(size_t n) const;
-	bool skipSpace();
+	bool skipSpace(bool store = false);
 	void advancePos(size_t n = 1);
 	std::string::size_type bufSize() const;
 
