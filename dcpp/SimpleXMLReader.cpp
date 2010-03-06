@@ -459,9 +459,7 @@ bool SimpleXMLReader::content() {
 		return entref(value);
 	}
 
-	if(!value.empty() || !isSpace(c)) {
-		append(value, MAX_VALUE_SIZE, c);
-	}
+	append(value, MAX_VALUE_SIZE, c);
 
 	advancePos(1);
 
@@ -493,11 +491,6 @@ bool SimpleXMLReader::elementEndEnd() {
 	}
 
 	if(charAt(0) == '>') {
-		// Shave off whitespace
-		while(!value.empty() && isSpace(value[value.size()-1])) {
-			value.erase(--value.end());
-		}
-
 		if(!encoding.empty() && encoding != Text::utf8) {
 			value = Text::toUtf8(encoding);
 		}
@@ -513,12 +506,16 @@ bool SimpleXMLReader::elementEndEnd() {
 	return false;
 }
 
-bool SimpleXMLReader::skipSpace() {
+bool SimpleXMLReader::skipSpace(bool store) {
 	if(!needChars(1)) {
 		return true;
 	}
 	bool skipped = false;
-	while(needChars(1) && isSpace(charAt(0))) {
+	int c;
+	while(needChars(1) && isSpace(c = charAt(0))) {
+		if(store) {
+			append(value, MAX_VALUE_SIZE, c);
+		}
 		advancePos();
 		skipped = true;
 	}
@@ -676,11 +673,12 @@ bool SimpleXMLReader::process() {
 			|| error("Error while parsing comment");
 			break;
 		case STATE_CONTENT:
-			literal(LITN("<!--"), false, STATE_COMMENT)
+			skipSpace(true)
+			|| literal(LITN("<!--"), false, STATE_COMMENT)
 			|| element()
 			|| literal(LITN("</"), false, STATE_ELEMENT_END)
 			|| content()
-			|| error("Expecting content");
+			|| error("Expecting content, element or comment");
 			break;
 		case STATE_END:
 			buf.clear();
@@ -696,6 +694,11 @@ bool SimpleXMLReader::process() {
 				bufPos = 0;
 			}
 			return true;
+		}
+
+		if(state == STATE_CONTENT && state != oldState) {
+			// might contain whitespace from previous unfruitful contents (that turned out to be elements / comments)
+			value.clear();
 		}
 
 		oldState = state;
