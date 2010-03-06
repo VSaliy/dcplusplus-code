@@ -209,8 +209,6 @@ void PrivateFrame::fillLogParams(StringMap& params) const {
 }
 
 void PrivateFrame::layout() {
-	bool scroll = chat->scrollIsAtEnd();
-
 	const int border = 2;
 
 	dwt::Rectangle r(getClientSize());
@@ -223,9 +221,6 @@ void PrivateFrame::layout() {
 
 	r.size.y -= rm.size.y + border;
 	chat->layout(r);
-
-	if(scroll)
-		chat->sendMessage(WM_VSCROLL, SB_BOTTOM);
 }
 
 void PrivateFrame::updateOnlineStatus() {

@@ -44,6 +44,8 @@ namespace private_
 {
 // begin namespace private_
 
+#ifdef PORT_ME
+
 // Class is only to make attaching of Edit Control in List View possible
 // TODO: Make window NOT hide the leftmost cell of row when entering "edit modus"..
 class TableEditBox : TextBox
@@ -73,7 +75,6 @@ inline TableEditBox::TableEditBox( dwt::Widget * parent )
 	dwtassert( parent, _T( "Cant have a TextBox without a parent..." ) );
 }
 
-#ifdef PORT_ME
 template< class EventHandlerClass >
 LRESULT TableEditBox< EventHandlerClass >::sendWidgetMessage( HWND hWnd, UINT msg, WPARAM & wPar, LPARAM & lPar )
 {

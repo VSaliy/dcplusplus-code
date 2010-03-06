@@ -37,8 +37,8 @@
 #define DWT_AspectScrollable_h
 
 #include "../Dispatchers.h"
+#include "../DWTException.h"
 #include "../Message.h"
-#include "../util/check.h"
 
 namespace dwt {
 
@@ -98,8 +98,9 @@ private:
 template<class WidgetType>
 SCROLLINFO AspectScrollable<WidgetType>::getScrollInfo(int fnBar, int mask) const {
 	SCROLLINFO info = { sizeof(SCROLLINFO), mask };
-	BOOL ret = ::GetScrollInfo(H(), fnBar, &info);
-	dwtassert(ret != FALSE, _T("AspectScrollable: Can't get scroll info"));
+	if(!::GetScrollInfo(H(), fnBar, &info)) {
+		throw Win32Exception("AspectScrollable: Can't get scroll info");
+	}
 	return info;
 }
 

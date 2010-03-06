@@ -75,7 +75,7 @@ bool RichTextBox::handleKeyDown(int c) {
 		return true;
 	case VK_ESCAPE:
 		setSelection(-1, -1);
-		sendMessage(WM_VSCROLL, SB_BOTTOM);
+		scrollToBottom();
 		clearCurrentNeedle();
 		return true;
 	}

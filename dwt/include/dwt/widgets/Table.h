@@ -745,17 +745,6 @@ inline void Table::setAlwaysShowSelection( bool value ) {
 	this->Widget::addRemoveStyle( LVS_SHOWSELALWAYS, value );
 }
 
-inline void Table::eraseColumn( unsigned columnNo ) {
-	dwtassert( columnNo != 0, _T( "Can't delete the leftmost column" ) );
-	ListView_DeleteColumn( handle(), columnNo );
-}
-
-inline void Table::setColumnWidth( unsigned columnNo, int width ) {
-	if ( ListView_SetColumnWidth( handle(), columnNo, width ) == FALSE ) {
-		dwtWin32DebugFail("Couldn't resize columns of Table");
-	}
-}
-
 inline void Table::eraseImpl( int row ) {
 	ListView_DeleteItem( handle(), row );
 }
