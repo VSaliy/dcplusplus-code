@@ -160,10 +160,14 @@ public:
 
 	bool getModify();
 
+	void scrollToBottom();
+
 	ClientCoordinate ptFromPos(int pos);
 	ScreenCoordinate getContextMenuPos();
 
 	virtual Point getPreferedSize();
+
+	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
 
 protected:
 	// Constructor Taking pointer to parent
@@ -392,19 +396,6 @@ inline void TextBoxBase::setModify( bool modify ) {
 
 inline bool TextBoxBase::getModify( ) {
 	return this->sendMessage( EM_GETMODIFY ) > 0;
-}
-
-inline TextBoxBase::TextBoxBase(Widget *parent, Dispatcher& dispatcher) :
-BaseType(parent, dispatcher),
-lines(1)
-{
-	// Can't have a text box without a parent...
-	dwtassert( parent, _T( "Cant have a TextBox without a parent..." ) );
-}
-
-inline TextBox::TextBox( Widget * parent )
-	: TextBoxBase(parent, ChainingDispatcher::superClass<TextBox>())
-{
 }
 
 inline void TextBox::setPassword( bool value, TCHAR pwdChar ) {

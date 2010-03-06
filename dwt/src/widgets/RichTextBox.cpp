@@ -36,6 +36,7 @@
 
 #include <dwt/widgets/RichTextBox.h>
 #include <dwt/Point.h>
+#include <dwt/util/check.h>
 #include <dwt/util/HoldRedraw.h>
 
 #include <dwt/LibraryLoader.h>
@@ -210,7 +211,7 @@ void RichTextBox::addTextSteady( const tstring & txtRaw, std::size_t len ) {
 		setSelection(cr.first-charsRemoved, cr.second-charsRemoved);
 
 		if(scroll)
-			sendMessage(WM_VSCROLL, SB_BOTTOM);
+			scrollToBottom();
 		else
 			setScrollPos(scrollPos);
 	}

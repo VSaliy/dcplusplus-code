@@ -248,8 +248,6 @@ void HubFrame::postClosing() {
 }
 
 void HubFrame::layout() {
-	bool scroll = chat->scrollIsAtEnd();
-
 	const int border = 2;
 
 	dwt::Rectangle r(getClientSize());
@@ -270,9 +268,6 @@ void HubFrame::layout() {
 		paned->setSecond(0);
 	}
 	paned->setRect(r);
-
-	if(scroll)
-		chat->sendMessage(WM_VSCROLL, SB_BOTTOM);
 }
 
 void HubFrame::updateStatus() {

@@ -409,6 +409,17 @@ void Table::setView( int view ) {
 	}
 }
 
+void Table::eraseColumn( unsigned columnNo ) {
+	dwtassert( columnNo != 0, _T( "Can't delete the leftmost column" ) );
+	ListView_DeleteColumn( handle(), columnNo );
+}
+
+void Table::setColumnWidth( unsigned columnNo, int width ) {
+	if ( ListView_SetColumnWidth( handle(), columnNo, width ) == FALSE ) {
+		dwtWin32DebugFail("Couldn't resize columns of Table");
+	}
+}
+
 void Table::redraw( int firstRow, int lastRow ) {
 	if(lastRow == -1) {
 		lastRow = size();

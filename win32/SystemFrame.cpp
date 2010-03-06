@@ -73,22 +73,17 @@ void SystemFrame::addLine(time_t t, const tstring& msg) {
 	log->addText(Text::toT("\r\n[" + Util::getShortTimeString(t) + "] ") + msg);
 
 	if(scroll)
-		log->sendMessage(WM_VSCROLL, SB_BOTTOM);
+		log->scrollToBottom();
 
 	setDirty(SettingsManager::BOLD_SYSTEM_LOG);
 }
 
 void SystemFrame::layout() {
-	bool scroll = log->scrollIsAtEnd();
-
 	dwt::Rectangle r(this->getClientSize());
 
 	status->layout(r);
 
 	log->layout(r);
-
-	if(scroll)
-		log->sendMessage(WM_VSCROLL, SB_BOTTOM);
 }
 
 bool SystemFrame::preClosing() {

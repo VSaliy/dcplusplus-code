@@ -30,10 +30,25 @@
 */
 
 #include <dwt/widgets/TextBox.h>
+
 #include <dwt/CanvasClasses.h>
+#include <dwt/util/check.h>
 
 namespace dwt {
 
+TextBoxBase::TextBoxBase(Widget *parent, Dispatcher& dispatcher) :
+BaseType(parent, dispatcher),
+lines(1)
+{
+	// Can't have a text box without a parent...
+	dwtassert( parent, _T( "Cant have a TextBox without a parent..." ) );
+}
+
+TextBox::TextBox(Widget* parent) :
+TextBoxBase(parent, ChainingDispatcher::superClass<TextBox>())
+{
+}
+	
 const TCHAR TextBox::windowClass[] = WC_EDIT;
 
 TextBoxBase::Seed::Seed(DWORD style, DWORD exStyle, const tstring& caption) :
@@ -115,6 +130,20 @@ ClientCoordinate TextBoxBase::ptFromPos(int pos) {
 	return ClientCoordinate(Point(LOWORD(res), HIWORD(res)), this);
 }
 
+void TextBoxBase::scrollToBottom() {
+	// this function takes care of various corner cases (not fully scrolled, scrolled too far...)
+
+	const std::pair<int, int> sel = getCaretPosRange();
+
+	setSelection(length());
+	showCaret();
+
+	// restore the previous selection
+	setSelection(sel.first, sel.second);
+
+	sendMessage(WM_VSCROLL, SB_BOTTOM);
+}
+
 ScreenCoordinate TextBoxBase::getContextMenuPos() {
 	return ptFromPos(getCaretPos());
 }
@@ -135,6 +164,19 @@ Point TextBoxBase::getPreferedSize() {
 	ret.x += GetSystemMetrics(SM_CXEDGE) * 2;
 	ret.y = lines * tmNew.tmHeight + std::min(tmNew.tmHeight, tmSys.tmHeight) / 2 + GetSystemMetrics(SM_CYEDGE) * 2;
 	return ret;
+}
+
+bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
+	bool handled = BaseType::handleMessage(msg, retVal);
+
+	// keep the scroll position at the end if it already was at the end
+	if((msg.message == WM_SIZE || msg.message == WM_MOVE) && hasStyle(WS_VSCROLL) && scrollIsAtEnd()) {
+		retVal = getDispatcher().chain(msg);
+		scrollToBottom();
+		return true;
+	}
+
+	return handled;
 }
 
 bool TextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
