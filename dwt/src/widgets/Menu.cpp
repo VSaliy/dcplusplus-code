@@ -217,6 +217,7 @@ void Menu::setMenu() {
 		Control* control = static_cast<Control*>(getParent());
 		control->onRaw(std::tr1::bind(&Menu::handleNCPaint, this, WM_NCPAINT, _1, menuWidth), Message(WM_NCPAINT));
 		control->onRaw(std::tr1::bind(&Menu::handleNCPaint, this, WM_NCACTIVATE, _1, menuWidth), Message(WM_NCACTIVATE));
+		::DrawMenuBar(control->handle());
 	}
 }
 
