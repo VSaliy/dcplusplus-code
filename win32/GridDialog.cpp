@@ -43,5 +43,5 @@ void GridDialog::layout() {
 	// now resize the dialog itself
 	sz.x = width; // don't change the horizontal size
 	sz.y += spacing * 2 + getYBorders();
-	dwt::ModalDialog::layout(dwt::Rectangle(sz));
+	dwt::ModalDialog::layout(dwt::Rectangle(getWindowRect().pos, sz));
 }
