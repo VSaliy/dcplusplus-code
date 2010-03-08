@@ -541,10 +541,15 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 	if(!isMenuBar && info.fType & MFT_SEPARATOR) {
 		// separator
-		Rectangle rectangle (itemRectangle);
+		Rectangle rectangle(itemRectangle);
 		rectangle.pos.x += stripWidth + textIconGap;
 
 		if(theme) {
+			Point pt;
+			if(getThemePartSize(canvas, MENU_POPUPSEPARATOR, 0, pt)) {
+				rectangle.size.x = std::min(rectangle.size.x, pt.x);
+				rectangle.size.y = std::min(rectangle.size.y, pt.y);
+			}
 			drawThemeBackground(canvas, MENU_POPUPSEPARATOR, 0, rectangle, false);
 
 		} else {
