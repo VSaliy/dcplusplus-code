@@ -556,7 +556,7 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 	bool isSelected = (info->itemState & ODS_SELECTED) == ODS_SELECTED;
 	bool isHighlighted = static_cast<int>(info->itemID) == highlighted || ti->marked;
 
-	FreeCanvas canvas(this, info->hDC);
+	FreeCanvas canvas(info->hDC);
 	bool oldMode = canvas.setBkMode(true);
 
 	Rectangle rect(info->rcItem);

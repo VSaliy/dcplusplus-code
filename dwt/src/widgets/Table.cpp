@@ -519,7 +519,7 @@ void Table::createArrows() {
 	triangle.push_back(Point(10, 6));
 
 	UpdateCanvas dc(this);
-	FreeCanvas dc_compat(this, ::CreateCompatibleDC(dc.handle()));
+	FreeCanvas dc_compat(::CreateCompatibleDC(dc.handle()));
 
 	upArrow = BitmapPtr(new Bitmap(::CreateCompatibleBitmap(dc.handle(), size.x, size.y)));
 	downArrow = BitmapPtr(new Bitmap(::CreateCompatibleBitmap(dc.handle(), size.x, size.y)));
