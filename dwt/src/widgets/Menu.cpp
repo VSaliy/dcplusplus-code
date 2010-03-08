@@ -434,7 +434,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	Rectangle itemRectangle(drawInfo->rcItem);
 
 	// setup buffered canvas
-	BufferedCanvas<FreeCanvas> canvas(reinterpret_cast<HWND>(handle()), drawInfo->hDC, itemRectangle.left(), itemRectangle.top());
+	BufferedCanvas<FreeCanvas> canvas(drawInfo->hDC, itemRectangle.left(), itemRectangle.top());
 
 	// this will contain adjusted sidebar width
 	int sidebarWidth = 0;

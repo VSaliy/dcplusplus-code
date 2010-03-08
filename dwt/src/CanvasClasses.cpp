@@ -247,13 +247,17 @@ unsigned Canvas::setTextAlign( unsigned fMode )
 	return ::SetTextAlign( itsHdc, fMode );
 }
 
-Canvas::Canvas( HWND hWnd )
-	: itsHandle( hWnd )
-{}
+BoundCanvas::BoundCanvas(HWND hWnd) :
+Canvas(),
+itsHandle(hWnd)
+{
+}
 
-Canvas::Canvas( Widget * widget )
-	: itsHandle( widget->handle() )
-{}
+BoundCanvas::BoundCanvas(Widget* widget) :
+Canvas(),
+itsHandle(widget->handle())
+{
+}
 
 PaintCanvas::~PaintCanvas()
 {
@@ -268,6 +272,12 @@ Rectangle PaintCanvas::getPaintRect()
 void PaintCanvas::initialize()
 {
 	itsHdc = ::BeginPaint( itsHandle, & itsPaint );
+}
+
+FreeCanvas::FreeCanvas(HDC hdc) :
+Canvas()
+{
+	itsHdc = hdc;
 }
 
 #ifndef WINCE

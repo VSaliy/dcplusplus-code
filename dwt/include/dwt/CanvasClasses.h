@@ -133,16 +133,9 @@ template<typename CanvasType>
 class BufferedCanvas : public CanvasType
 {
 public:
-	template<typename W>
-	BufferedCanvas(W widget, HDC source, long width = 0, long height = 0) :
-	CanvasType(widget, source)
-	{
-		init(source, width, height);
-	}
-
-	template<typename W>
-	BufferedCanvas(W widget, long width = 0, long height = 0) :
-	CanvasType(widget)
+	template<typename InitT> // InitT can be a widget pointer or an HDC
+	BufferedCanvas(InitT initT, long width = 0, long height = 0) :
+	CanvasType(initT)
 	{
 		init(this->CanvasType::itsHdc, width, height);
 	}
@@ -202,7 +195,7 @@ private:
   * </ul>
   */
 
-class Canvas
+class Canvas : private boost::noncopyable
 {
 public:
 	class Selector {
@@ -433,38 +426,29 @@ public:
 	void getTextMetrics(TEXTMETRIC& tm);
 
 	Point getTextExtent(const tstring& str);
-protected:
-	/// Not meant for directly instantiation
-	/** Class basically serves as an "abstract" base class for PaintCanvas and
-	  * UpdateCanvas. <br>
-	  * You should not directly instantiate this class but instead use one of the
-	  * derived classes.
-	  */
-	explicit Canvas( HWND hWnd );
 
-	/// Not meant for directly instantiation
-	/** Class basically serves as an "abstract" base class for PaintCanvas and
-	  * UpdateCanvas. <br>
-	  * You should not directly instantiate this class but instead use one of the
-	  * derived classes.
-	  */
-	explicit Canvas( Widget * widget );
+protected:
+	Canvas() : itsHdc(0) { }
 
 	/// Protected Constructor to prevent deletion of class directly
 	/** Derived class should delete, basically a hack to prevent deletion of a base
 	  * class pointer
 	  */
-	virtual ~Canvas()
-	{}
+	virtual ~Canvas() { }
 
 	/// Handle to the Device Context of the object.
 	/** Derived classes needs access to this to e.g. call BeginPaint and EndPaint
 	  */
 	HDC itsHdc;
+};
 
-	/// Handle to the window of the object
-	/** Handle of the window that the Canvas is for
-	  */
+/// base class for a canvas bound to a widget
+class BoundCanvas : public Canvas
+{
+protected:
+	explicit BoundCanvas(HWND hWnd);
+	explicit BoundCanvas(Widget* widget);
+
 	HWND itsHandle;
 };
 
@@ -481,13 +465,13 @@ protected:
   * <li>Pen</li>
   * </ul>
   */
-class PaintCanvas : public Canvas
+class PaintCanvas : public BoundCanvas
 {
 public:
 	/// Constructor, automatically calls BeginPaint
 	template<typename W>
 	explicit PaintCanvas(W widget) :
-	Canvas(widget)
+	BoundCanvas(widget)
 	{
 		initialize();
 	}
@@ -501,7 +485,6 @@ public:
 
 private:
 	PAINTSTRUCT itsPaint;
-	PaintCanvas( const PaintCanvas & ); // Never defined, class cannot be copied!
 
 	// Initializes the object
 	void initialize();
@@ -523,13 +506,13 @@ private:
   * </ul>
   */
 template<bool windowDC>
-class UpdateCanvas_ : public Canvas
+class UpdateCanvas_ : public BoundCanvas
 {
 public:
 	/// Constructor, automatically calls GetDC or GetWindowDC
 	template<typename W>
 	explicit UpdateCanvas_(W widget) :
-	Canvas(widget)
+	BoundCanvas(widget)
 	{
 		itsHdc = windowDC ? ::GetWindowDC(itsHandle) : ::GetDC(itsHandle);
 	}
@@ -561,12 +544,7 @@ class FreeCanvas : public Canvas
 {
 public:
 	/// Constructor, assigns the given HDC to the object
-	template<typename W>
-	FreeCanvas(W widget, HDC hdc) :
-	Canvas(widget)
-	{
-		itsHdc = hdc;
-	}
+	explicit FreeCanvas(HDC hdc);
 
 	virtual ~FreeCanvas() { }
 };
