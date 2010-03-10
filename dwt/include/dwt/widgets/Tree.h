@@ -349,12 +349,6 @@ inline void Tree::setColorImpl(COLORREF text, COLORREF background) {
 	TreeView_SetBkColor(handle(), background);
 }
 
-inline Rectangle Tree::getItemRect(HTREEITEM item) {
-	RECT rc;
-	TreeView_GetItemRect(handle(), item, &rc, TRUE);
-	return Rectangle(rc);
-}
-
 inline HTREEITEM Tree::hitTest(const ScreenCoordinate& pt) {
 	ClientCoordinate cc(pt, this);
 	TVHITTESTINFO tvhti = { cc.getPoint() };

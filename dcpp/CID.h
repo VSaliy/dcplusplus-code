@@ -66,7 +66,9 @@ namespace std { namespace tr1 {
 template<>
 struct hash<dcpp::CID> {
 	size_t operator()(const dcpp::CID& rhs) const {
-		return *reinterpret_cast<const size_t*>(rhs.data());
+		size_t hvHash;
+		memcpy(&hvHash, rhs.data(), sizeof(size_t));
+		return hvHash;
 	}
 };
 }
