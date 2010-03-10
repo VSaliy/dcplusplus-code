@@ -157,6 +157,12 @@ void Tree::select(const ScreenCoordinate& pt) {
 	}
 }
 
+Rectangle Tree::getItemRect(HTREEITEM item) {
+	RECT rc;
+	TreeView_GetItemRect(handle(), item, &rc, TRUE);
+	return Rectangle(rc);
+}
+
 /// Returns true if fired, else false
 bool Tree::handleMessage( const MSG & msg, LRESULT & retVal ) {
 	bool handled = BaseType::handleMessage(msg, retVal);
