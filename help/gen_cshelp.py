@@ -3,7 +3,7 @@
 
 def gen_cshelp(target, source):
 	import codecs
-	from HTMLParser import HTMLParser
+	from HTMLParser import HTMLParser, HTMLParseError
 	from htmlentitydefs import entitydefs
 	import re
 	from util import html_to_rtf
@@ -72,9 +72,14 @@ def gen_cshelp(target, source):
 
 	# parse all source files
 	for node in source:
+		path = str(node)
 		parser = Parser()
-		f = codecs.open(str(node), 'r', 'utf_8')
-		parser.feed(f.read())
+		f = codecs.open(path, 'r', 'utf_8')
+		try:
+			parser.feed(f.read())
+		except HTMLParseError:
+			print 'gen_cshelp: parse error in ' + path
+			raise
 		f.close()
 		parser.close()
 
