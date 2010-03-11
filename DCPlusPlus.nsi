@@ -68,6 +68,7 @@ check_programdir:
 no_backup:
   ; Put file there
   File "changelog.txt"
+  File "cshelp.rtf"
   File "dcppboot.xml"
   File "DCPlusPlus.chm"
   File "DCPlusPlus.exe"
@@ -174,6 +175,7 @@ Section "un.Uninstall"
   Delete "$INSTDIR\License-GeoIP.txt"
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\ChangeLog.txt"
+  Delete "$INSTDIR\cshelp.rtf"
   Delete "$INSTDIR\LICENSE-OpenSSL.txt"
   Delete "$INSTDIR\GeoIPCountryWhois.csv"
   Delete "$INSTDIR\mingwm10.dll"
