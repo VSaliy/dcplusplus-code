@@ -288,7 +288,11 @@ void TabView::handleTabSelected() {
 
 	if(ti->marked) {
 		ti->marked = false;
-		redraw(i);
+		if(hasStyle(TCS_OWNERDRAWFIXED)) {
+			redraw(i);
+		} else {
+			TabCtrl_HighlightItem(handle(), i, 0);
+		}
 	}
 
 	if(titleChangedFunction)
@@ -301,7 +305,11 @@ void TabView::mark(ContainerPtr w) {
 		bool& marked = getTabInfo(w)->marked;
 		if(!marked) {
 			marked = true;
-			redraw(i);
+			if(hasStyle(TCS_OWNERDRAWFIXED)) {
+				redraw(i);
+			} else {
+				TabCtrl_HighlightItem(handle(), i, 1);
+			}
 		}
 	}
 }
