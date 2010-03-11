@@ -76,6 +76,16 @@ public:
 
 		FontPtr font;
 
+		enum TabStyles {
+			/** use the default Windows tab style. multiline tabs re-organize so that the selected
+			tab is always at the bottom. */
+			WinDefault = TCS_TABS | TCS_HOTTRACK,
+
+			/** use a button-like style and have dwt draw tabs by itself, allowing for more
+			customization. multiline tabs always stay in the same position. */
+			dwtCustom = TCS_BUTTONS | TCS_OWNERDRAWFIXED
+		} tabStyle;
+
 		unsigned maxLength; /// max chars per tab; any value <= 3 means infinite
 		bool toggleActive; /// switch the active tab when clicking on the current active tab
 		bool ctrlTab; /// handle Ctrl+Tab and Ctrl+Shift+Tab

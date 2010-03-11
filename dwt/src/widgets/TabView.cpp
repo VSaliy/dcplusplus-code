@@ -47,12 +47,14 @@ const TCHAR TabView::windowClass[] = WC_TABCONTROL;
 
 TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_, bool ctrlTab_) :
 BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
-	TCS_BUTTONS | TCS_FOCUSNEVER | TCS_MULTILINE | TCS_OWNERDRAWFIXED | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
+	TCS_FOCUSNEVER | TCS_MULTILINE | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
 font(new Font(DefaultGuiFont)),
+tabStyle(WinDefault),
 maxLength(maxLength_),
 toggleActive(toggleActive_),
 ctrlTab(ctrlTab_)
 {
+	style |= tabStyle;
 }
 
 TabView::TabView(Widget* w) :
