@@ -37,11 +37,6 @@
 
 namespace dwt {
 
-static LibraryLoader& lib() {
-	static LibraryLoader l(_T("uxtheme"), true);
-	return l;
-}
-
 typedef HRESULT (*t_CloseThemeData)(HTHEME);
 static t_CloseThemeData CloseThemeData;
 
@@ -76,9 +71,10 @@ Themed::~Themed() {
 }
 
 void Themed::loadTheme(LPCWSTR classes, bool handleThemeChanges) {
-	if(lib().loaded()) {
+	static LibraryLoader lib(_T("uxtheme"), true);
+	if(lib.loaded()) {
 
-#define get(name) if(!name) { if(!(name = reinterpret_cast<t_##name>(lib().getProcAddress(_T(#name))))) { return; } }
+#define get(name) if(!name) { if(!(name = reinterpret_cast<t_##name>(lib.getProcAddress(_T(#name))))) { return; } }
 		get(CloseThemeData);
 		get(DrawThemeBackground);
 		get(DrawThemeParentBackground);
@@ -93,7 +89,7 @@ void Themed::loadTheme(LPCWSTR classes, bool handleThemeChanges) {
 
 		if(handleThemeChanges) {
 			w->addCallback(Message(WM_THEMECHANGED),
-				Dispatchers::VoidVoid<>(std::tr1::bind(&Themed::themeChanged, this, classes)));
+				Dispatchers::VoidVoid<0, false>(std::tr1::bind(&Themed::themeChanged, this, classes)));
 		}
 	}
 }
