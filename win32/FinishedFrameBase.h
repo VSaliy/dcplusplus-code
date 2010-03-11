@@ -81,14 +81,14 @@ protected:
 			filesWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
 			filesWindow->setHelpId(in_UL ? IDH_FINISHED_UL : IDH_FINISHED_DL);
 			filesWindow->onClosing(std::tr1::bind(&noClose));
-			tabs->add(filesWindow, WinUtil::tabIcon(in_UL ? IDI_FINISHED_UL_BY_FILE : IDI_FINISHED_DL_BY_FILE));
+			tabs->add(filesWindow, WinUtil::tabIcon(IDI_GROUPED_BY_FILES));
 
 			cs.style &= ~WS_VISIBLE;
 			cs.caption = T_("Grouped by users");
 			usersWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
 			usersWindow->setHelpId(in_UL ? IDH_FINISHED_UL : IDH_FINISHED_DL);
 			usersWindow->onClosing(std::tr1::bind(&noClose));
-			tabs->add(usersWindow, WinUtil::tabIcon(in_UL ? IDI_FINISHED_UL_BY_USER : IDI_FINISHED_DL_BY_USER));
+			tabs->add(usersWindow, WinUtil::tabIcon(IDI_GROUPED_BY_USERS));
 		}
 
 		{
