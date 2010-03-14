@@ -201,12 +201,7 @@ private:
 
 	void addTargets(const MenuPtr& menu, ItemInfo* ii = 0);
 	void addUserCommands(const MenuPtr& menu);
-	void addUserMenu(const MenuPtr& menu)
-#ifdef __GNUC__
-		// crashes when opening the tab menu otherwise <https://bugs.launchpad.net/dcplusplus/+bug/533840>
-		__attribute__((always_inline))
-#endif
-		;
+	void addUserMenu(const MenuPtr& menu);
 
 	void handleFind();
 	void handleFindNext();

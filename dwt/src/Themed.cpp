@@ -37,28 +37,28 @@
 
 namespace dwt {
 
-typedef HRESULT (*t_CloseThemeData)(HTHEME);
+typedef HRESULT (WINAPI *t_CloseThemeData)(HTHEME);
 static t_CloseThemeData CloseThemeData;
 
-typedef HRESULT (*t_DrawThemeBackground)(HTHEME, HDC, int, int, const RECT*, const RECT*);
+typedef HRESULT (WINAPI *t_DrawThemeBackground)(HTHEME, HDC, int, int, const RECT*, const RECT*);
 static t_DrawThemeBackground DrawThemeBackground;
 
-typedef HRESULT (*t_DrawThemeParentBackground)(HWND, HDC, const RECT*);
+typedef HRESULT (WINAPI *t_DrawThemeParentBackground)(HWND, HDC, const RECT*);
 static t_DrawThemeParentBackground DrawThemeParentBackground;
 
-typedef HRESULT (*t_DrawThemeText)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, DWORD, LPCRECT);
+typedef HRESULT (WINAPI *t_DrawThemeText)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, DWORD, LPCRECT);
 static t_DrawThemeText DrawThemeText;
 
-typedef HRESULT (*t_GetThemePartSize)(HTHEME, HDC, int, int, LPCRECT, THEMESIZE, SIZE*);
+typedef HRESULT (WINAPI *t_GetThemePartSize)(HTHEME, HDC, int, int, LPCRECT, THEMESIZE, SIZE*);
 static t_GetThemePartSize GetThemePartSize;
 
-typedef BOOL (*t_IsAppThemed)();
+typedef BOOL (WINAPI *t_IsAppThemed)();
 static t_IsAppThemed IsAppThemed;
 
-typedef BOOL (*t_IsThemeBackgroundPartiallyTransparent)(HTHEME, int, int);
+typedef BOOL (WINAPI *t_IsThemeBackgroundPartiallyTransparent)(HTHEME, int, int);
 static t_IsThemeBackgroundPartiallyTransparent IsThemeBackgroundPartiallyTransparent;
 
-typedef HWND (*t_OpenThemeData)(HTHEME, LPCWSTR);
+typedef HWND (WINAPI *t_OpenThemeData)(HTHEME, LPCWSTR);
 static t_OpenThemeData OpenThemeData;
 
 Themed::Themed(Widget* w_) : theme(0), w(w_)
