@@ -140,7 +140,6 @@ private:
 	void initTray();
 
 	// User actions
-	void handleExit();
 	void handleFavHubsDropDown(const dwt::ScreenCoordinate& pt);
 	void handleRecent(const dwt::ScreenCoordinate& pt);
 	void handleConfigureRecent(const string& id, const tstring& title);
