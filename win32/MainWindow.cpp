@@ -232,7 +232,7 @@ void MainWindow::initMenu() {
 
 		file->appendItem(T_("Settings\tCtrl+F3"), std::tr1::bind(&MainWindow::handleSettings, this), WinUtil::menuIcon(IDI_SETTINGS));
 		file->appendSeparator();
-		file->appendItem(T_("E&xit\tAlt+F4"), std::tr1::bind(&MainWindow::handleExit, this), WinUtil::menuIcon(IDI_EXIT));
+		file->appendItem(T_("E&xit\tAlt+F4"), std::tr1::bind(&MainWindow::close, this, true), WinUtil::menuIcon(IDI_EXIT));
 	}
 
 	{
@@ -617,10 +617,6 @@ void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
 	}
 }
 
-void MainWindow::handleExit() {
-	close(true);
-}
-
 void MainWindow::handleReconnect() {
 	forwardHub(&HubFrame::handleReconnect);
 }
@@ -907,6 +903,10 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::handleSettings() {
+	// this may be called directly from the tray icon when the main window is still hidden
+	if(::IsIconic(handle()))
+		handleRestore();
+
 	SettingsDialog dlg(this);
 
 	unsigned short lastTCP = static_cast<unsigned short>(SETTING(TCP_PORT));

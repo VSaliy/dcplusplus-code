@@ -864,7 +864,8 @@ unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const Ico
 	if(!::InsertMenuItem(itsHandle, index, TRUE, &info))
 		throw Win32Exception("Couldn't insert item in Menu::appendItem");
 
-	itsParent->setCallback(Message(WM_MENUCOMMAND, index * 31 + reinterpret_cast<LPARAM>(itsHandle)), Dispatcher(f));
+	getParent()->setCallback(Message(WM_MENUCOMMAND, index * 31 + reinterpret_cast<LPARAM>(handle())),
+		Dispatcher(std::tr1::bind(&Widget::callAsync, getParent(), f)));
 
 	if(ownerDrawn)
 		itsItemData.push_back(wrapper);
