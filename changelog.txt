@@ -1,6 +1,8 @@
 * [L#253398] Better highlight color for content changes in tabs (poy)
 * [L#226975] Don't re-organize tab rows when the selected tab changes (poy)
 
+* [L#533840] Fix crashes with themed menus (poy)
+
 -- 0.760 2010-03-11 --
 * [L#263390] Fix main icon format (poy)
 * Help updates (emtee, poy)
