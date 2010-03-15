@@ -84,7 +84,8 @@ font(font_)
 Menu::Menu(Widget* parent) :
 Themed(parent),
 ownerDrawn(true),
-isSysMenu(false),
+popup(true),
+barPopup(false),
 itsParent(parent),
 drawSidebar(false)
 {
@@ -93,6 +94,7 @@ drawSidebar(false)
 
 void Menu::createHelper(const Seed& cs) {
 	ownerDrawn = cs.ownerDrawn;
+	popup = cs.popup;
 
 	if(ownerDrawn) {
 		colors = cs.colors;
@@ -109,25 +111,27 @@ void Menu::createHelper(const Seed& cs) {
 			itsTitleFont = boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		}
 
-		loadTheme(VSCLASS_MENU, !cs.popup);
+		loadTheme(VSCLASS_MENU, !popup);
 	}
 }
 
 void Menu::create(const Seed& cs) {
 	createHelper(cs);
 
-	if(cs.popup)
+	if(popup)
 		itsHandle = ::CreatePopupMenu();
 	else
 		itsHandle = ::CreateMenu();
 	if ( !itsHandle ) {
-		throw Win32Exception("CreateMenu in Menu::create fizzled...");
+		throw Win32Exception("CreateMenu in Menu::create failed");
 	}
 
-	// set the MNS_NOTIFYBYPOS style to the whole menu
-	MENUINFO mi = { sizeof(MENUINFO), MIM_STYLE, MNS_NOTIFYBYPOS };
-	if(!::SetMenuInfo(itsHandle, &mi))
-		throw Win32Exception("SetMenuInfo in Menu::create fizzled...");
+	if(!popup) {
+		// set the MNS_NOTIFYBYPOS style to the whole menu
+		MENUINFO mi = { sizeof(MENUINFO), MIM_STYLE, MNS_NOTIFYBYPOS };
+		if(!::SetMenuInfo(handle(), &mi))
+			throw Win32Exception("SetMenuInfo in Menu::create failed");
+	}
 }
 
 void Menu::attach(HMENU hMenu, const Seed& cs) {
@@ -161,10 +165,10 @@ void Menu::attach(HMENU hMenu, const Seed& cs) {
 				if(::SetMenuItemInfo(itsHandle, i, TRUE, &info)) {
 					itsItemData.push_back( wrapper );
 				} else {
-					throw Win32Exception("SetMenuItemInfo in Menu::attach fizzled...");
+					throw Win32Exception("SetMenuItemInfo in Menu::attach failed");
 				}
 			} else {
-				throw Win32Exception("GetMenuItemInfo in Menu::attach fizzled...");
+				throw Win32Exception("GetMenuItemInfo in Menu::attach failed");
 			}
 		}
 	}
@@ -201,6 +205,8 @@ LRESULT Menu::handleNCPaint(UINT message, WPARAM wParam, long menuWidth) {
 }
 
 void Menu::setMenu() {
+	dwtassert(!popup, _T("Only non-popup menus may call setMenu (change the Seed accordingly)"));
+
 	if(!::SetMenu(getParent()->handle(), handle()))
 		throw Win32Exception("SetMenu in Menu::setMenu failed");
 
@@ -222,9 +228,16 @@ void Menu::setMenu() {
 }
 
 Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon) {
-	// create popup menu pointer
-	ObjectType retVal ( new Menu(itsParent) );
-	retVal->create(Seed(ownerDrawn, colors, iconSize, font));
+	// create the sub-menu
+	ObjectType sub(new Menu(getParent()));
+	sub->create(Seed(ownerDrawn, colors, iconSize, font));
+
+	if(popup) {
+		// keep the sub-menu's commands in sync with the root menu's
+		sub->commands = commands;
+	} else {
+		sub->barPopup = true;
+	}
 
 	// init structure for new item
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_SUBMENU | MIIM_STRING };
@@ -233,7 +246,7 @@ Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon) {
 	info.dwTypeData = const_cast< LPTSTR >( text.c_str() );
 
 	// set sub menu
-	info.hSubMenu = retVal->handle();
+	info.hSubMenu = sub->handle();
 
 	// get position to insert
 	unsigned position = getCount();
@@ -254,9 +267,9 @@ Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon) {
 	{
 		if(ownerDrawn)
 			itsItemData.push_back( wrapper );
-		itsChildren.push_back( retVal );
+		itsChildren.push_back( sub );
 	}
-	return retVal;
+	return sub;
 }
 
 #ifdef PORT_ME
@@ -269,7 +282,6 @@ Menu::ObjectType Menu::getSystemMenu()
 	ObjectType sysMenu( new Menu( itsParent->handle() ) );
 
 	// create(take) system menu
-	sysMenu->isSysMenu = true;
 	sysMenu->create( handle, false );
 
 	// We're assuming that the system menu has the same lifespan as the "this" menu, we must keep a reference to te system menu
@@ -404,9 +416,6 @@ void Menu::setTitle(const tstring& title, const IconPtr& icon, bool drawSidebar 
 }
 
 bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
-	// if processing menu bar
-	const bool isMenuBar = ::GetMenu(getParent()->handle()) == handle();
-
 	// init struct for menu item info
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_CHECKMARKS | MIIM_FTYPE | MIIM_DATA | MIIM_STATE | MIIM_STRING };
 
@@ -492,17 +501,17 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	int part, state;
 	if(theme) {
 		int part_bg, state_bg;
-		if(isMenuBar || wrapper->isTitle) {
-			part = MENU_BARITEM;
-			state = wrapper->isTitle ? MBI_NORMAL : isSelected ? MBI_PUSHED : isHighlighted ? MBI_HOT : MBI_NORMAL;
-			part_bg = MENU_BARBACKGROUND;
-			state_bg = MB_ACTIVE;
-		} else {
+		if(popup && !wrapper->isTitle) {
 			part = MENU_POPUPITEM;
 			state = (isDisabled || isGrayed) ? ((isSelected || isHighlighted) ? MPI_DISABLEDHOT : MPI_DISABLED) :
 				highlight ? MPI_HOT : MPI_NORMAL;
 			part_bg = MENU_POPUPBACKGROUND;
 			state_bg = 0;
+		} else {
+			part = MENU_BARITEM;
+			state = wrapper->isTitle ? MBI_NORMAL : isSelected ? MBI_PUSHED : isHighlighted ? MBI_HOT : MBI_NORMAL;
+			part_bg = MENU_BARBACKGROUND;
+			state_bg = MB_ACTIVE;
 		}
 
 		if(isThemeBackgroundPartiallyTransparent(part, state)) {
@@ -519,7 +528,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	} else {
 		canvas.fill(itemRectangle, Brush(
 			highlight ? colors.highlightBackground :
-			isMenuBar ? colors.menuBar :
+			!popup ? colors.menuBar :
 			wrapper->isTitle ? colors.stripBar :
 			colors.background));
 	}
@@ -527,7 +536,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 	Rectangle stripRectangle(itemRectangle);
 	stripRectangle.size.x = stripWidth;
 
-	if(!(theme ? (isSelected || isHighlighted) : highlight) && !isMenuBar && !wrapper->isTitle) {
+	if(!(theme ? (isSelected || isHighlighted) : highlight) && popup && !wrapper->isTitle) {
 		// paint the strip bar (on the left, where icons go)
 		canvas.fill(stripRectangle, Brush(colors.stripBar));
 	}
@@ -539,7 +548,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			drawThemeBackground(canvas, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, stripRectangle, false);
 	}
 
-	if(!isMenuBar && info.fType & MFT_SEPARATOR) {
+	if(popup && info.fType & MFT_SEPARATOR) {
 		// separator
 		Rectangle rectangle(itemRectangle);
 		rectangle.pos.x += stripWidth + textIconGap;
@@ -594,7 +603,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 			// compute text rectangle
 			Rectangle textRectangle(itemRectangle);
-			if(!isMenuBar) {
+			if(popup) {
 				if(!wrapper->isTitle || icon) {
 					textRectangle.pos.x += stripWidth + textIconGap;
 					textRectangle.size.x -= stripWidth + textIconGap;
@@ -606,7 +615,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			if((drawInfo->itemState & ODS_NOACCEL) == ODS_NOACCEL)
 				drawTextFormat |= DT_HIDEPREFIX;
 			unsigned drawAccelFormat = drawTextFormat | DT_RIGHT;
-			drawTextFormat |= (isMenuBar || wrapper->isTitle) ? DT_CENTER : DT_LEFT;
+			drawTextFormat |= (popup && !wrapper->isTitle) ? DT_LEFT : DT_CENTER;
 
 			if(theme) {
 				drawThemeText(canvas, part, state, text, drawTextFormat, textRectangle);
@@ -668,7 +677,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			::DeleteDC( memoryDC );
 		}
 
-		if(isChecked && !theme && !isMenuBar && !wrapper->isTitle) {
+		if(isChecked && !theme && popup && !wrapper->isTitle) {
 			// must draw the surrounding rect after the check-mark
 			stripRectangle.pos.x += 1;
 			stripRectangle.pos.y += 1;
@@ -722,9 +731,6 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 		return true;
 	}
 
-	// are we processing menu bar ?
-	const bool isMenuBar = ::GetMenu(getParent()->handle()) == handle();
-
 	Point textSize = getTextSize(getText(wrapper->index),
 		wrapper->isTitle ? itsTitleFont :
 		wrapper->isDefault ? boldFont :
@@ -737,9 +743,7 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 	const IconPtr& icon = wrapper->icon;
 
 	// adjust width
-	if ( !isMenuBar || // if not menu bar item
-		( isMenuBar && icon ) ) // or menu bar item with icon
-	{
+	if(popup || (!popup && icon)) {
 		// adjust item width
 		itemWidth += iconSize.x + textIconGap + pointerGap;
 
@@ -843,11 +847,23 @@ unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const Ico
 		info.fState |= MFS_DEFAULT;
 	}
 
+	const unsigned index = getCount();
+
+	if(f) {
+		Dispatcher::F async_f = std::tr1::bind(&Widget::callAsync, getParent(), f);
+		if(barPopup) {
+			getParent()->addCallback(Message(WM_MENUCOMMAND, index * 31 + reinterpret_cast<LPARAM>(handle())),
+				Dispatcher(async_f));
+		} else {
+			if(!commands)
+				commands.reset(new commands_type());
+			info.wID = id_offset + commands->size();
+			commands->push_back(async_f);
+		}
+	}
+
 	// set text
 	info.dwTypeData = const_cast< LPTSTR >( text.c_str() );
-
-	// set position to insert
-	unsigned index = getCount();
 
 	ItemDataWrapper * wrapper = NULL;
 	if(ownerDrawn) {
@@ -864,19 +880,16 @@ unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const Ico
 	if(!::InsertMenuItem(itsHandle, index, TRUE, &info))
 		throw Win32Exception("Couldn't insert item in Menu::appendItem");
 
-	getParent()->setCallback(Message(WM_MENUCOMMAND, index * 31 + reinterpret_cast<LPARAM>(handle())),
-		Dispatcher(std::tr1::bind(&Widget::callAsync, getParent(), f)));
-
 	if(ownerDrawn)
 		itsItemData.push_back(wrapper);
 
 	return index;
 }
 
-unsigned Menu::open(const ScreenCoordinate& sc, unsigned flags) {
+void Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 	long x = sc.getPoint().x, y = sc.getPoint().y;
 
-	if(x == - 1 && y == - 1) {
+	if(x == - 1 || y == - 1) {
 		DWORD pos = ::GetMessagePos();
 		x = LOWORD(pos);
 		y = HIWORD(pos);
@@ -889,7 +902,16 @@ unsigned Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 			static_cast<unsigned>(::GetSystemMetrics(SM_CYMENU)));
 	}
 
-	return ::TrackPopupMenu(itsHandle, flags, x, y, 0, itsParent->handle(), 0);
+	// sub-menus of the menu bar send WM_MENUCOMMAND; however, commands from ephemeral menus are handled right here.
+	if(!barPopup) {
+		if((flags & TPM_NONOTIFY) != TPM_NONOTIFY)
+			flags |= TPM_NONOTIFY;
+		if((flags & TPM_RETURNCMD) != TPM_RETURNCMD)
+			flags |= TPM_RETURNCMD;
+	}
+	unsigned ret = ::TrackPopupMenu(handle(), flags, x, y, 0, getParent()->handle(), 0);
+	if(!barPopup && ret >= id_offset && ret - id_offset < commands->size())
+		(*commands)[ret - id_offset]();
 }
 
 Menu::ObjectType Menu::getChild( unsigned position ) {

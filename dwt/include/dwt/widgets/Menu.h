@@ -181,9 +181,6 @@ public:
 	* is - 1 ( default ) it'll show the context menu on the position the mouse was
 	* at when the system last recieved a message, basically the "right" place...
 	* <br>
-	* Depending on the flags it might return the id of the menu item selected, or 0
-	* if none was chosen. Flags with TPM_RETURNCMD will return the menu - item, but
-	* not do the menu command.
 	* < ul >
 	* < li >TPM_CENTERALIGN : Centers the shortcut menu horizontally relative to the coordinate specified by the x parameter< /li >
 	* < li >TPM_LEFTALIGN : Function positions the shortcut menu so that its left side is aligned with the coordinate specified by the x parameter< /li >
@@ -191,8 +188,6 @@ public:
 	* < li >TPM_BOTTOMALIGN : Aligns menu bottoms to the coordinate specified by the y parameter< /li >
 	* < li >TPM_TOPALIGN : Opposite of BOTTOMALIGN< /li >
 	* < li >TPM_VCENTERALIGN : Centers vertically relative to the y parameter< /li >
-	* < li >TPM_NONOTIFY : Restricts the menu from sending notifications when user clicks item< /li >
-	* < li >TPM_RETURNCMD : returns the menu item identifier of the user's selection in the return value but DOES NOT carry out the event handler< /li >
 	* < li >TPM_LEFTBUTTON  : Restricts users to selecting menu items with only left mouse button< /li >
 	* < li >TPM_RIGHTBUTTON : User can choose menu item with both mouse buttons< /li >
 	* < /ul >
@@ -206,7 +201,7 @@ public:
 	* < li >TPM_VERPOSANIMATION : Animates the menu from top to bottom< /li >
 	* < /ul >
 	*/
-	unsigned open(const ScreenCoordinate& sc, unsigned flags = TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+	void open(const ScreenCoordinate& sc, unsigned flags = TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 	/// Sets menu title
 	/** A Menu can have a title, this function sets that title
@@ -251,12 +246,6 @@ public:
 	bool isEnabled(unsigned index);
 
 	void setDefaultItem(unsigned index);
-
-	/// Returns true if menu is "system menu" (icon in top left of window)
-	bool isSystemMenu()
-	{
-		return isSysMenu;
-	}
 
 	/// Returns the text of a specific menu item
 	tstring getText(unsigned index) const;
@@ -352,13 +341,17 @@ private:
 	static void destroyItemDataWrapper( ItemDataWrapper * wrapper );
 
 	bool ownerDrawn;
-	// True is menu is "system menu" (icon in top left of window)
-	bool isSysMenu;
+	bool popup;
+	bool barPopup;
 
 	// its sub menus
 	std::vector< ObjectType > itsChildren;
 	// its item data
 	std::vector < ItemDataWrapper * > itsItemData;
+
+	static const unsigned id_offset = 100;
+	typedef std::vector<Dispatcher::F> commands_type;
+	std::tr1::shared_ptr<commands_type> commands; // on the heap for easier sync with sub-menus' commands
 
 	HMENU itsHandle;
 	Widget* itsParent;
