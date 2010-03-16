@@ -340,9 +340,14 @@ private:
 	// This is used during menu destruction
 	static void destroyItemDataWrapper( ItemDataWrapper * wrapper );
 
+	Menu* getRootMenu() { return parentMenu ? parentMenu->getRootMenu() : this; }
+
+	Menu* parentMenu; /// only defined for sub-menus; this is a link to their container menu
+	HMENU itsHandle;
+	Widget* itsParent;
+
 	bool ownerDrawn;
 	bool popup;
-	bool barPopup;
 
 	// its sub menus
 	std::vector< ObjectType > itsChildren;
@@ -350,11 +355,8 @@ private:
 	std::vector < ItemDataWrapper * > itsItemData;
 
 	static const unsigned id_offset = 100;
-	typedef std::vector<Dispatcher::F> commands_type;
-	std::tr1::shared_ptr<commands_type> commands; // on the heap for easier sync with sub-menus' commands
-
-	HMENU itsHandle;
-	Widget* itsParent;
+	typedef std::auto_ptr<std::vector<Dispatcher::F> > commands_type;
+	commands_type commands; // just a pointer because sub-menus don't need this
 
 	Point iconSize;
 
