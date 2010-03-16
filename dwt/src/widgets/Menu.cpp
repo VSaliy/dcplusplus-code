@@ -83,10 +83,10 @@ font(font_)
 
 Menu::Menu(Widget* parent) :
 Themed(parent),
+parentMenu(0),
+itsParent(parent),
 ownerDrawn(true),
 popup(true),
-barPopup(false),
-itsParent(parent),
 drawSidebar(false)
 {
 	dwtassert(dynamic_cast<Control*>(itsParent), _T("A Menu must have a parent derived from dwt::Control"));
@@ -231,13 +231,7 @@ Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon) {
 	// create the sub-menu
 	ObjectType sub(new Menu(getParent()));
 	sub->create(Seed(ownerDrawn, colors, iconSize, font));
-
-	if(popup) {
-		// keep the sub-menu's commands in sync with the root menu's
-		sub->commands = commands;
-	} else {
-		sub->barPopup = true;
-	}
+	sub->parentMenu = this;
 
 	// init structure for new item
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_SUBMENU | MIIM_STRING };
@@ -851,14 +845,16 @@ unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const Ico
 
 	if(f) {
 		Dispatcher::F async_f = std::tr1::bind(&Widget::callAsync, getParent(), f);
-		if(barPopup) {
+		if(getRootMenu()->popup) {
+			commands_type& commands_ref = getRootMenu()->commands;
+			if(!commands_ref.get())
+				commands_ref.reset(new commands_type::element_type);
+			info.wID = id_offset + commands_ref->size();
+			commands_ref->push_back(async_f);
+		} else {
+			// sub-menus of a menu bar operate via WM_MENUCOMMAND
 			getParent()->addCallback(Message(WM_MENUCOMMAND, index * 31 + reinterpret_cast<LPARAM>(handle())),
 				Dispatcher(async_f));
-		} else {
-			if(!commands)
-				commands.reset(new commands_type());
-			info.wID = id_offset + commands->size();
-			commands->push_back(async_f);
 		}
 	}
 
@@ -903,15 +899,18 @@ void Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 	}
 
 	// sub-menus of the menu bar send WM_MENUCOMMAND; however, commands from ephemeral menus are handled right here.
-	if(!barPopup) {
+	if(getRootMenu()->popup) {
 		if((flags & TPM_NONOTIFY) != TPM_NONOTIFY)
 			flags |= TPM_NONOTIFY;
 		if((flags & TPM_RETURNCMD) != TPM_RETURNCMD)
 			flags |= TPM_RETURNCMD;
 	}
 	unsigned ret = ::TrackPopupMenu(handle(), flags, x, y, 0, getParent()->handle(), 0);
-	if(!barPopup && ret >= id_offset && ret - id_offset < commands->size())
-		(*commands)[ret - id_offset]();
+	if(ret >= id_offset) {
+		commands_type& commands_ref = getRootMenu()->commands;
+		if(commands_ref.get() && ret - id_offset < commands_ref->size())
+			(*commands_ref)[ret - id_offset]();
+	}
 }
 
 Menu::ObjectType Menu::getChild( unsigned position ) {
