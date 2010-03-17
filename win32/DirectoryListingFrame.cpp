@@ -470,16 +470,20 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 			menu = makeMultiMenu();
 		}
 
-		StringList ShellMenuPaths;
-		for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
-			ItemInfo* ii = files->getData(*i);
-			if(ii->type == ItemInfo::FILE) {
-				string localPath = dl->getLocalPath(ii->file);
-				if(!localPath.empty())
-					ShellMenuPaths.push_back(localPath);
+		if(dl->getUser() == ClientManager::getInstance()->getMe()) {
+			StringList ShellMenuPaths;
+			for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
+				ItemInfo* ii = files->getData(*i);
+				StringList paths;
+				switch(ii->type) {
+				case ItemInfo::FILE: paths = dl->getLocalPaths(ii->file); break;
+				case ItemInfo::DIRECTORY: paths = dl->getLocalPaths(ii->dir); break;
+				}
+				if(!paths.empty())
+					ShellMenuPaths.insert(ShellMenuPaths.end(), paths.begin(), paths.end());
 			}
+			menu->appendShellMenu(ShellMenuPaths);
 		}
-		menu->appendShellMenu(ShellMenuPaths);
 
 		addUserMenu(menu);
 
@@ -513,10 +517,10 @@ void DirectoryListingFrame::downloadFiles(const string& aTarget, bool view /* = 
 	int i=-1;
 	while((i = files->getNext(i, LVNI_SELECTED)) != -1) {
 		ItemInfo* ii = files->getData(i);
-		if(view) {
-			string localPath = dl->getLocalPath(ii->file);
-			if(!localPath.empty()) {
-				TextFrame::openWindow(this->getParent(), localPath);
+		if(view && dl->getUser() == ClientManager::getInstance()->getMe()) {
+			StringList paths = dl->getLocalPaths(ii->file);
+			if(!paths.empty()) {
+				TextFrame::openWindow(this->getParent(), paths[0]);
 				continue;
 			}
 		}

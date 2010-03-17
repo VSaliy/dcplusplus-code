@@ -59,6 +59,7 @@ public:
 
 	string toVirtual(const TTHValue& tth) const throw(ShareException);
 	string toReal(const string& virtualFile) throw(ShareException);
+	StringList getRealPaths(const string& virtualPath) throw(ShareException);
 	TTHValue getTTH(const string& virtualFile) const throw(ShareException);
 
 	void refresh(bool dirs = false, bool aUpdate = true, bool block = false) throw();
@@ -286,7 +287,7 @@ private:
 	void generateXmlList();
 	bool loadCache() throw();
 	DirList::const_iterator getByVirtual(const string& virtualName) const throw();
-
+	pair<Directory::Ptr, string> splitVirtual(const string& virtualPath) const throw(ShareException);
 	string findRealRoot(const string& virtualRoot, const string& virtualLeaf) const throw(ShareException);
 
 	Directory::Ptr getDirectory(const string& fname);
