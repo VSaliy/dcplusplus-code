@@ -899,12 +899,8 @@ void Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 	}
 
 	// sub-menus of the menu bar send WM_MENUCOMMAND; however, commands from ephemeral menus are handled right here.
-	if(getRootMenu()->popup) {
-		if((flags & TPM_NONOTIFY) != TPM_NONOTIFY)
-			flags |= TPM_NONOTIFY;
-		if((flags & TPM_RETURNCMD) != TPM_RETURNCMD)
-			flags |= TPM_RETURNCMD;
-	}
+	if(getRootMenu()->popup && (flags & TPM_RETURNCMD) != TPM_RETURNCMD)
+		flags |= TPM_RETURNCMD;
 	unsigned ret = ::TrackPopupMenu(handle(), flags, x, y, 0, getParent()->handle(), 0);
 	if(ret >= id_offset) {
 		commands_type& commands_ref = getRootMenu()->commands;

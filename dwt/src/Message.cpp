@@ -77,7 +77,9 @@ Message::Message(const MSG& msg_ ) :
 	} break;
 	case WM_COMMAND: {
 		if(msg_.lParam == 0) {
-			param = LOWORD(msg_.wParam);
+			if(HIWORD(msg_.wParam) != 0) { // ignore WM_COMMAND from menus, dwt menus don't use it
+				param = LOWORD(msg_.wParam);
+			}
 		} else {
 			param = HIWORD(msg_.wParam);
 		}
