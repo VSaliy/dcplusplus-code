@@ -243,20 +243,20 @@ string DirectoryListing::getPath(const Directory* d) const {
 	return dir;
 }
 
-string DirectoryListing::getLocalPath(const File* f) const {
-	if(getUser() == ClientManager::getInstance()->getMe()) {
-		string path;
-		try {
-			path = ShareManager::getInstance()->toReal(Util::toAdcFile(getPath(f) + f->getName()));
-		} catch(const ShareException&) {
-			// Ignore
-		}
-		if(!path.empty() && (dcpp::File::getSize(path) != -1)) {
-			return path;
-		}
+StringList DirectoryListing::getLocalPaths(const File* f) const {
+	try {
+		return ShareManager::getInstance()->getRealPaths(Util::toAdcFile(getPath(f) + f->getName()));
+	} catch(const ShareException&) {
+		return StringList();
 	}
+}
 
-	return string();
+StringList DirectoryListing::getLocalPaths(const Directory* d) const {
+	try {
+		return ShareManager::getInstance()->getRealPaths(Util::toAdcFile(getPath(d)));
+	} catch(const ShareException&) {
+		return StringList();
+	}
 }
 
 void DirectoryListing::download(Directory* aDir, const string& aTarget, bool highPrio) {
