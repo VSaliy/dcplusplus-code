@@ -118,9 +118,12 @@ protected:
 			if(linesToKeep) {
 				unsigned lineCount = chat->getLineCount();
 				if(linesToKeep < lineCount) {
-					HoldRedraw hold(chat);
-					chat->setSelection(0, chat->lineIndex(lineCount - linesToKeep));
-					chat->replaceSelection(_T(""));
+					{
+						HoldRedraw hold(chat);
+						chat->setSelection(0, chat->lineIndex(lineCount - linesToKeep));
+						chat->replaceSelection(_T(""));
+					}
+					chat->redraw();
 				}
 			} else
 				chat->setText(_T(""));
