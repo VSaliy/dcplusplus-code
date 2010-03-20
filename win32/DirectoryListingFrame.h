@@ -195,12 +195,13 @@ private:
 
 	ShellMenuPtr makeSingleMenu(ItemInfo* ii);
 	ShellMenuPtr makeMultiMenu();
-	MenuPtr makeDirMenu();
+	ShellMenuPtr makeDirMenu();
 
 	void runUserCommand(const UserCommand& uc);
 
 	void addTargets(const MenuPtr& menu, ItemInfo* ii = 0);
 	void addUserCommands(const MenuPtr& menu);
+	void addShellPaths(const ShellMenuPtr& menu, vector<ItemInfo*> sel);
 	void addUserMenu(const MenuPtr& menu);
 
 	void handleFind();
