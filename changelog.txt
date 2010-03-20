@@ -2,6 +2,7 @@
 * [L#226975] Don't re-organize tab rows when the selected tab changes (poy)
 * Stability improvement related to menus (poy)
 * [L#539992] Shell menus for directories when browsing own file list (poy)
+* Parse separators in titles of user command param boxes (poy)
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)

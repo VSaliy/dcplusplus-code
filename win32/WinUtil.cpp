@@ -650,7 +650,7 @@ void WinUtil::setClipboard(const tstring& str) {
 }
 
 bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap& sm) throw () {
-	ParamDlg dlg(parent, Text::toT(uc.getName()));
+	ParamDlg dlg(parent, Text::toT(Util::toString(" > ", uc.getDisplayName())));
 
 	string::size_type i = 0;
 	StringList names;
