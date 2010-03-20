@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_USER_COMMAND_H
 
 #include <dcpp/FavoriteManager.h>
-#include <dcpp/StringTokenizer.h>
 #include "resource.h"
 
 template<class T>
@@ -52,13 +51,9 @@ public:
 				} else if(uc->isRaw() || uc->isChat()) {
 					cur = menu;
 
-					tstring name = Text::toT(uc->getName());
-					Util::replace(_T("//"), _T("\t"), name);
-					StringTokenizer<tstring> t(name, _T('/'));
-					for(TStringList::const_iterator i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i) {
-						name = *i;
-						Util::replace(_T("\t"), _T("/"), name);
-						if(i+1 == t.getTokens().end()) {
+					for(StringList::const_iterator i = uc->getDisplayName().begin(), iend = uc->getDisplayName().end(); i != iend; ++i) {
+						tstring name = Text::toT(*i);
+						if(i + 1 == iend) {
 							cur->appendItem(name, std::tr1::bind(&T::runUserCommand, static_cast<T*>(this), std::tr1::cref(*uc)));
 						} else {
 							bool found = false;
