@@ -67,6 +67,7 @@ public:
 		cid = rhs.cid; type = rhs.type; ctx = rhs.ctx;
 		name = rhs.name; command = rhs.command; to = rhs.to; hub = rhs.hub;
 		*((Flags*)this) = rhs;
+		displayName.clear();
 		setDisplayName();
 		return *this;
 	}
