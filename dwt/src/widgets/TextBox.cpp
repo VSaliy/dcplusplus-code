@@ -213,7 +213,7 @@ bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
 
 		MenuPtr menu(WidgetCreator<Menu>::create(getParent(), menuSeed));
 		addCommands(menu);
-		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
+		menu->open(pt);
 		return true;
 	}
 

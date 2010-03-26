@@ -225,6 +225,8 @@ private:
 	void addAsFavorite();
 	void removeFavoriteHub();
 
+	bool userClick(const dwt::ScreenCoordinate& pt);
+
 	void runUserCommand(const UserCommand& uc);
 
 	bool handleMessageChar(int c);

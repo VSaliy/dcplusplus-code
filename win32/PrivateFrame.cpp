@@ -313,7 +313,7 @@ void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aU
 
 void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 	appendUserItems(getParent(), menu, false, false);
-	prepareMenu(menu, UserCommand::CONTEXT_CHAT, ClientManager::getInstance()->getHubs(replyTo.getUser().user->getCID(),
+	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubs(replyTo.getUser().user->getCID(),
 		replyTo.getUser().hint, priv));
 	menu->appendSeparator();
 }

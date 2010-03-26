@@ -1060,10 +1060,7 @@ bool HubFrame::matchFilter(const UserInfo& ui, int sel, bool doSizeCompare, Filt
 	return insert;
 }
 
-bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
-	if(pt.x() == -1 || pt.y() == -1) {
-		pt = chat->getContextMenuPos();
-	}
+bool HubFrame::userClick(const dwt::ScreenCoordinate& pt) {
 	tstring txt = chat->textUnderCursor(pt);
 	if(txt.empty())
 		return false;
@@ -1080,7 +1077,25 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 		return false;
 	}
 
-	return handleUsersContextMenu(pt);
+	return true;
+}
+
+bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
+	if(pt.x() == -1 || pt.y() == -1) {
+		pt = chat->getContextMenuPos();
+	}
+
+	if(userClick(pt) && handleUsersContextMenu(pt))
+		return true;
+
+	// imitate TextBoxBase's menu creation
+	MenuPtr menu(dwt::WidgetCreator<Menu>::create(chat->getParent(), WinUtil::Seeds::menu));
+	chat->addCommands(menu);
+
+	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
+
+	inTabMenu = false;
+	menu->open(pt);
 }
 
 bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
@@ -1097,10 +1112,10 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 		for(int j=0; j<COLUMN_LAST; j++) {
 			copyMenu->appendItem(T_(usersColumns[j].name), std::tr1::bind(&HubFrame::handleMultiCopy, this, j));
 		}
-		prepareMenu(menu, UserCommand::CONTEXT_CHAT, client->getHubUrl());
+
+		prepareMenu(menu, UserCommand::CONTEXT_USER, url);
 
 		inTabMenu = false;
-
 		menu->open(pt);
 		return true;
 	}
