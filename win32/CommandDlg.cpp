@@ -196,7 +196,7 @@ bool CommandDlg::handleInitDialog() {
 
 	if(ctx & UserCommand::CONTEXT_HUB)
 		hubMenu->setChecked(true);
-	if(ctx & UserCommand::CONTEXT_CHAT)
+	if(ctx & UserCommand::CONTEXT_USER)
 		userMenu->setChecked(true);
 	if(ctx & UserCommand::CONTEXT_SEARCH)
 		searchMenu->setChecked(true);
@@ -231,7 +231,7 @@ void CommandDlg::handleOKClicked() {
 	if(hubMenu->getChecked())
 		ctx |= UserCommand::CONTEXT_HUB;
 	if(userMenu->getChecked())
-		ctx |= UserCommand::CONTEXT_CHAT;
+		ctx |= UserCommand::CONTEXT_USER;
 	if(searchMenu->getChecked())
 		ctx |= UserCommand::CONTEXT_SEARCH;
 	if(fileListMenu->getChecked())
