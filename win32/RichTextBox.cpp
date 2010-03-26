@@ -20,7 +20,6 @@
 
 #include "RichTextBox.h"
 
-#include "WinUtil.h"
 #include "ParamDlg.h"
 
 RichTextBox::Seed::Seed() : 
@@ -54,17 +53,16 @@ bool RichTextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
 			// imitate AspectKeyboard
 			return handleKeyDown(static_cast<int>(msg.wParam));
 		}
-
-	case WM_CONTEXTMENU:
-		{
-			// imitate AspectContextMenu
-			bool shown = handleContextMenu(dwt::ScreenCoordinate(dwt::Point::fromLParam(msg.lParam)));
-			retVal = shown;
-			return shown;
-		}
 	}
 
 	return false;
+}
+
+void RichTextBox::addCommands(MenuPtr menu) {
+	BaseType::addCommands(menu);
+
+	menu->appendSeparator();
+	menu->appendItem(T_("&Find...\tF3"), std::tr1::bind(&RichTextBox::handleFind, this), dwt::IconPtr(), !getText().empty());
 }
 
 bool RichTextBox::handleKeyDown(int c) {
@@ -81,49 +79,7 @@ bool RichTextBox::handleKeyDown(int c) {
 	return false;
 }
 
-#define ID_EDIT_CLEAR 0xE120
-#define ID_EDIT_CLEAR_ALL 0xE121
-#define ID_EDIT_COPY 0xE122
-#define ID_EDIT_CUT 0xE123
-#define ID_EDIT_FIND 0xE124
-#define ID_EDIT_PASTE 0xE125
-#define ID_EDIT_PASTE_LINK 0xE126
-#define ID_EDIT_PASTE_SPECIAL 0xE127
-#define ID_EDIT_REPEAT 0xE128
-#define ID_EDIT_REPLACE 0xE129
-#define ID_EDIT_SELECT_ALL 0xE12A
-#define ID_EDIT_UNDO 0xE12B
-#define ID_EDIT_REDO 0xE12C
-
-bool RichTextBox::handleContextMenu(dwt::ScreenCoordinate pt) {
-	if(pt.x() == -1 || pt.y() == -1) {
-		pt = getContextMenuPos();
-	}
-
-	const bool writable = !hasStyle(ES_READONLY);
-
-	MenuPtr menu(dwt::WidgetCreator<Menu>::create(getParent(), WinUtil::Seeds::menu));
-	if(writable) {
-		menu->appendItem(T_("&Undo\tCtrl+Z"),
-			std::tr1::bind(&RichTextBox::sendMessage, this, WM_COMMAND, MAKEWPARAM(ID_EDIT_UNDO, 0), 0),
-			dwt::IconPtr(), sendMessage(EM_CANUNDO));
-		menu->appendSeparator();
-	}
-	menu->appendItem(T_("&Copy\tCtrl+C"), std::tr1::bind(&RichTextBox::handleCopy, this));
-	menu->appendSeparator();
-	menu->appendItem(T_("&Find...\tF3"), std::tr1::bind(&RichTextBox::handleFind, this));
-
-	menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
-	return true;
-}
-
-void RichTextBox::handleCopy()
-{
-	WinUtil::setClipboard(getSelection());
-}
-
-void RichTextBox::handleFind()
-{
+void RichTextBox::handleFind() {
 	findText(findTextPopup());
 }
 

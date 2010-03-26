@@ -4,6 +4,7 @@
 * [L#539992] Shell menus for directories when browsing own file list (poy)
 * Parse separators in titles of user command param boxes (poy)
 * Fix painting issues with /clear <n> (poy)
+* Smooth text-box menus (poy)
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)
