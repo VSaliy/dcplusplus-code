@@ -38,14 +38,13 @@ public:
 
 	bool handleMessage(const MSG& msg, LRESULT& retVal);
 
+	void addCommands(MenuPtr menu);
+
 	tstring findTextPopup();
 	void findTextNext();
 
 private:
 	bool handleKeyDown(int c);
-	bool handleContextMenu(dwt::ScreenCoordinate pt);
-
-	void handleCopy();
 	void handleFind();
 };
 

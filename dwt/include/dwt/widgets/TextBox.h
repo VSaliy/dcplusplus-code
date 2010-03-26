@@ -41,6 +41,7 @@
 #include "../aspects/AspectText.h"
 #include "../aspects/AspectUpdate.h"
 #include "Control.h"
+#include "Menu.h"
 
 namespace dwt {
 
@@ -157,6 +158,7 @@ public:
 	unsigned getLineCount() const;
 
 	virtual tstring textUnderCursor(const ScreenCoordinate& p, bool includeSpaces = false) = 0;
+	virtual tstring getSelection() const = 0;
 
 	void setModify(bool modify = false);
 
@@ -168,6 +170,8 @@ public:
 	ScreenCoordinate getContextMenuPos();
 
 	virtual Point getPreferedSize();
+
+	virtual void addCommands(MenuPtr menu);
 
 	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
 
@@ -185,6 +189,9 @@ protected:
 
 		/// number of lines this control occupies, used to guess its vertical size
 		unsigned lines;
+
+		/// seed to use for context menus
+		Menu::Seed menuSeed;
 	};
 
 	void create(const Seed& cs);
@@ -194,6 +201,7 @@ protected:
 
 private:
 	unsigned lines;
+	Menu::Seed menuSeed;
 };
 
 class TextBox :

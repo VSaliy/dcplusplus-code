@@ -205,6 +205,10 @@ void WinUtil::init() {
 	xdoptionsTable.style |= LVS_SINGLESEL | LVS_NOCOLUMNHEADER;
 	xdoptionsTable.lvStyle |= LVS_EX_CHECKBOXES;
 
+	xtextBox.menuSeed = Seeds::menu;
+	xdTextBox.menuSeed = Seeds::menu;
+	xRichTextBox.menuSeed = Seeds::menu;
+
 	init_helpPath();
 
 	if(!helpPath.empty()) {

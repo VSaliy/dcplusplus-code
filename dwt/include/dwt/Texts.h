@@ -29,34 +29,20 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ASPECTCONTEXTMENU_H_
-#define DWT_ASPECTCONTEXTMENU_H_
-
-#include "../Point.h"
-#include "../Dispatchers.h"
-#include "../Message.h"
+#ifndef DWT_TEXTS_H
+#define DWT_TEXTS_H
 
 namespace dwt {
 
-template<typename WidgetType>
-class AspectContextMenu {
-	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-
-	struct ContextMenuDispatcher : Dispatchers::Base<bool (const ScreenCoordinate&)> {
-		typedef Dispatchers::Base<bool(const ScreenCoordinate&)> BaseType;
-		ContextMenuDispatcher(const F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			return f(ScreenCoordinate(Point::fromLParam(msg.lParam)));
-		}
+struct Texts {
+	/** Texts used by DWT that the calling application should define. */
+	enum Text {
+		undo, cut, copy, paste, del, selAll // text-box menu commands
 	};
 
-public:
-	void onContextMenu(const typename ContextMenuDispatcher::F& f) {
-		W().addCallback(Message( WM_CONTEXTMENU ), ContextMenuDispatcher(f));
-	}
+	static tstring get(Text text);
 };
 
 }
 
-#endif /*ASPECTCONTEXTMENU_H_*/
+#endif

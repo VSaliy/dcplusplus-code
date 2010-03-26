@@ -32,6 +32,8 @@
 #include <dwt/widgets/TextBox.h>
 
 #include <dwt/CanvasClasses.h>
+#include <dwt/Texts.h>
+#include <dwt/WidgetCreator.h>
 #include <dwt/util/check.h>
 
 namespace dwt {
@@ -166,6 +168,30 @@ Point TextBoxBase::getPreferedSize() {
 	return ret;
 }
 
+void TextBoxBase::addCommands(MenuPtr menu) {
+	const bool writable = !hasStyle(ES_READONLY);
+	const bool text = !getText().empty();
+	const bool selection = !getSelection().empty();
+
+	if(writable) {
+		menu->appendItem(Texts::get(Texts::undo), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_UNDO, 0, 0),
+			IconPtr(), sendMessage(EM_CANUNDO));
+		menu->appendSeparator();
+		menu->appendItem(Texts::get(Texts::cut), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_CUT, 0, 0),
+			IconPtr(), selection);
+	}
+	menu->appendItem(Texts::get(Texts::copy), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_COPY, 0, 0),
+		IconPtr(), selection);
+	if(writable) {
+		menu->appendItem(Texts::get(Texts::paste), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_PASTE, 0, 0));
+		menu->appendItem(Texts::get(Texts::del), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_CLEAR, 0, 0),
+			IconPtr(), selection);
+	}
+	menu->appendSeparator();
+	menu->appendItem(Texts::get(Texts::selAll), std::tr1::bind(&TextBoxBase::setSelection, this, 0, -1),
+		IconPtr(), text);
+}
+
 bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
 	bool handled = BaseType::handleMessage(msg, retVal);
 
@@ -173,6 +199,21 @@ bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
 	if((msg.message == WM_SIZE || msg.message == WM_MOVE) && hasStyle(WS_VSCROLL) && scrollIsAtEnd()) {
 		retVal = getDispatcher().chain(msg);
 		scrollToBottom();
+		return true;
+	}
+
+	if(!handled && msg.message == WM_CONTEXTMENU) {
+		// process this here to give the host a chance to handle it differently.
+
+		// imitate AspectContextMenu
+		ScreenCoordinate pt(Point::fromLParam(msg.lParam));
+		if(pt.x() == -1 || pt.y() == -1) {
+			pt = getContextMenuPos();
+		}
+
+		MenuPtr menu(WidgetCreator<Menu>::create(getParent(), menuSeed));
+		addCommands(menu);
+		menu->open(pt, TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 		return true;
 	}
 
