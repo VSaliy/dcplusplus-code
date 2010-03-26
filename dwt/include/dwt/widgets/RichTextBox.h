@@ -117,7 +117,7 @@ public:
 
 	void setScrollPos(Point& scrollPos);
 
-	tstring textUnderCursor(const ScreenCoordinate& p);
+	tstring textUnderCursor(const ScreenCoordinate& p, bool includeSpaces = false);
 
 	void setText(const tstring& txt);
 

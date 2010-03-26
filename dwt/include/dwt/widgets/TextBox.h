@@ -156,6 +156,8 @@ public:
 
 	unsigned getLineCount() const;
 
+	virtual tstring textUnderCursor(const ScreenCoordinate& p, bool includeSpaces = false) = 0;
+
 	void setModify(bool modify = false);
 
 	bool getModify();
