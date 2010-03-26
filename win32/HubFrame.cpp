@@ -1096,6 +1096,7 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 
 	inTabMenu = false;
 	menu->open(pt);
+	return true;
 }
 
 bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
