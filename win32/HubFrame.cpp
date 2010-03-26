@@ -124,7 +124,7 @@ resort(false),
 showJoins(BOOLSETTING(SHOW_JOINS)),
 favShowJoins(BOOLSETTING(FAV_SHOW_JOINS)),
 currentUser(0),
-inTabMenu(false),
+hubMenu(false),
 inTabComplete(false)
 {
 	paned = addChild(WidgetVPaned::Seed(0.7));
@@ -1094,7 +1094,7 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
 
-	inTabMenu = false;
+	hubMenu = true;
 	menu->open(pt);
 	return true;
 }
@@ -1116,7 +1116,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 
 		prepareMenu(menu, UserCommand::CONTEXT_USER, url);
 
-		inTabMenu = false;
+		hubMenu = false;
 		menu->open(pt);
 		return true;
 	}
@@ -1135,7 +1135,7 @@ void HubFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 
 	menu->appendSeparator();
 
-	inTabMenu = true;
+	hubMenu = true;
 }
 
 void HubFrame::handleShowUsersClicked() {
@@ -1195,7 +1195,7 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 	client->getMyIdentity().getParams(ucParams, "my", true);
 	client->getHubIdentity().getParams(ucParams, "hub", false);
 
-	if(inTabMenu) {
+	if(hubMenu) {
 		client->escapeParams(ucParams);
 		client->sendUserCmd(uc, ucParams);
 	} else {

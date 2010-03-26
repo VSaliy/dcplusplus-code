@@ -181,7 +181,7 @@ private:
 	tstring filterString;
 
 	StringMap ucLineParams;
-	bool inTabMenu;
+	bool hubMenu;
 
 	tstring complete;
 	StringList tabCompleteNicks;
