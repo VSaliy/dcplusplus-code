@@ -310,6 +310,14 @@ bool WinUtil::checkNick() {
 	return true;
 }
 
+void WinUtil::handleDblClicks(dwt::TextBoxBase* box) {
+	box->onLeftMouseDblClick(std::tr1::bind(&WinUtil::handleBoxDblClick, box, _1));
+}
+
+bool WinUtil::handleBoxDblClick(dwt::TextBoxBase* box, const dwt::MouseEvent& ev) {
+	return parseDBLClick(box->textUnderCursor(ev.pos));
+}
+
 #define LINE2 _T("-- http://dcplusplus.sourceforge.net <DC++ ") _T(VERSIONSTRING) _T(">")
 const TCHAR
 	*msgs[] = {

@@ -101,6 +101,7 @@ public:
 	static void setStaticWindowState(const string& id, bool open);
 
 	static bool checkNick();
+	static void handleDblClicks(dwt::TextBoxBase* box);
 
 	/**
 	 * Check if this is a common /-command.
@@ -219,6 +220,8 @@ public:
 #endif
 
 private:
+	static bool handleBoxDblClick(dwt::TextBoxBase* box, const dwt::MouseEvent& ev);
+
 	static void init_helpPath();
 
 	static DWORD helpCookie;

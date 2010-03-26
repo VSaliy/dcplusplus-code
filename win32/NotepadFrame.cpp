@@ -35,6 +35,7 @@ NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) :
 		cs.style |= WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_NOHIDESEL | ES_WANTRETURN;
 		pad = addChild(cs);
 		addWidget(pad, false, false);
+		WinUtil::handleDblClicks(pad);
 	}
 
 	initStatus();

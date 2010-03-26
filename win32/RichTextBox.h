@@ -19,7 +19,7 @@
 #ifndef DCPLUSPLUS_WIN32_RichTextBox_H_
 #define DCPLUSPLUS_WIN32_RichTextBox_H_
 
-/** Our own flavour of rich text boxes that handle double clicks and have fancy menus */
+/// our rich text boxes that provide find functions
 class RichTextBox : public dwt::RichTextBox {
 	typedef dwt::RichTextBox BaseType;
 	friend class dwt::WidgetCreator<RichTextBox>;
@@ -44,7 +44,6 @@ public:
 private:
 	bool handleKeyDown(int c);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
-	bool handleLeftDblClick(const dwt::MouseEvent& ev);
 
 	void handleCopy();
 	void handleFind();

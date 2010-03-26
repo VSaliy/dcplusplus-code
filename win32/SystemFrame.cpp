@@ -39,6 +39,7 @@ SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 		addWidget(log);
 		log->onContextMenu(std::tr1::bind(&SystemFrame::handleContextMenu, this, _1));
 		log->onLeftMouseDblClick(std::tr1::bind(&SystemFrame::handleDoubleClick, this, _1));
+		WinUtil::handleDblClicks(log);
 	}
 
 	initStatus();

@@ -44,6 +44,7 @@ protected:
 			cs.style |= ES_READONLY;
 			chat = t().addChild(cs);
 			chat->setTextLimit(32768);
+			WinUtil::handleDblClicks(chat);
 		}
 
 		{

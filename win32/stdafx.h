@@ -54,14 +54,6 @@
 #include <dwt/widgets/ToolTip.h>
 #include <dwt/widgets/Window.h>
 
-#ifdef PORT_ME
-
-// Fix nt4 startup
-#include <multimon.h>
-
-
-#endif
-
 using namespace dcpp;
 
 using dwt::Button;
@@ -92,6 +84,8 @@ using dwt::Spinner;
 using dwt::SpinnerPtr;
 using dwt::TabView;
 using dwt::TabViewPtr;
+using dwt::TextBox;
+using dwt::TextBoxPtr;
 using dwt::ToolBar;
 using dwt::ToolBarPtr;
 using dwt::Tree;
@@ -118,7 +112,6 @@ using std::tr1::placeholders::_2;
 #endif
 #endif
 
-#include "TextBox.h"
 #include "ComboBox.h"
 #include "RichTextBox.h"
 #include "ShellMenu.h"

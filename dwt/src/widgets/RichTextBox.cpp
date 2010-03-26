@@ -131,16 +131,17 @@ void RichTextBox::setScrollPos(Point& scrollPos) {
 	sendMessage(EM_SETSCROLLPOS, 0, reinterpret_cast< LPARAM >(&scrollPos));
 }
 
-tstring RichTextBox::textUnderCursor(const ScreenCoordinate& p) {
+tstring RichTextBox::textUnderCursor(const ScreenCoordinate& p, bool includeSpaces) {
 	tstring tmp = getText();
 
-	tstring::size_type start = tmp.find_last_of(_T(" <\t\r\n"), fixupLineEndings(tmp.begin(), tmp.end(), charFromPos(p)));
+	tstring::size_type start = tmp.find_last_of(includeSpaces ? _T("<\t\r\n") : _T(" <\t\r\n"),
+		fixupLineEndings(tmp.begin(), tmp.end(), charFromPos(p)));
 	if(start == tstring::npos)
 		start = 0;
 	else
 		start++;
 
-	tstring::size_type end = tmp.find_first_of(_T(" >\t\r\n"), start + 1);
+	tstring::size_type end = tmp.find_first_of(includeSpaces ? _T(">\t\r\n") : _T(" >\t\r\n"), start + 1);
 	if(end == tstring::npos)
 		end = tmp.size();
 
