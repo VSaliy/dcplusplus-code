@@ -168,23 +168,28 @@ Point TextBoxBase::getPreferedSize() {
 	return ret;
 }
 
+// wrapper because sendMessage returns a value
+static inline void sendMessage_(TextBoxBase* box, UINT message) {
+	box->sendMessage(message);
+}
+
 void TextBoxBase::addCommands(MenuPtr menu) {
 	const bool writable = !hasStyle(ES_READONLY);
 	const bool text = !getText().empty();
 	const bool selection = !getSelection().empty();
 
 	if(writable) {
-		menu->appendItem(Texts::get(Texts::undo), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_UNDO, 0, 0),
+		menu->appendItem(Texts::get(Texts::undo), std::tr1::bind(&sendMessage_, this, WM_UNDO),
 			IconPtr(), sendMessage(EM_CANUNDO));
 		menu->appendSeparator();
-		menu->appendItem(Texts::get(Texts::cut), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_CUT, 0, 0),
+		menu->appendItem(Texts::get(Texts::cut), std::tr1::bind(&sendMessage_, this, WM_CUT),
 			IconPtr(), selection);
 	}
-	menu->appendItem(Texts::get(Texts::copy), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_COPY, 0, 0),
+	menu->appendItem(Texts::get(Texts::copy), std::tr1::bind(&sendMessage_, this, WM_COPY),
 		IconPtr(), selection);
 	if(writable) {
-		menu->appendItem(Texts::get(Texts::paste), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_PASTE, 0, 0));
-		menu->appendItem(Texts::get(Texts::del), std::tr1::bind(&TextBoxBase::sendMessage, this, WM_CLEAR, 0, 0),
+		menu->appendItem(Texts::get(Texts::paste), std::tr1::bind(&sendMessage_, this, WM_PASTE));
+		menu->appendItem(Texts::get(Texts::del), std::tr1::bind(&sendMessage_, this, WM_CLEAR),
 			IconPtr(), selection);
 	}
 	menu->appendSeparator();

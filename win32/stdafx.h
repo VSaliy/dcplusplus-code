@@ -99,16 +99,16 @@ using std::tr1::placeholders::_2;
 #define _(String) gettext(String)
 #define gettext_noop(String) String
 #define N_(String) gettext_noop (String)
-#define T_(String) Text::toT(gettext(String))
+#define T_(String) dcpp::Text::toT(gettext(String))
 #define CT_(String) T_(String).c_str()
 #define F_(String) dcpp_fmt(gettext(String))
 #define FN_(String1,String2, N) dcpp_fmt(ngettext(String1, String2, N))
 #ifdef UNICODE
-#define TF_(String) dcpp_fmt(Text::toT(gettext(String)))
-#define TFN_(String1,String2, N) dcpp_fmt(Text::toT(ngettext(String1, String2, N)))
+#define TF_(String) dcpp_fmt(dcpp::Text::toT(gettext(String)))
+#define TFN_(String1,String2, N) dcpp_fmt(dcpp::Text::toT(ngettext(String1, String2, N)))
 #else
-#define TF_(String) dcpp_fmt(Text::toT(gettext(String)))
-#define TFN_(String1,String2, N) dcpp_fmt(Text::toT(ngettext(String1, String2, N)))
+#define TF_(String) dcpp_fmt(dcpp::Text::toT(gettext(String)))
+#define TFN_(String1,String2, N) dcpp_fmt(dcpp::Text::toT(ngettext(String1, String2, N)))
 #endif
 #endif
 
