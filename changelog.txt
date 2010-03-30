@@ -7,6 +7,7 @@
 * Smooth text-box menus (poy)
 * Add user commands to the chat menu (poy)
 * OpenSSL 0.9.8n - defends against a remote crash (poy)
+* [L#548743] Fix broken share regression on non-Windows systems (steven sheehy)
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)
