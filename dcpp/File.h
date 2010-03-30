@@ -174,7 +174,6 @@ public:
 private:
 	HANDLE handle;
 #else
-	// This code has been cleaned up/fixed a little.
 public:
 	FileFindIter() {
 		dir = NULL;
@@ -228,7 +227,9 @@ public:
 		}
 		bool isHidden() {
 			if (!ent) return false;
-			return ent->d_name[0] == '.';
+			// Check if the parent directory is hidden for '.'
+			if (strcmp(ent->d_name, ".") == 0 && base[0] == '.') return true;
+			return ent->d_name[0] == '.' && strlen(ent->d_name) > 1;
 		}
 		bool isLink() {
 			struct stat inode;
