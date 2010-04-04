@@ -355,8 +355,10 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 	if(c.getParameters().size() < 2) {
 		return;
 	}
+#ifndef ENABLE_NAT_TRAVERSAL
 	if(!ClientManager::getInstance()->isActive())
 		return;
+#endif
 	OnlineUser* u = findUser(c.getFrom());
 	if(!u || u->getUser() == ClientManager::getInstance()->getMe())
 		return;
@@ -373,7 +375,24 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 		unknownProtocol(c.getFrom(), protocol, token);
 		return;
 	}
+#ifdef ENABLE_NAT_TRAVERSAL
+	if(ClientManager::getInstance()->isActive()) {
+		connect(*u, token, secure);
+		return;
+	}
+
+	if (!u->getIdentity().supports(NAT0_FEATURE))
+		return;
+
+	// Attempt to traverse NATs and/or firewalls with TCP.
+	// If they respond with their own, symmetric, RNT command, both
+	// clients call ConnectionManager::adcConnect.
+	send(AdcCommand(AdcCommand::CMD_NAT, u->getIdentity().getSID(), AdcCommand::TYPE_DIRECT).
+		addParam(protocol).addParam(Util::toString(sock->getLocalPort())).addParam(tok));
+	return;
+#else
 	connect(*u, token, secure);
+#endif
 }
 
 void AdcHub::handle(AdcCommand::CMD, AdcCommand& c) throw() {
@@ -805,6 +824,21 @@ void AdcHub::info(bool /*alwaysSend*/) {
 		su += ADCS_FEATURE + ",";
 	}
 
+#ifdef ENABLE_NAT_TRAVERSAL
+	// FIXME this was presumably the source of the A/P bug in StrongDC++, examine
+	if(BOOLSETTING(NO_IP_OVERRIDE) && !SETTING(EXTERNAL_IP).empty()) {
+		addParam(lastInfoMap, c, "I4", Socket::resolve(SETTING(EXTERNAL_IP)));
+	} else {
+		addParam(lastInfoMap, c, "I4", "0.0.0.0");
+	}
+	addParam(lastInfoMap, c, "U4", Util::toString(SearchManager::getInstance()->getPort()));
+	if(ClientManager::getInstance()->isActive()) {
+		su += TCP4_FEATURE + ",";
+		su += UDP4_FEATURE + ",";
+	} else {
+		su += NAT0_FEATURE + ",";
+	}
+#else
 	if(ClientManager::getInstance()->isActive()) {
 		if(BOOLSETTING(NO_IP_OVERRIDE) && !SETTING(EXTERNAL_IP).empty()) {
 			addParam(lastInfoMap, c, "I4", Socket::resolve(SETTING(EXTERNAL_IP)));
@@ -818,6 +852,7 @@ void AdcHub::info(bool /*alwaysSend*/) {
 		addParam(lastInfoMap, c, "I4", "");
 		addParam(lastInfoMap, c, "U4", "");
 	}
+#endif
 
 	if(!su.empty()) {
 		su.erase(su.size() - 1);
