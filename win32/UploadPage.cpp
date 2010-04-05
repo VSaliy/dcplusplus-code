@@ -192,7 +192,7 @@ void UploadPage::handleDragDrop(const TStringList& files) {
 
 void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox) {
 	// Save the checkbox state so that ShareManager knows to include/exclude hidden files
-	Item i = items[1]; // The checkbox. Explicit index used - bad!
+	Item i = items[0]; // The checkbox. Explicit index used - bad!
 	SettingsManager::getInstance()->set((SettingsManager::IntSetting)i.setting, checkBox->getChecked());
 
 	// Refresh the share. This is a blocking refresh. Might cause problems?
