@@ -44,7 +44,7 @@ private:
 	bool handleKeyDown(int c);
 	LRESULT handleItemChanged();
 	void handleDragDrop(const TStringList& files);
-	void handleShareHiddenClicked(CheckBoxPtr checkBox);
+	void handleShareHiddenClicked(CheckBoxPtr checkBox, Item& item);
 	void handleAddClicked();
 	void handleRenameClicked();
 	void handleRemoveClicked();
