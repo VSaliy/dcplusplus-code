@@ -87,7 +87,7 @@ remove(0)
 		// dummy grid so that the check-box doesn't fill the whole row.
 		CheckBoxPtr shareHidden = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Share hidden files")));
 		items.push_back(Item(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL));
-		shareHidden->onClicked(std::tr1::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden));
+		shareHidden->onClicked(std::tr1::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden, items.back()));
 		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);
 	}
 
@@ -190,10 +190,9 @@ void UploadPage::handleDragDrop(const TStringList& files) {
 			addDirectory(*i);
 }
 
-void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox) {
+void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox, Item& item) {
 	// Save the checkbox state so that ShareManager knows to include/exclude hidden files
-	Item i = items[0]; // The checkbox. Explicit index used - bad!
-	SettingsManager::getInstance()->set((SettingsManager::IntSetting)i.setting, checkBox->getChecked());
+	SettingsManager::getInstance()->set((SettingsManager::IntSetting)item.setting, checkBox->getChecked());
 
 	// Refresh the share. This is a blocking refresh. Might cause problems?
 	// Hopefully people won't click the checkbox enough for it to be an issue. :-)
