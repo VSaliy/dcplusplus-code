@@ -201,7 +201,7 @@ public:
 				C(SND);
 				C(SID);
 				C(CMD);
-#ifdef ENABLE_NAT_TRAVERSAL
+#ifndef DISABLE_NAT_TRAVERSAL
 				C(NAT);
 				C(RNT);
 #endif

@@ -355,7 +355,7 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 	if(c.getParameters().size() < 2) {
 		return;
 	}
-#ifndef ENABLE_NAT_TRAVERSAL
+#ifdef DISABLE_NAT_TRAVERSAL
 	if(!ClientManager::getInstance()->isActive())
 		return;
 #endif
@@ -375,7 +375,7 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 		unknownProtocol(c.getFrom(), protocol, token);
 		return;
 	}
-#ifdef ENABLE_NAT_TRAVERSAL
+#ifndef DISABLE_NAT_TRAVERSAL
 	if(ClientManager::getInstance()->isActive()) {
 		connect(*u, token, secure);
 		return;
@@ -388,7 +388,7 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 	// If they respond with their own, symmetric, RNT command, both
 	// clients call ConnectionManager::adcConnect.
 	send(AdcCommand(AdcCommand::CMD_NAT, u->getIdentity().getSID(), AdcCommand::TYPE_DIRECT).
-		addParam(protocol).addParam(Util::toString(sock->getLocalPort())).addParam(tok));
+		addParam(protocol).addParam(Util::toString(sock->getLocalPort())).addParam(token));
 	return;
 #else
 	connect(*u, token, secure);
@@ -824,7 +824,7 @@ void AdcHub::info(bool /*alwaysSend*/) {
 		su += ADCS_FEATURE + ",";
 	}
 
-#ifdef ENABLE_NAT_TRAVERSAL
+#ifndef DISABLE_NAT_TRAVERSAL
 	// FIXME this was presumably the source of the A/P bug in StrongDC++, examine
 	if(BOOLSETTING(NO_IP_OVERRIDE) && !SETTING(EXTERNAL_IP).empty()) {
 		addParam(lastInfoMap, c, "I4", Socket::resolve(SETTING(EXTERNAL_IP)));
