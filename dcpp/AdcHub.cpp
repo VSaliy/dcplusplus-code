@@ -825,17 +825,17 @@ void AdcHub::info(bool /*alwaysSend*/) {
 	}
 
 #ifndef DISABLE_NAT_TRAVERSAL
-	// FIXME this was presumably the source of the A/P bug in StrongDC++, examine
 	if(BOOLSETTING(NO_IP_OVERRIDE) && !SETTING(EXTERNAL_IP).empty()) {
 		addParam(lastInfoMap, c, "I4", Socket::resolve(SETTING(EXTERNAL_IP)));
 	} else {
 		addParam(lastInfoMap, c, "I4", "0.0.0.0");
 	}
-	addParam(lastInfoMap, c, "U4", Util::toString(SearchManager::getInstance()->getPort()));
 	if(ClientManager::getInstance()->isActive()) {
+		addParam(lastInfoMap, c, "U4", Util::toString(SearchManager::getInstance()->getPort()));
 		su += TCP4_FEATURE + ",";
 		su += UDP4_FEATURE + ",";
 	} else {
+		addParam(lastInfoMap, c, "U4", "");
 		su += NAT0_FEATURE + ",";
 	}
 #else
