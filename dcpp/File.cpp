@@ -441,7 +441,9 @@ StringList File::findFiles(const string& path, const string& pattern) {
 	if (dir) {
 		while (struct dirent* ent = readdir(dir)) {
 			if (fnmatch(pattern.c_str(), ent->d_name, 0) == 0) {
-				const char* extra = (ent->d_type & DT_DIR) ? "/" : "";
+				struct stat s;
+				stat(ent->d_name, &s);
+				const char* extra = (s.st_mode & S_IFDIR) ? "/" : "";
 				ret.push_back(path + Text::toUtf8(ent->d_name) + extra);
 			}
 		}
