@@ -36,6 +36,7 @@
 #include <netdb.h>
 #include <sys/utsname.h>
 #include <ctype.h>
+#include <string.h>
 #endif
 #include <locale.h>
 

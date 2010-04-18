@@ -38,7 +38,7 @@
 #include "SearchResult.h"
 #include "MerkleCheckOutputStream.h"
 
-#include <limits>
+#include <climits>
 
 #if !defined(_WIN32) && !defined(PATH_MAX) // Extra PATH_MAX check for Mac OS X
 #include <sys/syslimits.h>
