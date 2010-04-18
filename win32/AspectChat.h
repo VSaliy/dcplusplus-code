@@ -43,7 +43,7 @@ protected:
 			RichTextBox::Seed cs = WinUtil::Seeds::richTextBox;
 			cs.style |= ES_READONLY;
 			chat = t().addChild(cs);
-			chat->setTextLimit(32768);
+			chat->setTextLimit(65536);
 			WinUtil::handleDblClicks(chat);
 		}
 
