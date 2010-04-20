@@ -45,7 +45,6 @@
 #include "LibraryLoader.h"
 #include "Point.h"
 #include "Rectangle.h"
-#include "Resource.h"
 #include "Threads.h"
 #include "resources/Accelerator.h"
 #include "resources/Bitmap.h"
