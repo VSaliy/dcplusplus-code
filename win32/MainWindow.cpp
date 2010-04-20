@@ -471,7 +471,7 @@ void MainWindow::initTransfers() {
 void MainWindow::initTray() {
 	dcdebug("initTray\n");
 	notify = dwt::NotificationPtr(new dwt::Notification(this));
-	notify->create(dwt::Notification::Seed::Seed(mainSmallIcon));
+	notify->create(dwt::Notification::Seed(mainSmallIcon));
 	notify->onContextMenu(std::tr1::bind(&MainWindow::handleTrayContextMenu, this));
 	notify->onIconClicked(std::tr1::bind(&MainWindow::handleTrayClicked, this));
 	notify->onUpdateTip(std::tr1::bind(&MainWindow::handleTrayUpdate, this));

@@ -97,7 +97,7 @@ string UPnP_COM::getExternalIP() {
 
 	IStaticPortMappingCollection* pSPMC = getStaticPortMappingCollection();
 	if(!pSPMC)
-		return false;
+		return Util::emptyString;
 
 	/// @todo use a BSTR wrapper
 	BSTR protocol_ = SysAllocString(Text::toT(protocols[lastProtocol]).c_str());
