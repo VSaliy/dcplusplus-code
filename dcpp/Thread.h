@@ -62,7 +62,7 @@ public:
 	void setThreadPriority(Priority p) throw() { ::SetThreadPriority(threadHandle, p); }
 
 	static void sleep(uint32_t millis) { ::Sleep(millis); }
-	static void yield() { ::Sleep(1); }
+	static void yield() { ::Sleep(0); }
 
 #ifdef __MINGW32__
 	static long safeInc(volatile long& v) { return InterlockedIncrement((long*)&v); }
