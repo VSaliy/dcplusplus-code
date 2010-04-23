@@ -83,7 +83,7 @@ public:
 
 	void enter() {
 		while(Thread::safeExchange(state, 1) == 1) {
-			Thread::yield();
+			Thread::sleep(1);
 		}
 	}
 	void leave() {
