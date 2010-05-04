@@ -9,6 +9,7 @@
 * OpenSSL 0.9.8n - defends against a remote crash (poy)
 * [L#548743] Fix broken share regression on non-Windows systems (steven sheehy)
 * Fix 'Share hidden files' checkbox value saved to a wrong setting (emtee)
+* [L#562099] Fix encoding problems (poy)
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)
