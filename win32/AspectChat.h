@@ -64,12 +64,7 @@ protected:
 	virtual ~AspectChat() { }
 
 	tstring formatChatMessage(Client* aClient, const tstring& aLine) {
-		uint32_t color = SETTING(TEXT_COLOR);
-		string prologue =  "{\\urtf1\\ul0\\b0\\i0\n{\\colortbl;\\red" + Util::toString(color & 0xFF) +
-		  "\\green" + Util::toString((color >> 8) & 0xFF) + "\\blue" +
-		  Util::toString((color >> 16) & 0xFF) + ";}\n\\cf1\n";
-
-		return Text::toT(prologue) + chat->rtfEscape(aLine) + Text::toT("}\n");
+		return _T("{\\urtf1\n") + chat->rtfEscape(aLine) + _T("}\n");
 	}
 
 	void addChat(Client* aClient, const tstring& aLine) {
