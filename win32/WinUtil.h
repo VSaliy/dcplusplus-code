@@ -173,10 +173,11 @@ public:
 	static void reducePaths(string& message);
 
 	// Hash related
-	static void addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename);
-	static void bitziLink(const TTHValue& /*aHash*/);
-	static void copyMagnet(const TTHValue& /*aHash*/, const tstring& /*aFile*/);
-	static void searchHash(const TTHValue& /*aHash*/);
+	static void addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename, int64_t size);
+	static void bitziLink(const TTHValue& aHash);
+	static void copyMagnet(const TTHValue& aHash, const tstring& aFile, int64_t size);
+	static void searchHash(const TTHValue& aHash);
+	static string makeMagnet(const TTHValue& aHash, const string& aFile, int64_t size);
 
 	static void addLastDir(const tstring& dir);
 

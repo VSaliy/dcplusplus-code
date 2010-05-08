@@ -219,7 +219,7 @@ bool TransferView::handleDownloadsMenu(dwt::ScreenCoordinate pt) {
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		DownloadInfo* di = downloads->getSelectedData();
-		WinUtil::addHashItems(menu, di->tth, di->columns[DOWNLOAD_COLUMN_FILE]);
+		WinUtil::addHashItems(menu, di->tth, di->columns[DOWNLOAD_COLUMN_FILE], di->size);
 		menu->open(pt);
 
 		return true;

@@ -376,21 +376,25 @@ void SearchFrame::SearchInfo::DownloadTarget::operator()(SearchInfo* si) {
 }
 
 void SearchFrame::SearchInfo::CheckTTH::operator()(SearchInfo* si) {
+	const SearchResultPtr& sr = si->srs[0];
+
 	if(firstTTH) {
-		tth = si->columns[COLUMN_TTH];
 		hasTTH = true;
 		firstTTH = false;
+		tth = sr->getTTH();
+		name = si->getText(COLUMN_FILENAME);
+		size = sr->getSize();
 	} else if(hasTTH) {
-		if(tth != si->columns[COLUMN_TTH]) {
+		if(tth != sr->getTTH()) {
 			hasTTH = false;
 		}
 	}
 
 	if(firstHubs && hubs.empty()) {
-		hubs = ClientManager::getInstance()->getHubs(si->srs[0]->getUser()->getCID(), si->srs[0]->getHubURL());
+		hubs = ClientManager::getInstance()->getHubs(sr->getUser()->getCID(), sr->getHubURL());
 		firstHubs = false;
 	} else if(!hubs.empty()) {
-		Util::intersect(hubs, ClientManager::getInstance()->getHubs(si->srs[0]->getUser()->getCID(), si->srs[0]->getHubURL()));
+		Util::intersect(hubs, ClientManager::getInstance()->getHubs(sr->getUser()->getCID(), sr->getHubURL()));
 	}
 }
 
@@ -682,7 +686,7 @@ MenuPtr SearchFrame::makeMenu() {
 
 	if(checkTTH.hasTTH) {
 		menu->appendSeparator();
-		WinUtil::addHashItems(menu, TTHValue(Text::fromT(checkTTH.tth)), results->getSelectedData()->getText(COLUMN_FILENAME));
+		WinUtil::addHashItems(menu, checkTTH.tth, checkTTH.name, checkTTH.size);
 	}
 
 	menu->appendSeparator();
@@ -718,7 +722,7 @@ void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& fav
 	if(checkTTH.hasTTH) {
 		targets.clear();
 
-		QueueManager::getInstance()->getTargets(TTHValue(Text::fromT(checkTTH.tth)), targets);
+		QueueManager::getInstance()->getTargets(checkTTH.tth, targets);
 		if(targets.size() > 0) {
 			menu->appendSeparator();
 			for(StringIter i = targets.begin(); i != targets.end(); ++i)
@@ -1013,6 +1017,7 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 			if(sr->getType() == SearchResult::TYPE_FILE) {
 				ucParams["fileTR"] = sr->getTTH().toBase32();
 			}
+			ucParams["fileMN"] = WinUtil::makeMagnet(sr->getTTH(), sr->getFile(), sr->getSize());
 
 			// compatibility with 0.674 and earlier
 			ucParams["file"] = ucParams["fileFN"];

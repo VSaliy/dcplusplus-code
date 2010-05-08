@@ -11,6 +11,8 @@
 * Fix 'Share hidden files' checkbox value saved to a wrong setting (emtee)
 * [L#562099] Fix encoding problems (poy)
 * [L#556011] Respect the font style in chat windows
+* [L#551319] Add %[fileMN] to user command params (thanks darkklor)
+* Magnet links are now produced with a size (xl) param
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)

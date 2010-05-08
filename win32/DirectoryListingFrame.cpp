@@ -381,7 +381,7 @@ ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 
 		menu->appendSeparator();
 
-		WinUtil::addHashItems(menu, ii->file->getTTH(), Text::toT(ii->file->getName()));
+		WinUtil::addHashItems(menu, ii->file->getTTH(), Text::toT(ii->file->getName()), ii->file->getSize());
 	}
 
 	if((ii->type == ItemInfo::FILE && ii->file->getAdls()) ||
@@ -974,6 +974,7 @@ void DirectoryListingFrame::runUserCommand(const UserCommand& uc) {
 			ucParams["fileSI"] = Util::toString(ii->file->getSize());
 			ucParams["fileSIshort"] = Util::formatBytes(ii->file->getSize());
 			ucParams["fileTR"] = ii->file->getTTH().toBase32();
+			ucParams["fileMN"] = WinUtil::makeMagnet(ii->file->getTTH(), ii->file->getName(), ii->file->getSize());
 		} else {
 			ucParams["type"] = "Directory";
 			ucParams["fileFN"] = dl->getPath(ii->dir) + ii->dir->getName();
