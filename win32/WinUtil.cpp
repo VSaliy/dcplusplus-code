@@ -571,10 +571,10 @@ void WinUtil::reducePaths(string& message) {
 	}
 }
 
-void WinUtil::addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename) {
+void WinUtil::addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename, int64_t size) {
 	menu->appendItem(T_("Search for alternates"), std::tr1::bind(&WinUtil::searchHash, tth));
 	menu->appendItem(T_("Lookup TTH at Bitzi.com"), std::tr1::bind(WinUtil::bitziLink, tth));
-	menu->appendItem(T_("Copy magnet link to clipboard"), std::tr1::bind(&WinUtil::copyMagnet, tth, filename));
+	menu->appendItem(T_("Copy magnet link to clipboard"), std::tr1::bind(&WinUtil::copyMagnet, tth, filename, size));
 }
 
 void WinUtil::bitziLink(const TTHValue& aHash) {
@@ -585,11 +585,17 @@ void WinUtil::bitziLink(const TTHValue& aHash) {
 	openLink(_T("http://bitzi.com/lookup/tree:tiger:") + Text::toT(aHash.toBase32()));
 }
 
-void WinUtil::copyMagnet(const TTHValue& aHash, const tstring& aFile) {
+void WinUtil::copyMagnet(const TTHValue& aHash, const tstring& aFile, int64_t size) {
 	if(!aFile.empty()) {
-		setClipboard(_T("magnet:?xt=urn:tree:tiger:") + Text::toT(aHash.toBase32()) + _T("&dn=") + Text::toT(
-			Util::encodeURI(Text::fromT(aFile))));
+		setClipboard(Text::toT(makeMagnet(aHash, Text::fromT(aFile), size)));
 	}
+}
+
+string WinUtil::makeMagnet(const TTHValue& aHash, const string& aFile, int64_t size) {
+	string ret = "magnet:?xt=urn:tree:tiger:" + aHash.toBase32() + "&dn=" + Util::encodeURI(aFile);
+	if(size > 0)
+		ret += "&xl=" + Util::toString(size);
+	return ret;
 }
 
 void WinUtil::searchHash(const TTHValue& aHash) {

@@ -853,7 +853,7 @@ const string& QueueFrame::getDir(HTREEITEM item) {
 MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	WinUtil::addHashItems(menu, qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())));
+	WinUtil::addHashItems(menu, qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())), qii->getSize());
 	menu->appendItem(T_("&Move/Rename"), std::tr1::bind(&QueueFrame::handleMove, this));
 	menu->appendItem(T_("Re&check integrity"), std::tr1::bind(&QueueFrame::handleRecheck, this));
 	addPriorityMenu(menu);

@@ -111,7 +111,9 @@ private:
 			bool op;
 			bool hasTTH;
 			bool firstTTH;
-			tstring tth;
+			TTHValue tth;
+			tstring name;
+			int64_t size;
 		};
 
 		const tstring& getText(int col) const { return columns[col]; }
