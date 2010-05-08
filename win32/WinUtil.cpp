@@ -679,15 +679,45 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 		if(j == string::npos)
 			break;
 
-		string name = uc.getCommand().substr(i, j - i);
+		const string name = uc.getCommand().substr(i, j - i);
 		if(find(names.begin(), names.end(), name) == names.end()) {
-			string caption = name;
+			tstring caption = Text::toT(name);
 			if(uc.adc()) {
-				Util::replace("\\\\", "\\", caption);
-				Util::replace("\\s", " ", caption);
+				Util::replace(_T("\\\\"), _T("\\"), caption);
+				Util::replace(_T("\\s"), _T(" "), caption);
 			}
 
-			dlg.addTextBox(Text::toT(caption), Text::toT(sm["line:" + name]));
+			// let's break between slashes (while ignoring double-slashes) to see if it's a combo
+			int combo_sel = -1;
+			tstring name_ = caption;
+			Util::replace(_T("//"), _T("\t"), name_);
+			TStringList combo_values = StringTokenizer<tstring>(name_, _T('/')).getTokens();
+			if(combo_values.size() > 2) { // must contain at least: caption, default sel, 1 value
+
+				TStringIter first = combo_values.begin();
+				caption = *first;
+				combo_values.erase(first);
+
+				first = combo_values.begin();
+				combo_sel = Util::toUInt(Text::fromT(*first));
+				combo_values.erase(first);
+				if(static_cast<size_t>(combo_sel) >= combo_values.size())
+					combo_sel = 0; // default selection value too high
+
+				for(TStringIter i = combo_values.begin(), iend = combo_values.end(); i != iend; ++i)
+					Util::replace(_T("\t"), _T("/"), *i);
+
+				// if the combo has already been displayed before, retrieve the prev value and bypass combo_sel
+				TStringIterC prev = find(combo_values.begin(), combo_values.end(), Text::toT(sm["line:" + name]));
+				if(prev != combo_values.end())
+					combo_sel = prev - combo_values.begin();
+			}
+
+			if(combo_sel >= 0) {
+				dlg.addComboBox(caption, combo_values, combo_sel);
+			} else {
+				dlg.addTextBox(caption, Text::toT(sm["line:" + name]));
+			}
 			names.push_back(name);
 		}
 		i = j + 1;
