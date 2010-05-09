@@ -16,6 +16,8 @@
 * [L#505450] Extend %[line:] to create combo boxes (thanks sulan)
 * Compilation fixes for OpenSolaris (thanks andrew browne)
 * Help updates (poy, emtee)
+* [L#550300] Fix a possible file corruption (thanks bigmuscle)
+* [L#551184] Fix unnecessary move of downloaded filelists (emtee)
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)

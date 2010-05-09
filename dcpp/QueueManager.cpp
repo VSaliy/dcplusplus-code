@@ -1135,7 +1135,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 
 						if(aDownload->getType() != Transfer::TYPE_FILE || q->isFinished()) {
 							// Check if we need to move the file
-							if( !aDownload->getTempTarget().empty() && (Util::stricmp(aDownload->getPath().c_str(), aDownload->getTempTarget().c_str()) != 0) ) {
+							if( aDownload->getType() == Transfer::TYPE_FILE && !aDownload->getTempTarget().empty() && (Util::stricmp(aDownload->getPath().c_str(), aDownload->getTempTarget().c_str()) != 0) ) {
 								moveFile(aDownload->getTempTarget(), aDownload->getPath());
 							}
 
