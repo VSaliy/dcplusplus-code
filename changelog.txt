@@ -14,6 +14,8 @@
 * [L#551319] Add %[fileMN] to user command params (thanks darkklor)
 * Magnet links are now produced with a size (xl) param
 * [L#505450] Extend %[line:] to create combo boxes (thanks sulan)
+* Compilation fixes for OpenSolaris (thanks andrew browne)
+* Help updates (poy, emtee)
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)

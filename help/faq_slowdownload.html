@@ -33,26 +33,32 @@
  is enabled in the <a href="settings_appearance.html">Appearance</a> settings panel.
   </li> 
  <li>The person who you are downloading from is using a bandwidth
-limiter. There are two types: client based and third-party
+limiter. There are two types of limiting: client based or using a third-party
 program. 
     <ul>
-      <li>Often the clients with limiting capability have set download
-and upload speed ratios in place to avoid abuse. (ex. If the
+      <li>Clients with bandwith limiting capability often have set download
+and upload speed ratios in place to avoid abuse. (ex. if the
 upload speed limit is set below 6 KiB/s, then the client will restrict
 the client download speed to a 2:1 ratio). This varies from
 client to client and obviously not all support upload limiting.
 This type of speed limiting <i>only</i>
 restricts the uploading of files, including user lists. It
-does not limit chat, private messages, or searches.</li>
+does not limit chat, private messages, or searches. From version 0.760
+DC++ also has internal file transfer limiting capability. If enabled, DC++ shows
+the upload limiting rate in the 
+<a href="window_hub.html#userlistcolumns">Connection coloumn</a>
+of a hub's user list. Other (older) clients may show this value in
+L: or B: part of the <a href="faq_plusplus_tag.html">DC++ tag</a>.
+</li>
       <li>Users could also be using a third-party program to limit the
 speed of traffic. This type of speed limiting is absolute; it
 will limit the speed of all traffic by the user, which can include file
-transfers, searches, chat, and private messages. Since this type
-of application does not enforce a download speed:upload speed ratio, it
-may be more prone to abuse. For particularly slow transfers - 1
-KiB/s or slower, it <b>may</b> be to
-blame. </li>
+transfers, searches, chat, and private messages. This type
+of application never enforce a download speed:upload speed ratio, it
+may be more prone to abuse.</li>
     </ul>
+   So for particularly slow transfers (1 KiB/s or slower) from a certain user,
+abusive upload limiting <b>may</b> be to blame. 
  </li> 
  <li>The person who you are downloading from suffers from one or more  
  constant speed problem described in the next section.
@@ -143,18 +149,22 @@ congestion, running the <a href="http://www.dslreports.com/linequality"
 may help find the cause (<i>requires logon, free signup).</i>
   </li>
 
-    <li>Your Internet connection is <acronym
+    <li><p>Your Internet connection is <acronym
  title="Digital Subscriber Loop">DSL</acronym>, cable, or satellite one
 with an asymmetrical connection speed, such as 768/128 Kib/s or
 3.0 Mib/s / 256 Kib/s. On such connections, if you upload near the speed of
 your upload limit (16 KiB/s in the case of the 768/128 connection), it
 may affect the speeds of your downloads, no matter how much larger
-your download connection is. If this is happening, you can change the size of
-the <a href="settings_expert.html#writebuffer">Socket Write Buffer</a> in Experts Only
+your download connection is. If this is happening, you can use the 
+<a href="settings_bwlimit.html"> built-in transfer limiting function</a>
+to set the maximum upload rate value <b>slightly</b> lower than
+your available upload speed (eg. to 15 or 14 KiB/s in the case above).</p>
+<p>If you aren't allowed to use upload limiting you can also experiment with changing the
+size of <a href="settings_expert.html#writebuffer">Socket Write Buffer</a> in Experts Only
 panel of DC++ settings. It defaults to 8 KiB and you can try to change it to a smaller
 value. You should specify the value in bytes and you may have to try several values
-to test what size suits your connection best. Note that you should restart DC++ to 
-changes take effect.</li>
+to test what size suits your connection best. Note that you should restart DC++ to
+changes take effect.</p></li>
 
   <li>Your copy of Windows XP, Vista or Windows 7 has the "<acronym
  title="Quality of Service">QoS</acronym> Packet Scheduler"

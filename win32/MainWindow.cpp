@@ -441,6 +441,8 @@ void MainWindow::initStatusBar() {
 	status->setHelpId(STATUS_UP_TOTAL, IDH_MAIN_UP_TOTAL);
 	status->setHelpId(STATUS_DOWN_DIFF, IDH_MAIN_DOWN_DIFF);
 	status->setHelpId(STATUS_UP_DIFF, IDH_MAIN_UP_DIFF);
+	status->setHelpId(STATUS_DOWN_LIMIT, IDH_MAIN_DOWN_LIMIT);
+	status->setHelpId(STATUS_UP_LIMIT, IDH_MAIN_UP_LIMIT);
 
 	viewMenu->checkItem(viewIndexes["Status"], true);
 }
