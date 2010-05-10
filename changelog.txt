@@ -1,7 +1,7 @@
 * Stability improvement related to menus (poy)
 * [L#539992] Shell menus for directories when browsing own file list (poy)
 * Parse separators in titles of user command param boxes (poy)
-* Fix painting issues with /clear <n> (poy)
+* Fix painting issues with /clear (poy)
 * Smooth text-box menus (poy)
 * Add user commands to the chat menu (poy)
 * OpenSSL 0.9.8n - defends against a remote crash (poy)

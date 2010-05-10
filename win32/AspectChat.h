@@ -121,8 +121,10 @@ protected:
 					}
 					chat->redraw();
 				}
-			} else
-				chat->setText(_T(""));
+			} else {
+				chat->setSelection();
+				chat->replaceSelection(_T(""));
+			}
 		} else if(Util::stricmp(cmd.c_str(), _T("ts")) == 0) {
 			timeStamps = !timeStamps;
 			if(timeStamps) {
