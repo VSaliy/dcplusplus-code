@@ -1,5 +1,3 @@
-* [L#253398] Better highlight color for content changes in tabs (poy)
-* [L#226975] Don't re-organize tab rows when the selected tab changes (poy)
 * Stability improvement related to menus (poy)
 * [L#539992] Shell menus for directories when browsing own file list (poy)
 * Parse separators in titles of user command param boxes (poy)
@@ -19,6 +17,7 @@
 * [L#550300] Fix a possible file corruption (thanks bigmuscle)
 * [L#551184] Fix unnecessary move of downloaded filelists (emtee)
 * [L#556853] Fix sharing a whole drive (root folder) was impossible in random cases (emtee)
+* [L#559544] Don't clear multiline boxes with Ctrl+Alt+A (poy)
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)
