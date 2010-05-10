@@ -107,8 +107,10 @@ public:
 template< class WidgetType >
 class AspectKeyboard : public AspectKeyboardBase
 {
+	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	HWND H() { return W().handle(); }
+
+	HWND H() const { return W().handle(); }
 
 	typedef Dispatchers::VoidVoid<0, false> FocusDispatcher;
 
