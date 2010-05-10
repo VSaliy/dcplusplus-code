@@ -128,8 +128,17 @@ tstring TextBox::getSelection() const
 }
 
 ClientCoordinate TextBoxBase::ptFromPos(int pos) {
-	DWORD res = sendMessage(EM_POSFROMCHAR, pos);
-	return ClientCoordinate(Point(LOWORD(res), HIWORD(res)), this);
+	LRESULT res = sendMessage(EM_POSFROMCHAR, pos);
+	Point pt;
+	if(res == -1) {
+		Point sz = getClientSize();
+		pt.x = sz.x / 2;
+		pt.y = sz.y / 2;
+	} else {
+		pt.x = LOWORD(res);
+		pt.y = HIWORD(res);
+	}
+	return ClientCoordinate(pt, this);
 }
 
 void TextBoxBase::scrollToBottom() {
@@ -198,6 +207,9 @@ void TextBoxBase::addCommands(MenuPtr menu) {
 }
 
 bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
+	if(msg.message == WM_RBUTTONDOWN && !hasFocus())
+		setFocus();
+
 	bool handled = BaseType::handleMessage(msg, retVal);
 
 	// keep the scroll position at the end if it already was at the end
