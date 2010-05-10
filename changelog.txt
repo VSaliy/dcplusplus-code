@@ -18,6 +18,7 @@
 * [L#551184] Fix unnecessary move of downloaded filelists (emtee)
 * [L#556853] Fix sharing a whole drive (root folder) was impossible in random cases (emtee)
 * [L#559544] Don't clear multiline boxes with Ctrl+Alt+A (poy)
+* [L#545264] Correct ADC hub counts (emtee)
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)
