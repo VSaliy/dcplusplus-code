@@ -166,6 +166,7 @@ else:
 
 env.Append(CPPDEFINES = defs[mode])
 env.Append(CPPDEFINES = defs['common'])
+env.Append(CPPDEFINES = ['DISABLE_NAT_TRAVERSAL']) # TODO remove and fully enable
 
 env.Append(CCFLAGS = flags[mode])
 env.Append(CCFLAGS = flags['common'])
