@@ -17,8 +17,8 @@
  */
 
 #define APPNAME "DC++"
-#define VERSIONSTRING "0.761"
-#define VERSIONFLOAT 0.761
+#define VERSIONSTRING "0.762"
+#define VERSIONFLOAT 0.762
 
 namespace dcpp {
 extern const string fullVersionString;

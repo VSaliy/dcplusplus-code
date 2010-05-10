@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libdcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-02-11 22:46+0100\n"
+"POT-Creation-Date: 2010-05-10 19:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,77 +16,77 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: dcpp\Util.cpp:490
+#: dcpp\Util.cpp:491
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr ""
 
-#: dcpp\Util.cpp:452
+#: dcpp\Util.cpp:453
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr ""
 
-#: dcpp\Util.cpp:448
+#: dcpp\Util.cpp:449
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr ""
 
-#: dcpp\Util.cpp:450
+#: dcpp\Util.cpp:451
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr ""
 
-#: dcpp\Util.cpp:456
+#: dcpp\Util.cpp:457
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr ""
 
-#: dcpp\Util.cpp:454
+#: dcpp\Util.cpp:455
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:142
+#: dcpp\AdcHub.cpp:144
 #, boost-format
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr ""
 
-#: dcpp\NmdcHub.cpp:287
+#: dcpp\NmdcHub.cpp:288
 #, boost-format
 msgid "%1% (Nick unknown)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:866
+#: dcpp\HashManager.cpp:860
 #, boost-format
 msgid "%1% not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr ""
 
-#: dcpp\AdcHub.cpp:291
+#: dcpp\AdcHub.cpp:293
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:294
+#: dcpp\AdcHub.cpp:296
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:179
+#: dcpp\AdcHub.cpp:181
 #, boost-format
 msgid "%1%/s"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:539
+#: dcpp\DownloadManager.cpp:540
 #, boost-format
 msgid "%1%: File not available"
 msgstr ""
 
-#: dcpp\Util.cpp:446
+#: dcpp\Util.cpp:447
 #, c-format, boost-format
 msgid "%d B"
 msgstr ""
 
-#: dcpp\Util.cpp:486
+#: dcpp\Util.cpp:487
 #, c-format, boost-format
 msgid "%s B"
 msgstr ""
@@ -115,7 +115,7 @@ msgstr ""
 msgid "Auto-connect group (converted)"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:383 dcpp\DownloadManager.cpp:385
+#: dcpp\DownloadManager.cpp:384 dcpp\DownloadManager.cpp:386
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr ""
 
@@ -142,11 +142,11 @@ msgstr ""
 msgid "Could not open target file: %1%"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:421
+#: dcpp\ShareManager.cpp:462
 msgid "Directory already shared"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:408
+#: dcpp\ShareManager.cpp:449
 msgid "Directory is hidden"
 msgstr ""
 
@@ -171,7 +171,7 @@ msgstr ""
 msgid "Download Queue"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:809
+#: dcpp\ShareManager.cpp:710
 #, boost-format
 msgid "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %3%"
 msgstr ""
@@ -201,7 +201,7 @@ msgstr ""
 msgid "Error generating certificate"
 msgstr ""
 
-#: dcpp\HashManager.cpp:871
+#: dcpp\HashManager.cpp:865
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr ""
@@ -221,7 +221,7 @@ msgstr ""
 msgid "Failed to load private key"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:214
+#: dcpp\AdcHub.cpp:216
 msgid "Failed to negotiate base protocol"
 msgstr ""
 
@@ -233,25 +233,25 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:965
+#: dcpp\ShareManager.cpp:866
 #, boost-format
 msgid "File list %1% generated"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:747
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:894
+#: dcpp\ShareManager.cpp:795
 msgid "File list refresh finished"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:826
+#: dcpp\ShareManager.cpp:727
 msgid "File list refresh in progress, please wait for it to finish before trying to refresh again"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:869
+#: dcpp\ShareManager.cpp:770
 msgid "File list refresh initiated"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Hash database"
 msgstr ""
 
-#: dcpp\HashManager.cpp:773
+#: dcpp\HashManager.cpp:767
 msgid "Hash database rebuilt"
 msgstr ""
 
@@ -291,7 +291,7 @@ msgstr ""
 msgid "Hashing failed: %1%"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:220
+#: dcpp\AdcHub.cpp:222
 msgid "Hub probably uses an old version of ADC, please encourage the owner to upgrade"
 msgstr ""
 
@@ -319,7 +319,7 @@ msgstr ""
 msgid "No certificate file chosen"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:445
 msgid "No directory specified"
 msgstr ""
 
@@ -327,11 +327,11 @@ msgstr ""
 msgid "No private key file chosen"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:428
+#: dcpp\DownloadManager.cpp:429
 msgid "No slots available"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:614
+#: dcpp\AdcHub.cpp:660
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
@@ -346,7 +346,7 @@ msgstr ""
 msgid "Redirect user(s)"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:424
+#: dcpp\ShareManager.cpp:465
 msgid "Remove all subdirectories before adding this one"
 msgstr ""
 
@@ -422,7 +422,7 @@ msgstr ""
 msgid "The socks server requires authentication"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:412
+#: dcpp\ShareManager.cpp:453
 msgid "The temporary download directory cannot be shared"
 msgstr ""
 
@@ -434,7 +434,7 @@ msgstr ""
 msgid "This file is already queued"
 msgstr ""
 
-#: dcpp\NmdcHub.cpp:935
+#: dcpp\NmdcHub.cpp:944
 #, boost-format
 msgid "This hub is trying to use your client to spam %1%, please urge hub owner to fix this"
 msgstr ""
