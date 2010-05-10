@@ -202,6 +202,7 @@ private:
 		FILES_COLUMN_SPEED,
 		FILES_COLUMN_CRC32,
 		FILES_COLUMN_TIME,
+		FILES_COLUMN_ELAPSED,
 		FILES_COLUMN_LAST
 	};
 
@@ -213,6 +214,7 @@ private:
 		USERS_COLUMN_SPEED,
 		USERS_COLUMN_FILES,
 		USERS_COLUMN_TIME,
+		USERS_COLUMN_ELAPSED,
 		USERS_COLUMN_LAST
 	};
 
@@ -247,6 +249,7 @@ private:
 			columns[FILES_COLUMN_SPEED] = Text::toT(Util::formatBytes(entry->getAverageSpeed()) + "/s");
 			columns[FILES_COLUMN_CRC32] = entry->getCrc32Checked() ? T_("Yes") : T_("No");
 			columns[FILES_COLUMN_TIME] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
+			columns[FILES_COLUMN_ELAPSED] = Text::toT(Util::formatSeconds(entry->getMilliSeconds() / 1000));
 
 			return (sortCol != -1) ? (old != columns[sortCol]) : false;
 		}
@@ -264,6 +267,7 @@ private:
 				case FILES_COLUMN_FILESIZE: return compare(a->entry->getFileSize(), b->entry->getFileSize());
 				case FILES_COLUMN_PERCENTAGE: return compare(a->entry->getTransferredPercentage(), b->entry->getTransferredPercentage());
 				case FILES_COLUMN_SPEED: return compare(a->entry->getAverageSpeed(), b->entry->getAverageSpeed());
+				case FILES_COLUMN_ELAPSED: return compare(a->entry->getMilliSeconds(), b->entry->getMilliSeconds());
 				default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
 			}
 		}
@@ -318,6 +322,7 @@ private:
 			columns[USERS_COLUMN_SPEED] = Text::toT(Util::formatBytes(entry->getAverageSpeed()) + "/s");
 			columns[USERS_COLUMN_FILES] = Text::toT(Util::toString(entry->getFiles()));
 			columns[USERS_COLUMN_TIME] = Text::toT(Util::formatTime("%Y-%m-%d %H:%M:%S", entry->getTime()));
+			columns[USERS_COLUMN_ELAPSED] = Text::toT(Util::formatSeconds(entry->getMilliSeconds() / 1000));
 
 			return (sortCol != -1) ? (old != columns[sortCol]) : false;
 		}
@@ -333,6 +338,7 @@ private:
 			switch(col) {
 				case USERS_COLUMN_TRANSFERRED: return compare(a->entry->getTransferred(), b->entry->getTransferred());
 				case USERS_COLUMN_SPEED: return compare(a->entry->getAverageSpeed(), b->entry->getAverageSpeed());
+				case USERS_COLUMN_ELAPSED: return compare(a->entry->getMilliSeconds(), b->entry->getMilliSeconds());
 				default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
 			}
 		}
@@ -691,7 +697,8 @@ const ColumnInfo FinishedFrameBase<T, in_UL>::filesColumns[] = {
 	{ N_("% transferred"), 80, true },
 	{ N_("Speed"), 100, true },
 	{ N_("CRC Checked"), 80, false },
-	{ N_("Time"), 125, false }
+	{ N_("Time"), 125, false },
+	{ N_("Elapsed"), 125, false }
 };
 
 template<class T, bool in_UL>
@@ -701,7 +708,8 @@ const ColumnInfo FinishedFrameBase<T, in_UL>::usersColumns[] = {
 	{ N_("Transferred"), 80, true },
 	{ N_("Speed"), 100, true },
 	{ N_("Files"), 300, false },
-	{ N_("Time"), 125, false }
+	{ N_("Time"), 125, false },
+	{ N_("Elapsed"), 125, false }
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FINISHED_FRAME_BASE_H)
