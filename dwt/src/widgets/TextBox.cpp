@@ -250,7 +250,7 @@ bool TextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
 }
 
 bool TextBox::handleKeyDown(int c) {
-	if(c == 'A' && isControlPressed()) {
+	if(c == 'A' && isControlPressed() && !isAltPressed()) {
 		setSelection();
 		return true;
 	}
