@@ -789,7 +789,9 @@ void AdcHub::info(bool /*alwaysSend*/) {
 
 	AdcCommand c(AdcCommand::CMD_INF, AdcCommand::TYPE_BROADCAST);
 
-	updateCounts(false);
+	if (state == STATE_NORMAL) {
+		updateCounts(false);
+	}
 
 	addParam(lastInfoMap, c, "ID", ClientManager::getInstance()->getMyCID().toBase32());
 	addParam(lastInfoMap, c, "PD", ClientManager::getInstance()->getMyPID().toBase32());
