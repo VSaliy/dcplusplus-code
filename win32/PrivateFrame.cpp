@@ -120,6 +120,7 @@ online(replyTo.getUser().user->isOnline())
 {
 	chat->setHelpId(IDH_PM_CHAT);
 	addWidget(chat);
+	chat->onContextMenu(std::tr1::bind(&PrivateFrame::handleChatContextMenu, this, _1));
 
 	message->setHelpId(IDH_PM_MESSAGE);
 	addWidget(message, true);
@@ -316,6 +317,22 @@ void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubs(replyTo.getUser().user->getCID(),
 		replyTo.getUser().hint, priv));
 	menu->appendSeparator();
+}
+
+bool PrivateFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
+	if(pt.x() == -1 || pt.y() == -1) {
+		pt = chat->getContextMenuPos();
+	}
+
+	// imitate TextBoxBase's menu creation
+	MenuPtr menu(dwt::WidgetCreator<Menu>::create(chat->getParent(), WinUtil::Seeds::menu));
+	chat->addCommands(menu);
+
+	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubs(replyTo.getUser().user->getCID(),
+		replyTo.getUser().hint, priv));
+
+	menu->open(pt);
+	return true;
 }
 
 void PrivateFrame::runUserCommand(const UserCommand& uc) {

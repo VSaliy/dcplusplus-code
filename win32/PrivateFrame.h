@@ -93,6 +93,8 @@ private:
 	void addStatus(const tstring& aLine, bool log = true);
 	void updateOnlineStatus();
 
+	bool handleChatContextMenu(dwt::ScreenCoordinate pt);
+
 	void runUserCommand(const UserCommand& uc);
 
 	// MDIChildFrame
