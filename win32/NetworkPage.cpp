@@ -34,9 +34,7 @@ directIn(0),
 upnp(0),
 nat(0),
 passive(0),
-ipGroup(0),
 externalIP(0),
-ports(0),
 tcp(0),
 udp(0),
 tls(0),
@@ -49,14 +47,15 @@ socksServer(0)
 
 	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->setSpacing(10);
+	grid->setSpacing(20);
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Incoming connection settings")))->addChild(Grid::Seed(1, 2));
+		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Incoming connection settings")))->addChild(Grid::Seed(2, 2));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
+		cur->setSpacing(10);
 
-		GridPtr connType = cur->addChild(Grid::Seed(6, 1));
+		GridPtr connType = cur->addChild(Grid::Seed(4, 1));
 		connType->setSpacing(6);
  
 		directIn = connType->addChild(RadioButton::Seed(T_("My computer is directly connected to Internet (no router)")));
@@ -68,8 +67,12 @@ socksServer(0)
 		nat = connType->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
 		nat->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_NAT);
 
+		passive = connType->addChild(RadioButton::Seed(T_("Passive mode (last resort - has serious limitations)")));
+		passive->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_PASSIVE);
+
 		{
-			ipGroup = connType->addChild(GroupBox::Seed(T_("External / WAN IP")));
+			GroupBoxPtr ipGroup = cur->addChild(GroupBox::Seed(T_("External / WAN IP")));
+			cur->setWidget(ipGroup, 1, 0);
 			ipGroup->setHelpId(IDH_SETTINGS_NETWORK_EXTERNAL_IP);
 
 			GridPtr ipGrid = ipGroup->addChild(Grid::Seed(2, 1));
@@ -83,11 +86,8 @@ socksServer(0)
 			overrideIP->setHelpId(IDH_SETTINGS_NETWORK_OVERRIDE);
 		}
 
-		passive = connType->addChild(RadioButton::Seed(T_("Passive mode (last resort - has serious limitations)")));
-		passive->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_PASSIVE);
-
-		ports = cur->addChild(GroupBox::Seed(T_("Ports")));
-
+		GroupBoxPtr ports = cur->addChild(GroupBox::Seed(T_("Ports")));
+		cur->setWidget(ports, 0, 1, 2);
 		cur = ports->addChild(Grid::Seed(3, 2));
 		cur->column(1).size = 40;
 		cur->column(1).mode = GridInfo::STATIC;
@@ -170,14 +170,7 @@ socksServer(0)
 
 	PropPage::read(items);
 
-	fixControlsIn();
 	fixControlsOut();
-
-	directIn->onClicked(std::tr1::bind(&NetworkPage::fixControlsIn, this));
-	upnp->onClicked(std::tr1::bind(&NetworkPage::fixControlsIn, this));
-	nat->onClicked(std::tr1::bind(&NetworkPage::fixControlsIn, this));
-	passive->onClicked(std::tr1::bind(&NetworkPage::fixControlsIn, this));
-
 	directOut->onClicked(std::tr1::bind(&NetworkPage::fixControlsOut, this));
 	socks5->onClicked(std::tr1::bind(&NetworkPage::fixControlsOut, this));
 }
@@ -234,12 +227,6 @@ void NetworkPage::write()
 		settings->set(SettingsManager::OUTGOING_CONNECTIONS, ct);
 		Socket::socksUpdated();
 	}
-}
-
-void NetworkPage::fixControlsIn() {
-	bool enable = directIn->getChecked() || upnp->getChecked() || nat->getChecked();
-	ipGroup->setEnabled(enable);
-	ports->setEnabled(enable);
 }
 
 void NetworkPage::fixControlsOut() {
