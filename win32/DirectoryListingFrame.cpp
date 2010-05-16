@@ -83,12 +83,11 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& a
 	UserIter i = lists.find(aUser);
 	if(i != lists.end()) {
 		i->second->speed = aSpeed;
-		if(!BOOLSETTING(POPUNDER_FILELIST)) {
-			//i->second->activate();
-		}
 	} else {
 		DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
 		frame->loadFile(aFile, aDir);
+		if(!BOOLSETTING(POPUNDER_FILELIST))
+			frame->activate();
 	}
 }
 
@@ -149,6 +148,8 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const HintedUser
 	} else {
 		DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
 		frame->loadXML(txt);
+		if(!BOOLSETTING(POPUNDER_FILELIST))
+			frame->activate();
 	}
 }
 
@@ -241,8 +242,6 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	updateTitle();
 
 	layout();
-	if(!BOOLSETTING(POPUNDER_FILELIST))
-		activate();
 
 	lists.insert(std::make_pair(aUser, this));
 }
