@@ -119,7 +119,11 @@ protected:
 		getParent()->setActive(this);
 	}
 
-	dwt::TabView* getParent() {
+	bool isActive() const {
+		return getParent()->getActive() == this;
+	}
+
+	dwt::TabView* getParent() const {
 		return static_cast<dwt::TabView*>(BaseType::getParent());
 	}
 

@@ -102,7 +102,7 @@ public:
 
 	void next(bool reverse = false);
 
-	ContainerPtr getActive();
+	ContainerPtr getActive() const;
 	void setActive(ContainerPtr w) { setActive(findTab(w)); }
 
 	IconPtr getIcon(ContainerPtr w) const;
