@@ -7,43 +7,43 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:39+0100\n"
-"PO-Revision-Date: 2009-02-22 12:19+0000\n"
-"Last-Translator: kenan3008 <Unknown>\n"
+"POT-Creation-Date: 2010-05-10 19:47+0200\n"
+"PO-Revision-Date: 2010-04-15 15:22+0000\n"
+"Last-Translator: main(void) <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp\Util.cpp:490
-#, c-format, boost-format
+#: dcpp\Util.cpp:491
+#, boost-format, c-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:452
-#, c-format, boost-format
+#: dcpp\Util.cpp:453
+#, boost-format, c-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:448
-#, c-format, boost-format
+#: dcpp\Util.cpp:449
+#, boost-format, c-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:450
-#, c-format, boost-format
+#: dcpp\Util.cpp:451
+#, boost-format, c-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:456
-#, c-format, boost-format
+#: dcpp\Util.cpp:457
+#, boost-format, c-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:454
-#, c-format, boost-format
+#: dcpp\Util.cpp:455
+#, boost-format, c-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
 
@@ -80,18 +80,18 @@ msgstr "%1% je odstranjen: %2%"
 msgid "%1%/s"
 msgstr "%1%/s"
 
-#: dcpp\DownloadManager.cpp:539
+#: dcpp\DownloadManager.cpp:540
 #, boost-format
 msgid "%1%: File not available"
 msgstr "%1%: Datoteka nije dostupna"
 
-#: dcpp\Util.cpp:446
-#, c-format, boost-format
+#: dcpp\Util.cpp:447
+#, boost-format, c-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:486
-#, c-format, boost-format
+#: dcpp\Util.cpp:487
+#, boost-format, c-format
 msgid "%s B"
 msgstr "%s B"
 
@@ -100,9 +100,8 @@ msgid "<Enter string>"
 msgstr "<Unesi string>"
 
 #: dcpp\QueueManager.cpp:631
-#, fuzzy
 msgid "A file with a different TTH root already exists in the queue"
-msgstr "Datoteka sa drugačijim TTH kodom već postoji u listi čekanja"
+msgstr "Datoteka s različitom TTH stazom već postoji"
 
 #: dcpp\QueueManager.cpp:628
 msgid "A file with a different size already exists in the queue"
@@ -118,9 +117,9 @@ msgstr "Svi Slotovi za Download su zauzeti"
 
 #: dcpp\FavoriteManager.cpp:478
 msgid "Auto-connect group (converted)"
-msgstr ""
+msgstr "Auto-connect grupa (pretvoreno)"
 
-#: dcpp\DownloadManager.cpp:383 dcpp\DownloadManager.cpp:385
+#: dcpp\DownloadManager.cpp:384 dcpp\DownloadManager.cpp:386
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 Neskladnost (SFV-Provjera)"
 
@@ -147,14 +146,13 @@ msgstr "Veza ponovo uspostavljena"
 msgid "Could not open target file: %1%"
 msgstr "Nije moguće otvoriti odabranu datoteku: %1%"
 
-#: dcpp\ShareManager.cpp:421
+#: dcpp\ShareManager.cpp:462
 msgid "Directory already shared"
 msgstr "Sadržaj se već dijeli"
 
-#: dcpp\ShareManager.cpp:408
-#, fuzzy
+#: dcpp\ShareManager.cpp:449
 msgid "Directory is hidden"
-msgstr "Sadržaj se već dijeli"
+msgstr "Direktorij je sakriven"
 
 #: dcpp\DirectoryListing.cpp:163
 msgid "Directory missing name attribute"
@@ -177,14 +175,14 @@ msgstr "Diskonektovani korisnik napušta hub: %1%"
 msgid "Download Queue"
 msgstr "Lista za Download"
 
-#: dcpp\ShareManager.cpp:809
+#: dcpp\ShareManager.cpp:710
 #, boost-format
 msgid ""
-"Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %"
-"3%"
+"Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: "
+"%3%"
 msgstr ""
-"Duple datoteke neće se dijeliti: %1% (Veličina: %2% B) Dupla upoređena sa: %"
-"3%"
+"Duple datoteke neće se dijeliti: %1% (Veličina: %2% B) Dupla upoređena sa: "
+"%3%"
 
 #: dcpp\QueueManager.cpp:706 dcpp\QueueManager.cpp:710
 #, boost-format
@@ -243,25 +241,24 @@ msgstr ""
 "Socks Server ne može UDP Relay namjestiti (provjerite Adresu i Port Servera)"
 
 #: dcpp\QueueManager.cpp:693
-#, fuzzy
 msgid "File already exists at the target location"
-msgstr "Ista ili veća datoteka već postoji na ciljanoj lokaciji"
+msgstr "Datoteka već postoji na toj lokaciji"
 
-#: dcpp\ShareManager.cpp:965
-#, fuzzy, boost-format
+#: dcpp\ShareManager.cpp:866
+#, boost-format
 msgid "File list %1% generated"
-msgstr "Započeto osvježavanje liste datoteka"
+msgstr "Fajl lista %1% generirana"
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:747
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Osvježavanje liste nije uspjelo: %1%"
 
-#: dcpp\ShareManager.cpp:894
+#: dcpp\ShareManager.cpp:795
 msgid "File list refresh finished"
 msgstr "Završeno obnavljanje liste datoteka"
 
-#: dcpp\ShareManager.cpp:826
+#: dcpp\ShareManager.cpp:727
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -269,7 +266,7 @@ msgstr ""
 "Osvježavanje liste datoteka u toku, molimo da sačekate završetak operacije "
 "prije ponovnog pokušaja osježavanja"
 
-#: dcpp\ShareManager.cpp:869
+#: dcpp\ShareManager.cpp:770
 msgid "File list refresh initiated"
 msgstr "Započeto osvježavanje liste datoteka"
 
@@ -279,14 +276,14 @@ msgid "Finished hashing: %1%"
 msgstr "Završen hashing: %1%"
 
 #: dcpp\HashManager.cpp:82
-#, fuzzy, boost-format
+#, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
-msgstr "Završen hashing: %1% (%2%/s)"
+msgstr "Hashing je završen: %1% (%2% at %3%/s)"
 
 #: dcpp\HashManager.cpp:85
-#, fuzzy, boost-format
+#, boost-format
 msgid "Finished hashing: %1% (%2%)"
-msgstr "Završen hashing: %1% (%2%/s)"
+msgstr "Hashing je završen: %1% (%2%)"
 
 #: dcpp\DownloadManager.cpp:314
 msgid "Full tree does not match TTH root"
@@ -345,7 +342,7 @@ msgstr "Zapisano je više bajtova nego što je zahtjevano"
 msgid "No certificate file chosen"
 msgstr "Nije odabran certifikat"
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:445
 msgid "No directory specified"
 msgstr "Nije naveden direktorijum"
 
@@ -353,11 +350,11 @@ msgstr "Nije naveden direktorijum"
 msgid "No private key file chosen"
 msgstr "Nije odabran privatni ključ"
 
-#: dcpp\DownloadManager.cpp:428
+#: dcpp\DownloadManager.cpp:429
 msgid "No slots available"
 msgstr "Nema slobodnih slotova"
 
-#: dcpp\AdcHub.cpp:641
+#: dcpp\AdcHub.cpp:660
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Ne tražim konekcije - molim pokrenite ponovo  %1%"
@@ -372,7 +369,7 @@ msgstr "Isključen"
 msgid "Redirect user(s)"
 msgstr "Preusmeravanje korisnika"
 
-#: dcpp\ShareManager.cpp:424
+#: dcpp\ShareManager.cpp:465
 msgid "Remove all subdirectories before adding this one"
 msgstr "Skloniti sve poddirektorijume prije dodavanja ovog"
 
@@ -400,7 +397,7 @@ msgstr "Pretraga ponovo omogućena"
 
 #: dcpp\ChatMessage.cpp:34
 msgid "Sent "
-msgstr ""
+msgstr "Poslano "
 
 #: dcpp\DCPlusPlus.cpp:107
 msgid "Shared Files"
@@ -449,14 +446,13 @@ msgstr "Socks Server ne može uspostaviti vezu"
 msgid "The socks server requires authentication"
 msgstr "Socks Server traži autorizaciju"
 
-#: dcpp\ShareManager.cpp:412
+#: dcpp\ShareManager.cpp:453
 msgid "The temporary download directory cannot be shared"
 msgstr "Privremeni direktorij za skidanje ne može se otvoriti"
 
 #: dcpp\QueueManager.cpp:635
-#, fuzzy
 msgid "This file has already finished downloading"
-msgstr "Ova datoteka je već u pripremi za procesiranje"
+msgstr "Ova datoteka je već završila s skidanjem"
 
 #: dcpp\QueueManager.cpp:616
 msgid "This file is already queued"
@@ -468,6 +464,8 @@ msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
 "fix this"
 msgstr ""
+"Ovaj hub pokušava da koristiti vaš klijent za spam %1%, zamolite vlasnika da "
+"to popravi"
 
 #: dcpp\Thread.cpp:34 dcpp\Thread.cpp:42
 msgid "Unable to create thread"
@@ -476,12 +474,12 @@ msgstr "Nije moguće napraviti thread"
 #: dcpp\QueueManager.cpp:1038
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
-msgstr ""
+msgstr "Nisam uspeo prebaciti %1% to %2% (%3%) niti preimenovati u %4% (%5%)"
 
 #: dcpp\QueueManager.cpp:1035
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
-msgstr ""
+msgstr "Nisam uspeo prebaciti %1% to %2% (%3%); preimenovan u %4%"
 
 #: dcpp\QueueManager.cpp:1209
 #, boost-format
@@ -498,13 +496,13 @@ msgid "Unable to send file %1%: %2%"
 msgstr "Nije moguće poslati datoteku %1%: %2%"
 
 #: dcpp\Socket.cpp:54
-#, c-format, boost-format
+#, boost-format, c-format
 msgid "Unknown error: 0x%1$x"
 msgstr "Nepoznata greška: 0x%1$x"
 
 #: dcpp\DCPlusPlus.cpp:115
 msgid "Users"
-msgstr ""
+msgstr "Korisnici"
 
 #: dcpp\QueueManager.cpp:568
 msgid "You're trying to download from yourself!"

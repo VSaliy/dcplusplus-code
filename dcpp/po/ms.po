@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:39+0100\n"
+"POT-Creation-Date: 2010-05-16 19:33+0200\n"
 "PO-Revision-Date: 2008-03-13 23:10+0000\n"
 "Last-Translator: Tian Seng Leong <tleong@andrew.cmu.edu>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp\Util.cpp:490
+#: dcpp\Util.cpp:491
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:452
+#: dcpp\Util.cpp:453
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:448
+#: dcpp\Util.cpp:449
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:450
+#: dcpp\Util.cpp:451
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:456
+#: dcpp\Util.cpp:457
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:454
+#: dcpp\Util.cpp:455
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -80,17 +80,17 @@ msgstr ""
 msgid "%1%/s"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:539
+#: dcpp\DownloadManager.cpp:540
 #, boost-format
 msgid "%1%: File not available"
 msgstr "%1%: Tidak ada fail"
 
-#: dcpp\Util.cpp:446
+#: dcpp\Util.cpp:447
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:486
+#: dcpp\Util.cpp:487
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -120,7 +120,7 @@ msgstr "Semua slot muat turun sudah diambil"
 msgid "Auto-connect group (converted)"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:383 dcpp\DownloadManager.cpp:385
+#: dcpp\DownloadManager.cpp:384 dcpp\DownloadManager.cpp:386
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "Inkonsistensi CRC32 (SFV-Check)"
 
@@ -149,11 +149,11 @@ msgstr "Masa untuk sambungan telah habis"
 msgid "Could not open target file: %1%"
 msgstr "Tidak boleh buka fail target: %1%"
 
-#: dcpp\ShareManager.cpp:421
+#: dcpp\ShareManager.cpp:462
 msgid "Directory already shared"
 msgstr "Direktori sudah dikongsi"
 
-#: dcpp\ShareManager.cpp:408
+#: dcpp\ShareManager.cpp:449
 #, fuzzy
 msgid "Directory is hidden"
 msgstr "Direktori sudah dikongsi"
@@ -179,7 +179,7 @@ msgstr "Pengguna terputus meninggalkan hub: %1%"
 msgid "Download Queue"
 msgstr "Barisan Muat turun"
 
-#: dcpp\ShareManager.cpp:809
+#: dcpp\ShareManager.cpp:710
 #, fuzzy, boost-format
 msgid ""
 "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %"
@@ -252,21 +252,21 @@ msgid "File already exists at the target location"
 msgstr ""
 "Fail ini mempunyai fail yang lebih besar atau sama size di lokasi target"
 
-#: dcpp\ShareManager.cpp:965
+#: dcpp\ShareManager.cpp:866
 #, fuzzy, boost-format
 msgid "File list %1% generated"
 msgstr "Perbaharui Senarai fail sedang dimulakan"
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:747
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Senarai fail yang hendak diperbaharui telah gagal: %1%"
 
-#: dcpp\ShareManager.cpp:894
+#: dcpp\ShareManager.cpp:795
 msgid "File list refresh finished"
 msgstr "Senarai fail telah diperbaharui"
 
-#: dcpp\ShareManager.cpp:826
+#: dcpp\ShareManager.cpp:727
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -274,7 +274,7 @@ msgstr ""
 "Senarai fail sedang diperbaharui, sila tunggu sehingga habis sebelum cuba "
 "untuk memperbaharui semula."
 
-#: dcpp\ShareManager.cpp:869
+#: dcpp\ShareManager.cpp:770
 msgid "File list refresh initiated"
 msgstr "Perbaharui Senarai fail sedang dimulakan"
 
@@ -349,7 +349,7 @@ msgstr "Lebih data dihantar dari yang sepatutnya"
 msgid "No certificate file chosen"
 msgstr "TLS telah ditutup, tiada fail certifikasi"
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:445
 msgid "No directory specified"
 msgstr "Tiada direktori dispecifikasikan"
 
@@ -357,11 +357,11 @@ msgstr "Tiada direktori dispecifikasikan"
 msgid "No private key file chosen"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:428
+#: dcpp\DownloadManager.cpp:429
 msgid "No slots available"
 msgstr "Tidak ada slot"
 
-#: dcpp\AdcHub.cpp:641
+#: dcpp\AdcHub.cpp:660
 #, fuzzy, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Tidak mendenggar untuk sambungan - sila memulakan semula DC++"
@@ -376,7 +376,7 @@ msgstr "Offline"
 msgid "Redirect user(s)"
 msgstr "Sila hantar pengguna ke tempat lain"
 
-#: dcpp\ShareManager.cpp:424
+#: dcpp\ShareManager.cpp:465
 msgid "Remove all subdirectories before adding this one"
 msgstr "Menyingkirkan semua subdirektori semula tambah direktori ini"
 
@@ -456,7 +456,7 @@ msgstr "Server socks gagal memulakan hubungan"
 msgid "The socks server requires authentication"
 msgstr "Server socks perlukan pengesahan"
 
-#: dcpp\ShareManager.cpp:412
+#: dcpp\ShareManager.cpp:453
 msgid "The temporary download directory cannot be shared"
 msgstr "Direktori muat turun sementara tidak boleh dikongsi"
 

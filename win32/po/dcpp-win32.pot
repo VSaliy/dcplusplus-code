@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp-win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-05-10 19:47+0200\n"
+"POT-Creation-Date: 2010-05-16 19:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -129,7 +129,7 @@ msgstr ""
 msgid "&Browse file list"
 msgstr ""
 
-#: win32\Appearance2Page.cpp:98 win32\DirectoryListingFrame.cpp:450
+#: win32\Appearance2Page.cpp:98 win32\DirectoryListingFrame.cpp:459
 #: win32\LogPage.cpp:69 win32\SearchFrame.cpp:715 win32\SearchFrame.cpp:745
 msgid "&Browse..."
 msgstr ""
@@ -138,7 +138,7 @@ msgstr ""
 msgid "&Change"
 msgstr ""
 
-#: win32\FavHubGroupsDlg.cpp:148 win32\MDIChildFrame.h:216
+#: win32\FavHubGroupsDlg.cpp:148 win32\MDIChildFrame.h:220
 msgid "&Close"
 msgstr ""
 
@@ -183,8 +183,8 @@ msgstr ""
 msgid "&Disconnect"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:376 win32\DirectoryListingFrame.cpp:400
-#: win32\DirectoryListingFrame.cpp:410 win32\SearchFrame.cpp:681
+#: win32\DirectoryListingFrame.cpp:385 win32\DirectoryListingFrame.cpp:409
+#: win32\DirectoryListingFrame.cpp:419 win32\SearchFrame.cpp:681
 msgid "&Download"
 msgstr ""
 
@@ -216,7 +216,7 @@ msgstr ""
 msgid "&Get file list"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:390
+#: win32\DirectoryListingFrame.cpp:399
 msgid "&Go to directory"
 msgstr ""
 
@@ -309,7 +309,7 @@ msgstr ""
 msgid "&View"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:380 win32\SearchFrame.cpp:685
+#: win32\DirectoryListingFrame.cpp:389 win32\SearchFrame.cpp:685
 #: win32\FinishedFrameBase.h:430
 msgid "&View as text"
 msgstr ""
@@ -852,7 +852,7 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
-#: win32\NetworkPage.cpp:81
+#: win32\NetworkPage.cpp:84
 msgid "Don't allow hub/UPnP to override"
 msgstr ""
 
@@ -900,7 +900,7 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:439
+#: win32\DirectoryListingFrame.cpp:448
 msgid "Download &to..."
 msgstr ""
 
@@ -963,7 +963,7 @@ msgid_plural "Downloading from %1% users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: win32\DirectoryListingFrame.cpp:781
+#: win32\DirectoryListingFrame.cpp:790
 msgid "Downloading list..."
 msgstr ""
 
@@ -1029,7 +1029,7 @@ msgstr ""
 msgid "Enabled / Search String"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:883
+#: win32\DirectoryListingFrame.cpp:892
 msgid "Enter search string"
 msgstr ""
 
@@ -1091,7 +1091,7 @@ msgstr ""
 msgid "Experts only"
 msgstr ""
 
-#: win32\NetworkPage.cpp:72
+#: win32\NetworkPage.cpp:74
 msgid "External / WAN IP"
 msgstr ""
 
@@ -1201,7 +1201,7 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:722 win32\DirectoryListingFrame.cpp:738
+#: win32\DirectoryListingFrame.cpp:731 win32\DirectoryListingFrame.cpp:747
 #: win32\QueueFrame.cpp:202
 #, boost-format
 msgid "Files: %1%"
@@ -1211,7 +1211,7 @@ msgstr ""
 msgid "Filter spam messages"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:219 win32\DirectoryListingFrame.cpp:235
+#: win32\DirectoryListingFrame.cpp:230 win32\DirectoryListingFrame.cpp:246
 msgid "Find"
 msgstr ""
 
@@ -1440,7 +1440,7 @@ msgstr ""
 msgid "Ignored message: %1%"
 msgstr ""
 
-#: win32\NetworkPage.cpp:55
+#: win32\NetworkPage.cpp:53
 msgid "Incoming connection settings"
 msgstr ""
 
@@ -1601,7 +1601,7 @@ msgstr ""
 msgid "Manage &groups"
 msgstr ""
 
-#: win32\NetworkPage.cpp:68
+#: win32\NetworkPage.cpp:67
 msgid "Manual port forwarding (I have configured my router by myself)"
 msgstr ""
 
@@ -1613,11 +1613,11 @@ msgstr ""
 msgid "Match downloaded lists"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:214 win32\DirectoryListingFrame.cpp:234
+#: win32\DirectoryListingFrame.cpp:225 win32\DirectoryListingFrame.cpp:245
 msgid "Match queue"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:321
+#: win32\DirectoryListingFrame.cpp:330
 #, boost-format
 msgid "Matched %1% file"
 msgid_plural "Matched %1% files"
@@ -1739,7 +1739,7 @@ msgstr ""
 msgid "Move &Up"
 msgstr ""
 
-#: win32\NetworkPage.cpp:62
+#: win32\NetworkPage.cpp:61
 msgid "My computer is directly connected to Internet (no router)"
 msgstr ""
 
@@ -1765,7 +1765,7 @@ msgstr ""
 msgid "New virtual name matches old name, skipping..."
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:224 win32\DirectoryListingFrame.cpp:236
+#: win32\DirectoryListingFrame.cpp:235 win32\DirectoryListingFrame.cpp:247
 msgid "Next"
 msgstr ""
 
@@ -1796,7 +1796,7 @@ msgstr ""
 msgid "No full tree available"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:948
+#: win32\DirectoryListingFrame.cpp:957
 msgid "No matches"
 msgstr ""
 
@@ -1949,7 +1949,7 @@ msgstr ""
 msgid "Parameters"
 msgstr ""
 
-#: win32\NetworkPage.cpp:86
+#: win32\NetworkPage.cpp:70
 msgid "Passive mode (last resort - has serious limitations)"
 msgstr ""
 
@@ -2241,7 +2241,7 @@ msgstr ""
 msgid "Search for alternates"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:883 win32\DirectoryListingFrame.cpp:948
+#: win32\DirectoryListingFrame.cpp:892 win32\DirectoryListingFrame.cpp:957
 msgid "Search for file"
 msgstr ""
 
@@ -2385,7 +2385,7 @@ msgstr ""
 msgid "Size Type"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:723 win32\DirectoryListingFrame.cpp:740
+#: win32\DirectoryListingFrame.cpp:732 win32\DirectoryListingFrame.cpp:749
 #: win32\QueueFrame.cpp:199 win32\QueueFrame.cpp:203
 #, boost-format
 msgid "Size: %1%"
@@ -2461,7 +2461,7 @@ msgstr ""
 msgid "Speed"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:724
+#: win32\DirectoryListingFrame.cpp:733
 #, boost-format
 msgid "Speed: %1%/s"
 msgstr ""
@@ -2490,7 +2490,7 @@ msgstr ""
 msgid "Stored password sent..."
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:209 win32\DirectoryListingFrame.cpp:233
+#: win32\DirectoryListingFrame.cpp:220 win32\DirectoryListingFrame.cpp:244
 msgid "Subtract list"
 msgstr ""
 
@@ -2728,7 +2728,7 @@ msgstr ""
 msgid "Use TLS when remote client supports it"
 msgstr ""
 
-#: win32\NetworkPage.cpp:65
+#: win32\NetworkPage.cpp:64
 msgid "Use UPnP to let DC++ configure my router"
 msgstr ""
 
@@ -2748,7 +2748,7 @@ msgstr ""
 msgid "Use system icons when browsing files (slows browsing down a bit)"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:435 win32\SearchFrame.cpp:35
+#: win32\DirectoryListingFrame.cpp:444 win32\SearchFrame.cpp:35
 #: win32\TransferView.cpp:44
 msgid "User"
 msgstr ""
@@ -2769,7 +2769,7 @@ msgstr ""
 msgid "User certificate not trusted"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:786 win32\QueueFrame.cpp:332
+#: win32\DirectoryListingFrame.cpp:795 win32\QueueFrame.cpp:332
 msgid "User offline"
 msgstr ""
 

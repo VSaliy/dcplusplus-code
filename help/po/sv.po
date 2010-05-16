@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:40+0100\n"
-"PO-Revision-Date: 2010-03-07 04:05+0000\n"
-"Last-Translator: Fredrik <fffredde@hotmail.com>\n"
+"POT-Creation-Date: 2010-05-16 19:33+0300\n"
+"PO-Revision-Date: 2010-05-16 14:10+0000\n"
+"Last-Translator: Toast <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:33+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
@@ -25,7 +25,7 @@ msgstr "Chattkommandon"
 #. type: Content of: <html><body><h2>
 #: help/chat_commands.html:10
 msgid "Main Chat"
-msgstr "Huvudchatt"
+msgstr "Huvud Chatt"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:13
@@ -33,7 +33,7 @@ msgid ""
 "Joins &lt;hub-ip&gt;. See also <a po4a-id=0>Open new window when using /"
 "join</a>."
 msgstr ""
-"Går in på &lt;hub-ip&gt;. Kolla ochså <a po4a-id=0>öppnar ett nytt fönster "
+"Går in på &lt;hub-ip&gt;. Kolla också <a po4a-id=0>öppnar ett nytt fönster "
 "när du skriver /join</a>."
 
 #. type: Content of: <html><body><dl><dd>
@@ -42,8 +42,8 @@ msgid ""
 "Toggles the displaying of users joining the hub. This only takes effect for "
 "freshly-arriving users."
 msgstr ""
-"Växlar visning av användare som ansluter sig till hubben. Detta gäller "
-"endast för nyanslutna användare."
+"Växlar visning av användare som ansluter sig till hubben. Detta tar bara "
+"effekt för nya användare."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:20
@@ -67,10 +67,10 @@ msgid ""
 "users. This is only useful in <u>active</u> mode - the IP and port are "
 "unused in passive mode."
 msgstr ""
-"Visar IP och port som DC + + talar om för användarna att ansluta till. Om IP "
-"eller port är felaktig, kommer du inte att kunna ladda ner från vissa "
-"användare. Detta är bara användbart i <u> aktivt </u>-läge- IP och port är "
-"oanvända i passivt läge."
+"Visar IP och port som DC + + kommer att berätta för användarna att ansluta "
+"till. Om antingen IP eller hamnen är inte korrekt, du kommer inte att kunna "
+"ladda ner från vissa användare. Detta är bara användbart i <u> aktiva </u>-"
+"läge- IP och port är oanvända i passivt läge."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:32
@@ -258,10 +258,9 @@ msgid ""
 "specified it opens that log file. The status log is available only in the "
 "hub frame."
 msgstr ""
-"Om ingen parameter är specifierad så startar det här logfilen för hubben "
-"eller den privata chatten med det associerade programmet i Windows. Om en "
-"parameter är specifierad så öppnas logfilen. Statuslogfilen är endast "
-"tillgänglig i hubbens fönster."
+"Anges ingen parameter, öppnas loggen för main eller pm med det program som "
+"är associerat med logfiler i Windows. Anges en parameter så öppnas den filen "
+"istället. Statusloggen kan bara öppnas ifrån respektive hubbfönster."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/chat_commands.html:106
@@ -288,7 +287,7 @@ msgstr ""
 msgid ""
 "Highlights the last occourrence of the specified search string in the chat "
 "window."
-msgstr ""
+msgstr "Markerar den sista förekomsten av söksträngen i chattfönstret"
 
 #. type: Content of: <html><body><h1>
 #: help/commands_file.html:10
@@ -302,6 +301,9 @@ msgid ""
 "containing files.  For commands unique to different windows refer to the "
 "Help page of the corresponding window."
 msgstr ""
+"Dessa kommandon är tillgängliga i samband med menyer på olika listor som "
+"innehåller filer. För kommandon som är unika för olika fönster finns i "
+"hjälpfilen sida i motsvarande fönster."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_file_general.inc:2
@@ -344,7 +346,7 @@ msgstr "Kopierar filens <a po4a-id=0>magnet link</a> till urklipp."
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_file_download.inc:2
 msgid "Download"
-msgstr "Ladda ned"
+msgstr "Hämta"
 
 #. type: Content of: <html><body><dl><dd>
 #: C:/Documents/Programmes/DC++/repo/help/commands_file_download.inc:3
@@ -368,6 +370,10 @@ msgid ""
 "predefined place from the <a po4a-id=0>Download Favorites</a> or any other "
 "folder specified using the <i>Browse...</i> submenu."
 msgstr ""
+"Lägger till dom valda filerna eller katalogerna till nerladdningskön. "
+"Nerladdningsmålet kan väljas genom att använda submenyn : antingen en "
+"fördefinerad katalog från <a po4a-id=0>Download Favorites</a> eller någon "
+"annan mapp som har specificerats genom <i>Browse...</i> submenyn."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_file_management.inc:2
@@ -412,11 +418,16 @@ msgid ""
 "of context menu items registered with Windows it may take a few seconds to "
 "show the full menu."
 msgstr ""
+"Öppnar gränssnittet menyn undermeny poster. Denna meny innehåller samma "
+"saker som i den sammanhangsberoende menyn i Utforskaren. Observera att "
+"undermenyn delar laddas när den öppnas. Om du har stort antal objekt "
+"sammanhangsberoende menyn registrerats med Windows kan det ta några sekunder "
+"att visa den fullständiga menyn."
 
 #. type: Content of: <html><body><h1>
 #: help/commands_listview.html:10
 msgid "Menu commands available in all list views"
-msgstr ""
+msgstr "Menykommandon finns tillgängliga i alla listvyer"
 
 #. type: Content of: <html><body><p>
 #: help/commands_listview.html:12
@@ -426,6 +437,9 @@ msgid ""
 "list views. For commands unique to different windows refer to the Help page "
 "of the corresponding window."
 msgstr ""
+"Det här är de kommandon som är tillgängliga i de flesta fönster via "
+"högerklicksmenyn. De ger de vanliga möjligheterna för olika vyer. För "
+"kommandon som är unika för ett fönster se hjälpen for respektive fönster."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_listview.inc:2
@@ -562,6 +576,8 @@ msgid ""
 "Removes the selected user from the source list of all queued files. Pending "
 "filelist requests will be removed as well."
 msgstr ""
+"Tar bort den valda användaren från källistan av alla köade filer. Oavslutade "
+"fil-begäran kommer att tas bort också."
 
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_favorites.inc:2
@@ -571,11 +587,9 @@ msgstr "Lägg till i favoriter"
 
 #. type: Content of: <html><body><dl><dd>
 #: C:/Documents/Programmes/DC++/repo/help/commands_user_favorites.inc:3
-#, fuzzy
 msgid "Adds the selected users to your <a po4a-id=0>Favorite Users</a> list."
 msgstr ""
-"Tar bort den aktuella hubben från listan över <a po4a-id=0> favorit Hubbar </"
-"a>."
+"Lägger till den valda användaren till dina <a po4a-id=0>Favorite Users</a> ."
 
 #. type: Content of: <html><body><h1>
 #: help/credits.html:9
@@ -592,6 +606,11 @@ msgid ""
 "license is included in the section entitled \"<a po4a-id=0>GNU Free "
 "Documentation License</a>\"."
 msgstr ""
+"Tillstånd ges att kopiera, distribuera och / eller modifiera detta dokument "
+"under villkoren i GNU Free Documentation License, Version 1.2 eller senare "
+"version publicerad av Free Software Foundation, utan oföränderliga avsnitt, "
+"utan framsidestexter och ingen Tillbaka -omslagstexter. En kopia av licensen "
+"ingår i avsnittet \"<a po4a-id=0>GNU Free Documentation License</a>\"."
 
 #. type: Content of: <html><body><h1>
 #: help/credits.html:22
@@ -610,17 +629,19 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Anders Landin https://launchpad.net/~127594-gmail\n"
+"  Erik Simmesgård https://launchpad.net/~ersi\n"
 "  Fred https://launchpad.net/~eldmannen+launchpad\n"
 "  Fredrik https://launchpad.net/~fffredde\n"
+"  Lightgirl_xp https://launchpad.net/~lxp\n"
 "  Mattias Ohlsson https://launchpad.net/~mattias-oh\n"
 "  Nille https://launchpad.net/~nille-kungen\n"
 "  Oli https://launchpad.net/~ololizoz\n"
 "  Razze https://launchpad.net/~wallin1994\n"
 "  Simon Österberg https://launchpad.net/~simon-osterberg\n"
+"  Toast https://launchpad.net/~swetoast\n"
 "  Umut https://launchpad.net/~umut1990\n"
 "  dreaming_tree https://launchpad.net/~dreaming-tree72\n"
 "  endator https://launchpad.net/~endator\n"
-"  ersi https://launchpad.net/~ersi\n"
 "  poy https://launchpad.net/~poy"
 
 #. type: Content of: <html><body><div>
@@ -653,6 +674,9 @@ msgid ""
 "against current subdirectory and places the whole structure in the special "
 "folder; \"Full Path\": Matches against whole directory + filename."
 msgstr ""
+"\"Filnamn\": Matchar sökning mot filnamn; \"Katalog\": Matchar sökning mot "
+"katalognamn och placerar hela katalogen med understruktur i sökträffen; "
+"\"Hela sökvägen\": Matchar sökning mot hela sökvägen, katalog + filnamn."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dev_applypatch.html:9 help/index.html:128
@@ -670,21 +694,26 @@ msgid ""
 "1. Download and place <a po4a-id=0>GNU patch</a> in the directory you want "
 "to patch."
 msgstr ""
+"1. Ladda ner och placera <a po4a-id=0>GNU patch</a> i katalogen du vill "
+"patcha."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:19
 msgid "2. Type <i>cmd</i> in Run and tab your way to where GNU Patch is."
 msgstr ""
+"2. Skriv <i>cmd</i> i Kör, skriv cd och klicka på tab tills sökvägen för GNU "
+"Patch syns. Tryck Enter."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:21
 msgid "3. Write <i>patch -[parameter] &lt; my-patch.diff</i>"
-msgstr ""
+msgstr "3. Skriv <i>patch -[parameter] &lt; my-patch.diff</i>"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:23
 msgid "4. The file <i>my-patch.diff</i> is the actual patch you want to apply."
 msgstr ""
+"4. Filen <i>my-patch.diff</i> innehåller den patch som du vill applicera."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:26
@@ -697,12 +726,12 @@ msgstr ""
 #: help/dev_applypatch.html:28
 msgid ""
 "C:\\Program Files\\DCpp_orig is the directory that is going to be patched."
-msgstr ""
+msgstr "C:\\Program Files\\DCpp_orig är mappen som kommer att patchas"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_applypatch.html:29
 msgid "p1 gives the entire file name unmodified with out a leading slash."
-msgstr ""
+msgstr "p1 ger hela filnamnet oförändrat utan inledande snedstreck"
 
 #. type: Content of: <html><body><dl><dd><p>
 #: help/dev_applypatch.html:31 help/dev_createpatch.html:44
@@ -733,6 +762,8 @@ msgid ""
 "2. Type <i>cmd</i> in Run and navigate your way to where GNU Diff is "
 "installed."
 msgstr ""
+"Skriv<i>cmd</i> i kör och navigera dig till den plats där GNU Diff är "
+"installerad."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:20
@@ -766,7 +797,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:29
 msgid "C:\\Program Files\\GNU Diff is where GNU Diff is installed."
-msgstr ""
+msgstr "C:\\Program Files\\GNU Diff är där GNU Diff är installerad."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:30
@@ -776,6 +807,10 @@ msgid ""
 "in one of the two folders.  <i po4a-id=2>r</i> means that GNU Diff will go "
 "through subdirectories and give output on which directory and file differ."
 msgstr ""
+"Parametern <i po4a-id=0>u</i> menas att skillnaden är odefinerad. <i po4a-"
+"id=1>N</i> menas att GNU Diff vill visa resultat även om en fil inte finns i "
+"en av de två mapparna. <i po4a-id=2>r</i> menas att GNU Diff kommer att gå "
+"igenom undermappar och ge resultat om vilken katalog eller fil som avviker"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:38
@@ -789,17 +824,17 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:41
 msgid "<i>dcplusplus_chan</i> is the folder where changes has occured."
-msgstr ""
+msgstr "<i> dcplusplus_chan </ i> är den mapp där förändringar har skett."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:43
 msgid "The actual diff is <i>my-diff.diff</i>."
-msgstr ""
+msgstr "Den egentliga skillnad är <i> min-diff.diff </ i>."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dev_createpatch.html:50
 msgid "Interpreting the diff"
-msgstr ""
+msgstr "Tolkning av diff"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dev_createpatch.html:54
@@ -814,7 +849,7 @@ msgstr "Rader som börjar med <b>+</b> (plustecken) kommer att läggas till."
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_adls_properties.html:9 help/index.html:64
 msgid "ADLSearch Properties"
-msgstr ""
+msgstr "ADLSökings egenskaper"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:11
@@ -824,7 +859,7 @@ msgstr "Söksträng"
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:12
 msgid "This is the set of search strings to search for."
-msgstr ""
+msgstr "Detta är den uppsättning av söksträngar att söka efter."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:13 help/window_adlsearch.html:23
@@ -860,6 +895,8 @@ msgid ""
 "Matches against current subdirectory and places the whole structure in the "
 "special folder."
 msgstr ""
+"Matchar mot aktuell underkatalog och placerar hela strukturen i en speciell "
+"mapp."
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/dialog_adls_properties.html:21 help/window_adlsearch.html:31
@@ -882,6 +919,8 @@ msgid ""
 "Sets the lower limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
 msgstr ""
+"Ställer in den undre gräns för filstorlek. Detta används inte för <a po4a-"
+"id=0>Katalog</a> sökningar."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:27
@@ -894,11 +933,13 @@ msgid ""
 "Sets the upper limits for file size. This is unused for <a po4a-"
 "id=0>Directory</a> searches."
 msgstr ""
+"Ställer in den övre gränsen för filstorlek. Detta används inte för <a po4a-"
+"id=0>Katalog</a> sökningar."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:29
 msgid "Size Type"
-msgstr ""
+msgstr "Storlekstyp"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:30
@@ -908,7 +949,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:31 help/window_adlsearch.html:35
 msgid "Destination Directory"
-msgstr ""
+msgstr "Målkatalog"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_adls_properties.html:32 help/window_adlsearch.html:36
@@ -917,6 +958,8 @@ msgid ""
 "can exist simultaneously. Each folder name gets wrapped in &lt;&lt;&lt; and "
 "&gt;&gt;&gt;."
 msgstr ""
+"Ställer in utdata mappar för sökning. Flera mappar med olika namn kan "
+"existera samtidigt. Varje mappnamn tas upp i &lt;&lt;&lt; and &gt;&gt;&gt;."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_adls_properties.html:35
@@ -939,11 +982,13 @@ msgid ""
 "When checked, matches to this search will be put into your <a po4a-"
 "id=0>Download Queue</a>."
 msgstr ""
+"När markerad, träffar på  denna sökning kommer att läggas till i din <a po4a-"
+"id=0>Nedladdningskö</a>."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_customize_tb.html:9 help/index.html:66
 msgid "Toolbar customization"
-msgstr ""
+msgstr "Inställning av verktygsrad"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_customize_tb.html:10
@@ -1000,9 +1045,8 @@ msgstr ""
 #: help/window_favorite_hubs.html:51 help/window_favorite_hubs.html:52
 #: help/window_main.html:26 help/window_main.html:128
 #: help/window_main.html:133 help/window_main.html:221
-#, fuzzy
 msgid "Favorite hub groups"
-msgstr "Lägg till i favoriter"
+msgstr "Favoritgrupper"
 
 #. type: Content of: <html><body><dl><dd><div><placeholder><a>
 #: help/dialog_fav_hub_groups.html:10 help/index.html:33
@@ -1011,7 +1055,7 @@ msgstr "Lägg till i favoriter"
 #: help/window_main.html:217 help/window_main.html:219
 #: help/window_main.html:220
 msgid "Favorite Hubs"
-msgstr ""
+msgstr "Favorithubbar"
 
 #. type: Content of: <html><body><p><div><placeholder>
 #: help/dialog_fav_hub_groups.html:10 help/dialog_fav_hub_groups.html:15
@@ -1071,22 +1115,22 @@ msgstr ""
 #: help/window_main.html:324 help/window_main.html:328
 #: help/window_main.html:332 help/window_pm.html:26
 msgid "<placeholder id=0/>"
-msgstr ""
+msgstr "<placeholder id=0/>"
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/dialog_fav_hub_groups.html:10 help/window_main.html:23
 msgid "Connect to a favorite hub group"
-msgstr ""
+msgstr "Anslut till en favoritgrupp"
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/dialog_fav_hub_groups.html:10 help/window_main.html:125
 msgid "Close all hubs of a favorite group"
-msgstr ""
+msgstr "Stäng alla hubbar i en favoritgrupp"
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
 #: help/dialog_fav_hub_groups.html:10 help/window_main.html:130
 msgid "Close hubs not in a favorite group"
-msgstr ""
+msgstr "Stäng hubbar som inte tillhör en favoritgrupp"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:10
@@ -1100,9 +1144,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_fav_hub_groups.html:12
-#, fuzzy
 msgid "List"
-msgstr "Länkar"
+msgstr "Listor"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:13
@@ -1112,12 +1155,12 @@ msgstr ""
 #. type: Content of: <html><body><h3>
 #: help/dialog_fav_hub_groups.html:14
 msgid "Update"
-msgstr ""
+msgstr "Uppdatera"
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_fav_hub_groups.html:15 help/dialog_fav_hub_groups.html:19
 msgid "Group properties"
-msgstr ""
+msgstr "Gruppegenskaper"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:15
@@ -1156,11 +1199,13 @@ msgid ""
 "Unique name to identify this group; must not be already in use by another "
 "group."
 msgstr ""
+"Unikt namn för att identifiera denna grupp; får inte redan vara använt av "
+"någon annan grupp"
 
 #. type: Content of: <html><body><h3>
 #: help/dialog_fav_hub_groups.html:23
 msgid "Mark hubs in this group as private hubs"
-msgstr ""
+msgstr "Markera hubbarna i denna lista som privata"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:24
@@ -1180,7 +1225,7 @@ msgstr ""
 #. type: Content of: <html><body><h3>
 #: help/dialog_fav_hub_groups.html:26
 msgid "Connect to all hubs in this group when the program starts"
-msgstr ""
+msgstr "Anslut till alla hubbar i den här gruppen när programmet startas"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:27
@@ -1192,9 +1237,8 @@ msgstr ""
 
 #. type: Content of: <html><body><h3>
 #: help/dialog_fav_hub_groups.html:28
-#, fuzzy
 msgid "Add to the list"
-msgstr "Lägg till i favoriter"
+msgstr "Lägg till i listan"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_fav_hub_groups.html:29
@@ -1206,7 +1250,7 @@ msgstr ""
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_favorite_hub.html:9 help/index.html:62
 msgid "Favorite Hub Properties"
-msgstr ""
+msgstr "Egenskaper för favorithub"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:10 help/index.html:29
@@ -1229,7 +1273,7 @@ msgstr "Hubb"
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:13 help/window_favorite_hubs.html:16
 msgid "Specifies what name the hub has."
-msgstr ""
+msgstr "Specifierar vilket namn hubben har."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:14 help/window_public_hubs.html:21
@@ -1239,7 +1283,7 @@ msgstr "Adress"
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:15 help/window_favorite_hubs.html:24
 msgid "The address for the hub."
-msgstr ""
+msgstr "Addressen till hubben."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:16 help/dialog_favorite_hub.html:25
@@ -1252,12 +1296,12 @@ msgstr "Beskrivning"
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_favorite_hub.html:17 help/window_favorite_hubs.html:18
 msgid "Description of the hub."
-msgstr ""
+msgstr "Beskrivning av hubben."
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_favorite_hub.html:19
 msgid "Identification (leave blank for defaults)"
-msgstr ""
+msgstr "Identifikation (lämna tomt för standard)"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:21 help/settings_general.html:15
@@ -1271,6 +1315,7 @@ msgid ""
 "If you would like to use a special nick for a specific hub. Leave this blank "
 "for default."
 msgstr ""
+"Om du vill ha ett speciellt nick för en speciell hub. Lämna tom i standard."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:23 help/settings_connection.html:110
@@ -1293,11 +1338,13 @@ msgid ""
 "If you would like to use a special user description (shown in the user list) "
 "for a specific hub. Leave this blank for default."
 msgstr ""
+"Om du vill använda en speciell användar beskrivning (visas i användarlistan) "
+"för ett viss hub. Lämna tom för standard."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:27 help/window_favorite_hubs.html:27
 msgid "Group"
-msgstr ""
+msgstr "Grupp"
 
 #. type: Content of: <html><body><dl><dd><div>
 #: help/dialog_favorite_hub.html:29
@@ -1314,7 +1361,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_favorite_hub.html:32 help/window_favorite_hubs.html:49
 msgid "Manage groups"
-msgstr ""
+msgstr "Hantera grupper"
 
 #. type: Content of: <html><body><dl><dd><div>
 #: help/dialog_favorite_hub.html:34 help/window_favorite_hubs.html:51
@@ -1350,6 +1397,12 @@ msgid ""
 "frequent, but will also put on more strain on the computer and it will "
 "possibly perform slower."
 msgstr ""
+"Med detta fönster öppet, kommer DC++ att indexera på prioritetsnivå av "
+"\"normal\". Om DC++ indexerar i bakgrunden är prioteringsnivån \"lägsta"
+"\" (under normal). De prioriterade nivåerna  påverkar hur mycket tillgångs "
+"tid DC + + bör använda för indexering av filer. En högre prioritering "
+"innebär att DC + + indexerar mer frekvent, men kommer också att lägga på mer "
+"belastning på datorn och den kommer att arbeta långsammare."
 
 #. type: Content of: <html><body><p>
 #: help/dialog_indexing_progress.html:17
@@ -1370,12 +1423,12 @@ msgstr ""
 #: help/dialog_public_hub_lists.html:9 help/index.html:65
 #: help/settings_downloads.html:103 help/window_public_hubs.html:56
 msgid "Configured Public Hub Lists"
-msgstr ""
+msgstr "Konfigurerade Publika Hubblistor"
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_public_hub_lists.html:10
 msgid "Field to add a new hub list (top)"
-msgstr ""
+msgstr "Fält att ange en ny hublista i (Överst)"
 
 #. type: Content of: <html><body><p>
 #: help/dialog_public_hub_lists.html:12
@@ -1383,16 +1436,20 @@ msgid ""
 "Write here the address to the hub list you want to add. You can add muliple "
 "hub lists at once by separating them with a semi-colon (';')."
 msgstr ""
+"skriv här addressen till den hublista du vill lägga till. Du kan skriva in "
+"flera hublister på en gång genom att separera dem med ett semi-colon (\",\")."
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_public_hub_lists.html:14
 msgid "List of current hub lists"
-msgstr ""
+msgstr "Lista på aktuella hublistor."
 
 #. type: Content of: <html><body><p>
 #: help/dialog_public_hub_lists.html:16
 msgid "Lists your current hub lists. The hub list on top will be tried first."
 msgstr ""
+"Lista dina aktuella hublistor. Den hublista som är överst kommer att "
+"användas först."
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_public_hub_lists.html:18
@@ -1410,6 +1467,8 @@ msgid ""
 "Add the hub list(s) specified in the field on the top left to your list of "
 "public hub lists."
 msgstr ""
+"Lägg hublistansom anges i fältet överst till vänster i listan över publika "
+"listor"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_public_hub_lists.html:22 help/settings_user_commands.html:18
@@ -1422,6 +1481,8 @@ msgid ""
 "Move selected hub lists upwards in the list. The hub list on top will be "
 "tried first."
 msgstr ""
+"Flytta markerade hublistan uppåt i listan. Hublistan överst kommer att "
+"användas först."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_public_hub_lists.html:24 help/settings_user_commands.html:20
@@ -1434,6 +1495,8 @@ msgid ""
 "Move selected hub lists downwards in the list. The hub list on top will be "
 "tried first."
 msgstr ""
+"Flytta markerade hublistor nedåt i listan. Hublistanöverst kommer att "
+"användas först."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_public_hub_lists.html:26
@@ -1443,32 +1506,32 @@ msgstr "Redigera"
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_public_hub_lists.html:27
 msgid "Open a dialog to edit addresses to selected hub lists."
-msgstr ""
+msgstr "Öppna en dialogruta för att redigera adresser till utvalda hublistor."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_public_hub_lists.html:29
 msgid "Remove selected hub lists from your list of public hub lists."
-msgstr ""
+msgstr "Ta bort markerade hublistor från listan av publika hublistor."
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
 #: help/dialog_user_command.html:9 help/index.html:61
 msgid "User Command"
-msgstr ""
+msgstr "Användar kommando"
 
 #. type: Content of: <html><body><h2>
 #: help/dialog_user_command.html:10
 msgid "Command Types:"
-msgstr ""
+msgstr "Kommando typer"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:12
 msgid "Separator"
-msgstr ""
+msgstr "Avskiljare"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:13
 msgid "Adds a separator to the menu"
-msgstr ""
+msgstr "Lägger till en avgränsare i menyn."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:14
@@ -1481,11 +1544,13 @@ msgid ""
 "Sends raw command to the hub (experts only, end it with '|' in NMDC hubs and "
 "'\\n' in ADC hubs!)"
 msgstr ""
+"Skickar rå kommando till hubben (bara experter  avsluta det med \"|\" i NMDC "
+"hubbar och \"\\n\" i ADC hubbar!)"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:16
 msgid "Chat"
-msgstr ""
+msgstr "Chatt"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:17
@@ -1495,7 +1560,7 @@ msgstr "Skickar kommando som om du skriver det i chatten"
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:18
 msgid "PM"
-msgstr ""
+msgstr "PM"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:19
@@ -1510,12 +1575,12 @@ msgstr "Snabbvalsmeny"
 #. type: Content of: <html><body><p>
 #: help/dialog_user_command.html:23
 msgid "Contexts determine where the command is shown."
-msgstr ""
+msgstr "Sammanhanget fastställer  var kommandot visas"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:26
 msgid "Hub Menu"
-msgstr ""
+msgstr "Hubbmeny"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:27
@@ -1546,7 +1611,7 @@ msgstr "Sökmeny"
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:32
 msgid "File list Menu"
-msgstr ""
+msgstr "Fil list meny"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:33
@@ -1576,12 +1641,13 @@ msgid ""
 "Command text (may contain any of the variables listed below). Use Ctrl + "
 "Enter to create a new line."
 msgstr ""
+"Kommando text ( får endast innehålla variabler listade under). Använd Ctrl+ "
+"Enter för ny rad."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:41
-#, fuzzy
 msgid "Hub address"
-msgstr "Adress"
+msgstr "Hubbaddress"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:43
@@ -1602,13 +1668,12 @@ msgstr "Till"
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:49
 msgid "Private Message recipient"
-msgstr ""
+msgstr "Privat meddelande mottagaren"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/dialog_user_command.html:50
-#, fuzzy
 msgid "Send once per nick."
-msgstr "Skicka en gång per smeknamn"
+msgstr "Skicka en gång per användarnamn"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_user_command.html:52
@@ -1629,17 +1694,20 @@ msgid ""
 "time specifiers</a> (%Y, %m, ...). The following variables are also "
 "available:"
 msgstr ""
+"Parametrarna du kan använda %[<b>xxx</b>] variabler och <a po4a-id=0>datum/"
+"tid specifikatörer</a> (%Y, %m, ...). Följande variabler  är också "
+"tillgängliga."
 
 #. type: Content of: <html><body><ul><li>
 #: help/dialog_user_command.html:63
 msgid ""
 "%[fileFN]: Filename (search, file list, and transfer view contexts only)"
-msgstr ""
+msgstr "%[fileFN]: Filnamn (sök, fil lista, och öveför endast läst sammanhang)"
 
 #. type: Content of: <html><body><ul><li>
 #: help/dialog_user_command.html:64
 msgid "%[fileSIsize]: File size (search, file list contexts only)"
-msgstr ""
+msgstr "%[fileSIsize]: Fil storlek (Sök endast fil list sammanhanget)"
 
 #. type: Content of: <html><body><ul><li>
 #: help/dialog_user_command.html:65
@@ -1647,161 +1715,188 @@ msgid ""
 "%[fileSIshort]: File size, short version including units (search, file list "
 "contexts only)"
 msgstr ""
+"%[fileSIshort]: Fil storlek, enheternas korta version (sök, endast fil list "
+"sammanhang)"
 
 #. type: Content of: <html><body><ul><li>
-#: help/dialog_user_command.html:67
+#: help/dialog_user_command.html:66
 msgid ""
 "%[fileTR]: TTH for the file, or \"NONE\" (search, file list contexts only)"
 msgstr ""
 "%[fileTR]: TTH för filen, eller \"INGEN\" ( sök endast fil list sammanhang)"
 
 #. type: Content of: <html><body><ul><li>
-#: help/dialog_user_command.html:68
+#: help/dialog_user_command.html:67
+#, fuzzy
+msgid ""
+"%[fileMN]: <a po4a-id=0>magnet link</a> to the file (search, file list "
+"contexts only)"
+msgstr ""
+"%[fileTR]: TTH för filen, eller \"INGEN\" ( sök endast fil list sammanhang)"
+
+#. type: Content of: <html><body><ul><li>
+#: help/dialog_user_command.html:70
 msgid "%[type]: \"File\" or \"Directory\" (directory context only)"
 msgstr "%[type]: \"Fil\" eller \"Katalog\"( Katalog sammanhang"
 
 #. type: Content of: <html><body><ul><li>
-#: help/dialog_user_command.html:69
-msgid "%[line:<i>reason</i>]: Opens up a window asking for \"<i>reason</i>\""
+#: help/dialog_user_command.html:72
+msgid ""
+"%[line:<i>caption</i>]: Opens up a dialog asking for \"<i>caption</i>\"."
+msgstr ""
+
+#. type: Content of: <html><body><ul><li>
+#: help/dialog_user_command.html:73
+msgid ""
+"By default, the input interface is a text-box control, unless \"<i>caption</"
+"i>\" corresponds to the following syntax: caption/default_sel/value0/"
+"value1/.../valueN where <i>caption</i> is the new caption, <i>default_sel</"
+"i> is a number corresponding to the default value to select, and the "
+"following params are values of a drop-down list control created instead of "
+"the text-box.  Params are separated using forward slashes ('/'); one can use "
+"'//' to actually write a slash."
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/dialog_user_command.html:72
+#: help/dialog_user_command.html:81
 msgid ""
 "In addition to these variables, all of the ADC INF flags are available, with "
 "the following prefixes: <b>my</b>, <b>user</b>, and <b>hub</b>. Some may "
 "<u>not</u> be available on NMDC hubs. Many useful ones are enumerated below:"
 msgstr ""
+"Utöver dessa variabler, alla de ADC INF flaggor finns med följande prefix: "
+"<b> min </ b>, <b> användare </ b> och <b> hub </ b>. Vissa kanske <u> inte "
+"</ u> finns tillgängliga på NMDC hubbar. Många användbara räknas upp nedan:"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:76
+#: help/dialog_user_command.html:85
 msgid "%[myNI]: Your nick"
-msgstr ""
+msgstr "%[myNI]: Ditt nick"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:77
+#: help/dialog_user_command.html:86
 msgid "%[myCID]: Your ADC CID"
-msgstr ""
+msgstr "%[myCID]: Ditt ADC CID"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:78
+#: help/dialog_user_command.html:87
 msgid "%[userNI]: The user's nick"
-msgstr ""
+msgstr "%[userNI]: Användarens nick"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:79
+#: help/dialog_user_command.html:88
 msgid "%[userCID]: The user's ADC CID"
 msgstr "%[userCID]: Användarens ADC CID"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:80
+#: help/dialog_user_command.html:89
 msgid "%[userI4]: The user's IP (if supported by hub)"
 msgstr "%[userI4]: Användarens IP (om det stöds av hubben)"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:81
+#: help/dialog_user_command.html:90
 msgid "%[userTAG]: The user's tag"
 msgstr "%[userTAG]: Användarens tag"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:82
+#: help/dialog_user_command.html:91
 msgid "%[userDE]: The user's description"
 msgstr "%[userDE]: Användarens beskrivning"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:83
+#: help/dialog_user_command.html:92
 msgid "%[userEM]: The user's email"
 msgstr "%[userEM]: Användarens e-post address"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:84
+#: help/dialog_user_command.html:93
 msgid "%[userSS]: The user's shared bytes (exact)"
 msgstr "%[userSS]:  Användarens utdelade bytes (exakt)"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:85
+#: help/dialog_user_command.html:94
 msgid "%[userSSshort]: The user's shared bytes (formatted with units)"
-msgstr ""
+msgstr "%[userSSshort]: Användarens utdelade bytes (formaterad med enheter)"
 
 #. type: Content of: <html><body><h2>
-#: help/dialog_user_command.html:88
+#: help/dialog_user_command.html:97
 msgid "Compatibilty Variables"
 msgstr "Kompabilitetsvariabler"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:91
+#: help/dialog_user_command.html:100
 msgid "%[mynick] = %[myNI]"
 msgstr "%[mynick] = %[myNI]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:92
+#: help/dialog_user_command.html:101
 msgid "%[nick] = %[userNI]"
 msgstr "%[nick] = %[userNI]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:93
+#: help/dialog_user_command.html:102
 msgid "%[file] = %[fileFN]"
 msgstr "%[file] = %[fileFN]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:94
+#: help/dialog_user_command.html:103
 msgid "%[filesize] = %[fileSI]"
 msgstr "%[filesize] = %[fileSI]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:95
+#: help/dialog_user_command.html:104
 msgid "%[filesizeshort] = %[fileSIshort]"
 msgstr "%[filesizeshort] = %[fileSIshort]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:96
+#: help/dialog_user_command.html:105
 msgid "%[tth] = %[fileTR]"
 msgstr "%[tth] = %[fileTR]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:97
+#: help/dialog_user_command.html:106
 msgid "%[mycid] = %[myCID]"
 msgstr "%[mycid] = %[myCID]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:98
+#: help/dialog_user_command.html:107
 msgid "%[cid] = %[userCID]"
 msgstr "%[cid] = %[userCID]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:99
+#: help/dialog_user_command.html:108
 msgid "%[ip] = %[userI4]"
 msgstr "%[ip] = %[userI4]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:100
+#: help/dialog_user_command.html:109
 msgid "%[tag] = %[userTAG]"
 msgstr "%[tag] = %[userTAG]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:101
+#: help/dialog_user_command.html:110
 msgid "%[description] = %[userDE]"
 msgstr "%[description] = %[userDE]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:102
+#: help/dialog_user_command.html:111
 msgid "%[email] = %[userEM]"
 msgstr "%[email] = %[userEM]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:103
+#: help/dialog_user_command.html:112
 msgid "%[share] = %[userSS]"
 msgstr "%[share] = %[userSS]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:104
+#: help/dialog_user_command.html:113
 msgid "%[shareshort] = %[userSSshort]"
 msgstr "%[shareshort] = %[userSSshort]"
 
 #. type: Content of: <html><body><h1>
 #: help/faq_activemode.html:9
 msgid "Setting up active mode"
-msgstr ""
+msgstr "Ställa in aktivt läge"
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:10
@@ -1810,6 +1905,9 @@ msgid ""
 "po4a-id=0>TCP</acronym> and <acronym po4a-id=1>UDP</acronym> listening "
 "ports, as well as outgoing access on all ports for both TCP and UDP."
 msgstr ""
+"För att DC++ skall fungera ordenligt i aktiv läge, kräver den tillgång till "
+"lyssning på<acronym po4a-id=0>TCP</acronym> och <acronym po4a-id=1>UDP</"
+"acronym> liksom utgående access till både TCP och UDP."
 
 #. type: Content of: <html><body><h2>
 #: help/faq_activemode.html:15
@@ -1822,6 +1920,8 @@ msgid ""
 "Click on File menu and then Settings. Click on <a po4a-id=0>Connection "
 "Settings</a>."
 msgstr ""
+"Välj filmenyn och sen inställningar. Välj <a po4a-"
+"id=0>Anslutningsinställningar</a>."
 
 #. type: Content of: <html><body><ul><li>
 #: help/faq_activemode.html:21
@@ -2944,9 +3044,10 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:35
+#, fuzzy
 msgid ""
 "The person who you are downloading from is using a bandwidth limiter. There "
-"are two types: client based and third-party program."
+"are two types of limiting: client based or using a third-party program."
 msgstr ""
 "Personen du laddar ned från använder en bandbreddsbegränsare. Det finns två "
 "typer: Klientbaserad och tredjepartsprogram."
@@ -2954,40 +3055,50 @@ msgstr ""
 #. type: Content of: <html><body><ol><li><ul><li>
 #: help/faq_slowdownload.html:39
 msgid ""
-"Often the clients with limiting capability have set download and upload "
-"speed ratios in place to avoid abuse. (ex. If the upload speed limit is set "
+"Clients with bandwith limiting capability often have set download and upload "
+"speed ratios in place to avoid abuse. (ex. if the upload speed limit is set "
 "below 6 KiB/s, then the client will restrict the client download speed to a "
 "2:1 ratio). This varies from client to client and obviously not all support "
 "upload limiting.  This type of speed limiting <i>only</i> restricts the "
 "uploading of files, including user lists. It does not limit chat, private "
-"messages, or searches."
+"messages, or searches. From version 0.760 DC++ also has internal file "
+"transfer limiting capability. If enabled, DC++ shows the upload limiting "
+"rate in the <a po4a-id=0>Connection coloumn</a> of a hub's user list. Other "
+"(older) clients may show this value in L: or B: part of the <a po4a-id=1>DC+"
+"+ tag</a>."
 msgstr ""
 
 #. type: Content of: <html><body><ol><li><ul><li>
-#: help/faq_slowdownload.html:47
+#: help/faq_slowdownload.html:53
 msgid ""
 "Users could also be using a third-party program to limit the speed of "
 "traffic. This type of speed limiting is absolute; it will limit the speed of "
 "all traffic by the user, which can include file transfers, searches, chat, "
-"and private messages. Since this type of application does not enforce a "
-"download speed:upload speed ratio, it may be more prone to abuse. For "
-"particularly slow transfers - 1 KiB/s or slower, it <b>may</b> be to blame."
+"and private messages. This type of application never enforce a download "
+"speed:upload speed ratio, it may be more prone to abuse."
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:57
+#: help/faq_slowdownload.html:60
+msgid ""
+"So for particularly slow transfers (1 KiB/s or slower) from a certain user, "
+"abusive upload limiting <b>may</b> be to blame."
+msgstr ""
+
+#. type: Content of: <html><body><ol><li>
+#: help/faq_slowdownload.html:63
 msgid ""
 "The person who you are downloading from suffers from one or more constant "
 "speed problem described in the next section."
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/faq_slowdownload.html:61
+#: help/faq_slowdownload.html:67
 msgid "Solution : try to find more sources for your downloads :"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_slowdownload.html:64
+#: help/faq_slowdownload.html:70
 msgid ""
 "To gain more possible sources for your download select your download either "
 "in the <a po4a-id=0>Download Queue</a> or in the <a po4a-id=1>Downloads "
@@ -3000,7 +3111,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_slowdownload.html:74
+#: help/faq_slowdownload.html:80
 msgid ""
 "More sources for queued files can be discovered and automatically added if "
 "you enable <a po4a-id=0>Automatically Match Queue for Search Hits</a> in "
@@ -3008,7 +3119,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_slowdownload.html:78
+#: help/faq_slowdownload.html:84
 msgid ""
 "Automatic discovery for additional sources is also possible if you enable <a "
 "po4a-id=0>Automatically Search for Alternative Download Locations</a> in "
@@ -3018,7 +3129,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_slowdownload.html:85
+#: help/faq_slowdownload.html:91
 msgid ""
 "To minimize the download time make sure you have checked <a po4a-id=0>Enable "
 "segmented downloads</a> in Advanced settings. With segmented downloads "
@@ -3027,26 +3138,26 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/faq_slowdownload.html:92
+#: help/faq_slowdownload.html:98
 msgid "Slow downloads from every user"
 msgstr "Långsamma nedladdningar oavsett användare"
 
 #. type: Content of: <html><body><p>
-#: help/faq_slowdownload.html:93
+#: help/faq_slowdownload.html:99
 msgid ""
 "If you experience constant slow downloads with DC++ this can be for one or "
 "more of the following reasons :"
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:95
+#: help/faq_slowdownload.html:101
 msgid ""
 "You have enabled <a po4a-id=0>bandwith limiting</a> for downloads.  Make "
 "sure the limiter is disabled or set to high enough value."
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:97
+#: help/faq_slowdownload.html:103
 msgid ""
 "Your Internet connection is shared with others on your <acronym po4a-"
 "id=0>LAN</acronym> and they are using up all the available bandwidth. Tell "
@@ -3059,7 +3170,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:107
+#: help/faq_slowdownload.html:113
 msgid ""
 "Your ISP may be limiting your P2P traffic via some method of packet shaping. "
 "Call up the ISP and inquire if they do anything with P2P traffic. You can "
@@ -3072,7 +3183,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:116
+#: help/faq_slowdownload.html:122
 msgid ""
 "You haven't set up your third party firewall or internet monitor software "
 "correctly. Some of these security applications may treat p2p transfer as a "
@@ -3086,7 +3197,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:126
+#: help/faq_slowdownload.html:132
 msgid ""
 "You need to optimize your operating system for your current connection "
 "speed. First, <b>close <u>all</u></b> <acronym po4a-id=0>P2P</acronym> "
@@ -3103,24 +3214,33 @@ msgid ""
 "i>"
 msgstr ""
 
-#. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:146
+#. type: Content of: <html><body><ol><li><p>
+#: help/faq_slowdownload.html:152
 msgid ""
 "Your Internet connection is <acronym po4a-id=0>DSL</acronym>, cable, or "
 "satellite one with an asymmetrical connection speed, such as 768/128 Kib/s "
 "or 3.0 Mib/s / 256 Kib/s. On such connections, if you upload near the speed "
 "of your upload limit (16 KiB/s in the case of the 768/128 connection), it "
 "may affect the speeds of your downloads, no matter how much larger your "
-"download connection is. If this is happening, you can change the size of the "
-"<a po4a-id=1>Socket Write Buffer</a> in Experts Only panel of DC++ settings. "
-"It defaults to 8 KiB and you can try to change it to a smaller value. You "
-"should specify the value in bytes and you may have to try several values to "
-"test what size suits your connection best. Note that you should restart DC++ "
-"to changes take effect."
+"download connection is. If this is happening, you can use the <a po4a-id=1> "
+"built-in transfer limiting function</a> to set the maximum upload rate value "
+"<b>slightly</b> lower than your available upload speed (eg. to 15 or 14 KiB/"
+"s in the case above)."
+msgstr ""
+
+#. type: Content of: <html><body><ol><li><p>
+#: help/faq_slowdownload.html:162
+msgid ""
+"If you aren't allowed to use upload limiting you can also experiment with "
+"changing the size of <a po4a-id=0>Socket Write Buffer</a> in Experts Only "
+"panel of DC++ settings. It defaults to 8 KiB and you can try to change it to "
+"a smaller value. You should specify the value in bytes and you may have to "
+"try several values to test what size suits your connection best. Note that "
+"you should restart DC++ to changes take effect."
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:159
+#: help/faq_slowdownload.html:169
 msgid ""
 "Your copy of Windows XP, Vista or Windows 7 has the \"<acronym po4a-"
 "id=0>QoS</acronym> Packet Scheduler\" enabled so you are not able to use "
@@ -3132,7 +3252,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:170
+#: help/faq_slowdownload.html:180
 msgid ""
 "Your computer is infected with malicious software which altered the low "
 "level network settings of your operating system. This is common when your "
@@ -8145,8 +8265,8 @@ msgstr ""
 #. type: Content of: <html><body><h2>
 #: help/window_connections.html:40 help/window_download_queue.html:91
 #: help/window_downloads.html:29 help/window_favorite_users.html:27
-#: help/window_file_list.html:35 help/window_finished_downloads.html:42
-#: help/window_finished_uploads.html:42 help/window_hub.html:64
+#: help/window_file_list.html:35 help/window_finished_downloads.html:44
+#: help/window_finished_uploads.html:44 help/window_hub.html:64
 #: help/window_public_hubs.html:41 help/window_search.html:88
 #: help/window_search_spy.html:23 help/window_system_log.html:14
 #: help/window_waiting_users.html:21
@@ -8554,8 +8674,8 @@ msgid "Removes the user from all files in the queue."
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/window_download_queue.html:117 help/window_finished_downloads.html:54
-#: help/window_finished_uploads.html:54 help/window_hub.html:87
+#: help/window_download_queue.html:117 help/window_finished_downloads.html:56
+#: help/window_finished_uploads.html:56 help/window_hub.html:87
 #: help/window_main.html:115 help/window_pm.html:30
 #: help/window_public_hubs.html:69 help/window_search.html:108
 #: help/window_search_spy.html:28
@@ -8882,8 +9002,8 @@ msgid "The Hash of these files."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_file_list.html:40 help/window_finished_downloads.html:44
-#: help/window_finished_uploads.html:44 help/window_search.html:97
+#: help/window_file_list.html:40 help/window_finished_downloads.html:46
+#: help/window_finished_uploads.html:46 help/window_search.html:97
 msgid "View as text"
 msgstr "Visa som text"
 
@@ -9123,18 +9243,29 @@ msgstr ""
 msgid "Which files were downloded from the user."
 msgstr "Långsamma nedladdningar oavsett användare"
 
+#. type: Content of: <html><body><dl><dt>
+#: help/window_finished_downloads.html:40 help/window_finished_uploads.html:40
+msgid "Elapsed"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_finished_downloads.html:41 help/window_finished_uploads.html:41
+msgid ""
+"The total time, in seconds, that it took for the file to be transferred."
+msgstr ""
+
 #. type: Content of: <html><body><dl><dd><p>
-#: help/window_finished_downloads.html:45 help/window_finished_uploads.html:45
+#: help/window_finished_downloads.html:47 help/window_finished_uploads.html:47
 msgid "It will open the file (stored locally) in a text viewer window."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_finished_downloads.html:56
+#: help/window_finished_downloads.html:58
 msgid "Only show fully downloaded files"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:58
+#: help/window_finished_downloads.html:60
 msgid ""
 "When this check-box is checked (which is the case in the default "
 "configuration), only files that are fully downloaded (which are not anymore "
@@ -9143,39 +9274,39 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:61
+#: help/window_finished_downloads.html:63
 msgid ""
 "When this check-box is not checked, an item appears in that list as soon as "
 "a chunk of the corresponding file has finished downloading."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_finished_downloads.html:64 help/window_finished_uploads.html:56
+#: help/window_finished_downloads.html:66 help/window_finished_uploads.html:58
 msgid "# Items"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:65
+#: help/window_finished_downloads.html:67
 msgid "The amount of items that you have downloaded (received)."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_finished_downloads.html:66 help/window_finished_uploads.html:58
+#: help/window_finished_downloads.html:68 help/window_finished_uploads.html:60
 msgid "# bytes"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:67
+#: help/window_finished_downloads.html:69
 msgid "The amount in bytes that you have downloaded (received)."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_finished_downloads.html:68 help/window_finished_uploads.html:60
+#: help/window_finished_downloads.html:70 help/window_finished_uploads.html:62
 msgid "# bytes/seconds"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:69
+#: help/window_finished_downloads.html:71
 msgid "The average speed of the files you have downloaded (received)."
 msgstr ""
 
@@ -9236,17 +9367,17 @@ msgid "Which files were uploaded to the user."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_uploads.html:57
+#: help/window_finished_uploads.html:59
 msgid "The amount of items that you have uploaded (sent)."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_uploads.html:59
+#: help/window_finished_uploads.html:61
 msgid "The amount in bytes that you have uploaded (sent)."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_uploads.html:61
+#: help/window_finished_uploads.html:63
 msgid "The average speed of the files you have uploaded (sent)."
 msgstr ""
 
@@ -10368,6 +10499,31 @@ msgstr ""
 msgid ""
 "Shows the current overall upload speed and the number of current upload "
 "connections in parentheses (updated in every second)."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/window_main.html:334
+#, fuzzy
+msgid "Current download limit"
+msgstr "Sortera alla nedladdningar först"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_main.html:335
+msgid ""
+"Shows the current maximum download rate. Zero speed value means that "
+"download limiting is disabled."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/window_main.html:337
+msgid "Current upload limit"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_main.html:338
+msgid ""
+"Shows the current maximum upload rate. Zero speed value means that upload "
+"limiting is disabled."
 msgstr ""
 
 #. type: Content of: <html><body><h1>
@@ -11509,7 +11665,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:93
 msgid "Unable to open filelist: [filename]"
-msgstr ""
+msgstr "Klarade ej av att öppna fillistan: [filename]"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:94
@@ -11521,7 +11677,7 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: help/window_system_log.html:95
 msgid "Unable to send file [path]: [error message]"
-msgstr ""
+msgstr "Klarade ej av att ladda upp fil [path]: [error message]"
 
 #. type: Content of: <html><body><dl><dd>
 #: help/window_system_log.html:96
@@ -11536,6 +11692,9 @@ msgid ""
 "haven't been able to get a slot. As well, from which hub they originate, the "
 "file that they've queued and how much of the file they have completed."
 msgstr ""
+"Denna sida visar dig vilka användare som har en fil i kö från dig, men som "
+"ännu ej fått en nerladdningsplats, och även från vilken hubb förfrågan "
+"kommer samt hur mycket utav filen som redan är nerladdad."
 
 #. type: Content of: <html><body><p>
 #: help/window_waiting_users.html:18
@@ -11543,6 +11702,9 @@ msgid ""
 "Note that this is not an upload queue, and just a visual representation of "
 "who have tried to get a slot for what."
 msgstr ""
+"Observera att detta inte är en egentlig uppladdningskö, utan detta endast "
+"visar vem eller vilka som har försökt att få en nerladdningsplats samt för "
+"vilken fil de försökt få en plats för."
 
 #~ msgid "Send Once Per Nick"
 #~ msgstr "Skicka en gång per smeknamn"
@@ -11636,6 +11798,13 @@ msgstr ""
 
 #~ msgid "Alt + U"
 #~ msgstr "Alt + U"
+
+#~ msgid ""
+#~ "The person who you are downloading from is using a bandwidth limiter. "
+#~ "There are two types: client based and third-party program."
+#~ msgstr ""
+#~ "Personen du laddar ned från använder en bandbreddsbegränsare. Det finns "
+#~ "två typer: Klientbaserad och tredjepartsprogram."
 
 #~ msgid "<a po4a-id=0>Private Message</a>"
 #~ msgstr "Privat meddelande"

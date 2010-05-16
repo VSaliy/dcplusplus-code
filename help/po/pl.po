@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:40+0100\n"
-"PO-Revision-Date: 2010-02-28 21:51+0000\n"
+"POT-Creation-Date: 2010-05-16 19:33+0300\n"
+"PO-Revision-Date: 2010-05-05 20:06+0000\n"
 "Last-Translator: LadyStardust <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:33+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
@@ -1767,7 +1767,7 @@ msgstr ""
 "(jedynie w kontekście wyszukiwanie, lista plików)"
 
 #. type: Content of: <html><body><ul><li>
-#: help/dialog_user_command.html:67
+#: help/dialog_user_command.html:66
 msgid ""
 "%[fileTR]: TTH for the file, or \"NONE\" (search, file list contexts only)"
 msgstr ""
@@ -1775,17 +1775,41 @@ msgstr ""
 "plików)"
 
 #. type: Content of: <html><body><ul><li>
-#: help/dialog_user_command.html:68
+#: help/dialog_user_command.html:67
+#, fuzzy
+msgid ""
+"%[fileMN]: <a po4a-id=0>magnet link</a> to the file (search, file list "
+"contexts only)"
+msgstr ""
+"%[fileTR]: TTH pliku, lub \"NONE\" (jedynie w kontekście wyszukiwanie, lista "
+"plików)"
+
+#. type: Content of: <html><body><ul><li>
+#: help/dialog_user_command.html:70
 msgid "%[type]: \"File\" or \"Directory\" (directory context only)"
 msgstr "%[type]: \"Plik\" lub \"Folder\" (jedynie w kontekście folderu)"
 
 #. type: Content of: <html><body><ul><li>
-#: help/dialog_user_command.html:69
-msgid "%[line:<i>reason</i>]: Opens up a window asking for \"<i>reason</i>\""
+#: help/dialog_user_command.html:72
+#, fuzzy
+msgid ""
+"%[line:<i>caption</i>]: Opens up a dialog asking for \"<i>caption</i>\"."
 msgstr "%[line:<i>reason</i>]: Otwiera okno z zapytaniem \"<i>reason</i>\""
 
+#. type: Content of: <html><body><ul><li>
+#: help/dialog_user_command.html:73
+msgid ""
+"By default, the input interface is a text-box control, unless \"<i>caption</"
+"i>\" corresponds to the following syntax: caption/default_sel/value0/"
+"value1/.../valueN where <i>caption</i> is the new caption, <i>default_sel</"
+"i> is a number corresponding to the default value to select, and the "
+"following params are values of a drop-down list control created instead of "
+"the text-box.  Params are separated using forward slashes ('/'); one can use "
+"'//' to actually write a slash."
+msgstr ""
+
 #. type: Content of: <html><body><p>
-#: help/dialog_user_command.html:72
+#: help/dialog_user_command.html:81
 msgid ""
 "In addition to these variables, all of the ADC INF flags are available, with "
 "the following prefixes: <b>my</b>, <b>user</b>, and <b>hub</b>. Some may "
@@ -1797,130 +1821,130 @@ msgstr ""
 "wylistowano poniżej:"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:76
+#: help/dialog_user_command.html:85
 msgid "%[myNI]: Your nick"
 msgstr "%[myNI]: Twój nick"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:77
+#: help/dialog_user_command.html:86
 msgid "%[myCID]: Your ADC CID"
 msgstr "%[myCID]: Twój ADC CID"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:78
+#: help/dialog_user_command.html:87
 msgid "%[userNI]: The user's nick"
 msgstr "%[userNI]: Nick użytkownika"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:79
+#: help/dialog_user_command.html:88
 msgid "%[userCID]: The user's ADC CID"
 msgstr "%[userCID]: ADC CID użytkownika"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:80
+#: help/dialog_user_command.html:89
 msgid "%[userI4]: The user's IP (if supported by hub)"
 msgstr "%[userI4]: IP użytkownika (jeżeli jest podany przez hub)"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:81
+#: help/dialog_user_command.html:90
 msgid "%[userTAG]: The user's tag"
 msgstr "%[userTAG]: Tag użytkownika"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:82
+#: help/dialog_user_command.html:91
 msgid "%[userDE]: The user's description"
 msgstr "%[userDE]: Opis użytkownika"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:83
+#: help/dialog_user_command.html:92
 msgid "%[userEM]: The user's email"
 msgstr "%[userEM]: Email użytkownika"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:84
+#: help/dialog_user_command.html:93
 msgid "%[userSS]: The user's shared bytes (exact)"
 msgstr ""
 "%[userSS]:  Dokładna wielkość plików jaką udostępnia użytkownik, podana w "
 "bajtach"
 
 #. type: Content of: <html><body><div><ul><li>
-#: help/dialog_user_command.html:85
+#: help/dialog_user_command.html:94
 msgid "%[userSSshort]: The user's shared bytes (formatted with units)"
 msgstr ""
 "%[userSSshort]: Udostępniane przez użytkownika bajty (podane w jednostkach)"
 
 #. type: Content of: <html><body><h2>
-#: help/dialog_user_command.html:88
+#: help/dialog_user_command.html:97
 msgid "Compatibilty Variables"
 msgstr "Możliwe zmienne"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:91
+#: help/dialog_user_command.html:100
 msgid "%[mynick] = %[myNI]"
 msgstr "%[mynick] = %[myNI]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:92
+#: help/dialog_user_command.html:101
 msgid "%[nick] = %[userNI]"
 msgstr "%[nick] = %[userNI]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:93
+#: help/dialog_user_command.html:102
 msgid "%[file] = %[fileFN]"
 msgstr "%[file] = %[fileFN]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:94
+#: help/dialog_user_command.html:103
 msgid "%[filesize] = %[fileSI]"
 msgstr "%[filesize] = %[fileSI]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:95
+#: help/dialog_user_command.html:104
 msgid "%[filesizeshort] = %[fileSIshort]"
 msgstr "%[filesizeshort] = %[fileSIshort]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:96
+#: help/dialog_user_command.html:105
 msgid "%[tth] = %[fileTR]"
 msgstr "%[tth] = %[fileTR]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:97
+#: help/dialog_user_command.html:106
 msgid "%[mycid] = %[myCID]"
 msgstr "%[mycid] = %[myCID]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:98
+#: help/dialog_user_command.html:107
 msgid "%[cid] = %[userCID]"
 msgstr "%[cid] = %[userCID]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:99
+#: help/dialog_user_command.html:108
 msgid "%[ip] = %[userI4]"
 msgstr "%[ip] = %[userI4]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:100
+#: help/dialog_user_command.html:109
 msgid "%[tag] = %[userTAG]"
 msgstr "%[tag] = %[userTAG]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:101
+#: help/dialog_user_command.html:110
 msgid "%[description] = %[userDE]"
 msgstr "%[description] = %[userDE]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:102
+#: help/dialog_user_command.html:111
 msgid "%[email] = %[userEM]"
 msgstr "%[email] = %[userEM]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:103
+#: help/dialog_user_command.html:112
 msgid "%[share] = %[userSS]"
 msgstr "%[share] = %[userSS]"
 
 #. type: Content of: <html><body><ul><ul><li>
-#: help/dialog_user_command.html:104
+#: help/dialog_user_command.html:113
 msgid "%[shareshort] = %[userSSshort]"
 msgstr "%[shareshort] = %[userSSshort]"
 
@@ -3446,23 +3470,29 @@ msgstr ""
 
 #. type: Content of: <html><body><ol><li>
 #: help/faq_slowdownload.html:35
+#, fuzzy
 msgid ""
 "The person who you are downloading from is using a bandwidth limiter. There "
-"are two types: client based and third-party program."
+"are two types of limiting: client based or using a third-party program."
 msgstr ""
 "Osoba od której pobierasz używa limitera łącza. Istnieją dwa typy: wbudowany "
 "w klienta lub zewnętrzny program innej firmy."
 
 #. type: Content of: <html><body><ol><li><ul><li>
 #: help/faq_slowdownload.html:39
+#, fuzzy
 msgid ""
-"Often the clients with limiting capability have set download and upload "
-"speed ratios in place to avoid abuse. (ex. If the upload speed limit is set "
+"Clients with bandwith limiting capability often have set download and upload "
+"speed ratios in place to avoid abuse. (ex. if the upload speed limit is set "
 "below 6 KiB/s, then the client will restrict the client download speed to a "
 "2:1 ratio). This varies from client to client and obviously not all support "
 "upload limiting.  This type of speed limiting <i>only</i> restricts the "
 "uploading of files, including user lists. It does not limit chat, private "
-"messages, or searches."
+"messages, or searches. From version 0.760 DC++ also has internal file "
+"transfer limiting capability. If enabled, DC++ shows the upload limiting "
+"rate in the <a po4a-id=0>Connection coloumn</a> of a hub's user list. Other "
+"(older) clients may show this value in L: or B: part of the <a po4a-id=1>DC+"
+"+ tag</a>."
 msgstr ""
 "Często klienty z możliwością użycia limitera mają ustawioną średnią prędkość "
 "pobierania i wysyłania aby zapobiegać nadużyciu. (np. Jeżeli limit prędkości "
@@ -3473,14 +3503,14 @@ msgstr ""
 "czatu, prywatnych wiadomości czy wyszukiwania."
 
 #. type: Content of: <html><body><ol><li><ul><li>
-#: help/faq_slowdownload.html:47
+#: help/faq_slowdownload.html:53
+#, fuzzy
 msgid ""
 "Users could also be using a third-party program to limit the speed of "
 "traffic. This type of speed limiting is absolute; it will limit the speed of "
 "all traffic by the user, which can include file transfers, searches, chat, "
-"and private messages. Since this type of application does not enforce a "
-"download speed:upload speed ratio, it may be more prone to abuse. For "
-"particularly slow transfers - 1 KiB/s or slower, it <b>may</b> be to blame."
+"and private messages. This type of application never enforce a download "
+"speed:upload speed ratio, it may be more prone to abuse."
 msgstr ""
 "Użytkownicy mogą również używać zewnętrznego programu limitującego prędkość. "
 "Tego typu limitowanie oddziałowuje na wszystko; limituje prędkość przepływu "
@@ -3490,7 +3520,14 @@ msgstr ""
 "winna bardzo niskim transferom - 1 KiB/s lub niżej."
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:57
+#: help/faq_slowdownload.html:60
+msgid ""
+"So for particularly slow transfers (1 KiB/s or slower) from a certain user, "
+"abusive upload limiting <b>may</b> be to blame."
+msgstr ""
+
+#. type: Content of: <html><body><ol><li>
+#: help/faq_slowdownload.html:63
 msgid ""
 "The person who you are downloading from suffers from one or more constant "
 "speed problem described in the next section."
@@ -3499,12 +3536,12 @@ msgstr ""
 "następnej sekcji."
 
 #. type: Content of: <html><body><p>
-#: help/faq_slowdownload.html:61
+#: help/faq_slowdownload.html:67
 msgid "Solution : try to find more sources for your downloads :"
 msgstr "Rozwiązanie: spróbuj znaleźć więcej źródeł pobierań:"
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_slowdownload.html:64
+#: help/faq_slowdownload.html:70
 msgid ""
 "To gain more possible sources for your download select your download either "
 "in the <a po4a-id=0>Download Queue</a> or in the <a po4a-id=1>Downloads "
@@ -3517,7 +3554,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_slowdownload.html:74
+#: help/faq_slowdownload.html:80
 msgid ""
 "More sources for queued files can be discovered and automatically added if "
 "you enable <a po4a-id=0>Automatically Match Queue for Search Hits</a> in "
@@ -3528,7 +3565,7 @@ msgstr ""
 "wyszukane pozycje</a> w ustawieniach Kolejki."
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_slowdownload.html:78
+#: help/faq_slowdownload.html:84
 msgid ""
 "Automatic discovery for additional sources is also possible if you enable <a "
 "po4a-id=0>Automatically Search for Alternative Download Locations</a> in "
@@ -3543,7 +3580,7 @@ msgstr ""
 "zakończyć brakiem jakichkolwiek rezultatów na tych hubach."
 
 #. type: Content of: <html><body><ul><li>
-#: help/faq_slowdownload.html:85
+#: help/faq_slowdownload.html:91
 msgid ""
 "To minimize the download time make sure you have checked <a po4a-id=0>Enable "
 "segmented downloads</a> in Advanced settings. With segmented downloads "
@@ -3556,12 +3593,12 @@ msgstr ""
 "pliku od różnych źródeł."
 
 #. type: Content of: <html><body><h2>
-#: help/faq_slowdownload.html:92
+#: help/faq_slowdownload.html:98
 msgid "Slow downloads from every user"
 msgstr "Powolne pobieranie od każdego użytkownia"
 
 #. type: Content of: <html><body><p>
-#: help/faq_slowdownload.html:93
+#: help/faq_slowdownload.html:99
 msgid ""
 "If you experience constant slow downloads with DC++ this can be for one or "
 "more of the following reasons :"
@@ -3570,14 +3607,14 @@ msgstr ""
 "tego powodem jeden lub wiecej powodów:"
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:95
+#: help/faq_slowdownload.html:101
 msgid ""
 "You have enabled <a po4a-id=0>bandwith limiting</a> for downloads.  Make "
 "sure the limiter is disabled or set to high enough value."
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:97
+#: help/faq_slowdownload.html:103
 msgid ""
 "Your Internet connection is shared with others on your <acronym po4a-"
 "id=0>LAN</acronym> and they are using up all the available bandwidth. Tell "
@@ -3590,7 +3627,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:107
+#: help/faq_slowdownload.html:113
 msgid ""
 "Your ISP may be limiting your P2P traffic via some method of packet shaping. "
 "Call up the ISP and inquire if they do anything with P2P traffic. You can "
@@ -3611,7 +3648,7 @@ msgstr ""
 "FAQ</a>."
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:116
+#: help/faq_slowdownload.html:122
 msgid ""
 "You haven't set up your third party firewall or internet monitor software "
 "correctly. Some of these security applications may treat p2p transfer as a "
@@ -3625,7 +3662,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:126
+#: help/faq_slowdownload.html:132
 msgid ""
 "You need to optimize your operating system for your current connection "
 "speed. First, <b>close <u>all</u></b> <acronym po4a-id=0>P2P</acronym> "
@@ -3642,24 +3679,33 @@ msgid ""
 "i>"
 msgstr ""
 
-#. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:146
+#. type: Content of: <html><body><ol><li><p>
+#: help/faq_slowdownload.html:152
 msgid ""
 "Your Internet connection is <acronym po4a-id=0>DSL</acronym>, cable, or "
 "satellite one with an asymmetrical connection speed, such as 768/128 Kib/s "
 "or 3.0 Mib/s / 256 Kib/s. On such connections, if you upload near the speed "
 "of your upload limit (16 KiB/s in the case of the 768/128 connection), it "
 "may affect the speeds of your downloads, no matter how much larger your "
-"download connection is. If this is happening, you can change the size of the "
-"<a po4a-id=1>Socket Write Buffer</a> in Experts Only panel of DC++ settings. "
-"It defaults to 8 KiB and you can try to change it to a smaller value. You "
-"should specify the value in bytes and you may have to try several values to "
-"test what size suits your connection best. Note that you should restart DC++ "
-"to changes take effect."
+"download connection is. If this is happening, you can use the <a po4a-id=1> "
+"built-in transfer limiting function</a> to set the maximum upload rate value "
+"<b>slightly</b> lower than your available upload speed (eg. to 15 or 14 KiB/"
+"s in the case above)."
+msgstr ""
+
+#. type: Content of: <html><body><ol><li><p>
+#: help/faq_slowdownload.html:162
+msgid ""
+"If you aren't allowed to use upload limiting you can also experiment with "
+"changing the size of <a po4a-id=0>Socket Write Buffer</a> in Experts Only "
+"panel of DC++ settings. It defaults to 8 KiB and you can try to change it to "
+"a smaller value. You should specify the value in bytes and you may have to "
+"try several values to test what size suits your connection best. Note that "
+"you should restart DC++ to changes take effect."
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:159
+#: help/faq_slowdownload.html:169
 msgid ""
 "Your copy of Windows XP, Vista or Windows 7 has the \"<acronym po4a-"
 "id=0>QoS</acronym> Packet Scheduler\" enabled so you are not able to use "
@@ -3671,7 +3717,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ol><li>
-#: help/faq_slowdownload.html:170
+#: help/faq_slowdownload.html:180
 msgid ""
 "Your computer is infected with malicious software which altered the low "
 "level network settings of your operating system. This is common when your "
@@ -6191,6 +6237,10 @@ msgid ""
 "command</a>. To customize the format of the time stamps, see the <a po4a-"
 "id=1>Set Timestamps</a> option below."
 msgstr ""
+"Opcja ta pokaże znaczniki czasowe na czacie równane z nowo otwartymi hubami. "
+"Aby pokazać je na hubach już otwartych, wpisz <a po4a-id=0>/ts komende</a>. "
+"Aby dostosować format znaczników czasu sprawdź opcję <a po4a-id=1>Ustaw "
+"Znaczniki Czasu</a> poniżej."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:31
@@ -6203,6 +6253,8 @@ msgid ""
 "Show some messages destined for the Status Bar in main chat as well. <i>It's "
 "generally a good idea to leave this enabled.</i>"
 msgstr ""
+"Pokaż niektóre wiadomości przeznaczone dla Paska Statusu również na czacie "
+"głównym. <i>Ogółem jest dobrym pomysłem by zostawić to włączone.</i>"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:34
@@ -6216,6 +6268,9 @@ msgid ""
 "These messages are generally not useful and make reading the chat more "
 "troublesome."
 msgstr ""
+"Przy włączeniu funkcji, kick, debug oraz inne wiadomości spamu są ukryte "
+"przed czatem głównym. Wiadomości te są ogółem niepotrzebne oraz utrudniają "
+"czytanie czata głównego."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:36
@@ -6229,6 +6284,9 @@ msgid ""
 "<a po4a-id=0>/showjoins chat command</a> to enable or disable it on already "
 "open hubs. <i>On large hubs, you don't want this enabled.</i>"
 msgstr ""
+"Pokaż wejścia na czacie głównym nie zależnie czy ktoś łączy się czy opuszcza "
+"hub. Użyj <a po4a-id=0>komendy /showjoins</a> aby włączyć lub wyłączyć na "
+"hubach już otwartych. <i>Na dużych hubach lepiej nie włączać</i>"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:41
@@ -6241,6 +6299,8 @@ msgid ""
 "With this option enabled, only the joining and parting of <a po4a-"
 "id=0>Favorite Users</a> are shown."
 msgstr ""
+"Po włąćzeniu tej opcji, tylko wejścia i wyjścia <a po4a-id=0>Ulubionych "
+"Użytkowników</a> są pokazywane."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:44
@@ -6253,6 +6313,8 @@ msgid ""
 "With this option enabled, those users who are <a po4a-id=0>favorite users</"
 "a> will be sorted first in user lists."
 msgstr ""
+"Po włączeniu tej opcji, użytkownicy którzy są <a po4a-id=0>ulubionymi "
+"użytkownikami</a> będą wysortowani jako pierwsi na liście."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:46
@@ -6267,6 +6329,9 @@ msgid ""
 "Windows Explorer. <i>Turning on this option slows browsing file lists a bit."
 "</i>"
 msgstr ""
+"Przy włączeniu tej opcji DC++ użyje ikon przypisanych rozszerzeniom z "
+"Windows Explorer. <i>Włączenie tej opcji zwolni trochę pobieranie list "
+"plików.</i>"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:50
@@ -6279,6 +6344,9 @@ msgid ""
 "Enable this option to use a monospaced font more suitable for viewing NFO "
 "files in the built-in text viewer (the \"View as Text\" function)."
 msgstr ""
+"Włącz tę opcję aby uaktywnić czcionkę monospaced dla lepszego przeglądania "
+"plików NFO we wbudowanej przeglądarce tekstów (funkcja \"Wyświetl jako tekst"
+"\")."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:54
@@ -6292,6 +6360,9 @@ msgid ""
 "the <a po4a-id=0>Connections</a> window. This function uses the <a po4a-"
 "id=1>GeoIPCountryWhois.csv</a> database provided by <a po4a-id=2>MaxMind</a>."
 msgstr ""
+"Po wybraniu opcji, kody krajów osób wysyłających i pobierających pokażą się "
+"w oknie <a po4a-id=0>Połączenia</a>. Opcja ta korzysta z bazy danych <a po4a-"
+"id=1>GeoIPCountryWhois.csv</a> dostarczanej przez <a po4a-id=2>MaxMind</a>."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:61
@@ -6308,6 +6379,12 @@ msgid ""
 "variables are available, see <a po4a-id=2>Logs</a>. Use Ctrl + Enter to "
 "create a new line."
 msgstr ""
+"To jest domyśla wiadomość niedostępności, która pokaże się gdy ktoś wyśle ci "
+"PM po raz pierwszy, gdy znajdziesz się w trybie away. Możesz aktywować tryb "
+"away przez użycie komend <a po4a-id=0>/away &lt; oraz /back</a> lub <a po4a-"
+"id=1>opcji Automatycznie niedostępny po zminimalizowaniu</a>. Wszystkie "
+"zmienne formatowania są dostępne do sprawdznia w <a po4a-id=2>Logach</a>. "
+"Użyj Ctrl + Enter aby stworzyć nową linię."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:69
@@ -6330,6 +6407,9 @@ msgid ""
 "chat and private message windows. For the available formatting variables, "
 "please see <a po4a-id=0>Logs</a>."
 msgstr ""
+"To pozwoli na wybranie formatu znaczników czasu które pojawiają się na "
+"czacie głownym i oknie prywatnej wiadomości. Aby sprawdzić dostępne zmienne, "
+"proszę sprawdzić <a po4a-id=0>Logi</a>."
 
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_appearance.html:74
@@ -6351,6 +6431,11 @@ msgid ""
 "value, in which case the message editing box will never redraw itself. "
 "Minimum value: 1. Default values: 1 and 10."
 msgstr ""
+"Te dwa okienka kontrolują jak bardzo chcesz by okna edycji tekstu (w oknie "
+"<placeholder id=0/> oraz <placeholder id=1/>) zmieniały się gdy komponujesz "
+"wiadomość kilku liniową. Oba ustawienia mogą mieć tę samą wartość, w tej "
+"sytuacji okno edycji wiadomości nigdy nie będzie zmieniać się. Minimalna "
+"wartość: 1. Domyślne wartości: 1 i 10."
 
 #. type: Content of: <html><body><dl><dt>
 #: help/settings_appearance.html:79
@@ -6364,6 +6449,9 @@ msgid ""
 "its user interface and messages. \"Default\" means \"use the same language "
 "as my operating system\"."
 msgstr ""
+"Ta lista pozwoli ci na wybranie którym językiem DC++ powinno się posługiwać "
+"dla interfacu użytkownika oraz wiadomości. \"Domyślmy\" oznacza \"użyj tego "
+"samego języka co system operacyjny\"."
 
 #. type: Content of: <html><body><h1>
 #: help/settings_bwlimit.html:10
@@ -6673,6 +6761,10 @@ msgid ""
 "option in the list and click Browse. You can add only Wave (embedded) sound "
 "files (typically with .wav extension)."
 msgstr ""
+"Zamiast systemowego dźwięku piszczenia, możesz wybrać inny dźwięk lub "
+"melodię dla powyższych opcji. Aby przypisać dźwięk do jednego z nich wybierz "
+"opcję z listy oraz kliknij Wybierz. Możesz dodać tylko Wave (wbudowane) "
+"pliki dźwiękowe (zazwyczaj z rozszerzeniem .wav)."
 
 #. type: Content of: <html><body><p>
 #: help/settings_connection.html:11
@@ -9173,8 +9265,8 @@ msgstr "Adres IP i kod kraju (jeżeli możliwy) połączonego użytkownika"
 #. type: Content of: <html><body><h2>
 #: help/window_connections.html:40 help/window_download_queue.html:91
 #: help/window_downloads.html:29 help/window_favorite_users.html:27
-#: help/window_file_list.html:35 help/window_finished_downloads.html:42
-#: help/window_finished_uploads.html:42 help/window_hub.html:64
+#: help/window_file_list.html:35 help/window_finished_downloads.html:44
+#: help/window_finished_uploads.html:44 help/window_hub.html:64
 #: help/window_public_hubs.html:41 help/window_search.html:88
 #: help/window_search_spy.html:23 help/window_system_log.html:14
 #: help/window_waiting_users.html:21
@@ -9591,8 +9683,8 @@ msgid "Removes the user from all files in the queue."
 msgstr "Usuwa użytkownika z wszystkich plików z kolejki."
 
 #. type: Content of: <html><body><h2>
-#: help/window_download_queue.html:117 help/window_finished_downloads.html:54
-#: help/window_finished_uploads.html:54 help/window_hub.html:87
+#: help/window_download_queue.html:117 help/window_finished_downloads.html:56
+#: help/window_finished_uploads.html:56 help/window_hub.html:87
 #: help/window_main.html:115 help/window_pm.html:30
 #: help/window_public_hubs.html:69 help/window_search.html:108
 #: help/window_search_spy.html:28
@@ -9933,8 +10025,8 @@ msgid "The Hash of these files."
 msgstr "Indeks plików."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_file_list.html:40 help/window_finished_downloads.html:44
-#: help/window_finished_uploads.html:44 help/window_search.html:97
+#: help/window_file_list.html:40 help/window_finished_downloads.html:46
+#: help/window_finished_uploads.html:46 help/window_search.html:97
 msgid "View as text"
 msgstr "Wyświetl jako tekst"
 
@@ -10193,18 +10285,30 @@ msgstr "Hub źródła."
 msgid "Which files were downloded from the user."
 msgstr ""
 
+#. type: Content of: <html><body><dl><dt>
+#: help/window_finished_downloads.html:40 help/window_finished_uploads.html:40
+#, fuzzy
+msgid "Elapsed"
+msgstr "Min czas"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_finished_downloads.html:41 help/window_finished_uploads.html:41
+msgid ""
+"The total time, in seconds, that it took for the file to be transferred."
+msgstr ""
+
 #. type: Content of: <html><body><dl><dd><p>
-#: help/window_finished_downloads.html:45 help/window_finished_uploads.html:45
+#: help/window_finished_downloads.html:47 help/window_finished_uploads.html:47
 msgid "It will open the file (stored locally) in a text viewer window."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_finished_downloads.html:56
+#: help/window_finished_downloads.html:58
 msgid "Only show fully downloaded files"
 msgstr "Pokazuj tylko całkowicie pobrane pliki"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:58
+#: help/window_finished_downloads.html:60
 msgid ""
 "When this check-box is checked (which is the case in the default "
 "configuration), only files that are fully downloaded (which are not anymore "
@@ -10217,7 +10321,7 @@ msgstr ""
 "pogrupowane wg. Plik&quot;."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:61
+#: help/window_finished_downloads.html:63
 msgid ""
 "When this check-box is not checked, an item appears in that list as soon as "
 "a chunk of the corresponding file has finished downloading."
@@ -10226,32 +10330,32 @@ msgstr ""
 "odpowiedniego pliku zakończy się pobierać."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_finished_downloads.html:64 help/window_finished_uploads.html:56
+#: help/window_finished_downloads.html:66 help/window_finished_uploads.html:58
 msgid "# Items"
 msgstr "# Pozycje"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:65
+#: help/window_finished_downloads.html:67
 msgid "The amount of items that you have downloaded (received)."
 msgstr "Ilość pobranych pozycji."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_finished_downloads.html:66 help/window_finished_uploads.html:58
+#: help/window_finished_downloads.html:68 help/window_finished_uploads.html:60
 msgid "# bytes"
 msgstr "# bajty"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:67
+#: help/window_finished_downloads.html:69
 msgid "The amount in bytes that you have downloaded (received)."
 msgstr "Ilość pobranych bajtów."
 
 #. type: Content of: <html><body><dl><dt>
-#: help/window_finished_downloads.html:68 help/window_finished_uploads.html:60
+#: help/window_finished_downloads.html:70 help/window_finished_uploads.html:62
 msgid "# bytes/seconds"
 msgstr "# bajty/sekundy"
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_downloads.html:69
+#: help/window_finished_downloads.html:71
 msgid "The average speed of the files you have downloaded (received)."
 msgstr "Średnia prędkość pobranych plików (otrzymanych)."
 
@@ -10313,17 +10417,17 @@ msgid "Which files were uploaded to the user."
 msgstr "Prędkość wysyłania danego użytkownika."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_uploads.html:57
+#: help/window_finished_uploads.html:59
 msgid "The amount of items that you have uploaded (sent)."
 msgstr "Ilość plików wysłanych."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_uploads.html:59
+#: help/window_finished_uploads.html:61
 msgid "The amount in bytes that you have uploaded (sent)."
 msgstr "Ilość bajtów wysłanych."
 
 #. type: Content of: <html><body><dl><dd>
-#: help/window_finished_uploads.html:61
+#: help/window_finished_uploads.html:63
 msgid "The average speed of the files you have uploaded (sent)."
 msgstr "Średnia prędkość wysłanych plików."
 
@@ -11614,6 +11718,38 @@ msgid ""
 msgstr ""
 "Pokazuje obecną całkowitą prędkość wysyłania oraz w nawiasie ilość obecnych "
 "połączeń wychodzących (sprawdzane co sekundę)."
+
+#. type: Content of: <html><body><dl><dt>
+#: help/window_main.html:334
+#, fuzzy
+msgid "Current download limit"
+msgstr "Obecna prędkość pobierania"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_main.html:335
+#, fuzzy
+msgid ""
+"Shows the current maximum download rate. Zero speed value means that "
+"download limiting is disabled."
+msgstr ""
+"Sprecyzuje maksymalną prędkość stosunku pobierania wyrażoną w KiB/s. Zero "
+"oznacza brak limitowania. (domyślnie:0)"
+
+#. type: Content of: <html><body><dl><dt>
+#: help/window_main.html:337
+#, fuzzy
+msgid "Current upload limit"
+msgstr "Obecna prędkość wysyłania"
+
+#. type: Content of: <html><body><dl><dd>
+#: help/window_main.html:338
+#, fuzzy
+msgid ""
+"Shows the current maximum upload rate. Zero speed value means that upload "
+"limiting is disabled."
+msgstr ""
+"Tu specyzujemy maksymalny stosunek wysyłu wyrażony w KiB/s. Zero oznacza "
+"brak limitowania. (domyślnie:0)"
 
 #. type: Content of: <html><body><h1>
 #: help/window_network_stats.html:10 help/window_network_stats.html:11
@@ -12913,16 +13049,6 @@ msgstr ""
 "Zauważ, że nie jest to kolejka pobierania lecz jedynie wizualna prezentacja, "
 "kto potrzebuje od ciebie slot i na co."
 
-#~ msgid "Enable transfer rate limiting"
-#~ msgstr "Włącz limiter transferu"
-
-#~ msgid ""
-#~ "With this checkbox you can globally enable or disable the bandwith "
-#~ "limiting function."
-#~ msgstr ""
-#~ "Zaznaczając ten kwadracik możesz całkowicie włączyć lub wyłączyć funkcję "
-#~ "limitowania łącza."
-
 #~ msgid "Jump between input boxes."
 #~ msgstr "Zmiana okien."
 
@@ -13259,6 +13385,10 @@ msgstr ""
 #~ "= huby NMDC gdzie jesteś operatorem, \"adc://\" = wszystkie huby ADC, "
 #~ "\"adc://op\" = huby ADC gdzie jesteś operatorem, \"adcs://\" = wszystkie "
 #~ "huby z <a po4a-id=0>TLS</a>)"
+
+#~ msgid ""
+#~ "%[line:<i>reason</i>]: Opens up a window asking for \"<i>reason</i>\""
+#~ msgstr "%[line:<i>reason</i>]: Otwiera okno z zapytaniem \"<i>reason</i>\""
 
 #~ msgid ""
 #~ "Just run the installer and fire up DC++, then enter the settings to set "

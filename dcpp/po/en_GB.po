@@ -7,43 +7,43 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:39+0100\n"
-"PO-Revision-Date: 2009-02-21 23:03+0000\n"
-"Last-Translator: MikeJJ <Unknown>\n"
+"POT-Creation-Date: 2010-05-10 19:47+0200\n"
+"PO-Revision-Date: 2010-04-06 00:30+0000\n"
+"Last-Translator: Jonathon Fernyhough <j.fernyhough@gmail.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp\Util.cpp:490
-#, c-format, boost-format
+#: dcpp\Util.cpp:491
+#, boost-format, c-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:452
-#, c-format, boost-format
+#: dcpp\Util.cpp:453
+#, boost-format, c-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:448
-#, c-format, boost-format
+#: dcpp\Util.cpp:449
+#, boost-format, c-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:450
-#, c-format, boost-format
+#: dcpp\Util.cpp:451
+#, boost-format, c-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:456
-#, c-format, boost-format
+#: dcpp\Util.cpp:457
+#, boost-format, c-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:454
-#, c-format, boost-format
+#: dcpp\Util.cpp:455
+#, boost-format, c-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
 
@@ -79,18 +79,18 @@ msgstr "%1% was kicked: %2%"
 msgid "%1%/s"
 msgstr "%1%/s"
 
-#: dcpp\DownloadManager.cpp:539
+#: dcpp\DownloadManager.cpp:540
 #, boost-format
 msgid "%1%: File not available"
 msgstr "%1%: File not available"
 
-#: dcpp\Util.cpp:446
-#, c-format, boost-format
+#: dcpp\Util.cpp:447
+#, boost-format, c-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:486
-#, c-format, boost-format
+#: dcpp\Util.cpp:487
+#, boost-format, c-format
 msgid "%s B"
 msgstr "%s B"
 
@@ -99,9 +99,8 @@ msgid "<Enter string>"
 msgstr "<Enter string>"
 
 #: dcpp\QueueManager.cpp:631
-#, fuzzy
 msgid "A file with a different TTH root already exists in the queue"
-msgstr "A file with different tth root already exists in the queue"
+msgstr "A file with a different TTH root already exists in the queue"
 
 #: dcpp\QueueManager.cpp:628
 msgid "A file with a different size already exists in the queue"
@@ -117,9 +116,9 @@ msgstr "All download slots taken"
 
 #: dcpp\FavoriteManager.cpp:478
 msgid "Auto-connect group (converted)"
-msgstr ""
+msgstr "Auto-connect group (converted)"
 
-#: dcpp\DownloadManager.cpp:383 dcpp\DownloadManager.cpp:385
+#: dcpp\DownloadManager.cpp:384 dcpp\DownloadManager.cpp:386
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 inconsistency (SFV-Check)"
 
@@ -146,14 +145,13 @@ msgstr "Connectivity restored"
 msgid "Could not open target file: %1%"
 msgstr "Could not open target file: %1%"
 
-#: dcpp\ShareManager.cpp:421
+#: dcpp\ShareManager.cpp:462
 msgid "Directory already shared"
 msgstr "Directory already shared"
 
-#: dcpp\ShareManager.cpp:408
-#, fuzzy
+#: dcpp\ShareManager.cpp:449
 msgid "Directory is hidden"
-msgstr "Directory already shared"
+msgstr "Directory is hidden"
 
 #: dcpp\DirectoryListing.cpp:163
 msgid "Directory missing name attribute"
@@ -176,14 +174,14 @@ msgstr "Disconnected user leaving the hub: %1%"
 msgid "Download Queue"
 msgstr "Download Queue"
 
-#: dcpp\ShareManager.cpp:809
+#: dcpp\ShareManager.cpp:710
 #, boost-format
 msgid ""
-"Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %"
-"3%"
+"Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: "
+"%3%"
 msgstr ""
-"Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %"
-"3%"
+"Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: "
+"%3%"
 
 #: dcpp\QueueManager.cpp:706 dcpp\QueueManager.cpp:710
 #, boost-format
@@ -243,25 +241,24 @@ msgstr ""
 "port)"
 
 #: dcpp\QueueManager.cpp:693
-#, fuzzy
 msgid "File already exists at the target location"
-msgstr "A file of equal or larger size already exists at the target location"
+msgstr "File already exists at the target location"
 
-#: dcpp\ShareManager.cpp:965
-#, fuzzy, boost-format
+#: dcpp\ShareManager.cpp:866
+#, boost-format
 msgid "File list %1% generated"
-msgstr "File list refresh initiated"
+msgstr "File list %1% generated"
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:747
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "File list refresh failed: %1%"
 
-#: dcpp\ShareManager.cpp:894
+#: dcpp\ShareManager.cpp:795
 msgid "File list refresh finished"
 msgstr "File list refresh finished"
 
-#: dcpp\ShareManager.cpp:826
+#: dcpp\ShareManager.cpp:727
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -269,7 +266,7 @@ msgstr ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
 
-#: dcpp\ShareManager.cpp:869
+#: dcpp\ShareManager.cpp:770
 msgid "File list refresh initiated"
 msgstr "File list refresh initiated"
 
@@ -279,14 +276,14 @@ msgid "Finished hashing: %1%"
 msgstr "Finished hashing: %1%"
 
 #: dcpp\HashManager.cpp:82
-#, fuzzy, boost-format
+#, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
-msgstr "Finished hashing: %1% (%2%/s)"
+msgstr "Finished hashing: %1% (%2% at %3%/s)"
 
 #: dcpp\HashManager.cpp:85
-#, fuzzy, boost-format
+#, boost-format
 msgid "Finished hashing: %1% (%2%)"
-msgstr "Finished hashing: %1% (%2%/s)"
+msgstr "Finished hashing: %1% (%2%)"
 
 #: dcpp\DownloadManager.cpp:314
 msgid "Full tree does not match TTH root"
@@ -345,7 +342,7 @@ msgstr "More bytes written than requested"
 msgid "No certificate file chosen"
 msgstr "No certificate file chosen"
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:445
 msgid "No directory specified"
 msgstr "No directory specified"
 
@@ -353,11 +350,11 @@ msgstr "No directory specified"
 msgid "No private key file chosen"
 msgstr "No private key file chosen"
 
-#: dcpp\DownloadManager.cpp:428
+#: dcpp\DownloadManager.cpp:429
 msgid "No slots available"
 msgstr "No slots available"
 
-#: dcpp\AdcHub.cpp:641
+#: dcpp\AdcHub.cpp:660
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Not listening for connections - please restart %1%"
@@ -372,7 +369,7 @@ msgstr "Offline"
 msgid "Redirect user(s)"
 msgstr "Redirect user(s)"
 
-#: dcpp\ShareManager.cpp:424
+#: dcpp\ShareManager.cpp:465
 msgid "Remove all subdirectories before adding this one"
 msgstr "Remove all subdirectories before adding this one"
 
@@ -400,7 +397,7 @@ msgstr "Search enabled again"
 
 #: dcpp\ChatMessage.cpp:34
 msgid "Sent "
-msgstr ""
+msgstr "Sent "
 
 #: dcpp\DCPlusPlus.cpp:107
 msgid "Shared Files"
@@ -448,14 +445,13 @@ msgstr "The socks server failed establish a connection"
 msgid "The socks server requires authentication"
 msgstr "The socks server requires authentication"
 
-#: dcpp\ShareManager.cpp:412
+#: dcpp\ShareManager.cpp:453
 msgid "The temporary download directory cannot be shared"
 msgstr "The temporary download directory cannot be shared"
 
 #: dcpp\QueueManager.cpp:635
-#, fuzzy
 msgid "This file has already finished downloading"
-msgstr "This file is already queued"
+msgstr "This file has already finished downloading"
 
 #: dcpp\QueueManager.cpp:616
 msgid "This file is already queued"
@@ -467,6 +463,8 @@ msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
 "fix this"
 msgstr ""
+"This hub is trying to use your client to spam %1%, please urge hub owner to "
+"fix this"
 
 #: dcpp\Thread.cpp:34 dcpp\Thread.cpp:42
 msgid "Unable to create thread"
@@ -475,12 +473,12 @@ msgstr "Unable to create thread"
 #: dcpp\QueueManager.cpp:1038
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
-msgstr ""
+msgstr "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
 
 #: dcpp\QueueManager.cpp:1035
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
-msgstr ""
+msgstr "Unable to move %1% to %2% (%3%); renamed to %4%"
 
 #: dcpp\QueueManager.cpp:1209
 #, boost-format
@@ -497,13 +495,13 @@ msgid "Unable to send file %1%: %2%"
 msgstr "Unable to send file %1%: %2%"
 
 #: dcpp\Socket.cpp:54
-#, c-format, boost-format
+#, boost-format, c-format
 msgid "Unknown error: 0x%1$x"
 msgstr "Unknown error: 0x%1$x"
 
 #: dcpp\DCPlusPlus.cpp:115
 msgid "Users"
-msgstr ""
+msgstr "Users"
 
 #: dcpp\QueueManager.cpp:568
 msgid "You're trying to download from yourself!"
