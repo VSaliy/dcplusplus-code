@@ -1,3 +1,4 @@
+-- 0.762 2010-05-16 --
 * Stability improvement related to menus (poy)
 * [L#539992] Shell menus for directories when browsing own file list (poy)
 * Parse separators in titles of user command param boxes (poy)

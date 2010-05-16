@@ -7,43 +7,43 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:39+0100\n"
-"PO-Revision-Date: 2009-06-15 18:25+0000\n"
-"Last-Translator: nairobie <samuel.ostman@gmail.com>\n"
+"POT-Creation-Date: 2010-05-10 19:47+0200\n"
+"PO-Revision-Date: 2010-04-18 10:52+0000\n"
+"Last-Translator: Toast <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp\Util.cpp:490
-#, c-format, boost-format
+#: dcpp\Util.cpp:491
+#, boost-format, c-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:452
-#, c-format, boost-format
+#: dcpp\Util.cpp:453
+#, boost-format, c-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:448
-#, c-format, boost-format
+#: dcpp\Util.cpp:449
+#, boost-format, c-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:450
-#, c-format, boost-format
+#: dcpp\Util.cpp:451
+#, boost-format, c-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:456
-#, c-format, boost-format
+#: dcpp\Util.cpp:457
+#, boost-format, c-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:454
-#, c-format, boost-format
+#: dcpp\Util.cpp:455
+#, boost-format, c-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
 
@@ -78,18 +78,18 @@ msgstr "%1% kickades: %2%"
 msgid "%1%/s"
 msgstr "%1%/s"
 
-#: dcpp\DownloadManager.cpp:539
+#: dcpp\DownloadManager.cpp:540
 #, boost-format
 msgid "%1%: File not available"
 msgstr "%1%: Filen ej tillgänglig"
 
-#: dcpp\Util.cpp:446
-#, c-format, boost-format
+#: dcpp\Util.cpp:447
+#, boost-format, c-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:486
-#, c-format, boost-format
+#: dcpp\Util.cpp:487
+#, boost-format, c-format
 msgid "%s B"
 msgstr "%s B"
 
@@ -98,9 +98,8 @@ msgid "<Enter string>"
 msgstr "<Fyll i>"
 
 #: dcpp\QueueManager.cpp:631
-#, fuzzy
 msgid "A file with a different TTH root already exists in the queue"
-msgstr "En fil med annan tth-rot finns redan i kön"
+msgstr "En fil med en annan TTH root finns redan i kön"
 
 #: dcpp\QueueManager.cpp:628
 msgid "A file with a different size already exists in the queue"
@@ -116,9 +115,9 @@ msgstr "Alla nedladdningsplatser är upptagna"
 
 #: dcpp\FavoriteManager.cpp:478
 msgid "Auto-connect group (converted)"
-msgstr ""
+msgstr "Automatisk anslutnings grupp (koverterad)"
 
-#: dcpp\DownloadManager.cpp:383 dcpp\DownloadManager.cpp:385
+#: dcpp\DownloadManager.cpp:384 dcpp\DownloadManager.cpp:386
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 stämmer ej (kontrollera SFV)"
 
@@ -145,14 +144,13 @@ msgstr "Anslutning återställd"
 msgid "Could not open target file: %1%"
 msgstr "Kunde ej öppna målfilen: %1%"
 
-#: dcpp\ShareManager.cpp:421
+#: dcpp\ShareManager.cpp:462
 msgid "Directory already shared"
 msgstr "Katalogen är redan utdelad"
 
-#: dcpp\ShareManager.cpp:408
-#, fuzzy
+#: dcpp\ShareManager.cpp:449
 msgid "Directory is hidden"
-msgstr "Katalogen är redan utdelad"
+msgstr "Mappen är dold"
 
 #: dcpp\DirectoryListing.cpp:163
 msgid "Directory missing name attribute"
@@ -175,11 +173,11 @@ msgstr "Frånkopplad användare lämnar hubben: %1%"
 msgid "Download Queue"
 msgstr "Nedladdningskö"
 
-#: dcpp\ShareManager.cpp:809
+#: dcpp\ShareManager.cpp:710
 #, boost-format
 msgid ""
-"Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %"
-"3%"
+"Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: "
+"%3%"
 msgstr "Dubletter delas inte ut: %1% (Storlek: %2% B) Är dublett av: %3%"
 
 #: dcpp\QueueManager.cpp:706 dcpp\QueueManager.cpp:710
@@ -240,25 +238,24 @@ msgstr ""
 "adress och port)"
 
 #: dcpp\QueueManager.cpp:693
-#, fuzzy
 msgid "File already exists at the target location"
-msgstr "En fil med samma eller större storlek finns redan vid destinationen"
+msgstr "Filen finns redan på målplatsen"
 
-#: dcpp\ShareManager.cpp:965
-#, fuzzy, boost-format
+#: dcpp\ShareManager.cpp:866
+#, boost-format
 msgid "File list %1% generated"
-msgstr "Uppdatering av fillistan påbörjad"
+msgstr "Fil listan %1% generarad"
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:747
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Misslyckades uppdatera fillistan: %1%"
 
-#: dcpp\ShareManager.cpp:894
+#: dcpp\ShareManager.cpp:795
 msgid "File list refresh finished"
 msgstr "Uppdatering av fillistan klar"
 
-#: dcpp\ShareManager.cpp:826
+#: dcpp\ShareManager.cpp:727
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -266,7 +263,7 @@ msgstr ""
 "Uppdatering av fillistan pågår, var god vänta tills den är klar innan du "
 "försöker uppdatera igen"
 
-#: dcpp\ShareManager.cpp:869
+#: dcpp\ShareManager.cpp:770
 msgid "File list refresh initiated"
 msgstr "Uppdatering av fillistan påbörjad"
 
@@ -276,14 +273,14 @@ msgid "Finished hashing: %1%"
 msgstr "Hashning färdig: %1%"
 
 #: dcpp\HashManager.cpp:82
-#, fuzzy, boost-format
+#, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
-msgstr "Hashning färdig: %1% (%2%/s)"
+msgstr "Färdiga hashing: %1% (%2% at %3%/s)"
 
 #: dcpp\HashManager.cpp:85
-#, fuzzy, boost-format
+#, boost-format
 msgid "Finished hashing: %1% (%2%)"
-msgstr "Hashning färdig: %1% (%2%/s)"
+msgstr "Färdiga hashing: %1% (%2%)"
 
 #: dcpp\DownloadManager.cpp:314
 msgid "Full tree does not match TTH root"
@@ -342,7 +339,7 @@ msgstr "Skrev fler byte än efterfrågat"
 msgid "No certificate file chosen"
 msgstr "Ingen certifikatfil vald"
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:445
 msgid "No directory specified"
 msgstr "Ingen katalog vald"
 
@@ -350,11 +347,11 @@ msgstr "Ingen katalog vald"
 msgid "No private key file chosen"
 msgstr "Ingen privat nyckel vald"
 
-#: dcpp\DownloadManager.cpp:428
+#: dcpp\DownloadManager.cpp:429
 msgid "No slots available"
 msgstr "Inga platser tillgängliga"
 
-#: dcpp\AdcHub.cpp:641
+#: dcpp\AdcHub.cpp:660
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Lyssnar inte efter anslutningar - var god starta om %1%"
@@ -369,7 +366,7 @@ msgstr "Frånkopplad"
 msgid "Redirect user(s)"
 msgstr "Omdirigera användare"
 
-#: dcpp\ShareManager.cpp:424
+#: dcpp\ShareManager.cpp:465
 msgid "Remove all subdirectories before adding this one"
 msgstr "Ta bort alla underkataloger innan du lägger till denna"
 
@@ -397,7 +394,7 @@ msgstr "Sökning återaktiverad"
 
 #: dcpp\ChatMessage.cpp:34
 msgid "Sent "
-msgstr ""
+msgstr "Skickad "
 
 #: dcpp\DCPlusPlus.cpp:107
 msgid "Shared Files"
@@ -446,14 +443,13 @@ msgstr "Socks-servern misslyckades upprätta en anslutning"
 msgid "The socks server requires authentication"
 msgstr "Socks-servern kräver verifiering"
 
-#: dcpp\ShareManager.cpp:412
+#: dcpp\ShareManager.cpp:453
 msgid "The temporary download directory cannot be shared"
 msgstr "Den tillfälliga nedladdningskatalogen kan ej delas ut"
 
 #: dcpp\QueueManager.cpp:635
-#, fuzzy
 msgid "This file has already finished downloading"
-msgstr "Filen finns redan i kön"
+msgstr "Den här filen har redan blivit nerladdad"
 
 #: dcpp\QueueManager.cpp:616
 msgid "This file is already queued"
@@ -465,6 +461,8 @@ msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
 "fix this"
 msgstr ""
+"Denna hub försöker använda din klient för att spamma %1%, Var god och "
+"uppmana hubbägaren att åtgärda problemet."
 
 #: dcpp\Thread.cpp:34 dcpp\Thread.cpp:42
 msgid "Unable to create thread"
@@ -473,12 +471,12 @@ msgstr "Kan ej skapa tråd"
 #: dcpp\QueueManager.cpp:1038
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
-msgstr ""
+msgstr "Kan inte flytta %1% till %2% (%3%) samt döpa om till %4% (%5%)"
 
 #: dcpp\QueueManager.cpp:1035
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
-msgstr ""
+msgstr "Kan inte flytta %1% till %2% (%3%) samt döpa om till %4%"
 
 #: dcpp\QueueManager.cpp:1209
 #, boost-format
@@ -495,13 +493,13 @@ msgid "Unable to send file %1%: %2%"
 msgstr "Kan ej skicka fil %1%: %2%"
 
 #: dcpp\Socket.cpp:54
-#, c-format, boost-format
+#, boost-format, c-format
 msgid "Unknown error: 0x%1$x"
 msgstr "Okänt fel: 0x%1$x"
 
 #: dcpp\DCPlusPlus.cpp:115
 msgid "Users"
-msgstr ""
+msgstr "Användare"
 
 #: dcpp\QueueManager.cpp:568
 msgid "You're trying to download from yourself!"
@@ -515,6 +513,7 @@ msgstr "nedladdad från"
 msgid "uploaded to"
 msgstr "uppladdad till"
 
+#, boost-format
 #~ msgid "%1% renamed to %2%"
 #~ msgstr "%1% omdöpt till %2%"
 
@@ -524,8 +523,10 @@ msgstr "uppladdad till"
 #~ msgid "File not available"
 #~ msgstr "Filen är inte tillgänglig"
 
+#, boost-format
 #~ msgid "Finished hashing: %1% (%2%/s)"
 #~ msgstr "Hashning färdig: %1% (%2%/s)"
 
+#, boost-format
 #~ msgid "Unable to rename %1%: %2%"
 #~ msgstr "Kan ej döpa om %1%: %2%"

@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:39+0100\n"
-"PO-Revision-Date: 2009-03-01 09:00+0000\n"
-"Last-Translator: Keruskerfuerst <armin_mohring@web.de>\n"
+"POT-Creation-Date: 2010-05-16 19:33+0200\n"
+"PO-Revision-Date: 2010-03-27 15:25+0000\n"
+"Last-Translator: Jan-Christoph Borchardt <inquata@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp\Util.cpp:490
+#: dcpp\Util.cpp:491
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:452
+#: dcpp\Util.cpp:453
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:448
+#: dcpp\Util.cpp:449
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:450
+#: dcpp\Util.cpp:451
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:456
+#: dcpp\Util.cpp:457
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:454
+#: dcpp\Util.cpp:455
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -80,17 +80,17 @@ msgstr "%1% wurde gekickt: %2%"
 msgid "%1%/s"
 msgstr "%1%/s"
 
-#: dcpp\DownloadManager.cpp:539
+#: dcpp\DownloadManager.cpp:540
 #, boost-format
 msgid "%1%: File not available"
 msgstr "%1%: Datei nicht verfügbar"
 
-#: dcpp\Util.cpp:446
+#: dcpp\Util.cpp:447
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:486
+#: dcpp\Util.cpp:487
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s B"
@@ -122,7 +122,7 @@ msgstr "Alle Downloadslots besetzt"
 msgid "Auto-connect group (converted)"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:383 dcpp\DownloadManager.cpp:385
+#: dcpp\DownloadManager.cpp:384 dcpp\DownloadManager.cpp:386
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 Inkonsistenz (SFV-Check)"
 
@@ -149,11 +149,11 @@ msgstr "Konnektivität wiederhergestellt"
 msgid "Could not open target file: %1%"
 msgstr "Konnte die Zieldatei nicht öffnen: %1%"
 
-#: dcpp\ShareManager.cpp:421
+#: dcpp\ShareManager.cpp:462
 msgid "Directory already shared"
 msgstr "Verzeichnis ist bereits freigegeben"
 
-#: dcpp\ShareManager.cpp:408
+#: dcpp\ShareManager.cpp:449
 #, fuzzy
 msgid "Directory is hidden"
 msgstr "Verzeichnis ist bereits freigegeben"
@@ -179,7 +179,7 @@ msgstr "Getrennter Benutzer verlässt Hub: %1%"
 msgid "Download Queue"
 msgstr "Download Warteschlange"
 
-#: dcpp\ShareManager.cpp:809
+#: dcpp\ShareManager.cpp:710
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %"
@@ -250,21 +250,21 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "Eine Datei gleicher oder größerer Größe existiert bereits am Zielort"
 
-#: dcpp\ShareManager.cpp:965
+#: dcpp\ShareManager.cpp:866
 #, fuzzy, boost-format
 msgid "File list %1% generated"
 msgstr "Aktualisieren der Dateiliste gestartet"
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:747
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Aktualisieren der Dateiliste fehlgeschlagen: %1%"
 
-#: dcpp\ShareManager.cpp:894
+#: dcpp\ShareManager.cpp:795
 msgid "File list refresh finished"
 msgstr "Aktualisieren der Dateiliste beendet"
 
-#: dcpp\ShareManager.cpp:826
+#: dcpp\ShareManager.cpp:727
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -272,7 +272,7 @@ msgstr ""
 "Aktualisieren der Dateiliste im Gange, bitte vor erneuter Aktualisierung auf "
 "Ende warten"
 
-#: dcpp\ShareManager.cpp:869
+#: dcpp\ShareManager.cpp:770
 msgid "File list refresh initiated"
 msgstr "Aktualisieren der Dateiliste gestartet"
 
@@ -348,7 +348,7 @@ msgstr "Mehr bytes geschrieben als angefordert"
 msgid "No certificate file chosen"
 msgstr "Keine Zertifikat-Datei gewählt"
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:445
 msgid "No directory specified"
 msgstr "Kein Verzeichnis ausgewählt"
 
@@ -356,11 +356,11 @@ msgstr "Kein Verzeichnis ausgewählt"
 msgid "No private key file chosen"
 msgstr "Keine Privater Schlüssel-Datei gewählt"
 
-#: dcpp\DownloadManager.cpp:428
+#: dcpp\DownloadManager.cpp:429
 msgid "No slots available"
 msgstr "Keine Slots verfügbar"
 
-#: dcpp\AdcHub.cpp:641
+#: dcpp\AdcHub.cpp:660
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Es wird nicht auf Verbindungen gewartet - bitte %1% neustarten"
@@ -375,7 +375,7 @@ msgstr "Offline"
 msgid "Redirect user(s)"
 msgstr "Benutzer umleiten"
 
-#: dcpp\ShareManager.cpp:424
+#: dcpp\ShareManager.cpp:465
 msgid "Remove all subdirectories before adding this one"
 msgstr "Alle Unterverzeichnisse entfernen bevor dieses hinzugefügt wird"
 
@@ -403,7 +403,7 @@ msgstr "Suche wieder aktiviert"
 
 #: dcpp\ChatMessage.cpp:34
 msgid "Sent "
-msgstr ""
+msgstr "Gesendet "
 
 #: dcpp\DCPlusPlus.cpp:107
 msgid "Shared Files"
@@ -452,7 +452,7 @@ msgstr "Socks Server konnte keine Verbindung aufbauen"
 msgid "The socks server requires authentication"
 msgstr "Socks Server benötigt Authentifizierung"
 
-#: dcpp\ShareManager.cpp:412
+#: dcpp\ShareManager.cpp:453
 msgid "The temporary download directory cannot be shared"
 msgstr "Das temporäre Downloadverzeichnis kann nicht freigegeben werden"
 
@@ -507,7 +507,7 @@ msgstr "Unbekannter Fehler: 0x%1$x"
 
 #: dcpp\DCPlusPlus.cpp:115
 msgid "Users"
-msgstr ""
+msgstr "Benutzer"
 
 #: dcpp\QueueManager.cpp:568
 msgid "You're trying to download from yourself!"

@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:39+0100\n"
+"POT-Creation-Date: 2010-05-16 19:33+0200\n"
 "PO-Revision-Date: 2008-11-09 08:26+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp\Util.cpp:490
+#: dcpp\Util.cpp:491
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld ב'"
 
-#: dcpp\Util.cpp:452
+#: dcpp\Util.cpp:453
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f ג\"ב"
 
-#: dcpp\Util.cpp:448
+#: dcpp\Util.cpp:449
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f ק\"ב"
 
-#: dcpp\Util.cpp:450
+#: dcpp\Util.cpp:451
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f מ\"ב"
 
-#: dcpp\Util.cpp:456
+#: dcpp\Util.cpp:457
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f פ\"ב"
 
-#: dcpp\Util.cpp:454
+#: dcpp\Util.cpp:455
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f ט\"ב"
@@ -78,17 +78,17 @@ msgstr "%1% נבעט: %2%"
 msgid "%1%/s"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:539
+#: dcpp\DownloadManager.cpp:540
 #, boost-format
 msgid "%1%: File not available"
 msgstr "%1%: הקובץ אינו זמין"
 
-#: dcpp\Util.cpp:446
+#: dcpp\Util.cpp:447
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d ב'"
 
-#: dcpp\Util.cpp:486
+#: dcpp\Util.cpp:487
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s ב'"
@@ -118,7 +118,7 @@ msgstr "כל חריצי ההורדה תפוסים"
 msgid "Auto-connect group (converted)"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:383 dcpp\DownloadManager.cpp:385
+#: dcpp\DownloadManager.cpp:384 dcpp\DownloadManager.cpp:386
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "אי־רציפות ה־CRC32 (בדיקת־SFV)"
 
@@ -145,11 +145,11 @@ msgstr "ההתקשרות שוחזרה"
 msgid "Could not open target file: %1%"
 msgstr "לאניתן לפתוח את קובץ היעד: %1%"
 
-#: dcpp\ShareManager.cpp:421
+#: dcpp\ShareManager.cpp:462
 msgid "Directory already shared"
 msgstr "התיקייה כבר משותפת"
 
-#: dcpp\ShareManager.cpp:408
+#: dcpp\ShareManager.cpp:449
 #, fuzzy
 msgid "Directory is hidden"
 msgstr "התיקייה כבר משותפת"
@@ -175,7 +175,7 @@ msgstr "משתמש מנותק עוזב את הרכזת: %1%"
 msgid "Download Queue"
 msgstr "תור ההורדה"
 
-#: dcpp\ShareManager.cpp:809
+#: dcpp\ShareManager.cpp:710
 #, fuzzy, boost-format
 msgid ""
 "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %"
@@ -244,27 +244,27 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "קובץ בעל גודל זהה או רב יותר כבר קיים במיקום היעד"
 
-#: dcpp\ShareManager.cpp:965
+#: dcpp\ShareManager.cpp:866
 #, fuzzy, boost-format
 msgid "File list %1% generated"
 msgstr "רענון רשימת הקבצים החל"
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:747
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "רענון רשימת הקבצים נכשל: %1%"
 
-#: dcpp\ShareManager.cpp:894
+#: dcpp\ShareManager.cpp:795
 msgid "File list refresh finished"
 msgstr "רענון רשימת קבצים הסתיים"
 
-#: dcpp\ShareManager.cpp:826
+#: dcpp\ShareManager.cpp:727
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
 msgstr "רענון רשימת הקבצים מתבצע כעת, אנא המתן לסיומו לפני שתנסה לרענן שוב"
 
-#: dcpp\ShareManager.cpp:869
+#: dcpp\ShareManager.cpp:770
 msgid "File list refresh initiated"
 msgstr "רענון רשימת הקבצים החל"
 
@@ -338,7 +338,7 @@ msgstr "יותר בטים נכתבו מאשר נתבקשו"
 msgid "No certificate file chosen"
 msgstr "לא התבקשה תעודה"
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:445
 msgid "No directory specified"
 msgstr "לא הוגדרה תיקייה"
 
@@ -346,11 +346,11 @@ msgstr "לא הוגדרה תיקייה"
 msgid "No private key file chosen"
 msgstr "לא נבחר קובץ מפתח פרטי"
 
-#: dcpp\DownloadManager.cpp:428
+#: dcpp\DownloadManager.cpp:429
 msgid "No slots available"
 msgstr "אין חריצים פנויים"
 
-#: dcpp\AdcHub.cpp:641
+#: dcpp\AdcHub.cpp:660
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "לא מתבצעת האזנת חיבורים - אנא הפעל מחדש את %1%"
@@ -365,7 +365,7 @@ msgstr "מנותק"
 msgid "Redirect user(s)"
 msgstr "הפנה משתמש/ים"
 
-#: dcpp\ShareManager.cpp:424
+#: dcpp\ShareManager.cpp:465
 msgid "Remove all subdirectories before adding this one"
 msgstr "הסר את כל התת־תיקיות לפני שתוסיף את זאת"
 
@@ -441,7 +441,7 @@ msgstr "כשל בקיום ההתחברות לשרת ה־socks"
 msgid "The socks server requires authentication"
 msgstr "שרת ה־socks דורש אימות"
 
-#: dcpp\ShareManager.cpp:412
+#: dcpp\ShareManager.cpp:453
 msgid "The temporary download directory cannot be shared"
 msgstr "לא ניתן לשתף את תיקיית ההורדות הזמניות"
 

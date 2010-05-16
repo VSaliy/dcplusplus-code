@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:39+0100\n"
+"POT-Creation-Date: 2010-05-16 19:33+0200\n"
 "PO-Revision-Date: 2008-04-13 13:38+0000\n"
 "Last-Translator: el_libre - http://www.catmidia.cat  "
 "XDDDDDDDDDDDDDDDDDDDDDDDDDDD <el.libre@gmail.com>\n"
@@ -15,35 +15,35 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp\Util.cpp:490
+#: dcpp\Util.cpp:491
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr "%'lld B"
 
-#: dcpp\Util.cpp:452
+#: dcpp\Util.cpp:453
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr "%.02f GiB"
 
-#: dcpp\Util.cpp:448
+#: dcpp\Util.cpp:449
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr "%.02f KiB"
 
-#: dcpp\Util.cpp:450
+#: dcpp\Util.cpp:451
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr "%.02f MiB"
 
-#: dcpp\Util.cpp:456
+#: dcpp\Util.cpp:457
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr "%.02f PiB"
 
-#: dcpp\Util.cpp:454
+#: dcpp\Util.cpp:455
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
@@ -79,17 +79,17 @@ msgstr ""
 msgid "%1%/s"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:539
+#: dcpp\DownloadManager.cpp:540
 #, fuzzy, boost-format
 msgid "%1%: File not available"
 msgstr "Fitxer no disponible"
 
-#: dcpp\Util.cpp:446
+#: dcpp\Util.cpp:447
 #, c-format, boost-format
 msgid "%d B"
 msgstr "%d B"
 
-#: dcpp\Util.cpp:486
+#: dcpp\Util.cpp:487
 #, c-format, boost-format
 msgid "%s B"
 msgstr "%s Oct"
@@ -120,7 +120,7 @@ msgstr "No hi han slots de descàrrega lliures"
 msgid "Auto-connect group (converted)"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:383 dcpp\DownloadManager.cpp:385
+#: dcpp\DownloadManager.cpp:384 dcpp\DownloadManager.cpp:386
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "Inconsistencia CRC32 (Comprov-SFV)"
 
@@ -149,11 +149,11 @@ msgstr "S'ha esgotat el temps per la conexió"
 msgid "Could not open target file: %1%"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:421
+#: dcpp\ShareManager.cpp:462
 msgid "Directory already shared"
 msgstr "Aquest directori ja està compartit"
 
-#: dcpp\ShareManager.cpp:408
+#: dcpp\ShareManager.cpp:449
 #, fuzzy
 msgid "Directory is hidden"
 msgstr "Aquest directori ja està compartit"
@@ -179,7 +179,7 @@ msgstr ""
 msgid "Download Queue"
 msgstr "Cua de descàrrega"
 
-#: dcpp\ShareManager.cpp:809
+#: dcpp\ShareManager.cpp:710
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %"
@@ -248,27 +248,27 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "Un fitxer igual o més gran ja existeix al destí"
 
-#: dcpp\ShareManager.cpp:965
+#: dcpp\ShareManager.cpp:866
 #, fuzzy, boost-format
 msgid "File list %1% generated"
 msgstr "S'ha iniciat la actualizació de la llista de fitxers"
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:747
 #, fuzzy, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "S'ha acabt la actualització de la llista de fitxers"
 
-#: dcpp\ShareManager.cpp:894
+#: dcpp\ShareManager.cpp:795
 msgid "File list refresh finished"
 msgstr "S'ha acabt la actualització de la llista de fitxers"
 
-#: dcpp\ShareManager.cpp:826
+#: dcpp\ShareManager.cpp:727
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:869
+#: dcpp\ShareManager.cpp:770
 msgid "File list refresh initiated"
 msgstr "S'ha iniciat la actualizació de la llista de fitxers"
 
@@ -343,7 +343,7 @@ msgstr "S'ha enviado més dades que les esperades"
 msgid "No certificate file chosen"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:445
 msgid "No directory specified"
 msgstr "Directori no especificat"
 
@@ -351,11 +351,11 @@ msgstr "Directori no especificat"
 msgid "No private key file chosen"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:428
+#: dcpp\DownloadManager.cpp:429
 msgid "No slots available"
 msgstr "No queden slots disponibles"
 
-#: dcpp\AdcHub.cpp:641
+#: dcpp\AdcHub.cpp:660
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
@@ -370,7 +370,7 @@ msgstr "Desconectat"
 msgid "Redirect user(s)"
 msgstr "Redireccionar usuari(s)"
 
-#: dcpp\ShareManager.cpp:424
+#: dcpp\ShareManager.cpp:465
 msgid "Remove all subdirectories before adding this one"
 msgstr "Eliminar tots els subdirectoris avans d'agregar aquest"
 
@@ -449,7 +449,7 @@ msgstr "El servidor socks ha fallat a l'establir la conenxió"
 msgid "The socks server requires authentication"
 msgstr "el servidor socks nescessita autentificació"
 
-#: dcpp\ShareManager.cpp:412
+#: dcpp\ShareManager.cpp:453
 msgid "The temporary download directory cannot be shared"
 msgstr "El directorio de descàrregues temporals no es pot compartir"
 

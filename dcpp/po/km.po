@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-03-11 18:39+0100\n"
+"POT-Creation-Date: 2010-05-16 19:33+0200\n"
 "PO-Revision-Date: 2008-03-13 23:10+0000\n"
 "Last-Translator: Jacek Sieka <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-10 20:21+0000\n"
+"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: dcpp\Util.cpp:490
+#: dcpp\Util.cpp:491
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr ""
 
-#: dcpp\Util.cpp:452
+#: dcpp\Util.cpp:453
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr ""
 
-#: dcpp\Util.cpp:448
+#: dcpp\Util.cpp:449
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr ""
 
-#: dcpp\Util.cpp:450
+#: dcpp\Util.cpp:451
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr ""
 
-#: dcpp\Util.cpp:456
+#: dcpp\Util.cpp:457
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr ""
 
-#: dcpp\Util.cpp:454
+#: dcpp\Util.cpp:455
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr ""
@@ -78,17 +78,17 @@ msgstr ""
 msgid "%1%/s"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:539
+#: dcpp\DownloadManager.cpp:540
 #, fuzzy, boost-format
 msgid "%1%: File not available"
 msgstr "ឯកសារពុំអាចរកបាន"
 
-#: dcpp\Util.cpp:446
+#: dcpp\Util.cpp:447
 #, c-format, boost-format
 msgid "%d B"
 msgstr ""
 
-#: dcpp\Util.cpp:486
+#: dcpp\Util.cpp:487
 #, c-format, boost-format
 msgid "%s B"
 msgstr ""
@@ -118,7 +118,7 @@ msgstr "ប្រលោះទាញយកទាំងអស់ គ្មាន�
 msgid "Auto-connect group (converted)"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:383 dcpp\DownloadManager.cpp:385
+#: dcpp\DownloadManager.cpp:384 dcpp\DownloadManager.cpp:386
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 មិនខ្ជាប់ខ្ជួន (SFV-ត្រួតពិនិត្យ)"
 
@@ -147,11 +147,11 @@ msgstr "ការតភ្ជាប់ អស់ពេល"
 msgid "Could not open target file: %1%"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:421
+#: dcpp\ShareManager.cpp:462
 msgid "Directory already shared"
 msgstr "ថតក្រូណូបានចែករំលែករួចហើយ"
 
-#: dcpp\ShareManager.cpp:408
+#: dcpp\ShareManager.cpp:449
 #, fuzzy
 msgid "Directory is hidden"
 msgstr "ថតក្រូណូបានចែករំលែករួចហើយ"
@@ -177,7 +177,7 @@ msgstr ""
 msgid "Download Queue"
 msgstr "ទាញយកដាក់ជាជួរ"
 
-#: dcpp\ShareManager.cpp:809
+#: dcpp\ShareManager.cpp:710
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %"
@@ -244,27 +244,27 @@ msgstr ""
 msgid "File already exists at the target location"
 msgstr "ទំហំឯកសារដែលប៉ុនគ្នា ឬ ធំជាង គឺមានរួចហើយនៅឯទីតាំងគោលដៅ"
 
-#: dcpp\ShareManager.cpp:965
+#: dcpp\ShareManager.cpp:866
 #, fuzzy, boost-format
 msgid "File list %1% generated"
 msgstr "បញ្ជីឯកសារដែលធ្វើអោយស្រស់ បានផ្តើមថ្មី"
 
-#: dcpp\ShareManager.cpp:846
+#: dcpp\ShareManager.cpp:747
 #, fuzzy, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "បញ្ជីឯកសារដែលធ្វើអោយស្រស់ បានបញ្ចប់"
 
-#: dcpp\ShareManager.cpp:894
+#: dcpp\ShareManager.cpp:795
 msgid "File list refresh finished"
 msgstr "បញ្ជីឯកសារដែលធ្វើអោយស្រស់ បានបញ្ចប់"
 
-#: dcpp\ShareManager.cpp:826
+#: dcpp\ShareManager.cpp:727
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:869
+#: dcpp\ShareManager.cpp:770
 msgid "File list refresh initiated"
 msgstr "បញ្ជីឯកសារដែលធ្វើអោយស្រស់ បានផ្តើមថ្មី"
 
@@ -337,7 +337,7 @@ msgstr "ទិន្នន័យជាច្រើនត្រូវបានផ
 msgid "No certificate file chosen"
 msgstr ""
 
-#: dcpp\ShareManager.cpp:404
+#: dcpp\ShareManager.cpp:445
 msgid "No directory specified"
 msgstr "គ្មានថតក្រូណូបញ្ជាក់លម្អិត"
 
@@ -345,11 +345,11 @@ msgstr "គ្មានថតក្រូណូបញ្ជាក់លម្អ
 msgid "No private key file chosen"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:428
+#: dcpp\DownloadManager.cpp:429
 msgid "No slots available"
 msgstr "គ្មានប្រលោះដែលអាចរកបាន"
 
-#: dcpp\AdcHub.cpp:641
+#: dcpp\AdcHub.cpp:660
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
@@ -364,7 +364,7 @@ msgstr "ក្រៅបណ្តាញ"
 msgid "Redirect user(s)"
 msgstr "ប្តូរទិសអ្នកប្រើ"
 
-#: dcpp\ShareManager.cpp:424
+#: dcpp\ShareManager.cpp:465
 msgid "Remove all subdirectories before adding this one"
 msgstr "យកថតក្រូណូរងចេញទាំងអស់ មុននឹងបន្ថែមមួយនេះ"
 
@@ -443,7 +443,7 @@ msgstr "រន្ធម៉ាស៊ីនបម្រើបរាជ័យក្
 msgid "The socks server requires authentication"
 msgstr "រន្ធម៉ាស៊ីនបម្រើតម្រូវអោយមានការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ"
 
-#: dcpp\ShareManager.cpp:412
+#: dcpp\ShareManager.cpp:453
 msgid "The temporary download directory cannot be shared"
 msgstr "ថតក្រូណូដែលទាញយកជាបណ្តោះអាសន្ន មិនអាចត្រូវបានចែករំលែក"
 
