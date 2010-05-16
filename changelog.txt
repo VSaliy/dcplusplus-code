@@ -21,7 +21,8 @@
 * [L#545264] Correct ADC hub counts (emtee)
 * Add an "Elapsed" column in finished transfer windows (poy)
 * [L#539841] Network settings arrangements (poy)
-* [L#556799] Fix positioning and possible queue problems with downloaded file lists (emtee) 
+* [L#556799] Fix positioning and possible queue problems with downloaded file lists (emtee)
+* Refresh open file lists when they are being opened again (poy)
 
 -- 0.761 2010-03-14 --
 * [L#533840] Fix crashes with themed menus (poy)

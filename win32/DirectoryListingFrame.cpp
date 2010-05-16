@@ -80,15 +80,22 @@ int DirectoryListingFrame::ItemInfo::compareItems(ItemInfo* a, ItemInfo* b, int 
 }
 
 void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed) {
-	UserIter i = lists.find(aUser);
-	if(i != lists.end()) {
-		i->second->speed = aSpeed;
-	} else {
-		DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
-		frame->loadFile(aFile, aDir);
-		if(!BOOLSETTING(POPUNDER_FILELIST))
-			frame->activate();
+	bool wasActive = false;
+	UserIter prev = lists.find(aUser);
+	if(prev != lists.end()) {
+		wasActive = prev->second->isActive();
+		// close the other window this way instead of via SendMessage so we don't have to wait for it
+		MSG msg = { prev->second->handle(), WM_CLOSE };
+		prev->second->getDispatcher().chain(msg);
 	}
+
+	DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
+	frame->loadFile(aFile, aDir);
+
+	if(!wasActive && BOOLSETTING(POPUNDER_FILELIST))
+		frame->setDirty(SettingsManager::POPUNDER_FILELIST); /// @todo add a setting
+	else
+		frame->activate();
 }
 
 void DirectoryListingFrame::openOwnList(dwt::TabView* parent) {
@@ -145,10 +152,13 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const HintedUser
 	if(i != lists.end()) {
 		i->second->speed = aSpeed;
 		i->second->loadXML(txt);
+		i->second->setDirty(SettingsManager::POPUNDER_FILELIST); /// @todo add a setting
 	} else {
 		DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
 		frame->loadXML(txt);
-		if(!BOOLSETTING(POPUNDER_FILELIST))
+		if(BOOLSETTING(POPUNDER_FILELIST))
+			frame->setDirty(SettingsManager::POPUNDER_FILELIST); /// @todo add a setting
+		else
 			frame->activate();
 	}
 }

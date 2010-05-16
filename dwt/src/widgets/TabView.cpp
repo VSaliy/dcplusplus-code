@@ -162,7 +162,7 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 	w->onTextChanging(std::tr1::bind(&TabView::handleTextChanging, this, w, _1));
 }
 
-ContainerPtr TabView::getActive() {
+ContainerPtr TabView::getActive() const {
 	TabInfo* ti = getTabInfo(getSelected());
 	return ti ? ti->w : 0;
 }
