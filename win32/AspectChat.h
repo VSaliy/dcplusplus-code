@@ -64,7 +64,7 @@ protected:
 	virtual ~AspectChat() { }
 
 	tstring formatChatMessage(Client* aClient, const tstring& aLine) {
-		return _T("{\\urtf1\n") + chat->rtfEscape(aLine) + _T("}\n");
+		return Text::toT("{\\urtf1\n") + chat->rtfEscape(aLine) + Text::toT("}\n");
 	}
 
 	void addChat(Client* aClient, const tstring& aLine) {
