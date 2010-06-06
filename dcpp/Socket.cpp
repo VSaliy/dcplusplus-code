@@ -551,9 +551,9 @@ string Socket::resolve(const string& aDns) {
 	}
 #else
 	// POSIX doesn't guarantee the gethostbyname to be thread safe. And it may (will) return a pointer to static data.
-	struct addrinfo hints, *result;
 	string address = Util::emptyString;
-	memset(&hints, 0, sizeof(struct addrinfo));
+	addrinfo hints = { 0 };
+	addrinfo *result;
 	hints.ai_family = AF_INET;
 
 	if (getaddrinfo(aDns.c_str(), NULL, &hints, &result) == 0) {
