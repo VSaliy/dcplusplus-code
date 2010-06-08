@@ -53,6 +53,7 @@ IDH_FAV_HUB_GROUPS=dialog_fav_hub_groups.html
 IDH_ADLSP=dialog_adls_properties.html
 IDH_PUBLIC_HUB_LISTS=dialog_public_hub_lists.html
 IDH_CUSTOMIZE_TB=dialog_customize_tb.html
+IDH_STRING_LIST=dialog_string_list.html
 IDH_ADVANCED3PAGE=settings_expert.html
 IDH_ADVANCEDPAGE=settings_advanced.html
 IDH_APPEARANCE2PAGE=settings_colors_and_sounds.html

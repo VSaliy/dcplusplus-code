@@ -19,32 +19,23 @@
 #ifndef DCPLUSPLUS_WIN32_HUB_LISTS_DLG_H
 #define DCPLUSPLUS_WIN32_HUB_LISTS_DLG_H
 
-class HubListsDlg : public dwt::ModalDialog
+#include "StringListDlg.h"
+
+class HubListsDlg : public StringListDlg
 {
 public:
 	HubListsDlg(dwt::Widget* parent);
-	virtual ~HubListsDlg();
 
 	int run();
 
 private:
-	GridPtr grid;
-	TextBoxPtr editBox;
-	TablePtr hubLists;
+	tstring getTitle() const;
+	tstring getEditTitle() const;
+	tstring getEditDescription() const;
+	unsigned getHelpId(HelpFields field) const;
+	void add(const tstring& s);
 
-	bool handleInitDialog();
-	void handleDoubleClick();
-	bool handleKeyDown(int c);
-	void handleAddClicked();
-	void handleMoveUpClicked();
-	void handleMoveDownClicked();
-	void handleEditClicked();
-	void handleRemoveClicked();
-	void handleOKClicked();
-
-	void addHubList(const tstring& address, int index = -1);
-
-	void layout();
+	static TStringList getHubLists();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_HUB_LISTS_DLG_H)
