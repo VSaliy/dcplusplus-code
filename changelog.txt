@@ -1,5 +1,7 @@
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
 * [ADC] NAT traversal to allow passive-passive connections (thanks cologic)
+* Reduce donwload reconnect attempts after connection failures (poy)
+* [ADC] Handle fatal client-client STA commands (poy)
 
 -- 0.762 2010-05-16 --
 * Stability improvement related to menus (poy)
