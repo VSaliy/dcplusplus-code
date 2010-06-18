@@ -16,37 +16,34 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_UPNP_H
-#define DCPLUSPLUS_WIN32_UPNP_H
+#include "stdinc.h"
+#include "DCPlusPlus.h"
 
-class UPnP
-{
-public:
-	UPnP() { }
-	virtual ~UPnP() { }
+#include "UPnP.h"
 
-	virtual bool init() = 0;
+namespace dcpp {
 
-	enum Protocol {
-		PROTOCOL_TCP,
-		PROTOCOL_UDP,
-		PROTOCOL_LAST
-	};
-
-	virtual bool open(const unsigned short port, const Protocol protocol, const string& description) = 0;
-	bool close();
-
-	virtual string getExternalIP() = 0;
-
-protected:
-	static const char* protocols[PROTOCOL_LAST];
-
-	void open(const unsigned short port, const Protocol protocol);
-	virtual bool close(const unsigned short port, const Protocol protocol) = 0;
-
-private:
-	typedef std::pair<unsigned short, Protocol> rule;
-	std::vector<rule> rules;
+const char* UPnP::protocols[PROTOCOL_LAST] = {
+	"TCP",
+	"UDP"
 };
 
-#endif
+bool UPnP::open(const unsigned short port, const Protocol protocol, const string& description) {
+	if(!add(port, protocol, description))
+		return false;
+
+	rules.push_back(make_pair(port, protocol));
+	return true;
+}
+
+bool UPnP::close() {
+	bool ret = true;
+
+	for(std::vector<rule>::const_iterator i = rules.begin(), iend = rules.end(); i != iend; ++i)
+		ret &= remove(i->first, i->second);
+	rules.clear();
+
+	return ret;
+}
+
+} // namespace dcpp
