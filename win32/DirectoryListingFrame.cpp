@@ -80,20 +80,22 @@ int DirectoryListingFrame::ItemInfo::compareItems(ItemInfo* a, ItemInfo* b, int 
 }
 
 void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed) {
-	bool wasActive = false;
 	UserIter prev = lists.find(aUser);
-	if(prev != lists.end()) {
-		wasActive = prev->second->isActive();
-		// close the other window this way instead of via SendMessage so we don't have to wait for it
-		MSG msg = { prev->second->handle(), WM_CLOSE };
-		prev->second->getDispatcher().chain(msg);
+	if(prev == lists.end()) {
+		openWindow_(false, mdiParent, aFile, aDir, aUser, aSpeed);
+	} else {
+		bool wasActive = prev->second->isActive();
+		prev->second->close();
+		mdiParent->callAsync(std::tr1::bind(&DirectoryListingFrame::openWindow_, wasActive, mdiParent, aFile, aDir, aUser, aSpeed));
 	}
+}
 
+void DirectoryListingFrame::openWindow_(bool activate, dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed) {
 	DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
 	frame->loadFile(aFile, aDir);
 
-	if(!wasActive && BOOLSETTING(POPUNDER_FILELIST))
-		frame->setDirty(SettingsManager::POPUNDER_FILELIST); /// @todo add a setting
+	if(!activate && BOOLSETTING(POPUNDER_FILELIST))
+		frame->setDirty(SettingsManager::BOLD_FL);
 	else
 		frame->activate();
 }
