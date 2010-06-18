@@ -66,6 +66,9 @@ public:
 	const string& getId() const;
 
 	static void openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed);
+private:
+	static void openWindow_(bool activate, dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed);
+public:
 	static void openWindow(dwt::TabView* mdiParent, const HintedUser& aUser, const string& txt, int64_t aSpeed);
 	static void openOwnList(dwt::TabView* parent);
 	static void closeAll();
