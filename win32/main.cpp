@@ -22,11 +22,14 @@
 #include "WinUtil.h"
 #include "MainWindow.h"
 #include "SplashWindow.h"
+#include "UPnP_COM.h"
+#include "UPnP_MiniUPnPc.h"
 
 #include <dcpp/MerkleTree.h>
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
 #include <dcpp/ResourceManager.h>
+#include <dcpp/UPnPManager.h>
 
 #define WMU_WHERE_ARE_YOU_MSG _T("WMU_WHERE_ARE_YOU-{885D4B75-6606-4add-A8DE-EEEDC04181F1}")
 
@@ -112,7 +115,7 @@ int SmartWinMain(dwt::Application& app) {
 #endif
 #endif
 
-	// For SHBrowseForFolder, UPnP
+	// For SHBrowseForFolder, UPnP_COM
 	HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 	if(FAILED(hr))
 		return hr;
@@ -137,6 +140,9 @@ int SmartWinMain(dwt::Application& app) {
 		if(ResourceManager::getInstance()->isRTL()) {
 			SetProcessDefaultLayout(LAYOUT_RTL);
 		}
+
+		UPnPManager::getInstance()->addImplementation(new UPnP_MiniUPnPc());
+		UPnPManager::getInstance()->addImplementation(new UPnP_COM());
 
 		WinUtil::init();
 		MainWindow* wnd = new MainWindow;
