@@ -34,6 +34,7 @@ private:
 	tstring getEditDescription() const;
 	unsigned getHelpId(HelpFields field) const;
 	void add(const tstring& s);
+	void edit(unsigned row, const tstring& s);
 
 	static TStringList getHubLists();
 };
