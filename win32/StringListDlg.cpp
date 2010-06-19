@@ -51,6 +51,10 @@ void StringListDlg::insert(const tstring& line, int index) {
 	list->ensureVisible(index);
 }
 
+void StringListDlg::modify(unsigned row, const tstring& text) {
+	list->setText(row, 0, text);
+}
+
 tstring StringListDlg::getTitle() const {
 	return T_("List configuration");
 }
@@ -78,6 +82,12 @@ unsigned StringListDlg::getHelpId(HelpFields field) const {
 
 void StringListDlg::add(const tstring& s) {
 	insert(s);
+}
+
+void StringListDlg::edit(unsigned row, const tstring& s) {
+	ParamDlg dlg(this, getEditTitle(), getEditDescription(), s);
+	if(dlg.run() == IDOK)
+		modify(row, dlg.getValue());
 }
 
 bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
@@ -204,9 +214,7 @@ void StringListDlg::handleMoveDownClicked() {
 void StringListDlg::handleEditClicked() {
 	int i = -1;
 	while((i = list->getNext(i, LVNI_SELECTED)) != -1) {
-		ParamDlg dlg(this, getEditTitle(), getEditDescription(), list->getText(i, 0));
-		if(dlg.run() == IDOK)
-			list->setText(i, 0, dlg.getValue());
+		edit(i, list->getText(i, 0));
 	}
 }
 

@@ -24,6 +24,7 @@
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/StringTokenizer.h>
+#include "ParamDlg.h"
 
 HubListsDlg::HubListsDlg(dwt::Widget* parent) :
 StringListDlg(parent, getHubLists())
@@ -69,6 +70,23 @@ void HubListsDlg::add(const tstring& s) {
 	for(TStringIterC i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i)
 		if(!i->empty())
 			insert(*i);
+}
+
+void HubListsDlg::edit(unsigned row, const tstring& s) {
+	ParamDlg dlg(this, getEditTitle(), getEditDescription(), s);
+	if(dlg.run() == IDOK) {
+		bool modified = false;
+		StringTokenizer<tstring> t(dlg.getValue(), ';');
+		for(TStringIterC i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i)
+			if(!i->empty()) {
+				if(!modified) {
+					modify(row, *i);
+					modified = true;
+				} else {
+					insert(*i, ++row);
+				}
+			}
+	}
 }
 
 TStringList HubListsDlg::getHubLists() {

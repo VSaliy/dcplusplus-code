@@ -43,6 +43,7 @@ protected:
 	};
 
 	void insert(const tstring& line, int index = -1);
+	void modify(unsigned row, const tstring& value);
 
 private:
 	virtual tstring getTitle() const;
@@ -50,6 +51,7 @@ private:
 	virtual tstring getEditDescription() const;
 	virtual unsigned getHelpId(HelpFields field) const;
 	virtual void add(const tstring& s);
+	virtual void edit(unsigned row, const tstring& s);
 
 	GridPtr grid;
 	TextBoxPtr editBox;
