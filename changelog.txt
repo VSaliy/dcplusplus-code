@@ -3,6 +3,7 @@
 * Reduce donwload reconnect attempts after connection failures (poy)
 * Fix crashes related to file lists (poy)
 * [L#230973] Add MiniUPnPc for UPnP mappings and make it threaded (poy)
+* Be stricter when parsing list-looking %[line:] params (poy)
 
 -- 0.762 2010-05-16 --
 * Stability improvement related to menus (poy)

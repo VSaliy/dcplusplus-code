@@ -22,6 +22,8 @@
 
 #include "resource.h"
 
+#include <boost/lexical_cast.hpp>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/ClientManager.h>
@@ -689,21 +691,24 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 
 			// let's break between slashes (while ignoring double-slashes) to see if it's a combo
 			int combo_sel = -1;
-			tstring name_ = caption;
-			Util::replace(_T("//"), _T("\t"), name_);
-			TStringList combo_values = StringTokenizer<tstring>(name_, _T('/')).getTokens();
+			tstring combo_caption = caption;
+			Util::replace(_T("//"), _T("\t"), combo_caption);
+			TStringList combo_values = StringTokenizer<tstring>(combo_caption, _T('/')).getTokens();
 			if(combo_values.size() > 2) { // must contain at least: caption, default sel, 1 value
 
 				TStringIter first = combo_values.begin();
-				caption = *first;
+				combo_caption = *first;
 				combo_values.erase(first);
 
 				first = combo_values.begin();
-				combo_sel = Util::toUInt(Text::fromT(*first));
+				try { combo_sel = boost::lexical_cast<size_t>(Text::fromT(*first)); }
+				catch(const boost::bad_lexical_cast&) { combo_sel = -1; }
 				combo_values.erase(first);
 				if(static_cast<size_t>(combo_sel) >= combo_values.size())
-					combo_sel = 0; // default selection value too high
+					combo_sel = -1; // default selection value too high
+			}
 
+			if(combo_sel >= 0) {
 				for(TStringIter i = combo_values.begin(), iend = combo_values.end(); i != iend; ++i)
 					Util::replace(_T("\t"), _T("/"), *i);
 
@@ -711,13 +716,13 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 				TStringIterC prev = find(combo_values.begin(), combo_values.end(), Text::toT(sm["line:" + name]));
 				if(prev != combo_values.end())
 					combo_sel = prev - combo_values.begin();
-			}
 
-			if(combo_sel >= 0) {
-				dlg.addComboBox(caption, combo_values, combo_sel);
+				dlg.addComboBox(combo_caption, combo_values, combo_sel);
+
 			} else {
 				dlg.addTextBox(caption, Text::toT(sm["line:" + name]));
 			}
+
 			names.push_back(name);
 		}
 		i = j + 1;
