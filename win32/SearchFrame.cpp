@@ -186,18 +186,13 @@ droppedResults(0)
 		group = options->addChild(gs);
 		group->setHelpId(IDH_SEARCH_TYPE);
 
-		fileType = group->addChild(WinUtil::Seeds::comboBoxStatic);
-		addWidget(fileType);
-
-		fileType->addValue(T_("Any"));
-		fileType->addValue(T_("Audio"));
-		fileType->addValue(T_("Compressed"));
-		fileType->addValue(T_("Document"));
-		fileType->addValue(T_("Executable"));
-		fileType->addValue(T_("Picture"));
-		fileType->addValue(T_("Video"));
-		fileType->addValue(T_("Directory"));
-		fileType->addValue(T_("TTH"));
+		{
+			ComboBox::Seed cs = WinUtil::Seeds::comboBoxStatic;
+			cs.style |= CBS_SORT;
+			fileType = group->addChild(cs);
+			addWidget(fileType);
+			fillFileType(Text::toT(initialString.empty() ? SETTING(LAST_SEARCH_TYPE) : SearchManager::getTypeStr(initialType)));
+		}
 
 		gs.caption = T_("Search options");
 		cur = options->addChild(gs)->addChild(Grid::Seed(3, 1));
@@ -277,21 +272,54 @@ droppedResults(0)
 	hubs->setColumnWidth(0, LVSCW_AUTOSIZE);
 
 	SearchManager::getInstance()->addListener(this);
+	SettingsManager::getInstance()->addListener(this);
 
 	if(!initialString.empty()) {
 		lastSearches.push_back(initialString);
 		searchBox->insertValue(0, initialString);
 		searchBox->setSelected(0);
-		fileType->setSelected(initialType);
 		runSearch();
 	} else {
 		mode->setSelected(1);
-		fileType->setSelected(SETTING(LAST_SEARCH_TYPE));
 	}
 	searchBox->setFocus();
 }
 
 SearchFrame::~SearchFrame() {
+}
+
+void SearchFrame::fillFileType(const tstring& toSelect) {
+	typedef vector<pair<string, int> > values_type;
+	values_type values;
+	for(int type = SearchManager::TYPE_ANY; type != SearchManager::TYPE_LAST; ++type)
+		values.push_back(make_pair(SearchManager::getTypeStr(type), type));
+
+	const SettingsManager::SearchTypes& searchTypes = SettingsManager::getInstance()->getSearchTypes();
+	for(SettingsManager::SearchTypesIterC i = searchTypes.begin(), iend = searchTypes.end(); i != iend; ++i) {
+		if(i->first.size() > 1 || i->first[0] < '1' || i->first[0] > '6') { //Custom type
+			values.push_back(make_pair(i->first, SearchManager::TYPE_ANY));
+		}
+	}
+
+	bool selected = false;
+	for(values_type::const_iterator i = values.begin(), iend = values.end(); i != iend; ++i) {
+		tstring value = Text::toT(i->first);
+		int pos = fileType->addValue(value);
+		if(i->second != SearchManager::TYPE_ANY)
+			fileType->setData(pos, i->second);
+		if(!selected && value == toSelect) {
+			fileType->setSelected(pos);
+			selected = true;
+		}
+	}
+	if(!selected)
+		fileType->setSelected(0);
+}
+
+void SearchFrame::searchTypesChanged() {
+	tstring sel = fileType->getText();
+	fileType->clear();
+	fillFileType(sel);
 }
 
 void SearchFrame::layout() {
@@ -304,6 +332,7 @@ void SearchFrame::layout() {
 }
 
 bool SearchFrame::preClosing() {
+	SettingsManager::getInstance()->removeListener(this);
 	SearchManager::getInstance()->removeListener(this);
 	ClientManager::getInstance()->removeListener(this);
 
@@ -856,8 +885,11 @@ void SearchFrame::runSearch() {
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_FILTER_SHARED, filterShared);
 	if (bMerge != BOOLSETTING(SEARCH_MERGE))
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_MERGE, bMerge);
-	if (!initialType && fileType->getSelected() != SETTING(LAST_SEARCH_TYPE))
-		SettingsManager::getInstance()->set(SettingsManager::LAST_SEARCH_TYPE, fileType->getSelected());
+	if(initialType == SearchManager::TYPE_ANY) {
+		string text = Text::fromT(fileType->getText());
+		if(text != SETTING(LAST_SEARCH_TYPE))
+			SettingsManager::getInstance()->set(SettingsManager::LAST_SEARCH_TYPE, text);
+	}
 
 	tstring s = searchBox->getText();
 
@@ -928,7 +960,21 @@ void SearchFrame::runSearch() {
 	if(llsize == 0)
 		searchMode = SearchManager::SIZE_DONTCARE;
 
-	int ftype = fileType->getSelected();
+	int ftype = fileType->getData(fileType->getSelected());
+
+	// Get ADC searchtype extensions if any is selected
+	StringList extList;
+	try {
+		if(ftype == SearchManager::TYPE_ANY) {
+			// Custom searchtype
+			extList = SettingsManager::getInstance()->getExtensions(Text::fromT(fileType->getText()));
+		} else if(ftype > SearchManager::TYPE_ANY && ftype < SearchManager::TYPE_DIRECTORY) {
+			// Predefined searchtype
+			extList = SettingsManager::getInstance()->getExtensions(string(1, '0' + ftype));
+		}
+	} catch(const SearchTypeException&) {
+		ftype = SearchManager::TYPE_ANY;
+	}
 
 	status->setText(STATUS_STATUS, str(TF_("Searching for %1%...") % s));
 	status->setText(STATUS_COUNT, Util::emptyStringT);
@@ -939,8 +985,9 @@ void SearchFrame::runSearch() {
 	setText(str(TF_("Search - %1%") % s));
 
 	if(SearchManager::getInstance()->okToSearch()) {
+		dcdebug("Sent ADC extensions : %s\n",Util::toString(";",extList).c_str());
 		SearchManager::getInstance()->search(clients, Text::fromT(s), llsize,
-			(SearchManager::TypeModes)ftype, searchMode, token);
+			(SearchManager::TypeModes)ftype, searchMode, token, extList);
 		if(BOOLSETTING(CLEAR_SEARCH)) // Only clear if the search was sent
 			searchBox->setText(Util::emptyStringT);
 	} else {
@@ -1054,4 +1101,8 @@ void SearchFrame::on(ClientUpdated, Client* c) throw() {
 
 void SearchFrame::on(ClientDisconnected, Client* c) throw() {
 	callAsync(std::tr1::bind(&SearchFrame::onHubRemoved, this, new HubInfo(c)));
+}
+
+void SearchFrame::on(SettingsManagerListener::SearchTypesChanged) throw() {
+	callAsync(std::tr1::bind(&SearchFrame::searchTypesChanged, this));
 }

@@ -4,6 +4,7 @@
 * Fix crashes related to file lists (poy)
 * [L#230973] Add MiniUPnPc for UPnP mappings and make it threaded (poy)
 * Be stricter when parsing list-looking %[line:] params (poy)
+* [L#326541] [ADC] Customizable search type extensions (emtee)
 
 -- 0.762 2010-05-16 --
 * Stability improvement related to menus (poy)

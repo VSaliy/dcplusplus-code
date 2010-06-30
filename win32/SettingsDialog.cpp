@@ -40,6 +40,7 @@
 #include "UCPage.h"
 #include "CertificatesPage.h"
 #include "BandwidthLimitPage.h"
+#include "SearchTypesPage.h"
 
 SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
@@ -124,6 +125,7 @@ bool SettingsDialog::initDialog() {
 			addPage(T_("User Commands"), cur, new UCPage(cur), item);
 			addPage(T_("Security Certificates"), cur, new CertificatesPage(cur), item);
 			addPage(T_("Bandwidth Limiting"), cur, new BandwidthLimitPage(cur), item);
+			addPage(T_("Search Types"), cur, new SearchTypesPage(cur), item);
 		}
 	}
 
