@@ -60,6 +60,7 @@
 #define IDH_TABSPAGE 10314
 #define IDH_HISTORYPAGE 10315
 #define IDH_BWLIMITPAGE 10316
+#define IDH_SEARCHTYPESPAGE 10317
 
 // reserved for cshelp ids
 #define IDH_CSHELP_BEGIN 11000

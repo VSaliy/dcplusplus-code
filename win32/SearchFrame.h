@@ -25,11 +25,13 @@
 
 #include <dcpp/SearchResult.h>
 #include <dcpp/SearchManager.h>
+#include <dcpp/SettingsManager.h>
 #include <dcpp/ClientManagerListener.h>
 
 class SearchFrame :
 	public MDIChildFrame<SearchFrame>,
 	private SearchManagerListener,
+	private SettingsManagerListener,
 	private ClientManagerListener,
 	public AspectUserCommand<SearchFrame>
 {
@@ -230,6 +232,9 @@ private:
 	void initSecond();
 	bool eachSecond();
 
+	void fillFileType(const tstring& toSelect);
+	void searchTypesChanged();
+
 	void treat(const SearchInfo::Download& dl);
 
 	void runUserCommand(const UserCommand& uc);
@@ -245,6 +250,9 @@ private:
 	// SearchManagerListener
 	virtual void on(SearchManagerListener::SR, const SearchResultPtr& aResult) throw();
 	void addResult(SearchInfo* si);
+
+	// SettingsManagerListener
+	virtual void on(SettingsManagerListener::SearchTypesChanged) throw();
 
 	// ClientManagerListener
 	virtual void on(ClientConnected, Client* c) throw();

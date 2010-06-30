@@ -39,6 +39,7 @@
 #include "../aspects/AspectColor.h"
 #include "../aspects/AspectClickable.h"
 #include "../aspects/AspectCollection.h"
+#include "../aspects/AspectData.h"
 #include "../aspects/AspectDblClickable.h"
 #include "../aspects/AspectPainting.h"
 #include "../aspects/AspectSelection.h"
@@ -63,6 +64,7 @@ class ComboBox :
 	public AspectCollection<ComboBox, int>,
 	public AspectColor< ComboBox >,
 	public AspectColorCtlImpl<ComboBox>,
+	public AspectData<ComboBox, int>,
 	public AspectDblClickable< ComboBox >,
 	public AspectPainting< ComboBox >,
 	public AspectSelection< ComboBox, int >,
@@ -74,6 +76,7 @@ class ComboBox :
 	friend class AspectColor<ComboBox>;
 	friend class AspectSelection<ComboBox, int>;
 	friend class AspectClickable<ComboBox>;
+	friend class AspectData<ComboBox, int>;
 	friend class AspectDblClickable<ComboBox>;
 
 public:
@@ -153,6 +156,10 @@ private:
 	void eraseImpl( int row );
 	void clearImpl();
 	size_t sizeImpl() const;
+
+	// AspectData
+	LPARAM getDataImpl(int i);
+	void setDataImpl(int i, LPARAM data);
 
 	// Aspect expectation implementation
 	static const Message& getSelectionChangedMessage();

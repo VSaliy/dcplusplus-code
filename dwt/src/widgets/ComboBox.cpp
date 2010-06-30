@@ -85,4 +85,12 @@ void ComboBox::layout(const Rectangle& r) {
 	BaseType::layout(copy);
 }
 
+LPARAM ComboBox::getDataImpl(int i) {
+	return sendMessage(CB_GETITEMDATA, i);
+}
+
+void ComboBox::setDataImpl(int i, LPARAM data) {
+	sendMessage(CB_SETITEMDATA, i, data);
+}
+
 }
