@@ -1,12 +1,21 @@
 def gen_compile(target, source, env):
-	from cgi import escape
-	f_target = open(str(target[0]), "wb")
-	f_source = open(str(source[0]), "rb")
-	f_template = open(str(source[1]), "rb")
-	f_target.write(f_template.read().replace("<!-- contents -->", """
-<h1>Instructions to compile DC++</h1>
-<pre>
-""" + escape(f_source.read()) + "\n</pre>", 1))
-	f_target.close()
-	f_source.close()
-	f_template.close()
+	env.Execute('asciidoc -s -o"' + str(target[0]) + '" "' + str(source[0]) + '"')
+
+	f = open(str(source[1]), "rb")
+	template = f.read()
+	f.close()
+	template = template.split("<!-- contents -->", 1)
+
+	f = open(str(target[0]), "rb")
+	contents = f.read()
+	f.close()
+
+	import re
+	contents = re.sub(re.compile(r'<a ([^>]+)>([^<]+)</a>', re.I), r'<a \1 target="_blank" class="external">\2</a>', contents)
+
+	f = open(str(target[0]), "wb")
+	f.write(template[0]) # header
+	f.write("<h1>Compiling DC++</h1>")
+	f.write(contents)
+	f.write(template[1]) # footer
+	f.close()
