@@ -32,7 +32,8 @@ if env.WhereIs('perl') is None:
 	print 'Perl is required to run po4a scripts, skipping help build'
 	Return()
 
-if env.WhereIs('asciidoc') is None:
+env['asciidoc'] = dev.get_asciidoc()
+if env['asciidoc'] is None:
 	print 'asciidoc is required to process Compile.txt, skipping help build'
 	Return()
 

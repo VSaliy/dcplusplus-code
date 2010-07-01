@@ -126,6 +126,21 @@ class Dev:
 
 		return ret
 
+	# support installs that only have an asciidoc.py file but no executable
+	def get_asciidoc(self):
+		if 'PATHEXT' in self.env['ENV']:
+			pathext = self.env['ENV']['PATHEXT'] + ';.py'
+		else:
+			pathext = ''
+		asciidoc = self.env.WhereIs('asciidoc', pathext = pathext)
+		if asciidoc is None:
+			return None
+		if asciidoc[-3:] == '.py':
+			if self.env.WhereIs('python') is None:
+				return None
+			asciidoc = 'python ' + asciidoc
+		return asciidoc
+
 # source is *one* SCons file node (not a list!) designating the .po file
 # env must contain 'NAME_FILE', which is a SCons file node to the target file
 def gen_po_name(source, env):
