@@ -1,5 +1,5 @@
 def gen_compile(target, source, env):
-	env.Execute('asciidoc -s -o"' + str(target[0]) + '" "' + str(source[0]) + '"')
+	env.Execute(env['asciidoc'] + ' -s -o"' + str(target[0]) + '" "' + str(source[0]) + '"')
 
 	f = open(str(source[1]), "rb")
 	template = f.read()
