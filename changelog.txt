@@ -1,10 +1,12 @@
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
+* Fix socket resolve in *nix systems (thanks razzloss)
 * [ADC] NAT traversal to allow passive-passive connections (thanks cologic)
 * Reduce donwload reconnect attempts after connection failures (poy)
 * Fix crashes related to file lists (poy)
 * [L#230973] Add MiniUPnPc for UPnP mappings and make it threaded (poy)
 * Be stricter when parsing list-looking %[line:] params (poy)
-* [L#326541] [ADC] Customizable search type extensions (emtee)
+* [L#326541] [ADC] Customizable search type extensions (emtee, poy)
+* Help updates (poy)
 
 -- 0.762 2010-05-16 --
 * Stability improvement related to menus (poy)
