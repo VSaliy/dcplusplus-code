@@ -7,18 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-05-16 19:33+0300\n"
+"POT-Creation-Date: 2010-07-05 22:23+0300\n"
 "PO-Revision-Date: 2009-11-18 09:31+0000\n"
 "Last-Translator: René Pärts <Unknown>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-16 16:33+0000\n"
+"X-Launchpad-Export-Date: 2010-07-05 15:21+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/chat_commands.html:9 help/index.html:133
+#: help/chat_commands.html:9 help/index.html:135
 msgid "Chat Commands"
 msgstr "Vestluse käsud"
 
@@ -373,7 +373,8 @@ msgstr ""
 #. type: Content of: <html><body><dl><dt>
 #: C:/Documents/Programmes/DC++/repo/help/commands_listview.inc:2
 #: help/dialog_fav_hub_groups.html:16 help/dialog_public_hub_lists.html:28
-#: help/settings_favoritedirs.html:22 help/settings_sharing.html:40
+#: help/dialog_string_list.html:29 help/settings_favoritedirs.html:22
+#: help/settings_search_types.html:28 help/settings_sharing.html:40
 #: help/settings_user_commands.html:22 help/window_adlsearch.html:54
 #: help/window_download_queue.html:21 help/window_favorite_hubs.html:47
 msgid "Remove"
@@ -520,12 +521,12 @@ msgid "Contributors"
 msgstr "Toetajad"
 
 #. type: Content of: <html><body><h1>
-#: help/credits.html:34
+#: help/credits.html:35
 msgid "Translators"
 msgstr "Tõlkijad"
 
 #. type: Content of: <html><body><pre>
-#: help/credits.html:35
+#: help/credits.html:36
 #, no-wrap
 msgid "translator-credits"
 msgstr ""
@@ -564,7 +565,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_applypatch.html:9 help/index.html:128
+#: help/dev_applypatch.html:9 help/index.html:130
 msgid "Applying patches"
 msgstr "Paikade rakendamine"
 
@@ -624,7 +625,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/dev_createpatch.html:9 help/index.html:129
+#: help/dev_createpatch.html:9 help/index.html:131
 msgid "Creating patches"
 msgstr "Paikade loomine"
 
@@ -928,18 +929,19 @@ msgstr "Lemmik Hubid"
 #: help/index.html:43 help/index.html:44 help/index.html:45 help/index.html:46
 #: help/index.html:52 help/index.html:53 help/index.html:54 help/index.html:60
 #: help/index.html:61 help/index.html:62 help/index.html:63 help/index.html:64
-#: help/index.html:65 help/index.html:66 help/index.html:72 help/index.html:73
-#: help/index.html:75 help/index.html:77 help/index.html:78 help/index.html:81
-#: help/index.html:83 help/index.html:85 help/index.html:86 help/index.html:87
-#: help/index.html:91 help/index.html:93 help/index.html:97 help/index.html:99
+#: help/index.html:65 help/index.html:66 help/index.html:67 help/index.html:73
+#: help/index.html:74 help/index.html:76 help/index.html:78 help/index.html:79
+#: help/index.html:82 help/index.html:84 help/index.html:86 help/index.html:87
+#: help/index.html:88 help/index.html:92 help/index.html:94 help/index.html:98
 #: help/index.html:100 help/index.html:101 help/index.html:102
-#: help/index.html:110 help/index.html:111 help/index.html:112
+#: help/index.html:103 help/index.html:104 help/index.html:112
 #: help/index.html:113 help/index.html:114 help/index.html:115
 #: help/index.html:116 help/index.html:117 help/index.html:118
 #: help/index.html:119 help/index.html:120 help/index.html:121
-#: help/index.html:127 help/index.html:128 help/index.html:129
-#: help/index.html:133 help/index.html:139 help/index.html:144
-#: help/index.html:151 help/index.html:155 help/keyboard_commands.html:30
+#: help/index.html:122 help/index.html:123 help/index.html:129
+#: help/index.html:130 help/index.html:131 help/index.html:135
+#: help/index.html:141 help/index.html:146 help/index.html:153
+#: help/index.html:157 help/keyboard_commands.html:30
 #: help/keyboard_commands.html:35 help/keyboard_commands.html:39
 #: help/keyboard_commands.html:43 help/keyboard_commands.html:46
 #: help/keyboard_commands.html:49 help/keyboard_commands.html:50
@@ -953,27 +955,27 @@ msgstr "Lemmik Hubid"
 #: help/settings_downloads.html:103 help/settings_history.html:17
 #: help/settings_history.html:25 help/settings_history.html:36
 #: help/settings_history.html:43 help/settings_history.html:50
-#: help/settings_history.html:58 help/window_favorite_hubs.html:33
-#: help/window_favorite_hubs.html:51 help/window_favorite_hubs.html:52
-#: help/window_hub.html:82 help/window_main.html:25 help/window_main.html:26
-#: help/window_main.html:54 help/window_main.html:58 help/window_main.html:62
-#: help/window_main.html:66 help/window_main.html:70 help/window_main.html:74
-#: help/window_main.html:78 help/window_main.html:82 help/window_main.html:86
-#: help/window_main.html:90 help/window_main.html:94 help/window_main.html:98
-#: help/window_main.html:102 help/window_main.html:106
-#: help/window_main.html:124 help/window_main.html:127
-#: help/window_main.html:128 help/window_main.html:132
-#: help/window_main.html:133 help/window_main.html:136
-#: help/window_main.html:138 help/window_main.html:142
-#: help/window_main.html:209 help/window_main.html:219
-#: help/window_main.html:220 help/window_main.html:221
-#: help/window_main.html:225 help/window_main.html:228
-#: help/window_main.html:231 help/window_main.html:234
-#: help/window_main.html:237 help/window_main.html:240
-#: help/window_main.html:243 help/window_main.html:246
-#: help/window_main.html:262 help/window_main.html:320
-#: help/window_main.html:324 help/window_main.html:328
-#: help/window_main.html:332 help/window_pm.html:26
+#: help/settings_history.html:58 help/settings_search_types.html:12
+#: help/window_favorite_hubs.html:33 help/window_favorite_hubs.html:51
+#: help/window_favorite_hubs.html:52 help/window_hub.html:82
+#: help/window_main.html:25 help/window_main.html:26 help/window_main.html:54
+#: help/window_main.html:58 help/window_main.html:62 help/window_main.html:66
+#: help/window_main.html:70 help/window_main.html:74 help/window_main.html:78
+#: help/window_main.html:82 help/window_main.html:86 help/window_main.html:90
+#: help/window_main.html:94 help/window_main.html:98 help/window_main.html:102
+#: help/window_main.html:106 help/window_main.html:124
+#: help/window_main.html:127 help/window_main.html:128
+#: help/window_main.html:132 help/window_main.html:133
+#: help/window_main.html:136 help/window_main.html:138
+#: help/window_main.html:142 help/window_main.html:209
+#: help/window_main.html:219 help/window_main.html:220
+#: help/window_main.html:221 help/window_main.html:225
+#: help/window_main.html:228 help/window_main.html:231
+#: help/window_main.html:234 help/window_main.html:237
+#: help/window_main.html:240 help/window_main.html:243
+#: help/window_main.html:246 help/window_main.html:262
+#: help/window_main.html:320 help/window_main.html:324
+#: help/window_main.html:328 help/window_main.html:332 help/window_pm.html:26
 msgid "<placeholder id=0/>"
 msgstr ""
 
@@ -1004,7 +1006,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/dialog_fav_hub_groups.html:12
+#: help/dialog_fav_hub_groups.html:12 help/dialog_string_list.html:15
 #, fuzzy
 msgid "List"
 msgstr "Lingid"
@@ -1292,12 +1294,13 @@ msgid "Lists your current hub lists. The hub list on top will be tried first."
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/dialog_public_hub_lists.html:18
+#: help/dialog_public_hub_lists.html:18 help/dialog_string_list.html:19
 msgid "Buttons (right)"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/dialog_public_hub_lists.html:20 help/settings_user_commands.html:14
+#: help/dialog_public_hub_lists.html:20 help/dialog_string_list.html:21
+#: help/settings_search_types.html:19 help/settings_user_commands.html:14
 msgid "Add"
 msgstr "Lisa"
 
@@ -1309,7 +1312,8 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/dialog_public_hub_lists.html:22 help/settings_user_commands.html:18
+#: help/dialog_public_hub_lists.html:22 help/dialog_string_list.html:23
+#: help/settings_user_commands.html:18
 msgid "Move Up"
 msgstr "Liiguta üles"
 
@@ -1321,7 +1325,8 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/dialog_public_hub_lists.html:24 help/settings_user_commands.html:20
+#: help/dialog_public_hub_lists.html:24 help/dialog_string_list.html:25
+#: help/settings_user_commands.html:20
 msgid "Move Down"
 msgstr "Liiguta alla"
 
@@ -1333,7 +1338,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/dialog_public_hub_lists.html:26
+#: help/dialog_public_hub_lists.html:26 help/dialog_string_list.html:27
 msgid "Edit"
 msgstr "Muuda"
 
@@ -1345,6 +1350,58 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/dialog_public_hub_lists.html:29
 msgid "Remove selected hub lists from your list of public hub lists."
+msgstr ""
+
+#. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
+#: help/dialog_string_list.html:9 help/index.html:67
+msgid "List configuration"
+msgstr ""
+
+#. type: Content of: <html><body>
+#: help/dialog_string_list.html:10
+msgid "These instructions apply to generic list management dialogs."
+msgstr ""
+
+#. type: Content of: <html><body><h2>
+#: help/dialog_string_list.html:11
+msgid "Field to add a new item (top)"
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/dialog_string_list.html:13
+msgid "Use this input box to write a new item you want to add."
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/dialog_string_list.html:17
+msgid ""
+"Shows the current list. It will only be altered once you have pressed \"OK\"."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/dialog_string_list.html:22
+msgid ""
+"Add the item specified in the field on the top left to the current list."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/dialog_string_list.html:24
+msgid "Move selected items upwards in the list."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/dialog_string_list.html:26
+msgid "Move selected items downwards in the list."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/dialog_string_list.html:28
+msgid "Open a dialog to edit currently selected items."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/dialog_string_list.html:30
+msgid "Remove selected items from the current list."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
@@ -1966,7 +2023,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_different_icons.html:9 help/index.html:116
+#: help/faq_different_icons.html:9 help/index.html:118
 msgid "What do the different icons mean?"
 msgstr ""
 
@@ -2155,7 +2212,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_nosearch.html:9 help/index.html:114
+#: help/faq_nosearch.html:9 help/index.html:116
 msgid "Why don't I get any search results?"
 msgstr ""
 
@@ -2351,7 +2408,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/faq_plusplus_tag.html:54 help/index.html:91
+#: help/faq_plusplus_tag.html:54 help/index.html:92
 #: help/settings_history.html:9
 msgid "History"
 msgstr "Ajalugu"
@@ -2464,7 +2521,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_settings_files.html:9 help/index.html:121
+#: help/faq_settings_files.html:9 help/index.html:123
 msgid "DC++ settings files guide"
 msgstr ""
 
@@ -3065,7 +3122,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_units.html:9 help/index.html:117
+#: help/faq_units.html:9 help/index.html:119
 msgid "What do the units mean?"
 msgstr ""
 
@@ -3309,7 +3366,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_upnp.html:9 help/index.html:112
+#: help/faq_upnp.html:9 help/index.html:114
 msgid "How to set up UPnP?"
 msgstr ""
 
@@ -3449,7 +3506,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/faq_whyactive.html:9 help/index.html:110
+#: help/faq_whyactive.html:9 help/index.html:112
 msgid "Why do I need active mode?"
 msgstr "Miks ma vajan aktiivset olekut?"
 
@@ -3875,7 +3932,7 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:26 help/index.html:87 help/settings_windows.html:9
+#: help/index.html:26 help/index.html:88 help/settings_windows.html:9
 msgid "Windows"
 msgstr "Windows"
 
@@ -3885,7 +3942,7 @@ msgid "Main DC++ window"
 msgstr "DC++ peaaken"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:31 help/settings_history.html:50
+#: help/index.html:31 help/settings_history.html:50 help/settings_tabs.html:19
 #: help/window_file_list.html:10 help/window_file_list.html:11
 msgid "File List"
 msgstr "Failide nimekiri"
@@ -3907,14 +3964,14 @@ msgstr "Lemmik kasutajad"
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
 #: help/index.html:35 help/keyboard_commands.html:30
-#: help/settings_tabs.html:28 help/window_main.html:65
+#: help/settings_tabs.html:31 help/window_main.html:65
 #: help/window_main.html:66 help/window_main.html:186
 #: help/window_main.html:227 help/window_main.html:228
 msgid "Download Queue"
 msgstr "Allalaadimiste järjekord"
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/index.html:36 help/settings_tabs.html:31 help/window_main.html:69
+#: help/index.html:36 help/settings_tabs.html:34 help/window_main.html:69
 #: help/window_main.html:70 help/window_main.html:187
 #: help/window_main.html:230 help/window_main.html:231
 msgid "Finished Downloads"
@@ -3928,7 +3985,7 @@ msgid "Waiting Users"
 msgstr "Ootan kasutajaid"
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/index.html:38 help/settings_tabs.html:37 help/window_main.html:77
+#: help/index.html:38 help/settings_tabs.html:40 help/window_main.html:77
 #: help/window_main.html:78 help/window_main.html:189
 #: help/window_main.html:236 help/window_main.html:237
 msgid "Finished Uploads"
@@ -3936,8 +3993,9 @@ msgstr "Lõpetatud üleslaadimised"
 
 #. type: Content of: <html><body><dl><dt>
 #: help/index.html:39 help/keyboard_commands.html:49
-#: help/settings_history.html:58 help/settings_tabs.html:19
-#: help/window_main.html:81 help/window_main.html:82 help/window_main.html:142
+#: help/settings_history.html:58 help/settings_search_types.html:12
+#: help/settings_tabs.html:22 help/window_main.html:81
+#: help/window_main.html:82 help/window_main.html:142
 #: help/window_main.html:190 help/window_main.html:239
 #: help/window_main.html:240 help/window_search.html:10
 #: help/window_search.html:11 help/window_search.html:38
@@ -3951,7 +4009,7 @@ msgid "ADLSearch"
 msgstr "ADL otsing"
 
 #. type: Content of: <html><body><dl><dd><placeholder><a>
-#: help/index.html:41 help/settings_tabs.html:22 help/window_main.html:89
+#: help/index.html:41 help/settings_tabs.html:25 help/window_main.html:89
 #: help/window_main.html:90 help/window_main.html:192
 #: help/window_main.html:245 help/window_main.html:246
 msgid "Search Spy"
@@ -3983,7 +4041,7 @@ msgid "Connections"
 msgstr "Ühendused"
 
 #. type: Content of: <html><body><dl><dd><dl><dt>
-#: help/index.html:46 help/index.html:75 help/links.html:17
+#: help/index.html:46 help/index.html:76 help/links.html:17
 #: help/settings_colors_and_sounds.html:27 help/settings_downloads.html:9
 #: help/window_downloads.html:9 help/window_main.html:159
 msgid "Downloads"
@@ -4015,128 +4073,134 @@ msgid "Dialogs"
 msgstr "Dialoogid"
 
 #. type: Content of: <html><body><dl><dt>
-#: help/index.html:70 help/window_main.html:42 help/window_main.html:195
+#: help/index.html:71 help/window_main.html:42 help/window_main.html:195
 #: help/window_main.html:258
 msgid "Settings"
 msgstr "Seaded"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:72
+#: help/index.html:73
 msgid "Personal information"
 msgstr "Isiklik teave"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:73 help/settings_connection.html:9
+#: help/index.html:74 help/settings_connection.html:9
 msgid "Connection settings"
 msgstr "Ühenduse seaded"
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li><placeholder><a>
-#: help/index.html:77
+#: help/index.html:78
 msgid "Favorites"
 msgstr "Lemmikud"
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li><placeholder><a>
-#: help/index.html:78
+#: help/index.html:79
 msgid "Queue"
 msgstr "Järjekord"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:81 help/settings_sharing.html:9
+#: help/index.html:82 help/settings_sharing.html:9
 msgid "Sharing"
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:83 help/settings_appearance.html:9
+#: help/index.html:84 help/settings_appearance.html:9
 msgid "Appearance"
 msgstr "Välimus"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:85 help/settings_colors_and_sounds.html:9
+#: help/index.html:86 help/settings_colors_and_sounds.html:9
 msgid "Colors and sounds"
 msgstr "Värvid ja helid"
 
 #. type: Content of: <html><body><h2>
-#: help/index.html:86 help/window_main.html:270
+#: help/index.html:87 help/window_main.html:270
 msgid "Tabs"
 msgstr "Tabeldusmärgid"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:93 help/settings_logs.html:9
+#: help/index.html:94 help/settings_logs.html:9
 msgid "Logs"
 msgstr "Logid"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:97 help/settings_advanced.html:9
+#: help/index.html:98 help/settings_advanced.html:9
 msgid "Advanced"
 msgstr "Täpsem"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:99 help/settings_expert.html:9
+#: help/index.html:100 help/settings_expert.html:9
 msgid "Experts only"
 msgstr "Ekspertidele"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:100 help/settings_user_commands.html:9
+#: help/index.html:101 help/settings_user_commands.html:9
 msgid "User Commands"
 msgstr "Kasutaja käsud"
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:101 help/settings_certs.html:9
+#: help/index.html:102 help/settings_certs.html:9
 msgid "Security Certificates"
 msgstr "Turvasertifikaadid"
 
 #. type: Content of: <html><body><ul><li><ul><li><ul><li><placeholder><a>
-#: help/index.html:102
+#: help/index.html:103
 msgid "Bandwith Limiting"
 msgstr ""
 
+#. type: Content of: <html><body><h1>
+#: help/index.html:104 help/settings_search_types.html:9
+#, fuzzy
+msgid "Search Types"
+msgstr "Otsi nuhki"
+
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:108
+#: help/index.html:110
 msgid "Frequently Asked Questions"
 msgstr "Korduma Kippuvad Küsimused"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:111
+#: help/index.html:113
 msgid "How to set up active mode?"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:113
+#: help/index.html:115
 msgid "My ISP or University blocks DC++"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:115
+#: help/index.html:117
 msgid "Why am I getting slow download speeds?"
 msgstr "Miks mul on madal laadimis kiirus?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:118
+#: help/index.html:120
 msgid "How do I install/uninstall/upgrade DC++?"
 msgstr "Kuidas paigaltada/eemaltada/uuentada DC++?"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:119
+#: help/index.html:121
 msgid "What secret stuff are there?"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:120
+#: help/index.html:122
 msgid "What do the DC++ tags mean?"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><h3>
-#: help/index.html:125
+#: help/index.html:127
 msgid "Development"
 msgstr "Arendamine"
 
 #. type: Content of: <html><body><ul><li><ul><li><placeholder><a>
-#: help/index.html:127
+#: help/index.html:129
 msgid "Compile instructions"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:134
+#: help/index.html:136
 msgid ""
 "These are the commands that are available in chat, private messages, or "
 "both. They offer handy keyboard shortcuts to functions in the graphical "
@@ -4144,13 +4208,13 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:139
+#: help/index.html:141
 #, fuzzy
 msgid "List of Available Keyboard Shortcuts"
 msgstr "Klaviatuuri kiirklahvid"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:140
+#: help/index.html:142
 msgid ""
 "These are the keyboard shortcuts that are available in for different "
 "commands in DC++.  They offer quick access to some of the often used "
@@ -4158,12 +4222,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:144
+#: help/index.html:146
 msgid "Changelog"
 msgstr "Muudatuste logi"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:145
+#: help/index.html:147
 msgid ""
 "This page contains everything that has changed in the history of DC++.  Read "
 "this to find out about features that are poorly or not documented at all. "
@@ -4171,22 +4235,22 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/index.html:151 help/links.html:9
+#: help/index.html:153 help/links.html:9
 msgid "Links"
 msgstr "Lingid"
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:152
+#: help/index.html:154
 msgid "View the various links for DC++."
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div><placeholder><a>
-#: help/index.html:155
+#: help/index.html:157
 msgid "Help File Credits"
 msgstr ""
 
 #. type: Content of: <html><body><ul><li><div>
-#: help/index.html:156
+#: help/index.html:158
 msgid "View the credits and license of this help file."
 msgstr ""
 
@@ -6329,7 +6393,8 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dt>
-#: help/settings_favoritedirs.html:20 help/settings_sharing.html:35
+#: help/settings_favoritedirs.html:20 help/settings_search_types.html:25
+#: help/settings_sharing.html:35
 msgid "Rename"
 msgstr ""
 
@@ -7256,6 +7321,72 @@ msgid ""
 "items from the queue either, you must do that manually."
 msgstr ""
 
+#. type: Content of: <html><body><p>
+#: help/settings_search_types.html:11
+msgid ""
+"Lists search types to be used when initiating a search via the <placeholder "
+"id=0/> window. Each search type is associated to a set of file type "
+"extensions which can be configured here."
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/settings_search_types.html:14
+msgid "Note; Custom search types will only be applied to <b>ADC</b> hubs!"
+msgstr ""
+
+#. type: Content of: <html><body><p>
+#: help/settings_search_types.html:15
+msgid ""
+"On <b>NMDC</b> hubs, using a predefined search type will only search for a "
+"set of predefined, unconfigurable extensions; using a custom type will "
+"default to searching for any extension."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_search_types.html:20
+msgid ""
+"Ask for a new name to identify the search type to add, then open a dialog to "
+"add file type extensions associated to the new search type."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_search_types.html:22
+msgid "Modify"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_search_types.html:23
+msgid ""
+"Open a dialog to change the file type extensions associated to the currently "
+"selected search type."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_search_types.html:26
+msgid ""
+"Change the name of the currently selected search type. Predefined types "
+"cannot be renamed."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_search_types.html:29
+msgid ""
+"Remove the currently selected search type. Predefined types cannot be "
+"removed."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dt>
+#: help/settings_search_types.html:31
+msgid "Defaults"
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_search_types.html:32
+msgid ""
+"Erase all customized search types and reset the list to its default values. "
+"This action cannot be undone."
+msgstr ""
+
 #. type: Content of: <html><body><h2>
 #: help/settings_sharing.html:10
 msgid "Shared directories"
@@ -7386,51 +7517,58 @@ msgstr ""
 #. type: Content of: <html><body><dl><dd>
 #: help/settings_tabs.html:20
 msgid ""
+"When the content of a <a po4a-id=0>File List</a> window that's not focused "
+"has changed, the tab will be highlighted if you have this option selected."
+msgstr ""
+
+#. type: Content of: <html><body><dl><dd>
+#: help/settings_tabs.html:23
+msgid ""
 "When a search result is received in a <a po4a-id=0>Search</a> window that's "
 "not focused, the tab will be highlighted if you have this option selected."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_tabs.html:23
+#: help/settings_tabs.html:26
 msgid ""
 "When an entry is added to the <a po4a-id=0>Search Spy</a> window while it is "
 "out of focus, the tab will be highlighted if you have this option selected."
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/settings_tabs.html:25 help/window_system_log.html:9
+#: help/settings_tabs.html:28 help/window_system_log.html:9
 msgid "System log"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_tabs.html:26
+#: help/settings_tabs.html:29
 msgid ""
 "When an entry is added to the <a po4a-id=0>System Log</a> window while it is "
 "out of focus, the tab will be highlighted if you have this option selected."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_tabs.html:29
+#: help/settings_tabs.html:32
 msgid ""
 "This option controls whether or not the <a po4a-id=0>Download Queue</a>'s "
 "tab will highlight itself when a queue item changes state or finishes."
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_tabs.html:32
+#: help/settings_tabs.html:35
 msgid ""
 "When a download completes, the <a po4a-id=0>Finished Downloads</a> tab will "
 "be highlighted if this option is selected."
 msgstr ""
 
 #. type: Content of: <html><body><h1>
-#: help/settings_tabs.html:34 help/window_waiting_users.html:10
+#: help/settings_tabs.html:37 help/window_waiting_users.html:10
 #: help/window_waiting_users.html:11
 msgid "Waiting users"
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_tabs.html:35
+#: help/settings_tabs.html:38
 msgid ""
 "When a user or an item is added or removed to the <a po4a-id=0>Waiting "
 "Users</a> window while it is out of focus, the tab will be highlighted if "
@@ -7438,19 +7576,19 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><dl><dd>
-#: help/settings_tabs.html:38
+#: help/settings_tabs.html:41
 msgid ""
 "When an upload completes, the <a po4a-id=0>Finished Uploads</a> tab will be "
 "highlighted if this option is selected."
 msgstr ""
 
 #. type: Content of: <html><body><h2>
-#: help/settings_tabs.html:41
+#: help/settings_tabs.html:44
 msgid "Max characters per tab (0 = infinite)"
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/settings_tabs.html:43
+#: help/settings_tabs.html:46
 msgid ""
 "This value defines the maximum number of characters allowed to appear on "
 "each tab. When the title of a tab exceeds that value, it is cut accordingly "
@@ -7458,12 +7596,12 @@ msgid ""
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/settings_tabs.html:46
+#: help/settings_tabs.html:49
 msgid "Note; any value lower than or equal to 3 also means infinite."
 msgstr ""
 
 #. type: Content of: <html><body><p>
-#: help/settings_tabs.html:47
+#: help/settings_tabs.html:50
 msgid "Note; DC++ needs to be restarted for this setting to take effect."
 msgstr ""
 

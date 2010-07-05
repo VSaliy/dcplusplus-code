@@ -180,7 +180,8 @@ void SearchTypesPage::handleModClicked() {
 		return;
 
 	int cur = types->getSelected();
-	string name = Text::fromT(types->getText(cur, 0));
+	tstring caption = types->getText(cur, 0);
+	string name = Text::fromT(caption);
 	if(!types->getText(cur, 1).empty()) {
 		findRealName(name);
 	}
@@ -193,7 +194,7 @@ void SearchTypesPage::handleModClicked() {
 		return;
 	}
 
-	SearchTypeDlg dlg(this, Text::toT(name), extListT);
+	SearchTypeDlg dlg(this, caption, extListT);
 	if(dlg.run() == IDOK) {
 		StringList extList;
 		Text::fromT(dlg.getValues(), extList);
