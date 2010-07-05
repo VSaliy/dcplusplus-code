@@ -7,31 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-05-16 19:33+0200\n"
-"PO-Revision-Date: 2009-12-14 19:59+0000\n"
-"Last-Translator: Liel Fridman <Unknown>\n"
+"POT-Creation-Date: 2010-07-05 22:22+0200\n"
+"PO-Revision-Date: 2010-07-01 17:13+0000\n"
+"Last-Translator: Gabriel Shier <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
+"X-Launchpad-Export-Date: 2010-07-05 15:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: win32\MainWindow.cpp:994
-#, boost-format
-msgid " Encrypted Transfer Port (%1% TCP)"
-msgstr ""
-
-#: win32\MainWindow.cpp:998
-#, fuzzy, boost-format
-msgid " Search Port (%1% UDP)"
-msgstr "חיפוש"
-
-#: win32\MainWindow.cpp:990
-#, boost-format
-msgid " Transfer Port (%1% TCP)"
-msgstr ""
 
 #: win32\PublicHubsFrame.cpp:482
 msgid " from Coral"
@@ -39,28 +24,28 @@ msgstr ""
 
 #: win32\FinishedFrameBase.h:697
 msgid "% transferred"
-msgstr ""
+msgstr "% הועברו"
 
-#: win32\MainWindow.cpp:1170
+#: win32\MainWindow.cpp:1109
 #, boost-format
 msgid ""
 "%1%\n"
 "Open download page?"
 msgstr ""
 "%1%\n"
-"האם לפתוח את דף ההורדות?"
+"האם לפתוח עמוד הורדה?"
 
 #: win32\TransferView.cpp:602
 #, boost-format
 msgid "%1% (%2$0.2f)"
 msgstr ""
 
-#: win32\SearchFrame.cpp:986
+#: win32\SearchFrame.cpp:1033
 #, boost-format
 msgid "%1% / %2% sources ignored: %3%"
-msgstr ""
+msgstr "%1% / %2% מקורות לא מיוחסים: %3%"
 
-#: win32\WinUtil.cpp:624
+#: win32\WinUtil.cpp:626
 #, boost-format
 msgid "%1% files"
 msgstr "%1% קבצים"
@@ -70,41 +55,41 @@ msgstr "%1% קבצים"
 msgid "%1% files/h, %2% files left"
 msgstr "%1% קבצים/לשעה, %2% קבצים נשארו"
 
-#: win32\SearchFrame.cpp:961
+#: win32\SearchFrame.cpp:1008
 #, boost-format
 msgid "%1% filtered"
-msgstr ""
+msgstr "%1% סוננו"
 
-#: win32\SearchFrame.cpp:499 win32\FinishedFrameBase.h:538
+#: win32\SearchFrame.cpp:528 win32\FinishedFrameBase.h:538
 #, boost-format
 msgid "%1% item"
 msgid_plural "%1% items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1% פריט אחד"
+msgstr[1] "%1% פריטים"
 
 #: win32\HashProgressDlg.cpp:146
 #, boost-format
 msgid "%1% left"
-msgstr ""
+msgstr "%1% נותרו"
 
 #: win32\MainWindow.cpp:616
 #, boost-format
 msgid "%1% recent items will be saved from now on."
-msgstr ""
+msgstr "%1% פריטים אחרונים יישמרו מעתה ואילך."
 
-#: win32\SearchFrame.cpp:987
+#: win32\SearchFrame.cpp:1034
 #, boost-format
 msgid "%1% sources added"
-msgstr ""
+msgstr "%1% מקורות נוספו"
 
-#: win32\HubFrame.cpp:854 win32\SearchFrame.cpp:433
+#: win32\HubFrame.cpp:854 win32\SearchFrame.cpp:462
 #, boost-format
 msgid "%1% user"
 msgid_plural "%1% users"
 msgstr[0] "%1% משתמש"
 msgstr[1] "%1% משתמשים"
 
-#: win32\MainWindow.cpp:890 win32\MainWindow.cpp:894
+#: win32\MainWindow.cpp:888 win32\MainWindow.cpp:892
 #: win32\TransferView.cpp:617 win32\TransferView.cpp:665
 #: win32\FinishedFrameBase.h:540
 #, boost-format
@@ -116,169 +101,156 @@ msgstr ""
 msgid "%1%/s, %2% left"
 msgstr ""
 
-#: win32\HubListsDlg.cpp:61 win32\UCPage.cpp:57
+#: win32\SearchTypesPage.cpp:77 win32\StringListDlg.cpp:115
+#: win32\UCPage.cpp:57
 msgid "&Add"
 msgstr "ה&וספה"
 
 #: win32\FavoriteDirsPage.cpp:61 win32\UploadPage.cpp:76
 msgid "&Add folder"
-msgstr ""
+msgstr "הו&סף תיקיה"
 
 #: win32\FavHubGroupsDlg.cpp:134
-#, fuzzy
 msgid "&Add to the list"
-msgstr "האבים מועדפים"
+msgstr "הוסף לר&שימה"
 
-#: win32\WinUtil.cpp:1249 win32\UserInfoBase.h:130
+#: win32\WinUtil.cpp:1254 win32\UserInfoBase.h:130
 msgid "&Browse file list"
-msgstr ""
+msgstr "עיין ברשימת ה&קבצים"
 
-#: win32\Appearance2Page.cpp:98 win32\DirectoryListingFrame.cpp:459
-#: win32\LogPage.cpp:69 win32\SearchFrame.cpp:715 win32\SearchFrame.cpp:745
+#: win32\Appearance2Page.cpp:98 win32\DirectoryListingFrame.cpp:461
+#: win32\LogPage.cpp:69 win32\SearchFrame.cpp:744 win32\SearchFrame.cpp:774
 msgid "&Browse..."
 msgstr "&עיון..."
 
 #: win32\UCPage.cpp:61
-#, fuzzy
 msgid "&Change"
-msgstr "שינויים בגרסאות"
+msgstr "ש&נה"
 
 #: win32\FavHubGroupsDlg.cpp:148 win32\MDIChildFrame.h:220
-#, fuzzy
 msgid "&Close"
-msgstr "צבעים"
+msgstr "ס&גירה"
 
 #: win32\PublicHubsFrame.cpp:153
 msgid "&Configure"
-msgstr ""
+msgstr "&הגדר"
 
 #: win32\MainWindow.cpp:564
 msgid "&Configure..."
-msgstr ""
+msgstr "&הגדרות..."
 
 #: win32\FavHubsFrame.cpp:77 win32\FavHubsFrame.cpp:306
 #: win32\PublicHubsFrame.cpp:389
-#, fuzzy
 msgid "&Connect"
-msgstr "מחובר"
+msgstr "&התחבר"
 
 #: win32\HubFrame.cpp:1112
 msgid "&Copy"
-msgstr ""
+msgstr "&העתק"
 
 #: win32\dwt_Texts.cpp:31
-#, fuzzy
 msgid "&Copy\tCtrl+C"
-msgstr "פנקס רשימות"
+msgstr "ה&עתק\tCtrl+C"
 
 #: win32\WaitingUsersFrame.cpp:85
-#, fuzzy
 msgid "&Copy filename"
-msgstr "שם הקובץ"
+msgstr "&העתק שם קובץ"
 
-#: win32\MainWindow.cpp:1249
+#: win32\MainWindow.cpp:1188
 msgid "&Customize\tDouble-click"
-msgstr ""
+msgstr "&התאמה אישית\tלחיצה כפולה"
+
+#: win32\SearchTypesPage.cpp:93
+msgid "&Defaults"
+msgstr "&ברירות מחדל"
 
 #: win32\dwt_Texts.cpp:33
 msgid "&Delete\tDel"
 msgstr ""
 
 #: win32\UsersFrame.cpp:191
-#, fuzzy
 msgid "&Description"
-msgstr "תיאור"
+msgstr "&תיאור"
 
 #: win32\TransferView.cpp:193
-#, fuzzy
 msgid "&Disconnect"
-msgstr "התחברות מהירה"
+msgstr "&התנתק"
 
-#: win32\DirectoryListingFrame.cpp:385 win32\DirectoryListingFrame.cpp:409
-#: win32\DirectoryListingFrame.cpp:419 win32\SearchFrame.cpp:681
-#, fuzzy
+#: win32\DirectoryListingFrame.cpp:387 win32\DirectoryListingFrame.cpp:411
+#: win32\DirectoryListingFrame.cpp:421 win32\SearchFrame.cpp:710
 msgid "&Download"
-msgstr "הורדות"
+msgstr "&הורד"
 
 #: win32\MainWindow.cpp:248
-#, fuzzy
 msgid "&Download Queue\tCtrl+D"
-msgstr "תור הורדה"
+msgstr "&הורדות בהמתנה\tCtrl+D"
 
-#: win32\HubListsDlg.cpp:91
+#: win32\StringListDlg.cpp:146
 msgid "&Edit"
-msgstr ""
+msgstr "&עריכה"
 
 #: win32\MainWindow.cpp:243
-#, fuzzy
 msgid "&Favorite Hubs\tCtrl+F"
-msgstr "האבים מועדפים"
+msgstr "&חיבורים מעודפים\tCtrl+F"
 
 #: win32\MainWindow.cpp:216
-#, fuzzy
 msgid "&File"
-msgstr "קובץ"
+msgstr "&קובץ"
 
 #: win32\RichTextBox.cpp:65
 msgid "&Find...\tF3"
-msgstr ""
+msgstr "&חפש...\tF3"
 
 #: win32\TransferView.cpp:190
 msgid "&Force attempt"
-msgstr ""
+msgstr "&הכרח ניסיון"
 
-#: win32\QueueFrame.cpp:902 win32\WinUtil.cpp:1246 win32\UserInfoBase.h:128
+#: win32\QueueFrame.cpp:902 win32\WinUtil.cpp:1251 win32\UserInfoBase.h:128
 msgid "&Get file list"
-msgstr ""
+msgstr "&השג רשימת קבצים"
 
-#: win32\DirectoryListingFrame.cpp:399
-#, fuzzy
+#: win32\DirectoryListingFrame.cpp:401
 msgid "&Go to directory"
-msgstr "הורד את כל התיקיה"
+msgstr "&עבור אל התיקיה"
 
 #: win32\ADLSearchFrame.cpp:106 win32\MainWindow.cpp:298
 msgid "&Help"
-msgstr ""
+msgstr "ע&זרה"
 
-#: win32\MainWindow.cpp:1265
-#, fuzzy
+#: win32\MainWindow.cpp:1204
 msgid "&Hide\tCtrl+1"
-msgstr "חיפוש"
+msgstr "&הסתר\tCtrl+1"
 
-#: win32\WinUtil.cpp:1252 win32\UserInfoBase.h:131
+#: win32\WinUtil.cpp:1257 win32\UserInfoBase.h:131
 #, fuzzy
 msgid "&Match queue"
 msgstr "התאם תור"
 
 #: win32\QueueFrame.cpp:857 win32\QueueFrame.cpp:872 win32\QueueFrame.cpp:884
-#, fuzzy
 msgid "&Move/Rename"
-msgstr "שנה שם"
+msgstr "&הזז/שנה שם"
 
 #: win32\ADLSearchFrame.cpp:76 win32\ADLSearchFrame.cpp:281
 #: win32\FavHubsFrame.cpp:83 win32\FavHubsFrame.cpp:308
 msgid "&New..."
-msgstr ""
+msgstr "&חדש..."
 
 #: win32\MainWindow.cpp:263
-#, fuzzy
 msgid "&Notepad\tCtrl+N"
-msgstr "פנקס רשימות"
+msgstr "&כתבן\tCtrl+N"
 
 #: win32\SystemFrame.cpp:100 win32\FinishedFrameBase.h:431
 msgid "&Open"
-msgstr ""
+msgstr "&פתיחה"
 
 #: win32\dwt_Texts.cpp:32
-#, fuzzy
 msgid "&Paste\tCtrl+V"
-msgstr "פנקס רשימות"
+msgstr "ה&דבק\tCtrl+V"
 
 #: win32\ADLSearchFrame.cpp:82 win32\ADLSearchFrame.cpp:282
 #: win32\FavHubsFrame.cpp:89 win32\FavHubsFrame.cpp:309
-#, fuzzy
 msgid "&Properties"
-msgstr "מאפייני חיפוש ברשימות קבצים"
+msgstr "&מאפיינים"
 
 #: win32\MainWindow.cpp:241
 #, fuzzy
@@ -286,80 +258,74 @@ msgid "&Public Hubs\tCtrl+P"
 msgstr "האבים ציבוריים"
 
 #: win32\MainWindow.cpp:218
-#, fuzzy
 msgid "&Quick connect...\tCtrl+Q"
-msgstr "התחברות מהירה"
+msgstr "&חיבור מהיר...\tCtrl+Q"
 
 #: win32\HubFrame.cpp:1131 win32\MainWindow.cpp:222
 msgid "&Reconnect\tCtrl+R"
-msgstr ""
+msgstr "&התחבר מחדש\tCTRL+R"
 
 #: win32\PublicHubsFrame.cpp:158
 msgid "&Refresh"
-msgstr ""
+msgstr "רע&נן"
 
 #: win32\ADLSearchFrame.cpp:100 win32\ADLSearchFrame.cpp:283
 #: win32\FavHubGroupsDlg.cpp:103 win32\FavHubsFrame.cpp:107
 #: win32\FavHubsFrame.cpp:313 win32\FavoriteDirsPage.cpp:67
-#: win32\HubListsDlg.cpp:96 win32\QueueFrame.cpp:866 win32\QueueFrame.cpp:876
-#: win32\QueueFrame.cpp:886 win32\SearchFrame.cpp:697 win32\UCPage.cpp:73
-#: win32\UploadPage.cpp:81 win32\UsersFrame.cpp:192
-#: win32\WaitingUsersFrame.cpp:86 win32\FinishedFrameBase.h:434
-#: win32\FinishedFrameBase.h:453
-#, fuzzy
+#: win32\QueueFrame.cpp:866 win32\QueueFrame.cpp:876 win32\QueueFrame.cpp:886
+#: win32\SearchFrame.cpp:726 win32\SearchTypesPage.cpp:89
+#: win32\StringListDlg.cpp:151 win32\UCPage.cpp:73 win32\UploadPage.cpp:81
+#: win32\UsersFrame.cpp:192 win32\WaitingUsersFrame.cpp:86
+#: win32\FinishedFrameBase.h:434 win32\FinishedFrameBase.h:453
 msgid "&Remove"
-msgstr "שנה שם"
+msgstr "ה&סר"
 
 #: win32\SpyFrame.cpp:156
-#, fuzzy
 msgid "&Search"
-msgstr "חיפוש"
+msgstr "&חיפוש"
 
 #: win32\MainWindow.cpp:257
-#, fuzzy
 msgid "&Search\tCtrl+S"
-msgstr "חיפוש"
+msgstr "&חפש\tCtrl+S"
 
-#: win32\QueueFrame.cpp:909 win32\WinUtil.cpp:1255 win32\UserInfoBase.h:134
+#: win32\QueueFrame.cpp:909 win32\WinUtil.cpp:1260 win32\UserInfoBase.h:134
 msgid "&Send private message"
-msgstr ""
+msgstr "&שלח הודעה פרטית"
 
 #: win32\dwt_Texts.cpp:29
-#, fuzzy
 msgid "&Undo\tCtrl+Z"
-msgstr "פנקס רשימות"
+msgstr "&בטל פעולה אחרונה\tCtrl+Z"
 
 #: win32\FavHubGroupsDlg.cpp:98
 msgid "&Update"
-msgstr ""
+msgstr "&עדכן"
 
 #: win32\MainWindow.cpp:239
-#, fuzzy
 msgid "&View"
-msgstr "סרטים"
+msgstr "&תצוגה"
 
-#: win32\DirectoryListingFrame.cpp:389 win32\SearchFrame.cpp:685
+#: win32\DirectoryListingFrame.cpp:391 win32\SearchFrame.cpp:714
 #: win32\FinishedFrameBase.h:430
 msgid "&View as text"
-msgstr ""
+msgstr "&הצג כמלל"
 
 #: win32\MainWindow.cpp:280
 msgid "&Window"
-msgstr ""
+msgstr "&חלון"
 
 #: win32\MainWindow.cpp:570
 msgid "(No recent item found)"
-msgstr ""
+msgstr "(לא נמצאו פריטים אחרונים)"
 
 #: win32\HubFrame.cpp:498
 #, boost-format
 msgid "*** Joins: %1%"
-msgstr ""
+msgstr "*** מצטרפ/ת: %1%"
 
 #: win32\HubFrame.cpp:505
 #, boost-format
 msgid "*** Parts: %1%"
-msgstr ""
+msgstr "*** חלקים: %1%"
 
 #: win32\HashProgressDlg.cpp:127
 #, boost-format
@@ -373,9 +339,9 @@ msgstr ""
 
 #: win32\HashProgressDlg.cpp:131 win32\HashProgressDlg.cpp:142
 msgid "-:--:-- left"
-msgstr ""
+msgstr "-:--:-- נותרו"
 
-#: win32\WinUtil.cpp:1184
+#: win32\WinUtil.cpp:1189
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -383,38 +349,37 @@ msgstr ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
 
-#: win32\UploadPage.cpp:289
+#: win32\UploadPage.cpp:290
 #, boost-format
 msgid ""
 "A virtual directory named %1% already exists, do you wish to merge the "
 "contents?"
-msgstr ""
+msgstr "תיקיה וירטואלית בשם %1% כבר קיימת. האם ברצונך למזג את תכנן של התיקיות?"
 
 #: win32\MainWindow.cpp:258 win32\MainWindow.cpp:347
 msgid "ADL Search"
-msgstr "חיפוש ברישמות קבצים"
+msgstr "חיפוש ADL"
 
 #: win32\ADLSProperties.cpp:112
 msgid "ADLSearch Properties"
-msgstr "מאפייני חיפוש ברשימות קבצים"
+msgstr "מאפייני חיפוש ADL"
 
-#: win32\MainWindow.cpp:411 win32\MainWindow.cpp:873
+#: win32\MainWindow.cpp:411 win32\MainWindow.cpp:871
 msgid "AWAY"
 msgstr "לא נמצא"
 
-#: win32\AboutDlg.cpp:130 win32\MainWindow.cpp:304
+#: win32\AboutDlg.cpp:131 win32\MainWindow.cpp:304
 msgid "About DC++"
-msgstr ""
+msgstr "אודות DC++"
 
 #: win32\AdvancedPage.cpp:41
 msgid "Accept custom user commands from hub"
 msgstr "אשר פקודות מותאמות אישית מההאב"
 
 #: win32\HubFrame.cpp:1128 win32\PublicHubsFrame.cpp:390
-#: win32\WinUtil.cpp:1258 win32\UserInfoBase.h:136
-#, fuzzy
+#: win32\WinUtil.cpp:1263 win32\UserInfoBase.h:136
 msgid "Add To &Favorites"
-msgstr "האבים מועדפים"
+msgstr "הוסף ל&מועדפים"
 
 #: win32\AdvancedPage.cpp:43
 msgid "Add finished files to share instantly (if shared)"
@@ -422,75 +387,70 @@ msgstr "הוסף מידלשיתוף  קבצים שירדו אם תקית ההו�
 
 #: win32\QueueFrame.cpp:45
 msgid "Added"
-msgstr "התווסף"
+msgstr "נוספו"
 
-#: win32\FavHubProperties.cpp:69 win32\MainWindow.cpp:641
-#: win32\PublicHubsFrame.cpp:38
+#: win32\FavHubProperties.cpp:69 win32\HubListsDlg.cpp:52
+#: win32\MainWindow.cpp:641 win32\PublicHubsFrame.cpp:38
 msgid "Address"
 msgstr "כתובת"
 
-#: win32\SettingsDialog.cpp:122
+#: win32\SettingsDialog.cpp:123
 msgid "Advanced"
 msgstr "מתקדם"
 
-#: win32\QueueFrame.cpp:917 win32\QueueFrame.cpp:926 win32\WinUtil.cpp:1212
+#: win32\QueueFrame.cpp:917 win32\QueueFrame.cpp:926 win32\WinUtil.cpp:1217
 msgid "All"
 msgstr "הכל"
 
 #: win32\QueueFrame.cpp:334
-#, fuzzy, boost-format
+#, boost-format
 msgid "All %1% users offline"
-msgstr "המשתמש מנותק"
+msgstr "כל %1% המשתמשים אינם מחוברים"
 
-#: win32\WinUtil.cpp:627 win32\WinUtil.cpp:634
+#: win32\WinUtil.cpp:629 win32\WinUtil.cpp:636
 msgid "All files"
-msgstr ""
+msgstr "כל הקבצים"
 
 #: win32\CertificatesPage.cpp:32
 msgid "Allow TLS connections to clients without trusted certificate"
-msgstr ""
+msgstr "אפשר חיבורי TLS עם לקוחות ללא אימות אמין"
 
 #: win32\CertificatesPage.cpp:31
 msgid "Allow TLS connections to hubs without trusted certificate"
-msgstr ""
+msgstr "אפשר חיבורי TLS לרכזות ללא אימות חיבור אמין"
 
 #: win32\AppearancePage.cpp:35
 msgid "Always display tray icon"
-msgstr ""
+msgstr "תמיד הצג סמל במגש שולחן העבודה"
 
 #: win32\CommandDlg.cpp:149
 msgid "Always open help file with this dialog"
-msgstr "Always open help file with this dialog"
+msgstr "תמיד הצג קובץ עזרה בעת פתיחת דו-שיח זה"
 
 #: win32\FavHubGroupsDlg.cpp:273
-#, fuzzy, boost-format
+#, boost-format
 msgid "Another group with the name \"%1%\" already exists"
-msgstr "תיקיה או שם תיקיה כבר קיימים"
+msgstr "קבוצה נוספת עם השם \"%1%\" כבר קיימת"
 
 #: win32\HubFrame.cpp:178 win32\PublicHubsFrame.cpp:175
-#: win32\SearchFrame.cpp:192
 msgid "Any"
-msgstr "כלשהו"
+msgstr "הכול"
 
-#: win32\SettingsDialog.cpp:110
+#: win32\SettingsDialog.cpp:111
 msgid "Appearance"
 msgstr "מראה"
 
 #: win32\SearchFrame.cpp:168
 msgid "At least"
-msgstr "לפחות"
+msgstr "לכל הפחות"
 
 #: win32\SearchFrame.cpp:169
 msgid "At most"
 msgstr "לכל היותר"
 
-#: win32\SearchFrame.cpp:193
-msgid "Audio"
-msgstr "מוזיקה"
-
 #: win32\UsersFrame.cpp:32
 msgid "Auto grant slot / Nick"
-msgstr "כינוי \\ הענק סלוט"
+msgstr "הענק"
 
 #: win32\QueuePage.cpp:55
 msgid "Auto priority settings"
@@ -552,11 +512,11 @@ msgstr ""
 msgid "Average: %1%"
 msgstr "משתמשים"
 
-#: win32\WinUtil.cpp:410 win32\WinUtil.cpp:420
+#: win32\WinUtil.cpp:412 win32\WinUtil.cpp:422
 msgid "Away mode off"
 msgstr "מצב 'לא נמצא' כבוי"
 
-#: win32\WinUtil.cpp:415
+#: win32\WinUtil.cpp:417
 #, fuzzy, boost-format
 msgid "Away mode on: %1%"
 msgstr "מצב 'לא נמצא' כבוי"
@@ -571,7 +531,7 @@ msgstr "B"
 msgid "B/s"
 msgstr "KiB/s"
 
-#: win32\SettingsDialog.cpp:126
+#: win32\SettingsDialog.cpp:127
 msgid "Bandwidth Limiting"
 msgstr ""
 
@@ -603,7 +563,7 @@ msgstr "CRC32 inconsistency (SFV-Check)"
 msgid "Cached hub list is corrupted or unsupported"
 msgstr ""
 
-#: win32\WinUtil.cpp:888
+#: win32\WinUtil.cpp:893
 #, fuzzy
 msgid "Cancel"
 msgstr "שינויים בגרסאות"
@@ -645,7 +605,7 @@ msgstr ""
 msgid "Close all file list windows"
 msgstr ""
 
-#: win32\MainWindow.cpp:283 win32\MainWindow.cpp:1134
+#: win32\MainWindow.cpp:283 win32\MainWindow.cpp:1073
 #, fuzzy
 msgid "Close all hubs of a favorite group"
 msgstr "שרת העברה זה אינו שרת מועדף"
@@ -663,7 +623,7 @@ msgstr ""
 msgid "Close disconnected hubs"
 msgstr "סגור האבים מנותקים"
 
-#: win32\MainWindow.cpp:284 win32\MainWindow.cpp:1134
+#: win32\MainWindow.cpp:284 win32\MainWindow.cpp:1073
 #, fuzzy
 msgid "Close hubs not in a favorite group"
 msgstr "שרת העברה זה אינו שרת מועדף"
@@ -672,7 +632,7 @@ msgstr "שרת העברה זה אינו שרת מועדף"
 msgid "Colors"
 msgstr "צבעים"
 
-#: win32\SettingsDialog.cpp:111
+#: win32\SettingsDialog.cpp:112
 msgid "Colors and sounds"
 msgstr ""
 
@@ -684,15 +644,11 @@ msgstr "Command"
 msgid "Command Type"
 msgstr ""
 
-#: win32\SearchFrame.cpp:194
-msgid "Compressed"
-msgstr "מכווץ"
-
 #: win32\DownloadPage.cpp:113
 msgid "Configure Public Hub Lists"
 msgstr "Configure Public Hub Lists"
 
-#: win32\HubListsDlg.cpp:115 win32\PublicHubsFrame.cpp:139
+#: win32\HubListsDlg.cpp:44 win32\PublicHubsFrame.cpp:139
 msgid "Configured Public Hub Lists"
 msgstr "רשימת האבים ציבורית"
 
@@ -776,7 +732,7 @@ msgstr "חיבור"
 msgid "Connection"
 msgstr "חיבור"
 
-#: win32\SettingsDialog.cpp:99
+#: win32\SettingsDialog.cpp:100
 msgid "Connection settings"
 msgstr "הגדרות רשת"
 
@@ -799,7 +755,7 @@ msgstr "העתק כתובת ללוח"
 msgid "Copy &nick to clipboard"
 msgstr "העתק כתובת ללוח"
 
-#: win32\WinUtil.cpp:577
+#: win32\WinUtil.cpp:579
 msgid "Copy magnet link to clipboard"
 msgstr "העתק כתובת ללוח"
 
@@ -825,22 +781,22 @@ msgstr "Creating file index..."
 msgid "Cu&t\tCtrl+X"
 msgstr "פנקס רשימות"
 
-#: win32\MainWindow.cpp:897
+#: win32\MainWindow.cpp:895
 #, boost-format
 msgid "D Lim: %1%/s"
 msgstr ""
 
-#: win32\MainWindow.cpp:883
+#: win32\MainWindow.cpp:881
 #, boost-format
 msgid "D: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:891
+#: win32\MainWindow.cpp:889
 #, boost-format
 msgid "D: %1%/s (%2%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1391
+#: win32\MainWindow.cpp:1330
 #, boost-format
 msgid ""
 "D: %1%/s (%2%)\r\n"
@@ -894,12 +850,11 @@ msgid "Directories"
 msgstr "תיקיות"
 
 #: win32\ADLSProperties.cpp:63 win32\FavoriteDirsPage.cpp:33
-#: win32\LogPage.cpp:64 win32\SearchFrame.cpp:199 win32\SearchFrame.cpp:426
-#: win32\UploadPage.cpp:36
+#: win32\LogPage.cpp:64 win32\SearchFrame.cpp:455 win32\UploadPage.cpp:36
 msgid "Directory"
 msgstr "תיקיה"
 
-#: win32\FavoriteDirsPage.cpp:144 win32\FavoriteDirsPage.cpp:176
+#: win32\FavoriteDirsPage.cpp:146 win32\FavoriteDirsPage.cpp:178
 msgid "Directory or directory name already exists"
 msgstr "תיקיה או שם תיקיה כבר קיימים"
 
@@ -907,9 +862,9 @@ msgstr "תיקיה או שם תיקיה כבר קיימים"
 msgid "Do nothing"
 msgstr "ביטול"
 
-#: win32\SearchFrame.cpp:195
-msgid "Document"
-msgstr "מסמך"
+#: win32\SearchTypesPage.cpp:241
+msgid "Do you really want to delete this search type?"
+msgstr ""
 
 #: win32\NetworkPage.cpp:84
 msgid "Don't allow hub/UPnP to override"
@@ -962,7 +917,7 @@ msgstr "בוצע"
 msgid "Done."
 msgstr "בוצע"
 
-#: win32\DirectoryListingFrame.cpp:448
+#: win32\DirectoryListingFrame.cpp:450
 #, fuzzy
 msgid "Download &to..."
 msgstr "...הורד ל"
@@ -971,7 +926,7 @@ msgstr "...הורד ל"
 msgid "Download Matches"
 msgstr "הורד התאמות"
 
-#: win32\MainWindow.cpp:337 win32\QueueFrame.cpp:53 win32\TabsPage.cpp:36
+#: win32\MainWindow.cpp:337 win32\QueueFrame.cpp:53 win32\TabsPage.cpp:37
 msgid "Download Queue"
 msgstr "תור הורדה"
 
@@ -980,30 +935,30 @@ msgstr "תור הורדה"
 msgid "Download failed: %1%"
 msgstr "הורד"
 
-#: win32\WinUtil.cpp:464
+#: win32\WinUtil.cpp:466
 #, fuzzy
 msgid "Download limit disabled"
 msgstr "הורדות"
 
-#: win32\WinUtil.cpp:459 win32\WinUtil.cpp:460
+#: win32\WinUtil.cpp:461 win32\WinUtil.cpp:462
 #, fuzzy, c-format, boost-format
 msgid "Download limit set to %d KiB/s"
 msgstr "הורדות"
 
-#: win32\WinUtil.cpp:394
+#: win32\WinUtil.cpp:396
 #, fuzzy
 msgid "Download slots set"
 msgstr "הורדות"
 
-#: win32\SearchFrame.cpp:705
+#: win32\SearchFrame.cpp:734
 msgid "Download to..."
 msgstr "...הורד ל"
 
-#: win32\SearchFrame.cpp:683
+#: win32\SearchFrame.cpp:712
 msgid "Download whole directory"
 msgstr "הורד את כל התיקיה"
 
-#: win32\SearchFrame.cpp:735
+#: win32\SearchFrame.cpp:764
 msgid "Download whole directory to..."
 msgstr "...הורד את כל התיקיה ל"
 
@@ -1028,7 +983,7 @@ msgid_plural "Downloading from %1% users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: win32\DirectoryListingFrame.cpp:790
+#: win32\DirectoryListingFrame.cpp:792
 msgid "Downloading list..."
 msgstr "..מוריד רשימה"
 
@@ -1041,12 +996,12 @@ msgstr "...מוריד את רשימת ההאבים הציבורית"
 msgid "Downloading public hub list... (%1%)"
 msgstr "...מוריד את רשימת ההאבים הציבורית"
 
-#: win32\AboutDlg.cpp:123
+#: win32\AboutDlg.cpp:124
 msgid "Downloading..."
 msgstr "..מוריד"
 
 #: win32\Appearance2Page.cpp:76 win32\MainWindow.cpp:307
-#: win32\SettingsDialog.cpp:102 win32\TransferView.cpp:102
+#: win32\SettingsDialog.cpp:103 win32\TransferView.cpp:102
 msgid "Downloads"
 msgstr "הורדות"
 
@@ -1065,10 +1020,6 @@ msgstr ""
 #: win32\GeneralPage.cpp:49 win32\HubFrame.cpp:49
 msgid "E-Mail"
 msgstr "דוא\"ל"
-
-#: win32\HubListsDlg.cpp:177
-msgid "Edit the hublist"
-msgstr ""
 
 #: win32\FinishedFrameBase.h:701 win32\FinishedFrameBase.h:712
 #, fuzzy
@@ -1095,7 +1046,7 @@ msgstr "מאופשר"
 msgid "Enabled / Search String"
 msgstr "ערך חיפוש \\ מאופשר"
 
-#: win32\DirectoryListingFrame.cpp:892
+#: win32\DirectoryListingFrame.cpp:894
 msgid "Enter search string"
 msgstr "הכנס ערך חיפוש"
 
@@ -1108,12 +1059,12 @@ msgstr ""
 msgid "Error loading the notepad file: %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:165
+#: win32\AboutDlg.cpp:166
 #, fuzzy
 msgid "Error processing version information"
 msgstr "מידע אישי"
 
-#: win32\WinUtil.cpp:1033
+#: win32\WinUtil.cpp:1038
 #, boost-format
 msgid "Error registering %1%:// link handler"
 msgstr ""
@@ -1132,7 +1083,7 @@ msgstr "השמע צליל מעצבן בכל פעם שמתקבלת הודעה פ�
 msgid "Every time a private message is received"
 msgstr "השמע צליל מעצבן בכל פעם שמתקבלת הודעה פרטית"
 
-#: win32\AboutDlg.cpp:87
+#: win32\AboutDlg.cpp:88
 msgid ""
 "Ex-codeveloper: Per Lindén\n"
 "Graphics: Martin Skogevall et al.\n"
@@ -1144,11 +1095,7 @@ msgstr ""
 msgid "Exact size"
 msgstr "גודל מדויק"
 
-#: win32\SearchFrame.cpp:196
-msgid "Executable"
-msgstr "יישום"
-
-#: win32\MainWindow.cpp:1375
+#: win32\MainWindow.cpp:1314
 msgid "Exit"
 msgstr ""
 
@@ -1156,8 +1103,25 @@ msgstr ""
 msgid "Experimental feature, don't consider DC++ secure in any way"
 msgstr ""
 
-#: win32\SettingsDialog.cpp:123
+#: win32\SettingsDialog.cpp:124
 msgid "Experts only"
+msgstr ""
+
+#: win32\SearchTypeDlg.cpp:45
+msgid "Extension"
+msgstr ""
+
+#: win32\SearchTypeDlg.cpp:41
+msgid "Extension edition"
+msgstr ""
+
+#: win32\SearchTypesPage.cpp:35
+msgid "Extensions"
+msgstr ""
+
+#: win32\SearchTypeDlg.cpp:37
+#, boost-format
+msgid "Extensions for the %1% search type"
 msgstr ""
 
 #: win32\NetworkPage.cpp:74
@@ -1168,19 +1132,6 @@ msgstr ""
 #, fuzzy
 msgid "F&ilter"
 msgstr "קובץ"
-
-#: win32\MainWindow.cpp:977 win32\MainWindow.cpp:978
-msgid "Failed to create port mappings. Please set up your NAT yourself."
-msgstr "Failed to create port mappings. Please set up your NAT yourself."
-
-#: win32\MainWindow.cpp:1010 win32\MainWindow.cpp:1011
-#, fuzzy
-msgid "Failed to get external IP via UPnP. Please set it yourself."
-msgstr "Failed to get external IP via  UPnP. Please set it yourself."
-
-#: win32\MainWindow.cpp:1022
-msgid "Failed to remove port mappings"
-msgstr "Failed to remove port mappings"
 
 #: win32\MainWindow.cpp:245
 #, fuzzy
@@ -1217,8 +1168,8 @@ msgstr "האב מועדף התווסף"
 msgid "Favorite hub removed"
 msgstr "האב מועדף התווסף"
 
-#: win32\FavoriteDirsPage.cpp:32 win32\FavoriteDirsPage.cpp:138
-#: win32\FavoriteDirsPage.cpp:170
+#: win32\FavoriteDirsPage.cpp:32 win32\FavoriteDirsPage.cpp:140
+#: win32\FavoriteDirsPage.cpp:172
 msgid "Favorite name"
 msgstr "שם תיקיה מועדפת"
 
@@ -1226,7 +1177,7 @@ msgstr "שם תיקיה מועדפת"
 msgid "Favorite user added"
 msgstr "משתמש מועדף התווסף"
 
-#: win32\SettingsDialog.cpp:103
+#: win32\SettingsDialog.cpp:104
 #, fuzzy
 msgid "Favorites"
 msgstr "האבים מועדפים"
@@ -1239,7 +1190,12 @@ msgstr "קובץ"
 msgid "File Hash:"
 msgstr ""
 
-#: win32\WinUtil.cpp:634
+#: win32\TabsPage.cpp:33
+#, fuzzy
+msgid "File List"
+msgstr "Filelist Menu"
+
+#: win32\WinUtil.cpp:636
 #, fuzzy
 msgid "File Lists"
 msgstr "Filelist Menu"
@@ -1280,7 +1236,7 @@ msgstr ": שם קובץ"
 msgid "Files"
 msgstr "קובץ"
 
-#: win32\DirectoryListingFrame.cpp:731 win32\DirectoryListingFrame.cpp:747
+#: win32\DirectoryListingFrame.cpp:733 win32\DirectoryListingFrame.cpp:749
 #: win32\QueueFrame.cpp:202
 #, boost-format
 msgid "Files: %1%"
@@ -1291,7 +1247,7 @@ msgstr ""
 msgid "Filter spam messages"
 msgstr "שמור הודעות מצב"
 
-#: win32\DirectoryListingFrame.cpp:230 win32\DirectoryListingFrame.cpp:246
+#: win32\DirectoryListingFrame.cpp:232 win32\DirectoryListingFrame.cpp:248
 msgid "Find"
 msgstr "חפש"
 
@@ -1301,12 +1257,12 @@ msgid "Finished"
 msgstr "חפש"
 
 #: win32\FinishedDLFrame.cpp:28 win32\MainWindow.cpp:250
-#: win32\MainWindow.cpp:339 win32\TabsPage.cpp:37
+#: win32\MainWindow.cpp:339 win32\TabsPage.cpp:38
 msgid "Finished Downloads"
 msgstr "הורדות שהסתיימו"
 
 #: win32\FinishedULFrame.cpp:28 win32\MainWindow.cpp:254
-#: win32\MainWindow.cpp:343 win32\TabsPage.cpp:39
+#: win32\MainWindow.cpp:343 win32\TabsPage.cpp:40
 msgid "Finished Uploads"
 msgstr "העלאות שהסתיימו"
 
@@ -1347,15 +1303,15 @@ msgid "Get started"
 msgstr ""
 
 #: win32\ADLSProperties.cpp:89 win32\SearchFrame.cpp:182
-#: win32\WinUtil.cpp:1301
+#: win32\WinUtil.cpp:1306
 msgid "GiB"
 msgstr "GiB"
 
-#: win32\WinUtil.cpp:1261 win32\UserInfoBase.h:137
+#: win32\WinUtil.cpp:1266 win32\UserInfoBase.h:137
 msgid "Grant &extra slot"
 msgstr ""
 
-#: win32\AboutDlg.cpp:100
+#: win32\AboutDlg.cpp:101
 msgid "Greetz and Contributors"
 msgstr ""
 
@@ -1393,7 +1349,7 @@ msgstr "HTTP Proxy (for hublist only)"
 msgid "Height of the message editing box"
 msgstr ""
 
-#: win32\CommandDlg.cpp:159 win32\SettingsDialog.cpp:149
+#: win32\CommandDlg.cpp:159 win32\SettingsDialog.cpp:151
 msgid "Help"
 msgstr ""
 
@@ -1405,7 +1361,7 @@ msgstr ""
 msgid "Help forum"
 msgstr "פורום עזרה"
 
-#: win32\SearchFrame.cpp:213
+#: win32\SearchFrame.cpp:208
 #, fuzzy
 msgid "Hide files already in share"
 msgstr "אל תוריד קבצים שכבר נמצאים בשיתוף"
@@ -1426,7 +1382,7 @@ msgstr "הכי גבוהה"
 msgid "Highest prio max size"
 msgstr "Highest prio size"
 
-#: win32\SettingsDialog.cpp:117
+#: win32\SettingsDialog.cpp:118
 #, fuzzy
 msgid "History"
 msgstr "PM history"
@@ -1472,16 +1428,16 @@ msgstr ""
 msgid "Hub list downloaded%1% (%2%)"
 msgstr ""
 
-#: win32\HubListsDlg.cpp:177
+#: win32\HubListsDlg.cpp:48
 #, fuzzy
 msgid "Hublist"
 msgstr "האבים"
 
-#: win32\HistoryPage.cpp:80 win32\SearchFrame.cpp:225
+#: win32\HistoryPage.cpp:80 win32\SearchFrame.cpp:220
 msgid "Hubs"
 msgstr "האבים"
 
-#: win32\MainWindow.cpp:877 win32\PublicHubsFrame.cpp:226
+#: win32\MainWindow.cpp:875 win32\PublicHubsFrame.cpp:226
 #, fuzzy, boost-format
 msgid "Hubs: %1%"
 msgstr "האבים"
@@ -1542,13 +1498,22 @@ msgstr "תהליך האינדקס"
 msgid "Integrity check: %1% (%2%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1035
+#: win32\SearchTypeDlg.cpp:82
+#, boost-format
+msgid "Invalid extension: %1%"
+msgstr ""
+
+#: win32\MainWindow.cpp:974
 msgid "Invalid file list name"
 msgstr ""
 
-#: win32\WinUtil.cpp:388 win32\WinUtil.cpp:396
+#: win32\WinUtil.cpp:390 win32\WinUtil.cpp:398
 msgid "Invalid number of slots"
 msgstr "מספר לא תקין של מקומות העלאה"
+
+#: win32\StringListDlg.cpp:73
+msgid "Item edition"
+msgstr ""
 
 #: win32\QueueFrame.cpp:198
 #, boost-format
@@ -1587,7 +1552,7 @@ msgstr ""
 #: win32\ADLSProperties.cpp:87 win32\Advanced3Page.cpp:40
 #: win32\Advanced3Page.cpp:42 win32\QueuePage.cpp:69 win32\QueuePage.cpp:75
 #: win32\QueuePage.cpp:81 win32\QueuePage.cpp:87 win32\QueuePage.cpp:135
-#: win32\SearchFrame.cpp:180 win32\WinUtil.cpp:1305
+#: win32\SearchFrame.cpp:180 win32\WinUtil.cpp:1310
 msgid "KiB"
 msgstr "KiB"
 
@@ -1600,7 +1565,7 @@ msgstr "KiB/s"
 msgid "Language"
 msgstr "קובץ שפה"
 
-#: win32\AboutDlg.cpp:122
+#: win32\AboutDlg.cpp:123
 msgid "Latest stable version"
 msgstr ""
 
@@ -1612,6 +1577,10 @@ msgstr "הגבלות"
 #, fuzzy
 msgid "Line speed (upload)"
 msgstr "העלאות שהסתיימו"
+
+#: win32\StringListDlg.cpp:69
+msgid "List configuration"
+msgstr ""
 
 #: win32\SplashWindow.cpp:77
 #, boost-format
@@ -1659,12 +1628,12 @@ msgstr "לוגים"
 msgid "Login"
 msgstr "שם משתמש"
 
-#: win32\SettingsDialog.cpp:118
+#: win32\SettingsDialog.cpp:119
 #, fuzzy
 msgid "Logs"
 msgstr "שם משתמש"
 
-#: win32\WinUtil.cpp:576
+#: win32\WinUtil.cpp:578
 msgid "Lookup TTH at Bitzi.com"
 msgstr "Lookup TTH at Bitzi.com"
 
@@ -1680,11 +1649,15 @@ msgstr "Low prio size"
 msgid "Lowest"
 msgstr "הכי נמוכה"
 
-#: win32\MagnetDlg.cpp:107 win32\WinUtil.cpp:1185
+#: win32\SearchTypesPage.cpp:81
+msgid "M&odify"
+msgstr ""
+
+#: win32\MagnetDlg.cpp:107 win32\WinUtil.cpp:1190
 msgid "MAGNET Link detected"
 msgstr "קישור מגנט זוהה"
 
-#: win32\WinUtil.cpp:1130
+#: win32\WinUtil.cpp:1135
 #, fuzzy, boost-format
 msgid "MAGNET Link detected: %1%"
 msgstr "קישור מגנט זוהה"
@@ -1706,11 +1679,11 @@ msgstr ""
 msgid "Match downloaded lists"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:225 win32\DirectoryListingFrame.cpp:245
+#: win32\DirectoryListingFrame.cpp:227 win32\DirectoryListingFrame.cpp:247
 msgid "Match queue"
 msgstr "התאם תור"
 
-#: win32\DirectoryListingFrame.cpp:330
+#: win32\DirectoryListingFrame.cpp:332
 #, boost-format
 msgid "Matched %1% file"
 msgid_plural "Matched %1% files"
@@ -1726,7 +1699,7 @@ msgstr ""
 msgid "Max Size"
 msgstr "גודל"
 
-#: win32\TabsPage.cpp:62
+#: win32\TabsPage.cpp:63
 msgid "Max characters per tab (0 = infinite)"
 msgstr ""
 
@@ -1771,12 +1744,12 @@ msgstr ""
 msgid "Maximum simultaneous downloads (0 = infinite)"
 msgstr "מספר הורדות מירבי בו-זמנית, 0 = בלתי מוגבל"
 
-#: win32\SearchFrame.cpp:219
+#: win32\SearchFrame.cpp:214
 msgid "Merge results for the same file"
 msgstr ""
 
 #: win32\ADLSProperties.cpp:88 win32\Advanced3Page.cpp:43
-#: win32\SearchFrame.cpp:181 win32\WinUtil.cpp:1303
+#: win32\SearchFrame.cpp:181 win32\WinUtil.cpp:1308
 msgid "MiB"
 msgstr "MiB"
 
@@ -1836,12 +1809,12 @@ msgid "Minimize to tray"
 msgstr "מזער למגש"
 
 #: win32\ADLSearchFrame.cpp:94 win32\FavHubsFrame.cpp:101
-#: win32\FavHubsFrame.cpp:311 win32\HubListsDlg.cpp:86 win32\UCPage.cpp:69
+#: win32\FavHubsFrame.cpp:311 win32\StringListDlg.cpp:141 win32\UCPage.cpp:69
 msgid "Move &Down"
 msgstr ""
 
 #: win32\ADLSearchFrame.cpp:88 win32\FavHubsFrame.cpp:95
-#: win32\FavHubsFrame.cpp:310 win32\HubListsDlg.cpp:81 win32\UCPage.cpp:65
+#: win32\FavHubsFrame.cpp:310 win32\StringListDlg.cpp:136 win32\UCPage.cpp:65
 msgid "Move &Up"
 msgstr ""
 
@@ -1859,7 +1832,11 @@ msgstr "שם"
 msgid "Name and command must not be empty"
 msgstr ""
 
-#: win32\UploadPage.cpp:226 win32\UploadPage.cpp:284
+#: win32\SearchTypesPage.cpp:154
+msgid "Name of the new search type"
+msgstr ""
+
+#: win32\UploadPage.cpp:227 win32\UploadPage.cpp:285
 msgid "Name under which the others see the directory"
 msgstr "Name under which the others see the directory"
 
@@ -1867,11 +1844,20 @@ msgstr "Name under which the others see the directory"
 msgid "Network Statistics"
 msgstr "סטטיסטיקת רשת"
 
-#: win32\UploadPage.cpp:235
+#: win32\SearchTypesPage.cpp:224
+#, fuzzy
+msgid "New name"
+msgstr "שם"
+
+#: win32\SearchTypesPage.cpp:154
+msgid "New search type"
+msgstr ""
+
+#: win32\UploadPage.cpp:236
 msgid "New virtual name matches old name, skipping..."
 msgstr "New virtual name matches old name, skipping..."
 
-#: win32\DirectoryListingFrame.cpp:235 win32\DirectoryListingFrame.cpp:247
+#: win32\DirectoryListingFrame.cpp:237 win32\DirectoryListingFrame.cpp:249
 msgid "Next"
 msgstr "הבא"
 
@@ -1905,7 +1891,7 @@ msgstr "האב מועדף התווסף"
 msgid "No full tree available"
 msgstr "הקובץ לא נגיש"
 
-#: win32\DirectoryListingFrame.cpp:957
+#: win32\DirectoryListingFrame.cpp:959
 msgid "No matches"
 msgstr "אין התאמות"
 
@@ -1914,7 +1900,7 @@ msgid "No new downloads if speed exceeds (KiB/s, 0 = disable)"
 msgstr ""
 "ללא הורדות חדשות אם המהירות עוברת את המספר שבתיבה, ק\"ב לשניה, 0 = נטרול"
 
-#: win32\AboutDlg.cpp:118
+#: win32\AboutDlg.cpp:119
 msgid "No transfers yet"
 msgstr ""
 
@@ -1938,6 +1924,10 @@ msgstr "רגיל"
 msgid "Normal prio max size"
 msgstr "Normal prio size"
 
+#: win32\SearchTypesPage.cpp:98
+msgid "Note; Custom search types will only be applied to ADC hubs!"
+msgstr ""
+
 #: win32\UploadPage.cpp:85
 msgid "Note; Files appear in the share only after they've been hashed!"
 msgstr "!הערה: קבצים יכנסו לשיתוף רק בתום תהליך האנדקס"
@@ -1959,11 +1949,11 @@ msgstr "פנקס רשימות"
 msgid "Notification sound"
 msgstr ""
 
-#: win32\WinUtil.cpp:881
+#: win32\WinUtil.cpp:886
 msgid "OK"
 msgstr ""
 
-#: win32\WinUtil.cpp:510
+#: win32\WinUtil.cpp:512
 msgid "Offline"
 msgstr "לא מחובר"
 
@@ -1980,11 +1970,11 @@ msgstr "אין משתמשים להוריד מהם"
 msgid "Only show joins / parts for favorite users"
 msgstr "הראה רק כניסות ויציאות של משתמשים מועדפים"
 
-#: win32\SearchFrame.cpp:207
+#: win32\SearchFrame.cpp:202
 msgid "Only users with free slots"
 msgstr "רק משתמשים עם סלוטים פנויים"
 
-#: win32\SearchFrame.cpp:239
+#: win32\SearchFrame.cpp:234
 msgid "Only where I'm op"
 msgstr "רק היכן שאני מנהל"
 
@@ -1992,7 +1982,7 @@ msgstr "רק היכן שאני מנהל"
 msgid "Open &folder"
 msgstr ""
 
-#: win32\MainWindow.cpp:230 win32\MainWindow.cpp:1372
+#: win32\MainWindow.cpp:230 win32\MainWindow.cpp:1311
 msgid "Open downloads directory"
 msgstr "פתח את תיקית ההורדות"
 
@@ -2096,19 +2086,15 @@ msgstr "מושהה"
 msgid "Personal Information"
 msgstr "מידע אישי"
 
-#: win32\SettingsDialog.cpp:97
+#: win32\SettingsDialog.cpp:98
 msgid "Personal information"
 msgstr "מידע אישי"
 
-#: win32\WinUtil.cpp:1297
+#: win32\WinUtil.cpp:1302
 msgid "PiB"
 msgstr ""
 
-#: win32\SearchFrame.cpp:197
-msgid "Picture"
-msgstr "תמונה"
-
-#: win32\WinUtil.cpp:308
+#: win32\WinUtil.cpp:310
 msgid "Please enter a nickname in the settings dialog!"
 msgstr "!אנא בחר כינוי בחלון ההגדות"
 
@@ -2134,6 +2120,10 @@ msgstr "Port"
 #, fuzzy
 msgid "Ports"
 msgstr "Port"
+
+#: win32\SearchTypesPage.cpp:34 win32\SearchTypesPage.cpp:257
+msgid "Predefined"
+msgstr ""
 
 #: win32\HubFrame.cpp:775
 #, boost-format
@@ -2182,7 +2172,7 @@ msgstr "כתובת רשימת האבים ציבורית"
 msgid "Purge"
 msgstr "נקה"
 
-#: win32\SettingsDialog.cpp:104
+#: win32\SettingsDialog.cpp:105
 msgid "Queue"
 msgstr ""
 
@@ -2198,7 +2188,7 @@ msgstr "התחברות מהירה"
 msgid "Rating"
 msgstr "דירוג"
 
-#: win32\AboutDlg.cpp:117
+#: win32\AboutDlg.cpp:118
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr ""
@@ -2211,7 +2201,8 @@ msgstr "Raw"
 msgid "Re&check integrity"
 msgstr ""
 
-#: win32\FavoriteDirsPage.cpp:64 win32\UploadPage.cpp:78
+#: win32\FavoriteDirsPage.cpp:64 win32\SearchTypesPage.cpp:85
+#: win32\UploadPage.cpp:78
 #, fuzzy
 msgid "Re&name"
 msgstr "שנה שם"
@@ -2220,7 +2211,7 @@ msgstr "שנה שם"
 msgid "Re-add source"
 msgstr "הוסף מקור שוב"
 
-#: win32\SearchFrame.cpp:977
+#: win32\SearchFrame.cpp:1024
 msgid "Ready to search..."
 msgstr "...מוכן לחיפוש"
 
@@ -2298,9 +2289,13 @@ msgstr ""
 msgid "Remove source"
 msgstr "הסר מקור"
 
-#: win32\QueueFrame.cpp:934 win32\WinUtil.cpp:1265 win32\UserInfoBase.h:141
+#: win32\QueueFrame.cpp:934 win32\WinUtil.cpp:1270 win32\UserInfoBase.h:141
 msgid "Remove user from queue"
 msgstr "הסר משתמש מהתור"
+
+#: win32\SearchTypesPage.cpp:224
+msgid "Rename a search type"
+msgstr ""
 
 #: win32\MainWindow.cpp:313
 msgid "Report a bug"
@@ -2332,17 +2327,17 @@ msgid "SOCKS5"
 msgstr "SOCKS5"
 
 #: win32\MainWindow.cpp:345 win32\RichTextBox.cpp:88 win32\SearchFrame.cpp:95
-#: win32\SearchFrame.cpp:152 win32\TabsPage.cpp:33
+#: win32\SearchFrame.cpp:152 win32\TabsPage.cpp:34
 msgid "Search"
 msgstr "חיפוש"
 
-#: win32\SearchFrame.cpp:939 win32\SearchFrame.cpp:954
-#: win32\SearchFrame.cpp:973
+#: win32\SearchFrame.cpp:985 win32\SearchFrame.cpp:1001
+#: win32\SearchFrame.cpp:1020
 #, fuzzy, boost-format
 msgid "Search - %1%"
 msgstr "חיפוש"
 
-#: win32\SearchFrame.cpp:978
+#: win32\SearchFrame.cpp:1025
 #, fuzzy
 msgid "Search - Ready to search..."
 msgstr "...מוכן לחיפוש"
@@ -2352,7 +2347,7 @@ msgid "Search Menu"
 msgstr "Search Menu"
 
 #: win32\MainWindow.cpp:260 win32\MainWindow.cpp:349 win32\SpyFrame.cpp:43
-#: win32\TabsPage.cpp:34
+#: win32\TabsPage.cpp:35
 msgid "Search Spy"
 msgstr "מרגל החיפוש"
 
@@ -2360,15 +2355,20 @@ msgstr "מרגל החיפוש"
 msgid "Search String"
 msgstr "ערך חיפוש"
 
+#: win32\SettingsDialog.cpp:128
+#, fuzzy
+msgid "Search Types"
+msgstr "מרגל החיפוש"
+
 #: win32\SearchFrame.cpp:127
 msgid "Search for"
 msgstr "חפש"
 
-#: win32\WinUtil.cpp:575
+#: win32\WinUtil.cpp:577
 msgid "Search for alternates"
 msgstr "חפש עוד"
 
-#: win32\DirectoryListingFrame.cpp:892 win32\DirectoryListingFrame.cpp:957
+#: win32\DirectoryListingFrame.cpp:894 win32\DirectoryListingFrame.cpp:959
 msgid "Search for file"
 msgstr "חפש קובץ"
 
@@ -2376,7 +2376,7 @@ msgstr "חפש קובץ"
 msgid "Search history"
 msgstr "הסטורית חיפוש"
 
-#: win32\SearchFrame.cpp:202
+#: win32\SearchFrame.cpp:197
 msgid "Search options"
 msgstr "אפשרויות חיפוש"
 
@@ -2390,12 +2390,22 @@ msgstr ""
 msgid "Search string"
 msgstr "ערך חיפוש"
 
-#: win32\SearchFrame.cpp:933
+#: win32\SearchTypesPage.cpp:33
+#, fuzzy
+msgid "Search type"
+msgstr "מרגל החיפוש"
+
+#: win32\SearchTypesPage.cpp:54
+#, fuzzy
+msgid "Search types"
+msgstr "מרגל החיפוש"
+
+#: win32\SearchFrame.cpp:979
 #, fuzzy, boost-format
 msgid "Searching for %1%..."
 msgstr "חפש"
 
-#: win32\SearchFrame.cpp:948 win32\SearchFrame.cpp:971
+#: win32\SearchFrame.cpp:995 win32\SearchFrame.cpp:1018
 #, boost-format
 msgid "Searching too soon, next search in %1% second"
 msgid_plural "Searching too soon, next search in %1% seconds"
@@ -2410,7 +2420,7 @@ msgstr ""
 msgid "Secondary Transfer Rate Limiting Settings"
 msgstr ""
 
-#: win32\SettingsDialog.cpp:125
+#: win32\SettingsDialog.cpp:126
 msgid "Security Certificates"
 msgstr ""
 
@@ -2458,8 +2468,8 @@ msgstr "קבע עדיפות"
 msgid "Set timestamps"
 msgstr "קבע חותמת תאריך ושעה"
 
-#: win32\MainWindow.cpp:355 win32\MainWindow.cpp:1373
-#: win32\SettingsDialog.cpp:242
+#: win32\MainWindow.cpp:355 win32\MainWindow.cpp:1312
+#: win32\SettingsDialog.cpp:244
 msgid "Settings"
 msgstr "הגדרות"
 
@@ -2480,7 +2490,7 @@ msgstr "שיתוף"
 msgid "Shared directories"
 msgstr "תיקיות משותפות"
 
-#: win32\SettingsDialog.cpp:107
+#: win32\SettingsDialog.cpp:108
 msgid "Sharing"
 msgstr "שיתוף"
 
@@ -2492,7 +2502,7 @@ msgstr ""
 msgid "Shell menus"
 msgstr ""
 
-#: win32\MainWindow.cpp:1371
+#: win32\MainWindow.cpp:1310
 msgid "Show"
 msgstr "הראה"
 
@@ -2504,7 +2514,7 @@ msgstr "הראה כניסות ויציאות של משתמשים בצ'אט רא�
 msgid "Show timestamps in chat by default"
 msgstr "חתום תאריך ושעה בהתכתבות כברירת מחדל"
 
-#: win32\DirectoryListingFrame.cpp:45 win32\MainWindow.cpp:1253
+#: win32\DirectoryListingFrame.cpp:45 win32\MainWindow.cpp:1192
 #: win32\QueueFrame.cpp:38 win32\SearchFrame.cpp:37 win32\SearchFrame.cpp:157
 #: win32\TransferView.cpp:62 win32\UploadPage.cpp:37
 msgid "Size"
@@ -2514,7 +2524,7 @@ msgstr "גודל"
 msgid "Size Type"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:732 win32\DirectoryListingFrame.cpp:749
+#: win32\DirectoryListingFrame.cpp:734 win32\DirectoryListingFrame.cpp:751
 #: win32\QueueFrame.cpp:199 win32\QueueFrame.cpp:203
 #, fuzzy, boost-format
 msgid "Size: %1%"
@@ -2532,11 +2542,11 @@ msgstr "Slot granted"
 msgid "Slots"
 msgstr "סלוטים"
 
-#: win32\WinUtil.cpp:385
+#: win32\WinUtil.cpp:387
 msgid "Slots set"
 msgstr "Slots set"
 
-#: win32\MainWindow.cpp:879
+#: win32\MainWindow.cpp:877
 #, boost-format
 msgid "Slots: %1%/%2%"
 msgstr ""
@@ -2571,11 +2581,11 @@ msgstr "סוג מקור"
 msgid "Source too slow"
 msgstr ""
 
-#: win32\WinUtil.cpp:435
+#: win32\WinUtil.cpp:437
 msgid "Specify a URL"
 msgstr ""
 
-#: win32\WinUtil.cpp:402 win32\WinUtil.cpp:423 win32\WinUtil.cpp:429
+#: win32\WinUtil.cpp:404 win32\WinUtil.cpp:425 win32\WinUtil.cpp:431
 msgid "Specify a search string"
 msgstr "ציין ערך חיפוש"
 
@@ -2593,7 +2603,7 @@ msgstr "ציין ערך חיפוש"
 msgid "Speed"
 msgstr "מהירות"
 
-#: win32\DirectoryListingFrame.cpp:733
+#: win32\DirectoryListingFrame.cpp:735
 #, boost-format
 msgid "Speed: %1%/s"
 msgstr ""
@@ -2623,11 +2633,11 @@ msgstr ""
 msgid "Stored password sent..."
 msgstr "Stored password sent..."
 
-#: win32\DirectoryListingFrame.cpp:220 win32\DirectoryListingFrame.cpp:244
+#: win32\DirectoryListingFrame.cpp:222 win32\DirectoryListingFrame.cpp:246
 msgid "Subtract list"
 msgstr ""
 
-#: win32\MainWindow.cpp:265 win32\SystemFrame.cpp:32 win32\TabsPage.cpp:35
+#: win32\MainWindow.cpp:265 win32\SystemFrame.cpp:32 win32\TabsPage.cpp:36
 msgid "System Log"
 msgstr ""
 
@@ -2639,8 +2649,8 @@ msgstr "TCP Port"
 msgid "TLS"
 msgstr ""
 
-#: win32\AboutDlg.cpp:91 win32\DirectoryListingFrame.cpp:47
-#: win32\QueueFrame.cpp:46 win32\SearchFrame.cpp:44 win32\SearchFrame.cpp:200
+#: win32\AboutDlg.cpp:92 win32\DirectoryListingFrame.cpp:47
+#: win32\QueueFrame.cpp:46 win32\SearchFrame.cpp:44
 msgid "TTH"
 msgstr ""
 
@@ -2649,11 +2659,11 @@ msgstr ""
 msgid "TTH: %1%"
 msgstr ""
 
-#: win32\TabsPage.cpp:55
+#: win32\TabsPage.cpp:56
 msgid "Tab highlight on content change"
 msgstr ""
 
-#: win32\SettingsDialog.cpp:112
+#: win32\SettingsDialog.cpp:113
 msgid "Tabs"
 msgstr ""
 
@@ -2676,7 +2686,13 @@ msgstr ""
 msgid "This hub is not a favorite hub"
 msgstr "שרת העברה זה אינו שרת מועדף"
 
-#: win32\WinUtil.cpp:1299
+#: win32\SearchTypesPage.cpp:210
+msgid ""
+"This will delete all defined search types and restore the default ones. Do "
+"you want to continue?"
+msgstr ""
+
+#: win32\WinUtil.cpp:1304
 msgid "TiB"
 msgstr "ט\"ב"
 
@@ -2709,7 +2725,7 @@ msgstr "אל"
 msgid "Toggle window when selecting an active tab"
 msgstr "החלף חלון בעת בחירת הלשונית הפעילה"
 
-#: win32\MainWindow.cpp:1247
+#: win32\MainWindow.cpp:1186
 msgid "Toolbar"
 msgstr ""
 
@@ -2726,7 +2742,7 @@ msgstr "הגודל הכללי:"
 msgid "Total: %1%"
 msgstr "סך הכל: %1%"
 
-#: win32\AboutDlg.cpp:109
+#: win32\AboutDlg.cpp:110
 msgid "Totals"
 msgstr "סיכומים"
 
@@ -2756,17 +2772,17 @@ msgstr "נתיב התעודות המהימנות"
 msgid "Type"
 msgstr "סוג"
 
-#: win32\MainWindow.cpp:898
+#: win32\MainWindow.cpp:896
 #, fuzzy, boost-format
 msgid "U Lim: %1%/s"
 msgstr "U: %1%"
 
-#: win32\MainWindow.cpp:887
+#: win32\MainWindow.cpp:885
 #, boost-format
 msgid "U: %1%"
 msgstr "U: %1%"
 
-#: win32\MainWindow.cpp:895
+#: win32\MainWindow.cpp:893
 #, boost-format
 msgid "U: %1%/s (%2%)"
 msgstr "U: %1%/s (%2%)"
@@ -2792,7 +2808,7 @@ msgstr ""
 msgid "Under construction, restart DC++ to see effects..."
 msgstr ""
 
-#: win32\FavoriteDirsPage.cpp:138 win32\FavoriteDirsPage.cpp:170
+#: win32\FavoriteDirsPage.cpp:140 win32\FavoriteDirsPage.cpp:172
 msgid "Under what name you see the directory"
 msgstr "Under what name you see the directory"
 
@@ -2822,12 +2838,12 @@ msgstr ""
 msgid "Upload Slots"
 msgstr "מס' סלוטי העלאה"
 
-#: win32\WinUtil.cpp:451
+#: win32\WinUtil.cpp:453
 #, fuzzy
 msgid "Upload limit disabled"
 msgstr "מס' סלוטי העלאה"
 
-#: win32\WinUtil.cpp:446 win32\WinUtil.cpp:447
+#: win32\WinUtil.cpp:448 win32\WinUtil.cpp:449
 #, c-format, boost-format
 msgid "Upload limit set to %d KiB/s"
 msgstr ""
@@ -2836,7 +2852,7 @@ msgstr ""
 msgid "Upload slots"
 msgstr "מס' סלוטי העלאה"
 
-#: win32\AboutDlg.cpp:113
+#: win32\AboutDlg.cpp:114
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr ""
@@ -2891,12 +2907,12 @@ msgid "Use system icons when browsing files (slows browsing down a bit)"
 msgstr ""
 "השתמש בצלמיות מערכת כאשר אתה מעיין בקבצים. אפשרות זו מאיטה את העיון במקצת"
 
-#: win32\DirectoryListingFrame.cpp:444 win32\SearchFrame.cpp:35
+#: win32\DirectoryListingFrame.cpp:446 win32\SearchFrame.cpp:35
 #: win32\TransferView.cpp:44
 msgid "User"
 msgstr "משתמש"
 
-#: win32\SettingsDialog.cpp:124
+#: win32\SettingsDialog.cpp:125
 #, fuzzy
 msgid "User Commands"
 msgstr "Command"
@@ -2913,7 +2929,7 @@ msgstr "User Menu"
 msgid "User certificate not trusted"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:795 win32\QueueFrame.cpp:332
+#: win32\DirectoryListingFrame.cpp:797 win32\QueueFrame.cpp:332
 msgid "User offline"
 msgstr "המשתמש מנותק"
 
@@ -2930,15 +2946,15 @@ msgstr "משתמשים"
 msgid "Users: %1%"
 msgstr "משתמשים"
 
-#: win32\SearchFrame.cpp:198
-msgid "Video"
-msgstr "סרטים"
+#: win32\StringListDlg.cpp:77
+msgid "Value"
+msgstr ""
 
 #: win32\AppearancePage.cpp:37
 msgid "View status messages in main chat"
 msgstr "הראה הודעות מצב בחלון צ'אט ראשי"
 
-#: win32\UploadPage.cpp:35 win32\UploadPage.cpp:226 win32\UploadPage.cpp:284
+#: win32\UploadPage.cpp:35 win32\UploadPage.cpp:227 win32\UploadPage.cpp:285
 msgid "Virtual name"
 msgstr "שם וירטואלי"
 
@@ -2951,7 +2967,7 @@ msgstr "Waiting (User online)"
 msgid "Waiting (User online)"
 msgstr "Waiting (User online)"
 
-#: win32\MainWindow.cpp:252 win32\MainWindow.cpp:341 win32\TabsPage.cpp:38
+#: win32\MainWindow.cpp:252 win32\MainWindow.cpp:341 win32\TabsPage.cpp:39
 #: win32\WaitingUsersFrame.cpp:34
 #, fuzzy
 msgid "Waiting Users"
@@ -2978,7 +2994,7 @@ msgstr "השמע צליל מעצבן כאשר חלון הודעה פרטית נ�
 msgid "Window options"
 msgstr "אפשרויות חלון"
 
-#: win32\SettingsDialog.cpp:113
+#: win32\SettingsDialog.cpp:114
 #, fuzzy
 msgid "Windows"
 msgstr "אפשרויות חלון"
@@ -3034,20 +3050,41 @@ msgstr ""
 #~ msgid "About DC++..."
 #~ msgstr "..אודות דיסי"
 
+#~ msgid "Audio"
+#~ msgstr "מוזיקה"
+
 #~ msgid "Close disconnected"
 #~ msgstr "סגור האבים מנותקים"
+
+#~ msgid "Compressed"
+#~ msgstr "מכווץ"
 
 #~ msgid "DC++"
 #~ msgstr "דיסי"
 
+#~ msgid "Document"
+#~ msgstr "מסמך"
+
 #~ msgid "Download files from the Direct Connect network"
 #~ msgstr "הורד קבצים מרשת הדיסי"
+
+#~ msgid "Executable"
+#~ msgstr "יישום"
+
+#~ msgid "Failed to create port mappings. Please set up your NAT yourself."
+#~ msgstr "Failed to create port mappings. Please set up your NAT yourself."
 
 #~ msgid "Failed to get external IP via  UPnP. Please set it yourself."
 #~ msgstr "Failed to get external IP via  UPnP. Please set it yourself."
 
+#~ msgid "Failed to remove port mappings"
+#~ msgstr "Failed to remove port mappings"
+
 #~ msgid "PM history"
 #~ msgstr "PM history"
+
+#~ msgid "Picture"
+#~ msgstr "תמונה"
 
 #~ msgid "Register with Windows to handle dchub:// and adc:// URL links"
 #~ msgstr "רשום טיפול בכתובת האבים"
@@ -3060,3 +3097,6 @@ msgstr ""
 
 #~ msgid "URL:MAGNET URI"
 #~ msgstr "URL:MAGNET URI"
+
+#~ msgid "Video"
+#~ msgstr "סרטים"

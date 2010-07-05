@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp-win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-06-30 16:42+0200\n"
+"POT-Creation-Date: 2010-07-05 23:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,7 +98,7 @@ msgstr ""
 msgid "%1%/s, %2% left"
 msgstr ""
 
-#: win32\SearchTypesPage.cpp:77 win32\StringListDlg.cpp:105
+#: win32\SearchTypesPage.cpp:77 win32\StringListDlg.cpp:115
 #: win32\UCPage.cpp:57
 msgid "&Add"
 msgstr ""
@@ -182,7 +182,7 @@ msgstr ""
 msgid "&Download Queue\tCtrl+D"
 msgstr ""
 
-#: win32\StringListDlg.cpp:135
+#: win32\StringListDlg.cpp:146
 msgid "&Edit"
 msgstr ""
 
@@ -269,7 +269,7 @@ msgstr ""
 #: win32\FavHubsFrame.cpp:313 win32\FavoriteDirsPage.cpp:67
 #: win32\QueueFrame.cpp:866 win32\QueueFrame.cpp:876 win32\QueueFrame.cpp:886
 #: win32\SearchFrame.cpp:726 win32\SearchTypesPage.cpp:89
-#: win32\StringListDlg.cpp:140 win32\UCPage.cpp:73 win32\UploadPage.cpp:81
+#: win32\StringListDlg.cpp:151 win32\UCPage.cpp:73 win32\UploadPage.cpp:81
 #: win32\UsersFrame.cpp:192 win32\WaitingUsersFrame.cpp:86
 #: win32\FinishedFrameBase.h:434 win32\FinishedFrameBase.h:453
 msgid "&Remove"
@@ -340,7 +340,7 @@ msgstr ""
 msgid "A MAGNET link was given to DC++, but it didn't contain a valid file hash for use on the Direct Connect network.  No action will be taken."
 msgstr ""
 
-#: win32\UploadPage.cpp:289
+#: win32\UploadPage.cpp:290
 #, boost-format
 msgid "A virtual directory named %1% already exists, do you wish to merge the contents?"
 msgstr ""
@@ -820,7 +820,7 @@ msgstr ""
 msgid "Directory"
 msgstr ""
 
-#: win32\FavoriteDirsPage.cpp:144 win32\FavoriteDirsPage.cpp:176
+#: win32\FavoriteDirsPage.cpp:146 win32\FavoriteDirsPage.cpp:178
 msgid "Directory or directory name already exists"
 msgstr ""
 
@@ -1120,8 +1120,8 @@ msgstr ""
 msgid "Favorite hub removed"
 msgstr ""
 
-#: win32\FavoriteDirsPage.cpp:32 win32\FavoriteDirsPage.cpp:138
-#: win32\FavoriteDirsPage.cpp:170
+#: win32\FavoriteDirsPage.cpp:32 win32\FavoriteDirsPage.cpp:140
+#: win32\FavoriteDirsPage.cpp:172
 msgid "Favorite name"
 msgstr ""
 
@@ -1447,7 +1447,7 @@ msgstr ""
 msgid "Invalid number of slots"
 msgstr ""
 
-#: win32\StringListDlg.cpp:63
+#: win32\StringListDlg.cpp:73
 msgid "Item edition"
 msgstr ""
 
@@ -1511,7 +1511,7 @@ msgstr ""
 msgid "Line speed (upload)"
 msgstr ""
 
-#: win32\StringListDlg.cpp:59
+#: win32\StringListDlg.cpp:69
 msgid "List configuration"
 msgstr ""
 
@@ -1728,12 +1728,12 @@ msgid "Minimize to tray"
 msgstr ""
 
 #: win32\ADLSearchFrame.cpp:94 win32\FavHubsFrame.cpp:101
-#: win32\FavHubsFrame.cpp:311 win32\StringListDlg.cpp:130 win32\UCPage.cpp:69
+#: win32\FavHubsFrame.cpp:311 win32\StringListDlg.cpp:141 win32\UCPage.cpp:69
 msgid "Move &Down"
 msgstr ""
 
 #: win32\ADLSearchFrame.cpp:88 win32\FavHubsFrame.cpp:95
-#: win32\FavHubsFrame.cpp:310 win32\StringListDlg.cpp:125 win32\UCPage.cpp:65
+#: win32\FavHubsFrame.cpp:310 win32\StringListDlg.cpp:136 win32\UCPage.cpp:65
 msgid "Move &Up"
 msgstr ""
 
@@ -1751,11 +1751,11 @@ msgstr ""
 msgid "Name and command must not be empty"
 msgstr ""
 
-#: win32\SearchTypesPage.cpp:155
+#: win32\SearchTypesPage.cpp:154
 msgid "Name of the new search type"
 msgstr ""
 
-#: win32\UploadPage.cpp:226 win32\UploadPage.cpp:284
+#: win32\UploadPage.cpp:227 win32\UploadPage.cpp:285
 msgid "Name under which the others see the directory"
 msgstr ""
 
@@ -1767,11 +1767,11 @@ msgstr ""
 msgid "New name"
 msgstr ""
 
-#: win32\SearchTypesPage.cpp:155
+#: win32\SearchTypesPage.cpp:154
 msgid "New search type"
 msgstr ""
 
-#: win32\UploadPage.cpp:235
+#: win32\UploadPage.cpp:236
 msgid "New virtual name matches old name, skipping..."
 msgstr ""
 
@@ -2687,7 +2687,7 @@ msgstr ""
 msgid "Under construction, restart DC++ to see effects..."
 msgstr ""
 
-#: win32\FavoriteDirsPage.cpp:138 win32\FavoriteDirsPage.cpp:170
+#: win32\FavoriteDirsPage.cpp:140 win32\FavoriteDirsPage.cpp:172
 msgid "Under what name you see the directory"
 msgstr ""
 
@@ -2821,7 +2821,7 @@ msgstr ""
 msgid "Users: %1%"
 msgstr ""
 
-#: win32\StringListDlg.cpp:67
+#: win32\StringListDlg.cpp:77
 msgid "Value"
 msgstr ""
 
@@ -2829,7 +2829,7 @@ msgstr ""
 msgid "View status messages in main chat"
 msgstr ""
 
-#: win32\UploadPage.cpp:35 win32\UploadPage.cpp:226 win32\UploadPage.cpp:284
+#: win32\UploadPage.cpp:35 win32\UploadPage.cpp:227 win32\UploadPage.cpp:285
 msgid "Virtual name"
 msgstr ""
 

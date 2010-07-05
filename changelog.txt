@@ -1,3 +1,4 @@
+-- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
 * Fix socket resolve in *nix systems (thanks razzloss)
 * [ADC] NAT traversal to allow passive-passive connections (thanks cologic)
@@ -6,7 +7,8 @@
 * [L#230973] Add MiniUPnPc for UPnP mappings and make it threaded (poy)
 * Be stricter when parsing list-looking %[line:] params (poy)
 * [L#326541] [ADC] Customizable search type extensions (emtee, poy)
-* Help updates (poy)
+* Update zlib to version 1.2.5
+* Documentation and translations updated as usual, thanks everyone
 
 -- 0.762 2010-05-16 --
 * Stability improvement related to menus (poy)

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2010-05-16 19:33+0200\n"
+"POT-Creation-Date: 2010-07-05 22:22+0200\n"
 "PO-Revision-Date: 2009-06-12 23:32+0000\n"
 "Last-Translator: heroid <heroid@ayih.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,23 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-05-16 16:32+0000\n"
+"X-Launchpad-Export-Date: 2010-07-05 15:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: win32\MainWindow.cpp:994
-#, boost-format
-msgid " Encrypted Transfer Port (%1% TCP)"
-msgstr ""
-
-#: win32\MainWindow.cpp:998
-#, boost-format
-msgid " Search Port (%1% UDP)"
-msgstr " Porti i kërkimit (%1% UDP)"
-
-#: win32\MainWindow.cpp:990
-#, boost-format
-msgid " Transfer Port (%1% TCP)"
-msgstr " Porti i Transferit (%1% TCP)"
 
 #: win32\PublicHubsFrame.cpp:482
 msgid " from Coral"
@@ -41,7 +26,7 @@ msgstr ""
 msgid "% transferred"
 msgstr "% të transferuara"
 
-#: win32\MainWindow.cpp:1170
+#: win32\MainWindow.cpp:1109
 #, boost-format
 msgid ""
 "%1%\n"
@@ -55,12 +40,12 @@ msgstr ""
 msgid "%1% (%2$0.2f)"
 msgstr "%1% (%2$0.2f)"
 
-#: win32\SearchFrame.cpp:986
+#: win32\SearchFrame.cpp:1033
 #, boost-format
 msgid "%1% / %2% sources ignored: %3%"
 msgstr "%1% / %2% burime të injoruara: %3%"
 
-#: win32\WinUtil.cpp:624
+#: win32\WinUtil.cpp:626
 #, boost-format
 msgid "%1% files"
 msgstr "%1% skedarë"
@@ -70,12 +55,12 @@ msgstr "%1% skedarë"
 msgid "%1% files/h, %2% files left"
 msgstr "%1% skedarë/h, %2% skedarë të mbetur"
 
-#: win32\SearchFrame.cpp:961
+#: win32\SearchFrame.cpp:1008
 #, boost-format
 msgid "%1% filtered"
 msgstr "%1% të filtruara"
 
-#: win32\SearchFrame.cpp:499 win32\FinishedFrameBase.h:538
+#: win32\SearchFrame.cpp:528 win32\FinishedFrameBase.h:538
 #, boost-format
 msgid "%1% item"
 msgid_plural "%1% items"
@@ -92,19 +77,19 @@ msgstr "%1% të mbetura"
 msgid "%1% recent items will be saved from now on."
 msgstr ""
 
-#: win32\SearchFrame.cpp:987
+#: win32\SearchFrame.cpp:1034
 #, boost-format
 msgid "%1% sources added"
 msgstr ""
 
-#: win32\HubFrame.cpp:854 win32\SearchFrame.cpp:433
+#: win32\HubFrame.cpp:854 win32\SearchFrame.cpp:462
 #, boost-format
 msgid "%1% user"
 msgid_plural "%1% users"
 msgstr[0] "%1% përdorues"
 msgstr[1] "%1% përdorues"
 
-#: win32\MainWindow.cpp:890 win32\MainWindow.cpp:894
+#: win32\MainWindow.cpp:888 win32\MainWindow.cpp:892
 #: win32\TransferView.cpp:617 win32\TransferView.cpp:665
 #: win32\FinishedFrameBase.h:540
 #, boost-format
@@ -116,7 +101,8 @@ msgstr "%1%/s"
 msgid "%1%/s, %2% left"
 msgstr "%1%/s, %2% mbetur"
 
-#: win32\HubListsDlg.cpp:61 win32\UCPage.cpp:57
+#: win32\SearchTypesPage.cpp:77 win32\StringListDlg.cpp:115
+#: win32\UCPage.cpp:57
 msgid "&Add"
 msgstr "&Shto"
 
@@ -129,12 +115,12 @@ msgstr "&Shto dosje"
 msgid "&Add to the list"
 msgstr "Redakto hub listat"
 
-#: win32\WinUtil.cpp:1249 win32\UserInfoBase.h:130
+#: win32\WinUtil.cpp:1254 win32\UserInfoBase.h:130
 msgid "&Browse file list"
 msgstr "&Zgjidh listë skedarësh"
 
-#: win32\Appearance2Page.cpp:98 win32\DirectoryListingFrame.cpp:459
-#: win32\LogPage.cpp:69 win32\SearchFrame.cpp:715 win32\SearchFrame.cpp:745
+#: win32\Appearance2Page.cpp:98 win32\DirectoryListingFrame.cpp:461
+#: win32\LogPage.cpp:69 win32\SearchFrame.cpp:744 win32\SearchFrame.cpp:774
 msgid "&Browse..."
 msgstr "&Zgjidh..."
 
@@ -171,9 +157,14 @@ msgstr "&Kopjo\tCtrl+C"
 msgid "&Copy filename"
 msgstr "&Kopjo emër skedari"
 
-#: win32\MainWindow.cpp:1249
+#: win32\MainWindow.cpp:1188
 msgid "&Customize\tDouble-click"
 msgstr ""
+
+#: win32\SearchTypesPage.cpp:93
+#, fuzzy
+msgid "&Defaults"
+msgstr "E thjeshtë"
 
 #: win32\dwt_Texts.cpp:33
 msgid "&Delete\tDel"
@@ -187,8 +178,8 @@ msgstr "&Përshkrimi"
 msgid "&Disconnect"
 msgstr "&Qkyqu"
 
-#: win32\DirectoryListingFrame.cpp:385 win32\DirectoryListingFrame.cpp:409
-#: win32\DirectoryListingFrame.cpp:419 win32\SearchFrame.cpp:681
+#: win32\DirectoryListingFrame.cpp:387 win32\DirectoryListingFrame.cpp:411
+#: win32\DirectoryListingFrame.cpp:421 win32\SearchFrame.cpp:710
 msgid "&Download"
 msgstr "&Shkarko"
 
@@ -196,7 +187,7 @@ msgstr "&Shkarko"
 msgid "&Download Queue\tCtrl+D"
 msgstr "&Shkarkime të Pushuara\tCtrl+D"
 
-#: win32\HubListsDlg.cpp:91
+#: win32\StringListDlg.cpp:146
 msgid "&Edit"
 msgstr "&Ndrrysho"
 
@@ -217,11 +208,11 @@ msgstr "&Gjej...\tF3"
 msgid "&Force attempt"
 msgstr "&Provo me forcë"
 
-#: win32\QueueFrame.cpp:902 win32\WinUtil.cpp:1246 win32\UserInfoBase.h:128
+#: win32\QueueFrame.cpp:902 win32\WinUtil.cpp:1251 win32\UserInfoBase.h:128
 msgid "&Get file list"
 msgstr "&Merre listën e skedarëve"
 
-#: win32\DirectoryListingFrame.cpp:399
+#: win32\DirectoryListingFrame.cpp:401
 msgid "&Go to directory"
 msgstr "&Shko tek direktorija"
 
@@ -229,12 +220,12 @@ msgstr "&Shko tek direktorija"
 msgid "&Help"
 msgstr "&Ndihmë"
 
-#: win32\MainWindow.cpp:1265
+#: win32\MainWindow.cpp:1204
 #, fuzzy
 msgid "&Hide\tCtrl+1"
 msgstr "Kërko"
 
-#: win32\WinUtil.cpp:1252 win32\UserInfoBase.h:131
+#: win32\WinUtil.cpp:1257 win32\UserInfoBase.h:131
 #, fuzzy
 msgid "&Match queue"
 msgstr "Përputh me listën e shkarkimit"
@@ -288,11 +279,11 @@ msgstr "&Rifresko"
 #: win32\ADLSearchFrame.cpp:100 win32\ADLSearchFrame.cpp:283
 #: win32\FavHubGroupsDlg.cpp:103 win32\FavHubsFrame.cpp:107
 #: win32\FavHubsFrame.cpp:313 win32\FavoriteDirsPage.cpp:67
-#: win32\HubListsDlg.cpp:96 win32\QueueFrame.cpp:866 win32\QueueFrame.cpp:876
-#: win32\QueueFrame.cpp:886 win32\SearchFrame.cpp:697 win32\UCPage.cpp:73
-#: win32\UploadPage.cpp:81 win32\UsersFrame.cpp:192
-#: win32\WaitingUsersFrame.cpp:86 win32\FinishedFrameBase.h:434
-#: win32\FinishedFrameBase.h:453
+#: win32\QueueFrame.cpp:866 win32\QueueFrame.cpp:876 win32\QueueFrame.cpp:886
+#: win32\SearchFrame.cpp:726 win32\SearchTypesPage.cpp:89
+#: win32\StringListDlg.cpp:151 win32\UCPage.cpp:73 win32\UploadPage.cpp:81
+#: win32\UsersFrame.cpp:192 win32\WaitingUsersFrame.cpp:86
+#: win32\FinishedFrameBase.h:434 win32\FinishedFrameBase.h:453
 msgid "&Remove"
 msgstr "&Fshije"
 
@@ -304,7 +295,7 @@ msgstr "&Kërko"
 msgid "&Search\tCtrl+S"
 msgstr "&Kërko\tCtrl+S"
 
-#: win32\QueueFrame.cpp:909 win32\WinUtil.cpp:1255 win32\UserInfoBase.h:134
+#: win32\QueueFrame.cpp:909 win32\WinUtil.cpp:1260 win32\UserInfoBase.h:134
 msgid "&Send private message"
 msgstr "&Dërgo mesazh privat"
 
@@ -321,7 +312,7 @@ msgstr ""
 msgid "&View"
 msgstr "&Shfaq"
 
-#: win32\DirectoryListingFrame.cpp:389 win32\SearchFrame.cpp:685
+#: win32\DirectoryListingFrame.cpp:391 win32\SearchFrame.cpp:714
 #: win32\FinishedFrameBase.h:430
 msgid "&View as text"
 msgstr "&Shfaq si tekst"
@@ -358,14 +349,14 @@ msgstr "-.-- skedar/h, %1% skedar të mbetur"
 msgid "-:--:-- left"
 msgstr "-:--:-- mbetur"
 
-#: win32\WinUtil.cpp:1184
+#: win32\WinUtil.cpp:1189
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
 msgstr ""
 "Një MAGNET nyje e gabuar është dërguar në DC++.S`do ndërmiret asnjë veprim."
 
-#: win32\UploadPage.cpp:289
+#: win32\UploadPage.cpp:290
 #, boost-format
 msgid ""
 "A virtual directory named %1% already exists, do you wish to merge the "
@@ -382,11 +373,11 @@ msgstr "ADL Kërkim"
 msgid "ADLSearch Properties"
 msgstr "Konfigurimet e ADL Kërkimit"
 
-#: win32\MainWindow.cpp:411 win32\MainWindow.cpp:873
+#: win32\MainWindow.cpp:411 win32\MainWindow.cpp:871
 msgid "AWAY"
 msgstr "LARG"
 
-#: win32\AboutDlg.cpp:130 win32\MainWindow.cpp:304
+#: win32\AboutDlg.cpp:131 win32\MainWindow.cpp:304
 msgid "About DC++"
 msgstr "Rreth DC++"
 
@@ -395,7 +386,7 @@ msgid "Accept custom user commands from hub"
 msgstr "Prano urdhërat e zakonshme të përdoruesit nga hubi"
 
 #: win32\HubFrame.cpp:1128 win32\PublicHubsFrame.cpp:390
-#: win32\WinUtil.cpp:1258 win32\UserInfoBase.h:136
+#: win32\WinUtil.cpp:1263 win32\UserInfoBase.h:136
 msgid "Add To &Favorites"
 msgstr "Shto tek &Favoritët"
 
@@ -407,16 +398,16 @@ msgstr "Shto skedar të kryer për të ndarë (nëse ndahen)"
 msgid "Added"
 msgstr "U vendos"
 
-#: win32\FavHubProperties.cpp:69 win32\MainWindow.cpp:641
-#: win32\PublicHubsFrame.cpp:38
+#: win32\FavHubProperties.cpp:69 win32\HubListsDlg.cpp:52
+#: win32\MainWindow.cpp:641 win32\PublicHubsFrame.cpp:38
 msgid "Address"
 msgstr "Adresa"
 
-#: win32\SettingsDialog.cpp:122
+#: win32\SettingsDialog.cpp:123
 msgid "Advanced"
 msgstr "Përparuar"
 
-#: win32\QueueFrame.cpp:917 win32\QueueFrame.cpp:926 win32\WinUtil.cpp:1212
+#: win32\QueueFrame.cpp:917 win32\QueueFrame.cpp:926 win32\WinUtil.cpp:1217
 msgid "All"
 msgstr "Të gjitha"
 
@@ -425,7 +416,7 @@ msgstr "Të gjitha"
 msgid "All %1% users offline"
 msgstr "Të gjithë %1% përdoruesit nuk janë në lidhje"
 
-#: win32\WinUtil.cpp:627 win32\WinUtil.cpp:634
+#: win32\WinUtil.cpp:629 win32\WinUtil.cpp:636
 msgid "All files"
 msgstr "Të gjithë skedarët"
 
@@ -451,11 +442,10 @@ msgid "Another group with the name \"%1%\" already exists"
 msgstr "Dosja apo emri i dosjes tani egzitojnë"
 
 #: win32\HubFrame.cpp:178 win32\PublicHubsFrame.cpp:175
-#: win32\SearchFrame.cpp:192
 msgid "Any"
 msgstr "Çdo"
 
-#: win32\SettingsDialog.cpp:110
+#: win32\SettingsDialog.cpp:111
 msgid "Appearance"
 msgstr "Paraqitja"
 
@@ -466,10 +456,6 @@ msgstr "Minimale"
 #: win32\SearchFrame.cpp:169
 msgid "At most"
 msgstr "Maksimale"
-
-#: win32\SearchFrame.cpp:193
-msgid "Audio"
-msgstr "Muzikë"
 
 #: win32\UsersFrame.cpp:32
 msgid "Auto grant slot / Nick"
@@ -539,11 +525,11 @@ msgstr "Mesatarja: %1%"
 msgid "Average: %1%"
 msgstr "Mesatarja: %1%"
 
-#: win32\WinUtil.cpp:410 win32\WinUtil.cpp:420
+#: win32\WinUtil.cpp:412 win32\WinUtil.cpp:422
 msgid "Away mode off"
 msgstr "Gjendja e largimit deaktivizuar"
 
-#: win32\WinUtil.cpp:415
+#: win32\WinUtil.cpp:417
 #, boost-format
 msgid "Away mode on: %1%"
 msgstr "Moda e largët e ndezur: %1%"
@@ -557,7 +543,7 @@ msgstr "B"
 msgid "B/s"
 msgstr "B/s"
 
-#: win32\SettingsDialog.cpp:126
+#: win32\SettingsDialog.cpp:127
 msgid "Bandwidth Limiting"
 msgstr ""
 
@@ -589,7 +575,7 @@ msgstr "SFV-kontrolli dha një shumë kontroll të gabuar CRC32"
 msgid "Cached hub list is corrupted or unsupported"
 msgstr ""
 
-#: win32\WinUtil.cpp:888
+#: win32\WinUtil.cpp:893
 msgid "Cancel"
 msgstr "Anulo"
 
@@ -630,7 +616,7 @@ msgstr "Mbyll të gjitha PM dritaret"
 msgid "Close all file list windows"
 msgstr "Mbyll të gjitha dritaret e listave të fileve"
 
-#: win32\MainWindow.cpp:283 win32\MainWindow.cpp:1134
+#: win32\MainWindow.cpp:283 win32\MainWindow.cpp:1073
 #, fuzzy
 msgid "Close all hubs of a favorite group"
 msgstr "Ky hub s´është hub i parapëlqyer"
@@ -648,7 +634,7 @@ msgstr "Mbyll të gjitha dritaret për kërkim"
 msgid "Close disconnected hubs"
 msgstr "Të shkëputurat mbylli"
 
-#: win32\MainWindow.cpp:284 win32\MainWindow.cpp:1134
+#: win32\MainWindow.cpp:284 win32\MainWindow.cpp:1073
 #, fuzzy
 msgid "Close hubs not in a favorite group"
 msgstr "Ky hub s´është hub i parapëlqyer"
@@ -657,7 +643,7 @@ msgstr "Ky hub s´është hub i parapëlqyer"
 msgid "Colors"
 msgstr "Ngjyrat"
 
-#: win32\SettingsDialog.cpp:111
+#: win32\SettingsDialog.cpp:112
 msgid "Colors and sounds"
 msgstr "Ngjyrat dhe zërat"
 
@@ -669,15 +655,11 @@ msgstr "Urdhër"
 msgid "Command Type"
 msgstr "Lloji i Komandës"
 
-#: win32\SearchFrame.cpp:194
-msgid "Compressed"
-msgstr "Ngjeshur"
-
 #: win32\DownloadPage.cpp:113
 msgid "Configure Public Hub Lists"
 msgstr "Konfiguro listën publike"
 
-#: win32\HubListsDlg.cpp:115 win32\PublicHubsFrame.cpp:139
+#: win32\HubListsDlg.cpp:44 win32\PublicHubsFrame.cpp:139
 msgid "Configured Public Hub Lists"
 msgstr "Listat publike të hubave të konfiguruar"
 
@@ -758,7 +740,7 @@ msgstr "Lidhu me %1%..."
 msgid "Connection"
 msgstr "Lidhjaa"
 
-#: win32\SettingsDialog.cpp:99
+#: win32\SettingsDialog.cpp:100
 msgid "Connection settings"
 msgstr "Konfigurimet e kyçjes"
 
@@ -780,7 +762,7 @@ msgstr "Kopjo nyjen magnetike në clipboard"
 msgid "Copy &nick to clipboard"
 msgstr "Kopjo nyjen magnetike në clipboard"
 
-#: win32\WinUtil.cpp:577
+#: win32\WinUtil.cpp:579
 msgid "Copy magnet link to clipboard"
 msgstr "Kopjo nyjen magnetike në clipboard"
 
@@ -805,22 +787,22 @@ msgstr "Krijohet indeksi i fileve..."
 msgid "Cu&t\tCtrl+X"
 msgstr "&Fletore shënimesh\tCtrl+N"
 
-#: win32\MainWindow.cpp:897
+#: win32\MainWindow.cpp:895
 #, boost-format
 msgid "D Lim: %1%/s"
 msgstr ""
 
-#: win32\MainWindow.cpp:883
+#: win32\MainWindow.cpp:881
 #, boost-format
 msgid "D: %1%"
 msgstr "D: %1%"
 
-#: win32\MainWindow.cpp:891
+#: win32\MainWindow.cpp:889
 #, boost-format
 msgid "D: %1%/s (%2%)"
 msgstr "D: %1%/s (%2%)"
 
-#: win32\MainWindow.cpp:1391
+#: win32\MainWindow.cpp:1330
 #, boost-format
 msgid ""
 "D: %1%/s (%2%)\r\n"
@@ -875,12 +857,11 @@ msgid "Directories"
 msgstr "Dosjet"
 
 #: win32\ADLSProperties.cpp:63 win32\FavoriteDirsPage.cpp:33
-#: win32\LogPage.cpp:64 win32\SearchFrame.cpp:199 win32\SearchFrame.cpp:426
-#: win32\UploadPage.cpp:36
+#: win32\LogPage.cpp:64 win32\SearchFrame.cpp:455 win32\UploadPage.cpp:36
 msgid "Directory"
 msgstr "Dosje"
 
-#: win32\FavoriteDirsPage.cpp:144 win32\FavoriteDirsPage.cpp:176
+#: win32\FavoriteDirsPage.cpp:146 win32\FavoriteDirsPage.cpp:178
 msgid "Directory or directory name already exists"
 msgstr "Dosja apo emri i dosjes tani egzitojnë"
 
@@ -888,9 +869,9 @@ msgstr "Dosja apo emri i dosjes tani egzitojnë"
 msgid "Do nothing"
 msgstr "Mos vepro"
 
-#: win32\SearchFrame.cpp:195
-msgid "Document"
-msgstr "Dokument"
+#: win32\SearchTypesPage.cpp:241
+msgid "Do you really want to delete this search type?"
+msgstr ""
 
 #: win32\NetworkPage.cpp:84
 msgid "Don't allow hub/UPnP to override"
@@ -945,7 +926,7 @@ msgstr "Përfundoi"
 msgid "Done."
 msgstr "E Kryer."
 
-#: win32\DirectoryListingFrame.cpp:448
+#: win32\DirectoryListingFrame.cpp:450
 msgid "Download &to..."
 msgstr "Shkarko &tek..."
 
@@ -953,7 +934,7 @@ msgstr "Shkarko &tek..."
 msgid "Download Matches"
 msgstr "Shkarkimet e përputhshme"
 
-#: win32\MainWindow.cpp:337 win32\QueueFrame.cpp:53 win32\TabsPage.cpp:36
+#: win32\MainWindow.cpp:337 win32\QueueFrame.cpp:53 win32\TabsPage.cpp:37
 msgid "Download Queue"
 msgstr "Lista e shkarkimeve"
 
@@ -962,29 +943,29 @@ msgstr "Lista e shkarkimeve"
 msgid "Download failed: %1%"
 msgstr "Shkarkimi dështoi: %1%"
 
-#: win32\WinUtil.cpp:464
+#: win32\WinUtil.cpp:466
 #, fuzzy
 msgid "Download limit disabled"
 msgstr "Shkarkimet"
 
-#: win32\WinUtil.cpp:459 win32\WinUtil.cpp:460
+#: win32\WinUtil.cpp:461 win32\WinUtil.cpp:462
 #, fuzzy, c-format, boost-format
 msgid "Download limit set to %d KiB/s"
 msgstr "Shkarkimet"
 
-#: win32\WinUtil.cpp:394
+#: win32\WinUtil.cpp:396
 msgid "Download slots set"
 msgstr "Vendet e shkarkimit të vendosura"
 
-#: win32\SearchFrame.cpp:705
+#: win32\SearchFrame.cpp:734
 msgid "Download to..."
 msgstr "Shkarko në..."
 
-#: win32\SearchFrame.cpp:683
+#: win32\SearchFrame.cpp:712
 msgid "Download whole directory"
 msgstr "Shkarko tërë dosjen"
 
-#: win32\SearchFrame.cpp:735
+#: win32\SearchFrame.cpp:764
 msgid "Download whole directory to..."
 msgstr "Shkarko tërë dosjen në..."
 
@@ -1009,7 +990,7 @@ msgid_plural "Downloading from %1% users"
 msgstr[0] "Duke u shkarkuar nga %1% përdorues"
 msgstr[1] "Duke u shkarkuar nga %1% përdorues"
 
-#: win32\DirectoryListingFrame.cpp:790
+#: win32\DirectoryListingFrame.cpp:792
 msgid "Downloading list..."
 msgstr "Shkarkon listën..."
 
@@ -1022,12 +1003,12 @@ msgstr "Shkarkohet lista e hubave publik..."
 msgid "Downloading public hub list... (%1%)"
 msgstr "Duke e shkarkuar listen e hubsave... (%1%)"
 
-#: win32\AboutDlg.cpp:123
+#: win32\AboutDlg.cpp:124
 msgid "Downloading..."
 msgstr "Shkarkohet..."
 
 #: win32\Appearance2Page.cpp:76 win32\MainWindow.cpp:307
-#: win32\SettingsDialog.cpp:102 win32\TransferView.cpp:102
+#: win32\SettingsDialog.cpp:103 win32\TransferView.cpp:102
 msgid "Downloads"
 msgstr "Shkarkimet"
 
@@ -1046,10 +1027,6 @@ msgstr ""
 #: win32\GeneralPage.cpp:49 win32\HubFrame.cpp:49
 msgid "E-Mail"
 msgstr "Posta elektronike"
-
-#: win32\HubListsDlg.cpp:177
-msgid "Edit the hublist"
-msgstr "Redakto hub listat"
 
 #: win32\FinishedFrameBase.h:701 win32\FinishedFrameBase.h:712
 #, fuzzy
@@ -1076,7 +1053,7 @@ msgstr "Paraqitur"
 msgid "Enabled / Search String"
 msgstr "Aktiv / Kriteri për kërkim"
 
-#: win32\DirectoryListingFrame.cpp:892
+#: win32\DirectoryListingFrame.cpp:894
 msgid "Enter search string"
 msgstr "Shëno kriterjen për kërkim"
 
@@ -1089,11 +1066,11 @@ msgstr "Gabim në marrjen e qertifikatës"
 msgid "Error loading the notepad file: %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:165
+#: win32\AboutDlg.cpp:166
 msgid "Error processing version information"
 msgstr "Gabim gjat procesimit të versionit të informacionit"
 
-#: win32\WinUtil.cpp:1033
+#: win32\WinUtil.cpp:1038
 #, fuzzy, boost-format
 msgid "Error registering %1%:// link handler"
 msgstr "Gabim kur DC++ do krijonte magnet çelsin"
@@ -1112,7 +1089,7 @@ msgstr "Përdor tingull gjatë pranimit të mesazheve private"
 msgid "Every time a private message is received"
 msgstr "Përdor tingull gjatë pranimit të mesazheve private"
 
-#: win32\AboutDlg.cpp:87
+#: win32\AboutDlg.cpp:88
 msgid ""
 "Ex-codeveloper: Per Lindén\n"
 "Graphics: Martin Skogevall et al.\n"
@@ -1124,11 +1101,7 @@ msgstr ""
 msgid "Exact size"
 msgstr "Madhësia e sakt"
 
-#: win32\SearchFrame.cpp:196
-msgid "Executable"
-msgstr "Filet e programit"
-
-#: win32\MainWindow.cpp:1375
+#: win32\MainWindow.cpp:1314
 msgid "Exit"
 msgstr "Largohu"
 
@@ -1136,9 +1109,26 @@ msgstr "Largohu"
 msgid "Experimental feature, don't consider DC++ secure in any way"
 msgstr ""
 
-#: win32\SettingsDialog.cpp:123
+#: win32\SettingsDialog.cpp:124
 msgid "Experts only"
 msgstr "Vetëm ekspertët"
+
+#: win32\SearchTypeDlg.cpp:45
+msgid "Extension"
+msgstr ""
+
+#: win32\SearchTypeDlg.cpp:41
+msgid "Extension edition"
+msgstr ""
+
+#: win32\SearchTypesPage.cpp:35
+msgid "Extensions"
+msgstr ""
+
+#: win32\SearchTypeDlg.cpp:37
+#, boost-format
+msgid "Extensions for the %1% search type"
+msgstr ""
 
 #: win32\NetworkPage.cpp:74
 msgid "External / WAN IP"
@@ -1147,19 +1137,6 @@ msgstr "E jashtme / WAN IP"
 #: win32\PublicHubsFrame.cpp:122
 msgid "F&ilter"
 msgstr "F&ilter"
-
-#: win32\MainWindow.cpp:977 win32\MainWindow.cpp:978
-msgid "Failed to create port mappings. Please set up your NAT yourself."
-msgstr "Dështoi në krijimin e port mappings"
-
-#: win32\MainWindow.cpp:1010 win32\MainWindow.cpp:1011
-#, fuzzy
-msgid "Failed to get external IP via UPnP. Please set it yourself."
-msgstr "S`mund të merr IP-në nëpërmjet të UPnP-së.Të lutem vendose vet."
-
-#: win32\MainWindow.cpp:1022
-msgid "Failed to remove port mappings"
-msgstr "S`mund të largon port mappings"
 
 #: win32\MainWindow.cpp:245
 #, fuzzy
@@ -1195,8 +1172,8 @@ msgstr "Hubi i parapëlqyer është zhvendosur"
 msgid "Favorite hub removed"
 msgstr "Hubi i parapëlqyer është zhvendosur"
 
-#: win32\FavoriteDirsPage.cpp:32 win32\FavoriteDirsPage.cpp:138
-#: win32\FavoriteDirsPage.cpp:170
+#: win32\FavoriteDirsPage.cpp:32 win32\FavoriteDirsPage.cpp:140
+#: win32\FavoriteDirsPage.cpp:172
 msgid "Favorite name"
 msgstr "Emri i parapëlqyer"
 
@@ -1204,7 +1181,7 @@ msgstr "Emri i parapëlqyer"
 msgid "Favorite user added"
 msgstr "U vendos përdoruesi i parapëlqyer"
 
-#: win32\SettingsDialog.cpp:103
+#: win32\SettingsDialog.cpp:104
 msgid "Favorites"
 msgstr "Favoritët"
 
@@ -1216,7 +1193,12 @@ msgstr "Fil"
 msgid "File Hash:"
 msgstr "Hash-i i Skedarit:"
 
-#: win32\WinUtil.cpp:634
+#: win32\TabsPage.cpp:33
+#, fuzzy
+msgid "File List"
+msgstr "Listat e Skedarëve"
+
+#: win32\WinUtil.cpp:636
 msgid "File Lists"
 msgstr "Listat e Skedarëve"
 
@@ -1253,7 +1235,7 @@ msgstr "Emri i skedarit:"
 msgid "Files"
 msgstr "Skedarët"
 
-#: win32\DirectoryListingFrame.cpp:731 win32\DirectoryListingFrame.cpp:747
+#: win32\DirectoryListingFrame.cpp:733 win32\DirectoryListingFrame.cpp:749
 #: win32\QueueFrame.cpp:202
 #, boost-format
 msgid "Files: %1%"
@@ -1264,7 +1246,7 @@ msgstr "Skedarët: %1%"
 msgid "Filter spam messages"
 msgstr "Filteri për përjashtim dhe NMDC debug mesazhet"
 
-#: win32\DirectoryListingFrame.cpp:230 win32\DirectoryListingFrame.cpp:246
+#: win32\DirectoryListingFrame.cpp:232 win32\DirectoryListingFrame.cpp:248
 msgid "Find"
 msgstr "Gjej"
 
@@ -1274,12 +1256,12 @@ msgid "Finished"
 msgstr "Gjej"
 
 #: win32\FinishedDLFrame.cpp:28 win32\MainWindow.cpp:250
-#: win32\MainWindow.cpp:339 win32\TabsPage.cpp:37
+#: win32\MainWindow.cpp:339 win32\TabsPage.cpp:38
 msgid "Finished Downloads"
 msgstr "Shkarkimet e përfunduara"
 
 #: win32\FinishedULFrame.cpp:28 win32\MainWindow.cpp:254
-#: win32\MainWindow.cpp:343 win32\TabsPage.cpp:39
+#: win32\MainWindow.cpp:343 win32\TabsPage.cpp:40
 msgid "Finished Uploads"
 msgstr "Ngarkimet e përfunduara"
 
@@ -1320,15 +1302,15 @@ msgid "Get started"
 msgstr "Fillo"
 
 #: win32\ADLSProperties.cpp:89 win32\SearchFrame.cpp:182
-#: win32\WinUtil.cpp:1301
+#: win32\WinUtil.cpp:1306
 msgid "GiB"
 msgstr "GiB"
 
-#: win32\WinUtil.cpp:1261 win32\UserInfoBase.h:137
+#: win32\WinUtil.cpp:1266 win32\UserInfoBase.h:137
 msgid "Grant &extra slot"
 msgstr ""
 
-#: win32\AboutDlg.cpp:100
+#: win32\AboutDlg.cpp:101
 msgid "Greetz and Contributors"
 msgstr ""
 
@@ -1366,7 +1348,7 @@ msgstr "HTTP Proxy (vetëm për hub listën)"
 msgid "Height of the message editing box"
 msgstr ""
 
-#: win32\CommandDlg.cpp:159 win32\SettingsDialog.cpp:149
+#: win32\CommandDlg.cpp:159 win32\SettingsDialog.cpp:151
 msgid "Help"
 msgstr "Ndihmë"
 
@@ -1378,7 +1360,7 @@ msgstr ""
 msgid "Help forum"
 msgstr "Forumi për ndihmë"
 
-#: win32\SearchFrame.cpp:213
+#: win32\SearchFrame.cpp:208
 #, fuzzy
 msgid "Hide files already in share"
 msgstr ""
@@ -1400,7 +1382,7 @@ msgstr "Më së larti"
 msgid "Highest prio max size"
 msgstr "Madhë.maks.e prio-s"
 
-#: win32\SettingsDialog.cpp:117
+#: win32\SettingsDialog.cpp:118
 #, fuzzy
 msgid "History"
 msgstr "PM histori"
@@ -1446,15 +1428,15 @@ msgstr "Hubi egziston(prej më përpara)si i parapëlqyer"
 msgid "Hub list downloaded%1% (%2%)"
 msgstr ""
 
-#: win32\HubListsDlg.cpp:177
+#: win32\HubListsDlg.cpp:48
 msgid "Hublist"
 msgstr "Lista e hubit"
 
-#: win32\HistoryPage.cpp:80 win32\SearchFrame.cpp:225
+#: win32\HistoryPage.cpp:80 win32\SearchFrame.cpp:220
 msgid "Hubs"
 msgstr "Hubat"
 
-#: win32\MainWindow.cpp:877 win32\PublicHubsFrame.cpp:226
+#: win32\MainWindow.cpp:875 win32\PublicHubsFrame.cpp:226
 #, fuzzy, boost-format
 msgid "Hubs: %1%"
 msgstr "Hubat"
@@ -1515,13 +1497,22 @@ msgstr "Progres i Indeksimit"
 msgid "Integrity check: %1% (%2%)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1035
+#: win32\SearchTypeDlg.cpp:82
+#, boost-format
+msgid "Invalid extension: %1%"
+msgstr ""
+
+#: win32\MainWindow.cpp:974
 msgid "Invalid file list name"
 msgstr "Emri i listës së filit është i pa vlefshëm"
 
-#: win32\WinUtil.cpp:388 win32\WinUtil.cpp:396
+#: win32\WinUtil.cpp:390 win32\WinUtil.cpp:398
 msgid "Invalid number of slots"
 msgstr "Numër i pamjaftueshëm i kanaleve"
+
+#: win32\StringListDlg.cpp:73
+msgid "Item edition"
+msgstr ""
 
 #: win32\QueueFrame.cpp:198
 #, boost-format
@@ -1563,7 +1554,7 @@ msgstr ""
 #: win32\ADLSProperties.cpp:87 win32\Advanced3Page.cpp:40
 #: win32\Advanced3Page.cpp:42 win32\QueuePage.cpp:69 win32\QueuePage.cpp:75
 #: win32\QueuePage.cpp:81 win32\QueuePage.cpp:87 win32\QueuePage.cpp:135
-#: win32\SearchFrame.cpp:180 win32\WinUtil.cpp:1305
+#: win32\SearchFrame.cpp:180 win32\WinUtil.cpp:1310
 msgid "KiB"
 msgstr ""
 
@@ -1577,7 +1568,7 @@ msgstr "B/s"
 msgid "Language"
 msgstr "Fil Gjuhësor"
 
-#: win32\AboutDlg.cpp:122
+#: win32\AboutDlg.cpp:123
 msgid "Latest stable version"
 msgstr ""
 
@@ -1588,6 +1579,10 @@ msgstr "Kufizimet"
 #: win32\GeneralPage.cpp:59
 msgid "Line speed (upload)"
 msgstr "Shpejtësia e ngarkimit"
+
+#: win32\StringListDlg.cpp:69
+msgid "List configuration"
+msgstr ""
 
 #: win32\SplashWindow.cpp:77
 #, boost-format
@@ -1635,12 +1630,12 @@ msgstr "Shënimet"
 msgid "Login"
 msgstr "Emri i përdoruesit"
 
-#: win32\SettingsDialog.cpp:118
+#: win32\SettingsDialog.cpp:119
 #, fuzzy
 msgid "Logs"
 msgstr "Emri i përdoruesit"
 
-#: win32\WinUtil.cpp:576
+#: win32\WinUtil.cpp:578
 msgid "Lookup TTH at Bitzi.com"
 msgstr "Kërko TTH-kontroll shumën në Bitzi.com"
 
@@ -1656,11 +1651,15 @@ msgstr "Madhë.e ulët e prio-s"
 msgid "Lowest"
 msgstr "Më e ulët"
 
-#: win32\MagnetDlg.cpp:107 win32\WinUtil.cpp:1185
+#: win32\SearchTypesPage.cpp:81
+msgid "M&odify"
+msgstr ""
+
+#: win32\MagnetDlg.cpp:107 win32\WinUtil.cpp:1190
 msgid "MAGNET Link detected"
 msgstr "U zbulua MAGNET nyja"
 
-#: win32\WinUtil.cpp:1130
+#: win32\WinUtil.cpp:1135
 #, fuzzy, boost-format
 msgid "MAGNET Link detected: %1%"
 msgstr "U zbulua MAGNET nyja"
@@ -1683,11 +1682,11 @@ msgstr ""
 msgid "Match downloaded lists"
 msgstr "Së pari klasifiko të gjitha shkarkimet"
 
-#: win32\DirectoryListingFrame.cpp:225 win32\DirectoryListingFrame.cpp:245
+#: win32\DirectoryListingFrame.cpp:227 win32\DirectoryListingFrame.cpp:247
 msgid "Match queue"
 msgstr "Përputh me listën e shkarkimit"
 
-#: win32\DirectoryListingFrame.cpp:330
+#: win32\DirectoryListingFrame.cpp:332
 #, boost-format
 msgid "Matched %1% file"
 msgid_plural "Matched %1% files"
@@ -1702,7 +1701,7 @@ msgstr ""
 msgid "Max Size"
 msgstr "Madhësia maksimale"
 
-#: win32\TabsPage.cpp:62
+#: win32\TabsPage.cpp:63
 msgid "Max characters per tab (0 = infinite)"
 msgstr ""
 
@@ -1746,12 +1745,12 @@ msgstr ""
 msgid "Maximum simultaneous downloads (0 = infinite)"
 msgstr "Shkarkimet maksimale të njëkohëshme (0 = pakufizuar)"
 
-#: win32\SearchFrame.cpp:219
+#: win32\SearchFrame.cpp:214
 msgid "Merge results for the same file"
 msgstr ""
 
 #: win32\ADLSProperties.cpp:88 win32\Advanced3Page.cpp:43
-#: win32\SearchFrame.cpp:181 win32\WinUtil.cpp:1303
+#: win32\SearchFrame.cpp:181 win32\WinUtil.cpp:1308
 msgid "MiB"
 msgstr ""
 
@@ -1807,12 +1806,12 @@ msgid "Minimize to tray"
 msgstr "Zvoglo në desktop"
 
 #: win32\ADLSearchFrame.cpp:94 win32\FavHubsFrame.cpp:101
-#: win32\FavHubsFrame.cpp:311 win32\HubListsDlg.cpp:86 win32\UCPage.cpp:69
+#: win32\FavHubsFrame.cpp:311 win32\StringListDlg.cpp:141 win32\UCPage.cpp:69
 msgid "Move &Down"
 msgstr ""
 
 #: win32\ADLSearchFrame.cpp:88 win32\FavHubsFrame.cpp:95
-#: win32\FavHubsFrame.cpp:310 win32\HubListsDlg.cpp:81 win32\UCPage.cpp:65
+#: win32\FavHubsFrame.cpp:310 win32\StringListDlg.cpp:136 win32\UCPage.cpp:65
 msgid "Move &Up"
 msgstr ""
 
@@ -1830,7 +1829,11 @@ msgstr "Emri"
 msgid "Name and command must not be empty"
 msgstr ""
 
-#: win32\UploadPage.cpp:226 win32\UploadPage.cpp:284
+#: win32\SearchTypesPage.cpp:154
+msgid "Name of the new search type"
+msgstr ""
+
+#: win32\UploadPage.cpp:227 win32\UploadPage.cpp:285
 msgid "Name under which the others see the directory"
 msgstr "Emri i dosjes të cilën e shohin(shihet nga)të tjerët"
 
@@ -1838,11 +1841,20 @@ msgstr "Emri i dosjes të cilën e shohin(shihet nga)të tjerët"
 msgid "Network Statistics"
 msgstr "Statistika e rrjetit"
 
-#: win32\UploadPage.cpp:235
+#: win32\SearchTypesPage.cpp:224
+#, fuzzy
+msgid "New name"
+msgstr "Emri"
+
+#: win32\SearchTypesPage.cpp:154
+msgid "New search type"
+msgstr ""
+
+#: win32\UploadPage.cpp:236
 msgid "New virtual name matches old name, skipping..."
 msgstr "Emri i ri (viritual)përputhet me emrin e vjetër,tejkalon..."
 
-#: win32\DirectoryListingFrame.cpp:235 win32\DirectoryListingFrame.cpp:247
+#: win32\DirectoryListingFrame.cpp:237 win32\DirectoryListingFrame.cpp:249
 msgid "Next"
 msgstr "Përpara"
 
@@ -1876,7 +1888,7 @@ msgstr "Hubi i parapëlqyer është zhvendosur"
 msgid "No full tree available"
 msgstr "Fili s´është i arritshëm"
 
-#: win32\DirectoryListingFrame.cpp:957
+#: win32\DirectoryListingFrame.cpp:959
 msgid "No matches"
 msgstr "S`ka përputhje(fil me emër të tillë)"
 
@@ -1884,7 +1896,7 @@ msgstr "S`ka përputhje(fil me emër të tillë)"
 msgid "No new downloads if speed exceeds (KiB/s, 0 = disable)"
 msgstr "Shpejtësia e zvogëluar/s`ka shkarkime të reja(KiB/s, 0 = disable)"
 
-#: win32\AboutDlg.cpp:118
+#: win32\AboutDlg.cpp:119
 msgid "No transfers yet"
 msgstr ""
 
@@ -1908,6 +1920,10 @@ msgstr "Normale"
 msgid "Normal prio max size"
 msgstr "Madhë.norm.e prio-s"
 
+#: win32\SearchTypesPage.cpp:98
+msgid "Note; Custom search types will only be applied to ADC hubs!"
+msgstr ""
+
 #: win32\UploadPage.cpp:85
 msgid "Note; Files appear in the share only after they've been hashed!"
 msgstr "Filet e reja janë vendo.në shpërn.vetëm kur janë indeks.në dosje!"
@@ -1930,11 +1946,11 @@ msgstr "Shënime(Notepad)"
 msgid "Notification sound"
 msgstr ""
 
-#: win32\WinUtil.cpp:881
+#: win32\WinUtil.cpp:886
 msgid "OK"
 msgstr ""
 
-#: win32\WinUtil.cpp:510
+#: win32\WinUtil.cpp:512
 msgid "Offline"
 msgstr "Shkëputur"
 
@@ -1951,11 +1967,11 @@ msgstr "Së pari klasifiko të gjitha shkarkimet"
 msgid "Only show joins / parts for favorite users"
 msgstr "Shfaq vetëm pjesmarjet/shoqërimet për përdoruesit e parapëlqyer"
 
-#: win32\SearchFrame.cpp:207
+#: win32\SearchFrame.cpp:202
 msgid "Only users with free slots"
 msgstr "Vetëm përdorues me kanale të lira"
 
-#: win32\SearchFrame.cpp:239
+#: win32\SearchFrame.cpp:234
 msgid "Only where I'm op"
 msgstr "Vetëm kur jam në lidhje-online"
 
@@ -1963,7 +1979,7 @@ msgstr "Vetëm kur jam në lidhje-online"
 msgid "Open &folder"
 msgstr ""
 
-#: win32\MainWindow.cpp:230 win32\MainWindow.cpp:1372
+#: win32\MainWindow.cpp:230 win32\MainWindow.cpp:1311
 msgid "Open downloads directory"
 msgstr "Hap dosjen e shkarkimeve"
 
@@ -2066,19 +2082,15 @@ msgstr "Pushon"
 msgid "Personal Information"
 msgstr "Informata Personale"
 
-#: win32\SettingsDialog.cpp:97
+#: win32\SettingsDialog.cpp:98
 msgid "Personal information"
 msgstr "Informata Personale"
 
-#: win32\WinUtil.cpp:1297
+#: win32\WinUtil.cpp:1302
 msgid "PiB"
 msgstr ""
 
-#: win32\SearchFrame.cpp:197
-msgid "Picture"
-msgstr "Fotografi"
-
-#: win32\WinUtil.cpp:308
+#: win32\WinUtil.cpp:310
 msgid "Please enter a nickname in the settings dialog!"
 msgstr "Të lutem shëno një pseudonim në Konfigurimet!"
 
@@ -2103,6 +2115,10 @@ msgstr "Porti"
 #: win32\NetworkPage.cpp:89
 msgid "Ports"
 msgstr "Portet"
+
+#: win32\SearchTypesPage.cpp:34 win32\SearchTypesPage.cpp:257
+msgid "Predefined"
+msgstr ""
 
 #: win32\HubFrame.cpp:775
 #, boost-format
@@ -2153,7 +2169,7 @@ msgstr "Lista e hubave publik URL-ja"
 msgid "Purge"
 msgstr "Pastro"
 
-#: win32\SettingsDialog.cpp:104
+#: win32\SettingsDialog.cpp:105
 msgid "Queue"
 msgstr ""
 
@@ -2169,7 +2185,7 @@ msgstr "Lidhje e shpejt"
 msgid "Rating"
 msgstr "Populariteti"
 
-#: win32\AboutDlg.cpp:117
+#: win32\AboutDlg.cpp:118
 #, c-format, boost-format
 msgid "Ratio (up/down): %1$0.2f"
 msgstr ""
@@ -2182,7 +2198,8 @@ msgstr "Raw"
 msgid "Re&check integrity"
 msgstr ""
 
-#: win32\FavoriteDirsPage.cpp:64 win32\UploadPage.cpp:78
+#: win32\FavoriteDirsPage.cpp:64 win32\SearchTypesPage.cpp:85
+#: win32\UploadPage.cpp:78
 #, fuzzy
 msgid "Re&name"
 msgstr "Riemro"
@@ -2191,7 +2208,7 @@ msgstr "Riemro"
 msgid "Re-add source"
 msgstr "Rivendos burimin"
 
-#: win32\SearchFrame.cpp:977
+#: win32\SearchFrame.cpp:1024
 msgid "Ready to search..."
 msgstr "Gati për kërkim..."
 
@@ -2269,9 +2286,13 @@ msgstr "Zhvendos listat e fileve të ngadalshme"
 msgid "Remove source"
 msgstr "Zhvendose burimin"
 
-#: win32\QueueFrame.cpp:934 win32\WinUtil.cpp:1265 win32\UserInfoBase.h:141
+#: win32\QueueFrame.cpp:934 win32\WinUtil.cpp:1270 win32\UserInfoBase.h:141
 msgid "Remove user from queue"
 msgstr "Zhvendose përdoruesin nga rradha"
+
+#: win32\SearchTypesPage.cpp:224
+msgid "Rename a search type"
+msgstr ""
 
 #: win32\MainWindow.cpp:313
 msgid "Report a bug"
@@ -2303,17 +2324,17 @@ msgid "SOCKS5"
 msgstr "SOCKS5"
 
 #: win32\MainWindow.cpp:345 win32\RichTextBox.cpp:88 win32\SearchFrame.cpp:95
-#: win32\SearchFrame.cpp:152 win32\TabsPage.cpp:33
+#: win32\SearchFrame.cpp:152 win32\TabsPage.cpp:34
 msgid "Search"
 msgstr "Kërko"
 
-#: win32\SearchFrame.cpp:939 win32\SearchFrame.cpp:954
-#: win32\SearchFrame.cpp:973
+#: win32\SearchFrame.cpp:985 win32\SearchFrame.cpp:1001
+#: win32\SearchFrame.cpp:1020
 #, fuzzy, boost-format
 msgid "Search - %1%"
 msgstr "Kërko"
 
-#: win32\SearchFrame.cpp:978
+#: win32\SearchFrame.cpp:1025
 #, fuzzy
 msgid "Search - Ready to search..."
 msgstr "Gati për kërkim..."
@@ -2323,7 +2344,7 @@ msgid "Search Menu"
 msgstr "Kërko Meny"
 
 #: win32\MainWindow.cpp:260 win32\MainWindow.cpp:349 win32\SpyFrame.cpp:43
-#: win32\TabsPage.cpp:34
+#: win32\TabsPage.cpp:35
 msgid "Search Spy"
 msgstr "Kërkim nëpërmjet spionimit"
 
@@ -2331,15 +2352,20 @@ msgstr "Kërkim nëpërmjet spionimit"
 msgid "Search String"
 msgstr "Kriteri për kërkim"
 
+#: win32\SettingsDialog.cpp:128
+#, fuzzy
+msgid "Search Types"
+msgstr "Kërkim nëpërmjet spionimit"
+
 #: win32\SearchFrame.cpp:127
 msgid "Search for"
 msgstr "Kërko për"
 
-#: win32\WinUtil.cpp:575
+#: win32\WinUtil.cpp:577
 msgid "Search for alternates"
 msgstr "Kërko vende alternative për shkarkim"
 
-#: win32\DirectoryListingFrame.cpp:892 win32\DirectoryListingFrame.cpp:957
+#: win32\DirectoryListingFrame.cpp:894 win32\DirectoryListingFrame.cpp:959
 msgid "Search for file"
 msgstr "Kërko filin"
 
@@ -2347,7 +2373,7 @@ msgstr "Kërko filin"
 msgid "Search history"
 msgstr "Historia e kërkimit"
 
-#: win32\SearchFrame.cpp:202
+#: win32\SearchFrame.cpp:197
 msgid "Search options"
 msgstr "Konfigurimet e kërkimit"
 
@@ -2361,12 +2387,22 @@ msgstr ""
 msgid "Search string"
 msgstr "Kriteri për kërkim"
 
-#: win32\SearchFrame.cpp:933
+#: win32\SearchTypesPage.cpp:33
+#, fuzzy
+msgid "Search type"
+msgstr "Kërkim nëpërmjet spionimit"
+
+#: win32\SearchTypesPage.cpp:54
+#, fuzzy
+msgid "Search types"
+msgstr "Kërkim nëpërmjet spionimit"
+
+#: win32\SearchFrame.cpp:979
 #, fuzzy, boost-format
 msgid "Searching for %1%..."
 msgstr "Kërko për"
 
-#: win32\SearchFrame.cpp:948 win32\SearchFrame.cpp:971
+#: win32\SearchFrame.cpp:995 win32\SearchFrame.cpp:1018
 #, boost-format
 msgid "Searching too soon, next search in %1% second"
 msgid_plural "Searching too soon, next search in %1% seconds"
@@ -2381,7 +2417,7 @@ msgstr ""
 msgid "Secondary Transfer Rate Limiting Settings"
 msgstr ""
 
-#: win32\SettingsDialog.cpp:125
+#: win32\SettingsDialog.cpp:126
 msgid "Security Certificates"
 msgstr ""
 
@@ -2429,8 +2465,8 @@ msgstr "Vendos prioritet"
 msgid "Set timestamps"
 msgstr "Format i kohës (%H:%M:%S)"
 
-#: win32\MainWindow.cpp:355 win32\MainWindow.cpp:1373
-#: win32\SettingsDialog.cpp:242
+#: win32\MainWindow.cpp:355 win32\MainWindow.cpp:1312
+#: win32\SettingsDialog.cpp:244
 msgid "Settings"
 msgstr "Konfigurmiet"
 
@@ -2451,7 +2487,7 @@ msgstr "Shpërndan"
 msgid "Shared directories"
 msgstr "Dosjet e shpërndarjes"
 
-#: win32\SettingsDialog.cpp:107
+#: win32\SettingsDialog.cpp:108
 msgid "Sharing"
 msgstr "Shpërndan"
 
@@ -2463,7 +2499,7 @@ msgstr ""
 msgid "Shell menus"
 msgstr ""
 
-#: win32\MainWindow.cpp:1371
+#: win32\MainWindow.cpp:1310
 msgid "Show"
 msgstr "Shfaq"
 
@@ -2475,7 +2511,7 @@ msgstr "Shfaq kur përdoruesi kyçet/largohet nga biseda kryesore"
 msgid "Show timestamps in chat by default"
 msgstr "Në biseda(chat) shfaq orën"
 
-#: win32\DirectoryListingFrame.cpp:45 win32\MainWindow.cpp:1253
+#: win32\DirectoryListingFrame.cpp:45 win32\MainWindow.cpp:1192
 #: win32\QueueFrame.cpp:38 win32\SearchFrame.cpp:37 win32\SearchFrame.cpp:157
 #: win32\TransferView.cpp:62 win32\UploadPage.cpp:37
 msgid "Size"
@@ -2485,7 +2521,7 @@ msgstr "Madhësia"
 msgid "Size Type"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:732 win32\DirectoryListingFrame.cpp:749
+#: win32\DirectoryListingFrame.cpp:734 win32\DirectoryListingFrame.cpp:751
 #: win32\QueueFrame.cpp:199 win32\QueueFrame.cpp:203
 #, fuzzy, boost-format
 msgid "Size: %1%"
@@ -2503,11 +2539,11 @@ msgstr "Kanali u dhurua"
 msgid "Slots"
 msgstr "Kanalet"
 
-#: win32\WinUtil.cpp:385
+#: win32\WinUtil.cpp:387
 msgid "Slots set"
 msgstr "Kanalet e kufizuara(s´ka qasje)"
 
-#: win32\MainWindow.cpp:879
+#: win32\MainWindow.cpp:877
 #, boost-format
 msgid "Slots: %1%/%2%"
 msgstr ""
@@ -2541,11 +2577,11 @@ msgstr "Lloj i burimit"
 msgid "Source too slow"
 msgstr "Burimi është shumë i ngadalshëm"
 
-#: win32\WinUtil.cpp:435
+#: win32\WinUtil.cpp:437
 msgid "Specify a URL"
 msgstr "Cakto një URL"
 
-#: win32\WinUtil.cpp:402 win32\WinUtil.cpp:423 win32\WinUtil.cpp:429
+#: win32\WinUtil.cpp:404 win32\WinUtil.cpp:425 win32\WinUtil.cpp:431
 msgid "Specify a search string"
 msgstr "Cakto kriterjen për kërkim"
 
@@ -2563,7 +2599,7 @@ msgstr "Cakto kriterjen për kërkim"
 msgid "Speed"
 msgstr "Shpejtësia"
 
-#: win32\DirectoryListingFrame.cpp:733
+#: win32\DirectoryListingFrame.cpp:735
 #, boost-format
 msgid "Speed: %1%/s"
 msgstr ""
@@ -2593,11 +2629,11 @@ msgstr ""
 msgid "Stored password sent..."
 msgstr "U dërgua fjalëkalimi rezerv..."
 
-#: win32\DirectoryListingFrame.cpp:220 win32\DirectoryListingFrame.cpp:244
+#: win32\DirectoryListingFrame.cpp:222 win32\DirectoryListingFrame.cpp:246
 msgid "Subtract list"
 msgstr "Largo listën"
 
-#: win32\MainWindow.cpp:265 win32\SystemFrame.cpp:32 win32\TabsPage.cpp:35
+#: win32\MainWindow.cpp:265 win32\SystemFrame.cpp:32 win32\TabsPage.cpp:36
 msgid "System Log"
 msgstr "System Log"
 
@@ -2609,8 +2645,8 @@ msgstr "TCP Porti"
 msgid "TLS"
 msgstr ""
 
-#: win32\AboutDlg.cpp:91 win32\DirectoryListingFrame.cpp:47
-#: win32\QueueFrame.cpp:46 win32\SearchFrame.cpp:44 win32\SearchFrame.cpp:200
+#: win32\AboutDlg.cpp:92 win32\DirectoryListingFrame.cpp:47
+#: win32\QueueFrame.cpp:46 win32\SearchFrame.cpp:44
 msgid "TTH"
 msgstr ""
 
@@ -2619,11 +2655,11 @@ msgstr ""
 msgid "TTH: %1%"
 msgstr ""
 
-#: win32\TabsPage.cpp:55
+#: win32\TabsPage.cpp:56
 msgid "Tab highlight on content change"
 msgstr "Kur ndryshohet përmbajtja shëno hub shenjën(ve shenjë)"
 
-#: win32\SettingsDialog.cpp:112
+#: win32\SettingsDialog.cpp:113
 msgid "Tabs"
 msgstr ""
 
@@ -2646,7 +2682,13 @@ msgstr ""
 msgid "This hub is not a favorite hub"
 msgstr "Ky hub s´është hub i parapëlqyer"
 
-#: win32\WinUtil.cpp:1299
+#: win32\SearchTypesPage.cpp:210
+msgid ""
+"This will delete all defined search types and restore the default ones. Do "
+"you want to continue?"
+msgstr ""
+
+#: win32\WinUtil.cpp:1304
 msgid "TiB"
 msgstr ""
 
@@ -2679,7 +2721,7 @@ msgstr ""
 msgid "Toggle window when selecting an active tab"
 msgstr "Ndro katror(simbol)kur shtyp në hub shenjën"
 
-#: win32\MainWindow.cpp:1247
+#: win32\MainWindow.cpp:1186
 msgid "Toolbar"
 msgstr ""
 
@@ -2696,7 +2738,7 @@ msgstr "Madhësia e përgjithëshme:"
 msgid "Total: %1%"
 msgstr ""
 
-#: win32\AboutDlg.cpp:109
+#: win32\AboutDlg.cpp:110
 msgid "Totals"
 msgstr ""
 
@@ -2728,17 +2770,17 @@ msgstr ""
 msgid "Type"
 msgstr "Lloji"
 
-#: win32\MainWindow.cpp:898
+#: win32\MainWindow.cpp:896
 #, boost-format
 msgid "U Lim: %1%/s"
 msgstr ""
 
-#: win32\MainWindow.cpp:887
+#: win32\MainWindow.cpp:885
 #, boost-format
 msgid "U: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:895
+#: win32\MainWindow.cpp:893
 #, boost-format
 msgid "U: %1%/s (%2%)"
 msgstr ""
@@ -2770,7 +2812,7 @@ msgstr ""
 msgid "Under construction, restart DC++ to see effects..."
 msgstr ""
 
-#: win32\FavoriteDirsPage.cpp:138 win32\FavoriteDirsPage.cpp:170
+#: win32\FavoriteDirsPage.cpp:140 win32\FavoriteDirsPage.cpp:172
 msgid "Under what name you see the directory"
 msgstr "Me ç`farë emri e shikon dosjen"
 
@@ -2800,12 +2842,12 @@ msgstr ""
 msgid "Upload Slots"
 msgstr "Kanalet për ngarkime"
 
-#: win32\WinUtil.cpp:451
+#: win32\WinUtil.cpp:453
 #, fuzzy
 msgid "Upload limit disabled"
 msgstr "Kanalet për ngarkime"
 
-#: win32\WinUtil.cpp:446 win32\WinUtil.cpp:447
+#: win32\WinUtil.cpp:448 win32\WinUtil.cpp:449
 #, c-format, boost-format
 msgid "Upload limit set to %d KiB/s"
 msgstr ""
@@ -2814,7 +2856,7 @@ msgstr ""
 msgid "Upload slots"
 msgstr "Kanalet për ngarkime"
 
-#: win32\AboutDlg.cpp:113
+#: win32\AboutDlg.cpp:114
 #, boost-format
 msgid "Upload: %1%, Download: %2%"
 msgstr ""
@@ -2871,12 +2913,12 @@ msgstr ""
 "Gjatë shfletimit të fileve, përdor sistemin e ikonave(pak e ngadalson "
 "shfletimin)"
 
-#: win32\DirectoryListingFrame.cpp:444 win32\SearchFrame.cpp:35
+#: win32\DirectoryListingFrame.cpp:446 win32\SearchFrame.cpp:35
 #: win32\TransferView.cpp:44
 msgid "User"
 msgstr "Përdorues"
 
-#: win32\SettingsDialog.cpp:124
+#: win32\SettingsDialog.cpp:125
 #, fuzzy
 msgid "User Commands"
 msgstr "Urdhër"
@@ -2893,7 +2935,7 @@ msgstr "Menyja e përdoruesit"
 msgid "User certificate not trusted"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:795 win32\QueueFrame.cpp:332
+#: win32\DirectoryListingFrame.cpp:797 win32\QueueFrame.cpp:332
 msgid "User offline"
 msgstr "Përdoruesi është shkëputur"
 
@@ -2910,15 +2952,15 @@ msgstr "Përdorues"
 msgid "Users: %1%"
 msgstr "Përdorues"
 
-#: win32\SearchFrame.cpp:198
-msgid "Video"
-msgstr "Film"
+#: win32\StringListDlg.cpp:77
+msgid "Value"
+msgstr ""
 
 #: win32\AppearancePage.cpp:37
 msgid "View status messages in main chat"
 msgstr "Në bisedën kryesore shfaq mesazhin(kryesore)"
 
-#: win32\UploadPage.cpp:35 win32\UploadPage.cpp:226 win32\UploadPage.cpp:284
+#: win32\UploadPage.cpp:35 win32\UploadPage.cpp:227 win32\UploadPage.cpp:285
 msgid "Virtual name"
 msgstr "Emri viritual"
 
@@ -2931,7 +2973,7 @@ msgstr "Pret(Përdorues i lidhur)"
 msgid "Waiting (User online)"
 msgstr "Pret(Përdorues i lidhur)"
 
-#: win32\MainWindow.cpp:252 win32\MainWindow.cpp:341 win32\TabsPage.cpp:38
+#: win32\MainWindow.cpp:252 win32\MainWindow.cpp:341 win32\TabsPage.cpp:39
 #: win32\WaitingUsersFrame.cpp:34
 msgid "Waiting Users"
 msgstr "Në pritje të përdoruesve"
@@ -2959,7 +3001,7 @@ msgstr "Përdor tingull gjatë hapjes së mesazheve private"
 msgid "Window options"
 msgstr "Konfigurimet e dritares"
 
-#: win32\SettingsDialog.cpp:113
+#: win32\SettingsDialog.cpp:114
 #, fuzzy
 msgid "Windows"
 msgstr "Konfigurimet e dritares"
@@ -3015,17 +3057,38 @@ msgstr ""
 #~ msgid "About DC++..."
 #~ msgstr "Rreth DC++..."
 
+#~ msgid "Audio"
+#~ msgstr "Muzikë"
+
 #~ msgid "Close disconnected"
 #~ msgstr "Të shkëputurat mbylli"
+
+#~ msgid "Compressed"
+#~ msgstr "Ngjeshur"
 
 #~ msgid "DC++"
 #~ msgstr "DC++"
 
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
 #~ msgid "Download files from the Direct Connect network"
 #~ msgstr "Shkarko filet nga rrjeti Direct Connect"
 
+#~ msgid "Edit the hublist"
+#~ msgstr "Redakto hub listat"
+
+#~ msgid "Executable"
+#~ msgstr "Filet e programit"
+
+#~ msgid "Failed to create port mappings. Please set up your NAT yourself."
+#~ msgstr "Dështoi në krijimin e port mappings"
+
 #~ msgid "Failed to get external IP via  UPnP. Please set it yourself."
 #~ msgstr "S`mund të merr IP-në nëpërmjet të UPnP-së.Të lutem vendose vet."
+
+#~ msgid "Failed to remove port mappings"
+#~ msgstr "S`mund të largon port mappings"
 
 #~ msgid "Firewall (passive, last resort)"
 #~ msgstr "Muri mbrojtës (passive, last resort)"
@@ -3039,6 +3102,9 @@ msgstr ""
 #~ msgid "PM history"
 #~ msgstr "PM histori"
 
+#~ msgid "Picture"
+#~ msgstr "Fotografi"
+
 #~ msgid "Register with Windows to handle dchub:// and adc:// URL links"
 #~ msgstr "Kyç URL:të në DC++(nyje me prefiksin dchub://)"
 
@@ -3050,3 +3116,6 @@ msgstr ""
 
 #~ msgid "URL:MAGNET URI"
 #~ msgstr "URL:MAGNET URI"
+
+#~ msgid "Video"
+#~ msgstr "Film"
