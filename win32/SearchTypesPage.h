@@ -39,7 +39,7 @@ private:
 
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
-	LRESULT handleItemChanged();
+	void handleSelectionChanged();
 
 	void handleAddClicked();
 	void handleModClicked();

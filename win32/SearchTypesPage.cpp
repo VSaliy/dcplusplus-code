@@ -103,11 +103,11 @@ modify(0)
 
 	fillList();
 
-	handleItemChanged();
+	handleSelectionChanged();
 
 	types->onDblClicked(std::tr1::bind(&SearchTypesPage::handleDoubleClick, this));
 	types->onKeyDown(std::tr1::bind(&SearchTypesPage::handleKeyDown, this, _1));
-	types->onRaw(std::tr1::bind(&SearchTypesPage::handleItemChanged, this), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
+	types->onSelectionChanged(std::tr1::bind(&SearchTypesPage::handleSelectionChanged, this));
 }
 
 SearchTypesPage::~SearchTypesPage() {
@@ -142,13 +142,12 @@ bool SearchTypesPage::handleKeyDown(int c) {
 	return false;
 }
 
-LRESULT SearchTypesPage::handleItemChanged() {
+void SearchTypesPage::handleSelectionChanged() {
 	bool sel = types->hasSelected();
 	bool changeable = sel && types->getText(types->getSelected(), 1).empty();
 	rename->setEnabled(changeable);
 	remove->setEnabled(changeable);
 	modify->setEnabled(sel);
-	return 0;
 }
 
 void SearchTypesPage::handleAddClicked() {

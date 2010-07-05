@@ -74,6 +74,8 @@ remove(0)
 	for(StringPairIter j = dirs.begin(); j != dirs.end(); j++)
 		addRow(Text::toT(j->second), Text::toT(j->first));
 
+	handleSelectionChanged();
+
 	directories->onDblClicked(std::tr1::bind(&FavoriteDirsPage::handleDoubleClick, this));
 	directories->onKeyDown(std::tr1::bind(&FavoriteDirsPage::handleKeyDown, this, _1));
 	directories->onSelectionChanged(std::tr1::bind(&FavoriteDirsPage::handleSelectionChanged, this));
