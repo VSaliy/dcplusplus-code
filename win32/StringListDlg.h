@@ -23,7 +23,8 @@
 class StringListDlg : public dwt::ModalDialog
 {
 public:
-	StringListDlg(dwt::Widget* parent, const TStringList& initialValues);
+	/// @param ensureUniqueness whether items in the list are unique (case insensitive)
+	StringListDlg(dwt::Widget* parent, const TStringList& initialValues, bool ensureUniqueness = true);
 	virtual ~StringListDlg();
 
 	int run();
@@ -56,12 +57,21 @@ private:
 	GridPtr grid;
 	TextBoxPtr editBox;
 	TablePtr list;
+	ButtonPtr addBtn;
+	ButtonPtr up;
+	ButtonPtr down;
+	ButtonPtr editBtn;
+	ButtonPtr remove;
 
 	TStringList values;
+
+	const bool unique;
 
 	bool handleInitDialog(const TStringList& initialValues);
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
+	void handleSelectionChanged();
+	void handleInputUpdated();
 	void handleAddClicked();
 	void handleMoveUpClicked();
 	void handleMoveDownClicked();
@@ -70,6 +80,8 @@ private:
 	void handleOKClicked();
 
 	void layout();
+
+	bool checkUnique(const tstring& text);
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_STRING_LIST_DLG_H)

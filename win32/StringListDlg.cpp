@@ -26,11 +26,17 @@
 #include "ParamDlg.h"
 #include "WinUtil.h"
 
-StringListDlg::StringListDlg(dwt::Widget* parent, const TStringList& initialValues) :
+StringListDlg::StringListDlg(dwt::Widget* parent, const TStringList& initialValues, bool ensureUniqueness) :
 dwt::ModalDialog(parent),
 grid(0),
 editBox(0),
-list(0)
+list(0),
+addBtn(0),
+up(0),
+down(0),
+editBtn(0),
+remove(0),
+unique(ensureUniqueness)
 {
 	onInitDialog(std::tr1::bind(&StringListDlg::handleInitDialog, this, initialValues));
 	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
@@ -45,6 +51,8 @@ int StringListDlg::run() {
 }
 
 void StringListDlg::insert(const tstring& line, int index) {
+	if(!checkUnique(line))
+		return;
 	int itemCount = list->insert(TStringList(1, line), 0, index);
 	if(index == -1)
 		index = itemCount;
@@ -52,6 +60,8 @@ void StringListDlg::insert(const tstring& line, int index) {
 }
 
 void StringListDlg::modify(unsigned row, const tstring& text) {
+	if(!checkUnique(text))
+		return;
 	list->setText(row, 0, text);
 }
 
@@ -102,9 +112,11 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 	editBox->setHelpId(getHelpId(HELP_EDIT_BOX));
 
 	{
-		ButtonPtr add = grid->addChild(Button::Seed(T_("&Add")));
-		add->setHelpId(getHelpId(HELP_ADD));
-		add->onClicked(std::tr1::bind(&StringListDlg::handleAddClicked, this));
+		Button::Seed seed = Button::Seed(T_("&Add"));
+		seed.menuHandle = reinterpret_cast<HMENU>(IDOK);
+		addBtn = grid->addChild(seed);
+		addBtn->setHelpId(getHelpId(HELP_ADD));
+		addBtn->onClicked(std::tr1::bind(&StringListDlg::handleAddClicked, this));
 	}
 
 	{
@@ -119,32 +131,33 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 		cur->row(4).mode = GridInfo::FILL;
 		cur->row(4).align = GridInfo::BOTTOM_RIGHT;
 
-		ButtonPtr button;
 		Button::Seed seed;
 
 		seed.caption = T_("Move &Up");
-		button = cur->addChild(seed);
-		button->setHelpId(getHelpId(HELP_MOVE_UP));
-		button->onClicked(std::tr1::bind(&StringListDlg::handleMoveUpClicked, this));
+		up = cur->addChild(seed);
+		up->setHelpId(getHelpId(HELP_MOVE_UP));
+		up->onClicked(std::tr1::bind(&StringListDlg::handleMoveUpClicked, this));
 
 		seed.caption = T_("Move &Down");
-		button = cur->addChild(seed);
-		button->setHelpId(getHelpId(HELP_MOVE_DOWN));
-		button->onClicked(std::tr1::bind(&StringListDlg::handleMoveDownClicked, this));
+		down = cur->addChild(seed);
+		down->setHelpId(getHelpId(HELP_MOVE_DOWN));
+		down->onClicked(std::tr1::bind(&StringListDlg::handleMoveDownClicked, this));
 
 		seed.caption = T_("&Edit");
-		button = cur->addChild(seed);
-		button->setHelpId(getHelpId(HELP_EDIT));
-		button->onClicked(std::tr1::bind(&StringListDlg::handleEditClicked, this));
+		editBtn = cur->addChild(seed);
+		editBtn->setHelpId(getHelpId(HELP_EDIT));
+		editBtn->onClicked(std::tr1::bind(&StringListDlg::handleEditClicked, this));
 
 		seed.caption = T_("&Remove");
-		button = cur->addChild(seed);
-		button->setHelpId(getHelpId(HELP_REMOVE));
-		button->onClicked(std::tr1::bind(&StringListDlg::handleRemoveClicked, this));
+		remove = cur->addChild(seed);
+		remove->setHelpId(getHelpId(HELP_REMOVE));
+		remove->onClicked(std::tr1::bind(&StringListDlg::handleRemoveClicked, this));
 
-		WinUtil::addDlgButtons(cur,
+		::SetWindowLongPtr(
+			WinUtil::addDlgButtons(cur,
 			std::tr1::bind(&StringListDlg::handleOKClicked, this),
-			std::tr1::bind(&StringListDlg::endDialog, this, IDCANCEL));
+			std::tr1::bind(&StringListDlg::endDialog, this, IDCANCEL))
+			.first->handle(), GWLP_ID, 0); // the def button is the "Add" button
 	}
 
 	list->createColumns(TStringList(1));
@@ -152,8 +165,13 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 	for(TStringIterC i = initialValues.begin(), iend = initialValues.end(); i != iend; ++i)
 		insert(*i);
 
+	handleSelectionChanged();
+	handleInputUpdated();
+
 	list->onDblClicked(std::tr1::bind(&StringListDlg::handleDoubleClick, this));
 	list->onKeyDown(std::tr1::bind(&StringListDlg::handleKeyDown, this, _1));
+	list->onSelectionChanged(std::tr1::bind(&StringListDlg::handleSelectionChanged, this));
+	editBox->onUpdated(std::tr1::bind(&StringListDlg::handleInputUpdated, this));
 
 	setText(getTitle());
 
@@ -181,8 +199,30 @@ bool StringListDlg::handleKeyDown(int c) {
 	return false;
 }
 
+void StringListDlg::handleSelectionChanged() {
+	bool enable = list->hasSelected();
+	up->setEnabled(enable);
+	down->setEnabled(enable);
+	editBtn->setEnabled(enable);
+	remove->setEnabled(enable);
+}
+
+void StringListDlg::handleInputUpdated() {
+	bool enable = editBox->length() > 0;
+	if(addBtn->getEnabled() != enable) {
+		addBtn->setEnabled(enable);
+	}
+}
+
 void StringListDlg::handleAddClicked() {
+	if(editBox->length() <= 0)
+		return;
+
 	add(editBox->getText());
+
+	if(!editBox->hasFocus())
+		editBox->setFocus();
+	editBox->setSelection();
 }
 
 void StringListDlg::handleMoveUpClicked() {
@@ -236,4 +276,16 @@ void StringListDlg::layout() {
 	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 
 	list->setColumnWidth(0, list->getWindowSize().x - 20);
+}
+
+bool StringListDlg::checkUnique(const tstring& text) {
+	if(!unique)
+		return true;
+
+	int pos = list->find(text);
+	if(pos == -1)
+		return true;
+
+	list->ensureVisible(pos);
+	return false;
 }

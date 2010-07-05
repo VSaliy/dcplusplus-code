@@ -42,7 +42,7 @@ private:
 
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
-	LRESULT handleItemChanged();
+	void handleSelectionChanged();
 	void handleDragDrop(const TStringList& files);
 	void handleShareHiddenClicked(CheckBoxPtr checkBox, Item& item);
 	void handleAddClicked();

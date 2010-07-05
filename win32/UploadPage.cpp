@@ -129,9 +129,11 @@ remove(0)
 
 	fillList();
 
+	handleSelectionChanged();
+
 	directories->onDblClicked(std::tr1::bind(&UploadPage::handleDoubleClick, this));
 	directories->onKeyDown(std::tr1::bind(&UploadPage::handleKeyDown, this, _1));
-	directories->onRaw(std::tr1::bind(&UploadPage::handleItemChanged, this), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
+	directories->onSelectionChanged(std::tr1::bind(&UploadPage::handleSelectionChanged, this));
 	directories->onDragDrop(std::tr1::bind(&UploadPage::handleDragDrop, this, _1));
 }
 
@@ -177,11 +179,10 @@ bool UploadPage::handleKeyDown(int c) {
 	return false;
 }
 
-LRESULT UploadPage::handleItemChanged() {
+void UploadPage::handleSelectionChanged() {
 	bool enable = directories->hasSelected();
 	rename->setEnabled(enable);
 	remove->setEnabled(enable);
-	return 0;
 }
 
 void UploadPage::handleDragDrop(const TStringList& files) {
