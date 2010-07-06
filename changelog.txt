@@ -1,3 +1,5 @@
+* Prevent hub-provided cmds from "open own list" from going to the wrong hub
+
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
 * Fix socket resolve in *nix systems (thanks razzloss)
