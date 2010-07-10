@@ -41,9 +41,6 @@
 #include "../Dispatchers.h"
 #include <dwt/Themed.h>
 
-#include <memory>
-#include <vector>
-
 namespace dwt {
 
 /// Menu class

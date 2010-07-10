@@ -36,8 +36,8 @@
 #ifndef DWT_Widget_h
 #define DWT_Widget_h
 
-#include "forward.h"
 #include "Application.h"
+#include "forward.h"
 #include "Rectangle.h"
 #include "Point.h"
 #include "Message.h"

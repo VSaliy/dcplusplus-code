@@ -36,7 +36,6 @@
 #include "tstring.h"
 #include <dwt/resources/Icon.h>
 #include <typeinfo>
-#include <memory>
 
 namespace dwt {
 

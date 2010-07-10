@@ -33,10 +33,6 @@
 #ifndef DWT_FORWARD_H_
 #define DWT_FORWARD_H_
 
-namespace std {
-template<class T> class shared_ptr;
-}
-
 namespace dwt {
 
 template< class WidgetType >
