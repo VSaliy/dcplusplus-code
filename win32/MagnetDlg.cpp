@@ -34,7 +34,7 @@ search(0),
 mHash(aHash),
 mFileName(aFileName)
 {
-	onInitDialog(std::tr1::bind(&MagnetDlg::handleInitDialog, this));
+	onInitDialog(std::bind(&MagnetDlg::handleInitDialog, this));
 }
 
 MagnetDlg::~MagnetDlg() {
@@ -87,21 +87,21 @@ bool MagnetDlg::handleInitDialog() {
 		GridPtr cur = bottom->addChild(Grid::Seed(2, 1));
 
 		//queue = cur->addChild(RadioButton::Seed(T_("Add this file to your download queue")));
-		//queue->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, queue));
+		//queue->onClicked(std::bind(&MagnetDlg::handleRadioButtonClicked, this, queue));
 
 		search = cur->addChild(RadioButton::Seed(T_("Start a search for this file")));
 		search->setChecked();
-		//search->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, search));
+		//search->onClicked(std::bind(&MagnetDlg::handleRadioButtonClicked, this, search));
 
 		//doNothing = cur->addChild(CheckBox::Seed(T_("Do nothing")));
-		//doNothing->onClicked(std::tr1::bind(&MagnetDlg::handleRadioButtonClicked, this, doNothing));
+		//doNothing->onClicked(std::bind(&MagnetDlg::handleRadioButtonClicked, this, doNothing));
 		cur->addChild(RadioButton::Seed(T_("Do nothing")));
 
 		//remember = cur->addChild(CheckBox::Seed(T_("Do the same action next time without asking")));
 
 		WinUtil::addDlgButtons(bottom->addChild(Grid::Seed(2, 1)),
-			std::tr1::bind(&MagnetDlg::handleOKClicked, this),
-			std::tr1::bind(&MagnetDlg::endDialog, this, IDCANCEL));
+			std::bind(&MagnetDlg::handleOKClicked, this),
+			std::bind(&MagnetDlg::endDialog, this, IDCANCEL));
 	}
 
 	setText(T_("MAGNET Link detected"));

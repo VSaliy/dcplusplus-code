@@ -37,8 +37,8 @@ progress(0),
 pauseResume(0),
 autoClose(aAutoClose)
 {
-	onInitDialog(std::tr1::bind(&HashProgressDlg::handleInitDialog, this));
-	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+	onInitDialog(std::bind(&HashProgressDlg::handleInitDialog, this));
+	onHelp(std::bind(&WinUtil::help, _1, _2));
 }
 
 HashProgressDlg::~HashProgressDlg() {
@@ -77,13 +77,13 @@ bool HashProgressDlg::handleInitDialog() {
 		cur->column(2).align = GridInfo::BOTTOM_RIGHT;
 
 		pair<ButtonPtr, ButtonPtr> buttons = WinUtil::addDlgButtons(cur,
-			std::tr1::bind(&HashProgressDlg::endDialog, this, IDOK),
-			std::tr1::bind(&HashProgressDlg::endDialog, this, IDCANCEL));
+			std::bind(&HashProgressDlg::endDialog, this, IDOK),
+			std::bind(&HashProgressDlg::endDialog, this, IDCANCEL));
 		buttons.first->setText(T_("Run in background"));
 		buttons.second->setVisible(false);
 
 		pauseResume = cur->addChild(Button::Seed());
-		pauseResume->onClicked(std::tr1::bind(&HashProgressDlg::handlePauseResume, this));
+		pauseResume->onClicked(std::bind(&HashProgressDlg::handlePauseResume, this));
 		setButtonState();
 	}
 
@@ -93,7 +93,7 @@ bool HashProgressDlg::handleInitDialog() {
 	updateStats();
 
 	HashManager::getInstance()->setPriority(Thread::NORMAL);
-	createTimer(std::tr1::bind(&HashProgressDlg::updateStats, this), 1000);
+	createTimer(std::bind(&HashProgressDlg::updateStats, this), 1000);
 
 	setText(T_("Creating file index..."));
 

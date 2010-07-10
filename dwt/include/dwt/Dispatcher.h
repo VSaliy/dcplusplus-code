@@ -62,13 +62,13 @@ public:
 
 	static bool isRegistered(LPCTSTR className);
 
+	virtual ~Dispatcher();
+
 protected:
-	friend class std::auto_ptr<Dispatcher>;
+	friend class std::unique_ptr<Dispatcher>;
 
 	Dispatcher(WNDCLASSEX& cls);
 	Dispatcher(LPCTSTR name);
-
-	virtual ~Dispatcher();
 
 	template<typename T>
 	static LPCTSTR className() {
@@ -104,7 +104,7 @@ public:
 		cls.hCursor = cursor;
 		cls.hbrBackground = background;
 
-		static std::auto_ptr<Dispatcher> dispatcher(new NormalDispatcher(cls));
+		static std::unique_ptr<Dispatcher> dispatcher(new NormalDispatcher(cls));
 		return *dispatcher;
 	}
 
@@ -119,14 +119,14 @@ class ChainingDispatcher : public Dispatcher {
 public:
 	template<typename T>
 	static Dispatcher& superClass() {
-		static std::auto_ptr<Dispatcher> dispatcher = superClass(T::windowClass, className<T>());
+		static std::unique_ptr<Dispatcher> dispatcher = superClass(T::windowClass, className<T>());
 		return *dispatcher;
 	}
 
 	virtual LRESULT chain(const MSG& msg);
 
 private:
-	static std::auto_ptr<Dispatcher> superClass(LPCTSTR original, LPCTSTR newName);
+	static std::unique_ptr<Dispatcher> superClass(LPCTSTR original, LPCTSTR newName);
 
 	ChainingDispatcher(WNDCLASSEX& cls, WNDPROC wndProc_);
 

@@ -89,7 +89,7 @@ void Themed::loadTheme(LPCWSTR classes, bool handleThemeChanges) {
 
 		if(handleThemeChanges) {
 			w->addCallback(Message(WM_THEMECHANGED),
-				Dispatchers::VoidVoid<0, false>(std::tr1::bind(&Themed::themeChanged, this, classes)));
+				Dispatchers::VoidVoid<0, false>(std::bind(&Themed::themeChanged, this, classes)));
 		}
 	}
 }

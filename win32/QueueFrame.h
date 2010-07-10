@@ -179,7 +179,7 @@ private:
 
 	private:
 
-		std::auto_ptr<Display> display;
+		std::unique_ptr<Display> display;
 
 		QueueItemInfo(const QueueItemInfo&);
 		QueueItemInfo& operator=(const QueueItemInfo&);

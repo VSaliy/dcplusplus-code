@@ -41,7 +41,7 @@ namespace Dispatchers {
 
 template<typename T>
 struct Base {
-	typedef std::tr1::function<T> F;
+	typedef std::function<T> F;
 
 	Base(const F& f_) : f(f_) { }
 

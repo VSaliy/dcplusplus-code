@@ -109,26 +109,26 @@ lastTick(GET_TICK())
 	initSecond();
 	initTray();
 
-	addAccel(FCONTROL, '1', std::tr1::bind(&MainWindow::switchToolbar, this));
-	addAccel(FCONTROL, '2', std::tr1::bind(&MainWindow::switchTransfers, this));
-	addAccel(FCONTROL, '3', std::tr1::bind(&MainWindow::switchStatus, this));
-	addAccel(FCONTROL, 'D', std::tr1::bind(&QueueFrame::openWindow, getTabView()));
-	addAccel(FCONTROL, 'E', std::tr1::bind(&MainWindow::handleRefreshFileList, this));
-	addAccel(FCONTROL, 'F', std::tr1::bind(&FavHubsFrame::openWindow, getTabView()));
-	addAccel(FCONTROL, 'G', std::tr1::bind(&MainWindow::handleConnectFavHubGroup, this));
-	addAccel(FCONTROL, 'L', std::tr1::bind(&MainWindow::handleOpenFileList, this));
-	addAccel(FCONTROL, 'N', std::tr1::bind(&NotepadFrame::openWindow, getTabView()));
-	addAccel(FCONTROL, 'P', std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()));
-	addAccel(FCONTROL, 'Q', std::tr1::bind(&MainWindow::handleQuickConnect, this));
-	addAccel(FCONTROL, 'S', std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
-	addAccel(FCONTROL, 'U', std::tr1::bind(&UsersFrame::openWindow, getTabView()));
-	addAccel(FCONTROL, VK_F3, std::tr1::bind(&MainWindow::handleSettings, this));
-	addAccel(0, VK_F5, std::tr1::bind(&MainWindow::handleRefreshFileList, this));
+	addAccel(FCONTROL, '1', std::bind(&MainWindow::switchToolbar, this));
+	addAccel(FCONTROL, '2', std::bind(&MainWindow::switchTransfers, this));
+	addAccel(FCONTROL, '3', std::bind(&MainWindow::switchStatus, this));
+	addAccel(FCONTROL, 'D', std::bind(&QueueFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, 'E', std::bind(&MainWindow::handleRefreshFileList, this));
+	addAccel(FCONTROL, 'F', std::bind(&FavHubsFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, 'G', std::bind(&MainWindow::handleConnectFavHubGroup, this));
+	addAccel(FCONTROL, 'L', std::bind(&MainWindow::handleOpenFileList, this));
+	addAccel(FCONTROL, 'N', std::bind(&NotepadFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, 'P', std::bind(&PublicHubsFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, 'Q', std::bind(&MainWindow::handleQuickConnect, this));
+	addAccel(FCONTROL, 'S', std::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
+	addAccel(FCONTROL, 'U', std::bind(&UsersFrame::openWindow, getTabView()));
+	addAccel(FCONTROL, VK_F3, std::bind(&MainWindow::handleSettings, this));
+	addAccel(0, VK_F5, std::bind(&MainWindow::handleRefreshFileList, this));
 	initAccels();
 
-	onActivate(std::tr1::bind(&MainWindow::handleActivate, this, _1));
-	onSized(std::tr1::bind(&MainWindow::handleSized, this, _1));
-	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+	onActivate(std::bind(&MainWindow::handleActivate, this, _1));
+	onSized(std::bind(&MainWindow::handleSized, this, _1));
+	onHelp(std::bind(&WinUtil::help, _1, _2));
 	updateStatus();
 	layout();
 
@@ -136,14 +136,14 @@ lastTick(GET_TICK())
 	LogManager::getInstance()->addListener(this);
 	WindowManager::getInstance()->addListener(this);
 
-	onClosing(std::tr1::bind(&MainWindow::handleClosing, this));
+	onClosing(std::bind(&MainWindow::handleClosing, this));
 
-	onRaw(std::tr1::bind(&MainWindow::handleActivateApp, this, _1), dwt::Message(WM_ACTIVATEAPP));
-	onRaw(std::tr1::bind(&MainWindow::handleEndSession, this), dwt::Message(WM_ENDSESSION));
-	onRaw(std::tr1::bind(&MainWindow::handleCopyData, this, _2), dwt::Message(WM_COPYDATA));
-	onRaw(std::tr1::bind(&MainWindow::handleWhereAreYou, this), dwt::Message(SingleInstance::WMU_WHERE_ARE_YOU));
+	onRaw(std::bind(&MainWindow::handleActivateApp, this, _1), dwt::Message(WM_ACTIVATEAPP));
+	onRaw(std::bind(&MainWindow::handleEndSession, this), dwt::Message(WM_ENDSESSION));
+	onRaw(std::bind(&MainWindow::handleCopyData, this, _2), dwt::Message(WM_COPYDATA));
+	onRaw(std::bind(&MainWindow::handleWhereAreYou, this), dwt::Message(SingleInstance::WMU_WHERE_ARE_YOU));
 
-	filterIter = dwt::Application::instance().addFilter(std::tr1::bind(&MainWindow::filter, this, _1));
+	filterIter = dwt::Application::instance().addFilter(std::bind(&MainWindow::filter, this, _1));
 
 	TimerManager::getInstance()->start();
 
@@ -156,7 +156,7 @@ lastTick(GET_TICK())
 
 	WindowManager::getInstance()->autoOpen(WinUtil::isShift());
 
-	callAsync(std::tr1::bind(&MainWindow::parseCommandLine, this, tstring(::GetCommandLine())));
+	callAsync(std::bind(&MainWindow::parseCommandLine, this, tstring(::GetCommandLine())));
 
 	int cmdShow = dwt::Application::instance().getCmdShow();
 	::ShowWindow(handle(), (cmdShow == SW_SHOWDEFAULT || cmdShow == SW_SHOWNORMAL) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
@@ -164,10 +164,10 @@ lastTick(GET_TICK())
 		handleMinimized();
 
 	if(SETTING(NICK).empty()) {
-		callAsync(std::tr1::bind(&SystemFrame::openWindow, getTabView()));
+		callAsync(std::bind(&SystemFrame::openWindow, getTabView()));
 
 		WinUtil::help(this, IDH_GET_STARTED);
-		callAsync(std::tr1::bind(&MainWindow::handleSettings, this));
+		callAsync(std::bind(&MainWindow::handleSettings, this));
 	}
 
 	if(dwt::LibraryLoader::getCommonControlsVersion() < PACK_COMCTL_VERSION(5,80))
@@ -215,103 +215,103 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr file = mainMenu->appendPopup(T_("&File"));
 
-		file->appendItem(T_("&Quick connect...\tCtrl+Q"), std::tr1::bind(&MainWindow::handleQuickConnect, this), WinUtil::menuIcon(IDI_HUB));
-		file->appendItem(T_("Connect to a favorite hub &group...\tCtrl+G"), std::tr1::bind(&MainWindow::handleConnectFavHubGroup, this), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
+		file->appendItem(T_("&Quick connect...\tCtrl+Q"), std::bind(&MainWindow::handleQuickConnect, this), WinUtil::menuIcon(IDI_HUB));
+		file->appendItem(T_("Connect to a favorite hub &group...\tCtrl+G"), std::bind(&MainWindow::handleConnectFavHubGroup, this), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		file->appendSeparator();
 
-		file->appendItem(T_("&Reconnect\tCtrl+R"), std::tr1::bind(&MainWindow::handleReconnect, this), WinUtil::menuIcon(IDI_RECONNECT));
-		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), std::tr1::bind(&MainWindow::handleRedirect, this), WinUtil::menuIcon(IDI_FOLLOW));
+		file->appendItem(T_("&Reconnect\tCtrl+R"), std::bind(&MainWindow::handleReconnect, this), WinUtil::menuIcon(IDI_RECONNECT));
+		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), std::bind(&MainWindow::handleRedirect, this), WinUtil::menuIcon(IDI_FOLLOW));
 		file->appendSeparator();
 
-		file->appendItem(T_("Open file list...\tCtrl+L"), std::tr1::bind(&MainWindow::handleOpenFileList, this), WinUtil::menuIcon(IDI_OPEN_FILE_LIST));
-		file->appendItem(T_("Open own list"), std::tr1::bind(&DirectoryListingFrame::openOwnList, getTabView()));
-		file->appendItem(T_("Match downloaded lists"), std::tr1::bind(&MainWindow::handleMatchAll, this));
-		file->appendItem(T_("Refresh file list\tF5"), std::tr1::bind(&MainWindow::handleRefreshFileList, this));
-		file->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), WinUtil::menuIcon(IDI_OPEN_DL_DIR));
+		file->appendItem(T_("Open file list...\tCtrl+L"), std::bind(&MainWindow::handleOpenFileList, this), WinUtil::menuIcon(IDI_OPEN_FILE_LIST));
+		file->appendItem(T_("Open own list"), std::bind(&DirectoryListingFrame::openOwnList, getTabView()));
+		file->appendItem(T_("Match downloaded lists"), std::bind(&MainWindow::handleMatchAll, this));
+		file->appendItem(T_("Refresh file list\tF5"), std::bind(&MainWindow::handleRefreshFileList, this));
+		file->appendItem(T_("Open downloads directory"), std::bind(&MainWindow::handleOpenDownloadsDir, this), WinUtil::menuIcon(IDI_OPEN_DL_DIR));
 		file->appendSeparator();
 
-		file->appendItem(T_("Settings\tCtrl+F3"), std::tr1::bind(&MainWindow::handleSettings, this), WinUtil::menuIcon(IDI_SETTINGS));
+		file->appendItem(T_("Settings\tCtrl+F3"), std::bind(&MainWindow::handleSettings, this), WinUtil::menuIcon(IDI_SETTINGS));
 		file->appendSeparator();
-		file->appendItem(T_("E&xit\tAlt+F4"), std::tr1::bind(&MainWindow::close, this, true), WinUtil::menuIcon(IDI_EXIT));
+		file->appendItem(T_("E&xit\tAlt+F4"), std::bind(&MainWindow::close, this, true), WinUtil::menuIcon(IDI_EXIT));
 	}
 
 	{
 		viewMenu = mainMenu->appendPopup(T_("&View"));
 
 		viewIndexes[PublicHubsFrame::id] = viewMenu->appendItem(T_("&Public Hubs\tCtrl+P"),
-			std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_PUBLICHUBS));
+			std::bind(&PublicHubsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_PUBLICHUBS));
 		viewIndexes[FavHubsFrame::id] = viewMenu->appendItem(T_("&Favorite Hubs\tCtrl+F"),
-			std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
+			std::bind(&FavHubsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		viewIndexes[UsersFrame::id] = viewMenu->appendItem(T_("Favorite &Users\tCtrl+U"),
-			std::tr1::bind(&UsersFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FAVORITE_USERS));
+			std::bind(&UsersFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FAVORITE_USERS));
 		viewMenu->appendSeparator();
 		viewIndexes[QueueFrame::id] = viewMenu->appendItem(T_("&Download Queue\tCtrl+D"),
-			std::tr1::bind(&QueueFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_QUEUE));
+			std::bind(&QueueFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_QUEUE));
 		viewIndexes[FinishedDLFrame::id] = viewMenu->appendItem(T_("Finished Downloads"),
-			std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FINISHED_DL));
+			std::bind(&FinishedDLFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FINISHED_DL));
 		viewIndexes[WaitingUsersFrame::id] = viewMenu->appendItem(T_("Waiting Users"),
-			std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_WAITING_USERS));
+			std::bind(&WaitingUsersFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_WAITING_USERS));
 		viewIndexes[FinishedULFrame::id] = viewMenu->appendItem(T_("Finished Uploads"),
-			std::tr1::bind(&FinishedULFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FINISHED_UL));
+			std::bind(&FinishedULFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_FINISHED_UL));
 		viewMenu->appendSeparator();
-		viewMenu->appendItem(T_("&Search\tCtrl+S"), std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), WinUtil::menuIcon(IDI_SEARCH));
+		viewMenu->appendItem(T_("&Search\tCtrl+S"), std::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY), WinUtil::menuIcon(IDI_SEARCH));
 		viewIndexes[ADLSearchFrame::id] = viewMenu->appendItem(T_("ADL Search"),
-			std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_ADLSEARCH));
+			std::bind(&ADLSearchFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_ADLSEARCH));
 		viewIndexes[SpyFrame::id] = viewMenu->appendItem(T_("Search Spy"),
-			std::tr1::bind(&SpyFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_SPY));
+			std::bind(&SpyFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_SPY));
 		viewMenu->appendSeparator();
 		viewIndexes[NotepadFrame::id] = viewMenu->appendItem(T_("&Notepad\tCtrl+N"),
-			std::tr1::bind(&NotepadFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_NOTEPAD));
+			std::bind(&NotepadFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_NOTEPAD));
 		viewIndexes[SystemFrame::id] = viewMenu->appendItem(T_("System Log"),
-			std::tr1::bind(&SystemFrame::openWindow, getTabView()));
+			std::bind(&SystemFrame::openWindow, getTabView()));
 		viewIndexes[StatsFrame::id] = viewMenu->appendItem(T_("Network Statistics"),
-			std::tr1::bind(&StatsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_NET_STATS));
-		viewMenu->appendItem(T_("Indexing progress"), std::tr1::bind(&MainWindow::handleHashProgress, this));
+			std::bind(&StatsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_NET_STATS));
+		viewMenu->appendItem(T_("Indexing progress"), std::bind(&MainWindow::handleHashProgress, this));
 		viewMenu->appendSeparator();
 		viewIndexes["Toolbar"] = viewMenu->appendItem(T_("Toolbar\tCtrl+1"),
-			std::tr1::bind(&MainWindow::switchToolbar, this));
+			std::bind(&MainWindow::switchToolbar, this));
 		viewIndexes["Transfers"] = viewMenu->appendItem(T_("Transfer view\tCtrl+2"),
-			std::tr1::bind(&MainWindow::switchTransfers, this));
+			std::bind(&MainWindow::switchTransfers, this));
 		viewIndexes["Status"] = viewMenu->appendItem(T_("Status bar\tCtrl+3"),
-			std::tr1::bind(&MainWindow::switchStatus, this));
+			std::bind(&MainWindow::switchStatus, this));
 	}
 
 	{
 		MenuPtr window = mainMenu->appendPopup(T_("&Window"));
 
-		window->appendItem(T_("Close disconnected hubs"), std::tr1::bind(&HubFrame::closeDisconnected), WinUtil::menuIcon(IDI_HUB_OFF));
-		window->appendItem(T_("Close all hubs of a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this, false), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
-		window->appendItem(T_("Close hubs not in a favorite group"), std::tr1::bind(&MainWindow::handleCloseFavGroup, this, true), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
+		window->appendItem(T_("Close disconnected hubs"), std::bind(&HubFrame::closeDisconnected), WinUtil::menuIcon(IDI_HUB_OFF));
+		window->appendItem(T_("Close all hubs of a favorite group"), std::bind(&MainWindow::handleCloseFavGroup, this, false), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
+		window->appendItem(T_("Close hubs not in a favorite group"), std::bind(&MainWindow::handleCloseFavGroup, this, true), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		window->appendSeparator();
 
-		window->appendItem(T_("Close all PM windows"), std::tr1::bind(&PrivateFrame::closeAll), WinUtil::menuIcon(IDI_PRIVATE));
-		window->appendItem(T_("Close all offline PM windows"), std::tr1::bind(&PrivateFrame::closeAllOffline), WinUtil::menuIcon(IDI_PRIVATE_OFF));
+		window->appendItem(T_("Close all PM windows"), std::bind(&PrivateFrame::closeAll), WinUtil::menuIcon(IDI_PRIVATE));
+		window->appendItem(T_("Close all offline PM windows"), std::bind(&PrivateFrame::closeAllOffline), WinUtil::menuIcon(IDI_PRIVATE_OFF));
 		window->appendSeparator();
 
-		window->appendItem(T_("Close all file list windows"), std::tr1::bind(&DirectoryListingFrame::closeAll), WinUtil::menuIcon(IDI_DIRECTORY));
+		window->appendItem(T_("Close all file list windows"), std::bind(&DirectoryListingFrame::closeAll), WinUtil::menuIcon(IDI_DIRECTORY));
 		window->appendSeparator();
 
-		window->appendItem(T_("Close all search windows"), std::tr1::bind(&SearchFrame::closeAll), WinUtil::menuIcon(IDI_SEARCH));
+		window->appendItem(T_("Close all search windows"), std::bind(&SearchFrame::closeAll), WinUtil::menuIcon(IDI_SEARCH));
 	}
 
 	{
 		MenuPtr help = mainMenu->appendPopup(T_("&Help"));
 
-		help->appendItem(T_("Help &Contents\tF1"), std::tr1::bind(&WinUtil::help, this, IDH_INDEX), WinUtil::menuIcon(IDI_HELP));
-		help->appendItem(T_("Get started"), std::tr1::bind(&WinUtil::help, this, IDH_GET_STARTED));
+		help->appendItem(T_("Help &Contents\tF1"), std::bind(&WinUtil::help, this, IDH_INDEX), WinUtil::menuIcon(IDI_HELP));
+		help->appendItem(T_("Get started"), std::bind(&WinUtil::help, this, IDH_GET_STARTED));
 		help->appendSeparator();
-		help->appendItem(T_("Change Log"), std::tr1::bind(&WinUtil::help, this, IDH_CHANGELOG));
-		help->appendItem(T_("About DC++"), std::tr1::bind(&MainWindow::handleAbout, this), WinUtil::menuIcon(IDI_DCPP));
+		help->appendItem(T_("Change Log"), std::bind(&WinUtil::help, this, IDH_CHANGELOG));
+		help->appendItem(T_("About DC++"), std::bind(&MainWindow::handleAbout, this), WinUtil::menuIcon(IDI_DCPP));
 		help->appendSeparator();
-		help->appendItem(T_("DC++ Homepage"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.homepage)));
-		help->appendItem(T_("Downloads"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.downloads)));
-		help->appendItem(T_("GeoIP database update"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.geoipfile)));
-		help->appendItem(T_("Frequently asked questions"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.faq)));
-		help->appendItem(T_("Help forum"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.help)));
-		help->appendItem(T_("DC++ discussion forum"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.discuss)));
-		help->appendItem(T_("Request a feature"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.features)));
-		help->appendItem(T_("Report a bug"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.bugs)));
-		help->appendItem(T_("Donate (paypal)"), std::tr1::bind(&WinUtil::openLink, std::tr1::cref(links.donate)));
+		help->appendItem(T_("DC++ Homepage"), std::bind(&WinUtil::openLink, std::cref(links.homepage)));
+		help->appendItem(T_("Downloads"), std::bind(&WinUtil::openLink, std::cref(links.downloads)));
+		help->appendItem(T_("GeoIP database update"), std::bind(&WinUtil::openLink, std::cref(links.geoipfile)));
+		help->appendItem(T_("Frequently asked questions"), std::bind(&WinUtil::openLink, std::cref(links.faq)));
+		help->appendItem(T_("Help forum"), std::bind(&WinUtil::openLink, std::cref(links.help)));
+		help->appendItem(T_("DC++ discussion forum"), std::bind(&WinUtil::openLink, std::cref(links.discuss)));
+		help->appendItem(T_("Request a feature"), std::bind(&WinUtil::openLink, std::cref(links.features)));
+		help->appendItem(T_("Report a bug"), std::bind(&WinUtil::openLink, std::cref(links.bugs)));
+		help->appendItem(T_("Donate (paypal)"), std::bind(&WinUtil::openLink, std::cref(links.donate)));
 	}
 
 	mainMenu->setMenu();
@@ -325,39 +325,39 @@ void MainWindow::initToolbar() {
 	toolbar = addChild(ToolBar::Seed());
 
 	toolbar->addButton(PublicHubsFrame::id, toolbarIcon(IDI_PUBLICHUBS), 0, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS,
-		std::tr1::bind(&PublicHubsFrame::openWindow, getTabView()));
+		std::bind(&PublicHubsFrame::openWindow, getTabView()));
 	toolbar->addButton("Reconnect", toolbarIcon(IDI_RECONNECT), 0, T_("Reconnect"), IDH_TOOLBAR_RECONNECT,
-		std::tr1::bind(&MainWindow::handleReconnect, this));
+		std::bind(&MainWindow::handleReconnect, this));
 	toolbar->addButton("Redirect", toolbarIcon(IDI_FOLLOW), 0, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW,
-		std::tr1::bind(&MainWindow::handleRedirect, this));
+		std::bind(&MainWindow::handleRedirect, this));
 	toolbar->addButton(FavHubsFrame::id, toolbarIcon(IDI_FAVORITE_HUBS), 0, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
-		std::tr1::bind(&FavHubsFrame::openWindow, getTabView()), std::tr1::bind(&MainWindow::handleFavHubsDropDown, this, _1));
+		std::bind(&FavHubsFrame::openWindow, getTabView()), std::bind(&MainWindow::handleFavHubsDropDown, this, _1));
 	toolbar->addButton(UsersFrame::id, toolbarIcon(IDI_FAVORITE_USERS), 0, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
-		std::tr1::bind(&UsersFrame::openWindow, getTabView()));
+		std::bind(&UsersFrame::openWindow, getTabView()));
 	toolbar->addButton(QueueFrame::id, toolbarIcon(IDI_QUEUE), 0, T_("Download Queue"), IDH_TOOLBAR_QUEUE,
-		std::tr1::bind(&QueueFrame::openWindow, getTabView()));
+		std::bind(&QueueFrame::openWindow, getTabView()));
 	toolbar->addButton(FinishedDLFrame::id, toolbarIcon(IDI_FINISHED_DL), 0, T_("Finished Downloads"), IDH_TOOLBAR_FINISHED_DL,
-		std::tr1::bind(&FinishedDLFrame::openWindow, getTabView()));
+		std::bind(&FinishedDLFrame::openWindow, getTabView()));
 	toolbar->addButton(WaitingUsersFrame::id, toolbarIcon(IDI_WAITING_USERS), 0, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS,
-		std::tr1::bind(&WaitingUsersFrame::openWindow, getTabView()));
+		std::bind(&WaitingUsersFrame::openWindow, getTabView()));
 	toolbar->addButton(FinishedULFrame::id, toolbarIcon(IDI_FINISHED_UL), 0, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL,
-		std::tr1::bind(&FinishedULFrame::openWindow, getTabView()));
+		std::bind(&FinishedULFrame::openWindow, getTabView()));
 	toolbar->addButton(SearchFrame::id, toolbarIcon(IDI_SEARCH), 0, T_("Search"), IDH_TOOLBAR_SEARCH,
-		std::tr1::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
+		std::bind(&SearchFrame::openWindow, getTabView(), Util::emptyStringT, SearchManager::TYPE_ANY));
 	toolbar->addButton(ADLSearchFrame::id, toolbarIcon(IDI_ADLSEARCH), 0, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH,
-		std::tr1::bind(&ADLSearchFrame::openWindow, getTabView()));
+		std::bind(&ADLSearchFrame::openWindow, getTabView()));
 	toolbar->addButton(SpyFrame::id, toolbarIcon(IDI_SPY), 0, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY,
-		std::tr1::bind(&SpyFrame::openWindow, getTabView()));
+		std::bind(&SpyFrame::openWindow, getTabView()));
 	toolbar->addButton("OpenFL", toolbarIcon(IDI_OPEN_FILE_LIST), 0, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST,
-		std::tr1::bind(&MainWindow::handleOpenFileList, this));
+		std::bind(&MainWindow::handleOpenFileList, this));
 	toolbar->addButton("Recents", toolbarIcon(IDI_RECENTS), 0, T_("Recent windows"), IDH_TOOLBAR_RECENT,
-		0, std::tr1::bind(&MainWindow::handleRecent, this, _1));
+		0, std::bind(&MainWindow::handleRecent, this, _1));
 	toolbar->addButton("Settings", toolbarIcon(IDI_SETTINGS), 0, T_("Settings"), IDH_TOOLBAR_SETTINGS,
-		std::tr1::bind(&MainWindow::handleSettings, this));
+		std::bind(&MainWindow::handleSettings, this));
 	toolbar->addButton(NotepadFrame::id, toolbarIcon(IDI_NOTEPAD), 0, T_("Notepad"), IDH_TOOLBAR_NOTEPAD,
-		std::tr1::bind(&NotepadFrame::openWindow, getTabView()));
+		std::bind(&NotepadFrame::openWindow, getTabView()));
 	toolbar->addButton("CSHelp", toolbarIcon(IDI_WHATS_THIS), 0, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS,
-		std::tr1::bind(&MainWindow::handleWhatsThis, this));
+		std::bind(&MainWindow::handleWhatsThis, this));
 
 	if(SettingsManager::getInstance()->isDefault(SettingsManager::TOOLBAR)) {
 		// gotta create a default layout for the toolbar
@@ -388,11 +388,11 @@ void MainWindow::initToolbar() {
 			"CSHelp");
 	}
 	toolbar->setLayout(StringTokenizer<string>(SETTING(TOOLBAR), ',').getTokens());
-	toolbar->onCustomized(std::tr1::bind(&MainWindow::handleToolbarCustomized, this));
-	toolbar->onCustomizeHelp(std::tr1::bind(&WinUtil::help, toolbar, IDH_CUSTOMIZE_TB));
-	toolbar->onContextMenu(std::tr1::bind(&MainWindow::handleToolbarContextMenu, this, _1));
+	toolbar->onCustomized(std::bind(&MainWindow::handleToolbarCustomized, this));
+	toolbar->onCustomizeHelp(std::bind(&WinUtil::help, toolbar, IDH_CUSTOMIZE_TB));
+	toolbar->onContextMenu(std::bind(&MainWindow::handleToolbarContextMenu, this, _1));
 
-	toolbar->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+	toolbar->onHelp(std::bind(&WinUtil::help, _1, _2));
 
 	viewMenu->checkItem(viewIndexes["Toolbar"], true);
 }
@@ -405,7 +405,7 @@ void MainWindow::initStatusBar() {
 
 	slotsSpin = addChild(Spinner::Seed(1));
 	slotsSpin->setHelpId(IDH_MAIN_SLOTS_SPIN);
-	slotsSpin->onUpdate(std::tr1::bind(&MainWindow::handleSlotsUpdate, this, _1, _2));
+	slotsSpin->onUpdate(std::bind(&MainWindow::handleSlotsUpdate, this, _1, _2));
 
 	initStatus(true);
 	status->setSize(STATUS_AWAY, status->getTextSize(T_("AWAY")).x + 12);
@@ -423,10 +423,10 @@ void MainWindow::initStatusBar() {
 		status->setIcon(STATUS_UP_DIFF, icon_UL);
 	}
 
-	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
-	status->onDblClicked(STATUS_AWAY, std::tr1::bind(&Util::switchAway));
+	status->onDblClicked(STATUS_STATUS, std::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
+	status->onDblClicked(STATUS_AWAY, std::bind(&Util::switchAway));
 	{
-		dwt::Dispatchers::VoidVoid<>::F f = std::tr1::bind(&StatsFrame::openWindow, getTabView());
+		dwt::Dispatchers::VoidVoid<>::F f = std::bind(&StatsFrame::openWindow, getTabView());
 		status->onDblClicked(STATUS_DOWN_TOTAL, f);
 		status->onDblClicked(STATUS_UP_TOTAL, f);
 		status->onDblClicked(STATUS_DOWN_DIFF, f);
@@ -454,8 +454,8 @@ void MainWindow::initTabs() {
 	seed.toggleActive = BOOLSETTING(TOGGLE_ACTIVE_WINDOW);
 	seed.ctrlTab = true;
 	tabs = addChild(seed);
-	tabs->onTitleChanged(std::tr1::bind(&MainWindow::handleTabsTitleChanged, this, _1));
-	tabs->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+	tabs->onTitleChanged(std::bind(&MainWindow::handleTabsTitleChanged, this, _1));
+	tabs->onHelp(std::bind(&WinUtil::help, _1, _2));
 	paned->setFirst(tabs);
 }
 
@@ -474,9 +474,9 @@ void MainWindow::initTray() {
 	dcdebug("initTray\n");
 	notify = dwt::NotificationPtr(new dwt::Notification(this));
 	notify->create(dwt::Notification::Seed(mainSmallIcon));
-	notify->onContextMenu(std::tr1::bind(&MainWindow::handleTrayContextMenu, this));
-	notify->onIconClicked(std::tr1::bind(&MainWindow::handleTrayClicked, this));
-	notify->onUpdateTip(std::tr1::bind(&MainWindow::handleTrayUpdate, this));
+	notify->onContextMenu(std::bind(&MainWindow::handleTrayContextMenu, this));
+	notify->onIconClicked(std::bind(&MainWindow::handleTrayClicked, this));
+	notify->onUpdateTip(std::bind(&MainWindow::handleTrayUpdate, this));
 	if(SETTING(ALWAYS_TRAY)) {
 		notify->setVisible(true);
 	}
@@ -540,7 +540,7 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 
 	for(GroupMenus::iterator i = groupMenus.begin(); i != groupMenus.end(); ++i) {
 		i->second = menu->appendPopup(dwt::util::escapeMenu(Text::toT(i->first)));
-		i->second->appendItem(T_("Connect to all hubs in this group"), std::tr1::bind(&multiConnect, i->first, getTabView()));
+		i->second->appendItem(T_("Connect to all hubs in this group"), std::bind(&multiConnect, i->first, getTabView()));
 		i->second->appendSeparator();
 	}
 
@@ -550,7 +550,7 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 		GroupMenus::iterator groupMenu = groupMenus.find(entry->getGroup());
 		((groupMenu == groupMenus.end()) ? menu : groupMenu->second)->appendItem(
 			dwt::util::escapeMenu(Text::toT(entry->getName())),
-			std::tr1::bind(&HubFrame::openWindow, getTabView(), entry->getServer()));
+			std::bind(&HubFrame::openWindow, getTabView(), entry->getServer()));
 	}
 
 	menu->open(pt);
@@ -561,7 +561,7 @@ static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu
 						  const tstring& text, unsigned iconId, unsigned favIconId, configureF f)
 {
 	MenuPtr popup = menu->appendPopup(text, WinUtil::menuIcon(iconId));
-	popup->appendItem(T_("&Configure..."), std::tr1::bind(f, mainWindow, T::id, text),
+	popup->appendItem(T_("&Configure..."), std::bind(f, mainWindow, T::id, text),
 		WinUtil::menuIcon(IDI_SETTINGS), true, true);
 	popup->appendSeparator();
 
@@ -581,7 +581,7 @@ static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu
 				continue;
 
 			popup->appendItem(dwt::util::escapeMenu(Text::toT(title->second)),
-				std::tr1::bind(&T::parseWindowParams, mainWindow->getTabView(), params),
+				std::bind(&T::parseWindowParams, mainWindow->getTabView(), params),
 				T::isFavorite(params) ? favIcon : 0);
 		}
 	}
@@ -710,7 +710,7 @@ void MainWindow::statusMessage(time_t t, const string& m) {
 }
 
 void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
-	callAsync(std::tr1::bind(&MainWindow::statusMessage, this, t, m));
+	callAsync(std::bind(&MainWindow::statusMessage, this, t, m));
 }
 
 void MainWindow::viewAndDelete(const string& fileName) {
@@ -811,7 +811,7 @@ bool MainWindow::handleClosing() {
 }
 
 void MainWindow::initSecond() {
-	createTimer(std::tr1::bind(&MainWindow::eachSecond, this), 1000);
+	createTimer(std::bind(&MainWindow::eachSecond, this), 1000);
 }
 
 bool MainWindow::eachSecond() {
@@ -1185,7 +1185,7 @@ bool MainWindow::handleToolbarContextMenu(const dwt::ScreenCoordinate& pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 	menu->setTitle(T_("Toolbar"));
 
-	menu->appendItem(T_("&Customize\tDouble-click"), std::tr1::bind(&ToolBar::customize, toolbar),
+	menu->appendItem(T_("&Customize\tDouble-click"), std::bind(&ToolBar::customize, toolbar),
 		WinUtil::menuIcon(IDI_SETTINGS), true, true);
 
 	{
@@ -1194,14 +1194,14 @@ bool MainWindow::handleToolbarContextMenu(const dwt::ScreenCoordinate& pt) {
 		const int& setting = SETTING(TOOLBAR_SIZE);
 		for(size_t i = 0, iend = sizeof(sizes) / sizeof(int); i < iend; ++i) {
 			const int& n = sizes[i];
-			size->appendItem(Text::toT(Util::toString(n)), std::tr1::bind(&MainWindow::handleToolbarSize, this, n));
+			size->appendItem(Text::toT(Util::toString(n)), std::bind(&MainWindow::handleToolbarSize, this, n));
 			if(n == setting)
 				size->checkItem(i);
 		}
 	}
 
 	menu->appendSeparator();
-	menu->appendItem(T_("&Hide\tCtrl+1"), std::tr1::bind(&MainWindow::switchToolbar, this));
+	menu->appendItem(T_("&Hide\tCtrl+1"), std::bind(&MainWindow::switchToolbar, this));
 
 	menu->open(pt);
 	return true;
@@ -1307,11 +1307,11 @@ bool MainWindow::handleMessage(const MSG& msg, LRESULT& retVal) {
 void MainWindow::handleTrayContextMenu() {
 	MenuPtr trayMenu = addChild(WinUtil::Seeds::menu);
 
-	trayMenu->appendItem(T_("Show"), std::tr1::bind(&MainWindow::handleRestore, this), WinUtil::menuIcon(IDI_DCPP), true, true);
-	trayMenu->appendItem(T_("Open downloads directory"), std::tr1::bind(&MainWindow::handleOpenDownloadsDir, this), WinUtil::menuIcon(IDI_OPEN_DL_DIR));
-	trayMenu->appendItem(T_("Settings"), std::tr1::bind(&MainWindow::handleSettings, this), WinUtil::menuIcon(IDI_SETTINGS));
+	trayMenu->appendItem(T_("Show"), std::bind(&MainWindow::handleRestore, this), WinUtil::menuIcon(IDI_DCPP), true, true);
+	trayMenu->appendItem(T_("Open downloads directory"), std::bind(&MainWindow::handleOpenDownloadsDir, this), WinUtil::menuIcon(IDI_OPEN_DL_DIR));
+	trayMenu->appendItem(T_("Settings"), std::bind(&MainWindow::handleSettings, this), WinUtil::menuIcon(IDI_SETTINGS));
 	trayMenu->appendSeparator();
-	trayMenu->appendItem(T_("Exit"), std::tr1::bind(&MainWindow::close, this, true), WinUtil::menuIcon(IDI_EXIT));
+	trayMenu->appendItem(T_("Exit"), std::bind(&MainWindow::close, this, true), WinUtil::menuIcon(IDI_EXIT));
 
 	dwt::ScreenCoordinate pt;
 	::GetCursorPos(&pt.getPoint());
@@ -1344,24 +1344,24 @@ void MainWindow::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, cons
 
 void MainWindow::on(PartialList, const HintedUser& aUser, const string& text) throw() {
 	callAsync(
-		std::tr1::bind((void (*)(dwt::TabView*, const HintedUser&, const string&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
+		std::bind((void (*)(dwt::TabView*, const HintedUser&, const string&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
 		aUser, text, 0));
 }
 
 void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) throw() {
 	if (qi->isSet(QueueItem::FLAG_CLIENT_VIEW)) {
 		if (qi->isSet(QueueItem::FLAG_USER_LIST)) {
-			callAsync(std::tr1::bind((void(*)(dwt::TabView*, const tstring&, const tstring&, const HintedUser&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
+			callAsync(std::bind((void(*)(dwt::TabView*, const tstring&, const tstring&, const HintedUser&, int64_t))(&DirectoryListingFrame::openWindow), getTabView(),
 				Text::toT(qi->getListName()), Text::toT(dir), qi->getDownloads()[0]->getHintedUser(), speed));
 		} else if (qi->isSet(QueueItem::FLAG_TEXT)) {
-			callAsync(std::tr1::bind(&MainWindow::viewAndDelete, this, qi->getTarget()));
+			callAsync(std::bind(&MainWindow::viewAndDelete, this, qi->getTarget()));
 		}
 	}
 }
 
 void MainWindow::on(WindowManagerListener::Window, const string& id, const StringMap& params) throw() {
 	if(0);
-#define compare_id(frame) else if(frame::id == id) callAsync(std::tr1::bind(&frame::parseWindowParams, getTabView(), params))
+#define compare_id(frame) else if(frame::id == id) callAsync(std::bind(&frame::parseWindowParams, getTabView(), params))
 	compare_id(HubFrame);
 	compare_id(PrivateFrame);
 	compare_id(DirectoryListingFrame);

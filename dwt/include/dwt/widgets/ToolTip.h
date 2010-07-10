@@ -54,7 +54,7 @@ class ToolTip :
 	friend class WidgetCreator< ToolTip >;
 
 	struct Dispatcher {
-		typedef std::tr1::function<void (tstring&)> F;
+		typedef std::function<void (tstring&)> F;
 
 		Dispatcher(const F& f_) : f(f_) { }
 

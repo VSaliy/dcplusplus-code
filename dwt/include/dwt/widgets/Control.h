@@ -72,7 +72,7 @@ class Control:
 {
 	struct CreateDispatcher
 	{
-		typedef std::tr1::function<void (const CREATESTRUCT&)> F;
+		typedef std::function<void (const CREATESTRUCT&)> F;
 
 		CreateDispatcher(const F& f_) : f(f_) { }
 

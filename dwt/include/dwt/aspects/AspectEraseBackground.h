@@ -56,7 +56,7 @@ class AspectEraseBackground
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
 	struct EraseBackgroundDispatcher {
-		typedef std::tr1::function<void (Canvas&)> F;
+		typedef std::function<void (Canvas&)> F;
 
 		EraseBackgroundDispatcher(const F& f_, WidgetType* widget_) : f(f_), widget(widget_) { }
 

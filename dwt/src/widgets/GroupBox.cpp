@@ -55,7 +55,7 @@ void GroupBox::create( const GroupBox::Seed & cs ) {
 	padding.x = ::GetSystemMetrics(SM_CXEDGE) * 2 + cs.padding.x * 2;
 	padding.y = ::GetSystemMetrics(SM_CYEDGE) + cs.padding.y * 2; // ignore the top border
 
-	onEnabled(std::tr1::bind(&GroupBox::handleEnabled, this, _1));
+	onEnabled(std::bind(&GroupBox::handleEnabled, this, _1));
 }
 
 Point GroupBox::getPreferedSize() {

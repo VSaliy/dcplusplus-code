@@ -77,7 +77,7 @@ void TextBox::create(const Seed& cs) {
 
 	// multiline text-boxes don't handle ctrl + A so we have do it ourselves...
 	if((cs.style & ES_MULTILINE) == ES_MULTILINE)
-		onKeyDown(std::tr1::bind(&TextBox::handleKeyDown, this, _1));
+		onKeyDown(std::bind(&TextBox::handleKeyDown, this, _1));
 }
 
 void TextBox::setText(const tstring& txt) {
@@ -188,21 +188,21 @@ void TextBoxBase::addCommands(MenuPtr menu) {
 	const bool selection = !getSelection().empty();
 
 	if(writable) {
-		menu->appendItem(Texts::get(Texts::undo), std::tr1::bind(&sendMessage_, this, WM_UNDO),
+		menu->appendItem(Texts::get(Texts::undo), std::bind(&sendMessage_, this, WM_UNDO),
 			IconPtr(), sendMessage(EM_CANUNDO));
 		menu->appendSeparator();
-		menu->appendItem(Texts::get(Texts::cut), std::tr1::bind(&sendMessage_, this, WM_CUT),
+		menu->appendItem(Texts::get(Texts::cut), std::bind(&sendMessage_, this, WM_CUT),
 			IconPtr(), selection);
 	}
-	menu->appendItem(Texts::get(Texts::copy), std::tr1::bind(&sendMessage_, this, WM_COPY),
+	menu->appendItem(Texts::get(Texts::copy), std::bind(&sendMessage_, this, WM_COPY),
 		IconPtr(), selection);
 	if(writable) {
-		menu->appendItem(Texts::get(Texts::paste), std::tr1::bind(&sendMessage_, this, WM_PASTE));
-		menu->appendItem(Texts::get(Texts::del), std::tr1::bind(&sendMessage_, this, WM_CLEAR),
+		menu->appendItem(Texts::get(Texts::paste), std::bind(&sendMessage_, this, WM_PASTE));
+		menu->appendItem(Texts::get(Texts::del), std::bind(&sendMessage_, this, WM_CLEAR),
 			IconPtr(), selection);
 	}
 	menu->appendSeparator();
-	menu->appendItem(Texts::get(Texts::selAll), std::tr1::bind(&TextBoxBase::setSelection, this, 0, -1),
+	menu->appendItem(Texts::get(Texts::selAll), std::bind(&TextBoxBase::setSelection, this, 0, -1),
 		IconPtr(), text);
 }
 

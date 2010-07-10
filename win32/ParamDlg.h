@@ -45,8 +45,8 @@ private:
 	enum { width = 365 };
 
 	GridPtr left;
-	std::vector<std::tr1::function<void ()> > initFs;
-	std::vector<std::tr1::function<tstring ()> > valueFs;
+	std::vector<std::function<void ()> > initFs;
+	std::vector<std::function<tstring ()> > valueFs;
 
 	TStringList values;
 

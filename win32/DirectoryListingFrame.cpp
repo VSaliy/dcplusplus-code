@@ -86,7 +86,7 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& a
 	} else {
 		bool wasActive = prev->second->isActive();
 		prev->second->close();
-		mdiParent->callAsync(std::tr1::bind(&DirectoryListingFrame::openWindow_, wasActive, mdiParent, aFile, aDir, aUser, aSpeed));
+		mdiParent->callAsync(std::bind(&DirectoryListingFrame::openWindow_, wasActive, mdiParent, aFile, aDir, aUser, aSpeed));
 	}
 }
 
@@ -192,9 +192,9 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 		addWidget(dirs);
 		paned->setFirst(dirs);
 		dirs->setNormalImageList(WinUtil::fileImages);
-		dirs->onSelectionChanged(std::tr1::bind(&DirectoryListingFrame::handleSelectionChanged, this));
-		dirs->onContextMenu(std::tr1::bind(&DirectoryListingFrame::handleDirsContextMenu, this, _1));
-		dirs->onXMouseUp(std::tr1::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
+		dirs->onSelectionChanged(std::bind(&DirectoryListingFrame::handleSelectionChanged, this));
+		dirs->onContextMenu(std::bind(&DirectoryListingFrame::handleDirsContextMenu, this, _1));
+		dirs->onXMouseUp(std::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
 	}
 
 	{
@@ -207,13 +207,13 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(DIRECTORYLISTINGFRAME_ORDER), SETTING(DIRECTORYLISTINGFRAME_WIDTHS));
 		files->setSort(COLUMN_FILENAME);
 
-		files->onSelectionChanged(std::tr1::bind(&DirectoryListingFrame::callAsync, this,
-			dwt::Application::Callback(std::tr1::bind(&DirectoryListingFrame::updateStatus, this))));
-		files->onDblClicked(std::tr1::bind(&DirectoryListingFrame::handleDoubleClickFiles, this));
-		files->onKeyDown(std::tr1::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));
-		files->onSysKeyDown(std::tr1::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));
-		files->onContextMenu(std::tr1::bind(&DirectoryListingFrame::handleFilesContextMenu, this, _1));
-		files->onXMouseUp(std::tr1::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
+		files->onSelectionChanged(std::bind(&DirectoryListingFrame::callAsync, this,
+			dwt::Application::Callback(std::bind(&DirectoryListingFrame::updateStatus, this))));
+		files->onDblClicked(std::bind(&DirectoryListingFrame::handleDoubleClickFiles, this));
+		files->onKeyDown(std::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));
+		files->onSysKeyDown(std::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));
+		files->onContextMenu(std::bind(&DirectoryListingFrame::handleFilesContextMenu, this, _1));
+		files->onXMouseUp(std::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
 	}
 
 	{
@@ -222,22 +222,22 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 		cs.caption = T_("Subtract list");
 		listDiff = addChild(cs);
 		listDiff->setHelpId(IDH_FILE_LIST_SUBSTRACT);
-		listDiff->onClicked(std::tr1::bind(&DirectoryListingFrame::handleListDiff, this));
+		listDiff->onClicked(std::bind(&DirectoryListingFrame::handleListDiff, this));
 
 		cs.caption = T_("Match queue");
 		matchQueue = addChild(cs);
 		matchQueue->setHelpId(IDH_FILE_LIST_MATCH_QUEUE);
-		matchQueue->onClicked(std::tr1::bind(&DirectoryListingFrame::handleMatchQueue, this));
+		matchQueue->onClicked(std::bind(&DirectoryListingFrame::handleMatchQueue, this));
 
 		cs.caption = T_("Find");
 		find = addChild(cs);
 		find->setHelpId(IDH_FILE_LIST_FIND);
-		find->onClicked(std::tr1::bind(&DirectoryListingFrame::handleFind, this));
+		find->onClicked(std::bind(&DirectoryListingFrame::handleFind, this));
 
 		cs.caption = T_("Next");
 		findNext = addChild(cs);
 		findNext->setHelpId(IDH_FILE_LIST_NEXT);
-		findNext->onClicked(std::tr1::bind(&DirectoryListingFrame::handleFindNext, this));
+		findNext->onClicked(std::bind(&DirectoryListingFrame::handleFindNext, this));
 	}
 
 	initStatus();
@@ -384,11 +384,11 @@ void DirectoryListingFrame::updateTitle() {
 ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
-	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu, ii);
 
 	if(ii->type == ItemInfo::FILE) {
-		menu->appendItem(T_("&View as text"), std::tr1::bind(&DirectoryListingFrame::handleViewAsText, this));
+		menu->appendItem(T_("&View as text"), std::bind(&DirectoryListingFrame::handleViewAsText, this));
 
 		menu->appendSeparator();
 
@@ -398,7 +398,7 @@ ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 	if((ii->type == ItemInfo::FILE && ii->file->getAdls()) ||
 		(ii->type == ItemInfo::DIRECTORY && ii->dir->getAdls() && ii->dir->getParent() != dl->getRoot()) )	{
 		menu->appendSeparator();
-		menu->appendItem(T_("&Go to directory"), std::tr1::bind(&DirectoryListingFrame::handleGoToDirectory, this));
+		menu->appendItem(T_("&Go to directory"), std::bind(&DirectoryListingFrame::handleGoToDirectory, this));
 	}
 
 	addUserCommands(menu);
@@ -408,7 +408,7 @@ ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
-	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu);
 	addUserCommands(menu);
 
@@ -418,7 +418,7 @@ ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
 ShellMenuPtr DirectoryListingFrame::makeDirMenu() {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
-	menu->appendItem(T_("&Download"), std::tr1::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu);
 	return menu;
 }
@@ -451,14 +451,14 @@ void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
 	StringPairList spl = FavoriteManager::getInstance()->getFavoriteDirs();
 	size_t i = 0;
 	for(; i < spl.size(); ++i) {
-		menu->appendItem(Text::toT(spl[i].second), std::tr1::bind(&DirectoryListingFrame::handleDownloadFavorite, this, i));
+		menu->appendItem(Text::toT(spl[i].second), std::bind(&DirectoryListingFrame::handleDownloadFavorite, this, i));
 	}
 
 	if(i > 0) {
 		menu->appendSeparator();
 	}
 
-	menu->appendItem(T_("&Browse..."), std::tr1::bind(&DirectoryListingFrame::handleDownloadBrowse, this));
+	menu->appendItem(T_("&Browse..."), std::bind(&DirectoryListingFrame::handleDownloadBrowse, this));
 
 	targets.clear();
 
@@ -467,7 +467,7 @@ void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
 		if(!targets.empty()) {
 			menu->appendSeparator();
 			for(i = 0; i < targets.size(); ++i) {
-				menu->appendItem(Text::toT(targets[i]), std::tr1::bind(&DirectoryListingFrame::handleDownloadTarget, this, i));
+				menu->appendItem(Text::toT(targets[i]), std::bind(&DirectoryListingFrame::handleDownloadTarget, this, i));
 			}
 		}
 	}
@@ -476,7 +476,7 @@ void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
 		menu->appendSeparator();
 
 		for(i = 0; i < WinUtil::lastDirs.size(); ++i) {
-			menu->appendItem(WinUtil::lastDirs[i], std::tr1::bind(&DirectoryListingFrame::handleDownloadLastDir, this, i));
+			menu->appendItem(WinUtil::lastDirs[i], std::bind(&DirectoryListingFrame::handleDownloadLastDir, this, i));
 		}
 	}
 }
@@ -1085,13 +1085,13 @@ DirectoryListingFrame::UserInfoList DirectoryListingFrame::selectedUsersImpl() {
 
 void DirectoryListingFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
 	if(aUser.getUser() == dl->getUser().user)
-		callAsync(std::tr1::bind(&DirectoryListingFrame::updateTitle, this));
+		callAsync(std::bind(&DirectoryListingFrame::updateTitle, this));
 }
 void DirectoryListingFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
 	if(aUser == dl->getUser().user)
-		callAsync(std::tr1::bind(&DirectoryListingFrame::updateTitle, this));
+		callAsync(std::bind(&DirectoryListingFrame::updateTitle, this));
 }
 void DirectoryListingFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
 	if(aUser == dl->getUser().user)
-		callAsync(std::tr1::bind(&DirectoryListingFrame::updateTitle, this));
+		callAsync(std::bind(&DirectoryListingFrame::updateTitle, this));
 }

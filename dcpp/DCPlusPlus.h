@@ -85,10 +85,10 @@ typedef std::pair<string, string> StringPair;
 typedef std::vector<StringPair> StringPairList;
 typedef StringPairList::iterator StringPairIter;
 
-typedef std::tr1::unordered_map<string, string> StringMap;
+typedef std::unordered_map<string, string> StringMap;
 typedef StringMap::iterator StringMapIter;
 
-typedef std::tr1::unordered_set<string> StringSet;
+typedef std::unordered_set<string> StringSet;
 typedef StringSet::iterator StringSetIter;
 
 typedef std::vector<wstring> WStringList;
@@ -143,7 +143,6 @@ boost::basic_format<T> dcpp_fmt(const std::basic_string<T>& t) {
 # define PATH_SEPARATOR_STR "/"
 
 #endif
-
 
 typedef unordered_map<wstring, wstring> WStringMap;
 typedef WStringMap::iterator WStringMapIter;

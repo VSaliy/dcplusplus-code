@@ -79,7 +79,7 @@ class AspectHelp {
 		const WidgetType* const widget;
 	};
 
-	typedef std::tr1::function<void (unsigned&)> id_function_type;
+	typedef std::function<void (unsigned&)> id_function_type;
 
 public:
 	unsigned getHelpId() const {

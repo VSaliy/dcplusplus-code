@@ -53,7 +53,7 @@ grid(0)
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
 
 		ButtonPtr browse = cur->addChild(Button::Seed(T_("Browse...")));
-		browse->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
+		browse->onClicked(std::bind(&DownloadPage::handleBrowseDir, this, items.back()));
 		browse->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
 
 		label = cur->addChild(Label::Seed(T_("Unfinished downloads directory")));
@@ -65,7 +65,7 @@ grid(0)
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
 
 		browse = cur->addChild(Button::Seed(T_("Browse...")));
-		browse->onClicked(std::tr1::bind(&DownloadPage::handleBrowseDir, this, items.back()));
+		browse->onClicked(std::bind(&DownloadPage::handleBrowseDir, this, items.back()));
 		browse->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
 	}
 
@@ -110,7 +110,7 @@ grid(0)
 		cur->addChild(Label::Seed(T_("Public Hubs list URL")));
 
 		// dummy grid so that the button doesn't fill the whole row.
-		cur->addChild(Grid::Seed(1, 1))->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::tr1::bind(&DownloadPage::handleConfigHubLists, this));
+		cur->addChild(Grid::Seed(1, 1))->addChild(Button::Seed(T_("Configure Public Hub Lists")))->onClicked(std::bind(&DownloadPage::handleConfigHubLists, this));
 
 		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);

@@ -241,7 +241,7 @@ private:
 	TTHValue xmlRoot;
 	int64_t bzXmlListLen;
 	TTHValue bzXmlRoot;
-	auto_ptr<File> bzXmlRef;
+	unique_ptr<File> bzXmlRef;
 
 	bool xmlDirty;
 	bool forceXmlRefresh; /// bypass the 15-minutes guard

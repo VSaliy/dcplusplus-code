@@ -28,14 +28,14 @@ ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title) :
 GridDialog(parent, width),
 left(0)
 {
-	onInitDialog(std::tr1::bind(&ParamDlg::initDialog, this, title));
+	onInitDialog(std::bind(&ParamDlg::initDialog, this, title));
 }
 
 ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title, const tstring& name, const tstring& value, bool password) :
 GridDialog(parent, width),
 left(0)
 {
-	onInitDialog(std::tr1::bind(&ParamDlg::initDialog, this, title));
+	onInitDialog(std::bind(&ParamDlg::initDialog, this, title));
 	addTextBox(name, value, password);
 }
 
@@ -43,20 +43,20 @@ ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title, const tstring& nam
 GridDialog(parent, width),
 left(0)
 {
-	onInitDialog(std::tr1::bind(&ParamDlg::initDialog, this, title));
+	onInitDialog(std::bind(&ParamDlg::initDialog, this, title));
 	addComboBox(name, choices, sel);
 }
 
 void ParamDlg::addTextBox(const tstring& name, const tstring& value, bool password) {
-	initFs.push_back(std::tr1::bind(&ParamDlg::initTextBox, this, name, value, password));
+	initFs.push_back(std::bind(&ParamDlg::initTextBox, this, name, value, password));
 }
 
 void ParamDlg::addIntTextBox(const tstring& name, const tstring& value, const int min, const int max) {
-	initFs.push_back(std::tr1::bind(&ParamDlg::initIntTextBox, this, name, value, min, max));
+	initFs.push_back(std::bind(&ParamDlg::initIntTextBox, this, name, value, min, max));
 }
 
 void ParamDlg::addComboBox(const tstring& name, const TStringList& choices, size_t sel) {
-	initFs.push_back(std::tr1::bind(&ParamDlg::initComboBox, this, name, choices, sel));
+	initFs.push_back(std::bind(&ParamDlg::initComboBox, this, name, choices, sel));
 }
 
 void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool password) {
@@ -65,7 +65,7 @@ void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool passw
 		box->setPassword();
 	}
 	box->setText(value);
-	valueFs.push_back(std::tr1::bind((tstring (TextBox::*)() const)(&TextBox::getText), box));
+	valueFs.push_back(std::bind((tstring (TextBox::*)() const)(&TextBox::getText), box));
 }
 
 void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const int min, const int max) {
@@ -77,7 +77,7 @@ void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const i
 
 	cur->setWidget(cur->addChild(Spinner::Seed(min, max, box)));
 
-	valueFs.push_back(std::tr1::bind((tstring (TextBox::*)() const)(&TextBox::getText), box));
+	valueFs.push_back(std::bind((tstring (TextBox::*)() const)(&TextBox::getText), box));
 }
 
 void ParamDlg::initComboBox(const tstring& name, const TStringList& choices, size_t sel) {
@@ -85,7 +85,7 @@ void ParamDlg::initComboBox(const tstring& name, const TStringList& choices, siz
 	for(TStringList::const_iterator i = choices.begin(), iend = choices.end(); i != iend; ++i)
 		box->addValue(*i);
 	box->setSelected(sel);
-	valueFs.push_back(std::tr1::bind((tstring (ComboBox::*)() const)(&ComboBox::getText), box));
+	valueFs.push_back(std::bind((tstring (ComboBox::*)() const)(&ComboBox::getText), box));
 }
 
 bool ParamDlg::initDialog(const tstring& title) {
@@ -100,8 +100,8 @@ bool ParamDlg::initDialog(const tstring& title) {
 		initFs[i]();
 
 	WinUtil::addDlgButtons(grid->addChild(Grid::Seed(2, 1)),
-		std::tr1::bind(&ParamDlg::okClicked, this),
-		std::tr1::bind(&ParamDlg::endDialog, this, IDCANCEL));
+		std::bind(&ParamDlg::okClicked, this),
+		std::bind(&ParamDlg::endDialog, this, IDCANCEL));
 
 	setText(title);
 

@@ -61,8 +61,8 @@ class TabView :
 	friend class AspectCollection<TabView, int>;
 	friend class AspectSelection<TabView, int>;
 	friend class WidgetCreator< TabView >;
-	typedef std::tr1::function<void (const tstring&)> TitleChangedFunction;
-	typedef std::tr1::function<bool (const ScreenCoordinate&)> ContextMenuFunction;
+	typedef std::function<void (const tstring&)> TitleChangedFunction;
+	typedef std::function<bool (const ScreenCoordinate&)> ContextMenuFunction;
 
 public:
 	/// Class type

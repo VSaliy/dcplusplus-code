@@ -55,16 +55,16 @@ protected:
 
 		tabView->add(this, iconId ? WinUtil::tabIcon(iconId) : dwt::IconPtr());
 
-		this->onTabContextMenu(std::tr1::bind(&ThisType::handleContextMenu, this, _1));
+		this->onTabContextMenu(std::bind(&ThisType::handleContextMenu, this, _1));
 
-		onClosing(std::tr1::bind(&ThisType::handleClosing, this));
-		onFocus(std::tr1::bind(&ThisType::handleFocus, this));
-		onSized(std::tr1::bind(&ThisType::handleSized, this, _1));
-		onActivate(std::tr1::bind(&ThisType::handleActivate, this, _1));
+		onClosing(std::bind(&ThisType::handleClosing, this));
+		onFocus(std::bind(&ThisType::handleFocus, this));
+		onSized(std::bind(&ThisType::handleSized, this, _1));
+		onActivate(std::bind(&ThisType::handleActivate, this, _1));
 		addDlgCodeMessage(this);
 
-		addAccel(FCONTROL, 'W', std::tr1::bind(&ThisType::close, this, true));
-		addAccel(FCONTROL, VK_F4, std::tr1::bind(&ThisType::close, this, true));
+		addAccel(FCONTROL, 'W', std::bind(&ThisType::close, this, true));
+		addAccel(FCONTROL, VK_F4, std::bind(&ThisType::close, this, true));
 		if(manageAccels)
 			initAccels();
 	}
@@ -111,7 +111,7 @@ protected:
 		}
 	}
 
-	void onTabContextMenu(const std::tr1::function<bool (const dwt::ScreenCoordinate&)>& f) {
+	void onTabContextMenu(const std::function<bool (const dwt::ScreenCoordinate&)>& f) {
 		getParent()->onTabContextMenu(this, f);
 	}
 
@@ -151,15 +151,15 @@ private:
 	bool reallyClose;
 
 	void addDlgCodeMessage(ComboBox* widget, bool autoTab = true) {
-		widget->onRaw(std::tr1::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
+		widget->onRaw(std::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
 		TextBox* text = widget->getTextBox();
 		if(text)
-			text->onRaw(std::tr1::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
+			text->onRaw(std::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
 	}
 
 	template<typename W>
 	void addDlgCodeMessage(W* widget, bool autoTab = true) {
-		widget->onRaw(std::tr1::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
+		widget->onRaw(std::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
 	}
 
 	void addColor(ComboBox* widget) {
@@ -217,7 +217,7 @@ private:
 		menu->setTitle(getParent()->getText(this), getParent()->getIcon(this));
 
 		tabMenuImpl(menu);
-		menu->appendItem(T_("&Close"), std::tr1::bind(&ThisType::close, this, true), WinUtil::menuIcon(IDI_EXIT));
+		menu->appendItem(T_("&Close"), std::bind(&ThisType::close, this, true), WinUtil::menuIcon(IDI_EXIT));
 
 		menu->open(pt);
 		return true;

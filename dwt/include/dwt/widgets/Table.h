@@ -80,7 +80,7 @@ class Table :
 	typedef CommonControl BaseType;
 
 	struct HeaderDispatcher {
-		typedef std::tr1::function<void (int)> F;
+		typedef std::function<void (int)> F;
 
 		HeaderDispatcher(const F& f_) : f(f_) { }
 
@@ -109,7 +109,7 @@ public:
 	/// Object type
 	typedef ThisType* ObjectType;
 
-	typedef std::tr1::function<int (LPARAM a, LPARAM b)> SortFunction;
+	typedef std::function<int (LPARAM a, LPARAM b)> SortFunction;
 
 	/// Seed class
 	/** This class contains all of the values needed to create the widget. It also

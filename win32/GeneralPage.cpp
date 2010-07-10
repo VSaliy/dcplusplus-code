@@ -68,7 +68,7 @@ connections(0)
 
 	PropPage::read(items);
 
-	nick->onUpdated(std::tr1::bind(&GeneralPage::handleNickTextChanged, this));
+	nick->onUpdated(std::bind(&GeneralPage::handleNickTextChanged, this));
 
 	int selected = 0, j = 0;
 	for(StringIter i = SettingsManager::connectionSpeeds.begin(); i != SettingsManager::connectionSpeeds.end(); ++i, ++j) {

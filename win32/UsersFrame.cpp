@@ -51,10 +51,10 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 		users->setSort(COLUMN_NICK);
 
 		// TODO check default (browse vs get)
-		users->onDblClicked(std::tr1::bind(&UsersFrame::handleGetList, this));
-		users->onKeyDown(std::tr1::bind(&UsersFrame::handleKeyDown, this, _1));
-		users->onRaw(std::tr1::bind(&UsersFrame::handleItemChanged, this, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
-		users->onContextMenu(std::tr1::bind(&UsersFrame::handleContextMenu, this, _1));
+		users->onDblClicked(std::bind(&UsersFrame::handleGetList, this));
+		users->onKeyDown(std::bind(&UsersFrame::handleKeyDown, this, _1));
+		users->onRaw(std::bind(&UsersFrame::handleItemChanged, this, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
+		users->onContextMenu(std::bind(&UsersFrame::handleContextMenu, this, _1));
 	}
 
 	{
@@ -188,8 +188,8 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		appendUserItems(getParent(), menu);
 		menu->appendSeparator();
-		menu->appendItem(T_("&Description"), std::tr1::bind(&UsersFrame::handleDescription, this));
-		menu->appendItem(T_("&Remove"), std::tr1::bind(&UsersFrame::handleRemove, this));
+		menu->appendItem(T_("&Description"), std::bind(&UsersFrame::handleDescription, this));
+		menu->appendItem(T_("&Remove"), std::bind(&UsersFrame::handleRemove, this));
 
 		menu->open(pt);
 
@@ -207,9 +207,9 @@ void UsersFrame::on(UserAdded, const FavoriteUser& aUser) throw() {
 }
 
 void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) throw() {
-	callAsync(std::tr1::bind(&UsersFrame::removeUser, this, aUser.getUser()));
+	callAsync(std::bind(&UsersFrame::removeUser, this, aUser.getUser()));
 }
 
 void UsersFrame::on(StatusChanged, const UserPtr& aUser) throw() {
-	callAsync(std::tr1::bind(&UsersFrame::updateUser, this, aUser));
+	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
 }

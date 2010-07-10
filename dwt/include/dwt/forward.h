@@ -33,9 +33,9 @@
 #ifndef DWT_FORWARD_H_
 #define DWT_FORWARD_H_
 
-namespace std { namespace tr1 {
+namespace std {
 template<class T> class shared_ptr;
-} }
+}
 
 namespace dwt {
 
@@ -71,7 +71,7 @@ class Label;
 typedef Label* LabelPtr;
 
 class Menu;
-typedef std::tr1::shared_ptr<Menu> MenuPtr;
+typedef std::shared_ptr<Menu> MenuPtr;
 
 class MDIChild;
 typedef MDIChild* MDIChildPtr;
@@ -83,7 +83,7 @@ class MDIParent;
 typedef MDIParent* MDIParentPtr;
 
 class Notification;
-typedef std::tr1::shared_ptr<Notification> NotificationPtr;
+typedef std::shared_ptr<Notification> NotificationPtr;
 
 class ProgressBar;
 typedef ProgressBar* ProgressBarPtr;

@@ -61,7 +61,7 @@ public:
 	void addNotification(const tstring& message);
 
 	// TODO Fix callback parameters
-	typedef std::tr1::function<void ()> Callback;
+	typedef std::function<void ()> Callback;
 
 	void onContextMenu(const Callback& callback_) { contextMenu = callback_; }
 

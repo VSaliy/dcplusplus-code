@@ -74,8 +74,8 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 
 	list->setColumnWidth(0, LVSCW_AUTOSIZE);
 
-	list->onHelp(std::tr1::bind(&PropPage::handleListHelp, this, list, _2));
-	list->setHelpId(std::tr1::bind(&PropPage::handleListHelpId, this, list, _1));
+	list->onHelp(std::bind(&PropPage::handleListHelp, this, list, _2));
+	list->setHelpId(std::bind(&PropPage::handleListHelpId, this, list, _1));
 }
 
 void PropPage::write(const ItemList& items) {

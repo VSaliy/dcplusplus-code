@@ -38,8 +38,8 @@ editBtn(0),
 remove(0),
 unique(ensureUniqueness)
 {
-	onInitDialog(std::tr1::bind(&StringListDlg::handleInitDialog, this, initialValues));
-	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+	onInitDialog(std::bind(&StringListDlg::handleInitDialog, this, initialValues));
+	onHelp(std::bind(&WinUtil::help, _1, _2));
 }
 
 StringListDlg::~StringListDlg() {
@@ -116,7 +116,7 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 		seed.menuHandle = reinterpret_cast<HMENU>(IDOK);
 		addBtn = grid->addChild(seed);
 		addBtn->setHelpId(getHelpId(HELP_ADD));
-		addBtn->onClicked(std::tr1::bind(&StringListDlg::handleAddClicked, this));
+		addBtn->onClicked(std::bind(&StringListDlg::handleAddClicked, this));
 	}
 
 	{
@@ -136,27 +136,27 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 		seed.caption = T_("Move &Up");
 		up = cur->addChild(seed);
 		up->setHelpId(getHelpId(HELP_MOVE_UP));
-		up->onClicked(std::tr1::bind(&StringListDlg::handleMoveUpClicked, this));
+		up->onClicked(std::bind(&StringListDlg::handleMoveUpClicked, this));
 
 		seed.caption = T_("Move &Down");
 		down = cur->addChild(seed);
 		down->setHelpId(getHelpId(HELP_MOVE_DOWN));
-		down->onClicked(std::tr1::bind(&StringListDlg::handleMoveDownClicked, this));
+		down->onClicked(std::bind(&StringListDlg::handleMoveDownClicked, this));
 
 		seed.caption = T_("&Edit");
 		editBtn = cur->addChild(seed);
 		editBtn->setHelpId(getHelpId(HELP_EDIT));
-		editBtn->onClicked(std::tr1::bind(&StringListDlg::handleEditClicked, this));
+		editBtn->onClicked(std::bind(&StringListDlg::handleEditClicked, this));
 
 		seed.caption = T_("&Remove");
 		remove = cur->addChild(seed);
 		remove->setHelpId(getHelpId(HELP_REMOVE));
-		remove->onClicked(std::tr1::bind(&StringListDlg::handleRemoveClicked, this));
+		remove->onClicked(std::bind(&StringListDlg::handleRemoveClicked, this));
 
 		::SetWindowLongPtr(
 			WinUtil::addDlgButtons(cur,
-			std::tr1::bind(&StringListDlg::handleOKClicked, this),
-			std::tr1::bind(&StringListDlg::endDialog, this, IDCANCEL))
+			std::bind(&StringListDlg::handleOKClicked, this),
+			std::bind(&StringListDlg::endDialog, this, IDCANCEL))
 			.first->handle(), GWLP_ID, 0); // the def button is the "Add" button
 	}
 
@@ -168,10 +168,10 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 	handleSelectionChanged();
 	handleInputUpdated();
 
-	list->onDblClicked(std::tr1::bind(&StringListDlg::handleDoubleClick, this));
-	list->onKeyDown(std::tr1::bind(&StringListDlg::handleKeyDown, this, _1));
-	list->onSelectionChanged(std::tr1::bind(&StringListDlg::handleSelectionChanged, this));
-	editBox->onUpdated(std::tr1::bind(&StringListDlg::handleInputUpdated, this));
+	list->onDblClicked(std::bind(&StringListDlg::handleDoubleClick, this));
+	list->onKeyDown(std::bind(&StringListDlg::handleKeyDown, this, _1));
+	list->onSelectionChanged(std::bind(&StringListDlg::handleSelectionChanged, this));
+	editBox->onUpdated(std::bind(&StringListDlg::handleInputUpdated, this));
 
 	setText(getTitle());
 

@@ -90,28 +90,28 @@ private:
 
 protected:
 	void handleMatchQueue() {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::matchQueue, _1));
+		handleUserFunction(std::bind(&UserInfoBase::matchQueue, _1));
 	}
 	void handleGetList() {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::getList, _1));
+		handleUserFunction(std::bind(&UserInfoBase::getList, _1));
 	}
 	void handleBrowseList() {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::browseList, _1));
+		handleUserFunction(std::bind(&UserInfoBase::browseList, _1));
 	}
 	void handleAddFavorite() {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::addFav, _1));
+		handleUserFunction(std::bind(&UserInfoBase::addFav, _1));
 	}
 	void handlePrivateMessage(dwt::TabViewPtr parent) {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::pm, _1, parent));
+		handleUserFunction(std::bind(&UserInfoBase::pm, _1, parent));
 	}
 	void handleGrantSlot() {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::grant, _1));
+		handleUserFunction(std::bind(&UserInfoBase::grant, _1));
 	}
 	void handleRemoveFromQueue() {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::removeFromQueue, _1));
+		handleUserFunction(std::bind(&UserInfoBase::removeFromQueue, _1));
 	}
 	void handleConnectFav(dwt::TabViewPtr parent) {
-		handleUserFunction(std::tr1::bind(&UserInfoBase::connectFav, _1, parent));
+		handleUserFunction(std::bind(&UserInfoBase::connectFav, _1, parent));
 	}
 
 	void appendUserItems(dwt::TabViewPtr parent, dwt::MenuPtr menu,
@@ -122,23 +122,23 @@ protected:
 			return;
 
 		UserInfoBase::UserTraits traits;
-		for_each(users.begin(), users.end(), std::tr1::bind(&UserInfoBase::UserTraits::parse, &traits, _1));
+		for_each(users.begin(), users.end(), std::bind(&UserInfoBase::UserTraits::parse, &traits, _1));
 
 		if(includeGetList) {
-			menu->appendItem(T_("&Get file list"), std::tr1::bind(&ThisType::handleGetList, this), dwt::IconPtr(), true, defaultIsGetList);
+			menu->appendItem(T_("&Get file list"), std::bind(&ThisType::handleGetList, this), dwt::IconPtr(), true, defaultIsGetList);
 			if(traits.adcOnly)
-				menu->appendItem(T_("&Browse file list"), std::tr1::bind(&ThisType::handleBrowseList, this));
-			menu->appendItem(T_("&Match queue"), std::tr1::bind(&ThisType::handleMatchQueue, this));
+				menu->appendItem(T_("&Browse file list"), std::bind(&ThisType::handleBrowseList, this));
+			menu->appendItem(T_("&Match queue"), std::bind(&ThisType::handleMatchQueue, this));
 		}
 		if(includeSendPM)
-			menu->appendItem(T_("&Send private message"), std::tr1::bind(&ThisType::handlePrivateMessage, this, parent), dwt::IconPtr(), true, !defaultIsGetList);
+			menu->appendItem(T_("&Send private message"), std::bind(&ThisType::handlePrivateMessage, this, parent), dwt::IconPtr(), true, !defaultIsGetList);
 		if(!traits.favOnly)
-			menu->appendItem(T_("Add To &Favorites"), std::tr1::bind(&ThisType::handleAddFavorite, this), WinUtil::menuIcon(IDI_FAVORITE_USERS));
-		menu->appendItem(T_("Grant &extra slot"), std::tr1::bind(&ThisType::handleGrantSlot, this));
+			menu->appendItem(T_("Add To &Favorites"), std::bind(&ThisType::handleAddFavorite, this), WinUtil::menuIcon(IDI_FAVORITE_USERS));
+		menu->appendItem(T_("Grant &extra slot"), std::bind(&ThisType::handleGrantSlot, this));
 		if(!traits.nonFavOnly)
-			menu->appendItem(T_("Connect to hub"), std::tr1::bind(&ThisType::handleConnectFav, this, parent), WinUtil::menuIcon(IDI_HUB));
+			menu->appendItem(T_("Connect to hub"), std::bind(&ThisType::handleConnectFav, this, parent), WinUtil::menuIcon(IDI_HUB));
 		menu->appendSeparator();
-		menu->appendItem(T_("Remove user from queue"), std::tr1::bind(&ThisType::handleRemoveFromQueue, this));
+		menu->appendItem(T_("Remove user from queue"), std::bind(&ThisType::handleRemoveFromQueue, this));
 	}
 };
 

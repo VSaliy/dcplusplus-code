@@ -1482,7 +1482,7 @@ void QueueManager::saveQueue(bool force) throw() {
 	lastSave = GET_TICK();
 
 	ClientManager* cm = ClientManager::getInstance();
-	std::for_each(cids.begin(), cids.end(), std::tr1::bind(&ClientManager::saveUser, cm, std::tr1::placeholders::_1));
+	std::for_each(cids.begin(), cids.end(), std::bind(&ClientManager::saveUser, cm, std::placeholders::_1));
 }
 
 class QueueLoader : public SimpleXMLReader::CallBack {

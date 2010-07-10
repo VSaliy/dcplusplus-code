@@ -163,7 +163,7 @@ private:
 
 	int64_t speed;		/**< Speed at which this file list was downloaded */
 
-	std::auto_ptr<DirectoryListing> dl;
+	std::unique_ptr<DirectoryListing> dl;
 	UserInfoBase user;
 	string path;
 

@@ -58,8 +58,8 @@ public:
 		this->addCallback(
 			dwt::Message( WM_NOTIFY, LVN_GETDISPINFO ), &ThisType::TypedTableDispatcher
 		);
-		this->onColumnClick(std::tr1::bind(&ThisType::handleColumnClick, this, _1));
-		this->onSortItems(std::tr1::bind(&ThisType::handleSort, this, _1, _2));
+		this->onColumnClick(std::bind(&ThisType::handleColumnClick, this, _1));
+		this->onSortItems(std::bind(&ThisType::handleSort, this, _1, _2));
 	}
 
 	int insert(ContentType* item) {

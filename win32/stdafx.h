@@ -91,8 +91,8 @@ using dwt::ToolBarPtr;
 using dwt::Tree;
 using dwt::TreePtr;
 
-using std::tr1::placeholders::_1;
-using std::tr1::placeholders::_2;
+using std::placeholders::_1;
+using std::placeholders::_2;
 
 #define LOCALEDIR dcpp::Util::getPath(Util::PATH_LOCALE).c_str()
 #define PACKAGE "dcpp-win32"

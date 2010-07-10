@@ -55,7 +55,7 @@ public:
 
 	template<typename T>
 	void attachChild(T& childPtr, int id) {
-		childPtr = attachChild<typename std::tr1::remove_pointer<T>::type >(id);
+		childPtr = attachChild<typename std::remove_pointer<T>::type >(id);
 	}
 
 	template<typename T>

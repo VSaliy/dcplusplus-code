@@ -1,3 +1,5 @@
+* Compiled with C++0x support
+* Update Boost to version 1.43
 * Prevent hub-provided cmds from "open own list" from going to the wrong hub
 
 -- 0.770 2010-07-05 --

@@ -97,7 +97,7 @@ public:
 
 private:
 
-	std::auto_ptr<Socket> socket;
+	std::unique_ptr<Socket> socket;
 	uint16_t port;
 	bool stop;
 	uint64_t lastSearch;

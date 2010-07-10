@@ -255,7 +255,7 @@ LRESULT ChainingDispatcher::chain(const MSG& msg) {
 	return ::CallWindowProc(wndProc, msg.hwnd, msg.message, msg.wParam, msg.lParam);
 }
 
-std::auto_ptr<Dispatcher> ChainingDispatcher::superClass(LPCTSTR original, LPCTSTR newName) {
+std::unique_ptr<Dispatcher> ChainingDispatcher::superClass(LPCTSTR original, LPCTSTR newName) {
 	WNDCLASSEX orgClass = { sizeof(WNDCLASSEX) };
 
 	if(!::GetClassInfoEx(::GetModuleHandle(NULL), original, &orgClass)) {
@@ -266,7 +266,7 @@ std::auto_ptr<Dispatcher> ChainingDispatcher::superClass(LPCTSTR original, LPCTS
 
 	fillWndClass(orgClass, newName);
 
-	return std::auto_ptr<Dispatcher>(new ChainingDispatcher(orgClass, proc));
+	return std::unique_ptr<Dispatcher>(new ChainingDispatcher(orgClass, proc));
 }
 
 }

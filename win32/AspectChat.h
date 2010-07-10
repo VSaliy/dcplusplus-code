@@ -51,14 +51,14 @@ protected:
 			TextBox::Seed cs = WinUtil::Seeds::textBox;
 			cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL;
 			message = t().addChild(cs);
-			message->onUpdated(std::tr1::bind(&ThisType::handleMessageUpdated, this));
+			message->onUpdated(std::bind(&ThisType::handleMessageUpdated, this));
 		}
 
-		t().addAccel(FALT, 'C', std::tr1::bind(&dwt::Control::setFocus, chat));
-		t().addAccel(FALT, 'M', std::tr1::bind(&dwt::Control::setFocus, message));
-		t().addAccel(FALT, 'S', std::tr1::bind(&ThisType::sendMessage_, this));
-		t().addAccel(0, VK_ESCAPE, std::tr1::bind(&ThisType::handleEscape, this));
-		t().addAccel(0, VK_F3, std::tr1::bind(&RichTextBox::findTextNext, chat));
+		t().addAccel(FALT, 'C', std::bind(&dwt::Control::setFocus, chat));
+		t().addAccel(FALT, 'M', std::bind(&dwt::Control::setFocus, message));
+		t().addAccel(FALT, 'S', std::bind(&ThisType::sendMessage_, this));
+		t().addAccel(0, VK_ESCAPE, std::bind(&ThisType::handleEscape, this));
+		t().addAccel(0, VK_F3, std::bind(&RichTextBox::findTextNext, chat));
 	}
 
 	virtual ~AspectChat() { }

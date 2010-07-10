@@ -41,12 +41,12 @@
 #include "Rectangle.h"
 #include "Point.h"
 #include "Message.h"
-#include "dwt_unordered_map.h"
 #include "Dispatcher.h"
+#include <unordered_map>
 
 namespace dwt {
 
-using namespace std::tr1::placeholders;
+using namespace std::placeholders;
 
 template<typename T>
 T hwnd_cast(HWND hwnd);
@@ -106,10 +106,10 @@ public:
 	  */
 	void addRemoveExStyle(DWORD addStyle, bool add);
 
-	typedef std::tr1::function<bool(const MSG& msg, LRESULT& ret)> CallbackType;
+	typedef std::function<bool(const MSG& msg, LRESULT& ret)> CallbackType;
 	typedef std::list<CallbackType> CallbackList;
 	typedef CallbackList::iterator CallbackIter;
-	typedef std::tr1::unordered_map<Message, CallbackList> CallbackCollectionType;
+	typedef std::unordered_map<Message, CallbackList> CallbackCollectionType;
 
 	/// Adds a new callback - multiple callbacks for the same message will be called in the order they were added
 	CallbackIter addCallback(const Message& msg, const CallbackType& callback);

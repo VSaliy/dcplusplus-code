@@ -544,7 +544,7 @@ void Table::createArrows() {
 
 		dc_compat.fill(rect, brush_bg);
 
-		XFORM xform = { 1, 0, 0, -1, 0, size.y }; // horizontal reflection then downwards translation
+		XFORM xform = { 1, 0, 0, -1, 0, static_cast<FLOAT>(size.y) }; // horizontal reflection then downwards translation
 		dc_compat.fill(*region.transform(&xform), brush_arrow);
 	}
 }
