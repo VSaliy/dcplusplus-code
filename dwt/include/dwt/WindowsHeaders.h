@@ -75,6 +75,7 @@
 #include <assert.h>
 
 // Standard headers that most classes need
+#include <memory>
 #include <vector>
 #include <list>
 #include <boost/noncopyable.hpp>

@@ -30,7 +30,6 @@
 */
 
 #include <dwt/widgets/ToolTip.h>
-#include <memory>
 
 namespace dwt {
 
