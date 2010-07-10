@@ -150,7 +150,6 @@
 #  define BOOST_HAS_TR1_UTILITY
 #  define BOOST_HAS_TR1_UNORDERED_MAP
 #  define BOOST_HAS_TR1_UNORDERED_SET
-#  define BOOST_HAS_TR1_CMATH
 #else
 #  define BOOST_HAS_TR1_HASH
 #endif
