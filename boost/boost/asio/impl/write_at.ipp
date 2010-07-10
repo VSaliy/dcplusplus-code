@@ -2,7 +2,7 @@
 // write_at.ipp
 // ~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2008 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2010 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -38,7 +38,7 @@ std::size_t write_at(SyncRandomAccessWriteDevice& d,
   boost::asio::detail::consuming_buffers<
     const_buffer, ConstBufferSequence> tmp(buffers);
   std::size_t total_transferred = 0;
-  tmp.set_max_size(detail::adapt_completion_condition_result(
+  tmp.prepare(detail::adapt_completion_condition_result(
         completion_condition(ec, total_transferred)));
   while (tmp.begin() != tmp.end())
   {
@@ -46,7 +46,7 @@ std::size_t write_at(SyncRandomAccessWriteDevice& d,
         offset + total_transferred, tmp, ec);
     tmp.consume(bytes_transferred);
     total_transferred += bytes_transferred;
-    tmp.set_max_size(detail::adapt_completion_condition_result(
+    tmp.prepare(detail::adapt_completion_condition_result(
           completion_condition(ec, total_transferred)));
   }
   return total_transferred;
@@ -75,6 +75,8 @@ inline std::size_t write_at(SyncRandomAccessWriteDevice& d,
   boost::asio::detail::throw_error(ec);
   return bytes_transferred;
 }
+
+#if !defined(BOOST_NO_IOSTREAM)
 
 template <typename SyncRandomAccessWriteDevice, typename Allocator,
     typename CompletionCondition>
@@ -111,6 +113,8 @@ inline std::size_t write_at(SyncRandomAccessWriteDevice& d,
   return bytes_transferred;
 }
 
+#endif // !defined(BOOST_NO_IOSTREAM)
+
 namespace detail
 {
   template <typename AsyncRandomAccessWriteDevice, typename ConstBufferSequence,
@@ -138,7 +142,7 @@ namespace detail
     {
       total_transferred_ += bytes_transferred;
       buffers_.consume(bytes_transferred);
-      buffers_.set_max_size(detail::adapt_completion_condition_result(
+      buffers_.prepare(detail::adapt_completion_condition_result(
             completion_condition_(ec, total_transferred_)));
       if (buffers_.begin() == buffers_.end())
       {
@@ -167,7 +171,7 @@ namespace detail
         CompletionCondition, WriteHandler>* this_handler)
   {
     return boost_asio_handler_alloc_helpers::allocate(
-        size, &this_handler->handler_);
+        size, this_handler->handler_);
   }
 
   template <typename AsyncRandomAccessWriteDevice, typename ConstBufferSequence,
@@ -177,7 +181,7 @@ namespace detail
         CompletionCondition, WriteHandler>* this_handler)
   {
     boost_asio_handler_alloc_helpers::deallocate(
-        pointer, size, &this_handler->handler_);
+        pointer, size, this_handler->handler_);
   }
 
   template <typename Function, typename AsyncRandomAccessWriteDevice,
@@ -188,7 +192,7 @@ namespace detail
         CompletionCondition, WriteHandler>* this_handler)
   {
     boost_asio_handler_invoke_helpers::invoke(
-        function, &this_handler->handler_);
+        function, this_handler->handler_);
   }
 } // namespace detail
 
@@ -203,7 +207,7 @@ inline void async_write_at(AsyncRandomAccessWriteDevice& d,
 
   boost::system::error_code ec;
   std::size_t total_transferred = 0;
-  tmp.set_max_size(detail::adapt_completion_condition_result(
+  tmp.prepare(detail::adapt_completion_condition_result(
         completion_condition(ec, total_transferred)));
   if (tmp.begin() == tmp.end())
   {
@@ -226,6 +230,8 @@ inline void async_write_at(AsyncRandomAccessWriteDevice& d,
 {
   async_write_at(d, offset, buffers, transfer_all(), handler);
 }
+
+#if !defined(BOOST_NO_IOSTREAM)
 
 namespace detail
 {
@@ -261,7 +267,7 @@ namespace detail
         Allocator, WriteHandler>* this_handler)
   {
     return boost_asio_handler_alloc_helpers::allocate(
-        size, &this_handler->handler_);
+        size, this_handler->handler_);
   }
 
   template <typename AsyncRandomAccessWriteDevice, typename Allocator,
@@ -271,7 +277,7 @@ namespace detail
         Allocator, WriteHandler>* this_handler)
   {
     boost_asio_handler_alloc_helpers::deallocate(
-        pointer, size, &this_handler->handler_);
+        pointer, size, this_handler->handler_);
   }
 
   template <typename Function, typename AsyncRandomAccessWriteDevice,
@@ -281,7 +287,7 @@ namespace detail
         Allocator, WriteHandler>* this_handler)
   {
     boost_asio_handler_invoke_helpers::invoke(
-        function, &this_handler->handler_);
+        function, this_handler->handler_);
   }
 } // namespace detail
 
@@ -304,6 +310,8 @@ inline void async_write_at(AsyncRandomAccessWriteDevice& d,
 {
   async_write_at(d, offset, b, transfer_all(), handler);
 }
+
+#endif // !defined(BOOST_NO_IOSTREAM)
 
 } // namespace asio
 } // namespace boost

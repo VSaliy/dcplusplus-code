@@ -2,7 +2,7 @@
 // socket_types.hpp
 // ~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2008 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2010 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -68,13 +68,15 @@
 #   define WIN32_LEAN_AND_MEAN
 #  endif // !defined(WIN32_LEAN_AND_MEAN)
 # endif // !defined(BOOST_ASIO_NO_WIN32_LEAN_AND_MEAN)
+# if !defined(BOOST_ASIO_NO_NOMINMAX)
+#  if !defined(NOMINMAX)
+#   define NOMINMAX 1
+#  endif // !defined(NOMINMAX)
+# endif // !defined(BOOST_ASIO_NO_NOMINMAX)
 # if defined(__CYGWIN__)
 #  if !defined(__USE_W32_SOCKETS)
 #   error You must add -D__USE_W32_SOCKETS to your compiler options.
 #  endif // !defined(__USE_W32_SOCKETS)
-#  if !defined(NOMINMAX)
-#   define NOMINMAX 1
-#  endif // !defined(NOMINMAX)
 # endif // defined(__CYGWIN__)
 # include <winsock2.h>
 # include <ws2tcpip.h>
@@ -163,7 +165,11 @@ typedef int socket_type;
 const int invalid_socket = -1;
 const int socket_error_retval = -1;
 const int max_addr_v4_str_len = INET_ADDRSTRLEN;
+#if defined(INET6_ADDRSTRLEN)
 const int max_addr_v6_str_len = INET6_ADDRSTRLEN + 1 + IF_NAMESIZE;
+#else // defined(INET6_ADDRSTRLEN)
+const int max_addr_v6_str_len = 256;
+#endif // defined(INET6_ADDRSTRLEN)
 typedef sockaddr socket_addr_type;
 typedef in_addr in4_addr_type;
 # if defined(__hpux)

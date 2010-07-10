@@ -2,7 +2,7 @@
 // read_at.ipp
 // ~~~~~~~~~~~
 //
-// Copyright (c) 2003-2008 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2010 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -43,7 +43,7 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
   boost::asio::detail::consuming_buffers<
     mutable_buffer, MutableBufferSequence> tmp(buffers);
   std::size_t total_transferred = 0;
-  tmp.set_max_size(detail::adapt_completion_condition_result(
+  tmp.prepare(detail::adapt_completion_condition_result(
         completion_condition(ec, total_transferred)));
   while (tmp.begin() != tmp.end())
   {
@@ -51,7 +51,7 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
         offset + total_transferred, tmp, ec);
     tmp.consume(bytes_transferred);
     total_transferred += bytes_transferred;
-    tmp.set_max_size(detail::adapt_completion_condition_result(
+    tmp.prepare(detail::adapt_completion_condition_result(
           completion_condition(ec, total_transferred)));
   }
   return total_transferred;
@@ -80,6 +80,8 @@ inline std::size_t read_at(SyncRandomAccessReadDevice& d,
   boost::asio::detail::throw_error(ec);
   return bytes_transferred;
 }
+
+#if !defined(BOOST_NO_IOSTREAM)
 
 template <typename SyncRandomAccessReadDevice, typename Allocator,
     typename CompletionCondition>
@@ -126,6 +128,8 @@ inline std::size_t read_at(SyncRandomAccessReadDevice& d,
   return bytes_transferred;
 }
 
+#endif // !defined(BOOST_NO_IOSTREAM)
+
 namespace detail
 {
   template <typename AsyncRandomAccessReadDevice,
@@ -154,7 +158,7 @@ namespace detail
     {
       total_transferred_ += bytes_transferred;
       buffers_.consume(bytes_transferred);
-      buffers_.set_max_size(detail::adapt_completion_condition_result(
+      buffers_.prepare(detail::adapt_completion_condition_result(
             completion_condition_(ec, total_transferred_)));
       if (buffers_.begin() == buffers_.end())
       {
@@ -184,7 +188,7 @@ namespace detail
         CompletionCondition, ReadHandler>* this_handler)
   {
     return boost_asio_handler_alloc_helpers::allocate(
-        size, &this_handler->handler_);
+        size, this_handler->handler_);
   }
 
   template <typename AsyncRandomAccessReadDevice,
@@ -195,7 +199,7 @@ namespace detail
         CompletionCondition, ReadHandler>* this_handler)
   {
     boost_asio_handler_alloc_helpers::deallocate(
-        pointer, size, &this_handler->handler_);
+        pointer, size, this_handler->handler_);
   }
 
   template <typename Function, typename AsyncRandomAccessReadDevice,
@@ -206,7 +210,7 @@ namespace detail
         CompletionCondition, ReadHandler>* this_handler)
   {
     boost_asio_handler_invoke_helpers::invoke(
-        function, &this_handler->handler_);
+        function, this_handler->handler_);
   }
 } // namespace detail
 
@@ -221,7 +225,7 @@ inline void async_read_at(AsyncRandomAccessReadDevice& d,
 
   boost::system::error_code ec;
   std::size_t total_transferred = 0;
-  tmp.set_max_size(detail::adapt_completion_condition_result(
+  tmp.prepare(detail::adapt_completion_condition_result(
         completion_condition(ec, total_transferred)));
   if (tmp.begin() == tmp.end())
   {
@@ -244,6 +248,8 @@ inline void async_read_at(AsyncRandomAccessReadDevice& d,
 {
   async_read_at(d, offset, buffers, transfer_all(), handler);
 }
+
+#if !defined(BOOST_NO_IOSTREAM)
 
 namespace detail
 {
@@ -301,7 +307,7 @@ namespace detail
         CompletionCondition, ReadHandler>* this_handler)
   {
     return boost_asio_handler_alloc_helpers::allocate(
-        size, &this_handler->handler_);
+        size, this_handler->handler_);
   }
 
   template <typename AsyncRandomAccessReadDevice, typename Allocator,
@@ -311,7 +317,7 @@ namespace detail
         CompletionCondition, ReadHandler>* this_handler)
   {
     boost_asio_handler_alloc_helpers::deallocate(
-        pointer, size, &this_handler->handler_);
+        pointer, size, this_handler->handler_);
   }
 
   template <typename Function, typename AsyncRandomAccessReadDevice,
@@ -321,7 +327,7 @@ namespace detail
         CompletionCondition, ReadHandler>* this_handler)
   {
     boost_asio_handler_invoke_helpers::invoke(
-        function, &this_handler->handler_);
+        function, this_handler->handler_);
   }
 } // namespace detail
 
@@ -358,6 +364,8 @@ inline void async_read_at(AsyncRandomAccessReadDevice& d,
 {
   async_read_at(d, offset, b, transfer_all(), handler);
 }
+
+#endif // !defined(BOOST_NO_IOSTREAM)
 
 } // namespace asio
 } // namespace boost
