@@ -116,7 +116,7 @@ class AspectKeyboard : public AspectKeyboardBase
 
 	struct KeyDispatcher
 	{
-		typedef std::tr1::function<bool (int)> F;
+		typedef std::function<bool (int)> F;
 
 		KeyDispatcher(const F& f_) : f(f_) { }
 

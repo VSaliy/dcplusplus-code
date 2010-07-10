@@ -85,7 +85,7 @@ class Tree :
 protected:
 	struct Dispatcher
 	{
-		typedef std::tr1::function<bool (const tstring&)> F;
+		typedef std::function<bool (const tstring&)> F;
 
 		Dispatcher(const F& f_) : f(f_) { }
 

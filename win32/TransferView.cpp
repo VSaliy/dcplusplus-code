@@ -86,7 +86,7 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		cs.maxLength = 0;
 		cs.ctrlTab = true;
 		tabs = addChild(cs);
-		tabs->onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+		tabs->onHelp(std::bind(&WinUtil::help, _1, _2));
 	}
 
 	{
@@ -95,14 +95,14 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		cs.location = tabs->getClientSize();
 		connectionsWindow = dwt::WidgetCreator<Container>::create(tabs, cs);
 		connectionsWindow->setHelpId(IDH_CONNECTIONS);
-		connectionsWindow->onClosing(std::tr1::bind(&noClose));
+		connectionsWindow->onClosing(std::bind(&noClose));
 		tabs->add(connectionsWindow);
 
 		cs.style &= ~WS_VISIBLE;
 		cs.caption = T_("Downloads");
 		downloadsWindow = dwt::WidgetCreator<Container>::create(tabs, cs);
 		downloadsWindow->setHelpId(IDH_DOWNLOADS);
-		downloadsWindow->onClosing(std::tr1::bind(&noClose));
+		downloadsWindow->onClosing(std::bind(&noClose));
 		tabs->add(downloadsWindow);
 	}
 
@@ -119,10 +119,10 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		connections->setColor(WinUtil::textColor, WinUtil::bgColor);
 		connections->setSort(CONNECTION_COLUMN_USER);
 
-		connections->onContextMenu(std::tr1::bind(&TransferView::handleConnectionsMenu, this, _1));
-		connections->onKeyDown(std::tr1::bind(&TransferView::handleKeyDown, this, _1));
-		connections->onDblClicked(std::tr1::bind(&TransferView::handleDblClicked, this));
-		connections->onRaw(std::tr1::bind(&TransferView::handleCustomDraw, this, _1, _2), dwt::Message(WM_NOTIFY, NM_CUSTOMDRAW));
+		connections->onContextMenu(std::bind(&TransferView::handleConnectionsMenu, this, _1));
+		connections->onKeyDown(std::bind(&TransferView::handleKeyDown, this, _1));
+		connections->onDblClicked(std::bind(&TransferView::handleDblClicked, this));
+		connections->onRaw(std::bind(&TransferView::handleCustomDraw, this, _1, _2), dwt::Message(WM_NOTIFY, NM_CUSTOMDRAW));
 	}
 
 	{
@@ -133,15 +133,15 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		downloads->setColor(WinUtil::textColor, WinUtil::bgColor);
 		downloads->setSmallImageList(WinUtil::fileImages);
 
-		downloads->onContextMenu(std::tr1::bind(&TransferView::handleDownloadsMenu, this, _1));
-		downloads->onRaw(std::tr1::bind(&TransferView::handleCustomDraw, this, _1, _2), dwt::Message(WM_NOTIFY, NM_CUSTOMDRAW));
+		downloads->onContextMenu(std::bind(&TransferView::handleDownloadsMenu, this, _1));
+		downloads->onRaw(std::bind(&TransferView::handleCustomDraw, this, _1, _2), dwt::Message(WM_NOTIFY, NM_CUSTOMDRAW));
 	}
 
-	connectionsWindow->onSized(std::tr1::bind(&fills, connectionsWindow, connections));
-	downloadsWindow->onSized(std::tr1::bind(&fills, downloadsWindow, downloads));
+	connectionsWindow->onSized(std::bind(&fills, connectionsWindow, connections));
+	downloadsWindow->onSized(std::bind(&fills, downloadsWindow, downloads));
 
-	onSized(std::tr1::bind(&TransferView::handleSized, this, _1));
-	onRaw(std::tr1::bind(&TransferView::handleDestroy, this), dwt::Message(WM_DESTROY));
+	onSized(std::bind(&TransferView::handleSized, this, _1));
+	onRaw(std::bind(&TransferView::handleDestroy, this), dwt::Message(WM_DESTROY));
 	noEraseBackground();
 
 	layout();
@@ -187,10 +187,10 @@ MenuPtr TransferView::makeContextMenu(ConnectionInfo* ii) {
 	appendUserItems(mdi, menu, false);
 	menu->appendSeparator();
 
-	menu->appendItem(T_("&Force attempt"), std::tr1::bind(&TransferView::handleForce, this));
-	menu->appendItem(T_("Copy &nick to clipboard"), std::tr1::bind(&TransferView::handleCopyNick, this));
+	menu->appendItem(T_("&Force attempt"), std::bind(&TransferView::handleForce, this));
+	menu->appendItem(T_("Copy &nick to clipboard"), std::bind(&TransferView::handleCopyNick, this));
 	menu->appendSeparator();
-	menu->appendItem(T_("&Disconnect"), std::tr1::bind(&TransferView::handleDisconnect, this));
+	menu->appendItem(T_("&Disconnect"), std::bind(&TransferView::handleDisconnect, this));
 
 	return menu;
 }
@@ -456,7 +456,7 @@ int TransferView::ConnectionInfo::compareItems(ConnectionInfo* a, ConnectionInfo
 
 void TransferView::addTask(int type, Task* ui) {
 	tasks.add(type, ui);
-	callAsync(std::tr1::bind(&TransferView::execTasks, this));
+	callAsync(std::bind(&TransferView::execTasks, this));
 }
 
 void TransferView::execTasks() {
@@ -476,7 +476,7 @@ void TransferView::execTasks() {
 			ii->update(*ui);
 			connections->insert(ii);
 		} else if(i->first == CONNECTIONS_REMOVE) {
-			auto_ptr<UpdateInfo> ui(static_cast<UpdateInfo*>(i->second));
+			unique_ptr<UpdateInfo> ui(static_cast<UpdateInfo*>(i->second));
 			int ic = connections->size();
 			for(int i = 0; i < ic; ++i) {
 				ConnectionInfo* ii = connections->getData(i);
@@ -805,7 +805,7 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) thr
 		tasks.add(DOWNLOADS_TICK, *i);
 	}
 
-	callAsync(std::tr1::bind(&TransferView::execTasks, this));
+	callAsync(std::bind(&TransferView::execTasks, this));
 }
 
 void TransferView::on(DownloadManagerListener::Failed, Download* d, const string& aReason) throw() {
@@ -850,7 +850,7 @@ void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) throw()
 		onTransferTick(*i, false);
 	}
 
-	callAsync(std::tr1::bind(&TransferView::execTasks, this));
+	callAsync(std::bind(&TransferView::execTasks, this));
 }
 
 void TransferView::on(DownloadManagerListener::Complete, Download* d) throw() {

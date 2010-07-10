@@ -73,13 +73,13 @@ remove(0)
 			row->addChild(Label::Seed(T_("Total size:")));
 			total = row->addChild(Label::Seed(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize()))));
 
-			row->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::tr1::bind(&UploadPage::handleAddClicked, this));
+			row->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::bind(&UploadPage::handleAddClicked, this));
 
 			rename = row->addChild(Button::Seed(T_("Re&name")));
-			rename->onClicked(std::tr1::bind(&UploadPage::handleRenameClicked, this));
+			rename->onClicked(std::bind(&UploadPage::handleRenameClicked, this));
 
 			remove = row->addChild(Button::Seed(T_("&Remove")));
-			remove->onClicked(std::tr1::bind(&UploadPage::handleRemoveClicked, this));
+			remove->onClicked(std::bind(&UploadPage::handleRemoveClicked, this));
 		}
 
 		cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")));
@@ -87,7 +87,7 @@ remove(0)
 		// dummy grid so that the check-box doesn't fill the whole row.
 		CheckBoxPtr shareHidden = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Share hidden files")));
 		items.push_back(Item(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL));
-		shareHidden->onClicked(std::tr1::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden, items.back()));
+		shareHidden->onClicked(std::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden, items.back()));
 		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);
 	}
 
@@ -131,10 +131,10 @@ remove(0)
 
 	handleSelectionChanged();
 
-	directories->onDblClicked(std::tr1::bind(&UploadPage::handleDoubleClick, this));
-	directories->onKeyDown(std::tr1::bind(&UploadPage::handleKeyDown, this, _1));
-	directories->onSelectionChanged(std::tr1::bind(&UploadPage::handleSelectionChanged, this));
-	directories->onDragDrop(std::tr1::bind(&UploadPage::handleDragDrop, this, _1));
+	directories->onDblClicked(std::bind(&UploadPage::handleDoubleClick, this));
+	directories->onKeyDown(std::bind(&UploadPage::handleKeyDown, this, _1));
+	directories->onSelectionChanged(std::bind(&UploadPage::handleSelectionChanged, this));
+	directories->onDragDrop(std::bind(&UploadPage::handleDragDrop, this, _1));
 }
 
 UploadPage::~UploadPage() {

@@ -59,13 +59,13 @@ remove(0)
 	}
 
 	ButtonPtr add = grid->addChild(Button::Seed(T_("&Add folder")));
-	add->onClicked(std::tr1::bind(&FavoriteDirsPage::handleAddClicked, this));
+	add->onClicked(std::bind(&FavoriteDirsPage::handleAddClicked, this));
 	add->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_ADD);
 	rename = grid->addChild(Button::Seed(T_("Re&name")));
-	rename->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRenameClicked, this));
+	rename->onClicked(std::bind(&FavoriteDirsPage::handleRenameClicked, this));
 	rename->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_RENAME);
 	remove = grid->addChild(Button::Seed(T_("&Remove")));
-	remove->onClicked(std::tr1::bind(&FavoriteDirsPage::handleRemoveClicked, this));
+	remove->onClicked(std::bind(&FavoriteDirsPage::handleRemoveClicked, this));
 	remove->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_REMOVE);
 
 	WinUtil::makeColumns(directories, columns, 2);
@@ -76,10 +76,10 @@ remove(0)
 
 	handleSelectionChanged();
 
-	directories->onDblClicked(std::tr1::bind(&FavoriteDirsPage::handleDoubleClick, this));
-	directories->onKeyDown(std::tr1::bind(&FavoriteDirsPage::handleKeyDown, this, _1));
-	directories->onSelectionChanged(std::tr1::bind(&FavoriteDirsPage::handleSelectionChanged, this));
-	directories->onDragDrop(std::tr1::bind(&FavoriteDirsPage::handleDragDrop, this, _1));
+	directories->onDblClicked(std::bind(&FavoriteDirsPage::handleDoubleClick, this));
+	directories->onKeyDown(std::bind(&FavoriteDirsPage::handleKeyDown, this, _1));
+	directories->onSelectionChanged(std::bind(&FavoriteDirsPage::handleSelectionChanged, this));
+	directories->onDragDrop(std::bind(&FavoriteDirsPage::handleDragDrop, this, _1));
 }
 
 FavoriteDirsPage::~FavoriteDirsPage() {

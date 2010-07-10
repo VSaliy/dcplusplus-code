@@ -44,8 +44,8 @@ edit(0),
 priv_box(0),
 parentEntry(parentEntry_)
 {
-	onInitDialog(std::tr1::bind(&FavHubGroupsDlg::handleInitDialog, this));
-	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+	onInitDialog(std::bind(&FavHubGroupsDlg::handleInitDialog, this));
+	onHelp(std::bind(&WinUtil::help, _1, _2));
 }
 
 FavHubGroupsDlg::~FavHubGroupsDlg() {
@@ -98,12 +98,12 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		Button::Seed seed(T_("&Update"));
 		update = cur->addChild(seed);
 		update->setHelpId(IDH_FAV_HUB_GROUPS_UPDATE);
-		update->onClicked(std::tr1::bind(&FavHubGroupsDlg::handleUpdate, this));
+		update->onClicked(std::bind(&FavHubGroupsDlg::handleUpdate, this));
 
 		seed.caption = T_("&Remove");
 		remove = cur->addChild(seed);
 		remove->setHelpId(IDH_FAV_HUB_GROUPS_REMOVE);
-		remove->onClicked(std::tr1::bind(&FavHubGroupsDlg::handleRemove, this));
+		remove->onClicked(std::bind(&FavHubGroupsDlg::handleRemove, this));
 	}
 
 	{
@@ -133,7 +133,7 @@ bool FavHubGroupsDlg::handleInitDialog() {
 
 			ButtonPtr add = cur2->addChild(Button::Seed(T_("&Add to the list")));
 			add->setHelpId(IDH_FAV_HUB_GROUPS_ADD);
-			add->onClicked(std::tr1::bind(&FavHubGroupsDlg::handleAdd, this));
+			add->onClicked(std::bind(&FavHubGroupsDlg::handleAdd, this));
 		}
 	}
 
@@ -143,8 +143,8 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 
 		pair<ButtonPtr, ButtonPtr> buttons = WinUtil::addDlgButtons(cur,
-			std::tr1::bind(&FavHubGroupsDlg::handleClose, this),
-			std::tr1::bind(&FavHubGroupsDlg::handleClose, this));
+			std::bind(&FavHubGroupsDlg::handleClose, this),
+			std::bind(&FavHubGroupsDlg::handleClose, this));
 		buttons.first->setText(T_("&Close"));
 		buttons.second->setVisible(false);
 	}
@@ -161,8 +161,8 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		groups->setSort(COLUMN_NAME);
 	}
 
-	groups->onKeyDown(std::tr1::bind(&FavHubGroupsDlg::handleKeyDown, this, _1));
-	groups->onSelectionChanged(std::tr1::bind(&FavHubGroupsDlg::handleSelectionChanged, this));
+	groups->onKeyDown(std::bind(&FavHubGroupsDlg::handleKeyDown, this, _1));
+	groups->onSelectionChanged(std::bind(&FavHubGroupsDlg::handleSelectionChanged, this));
 
 	handleSelectionChanged();
 
@@ -230,7 +230,7 @@ void FavHubGroupsDlg::handleUpdate() {
 }
 
 void FavHubGroupsDlg::handleRemove() {
-	groups->forEachSelectedT(std::tr1::bind(&FavHubGroupsDlg::removeGroup, this, _1), true);
+	groups->forEachSelectedT(std::bind(&FavHubGroupsDlg::removeGroup, this, _1), true);
 }
 
 void FavHubGroupsDlg::handleAdd() {

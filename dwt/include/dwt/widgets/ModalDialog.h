@@ -68,7 +68,7 @@ class ModalDialog :
 	typedef Frame BaseType;
 	struct Dispatcher
 	{
-		typedef std::tr1::function<bool ()> F;
+		typedef std::function<bool ()> F;
 
 		Dispatcher(const F& f_) : f(f_) { }
 

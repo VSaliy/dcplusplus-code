@@ -62,7 +62,7 @@ void RichTextBox::addCommands(MenuPtr menu) {
 	BaseType::addCommands(menu);
 
 	menu->appendSeparator();
-	menu->appendItem(T_("&Find...\tF3"), std::tr1::bind(&RichTextBox::handleFind, this), dwt::IconPtr(), !getText().empty());
+	menu->appendItem(T_("&Find...\tF3"), std::bind(&RichTextBox::handleFind, this), dwt::IconPtr(), !getText().empty());
 }
 
 bool RichTextBox::handleKeyDown(int c) {

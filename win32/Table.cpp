@@ -28,5 +28,5 @@ BaseType::Seed()
 Table::Table(dwt::Widget* parent) :
 BaseType(parent)
 {
-	addAccel(FCONTROL, 'A', std::tr1::bind(&Table::selectAll, this));
+	addAccel(FCONTROL, 'A', std::bind(&Table::selectAll, this));
 }

@@ -119,17 +119,17 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 	}
 
 	callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->addCallback(dwt::Message(WM_DRAWITEM),
-		Dispatcher(std::tr1::bind(&ShellMenu::handleDrawItem, this, _1, _2)))));
+		Dispatcher(std::bind(&ShellMenu::handleDrawItem, this, _1, _2)))));
 	callbacks.push_back(make_pair(dwt::Message(WM_MEASUREITEM), getParent()->addCallback(dwt::Message(WM_MEASUREITEM),
-		Dispatcher(std::tr1::bind(&ShellMenu::handleMeasureItem, this, _1, _2)))));
+		Dispatcher(std::bind(&ShellMenu::handleMeasureItem, this, _1, _2)))));
 	callbacks.push_back(make_pair(dwt::Message(WM_MENUCHAR), getParent()->addCallback(dwt::Message(WM_MENUCHAR),
-		Dispatcher(std::tr1::bind(&ShellMenu::dispatch, this, _1, _2)))));
+		Dispatcher(std::bind(&ShellMenu::dispatch, this, _1, _2)))));
 	callbacks.push_back(make_pair(dwt::Message(WM_INITMENUPOPUP), getParent()->addCallback(dwt::Message(WM_INITMENUPOPUP),
-		Dispatcher(std::tr1::bind(&ShellMenu::handleInitMenuPopup, this, _1, _2)))));
+		Dispatcher(std::bind(&ShellMenu::handleInitMenuPopup, this, _1, _2)))));
 	callbacks.push_back(make_pair(dwt::Message(WM_UNINITMENUPOPUP), getParent()->addCallback(dwt::Message(WM_UNINITMENUPOPUP),
-		Dispatcher(std::tr1::bind(&ShellMenu::handleUnInitMenuPopup, this, _1, _2)))));
+		Dispatcher(std::bind(&ShellMenu::handleUnInitMenuPopup, this, _1, _2)))));
 	callbacks.push_back(make_pair(dwt::Message(WM_MENUSELECT), getParent()->addCallback(dwt::Message(WM_MENUSELECT),
-		Dispatcher(std::tr1::bind(&ShellMenu::handleMenuSelect, this, _1)))));
+		Dispatcher(std::bind(&ShellMenu::handleMenuSelect, this, _1)))));
 }
 
 ShellMenu::~ShellMenu() {

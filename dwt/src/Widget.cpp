@@ -150,7 +150,7 @@ void checkCall(HWND handle, const Application::Callback& f) {
 }
 
 void Widget::callAsync(const Application::Callback& f) {
-	Application::instance().callAsync(std::tr1::bind(&checkCall, handle(), f));
+	Application::instance().callAsync(std::bind(&checkCall, handle(), f));
 }
 
 bool Widget::handleMessage(const MSG &msg, LRESULT &retVal) {

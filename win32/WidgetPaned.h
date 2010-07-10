@@ -144,9 +144,9 @@ void WidgetPaned< horizontal >::create( const Seed & cs )
 	pos = cs.pos;
 	BaseType::create(cs);
 
-	onLeftMouseDown(std::tr1::bind(&ThisType::handleLButtonDown, this));
-	onMouseMove(std::tr1::bind(&ThisType::handleMouseMove, this, _1));
-	onLeftMouseUp(std::tr1::bind(&ThisType::handleLButtonUp, this));
+	onLeftMouseDown(std::bind(&ThisType::handleLButtonDown, this));
+	onMouseMove(std::bind(&ThisType::handleMouseMove, this, _1));
+	onLeftMouseUp(std::bind(&ThisType::handleLButtonUp, this));
 }
 
 template< bool horizontal >

@@ -55,7 +55,7 @@ class AspectRaw
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	struct RawDispatcher {
-		typedef std::tr1::function<LRESULT (WPARAM, LPARAM)> F;
+		typedef std::function<LRESULT (WPARAM, LPARAM)> F;
 
 		RawDispatcher(const F& f_) : f(f_) { }
 

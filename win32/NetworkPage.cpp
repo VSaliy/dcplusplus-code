@@ -171,8 +171,8 @@ socksServer(0)
 	PropPage::read(items);
 
 	fixControlsOut();
-	directOut->onClicked(std::tr1::bind(&NetworkPage::fixControlsOut, this));
-	socks5->onClicked(std::tr1::bind(&NetworkPage::fixControlsOut, this));
+	directOut->onClicked(std::bind(&NetworkPage::fixControlsOut, this));
+	socks5->onClicked(std::bind(&NetworkPage::fixControlsOut, this));
 }
 
 NetworkPage::~NetworkPage() {

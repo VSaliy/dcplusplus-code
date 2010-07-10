@@ -64,7 +64,7 @@ class DateTime :
 
 	struct Dispatcher
 	{
-		typedef std::tr1::function<void (const SYSTEMTIME &)> F;
+		typedef std::function<void (const SYSTEMTIME &)> F;
 
 		Dispatcher(const F& f_) : f(f_) { }
 

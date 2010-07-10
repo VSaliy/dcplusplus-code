@@ -41,7 +41,7 @@ class AspectCloseable {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
 	struct CloseableDispatcher {
-		typedef std::tr1::function<bool ()> F;
+		typedef std::function<bool ()> F;
 
 		CloseableDispatcher(const F& f_) : f(f_) { }
 

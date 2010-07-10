@@ -38,8 +38,8 @@ active(0),
 autoQueue(0),
 search(_search)
 {
-	onInitDialog(std::tr1::bind(&ADLSProperties::handleInitDialog, this));
-	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+	onInitDialog(std::bind(&ADLSProperties::handleInitDialog, this));
+	onHelp(std::bind(&WinUtil::help, _1, _2));
 }
 
 ADLSProperties::~ADLSProperties() {
@@ -106,8 +106,8 @@ bool ADLSProperties::handleInitDialog() {
 	}
 
 	WinUtil::addDlgButtons(grid,
-		std::tr1::bind(&ADLSProperties::handleOKClicked, this),
-		std::tr1::bind(&ADLSProperties::endDialog, this, IDCANCEL));
+		std::bind(&ADLSProperties::handleOKClicked, this),
+		std::bind(&ADLSProperties::endDialog, this, IDCANCEL));
 
 	setText(T_("ADLSearch Properties"));
 

@@ -42,7 +42,7 @@ class AspectTimer {
 	HWND H() { return W().handle(); }
 
 	struct TimerDispatcher {
-		typedef std::tr1::function<bool ()> F;
+		typedef std::function<bool ()> F;
 
 		TimerDispatcher(const F& f_) : f(f_) { }
 

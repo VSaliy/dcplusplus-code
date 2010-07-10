@@ -161,7 +161,7 @@ public:
 	GETSET(UserPtr, user, User);
 	GETSET(uint32_t, sid, SID);
 private:
-	typedef std::tr1::unordered_map<short, string> InfMap;
+	typedef std::unordered_map<short, string> InfMap;
 	typedef InfMap::iterator InfIter;
 	InfMap info;
 

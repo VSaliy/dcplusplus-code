@@ -58,7 +58,7 @@ class ToolBar :
 {
 	typedef Control BaseType;
 	typedef Dispatchers::VoidVoid<> Dispatcher;
-	typedef std::tr1::function<void (const ScreenCoordinate&)> DropDownFunction;
+	typedef std::function<void (const ScreenCoordinate&)> DropDownFunction;
 	friend class WidgetCreator<ToolBar>;
 public:
 	/// Class type

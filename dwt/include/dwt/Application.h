@@ -93,7 +93,7 @@ class Application :public boost::noncopyable
 	friend class Widget;
 	friend class Policies::ModelessDialog;
 public:
-	typedef std::tr1::function<void()> Callback;
+	typedef std::function<void()> Callback;
 
 	/// Returns the Application object
 	/** Use this static function to access the Application object.
@@ -118,7 +118,7 @@ public:
 	tstring getModuleFileName() const;
 
 	/** A function that should return true if it processed the message and false otherwise */
-	typedef std::tr1::function<bool (MSG&)> FilterFunction;
+	typedef std::function<bool (MSG&)> FilterFunction;
 	// List because its iterators aren't invalidated on add/delete...
 	typedef std::list<FilterFunction> FilterList;
 	typedef FilterList::iterator FilterIter;

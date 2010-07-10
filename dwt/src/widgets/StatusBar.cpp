@@ -69,10 +69,10 @@ void StatusBar::create(const Seed& cs) {
 		setFont(cs.font);
 
 	tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
-	tip->setTool(this, std::tr1::bind(&StatusBar::handleToolTip, this, _1));
+	tip->setTool(this, std::bind(&StatusBar::handleToolTip, this, _1));
 
-	ClickType::onClicked(std::tr1::bind(&StatusBar::handleClicked, this));
-	DblClickType::onDblClicked(std::tr1::bind(&StatusBar::handleDblClicked, this));
+	ClickType::onClicked(std::bind(&StatusBar::handleClicked, this));
+	DblClickType::onDblClicked(std::bind(&StatusBar::handleDblClicked, this));
 }
 
 void StatusBar::setSize(unsigned part, unsigned size) {

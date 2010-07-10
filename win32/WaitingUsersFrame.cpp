@@ -39,8 +39,8 @@ WaitingUsersFrame::WaitingUsersFrame(dwt::TabView* mdiParent) :
 	{
 		queued = addChild(WinUtil::Seeds::treeView);
 		addWidget(queued);
-		queued->onContextMenu(std::tr1::bind(&WaitingUsersFrame::handleContextMenu, this, _1));
-		queued->onChar(std::tr1::bind(&WaitingUsersFrame::handleChar, this, _1));
+		queued->onContextMenu(std::bind(&WaitingUsersFrame::handleContextMenu, this, _1));
+		queued->onChar(std::bind(&WaitingUsersFrame::handleChar, this, _1));
 	}
 
 	initStatus();
@@ -82,8 +82,8 @@ bool WaitingUsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 	appendUserItems(getParent(), menu);
 	menu->appendSeparator();
-	menu->appendItem(T_("&Copy filename"), std::tr1::bind(&WaitingUsersFrame::onCopyFilename, this));
-	menu->appendItem(T_("&Remove"), std::tr1::bind(&WaitingUsersFrame::onRemove, this));
+	menu->appendItem(T_("&Copy filename"), std::bind(&WaitingUsersFrame::onCopyFilename, this));
+	menu->appendItem(T_("&Remove"), std::bind(&WaitingUsersFrame::onRemove, this));
 
 	menu->open(pt);
 	return true;
@@ -151,10 +151,10 @@ WaitingUsersFrame::UserInfoList WaitingUsersFrame::selectedUsersImpl() const {
 
 // UploadManagerListener
 void WaitingUsersFrame::on(UploadManagerListener::WaitingAddFile, const HintedUser& aUser, const string& aFilename) throw() {
-	callAsync(std::tr1::bind(&WaitingUsersFrame::onAddFile, this, aUser, aFilename));
+	callAsync(std::bind(&WaitingUsersFrame::onAddFile, this, aUser, aFilename));
 }
 void WaitingUsersFrame::on(UploadManagerListener::WaitingRemoveUser, const HintedUser& aUser) throw() {
-	callAsync(std::tr1::bind(&WaitingUsersFrame::onRemoveUser, this, aUser));
+	callAsync(std::bind(&WaitingUsersFrame::onRemoveUser, this, aUser));
 }
 
 // Keyboard shortcuts

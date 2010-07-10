@@ -55,10 +55,8 @@
 		Also grab natupnp.h and move it to MinGW\include (needs to be obtained from the .Net 1.1 SDK)
 		<http://www.microsoft.com/downloads/details.aspx?FamilyID=9b3a2ca6-3647-4070-9f41-a333c6b9181d&DisplayLang=en>
 
-	b. Microsoft Visual C++ 9.0 (2008) with at least Service Pack 1:
-
-		Get <https://connect.microsoft.com/VisualStudio/Downloads/DownloadDetails.aspx?DownloadID=17034&amp;wa=wsignin1.0>,
-		a hotfixed-hotfix which fixes SP1.
+	b. Microsoft Visual C++ 10 (2010):
+	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
 
 		Download OpenSSL from www.openssl.org and compile it. You should get libraries called
 		libeay32.lib and ssleay32.lib; copy them in openssl/lib.
@@ -67,14 +65,6 @@
 		(read their instructions file; it's a matter of adding "debug" in the do_* file you use).
 		Rename debug libraries to libeay32d.lib and ssleay32d.lib; put them in openssl/lib.
 
-	c. Other:
-
-		You are on your own.
-
-		DC++ requires tr1 containers to be compiled. Those are already provided when using MinGW and
-		MSVC 9 SP1. Other ways of getting tr1 containers are using boost or STLPort (make sure to turn off
-		nativestl (see "scons -h") and compile/install STLPort in the stlport directory), but in these
-		cases you will probably encounter compile problems.
 
 3. Starting the build process
 
@@ -95,6 +85,7 @@
 		For more possible arguments, consult the SCons manual.
 
 		If you have problems, use google. It works for me.
+
 
 4.  Other information and submitting patches
 

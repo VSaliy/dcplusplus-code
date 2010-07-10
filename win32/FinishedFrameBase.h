@@ -80,14 +80,14 @@ protected:
 			cs.location = tabs->getClientSize();
 			filesWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
 			filesWindow->setHelpId(in_UL ? IDH_FINISHED_UL : IDH_FINISHED_DL);
-			filesWindow->onClosing(std::tr1::bind(&noClose));
+			filesWindow->onClosing(std::bind(&noClose));
 			tabs->add(filesWindow, WinUtil::tabIcon(IDI_GROUPED_BY_FILES));
 
 			cs.style &= ~WS_VISIBLE;
 			cs.caption = T_("Grouped by users");
 			usersWindow = dwt::WidgetCreator<dwt::Container>::create(tabs, cs);
 			usersWindow->setHelpId(in_UL ? IDH_FINISHED_UL : IDH_FINISHED_DL);
-			usersWindow->onClosing(std::tr1::bind(&noClose));
+			usersWindow->onClosing(std::bind(&noClose));
 			tabs->add(usersWindow, WinUtil::tabIcon(IDI_GROUPED_BY_USERS));
 		}
 
@@ -102,9 +102,9 @@ protected:
 
 			files->setSmallImageList(WinUtil::fileImages);
 
-			files->onDblClicked(std::tr1::bind(&ThisType::handleOpenFile, this));
-			files->onKeyDown(std::tr1::bind(&ThisType::handleFilesKeyDown, this, _1));
-			files->onContextMenu(std::tr1::bind(&ThisType::handleFilesContextMenu, this, _1));
+			files->onDblClicked(std::bind(&ThisType::handleOpenFile, this));
+			files->onKeyDown(std::bind(&ThisType::handleFilesKeyDown, this, _1));
+			files->onContextMenu(std::bind(&ThisType::handleFilesContextMenu, this, _1));
 		}
 
 		{
@@ -118,12 +118,12 @@ protected:
 
 			users->setSmallImageList(WinUtil::userImages);
 
-			users->onKeyDown(std::tr1::bind(&ThisType::handleUsersKeyDown, this, _1));
-			users->onContextMenu(std::tr1::bind(&ThisType::handleUsersContextMenu, this, _1));
+			users->onKeyDown(std::bind(&ThisType::handleUsersKeyDown, this, _1));
+			users->onContextMenu(std::bind(&ThisType::handleUsersContextMenu, this, _1));
 		}
 
-		filesWindow->onSized(std::tr1::bind(&ThisType::fills, filesWindow, files));
-		usersWindow->onSized(std::tr1::bind(&ThisType::fills, usersWindow, users));
+		filesWindow->onSized(std::bind(&ThisType::fills, filesWindow, files));
+		usersWindow->onSized(std::bind(&ThisType::fills, usersWindow, users));
 
 		if(!in_UL) {
 			bOnlyFull = BOOLSETTING(FINISHED_DL_ONLY_FULL);
@@ -133,16 +133,16 @@ protected:
 				onlyFull = this->addChild(seed);
 				onlyFull->setHelpId(IDH_FINISHED_DL_ONLY_FULL);
 				onlyFull->setChecked(bOnlyFull);
-				onlyFull->onClicked(std::tr1::bind(&ThisType::handleOnlyFullClicked, this));
+				onlyFull->onClicked(std::bind(&ThisType::handleOnlyFullClicked, this));
 			}
 
-			filesWindow->onActivate(std::tr1::bind(&dwt::CheckBox::setVisible, onlyFull, _1));
+			filesWindow->onActivate(std::bind(&dwt::CheckBox::setVisible, onlyFull, _1));
 		}
 
 		this->initStatus();
 		if(onlyFull)
 			this->status->setSize(STATUS_ONLY_FULL, onlyFull->getPreferedSize().x);
-		this->status->onDblClicked(STATUS_STATUS, std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(in_UL ? LogManager::UPLOAD : LogManager::DOWNLOAD)))));
+		this->status->onDblClicked(STATUS_STATUS, std::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(in_UL ? LogManager::UPLOAD : LogManager::DOWNLOAD)))));
 
 		this->status->setHelpId(STATUS_COUNT, in_UL ? IDH_FINISHED_UL_COUNT : IDH_FINISHED_DL_COUNT);
 		this->status->setHelpId(STATUS_BYTES, in_UL ? IDH_FINISHED_UL_BYTES : IDH_FINISHED_DL_BYTES);
@@ -151,8 +151,8 @@ protected:
 		layout();
 		this->activate();
 
-		filesWindow->onActivate(std::tr1::bind(&ThisType::updateStatus, this, _1));
-		usersWindow->onActivate(std::tr1::bind(&ThisType::updateStatus, this, _1));
+		filesWindow->onActivate(std::bind(&ThisType::updateStatus, this, _1));
+		usersWindow->onActivate(std::bind(&ThisType::updateStatus, this, _1));
 
 		FinishedManager::getInstance()->addListener(this);
 
@@ -427,12 +427,12 @@ private:
 
 			ShellMenuPtr menu = filesWindow->addChild(ShellMenu::Seed());
 
-			menu->appendItem(T_("&View as text"), std::tr1::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), checker.allFilesExist && !checker.isBz2);
-			menu->appendItem(T_("&Open"), std::tr1::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), checker.allFilesExist, true);
-			menu->appendItem(T_("Open &folder"), std::tr1::bind(&ThisType::handleOpenFolder, this));
+			menu->appendItem(T_("&View as text"), std::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), checker.allFilesExist && !checker.isBz2);
+			menu->appendItem(T_("&Open"), std::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), checker.allFilesExist, true);
+			menu->appendItem(T_("Open &folder"), std::bind(&ThisType::handleOpenFolder, this));
 			menu->appendSeparator();
-			menu->appendItem(T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveFiles, this));
-			menu->appendItem(T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
+			menu->appendItem(T_("&Remove"), std::bind(&ThisType::handleRemoveFiles, this));
+			menu->appendItem(T_("Remove &all"), std::bind(&ThisType::handleRemoveAll, this));
 			menu->appendSeparator();
 			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
 			menu->appendShellMenu(checker.ShellMenuPaths);
@@ -450,8 +450,8 @@ private:
 			}
 
 			dwt::MenuPtr menu = usersWindow->addChild(WinUtil::Seeds::menu);
-			menu->appendItem(T_("&Remove"), std::tr1::bind(&ThisType::handleRemoveUsers, this));
-			menu->appendItem(T_("Remove &all"), std::tr1::bind(&ThisType::handleRemoveAll, this));
+			menu->appendItem(T_("&Remove"), std::bind(&ThisType::handleRemoveUsers, this));
+			menu->appendItem(T_("Remove &all"), std::bind(&ThisType::handleRemoveAll, this));
 			menu->appendSeparator();
 			WinUtil::addUserItems(menu, users->forEachSelectedT(UserCollector()).users, this->getParent());
 
@@ -462,11 +462,11 @@ private:
 	}
 
 	void handleViewAsText() {
-		files->forEachSelectedT(std::tr1::bind(&FileInfo::viewAsText, _1, this->getParent()));
+		files->forEachSelectedT(std::bind(&FileInfo::viewAsText, _1, this->getParent()));
 	}
 
 	void handleOpenFile() {
-		files->forEachSelectedT(std::tr1::bind(&FileInfo::open, _1, this->getParent(),
+		files->forEachSelectedT(std::bind(&FileInfo::open, _1, this->getParent(),
 			in_UL ? ShareManager::getInstance()->getOwnListFile() : Util::emptyString));
 	}
 
@@ -649,41 +649,41 @@ private:
 
 	virtual void on(AddedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
 		if(upload == in_UL)
-			callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
+			callAsync(std::bind(&ThisType::onAddedFile, this, file, entry));
 	}
 
 	virtual void on(AddedUser, bool upload, const HintedUser& user, const FinishedUserItemPtr& entry) throw() {
 		if(upload == in_UL)
-			callAsync(std::tr1::bind(&ThisType::onAddedUser, this, user, entry));
+			callAsync(std::bind(&ThisType::onAddedUser, this, user, entry));
 	}
 
 	virtual void on(UpdatedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
 		if(upload == in_UL) {
 			if(bOnlyFull && entry->isFull())
-				callAsync(std::tr1::bind(&ThisType::onAddedFile, this, file, entry));
+				callAsync(std::bind(&ThisType::onAddedFile, this, file, entry));
 			else
-				callAsync(std::tr1::bind(&ThisType::onUpdatedFile, this, file));
+				callAsync(std::bind(&ThisType::onUpdatedFile, this, file));
 		}
 	}
 
 	virtual void on(UpdatedUser, bool upload, const HintedUser& user) throw() {
 		if(upload == in_UL)
-			callAsync(std::tr1::bind(&ThisType::onUpdatedUser, this, user));
+			callAsync(std::bind(&ThisType::onUpdatedUser, this, user));
 	}
 
 	virtual void on(RemovedFile, bool upload, const string& file) throw() {
 		if(upload == in_UL)
-			callAsync(std::tr1::bind(&ThisType::onRemovedFile, this, file));
+			callAsync(std::bind(&ThisType::onRemovedFile, this, file));
 	}
 
 	virtual void on(RemovedUser, bool upload, const HintedUser& user) throw() {
 		if(upload == in_UL)
-			callAsync(std::tr1::bind(&ThisType::onRemovedUser, this, user));
+			callAsync(std::bind(&ThisType::onRemovedUser, this, user));
 	}
 
 	virtual void on(RemovedAll, bool upload) throw() {
 		if(upload == in_UL)
-			callAsync(std::tr1::bind(&ThisType::onRemovedAll, this));
+			callAsync(std::bind(&ThisType::onRemovedAll, this));
 	}
 };
 

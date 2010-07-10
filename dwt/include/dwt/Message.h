@@ -81,7 +81,8 @@ public:
 	bool operator<(const Message& rhs) const;
 	bool operator==(const Message& rhs) const;
 private:
-	friend class std::tr1::hash<Message>;
+	friend class std::hash<Message>;
+
 	/// Contains the actual Message
 	UINT msg;
 
@@ -95,13 +96,12 @@ inline bool Message::operator==( const Message & right ) const {
 
 }
 
-namespace std { namespace tr1 {
+namespace std {
 template<>
 struct hash<dwt::Message> {
 	size_t operator()(const dwt::Message& message) const { return message.msg * 31 + message.param; }
 };
 
-} }
-
+}
 
 #endif

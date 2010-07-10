@@ -89,7 +89,7 @@ throttleTime(0)
 		throttleTime = cur->addChild(CheckBox::Seed(T_("Use second set of bandwidth limits from")));
 		throttleTime->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_ENABLE);
 		items.push_back(Item(throttleTime, SettingsManager::TIME_DEPENDENT_THROTTLE, PropPage::T_BOOL));
-		throttleTime->onClicked(std::tr1::bind(&BandwidthLimitPage::fixControls, this));
+		throttleTime->onClicked(std::bind(&BandwidthLimitPage::fixControls, this));
 
 		timeBound[0] = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
 		cur->addChild(Label::Seed(T_("to")))->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_ENABLE);

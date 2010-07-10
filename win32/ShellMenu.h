@@ -39,7 +39,7 @@ class ShellMenu : public Menu
 public:
 	typedef ShellMenu ThisType;
 
-	typedef std::tr1::shared_ptr<ShellMenu> ObjectType;
+	typedef std::shared_ptr<ShellMenu> ObjectType;
 
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;

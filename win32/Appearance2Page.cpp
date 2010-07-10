@@ -56,7 +56,7 @@ oldSelection(-1)
 		cur->setHelpId(IDH_SETTINGS_APPEARANCE2_COLORS);
 
 		ButtonPtr windowColor = cur->addChild(Button::Seed(T_("Select &window color")));
-		windowColor->onClicked(std::tr1::bind(&Appearance2Page::handleBackgroundClicked, this));
+		windowColor->onClicked(std::bind(&Appearance2Page::handleBackgroundClicked, this));
 		windowColor->setHelpId(IDH_SETTINGS_APPEARANCE2_SELWINCOLOR);
 
 		Label::Seed seed(T_("Donate \342\202\254\342\202\254\342\202\254:s! (ok, dirty dollars are fine as well =) (see help menu)"));
@@ -66,15 +66,15 @@ oldSelection(-1)
 		example->setHelpId(IDH_SETTINGS_APPEARANCE2_COLORS);
 
 		ButtonPtr uploads = cur->addChild(Button::Seed(T_("Uploads")));
-		uploads->onClicked(std::tr1::bind(&Appearance2Page::handleULClicked, this));
+		uploads->onClicked(std::bind(&Appearance2Page::handleULClicked, this));
 		uploads->setHelpId(IDH_SETTINGS_APPEARANCE2_UPLOAD_BAR_COLOR);
 
 		ButtonPtr textStyle	= cur->addChild(Button::Seed(T_("Select &text style")));
-		textStyle->onClicked(std::tr1::bind(&Appearance2Page::handleTextClicked, this));
+		textStyle->onClicked(std::bind(&Appearance2Page::handleTextClicked, this));
 		textStyle->setHelpId(IDH_SETTINGS_APPEARANCE2_SELTEXT);
 
 		ButtonPtr downloads	= cur->addChild(Button::Seed(T_("Downloads")));
-		downloads->onClicked(std::tr1::bind(&Appearance2Page::handleDLClicked, this));
+		downloads->onClicked(std::bind(&Appearance2Page::handleDLClicked, this));
 		downloads->setHelpId(IDH_SETTINGS_APPEARANCE2_DOWNLOAD_BAR_COLOR);
 	}
 
@@ -97,7 +97,7 @@ oldSelection(-1)
 
 		browse = cur->addChild(Button::Seed(T_("&Browse...")));
 		browse->setHelpId(IDH_SETTINGS_APPEARANCE2_BEEPFILE);
-		browse->onClicked(std::tr1::bind(&Appearance2Page::handleBrowseClicked, this));
+		browse->onClicked(std::bind(&Appearance2Page::handleBrowseClicked, this));
 	}
 
 	grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")))->setHelpId(IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART);
@@ -129,10 +129,10 @@ oldSelection(-1)
 
 	saveSoundOptions();
 
-	sounds->onSelectionChanged(std::tr1::bind(&Appearance2Page::handleSelectionChanged, this));
+	sounds->onSelectionChanged(std::bind(&Appearance2Page::handleSelectionChanged, this));
 
-	sounds->onHelp(std::tr1::bind(&Appearance2Page::handleSoundsHelp, this, _2));
-	sounds->setHelpId(std::tr1::bind(&Appearance2Page::handleSoundsHelpId, this, _1));
+	sounds->onHelp(std::bind(&Appearance2Page::handleSoundsHelp, this, _2));
+	sounds->setHelpId(std::bind(&Appearance2Page::handleSoundsHelpId, this, _1));
 }
 
 Appearance2Page::~Appearance2Page() {

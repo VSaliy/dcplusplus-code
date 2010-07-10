@@ -70,9 +70,9 @@ fileLists(0)
 
 		dirs->setNormalImageList(WinUtil::fileImages);
 
-		dirs->onSelectionChanged(std::tr1::bind(&QueueFrame::updateFiles, this));
-		dirs->onKeyDown(std::tr1::bind(&QueueFrame::handleKeyDownDirs, this, _1));
-		dirs->onContextMenu(std::tr1::bind(&QueueFrame::handleDirsContextMenu, this, _1));
+		dirs->onSelectionChanged(std::bind(&QueueFrame::updateFiles, this));
+		dirs->onKeyDown(std::bind(&QueueFrame::handleKeyDownDirs, this, _1));
+		dirs->onContextMenu(std::bind(&QueueFrame::handleDirsContextMenu, this, _1));
 	}
 
 	{
@@ -84,16 +84,16 @@ fileLists(0)
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(QUEUEFRAME_ORDER), SETTING(QUEUEFRAME_WIDTHS));
 		files->setSort(COLUMN_TARGET);
 
-		files->onKeyDown(std::tr1::bind(&QueueFrame::handleKeyDownFiles, this, _1));
-		files->onSelectionChanged(std::tr1::bind(&QueueFrame::callAsync, this,
-			dwt::Application::Callback(std::tr1::bind(&QueueFrame::updateStatus, this))));
-		files->onContextMenu(std::tr1::bind(&QueueFrame::handleFilesContextMenu, this, _1));
+		files->onKeyDown(std::bind(&QueueFrame::handleKeyDownFiles, this, _1));
+		files->onSelectionChanged(std::bind(&QueueFrame::callAsync, this,
+			dwt::Application::Callback(std::bind(&QueueFrame::updateStatus, this))));
+		files->onContextMenu(std::bind(&QueueFrame::handleFilesContextMenu, this, _1));
 	}
 
 	showTree = addChild(WinUtil::Seeds::splitCheckBox);
 	showTree->setHelpId(IDH_QUEUE_SHOW_TREE);
 	showTree->setChecked(BOOLSETTING(QUEUEFRAME_SHOW_TREE));
-	showTree->onClicked(std::tr1::bind(&QueueFrame::handleShowTreeClicked, this));
+	showTree->onClicked(std::bind(&QueueFrame::handleShowTreeClicked, this));
 
 	initStatus();
 	status->setSize(STATUS_SHOW_TREE, showTree->getPreferedSize().x);
@@ -854,8 +854,8 @@ MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	WinUtil::addHashItems(menu, qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())), qii->getSize());
-	menu->appendItem(T_("&Move/Rename"), std::tr1::bind(&QueueFrame::handleMove, this));
-	menu->appendItem(T_("Re&check integrity"), std::tr1::bind(&QueueFrame::handleRecheck, this));
+	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
+	menu->appendItem(T_("Re&check integrity"), std::bind(&QueueFrame::handleRecheck, this));
 	addPriorityMenu(menu);
 	addBrowseMenu(menu, qii);
 	addPMMenu(menu, qii);
@@ -863,17 +863,17 @@ MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	addReaddMenu(menu, qii);
 	addRemoveMenu(menu, qii);
 	addRemoveSourcesMenu(menu, qii);
-	menu->appendItem(T_("&Remove"), std::tr1::bind(&QueueFrame::handleRemove, this));
+	menu->appendItem(T_("&Remove"), std::bind(&QueueFrame::handleRemove, this));
 	return menu;
 }
 
 MenuPtr QueueFrame::makeMultiMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	menu->appendItem(T_("&Move/Rename"), std::tr1::bind(&QueueFrame::handleMove, this));
-	menu->appendItem(T_("Re&check integrity"), std::tr1::bind(&QueueFrame::handleRecheck, this));
+	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
+	menu->appendItem(T_("Re&check integrity"), std::bind(&QueueFrame::handleRecheck, this));
 	addPriorityMenu(menu);
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), std::tr1::bind(&QueueFrame::handleRemove, this));
+	menu->appendItem(T_("&Remove"), std::bind(&QueueFrame::handleRemove, this));
 	return menu;
 }
 
@@ -881,20 +881,20 @@ MenuPtr QueueFrame::makeDirMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 	addPriorityMenu(menu);
-	menu->appendItem(T_("&Move/Rename"), std::tr1::bind(&QueueFrame::handleMove, this));
+	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), std::tr1::bind(&QueueFrame::handleRemove, this));
+	menu->appendItem(T_("&Remove"), std::bind(&QueueFrame::handleRemove, this));
 	return menu;
 }
 
 void QueueFrame::addPriorityMenu(const MenuPtr& parent) {
 	MenuPtr menu = parent->appendPopup(T_("Set priority"));
-	menu->appendItem(T_("Paused"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::PAUSED));
-	menu->appendItem(T_("Lowest"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::LOWEST));
-	menu->appendItem(T_("Low"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::LOW));
-	menu->appendItem(T_("Normal"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::NORMAL));
-	menu->appendItem(T_("High"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::HIGH));
-	menu->appendItem(T_("Highest"), std::tr1::bind(&QueueFrame::handlePriority, this, QueueItem::HIGHEST));
+	menu->appendItem(T_("Paused"), std::bind(&QueueFrame::handlePriority, this, QueueItem::PAUSED));
+	menu->appendItem(T_("Lowest"), std::bind(&QueueFrame::handlePriority, this, QueueItem::LOWEST));
+	menu->appendItem(T_("Low"), std::bind(&QueueFrame::handlePriority, this, QueueItem::LOW));
+	menu->appendItem(T_("Normal"), std::bind(&QueueFrame::handlePriority, this, QueueItem::NORMAL));
+	menu->appendItem(T_("High"), std::bind(&QueueFrame::handlePriority, this, QueueItem::HIGH));
+	menu->appendItem(T_("Highest"), std::bind(&QueueFrame::handlePriority, this, QueueItem::HIGHEST));
 }
 
 void QueueFrame::addBrowseMenu(const MenuPtr& parent, QueueItemInfo* qii) {
@@ -914,7 +914,7 @@ void QueueFrame::addPMMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 void QueueFrame::addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 	unsigned int pos = parent->getCount();
 	MenuPtr menu = parent->appendPopup(T_("Re-add source"));
-	menu->appendItem(T_("All"), std::tr1::bind(&QueueFrame::handleReadd, this, HintedUser(UserPtr(), Util::emptyString)));
+	menu->appendItem(T_("All"), std::bind(&QueueFrame::handleReadd, this, HintedUser(UserPtr(), Util::emptyString)));
 	menu->appendSeparator();
 	if(!addUsers(menu, &QueueFrame::handleReadd, qii->getBadSources(), true))
 		parent->setItemEnabled(pos, false);
@@ -923,7 +923,7 @@ void QueueFrame::addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 void QueueFrame::addRemoveMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 	unsigned int pos = parent->getCount();
 	MenuPtr menu = parent->appendPopup(T_("Remove source"));
-	menu->appendItem(T_("All"), std::tr1::bind(&QueueFrame::handleRemoveSource, this, HintedUser(UserPtr(), Util::emptyString)));
+	menu->appendItem(T_("All"), std::bind(&QueueFrame::handleRemoveSource, this, HintedUser(UserPtr(), Util::emptyString)));
 	menu->appendSeparator();
 	if(!addUsers(menu, &QueueFrame::handleRemoveSource, qii->getSources(), true))
 		parent->setItemEnabled(pos, false);
@@ -942,7 +942,7 @@ bool QueueFrame::addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const
 		const QueueItem::Source& source = *i;
 		const HintedUser& user = source.getUser();
 		if(offline || user.user->isOnline()) {
-			menu->appendItem(dwt::util::escapeMenu(WinUtil::getNicks(user)), std::tr1::bind(handler, this, user));
+			menu->appendItem(dwt::util::escapeMenu(WinUtil::getNicks(user)), std::bind(handler, this, user));
 			added = true;
 		}
 	}
@@ -1058,25 +1058,25 @@ void QueueFrame::onUpdated(QueueItem* qi) {
 }
 
 void QueueFrame::onRechecked(const string& target, const tstring& message) {
-	callAsync(std::tr1::bind(&dwt::StatusBar::setText, status, STATUS_STATUS,
+	callAsync(std::bind(&dwt::StatusBar::setText, status, STATUS_STATUS,
 		str(TF_("Integrity check: %1% (%2%)") % message % Text::toT(target)), false));
 }
 
 void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) throw() {
-	callAsync(std::tr1::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
+	callAsync(std::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
 }
 
 void QueueFrame::on(QueueManagerListener::Removed, QueueItem* aQI) throw() {
-	callAsync(std::tr1::bind(&QueueFrame::onRemoved, this, aQI->getTarget()));
+	callAsync(std::bind(&QueueFrame::onRemoved, this, aQI->getTarget()));
 }
 
 void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw() {
-	callAsync(std::tr1::bind(&QueueFrame::onRemoved, this, oldTarget));
-	callAsync(std::tr1::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
+	callAsync(std::bind(&QueueFrame::onRemoved, this, oldTarget));
+	callAsync(std::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
 }
 
 void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw() {
-	callAsync(std::tr1::bind(&QueueFrame::onUpdated, this, new QueueItem(*aQI)));
+	callAsync(std::bind(&QueueFrame::onUpdated, this, new QueueItem(*aQI)));
 }
 
 void QueueFrame::on(QueueManagerListener::RecheckStarted, const string& target) throw() {

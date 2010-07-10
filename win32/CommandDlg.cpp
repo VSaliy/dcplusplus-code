@@ -52,8 +52,8 @@ command(command_),
 to(to_),
 hub(hub_)
 {
-	onInitDialog(std::tr1::bind(&CommandDlg::handleInitDialog, this));
-	onHelp(std::tr1::bind(&WinUtil::help, _1, _2));
+	onInitDialog(std::bind(&CommandDlg::handleInitDialog, this));
+	onHelp(std::bind(&WinUtil::help, _1, _2));
 }
 
 CommandDlg::~CommandDlg() {
@@ -77,19 +77,19 @@ bool CommandDlg::handleInitDialog() {
 
 		separator = cur->addChild(RadioButton::Seed(T_("Separator")));
 		separator->setHelpId(IDH_USER_COMMAND_SEPARATOR);
-		separator->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
+		separator->onClicked(std::bind(&CommandDlg::handleTypeChanged, this));
 
 		chat = cur->addChild(RadioButton::Seed(T_("Chat")));
 		chat->setHelpId(IDH_USER_COMMAND_CHAT);
-		chat->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
+		chat->onClicked(std::bind(&CommandDlg::handleTypeChanged, this));
 
 		raw = cur->addChild(RadioButton::Seed(T_("Raw")));
 		raw->setHelpId(IDH_USER_COMMAND_RAW);
-		raw->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
+		raw->onClicked(std::bind(&CommandDlg::handleTypeChanged, this));
 
 		PM = cur->addChild(RadioButton::Seed(T_("PM")));
 		PM->setHelpId(IDH_USER_COMMAND_PM);
-		PM->onClicked(std::tr1::bind(&CommandDlg::handleTypeChanged, this));
+		PM->onClicked(std::bind(&CommandDlg::handleTypeChanged, this));
 	}
 
 	{
@@ -130,17 +130,17 @@ bool CommandDlg::handleInitDialog() {
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
 		commandBox = cur->addChild(seed);
 		commandBox->setHelpId(IDH_USER_COMMAND_COMMAND);
-		commandBox->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
+		commandBox->onUpdated(std::bind(&CommandDlg::updateCommand, this));
 
 		cur->addChild(Label::Seed(T_("Hub address (see help for usage)")))->setHelpId(IDH_USER_COMMAND_HUB);
 		hubBox = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		hubBox->setHelpId(IDH_USER_COMMAND_HUB);
-		hubBox->onUpdated(std::tr1::bind(&CommandDlg::updateHub, this));
+		hubBox->onUpdated(std::bind(&CommandDlg::updateHub, this));
 
 		cur->addChild(Label::Seed(T_("To")))->setHelpId(IDH_USER_COMMAND_NICK);
 		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		nick->setHelpId(IDH_USER_COMMAND_NICK);
-		nick->onUpdated(std::tr1::bind(&CommandDlg::updateCommand, this));
+		nick->onUpdated(std::bind(&CommandDlg::updateCommand, this));
 
 		once = cur->addChild(CheckBox::Seed(T_("Send once per nick")));
 		once->setHelpId(IDH_USER_COMMAND_ONCE);
@@ -152,13 +152,13 @@ bool CommandDlg::handleInitDialog() {
 	openHelp->setChecked(bOpenHelp);
 
 	WinUtil::addDlgButtons(grid,
-		std::tr1::bind(&CommandDlg::handleOKClicked, this),
-		std::tr1::bind(&CommandDlg::endDialog, this, IDCANCEL));
+		std::bind(&CommandDlg::handleOKClicked, this),
+		std::bind(&CommandDlg::endDialog, this, IDCANCEL));
 
 	{
 		ButtonPtr button = grid->addChild(Button::Seed(T_("Help")));
 		button->setHelpId(IDH_DCPP_HELP);
-		button->onClicked(std::tr1::bind(&WinUtil::help, this, IDH_USER_COMMAND));
+		button->onClicked(std::bind(&WinUtil::help, this, IDH_USER_COMMAND));
 	}
 
 	if(bOpenHelp) {

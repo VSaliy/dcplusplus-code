@@ -37,13 +37,13 @@ SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 		cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
 		log = addChild(cs);
 		addWidget(log);
-		log->onContextMenu(std::tr1::bind(&SystemFrame::handleContextMenu, this, _1));
-		log->onLeftMouseDblClick(std::tr1::bind(&SystemFrame::handleDoubleClick, this, _1));
+		log->onContextMenu(std::bind(&SystemFrame::handleContextMenu, this, _1));
+		log->onLeftMouseDblClick(std::bind(&SystemFrame::handleDoubleClick, this, _1));
 		WinUtil::handleDblClicks(log);
 	}
 
 	initStatus();
-	status->onDblClicked(STATUS_STATUS, std::tr1::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
+	status->onDblClicked(STATUS_STATUS, std::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
 
 	layout();
 	activate();
@@ -97,8 +97,8 @@ bool SystemFrame::handleContextMenu(const dwt::ScreenCoordinate& pt) {
 	string path_a = Text::fromT(path);
 	if(File::getSize(path_a) != -1) {
 		ShellMenuPtr menu = addChild(ShellMenu::Seed());
-		menu->appendItem(T_("&Open"), std::tr1::bind(&WinUtil::openFile, path), dwt::IconPtr(), true, true);
-		menu->appendItem(T_("Open &folder"), std::tr1::bind(&WinUtil::openFolder, path));
+		menu->appendItem(T_("&Open"), std::bind(&WinUtil::openFile, path), dwt::IconPtr(), true, true);
+		menu->appendItem(T_("Open &folder"), std::bind(&WinUtil::openFolder, path));
 		menu->appendShellMenu(StringList(1, path_a));
 		menu->open(pt);
 		return true;
@@ -116,5 +116,5 @@ bool SystemFrame::handleDoubleClick(const dwt::MouseEvent& mouseEvent) {
 }
 
 void SystemFrame::on(Message, time_t t, const string& message) throw() {
-	callAsync(std::tr1::bind(&SystemFrame::addLine, this, t, Text::toT(message)));
+	callAsync(std::bind(&SystemFrame::addLine, this, t, Text::toT(message)));
 }

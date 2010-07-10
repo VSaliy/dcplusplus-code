@@ -54,7 +54,7 @@ void Grid::create( const Seed & cs )
 		columns[i].align = GridInfo::STRETCH;	// Default to stretch for horizontal alignment
 	}
 
-	onEnabled(std::tr1::bind(&Grid::handleEnabled, this, _1));
+	onEnabled(std::bind(&Grid::handleEnabled, this, _1));
 }
 
 Point Grid::getPreferedSize() {

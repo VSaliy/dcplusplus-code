@@ -65,7 +65,7 @@ public:
 	typedef Menu ThisType;
 
 	/// Object type
-	typedef std::tr1::shared_ptr<Menu> ObjectType;
+	typedef std::shared_ptr<Menu> ObjectType;
 
 	/// Global colors, can be changed through the seed
 	struct Colors {
@@ -355,7 +355,7 @@ private:
 	std::vector < ItemDataWrapper * > itsItemData;
 
 	static const unsigned id_offset = 100;
-	typedef std::auto_ptr<std::vector<Dispatcher::F> > commands_type;
+	typedef std::unique_ptr<std::vector<Dispatcher::F> > commands_type;
 	commands_type commands; // just a pointer because sub-menus don't need this
 
 	Point iconSize;

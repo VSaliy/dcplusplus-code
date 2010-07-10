@@ -47,8 +47,8 @@ void Notification::create(const Notification::Seed& seed) {
 	tip = seed.tip;
 
 	// TODO Allow more than one icon per window
-	parent->setCallback(Message(message), std::tr1::bind(&Notification::trayHandler, this, _1));
-	parent->setCallback(Message(taskbar), std::tr1::bind(&Notification::redisplay, this));
+	parent->setCallback(Message(message), std::bind(&Notification::trayHandler, this, _1));
+	parent->setCallback(Message(taskbar), std::bind(&Notification::redisplay, this));
 }
 
 void Notification::setIcon(const IconPtr& icon_) {

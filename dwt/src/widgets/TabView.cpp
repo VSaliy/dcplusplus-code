@@ -73,8 +73,8 @@ dragging(0)
 
 void TabView::create(const Seed & cs) {
 	if(cs.ctrlTab) {
-		addAccel(FCONTROL, VK_TAB, std::tr1::bind(&TabView::handleCtrlTab, this, false));
-		addAccel(FCONTROL | FSHIFT, VK_TAB, std::tr1::bind(&TabView::handleCtrlTab, this, true));
+		addAccel(FCONTROL, VK_TAB, std::bind(&TabView::handleCtrlTab, this, false));
+		addAccel(FCONTROL | FSHIFT, VK_TAB, std::bind(&TabView::handleCtrlTab, this, true));
 	}
 
 	BaseType::create(cs);
@@ -101,7 +101,7 @@ void TabView::create(const Seed & cs) {
 		loadTheme(VSCLASS_TAB);
 
 		// TCS_HOTTRACK seems to have no effect in owner-drawn tabs, so do the tracking ourselves.
-		onMouseMove(std::tr1::bind(&TabView::handleMouseMove, this, _1));
+		onMouseMove(std::bind(&TabView::handleMouseMove, this, _1));
 
 	} else {
 		setFont(font);
@@ -111,17 +111,17 @@ void TabView::create(const Seed & cs) {
 
 	TabCtrl_SetImageList(handle(), imageList->handle());
 
-	onSelectionChanged(std::tr1::bind(&TabView::handleTabSelected, this));
-	onLeftMouseDown(std::tr1::bind(&TabView::handleLeftMouseDown, this, _1));
-	onLeftMouseUp(std::tr1::bind(&TabView::handleLeftMouseUp, this, _1));
-	onContextMenu(std::tr1::bind(&TabView::handleContextMenu, this, _1));
-	onMiddleMouseDown(std::tr1::bind(&TabView::handleMiddleMouseDown, this, _1));
-	onXMouseUp(std::tr1::bind(&TabView::handleXMouseUp, this, _1));
+	onSelectionChanged(std::bind(&TabView::handleTabSelected, this));
+	onLeftMouseDown(std::bind(&TabView::handleLeftMouseDown, this, _1));
+	onLeftMouseUp(std::bind(&TabView::handleLeftMouseUp, this, _1));
+	onContextMenu(std::bind(&TabView::handleContextMenu, this, _1));
+	onMiddleMouseDown(std::bind(&TabView::handleMiddleMouseDown, this, _1));
+	onXMouseUp(std::bind(&TabView::handleXMouseUp, this, _1));
 
 	if(cs.style & TCS_TOOLTIPS) {
 		tip = WidgetCreator<ToolTip>::attach(this, TabCtrl_GetToolTips(handle())); // created and managed by the tab control thanks to the TCS_TOOLTIPS style
 		tip->addRemoveStyle(TTS_NOPREFIX, true);
-		tip->onRaw(std::tr1::bind(&TabView::handleToolTip, this, _2), Message(WM_NOTIFY, TTN_GETDISPINFO));
+		tip->onRaw(std::bind(&TabView::handleToolTip, this, _2), Message(WM_NOTIFY, TTN_GETDISPINFO));
 	}
 }
 
@@ -159,7 +159,7 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 
 	layout();
 
-	w->onTextChanging(std::tr1::bind(&TabView::handleTextChanging, this, w, _1));
+	w->onTextChanging(std::bind(&TabView::handleTextChanging, this, w, _1));
 }
 
 ContainerPtr TabView::getActive() const {
@@ -550,7 +550,7 @@ bool TabView::handleMouseMove(const MouseEvent& mouseEvent) {
 	if(i != -1 && i != highlighted) {
 		redraw(i);
 		highlighted = i;
-		onMouseLeave(std::tr1::bind(&TabView::handleMouseLeave, this));
+		onMouseLeave(std::bind(&TabView::handleMouseLeave, this));
 	}
 	return false;
 }

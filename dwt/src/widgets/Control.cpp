@@ -52,9 +52,9 @@ accel(0)
 
 void Control::addAccel(BYTE fVirt, WORD key, const CommandDispatcher::F& f) {
 	const size_t id = id_offset + accels.size();
-	ACCEL a = { fVirt | FVIRTKEY, key, id };
+	ACCEL a = { static_cast<BYTE>(fVirt | FVIRTKEY), key, static_cast<WORD>(id) };
 	accels.push_back(a);
-	onCommand(std::tr1::bind(&Widget::callAsync, this, f), id);
+	onCommand(std::bind(&Widget::callAsync, this, f), id);
 }
 
 void Control::initAccels() {

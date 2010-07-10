@@ -51,7 +51,7 @@ class AspectPainting
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
 	struct PaintDispatcher {
-		typedef std::tr1::function<void (PaintCanvas&)> F;
+		typedef std::function<void (PaintCanvas&)> F;
 
 		PaintDispatcher(const F& f_, Widget* widget_) : f(f_), widget(widget_) { }
 
