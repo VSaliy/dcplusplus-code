@@ -59,8 +59,6 @@ private:
 	static string errorToString(int aError) throw();
 };
 
-class ServerSocket;
-
 class Socket
 {
 public:
