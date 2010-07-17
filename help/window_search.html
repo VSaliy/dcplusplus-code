@@ -40,9 +40,13 @@ setting is enabled. Activating that option can generate lots of filelist traffic
   <dt>Size</dt>
   <dd cshelp="IDH_SEARCH_SIZE">Filter away files depending on their file size.</dd>
   <dt>File type</dt>
-  <dd cshelp="IDH_SEARCH_TYPE">Filter away files depending on their file type (extension).
-  Not all possible extensions are included in some file type groups. If you search for newer or obscure file types, then it is recommended to use the <i>Any</i> option and include
-  	the file extension in the search string instead. Options other than <i>Any</i>, <i>Directory</i> &amp; <i>TTH</i> are ignored for searches on ADC hubs.</dd>
+  <dd cshelp="IDH_SEARCH_TYPE">Filter away results depending on their file type (extension) or hash value.<br/>
+  Note: options that specify a certain file type (other than <i>Any</i>, <i>Directory</i> &amp; <i>TTH</i>) will work different on ADC and NMDC hubs as follows:
+  <ul>
+  	<li>In NMDC hubs : not all possible extensions are included in some file type groups. If you search for newer or obscure file types then it is recommended to use the <i>Any</i> option here and include the desired file extension(s) in the search string instead.</li>
+  	<li>In ADC hubs : all file type groups will filter results using the corresponding configured <a href="settings_search_types.html">Search Types</a> setting.</li>
+  </ul>
+  </dd>
   <dt>Only users with free slots</dt>
   <dd cshelp="IDH_SEARCH_SLOTS">Filter away files depending on the user's free slots.</dd>
   <dt>Hide files already in share</dt>

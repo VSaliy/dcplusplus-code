@@ -73,7 +73,7 @@ IP page</a> or at <a
  href="http://whatismyip.com" target="_blank" class="external">WhatIsMyIP.com</a>. </li>
   <li>Active mode should now be working. For checking or troubleshooting if you have properly
   	 forwarded the port(s) to DC++, use <a
- href="http://www.canyouseeme.org" target="_blank" class="external">www.canyouseeme.org</a>.  Make sure DC++ is open.  Then, from the site, enter in the port you're forwarding and click Check. If everything has been properly set up, the site should say Success.  If you get an error message in red, then you need to double-check the port forwarding on the router, DC++ settings and possibly your <a href="http://www.dslreports.com/faq/dc/3.1_Software_Firewalls" target="_blank" class="external">software firewall</a> settings.    </li>
+ href="http://www.canyouseeme.org" target="_blank" class="external">www.canyouseeme.org</a>. Make sure DC++ is open. Then, from the site, enter in the port you're forwarding and click Check. If everything has been properly set up, the site should say Success. If you get an error message in red, then you need to double-check the port forwarding on the router, DC++ settings and possibly your <a href="#firewall">built-in</a> or <a href="http://www.dslreports.com/faq/dc/3.1_Software_Firewalls" target="_blank" class="external">3rd party software firewall</a> settings.</li>
 </ol>
 <p>You may find detailed how-to guides with screen shots for various router models at <a
  href="http://www.portforward.com/routers.htm" target="_blank" class="external">www.portforward.com</a>. There is a huge list of models there, click on your model name,
@@ -102,26 +102,33 @@ Another option to ensure you'll always have the same internal IP address is to s
 <p>Besides normal file transfers DC++ is capable of <a href="settings_certs.html">secure</a> (<a href="http://en.wikipedia.org/wiki/Secure_Sockets_Layer" target="_blank" class="external">SSL encrypted</a>) way of receiving and transmitting files on ADC hubs. If you plan (or required) to use this feature and you <i>use DC++ in active mode with manual port forwarding</i> you should forward one more port for SSL handshake. You must choose and forward another free port between 1024 - 65535 for TLS which is <b>different than the one(s) you use for TCP and UDP</b>. In the port forwarding rule you should set the protocol type to <b>TCP or Both</b> for the TLS port. Finally you must put the port number to the TLS field in <a href="settings_connection.html">Incoming connections settings</a> to be able to download from users who have secure transfers enabled.</p>
 	
 
-<h2 id="firewall">Windows XP?</h2>
-<ul>
-  <li><u>Service Pack 1</u>:
-Its strongly recommended that you do not use the SP1 firewall and
-instead use a third party one.
-Make sure to disable the XP firewall if you do choose this option. If
-you really must use it, then check out <a
- href="http://www.microsoft.com/security/protect/ports.asp"
- target="_blank" class="external"> this guide</a>  on how to set it up.</li>
-  <li><u>Service Pack 2 or 3</u>:
-The firewall in SP2 & SP3 is a lot more robust than its original incarnation.
-While it does not offer a plethora of options, its suitable to use by
-itself for protection. Its wise to enable logging of packets that the
-firewall drops for troubleshooting applications. To do this, go to
-Control Panels -&gt; Windows Firewall -&gt; Advanced Tab -&gt; Security
-Logging -&gt; Settings. Enable <i>Log
-Dropped Packets</i>. The log file is located at:
-C:\WINDOWS\pfirewall.log. Here's a complete guide <a
- href="http://www.microsoft.com/technet/security/smallbusiness/prodtech/windowsxp/cfgfwall.mspx"
- target="_blank" class="external">How to Configure Windows Firewall on Windows XP SP2 & SP3</a>.</li>
+<h2 id="firewall">Troubleshooting Windows built-in firewall</h2>
+<p>The firewall component included in recent Windows operating systems is enabled by default. While it does not offer a plethora of options, its suitable to use by itself for protection. If its enabled and you have problems accessing the Internet with DC++ the best practice is to check for and delete existing exception(s) for DC++ then let the operating system properly readd it at next start of DC++ application. To do this, close DC++ and
+<ul> 
+  <li><u>in Windows XP Service Pack 2 & 3 or Windows Vista</u>:
+go to Control Panel -&gt; Windows Firewall -&gt; Exceptions Tab. Select DC++ and click Delete.
+  </li>
+  <li><u>in Windows 7</u>:
+go to Control Panel -&gt; Windows Firewall -&gt; Allow a program or feature through Windows Firewall. Select DC++ and click Remove.
+  </li>
 </ul>
+Start DC++ again and if a firewall popup window appears asking permission for DC++, click Allow.
+</p>
+<p>If the above doesn't help its wise to enable logging of packets that the firewall drops for troubleshooting DC++ (or any other applications') access. To do this,
+<ul>
+  <li><u>in Windows XP (Service Pack 2 or 3)</u>:
+go to Control Panel -&gt; Windows Firewall -&gt; Advanced Tab -&gt; Security Logging -&gt; Settings. Enable <i>Log
+Dropped Packets</i>. The log file is located at: C:\WINDOWS\pfirewall.log</li>
+  <li><u>in Windows Vista</u>:
+you can find the firewall logging properties at Start Menu -&gt; All Programs -&gt; Administrative Tools -&gt; Windows Firewall with Advanced Security -&gt; Windows Firewall Properties -&gt; Profile tabs -&gt; Customize button under the Logging section under each of the profile tabs. You can also specify the path of the log file there.</li>
+  <li><u>in Windows 7</u>:
+go to Control Panel -&gt; Windows Firewall -&gt; Advanced Settings -&gt; Monitoring -&gt; Firewall. You can browse the firewall events here in great detail.</li>
+</ul>
+</p>
+<p>
+Here's a complete guide of <a
+ href="http://www.microsoft.com/technet/security/smallbusiness/prodtech/windowsxp/cfgfwall.mspx"
+ target="_blank" class="external">How to Configure Windows Firewall on Windows XP SP2 & SP3</a> which seems to be largely apply to Windows Vista as well.
+</p>
 </body>
 </html>
