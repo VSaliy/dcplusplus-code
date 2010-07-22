@@ -45,6 +45,7 @@
 #include "PrivateFrame.h"
 
 #include <dwt/DWTException.h>
+#include <dwt/LibraryLoader.h>
 
 // def taken from <gettextP.h>
 extern "C" const char *_nl_locale_name_default(void);
@@ -259,6 +260,16 @@ void WinUtil::init_helpPath() {
 
 void WinUtil::uninit() {
 	::HtmlHelp(NULL, NULL, HH_UNINITIALIZE, helpCookie);
+}
+
+void WinUtil::enableDEP() {
+	dwt::LibraryLoader kernel(_T("kernel32.dll"));
+	typedef WINBASEAPI BOOL WINAPI (*SPDP)(DWORD);
+	SPDP spdp = (SPDP)kernel.getProcAddress(_T("SetProcessDEPPolicy"));
+	if (spdp)
+		dcdebug("SetProcessDEPPolicy %s\n", (*spdp)(1)?"succeeded":"failed");
+	else
+		dcdebug("SetProcessDEPPolicy not present\n");	
 }
 
 tstring WinUtil::encodeFont(LOGFONT const& font) {

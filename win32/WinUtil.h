@@ -95,6 +95,8 @@ public:
 	static void init();
 	static void uninit();
 
+	static void enableDEP();
+
 	static tstring encodeFont(LOGFONT const& font);
 	static void decodeFont(const tstring& setting, LOGFONT &dest);
 
