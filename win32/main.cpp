@@ -72,6 +72,7 @@ void term_handler() {
 int SmartWinMain(dwt::Application& app) {
 	dcdebug("StartWinMain\n");
 
+	WinUtil::enableDEP();
 	Util::initialize();
 
 	string configPathHash;
