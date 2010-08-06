@@ -152,7 +152,7 @@ void TabsPage::createPreview() {
 		seed.style |= TCS_BUTTONS;
 	TabViewPtr tabs = cur->addChild(seed);
 
-	auto makeTab = [&tabs](const tstring& text) {
+	auto makeTab = [&tabs](const tstring& text) -> ContainerPtr {
 		Container::Seed cs;
 		cs.caption = text;
 		ContainerPtr ret = dwt::WidgetCreator<Container>::create(tabs, cs);

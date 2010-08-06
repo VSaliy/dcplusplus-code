@@ -86,6 +86,8 @@ void TabView::create(const Seed & cs) {
 		font = new Font(DefaultGuiFont);
 
 	if(cs.style & TCS_OWNERDRAWFIXED) {
+		if(widthConfig < 100)
+			widthConfig = 100;
 		TabCtrl_SetMinTabWidth(handle(), widthConfig);
 
 		LOGFONT lf;
@@ -666,6 +668,9 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 		rect.size.x -= size.x;
 	}
 
+	//if(isSelected)
+	//	rect.size.x -= margin.x + 16; // keep some space for the 'X' button
+
 	const tstring text = ti->w->getText();
 	const unsigned dtFormat = DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | DT_WORD_ELLIPSIS;
 	Canvas::Selector select(canvas, *((isSelected || ti->marked) ? boldFont : font));
@@ -675,6 +680,12 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 		canvas.setTextColor(::GetSysColor(isSelected ? COLOR_WINDOWTEXT : isHighlighted ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
 		canvas.drawText(text, rect, dtFormat);
 	}
+
+	//if(isSelected) {
+	//	rect.pos.x = rect.right() + margin.x;
+	//	rect.size.x = 16;
+	//	drawThemeBackground(canvas, WP_SMALLCLOSEBUTTON, 0, rect);
+	//}
 }
 
 void TabView::helpImpl(unsigned& id) {
