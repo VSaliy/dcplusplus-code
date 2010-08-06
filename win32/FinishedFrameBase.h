@@ -68,10 +68,11 @@ protected:
 		bOnlyFull(false)
 	{
 		{
-			dwt::TabView::Seed cs = WinUtil::Seeds::tabs;
-			cs.location = dwt::Rectangle(this->getClientSize());
-			cs.maxLength = 0;
-			tabs = this->addChild(cs);
+			dwt::TabView::Seed seed = WinUtil::Seeds::tabs;
+			seed.style &= ~TCS_OWNERDRAWFIXED;
+			seed.location = dwt::Rectangle(this->getClientSize());
+			seed.widthConfig = 0;
+			tabs = this->addChild(seed);
 		}
 
 		{

@@ -449,8 +449,15 @@ void MainWindow::initStatusBar() {
 
 void MainWindow::initTabs() {
 	dcdebug("initTabs\n");
-	dwt::TabView::Seed seed = WinUtil::Seeds::tabs;
-	seed.maxLength = SETTING(MAX_TAB_CHARS);
+	SettingsManager::getInstance()->setDefault(SettingsManager::TAB_STYLE, TCS_OWNERDRAWFIXED);
+	TabView::Seed seed = WinUtil::Seeds::tabs;
+	seed.widthConfig = SETTING(TAB_WIDTH);
+	if(!(SETTING(TAB_STYLE) & TCS_OWNERDRAWFIXED)) {
+		seed.style &= ~TCS_OWNERDRAWFIXED;
+		seed.widthConfig -= 100; // max width to max chars
+	}
+	if(SETTING(TAB_STYLE) & TCS_BUTTONS)
+		seed.style |= TCS_BUTTONS;
 	seed.toggleActive = BOOLSETTING(TOGGLE_ACTIVE_WINDOW);
 	seed.ctrlTab = true;
 	tabs = addChild(seed);

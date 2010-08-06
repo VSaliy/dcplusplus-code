@@ -264,7 +264,7 @@ void WinUtil::uninit() {
 
 void WinUtil::enableDEP() {
 	dwt::LibraryLoader kernel(_T("kernel32.dll"));
-	typedef WINBASEAPI BOOL WINAPI (*SPDP)(DWORD);
+	typedef BOOL (WINAPI *SPDP)(DWORD);
 	SPDP spdp = (SPDP)kernel.getProcAddress(_T("SetProcessDEPPolicy"));
 	if (spdp)
 		dcdebug("SetProcessDEPPolicy %s\n", (*spdp)(1)?"succeeded":"failed");

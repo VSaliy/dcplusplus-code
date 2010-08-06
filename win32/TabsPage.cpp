@@ -22,7 +22,7 @@
 
 #include "TabsPage.h"
 
-#include <dwt/widgets/Spinner.h>
+#include <dwt/widgets/Slider.h>
 
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
@@ -44,34 +44,70 @@ PropPage::ListItem TabsPage::listItems[] = {
 TabsPage::TabsPage(dwt::Widget* parent) :
 PropPage(parent),
 grid(0),
+dcppDraw(0),
+buttonStyle(0),
+tabWidth(0),
+previewGroup(0),
 options(0)
 {
 	setHelpId(IDH_TABSPAGE);
 
-	grid = addChild(Grid::Seed(2, 1));
+	grid = addChild(Grid::Seed(4, 1));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->row(0).mode = GridInfo::FILL;
-	grid->row(0).align = GridInfo::STRETCH;
-
-	options = grid->addChild(GroupBox::Seed(T_("Tab highlight on content change")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
+	grid->row(3).mode = GridInfo::FILL;
+	grid->row(3).align = GridInfo::STRETCH;
+	grid->setSpacing(10);
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
-		cur->column(1).size = 40;
-		cur->column(1).mode = GridInfo::STATIC;
 
-		cur->addChild(Label::Seed(T_("Max characters per tab (0 = infinite)")))->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
+		GroupBoxPtr group = cur->addChild(GroupBox::Seed());
+		group->setHelpId(IDH_SETTINGS_TABS_DRAW);
+		GridPtr cur2 = group->addChild(Grid::Seed(2, 1));
+		dcppDraw = cur2->addChild(RadioButton::Seed(T_("DC++ draws tabs")));
+		dcppDraw->onClicked(std::bind(&TabsPage::createPreview, this));
+		RadioButtonPtr button = cur2->addChild(RadioButton::Seed(T_("Windows draws tabs")));
+		button->onClicked(std::bind(&TabsPage::createPreview, this));
+		if(SETTING(TAB_STYLE) & TCS_OWNERDRAWFIXED)
+			dcppDraw->setChecked();
+		else
+			button->setChecked();
 
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::MAX_TAB_CHARS, PropPage::T_INT_WITH_SPIN));
-		box->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
-
-		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
-		cur->setWidget(spin);
-		spin->setHelpId(IDH_SETTINGS_MAX_TAB_CHARS);
+		group = cur->addChild(GroupBox::Seed());
+		group->setHelpId(IDH_SETTINGS_TABS_STYLE);
+		cur2 = group->addChild(Grid::Seed(2, 1));
+		button = cur2->addChild(RadioButton::Seed(T_("Tab style")));
+		button->onClicked(std::bind(&TabsPage::createPreview, this));
+		buttonStyle = cur2->addChild(RadioButton::Seed(T_("Button style")));
+		buttonStyle->onClicked(std::bind(&TabsPage::createPreview, this));
+		if(SETTING(TAB_STYLE) & TCS_BUTTONS)
+			buttonStyle->setChecked();
+		else
+			button->setChecked();
 	}
 
-	PropPage::read(items);
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Tab width")));
+		group->setHelpId(IDH_SETTINGS_TAB_WIDTH);
+
+		GridPtr cur = group->addChild(Grid::Seed(1, 1));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->row(0).size = 30;
+		cur->row(0).mode = GridInfo::STATIC;
+		cur->row(0).align = GridInfo::STRETCH;
+
+		tabWidth = cur->addChild(Slider::Seed());
+		tabWidth->setRange(100, 1000);
+		tabWidth->setPosition(SETTING(TAB_WIDTH));
+		tabWidth->onScrollHorz(std::bind(&TabsPage::createPreview, this));
+	}
+
+	previewGroup = grid->addChild(GroupBox::Seed(T_("Preview")));
+	previewGroup->setHelpId(IDH_SETTINGS_TAB_PREVIEW);
+	createPreview();
+
+	options = grid->addChild(GroupBox::Seed(T_("Tab highlight on content change")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
+
 	PropPage::read(listItems, options);
 }
 
@@ -86,6 +122,56 @@ void TabsPage::layout(const dwt::Rectangle& rc) {
 }
 
 void TabsPage::write() {
-	PropPage::write(items);
+	int tabStyle = 0;
+	if(dcppDraw->getChecked())
+		tabStyle |= TCS_OWNERDRAWFIXED;
+	if(buttonStyle->getChecked())
+		tabStyle |= TCS_BUTTONS;
+	SettingsManager::getInstance()->set(SettingsManager::TAB_STYLE, tabStyle);
+
+	SettingsManager::getInstance()->set(SettingsManager::TAB_WIDTH, tabWidth->getPosition());
+
 	PropPage::write(options);
+}
+
+void TabsPage::createPreview() {
+	GridPtr cur = previewGroup->addChild(Grid::Seed(1, 1));
+	cur->column(0).mode = GridInfo::FILL;
+	cur->row(0).size = 100;
+	cur->row(0).mode = GridInfo::STATIC;
+	cur->row(0).align = GridInfo::STRETCH;
+
+	TabView::Seed seed = WinUtil::Seeds::tabs;
+	seed.widthConfig = tabWidth->getPosition();
+	seed.style |= WS_DISABLED;
+	if(!dcppDraw->getChecked()) {
+		seed.style &= ~TCS_OWNERDRAWFIXED;
+		seed.widthConfig -= 100; // max width to max chars
+	}
+	if(buttonStyle->getChecked())
+		seed.style |= TCS_BUTTONS;
+	TabViewPtr tabs = cur->addChild(seed);
+
+	auto makeTab = [&tabs](const tstring& text) {
+		Container::Seed cs;
+		cs.caption = text;
+		ContainerPtr ret = dwt::WidgetCreator<Container>::create(tabs, cs);
+		// the tab control sends WM_ACTIVATE messages; catch them, otherwise the dialog gets messed up.
+		ret->onRaw([](WPARAM, LPARAM) { return 0; }, dwt::Message(WM_ACTIVATE));
+		return ret;
+	};
+
+	tabs->add(makeTab(T_("Example hub tab")), WinUtil::tabIcon(IDI_HUB));
+	dwt::IconPtr icon = WinUtil::tabIcon(IDI_DCPP);
+	tabs->add(makeTab(T_("Selected tab")), icon);
+	ContainerPtr highlighted = makeTab(T_("Highlighted tab"));
+	tabs->add(highlighted, icon);
+	tabs->add(makeTab(T_("Yet another tab")), icon);
+	tabs->setSelected(1);
+	tabs->mark(highlighted);
+
+	// refresh
+	dwt::Rectangle rect = previewGroup->getWindowRect();
+	rect.pos -= grid->getWindowRect().pos; // screen->client coords
+	previewGroup->layout(rect);
 }
