@@ -160,6 +160,8 @@ private:
 
 	bool inTab;
 	int highlighted;
+	bool highlightClose;
+	bool closeAuthorized;
 
 	typedef std::list<ContainerPtr> WindowList;
 	typedef WindowList::iterator WindowIter;
@@ -170,6 +172,7 @@ private:
 	int active;
 	ContainerPtr dragging;
 	tstring tipText;
+	Rectangle closeRect;
 
 	int findTab(ContainerPtr w) const;
 
@@ -204,6 +207,7 @@ private:
 	void setText(unsigned idx, const tstring& text);
 	void redraw(unsigned index);
 	void draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSelected);
+	bool inCloseRect(const ScreenCoordinate& pos) const;
 
 	// AspectCollection
 	void eraseImpl( int row );

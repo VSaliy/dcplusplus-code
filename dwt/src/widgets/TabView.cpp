@@ -64,6 +64,8 @@ font(0),
 boldFont(0),
 inTab(false),
 highlighted(-1),
+highlightClose(false),
+closeAuthorized(false),
 active(-1),
 dragging(0)
 {
@@ -461,6 +463,7 @@ bool TabView::handleLeftMouseDown(const MouseEvent& mouseEvent) {
 		if(mouseEvent.isShiftPressed)
 			ti->w->close();
 		else {
+			closeAuthorized = inCloseRect(mouseEvent.pos);
 			dragging = ti->w;
 			::SetCapture(handle());
 		}
@@ -488,7 +491,11 @@ bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		if(dropPos == dragPos) {
 			// the tab hasn't moved; handle the click
 			if(dropPos == active) {
-				if(toggleActive)
+				if(closeAuthorized && inCloseRect(mouseEvent.pos)) {
+					TabInfo* ti = getTabInfo(active);
+					if(ti)
+						ti->w->close();
+				} else if(toggleActive)
 					next();
 			} else
 				setActive(dropPos);
@@ -561,11 +568,18 @@ bool TabView::handleMouseMove(const MouseEvent& mouseEvent) {
 	if(highlighted != -1 && i != highlighted) {
 		redraw(highlighted);
 		highlighted = -1;
+		highlightClose = false;
 	}
 	if(i != -1 && i != highlighted) {
 		redraw(i);
 		highlighted = i;
 		onMouseLeave(std::bind(&TabView::handleMouseLeave, this));
+	}
+	if(i != -1 && i == active) {
+		if(highlightClose ^ inCloseRect(mouseEvent.pos)) {
+			highlightClose = !highlightClose;
+			redraw(i);
+		}
 	}
 	return false;
 }
@@ -669,8 +683,8 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 		rect.size.x -= size.x;
 	}
 
-	//if(isSelected)
-	//	rect.size.x -= margin.x + 16; // keep some space for the 'X' button
+	if(isSelected)
+		rect.size.x -= margin.x + 16; // keep some space for the 'X' button
 
 	const tstring text = ti->w->getText();
 	const unsigned dtFormat = DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | DT_WORD_ELLIPSIS;
@@ -682,11 +696,29 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 		canvas.drawText(text, rect, dtFormat);
 	}
 
-	//if(isSelected) {
-	//	rect.pos.x = rect.right() + margin.x;
-	//	rect.size.x = 16;
-	//	drawThemeBackground(canvas, WP_SMALLCLOSEBUTTON, 0, rect);
-	//}
+	if(isSelected) {
+		rect.pos.x = rect.right() + margin.x;
+		rect.size.x = 16;
+		rect.size.y = 16;
+
+		UINT format = DFCS_CAPTIONCLOSE | DFCS_FLAT;
+		if(isHighlighted && highlightClose)
+			format |= DFCS_HOT;
+		::RECT rc(rect);
+		::DrawFrameControl(canvas.handle(), &rc, DFC_CAPTION, format);
+
+		closeRect = rect;
+		closeRect.pos = ScreenCoordinate(ClientCoordinate(closeRect.pos, this)).getPoint();
+		closeRect.size = ScreenCoordinate(ClientCoordinate(closeRect.size, this)).getPoint();
+	}
+}
+
+bool TabView::inCloseRect(const ScreenCoordinate& pos) const {
+	if(closeRect.width() > 0 && closeRect.height() > 0) {
+		::RECT rc(closeRect);
+		return ::PtInRect(&rc, pos.getPoint());
+	}
+	return false;
 }
 
 void TabView::helpImpl(unsigned& id) {
