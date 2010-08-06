@@ -142,6 +142,7 @@ private:
 	struct TabInfo {
 		TabView* control; // for painting messages
 		ContainerPtr w;
+		tstring text;
 		ContextMenuFunction handleContextMenu;
 		bool marked;
 		TabInfo(TabView* control_, ContainerPtr w_) : control(control_), w(w_), handleContextMenu(0), marked(false) { }
