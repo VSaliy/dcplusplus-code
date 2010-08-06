@@ -76,22 +76,15 @@ public:
 
 		FontPtr font;
 
-		enum TabStyles {
-			/** use the default Windows tab style. multiline tabs re-organize so that the selected
-			tab is always at the bottom. */
-			WinDefault = TCS_TABS | TCS_HOTTRACK,
+		/** for owner-drawn tabs (that have the TCS_OWNERDRAWFIXED style), defines the width of
+		each tab. otherwise, sets the max chars per tab (any value <= 3 means infinite). */
+		unsigned widthConfig;
 
-			/** use a button-like style and have dwt draw tabs by itself, allowing for more
-			customization. multiline tabs always stay in the same position. */
-			dwtCustom = TCS_BUTTONS | TCS_OWNERDRAWFIXED
-		} tabStyle;
-
-		unsigned maxLength; /// max chars per tab; any value <= 3 means infinite
 		bool toggleActive; /// switch the active tab when clicking on the current active tab
 		bool ctrlTab; /// handle Ctrl+Tab and Ctrl+Shift+Tab
 
 		/// Fills with default parameters
-		Seed(unsigned maxLength_ = 20, bool toggleActive_ = false, bool ctrlTab_ = false);
+		Seed(unsigned widthConfig_ = 150, bool toggleActive_ = false, bool ctrlTab_ = false);
 	};
 
 	void add(ContainerPtr w, const IconPtr& icon = IconPtr());
@@ -158,7 +151,7 @@ private:
 	TitleChangedFunction titleChangedFunction;
 
 	// these can be set through the Seed
-	unsigned maxLength; // max chars per tab; either 0 (infinite) or > 3
+	unsigned widthConfig;
 	bool toggleActive;
 	FontPtr font;
 	FontPtr boldFont;
@@ -195,8 +188,8 @@ private:
 	bool handleXMouseUp(const MouseEvent& mouseEvent);
 	bool handleMouseMove(const MouseEvent& mouseEvent);
 	void handleMouseLeave();
-
 	bool handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti);
+	void handlePainting(PaintCanvas& canvas);
 
 	tstring formatTitle(tstring title);
 	void layout();
@@ -208,6 +201,7 @@ private:
 	tstring getText(unsigned idx) const;
 	void setText(unsigned idx, const tstring& text);
 	void redraw(unsigned index);
+	void draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSelected);
 
 	// AspectCollection
 	void eraseImpl( int row );

@@ -45,16 +45,14 @@ namespace dwt {
 
 const TCHAR TabView::windowClass[] = WC_TABCONTROL;
 
-TabView::Seed::Seed(unsigned maxLength_, bool toggleActive_, bool ctrlTab_) :
+TabView::Seed::Seed(unsigned widthConfig_, bool toggleActive_, bool ctrlTab_) :
 BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
-	TCS_FOCUSNEVER | TCS_MULTILINE | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
+	TCS_FOCUSNEVER | TCS_HOTTRACK | TCS_MULTILINE | TCS_OWNERDRAWFIXED | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
 font(new Font(DefaultGuiFont)),
-tabStyle(WinDefault),
-maxLength(maxLength_),
+widthConfig(widthConfig_),
 toggleActive(toggleActive_),
 ctrlTab(ctrlTab_)
 {
-	style |= tabStyle;
 }
 
 TabView::TabView(Widget* w) :
@@ -79,9 +77,7 @@ void TabView::create(const Seed & cs) {
 
 	BaseType::create(cs);
 
-	maxLength = cs.maxLength;
-	if(maxLength <= 3)
-		maxLength = 0;
+	widthConfig = cs.widthConfig;
 	toggleActive = cs.toggleActive;
 
 	if(cs.font)
@@ -90,20 +86,29 @@ void TabView::create(const Seed & cs) {
 		font = new Font(DefaultGuiFont);
 
 	if(cs.style & TCS_OWNERDRAWFIXED) {
-		dwtassert(dynamic_cast<Control*>(getParent()), _T("Owner-drawn tabs must have a parent derived from dwt::Control"));
+		TabCtrl_SetMinTabWidth(handle(), widthConfig);
 
 		LOGFONT lf;
 		::GetObject(font->handle(), sizeof(lf), &lf);
 		lf.lfWeight = FW_BOLD;
 		boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
-		setFont(boldFont); // so the control adjusts its size per the bold font
 
 		loadTheme(VSCLASS_TAB);
+
+		// in button-style, use classic owner-draw callbacks; in tab style, fully take over painting.
+		if(cs.style & TCS_BUTTONS) {
+			dwtassert(dynamic_cast<Control*>(getParent()), _T("Owner-drawn tabs must have a parent derived from dwt::Control"));
+		} else {
+			onPainting(std::bind((void (TabView::*)(PaintCanvas&))(&TabView::handlePainting), this, _1));
+		}
 
 		// TCS_HOTTRACK seems to have no effect in owner-drawn tabs, so do the tracking ourselves.
 		onMouseMove(std::bind(&TabView::handleMouseMove, this, _1));
 
 	} else {
+		if(widthConfig <= 3)
+			widthConfig = 0;
+
 		setFont(font);
 	}
 
@@ -127,14 +132,17 @@ void TabView::create(const Seed & cs) {
 
 void TabView::add(ContainerPtr w, const IconPtr& icon) {
 	int image = addIcon(icon);
-	size_t tabs = size();
-	TabInfo* ti = new TabInfo(this, w);
-	tstring title = formatTitle(w->getText());
 
-	TCITEM item = { 0 };
-	item.mask = TCIF_TEXT | TCIF_PARAM;
-	item.pszText = const_cast < TCHAR * >( title.c_str() );
+	size_t tabs = size();
+
+	TabInfo* ti = new TabInfo(this, w);
+	TCITEM item = {  TCIF_PARAM };
 	item.lParam = reinterpret_cast<LPARAM>(ti);
+
+	if(!hasStyle(TCS_OWNERDRAWFIXED)) {
+		item.mask |= TCIF_TEXT;
+		item.pszText = const_cast<LPTSTR>(formatTitle(w->getText()).c_str());
+	}
 
 	if(image != -1) {
 		item.mask |= TCIF_IMAGE;
@@ -339,8 +347,12 @@ TabView::TabInfo* TabView::getTabInfo(int i) const {
 void TabView::handleTextChanging(ContainerPtr w, const tstring& newText) {
 	int i = findTab(w);
 	if(i != -1) {
-		setText(i, formatTitle(newText));
-		layout();
+		if(hasStyle(TCS_OWNERDRAWFIXED)) {
+			redraw(i);
+		} else {
+			setText(i, formatTitle(newText));
+			layout();
+		}
 
 		if((i == active) && titleChangedFunction)
 			titleChangedFunction(newText);
@@ -348,8 +360,8 @@ void TabView::handleTextChanging(ContainerPtr w, const tstring& newText) {
 }
 
 tstring TabView::formatTitle(tstring title) {
-	if(maxLength && title.length() > maxLength)
-		title = title.substr(0, maxLength - 3) + _T("...");
+	if(widthConfig && title.length() > widthConfig)
+		title = title.substr(0, widthConfig - 3) + _T("...");
 	return util::escapeMenu(title);
 }
 
@@ -563,24 +575,68 @@ void TabView::handleMouseLeave() {
 }
 
 bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
-	bool isSelected = (info->itemState & ODS_SELECTED) == ODS_SELECTED;
-	bool isHighlighted = static_cast<int>(info->itemID) == highlighted || ti->marked;
-
 	FreeCanvas canvas(info->hDC);
 	bool oldMode = canvas.setBkMode(true);
 
 	Rectangle rect(info->rcItem);
-
-	int part, state;
 	if(theme) {
-		part = TABP_TABITEM;
-		state = isSelected ? TIS_SELECTED : isHighlighted ? TIS_HOT : TIS_NORMAL;
-
 		// remove some borders
 		rect.pos.x -= 1;
 		rect.pos.y -= 1;
 		rect.size.x += 2;
 		rect.size.y += 1;
+	}
+
+	draw(canvas, info->itemID, std::move(rect), (info->itemState & ODS_SELECTED) == ODS_SELECTED);
+
+	canvas.setBkMode(oldMode);
+	return true;
+}
+
+void TabView::handlePainting(PaintCanvas& canvas) {
+	bool oldMode = canvas.setBkMode(true);
+
+	Rectangle rect(canvas.getPaintRect());
+
+	int sel = getSelected();
+	Rectangle selRect;
+
+	for(size_t i = 0; i < size(); ++i) {
+		RECT rc;
+		if(TabCtrl_GetItemRect(handle(), i, &rc) &&
+			(rc.right >= rect.left() || rc.left <= rect.right()) &&
+			(rc.bottom >= rect.top() || rc.top <= rect.bottom()))
+		{
+			if(static_cast<int>(i) == sel) {
+				rc.top -= 2;
+				rc.bottom += 1;
+				rc.left -= 1;
+				rc.right += 1;
+				selRect = Rectangle(rc);
+			} else {
+				draw(canvas, i, Rectangle(rc), false);
+			}
+		}
+	}
+
+	// draw the selected tab last because it might need to step on others
+	if(selRect.height() > 0)
+		draw(canvas, sel, std::move(selRect), true);
+
+	canvas.setBkMode(oldMode);
+}
+
+void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSelected) {
+	TabInfo* ti = getTabInfo(index);
+	if(!ti)
+		return;
+
+	bool isHighlighted = static_cast<int>(index) == highlighted || ti->marked;
+
+	int part, state;
+	if(theme) {
+		part = TABP_TABITEM;
+		state = isSelected ? TIS_SELECTED : isHighlighted ? TIS_HOT : TIS_NORMAL;
 
 		drawThemeBackground(canvas, part, state, rect);
 
@@ -588,32 +644,37 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 		canvas.fill(rect, Brush(isSelected ? Brush::Window : isHighlighted ? Brush::HighLight : Brush::BtnFace));
 	}
 
-	const Point margin(2, 1);
+	if(isSelected && !hasStyle(TCS_BUTTONS)) {
+		rect.pos.y += 2;
+		rect.size.y -= 2;
+	}
+
+	const Point margin(4, 1);
 	rect.pos += margin;
 	rect.size -= margin + margin;
 
-	IconPtr icon = getIcon(info->itemID);
+	IconPtr icon = getIcon(index);
 	if(icon) {
 		Point size = icon->getSize();
-		canvas.drawIcon(icon, Rectangle(rect.pos, size));
+		Point pos = rect.pos;
+		if(size.y < rect.size.y)
+			pos.y += (rect.size.y - size.y) / 2; // center the icon vertically
+		canvas.drawIcon(icon, Rectangle(pos, size));
 
 		size.x += margin.x;
 		rect.pos.x += size.x;
 		rect.size.x -= size.x;
 	}
 
-	const tstring text = getText(info->itemID);
+	const tstring text = ti->w->getText();
+	const unsigned dtFormat = DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | DT_WORD_ELLIPSIS;
 	Canvas::Selector select(canvas, *((isSelected || ti->marked) ? boldFont : font));
 	if(theme) {
-		drawThemeText(canvas, part, state, text, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX, rect);
+		drawThemeText(canvas, part, state, text, dtFormat, rect);
 	} else {
 		canvas.setTextColor(::GetSysColor(isSelected ? COLOR_WINDOWTEXT : isHighlighted ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
-		canvas.drawText(text, rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
+		canvas.drawText(text, rect, dtFormat);
 	}
-
-	canvas.setBkMode(oldMode);
-
-	return true;
 }
 
 void TabView::helpImpl(unsigned& id) {
@@ -663,11 +724,10 @@ bool TabView::filter(const MSG& msg) {
 	return false;
 }
 
-void TabView::setText( unsigned index, const tstring& text )
-{
+void TabView::setText(unsigned index, const tstring& text) {
 	TCITEM item = { TCIF_TEXT };
-	item.pszText = const_cast < TCHAR * >( text.c_str() );
-	TabCtrl_SetItem(this->handle(), index, &item);
+	item.pszText = const_cast<LPTSTR>(text.c_str());
+	TabCtrl_SetItem(handle(), index, &item);
 }
 
 tstring TabView::getText(unsigned idx) const

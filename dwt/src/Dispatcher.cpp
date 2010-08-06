@@ -124,6 +124,8 @@ HWND WindowProc::getHandler(const MSG& msg) {
 		}
 
 	case WM_COMMAND:
+	case WM_HSCROLL:
+	case WM_VSCROLL:
 		{
 			if(msg.lParam != 0) {
 				handler = reinterpret_cast<HWND>(msg.lParam);

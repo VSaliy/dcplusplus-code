@@ -33,8 +33,10 @@
 
 namespace dwt {
 
+const TCHAR Slider::windowClass[] = TRACKBAR_CLASS;
+
 Slider::Seed::Seed() :
-	BaseType::Seed(WS_CHILD | WS_TABSTOP)
+BaseType::Seed(WS_CHILD | WS_TABSTOP | TBS_NOTICKS | TBS_TOOLTIPS)
 {
 }
 

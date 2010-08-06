@@ -2,7 +2,8 @@
 * Update Boost to version 1.43
 * Prevent hub-provided cmds from "open own list" from going to the wrong hub
 * Remove ADC empty token workaround targeting 0.698 (cologic)
-* Enable Data Execution Prevention on WinXP SP3/Vista/Win7/Win 2k8 Server (cologic)
+* Enable Data Execution Prevention (cologic)
+* Improved tabs, new settings (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)

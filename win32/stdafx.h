@@ -80,6 +80,8 @@ using dwt::ProgressBarPtr;
 using dwt::RadioButton;
 using dwt::RadioButtonPtr;
 using dwt::SaveDialog;
+using dwt::Slider;
+using dwt::SliderPtr;
 using dwt::Spinner;
 using dwt::SpinnerPtr;
 using dwt::TabView;

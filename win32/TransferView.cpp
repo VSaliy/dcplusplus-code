@@ -81,11 +81,12 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 	create();
 
 	{
-		TabView::Seed cs = WinUtil::Seeds::tabs;
-		cs.location = dwt::Rectangle(getClientSize());
-		cs.maxLength = 0;
-		cs.ctrlTab = true;
-		tabs = addChild(cs);
+		TabView::Seed seed = WinUtil::Seeds::tabs;
+		seed.style &= ~TCS_OWNERDRAWFIXED;
+		seed.location = dwt::Rectangle(getClientSize());
+		seed.widthConfig = 0;
+		seed.ctrlTab = true;
+		tabs = addChild(seed);
 		tabs->onHelp(std::bind(&WinUtil::help, _1, _2));
 	}
 

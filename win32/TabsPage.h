@@ -31,12 +31,16 @@ public:
 	virtual void write();
 
 private:
-	ItemList items;
-
 	GridPtr grid;
+	RadioButtonPtr dcppDraw;
+	RadioButtonPtr buttonStyle;
+	SliderPtr tabWidth;
+	GroupBoxPtr previewGroup;
 
 	static ListItem listItems[];
 	TablePtr options;
+
+	void createPreview();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_TABS_PAGE_H)

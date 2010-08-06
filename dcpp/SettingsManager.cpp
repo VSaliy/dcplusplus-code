@@ -81,9 +81,9 @@ const string SettingsManager::settingTags[] =
 	"UseTLS", "AutoSearchLimit", "AltSortOrder", "AutoKickNoFavs", "PromptPassword", "SpyFrameIgnoreTthSearches",
 	"DontDlAlreadyQueued", "MaxCommandLength", "AllowUntrustedHubs", "AllowUntrustedClients",
 	"TLSPort", "FastHash", "SortFavUsersFirst", "SegmentedDL", "FollowLinks",
-	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "MaxTabChars", "FinishedDLOnlyFull",
+	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "FinishedDLOnlyFull",
 	"ConfirmExit", "ConfirmHubClosing", "ConfirmHubRemoval", "ConfirmUserRemoval", "ConfirmItemRemoval", "ConfirmADLSRemoval",
-	"SearchMerge", "ToolbarSize",
+	"SearchMerge", "ToolbarSize", "TabWidth", "TabStyle",
 	"KeepFinishedFiles",
 	"MinMessageLines", "MaxMessageLines",
 	"BandwidthLimitStart", "BandwidthLimitEnd", "TimeDependentThrottle", "MaxDownloadSpeedRealTime",
@@ -279,7 +279,6 @@ SettingsManager::SettingsManager()
 	setDefault(SEND_BLOOM, true);
 	setDefault(OWNER_DRAWN_MENUS, true);
 	setDefault(CORAL, true);
-	setDefault(MAX_TAB_CHARS, 20);
 	setDefault(FINISHED_DL_ONLY_FULL, true);
 	setDefault(CONFIRM_EXIT, true);
 	setDefault(CONFIRM_HUB_CLOSING, true);
@@ -289,6 +288,7 @@ SettingsManager::SettingsManager()
 	setDefault(CONFIRM_ADLS_REMOVAL, true);
 	setDefault(SEARCH_MERGE, true);
 	setDefault(TOOLBAR_SIZE, 20);
+	setDefault(TAB_WIDTH, 150);
 	setDefault(TRANSFERS_PANED_POS, .7);
 	setDefault(QUEUE_PANED_POS, .3);
 	setDefault(SEARCH_PANED_POS, .2);
