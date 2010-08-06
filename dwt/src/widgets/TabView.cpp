@@ -142,8 +142,9 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 	item.lParam = reinterpret_cast<LPARAM>(ti);
 
 	if(!hasStyle(TCS_OWNERDRAWFIXED)) {
+		ti->text = formatTitle(w->getText());
 		item.mask |= TCIF_TEXT;
-		item.pszText = const_cast<LPTSTR>(formatTitle(w->getText()).c_str());
+		item.pszText = const_cast<LPTSTR>(ti->text.c_str());
 	}
 
 	if(image != -1) {
@@ -736,9 +737,13 @@ bool TabView::filter(const MSG& msg) {
 }
 
 void TabView::setText(unsigned index, const tstring& text) {
-	TCITEM item = { TCIF_TEXT };
-	item.pszText = const_cast<LPTSTR>(text.c_str());
-	TabCtrl_SetItem(handle(), index, &item);
+	TabInfo* ti = getTabInfo(index);
+	if(ti) {
+		ti->text = text;
+		TCITEM item = { TCIF_TEXT };
+		item.pszText = const_cast<LPTSTR>(ti->text.c_str());
+		TabCtrl_SetItem(handle(), index, &item);
+	}
 }
 
 tstring TabView::getText(unsigned idx) const
