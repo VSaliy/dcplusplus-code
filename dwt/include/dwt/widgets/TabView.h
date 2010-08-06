@@ -77,7 +77,8 @@ public:
 		FontPtr font;
 
 		/** for owner-drawn tabs (that have the TCS_OWNERDRAWFIXED style), defines the width of
-		each tab. otherwise, sets the max chars per tab (any value <= 3 means infinite). */
+		each tab (min 100 pixels). otherwise, sets the maximum number of characters per tab (in
+		that case, any value <= 3 means infinite). */
 		unsigned widthConfig;
 
 		bool toggleActive; /// switch the active tab when clicking on the current active tab
