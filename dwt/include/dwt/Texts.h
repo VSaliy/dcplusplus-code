@@ -37,7 +37,8 @@ namespace dwt {
 struct Texts {
 	/** Texts used by DWT that the calling application should define. */
 	enum Text {
-		undo, cut, copy, paste, del, selAll // text-box menu commands
+		undo, cut, copy, paste, del, selAll, // text-box menu commands
+		close // tooltip for closing an owner-drawn tab
 	};
 
 	static tstring get(Text text);
