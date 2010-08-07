@@ -539,7 +539,7 @@ FileFindIter& FileFindIter::operator++() {
 	return *this;
 }
 
-bool operator FileFindIter::!=(const FileFindIter& rhs) const {
+bool FileFindIter::operator!=(const FileFindIter& rhs) const {
 	// good enough to to say if it's null
 	return dir != rhs.dir;
 }

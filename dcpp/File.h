@@ -144,6 +144,10 @@ public:
 		bool isLink();
 		int64_t getSize();
 		uint32_t getLastWriteTime();
+		#ifndef _WIN32
+			dirent *ent;
+			string base;
+		#endif
 	};
 
 	DirData& operator*() { return data; }
