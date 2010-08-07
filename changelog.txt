@@ -5,6 +5,8 @@
 * Enable Data Execution Prevention (cologic)
 * Improved tabs, new settings (poy)
 * [L#571546] Add an "X" icon to close the active tab (poy)
+* [L#603071] Linux compile fix (thanks netcelli)
+* [L#606435] Prevent potential re-hashing (thanks vasily.n)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
