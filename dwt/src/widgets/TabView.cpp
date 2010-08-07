@@ -714,7 +714,6 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 
 		closeRect = rect;
 		closeRect.pos = ScreenCoordinate(ClientCoordinate(closeRect.pos, this)).getPoint();
-		closeRect.size = ScreenCoordinate(ClientCoordinate(closeRect.size, this)).getPoint();
 	}
 }
 
