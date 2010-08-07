@@ -241,13 +241,6 @@ IconPtr TabView::getIcon(ContainerPtr w) const {
 	return IconPtr();
 }
 
-tstring TabView::getText(ContainerPtr w) const {
-	int i = findTab(w);
-	if(i != -1)
-		return getText(i);
-	return tstring();
-}
-
 void TabView::onTabContextMenu(ContainerPtr w, const ContextMenuFunction& f) {
 	TabInfo* ti = getTabInfo(w);
 	if(ti) {
@@ -791,19 +784,6 @@ void TabView::setText(unsigned index, const tstring& text) {
 		item.pszText = const_cast<LPTSTR>(ti->text.c_str());
 		TabCtrl_SetItem(handle(), index, &item);
 	}
-}
-
-tstring TabView::getText(unsigned idx) const
-{
-	TCITEM item = { TCIF_TEXT };
-	TCHAR buffer[1024];
-	item.cchTextMax = (sizeof(buffer) / sizeof(TCHAR)) - 1 ;
-	item.pszText = buffer;
-	if ( !TabCtrl_GetItem( this->handle(), idx, & item ) )
-	{
-		throw Win32Exception("Couldn't retrieve text in TabView::getText.");
-	}
-	return buffer;
 }
 
 void TabView::redraw(unsigned index) {

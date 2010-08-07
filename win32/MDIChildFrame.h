@@ -214,7 +214,7 @@ private:
 	bool handleContextMenu(const dwt::ScreenCoordinate& pt) {
 		dwt::Menu::ObjectType menu = addChild(WinUtil::Seeds::menu);
 
-		menu->setTitle(getParent()->getText(this), getParent()->getIcon(this));
+		menu->setTitle(getText(), getParent()->getIcon(this));
 
 		tabMenuImpl(menu);
 		menu->appendItem(T_("&Close"), std::bind(&ThisType::close, this, true), WinUtil::menuIcon(IDI_EXIT));

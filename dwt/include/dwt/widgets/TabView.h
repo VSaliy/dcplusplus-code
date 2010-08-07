@@ -102,8 +102,6 @@ public:
 	IconPtr getIcon(ContainerPtr w) const;
 	void setIcon(ContainerPtr w, const IconPtr& icon);
 
-	tstring getText(ContainerPtr w) const;
-
 	void onTitleChanged(const TitleChangedFunction& f) {
 		titleChangedFunction = f;
 	}
@@ -203,7 +201,6 @@ private:
 	void swapWidgets(ContainerPtr oldW, ContainerPtr newW);
 
 	IconPtr getIcon(unsigned index) const;
-	tstring getText(unsigned idx) const;
 	void setText(unsigned idx, const tstring& text);
 	void redraw(unsigned index);
 	void draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSelected);
