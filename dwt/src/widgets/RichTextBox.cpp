@@ -157,28 +157,27 @@ int RichTextBox::fixupLineEndings(tstring::const_iterator begin, tstring::const_
 		boost::lambda::var(cur) > ibo)) - begin;
 }
 
-void RichTextBox::setText(const std::string& txt) {
+void RichTextBox::setTextA(const std::string& txt) {
 	{
 		util::HoldRedraw hold(this);
-		setSelection();
-		setText_(txt);
+		setTextEx(txt, ST_DEFAULT);
 		sendMessage(WM_VSCROLL, SB_TOP);
 	}
 	redraw();
 }
 
-void RichTextBox::setText_(const std::string& txt) {
-	SETTEXTEX config = { ST_SELECTION, CP_ACP };
+void RichTextBox::setTextEx(const std::string& txt, DWORD flags) {
+	SETTEXTEX config = { flags, CP_ACP };
 	sendMessage(EM_SETTEXTEX, reinterpret_cast<WPARAM>(&config), reinterpret_cast<LPARAM>(txt.c_str()));
 }
 
 void RichTextBox::setText(const tstring& txt) {
-	setText("{\\urtf " + escapeUnicode(txt) + "}");
+	setTextA("{\\urtf " + escapeUnicode(txt) + "}");
 }
 
 void RichTextBox::addText(const std::string & txt) {
 	setSelection(-1, -1);
-	setText_(txt);
+	setTextEx(txt, ST_SELECTION);
 }
 
 void RichTextBox::addTextSteady( const tstring & txtRaw, std::size_t len ) {
