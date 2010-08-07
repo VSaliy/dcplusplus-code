@@ -38,6 +38,7 @@
 #include <dwt/DWTException.h>
 #include <dwt/resources/Brush.h>
 #include <dwt/dwt_vsstyle.h>
+#include <dwt/Texts.h>
 
 #include <algorithm>
 
@@ -451,7 +452,7 @@ LRESULT TabView::handleToolTip(LPARAM lParam) {
 	LPNMTTDISPINFO ttdi = reinterpret_cast<LPNMTTDISPINFO>(lParam);
 	TabInfo* ti = getTabInfo(ttdi->hdr.idFrom); // here idFrom corresponds to the index of the tab
 	if(ti) {
-		tipText = ti->w->getText();
+		tipText = highlightClose ? Texts::get(Texts::close) : ti->w->getText();
 		ttdi->lpszText = const_cast<LPTSTR>(tipText.c_str());
 	}
 	return 0;
@@ -578,6 +579,8 @@ bool TabView::handleMouseMove(const MouseEvent& mouseEvent) {
 	if(i != -1 && i == active) {
 		if(highlightClose ^ inCloseRect(mouseEvent.pos)) {
 			highlightClose = !highlightClose;
+			if(tip)
+				tip->refresh();
 			redraw(i);
 		}
 	}
@@ -662,8 +665,8 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 	}
 
 	if(isSelected && !hasStyle(TCS_BUTTONS)) {
-		rect.pos.y += 2;
-		rect.size.y -= 2;
+		rect.pos.y += 1;
+		rect.size.y -= 1;
 	}
 
 	const Point margin(4, 1);
@@ -699,6 +702,8 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 	if(isSelected) {
 		rect.pos.x = rect.right() + margin.x;
 		rect.size.x = 16;
+		if(16 < rect.size.y)
+			rect.pos.y += (rect.size.y - 16) / 2; // center the icon vertically
 		rect.size.y = 16;
 
 		UINT format = DFCS_CAPTIONCLOSE | DFCS_FLAT;
