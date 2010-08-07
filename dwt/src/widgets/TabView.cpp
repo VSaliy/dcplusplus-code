@@ -100,10 +100,10 @@ void TabView::create(const Seed & cs) {
 
 		loadTheme(VSCLASS_TAB);
 
-		// in button-style, use classic owner-draw callbacks; in tab style, fully take over painting.
-		if(cs.style & TCS_BUTTONS) {
+		if(!theme || (cs.style & TCS_BUTTONS)) {
 			dwtassert(dynamic_cast<Control*>(getParent()), _T("Owner-drawn tabs must have a parent derived from dwt::Control"));
 		} else {
+			// we don't want pre-drawn borders to get in the way here, so we fully take over painting.
 			onPainting(std::bind((void (TabView::*)(PaintCanvas&))(&TabView::handlePainting), this, _1));
 		}
 
@@ -665,7 +665,7 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 		canvas.fill(rect, Brush(isSelected ? Brush::Window : isHighlighted ? Brush::HighLight : Brush::BtnFace));
 	}
 
-	if(isSelected && !hasStyle(TCS_BUTTONS)) {
+	if(isSelected && theme && !hasStyle(TCS_BUTTONS)) {
 		rect.pos.y += 1;
 		rect.size.y -= 1;
 	}
