@@ -162,8 +162,8 @@ private:
 	static std::string unicodeEscapeFormatter(const tstring_range& match);
 	static tstring rtfEscapeFormatter(const tstring_range& match);
 
-	void setText(const std::string& txt);
-	void setText_(const std::string& txt);
+	void setTextA(const std::string& txt);
+	void setTextEx(const std::string& txt, DWORD format);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
