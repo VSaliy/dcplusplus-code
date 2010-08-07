@@ -41,6 +41,7 @@
 #include <dwt/resources/Pen.h>
 #include <dwt/DWTException.h>
 #include <dwt/util/check.h>
+#include <dwt/util/StringUtils.h>
 #include <dwt/util/win32/Version.h>
 #include <dwt/dwt_vsstyle.h>
 
@@ -380,7 +381,7 @@ void Menu::setTitle(const tstring& title, const IconPtr& icon, bool drawSidebar 
 
 	const bool hasTitle = !itsTitle.empty();
 	// set the new title
-	itsTitle = title;
+	itsTitle = util::escapeMenu(title);
 
 	if(!drawSidebar) {
 		// init struct for title info
@@ -610,6 +611,8 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 				drawTextFormat |= DT_HIDEPREFIX;
 			unsigned drawAccelFormat = drawTextFormat | DT_RIGHT;
 			drawTextFormat |= (popup && !wrapper->isTitle) ? DT_LEFT : DT_CENTER;
+			if(wrapper->isTitle)
+				drawTextFormat |= DT_WORD_ELLIPSIS;
 
 			if(theme) {
 				drawThemeText(canvas, part, state, text, drawTextFormat, textRectangle);
@@ -729,7 +732,8 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 		wrapper->isTitle ? itsTitleFont :
 		wrapper->isDefault ? boldFont :
 		font);
-	itemWidth = textSize.x;
+	if(!wrapper->isTitle) // the title will adjust its hor size per others and add ellipsis if needed
+		itemWidth = textSize.x;
 	itemHeight = textSize.y;
 
 	// find item icon
