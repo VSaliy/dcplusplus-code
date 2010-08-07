@@ -464,15 +464,23 @@ bool TabView::handleLeftMouseDown(const MouseEvent& mouseEvent) {
 		if(mouseEvent.isShiftPressed)
 			ti->w->close();
 		else {
-			closeAuthorized = inCloseRect(mouseEvent.pos);
 			dragging = ti->w;
 			::SetCapture(handle());
+			if(hasStyle(TCS_OWNERDRAWFIXED)) {
+				int index = findTab(dragging);
+				if(index == active) {
+					closeAuthorized = inCloseRect(mouseEvent.pos);
+					redraw(index);
+				}
+			}
 		}
 	}
 	return true;
 }
 
 bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
+	bool closeAuth = closeAuthorized;
+	closeAuthorized = false;
 	::ReleaseCapture();
 
 	if(dragging) {
@@ -492,7 +500,7 @@ bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		if(dropPos == dragPos) {
 			// the tab hasn't moved; handle the click
 			if(dropPos == active) {
-				if(closeAuthorized && inCloseRect(mouseEvent.pos)) {
+				if(closeAuth && inCloseRect(mouseEvent.pos)) {
 					TabInfo* ti = getTabInfo(active);
 					if(ti)
 						ti->w->close();
@@ -707,8 +715,11 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 		rect.size.y = 16;
 
 		UINT format = DFCS_CAPTIONCLOSE | DFCS_FLAT;
-		if(isHighlighted && highlightClose)
+		if(isHighlighted && highlightClose) {
 			format |= DFCS_HOT;
+			if(closeAuthorized)
+				format |= DFCS_PUSHED;
+		}
 		::RECT rc(rect);
 		::DrawFrameControl(canvas.handle(), &rc, DFC_CAPTION, format);
 

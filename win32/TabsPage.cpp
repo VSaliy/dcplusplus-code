@@ -64,9 +64,9 @@ options(0)
 		GroupBoxPtr group = cur->addChild(GroupBox::Seed());
 		group->setHelpId(IDH_SETTINGS_TABS_DRAW);
 		GridPtr cur2 = group->addChild(Grid::Seed(2, 1));
-		dcppDraw = cur2->addChild(RadioButton::Seed(T_("DC++ draws tabs")));
+		dcppDraw = cur2->addChild(RadioButton::Seed(T_("Let DC++ draw tabs")));
 		dcppDraw->onClicked(std::bind(&TabsPage::createPreview, this));
-		RadioButtonPtr button = cur2->addChild(RadioButton::Seed(T_("Windows draws tabs")));
+		RadioButtonPtr button = cur2->addChild(RadioButton::Seed(T_("Use standard Windows tabs")));
 		button->onClicked(std::bind(&TabsPage::createPreview, this));
 		if(SETTING(TAB_STYLE) & TCS_OWNERDRAWFIXED)
 			dcppDraw->setChecked();
