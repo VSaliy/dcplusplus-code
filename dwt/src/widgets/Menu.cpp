@@ -57,6 +57,8 @@ const int Menu::pointerGap = 5;
 const int Menu::textIconGap = 8;
 const int Menu::textBorderGap = 4;
 
+/// @todo menus should re-init the cached default colors on WM_SYSCOLORCHANGE
+
 const COLORREF Menu::Colors::text = ::GetSysColor(COLOR_MENUTEXT);
 const COLORREF Menu::Colors::gray = ::GetSysColor(COLOR_GRAYTEXT);
 

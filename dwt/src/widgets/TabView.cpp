@@ -89,6 +89,8 @@ void TabView::create(const Seed & cs) {
 		font = new Font(DefaultGuiFont);
 
 	if(cs.style & TCS_OWNERDRAWFIXED) {
+		dwtassert(dynamic_cast<Control*>(getParent()), _T("Owner-drawn tabs must have a parent derived from dwt::Control"));
+
 		if(widthConfig < 100)
 			widthConfig = 100;
 		TabCtrl_SetMinTabWidth(handle(), widthConfig);
@@ -100,9 +102,7 @@ void TabView::create(const Seed & cs) {
 
 		loadTheme(VSCLASS_TAB);
 
-		if(!theme || (cs.style & TCS_BUTTONS)) {
-			dwtassert(dynamic_cast<Control*>(getParent()), _T("Owner-drawn tabs must have a parent derived from dwt::Control"));
-		} else {
+		if(!(cs.style & TCS_BUTTONS)) {
 			// we don't want pre-drawn borders to get in the way here, so we fully take over painting.
 			onPainting(std::bind((void (TabView::*)(PaintCanvas&))(&TabView::handlePainting), this, _1));
 		}
@@ -822,6 +822,11 @@ int TabView::hitTest(const ScreenCoordinate& pt) {
 }
 
 bool TabView::handleMessage( const MSG & msg, LRESULT & retVal ) {
+	if(msg.message == WM_PAINT && !theme) {
+		// let the tab control draw the borders of unthemed tabs (and revert to classic owner-draw callbacks).
+		return false;
+	}
+
 	bool handled = BaseType::handleMessage(msg, retVal);
 
 	if(msg.message == WM_SIZE) {
