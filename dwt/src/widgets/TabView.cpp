@@ -100,6 +100,7 @@ void TabView::create(const Seed & cs) {
 		boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 
 		theme.load(VSCLASS_TAB, this);
+		windowTheme.load(VSCLASS_WINDOW, this);
 
 		if(!(cs.style & TCS_BUTTONS)) {
 			// we don't want pre-drawn borders to get in the way here, so we fully take over painting.
@@ -708,14 +709,20 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 			rect.pos.y += (rect.size.y - 16) / 2; // center the icon vertically
 		rect.size.y = 16;
 
-		UINT format = DFCS_CAPTIONCLOSE | DFCS_FLAT;
-		if(isHighlighted && highlightClose) {
-			format |= DFCS_HOT;
-			if(closeAuthorized)
-				format |= DFCS_PUSHED;
+		if(windowTheme) {
+			windowTheme.drawBackground(canvas, WP_CLOSEBUTTON,
+				(isHighlighted && highlightClose) ? (closeAuthorized ? CBS_PUSHED : CBS_HOT) : CBS_NORMAL, rect);
+
+		} else {
+			UINT format = DFCS_CAPTIONCLOSE | DFCS_FLAT;
+			if(isHighlighted && highlightClose) {
+				format |= DFCS_HOT;
+				if(closeAuthorized)
+					format |= DFCS_PUSHED;
+			}
+			::RECT rc(rect);
+			::DrawFrameControl(canvas.handle(), &rc, DFC_CAPTION, format);
 		}
-		::RECT rc(rect);
-		::DrawFrameControl(canvas.handle(), &rc, DFC_CAPTION, format);
 
 		closeRect = rect;
 		closeRect.pos = ScreenCoordinate(ClientCoordinate(closeRect.pos, this)).getPoint();
