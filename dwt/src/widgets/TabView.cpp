@@ -58,7 +58,6 @@ ctrlTab(ctrlTab_)
 
 TabView::TabView(Widget* w) :
 BaseType(w, ChainingDispatcher::superClass<TabView>()),
-Themed(this),
 tip(0),
 toggleActive(false),
 font(0),
@@ -100,7 +99,7 @@ void TabView::create(const Seed & cs) {
 		lf.lfWeight = FW_BOLD;
 		boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 
-		loadTheme(VSCLASS_TAB);
+		theme.load(VSCLASS_TAB, this);
 
 		if(!(cs.style & TCS_BUTTONS)) {
 			// we don't want pre-drawn borders to get in the way here, so we fully take over painting.
@@ -661,7 +660,7 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 		part = TABP_TABITEM;
 		state = isSelected ? TIS_SELECTED : isHighlighted ? TIS_HOT : TIS_NORMAL;
 
-		drawThemeBackground(canvas, part, state, rect);
+		theme.drawBackground(canvas, part, state, rect);
 
 	} else {
 		canvas.fill(rect, Brush(isSelected ? Brush::Window : isHighlighted ? Brush::HighLight : Brush::BtnFace));
@@ -696,7 +695,7 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 	const unsigned dtFormat = DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | DT_WORD_ELLIPSIS;
 	Canvas::Selector select(canvas, *((isSelected || ti->marked) ? boldFont : font));
 	if(theme) {
-		drawThemeText(canvas, part, state, text, dtFormat, rect);
+		theme.drawText(canvas, part, state, text, dtFormat, rect);
 	} else {
 		canvas.setTextColor(::GetSysColor(isSelected ? COLOR_WINDOWTEXT : isHighlighted ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
 		canvas.drawText(text, rect, dtFormat);

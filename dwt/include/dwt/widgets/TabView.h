@@ -39,7 +39,7 @@
 #include "../aspects/AspectSelection.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
-#include <dwt/Themed.h>
+#include <dwt/Theme.h>
 
 #include <list>
 #include <vector>
@@ -54,8 +54,7 @@ class TabView :
 	private AspectCollection<TabView, int>,
 	public AspectPainting< TabView >,
 	public AspectSelection< TabView, int >,
-	public AspectText< TabView >,
-	private Themed
+	public AspectText< TabView >
 {
 	typedef CommonControl BaseType;
 	friend class AspectCollection<TabView, int>;
@@ -146,6 +145,7 @@ private:
 		TabInfo(TabView* control_, ContainerPtr w_) : control(control_), w(w_), handleContextMenu(0), marked(false) { }
 	};
 
+	Theme theme;
 	ToolTipPtr tip;
 
 	TitleChangedFunction titleChangedFunction;

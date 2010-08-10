@@ -85,7 +85,6 @@ font(font_)
 }
 
 Menu::Menu(Widget* parent) :
-Themed(parent),
 parentMenu(0),
 itsParent(parent),
 ownerDrawn(true),
@@ -114,7 +113,7 @@ void Menu::createHelper(const Seed& cs) {
 			itsTitleFont = boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		}
 
-		loadTheme(VSCLASS_MENU, !popup);
+		theme.load(VSCLASS_MENU, itsParent, !popup);
 	}
 }
 
@@ -199,7 +198,7 @@ LRESULT Menu::handleNCPaint(UINT message, WPARAM wParam, long menuWidth) {
 		Rectangle rect_bg = rect;
 		rect_bg.pos.x -= 1;
 		rect_bg.size.x += 1;
-		drawThemeBackground(canvas, MENU_BARBACKGROUND, MB_ACTIVE, rect_bg, false);
+		theme.drawBackground(canvas, MENU_BARBACKGROUND, MB_ACTIVE, rect_bg, false);
 
 		canvas.blast(rect);
 	}
@@ -511,16 +510,16 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			state_bg = MB_ACTIVE;
 		}
 
-		if(isThemeBackgroundPartiallyTransparent(part, state)) {
+		if(theme.isBackgroundPartiallyTransparent(part, state)) {
 			Rectangle rect = itemRectangle;
 			if(part_bg == MENU_BARBACKGROUND) {
 				// avoid non-drawn edges
 				rect.pos.x -= 1;
 				rect.size.x += 2;
 			}
-			drawThemeBackground(canvas, part_bg, state_bg, rect, false);
+			theme.drawBackground(canvas, part_bg, state_bg, rect, false);
 		}
-		drawThemeBackground(canvas, part, state, itemRectangle, false);
+		theme.drawBackground(canvas, part, state, itemRectangle, false);
 
 	} else {
 		canvas.fill(itemRectangle, Brush(
@@ -540,9 +539,9 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 	if(isChecked && theme) {
 		/// @todo we should also support bullets
-		drawThemeBackground(canvas, MENU_POPUPCHECKBACKGROUND, icon ? MCB_BITMAP : MCB_NORMAL, stripRectangle, false);
+		theme.drawBackground(canvas, MENU_POPUPCHECKBACKGROUND, icon ? MCB_BITMAP : MCB_NORMAL, stripRectangle, false);
 		if(!icon)
-			drawThemeBackground(canvas, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, stripRectangle, false);
+			theme.drawBackground(canvas, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, stripRectangle, false);
 	}
 
 	if(popup && info.fType & MFT_SEPARATOR) {
@@ -552,11 +551,11 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 		if(theme) {
 			Point pt;
-			if(getThemePartSize(canvas, MENU_POPUPSEPARATOR, 0, pt)) {
+			if(theme.getPartSize(canvas, MENU_POPUPSEPARATOR, 0, pt)) {
 				rectangle.size.x = std::min(rectangle.size.x, pt.x);
 				rectangle.size.y = std::min(rectangle.size.y, pt.y);
 			}
-			drawThemeBackground(canvas, MENU_POPUPSEPARATOR, 0, rectangle, false);
+			theme.drawBackground(canvas, MENU_POPUPSEPARATOR, 0, rectangle, false);
 
 		} else {
 			// center in the item rectangle
@@ -617,9 +616,9 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 				drawTextFormat |= DT_WORD_ELLIPSIS;
 
 			if(theme) {
-				drawThemeText(canvas, part, state, text, drawTextFormat, textRectangle);
+				theme.drawText(canvas, part, state, text, drawTextFormat, textRectangle);
 				if(!accelerator.empty())
-					drawThemeText(canvas, part, state, accelerator, drawAccelFormat, textRectangle);
+					theme.drawText(canvas, part, state, accelerator, drawAccelFormat, textRectangle);
 
 			} else {
 				bool oldMode = canvas.setBkMode(true);
@@ -718,7 +717,7 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 		if(theme) {
 			UpdateCanvas canvas(getParent());
 			Point pt;
-			if(getThemePartSize(canvas, MENU_POPUPSEPARATOR, 0, pt)) {
+			if(theme.getPartSize(canvas, MENU_POPUPSEPARATOR, 0, pt)) {
 				itemWidth = pt.x;
 				itemHeight = pt.y;
 				return true;
