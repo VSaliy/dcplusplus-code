@@ -196,7 +196,7 @@ Section "un.Uninstall"
   ; remove directories used.
   RMDir "$SMPROGRAMS\DC++"
 
-  MessageBox MB_YESNO|MB_ICONQUESTION "Also remove queue and settings?" IDYES kill_dir
+  MessageBox MB_YESNO|MB_ICONQUESTION "Also remove queue, settings and the complete DC++ program folder ($INSTDIR) with all of its subfolders?" IDYES kill_dir
 
   RMDir "$INSTDIR"
   goto end_uninstall
