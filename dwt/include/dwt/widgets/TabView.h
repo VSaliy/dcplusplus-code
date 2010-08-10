@@ -146,6 +146,7 @@ private:
 	};
 
 	Theme theme;
+	Theme windowTheme; // to draw the close button
 	ToolTipPtr tip;
 
 	TitleChangedFunction titleChangedFunction;
