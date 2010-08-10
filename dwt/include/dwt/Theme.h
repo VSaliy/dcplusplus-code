@@ -29,8 +29,8 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_THEMED_H
-#define DWT_THEMED_H
+#ifndef DWT_THEME_H
+#define DWT_THEME_H
 
 #include "CanvasClasses.h"
 
@@ -38,33 +38,34 @@
 
 namespace dwt {
 
-/** helper class a widget can derive from. this class:
+/** helper class to manage a theme. this class:
 - manages calls to visual styles APIs without having to link to uxtheme.lib.
 - handles opening and closing the theme on destruction and on WM_THEMECHANGED.
 */
-class Themed {
-protected:
-	explicit Themed(Widget* w_);
-	virtual ~Themed();
+class Theme {
+public:
+	Theme();
+	virtual ~Theme();
 
-	void loadTheme(LPCWSTR classes, bool handleThemeChanges = true);
+	void load(LPCWSTR classes, Widget* w_, bool handleThemeChanges = true);
 
 	/**
 	* @param drawParent if false, you have to call isThemeBackgroundPartiallyTransparent and handle
 	* drawing the transparent bits yourself.
 	*/
-	void drawThemeBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent = true);
-	void drawThemeText(Canvas& canvas, int part, int state, const tstring& text, DWORD flags, const Rectangle& rect);
-	bool getThemePartSize(Canvas& canvas, int part, int state, Point& ret);
-	bool isThemeBackgroundPartiallyTransparent(int part, int state);
+	void drawBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent = true);
+	void drawText(Canvas& canvas, int part, int state, const tstring& text, DWORD flags, const Rectangle& rect);
+	bool getPartSize(Canvas& canvas, int part, int state, Point& ret);
+	bool isBackgroundPartiallyTransparent(int part, int state);
 
-	HTHEME theme;
+	operator bool() const;
 
 private:
-	void openTheme(LPCWSTR classes);
-	void closeTheme();
+	void open(LPCWSTR classes);
+	void close();
 	void themeChanged(LPCWSTR classes);
 
+	HTHEME theme;
 	Widget* w;
 };
 

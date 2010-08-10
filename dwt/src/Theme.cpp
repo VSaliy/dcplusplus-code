@@ -29,7 +29,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <dwt/Themed.h>
+#include <dwt/Theme.h>
 
 #include <dwt/Dispatchers.h>
 #include <dwt/LibraryLoader.h>
@@ -61,16 +61,15 @@ static t_IsThemeBackgroundPartiallyTransparent IsThemeBackgroundPartiallyTranspa
 typedef HWND (WINAPI *t_OpenThemeData)(HTHEME, LPCWSTR);
 static t_OpenThemeData OpenThemeData;
 
-Themed::Themed(Widget* w_) : theme(0), w(w_)
+Theme::Theme() : theme(0)
 {
-	dwtassert(w, _T("Themed: no widget set"));
 }
 
-Themed::~Themed() {
-	closeTheme();
+Theme::~Theme() {
+	close();
 }
 
-void Themed::loadTheme(LPCWSTR classes, bool handleThemeChanges) {
+void Theme::load(LPCWSTR classes, Widget* w_, bool handleThemeChanges) {
 	static LibraryLoader lib(_T("uxtheme"), true);
 	if(lib.loaded()) {
 
@@ -85,29 +84,32 @@ void Themed::loadTheme(LPCWSTR classes, bool handleThemeChanges) {
 		get(OpenThemeData);
 #undef get
 
-		openTheme(classes);
+		w = w_;
+		dwtassert(w, _T("Theme: no widget set"));
+
+		open(classes);
 
 		if(handleThemeChanges) {
 			w->addCallback(Message(WM_THEMECHANGED),
-				Dispatchers::VoidVoid<0, false>(std::bind(&Themed::themeChanged, this, classes)));
+				Dispatchers::VoidVoid<0, false>(std::bind(&Theme::themeChanged, this, classes)));
 		}
 	}
 }
 
-void Themed::drawThemeBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent) {
+void Theme::drawBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent) {
 	::RECT rc = rect;
-	if(drawParent && isThemeBackgroundPartiallyTransparent(part, state)) {
+	if(drawParent && isBackgroundPartiallyTransparent(part, state)) {
 		DrawThemeParentBackground(w->handle(), canvas.handle(), &rc);
 	}
 	DrawThemeBackground(theme, canvas.handle(), part, state, &rc, 0);
 }
 
-void Themed::drawThemeText(Canvas& canvas, int part, int state, const tstring& text, DWORD flags, const Rectangle& rect) {
+void Theme::drawText(Canvas& canvas, int part, int state, const tstring& text, DWORD flags, const Rectangle& rect) {
 	::RECT rc = rect;
 	DrawThemeText(theme, canvas.handle(), part, state, text.c_str(), text.size(), flags, 0, &rc);
 }
 
-bool Themed::getThemePartSize(Canvas& canvas, int part, int state, Point& ret) {
+bool Theme::getPartSize(Canvas& canvas, int part, int state, Point& ret) {
 	SIZE size;
 	if(GetThemePartSize(theme, canvas.handle(), part, state, 0, TS_TRUE, &size) == S_OK) {
 		ret.x = size.cx;
@@ -117,26 +119,30 @@ bool Themed::getThemePartSize(Canvas& canvas, int part, int state, Point& ret) {
 	return false;
 }
 
-bool Themed::isThemeBackgroundPartiallyTransparent(int part, int state) {
+bool Theme::isBackgroundPartiallyTransparent(int part, int state) {
 	return IsThemeBackgroundPartiallyTransparent(theme, part, state);
 }
 
-void Themed::openTheme(LPCWSTR classes) {
+Theme::operator bool() const {
+	return theme;
+}
+
+void Theme::open(LPCWSTR classes) {
 	if(IsAppThemed()) {
 		theme = OpenThemeData(w->handle(), classes);
 	}
 }
 
-void Themed::closeTheme() {
+void Theme::close() {
 	if(theme) {
 		CloseThemeData(theme);
 		theme = 0;
 	}
 }
 
-void Themed::themeChanged(LPCWSTR classes) {
-	closeTheme();
-	openTheme(classes);
+void Theme::themeChanged(LPCWSTR classes) {
+	close();
+	open(classes);
 }
 
 }

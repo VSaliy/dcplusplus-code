@@ -39,7 +39,7 @@
 
 #include "../CanvasClasses.h"
 #include "../Dispatchers.h"
-#include <dwt/Themed.h>
+#include <dwt/Theme.h>
 
 namespace dwt {
 
@@ -51,7 +51,7 @@ namespace dwt {
 * Window. <br>
 * Note for Desktop version only! <br>
 */
-class Menu : private boost::noncopyable, private Themed
+class Menu : private boost::noncopyable
 {
 	friend class WidgetCreator<Menu>;
 
@@ -354,6 +354,8 @@ private:
 	static const unsigned id_offset = 100;
 	typedef std::unique_ptr<std::vector<Dispatcher::F> > commands_type;
 	commands_type commands; // just a pointer because sub-menus don't need this
+
+	Theme theme;
 
 	Point iconSize;
 
