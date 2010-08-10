@@ -472,9 +472,10 @@ bool TabView::handleLeftMouseDown(const MouseEvent& mouseEvent) {
 }
 
 bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
+	::ReleaseCapture();
+
 	bool closeAuth = closeAuthorized;
 	closeAuthorized = false;
-	::ReleaseCapture();
 
 	if(dragging) {
 		int dragPos = findTab(dragging);
@@ -486,8 +487,12 @@ bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		int dropPos = hitTest(mouseEvent.pos);
 
 		if(dropPos == -1) {
-			// not in the tab control; move the tab to the end
-			dropPos = size() - 1;
+			// not on any of the current tabs; see if the tab should be moved to the end.
+			Point pt = ClientCoordinate(mouseEvent.pos, this).getPoint();
+			if(pt.x >= 0 && pt.x <= clientSize.right() && pt.y >= 0 && pt.y <= clientSize.top())
+				dropPos = size() - 1;
+			else
+				return true;
 		}
 
 		if(dropPos == dragPos) {
