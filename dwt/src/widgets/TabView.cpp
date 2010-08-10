@@ -615,9 +615,11 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 }
 
 void TabView::handlePainting(PaintCanvas& canvas) {
-	bool oldMode = canvas.setBkMode(true);
-
 	Rectangle rect(canvas.getPaintRect());
+	if(rect.width() == 0 || rect.height() == 0)
+		return;
+
+	bool oldMode = canvas.setBkMode(true);
 
 	int sel = getSelected();
 	Rectangle selRect;
