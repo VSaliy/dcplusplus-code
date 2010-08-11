@@ -34,6 +34,8 @@ private:
 	GridPtr grid;
 	RadioButtonPtr dcppDraw;
 	RadioButtonPtr buttonStyle;
+	GroupBoxPtr themeGroup;
+	RadioButtonPtr browserTheme;
 	SliderPtr tabWidth;
 	GroupBoxPtr previewGroup;
 
