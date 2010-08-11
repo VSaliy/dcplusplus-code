@@ -23,6 +23,7 @@
 #include "TabsPage.h"
 
 #include <dwt/widgets/Slider.h>
+#include <dwt/util/win32/Version.h>
 
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
@@ -46,6 +47,8 @@ PropPage(parent),
 grid(0),
 dcppDraw(0),
 buttonStyle(0),
+themeGroup(0),
+browserTheme(0),
 tabWidth(0),
 previewGroup(0),
 options(0)
@@ -59,16 +62,18 @@ options(0)
 	grid->setSpacing(10);
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
 
 		GroupBoxPtr group = cur->addChild(GroupBox::Seed());
 		group->setHelpId(IDH_SETTINGS_TABS_DRAW);
 		GridPtr cur2 = group->addChild(Grid::Seed(2, 1));
 		dcppDraw = cur2->addChild(RadioButton::Seed(T_("Let DC++ draw tabs")));
 		dcppDraw->onClicked(std::bind(&TabsPage::createPreview, this));
+		dcppDraw->onClicked([&themeGroup]() { themeGroup->setEnabled(true); });
 		RadioButtonPtr button = cur2->addChild(RadioButton::Seed(T_("Use standard Windows tabs")));
 		button->onClicked(std::bind(&TabsPage::createPreview, this));
-		if(SETTING(TAB_STYLE) & TCS_OWNERDRAWFIXED)
+		button->onClicked([&themeGroup]() { themeGroup->setEnabled(false); });
+		if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_OD)
 			dcppDraw->setChecked();
 		else
 			button->setChecked();
@@ -80,10 +85,27 @@ options(0)
 		button->onClicked(std::bind(&TabsPage::createPreview, this));
 		buttonStyle = cur2->addChild(RadioButton::Seed(T_("Button style")));
 		buttonStyle->onClicked(std::bind(&TabsPage::createPreview, this));
-		if(SETTING(TAB_STYLE) & TCS_BUTTONS)
+		if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BUTTONS)
 			buttonStyle->setChecked();
 		else
 			button->setChecked();
+
+		themeGroup = cur->addChild(GroupBox::Seed());
+		themeGroup->setHelpId(IDH_SETTINGS_TABS_STYLE);
+		cur2 = themeGroup->addChild(Grid::Seed(2, 1));
+		button = cur2->addChild(RadioButton::Seed(T_("Default theme")));
+		button->onClicked(std::bind(&TabsPage::createPreview, this));
+		browserTheme = cur2->addChild(RadioButton::Seed(T_("Browser theme")));
+		if(dwt::util::win32::ensureVersion(dwt::util::win32::VISTA))
+			browserTheme->onClicked(std::bind(&TabsPage::createPreview, this));
+		else
+			browserTheme->setEnabled(false);
+		if(browserTheme->getEnabled() && (SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BROWSER))
+			browserTheme->setChecked();
+		else
+			button->setChecked();
+		if(!(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_OD))
+			themeGroup->setEnabled(false);
 	}
 
 	{
@@ -124,9 +146,11 @@ void TabsPage::layout(const dwt::Rectangle& rc) {
 void TabsPage::write() {
 	int tabStyle = 0;
 	if(dcppDraw->getChecked())
-		tabStyle |= TCS_OWNERDRAWFIXED;
+		tabStyle |= SettingsManager::TAB_STYLE_OD;
 	if(buttonStyle->getChecked())
-		tabStyle |= TCS_BUTTONS;
+		tabStyle |= SettingsManager::TAB_STYLE_BUTTONS;
+	if(browserTheme->getChecked())
+		tabStyle |= SettingsManager::TAB_STYLE_BROWSER;
 	SettingsManager::getInstance()->set(SettingsManager::TAB_STYLE, tabStyle);
 
 	SettingsManager::getInstance()->set(SettingsManager::TAB_WIDTH, tabWidth->getPosition());
@@ -144,7 +168,10 @@ void TabsPage::createPreview() {
 	TabView::Seed seed = WinUtil::Seeds::tabs;
 	seed.widthConfig = tabWidth->getPosition();
 	seed.style |= WS_DISABLED;
-	if(!dcppDraw->getChecked()) {
+	if(dcppDraw->getChecked()) {
+		if(browserTheme->getChecked())
+			seed.tabStyle = TabView::Seed::WinBrowser;
+	} else {
 		seed.style &= ~TCS_OWNERDRAWFIXED;
 		seed.widthConfig -= 100; // max width to max chars
 	}

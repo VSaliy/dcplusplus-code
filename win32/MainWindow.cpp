@@ -449,14 +449,16 @@ void MainWindow::initStatusBar() {
 
 void MainWindow::initTabs() {
 	dcdebug("initTabs\n");
-	SettingsManager::getInstance()->setDefault(SettingsManager::TAB_STYLE, TCS_OWNERDRAWFIXED);
 	TabView::Seed seed = WinUtil::Seeds::tabs;
 	seed.widthConfig = SETTING(TAB_WIDTH);
-	if(!(SETTING(TAB_STYLE) & TCS_OWNERDRAWFIXED)) {
+	if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_OD) {
+		if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BROWSER)
+			seed.tabStyle = TabView::Seed::WinBrowser;
+	} else {
 		seed.style &= ~TCS_OWNERDRAWFIXED;
 		seed.widthConfig -= 100; // max width to max chars
 	}
-	if(SETTING(TAB_STYLE) & TCS_BUTTONS)
+	if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BUTTONS)
 		seed.style |= TCS_BUTTONS;
 	seed.toggleActive = BOOLSETTING(TOGGLE_ACTIVE_WINDOW);
 	seed.ctrlTab = true;

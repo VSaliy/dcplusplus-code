@@ -73,6 +73,12 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
+		enum {
+			WinDefault, /// use the default Windows style.
+
+			WinBrowser /// use the "Browser" Windows style, only available on Win >= Vista.
+		} tabStyle;
+
 		FontPtr font;
 
 		/** for owner-drawn tabs (that have the TCS_OWNERDRAWFIXED style), defines the width of

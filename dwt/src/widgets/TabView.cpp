@@ -35,6 +35,7 @@
 #include <dwt/widgets/ToolTip.h>
 #include <dwt/WidgetCreator.h>
 #include <dwt/util/StringUtils.h>
+#include <dwt/util/win32/Version.h>
 #include <dwt/DWTException.h>
 #include <dwt/resources/Brush.h>
 #include <dwt/dwt_vsstyle.h>
@@ -49,6 +50,7 @@ const TCHAR TabView::windowClass[] = WC_TABCONTROL;
 TabView::Seed::Seed(unsigned widthConfig_, bool toggleActive_, bool ctrlTab_) :
 BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
 	TCS_FOCUSNEVER | TCS_HOTTRACK | TCS_MULTILINE | TCS_OWNERDRAWFIXED | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
+tabStyle(WinDefault),
 font(new Font(DefaultGuiFont)),
 widthConfig(widthConfig_),
 toggleActive(toggleActive_),
@@ -99,7 +101,12 @@ void TabView::create(const Seed & cs) {
 		lf.lfWeight = FW_BOLD;
 		boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 
-		theme.load(VSCLASS_TAB, this);
+		if(cs.tabStyle == Seed::WinBrowser && util::win32::ensureVersion(util::win32::VISTA)) {
+			theme.load(L"BrowserTab::" VSCLASS_TAB, this);
+			if(!theme)
+				theme.load(VSCLASS_TAB, this, false);
+		} else
+			theme.load(VSCLASS_TAB, this);
 		windowTheme.load(VSCLASS_WINDOW, this);
 
 		if(!(cs.style & TCS_BUTTONS)) {
