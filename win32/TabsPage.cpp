@@ -177,6 +177,7 @@ void TabsPage::createPreview() {
 	}
 	if(buttonStyle->getChecked())
 		seed.style |= TCS_BUTTONS;
+	seed.closeIcon = WinUtil::tabIcon(IDI_EXIT);
 	TabViewPtr tabs = cur->addChild(seed);
 
 	auto makeTab = [&tabs](const tstring& text) -> ContainerPtr {

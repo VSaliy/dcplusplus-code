@@ -86,6 +86,10 @@ public:
 		that case, any value <= 3 means infinite). */
 		unsigned widthConfig;
 
+		/** 16x16 icon to draw the close button of owner-drawn tabs (that have the
+		TCS_OWNERDRAWFIXED style). if no icon is provided, a standard 'X' icon will be used. */
+		IconPtr closeIcon;
+
 		bool toggleActive; /// switch the active tab when clicking on the current active tab
 		bool ctrlTab; /// handle Ctrl+Tab and Ctrl+Shift+Tab
 
@@ -152,7 +156,6 @@ private:
 	};
 
 	Theme theme;
-	Theme windowTheme; // to draw the close button
 	ToolTipPtr tip;
 
 	TitleChangedFunction titleChangedFunction;
@@ -162,6 +165,7 @@ private:
 	bool toggleActive;
 	FontPtr font;
 	FontPtr boldFont;
+	IconPtr closeIcon;
 
 	bool inTab;
 	int highlighted;

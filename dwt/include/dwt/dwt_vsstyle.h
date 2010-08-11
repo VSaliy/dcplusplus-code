@@ -61,12 +61,6 @@
 #define TIS_HOT 2
 #define TIS_SELECTED 3
 
-#define VSCLASS_WINDOW L"WINDOW"
-#define WP_CLOSEBUTTON 18
-#define CBS_NORMAL 1
-#define CBS_HOT 2
-#define CBS_PUSHED 3
-
 #else
 #include <vsstyle.h>
 #endif
