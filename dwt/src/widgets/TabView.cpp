@@ -101,13 +101,14 @@ void TabView::create(const Seed & cs) {
 		lf.lfWeight = FW_BOLD;
 		boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 
+		closeIcon = cs.closeIcon;
+
 		if(cs.tabStyle == Seed::WinBrowser && util::win32::ensureVersion(util::win32::VISTA)) {
 			theme.load(L"BrowserTab::" VSCLASS_TAB, this);
 			if(!theme)
 				theme.load(VSCLASS_TAB, this, false);
 		} else
 			theme.load(VSCLASS_TAB, this);
-		windowTheme.load(VSCLASS_WINDOW, this);
 
 		if(!(cs.style & TCS_BUTTONS)) {
 			// we don't want pre-drawn borders to get in the way here, so we fully take over painting.
@@ -721,9 +722,17 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 			rect.pos.y += (rect.size.y - 16) / 2; // center the icon vertically
 		rect.size.y = 16;
 
-		if(windowTheme) {
-			windowTheme.drawBackground(canvas, WP_CLOSEBUTTON,
-				(isHighlighted && highlightClose) ? (closeAuthorized ? CBS_PUSHED : CBS_HOT) : CBS_NORMAL, rect);
+		if(closeIcon) {
+			Rectangle drawRect = rect;
+			if(isHighlighted && highlightClose) {
+				drawRect.pos.x -= 1;
+				drawRect.pos.y -= 1;
+				if(closeAuthorized) {
+					drawRect.size.x += 1;
+					drawRect.size.y += 1;
+				}
+			}
+			canvas.drawIcon(closeIcon, drawRect);
 
 		} else {
 			UINT format = DFCS_CAPTIONCLOSE | DFCS_FLAT;

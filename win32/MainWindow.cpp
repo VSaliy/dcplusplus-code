@@ -460,6 +460,7 @@ void MainWindow::initTabs() {
 	}
 	if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BUTTONS)
 		seed.style |= TCS_BUTTONS;
+	seed.closeIcon = WinUtil::tabIcon(IDI_EXIT);
 	seed.toggleActive = BOOLSETTING(TOGGLE_ACTIVE_WINDOW);
 	seed.ctrlTab = true;
 	tabs = addChild(seed);
