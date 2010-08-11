@@ -69,14 +69,14 @@ options(0)
 		GridPtr cur2 = group->addChild(Grid::Seed(2, 1));
 		dcppDraw = cur2->addChild(RadioButton::Seed(T_("Let DC++ draw tabs")));
 		dcppDraw->onClicked(std::bind(&TabsPage::createPreview, this));
-		dcppDraw->onClicked([&themeGroup, &browserTheme]() {
+		dcppDraw->onClicked([this]() {
 			themeGroup->setEnabled(true);
 			if(!dwt::util::win32::ensureVersion(dwt::util::win32::VISTA))
 				browserTheme->setEnabled(false);
 		});
 		RadioButtonPtr button = cur2->addChild(RadioButton::Seed(T_("Use standard Windows tabs")));
 		button->onClicked(std::bind(&TabsPage::createPreview, this));
-		button->onClicked([&themeGroup]() { themeGroup->setEnabled(false); });
+		button->onClicked([this]() { themeGroup->setEnabled(false); });
 		if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_OD)
 			dcppDraw->setChecked();
 		else
