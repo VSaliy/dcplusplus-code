@@ -60,7 +60,7 @@
 #include <dcpp/ShareManager.h>
 #include <dcpp/QueueManager.h>
 #include <dcpp/ClientManager.h>
-#include <dcpp/UPnPManager.h>
+#include <dcpp/ConnectivityManager.h>
 #include <dcpp/Download.h>
 #include <dcpp/WindowInfo.h>
 #include <dcpp/SimpleXML.h>
@@ -152,7 +152,12 @@ lastTick(GET_TICK())
 	c->downloadFile("http://dcplusplus.sourceforge.net/version.xml");
 
 	File::ensureDirectory(SETTING(LOG_DIRECTORY));
-	startSocket();
+
+	try {
+		ConnectivityManager::getInstance()->setup(true, SettingsManager::INCOMING_DIRECT);
+	} catch (const Exception& e) {
+		showPortsError(e.getError());
+	}
 
 	WindowManager::getInstance()->autoOpen(WinUtil::isShift());
 
@@ -931,13 +936,10 @@ void MainWindow::handleSettings() {
 	if(dlg.run() == IDOK) {
 		SettingsManager::getInstance()->save();
 
-		if(SETTING(INCOMING_CONNECTIONS) != lastConn || SETTING(TCP_PORT) != lastTCP || SETTING(UDP_PORT) != lastUDP || SETTING(TLS_PORT) != lastTLS) {
-			if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP || lastConn == SettingsManager::INCOMING_FIREWALL_UPNP)
-				UPnPManager::getInstance()->close();
-			startSocket();
-		} else if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP && !UPnPManager::getInstance()->getOpened()) {
-			// previous UPnP mappings had failed; try again
-			UPnPManager::getInstance()->open();
+		try {
+			ConnectivityManager::getInstance()->setup(SETTING(INCOMING_CONNECTIONS) != lastConn || SETTING(TCP_PORT) != lastTCP || SETTING(UDP_PORT) != lastUDP || SETTING(TLS_PORT) != lastTLS, lastConn);
+		} catch (const Exception& e) {
+			showPortsError(e.getError());
 		}
 
 		if(BOOLSETTING(SORT_FAVUSERS_FIRST) != lastSortFavUsersFirst)
@@ -952,26 +954,8 @@ void MainWindow::handleSettings() {
 	}
 }
 
-void MainWindow::startSocket() {
-	SearchManager::getInstance()->disconnect();
-	ConnectionManager::getInstance()->disconnect();
-
-	if(ClientManager::getInstance()->isActive()) {
-		try {
-			ConnectionManager::getInstance()->listen();
-		} catch(const Exception&) {
-			dwt::MessageBox(this).show(T_("Unable to open TCP/TLS port. File transfers will not work correctly until you change settings or turn off any application that might be using the TCP/TLS port"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
-		}
-		try {
-			SearchManager::getInstance()->listen();
-		} catch(const Exception&) {
-			dwt::MessageBox(this).show(T_("Unable to open UDP port. Searching will not work correctly until you change settings or turn off any application that might be using the UDP port"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
-		}
-
-		// must be done after listen calls; otherwise ports won't be set
-		if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP)
-			UPnPManager::getInstance()->open();
-	}
+void MainWindow::showPortsError(const string& port) {
+	dwt::MessageBox(this).show(Text::toT(str(F_("Unable to open %1% port. Searching or file transfers will not work correctly until you change settings or turn off any application that might be using that port.") % port)), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 }
 
 void MainWindow::handleOpenFileList() {

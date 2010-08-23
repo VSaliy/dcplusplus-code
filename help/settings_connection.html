@@ -6,27 +6,49 @@
 <link type="text/css" rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<h1 id="connection">Connection settings</h1>
+<h1>Connection settings</h1>
+<h2 id="autoconn">Automatic connection type detection</h2>
 <p>
-Use these settings to properly configure DC++
-for incoming and outgoing connections. Your incoming connection
-type must be correctly chosen for downloads to work. If unsure
-about these settings, you may want to follow the 
-<a href="get_started.html#connection">connection setup part</a>
-of the <a href="get_started.html">Get Started guide</a>.
+  Your incoming connection type must be correctly chosen for searches and downloads to work. In most cases DC++ 
+  is able to detect the best incoming connection type for you so its recommended to leave the automatic detection
+  option enabled and let DC++ auto-configure your settings. This way the required connection settings will be 
+  determined automatically and all <u>manual connection settings will be ignored</u>. If automatic detection fails,
+  the determined connection type doesn't work or the result is fallback to passive mode then you can disable
+  the automatic detection and set up your connection manually in a hope to achieve better connectivity.
 </p>
-<h2>Incoming connection settings</h2>
+<dl style="margin-left: 40px;">
+  <dt>Enable automatic incoming connection type detection</dt>
+  <dd cshelp="IDH_SETTINGS_NETWORK_AUTODETECT">Select this if you want to make DC++ determine the best connection type
+  for you. This should work with the majority of network structures DC++ used in. Possibility of successful
+  active mode detection may depend on operating system configuration and network devices used.
+  <b>Disable this option if you use DC++ in a local network only (eg. in a campus, etc..).</b></dd>
+  <dt>Detect now</dt>
+  <dd cshelp="IDH_SETTINGS_NETWORK_DETECT_NOW">With this button, you can force DC++ to (re)detect the best connection
+   mode available to you. Details and result of the operation will be shown in the Detection log box below.</dd>
+  <dt>Detection log</dt>
+  <dd cshelp="IDH_SETTINGS_NETWORK_DETECTION_LOG">This box contains the log and result of the last connection type
+  detection started by clicking the Detect now button. It'll contain the detection steps, possible error messages and shows
+  you why a certain connection mode was chosen. These information are helpful in case of errors or when the result
+  is other than expected. Detection messages will appear in the System log as well; description of all the possible
+  messages are available in the <a href="window_system_log.html">list of System log messages</a>.</dd>
+</dl>
+<h2 id="connection">Incoming connection settings</h2>
+<p>
+Use these settings to manually configure DC++ for incoming connections. If unsure, you may want to follow the <a href="get_started.html#connection">connection setup part</a> of the <a href="get_started.html">Get Started guide</a>.
+You should disable Automatic connection type detection to make these settings manually configurable.
+</p>
   <p style="margin-left: 40px;">Before set up the following settings make sure you familiar with the meaning of all connection modes, 
   <a href="faq_whyactive.html">differences between active and passive mode and their effect on 
   your ability to search and download from users</a> of the DC network.</p> 
   <h3 style="margin-left: 40px;"><u>Active connection modes</u></h3>
   <p style="margin-left: 40px;">Active are the preferred connection modes in the DC network. In case of any problems with 
   setting up active connection modes please follow the detailed <a href="faq_activemode.html">
-  Active mode FAQ</a> for help.</p>	  
+  Active mode FAQ</a> for help.</p>
 <dl style="margin-left: 40px;">
   <dt>My computer is directly connected to Internet (no router)</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_DIRECT">Select this mode if your computer is connected directly to the
-internet. <b>Do <u>not</u> select this mode if you have a router or any external firewall.</b> 
+internet or you plan to connect to hubs in your local network only. <b>Do <u>not</u> select this mode if 
+you have a router or any external firewall.</b> 
 If your computer is not behind a router all you have to do is to choose this option and usually 
 you don't need to alter anything more in the connection settings. However, if you have a software firewall
 installed or built-in Windows firewall enabled, you may need further configuration in the firewall 
@@ -67,7 +89,8 @@ ones. This mode carries some serious limitations:
 Generally you don't need to add specific ports unless you configured your port forwarding settings manually.
 If the ports not set DC++ will try to assgin them automatically in various ways depending on what connection
 mode used. So if you use any conncetion mode option other than 'Manual port forwarding (I have configured my router by myself)'
-then its best to leave the port fields empty. If port settings are left blank, DC++ will use a random port between 1025 and 32000.</p>
+then its best to leave the port fields empty. If port settings are left blank, DC++ will use a random port between 1025 and 32000.
+Port values will be ignored if <a href="autoconn">Automatic incoming connection type detection</a> is enabled.</p>
 <dl>
   <dt>TCP</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_PORT_TCP">This is the port that DC++ listens on for incoming client
@@ -83,35 +106,10 @@ results. If this port incorrectly forwarded you won't be able to receive search 
 </dd>
 <dt>External / WAN IP</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_EXTERNAL_IP">This field specifies your external IP address. <i>If you unsure and use any conncetion mode option <u>other than</u></i> 'Manual port forwarding (I have configured my router by myself)' <i>then leave this field blank.</i> If your computer is directly connected to the internet, your internal and external IP is the same and can easily be automatically detected. Fill in this box <b>only</b> if you need to override the auto-detection. Ordinarily, only users behind a firewall/router (NAT device) may need to fill in this box. If you put a DNS name here, DC++ will try to resolve it into an IP address before use. To know how to determine your external IP address follow the 
-<a href="get_started.html#connection">connection setup part</a> of the <a href="get_started.html">Get Started guide</a> or the detailed <a href="faq_activemode.html">Active mode FAQ</a>.</dd>
-  <dt>Don't allow hub/UPnP to override</dt>
+<a href="get_started.html#connection">connection setup part</a> of the <a href="get_started.html">Get Started guide</a> or the detailed <a href="faq_activemode.html">Active mode FAQ</a>. IP address set here will be deleted if you enable <a href="autoconn">Automatic incoming connection type detection</a>.</dd>
+  <dt id="noipoverride">Don't allow hub/UPnP to override</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_OVERRIDE">Enable this to always use the IP address in "External / WAN IP",
-and not let either UPnP or connected hubs change it. If unsure leave this setting disabled.</dd>
-</dl>
-<h2>Outgoing connection settings</h2>
-<dl style="margin-left: 40px;">
-  <dt>Direct connection</dt>
-  <dd cshelp="IDH_SETTINGS_NETWORK_DIRECT_OUT">Select this mode if you can make unrestricted outbound
-connections. This includes connecting to any IP address on any port. Choose this option if unsure.</dd>
-  <dt>SOCKS5</dt>
-  <dd cshelp="IDH_SETTINGS_NETWORK_SOCKS5">Select this mode if you want to make outbound connections through
-a SOCKS proxy. The caveats for Passive mode also apply here.
-SOCKS5 proxies are <u>not</u>
-the same as HTTP proxies. DC++'s SOCKS5 support does <u>not</u> include GSSAPI.</dd>
-</dl>
-<h3 style="margin-left: 40px;">Options</h3>
-<dl style="margin-left: 80px;">
-  <dt>Socks IP</dt>
-  <dd cshelp="IDH_SETTINGS_NETWORK_SOCKS_SERVER">This is the IP, not host name, of your SOCKS5 server.</dd>
-  <dt>Port</dt>
-  <dd cshelp="IDH_SETTINGS_NETWORK_SOCKS_PORT">The port that your SOCKS5 server runs on. The default is 1080.</dd>
-  <dt>Login</dt>
-  <dd cshelp="IDH_SETTINGS_NETWORK_SOCKS_USER">Login name for the SOCKS5 proxy; may be required.</dd>
-  <dt>Password</dt>
-  <dd cshelp="IDH_SETTINGS_NETWORK_SOCKS_PASSWORD">Password for the SOCKS5 proxy; may be required.</dd>
-  <dt>Use SOCKS5 server to resolve host names</dt>
-  <dd cshelp="IDH_SETTINGS_NETWORK_SOCKS_RESOLVE">Enable this to use the SOCKS5 proxy, instead of the local name
-server, to resolve host names into IP addresses.</dd>
+and not let either UPnP or connected hubs change it. If unsure leave this setting disabled. This option will be cleared if you enable <a href="autoconn"> Automatic incoming connection type detection</a>.</dd>
 </dl>
 </body>
 </html>

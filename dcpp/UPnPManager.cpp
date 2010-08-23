@@ -25,6 +25,7 @@
 #include "SearchManager.h"
 #include "LogManager.h"
 #include "version.h"
+#include "ConnectivityManager.h"
 
 namespace dcpp {
 
@@ -75,7 +76,9 @@ int UPnPManager::run() {
 			continue;
 
 		opened = true;
-		log(_("Successfully created port mappings"));
+
+		log(str(F_("Successfully created port mappings. TCP: %1%, UDP: %2%, TLS: %3%") % conn_port % search_port % secure_port));
+		ConnectivityManager::getInstance()->mappingFinished(true);
 
 		if(!BOOLSETTING(NO_IP_OVERRIDE)) {
 			// now lets configure the external IP (connect to me) address
@@ -95,6 +98,7 @@ int UPnPManager::run() {
 
 	if(!opened) {
 		log(_("Failed to create port mappings"));
+		ConnectivityManager::getInstance()->mappingFinished(false);
 	}
 
 	return 0;
@@ -107,7 +111,7 @@ void UPnPManager::close(UPnP& impl) {
 }
 
 void UPnPManager::log(const string& message) {
-	LogManager::getInstance()->message(str(F_("UPnP: %1%") % message));
+	ConnectivityManager::getInstance()->log(str(F_("UPnP: %1%") % message));
 }
 
 } // namespace dcpp

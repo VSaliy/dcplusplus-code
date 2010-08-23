@@ -61,6 +61,7 @@
 #define IDH_HISTORYPAGE 10315
 #define IDH_BWLIMITPAGE 10316
 #define IDH_SEARCHTYPESPAGE 10317
+#define IDH_PROXYPAGE 10318
 
 // reserved for cshelp ids
 #define IDH_CSHELP_BEGIN 11000

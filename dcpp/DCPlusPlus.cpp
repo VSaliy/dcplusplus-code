@@ -37,6 +37,7 @@
 #include "UPnPManager.h"
 #include "WindowManager.h"
 #include "ThrottleManager.h"
+#include "ConnectivityManager.h"
 
 #include "StringTokenizer.h"
 
@@ -82,6 +83,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 	FavoriteManager::newInstance();
 	FinishedManager::newInstance();
 	ADLSearchManager::newInstance();
+	ConnectivityManager::newInstance();
 	UPnPManager::newInstance();
 	WindowManager::newInstance();
 
@@ -133,6 +135,7 @@ void shutdown() {
 
 	WindowManager::deleteInstance();
 	UPnPManager::deleteInstance();
+	ConnectivityManager::deleteInstance();
 	ADLSearchManager::deleteInstance();
 	FinishedManager::deleteInstance();
 	ShareManager::deleteInstance();

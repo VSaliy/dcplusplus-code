@@ -29,18 +29,26 @@
 	<dd>This message is shown when someone's filelist has just matched to your queue. [x] shows the number of found matches.</dd>
 	<dt>Duplicate file will not be shared: [path1] (Size: [size]) Dupe matched against: [path2]</dt>
 	<dd>This means that since you have <a href="settings_advanced.html#listdupes">Keep duplicate files in your file list</a>
-		setting disabled, a file ([path1]) beeing indexed and already shared (as [path2]) won't be added to your share again.</dd>
+	setting disabled, a file ([path1]) beeing indexed and already shared (as [path2]) won't be added to your share again.</dd>
 	<dt>Hash database rebuilt</dt>
 	<dd>Informs you about the finish of a full hash database rebuilding process which can be initiated by the <a href="chat_commands.html">/rebuild</a> chat command</dd>
 	<dt>Disconnected user leaving the hub: [nick]</dt>
-	<dd>You have <a href="settings_advanced.html#disconnect">Automatically disconnect users who leave the hub</a> setting enabled and this message
-		informs you about its effect.</dd>
+	<dd>You have <a href="settings_advanced.html#disconnect">Automatically disconnect users who leave the hub</a> setting enabled and this message informs you about its effect.</dd>
 	<dt>MAGNET Link detected: [link]</dt>
 	<dd>The client received a <a href="settings_advanced.html#registrymagnet">magnet link</a> handle request.</dd>
 	<dt>Generated new TLS certificate</dt>
-	<dd>As <a href="settings_certs.html">Security certificates</a> enabled but no existing TLS certificate files found (or they are invalid), new
-		 certificate files generated in the 'Certificates' subfolder of the directory where DC++ configuraton files are stored.</dd>
-</dl>	
+	<dd>As <a href="settings_certs.html">Security certificates</a> enabled but no existing TLS certificate files found (or they are invalid), new ertificate files generated in the 'Certificates' subfolder of the directory where DC++ configuraton files are stored.</dd>
+	<dt>UPnP: Successfully created port mappings. TCP: [port1], UDP: [port2], TLS: [port3]</dt>
+	<dd>The UPnP framework found a UPnP capable device and successfully mapped the shown ports for their respective protocols.</dd>
+	<dt>Connectivity: Determining connection type...</dt>
+	<dd>This message signs that <a href="settings_connection.html#autoconn">Automatic incoming connection type detection</a> is started.</dd>
+	<dt>Connectivity: Public IP address detected, selecting active mode with direct connection</dt>
+	<dd>It means that <a href="settings_connection.html#autoconn">Automatic connection type detection</a> determined that you have a public IP address so it assumed that you are directly connected to the Internet. The appropriate connection type selected.</dd>
+	<dt>Connectivity: Local network with possible NAT detected, trying to map the ports using UPnP...</dt>
+	<dd><a href="settings_connection.html#autoconn">Automatic connection type detection</a> determined that you have a <a href="non-routable.html">private</a> IP address and it started to discover for a possible UPnP capable gateway (router).</dd>
+	<dt>Connectivity: Automatic setup of active mode has failed. You may want to set up your connection manually for better connectivity</dt>
+	<dd><a href="settings_connection.html#autoconn">Automatic incoming connection type detection</a> did not find any way to configure any kind of active connection so as a last resort it selected passive connection mode with <a href="http://en.wikipedia.org/wiki/NAT_traversal" target="_blank" class="external">NAT traversal</a> capability.</dd>
+</dl>
 
 <h2>Error messages</h2>
 <p>Some errors shown in the log contain additional system messages provided by the operating system. These messages usually tell you more about the exact problem; they are marked as [error message] in the description of possible logged errors below. Note that system messages are always shown in the language of your operating system even if you have chosen another one for DC++.</p>
@@ -49,13 +57,14 @@
 	<dt>Error registering adc(s):// link handler</dt>
 	<dt>Error registering Magnet link handler</dt>
 	<dd>These errors mean that DC++ was unable to register the appropriate link handler(s) in Windows, per the <a href="settings_advanced.html#registrymagnet">Register with Windows to handle magnet: URI links</a> and <a href="settings_advanced.html#registrydchubadc">Register with Windows to handle dchub://, adc:// and adcs:// URL links</a> settings. The most common reason of an unsuccesful registration is that the user account under which DC++ is running does not have appropriate rights for (write) access the required parts of the Windows Registry.</dd>
-	<dt>Failed to get external IP via UPnP. Please set it yourself</dt>
-	<dd>This error can appear at startup and means that while port mappings were successful, DC++ couldn't get external IP address from the UPnP device. If this message persists it may be because of broken UPnP support of the device.</dd>
-	<dt>Failed to create port mappings. Please set up your NAT yourself</dt>
-	<dd>This error can appear at startup when <a href="settings_connection.html">incoming connection mode</a> is set to 'Firewall with UPnP' and means that there is no UPnP device can be found or it didn't responded. Refer to the <a href="faq_upnp.html">UPnP FAQ</a> for more information.</dd>
-	<dt>Failed to remove port mappings</dt>
-	<dd>This message can appear only during shutdown of DC++ and means that UPnP port mappings created
-		at startup couldn't be successfully removed. If this message persists it may be because of broken UPnP support of the device.</dd>
+	<dt>UPnP: Failed to get external IP</dt>
+	<dd>This error message can appear when DC++ tries to map ports for incoming connections via UPnP and means that while port mappings were successful, DC++ couldn't get external IP address from the UPnP device. If this message persists it may be because of broken UPnP support of the device. If its <a href="settings_connection.html#noipoverride">allowed</a> DC++ will try to get the external IP from connected hubs.</dd>
+	<dt>UPnP: Failed to create port mappings</dt>
+	<dd>This error message can appear when DC++ tries to map ports for incoming connections via UPnP. It means that no UPnP device can be found or its not responding. It can happen that you get this message when <a href="settings_connection.html#autoconn">Automatic connection type detection</a> is enabled as DC++ trying to discover a possible UPnP device for setting up active mode. This message is a real problem only if you selected the 'Use UPnP to let DC++ configure my router' option manually in <a href="settings_connection.html#connection">Incoming connection settings</a>. In this case refer to the <a href="faq_upnp.html">UPnP FAQ</a> for more information.</dd>
+	<dt>UPnP: Failed to remove port mappings</dt>
+	<dd>This message can appear mostly at shutdown of DC++ and means that UPnP port mappings created before couldn't be successfully removed. If this message persists the most probable reason is broken UPnP support of the (router) device.</dd>
+	<dt>Connectivity: Unable to open TCP/UDP port(s). You must set up your connection manually</dt>
+	<dd>You can get this message only when <a href="settings_connection.html#autoconn">Automatic connection type detection</a> is enabled and DC++ failed to open port(s) before trying to determine the available conncetion types. Possible reasons include the choosen port(s) are already occupied by another application or DC++ is blocked by a <a href="get_started.html#firewall">software firewall</a>.</dd>
 	<dt>Not listening for connections - please restart DC++</dt>
 	<dd>An unrecoverable low level networking error keeps DC++ from listening for connections. Search and download won't work until you restart DC++.</dd>
 	<dt>Connectivity error: [error message]</dt>

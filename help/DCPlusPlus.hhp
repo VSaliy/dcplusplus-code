@@ -72,6 +72,7 @@ IDH_TABSPAGE=settings_tabs.html
 IDH_HISTORYPAGE=settings_history.html
 IDH_BWLIMITPAGE=settings_bwlimit.html
 IDH_SEARCHTYPESPAGE=settings_search_types.html
+IDH_PROXYPAGE=settings_proxy.html
 
 [MAP]
 #include resource.h
