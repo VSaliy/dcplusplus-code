@@ -16,18 +16,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_NETWORK_PAGE_H
-#define DCPLUSPLUS_WIN32_NETWORK_PAGE_H
+#ifndef DCPLUSPLUS_WIN32_PROXY_PAGE_H
+#define DCPLUSPLUS_WIN32_PROXY_PAGE_H
 
 #include "PropPage.h"
 
-#include <dcpp/ConnectivityManager.h>
-
-class NetworkPage : public PropPage, private ConnectivityManagerListener
+class ProxyPage : public PropPage
 {
 public:
-	NetworkPage(dwt::Widget* parent);
-	virtual ~NetworkPage();
+	ProxyPage(dwt::Widget* parent);
+	virtual ~ProxyPage();
 
 	virtual void layout(const dwt::Rectangle& rc);
 	virtual void write();
@@ -36,35 +34,15 @@ private:
 	ItemList items;
 
 	GridPtr grid;
-	GroupBoxPtr incoming;
 
-	CheckBoxPtr autoDetect;
-	ButtonPtr detectNow;
-	RichTextBoxPtr log;
+	RadioButtonPtr directOut;
+	RadioButtonPtr socks5;
 
-	RadioButtonPtr directIn;
-	RadioButtonPtr upnp;
-	RadioButtonPtr nat;
-	RadioButtonPtr passive;
+	GroupBoxPtr socksSettings;
+	TextBoxPtr socksServer;
+	CheckBoxPtr socksResolve;
 
-	TextBoxPtr externalIP;
-	CheckBoxPtr overrideIP;
-
-	TextBoxPtr tcp;
-	TextBoxPtr udp;
-	TextBoxPtr tls;
-
-	void setRadioButtons();
-
-	void handleAutoClicked();
-	void handleDetectClicked();
-
-	void addLogLine(const tstring& msg);
-	void detectionFinished();
-
-	//ConnectivityManagerListener
-	virtual void on(Message, const string& message) throw();
-	virtual void on(Finished) throw();
+	void fixControlsOut();
 };
 
-#endif // !defined(DCPLUSPLUS_WIN32_NETWORK_PAGE_H)
+#endif // !defined(DCPLUSPLUS_WIN32_PROXY_PAGE_H)

@@ -41,6 +41,7 @@
 #include "CertificatesPage.h"
 #include "BandwidthLimitPage.h"
 #include "SearchTypesPage.h"
+#include "ProxyPage.h"
 
 SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
@@ -97,7 +98,11 @@ bool SettingsDialog::initDialog() {
 
 		addPage(T_("Personal information"), cur, new GeneralPage(cur));
 
-		addPage(T_("Connection settings"), cur, new NetworkPage(cur));
+		{
+			HTREEITEM item = addPage(T_("Connection settings"), cur, new NetworkPage(cur));
+			addPage(T_("Bandwidth Limiting"), cur, new BandwidthLimitPage(cur), item);
+			addPage(T_("Proxy Settings"), cur, new ProxyPage(cur), item);
+		}
 
 		{
 			HTREEITEM item = addPage(T_("Downloads"), cur, new DownloadPage(cur));
@@ -124,7 +129,6 @@ bool SettingsDialog::initDialog() {
 			addPage(T_("Experts only"), cur, new Advanced3Page(cur), item);
 			addPage(T_("User Commands"), cur, new UCPage(cur), item);
 			addPage(T_("Security Certificates"), cur, new CertificatesPage(cur), item);
-			addPage(T_("Bandwidth Limiting"), cur, new BandwidthLimitPage(cur), item);
 			addPage(T_("Search Types"), cur, new SearchTypesPage(cur), item);
 		}
 	}

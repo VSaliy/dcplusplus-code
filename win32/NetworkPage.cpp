@@ -23,7 +23,6 @@
 #include "NetworkPage.h"
 
 #include <dcpp/SettingsManager.h>
-#include <dcpp/Socket.h>
 #include "WinUtil.h"
 #include <dwt/util/win32/Version.h>
 
@@ -37,20 +36,44 @@ passive(0),
 externalIP(0),
 tcp(0),
 udp(0),
-tls(0),
-directOut(0),
-socks5(0),
-socksSettings(0),
-socksServer(0)
+tls(0)
 {
 	setHelpId(IDH_NETWORKPAGE);
 
 	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->setSpacing(20);
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Incoming connection settings")))->addChild(Grid::Seed(2, 2));
+		GroupBoxPtr autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connection type detection")));
+		GridPtr cur = autoGroup->addChild(Grid::Seed(2, 1));
+		cur->column(0).mode = GridInfo::FILL;
+
+		GridPtr cur2 = cur->addChild(Grid::Seed(1, 2));
+		cur2->column(0).mode = GridInfo::FILL;
+
+		autoDetect = cur2->addChild(CheckBox::Seed(T_("Enable automatic incoming connection type detection")));
+		autoDetect->setHelpId(IDH_SETTINGS_NETWORK_AUTODETECT);
+		items.push_back(Item(autoDetect, SettingsManager::AUTO_DETECT_CONNECTION, PropPage::T_BOOL));
+		autoDetect->onClicked(std::bind(&NetworkPage::handleAutoClicked, this));
+
+		detectNow = cur2->addChild(Button::Seed(T_("Detect now")));
+		detectNow->setHelpId(IDH_SETTINGS_NETWORK_DETECT_NOW);
+		detectNow->onClicked(std::bind(&NetworkPage::handleDetectClicked, this));
+
+		GroupBoxPtr logGroup = cur->addChild(GroupBox::Seed(T_("Detection log")));
+		
+		RichTextBox::Seed seed;
+		seed.style |= ES_READONLY | ES_SUNKEN;
+		seed.lines = 7;
+		seed.foregroundColor = ::GetSysColor(COLOR_WINDOWTEXT);
+		seed.backgroundColor = ::GetSysColor(COLOR_3DFACE);
+		log = logGroup->addChild(seed);
+		log->setHelpId(IDH_SETTINGS_NETWORK_DETECTION_LOG);
+	}
+
+	{
+		incoming = grid->addChild(GroupBox::Seed(T_("Incoming connection settings")));
+		GridPtr cur = incoming->addChild(Grid::Seed(2, 2));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 		cur->setSpacing(10);
@@ -81,7 +104,7 @@ socksServer(0)
 			externalIP = ipGrid->addChild(WinUtil::Seeds::Dialog::textBox);
 			items.push_back(Item(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR));
 
-			CheckBoxPtr overrideIP = ipGrid->addChild(CheckBox::Seed(T_("Don't allow hub/UPnP to override")));
+			overrideIP = ipGrid->addChild(CheckBox::Seed(T_("Don't allow hub/UPnP to override")));
 			items.push_back(Item(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL));
 			overrideIP->setHelpId(IDH_SETTINGS_NETWORK_OVERRIDE);
 		}
@@ -108,74 +131,30 @@ socksServer(0)
 		tls->setHelpId(IDH_SETTINGS_NETWORK_PORT_TLS);
 	}
 
-	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Outgoing connection settings")))->addChild(Grid::Seed(1, 2));
-		cur->row(0).align = GridInfo::TOP_LEFT;
-		cur->column(1).mode = GridInfo::FILL;
-		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
-
-		{
-			GridPtr outChoice = cur->addChild(Grid::Seed(2, 1));
-
-			directOut = outChoice->addChild(RadioButton::Seed(T_("Direct connection")));
-			directOut->setHelpId(IDH_SETTINGS_NETWORK_DIRECT_OUT);
-
-			socks5 = outChoice->addChild(RadioButton::Seed(T_("SOCKS5")));
-			cur->setWidget(socks5, 1, 0);
-			socks5->setHelpId(IDH_SETTINGS_NETWORK_SOCKS5);
-		}
-
-		socksSettings = cur->addChild(GroupBox::Seed(T_("SOCKS5")));
-		cur = socksSettings->addChild(Grid::Seed(5, 2));
-		cur->addChild(Label::Seed(T_("IP")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);
-		cur->addChild(Label::Seed(T_("Port")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);
-		socksServer = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(socksServer, SettingsManager::SOCKS_SERVER, PropPage::T_STR));
-		socksServer->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_SERVER);
-		socksServer->setTextLimit(250);
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::SOCKS_PORT, PropPage::T_INT));
-		box->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PORT);
-		box->setTextLimit(250);
-		cur->addChild(Label::Seed(T_("Login")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);
-		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);
-		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::SOCKS_USER, PropPage::T_STR));
-		box->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_USER);
-		box->setTextLimit(250);
-		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR));
-		box->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_PASSWORD);
-		box->setTextLimit(250);
-		CheckBoxPtr socksResolve = cur->addChild(CheckBox::Seed(T_("Use SOCKS5 server to resolve host names")));
-		cur->setWidget(socksResolve, 4, 0, 1, 2);
-		items.push_back(Item(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL));
-		socksResolve->setHelpId(IDH_SETTINGS_NETWORK_SOCKS_RESOLVE);
-	}
-
 	if(!dwt::util::win32::ensureVersion(dwt::util::win32::XP)) {
 		upnp->setEnabled(false);
 	}
+
+	PropPage::read(items);
+
+	setRadioButtons();
+	
+	handleAutoClicked();
+
+	ConnectivityManager::getInstance()->addListener(this);
+}
+
+NetworkPage::~NetworkPage() {
+	ConnectivityManager::getInstance()->removeListener(this);
+}
+
+void NetworkPage::setRadioButtons() {
 	switch(SETTING(INCOMING_CONNECTIONS)) {
 		case SettingsManager::INCOMING_FIREWALL_UPNP: upnp->setChecked(); break;
 		case SettingsManager::INCOMING_FIREWALL_NAT: nat->setChecked(); break;
 		case SettingsManager::INCOMING_FIREWALL_PASSIVE: passive->setChecked(); break;
 		default: directIn->setChecked(); break;
 	}
-
-	switch(SETTING(OUTGOING_CONNECTIONS)) {
-		case SettingsManager::OUTGOING_SOCKS5: socks5->setChecked(); break;
-		default: directOut->setChecked(); break;
-	}
-
-	PropPage::read(items);
-
-	fixControlsOut();
-	directOut->onClicked(std::bind(&NetworkPage::fixControlsOut, this));
-	socks5->onClicked(std::bind(&NetworkPage::fixControlsOut, this));
-}
-
-NetworkPage::~NetworkPage() {
 }
 
 void NetworkPage::layout(const dwt::Rectangle& rc) {
@@ -194,15 +173,7 @@ void NetworkPage::write()
 		x.erase(i, 1);
 	externalIP->setText(x);
 
-	x = socksServer->getText();
-
-	while((i = x.find(' ')) != string::npos)
-		x.erase(i, 1);
-	socksServer->setText(x);
-
 	PropPage::write(items);
-
-	SettingsManager* settings = SettingsManager::getInstance();
 
 	// Set connection active/passive
 	int ct = SettingsManager::INCOMING_DIRECT;
@@ -215,20 +186,48 @@ void NetworkPage::write()
 		ct = SettingsManager::INCOMING_FIREWALL_PASSIVE;
 
 	if(SETTING(INCOMING_CONNECTIONS) != ct) {
-		settings->set(SettingsManager::INCOMING_CONNECTIONS, ct);
-	}
-
-	ct = SettingsManager::OUTGOING_DIRECT;
-
-	if(socks5->getChecked())
-		ct = SettingsManager::OUTGOING_SOCKS5;
-
-	if(SETTING(OUTGOING_CONNECTIONS) != ct) {
-		settings->set(SettingsManager::OUTGOING_CONNECTIONS, ct);
-		Socket::socksUpdated();
+		SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, ct);
 	}
 }
 
-void NetworkPage::fixControlsOut() {
-	socksSettings->setEnabled(socks5->getChecked());
+void NetworkPage::handleDetectClicked() {
+	log->setText(Util::emptyStringT);
+	detectNow->setEnabled(false);
+	ConnectivityManager::getInstance()->detectConnection();
+}
+
+void NetworkPage::handleAutoClicked() {
+	bool enabled = autoDetect->getChecked();
+	if (enabled) {
+		externalIP->setText(Util::emptyStringT);
+		overrideIP->setChecked(false);
+	}
+	incoming->setEnabled(!enabled);
+	detectNow->setEnabled(enabled);
+
+	//Save the checkbox state for ConnectivityManager
+	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, enabled);
+}
+
+void NetworkPage::addLogLine(const tstring& msg) {
+	const tstring message = msg + Text::toT("\r\n");
+	log->addTextSteady(message, message.size());
+}
+
+void NetworkPage::detectionFinished() {
+	directIn->setChecked(false);
+	upnp->setChecked(false);
+	nat->setChecked(false);
+	passive->setChecked(false);
+
+	setRadioButtons();
+	detectNow->setEnabled(true);
+}
+
+void NetworkPage::on(Message, const string& message) throw() {
+	callAsync(std::bind(&NetworkPage::addLogLine, this, Text::toT(message)));
+}
+
+void NetworkPage::on(Finished) throw() {
+	callAsync(std::bind(&NetworkPage::detectionFinished, this));
 }

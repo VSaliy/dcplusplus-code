@@ -182,7 +182,7 @@ private:
 	void layoutSlotsSpin();
 	bool eachSecond();
 	void updateStatus();
-	void startSocket();
+	void showPortsError(const string& port);
 	void saveWindowSettings();
 	void parseCommandLine(const tstring& line);
 	void viewAndDelete(const string& fileName);

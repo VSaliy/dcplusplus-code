@@ -89,6 +89,7 @@ const string SettingsManager::settingTags[] =
 	"BandwidthLimitStart", "BandwidthLimitEnd", "TimeDependentThrottle", "MaxDownloadSpeedRealTime",
 	"MaxUploadSpeedTime", "MaxDownloadSpeedPrimary", "MaxUploadSpeedPrimary",
 	"SlotsAlternateLimiting", "SlotsPrimaryLimiting",
+	"AutoDetectIncomingConnection",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -141,6 +142,7 @@ SettingsManager::SettingsManager()
 	setDefault(TLS_PORT, 0);
 	setDefault(INCOMING_CONNECTIONS, INCOMING_DIRECT);
 	setDefault(OUTGOING_CONNECTIONS, OUTGOING_DIRECT);
+	setDefault(AUTO_DETECT_CONNECTION, true);
 	setDefault(AUTO_FOLLOW, true);
 	setDefault(CLEAR_SEARCH, true);
 	setDefault(SHARE_HIDDEN, false);
@@ -421,6 +423,10 @@ void SettingsManager::load(string const& aFileName)
 			set(LOG_FILE_UPLOAD, Util::emptyString);
 			set(LOG_FILE_DOWNLOAD, Util::emptyString);
 			set(LOG_FILE_SYSTEM, Util::emptyString);
+		}
+
+		if(v <= 0.770 && SETTING(INCOMING_CONNECTIONS) != INCOMING_FIREWALL_PASSIVE) {
+			set(AUTO_DETECT_CONNECTION, false); //Don't touch if it works
 		}
 
 		if(SETTING(SET_MINISLOT_SIZE) < 64)
