@@ -67,7 +67,7 @@ public:
 	const string& getId() const;
 
 	static void openWindow(dwt::TabView* mdiParent, const string& url);
-	static void closeDisconnected();
+	static void closeAll(bool all);
 	static void closeFavGroup(const string& group, bool reversed);
 	static void resortUsers();
 

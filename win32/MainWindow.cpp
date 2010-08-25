@@ -284,7 +284,8 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr window = mainMenu->appendPopup(T_("&Window"));
 
-		window->appendItem(T_("Close disconnected hubs"), std::bind(&HubFrame::closeDisconnected), WinUtil::menuIcon(IDI_HUB_OFF));
+		window->appendItem(T_("Close disconnected hubs"), std::bind(&HubFrame::closeAll, false), WinUtil::menuIcon(IDI_HUB_OFF));
+		window->appendItem(T_("Close all hubs"), std::bind(&HubFrame::closeAll, true), WinUtil::menuIcon(IDI_HUB));
 		window->appendItem(T_("Close all hubs of a favorite group"), std::bind(&MainWindow::handleCloseFavGroup, this, false), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		window->appendItem(T_("Close hubs not in a favorite group"), std::bind(&MainWindow::handleCloseFavGroup, this, true), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		window->appendSeparator();

@@ -64,10 +64,10 @@ void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
 	new HubFrame(mdiParent, url);
 }
 
-void HubFrame::closeDisconnected() {
+void HubFrame::closeAll(bool all) {
 	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
 		HubFrame* frame = *i;
-		if(!(frame->client->isConnected())) {
+		if(all || !(frame->client->isConnected())) {
 			frame->close(true);
 		}
 	}
