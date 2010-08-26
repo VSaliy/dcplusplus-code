@@ -102,8 +102,8 @@ public:
 
 	bool isActive() { return SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_PASSIVE; }
 
-	void lock() throw() { cs.enter(); }
-	void unlock() throw() { cs.leave(); }
+	void lock() throw() { cs.lock(); }
+	void unlock() throw() { cs.unlock(); }
 
 	Client::List& getClients() { return clients; }
 

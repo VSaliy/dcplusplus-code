@@ -45,7 +45,7 @@ FinishedManager::~FinishedManager() throw() {
 }
 
 void FinishedManager::lockLists() {
-	cs.enter();
+	cs.lock();
 }
 
 const FinishedManager::MapByFile& FinishedManager::getMapByFile(bool upload) const {
@@ -57,7 +57,7 @@ const FinishedManager::MapByUser& FinishedManager::getMapByUser(bool upload) con
 }
 
 void FinishedManager::unLockLists() {
-	cs.leave();
+	cs.unlock();
 }
 
 void FinishedManager::remove(bool upload, const string& file) {
