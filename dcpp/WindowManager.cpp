@@ -54,11 +54,11 @@ void WindowManager::autoOpen(bool skipHubs) {
 }
 
 void WindowManager::lock() {
-	cs.enter();
+	cs.lock();
 }
 
 void WindowManager::unlock() {
-	cs.leave();
+	cs.unlock();
 }
 
 void WindowManager::add(const string& id, const StringMap& params) {
