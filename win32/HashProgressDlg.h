@@ -38,7 +38,7 @@ private:
 	bool autoClose;
 	int64_t startBytes;
 	size_t startFiles;
-	uint32_t startTime;
+	uint64_t startTime;
 
 	bool handleInitDialog();
 
