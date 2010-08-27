@@ -16,13 +16,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#if !defined(TIMER_MANAGER_H)
-#define TIMER_MANAGER_H
+#ifndef DCPLUSPLUS_DCPP_TIMER_MANAGER_H
+#define DCPLUSPLUS_DCPP_TIMER_MANAGER_H
 
 #include "Thread.h"
-#include "Semaphore.h"
 #include "Speaker.h"
 #include "Singleton.h"
+
+#include <boost/thread/mutex.hpp>
 
 #ifndef _WIN32
 #include <sys/time.h>
@@ -38,46 +39,25 @@ public:
 	typedef X<0> Second;
 	typedef X<1> Minute;
 
-	// We expect everyone to implement this...
-	virtual void on(Second, uint32_t) throw() { }
-	virtual void on(Minute, uint32_t) throw() { }
+	virtual void on(Second, uint64_t) throw() { }
+	virtual void on(Minute, uint64_t) throw() { }
 };
 
 class TimerManager : public Speaker<TimerManagerListener>, public Singleton<TimerManager>, public Thread
 {
 public:
-	void shutdown() {
-		s.signal();
-		join();
-	}
+	void shutdown();
 
 	static time_t getTime() { return (time_t)time(NULL); }
 	static uint64_t getTick();
 private:
-
-	Semaphore s;
-
 	friend class Singleton<TimerManager>;
-	TimerManager() {
-#ifndef _WIN32
-		gettimeofday(&tv, NULL);
-#endif
-	}
+	boost::timed_mutex mtx;
 
-	virtual ~TimerManager() throw() {
-		dcassert(listeners.empty());
-		shutdown();
-	}
+	TimerManager();
+	virtual ~TimerManager() throw();
 
 	virtual int run();
-
-#ifdef _WIN32
-	static DWORD lastTick;
-	static uint32_t cycles;
-	static FastCriticalSection cs;
-#else
-	static timeval tv;
-#endif
 };
 
 #define GET_TICK() TimerManager::getTick()
@@ -85,4 +65,4 @@ private:
 
 } // namespace dcpp
 
-#endif // !defined(TIMER_MANAGER_H)
+#endif // DCPLUSPLUS_DCPP_TIMER_MANAGER_H

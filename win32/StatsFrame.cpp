@@ -136,13 +136,13 @@ void StatsFrame::layout() {
 }
 
 bool StatsFrame::eachSecond() {
-	uint32_t tick = GET_TICK();
-	uint32_t tdiff = tick - lastTick;
+	uint64_t tick = GET_TICK();
+	uint64_t tdiff = tick - lastTick;
 	if(tdiff == 0)
 		return true;
 
-	uint32_t scrollms = (tdiff + scrollTick)*PIX_PER_SEC;
-	uint32_t scroll = scrollms / 1000;
+	uint64_t scrollms = (tdiff + scrollTick)*PIX_PER_SEC;
+	uint64_t scroll = scrollms / 1000;
 
 	if(scroll == 0)
 		return true;

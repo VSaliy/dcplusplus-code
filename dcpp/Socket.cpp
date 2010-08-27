@@ -152,7 +152,7 @@ void Socket::connect(const string& aAddr, uint16_t aPort) throw(SocketException)
 }
 
 namespace {
-	inline uint32_t timeLeft(uint32_t start, uint32_t timeout) {
+	inline uint64_t timeLeft(uint64_t start, uint64_t timeout) {
 		if(timeout == 0) {
 			return 0;
 		}
