@@ -52,13 +52,13 @@ msvc_link_flags = {
 }
 
 msvc_defs = {
-	'common' : ['_REENTRANT'],
+	'common' : ['_REENTRANT', 'BOOST_USE_WINDOWS_H'],
 	'debug' : ['_DEBUG', '_HAS_ITERATOR_DEBUGGING=0', '_SECURE_SCL=0'],
 	'release' : ['NDEBUG']
 }
 
 gcc_defs = {
-	'common' : ['_REENTRANT'],
+	'common' : ['_REENTRANT', 'BOOST_USE_WINDOWS_H'],
 	'debug' : ['_DEBUG'],
 	'release' : ['NDEBUG']
 }

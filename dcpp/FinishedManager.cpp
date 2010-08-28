@@ -45,7 +45,7 @@ FinishedManager::~FinishedManager() throw() {
 }
 
 void FinishedManager::lockLists() {
-	cs.enter();
+	cs.lock();
 }
 
 const FinishedManager::MapByFile& FinishedManager::getMapByFile(bool upload) const {
@@ -57,7 +57,7 @@ const FinishedManager::MapByUser& FinishedManager::getMapByUser(bool upload) con
 }
 
 void FinishedManager::unLockLists() {
-	cs.leave();
+	cs.unlock();
 }
 
 void FinishedManager::remove(bool upload, const string& file) {
@@ -111,7 +111,7 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 		string file = t->getPath();
 		const HintedUser& user = t->getHintedUser();
 
-		int64_t milliSeconds = GET_TICK() - t->getStart();
+		uint64_t milliSeconds = GET_TICK() - t->getStart();
 		time_t time = GET_TIME();
 
 		int64_t size = 0;
