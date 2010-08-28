@@ -414,7 +414,7 @@ void UploadManager::removeConnection(UserConnection* aSource) {
 	}
 }
 
-void UploadManager::on(TimerManagerListener::Minute, uint32_t /* aTick */) throw() {
+void UploadManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) throw() {
 	UserList disconnects;
 	{
 		Lock l(cs);
@@ -488,7 +488,7 @@ void UploadManager::on(AdcCommand::GFI, UserConnection* aSource, const AdcComman
 }
 
 // TimerManagerListener
-void UploadManager::on(TimerManagerListener::Second, uint32_t) throw() {
+void UploadManager::on(TimerManagerListener::Second, uint64_t) throw() {
 	Lock l(cs);
 	UploadList ticks;
 

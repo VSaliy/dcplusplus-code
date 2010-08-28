@@ -102,8 +102,8 @@ public:
 	void setPriority(const string& aTarget, QueueItem::Priority p) throw();
 
 	void getTargets(const TTHValue& tth, StringList& sl);
-	QueueItem::StringMap& lockQueue() throw() { cs.enter(); return fileQueue.getQueue(); } ;
-	void unlockQueue() throw() { cs.leave(); }
+	QueueItem::StringMap& lockQueue() throw() { cs.lock(); return fileQueue.getQueue(); } ;
+	void unlockQueue() throw() { cs.unlock(); }
 
 	Download* getDownload(UserConnection& aSource, bool supportsTrees) throw();
 	void putDownload(Download* aDownload, bool finished) throw();
@@ -237,7 +237,7 @@ private:
 	/** The queue needs to be saved */
 	bool dirty;
 	/** Next search */
-	uint32_t nextSearch;
+	uint64_t nextSearch;
 	/** File lists not to delete */
 	StringList protectedFileLists;
 	/** Sanity check for the target filename */
@@ -258,8 +258,8 @@ private:
 	string getListPath(const HintedUser& user);
 
 	// TimerManagerListener
-	virtual void on(TimerManagerListener::Second, uint32_t aTick) throw();
-	virtual void on(TimerManagerListener::Minute, uint32_t aTick) throw();
+	virtual void on(TimerManagerListener::Second, uint64_t aTick) throw();
+	virtual void on(TimerManagerListener::Minute, uint64_t aTick) throw();
 
 	// SearchManagerListener
 	virtual void on(SearchManagerListener::SR, const SearchResultPtr&) throw();

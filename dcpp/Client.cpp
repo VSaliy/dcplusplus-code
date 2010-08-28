@@ -202,7 +202,7 @@ void Client::on(Line, const string& /*aLine*/) throw() {
 	updateActivity();
 }
 
-void Client::on(Second, uint32_t aTick) throw() {
+void Client::on(Second, uint64_t aTick) throw() {
 	if(state == STATE_DISCONNECTED && getAutoReconnect() && (aTick > (getLastActivity() + getReconnDelay() * 1000)) ) {
 		// Try to reconnect...
 		connect();
