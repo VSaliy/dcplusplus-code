@@ -1,5 +1,5 @@
 * Compiled with C++0x support
-* Update Boost to version 1.43
+* Update Boost to version 1.44
 * Prevent hub-provided cmds from "open own list" from going to the wrong hub
 * Remove ADC empty token workaround targeting 0.698 (cologic)
 * Enable Data Execution Prevention (cologic)
