@@ -273,7 +273,7 @@ void MainWindow::initMenu() {
 			std::bind(&SystemFrame::openWindow, getTabView()));
 		viewIndexes[StatsFrame::id] = viewMenu->appendItem(T_("Network Statistics"),
 			std::bind(&StatsFrame::openWindow, getTabView()), WinUtil::menuIcon(IDI_NET_STATS));
-		viewMenu->appendItem(T_("Indexing progress"), std::bind(&MainWindow::handleHashProgress, this));
+		viewMenu->appendItem(T_("Indexing progress"), std::bind(&MainWindow::handleHashProgress, this), WinUtil::menuIcon(IDI_INDEXING));
 		viewMenu->appendSeparator();
 		viewIndexes["Toolbar"] = viewMenu->appendItem(T_("Toolbar\tCtrl+1"),
 			std::bind(&MainWindow::switchToolbar, this));
