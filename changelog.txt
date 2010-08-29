@@ -13,6 +13,7 @@
 * Use boost's timing functions (arnetheduck)
 * New icons
 * Update the links in the "Help" menu (poy)
+* Prevent current-directory Windows DLL injection (cologic)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
