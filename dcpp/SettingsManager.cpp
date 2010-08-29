@@ -291,7 +291,7 @@ SettingsManager::SettingsManager()
 	setDefault(SEARCH_MERGE, true);
 	setDefault(TOOLBAR_SIZE, 20);
 	setDefault(TAB_WIDTH, 150);
-	setDefault(TAB_STYLE, TAB_STYLE_OD);
+	setDefault(TAB_STYLE, TAB_STYLE_OD | TAB_STYLE_BROWSER);
 	setDefault(TRANSFERS_PANED_POS, .7);
 	setDefault(QUEUE_PANED_POS, .3);
 	setDefault(SEARCH_PANED_POS, .2);

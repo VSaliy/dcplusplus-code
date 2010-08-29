@@ -462,7 +462,7 @@ void MainWindow::initTabs() {
 			seed.tabStyle = TabView::Seed::WinBrowser;
 	} else {
 		seed.style &= ~TCS_OWNERDRAWFIXED;
-		seed.widthConfig -= 100; // max width to max chars
+		seed.widthConfig = (seed.widthConfig - 100) / 9; // max width to max chars
 	}
 	if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BUTTONS)
 		seed.style |= TCS_BUTTONS;
