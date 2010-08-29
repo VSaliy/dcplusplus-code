@@ -29,12 +29,13 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <dwt/widgets/RichTextBox.h>
+
 #include <algorithm>
 #include <boost/lambda/lambda.hpp>
 #include <boost/format.hpp>
 #include <boost/scoped_array.hpp>
 
-#include <dwt/widgets/RichTextBox.h>
 #include <dwt/Point.h>
 #include <dwt/util/check.h>
 #include <dwt/util/HoldRedraw.h>

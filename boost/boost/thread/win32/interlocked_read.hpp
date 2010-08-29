@@ -68,7 +68,7 @@ namespace boost
         }
         inline void interlocked_write_release(void* volatile* x,void* value)
         {
-            BOOST_INTERLOCKED_EXCHANGE_POINTER(x,value);
+            (BOOST_INTERLOCKED_EXCHANGE_POINTER(x,value));
         }
     }
 }
