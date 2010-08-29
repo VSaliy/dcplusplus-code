@@ -133,15 +133,8 @@ bool SettingsDialog::initDialog() {
 		}
 	}
 
-	{
-		RichTextBox::Seed seed;
-		seed.style |= ES_READONLY | ES_SUNKEN;
-		seed.lines = 6;
-		seed.foregroundColor = ::GetSysColor(COLOR_WINDOWTEXT);
-		seed.backgroundColor = ::GetSysColor(COLOR_3DFACE);
-		help = grid->addChild(seed);
-		help->onRaw(std::bind(&helpDlgCode, _1), dwt::Message(WM_GETDLGCODE));
-	}
+	help = grid->addChild(WinUtil::Seeds::Dialog::richTextBox);
+	help->onRaw(std::bind(&helpDlgCode, _1), dwt::Message(WM_GETDLGCODE));
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 3));

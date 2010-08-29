@@ -87,6 +87,7 @@ public:
 			static const ComboBox::Seed comboBox;
 			static const TextBox::Seed textBox;
 			static const TextBox::Seed intTextBox;
+			static const RichTextBox::Seed richTextBox;
 			static const Table::Seed table;
 			static const Table::Seed optionsTable;
 		};
