@@ -98,6 +98,8 @@ private:
 		tstring features;
 		tstring bugs;
 		tstring donate;
+		tstring blog;
+		tstring community;
 	} links;
 
 	WidgetHPanedPtr paned;

@@ -11,7 +11,10 @@ def gen_changelog(target, source, env):
 li { margin-left: auto; margin: 0em 0em 0em 0em; }
 </style>
 
-<h1>DC++ Changelog</h1>
+<h1>
+	<img src=\"Changelog.ico\" width=\"16\" height=\"16\" alt=\"DC++ Changelog\"/>
+	DC++ Changelog
+</h1>
 See the version history of DC++ below.
 
 """

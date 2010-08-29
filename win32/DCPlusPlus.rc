@@ -84,6 +84,13 @@ IDI_RECENTS             ICON                    "res/Recents.ico"
 IDI_WHATS_THIS          ICON                    "res/WhatsThis.ico"
 IDI_DOWNLOAD            ICON                    "res/Download.ico"
 IDI_UPLOAD              ICON                    "res/Upload.ico"
+IDI_CHANGELOG           ICON                    "res/Changelog.ico"
+IDI_DONATE              ICON                    "res/Donate.ico"
+IDI_GET_STARTED         ICON                    "res/GetStarted.ico"
+IDI_INDEXING            ICON                    "res/Indexing.ico"
+IDI_LINKS               ICON                    "res/Links.ico"
+IDI_REFRESH             ICON                    "res/Refresh.ico"
+IDI_SLOTS               ICON                    "res/Slots.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
