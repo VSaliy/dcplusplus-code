@@ -79,13 +79,15 @@ void GroupBox::layout(const Rectangle& rect) {
 }
 
 Rectangle GroupBox::shrink(const Rectangle& client) {
-	// Taken from http://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
-
 	c.selectFont(getFont());
+
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);
-	const int h = tmNew.tmHeight;
+	int h = tmNew.tmHeight;
+
+	if(length() == 0)
+		h /= 2;
 
 	return Rectangle(
 		client.width() > padding.x / 2 ? client.x() + padding.x / 2 : client.width(),
@@ -101,9 +103,14 @@ Point GroupBox::expand(const Point& child) {
 
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);
-	const int h = tmNew.tmHeight;
+	int h = tmNew.tmHeight;
 
-	Point txt = c.getTextExtent(getText());
+	Point txt;
+	if(length() > 0) {
+		txt = c.getTextExtent(getText());
+	} else {
+		h /= 2;
+	}
 
 	return Point(std::max(child.x, txt.x) + padding.x, child.y + padding.y + h);
 }
