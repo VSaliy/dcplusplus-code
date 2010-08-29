@@ -99,6 +99,8 @@ lastTick(GET_TICK())
 	links.features = links.homepage + _T("featurereq/");
 	links.bugs = links.homepage + _T("bugs/");
 	links.donate = _T("https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=arnetheduck%40gmail%2ecom&item_name=DCPlusPlus&no_shipping=1&return=http%3a%2f%2fdcplusplus%2esf%2enet%2f&cancel_return=http%3a%2f%2fdcplusplus%2esf%2enet%2f&cn=Greeting&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8");
+	links.blog = _T("http://dcpp.wordpress.com");
+	links.community = _T("http://www.adcportal.com");
 
 	initWindow();
 	initTabs();
@@ -231,7 +233,7 @@ void MainWindow::initMenu() {
 		file->appendItem(T_("Open file list...\tCtrl+L"), std::bind(&MainWindow::handleOpenFileList, this), WinUtil::menuIcon(IDI_OPEN_FILE_LIST));
 		file->appendItem(T_("Open own list"), std::bind(&DirectoryListingFrame::openOwnList, getTabView()));
 		file->appendItem(T_("Match downloaded lists"), std::bind(&MainWindow::handleMatchAll, this));
-		file->appendItem(T_("Refresh file list\tF5"), std::bind(&MainWindow::handleRefreshFileList, this));
+		file->appendItem(T_("Refresh file list\tF5"), std::bind(&MainWindow::handleRefreshFileList, this), WinUtil::menuIcon(IDI_REFRESH));
 		file->appendItem(T_("Open downloads directory"), std::bind(&MainWindow::handleOpenDownloadsDir, this), WinUtil::menuIcon(IDI_OPEN_DL_DIR));
 		file->appendSeparator();
 
@@ -304,20 +306,26 @@ void MainWindow::initMenu() {
 		MenuPtr help = mainMenu->appendPopup(T_("&Help"));
 
 		help->appendItem(T_("Help &Contents\tF1"), std::bind(&WinUtil::help, this, IDH_INDEX), WinUtil::menuIcon(IDI_HELP));
-		help->appendItem(T_("Get started"), std::bind(&WinUtil::help, this, IDH_GET_STARTED));
+		help->appendItem(T_("Get started"), std::bind(&WinUtil::help, this, IDH_GET_STARTED), WinUtil::menuIcon(IDI_GET_STARTED));
 		help->appendSeparator();
-		help->appendItem(T_("Change Log"), std::bind(&WinUtil::help, this, IDH_CHANGELOG));
+		help->appendItem(T_("Change Log"), std::bind(&WinUtil::help, this, IDH_CHANGELOG), WinUtil::menuIcon(IDI_CHANGELOG));
 		help->appendItem(T_("About DC++"), std::bind(&MainWindow::handleAbout, this), WinUtil::menuIcon(IDI_DCPP));
 		help->appendSeparator();
-		help->appendItem(T_("DC++ Homepage"), std::bind(&WinUtil::openLink, std::cref(links.homepage)));
+
+		help = help->appendPopup(T_("Links"), WinUtil::menuIcon(IDI_LINKS));
+		help->appendItem(T_("Homepage"), std::bind(&WinUtil::openLink, std::cref(links.homepage)));
 		help->appendItem(T_("Downloads"), std::bind(&WinUtil::openLink, std::cref(links.downloads)));
-		help->appendItem(T_("GeoIP database update"), std::bind(&WinUtil::openLink, std::cref(links.geoipfile)));
 		help->appendItem(T_("Frequently asked questions"), std::bind(&WinUtil::openLink, std::cref(links.faq)));
-		help->appendItem(T_("Help forum"), std::bind(&WinUtil::openLink, std::cref(links.help)));
-		help->appendItem(T_("DC++ discussion forum"), std::bind(&WinUtil::openLink, std::cref(links.discuss)));
+		help->appendItem(T_("Help center"), std::bind(&WinUtil::openLink, std::cref(links.help)));
+		help->appendItem(T_("Discussion forum"), std::bind(&WinUtil::openLink, std::cref(links.discuss)));
 		help->appendItem(T_("Request a feature"), std::bind(&WinUtil::openLink, std::cref(links.features)));
 		help->appendItem(T_("Report a bug"), std::bind(&WinUtil::openLink, std::cref(links.bugs)));
-		help->appendItem(T_("Donate (paypal)"), std::bind(&WinUtil::openLink, std::cref(links.donate)));
+		help->appendItem(T_("Donate (paypal)"), std::bind(&WinUtil::openLink, std::cref(links.donate)), WinUtil::menuIcon(IDI_DONATE));
+		help->appendItem(T_("Blog"), std::bind(&WinUtil::openLink, std::cref(links.blog)));
+		help->appendItem(T_("Community news"), std::bind(&WinUtil::openLink, std::cref(links.community)));
+		help->appendSeparator();
+
+		help->appendItem(T_("GeoIP database update"), std::bind(&WinUtil::openLink, std::cref(links.geoipfile)));
 	}
 
 	mainMenu->setMenu();
@@ -362,6 +370,8 @@ void MainWindow::initToolbar() {
 		std::bind(&MainWindow::handleSettings, this));
 	toolbar->addButton(NotepadFrame::id, toolbarIcon(IDI_NOTEPAD), 0, T_("Notepad"), IDH_TOOLBAR_NOTEPAD,
 		std::bind(&NotepadFrame::openWindow, getTabView()));
+	toolbar->addButton("Refresh", toolbarIcon(IDI_REFRESH), 0, T_("Refresh file list"), IDH_TOOLBAR_REFRESH,
+		std::bind(&MainWindow::handleRefreshFileList, this));
 	toolbar->addButton("CSHelp", toolbarIcon(IDI_WHATS_THIS), 0, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS,
 		std::bind(&MainWindow::handleWhatsThis, this));
 
@@ -390,6 +400,7 @@ void MainWindow::initToolbar() {
 			comma +
 			"Settings" + comma +
 			NotepadFrame::id + comma +
+			"Refresh" + comma +
 			comma +
 			"CSHelp");
 	}
@@ -420,6 +431,7 @@ void MainWindow::initStatusBar() {
 	status->setSize(STATUS_DUMMY, 32);
 
 	status->setIcon(STATUS_COUNTS, WinUtil::statusIcon(IDI_HUB));
+	status->setIcon(STATUS_SLOTS, WinUtil::statusIcon(IDI_SLOTS));
 	{
 		dwt::IconPtr icon_DL(WinUtil::statusIcon(IDI_DOWNLOAD));
 		dwt::IconPtr icon_UL(WinUtil::statusIcon(IDI_UPLOAD));
@@ -890,7 +902,9 @@ void MainWindow::updateStatus() {
 	status->setText(STATUS_COUNTS, s);
 	status->setToolTip(STATUS_COUNTS, str(TF_("Hubs: %1%") % s));
 
-	status->setText(STATUS_SLOTS, str(TF_("Slots: %1%/%2%") % UploadManager::getInstance()->getFreeSlots() % (SETTING(SLOTS))), true);
+	s = str(TF_("%1%/%2%") % UploadManager::getInstance()->getFreeSlots() % (SETTING(SLOTS)));
+	status->setText(STATUS_SLOTS, s, true);
+	status->setToolTip(STATUS_SLOTS, str(TF_("Slots: %1%") % s));
 
 	s = Text::toT(Util::formatBytes(down));
 	status->setText(STATUS_DOWN_TOTAL, s);
@@ -1142,6 +1156,14 @@ void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/,
 			xml.resetCurrentChild();
 			if(xml.findChild("Forum")) {
 				links.discuss = Text::toT(xml.getChildData());
+			}
+			xml.resetCurrentChild();
+			if(xml.findChild("Blog")) {
+				links.blog = Text::toT(xml.getChildData());
+			}
+			xml.resetCurrentChild();
+			if(xml.findChild("Community")) {
+				links.community = Text::toT(xml.getChildData());
 			}
 			xml.stepOut();
 		}

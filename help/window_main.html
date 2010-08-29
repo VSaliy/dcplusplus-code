@@ -13,7 +13,7 @@
 	</h1>
 <h2>Main Menu bar (top)</h2>
 
-<dl id="filemenu" style="margin-left: 40px;">
+<dl id="filemenu" style="margin-left: 10px;">
 	<dt>File Menu</dt>
 	<dd>
 	    You can find the file input-output functions as well as the basic connection options and the settings in this menu.
@@ -35,7 +35,7 @@
 			<dd>You can open and check how your own file list looks like. Useful to see what's displayed to others when they get your file list.</dd>
 			<dt>Match downloaded lists</dt>
 			<dd>This function is used to match your download queue for already downloaded file lists (they stored in the FileLists directory in your DC++ program folder).</dd>
-			<dt>Refresh file list</dt>
+			<dt><img src="Refresh.ico" width="16" height="16" alt="Refresh file list"/> Refresh file list</dt>
 			<dd>This will immediately rescan your shared directories for new or changed content and updates your file list.</dd>
 			<dt><img src="OpenDLDir.ico" width="16" height="16" alt="Open downloads directory"/> Open downloads directory</dt>
 			<dd>Opens your downloads folder in Windows Explorer.</dd>
@@ -102,7 +102,7 @@
 			<dd><div>Open the <placeholder><a href="window_network_stats.html">Network Statistics</a></placeholder> window.</div>
 			<div>It displays a real-time chart of the average speed of data sent and received by DC++.</div></dd>
 
-			<dt>Indexing progress</dt>
+			<dt><img src="Indexing.ico" width="16" height="16" alt="Indexing progress"/> Indexing progress</dt>
 			<dd><div>Open the <placeholder><a href="dialog_indexing_progress.html">Indexing progess</a></placeholder> dialog.</div>
 			<div>It shows you the current state of file hashing operation and how much time there is left from it.</div></dd>
 
@@ -148,30 +148,47 @@
 		<dl style="margin-left: 30px;">
 			<dt><img src="Help.ico" width="16" height="16" alt="Help Contents"/> Help Contents</dt>
 			<dd>Opens the Overview page of the built-in Help.</dd>
-			<dt>Get started</dt>
+			<dt><img src="GetStarted.ico" width="16" height="16" alt="Get started"/> Get started</dt>
 			<dd>The best way to start here if you are new to DC++.</dd>
-			<dt>Change Log</dt>
+			<dt><img src="Changelog.ico" width="16" height="16" alt="Change Log"/> Change Log</dt>
 			<dd>You can follow what's been changed in the different DC++ versions since the development started.</dd>
 			<dt><img src="DCPlusPlus.png" width="16" height="16" alt="About DC++"/> About DC++</dt>
 			<dd>You can see the copyrights, list of all names who ever contributed to DC++ as well as some useful statistical information about your up/download ratio. The About box also shows you the version number of the current stable release of DC++.</dd>
-			<dt>DC++ Homepage</dt>
+			<dt><img src="Links.ico" width="16" height="16" alt="Links"/> Links</dt>
+			<dd>Web links that will open in your web browser.
+
+			<dl style="margin-left: 30px;">
+			<dt>Homepage</dt>
 			<dd>Opens the DC++ home page in your web browser.</dd>
 			<dt>Downloads</dt>
 			<dd>Opens the trusted DC++ download page in your web browser.</dd>
-			<dt>GeoIP database update</dt>
-			<dd>Opens a web page where the latest GeoIP database can be obtained. The database file called GeoIPCountryWhoIs.csv and should be saved to the DC++ program folder. GeoIP is used to show what country uploaders and downloaders are from in the <a href="window_connections.html">Connections</a> window. The database file is frequently updated on the web page - the newer your GeoIP file is the more exact country information will be displayed in the Connections window.</dd>
 			<dt>Frequently asked questions</dt>
-			<dd>Opens the official Direct Connect FAQ page in your web browser.</dd>
-			<dt>Help forum</dt>
+			<dd>Opens the DC++ FAQ page in your web browser.</dd>
+			<dt>Help center</dt>
 			<dd>Points to the DC++ support forum.</dd>
-			<dt>DC++ discussion forum</dt>
+			<dt>Discussion forum</dt>
 			<dd>Points to the DC++ discussion forum.</dd>
 			<dt>Request a feature</dt>
 			<dd>You can propose modifications or request new features here.</dd>
 			<dt>Report a bug</dt>
-			<dd>You can report problems (only) about DC++ here.</dd>
-			<dt>Donate (paypal)</dt>
-			<dd>Found this free program useful? Then you may consider donate the further development... You can do it here, through the author's Paypal account.</dd>
+			<dd>You can report problems about DC++ here.</dd>
+			<dt><img src="Donate.ico" width="16" height="16" alt="Donate (paypal)"/> Donate (paypal)</dt>
+			<dd>Found this free program useful? Then you please consider donating some money... You can do it here, through the author's Paypal account.</dd>
+			<dt>Blog</dt>
+			<dd>Opens the DC++ blog in your web browser.</dd>
+			<dt>Community news</dt>
+			<dd>Opens ADCPortal in your web browser.</dd>
+			<dt>GeoIP database update</dt>
+			<dd>Opens a web page where the latest GeoIP database can be obtained. The database file
+			is called GeoIPCountryWhoIs.csv and should be saved into the DC++ program folder. GeoIP
+			is used to determine the country of uploaders and downloaders in the
+			<a href="window_connections.html">Connections</a> window. The database file is
+			frequently updated; the newer your GeoIP file is, the more exact country information
+			will be in the Connections window.</dd>
+			</dl>
+
+			</dd>
+
 		</dl>
     </dd>
 </dl>
@@ -194,6 +211,7 @@
 <a href="#tb_recent" title="Recent windows"><img src="Recents.ico" width="20" height="20" alt="Recent windows"/></a>
 <a href="#tb_settings" title="Settings"><img src="Settings.ico" width="20" height="20" alt="Settings"/></a>
 <a href="window_notepad.html" title="Notepad"><img src="Notepad.ico" width="20" height="20" alt="Notepad"/></a>
+<a href="#tb_refresh" title="Refresh file list"><img src="Refresh.ico" width="20" height="20" alt="Refresh file list"/></a>
 <a href="#tb_whats_this" title="What's This?"><img src="WhatsThis.ico" width="20" height="20" alt="What's This?"/></a>
 </p>
 <p>The toolbar provides quick access to some regularly used parts and functions of DC++. You can customize the toolbar for yourself, 
@@ -260,6 +278,9 @@ add, remove and group the buttons using the following toolbar customization func
 
     <dt>Notepad</dt>
 	<dd cshelp="IDH_TOOLBAR_NOTEPAD">Open the <placeholder><a href="window_notepad.html">Notepad</a></placeholder> window.</dd>
+
+	<dt id="tb_refresh">Refresh file list</dt>
+    <dd cshelp="IDH_TOOLBAR_REFRESH">This will immediately rescan your shared directories for new or changed content and updates your file list.</dd>
 
     <dt id="tb_whats_this">What's This?</dt>
     <dd cshelp="IDH_TOOLBAR_WHATS_THIS">
