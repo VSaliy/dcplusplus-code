@@ -52,13 +52,13 @@ msvc_link_flags = {
 }
 
 msvc_defs = {
-	'common' : ['_REENTRANT', 'BOOST_USE_WINDOWS_H'],
+	'common' : ['_REENTRANT'],
 	'debug' : ['_DEBUG', '_HAS_ITERATOR_DEBUGGING=0', '_SECURE_SCL=0'],
 	'release' : ['NDEBUG']
 }
 
 gcc_defs = {
-	'common' : ['_REENTRANT', 'BOOST_USE_WINDOWS_H'],
+	'common' : ['_REENTRANT'],
 	'debug' : ['_DEBUG'],
 	'release' : ['NDEBUG']
 }
@@ -122,6 +122,10 @@ dev.prepare()
 env.SConsignFile()
 
 env.Append(CPPPATH = ['#/boost/', '#/intl/'])
+
+# boost defines
+if dev.is_win32():
+	env.Append(CPPDEFINES = ['BOOST_ALL_NO_LIB', 'BOOST_USE_WINDOWS_H'])
 
 if not env['nativestl']:
 	env.Append(CPPPATH = ['#/stlport/stlport/'])
