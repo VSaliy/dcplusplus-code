@@ -62,12 +62,7 @@ tls(0)
 
 		GroupBoxPtr logGroup = cur->addChild(GroupBox::Seed(T_("Detection log")));
 		
-		RichTextBox::Seed seed;
-		seed.style |= ES_READONLY | ES_SUNKEN;
-		seed.lines = 7;
-		seed.foregroundColor = ::GetSysColor(COLOR_WINDOWTEXT);
-		seed.backgroundColor = ::GetSysColor(COLOR_3DFACE);
-		log = logGroup->addChild(seed);
+		log = logGroup->addChild(WinUtil::Seeds::Dialog::richTextBox);
 		log->setHelpId(IDH_SETTINGS_NETWORK_DETECTION_LOG);
 	}
 

@@ -86,6 +86,7 @@ const Tree::Seed WinUtil::Seeds::treeView;
 const ComboBox::Seed WinUtil::Seeds::Dialog::comboBox;
 const TextBox::Seed WinUtil::Seeds::Dialog::textBox;
 const TextBox::Seed WinUtil::Seeds::Dialog::intTextBox;
+const RichTextBox::Seed WinUtil::Seeds::Dialog::richTextBox;
 const Table::Seed WinUtil::Seeds::Dialog::table;
 const Table::Seed WinUtil::Seeds::Dialog::optionsTable;
 
@@ -152,6 +153,7 @@ void WinUtil::init() {
 	ComboBox::Seed& xdComboBox = const_cast<ComboBox::Seed&> (Seeds::Dialog::comboBox);
 	TextBox::Seed& xdTextBox = const_cast<TextBox::Seed&> (Seeds::Dialog::textBox);
 	TextBox::Seed& xdintTextBox = const_cast<TextBox::Seed&> (Seeds::Dialog::intTextBox);
+	RichTextBox::Seed& xdRichTextBox = const_cast<RichTextBox::Seed&> (Seeds::Dialog::richTextBox);
 	Table::Seed& xdTable = const_cast<Table::Seed&> (Seeds::Dialog::table);
 	Table::Seed& xdoptionsTable = const_cast<Table::Seed&> (Seeds::Dialog::optionsTable);
 
@@ -199,6 +201,13 @@ void WinUtil::init() {
 
 	xdintTextBox = xdTextBox;
 	xdintTextBox.style |= ES_NUMBER;
+
+	xdRichTextBox.style |= ES_READONLY | ES_SUNKEN;
+	xdRichTextBox.exStyle = WS_EX_CLIENTEDGE;
+	xdRichTextBox.font = font;
+	xdRichTextBox.lines = 6;
+	xdRichTextBox.foregroundColor = ::GetSysColor(COLOR_WINDOWTEXT);
+	xdRichTextBox.backgroundColor = ::GetSysColor(COLOR_3DFACE);
 
 	xdTable.style |= WS_HSCROLL | WS_VSCROLL | LVS_SHOWSELALWAYS | LVS_NOSORTHEADER;
 	xdTable.exStyle = WS_EX_CLIENTEDGE;
