@@ -72,10 +72,10 @@ void term_handler() {
 int SmartWinMain(dwt::Application& app) {
 	dcdebug("StartWinMain\n");
 
-	WinUtil::enableDEP();
-
 	// http://www.kb.cert.org/vuls/id/707943 part III, "For Developers".
 	::SetDllDirectory(_T(""));
+
+	WinUtil::enableDEP();
 
 	Util::initialize();
 
