@@ -33,16 +33,23 @@ void UPnPManager::addImplementation(UPnP* impl) {
 	impls.push_back(impl);
 }
 
-void UPnPManager::open() {
+bool UPnPManager::open() {
 	if(opened)
-		return;
+		return false;
 
 	if(impls.empty()) {
 		log(_("No UPnP implementation available"));
-		return;
+		return false;
 	}
 
+	if(Thread::safeExchange(portMapping, 1) == 1) {
+		log(_("Another UPnP port mapping attempt is in progress..."));
+		return false;
+	} 
+
 	start();
+
+	return true;
 }
 
 void UPnPManager::close() {
@@ -101,6 +108,7 @@ int UPnPManager::run() {
 		ConnectivityManager::getInstance()->mappingFinished(false);
 	}
 
+	portMapping = 0;
 	return 0;
 }
 

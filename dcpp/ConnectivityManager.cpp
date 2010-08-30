@@ -47,6 +47,11 @@ void ConnectivityManager::startSocket() {
 }
 
 void ConnectivityManager::detectConnection() {
+	if (running)
+		return;
+
+	running = true;
+
 	if (UPnPManager::getInstance()->getOpened()) {
 		UPnPManager::getInstance()->close();
 	}
@@ -60,6 +65,7 @@ void ConnectivityManager::detectConnection() {
 		SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, SettingsManager::INCOMING_FIREWALL_PASSIVE);
 		log(str(F_("Unable to open %1% port(s). You must set up your connection manually") % e.getError()));
 		fire(ConnectivityManagerListener::Finished());
+		running = false;
 		return;
 	}
 
@@ -69,13 +75,16 @@ void ConnectivityManager::detectConnection() {
 		SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, SettingsManager::INCOMING_DIRECT);
 		log(_("Public IP address detected, selecting active mode with direct connection"));
 		fire(ConnectivityManagerListener::Finished());
+		running = false;
 		return;
 	}
 
 	SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, SettingsManager::INCOMING_FIREWALL_UPNP);
 	log(_("Local network with possible NAT detected, trying to map the ports using UPnP..."));
 	
-	UPnPManager::getInstance()->open();
+	if (!UPnPManager::getInstance()->open()) {
+		running = false;
+	}
 }
 
 void ConnectivityManager::setup(bool settingsChanged, int lastConnectionMode) {
@@ -103,6 +112,8 @@ void ConnectivityManager::mappingFinished(bool success) {
 		}
 		fire(ConnectivityManagerListener::Finished());
 	}
+
+	running = false;
 }
 
 void ConnectivityManager::listen() {
