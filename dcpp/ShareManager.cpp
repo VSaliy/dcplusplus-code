@@ -40,7 +40,6 @@
 #include "version.h"
 
 #ifndef _WIN32
-#include <sys/types.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
