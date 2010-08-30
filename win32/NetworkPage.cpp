@@ -198,7 +198,7 @@ void NetworkPage::handleAutoClicked() {
 		overrideIP->setChecked(false);
 	}
 	incoming->setEnabled(!enabled);
-	detectNow->setEnabled(enabled);
+	detectNow->setEnabled(enabled && !ConnectivityManager::getInstance()->isRunning());
 
 	//Save the checkbox state for ConnectivityManager
 	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, enabled);

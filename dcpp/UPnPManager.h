@@ -39,7 +39,7 @@ public:
 	* first added impl will be tried first.
 	*/
 	void addImplementation(UPnP* impl);
-	void open();
+	bool open();
 	void close();
 
 	bool getOpened() const { return opened; }
@@ -51,6 +51,7 @@ private:
 	Impls impls;
 
 	bool opened;
+	volatile long portMapping;
 
 	UPnPManager() : opened(false) { }
 	virtual ~UPnPManager() throw() { join(); }
