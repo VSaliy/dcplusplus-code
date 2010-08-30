@@ -123,10 +123,6 @@ env.SConsignFile()
 
 env.Append(CPPPATH = ['#/boost/', '#/intl/'])
 
-# boost defines
-if dev.is_win32():
-	env.Append(CPPDEFINES = ['BOOST_ALL_NO_LIB', 'BOOST_USE_WINDOWS_H'])
-
 if not env['nativestl']:
 	env.Append(CPPPATH = ['#/stlport/stlport/'])
 	env.Append(LIBPATH = ['#/stlport/lib/'])

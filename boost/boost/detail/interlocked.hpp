@@ -112,11 +112,11 @@ namespace boost
 namespace detail
 {
 
-extern "C" __declspec(dllimport) long __stdcall InterlockedIncrement( long volatile * );
-extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement( long volatile * );
-extern "C" __declspec(dllimport) long __stdcall InterlockedCompareExchange( long volatile *, long, long );
-extern "C" __declspec(dllimport) long __stdcall InterlockedExchange( long volatile *, long );
-extern "C" __declspec(dllimport) long __stdcall InterlockedExchangeAdd( long volatile *, long );
+extern "C" long InterlockedIncrement( long volatile * );
+extern "C" long InterlockedDecrement( long volatile * );
+extern "C" long InterlockedCompareExchange( long volatile *, long, long );
+extern "C" long InterlockedExchange( long volatile *, long );
+extern "C" long InterlockedExchangeAdd( long volatile *, long );
 
 } // namespace detail
 
