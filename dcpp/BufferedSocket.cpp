@@ -42,13 +42,13 @@ disconnecting(false)
 {
 	start();
 
-	Thread::safeInc(sockets);
+	++sockets;
 }
 
-volatile long BufferedSocket::sockets = 0;
+atomic<long> BufferedSocket::sockets(0);
 
 BufferedSocket::~BufferedSocket() throw() {
-	Thread::safeDec(sockets);
+	--sockets;
 }
 
 void BufferedSocket::setMode (Modes aMode, size_t aRollback) {

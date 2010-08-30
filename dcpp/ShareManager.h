@@ -34,6 +34,8 @@
 #include "MerkleTree.h"
 #include "Pointer.h"
 
+#include <atomic>
+
 namespace dcpp {
 
 STANDARD_EXCEPTION(ShareException);
@@ -251,7 +253,7 @@ private:
 
 	int listN;
 
-	volatile long refreshing;
+	atomic_flag refreshing;
 
 	uint64_t lastXmlUpdate;
 	uint64_t lastFullUpdate;
