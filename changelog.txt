@@ -14,6 +14,10 @@
 * New icons
 * Update the links in the "Help" menu (poy)
 * Prevent current-directory Windows DLL injection (cologic)
+* [L#617021] Fix linux semaphore (thanks gennady proskurin)
+* [L#617591] Fix multi-core/cpu issue with ref-counting (thanks gennady proskurin)
+* Fix some counters that could have caused issues when running dc++ for a long time
+* [L#617517] More portable critical sections (thanks big muscle)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)

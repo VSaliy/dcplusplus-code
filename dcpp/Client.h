@@ -27,6 +27,8 @@
 #include "TimerManager.h"
 #include "ClientListener.h"
 
+#include <atomic>
+
 namespace dcpp {
 
 /** Yes, this should probably be called a Hub */
@@ -72,7 +74,8 @@ public:
 
 	static string getCounts() {
 		char buf[128];
-		return string(buf, snprintf(buf, sizeof(buf), "%ld/%ld/%ld", counts.normal, counts.registered, counts.op));
+		return string(buf, snprintf(buf, sizeof(buf), "%ld/%ld/%ld",
+				counts[COUNT_NORMAL].load(), counts[COUNT_REGISTERED].load(), counts[COUNT_OP].load()));
 	}
 
 	StringMap& escapeParams(StringMap& sm) {
@@ -112,13 +115,15 @@ protected:
 	friend class ClientManager;
 	Client(const string& hubURL, char separator, bool secure_);
 	virtual ~Client() throw();
-	struct Counts {
-		Counts(long n = 0, long r = 0, long o = 0) : normal(n), registered(r), op(o) { }
-		volatile long normal;
-		volatile long registered;
-		volatile long op;
-		bool operator !=(const Counts& rhs) { return normal != rhs.normal || registered != rhs.registered || op != rhs.op; }
+
+	enum CountType {
+		COUNT_NORMAL,
+		COUNT_REGISTERED,
+		COUNT_OP,
+		COUNT_UNCOUNTED,
 	};
+
+	static atomic<long> counts[COUNT_UNCOUNTED];
 
 	enum States {
 		STATE_CONNECTING,	///< Waiting for socket to connect
@@ -130,9 +135,6 @@ protected:
 	} state;
 
 	BufferedSocket* sock;
-
-	static Counts counts;
-	Counts lastCounts;
 
 	void updateCounts(bool aRemove);
 	void updateActivity() { lastActivity = GET_TICK(); }
@@ -151,13 +153,6 @@ protected:
 	virtual void on(Failed, const string&) throw();
 
 private:
-
-	enum CountType {
-		COUNT_UNCOUNTED,
-		COUNT_NORMAL,
-		COUNT_REGISTERED,
-		COUNT_OP
-	};
 
 	Client(const Client&);
 	Client& operator=(const Client&);
