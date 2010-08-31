@@ -884,6 +884,14 @@ void QueueManager::getTargets(const TTHValue& tth, StringList& sl) {
 	}
 }
 
+void QueueManager::addListener(QueueManagerListener* ql, const function<void (const QueueItem::StringMap&)>& currentQueue) {
+	Lock l(cs);
+	Speaker<QueueManagerListener>::addListener(ql);
+	if(currentQueue) {
+		currentQueue(fileQueue.getQueue());
+	}
+}
+
 Download* QueueManager::getDownload(UserConnection& aSource, bool supportsTrees) throw() {
 	Lock l(cs);
 
