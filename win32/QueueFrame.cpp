@@ -103,9 +103,7 @@ fileLists(0)
 	status->setHelpId(STATUS_TOTAL_COUNT, IDH_QUEUE_TOTAL_COUNT);
 	status->setHelpId(STATUS_TOTAL_BYTES, IDH_QUEUE_TOTAL_BYTES);
 
-	addQueueList(QueueManager::getInstance()->lockQueue());
-	QueueManager::getInstance()->unlockQueue();
-	QueueManager::getInstance()->addListener(this);
+	QueueManager::getInstance()->addListener(this, [this](const QueueItem::StringMap& qsm) { addQueueList(qsm); });
 
 	updateStatus();
 
