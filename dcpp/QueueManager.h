@@ -102,8 +102,9 @@ public:
 	void setPriority(const string& aTarget, QueueItem::Priority p) throw();
 
 	void getTargets(const TTHValue& tth, StringList& sl);
-	QueueItem::StringMap& lockQueue() throw() { cs.lock(); return fileQueue.getQueue(); } ;
-	void unlockQueue() throw() { cs.unlock(); }
+
+	using Speaker<QueueManagerListener>::addListener;
+	void addListener(QueueManagerListener* l, const function<void(const QueueItem::StringMap&)>& currentQueue);
 
 	Download* getDownload(UserConnection& aSource, bool supportsTrees) throw();
 	void putDownload(Download* aDownload, bool finished) throw();
