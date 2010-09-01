@@ -42,7 +42,7 @@ class ConnectivityManager : public Singleton<ConnectivityManager>, public Speake
 public:
 	void detectConnection();
 	void setup(bool settingsChanged, int lastConnectionMode);
-	bool isRunning() { return running; }
+	bool isRunning() const { return running; }
 
 private:
 	friend class Singleton<ConnectivityManager>;

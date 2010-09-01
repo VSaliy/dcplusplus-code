@@ -171,10 +171,23 @@ lastTick(GET_TICK())
 		handleMinimized();
 
 	if(SETTING(NICK).empty()) {
-		callAsync(std::bind(&SystemFrame::openWindow, getTabView()));
+		callAsync([this]() {
+			bool systemLogOpen = false;
+			const dwt::TabView::ChildList& views = tabs->getChildren();
+			for(dwt::TabView::ChildList::const_iterator i = views.begin(); i != views.end(); ++i) {
+				MDIChildFrame<dwt::Container>* child = static_cast<MDIChildFrame<dwt::Container>*>(*i);
+				if(child->getId() == SystemFrame::id) {
+					systemLogOpen = true;
+					break;
+				}
+			}
 
-		WinUtil::help(this, IDH_GET_STARTED);
-		callAsync(std::bind(&MainWindow::handleSettings, this));
+			if(!systemLogOpen)
+				SystemFrame::openWindow(getTabView());
+
+			WinUtil::help(this, IDH_GET_STARTED);
+			handleSettings();
+		});
 	}
 
 	if(dwt::LibraryLoader::getCommonControlsVersion() < PACK_COMCTL_VERSION(5,80))
