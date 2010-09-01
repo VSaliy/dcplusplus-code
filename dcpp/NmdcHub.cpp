@@ -780,8 +780,6 @@ void NmdcHub::myInfo(bool alwaysSend) {
 
 	reloadSettings(false);
 
-	lastCounts = counts;
-
 	string tmp1 = ";**\x1fU9";
 	string tmp2 = "+L9";
 	string tmp3 = "+G9";

@@ -40,7 +40,6 @@
 #include "version.h"
 
 #ifndef _WIN32
-#include <sys/types.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -52,7 +51,7 @@
 namespace dcpp {
 
 ShareManager::ShareManager() : hits(0), xmlListLen(0), bzXmlListLen(0),
-	xmlDirty(true), forceXmlRefresh(false), refreshDirs(false), update(false), initial(true), listN(0), refreshing(0),
+	xmlDirty(true), forceXmlRefresh(false), refreshDirs(false), update(false), initial(true), listN(0), refreshing(false),
 	lastXmlUpdate(0), lastFullUpdate(GET_TICK()), bloom(1<<20)
 {
 	SettingsManager::getInstance()->addListener(this);
@@ -723,7 +722,7 @@ void ShareManager::updateIndices(Directory& dir, const Directory::File::Set::ite
 }
 
 void ShareManager::refresh(bool dirs /* = false */, bool aUpdate /* = true */, bool block /* = false */) throw() {
-	if(Thread::safeExchange(refreshing, 1) == 1) {
+	if(refreshing.test_and_set()) {
 		LogManager::getInstance()->message(_("File list refresh in progress, please wait for it to finish before trying to refresh again"));
 		return;
 	}
@@ -798,7 +797,8 @@ int ShareManager::run() {
 	if(update) {
 		ClientManager::getInstance()->infoUpdated();
 	}
-	refreshing = 0;
+
+	refreshing.clear();
 	return 0;
 }
 

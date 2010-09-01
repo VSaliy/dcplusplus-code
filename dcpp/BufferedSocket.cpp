@@ -42,13 +42,13 @@ disconnecting(false)
 {
 	start();
 
-	Thread::safeInc(sockets);
+	++sockets;
 }
 
-volatile long BufferedSocket::sockets = 0;
+atomic<long> BufferedSocket::sockets(0);
 
 BufferedSocket::~BufferedSocket() throw() {
-	Thread::safeDec(sockets);
+	--sockets;
 }
 
 void BufferedSocket::setMode (Modes aMode, size_t aRollback) {
@@ -420,7 +420,7 @@ void BufferedSocket::threadSendData() throw(Exception) {
 
 bool BufferedSocket::checkEvents() throw(Exception) {
 	while(state == RUNNING ? taskSem.wait(0) : taskSem.wait()) {
-		pair<Tasks, boost::shared_ptr<TaskData> > p;
+		pair<Tasks, shared_ptr<TaskData> > p;
 		{
 			Lock l(cs);
 			dcassert(tasks.size() > 0);
