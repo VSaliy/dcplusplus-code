@@ -24,6 +24,8 @@
 #include "Thread.h"
 #include "UPnP.h"
 
+#include <atomic>
+
 #include <boost/ptr_container/ptr_vector.hpp>
 
 namespace dcpp {
@@ -51,9 +53,9 @@ private:
 	Impls impls;
 
 	bool opened;
-	volatile long portMapping;
+	atomic_flag portMapping;
 
-	UPnPManager() : opened(false) { }
+	UPnPManager() : opened(false), portMapping(false) { }
 	virtual ~UPnPManager() throw() { join(); }
 
 	int run();

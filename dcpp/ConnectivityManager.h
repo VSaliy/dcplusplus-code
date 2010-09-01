@@ -41,7 +41,6 @@ class ConnectivityManager : public Singleton<ConnectivityManager>, public Speake
 {
 public:
 	void detectConnection();
-	void log(const string& msg);
 	void setup(bool settingsChanged, int lastConnectionMode);
 	bool isRunning() { return running; }
 
@@ -53,6 +52,8 @@ private:
 	virtual ~ConnectivityManager() throw() { }
 
 	void mappingFinished(bool success);
+	void log(const string& msg);
+
 	void startSocket();
 	void listen();
 	void disconnect();
