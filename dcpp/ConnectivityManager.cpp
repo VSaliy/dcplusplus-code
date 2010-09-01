@@ -30,7 +30,10 @@
 namespace dcpp {
 
 ConnectivityManager::ConnectivityManager() :
-autoDetected(false) { }
+autoDetected(false),
+running(false)
+{
+}
 
 void ConnectivityManager::startSocket() {
 	autoDetected = false;

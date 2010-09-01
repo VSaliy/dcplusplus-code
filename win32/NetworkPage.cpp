@@ -61,9 +61,8 @@ tls(0)
 		detectNow->onClicked(std::bind(&NetworkPage::handleDetectClicked, this));
 
 		GroupBoxPtr logGroup = cur->addChild(GroupBox::Seed(T_("Detection log")));
-		
 		log = logGroup->addChild(WinUtil::Seeds::Dialog::richTextBox);
-		log->setHelpId(IDH_SETTINGS_NETWORK_DETECTION_LOG);
+		logGroup->setHelpId(IDH_SETTINGS_NETWORK_DETECTION_LOG);
 	}
 
 	{
