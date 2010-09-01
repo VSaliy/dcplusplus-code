@@ -151,6 +151,8 @@ if env['CC'] == 'cl': # MSVC
 	link_flags = msvc_link_flags
 	defs = msvc_defs
 
+	env.Append(CPPPATH = ['#/msvc/'])
+
 	env.Append(LIBS = ['User32', 'shell32', 'Advapi32'])
 
 else:
