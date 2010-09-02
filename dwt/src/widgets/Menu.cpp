@@ -223,8 +223,8 @@ void Menu::setMenu() {
 		}
 
 		Control* control = static_cast<Control*>(getParent());
-		control->onRaw([this, menuWidth](WPARAM wParam, LPARAM) { return this->handleNCPaint(WM_NCPAINT, wParam, menuWidth); }, Message(WM_NCPAINT)); //@todo GCC 4.5.0 workaround
-		control->onRaw([this, menuWidth](WPARAM wParam, LPARAM) { return this->handleNCPaint(WM_NCACTIVATE, wParam, menuWidth); }, Message(WM_NCACTIVATE)); //@todo GCC 4.5.0 workaround
+		control->onRaw([this, menuWidth](WPARAM wParam, LPARAM) { return handleNCPaint(WM_NCPAINT, wParam, menuWidth); }, Message(WM_NCPAINT));
+		control->onRaw([this, menuWidth](WPARAM wParam, LPARAM) { return handleNCPaint(WM_NCACTIVATE, wParam, menuWidth); }, Message(WM_NCACTIVATE));
 		::DrawMenuBar(control->handle());
 	}
 }

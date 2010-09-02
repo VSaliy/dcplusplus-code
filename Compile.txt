@@ -44,7 +44,7 @@
 
 2. Compiler
 
-	a. MinGW (GCC 4.5 or later):
+	a. MinGW (GCC 4.5.1 or later):
 	<http://sourceforge.net/projects/mingw/files/>
 
 		You'll need w32api, binutils, mingw-runtime, gcc-core, gcc-g++, and some deps like libmpc.

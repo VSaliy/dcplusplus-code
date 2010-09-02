@@ -183,10 +183,10 @@ lastTick(GET_TICK())
 			}
 
 			if(!systemLogOpen)
-				SystemFrame::openWindow(this->getTabView()); //@todo GCC 4.5.0 workaround
+				SystemFrame::openWindow(getTabView());
 
 			WinUtil::help(this, IDH_GET_STARTED);
-			this->handleSettings(); //@todo GCC 4.5.0 workaround
+			handleSettings();
 		});
 	}
 

@@ -59,20 +59,20 @@ void ToolBar::create(const Seed& cs) {
 	//// Telling the toolbar what the size of the TBBUTTON struct is
 	sendMessage(TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON));
 
-	onRaw([this](WPARAM, LPARAM lParam) { return this->handleDropDown(lParam); }, Message(WM_NOTIFY, TBN_DROPDOWN)); //@todo GCC 4.5.0 workaround
-	onRaw([this](WPARAM, LPARAM lParam) { return this->handleToolTip(lParam); }, Message(WM_NOTIFY, TBN_GETINFOTIP)); //@todo GCC 4.5.0 workaround
+	onRaw([this](WPARAM, LPARAM lParam) { return handleDropDown(lParam); }, Message(WM_NOTIFY, TBN_DROPDOWN));
+	onRaw([this](WPARAM, LPARAM lParam) { return handleToolTip(lParam); }, Message(WM_NOTIFY, TBN_GETINFOTIP));
 
 	if((cs.style & CCS_ADJUSTABLE) == CCS_ADJUSTABLE) {
 		// customization-related messages
-		onRaw([this](WPARAM, LPARAM) { return this->handleBeginAdjust(); }, Message(WM_NOTIFY, TBN_BEGINADJUST)); //@todo GCC 4.5.0 workaround
-		onRaw([this](WPARAM, LPARAM) { return this->handleChange(); }, Message(WM_NOTIFY, TBN_TOOLBARCHANGE)); //@todo GCC 4.5.0 workaround
-		onRaw([this](WPARAM, LPARAM) { return this->handleCustHelp(); }, Message(WM_NOTIFY, TBN_CUSTHELP)); //@todo GCC 4.5.0 workaround
-		onRaw([this](WPARAM, LPARAM) { return this->handleEndAdjust(); }, Message(WM_NOTIFY, TBN_ENDADJUST)); //@todo GCC 4.5.0 workaround
-		onRaw([this](WPARAM, LPARAM lParam) { return this->handleGetButtonInfo(lParam); }, Message(WM_NOTIFY, TBN_GETBUTTONINFO)); //@todo GCC 4.5.0 workaround
-		onRaw([this](WPARAM, LPARAM) { return this->handleInitCustomize(); }, Message(WM_NOTIFY, TBN_INITCUSTOMIZE)); //@todo GCC 4.5.0 workaround
-		onRaw([this](WPARAM, LPARAM) { return this->handleQuery(); }, Message(WM_NOTIFY, TBN_QUERYINSERT)); //@todo GCC 4.5.0 workaround
-		onRaw([this](WPARAM, LPARAM) { return this->handleQuery(); }, Message(WM_NOTIFY, TBN_QUERYDELETE)); //@todo GCC 4.5.0 workaround
-		onRaw([this](WPARAM, LPARAM) { return this->handleReset(); }, Message(WM_NOTIFY, TBN_RESET)); //@todo GCC 4.5.0 workaround
+		onRaw([this](WPARAM, LPARAM) { return handleBeginAdjust(); }, Message(WM_NOTIFY, TBN_BEGINADJUST));
+		onRaw([this](WPARAM, LPARAM) { return handleChange(); }, Message(WM_NOTIFY, TBN_TOOLBARCHANGE));
+		onRaw([this](WPARAM, LPARAM) { return handleCustHelp(); }, Message(WM_NOTIFY, TBN_CUSTHELP));
+		onRaw([this](WPARAM, LPARAM) { return handleEndAdjust(); }, Message(WM_NOTIFY, TBN_ENDADJUST));
+		onRaw([this](WPARAM, LPARAM lParam) { return handleGetButtonInfo(lParam); }, Message(WM_NOTIFY, TBN_GETBUTTONINFO));
+		onRaw([this](WPARAM, LPARAM) { return handleInitCustomize(); }, Message(WM_NOTIFY, TBN_INITCUSTOMIZE));
+		onRaw([this](WPARAM, LPARAM) { return handleQuery(); }, Message(WM_NOTIFY, TBN_QUERYINSERT));
+		onRaw([this](WPARAM, LPARAM) { return handleQuery(); }, Message(WM_NOTIFY, TBN_QUERYDELETE));
+		onRaw([this](WPARAM, LPARAM) { return handleReset(); }, Message(WM_NOTIFY, TBN_RESET));
 	}
 }
 

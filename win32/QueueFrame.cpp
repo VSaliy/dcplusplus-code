@@ -103,7 +103,7 @@ fileLists(0)
 	status->setHelpId(STATUS_TOTAL_COUNT, IDH_QUEUE_TOTAL_COUNT);
 	status->setHelpId(STATUS_TOTAL_BYTES, IDH_QUEUE_TOTAL_BYTES);
 
-	QueueManager::getInstance()->addListener(this, [this](const QueueItem::StringMap& qsm) { this->addQueueList(qsm); }); //@todo GCC 4.5.0 workaround
+	QueueManager::getInstance()->addListener(this, [this](const QueueItem::StringMap& qsm) { addQueueList(qsm); });
 
 	updateStatus();
 
