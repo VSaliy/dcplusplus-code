@@ -69,10 +69,10 @@ void StatusBar::create(const Seed& cs) {
 		setFont(cs.font);
 
 	tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
-	tip->setTool(this, [this](tstring& text) { handleToolTip(text); });
+	tip->setTool(this, [this](tstring& text) { this->handleToolTip(text); }); //@todo GCC 4.5.0 workaround
 
-	ClickType::onClicked([this] { handleClicked(); });
-	DblClickType::onDblClicked([this] { handleDblClicked(); });
+	ClickType::onClicked([this] { this->handleClicked(); }); //@todo GCC 4.5.0 workaround
+	DblClickType::onDblClicked([this] { this->handleDblClicked(); }); //@todo GCC 4.5.0 workaround
 }
 
 void StatusBar::setSize(unsigned part, unsigned size) {
