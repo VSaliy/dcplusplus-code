@@ -92,7 +92,7 @@ void Theme::load(LPCWSTR classes, Widget* w_, bool handleThemeChanges) {
 		if(handleThemeChanges) {
 			// @todo Is it safe to assume that classes will still point to a valid string?
 			w->addCallback(Message(WM_THEMECHANGED),
-				Dispatchers::VoidVoid<0, false>([this, classes] { this->themeChanged(classes); })); //@todo GCC 4.5.0 workaround
+				Dispatchers::VoidVoid<0, false>([this, classes] { themeChanged(classes); }));
 		}
 	}
 }

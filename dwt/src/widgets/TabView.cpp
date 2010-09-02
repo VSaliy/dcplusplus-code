@@ -75,8 +75,8 @@ dragging(0)
 
 void TabView::create(const Seed & cs) {
 	if(cs.ctrlTab) {
-		addAccel(FCONTROL, VK_TAB, [this] { this->handleCtrlTab(false); }); //@todo GCC 4.5.0 workaround
-		addAccel(FCONTROL | FSHIFT, VK_TAB, [this] { this->handleCtrlTab(true); }); //@todo GCC 4.5.0 workaround
+		addAccel(FCONTROL, VK_TAB, [this] { handleCtrlTab(false); });
+		addAccel(FCONTROL | FSHIFT, VK_TAB, [this] { handleCtrlTab(true); });
 	}
 
 	BaseType::create(cs);
@@ -112,11 +112,11 @@ void TabView::create(const Seed & cs) {
 
 		if(!(cs.style & TCS_BUTTONS)) {
 			// we don't want pre-drawn borders to get in the way here, so we fully take over painting.
-			onPainting([this](PaintCanvas& pc) { this->handlePainting(pc); }); //@todo GCC 4.5.0 workaround
+			onPainting([this](PaintCanvas& pc) { handlePainting(pc); });
 		}
 
 		// TCS_HOTTRACK seems to have no effect in owner-drawn tabs, so do the tracking ourselves.
-		onMouseMove([this](const MouseEvent& me) { return this->handleMouseMove(me); }); //@todo GCC 4.5.0 workaround
+		onMouseMove([this](const MouseEvent& me) { return handleMouseMove(me); });
 
 	} else {
 		if(widthConfig <= 3)
@@ -129,17 +129,17 @@ void TabView::create(const Seed & cs) {
 
 	TabCtrl_SetImageList(handle(), imageList->handle());
 
-	onSelectionChanged([this] { this->handleTabSelected(); }); //@todo GCC 4.5.0 workaround
-	onLeftMouseDown([this](const MouseEvent& me) { return this->handleLeftMouseDown(me); }); //@todo GCC 4.5.0 workaround
-	onLeftMouseUp([this](const MouseEvent& me) { return this->handleLeftMouseUp(me); }); //@todo GCC 4.5.0 workaround
-	onContextMenu([this](const ScreenCoordinate& sc) { return this->handleContextMenu(sc); }); //@todo GCC 4.5.0 workaround
-	onMiddleMouseDown([this](const MouseEvent& me) { return this->handleMiddleMouseDown(me); }); //@todo GCC 4.5.0 workaround
-	onXMouseUp([this](const MouseEvent& me) { return this->handleXMouseUp(me); }); //@todo GCC 4.5.0 workaround
+	onSelectionChanged([this] { handleTabSelected(); });
+	onLeftMouseDown([this](const MouseEvent& me) { return handleLeftMouseDown(me); });
+	onLeftMouseUp([this](const MouseEvent& me) { return handleLeftMouseUp(me); });
+	onContextMenu([this](const ScreenCoordinate& sc) { return handleContextMenu(sc); });
+	onMiddleMouseDown([this](const MouseEvent& me) { return handleMiddleMouseDown(me); });
+	onXMouseUp([this](const MouseEvent& me) { return handleXMouseUp(me); });
 
 	if(cs.style & TCS_TOOLTIPS) {
 		tip = WidgetCreator<ToolTip>::attach(this, TabCtrl_GetToolTips(handle())); // created and managed by the tab control thanks to the TCS_TOOLTIPS style
 		tip->addRemoveStyle(TTS_NOPREFIX, true);
-		tip->onRaw([this](WPARAM, LPARAM lParam) { return this->handleToolTip(lParam); }, Message(WM_NOTIFY, TTN_GETDISPINFO)); //@todo GCC 4.5.0 workaround
+		tip->onRaw([this](WPARAM, LPARAM lParam) { return handleToolTip(lParam); }, Message(WM_NOTIFY, TTN_GETDISPINFO));
 	}
 }
 
@@ -181,7 +181,7 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 
 	layout();
 
-	w->onTextChanging([this, w](const tstring& t) { this->handleTextChanging(w, t); }); //@todo GCC 4.5.0 workaround
+	w->onTextChanging([this, w](const tstring& t) { handleTextChanging(w, t); });
 }
 
 ContainerPtr TabView::getActive() const {
@@ -588,7 +588,7 @@ bool TabView::handleMouseMove(const MouseEvent& mouseEvent) {
 	if(i != -1 && i != highlighted) {
 		redraw(i);
 		highlighted = i;
-		onMouseLeave([this]() { this->handleMouseLeave(); }); //@todo GCC 4.5.0 workaround
+		onMouseLeave([this]() { handleMouseLeave(); });
 	}
 	if(i != -1 && i == active) {
 		if(highlightClose ^ inCloseRect(mouseEvent.pos)) {
