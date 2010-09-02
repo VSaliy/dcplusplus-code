@@ -75,8 +75,8 @@ dragging(0)
 
 void TabView::create(const Seed & cs) {
 	if(cs.ctrlTab) {
-		addAccel(FCONTROL, VK_TAB, std::bind(&TabView::handleCtrlTab, this, false));
-		addAccel(FCONTROL | FSHIFT, VK_TAB, std::bind(&TabView::handleCtrlTab, this, true));
+		addAccel(FCONTROL, VK_TAB, [this] { handleCtrlTab(false); });
+		addAccel(FCONTROL | FSHIFT, VK_TAB, [this] { handleCtrlTab(true); });
 	}
 
 	BaseType::create(cs);
@@ -112,11 +112,11 @@ void TabView::create(const Seed & cs) {
 
 		if(!(cs.style & TCS_BUTTONS)) {
 			// we don't want pre-drawn borders to get in the way here, so we fully take over painting.
-			onPainting(std::bind((void (TabView::*)(PaintCanvas&))(&TabView::handlePainting), this, _1));
+			onPainting([this](PaintCanvas& pc) { handlePainting(pc); });
 		}
 
 		// TCS_HOTTRACK seems to have no effect in owner-drawn tabs, so do the tracking ourselves.
-		onMouseMove(std::bind(&TabView::handleMouseMove, this, _1));
+		onMouseMove([this](const MouseEvent& me) { return handleMouseMove(me); });
 
 	} else {
 		if(widthConfig <= 3)
@@ -129,17 +129,17 @@ void TabView::create(const Seed & cs) {
 
 	TabCtrl_SetImageList(handle(), imageList->handle());
 
-	onSelectionChanged(std::bind(&TabView::handleTabSelected, this));
-	onLeftMouseDown(std::bind(&TabView::handleLeftMouseDown, this, _1));
-	onLeftMouseUp(std::bind(&TabView::handleLeftMouseUp, this, _1));
-	onContextMenu(std::bind(&TabView::handleContextMenu, this, _1));
-	onMiddleMouseDown(std::bind(&TabView::handleMiddleMouseDown, this, _1));
-	onXMouseUp(std::bind(&TabView::handleXMouseUp, this, _1));
+	onSelectionChanged([this] { handleTabSelected(); });
+	onLeftMouseDown([this](const MouseEvent& me) { return handleLeftMouseDown(me); });
+	onLeftMouseUp([this](const MouseEvent& me) { return handleLeftMouseUp(me); });
+	onContextMenu([this](const ScreenCoordinate& sc) { return handleContextMenu(sc); });
+	onMiddleMouseDown([this](const MouseEvent& me) { return handleMiddleMouseDown(me); });
+	onXMouseUp([this](const MouseEvent& me) { return handleXMouseUp(me); });
 
 	if(cs.style & TCS_TOOLTIPS) {
 		tip = WidgetCreator<ToolTip>::attach(this, TabCtrl_GetToolTips(handle())); // created and managed by the tab control thanks to the TCS_TOOLTIPS style
 		tip->addRemoveStyle(TTS_NOPREFIX, true);
-		tip->onRaw(std::bind(&TabView::handleToolTip, this, _2), Message(WM_NOTIFY, TTN_GETDISPINFO));
+		tip->onRaw([this](WPARAM, LPARAM lParam) { return handleToolTip(lParam); }, Message(WM_NOTIFY, TTN_GETDISPINFO));
 	}
 }
 
@@ -181,7 +181,7 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 
 	layout();
 
-	w->onTextChanging(std::bind(&TabView::handleTextChanging, this, w, _1));
+	w->onTextChanging([this, w](const tstring& t) { handleTextChanging(w, t); });
 }
 
 ContainerPtr TabView::getActive() const {
@@ -588,7 +588,7 @@ bool TabView::handleMouseMove(const MouseEvent& mouseEvent) {
 	if(i != -1 && i != highlighted) {
 		redraw(i);
 		highlighted = i;
-		onMouseLeave(std::bind(&TabView::handleMouseLeave, this));
+		onMouseLeave([this]() { handleMouseLeave(); });
 	}
 	if(i != -1 && i == active) {
 		if(highlightClose ^ inCloseRect(mouseEvent.pos)) {
