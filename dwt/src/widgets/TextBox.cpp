@@ -77,7 +77,7 @@ void TextBox::create(const Seed& cs) {
 
 	// multiline text-boxes don't handle ctrl + A so we have do it ourselves...
 	if((cs.style & ES_MULTILINE) == ES_MULTILINE)
-		onKeyDown(std::bind(&TextBox::handleKeyDown, this, _1));
+		onKeyDown([this](bool c) { return handleKeyDown(c); });
 }
 
 void TextBox::setText(const tstring& txt) {
@@ -177,32 +177,27 @@ Point TextBoxBase::getPreferedSize() {
 	return ret;
 }
 
-// wrapper because sendMessage returns a value
-static inline void sendMessage_(TextBoxBase* box, UINT message) {
-	box->sendMessage(message);
-}
-
 void TextBoxBase::addCommands(MenuPtr menu) {
 	const bool writable = !hasStyle(ES_READONLY);
 	const bool text = !getText().empty();
 	const bool selection = !getSelection().empty();
 
 	if(writable) {
-		menu->appendItem(Texts::get(Texts::undo), std::bind(&sendMessage_, this, WM_UNDO),
+		menu->appendItem(Texts::get(Texts::undo), [this] { this->sendMessage(WM_UNDO); },
 			IconPtr(), sendMessage(EM_CANUNDO));
 		menu->appendSeparator();
-		menu->appendItem(Texts::get(Texts::cut), std::bind(&sendMessage_, this, WM_CUT),
+		menu->appendItem(Texts::get(Texts::cut), [this] { this->sendMessage(WM_CUT); },
 			IconPtr(), selection);
 	}
-	menu->appendItem(Texts::get(Texts::copy), std::bind(&sendMessage_, this, WM_COPY),
+	menu->appendItem(Texts::get(Texts::copy), [this] { this->sendMessage(WM_COPY); },
 		IconPtr(), selection);
 	if(writable) {
-		menu->appendItem(Texts::get(Texts::paste), std::bind(&sendMessage_, this, WM_PASTE));
-		menu->appendItem(Texts::get(Texts::del), std::bind(&sendMessage_, this, WM_CLEAR),
+		menu->appendItem(Texts::get(Texts::paste), [this] { this->sendMessage(WM_PASTE); });
+		menu->appendItem(Texts::get(Texts::del), [this] { this->sendMessage(WM_CLEAR); },
 			IconPtr(), selection);
 	}
 	menu->appendSeparator();
-	menu->appendItem(Texts::get(Texts::selAll), std::bind(&TextBoxBase::setSelection, this, 0, -1),
+	menu->appendItem(Texts::get(Texts::selAll), [this] { this->setSelection(0, -1);},
 		IconPtr(), text);
 }
 

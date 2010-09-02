@@ -47,9 +47,9 @@ BaseType(parent, ChainingDispatcher::superClass<ModalDialog>()),
 quit(false),
 ret(0)
 {
-	onClosing(std::bind(&ThisType::defaultClosing, this));
+	onClosing([this] { return this->ThisType::defaultClosing(); });
 
-	filterIter = dwt::Application::instance().addFilter(std::bind(&ThisType::filter, this, _1));
+	filterIter = dwt::Application::instance().addFilter([this](MSG& msg) { return this->ThisType::filter(msg); });
 }
 
 ModalDialog::~ModalDialog() {

@@ -59,20 +59,20 @@ void ToolBar::create(const Seed& cs) {
 	//// Telling the toolbar what the size of the TBBUTTON struct is
 	sendMessage(TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON));
 
-	onRaw(std::bind(&ToolBar::handleDropDown, this, _2), Message(WM_NOTIFY, TBN_DROPDOWN));
-	onRaw(std::bind(&ToolBar::handleToolTip, this, _2), Message(WM_NOTIFY, TBN_GETINFOTIP));
+	onRaw([this](WPARAM, LPARAM lParam) { return handleDropDown(lParam); }, Message(WM_NOTIFY, TBN_DROPDOWN));
+	onRaw([this](WPARAM, LPARAM lParam) { return handleToolTip(lParam); }, Message(WM_NOTIFY, TBN_GETINFOTIP));
 
 	if((cs.style & CCS_ADJUSTABLE) == CCS_ADJUSTABLE) {
 		// customization-related messages
-		onRaw(std::bind(&ToolBar::handleBeginAdjust, this), Message(WM_NOTIFY, TBN_BEGINADJUST));
-		onRaw(std::bind(&ToolBar::handleChange, this), Message(WM_NOTIFY, TBN_TOOLBARCHANGE));
-		onRaw(std::bind(&ToolBar::handleCustHelp, this), Message(WM_NOTIFY, TBN_CUSTHELP));
-		onRaw(std::bind(&ToolBar::handleEndAdjust, this), Message(WM_NOTIFY, TBN_ENDADJUST));
-		onRaw(std::bind(&ToolBar::handleGetButtonInfo, this, _2), Message(WM_NOTIFY, TBN_GETBUTTONINFO));
-		onRaw(std::bind(&ToolBar::handleInitCustomize, this), Message(WM_NOTIFY, TBN_INITCUSTOMIZE));
-		onRaw(std::bind(&ToolBar::handleQuery, this), Message(WM_NOTIFY, TBN_QUERYINSERT));
-		onRaw(std::bind(&ToolBar::handleQuery, this), Message(WM_NOTIFY, TBN_QUERYDELETE));
-		onRaw(std::bind(&ToolBar::handleReset, this), Message(WM_NOTIFY, TBN_RESET));
+		onRaw([this](WPARAM, LPARAM) { return handleBeginAdjust(); }, Message(WM_NOTIFY, TBN_BEGINADJUST));
+		onRaw([this](WPARAM, LPARAM) { return handleChange(); }, Message(WM_NOTIFY, TBN_TOOLBARCHANGE));
+		onRaw([this](WPARAM, LPARAM) { return handleCustHelp(); }, Message(WM_NOTIFY, TBN_CUSTHELP));
+		onRaw([this](WPARAM, LPARAM) { return handleEndAdjust(); }, Message(WM_NOTIFY, TBN_ENDADJUST));
+		onRaw([this](WPARAM, LPARAM lParam) { return handleGetButtonInfo(lParam); }, Message(WM_NOTIFY, TBN_GETBUTTONINFO));
+		onRaw([this](WPARAM, LPARAM) { return handleInitCustomize(); }, Message(WM_NOTIFY, TBN_INITCUSTOMIZE));
+		onRaw([this](WPARAM, LPARAM) { return handleQuery(); }, Message(WM_NOTIFY, TBN_QUERYINSERT));
+		onRaw([this](WPARAM, LPARAM) { return handleQuery(); }, Message(WM_NOTIFY, TBN_QUERYDELETE));
+		onRaw([this](WPARAM, LPARAM) { return handleReset(); }, Message(WM_NOTIFY, TBN_RESET));
 	}
 }
 

@@ -223,8 +223,8 @@ void Menu::setMenu() {
 		}
 
 		Control* control = static_cast<Control*>(getParent());
-		control->onRaw(std::bind(&Menu::handleNCPaint, this, WM_NCPAINT, _1, menuWidth), Message(WM_NCPAINT));
-		control->onRaw(std::bind(&Menu::handleNCPaint, this, WM_NCACTIVATE, _1, menuWidth), Message(WM_NCACTIVATE));
+		control->onRaw([this, menuWidth](WPARAM wParam, LPARAM) { return handleNCPaint(WM_NCPAINT, wParam, menuWidth); }, Message(WM_NCPAINT));
+		control->onRaw([this, menuWidth](WPARAM wParam, LPARAM) { return handleNCPaint(WM_NCACTIVATE, wParam, menuWidth); }, Message(WM_NCACTIVATE));
 		::DrawMenuBar(control->handle());
 	}
 }
@@ -849,7 +849,8 @@ unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const Ico
 	const unsigned index = getCount();
 
 	if(f) {
-		Dispatcher::F async_f = std::bind(&Widget::callAsync, getParent(), f);
+		Widget *parent = getParent();
+		Dispatcher::F async_f = [this, parent, f] { parent->callAsync(f); };
 		if(getRootMenu()->popup) {
 			commands_type& commands_ref = getRootMenu()->commands;
 			if(!commands_ref.get())
