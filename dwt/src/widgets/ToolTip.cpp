@@ -57,7 +57,7 @@ void ToolTip::setText(const tstring& text_) {
 
 void ToolTip::setText(Widget* widget, const tstring& text_) {
 	text = text_;
-	setTool(widget, [this](tstring& t) { handleGetTip(t); });
+	setTool(widget, [this](tstring& t) { this->handleGetTip(t); }); //@todo GCC 4.5.0 workaround
 }
 
 void ToolTip::setTool(Widget* widget, const Dispatcher::F& f) {
