@@ -49,7 +49,8 @@ tls(0)
 		cur->column(0).mode = GridInfo::FILL;
 
 		GridPtr cur2 = cur->addChild(Grid::Seed(1, 2));
-		cur2->column(0).mode = GridInfo::FILL;
+		cur2->column(1).mode = GridInfo::FILL;
+		cur2->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		autoDetect = cur2->addChild(CheckBox::Seed(T_("Enable automatic incoming connection type detection")));
 		autoDetect->setHelpId(IDH_SETTINGS_NETWORK_AUTODETECT);
