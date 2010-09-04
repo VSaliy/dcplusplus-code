@@ -56,6 +56,7 @@ const int Menu::borderGap = 3;
 const int Menu::pointerGap = 5;
 const int Menu::textIconGap = 8;
 const int Menu::textBorderGap = 4;
+const unsigned Menu::minWidth = 100;
 
 /// @todo menus should re-init the cached default colors on WM_SYSCOLORCHANGE
 
@@ -754,8 +755,11 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 	if(drawSidebar)
 		itemWidth += getTextSize(getText(0), itsTitleFont).y; // 0 is the title index
 
-	// adjust item height
-	itemHeight = (std::max)( itemHeight, ( UINT )::GetSystemMetrics( SM_CYMENU ) );
+	// make sure the calculated size is not too small
+	if(popup) {
+		itemWidth = std::max(itemWidth, minWidth);
+		itemHeight = std::max(itemHeight, static_cast<UINT>(::GetSystemMetrics(SM_CYMENU)));
+	}
 	return true;
 }
 
