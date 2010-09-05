@@ -72,7 +72,6 @@ opts = Variables('custom.py', ARGUMENTS)
 opts.AddVariables(
 	EnumVariable('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
 	EnumVariable('mode', 'Compile mode', 'debug', ['debug', 'release']),
-	BoolVariable('nativestl', 'Use native STL instead of STLPort', 'yes'),
 	BoolVariable('gch', 'Use GCH when compiling GUI (disable if you have linking problems with mingw)', 'yes'),
 	BoolVariable('verbose', 'Show verbose command lines', 'no'),
 	BoolVariable('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
@@ -126,15 +125,6 @@ env.Append(CPPPATH = ['#/boost/', '#/intl/'])
 # boost defines
 if dev.is_win32():
 	env.Append(CPPDEFINES = ['BOOST_ALL_NO_LIB', 'BOOST_USE_WINDOWS_H'])
-
-if not env['nativestl']:
-	env.Append(CPPPATH = ['#/stlport/stlport/'])
-	env.Append(LIBPATH = ['#/stlport/lib/'])
-	env.Append(CPPDEFINES = ['HAVE_STLPORT', '_STLP_USE_STATIC_LIB=1'])
-	if mode == 'debug':
-		env.Append(LIBS = ['stlportg.5.1'])
-	else:
-		env.Append(LIBS = ['stlport.5.1'])
 
 if 'gcc' in env['TOOLS']:
 	if env['savetemps']:
