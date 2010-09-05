@@ -101,7 +101,7 @@ product or seen a sign of its operation.</p>
 
 <p>If you use Windows XP with third party software firewall installed then make 
 sure you have the <a href="http://support.microsoft.com/kb/283673" target="_blank" class="external">internal Windows firewall disabled</a>. 
-On Vista and Windows 7 this should be always done by the external firewall application.
+On Vista and Windows 7 this should be automatically done by your 3rd party firewall application.
 </p>
 
 <p>The easiest way to check if DC++ is blocked is to go the Help/About menu in
@@ -113,7 +113,7 @@ Internet.</p>
 <p><a href="faq_activemode.html#firewall">Here are some tips</a> how to try to unblock DC++ in the built-in Windows firewall.</p>
 
 <p>The method for unblocking programs in 3rd party firewalls varies from product to product.
-Check your firewall's help or manual for instructions. The best practice is to
+Check your firewall's help or manual for instructions. The best general practice is to
 exit DC++ and remove ALL the rules for DC++ in the firewall configuration. In
 most cases the time of next start of DC++ you'll be shown a popup window where
 you can re-enable DC++. You can find configuration instructions for some
@@ -121,66 +121,25 @@ popular firewall software <a href="http://www.dslreports.com/faq/dc/3.1_Software
 
 <h2 id="connection">Setting up your connection</h2>
 
-<p>To make your life easier while using DC++ you should find out what connection
-mode works for you. From a protocol perspective, there are two connection
+<p>To make your life easier while using DC++ your connection must be set up correctly.
+In other words your incoming connection type must be correctly chosen for searches and
+downloads to work. The available connection modes depend on the structure of your network
+and the way you access the Internet. From a protocol perspective, there are two connection
 methods available: <b>active mode</b> and <b>passive mode</b>. While passive
 mode is almost guaranteed to work, it does not work as well as a properly
-configured active mode connection.  For a more in-depth explanation, read 
-<a href="faq_whyactive.html">Why do I need active mode?</a>
-</p>
+configured active mode connection. For a more in-depth explanation, read
+<a href="faq_whyactive.html">Why do I need active mode?</a></p>
 
-<p>It is very important to decide what <i>active connection mode</i> is available
-for you. It depends on your network structure, so you need to know exactly how
-you access the Internet. Is it a direct connection through a modem or do you
-have a local network and access the Internet through a router or other gateway?
-If unsure, <a href="http://www.b.ali.btinternet.co.uk/DCPlusPlus/advancedUsage.html#activepassive" target="_blank" class="external">this page</a> 
-should help you figure it out. </p>
+<p>In most cases DC++ should be able to detect the appropriate connection method for you.
+The <a href="settings_connection.html">automatic connection type detection feature</a>
+is enabled by default and it tries to decide the best available connection mode at start.
+If you able to search and download from the users of the hubs you're connected to then
+you're done.</p>
 
-<p>If you're still unsure what network devices you use to connect to the Internet,
-then use <a href="http://www.google.com/" target="_blank" class="external">Google</a>! It can give you
-information on every network device you own, just by searching for the <u>model
-number</u> printed on the device.  Many ISPs call their device a simple modem
-when it is actually a router, so it never hurts to check.</p>
-
-<p>In order to choose a proper active connection mode, you must know whether you
-are <i>behind a router or gateway</i> or if you <i>access the Internet
-directly</i>. You can also determine if you have a router or not by checking
-your <i>external</i> and <i>internal</i> IP addresses. If these IP addresses
-<b>do NOT match then you access the Internet through a local gateway or
-router</b>.</p>
-
-<ul> <li style="margin-left: 10px;">To see your <i>internal IP address</i> go
-to the Windows Start menu, click Run... and type : cmd /k ipconfig</li>
-
-<li style="margin-left: 10px;">To see your <i>external IP address</i> go to one
-of the following websites : <a href="http://www.whatismyip.com/" target="_blank" class="external">www.whatismyip.com</a>, <a href="http://www.dslreports.com/ip" target="_blank" class="external">www.dslreports.com/ip</a>, <a href="http://www.ip2location.com/" target="_blank" class="external">www.ip2location.com</a></li> 
-</ul>
-
-<p>If you are still unsure you may want to consult your ISP support hotline or
-system administrator (if on an organization's network).</p>
-
-<p>When you look at the <a href="settings_connection.html">Connection Settings</a>
-you will find 3 options for active mode and the last option for being passive
-as a last resort. For being active:</p>
-
-<ul>
-<li style="margin-left: 10px;">You can use the <i>My computer is directly connected 
-to Internet (no router)</i> option <b>ONLY if you don't have a router/gateway</b>.
-
-</li><li style="margin-left: 10px;">If you <b>have a router/gateway you can use ONLY
-the 2nd or the 3rd option</b> : <i>Use UPnP to let DC++ configure
-my router</i> or <i>Manual port forwarding (I have configured my router by myself)</i></li>
-
-</ul>
-
-<p>For setting up any of the three active mode options follow the <a href="faq_activemode.html">active mode setup FAQ</a>.</p>
-
-<p>If none of the above helped or you are not able to use active mode in your
-network (e.g. you have no access to the configuration page of the
-router/gateway or you have firewall service provided by your ISP) then you must
-choose <i>Passive mode (last resort - has serious limitations)</i> option in 
-<a href="settings_connection.html">Connection Settings</a>. As linked above,
-however, passive mode has several disadvantages.</p>
+<p>If searches and/or downloads do not work then make sure that <a href="settings_connection.html">
+Enable automatic connection type detection</a> setting is enabled. If it doesn't help
+(or it forces you into passive mode and you want to improve your connectivity) then follow
+<a href="faq_connection.html">the FAQ that tells you how to set up connection manually in DC++.</a></p>
 
 <h2>Help resources</h2>
 <p>
