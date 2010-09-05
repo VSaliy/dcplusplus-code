@@ -18,6 +18,7 @@
 * [L#617591] Fix multi-core/cpu issue with ref-counting (thanks gennady proskurin)
 * Fix some counters that could have caused issues when running dc++ for a long time
 * [L#617517] More portable critical sections (thanks big muscle)
+* Removed stlport support (probably defunct by now...)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
