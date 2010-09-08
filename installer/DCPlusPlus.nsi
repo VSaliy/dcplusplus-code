@@ -1,30 +1,16 @@
+!include "MUI2.nsh"
 !include "Sections.nsh"
 
-Function GetDCPlusPlusVersion
-        Exch $0
-	GetDllVersion "$INSTDIR\$0" $R0 $R1
-	IntOp $R2 $R0 / 0x00010000
-	IntOp $R3 $R0 & 0x0000FFFF
-	IntOp $R4 $R1 / 0x00010000
-	IntOp $R5 $R1 & 0x0000FFFF
-        StrCpy $1 "$R2.$R3$R4$R5"
-        Exch $1
-FunctionEnd
-
-SetCompressor "lzma"
+Var VERSION ; will be filled in onInit
 
 ; The name of the installer
-Name "DC++"
+Name "DC++ $VERSION"
 
+RequestExecutionLevel admin
+SetCompressor /SOLID "lzma"
 ShowInstDetails show
 ShowUninstDetails show
-
-Page license
-Page components
-Page directory
-Page instfiles
-UninstPage uninstConfirm
-UninstPage instfiles
+XPStyle on
 
 ; The file to write
 OutFile "DCPlusPlus-xxx.exe"
@@ -35,14 +21,40 @@ InstallDir $PROGRAMFILES\DC++
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM SOFTWARE\DC++ "Install_Dir"
 
-LicenseText "DC++ is licensed under the GPL, here's the full text!"
-LicenseData "License.txt"
-LicenseForceSelection checkbox
+; Modern UI instructions
 
-; The text to prompt the user to enter a directory
-ComponentText "Welcome to the DC++ installer."
-; The text to prompt the user to enter a directory
-DirText "Choose a directory to install in to:"
+!define MUI_ICON "Install.ico"
+!define MUI_UNICON "Uninstall.ico"
+
+!define MUI_ABORTWARNING
+!define MUI_ABORTWARNING_CANCEL_DEFAULT
+!define MUI_UNABORTWARNING
+!define MUI_UNABORTWARNING_CANCEL_DEFAULT
+
+;!define MUI_LANGDLL_ALWAYSSHOW
+;!define MUI_LANGDLL_REGISTRY_ROOT "HKLM"
+;!define MUI_LANGDLL_REGISTRY_KEY "SOFTWARE\DC++"
+;!define MUI_LANGDLL_REGISTRY_VALUENAME "Install_Language"
+;!define MUI_LANGDLL_WINDOWTITLE "$(^NameDA) language selection"
+
+!define MUI_LICENSEPAGE_TEXT_TOP "DC++ is licensed under the GPL, here is the full text."
+!insertmacro MUI_PAGE_LICENSE "License.txt"
+
+!define MUI_COMPONENTSPAGE_NODESC
+!insertmacro MUI_PAGE_COMPONENTS
+
+!insertmacro MUI_PAGE_DIRECTORY
+
+!insertmacro MUI_PAGE_INSTFILES
+
+!define MUI_UNCONFIRMPAGE_TEXT_TOP "$(^UninstallingText) Warning: the 'locale' directory ($INSTDIR\locale) will be completely erased!"
+!insertmacro MUI_UNPAGE_CONFIRM
+
+!insertmacro MUI_UNPAGE_INSTFILES
+
+!insertmacro MUI_LANGUAGE "English"
+;!insertmacro MUI_LANGUAGE "French"
+!insertmacro MUI_RESERVEFILE_LANGDLL
 
 ; The stuff to install
 Section "DC++ (required)" dcpp
@@ -78,23 +90,18 @@ no_backup:
   File "mingwm10.dll"
 
   ; Add the whole locale directory
-  File /r "locale" 
-  
+  File /r "locale"
+
   ; Remove opencow just in case we're upgrading
   Delete "$INSTDIR\opencow.dll"
-  
-  ; Get DCPlusplus version we just installed and store in $1
-  Push "DCPlusPlus.exe"
-  Call "GetDCPlusPlusVersion"
-  Pop $1
 
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\DC++ "Install_Dir" "$INSTDIR"
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "DisplayIcon" '"$INSTDIR\DCPlusPlus.exe"'
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "DisplayName" "DC++ $1"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "DisplayVersion" "$1"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "DisplayName" "DC++ $VERSION"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "DisplayVersion" "$VERSION"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "Publisher" "Jacek Sieka"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "URLInfoAbout" "http://dcplusplus.sourceforge.net/"
@@ -102,7 +109,7 @@ no_backup:
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "HelpLink" "http://dcplusplus.sourceforge.net/webhelp/"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "NoModify" "1"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\DC++" "NoRepair" "1"
-  
+
   WriteUninstaller "uninstall.exe"
 SectionEnd
 
@@ -121,7 +128,7 @@ Section "Start Menu Shortcuts"
   CreateShortCut "$SMPROGRAMS\DC++\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 SectionEnd
 
-Section "Store settings in your user profile folder" loc
+Section "Store settings in your user profile directory" loc
   ; Change to nonlocal dcppboot if the checkbox left checked
   SetOutPath $INSTDIR
   File /oname=dcppboot.xml "dcppboot.nonlocal.xml" 
@@ -136,32 +143,52 @@ Function .onSelChange
   IntOp $0 $0 & ${SF_SELECTED}
   StrCmp $0 ${SF_SELECTED} skip
     StrCpy $R9 "1"
-    MessageBox MB_OK|MB_ICONEXCLAMATION "If you want to keep your settings in the program directory using Windows Vista or later make sure that you DO NOT install DC++ to the 'Program files' folder!!! This can lead to abnormal behaviour like loss of settings or downloads!"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "If you want to keep your settings in the program directory using Windows Vista or later, make sure that you DO NOT install DC++ into 'Program Files'! This can lead to abnormal behaviour like loss of settings or downloads."
 skip:
 FunctionEnd
 
-
 Function .onInit
-  ; Check for Vista+
-  ReadRegStr $R8 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
-  IfErrors xp_or_below nt
+	; Check for Vista+
+	ReadRegStr $R8 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
+	IfErrors xp_or_below nt
 nt:
-  StrCmp $R8 '6.0' vistaplus
-  StrCmp $R8 '6.1' 0 xp_or_below
+	StrCmp $R8 '6.0' vistaplus
+	StrCmp $R8 '6.1' 0 xp_or_below
 vistaplus:
-  StrCpy $R8 "1"
-  goto end
+	StrCpy $R8 "1"
+	goto end
 xp_or_below:
-  StrCpy $R8 "0"
+	StrCpy $R8 "0"
 end:
-  ; Set the program component really required (read only)
-  IntOp $0 ${SF_SELECTED} | ${SF_RO}
-  SectionSetFlags ${dcpp} $0
+
+	; Set the program component really required (read only)
+	IntOp $0 ${SF_SELECTED} | ${SF_RO}
+	SectionSetFlags ${dcpp} $0
+
+	; Get the DC++ version and store it in $VERSION
+	GetDllVersionLocal "DCPlusPlus.exe" $R0 $R1
+	IntOp $R2 $R0 / 0x00010000
+	IntOp $R3 $R0 & 0x0000FFFF
+	IntOp $R4 $R1 / 0x00010000
+	IntOp $R5 $R1 & 0x0000FFFF
+	StrCpy $VERSION "$R2.$R3$R4$R5"
+
+	;!insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
 
 ; uninstall stuff
 
-UninstallText "This will uninstall DC++ by removing installed program files and locale data. WARNING: the contents of the locale data folder ($INSTDIR\locale) will be completely erased!"
+Function un.onInit
+	; Get the DC++ version and store it in $VERSION
+	GetDllVersionLocal "DCPlusPlus.exe" $R0 $R1
+	IntOp $R2 $R0 / 0x00010000
+	IntOp $R3 $R0 & 0x0000FFFF
+	IntOp $R4 $R1 / 0x00010000
+	IntOp $R5 $R1 & 0x0000FFFF
+	StrCpy $VERSION "$R2.$R3$R4$R5"
+
+	;!insertmacro MUI_UNGETLANGUAGE
+FunctionEnd
 
 ; special uninstall section.
 Section "un.Uninstall"
@@ -196,7 +223,7 @@ Section "un.Uninstall"
   ; remove directories used.
   RMDir "$SMPROGRAMS\DC++"
 
-  MessageBox MB_YESNO|MB_ICONQUESTION "Also remove queue, settings and the complete DC++ program folder ($INSTDIR) with all of its subfolders?" IDYES kill_dir
+  MessageBox MB_YESNO|MB_ICONQUESTION "Also remove queue, settings and the whole DC++ program directory ($INSTDIR) with all of its sub-directories?" IDYES kill_dir
 
   RMDir "$INSTDIR"
   goto end_uninstall
@@ -211,5 +238,3 @@ kill_dir:
 end_uninstall:
 
 SectionEnd
-
-; eof
