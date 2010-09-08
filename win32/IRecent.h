@@ -32,7 +32,6 @@ protected:
 		WindowManager::getInstance()->addRecent(t().getId(), t().getWindowParams());
 	}
 
-public:
 	void setText(const tstring& text) {
 		t().MDIChildFrame<T>::setText(text);
 		WindowManager::getInstance()->updateRecent(t().getId(), t().getWindowParams());
