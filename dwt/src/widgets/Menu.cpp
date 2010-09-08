@@ -758,8 +758,8 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 	// make sure the calculated size is not too small
 	if(popup) {
 		itemWidth = std::max(itemWidth, minWidth);
-		itemHeight = std::max(itemHeight, static_cast<UINT>(::GetSystemMetrics(SM_CYMENU)));
 	}
+	itemHeight = std::max(itemHeight, static_cast<UINT>(::GetSystemMetrics(SM_CYMENU)));
 	return true;
 }
 
