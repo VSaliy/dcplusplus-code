@@ -745,7 +745,7 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 void HubFrame::on(Connecting, Client*) throw() {
 	tstring hubUrl = Text::toT(client->getHubUrl());
 	callAsync([this, hubUrl]() { addStatus(boost::str(TF_("Connecting to %1%...") % hubUrl), true); });
-	callAsync([this, hubUrl]() { setText(hubUrl); });
+	callAsync([this, hubUrl]() { this->setText(hubUrl); });
 }
 void HubFrame::on(Connected, Client*) throw() {
 	callAsync(std::bind(&HubFrame::onConnected, this));
@@ -799,7 +799,7 @@ void HubFrame::on(HubUpdated, Client*) throw() {
 	}
 #endif
 	tstring hubNameT = Text::toT(hubName);
-	callAsync([this, hubNameT]() { setText(hubNameT); });
+	callAsync([this, hubNameT]() { this->setText(hubNameT); });
 }
 
 void HubFrame::on(Message, Client*, const ChatMessage& message) throw() {

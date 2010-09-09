@@ -25,6 +25,8 @@
 
 #include <ole2.h>
 
+const string UPnP_COM::name = "Standard Windows";
+	
 bool UPnP_COM::init() {
 	// Lacking the __uuidof in mingw...
 	CLSID upnp;

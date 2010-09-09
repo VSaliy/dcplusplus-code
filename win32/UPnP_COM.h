@@ -38,8 +38,12 @@ private:
 
 	bool add(const unsigned short port, const Protocol protocol, const string& description);
 	bool remove(const unsigned short port, const Protocol protocol);
+	const string& getName() const {
+		return name;
+	}
 
 	string getExternalIP();
+	static const string name;
 
 	IUPnPNAT* pUN;
 	// this one can become invalidated so we can't cache it
