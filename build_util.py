@@ -4,7 +4,7 @@ import os
 
 class Dev:
 	def __init__(self, mode, tools, env):
-		
+
 		self.mode = mode
 		self.tools = tools
 		self.env = env
@@ -13,7 +13,7 @@ class Dev:
 		if env['arch'] != 'x86':
 			self.build_root += '-' + env['arch']
 		self.build_root += '/'
-	
+
 	def prepare(self):
 		if not self.env['verbose']:
 			self.env['CCCOMSTR'] = "Compiling $TARGET (static)"
@@ -27,7 +27,7 @@ class Dev:
 			self.env['LINKCOMSTR'] = "Linking $TARGET (static)"
 			self.env['ARCOMSTR'] = "Archiving $TARGET"
 			self.env['RCCOMSTR'] = "Resource $TARGET"
-		
+
 		self.env.SConsignFile()
 		self.env.SetOption('implicit_cache', '1')
 		self.env.SetOption('max_drift', 60*10)
@@ -35,26 +35,29 @@ class Dev:
 
 		if 'mingw' in self.env['TOOLS']:
 			self.env.Append(LINKFLAGS=["-Wl,--enable-runtime-pseudo-reloc"])
-			
+
 			prefix = ''
 			if self.env.get('prefix') is not None:
 				prefix = self.env['prefix']
 			elif sys.platform != 'win32':
 				prefix = 'i386-mingw32-'
-			
+
 			self.env['CC'] = prefix + 'gcc'
 			self.env['CXX'] = prefix + 'g++'
 			self.env['LINK'] = prefix + 'g++'
 			self.env['AR'] = prefix + 'ar'
 			self.env['RANLIB'] = prefix + 'ranlib'
 			self.env['RC'] = prefix + 'windres'
-			
+
 			if sys.platform != 'win32':
 				self.env['PROGSUFFIX'] = '.exe'
 				self.env['LIBPREFIX'] = 'lib'
 				self.env['LIBSUFFIX'] = '.a'
 				self.env['SHLIBSUFFIX'] = '.dll'
-				
+
+			# some distros of windres fail when they receive Win paths as input, so convert...
+			self.env['RCCOM'] = self.env['RCCOM'].replace('-i $SOURCE', '-i ${SOURCE.posix}', 1)
+
 	def is_win32(self):
 		return sys.platform == 'win32' or 'mingw' in self.env['TOOLS']
 
@@ -63,16 +66,16 @@ class Dev:
 
 	def get_build_path(self, source_path):
 		return self.get_build_root() + source_path
-	
+
 	def get_target(self, source_path, name, in_bin = True):
 		if in_bin:
 			return self.get_build_root() + 'bin/' + name
 		else:
 			return self.get_build_root() + source_path + name
-		
+
 	def get_sources(self, source_path, source_glob):
 		return map(lambda x: self.get_build_path(source_path) + x, glob.glob(source_glob))
-		
+
 	def prepare_build(self, source_path, name, source_glob = '*.cpp', in_bin = True, precompiled_header = None):
 		env = self.env.Clone()
 		env.BuildDir(self.get_build_path(source_path), '.', duplicate = 0)
@@ -157,13 +160,12 @@ def CheckPKGConfig(context, version):
 	ret = context.TryAction('pkg-config --atleast-pkgconfig-version=%s' % version)[0]
 	context.Result( ret )
 	return ret
-	
+
 def CheckPKG(context, name):
 	context.Message( 'Checking for %s... ' % name )
 	ret = context.TryAction('pkg-config --exists "%s"' % name)[0]
 	if ret:
 		context.env.ParseConfig('pkg-config --cflags --libs "%s"' % name)
-		
+
 	context.Result( ret )
 	return ret
-	   
