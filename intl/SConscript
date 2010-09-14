@@ -3,7 +3,7 @@ Import('dev source_path')
 if dev.is_win32():
 	env, target, sources = dev.prepare_build(source_path, 'aintl', '*.c', in_bin=False)
 
-	env.Append(CPPDEFINES=['LOCALEDIR=\\"\\"', 'LOCALE_ALIAS_PATH=\\"\\"', 'INSTALLDIR=\\"\\"', 'LIBDIR=\\"\\"',
+	env.Append(CPPDEFINES=['LOCALEDIR=\'""\'', 'LOCALE_ALIAS_PATH=\'""\'', 'INSTALLDIR=\'""\'', 'LIBDIR=\'""\'',
 		'IN_LIBINTL', 'ENABLE_RELOCATABLE=1', 'NO_XMALLOC', 'HAVE_CONFIG_H',
 		'set_relocation_prefix=libintl_set_relocation_prefix', 'relocate=libintl_relocate'])
 	env.Append(CPPPATH='#/intl')

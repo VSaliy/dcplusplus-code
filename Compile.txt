@@ -52,7 +52,7 @@
 		MinGW and add MinGW\bin to my PATH.
 		Note; the sjlj variant is slower than the dwarf variant; the latter is recommended.
 
-		Also grab natupnp.h and move it to MinGW\include (needs to be obtained from the .Net 1.1 SDK)
+		Also grab natupnp.h from the .Net 1.1 SDK and place it in the root of the repository.
 		<http://www.microsoft.com/downloads/details.aspx?FamilyID=9b3a2ca6-3647-4070-9f41-a333c6b9181d&DisplayLang=en>
 
 	b. Microsoft Visual C++ 10 (2010):
