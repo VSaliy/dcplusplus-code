@@ -7,7 +7,7 @@ Import('dev')
 env = dev.env.Clone()
 
 import os
-from util import array_remove
+from build_util import array_remove
 
 # static_HTMLs holds static (not dynamically generated) HTML sources
 static_HTMLs = Glob('*.html', strings = 1)
@@ -25,7 +25,7 @@ env.Depends('resource.h', 'cshelp.h')
 if not env['help']:
 	Return()
 
-if env['mode'] != 'release' and not env['i18n']:
+if not env['i18n']:
 	Return()
 
 if env.WhereIs('perl') is None:
@@ -90,11 +90,11 @@ CHM_sources.sort()
 # additional dependencies (that have to be built before the help file)
 CHM_dependencies = ['addendum.txt', 'cshelp.h']
 
-from build_util import gen_po_name
+from build_util import nixify, gen_po_name, scoped_cmd
 import filecmp
 from gen_toc import gen_toc
 from set_hhp_locale import set_hhp_locale
-from util import nixify, scoped_cmd, get_lcid
+from util import get_lcid
 
 po4a_path = Dir('#/po4a').abspath + '/'
 env['po4a_cmd'] = lambda prog, options: 'perl -I"' + po4a_path + 'lib" "' + po4a_path + prog + '" -f xhtml -o "translated=p<placeholder> p<placeholder><a>" -o "untranslated=<untranslated> <untranslated><a> <untranslated><li>" -o foldattributes -o "includessi=' + nixify(Dir('#/help').abspath) + '/" -M utf-8 -L utf-8 ' + options

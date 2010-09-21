@@ -19,6 +19,7 @@
 * Fix some counters that could have caused issues when running dc++ for a long time
 * [L#617517] More portable critical sections (thanks big muscle)
 * Removed stlport support (probably defunct by now...)
+* Modernize the installer and make it translatable (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
