@@ -1,0 +1,143 @@
+# Build the DC++ installer
+# Dependencies:
+# - Perl, in order to use po4a <http://po4a.alioth.debian.org/>
+# - Unicode NSIS <http://code.google.com/p/unsis/>
+# - zip (MSYS / Cygwin provide one)
+# - bzr (this tree must be under bzr version control)
+
+Import('dev')
+env = dev.env.Clone()
+
+if not env['i18n'] and not env['distro']:
+	Return()
+
+if env.WhereIs('perl') is None:
+	raise Exception('Perl is required to run po4a scripts, installer translation impossible')
+
+nsis = None
+if env['distro']:
+	nsis = env.WhereIs('makensis')
+	if nsis is None:
+		raise Exception('makensis.exe not found in PATH - Unicode NSIS is required to build the distro')
+	if env.WhereIs('bzr') is None:
+		raise Exception('"bzr" is required to build the distro; this tree must be under bzr version control')
+	if env.WhereIs('strip') is None:
+		raise Exception('"strip" is required to build the distro; it should be part of MinGW / binutils')
+	if env.WhereIs('zip') is None:
+		raise Exception('"zip" is required to build the distro; get the one from MSYS or Cygwin')
+
+from build_util import nixify
+import re
+
+po4a_path = Dir('#/po4a').abspath + '/'
+env['po4a_cmd'] = lambda prog, options: 'perl -I"' + po4a_path + 'lib" "' + po4a_path + prog + '" -f xml -M utf-8 -L utf-8 ' + options
+
+# create the translation template
+def gen_pot(target, source, env):
+	return env.Execute(env['po4a_cmd']('po4a-gettextize', '-o "package-name=dcpp-installer" -o "copyright-holder=Jacek Sieka" -o "msgid-bugs-address=dcplusplus-devel@lists.sourceforge.net" -m "' + nixify(str(source[0])) + '" -p "' + nixify(str(target[0])) + '"'))
+potfile = File('po/dcpp-installer.pot')
+env.Command(potfile, File('Strings.xml'), Action(gen_pot, 'Extracting installer texts to $TARGET'))
+
+# update .po's in installer/po
+po_list = Glob('po/*.po')
+for po_node in po_list:
+	env.Precious(env.PoBuild(po_node, potfile))
+
+if nsis is None:
+	Return()
+
+from build_util import get_po_name, scoped_cmd
+import bzrlib
+import codecs
+import os.path
+from xml.dom.minidom import parse
+
+# gather the files necessary to create the installer
+sources = Glob('*.*')
+reg = re.compile('^\W*File.+"([^"]+)"')
+f = codecs.open('DCPlusPlus.nsi', 'rb', 'utf_8')
+for line in f:
+	match = reg.search(line)
+	if match:
+		match = match.group(1)
+		if env.FindFile(match, '#'):
+			match = '#/' + match
+		else:
+			# file not found in the root; must be a built file
+			match = dev.get_build_path('bin') + '/' + match
+		sources.append(match)
+f.close()
+sources.append(potfile)
+sources.append(po_list)
+sources.sort()
+
+def gen_installer(target, source, env):
+	# create the temporary build directory
+	build_dir = 'build/installer'
+	build_path = build_dir + '/'
+	env.Execute([Delete(build_dir), Mkdir(build_dir)])
+	dir_cleaner = scoped_cmd(lambda: env.Execute(Delete(build_dir)))
+
+	# the file, included by the installer, that lists all available translations
+	f_i18n = codecs.open(build_path + 'i18n.nsh', 'wb', 'utf_8')
+
+	# copy the source files to the build directory
+	for node in source:
+		name = os.path.basename(node.path)
+
+		if name == 'DCPlusPlus.exe':
+			env.Execute('strip "' + nixify(node.path) + '" -o "' + build_path + name + '"')
+
+		elif name[-3:] == '.po' or name[-4:] == '.pot':
+			# find the corresponding name among the NSIS language files
+			name = get_po_name(node)
+			if name is None:
+				# this must be the template (.pot)
+				name = 'English'
+			elif name == 'Norwegian Bokmal':
+				name = 'Norwegian'
+			elif name == 'Norwegian Nynorsk':
+				name = 'NorwegianNynorsk'
+			elif name == 'Brazilian Portuguese':
+				name = 'PortugueseBR'
+			elif name == 'Simplified Chinese':
+				name = 'SimpChinese'
+			if os.path.exists(os.path.dirname(nsis) + '/Contrib/Language files/' + name + '.nlf'):
+				f_i18n.write('!insertmacro MUI_LANGUAGE "' + name + '"\n!insertmacro LANGFILE_INCLUDE "_' + name + '.nsh"\n')
+				xml_file = build_path + 'Strings.xml'
+				# translate our strings
+				env.Execute(env['po4a_cmd']('po4a-translate', '-m "installer/Strings.xml" -l "' + xml_file + '" -p "' + nixify(str(node)) + '" -k 0'))
+				# parse translated strings to generate message catalogs suitable for the installer
+				f_nsh = codecs.open(build_path + '_' + name + '.nsh', 'wb', 'utf_8')
+				f_nsh.write('!insertmacro LANGFILE_EXT "' + name + '"\n')
+				dom = parse(xml_file)
+				for elem in dom.firstChild.childNodes:
+					if elem.nodeType == elem.ELEMENT_NODE:
+						f_nsh.write('${LangFileString} ' + elem.nodeName + ' "' + elem.firstChild.nodeValue + '"\n')
+				f_nsh.close()
+				dom.unlink()
+				env.Execute(Delete(xml_file))
+
+		else:
+			env.Execute(Copy(build_path + name, node))
+
+	f_i18n.close()
+
+	# create the installer
+	ret = env.Execute('makensis ' + build_path + 'DCPlusPlus.nsi')
+	if ret:
+		return ret
+	env.Execute(Move(target[0], build_path + os.path.basename(target[0].path)))
+
+	# make the zip binary archive
+	env.Execute('cd "' + build_dir + '" && zip -9 -r "' + nixify(str(target[1].abspath)) + '" . -x "dcppboot.nonlocal.xml" -x "\\*.ico" -x "\\*.nsh" -x "\\*.nsi" && cd "' + env.Dir('#').abspath + '"')
+
+	# use "bzr export" to zip the source
+	env.Execute('bzr export "' + nixify(str(target[2])) + '"')
+
+	return ret
+
+distro_path = '#/build/distro/'
+ret = env.Command([distro_path + 'DCPlusPlus-xxx.exe', distro_path + 'DCPlusPlus-xxx.zip', distro_path + 'DCPlusPlus-xxx-src.zip'], sources, Action(gen_installer, 'Creating final distro packages ($TARGETS)'))
+
+Return('ret')

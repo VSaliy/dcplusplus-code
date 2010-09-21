@@ -3,13 +3,10 @@ import sys
 import os
 
 class Dev:
-	def __init__(self, mode, tools, env):
-
-		self.mode = mode
-		self.tools = tools
+	def __init__(self, env):
 		self.env = env
 
-		self.build_root = '#/build/' + self.mode + '-' + self.tools
+		self.build_root = '#/build/' + env['mode'] + '-' + env['tools']
 		if env['arch'] != 'x86':
 			self.build_root += '-' + env['arch']
 		self.build_root += '/'
@@ -103,7 +100,7 @@ class Dev:
 		return local_env.SConscript(source_path + 'SConscript', exports={'dev' : self, 'source_path' : full_path })
 
 	def i18n (self, source_path, buildenv, sources, name):
-		if self.env['mode'] != 'release' and not self.env['i18n']:
+		if not self.env['i18n']:
 			return
 
 		p_oze = glob.glob('po/*.po')
@@ -145,15 +142,23 @@ class Dev:
 		return asciidoc
 
 # source is *one* SCons file node (not a list!) designating the .po file
-# env must contain 'NAME_FILE', which is a SCons file node to the target file
-def gen_po_name(source, env):
+def get_po_name(source):
 	# rely on the comments at the beginning of the po file to find the language name.
 	import codecs, re
 	match = re.compile('^# (.+) translation.*', re.I).search(codecs.open(str(source), 'rb', 'utf_8').readline())
 	if match:
 		name = match.group(1)
 		if name != "XXX":
-			codecs.open(str(env['NAME_FILE']), 'wb', 'utf_8').write(name)
+			return name
+	return None
+
+# source is *one* SCons file node (not a list!) designating the .po file
+# env must contain 'NAME_FILE', which is a SCons file node to the target file
+def gen_po_name(source, env):
+	import codecs
+	name = get_po_name(source)
+	if name:
+		codecs.open(str(env['NAME_FILE']), 'wb', 'utf_8').write(name)
 
 def CheckPKGConfig(context, version):
 	context.Message( 'Checking for pkg-config... ' )
@@ -169,3 +174,16 @@ def CheckPKG(context, name):
 
 	context.Result( ret )
 	return ret
+
+def nixify(path):
+	return path.replace('\\', '/')
+
+def array_remove(array, to_remove):
+	if to_remove in array:
+		array.remove(to_remove)
+
+class scoped_cmd:
+	def __init__(self, cmd):
+		self.cmd = cmd
+	def __del__(self):
+		self.cmd()

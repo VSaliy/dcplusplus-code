@@ -77,15 +77,25 @@ opts.AddVariables(
 	BoolVariable('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
 	BoolVariable('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
 	BoolVariable('i18n', 'Rebuild i18n files in debug build', 'no'),
-	BoolVariable('help', 'Build help files (requires i18n=1 or mode=release)', 'yes'),
-	BoolVariable('test', 'Build test suite', 'no'),
+	BoolVariable('help', 'Build help files (requires i18n=1)', 'yes'),
 	BoolVariable('webhelp', 'Build help files for the web (requires help=1)', 'no'),
+	BoolVariable('test', 'Build test suite', 'no'),
 	('prefix', 'Prefix to use when cross compiling', ''),
-	EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64'])
+	EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64']),
+	BoolVariable('distro', 'Produce the official distro (forces tools=mingw, mode=release, unicode=1, i18n=1, help=1, webhelp=1, arch=x86)', 'no')
 )
 
 opts.Update(defEnv)
 Help(opts.GenerateHelpText(defEnv))
+
+if defEnv['distro']:
+	defEnv['tools'] = 'mingw'
+	defEnv['mode'] = 'release'
+	defEnv['unicode'] = 1
+	defEnv['i18n'] = 1
+	defEnv['help'] = 1
+	defEnv['webhelp'] = 1
+	defEnv['arch'] = 'x86'
 
 # workaround for SCons 1.2 which hard-codes possible archs (only allows 'x86' and 'amd64'...)
 # TODO remove when SCons knows about all available archs
@@ -96,13 +106,16 @@ if TARGET_ARCH == 'x64':
 env = Environment(ENV = os.environ, tools = [defEnv['tools']], options = opts, TARGET_ARCH = TARGET_ARCH, MSVS_ARCH = TARGET_ARCH)
 
 if 'mingw' not in env['TOOLS'] and 'gcc' in env['TOOLS']:
-	print "Non-mingw gcc builds not supported"
-	Exit(1)
+	raise Exception('Non-mingw gcc builds not supported')
 
-mode = env['mode']
-if mode not in gcc_flags:
-	print "Unknown mode, exiting"
-	Exit(1)
+if env['distro']:
+	env['tools'] = 'mingw'
+	env['mode'] = 'release'
+	env['unicode'] = 1
+	env['i18n'] = 1
+	env['help'] = 1
+	env['webhelp'] = 1
+	env['arch'] = 'x86'
 
 # filter out boost from dependencies to get a speedier rebuild scan
 # this means that if boost changes, scons -c needs to be run
@@ -115,7 +128,7 @@ SourceFileScanner.function['.cpp'].recurse_nodes = filterBoost
 SourceFileScanner.function['.h'].recurse_nodes = filterBoost
 SourceFileScanner.function['.hpp'].recurse_nodes = filterBoost
 
-dev = Dev(mode, env['tools'], env)
+dev = Dev(env)
 dev.prepare()
 
 env.SConsignFile()
@@ -153,16 +166,16 @@ else:
 
 	env.Tool("gch", toolpath=".")
 
-env.Append(CPPDEFINES = defs[mode])
+env.Append(CPPDEFINES = defs[env['mode']])
 env.Append(CPPDEFINES = defs['common'])
 
-env.Append(CCFLAGS = flags[mode])
+env.Append(CCFLAGS = flags[env['mode']])
 env.Append(CCFLAGS = flags['common'])
 
-env.Append(CXXFLAGS = xxflags[mode])
+env.Append(CXXFLAGS = xxflags[env['mode']])
 env.Append(CXXFLAGS = xxflags['common'])
 
-env.Append(LINKFLAGS = link_flags[mode])
+env.Append(LINKFLAGS = link_flags[env['mode']])
 env.Append(LINKFLAGS = link_flags['common'])
 
 env.SourceCode('.', None)
@@ -209,4 +222,4 @@ if env['test']:
 	dev.test = dev.build('test/')
 else:
 	dev.win32 = dev.build('win32/')
-	
+dev.installer = dev.build('installer/')

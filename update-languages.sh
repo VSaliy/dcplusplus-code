@@ -34,9 +34,9 @@ cd ../..
 
 }
 
-scons i18n=1 dcpp/po win32/po help/po
+scons i18n=1 dcpp/po win32/po help/po installer/po
 
 process libdcpp dcpp
 process dcpp-win32 win32
 process dcpp-help help
-
+process dcpp-installer installer

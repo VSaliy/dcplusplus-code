@@ -17,7 +17,7 @@
 		Note: SCons relies on Python so you need to have Python installed first.
 		Make sure that SCons is in your PATH environment variable.
 
-		* Perl - 5.12.0.1 (ActivePerl or Cygwin, only needed to build help files)
+		* Perl - 5.12.0.1 (from MSYS, Cygwin or ActivePerl; only needed to build help files)
 		<http://www.perl.org/get.html>
 
 		Make sure that Perl is in your PATH environment variable.
@@ -32,7 +32,7 @@
 
 		Go to your HTML Help Workshop include directory (HTML Help Workshop/include) and copy
 		htmlhelp.h to the htmlhelp/include directory of the DC++ source.
-		Go to your HTML Help Workshop lib directory (HTML Help Workshop\lib) and copy htmlhelp.lib
+		Go to your HTML Help Workshop lib directory (HTML Help Workshop/lib) and copy htmlhelp.lib
 		to the htmlhelp/lib directory of the DC++ source.
 		Make sure that hhc.exe is in your PATH environment variable.
 
@@ -40,6 +40,16 @@
 		<http://www.methods.co.nz/asciidoc/>
 
 		Make sure that asciidoc is in your PATH environment variable.
+
+		* Unicode NSIS (only needed to build the installer)
+		<http://code.google.com/p/unsis/>
+
+		Make sure that makensis.exe is in your PATH environment variable.
+		Make sure that you are using the Unicode version of the installer builder.
+
+		* zip (from MSYS or Cygwin; only needed to build the official distro)
+
+		Make sure that zip is in your PATH environment variable.
 
 
 2. Compiler

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Strings>
+	<LICENSE_TOP>DC++ is licensed under the GPL, here is the full text.</LICENSE_TOP>
+	<SECTION_DCPP>DC++ (required)</SECTION_DCPP>
+	<BACKUP_QUESTION>A previous installation of DC++ has been found; backup settings and queue to '$R0'?</BACKUP_QUESTION>
+	<SECTION_IP_COUNTRY>IP -&gt; country mappings</SECTION_IP_COUNTRY>
+	<SECTION_START_MENU>Start menu shortcuts</SECTION_START_MENU>
+	<SECTION_LOCAL>Store settings in the user profile directory</SECTION_LOCAL>
+	<LOCAL_WARNING>Unchecking this box will make DC++ store its settings in the program directory. This is strongly discouraged on Windows Vista and later; settings or downloads might get lost.</LOCAL_WARNING>
+	<WARNING_LOCALE_ERASED>Warning: the 'locale' directory ($INSTDIR\locale) will be completely erased!</WARNING_LOCALE_ERASED>
+	<SM_DCPP_DESCR>DC++ (file sharing application)</SM_DCPP_DESCR>
+	<SM_LICENSE>License</SM_LICENSE>
+	<SM_HELP>Help</SM_HELP>
+	<SM_CHANGELOG>Change Log</SM_CHANGELOG>
+	<SM_UNINSTALL>Uninstall</SM_UNINSTALL>
+	<UN_REMOVE_QUESTION>Also remove queue, settings and the whole DC++ program directory ($INSTDIR) with all of its sub-directories?</UN_REMOVE_QUESTION>
+</Strings>
