@@ -107,7 +107,7 @@ def gen_installer(target, source, env):
 				xml_file = build_path + 'Strings.xml'
 				# translate our strings
 				env.Execute(env['po4a_cmd']('po4a-translate', '-m "installer/Strings.xml" -l "' + xml_file + '" -p "' + nixify(str(node)) + '" -k 0'))
-				# parse translated strings to generate message catalogs suitable for the installer
+				# parse translated strings to generate a message catalog included by i18n.nsh
 				f_nsh = codecs.open(build_path + '_' + name + '.nsh', 'wb', 'utf_8')
 				f_nsh.write('!insertmacro LANGFILE_EXT "' + name + '"\n')
 				dom = parse(xml_file)
