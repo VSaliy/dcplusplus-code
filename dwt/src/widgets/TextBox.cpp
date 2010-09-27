@@ -77,7 +77,7 @@ void TextBox::create(const Seed& cs) {
 
 	// multiline text-boxes don't handle ctrl + A so we have do it ourselves...
 	if((cs.style & ES_MULTILINE) == ES_MULTILINE)
-		onKeyDown([this](bool c) { return handleKeyDown(c); });
+		onKeyDown([this](int c) { return handleKeyDown(c); });
 }
 
 void TextBox::setText(const tstring& txt) {
