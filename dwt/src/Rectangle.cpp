@@ -57,7 +57,7 @@ Rectangle Rectangle::subRect( double xFraction, double yFraction,
 
 // Size of the rectangle will be * factor.
 // Position adjusted for the same center.
-Rectangle Rectangle::shrink( double factor ) const
+Rectangle Rectangle::shrinkFactor( double factor ) const
 {
 	double posFactor = ( 1.0 - factor ) * 0.5;
 	return subRect( posFactor, posFactor, factor, factor );

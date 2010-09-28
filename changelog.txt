@@ -9,8 +9,6 @@
 * [L#606435] Prevent potential re-hashing (thanks vasily.n)
 * Automatic incoming connection type detection - enabled by default (emtee)
 * Add "Close all hubs" to Window menu (emtee)
-* Use boost's locking mechanisms (arnetheduck)
-* Use boost's timing functions (arnetheduck)
 * New icons
 * Update the links in the "Help" menu (poy)
 * Prevent current-directory Windows DLL injection (cologic)
@@ -20,6 +18,7 @@
 * [L#617517] More portable critical sections (thanks big muscle)
 * Removed stlport support (probably defunct by now...)
 * Modernize the installer and make it translatable (poy)
+* Customize the font selection dialog, save the charset (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)

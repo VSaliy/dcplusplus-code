@@ -41,50 +41,38 @@
 
 namespace dwt {
 
-/// ChooseFontDialog class
-/** \ingroup WidgetControls
-  * \image html choosefont.PNG
-  * Class for showing a common ChooseFontDialog box. <br>
-  * Either derive from it or call WidgetFactory::createChooseFont. <br>
-  * Note! <br>
-  * If you wish to use this class with Parent classes other than those from SmartWin
-  * you need to expose a public function called "parent" taking no arguments returning
-  * an HWND on the template parameter class. <br>
-  * the complete signature of the function will then be "HWND parent()"
-  */
 class FontDialog
 {
 public:
-	/// Class type
-	typedef FontDialog ThisType;
-
-	/// Object type
-	/** Note, not a pointer!!!!
-	  */
-	typedef ThisType ObjectType;
-
-	/// Shows the dialog
-	bool open(DWORD dwFlags, LOGFONT& font, DWORD& rgbColors);
-
 	/// Constructor Taking pointer to parent
-	explicit FontDialog( Widget* parent = 0 );
+	explicit FontDialog(Widget* parent = 0);
 
-	~FontDialog() { }
+	struct Options {
+		bool strikeout; /// if false, the "Strikeout" check-box will be hidden
+		bool underline; /// if false, the "Underline" check-box will be hidden
+
+		bool customBgColor;
+		COLORREF bgColor;
+
+		Options() : strikeout(true), underline(true), customBgColor(false) { }
+		void setBgColor(COLORREF color) { customBgColor = true; bgColor = color; }
+	};
+
+	/** Shows the dialog
+	* @param font initial and returned font (only changed if the user presses OK)
+	* @param color initial and returned color (only changed if the user presses OK)
+	* @param flags additional flags besides those that dwt automatically adds (see the CHOOSEFONT doc)
+	* @return whether the user pressed OK
+	*/
+	bool open(LOGFONT& font, DWORD& color, Options* options = 0, DWORD flags = 0);
 
 private:
 	Widget* itsParent;
 
-	HWND getParentHandle() { return itsParent ? itsParent->handle() : NULL; }
+	HWND getParentHandle() const { return itsParent ? itsParent->handle() : NULL; }
+
+	static UINT_PTR CALLBACK CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-inline FontDialog::FontDialog( Widget * parent )
-	: itsParent( parent )
-{
-}
 
 }
 

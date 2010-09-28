@@ -169,11 +169,11 @@ void Appearance2Page::handleBackgroundClicked() {
 }
 
 void Appearance2Page::handleTextClicked() {
-	LOGFONT logFont_ = logFont;
-	DWORD fg_ = fg;
-	if(FontDialog(this).open(CF_EFFECTS | CF_SCREENFONTS, logFont_, fg_)) {
-		logFont = logFont_;
-		fg = fg_;
+	FontDialog::Options options;
+	options.strikeout = false;
+	options.underline = false;
+	options.setBgColor(bg);
+	if(FontDialog(this).open(logFont, fg, &options)) {
 		font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&logFont), true));
 		example->setColor(fg, bg);
 		example->setFont(font);
