@@ -100,7 +100,7 @@ void WinUtil::init() {
 	bgBrush = dwt::BrushPtr(new dwt::Brush(bgColor));
 
 	LOGFONT lf;
-	::GetObject((HFONT) GetStockObject(DEFAULT_GUI_FONT), sizeof(lf), &lf);
+	::GetObject(reinterpret_cast<HFONT>(::GetStockObject(DEFAULT_GUI_FONT)), sizeof(lf), &lf);
 	SettingsManager::getInstance()->setDefault(SettingsManager::TEXT_FONT, Text::fromT(encodeFont(lf)));
 	decodeFont(Text::toT(SETTING(TEXT_FONT)), lf);
 
@@ -289,6 +289,8 @@ tstring WinUtil::encodeFont(LOGFONT const& font) {
 	res += Text::toT(Util::toString(font.lfWeight));
 	res += _T(',');
 	res += Text::toT(Util::toString(font.lfItalic));
+	res += _T(',');
+	res += Text::toT(Util::toString(font.lfCharSet));
 	return res;
 }
 
@@ -306,13 +308,16 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 	StringTokenizer<tstring> st(setting, _T(','));
 	TStringList &sl = st.getTokens();
 
-	::GetObject((HFONT) GetStockObject(DEFAULT_GUI_FONT), sizeof(dest), &dest);
+	::GetObject(reinterpret_cast<HFONT>(::GetStockObject(DEFAULT_GUI_FONT)), sizeof(dest), &dest);
 	tstring face;
-	if(sl.size() == 4) {
+	if(sl.size() >= 4) {
 		face = sl[0];
 		dest.lfHeight = Util::toInt(Text::fromT(sl[1]));
 		dest.lfWeight = Util::toInt(Text::fromT(sl[2]));
-		dest.lfItalic = (BYTE) Util::toInt(Text::fromT(sl[3]));
+		dest.lfItalic = static_cast<BYTE>(Util::toInt(Text::fromT(sl[3])));
+		if(sl.size() >= 5) {
+			dest.lfCharSet = static_cast<BYTE>(Util::toInt(Text::fromT(sl[4])));
+		}
 	}
 
 	if(!face.empty()) {

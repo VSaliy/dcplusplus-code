@@ -125,7 +125,7 @@ struct Rectangle {
 	  * shrink( long border ) is similar, but removes a constant border amount of
 	  * pixels on all sides.
 	  */
-	Rectangle shrink( double factor ) const;
+	Rectangle shrinkFactor( double factor ) const;
 
 	/// Move inwards by xBorder and shrink the size by 2*xBorder
 	/** A rectangle of #### changes to ##.<br>
