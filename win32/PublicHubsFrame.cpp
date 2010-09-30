@@ -78,6 +78,8 @@ int PublicHubsFrame::HubInfo::compareItems(const HubInfo* a, const HubInfo* b, i
 PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
 BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDI_PUBLICHUBS, false),
 grid(0),
+upper(0),
+blacklist(0),
 hubs(0),
 filter(0),
 filterSel(0),
@@ -91,10 +93,28 @@ users(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		WidgetHubs::Seed cs;
-		cs.style |= LVS_SINGLESEL;
-		hubs = grid->addChild(cs);
-		addWidget(hubs);
+		upper = grid->addChild(Grid::Seed(2, 1));
+		upper->setSpacing(0);
+		upper->column(0).mode = GridInfo::FILL;
+		upper->row(0).size = 0;
+		upper->row(0).mode = GridInfo::STATIC;
+		upper->row(1).mode = GridInfo::FILL;
+		upper->row(1).align = GridInfo::STRETCH;
+
+		{
+			TextBox::Seed seed = WinUtil::Seeds::textBox;
+			seed.style |= WS_DISABLED | ES_MULTILINE | WS_VSCROLL | ES_READONLY;
+			seed.lines = 8;
+			blacklist = upper->addChild(seed);
+			addWidget(blacklist);
+		}
+
+		{
+			WidgetHubs::Seed seed;
+			seed.style |= LVS_SINGLESEL;
+			hubs = upper->addChild(seed);
+			addWidget(hubs);
+		}
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(PUBLICHUBSFRAME_ORDER), SETTING(PUBLICHUBSFRAME_WIDTHS));
 		hubs->setSort(COLUMN_USERS, false);
@@ -239,19 +259,39 @@ void PublicHubsFrame::updateDropDown() {
 void PublicHubsFrame::updateList() {
 	dcdebug("PublicHubsFrame::updateList\n");
 
-	hubs->clear();
+	const string& blacklisted = FavoriteManager::getInstance()->blacklisted();
+	if(blacklisted.empty()) {
+		if(blacklist->getEnabled()) {
+			blacklist->setEnabled(false);
+			blacklist->setVisible(false);
+			upper->row(0).mode = GridInfo::STATIC;
+			layout();
+		}
+	} else {
+		blacklist->setText(str(TF_(
+			"Warning: fraudulent hub list detected!\r\n\r\n"
+			"The current hub list (%1%) has been blacklisted by DC++ for the following reason:\r\n"
+			"%2%\r\n\r\n"
+			"It is strongly recommended that you do not connect to any of the hubs listed here "
+			"and that you remove this hub list from your collection by using the \"Configure\" "
+			"button below."
+			) % Text::toT(FavoriteManager::getInstance()->getCurrentHubList()) % Text::toT(blacklisted)));
+		blacklist->setEnabled(true);
+		blacklist->setVisible(true);
+		upper->row(0).mode = GridInfo::AUTO;
+		layout();
+	}
+
 	users = 0;
 	visibleHubs = 0;
 
-	HoldRedraw hold(hubs);
-
-	double size = -1;
-	FilterModes mode = NONE;
-
 	int sel = filterSel->getSelected();
-
+	FilterModes mode = NONE;
+	double size = -1;
 	bool doSizeCompare = parseFilter(mode, size);
 
+	HoldRedraw hold(hubs);
+	hubs->clear();
 	for(HubEntryList::const_iterator i = entries.begin(); i != entries.end(); ++i) {
 		if(matchFilter(*i, sel, doSizeCompare, mode, size)) {
 			hubs->insert(hubs->size(), new HubInfo(&(*i)));
