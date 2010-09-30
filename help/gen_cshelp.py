@@ -6,7 +6,7 @@ def gen_cshelp(target, source):
 	from HTMLParser import HTMLParser, HTMLParseError
 	from htmlentitydefs import entitydefs
 	import re
-	from util import html_to_rtf
+	from build_util import html_to_rtf
 
 	spaces = re.compile('\s+')
 
@@ -95,7 +95,7 @@ def gen_cshelp(target, source):
 ''')
 	number = 11000
 	if len(target) >= 2:
-		from util import get_win_cp
+		from build_util import get_win_cp
 		f_rtf = codecs.open(str(target[1]), 'w', 'utf_8')
 	for entry in output:
 		f_h.write('#define ' + entry[0] + ' ' + str(number) + '\r\n')

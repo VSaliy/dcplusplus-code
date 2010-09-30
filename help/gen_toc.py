@@ -5,7 +5,7 @@ def gen_toc(target, source, lcid):
 	from HTMLParser import HTMLParser
 	from htmlentitydefs import entitydefs
 	import re
-	from util import get_win_cp
+	from build_util import get_win_cp
 
 	spaces = re.compile("\s+")
 
