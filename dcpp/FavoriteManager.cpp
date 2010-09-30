@@ -41,6 +41,9 @@ FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), 
 	ClientManager::getInstance()->addListener(this);
 
 	File::ensureDirectory(Util::getHubListsPath());
+
+	blacklist.insert(make_pair("adchublist.com", "Domain used for spam purposes."));
+	blacklist.insert(make_pair("openhublist.org", "Domain used for spam purposes."));
 }
 
 FavoriteManager::~FavoriteManager() throw() {
@@ -640,6 +643,35 @@ StringList FavoriteManager::getHubLists() {
 	return lists.getTokens();
 }
 
+const string& FavoriteManager::blacklisted() const {
+	if(publicListServer.empty())
+		return Util::emptyString;
+
+	// get the host
+	string server;
+	uint16_t port = 0;
+	string file;
+	Util::decodeUrl(publicListServer, server, port, file);
+	// only keep the last 2 words (example.com)
+	size_t pos = server.rfind('.');
+	if(pos == string::npos || pos == 0 || pos >= server.size() - 2)
+		return Util::emptyString;
+	pos = server.rfind('.', pos - 1);
+	if(pos != string::npos)
+		server = server.substr(pos + 1);
+
+	StringMap::const_iterator i = blacklist.find(server);
+	if(i == blacklist.end())
+		return Util::emptyString;
+	return i->second;
+}
+
+void FavoriteManager::addBlacklist(const string& url, const string& reason) {
+	if(url.empty() || reason.empty())
+		return;
+	blacklist[url] = reason;
+}
+
 FavoriteHubEntryList::iterator FavoriteManager::getFavoriteHub(const string& aServer) {
 	for(FavoriteHubEntryList::iterator i = favoriteHubs.begin(); i != favoriteHubs.end(); ++i) {
 		if(Util::stricmp((*i)->getServer(), aServer) == 0) {
@@ -768,14 +800,13 @@ void FavoriteManager::on(Failed, HttpConnection*, const string& aLine) throw() {
 	}
 }
 void FavoriteManager::on(Complete, HttpConnection*, const string& aLine, bool fromCoral) throw() {
-	bool parseSuccess;
-
+	bool parseSuccess = false;
 	c->removeListener(this);
 	if(useHttp) {
 		parseSuccess = onHttpFinished(true);
 	}	
 	running = false;
-	if(useHttp && parseSuccess) {
+	if(parseSuccess) {
 		fire(FavoriteManagerListener::DownloadFinished(), aLine, fromCoral);
 	}
 }
