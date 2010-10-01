@@ -979,8 +979,6 @@ void NmdcHub::on(Minute, uint64_t aTick) throw() {
 		protectedIPs.clear();
 
 		protectedIPs.push_back("dcpp.net");
-		protectedIPs.push_back("hublist.org");
-		protectedIPs.push_back("openhublist.org");
 		protectedIPs.push_back("dchublist.com");
 		protectedIPs.push_back("hublista.hu");
 		protectedIPs.push_back("adcportal.com");

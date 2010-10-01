@@ -59,9 +59,10 @@ public:
 	}
 	bool isDownloading() { return (useHttp && running); }
 	const string& getCurrentHubList() const { return publicListServer; }
-	/// @return ref to the reason string the current list is blacklisted; or empty string otherwise.
+	/// @return ref to the reason string the current list is blacklisted for; or empty string otherwise
 	const string& blacklisted() const;
-	void addBlacklist(const string& url, const string& reason);
+	/// @param domain a domain name with 2 words max, such as "example.com"
+	void addBlacklist(const string& domain, const string& reason);
 
 // Favorite Users
 	typedef unordered_map<CID, FavoriteUser> FavoriteMap;
