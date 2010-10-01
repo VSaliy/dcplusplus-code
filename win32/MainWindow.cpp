@@ -1186,13 +1186,13 @@ void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/,
 		if(xml.findChild("Blacklist")) {
 			xml.stepIn();
 			while(xml.findChild("Blacklisted")) {
-				const string& url = xml.getChildAttrib("Url");
-				if(url.empty())
+				const string& domain = xml.getChildAttrib("Domain");
+				if(domain.empty())
 					continue;
 				const string& reason = xml.getChildAttrib("Reason");
 				if(reason.empty())
 					continue;
-				FavoriteManager::getInstance()->addBlacklist(url, reason);
+				FavoriteManager::getInstance()->addBlacklist(domain, reason);
 			}
 			xml.stepOut();
 		}

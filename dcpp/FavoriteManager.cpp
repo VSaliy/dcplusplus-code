@@ -42,8 +42,16 @@ FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), 
 
 	File::ensureDirectory(Util::getHubListsPath());
 
-	blacklist.insert(make_pair("adchublist.com", "Domain used for spam purposes."));
-	blacklist.insert(make_pair("openhublist.org", "Domain used for spam purposes."));
+	/* after the release of the first version including this blacklist, remember to also update
+	version.xml when a domain has to be added to this list, using the following format:
+	<Blacklist>
+		<Blacklisted Domain="example1.com" Reason="Domain used for spam purposes."/>
+		<Blacklisted Domain="example2.com" Reason="Domain used for spam purposes."/>
+	</Blacklist>
+	(the "Blacklist" tag should be under the main "DCUpdate" tag.) */
+	addBlacklist("adchublist.com", "Domain used for spam purposes.");
+	addBlacklist("hublist.org", "Domain used for spam purposes.");
+	addBlacklist("openhublist.org", "Domain used for spam purposes.");
 }
 
 FavoriteManager::~FavoriteManager() throw() {
@@ -666,10 +674,10 @@ const string& FavoriteManager::blacklisted() const {
 	return i->second;
 }
 
-void FavoriteManager::addBlacklist(const string& url, const string& reason) {
-	if(url.empty() || reason.empty())
+void FavoriteManager::addBlacklist(const string& domain, const string& reason) {
+	if(domain.empty() || reason.empty())
 		return;
-	blacklist[url] = reason;
+	blacklist[domain] = reason;
 }
 
 FavoriteHubEntryList::iterator FavoriteManager::getFavoriteHub(const string& aServer) {

@@ -103,6 +103,7 @@ users(0)
 
 		{
 			TextBox::Seed seed = WinUtil::Seeds::textBox;
+			seed.style &= ~WS_VISIBLE;
 			seed.style |= WS_DISABLED | ES_MULTILINE | WS_VSCROLL | ES_READONLY;
 			seed.lines = 8;
 			blacklist = upper->addChild(seed);
@@ -262,6 +263,7 @@ void PublicHubsFrame::updateList() {
 	const string& blacklisted = FavoriteManager::getInstance()->blacklisted();
 	if(blacklisted.empty()) {
 		if(blacklist->getEnabled()) {
+			blacklist->setText(Util::emptyStringT);
 			blacklist->setEnabled(false);
 			blacklist->setVisible(false);
 			upper->row(0).mode = GridInfo::STATIC;
