@@ -165,6 +165,8 @@ else:
 	defs = gcc_defs
 
 	env.Tool("gch", toolpath=".")
+	env.Append(CPPPATH = ['#/htmlhelp/include/'])
+	env.Append(LIBPATH = ['#/htmlhelp/lib/'])
 
 env.Append(CPPDEFINES = defs[env['mode']])
 env.Append(CPPDEFINES = defs['common'])
@@ -210,6 +212,14 @@ pot_args = ['xgettext', '--from-code=UTF-8', '--foreign-user', '--package-name=$
 
 pot_bld = Builder (action = Action([pot_args], 'Extracting messages to $TARGET from $SOURCES'))
 env.Append(BUILDERS = {'PotBuild' : pot_bld})
+
+conf = Configure(env)
+if conf.CheckCHeader("htmlhelp.h"):
+	conf.env.Append(CPPDEFINES="HAVE_HTMLHELP_H")
+	conf.env.Append(LIBS="htmlhelp")
+if conf.CheckCHeader("natupnp.h"):
+	conf.env.Append(CPPDEFINES="HAVE_NATUPNP_H")
+env = conf.Finish()
 
 dev.zlib = dev.build('zlib/')
 dev.bzip2 = dev.build('bzip2/')

@@ -21,12 +21,8 @@
 
 #include <dcpp/UPnP.h>
 
-// for mingw64
-#ifndef interface
-#define interface struct
-#endif
-
-#include <natupnp.h>
+struct IUPnPNAT;
+struct IStaticPortMappingCollection;
 
 class UPnP_COM : public UPnP
 {
