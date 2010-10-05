@@ -23,8 +23,6 @@
 #include <dcpp/DCPlusPlus.h>
 
 #include <shlobj.h>
-#include <malloc.h>
-#include <htmlhelp.h>
 #include <libintl.h>
 
 #include <dwt/Application.h>

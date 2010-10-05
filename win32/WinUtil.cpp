@@ -47,6 +47,10 @@
 #include <dwt/DWTException.h>
 #include <dwt/LibraryLoader.h>
 
+#ifdef HAVE_HTMLHELP_H
+#include <htmlhelp.h>
+#endif
+
 // def taken from <gettextP.h>
 extern "C" const char *_nl_locale_name_default(void);
 
@@ -232,7 +236,9 @@ void WinUtil::init() {
 		}
 	}
 
+#ifdef HAVE_HTMLHELP_H
 	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR> (&helpCookie));
+#endif
 }
 
 void WinUtil::init_helpPath() {
@@ -268,7 +274,9 @@ void WinUtil::init_helpPath() {
 }
 
 void WinUtil::uninit() {
+#ifdef HAVE_HTMLHELP_H
 	::HtmlHelp(NULL, NULL, HH_UNINITIALIZE, helpCookie);
+#endif
 }
 
 void WinUtil::enableDEP() {
@@ -877,9 +885,11 @@ void WinUtil::help(dwt::Control* widget, unsigned id) {
 		// context-sensitive help
 		new HelpPopup(widget, Text::toT(getHelpText(id)));
 	} else {
+#ifdef HAVE_HTMLHELP_H
 		if(id < IDH_BEGIN || id > IDH_END)
 			id = IDH_INDEX;
 		::HtmlHelp(widget->handle(), helpPath.c_str(), HH_HELP_CONTEXT, id);
+#endif
 	}
 }
 
