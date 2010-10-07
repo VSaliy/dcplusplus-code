@@ -20,6 +20,7 @@
 * Modernize the installer and make it translatable (poy)
 * Customize the font selection dialog, save the charset (poy)
 * Blacklist rogue hub-lists (poy)
+* Fix some wrong menu fonts (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
