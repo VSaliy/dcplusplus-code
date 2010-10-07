@@ -61,12 +61,13 @@ lines(1)
 
 void TextBoxBase::create(const Seed& cs) {
 	lines = cs.lines;
+	menuSeed = cs.menuSeed;
 	BaseType::create(cs);
 }
 
 TextBox::Seed::Seed(const tstring& caption) :
-	BaseType::Seed(WS_CHILD | WS_TABSTOP, WS_EX_CLIENTEDGE, caption),
-	font(new Font(DefaultGuiFont))
+BaseType::Seed(WS_CHILD | WS_TABSTOP, WS_EX_CLIENTEDGE, caption),
+font(new Font(DefaultGuiFont))
 {
 }
 

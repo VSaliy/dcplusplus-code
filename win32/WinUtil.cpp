@@ -224,6 +224,7 @@ void WinUtil::init() {
 	xtextBox.menuSeed = Seeds::menu;
 	xdTextBox.menuSeed = Seeds::menu;
 	xRichTextBox.menuSeed = Seeds::menu;
+	xdRichTextBox.menuSeed = Seeds::menu;
 
 	init_helpPath();
 
