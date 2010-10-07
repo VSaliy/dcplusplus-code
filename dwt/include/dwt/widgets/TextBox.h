@@ -171,7 +171,7 @@ public:
 
 	virtual Point getPreferedSize();
 
-	virtual void addCommands(MenuPtr menu);
+	virtual MenuPtr getMenu();
 
 	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
 

@@ -1090,9 +1090,7 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 	if(userClick(pt) && handleUsersContextMenu(pt))
 		return true;
 
-	// imitate TextBoxBase's menu creation
-	MenuPtr menu(dwt::WidgetCreator<Menu>::create(chat->getParent(), WinUtil::Seeds::menu));
-	chat->addCommands(menu);
+	MenuPtr menu = chat->getMenu();
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
 

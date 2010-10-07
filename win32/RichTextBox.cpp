@@ -58,11 +58,13 @@ bool RichTextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
 	return false;
 }
 
-void RichTextBox::addCommands(MenuPtr menu) {
-	BaseType::addCommands(menu);
+MenuPtr RichTextBox::getMenu() {
+	MenuPtr menu = BaseType::getMenu();
 
 	menu->appendSeparator();
-	menu->appendItem(T_("&Find...\tF3"), std::bind(&RichTextBox::handleFind, this), dwt::IconPtr(), !getText().empty());
+	menu->appendItem(T_("&Find...\tF3"), [this]() { findText(findTextPopup()); }, dwt::IconPtr(), !getText().empty());
+
+	return menu;
 }
 
 bool RichTextBox::handleKeyDown(int c) {
@@ -77,10 +79,6 @@ bool RichTextBox::handleKeyDown(int c) {
 		return true;
 	}
 	return false;
-}
-
-void RichTextBox::handleFind() {
-	findText(findTextPopup());
 }
 
 tstring RichTextBox::findTextPopup() {

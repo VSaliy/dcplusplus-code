@@ -38,7 +38,7 @@ public:
 
 	bool handleMessage(const MSG& msg, LRESULT& retVal);
 
-	void addCommands(MenuPtr menu);
+	MenuPtr getMenu();
 
 	tstring findTextPopup();
 	void findTextNext();
