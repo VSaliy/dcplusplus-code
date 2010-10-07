@@ -72,6 +72,10 @@
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/StringUtils.h>
 
+#ifdef HAVE_HTMLHELP_H
+#include <htmlhelp.h>
+#endif
+
 static dwt::IconPtr mainIcon(WinUtil::createIcon(IDI_DCPP, 32));
 static dwt::IconPtr mainSmallIcon(WinUtil::createIcon(IDI_DCPP, 16));
 
