@@ -14,11 +14,12 @@ else:
 
 if 'HAVE_HTMLHELP_H' in env['CPPPATH']:
 	env.Append(LIBS='htmlhelp')
-		
-env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
-env.Append(CPPPATH = ['#/openssl/include', '#/miniupnpc', '#/dwt/include', '#/'])
-openssl_lib = '#/openssl/lib/'
 
+env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
+
+env.Append(CPPPATH = ['#/openssl/include', '#/miniupnpc', '#/dwt/include', '#/'])
+
+openssl_lib = '#/openssl/lib/'
 if env['arch'] != 'x86':
 	openssl_lib += env['arch'] + '/'
 env.Append(LIBPATH = [openssl_lib])

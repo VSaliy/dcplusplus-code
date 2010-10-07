@@ -214,11 +214,10 @@ pot_bld = Builder (action = Action([pot_args], 'Extracting messages to $TARGET f
 env.Append(BUILDERS = {'PotBuild' : pot_bld})
 
 conf = Configure(env)
-if conf.CheckCHeader("htmlhelp.h"):
-	conf.env.Append(CPPDEFINES="HAVE_HTMLHELP_H")
-	conf.env.Append(LIBS="htmlhelp")
-if conf.CheckCHeader("natupnp.h"):
-	conf.env.Append(CPPDEFINES="HAVE_NATUPNP_H")
+if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
+	conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
+if conf.CheckCXXHeader('natupnp.h', '<>'):
+	conf.env.Append(CPPDEFINES='HAVE_NATUPNP_H')
 env = conf.Finish()
 
 dev.zlib = dev.build('zlib/')
