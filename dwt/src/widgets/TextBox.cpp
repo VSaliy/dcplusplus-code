@@ -177,10 +177,12 @@ Point TextBoxBase::getPreferedSize() {
 	return ret;
 }
 
-void TextBoxBase::addCommands(MenuPtr menu) {
+MenuPtr TextBoxBase::getMenu() {
 	const bool writable = !hasStyle(ES_READONLY);
 	const bool text = !getText().empty();
 	const bool selection = !getSelection().empty();
+
+	MenuPtr menu(WidgetCreator<Menu>::create(getParent(), menuSeed));
 
 	if(writable) {
 		menu->appendItem(Texts::get(Texts::undo), [this] { this->sendMessage(WM_UNDO); },
@@ -199,6 +201,8 @@ void TextBoxBase::addCommands(MenuPtr menu) {
 	menu->appendSeparator();
 	menu->appendItem(Texts::get(Texts::selAll), [this] { this->setSelection(0, -1);},
 		IconPtr(), text);
+
+	return menu;
 }
 
 bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
@@ -223,9 +227,7 @@ bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
 			pt = getContextMenuPos();
 		}
 
-		MenuPtr menu(WidgetCreator<Menu>::create(getParent(), menuSeed));
-		addCommands(menu);
-		menu->open(pt);
+		getMenu()->open(pt);
 		return true;
 	}
 

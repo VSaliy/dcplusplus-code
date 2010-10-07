@@ -324,9 +324,7 @@ bool PrivateFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 		pt = chat->getContextMenuPos();
 	}
 
-	// imitate TextBoxBase's menu creation
-	MenuPtr menu(dwt::WidgetCreator<Menu>::create(chat->getParent(), WinUtil::Seeds::menu));
-	chat->addCommands(menu);
+	MenuPtr menu = chat->getMenu();
 
 	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubs(replyTo.getUser().user->getCID(),
 		replyTo.getUser().hint, priv));
