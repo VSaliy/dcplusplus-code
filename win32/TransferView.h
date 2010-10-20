@@ -85,6 +85,7 @@ private:
 		CONNECTION_COLUMN_QUEUED,
 		CONNECTION_COLUMN_CIPHER,
 		CONNECTION_COLUMN_IP,
+		CONNECTION_COLUMN_COUNTRY,
 		CONNECTION_COLUMN_LAST
 	};
 
@@ -143,7 +144,8 @@ private:
 			MASK_TRANSFERED = 1 << 3,
 			MASK_IP = 1 << 4,
 			MASK_CIPHER = 1 << 5,
-			MASK_CHUNK = 1 << 6
+			MASK_CHUNK = 1 << 6,
+			MASK_COUNTRY = 1 << 7
 		};
 
 		bool operator==(const ConnectionInfo& ii) { return download == ii.download && user == ii.getUser(); }
@@ -172,6 +174,8 @@ private:
 		int64_t chunkPos;
 		int64_t chunk;
 
+		void setCountry(const tstring& aCountry) { country = aCountry; updateMask |= MASK_COUNTRY; }
+		tstring country;
 		void setIP(const tstring& aIp) { ip = aIp; updateMask |= MASK_IP; }
 		tstring ip;
 		void setCipher(const tstring& aCipher) { cipher = aCipher; updateMask |= MASK_CIPHER; }

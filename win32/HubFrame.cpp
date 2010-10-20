@@ -46,6 +46,7 @@ static const ColumnInfo usersColumns[] = {
 	{ N_("Tag"), 100, false },
 	{ N_("Connection"), 75, false },
 	{ N_("IP"), 100, false },
+	{ N_("Country"), 50, false },
 	{ N_("E-Mail"), 100, false },
 	{ N_("CID"), 300, false}
 };
@@ -639,9 +640,8 @@ bool HubFrame::UserInfo::update(const Identity& identity, int sortCol) {
 	columns[COLUMN_CONNECTION] = Text::toT(identity.getConnection());
 	string ip = identity.getIp();
 	string country = ip.empty()?Util::emptyString:Util::getIpCountry(ip);
-	if (!country.empty())
-		ip = country + " (" + ip + ")";
 	columns[COLUMN_IP] = Text::toT(ip);
+	columns[COLUMN_COUNTRY] = Text::toT(country);
 	columns[COLUMN_EMAIL] = Text::toT(identity.getEmail());
 	columns[COLUMN_CID] = Text::toT(identity.getUser()->getCID().toBase32());
 
