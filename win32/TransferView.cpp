@@ -34,8 +34,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
-int TransferView::connectionIndexes[] = { CONNECTION_COLUMN_USER, CONNECTION_COLUMN_HUB, CONNECTION_COLUMN_STATUS, CONNECTION_COLUMN_SPEED, CONNECTION_COLUMN_CHUNK, CONNECTION_COLUMN_TRANSFERED, CONNECTION_COLUMN_QUEUED, CONNECTION_COLUMN_CIPHER, CONNECTION_COLUMN_IP };
-int TransferView::connectionSizes[] = { 125, 100, 375, 100, 125, 125, 75, 100, 100 };
+int TransferView::connectionIndexes[] = { CONNECTION_COLUMN_USER, CONNECTION_COLUMN_HUB, CONNECTION_COLUMN_STATUS, CONNECTION_COLUMN_SPEED, CONNECTION_COLUMN_CHUNK, CONNECTION_COLUMN_TRANSFERED, CONNECTION_COLUMN_QUEUED, CONNECTION_COLUMN_CIPHER, CONNECTION_COLUMN_IP, CONNECTION_COLUMN_COUNTRY };
+int TransferView::connectionSizes[] = { 125, 100, 375, 100, 125, 125, 75, 100, 100, 50 };
 
 int TransferView::downloadIndexes[] = { DOWNLOAD_COLUMN_FILE, DOWNLOAD_COLUMN_PATH, DOWNLOAD_COLUMN_STATUS, DOWNLOAD_COLUMN_TIMELEFT, DOWNLOAD_COLUMN_SPEED, DOWNLOAD_COLUMN_DONE, DOWNLOAD_COLUMN_SIZE };
 int TransferView::downloadSizes[] = { 200, 300, 150, 200, 125, 100, 100 };
@@ -49,7 +49,8 @@ static const ColumnInfo connectionColumns[] = {
 	{ N_("Transferred (Ratio)"), 125, true },
 	{ N_("Queued"), 80, true },
 	{ N_("Cipher"), 150, false },
-	{ N_("IP"), 100, false }
+	{ N_("IP"), 100, false },
+	{ N_("Country"), 50, false }
 };
 
 static const ColumnInfo downloadColumns[] = {
@@ -624,6 +625,10 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 	if(ui.updateMask & UpdateInfo::MASK_IP) {
 		columns[CONNECTION_COLUMN_IP] = ui.ip;
 	}
+	
+	if(ui.updateMask & UpdateInfo::MASK_COUNTRY) {
+		columns[CONNECTION_COLUMN_COUNTRY] = ui.country;
+	}
 
 	if(ui.updateMask & UpdateInfo::MASK_CIPHER) {
 		columns[CONNECTION_COLUMN_CIPHER] = ui.cipher;
@@ -720,12 +725,9 @@ void TransferView::starting(UpdateInfo* ui, Transfer* t) {
 	const UserConnection& uc = t->getUserConnection();
 	ui->setCipher(Text::toT(uc.getCipherName()));
 	tstring country = Text::toT(Util::getIpCountry(uc.getRemoteIp()));
-	tstring ip = Text::toT(uc.getRemoteIp());
-	if(country.empty()) {
-		ui->setIP(ip);
-	} else {
-		ui->setIP(country + _T(" (") + ip + _T(")"));
-	}
+	if(!country.empty())
+		ui->setCountry(country);
+	ui->setIP(Text::toT(uc.getRemoteIp()));
 }
 
 void TransferView::on(DownloadManagerListener::Requesting, Download* d) throw() {

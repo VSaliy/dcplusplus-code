@@ -21,6 +21,7 @@
 * Customize the font selection dialog, save the charset (poy)
 * Blacklist rogue hub-lists (poy)
 * Fix some wrong menu fonts (poy)
+* Separate IP and Country coloumn in the list of users and connections (thanks iceman50)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
