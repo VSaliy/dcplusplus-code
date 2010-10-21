@@ -133,7 +133,7 @@ dev.prepare()
 
 env.SConsignFile()
 
-env.Append(CPPPATH = ['#/boost/', '#/intl/'])
+env.Append(CPPPATH = ['#/', '#/boost/', '#/intl/'])
 
 # boost defines
 if dev.is_win32():
@@ -165,6 +165,7 @@ else:
 	defs = gcc_defs
 
 	env.Tool("gch", toolpath=".")
+
 	env.Append(CPPPATH = ['#/htmlhelp/include/'])
 	env.Append(LIBPATH = ['#/htmlhelp/lib/'])
 
