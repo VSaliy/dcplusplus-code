@@ -28,11 +28,6 @@
 const string UPnP_COM::name = "Standard Windows";
 
 #ifdef HAVE_NATUPNP_H
-// for mingw64
-#ifndef interface
-#define interface struct
-#endif
-
 #include <natupnp.h>
 	
 bool UPnP_COM::init() {
