@@ -20,9 +20,14 @@
   <dt>Enable automatic incoming connection type detection</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_AUTODETECT">Select this if you want to make DC++ determine the best connection type
   for you. This should work with the majority of network structures DC++ used in. Possibility of successful
-  active mode detection may depend on operating system configuration and network devices used.
-  <b>Its recommended to disable this option if you have more than one network device in your computer or if you use DC++
-  to connect to local network hubs only (eg. in a campus, etc..).</b></dd>
+active mode detection may depend on operating system configuration and network devices used.
+  <p>Its recommended to disable this option and set up your connection manually if you
+  	<ul>
+  		<li>have more than one physical network device (eg. network cards, 3G USB modem, etc...) in your computer;</li>
+  		<li>use any network tunneling, <a href="http://en.wikipedia.org/wiki/Vpn" target="_blank" class="external">VPN</a> networking service or any other software that creates virtual network devices;</li>
+  		<li>use DC++ to connect to local network hubs only (eg. in a campus, etc..).</li>
+  	</ul>
+  </p></dd>
   <dt>Detect now</dt>
   <dd cshelp="IDH_SETTINGS_NETWORK_DETECT_NOW">With this button, you can force DC++ to (re)detect the best connection
    mode available to you. Details and result of the operation will be shown in the Detection log box below.</dd>

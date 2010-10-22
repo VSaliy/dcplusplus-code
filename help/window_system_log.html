@@ -37,8 +37,8 @@
 	<dt>MAGNET Link detected: [link]</dt>
 	<dd>The client received a <a href="settings_advanced.html#registrymagnet">magnet link</a> handle request.</dd>
 	<dt>Generated new TLS certificate</dt>
-	<dd>As <a href="settings_certs.html">Security certificates</a> enabled but no existing TLS certificate files found (or they are invalid), new ertificate files generated in the 'Certificates' subfolder of the directory where DC++ configuraton files are stored.</dd>
-	<dt>UPnP: Successfully created port mappings. TCP: [port1], UDP: [port2], TLS: [port3]</dt>
+	<dd>As <a href="settings_certs.html">Security certificates</a> enabled but no existing TLS certificate files found (or they are invalid), new certificate files generated in the 'Certificates' subfolder of the directory where DC++ configuraton files are stored.</dd>
+	<dt>UPnP: Successfully created port mappings (TCP: [port1], UDP: [port2], TLS: [port3]), mapped using the [interface name] interface</dt>
 	<dd>The UPnP framework found a UPnP capable device and successfully mapped the shown ports for their respective protocols.</dd>
 	<dt>Connectivity: Determining connection type...</dt>
 	<dd>This message signs that <a href="settings_connection.html#autoconn">Automatic incoming connection type detection</a> is started.</dd>
@@ -63,7 +63,13 @@
 	<dd>This error message can appear when DC++ tries to map ports for incoming connections via UPnP. It means that no UPnP device can be found or its not responding. It can happen that you get this message when <a href="settings_connection.html#autoconn">Automatic connection type detection</a> is enabled as DC++ trying to discover a possible UPnP device for setting up active mode. This message is a real problem only if you selected the 'Use UPnP to let DC++ configure my router' option manually in <a href="settings_connection.html#connection">Incoming connection settings</a>. In this case refer to the <a href="faq_upnp.html">UPnP FAQ</a> for more information.</dd>
 	<dt>UPnP: Failed to remove port mappings</dt>
 	<dd>This message can appear mostly at shutdown of DC++ and means that UPnP port mappings created before couldn't be successfully removed. If this message persists the most probable reason is broken UPnP support of the (router) device.</dd>
-	<dt>Connectivity: Unable to open TCP/UDP port(s). You must set up your connection manually</dt>
+	<dt>UPnP: Another UPnP port mapping attempt is in progress...</dt>
+	<dd>This means that an <a href="settings_connection.html#autoconn">automatic connection type detection</a> attempt was started too soon (the previous operation has not been finished). Try restarting DC++ if this message persists. If restart DC++ does not help the most probable reason is broken UPnP support of your (router) device.</dd>
+	<dt>UPnP: Failed to initalize the [interface name] interface</dt>
+	<dd>DC++ failed to initalize one of its UPnP interface and will try to use the next one in the row.</dd>
+	<dt>UPnP: The [interface name] interface has failed to map the [TCP/UDP/TLS] [port number] port</dt>
+	<dd>The currently used UPnP interface failed to map the shown port. DC++ will try to use the next UPnP interface in the row.</dd>
+	<dt>Connectivity: Unable to open TCP/UDP/TLS port(s). You must set up your connection manually</dt>
 	<dd>You can get this message only when <a href="settings_connection.html#autoconn">Automatic connection type detection</a> is enabled and DC++ failed to open port(s) before trying to determine the available conncetion types. Possible reasons include the choosen port(s) are already occupied by another application or DC++ is blocked by a <a href="get_started.html#firewall">software firewall</a>.</dd>
 	<dt>Not listening for connections - please restart DC++</dt>
 	<dd>An unrecoverable low level networking error keeps DC++ from listening for connections. Search and download won't work until you restart DC++.</dd>
