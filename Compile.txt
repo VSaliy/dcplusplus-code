@@ -102,12 +102,15 @@
 		a. By the way, with doxygen, graphviz and some luck you can use the supplied doxygen
 		configuration file to generate some nice docs...just check that the paths in doxyfile are
 		correct (graphviz)...
+		
+		b. In the event you experience crashing you can check the howto guide for debugging
+		at <https://answers.launchpad.net/dcplusplus/+faq/337>
 
-		b. Linux / Unix:
+		c. Linux / Unix:
 
 			Look at <http://launchpad.net/linuxdcpp> for the *nix port of DC++ - they'll gladly accept any help. 	
 
-		c. Submitting patches
+		d. Submitting patches
 
 			If you think you've done something that more people could use, you can always submit a
 			patch for inclusion in the original distribution. I will then consider whether I like
@@ -127,7 +130,7 @@
 			   <http://sourceforge.net/mail/?group_id=40287>). Please make sure to include a copyright handover notice (see below).
 
 
-		d. Licensing issues with submitted patches	
+		e. Licensing issues with submitted patches	
 
 			In order to avoid future licensing issues, I ask you to give me copyright over any submitted code. 
 			If you don't like this policy, you are free to start your own distribution (as
