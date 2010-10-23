@@ -44,6 +44,8 @@
 #include "MainWindow.h"
 #include "PrivateFrame.h"
 
+#include "Winamp.h"
+
 #include <dwt/DWTException.h>
 #include <dwt/LibraryLoader.h>
 
@@ -382,7 +384,7 @@ const TCHAR
 
 tstring
 	WinUtil::commands =
-		_T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts, /download, /upload");
+		_T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts, /download, /upload, /winamp");
 
 bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson) {
 	string::size_type i = cmd.find(' ');
@@ -499,6 +501,12 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 		} else {
 			status = T_("Download limit disabled");
 		}
+	} else if(Util::stricmp(cmd.c_str(), _T("winamp")) == 0) {
+		tstring res = winampSpam(_T(""));
+		if (res == T_("Winamp is not running"))
+			status = res;
+		else
+			message = res;
 	} else {
 		return false;
 	}
@@ -588,6 +596,100 @@ int WinUtil::getIconIndex(const tstring& aFileName) {
 	} else {
 		return 2;
 	}
+}
+
+tstring WinUtil::winampSpam(const tstring& param) {
+	HWND hwndWinamp = FindWindow(_T("Winamp v1.x"), NULL);
+	tstring status;
+	if (hwndWinamp) {
+		StringMap params;
+		int waVersion = SendMessage(hwndWinamp,WM_USER, 0, IPC_GETVERSION),
+			majorVersion, minorVersion;
+		majorVersion = waVersion >> 12;
+		if (((waVersion & 0x00F0) >> 4) == 0) {
+			minorVersion = ((waVersion & 0x0f00) >> 8) * 10 + (waVersion & 0x000f);
+		} else {
+			minorVersion = ((waVersion & 0x00f0) >> 4) * 10 + (waVersion & 0x000f);
+		}
+		params["version"] = Util::toString(majorVersion + minorVersion / 100.0);
+		int state = SendMessage(hwndWinamp,WM_USER, 0, IPC_ISPLAYING);
+		switch (state) {
+			case 0: params["state"] = "stopped";
+				break;
+			case 1: params["state"] = "playing";
+				break;
+			case 3: params["state"] = "paused";
+		};
+		TCHAR titleBuffer[2048];
+		int buffLength = sizeof(titleBuffer);
+		GetWindowText(hwndWinamp, titleBuffer, buffLength);
+		tstring title = titleBuffer;
+		params["rawtitle"] = Text::fromT(title);
+		// there's some winamp bug with scrolling. wa5.09x and 5.1 or something.. see:
+		// http://forums.winamp.com/showthread.php?s=&postid=1768775#post1768775
+		int starpos = title.find(_T("***"));
+		if (starpos >= 1) {
+			tstring firstpart = title.substr(0, starpos - 1);
+			if (firstpart == title.substr(title.size() - firstpart.size(), title.size())) {
+				// fix title
+				title = title.substr(starpos, title.size());
+			}
+		}
+		// fix the title if scrolling is on, so need to put the stairs to the end of it
+		tstring titletmp = title.substr(title.find(_T("***")) + 2, title.size());
+		title = titletmp + title.substr(0, title.size() - titletmp.size());
+		title = title.substr(title.find(_T('.')) + 2, title.size());
+		if (title.rfind(_T('-')) != string::npos) {
+			params["title"] = Text::fromT(title.substr(0, title.rfind(_T('-')) - 1));
+		}
+		int curPos = SendMessage(hwndWinamp,WM_USER, 0, IPC_GETOUTPUTTIME);
+		int length = SendMessage(hwndWinamp,WM_USER, 1, IPC_GETOUTPUTTIME);
+		if (curPos == -1) {
+			curPos = 0;
+		} else {
+			curPos /= 1000;
+		}
+		int intPercent;
+		if (length > 0 ) {
+			intPercent = curPos * 100 / length;
+		} else {
+			length = 0;
+			intPercent = 0;
+		}
+		params["percent"] = Util::toString(intPercent) + "%";
+		params["elapsed"] = Util::formatSeconds(curPos);
+		params["length"] = Util::formatSeconds(length);
+		if(length>0) {
+			int numFront = min(max(intPercent / 10, 0), 10),
+				numBack = min(max(10 - 1 - numFront, 0), 10);
+			string inFront = string(numFront, '-'),
+				inBack = string(numBack, '-');
+			params["bar"] = "[" + inFront + (state ? "|" : "-") + inBack + "]";
+		}
+		int waSampleRate = SendMessage(hwndWinamp,WM_USER, 0, IPC_GETINFO),
+			waBitRate = SendMessage(hwndWinamp,WM_USER, 1, IPC_GETINFO),
+			waChannels = SendMessage(hwndWinamp,WM_USER, 2, IPC_GETINFO);
+		params["bitrate"] = Util::toString(waBitRate) + "kbps";
+		params["sample"] = Util::toString(waSampleRate) + "kHz";
+		string waChannelName;
+		switch (waChannels) {
+			case 2:
+				waChannelName = "stereo";
+				break;
+			case 6:
+				waChannelName = "5.1 surround";
+				break;
+			default:
+				waChannelName = "mono";
+		}
+		params["channels"] = waChannelName;
+		status = Text::toT(Util::formatParams(SETTING(WINAMP_FORMAT), params, false));
+		if (!param.empty())
+			status += _T(" " + param);
+	} else {
+		status = T_("Winamp is not running");
+	}
+	return status;
 }
 
 void WinUtil::reducePaths(string& message) {
