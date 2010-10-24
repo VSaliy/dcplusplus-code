@@ -158,8 +158,6 @@ public:
 	static int getDirIconIndex() { return dirIconIndex; }
 	static int getDirMaskedIndex() { return dirMaskedIndex; }
 
-	static tstring winampSpam(const tstring& param);
-
 	static bool isShift() { return (::GetKeyState(VK_SHIFT) & 0x8000) > 0; }
 	static bool isAlt() { return (::GetKeyState(VK_MENU) & 0x8000) > 0; }
 	static bool isCtrl() { return (::GetKeyState(VK_CONTROL) & 0x8000) > 0; }
