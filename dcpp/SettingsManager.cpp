@@ -51,7 +51,7 @@ const string SettingsManager::settingTags[] =
 	"LogFormatSystem", "LogFormatStatus", "DirectoryListingFrameOrder", "DirectoryListingFrameWidths",
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
 	"Language", "DownloadsOrder", "DownloadsWidth", "Toolbar", "LastSearchType",
-	"SoundMainChat", "SoundPM", "SoundPMWindow", "WinampFormat",
+	"SoundMainChat", "SoundPM", "SoundPMWindow",
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
@@ -318,7 +318,6 @@ SettingsManager::SettingsManager()
 	setDefault(MAIN_WINDOW_POS_Y, CW_USEDEFAULT);
 	setDefault(UPLOAD_BAR_COLOR, RGB(205, 60, 55));
 	setDefault(DOWNLOAD_BAR_COLOR, RGB(55, 170, 85));
-	setDefault(WINAMP_FORMAT, "Winamp(%[version]) %[state] (%[title] - %[bitrate]) - (%[length] %[bar])");
 
 #endif
 }
