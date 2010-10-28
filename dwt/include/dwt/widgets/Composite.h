@@ -35,7 +35,6 @@
 #include "../aspects/AspectActivate.h"
 #include "../aspects/AspectContainer.h"
 #include "../aspects/AspectEraseBackground.h"
-#include "../aspects/AspectPainting.h"
 #include "../aspects/AspectText.h"
 #include "../resources/Icon.h"
 #include "../WidgetCreator.h"
@@ -49,7 +48,6 @@ class Composite :
 	public AspectActivate<Composite>,
 	public AspectContainer<Composite>,
 	public AspectEraseBackground<Composite>,
-	public AspectPainting<Composite>,
 	public AspectText<Composite>
 {
 	typedef Control BaseType;
