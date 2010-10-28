@@ -62,8 +62,7 @@ Dispatcher& RichTextBox::makeDispatcher() {
 	return ChainingDispatcher::superClass<RichTextBox>();
 }
 
-void RichTextBox::create( const Seed & cs )
-{
+void RichTextBox::create(const Seed& cs) {
 	dwtassert((cs.style & WS_CHILD) == WS_CHILD, _T("Widget must have WS_CHILD style"));
 	BaseType::create( cs );
 	if(cs.font)
@@ -81,7 +80,27 @@ void RichTextBox::create( const Seed & cs )
 	setScrollBarHorizontally( cs.scrollBarHorizontallyFlag );
 	setScrollBarVertically( cs.scrollBarVerticallyFlag );
 
-	sendMessage( EM_AUTOURLDETECT, FALSE, 0 );
+	sendMessage(EM_AUTOURLDETECT, FALSE);
+
+	/* unlike other common controls, Rich Edits ignore WM_PRINTCLIENT messages. as per
+	<http://msdn.microsoft.com/en-us/library/bb787875(VS.85).aspx>, we have to handle the printing
+	by ourselves. this is crucial for taskbar thumbnails and "Aero Peek" previews. */
+	onPrinting([this](Canvas& canvas) {
+		Rectangle rect(getClientSize());
+
+		// paint a background in case the text doesn't span the whole box.
+		canvas.fill(rect, Brush(Brush::Window));
+
+		::FORMATRANGE format = { canvas.handle(), canvas.handle() };
+		format.rc = rect;
+		format.rc.right *= ::GetDeviceCaps(canvas.handle(), LOGPIXELSX);
+		format.rc.bottom *= ::GetDeviceCaps(canvas.handle(), LOGPIXELSY);
+		format.rcPage = format.rc;
+		format.chrg.cpMin = 0;
+		format.chrg.cpMax = -1;
+		sendMessage(EM_FORMATRANGE, 1, reinterpret_cast<LPARAM>(&format));
+		sendMessage(EM_FORMATRANGE); // "free the cached information" as MSDN recommends.
+	});
 }
 
 inline int RichTextBox::charFromPos(const ScreenCoordinate& pt) {
@@ -92,7 +111,7 @@ inline int RichTextBox::charFromPos(const ScreenCoordinate& pt) {
 	POINTL lp;
 	lp.x = cc.x();
 	lp.y = cc.y();
-	return ::SendMessage(this->handle(), EM_CHARFROMPOS, 0, (LPARAM)&lp);
+	return sendMessage(EM_CHARFROMPOS, 0, (LPARAM)&lp);
 }
 
 inline Point RichTextBox::posFromChar(int charOffset)
@@ -104,7 +123,7 @@ inline Point RichTextBox::posFromChar(int charOffset)
 
 inline int RichTextBox::lineFromPos(const ScreenCoordinate& pt) {
 	ClientCoordinate cc(pt, this);
-	return ::SendMessage(this->handle(), EM_EXLINEFROMCHAR, 0, charFromPos(pt));
+	return sendMessage(EM_EXLINEFROMCHAR, 0, charFromPos(pt));
 }
 
 tstring RichTextBox::getSelection() const {
