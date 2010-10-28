@@ -22,7 +22,6 @@
 #include <dcpp/stdinc.h>
 #include <dcpp/DCPlusPlus.h>
 
-#include <shlobj.h>
 #include <libintl.h>
 
 #include <dwt/Application.h>

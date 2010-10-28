@@ -499,6 +499,7 @@ void MainWindow::initTabs() {
 	seed.toggleActive = BOOLSETTING(TOGGLE_ACTIVE_WINDOW);
 	seed.ctrlTab = true;
 	tabs = addChild(seed);
+	tabs->initTaskbar(this);
 	tabs->onTitleChanged(std::bind(&MainWindow::handleTabsTitleChanged, this, _1));
 	tabs->onHelp(std::bind(&WinUtil::help, _1, _2));
 	paned->setFirst(tabs);

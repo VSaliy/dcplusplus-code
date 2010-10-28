@@ -38,7 +38,6 @@
 
 #include "../Widget.h"
 #include "../tstring.h"
-#include <shlobj>
 
 namespace dwt {
 

@@ -38,6 +38,7 @@
 #include "../aspects/AspectSelection.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
+#include <dwt/Taskbar.h>
 #include <dwt/Theme.h>
 
 #include <list>
@@ -52,7 +53,8 @@ class TabView :
 	// Aspects
 	private AspectCollection<TabView, int>,
 	public AspectSelection< TabView, int >,
-	public AspectText< TabView >
+	public AspectText< TabView >,
+	public Taskbar
 {
 	typedef CommonControl BaseType;
 	friend class AspectCollection<TabView, int>;

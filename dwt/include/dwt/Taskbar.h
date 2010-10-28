@@ -13,7 +13,7 @@
       * Redistributions in binary form must reproduce the above copyright notice,
         this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+      * Neither the name of the DWT nor the names of its contributors
         may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
@@ -29,14 +29,45 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace dwt { namespace util { namespace win32 {
+#ifndef DWT_TASKBAR_H
+#define DWT_TASKBAR_H
 
-enum Version {
-	XP,
-	VISTA,
-	SEVEN
+#include "WindowsHeaders.h"
+#include "forward.h"
+#include "resources/Bitmap.h"
+#include "resources/Icon.h"
+#include <unordered_map>
+
+namespace dwt {
+
+/** provides widgets with the ability to play with the taskbar associated with a main window. */
+class Taskbar {
+public:
+	void initTaskbar(WindowPtr window_);
+
+protected:
+	typedef std::function<void (ContainerPtr)> ActivateF;
+	/// @param activateF_ function called when the user activates a tab using the taskbar.
+	explicit Taskbar(const ActivateF& activateF_);
+	virtual ~Taskbar();
+
+	void addToTaskbar(ContainerPtr tab);
+	void removeFromTaskbar(ContainerPtr tab);
+	void moveOnTaskbar(ContainerPtr tab, ContainerPtr rightNeighbor = 0);
+	void setActiveOnTaskbar(ContainerPtr tab);
+	void setTaskbarIcon(ContainerPtr tab, const IconPtr& icon);
+
+	ITaskbarList3* taskbar;
+
+private:
+	BitmapPtr getBitmap(ContainerPtr tab, LPARAM thumbnailSize);
+
+	WindowPtr window;
+	std::unordered_map<ContainerPtr, ContainerPtr> tabs;
+
+	ActivateF activateF;
 };
 
-bool ensureVersion(Version version);
+}
 
-} } }
+#endif

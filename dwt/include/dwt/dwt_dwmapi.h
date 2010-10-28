@@ -29,14 +29,23 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace dwt { namespace util { namespace win32 {
+#ifndef DWT_DWMAPI_H
+#define DWT_DWMAPI_H
 
-enum Version {
-	XP,
-	VISTA,
-	SEVEN
-};
+#ifdef __GNUC__
+// MinGW lacks dwmapi.h, so define what we need here
 
-bool ensureVersion(Version version);
+#define DWMWA_FORCE_ICONIC_REPRESENTATION 7
+#define DWMWA_FORCE_ICONIC_REPRESENTATION 10
 
-} } }
+#else
+#include <dwmapi.h>
+#endif
+
+// in addition, we also define the following messages that are normally only defined for Win 7
+#if(_WIN32_WINNT < 0x0601)
+#define WM_DWMSENDICONICTHUMBNAIL 0x0323
+#define WM_DWMSENDICONICLIVEPREVIEWBITMAP 0x0326
+#endif
+
+#endif

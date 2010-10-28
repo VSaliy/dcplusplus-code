@@ -60,6 +60,7 @@ ctrlTab(ctrlTab_)
 
 TabView::TabView(Widget* w) :
 BaseType(w, ChainingDispatcher::superClass<TabView>()),
+Taskbar([this](ContainerPtr tab) { setActive(tab); }),
 tip(0),
 toggleActive(false),
 font(0),
@@ -168,6 +169,13 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 		throw Win32Exception("Error while trying to add page into Tab Sheet");
 	}
 
+	if(taskbar) {
+		addToTaskbar(w);
+		if(image != -1) {
+			setTaskbarIcon(w, icon);
+		}
+	}
+
 	viewOrder.push_front(w);
 
 	if(viewOrder.size() == 1 || w->hasStyle(WS_VISIBLE)) {
@@ -220,6 +228,10 @@ void TabView::remove(ContainerPtr w) {
 	}
 
 	layout();
+
+	if(taskbar) {
+		removeFromTaskbar(w);
+	}
 }
 
 IconPtr TabView::getIcon(unsigned index) const {
@@ -238,6 +250,10 @@ void TabView::setIcon(ContainerPtr w, const IconPtr& icon) {
 			TCITEM item = { TCIF_IMAGE };
 			item.iImage = image;
 			TabCtrl_SetItem(this->handle(), i, &item);
+
+			if(taskbar) {
+				setTaskbarIcon(w, icon);
+			}
 		}
 	}
 }
@@ -312,6 +328,10 @@ void TabView::handleTabSelected() {
 
 	if(titleChangedFunction)
 		titleChangedFunction(ti->w->getText());
+
+	if(taskbar) {
+		setActiveOnTaskbar(ti->w);
+	}
 }
 
 void TabView::mark(ContainerPtr w) {
@@ -377,11 +397,25 @@ void TabView::layout() {
 
 	Rectangle tmp = getUsableArea(true);
 	if(!(tmp == clientSize)) {
-		int i = getSelected();
-		if(i != -1) {
-			getTabInfo(i)->w->layout(tmp);
-		}
 		clientSize = tmp;
+
+		// the client area has changed, update the selected tab synchronously.
+		ContainerPtr sel = 0;
+		TabInfo* ti = getTabInfo(getSelected());
+		if(ti) {
+			sel = ti->w;
+			sel->layout(clientSize);
+		}
+
+		// update background tabs too, but only asynchronously.
+		callAsync([this, sel]() {
+			for(auto i = viewOrder.begin(); i != viewOrder.end(); ++i) {
+				ContainerPtr w = *i;
+				if(w != sel) {
+					w->layout(clientSize);
+				}
+			}
+		});
 	}
 }
 
@@ -522,8 +556,7 @@ bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		TCHAR buf[1024] = { 0 };
 		item.pszText = buf;
 		item.cchTextMax = (sizeof(buf) / sizeof(TCHAR)) - 1;
-
-		TabCtrl_GetItem( this->handle(), dragPos, & item );
+		TabCtrl_GetItem(handle(), dragPos, &item);
 
 		erase(dragPos);
 
@@ -532,6 +565,10 @@ bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		active = getSelected();
 
 		layout();
+
+		if(taskbar) {
+			moveOnTaskbar(getTabInfo(dropPos)->w, (dropPos < size() - 1) ? getTabInfo(dropPos + 1)->w : 0);
+		}
 	}
 
 	return true;

@@ -36,7 +36,7 @@ namespace dwt {
 
 const UINT Notification::message = ::RegisterWindowMessage(_T("dwt::Notification"));
 
-static const UINT taskbar = ::RegisterWindowMessage(_T("TaskbarCreated"));
+static const UINT taskbarMsg = ::RegisterWindowMessage(_T("TaskbarCreated"));
 
 Notification::~Notification() {
 	setVisible(false);
@@ -48,7 +48,7 @@ void Notification::create(const Notification::Seed& seed) {
 
 	// TODO Allow more than one icon per window
 	parent->setCallback(Message(message), [this](const MSG& msg, LRESULT&) { return trayHandler(msg); });
-	parent->setCallback(Message(taskbar), [this](const MSG&, LRESULT&) { return redisplay(); });
+	parent->setCallback(Message(taskbarMsg), [this](const MSG&, LRESULT&) { return redisplay(); });
 }
 
 void Notification::setIcon(const IconPtr& icon_) {
