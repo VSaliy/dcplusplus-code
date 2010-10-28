@@ -73,12 +73,12 @@ private:
 	int64_t lastDown;
 	int64_t max;
 
-	void handlePaint(dwt::PaintCanvas& canvas);
+	void draw(dwt::Canvas& canvas, const dwt::Rectangle& rect);
 
 	void layout();
 	bool eachSecond();
 
-	void drawLine(dwt::Canvas& canvas, StatIter begin, StatIter end, dwt::Rectangle& rect, long clientRight);
+	void drawLine(dwt::Canvas& canvas, StatIter begin, StatIter end, const dwt::Rectangle& rect, long clientRight);
 	void addTick(int64_t bdiff, int64_t tdiff, StatList& lst, AvgList& avg, int scroll);
 };
 

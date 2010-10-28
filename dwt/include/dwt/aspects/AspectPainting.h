@@ -37,6 +37,7 @@
 #define DWT_AspectPainting_h
 
 #include "../CanvasClasses.h"
+#include "../Dispatchers.h"
 
 namespace dwt {
 
@@ -50,30 +51,47 @@ class AspectPainting
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct PaintDispatcher {
-		typedef std::function<void (PaintCanvas&)> F;
+	struct PaintDispatcher : Dispatchers::Base<void (PaintCanvas&)> {
+		typedef Dispatchers::Base<void (PaintCanvas&)> BaseType;
+		PaintDispatcher(const typename BaseType::F& f, Widget* widget_) :
+		BaseType(f),
+		widget(widget_)
+		{ }
 
-		PaintDispatcher(const F& f_, Widget* widget_) : f(f_), widget(widget_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
+		bool operator()(const MSG& msg, LRESULT&) const {
 			PaintCanvas canvas(widget);
-
 			f(canvas);
 			return true;
 		}
 
-		F f;
+	private:
 		Widget* widget;
 	};
+
+	struct PrintDispatcher : Dispatchers::Base<void (Canvas&)> {
+		typedef Dispatchers::Base<void (Canvas&)> BaseType;
+		PrintDispatcher(const F& f_) : BaseType(f_) { }
+
+		bool operator()(const MSG& msg, LRESULT& ret) const {
+			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
+			f(canvas);
+			return true;
+		}
+	};
+
 public:
 	/// \ingroup EventHandlersAspectPainting
 	/// Painting event handler setter
-	/** If supplied, event handler is called with a Canvas & which you can use to
+	/** If supplied, event handler is called with a PaintCanvas& which you can use to
 	  * paint stuff onto the window with. <br>
-	  * Parameters passed is Canvas &
+	  * Parameters passed is PaintCanvas&
 	  */
 	void onPainting(const typename PaintDispatcher::F& f) {
 		W().addCallback(Message(WM_PAINT), PaintDispatcher(f, &W()));
+	}
+
+	void onPrinting(const typename PrintDispatcher::F& f) {
+		W().addCallback(Message(WM_PRINTCLIENT), PrintDispatcher(f));
 	}
 
 protected:
