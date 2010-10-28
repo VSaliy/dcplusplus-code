@@ -36,7 +36,7 @@
 // MinGW lacks dwmapi.h, so define what we need here
 
 #define DWMWA_FORCE_ICONIC_REPRESENTATION 7
-#define DWMWA_FORCE_ICONIC_REPRESENTATION 10
+#define DWMWA_HAS_ICONIC_BITMAP 10
 
 #else
 #include <dwmapi.h>
