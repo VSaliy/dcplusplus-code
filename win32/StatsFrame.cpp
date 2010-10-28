@@ -42,7 +42,13 @@ StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
 {
 	setFont(WinUtil::font);
 
-	onPainting(std::bind(&StatsFrame::handlePaint, this, _1));
+	onPainting([this](dwt::PaintCanvas& canvas) {
+		dwt::Rectangle rect = canvas.getPaintRect();
+		if(rect.width() == 0 || rect.height() == 0)
+			return;
+		draw(canvas, rect);
+	});
+	onPrinting([this](dwt::Canvas& canvas) { draw(canvas, dwt::Rectangle(getClientSize())); });
 
 	initStatus();
 
@@ -55,12 +61,7 @@ StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
 StatsFrame::~StatsFrame() {
 }
 
-void StatsFrame::handlePaint(dwt::PaintCanvas& canvas) {
-	dwt::Rectangle rect = canvas.getPaintRect();
-
-	if(rect.width() == 0 || rect.size.y == 0)
-		return;
-
+void StatsFrame::draw(dwt::Canvas& canvas, const dwt::Rectangle& rect) {
 	{
 		dwt::Canvas::Selector select(canvas, *WinUtil::bgBrush);
 		::BitBlt(canvas.handle(), rect.x(), rect.y(), rect.width(), rect.height(), NULL, 0, 0, PATCOPY);
@@ -182,7 +183,7 @@ bool StatsFrame::eachSecond() {
 	return true;
 }
 
-void StatsFrame::drawLine(dwt::Canvas& canvas, StatIter begin, StatIter end, dwt::Rectangle& rect, long clientRight) {
+void StatsFrame::drawLine(dwt::Canvas& canvas, StatIter begin, StatIter end, const dwt::Rectangle& rect, long clientRight) {
 	StatIter i;
 	for(i = begin; i != end; ++i) {
 		if((clientRight - (long)i->scroll) < rect.right())
