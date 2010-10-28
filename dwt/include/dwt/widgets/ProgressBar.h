@@ -36,7 +36,6 @@
 #ifndef DWT_ProgressBar_h
 #define DWT_ProgressBar_h
 
-#include "../aspects/AspectPainting.h"
 #include "Control.h"
 
 namespace dwt {
@@ -50,9 +49,7 @@ namespace dwt {
   * jobs, often used when downloading from internet or installing applications etc.
   */
 class ProgressBar :
-	public CommonControl,
-	// Aspects
-	public AspectPainting< ProgressBar >
+	public CommonControl
 {
 	typedef CommonControl BaseType;
 

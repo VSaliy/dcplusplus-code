@@ -44,6 +44,7 @@
 #include "../aspects/AspectHelp.h"
 #include "../aspects/AspectKeyboard.h"
 #include "../aspects/AspectMouse.h"
+#include "../aspects/AspectPainting.h"
 #include "../aspects/AspectRaw.h"
 #include "../aspects/AspectSizable.h"
 #include "../aspects/AspectTimer.h"
@@ -65,6 +66,7 @@ class Control:
 	public AspectHelp<Control>,
 	public AspectKeyboard<Control>,
 	public AspectMouse<Control>,
+	public AspectPainting<Control>,
 	public AspectRaw<Control>,
 	public AspectSizable<Control>,
 	public AspectTimer<Control>,

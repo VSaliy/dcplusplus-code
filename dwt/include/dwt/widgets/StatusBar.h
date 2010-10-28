@@ -38,7 +38,6 @@
 
 #include "../aspects/AspectClickable.h"
 #include "../aspects/AspectDblClickable.h"
-#include "../aspects/AspectPainting.h"
 #include "Control.h"
 
 #include <vector>
@@ -64,8 +63,7 @@ class StatusBar :
 
 	// Aspects
 	public AspectClickable<StatusBar>,
-	public AspectDblClickable<StatusBar>,
-	public AspectPainting<StatusBar>
+	public AspectDblClickable<StatusBar>
 {
 	typedef CommonControl BaseType;
 	typedef AspectClickable<StatusBar> ClickType;

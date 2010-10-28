@@ -35,7 +35,6 @@
 #include "../resources/ImageList.h"
 #include "../Rectangle.h"
 #include "../aspects/AspectCollection.h"
-#include "../aspects/AspectPainting.h"
 #include "../aspects/AspectSelection.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
@@ -52,7 +51,6 @@ class TabView :
 	public CommonControl,
 	// Aspects
 	private AspectCollection<TabView, int>,
-	public AspectPainting< TabView >,
 	public AspectSelection< TabView, int >,
 	public AspectText< TabView >
 {
