@@ -39,7 +39,6 @@
 #include "../aspects/AspectColor.h"
 #include "../aspects/AspectClickable.h"
 #include "../aspects/AspectDblClickable.h"
-#include "../aspects/AspectPainting.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
 
@@ -64,7 +63,6 @@ class Label :
 	public AspectColor< Label >,
 	public AspectColorCtlImpl<Label>,
 	public AspectDblClickable< Label >,
-	public AspectPainting< Label >,
 	public AspectText< Label >
 {
 	typedef CommonControl BaseType;

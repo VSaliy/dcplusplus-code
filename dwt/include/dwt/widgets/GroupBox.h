@@ -48,7 +48,6 @@
 #include "../aspects/AspectClickable.h"
 #include "../aspects/AspectChild.h"
 #include "../aspects/AspectDblClickable.h"
-#include "../aspects/AspectPainting.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
 
@@ -60,7 +59,6 @@ class GroupBox :
 	public AspectColor<GroupBox>,
 	public AspectColorCtlImpl<GroupBox>,
 	public AspectChild<GroupBox>,
-	public AspectPainting< GroupBox >,
 	public AspectText< GroupBox >
 {
 	typedef CommonControl BaseType;

@@ -37,7 +37,6 @@
 #define DWT_DateTime_h
 
 #include "../aspects/AspectClickable.h"
-#include "../aspects/AspectPainting.h"
 #include "../util/check.h"
 #include "Control.h"
 
@@ -55,8 +54,7 @@ namespace dwt {
 class DateTime :
 	public CommonControl,
 	// Aspects
-	public AspectClickable< DateTime >,
-	public AspectPainting< DateTime >
+	public AspectClickable< DateTime >
 {
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< DateTime >;
