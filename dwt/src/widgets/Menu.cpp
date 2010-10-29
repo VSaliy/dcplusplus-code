@@ -553,7 +553,6 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 		if(theme) {
 			Point pt;
 			if(theme.getPartSize(canvas, MENU_POPUPSEPARATOR, 0, pt)) {
-				rectangle.size.x = std::min(rectangle.size.x, pt.x);
 				rectangle.size.y = std::min(rectangle.size.y, pt.y);
 			}
 			theme.drawBackground(canvas, MENU_POPUPSEPARATOR, 0, rectangle, false);
