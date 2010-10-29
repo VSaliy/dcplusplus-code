@@ -48,7 +48,7 @@ StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
 			return;
 		draw(canvas, rect);
 	});
-	onPrinting([this](dwt::Canvas& canvas) { draw(canvas, dwt::Rectangle(getClientSize())); });
+	onPrinting([this](dwt::Canvas& canvas) { draw(canvas, dwt::Rectangle(GCC_WTF->getClientSize())); });
 
 	initStatus();
 

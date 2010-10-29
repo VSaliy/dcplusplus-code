@@ -49,9 +49,13 @@ typedef struct ITaskbarList ITaskbarList;
 typedef struct ITaskbarList2 ITaskbarList2;
 #endif
 
+#ifndef __ITaskbarList3_FWD_DEFINED__
+#define __ITaskbarList3_FWD_DEFINED__
+typedef struct ITaskbarList3 ITaskbarList3;
+#endif
+
 #ifndef __ITaskbarList_INTERFACE_DEFINED__
 #define __ITaskbarList_INTERFACE_DEFINED__
-  EXTERN_C const IID IID_ITaskbarList;
 #if defined(__cplusplus) && !defined(CINTERFACE)
   struct ITaskbarList : public IUnknown {
   public:
@@ -62,37 +66,32 @@ typedef struct ITaskbarList2 ITaskbarList2;
     virtual HRESULT WINAPI SetActiveAlt(HWND hwnd) = 0;
   };
 #endif
-  HRESULT WINAPI ITaskbarList_HrInit_Proxy(ITaskbarList *This);
-  void __RPC_STUB ITaskbarList_HrInit_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
-  HRESULT WINAPI ITaskbarList_AddTab_Proxy(ITaskbarList *This,HWND hwnd);
-  void __RPC_STUB ITaskbarList_AddTab_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
-  HRESULT WINAPI ITaskbarList_DeleteTab_Proxy(ITaskbarList *This,HWND hwnd);
-  void __RPC_STUB ITaskbarList_DeleteTab_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
-  HRESULT WINAPI ITaskbarList_ActivateTab_Proxy(ITaskbarList *This,HWND hwnd);
-  void __RPC_STUB ITaskbarList_ActivateTab_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
-  HRESULT WINAPI ITaskbarList_SetActiveAlt_Proxy(ITaskbarList *This,HWND hwnd);
-  void __RPC_STUB ITaskbarList_SetActiveAlt_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
 #endif
 
 #ifndef __ITaskbarList2_INTERFACE_DEFINED__
 #define __ITaskbarList2_INTERFACE_DEFINED__
-  EXTERN_C const IID IID_ITaskbarList2;
 #if defined(__cplusplus) && !defined(CINTERFACE)
   struct ITaskbarList2 : public ITaskbarList {
   public:
     virtual HRESULT WINAPI MarkFullscreenWindow(HWND hwnd,WINBOOL fFullscreen) = 0;
   };
 #endif
-  HRESULT WINAPI ITaskbarList2_MarkFullscreenWindow_Proxy(ITaskbarList2 *This,HWND hwnd,WINBOOL fFullscreen);
-  void __RPC_STUB ITaskbarList2_MarkFullscreenWindow_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
 #endif
 
 #ifndef __ITaskbarList3_INTERFACE_DEFINED__
 #define __ITaskbarList3_INTERFACE_DEFINED__
-  EXTERN_C const IID IID_ITaskbarList3;
 #if defined(__cplusplus) && !defined(CINTERFACE)
   struct ITaskbarList3 : public ITaskbarList2 {
   public:
+        virtual HRESULT WINAPI SetProgressValue( 
+            /* [in] */ HWND hwnd,
+            /* [in] */ ULONGLONG ullCompleted,
+            /* [in] */ ULONGLONG ullTotal) = 0;
+        
+        virtual HRESULT WINAPI SetProgressState( 
+            /* [in] */ HWND hwnd,
+            /* [in] */ /*TBPFLAG*/int tbpFlags) = 0;
+        
         virtual HRESULT WINAPI RegisterTab( 
             /* [in] */ HWND hwndTab,
             /* [in] */ HWND hwndMDI) = 0;
@@ -108,16 +107,35 @@ typedef struct ITaskbarList2 ITaskbarList2;
             /* [in] */ HWND hwndTab,
             /* [in] */ HWND hwndMDI,
             /* [in] */ DWORD dwReserved) = 0;
+        
+        virtual HRESULT WINAPI ThumbBarAddButtons( 
+            /* [in] */ HWND hwnd,
+            /* [in] */ UINT cButtons,
+            /* [size_is][in] */ /*LPTHUMBBUTTON*/void* pButton) = 0;
+        
+        virtual HRESULT WINAPI ThumbBarUpdateButtons( 
+            /* [in] */ HWND hwnd,
+            /* [in] */ UINT cButtons,
+            /* [size_is][in] */ /*LPTHUMBBUTTON*/void* pButton) = 0;
+        
+        virtual HRESULT WINAPI ThumbBarSetImageList( 
+            /* [in] */ HWND hwnd,
+            /* [in] */ /*HIMAGELIST*/void* himl) = 0;
+        
+        virtual HRESULT WINAPI SetOverlayIcon( 
+            /* [in] */ HWND hwnd,
+            /* [in] */ HICON hIcon,
+            /* [string][unique][in] */ LPCWSTR pszDescription) = 0;
+        
+        virtual HRESULT WINAPI SetThumbnailTooltip( 
+            /* [in] */ HWND hwnd,
+            /* [string][unique][in] */ LPCWSTR pszTip) = 0;
+        
+        virtual HRESULT WINAPI SetThumbnailClip( 
+            /* [in] */ HWND hwnd,
+            /* [in] */ RECT *prcClip) = 0;
   };
 #endif
-  HRESULT WINAPI ITaskbarList3_RegisterTab_Proxy(ITaskbarList3 *This,HWND hwnd,HWND hwndMDI);
-  void __RPC_STUB ITaskbarList3_RegisterTab_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
-  HRESULT WINAPI ITaskbarList3_UnregisterTab_Proxy(ITaskbarList3 *This,HWND hwnd);
-  void __RPC_STUB ITaskbarList3_UnregisterTab_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
-  HRESULT WINAPI ITaskbarList3_SetTabOrder_Proxy(ITaskbarList3 *This,HWND hwnd,HWND hwndInsertBefore);
-  void __RPC_STUB ITaskbarList3_SetTabOrder_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
-  HRESULT WINAPI ITaskbarList3_SetTabActive_Proxy(ITaskbarList3 *This,HWND hwnd,HWND hwndMDI,DWORD dwReserved);
-  void __RPC_STUB ITaskbarList3_SetTabActive_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
 #endif
 
 #endif

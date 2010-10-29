@@ -86,7 +86,7 @@ void RichTextBox::create(const Seed& cs) {
 	<http://msdn.microsoft.com/en-us/library/bb787875(VS.85).aspx>, we have to handle the printing
 	by ourselves. this is crucial for taskbar thumbnails and "Aero Peek" previews. */
 	onPrinting([this, cs](Canvas& canvas) {
-		Rectangle rect(getClientSize());
+		Rectangle rect(GCC_WTF->getClientSize());
 
 		// paint a background in case the text doesn't span the whole box.
 		canvas.fill(rect, Brush(cs.backgroundColor));
@@ -98,8 +98,8 @@ void RichTextBox::create(const Seed& cs) {
 		format.rcPage = format.rc;
 		format.chrg.cpMin = 0;
 		format.chrg.cpMax = -1;
-		sendMessage(EM_FORMATRANGE, 1, reinterpret_cast<LPARAM>(&format));
-		sendMessage(EM_FORMATRANGE); // "free the cached information" as MSDN recommends.
+		GCC_WTF->sendMessage(EM_FORMATRANGE, 1, reinterpret_cast<LPARAM>(&format));
+		GCC_WTF->sendMessage(EM_FORMATRANGE); // "free the cached information" as MSDN recommends.
 	});
 }
 
