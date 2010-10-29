@@ -85,16 +85,16 @@ void RichTextBox::create(const Seed& cs) {
 	/* unlike other common controls, Rich Edits ignore WM_PRINTCLIENT messages. as per
 	<http://msdn.microsoft.com/en-us/library/bb787875(VS.85).aspx>, we have to handle the printing
 	by ourselves. this is crucial for taskbar thumbnails and "Aero Peek" previews. */
-	onPrinting([this](Canvas& canvas) {
+	onPrinting([this, cs](Canvas& canvas) {
 		Rectangle rect(getClientSize());
 
 		// paint a background in case the text doesn't span the whole box.
-		canvas.fill(rect, Brush(Brush::Window));
+		canvas.fill(rect, Brush(cs.backgroundColor));
 
 		::FORMATRANGE format = { canvas.handle(), canvas.handle() };
 		format.rc = rect;
-		format.rc.right *= ::GetDeviceCaps(canvas.handle(), LOGPIXELSX);
-		format.rc.bottom *= ::GetDeviceCaps(canvas.handle(), LOGPIXELSY);
+		format.rc.right *= canvas.getDeviceCaps(LOGPIXELSX);
+		format.rc.bottom *= canvas.getDeviceCaps(LOGPIXELSY);
 		format.rcPage = format.rc;
 		format.chrg.cpMin = 0;
 		format.chrg.cpMax = -1;
