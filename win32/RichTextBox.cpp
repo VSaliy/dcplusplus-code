@@ -62,7 +62,7 @@ MenuPtr RichTextBox::getMenu() {
 	MenuPtr menu = BaseType::getMenu();
 
 	menu->appendSeparator();
-	menu->appendItem(T_("&Find...\tF3"), [this]() { this->findText(this->findTextPopup()); }, dwt::IconPtr(), !getText().empty());
+	menu->appendItem(T_("&Find...\tF3"), [this]() { GCC_WTF->findText(this->findTextPopup()); }, dwt::IconPtr(), !getText().empty());
 
 	return menu;
 }
