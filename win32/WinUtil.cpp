@@ -118,7 +118,7 @@ void WinUtil::init() {
 
 	if(BOOLSETTING(USE_SYSTEM_ICONS)) {
 		SHFILEINFO fi;
-		::SHGetFileInfo(_T("."), FILE_ATTRIBUTE_DIRECTORY, &fi, sizeof(fi), SHGFI_ICON | SHGFI_SMALLICON
+		::SHGetFileInfo(_T("./"), FILE_ATTRIBUTE_DIRECTORY, &fi, sizeof(fi), SHGFI_ICON | SHGFI_SMALLICON
 			| SHGFI_USEFILEATTRIBUTES);
 		dwt::Icon tmp(fi.hIcon);
 		fileImages->add(tmp);
