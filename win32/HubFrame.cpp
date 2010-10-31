@@ -190,6 +190,7 @@ inTabComplete(false)
 	status->onDblClicked(STATUS_STATUS, std::bind(&HubFrame::openLog, this, false));
 
 	status->setHelpId(STATUS_STATUS, IDH_HUB_STATUS);
+	status->setHelpId(STATUS_SECURE, IDH_HUB_SECURE_STATUS);
 	status->setHelpId(STATUS_USERS, IDH_HUB_USERS_COUNT);
 	status->setHelpId(STATUS_SHARED, IDH_HUB_SHARED);
 	status->setHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
