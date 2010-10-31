@@ -21,10 +21,11 @@
 * Customize the font selection dialog, save the charset (poy)
 * Blacklist rogue hub-lists (poy)
 * Fix some wrong menu fonts (poy)
-* Separate IP and Country columns in users and connections lists (thanks iceman50)
+* [L#630655] Separate IP and Country columns in users and connections lists (thanks iceman50)
 * Support taskbar thumbnails and "Aero Peek" live previews on Win 7 (poy)
 * Fix menu separators on Win 7 (poy)
 * [L#588224] Display folders using the correct icon on Win 7 (poy)
+* Help updates (poy, emtee)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
