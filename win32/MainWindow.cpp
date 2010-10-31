@@ -954,7 +954,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::handleSettings() {
 	// this may be called directly from the tray icon when the main window is still hidden
-	if(::IsIconic(handle()))
+	if(isIconic())
 		handleRestore();
 
 	SettingsDialog dlg(this);
@@ -1373,7 +1373,7 @@ void MainWindow::handleTrayContextMenu() {
 }
 
 void MainWindow::handleTrayClicked() {
-	if(::IsIconic(handle())) {
+	if(isIconic()) {
 		handleRestore();
 	} else {
 		minimize();

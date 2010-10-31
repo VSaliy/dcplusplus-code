@@ -140,9 +140,15 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 	tab->onTextChanging([proxy](const tstring& text) { proxy->setText(text); });
 	tab->onSized([proxy](const SizedEvent&) { DwmInvalidateIconicBitmaps(proxy->handle()); });
 
+	// forward taskbar events that were sent to the proxy window to the actual tab window.
 	proxy->onActivate([this, tab](bool activate) {
-		if(activate)
+		if(activate) {
 			activateF(tab);
+			if(window->isIconic())
+				window->restore();
+			else
+				window->setVisible(true);
+		}
 	});
 	proxy->onClosing([tab]() -> bool {
 		tab->close(true);
