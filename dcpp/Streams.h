@@ -108,13 +108,13 @@ class IOStream : public InputStream, public OutputStream {
 template<bool managed>
 class LimitedInputStream : public InputStream {
 public:
-	LimitedInputStream(InputStream* is, uint64_t aMaxBytes) : s(is), maxBytes(aMaxBytes) {
+	LimitedInputStream(InputStream* is, int64_t aMaxBytes) : s(is), maxBytes(aMaxBytes) {
 	}
 	virtual ~LimitedInputStream() throw() { if(managed) delete s; }
 
 	size_t read(void* buf, size_t& len) throw(FileException) {
 		dcassert(maxBytes >= 0);
-		len = (size_t)min(maxBytes, (uint64_t)len);
+		len = (size_t)min(maxBytes, (int64_t)len);
 		if(len == 0)
 			return 0;
 		size_t x = s->read(buf, len);
@@ -124,18 +124,24 @@ public:
 
 private:
 	InputStream* s;
-	uint64_t maxBytes;
+	int64_t maxBytes;
 };
 
 /** Limits the number of bytes that are requested to be written (not the number actually written!) */
 template<bool managed>
 class LimitedOutputStream : public OutputStream {
 public:
-	LimitedOutputStream(OutputStream* os, uint64_t aMaxBytes) : s(os), maxBytes(aMaxBytes) {
+	LimitedOutputStream(OutputStream* os, int64_t aMaxBytes) : s(os), maxBytes(aMaxBytes) {
 	}
 	virtual ~LimitedOutputStream() throw() { if(managed) delete s; }
 
-	virtual size_t write(const void* buf, size_t len) throw(Exception);
+	virtual size_t write(const void* buf, size_t len) throw(Exception) {
+		if(maxBytes < len) {
+			throw FileException(_("More bytes written than requested"));
+		}
+		maxBytes -= len;
+		return s->write(buf, len);
+	}
 
 	virtual size_t flush() throw(Exception) {
 		return s->flush();
@@ -144,7 +150,7 @@ public:
 	virtual bool eof() { return maxBytes == 0; }
 private:
 	OutputStream* s;
-	uint64_t maxBytes;
+	int64_t maxBytes;
 };
 
 template<bool managed>
