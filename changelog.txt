@@ -26,6 +26,7 @@
 * Fix menu separators on Win 7 (poy)
 * [L#588224] Display folders using the correct icon on Win 7 (poy)
 * Help updates (poy, emtee)
+* [L#571914] Fix crash when zero sized bloom filter requested (emtee)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
