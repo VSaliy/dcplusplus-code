@@ -144,6 +144,8 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 	proxy->onActivate([this, tab](bool activate) {
 		if(activate) {
 			activateF(tab);
+			// imitate MFC...
+			::SetForegroundWindow(window->handle());
 			if(window->isIconic())
 				window->restore();
 			else
