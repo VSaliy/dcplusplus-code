@@ -402,6 +402,7 @@ void MainWindow::initToolbar() {
 			SearchFrame::id + comma +
 			ADLSearchFrame::id + comma +
 			SpyFrame::id + comma +
+			comma +
 			StatsFrame::id + comma +
 			comma +
 			"OpenFL" + comma +
