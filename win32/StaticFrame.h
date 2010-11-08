@@ -38,12 +38,12 @@ public:
 		WinUtil::setStaticWindowState(T::id, false);
 	}
 
-	static void openWindow(dwt::TabView* mdiClient) {
+	static void openWindow(dwt::TabView* mdiClient, bool close = true, bool activate = true) {
 		if(frame) {
-			if(mdiClient->getActive() != frame) {
-				frame->activate();
-			} else {
+			if(close && mdiClient->getActive() == frame) {
 				frame->close();
+			} else if(activate) {
+				frame->activate();
 			}
 		} else {
 			frame = new T(mdiClient);

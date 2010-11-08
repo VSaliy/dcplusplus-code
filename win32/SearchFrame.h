@@ -48,7 +48,8 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void openWindow(dwt::TabView* mdiParent, const tstring& str, SearchManager::TypeModes type);
+	static void openWindow(dwt::TabView* mdiParent, const tstring& str = Util::emptyStringT,
+		SearchManager::TypeModes type = SearchManager::TYPE_ANY);
 	static void closeAll();
 
 private:
