@@ -368,6 +368,8 @@ void MainWindow::initToolbar() {
 		[this] { ADLSearchFrame::openWindow(getTabView()); });
 	toolbar->addButton(SpyFrame::id, toolbarIcon(IDI_SPY), 0, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY,
 		[this] { SpyFrame::openWindow(getTabView()); });
+	toolbar->addButton(StatsFrame::id, toolbarIcon(IDI_NET_STATS), 0, T_("Network Statistics"), IDH_TOOLBAR_NET_STATS,
+		[this] { StatsFrame::openWindow(getTabView()); });
 	toolbar->addButton("OpenFL", toolbarIcon(IDI_OPEN_FILE_LIST), 0, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST,
 		std::bind(&MainWindow::handleOpenFileList, this));
 	toolbar->addButton("Recents", toolbarIcon(IDI_RECENTS), 0, T_("Recent windows"), IDH_TOOLBAR_RECENT,
@@ -400,6 +402,7 @@ void MainWindow::initToolbar() {
 			SearchFrame::id + comma +
 			ADLSearchFrame::id + comma +
 			SpyFrame::id + comma +
+			StatsFrame::id + comma +
 			comma +
 			"OpenFL" + comma +
 			"Recents" + comma +

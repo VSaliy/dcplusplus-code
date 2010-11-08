@@ -26,7 +26,8 @@
 * Fix menu separators on Win 7 (poy)
 * [L#588224] Display folders using the correct icon on Win 7 (poy)
 * Help updates (poy, emtee)
-* [L#571914] Fix crash when zero sized bloom filter requested (emtee)
+* [L#571914] Fix crash when a zero sized bloom filter is requested (emtee)
+* Don't close the net stats window when double-clicking on the status bar (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
