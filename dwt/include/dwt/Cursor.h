@@ -60,9 +60,9 @@ class Cursor
 		}
 	};
 
-	std::shared_ptr< Implementation > itsImplementation;
+	shared_ptr< Implementation > itsImplementation;
 
-	Cursor( std::shared_ptr< Implementation > implementation )
+	Cursor( shared_ptr< Implementation > implementation )
 		: itsImplementation( implementation )
 	{}
 
@@ -73,7 +73,7 @@ public:
 	  */
 	static Cursor getWaitCursor()
 	{
-		std::shared_ptr< Implementation > implementation( new Implementation( ::SetCursor( ::LoadCursor( 0, IDC_WAIT ) ) ) );
+		shared_ptr< Implementation > implementation( new Implementation( ::SetCursor( ::LoadCursor( 0, IDC_WAIT ) ) ) );
 		return Cursor( implementation );
 	}
 };
