@@ -67,7 +67,7 @@ class Label;
 typedef Label* LabelPtr;
 
 class Menu;
-typedef std::shared_ptr<Menu> MenuPtr;
+typedef shared_ptr<Menu> MenuPtr;
 
 class MDIChild;
 typedef MDIChild* MDIChildPtr;
@@ -79,7 +79,7 @@ class MDIParent;
 typedef MDIParent* MDIParentPtr;
 
 class Notification;
-typedef std::shared_ptr<Notification> NotificationPtr;
+typedef shared_ptr<Notification> NotificationPtr;
 
 class ProgressBar;
 typedef ProgressBar* ProgressBarPtr;

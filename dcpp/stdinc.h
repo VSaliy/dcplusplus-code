@@ -88,6 +88,18 @@
 #include <memory.h>
 #include <sys/types.h>
 
+#ifdef __MINGW32__
+/* the shared_ptr implementation provided by MinGW / GCC 4.5's libstdc++ consumes too many
+semaphores, so we prefer boost's one. see <https://bugs.launchpad.net/dcplusplus/+bug/654040>. */
+#define _SHARED_PTR_H 1 // skip libstdc++'s bits/shared_ptr.h
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/make_shared.hpp>
+using boost::shared_ptr;
+using boost::enable_shared_from_this;
+using boost::make_shared;
+#endif
+
 #include <algorithm>
 #include <vector>
 #include <string>
