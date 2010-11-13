@@ -40,36 +40,6 @@
 #error This file is only for MSVC
 #endif
 
-// We don't want the stupid "pointer trunctation" to 64 bit architecture warning.
-// The warnings aren't justified anyway since they are basically a bug in 7.1
-// release... E.g. the SetWindowLongPtr is defined as SetWindowLong in 32 bits mode
-// but will in 64 bits mode be defined as the 64 bits equivalent version, therefore
-// it will give you a 64 bit compile warning when this file is compiled with
-// warning level 4 (MSVC)
-#pragma warning( disable : 4244 )
-#pragma warning( disable : 4312 )
-#pragma warning( disable : 4311 )
+// implement compatibility shims for MSVC here
 
-#endif
-
-	#define SMARTWIN_WNDCLASSEX WNDCLASSEX
-	#define SmartWinRegisterClass RegisterClassEx
-
-#pragma comment( lib, "Comdlg32.lib" )
-#pragma comment( lib, "comctl32.lib" )
-
-#ifdef DLL
-	#ifdef _DEBUG
-		#ifdef _UNICODE
-			#pragma comment( lib, "SmartWinDU.lib" )
-		#else
-			#pragma comment( lib, "SmartWinD.lib" )
-		#endif
-	#else
-		#ifdef _UNICODE
-			#pragma comment( lib, "SmartWinU.lib" )
-		#else
-			#pragma comment( lib, "SmartWin.lib" )
-		#endif
-	#endif
 #endif
