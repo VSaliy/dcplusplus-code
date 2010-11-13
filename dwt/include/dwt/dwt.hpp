@@ -38,14 +38,12 @@
 
 #include "WindowsHeaders.h"
 
-#include "Anchors.h"
 #include "Application.h"
 #include "ClipBoard.h"
 #include "Cursor.h"
 #include "LibraryLoader.h"
 #include "Point.h"
 #include "Rectangle.h"
-#include "Threads.h"
 #include "resources/Accelerator.h"
 #include "resources/Bitmap.h"
 #include "resources/Brush.h"
