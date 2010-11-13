@@ -30,6 +30,7 @@
 * Don't close the net stats window when double-clicking on the status bar (poy)
 * Fix a random crash when reconnecting hubs and being unlucky (poy)
 * Added notice about the original C implementation of Tiger (you must include this in mods!) (ullner)
+* Add a menu to change the group of a fav hub more easily (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)

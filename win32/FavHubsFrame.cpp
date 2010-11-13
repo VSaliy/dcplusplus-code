@@ -45,7 +45,7 @@ BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDI_FAVORITE_HUBS),
 grid(0),
 hubs(0)
 {
-	grid = addChild(Grid::Seed(2, 7));
+	grid = addChild(Grid::Seed(2, 8));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
 	grid->column(2).mode = GridInfo::FILL;
@@ -53,6 +53,7 @@ hubs(0)
 	grid->column(4).mode = GridInfo::FILL;
 	grid->column(5).mode = GridInfo::FILL;
 	grid->column(6).mode = GridInfo::FILL;
+	grid->column(7).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
@@ -60,7 +61,7 @@ hubs(0)
 		Table::Seed cs = WinUtil::Seeds::table;
 		cs.style |= LVS_NOSORTHEADER;
 		hubs = grid->addChild(cs);
-		grid->setWidget(hubs, 0, 0, 1, 7);
+		grid->setWidget(hubs, 0, 0, 1, 8);
 		addWidget(hubs, false, true, false); /// @todo group headers never change colors so for now, we keep default Win colors
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
@@ -110,7 +111,13 @@ hubs(0)
 		button->onClicked(std::bind(&FavHubsFrame::handleRemove, this));
 		addWidget(button);
 
-		cs.caption = T_("Manage &groups");
+		cs.caption = T_("&Group");
+		button = grid->addChild(cs);
+		button->setHelpId(IDH_FAVORITE_HUBS_GROUP);
+		button->onClicked([this] { handleGroup(); });
+		addWidget(button);
+
+		cs.caption = T_("&Manage groups");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_MANAGE_GROUPS);
 		button->onClicked(std::bind(&FavHubsFrame::handleGroups, this));
@@ -265,6 +272,19 @@ void FavHubsFrame::handleRemove() {
 	}
 }
 
+void FavHubsFrame::handleGroup() {
+	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	fillGroupMenu(menu);
+	menu->open(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
+}
+
+void FavHubsFrame::handleGroup(const string& group) {
+	StateKeeper keeper(hubs);
+	const FavoriteHubEntryList& selected = keeper.getSelection();
+	for_each(selected.cbegin(), selected.cend(), [group](FavoriteHubEntryPtr entry) { entry->setGroup(group); });
+	refresh();
+}
+
 void FavHubsFrame::handleGroups() {
 	FavHubGroupsDlg(this).run();
 
@@ -312,7 +332,13 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), std::bind(&FavHubsFrame::handleRemove, this), dwt::IconPtr(), selected);
 	menu->appendSeparator();
-	menu->appendItem(T_("Manage &groups"), std::bind(&FavHubsFrame::handleGroups, this));
+	if(selected) {
+		MenuPtr group = menu->appendPopup(T_("&Group"));
+		fillGroupMenu(group);
+	} else {
+		menu->appendItem(T_("&Group"), 0, dwt::IconPtr(), selected);
+	}
+	menu->appendItem(T_("&Manage groups"), std::bind(&FavHubsFrame::handleGroups, this));
 
 	menu->open(pt);
 	return true;
@@ -327,6 +353,14 @@ TStringList FavHubsFrame::getSortedGroups() const {
 	TStringList groups(sorted_groups.begin(), sorted_groups.end());
 	groups.insert(groups.begin(), Util::emptyStringT); // default group (otherwise, hubs without group don't show up)
 	return groups;
+}
+
+void FavHubsFrame::fillGroupMenu(MenuPtr menu) {
+	TStringList groups(getSortedGroups());
+	for(auto i = groups.cbegin(), iend = groups.cend(); i != iend; ++i) {
+		const tstring& group = i->empty() ? T_("Default group") : *i;
+		menu->appendItem(group, [this, group] { handleGroup(Text::fromT(group)); });
+	}
 }
 
 void FavHubsFrame::fillList() {
