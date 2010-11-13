@@ -83,12 +83,15 @@ private:
 	void handleProperties();
 	void handleMove(bool up);
 	void handleRemove();
+	void handleGroup();
+	void handleGroup(const string& group);
 	void handleGroups();
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 
 	TStringList getSortedGroups() const;
+	void fillGroupMenu(MenuPtr menu);
 	void fillList();
 	void refresh();
 	FavoriteHubEntryList getSelection() const;
