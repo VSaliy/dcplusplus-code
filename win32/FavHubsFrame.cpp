@@ -74,15 +74,19 @@ hubs(0)
 	{
 		ButtonPtr button;
 		Button::Seed cs = WinUtil::Seeds::button;
+		cs.style |= WS_DISABLED;
 
 		cs.caption = T_("&Connect");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_CONNECT);
 		button->onClicked(std::bind(&FavHubsFrame::openSelected, this));
 		addWidget(button);
+		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->hasSelected()); });
 
 		cs.caption = T_("&New...");
+		cs.style &= ~WS_DISABLED;
 		button = grid->addChild(cs);
+		cs.style |= WS_DISABLED;
 		button->setHelpId(IDH_FAVORITE_HUBS_NEW);
 		button->onClicked(std::bind(&FavHubsFrame::handleAdd, this));
 		addWidget(button);
@@ -92,32 +96,38 @@ hubs(0)
 		button->setHelpId(IDH_FAVORITE_HUBS_PROPERTIES);
 		button->onClicked(std::bind(&FavHubsFrame::handleProperties, this));
 		addWidget(button);
+		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->countSelected() == 1); });
 
 		cs.caption = T_("Move &Up");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_MOVE_UP);
 		button->onClicked(std::bind(&FavHubsFrame::handleMove, this, true));
 		addWidget(button);
+		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->hasSelected()); });
 
 		cs.caption = T_("Move &Down");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_MOVE_DOWN);
 		button->onClicked(std::bind(&FavHubsFrame::handleMove, this, false));
 		addWidget(button);
+		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->hasSelected()); });
 
 		cs.caption = T_("&Remove");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_REMOVE);
 		button->onClicked(std::bind(&FavHubsFrame::handleRemove, this));
 		addWidget(button);
+		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->hasSelected()); });
 
-		cs.caption = T_("&Group");
+		cs.caption = T_("&Move to group");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_GROUP);
 		button->onClicked([this] { handleGroup(); });
 		addWidget(button);
+		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->hasSelected()); });
 
-		cs.caption = T_("&Manage groups");
+		cs.caption = T_("Manage &groups");
+		cs.style &= ~WS_DISABLED;
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_MANAGE_GROUPS);
 		button->onClicked(std::bind(&FavHubsFrame::handleGroups, this));
@@ -333,12 +343,11 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	menu->appendItem(T_("&Remove"), std::bind(&FavHubsFrame::handleRemove, this), dwt::IconPtr(), selected);
 	menu->appendSeparator();
 	if(selected) {
-		MenuPtr group = menu->appendPopup(T_("&Group"));
-		fillGroupMenu(group);
+		fillGroupMenu(menu->appendPopup(T_("&Move to group")));
 	} else {
-		menu->appendItem(T_("&Group"), 0, dwt::IconPtr(), selected);
+		menu->appendItem(T_("&Move to group"), 0, dwt::IconPtr(), selected);
 	}
-	menu->appendItem(T_("&Manage groups"), std::bind(&FavHubsFrame::handleGroups, this));
+	menu->appendItem(T_("Manage &groups"), std::bind(&FavHubsFrame::handleGroups, this));
 
 	menu->open(pt);
 	return true;
