@@ -49,6 +49,9 @@ public:
 	virtual void send(const AdcCommand& cmd);
 
 	string getMySID() { return AdcCommand::fromSID(sid); }
+
+	static StringList parseSearchExts(int flag);
+
 private:
 	friend class ClientManager;
 	friend class CommandHandler<AdcHub>;

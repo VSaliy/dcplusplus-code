@@ -985,7 +985,6 @@ void SearchFrame::runSearch() {
 	setText(str(TF_("Search - %1%") % s));
 
 	if(SearchManager::getInstance()->okToSearch()) {
-		dcdebug("Sent ADC extensions : %s\n",Util::toString(";",extList).c_str());
 		SearchManager::getInstance()->search(clients, Text::fromT(s), llsize,
 			(SearchManager::TypeModes)ftype, searchMode, token, extList);
 		if(BOOLSETTING(CLEAR_SEARCH)) // Only clear if the search was sent
