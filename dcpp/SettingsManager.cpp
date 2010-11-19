@@ -543,10 +543,9 @@ void SettingsManager::validateSearchTypeName(const string& name) const {
 void SettingsManager::setSearchTypeDefaults() {
 	searchTypes.clear();
 
-	// @todo simplify this as searchTypes[string(1, '0' + SearchManager::TYPE_AUDIO)] = { "mp3", "etc" } when VC++ supports initializer lists
+	/// @todo simplify this as searchTypes[string(1, '0' + SearchManager::TYPE_AUDIO)] = { "mp3", "etc" } when VC++ supports initializer lists
 
-	// @todo the default extension list contains some depreciated formats they kept to get all the NMDC-built subset of results for both type 
-	// of hubs. Some of these may worth to be dropped along with NMDC support...
+	/// @todo the default extension list contains some deprecated formats kept around for NMDC, drop them later
 
 	{
 		StringList& l = searchTypes.insert(make_pair(string(1, '0' + SearchManager::TYPE_AUDIO), StringList())).first->second;
