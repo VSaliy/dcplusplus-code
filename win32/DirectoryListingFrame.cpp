@@ -49,6 +49,8 @@ static const ColumnInfo filesColumns[] = {
 
 DirectoryListingFrame::UserMap DirectoryListingFrame::lists;
 
+TStringList DirectoryListingFrame::lastSearches;
+
 int DirectoryListingFrame::ItemInfo::getImage() const {
 	if(type == DIRECTORY || type == USER) {
 		return dir->getComplete() ? WinUtil::getDirIconIndex() : WinUtil::getDirMaskedIndex();
@@ -891,12 +893,20 @@ void DirectoryListingFrame::findFile(bool findNext)
 {
 	if(!findNext) {
 		// Prompt for substring to find
-		ParamDlg dlg(this, T_("Search for file"), T_("Enter search string"));
+		ParamDlg dlg(this, T_("Search for file"), T_("Enter search string"), lastSearches, 0, true /*comboBoxEdit*/);
 
 		if(dlg.run() != IDOK)
 			return;
 
-		findStr = Text::fromT(dlg.getValue());
+		const tstring& value = dlg.getValue();
+		if(!value.empty() && std::find(lastSearches.begin(), lastSearches.end(), value) == lastSearches.end()) {
+			size_t i = max(SETTING(SEARCH_HISTORY) - 1, 0);
+			while(lastSearches.size() > i) {
+				lastSearches.erase(lastSearches.end() - 1);
+			}
+			lastSearches.insert(lastSearches.begin(), value);
+		}
+		findStr = Text::fromT(value);
 		skipHits = 0;
 	} else {
 		skipHits++;
