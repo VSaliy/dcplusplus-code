@@ -39,12 +39,12 @@ left(0)
 	addTextBox(name, value, password);
 }
 
-ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title, const tstring& name, const TStringList& choices, size_t sel) :
+ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title, const tstring& name, const TStringList& choices, size_t sel, bool edit) :
 GridDialog(parent, width),
 left(0)
 {
 	onInitDialog(std::bind(&ParamDlg::initDialog, this, title));
-	addComboBox(name, choices, sel);
+	addComboBox(name, choices, sel, edit);
 }
 
 void ParamDlg::addTextBox(const tstring& name, const tstring& value, bool password) {
@@ -55,8 +55,8 @@ void ParamDlg::addIntTextBox(const tstring& name, const tstring& value, const in
 	initFs.push_back(std::bind(&ParamDlg::initIntTextBox, this, name, value, min, max));
 }
 
-void ParamDlg::addComboBox(const tstring& name, const TStringList& choices, size_t sel) {
-	initFs.push_back(std::bind(&ParamDlg::initComboBox, this, name, choices, sel));
+void ParamDlg::addComboBox(const tstring& name, const TStringList& choices, size_t sel, bool edit) {
+	initFs.push_back(std::bind(&ParamDlg::initComboBox, this, name, choices, sel, edit));
 }
 
 void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool password) {
@@ -80,8 +80,8 @@ void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const i
 	valueFs.push_back(std::bind((tstring (TextBox::*)() const)(&TextBox::getText), box));
 }
 
-void ParamDlg::initComboBox(const tstring& name, const TStringList& choices, size_t sel) {
-	ComboBoxPtr box = left->addChild(GroupBox::Seed(name))->addChild(WinUtil::Seeds::Dialog::comboBox);
+void ParamDlg::initComboBox(const tstring& name, const TStringList& choices, size_t sel, bool edit) {
+	ComboBoxPtr box = left->addChild(GroupBox::Seed(name))->addChild(edit ? WinUtil::Seeds::Dialog::comboBoxEdit : WinUtil::Seeds::Dialog::comboBox);
 	for(TStringList::const_iterator i = choices.begin(), iend = choices.end(); i != iend; ++i)
 		box->addValue(*i);
 	box->setSelected(sel);

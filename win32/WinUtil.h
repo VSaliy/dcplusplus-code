@@ -85,6 +85,7 @@ public:
 
 		struct Dialog {
 			static const ComboBox::Seed comboBox;
+			static const ComboBox::Seed comboBoxEdit;
 			static const TextBox::Seed textBox;
 			static const TextBox::Seed intTextBox;
 			static const RichTextBox::Seed richTextBox;

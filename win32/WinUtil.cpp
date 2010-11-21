@@ -88,6 +88,7 @@ const TabView::Seed WinUtil::Seeds::tabs;
 const Tree::Seed WinUtil::Seeds::treeView;
 
 const ComboBox::Seed WinUtil::Seeds::Dialog::comboBox;
+const ComboBox::Seed WinUtil::Seeds::Dialog::comboBoxEdit;
 const TextBox::Seed WinUtil::Seeds::Dialog::textBox;
 const TextBox::Seed WinUtil::Seeds::Dialog::intTextBox;
 const RichTextBox::Seed WinUtil::Seeds::Dialog::richTextBox;

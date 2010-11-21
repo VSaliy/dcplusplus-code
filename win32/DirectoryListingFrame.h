@@ -182,6 +182,8 @@ private:
 	bool updating;
 	bool searching;
 
+	static TStringList lastSearches;
+	
 	StringMap ucLineParams;
 
 	typedef unordered_map<UserPtr, DirectoryListingFrame*, User::Hash> UserMap;
