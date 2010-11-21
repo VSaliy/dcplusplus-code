@@ -7,5 +7,11 @@
 #endif
 
 #else
-#include "opensslconf-mingw.h"
+
+#ifdef _WIN64
+#include "opensslconf-mingw-x64.h"
+#else
+#include "opensslconf-mingw-x86.h"
+#endif
+
 #endif

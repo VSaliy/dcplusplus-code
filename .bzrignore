@@ -17,3 +17,4 @@ natupnp.h
 .sconf_temp
 config.log
 .sconsign.dblite
+openssl/build/openssl*

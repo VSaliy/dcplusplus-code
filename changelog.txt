@@ -34,6 +34,7 @@
 * [ADC] Support hidden users as per the ADC ext spec (poy)
 * [ADC] Group search extensions with the "GR" param (poy)
 * Keep search history in file list windows (emtee)
+* Update OpenSSL to version 1.0.0b (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
