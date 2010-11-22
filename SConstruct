@@ -148,10 +148,6 @@ if 'gcc' in env['TOOLS']:
 	else:
 		env.Append(CCFLAGS = ['-pipe'])
 
-	if dev.is_win32() and env['arch'] == 'x86':
-		# disable the time64->time32 function conv on mingw64 building for x86
-		env.Append(CPPDEFINES = ['__MINGW_USE_VC2005_COMPAT'])
-
 # MinGW seems to choke on member function calls from lambdas, one has to add "this->".
 # TODO When versions of GCC for MinGW that don't need this workaround are available, remove any
 # mention of "GCC_WTF". Until then, use it to facilitate search & replace.
