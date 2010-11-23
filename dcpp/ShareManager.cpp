@@ -1061,7 +1061,7 @@ static bool checkType(const string& aString, int aType) {
 		}
 		break;
 	default:
-		dcasserta(0);
+		dcassert(0);
 		break;
 	}
 	return false;

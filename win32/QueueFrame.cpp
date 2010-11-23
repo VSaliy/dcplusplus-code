@@ -356,7 +356,7 @@ void QueueFrame::QueueItemInfo::update() {
 		case QueueItem::NORMAL: display->columns[COLUMN_PRIORITY] = T_("Normal"); break;
 		case QueueItem::HIGH: display->columns[COLUMN_PRIORITY] = T_("High"); break;
 		case QueueItem::HIGHEST: display->columns[COLUMN_PRIORITY] = T_("Highest"); break;
-		default: dcasserta(0); break;
+		default: dcassert(0); break;
 			}
 		}
 
