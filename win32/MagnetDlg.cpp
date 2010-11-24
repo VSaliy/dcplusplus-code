@@ -24,7 +24,7 @@
 
 #include "WinUtil.h"
 
-MagnetDlg::MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName) :
+MagnetDlg::MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName, const tstring& aKeySearch) :
 dwt::ModalDialog(parent),
 grid(0),
 //queue(0),
@@ -32,7 +32,8 @@ search(0),
 //doNothing(0),
 //remember(0),
 mHash(aHash),
-mFileName(aFileName)
+mFileName(aFileName),
+mKeySearch(aKeySearch)
 {
 	onInitDialog(std::bind(&MagnetDlg::handleInitDialog, this));
 }
@@ -71,8 +72,15 @@ bool MagnetDlg::handleInitDialog() {
 		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_READONLY;
 
-		cur->addChild(Label::Seed(T_("File Hash:")));
-		cur->addChild(seed)->setText(mHash);
+		if (!mHash.empty()) {
+			cur->addChild(Label::Seed(T_("File Hash:")));
+			cur->addChild(seed)->setText(mHash);
+		}
+		else if (!mKeySearch.empty())
+		{
+			cur->addChild(Label::Seed(T_("Key Search:")));
+			cur->addChild(seed)->setText(mKeySearch);
+		}
 
 		cur->addChild(Label::Seed(T_("Filename:")));
 		cur->addChild(seed)->setText(mFileName);
@@ -132,8 +140,12 @@ void MagnetDlg::handleOKClicked() {
 	//}
 
 	if(search->getChecked()) {
-		TTHValue tmphash(Text::fromT(mHash));
-		WinUtil::searchHash(tmphash);
+		if (!mHash.empty()) {
+			TTHValue tmphash(Text::fromT(mHash));
+			WinUtil::searchHash(tmphash);
+		}else if (!mKeySearch.empty()) {
+			WinUtil::searchAny(mKeySearch);
+		}
 	} //else if(queue->getChecked()) {
 		// FIXME: Write this code when the queue is more tth-centric
 	//}

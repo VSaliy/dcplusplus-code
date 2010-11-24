@@ -28,7 +28,7 @@
 class MagnetDlg : public dwt::ModalDialog
 {
 public:
-	MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName);
+	MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName, const tstring& aKeySearch);
 	virtual ~MagnetDlg();
 
 	int run();
@@ -42,6 +42,7 @@ private:
 
 	tstring mHash;
 	tstring mFileName;
+	tstring mKeySearch;
 
 	bool handleInitDialog();
 	//void handleRadioButtonClicked(RadioButtonPtr radioButton);

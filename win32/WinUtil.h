@@ -180,6 +180,7 @@ public:
 	static void addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename, int64_t size);
 	static void bitziLink(const TTHValue& aHash);
 	static void copyMagnet(const TTHValue& aHash, const tstring& aFile, int64_t size);
+	static void searchAny(const tstring& aSearch);
 	static void searchHash(const TTHValue& aHash);
 	static string makeMagnet(const TTHValue& aHash, const string& aFile, int64_t size);
 
