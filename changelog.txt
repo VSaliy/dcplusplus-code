@@ -36,6 +36,7 @@
 * Keep search history in file list windows (emtee)
 * Update OpenSSL to version 1.0.0b (poy)
 * [L#378829] Make sure our OpenSSL binaries aren't "optimized for MS-DOS" (poy)
+* [L#674545] Add magnet keyword search (thanks flow84)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)

@@ -649,6 +649,10 @@ string WinUtil::makeMagnet(const TTHValue& aHash, const string& aFile, int64_t s
 	return ret;
 }
 
+void WinUtil::searchAny(const tstring& aSearch) {
+	SearchFrame::openWindow(mainWindow->getTabView(), aSearch, SearchManager::TYPE_ANY);
+}
+
 void WinUtil::searchHash(const TTHValue& aHash) {
 	SearchFrame::openWindow(mainWindow->getTabView(), Text::toT(aHash.toBase32()), SearchManager::TYPE_TTH);
 }
@@ -1187,7 +1191,7 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 		StringTokenizer<tstring> mag(aUrl.substr(8), _T('&'));
 		typedef map<tstring, tstring> MagMap;
 		MagMap hashes;
-		tstring fname, fhash, type, param;
+		tstring fname, fhash, type, param, fkey;
 		for(TStringList::iterator idx = mag.getTokens().begin(); idx != mag.getTokens().end(); ++idx) {
 			// break into pairs
 			string::size_type pos = idx->find(_T('='));
@@ -1209,6 +1213,8 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 				hashes[type] = param.substr(20);
 			} else if(type.length() == 2 && Util::strnicmp(type.c_str(), _T("dn"), 2) == 0) {
 				fname = param;
+			} else if(type.length() == 2 && Util::strnicmp(type.c_str(), _T("kt"), 2) == 0) {
+				fkey = param;
 			}
 		}
 		// pick the most authoritative hash out of all of them.
@@ -1221,7 +1227,7 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 		if(hashes.find(_T("xt")) != hashes.end()) {
 			fhash = hashes[_T("xt")];
 		}
-		if(!fhash.empty()) {
+		if(!fhash.empty() || !fkey.empty()) {
 			// ok, we have a hash, and maybe a filename.
 			//if(!BOOLSETTING(MAGNET_ASK)) {
 			//	switch(SETTING(MAGNET_ACTION)) {
@@ -1233,7 +1239,7 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 			//	};
 			//} else {
 			// use aOverride to force the display of the dialog.  used for auto-updating
-			MagnetDlg(mainWindow, fhash, fname).run();
+			MagnetDlg(mainWindow, fhash, fname, fkey).run();
 			//}
 		} else {
 			dwt::MessageBox(mainWindow).show(
