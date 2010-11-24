@@ -174,8 +174,11 @@ else:
 
 	env.Tool("gch", toolpath=".")
 
-	env.Append(CPPPATH = ['#/htmlhelp/include/'])
-	env.Append(LIBPATH = ['#/htmlhelp/lib/'])
+	env.Append(CPPPATH = ['#/htmlhelp/preload/', '#/htmlhelp/include/'])
+	html_lib = '#/htmlhelp/lib/'
+	if env['arch'] != 'x86':
+		html_lib = html_lib + env['arch'] + '/'
+	env.Append(LIBPATH = [html_lib])
 
 env.Append(CPPDEFINES = defs[env['mode']])
 env.Append(CPPDEFINES = defs['common'])
@@ -222,7 +225,7 @@ pot_args = ['xgettext', '--from-code=UTF-8', '--foreign-user', '--package-name=$
 pot_bld = Builder (action = Action([pot_args], 'Extracting messages to $TARGET from $SOURCES'))
 env.Append(BUILDERS = {'PotBuild' : pot_bld})
 
-conf = Configure(env)
+conf = Configure(env, conf_dir = dev.get_build_path('.sconf_temp'), log_file = dev.get_build_path('config.log'), clean = False, help = False)
 if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
 	conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
 if conf.CheckCXXHeader('natupnp.h', '<>'):

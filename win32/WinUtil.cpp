@@ -49,6 +49,20 @@
 
 #ifdef HAVE_HTMLHELP_H
 #include <htmlhelp.h>
+
+#ifndef _MSC_VER
+// HTML Help libs from recent MS SDKs are compiled with /GS, so link in the following.
+#ifdef _WIN64
+#define HH_GS_CALL __cdecl
+#else
+#define HH_GS_CALL __fastcall
+#endif
+extern "C" {
+	void HH_GS_CALL __GSHandlerCheck() { }
+	void HH_GS_CALL __security_check_cookie(uintptr_t) { }
+}
+#undef HH_GS_CALL
+#endif
 #endif
 
 // def taken from <gettextP.h>
