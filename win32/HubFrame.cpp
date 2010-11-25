@@ -296,7 +296,7 @@ void HubFrame::updateSecureStatus() {
 }
 
 void HubFrame::initSecond() {
-	createTimer(std::bind(&HubFrame::eachSecond, this), 1000);
+	setTimer(std::bind(&HubFrame::eachSecond, this), 1000);
 }
 
 bool HubFrame::eachSecond() {

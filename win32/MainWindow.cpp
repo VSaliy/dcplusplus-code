@@ -69,7 +69,6 @@
 #include <dwt/widgets/ToolBar.h>
 #include <dwt/widgets/Spinner.h>
 #include <dwt/widgets/Notification.h>
-#include <dwt/LibraryLoader.h>
 #include <dwt/util/StringUtils.h>
 
 #ifdef HAVE_HTMLHELP_H
@@ -112,7 +111,6 @@ lastTick(GET_TICK())
 	initToolbar();
 	initStatusBar();
 	initTransfers();
-	initSecond();
 	initTray();
 
 	addAccel(FCONTROL, '1', std::bind(&MainWindow::switchToolbar, this));
@@ -135,7 +133,10 @@ lastTick(GET_TICK())
 	onActivate(std::bind(&MainWindow::handleActivate, this, _1));
 	onSized(std::bind(&MainWindow::handleSized, this, _1));
 	onHelp(std::bind(&WinUtil::help, _1, _2));
+
 	updateStatus();
+	setTimer([this]() -> bool { updateStatus(); return true; }, 1000, TIMER_STATUS);
+
 	layout();
 
 	QueueManager::getInstance()->addListener(this);
@@ -183,8 +184,8 @@ lastTick(GET_TICK())
 		});
 	}
 
-	if(dwt::LibraryLoader::getCommonControlsVersion() < PACK_COMCTL_VERSION(5,80))
-		dwt::MessageBox(this).show(T_("Your version of windows common controls is too old for DC++ to run correctly, and you will most probably experience problems with the user interface. You should download version 5.80 or higher from the DC++ homepage or from Microsoft directly."), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
+	if(SETTING(SETTINGS_SAVE_INTERVAL) > 0)
+		setSaveTimer();
 }
 
 void MainWindow::initWindow() {
@@ -779,6 +780,16 @@ dwt::IconPtr MainWindow::toolbarIcon(unsigned id) const {
 	return WinUtil::createIcon(id, SETTING(TOOLBAR_SIZE));
 }
 
+void MainWindow::setSaveTimer() {
+	setTimer([this]() -> bool { saveSettings(); return true; }, SETTING(SETTINGS_SAVE_INTERVAL) * 60 * 1000, TIMER_SAVE);
+}
+
+void MainWindow::saveSettings() {
+	saveWindowSettings();
+	QueueManager::getInstance()->saveQueue();
+	SettingsManager::getInstance()->save();
+}
+
 void MainWindow::saveWindowSettings() {
 	{
 		WindowManager* wm = WindowManager::getInstance();
@@ -843,15 +854,6 @@ bool MainWindow::handleClosing() {
 	stopperThread = NULL;
 	::PostQuitMessage(0);
 	dcdebug("Quit message posted\n");
-	return true;
-}
-
-void MainWindow::initSecond() {
-	createTimer(std::bind(&MainWindow::eachSecond, this), 1000);
-}
-
-bool MainWindow::eachSecond() {
-	updateStatus();
 	return true;
 }
 
@@ -955,6 +957,7 @@ void MainWindow::handleSettings() {
 	bool lastSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
 	bool lastURLReg = BOOLSETTING(URL_HANDLER);
 	bool lastMagnetReg = BOOLSETTING(MAGNET_REGISTER);
+	int lastSettingsSave = SETTING(SETTINGS_SAVE_INTERVAL);
 
 	if(dlg.run() == IDOK) {
 		SettingsManager::getInstance()->save();
@@ -974,6 +977,9 @@ void MainWindow::handleSettings() {
 			WinUtil::registerMagnetHandler();
 
 		ClientManager::getInstance()->infoUpdated();
+
+		if(SETTING(SETTINGS_SAVE_INTERVAL) != lastSettingsSave)
+			setSaveTimer();
 	}
 }
 
@@ -1205,9 +1211,7 @@ LRESULT MainWindow::handleEndSession() {
 		c = NULL;
 	}
 
-	saveWindowSettings();
-	QueueManager::getInstance()->saveQueue();
-	SettingsManager::getInstance()->save();
+	saveSettings();
 
 	return 0;
 }

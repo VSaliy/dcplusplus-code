@@ -31,7 +31,7 @@ grid(0)
 {
 	setHelpId(IDH_ADVANCED3PAGE);
 
-	grid = addChild(Grid::Seed(5, 2));
+	grid = addChild(Grid::Seed(6, 2));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
 	grid->setSpacing(10);
@@ -43,8 +43,9 @@ grid(0)
 	addItem(T_("Max filelist size"), SettingsManager::MAX_FILELIST_SIZE, true, IDH_SETTINGS_ADVANCED3_MAX_FILELIST_SIZE, T_("MiB"));
 	addItem(T_("Bind address"), SettingsManager::BIND_ADDRESS, false, IDH_SETTINGS_ADVANCED3_BIND_ADDRESS);
 	addItem(T_("PID"), SettingsManager::PRIVATE_ID, false, IDH_SETTINGS_ADVANCED3_PRIVATE_ID);
+	addItem(T_("Auto refresh time"), SettingsManager::AUTO_REFRESH_TIME, true, IDH_SETTINGS_ADVANCED3_AUTO_REFRESH_TIME, T_("minutes"));
+	addItem(T_("Settings save interval"), SettingsManager::SETTINGS_SAVE_INTERVAL, true, IDH_SETTINGS_ADVANCED3_SETTINGS_SAVE_INTERVAL, T_("minutes"));
 	addItem(T_("Socket read buffer"), SettingsManager::SOCKET_IN_BUFFER, true, IDH_SETTINGS_ADVANCED3_SOCKET_IN_BUFFER, T_("B"));
-	addItem(T_("Auto refresh time"), SettingsManager::AUTO_REFRESH_TIME, true, IDH_SETTINGS_ADVANCED3_AUTO_REFRESH_TIME);
 	addItem(T_("Socket write buffer"), SettingsManager::SOCKET_OUT_BUFFER, true, IDH_SETTINGS_ADVANCED3_SOCKET_OUT_BUFFER, T_("B"));
 
 	PropPage::read(items);

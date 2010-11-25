@@ -55,7 +55,7 @@ StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
 	layout();
 	activate();
 
-	createTimer(std::bind(&StatsFrame::eachSecond, this), 1000);
+	setTimer(std::bind(&StatsFrame::eachSecond, this), 1000);
 }
 
 StatsFrame::~StatsFrame() {

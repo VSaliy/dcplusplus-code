@@ -1008,7 +1008,7 @@ void SearchFrame::updateStatusFiltered() {
 }
 
 void SearchFrame::initSecond() {
-	createTimer(std::bind(&SearchFrame::eachSecond, this), 1000);
+	setTimer(std::bind(&SearchFrame::eachSecond, this), 1000);
 }
 
 bool SearchFrame::eachSecond() {

@@ -447,6 +447,7 @@ void PublicHubsFrame::handleRefresh() {
 void PublicHubsFrame::handleConfigure() {
 	HubListsDlg dlg(this);
 	if(dlg.run() == IDOK) {
+		SettingsManager::getInstance()->save();
 		updateDropDown();
 	}
 }

@@ -23,7 +23,8 @@
 #include "resource.h"
 
 class NotepadFrame :
-	public StaticFrame<NotepadFrame>
+	public StaticFrame<NotepadFrame>,
+	private SettingsManagerListener
 {
 	typedef StaticFrame<NotepadFrame> BaseType;
 public:
@@ -47,6 +48,9 @@ protected:
 
 private:
 	TextBoxPtr pad;
+
+	void save();
+	virtual void on(SettingsManagerListener::Save, SimpleXML&) throw();
 };
 
 #endif

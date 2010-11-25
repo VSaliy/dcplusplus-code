@@ -48,25 +48,18 @@ NotepadFrame::NotepadFrame(dwt::TabView* mdiParent) :
 	}
 
 	pad->setModify(false);
+	SettingsManager::getInstance()->addListener(this);
 
 	layout();
 	activate();
 }
 
 NotepadFrame::~NotepadFrame() {
-
 }
 
 bool NotepadFrame::preClosing() {
-	if(pad->getModify()) {
-		try {
-			dcdebug("Writing notepad contents\n");
-			File(Util::getNotepadFile(), File::WRITE, File::CREATE | File::TRUNCATE).write(Text::fromT(pad->getText()));
-		} catch(const FileException& e) {
-			dcdebug("Writing failed: %s\n", e.getError().c_str());
-			///@todo Notify user
-		}
-	}
+	SettingsManager::getInstance()->removeListener(this);
+	save();
 	return true;
 }
 
@@ -76,4 +69,20 @@ void NotepadFrame::layout() {
 	status->layout(r);
 
 	pad->layout(r);
+}
+
+void NotepadFrame::save() {
+	if(pad->getModify()) {
+		try {
+			dcdebug("Writing notepad contents\n");
+			File(Util::getNotepadFile(), File::WRITE, File::CREATE | File::TRUNCATE).write(Text::fromT(pad->getText()));
+		} catch(const FileException& e) {
+			dcdebug("Writing failed: %s\n", e.getError().c_str());
+			///@todo Notify user
+		}
+	}
+}
+
+void NotepadFrame::on(SettingsManagerListener::Save, SimpleXML&) throw() {
+	callAsync([this] { save(); });
 }
