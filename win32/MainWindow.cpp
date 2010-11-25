@@ -786,7 +786,6 @@ void MainWindow::setSaveTimer() {
 
 void MainWindow::saveSettings() {
 	saveWindowSettings();
-	QueueManager::getInstance()->saveQueue();
 	SettingsManager::getInstance()->save();
 }
 
@@ -1212,6 +1211,7 @@ LRESULT MainWindow::handleEndSession() {
 	}
 
 	saveSettings();
+	QueueManager::getInstance()->saveQueue();
 
 	return 0;
 }
