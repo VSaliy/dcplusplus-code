@@ -41,22 +41,18 @@ class AspectTimer {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	HWND H() { return W().handle(); }
 
-	struct TimerDispatcher {
-		typedef std::function<bool ()> F;
-
-		TimerDispatcher(const F& f_) : f(f_) { }
+	struct TimerDispatcher : Dispatchers::Base<bool ()> {
+		typedef Dispatchers::Base<bool ()> BaseType;
+		TimerDispatcher(const F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			if(!f()) {
 				/// @todo remove from message map as well...
 				::KillTimer(msg.hwnd, msg.wParam);
 			}
-			return FALSE;
+			return true;
 		}
-
-		F f;
 	};
-
 
 public:
 	/// Creates a timer object.
@@ -65,16 +61,19 @@ public:
 	  * If your event handler returns true, it will keep getting called periodically, otherwise
 	  * it will be removed.
 	  */
-	void createTimer(const typename TimerDispatcher::F& f, unsigned int milliSeconds, unsigned int id = 0);
-
+	void setTimer(const typename TimerDispatcher::F& f, unsigned int milliSeconds, unsigned int id = 0);
 };
 
 template< class WidgetType >
-void AspectTimer< WidgetType >::createTimer( const typename TimerDispatcher::F& f,
+void AspectTimer< WidgetType >::setTimer( const typename TimerDispatcher::F& f,
 	unsigned int milliSecond, unsigned int id)
 {
-	::SetTimer( H(), id, static_cast< UINT >( milliSecond ), NULL);
-	W().addCallback(Message( WM_TIMER, id ), TimerDispatcher(f));
+	if(milliSecond) {
+		::SetTimer(H(), id, milliSecond, 0);
+		W().setCallback(Message(WM_TIMER, id), TimerDispatcher(f));
+	} else {
+		::KillTimer(H(), id);
+	}
 }
 
 }

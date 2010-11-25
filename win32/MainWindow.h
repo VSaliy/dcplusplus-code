@@ -102,6 +102,11 @@ private:
 		tstring community;
 	} links;
 
+	enum {
+		TIMER_STATUS,
+		TIMER_SAVE
+	};
+
 	WidgetHPanedPtr paned;
 	MenuPtr mainMenu;
 	MenuPtr viewMenu;
@@ -135,7 +140,6 @@ private:
 	void initStatusBar();
 	void initTabs();
 	void initTransfers();
-	void initSecond();
 	void initTray();
 
 	// User actions
@@ -182,9 +186,10 @@ private:
 
 	void layout();
 	void layoutSlotsSpin();
-	bool eachSecond();
 	void updateStatus();
 	void showPortsError(const string& port);
+	void setSaveTimer();
+	void saveSettings();
 	void saveWindowSettings();
 	void parseCommandLine(const tstring& line);
 	bool chooseFavHubGroup(const tstring& title, tstring& group);

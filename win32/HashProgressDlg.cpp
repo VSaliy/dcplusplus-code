@@ -93,7 +93,7 @@ bool HashProgressDlg::handleInitDialog() {
 	updateStats();
 
 	HashManager::getInstance()->setPriority(Thread::NORMAL);
-	createTimer(std::bind(&HashProgressDlg::updateStats, this), 1000);
+	setTimer(std::bind(&HashProgressDlg::updateStats, this), 1000);
 
 	setText(T_("Creating file index..."));
 

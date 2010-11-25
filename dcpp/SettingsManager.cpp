@@ -89,7 +89,7 @@ const string SettingsManager::settingTags[] =
 	"BandwidthLimitStart", "BandwidthLimitEnd", "TimeDependentThrottle", "MaxDownloadSpeedRealTime",
 	"MaxUploadSpeedTime", "MaxDownloadSpeedPrimary", "MaxUploadSpeedPrimary",
 	"SlotsAlternateLimiting", "SlotsPrimaryLimiting",
-	"AutoDetectIncomingConnection",
+	"AutoDetectIncomingConnection", "SettingsSaveInterval",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -307,6 +307,7 @@ SettingsManager::SettingsManager()
 	setDefault(BANDWIDTH_LIMIT_END, 1);
 	setDefault(SLOTS_ALTERNATE_LIMITING, 1);
 	setDefault(SLOTS_PRIMARY, 3);
+	setDefault(SETTINGS_SAVE_INTERVAL, 10);
 
 	setSearchTypeDefaults();
 
