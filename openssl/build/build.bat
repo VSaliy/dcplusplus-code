@@ -46,11 +46,12 @@ nmake -f ms\nt.mak clean install
 if errorlevel 1 goto end
 mv inc32/openssl/opensslconf.h ../../include/openssl/opensslconf-msvc-x86.h
 mv inc32/openssl/* ../../include/openssl
-mv out32/libeay32.lib out32/ssleay32.lib ../../lib
+mv lib/libeay32.lib lib/ssleay32.lib tmp32/lib.pdb ../../lib
 nmake -f ms\ntdebug.mak clean install
 if errorlevel 1 goto end
-mv out32.dbg/libeay32.lib ../../lib/libeay32d.lib
-mv out32.dbg/ssleay32.lib ../../lib/ssleay32d.lib
+mv lib/libeay32.lib ../../lib/libeay32d.lib
+mv lib/ssleay32.lib ../../lib/ssleay32d.lib
+mv tmp32.dbg/libd.pdb ../../lib
 cd ..
 
 rm -rf */
@@ -64,11 +65,12 @@ call ms\do_win64a
 nmake -f ms\nt.mak clean install
 if errorlevel 1 goto end
 mv inc32/openssl/opensslconf.h ../../include/openssl/opensslconf-msvc-x64.h
-mv out32/libeay32.lib out32/ssleay32.lib ../../lib/x64
+mv lib/libeay32.lib lib/ssleay32.lib tmp32/lib.pdb ../../lib/x64
 nmake -f ms\ntdebug.mak clean install
 if errorlevel 1 goto end
-mv out32.dbg/libeay32.lib ../../lib/x64/libeay32d.lib
-mv out32.dbg/ssleay32.lib ../../lib/x64/ssleay32d.lib
+mv lib/libeay32.lib ../../lib/x64/libeay32d.lib
+mv lib/ssleay32.lib ../../lib/x64/ssleay32d.lib
+mv tmp32.dbg/libd.pdb ../../lib/x64
 cd ..
 
 rm -rf */
