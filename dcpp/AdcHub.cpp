@@ -44,11 +44,14 @@ const string AdcHub::ADCS_FEATURE("ADC0");
 const string AdcHub::TCP4_FEATURE("TCP4");
 const string AdcHub::UDP4_FEATURE("UDP4");
 const string AdcHub::NAT0_FEATURE("NAT0");
+const string AdcHub::SEGA_FEATURE("SEGA");
 const string AdcHub::BASE_SUPPORT("ADBASE");
 const string AdcHub::BAS0_SUPPORT("ADBAS0");
 const string AdcHub::TIGR_SUPPORT("ADTIGR");
 const string AdcHub::UCM0_SUPPORT("ADUCM0");
 const string AdcHub::BLO0_SUPPORT("ADBLO0");
+
+const vector<StringList> AdcHub::searchExts;
 
 AdcHub::AdcHub(const string& aHubURL, bool secure) : Client(aHubURL, '\n', secure), oldPassword(false), sid(0) {
 	TimerManager::getInstance()->addListener(this);
@@ -713,76 +716,72 @@ void AdcHub::sendUserCmd(const UserCommand& command, const StringMap& params) {
 	}
 }
 
-namespace {
-static vector<StringList> searchExts;
-
-static void defineSearchExts() {
+const vector<StringList>& AdcHub::getSearchExts() {
 	if(!searchExts.empty())
-		return;
+		return searchExts;
 
-	searchExts.resize(6);
+	// the list is always immutable except for this function where it is initially being filled.
+	auto& xSearchExts = const_cast<vector<StringList>&>(searchExts);
+
+	xSearchExts.resize(6);
 
 	/// @todo simplify this as searchExts[0] = { "mp3", "etc" } when VC++ supports initializer lists
 
+	// these extensions *must* be sorted alphabetically!
+
 	{
-		StringList& l = searchExts[0];
-		l.push_back("mp3"); l.push_back("flac"); l.push_back("ogg"); l.push_back("mpc");
-		l.push_back("ape"); l.push_back("wma");l.push_back("wav"); l.push_back("m4a");
-		l.push_back("mp2"); l.push_back("mid"); l.push_back("au"); l.push_back("aiff");
-		l.push_back("ra");
-		sort(l.begin(), l.end());
+		StringList& l = xSearchExts[0];
+		l.push_back("ape"); l.push_back("flac"); l.push_back("m4a"); l.push_back("mid");
+		l.push_back("mp3"); l.push_back("mpc"); l.push_back("ogg"); l.push_back("ra");
+		l.push_back("wav"); l.push_back("wma");
 	}
 
 	{
-		StringList& l = searchExts[1];
-		l.push_back("rar"); l.push_back("7z"); l.push_back("zip"); l.push_back("tar");
-		l.push_back("gz"); l.push_back("bz2"); l.push_back("z"); l.push_back("ace");
-		l.push_back("lha"); l.push_back("lzh"); l.push_back("arj");
-		sort(l.begin(), l.end());
+		StringList& l = xSearchExts[1];
+		l.push_back("7z"); l.push_back("ace"); l.push_back("arj"); l.push_back("bz2");
+		l.push_back("gz"); l.push_back("lha"); l.push_back("lzh"); l.push_back("rar");
+		l.push_back("tar"); l.push_back("z"); l.push_back("zip");
 	}
 
 	{
-		StringList& l = searchExts[2];
-		l.push_back("doc"); l.push_back("xls"); l.push_back("ppt"); l.push_back("docx");
-		l.push_back("xlsx"); l.push_back("pptx"); l.push_back("odf"); l.push_back("odt");
-		l.push_back("ods"); l.push_back("odp"); l.push_back("pdf"); l.push_back("xps");
-		l.push_back("htm"); l.push_back("html"); l.push_back("xml"); l.push_back("txt");
-		l.push_back("nfo"); l.push_back("rtf");
-		sort(l.begin(), l.end());
+		StringList& l = xSearchExts[2];
+		l.push_back("doc"); l.push_back("docx"); l.push_back("htm"); l.push_back("html");
+		l.push_back("nfo"); l.push_back("odf"); l.push_back("odp"); l.push_back("ods");
+		l.push_back("odt"); l.push_back("pdf"); l.push_back("ppt"); l.push_back("pptx");
+		l.push_back("rtf"); l.push_back("txt"); l.push_back("xls"); l.push_back("xlsx");
+		l.push_back("xml"); l.push_back("xps");
 	}
 
 	{
-		StringList& l = searchExts[3];
-		l.push_back("exe"); l.push_back("com"); l.push_back("bat"); l.push_back("cmd");
-		l.push_back("dll"); l.push_back("vbs"); l.push_back("ps1"); l.push_back("msi");
-		sort(l.begin(), l.end());
+		StringList& l = xSearchExts[3];
+		l.push_back("app"); l.push_back("bat"); l.push_back("cmd"); l.push_back("com");
+		l.push_back("dll"); l.push_back("exe"); l.push_back("jar"); l.push_back("msi");
+		l.push_back("ps1"); l.push_back("vbs"); l.push_back("wsf");
 	}
 
 	{
-		StringList& l = searchExts[4];
-		l.push_back("bmp"); l.push_back("ico"); l.push_back("jpg"); l.push_back("jpeg");
-		l.push_back("png"); l.push_back("gif"); l.push_back("tga"); l.push_back("ai");
-		l.push_back("ps"); l.push_back("pict"); l.push_back("eps"); l.push_back("img");
-		l.push_back("pct"); l.push_back("psp"); l.push_back("tif"); l.push_back("rle");
-		l.push_back("pcx"); l.push_back("sfw"); l.push_back("psd"); l.push_back("cdr");
-		sort(l.begin(), l.end());
+		StringList& l = xSearchExts[4];
+		l.push_back("bmp"); l.push_back("cdr"); l.push_back("eps"); l.push_back("gif");
+		l.push_back("ico"); l.push_back("img"); l.push_back("jpeg"); l.push_back("jpg");
+		l.push_back("png"); l.push_back("ps"); l.push_back("psd"); l.push_back("sfw");
+		l.push_back("tga"); l.push_back("tif"); l.push_back("webp");
 	}
 
 	{
-		StringList& l = searchExts[5];
-		l.push_back("mpg"); l.push_back("avi"); l.push_back("mkv"); l.push_back("wmv");
-		l.push_back("mov"); l.push_back("mp4"); l.push_back("3gp"); l.push_back("qt");
-		l.push_back("asx"); l.push_back("divx"); l.push_back("asf"); l.push_back("pxp");
-		l.push_back("ogm"); l.push_back("flv"); l.push_back("rm"); l.push_back("rmvb");
-		l.push_back("webm"); l.push_back("mpeg");
-		sort(l.begin(), l.end());
+		StringList& l = xSearchExts[5];
+		l.push_back("3gp"); l.push_back("asf"); l.push_back("asx"); l.push_back("avi");
+		l.push_back("divx"); l.push_back("flv"); l.push_back("mkv"); l.push_back("mov");
+		l.push_back("mp4"); l.push_back("mpeg"); l.push_back("mpg"); l.push_back("ogm");
+		l.push_back("pxp"); l.push_back("qt"); l.push_back("rm"); l.push_back("rmvb");
+		l.push_back("swf"); l.push_back("vob"); l.push_back("webm"); l.push_back("wmv");
 	}
-}
+
+	return searchExts;
 }
 
 StringList AdcHub::parseSearchExts(int flag) {
-	defineSearchExts();
 	StringList ret;
+	const auto& searchExts = getSearchExts();
 	for(auto i = searchExts.cbegin(), iend = searchExts.cend(); i != iend; ++i) {
 		if(flag & (1 << (i - searchExts.cbegin()))) {
 			ret.insert(ret.begin(), i->begin(), i->end());
@@ -796,6 +795,9 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 		return;
 
 	AdcCommand c(AdcCommand::CMD_SCH, AdcCommand::TYPE_BROADCAST);
+
+	if(!aToken.empty())
+		c.addParam("TO", aToken);
 
 	if(aFileType == SearchManager::TYPE_TTH) {
 		c.addParam("TR", aString);
@@ -823,8 +825,9 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 				sort(exts.begin(), exts.end());
 
 				uint8_t gr = 0;
+				StringList rx;
 
-				defineSearchExts();
+				const auto& searchExts = getSearchExts();
 				for(auto i = searchExts.cbegin(), iend = searchExts.cend(); i != iend; ++i) {
 					const StringList& def = *i;
 
@@ -856,36 +859,56 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 
 					exts = temp; // the exts to still add (that were not defined in the group)
 
-					for(auto rmi = rm.cbegin(), rmiend = rm.cend(); rmi != rmiend; ++rmi)
-						c.addParam("RX", *rmi);
+					rx.insert(rx.begin(), rm.begin(), rm.end());
 
 					if(exts.size() <= 2)
 						break;
 					// keep looping to see if there are more exts that can be grouped
 				}
 
-				if(gr)
-					c.addParam("GR", Util::toString(gr));
+				if(gr) {
+					// some extensions can be grouped; let's send a command with grouped exts.
+					AdcCommand c_gr(AdcCommand::CMD_SCH, AdcCommand::TYPE_FEATURE);
+					c_gr.setFeatures('+' + SEGA_FEATURE);
+
+					const auto& params = c.getParameters();
+					for(auto i = params.cbegin(), iend = params.cend(); i != iend; ++i)
+						c_gr.addParam(*i);
+
+					for(auto i = exts.cbegin(), iend = exts.cend(); i != iend; ++i)
+						c_gr.addParam("EX", *i);
+					c_gr.addParam("GR", Util::toString(gr));
+					for(auto i = rx.cbegin(), iend = rx.cend(); i != iend; ++i)
+						c_gr.addParam("RX", *i);
+
+					sendSearch(c_gr);
+
+					// make sure users with the feature don't receive the search twice.
+					c.setType(AdcCommand::TYPE_FEATURE);
+					c.setFeatures('-' + SEGA_FEATURE);
+				}
 			}
 
-			for(auto i = exts.cbegin(), iend = exts.cend(); i != iend; ++i)
+			for(auto i = aExtList.cbegin(), iend = aExtList.cend(); i != iend; ++i)
 				c.addParam("EX", *i);
 		}
 	}
 
-	if(!aToken.empty())
-		c.addParam("TO", aToken);
+	sendSearch(c);
+}
 
+void AdcHub::sendSearch(AdcCommand& c) {
 	if(ClientManager::getInstance()->isActive()) {
 		send(c);
 	} else {
 		c.setType(AdcCommand::TYPE_FEATURE);
+		string features = c.getFeatures();
 #ifndef DISABLE_NAT_TRAVERSAL
-		c.setFeatures("+TCP4-NAT0");
-		send(c);		
-		c.setFeatures("+NAT0");
+		c.setFeatures(features + '+' + TCP4_FEATURE + '-' + NAT0_FEATURE);
+		send(c);
+		c.setFeatures(features + '+' + NAT0_FEATURE);
 #else
-		c.setFeatures("+TCP4");
+		c.setFeatures(features + '+' + TCP4_FEATURE);
 #endif
 		send(c);
 	}
@@ -968,9 +991,10 @@ void AdcHub::info(bool /*alwaysSend*/) {
 		addParam(lastInfoMap, c, "US", Util::toString((long)(Util::toDouble(SETTING(UPLOAD_SPEED))*1024*1024/8)));
 	}
 
-	string su;
+	string su(SEGA_FEATURE);
+
 	if(CryptoManager::getInstance()->TLSOk()) {
-		su += ADCS_FEATURE + ",";
+		su += "," + ADCS_FEATURE;
 	}
 
 #ifndef DISABLE_NAT_TRAVERSAL
@@ -981,11 +1005,11 @@ void AdcHub::info(bool /*alwaysSend*/) {
 	}
 	if(ClientManager::getInstance()->isActive()) {
 		addParam(lastInfoMap, c, "U4", Util::toString(SearchManager::getInstance()->getPort()));
-		su += TCP4_FEATURE + ",";
-		su += UDP4_FEATURE + ",";
+		su += "," + TCP4_FEATURE;
+		su += "," + UDP4_FEATURE;
 	} else {
 		addParam(lastInfoMap, c, "U4", "");
-		su += NAT0_FEATURE + ",";
+		su += "," + NAT0_FEATURE;
 	}
 #else
 	if(ClientManager::getInstance()->isActive()) {
@@ -995,17 +1019,14 @@ void AdcHub::info(bool /*alwaysSend*/) {
 			addParam(lastInfoMap, c, "I4", "0.0.0.0");
 		}
 		addParam(lastInfoMap, c, "U4", Util::toString(SearchManager::getInstance()->getPort()));
-		su += TCP4_FEATURE + ",";
-		su += UDP4_FEATURE + ",";
+		su += "," + TCP4_FEATURE;
+		su += "," + UDP4_FEATURE;
 	} else {
 		addParam(lastInfoMap, c, "I4", "");
 		addParam(lastInfoMap, c, "U4", "");
 	}
 #endif
 
-	if(!su.empty()) {
-		su.erase(su.size() - 1);
-	}
 	addParam(lastInfoMap, c, "SU", su);
 
 	if(c.getParameters().size() > 0) {
