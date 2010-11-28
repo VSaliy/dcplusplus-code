@@ -32,7 +32,7 @@
 * Added notice about the original C implementation of Tiger (you must include this in mods!) (ullner)
 * Add a menu to change the group of a fav hub more easily (poy)
 * [ADC] Support hidden users as per the ADC ext spec (poy)
-* [ADC] Group search extensions with the "GR" param (poy)
+* [ADC] Group search extensions thanks to "SEGA" (poy)
 * Keep search history in file list windows (emtee)
 * Update OpenSSL to version 1.0.0b (poy)
 * [L#378829] Make sure our OpenSSL binaries aren't "optimized for MS-DOS" (poy)
