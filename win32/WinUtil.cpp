@@ -376,24 +376,27 @@ bool WinUtil::handleBoxDblClick(dwt::TextBoxBase* box, const dwt::MouseEvent& ev
 #define LINE2 _T("-- http://dcplusplus.sourceforge.net <DC++ ") _T(VERSIONSTRING) _T(">")
 const TCHAR
 	*msgs[] = {
-		_T("\r\n-- I'm a happy dc++ user. You could be happy too.\r\n") LINE2,
+		_T("\r\n-- I'm a happy DC++ user. You could be happy too.\r\n") LINE2,
 		_T("\r\n-- Neo-...what? Nope...never heard of it...\r\n") LINE2,
-		_T("\r\n-- Evolution of species: Ape --> Man\r\n-- Evolution of science: \"The Earth is Flat\" --> \"The Earth is Round\"\r\n-- Evolution of sharing: NMDC --> DC++\r\n") LINE2,
+		_T("\r\n-- Evolution of species: Ape --> Man\r\n-- Evolution of science: \"The Earth is Flat\" --> \"The Earth is Round\"\r\n-- Evolution of DC: NMDC --> ADC\r\n") LINE2,
 		_T("\r\n-- I share, therefore I am.\r\n") LINE2,
 		_T("\r\n-- I came, I searched, I found...\r\n") LINE2,
 		_T("\r\n-- I came, I shared, I sent...\r\n") LINE2,
-		_T("\r\n-- I can set away mode, can't you?\r\n") LINE2,
+		_T("\r\n-- I can fully configure the toolbar, can you?\r\n") LINE2,
 		_T("\r\n-- I don't have to see any ads, do you?\r\n") LINE2,
-		_T("\r\n-- I don't have to see those annoying kick messages, do you?\r\n") LINE2,
-		_T("\r\n-- I can resume my files to a different filename, can you?\r\n") LINE2,
-		_T("\r\n-- I can share huge amounts of files, can you?\r\n") LINE2,
-		_T("\r\n-- My client doesn't spam the chat with useless debug messages, does yours?\r\n") LINE2,
-		_T("\r\n-- I can add multiple users to the same download and have the client connect to another automatically when one goes offline, can you?\r\n") LINE2,
+		_T("\r\n-- My client supports passive-passive downloads, does yours?\r\n") LINE2,
+		_T("\r\n-- I can refresh my opened file lists, can you?\r\n") LINE2,
+		_T("\r\n-- I can get help for every part of GUI and settings in my client, can you?\r\n") LINE2,
+		_T("\r\n-- My client automatically detects the connection, does yours?\r\n") LINE2,
+		_T("\r\n-- My client keeps track of all the recent opened windows, does yours?\r\n") LINE2,
 		_T("\r\n-- These addies are pretty annoying, aren't they? Get revenge by sending them yourself!\r\n") LINE2,
-		_T("\r\n-- My client supports TTH hashes, does yours?\r\n") LINE2,
-		_T("\r\n-- My client supports XML file lists, does yours?\r\n") LINE2 };
+		_T("\r\n-- My client supports taskbar thumbnails and Aero Peek previews, does yours?\r\n") LINE2,
+		_T("\r\n-- My client supports secure communication and transfers, does yours?\r\n") LINE2,
+		_T("\r\n-- My client supports grouping favorite hubs, does yours?\r\n") LINE2,
+		_T("\r\n-- My client supports segmented downloading, does yours?\r\n") LINE2,
+		_T("\r\n-- My client supports browsing file lists, does yours?\r\n") LINE2 };
 
-#define MSGS 16
+#define MSGS 19
 
 tstring
 	WinUtil::commands =
