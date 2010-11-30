@@ -26,6 +26,7 @@
 
 #include <dwt/Application.h>
 #include <dwt/resources/Pen.h>
+#include <dwt/util/StringUtils.h>
 #include <dwt/widgets/Button.h>
 #include <dwt/widgets/CheckBox.h>
 #include <dwt/widgets/ComboBox.h>
@@ -53,6 +54,7 @@
 
 using namespace dcpp;
 
+using dwt::util::escapeMenu;
 using dwt::Button;
 using dwt::ButtonPtr;
 using dwt::CheckBox;

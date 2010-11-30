@@ -22,8 +22,6 @@
 
 #include "ShellMenu.h"
 
-#include <dwt/util/StringUtils.h>
-
 #include "resource.h"
 #include "WinUtil.h"
 
@@ -111,11 +109,11 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 	appendSeparator();
 
 	if(valid.size() == 1)
-		handlers.push_back(make_pair(appendPopup(T_("Shell menu")), valid[0].second));
+		handlers.push_back(make_pair(appendPopup(T_("Shell menu"), dwt::IconPtr(), false), valid[0].second));
 	else {
 		MenuPtr popup = appendPopup(T_("Shell menus"));
 		for(valid_type::const_iterator i = valid.begin(); i != valid.end(); ++i)
-			handlers.push_back(make_pair(popup->appendPopup(dwt::util::escapeMenu(Text::toT(i->first))), i->second));
+			handlers.push_back(make_pair(popup->appendPopup(escapeMenu(Text::toT(i->first)), dwt::IconPtr(), false), i->second));
 	}
 
 	callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->addCallback(dwt::Message(WM_DRAWITEM),

@@ -69,7 +69,6 @@
 #include <dwt/widgets/ToolBar.h>
 #include <dwt/widgets/Spinner.h>
 #include <dwt/widgets/Notification.h>
-#include <dwt/util/StringUtils.h>
 
 #ifdef HAVE_HTMLHELP_H
 #include <htmlhelp.h>
@@ -581,7 +580,7 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 		groupMenus.insert(make_pair(i->first, MenuPtr()));
 
 	for(GroupMenus::iterator i = groupMenus.begin(); i != groupMenus.end(); ++i) {
-		i->second = menu->appendPopup(dwt::util::escapeMenu(Text::toT(i->first)));
+		i->second = menu->appendPopup(escapeMenu(Text::toT(i->first)));
 		i->second->appendItem(T_("Connect to all hubs in this group"), std::bind(&multiConnect, i->first, getTabView()));
 		i->second->appendSeparator();
 	}
@@ -591,7 +590,7 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 		FavoriteHubEntry* entry = *i;
 		GroupMenus::iterator groupMenu = groupMenus.find(entry->getGroup());
 		((groupMenu == groupMenus.end()) ? menu : groupMenu->second)->appendItem(
-			dwt::util::escapeMenu(Text::toT(entry->getName())),
+			escapeMenu(Text::toT(entry->getName())),
 			[this, entry] { HubFrame::openWindow(getTabView(), entry->getServer()); });
 	}
 
@@ -622,7 +621,7 @@ static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu
 			if(title == params.end() || title->second.empty())
 				continue;
 
-			popup->appendItem(dwt::util::escapeMenu(Text::toT(title->second)),
+			popup->appendItem(escapeMenu(Text::toT(title->second)),
 				std::bind(&T::parseWindowParams, mainWindow->getTabView(), params),
 				T::isFavorite(params) ? favIcon : 0);
 		}

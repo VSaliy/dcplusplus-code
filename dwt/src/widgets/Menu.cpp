@@ -230,11 +230,15 @@ void Menu::setMenu() {
 	}
 }
 
-Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon) {
+Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon, bool subTitle) {
 	// create the sub-menu
 	ObjectType sub(new Menu(getParent()));
 	sub->create(Seed(ownerDrawn, colors, iconSize, font));
 	sub->parentMenu = this;
+
+	if(subTitle && popup) {
+		sub->setTitle(text, icon);
+	}
 
 	// init structure for new item
 	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_SUBMENU | MIIM_STRING };
@@ -383,14 +387,14 @@ void Menu::setTitle(const tstring& title, const IconPtr& icon, bool drawSidebar 
 
 	const bool hasTitle = !itsTitle.empty();
 	// set the new title
-	itsTitle = util::escapeMenu(title);
+	itsTitle = title;
 
 	if(!drawSidebar) {
 		// init struct for title info
 		MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_STATE | MIIM_STRING | MIIM_FTYPE | MIIM_DATA, MFT_OWNERDRAW, MF_DISABLED };
 
 		// set title text
-		info.dwTypeData = const_cast< LPTSTR >( title.c_str() );
+		info.dwTypeData = const_cast<LPTSTR>(itsTitle.c_str());
 
 		// create wrapper for title item
 		ItemDataWrapper * wrapper = new ItemDataWrapper(this, 0, true, icon);
@@ -898,13 +902,6 @@ void Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 		DWORD pos = ::GetMessagePos();
 		x = LOWORD(pos);
 		y = HIWORD(pos);
-	}
-
-	if(!itsTitle.empty()) {
-		// adjust "y" so that the first command ends up in front of the cursor, not the title
-		/// @todo fix for menus that open upwards
-		y -= std::max(static_cast<unsigned>(getTextSize(getText(0), itsTitleFont).y), // 0 is the title index
-			static_cast<unsigned>(::GetSystemMetrics(SM_CYMENU)));
 	}
 
 	// sub-menus of the menu bar send WM_MENUCOMMAND; however, commands from ephemeral menus are handled right here.
