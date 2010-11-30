@@ -56,7 +56,7 @@ const int Menu::borderGap = 3;
 const int Menu::pointerGap = 5;
 const int Menu::textIconGap = 8;
 const int Menu::textBorderGap = 4;
-const unsigned Menu::minWidth = 100;
+const unsigned Menu::minWidth = 150;
 
 /// @todo menus should re-init the cached default colors on WM_SYSCOLORCHANGE
 
@@ -616,7 +616,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 				drawTextFormat |= DT_HIDEPREFIX;
 			unsigned drawAccelFormat = drawTextFormat | DT_RIGHT;
 			drawTextFormat |= (popup && !wrapper->isTitle) ? DT_LEFT : DT_CENTER;
-			if(wrapper->isTitle)
+			if(getRootMenu()->popup) // menus not in the menu bar may get cropped
 				drawTextFormat |= DT_WORD_ELLIPSIS;
 
 			if(theme) {
@@ -758,8 +758,9 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 	if(drawSidebar)
 		itemWidth += getTextSize(getText(0), itsTitleFont).y; // 0 is the title index
 
-	// make sure the calculated size is not too small
-	if(popup) {
+	// make sure the calculated size is acceptable
+	if(getRootMenu()->popup) {
+		itemWidth = std::min(itemWidth, static_cast<unsigned>(getParent()->getWindowSize().x / 2));
 		itemWidth = std::max(itemWidth, minWidth);
 	}
 	itemHeight = std::max(itemHeight, static_cast<UINT>(::GetSystemMetrics(SM_CYMENU)));
