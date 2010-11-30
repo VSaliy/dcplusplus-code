@@ -330,22 +330,24 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		pt = hubs->getContextMenuPos();
 	}
 
-	const size_t selected = hubs->countSelected();
+	size_t sel = hubs->countSelected();
 
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	menu->appendItem(T_("&Connect"), std::bind(&FavHubsFrame::openSelected, this), dwt::IconPtr(), selected, true);
+	menu->setTitle((sel == 0) ? getText() : (sel == 1) ? escapeMenu(hubs->getText(hubs->getSelected(), COLUMN_NAME)) :
+		str(TF_("%1% hubs") % sel), getParent()->getIcon(this));
+	menu->appendItem(T_("&Connect"), std::bind(&FavHubsFrame::openSelected, this), dwt::IconPtr(), sel, true);
 	menu->appendSeparator();
 	menu->appendItem(T_("&New..."), std::bind(&FavHubsFrame::handleAdd, this));
-	menu->appendItem(T_("&Properties"), std::bind(&FavHubsFrame::handleProperties, this), dwt::IconPtr(), selected == 1);
-	menu->appendItem(T_("Move &Up"), std::bind(&FavHubsFrame::handleMove, this, true), dwt::IconPtr(), selected);
-	menu->appendItem(T_("Move &Down"), std::bind(&FavHubsFrame::handleMove, this, false), dwt::IconPtr(), selected);
+	menu->appendItem(T_("&Properties"), std::bind(&FavHubsFrame::handleProperties, this), dwt::IconPtr(), sel == 1);
+	menu->appendItem(T_("Move &Up"), std::bind(&FavHubsFrame::handleMove, this, true), dwt::IconPtr(), sel);
+	menu->appendItem(T_("Move &Down"), std::bind(&FavHubsFrame::handleMove, this, false), dwt::IconPtr(), sel);
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), std::bind(&FavHubsFrame::handleRemove, this), dwt::IconPtr(), selected);
+	menu->appendItem(T_("&Remove"), std::bind(&FavHubsFrame::handleRemove, this), dwt::IconPtr(), sel);
 	menu->appendSeparator();
-	if(selected) {
+	if(sel) {
 		fillGroupMenu(menu->appendPopup(T_("&Move to group")));
 	} else {
-		menu->appendItem(T_("&Move to group"), 0, dwt::IconPtr(), selected);
+		menu->appendItem(T_("&Move to group"), 0, dwt::IconPtr(), false);
 	}
 	menu->appendItem(T_("Manage &groups"), std::bind(&FavHubsFrame::handleGroups, this));
 

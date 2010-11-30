@@ -180,12 +180,14 @@ LRESULT UsersFrame::handleItemChanged(LPARAM lParam) {
 }
 
 bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
-	if (users->hasSelected()) {
+	size_t sel = users->countSelected();
+	if(sel > 0) {
 		if(pt.x() == -1 && pt.y() == -1) {
 			pt = users->getContextMenuPos();
 		}
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+		menu->setTitle((sel == 1) ? escapeMenu(users->getSelectedData()->getText(COLUMN_NICK)) : str(TF_("%1% users") % sel));
 		appendUserItems(getParent(), menu);
 		menu->appendSeparator();
 		menu->appendItem(T_("&Description"), std::bind(&UsersFrame::handleDescription, this));

@@ -132,7 +132,7 @@ public:
 	* A popup is basically another branch in the menu hierarchy <br>
 	* See the Menu project for a demonstration.
 	*/
-	ObjectType appendPopup(const tstring& text, const IconPtr& icon = IconPtr());
+	ObjectType appendPopup(const tstring& text, const IconPtr& icon = IconPtr(), bool subTitle = true);
 
 	/// Returns the "System Menu"
 	/** The system menu is a special menu that ( normally ) is accessed by pressing

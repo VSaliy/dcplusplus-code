@@ -152,11 +152,13 @@ bool SpyFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 			pt = searches->getContextMenuPos();
 		}
 
-		MenuPtr contextMenu = addChild(WinUtil::Seeds::menu);
-		contextMenu->appendItem(T_("&Search"), std::bind(&SpyFrame::handleSearch, this,
-			searches->getText(searches->getSelected(), COLUMN_STRING)), WinUtil::menuIcon(IDI_SEARCH));
+		tstring selText = searches->getText(searches->getSelected(), COLUMN_STRING);
 
-		contextMenu->open(pt);
+		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+		menu->setTitle(escapeMenu(selText), getParent()->getIcon(this));
+		menu->appendItem(T_("&Search"), std::bind(&SpyFrame::handleSearch, this, selText), WinUtil::menuIcon(IDI_SEARCH));
+
+		menu->open(pt);
 		return true;
 	}
 	return false;

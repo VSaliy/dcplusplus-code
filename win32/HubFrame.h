@@ -133,8 +133,10 @@ private:
 		string getNick() const { return identity.getNick(); }
 		bool isHidden() const { return identity.isHidden(); }
 
-		tstring columns[COLUMN_LAST];
 		GETSET(Identity, identity, Identity);
+
+	private:
+		tstring columns[COLUMN_LAST];
 	};
 
 	typedef unordered_map<UserPtr, UserInfo*, User::Hash> UserMap;

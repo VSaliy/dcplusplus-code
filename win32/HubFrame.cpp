@@ -583,7 +583,7 @@ void HubFrame::onPrivateMessage(const UserPtr& from, const UserPtr& to, const Us
 
 HubFrame::UserInfo* HubFrame::findUser(const tstring& nick) {
 	for(UserMapIter i = userMap.begin(); i != userMap.end(); ++i) {
-		if(i->second->columns[COLUMN_NICK] == nick)
+		if(i->second->getText(COLUMN_NICK) == nick)
 			return i->second;
 	}
 	return 0;
@@ -595,7 +595,7 @@ const tstring& HubFrame::getNick(const UserPtr& aUser) {
 		return Util::emptyStringT;
 
 	UserInfo* ui = i->second;
-	return ui->columns[COLUMN_NICK];
+	return ui->getText(COLUMN_NICK);
 }
 
 bool HubFrame::updateUser(const UserTask& u) {
@@ -1093,6 +1093,8 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 
 	MenuPtr menu = chat->getMenu();
 
+	menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
+
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
 
 	hubMenu = true;
@@ -1101,12 +1103,17 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 }
 
 bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
-	if(showUsers->getChecked() ? users->hasSelected() : (currentUser != 0)) {
+	auto sel = selectedUsersImpl();
+	if(!sel.empty()) {
 		if(pt.x() == -1 || pt.y() == -1) {
 			pt = users->getContextMenuPos();
 		}
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+
+		menu->setTitle((sel.size() == 1) ? escapeMenu(getNick(sel[0]->getUser())) : str(TF_("%1% users") % sel.size()),
+			WinUtil::userImages->getIcon(IMAGE_USER));
+
 		appendUserItems(getParent(), menu);
 
 		menu->appendSeparator();

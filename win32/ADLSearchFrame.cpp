@@ -275,14 +275,16 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		pt = items->getContextMenuPos();
 	}
 
-	bool hasSelected = items->hasSelected();
+	size_t sel = items->countSelected();
 
-	MenuPtr contextMenu = addChild(WinUtil::Seeds::menu);
-	contextMenu->appendItem(T_("&New..."), std::bind(&ADLSearchFrame::handleAdd, this));
-	contextMenu->appendItem(T_("&Properties"), std::bind(&ADLSearchFrame::handleProperties, this), dwt::IconPtr(), hasSelected);
-	contextMenu->appendItem(T_("&Remove"), std::bind(&ADLSearchFrame::handleRemove, this), dwt::IconPtr(), hasSelected);
+	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	menu->setTitle((sel == 0) ? getText() : (sel == 1) ? escapeMenu(items->getText(items->getSelected(), COLUMN_ACTIVE_SEARCH_STRING)) :
+		str(TF_("%1% items") % sel), getParent()->getIcon(this));
+	menu->appendItem(T_("&New..."), std::bind(&ADLSearchFrame::handleAdd, this));
+	menu->appendItem(T_("&Properties"), std::bind(&ADLSearchFrame::handleProperties, this), dwt::IconPtr(), sel);
+	menu->appendItem(T_("&Remove"), std::bind(&ADLSearchFrame::handleRemove, this), dwt::IconPtr(), sel);
 
-	contextMenu->open(pt);
+	menu->open(pt);
 	return true;
 }
 

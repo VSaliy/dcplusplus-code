@@ -27,8 +27,6 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/version.h>
 
-#include <dwt/util/StringUtils.h>
-
 const string QueueFrame::id = "Queue";
 const string& QueueFrame::getId() const { return id; }
 
@@ -940,7 +938,7 @@ bool QueueFrame::addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const
 		const QueueItem::Source& source = *i;
 		const HintedUser& user = source.getUser();
 		if(offline || user.user->isOnline()) {
-			menu->appendItem(dwt::util::escapeMenu(WinUtil::getNicks(user)), std::bind(handler, this, user));
+			menu->appendItem(escapeMenu(WinUtil::getNicks(user)), std::bind(handler, this, user));
 			added = true;
 		}
 	}
