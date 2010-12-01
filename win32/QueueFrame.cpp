@@ -849,6 +849,8 @@ const string& QueueFrame::getDir(HTREEITEM item) {
 MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
+	menu->setTitle(escapeMenu(qii->getText(COLUMN_TARGET)), WinUtil::fileImages->getIcon(qii->getImage()));
+
 	WinUtil::addHashItems(menu, qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())), qii->getSize());
 	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
 	menu->appendItem(T_("Re&check integrity"), std::bind(&QueueFrame::handleRecheck, this));
@@ -865,6 +867,10 @@ MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 
 MenuPtr QueueFrame::makeMultiMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+
+	size_t sel = files->countSelected();
+	menu->setTitle(str(TF_("%1% files") % sel), getParent()->getIcon(this));
+
 	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
 	menu->appendItem(T_("Re&check integrity"), std::bind(&QueueFrame::handleRecheck, this));
 	addPriorityMenu(menu);
@@ -875,6 +881,10 @@ MenuPtr QueueFrame::makeMultiMenu() {
 
 MenuPtr QueueFrame::makeDirMenu() {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+
+	auto selData = dirs->getSelectedData();
+	menu->setTitle(escapeMenu(selData ? selData->getText() : getText()),
+		selData ? WinUtil::fileImages->getIcon(selData->getImage()) : getParent()->getIcon(this));
 
 	addPriorityMenu(menu);
 	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
@@ -946,7 +956,8 @@ bool QueueFrame::addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const
 }
 
 bool QueueFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
-	if(files->countSelected() > 0) {
+	size_t sel = files->countSelected();
+	if(sel) {
 		if(pt.x() == -1 || pt.y() == -1) {
 			pt = files->getContextMenuPos();
 		}
@@ -960,8 +971,8 @@ bool QueueFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 		} else {
 			contextMenu = makeMultiMenu();
 		}
-		contextMenu->open(pt);
 
+		contextMenu->open(pt);
 		return true;
 	}
 	return false;
@@ -977,8 +988,8 @@ bool QueueFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 	if(dirs->hasSelected()) {
 		usingDirMenu = true;
 		MenuPtr contextMenu = makeDirMenu();
-		contextMenu->open(pt);
 
+		contextMenu->open(pt);
 		return true;
 	}
 

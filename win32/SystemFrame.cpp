@@ -97,6 +97,7 @@ bool SystemFrame::handleContextMenu(const dwt::ScreenCoordinate& pt) {
 	string path_a = Text::fromT(path);
 	if(File::getSize(path_a) != -1) {
 		ShellMenuPtr menu = addChild(ShellMenu::Seed());
+		menu->setTitle(escapeMenu(path), WinUtil::fileImages->getIcon(WinUtil::getIconIndex(path)));
 		menu->appendItem(T_("&Open"), std::bind(&WinUtil::openFile, path), dwt::IconPtr(), true, true);
 		menu->appendItem(T_("Open &folder"), std::bind(&WinUtil::openFolder, path));
 		menu->appendShellMenu(StringList(1, path_a));

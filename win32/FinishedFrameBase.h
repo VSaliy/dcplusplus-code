@@ -419,15 +419,18 @@ private:
 	};
 
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt) {
-		if(files->hasSelected()) {
+		size_t sel = files->countSelected();
+		if(sel) {
 			if(pt.x() == -1 && pt.y() == -1) {
 				pt = files->getContextMenuPos();
 			}
 
 			FileChecker checker = files->forEachSelectedT(FileChecker());
+			auto selData = (sel == 1) ? files->getSelectedData() : 0;
 
 			ShellMenuPtr menu = filesWindow->addChild(ShellMenu::Seed());
-
+			menu->setTitle(selData ? escapeMenu(selData->getText(FILES_COLUMN_FILE)) : str(TF_("%1% files") % sel),
+				selData ? WinUtil::fileImages->getIcon(selData->getImage()) : tabs->getIcon(filesWindow));
 			menu->appendItem(T_("&View as text"), std::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), checker.allFilesExist && !checker.isBz2);
 			menu->appendItem(T_("&Open"), std::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), checker.allFilesExist, true);
 			menu->appendItem(T_("Open &folder"), std::bind(&ThisType::handleOpenFolder, this));
@@ -445,12 +448,17 @@ private:
 	}
 
 	bool handleUsersContextMenu(dwt::ScreenCoordinate pt) {
-		if(users->hasSelected()) {
+		size_t sel = users->countSelected();
+		if(sel) {
 			if(pt.x() == -1 && pt.y() == -1) {
 				pt = users->getContextMenuPos();
 			}
 
+			auto selData = (sel == 1) ? users->getSelectedData() : 0;
+
 			dwt::MenuPtr menu = usersWindow->addChild(WinUtil::Seeds::menu);
+			menu->setTitle(selData ? escapeMenu(selData->getText(USERS_COLUMN_NICK)) : str(TF_("%1% users") % sel),
+				selData ? WinUtil::userImages->getIcon(selData->getImage()) : tabs->getIcon(usersWindow));
 			menu->appendItem(T_("&Remove"), std::bind(&ThisType::handleRemoveUsers, this));
 			menu->appendItem(T_("Remove &all"), std::bind(&ThisType::handleRemoveAll, this));
 			menu->appendSeparator();

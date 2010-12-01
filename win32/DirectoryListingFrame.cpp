@@ -386,6 +386,8 @@ void DirectoryListingFrame::updateTitle() {
 ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
+	menu->setTitle(escapeMenu(ii->getText(COLUMN_FILENAME)), WinUtil::fileImages->getIcon(ii->getImage()));
+
 	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu, ii);
 
@@ -410,6 +412,9 @@ ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
+	size_t sel = files->countSelected();
+	menu->setTitle(str(TF_("%1% items") % sel), getParent()->getIcon(this));
+
 	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu);
 	addUserCommands(menu);
@@ -417,8 +422,11 @@ ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
 	return menu;
 }
 
-ShellMenuPtr DirectoryListingFrame::makeDirMenu() {
+ShellMenuPtr DirectoryListingFrame::makeDirMenu(ItemInfo* ii) {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
+
+	menu->setTitle(escapeMenu(ii ? ii->getText(COLUMN_FILENAME) : getText()),
+		ii ? WinUtil::fileImages->getIcon(ii->getImage()) : getParent()->getIcon(this));
 
 	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
 	addTargets(menu);
@@ -429,14 +437,14 @@ void DirectoryListingFrame::addUserCommands(const MenuPtr& parent) {
 	prepareMenu(parent, UserCommand::CONTEXT_FILELIST, ClientManager::getInstance()->getHubs(dl->getUser().user->getCID(), dl->getUser().hint));
 }
 
-void DirectoryListingFrame::addShellPaths(const ShellMenuPtr& menu, vector<ItemInfo*> sel) {
+void DirectoryListingFrame::addShellPaths(const ShellMenuPtr& menu, const vector<ItemInfo*>& sel) {
 	StringList ShellMenuPaths;
-	for(vector<ItemInfo*>::const_iterator i = sel.begin(), iend = sel.end(); i != iend; ++i) {
+	for(auto i = sel.cbegin(), iend = sel.cend(); i != iend; ++i) {
 		ItemInfo* ii = *i;
 		StringList paths;
 		switch(ii->type) {
-				case ItemInfo::FILE: paths = dl->getLocalPaths(ii->file); break;
-				case ItemInfo::DIRECTORY: paths = dl->getLocalPaths(ii->dir); break;
+			case ItemInfo::FILE: paths = dl->getLocalPaths(ii->file); break;
+			case ItemInfo::DIRECTORY: paths = dl->getLocalPaths(ii->dir); break;
 		}
 		if(!paths.empty())
 			ShellMenuPaths.insert(ShellMenuPaths.end(), paths.begin(), paths.end());
@@ -500,7 +508,7 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 
 		if(dl->getUser() == ClientManager::getInstance()->getMe()) {
 			vector<ItemInfo*> sel;
-			for(std::vector<unsigned>::const_iterator i = selected.begin(), iend = selected.end(); i != iend; ++i)
+			for(auto i = selected.cbegin(), iend = selected.cend(); i != iend; ++i)
 				sel.push_back(files->getData(*i));
 			addShellPaths(menu, sel);
 		}
@@ -522,12 +530,11 @@ bool DirectoryListingFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 	}
 
 	if(dirs->getSelected()) {
-		ShellMenuPtr menu = makeDirMenu();
+		ItemInfo* ii = dirs->getSelectedData();
+		ShellMenuPtr menu = makeDirMenu(ii);
 
-		if(dl->getUser() == ClientManager::getInstance()->getMe()) {
-			ItemInfo* ii = dirs->getSelectedData();
-			if(ii)
-				addShellPaths(menu, vector<ItemInfo*>(1, ii));
+		if(ii && dl->getUser() == ClientManager::getInstance()->getMe()) {
+			addShellPaths(menu, vector<ItemInfo*>(1, ii));
 		}
 
 		addUserMenu(menu);
