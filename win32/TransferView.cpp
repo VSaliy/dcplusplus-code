@@ -183,47 +183,62 @@ LRESULT TransferView::handleDestroy() {
 	return 0;
 }
 
-MenuPtr TransferView::makeContextMenu(ConnectionInfo* ii) {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-
-	appendUserItems(mdi, menu, false);
-	menu->appendSeparator();
-
-	menu->appendItem(T_("&Force attempt"), std::bind(&TransferView::handleForce, this));
-	menu->appendItem(T_("Copy &nick to clipboard"), std::bind(&TransferView::handleCopyNick, this));
-	menu->appendSeparator();
-	menu->appendItem(T_("&Disconnect"), std::bind(&TransferView::handleDisconnect, this));
-
-	return menu;
-}
-
 bool TransferView::handleConnectionsMenu(dwt::ScreenCoordinate pt) {
-	if (connections->hasSelected()) {
+	size_t sel = connections->countSelected();
+	if(sel) {
 		if(pt.x() == -1 && pt.y() == -1) {
 			pt = connections->getContextMenuPos();
 		}
 
-		/// @todo Fix multiple selection menu...
-		ConnectionInfo* ii = connections->getSelectedData();
-		MenuPtr contextMenu = makeContextMenu(ii);
-		contextMenu->open(pt);
+		auto selData = (sel == 1) ? connections->getSelectedData() : 0;
 
+		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+
+		menu->setTitle(selData ? escapeMenu(selData->getText(CONNECTION_COLUMN_USER)) : str(TF_("%1% users") % sel),
+			selData ? arrows->getIcon(selData->getImage()) : 0);
+
+		appendUserItems(mdi, menu, false);
+		menu->appendSeparator();
+
+		menu->appendItem(T_("&Force attempt"), std::bind(&TransferView::handleForce, this));
+		menu->appendItem(T_("Copy &nick to clipboard"), std::bind(&TransferView::handleCopyNick, this));
+		menu->appendSeparator();
+		menu->appendItem(T_("&Disconnect"), std::bind(&TransferView::handleDisconnect, this));
+
+		menu->open(pt);
 		return true;
 	}
 	return false;
 }
 
 bool TransferView::handleDownloadsMenu(dwt::ScreenCoordinate pt) {
-	if (downloads->countSelected() == 1) {
+	size_t sel = downloads->countSelected();
+	if(sel) {
 		if(pt.x() == -1 && pt.y() == -1) {
 			pt = downloads->getContextMenuPos();
 		}
 
-		MenuPtr menu = addChild(WinUtil::Seeds::menu);
-		DownloadInfo* di = downloads->getSelectedData();
-		WinUtil::addHashItems(menu, di->tth, di->columns[DOWNLOAD_COLUMN_FILE], di->size);
-		menu->open(pt);
+		auto selData = (sel == 1) ? downloads->getSelectedData() : 0;
 
+		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+
+		menu->setTitle(selData ? escapeMenu(selData->getText(DOWNLOAD_COLUMN_FILE)) : str(TF_("%1% files") % sel),
+			selData ? WinUtil::fileImages->getIcon(selData->getImage()) : 0);
+
+		if(selData) {
+			WinUtil::addHashItems(menu, selData->tth, selData->getText(DOWNLOAD_COLUMN_FILE), selData->size);
+		} else {
+			for(size_t i = 0; i < sel; ++i) {
+				selData = downloads->getData(i);
+				if(selData) {
+					const tstring& file = selData->getText(DOWNLOAD_COLUMN_FILE);
+					WinUtil::addHashItems(menu->appendPopup(file, WinUtil::fileImages->getIcon(selData->getImage())),
+						selData->tth, file, selData->size);
+				}
+			}
+		}
+
+		menu->open(pt);
 		return true;
 	}
 	return false;

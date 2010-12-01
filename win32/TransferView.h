@@ -265,8 +265,6 @@ private:
 	bool handleKeyDown(int c);
 	void handleDblClicked();
 
-	MenuPtr makeContextMenu(ConnectionInfo* ii);
-
 	int find(const string& path);
 
 	void layout();
