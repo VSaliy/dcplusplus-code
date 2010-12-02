@@ -41,6 +41,7 @@
 * Add titles to various menus (poy)
 * [L#535556] Make sure menus are not too wide (poy)
 * [L#610466] Fix share files instantly when unfinished folder and download target is not on the same drive (emtee)
+* [L#300728] Fix infinitive recursion when sharing a directory with broken name on unix (thanks alexander sashnov)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)

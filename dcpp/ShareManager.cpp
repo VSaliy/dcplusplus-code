@@ -631,6 +631,11 @@ ShareManager::Directory::Ptr ShareManager::buildTree(const string& aName, const 
 #endif
 		string name = i->getFileName();
 
+		if(name.empty()) {
+			LogManager::getInstance()->message(str(F_("Invalid file name found while hashing folder %1%") % Util::addBrackets(aName)));
+			continue;
+		}
+		
 		if(name == "." || name == "..")
 			continue;
 		if(!BOOLSETTING(SHARE_HIDDEN) && i->isHidden())
