@@ -44,6 +44,7 @@
 * [L#300728] Fix infinite recursion when sharing a directory with a broken name on unix (thanks alexander sashnov)
 * [L#250149] Retry on more possible Coral errors (emtee)
 * [L#260748] Really readded sfv check (was broken by segmented downloading) (emtee)
+* Update bzip2 to version 1.0.6
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
