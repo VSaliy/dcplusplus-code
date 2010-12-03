@@ -69,13 +69,14 @@ public:
 	GETSET(uint64_t, lastGrant, LastGrant);
 	
 private:
-
 	UploadList uploads;
 	mutable CriticalSection cs;
 
 	typedef unordered_set<UserPtr, User::Hash> SlotSet;
 	typedef SlotSet::iterator SlotIter;
 	SlotSet reservedSlots;
+
+	int lastFreeSlots; /// amount of free slots at the previous minute
 
 	typedef pair<HintedUser, uint64_t> WaitingUser;
 	typedef list<WaitingUser> WaitingUserList;
