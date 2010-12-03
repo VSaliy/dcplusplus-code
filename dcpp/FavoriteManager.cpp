@@ -830,6 +830,10 @@ void FavoriteManager::on(TypeBZ2, HttpConnection*) throw() {
 	if(useHttp)
 		listType = TYPE_BZIP2;
 }
+void FavoriteManager::on(Retried, HttpConnection*, const bool Connected) throw() {
+	if (Connected)
+		downloadBuf = Util::emptyString;
+}
 
 void FavoriteManager::on(UserUpdated, const OnlineUser& user) throw() {
 	userUpdated(user);

@@ -161,6 +161,7 @@ private:
 	virtual void on(Redirected, HttpConnection*, const string&) throw();
 	virtual void on(TypeNormal, HttpConnection*) throw();
 	virtual void on(TypeBZ2, HttpConnection*) throw();
+	virtual void on(Retried, HttpConnection*, const bool) throw(); 
 
 	bool onHttpFinished(bool fromHttp) throw();
 

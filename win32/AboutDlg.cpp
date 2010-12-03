@@ -173,3 +173,10 @@ void AboutDlg::on(HttpConnectionListener::Failed, HttpConnection* conn, const st
 	callAsync(std::bind(&Label::setText, version, Text::toT(aLine)));
 	conn->removeListener(this);
 }
+
+void AboutDlg::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) throw() {
+	if (Connected)
+		downBuf = Util::emptyString;
+}
+
+

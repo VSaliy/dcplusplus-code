@@ -1387,6 +1387,11 @@ void MainWindow::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, cons
 	versionInfo += string((const char*)buf, len);
 }
 
+ void MainWindow::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) throw() {
+ 	if (Connected)
+ 		versionInfo = Util::emptyString;
+ }
+
 void MainWindow::on(PartialList, const HintedUser& aUser, const string& text) throw() {
 	callAsync([this, aUser, text] { DirectoryListingFrame::openWindow(getTabView(), aUser, text, 0); });
 }

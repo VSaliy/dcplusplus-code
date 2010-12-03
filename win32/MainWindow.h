@@ -209,7 +209,8 @@ private:
 	// HttpConnectionListener
 	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, string const& /*aLine*/, bool /*fromCoral*/) throw();
 	virtual void on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw();
-
+	virtual void on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) throw();		
+		
 	// QueueManagerListener
 	virtual void on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) throw();
 	virtual void on(PartialList, const HintedUser&, const string& text) throw();
