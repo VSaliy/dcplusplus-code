@@ -705,13 +705,14 @@ bool HubFrame::handleMessageKeyDown(int c) {
 int HubFrame::UserInfo::getImage() const {
 	int image = identity.isOp() ? IMAGE_OP : IMAGE_USER;
 
-	if(identity.supports(AdcHub::ADCS_FEATURE) && identity.supports(AdcHub::SEGA_FEATURE) &&
+	string freeSlots = identity.get("FS");
+
+	if(!freeSlots.empty() && identity.supports(AdcHub::ADCS_FEATURE) && identity.supports(AdcHub::SEGA_FEATURE) &&
 		((identity.supports(AdcHub::TCP4_FEATURE) && identity.supports(AdcHub::UDP4_FEATURE)) || identity.supports(AdcHub::NAT0_FEATURE)))
 	{
 		image += 2;
 	}
 
-	string freeSlots = identity.get("FS");
 	if(!freeSlots.empty() && Util::toUInt(freeSlots) == 0) {
 		image += 4;
 	}
