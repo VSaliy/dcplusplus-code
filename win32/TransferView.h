@@ -292,9 +292,11 @@ private:
 
 	virtual void on(QueueManagerListener::StatusUpdated, QueueItem*) throw();
 	virtual void on(QueueManagerListener::Removed, QueueItem*) throw();
+	virtual void on(QueueManagerListener::CRCFailed, Download* aDownload, const string& aReason) throw();
 
 	void onTransferTick(Transfer* aTransfer, bool isDownload);
 	void onTransferComplete(Transfer* aTransfer, bool isDownload);
+	void onFailed(Download* aDownload, const string& aReason);
 	void starting(UpdateInfo* ui, Transfer* t);
 
 	LRESULT handleCustomDraw(WPARAM wParam, LPARAM lParam);

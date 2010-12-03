@@ -21,6 +21,7 @@
 
 #include "DownloadManagerListener.h"
 #include "UploadManagerListener.h"
+#include "QueueManagerListener.h"
 
 #include "Speaker.h"
 #include "CriticalSection.h"
@@ -32,7 +33,7 @@
 namespace dcpp {
 
 class FinishedManager : public Singleton<FinishedManager>,
-	public Speaker<FinishedManagerListener>, private DownloadManagerListener, private UploadManagerListener
+	public Speaker<FinishedManagerListener>, private DownloadManagerListener, private UploadManagerListener, private QueueManagerListener
 {
 public:
 	typedef unordered_map<string, FinishedFileItemPtr> MapByFile;
@@ -67,6 +68,8 @@ private:
 
 	virtual void on(UploadManagerListener::Complete, Upload* u) throw();
 	virtual void on(UploadManagerListener::Failed, Upload* u, const string&) throw();
+	
+	virtual void on(QueueManagerListener::CRCChecked, Download* d) throw();
 };
 
 } // namespace dcpp
