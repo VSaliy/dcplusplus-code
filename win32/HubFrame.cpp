@@ -706,11 +706,13 @@ int HubFrame::UserInfo::getImage() const {
 	int image = identity.isOp() ? IMAGE_OP : IMAGE_USER;
 
 	if(identity.getUser()->isSet(User::DCPLUSPLUS))
-		image+=2;
-	if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_PASSIVE && !identity.isTcpActive()) {
-		// Users we can't connect to...
-		image+=4;
+		image += 2;
+
+	string freeSlots = identity.get("FS");
+	if(!freeSlots.empty() && Util::toUInt(freeSlots) == 0) {
+		image += 4;
 	}
+
 	return image;
 }
 

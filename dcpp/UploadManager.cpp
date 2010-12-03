@@ -41,7 +41,7 @@ namespace dcpp {
 
 static const string UPLOAD_AREA = "Uploads";
 
-UploadManager::UploadManager() throw() : running(0), extra(0), lastGrant(0) {
+UploadManager::UploadManager() throw() : running(0), extra(0), lastGrant(0), lastFreeSlots(-1) {
 	ClientManager::getInstance()->addListener(this);
 	TimerManager::getInstance()->addListener(this);
 }
@@ -454,6 +454,12 @@ void UploadManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) throw
 		LogManager::getInstance()->message(str(F_("Disconnected user leaving the hub: %1%") %
 			Util::toString(ClientManager::getInstance()->getNicks((*i)->getCID(), Util::emptyString))));
 		ConnectionManager::getInstance()->disconnect(*i, false);
+	}
+
+	int freeSlots = getFreeSlots();
+	if(freeSlots != lastFreeSlots) {
+		lastFreeSlots = freeSlots;
+		ClientManager::getInstance()->infoUpdated();
 	}
 }
 

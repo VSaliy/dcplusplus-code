@@ -33,6 +33,7 @@
 #include "CryptoManager.h"
 #include "LogManager.h"
 #include "ThrottleManager.h"
+#include "UploadManager.h"
 
 #include <cmath>
 
@@ -965,6 +966,7 @@ void AdcHub::info(bool /*alwaysSend*/) {
 	addParam(lastInfoMap, c, "NI", getCurrentNick());
 	addParam(lastInfoMap, c, "DE", getCurrentDescription());
 	addParam(lastInfoMap, c, "SL", Util::toString(SETTING(SLOTS)));
+	addParam(lastInfoMap, c, "FS", Util::toString(UploadManager::getInstance()->getFreeSlots()));
 	addParam(lastInfoMap, c, "SS", ShareManager::getInstance()->getShareSizeString());
 	addParam(lastInfoMap, c, "SF", Util::toString(ShareManager::getInstance()->getSharedFiles()));
 	addParam(lastInfoMap, c, "EM", SETTING(EMAIL));
