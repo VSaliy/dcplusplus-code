@@ -180,6 +180,9 @@ else:
 		html_lib = html_lib + env['arch'] + '/'
 	env.Append(LIBPATH = [html_lib])
 
+	# for MinGW64 to accept natupnp.h
+	env.Append(CPPDEFINES = ['__MIDL_user_allocate_free_DEFINED__'])
+
 env.Append(CPPDEFINES = defs[env['mode']])
 env.Append(CPPDEFINES = defs['common'])
 
