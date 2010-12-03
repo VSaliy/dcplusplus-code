@@ -55,7 +55,7 @@ help(0)
 }
 
 int SettingsDialog::run() {
-	create(Seed(dwt::Point(660, 540), DS_CONTEXTHELP));
+	create(Seed(dwt::Point(680, 560), DS_CONTEXTHELP));
 	return show();
 }
 
@@ -77,6 +77,7 @@ bool SettingsDialog::initDialog() {
 	setHelpId(IDH_INDEX);
 
 	grid = addChild(Grid::Seed(3, 1));
+	grid->setSpacing(8);
 
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
@@ -84,6 +85,7 @@ bool SettingsDialog::initDialog() {
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		cur->setSpacing(8);
 
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
@@ -92,9 +94,13 @@ bool SettingsDialog::initDialog() {
 		cur->column(0).mode = GridInfo::STATIC;
 		cur->column(1).mode = GridInfo::FILL;
 
-		tree = cur->addChild(Tree::Seed());
-		tree->setHelpId(IDH_SETTINGS_TREE);
-		tree->onSelectionChanged(std::bind(&SettingsDialog::handleSelectionChanged, this));
+		{
+			auto seed = Tree::Seed();
+			seed.style |= WS_BORDER;
+			tree = cur->addChild(seed);
+			tree->setHelpId(IDH_SETTINGS_TREE);
+			tree->onSelectionChanged(std::bind(&SettingsDialog::handleSelectionChanged, this));
+		}
 
 		addPage(T_("Personal information"), cur, new GeneralPage(cur));
 
@@ -138,6 +144,7 @@ bool SettingsDialog::initDialog() {
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
+		cur->setSpacing(8);
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 
@@ -249,5 +256,5 @@ void SettingsDialog::write() {
 
 void SettingsDialog::layout() {
 	dwt::Point sz = getClientSize();
-	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
+	grid->layout(dwt::Rectangle(8, 8, sz.x - 16, sz.y - 16));
 }
