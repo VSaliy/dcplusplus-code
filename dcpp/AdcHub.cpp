@@ -34,7 +34,7 @@
 #include "LogManager.h"
 #include "ThrottleManager.h"
 
-#include <math.h>
+#include <cmath>
 
 namespace dcpp {
 
@@ -818,80 +818,77 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 			c.addParam("TY", "2");
 		}
 
-		if(!aExtList.empty()) {
+		if(aExtList.size() > 2) {
 			StringList exts = aExtList;
+			sort(exts.begin(), exts.end());
 
-			if(exts.size() > 2) {
-				sort(exts.begin(), exts.end());
+			uint8_t gr = 0;
+			StringList rx;
 
-				uint8_t gr = 0;
-				StringList rx;
+			const auto& searchExts = getSearchExts();
+			for(auto i = searchExts.cbegin(), iend = searchExts.cend(); i != iend; ++i) {
+				const StringList& def = *i;
 
-				const auto& searchExts = getSearchExts();
-				for(auto i = searchExts.cbegin(), iend = searchExts.cend(); i != iend; ++i) {
-					const StringList& def = *i;
+				// gather the exts not present in any of the lists
+				StringList temp(def.size() + exts.size());
+				temp = StringList(temp.begin(), set_symmetric_difference(def.begin(), def.end(),
+					exts.begin(), exts.end(), temp.begin()));
 
-					// gather the exts not present in any of the lists
-					StringList temp(def.size() + exts.size());
-					temp = StringList(temp.begin(), set_symmetric_difference(def.begin(), def.end(),
-						exts.begin(), exts.end(), temp.begin()));
-
-					// figure out whether the remaining exts have to be added or removed from the set
-					StringList rm;
-					bool ok = true;
-					for(auto diff = temp.begin(); diff != temp.end();) {
-						if(find(def.cbegin(), def.cend(), *diff) == def.cend()) {
-							++diff; // will be added further below as an "EX"
-						} else {
-							if(rm.size() == 2) {
-								ok = false;
-								break;
-							}
-							rm.push_back(*diff);
-							diff = temp.erase(diff);
+				// figure out whether the remaining exts have to be added or removed from the set
+				StringList rx_;
+				bool ok = true;
+				for(auto diff = temp.begin(); diff != temp.end();) {
+					if(find(def.cbegin(), def.cend(), *diff) == def.cend()) {
+						++diff; // will be added further below as an "EX"
+					} else {
+						if(rx_.size() == 2) {
+							ok = false;
+							break;
 						}
+						rx_.push_back(*diff);
+						diff = temp.erase(diff);
 					}
-					if(!ok) // too many "RX"s necessary - disregard this group
-						continue;
-
-					// let's include this group!
-					gr += 1 << (i - searchExts.cbegin());
-
-					exts = temp; // the exts to still add (that were not defined in the group)
-
-					rx.insert(rx.begin(), rm.begin(), rm.end());
-
-					if(exts.size() <= 2)
-						break;
-					// keep looping to see if there are more exts that can be grouped
 				}
+				if(!ok) // too many "RX"s necessary - disregard this group
+					continue;
 
-				if(gr) {
-					// some extensions can be grouped; let's send a command with grouped exts.
-					AdcCommand c_gr(AdcCommand::CMD_SCH, AdcCommand::TYPE_FEATURE);
-					c_gr.setFeatures('+' + SEGA_FEATURE);
+				// let's include this group!
+				gr += 1 << (i - searchExts.cbegin());
 
-					const auto& params = c.getParameters();
-					for(auto i = params.cbegin(), iend = params.cend(); i != iend; ++i)
-						c_gr.addParam(*i);
+				exts = temp; // the exts to still add (that were not defined in the group)
 
-					for(auto i = exts.cbegin(), iend = exts.cend(); i != iend; ++i)
-						c_gr.addParam("EX", *i);
-					c_gr.addParam("GR", Util::toString(gr));
-					for(auto i = rx.cbegin(), iend = rx.cend(); i != iend; ++i)
-						c_gr.addParam("RX", *i);
+				rx.insert(rx.begin(), rx_.begin(), rx_.end());
 
-					sendSearch(c_gr);
-
-					// make sure users with the feature don't receive the search twice.
-					c.setType(AdcCommand::TYPE_FEATURE);
-					c.setFeatures('-' + SEGA_FEATURE);
-				}
+				if(exts.size() <= 2)
+					break;
+				// keep looping to see if there are more exts that can be grouped
 			}
 
-			for(auto i = aExtList.cbegin(), iend = aExtList.cend(); i != iend; ++i)
-				c.addParam("EX", *i);
+			if(gr) {
+				// some extensions can be grouped; let's send a command with grouped exts.
+				AdcCommand c_gr(AdcCommand::CMD_SCH, AdcCommand::TYPE_FEATURE);
+				c_gr.setFeatures('+' + SEGA_FEATURE);
+
+				const auto& params = c.getParameters();
+				for(auto i = params.cbegin(), iend = params.cend(); i != iend; ++i)
+					c_gr.addParam(*i);
+
+				for(auto i = exts.cbegin(), iend = exts.cend(); i != iend; ++i)
+					c_gr.addParam("EX", *i);
+				c_gr.addParam("GR", Util::toString(gr));
+				for(auto i = rx.cbegin(), iend = rx.cend(); i != iend; ++i)
+					c_gr.addParam("RX", *i);
+
+				sendSearch(c_gr);
+
+				// make sure users with the feature don't receive the search twice.
+				c.setType(AdcCommand::TYPE_FEATURE);
+				c.setFeatures('-' + SEGA_FEATURE);
+			}
 		}
+
+		for(auto i = aExtList.cbegin(), iend = aExtList.cend(); i != iend; ++i)
+			c.addParam("EX", *i);
 	}
 
 	sendSearch(c);
