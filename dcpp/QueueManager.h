@@ -258,6 +258,9 @@ private:
 
 	string getListPath(const HintedUser& user);
 
+	void checkSfv(QueueItem* qi, Download* d);
+	uint32_t calcCrc32(const string& file) throw(FileException);
+
 	// TimerManagerListener
 	virtual void on(TimerManagerListener::Second, uint64_t aTick) throw();
 	virtual void on(TimerManagerListener::Minute, uint64_t aTick) throw();

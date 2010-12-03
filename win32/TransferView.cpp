@@ -827,7 +827,15 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) thr
 }
 
 void TransferView::on(DownloadManagerListener::Failed, Download* d, const string& aReason) throw() {
-	UpdateInfo* ui = new UpdateInfo(d->getHintedUser(), true, true);
+	onFailed(d, aReason);
+}
+
+void TransferView::on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) throw() {
+	onFailed(d, aReason);
+}
+
+void TransferView::onFailed(Download* d, const string& aReason) {
+ 	UpdateInfo* ui = new UpdateInfo(d->getHintedUser(), true, true);
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
 	ui->setStatusString(Text::toT(aReason));
 
