@@ -45,6 +45,8 @@
 * [L#250149] Retry on more possible Coral errors (emtee)
 * [L#260748] Really readded sfv check (was broken by segmented downloading) (emtee)
 * Update bzip2 to version 1.0.6
+* Repurpose blue user icons to identify users with great protocol support (poy)
+* [ADC] Dispatch the amount of free slots with INF FS (poy)
 * Repurpose passive user icons to mean "no free slot" (poy)
 
 -- 0.770 2010-07-05 --
