@@ -26,9 +26,7 @@
 #include "WinUtil.h"
 
 PropPage::PropPage(dwt::Widget* parent) : dwt::ModelessDialog(parent) {
-	Seed seed;
-	seed.exStyle |= WS_EX_STATICEDGE;
-	create(seed);
+	create();
 }
 
 PropPage::~PropPage() {

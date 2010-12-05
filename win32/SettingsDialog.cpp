@@ -102,45 +102,62 @@ bool SettingsDialog::initDialog() {
 			tree->onSelectionChanged(std::bind(&SettingsDialog::handleSelectionChanged, this));
 		}
 
-		addPage(T_("Personal information"), cur, new GeneralPage(cur));
+		Grid::Seed seed(1, 1);
+		seed.style |= WS_BORDER;
+		cur = cur->addChild(seed);
+		cur->column(0).mode = GridInfo::FILL;
+		cur->row(0).mode = GridInfo::FILL;
+		cur->row(0).align = GridInfo::STRETCH;
+
+		addPage(T_("Personal information"), new GeneralPage(cur));
 
 		{
-			HTREEITEM item = addPage(T_("Connection settings"), cur, new NetworkPage(cur));
-			addPage(T_("Bandwidth Limiting"), cur, new BandwidthLimitPage(cur), item);
-			addPage(T_("Proxy Settings"), cur, new ProxyPage(cur), item);
+			HTREEITEM item = addPage(T_("Connection settings"), new NetworkPage(cur));
+			addPage(T_("Bandwidth Limiting"), new BandwidthLimitPage(cur), item);
+			addPage(T_("Proxy Settings"), new ProxyPage(cur), item);
 		}
 
 		{
-			HTREEITEM item = addPage(T_("Downloads"), cur, new DownloadPage(cur));
-			addPage(T_("Favorites"), cur, new FavoriteDirsPage(cur), item);
-			addPage(T_("Queue"), cur, new QueuePage(cur), item);
+			HTREEITEM item = addPage(T_("Downloads"), new DownloadPage(cur));
+			addPage(T_("Favorites"), new FavoriteDirsPage(cur), item);
+			addPage(T_("Queue"), new QueuePage(cur), item);
 		}
 
-		addPage(T_("Sharing"), cur, new UploadPage(cur));
+		addPage(T_("Sharing"), new UploadPage(cur));
 
 		{
-			HTREEITEM item = addPage(T_("Appearance"), cur, new AppearancePage(cur));
-			addPage(T_("Colors and sounds"), cur, new Appearance2Page(cur), item);
-			addPage(T_("Tabs"), cur, new TabsPage(cur), item);
-			addPage(T_("Windows"), cur, new WindowsPage(cur), item);
-		}
-
-		{
-			HTREEITEM item = addPage(T_("History"), cur, new HistoryPage(cur));
-			addPage(T_("Logs"), cur, new LogPage(cur), item);
+			HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(cur));
+			addPage(T_("Colors and sounds"), new Appearance2Page(cur), item);
+			addPage(T_("Tabs"), new TabsPage(cur), item);
+			addPage(T_("Windows"), new WindowsPage(cur), item);
 		}
 
 		{
-			HTREEITEM item = addPage(T_("Advanced"), cur, new AdvancedPage(cur));
-			addPage(T_("Experts only"), cur, new Advanced3Page(cur), item);
-			addPage(T_("User Commands"), cur, new UCPage(cur), item);
-			addPage(T_("Security Certificates"), cur, new CertificatesPage(cur), item);
-			addPage(T_("Search Types"), cur, new SearchTypesPage(cur), item);
+			HTREEITEM item = addPage(T_("History"), new HistoryPage(cur));
+			addPage(T_("Logs"), new LogPage(cur), item);
+		}
+
+		{
+			HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(cur));
+			addPage(T_("Experts only"), new Advanced3Page(cur), item);
+			addPage(T_("User Commands"), new UCPage(cur), item);
+			addPage(T_("Security Certificates"), new CertificatesPage(cur), item);
+			addPage(T_("Search Types"), new SearchTypesPage(cur), item);
 		}
 	}
 
-	help = grid->addChild(WinUtil::Seeds::Dialog::richTextBox);
-	help->onRaw(std::bind(&helpDlgCode, _1), dwt::Message(WM_GETDLGCODE));
+	{
+		Grid::Seed gs(1, 1);
+		gs.style |= WS_BORDER;
+		auto cur = grid->addChild(gs);
+		cur->column(0).mode = GridInfo::FILL;
+
+		auto ts = WinUtil::Seeds::Dialog::richTextBox;
+		ts.style &= ~ES_SUNKEN;
+		ts.exStyle &= ~WS_EX_CLIENTEDGE;
+		help = cur->addChild(ts);
+		help->onRaw(std::bind(&helpDlgCode, _1), dwt::Message(WM_GETDLGCODE));
+	}
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
@@ -195,8 +212,8 @@ void SettingsDialog::handleChildHelp(dwt::Control* widget) {
 	help->setText(Text::toT(WinUtil::getHelpText(widget->getHelpId())));
 }
 
-HTREEITEM SettingsDialog::addPage(const tstring& title, GridPtr upper, PropPage* page, HTREEITEM parent) {
-	upper->setWidget(page, 0, 1);
+HTREEITEM SettingsDialog::addPage(const tstring& title, PropPage* page, HTREEITEM parent) {
+	static_cast<GridPtr>(page->getParent())->setWidget(page, 0, 0);
 	pages.push_back(page);
 	return tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
 }
