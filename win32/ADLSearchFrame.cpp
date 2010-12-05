@@ -32,9 +32,10 @@ const string ADLSearchFrame::id = "ADLSearch";
 const string& ADLSearchFrame::getId() const { return id; }
 
 static const ColumnInfo itemsColumns[] = {
-	{ N_("Enabled / Search String"), 120, false },
-	{ N_("Source Type"), 90, false },
-	{ N_("Destination Directory"), 90, false },
+	{ N_("Enabled / Search String"), 200, false },
+	{ N_("Regular Expression"), 100, false },
+	{ N_("Source Type"), 100, false },
+	{ N_("Destination Directory"), 100, false },
 	{ N_("Min Size"), 100, true },
 	{ N_("Max Size"), 100, true }
 };
@@ -133,7 +134,7 @@ void ADLSearchFrame::layout() {
 }
 
 bool ADLSearchFrame::preClosing() {
-	ADLSearchManager::getInstance()->Save();
+	ADLSearchManager::getInstance()->save();
 	return true;
 }
 
@@ -144,7 +145,7 @@ void ADLSearchFrame::postClosing() {
 
 void ADLSearchFrame::handleAdd() {
 	ADLSearch search;
-	ADLSProperties dlg(this, &search);
+	ADLSProperties dlg(this, search);
 	if(dlg.run() == IDOK) {
 		ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
 
@@ -159,11 +160,15 @@ void ADLSearchFrame::handleAdd() {
 			collection.push_back(search);
 		}
 
+		ADLSearchManager::getInstance()->save();
+
 		addEntry(search, index);
 	}
 }
 
 void ADLSearchFrame::handleProperties() {
+	bool save = false;
+
 	// Get selection info
 	std::vector<unsigned> selected = items->getSelection();
 	for(std::vector<unsigned>::const_iterator i = selected.begin(); i != selected.end(); ++i) {
@@ -172,10 +177,11 @@ void ADLSearchFrame::handleProperties() {
 		ADLSearch search = collection[*i];
 
 		// Invoke dialog with selected search
-		ADLSProperties dlg(this, &search);
+		ADLSProperties dlg(this, search);
 		if(dlg.run() == IDOK) {
 			// Update search collection
 			collection[*i] = search;
+			save = true;
 
 			// Update list control
 			HoldRedraw hold(items);
@@ -184,47 +190,71 @@ void ADLSearchFrame::handleProperties() {
 			items->select(*i);
 		}
 	}
+
+	if(save)
+		ADLSearchManager::getInstance()->save();
 }
 
 void ADLSearchFrame::handleUp() {
 	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
+	bool save = false;
+
 	HoldRedraw hold(items);
 	std::vector<unsigned> selected = items->getSelection();
 	for(std::vector<unsigned>::const_iterator i = selected.begin(); i != selected.end(); ++i) {
 		if(*i > 0) {
 			ADLSearch search = collection[*i];
 			swap(collection[*i], collection[*i - 1]);
+			save = true;
+
 			items->erase(*i);
 			addEntry(search, *i - 1);
 			items->select(*i - 1);
 		}
 	}
+
+	if(save)
+		ADLSearchManager::getInstance()->save();
 }
 
 void ADLSearchFrame::handleDown() {
 	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
+	bool save = false;
+
 	HoldRedraw hold(items);
 	std::vector<unsigned> selected = items->getSelection();
 	for(std::vector<unsigned>::reverse_iterator i = selected.rbegin(); i != selected.rend(); ++i) {
 		if(*i < items->size() - 1) {
 			ADLSearch search = collection[*i];
 			swap(collection[*i], collection[*i + 1]);
+			save = true;
+
 			items->erase(*i);
 			addEntry(search, *i + 1);
 			items->select(*i + 1);
 		}
 	}
+
+	if(save)
+		ADLSearchManager::getInstance()->save();
 }
 
 void ADLSearchFrame::handleRemove() {
+	bool save = false;
+
 	if(!BOOLSETTING(CONFIRM_ADLS_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES) {
 		ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
 		int i;
 		while((i = items->getNext(-1, LVNI_SELECTED)) != -1) {
 			collection.erase(collection.begin() + i);
+			save = true;
+
 			items->erase(i);
 		}
 	}
+
+	if(save)
+		ADLSearchManager::getInstance()->save();
 }
 
 void ADLSearchFrame::handleDoubleClick() {
@@ -266,6 +296,7 @@ LRESULT ADLSearchFrame::handleItemChanged(LPARAM lParam) {
 		ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
 		ADLSearch& search = collection[item->iItem];
 		search.isActive = items->isChecked(item->iItem);
+		ADLSearchManager::getInstance()->save();
 	}
 	return 0;
 }
@@ -291,6 +322,7 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 void ADLSearchFrame::addEntry(ADLSearch& search, int index, bool scroll) {
 	TStringList l;
 	l.push_back(Text::toT(search.searchString));
+	l.push_back(search.isRegEx() ? T_("Yes") : T_("No"));
 	l.push_back(Text::toT(search.SourceTypeToString(search.sourceType)));
 	l.push_back(Text::toT(search.destDir));
 	l.push_back((search.minFileSize >= 0) ? Text::toT(Util::toString(search.minFileSize)) + _T(" ") + Text::toT(search.SizeTypeToString(search.typeFileSize)) : Util::emptyStringT);

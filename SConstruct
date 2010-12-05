@@ -235,6 +235,7 @@ if conf.CheckCXXHeader('natupnp.h', '<>'):
 	conf.env.Append(CPPDEFINES='HAVE_NATUPNP_H')
 env = conf.Finish()
 
+dev.boost = dev.build('boost/')
 dev.zlib = dev.build('zlib/')
 dev.bzip2 = dev.build('bzip2/')
 dev.intl = dev.build('intl/')
@@ -242,7 +243,7 @@ dev.miniupnpc = dev.build('miniupnpc/')
 dev.dwt = dev.build('dwt/')
 dev.client = dev.build('dcpp/')
 dev.help = dev.build('help/')
-if env['test']:
+if dev.env['test']:
 	dev.test = dev.build('test/')
 else:
 	dev.win32 = dev.build('win32/')

@@ -49,6 +49,7 @@
 * [ADC] Dispatch the amount of free slots with INF FS (poy)
 * Repurpose passive user icons to mean "no free slot" (when INF FS is available) (poy)
 * [L#534242] Better looking settings dialog (fleetcommand, poy)
+* Allow regular expressions in ADL searches (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)

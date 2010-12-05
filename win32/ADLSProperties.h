@@ -26,11 +26,12 @@
 class ADLSProperties : public GridDialog
 {
 public:
-	ADLSProperties(dwt::Widget* parent, ADLSearch *_search);
+	ADLSProperties(dwt::Widget* parent, ADLSearch& search_);
 	virtual ~ADLSProperties();
 
 private:
 	TextBoxPtr searchString;
+	CheckBoxPtr reg;
 	ComboBoxPtr searchType;
 	TextBoxPtr minSize;
 	TextBoxPtr maxSize;
@@ -39,7 +40,7 @@ private:
 	CheckBoxPtr active;
 	CheckBoxPtr autoQueue;
 
-	ADLSearch* search;
+	ADLSearch& search;
 
 	bool handleInitDialog();
 	void handleOKClicked();
