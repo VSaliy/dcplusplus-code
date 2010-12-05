@@ -226,7 +226,7 @@ void WinUtil::init() {
 	xdRichTextBox.font = font;
 	xdRichTextBox.lines = 6;
 	xdRichTextBox.foregroundColor = ::GetSysColor(COLOR_WINDOWTEXT);
-	xdRichTextBox.backgroundColor = ::GetSysColor(COLOR_3DFACE);
+	xdRichTextBox.backgroundColor = ::GetSysColor(COLOR_WINDOW);
 
 	xdTable.style |= WS_HSCROLL | WS_VSCROLL | LVS_SHOWSELALWAYS | LVS_NOSORTHEADER;
 	xdTable.exStyle = WS_EX_CLIENTEDGE;
