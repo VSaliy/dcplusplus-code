@@ -26,7 +26,7 @@
 #include <dcpp/FavoriteManager.h>
 #include "WinUtil.h"
 
-ADLSProperties::ADLSProperties(dwt::Widget* parent, ADLSearch *_search) :
+ADLSProperties::ADLSProperties(dwt::Widget* parent, ADLSearch& search_) :
 GridDialog(parent, 290, DS_CONTEXTHELP),
 searchString(0),
 searchType(0),
@@ -36,7 +36,7 @@ sizeType(0),
 destDir(0),
 active(0),
 autoQueue(0),
-search(_search)
+search(search_)
 {
 	onInitDialog(std::bind(&ADLSProperties::handleInitDialog, this));
 	onHelp(std::bind(&WinUtil::help, _1, _2));
@@ -53,8 +53,16 @@ bool ADLSProperties::handleInitDialog() {
 
 	GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Search String")));
 	group->setHelpId(IDH_ADLSP_SEARCH_STRING);
-	searchString = group->addChild(WinUtil::Seeds::Dialog::textBox);
-	searchString->setText(Text::toT(search->searchString));
+	{
+		GridPtr cur = group->addChild(Grid::Seed(2, 1));
+		cur->column(0).mode = GridInfo::FILL;
+
+		searchString = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		searchString->setText(Text::toT(search.searchString));
+
+		reg = cur->addChild(CheckBox::Seed(T_("Regular Expression")));
+		reg->setChecked(search.isRegEx());
+	}
 
 	group = grid->addChild(GroupBox::Seed(T_("Source Type")));
 	group->setHelpId(IDH_ADLSP_SOURCE_TYPE);
@@ -62,7 +70,7 @@ bool ADLSProperties::handleInitDialog() {
 	searchType->addValue(T_("Filename"));
 	searchType->addValue(T_("Directory"));
 	searchType->addValue(T_("Full Path"));
-	searchType->setSelected(search->sourceType);
+	searchType->setSelected(search.sourceType);
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
@@ -72,12 +80,12 @@ bool ADLSProperties::handleInitDialog() {
 		group = cur->addChild(GroupBox::Seed(T_("Min FileSize")));
 		group->setHelpId(IDH_ADLSP_MIN_FILE_SIZE);
 		minSize = group->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		minSize->setText((search->minFileSize > 0) ? Text::toT(Util::toString(search->minFileSize)) : Util::emptyStringT);
+		minSize->setText((search.minFileSize > 0) ? Text::toT(Util::toString(search.minFileSize)) : Util::emptyStringT);
 
 		group = cur->addChild(GroupBox::Seed(T_("Max FileSize")));
 		group->setHelpId(IDH_ADLSP_MAX_FILE_SIZE);
 		maxSize = group->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		maxSize->setText((search->maxFileSize > 0) ? Text::toT(Util::toString(search->maxFileSize)) : Util::emptyStringT);
+		maxSize->setText((search.maxFileSize > 0) ? Text::toT(Util::toString(search.maxFileSize)) : Util::emptyStringT);
 	}
 
 	group = grid->addChild(GroupBox::Seed(T_("Size Type")));
@@ -87,21 +95,21 @@ bool ADLSProperties::handleInitDialog() {
 	sizeType->addValue(T_("KiB"));
 	sizeType->addValue(T_("MiB"));
 	sizeType->addValue(T_("GiB"));
-	sizeType->setSelected(search->typeFileSize);
+	sizeType->setSelected(search.typeFileSize);
 
 	group = grid->addChild(GroupBox::Seed(T_("Destination Directory")));
 	group->setHelpId(IDH_ADLSP_DEST_DIR);
 	destDir = group->addChild(WinUtil::Seeds::Dialog::textBox);
-	destDir->setText(Text::toT(search->destDir));
+	destDir->setText(Text::toT(search.destDir));
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(2, 1));
 
 		active = cur->addChild(CheckBox::Seed(T_("Enabled")));
-		active->setChecked(search->isActive);
+		active->setChecked(search.isActive);
 		active->setHelpId(IDH_ADLSP_ENABLED);
 		autoQueue = cur->addChild(CheckBox::Seed(T_("Download Matches")));
-		autoQueue->setChecked(search->isAutoQueue);
+		autoQueue->setChecked(search.isAutoQueue);
 		autoQueue->setHelpId(IDH_ADLSP_AUTOQUEUE);
 	}
 
@@ -118,23 +126,24 @@ bool ADLSProperties::handleInitDialog() {
 }
 
 void ADLSProperties::handleOKClicked() {
-	search->searchString = Text::fromT(searchString->getText());
+	search.searchString = Text::fromT(searchString->getText());
+	search.setRegEx(reg->getChecked());
 
-	search->sourceType = ADLSearch::SourceType(searchType->getSelected());
+	search.sourceType = ADLSearch::SourceType(searchType->getSelected());
 
 	tstring minFileSize = minSize->getText();
-	search->minFileSize = minFileSize.empty() ? -1 : Util::toInt64(Text::fromT(minFileSize));
+	search.minFileSize = minFileSize.empty() ? -1 : Util::toInt64(Text::fromT(minFileSize));
 
 	tstring maxFileSize = maxSize->getText();
-	search->maxFileSize = maxFileSize.empty() ? -1 : Util::toInt64(Text::fromT(maxFileSize));
+	search.maxFileSize = maxFileSize.empty() ? -1 : Util::toInt64(Text::fromT(maxFileSize));
 
-	search->typeFileSize = ADLSearch::SizeType(sizeType->getSelected());
+	search.typeFileSize = ADLSearch::SizeType(sizeType->getSelected());
 
-	search->destDir = Text::fromT(destDir->getText());
+	search.destDir = Text::fromT(destDir->getText());
 
-	search->isActive = active->getChecked();
+	search.isActive = active->getChecked();
 
-	search->isAutoQueue = autoQueue->getChecked();
+	search.isAutoQueue = autoQueue->getChecked();
 
 	endDialog(IDOK);
 }
