@@ -117,9 +117,9 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) throw
 				BufferedSocket::putSocket(socket);
 				socket = NULL;
 				if(SETTING(CORAL) && coralizeState != CST_NOCORALIZE) {
+					fire(HttpConnectionListener::Retried(), this, coralizeState == CST_CONNECTED);		
 					coralizeState = CST_NOCORALIZE;
 					dcdebug("HTTP error with Coral, retrying : %s\n",currentUrl.c_str());
-					fire(HttpConnectionListener::Retried(), this, coralizeState == CST_CONNECTED);		
 					downloadFile(currentUrl);
 					return;
 				}
@@ -171,9 +171,9 @@ void HttpConnection::on(BufferedSocketListener::Failed, const string& aLine) thr
 	BufferedSocket::putSocket(socket);
 	socket = NULL;
 	if(SETTING(CORAL) && coralizeState != CST_NOCORALIZE) {
+		fire(HttpConnectionListener::Retried(), this, coralizeState == CST_CONNECTED);
 		coralizeState = CST_NOCORALIZE;
 		dcdebug("Coralized address failed, retrying : %s\n",currentUrl.c_str());
-		fire(HttpConnectionListener::Retried(), this, coralizeState == CST_CONNECTED);
 		downloadFile(currentUrl);
 		return;
 	}
