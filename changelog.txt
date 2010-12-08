@@ -52,6 +52,7 @@
 * Allow regular expressions in ADL searches (poy)
 * [L#395464] [ADC] Send "000" as the STA success code
 * Add user information tooltips (poy)
+* Avoid parallel hub list downloads (emtee)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
