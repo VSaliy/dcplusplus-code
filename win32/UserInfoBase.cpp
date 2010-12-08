@@ -20,11 +20,14 @@
 
 #include "UserInfoBase.h"
 
-#include <dcpp/QueueManager.h>
-#include <dcpp/LogManager.h>
+#include <dcpp/ClientManager.h>
 #include <dcpp/FavoriteManager.h>
+#include <dcpp/LogManager.h>
+#include <dcpp/QueueManager.h>
 #include <dcpp/UploadManager.h>
 #include <dcpp/User.h>
+
+#include <dwt/util/StringUtils.h>
 
 #include "PrivateFrame.h"
 #include "HubFrame.h"
@@ -76,6 +79,57 @@ void UserInfoBase::connectFav(dwt::TabView* mdiParent) {
 	if(!url.empty()) {
 		HubFrame::openWindow(mdiParent, url);
 	}
+}
+
+const size_t maxChars = 100; // max chars per tooltip line
+
+tstring UserInfoBase::getTooltip(bool priv) const {
+	bool hubSet = priv;
+	if(!priv)
+		priv = FavoriteManager::getInstance()->isPrivate(user.hint);
+
+	tstring ret(WinUtil::getNicks(user, priv));
+	dwt::util::cutStr(ret, maxChars);
+
+	auto addLine = [&ret](tstring line) {
+		dwt::util::cutStr(line, maxChars);
+		ret += _T("\r\n") + line;
+	};
+
+	if(!hubSet)
+		addLine(str(TF_("Hubs: %1%") % WinUtil::getHubNames(user, priv).first));
+
+	OnlineUser* ou = ClientManager::getInstance()->findOnlineUser(user, priv);
+	if(!ou)
+		return ret;
+	const Identity& id = ou->getIdentity();
+
+	auto getField = [&id](const char* code) -> tstring {
+		string field = id.get(code);
+		return field.empty() ? _T("?") : Text::toT(field);
+	};
+
+	if(id.isHidden())
+		addLine(T_("Hidden user"));
+	if(id.isBot())
+		addLine(T_("Bot"));
+	if(id.isOp())
+		addLine(T_("Hub operator"));
+	if(id.isAway())
+		addLine(T_("In away mode"));
+
+	addLine(str(TF_("Shared: %1%") % Text::toT(Util::formatBytes(id.getBytesShared()))));
+	addLine(str(TF_("Description: %1%") % Text::toT(id.getDescription())));
+	addLine(str(TF_("Tag: %1%") % Text::toT(id.getTag())));
+	addLine(str(TF_("Connection: %1%") % Text::toT(id.getConnection())));
+	addLine(str(TF_("IP: %1%") % getField("I4")));
+	const string country = id.getCountry();
+	if(!country.empty())
+		addLine(str(TF_("Country: %1%") % Text::toT(country)));
+	addLine(str(TF_("E-mail: %1%") % Text::toT(id.getEmail())));
+	addLine(str(TF_("Slots: %1%/%2%") % getField("FS") % getField("SL")));
+
+	return ret;
 }
 
 void UserInfoBase::UserTraits::parse(UserInfoBase* ui) {

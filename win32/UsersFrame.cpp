@@ -55,6 +55,8 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 		users->onKeyDown(std::bind(&UsersFrame::handleKeyDown, this, _1));
 		users->onRaw(std::bind(&UsersFrame::handleItemChanged, this, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 		users->onContextMenu(std::bind(&UsersFrame::handleContextMenu, this, _1));
+
+		prepareUserList(users);
 	}
 
 	{

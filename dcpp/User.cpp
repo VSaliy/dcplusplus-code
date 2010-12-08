@@ -90,6 +90,10 @@ string Identity::getTag() const {
 		get("HR") + "/" + get("HO") + ",S:" + get("SL") + ">";
 }
 
+string Identity::getCountry() const {
+	return Util::getIpCountry(getIp());
+}
+
 string Identity::get(const char* name) const {
 	FastLock l(cs);
 	InfMap::const_iterator i = info.find(*(short*)name);

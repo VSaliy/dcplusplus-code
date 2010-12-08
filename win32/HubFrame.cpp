@@ -162,6 +162,8 @@ inTabComplete(false)
 		users->onKeyDown(std::bind(&HubFrame::handleUsersKeyDown, this, _1));
 		users->onContextMenu(std::bind(&HubFrame::handleUsersContextMenu, this, _1));
 
+		prepareUserList(users, true);
+
 		TextBox::Seed cs = WinUtil::Seeds::textBox;
 		cs.style |= ES_AUTOHSCROLL;
 		filter = userGrid->addChild(cs);
@@ -639,10 +641,8 @@ bool HubFrame::UserInfo::update(const Identity& identity, int sortCol) {
 	columns[COLUMN_DESCRIPTION] = Text::toT(identity.getDescription());
 	columns[COLUMN_TAG] = Text::toT(identity.getTag());
 	columns[COLUMN_CONNECTION] = Text::toT(identity.getConnection());
-	string ip = identity.getIp();
-	string country = ip.empty()?Util::emptyString:Util::getIpCountry(ip);
-	columns[COLUMN_IP] = Text::toT(ip);
-	columns[COLUMN_COUNTRY] = Text::toT(country);
+	columns[COLUMN_IP] = Text::toT(identity.getIp());
+	columns[COLUMN_COUNTRY] = Text::toT(identity.getCountry());
 	columns[COLUMN_EMAIL] = Text::toT(identity.getEmail());
 	columns[COLUMN_CID] = Text::toT(identity.getUser()->getCID().toBase32());
 
