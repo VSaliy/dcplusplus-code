@@ -83,22 +83,14 @@ class Table :
 		typedef Dispatchers::Base<void (int)> BaseType;
 		HeaderDispatcher(const F& f_) : BaseType(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			f(reinterpret_cast<LPNMLISTVIEW>(msg.lParam)->iSubItem);
-			return true;
-		}
+		bool operator()(const MSG& msg, LRESULT& ret) const;
 	};
 
 	struct TooltipDispatcher : Dispatchers::Base<tstring (int)> {
 		typedef Dispatchers::Base<tstring (int)> BaseType;
 		TooltipDispatcher(const F& f_) : BaseType(f_) { }
 
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			NMLVGETINFOTIP& tip = *reinterpret_cast<LPNMLVGETINFOTIP>(msg.lParam);
-			tstring text(f(tip.iItem));
-			_tcscpy_s(tip.pszText, tip.cchTextMax, text.c_str());
-			return true;
-		}
+		bool operator()(const MSG& msg, LRESULT& ret) const;
 	};
 
 	// Need to be friend to access private data...
