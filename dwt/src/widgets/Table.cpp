@@ -35,6 +35,7 @@
 #include <dwt/CanvasClasses.h>
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/check.h>
+#include <dwt/util/StringUtils.h>
 #include <dwt/DWTException.h>
 
 #include <boost/scoped_array.hpp>
@@ -85,6 +86,21 @@ sortType(SORT_CALLBACK),
 ascending(true)
 {
 	createArrows();
+}
+
+bool Table::HeaderDispatcher::operator()(const MSG& msg, LRESULT& ret) const {
+	f(reinterpret_cast<LPNMLISTVIEW>(msg.lParam)->iSubItem);
+	return true;
+}
+
+bool Table::TooltipDispatcher::operator()(const MSG& msg, LRESULT& ret) const {
+	NMLVGETINFOTIP& tip = *reinterpret_cast<LPNMLVGETINFOTIP>(msg.lParam);
+	if(tip.cchTextMax <= 2)
+		return true;
+	tstring text(f(tip.iItem));
+	util::cutStr(text, tip.cchTextMax - 1);
+	_tcscpy(tip.pszText, text.c_str());
+	return true;
 }
 
 void Table::setSort(int aColumn, SortType aType, bool aAscending) {
