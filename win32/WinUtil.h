@@ -167,12 +167,14 @@ public:
 	static tstring getNicks(const UserPtr& u, const string& hintUrl);
 	static tstring getNicks(const CID& cid, const string& hintUrl, bool priv);
 	static tstring getNicks(const HintedUser& user) { return getNicks(user.user->getCID(), user.hint); }
+	static tstring getNicks(const HintedUser& user, bool priv) { return getNicks(user.user->getCID(), user.hint, priv); }
 
 	/** @return Pair of hubnames as a string and a bool representing the user's online status */
 	static pair<tstring, bool> getHubNames(const CID& cid, const string& hintUrl);
 	static pair<tstring, bool> getHubNames(const UserPtr& u, const string& hintUrl);
 	static pair<tstring, bool> getHubNames(const CID& cid, const string& hintUrl, bool priv);
 	static pair<tstring, bool> getHubNames(const HintedUser& user) { return getHubNames(user.user->getCID(), user.hint); }
+	static pair<tstring, bool> getHubNames(const HintedUser& user, bool priv) { return getHubNames(user.user->getCID(), user.hint, priv); }
 
 	static void reducePaths(string& message);
 

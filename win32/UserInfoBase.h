@@ -41,6 +41,8 @@ public:
 	void removeFromQueue();
 	void connectFav(dwt::TabViewPtr);
 
+	tstring getTooltip(bool priv) const;
+
 	const HintedUser& getUser() const { return user; }
 
 	struct UserTraits {
@@ -139,6 +141,11 @@ protected:
 			menu->appendItem(T_("Connect to hub"), std::bind(&ThisType::handleConnectFav, this, parent), WinUtil::menuIcon(IDI_HUB));
 		menu->appendSeparator();
 		menu->appendItem(T_("Remove user from queue"), std::bind(&ThisType::handleRemoveFromQueue, this));
+	}
+
+	template<typename TableType>
+	void prepareUserList(TableType* table, bool priv = false) {
+		table->setTooltips([table, priv](int i) -> tstring { return table->getData(i)->getTooltip(priv); });
 	}
 };
 

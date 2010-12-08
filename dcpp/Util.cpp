@@ -899,9 +899,10 @@ uint32_t Util::rand() {
 	for exemple: it returns "PT", whitch standards for "Portugal"
 	more info: http://www.maxmind.com/app/csv
 */
-string Util::getIpCountry (string IP) {
-	if (BOOLSETTING(GET_USER_COUNTRY)) {
-		dcassert(count(IP.begin(), IP.end(), '.') == 3);
+string Util::getIpCountry(const string& IP) {
+	if(BOOLSETTING(GET_USER_COUNTRY)) {
+		if(count(IP.begin(), IP.end(), '.') != 3)
+			return Util::emptyString;
 
 		//e.g IP 23.24.25.26 : w=23, x=24, y=25, z=26
 		string::size_type a = IP.find('.');
@@ -920,7 +921,7 @@ string Util::getIpCountry (string IP) {
 		}
 	}
 
-	return Util::emptyString; //if doesn't returned anything already, something is wrong...
+	return Util::emptyString;
 }
 
 string Util::getTimeString() {

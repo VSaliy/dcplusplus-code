@@ -79,18 +79,26 @@ class Table :
 {
 	typedef CommonControl BaseType;
 
-	struct HeaderDispatcher {
-		typedef std::function<void (int)> F;
-
-		HeaderDispatcher(const F& f_) : f(f_) { }
+	struct HeaderDispatcher : Dispatchers::Base<void (int)> {
+		typedef Dispatchers::Base<void (int)> BaseType;
+		HeaderDispatcher(const F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
-			LPNMLISTVIEW p = (LPNMLISTVIEW) msg.lParam;
-			f(p->iSubItem);
+			f(reinterpret_cast<LPNMLISTVIEW>(msg.lParam)->iSubItem);
 			return true;
 		}
+	};
 
-		F f;
+	struct TooltipDispatcher : Dispatchers::Base<tstring (int)> {
+		typedef Dispatchers::Base<tstring (int)> BaseType;
+		TooltipDispatcher(const F& f_) : BaseType(f_) { }
+
+		bool operator()(const MSG& msg, LRESULT& ret) const {
+			NMLVGETINFOTIP& tip = *reinterpret_cast<LPNMLVGETINFOTIP>(msg.lParam);
+			tstring text(f(tip.iItem));
+			_tcscpy_s(tip.pszText, tip.cchTextMax, text.c_str());
+			return true;
+		}
 	};
 
 	// Need to be friend to access private data...
@@ -352,6 +360,8 @@ public:
 	  * getSelected ( multiple row selection mode )
 	  */
 	void setSingleRowSelection( bool value = true );
+
+	void setTooltips(const TooltipDispatcher::F& f);
 
 	/// Adds (or removes) grid lines.
 	/** A grid with grid lines will have lines surrounding every cell in it. <br>

@@ -38,6 +38,8 @@ namespace dwt { namespace util {
 
 tstring escapeMenu(tstring str);
 
+void cutStr(tstring& str, size_t n);
+
 } }
 
 #endif /*STRINGUTILS_H_*/

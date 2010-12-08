@@ -324,7 +324,7 @@ void ClientManager::putOffline(OnlineUser* ou, bool disconnect) throw() {
 	}
 }
 
-OnlineUser* ClientManager::findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p) throw() {
+OnlineUser* ClientManager::findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p) {
 	p = onlineUsers.equal_range(cid);
 	if(p.first == p.second) // no user found with the given CID.
 		return 0;
@@ -341,7 +341,11 @@ OnlineUser* ClientManager::findOnlineUser_hint(const CID& cid, const string& hin
 	return 0;
 }
 
-OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl, bool priv) throw() {
+OnlineUser* ClientManager::findOnlineUser(const HintedUser& user, bool priv) {
+	return findOnlineUser(user.user->getCID(), user.hint, priv);
+}
+
+OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl, bool priv) {
 	OnlinePair p;
 	OnlineUser* u = findOnlineUser_hint(cid, hintUrl, p);
 	if(u) // found an exact match (CID + hint).
@@ -362,7 +366,7 @@ void ClientManager::connect(const HintedUser& user, const string& token) {
 	bool priv = FavoriteManager::getInstance()->isPrivate(user.hint);
 
 	Lock l(cs);
-	OnlineUser* u = findOnlineUser(user.user->getCID(), user.hint, priv);
+	OnlineUser* u = findOnlineUser(user, priv);
 
 	if(u) {
 		u->getClient().connect(*u, token);
@@ -373,7 +377,7 @@ void ClientManager::privateMessage(const HintedUser& user, const string& msg, bo
 	bool priv = FavoriteManager::getInstance()->isPrivate(user.hint);
 
 	Lock l(cs);
-	OnlineUser* u = findOnlineUser(user.user->getCID(), user.hint, priv);
+	OnlineUser* u = findOnlineUser(user, priv);
 
 	if(u) {
 		u->getClient().privateMessage(*u, msg, thirdPerson);

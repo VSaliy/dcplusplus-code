@@ -387,8 +387,8 @@ void TabView::handleTextChanging(ContainerPtr w, const tstring& newText) {
 }
 
 tstring TabView::formatTitle(tstring title) {
-	if(widthConfig && title.length() > widthConfig)
-		title = title.substr(0, widthConfig - 3) + _T("...");
+	if(widthConfig)
+		util::cutStr(title, widthConfig);
 	return util::escapeMenu(title);
 }
 

@@ -73,7 +73,8 @@ public:
 	* @param priv discard any user that doesn't match the hint.
 	* @return OnlineUser* found by CID and hint; might be only by CID if priv is false.
 	*/
-	OnlineUser* findOnlineUser(const CID& cid, const string& hintUrl, bool priv) throw();
+	OnlineUser* findOnlineUser(const HintedUser& user, bool priv);
+	OnlineUser* findOnlineUser(const CID& cid, const string& hintUrl, bool priv);
 
 	UserPtr findUser(const string& aNick, const string& aHubUrl) const throw() { return findUser(makeCid(aNick, aHubUrl)); }
 	UserPtr findUser(const CID& cid) const throw();
@@ -156,7 +157,7 @@ private:
 	void updateNick(const OnlineUser& user) throw();
 
 	/// @return OnlineUser* found by CID and hint; discard any user that doesn't match the hint.
-	OnlineUser* findOnlineUser_hint(const CID& cid, const string& hintUrl) throw() {
+	OnlineUser* findOnlineUser_hint(const CID& cid, const string& hintUrl) {
 		OnlinePair p;
 		return findOnlineUser_hint(cid, hintUrl, p);
 	}
@@ -164,7 +165,7 @@ private:
 	* @param p OnlinePair of all the users found by CID, even those who don't match the hint.
 	* @return OnlineUser* found by CID and hint; discard any user that doesn't match the hint.
 	*/
-	OnlineUser* findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p) throw();
+	OnlineUser* findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p);
 
 	string getUsersFile() const { return Util::getPath(Util::PATH_USER_LOCAL) + "Users.xml"; }
 

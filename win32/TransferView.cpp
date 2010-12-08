@@ -125,6 +125,8 @@ TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
 		connections->onKeyDown(std::bind(&TransferView::handleKeyDown, this, _1));
 		connections->onDblClicked(std::bind(&TransferView::handleDblClicked, this));
 		connections->onRaw(std::bind(&TransferView::handleCustomDraw, this, _1, _2), dwt::Message(WM_NOTIFY, NM_CUSTOMDRAW));
+
+		prepareUserList(connections);
 	}
 
 	{

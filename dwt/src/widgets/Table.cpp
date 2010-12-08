@@ -554,4 +554,9 @@ int Table::hitTest(const ScreenCoordinate& pt) {
 	return ListView_HitTest(handle(), &lvi);
 }
 
+void Table::setTooltips(const TooltipDispatcher::F& f) {
+	addRemoveTableExtendedStyle(LVS_EX_INFOTIP, true);
+	addCallback(Message(WM_NOTIFY, LVN_GETINFOTIP), TooltipDispatcher(f));
+}
+
 }

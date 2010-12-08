@@ -43,4 +43,9 @@ tstring escapeMenu(tstring str) {
 	return str;
 }
 
+void cutStr(tstring& str, size_t n) {
+	if(str.size() > n)
+		str = str.substr(0, n - 3) + _T("...");
+}
+
 } }
