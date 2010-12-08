@@ -572,6 +572,11 @@ int Table::hitTest(const ScreenCoordinate& pt) {
 
 void Table::setTooltips(const TooltipDispatcher::F& f) {
 	addRemoveTableExtendedStyle(LVS_EX_INFOTIP, true);
+	HWND tip = ListView_GetToolTips(handle());
+	if(tip) {
+		// make tooltips last longer
+		::SendMessage(tip, TTM_SETDELAYTIME, TTDT_AUTOPOP, MAKELPARAM(::SendMessage(tip, TTM_GETDELAYTIME, TTDT_AUTOPOP, 0) * 3, 0));
+	}
 	addCallback(Message(WM_NOTIFY, LVN_GETINFOTIP), TooltipDispatcher(f));
 }
 
