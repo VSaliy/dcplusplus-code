@@ -103,6 +103,7 @@ private:
 	TextBoxPtr filter;
 	ComboBoxPtr filterSel;
 	ComboBoxPtr lists;
+	GridPtr listsGrid;
 
 	size_t visibleHubs;
 	int users;
@@ -132,7 +133,7 @@ private:
 	bool parseFilter(FilterModes& mode, double& size);
 	bool matchFilter(const HubEntry& entry, const int& sel, bool doSizeCompare, const FilterModes& mode, const double& size);
 
-	void onFinished(const tstring& s);
+	void onFinished(const tstring& s, bool success);
 
 	virtual void on(DownloadStarting, const string& l) throw();
 	virtual void on(DownloadFailed, const string& l) throw();

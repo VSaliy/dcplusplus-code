@@ -84,6 +84,7 @@ hubs(0),
 filter(0),
 filterSel(0),
 lists(0),
+listsGrid(0),
 visibleHubs(0),
 users(0)
 {
@@ -162,22 +163,22 @@ users(0)
 		lower->setWidget(group, 0, 2);
 		group->setHelpId(IDH_PUBLIC_HUBS_LISTS);
 
-		cur = group->addChild(Grid::Seed(1, 3));
-		cur->column(0).mode = GridInfo::FILL;
+		listsGrid = group->addChild(Grid::Seed(1, 3));
+		listsGrid->column(0).mode = GridInfo::FILL;
 
-		lists = cur->addChild(WinUtil::Seeds::comboBoxStatic);
+		lists = listsGrid->addChild(WinUtil::Seeds::comboBoxStatic);
 		addWidget(lists);
 		lists->onSelectionChanged(std::bind(&PublicHubsFrame::handleListSelChanged, this));
 
 		Button::Seed bs = WinUtil::Seeds::button;
 
 		bs.caption = T_("&Configure");
-		ButtonPtr button = cur->addChild(bs);
+		ButtonPtr button = listsGrid->addChild(bs);
 		addWidget(button);
 		button->onClicked(std::bind(&PublicHubsFrame::handleConfigure, this));
 
 		bs.caption = T_("&Refresh");
-		button = cur->addChild(bs);
+		button = listsGrid->addChild(bs);
 		button->setHelpId(IDH_PUBLIC_HUBS_REFRESH);
 		addWidget(button);
 		button->onClicked(std::bind(&PublicHubsFrame::handleRefresh, this));
@@ -211,6 +212,8 @@ users(0)
 	layout();
 	activate();
 
+	listsGrid->setEnabled(false);
+	
 	if(FavoriteManager::getInstance()->isDownloading()) {
 		status->setText(STATUS_STATUS, T_("Downloading public hub list..."));
 	} else if(entries.empty()) {
@@ -443,6 +446,7 @@ void PublicHubsFrame::handleRefresh() {
 	status->setText(STATUS_STATUS, T_("Downloading public hub list..."));
 	FavoriteManager::getInstance()->refresh(true);
 	updateDropDown();
+	listsGrid->setEnabled(false);
 }
 
 void PublicHubsFrame::handleConfigure() {
@@ -495,6 +499,7 @@ bool PublicHubsFrame::handleKeyDown(int c) {
 }
 
 void PublicHubsFrame::handleListSelChanged() {
+	listsGrid->setEnabled(false);
 	FavoriteManager::getInstance()->setHubList(lists->getSelected());
 	entries = FavoriteManager::getInstance()->getPublicHubs();
 	updateList();
@@ -508,10 +513,13 @@ void PublicHubsFrame::handleFilterUpdated() {
 	}
 }
 
-void PublicHubsFrame::onFinished(const tstring& s) {
-	entries = FavoriteManager::getInstance()->getPublicHubs();
-	updateList();
+void PublicHubsFrame::onFinished(const tstring& s, bool success) {
+	if(success) {
+		entries = FavoriteManager::getInstance()->getPublicHubs();
+		updateList();
+	}
 	status->setText(STATUS_STATUS, s);
+	listsGrid->setEnabled(true);
 }
 
 void PublicHubsFrame::on(DownloadStarting, const string& l) throw() {
@@ -519,21 +527,21 @@ void PublicHubsFrame::on(DownloadStarting, const string& l) throw() {
 }
 
 void PublicHubsFrame::on(DownloadFailed, const string& l) throw() {
-	callAsync(std::bind(&dwt::StatusBar::setText, status, STATUS_STATUS, str(TF_("Download failed: %1%") % Text::toT(l)), false));
+	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Download failed: %1%") % Text::toT(l)), false));
 }
 
 void PublicHubsFrame::on(DownloadFinished, const string& l, bool fromCoral) throw() {
-	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Hub list downloaded%1% (%2%)") % (fromCoral ? T_(" from Coral") : Util::emptyStringT) % Text::toT(l))));
+	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Hub list downloaded%1% (%2%)") % (fromCoral ? T_(" from Coral") : Util::emptyStringT) % Text::toT(l)), true));
 }
 
 void PublicHubsFrame::on(LoadedFromCache, const string& l, const string& d) throw() {
-	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Locally cached (as of %1%) version of the hub list loaded (%2%)") % Text::toT(d) % Text::toT(l))));
+	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Locally cached (as of %1%) version of the hub list loaded (%2%)") % Text::toT(d) % Text::toT(l)), true));
 }
 
 void PublicHubsFrame::on(Corrupted, const string& l) throw() {
-	if (l.empty()) {
-		callAsync(std::bind(&PublicHubsFrame::onFinished, this, T_("Cached hub list is corrupted or unsupported")));
+	if(l.empty()) {
+		callAsync(std::bind(&PublicHubsFrame::onFinished, this, T_("Cached hub list is corrupted or unsupported"), false));
 	} else {
-		callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Downloaded hub list is corrupted or unsupported (%1%)") % Text::toT(l))));
+		callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Downloaded hub list is corrupted or unsupported (%1%)") % Text::toT(l)), false));
 	}
 }
