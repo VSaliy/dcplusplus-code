@@ -104,9 +104,9 @@ tstring UserInfoBase::getTooltip(bool priv) const {
 		return ret;
 	const Identity& id = ou->getIdentity();
 
-	auto getField = [&id](const char* code) -> tstring {
-		string field = id.get(code);
-		return field.empty() ? _T("?") : Text::toT(field);
+	auto addValue = [&id, &addLine](const tstring& descr, const string& value) {
+		if(!value.empty())
+			addLine(str(TF_("%1%: %2%") % descr % Text::toT(value)));
 	};
 
 	if(id.isHidden())
@@ -118,16 +118,21 @@ tstring UserInfoBase::getTooltip(bool priv) const {
 	if(id.isAway())
 		addLine(T_("In away mode"));
 
-	addLine(str(TF_("Shared: %1%") % Text::toT(Util::formatBytes(id.getBytesShared()))));
-	addLine(str(TF_("Description: %1%") % Text::toT(id.getDescription())));
-	addLine(str(TF_("Tag: %1%") % Text::toT(id.getTag())));
-	addLine(str(TF_("Connection: %1%") % Text::toT(id.getConnection())));
-	addLine(str(TF_("IP: %1%") % getField("I4")));
-	const string country = id.getCountry();
-	if(!country.empty())
-		addLine(str(TF_("Country: %1%") % Text::toT(country)));
-	addLine(str(TF_("E-mail: %1%") % Text::toT(id.getEmail())));
-	addLine(str(TF_("Slots: %1%/%2%") % getField("FS") % getField("SL")));
+	addValue(T_("Shared"), Util::formatBytes(id.getBytesShared()));
+	addValue(T_("Description"), id.getDescription());
+	addValue(T_("Tag"), id.getTag());
+	addValue(T_("Connection"), id.getConnection());
+	addValue(T_("IP"), id.getIp());
+	addValue(T_("Country"), id.getCountry());
+	addValue(T_("E-mail"), id.getEmail());
+	string slots = id.get("SL");
+	if(!slots.empty()) {
+		tstring value = Text::toT(slots);
+		string fs = id.get("FS");
+		if(!fs.empty())
+			value = str(TF_("%1%/%2%") % Text::toT(fs) % value);
+		addLine(str(TF_("%1%: %2%") % T_("Slots") % value));
+	}
 
 	return ret;
 }
