@@ -1239,9 +1239,9 @@ bool MainWindow::handleToolbarContextMenu(const dwt::ScreenCoordinate& pt) {
 		const int& setting = SETTING(TOOLBAR_SIZE);
 		for(size_t i = 0, iend = sizeof(sizes) / sizeof(int); i < iend; ++i) {
 			const int& n = sizes[i];
-			size->appendItem(Text::toT(Util::toString(n)), std::bind(&MainWindow::handleToolbarSize, this, n));
+			unsigned pos = size->appendItem(Text::toT(Util::toString(n)), std::bind(&MainWindow::handleToolbarSize, this, n));
 			if(n == setting)
-				size->checkItem(i);
+				size->checkItem(pos);
 		}
 	}
 
