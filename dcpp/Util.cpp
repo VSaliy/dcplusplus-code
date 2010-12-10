@@ -204,12 +204,13 @@ void Util::initialize(PathsMap pathOverrides) {
 		string::size_type comma2 = 0;
 		string::size_type comma3 = 0;
 		string::size_type comma4 = 0;
+		string::size_type comma5 = 0;
 		string::size_type lineend = 0;
-		CountryIter last = countries.end();
+		auto last = countries.end();
 		uint32_t startIP = 0;
 		uint32_t endIP = 0, endIPprev = 0;
 
-		for(;;) {
+		while(true) {
 			comma1 = data.find(',', linestart);
 			if(comma1 == string::npos) break;
 			comma2 = data.find(',', comma1 + 1);
@@ -218,15 +219,17 @@ void Util::initialize(PathsMap pathOverrides) {
 			if(comma3 == string::npos) break;
 			comma4 = data.find(',', comma3 + 1);
 			if(comma4 == string::npos) break;
-			lineend = data.find('\n', comma4);
+			comma5 = data.find(',', comma4 + 1);
+			if(comma5 == string::npos) break;
+			lineend = data.find('\n', comma5);
 			if(lineend == string::npos) break;
 
 			startIP = Util::toUInt32(start + comma2 + 2);
 			endIP = Util::toUInt32(start + comma3 + 2);
-			uint16_t* country = (uint16_t*)(start + comma4 + 2);
 			if((startIP-1) != endIPprev)
-				last = countries.insert(last, make_pair((startIP-1), (uint16_t)16191));
-			last = countries.insert(last, make_pair(endIP, *country));
+				last = countries.insert(last, make_pair((startIP-1), _("Unknown")));
+			auto nameStart = comma5 + 2;
+			last = countries.insert(last, make_pair(endIP, string(start + nameStart, lineend - 1 - nameStart)));
 
 			endIPprev = endIP;
 			linestart = lineend + 1;
@@ -372,7 +375,7 @@ string Util::validateFileName(string tmp) {
 }
 
 bool Util::checkExtension(const string& tmp) {
-	for(int i = 0; i < tmp.length(); i++) {
+	for(size_t i = 0, n = tmp.size(); i < n; ++i) {
 		if (tmp[i] < 0 || tmp[i] == 32 || tmp[i] == ':') {
 			return false;
 		}
@@ -895,11 +898,10 @@ uint32_t Util::rand() {
 }
 
 /*	getIpCountry
-	This function returns the country(Abbreviation) of an ip
-	for exemple: it returns "PT", whitch standards for "Portugal"
+	This function returns the full country name of an ip, eg "Portugal".
 	more info: http://www.maxmind.com/app/csv
 */
-string Util::getIpCountry(const string& IP) {
+const string& Util::getIpCountry(const string& IP) {
 	if(BOOLSETTING(GET_USER_COUNTRY)) {
 		if(count(IP.begin(), IP.end(), '.') != 3)
 			return Util::emptyString;
@@ -914,10 +916,9 @@ string Util::getIpCountry(const string& IP) {
 			(Util::toUInt32(IP.c_str() + b + 1) << 8) |
 			(Util::toUInt32(IP.c_str() + c + 1) );
 
-		CountryIter i = countries.lower_bound(ipnum);
-
+		auto i = countries.lower_bound(ipnum);
 		if(i != countries.end()) {
-			return string((char*)&(i->second), 2);
+			return i->second;
 		}
 	}
 

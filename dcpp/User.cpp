@@ -90,7 +90,7 @@ string Identity::getTag() const {
 		get("HR") + "/" + get("HO") + ",S:" + get("SL") + ">";
 }
 
-string Identity::getCountry() const {
+const string& Identity::getCountry() const {
 	return Util::getIpCountry(getIp());
 }
 

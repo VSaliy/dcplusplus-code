@@ -474,11 +474,11 @@ void SearchFrame::SearchInfo::update() {
 		columns[COLUMN_CONNECTION] = Text::toT(ClientManager::getInstance()->getConnection(sr->getUser()->getCID()));
 		columns[COLUMN_SLOTS] = Text::toT(sr->getSlotString());
 		columns[COLUMN_IP] = Text::toT(sr->getIP());
-		if (!columns[COLUMN_IP].empty()) {
+		if(!columns[COLUMN_IP].empty()) {
 			// Only attempt to grab a country mapping if we actually have an IP address
-			tstring tmpCountry = Text::toT(Util::getIpCountry(sr->getIP()));
-			if(!tmpCountry.empty())
-				columns[COLUMN_IP] = tmpCountry + _T(" (") + columns[COLUMN_IP] + _T(")");
+			const string& country = Util::getIpCountry(sr->getIP());
+			if(!country.empty())
+				columns[COLUMN_IP] = Text::toT(country) + _T(" (") + columns[COLUMN_IP] + _T(")");
 		}
 		columns[COLUMN_HUB] = Text::toT(sr->getHubName());
 		columns[COLUMN_CID] = Text::toT(sr->getUser()->getCID().toBase32());
