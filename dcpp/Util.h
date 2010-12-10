@@ -412,7 +412,7 @@ public:
 	static int stricmp(const wstring& a, const wstring& b) { return stricmp(a.c_str(), b.c_str()); }
 	static int strnicmp(const wstring& a, const wstring& b, size_t n) { return strnicmp(a.c_str(), b.c_str(), n); }
 
-	static string getIpCountry(const string& IP);
+	static const string& getIpCountry(const string& IP);
 
 	static bool getAway() { return away; }
 	static void setAway(bool aAway) {
@@ -446,9 +446,7 @@ private:
 	static string awayMsg;
 	static time_t awayTime;
 
-	typedef map<uint32_t, uint16_t> CountryList;
-	typedef CountryList::iterator CountryIter;
-
+	typedef map<uint32_t, string> CountryList;
 	static CountryList countries;
 
 	static void loadBootConfig();
