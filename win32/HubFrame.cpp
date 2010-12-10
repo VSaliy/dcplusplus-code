@@ -46,7 +46,7 @@ static const ColumnInfo usersColumns[] = {
 	{ N_("Tag"), 100, false },
 	{ N_("Connection"), 75, false },
 	{ N_("IP"), 100, false },
-	{ N_("Country"), 50, false },
+	{ N_("Country"), 100, false },
 	{ N_("E-Mail"), 100, false },
 	{ N_("CID"), 300, false}
 };
