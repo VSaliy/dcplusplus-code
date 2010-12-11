@@ -81,6 +81,7 @@ int WinUtil::dirIconIndex;
 int WinUtil::dirMaskedIndex;
 TStringList WinUtil::lastDirs;
 MainWindow* WinUtil::mainWindow = 0;
+float WinUtil::dpiFactor = 0;
 bool WinUtil::urlDcADCRegistered = false;
 bool WinUtil::urlMagnetRegistered = false;
 WinUtil::ImageMap WinUtil::fileIndexes;
@@ -118,12 +119,20 @@ void WinUtil::init() {
 	bgColor = SETTING(BACKGROUND_COLOR);
 	bgBrush = dwt::BrushPtr(new dwt::Brush(bgColor));
 
-	LOGFONT lf;
-	::GetObject(reinterpret_cast<HFONT>(::GetStockObject(DEFAULT_GUI_FONT)), sizeof(lf), &lf);
-	SettingsManager::getInstance()->setDefault(SettingsManager::TEXT_FONT, Text::fromT(encodeFont(lf)));
-	decodeFont(Text::toT(SETTING(TEXT_FONT)), lf);
+	// Conversion for DPI awareness, see <http://msdn.microsoft.com/en-us/library/dd464660(VS.85).aspx>.
+	dpiFactor = static_cast<float>(dwt::UpdateCanvas(reinterpret_cast<HWND>(0)).getDeviceCaps(LOGPIXELSX)) / 96.0;
 
-	font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&lf), true));
+	if(SettingsManager::getInstance()->isDefault(SettingsManager::MAIN_FONT)) {
+		NONCLIENTMETRICS metrics = { sizeof(NONCLIENTMETRICS) };
+		::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &metrics, 0);
+		SettingsManager::getInstance()->setDefault(SettingsManager::MAIN_FONT, Text::fromT(encodeFont(metrics.lfMessageFont)));
+	}
+
+	{
+		LOGFONT lf;
+		decodeFont(Text::toT(SETTING(MAIN_FONT)), lf);
+		font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&lf), true));
+	}
 	monoFont = dwt::FontPtr(new dwt::Font((BOOLSETTING(USE_OEM_MONOFONT) ? dwt::OemFixedFont : dwt::AnsiFixedFont)));
 
 	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
@@ -308,7 +317,7 @@ void WinUtil::enableDEP() {
 tstring WinUtil::encodeFont(LOGFONT const& font) {
 	tstring res(font.lfFaceName);
 	res += _T(',');
-	res += Text::toT(Util::toString(font.lfHeight));
+	res += Text::toT(Util::toString(font.lfHeight / dpiFactor));
 	res += _T(',');
 	res += Text::toT(Util::toString(font.lfWeight));
 	res += _T(',');
@@ -332,11 +341,14 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 	StringTokenizer<tstring> st(setting, _T(','));
 	TStringList &sl = st.getTokens();
 
-	::GetObject(reinterpret_cast<HFONT>(::GetStockObject(DEFAULT_GUI_FONT)), sizeof(dest), &dest);
+	NONCLIENTMETRICS metrics = { sizeof(NONCLIENTMETRICS) };
+	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &metrics, 0);
+	dest = metrics.lfMessageFont;
+
 	tstring face;
 	if(sl.size() >= 4) {
 		face = sl[0];
-		dest.lfHeight = Util::toInt(Text::fromT(sl[1]));
+		dest.lfHeight = Util::toInt(Text::fromT(sl[1])) * dpiFactor;
 		dest.lfWeight = Util::toInt(Text::fromT(sl[2]));
 		dest.lfItalic = static_cast<BYTE>(Util::toInt(Text::fromT(sl[3])));
 		if(sl.size() >= 5) {
@@ -646,10 +658,10 @@ void WinUtil::copyMagnet(const TTHValue& aHash, const tstring& aFile, int64_t si
 }
 
 string WinUtil::makeMagnet(const TTHValue& aHash, const string& aFile, int64_t size) {
-	string ret = "magnet:?xt=urn:tree:tiger:" + aHash.toBase32() + "&dn=" + Util::encodeURI(aFile);
+	string ret = "magnet:?xt=urn:tree:tiger:" + aHash.toBase32();
 	if(size > 0)
 		ret += "&xl=" + Util::toString(size);
-	return ret;
+	return ret + "&dn=" + Util::encodeURI(aFile);
 }
 
 void WinUtil::searchAny(const tstring& aSearch) {

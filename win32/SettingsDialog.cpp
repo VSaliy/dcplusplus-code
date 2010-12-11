@@ -55,7 +55,7 @@ help(0)
 }
 
 int SettingsDialog::run() {
-	create(Seed(dwt::Point(680, 560), DS_CONTEXTHELP));
+	create(Seed(dwt::Point(700 * WinUtil::dpiFactor, 580 * WinUtil::dpiFactor), DS_CONTEXTHELP));
 	return show();
 }
 
@@ -90,7 +90,7 @@ bool SettingsDialog::initDialog() {
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
 
-		cur->column(0).size = 155;
+		cur->column(0).size = 170;
 		cur->column(0).mode = GridInfo::STATIC;
 		cur->column(1).mode = GridInfo::FILL;
 

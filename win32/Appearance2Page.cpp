@@ -107,7 +107,7 @@ oldSelection(-1)
 	upBar = SETTING(UPLOAD_BAR_COLOR);
 	downBar = SETTING(DOWNLOAD_BAR_COLOR);
 
-	WinUtil::decodeFont(Text::toT(SETTING(TEXT_FONT)), logFont);
+	WinUtil::decodeFont(Text::toT(SETTING(MAIN_FONT)), logFont);
 	font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&logFont), true));
 
 	example->setColor(fg, bg);
@@ -152,7 +152,7 @@ void Appearance2Page::write() {
 	settings->set(SettingsManager::BACKGROUND_COLOR, (int)bg);
 	settings->set(SettingsManager::UPLOAD_BAR_COLOR, (int)upBar);
 	settings->set(SettingsManager::DOWNLOAD_BAR_COLOR, (int)downBar);
-	settings->set(SettingsManager::TEXT_FONT, Text::fromT(WinUtil::encodeFont(logFont)));
+	settings->set(SettingsManager::MAIN_FONT, Text::fromT(WinUtil::encodeFont(logFont)));
 
 	saveSoundOptions();
 	for(size_t i = 0; soundOptions[i].setting != 0; ++i)

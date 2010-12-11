@@ -54,6 +54,8 @@
 * Add user information tooltips (poy)
 * Avoid parallel hub list downloads (emtee)
 * Display full country names rather than abbreviations (poy)
+* Select a better default font (poy)
+* [L#681754] Fonts and dialogs respect DPI settings - mark DC++ as DPI aware (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)

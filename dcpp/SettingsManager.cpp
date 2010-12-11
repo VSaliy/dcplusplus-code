@@ -38,7 +38,7 @@ const string SettingsManager::settingTags[] =
 {
 	// Strings
 	"Nick", "UploadSpeed", "Description", "DownloadDirectory", "EMail", "ExternalIp",
-	"Font", "ConnectionsOrder", "ConnectionsWidths", "HubFrameOrder", "HubFrameWidths",
+	"MainFont", "ConnectionsOrder", "ConnectionsWidths", "HubFrameOrder", "HubFrameWidths",
 	"SearchFrameOrder", "SearchFrameWidths", "FavHubsFrameOrder", "FavHubsFrameWidths",
 	"HublistServers", "QueueFrameOrder", "QueueFrameWidths", "PublicHubsFrameOrder", "PublicHubsFrameWidths",
 	"FinishedDLFilesOrder", "FinishedDLFilesWidths", "FinishedDLUsersOrder", "FinishedDLUsersWidths",
