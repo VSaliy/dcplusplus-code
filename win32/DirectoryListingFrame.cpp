@@ -172,6 +172,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	dirs(0),
 	files(0),
 	paned(0),
+	findPrev(0),
 	find(0),
 	findNext(0),
 	listDiff(0),
@@ -234,12 +235,17 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 		cs.caption = T_("Find");
 		find = addChild(cs);
 		find->setHelpId(IDH_FILE_LIST_FIND);
-		find->onClicked(std::bind(&DirectoryListingFrame::handleFind, this));
+		find->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_START));
+
+		cs.caption = T_("Previous");
+		findPrev = addChild(cs);
+		findPrev->setHelpId(IDH_FILE_LIST_PREV);
+		findPrev->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_PREV));
 
 		cs.caption = T_("Next");
 		findNext = addChild(cs);
 		findNext->setHelpId(IDH_FILE_LIST_NEXT);
-		findNext->onClicked(std::bind(&DirectoryListingFrame::handleFindNext, this));
+		findNext->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_NEXT));
 	}
 
 	initStatus();
@@ -248,6 +254,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	status->setText(STATUS_FILE_LIST_DIFF, T_("Subtract list"));
 	status->setText(STATUS_MATCH_QUEUE, T_("Match queue"));
 	status->setText(STATUS_FIND, T_("Find"));
+	status->setText(STATUS_PREV, T_("Previous"));
 	status->setText(STATUS_NEXT, T_("Next"));
 
 	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
@@ -298,6 +305,7 @@ void DirectoryListingFrame::layout() {
 	status->mapWidget(STATUS_FILE_LIST_DIFF, listDiff);
 	status->mapWidget(STATUS_MATCH_QUEUE, matchQueue);
 	status->mapWidget(STATUS_FIND, find);
+	status->mapWidget(STATUS_PREV, findPrev);
 	status->mapWidget(STATUS_NEXT, findNext);
 
 	paned->setRect(r);
@@ -315,16 +323,9 @@ void DirectoryListingFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
 
-void DirectoryListingFrame::handleFind() {
+void DirectoryListingFrame::handleFind(int direction) {
 	searching = true;
-	findFile(false);
-	searching = false;
-	updateStatus();
-}
-
-void DirectoryListingFrame::handleFindNext() {
-	searching = true;
-	findFile(true);
+	findFile(direction);
 	searching = false;
 	updateStatus();
 }
@@ -896,9 +897,15 @@ HTREEITEM DirectoryListingFrame::findFile(const StringSearch& str, HTREEITEM roo
 	return 0;
 }
 
-void DirectoryListingFrame::findFile(bool findNext)
+void DirectoryListingFrame::findFile(int direction)
 {
-	if(!findNext) {
+	if(findStr.empty() && direction != FIND_START) {
+		direction = FIND_START;
+	}
+
+	switch (direction) {
+	case FIND_START:
+	{
 		// Prompt for substring to find
 		ParamDlg dlg(this, T_("Search for file"), T_("Enter search string"), lastSearches, 0, true /*comboBoxEdit*/);
 
@@ -915,8 +922,17 @@ void DirectoryListingFrame::findFile(bool findNext)
 		}
 		findStr = Text::fromT(value);
 		skipHits = 0;
-	} else {
+		break;
+	}
+	case FIND_NEXT:
 		skipHits++;
+		break;
+	case FIND_PREV:
+		if (skipHits == 0) {
+			dwt::MessageBox(this).show(T_("No matches"), T_("Find previous"));
+			return;
+		}
+		skipHits--;
 	}
 
 	if(findStr.empty())
@@ -974,6 +990,8 @@ void DirectoryListingFrame::findFile(bool findNext)
 		dirs->setSelected(NULL);
 		dirs->setSelected(oldDir);
 		dwt::MessageBox(this).show(T_("No matches"), T_("Search for file"));
+		if (skipHits > 0)
+			skipHits--;
 	}
 }
 

@@ -58,6 +58,7 @@ public:
 		STATUS_FILE_LIST_DIFF,
 		STATUS_MATCH_QUEUE,
 		STATUS_FIND,
+		STATUS_PREV,
 		STATUS_NEXT,
 		STATUS_LAST
 	};
@@ -87,6 +88,12 @@ private:
 		COLUMN_LAST
 	};
 
+	enum {
+		FIND_START,
+		FIND_NEXT,
+		FIND_PREV
+	};
+	
 	class ItemInfo : public FastAlloc<ItemInfo> {
 	public:
 		enum ItemType {
@@ -156,6 +163,7 @@ private:
 	WidgetFilesPtr files;
 	WidgetVPanedPtr paned;
 
+	ButtonPtr findPrev;
 	ButtonPtr find;
 	ButtonPtr findNext;
 	ButtonPtr listDiff;
@@ -209,8 +217,7 @@ private:
 	void addShellPaths(const ShellMenuPtr& menu, const vector<ItemInfo*>& sel);
 	void addUserMenu(const MenuPtr& menu);
 
-	void handleFind();
-	void handleFindNext();
+	void handleFind(int direction);
 	void handleListDiff();
 	void handleMatchQueue();
 
@@ -253,7 +260,7 @@ private:
 	void initStatusText();
 	void updateStatus();
 
-	void findFile(bool findNext);
+	void findFile(int direction);
 	HTREEITEM findFile(const StringSearch& str, HTREEITEM root, int &foundFile, int &skipHits);
 
 	// MDIChildFrame
