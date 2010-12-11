@@ -64,6 +64,7 @@ public:
 	static TStringList lastDirs;
 	static MainWindow* mainWindow;
 	//static dwt::TabView* mdiParent;
+	static float dpiFactor;
 
 	typedef unordered_map<string, int> ImageMap;
 	typedef ImageMap::iterator ImageIter;

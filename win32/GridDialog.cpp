@@ -20,10 +20,12 @@
 
 #include "GridDialog.h"
 
+#include "WinUtil.h"
+
 GridDialog::GridDialog(dwt::Widget* parent, const long width_, const DWORD styles_) :
 dwt::ModalDialog(parent),
 grid(0),
-width(width_),
+width(width_ * WinUtil::dpiFactor),
 styles(styles_)
 {
 }
