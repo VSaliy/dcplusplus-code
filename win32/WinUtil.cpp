@@ -317,7 +317,7 @@ void WinUtil::enableDEP() {
 tstring WinUtil::encodeFont(LOGFONT const& font) {
 	tstring res(font.lfFaceName);
 	res += _T(',');
-	res += Text::toT(Util::toString(font.lfHeight / dpiFactor));
+	res += Text::toT(Util::toString(static_cast<int>(font.lfHeight / dpiFactor)));
 	res += _T(',');
 	res += Text::toT(Util::toString(font.lfWeight));
 	res += _T(',');
@@ -329,11 +329,12 @@ tstring WinUtil::encodeFont(LOGFONT const& font) {
 
 std::string WinUtil::toString(const std::vector<int>& tokens) {
 	std::string ret;
-	for(std::vector<int>::const_iterator i = tokens.begin(); i != tokens.end(); ++i) {
-		ret += Util::toString(*i) + ',';
+	auto start = tokens.cbegin();
+	for(auto i = start, iend = tokens.cend(); i != iend; ++i) {
+		if(i != start)
+			ret += ',';
+		ret += Util::toString(*i);
 	}
-	if(!ret.empty())
-		ret.erase(ret.size() - 1);
 	return ret;
 }
 
