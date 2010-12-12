@@ -33,59 +33,34 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_CoolBar_h
-#define DWT_CoolBar_h
+#ifndef DWT_Rebar_h
+#define DWT_Rebar_h
 
-#ifndef WINCE // Doesn't exist in Windows CE based systems
-
-#include "../aspects/AspectEnabled.h"
-#include "../aspects/AspectKeyboard.h"
-#include "../aspects/AspectFont.h"
-#include "../aspects/AspectRaw.h"
-#include "../aspects/AspectSizable.h"
-#include "../aspects/AspectVisible.h"
-#include "../util/check.h"
+#include "Control.h"
 
 namespace dwt {
 
-/// Coolbar Control class
+/// Rebar Control class
 /** \ingroup WidgetControls
   * \WidgetUsageInfo
-  * \image html coolbar.PNG
-  * A coolbar is a strip of buttons normally associated with menu commands, like  for
+  * \image html Rebar.PNG
+  * A Rebar is a strip of buttons normally associated with menu commands, like  for
   * instance Internet Explorer has ( unless you have made them invisible ) a toolbar
   * of buttons, one for going "home", one to stop rendering of the  current page, one
   * to view the log of URL's you have been to etc... In addition to serving like a
-  * dockable toolbar ( see ToolBar ) a Coolbar  Widget can also contain more
+  * dockable toolbar ( see ToolBar ) a Rebar  Widget can also contain more
   * complex Widgets lke for instance a ComboBox, a TextBox and so on...
-  *
-  * @todo This class needs some love...
   */
-class CoolBar :
-	public Widget,
-
-	// Aspects
-	public AspectEnabled< CoolBar >,
-	public AspectKeyboard< CoolBar >,
-	public AspectFont< CoolBar >,
-	public AspectRaw< CoolBar >,
-	private AspectSizable< CoolBar >,
-	public AspectVisible< CoolBar >
+class Rebar :
+	public Control
 {
-	typedef Widget BaseType;
-	typedef dwt::AspectSizable< CoolBar > AspectSizable;
-	friend class WidgetCreator< CoolBar >;
-public:
-	// Including the stuff we need from AspectSizable to make it accessible
-	// Note here that since we DON'T want the setBounds functions we must
-	// inherit privately from AspectSizable and include the stuff we WAN'T to
-	// expose from AspectSizable in a public block of the class.
-	using AspectSizable::bringToFront;
-	using AspectSizable::onSized;
-	using AspectSizable::onMoved;
+	typedef Control BaseType;
 
+	friend class WidgetCreator<Rebar>;
+
+public:
 	/// Class type
-	typedef CoolBar ThisType;
+	typedef Rebar ThisType;
 
 	/// Object type
 	typedef ThisType* ObjectType;
@@ -101,27 +76,25 @@ public:
 		Seed();
 	};
 
-	/// Actually creates the Coolbar
-	/** You should call WidgetFactory::createCoolbar if you instantiate class
+	/// Actually creates the Rebar
+	/** You should call WidgetFactory::createRebar if you instantiate class
 	  * directly. <br>
 	  * Only if you DERIVE from class you should call this function directly.
 	  */
-	void create( const Seed & cs = Seed() );
+	void create(const Seed& cs = Seed());
 
-	/// Refreshes the Coolbar
+#if 0
+	/// Refreshes the Rebar
 	/** Call this one after the container widget has been resized to make sure the
-	  * coolbar is having the right size...
+	  * Rebar is having the right size...
 	  */
 	void refresh();
+#endif
 
 protected:
-	// CTOR
-	explicit CoolBar(Widget *parent );
-
-	// To assure nobody accidentally deletes any heaped object of this type, parent
-	// is supposed to do so when parent is killed...
-	virtual ~CoolBar()
-	{}
+	// Protected to avoid direct instantiation
+	explicit Rebar(Widget* parent);
+	virtual ~Rebar() { }
 
 private:
 	friend class ChainingDispatcher;
@@ -131,29 +104,6 @@ private:
 	void addChild( Widget * child, unsigned width, unsigned height, const tstring & txt );
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-inline CoolBar::CoolBar( Widget * parent )
-	: BaseType( parent )
-{
-	// Can't have a text box without a parent...
-	dwtassert( parent, _T( "Can't have a Button without a parent..." ) );
-}
-*/
-inline void CoolBar::refresh() {
-	// This might look a bit stupid, but Windows API have some minor flaws. One of
-	// those flaws is that a Coolbar (and a Toolbar) control must be "resized" with
-	// a dummy value to make sure the Coolbar (&& the Toolbar) fills up the
-	// complete area of the container Widget...
-
-	if ( ::MoveWindow( this->handle(), 0, 0, 0, 0, TRUE ) == 0 ) {
-		dwtWin32DebugFail("Couldn't reposition windows");
-	}
 }
 
-}
-
-#endif  //WINCE
-#endif  //CoolBar_h
+#endif

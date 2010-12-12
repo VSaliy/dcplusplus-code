@@ -549,6 +549,15 @@ public:
 	virtual ~FreeCanvas() { }
 };
 
+/// Calls CreateCompatibleDC and returns a managed canvas.
+class CompatibleCanvas : public FreeCanvas
+{
+public:
+	explicit CompatibleCanvas(HDC hdc);
+
+	virtual ~CompatibleCanvas();
+};
+
 #ifndef WINCE
 // TODO: Create custom enums for typesafety... ?
 /// Helper class for setting and resetting the ROP2 mode

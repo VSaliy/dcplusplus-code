@@ -29,21 +29,41 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <dwt/widgets/CoolBar.h>
+#include <dwt/widgets/Rebar.h>
 #include <dwt/DWTException.h>
 
 namespace dwt {
 
-CoolBar::Seed::Seed() :
-	BaseType::Seed(WS_CHILD | WS_VISIBLE | RBS_VARHEIGHT | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER)
+const TCHAR Rebar::windowClass[] = REBARCLASSNAME;
+
+Rebar::Seed::Seed() :
+BaseType::Seed(WS_CHILD | RBS_VARHEIGHT | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER)
 {
 }
 
-void CoolBar::create( const Seed & cs ) {
+Rebar::Rebar(Widget* parent) :
+BaseType(parent, ChainingDispatcher::superClass<Rebar>())
+{
+}
+
+void Rebar::create(const Seed& cs) {
 	BaseType::create(cs);
 }
 
-void CoolBar::addChild( Widget * child,
+#if 0
+void Rebar::refresh() {
+	// This might look a bit stupid, but Windows API have some minor flaws. One of
+	// those flaws is that a Rebar (and a Toolbar) control must be "resized" with
+	// a dummy value to make sure the Rebar (&& the Toolbar) fills up the
+	// complete area of the container Widget...
+
+	if ( ::MoveWindow( this->handle(), 0, 0, 0, 0, TRUE ) == 0 ) {
+		dwtWin32DebugFail("Couldn't reposition windows");
+	}
+}
+#endif
+
+void Rebar::addChild( Widget * child,
 	unsigned width, unsigned height, const tstring & txt
 	)
 {
@@ -62,9 +82,8 @@ void CoolBar::addChild( Widget * child,
 	rbBand.fStyle = 0; //RBBS_GRIPPERALWAYS;
 	if ( sendMessage( RB_INSERTBAND, ( WPARAM ) - 1, ( LPARAM ) & rbBand ) == 0 )
 	{
-		throw DWTException( "There was a problem when trying to insert a band into your Coolbar object!");
+		throw DWTException( "There was a problem when trying to insert a band into your Rebar object!");
 	}
 }
-
 
 }

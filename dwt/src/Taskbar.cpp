@@ -220,7 +220,7 @@ BitmapPtr Taskbar::getBitmap(ContainerPtr tab, LPARAM thumbnailSize) {
 	BITMAPINFO info = { { sizeof(BITMAPINFOHEADER), size_full.x, size_full.y, 1, 32, BI_RGB } };
 	BitmapPtr bitmap_full(new Bitmap(::CreateDIBSection(canvas.handle(), &info, DIB_RGB_COLORS, 0, 0, 0)));
 
-	FreeCanvas canvas_full(::CreateCompatibleDC(canvas.handle()));
+	CompatibleCanvas canvas_full(canvas.handle());
 	Canvas::Selector select_full(canvas_full, *bitmap_full);
 
 	tab->sendMessage(WM_PRINT, reinterpret_cast<WPARAM>(canvas_full.handle()), PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN | PRF_ERASEBKGND);
@@ -243,7 +243,7 @@ BitmapPtr Taskbar::getBitmap(ContainerPtr tab, LPARAM thumbnailSize) {
 	info.bmiHeader.biHeight = size_thumb.y;
 	BitmapPtr bitmap_thumb(new Bitmap(::CreateDIBSection(canvas.handle(), &info, DIB_RGB_COLORS, 0, 0, 0)));
 
-	FreeCanvas canvas_thumb(::CreateCompatibleDC(canvas.handle()));
+	CompatibleCanvas canvas_thumb(canvas.handle());
 	Canvas::Selector select_thumb(canvas_thumb, *bitmap_thumb);
 
 	::SetStretchBltMode(canvas_thumb.handle(), HALFTONE);

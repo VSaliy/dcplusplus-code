@@ -662,21 +662,19 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			canvas.fill(iconRectangle, Brush(highlight ? colors.highlightBackground : colors.stripBar));
 
 			// create memory DC and set bitmap on it
-			HDC memoryDC = ::CreateCompatibleDC( canvas.handle() );
-			HGDIOBJ old = ::SelectObject( memoryDC, ::CreateCompatibleBitmap( canvas.handle(), iconSize.x, iconSize.y ) );
+			CompatibleCanvas canvas_compat(canvas.handle());
+			BitmapPtr bitmap_compat(new Bitmap(::CreateCompatibleBitmap(canvas.handle(), iconSize.x, iconSize.y)));
+			Canvas::Selector select_compat(canvas_compat, *bitmap_compat);
 
 			// draw into memory
 			RECT rc( Rectangle( 0, 0, iconSize.x, iconSize.y ) );
-			::DrawFrameControl( memoryDC, & rc, DFC_MENU, ( info.fType & MFT_RADIOCHECK ) == 0 ? DFCS_MENUCHECK : DFCS_MENUBULLET );
+			::DrawFrameControl(canvas_compat.handle(), & rc, DFC_MENU, ( info.fType & MFT_RADIOCHECK ) == 0 ? DFCS_MENUCHECK : DFCS_MENUBULLET );
 
 			const int adjustment = 2; // adjustment for mark to be in the center
 
 			// bit - blast into out canvas
-			::BitBlt( canvas.handle(), iconRectangle.left() + adjustment, iconRectangle.top(), iconSize.x, iconSize.y, memoryDC, 0, 0, SRCAND );
-
-			// delete memory dc
-			::DeleteObject( ::SelectObject( memoryDC, old ) );
-			::DeleteDC( memoryDC );
+			::BitBlt(canvas.handle(), iconRectangle.left() + adjustment, iconRectangle.top(),
+				iconSize.x, iconSize.y, canvas_compat.handle(), 0, 0, SRCAND);
 		}
 
 		if(isChecked && !theme && popup && !wrapper->isTitle) {

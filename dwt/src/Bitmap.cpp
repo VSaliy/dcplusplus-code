@@ -34,6 +34,8 @@
 */
 
 #include <dwt/resources/Bitmap.h>
+
+#include <dwt/CanvasClasses.h>
 #include <dwt/Point.h>
 
 namespace dwt {
@@ -75,25 +77,18 @@ Point Bitmap::getSize( HBITMAP bitmap )
 	return Point( bm.bmWidth, bm.bmHeight );
 }
 
-BitmapPtr Bitmap::resize( const Point & newSize ) const
-{
-	HDC hdc1 = ::CreateCompatibleDC( 0 );
-	HBITMAP hBitmapOld1 = ( HBITMAP )::SelectObject( hdc1, handle() );
+BitmapPtr Bitmap::resize(const Point& newSize) const {
+	CompatibleCanvas dc1(0);
+	Canvas::Selector select1(dc1, *this);
 
-	HDC hdc2 = ::CreateCompatibleDC( 0 );
-	HBITMAP hBitmapNew = ::CreateCompatibleBitmap( hdc1, newSize.x, newSize.y );
-	HBITMAP hBitmapOld2 = ( HBITMAP )::SelectObject( hdc2, hBitmapNew );
+	CompatibleCanvas dc2(0);
+	BitmapPtr ret(new Bitmap(::CreateCompatibleBitmap(dc1.handle(), newSize.x, newSize.y)));
+	Canvas::Selector select2(dc2, *ret);
 
 	const Point oldSize = getSize();
-	::StretchBlt( hdc2, 0, 0, newSize.x, newSize.y, hdc1, 0, 0, oldSize.x, oldSize.y, SRCCOPY );
+	::StretchBlt(dc2.handle(), 0, 0, newSize.x, newSize.y, dc1.handle(), 0, 0, oldSize.x, oldSize.y, SRCCOPY);
 
-	hBitmapNew = ( HBITMAP )::SelectObject( hdc2, hBitmapOld2 );
-
-	// Clean up
-	::SelectObject( hdc1, hBitmapOld1 );
-	::DeleteDC( hdc2 );
-	::DeleteDC( hdc1 );
-	return BitmapPtr( new Bitmap( hBitmapNew ) );
+	return ret;
 }
 
 }

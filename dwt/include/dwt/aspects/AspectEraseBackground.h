@@ -55,22 +55,18 @@ class AspectEraseBackground
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct EraseBackgroundDispatcher {
-		typedef std::function<void (Canvas&)> F;
-
-		EraseBackgroundDispatcher(const F& f_, WidgetType* widget_) : f(f_), widget(widget_) { }
+	struct EraseBackgroundDispatcher : Dispatchers::Base<void (Canvas&)> {
+		typedef Dispatchers::Base<void (Canvas&)> BaseType;
+		EraseBackgroundDispatcher(const F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
-			FreeCanvas canvas( widget->handle(), reinterpret_cast< HDC >( msg.wParam ) );
-
+			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
 			f(canvas);
 			ret = 1;
 			return true;
 		}
-
-		F f;
-		WidgetType* widget;
 	};
+
 public:
 	/// \ingroup EventHandlersAspectEraseBackground
 	/// Setting the event handler for the "erase background" event

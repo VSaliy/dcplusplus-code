@@ -280,6 +280,15 @@ Canvas()
 	itsHdc = hdc;
 }
 
+CompatibleCanvas::CompatibleCanvas(HDC hdc) :
+FreeCanvas(::CreateCompatibleDC(hdc))
+{
+}
+
+CompatibleCanvas::~CompatibleCanvas() {
+	::DeleteDC(itsHdc);
+}
+
 #ifndef WINCE
 HdcModeSetter::HdcModeSetter( Canvas & canvas, int mode )
 	: itsOldMode( ::GetROP2( canvas.handle() ) ),
