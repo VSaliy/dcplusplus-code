@@ -107,7 +107,7 @@ public:
 	/** This function is IMMUTABLE meaning it will not modify the given bitmap at all
 	  * but rather return a new Bitmap containing the resized Bitmap.
 	  */
-	BitmapPtr resize( const Point & newSize ) const;
+	BitmapPtr resize(const Point& newSize) const;
 
 private:
 	friend class Handle<GdiPolicy<HBITMAP> >;
