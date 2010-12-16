@@ -70,6 +70,8 @@ void term_handler() {
 #endif
 
 int SmartWinMain(dwt::Application& app) {
+	dcdebug("StartWinMain\n");
+
 	// http://www.kb.cert.org/vuls/id/707943 part III, "For Developers".
 	::SetDllDirectory(_T(""));
 
@@ -112,10 +114,10 @@ int SmartWinMain(dwt::Application& app) {
 #ifdef _DEBUG
 	old_handler = set_terminate(&term_handler);
 
-	// attach to the parent console, or create one
-	if(!AttachConsole(ATTACH_PARENT_PROCESS))
-		AllocConsole();
-	freopen("conout$", "w", stdout);
+#ifdef __MINGW32__
+	// For debugging
+	::LoadLibrary(_T("exchndl.dll"));
+#endif
 #endif
 
 	// For SHBrowseForFolder, UPnP_COM
