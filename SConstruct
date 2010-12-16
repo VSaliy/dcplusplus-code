@@ -6,9 +6,9 @@ import os,sys
 from build_util import Dev, gen_po_name
 
 gcc_flags = {
-	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-fexceptions', '-mthreads', '-mwindows'],
+	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-fexceptions', '-mthreads'],
 	'debug': [], 
-	'release' : ['-O3']
+	'release' : ['-O3', '-mwindows']
 }
 
 gcc_xxflags = {
@@ -43,9 +43,9 @@ msvc_xxflags = {
 }
 
 gcc_link_flags = {
-	'common' : ['-g', '-static-libgcc', '-static-libstdc++', '-Wl,--no-undefined', '-time', '-mthreads', '-mwindows'],
+	'common' : ['-g', '-static-libgcc', '-static-libstdc++', '-Wl,--no-undefined', '-time', '-mthreads'],
 	'debug' : [],
-	'release' : []
+	'release' : ['-mwindows']
 }
 
 msvc_link_flags = {
