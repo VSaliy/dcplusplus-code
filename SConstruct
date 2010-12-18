@@ -172,6 +172,14 @@ else:
 	link_flags = gcc_link_flags
 	defs = gcc_defs
 
+	if env['mode'] == 'debug':
+		import sys
+		if sys.platform == 'win32':
+			env.Append(CCFLAGS = ['-mwindows'])
+			env.Append(LINKFLAGS = ['-mwindows'])
+		else:
+			env.Append(CPPDEFINES = ['CONSOLE'])
+
 	env.Tool("gch", toolpath=".")
 
 	env.Append(CPPPATH = ['#/htmlhelp/preload/', '#/htmlhelp/include/'])

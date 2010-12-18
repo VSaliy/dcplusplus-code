@@ -276,7 +276,7 @@ void Application::removeFilter(const FilterIter& i) {
 
 } // namespace dwt
 
-int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	unsigned int retVal = 0;
 
