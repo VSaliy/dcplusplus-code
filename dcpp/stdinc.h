@@ -121,6 +121,8 @@ using boost::make_shared;
 #include <boost/scoped_array.hpp>
 #include <boost/noncopyable.hpp>
 
+#include "nullptr.h"
+
 namespace dcpp {
 using namespace std;
 }
