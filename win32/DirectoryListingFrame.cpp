@@ -183,7 +183,6 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	usingDirMenu(false),
 	historyIndex(0),
 	treeRoot(NULL),
-	skipHits(0),
 	updating(false),
 	searching(false)
 {
@@ -323,9 +322,9 @@ void DirectoryListingFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
 
-void DirectoryListingFrame::handleFind(int direction) {
+void DirectoryListingFrame::handleFind(FindMode mode) {
 	searching = true;
-	findFile(direction);
+	findFile(mode);
 	searching = false;
 	updateStatus();
 }
@@ -725,8 +724,8 @@ HTREEITEM DirectoryListingFrame::findItem(HTREEITEM ht, const tstring& name) {
 void DirectoryListingFrame::selectItem(const tstring& name) {
 	HTREEITEM ht = findItem(treeRoot, name);
 	if(ht != NULL) {
-		dirs->ensureVisible(ht);
 		dirs->setSelected(ht);
+		dirs->ensureVisible(ht);
 	}
 }
 
@@ -851,147 +850,93 @@ void DirectoryListingFrame::forward() {
 	}
 }
 
-HTREEITEM DirectoryListingFrame::findFile(const StringSearch& str, HTREEITEM root,
-										  int &foundFile, int &skipHits)
-{
-	// Check dir name for match
-	DirectoryListing::Directory* dir = dirs->getData(root)->dir;
-	if(str.match(dir->getName())) {
-		if(skipHits == 0) {
-			foundFile = -1;
-			return root;
-		} else {
-			skipHits--;
+pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos) {
+	// try to match the names currently in the list pane
+	const int n = files->size();
+	if(reverse && pos == -1)
+		pos = n;
+	for(reverse ? --pos : ++pos; reverse ? (pos >= 0) : (pos < n); reverse ? --pos : ++pos) {
+		const ItemInfo& ii = *files->getData(pos);
+		const string& name = (ii.type == ItemInfo::FILE) ? ii.file->getName() : ii.dir->getName();
+		if(str.match(name))
+			return make_pair(item, pos);
+	}
+
+	// flow to the next directory
+	HTREEITEM next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
+	if(next) {
+		if(dirs->getChild(next)) {
+			dirs->expand(next);
+			next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
 		}
+
+		// refresh the list pane to respect sorting etc
+		changeDir(dirs->getData(next)->dir);
+
+		return findFile(str, reverse, next, -1);
 	}
 
-	// Force list pane to contain files of current dir
-	changeDir(dir);
-
-	// Check file names in list pane
-	for(size_t i = 0; i < files->size(); i++) {
-		ItemInfo* ii = files->getData(i);
-		if(ii->type == ItemInfo::FILE) {
-			if(str.match(ii->file->getName())) {
-				if(skipHits == 0) {
-					foundFile = i;
-					return root;
-				} else {
-					skipHits--;
-				}
-			}
-		}
-	}
-
-	dcdebug("looking for directories...\n");
-	// Check subdirs recursively
-	HTREEITEM item = dirs->getChild(root);
-	while(item != NULL) {
-		HTREEITEM srch = findFile(str, item, foundFile, skipHits);
-		if(srch)
-			return srch;
-		else
-			item = dirs->getNextSibling(item);
-	}
-
-	return 0;
+	return make_pair(nullptr, 0);
 }
 
-void DirectoryListingFrame::findFile(int direction)
-{
-	if(findStr.empty() && direction != FIND_START) {
-		direction = FIND_START;
-	}
-
-	switch (direction) {
-	case FIND_START:
-	{
+void DirectoryListingFrame::findFile(FindMode mode) {
+	if(mode == FIND_START || findStr.empty()) {
 		// Prompt for substring to find
-		ParamDlg dlg(this, T_("Search for file"), T_("Enter search string"), lastSearches, 0, true /*comboBoxEdit*/);
-
+		ParamDlg dlg(this, T_("Search for file"), T_("Enter search string"), lastSearches, 0, true);
 		if(dlg.run() != IDOK)
 			return;
 
 		const tstring& value = dlg.getValue();
-		if(!value.empty() && std::find(lastSearches.begin(), lastSearches.end(), value) == lastSearches.end()) {
+		if(value.empty())
+			return;
+		findStr = Text::fromT(value);
+
+		if(std::find(lastSearches.begin(), lastSearches.end(), value) == lastSearches.end()) {
 			size_t i = max(SETTING(SEARCH_HISTORY) - 1, 0);
 			while(lastSearches.size() > i) {
 				lastSearches.erase(lastSearches.end() - 1);
 			}
 			lastSearches.insert(lastSearches.begin(), value);
 		}
-		findStr = Text::fromT(value);
-		skipHits = 0;
-		break;
 	}
-	case FIND_NEXT:
-		skipHits++;
-		break;
-	case FIND_PREV:
-		if (skipHits == 0) {
-			dwt::MessageBox(this).show(T_("No matches"), T_("Find previous"));
-			return;
-		}
-		skipHits--;
-	}
-
-	if(findStr.empty())
-		return;
 
 	HoldRedraw hold(files);
 	HoldRedraw hold2(dirs);
 	HoldRedraw hold3(status);
 
 	// Do a search
-	int foundFile = -1, skipHitsTmp = skipHits;
+
 	HTREEITEM const oldDir = dirs->getSelected();
-	HTREEITEM const foundDir = findFile(StringSearch(findStr), treeRoot, foundFile, skipHitsTmp);
 
-	if(foundDir) {
-		// Highlight the directory tree and list if the parent dir/a matched dir was found
-		if(foundFile >= 0) {
-			// SelectItem won't update the list if SetRedraw was set to FALSE and then
-			// to TRUE and the item setSelecteded is the same as the last one... workaround:
-			if(oldDir == foundDir)
-				dirs->setSelected(NULL);
+	if(mode == FIND_START) {
+		dirs->setSelected(treeRoot);
+		files->clearSelection();
+	}
 
-			dirs->setSelected(foundDir);
-		} else {
-			// Got a dir; setSelected its parent directory in the tree if there is one
-			HTREEITEM parentItem = dirs->getParent(foundDir);
-			if(parentItem) {
-				// Go to parent file list
-				dirs->setSelected(parentItem);
+	auto search = findFile(StringSearch(findStr), mode == FIND_PREV, (mode == FIND_START) ? treeRoot : oldDir, files->getSelected());
 
-				// Locate the dir in the file list
-				DirectoryListing::Directory* dir = dirs->getData(foundDir)->dir;
+	if(search.first) {
+		// SelectItem won't update the list if SetRedraw was set to FALSE and then
+		// to TRUE and the item setSelecteded is the same as the last one... workaround:
+		if(oldDir == search.first)
+			dirs->setSelected(NULL);
+		// Highlight the directory in the tree
+		dirs->setSelected(search.first);
+		dirs->ensureVisible(search.first);
 
-				foundFile = files->find(Text::toT(dir->getName()), -1, false);
-			} else {
-				// If no parent exists, just the dir tree item and skip the list highlighting
-				dirs->setSelected(foundDir);
-			}
-		}
+		// Remove prev. selection from file list
+		files->clearSelection();
 
-		// Remove prev. setSelectedion from file list
-		if(files->hasSelected()) {
-			files->clearSelection();
-		}
+		// Highlight and focus the file
+		files->setFocus();
+		files->setSelected(search.second);
+		files->ensureVisible(search.second);
 
-		// Highlight and focus the dir/file if possible
-		if(foundFile >= 0) {
-			files->setFocus();
-			files->setSelected(foundFile);
-			files->ensureVisible(foundFile);
-		} else {
-			dirs->setFocus();
-		}
 	} else {
+		// same workaround as above (select NULL / select old dir) as dirs may have changed while searching
 		dirs->setSelected(NULL);
 		dirs->setSelected(oldDir);
-		dwt::MessageBox(this).show(T_("No matches"), T_("Search for file"));
-		if (skipHits > 0)
-			skipHits--;
+		dwt::MessageBox(this).show(T_("No matches found for:") + _T("\n") + Text::toT(findStr), T_("Search for file"));
 	}
 }
 

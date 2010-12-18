@@ -68,7 +68,7 @@ public:
 		GETSET(bool, adls, Adls);
 	};
 
-	class Directory : public FastAlloc<Directory> {
+	class Directory : public FastAlloc<Directory>, boost::noncopyable {
 	public:
 		typedef Directory* Ptr;
 		struct DirSort {
@@ -112,10 +112,6 @@ public:
 		GETSET(Directory*, parent, Parent);
 		GETSET(bool, adls, Adls);
 		GETSET(bool, complete, Complete);
-
-	private:
-		Directory(const Directory&);
-		Directory& operator=(const Directory&);
 	};
 
 	class AdlDirectory : public Directory {
