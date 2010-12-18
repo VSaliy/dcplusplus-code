@@ -261,6 +261,7 @@ int ConnectionManager::Server::run() throw() {
 					LogManager::getInstance()->message(_("Connectivity restored"));
 					failed = false;
 				}
+				break;
 			} catch(const SocketException& e) {
 				dcdebug("ConnectionManager::Server::run Stopped listening: %s\n", e.getError().c_str());
 
