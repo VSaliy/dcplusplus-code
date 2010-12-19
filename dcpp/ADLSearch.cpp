@@ -25,10 +25,11 @@
 #include "DCPlusPlus.h"
 
 #include "ADLSearch.h"
-#include "QueueManager.h"
-#include "ClientManager.h"
 
+#include "ClientManager.h"
 #include "File.h"
+#include "LogManager.h"
+#include "QueueManager.h"
 #include "SimpleXML.h"
 
 namespace dcpp {
@@ -131,7 +132,11 @@ struct Prepare : boost::static_visitor<> {
 	}
 
 	void operator()(boost::regex& r) const {
-		r.assign(s);
+		try {
+			r.assign(s);
+		} catch(const std::runtime_error&) {
+			LogManager::getInstance()->message(str(F_("Invalid ADL Search regular expression: %1%") % s));
+		}
 	}
 
 private:
@@ -196,7 +201,12 @@ struct SearchAll : boost::static_visitor<bool> {
 	}
 
 	bool operator()(boost::regex& r) const {
-		return boost::regex_search(s, r);
+		try {
+			return !r.empty() && boost::regex_search(s, r);
+		} catch(const std::runtime_error&) {
+			// most likely a stack overflow, ignore...
+			return false;
+		}
 	}
 
 private:
