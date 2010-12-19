@@ -212,10 +212,9 @@ users(0)
 	layout();
 	activate();
 
-	listsGrid->setEnabled(false);
-	
 	if(FavoriteManager::getInstance()->isDownloading()) {
 		status->setText(STATUS_STATUS, T_("Downloading public hub list..."));
+		listsGrid->setEnabled(false);
 	} else if(entries.empty()) {
 		FavoriteManager::getInstance()->refresh();
 	}
