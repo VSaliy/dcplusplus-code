@@ -60,7 +60,7 @@ ctrlTab(ctrlTab_)
 
 TabView::TabView(Widget* w) :
 BaseType(w, ChainingDispatcher::superClass<TabView>()),
-Taskbar([this](ContainerPtr tab) { setActive(tab); }),
+Taskbar(),
 tip(0),
 toggleActive(false),
 font(0),
@@ -278,6 +278,10 @@ const TabView::ChildList TabView::getChildren() const {
 		ret.push_back(getTabInfo(i)->w);
 	}
 	return ret;
+}
+
+void TabView::setActive(ContainerPtr w) {
+	setActive(findTab(w));
 }
 
 void TabView::setActive(int i) {
@@ -567,7 +571,7 @@ bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		layout();
 
 		if(taskbar) {
-			moveOnTaskbar(getTabInfo(dropPos)->w, (dropPos < size() - 1) ? getTabInfo(dropPos + 1)->w : 0);
+			moveOnTaskbar(getTabInfo(dropPos)->w, (dropPos < static_cast<int>(size()) - 1) ? getTabInfo(dropPos + 1)->w : 0);
 		}
 	}
 
