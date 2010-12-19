@@ -1066,17 +1066,12 @@ void MainWindow::parseCommandLine(const tstring& cmdLine)
 	string::size_type i = 0;
 	string::size_type j;
 
-	if( (j = cmdLine.find(_T("dchub://"), i)) != string::npos) {
-		WinUtil::parseDchubUrl(cmdLine.substr(j));
-	}
-	if( (j = cmdLine.find(_T("adc://"), i)) != string::npos) {
-		WinUtil::parseADChubUrl(cmdLine.substr(j), false);
-	}
-	if( (j = cmdLine.find(_T("adcs://"), i)) != string::npos) {
-		WinUtil::parseADChubUrl(cmdLine.substr(j), true);
-	}
-	if( (j = cmdLine.find(_T("magnet:?"), i)) != string::npos) {
-		WinUtil::parseMagnetUri(cmdLine.substr(j));
+	if( (j = cmdLine.find(_T("dchub://"), i)) != string::npos ||
+		(j = cmdLine.find(_T("adc://"), i)) != string::npos ||
+		(j = cmdLine.find(_T("adcs://"), i)) != string::npos ||
+		(j = cmdLine.find(_T("magnet:?"), i)) != string::npos )
+	{
+		WinUtil::parseDBLClick(cmdLine.substr(j));
 	}
 }
 
