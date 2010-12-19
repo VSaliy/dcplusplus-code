@@ -46,9 +46,7 @@ public:
 	void initTaskbar(WindowPtr window_);
 
 protected:
-	typedef std::function<void (ContainerPtr)> ActivateF;
-	/// @param activateF_ function called when the user activates a tab using the taskbar.
-	explicit Taskbar(const ActivateF& activateF_);
+	Taskbar();
 	virtual ~Taskbar();
 
 	void addToTaskbar(ContainerPtr tab);
@@ -62,10 +60,11 @@ protected:
 private:
 	BitmapPtr getBitmap(ContainerPtr tab, LPARAM thumbnailSize);
 
+	/// function called when the user activates a tab using the taskbar.
+	virtual void setActive(ContainerPtr) = 0;
+
 	WindowPtr window;
 	std::unordered_map<ContainerPtr, ContainerPtr> tabs;
-
-	ActivateF activateF;
 };
 
 }

@@ -106,7 +106,7 @@ public:
 	void next(bool reverse = false);
 
 	ContainerPtr getActive() const;
-	void setActive(ContainerPtr w) { setActive(findTab(w)); }
+	void setActive(ContainerPtr w);
 
 	IconPtr getIcon(ContainerPtr w) const;
 	void setIcon(ContainerPtr w, const IconPtr& icon);

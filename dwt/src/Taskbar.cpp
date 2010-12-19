@@ -54,10 +54,9 @@ static t_DwmSetIconicThumbnail DwmSetIconicThumbnail;
 typedef HRESULT (WINAPI *t_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
 static t_DwmSetWindowAttribute DwmSetWindowAttribute;
 
-Taskbar::Taskbar(const ActivateF& activateF_) :
+Taskbar::Taskbar() :
 taskbar(0),
-window(0),
-activateF(activateF_)
+window(0)
 {
 }
 
@@ -143,8 +142,7 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 	// forward taskbar events that were sent to the proxy window to the actual tab window.
 	proxy->onActivate([this, tab](bool activate) {
 		if(activate) {
-			activateF(tab);
-			// imitate MFC...
+			setActive(tab);
 			::SetForegroundWindow(window->handle());
 			if(window->isIconic())
 				window->restore();
