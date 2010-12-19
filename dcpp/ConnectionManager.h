@@ -175,6 +175,8 @@ private:
 
 	void accept(const Socket& sock, bool secure) throw();
 
+	bool checkKeyprint(UserConnection *aSource);
+
 	void failed(UserConnection* aSource, const string& aError, bool protocolError);
 
 	// UserConnectionListener

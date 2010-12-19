@@ -38,8 +38,16 @@ Client::Client(const string& hubURL, char separator_, bool secure_) :
 	hubUrl(hubURL), port(0), separator(separator_),
 	secure(secure_), countType(COUNT_UNCOUNTED)
 {
-	string file;
-	Util::decodeUrl(hubURL, address, port, file);
+	string file, proto, query, fragment;
+	Util::decodeUrl(hubURL, proto, address, port, file, query, fragment);
+
+	if(!query.empty()) {
+		auto q = Util::decodeQuery(query);
+		auto kp = q.find("kp");
+		if(kp != q.end()) {
+			keyprint = kp->second;
+		}
+	}
 
 	TimerManager::getInstance()->addListener(this);
 }
@@ -126,6 +134,21 @@ void Client::on(Connected) throw() {
 	updateActivity();
 	ip = sock->getIp();
 	localIp = sock->getLocalIp();
+
+	if(sock->isSecure() && keyprint.compare(0, 7, "SHA256/") == 0) {
+		auto kp = sock->getKeyprint();
+		if(!kp.empty()) {
+			vector<uint8_t> kp2v(kp.size());
+			Encoder::fromBase32(keyprint.c_str() + 7, &kp2v[0], kp2v.size());
+			if(!std::equal(kp.begin(), kp.end(), kp2v.begin())) {
+				state = STATE_DISCONNECTED;
+				sock->removeListener(this);
+				fire(ClientListener::Failed(), this, "Keyprint mismatch");
+				return;
+			}
+		}
+	}
+
 	fire(ClientListener::Connected(), this);
 	state = STATE_PROTOCOL;
 }
@@ -152,6 +175,10 @@ bool Client::isTrusted() const {
 
 std::string Client::getCipherName() const {
 	return isReady() ? sock->getCipherName() : Util::emptyString;
+}
+
+vector<uint8_t> Client::getKeyprint() const {
+	return isReady() ? sock->getKeyprint() : vector<uint8_t>();
 }
 
 void Client::updateCounts(bool aRemove) {
