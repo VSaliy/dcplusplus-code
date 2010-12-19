@@ -165,7 +165,9 @@ public:
 
 	ScreenCoordinate getContextMenuPos();
 
+	bool isExpanded(HTREEITEM node);
 	void expand(HTREEITEM node);
+	void collapse(HTREEITEM node);
 
 	void select(const ScreenCoordinate& pt);
 
@@ -355,8 +357,16 @@ inline HTREEITEM Tree::hitTest(const ScreenCoordinate& pt) {
 	return TreeView_HitTest(handle(), &tvhti);
 }
 
+inline bool Tree::isExpanded(HTREEITEM node) {
+	return TreeView_GetItemState(handle(), node, TVIS_EXPANDED) & TVIS_EXPANDED;
+}
+
 inline void Tree::expand(HTREEITEM node) {
 	TreeView_Expand(handle(), node, TVE_EXPAND);
+}
+
+inline void Tree::collapse(HTREEITEM node) {
+	TreeView_Expand(handle(), node, TVE_COLLAPSE);
 }
 
 inline void Tree::clearImpl() {

@@ -865,15 +865,22 @@ pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bo
 	// flow to the next directory
 	HTREEITEM next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
 	if(next) {
-		if(dirs->getChild(next)) {
+		HTREEITEM collapse = nullptr;
+		if(dirs->getChild(next) && !dirs->isExpanded(next)) {
 			dirs->expand(next);
+			collapse = next;
 			next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
 		}
 
 		// refresh the list pane to respect sorting etc
 		changeDir(dirs->getData(next)->dir);
 
-		return findFile(str, reverse, next, -1);
+		auto ret = findFile(str, reverse, next, -1);
+
+		if(collapse)
+			dirs->collapse(collapse);
+
+		return ret;
 	}
 
 	return make_pair(nullptr, 0);
@@ -908,6 +915,15 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 
 	HTREEITEM const oldDir = dirs->getSelected();
 
+	auto selectDir = [this, oldDir](HTREEITEM newDir) {
+		// SelectItem won't update the list if SetRedraw was set to FALSE and then
+		// to TRUE and the selected item is the same as the last one... workaround:
+		if(newDir == oldDir)
+			dirs->setSelected(nullptr);
+		dirs->setSelected(newDir);
+		dirs->ensureVisible(newDir);
+	};
+
 	if(mode == FIND_START) {
 		dirs->setSelected(treeRoot);
 		files->clearSelection();
@@ -916,13 +932,7 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 	auto search = findFile(StringSearch(findStr), mode == FIND_PREV, (mode == FIND_START) ? treeRoot : oldDir, files->getSelected());
 
 	if(search.first) {
-		// SelectItem won't update the list if SetRedraw was set to FALSE and then
-		// to TRUE and the item setSelecteded is the same as the last one... workaround:
-		if(oldDir == search.first)
-			dirs->setSelected(NULL);
-		// Highlight the directory in the tree
-		dirs->setSelected(search.first);
-		dirs->ensureVisible(search.first);
+		selectDir(search.first);
 
 		// Remove prev. selection from file list
 		files->clearSelection();
@@ -933,9 +943,7 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 		files->ensureVisible(search.second);
 
 	} else {
-		// same workaround as above (select NULL / select old dir) as dirs may have changed while searching
-		dirs->setSelected(NULL);
-		dirs->setSelected(oldDir);
+		selectDir(oldDir);
 		dwt::MessageBox(this).show(T_("No matches found for:") + _T("\n") + Text::toT(findStr), T_("Search for file"));
 	}
 }
