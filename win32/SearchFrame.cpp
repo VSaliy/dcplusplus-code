@@ -710,7 +710,7 @@ MenuPtr SearchFrame::makeMenu() {
 	menu->setTitle(checkTTH.hasTTH ? escapeMenu(checkTTH.name) : str(TF_("%1% results") % results->countSelected()),
 		getParent()->getIcon(this));
 
-	menu->appendItem(T_("&Download"), std::bind(&SearchFrame::handleDownload, this), dwt::IconPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::bind(&SearchFrame::handleDownload, this), WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
 	addTargetMenu(menu, favoriteDirs, checkTTH);
 	menu->appendItem(T_("Download whole directory"), std::bind(&SearchFrame::handleDownloadDir, this));
 	addTargetDirMenu(menu, favoriteDirs);

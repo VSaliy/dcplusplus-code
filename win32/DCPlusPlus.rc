@@ -89,6 +89,10 @@ IDI_INDEXING            ICON                    "res/Indexing.ico"
 IDI_LINKS               ICON                    "res/Links.ico"
 IDI_REFRESH             ICON                    "res/Refresh.ico"
 IDI_SLOTS               ICON                    "res/Slots.ico"
+IDI_OK                  ICON                    "res/OK.ico"
+IDI_CANCEL              ICON                    "res/Cancel.ico"
+IDI_LEFT                ICON                    "res/Left.ico"
+IDI_RIGHT               ICON                    "res/Right.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

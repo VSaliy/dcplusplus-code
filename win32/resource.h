@@ -47,6 +47,10 @@
 #define IDI_LINKS 139
 #define IDI_REFRESH 140
 #define IDI_SLOTS 141
+#define IDI_OK 142
+#define IDI_CANCEL 143
+#define IDI_LEFT 144
+#define IDI_RIGHT 145
 
 #define IDB_FOLDERS		151
 #define IDB_USERS		154
