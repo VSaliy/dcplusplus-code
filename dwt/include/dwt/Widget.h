@@ -131,7 +131,7 @@ public:
 	/** This will be called when it's time to delete the widget */
 	virtual void kill();
 
-	virtual Point getPreferedSize();
+	virtual Point getPreferredSize();
 
 	/** Layout the widget in the specified rectangle (in client coordinates) */
 	virtual void layout(const Rectangle& rect);

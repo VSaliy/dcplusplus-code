@@ -251,7 +251,7 @@ droppedResults(0)
 	showUI->onClicked(std::bind(&SearchFrame::handleShowUIClicked, this));
 
 	initStatus();
-	status->setSize(STATUS_SHOW_UI, showUI->getPreferedSize().x);
+	status->setSize(STATUS_SHOW_UI, showUI->getPreferredSize().x);
 
 	layout();
 	activate();

@@ -57,7 +57,7 @@ void Grid::create( const Seed & cs )
 	onEnabled([this](bool b) { handleEnabled(b); });
 }
 
-Point Grid::getPreferedSize() {
+Point Grid::getPreferredSize() {
 	// TODO find better way of keeping track of children
 	for(HWND wnd = ::FindWindowEx(handle(), NULL, NULL, NULL); wnd; wnd = ::FindWindowEx(handle(), wnd, NULL, NULL)) {
 		// Update widget info if it's missing for some children...
@@ -73,12 +73,12 @@ Point Grid::getPreferedSize() {
 	return p + actualSpacing();
 }
 
-Point Grid::getPreferedSize(size_t row, size_t column) const {
+Point Grid::getPreferredSize(size_t row, size_t column) const {
 	Point ret(0, 0);
 
 	for(WidgetInfoList::const_iterator i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
 		if(i->inCell(row, column) && i->w->hasStyle(WS_VISIBLE)) {
-			ret = i->w->getPreferedSize();
+			ret = i->w->getPreferredSize();
 			// TODO consider fractions...
 			if(i->colSpan > 1) {
 				if(ret.x > i->colSpan*spacing) {
@@ -127,7 +127,7 @@ std::vector<size_t> Grid::calcSizes(const GridInfoList& x, const GridInfoList& y
 			break;
 		case GridInfo::AUTO:
 			for(size_t j = 0; j < y.size(); ++j) {
-				ret[i] = std::max(ret[i], static_cast<size_t>(isRow ? getPreferedSize(i, j).y : getPreferedSize(j, i).x));
+				ret[i] = std::max(ret[i], static_cast<size_t>(isRow ? getPreferredSize(i, j).y : getPreferredSize(j, i).x));
 			}
 			break;
 		}
@@ -205,7 +205,7 @@ void Grid::layout(const Rectangle& r) {
 		size_t h = std::accumulate(rowSize.begin() + r, rowSize.begin() + r + rs, 0);
 		h += (rs-1)*spacing;
 
-		Point ps = wi->w->getPreferedSize();
+		Point ps = wi->w->getPreferredSize();
 
 		switch(columns[wi->column].align) {
 		case GridInfo::TOP_LEFT: w = ps.x; break;

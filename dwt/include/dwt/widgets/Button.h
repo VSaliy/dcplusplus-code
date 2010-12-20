@@ -86,7 +86,7 @@ public:
 	void setImage(BitmapPtr bitmap);
 	void setImage(IconPtr icon);
 
-	virtual Point getPreferedSize();
+	virtual Point getPreferredSize();
 
 protected:
 	typedef Button ButtonType;

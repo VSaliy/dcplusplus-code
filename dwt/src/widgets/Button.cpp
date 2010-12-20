@@ -61,7 +61,7 @@ void Button::setImage(IconPtr icon) {
 	sendMessage(BM_SETIMAGE, IMAGE_ICON, reinterpret_cast<LPARAM>(icon->handle()));
 }
 
-Point Button::getPreferedSize() {
+Point Button::getPreferredSize() {
 	SIZE size = { 0 };
 	if(sendMessage(BCM_GETIDEALSIZE, 0, reinterpret_cast<LPARAM>(&size))) {
 		return Point(size.cx, size.cy);

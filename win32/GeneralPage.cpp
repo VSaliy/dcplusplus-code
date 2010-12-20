@@ -86,7 +86,7 @@ GeneralPage::~GeneralPage() {
 void GeneralPage::layout(const dwt::Rectangle& rc) {
 	PropPage::layout(rc);
 
-	dwt::Point groupSize = group->getPreferedSize();
+	dwt::Point groupSize = group->getPreferredSize();
 	group->layout(dwt::Rectangle(7, 4, getClientSize().x - 14, groupSize.y));
 }
 

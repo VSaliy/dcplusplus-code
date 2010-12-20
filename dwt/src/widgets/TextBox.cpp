@@ -160,7 +160,7 @@ ScreenCoordinate TextBoxBase::getContextMenuPos() {
 	return ptFromPos(getCaretPos());
 }
 
-Point TextBoxBase::getPreferedSize() {
+Point TextBoxBase::getPreferredSize() {
 	// Taken from http://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
 

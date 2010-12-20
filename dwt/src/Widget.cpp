@@ -173,7 +173,7 @@ void Widget::setParent(Widget* widget) {
 	parent = widget;
 }
 
-Point Widget::getPreferedSize() {
+Point Widget::getPreferredSize() {
 	return Point(0, 0);
 }
 

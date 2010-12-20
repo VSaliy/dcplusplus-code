@@ -46,7 +46,7 @@ CheckBox::Seed::Seed(const tstring& caption, DWORD style) :
 
 }
 
-Point CheckBox::getPreferedSize() {
+Point CheckBox::getPreferredSize() {
 	// Pixels between icon and text
 	const int MARGIN = 4;
 

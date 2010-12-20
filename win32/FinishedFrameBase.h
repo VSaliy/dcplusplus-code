@@ -142,7 +142,7 @@ protected:
 
 		this->initStatus();
 		if(onlyFull)
-			this->status->setSize(STATUS_ONLY_FULL, onlyFull->getPreferedSize().x);
+			this->status->setSize(STATUS_ONLY_FULL, onlyFull->getPreferredSize().x);
 		this->status->onDblClicked(STATUS_STATUS, std::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(in_UL ? LogManager::UPLOAD : LogManager::DOWNLOAD)))));
 
 		this->status->setHelpId(STATUS_COUNT, in_UL ? IDH_FINISHED_UL_COUNT : IDH_FINISHED_DL_COUNT);

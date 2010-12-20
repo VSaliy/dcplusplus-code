@@ -252,11 +252,11 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 
 	initStatus();
 
-	status->setSize(STATUS_FILE_LIST_DIFF, listDiff->getPreferedSize().x);
-	status->setSize(STATUS_MATCH_QUEUE, matchQueue->getPreferedSize().x);
-	status->setSize(STATUS_FIND, find->getPreferedSize().x);
-	status->setSize(STATUS_PREV, findPrev->getPreferedSize().x);
-	status->setSize(STATUS_NEXT, findNext->getPreferedSize().x);
+	status->setSize(STATUS_FILE_LIST_DIFF, listDiff->getPreferredSize().x);
+	status->setSize(STATUS_MATCH_QUEUE, matchQueue->getPreferredSize().x);
+	status->setSize(STATUS_FIND, find->getPreferredSize().x);
+	status->setSize(STATUS_PREV, findPrev->getPreferredSize().x);
+	status->setSize(STATUS_NEXT, findNext->getPreferredSize().x);
 
 	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
 

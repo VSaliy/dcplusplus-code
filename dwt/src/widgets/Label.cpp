@@ -65,7 +65,7 @@ void Label::layout(const Rectangle& r_) {
 	BaseType::layout(r);
 }
 
-Point Label::getPreferedSize() {
+Point Label::getPreferredSize() {
 	if(hasStyle(SS_ICON)) {
 		// icon control; the control should have already resized itself to its preferred size.
 		return getWindowSize();

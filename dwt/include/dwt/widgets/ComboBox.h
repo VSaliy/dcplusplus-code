@@ -125,7 +125,7 @@ public:
 	  */
 	void create( const Seed & cs = Seed() );
 
-	virtual Point getPreferedSize();
+	virtual Point getPreferredSize();
 
 	/// Returns true if fired, else false
 	virtual void layout(const Rectangle& r);

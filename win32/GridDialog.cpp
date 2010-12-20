@@ -39,7 +39,7 @@ void GridDialog::layout() {
 	size_t spacing = grid->getSpacing();
 
 	dwt::Point sz = getClientSize();
-	sz.y = grid->getPreferedSize().y;
+	sz.y = grid->getPreferredSize().y;
 	grid->layout(dwt::Rectangle(spacing, spacing, sz.x - spacing * 2, sz.y));
 
 	// now resize the dialog itself

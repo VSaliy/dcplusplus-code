@@ -169,7 +169,7 @@ public:
 	ClientCoordinate ptFromPos(int pos);
 	ScreenCoordinate getContextMenuPos();
 
-	virtual Point getPreferedSize();
+	virtual Point getPreferredSize();
 
 	virtual MenuPtr getMenu();
 

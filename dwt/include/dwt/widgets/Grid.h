@@ -103,7 +103,7 @@ public:
 
 	void create( const Seed & cs = Seed() );
 
-	Point getPreferedSize();
+	Point getPreferredSize();
 
 protected:
 	friend class WidgetCreator<Grid>;
@@ -141,7 +141,7 @@ private:
 	typedef std::vector<WidgetInfo> WidgetInfoList;
 	WidgetInfoList widgetInfo;
 
-	Point getPreferedSize(size_t row, size_t column) const;
+	Point getPreferredSize(size_t row, size_t column) const;
 
 	std::vector<size_t> calcSizes(const GridInfoList& x, const GridInfoList& y, size_t cur, bool row) const;
 

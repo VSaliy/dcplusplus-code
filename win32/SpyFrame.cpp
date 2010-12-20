@@ -72,7 +72,7 @@ SpyFrame::SpyFrame(dwt::TabView* mdiParent) :
 	}
 
 	initStatus();
-	status->setSize(STATUS_IGNORE_TTH, ignoreTTH->getPreferedSize().x);
+	status->setSize(STATUS_IGNORE_TTH, ignoreTTH->getPreferredSize().x);
 
 	status->setHelpId(STATUS_TOTAL, IDH_SPY_TOTAL);
 	status->setHelpId(STATUS_AVG_PER_SECOND, IDH_SPY_AVG_PER_SECOND);
