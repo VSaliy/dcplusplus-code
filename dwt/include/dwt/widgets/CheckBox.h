@@ -88,7 +88,7 @@ public:
 	  */
 	void setChecked( bool value = true );
 
-	virtual Point getPreferedSize();
+	virtual Point getPreferredSize();
 
 protected:
 	// Constructor Taking pointer to parent

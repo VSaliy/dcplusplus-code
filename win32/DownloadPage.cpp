@@ -127,7 +127,7 @@ DownloadPage::~DownloadPage() {
 void DownloadPage::layout(const dwt::Rectangle& rc) {
 	PropPage::layout(rc);
 
-	dwt::Point gridSize = grid->getPreferedSize();
+	dwt::Point gridSize = grid->getPreferredSize();
 	grid->layout(dwt::Rectangle(7, 4, getClientSize().x - 14, gridSize.y));
 }
 

@@ -188,7 +188,7 @@ inTabComplete(false)
 	showUsers->setChecked(BOOLSETTING(GET_USER_INFO));
 
 	initStatus();
-	status->setSize(STATUS_SHOW_USERS, showUsers->getPreferedSize().x);
+	status->setSize(STATUS_SHOW_USERS, showUsers->getPreferredSize().x);
 	status->onDblClicked(STATUS_STATUS, std::bind(&HubFrame::openLog, this, false));
 
 	status->setHelpId(STATUS_STATUS, IDH_HUB_STATUS);

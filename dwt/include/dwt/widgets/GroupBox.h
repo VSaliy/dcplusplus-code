@@ -91,7 +91,7 @@ public:
 	/// Actually creates the GroupBox
 	void create( const Seed & cs = Seed() );
 
-	virtual Point getPreferedSize();
+	virtual Point getPreferredSize();
 
 	virtual void layout(const Rectangle& rect);
 

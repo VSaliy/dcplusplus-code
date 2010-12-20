@@ -58,12 +58,12 @@ void GroupBox::create( const GroupBox::Seed & cs ) {
 	onEnabled([this](bool b) { handleEnabled(b); });
 }
 
-Point GroupBox::getPreferedSize() {
+Point GroupBox::getPreferredSize() {
 	Point ret(0, 0);
 	Widget* w = getChild();
 
 	if(w) {
-		ret = w->getPreferedSize();
+		ret = w->getPreferredSize();
 	}
 
 	return expand(ret);

@@ -62,7 +62,7 @@ tstring ComboBox::getValue( int index ) {
 	return retVal;
 }
 
-Point ComboBox::getPreferedSize() {
+Point ComboBox::getPreferredSize() {
 	// Pixels between text and arrow
 	const int MARGIN = 2;
 

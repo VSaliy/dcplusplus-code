@@ -94,7 +94,7 @@ fileLists(0)
 	showTree->onClicked(std::bind(&QueueFrame::handleShowTreeClicked, this));
 
 	initStatus();
-	status->setSize(STATUS_SHOW_TREE, showTree->getPreferedSize().x);
+	status->setSize(STATUS_SHOW_TREE, showTree->getPreferredSize().x);
 
 	status->setHelpId(STATUS_PARTIAL_COUNT, IDH_QUEUE_PARTIAL_COUNT);
 	status->setHelpId(STATUS_PARTIAL_BYTES, IDH_QUEUE_PARTIAL_BYTES);
