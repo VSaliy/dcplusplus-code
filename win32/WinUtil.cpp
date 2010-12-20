@@ -639,9 +639,9 @@ void WinUtil::reducePaths(string& message) {
 }
 
 void WinUtil::addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename, int64_t size) {
-	menu->appendItem(T_("Search for alternates"), std::bind(&WinUtil::searchHash, tth));
+	menu->appendItem(T_("Search for alternates"), std::bind(&WinUtil::searchHash, tth), menuIcon(IDI_SEARCH));
 	menu->appendItem(T_("Lookup TTH at Bitzi.com"), std::bind(WinUtil::bitziLink, tth));
-	menu->appendItem(T_("Copy magnet link to clipboard"), std::bind(&WinUtil::copyMagnet, tth, filename, size));
+	menu->appendItem(T_("Copy magnet link to clipboard"), std::bind(&WinUtil::copyMagnet, tth, filename, size), menuIcon(IDI_MAGNET));
 }
 
 void WinUtil::bitziLink(const TTHValue& aHash) {
@@ -959,6 +959,7 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid, const dwt::Appli
 	seed.padding.x = 20;
 	ButtonPtr ok = grid->addChild(seed);
 	ok->setHelpId(IDH_DCPP_OK);
+	ok->setImage(buttonIcon(IDI_OK));
 	ok->onClicked(f_ok);
 
 	seed.caption = T_("Cancel");
@@ -966,6 +967,7 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid, const dwt::Appli
 	seed.padding.x = 10;
 	ButtonPtr cancel = grid->addChild(seed);
 	cancel->setHelpId(IDH_DCPP_CANCEL);
+	cancel->setImage(buttonIcon(IDI_CANCEL));
 	cancel->onClicked(f_cancel);
 
 	return make_pair(ok, cancel);

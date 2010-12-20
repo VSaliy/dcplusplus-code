@@ -220,6 +220,7 @@ public:
 	/* utility functions to create icons. use these throughout the prog to make it easier to change
 	sizes globally should the need arise to later on. */
 	static dwt::IconPtr createIcon(unsigned id, long size);
+	static inline dwt::IconPtr buttonIcon(unsigned id) { return createIcon(id, 16); }
 	static inline dwt::IconPtr menuIcon(unsigned id) { return createIcon(id, 16); }
 	static inline dwt::IconPtr statusIcon(unsigned id) { return createIcon(id, 16); }
 	static inline dwt::IconPtr tabIcon(unsigned id) { return createIcon(id, 16); }

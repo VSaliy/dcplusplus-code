@@ -234,27 +234,29 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 		cs.caption = T_("Find");
 		find = addChild(cs);
 		find->setHelpId(IDH_FILE_LIST_FIND);
+		find->setImage(WinUtil::buttonIcon(IDI_SEARCH));
 		find->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_START));
 
 		cs.caption = T_("Previous");
 		findPrev = addChild(cs);
 		findPrev->setHelpId(IDH_FILE_LIST_PREV);
+		findPrev->setImage(WinUtil::buttonIcon(IDI_LEFT));
 		findPrev->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_PREV));
 
 		cs.caption = T_("Next");
 		findNext = addChild(cs);
 		findNext->setHelpId(IDH_FILE_LIST_NEXT);
+		findNext->setImage(WinUtil::buttonIcon(IDI_RIGHT));
 		findNext->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_NEXT));
 	}
 
 	initStatus();
 
-	// This will set the widths correctly
-	status->setText(STATUS_FILE_LIST_DIFF, T_("Subtract list"));
-	status->setText(STATUS_MATCH_QUEUE, T_("Match queue"));
-	status->setText(STATUS_FIND, T_("Find"));
-	status->setText(STATUS_PREV, T_("Previous"));
-	status->setText(STATUS_NEXT, T_("Next"));
+	status->setSize(STATUS_FILE_LIST_DIFF, listDiff->getPreferedSize().x);
+	status->setSize(STATUS_MATCH_QUEUE, matchQueue->getPreferedSize().x);
+	status->setSize(STATUS_FIND, find->getPreferedSize().x);
+	status->setSize(STATUS_PREV, findPrev->getPreferedSize().x);
+	status->setSize(STATUS_NEXT, findNext->getPreferedSize().x);
 
 	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
 
@@ -388,7 +390,7 @@ ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 
 	menu->setTitle(escapeMenu(ii->getText(COLUMN_FILENAME)), WinUtil::fileImages->getIcon(ii->getImage()));
 
-	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
 	addTargets(menu, ii);
 
 	if(ii->type == ItemInfo::FILE) {
@@ -415,7 +417,7 @@ ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
 	size_t sel = files->countSelected();
 	menu->setTitle(str(TF_("%1% items") % sel), getParent()->getIcon(this));
 
-	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
 	addTargets(menu);
 	addUserCommands(menu);
 
@@ -428,7 +430,7 @@ ShellMenuPtr DirectoryListingFrame::makeDirMenu(ItemInfo* ii) {
 	menu->setTitle(escapeMenu(ii ? ii->getText(COLUMN_FILENAME) : getText()),
 		ii ? WinUtil::fileImages->getIcon(ii->getImage()) : getParent()->getIcon(this));
 
-	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), dwt::IconPtr(), true, true);
+	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
 	addTargets(menu);
 	return menu;
 }
@@ -850,7 +852,7 @@ void DirectoryListingFrame::forward() {
 	}
 }
 
-pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos) {
+pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos, vector<HTREEITEM>& collapse) {
 	// try to match the names currently in the list pane
 	const int n = files->size();
 	if(reverse && pos == -1)
@@ -863,24 +865,22 @@ pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bo
 	}
 
 	// flow to the next directory
+	if(!reverse && dirs->getChild(item) && !dirs->isExpanded(item)) {
+		dirs->expand(item);
+		collapse.push_back(item);
+	}
 	HTREEITEM next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
 	if(next) {
-		HTREEITEM collapse = nullptr;
-		if(dirs->getChild(next) && !dirs->isExpanded(next)) {
+		if(reverse && dirs->getChild(next) && !dirs->isExpanded(next)) {
 			dirs->expand(next);
-			collapse = next;
-			next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
+			collapse.push_back(next);
+			next = dirs->getNext(item, TVGN_PREVIOUSVISIBLE);
 		}
 
 		// refresh the list pane to respect sorting etc
 		changeDir(dirs->getData(next)->dir);
 
-		auto ret = findFile(str, reverse, next, -1);
-
-		if(collapse)
-			dirs->collapse(collapse);
-
-		return ret;
+		return findFile(str, reverse, next, -1, collapse);
 	}
 
 	return make_pair(nullptr, 0);
@@ -911,8 +911,6 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 	HoldRedraw hold2(dirs);
 	HoldRedraw hold3(status);
 
-	// Do a search
-
 	HTREEITEM const oldDir = dirs->getSelected();
 
 	auto selectDir = [this, oldDir](HTREEITEM newDir) {
@@ -929,7 +927,10 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 		files->clearSelection();
 	}
 
-	auto search = findFile(StringSearch(findStr), mode == FIND_PREV, (mode == FIND_START) ? treeRoot : oldDir, files->getSelected());
+	vector<HTREEITEM> collapse;
+	auto search = findFile(StringSearch(findStr), mode == FIND_PREV, (mode == FIND_START) ? treeRoot : oldDir, files->getSelected(), collapse);
+	for(auto i = collapse.cbegin(), iend = collapse.cend(); i != iend; ++i)
+		dirs->collapse(*i);
 
 	if(search.first) {
 		selectDir(search.first);

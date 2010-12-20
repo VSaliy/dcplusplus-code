@@ -83,6 +83,9 @@ public:
 
 	void create(const Seed& cs = Seed());
 
+	void setImage(BitmapPtr bitmap);
+	void setImage(IconPtr icon);
+
 	virtual Point getPreferedSize();
 
 protected:
@@ -93,8 +96,6 @@ protected:
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
-
-	Point padding;
 
 	// Contract needed by AspectClickable Aspect class
 	static Message getClickMessage();

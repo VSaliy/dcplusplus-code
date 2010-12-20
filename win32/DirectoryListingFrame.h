@@ -260,7 +260,7 @@ private:
 	void updateStatus();
 
 	void findFile(FindMode mode);
-	pair<HTREEITEM, int> findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos);
+	pair<HTREEITEM, int> findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos, vector<HTREEITEM>& collapse);
 
 	// MDIChildFrame
 	void tabMenuImpl(dwt::MenuPtr& menu);

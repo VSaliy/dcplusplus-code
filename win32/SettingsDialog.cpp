@@ -173,6 +173,7 @@ bool SettingsDialog::initDialog() {
 		seed.padding.x = 10;
 		ButtonPtr button = cur->addChild(seed);
 		button->setHelpId(IDH_DCPP_HELP);
+		button->setImage(WinUtil::buttonIcon(IDI_HELP));
 		button->onClicked(std::bind(&SettingsDialog::handleHelp, this, this, IDH_INDEX));
 	}
 

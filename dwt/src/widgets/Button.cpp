@@ -30,6 +30,7 @@
 */
 
 #include <dwt/widgets/Button.h>
+
 #include <dwt/CanvasClasses.h>
 
 namespace dwt {
@@ -48,15 +49,28 @@ void Button::create(const Seed& cs) {
 	if(cs.font)
 		setFont(cs.font);
 
-	padding.x = ::GetSystemMetrics(SM_CYFIXEDFRAME) * 2 + cs.padding.x * 2;
-	padding.y = ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2 + cs.padding.y * 2;
+	::RECT rect = { cs.padding.x, cs.padding.y, cs.padding.x, cs.padding.y };
+	sendMessage(BCM_SETTEXTMARGIN, 0, reinterpret_cast<LPARAM>(&rect));
+}
+
+void Button::setImage(BitmapPtr bitmap) {
+	sendMessage(BM_SETIMAGE, IMAGE_BITMAP, reinterpret_cast<LPARAM>(bitmap->handle()));
+}
+
+void Button::setImage(IconPtr icon) {
+	sendMessage(BM_SETIMAGE, IMAGE_ICON, reinterpret_cast<LPARAM>(icon->handle()));
 }
 
 Point Button::getPreferedSize() {
-	// TODO Consider icons etc
+	SIZE size = { 0 };
+	if(sendMessage(BCM_GETIDEALSIZE, 0, reinterpret_cast<LPARAM>(&size))) {
+		return Point(size.cx, size.cy);
+	}
+
+	// BCM_GETIDEALSIZE fails on comctrl < 6, so resort to the standard method
 	UpdateCanvas c(this);
 	c.selectFont(getFont());
-	return c.getTextExtent(getText()) + padding;
+	return c.getTextExtent(getText()) + Point(3, 2) + Point(::GetSystemMetrics(SM_CYFIXEDFRAME) * 2, ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2);
 }
 
 }
