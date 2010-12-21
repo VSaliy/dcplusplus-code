@@ -21,7 +21,6 @@
 #include "DirectoryListingFrame.h"
 
 #include "MainWindow.h"
-#include "ParamDlg.h"
 #include "TextFrame.h"
 #include "HoldRedraw.h"
 
@@ -169,14 +168,14 @@ void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const HintedUser
 
 DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const HintedUser& aUser, int64_t aSpeed) :
 	BaseType(mdiParent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY),
+	grid(0),
 	dirs(0),
 	files(0),
-	paned(0),
-	findPrev(0),
-	find(0),
-	findNext(0),
+	searchGrid(0),
+	searchBox(0),
 	listDiff(0),
 	matchQueue(0),
+	find(0),
 	speed(aSpeed),
 	dl(new DirectoryListing(aUser)),
 	user(aUser),
@@ -186,10 +185,17 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	updating(false),
 	searching(false)
 {
-	paned = addChild(WidgetVPaned::Seed(0.3));
+	grid = addChild(Grid::Seed(2, 1));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+	grid->row(1).size = 0;
+	grid->row(1).mode = GridInfo::STATIC;
+
+	VSplitterPtr paned = grid->addChild(VSplitter::Seed(0.3));
 
 	{
-		dirs = addChild(WidgetDirs::Seed());
+		dirs = grid->addChild(WidgetDirs::Seed());
 		dirs->setHelpId(IDH_FILE_LIST_DIRS);
 		addWidget(dirs);
 		paned->setFirst(dirs);
@@ -200,7 +206,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	}
 
 	{
-		files = addChild(WidgetFiles::Seed());
+		files = grid->addChild(WidgetFiles::Seed());
 		files->setHelpId(IDH_FILE_LIST_FILES);
 		addWidget(files);
 		paned->setSecond(files);
@@ -221,6 +227,35 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	{
 		Button::Seed cs = WinUtil::Seeds::button;
 
+		searchGrid = grid->addChild(Grid::Seed(1, 4));
+		grid->setWidget(searchGrid, 1, 0);
+		searchGrid->column(0).mode = GridInfo::FILL;
+
+		searchBox = searchGrid->addChild(WinUtil::Seeds::comboBoxEdit);
+		searchBox->setHelpId(IDH_FILE_LIST_SEARCH_BOX);
+		addWidget(searchBox);
+
+		cs.caption = T_("Find from the beginning");
+		ButtonPtr button = searchGrid->addChild(cs);
+		button->setHelpId(IDH_FILE_LIST_FIND_START);
+		button->setImage(WinUtil::buttonIcon(IDI_SEARCH));
+		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_START));
+		addWidget(button);
+
+		cs.caption = T_("Previous");
+		button = searchGrid->addChild(cs);
+		button->setHelpId(IDH_FILE_LIST_FIND_PREV);
+		button->setImage(WinUtil::buttonIcon(IDI_LEFT));
+		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_PREV));
+		addWidget(button);
+
+		cs.caption = T_("Next");
+		button = searchGrid->addChild(cs);
+		button->setHelpId(IDH_FILE_LIST_FIND_NEXT);
+		button->setImage(WinUtil::buttonIcon(IDI_RIGHT));
+		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_NEXT));
+		addWidget(button);
+
 		cs.caption = T_("Subtract list");
 		listDiff = addChild(cs);
 		listDiff->setHelpId(IDH_FILE_LIST_SUBSTRACT);
@@ -231,32 +266,20 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 		matchQueue->setHelpId(IDH_FILE_LIST_MATCH_QUEUE);
 		matchQueue->onClicked(std::bind(&DirectoryListingFrame::handleMatchQueue, this));
 
-		cs.caption = T_("Find");
+		cs.caption = T_("Find") + _T(" \u25B2") /* up arrow */;
 		find = addChild(cs);
 		find->setHelpId(IDH_FILE_LIST_FIND);
 		find->setImage(WinUtil::buttonIcon(IDI_SEARCH));
-		find->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_START));
-
-		cs.caption = T_("Previous");
-		findPrev = addChild(cs);
-		findPrev->setHelpId(IDH_FILE_LIST_PREV);
-		findPrev->setImage(WinUtil::buttonIcon(IDI_LEFT));
-		findPrev->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_PREV));
-
-		cs.caption = T_("Next");
-		findNext = addChild(cs);
-		findNext->setHelpId(IDH_FILE_LIST_NEXT);
-		findNext->setImage(WinUtil::buttonIcon(IDI_RIGHT));
-		findNext->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_NEXT));
+		find->onClicked(std::bind(&DirectoryListingFrame::handleFindToggle, this));
 	}
+
+	searchGrid->setEnabled(false);
 
 	initStatus();
 
 	status->setSize(STATUS_FILE_LIST_DIFF, listDiff->getPreferredSize().x);
 	status->setSize(STATUS_MATCH_QUEUE, matchQueue->getPreferredSize().x);
 	status->setSize(STATUS_FIND, find->getPreferredSize().x);
-	status->setSize(STATUS_PREV, findPrev->getPreferredSize().x);
-	status->setSize(STATUS_NEXT, findNext->getPreferredSize().x);
 
 	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
 
@@ -306,10 +329,8 @@ void DirectoryListingFrame::layout() {
 	status->mapWidget(STATUS_FILE_LIST_DIFF, listDiff);
 	status->mapWidget(STATUS_MATCH_QUEUE, matchQueue);
 	status->mapWidget(STATUS_FIND, find);
-	status->mapWidget(STATUS_PREV, findPrev);
-	status->mapWidget(STATUS_NEXT, findNext);
 
-	paned->setRect(r);
+	grid->layout(r);
 }
 
 bool DirectoryListingFrame::preClosing() {
@@ -350,6 +371,21 @@ void DirectoryListingFrame::handleListDiff() {
 			/// @todo report to user?
 		}
 	}
+}
+
+void DirectoryListingFrame::handleFindToggle() {
+	if(searchGrid->getEnabled()) {
+		searchBox->clear();
+		searchGrid->setEnabled(false);
+		grid->row(1).mode = GridInfo::STATIC;
+	} else {
+		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i)
+			searchBox->addValue(*i);
+		searchGrid->setEnabled(true);
+		grid->row(1).mode = GridInfo::AUTO;
+		searchBox->setFocus();
+	}
+	layout();
 }
 
 void DirectoryListingFrame::refreshTree(const tstring& root) {
@@ -887,24 +923,21 @@ pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bo
 }
 
 void DirectoryListingFrame::findFile(FindMode mode) {
-	if(mode == FIND_START || findStr.empty()) {
-		// Prompt for substring to find
-		ParamDlg dlg(this, T_("Search for file"), T_("Enter search string"), lastSearches, 0, true);
-		if(dlg.run() != IDOK)
-			return;
+	const tstring findStr = searchBox->getText();
+	if(findStr.empty())
+		return;
 
-		const tstring& value = dlg.getValue();
-		if(value.empty())
-			return;
-		findStr = Text::fromT(value);
-
-		if(std::find(lastSearches.begin(), lastSearches.end(), value) == lastSearches.end()) {
+	{
+		auto prev = std::find(lastSearches.begin(), lastSearches.end(), findStr);
+		if(prev == lastSearches.end()) {
 			size_t i = max(SETTING(SEARCH_HISTORY) - 1, 0);
 			while(lastSearches.size() > i) {
-				lastSearches.erase(lastSearches.end() - 1);
+				lastSearches.erase(lastSearches.begin());
 			}
-			lastSearches.insert(lastSearches.begin(), value);
-		}
+		} else
+			lastSearches.erase(prev);
+		lastSearches.push_back(findStr);
+		searchBox->insertValue(0, findStr);
 	}
 
 	HoldRedraw hold(files);
@@ -928,7 +961,8 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 	}
 
 	vector<HTREEITEM> collapse;
-	auto search = findFile(StringSearch(findStr), mode == FIND_PREV, (mode == FIND_START) ? treeRoot : oldDir, files->getSelected(), collapse);
+	auto search = findFile(StringSearch(Text::fromT(findStr)), mode == FIND_PREV,
+		(mode == FIND_START) ? treeRoot : oldDir, files->getSelected(), collapse);
 	for(auto i = collapse.cbegin(), iend = collapse.cend(); i != iend; ++i)
 		dirs->collapse(*i);
 
@@ -945,7 +979,7 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 
 	} else {
 		selectDir(oldDir);
-		dwt::MessageBox(this).show(T_("No matches found for:") + _T("\n") + Text::toT(findStr), T_("Search for file"));
+		dwt::MessageBox(this).show(T_("No matches found for:") + _T("\n") + findStr, T_("Search for file"));
 	}
 }
 

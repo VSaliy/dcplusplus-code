@@ -96,6 +96,12 @@ typedef Slider* SliderPtr;
 class Spinner;
 typedef Spinner* SpinnerPtr;
 
+template<bool horizontal> class Splitter;
+typedef Splitter<false> VSplitter;
+typedef VSplitter* VSplitterPtr;
+typedef Splitter<true> HSplitter;
+typedef HSplitter* HSplitterPtr;
+
 class StatusBar;
 typedef StatusBar* StatusBarPtr;
 

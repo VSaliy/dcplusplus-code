@@ -153,7 +153,7 @@ private:
 		}
 	};
 
-	WidgetVPanedPtr paned;
+	VSplitterPtr paned;
 
 	GridPtr userGrid;
 

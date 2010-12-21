@@ -128,7 +128,7 @@ currentUser(0),
 hubMenu(false),
 inTabComplete(false)
 {
-	paned = addChild(WidgetVPaned::Seed(0.7));
+	paned = addChild(VSplitter::Seed(0.7));
 
 	chat->setHelpId(IDH_HUB_CHAT);
 	addWidget(chat);
@@ -271,7 +271,7 @@ void HubFrame::layout() {
 	} else if(!checked && paned->getSecond()) {
 		paned->setSecond(0);
 	}
-	paned->setRect(r);
+	paned->layout(r);
 }
 
 void HubFrame::updateStatus() {

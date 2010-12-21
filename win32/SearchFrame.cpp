@@ -113,7 +113,7 @@ showUI(0),
 initialType(initialType_),
 droppedResults(0)
 {
-	paned = addChild(WidgetVPaned::Seed(SETTING(SEARCH_PANED_POS)));
+	paned = addChild(VSplitter::Seed(SETTING(SEARCH_PANED_POS)));
 
 	{
 		options = addChild(Grid::Seed(5, 1));
@@ -136,9 +136,8 @@ droppedResults(0)
 		cur->setWidget(searchBox, 0, 0, 1, 2);
 		addWidget(searchBox);
 
-		for(TStringIter i = lastSearches.begin(); i != lastSearches.end(); ++i) {
-			searchBox->insertValue(0, *i);
-		}
+		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i)
+			searchBox->addValue(*i);
 		searchBox->getTextBox()->onKeyDown(std::bind(&SearchFrame::handleSearchKeyDown, this, _1));
 		searchBox->getTextBox()->onChar(std::bind(&SearchFrame::handleSearchChar, this, _1));
 
@@ -328,7 +327,7 @@ void SearchFrame::layout() {
 	status->layout(r);
 	status->mapWidget(STATUS_SHOW_UI, showUI);
 
-	paned->setRect(r);
+	paned->layout(r);
 }
 
 bool SearchFrame::preClosing() {

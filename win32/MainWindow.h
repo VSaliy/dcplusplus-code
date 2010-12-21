@@ -107,7 +107,7 @@ private:
 		TIMER_SAVE
 	};
 
-	WidgetHPanedPtr paned;
+	HSplitterPtr paned;
 	MenuPtr mainMenu;
 	MenuPtr viewMenu;
 	TransferView* transfers;
