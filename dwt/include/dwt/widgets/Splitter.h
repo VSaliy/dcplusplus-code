@@ -156,9 +156,9 @@ void Splitter<horizontal>::create(const Seed& cs) {
 	pos = cs.pos;
 	BaseType::create(cs);
 
-	onLeftMouseDown([this](const MouseEvent&) { return handleLButtonDown(); });
-	onMouseMove([this](const MouseEvent& mouseEvent) { return handleMouseMove(mouseEvent); });
-	onLeftMouseUp([this](const MouseEvent&) { return handleLButtonUp(); });
+	onLeftMouseDown([this](const MouseEvent&) { return GCC_WTF->handleLButtonDown(); });
+	onMouseMove([this](const MouseEvent& mouseEvent) { return GCC_WTF->handleMouseMove(mouseEvent); });
+	onLeftMouseUp([this](const MouseEvent&) { return GCC_WTF->handleLButtonUp(); });
 }
 
 template<bool horizontal>
