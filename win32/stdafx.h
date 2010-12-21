@@ -45,6 +45,7 @@
 #include <dwt/widgets/RadioButton.h>
 #include <dwt/widgets/RichTextBox.h>
 #include <dwt/widgets/SaveDialog.h>
+#include <dwt/widgets/Splitter.h>
 #include <dwt/widgets/Table.h>
 #include <dwt/widgets/TabView.h>
 #include <dwt/widgets/TextBox.h>
@@ -83,6 +84,10 @@ using dwt::Slider;
 using dwt::SliderPtr;
 using dwt::Spinner;
 using dwt::SpinnerPtr;
+using dwt::HSplitter;
+using dwt::HSplitterPtr;
+using dwt::VSplitter;
+using dwt::VSplitterPtr;
 using dwt::TabView;
 using dwt::TabViewPtr;
 using dwt::TextBox;
@@ -117,4 +122,3 @@ using std::placeholders::_2;
 #include "RichTextBox.h"
 #include "ShellMenu.h"
 #include "Table.h"
-#include "WidgetPaned.h"

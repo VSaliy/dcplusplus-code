@@ -58,8 +58,6 @@ public:
 		STATUS_FILE_LIST_DIFF,
 		STATUS_MATCH_QUEUE,
 		STATUS_FIND,
-		STATUS_PREV,
-		STATUS_NEXT,
 		STATUS_LAST
 	};
 
@@ -154,20 +152,22 @@ private:
 		tstring columns[COLUMN_LAST];
 	};
 
+	GridPtr grid;
+
 	typedef TypedTree<ItemInfo> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
 	WidgetDirsPtr dirs;
+
 	typedef TypedTable<ItemInfo> WidgetFiles;
 	typedef WidgetFiles* WidgetFilesPtr;
-
 	WidgetFilesPtr files;
-	WidgetVPanedPtr paned;
 
-	ButtonPtr findPrev;
-	ButtonPtr find;
-	ButtonPtr findNext;
+	GridPtr searchGrid;
+	ComboBoxPtr searchBox;
+
 	ButtonPtr listDiff;
 	ButtonPtr matchQueue;
+	ButtonPtr find;
 
 	int64_t speed;		/**< Speed at which this file list was downloaded */
 
@@ -183,7 +183,6 @@ private:
 
 	HTREEITEM treeRoot;
 
-	string findStr;
 	string size;
 
 	bool updating;
@@ -219,6 +218,7 @@ private:
 	void handleFind(FindMode mode);
 	void handleListDiff();
 	void handleMatchQueue();
+	void handleFindToggle();
 
 	void handleDownload();
 	void handleViewAsText();

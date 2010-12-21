@@ -87,7 +87,7 @@ void ToolBar::addButton(const std::string& id, const IconPtr& icon, const IconPt
 	if(hotIcon) {
 		if(!itsHotImageList)
 			setHotImageList(new ImageList(hotIcon->getSize()));
-		itsHotImageList->add(*icon);
+		itsHotImageList->add(*hotIcon);
 	}
 
 	addButton(id, icon ? itsNormalImageList->size() - 1 : I_IMAGENONE, text, helpId, f, dropDownF);

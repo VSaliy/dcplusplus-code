@@ -185,7 +185,7 @@ private:
 		QueueItemInfo& operator=(const QueueItemInfo&);
 	};
 
-	WidgetVPanedPtr paned;
+	VSplitterPtr paned;
 
 	typedef TypedTree<DirItemInfo> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;

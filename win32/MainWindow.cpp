@@ -213,7 +213,7 @@ void MainWindow::initWindow() {
 
 	setHelpId(IDH_MAIN);
 
-	paned = addChild(WidgetHPaned::Seed(SETTING(TRANSFERS_PANED_POS)));
+	paned = addChild(HSplitter::Seed(SETTING(TRANSFERS_PANED_POS)));
 }
 
 void MainWindow::initMenu() {
@@ -870,7 +870,7 @@ void MainWindow::layout() {
 		layoutSlotsSpin();
 	}
 
-	paned->setRect(r);
+	paned->layout(r);
 }
 
 void MainWindow::layoutSlotsSpin() {
@@ -1285,6 +1285,7 @@ void MainWindow::switchTransfers() {
 		transfers->prepareClose();
 		::DestroyWindow(transfers->handle());
 		transfers = 0;
+		paned->setSecond(transfers);
 
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_TRANSFERVIEW, false);
 		viewMenu->checkItem(viewIndexes["Transfers"], false);
@@ -1294,7 +1295,7 @@ void MainWindow::switchTransfers() {
 		initTransfers();
 	}
 
-	paned->setSecond(transfers);
+	layout();
 }
 
 void MainWindow::switchStatus() {

@@ -33,17 +33,32 @@ Shows the contents of the folder selected in the folder list (window on the left
 </dl>
 
 <h2>Context menu commands</h2>
-<!--#include virtual="commands_file_download.inc" --> 
-<!--#include virtual="commands_file_general.inc" --> 
-<!--#include virtual="commands_file_management.inc" --> 
+<!--#include virtual="commands_file_download.inc" -->
+<!--#include virtual="commands_file_general.inc" -->
+<!--#include virtual="commands_file_management.inc" -->
 <dl style="margin-left: 40px;">
   <dt>View as text</dt>
   <dd>
-  	 <p>Using in downloaded filelists, this command downloads the selected file to the temporary folder of the operating system and opens
-  	its contents in a text viewer window. The file will be deleted right after its contents shown.</p>
-  	<p>If you browse your <u>own</u> filelist this will open the selected file (stored locally) in a text viewer window.</p>  	
-    <!--#include virtual="commands_viewastext.inc" --> 
+    <!--#include virtual="commands_viewastext.inc" -->
   </dd>
+</dl>
+
+<h2>Search row (bottom)</h2>
+A search row may be shown right above the status bar to allow looking for files in the current file
+list. Its visibility is controlled by the "Find &#9650;" button.
+<dl style="margin-left: 40px;">
+  <dt>Text-box (left)</dt>
+  <dd cshelp="IDH_FILE_LIST_SEARCH_BOX">Enter your search terms here. The most recent searches can
+  be accessed by unfolding the list contained within this box.</dd>
+  <dt>Find from the beginning</dt>
+  <dd cshelp="IDH_FILE_LIST_FIND_START">Find items that match the search strings specified in the
+  text-box. The search starts from the root of the file list.</dd>
+  <dt>Previous</dt>
+  <dd cshelp="IDH_FILE_LIST_FIND_PREV">Find items that match the search strings specified in the
+  text-box. The search starts from the current selection and goes backwards.</dd>
+  <dt>Next</dt>
+  <dd cshelp="IDH_FILE_LIST_FIND_NEXT">Find items that match the search strings specified in the
+  text-box. The search starts from the current selection and goes forward.</dd>
 </dl>
 
 <h2>Status bar (bottom)</h2>
@@ -67,11 +82,8 @@ Shows the contents of the folder selected in the folder list (window on the left
   <dt>Match queue</dt>
   <dd cshelp="IDH_FILE_LIST_MATCH_QUEUE">Search the list for items you are currently downloading; found items will be automatically added as sources for your current downloads.</dd>
   <dt>Find</dt>
-  <dd cshelp="IDH_FILE_LIST_FIND">Find items based on search strings you can specify.</dd>
-  <dt>Previous</dt>
-  <dd cshelp="IDH_FILE_LIST_PREV">Go backwards for previous items found based on search strings you have specified by pressing the "Find" button.</dd>
-  <dt>Next</dt>
-  <dd cshelp="IDH_FILE_LIST_NEXT">Continue searching for more items based on search strings you have specified by pressing the "Find" button.</dd>
+  <dd cshelp="IDH_FILE_LIST_FIND">Toggle the visibility of the search box, which allows searching
+  within the file list.</dd>
 </dl>
 </body>
 </html>

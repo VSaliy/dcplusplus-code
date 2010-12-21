@@ -59,7 +59,7 @@ queueSize(0),
 queueItems(0),
 fileLists(0)
 {
-	paned = addChild(WidgetVPaned::Seed(SETTING(QUEUE_PANED_POS)));
+	paned = addChild(VSplitter::Seed(SETTING(QUEUE_PANED_POS)));
 
 	{
 		dirs = addChild(WidgetDirs::Seed());
@@ -119,7 +119,7 @@ void QueueFrame::layout() {
 	status->layout(r);
 	status->mapWidget(STATUS_SHOW_TREE, showTree);
 
-	paned->setRect(r);
+	paned->layout(r);
 }
 
 bool QueueFrame::handleKeyDownDirs(int c) {

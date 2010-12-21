@@ -155,7 +155,7 @@ private:
 	typedef FrameSet::iterator FrameIter;
 	static FrameSet frames;
 
-	WidgetVPanedPtr paned;
+	VSplitterPtr paned;
 
 	GridPtr options;
 
