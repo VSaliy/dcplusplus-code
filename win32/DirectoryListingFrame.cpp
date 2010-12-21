@@ -928,14 +928,18 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 		return;
 
 	{
+		// make sure the new search string is at the top of the list
 		auto prev = std::find(lastSearches.begin(), lastSearches.end(), findStr);
 		if(prev == lastSearches.end()) {
 			size_t i = max(SETTING(SEARCH_HISTORY) - 1, 0);
 			while(lastSearches.size() > i) {
 				lastSearches.erase(lastSearches.begin());
 			}
-		} else
+		} else {
+			searchBox->erase(lastSearches.end() - 1 - prev); // the GUI list is in reverse order...
+			searchBox->setText(findStr); // it erases the text-box too...
 			lastSearches.erase(prev);
+		}
 		lastSearches.push_back(findStr);
 		searchBox->insertValue(0, findStr);
 	}
