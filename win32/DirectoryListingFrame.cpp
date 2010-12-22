@@ -266,7 +266,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 		matchQueue->setHelpId(IDH_FILE_LIST_MATCH_QUEUE);
 		matchQueue->onClicked(std::bind(&DirectoryListingFrame::handleMatchQueue, this));
 
-		cs.caption = T_("Find") + _T(" \u25B2") /* up arrow */;
+		cs.caption = T_("Find") + _T(" \u2206") /* up arrow */;
 		find = addChild(cs);
 		find->setHelpId(IDH_FILE_LIST_FIND);
 		find->setImage(WinUtil::buttonIcon(IDI_SEARCH));
