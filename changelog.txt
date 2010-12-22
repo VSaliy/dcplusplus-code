@@ -60,6 +60,7 @@
 * Select a better default font (poy)
 * [L#681754] Fonts and dialogs respect DPI settings - mark DC++ as DPI aware (poy)
 * Update MiniUPnPc (poy)
+* Ameliorate the MiniUPnPc device selection
 * Prevent an endless loop on connection failure (thanks bigmuscle)
 
 -- 0.770 2010-07-05 --
