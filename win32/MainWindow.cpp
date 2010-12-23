@@ -66,9 +66,10 @@
 #include <dcpp/SimpleXML.h>
 #include <dcpp/ThrottleManager.h>
 
-#include <dwt/widgets/ToolBar.h>
-#include <dwt/widgets/Spinner.h>
 #include <dwt/widgets/Notification.h>
+#include <dwt/widgets/Rebar.h>
+#include <dwt/widgets/Spinner.h>
+#include <dwt/widgets/ToolBar.h>
 
 #ifdef HAVE_HTMLHELP_H
 #include <htmlhelp.h>
@@ -79,6 +80,7 @@ static dwt::IconPtr mainSmallIcon(WinUtil::createIcon(IDI_DCPP, 16));
 
 MainWindow::MainWindow() :
 dwt::Window(0, dwt::NormalDispatcher::newClass<MainWindow>(mainIcon, mainSmallIcon)),
+rebar(0),
 paned(0),
 transfers(0),
 toolbar(0),
@@ -212,6 +214,8 @@ void MainWindow::initWindow() {
 	create(cs);
 
 	setHelpId(IDH_MAIN);
+
+	rebar = addChild(Rebar::Seed());
 
 	paned = addChild(HSplitter::Seed(SETTING(TRANSFERS_PANED_POS)));
 }
@@ -420,6 +424,8 @@ void MainWindow::initToolbar() {
 	toolbar->onContextMenu(std::bind(&MainWindow::handleToolbarContextMenu, this, _1));
 
 	toolbar->onHelp(std::bind(&WinUtil::help, _1, _2));
+
+	rebar->add(toolbar);
 
 	viewMenu->checkItem(viewIndexes["Toolbar"], true);
 }
@@ -858,9 +864,9 @@ bool MainWindow::handleClosing() {
 void MainWindow::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	if(toolbar) {
-		toolbar->refresh();
-		dwt::Point pt = toolbar->getWindowSize();
+	if(rebar->size() > 0) {
+		rebar->refresh();
+		dwt::Point pt = rebar->getWindowSize();
 		r.pos.y += pt.y;
 		r.size.y -= pt.y;
 	}
@@ -1260,6 +1266,7 @@ void MainWindow::handleToolbarSize(int size) {
 
 void MainWindow::switchToolbar() {
 	if(toolbar) {
+		rebar->remove(toolbar);
 		::DestroyWindow(toolbar->handle());
 		toolbar = 0;
 

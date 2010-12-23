@@ -87,6 +87,9 @@ typedef ProgressBar* ProgressBarPtr;
 class RadioButton;
 typedef RadioButton* RadioButtonPtr;
 
+class Rebar;
+typedef Rebar* RebarPtr;
+
 class RichTextBox;
 typedef RichTextBox* RichTextBoxPtr;
 

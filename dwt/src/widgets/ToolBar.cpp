@@ -36,7 +36,7 @@ namespace dwt {
 const TCHAR ToolBar::windowClass[] = TOOLBARCLASSNAME;
 
 ToolBar::Seed::Seed() :
-BaseType::Seed(WS_CHILD | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS | CCS_ADJUSTABLE)
+BaseType::Seed(WS_CHILD | CCS_ADJUSTABLE | CCS_NODIVIDER | CCS_NORESIZE | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS)
 {
 }
 
@@ -74,6 +74,11 @@ void ToolBar::create(const Seed& cs) {
 		onRaw([this](WPARAM, LPARAM) { return handleQuery(); }, Message(WM_NOTIFY, TBN_QUERYDELETE));
 		onRaw([this](WPARAM, LPARAM) { return handleReset(); }, Message(WM_NOTIFY, TBN_RESET));
 	}
+}
+
+Point ToolBar::getPreferredSize() {
+	// don't care about the width
+	return Point(0, HIWORD(sendMessage(TB_GETBUTTONSIZE)) + HIWORD(sendMessage(TB_GETPADDING)));
 }
 
 void ToolBar::addButton(const std::string& id, const IconPtr& icon, const IconPtr& hotIcon, const tstring& text, unsigned helpId,

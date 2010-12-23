@@ -83,13 +83,16 @@ public:
 	  */
 	void create(const Seed& cs = Seed());
 
-#if 0
 	/// Refreshes the Rebar
 	/** Call this one after the container widget has been resized to make sure the
 	  * Rebar is having the right size...
 	  */
 	void refresh();
-#endif
+
+	void add(Widget* w, const tstring& text = tstring());
+	void remove(Widget* w);
+
+	unsigned size() const;
 
 protected:
 	// Protected to avoid direct instantiation
@@ -99,9 +102,6 @@ protected:
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
-
-	// Adds up the given child to a new rebar band...
-	void addChild( Widget * child, unsigned width, unsigned height, const tstring & txt );
 };
 
 }
