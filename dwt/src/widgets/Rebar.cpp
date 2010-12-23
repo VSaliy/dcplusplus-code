@@ -30,14 +30,13 @@
 */
 
 #include <dwt/widgets/Rebar.h>
-#include <dwt/DWTException.h>
 
 namespace dwt {
 
 const TCHAR Rebar::windowClass[] = REBARCLASSNAME;
 
 Rebar::Seed::Seed() :
-BaseType::Seed(WS_CHILD | RBS_VARHEIGHT | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER)
+BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER | RBS_AUTOSIZE | RBS_VARHEIGHT, WS_EX_TOOLWINDOW)
 {
 }
 
@@ -50,40 +49,46 @@ void Rebar::create(const Seed& cs) {
 	BaseType::create(cs);
 }
 
-#if 0
 void Rebar::refresh() {
-	// This might look a bit stupid, but Windows API have some minor flaws. One of
-	// those flaws is that a Rebar (and a Toolbar) control must be "resized" with
-	// a dummy value to make sure the Rebar (&& the Toolbar) fills up the
-	// complete area of the container Widget...
-
-	if ( ::MoveWindow( this->handle(), 0, 0, 0, 0, TRUE ) == 0 ) {
-		dwtWin32DebugFail("Couldn't reposition windows");
-	}
+	// use dummy sizes to avoid flickering; the rebar will figure out the proper sizes by itself.
+	::MoveWindow(handle(), 0, 0, 0, 0, TRUE);
 }
-#endif
 
-void Rebar::addChild( Widget * child,
-	unsigned width, unsigned height, const tstring & txt
-	)
-{
-	REBARBANDINFO rbBand;
-	rbBand.cbSize = sizeof( REBARBANDINFO );
-	rbBand.fMask = RBBIM_SIZE | RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_STYLE;
-	if ( txt != _T( "" ) )
-	{
-		rbBand.fMask |= RBBIM_TEXT;
-		rbBand.lpText = const_cast < TCHAR * >( txt.c_str() );
+void Rebar::add(Widget* w, const tstring& text) {
+	if(size() == 0)
+		setVisible(true);
+
+	REBARBANDINFO info = { sizeof(REBARBANDINFO), RBBIM_CHILD | RBBIM_CHILDSIZE };
+
+	if(!text.empty()) {
+		info.fMask |= RBBIM_TEXT;
+		info.lpText = const_cast<LPTSTR>(text.c_str());
 	}
-	rbBand.hwndChild = child->handle();
-	rbBand.cxMinChild = width;
-	rbBand.cyMinChild = height;
-	rbBand.cx = width;
-	rbBand.fStyle = 0; //RBBS_GRIPPERALWAYS;
-	if ( sendMessage( RB_INSERTBAND, ( WPARAM ) - 1, ( LPARAM ) & rbBand ) == 0 )
-	{
-		throw DWTException( "There was a problem when trying to insert a band into your Rebar object!");
+
+	info.hwndChild = w->handle();
+
+	const Point size = w->getPreferredSize();
+	info.cxMinChild = size.x;
+	info.cyMinChild = size.y;
+
+	sendMessage(RB_INSERTBAND, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(&info));
+}
+
+void Rebar::remove(Widget* w) {
+	for(unsigned i = 0, n = size(); i < n; ++i) {
+		REBARBANDINFO info = { sizeof(REBARBANDINFO), RBBIM_CHILD };
+		if(sendMessage(RB_GETBANDINFO, i, reinterpret_cast<LPARAM>(&info)) && info.hwndChild == w->handle()) {
+			sendMessage(RB_DELETEBAND, i);
+			break;
+		}
 	}
+
+	if(size() == 0)
+		setVisible(false);
+}
+
+unsigned Rebar::size() const {
+	return sendMessage(RB_GETBANDCOUNT);
 }
 
 }

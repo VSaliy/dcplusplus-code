@@ -86,11 +86,6 @@ public:
 	  */
 	void refresh();
 
-	/// Sets the size of buttons in the toolbar
-	/** This should be relative to the size of the bitmap used (if you use a bitmap)
-	  */
-	void setButtonSize( unsigned int width, unsigned int height );
-
 	/// Adds a bitmap to the toolbar that later can be referenced while adding buttons
 	/** Loads a bitmap that is contained in a BitmapPtr. <br>
 	  * noButtonsInBitmap is how many buttons there actually exists in the bitmap
@@ -199,6 +194,8 @@ public:
 	  */
 	void create(const Seed& cs = Seed());
 
+	virtual Point getPreferredSize();
+
 protected:
 	// Constructor Taking pointer to parent
 	explicit ToolBar(Widget* parent);
@@ -266,15 +263,6 @@ private:
 inline void ToolBar::refresh()
 {
 	sendMessage(TB_AUTOSIZE);
-}
-
-inline void ToolBar::setButtonSize( unsigned int width, unsigned int height )
-{
-	if ( sendMessage(TB_SETBUTTONSIZE, 0, static_cast< LPARAM >( MAKELONG( width, height ) ) ) != TRUE ||
-		sendMessage(TB_SETBITMAPSIZE, 0, static_cast< LPARAM >( MAKELONG( width, height ) ) ) != TRUE )
-	{
-		throw Win32Exception( "Error while trying to set toolbar button size...");
-	}
 }
 
 /*

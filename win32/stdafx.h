@@ -79,6 +79,8 @@ using dwt::ProgressBar;
 using dwt::ProgressBarPtr;
 using dwt::RadioButton;
 using dwt::RadioButtonPtr;
+using dwt::Rebar;
+using dwt::RebarPtr;
 using dwt::SaveDialog;
 using dwt::Slider;
 using dwt::SliderPtr;

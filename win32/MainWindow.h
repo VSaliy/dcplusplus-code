@@ -107,6 +107,7 @@ private:
 		TIMER_SAVE
 	};
 
+	RebarPtr rebar;
 	HSplitterPtr paned;
 	MenuPtr mainMenu;
 	MenuPtr viewMenu;
