@@ -48,23 +48,24 @@ semaphores, so we prefer boost's one. see <https://bugs.launchpad.net/dcplusplus
 #include <boost/make_shared.hpp>
 #define SHARED_PTR_NS boost
 
-// Need to forward declare these since GCC does syntax checking of
-// non-instantiated templates!
-BOOL CommandBar_InsertMenubarEx( HWND hwndCB, HINSTANCE hInst, LPTSTR pszMenu, WORD iButton );
-BOOL CommandBar_AddAdornments( HWND hwndCB, DWORD dwFlags, DWORD dwReserved );
-void CommandBar_Destroy( HWND hwndCB );
+#ifndef BCM_FIRST
+#define BCM_FIRST 0x1600
+#endif
+#ifndef BCM_GETIDEALSIZE
+#define BCM_GETIDEALSIZE (BCM_FIRST + 0x0001)
+#endif
+#ifndef BCM_SETTEXTMARGIN
+#define BCM_SETTEXTMARGIN (BCM_FIRST + 0x0004)
+#endif
 
 #ifndef BUTTON_IMAGELIST_ALIGN_CENTER
-
 typedef struct
 {
 	HIMAGELIST himl; // Index: Normal, hot pushed, disabled. If count is less than 4, we use index 1
 	RECT margin; // Margin around icon.
 	UINT uAlign;
 } BUTTON_IMAGELIST, * PBUTTON_IMAGELIST;
-
 #define BUTTON_IMAGELIST_ALIGN_CENTER   4       // Doesn't draw text
-
 #endif
 
 #define COLOR_MENUHILIGHT       29
