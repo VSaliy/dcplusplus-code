@@ -29,6 +29,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "../../WindowsHeaders.h"
 #include "../../tstring.h"
 
 // This file contains various win32 api helpers / converters used to c++-ify win32 some
@@ -46,5 +47,7 @@ inline tstring getWindowText(HWND hWnd) {
 	retVal.resize(::SendMessage(hWnd, WM_GETTEXT, static_cast<WPARAM>(textLength + 1), reinterpret_cast<LPARAM>(&retVal[0])));
 	return retVal;
 }
+
+void updateStyle(HWND hwnd, int which, DWORD style, bool add);
 
 } } }

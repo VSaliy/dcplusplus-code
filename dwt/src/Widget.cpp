@@ -49,6 +49,7 @@
 
 #include <dwt/DWTException.h>
 #include <dwt/util/check.h>
+#include <dwt/util/win32/ApiHelpers.h>
 
 namespace dwt {
 
@@ -97,31 +98,12 @@ void Widget::setHandle(HWND h) {
 	::SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc::wndProc));
 }
 
-static void updateStyle(HWND hwnd, int which, DWORD style, bool add) {
-	DWORD newStyle = ::GetWindowLong(hwnd, which);
-	bool mustUpdate = false;
-	if(add && (newStyle & style) != style) {
-		mustUpdate = true;
-		newStyle |= style;
-	} else if(!add && (newStyle & style) == style) {
-		mustUpdate = true;
-		newStyle ^= style;
-	}
-
-	if(mustUpdate) {
-		::SetWindowLong(hwnd, which, newStyle);
-
-		// Faking a recheck in the window to read new style... (hack)
-		::SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
-	}
-}
-
 void Widget::addRemoveStyle(DWORD addStyle, bool add) {
-	updateStyle(handle(), GWL_STYLE, addStyle, add);
+	util::win32::updateStyle(handle(), GWL_STYLE, addStyle, add);
 }
 
 void Widget::addRemoveExStyle(DWORD addStyle, bool add) {
-	updateStyle(handle(), GWL_EXSTYLE, addStyle, add);
+	util::win32::updateStyle(handle(), GWL_EXSTYLE, addStyle, add);
 }
 
 Widget::CallbackIter Widget::addCallback(const Message& msg, const CallbackType& callback) {
