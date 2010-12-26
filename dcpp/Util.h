@@ -446,8 +446,9 @@ private:
 	static string awayMsg;
 	static time_t awayTime;
 
-	typedef map<uint32_t, string> CountryList;
+	typedef map<uint32_t, size_t> CountryList;
 	static CountryList countries;
+	static StringList countryNames;
 
 	static void loadBootConfig();
 };
