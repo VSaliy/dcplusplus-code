@@ -131,6 +131,7 @@ private:
 	int64_t lastUp;
 	int64_t lastDown;
 	uint64_t lastTick;
+	bool prevAway;
 
 	dwt::Application::FilterIter filterIter;
 	dwt::NotificationPtr notify;
@@ -188,6 +189,7 @@ private:
 	void layout();
 	void layoutSlotsSpin();
 	void updateStatus();
+	void updateAwayStatus();
 	void showPortsError(const string& port);
 	void setSaveTimer();
 	void saveSettings();

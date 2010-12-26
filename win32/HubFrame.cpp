@@ -703,18 +703,22 @@ bool HubFrame::handleMessageKeyDown(int c) {
 }
 
 int HubFrame::UserInfo::getImage() const {
-	int image = identity.isOp() ? IMAGE_OP : IMAGE_USER;
+	int image = identity.isAway() ? WinUtil::USER_ICON_AWAY : WinUtil::USER_ICON;
 
-	string freeSlots = identity.get("FS");
-
-	if(!freeSlots.empty() && identity.supports(AdcHub::ADCS_FEATURE) && identity.supports(AdcHub::SEGA_FEATURE) &&
-		((identity.supports(AdcHub::TCP4_FEATURE) && identity.supports(AdcHub::UDP4_FEATURE)) || identity.supports(AdcHub::NAT0_FEATURE)))
-	{
-		image += 2;
+	if(identity.isOp()) {
+		image += 1 << (WinUtil::USER_ICON_OP - 1);
 	}
 
+	if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_PASSIVE &&
+		!identity.isTcpActive() && !identity.supports(AdcHub::NAT0_FEATURE))
+	{
+		// Users we can't connect to
+		image += 1 << (WinUtil::USER_ICON_NOCON - 1);
+	}
+
+	string freeSlots = identity.get("FS");
 	if(!freeSlots.empty() && Util::toUInt(freeSlots) == 0) {
-		image += 4;
+		image += 1 << (WinUtil::USER_ICON_NOSLOT - 1);
 	}
 
 	return image;
@@ -1118,7 +1122,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
 		menu->setTitle((sel.size() == 1) ? escapeMenu(getNick(sel[0]->getUser())) : str(TF_("%1% users") % sel.size()),
-			WinUtil::userImages->getIcon(IMAGE_USER));
+			WinUtil::userImages->getIcon(0));
 
 		appendUserItems(getParent(), menu);
 

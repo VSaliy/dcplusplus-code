@@ -48,9 +48,9 @@
 * [L#250149] Retry on more possible Coral errors (emtee)
 * [L#260748] Really readded sfv check (was broken by segmented downloading) (emtee)
 * Update bzip2 to version 1.0.6
-* Repurpose blue user icons to identify users with great ADC protocol support (poy)
 * [ADC] Dispatch the amount of free slots with INF FS (poy)
-* Repurpose passive user icons to mean "no free slot" (when INF FS is available) (poy)
+* [ADC] Dispatch away mode changes (poy)
+* Add a user icon modifier for users with no free slot (when INF FS is available) (poy)
 * [L#534242] Better looking settings dialog (fleetcommand, poy)
 * Allow regular expressions in ADL searches (poy)
 * [L#395464] [ADC] Send "000" as the STA success code

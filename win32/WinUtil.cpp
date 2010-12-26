@@ -46,6 +46,7 @@
 
 #include <dwt/DWTException.h>
 #include <dwt/LibraryLoader.h>
+#include <dwt/util/GDI.h>
 
 #ifdef HAVE_HTMLHELP_H
 #include <htmlhelp.h>
@@ -158,8 +159,18 @@ void WinUtil::init() {
 
 	{
 		userImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
-		dwt::Bitmap tmp(IDB_USERS);
-		userImages->add(tmp, RGB(255, 0, 255));
+		auto userIcon = [](unsigned id) { return createIcon(id, 16); };
+		dwt::IconPtr user = userIcon(IDI_USER), away = userIcon(IDI_USER_AWAY);
+		const unsigned modifierCount = USER_ICON_LAST - USER_ICON_MOD_START;
+		dwt::IconPtr modifiers[modifierCount] = { userIcon(IDI_USER_OP), userIcon(IDI_USER_NOCON), userIcon(IDI_USER_NOSLOT) };
+		for(size_t i = 0, n = USER_ICON_MOD_START * modifierCount * modifierCount; i < n; ++i) {
+			vector<dwt::IconPtr> icons;
+			icons.push_back((i & USER_ICON_AWAY) ? away : user);
+			for(size_t iMod = 0; iMod < modifierCount; ++iMod)
+				if(i & (1 << (iMod + 1)))
+					icons.push_back(modifiers[iMod]);
+			userImages->add(*dwt::util::merge(icons));
+		}
 	}
 
 	registerHubHandlers();

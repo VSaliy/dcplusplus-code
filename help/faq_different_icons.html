@@ -6,17 +6,22 @@
 <link type="text/css" rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<h1>What do the different user icons mean?</h1>
-<dl style="margin-left: 40px;">
-  <dt>Green</dt>
-  <dd>Standard user icon (no particular attribute).</dd>
-  <dt>Blue</dt>
-  <dd>The user has great ADC protocol support; it has at least all the features supported by this client.</dd>
-  <dt>With bricks</dt>
-  <dd>The user has no free slot available.</dd>
-  <dt>With a yellow key</dt>
-  <dd>The user is a hub operator.</dd>
-</dl>
-<img src="users.bmp" alt="User Icons"/>
+	<h1>What do the different user icons mean?</h1>
+	Base icons:
+	<dl style="margin-left: 40px;">
+		<dt><img src="User.ico" width="16" height="16" alt="Green"/> Green</dt>
+		<dd>Standard user icon (no particular attribute).</dd>
+		<dt><img src="UserAway.ico" width="16" height="16" alt="Grey"/> Grey</dt>
+		<dd>The user is in away mode.</dd>
+	</dl>
+	Icon modifiers:
+	<dl style="margin-left: 40px;">
+		<dt><img src="UserOp.ico" width="16" height="16" alt="Yellow key"/> Yellow key</dt>
+		<dd>The user is a hub operator.</dd>
+		<dt><img src="UserNoCon.ico" width="16" height="16" alt="Red bricks"/> Red bricks</dt>
+		<dd>The user cannot be connected to, for he is in passive mode and does not support NAT traversal.</dd>
+		<dt><img src="UserNoSlot.ico" width="16" height="16" alt="Red circle"/> Red circle</dt>
+		<dd>The user has no free slot available.</dd>
+	</dl>
 </body>
 </html>

@@ -48,6 +48,20 @@ struct ColumnInfo {
 
 class WinUtil {
 public:
+	enum {
+		// base icons
+		USER_ICON,
+		USER_ICON_AWAY,
+
+		// modifiers
+		USER_ICON_MOD_START,
+		USER_ICON_OP = USER_ICON_MOD_START,
+		USER_ICON_NOCON,
+		USER_ICON_NOSLOT,
+
+		USER_ICON_LAST
+	};
+
 	static tstring tth;
 
 	static dwt::BrushPtr bgBrush;

@@ -92,7 +92,8 @@ c(0),
 stopperThread(NULL),
 lastUp(0),
 lastDown(0),
-lastTick(GET_TICK())
+lastTick(GET_TICK()),
+prevAway(false)
 {
 	links.homepage = _T("http://dcplusplus.sourceforge.net/");
 	links.downloads = links.homepage + _T("download/");
@@ -441,10 +442,11 @@ void MainWindow::initStatusBar() {
 	slotsSpin->onUpdate(std::bind(&MainWindow::handleSlotsUpdate, this, _1, _2));
 
 	initStatus(true);
-	status->setSize(STATUS_AWAY, status->getTextSize(T_("AWAY")).x + 12);
 	status->setSize(STATUS_SLOTS_SPIN, 22);
 	///@todo set to checkbox width + resizedrag width really
 	status->setSize(STATUS_DUMMY, 32);
+
+	updateAwayStatus();
 
 	status->setIcon(STATUS_COUNTS, WinUtil::statusIcon(IDI_HUB));
 	status->setIcon(STATUS_SLOTS, WinUtil::statusIcon(IDI_SLOTS));
@@ -910,7 +912,10 @@ void MainWindow::updateStatus() {
 	if(!status)
 		return;
 
-	status->setText(STATUS_AWAY, Util::getAway() ? T_("AWAY") : _T(""));
+	if(Util::getAway() != prevAway) {
+		prevAway = !prevAway;
+		updateAwayStatus();
+	}
 
 	tstring s = Text::toT(Client::getCounts());
 	status->setText(STATUS_COUNTS, s);
@@ -940,6 +945,12 @@ void MainWindow::updateStatus() {
 	status->setText(STATUS_UP_LIMIT, str(TF_("U Lim: %1%/s") % Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getUpLimit()*1024))));
 
 	layoutSlotsSpin();
+}
+
+void MainWindow::updateAwayStatus() {
+	status->setIcon(STATUS_AWAY, WinUtil::statusIcon(prevAway ? IDI_USER_AWAY : IDI_USER));
+	status->setToolTip(STATUS_AWAY, prevAway ? (T_("Status: Away - Double-click to switch to Available")) :
+		(T_("Status: Available - Double-click to switch to Away")));
 }
 
 MainWindow::~MainWindow() {
