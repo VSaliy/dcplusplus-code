@@ -414,15 +414,9 @@ public:
 
 	static const string& getIpCountry(const string& IP);
 
-	static bool getAway() { return away; }
-	static void setAway(bool aAway) {
-		away = aAway;
-		if (away)
-			awayTime = time(NULL);
-	}
-	static void switchAway() {
-		setAway(!away);
-	}
+	static bool getAway();
+	static void setAway(bool aAway);
+	static void switchAway();
 
 	static bool getManualAway() { return manualAway; }
 	static void setManualAway(bool aManualAway) { manualAway = aManualAway;	}

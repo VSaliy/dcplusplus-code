@@ -20,14 +20,16 @@
 #include "DCPlusPlus.h"
 
 #include "Util.h"
-#include "File.h"
 
-#include "StringTokenizer.h"
-#include "SettingsManager.h"
-#include "LogManager.h"
-#include "version.h"
+#include "CID.h"
+#include "ClientManager.h"
+#include "FastAlloc.h"
 #include "File.h"
+#include "LogManager.h"
+#include "SettingsManager.h"
 #include "SimpleXML.h"
+#include "StringTokenizer.h"
+#include "version.h"
 
 #ifndef _WIN32
 #include <sys/socket.h>
@@ -39,10 +41,6 @@
 #include <string.h>
 #endif
 #include <locale.h>
-
-#include "CID.h"
-
-#include "FastAlloc.h"
 
 namespace dcpp {
 
@@ -1006,5 +1004,23 @@ string Util::translateError(int aError) {
 #endif // _WIN32
 }
 
+bool Util::getAway() {
+	return away;
+}
+
+void Util::setAway(bool aAway) {
+	bool changed = aAway != away;
+
+	away = aAway;
+	if(away)
+		awayTime = time(NULL);
+
+	if(changed)
+		ClientManager::getInstance()->infoUpdated();
+}
+
+void Util::switchAway() {
+	setAway(!away);
+}
 
 } // namespace dcpp

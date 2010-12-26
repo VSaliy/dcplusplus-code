@@ -38,7 +38,6 @@ END
 //
 
 IDB_FOLDERS             BITMAP                  "res/folders.bmp"
-IDB_USERS               BITMAP                  "res/users.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -93,6 +92,11 @@ IDI_OK                  ICON                    "res/OK.ico"
 IDI_CANCEL              ICON                    "res/Cancel.ico"
 IDI_LEFT                ICON                    "res/Left.ico"
 IDI_RIGHT               ICON                    "res/Right.ico"
+IDI_USER                ICON                    "res/User.ico"
+IDI_USER_AWAY           ICON                    "res/UserAway.ico"
+IDI_USER_OP             ICON                    "res/UserOp.ico"
+IDI_USER_NOCON          ICON                    "res/UserNoCon.ico"
+IDI_USER_NOSLOT         ICON                    "res/UserNoSlot.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

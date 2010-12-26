@@ -88,10 +88,6 @@ private:
 	};
 
 	enum {
-		IMAGE_USER = 0, IMAGE_OP
-	};
-
-	enum {
 		COLUMN_FIRST,
 		COLUMN_NICK = COLUMN_FIRST,
 		COLUMN_SHARED,
