@@ -60,6 +60,7 @@ string Util::awayMsg;
 time_t Util::awayTime;
 
 Util::CountryList Util::countries;
+StringList Util::countryNames;
 
 string Util::paths[Util::PATH_LAST];
 
@@ -200,36 +201,43 @@ void Util::initialize(PathsMap pathOverrides) {
 
 		const char* start = data.c_str();
 		string::size_type linestart = 0;
-		string::size_type comma1 = 0;
-		string::size_type comma2 = 0;
-		string::size_type comma3 = 0;
-		string::size_type comma4 = 0;
-		string::size_type comma5 = 0;
 		string::size_type lineend = 0;
 		auto last = countries.end();
 		uint32_t startIP = 0;
 		uint32_t endIP = 0, endIPprev = 0;
 
+		countryNames.push_back(_("Unknown"));
+		auto addCountry = [](const string& countryName) -> size_t {
+			auto begin = countryNames.cbegin(), end = countryNames.cend();
+			auto pos = std::find(begin, end, countryName);
+			if(pos != end)
+				return pos - begin;
+			countryNames.push_back(countryName);
+			return countryNames.size() - 1;
+		};
+
 		while(true) {
-			comma1 = data.find(',', linestart);
-			if(comma1 == string::npos) break;
-			comma2 = data.find(',', comma1 + 1);
-			if(comma2 == string::npos) break;
-			comma3 = data.find(',', comma2 + 1);
-			if(comma3 == string::npos) break;
-			comma4 = data.find(',', comma3 + 1);
-			if(comma4 == string::npos) break;
-			comma5 = data.find(',', comma4 + 1);
-			if(comma5 == string::npos) break;
-			lineend = data.find('\n', comma5);
+			auto pos = data.find(',', linestart);
+			if(pos == string::npos) break;
+			pos = data.find(',', pos + 1);
+			if(pos == string::npos) break;
+			startIP = toUInt32(start + pos + 2) - 1;
+
+			pos = data.find(',', pos + 1);
+			if(pos == string::npos) break;
+			endIP = toUInt32(start + pos + 2);
+
+			pos = data.find(',', pos + 1);
+			if(pos == string::npos) break;
+			pos = data.find(',', pos + 1);
+			if(pos == string::npos) break;
+			lineend = data.find('\n', pos);
 			if(lineend == string::npos) break;
 
-			startIP = Util::toUInt32(start + comma2 + 2);
-			endIP = Util::toUInt32(start + comma3 + 2);
-			if((startIP-1) != endIPprev)
-				last = countries.insert(last, make_pair((startIP-1), _("Unknown")));
-			auto nameStart = comma5 + 2;
-			last = countries.insert(last, make_pair(endIP, string(start + nameStart, lineend - 1 - nameStart)));
+			if(startIP != endIPprev)
+				last = countries.insert(last, make_pair(startIP, 0));
+			pos += 2;
+			last = countries.insert(last, make_pair(endIP, addCountry(data.substr(pos, lineend - 1 - pos))));
 
 			endIPprev = endIP;
 			linestart = lineend + 1;
@@ -904,25 +912,26 @@ uint32_t Util::rand() {
 const string& Util::getIpCountry(const string& IP) {
 	if(BOOLSETTING(GET_USER_COUNTRY)) {
 		if(count(IP.begin(), IP.end(), '.') != 3)
-			return Util::emptyString;
+			return emptyString;
 
 		//e.g IP 23.24.25.26 : w=23, x=24, y=25, z=26
 		string::size_type a = IP.find('.');
 		string::size_type b = IP.find('.', a+1);
 		string::size_type c = IP.find('.', b+2);
 
-		uint32_t ipnum = (Util::toUInt32(IP.c_str()) << 24) |
-			(Util::toUInt32(IP.c_str() + a + 1) << 16) |
-			(Util::toUInt32(IP.c_str() + b + 1) << 8) |
-			(Util::toUInt32(IP.c_str() + c + 1) );
+		/// @todo this is impl dependant and is working by chance because we are currently using atoi!
+		uint32_t ipnum = (toUInt32(IP.c_str()) << 24) |
+			(toUInt32(IP.c_str() + a + 1) << 16) |
+			(toUInt32(IP.c_str() + b + 1) << 8) |
+			(toUInt32(IP.c_str() + c + 1) );
 
 		auto i = countries.lower_bound(ipnum);
 		if(i != countries.end()) {
-			return i->second;
+			return countryNames[i->second];
 		}
 	}
 
-	return Util::emptyString;
+	return emptyString;
 }
 
 string Util::getTimeString() {
