@@ -13,7 +13,7 @@
       * Redistributions in binary form must reproduce the above copyright notice,
         this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor the names of its contributors
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
         may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
@@ -29,57 +29,27 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <dwt/widgets/ToolTip.h>
+#include <dwt/util/win32/ApiHelpers.h>
 
-namespace dwt {
+namespace dwt { namespace util { namespace win32 {
 
-const TCHAR ToolTip::windowClass[] = TOOLTIPS_CLASS;
+void updateStyle(HWND hwnd, int which, DWORD style, bool add) {
+	DWORD newStyle = ::GetWindowLong(hwnd, which);
+	bool mustUpdate = false;
+	if(add && (newStyle & style) != style) {
+		mustUpdate = true;
+		newStyle |= style;
+	} else if(!add && (newStyle & style) == style) {
+		mustUpdate = true;
+		newStyle ^= style;
+	}
 
-ToolTip::Seed::Seed() :
-	BaseType::Seed(WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON | TTS_NOPREFIX, WS_EX_TRANSPARENT)
-{
+	if(mustUpdate) {
+		::SetWindowLong(hwnd, which, newStyle);
+
+		// Faking a recheck in the window to read new style... (hack)
+		::SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+	}
 }
 
-void ToolTip::create( const Seed & cs ) {
-	dwtassert((cs.style & WS_POPUP) == WS_POPUP, _T("Widget must have WS_POPUP style"));
-
-	BaseType::create(cs);
-}
-
-void ToolTip::relayEvent(const MSG& msg) {
-	if(msg.message >= WM_MOUSEFIRST && msg.message <= WM_MOUSELAST)
-		sendMessage(TTM_RELAYEVENT, 0, reinterpret_cast<LPARAM>(&msg));
-}
-
-void ToolTip::setText(const tstring& text_) {
-	setText(getParent(), text_);
-}
-
-void ToolTip::setText(Widget* widget, const tstring& text_) {
-	text = text_;
-	setTool(widget, [this](tstring& t) { handleGetTip(t); });
-}
-
-void ToolTip::setTool(Widget* widget, const Dispatcher::F& f) {
-	onGetTip(f);
-
-	TOOLINFO ti = { sizeof(TOOLINFO), TTF_IDISHWND | TTF_SUBCLASS, getParent()->handle(),
-		reinterpret_cast<UINT_PTR>(widget->handle()) };
-	ti.lpszText = LPSTR_TEXTCALLBACK;
-	sendMessage(TTM_ADDTOOL, 0, reinterpret_cast<LPARAM>(&ti));
-}
-
-void ToolTip::setActive(bool b) {
-	sendMessage(TTM_ACTIVATE, b ? TRUE : FALSE);
-}
-
-void ToolTip::refresh() {
-	setActive(false);
-	setActive(true);
-}
-
-void ToolTip::handleGetTip(tstring& ret) {
-	ret = text;
-}
-
-}
+} } }

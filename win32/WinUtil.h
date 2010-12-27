@@ -52,6 +52,7 @@ public:
 		// base icons
 		USER_ICON,
 		USER_ICON_AWAY,
+		USER_ICON_BOT,
 
 		// modifiers
 		USER_ICON_MOD_START,

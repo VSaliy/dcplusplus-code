@@ -574,6 +574,7 @@ void Table::setTooltips(const TooltipDispatcher::F& f) {
 	addRemoveTableExtendedStyle(LVS_EX_INFOTIP, true);
 	HWND tip = ListView_GetToolTips(handle());
 	if(tip) {
+		util::win32::updateStyle(tip, GWL_STYLE, TTS_BALLOON, true);
 		// make tooltips last longer
 		::SendMessage(tip, TTM_SETDELAYTIME, TTDT_AUTOPOP, MAKELPARAM(::SendMessage(tip, TTM_GETDELAYTIME, TTDT_AUTOPOP, 0) * 3, 0));
 	}

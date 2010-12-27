@@ -53,11 +53,12 @@
 #define IDI_RIGHT 145
 #define IDI_USER 146
 #define IDI_USER_AWAY 147
-#define IDI_USER_OP 148
-#define IDI_USER_NOCON 149
-#define IDI_USER_NOSLOT 150
+#define IDI_USER_BOT 148
+#define IDI_USER_OP 149
+#define IDI_USER_NOCON 150
+#define IDI_USER_NOSLOT 151
 
-#define IDB_FOLDERS		151
+#define IDB_FOLDERS 200
 
 // Stuff that uses multiple id's
 

@@ -703,22 +703,23 @@ bool HubFrame::handleMessageKeyDown(int c) {
 }
 
 int HubFrame::UserInfo::getImage() const {
-	int image = identity.isAway() ? WinUtil::USER_ICON_AWAY : WinUtil::USER_ICON;
+	int image = identity.isBot() ? WinUtil::USER_ICON_BOT : identity.isAway() ? WinUtil::USER_ICON_AWAY : WinUtil::USER_ICON;
+	image *= WinUtil::USER_ICON_MOD_START * WinUtil::USER_ICON_MOD_START;
 
 	if(identity.isOp()) {
-		image += 1 << (WinUtil::USER_ICON_OP - 1);
+		image += 1 << (WinUtil::USER_ICON_OP - WinUtil::USER_ICON_MOD_START);
 	}
 
 	if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_PASSIVE &&
-		!identity.isTcpActive() && !identity.supports(AdcHub::NAT0_FEATURE))
+		!identity.isBot() && !identity.isTcpActive() && !identity.supports(AdcHub::NAT0_FEATURE))
 	{
 		// Users we can't connect to
-		image += 1 << (WinUtil::USER_ICON_NOCON - 1);
+		image += 1 << (WinUtil::USER_ICON_NOCON - WinUtil::USER_ICON_MOD_START);
 	}
 
 	string freeSlots = identity.get("FS");
 	if(!freeSlots.empty() && Util::toUInt(freeSlots) == 0) {
-		image += 1 << (WinUtil::USER_ICON_NOSLOT - 1);
+		image += 1 << (WinUtil::USER_ICON_NOSLOT - WinUtil::USER_ICON_MOD_START);
 	}
 
 	return image;
