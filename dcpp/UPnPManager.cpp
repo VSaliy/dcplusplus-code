@@ -121,8 +121,9 @@ int UPnPManager::run() {
 }
 
 void UPnPManager::close(UPnP& impl) {
-	if(!impl.close()) {
-		log(_("Failed to remove port mappings"));
+	if(impl.hasRules()) {
+		log(impl.close() ? str(F_("Successfully removed port mappings with the %1% interface") % impl.getName()) :
+			str(F_("Failed to remove port mappings with the %1% interface") % impl.getName()));
 	}
 }
 
