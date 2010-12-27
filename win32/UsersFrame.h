@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_USERS_FRAME_H
 
 #include <dcpp/FavoriteManagerListener.h>
+#include <dcpp/ClientManagerListener.h>
 
 #include "StaticFrame.h"
 #include "WinUtil.h"
@@ -31,6 +32,7 @@
 class UsersFrame :
 	public StaticFrame<UsersFrame>,
 	private FavoriteManagerListener,
+	private ClientManagerListener,
 	public AspectUserInfo<UsersFrame>
 {
 	typedef StaticFrame<UsersFrame> BaseType;
@@ -70,6 +72,7 @@ private:
 
 	class UserInfo : public UserInfoBase {
 	public:
+		UserInfo(const UserPtr& u);
 		UserInfo(const FavoriteUser& u);
 
 		const tstring& getText(int col) const {
@@ -86,6 +89,7 @@ private:
 
 		void remove();
 
+		void update(const UserPtr& u);
 		void update(const FavoriteUser& u);
 
 		tstring columns[COLUMN_LAST];
@@ -94,10 +98,14 @@ private:
 	typedef TypedTable<UserInfo> WidgetUsers;
 	typedef WidgetUsers* WidgetUsersPtr;
 	WidgetUsersPtr users;
+	TextBoxPtr userInfo;
+	VSplitterPtr splitter;
+
+	std::unordered_map<UserPtr, UserInfo*, User::Hash> userInfos;
 
 	bool startup;
 
-	void addUser(const FavoriteUser& aUser);
+	void addUser(const UserPtr& aUser);
 	void updateUser(const UserPtr& aUser);
 	void removeUser(const UserPtr& aUser);
 
@@ -106,6 +114,7 @@ private:
 	bool handleKeyDown(int c);
 	LRESULT handleItemChanged(LPARAM lParam);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
+	void handleSelectionChanged();
 
 	// AspectUserInfo
 	UserInfoList selectedUsersImpl() const;
@@ -114,6 +123,10 @@ private:
 	virtual void on(UserAdded, const FavoriteUser& aUser) throw();
 	virtual void on(UserRemoved, const FavoriteUser& aUser) throw();
 	virtual void on(StatusChanged, const UserPtr& aUser) throw();
+
+	// ClientManagerListner
+	virtual void on(UserConnected, const UserPtr& aUser) throw();
+	virtual void on(UserDisconnected, const UserPtr& aUser) throw();
 };
 
 #endif // !defined(USERS_FRAME_H)

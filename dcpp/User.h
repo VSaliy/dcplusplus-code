@@ -149,6 +149,7 @@ public:
 	bool isAway() const { return isSet("AW"); }
 	bool isTcpActive() const;
 	bool isUdpActive() const;
+	std::map<string, string> getInfo() const;
 	string get(const char* name) const;
 	void set(const char* name, const string& val);
 	bool isSet(const char* name) const;

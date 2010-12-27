@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#if !defined(SOCKET_H)
-#define SOCKET_H
+#ifndef DCPLUSPLUS_DCPP_SOCKET_H
+#define DCPLUSPLUS_DCPP_SOCKET_H
 
 #include "Util.h"
 #include "Exception.h"
@@ -175,7 +175,7 @@ public:
 	virtual bool isSecure() const throw() { return false; }
 	virtual bool isTrusted() const throw() { return false; }
 	virtual std::string getCipherName() const throw() { return Util::emptyString; }
-	virtual std::string getDigest() const throw() { return Util::emptyString; }
+	virtual vector<uint8_t> getKeyprint() const throw() { return vector<uint8_t>(); }
 
 	/** When socks settings are updated, this has to be called... */
 	static void socksUpdated();
@@ -199,7 +199,6 @@ protected:
 private:
 	Socket(const Socket&);
 	Socket& operator=(const Socket&);
-
 
 	void socksAuth(uint32_t timeout) throw(SocketException);
 
