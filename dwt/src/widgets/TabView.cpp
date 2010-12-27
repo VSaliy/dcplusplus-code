@@ -139,7 +139,6 @@ void TabView::create(const Seed & cs) {
 
 	if(cs.style & TCS_TOOLTIPS) {
 		tip = WidgetCreator<ToolTip>::attach(this, TabCtrl_GetToolTips(handle())); // created and managed by the tab control thanks to the TCS_TOOLTIPS style
-		tip->addRemoveStyle(TTS_BALLOON, true);
 		tip->addRemoveStyle(TTS_NOPREFIX, true);
 		tip->onRaw([this](WPARAM, LPARAM lParam) { return handleToolTip(lParam); }, Message(WM_NOTIFY, TTN_GETDISPINFO));
 	}

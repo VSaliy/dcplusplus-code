@@ -61,12 +61,6 @@ void ToolBar::create(const Seed& cs) {
 	//// Telling the toolbar what the size of the TBBUTTON struct is
 	sendMessage(TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON));
 
-	if((cs.style & TBSTYLE_TOOLTIPS) == TBSTYLE_TOOLTIPS) {
-		HWND tip = reinterpret_cast<HWND>(sendMessage(TB_GETTOOLTIPS));
-		if(tip)
-			util::win32::updateStyle(tip, GWL_STYLE, TTS_BALLOON, true);
-	}
-
 	onRaw([this](WPARAM, LPARAM lParam) { return handleDropDown(lParam); }, Message(WM_NOTIFY, TBN_DROPDOWN));
 	onRaw([this](WPARAM, LPARAM lParam) { return handleToolTip(lParam); }, Message(WM_NOTIFY, TBN_GETINFOTIP));
 

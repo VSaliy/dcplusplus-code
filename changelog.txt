@@ -63,7 +63,6 @@
 * Update MiniUPnPc (poy)
 * Ameliorate the MiniUPnPc device selection
 * Prevent an endless loop on connection failure (thanks bigmuscle)
-* [L#694167] Balloon-style tooltips (iceman50, poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
