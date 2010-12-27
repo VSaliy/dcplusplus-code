@@ -947,6 +947,10 @@ bool NmdcHub::isProtectedIP(const string& ip) {
 void NmdcHub::on(Connected) throw() {
 	Client::on(Connected());
 
+	if(state != STATE_PROTOCOL) {
+		return;
+	}
+
 	supportFlags = 0;
 	lastMyInfoA.clear();
 	lastMyInfoB.clear();

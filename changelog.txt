@@ -60,6 +60,7 @@
 * Select a better default font (poy)
 * [L#681754] Fonts and dialogs respect DPI settings - mark DC++ as DPI aware (poy)
 * Update MiniUPnPc (poy)
+* Experimental implementation of KEYP ADC extension
 * Ameliorate the MiniUPnPc device selection
 * Prevent an endless loop on connection failure (thanks bigmuscle)
 

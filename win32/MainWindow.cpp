@@ -639,7 +639,7 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 
 	{
 		WindowManager* wm = WindowManager::getInstance();
-		wm->lock();
+		auto lock = wm->lock();
 		const WindowManager::RecentList& recent = wm->getRecent();
 
 		typedef void (MainWindow::*configureF)(const string&, const tstring&);
@@ -647,8 +647,6 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 		addRecentMenu<HubFrame>(recent, menu, this, T_("Recent hubs"), IDI_HUB, IDI_FAVORITE_HUBS, f);
 		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDI_PRIVATE, IDI_FAVORITE_USERS, f);
 		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDI_DIRECTORY, IDI_FAVORITE_USERS, f);
-
-		wm->unlock();
 	}
 
 	menu->open(pt);
@@ -797,7 +795,7 @@ void MainWindow::saveSettings() {
 void MainWindow::saveWindowSettings() {
 	{
 		WindowManager* wm = WindowManager::getInstance();
-		wm->lock();
+		auto lock = wm->lock();
 		wm->clear();
 
 		const dwt::TabView::ChildList& views = tabs->getChildren();
@@ -805,8 +803,6 @@ void MainWindow::saveWindowSettings() {
 			MDIChildFrame<dwt::Container>* child = static_cast<MDIChildFrame<dwt::Container>*>(*i);
 			wm->add(child->getId(), child->getWindowParams());
 		}
-
-		wm->unlock();
 	}
 
 	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_PANED_POS, paned->getRelativePos());
@@ -1072,17 +1068,12 @@ void MainWindow::parseCommandLine(const tstring& cmdLine)
 	string::size_type i = 0;
 	string::size_type j;
 
-	if( (j = cmdLine.find(_T("dchub://"), i)) != string::npos) {
-		WinUtil::parseDchubUrl(cmdLine.substr(j));
-	}
-	if( (j = cmdLine.find(_T("adc://"), i)) != string::npos) {
-		WinUtil::parseADChubUrl(cmdLine.substr(j), false);
-	}
-	if( (j = cmdLine.find(_T("adcs://"), i)) != string::npos) {
-		WinUtil::parseADChubUrl(cmdLine.substr(j), true);
-	}
-	if( (j = cmdLine.find(_T("magnet:?"), i)) != string::npos) {
-		WinUtil::parseMagnetUri(cmdLine.substr(j));
+	if( (j = cmdLine.find(_T("dchub://"), i)) != string::npos ||
+		(j = cmdLine.find(_T("adc://"), i)) != string::npos ||
+		(j = cmdLine.find(_T("adcs://"), i)) != string::npos ||
+		(j = cmdLine.find(_T("magnet:?"), i)) != string::npos )
+	{
+		WinUtil::parseDBLClick(cmdLine.substr(j));
 	}
 }
 

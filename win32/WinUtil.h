@@ -198,8 +198,6 @@ public:
 	static bool getUCParams(dwt::Widget* parent, const UserCommand& cmd, StringMap& sm) throw();
 
 	static bool parseDBLClick(const tstring& aString);
-	static void parseDchubUrl(const tstring& /*aUrl*/);
-	static void parseADChubUrl(const tstring& /*aUrl*/, bool isSecure);
 	static void parseMagnetUri(const tstring& /*aUrl*/, bool aOverride = false);
 
 	static void help(dwt::Control* widget, unsigned id);
