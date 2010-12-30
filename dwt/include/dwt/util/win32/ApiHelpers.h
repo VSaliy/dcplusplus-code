@@ -37,16 +37,8 @@
 
 namespace dwt { namespace util { namespace win32 {
 
-inline size_t getWindowTextLength(HWND hWnd) { return static_cast<size_t>(::SendMessage(hWnd, WM_GETTEXTLENGTH, 0, 0)); }
-
-inline tstring getWindowText(HWND hWnd) {
-	size_t textLength = getWindowTextLength(hWnd);
-	if (textLength == 0)
-		return tstring();
-	tstring retVal(textLength + 1, 0);
-	retVal.resize(::SendMessage(hWnd, WM_GETTEXT, static_cast<WPARAM>(textLength + 1), reinterpret_cast<LPARAM>(&retVal[0])));
-	return retVal;
-}
+size_t getWindowTextLength(HWND hWnd);
+tstring getWindowText(HWND hWnd);
 
 void updateStyle(HWND hwnd, int which, DWORD style, bool add);
 
