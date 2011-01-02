@@ -102,7 +102,7 @@ void DirectoryListingFrame::openWindow_(bool activate, dwt::TabView* mdiParent, 
 }
 
 void DirectoryListingFrame::openOwnList(dwt::TabView* parent) {
-	string ownListFile = ShareManager::getInstance()->getOwnListFile();
+	const string& ownListFile = ShareManager::getInstance()->getOwnListFile();
 	if(!ownListFile.empty()) {
 		openWindow(parent, Text::toT(ownListFile), Util::emptyStringT, HintedUser(ClientManager::getInstance()->getMe(), Util::emptyString), 0);
 	}
@@ -274,6 +274,7 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	}
 
 	searchGrid->setEnabled(false);
+	searchGrid->setVisible(false);
 
 	initStatus();
 
@@ -377,11 +378,13 @@ void DirectoryListingFrame::handleFindToggle() {
 	if(searchGrid->getEnabled()) {
 		searchBox->clear();
 		searchGrid->setEnabled(false);
+		searchGrid->setVisible(false);
 		grid->row(1).mode = GridInfo::STATIC;
 	} else {
 		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i)
 			searchBox->addValue(*i);
 		searchGrid->setEnabled(true);
+		searchGrid->setVisible(true);
 		grid->row(1).mode = GridInfo::AUTO;
 		searchBox->setFocus();
 	}

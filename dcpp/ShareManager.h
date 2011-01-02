@@ -96,7 +96,7 @@ public:
 		hits += aHits;
 	}
 
-	string getOwnListFile() {
+	const string& getOwnListFile() {
 		generateXmlList();
 		return getBZXmlFile();
 	}
