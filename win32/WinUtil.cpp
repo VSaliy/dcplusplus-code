@@ -163,7 +163,7 @@ void WinUtil::init() {
 		const unsigned baseCount = USER_ICON_MOD_START;
 		const unsigned modifierCount = USER_ICON_LAST - USER_ICON_MOD_START;
 		dwt::IconPtr bases[baseCount] = { userIcon(IDI_USER), userIcon(IDI_USER_AWAY), userIcon(IDI_USER_BOT) };
-		dwt::IconPtr modifiers[modifierCount] = { userIcon(IDI_USER_OP), userIcon(IDI_USER_NOCON), userIcon(IDI_USER_NOSLOT) };
+		dwt::IconPtr modifiers[modifierCount] = { userIcon(IDI_USER_NOCON), userIcon(IDI_USER_NOSLOT), userIcon(IDI_USER_OP) };
 		for(size_t iBase = 0; iBase < baseCount; ++iBase) {
 			for(size_t i = 0, n = modifierCount * modifierCount; i < n; ++i) {
 				vector<dwt::IconPtr> icons;
