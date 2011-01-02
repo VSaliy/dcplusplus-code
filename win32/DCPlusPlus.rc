@@ -95,9 +95,9 @@ IDI_RIGHT               ICON                    "res/Right.ico"
 IDI_USER                ICON                    "res/User.ico"
 IDI_USER_AWAY           ICON                    "res/UserAway.ico"
 IDI_USER_BOT            ICON                    "res/UserBot.ico"
-IDI_USER_OP             ICON                    "res/UserOp.ico"
 IDI_USER_NOCON          ICON                    "res/UserNoCon.ico"
 IDI_USER_NOSLOT         ICON                    "res/UserNoSlot.ico"
+IDI_USER_OP             ICON                    "res/UserOp.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
