@@ -227,6 +227,7 @@ private:
 	void handleDownloadTarget(unsigned index);
 	void handleDownloadFavorite(unsigned index);
 	void handleDownloadBrowse();
+	bool handleKeyDownDirs(int c);
 	bool handleKeyDownFiles(int c);
 
 	void handleDoubleClickFiles();

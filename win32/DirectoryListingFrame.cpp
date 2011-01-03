@@ -35,6 +35,8 @@
 #include <dcpp/ShareManager.h>
 #include <dcpp/WindowInfo.h>
 
+#include <dwt/widgets/ToolBar.h>
+
 const string DirectoryListingFrame::id = "DirectoryListing";
 const string& DirectoryListingFrame::getId() const { return id; }
 
@@ -191,16 +193,47 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 	grid->row(0).align = GridInfo::STRETCH;
 	grid->row(1).size = 0;
 	grid->row(1).mode = GridInfo::STATIC;
+	grid->setSpacing(0);
 
 	VSplitterPtr paned = grid->addChild(VSplitter::Seed(0.3));
 
 	{
-		dirs = grid->addChild(WidgetDirs::Seed());
+		// create a container that will hold both the toolbar and the dir tree.
+		ContainerPtr container = grid->addChild(Container::Seed(0, WS_EX_CONTROLPARENT));
+
+		auto seed = ToolBar::Seed();
+		seed.style &= ~CCS_ADJUSTABLE;
+		ToolBarPtr toolbar = container->addChild(seed);
+
+		StringList ids;
+		auto addButton = [toolbar, &ids](unsigned icon, const tstring& text, unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f) {
+			ids.push_back(string(1, '0' + ids.size()));
+			toolbar->addButton(ids.back(), WinUtil::toolbarIcon(icon), 0, text, helpId, f);
+		};
+		addButton(IDI_LEFT, T_("Back"), IDH_FILE_LIST_BACK, [this] { back(); });
+		addButton(IDI_RIGHT, T_("Forward"), IDH_FILE_LIST_FORWARD, [this] { this->forward(); }); // explicit ns (vs std::forward)
+		ids.push_back(string());
+		addButton(IDI_UP, T_("Up one level"), IDH_FILE_LIST_UP, [this] { up(); });
+		toolbar->setLayout(ids);
+
+		dirs = container->addChild(WidgetDirs::Seed());
 		dirs->setHelpId(IDH_FILE_LIST_DIRS);
 		addWidget(dirs);
-		paned->setFirst(dirs);
+
+		container->onSized([this, toolbar](const dwt::SizedEvent& e) {
+			dwt::Rectangle r(e.size);
+			toolbar->refresh();
+			dwt::Point pt = toolbar->getWindowSize();
+			r.pos.y += pt.y;
+			r.size.y -= pt.y;
+			dirs->layout(r);
+		});
+		paned->setFirst(container);
+
 		dirs->setNormalImageList(WinUtil::fileImages);
 		dirs->onSelectionChanged(std::bind(&DirectoryListingFrame::handleSelectionChanged, this));
+		dirs->onKeyDown(std::bind(&DirectoryListingFrame::handleKeyDownDirs, this, _1));
+		dirs->onSysKeyDown(std::bind(&DirectoryListingFrame::handleKeyDownDirs, this, _1));
 		dirs->onContextMenu(std::bind(&DirectoryListingFrame::handleDirsContextMenu, this, _1));
 		dirs->onXMouseUp(std::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
 	}
@@ -1068,19 +1101,32 @@ bool DirectoryListingFrame::handleXMouseUp(const dwt::MouseEvent& mouseEvent) {
 	return true;
 }
 
+bool DirectoryListingFrame::handleKeyDownDirs(int c) {
+	switch(c) {
+	case VK_BACK: { back(); return true; }
+	case VK_LEFT:
+		{
+			if(isControlPressed()) { back(); return true; }
+			break;
+		}
+	case VK_RIGHT:
+		{
+			if(isControlPressed()) { forward(); return true; }
+			break;
+		}
+	case VK_UP:
+		{
+			if(isControlPressed()) { up(); return true; }
+			break;
+		}
+	}
+	return false;
+}
+
 bool DirectoryListingFrame::handleKeyDownFiles(int c) {
-	if(c == VK_BACK) {
-		up();
+	if(handleKeyDownDirs(c))
 		return true;
-	}
-	if(c == VK_LEFT && isControlPressed()) {
-		back();
-		return true;
-	}
-	if(c == VK_RIGHT && isControlPressed()) {
-		forward();
-		return true;
-	}
+
 	if(c == VK_RETURN) {
 		if(files->countSelected() == 1) {
 			ItemInfo* ii = files->getSelectedData();
@@ -1101,6 +1147,7 @@ bool DirectoryListingFrame::handleKeyDownFiles(int c) {
 		}
 		return true;
 	}
+
 	return false;
 }
 

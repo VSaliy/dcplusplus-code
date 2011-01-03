@@ -1383,6 +1383,10 @@ dwt::IconPtr WinUtil::createIcon(unsigned id, long size) {
 	return new dwt::Icon(id, dwt::Point(size, size));
 }
 
+dwt::IconPtr WinUtil::toolbarIcon(unsigned id) {
+	return createIcon(id, SETTING(TOOLBAR_SIZE));
+}
+
 #ifdef PORT_ME
 
 double WinUtil::toBytes(TCHAR* aSize) {

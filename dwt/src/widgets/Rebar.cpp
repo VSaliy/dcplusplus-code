@@ -58,6 +58,8 @@ void Rebar::add(Widget* w, const tstring& text) {
 	if(size() == 0)
 		setVisible(true);
 
+	w->addRemoveStyle(CCS_NORESIZE, true);
+
 	REBARBANDINFO info = { sizeof(REBARBANDINFO), RBBIM_CHILD | RBBIM_CHILDSIZE };
 
 	if(!text.empty()) {
