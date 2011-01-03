@@ -197,7 +197,6 @@ private:
 	void parseCommandLine(const tstring& line);
 	bool chooseFavHubGroup(const tstring& title, tstring& group);
 	void statusMessage(time_t t, const string& m);
-	dwt::IconPtr toolbarIcon(unsigned id) const;
 
 	bool filter(MSG& msg);
 

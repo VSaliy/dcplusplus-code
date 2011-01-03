@@ -349,43 +349,43 @@ void MainWindow::initToolbar() {
 	dcdebug("initToolbar\n");
 	toolbar = addChild(ToolBar::Seed());
 
-	toolbar->addButton(PublicHubsFrame::id, toolbarIcon(IDI_PUBLICHUBS), 0, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS,
+	toolbar->addButton(PublicHubsFrame::id, WinUtil::toolbarIcon(IDI_PUBLICHUBS), 0, T_("Public Hubs"), IDH_TOOLBAR_PUBLIC_HUBS,
 		[this] { PublicHubsFrame::openWindow(getTabView()); });
-	toolbar->addButton("Reconnect", toolbarIcon(IDI_RECONNECT), 0, T_("Reconnect"), IDH_TOOLBAR_RECONNECT,
+	toolbar->addButton("Reconnect", WinUtil::toolbarIcon(IDI_RECONNECT), 0, T_("Reconnect"), IDH_TOOLBAR_RECONNECT,
 		std::bind(&MainWindow::handleReconnect, this));
-	toolbar->addButton("Redirect", toolbarIcon(IDI_FOLLOW), 0, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW,
+	toolbar->addButton("Redirect", WinUtil::toolbarIcon(IDI_FOLLOW), 0, T_("Follow last redirect"), IDH_TOOLBAR_FOLLOW,
 		std::bind(&MainWindow::handleRedirect, this));
-	toolbar->addButton(FavHubsFrame::id, toolbarIcon(IDI_FAVORITE_HUBS), 0, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
+	toolbar->addButton(FavHubsFrame::id, WinUtil::toolbarIcon(IDI_FAVORITE_HUBS), 0, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
 		[this] { FavHubsFrame::openWindow(getTabView()); }, std::bind(&MainWindow::handleFavHubsDropDown, this, _1));
-	toolbar->addButton(UsersFrame::id, toolbarIcon(IDI_FAVORITE_USERS), 0, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
+	toolbar->addButton(UsersFrame::id, WinUtil::toolbarIcon(IDI_FAVORITE_USERS), 0, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
 		[this] { UsersFrame::openWindow(getTabView()); });
-	toolbar->addButton(QueueFrame::id, toolbarIcon(IDI_QUEUE), 0, T_("Download Queue"), IDH_TOOLBAR_QUEUE,
+	toolbar->addButton(QueueFrame::id, WinUtil::toolbarIcon(IDI_QUEUE), 0, T_("Download Queue"), IDH_TOOLBAR_QUEUE,
 		[this] { QueueFrame::openWindow(getTabView()); });
-	toolbar->addButton(FinishedDLFrame::id, toolbarIcon(IDI_FINISHED_DL), 0, T_("Finished Downloads"), IDH_TOOLBAR_FINISHED_DL,
+	toolbar->addButton(FinishedDLFrame::id, WinUtil::toolbarIcon(IDI_FINISHED_DL), 0, T_("Finished Downloads"), IDH_TOOLBAR_FINISHED_DL,
 		[this] { FinishedDLFrame::openWindow(getTabView()); });
-	toolbar->addButton(WaitingUsersFrame::id, toolbarIcon(IDI_WAITING_USERS), 0, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS,
+	toolbar->addButton(WaitingUsersFrame::id, WinUtil::toolbarIcon(IDI_WAITING_USERS), 0, T_("Waiting Users"), IDH_TOOLBAR_WAITING_USERS,
 		[this] { WaitingUsersFrame::openWindow(getTabView()); });
-	toolbar->addButton(FinishedULFrame::id, toolbarIcon(IDI_FINISHED_UL), 0, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL,
+	toolbar->addButton(FinishedULFrame::id, WinUtil::toolbarIcon(IDI_FINISHED_UL), 0, T_("Finished Uploads"), IDH_TOOLBAR_FINISHED_UL,
 		[this] { FinishedULFrame::openWindow(getTabView()); });
-	toolbar->addButton(SearchFrame::id, toolbarIcon(IDI_SEARCH), 0, T_("Search"), IDH_TOOLBAR_SEARCH,
+	toolbar->addButton(SearchFrame::id, WinUtil::toolbarIcon(IDI_SEARCH), 0, T_("Search"), IDH_TOOLBAR_SEARCH,
 		[this] { SearchFrame::openWindow(getTabView()); });
-	toolbar->addButton(ADLSearchFrame::id, toolbarIcon(IDI_ADLSEARCH), 0, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH,
+	toolbar->addButton(ADLSearchFrame::id, WinUtil::toolbarIcon(IDI_ADLSEARCH), 0, T_("ADL Search"), IDH_TOOLBAR_ADL_SEARCH,
 		[this] { ADLSearchFrame::openWindow(getTabView()); });
-	toolbar->addButton(SpyFrame::id, toolbarIcon(IDI_SPY), 0, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY,
+	toolbar->addButton(SpyFrame::id, WinUtil::toolbarIcon(IDI_SPY), 0, T_("Search Spy"), IDH_TOOLBAR_SEARCH_SPY,
 		[this] { SpyFrame::openWindow(getTabView()); });
-	toolbar->addButton(StatsFrame::id, toolbarIcon(IDI_NET_STATS), 0, T_("Network Statistics"), IDH_TOOLBAR_NET_STATS,
+	toolbar->addButton(StatsFrame::id, WinUtil::toolbarIcon(IDI_NET_STATS), 0, T_("Network Statistics"), IDH_TOOLBAR_NET_STATS,
 		[this] { StatsFrame::openWindow(getTabView()); });
-	toolbar->addButton("OpenFL", toolbarIcon(IDI_OPEN_FILE_LIST), 0, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST,
+	toolbar->addButton("OpenFL", WinUtil::toolbarIcon(IDI_OPEN_FILE_LIST), 0, T_("Open file list..."), IDH_TOOLBAR_FILE_LIST,
 		std::bind(&MainWindow::handleOpenFileList, this));
-	toolbar->addButton("Recents", toolbarIcon(IDI_RECENTS), 0, T_("Recent windows"), IDH_TOOLBAR_RECENT,
+	toolbar->addButton("Recents", WinUtil::toolbarIcon(IDI_RECENTS), 0, T_("Recent windows"), IDH_TOOLBAR_RECENT,
 		0, std::bind(&MainWindow::handleRecent, this, _1));
-	toolbar->addButton("Settings", toolbarIcon(IDI_SETTINGS), 0, T_("Settings"), IDH_TOOLBAR_SETTINGS,
+	toolbar->addButton("Settings", WinUtil::toolbarIcon(IDI_SETTINGS), 0, T_("Settings"), IDH_TOOLBAR_SETTINGS,
 		std::bind(&MainWindow::handleSettings, this));
-	toolbar->addButton(NotepadFrame::id, toolbarIcon(IDI_NOTEPAD), 0, T_("Notepad"), IDH_TOOLBAR_NOTEPAD,
+	toolbar->addButton(NotepadFrame::id, WinUtil::toolbarIcon(IDI_NOTEPAD), 0, T_("Notepad"), IDH_TOOLBAR_NOTEPAD,
 		[this] { NotepadFrame::openWindow(getTabView()); });
-	toolbar->addButton("Refresh", toolbarIcon(IDI_REFRESH), 0, T_("Refresh file list"), IDH_TOOLBAR_REFRESH,
+	toolbar->addButton("Refresh", WinUtil::toolbarIcon(IDI_REFRESH), 0, T_("Refresh file list"), IDH_TOOLBAR_REFRESH,
 		std::bind(&MainWindow::handleRefreshFileList, this));
-	toolbar->addButton("CSHelp", toolbarIcon(IDI_WHATS_THIS), 0, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS,
+	toolbar->addButton("CSHelp", WinUtil::toolbarIcon(IDI_WHATS_THIS), 0, T_("What's This?"), IDH_TOOLBAR_WHATS_THIS,
 		std::bind(&MainWindow::handleWhatsThis, this));
 
 	if(SettingsManager::getInstance()->isDefault(SettingsManager::TOOLBAR)) {
@@ -781,10 +781,6 @@ bool MainWindow::chooseFavHubGroup(const tstring& title, tstring& group) {
 		return true;
 	}
 	return false;
-}
-
-dwt::IconPtr MainWindow::toolbarIcon(unsigned id) const {
-	return WinUtil::createIcon(id, SETTING(TOOLBAR_SIZE));
 }
 
 void MainWindow::setSaveTimer() {

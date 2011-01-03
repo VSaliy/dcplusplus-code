@@ -98,6 +98,7 @@ IDI_USER_BOT            ICON                    "res/UserBot.ico"
 IDI_USER_NOCON          ICON                    "res/UserNoCon.ico"
 IDI_USER_NOSLOT         ICON                    "res/UserNoSlot.ico"
 IDI_USER_OP             ICON                    "res/UserOp.ico"
+IDI_UP                  ICON                    "res/Up.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

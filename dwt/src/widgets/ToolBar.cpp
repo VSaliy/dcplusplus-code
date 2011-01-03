@@ -31,14 +31,12 @@
 
 #include <dwt/widgets/ToolBar.h>
 
-#include <dwt/util/win32/ApiHelpers.h>
-
 namespace dwt {
 
 const TCHAR ToolBar::windowClass[] = TOOLBARCLASSNAME;
 
 ToolBar::Seed::Seed() :
-BaseType::Seed(WS_CHILD | CCS_ADJUSTABLE | CCS_NODIVIDER | CCS_NORESIZE | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS)
+BaseType::Seed(WS_CHILD | CCS_ADJUSTABLE | CCS_NODIVIDER | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS)
 {
 }
 
