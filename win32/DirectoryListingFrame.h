@@ -229,6 +229,8 @@ private:
 	void handleDownloadBrowse();
 	bool handleKeyDownDirs(int c);
 	bool handleKeyDownFiles(int c);
+	bool handleSearchKeyDown(int c);
+	bool handleSearchChar(int c);
 
 	void handleDoubleClickFiles();
 	void handleSelectionChanged();
