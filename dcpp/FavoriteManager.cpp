@@ -42,8 +42,8 @@ FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), 
 
 	File::ensureDirectory(Util::getHubListsPath());
 
-	/* after the release of the first version including this blacklist, remember to also update
-	version.xml when a domain has to be added to this list, using the following format:
+	/* after the release of the first version including this blacklist (DC++ 0.780), remember to
+	also update version.xml when a domain has to be added to this list, using the following format:
 	<Blacklist>
 		<Blacklisted Domain="example1.com" Reason="Domain used for spam purposes."/>
 		<Blacklisted Domain="example2.com" Reason="Domain used for spam purposes."/>
@@ -51,6 +51,7 @@ FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), 
 	(the "Blacklist" tag should be under the main "DCUpdate" tag.) */
 	addBlacklist("adchublist.com", "Domain used for spam purposes.");
 	addBlacklist("hublist.org", "Domain used for spam purposes.");
+	addBlacklist("hubtracker.com", "Domain lost to unknown owners advertising dubious pharmaceuticals.");
 	addBlacklist("openhublist.org", "Domain used for spam purposes.");
 }
 

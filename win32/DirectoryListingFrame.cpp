@@ -267,6 +267,8 @@ DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const Hint
 		searchBox = searchGrid->addChild(WinUtil::Seeds::comboBoxEdit);
 		searchBox->setHelpId(IDH_FILE_LIST_SEARCH_BOX);
 		addWidget(searchBox);
+		searchBox->getTextBox()->onKeyDown(std::bind(&DirectoryListingFrame::handleSearchKeyDown, this, _1));
+		searchBox->getTextBox()->onChar(std::bind(&DirectoryListingFrame::handleSearchChar, this, _1));
 
 		cs.caption = T_("Find from the beginning");
 		ButtonPtr button = searchGrid->addChild(cs);
@@ -1012,8 +1014,7 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 		// Remove prev. selection from file list
 		files->clearSelection();
 
-		// Highlight and focus the file
-		files->setFocus();
+		// Highlight the file
 		files->setSelected(search.second);
 		files->ensureVisible(search.second);
 
@@ -1149,6 +1150,19 @@ bool DirectoryListingFrame::handleKeyDownFiles(int c) {
 	}
 
 	return false;
+}
+
+bool DirectoryListingFrame::handleSearchKeyDown(int c) {
+	if(c == VK_RETURN && !(WinUtil::isShift() || WinUtil::isCtrl() || WinUtil::isAlt())) {
+		handleFind(FIND_START);
+		return true;
+	}
+	return false;
+}
+
+bool DirectoryListingFrame::handleSearchChar(int c) {
+	// avoid the "beep" sound when enter is pressed
+	return c == VK_RETURN;
 }
 
 void DirectoryListingFrame::tabMenuImpl(dwt::MenuPtr& menu) {
