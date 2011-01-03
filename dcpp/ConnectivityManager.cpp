@@ -55,6 +55,9 @@ void ConnectivityManager::detectConnection() {
 
 	running = true;
 
+	SettingsManager::getInstance()->set(SettingsManager::EXTERNAL_IP, Util::emptyString);
+	SettingsManager::getInstance()->set(SettingsManager::NO_IP_OVERRIDE, false);
+
 	if (UPnPManager::getInstance()->getOpened()) {
 		UPnPManager::getInstance()->close();
 	}
