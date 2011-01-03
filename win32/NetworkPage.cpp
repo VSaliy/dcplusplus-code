@@ -188,15 +188,14 @@ void NetworkPage::write()
 void NetworkPage::handleDetectClicked() {
 	log->setText(Util::emptyStringT);
 	detectNow->setEnabled(false);
+	externalIP->setText(Util::emptyStringT);
+	overrideIP->setChecked(false);
 	ConnectivityManager::getInstance()->detectConnection();
 }
 
 void NetworkPage::handleAutoClicked() {
 	bool enabled = autoDetect->getChecked();
-	if (enabled) {
-		externalIP->setText(Util::emptyStringT);
-		overrideIP->setChecked(false);
-	}
+
 	incoming->setEnabled(!enabled);
 	detectNow->setEnabled(enabled && !ConnectivityManager::getInstance()->isRunning());
 
@@ -216,6 +215,7 @@ void NetworkPage::detectionFinished() {
 	passive->setChecked(false);
 
 	setRadioButtons();
+	externalIP->setText(Text::toT(SETTING(EXTERNAL_IP)));
 	detectNow->setEnabled(true);
 }
 
