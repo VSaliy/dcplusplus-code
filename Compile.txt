@@ -65,6 +65,8 @@
 		Also grab natupnp.h from the .Net 1.1 SDK and place it in the root of the repository.
 		<http://www.microsoft.com/downloads/details.aspx?FamilyID=9b3a2ca6-3647-4070-9f41-a333c6b9181d&DisplayLang=en>
 
+		A pre-packaged MinGW set can be found on <http://code.google.com/p/pcxprj/>.
+
 	b. Microsoft Visual C++ 10 (2010):
 	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
 

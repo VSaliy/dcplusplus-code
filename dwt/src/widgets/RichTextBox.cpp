@@ -93,10 +93,12 @@ void RichTextBox::create(const Seed& cs) {
 
 		::FORMATRANGE format = { canvas.handle(), canvas.handle() };
 		format.rc = rect;
-		format.rc.right *= canvas.getDeviceCaps(LOGPIXELSX);
-		format.rc.bottom *= canvas.getDeviceCaps(LOGPIXELSY);
+		format.rc.bottom += 2; // useful when edge lines are cropped.
+		// convert to twips and respect DPI settings.
+		format.rc.right *= 1440 / canvas.getDeviceCaps(LOGPIXELSX);
+		format.rc.bottom *= 1440 / canvas.getDeviceCaps(LOGPIXELSY);
 		format.rcPage = format.rc;
-		format.chrg.cpMin = 0;
+		format.chrg.cpMin = GCC_WTF->lineIndex(GCC_WTF->getFirstVisibleLine());
 		format.chrg.cpMax = -1;
 		GCC_WTF->sendMessage(EM_FORMATRANGE, 1, reinterpret_cast<LPARAM>(&format));
 		GCC_WTF->sendMessage(EM_FORMATRANGE); // "free the cached information" as MSDN recommends.
