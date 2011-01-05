@@ -292,6 +292,7 @@ void FavHubsFrame::handleGroup(const string& group) {
 	StateKeeper keeper(hubs);
 	const FavoriteHubEntryList& selected = keeper.getSelection();
 	for_each(selected.cbegin(), selected.cend(), [group](FavoriteHubEntryPtr entry) { entry->setGroup(group); });
+	FavoriteManager::getInstance()->save();
 	refresh();
 }
 
