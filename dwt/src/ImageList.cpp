@@ -105,13 +105,12 @@ Point ImageList::getImageSize() const
 	return Point( x, y );
 }
 
-int ImageList::size() const
-{
-	return ImageList_GetImageCount( handle() );
+bool ImageList::empty() const {
+	return size() == 0;
 }
 
-int ImageList::getImageCount() const {
-	return size();
+size_t ImageList::size() const {
+	return ImageList_GetImageCount(handle());
 }
 
 IconPtr ImageList::getIcon(unsigned i) const {

@@ -129,7 +129,7 @@ private:
 		}
 
 		int getImage() const {
-			return WinUtil::getIconIndex(Text::toT(getTarget()));
+			return WinUtil::getFileIcon(Text::toT(getTarget()));
 		}
 
 		static int compareItems(QueueItemInfo* a, QueueItemInfo* b, int col) {

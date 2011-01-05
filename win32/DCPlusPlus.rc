@@ -34,13 +34,6 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Bitmap
-//
-
-IDB_FOLDERS             BITMAP                  "res/folders.bmp"
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Icon
 //
 
@@ -99,6 +92,8 @@ IDI_USER_NOCON          ICON                    "res/UserNoCon.ico"
 IDI_USER_NOSLOT         ICON                    "res/UserNoSlot.ico"
 IDI_USER_OP             ICON                    "res/UserOp.ico"
 IDI_UP                  ICON                    "res/Up.ico"
+IDI_FILE                ICON                    "res/File.ico"
+IDI_EXEC                ICON                    "res/Exec.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

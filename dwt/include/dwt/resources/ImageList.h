@@ -136,10 +136,8 @@ public:
 
 	COLORREF getBkColor() const;
 
-	int size() const;
-
-	/// Deprecated, use size
-	int getImageCount() const;
+	bool empty() const;
+	size_t size() const;
 
 private:
 	friend class Handle<ImageListPolicy>;

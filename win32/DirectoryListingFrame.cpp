@@ -54,10 +54,10 @@ TStringList DirectoryListingFrame::lastSearches;
 
 int DirectoryListingFrame::ItemInfo::getImage() const {
 	if(type == DIRECTORY || type == USER) {
-		return dir->getComplete() ? WinUtil::getDirIconIndex() : WinUtil::getDirMaskedIndex();
+		return dir->getComplete() ? WinUtil::DIR_ICON : WinUtil::DIR_ICON_INCOMPLETE;
 	}
 
-	return WinUtil::getIconIndex(getText(COLUMN_FILENAME));
+	return WinUtil::getFileIcon(getText(COLUMN_FILENAME));
 }
 
 int DirectoryListingFrame::ItemInfo::compareItems(ItemInfo* a, ItemInfo* b, int col) {

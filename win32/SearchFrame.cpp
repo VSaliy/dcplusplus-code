@@ -51,7 +51,7 @@ SearchFrame::FrameSet SearchFrame::frames;
 
 int SearchFrame::SearchInfo::getImage() {
 	const SearchResultPtr& sr = srs[0];
-	return sr->getType() == SearchResult::TYPE_FILE ? WinUtil::getIconIndex(Text::toT(sr->getFile())) : WinUtil::getDirIconIndex();
+	return sr->getType() == SearchResult::TYPE_FILE ? WinUtil::getFileIcon(Text::toT(sr->getFile())) : WinUtil::DIR_ICON;
 }
 
 int SearchFrame::SearchInfo::compareItems(SearchInfo* a, SearchInfo* b, int col) {
