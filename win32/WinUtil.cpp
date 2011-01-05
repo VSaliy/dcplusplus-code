@@ -77,9 +77,6 @@ dwt::FontPtr WinUtil::font;
 dwt::FontPtr WinUtil::monoFont;
 dwt::ImageListPtr WinUtil::fileImages;
 dwt::ImageListPtr WinUtil::userImages;
-int WinUtil::fileImageCount;
-int WinUtil::dirIconIndex;
-int WinUtil::dirMaskedIndex;
 TStringList WinUtil::lastDirs;
 MainWindow* WinUtil::mainWindow = 0;
 float WinUtil::dpiFactor = 0;
@@ -138,39 +135,51 @@ void WinUtil::init() {
 
 	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 
-	dirIconIndex = fileImageCount++;
-	dirMaskedIndex = fileImageCount++;
-
+	// get the directory icon (DIR_ICON).
 	if(BOOLSETTING(USE_SYSTEM_ICONS)) {
-		SHFILEINFO fi;
-		::SHGetFileInfo(_T("./"), FILE_ATTRIBUTE_DIRECTORY, &fi, sizeof(fi), SHGFI_ICON | SHGFI_SMALLICON
-			| SHGFI_USEFILEATTRIBUTES);
-		dwt::Icon tmp(fi.hIcon);
-		fileImages->add(tmp);
-		// @todo This one should be masked further for the incomplete folder thing
-		fileImages->add(tmp);
-	} else {
-		dwt::Bitmap tmp(IDB_FOLDERS);
-		fileImages->add(tmp, RGB(255, 0, 255));
-
-		// Unknown file
-		fileImageCount++;
+		::SHFILEINFO info;
+		if(::SHGetFileInfo(_T("./"), FILE_ATTRIBUTE_DIRECTORY, &info, sizeof(info),
+			SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES) && info.hIcon)
+		{
+			dwt::Icon icon(info.hIcon);
+			fileImages->add(icon);
+		}
 	}
+	if(fileImages->empty()) {
+		fileImages->add(*createIcon(IDI_DIRECTORY, 16));
+	}
+
+	// create the incomplete directory icon (DIR_ICON_INCOMPLETE).
+	{
+		vector<dwt::IconPtr> icons;
+		icons.push_back(fileImages->getIcon(DIR_ICON));
+		icons.push_back(createIcon(IDI_EXEC, 16));
+		fileImages->add(*dwt::util::merge(icons));
+	}
+
+	// add the generic file icon (FILE_ICON_GENERIC).
+	fileImages->add(*createIcon(IDI_FILE, 16));
 
 	{
 		userImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
-		auto userIcon = [](unsigned id) { return createIcon(id, 16); };
+
 		const unsigned baseCount = USER_ICON_MOD_START;
 		const unsigned modifierCount = USER_ICON_LAST - USER_ICON_MOD_START;
+
+		auto userIcon = [](unsigned id) { return createIcon(id, 16); };
 		dwt::IconPtr bases[baseCount] = { userIcon(IDI_USER), userIcon(IDI_USER_AWAY), userIcon(IDI_USER_BOT) };
 		dwt::IconPtr modifiers[modifierCount] = { userIcon(IDI_USER_NOCON), userIcon(IDI_USER_NOSLOT), userIcon(IDI_USER_OP) };
+
 		for(size_t iBase = 0; iBase < baseCount; ++iBase) {
 			for(size_t i = 0, n = modifierCount * modifierCount; i < n; ++i) {
 				vector<dwt::IconPtr> icons;
+
 				icons.push_back(bases[iBase]);
+
 				for(size_t iMod = 0; iMod < modifierCount; ++iMod)
 					if(i & (1 << iMod))
 						icons.push_back(modifiers[iMod]);
+
 				userImages->add(*dwt::util::merge(icons));
 			}
 		}
@@ -606,33 +615,30 @@ pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& hintUrl, 
 	return formatHubNames(ClientManager::getInstance()->getHubNames(cid, hintUrl, priv));
 }
 
-int WinUtil::getIconIndex(const tstring& aFileName) {
+size_t WinUtil::getFileIcon(const tstring& aFileName) {
 	if(BOOLSETTING(USE_SYSTEM_ICONS)) {
-		SHFILEINFO fi;
-		string x = Text::toLower(Util::getFileExt(Text::fromT(aFileName)));
-		if(!x.empty()) {
-			ImageIter j = fileIndexes.find(x);
-			if(j != fileIndexes.end())
-				return j->second;
+		string ext = Text::toLower(Util::getFileExt(Text::fromT(aFileName)));
+		if(!ext.empty()) {
+			auto index = fileIndexes.find(ext);
+			if(index != fileIndexes.end())
+				return index->second;
 		}
-		tstring fn = Text::toT(Text::toLower(Util::getFileName(Text::fromT(aFileName))));
-		::SHGetFileInfo(fn.c_str(), FILE_ATTRIBUTE_NORMAL, &fi, sizeof(fi), SHGFI_ICON | SHGFI_SMALLICON
-			| SHGFI_USEFILEATTRIBUTES);
-		if(!fi.hIcon) {
-			return 2;
-		}
-		try {
-			dwt::Icon tmp(fi.hIcon);
-			fileImages->add(tmp);
 
-			fileIndexes[x] = fileImageCount++;
-			return fileImageCount - 1;
-		} catch (const dwt::DWTException&) {
-			return 2;
+		::SHFILEINFO info;
+		if(::SHGetFileInfo(Text::toT(Text::toLower(Util::getFileName(Text::fromT(aFileName)))).c_str(), FILE_ATTRIBUTE_NORMAL,
+			&info, sizeof(info), SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES) && info.hIcon)
+		{
+			size_t ret = fileImages->size();
+			fileIndexes[ext] = ret;
+
+			dwt::Icon icon(info.hIcon);
+			fileImages->add(icon);
+
+			return ret;
 		}
-	} else {
-		return 2;
 	}
+
+	return FILE_ICON_GENERIC;
 }
 
 void WinUtil::reducePaths(string& message) {

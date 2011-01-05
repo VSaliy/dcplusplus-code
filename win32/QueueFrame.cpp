@@ -427,11 +427,11 @@ QueueFrame::DirItemInfo::DirItemInfo(const string& dir_) : dir(dir_), text(getDi
 }
 
 int QueueFrame::DirItemInfo::getImage() {
-	return WinUtil::getDirIconIndex();
+	return WinUtil::DIR_ICON;
 }
 
 int QueueFrame::DirItemInfo::getSelectedImage() {
-	return WinUtil::getDirIconIndex();
+	return WinUtil::DIR_ICON;
 }
 
 HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false */, HTREEITEM startAt /* = NULL */) {

@@ -48,6 +48,15 @@ struct ColumnInfo {
 
 class WinUtil {
 public:
+	// pre-defined icon indexes used by the "fileImages" image list - see also getFileIcon.
+	enum {
+		DIR_ICON,
+		DIR_ICON_INCOMPLETE,
+
+		FILE_ICON_GENERIC
+	};
+
+	// icon indexes to use with the "userImages" image list.
 	enum {
 		// base icons
 		USER_ICON,
@@ -73,15 +82,12 @@ public:
 	static tstring commands;
 	static dwt::ImageListPtr fileImages;
 	static dwt::ImageListPtr userImages;
-	static int fileImageCount;
-	static int dirIconIndex;
-	static int dirMaskedIndex;
 	static TStringList lastDirs;
 	static MainWindow* mainWindow;
 	//static dwt::TabView* mdiParent;
 	static float dpiFactor;
 
-	typedef unordered_map<string, int> ImageMap;
+	typedef unordered_map<string, size_t> ImageMap;
 	typedef ImageMap::iterator ImageIter;
 	static ImageMap fileIndexes;
 
@@ -171,9 +177,7 @@ public:
 		const dwt::Application::Callback& f_ok,
 		const dwt::Application::Callback& f_cancel);
 
-	static int getIconIndex(const tstring& aFileName);
-	static int getDirIconIndex() { return dirIconIndex; }
-	static int getDirMaskedIndex() { return dirMaskedIndex; }
+	static size_t getFileIcon(const tstring& aFileName);
 
 	static bool isShift() { return (::GetKeyState(VK_SHIFT) & 0x8000) > 0; }
 	static bool isAlt() { return (::GetKeyState(VK_MENU) & 0x8000) > 0; }

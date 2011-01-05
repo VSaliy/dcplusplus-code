@@ -61,8 +61,6 @@ if env['webhelp']:
 	web_files.append('external.png')
 	web_files.append('office11.css')
 	web_files.append('style.css')
-	for file in Glob('#/res/*.bmp'):
-		web_files.append(file)
 	for file in Glob('#/res/*.ico'):
 		web_files.append(file)
 	for file in Glob('#/res/*.png'):
@@ -82,7 +80,6 @@ CHM_sources.append('index.hhk')
 CHM_sources.append('office11.css')
 CHM_sources.append('resource.h')
 CHM_sources.append('style.css')
-CHM_sources.append(Glob('#/res/*.bmp'))
 CHM_sources.append(Glob('#/res/*.ico'))
 CHM_sources.append(Glob('#/res/*.png'))
 CHM_sources.sort()

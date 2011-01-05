@@ -58,6 +58,8 @@
 #define IDI_USER_NOSLOT 150
 #define IDI_USER_OP 151
 #define IDI_UP 152
+#define IDI_FILE 153
+#define IDI_EXEC 154
 
 #define IDB_FOLDERS 200
 

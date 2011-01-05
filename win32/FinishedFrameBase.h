@@ -259,7 +259,7 @@ private:
 			return columns[col];
 		}
 		int getImage() const {
-			return WinUtil::getIconIndex(Text::toT(file));
+			return WinUtil::getFileIcon(Text::toT(file));
 		}
 
 		static int compareItems(FileInfo* a, FileInfo* b, int col) {
