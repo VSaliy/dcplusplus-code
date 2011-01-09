@@ -66,6 +66,7 @@
 * More consistent behavior in file lists for back / forward / up, and some buttons (poy)
 * Rework file and folder icons, add one for incomplete dirs (poy)
 * Save and restore the selected tab when re-opening (poy)
+* Process file lists only when they first come into view (poy)
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
