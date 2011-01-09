@@ -149,6 +149,7 @@ if 'gcc' in env['TOOLS']:
 		env.Append(CCFLAGS = ['-pipe'])
 
 # MinGW seems to choke on member function calls from lambdas, one has to add "this->".
+# bug report: <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=47169>
 # TODO When versions of GCC for MinGW that don't need this workaround are available, remove any
 # mention of "GCC_WTF". Until then, use it to facilitate search & replace.
 env.Append(CPPDEFINES = ['GCC_WTF="this"'])
