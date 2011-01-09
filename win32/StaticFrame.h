@@ -25,6 +25,8 @@
 
 template<class T>
 class StaticFrame : public MDIChildFrame<T> {
+	typedef MDIChildFrame<T> BaseType;
+
 public:
 	StaticFrame(TabViewPtr parent, const tstring& title, unsigned helpId, unsigned iconId, bool manageAccels = true) :
 		MDIChildFrame<T>(parent, title, helpId, iconId, manageAccels)
@@ -52,7 +54,7 @@ public:
 	}
 
 	static void parseWindowParams(TabViewPtr parent, const StringMap& params) {
-		openWindow(parent, false, parseActivateParam(params));
+		openWindow(parent, false, BaseType::parseActivateParam(params));
 	}
 
 private:
