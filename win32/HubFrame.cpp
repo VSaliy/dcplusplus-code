@@ -538,21 +538,22 @@ void HubFrame::onGetPassword() {
 	if(client->getPassword().size() > 0) {
 		client->password(client->getPassword());
 		addStatus(T_("Stored password sent..."));
-	} else {
-		if(!BOOLSETTING(PROMPT_PASSWORD)) {
-			message->setText(_T("/password "));
-			message->setFocus();
-			message->setSelection(10, 10);
-			waitingForPW = true;
-		} else {
-			ParamDlg linePwd(this, T_("Please enter a password"), T_("Please enter a password"), Util::emptyStringT, true);
-			if(linePwd.run() == IDOK) {
+	} else if(!waitingForPW) {
+		waitingForPW = true;
+		if(BOOLSETTING(PROMPT_PASSWORD)) {
+			ParamDlg linePwd(this, getText(), T_("Please enter a password"), Util::emptyStringT, true);
+			auto res = linePwd.run();
+			waitingForPW = false;
+			if(res == IDOK) {
 				client->setPassword(Text::fromT(linePwd.getValue()));
 				client->password(Text::fromT(linePwd.getValue()));
-				waitingForPW = false;
 			} else {
 				client->disconnect(true);
 			}
+		} else {
+			message->setText(_T("/password "));
+			message->setFocus();
+			message->setSelection(10, 10);
 		}
 	}
 }

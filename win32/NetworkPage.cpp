@@ -204,7 +204,8 @@ void NetworkPage::handleAutoClicked() {
 }
 
 void NetworkPage::addLogLine(const tstring& msg) {
-	const tstring message = msg + Text::toT("\r\n");
+	/// @todo factor out to dwt
+	const tstring message = Text::toT("{\\urtf1\n") + log->rtfEscape(msg + Text::toT("\r\n")) + Text::toT("}\n");
 	log->addTextSteady(message, message.size());
 }
 
