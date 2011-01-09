@@ -53,16 +53,21 @@ static const ColumnInfo usersColumns[] = {
 
 HubFrame::FrameList HubFrame::frames;
 
-void HubFrame::openWindow(dwt::TabView* mdiParent, const string& url) {
-	for(FrameIter i = frames.begin(); i!= frames.end(); ++i) {
+void HubFrame::openWindow(TabViewPtr parent, const string& url, bool activate) {
+	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
 		HubFrame* frame = *i;
 		if(frame->url == url) {
-			frame->activate();
+			if(activate)
+				frame->activate();
+			else
+				frame->setDirty(SettingsManager::BOLD_HUB);
 			return;
 		}
 	}
 
-	new HubFrame(mdiParent, url);
+	auto frame = new HubFrame(parent, url);
+	if(activate)
+		frame->activate();
 }
 
 void HubFrame::closeAll(bool all) {
@@ -96,10 +101,10 @@ const StringMap HubFrame::getWindowParams() const {
 	return ret;
 }
 
-void HubFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
+void HubFrame::parseWindowParams(TabViewPtr parent, const StringMap& params) {
 	StringMap::const_iterator i = params.find(WindowInfo::address);
 	if(i != params.end())
-		openWindow(parent, i->second);
+		openWindow(parent, i->second, parseActivateParam(params));
 }
 
 bool HubFrame::isFavorite(const StringMap& params) {
@@ -109,8 +114,8 @@ bool HubFrame::isFavorite(const StringMap& params) {
 	return false;
 }
 
-HubFrame::HubFrame(dwt::TabView* mdiParent, const string& url_) :
-BaseType(mdiParent, Text::toT(url_), IDH_HUB, IDI_HUB_OFF, false),
+HubFrame::HubFrame(TabViewPtr parent, const string& url_) :
+BaseType(parent, Text::toT(url_), IDH_HUB, IDI_HUB_OFF, false),
 paned(0),
 userGrid(0),
 users(0),
@@ -205,7 +210,6 @@ inTabComplete(false)
 	initAccels();
 
 	layout();
-	activate();
 
 	initSecond();
 

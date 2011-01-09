@@ -75,8 +75,8 @@ int PublicHubsFrame::HubInfo::compareItems(const HubInfo* a, const HubInfo* b, i
 	}
 }
 
-PublicHubsFrame::PublicHubsFrame(dwt::TabView* mdiParent) :
-BaseType(mdiParent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDI_PUBLICHUBS, false),
+PublicHubsFrame::PublicHubsFrame(TabViewPtr parent) :
+BaseType(parent, T_("Public Hubs"), IDH_PUBLIC_HUBS, IDI_PUBLICHUBS, false),
 grid(0),
 upper(0),
 blacklist(0),
@@ -210,7 +210,6 @@ users(0)
 	initAccels();
 
 	layout();
-	activate();
 
 	if(FavoriteManager::getInstance()->isDownloading()) {
 		status->setText(STATUS_STATUS, T_("Downloading public hub list..."));

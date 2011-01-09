@@ -64,16 +64,16 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed);
+	static void openWindow(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, bool activate = true);
 private:
-	static void openWindow_(bool activate, dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed);
+	static void openWindow_(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, bool activate);
 public:
-	static void openWindow(dwt::TabView* mdiParent, const HintedUser& aUser, const string& txt, int64_t aSpeed);
-	static void openOwnList(dwt::TabView* parent);
+	static void openWindow(TabViewPtr parent, const HintedUser& aUser, const string& txt, int64_t aSpeed);
+	static void openOwnList(TabViewPtr parent, bool activate = true);
 	static void closeAll();
 
 	const StringMap getWindowParams() const;
-	static void parseWindowParams(dwt::TabView* parent, const StringMap& params);
+	static void parseWindowParams(TabViewPtr parent, const StringMap& params);
 	static bool isFavorite(const StringMap& params);
 
 private:
@@ -197,7 +197,7 @@ private:
 
 	static UserMap lists;
 
-	DirectoryListingFrame(dwt::TabView* mdiParent, const HintedUser& aUser, int64_t aSpeed);
+	DirectoryListingFrame(TabViewPtr parent, const HintedUser& aUser, int64_t aSpeed);
 	virtual ~DirectoryListingFrame();
 
 	void layout();

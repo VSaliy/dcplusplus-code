@@ -57,7 +57,7 @@ public:
 		STATUS_LAST
 	};
 
-	dwt::TabViewPtr getTabView() { return tabs; }
+	TabViewPtr getTabView() { return tabs; }
 
 	virtual bool handleMessage( const MSG & msg, LRESULT & retVal );
 
@@ -113,8 +113,8 @@ private:
 	MenuPtr viewMenu;
 	TransferView* transfers;
 	ToolBarPtr toolbar;
-	dwt::TabViewPtr tabs;
-	dwt::SpinnerPtr slotsSpin;
+	TabViewPtr tabs;
+	SpinnerPtr slotsSpin;
 
 	typedef unordered_map<string, unsigned> ViewIndexes;
 	ViewIndexes viewIndexes; /// indexes of menu commands of the "View" menu that open static windows

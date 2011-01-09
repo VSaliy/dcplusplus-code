@@ -28,7 +28,7 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static TextFrame* openWindow(dwt::TabView* mdiParent, const string& fileName);
+	static void openWindow(TabViewPtr parent, const string& fileName);
 
 	enum Status {
 		STATUS_STATUS,
@@ -38,7 +38,7 @@ public:
 private:
 	friend class MDIChildFrame<TextFrame>;
 
-	TextFrame(dwt::TabView* mdiParent, const string& fileName);
+	TextFrame(TabViewPtr parent, const string& fileName);
 	TextBoxPtr pad;
 
 	virtual ~TextFrame() { }

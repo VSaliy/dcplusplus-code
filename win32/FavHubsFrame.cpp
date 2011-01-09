@@ -40,8 +40,8 @@ static const ColumnInfo hubsColumns[] = {
 	{ N_("Group"), 100, false }
 };
 
-FavHubsFrame::FavHubsFrame(dwt::TabView* mdiParent) :
-BaseType(mdiParent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDI_FAVORITE_HUBS),
+FavHubsFrame::FavHubsFrame(TabViewPtr parent) :
+BaseType(parent, T_("Favorite Hubs"), IDH_FAVORITE_HUBS, IDI_FAVORITE_HUBS),
 grid(0),
 hubs(0)
 {
@@ -137,7 +137,6 @@ hubs(0)
 	initStatus();
 
 	layout();
-	activate();
 
 	fillList();
 

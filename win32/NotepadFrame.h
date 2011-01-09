@@ -40,7 +40,7 @@ protected:
 	friend class StaticFrame<NotepadFrame>;
 	friend class MDIChildFrame<NotepadFrame>;
 
-	NotepadFrame(dwt::TabView* mdiParent);
+	NotepadFrame(TabViewPtr parent);
 	virtual ~NotepadFrame();
 
 	void layout();

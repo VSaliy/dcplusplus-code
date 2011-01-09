@@ -49,7 +49,7 @@ public:
 
 protected:
 	// Constructor
-	WaitingUsersFrame(dwt::TabView* mdiParent);
+	WaitingUsersFrame(TabViewPtr parent);
 	virtual ~WaitingUsersFrame() { }
 
 private:

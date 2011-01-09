@@ -57,8 +57,8 @@ protected:
 	friend class StaticFrame<T>;
 	friend class MDIChildFrame<T>;
 
-	FinishedFrameBase(dwt::TabView* mdiParent, const tstring& title, unsigned helpId, unsigned resourceId) :
-		BaseType(mdiParent, title, helpId, resourceId),
+	FinishedFrameBase(TabViewPtr parent, const tstring& title, unsigned helpId, unsigned resourceId) :
+		BaseType(parent, title, helpId, resourceId),
 		tabs(0),
 		files(0),
 		filesWindow(0),
@@ -68,7 +68,7 @@ protected:
 		bOnlyFull(false)
 	{
 		{
-			dwt::TabView::Seed seed = WinUtil::Seeds::tabs;
+			TabView::Seed seed = WinUtil::Seeds::tabs;
 			seed.style &= ~TCS_OWNERDRAWFIXED;
 			seed.location = dwt::Rectangle(this->getClientSize());
 			seed.widthConfig = 0;
@@ -150,7 +150,6 @@ protected:
 		this->status->setHelpId(STATUS_SPEED, in_UL ? IDH_FINISHED_UL_SPEED : IDH_FINISHED_DL_SPEED);
 
 		layout();
-		this->activate();
 
 		filesWindow->onActivate(std::bind(&ThisType::updateStatus, this, _1));
 		usersWindow->onActivate(std::bind(&ThisType::updateStatus, this, _1));
@@ -273,11 +272,11 @@ private:
 			}
 		}
 
-		void viewAsText(dwt::TabViewPtr parent) {
+		void viewAsText(TabViewPtr parent) {
 			TextFrame::openWindow(parent, file);
 		}
 
-		void open(dwt::TabViewPtr parent, const string& ownList) {
+		void open(TabViewPtr parent, const string& ownList) {
 			if (in_UL && file == ownList) {
 				DirectoryListingFrame::openOwnList(parent);
 				return;
@@ -355,7 +354,7 @@ private:
 		tstring columns[USERS_COLUMN_LAST];
 	};
 
-	dwt::TabViewPtr tabs;
+	TabViewPtr tabs;
 
 	typedef TypedTable<FileInfo> WidgetFiles;
 	typedef WidgetFiles* WidgetFilesPtr;

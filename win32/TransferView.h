@@ -45,7 +45,7 @@ class TransferView :
 	friend class AspectUserInfo<TransferView>;
 
 public:
-	TransferView(dwt::Widget* parent, dwt::TabView* mdi);
+	TransferView(dwt::Widget* parent, TabViewPtr mdi_);
 
 	void prepareClose();
 

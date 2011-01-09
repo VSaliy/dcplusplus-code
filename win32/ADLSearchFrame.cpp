@@ -40,8 +40,8 @@ static const ColumnInfo itemsColumns[] = {
 	{ N_("Max Size"), 100, true }
 };
 
-ADLSearchFrame::ADLSearchFrame(dwt::TabView* mdiParent) :
-BaseType(mdiParent, T_("Automatic Directory Listing Search"), IDH_ADL_SEARCH, IDI_ADLSEARCH),
+ADLSearchFrame::ADLSearchFrame(TabViewPtr parent) :
+BaseType(parent, T_("Automatic Directory Listing Search"), IDH_ADL_SEARCH, IDI_ADLSEARCH),
 grid(0),
 items(0)
 {
@@ -114,7 +114,6 @@ items(0)
 	initStatus();
 
 	layout();
-	activate();
 
 	// Load all searches
 	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;

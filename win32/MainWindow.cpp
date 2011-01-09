@@ -233,24 +233,24 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr file = mainMenu->appendPopup(T_("&File"));
 
-		file->appendItem(T_("&Quick connect...\tCtrl+Q"), std::bind(&MainWindow::handleQuickConnect, this), WinUtil::menuIcon(IDI_HUB));
-		file->appendItem(T_("Connect to a favorite hub &group...\tCtrl+G"), std::bind(&MainWindow::handleConnectFavHubGroup, this), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
+		file->appendItem(T_("&Quick connect...\tCtrl+Q"), [this] { handleQuickConnect(); }, WinUtil::menuIcon(IDI_HUB));
+		file->appendItem(T_("Connect to a favorite hub &group...\tCtrl+G"), [this] { handleConnectFavHubGroup(); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		file->appendSeparator();
 
-		file->appendItem(T_("&Reconnect\tCtrl+R"), std::bind(&MainWindow::handleReconnect, this), WinUtil::menuIcon(IDI_RECONNECT));
-		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), std::bind(&MainWindow::handleRedirect, this), WinUtil::menuIcon(IDI_FOLLOW));
+		file->appendItem(T_("&Reconnect\tCtrl+R"), [this] { handleReconnect(); }, WinUtil::menuIcon(IDI_RECONNECT));
+		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), [this] { handleRedirect(); }, WinUtil::menuIcon(IDI_FOLLOW));
 		file->appendSeparator();
 
-		file->appendItem(T_("Open file list...\tCtrl+L"), std::bind(&MainWindow::handleOpenFileList, this), WinUtil::menuIcon(IDI_OPEN_FILE_LIST));
-		file->appendItem(T_("Open own list"), std::bind(&DirectoryListingFrame::openOwnList, getTabView()));
-		file->appendItem(T_("Match downloaded lists"), std::bind(&MainWindow::handleMatchAll, this));
-		file->appendItem(T_("Refresh file list\tF5"), std::bind(&MainWindow::handleRefreshFileList, this), WinUtil::menuIcon(IDI_REFRESH));
-		file->appendItem(T_("Open downloads directory"), std::bind(&MainWindow::handleOpenDownloadsDir, this), WinUtil::menuIcon(IDI_OPEN_DL_DIR));
+		file->appendItem(T_("Open file list...\tCtrl+L"), [this] { handleOpenFileList(); }, WinUtil::menuIcon(IDI_OPEN_FILE_LIST));
+		file->appendItem(T_("Open own list"), [this] { DirectoryListingFrame::openOwnList(getTabView()); });
+		file->appendItem(T_("Match downloaded lists"), [this] { handleMatchAll(); });
+		file->appendItem(T_("Refresh file list\tF5"), [this] { handleRefreshFileList(); }, WinUtil::menuIcon(IDI_REFRESH));
+		file->appendItem(T_("Open downloads directory"), [this] { handleOpenDownloadsDir(); }, WinUtil::menuIcon(IDI_OPEN_DL_DIR));
 		file->appendSeparator();
 
-		file->appendItem(T_("Settings\tCtrl+F3"), std::bind(&MainWindow::handleSettings, this), WinUtil::menuIcon(IDI_SETTINGS));
+		file->appendItem(T_("Settings\tCtrl+F3"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));
 		file->appendSeparator();
-		file->appendItem(T_("E&xit\tAlt+F4"), std::bind(&MainWindow::close, this, true), WinUtil::menuIcon(IDI_EXIT));
+		file->appendItem(T_("E&xit\tAlt+F4"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
 	}
 
 	{
@@ -571,7 +571,7 @@ void MainWindow::handleTabsTitleChanged(const tstring& title) {
 	setText(title.empty() ? _T(APPNAME) _T(" ") _T(VERSIONSTRING) : _T(APPNAME) _T(" ") _T(VERSIONSTRING) _T(" - [") + title + _T("]"));
 }
 
-static void multiConnect(const string& group, dwt::TabView* parent) {
+static void multiConnect(const string& group, TabViewPtr parent) {
 	FavoriteHubEntryList hubs = FavoriteManager::getInstance()->getFavoriteHubs(group);
 	for(FavoriteHubEntryList::const_iterator i = hubs.begin(), iend = hubs.end(); i != iend; ++i)
 		HubFrame::openWindow(parent, (*i)->getServer());
@@ -794,14 +794,19 @@ void MainWindow::saveSettings() {
 
 void MainWindow::saveWindowSettings() {
 	{
+		const auto& views = tabs->getChildren();
+		auto active = tabs->getActive();
+
 		WindowManager* wm = WindowManager::getInstance();
 		wm->lock();
 		wm->clear();
 
-		const dwt::TabView::ChildList& views = tabs->getChildren();
-		for(dwt::TabView::ChildList::const_iterator i = views.begin(); i != views.end(); ++i) {
-			MDIChildFrame<dwt::Container>* child = static_cast<MDIChildFrame<dwt::Container>*>(*i);
-			wm->add(child->getId(), child->getWindowParams());
+		for(auto i = views.cbegin(), iend = views.cend(); i != iend; ++i) {
+			auto child = static_cast<MDIChildFrame<dwt::Container>*>(*i);
+			auto params = child->getWindowParams();
+			if(child == active)
+				params["Active"] = "1";
+			wm->add(child->getId(), params);
 		}
 
 		wm->unlock();
@@ -1285,8 +1290,8 @@ void MainWindow::switchToolbar() {
 		initToolbar();
 
 		// re-check currently opened static windows
-		const dwt::TabView::ChildList& views = tabs->getChildren();
-		for(dwt::TabView::ChildList::const_iterator i = views.begin(); i != views.end(); ++i) {
+		const auto& views = tabs->getChildren();
+		for(auto i = views.cbegin(), iend = views.cend(); i != iend; ++i) {
 			toolbar->setButtonChecked(static_cast<MDIChildFrame<dwt::Container>*>(*i)->getId(), true);
 		}
 	}

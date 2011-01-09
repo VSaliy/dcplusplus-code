@@ -26,8 +26,8 @@
 const string StatsFrame::id = "Stats";
 const string& StatsFrame::getId() const { return id; }
 
-StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Network Statistics"), IDH_NET_STATS, IDI_NET_STATS),
+StatsFrame::StatsFrame(TabViewPtr parent) :
+	BaseType(parent, T_("Network Statistics"), IDH_NET_STATS, IDI_NET_STATS),
 	pen(new dwt::Pen(WinUtil::textColor)),
 	upPen(new dwt::Pen(SETTING(UPLOAD_BAR_COLOR))),
 	downPen(new dwt::Pen(SETTING(DOWNLOAD_BAR_COLOR))),
@@ -53,7 +53,6 @@ StatsFrame::StatsFrame(dwt::TabView* mdiParent) :
 	initStatus();
 
 	layout();
-	activate();
 
 	setTimer(std::bind(&StatsFrame::eachSecond, this), 1000);
 }

@@ -81,8 +81,8 @@ int SearchFrame::SearchInfo::compareItems(SearchInfo* a, SearchInfo* b, int col)
 }
 
 
-void SearchFrame::openWindow(dwt::TabView* mdiParent, const tstring& str, SearchManager::TypeModes type) {
-	SearchFrame* pChild = new SearchFrame(mdiParent, str, type);
+void SearchFrame::openWindow(TabViewPtr parent, const tstring& str, SearchManager::TypeModes type) {
+	SearchFrame* pChild = new SearchFrame(parent, str, type);
 	frames.insert(pChild);
 }
 
@@ -91,8 +91,8 @@ void SearchFrame::closeAll() {
 		(*i)->close(true);
 }
 
-SearchFrame::SearchFrame(dwt::TabView* mdiParent, const tstring& initialString, SearchManager::TypeModes initialType_) :
-BaseType(mdiParent, T_("Search"), IDH_SEARCH, IDI_SEARCH),
+SearchFrame::SearchFrame(TabViewPtr parent, const tstring& initialString, SearchManager::TypeModes initialType_) :
+BaseType(parent, T_("Search"), IDH_SEARCH, IDI_SEARCH),
 paned(0),
 options(0),
 searchBox(0),

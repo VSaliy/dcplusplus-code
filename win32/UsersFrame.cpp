@@ -36,8 +36,8 @@ static const ColumnInfo usersColumns[] = {
 	{ N_("CID"), 300, false }
 };
 
-UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Favorite Users"), IDH_FAVUSERS, IDI_FAVORITE_USERS),
+UsersFrame::UsersFrame(TabViewPtr parent) :
+	BaseType(parent, T_("Favorite Users"), IDH_FAVUSERS, IDI_FAVORITE_USERS),
 	users(0),
 	startup(true)
 {
@@ -72,7 +72,6 @@ UsersFrame::UsersFrame(dwt::TabView* mdiParent) :
 	initStatus();
 
 	layout();
-	activate();
 
 	startup = false;
 }

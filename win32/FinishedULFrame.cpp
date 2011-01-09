@@ -24,7 +24,7 @@
 const string FinishedULFrame::id = "FinishedUL";
 const string& FinishedULFrame::getId() const { return id; }
 
-FinishedULFrame::FinishedULFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("Finished Uploads"), IDH_FINISHED_UL, IDI_FINISHED_UL)
+FinishedULFrame::FinishedULFrame(TabViewPtr parent) :
+	BaseType(parent, T_("Finished Uploads"), IDH_FINISHED_UL, IDI_FINISHED_UL)
 {
 }
