@@ -64,6 +64,8 @@ protected:
 	virtual ~AspectChat() { }
 
 	tstring formatChatMessage(Client* aClient, const tstring& aLine) {
+		/// @todo factor out to dwt
+		/// @todo Text::toT works but _T doesn't, verify this.
 		return Text::toT("{\\urtf1\n") + chat->rtfEscape(aLine) + Text::toT("}\n");
 	}
 

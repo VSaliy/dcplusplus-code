@@ -250,7 +250,7 @@ void MainWindow::initMenu() {
 
 		file->appendItem(T_("Settings\tCtrl+F3"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));
 		file->appendSeparator();
-		file->appendItem(T_("E&xit\tAlt+F4"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
+		file->appendItem(T_("E&xit\tAlt+F4"), [this] { GCC_WTF->close(true); }, WinUtil::menuIcon(IDI_EXIT));
 	}
 
 	{
