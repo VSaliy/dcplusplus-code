@@ -82,28 +82,31 @@ int DirectoryListingFrame::ItemInfo::compareItems(ItemInfo* a, ItemInfo* b, int 
 	}
 }
 
-void DirectoryListingFrame::openWindow(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, bool activate) {
+void DirectoryListingFrame::openWindow(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, Activation activate) {
 	UserIter prev = lists.find(aUser);
 	if(prev == lists.end()) {
-		openWindow_(parent, aFile, aDir, aUser, aSpeed, activate && !BOOLSETTING(POPUNDER_FILELIST));
+		openWindow_(parent, aFile, aDir, aUser, aSpeed, activate);
 	} else {
-		activate &= prev->second->isActive() || !BOOLSETTING(POPUNDER_FILELIST);
+		activate = prev->second->isActive() ? FORCE_ACTIVE : FOLLOW_SETTING;
 		prev->second->close();
 		parent->callAsync(std::bind(&DirectoryListingFrame::openWindow_, parent, aFile, aDir, aUser, aSpeed, activate));
 	}
 }
 
-void DirectoryListingFrame::openWindow_(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, bool activate) {
+void DirectoryListingFrame::openWindow_(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, Activation activate) {
 	DirectoryListingFrame* frame = new DirectoryListingFrame(parent, aUser, aSpeed);
-	frame->loadFile(aFile, aDir);
+	frame->path = Text::fromT(aFile);
 
-	if(activate)
+	if(activate == FORCE_ACTIVE || (activate == FOLLOW_SETTING && !BOOLSETTING(POPUNDER_FILELIST))) {
+		frame->loadFile(aDir);
 		frame->activate();
-	else
+	} else {
 		frame->setDirty(SettingsManager::BOLD_FL);
+		frame->onActivate([frame, aDir](bool b) { if(b) frame->loadFile(aDir); });
+	}
 }
 
-void DirectoryListingFrame::openOwnList(TabViewPtr parent, bool activate) {
+void DirectoryListingFrame::openOwnList(TabViewPtr parent, Activation activate) {
 	openWindow(parent, Text::toT(ShareManager::getInstance()->getOwnListFile()), Util::emptyStringT,
 		HintedUser(ClientManager::getInstance()->getMe(), Util::emptyString), 0, activate);
 }
@@ -128,7 +131,7 @@ void DirectoryListingFrame::parseWindowParams(TabViewPtr parent, const StringMap
 	StringMap::const_iterator hub = params.find("Hub");
 	StringMap::const_iterator speed = params.find("Speed");
 	if(path != params.end() && speed != params.end()) {
-		bool activate = parseActivateParam(params);
+		Activation activate = parseActivateParam(params) ? FORCE_ACTIVE : FORCE_INACTIVE;
 		if(path->second.empty()) {
 			openOwnList(parent, activate);
 		} else if(File::getSize(path->second) != -1) {
@@ -183,6 +186,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	usingDirMenu(false),
 	historyIndex(0),
 	treeRoot(NULL),
+	loaded(false),
 	updating(false),
 	searching(false)
 {
@@ -331,10 +335,13 @@ DirectoryListingFrame::~DirectoryListingFrame() {
 	lists.erase(dl->getUser());
 }
 
-void DirectoryListingFrame::loadFile(const tstring& name, const tstring& dir) {
+void DirectoryListingFrame::loadFile(const tstring& dir) {
+	if(loaded)
+		return;
+	loaded = true;
+
 	try {
-		dl->loadFile(Text::fromT(name));
-		path = Text::fromT(name);
+		dl->loadFile(path);
 		addRecent();
 		ADLSearchManager::getInstance()->matchListing(*dl);
 		refreshTree(dir);

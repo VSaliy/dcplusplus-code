@@ -64,12 +64,17 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void openWindow(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, bool activate = true);
+	enum Activation {
+		FOLLOW_SETTING,
+		FORCE_ACTIVE,
+		FORCE_INACTIVE
+	};
+	static void openWindow(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, Activation activate = FOLLOW_SETTING);
 private:
-	static void openWindow_(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, bool activate);
+	static void openWindow_(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, Activation activate);
 public:
 	static void openWindow(TabViewPtr parent, const HintedUser& aUser, const string& txt, int64_t aSpeed);
-	static void openOwnList(TabViewPtr parent, bool activate = true);
+	static void openOwnList(TabViewPtr parent, Activation activate = FOLLOW_SETTING);
 	static void closeAll();
 
 	const StringMap getWindowParams() const;
@@ -185,11 +190,12 @@ private:
 
 	string size;
 
+	bool loaded;
 	bool updating;
 	bool searching;
 
 	static TStringList lastSearches;
-	
+
 	StringMap ucLineParams;
 
 	typedef unordered_map<UserPtr, DirectoryListingFrame*, User::Hash> UserMap;
@@ -250,7 +256,7 @@ private:
 	void clearList();
 	void updateTitle();
 
-	void loadFile(const tstring& name, const tstring& dir);
+	void loadFile(const tstring& dir);
 	void loadXML(const string& txt);
 	void refreshTree(const tstring& root);
 
