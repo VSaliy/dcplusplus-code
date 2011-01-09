@@ -71,7 +71,7 @@ static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
 	control->layout(dwt::Rectangle(parent->getClientSize()));
 }
 
-TransferView::TransferView(dwt::Widget* parent, dwt::TabView* mdi_) :
+TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 	dwt::Container(parent),
 	connections(0),
 	connectionsWindow(0),

@@ -65,13 +65,13 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void openWindow(dwt::TabView* mdiParent, const string& url);
+	static void openWindow(TabViewPtr parent, const string& url, bool activate = true);
 	static void closeAll(bool all);
 	static void closeFavGroup(const string& group, bool reversed);
 	static void resortUsers();
 
 	const StringMap getWindowParams() const;
-	static void parseWindowParams(dwt::TabView* parent, const StringMap& params);
+	static void parseWindowParams(TabViewPtr parent, const StringMap& params);
 	static bool isFavorite(const StringMap& params);
 
 private:
@@ -189,7 +189,7 @@ private:
 	typedef FrameList::iterator FrameIter;
 	static FrameList frames;
 
-	HubFrame(dwt::TabView* mdiParent, const string& url);
+	HubFrame(TabViewPtr parent, const string& url);
 	virtual ~HubFrame();
 
 	void layout();

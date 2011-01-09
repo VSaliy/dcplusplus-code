@@ -28,8 +28,8 @@
 const string SystemFrame::id = "SystemLog";
 const string& SystemFrame::getId() const { return id; }
 
-SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
-	BaseType(mdiParent, T_("System Log"), IDH_SYSTEM_LOG, IDI_DCPP),
+SystemFrame::SystemFrame(TabViewPtr parent) :
+	BaseType(parent, T_("System Log"), IDH_SYSTEM_LOG, IDI_DCPP),
 	log(0)
 {
 	{
@@ -46,7 +46,6 @@ SystemFrame::SystemFrame(dwt::TabView* mdiParent) :
 	status->onDblClicked(STATUS_STATUS, std::bind(&WinUtil::openFile, Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))));
 
 	layout();
-	activate();
 
 	LogManager::List oldMessages = LogManager::getInstance()->getLastLogs();
 	// Technically, we might miss a message or two here, but who cares...

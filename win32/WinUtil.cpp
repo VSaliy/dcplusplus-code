@@ -1340,7 +1340,7 @@ static bool isFav(const UserPtr& u) {
 	return !FavoriteManager::getInstance()->isFavoriteUser(u);
 }
 
-void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, dwt::TabViewPtr parent, const StringList& dirs) {
+void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs) {
 	QueueManager* qm = QueueManager::getInstance();
 
 	addUsers(menu, T_("&Get file list"), users, std::bind(&QueueManager::addList, qm, _1,
@@ -1352,8 +1352,8 @@ void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, dwt::TabVi
 	addUsers(menu, T_("&Match queue"), users, std::bind(&QueueManager::addList, qm, _1,
 		QueueItem::FLAG_MATCH_QUEUE, Util::emptyString));
 
-	addUsers(menu, T_("&Send private message"), users, std::bind(&PrivateFrame::openWindow, parent, _1,
-		Util::emptyStringT, Util::emptyString));
+	addUsers(menu, T_("&Send private message"), users, [parent](const HintedUser& u, const string&) {
+		PrivateFrame::openWindow(parent, u); });
 
 	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav), std::bind(&FavoriteManager::addFavoriteUser,
 		FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDI_FAVORITE_USERS)));

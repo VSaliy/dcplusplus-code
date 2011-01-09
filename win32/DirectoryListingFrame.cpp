@@ -82,32 +82,30 @@ int DirectoryListingFrame::ItemInfo::compareItems(ItemInfo* a, ItemInfo* b, int 
 	}
 }
 
-void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed) {
+void DirectoryListingFrame::openWindow(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, bool activate) {
 	UserIter prev = lists.find(aUser);
 	if(prev == lists.end()) {
-		openWindow_(false, mdiParent, aFile, aDir, aUser, aSpeed);
+		openWindow_(parent, aFile, aDir, aUser, aSpeed, activate && !BOOLSETTING(POPUNDER_FILELIST));
 	} else {
-		bool wasActive = prev->second->isActive();
+		activate &= prev->second->isActive() || !BOOLSETTING(POPUNDER_FILELIST);
 		prev->second->close();
-		mdiParent->callAsync(std::bind(&DirectoryListingFrame::openWindow_, wasActive, mdiParent, aFile, aDir, aUser, aSpeed));
+		parent->callAsync(std::bind(&DirectoryListingFrame::openWindow_, parent, aFile, aDir, aUser, aSpeed, activate));
 	}
 }
 
-void DirectoryListingFrame::openWindow_(bool activate, dwt::TabView* mdiParent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed) {
-	DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
+void DirectoryListingFrame::openWindow_(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, bool activate) {
+	DirectoryListingFrame* frame = new DirectoryListingFrame(parent, aUser, aSpeed);
 	frame->loadFile(aFile, aDir);
 
-	if(!activate && BOOLSETTING(POPUNDER_FILELIST))
-		frame->setDirty(SettingsManager::BOLD_FL);
-	else
+	if(activate)
 		frame->activate();
+	else
+		frame->setDirty(SettingsManager::BOLD_FL);
 }
 
-void DirectoryListingFrame::openOwnList(dwt::TabView* parent) {
-	const string& ownListFile = ShareManager::getInstance()->getOwnListFile();
-	if(!ownListFile.empty()) {
-		openWindow(parent, Text::toT(ownListFile), Util::emptyStringT, HintedUser(ClientManager::getInstance()->getMe(), Util::emptyString), 0);
-	}
+void DirectoryListingFrame::openOwnList(TabViewPtr parent, bool activate) {
+	openWindow(parent, Text::toT(ShareManager::getInstance()->getOwnListFile()), Util::emptyStringT,
+		HintedUser(ClientManager::getInstance()->getMe(), Util::emptyString), 0, activate);
 }
 
 void DirectoryListingFrame::closeAll(){
@@ -125,18 +123,19 @@ const StringMap DirectoryListingFrame::getWindowParams() const {
 	return ret;
 }
 
-void DirectoryListingFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
+void DirectoryListingFrame::parseWindowParams(TabViewPtr parent, const StringMap& params) {
 	StringMap::const_iterator path = params.find(WindowInfo::fileList);
 	StringMap::const_iterator hub = params.find("Hub");
 	StringMap::const_iterator speed = params.find("Speed");
 	if(path != params.end() && speed != params.end()) {
+		bool activate = parseActivateParam(params);
 		if(path->second.empty()) {
-			openOwnList(parent);
+			openOwnList(parent, activate);
 		} else if(File::getSize(path->second) != -1) {
 			UserPtr u = DirectoryListing::getUserFromFilename(path->second);
 			if(u) {
 				openWindow(parent, Text::toT(path->second), Util::emptyStringT, HintedUser(u,
-					(hub == params.end()) ? Util::emptyString : hub->second), Util::toInt64(speed->second));
+					(hub == params.end()) ? Util::emptyString : hub->second), Util::toInt64(speed->second), activate);
 			}
 		}
 	}
@@ -152,24 +151,24 @@ bool DirectoryListingFrame::isFavorite(const StringMap& params) {
 	return false;
 }
 
-void DirectoryListingFrame::openWindow(dwt::TabView* mdiParent, const HintedUser& aUser, const string& txt, int64_t aSpeed) {
+void DirectoryListingFrame::openWindow(TabViewPtr parent, const HintedUser& aUser, const string& txt, int64_t aSpeed) {
 	UserIter i = lists.find(aUser);
 	if(i != lists.end()) {
 		i->second->speed = aSpeed;
 		i->second->loadXML(txt);
-		i->second->setDirty(SettingsManager::POPUNDER_FILELIST); /// @todo add a setting
+		i->second->setDirty(SettingsManager::BOLD_FL);
 	} else {
-		DirectoryListingFrame* frame = new DirectoryListingFrame(mdiParent, aUser, aSpeed);
+		DirectoryListingFrame* frame = new DirectoryListingFrame(parent, aUser, aSpeed);
 		frame->loadXML(txt);
 		if(BOOLSETTING(POPUNDER_FILELIST))
-			frame->setDirty(SettingsManager::POPUNDER_FILELIST); /// @todo add a setting
+			frame->setDirty(SettingsManager::BOLD_FL);
 		else
 			frame->activate();
 	}
 }
 
-DirectoryListingFrame::DirectoryListingFrame(dwt::TabView* mdiParent, const HintedUser& aUser, int64_t aSpeed) :
-	BaseType(mdiParent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY),
+DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser& aUser, int64_t aSpeed) :
+	BaseType(parent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY),
 	grid(0),
 	dirs(0),
 	files(0),

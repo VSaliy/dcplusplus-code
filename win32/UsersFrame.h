@@ -49,7 +49,7 @@ public:
 	const string& getId() const;
 
 protected:
-	UsersFrame(dwt::TabView* mdiParent);
+	UsersFrame(TabViewPtr parent);
 	virtual ~UsersFrame();
 
 	void layout();

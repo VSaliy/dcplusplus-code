@@ -35,30 +35,32 @@ const string& PrivateFrame::getId() const { return id; }
 
 PrivateFrame::FrameMap PrivateFrame::frames;
 
-void PrivateFrame::openWindow(dwt::TabView* mdiParent, const HintedUser& replyTo_, const tstring& msg, const string& logPath)
+void PrivateFrame::openWindow(TabViewPtr parent, const HintedUser& replyTo_, const tstring& msg,
+	const string& logPath, bool activate)
 {
-	PrivateFrame* pf = 0;
+	PrivateFrame* pf;
 	FrameIter i = frames.find(replyTo_);
 	if(i == frames.end()) {
-		pf = new PrivateFrame(mdiParent, replyTo_, true, logPath);
+		pf = new PrivateFrame(parent, replyTo_, logPath);
 	} else {
 		pf = i->second;
-		pf->activate();
 	}
+	if(activate)
+		pf->activate();
 	if(!msg.empty())
 		pf->sendMessage(msg);
 
 }
 
-void PrivateFrame::gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
+void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
 							  const tstring& aMessage, const string& hubHint)
 {
-	PrivateFrame* p = 0;
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
-
 	FrameIter i = frames.find(user);
 	if(i == frames.end()) {
-		p = new PrivateFrame(mdiParent, HintedUser(user, hubHint), !BOOLSETTING(POPUNDER_PM));
+		auto p = new PrivateFrame(parent, HintedUser(user, hubHint));
+		if(!BOOLSETTING(POPUNDER_PM))
+			p->activate();
 		p->addChat(aMessage);
 		if(Util::getAway()) {
 			if(!(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT)))
@@ -92,13 +94,13 @@ const StringMap PrivateFrame::getWindowParams() const {
 	return ret;
 }
 
-void PrivateFrame::parseWindowParams(dwt::TabView* parent, const StringMap& params) {
+void PrivateFrame::parseWindowParams(TabViewPtr parent, const StringMap& params) {
 	StringMap::const_iterator cid = params.find(WindowInfo::cid);
 	StringMap::const_iterator hub = params.find("Hub");
 	if(cid != params.end() && hub != params.end()) {
 		StringMap::const_iterator logPath = params.find("LogPath");
 		openWindow(parent, HintedUser(ClientManager::getInstance()->getUser(CID(cid->second)), hub->second), Util::emptyStringT,
-			logPath != params.end() ? logPath->second : Util::emptyString);
+			logPath != params.end() ? logPath->second : Util::emptyString, parseActivateParam(params));
 	}
 }
 
@@ -112,8 +114,8 @@ bool PrivateFrame::isFavorite(const StringMap& params) {
 	return false;
 }
 
-PrivateFrame::PrivateFrame(dwt::TabView* mdiParent, const HintedUser& replyTo_, bool active, const string& logPath) :
-BaseType(mdiParent, _T(""), IDH_PM, IDI_PRIVATE, false),
+PrivateFrame::PrivateFrame(TabViewPtr parent, const HintedUser& replyTo_, const string& logPath) :
+BaseType(parent, _T(""), IDH_PM, IDI_PRIVATE, false),
 replyTo(replyTo_),
 priv(FavoriteManager::getInstance()->isPrivate(replyTo.getUser().hint)),
 online(replyTo.getUser().user->isOnline())
@@ -136,8 +138,6 @@ online(replyTo.getUser().user->isOnline())
 	initAccels();
 
 	layout();
-	if(active)
-		activate();
 
 	readLog(logPath, SETTING(PM_LAST_LOG_LINES));
 

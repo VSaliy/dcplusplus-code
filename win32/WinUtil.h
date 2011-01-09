@@ -84,7 +84,6 @@ public:
 	static dwt::ImageListPtr userImages;
 	static TStringList lastDirs;
 	static MainWindow* mainWindow;
-	//static dwt::TabView* mdiParent;
 	static float dpiFactor;
 
 	typedef unordered_map<string, size_t> ImageMap;
@@ -234,7 +233,7 @@ public:
 		return Text::fromT(tstring(buf, x));
 	}
 
-	static void addUserItems(MenuPtr menu, const HintedUserList& users, dwt::TabViewPtr parent, const StringList& dirs = StringList());
+	static void addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs = StringList());
 
 	/* utility functions to create icons. use these throughout the prog to make it easier to change
 	sizes globally should the need arise to later on. */

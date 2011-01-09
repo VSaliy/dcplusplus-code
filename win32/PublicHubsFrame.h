@@ -47,7 +47,7 @@ private:
 	friend class StaticFrame<PublicHubsFrame>;
 	friend class MDIChildFrame<PublicHubsFrame>;
 
-	PublicHubsFrame(dwt::TabView* mdiParent);
+	PublicHubsFrame(TabViewPtr parent);
 	virtual ~PublicHubsFrame();
 
 	enum {

@@ -44,7 +44,7 @@ protected:
 	friend class StaticFrame<SpyFrame>;
 	friend class MDIChildFrame<SpyFrame>;
 
-	SpyFrame(dwt::TabView* mdiParent);
+	SpyFrame(TabViewPtr parent);
 	virtual ~SpyFrame();
 
 	void layout();

@@ -26,9 +26,8 @@
 template<class T>
 class StaticFrame : public MDIChildFrame<T> {
 public:
-
-	StaticFrame(dwt::TabView* mdiClient, const tstring& title, unsigned helpId, unsigned iconId, bool manageAccels = true) :
-		MDIChildFrame<T>(mdiClient, title, helpId, iconId, manageAccels)
+	StaticFrame(TabViewPtr parent, const tstring& title, unsigned helpId, unsigned iconId, bool manageAccels = true) :
+		MDIChildFrame<T>(parent, title, helpId, iconId, manageAccels)
 	{
 		WinUtil::setStaticWindowState(T::id, true);
 	}
@@ -38,16 +37,22 @@ public:
 		WinUtil::setStaticWindowState(T::id, false);
 	}
 
-	static void openWindow(dwt::TabView* mdiClient, bool close = true, bool activate = true) {
+	static void openWindow(TabViewPtr parent, bool close = true, bool activate = true) {
 		if(frame) {
-			if(close && mdiClient->getActive() == frame) {
+			if(close && parent->getActive() == frame) {
 				frame->close();
 			} else if(activate) {
 				frame->activate();
 			}
 		} else {
-			frame = new T(mdiClient);
+			frame = new T(parent);
+			if(activate)
+				frame->activate();
 		}
+	}
+
+	static void parseWindowParams(TabViewPtr parent, const StringMap& params) {
+		openWindow(parent, false, parseActivateParam(params));
 	}
 
 private:

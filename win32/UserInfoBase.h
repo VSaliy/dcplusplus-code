@@ -35,11 +35,11 @@ public:
 	void getList();
 	void browseList();
 	void matchQueue();
-	void pm(dwt::TabViewPtr);
+	void pm(TabViewPtr);
 	void grant();
 	void addFav();
 	void removeFromQueue();
-	void connectFav(dwt::TabViewPtr);
+	void connectFav(TabViewPtr);
 
 	tstring getTooltip(bool priv) const;
 
@@ -103,7 +103,7 @@ protected:
 	void handleAddFavorite() {
 		handleUserFunction(std::bind(&UserInfoBase::addFav, _1));
 	}
-	void handlePrivateMessage(dwt::TabViewPtr parent) {
+	void handlePrivateMessage(TabViewPtr parent) {
 		handleUserFunction(std::bind(&UserInfoBase::pm, _1, parent));
 	}
 	void handleGrantSlot() {
@@ -112,11 +112,11 @@ protected:
 	void handleRemoveFromQueue() {
 		handleUserFunction(std::bind(&UserInfoBase::removeFromQueue, _1));
 	}
-	void handleConnectFav(dwt::TabViewPtr parent) {
+	void handleConnectFav(TabViewPtr parent) {
 		handleUserFunction(std::bind(&UserInfoBase::connectFav, _1, parent));
 	}
 
-	void appendUserItems(dwt::TabViewPtr parent, dwt::MenuPtr menu,
+	void appendUserItems(TabViewPtr parent, dwt::MenuPtr menu,
 		bool defaultIsGetList = true, bool includeSendPM = true, bool includeGetList = true)
 	{
 		UserInfoList users = t().selectedUsersImpl();

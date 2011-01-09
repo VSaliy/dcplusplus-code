@@ -55,16 +55,16 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void gotMessage(dwt::TabView* mdiParent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
+	static void gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
 		const tstring& aMessage, const string& hubHint);
-	static void openWindow(dwt::TabView* mdiParent, const HintedUser& replyTo, const tstring& msg = Util::emptyStringT,
-		const string& logPath = Util::emptyString);
+	static void openWindow(TabViewPtr parent, const HintedUser& replyTo, const tstring& msg = Util::emptyStringT,
+		const string& logPath = Util::emptyString, bool activate = true);
 	static bool isOpen(const UserPtr& u) { return frames.find(u) != frames.end(); }
 	static void closeAll();
 	static void closeAllOffline();
 
 	const StringMap getWindowParams() const;
-	static void parseWindowParams(dwt::TabView* parent, const StringMap& params);
+	static void parseWindowParams(TabViewPtr parent, const StringMap& params);
 	static bool isFavorite(const StringMap& params);
 
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
@@ -80,7 +80,7 @@ private:
 	typedef FrameMap::iterator FrameIter;
 	static FrameMap frames;
 
-	PrivateFrame(dwt::TabView* mdiParent, const HintedUser& replyTo_, bool active, const string& logPath = Util::emptyString);
+	PrivateFrame(TabViewPtr parent, const HintedUser& replyTo_, const string& logPath = Util::emptyString);
 	virtual ~PrivateFrame();
 
 	void layout();

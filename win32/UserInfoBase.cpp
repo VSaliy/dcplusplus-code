@@ -60,8 +60,8 @@ void UserInfoBase::addFav() {
 	FavoriteManager::getInstance()->addFavoriteUser(user);
 }
 
-void UserInfoBase::pm(dwt::TabView* mdiParent) {
-	PrivateFrame::openWindow(mdiParent, user, Util::emptyStringT);
+void UserInfoBase::pm(TabViewPtr parent) {
+	PrivateFrame::openWindow(parent, user, Util::emptyStringT);
 }
 
 void UserInfoBase::grant() {
@@ -72,12 +72,12 @@ void UserInfoBase::removeFromQueue() {
 	QueueManager::getInstance()->removeSource(user, QueueItem::Source::FLAG_REMOVED);
 }
 
-void UserInfoBase::connectFav(dwt::TabView* mdiParent) {
+void UserInfoBase::connectFav(TabViewPtr parent) {
 	std::string url = user.hint;
 	if(url.empty())
 		url = FavoriteManager::getInstance()->getUserURL(user);
 	if(!url.empty()) {
-		HubFrame::openWindow(mdiParent, url);
+		HubFrame::openWindow(parent, url);
 	}
 }
 

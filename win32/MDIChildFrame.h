@@ -38,7 +38,7 @@ class MDIChildFrame :
 	T& t() { return *static_cast<T*>(this); }
 
 protected:
-	MDIChildFrame(dwt::TabView* tabView, const tstring& title, unsigned helpId = 0, unsigned iconId = 0, bool manageAccels = true) :
+	MDIChildFrame(TabViewPtr tabView, const tstring& title, unsigned helpId = 0, unsigned iconId = 0, bool manageAccels = true) :
 		BaseType(tabView),
 		lastFocus(NULL),
 		alwaysSameFocus(false),
@@ -123,12 +123,17 @@ protected:
 		return getParent()->getActive() == this;
 	}
 
-	dwt::TabView* getParent() const {
-		return static_cast<dwt::TabView*>(BaseType::getParent());
+	TabViewPtr getParent() const {
+		return static_cast<TabViewPtr>(BaseType::getParent());
 	}
 
 	void setIcon(unsigned iconId) {
 		getParent()->setIcon(this, WinUtil::tabIcon(iconId));
+	}
+
+	static bool parseActivateParam(const StringMap& params) {
+		auto i = params.find("Active");
+		return i != params.end() && i->second == "1";
 	}
 
 public:
@@ -138,10 +143,6 @@ public:
 
 	virtual const StringMap getWindowParams() const {
 		return StringMap();
-	}
-
-	static void parseWindowParams(dwt::TabView* parent, const StringMap& /*params*/) {
-		T::openWindow(parent);
 	}
 
 private:

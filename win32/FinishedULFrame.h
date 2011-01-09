@@ -29,7 +29,7 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	FinishedULFrame(dwt::TabView* mdiParent);
+	FinishedULFrame(TabViewPtr parent);
 	virtual ~FinishedULFrame() { }
 };
 
