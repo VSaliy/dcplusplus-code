@@ -35,6 +35,7 @@
 #include <dcpp/ShareManager.h>
 #include <dcpp/WindowInfo.h>
 
+#include <dwt/widgets/Rebar.h>
 #include <dwt/widgets/ToolBar.h>
 
 const string DirectoryListingFrame::id = "DirectoryListing";
@@ -172,6 +173,8 @@ void DirectoryListingFrame::openWindow(TabViewPtr parent, const HintedUser& aUse
 
 DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser& aUser, int64_t aSpeed) :
 	BaseType(parent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY),
+	rebar(0),
+	pathBox(0),
 	grid(0),
 	dirs(0),
 	files(0),
@@ -198,40 +201,13 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	grid->row(1).mode = GridInfo::STATIC;
 	grid->setSpacing(0);
 
-	VSplitterPtr paned = grid->addChild(VSplitter::Seed(0.3));
-
 	{
-		// create a container that will hold both the toolbar and the dir tree.
-		ContainerPtr container = grid->addChild(Container::Seed(0, WS_EX_CONTROLPARENT));
+		VSplitterPtr paned = grid->addChild(VSplitter::Seed(0.3));
 
-		auto seed = ToolBar::Seed();
-		seed.style &= ~CCS_ADJUSTABLE;
-		ToolBarPtr toolbar = container->addChild(seed);
-
-		StringList ids;
-		auto addButton = [toolbar, &ids](unsigned icon, const tstring& text, unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f) {
-			ids.push_back(string(1, '0' + ids.size()));
-			toolbar->addButton(ids.back(), WinUtil::toolbarIcon(icon), 0, text, helpId, f);
-		};
-		addButton(IDI_LEFT, T_("Back"), IDH_FILE_LIST_BACK, [this] { back(); });
-		addButton(IDI_RIGHT, T_("Forward"), IDH_FILE_LIST_FORWARD, [this] { this->forward(); }); // explicit ns (vs std::forward)
-		ids.push_back(string());
-		addButton(IDI_UP, T_("Up one level"), IDH_FILE_LIST_UP, [this] { up(); });
-		toolbar->setLayout(ids);
-
-		dirs = container->addChild(WidgetDirs::Seed());
+		dirs = grid->addChild(WidgetDirs::Seed());
 		dirs->setHelpId(IDH_FILE_LIST_DIRS);
 		addWidget(dirs);
-
-		container->onSized([this, toolbar](const dwt::SizedEvent& e) {
-			dwt::Rectangle r(e.size);
-			toolbar->refresh();
-			dwt::Point pt = toolbar->getWindowSize();
-			r.pos.y += pt.y;
-			r.size.y -= pt.y;
-			dirs->layout(r);
-		});
-		paned->setFirst(container);
+		paned->setFirst(dirs);
 
 		dirs->setNormalImageList(WinUtil::fileImages);
 		dirs->onSelectionChanged(std::bind(&DirectoryListingFrame::handleSelectionChanged, this));
@@ -239,9 +215,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		dirs->onSysKeyDown(std::bind(&DirectoryListingFrame::handleKeyDownDirs, this, _1));
 		dirs->onContextMenu(std::bind(&DirectoryListingFrame::handleDirsContextMenu, this, _1));
 		dirs->onXMouseUp(std::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
-	}
 
-	{
 		files = grid->addChild(WidgetFiles::Seed());
 		files->setHelpId(IDH_FILE_LIST_FILES);
 		addWidget(files);
@@ -314,6 +288,37 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	searchGrid->setEnabled(false);
 	searchGrid->setVisible(false);
 
+	// create the rebar after the rest to make sure it doesn't grab the default focus.
+	rebar = addChild(Rebar::Seed());
+
+	{
+		auto seed = ToolBar::Seed();
+		seed.style &= ~CCS_ADJUSTABLE;
+		ToolBarPtr toolbar = addChild(seed);
+
+		StringList ids;
+		auto addButton = [toolbar, &ids](unsigned icon, const tstring& text, unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f) {
+			ids.push_back(string(1, '0' + ids.size()));
+			toolbar->addButton(ids.back(), WinUtil::toolbarIcon(icon), 0, text, helpId, f);
+		};
+		addButton(IDI_LEFT, T_("Back"), IDH_FILE_LIST_BACK, [this] { back(); });
+		addButton(IDI_RIGHT, T_("Forward"), IDH_FILE_LIST_FORWARD, [this] { this->forward(); }); // explicit ns (vs std::forward)
+		ids.push_back(string());
+		addButton(IDI_UP, T_("Up one level"), IDH_FILE_LIST_UP, [this] { up(); });
+		toolbar->setLayout(ids);
+
+		rebar->add(toolbar, RBBS_NOGRIPPER);
+	}
+
+	pathBox = addChild(WinUtil::Seeds::comboBoxEdit);
+	pathBox->getTextBox()->setReadOnly();
+	addWidget(pathBox);
+	pathBox->onSelectionChanged([this] { selectItem(Text::toT(history[pathBox->getSelected()])); });
+
+	rebar->add(pathBox, RBBS_NOGRIPPER);
+
+	rebar->sendMessage(RB_MINIMIZEBAND); // minimize the toolbar band and maximize the path box
+
 	initStatus();
 
 	status->setSize(STATUS_FILE_LIST_DIFF, listDiff->getPreferredSize().x);
@@ -365,6 +370,11 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 
 void DirectoryListingFrame::layout() {
 	dwt::Rectangle r(getClientSize());
+
+	rebar->refresh();
+	dwt::Point pt = rebar->getWindowSize();
+	r.pos.y += pt.y;
+	r.size.y -= pt.y;
 
 	status->layout(r);
 
@@ -844,6 +854,9 @@ void DirectoryListingFrame::updateStatus() {
 }
 
 void DirectoryListingFrame::handleSelectionChanged() {
+	if(!loaded)
+		return;
+
 	ItemInfo* ii = dirs->getSelectedData();
 	if(!ii) {
 		return;
@@ -853,9 +866,16 @@ void DirectoryListingFrame::handleSelectionChanged() {
 	if(d == 0) {
 		return;
 	}
+
 	HoldRedraw hold(files);
 	changeDir(d);
+
 	addHistory(dl->getPath(d));
+
+	pathBox->clear();
+	for(auto i = history.cbegin(), iend = history.cend(); i != iend; ++i)
+		pathBox->addValue(i->empty() ? getText() : Text::toT(*i));
+	pathBox->setSelected(historyIndex - 1);
 }
 
 void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
@@ -915,7 +935,7 @@ void DirectoryListingFrame::up() {
 void DirectoryListingFrame::back() {
 	if(history.size() > 1 && historyIndex > 1) {
 		size_t n = min(historyIndex, history.size()) - 1;
-		deque<string> tmp = history;
+		auto tmp = history;
 		selectItem(Text::toT(history[n - 1]));
 		historyIndex = n;
 		history = tmp;
@@ -925,7 +945,7 @@ void DirectoryListingFrame::back() {
 void DirectoryListingFrame::forward() {
 	if(history.size() > 1 && historyIndex < history.size()) {
 		size_t n = min(historyIndex, history.size() - 1);
-		deque<string> tmp = history;
+		auto tmp = history;
 		selectItem(Text::toT(history[n]));
 		historyIndex = n + 1;
 		history = tmp;

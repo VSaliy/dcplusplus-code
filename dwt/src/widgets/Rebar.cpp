@@ -36,7 +36,7 @@ namespace dwt {
 const TCHAR Rebar::windowClass[] = REBARCLASSNAME;
 
 Rebar::Seed::Seed() :
-BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER | RBS_AUTOSIZE | RBS_VARHEIGHT, WS_EX_TOOLWINDOW)
+BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER | RBS_AUTOSIZE | RBS_VARHEIGHT, WS_EX_CONTROLPARENT | WS_EX_TOOLWINDOW)
 {
 }
 
@@ -54,13 +54,13 @@ void Rebar::refresh() {
 	::MoveWindow(handle(), 0, 0, 0, 0, TRUE);
 }
 
-void Rebar::add(Widget* w, const tstring& text) {
+void Rebar::add(Widget* w, unsigned style, const tstring& text) {
 	if(size() == 0)
 		setVisible(true);
 
 	w->addRemoveStyle(CCS_NORESIZE, true);
 
-	REBARBANDINFO info = { sizeof(REBARBANDINFO), RBBIM_CHILD | RBBIM_CHILDSIZE };
+	REBARBANDINFO info = { sizeof(REBARBANDINFO), RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_STYLE, style };
 
 	if(!text.empty()) {
 		info.fMask |= RBBIM_TEXT;
@@ -87,6 +87,10 @@ void Rebar::remove(Widget* w) {
 
 	if(size() == 0)
 		setVisible(false);
+}
+
+bool Rebar::empty() const {
+	return size() == 0;
 }
 
 unsigned Rebar::size() const {

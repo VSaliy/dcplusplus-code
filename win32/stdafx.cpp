@@ -17,3 +17,18 @@
  */
 
 #include "stdafx.h"
+
+#if defined(__GNUC__)
+#if __GNUC__ <= 4 && __GNUC_MINOR__ <= 5 && __GNUC_PATCHLEVEL__ < 1
+#error GCC 4.5.1 is required
+#endif
+
+#elif defined(_MSC_VER)
+#if _MSC_VER < 1600
+#error MSVC 10 (2010) is required
+#endif
+
+#else
+#error No supported compiler found
+
+#endif
