@@ -1014,13 +1014,21 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 
 	HTREEITEM const oldDir = dirs->getSelected();
 
-	auto selectDir = [this, oldDir](HTREEITEM newDir) {
+	auto prevHistory = history;
+	auto prevHistoryIndex = historyIndex;
+
+	auto selectDir = [this, oldDir, &prevHistory, prevHistoryIndex](HTREEITEM newDir) {
 		// SelectItem won't update the list if SetRedraw was set to FALSE and then
 		// to TRUE and the selected item is the same as the last one... workaround:
 		if(newDir == oldDir)
 			dirs->setSelected(nullptr);
 		dirs->setSelected(newDir);
 		dirs->ensureVisible(newDir);
+
+		if(newDir == oldDir) {
+			history = prevHistory;
+			historyIndex = prevHistoryIndex;
+		}
 	};
 
 	if(mode == FIND_START) {
