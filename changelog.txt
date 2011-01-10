@@ -1,3 +1,4 @@
+-- 0.780 2011-01-10 --
 * Compiled with C++0x support
 * Update Boost to version 1.45
 * Prevent hub-provided cmds from "open own list" from going to the wrong hub
@@ -69,6 +70,7 @@
 * Process file lists only when they first come into view (poy)
 * [L#700594] Prevent multiple password dialogs and give them the hub title (poy)
 * [L#700593] Add an address bar in file lists (poy)
+* Documentation and translations updated as usual, thanks everyone
 
 -- 0.770 2010-07-05 --
 * [L#550300] Catch more potential file corruptions (thanks bigmuscle)
