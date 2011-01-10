@@ -359,6 +359,8 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 }
 
 void DirectoryListingFrame::loadXML(const string& txt) {
+	loaded = true;
+
 	try {
 		refreshTree(Text::toT(Util::toNmdcFile(dl->updateXML(txt))));
 	} catch(const Exception& e) {
