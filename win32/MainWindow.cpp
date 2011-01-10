@@ -867,7 +867,7 @@ bool MainWindow::handleClosing() {
 void MainWindow::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	if(rebar->size() > 0) {
+	if(!rebar->empty()) {
 		rebar->refresh();
 		dwt::Point pt = rebar->getWindowSize();
 		r.pos.y += pt.y;

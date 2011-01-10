@@ -89,9 +89,11 @@ public:
 	  */
 	void refresh();
 
-	void add(Widget* w, const tstring& text = tstring());
+	/** @param style see the REBARBANDINFO doc for possible values (fStyle section) */
+	void add(Widget* w, unsigned style = 0, const tstring& text = tstring());
 	void remove(Widget* w);
 
+	bool empty() const;
 	unsigned size() const;
 
 protected:

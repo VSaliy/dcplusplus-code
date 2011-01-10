@@ -157,6 +157,9 @@ private:
 		tstring columns[COLUMN_LAST];
 	};
 
+	RebarPtr rebar;
+	ComboBoxPtr pathBox;
+
 	GridPtr grid;
 
 	typedef TypedTree<ItemInfo> WidgetDirs;

@@ -77,8 +77,10 @@ void ToolBar::create(const Seed& cs) {
 }
 
 Point ToolBar::getPreferredSize() {
-	// don't care about the width
-	return Point(0, HIWORD(sendMessage(TB_GETBUTTONSIZE)) + HIWORD(sendMessage(TB_GETPADDING)));
+	// get the rect of the last item
+	RECT rect;
+	sendMessage(TB_GETITEMRECT, size() - 1, reinterpret_cast<LPARAM>(&rect));
+	return Point(rect.right, rect.bottom - rect.top);
 }
 
 void ToolBar::addButton(const std::string& id, const IconPtr& icon, const IconPtr& hotIcon, const tstring& text, unsigned helpId,
