@@ -2267,11 +2267,6 @@ msgid ""
 "+.  You can find some more how-to's for popular router models at the <a po4a-"
 "id=1>DSLReport FAQ page</a> as well."
 msgstr ""
-"Du findet detaillierte how-to guides mit Screenshots für verschiedene Router-"
-"Modelle auf <a po4a-id=0>www.portforward.com</a> (Englisch). Es gibt dort "
-"eine große Liste an Modellen. Wähle dein Modell aus und DC++ aus der "
-"Programmliste auf der nächsten Seite. Ein Guide leitet dich durch die "
-"einzelnen Schritte."
 
 #. type: Content of: <html><body><p>
 #: help/faq_activemode.html:84
