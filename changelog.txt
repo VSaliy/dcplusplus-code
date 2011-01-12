@@ -1,3 +1,5 @@
+* Add a dummy serial number to TLS certs to satisfy some parsers (poy)
+
 -- 0.780 2011-01-10 --
 * Compiled with C++0x support
 * Update Boost to version 1.45
