@@ -13319,7 +13319,7 @@ msgid ""
 "windows (like Download Queue or Search) have their own functional status bar "
 "and messages related to those windows may appear only on their own place."
 msgstr ""
-"Pamiętaj że <i>nie wszystkie</> wiadomości błędu pokazują się w Logu "
+"Pamiętaj że <i>nie wszystkie</i> wiadomości błędu pokazują się w Logu "
 "Systemowym. Niektóre okna (jak Kolejka i Szukaj) posiadają swoje własne "
 "paski statusu więc wiadomości z nimi związane wyświetlą się właśnie tam."
 
