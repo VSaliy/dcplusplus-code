@@ -1,4 +1,5 @@
 * Add a dummy serial number to TLS certs to satisfy some parsers (poy)
+* Avoid loading unprocessed file lists on exit (poy)
 
 -- 0.780 2011-01-10 --
 * Compiled with C++0x support
