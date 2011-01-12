@@ -103,7 +103,10 @@ void DirectoryListingFrame::openWindow_(TabViewPtr parent, const tstring& aFile,
 		frame->activate();
 	} else {
 		frame->setDirty(SettingsManager::BOLD_FL);
-		frame->onActivate([frame, aDir](bool b) { if(b) frame->loadFile(aDir); });
+		frame->onActivate([frame, aDir](bool b) {
+			if(b && !frame->loaded && !WinUtil::mainWindow->closing())
+				frame->loadFile(aDir);
+		});
 	}
 }
 
@@ -341,8 +344,6 @@ DirectoryListingFrame::~DirectoryListingFrame() {
 }
 
 void DirectoryListingFrame::loadFile(const tstring& dir) {
-	if(loaded)
-		return;
 	loaded = true;
 
 	try {
