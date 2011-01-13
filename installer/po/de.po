@@ -33,7 +33,7 @@ msgstr "DC++ (notwendig)"
 #: installer/Strings.xml:5
 #, no-wrap
 msgid "A previous installation of DC++ has been found; backup settings and queue to '$R0'?"
-msgstr "Eine alte DC++ Installation wurde gefunden. Sollen die Einstellungen und die Warteschlange '$R0\" gesichert werden?"
+msgstr "Eine alte DC++ Installation wurde gefunden. Sollen die Einstellungen und die Warteschlange '$R0' gesichert werden?"
 
 #. type: Content of: <Strings><SECTION_IP_COUNTRY>
 #: installer/Strings.xml:6
