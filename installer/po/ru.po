@@ -58,7 +58,7 @@ msgstr "Сохранять настройки в каталоге профиля
 #, no-wrap
 msgid "Unchecking this box will make DC++ store its settings in the program directory. This is strongly discouraged on Windows Vista and later; settings or downloads might get lost."
 msgstr ""
-"При отключении данного пункта DC++ сохранит все настройки в папке с программой. Это нежелательно  для\r\n"
+"При отключении данного пункта DC++ сохранит все настройки в папке с программой. Это нежелательно  для "
 "Windows Vista и более поздних систем; настройки или загрузки могут быть потеряны."
 
 #. type: Content of: <Strings><WARNING_LOCALE_ERASED>
