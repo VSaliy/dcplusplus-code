@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_STDAFX_H
 #define DCPLUSPLUS_WIN32_STDAFX_H
 
+#include "compiler.h"
+
 #include <dcpp/stdinc.h>
 #include <dcpp/DCPlusPlus.h>
 

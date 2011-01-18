@@ -19,11 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_STDINC_H
 #define DCPLUSPLUS_DCPP_STDINC_H
 
-// This enables stlport's debug mode (and slows it down to a crawl...)
-//#define _STLP_DEBUG 1
-//#define _STLP_USE_NEWALLOC 1
-
-// --- Shouldn't have to change anything under here...
+#include "compiler.h"
 
 #ifndef _REENTRANT
 # define _REENTRANT 1
