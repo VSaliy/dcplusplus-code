@@ -277,16 +277,24 @@ private:
 		}
 
 		void open(TabViewPtr parent, const string& ownList) {
-			if (in_UL && file == ownList) {
+			// see if we are opening our own file list.
+			if(in_UL && file == ownList) {
 				DirectoryListingFrame::openOwnList(parent);
 				return;
 			}
 
+			// see if we are opening a file list.
 			UserPtr u = DirectoryListing::getUserFromFilename(file);
-			if(u)
-				DirectoryListingFrame::openWindow(parent, Text::toT(file), Util::emptyStringT, HintedUser(u, Util::emptyString), entry->getAverageSpeed());
-			else
-				WinUtil::openFile(Text::toT(file));
+			if(u) {
+				const auto& users = entry->getUsers();
+				auto hu = find(users.cbegin(), users.cend(), u);
+				if(hu != users.cend()) {
+					DirectoryListingFrame::openWindow(parent, Text::toT(file), Util::emptyStringT, *hu, entry->getAverageSpeed());
+					return;
+				}
+			}
+
+			WinUtil::openFile(Text::toT(file));
 		}
 
 		void openFolder() {
