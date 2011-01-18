@@ -72,16 +72,16 @@ public:
 		return first;
 	}
 	void setFirst(Widget* first_) {
-		dwtassert(first_->getParent() == getParent(), _T("A splitter and its siblings must have the same parent"));
 		first = first_;
+		dwtassert(!first || first->getParent() == getParent(), _T("A splitter and its siblings must have the same parent"));
 	}
 
 	Widget* getSecond() {
 		return second;
 	}
 	void setSecond(Widget* second_) {
-		dwtassert(second_->getParent() == getParent(), _T("A splitter and its siblings must have the same parent"));
 		second = second_;
+		dwtassert(!second || second->getParent() == getParent(), _T("A splitter and its siblings must have the same parent"));
 	}
 
 	void create(const Seed& cs = Seed());
