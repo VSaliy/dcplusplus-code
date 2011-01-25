@@ -61,6 +61,7 @@
 extern "C" {
 	void HH_GS_CALL __GSHandlerCheck() { }
 	void HH_GS_CALL __security_check_cookie(uintptr_t) { }
+	uintptr_t __security_cookie;
 }
 #undef HH_GS_CALL
 #endif
