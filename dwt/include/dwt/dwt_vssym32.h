@@ -29,23 +29,21 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_DWMAPI_H
-#define DWT_DWMAPI_H
+#ifndef DWT_VSSYM32_H
+#define DWT_VSSYM32_H
 
 #ifdef __GNUC__
-// MinGW lacks dwmapi.h, so define what we need here
+// MinGW lacks vssym32.h, so define what we need here
 
-#define DWMWA_FORCE_ICONIC_REPRESENTATION 7
-#define DWMWA_HAS_ICONIC_BITMAP 10
-
-#else
-#include <dwmapi.h>
+#ifndef TMT_CONTENTMARGINS
+#define TMT_CONTENTMARGINS 3602
+#endif
+#ifndef TMT_HEADING1TEXTCOLOR
+#define TMT_HEADING1TEXTCOLOR 3825
 #endif
 
-// in addition, we also define the following messages that are normally only defined for Win 7
-#if(_WIN32_WINNT < 0x0601)
-#define WM_DWMSENDICONICTHUMBNAIL 0x0323
-#define WM_DWMSENDICONICLIVEPREVIEWBITMAP 0x0326
+#else
+#include <vssym32.h>
 #endif
 
 #endif
