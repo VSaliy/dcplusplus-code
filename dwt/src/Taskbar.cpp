@@ -43,16 +43,16 @@ namespace dwt {
 static const UINT taskbarButtonMsg = ::RegisterWindowMessage(_T("TaskbarButtonCreated"));
 
 typedef HRESULT (WINAPI *t_DwmInvalidateIconicBitmaps)(HWND);
-static t_DwmInvalidateIconicBitmaps DwmInvalidateIconicBitmaps;
+static t_DwmInvalidateIconicBitmaps DwmInvalidateIconicBitmaps = 0;
 
 typedef HRESULT (WINAPI *t_DwmSetIconicLivePreviewBitmap)(HWND, HBITMAP, POINT*, DWORD);
-static t_DwmSetIconicLivePreviewBitmap DwmSetIconicLivePreviewBitmap;
+static t_DwmSetIconicLivePreviewBitmap DwmSetIconicLivePreviewBitmap = 0;
 
 typedef HRESULT (WINAPI *t_DwmSetIconicThumbnail)(HWND, HBITMAP, DWORD);
-static t_DwmSetIconicThumbnail DwmSetIconicThumbnail;
+static t_DwmSetIconicThumbnail DwmSetIconicThumbnail = 0;
 
 typedef HRESULT (WINAPI *t_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
-static t_DwmSetWindowAttribute DwmSetWindowAttribute;
+static t_DwmSetWindowAttribute DwmSetWindowAttribute = 0;
 
 Taskbar::Taskbar() :
 taskbar(0),
@@ -150,8 +150,10 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 				window->setVisible(true);
 		}
 	});
-	proxy->onClosing([tab]() -> bool {
-		tab->close(true);
+	proxy->onClosing([this, tab]() -> bool {
+		if(window->getEnabled()) {
+			tab->close(true);
+		}
 		return false; // don't close the proxy window just yet; wait for removeFromTaskbar.
 	});
 
@@ -219,7 +221,7 @@ BitmapPtr Taskbar::getBitmap(ContainerPtr tab, LPARAM thumbnailSize) {
 	BitmapPtr bitmap_full(new Bitmap(::CreateDIBSection(canvas.handle(), &info, DIB_RGB_COLORS, 0, 0, 0)));
 
 	CompatibleCanvas canvas_full(canvas.handle());
-	Canvas::Selector select_full(canvas_full, *bitmap_full);
+	auto select_full(canvas_full.select(*bitmap_full));
 
 	tab->sendMessage(WM_PRINT, reinterpret_cast<WPARAM>(canvas_full.handle()), PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN | PRF_ERASEBKGND);
 
@@ -242,7 +244,7 @@ BitmapPtr Taskbar::getBitmap(ContainerPtr tab, LPARAM thumbnailSize) {
 	BitmapPtr bitmap_thumb(new Bitmap(::CreateDIBSection(canvas.handle(), &info, DIB_RGB_COLORS, 0, 0, 0)));
 
 	CompatibleCanvas canvas_thumb(canvas.handle());
-	Canvas::Selector select_thumb(canvas_thumb, *bitmap_thumb);
+	auto select_thumb(canvas_thumb.select(*bitmap_thumb));
 
 	::SetStretchBltMode(canvas_thumb.handle(), HALFTONE);
 	::SetBrushOrgEx(canvas_thumb.handle(), 0, 0, 0);
