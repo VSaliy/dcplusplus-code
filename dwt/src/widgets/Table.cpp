@@ -380,7 +380,7 @@ void Table::handleGroupDraw(COLORREF bgColor) {
 	theme.load(VSCLASS_LISTVIEW, this);
 
 	onRaw([this, bgColor](WPARAM, LPARAM lParam) -> LRESULT {
-		if(!grouped || !lParam)
+		if(!grouped || !lParam || !theme)
 			return CDRF_DODEFAULT;
 		auto& data = *reinterpret_cast<LPNMLVCUSTOMDRAW>(lParam);
 		if(data.dwItemType == LVCDI_GROUP && data.nmcd.dwDrawStage == CDDS_PREPAINT) {
