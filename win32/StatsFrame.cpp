@@ -62,20 +62,21 @@ StatsFrame::~StatsFrame() {
 
 void StatsFrame::draw(dwt::Canvas& canvas, const dwt::Rectangle& rect) {
 	{
-		dwt::Canvas::Selector select(canvas, *WinUtil::bgBrush);
+		auto select(canvas.select(*WinUtil::bgBrush));
 		::BitBlt(canvas.handle(), rect.x(), rect.y(), rect.width(), rect.height(), NULL, 0, 0, PATCOPY);
 	}
 
 	canvas.setTextColor(WinUtil::textColor);
 	canvas.setBkColor(WinUtil::bgColor);
-	canvas.selectFont(WinUtil::font);
+
+	auto selectFont(canvas.select(*WinUtil::font));
 
 	long fontHeight = getTextSize(_T("A")).y;
 	int lines = height / (fontHeight * LINE_HEIGHT);
 	int lheight = height / (lines+1);
 
 	{
-		dwt::Canvas::Selector select(canvas, *pen);
+		auto select(canvas.select(*pen));
 		for(int i = 0; i < lines; ++i) {
 			int ypos = lheight * (i+1);
 			if(ypos > fontHeight + 2) {
@@ -114,12 +115,12 @@ void StatsFrame::draw(dwt::Canvas& canvas, const dwt::Rectangle& rect) {
 	long clientRight = getClientSize().x;
 
 	{
-		dwt::Canvas::Selector select(canvas, *upPen);
+		auto select(canvas.select(*upPen));
 		drawLine(canvas, up.begin(), up.end(), rect, clientRight);
 	}
 
 	{
-		dwt::Canvas::Selector select(canvas, *downPen);
+		auto select(canvas.select(*downPen));
 		drawLine(canvas, down.begin(), down.end(), rect, clientRight);
 	}
 }

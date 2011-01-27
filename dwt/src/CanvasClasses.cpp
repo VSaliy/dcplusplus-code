@@ -36,11 +36,6 @@
 
 namespace dwt {
 
-void Canvas::selectFont( FontPtr font )
-{
-	SelectFont( itsHdc, font->handle() );
-}
-
 int Canvas::getDeviceCaps( int nIndex )
 {
 	return( ::GetDeviceCaps( itsHdc, nIndex ) );
@@ -192,6 +187,10 @@ bool Canvas::extFloodFill( int x, int y, COLORREF color, bool fillTilColorFound 
 	return ::ExtFloodFill( itsHdc, x, y, color, fillTilColorFound ? FLOODFILLBORDER : FLOODFILLSURFACE ) != FALSE;
 }
 #endif //!WINCE
+
+void Canvas::invert(const Region& region) {
+	::InvertRgn(handle(), region.handle());
+}
 
 void Canvas::drawIcon(const IconPtr& icon, const Rectangle& rectangle) {
 	if(!::DrawIconEx(itsHdc, rectangle.left(), rectangle.top(), icon->handle(), rectangle.width(), rectangle.height(), 0, 0, DI_NORMAL))

@@ -80,7 +80,7 @@ void GroupBox::layout(const Rectangle& rect) {
 
 Rectangle GroupBox::shrink(const Rectangle& client) {
 	UpdateCanvas c(this);
-	c.selectFont(getFont());
+	auto select(c.select(*getFont()));
 
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);
@@ -99,7 +99,7 @@ Rectangle GroupBox::shrink(const Rectangle& client) {
 
 Point GroupBox::expand(const Point& child) {
 	UpdateCanvas c(this);
-	c.selectFont(getFont());
+	auto select(c.select(*getFont()));
 
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);

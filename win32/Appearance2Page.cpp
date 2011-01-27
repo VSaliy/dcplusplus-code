@@ -172,7 +172,7 @@ void Appearance2Page::handleTextClicked() {
 	FontDialog::Options options;
 	options.strikeout = false;
 	options.underline = false;
-	options.setBgColor(bg);
+	options.bgColor = bg;
 	if(FontDialog(this).open(logFont, fg, &options)) {
 		font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&logFont), true));
 		example->setColor(fg, bg);

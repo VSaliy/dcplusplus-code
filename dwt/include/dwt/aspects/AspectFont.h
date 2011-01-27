@@ -94,7 +94,7 @@ template< class WidgetType >
 Point AspectFont< WidgetType >::getTextSize( const tstring & text )
 {
 	UpdateCanvas c(&W());
-	c.selectFont(W().getFont());
+	auto select(c.select(*W().getFont()));
 
 	Rectangle rect;
 	c.drawText(text, rect, DT_CALCRECT | DT_NOPREFIX);

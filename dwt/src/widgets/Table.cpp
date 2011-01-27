@@ -31,12 +31,14 @@
 
 #include <dwt/widgets/Table.h>
 
-#include <dwt/resources/Region.h>
 #include <dwt/CanvasClasses.h>
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/check.h>
 #include <dwt/util/StringUtils.h>
+#include <dwt/util/win32/Version.h>
 #include <dwt/DWTException.h>
+#include <dwt/dwt_vsstyle.h>
+#include <dwt/dwt_vssym32.h>
 
 #include <boost/scoped_array.hpp>
 
@@ -361,6 +363,88 @@ void Table::setGroups(const std::vector<tstring>& groups) {
 	grouped = true;
 }
 
+tstring Table::getGroup(unsigned id) const {
+	if(grouped) {
+		LVGROUP group = { sizeof(LVGROUP), LVGF_HEADER };
+		if(ListView_GetGroupInfo(handle(), id, &group) == static_cast<int>(id)) {
+			return tstring(group.pszHeader, group.cchHeader);
+		}
+	}
+	return tstring();
+}
+
+void Table::handleGroupDraw(COLORREF bgColor) {
+	if(!util::win32::ensureVersion(util::win32::VISTA))
+		return; // can get messy on XP, leave default colors to these users...
+
+	theme.load(VSCLASS_LISTVIEW, this);
+
+	onRaw([this, bgColor](WPARAM, LPARAM lParam) -> LRESULT {
+		if(!grouped || !lParam)
+			return CDRF_DODEFAULT;
+		auto& data = *reinterpret_cast<LPNMLVCUSTOMDRAW>(lParam);
+		if(data.dwItemType == LVCDI_GROUP && data.nmcd.dwDrawStage == CDDS_PREPAINT) {
+			// got a group!
+			int id = data.nmcd.dwItemSpec;
+			if(id <= 0) // skip id=-1 (error) and id=0 (first group, that has no header)
+				return CDRF_DODEFAULT;
+
+			FreeCanvas canvas(data.nmcd.hdc);
+			bool oldMode = canvas.setBkMode(true);
+
+			Rectangle rect(data.rcText);
+			Region region(rect);
+
+			// find out whether the mouse is hovering the group header.
+			LVHITTESTINFO hit = { ClientCoordinate(ScreenCoordinate(Point::fromLParam(::GetMessagePos())), this).getPoint(), LVHT_EX_GROUP };
+			const bool hot = GCC_WTF->sendMessage(LVM_HITTEST, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(&hit)) == id;
+
+			int part = LVP_GROUPHEADER;
+			int state = hot ? LVGH_OPENHOT : LVGH_OPEN;
+
+			bool invert = false;
+
+			auto color = theme.getColor(part, state, TMT_HEADING1TEXTCOLOR);
+			if(color != -1) {
+				auto r = GetRValue(bgColor), g = GetGValue(bgColor), b = GetBValue(bgColor);
+				if(abs(GetRValue(color) + GetGValue(color) + GetBValue(color) - r - g - b) < 300) {
+					/* the theme color and the bg color are too close to each other; start by
+					filling the canvas with an invert of the bg, then invert the whole canvas after
+					everything has been drawn. */
+					canvas.fill(rect, Brush(RGB(255 - r, 255 - g, 255 - b)));
+					invert = true;
+				}
+			}
+
+			// draw the global background (including borders).
+			theme.drawBackground(canvas, part, state, rect, false);
+
+			// draw the text.
+			const tstring text = getGroup(id);
+			const unsigned textFlags = DT_VCENTER | DT_SINGLELINE;
+			theme.formatTextRect(canvas, part, LVGH_OPEN /* the hot version doesn't expose margins... */, text, textFlags, rect);
+			theme.drawText(canvas, part, state, text, textFlags, rect, color);
+
+			// draw the horizontal line.
+			part = LVP_GROUPHEADERLINE;
+			state = hot ? LVGHL_OPENHOT : LVGHL_OPEN;
+			const unsigned margin = 4;
+			Point lineSize(0, 1); // default: 1px height - ignore the width.
+			theme.getPartSize(canvas, part, state, lineSize);
+			theme.drawBackground(canvas, part, state, Rectangle(rect.right() + margin, rect.top() + (rect.height() - lineSize.y) / 2,
+				data.rcText.right - rect.right() - 2 * margin, lineSize.y), false);
+
+			if(invert) {
+				canvas.invert(region);
+			}
+
+			canvas.setBkMode(oldMode);
+			return CDRF_SKIPDEFAULT;
+		}
+		return CDRF_DODEFAULT;
+	}, Message(WM_NOTIFY, NM_CUSTOMDRAW));
+}
+
 LPARAM Table::getDataImpl(int idx) {
 	LVITEM item = { LVIF_PARAM };
 	item.iItem = idx;
@@ -547,7 +631,7 @@ void Table::createArrows() {
 
 	{
 		// create up arrow
-		Canvas::Selector select(dc_compat, *upArrow);
+		auto select(dc_compat.select(*upArrow));
 
 		dc_compat.fill(rect, brush_bg);
 
@@ -556,7 +640,7 @@ void Table::createArrows() {
 
 	{
 		// create down arrow
-		Canvas::Selector select(dc_compat, *downArrow);
+		auto select(dc_compat.select(*downArrow));
 
 		dc_compat.fill(rect, brush_bg);
 

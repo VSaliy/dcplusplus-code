@@ -52,7 +52,7 @@ Point CheckBox::getPreferredSize() {
 
 	UpdateCanvas c(this);
 
-	c.selectFont(getFont());
+	auto select(c.select(*getFont()));
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);
 

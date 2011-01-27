@@ -51,11 +51,9 @@ public:
 		bool strikeout; /// if false, the "Strikeout" check-box will be hidden
 		bool underline; /// if false, the "Underline" check-box will be hidden
 
-		bool customBgColor;
-		COLORREF bgColor;
+		int64_t bgColor; /// either a COLORREF or -1 for the default
 
-		Options() : strikeout(true), underline(true), customBgColor(false) { }
-		void setBgColor(COLORREF color) { customBgColor = true; bgColor = color; }
+		Options() : strikeout(true), underline(true), bgColor(-1) { }
 	};
 
 	/** Shows the dialog

@@ -43,7 +43,7 @@ BitmapPtr merge(const std::vector<IconPtr>& icons) {
 	BitmapPtr ret(new Bitmap(::CreateCompatibleBitmap(screen_canvas.handle(), size.x, size.y)));
 
 	CompatibleCanvas canvas(screen_canvas.handle());
-	Canvas::Selector select(canvas, *ret);
+	auto select(canvas.select(*ret));
 
 	Rectangle rect(size);
 	for(auto i = icons.cbegin(), iend = icons.cend(); i != iend; ++i)

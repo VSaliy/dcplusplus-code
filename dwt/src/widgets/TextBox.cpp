@@ -164,11 +164,13 @@ Point TextBoxBase::getPreferredSize() {
 	// Taken from http://support.microsoft.com/kb/124315
 	UpdateCanvas c(this);
 
-	c.selectFont(FontPtr(new Font(SystemFont)));
 	TEXTMETRIC tmSys = { 0 };
-	c.getTextMetrics(tmSys);
+	{
+		auto select(c.select(*FontPtr(new Font(SystemFont))));
+		c.getTextMetrics(tmSys);
+	}
 
-	c.selectFont(getFont());
+	auto select(c.select(*getFont()));
 	TEXTMETRIC tmNew = { 0 };
 	c.getTextMetrics(tmNew);
 

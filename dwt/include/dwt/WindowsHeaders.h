@@ -63,6 +63,8 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 
+#include <cstdint>
+
 // Windows API files...
 #include <errno.h>
 #include <windows.h>

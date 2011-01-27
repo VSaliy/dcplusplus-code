@@ -23,6 +23,8 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 
+#include <dwt/util/win32/Version.h>
+
 #include "HubFrame.h"
 #include "FavHubProperties.h"
 #include "FavHubGroupsDlg.h"
@@ -62,13 +64,14 @@ hubs(0)
 		cs.style |= LVS_NOSORTHEADER;
 		hubs = grid->addChild(cs);
 		grid->setWidget(hubs, 0, 0, 1, 8);
-		addWidget(hubs, false, true, false); /// @todo group headers never change colors so for now, we keep default Win colors
+		addWidget(hubs, false, true, dwt::util::win32::ensureVersion(dwt::util::win32::VISTA)); // default colors for XP
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
 
 		hubs->onDblClicked(std::bind(&FavHubsFrame::handleDoubleClick, this));
 		hubs->onKeyDown(std::bind(&FavHubsFrame::handleKeyDown, this, _1));
 		hubs->onContextMenu(std::bind(&FavHubsFrame::handleContextMenu, this, _1));
+		hubs->handleGroupDraw(WinUtil::bgColor);
 	}
 
 	{

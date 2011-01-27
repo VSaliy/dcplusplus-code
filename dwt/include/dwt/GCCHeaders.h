@@ -235,6 +235,92 @@ typedef struct tagLVGROUP
 #define LVGA_FOOTER_RIGHT   0x00000020  // Don't forget to validate exclusivity
 #endif
 
+// MinGW doesn't have all the fields in the following structure, so re-define it better.
+typedef struct tagNMLVCUSTOMDRAW_
+{
+    NMCUSTOMDRAW nmcd;
+    COLORREF clrText;
+    COLORREF clrTextBk;
+#if (_WIN32_IE >= 0x0400)
+    int iSubItem;
+#endif
+#if (_WIN32_WINNT >= 0x0501)
+    DWORD dwItemType;
+
+    // Item custom draw
+    COLORREF clrFace;
+    int iIconEffect;
+    int iIconPhase;
+    int iPartId;
+    int iStateId;
+
+    // Group Custom Draw
+    RECT rcText;
+    UINT uAlign;      // Alignment. Use LVGA_HEADER_CENTER, LVGA_HEADER_RIGHT, LVGA_HEADER_LEFT
+#endif
+} NMLVCUSTOMDRAW_, *LPNMLVCUSTOMDRAW_;
+
+#define tagNMLVCUSTOMDRAW tagNMLVCUSTOMDRAW_
+#define NMLVCUSTOMDRAW NMLVCUSTOMDRAW_
+#define LPNMLVCUSTOMDRAW LPNMLVCUSTOMDRAW_
+
+// dwItemType
+#define LVCDI_ITEM      0x00000000
+#define LVCDI_GROUP     0x00000001
+#define LVCDI_ITEMSLIST 0x00000002
+
+#ifndef LVHT_EX_GROUP
+#define LVHT_EX_GROUP_HEADER       0x10000000
+#define LVHT_EX_GROUP_FOOTER       0x20000000
+#define LVHT_EX_GROUP_COLLAPSE     0x40000000
+#define LVHT_EX_GROUP_BACKGROUND   0x80000000
+#define LVHT_EX_GROUP_STATEICON    0x01000000
+#define LVHT_EX_GROUP_SUBSETLINK   0x02000000
+#define LVHT_EX_GROUP              (LVHT_EX_GROUP_BACKGROUND | LVHT_EX_GROUP_COLLAPSE | LVHT_EX_GROUP_FOOTER | LVHT_EX_GROUP_HEADER | LVHT_EX_GROUP_STATEICON | LVHT_EX_GROUP_SUBSETLINK)
+#endif
+
+#ifndef DTT_VALIDBITS
+// Callback function used by DrawThemeTextEx, instead of DrawText
+typedef int (WINAPI *DTT_CALLBACK_PROC)(HDC hdc, LPWSTR pszText, int cchText, LPRECT prc, UINT dwFlags, LPARAM lParam);
+
+//---- bits used in dwFlags of DTTOPTS ----
+#define DTT_TEXTCOLOR       (1UL << 0)      // crText has been specified
+#define DTT_BORDERCOLOR     (1UL << 1)      // crBorder has been specified
+#define DTT_SHADOWCOLOR     (1UL << 2)      // crShadow has been specified
+#define DTT_SHADOWTYPE      (1UL << 3)      // iTextShadowType has been specified
+#define DTT_SHADOWOFFSET    (1UL << 4)      // ptShadowOffset has been specified
+#define DTT_BORDERSIZE      (1UL << 5)      // iBorderSize has been specified
+#define DTT_FONTPROP        (1UL << 6)      // iFontPropId has been specified
+#define DTT_COLORPROP       (1UL << 7)      // iColorPropId has been specified
+#define DTT_STATEID         (1UL << 8)      // IStateId has been specified
+#define DTT_CALCRECT        (1UL << 9)      // Use pRect as and in/out parameter
+#define DTT_APPLYOVERLAY    (1UL << 10)     // fApplyOverlay has been specified
+#define DTT_GLOWSIZE        (1UL << 11)     // iGlowSize has been specified
+#define DTT_CALLBACK        (1UL << 12)     // pfnDrawTextCallback has been specified
+#define DTT_COMPOSITED      (1UL << 13)     // Draws text with antialiased alpha (needs a DIB section)
+#define DTT_VALIDBITS       (DTT_TEXTCOLOR | DTT_BORDERCOLOR | DTT_SHADOWCOLOR | DTT_SHADOWTYPE | DTT_SHADOWOFFSET | DTT_BORDERSIZE | \
+                             DTT_FONTPROP | DTT_COLORPROP | DTT_STATEID | DTT_CALCRECT | DTT_APPLYOVERLAY | DTT_GLOWSIZE | DTT_COMPOSITED)
+
+typedef struct _DTTOPTS
+{
+    DWORD             dwSize;              // size of the struct
+    DWORD             dwFlags;             // which options have been specified
+    COLORREF          crText;              // color to use for text fill
+    COLORREF          crBorder;            // color to use for text outline
+    COLORREF          crShadow;            // color to use for text shadow
+    int               iTextShadowType;     // TST_SINGLE or TST_CONTINUOUS
+    POINT             ptShadowOffset;      // where shadow is drawn (relative to text)
+    int               iBorderSize;         // Border radius around text
+    int               iFontPropId;         // Font property to use for the text instead of TMT_FONT
+    int               iColorPropId;        // Color property to use for the text instead of TMT_TEXTCOLOR
+    int               iStateId;            // Alternate state id
+    BOOL              fApplyOverlay;       // Overlay text on top of any text effect?
+    int               iGlowSize;           // Glow radious around text
+    DTT_CALLBACK_PROC pfnDrawTextCallback; // Callback for DrawText
+    LPARAM            lParam;              // Parameter for callback
+} DTTOPTS, *PDTTOPTS; 
+#endif
+
 #ifdef max
 #undef max
 #endif
