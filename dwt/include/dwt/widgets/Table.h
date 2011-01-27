@@ -48,6 +48,7 @@
 #include "../aspects/AspectSelection.h"
 #include "Control.h"
 #include "WidgetListViewEditBox.h"
+#include <dwt/Theme.h>
 
 #include <vector>
 
@@ -301,15 +302,18 @@ public:
 	  */
 	void setColumnWidth( unsigned columnNo, int width );
 
-	/**
-	* Enable group support (only for ComCtrl 6), and insert each given group.
-	* Group id used will be the position of the group in the vector.
-	*
-	* Group support is not fully implemented, use at your own risk!
-	*/
+	/** Enable group support (only for ComCtrl 6), and insert each given group. The group id used
+	will be the position of the group in the vector. */
 	void setGroups(const std::vector<tstring>& groups);
+	tstring getGroup(unsigned id) const;
 
 	bool isGrouped() const { return grouped; }
+
+	/** tell dwt to take over painting of group headers in order to allow custom colors that match
+	* the background. the theme will be respected.
+	* @param bgColor the background of the current widget.
+	*/
+	void handleGroupDraw(COLORREF bgColor);
 
 	/// Returns the checked state of the given row
 	/** A list view can have checkboxes in each row, if the checkbox for the given
@@ -492,6 +496,8 @@ private:
 	static const TCHAR windowClass[];
 
 	bool grouped;
+
+	Theme theme;
 
 	// Edit row index and Edit column index, only used when grid is in "edit mode"
 	int itsEditRow;

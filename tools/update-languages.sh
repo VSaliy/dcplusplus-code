@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ..
+
 SOURCE=$1
 if [[ ! -d $SOURCE ]] ; then
 	echo $SOURCE is not a directory && exit 1

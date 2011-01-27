@@ -67,7 +67,7 @@ Point ComboBox::getPreferredSize() {
 	const int MARGIN = 2;
 
 	UpdateCanvas c(this);
-	c.selectFont(getFont());
+	auto select(c.select(*getFont()));
 	Point ret;
 	for(size_t i = 0; i < size(); ++i) {
 		Point ext = c.getTextExtent(getValue(i));

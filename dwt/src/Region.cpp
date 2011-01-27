@@ -38,20 +38,22 @@ namespace dwt {
 
 Region::Region(HRGN h, bool own) : ResourceType(h, own) { }
 
+Region::Region(const Rectangle& rect) : ResourceType(::CreateRectRgn(rect.left(), rect.top(), rect.right(), rect.bottom()), true) { }
+
 Region::Region(const std::vector<Point>& points, PolyFillMode mode) : ResourceType(::CreatePolygonRgn(&points[0], points.size(), mode), true) { }
 
 RegionPtr Region::transform(const PXFORM pxform) const {
 	DWORD bytes = ::GetRegionData(handle(), 0, NULL);
 	if(!bytes)
-		throw Win32Exception("1st GetRegionData in Region::transform fizzled...");
+		throw Win32Exception("1st GetRegionData in Region::transform failed");
 
 	std::vector<char> data(bytes);
 	if(!::GetRegionData(handle(), bytes, reinterpret_cast<PRGNDATA>(&data[0])))
-		throw Win32Exception("2nd GetRegionData in Region::transform fizzled...");
+		throw Win32Exception("2nd GetRegionData in Region::transform failed");
 
 	HRGN transformed = ::ExtCreateRegion(pxform, bytes, reinterpret_cast<PRGNDATA>(&data[0]));
 	if(!transformed)
-		throw Win32Exception("ExtCreateRegion in Region::transform fizzled...");
+		throw Win32Exception("ExtCreateRegion in Region::transform failed");
 
 	return RegionPtr(new Region(transformed));
 }

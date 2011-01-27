@@ -34,6 +34,7 @@
 
 #include "../WindowsHeaders.h"
 #include "Handle.h"
+#include <dwt/Rectangle.h>
 
 #include <vector>
 
@@ -56,6 +57,9 @@ public:
 	};
 
 	explicit Region(HRGN h, bool own = true);
+
+	/// create a rectangular region; more information in the ::CreateRectRgn doc.
+	explicit Region(const Rectangle& rect);
 
 	/**
 	* creates a polygonal region; more information in the ::CreatePolygonRgn doc.

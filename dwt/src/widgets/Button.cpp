@@ -69,7 +69,7 @@ Point Button::getPreferredSize() {
 
 	// BCM_GETIDEALSIZE fails on comctrl < 6, so resort to the standard method
 	UpdateCanvas c(this);
-	c.selectFont(getFont());
+	auto select(c.select(*getFont()));
 	return c.getTextExtent(getText()) + Point(3, 2) + Point(::GetSystemMetrics(SM_CYFIXEDFRAME) * 2, ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2);
 }
 

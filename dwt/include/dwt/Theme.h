@@ -47,23 +47,33 @@ public:
 	Theme();
 	virtual ~Theme();
 
-	void load(LPCWSTR classes, Widget* w_, bool handleThemeChanges = true);
+	void load(const tstring& classes, Widget* w_, bool handleThemeChanges = true);
 
 	/**
 	* @param drawParent if false, you have to call isThemeBackgroundPartiallyTransparent and handle
 	* drawing the transparent bits yourself.
 	*/
 	void drawBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent = true);
-	void drawText(Canvas& canvas, int part, int state, const tstring& text, DWORD flags, const Rectangle& rect);
+	/**
+	* @param textFlags see the DrawText doc for possible values.
+	* @param color either a COLORREF or -1 for the default theme color.
+	*/
+	void drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect, int64_t color = -1);
+	/// @param textFlags see the DrawText doc for possible values.
+	void formatTextRect(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, Rectangle& rect);
+	/**
+	* @param specifier color property of the theme, see the TMT_COLOR doc for possible values.
+	* @return either a COLORREF or -1 if not specified.
+	*/
+	int64_t getColor(int part, int state, int specifier);
 	bool getPartSize(Canvas& canvas, int part, int state, Point& ret);
 	bool isBackgroundPartiallyTransparent(int part, int state);
 
 	operator bool() const;
 
 private:
-	void open(LPCWSTR classes);
+	void open(const tstring& classes);
 	void close();
-	void themeChanged(LPCWSTR classes);
 
 	HTHEME theme;
 	Widget* w;

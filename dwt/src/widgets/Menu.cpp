@@ -458,7 +458,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 		lf.lfOrientation = lf.lfEscapement = 900;
 
 		// create title font from logical info and select it
-		Canvas::Selector select(canvas, *FontPtr(new Font(::CreateFontIndirect(&lf), true)));
+		auto select(canvas.select(*FontPtr(new Font(::CreateFontIndirect(&lf), true))));
 
 		// set sidebar width to text height
 		sidebarWidth = canvas.getTextExtent(itsTitle).y;
@@ -566,7 +566,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			rectangle.pos.y += rectangle.height() / 2 - 1;
 
 			// select color
-			Canvas::Selector select(canvas, *PenPtr(new Pen(Colors::gray)));
+			auto select(canvas.select(*PenPtr(new Pen(Colors::gray))));
 
 			// draw separator
 			canvas.moveTo( rectangle.left(), rectangle.top() );
@@ -596,10 +596,10 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 				accelerator = itemText.substr( index + 1 );
 
 			// Select item font
-			Canvas::Selector select(canvas, *(
+			auto select(canvas.select(*(
 				wrapper->isTitle ? itsTitleFont :
 				wrapper->isDefault ? boldFont :
-				font));
+				font)));
 
 			// compute text rectangle
 			Rectangle textRectangle(itemRectangle);
@@ -664,7 +664,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			// create memory DC and set bitmap on it
 			CompatibleCanvas canvas_compat(canvas.handle());
 			BitmapPtr bitmap_compat(new Bitmap(::CreateCompatibleBitmap(canvas.handle(), iconSize.x, iconSize.y)));
-			Canvas::Selector select_compat(canvas_compat, *bitmap_compat);
+			auto select_compat(canvas_compat.select(*bitmap_compat));
 
 			// draw into memory
 			RECT rc( Rectangle( 0, 0, iconSize.x, iconSize.y ) );
@@ -683,7 +683,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			stripRectangle.pos.y += 1;
 			stripRectangle.size.x -= 2;
 			stripRectangle.size.y -= 2;
-			Canvas::Selector select(canvas, *PenPtr(new Pen(Colors::gray)));
+			auto select(canvas.select(*PenPtr(new Pen(Colors::gray))));
 			canvas.line(stripRectangle);
 		}
 	}
@@ -927,7 +927,7 @@ Menu::ObjectType Menu::getChild( unsigned position ) {
 
 Point Menu::getTextSize(const tstring& text, const FontPtr& font_) const {
 	UpdateCanvas canvas(getParent());
-	Canvas::Selector select(canvas, *font_);
+	auto select(canvas.select(*font_));
 	return canvas.getTextExtent(text) + Point(borderGap, borderGap);
 }
 

@@ -40,6 +40,7 @@
 #include "resources/Bitmap.h"
 #include "resources/Font.h"
 #include "resources/Icon.h"
+#include "resources/Region.h"
 
 namespace dwt {
 
@@ -197,7 +198,6 @@ private:
 
 class Canvas : private boost::noncopyable
 {
-public:
 	class Selector {
 	public:
 		template<typename T>
@@ -210,15 +210,18 @@ public:
 		HGDIOBJ h;
 	};
 
+public:
+	/** select a new resource (brush / font / pen / etc).
+	* @return object that restores the previous resource when destroyed.
+	*/
+	template<typename T> Selector select(T&& t) {
+		return Selector(*this, std::forward<T>(t));
+	}
+
 	/// Returns the Device Context for the Canvas
 	/** Can be used to construct e.g. a Pen object or a HdcModeSetter object
 	  */
 	HDC handle() const;
-
-	/// Selects the given font
-	/** Selects the given font for later text operations
-	  */
-	void selectFont( FontPtr font );
 
 	/// Gets the device capabilities.
 	/** HORZRES, VERTRES give pixels
@@ -337,6 +340,9 @@ public:
 	  */
 	bool extFloodFill( int x, int y, COLORREF color, bool fillTilColorFound );
 #endif //!WINCE
+
+	/// invert the colors in the specified region; see the InvertRgn doc for more information.
+	void invert(const Region& region);
 
 	void drawIcon(const IconPtr& icon, const Rectangle& rectangle);
 

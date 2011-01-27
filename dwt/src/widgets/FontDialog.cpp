@@ -67,7 +67,7 @@ UINT_PTR CALLBACK FontDialog::CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 				::ShowWindow(box, SW_HIDE);
 			}
 
-			if(options.customBgColor) {
+			if(options.bgColor != -1) {
 				::SetProp(hwnd, _T("bgColor"), &options.bgColor);
 			}
 
@@ -105,7 +105,7 @@ UINT_PTR CALLBACK FontDialog::CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			LOGFONT logFont;
 			::SendMessage(hwnd, WM_CHOOSEFONT_GETLOGFONT, 0, reinterpret_cast<LPARAM>(&logFont));
 			Font font(::CreateFontIndirect(&logFont), true);
-			Canvas::Selector select(canvas, font);
+			auto select(canvas.select(font));
 
 			canvas.drawText(util::win32::getWindowText(box), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 

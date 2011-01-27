@@ -35,6 +35,14 @@
 #ifdef __GNUC__
 // MinGW lacks vsstyle.h, so define what we need here
 
+#define VSCLASS_LISTVIEW L"LISTVIEW"
+#define LVP_GROUPHEADER 6
+#define LVP_GROUPHEADERLINE 7
+#define LVGH_OPEN 1
+#define LVGH_OPENHOT 2
+#define LVGHL_OPEN 1
+#define LVGHL_OPENHOT 2
+
 #define VSCLASS_MENU L"MENU"
 #define MENU_BARBACKGROUND 7
 #define MENU_BARITEM 8

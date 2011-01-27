@@ -79,11 +79,11 @@ Point Bitmap::getSize( HBITMAP bitmap )
 
 BitmapPtr Bitmap::resize(const Point& newSize) const {
 	CompatibleCanvas dc1(0);
-	Canvas::Selector select1(dc1, *this);
+	auto select1(dc1.select(*this));
 
 	CompatibleCanvas dc2(0);
 	BitmapPtr ret(new Bitmap(::CreateCompatibleBitmap(dc1.handle(), newSize.x, newSize.y)));
-	Canvas::Selector select2(dc2, *ret);
+	auto select2(dc2.select(*ret));
 
 	const Point oldSize = getSize();
 	::StretchBlt(dc2.handle(), 0, 0, newSize.x, newSize.y, dc1.handle(), 0, 0, oldSize.x, oldSize.y, SRCCOPY);

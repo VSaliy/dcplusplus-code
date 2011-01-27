@@ -34,32 +34,46 @@
 #include <dwt/Dispatchers.h>
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/check.h>
+#include <dwt/util/win32/Version.h>
+#include <dwt/dwt_vssym32.h>
 
 namespace dwt {
 
 typedef HRESULT (WINAPI *t_CloseThemeData)(HTHEME);
-static t_CloseThemeData CloseThemeData;
+static t_CloseThemeData CloseThemeData = 0;
 
 typedef HRESULT (WINAPI *t_DrawThemeBackground)(HTHEME, HDC, int, int, const RECT*, const RECT*);
-static t_DrawThemeBackground DrawThemeBackground;
+static t_DrawThemeBackground DrawThemeBackground = 0;
 
 typedef HRESULT (WINAPI *t_DrawThemeParentBackground)(HWND, HDC, const RECT*);
-static t_DrawThemeParentBackground DrawThemeParentBackground;
+static t_DrawThemeParentBackground DrawThemeParentBackground = 0;
 
 typedef HRESULT (WINAPI *t_DrawThemeText)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, DWORD, LPCRECT);
-static t_DrawThemeText DrawThemeText;
+static t_DrawThemeText DrawThemeText = 0;
+
+typedef HRESULT (WINAPI *t_DrawThemeTextEx)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, LPRECT, const DTTOPTS*);
+static t_DrawThemeTextEx DrawThemeTextEx = 0;
+
+typedef HRESULT (WINAPI *t_GetThemeColor)(HTHEME, int, int, int, COLORREF*);
+static t_GetThemeColor GetThemeColor = 0;
+
+typedef HRESULT (WINAPI *t_GetThemeMargins)(HTHEME, HDC, int, int, int, LPRECT, MARGINS*);
+static t_GetThemeMargins GetThemeMargins = 0;
 
 typedef HRESULT (WINAPI *t_GetThemePartSize)(HTHEME, HDC, int, int, LPCRECT, THEMESIZE, SIZE*);
-static t_GetThemePartSize GetThemePartSize;
+static t_GetThemePartSize GetThemePartSize = 0;
+
+typedef HRESULT (WINAPI *t_GetThemeTextExtent)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, LPCRECT, LPRECT);
+static t_GetThemeTextExtent GetThemeTextExtent = 0;
 
 typedef BOOL (WINAPI *t_IsAppThemed)();
-static t_IsAppThemed IsAppThemed;
+static t_IsAppThemed IsAppThemed = 0;
 
 typedef BOOL (WINAPI *t_IsThemeBackgroundPartiallyTransparent)(HTHEME, int, int);
-static t_IsThemeBackgroundPartiallyTransparent IsThemeBackgroundPartiallyTransparent;
+static t_IsThemeBackgroundPartiallyTransparent IsThemeBackgroundPartiallyTransparent = 0;
 
 typedef HWND (WINAPI *t_OpenThemeData)(HTHEME, LPCWSTR);
-static t_OpenThemeData OpenThemeData;
+static t_OpenThemeData OpenThemeData = 0;
 
 Theme::Theme() : theme(0)
 {
@@ -69,7 +83,7 @@ Theme::~Theme() {
 	close();
 }
 
-void Theme::load(LPCWSTR classes, Widget* w_, bool handleThemeChanges) {
+void Theme::load(const tstring& classes, Widget* w_, bool handleThemeChanges) {
 	static LibraryLoader lib(_T("uxtheme"), true);
 	if(lib.loaded()) {
 
@@ -77,8 +91,11 @@ void Theme::load(LPCWSTR classes, Widget* w_, bool handleThemeChanges) {
 		get(CloseThemeData);
 		get(DrawThemeBackground);
 		get(DrawThemeParentBackground);
-		get(DrawThemeText);
+		if(util::win32::ensureVersion(util::win32::VISTA)) { get(DrawThemeTextEx); } else { get(DrawThemeText); }
+		get(GetThemeColor);
+		get(GetThemeMargins);
 		get(GetThemePartSize);
+		get(GetThemeTextExtent);
 		get(IsAppThemed);
 		get(IsThemeBackgroundPartiallyTransparent);
 		get(OpenThemeData);
@@ -90,9 +107,10 @@ void Theme::load(LPCWSTR classes, Widget* w_, bool handleThemeChanges) {
 		open(classes);
 
 		if(handleThemeChanges) {
-			// @todo Is it safe to assume that classes will still point to a valid string?
-			w->addCallback(Message(WM_THEMECHANGED),
-				Dispatchers::VoidVoid<0, false>([this, classes] { themeChanged(classes); }));
+			w->addCallback(Message(WM_THEMECHANGED), Dispatchers::VoidVoid<0, false>([this, classes] {
+				close();
+				open(classes);
+			}));
 		}
 	}
 }
@@ -105,9 +123,41 @@ void Theme::drawBackground(Canvas& canvas, int part, int state, const Rectangle&
 	DrawThemeBackground(theme, canvas.handle(), part, state, &rc, 0);
 }
 
-void Theme::drawText(Canvas& canvas, int part, int state, const tstring& text, DWORD flags, const Rectangle& rect) {
+void Theme::drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect, int64_t color) {
 	::RECT rc = rect;
-	DrawThemeText(theme, canvas.handle(), part, state, text.c_str(), text.size(), flags, 0, &rc);
+
+	if(DrawThemeTextEx) {
+		DTTOPTS opts = { sizeof(DTTOPTS) };
+		if(color != -1) {
+			opts.dwFlags |= DTT_TEXTCOLOR;
+			opts.crText = color;
+		}
+
+		DrawThemeTextEx(theme, canvas.handle(), part, state, text.c_str(), text.size(), textFlags, &rc, &opts);
+
+	} else {
+		DrawThemeText(theme, canvas.handle(), part, state, text.c_str(), text.size(), textFlags, 0, &rc);
+	}
+}
+
+void Theme::formatTextRect(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, Rectangle& rect) {
+	::RECT rc = rect;
+
+	MARGINS margins = { 0 };
+	if(GetThemeMargins(theme, canvas.handle(), part, state, TMT_CONTENTMARGINS, &rc, &margins) == S_OK) {
+		rc.left += margins.cxLeftWidth; rc.right -= margins.cxRightWidth;
+		rc.top += margins.cyTopHeight; rc.bottom -= margins.cyBottomHeight;
+	}
+
+	::RECT rcOut;
+	rect = Rectangle(
+		(GetThemeTextExtent(theme, canvas.handle(), part, state, text.c_str(), text.size(), textFlags, &rc, &rcOut) == S_OK)
+		? rcOut : rc);
+}
+
+int64_t Theme::getColor(int part, int state, int specifier) {
+	COLORREF color;
+	return (GetThemeColor(theme, part, state, specifier, &color) == S_OK) ? color : -1;
 }
 
 bool Theme::getPartSize(Canvas& canvas, int part, int state, Point& ret) {
@@ -128,9 +178,9 @@ Theme::operator bool() const {
 	return theme;
 }
 
-void Theme::open(LPCWSTR classes) {
+void Theme::open(const tstring& classes) {
 	if(IsAppThemed()) {
-		theme = OpenThemeData(w->handle(), classes);
+		theme = OpenThemeData(w->handle(), classes.c_str());
 	}
 }
 
@@ -139,11 +189,6 @@ void Theme::close() {
 		CloseThemeData(theme);
 		theme = 0;
 	}
-}
-
-void Theme::themeChanged(LPCWSTR classes) {
-	close();
-	open(classes);
 }
 
 }

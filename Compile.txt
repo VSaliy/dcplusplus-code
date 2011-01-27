@@ -57,9 +57,9 @@
 	a. MinGW (GCC 4.5.2 or later):
 	<http://sourceforge.net/projects/mingw/files/>
 
-		The easiest way to install is to run the mingw-get installer. Alternatively, the various
-		packages can be individually downloaded and extracted to C:\MinGW.
-		Unofficial pre-packaged MinGW sets can be found on <http://code.google.com/p/pcxprj/>.
+		The easiest way to install is via mingw-get. Extract it to C:\MinGW and run:
+			mingw-get install gcc g++
+		A graphical installer around mingw-get is also available to facilitate the above.
 
 		Make sure that MinGW\bin is in your PATH environment variable.
 

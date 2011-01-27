@@ -748,7 +748,7 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 
 	const tstring text = ti->w->getText();
 	const unsigned dtFormat = DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | DT_WORD_ELLIPSIS;
-	Canvas::Selector select(canvas, *((isSelected || ti->marked) ? boldFont : font));
+	auto select(canvas.select(*((isSelected || ti->marked) ? boldFont : font)));
 	if(theme) {
 		theme.drawText(canvas, part, state, text, dtFormat, rect);
 	} else {
