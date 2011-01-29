@@ -33,19 +33,61 @@
 #ifndef DWT_ASPECTCONTAINER_H_
 #define DWT_ASPECTCONTAINER_H_
 
+#include <utility>
+
 #include "../forward.h"
 #include "../WidgetCreator.h"
+
+#include <boost/iterator/iterator_facade.hpp>
 
 namespace dwt {
 
 template<typename WidgetType>
 class AspectContainer {
+	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
+
 public:
+	template<typename ChildWidget>
+	class ChildIterator : public boost::iterator_facade<ChildIterator<ChildWidget>, ChildWidget*, boost::forward_traversal_tag, ChildWidget*> {
+	public:
+		typedef ChildWidget* value_type;
+
+		ChildIterator() : cur(0) { }
+		explicit ChildIterator(Widget* start) : cur(start) { }
+		static ChildIterator first(Widget *parent) { return ChildIterator(next(parent, 0)); }
+
+	private:
+		friend class boost::iterator_core_access;
+
+		void increment() { cur = next(cur->getParent(), cur); }
+
+	    bool equal(const ChildIterator& other) const {
+	        return this->cur == other.cur;
+	    }
+
+	    value_type dereference() const { return static_cast<value_type>(cur); }
+
+	    static Widget* next(Widget *parent, Widget *child) {
+	    	do {
+				child = hwnd_cast<Widget*>(::FindWindowEx(parent->handle(), child ? child->handle() : NULL, NULL, NULL));
+			} while(child && !dynamic_cast<ChildWidget*>(child));
+
+	    	return child;
+	    }
+
+	    Widget* cur;
+	};
+
 	template<typename SeedType>
 	typename SeedType::WidgetType::ObjectType addChild(const SeedType& seed) {
 		return WidgetCreator<typename SeedType::WidgetType>::create(static_cast<WidgetType*>(this), seed);
 	}
 
+	template<typename T>
+	std::pair<ChildIterator<T>, ChildIterator<T> > getChildren() {
+		return std::make_pair(ChildIterator<T>::first(&W()), ChildIterator<T>());
+	}
 };
 
 }

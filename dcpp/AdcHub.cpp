@@ -994,6 +994,8 @@ void AdcHub::info(bool /*alwaysSend*/) {
 
 	if(CryptoManager::getInstance()->TLSOk()) {
 		su += "," + ADCS_FEATURE;
+		auto &kp = CryptoManager::getInstance()->getKeyprint();
+		addParam(lastInfoMap, c, "KP", "SHA256/" + Encoder::toBase32(&kp[0], kp.size()));
 	}
 
 #ifndef DISABLE_NAT_TRAVERSAL
@@ -1071,6 +1073,10 @@ void AdcHub::unknownProtocol(uint32_t target, const string& protocol, const stri
 
 void AdcHub::on(Connected c) throw() {
 	Client::on(c);
+
+	if(state != STATE_PROTOCOL) {
+		return;
+	}
 
 	lastInfoMap.clear();
 	sid = 0;
