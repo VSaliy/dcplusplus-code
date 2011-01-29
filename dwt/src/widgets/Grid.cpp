@@ -154,15 +154,7 @@ Point Grid::actualSpacing() const {
 
 void Grid::layout(const Rectangle& r) {
 	// Layout children first.
-	std::vector<HWND> children;
-
-	// TODO find better way of keeping track of children
-	for(HWND wnd = ::FindWindowEx(handle(), NULL, NULL, NULL); wnd; wnd = ::FindWindowEx(handle(), wnd, NULL, NULL)) {
-		WidgetInfo* wi = getWidgetInfo(wnd);
-		if(!wi)
-			continue;
-		children.push_back(wnd);
-	}
+	auto children = getChildren<Widget>();
 
 	Point size = r.size;
 	Point as = actualSpacing();
@@ -173,8 +165,8 @@ void Grid::layout(const Rectangle& r) {
 	std::vector<size_t> rowSize = calcSizes(rows, columns, size.y, true);
 	std::vector<size_t> colSize = calcSizes(columns, rows, size.x, false);
 
-	for(std::vector<HWND>::iterator i = children.begin(); i != children.end(); ++i) {
-		WidgetInfo* wi = getWidgetInfo(*i);
+	for(auto i = children.first; i != children.second; ++i) {
+		WidgetInfo* wi = getWidgetInfo((*i)->handle());
 		if(!wi || !wi->w)
 			continue;
 

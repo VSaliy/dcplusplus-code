@@ -256,17 +256,18 @@ droppedResults(0)
 	activate();
 
 	ClientManager* clientMgr = ClientManager::getInstance();
-	clientMgr->lock();
-	clientMgr->addListener(this);
-	Client::List& clients = clientMgr->getClients();
-	for(Client::List::iterator it = clients.begin(); it != clients.end(); ++it) {
-		Client* client = *it;
-		if(!client->isConnected())
-			continue;
+	{
+		auto lock = clientMgr->lock();
+		clientMgr->addListener(this);
+		Client::List& clients = clientMgr->getClients();
+		for(Client::List::iterator it = clients.begin(); it != clients.end(); ++it) {
+			Client* client = *it;
+			if(!client->isConnected())
+				continue;
 
-		onHubAdded(new HubInfo(client));
+			onHubAdded(new HubInfo(client));
+		}
 	}
-	clientMgr->unlock();
 
 	hubs->setColumnWidth(0, LVSCW_AUTOSIZE);
 

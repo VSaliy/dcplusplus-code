@@ -1160,63 +1160,50 @@ void WinUtil::openLink(const tstring& url) {
 	::ShellExecute(NULL, NULL, url.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
-bool WinUtil::parseDBLClick(const tstring& aString) {
-	if((Util::strnicmp(aString.c_str(), _T("http://"), 7) == 0)
-		|| (Util::strnicmp(aString.c_str(), _T("www."), 4) == 0) || (Util::strnicmp(aString.c_str(), _T("ftp://"), 6)
-		== 0) || (Util::strnicmp(aString.c_str(), _T("irc://"), 6) == 0) || (Util::strnicmp(aString.c_str(),
-		_T("https://"), 8) == 0) || (Util::strnicmp(aString.c_str(), _T("mailto:"), 7) == 0))
-	{
-
-		openLink(aString);
-		return true;
-	} else if(Util::strnicmp(aString.c_str(), _T("dchub://"), 8) == 0) {
-		parseDchubUrl(aString);
-		return true;
-	} else if(Util::strnicmp(aString.c_str(), _T("magnet:?"), 8) == 0) {
-		parseMagnetUri(aString);
-		return true;
-	} else if(Util::strnicmp(aString.c_str(), _T("adc://"), 6) == 0) {
-		parseADChubUrl(aString, false);
-		return true;
-	} else if(Util::strnicmp(aString.c_str(), _T("adcs://"), 7) == 0) {
-		parseADChubUrl(aString, true);
-		return true;
-	}
-	return false;
-}
-
-void WinUtil::parseDchubUrl(const tstring& aUrl) {
-	string server, file;
+bool WinUtil::parseDBLClick(const tstring& str) {
+	auto url = Text::fromT(str);
+	string proto, host, file, query, fragment;
 	uint16_t port = 411;
-	Util::decodeUrl(Text::fromT(aUrl), server, port, file);
-	string url = server + ":" + Util::toString(port);
-	if(!server.empty()) {
-		HubFrame::openWindow(mainWindow->getTabView(), url);
-	}
-	if(!file.empty()) {
-		if(file[0] == '/') {
-			// Remove any '/' in from of the file
-			file = file.substr(1);
-			if(file.empty()) return;
-		}	
-		try {
-			UserPtr user = ClientManager::getInstance()->findLegacyUser(file);
-			if(user)
-				QueueManager::getInstance()->addList(HintedUser(user, url), QueueItem::FLAG_CLIENT_VIEW);
-			// @todo else report error
-		} catch (const Exception&) {
-			// ...
-		}
-	}
-}
+	Util::decodeUrl(url, proto, host, port, file, query, fragment);
 
-void WinUtil::parseADChubUrl(const tstring& aUrl, bool isSecure) {
-	string server, file;
-	uint16_t port = 0; //make sure we get a port since adc doesn't have a standard one
-	Util::decodeUrl(Text::fromT(aUrl), server, port, file);
-	if(!server.empty() && port > 0) {
-		HubFrame::openWindow(mainWindow->getTabView(), string(isSecure ? "adcs" : "adc") + "://" + server + ":" + Util::toString(port));
+	if(Util::stricmp(proto.c_str(), "adc") == 0 ||
+		Util::stricmp(proto.c_str(), "adcs") == 0 ||
+		Util::stricmp(proto.c_str(), "dchub") == 0 ||
+		proto.empty())
+	{
+		if(host == "magnet") {
+			parseMagnetUri(str);
+		} else {
+			if(!host.empty()) {
+				HubFrame::openWindow(mainWindow->getTabView(), url);
+			}
+
+			if(!file.empty()) {
+				if(file[0] == '/') {
+					// Remove any '/' in from of the file
+					file = file.substr(1);
+					if(file.empty()) return true;
+				}
+				try {
+					UserPtr user = ClientManager::getInstance()->findLegacyUser(file);
+					if(user)
+						QueueManager::getInstance()->addList(HintedUser(user, url), QueueItem::FLAG_CLIENT_VIEW);
+					// @todo else report error
+				} catch (const Exception&) {
+					// ...
+				}
+			}
+		}
+
+		return true;
+	} else if(!proto.empty() ||
+		Util::strnicmp(str.c_str(), _T("www."), 4) == 0 ||
+		Util::strnicmp(str.c_str(), _T("mailto:"), 7) == 0) {
+		openLink(str);
+		return true;
 	}
+
+	return false;
 }
 
 void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {

@@ -38,6 +38,8 @@ class ClientManager : public Speaker<ClientManagerListener>,
 	private TimerManagerListener
 {
 public:
+	typedef unordered_map<CID, UserPtr> UserMap;
+
 	Client* getClient(const string& aHubURL);
 	void putClient(Client* aClient);
 
@@ -47,6 +49,7 @@ public:
 	StringList getHubs(const CID& cid, const string& hintUrl);
 	StringList getHubNames(const CID& cid, const string& hintUrl);
 	StringList getNicks(const CID& cid, const string& hintUrl);
+	string getField(const CID& cid, const string& hintUrl, const char* field) const;
 
 	StringList getHubs(const CID& cid, const string& hintUrl, bool priv);
 	StringList getHubNames(const CID& cid, const string& hintUrl, bool priv);
@@ -103,10 +106,11 @@ public:
 
 	bool isActive() { return SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_PASSIVE; }
 
-	void lock() throw() { cs.lock(); }
-	void unlock() throw() { cs.unlock(); }
+	Lock lock() { return Lock(cs); }
 
 	Client::List& getClients() { return clients; }
+
+	const UserMap& getUsers() const { return users; }
 
 	CID getMyCID();
 	const CID& getMyPID();
@@ -119,7 +123,6 @@ private:
 	typedef unordered_map<string, UserPtr> LegacyMap;
 	typedef LegacyMap::iterator LegacyIter;
 
-	typedef unordered_map<CID, UserPtr> UserMap;
 	typedef UserMap::iterator UserIter;
 
 	typedef std::pair<std::string, bool> NickMapEntry; // the boolean being true means "save this".
@@ -157,15 +160,15 @@ private:
 	void updateNick(const OnlineUser& user) throw();
 
 	/// @return OnlineUser* found by CID and hint; discard any user that doesn't match the hint.
-	OnlineUser* findOnlineUser_hint(const CID& cid, const string& hintUrl) {
-		OnlinePair p;
-		return findOnlineUser_hint(cid, hintUrl, p);
+	OnlineUser* findOnlineUserHint(const CID& cid, const string& hintUrl) const {
+		OnlinePairC p;
+		return findOnlineUserHint(cid, hintUrl, p);
 	}
 	/**
 	* @param p OnlinePair of all the users found by CID, even those who don't match the hint.
 	* @return OnlineUser* found by CID and hint; discard any user that doesn't match the hint.
 	*/
-	OnlineUser* findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p);
+	OnlineUser* findOnlineUserHint(const CID& cid, const string& hintUrl, OnlinePairC& p) const;
 
 	string getUsersFile() const { return Util::getPath(Util::PATH_USER_LOCAL) + "Users.xml"; }
 

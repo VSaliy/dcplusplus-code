@@ -23,6 +23,7 @@
 #include "HoldRedraw.h"
 
 #include <dcpp/FavoriteManager.h>
+#include <dcpp/ClientManager.h>
 #include <dcpp/version.h>
 
 const string UsersFrame::id = "FavUsers";
@@ -36,11 +37,24 @@ static const ColumnInfo usersColumns[] = {
 	{ N_("CID"), 300, false }
 };
 
+struct FieldName {
+	string field;
+	tstring name;
+};
+
+static const FieldName fields[] =
+{
+	{ "NI", T_("Nick") },
+	{ "DE", T_("Description") },
+};
+
 UsersFrame::UsersFrame(TabViewPtr parent) :
 	BaseType(parent, T_("Favorite Users"), IDH_FAVUSERS, IDI_FAVORITE_USERS),
 	users(0),
 	startup(true)
 {
+	splitter = addChild(VSplitter::Seed(0.3));
+
 	{
 		WidgetUsers::Seed cs;
 		cs.lvStyle |= LVS_EX_CHECKBOXES;
@@ -55,19 +69,42 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 		users->onKeyDown(std::bind(&UsersFrame::handleKeyDown, this, _1));
 		users->onRaw(std::bind(&UsersFrame::handleItemChanged, this, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 		users->onContextMenu(std::bind(&UsersFrame::handleContextMenu, this, _1));
-
+		users->onSelectionChanged(std::bind(&UsersFrame::handleSelectionChanged, this));
 		prepareUserList(users);
+
+		splitter->setFirst(users);
 	}
 
 	{
+		Grid::Seed cs(0, 2);
+		cs.style |= WS_VSCROLL;
+		userInfo = addChild(cs);
+		splitter->setSecond(userInfo);
+	}
+
+	{
+		auto lock = ClientManager::getInstance()->lock();
+		auto &ou = ClientManager::getInstance()->getUsers();
+
 		HoldRedraw hold(users);
-		FavoriteManager::FavoriteMap ul = FavoriteManager::getInstance()->getFavoriteUsers();
-		for(FavoriteManager::FavoriteMap::iterator i = ul.begin(); i != ul.end(); ++i) {
-			addUser(i->second);
+		for(auto i = ou.begin(); i != ou.end(); ++i) {
+			if(i->second->isOnline()) {
+				addUser(i->second);
+			}
+		}
+	}
+
+	{
+		auto fu = FavoriteManager::getInstance()->getFavoriteUsers();
+
+		HoldRedraw hold(users);
+		for(auto i = fu.begin(); i != fu.end(); ++i) {
+			addUser(i->second.getUser());
 		}
 	}
 
 	FavoriteManager::getInstance()->addListener(this);
+	ClientManager::getInstance()->addListener(this);
 
 	initStatus();
 
@@ -84,11 +121,12 @@ void UsersFrame::layout() {
 
 	status->layout(r);
 
-	users->layout(r);
+	splitter->layout(r);
 }
 
 bool UsersFrame::preClosing() {
 	FavoriteManager::getInstance()->removeListener(this);
+	ClientManager::getInstance()->removeListener(this);
 	return true;
 }
 
@@ -103,8 +141,20 @@ UserInfoBase(HintedUser(u.getUser(), Util::emptyString)) /// @todo fav users are
 	update(u);
 }
 
+UsersFrame::UserInfo::UserInfo(const UserPtr& u) :
+UserInfoBase(HintedUser(u, Util::emptyString)) /// @todo fav users aren't aware of hub hints for now
+{
+	update(u);
+}
+
 void UsersFrame::UserInfo::remove() {
 	FavoriteManager::getInstance()->removeFavoriteUser(user);
+}
+
+void UsersFrame::UserInfo::update(const UserPtr& u) {
+	columns[COLUMN_NICK] = WinUtil::getNicks(u, Util::emptyString);
+	columns[COLUMN_SEEN] = u->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", FavoriteManager::getInstance()->getLastSeen(u)));
+	columns[COLUMN_CID] = Text::toT(u->getCID().toBase32());
 }
 
 void UsersFrame::UserInfo::update(const FavoriteUser& u) {
@@ -115,30 +165,67 @@ void UsersFrame::UserInfo::update(const FavoriteUser& u) {
 	columns[COLUMN_CID] = Text::toT(u.getUser()->getCID().toBase32());
 }
 
-void UsersFrame::addUser(const FavoriteUser& aUser) {
-	int i = users->insert(new UserInfo(aUser));
-	bool b = aUser.isSet(FavoriteUser::FLAG_GRANTSLOT);
-	users->setChecked(i, b);
+void UsersFrame::addUser(const UserPtr& aUser) {
+	auto ui = userInfos.find(aUser);
+	if(ui == userInfos.end()) {
+		auto x = new UserInfo(aUser);
+		userInfos.insert(std::make_pair(aUser, x));
+		int i = users->insert(x);
+		//bool b = aUser.isSet(FavoriteUser::FLAG_GRANTSLOT);
+		//users->setChecked(i, b);
+	} else {
+		// update
+	}
 }
 
 void UsersFrame::updateUser(const UserPtr& aUser) {
-	for(size_t i = 0; i < users->size(); ++i) {
-		UserInfo *ui = users->getData(i);
-		if(ui->getUser() == aUser) {
-			ui->columns[COLUMN_SEEN] = aUser->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", FavoriteManager::getInstance()->getLastSeen(aUser)));
+	auto ui = userInfos.find(aUser);
+	if(ui != userInfos.end()) {
+		auto i = users->find(ui->second);
+		if(i != -1) {
+			ui->second->columns[COLUMN_SEEN] = aUser->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", FavoriteManager::getInstance()->getLastSeen(aUser)));
 			users->update(i);
 		}
 	}
 }
 
 void UsersFrame::removeUser(const UserPtr& aUser) {
-	for(size_t i = 0; i < users->size(); ++i) {
-		UserInfo *ui = users->getData(i);
-		if(ui->getUser() == aUser) {
-			users->erase(i);
-			return;
-		}
+	auto ui = userInfos.find(aUser);
+	if(ui != userInfos.end()) {
+		users->erase(ui->second);
+		userInfos.erase(ui);
 	}
+}
+
+void UsersFrame::handleSelectionChanged() {
+	// Clear old items
+	auto children = userInfo->getChildren<Container>();
+	auto v = std::vector<Container*>();
+	for(auto i = children.first; i != children.second; ++i) {
+		v.push_back(&(**i));
+	}
+
+	for_each(v.begin(), v.end(), [](Container *c) { c->close(); });
+
+	auto sel = users->getSelectedData();
+	if(!sel) {
+
+		return;
+	}
+
+	auto lock = ClientManager::getInstance()->lock();
+	auto ui = ClientManager::getInstance()->findOnlineUser(sel->getUser(), false);
+	if(!ui) {
+		return;
+	}
+
+	auto info = ui->getIdentity().getInfo();
+	tstring text;
+	for(auto i = info.begin(); i != info.end(); ++i) {
+		text += Text::toT(i->first) + _T(":") + Text::toT(i->second) + _T("\r\n");
+	}
+
+	userInfo->setText(text);
 }
 
 void UsersFrame::handleDescription() {
@@ -198,6 +285,7 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		return true;
 	}
+
 	return false;
 }
 
@@ -206,13 +294,21 @@ UsersFrame::UserInfoList UsersFrame::selectedUsersImpl() const {
 }
 
 void UsersFrame::on(UserAdded, const FavoriteUser& aUser) throw() {
-	addUser(aUser);
+	callAsync(std::bind(&UsersFrame::updateUser, this, aUser.getUser()));
 }
 
 void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) throw() {
-	callAsync(std::bind(&UsersFrame::removeUser, this, aUser.getUser()));
+	callAsync(std::bind(&UsersFrame::updateUser, this, aUser.getUser()));
 }
 
 void UsersFrame::on(StatusChanged, const UserPtr& aUser) throw() {
+	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
+}
+
+void UsersFrame::on(UserConnected, const UserPtr& aUser) throw() {
+	callAsync(std::bind(&UsersFrame::addUser, this, aUser));
+}
+
+void UsersFrame::on(UserDisconnected, const UserPtr& aUser) throw() {
 	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
 }

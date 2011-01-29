@@ -510,7 +510,7 @@ private:
 	}
 
 	void updateLists() {
-		FinishedManager::getInstance()->lockLists();
+		auto lock = FinishedManager::getInstance()->lockLists();
 		{
 			HoldRedraw hold(files);
 			const FinishedManager::MapByFile& map = FinishedManager::getInstance()->getMapByFile(in_UL);
@@ -523,7 +523,6 @@ private:
 			for(FinishedManager::MapByUser::const_iterator i = map.begin(); i != map.end(); ++i)
 				addUser(i->first, i->second);
 		}
-		FinishedManager::getInstance()->unLockLists();
 
 		updateStatus();
 	}

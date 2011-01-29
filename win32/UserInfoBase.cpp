@@ -99,6 +99,7 @@ tstring UserInfoBase::getTooltip(bool priv) const {
 	if(!hubSet)
 		addLine(str(TF_("Hubs: %1%") % WinUtil::getHubNames(user, priv).first));
 
+	auto lock = ClientManager::getInstance()->lock();
 	OnlineUser* ou = ClientManager::getInstance()->findOnlineUser(user, priv);
 	if(!ou)
 		return ret;

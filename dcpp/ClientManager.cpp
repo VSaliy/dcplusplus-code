@@ -93,7 +93,7 @@ StringList ClientManager::getHubs(const CID& cid, const string& hintUrl, bool pr
 			lst.push_back(i->second->getClient().getHubUrl());
 		}
 	} else {
-		OnlineUser* u = findOnlineUser_hint(cid, hintUrl);
+		OnlineUser* u = findOnlineUserHint(cid, hintUrl);
 		if(u)
 			lst.push_back(u->getClient().getHubUrl());
 	}
@@ -109,7 +109,7 @@ StringList ClientManager::getHubNames(const CID& cid, const string& hintUrl, boo
 			lst.push_back(i->second->getClient().getHubName());
 		}
 	} else {
-		OnlineUser* u = findOnlineUser_hint(cid, hintUrl);
+		OnlineUser* u = findOnlineUserHint(cid, hintUrl);
 		if(u)
 			lst.push_back(u->getClient().getHubName());
 	}
@@ -126,7 +126,7 @@ StringList ClientManager::getNicks(const CID& cid, const string& hintUrl, bool p
 			ret.insert(i->second->getIdentity().getNick());
 		}
 	} else {
-		OnlineUser* u = findOnlineUser_hint(cid, hintUrl);
+		OnlineUser* u = findOnlineUserHint(cid, hintUrl);
 		if(u)
 			ret.insert(u->getIdentity().getNick());
 	}
@@ -142,6 +142,28 @@ StringList ClientManager::getNicks(const CID& cid, const string& hintUrl, bool p
 	}
 
 	return StringList(ret.begin(), ret.end());
+}
+
+string ClientManager::getField(const CID& cid, const string& hint, const char* field) const {
+	Lock l(cs);
+
+	OnlinePairC p;
+	auto u = findOnlineUserHint(cid, hint, p);
+	if(u) {
+		auto value = u->getIdentity().get(field);
+		if(!value.empty()) {
+			return value;
+		}
+	}
+
+	for(auto i = p.first; i != p.second; ++i) {
+		auto value = i->second->getIdentity().get(field);
+		if(!value.empty()) {
+			return value;
+		}
+	}
+
+	return Util::emptyString;
 }
 
 string ClientManager::getConnection(const CID& cid) const {
@@ -324,13 +346,13 @@ void ClientManager::putOffline(OnlineUser* ou, bool disconnect) throw() {
 	}
 }
 
-OnlineUser* ClientManager::findOnlineUser_hint(const CID& cid, const string& hintUrl, OnlinePair& p) {
+OnlineUser* ClientManager::findOnlineUserHint(const CID& cid, const string& hintUrl, OnlinePairC& p) const {
 	p = onlineUsers.equal_range(cid);
 	if(p.first == p.second) // no user found with the given CID.
 		return 0;
 
 	if(!hintUrl.empty()) {
-		for(OnlineIter i = p.first; i != p.second; ++i) {
+		for(auto i = p.first; i != p.second; ++i) {
 			OnlineUser* u = i->second;
 			if(u->getClient().getHubUrl() == hintUrl) {
 				return u;
@@ -346,8 +368,8 @@ OnlineUser* ClientManager::findOnlineUser(const HintedUser& user, bool priv) {
 }
 
 OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl, bool priv) {
-	OnlinePair p;
-	OnlineUser* u = findOnlineUser_hint(cid, hintUrl, p);
+	OnlinePairC p;
+	OnlineUser* u = findOnlineUserHint(cid, hintUrl, p);
 	if(u) // found an exact match (CID + hint).
 		return u;
 
@@ -390,7 +412,7 @@ void ClientManager::userCommand(const HintedUser& user, const UserCommand& uc, S
 	 * extracted from search results don't always have a correct hint; see
 	 * SearchManager::onRES(const AdcCommand& cmd, ...). when that is done, and SearchResults are
 	 * switched to storing only reliable HintedUsers (found with the token of the ADC command),
-	 * change this call to findOnlineUser_hint. */
+	 * change this call to findOnlineUserHint. */
 	OnlineUser* ou = findOnlineUser(user.user->getCID(), user.hint.empty() ? uc.getHub() : user.hint, false);
 	if(!ou)
 		return;
@@ -463,9 +485,10 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 
 		} else {
 			try {
-				string ip, file;
+				string ip, file, proto, query, fragment;
 				uint16_t port = 0;
-				Util::decodeUrl(aSeeker, ip, port, file);
+
+				Util::decodeUrl(aSeeker, proto, ip, port, file, query, fragment);
 				ip = Socket::resolve(ip);
 				if(static_cast<NmdcHub*>(aClient)->isProtectedIP(ip))
 					return;

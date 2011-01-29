@@ -125,6 +125,17 @@ bool Identity::supports(const string& name) const {
 	return false;
 }
 
+std::map<string, string> Identity::getInfo() const {
+	std::map<string, string> ret;
+
+	FastLock l(cs);
+	for(auto i = info.begin(); i != info.end(); ++i) {
+		ret[string((char*)(&i->first), 2)] = i->second;
+	}
+
+	return ret;
+}
+
 void FavoriteUser::update(const OnlineUser& info) {
 	setNick(info.getIdentity().getNick());
 	setUrl(info.getClient().getHubUrl());

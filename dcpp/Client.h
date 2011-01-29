@@ -61,6 +61,7 @@ public:
 	bool isSecure() const;
 	bool isTrusted() const;
 	std::string getCipherName() const;
+	vector<uint8_t> getKeyprint() const;
 
 	bool isOp() const { return getMyIdentity().isOp(); }
 
@@ -162,6 +163,8 @@ private:
 	string address;
 	string ip;
 	string localIp;
+	string keyprint;
+
 	uint16_t port;
 	char separator;
 	bool secure;

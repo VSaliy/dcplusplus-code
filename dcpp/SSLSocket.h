@@ -62,11 +62,10 @@ public:
 	virtual bool isSecure() const throw() { return true; }
 	virtual bool isTrusted() const throw();
 	virtual std::string getCipherName() const throw();
-	virtual std::string getDigest() const throw();
+	virtual vector<uint8_t> getKeyprint() const throw();
 
 	virtual bool waitConnected(uint32_t millis);
 	virtual bool waitAccepted(uint32_t millis);
-
 
 private:
 	friend class CryptoManager;
