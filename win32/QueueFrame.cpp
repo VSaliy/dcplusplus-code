@@ -425,8 +425,8 @@ QueueFrame::DirItemInfo::DirItemInfo(const string& dir_) : dir(dir_), text(getDi
 
 }
 
-int QueueFrame::DirItemInfo::getImage() {
-	return WinUtil::DIR_ICON;
+int QueueFrame::DirItemInfo::getImage(int col) {
+	return col == 0 ? WinUtil::DIR_ICON : -1;
 }
 
 int QueueFrame::DirItemInfo::getSelectedImage() {
@@ -848,7 +848,7 @@ const string& QueueFrame::getDir(HTREEITEM item) {
 MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	menu->setTitle(escapeMenu(qii->getText(COLUMN_TARGET)), WinUtil::fileImages->getIcon(qii->getImage()));
+	menu->setTitle(escapeMenu(qii->getText(COLUMN_TARGET)), WinUtil::fileImages->getIcon(qii->getImage(0)));
 
 	WinUtil::addHashItems(menu, qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())), qii->getSize());
 	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
@@ -883,7 +883,7 @@ MenuPtr QueueFrame::makeDirMenu() {
 
 	auto selData = dirs->getSelectedData();
 	menu->setTitle(escapeMenu(selData ? selData->getText() : getText()),
-		selData ? WinUtil::fileImages->getIcon(selData->getImage()) : getParent()->getIcon(this));
+		selData ? WinUtil::fileImages->getIcon(selData->getImage(0)) : getParent()->getIcon(this));
 
 	addPriorityMenu(menu);
 	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));

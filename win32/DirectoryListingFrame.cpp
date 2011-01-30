@@ -53,7 +53,11 @@ DirectoryListingFrame::UserMap DirectoryListingFrame::lists;
 
 TStringList DirectoryListingFrame::lastSearches;
 
-int DirectoryListingFrame::ItemInfo::getImage() const {
+int DirectoryListingFrame::ItemInfo::getImage(int col) const {
+	if(col != 0) {
+		return -1;
+	}
+
 	if(type == DIRECTORY || type == USER) {
 		return dir->getComplete() ? WinUtil::DIR_ICON : WinUtil::DIR_ICON_INCOMPLETE;
 	}
@@ -481,7 +485,7 @@ void DirectoryListingFrame::updateTitle() {
 ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
-	menu->setTitle(escapeMenu(ii->getText(COLUMN_FILENAME)), WinUtil::fileImages->getIcon(ii->getImage()));
+	menu->setTitle(escapeMenu(ii->getText(COLUMN_FILENAME)), WinUtil::fileImages->getIcon(ii->getImage(0)));
 
 	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
 	addTargets(menu, ii);
@@ -521,7 +525,7 @@ ShellMenuPtr DirectoryListingFrame::makeDirMenu(ItemInfo* ii) {
 	ShellMenuPtr menu = addChild(ShellMenu::Seed());
 
 	menu->setTitle(escapeMenu(ii ? ii->getText(COLUMN_FILENAME) : getText()),
-		ii ? WinUtil::fileImages->getIcon(ii->getImage()) : getParent()->getIcon(this));
+		ii ? WinUtil::fileImages->getIcon(ii->getImage(0)) : getParent()->getIcon(this));
 
 	menu->appendItem(T_("&Download"), std::bind(&DirectoryListingFrame::handleDownload, this), WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
 	addTargets(menu);

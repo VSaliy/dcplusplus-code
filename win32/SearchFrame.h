@@ -120,7 +120,7 @@ private:
 		};
 
 		const tstring& getText(int col) const { return columns[col]; }
-		int getImage();
+		int getImage(int col) const;
 
 		static int compareItems(SearchInfo* a, SearchInfo* b, int col);
 
@@ -140,7 +140,7 @@ private:
 		const tstring& getText(int col) const {
 			return (col == 0) ? name : Util::emptyStringT;
 		}
-		int getImage() const {
+		int getImage(int) const {
 			return 0;
 		}
 		static int compareItems(HubInfo* a, HubInfo* b, int col) {

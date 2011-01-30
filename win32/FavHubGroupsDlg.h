@@ -45,7 +45,7 @@ private:
 		GroupInfo(const FavHubGroup& group_);
 
 		const tstring& getText(int col) const;
-		int getImage() const;
+		int getImage(int) const;
 
 		static int compareItems(const GroupInfo* a, const GroupInfo* b, int col);
 

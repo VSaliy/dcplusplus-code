@@ -257,8 +257,8 @@ private:
 		const tstring& getText(int col) const {
 			return columns[col];
 		}
-		int getImage() const {
-			return WinUtil::getFileIcon(Text::toT(file));
+		int getImage(int col) const {
+			return col == 0 ? WinUtil::getFileIcon(Text::toT(file)) : -1;
 		}
 
 		static int compareItems(FileInfo* a, FileInfo* b, int col) {
@@ -338,7 +338,7 @@ private:
 		const tstring& getText(int col) const {
 			return columns[col];
 		}
-		int getImage() const {
+		int getImage(int) const {
 			return 0;
 		}
 
@@ -437,7 +437,7 @@ private:
 
 			ShellMenuPtr menu = filesWindow->addChild(ShellMenu::Seed());
 			menu->setTitle(selData ? escapeMenu(selData->getText(FILES_COLUMN_FILE)) : str(TF_("%1% files") % sel),
-				selData ? WinUtil::fileImages->getIcon(selData->getImage()) : tabs->getIcon(filesWindow));
+				selData ? WinUtil::fileImages->getIcon(selData->getImage(0)) : tabs->getIcon(filesWindow));
 			menu->appendItem(T_("&View as text"), std::bind(&ThisType::handleViewAsText, this), dwt::IconPtr(), checker.allFilesExist && !checker.isBz2);
 			menu->appendItem(T_("&Open"), std::bind(&ThisType::handleOpenFile, this), dwt::IconPtr(), checker.allFilesExist, true);
 			menu->appendItem(T_("Open &folder"), std::bind(&ThisType::handleOpenFolder, this));
@@ -465,7 +465,7 @@ private:
 
 			dwt::MenuPtr menu = usersWindow->addChild(WinUtil::Seeds::menu);
 			menu->setTitle(selData ? escapeMenu(selData->getText(USERS_COLUMN_NICK)) : str(TF_("%1% users") % sel),
-				selData ? WinUtil::userImages->getIcon(selData->getImage()) : tabs->getIcon(usersWindow));
+				selData ? WinUtil::userImages->getIcon(selData->getImage(0)) : tabs->getIcon(usersWindow));
 			menu->appendItem(T_("&Remove"), std::bind(&ThisType::handleRemoveUsers, this));
 			menu->appendItem(T_("Remove &all"), std::bind(&ThisType::handleRemoveAll, this));
 			menu->appendSeparator();

@@ -79,7 +79,7 @@ private:
 			return columns[col];
 		}
 
-		int getImage() const {
+		int getImage(int col) const {
 			return 0;
 		}
 

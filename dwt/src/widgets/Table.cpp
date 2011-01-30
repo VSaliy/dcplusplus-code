@@ -52,7 +52,7 @@ BitmapPtr Table::downArrow = 0;
 Table::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | LVS_REPORT),
 	font(new Font(DefaultGuiFont)),
-	lvStyle(0)
+	lvStyle(LVS_EX_DOUBLEBUFFER | LVS_EX_SUBITEMIMAGES)
 {
 }
 
@@ -240,7 +240,7 @@ int Table::insert(const std::vector<tstring>& row, LPARAM lPar, int index, int i
 	}
 
 	// now insert sub-items (for columns)
-	lvi.mask = LVIF_TEXT;
+	lvi.mask = LVIF_TEXT | LVIF_IMAGE;
 	lvi.iSubItem = 1;
 	for(std::vector<tstring>::const_iterator i = row.begin() + 1, iend = row.end(); i != iend; ++i) {
 		lvi.pszText = const_cast<LPTSTR>(i->c_str());
