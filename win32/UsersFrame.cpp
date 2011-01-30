@@ -225,8 +225,6 @@ void UsersFrame::handleSelectionChanged() {
 		return;
 	}
 
-	dcdebug("Selected %s\n", sel->getUser().user->getCID().toBase32().c_str());
-
 	auto lock = ClientManager::getInstance()->lock();
 	auto ui = ClientManager::getInstance()->findOnlineUser(sel->getUser(), false);
 	if(!ui) {

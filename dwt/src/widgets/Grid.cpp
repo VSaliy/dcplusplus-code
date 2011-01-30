@@ -58,6 +58,10 @@ void Grid::create( const Seed & cs )
 }
 
 Point Grid::getPreferredSize() {
+	// Make sure we have WidgetInfo's for every child...
+	auto children = getChildren<Widget>();
+	std::for_each(children.first, children.second, [=](Widget* w) { getWidgetInfo(w->handle()); });
+
 	std::vector<size_t> rowSize = calcSizes(rows, columns, 0, true);
 	std::vector<size_t> colSize = calcSizes(columns, rows, 0, false);
 	Point p(
