@@ -260,7 +260,7 @@ void MainWindow::initMenu() {
 			[this] { PublicHubsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_PUBLICHUBS));
 		viewIndexes[FavHubsFrame::id] = viewMenu->appendItem(T_("&Favorite Hubs\tCtrl+F"),
 			[this] { FavHubsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
-		viewIndexes[UsersFrame::id] = viewMenu->appendItem(T_("Favorite &Users\tCtrl+U"),
+		viewIndexes[UsersFrame::id] = viewMenu->appendItem(T_("&Users\tCtrl+U"),
 			[this] { UsersFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FAVORITE_USERS));
 		viewMenu->appendSeparator();
 		viewIndexes[QueueFrame::id] = viewMenu->appendItem(T_("&Download Queue\tCtrl+D"),
@@ -357,7 +357,7 @@ void MainWindow::initToolbar() {
 		std::bind(&MainWindow::handleRedirect, this));
 	toolbar->addButton(FavHubsFrame::id, WinUtil::toolbarIcon(IDI_FAVORITE_HUBS), 0, T_("Favorite Hubs"), IDH_TOOLBAR_FAVORITE_HUBS,
 		[this] { FavHubsFrame::openWindow(getTabView()); }, std::bind(&MainWindow::handleFavHubsDropDown, this, _1));
-	toolbar->addButton(UsersFrame::id, WinUtil::toolbarIcon(IDI_FAVORITE_USERS), 0, T_("Favorite Users"), IDH_TOOLBAR_FAVORITE_USERS,
+	toolbar->addButton(UsersFrame::id, WinUtil::toolbarIcon(IDI_FAVORITE_USERS), 0, T_("Users"), IDH_TOOLBAR_FAVORITE_USERS,
 		[this] { UsersFrame::openWindow(getTabView()); });
 	toolbar->addButton(QueueFrame::id, WinUtil::toolbarIcon(IDI_QUEUE), 0, T_("Download Queue"), IDH_TOOLBAR_QUEUE,
 		[this] { QueueFrame::openWindow(getTabView()); });

@@ -160,21 +160,25 @@ void FavoriteManager::removeHubUserCommands(int ctx, const string& hub) {
 }
 
 void FavoriteManager::addFavoriteUser(const UserPtr& aUser) {
-	Lock l(cs);
-	if(users.find(aUser->getCID()) == users.end()) {
-		StringList urls = ClientManager::getInstance()->getHubs(aUser->getCID(), Util::emptyString);
-		StringList nicks = ClientManager::getInstance()->getNicks(aUser->getCID(), Util::emptyString);
+	{
+		Lock l(cs);
+		if(users.find(aUser->getCID()) == users.end()) {
+			StringList urls = ClientManager::getInstance()->getHubs(aUser->getCID(), Util::emptyString);
+			StringList nicks = ClientManager::getInstance()->getNicks(aUser->getCID(), Util::emptyString);
 
-		/// @todo make this an error probably...
-		if(urls.empty())
-			urls.push_back(Util::emptyString);
-		if(nicks.empty())
-			nicks.push_back(Util::emptyString);
+			/// @todo make this an error probably...
+			if(urls.empty())
+				urls.push_back(Util::emptyString);
+			if(nicks.empty())
+				nicks.push_back(Util::emptyString);
 
-		FavoriteMap::iterator i = users.insert(make_pair(aUser->getCID(), FavoriteUser(aUser, nicks[0], urls[0]))).first;
-		fire(FavoriteManagerListener::UserAdded(), i->second);
-		save();
+			FavoriteMap::iterator i = users.insert(make_pair(aUser->getCID(), FavoriteUser(aUser, nicks[0], urls[0]))).first;
+			fire(FavoriteManagerListener::UserAdded(), i->second);
+			save();
+		}
 	}
+
+	ClientManager::getInstance()->saveUser(aUser->getCID());
 }
 
 void FavoriteManager::removeFavoriteUser(const UserPtr& aUser) {
@@ -528,6 +532,8 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			} else {
 				u = ClientManager::getInstance()->getUser(CID(cid));
 			}
+
+			ClientManager::getInstance()->saveUser(u->getCID());
 			FavoriteMap::iterator i = users.insert(make_pair(u->getCID(), FavoriteUser(u, nick, hubUrl))).first;
 
 			if(aXml.getBoolChildAttrib("GrantSlot"))

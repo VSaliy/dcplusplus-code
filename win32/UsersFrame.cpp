@@ -32,9 +32,9 @@ const string& UsersFrame::getId() const { return id; }
 dwt::ImageListPtr UsersFrame::userIcons;
 
 static const ColumnInfo usersColumns[] = {
-	{ N_("Favorite"), 30, false },
-	{ N_("Nick"), 50, false },
-	{ N_("Grant slot"), 30, false },
+	{ N_("Favorite"), 25, false },
+	{ N_("Grant slot"), 25, false },
+	{ N_("Nick"), 125, false },
 	{ N_("Hub (last seen in, if offline)"), 300, false },
 	{ N_("Time last seen"), 150, false },
 	{ N_("Description"), 200, false },
@@ -53,7 +53,7 @@ static const FieldName fields[] =
 };
 
 UsersFrame::UsersFrame(TabViewPtr parent) :
-	BaseType(parent, T_("Favorite Users"), IDH_FAVUSERS, IDI_FAVORITE_USERS),
+	BaseType(parent, T_("Users"), IDH_FAVUSERS, IDI_FAVORITE_USERS),
 	users(0),
 	startup(true)
 {
@@ -165,6 +165,7 @@ void UsersFrame::UserInfo::remove() {
 
 void UsersFrame::UserInfo::update(const UserPtr& u) {
 	columns[COLUMN_NICK] = WinUtil::getNicks(u, Util::emptyString);
+	columns[COLUMN_HUB] = u->isOnline() ? WinUtil::getHubNames(u, Util::emptyString).first : Util::emptyStringT;
 	columns[COLUMN_SEEN] = u->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", FavoriteManager::getInstance()->getLastSeen(u)));
 	columns[COLUMN_CID] = Text::toT(u->getCID().toBase32());
 
@@ -196,7 +197,7 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 	if(ui != userInfos.end()) {
 		auto i = users->find(ui->second);
 		if(i != -1) {
-			ui->second->columns[COLUMN_SEEN] = aUser->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", FavoriteManager::getInstance()->getLastSeen(aUser)));
+			ui->second->update(aUser);
 			users->update(i);
 		}
 	}
@@ -212,19 +213,19 @@ void UsersFrame::removeUser(const UserPtr& aUser) {
 
 void UsersFrame::handleSelectionChanged() {
 	// Clear old items
-	auto children = userInfo->getChildren<Container>();
-	auto v = std::vector<Container*>();
-	for(auto i = children.first; i != children.second; ++i) {
-		v.push_back(&(**i));
-	}
+	auto children = userInfo->getChildren<Control>();
+	auto v = std::vector<Control*>(children.first, children.second);
 
-	for_each(v.begin(), v.end(), [](Container *c) { c->close(); });
+	for_each(v.begin(), v.end(), [](Control *w) { w->close(); });
+
+	userInfo->clearRows();
 
 	auto sel = users->getSelectedData();
 	if(!sel) {
-
 		return;
 	}
+
+	dcdebug("Selected %s\n", sel->getUser().user->getCID().toBase32().c_str());
 
 	auto lock = ClientManager::getInstance()->lock();
 	auto ui = ClientManager::getInstance()->findOnlineUser(sel->getUser(), false);
@@ -235,10 +236,12 @@ void UsersFrame::handleSelectionChanged() {
 	auto info = ui->getIdentity().getInfo();
 	tstring text;
 	for(auto i = info.begin(); i != info.end(); ++i) {
-		text += Text::toT(i->first) + _T(":") + Text::toT(i->second) + _T("\r\n");
+		userInfo->addRow(GridInfo());
+		userInfo->addChild(Label::Seed(Text::toT(i->first)));
+		userInfo->addChild(Label::Seed(Text::toT(i->second)));
 	}
 
-	userInfo->setText(text);
+	layout();
 }
 
 void UsersFrame::handleDescription() {
