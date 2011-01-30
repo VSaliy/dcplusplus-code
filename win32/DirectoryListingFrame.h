@@ -132,10 +132,10 @@ private:
 			return columns[COLUMN_FILENAME];
 		}
 
-		int getImage() const;
+		int getImage(int col = 0) const;
 
 		int getSelectedImage() const {
-			return getImage();
+			return getImage(0);
 		}
 
 		const tstring& getText(int col) const {

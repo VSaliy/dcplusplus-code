@@ -66,8 +66,8 @@ const tstring& FavHubGroupsDlg::GroupInfo::getText(int col) const {
 	return columns[col];
 }
 
-int FavHubGroupsDlg::GroupInfo::getImage() const {
-	return 0;
+int FavHubGroupsDlg::GroupInfo::getImage(int) const {
+	return -1;
 }
 
 int FavHubGroupsDlg::GroupInfo::compareItems(const GroupInfo* a, const GroupInfo* b, int col) {

@@ -83,7 +83,7 @@ private:
 
 		static int compareItems(const HubInfo* a, const HubInfo* b, int col);
 		const tstring& getText(int column) const { return columns[column]; }
-		int getImage() const { return 0; }
+		int getImage(int) const { return 0; }
 
 		const HubEntry* entry;
 

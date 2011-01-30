@@ -707,7 +707,11 @@ bool HubFrame::handleMessageKeyDown(int c) {
 	return ChatType::handleMessageKeyDown(c);
 }
 
-int HubFrame::UserInfo::getImage() const {
+int HubFrame::UserInfo::getImage(int col) const {
+	if(col != 0) {
+		return -1;
+	}
+
 	int image = identity.isBot() ? WinUtil::USER_ICON_BOT : identity.isAway() ? WinUtil::USER_ICON_AWAY : WinUtil::USER_ICON;
 	image *= WinUtil::USER_ICON_MOD_START * WinUtil::USER_ICON_MOD_START;
 

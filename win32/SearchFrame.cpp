@@ -49,7 +49,11 @@ TStringList SearchFrame::lastSearches;
 
 SearchFrame::FrameSet SearchFrame::frames;
 
-int SearchFrame::SearchInfo::getImage() {
+int SearchFrame::SearchInfo::getImage(int col) const {
+	if(col != 0) {
+		return -1;
+	}
+
 	const SearchResultPtr& sr = srs[0];
 	return sr->getType() == SearchResult::TYPE_FILE ? WinUtil::getFileIcon(Text::toT(sr->getFile())) : WinUtil::DIR_ICON;
 }

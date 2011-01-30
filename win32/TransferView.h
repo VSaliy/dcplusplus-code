@@ -129,8 +129,8 @@ private:
 		const tstring& getText(int col) const {
 			return columns[col];
 		}
-		int getImage() const {
-			return download ? IMAGE_DOWNLOAD : IMAGE_UPLOAD;
+		int getImage(int col) const {
+			return col == 0 ? (download ? IMAGE_DOWNLOAD : IMAGE_UPLOAD) : -1;
 		}
 
 		static int compareItems(ConnectionInfo* a, ConnectionInfo* b, int col);
@@ -202,7 +202,7 @@ private:
 			return columns[col];
 		}
 
-		int getImage() const;
+		int getImage(int col) const;
 
 		static int compareItems(DownloadInfo* a, DownloadInfo* b, int col) {
 			switch(col) {

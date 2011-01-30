@@ -73,7 +73,7 @@ private:
 		DirItemInfo(const string& dir);
 		DirItemInfo(const string& dir_, const tstring& text_) : dir(dir_), text(text_) { }
 		const tstring& getText() const { return text; }
-		int getImage();
+		int getImage(int col = 0);
 		int getSelectedImage();
 		const string& getDir() const { return dir; }
 	private:
@@ -128,8 +128,8 @@ private:
 			return getDisplay()->columns[col];
 		}
 
-		int getImage() const {
-			return WinUtil::getFileIcon(Text::toT(getTarget()));
+		int getImage(int col) const {
+			return col == 0 ? WinUtil::getFileIcon(Text::toT(getTarget())) : -1;
 		}
 
 		static int compareItems(QueueItemInfo* a, QueueItemInfo* b, int col) {

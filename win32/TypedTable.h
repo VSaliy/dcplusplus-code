@@ -197,7 +197,7 @@ private:
 		}
 		if(nm->item.mask & LVIF_IMAGE) {
 			ContentType* content = reinterpret_cast<ContentType*>(nm->item.lParam);
-			nm->item.iImage = content->getImage();
+			nm->item.iImage = content->getImage(nm->item.iSubItem);
 		}
 		return true;
 	}
