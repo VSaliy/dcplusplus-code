@@ -88,9 +88,14 @@ public:
 	};
 
 	virtual void layout(const Rectangle& r);
-
 	void addRow(const GridInfo& gp) { rows.push_back(gp); }
 	void addColumn(const GridInfo& gp) { columns.push_back(gp); }
+
+	void removeRow(size_t i) { rows.erase(rows.begin() + i); }
+	void removeColumn(size_t i) { columns.erase(columns.begin() + i); }
+
+	void clearRows() { rows.clear(); }
+	void clearColumns() { columns.clear(); }
 
 	void setWidget(Widget* w, size_t row, size_t column, size_t rowSpan = 1, size_t colSpan = 1);
 	void setWidget(Widget* w);
@@ -101,9 +106,15 @@ public:
 	GridInfo& row(size_t i);
 	GridInfo& column(size_t i);
 
+	size_t rowCount() const { return rows.size(); }
+	size_t columnCount() const { return columns.size(); }
+
 	void create( const Seed & cs = Seed() );
 
 	Point getPreferredSize();
+
+	/// Returns true if handled, else false
+	virtual bool handleMessage(const MSG &msg, LRESULT &retVal);
 
 protected:
 	friend class WidgetCreator<Grid>;

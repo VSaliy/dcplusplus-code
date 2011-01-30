@@ -63,8 +63,8 @@ private:
 	enum {
 		COLUMN_FIRST,
 		COLUMN_FAVORITE = COLUMN_FIRST,
-		COLUMN_NICK,
 		COLUMN_SLOT,
+		COLUMN_NICK,
 		COLUMN_HUB,
 		COLUMN_SEEN,
 		COLUMN_DESCRIPTION,
@@ -97,7 +97,11 @@ private:
 		}
 
 		static int compareItems(UserInfo* a, UserInfo* b, int col) {
-			return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+			switch(col) {
+			case COLUMN_FAVORITE: return compare(a->isFavorite, b->isFavorite);
+			case COLUMN_SLOT: return compare(a->grantSlot, b->grantSlot);
+			default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+			}
 		}
 
 		void remove();

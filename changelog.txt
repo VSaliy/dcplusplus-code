@@ -1,8 +1,9 @@
-* Fav users frame becomes users frame with more stuff
+* Fav users frame becomes users frame and shows all users
 * Experimental implementation of KEYP ADC extension
 * Prevent a remote crash triggered via malformed user commands (poy)
 * Avoid crashes when closing from the taskbar too often (poy)
 * [L#580051] Restore DC++ colors to fav hubs on >= Vista (poy)
+* Favorite user nicks are saved in Users.xml
 
 -- 0.781 2011-01-12 --
 * Add a dummy serial number to TLS certs to satisfy some parsers (poy)

@@ -58,12 +58,6 @@ void Grid::create( const Seed & cs )
 }
 
 Point Grid::getPreferredSize() {
-	// TODO find better way of keeping track of children
-	for(HWND wnd = ::FindWindowEx(handle(), NULL, NULL, NULL); wnd; wnd = ::FindWindowEx(handle(), wnd, NULL, NULL)) {
-		// Update widget info if it's missing for some children...
-		getWidgetInfo(wnd);
-	}
-
 	std::vector<size_t> rowSize = calcSizes(rows, columns, 0, true);
 	std::vector<size_t> colSize = calcSizes(columns, rows, 0, false);
 	Point p(
@@ -155,6 +149,9 @@ Point Grid::actualSpacing() const {
 void Grid::layout(const Rectangle& r) {
 	// Layout children first.
 	auto children = getChildren<Widget>();
+
+	// Make sure we have WidgetInfo's for every child...
+	std::for_each(children.first, children.second, [=](Widget* w) { getWidgetInfo(w->handle()); });
 
 	Point size = r.size;
 	Point as = actualSpacing();
@@ -289,6 +286,24 @@ void Grid::handleEnabled(bool enabled) {
 	for(HWND wnd = ::FindWindowEx(handle(), NULL, NULL, NULL); wnd; wnd = ::FindWindowEx(handle(), wnd, NULL, NULL)) {
 		::EnableWindow(wnd, enabled ? TRUE : FALSE);
 	}
+}
+
+bool Grid::handleMessage(const MSG &msg, LRESULT &retVal) {
+	if(msg.message == WM_PARENTNOTIFY) {
+		if(LOWORD(msg.wParam) == WM_DESTROY) {
+			auto wnd = (HWND)msg.lParam;
+			if(::GetParent(wnd) == handle()) {
+				for(auto i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
+					if(i->w->handle() == wnd) {
+						widgetInfo.erase(i);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	return BaseType::handleMessage(msg, retVal);
 }
 
 }
