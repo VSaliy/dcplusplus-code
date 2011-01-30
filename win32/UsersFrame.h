@@ -62,12 +62,21 @@ protected:
 private:
 	enum {
 		COLUMN_FIRST,
-		COLUMN_NICK = COLUMN_FIRST,
+		COLUMN_FAVORITE = COLUMN_FIRST,
+		COLUMN_NICK,
+		COLUMN_SLOT,
 		COLUMN_HUB,
 		COLUMN_SEEN,
 		COLUMN_DESCRIPTION,
 		COLUMN_CID,
 		COLUMN_LAST
+	};
+
+	enum {
+		FAVORITE_OFF_ICON,
+		FAVORITE_ON_ICON,
+		GRANT_OFF_ICON,
+		GRANT_ON_ICON
 	};
 
 	class UserInfo : public UserInfoBase {
@@ -80,7 +89,11 @@ private:
 		}
 
 		int getImage(int col) const {
-			return 0;
+			switch(col) {
+			case COLUMN_FAVORITE: return isFavorite ? FAVORITE_ON_ICON : FAVORITE_OFF_ICON;
+			case COLUMN_SLOT: return grantSlot ? GRANT_ON_ICON : GRANT_OFF_ICON;
+			default: return -1;
+			}
 		}
 
 		static int compareItems(UserInfo* a, UserInfo* b, int col) {
@@ -93,6 +106,9 @@ private:
 		void update(const FavoriteUser& u);
 
 		tstring columns[COLUMN_LAST];
+
+		bool isFavorite;
+		bool grantSlot;
 	};
 
 	typedef TypedTable<UserInfo> WidgetUsers;
@@ -100,6 +116,7 @@ private:
 	WidgetUsersPtr users;
 	GridPtr userInfo;
 	VSplitterPtr splitter;
+	static dwt::ImageListPtr userIcons;
 
 	std::unordered_map<UserPtr, UserInfo*, User::Hash> userInfos;
 
@@ -115,6 +132,7 @@ private:
 	LRESULT handleItemChanged(LPARAM lParam);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	void handleSelectionChanged();
+	bool handleClick(const dwt::MouseEvent &me);
 
 	// AspectUserInfo
 	UserInfoList selectedUsersImpl() const;

@@ -199,7 +199,7 @@ void Appearance2Page::handleSoundsHelp(unsigned id) {
 	// same as PropPage::handleListHelp
 	int item =
 		isKeyPressed(VK_F1) ? sounds->getSelected() :
-		sounds->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
+		sounds->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos()))).first;
 	if(item >= 0 && soundOptions[item].helpId)
 		id = soundOptions[item].helpId;
 	WinUtil::help(sounds, id);

@@ -60,8 +60,10 @@
 #define IDI_UP 152
 #define IDI_FILE 153
 #define IDI_EXEC 154
-
-#define IDB_FOLDERS 200
+#define IDI_FAVORITE_USER_ON 155
+#define IDI_FAVORITE_USER_OFF 156
+#define IDI_GRANT_SLOT_ON 157
+#define IDI_GRANT_SLOT_OFF 158
 
 // Stuff that uses multiple id's
 

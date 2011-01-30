@@ -26,11 +26,15 @@
 #include <dcpp/ClientManager.h>
 #include <dcpp/version.h>
 
-const string UsersFrame::id = "FavUsers";
+const string UsersFrame::id = "Users";
 const string& UsersFrame::getId() const { return id; }
 
+dwt::ImageListPtr UsersFrame::userIcons;
+
 static const ColumnInfo usersColumns[] = {
-	{ N_("Auto grant slot / Nick"), 200, false },
+	{ N_("Favorite"), 30, false },
+	{ N_("Nick"), 50, false },
+	{ N_("Grant slot"), 30, false },
 	{ N_("Hub (last seen in, if offline)"), 300, false },
 	{ N_("Time last seen"), 150, false },
 	{ N_("Description"), 200, false },
@@ -55,9 +59,16 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 {
 	splitter = addChild(VSplitter::Seed(0.3));
 
+	if(!userIcons) {
+		userIcons = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
+		userIcons->add(dwt::Icon(IDI_FAVORITE_USER_OFF));
+		userIcons->add(dwt::Icon(IDI_FAVORITE_USER_ON));
+		userIcons->add(dwt::Icon(IDI_GRANT_SLOT_OFF));
+		userIcons->add(dwt::Icon(IDI_GRANT_SLOT_ON));
+	}
+
 	{
 		WidgetUsers::Seed cs;
-		cs.lvStyle |= LVS_EX_CHECKBOXES;
 		users = addChild(cs);
 		addWidget(users);
 
@@ -67,9 +78,10 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 		// TODO check default (browse vs get)
 		users->onDblClicked(std::bind(&UsersFrame::handleGetList, this));
 		users->onKeyDown(std::bind(&UsersFrame::handleKeyDown, this, _1));
-		users->onRaw(std::bind(&UsersFrame::handleItemChanged, this, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 		users->onContextMenu(std::bind(&UsersFrame::handleContextMenu, this, _1));
 		users->onSelectionChanged(std::bind(&UsersFrame::handleSelectionChanged, this));
+		users->setSmallImageList(userIcons);
+		users->onLeftMouseDown(std::bind(&UsersFrame::handleClick, this, _1));
 		prepareUserList(users);
 
 		splitter->setFirst(users);
@@ -155,6 +167,9 @@ void UsersFrame::UserInfo::update(const UserPtr& u) {
 	columns[COLUMN_NICK] = WinUtil::getNicks(u, Util::emptyString);
 	columns[COLUMN_SEEN] = u->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", FavoriteManager::getInstance()->getLastSeen(u)));
 	columns[COLUMN_CID] = Text::toT(u->getCID().toBase32());
+
+	isFavorite = FavoriteManager::getInstance()->isFavoriteUser(u);
+	grantSlot = FavoriteManager::getInstance()->hasSlot(u);
 }
 
 void UsersFrame::UserInfo::update(const FavoriteUser& u) {
@@ -170,11 +185,9 @@ void UsersFrame::addUser(const UserPtr& aUser) {
 	if(ui == userInfos.end()) {
 		auto x = new UserInfo(aUser);
 		userInfos.insert(std::make_pair(aUser, x));
-		int i = users->insert(x);
-		//bool b = aUser.isSet(FavoriteUser::FLAG_GRANTSLOT);
-		//users->setChecked(i, b);
+		users->insert(x);
 	} else {
-		// update
+		// TODO Update
 	}
 }
 
@@ -259,14 +272,6 @@ bool UsersFrame::handleKeyDown(int c) {
 	return false;
 }
 
-LRESULT UsersFrame::handleItemChanged(LPARAM lParam) {
-	LPNMITEMACTIVATE l = reinterpret_cast<LPNMITEMACTIVATE>(lParam);
-	if(!startup && l->iItem != -1 && ((l->uNewState & LVIS_STATEIMAGEMASK) != (l->uOldState & LVIS_STATEIMAGEMASK))) {
-		FavoriteManager::getInstance()->setAutoGrant(users->getData(l->iItem)->getUser(), users->isChecked(l->iItem));
-	}
-	return 0;
-}
-
 bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	size_t sel = users->countSelected();
 	if(sel > 0) {
@@ -287,6 +292,38 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	}
 
 	return false;
+}
+
+bool UsersFrame::handleClick(const dwt::MouseEvent &me) {
+	auto item = users->hitTest(me.pos);
+	if(item.first == -1 || item.second == -1) {
+		return false;
+	}
+
+	auto ui = users->getData(item.first);
+	switch(item.second) {
+	case COLUMN_FAVORITE:
+		if(ui->isFavorite) {
+			FavoriteManager::getInstance()->removeFavoriteUser(ui->getUser());
+		} else {
+			FavoriteManager::getInstance()->addFavoriteUser(ui->getUser());
+		}
+
+		ui->isFavorite = !ui->isFavorite;
+		users->update(item.first);
+		break;
+
+	case COLUMN_SLOT:
+		FavoriteManager::getInstance()->setAutoGrant(ui->getUser(), !ui->grantSlot);
+		ui->grantSlot = !ui->grantSlot;
+		users->update(item.first);
+		break;
+
+	default:
+		return false;
+	}
+
+	return true;
 }
 
 UsersFrame::UserInfoList UsersFrame::selectedUsersImpl() const {
