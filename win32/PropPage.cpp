@@ -127,7 +127,7 @@ void PropPage::handleListHelp(TablePtr list, unsigned id) {
 	// we have the help id of the whole list-view; convert to the one of the specific option the user wants help for
 	int item =
 		isKeyPressed(VK_F1) ? list->getSelected() :
-		list->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
+		list->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos()))).first;
 	const ListItem* listItems = lists[list];
 	if(item >= 0 && listItems[item].helpId)
 		id = listItems[item].helpId;

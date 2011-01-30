@@ -649,9 +649,9 @@ void Table::createArrows() {
 	}
 }
 
-int Table::hitTest(const ScreenCoordinate& pt) {
+std::pair<int, int> Table::hitTest(const ScreenCoordinate& pt) {
 	LVHITTESTINFO lvi = { ClientCoordinate(pt, this).getPoint() };
-	return ListView_HitTest(handle(), &lvi);
+	return ListView_SubItemHitTest(handle(), &lvi) == -1 ? std::make_pair(-1, -1) : std::make_pair(lvi.iItem, lvi.iSubItem);
 }
 
 void Table::setTooltips(const TooltipDispatcher::F& f) {

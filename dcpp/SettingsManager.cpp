@@ -431,6 +431,12 @@ void SettingsManager::load(string const& aFileName)
 			set(AUTO_DETECT_CONNECTION, false); //Don't touch if it works
 		}
 
+		if(v <= 0.781) {
+			// These were remade completely...
+			set(USERSFRAME_ORDER, Util::emptyString);
+			set(USERSFRAME_WIDTHS, Util::emptyString);
+		}
+
 		if(SETTING(SET_MINISLOT_SIZE) < 64)
 			set(SET_MINISLOT_SIZE, 64);
 		if(SETTING(AUTODROP_INTERVAL) < 1)

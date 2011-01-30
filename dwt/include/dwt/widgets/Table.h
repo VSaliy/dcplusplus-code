@@ -50,6 +50,7 @@
 #include "WidgetListViewEditBox.h"
 #include <dwt/Theme.h>
 
+#include <utility>
 #include <vector>
 
 namespace dwt {
@@ -464,7 +465,7 @@ public:
 
 	void ensureVisible(int i, bool partial = false);
 
-	int hitTest(const ScreenCoordinate& pt);
+	std::pair<int, int> hitTest(const ScreenCoordinate& pt);
 
 	/// Actually creates the Data Grid Control
 	/** You should call WidgetFactory::createTable if you instantiate class
