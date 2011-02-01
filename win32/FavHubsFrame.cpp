@@ -23,8 +23,6 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 
-#include <dwt/util/win32/Version.h>
-
 #include "HubFrame.h"
 #include "FavHubProperties.h"
 #include "FavHubGroupsDlg.h"
@@ -64,7 +62,7 @@ hubs(0)
 		cs.style |= LVS_NOSORTHEADER;
 		hubs = grid->addChild(cs);
 		grid->setWidget(hubs, 0, 0, 1, 8);
-		addWidget(hubs, false, true, dwt::util::win32::ensureVersion(dwt::util::win32::VISTA)); // default colors for XP
+		addWidget(hubs);
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
 

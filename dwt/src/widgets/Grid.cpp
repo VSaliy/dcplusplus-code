@@ -31,6 +31,7 @@
 
 #include <dwt/widgets/Grid.h>
 
+#include <algorithm>
 #include <numeric>
 
 namespace dwt {

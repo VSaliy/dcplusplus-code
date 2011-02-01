@@ -157,7 +157,9 @@ void Theme::formatTextRect(Canvas& canvas, int part, int state, const tstring& t
 
 int64_t Theme::getColor(int part, int state, int specifier) {
 	COLORREF color;
-	return (GetThemeColor(theme, part, state, specifier, &color) == S_OK) ? color : -1;
+	if(GetThemeColor(theme, part, state, specifier, &color) == S_OK)
+		return color;
+	return -1;
 }
 
 bool Theme::getPartSize(Canvas& canvas, int part, int state, Point& ret) {
