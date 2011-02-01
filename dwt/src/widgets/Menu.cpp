@@ -474,7 +474,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			COLORREF oldColor = canvas.setTextColor( colors.titleText );
 
 			// set background mode to transparent
-			bool oldMode = canvas.setBkMode( true );
+			auto bkMode(canvas.setBkMode(true));
 
 			// get rect for sidebar
 			RECT rect;
@@ -493,7 +493,6 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 
 			// clear
 			canvas.setTextColor( oldColor );
-			canvas.setBkMode( oldMode );
 		}
 	}
 
@@ -625,7 +624,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 					theme.drawText(canvas, part, state, accelerator, drawAccelFormat, textRectangle);
 
 			} else {
-				bool oldMode = canvas.setBkMode(true);
+				auto bkMode(canvas.setBkMode(true));
 
 				canvas.setTextColor(
 					isGrayed ? Colors::gray :
@@ -636,8 +635,6 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 				canvas.drawText(text, textRectangle, drawTextFormat);
 				if(!accelerator.empty())
 					canvas.drawText(accelerator, textRectangle, drawAccelFormat);
-
-				canvas.setBkMode(oldMode);
 			}
 		}
 
