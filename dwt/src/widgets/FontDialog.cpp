@@ -86,7 +86,7 @@ UINT_PTR CALLBACK FontDialog::CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			by ourselves. thanks to Wine (dlls/comdlg32/fontdlg.c) for showing how this is done. */
 
 			PaintCanvas canvas(hwnd);
-			bool oldMode = canvas.setBkMode(true);
+			auto bkMode(canvas.setBkMode(true));
 
 			HWND box = ::GetDlgItem(hwnd, stc5);
 
@@ -108,8 +108,6 @@ UINT_PTR CALLBACK FontDialog::CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			auto select(canvas.select(font));
 
 			canvas.drawText(util::win32::getWindowText(box), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-
-			canvas.setBkMode(oldMode);
 			return 1;
 		}
 

@@ -651,7 +651,7 @@ void TabView::handleMouseLeave() {
 
 bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 	FreeCanvas canvas(info->hDC);
-	bool oldMode = canvas.setBkMode(true);
+	auto bkMode(canvas.setBkMode(true));
 
 	Rectangle rect(info->rcItem);
 	if(theme) {
@@ -663,8 +663,6 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 	}
 
 	draw(canvas, info->itemID, std::move(rect), (info->itemState & ODS_SELECTED) == ODS_SELECTED);
-
-	canvas.setBkMode(oldMode);
 	return true;
 }
 
@@ -673,7 +671,7 @@ void TabView::handlePainting(PaintCanvas& canvas) {
 	if(rect.width() == 0 || rect.height() == 0)
 		return;
 
-	bool oldMode = canvas.setBkMode(true);
+	auto bkMode(canvas.setBkMode(true));
 
 	int sel = getSelected();
 	Rectangle selRect;
@@ -699,8 +697,6 @@ void TabView::handlePainting(PaintCanvas& canvas) {
 	// draw the selected tab last because it might need to step on others
 	if(selRect.height() > 0)
 		draw(canvas, sel, std::move(selRect), true);
-
-	canvas.setBkMode(oldMode);
 }
 
 void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSelected) {

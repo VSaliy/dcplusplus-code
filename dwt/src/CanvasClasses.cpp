@@ -226,9 +226,18 @@ COLORREF Canvas::setBkColor( COLORREF crColor )
 	return ::SetBkColor( itsHdc, crColor );
 }
 
-bool Canvas::setBkMode( bool transparent )
+Canvas::BkMode::BkMode(Canvas& canvas_, int mode) :
+canvas(canvas_), prevMode(::SetBkMode(canvas.handle(), mode))
 {
-	return ::SetBkMode( itsHdc, transparent ? TRANSPARENT : OPAQUE ) == TRANSPARENT;
+}
+
+Canvas::BkMode::~BkMode() {
+	if(prevMode)
+		::SetBkMode(canvas.handle(), prevMode);
+}
+
+Canvas::BkMode Canvas::setBkMode(bool transparent) {
+	return BkMode(*this, transparent ? TRANSPARENT : OPAQUE);
 }
 
 COLORREF Canvas::getBkColor()

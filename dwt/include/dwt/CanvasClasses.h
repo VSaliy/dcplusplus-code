@@ -210,6 +210,16 @@ class Canvas : private boost::noncopyable
 		HGDIOBJ h;
 	};
 
+	class BkMode {
+	public:
+		BkMode(Canvas& canvas_, int mode);
+		~BkMode();
+
+	private:
+		Canvas& canvas;
+		int prevMode;
+	};
+
 public:
 	/** select a new resource (brush / font / pen / etc).
 	* @return object that restores the previous resource when destroyed.
@@ -396,11 +406,10 @@ public:
 	  */
 	COLORREF setBkColor( COLORREF crColor );
 
-	/// Sets the background mode
-	/** Can either be transparent (true) or opaque (false). Returns true if the
-	  * previous background mode was transparent, false if it was opaque
-	  */
-	bool setBkMode( bool transparent = false );
+	/** Sets the background mode, see the ::SetBkMode doc for more information.
+	* @return object that restores the previous bkmode value when destroyed.
+	*/
+	BkMode setBkMode(bool transparent);
 
 	/// Gets the background color for the this Canvas
 	/** Gets the background color for extTextOut() calls.
