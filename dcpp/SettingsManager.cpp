@@ -435,6 +435,10 @@ void SettingsManager::load(string const& aFileName)
 			// These were remade completely...
 			set(USERSFRAME_ORDER, Util::emptyString);
 			set(USERSFRAME_WIDTHS, Util::emptyString);
+
+			// the id has changed
+			if(isSet[TOOLBAR])
+				Util::replace("FavUsers", "Users", strSettings[TOOLBAR - STR_FIRST]);
 		}
 
 		if(SETTING(SET_MINISLOT_SIZE) < 64)
