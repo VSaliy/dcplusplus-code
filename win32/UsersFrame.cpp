@@ -69,6 +69,7 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 
 	{
 		WidgetUsers::Seed cs;
+		cs.lvStyle |= LVS_EX_SUBITEMIMAGES;
 		users = addChild(cs);
 		addWidget(users);
 

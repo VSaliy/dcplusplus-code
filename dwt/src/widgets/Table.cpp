@@ -52,7 +52,7 @@ BitmapPtr Table::downArrow = 0;
 Table::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | LVS_REPORT),
 	font(new Font(DefaultGuiFont)),
-	lvStyle(LVS_EX_DOUBLEBUFFER | LVS_EX_SUBITEMIMAGES)
+	lvStyle(LVS_EX_DOUBLEBUFFER)
 {
 }
 
