@@ -23,6 +23,7 @@ struct IGDdatas_service {
 struct IGDdatas {
 	char cureltname[MINIUPNPC_URL_MAXSIZE];
 	char urlbase[MINIUPNPC_URL_MAXSIZE];
+	char modelName[MINIUPNPC_URL_MAXSIZE];
 	int level;
 	/*int state;*/
 	/* "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1" */

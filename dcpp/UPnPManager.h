@@ -62,6 +62,7 @@ private:
 
 	void close(UPnP& impl);
 	void log(const string& message);
+	string deviceString(UPnP& impl) const;
 };
 
 } // namespace dcpp

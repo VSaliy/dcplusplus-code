@@ -45,7 +45,7 @@ bool UPnPManager::open() {
 	if(portMapping.test_and_set()) {
 		log(_("Another UPnP port mapping attempt is in progress..."));
 		return false;
-	} 
+	}
 
 	start();
 
@@ -64,7 +64,7 @@ int UPnPManager::run() {
 		conn_port = ConnectionManager::getInstance()->getPort(),
 		secure_port = ConnectionManager::getInstance()->getSecurePort(),
 		search_port = SearchManager::getInstance()->getPort();
-	
+
 	for(Impls::iterator i = impls.begin(); i != impls.end(); ++i) {
 		UPnP& impl = *i;
 
@@ -79,7 +79,7 @@ int UPnPManager::run() {
 			log(str(F_("The %1% interface has failed to map the %2% %3% port") % impl.getName() % "TCP" % conn_port));
 			continue;
 		}
-		
+
 		if(secure_port != 0 && !impl.open(secure_port, UPnP::PROTOCOL_TCP, str(F_(APPNAME " Encrypted Transfer Port (%1% TCP)") % secure_port))) {
 			log(str(F_("The %1% interface has failed to map the %2% %3% port") % impl.getName() % "TLS" % secure_port));
 			continue;
@@ -92,7 +92,8 @@ int UPnPManager::run() {
 
 		opened = true;
 
-		log(str(F_("Successfully created port mappings (TCP: %1%, UDP: %2%, TLS: %3%), mapped using the %4% interface") % conn_port % search_port % secure_port % impl.getName()));
+		log(str(F_("Successfully created port mappings (TCP: %1%, UDP: %2%, TLS: %3%) on the %4% device with the %5% interface") %
+			conn_port % search_port % secure_port % deviceString(impl) % impl.getName()));
 
 		if(!BOOLSETTING(NO_IP_OVERRIDE)) {
 			// now lets configure the external IP (connect to me) address
@@ -123,13 +124,21 @@ int UPnPManager::run() {
 
 void UPnPManager::close(UPnP& impl) {
 	if(impl.hasRules()) {
-		log(impl.close() ? str(F_("Successfully removed port mappings with the %1% interface") % impl.getName()) :
-			str(F_("Failed to remove port mappings with the %1% interface") % impl.getName()));
+		log(impl.close() ?
+			str(F_("Successfully removed port mappings from the %1% device with the %2% interface") % deviceString(impl) % impl.getName()) :
+			str(F_("Failed to remove port mappings from the %1% device with the %2% interface") % deviceString(impl) % impl.getName()));
 	}
 }
 
 void UPnPManager::log(const string& message) {
 	ConnectivityManager::getInstance()->log(str(F_("UPnP: %1%") % message));
+}
+
+string UPnPManager::deviceString(UPnP& impl) const {
+	string name(impl.getDeviceName());
+	if(name.empty())
+		name = _("Generic");
+	return '"' + name + '"';
 }
 
 } // namespace dcpp

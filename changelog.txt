@@ -4,6 +4,8 @@
 * Avoid crashes when closing from the taskbar too often (poy)
 * [L#580051] Restore DC++ colors to the fav hub window (poy)
 * Favorite user nicks are saved in Users.xml
+* Be stricter when determining whether MiniUPnP has succeeded (poy)
+* Display the name of the device MiniUPnP has bound to (poy)
 
 -- 0.781 2011-01-12 --
 * Add a dummy serial number to TLS certs to satisfy some parsers (poy)
