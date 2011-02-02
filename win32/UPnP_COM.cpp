@@ -93,6 +93,11 @@ bool UPnP_COM::remove(const unsigned short port, const Protocol protocol) {
 	return ret;
 }
 
+string UPnP_COM::getDeviceName() {
+	/// @todo use IUPnPDevice::ModelName <http://msdn.microsoft.com/en-us/library/aa381670(VS.85).aspx>?
+	return Util::emptyString;
+}
+
 string UPnP_COM::getExternalIP() {
 	// Get the External IP from the last added mapping
 	if(!lastPort)
@@ -160,6 +165,10 @@ bool UPnP_COM::add(const unsigned short port, const Protocol protocol, const str
 
 bool UPnP_COM::remove(const unsigned short port, const Protocol protocol) {
 	return false;
+}
+
+string UPnP_COM::getDeviceName() {
+	return Util::emptyString;
 }
 
 string UPnP_COM::getExternalIP() {

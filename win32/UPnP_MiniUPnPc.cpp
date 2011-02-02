@@ -37,7 +37,7 @@ bool UPnP_MiniUPnPc::init() {
 	if(!devices)
 		return false;
 
-	bool ret = UPNP_GetValidIGD(devices, &urls, &data, 0, 0);
+	bool ret = UPNP_GetValidIGD(devices, &urls, &data, 0, 0) == 1;
 
 	freeUPNPDevlist(devices);
 
@@ -53,6 +53,10 @@ bool UPnP_MiniUPnPc::add(const unsigned short port, const Protocol protocol, con
 bool UPnP_MiniUPnPc::remove(const unsigned short port, const Protocol protocol) {
 	return UPNP_DeletePortMapping(urls.controlURL, data.first.servicetype, Util::toString(port).c_str(),
 		protocols[protocol], 0) == UPNPCOMMAND_SUCCESS;
+}
+
+string UPnP_MiniUPnPc::getDeviceName() {
+	return data.modelName;
 }
 
 string UPnP_MiniUPnPc::getExternalIP() {

@@ -39,7 +39,9 @@ public:
 	bool close();
 	bool hasRules() const;
 
+	virtual string getDeviceName() = 0;
 	virtual string getExternalIP() = 0;
+
 	virtual const string& getName() const = 0;
 
 protected:

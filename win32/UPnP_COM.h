@@ -24,6 +24,7 @@
 struct IUPnPNAT;
 struct IStaticPortMappingCollection;
 
+/// @todo this class is far from complete (should register callbacks, etc)
 class UPnP_COM : public UPnP
 {
 public:
@@ -34,12 +35,14 @@ private:
 
 	bool add(const unsigned short port, const Protocol protocol, const string& description);
 	bool remove(const unsigned short port, const Protocol protocol);
+
+	string getDeviceName();
+	string getExternalIP();
+
+	static const string name;
 	const string& getName() const {
 		return name;
 	}
-
-	string getExternalIP();
-	static const string name;
 
 	IUPnPNAT* pUN;
 	// this one can become invalidated so we can't cache it
