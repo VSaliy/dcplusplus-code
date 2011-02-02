@@ -201,7 +201,7 @@ private:
 	void addChat(const tstring& aLine);
 	void addStatus(const tstring& aLine, bool legitimate = true);
 
-	tstring getStatusUsers() const;
+	pair<size_t, tstring> getStatusUsers() const;
 	tstring getStatusShared() const;
 	tstring getStatusAverageShared() const;
 	void updateStatus();

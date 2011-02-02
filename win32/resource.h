@@ -64,6 +64,7 @@
 #define IDI_FAVORITE_USER_OFF 156
 #define IDI_GRANT_SLOT_ON 157
 #define IDI_GRANT_SLOT_OFF 158
+#define IDI_SLOTS_FULL 159
 
 // Stuff that uses multiple id's
 
