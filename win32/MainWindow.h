@@ -132,6 +132,7 @@ private:
 	int64_t lastDown;
 	uint64_t lastTick;
 	bool prevAway;
+	bool fullSlots;
 
 	dwt::Application::FilterIter filterIter;
 	dwt::NotificationPtr notify;

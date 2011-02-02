@@ -196,6 +196,8 @@ inTabComplete(false)
 	status->setSize(STATUS_SHOW_USERS, showUsers->getPreferredSize().x);
 	status->onDblClicked(STATUS_STATUS, std::bind(&HubFrame::openLog, this, false));
 
+	status->setIcon(STATUS_USERS, WinUtil::statusIcon(IDI_USER));
+
 	status->setHelpId(STATUS_STATUS, IDH_HUB_STATUS);
 	status->setHelpId(STATUS_SECURE, IDH_HUB_SECURE_STATUS);
 	status->setHelpId(STATUS_USERS, IDH_HUB_USERS_COUNT);
@@ -279,7 +281,10 @@ void HubFrame::layout() {
 }
 
 void HubFrame::updateStatus() {
-	status->setText(STATUS_USERS, getStatusUsers());
+	auto users = getStatusUsers();
+	status->setText(STATUS_USERS, users.second + Text::toT(Util::toString(users.first)));
+	status->setToolTip(STATUS_USERS, users.second + str(TFN_("%1% user", "%1% users", users.first) % users.first));
+
 	status->setText(STATUS_SHARED, getStatusShared());
 	status->setText(STATUS_AVERAGE_SHARED, getStatusAverageShared());
 }
@@ -861,7 +866,7 @@ tstring HubFrame::getStatusShared() const {
 	return Text::toT(Util::formatBytes(available));
 }
 
-tstring HubFrame::getStatusUsers() const {
+pair<size_t, tstring> HubFrame::getStatusUsers() const {
 	size_t userCount = 0;
 	for(UserMap::const_iterator i = userMap.begin(); i != userMap.end(); ++i){
 		UserInfo* ui = i->second;
@@ -874,7 +879,7 @@ tstring HubFrame::getStatusUsers() const {
 		textForUsers += Text::toT(Util::toString(users->countSelected()) + "/");
 	if (showUsers->getChecked() && users->size() < userCount)
 		textForUsers += Text::toT(Util::toString(users->size()) + "/");
-	return textForUsers + str(TFN_("%1% user", "%1% users", userCount) % userCount);
+	return make_pair(userCount, textForUsers);
 }
 
 tstring HubFrame::getStatusAverageShared() const {

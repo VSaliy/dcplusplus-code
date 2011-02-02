@@ -93,7 +93,8 @@ stopperThread(NULL),
 lastUp(0),
 lastDown(0),
 lastTick(GET_TICK()),
-prevAway(false)
+prevAway(false),
+fullSlots(false)
 {
 	links.homepage = _T("http://dcplusplus.sourceforge.net/");
 	links.downloads = links.homepage + _T("download/");
@@ -918,9 +919,14 @@ void MainWindow::updateStatus() {
 	status->setText(STATUS_COUNTS, s);
 	status->setToolTip(STATUS_COUNTS, str(TF_("Hubs: %1%") % s));
 
-	s = str(TF_("%1%/%2%") % UploadManager::getInstance()->getFreeSlots() % (SETTING(SLOTS)));
-	status->setText(STATUS_SLOTS, s, true);
-	status->setToolTip(STATUS_SLOTS, str(TF_("Slots: %1%") % s));
+	auto freeSlots = UploadManager::getInstance()->getFreeSlots();
+	auto totalSlots = SETTING(SLOTS);
+	status->setText(STATUS_SLOTS, str(TF_("%1%/%2%") % freeSlots % totalSlots), true);
+	status->setToolTip(STATUS_SLOTS, str(TF_("%1% free slots of %2% total upload slots") % freeSlots % totalSlots));
+	if(!freeSlots ^ fullSlots) {
+		fullSlots = !freeSlots;
+		status->setIcon(STATUS_SLOTS, WinUtil::statusIcon(fullSlots ? IDI_SLOTS_FULL : IDI_SLOTS));
+	}
 
 	s = Text::toT(Util::formatBytes(down));
 	status->setText(STATUS_DOWN_TOTAL, s);
