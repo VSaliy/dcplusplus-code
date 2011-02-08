@@ -30,6 +30,7 @@
 */
 
 #include <dwt/widgets/Grid.h>
+#include <dwt/util/check.h>
 
 #include <algorithm>
 #include <numeric>
@@ -262,6 +263,8 @@ Grid::WidgetInfo* Grid::getWidgetInfo(HWND hwnd) {
 }
 
 void Grid::setWidget(Widget* w, size_t row, size_t column, size_t rowSpan, size_t colSpan) {
+	dwtassert(w->getParent() == this, _T("Widget must be a child of the grid"));
+
 	for(WidgetInfoList::iterator i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
 		if(i->w == w) {
 			i->row = row;
