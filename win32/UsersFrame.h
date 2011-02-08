@@ -115,14 +115,22 @@ private:
 		bool grantSlot;
 	};
 
-	typedef TypedTable<UserInfo> WidgetUsers;
+	typedef TypedTable<UserInfo, false> WidgetUsers;
 	typedef WidgetUsers* WidgetUsersPtr;
+
+	GridPtr filterGrid;
+
 	WidgetUsersPtr users;
 	GridPtr userInfo;
 	VSplitterPtr splitter;
+
+	TextBoxPtr filter;
+	CheckBoxPtr showFavs;
+
 	static dwt::ImageListPtr userIcons;
 
-	std::unordered_map<UserPtr, UserInfo*, User::Hash> userInfos;
+	// TODO change to unique_ptr once g++ map supports it (no move insert in 4.5 it seems...)
+	std::unordered_map<UserPtr, shared_ptr<UserInfo>, User::Hash> userInfos;
 
 	bool startup;
 
@@ -137,6 +145,8 @@ private:
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	void handleSelectionChanged();
 	bool handleClick(const dwt::MouseEvent &me);
+	void handleFilterUpdated();
+	bool matches(const UserInfo& ui);
 
 	// AspectUserInfo
 	UserInfoList selectedUsersImpl() const;
@@ -148,6 +158,7 @@ private:
 
 	// ClientManagerListner
 	virtual void on(UserConnected, const UserPtr& aUser) throw();
+	virtual void on(UserUpdated, const UserPtr& aUser) throw();
 	virtual void on(UserDisconnected, const UserPtr& aUser) throw();
 };
 
