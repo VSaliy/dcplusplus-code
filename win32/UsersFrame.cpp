@@ -57,7 +57,17 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	users(0),
 	startup(true)
 {
-	splitter = addChild(VSplitter::Seed(0.3));
+	filterGrid = addChild(Grid::Seed(1, 2));
+
+	filter = filterGrid->addChild(WinUtil::Seeds::textBox);
+	filter->onUpdated(std::bind(&UsersFrame::handleFilterUpdated, this));
+	filterGrid->column(0).mode = GridInfo::FILL;
+
+	showFavs = filterGrid->addChild(WinUtil::Seeds::checkBox);
+	showFavs->setText(_T("Favorite users only"));
+	showFavs->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
+
+	splitter = addChild(VSplitter::Seed(0.7));
 
 	if(!userIcons) {
 		userIcons = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
@@ -99,7 +109,6 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 		auto lock = ClientManager::getInstance()->lock();
 		auto &ou = ClientManager::getInstance()->getUsers();
 
-		HoldRedraw hold(users);
 		for(auto i = ou.begin(); i != ou.end(); ++i) {
 			if(i->second->isOnline()) {
 				addUser(i->second);
@@ -110,7 +119,6 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	{
 		auto fu = FavoriteManager::getInstance()->getFavoriteUsers();
 
-		HoldRedraw hold(users);
 		for(auto i = fu.begin(); i != fu.end(); ++i) {
 			addUser(i->second.getUser());
 		}
@@ -124,6 +132,8 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	layout();
 
 	startup = false;
+
+	handleFilterUpdated();
 }
 
 UsersFrame::~UsersFrame() {
@@ -133,6 +143,14 @@ void UsersFrame::layout() {
 	dwt::Rectangle r(dwt::Point(0, 0), getClientSize());
 
 	status->layout(r);
+
+	auto r2 = r;
+	r2.size.y = filter->getPreferredSize().y;
+
+	filterGrid->layout(r2);
+
+	r.pos.y += filter->getWindowSize().y + 3;
+	r.size.y -= filter->getWindowSize().y + 3;
 
 	splitter->layout(r);
 }
@@ -185,9 +203,12 @@ void UsersFrame::UserInfo::update(const FavoriteUser& u) {
 void UsersFrame::addUser(const UserPtr& aUser) {
 	auto ui = userInfos.find(aUser);
 	if(ui == userInfos.end()) {
-		auto x = new UserInfo(aUser);
-		userInfos.insert(std::make_pair(aUser, x));
-		users->insert(x);
+		auto x = make_shared<UserInfo>(aUser);
+		if(matches(*x)){
+			users->insert(x.get());
+		}
+
+		userInfos.insert(std::make_pair(aUser, std::move(x)));
 	} else {
 		// TODO Update
 	}
@@ -196,18 +217,26 @@ void UsersFrame::addUser(const UserPtr& aUser) {
 void UsersFrame::updateUser(const UserPtr& aUser) {
 	auto ui = userInfos.find(aUser);
 	if(ui != userInfos.end()) {
-		auto i = users->find(ui->second);
-		if(i != -1) {
-			ui->second->update(aUser);
-			users->update(i);
+		ui->second->update(aUser);
+
+		if(matches(*ui->second)) {
+			auto i = users->find(ui->second.get());
+			if(i != -1) {
+				users->update(i);
+			}
 		}
 	}
 }
 
 void UsersFrame::removeUser(const UserPtr& aUser) {
+	if(FavoriteManager::getInstance()->isFavoriteUser(aUser)) {
+		updateUser(aUser);
+		return;
+	}
+
 	auto ui = userInfos.find(aUser);
 	if(ui != userInfos.end()) {
-		users->erase(ui->second);
+		users->erase(ui->second.get());
 		userInfos.erase(ui);
 	}
 }
@@ -328,6 +357,30 @@ bool UsersFrame::handleClick(const dwt::MouseEvent &me) {
 	return true;
 }
 
+void UsersFrame::handleFilterUpdated() {
+	HoldRedraw h(users);
+	users->clear();
+	for(auto i = userInfos.begin(); i != userInfos.end(); ++i) {
+		if(matches(*i->second)) {
+			users->insert(i->second.get());
+		}
+	}
+}
+
+bool UsersFrame::matches(const UserInfo &ui) {
+	if(showFavs->getChecked() && !FavoriteManager::getInstance()->isFavoriteUser(ui.getUser())) {
+		return false;
+	}
+
+	auto txt = filter->getText();
+
+	if(Util::findSubString(ui.columns[COLUMN_NICK], txt) != string::npos) {
+		return true;
+	}
+
+	return false;
+}
+
 UsersFrame::UserInfoList UsersFrame::selectedUsersImpl() const {
 	return usersFromTable(users);
 }
@@ -348,6 +401,10 @@ void UsersFrame::on(UserConnected, const UserPtr& aUser) throw() {
 	callAsync(std::bind(&UsersFrame::addUser, this, aUser));
 }
 
-void UsersFrame::on(UserDisconnected, const UserPtr& aUser) throw() {
+void UsersFrame::on(UserUpdated, const UserPtr& aUser) throw() {
 	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
+}
+
+void UsersFrame::on(UserDisconnected, const UserPtr& aUser) throw() {
+	callAsync(std::bind(&UsersFrame::removeUser, this, aUser));
 }
