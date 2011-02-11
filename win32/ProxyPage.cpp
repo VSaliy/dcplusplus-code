@@ -53,7 +53,6 @@ socksServer(0)
 			directOut->setHelpId(IDH_SETTINGS_PROXY_DIRECT_OUT);
 
 			socks5 = outChoice->addChild(RadioButton::Seed(T_("SOCKS5")));
-			cur->setWidget(socks5, 1, 0);
 			socks5->setHelpId(IDH_SETTINGS_PROXY_SOCKS5);
 		}
 

@@ -688,6 +688,7 @@ void SearchFrame::handleRemove() {
 	while((i = results->getNext(-1, LVNI_SELECTED)) != -1) {
 		results->erase(i);
 	}
+	status->setText(STATUS_COUNT, str(TFN_("%1% item", "%1% items", results->size()) % results->size()));
 }
 
 struct UserCollector {
