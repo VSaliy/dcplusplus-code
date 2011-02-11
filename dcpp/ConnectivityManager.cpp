@@ -20,12 +20,13 @@
 #include "DCPlusPlus.h"
 
 #include "ConnectivityManager.h"
-#include "SettingsManager.h"
+
 #include "ClientManager.h"
 #include "ConnectionManager.h"
-#include "SearchManager.h"
 #include "LogManager.h"
-#include "UPnPManager.h"
+#include "MappingManager.h"
+#include "SearchManager.h"
+#include "SettingsManager.h"
 
 namespace dcpp {
 
@@ -45,7 +46,7 @@ void ConnectivityManager::startSocket() {
 
 		// must be done after listen calls; otherwise ports won't be set
 		if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP)
-			UPnPManager::getInstance()->open();
+			MappingManager::getInstance()->open();
 	}
 }
 
@@ -58,8 +59,8 @@ void ConnectivityManager::detectConnection() {
 	SettingsManager::getInstance()->set(SettingsManager::EXTERNAL_IP, Util::emptyString);
 	SettingsManager::getInstance()->set(SettingsManager::NO_IP_OVERRIDE, false);
 
-	if (UPnPManager::getInstance()->getOpened()) {
-		UPnPManager::getInstance()->close();
+	if (MappingManager::getInstance()->getOpened()) {
+		MappingManager::getInstance()->close();
 	}
 
 	disconnect();
@@ -86,9 +87,9 @@ void ConnectivityManager::detectConnection() {
 	}
 
 	SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, SettingsManager::INCOMING_FIREWALL_UPNP);
-	log(_("Local network with possible NAT detected, trying to map the ports using UPnP..."));
+	log(_("Local network with possible NAT detected, trying to map the ports..."));
 	
-	if (!UPnPManager::getInstance()->open()) {
+	if (!MappingManager::getInstance()->open()) {
 		running = false;
 	}
 }
@@ -99,12 +100,12 @@ void ConnectivityManager::setup(bool settingsChanged, int lastConnectionMode) {
 	} else {
 		if(autoDetected || settingsChanged) {
 			if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP || lastConnectionMode == SettingsManager::INCOMING_FIREWALL_UPNP) {
-				UPnPManager::getInstance()->close();
+				MappingManager::getInstance()->close();
 			}
 			startSocket();
-		} else if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP && !UPnPManager::getInstance()->getOpened()) {
-			// previous UPnP mappings had failed; try again
-			UPnPManager::getInstance()->open();
+		} else if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP && !MappingManager::getInstance()->getOpened()) {
+			// previous mappings had failed; try again
+			MappingManager::getInstance()->open();
 		}
 	}
 }

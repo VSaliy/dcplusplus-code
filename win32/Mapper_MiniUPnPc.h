@@ -16,29 +16,34 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_UPNP_MINIUPNPC_H
-#define DCPLUSPLUS_WIN32_UPNP_MINIUPNPC_H
+#ifndef DCPLUSPLUS_WIN32_MAPPER_MINIUPNPC_H
+#define DCPLUSPLUS_WIN32_MAPPER_MINIUPNPC_H
 
-#include <dcpp/UPnP.h>
+#include <dcpp/Mapper.h>
 
-class UPnP_MiniUPnPc : public UPnP
+class Mapper_MiniUPnPc : public Mapper
 {
 public:
-	UPnP_MiniUPnPc() : UPnP() { }
+	Mapper_MiniUPnPc() : Mapper() { }
 
 private:
 	bool init();
+	void uninit();
 
 	bool add(const unsigned short port, const Protocol protocol, const string& description);
 	bool remove(const unsigned short port, const Protocol protocol);
+
+	uint32_t renewal() const { return 0; }
 
 	string getDeviceName();
 	string getExternalIP();
 
 	static const string name;
-	const string& getName() const {
-		return name;
-	}
+	const string& getName() const { return name; }
+
+	string url;
+	string service;
+	string device;
 };
 
 #endif

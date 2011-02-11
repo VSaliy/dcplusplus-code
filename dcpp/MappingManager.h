@@ -16,13 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_UPNP_MANAGER_H
-#define DCPLUSPLUS_DCPP_UPNP_MANAGER_H
+#ifndef DCPLUSPLUS_DCPP_MAPPING_MANAGER_H
+#define DCPLUSPLUS_DCPP_MAPPING_MANAGER_H
 
 #include "forward.h"
-#include "Singleton.h"
-#include "Thread.h"
-#include "UPnP.h"
+#include "Mapper.h"
+#include "TimerManager.h"
 
 #include <atomic>
 
@@ -30,39 +29,44 @@
 
 namespace dcpp {
 
-class UPnPManager :
-	public Singleton<UPnPManager>,
-	private Thread
+class MappingManager :
+	public Singleton<MappingManager>,
+	private Thread,
+	private TimerManagerListener
 {
 public:
 	/**
-	* add an implementation, derived from the base UPnP class.
-	* must be allocated on the heap; its deletion will be managed by UPnPManager.
-	* first added impl will be tried first.
+	* add an implementation, derived from the base Mapper class.
+	* must be allocated on the heap; its deletion will be managed by MappingManager.
+	* the first added mapper will be tried first.
 	*/
-	void addImplementation(UPnP* impl);
+	void addImplementation(Mapper* mapper);
 	bool open();
 	void close();
 
 	bool getOpened() const { return opened; }
 
 private:
-	friend class Singleton<UPnPManager>;
+	friend class Singleton<MappingManager>;
 
-	typedef boost::ptr_vector<UPnP> Impls;
-	Impls impls;
+	boost::ptr_vector<Mapper> mappers;
 
 	bool opened;
-	atomic_flag portMapping;
+	atomic_flag busy;
 
-	UPnPManager() : opened(false), portMapping(false) { }
-	virtual ~UPnPManager() throw() { join(); }
+	uint64_t renewal; /// when the next renewal should happen, if requested by the mapper.
+	size_t working; /// index of the currently working implementation (used for renewal).
+
+	MappingManager() : opened(false), busy(false), renewal(0), working(0) { }
+	virtual ~MappingManager() throw() { join(); }
 
 	int run();
 
-	void close(UPnP& impl);
+	void close(Mapper& mapper);
 	void log(const string& message);
-	string deviceString(UPnP& impl) const;
+	string deviceString(Mapper& mapper) const;
+
+	void on(TimerManagerListener::Minute, uint64_t tick) throw();
 };
 
 } // namespace dcpp

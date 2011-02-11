@@ -22,14 +22,15 @@
 #include "WinUtil.h"
 #include "MainWindow.h"
 #include "SplashWindow.h"
-#include "UPnP_COM.h"
-#include "UPnP_MiniUPnPc.h"
+#include "Mapper_NATPMP.h"
+#include "Mapper_MiniUPnPc.h"
+#include "Mapper_WinUPnP.h"
 
 #include <dcpp/MerkleTree.h>
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
+#include <dcpp/MappingManager.h>
 #include <dcpp/ResourceManager.h>
-#include <dcpp/UPnPManager.h>
 
 #define WMU_WHERE_ARE_YOU_MSG _T("WMU_WHERE_ARE_YOU-{885D4B75-6606-4add-A8DE-EEEDC04181F1}")
 
@@ -119,7 +120,6 @@ int SmartWinMain(dwt::Application& app) {
 		return 1;
 	}
 
-	// For SHBrowseForFolder, UPnP_COM
 	HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 	if(FAILED(hr))
 		return hr;
@@ -145,8 +145,9 @@ int SmartWinMain(dwt::Application& app) {
 			SetProcessDefaultLayout(LAYOUT_RTL);
 		}
 
-		UPnPManager::getInstance()->addImplementation(new UPnP_MiniUPnPc());
-		UPnPManager::getInstance()->addImplementation(new UPnP_COM());
+		MappingManager::getInstance()->addImplementation(new Mapper_NATPMP());
+		MappingManager::getInstance()->addImplementation(new Mapper_MiniUPnPc());
+		MappingManager::getInstance()->addImplementation(new Mapper_WinUPnP());
 
 		WinUtil::init();
 		MainWindow* wnd = new MainWindow;

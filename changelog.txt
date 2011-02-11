@@ -8,6 +8,7 @@
 * Display the name of the device MiniUPnP has bound to (poy)
 * More status bar icons
 * [L#704743] Fix hang on exit under WINE in active mode (cologic)
+* Add NAT-PMP for port mappings as an alternative to UPnP (poy)
 
 -- 0.781 2011-01-12 --
 * Add a dummy serial number to TLS certs to satisfy some parsers (poy)

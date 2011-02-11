@@ -24,7 +24,6 @@
 
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
-#include <dwt/util/win32/Version.h>
 
 NetworkPage::NetworkPage(dwt::Widget* parent) :
 PropPage(parent),
@@ -79,7 +78,7 @@ tls(0)
 		directIn = connType->addChild(RadioButton::Seed(T_("My computer is directly connected to Internet (no router)")));
 		directIn->setHelpId(IDH_SETTINGS_NETWORK_DIRECT);
 
-		upnp = connType->addChild(RadioButton::Seed(T_("Use UPnP to let DC++ configure my router")));
+		upnp = connType->addChild(RadioButton::Seed(T_("Let DC++ configure my router (UPnP / NAT-PMP)")));
 		upnp->setHelpId(IDH_SETTINGS_NETWORK_FIREWALL_UPNP);
 
 		nat = connType->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
@@ -99,7 +98,7 @@ tls(0)
 			externalIP = ipGrid->addChild(WinUtil::Seeds::Dialog::textBox);
 			items.push_back(Item(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR));
 
-			overrideIP = ipGrid->addChild(CheckBox::Seed(T_("Don't allow hub/UPnP to override")));
+			overrideIP = ipGrid->addChild(CheckBox::Seed(T_("Don't allow hubs/UPnP/NAT-PMP to override")));
 			items.push_back(Item(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL));
 			overrideIP->setHelpId(IDH_SETTINGS_NETWORK_OVERRIDE);
 		}
@@ -124,10 +123,6 @@ tls(0)
 		tls = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(tls, SettingsManager::TLS_PORT, PropPage::T_INT));
 		tls->setHelpId(IDH_SETTINGS_NETWORK_PORT_TLS);
-	}
-
-	if(!dwt::util::win32::ensureVersion(dwt::util::win32::XP)) {
-		upnp->setEnabled(false);
 	}
 
 	PropPage::read(items);

@@ -18,50 +18,62 @@
 
 #include "stdafx.h"
 
-#include "UPnP_MiniUPnPc.h"
+#include "Mapper_MiniUPnPc.h"
 
 #include <dcpp/Util.h>
 
+extern "C" {
 #ifndef STATICLIB
 #define STATICLIB
 #endif
 #include <miniupnpc/miniupnpc.h>
 #include <miniupnpc/upnpcommands.h>
+}
 
-static UPNPUrls urls;
-static IGDdatas data;
-const string UPnP_MiniUPnPc::name = "MiniUPnP";
+const string Mapper_MiniUPnPc::name = "MiniUPnP";
 
-bool UPnP_MiniUPnPc::init() {
+bool Mapper_MiniUPnPc::init() {
 	UPNPDev* devices = upnpDiscover(2000, 0, 0, 0);
 	if(!devices)
 		return false;
 
-	bool ret = UPNP_GetValidIGD(devices, &urls, &data, 0, 0) == 1;
+	UPNPUrls urls;
+	IGDdatas data;
 
+	bool ret = UPNP_GetValidIGD(devices, &urls, &data, 0, 0) == 1;
+	if(ret) {
+		url = urls.controlURL;
+		service = data.first.servicetype;
+		device = data.CIF.friendlyName;
+	}
+
+	FreeUPNPUrls(&urls);
 	freeUPNPDevlist(devices);
 
 	return ret;
 }
 
-bool UPnP_MiniUPnPc::add(const unsigned short port, const Protocol protocol, const string& description) {
+void Mapper_MiniUPnPc::uninit() {
+}
+
+bool Mapper_MiniUPnPc::add(const unsigned short port, const Protocol protocol, const string& description) {
 	const string port_ = Util::toString(port);
-	return UPNP_AddPortMapping(urls.controlURL, data.first.servicetype, port_.c_str(), port_.c_str(),
+	return UPNP_AddPortMapping(url.c_str(), service.c_str(), port_.c_str(), port_.c_str(),
 		Util::getLocalIp().c_str(), description.c_str(), protocols[protocol], 0) == UPNPCOMMAND_SUCCESS;
 }
 
-bool UPnP_MiniUPnPc::remove(const unsigned short port, const Protocol protocol) {
-	return UPNP_DeletePortMapping(urls.controlURL, data.first.servicetype, Util::toString(port).c_str(),
+bool Mapper_MiniUPnPc::remove(const unsigned short port, const Protocol protocol) {
+	return UPNP_DeletePortMapping(url.c_str(), service.c_str(), Util::toString(port).c_str(),
 		protocols[protocol], 0) == UPNPCOMMAND_SUCCESS;
 }
 
-string UPnP_MiniUPnPc::getDeviceName() {
-	return data.modelName;
+string Mapper_MiniUPnPc::getDeviceName() {
+	return device;
 }
 
-string UPnP_MiniUPnPc::getExternalIP() {
+string Mapper_MiniUPnPc::getExternalIP() {
 	char buf[16] = { 0 };
-	if(UPNP_GetExternalIPAddress(urls.controlURL, data.first.servicetype, buf) == UPNPCOMMAND_SUCCESS)
+	if(UPNP_GetExternalIPAddress(url.c_str(), service.c_str(), buf) == UPNPCOMMAND_SUCCESS)
 		return buf;
 	return Util::emptyString;
 }
