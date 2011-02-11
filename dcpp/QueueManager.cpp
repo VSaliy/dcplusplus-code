@@ -1729,7 +1729,7 @@ void QueueManager::checkSfv(QueueItem* qi, Download* d) {
 			File::deleteFile(qi->getTempTarget());
 			qi->resetDownloaded();
 			dcdebug("QueueManager: CRC32 mismatch for %s\n", qi->getTarget().c_str());
-			LogManager::getInstance()->message(_("CRC32 inconsistency (SFV-Check)") + ' ' + Util::addBrackets(qi->getTarget()));
+			LogManager::getInstance()->message(str(F_("CRC32 inconsistency (SFV-Check): %1%") % Util::addBrackets(qi->getTarget()))); 
 
 			setPriority(qi->getTarget(), QueueItem::PAUSED);
 
