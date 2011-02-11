@@ -46,7 +46,7 @@ public:
 
 private:
 	friend class Singleton<ConnectivityManager>;
-	friend class UPnPManager;
+	friend class MappingManager;
 	
 	ConnectivityManager();
 	virtual ~ConnectivityManager() throw() { }

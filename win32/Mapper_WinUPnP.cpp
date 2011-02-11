@@ -18,19 +18,19 @@
 
 #include "stdafx.h"
 
-#include "UPnP_COM.h"
+#include "Mapper_WinUPnP.h"
 
 #include <dcpp/Util.h>
 #include <dcpp/Text.h>
 
 #include <ole2.h>
 
-const string UPnP_COM::name = "Standard Windows";
+const string Mapper_WinUPnP::name = "Windows UPnP";
 
 #ifdef HAVE_NATUPNP_H
 #include <natupnp.h>
 	
-bool UPnP_COM::init() {
+bool Mapper_WinUPnP::init() {
 	// Lacking the __uuidof in mingw...
 	CLSID upnp;
 	OLECHAR upnps[] = L"{AE1E00AA-3FD5-403C-8A27-2BBDC30CD0E1}";
@@ -45,7 +45,10 @@ bool UPnP_COM::init() {
 	return pUN;
 }
 
-bool UPnP_COM::add(const unsigned short port, const Protocol protocol, const string& description) {
+void Mapper_WinUPnP::uninit() {
+}
+
+bool Mapper_WinUPnP::add(const unsigned short port, const Protocol protocol, const string& description) {
 	IStaticPortMappingCollection* pSPMC = getStaticPortMappingCollection();
 	if(!pSPMC)
 		return false;
@@ -65,15 +68,15 @@ bool UPnP_COM::add(const unsigned short port, const Protocol protocol, const str
 	bool ret = SUCCEEDED(hr);
 	if(ret) {
 		pSPM->Release();
-		pSPMC->Release();
 
 		lastPort = port;
 		lastProtocol = protocol;
 	}
+	pSPMC->Release();
 	return ret;
 }
 
-bool UPnP_COM::remove(const unsigned short port, const Protocol protocol) {
+bool Mapper_WinUPnP::remove(const unsigned short port, const Protocol protocol) {
 	IStaticPortMappingCollection* pSPMC = getStaticPortMappingCollection();
 	if(!pSPMC)
 		return false;
@@ -93,12 +96,12 @@ bool UPnP_COM::remove(const unsigned short port, const Protocol protocol) {
 	return ret;
 }
 
-string UPnP_COM::getDeviceName() {
+string Mapper_WinUPnP::getDeviceName() {
 	/// @todo use IUPnPDevice::ModelName <http://msdn.microsoft.com/en-us/library/aa381670(VS.85).aspx>?
 	return Util::emptyString;
 }
 
-string UPnP_COM::getExternalIP() {
+string Mapper_WinUPnP::getExternalIP() {
 	// Get the External IP from the last added mapping
 	if(!lastPort)
 		return Util::emptyString;
@@ -143,7 +146,7 @@ string UPnP_COM::getExternalIP() {
 	return ret;
 }
 
-IStaticPortMappingCollection* UPnP_COM::getStaticPortMappingCollection() {
+IStaticPortMappingCollection* Mapper_WinUPnP::getStaticPortMappingCollection() {
 	if(!pUN)
 		return 0;
 	IStaticPortMappingCollection* ret = 0;
@@ -155,27 +158,27 @@ IStaticPortMappingCollection* UPnP_COM::getStaticPortMappingCollection() {
 
 #else
 
-bool UPnP_COM::init() {
+bool Mapper_WinUPnP::init() {
 	return false;
 }
 
-bool UPnP_COM::add(const unsigned short port, const Protocol protocol, const string& description) {
+bool Mapper_WinUPnP::add(const unsigned short port, const Protocol protocol, const string& description) {
 	return false;
 }
 
-bool UPnP_COM::remove(const unsigned short port, const Protocol protocol) {
+bool Mapper_WinUPnP::remove(const unsigned short port, const Protocol protocol) {
 	return false;
 }
 
-string UPnP_COM::getDeviceName() {
+string Mapper_WinUPnP::getDeviceName() {
 	return Util::emptyString;
 }
 
-string UPnP_COM::getExternalIP() {
+string Mapper_WinUPnP::getExternalIP() {
 	return Util::emptyString;
 }
 
-IStaticPortMappingCollection* UPnP_COM::getStaticPortMappingCollection() {
+IStaticPortMappingCollection* Mapper_WinUPnP::getStaticPortMappingCollection() {
 	return 0;
 }
 

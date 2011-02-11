@@ -19,16 +19,16 @@
 #include "stdinc.h"
 #include "DCPlusPlus.h"
 
-#include "UPnP.h"
+#include "Mapper.h"
 
 namespace dcpp {
 
-const char* UPnP::protocols[PROTOCOL_LAST] = {
+const char* Mapper::protocols[PROTOCOL_LAST] = {
 	"TCP",
 	"UDP"
 };
 
-bool UPnP::open(const unsigned short port, const Protocol protocol, const string& description) {
+bool Mapper::open(const unsigned short port, const Protocol protocol, const string& description) {
 	if(!add(port, protocol, description))
 		return false;
 
@@ -36,7 +36,7 @@ bool UPnP::open(const unsigned short port, const Protocol protocol, const string
 	return true;
 }
 
-bool UPnP::close() {
+bool Mapper::close() {
 	bool ret = true;
 
 	for(auto i = rules.cbegin(), iend = rules.cend(); i != iend; ++i)
@@ -46,7 +46,7 @@ bool UPnP::close() {
 	return ret;
 }
 
-bool UPnP::hasRules() const {
+bool Mapper::hasRules() const {
 	return !rules.empty();
 }
 

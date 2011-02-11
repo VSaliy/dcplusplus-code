@@ -69,8 +69,6 @@ void IGDdata(void * d, const char * data, int l)
            datas->level, datas->cureltname, l, data);	*/
 	if( !strcmp(datas->cureltname, "URLBase") )
 		dstmember = datas->urlbase;
-	else if( !strcmp(datas->cureltname, "modelName") )
-		dstmember = datas->modelName;
 	else if( !strcmp(datas->cureltname, "serviceType") )
 		dstmember = datas->tmp.servicetype;
 	else if( !strcmp(datas->cureltname, "controlURL") )
@@ -81,6 +79,8 @@ void IGDdata(void * d, const char * data, int l)
 		dstmember = datas->tmp.scpdurl;
 /*	else if( !strcmp(datas->cureltname, "deviceType") )
 		dstmember = datas->devicetype_tmp;*/
+	else if( !strcmp(datas->cureltname, "friendlyName") )
+		dstmember = datas->tmp.friendlyName;
 	if(dstmember)
 	{
 		if(l>=MINIUPNPC_URL_MAXSIZE)

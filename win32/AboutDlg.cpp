@@ -32,7 +32,7 @@ static const char thanks[] = "Big thanks to all donators and people who have con
 "This product uses zlib (www.zlib.net), thanks to Jean-loup Gailly and Mark Adler for providing it. "
 "This product includes GeoIP data created by MaxMind, available from http://maxmind.com/. "
 "This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/). "
-"This product uses the MiniUPnP client library (http://miniupnp.tuxfamily.org) by Thomas Bernard. "
+"This product uses the MiniUPnP client library (http://miniupnp.tuxfamily.org) and libnatpmp by Thomas Bernard. "
 "The following people have contributed code to DC++ (I hope I haven't missed someone, they're "
 "roughly in chronological order...=):\r\n"
 "geoff, carxor, luca rota, dan kline, mike, anton, zc, sarf, farcry, kyrre aalerud, opera, "

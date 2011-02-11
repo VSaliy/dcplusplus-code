@@ -37,5 +37,5 @@ env.Depends(res, 'resource.h')
 headers=dev.get_sources(source_path, "*.h")
 dev.i18n(source_path, env, [sources,headers], 'dcpp-win32')
 
-ret = env.Program(target, [sources, res, dev.client, dev.zlib, dev.boost, dev.bzip2, dev.miniupnpc, dev.dwt, dev.intl])
+ret = env.Program(target, [sources, res, dev.client, dev.zlib, dev.boost, dev.bzip2, dev.miniupnpc, dev.natpmp, dev.dwt, dev.intl])
 Return('ret')
