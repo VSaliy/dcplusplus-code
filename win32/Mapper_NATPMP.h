@@ -30,8 +30,6 @@ private:
 	bool init();
 	void uninit();
 
-	bool close();
-
 	bool add(const unsigned short port, const Protocol protocol, const string& description);
 	bool remove(const unsigned short port, const Protocol protocol);
 

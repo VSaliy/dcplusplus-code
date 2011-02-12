@@ -35,8 +35,6 @@ const string Mapper_NATPMP::name = "NAT-PMP";
 static natpmp_t nat;
 
 bool Mapper_NATPMP::init() {
-	nat.s = 0;
-
 	// the lib normally handles this but we call it manually to store the result (IP of the router).
 	in_addr addr;
 	if(getdefaultgateway(reinterpret_cast<in_addr_t*>(&addr.s_addr)) < 0)
@@ -48,18 +46,6 @@ bool Mapper_NATPMP::init() {
 
 void Mapper_NATPMP::uninit() {
 	closenatpmp(&nat);
-	nat.s = 0;
-}
-
-bool Mapper_NATPMP::close() {
-	if(nat.s) // during the init phase - uninit will be called by MappingManager.
-		return Mapper::close();
-	if(init()) { // out of the init phase - we must re-create a socket.
-		bool ret = Mapper::close();
-		uninit();
-		return ret;
-	}
-	return false;
 }
 
 int reqType(const Mapper::Protocol protocol) {
@@ -101,7 +87,7 @@ bool Mapper_NATPMP::add(const unsigned short port, const Protocol protocol, cons
 	if(sendRequest(port, protocol, 3600)) {
 		natpmpresp_t response;
 		if(read(response) && response.type == respType(protocol) && response.pnu.newportmapping.mappedpublicport == port) {
-			lifetime = std::min(lifetime, response.pnu.newportmapping.lifetime);
+			lifetime = std::min(lifetime ? lifetime : 3600, response.pnu.newportmapping.lifetime);
 			return true;
 		}
 	}

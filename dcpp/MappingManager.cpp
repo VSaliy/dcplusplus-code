@@ -73,6 +73,13 @@ int MappingManager::run() {
 	if(renewal) {
 		Mapper& mapper = mappers[working];
 
+		ScopedFunctor([&mapper] { mapper.uninit(); });
+		if(!mapper.init()) {
+			// can't renew; try again later.
+			renewal = GET_TICK() + std::max(mapper.renewal(), 10u) * 60 * 1000;
+			return 0;
+		}
+
 		auto addRule = [this, &mapper](const unsigned short port, Mapper::Protocol protocol, const string& description) {
 			// just launch renewal requests - don't bother with possible failures.
 			if(port) {
@@ -87,7 +94,7 @@ int MappingManager::run() {
 
 		auto minutes = mapper.renewal();
 		if(minutes) {
-			renewal = GET_TICK() + minutes * 60 * 1000;
+			renewal = GET_TICK() + std::max(minutes, 10u) * 60 * 1000;
 		} else {
 			TimerManager::getInstance()->removeListener(this);
 		}
@@ -98,14 +105,14 @@ int MappingManager::run() {
 	for(auto i = mappers.begin(); i != mappers.end(); ++i) {
 		Mapper& mapper = *i;
 
-		mapper.close();
-
 		ScopedFunctor([&mapper] { mapper.uninit(); });
 
 		if(!mapper.init()) {
 			log(str(F_("Failed to initalize the %1% interface") % mapper.getName()));
 			continue;
 		}
+
+		mapper.close();
 
 		auto addRule = [this, &mapper](const unsigned short port, Mapper::Protocol protocol, const string& description) -> bool {
 			if(port && !mapper.open(port, protocol, boost::str(F_("%1% %2% port (%3% %4%)") %
@@ -142,7 +149,7 @@ int MappingManager::run() {
 
 		auto minutes = mapper.renewal();
 		if(minutes) {
-			renewal = GET_TICK() + minutes * 60 * 1000;
+			renewal = GET_TICK() + std::max(minutes, 10u) * 60 * 1000;
 			working = i - mappers.begin();
 			TimerManager::getInstance()->addListener(this);
 		}
@@ -159,7 +166,12 @@ int MappingManager::run() {
 
 void MappingManager::close(Mapper& mapper) {
 	if(mapper.hasRules()) {
-		log(mapper.close() ?
+		bool ret = mapper.init();
+		if(ret) {
+			ret = mapper.close();
+			mapper.uninit();
+		}
+		log(ret ?
 			str(F_("Successfully removed port mappings from the %1% device with the %2% interface") % deviceString(mapper) % mapper.getName()) :
 			str(F_("Failed to remove port mappings from the %1% device with the %2% interface") % deviceString(mapper) % mapper.getName()));
 	}
@@ -177,7 +189,7 @@ string MappingManager::deviceString(Mapper& mapper) const {
 }
 
 void MappingManager::on(TimerManagerListener::Minute, uint64_t tick) throw() {
-	if(tick >= renewal)
+	if(tick >= renewal && !busy.test_and_set())
 		start();
 }
 
