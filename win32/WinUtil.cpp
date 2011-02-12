@@ -1163,35 +1163,30 @@ void WinUtil::openLink(const tstring& url) {
 bool WinUtil::parseDBLClick(const tstring& str) {
 	auto url = Text::fromT(str);
 	string proto, host, file, query, fragment;
-	uint16_t port = 411;
+	uint16_t port;
 	Util::decodeUrl(url, proto, host, port, file, query, fragment);
 
 	if(Util::stricmp(proto.c_str(), "adc") == 0 ||
 		Util::stricmp(proto.c_str(), "adcs") == 0 ||
-		Util::stricmp(proto.c_str(), "dchub") == 0 ||
-		proto.empty())
+		Util::stricmp(proto.c_str(), "dchub") == 0 )
 	{
-		if(host == "magnet") {
-			parseMagnetUri(str);
-		} else {
-			if(!host.empty()) {
-				HubFrame::openWindow(mainWindow->getTabView(), url);
-			}
+		if(!host.empty()) {
+			HubFrame::openWindow(mainWindow->getTabView(), url);
+		}
 
-			if(!file.empty()) {
-				if(file[0] == '/') {
-					// Remove any '/' in from of the file
-					file = file.substr(1);
-					if(file.empty()) return true;
-				}
-				try {
-					UserPtr user = ClientManager::getInstance()->findLegacyUser(file);
-					if(user)
-						QueueManager::getInstance()->addList(HintedUser(user, url), QueueItem::FLAG_CLIENT_VIEW);
-					// @todo else report error
-				} catch (const Exception&) {
-					// ...
-				}
+		if(!file.empty()) {
+			if(file[0] == '/') {
+				// Remove any '/' in from of the file
+				file = file.substr(1);
+				if(file.empty()) return true;
+			}
+			try {
+				UserPtr user = ClientManager::getInstance()->findLegacyUser(file);
+				if(user)
+					QueueManager::getInstance()->addList(HintedUser(user, url), QueueItem::FLAG_CLIENT_VIEW);
+				// @todo else report error
+			} catch (const Exception&) {
+				// ...
 			}
 		}
 
@@ -1200,6 +1195,9 @@ bool WinUtil::parseDBLClick(const tstring& str) {
 		Util::strnicmp(str.c_str(), _T("www."), 4) == 0 ||
 		Util::strnicmp(str.c_str(), _T("mailto:"), 7) == 0) {
 		openLink(str);
+		return true;
+	} else if(host == "magnet") {
+		parseMagnetUri(str);
 		return true;
 	}
 
