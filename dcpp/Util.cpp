@@ -460,7 +460,7 @@ void Util::decodeUrl(const string& url, string& protocol, string& host, uint16_t
 		fileStart = authorityEnd;
 	}
 
-	protocol = url.substr(protoStart, protoEnd - protoStart);
+	protocol = (protoEnd == string::npos ? Util::emptyString : url.substr(protoStart, protoEnd - protoStart));
 
 	if(authorityEnd > authorityStart) {
 		dcdebug("x");
@@ -499,7 +499,7 @@ void Util::decodeUrl(const string& url, string& protocol, string& host, uint16_t
 				port = 80;
 			} else if(protocol == "https") {
 				port = 443;
-			} else if(protocol == "dchub") {
+			} else if(protocol == "dchub"  || protocol.empty()) {
 				port = 411;
 			}
 		} else {
