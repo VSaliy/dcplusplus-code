@@ -148,15 +148,34 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 			const string& n = getAttrib(attribs, sName, 0);
 			if(n.empty())
 				return;
+
 			const string& s = getAttrib(attribs, sSize, 1);
 			if(s.empty())
 				return;
+			auto size = Util::toInt64(s);
+
 			const string& h = getAttrib(attribs, sTTH, 2);
-			if(h.empty()) {
+			if(h.empty())
 				return;
+			TTHValue tth(h); /// @todo verify validity?
+
+			if(updating) {
+				// just update the current file if it is already there.
+				for(auto i = cur->files.cbegin(), iend = cur->files.cend(); i != iend; ++i) {
+					auto& file = **i;
+					/// @todo comparisons should be case-insensitive but it takes too long - add a cache
+					if(file.getTTH() == tth || file.getName() == n) {
+						file.setName(n);
+						file.setSize(size);
+						file.setTTH(tth);
+						return;
+					}
+				}
 			}
-			DirectoryListing::File* f = new DirectoryListing::File(cur, n, Util::toInt64(s), h);
+
+			DirectoryListing::File* f = new DirectoryListing::File(cur, n, size, tth);
 			cur->files.push_back(f);
+
 		} else if(name == sDirectory) {
 			const string& n = getAttrib(attribs, sName, 0);
 			if(n.empty()) {
@@ -166,6 +185,7 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 			DirectoryListing::Directory* d = NULL;
 			if(updating) {
 				for(DirectoryListing::Directory::Iter i = cur->directories.begin(); i != cur->directories.end(); ++i) {
+					/// @todo comparisons should be case-insensitive but it takes too long - add a cache
 					if((*i)->getName() == n) {
 						d = *i;
 						if(!d->getComplete())
