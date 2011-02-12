@@ -33,6 +33,11 @@ extern "C" {
 const string Mapper_MiniUPnPc::name = "MiniUPnP";
 
 bool Mapper_MiniUPnPc::init() {
+	// only init once.
+	static bool initialized = false;
+	if(initialized)
+		return true;
+
 	UPNPDev* devices = upnpDiscover(2000, 0, 0, 0);
 	if(!devices)
 		return false;
@@ -40,8 +45,8 @@ bool Mapper_MiniUPnPc::init() {
 	UPNPUrls urls;
 	IGDdatas data;
 
-	bool ret = UPNP_GetValidIGD(devices, &urls, &data, 0, 0) == 1;
-	if(ret) {
+	initialized = UPNP_GetValidIGD(devices, &urls, &data, 0, 0) == 1;
+	if(initialized) {
 		url = urls.controlURL;
 		service = data.first.servicetype;
 		device = data.CIF.friendlyName;
@@ -50,7 +55,7 @@ bool Mapper_MiniUPnPc::init() {
 	FreeUPNPUrls(&urls);
 	freeUPNPDevlist(devices);
 
-	return ret;
+	return initialized;
 }
 
 void Mapper_MiniUPnPc::uninit() {

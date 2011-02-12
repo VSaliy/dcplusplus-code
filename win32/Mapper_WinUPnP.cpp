@@ -31,6 +31,11 @@ const string Mapper_WinUPnP::name = "Windows UPnP";
 #include <natupnp.h>
 	
 bool Mapper_WinUPnP::init() {
+	// only init once.
+	static bool initialized = false;
+	if(initialized)
+		return true;
+
 	// Lacking the __uuidof in mingw...
 	CLSID upnp;
 	OLECHAR upnps[] = L"{AE1E00AA-3FD5-403C-8A27-2BBDC30CD0E1}";
@@ -42,7 +47,8 @@ bool Mapper_WinUPnP::init() {
 	HRESULT hr = CoCreateInstance(upnp, 0, CLSCTX_INPROC_SERVER, iupnp, reinterpret_cast<LPVOID*>(&pUN));
 	if(FAILED(hr))
 		pUN = 0;
-	return pUN;
+	initialized = pUN;
+	return initialized;
 }
 
 void Mapper_WinUPnP::uninit() {
@@ -160,6 +166,9 @@ IStaticPortMappingCollection* Mapper_WinUPnP::getStaticPortMappingCollection() {
 
 bool Mapper_WinUPnP::init() {
 	return false;
+}
+
+void Mapper_WinUPnP::uninit() {
 }
 
 bool Mapper_WinUPnP::add(const unsigned short port, const Protocol protocol, const string& description) {

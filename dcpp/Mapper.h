@@ -25,8 +25,8 @@ namespace dcpp {
 class Mapper : boost::noncopyable
 {
 public:
-	Mapper() { printf("mapper constructor\n"); }
-	virtual ~Mapper() { printf("mapper destructor\n"); }
+	Mapper() { }
+	virtual ~Mapper() { }
 
 	enum Protocol {
 		PROTOCOL_TCP,
