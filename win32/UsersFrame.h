@@ -126,6 +126,8 @@ private:
 
 	TextBoxPtr filter;
 	CheckBoxPtr showFavs;
+	CheckBoxPtr showOnline;
+	CheckBoxPtr showQueue;
 
 	static dwt::ImageListPtr userIcons;
 

@@ -24,6 +24,7 @@
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/ClientManager.h>
+#include <dcpp/QueueManager.h>
 #include <dcpp/version.h>
 
 const string UsersFrame::id = "Users";
@@ -50,6 +51,14 @@ static const FieldName fields[] =
 {
 	{ "NI", T_("Nick") },
 	{ "DE", T_("Description") },
+	{ "EM", T_("E-Mail"),
+	{ "SL", T_("Slots") },
+	{ "SF", T_("Shared files") },
+	{ "SS", T_("Shared bytes") },
+	{ "I4", T_("IP (v4)") },
+	{ "I6", T_("IP (v6)") },
+	{ "VE", T_("Client") },
+	{ "", _T("") }
 };
 
 UsersFrame::UsersFrame(TabViewPtr parent) :
@@ -57,15 +66,25 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	users(0),
 	startup(true)
 {
-	filterGrid = addChild(Grid::Seed(1, 2));
+	filterGrid = addChild(Grid::Seed(1, 4));
 
 	filter = filterGrid->addChild(WinUtil::Seeds::textBox);
 	filter->onUpdated(std::bind(&UsersFrame::handleFilterUpdated, this));
 	filterGrid->column(0).mode = GridInfo::FILL;
 
+	showOnline = filterGrid->addChild(WinUtil::Seeds::checkBox);
+	showOnline->setText(_T("Online"));
+	showOnline->setChecked(); // TODO save / restore last state
+	showOnline->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
+
 	showFavs = filterGrid->addChild(WinUtil::Seeds::checkBox);
-	showFavs->setText(_T("Favorite users only"));
+	showFavs->setText(_T("Favorite"));
+	showFavs->setChecked();	// TODO save / restore last state
 	showFavs->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
+
+	showQueue = filterGrid->addChild(WinUtil::Seeds::checkBox);
+	showQueue->setText(_T("Download queue"));
+	showQueue->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
 
 	splitter = addChild(VSplitter::Seed(0.7));
 
@@ -145,11 +164,12 @@ void UsersFrame::layout() {
 	status->layout(r);
 
 	auto r2 = r;
-	r2.size.y = filter->getPreferredSize().y;
+	auto r2y = filter->getPreferredSize().y;
+	r2.pos.y = r2.pos.y + r2.size.y - r2y;
+	r2.size.y = r2y;
 
 	filterGrid->layout(r2);
 
-	r.pos.y += filter->getWindowSize().y + 3;
 	r.size.y -= filter->getWindowSize().y + 3;
 
 	splitter->layout(r);
@@ -250,6 +270,10 @@ void UsersFrame::handleSelectionChanged() {
 
 	userInfo->clearRows();
 
+	if(users->countSelected() != 1) {
+		return;
+	}
+
 	auto sel = users->getSelectedData();
 	if(!sel) {
 		return;
@@ -262,7 +286,17 @@ void UsersFrame::handleSelectionChanged() {
 	}
 
 	auto info = ui->getIdentity().getInfo();
-	tstring text;
+
+	for(auto f = fields; !f->field.empty(); ++f) {
+		auto i = info.find(f->field);
+		if(i != info.end()) {
+			userInfo->addRow(GridInfo());
+			userInfo->addChild(Label::Seed(f->name));
+			userInfo->addChild(Label::Seed(Text::toT(i->second)));
+			info.erase(i);
+		}
+	}
+
 	for(auto i = info.begin(); i != info.end(); ++i) {
 		userInfo->addRow(GridInfo());
 		userInfo->addChild(Label::Seed(Text::toT(i->first)));
@@ -368,13 +402,21 @@ void UsersFrame::handleFilterUpdated() {
 }
 
 bool UsersFrame::matches(const UserInfo &ui) {
-	if(showFavs->getChecked() && !FavoriteManager::getInstance()->isFavoriteUser(ui.getUser())) {
+
+	auto txt = filter->getText();
+	if(!txt.empty() && Util::findSubString(ui.columns[COLUMN_NICK], txt) == string::npos) {
 		return false;
 	}
 
-	auto txt = filter->getText();
+	if(showOnline->getChecked() && ui.getUser().user->isOnline()) {
+		return true;
+	}
 
-	if(Util::findSubString(ui.columns[COLUMN_NICK], txt) != string::npos) {
+	if(showFavs->getChecked() && FavoriteManager::getInstance()->isFavoriteUser(ui.getUser())) {
+		return true;
+	}
+
+	if(showQueue->getChecked() && QueueManager::getInstance()->getQueued(ui.getUser()) > 0) {
 		return true;
 	}
 
