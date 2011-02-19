@@ -22,6 +22,7 @@
 
 #include "AppearancePage.h"
 
+#include <dwt/widgets/LoadDialog.h>
 #include <dwt/widgets/Spinner.h>
 
 #include <dcpp/SettingsManager.h>

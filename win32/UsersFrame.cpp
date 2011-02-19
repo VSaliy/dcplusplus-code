@@ -27,6 +27,8 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/version.h>
 
+#include <dwt/widgets/Splitter.h>
+
 const string UsersFrame::id = "Users";
 const string& UsersFrame::getId() const { return id; }
 

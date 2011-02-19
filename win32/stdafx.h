@@ -24,38 +24,30 @@
 #include <dcpp/stdinc.h>
 #include <dcpp/DCPlusPlus.h>
 
+using namespace dcpp;
+
 #include <libintl.h>
 
-#include <dwt/Application.h>
-#include <dwt/resources/Pen.h>
+#include <dwt/forward.h>
 #include <dwt/util/StringUtils.h>
 #include <dwt/widgets/Button.h>
 #include <dwt/widgets/CheckBox.h>
 #include <dwt/widgets/ComboBox.h>
-#include <dwt/widgets/ColorDialog.h>
 #include <dwt/widgets/Container.h>
-#include <dwt/widgets/FolderDialog.h>
-#include <dwt/widgets/FontDialog.h>
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/GroupBox.h>
 #include <dwt/widgets/Label.h>
-#include <dwt/widgets/LoadDialog.h>
 #include <dwt/widgets/MessageBox.h>
 #include <dwt/widgets/Menu.h>
 #include <dwt/widgets/ModalDialog.h>
 #include <dwt/widgets/ModelessDialog.h>
 #include <dwt/widgets/RadioButton.h>
 #include <dwt/widgets/RichTextBox.h>
-#include <dwt/widgets/SaveDialog.h>
-#include <dwt/widgets/Splitter.h>
 #include <dwt/widgets/Table.h>
 #include <dwt/widgets/TabView.h>
 #include <dwt/widgets/TextBox.h>
 #include <dwt/widgets/Tree.h>
-#include <dwt/widgets/ToolTip.h>
 #include <dwt/widgets/Window.h>
-
-using namespace dcpp;
 
 using dwt::util::escapeMenu;
 using dwt::Button;

@@ -22,6 +22,10 @@
 
 #include "Appearance2Page.h"
 
+#include <dwt/widgets/ColorDialog.h>
+#include <dwt/widgets/FontDialog.h>
+#include <dwt/widgets/LoadDialog.h>
+
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 

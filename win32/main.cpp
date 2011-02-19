@@ -32,6 +32,8 @@
 #include <dcpp/MappingManager.h>
 #include <dcpp/ResourceManager.h>
 
+#include <dwt/Application.h>
+
 #define WMU_WHERE_ARE_YOU_MSG _T("WMU_WHERE_ARE_YOU-{885D4B75-6606-4add-A8DE-EEEDC04181F1}")
 
 const UINT SingleInstance::WMU_WHERE_ARE_YOU = ::RegisterWindowMessage(WMU_WHERE_ARE_YOU_MSG);

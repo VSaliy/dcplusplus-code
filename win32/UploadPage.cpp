@@ -22,6 +22,7 @@
 
 #include "UploadPage.h"
 
+#include <dwt/widgets/FolderDialog.h>
 #include <dwt/widgets/Spinner.h>
 
 #include <dcpp/SettingsManager.h>

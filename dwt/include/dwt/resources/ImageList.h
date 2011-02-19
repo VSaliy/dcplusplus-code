@@ -37,6 +37,7 @@
 #define DWT_ImageList_h
 
 #include "../WindowsHeaders.h"
+#include "../forward.h"
 #include "../tstring.h"
 #include "../Point.h"
 #include "Bitmap.h"
@@ -44,15 +45,6 @@
 #include "Handle.h"
 
 namespace dwt {
-
-// Forward declaration
-class ImageList;
-
-/// \ingroup GlobalStuff
-/// ImageList pointer
-/** Use this typedef instead to ensure compatibility in future versions of SmartWin!!
-  */
-typedef boost::intrusive_ptr< ImageList > ImageListPtr;
 
 /// Class encapsulating an HIMAGELIST and ensuring that the contained HIMAGELIST is
 /// freed upon destruction of this object

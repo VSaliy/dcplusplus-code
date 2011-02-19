@@ -19,6 +19,7 @@
 #include "stdafx.h"
 
 #include "QueueFrame.h"
+
 #include "WinUtil.h"
 #include "resource.h"
 #include "HoldRedraw.h"
@@ -26,6 +27,9 @@
 
 #include <dcpp/QueueManager.h>
 #include <dcpp/version.h>
+
+#include <dwt/widgets/FolderDialog.h>
+#include <dwt/widgets/Splitter.h>
 
 const string QueueFrame::id = "Queue";
 const string& QueueFrame::getId() const { return id; }
@@ -83,8 +87,7 @@ fileLists(0)
 		files->setSort(COLUMN_TARGET);
 
 		files->onKeyDown(std::bind(&QueueFrame::handleKeyDownFiles, this, _1));
-		files->onSelectionChanged(std::bind(&QueueFrame::callAsync, this,
-			dwt::Application::Callback(std::bind(&QueueFrame::updateStatus, this))));
+		files->onSelectionChanged([this] { GCC_WTF->callAsync([&] { updateStatus(); }); });
 		files->onContextMenu(std::bind(&QueueFrame::handleFilesContextMenu, this, _1));
 	}
 

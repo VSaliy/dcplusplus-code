@@ -37,13 +37,11 @@
 #define DWT_Font_h
 
 #include "../WindowsHeaders.h"
+#include "../forward.h"
 #include "../tstring.h"
 #include "Handle.h"
 
 namespace dwt {
-
-class Font;
-typedef boost::intrusive_ptr< Font > FontPtr;
 
 #ifndef WINCE
 /// Type of default installed fonts you can create with the Font class

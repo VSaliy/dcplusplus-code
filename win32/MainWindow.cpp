@@ -66,9 +66,11 @@
 #include <dcpp/SimpleXML.h>
 #include <dcpp/ThrottleManager.h>
 
+#include <dwt/Application.h>
 #include <dwt/widgets/Notification.h>
 #include <dwt/widgets/Rebar.h>
 #include <dwt/widgets/Spinner.h>
+#include <dwt/widgets/Splitter.h>
 #include <dwt/widgets/ToolBar.h>
 
 #ifdef HAVE_HTMLHELP_H

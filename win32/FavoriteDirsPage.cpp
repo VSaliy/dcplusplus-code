@@ -22,6 +22,8 @@
 
 #include "FavoriteDirsPage.h"
 
+#include <dwt/widgets/FolderDialog.h>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>

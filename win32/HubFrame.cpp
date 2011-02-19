@@ -36,6 +36,8 @@
 #include <dcpp/version.h>
 #include <dcpp/WindowInfo.h>
 
+#include <dwt/widgets/Splitter.h>
+
 const string HubFrame::id = WindowManager::hub();
 const string& HubFrame::getId() const { return id; }
 
@@ -161,8 +163,7 @@ inTabComplete(false)
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
 		users->setSort(COLUMN_NICK);
 
-		users->onSelectionChanged(std::bind(&HubFrame::callAsync, this,
-			dwt::Application::Callback(std::bind(&HubFrame::updateStatus, this))));
+		users->onSelectionChanged([this] { GCC_WTF->callAsync([&] { updateStatus(); }); });
 		users->onDblClicked(std::bind(&HubFrame::handleDoubleClickUsers, this));
 		users->onKeyDown(std::bind(&HubFrame::handleUsersKeyDown, this, _1));
 		users->onContextMenu(std::bind(&HubFrame::handleUsersContextMenu, this, _1));
@@ -369,7 +370,7 @@ void HubFrame::enterImpl(const tstring& s) {
 				addStatus(T_("Join/part of favorite users showing off"));
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("close")) == 0) {
-			this->close(true);
+			close(true);
 		} else if(Util::stricmp(cmd.c_str(), _T("userlist")) == 0) {
 			showUsers->setChecked(!showUsers->getChecked());
 		} else if(Util::stricmp(cmd.c_str(), _T("connection")) == 0) {
@@ -771,7 +772,7 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 void HubFrame::on(Connecting, Client*) throw() {
 	tstring hubUrl = Text::toT(client->getHubUrl());
 	callAsync([this, hubUrl]() { addStatus(boost::str(TF_("Connecting to %1%...") % hubUrl), true); });
-	callAsync([this, hubUrl]() { this->setText(hubUrl); });
+	callAsync([this, hubUrl]() { GCC_WTF->setText(hubUrl); });
 }
 void HubFrame::on(Connected, Client*) throw() {
 	callAsync(std::bind(&HubFrame::onConnected, this));
@@ -825,7 +826,7 @@ void HubFrame::on(HubUpdated, Client*) throw() {
 	}
 #endif
 	tstring hubNameT = Text::toT(hubName);
-	callAsync([this, hubNameT]() { this->setText(hubNameT); });
+	callAsync([this, hubNameT]() { GCC_WTF->setText(hubNameT); });
 }
 
 void HubFrame::on(Message, Client*, const ChatMessage& message) throw() {
