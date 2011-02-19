@@ -59,7 +59,8 @@ public:
 	typedef unordered_map<UserPtr, FileSet, User::Hash> FilesMap;
 	void clearUserFiles(const UserPtr&);
 	HintedUserList getWaitingUsers() const;
-	const FileSet& getWaitingUserFiles(const UserPtr&);
+	bool isWaiting(const UserPtr &) const;
+	FileSet getWaitingUserFiles(const UserPtr&) const;
 
 	/** @internal */
 	void addConnection(UserConnectionPtr conn);

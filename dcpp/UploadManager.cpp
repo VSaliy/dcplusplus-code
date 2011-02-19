@@ -391,9 +391,19 @@ HintedUserList UploadManager::getWaitingUsers() const {
 	return u;
 }
 
-const UploadManager::FileSet& UploadManager::getWaitingUserFiles(const UserPtr &u) {
+UploadManager::FileSet UploadManager::getWaitingUserFiles(const UserPtr &u) const {
 	Lock l(cs);
-	return waitingFiles.find(u)->second;
+	auto i = waitingFiles.find(u);
+	if(i == waitingFiles.end()) {
+		return FileSet();
+	}
+
+	return i->second;
+}
+
+bool UploadManager::isWaiting(const UserPtr &u) const {
+	Lock l(cs);
+	return waitingFiles.find(u) != waitingFiles.end();
 }
 
 void UploadManager::addConnection(UserConnectionPtr conn) {
