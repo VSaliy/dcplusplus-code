@@ -33,6 +33,8 @@
 #define DWT_SPLITTER_H
 
 #include "Container.h"
+#include "ToolTip.h"
+#include <dwt/Texts.h>
 
 namespace dwt {
 
@@ -181,6 +183,8 @@ void Splitter<horizontal>::create(const Seed& cs) {
 	onLeftMouseDown([this](const MouseEvent&) { return GCC_WTF->handleLButtonDown(); });
 	onMouseMove([this](const MouseEvent& mouseEvent) { return GCC_WTF->handleMouseMove(mouseEvent); });
 	onLeftMouseUp([this](const MouseEvent&) { return GCC_WTF->handleLButtonUp(); });
+
+	addChild(ToolTip::Seed())->setText(Texts::get(Texts::resize));
 }
 
 template<bool horizontal>

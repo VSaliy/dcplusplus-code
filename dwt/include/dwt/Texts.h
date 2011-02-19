@@ -38,6 +38,7 @@ struct Texts {
 	/** Texts used by DWT that the calling application should define. */
 	enum Text {
 		undo, cut, copy, paste, del, selAll, // text-box menu commands
+		resize, // tooltip for splitters
 		close // tooltip for closing an owner-drawn tab
 	};
 
