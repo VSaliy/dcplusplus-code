@@ -25,7 +25,9 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/ShareManager.h>
-#include <set>
+
+#include <dwt/widgets/FolderDialog.h>
+#include <dwt/widgets/Splitter.h>
 
 const string SearchFrame::id = "Search";
 const string& SearchFrame::getId() const { return id; }

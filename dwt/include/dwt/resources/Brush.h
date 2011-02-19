@@ -37,13 +37,10 @@
 #define DWT_BRUSH_H_
 
 #include "../WindowsHeaders.h"
+#include "../forward.h"
 #include "Handle.h"
 
 namespace dwt {
-
-class Brush;
-
-typedef boost::intrusive_ptr< Brush > BrushPtr;
 
 class Brush : public Handle<GdiPolicy<HBRUSH> > {
 public:

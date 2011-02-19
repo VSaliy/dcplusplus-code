@@ -37,20 +37,12 @@
 #define DWT_Icon_h
 
 #include "../WindowsHeaders.h"
+#include "../forward.h"
 #include "../Point.h"
 #include "../tstring.h"
 #include "Handle.h"
 
 namespace dwt {
-
-// Forward declaration
-class Icon;
-
-/// \ingroup GlobalStuff
-/// Icon pointer
-/** Use this typedef instead to ensure compatibility in future versions of SmartWin!!
-  */
-typedef boost::intrusive_ptr< Icon > IconPtr;
 
 struct IconPolicy : public NullPolicy<HICON> {
 	void release(HICON h) { ::DestroyIcon(h); }

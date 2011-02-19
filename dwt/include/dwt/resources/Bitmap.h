@@ -37,20 +37,11 @@
 #define DWT_Bitmap_h
 
 #include "../WindowsHeaders.h"
+#include "../forward.h"
 #include "../tstring.h"
 #include "Handle.h"
 
 namespace dwt {
-
-// Forward declarations
-class Bitmap;
-struct Point;
-
-/// \ingroup GlobalStuff
-/// Bitmap pointer
-/** Use this typedef instead to ensure compatibility in future versions of SmartWin!!
-  */
-typedef boost::intrusive_ptr< Bitmap > BitmapPtr;
 
 /// Class encapsulating an HBITMAP and ensuring that the contained HBITMAP is freed
 /// upon destruction of this object

@@ -35,7 +35,10 @@
 #include <dcpp/ShareManager.h>
 #include <dcpp/WindowInfo.h>
 
+#include <dwt/widgets/FolderDialog.h>
 #include <dwt/widgets/Rebar.h>
+#include <dwt/widgets/SaveDialog.h>
+#include <dwt/widgets/Splitter.h>
 #include <dwt/widgets/ToolBar.h>
 
 const string DirectoryListingFrame::id = "DirectoryListing";
@@ -232,8 +235,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(DIRECTORYLISTINGFRAME_ORDER), SETTING(DIRECTORYLISTINGFRAME_WIDTHS));
 		files->setSort(COLUMN_FILENAME);
 
-		files->onSelectionChanged(std::bind(&DirectoryListingFrame::callAsync, this,
-			dwt::Application::Callback(std::bind(&DirectoryListingFrame::updateStatus, this))));
+		files->onSelectionChanged([this] { GCC_WTF->callAsync([&] { updateStatus(); }); });
 		files->onDblClicked(std::bind(&DirectoryListingFrame::handleDoubleClickFiles, this));
 		files->onKeyDown(std::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));
 		files->onSysKeyDown(std::bind(&DirectoryListingFrame::handleKeyDownFiles, this, _1));

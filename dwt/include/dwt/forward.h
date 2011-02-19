@@ -33,16 +33,28 @@
 #ifndef DWT_FORWARD_H_
 #define DWT_FORWARD_H_
 
+namespace boost {
+template<class T> class intrusive_ptr;
+}
+
 namespace dwt {
 
 template< class WidgetType >
 class WidgetCreator;
+
+class Bitmap;
+typedef boost::intrusive_ptr<Bitmap> BitmapPtr;
+
+class Brush;
+typedef boost::intrusive_ptr<Brush> BrushPtr;
 
 class Button;
 typedef Button* ButtonPtr;
 
 class CheckBox;
 typedef CheckBox* CheckBoxPtr;
+
+class ColorDialog;
 
 class ComboBox;
 typedef ComboBox* ComboBoxPtr;
@@ -56,6 +68,13 @@ typedef CoolBar* CoolBarPtr;
 class DateTime;
 typedef DateTime* DateTimePtr;
 
+class FolderDialog;
+
+class Font;
+typedef boost::intrusive_ptr<Font> FontPtr;
+
+class FontDialog;
+
 class Grid;
 typedef Grid* GridPtr;
 class GridInfo;
@@ -63,8 +82,16 @@ class GridInfo;
 class GroupBox;
 typedef GroupBox* GroupBoxPtr;
 
+class Icon;
+typedef boost::intrusive_ptr<Icon> IconPtr;
+
+class ImageList;
+typedef boost::intrusive_ptr<ImageList> ImageListPtr;
+
 class Label;
 typedef Label* LabelPtr;
+
+class LoadDialog;
 
 class Menu;
 typedef shared_ptr<Menu> MenuPtr;
@@ -81,6 +108,11 @@ typedef MDIParent* MDIParentPtr;
 class Notification;
 typedef shared_ptr<Notification> NotificationPtr;
 
+class Pen;
+typedef boost::intrusive_ptr<Pen> PenPtr;
+
+struct Point;
+
 class ProgressBar;
 typedef ProgressBar* ProgressBarPtr;
 
@@ -90,8 +122,15 @@ typedef RadioButton* RadioButtonPtr;
 class Rebar;
 typedef Rebar* RebarPtr;
 
+struct Rectangle;
+
+class Region;
+typedef boost::intrusive_ptr<Region> RegionPtr;
+
 class RichTextBox;
 typedef RichTextBox* RichTextBoxPtr;
+
+class SaveDialog;
 
 class Slider;
 typedef Slider* SliderPtr;

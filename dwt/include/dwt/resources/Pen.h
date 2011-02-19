@@ -37,13 +37,10 @@
 #define DWT_PEN_H_
 
 #include "../WindowsHeaders.h"
+#include "../forward.h"
 #include "Handle.h"
 
 namespace dwt {
-
-class Pen;
-
-typedef boost::intrusive_ptr< Pen > PenPtr;
 
 class Pen : public Handle<GdiPolicy<HPEN> > {
 public:

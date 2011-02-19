@@ -171,10 +171,17 @@ public:
 		return ret;
 	}
 
-	static pair<ButtonPtr, ButtonPtr> addDlgButtons(
-		GridPtr grid,
-		const dwt::Application::Callback& f_ok,
-		const dwt::Application::Callback& f_cancel);
+private:
+	static pair<ButtonPtr, ButtonPtr> addDlgButtons(GridPtr grid);
+public:
+	/// @return pair of the ok and cancel buttons.
+	template<typename Tok, typename Tcancel>
+	static pair<ButtonPtr, ButtonPtr> addDlgButtons(GridPtr grid, const Tok& f_ok, const Tcancel& f_cancel) {
+		auto ret = addDlgButtons(grid);
+		ret.first->onClicked(f_ok);
+		ret.second->onClicked(f_cancel);
+		return ret;
+	}
 
 	static size_t getFileIcon(const tstring& aFileName);
 

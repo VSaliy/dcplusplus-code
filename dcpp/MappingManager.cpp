@@ -118,8 +118,8 @@ int MappingManager::run() {
 			if(port && !mapper.open(port, protocol, boost::str(F_("%1% %2% port (%3% %4%)") %
 				APPNAME % description % port % Mapper::protocols[protocol])))
 			{
-				this->log(boost::str(F_("The %1% interface has failed to map the %2% port (%3% %4%)") %
-					mapper.getName() % description % port % Mapper::protocols[protocol]));
+				this->log(boost::str(F_("Failed to map the %1% port (%2% %3%) with the %4% interface") %
+					description % port % Mapper::protocols[protocol] % mapper.getName()));
 				mapper.close();
 				return false;
 			}

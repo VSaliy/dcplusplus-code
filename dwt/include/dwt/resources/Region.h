@@ -33,17 +33,11 @@
 #define DWT_REGION_H
 
 #include "../WindowsHeaders.h"
+#include "../forward.h"
 #include "Handle.h"
 #include <dwt/Rectangle.h>
 
-#include <vector>
-
 namespace dwt {
-
-struct Point;
-class Region;
-
-typedef boost::intrusive_ptr<Region> RegionPtr;
 
 class Region : public Handle<GdiPolicy<HRGN> > {
 public:

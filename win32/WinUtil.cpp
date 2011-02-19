@@ -47,6 +47,8 @@
 #include <dwt/DWTException.h>
 #include <dwt/LibraryLoader.h>
 #include <dwt/util/GDI.h>
+#include <dwt/widgets/LoadDialog.h>
+#include <dwt/widgets/SaveDialog.h>
 
 #ifdef HAVE_HTMLHELP_H
 #include <htmlhelp.h>
@@ -970,8 +972,7 @@ void WinUtil::toInts(const string& str, std::vector<int>& array) {
 	}
 }
 
-pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid, const dwt::Application::Callback& f_ok,
-	const dwt::Application::Callback& f_cancel)
+pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid)
 {
 	Button::Seed seed;
 
@@ -981,7 +982,6 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid, const dwt::Appli
 	ButtonPtr ok = grid->addChild(seed);
 	ok->setHelpId(IDH_DCPP_OK);
 	ok->setImage(buttonIcon(IDI_OK));
-	ok->onClicked(f_ok);
 
 	seed.caption = T_("Cancel");
 	seed.menuHandle = reinterpret_cast<HMENU> (IDCANCEL);
@@ -989,7 +989,6 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid, const dwt::Appli
 	ButtonPtr cancel = grid->addChild(seed);
 	cancel->setHelpId(IDH_DCPP_CANCEL);
 	cancel->setImage(buttonIcon(IDI_CANCEL));
-	cancel->onClicked(f_cancel);
 
 	return make_pair(ok, cancel);
 }

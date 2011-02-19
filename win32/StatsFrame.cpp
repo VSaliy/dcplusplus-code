@@ -23,6 +23,8 @@
 #include <dcpp/Socket.h>
 #include <dcpp/TimerManager.h>
 
+#include <dwt/resources/Pen.h>
+
 const string StatsFrame::id = "Stats";
 const string& StatsFrame::getId() const { return id; }
 
