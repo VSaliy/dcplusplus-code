@@ -55,15 +55,14 @@ class AspectEraseBackground
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct EraseBackgroundDispatcher : Dispatchers::Base<void (Canvas&)> {
-		typedef Dispatchers::Base<void (Canvas&)> BaseType;
+	struct EraseBackgroundDispatcher : Dispatchers::Base<bool (Canvas&)> {
+		typedef Dispatchers::Base<bool (Canvas&)> BaseType;
 		EraseBackgroundDispatcher(const F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
-			f(canvas);
-			ret = 1;
-			return true;
+			ret = f(canvas);
+			return ret;
 		}
 	};
 
@@ -75,12 +74,13 @@ public:
 	  * background property of the Widget.
 	  */
 	void onEraseBackground(const typename EraseBackgroundDispatcher::F& f) {
-		W().setCallback(Message( WM_ERASEBKGND ), EraseBackgroundDispatcher(f, &W() ) );
+		W().setCallback(Message(WM_ERASEBKGND), EraseBackgroundDispatcher(f));
 	}
 
 	void noEraseBackground() {
-		W().setCallback(Message( WM_ERASEBKGND ), &AspectEraseBackground<WidgetType>::noEraseDispatcher);
+		W().setCallback(Message(WM_ERASEBKGND), &AspectEraseBackground<WidgetType>::noEraseDispatcher);
 	}
+
 protected:
 	virtual ~AspectEraseBackground() { }
 
