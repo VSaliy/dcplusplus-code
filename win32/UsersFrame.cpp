@@ -25,6 +25,8 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/QueueManager.h>
+#include <dcpp/UploadManager.h>
+
 #include <dcpp/version.h>
 
 #include <dwt/widgets/Splitter.h>
@@ -68,7 +70,7 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	users(0),
 	startup(true)
 {
-	filterGrid = addChild(Grid::Seed(1, 4));
+	filterGrid = addChild(Grid::Seed(1, 5));
 
 	filter = filterGrid->addChild(WinUtil::Seeds::textBox);
 	filter->onUpdated(std::bind(&UsersFrame::handleFilterUpdated, this));
@@ -85,8 +87,12 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	showFavs->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
 
 	showQueue = filterGrid->addChild(WinUtil::Seeds::checkBox);
-	showQueue->setText(_T("Download queue"));
+	showQueue->setText(_T("Pending download"));
 	showQueue->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
+
+	showWaiting = filterGrid->addChild(WinUtil::Seeds::checkBox);
+	showWaiting->setText(_T("Pending upload"));
+	showWaiting->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
 
 	splitter = addChild(VSplitter::Seed(0.7));
 
@@ -131,22 +137,14 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 		auto &ou = ClientManager::getInstance()->getUsers();
 
 		for(auto i = ou.begin(); i != ou.end(); ++i) {
-			if(i->second->isOnline()) {
-				addUser(i->second);
-			}
-		}
-	}
-
-	{
-		auto fu = FavoriteManager::getInstance()->getFavoriteUsers();
-
-		for(auto i = fu.begin(); i != fu.end(); ++i) {
-			addUser(i->second.getUser());
+			addUser(i->second);
 		}
 	}
 
 	FavoriteManager::getInstance()->addListener(this);
 	ClientManager::getInstance()->addListener(this);
+	UploadManager::getInstance()->addListener(this);
+	QueueManager::getInstance()->addListener(this);
 
 	initStatus();
 
@@ -180,6 +178,9 @@ void UsersFrame::layout() {
 bool UsersFrame::preClosing() {
 	FavoriteManager::getInstance()->removeListener(this);
 	ClientManager::getInstance()->removeListener(this);
+	UploadManager::getInstance()->removeListener(this);
+	QueueManager::getInstance()->removeListener(this);
+
 	return true;
 }
 
@@ -223,43 +224,42 @@ void UsersFrame::UserInfo::update(const FavoriteUser& u) {
 }
 
 void UsersFrame::addUser(const UserPtr& aUser) {
+	if(!show(aUser, true)) {
+		return;
+	}
+
 	auto ui = userInfos.find(aUser);
 	if(ui == userInfos.end()) {
 		auto x = make_shared<UserInfo>(aUser);
-		if(matches(*x)){
+		userInfos.insert(std::make_pair(aUser, x));
+
+		if(matches(*x)) {
 			users->insert(x.get());
 		}
-
-		userInfos.insert(std::make_pair(aUser, std::move(x)));
 	} else {
-		// TODO Update
+		updateUser(aUser);
 	}
 }
 
 void UsersFrame::updateUser(const UserPtr& aUser) {
 	auto ui = userInfos.find(aUser);
 	if(ui != userInfos.end()) {
+		if(!show(aUser, true)) {
+			users->erase(ui->second.get());
+			userInfos.erase(ui);
+			return;
+		}
+
 		ui->second->update(aUser);
 
 		if(matches(*ui->second)) {
 			auto i = users->find(ui->second.get());
 			if(i != -1) {
 				users->update(i);
+			} else {
+				users->insert(ui->second.get());
 			}
 		}
-	}
-}
-
-void UsersFrame::removeUser(const UserPtr& aUser) {
-	if(FavoriteManager::getInstance()->isFavoriteUser(aUser)) {
-		updateUser(aUser);
-		return;
-	}
-
-	auto ui = userInfos.find(aUser);
-	if(ui != userInfos.end()) {
-		users->erase(ui->second.get());
-		userInfos.erase(ui);
 	}
 }
 
@@ -404,21 +404,28 @@ void UsersFrame::handleFilterUpdated() {
 }
 
 bool UsersFrame::matches(const UserInfo &ui) {
-
 	auto txt = filter->getText();
 	if(!txt.empty() && Util::findSubString(ui.columns[COLUMN_NICK], txt) == string::npos) {
 		return false;
 	}
 
-	if(showOnline->getChecked() && ui.getUser().user->isOnline()) {
+	return show(ui.getUser(), false);
+}
+
+bool UsersFrame::show(const UserPtr &u, bool any) const {
+	if((any || showOnline->getChecked()) && u->isOnline()) {
 		return true;
 	}
 
-	if(showFavs->getChecked() && FavoriteManager::getInstance()->isFavoriteUser(ui.getUser())) {
+	if((any || showFavs->getChecked()) && FavoriteManager::getInstance()->isFavoriteUser(u)) {
 		return true;
 	}
 
-	if(showQueue->getChecked() && QueueManager::getInstance()->getQueued(ui.getUser()) > 0) {
+	if((any || showQueue->getChecked()) && QueueManager::getInstance()->getQueued(u) > 0) {
+		return true;
+	}
+
+	if((any || showWaiting->getChecked()) && UploadManager::getInstance()->isWaiting(u)) {
 		return true;
 	}
 
@@ -430,7 +437,7 @@ UsersFrame::UserInfoList UsersFrame::selectedUsersImpl() const {
 }
 
 void UsersFrame::on(UserAdded, const FavoriteUser& aUser) throw() {
-	callAsync(std::bind(&UsersFrame::updateUser, this, aUser.getUser()));
+	callAsync(std::bind(&UsersFrame::addUser, this, aUser.getUser()));
 }
 
 void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) throw() {
@@ -450,5 +457,31 @@ void UsersFrame::on(UserUpdated, const UserPtr& aUser) throw() {
 }
 
 void UsersFrame::on(UserDisconnected, const UserPtr& aUser) throw() {
-	callAsync(std::bind(&UsersFrame::removeUser, this, aUser));
+	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
+}
+
+void UsersFrame::on(WaitingAddFile, const HintedUser& aUser, const string&) throw() {
+	callAsync(std::bind(&UsersFrame::addUser, this, aUser.user));
+}
+
+void UsersFrame::on(WaitingRemoveUser, const HintedUser& aUser) throw() {
+	callAsync(std::bind(&UsersFrame::updateUser, this, aUser.user));
+}
+
+void UsersFrame::on(Added, QueueItem* qi) throw() {
+	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
+		callAsync(std::bind(&UsersFrame::addUser, this, i->getUser().user));
+	}
+}
+
+void UsersFrame::on(SourcesUpdated, QueueItem* qi) throw() {
+	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
+		callAsync(std::bind(&UsersFrame::updateUser, this, i->getUser().user));
+	}
+}
+
+void UsersFrame::on(Removed, QueueItem* qi) throw() {
+	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
+		callAsync(std::bind(&UsersFrame::updateUser, this, i->getUser().user));
+	}
 }

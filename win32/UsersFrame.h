@@ -21,6 +21,8 @@
 
 #include <dcpp/FavoriteManagerListener.h>
 #include <dcpp/ClientManagerListener.h>
+#include <dcpp/UploadManagerListener.h>
+#include <dcpp/QueueManagerListener.h>
 
 #include "StaticFrame.h"
 #include "WinUtil.h"
@@ -33,6 +35,8 @@ class UsersFrame :
 	public StaticFrame<UsersFrame>,
 	private FavoriteManagerListener,
 	private ClientManagerListener,
+	private UploadManagerListener,
+	private QueueManagerListener,
 	public AspectUserInfo<UsersFrame>
 {
 	typedef StaticFrame<UsersFrame> BaseType;
@@ -128,6 +132,7 @@ private:
 	CheckBoxPtr showFavs;
 	CheckBoxPtr showOnline;
 	CheckBoxPtr showQueue;
+	CheckBoxPtr showWaiting;
 
 	static dwt::ImageListPtr userIcons;
 
@@ -138,7 +143,6 @@ private:
 
 	void addUser(const UserPtr& aUser);
 	void updateUser(const UserPtr& aUser);
-	void removeUser(const UserPtr& aUser);
 
 	void handleDescription();
 	void handleRemove();
@@ -149,6 +153,8 @@ private:
 	bool handleClick(const dwt::MouseEvent &me);
 	void handleFilterUpdated();
 	bool matches(const UserInfo& ui);
+
+	bool show(const UserPtr& u, bool any) const;
 
 	// AspectUserInfo
 	UserInfoList selectedUsersImpl() const;
@@ -162,6 +168,15 @@ private:
 	virtual void on(UserConnected, const UserPtr& aUser) throw();
 	virtual void on(UserUpdated, const UserPtr& aUser) throw();
 	virtual void on(UserDisconnected, const UserPtr& aUser) throw();
+
+	// UploadManagerListener
+	virtual void on(WaitingAddFile, const HintedUser&, const string&) throw();
+	virtual void on(WaitingRemoveUser, const HintedUser&) throw();
+
+	// QueueManagerListener
+	virtual void on(Added, QueueItem*) throw();
+	virtual void on(SourcesUpdated, QueueItem*) throw();
+	virtual void on(Removed, QueueItem*) throw();
 };
 
 #endif // !defined(USERS_FRAME_H)
