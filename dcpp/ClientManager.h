@@ -58,6 +58,8 @@ public:
 	StringList getNicks(const HintedUser& user) { return getNicks(user.user->getCID(), user.hint); }
 	StringList getHubNames(const HintedUser& user) { return getHubNames(user.user->getCID(), user.hint); }
 
+	vector<Identity> getIdentities(const UserPtr &u) const;
+
 	string getConnection(const CID& cid) const;
 
 	bool isConnected(const string& aUrl) const;

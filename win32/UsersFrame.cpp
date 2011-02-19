@@ -49,20 +49,36 @@ static const ColumnInfo usersColumns[] = {
 struct FieldName {
 	string field;
 	tstring name;
+	tstring (*convert)(const string &val);
 };
+
+static tstring formatBytes(const string& val) {
+	return Text::toT(Util::formatBytes(val));
+}
 
 static const FieldName fields[] =
 {
-	{ "NI", T_("Nick") },
-	{ "DE", T_("Description") },
-	{ "EM", T_("E-Mail") },
-	{ "SL", T_("Slots") },
-	{ "SF", T_("Shared files") },
-	{ "SS", T_("Shared bytes") },
-	{ "I4", T_("IP (v4)") },
-	{ "I6", T_("IP (v6)") },
-	{ "VE", T_("Client") },
-	{ "", _T("") }
+	{ "NI", T_("Nick"), &Text::toT },
+	{ "AW", T_("Away"), &Text::toT },
+	{ "DE", T_("Description"), &Text::toT },
+	{ "EM", T_("E-Mail"), &Text::toT },
+	{ "SS", T_("Shared bytes"), &formatBytes },
+	{ "SF", T_("Shared files"), &Text::toT },
+	{ "US", T_("Upload speed"), &Text::toT },
+	{ "DS", T_("Download speed"), &Text::toT },
+	{ "SL", T_("Slots"), &Text::toT },
+	{ "HN", T_("Hubs (normal)"), &Text::toT },
+	{ "HR", T_("Hubs (registered)"), &Text::toT },
+	{ "HO", T_("Hubs (op)"), &Text::toT },
+	{ "I4", T_("IP (v4)"), &Text::toT },
+	{ "I6", T_("IP (v6)"), &Text::toT },
+	{ "U4", T_("Search port (v4)"), &Text::toT },
+	{ "U6", T_("Search port (v4)"), &Text::toT },
+	{ "SU", T_("Features"), &Text::toT },
+	{ "VE", T_("Client"), &Text::toT },
+	{ "ID", T_("CID"), &Text::toT },
+
+	{ "", _T(""), 0 }
 };
 
 UsersFrame::UsersFrame(TabViewPtr parent) :
@@ -281,20 +297,29 @@ void UsersFrame::handleSelectionChanged() {
 		return;
 	}
 
-	auto lock = ClientManager::getInstance()->lock();
-	auto ui = ClientManager::getInstance()->findOnlineUser(sel->getUser(), false);
-	if(!ui) {
+	auto user = sel->getUser();
+	auto idents = ClientManager::getInstance()->getIdentities(user);
+	if(idents.empty()) {
 		return;
 	}
 
-	auto info = ui->getIdentity().getInfo();
+	auto info = idents[0].getInfo();
+	for(size_t i = 1; i < idents.size(); ++i) {
+		for(auto j = idents[i].getInfo().begin(); j != idents[i].getInfo().end(); ++j) {
+			info[j->first] = j->second;
+		}
+	}
+
+	userInfo->addRow(GridInfo());
+	auto general = userInfo->addChild(Label::Seed(T_("General information")));
+	userInfo->setWidget(general, 0, 0, 1, 2);
 
 	for(auto f = fields; !f->field.empty(); ++f) {
 		auto i = info.find(f->field);
 		if(i != info.end()) {
 			userInfo->addRow(GridInfo());
 			userInfo->addChild(Label::Seed(f->name));
-			userInfo->addChild(Label::Seed(Text::toT(i->second)));
+			userInfo->addChild(Label::Seed(f->convert(i->second)));
 			info.erase(i);
 		}
 	}
@@ -303,6 +328,35 @@ void UsersFrame::handleSelectionChanged() {
 		userInfo->addRow(GridInfo());
 		userInfo->addChild(Label::Seed(Text::toT(i->first)));
 		userInfo->addChild(Label::Seed(Text::toT(i->second)));
+	}
+
+	auto queued = QueueManager::getInstance()->getQueued(user);
+
+	if(queued.first) {
+		userInfo->addRow(GridInfo());
+		auto general = userInfo->addChild(Label::Seed(T_("Pending downloads information")));
+		userInfo->setWidget(general, userInfo->rowCount()-1, 0, 1, 2);
+
+		userInfo->addRow(GridInfo());
+		userInfo->addChild(Label::Seed(T_("Queued files")));
+		userInfo->addChild(Label::Seed(Text::toT(Util::toString(queued.first))));
+
+		userInfo->addRow(GridInfo());
+		userInfo->addChild(Label::Seed(T_("Queued bytes")));
+		userInfo->addChild(Label::Seed(Text::toT(Util::formatBytes(queued.second))));
+	}
+
+	auto files = UploadManager::getInstance()->getWaitingUserFiles(user);
+	if(!files.empty()) {
+		userInfo->addRow(GridInfo());
+		auto general = userInfo->addChild(Label::Seed(T_("Pending uploads information")));
+		userInfo->setWidget(general, userInfo->rowCount()-1, 0, 1, 2);
+
+		for(auto i = files.begin(); i != files.end(); ++i) {
+			userInfo->addRow(GridInfo());
+			userInfo->addChild(Label::Seed(T_("Filename")));
+			userInfo->addChild(Label::Seed(Text::toT(*i)));
+		}
 	}
 
 	layout();
@@ -421,11 +475,11 @@ bool UsersFrame::show(const UserPtr &u, bool any) const {
 		return true;
 	}
 
-	if((any || showQueue->getChecked()) && QueueManager::getInstance()->getQueued(u) > 0) {
+	if((any || showWaiting->getChecked()) && UploadManager::getInstance()->isWaiting(u)) {
 		return true;
 	}
 
-	if((any || showWaiting->getChecked()) && UploadManager::getInstance()->isWaiting(u)) {
+	if((any || showQueue->getChecked()) && QueueManager::getInstance()->getQueued(u).first > 0) {
 		return true;
 	}
 

@@ -589,7 +589,7 @@ TransferView::ConnectionInfo::ConnectionInfo(const HintedUser& u, bool aDownload
 	columns[CONNECTION_COLUMN_STATUS] = T_("Idle");
 	columns[CONNECTION_COLUMN_TRANSFERED] = Text::toT(Util::toString(0));
 	if(aDownload) {
-		queued = QueueManager::getInstance()->getQueued(u);
+		queued = QueueManager::getInstance()->getQueued(u).second;
 		columns[CONNECTION_COLUMN_QUEUED] = Text::toT(Util::formatBytes(queued));
 	}
 }
@@ -600,7 +600,7 @@ void TransferView::ConnectionInfo::update(const UpdateInfo& ui) {
 		status = ui.status;
 		if(download) {
 			// Also update queued when status changes...
-			queued = QueueManager::getInstance()->getQueued(user);
+			queued = QueueManager::getInstance()->getQueued(user).second;
 			columns[CONNECTION_COLUMN_QUEUED] = Text::toT(Util::formatBytes(queued));
 		}
 	}

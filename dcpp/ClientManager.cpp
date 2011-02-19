@@ -144,6 +144,17 @@ StringList ClientManager::getNicks(const CID& cid, const string& hintUrl, bool p
 	return StringList(ret.begin(), ret.end());
 }
 
+vector<Identity> ClientManager::getIdentities(const UserPtr &u) const {
+	Lock l(cs);
+	auto op = onlineUsers.equal_range(u->getCID());
+	auto ret = vector<Identity>();
+	for(auto i = op.first; i != op.second; ++i) {
+		ret.push_back(i->second->getIdentity());
+	}
+
+	return ret;
+}
+
 string ClientManager::getField(const CID& cid, const string& hint, const char* field) const {
 	Lock l(cs);
 
