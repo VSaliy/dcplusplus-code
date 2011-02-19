@@ -32,6 +32,7 @@ tstring Texts::get(Text text) {
 	case paste: return T_("&Paste\tCtrl+V");
 	case del: return T_("&Delete\tDel");
 	case selAll: return T_("Select &All\tCtrl+A");
+	case resize: return T_("Click and drag to resize");
 	case close: return T_("Close");
 	}
 

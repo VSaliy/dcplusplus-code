@@ -53,7 +53,7 @@ static const FieldName fields[] =
 {
 	{ "NI", T_("Nick") },
 	{ "DE", T_("Description") },
-	{ "EM", T_("E-Mail"),
+	{ "EM", T_("E-Mail") },
 	{ "SL", T_("Slots") },
 	{ "SF", T_("Shared files") },
 	{ "SS", T_("Shared bytes") },
