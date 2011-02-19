@@ -242,7 +242,8 @@ int ConnectionManager::Server::run() throw() {
 	while(!die) {
 		try {
 			while(!die) {
-				if(sock.wait(POLL_TIMEOUT, Socket::WAIT_READ) == Socket::WAIT_READ) {
+				auto ret = sock.wait(POLL_TIMEOUT, Socket::WAIT_READ);
+				if(ret == Socket::WAIT_READ) {
 					ConnectionManager::getInstance()->accept(sock, secure);
 				}
 			}

@@ -252,8 +252,8 @@ void QueueManager::UserQueue::setPriority(QueueItem* qi, QueueItem::Priority p) 
 	add(qi);
 }
 
-int64_t QueueManager::UserQueue::getQueued(const UserPtr& aUser) const {
-	int64_t total = 0;
+pair<size_t, int64_t> QueueManager::UserQueue::getQueued(const UserPtr& aUser) const {
+	pair<size_t, int64_t> ret(0, 0);
 	for(size_t i = QueueItem::LOWEST; i < QueueItem::LAST; ++i) {
 		const QueueItem::UserListMap& ulm = userQueue[i];
 		QueueItem::UserListMap::const_iterator iulm = ulm.find(aUser);
@@ -263,12 +263,13 @@ int64_t QueueManager::UserQueue::getQueued(const UserPtr& aUser) const {
 
 		for(QueueItem::List::const_iterator j = iulm->second.begin(); j != iulm->second.end(); ++j) {
 			const QueueItem::Ptr qi = *j;
+			++ret.first;
 			if(qi->getSize() != -1) {
-				total += qi->getSize() - qi->getDownloadedBytes();
+				ret.second += qi->getSize() - qi->getDownloadedBytes();
 			}
 		}
 	}
-	return total;
+	return ret;
 }
 
 QueueItem* QueueManager::UserQueue::getRunning(const UserPtr& aUser) {
@@ -1339,7 +1340,7 @@ endCheck:
 	}
 }
 
-int64_t QueueManager::getQueued(const UserPtr& aUser) const {
+pair<size_t, int64_t> QueueManager::getQueued(const UserPtr& aUser) const {
 	Lock l(cs);
 	return userQueue.getQueued(aUser);
 }

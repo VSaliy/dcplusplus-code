@@ -359,10 +359,7 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 	if(c.getParameters().size() < 2) {
 		return;
 	}
-#ifdef DISABLE_NAT_TRAVERSAL
-	if(!ClientManager::getInstance()->isActive())
-		return;
-#endif
+
 	OnlineUser* u = findUser(c.getFrom());
 	if(!u || u->getUser() == ClientManager::getInstance()->getMe())
 		return;
@@ -379,7 +376,7 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 		unknownProtocol(c.getFrom(), protocol, token);
 		return;
 	}
-#ifndef DISABLE_NAT_TRAVERSAL
+
 	if(ClientManager::getInstance()->isActive()) {
 		connect(*u, token, secure);
 		return;
@@ -393,10 +390,6 @@ void AdcHub::handle(AdcCommand::RCM, AdcCommand& c) throw() {
 	// clients call ConnectionManager::adcConnect.
 	send(AdcCommand(AdcCommand::CMD_NAT, u->getIdentity().getSID(), AdcCommand::TYPE_DIRECT).
 		addParam(protocol).addParam(Util::toString(sock->getLocalPort())).addParam(token));
-	return;
-#else
-	connect(*u, token, secure);
-#endif
 }
 
 void AdcHub::handle(AdcCommand::CMD, AdcCommand& c) throw() {
@@ -901,13 +894,10 @@ void AdcHub::sendSearch(AdcCommand& c) {
 	} else {
 		c.setType(AdcCommand::TYPE_FEATURE);
 		string features = c.getFeatures();
-#ifndef DISABLE_NAT_TRAVERSAL
+
 		c.setFeatures(features + '+' + TCP4_FEATURE + '-' + NAT0_FEATURE);
 		send(c);
 		c.setFeatures(features + '+' + NAT0_FEATURE);
-#else
-		c.setFeatures(features + '+' + TCP4_FEATURE);
-#endif
 		send(c);
 	}
 }
