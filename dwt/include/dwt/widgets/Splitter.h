@@ -102,12 +102,22 @@ private:
 
 	double pos;
 
+	bool hovering;
 	bool moving;
 
 	Rectangle rect;
 
 	Rectangle getSplitterRect();
 	void layout();
+
+	bool handleBg(Canvas& canvas) {
+		if(hovering) {
+			// safe to assume that the text color is different enough from the default background.
+			canvas.fill(Rectangle(getClientSize()), Brush(Brush::WindowText));
+			return true;
+		}
+		return false;
+	}
 
 	bool handleLButtonDown() {
 		::SetCapture(handle());
@@ -116,6 +126,15 @@ private:
 	}
 
 	bool handleMouseMove(const MouseEvent& mouseEvent) {
+		if(!hovering) {
+			hovering = true;
+			redraw();
+			onMouseLeave([this] {
+				GCC_WTF->hovering = false;
+				GCC_WTF->redraw();
+			});
+		}
+
 		if(moving && mouseEvent.ButtonPressed == MouseEvent::LEFT) {
 			ClientCoordinate cc(mouseEvent.pos, getParent());
 			double distance = horizontal ? cc.y() : cc.x();
@@ -147,6 +166,7 @@ BaseType(parent, NormalDispatcher::newClass<ThisType>(0, 0, ::LoadCursor(0, hori
 first(0),
 second(0),
 pos(0.5),
+hovering(false),
 moving(false)
 {
 }
@@ -155,6 +175,8 @@ template<bool horizontal>
 void Splitter<horizontal>::create(const Seed& cs) {
 	pos = cs.pos;
 	BaseType::create(cs);
+
+	onEraseBackground([this](Canvas& canvas) { return GCC_WTF->handleBg(canvas); });
 
 	onLeftMouseDown([this](const MouseEvent&) { return GCC_WTF->handleLButtonDown(); });
 	onMouseMove([this](const MouseEvent& mouseEvent) { return GCC_WTF->handleMouseMove(mouseEvent); });
@@ -179,10 +201,10 @@ Rectangle Splitter<horizontal>::getSplitterRect() {
 	double splitterSize = ::GetSystemMetrics(horizontal ? SM_CYEDGE : SM_CXEDGE) + 2;
 	if(horizontal) {
 		rc.size.y = splitterSize;
-		rc.pos.y += pos * rect.height() - splitterSize / 2;
+		rc.pos.y += pos * rect.height() - splitterSize / 2.;
 	} else {
 		rc.size.x = splitterSize;
-		rc.pos.x += pos * rect.width() - splitterSize / 2;
+		rc.pos.x += pos * rect.width() - splitterSize / 2.;
 	}
 
 	return rc;
