@@ -59,6 +59,14 @@
 #define MPI_DISABLED 3
 #define MPI_DISABLEDHOT 4
 
+#define VSCLASS_PROGRESS L"PROGRESS"
+#define PP_BAR 1
+#define PP_BARVERT 2
+#define PP_FILL 5
+#define PP_FILLVERT 6
+#define PBFS_NORMAL 1
+#define PBFVS_NORMAL 1
+
 #define VSCLASS_TAB L"TAB"
 #define TABP_TABITEM 1
 #define TIS_NORMAL 1
