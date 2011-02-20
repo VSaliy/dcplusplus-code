@@ -148,9 +148,9 @@ int SmartWinMain(dwt::Application& app) {
 			SetProcessDefaultLayout(LAYOUT_RTL);
 		}
 
-		MappingManager::getInstance()->addImplementation(new Mapper_NATPMP());
-		MappingManager::getInstance()->addImplementation(new Mapper_MiniUPnPc());
-		MappingManager::getInstance()->addImplementation(new Mapper_WinUPnP());
+		MappingManager::getInstance()->addImplementation<Mapper_NATPMP>();
+		MappingManager::getInstance()->addImplementation<Mapper_MiniUPnPc>();
+		MappingManager::getInstance()->addImplementation<Mapper_WinUPnP>();
 
 		WinUtil::init();
 		MainWindow* wnd = new MainWindow;
