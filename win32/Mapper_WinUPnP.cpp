@@ -31,8 +31,6 @@ const string Mapper_WinUPnP::name = "Windows UPnP";
 #include <natupnp.h>
 	
 bool Mapper_WinUPnP::init() {
-	// only init once.
-	static bool initialized = false;
 	if(initialized)
 		return true;
 

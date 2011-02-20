@@ -33,8 +33,6 @@ extern "C" {
 const string Mapper_MiniUPnPc::name = "MiniUPnP";
 
 bool Mapper_MiniUPnPc::init() {
-	// only init once.
-	static bool initialized = false;
 	if(initialized)
 		return true;
 

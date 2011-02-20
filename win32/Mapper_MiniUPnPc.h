@@ -24,7 +24,7 @@
 class Mapper_MiniUPnPc : public Mapper
 {
 public:
-	Mapper_MiniUPnPc() : Mapper() { }
+	Mapper_MiniUPnPc() : Mapper(), initialized(false) { }
 
 private:
 	bool init();
@@ -40,6 +40,8 @@ private:
 
 	static const string name;
 	const string& getName() const { return name; }
+
+	bool initialized;
 
 	string url;
 	string service;

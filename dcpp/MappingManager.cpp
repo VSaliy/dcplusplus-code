@@ -30,12 +30,8 @@
 
 namespace dcpp {
 
-void MappingManager::addImplementation(Mapper* mapper) {
-	mappers.push_back(mapper);
-}
-
 bool MappingManager::open() {
-	if(opened)
+	if(getOpened())
 		return false;
 
 	if(mappers.empty()) {
@@ -56,9 +52,14 @@ bool MappingManager::open() {
 void MappingManager::close() {
 	TimerManager::getInstance()->removeListener(this);
 
-	for(auto i = mappers.begin(); i != mappers.end(); ++i)
-		close(*i);
-	opened = false;
+	if(working.get()) {
+		close(*working);
+		working.reset();
+	}
+}
+
+bool MappingManager::getOpened() const {
+	return working.get();
 }
 
 int MappingManager::run() {
@@ -71,7 +72,7 @@ int MappingManager::run() {
 		search_port = SearchManager::getInstance()->getPort();
 
 	if(renewal) {
-		Mapper& mapper = mappers[working];
+		Mapper& mapper = *working;
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });
 		if(!mapper.init()) {
@@ -103,7 +104,8 @@ int MappingManager::run() {
 	}
 
 	for(auto i = mappers.begin(); i != mappers.end(); ++i) {
-		Mapper& mapper = *i;
+		unique_ptr<Mapper> pMapper((*i)());
+		Mapper& mapper = *pMapper;
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });
 
@@ -111,8 +113,6 @@ int MappingManager::run() {
 			log(str(F_("Failed to initalize the %1% interface") % mapper.getName()));
 			continue;
 		}
-
-		mapper.close();
 
 		auto addRule = [this, &mapper](const unsigned short port, Mapper::Protocol protocol, const string& description) -> bool {
 			if(port && !mapper.open(port, protocol, boost::str(F_("%1% %2% port (%3% %4%)") %
@@ -126,14 +126,15 @@ int MappingManager::run() {
 			return true;
 		};
 
-		opened = addRule(conn_port, Mapper::PROTOCOL_TCP, _("Transfer")) &&
+		if(!(addRule(conn_port, Mapper::PROTOCOL_TCP, _("Transfer")) &&
 			addRule(secure_port, Mapper::PROTOCOL_TCP, _("Encrypted Transfer")) &&
-			addRule(search_port, Mapper::PROTOCOL_UDP, _("Search"));
-		if(!opened)
+			addRule(search_port, Mapper::PROTOCOL_UDP, _("Search"))))
 			continue;
 
 		log(str(F_("Successfully created port mappings (TCP: %1%, UDP: %2%, TLS: %3%) on the %4% device with the %5% interface") %
 			conn_port % search_port % secure_port % deviceString(mapper) % mapper.getName()));
+
+		working = move(pMapper);
 
 		if(!BOOLSETTING(NO_IP_OVERRIDE)) {
 			string externalIP = mapper.getExternalIP();
@@ -150,13 +151,12 @@ int MappingManager::run() {
 		auto minutes = mapper.renewal();
 		if(minutes) {
 			renewal = GET_TICK() + std::max(minutes, 10u) * 60 * 1000;
-			working = i - mappers.begin();
 			TimerManager::getInstance()->addListener(this);
 		}
 		break;
 	}
 
-	if(!opened) {
+	if(!getOpened()) {
 		log(_("Failed to create port mappings"));
 		ConnectivityManager::getInstance()->mappingFinished(false);
 	}

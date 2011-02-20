@@ -25,8 +25,6 @@
 
 #include <atomic>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 namespace dcpp {
 
 class MappingManager :
@@ -35,29 +33,24 @@ class MappingManager :
 	private TimerManagerListener
 {
 public:
-	/**
-	* add an implementation, derived from the base Mapper class.
-	* must be allocated on the heap; its deletion will be managed by MappingManager.
-	* the first added mapper will be tried first.
-	*/
-	void addImplementation(Mapper* mapper);
+	/** add an implementation derived from the base Mapper class, passed as template parameter.
+	the first added mapper will be tried first. */
+	template<typename T> void addImplementation() { mappers.push_back([] { return new T(); }); }
+
 	bool open();
 	void close();
-
-	bool getOpened() const { return opened; }
+	bool getOpened() const;
 
 private:
 	friend class Singleton<MappingManager>;
 
-	boost::ptr_vector<Mapper> mappers;
+	vector<function<Mapper* ()>> mappers;
 
-	bool opened;
 	atomic_flag busy;
-
+	unique_ptr<Mapper> working; /// currently working implementation.
 	uint64_t renewal; /// when the next renewal should happen, if requested by the mapper.
-	size_t working; /// index of the currently working implementation (used for renewal).
 
-	MappingManager() : opened(false), busy(false), renewal(0), working(0) { }
+	MappingManager() : busy(false), renewal(0) { }
 	virtual ~MappingManager() throw() { join(); }
 
 	int run();

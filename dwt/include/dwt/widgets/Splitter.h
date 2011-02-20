@@ -127,7 +127,7 @@ private:
 			}
 			theme.drawBackground(canvas, part, state, canvas.getPaintRect());
 
-		} else {
+		} else if(hovering) {
 			// safe to assume that the text color is different enough from the default background.
 			canvas.fill(canvas.getPaintRect(), Brush(Brush::WindowText));
 		}
