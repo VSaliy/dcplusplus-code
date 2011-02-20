@@ -35,6 +35,7 @@
 #include "Container.h"
 #include "ToolTip.h"
 #include <dwt/Texts.h>
+#include <dwt/dwt_vsstyle.h>
 
 namespace dwt {
 
@@ -102,6 +103,8 @@ private:
 	Widget* first;
 	Widget* second;
 
+	Theme theme;
+
 	double pos;
 
 	bool hovering;
@@ -112,13 +115,22 @@ private:
 	Rectangle getSplitterRect();
 	void layout();
 
-	bool handleBg(Canvas& canvas) {
-		if(hovering) {
+	void handlePainting(PaintCanvas& canvas) {
+		if(theme) {
+			int part, state;
+			if(hovering) {
+				part = horizontal ? PP_FILL : PP_FILLVERT;
+				state = horizontal ? PBFS_NORMAL : PBFVS_NORMAL;
+			} else {
+				part = horizontal ? PP_BAR : PP_BARVERT;
+				state = 0;
+			}
+			theme.drawBackground(canvas, part, state, canvas.getPaintRect());
+
+		} else {
 			// safe to assume that the text color is different enough from the default background.
-			canvas.fill(Rectangle(getClientSize()), Brush(Brush::WindowText));
-			return true;
+			canvas.fill(canvas.getPaintRect(), Brush(Brush::WindowText));
 		}
-		return false;
 	}
 
 	bool handleLButtonDown() {
@@ -178,7 +190,8 @@ void Splitter<horizontal>::create(const Seed& cs) {
 	pos = cs.pos;
 	BaseType::create(cs);
 
-	onEraseBackground([this](Canvas& canvas) { return GCC_WTF->handleBg(canvas); });
+	theme.load(VSCLASS_PROGRESS, this);
+	onPainting([this](PaintCanvas& canvas) { GCC_WTF->handlePainting(canvas); });
 
 	onLeftMouseDown([this](const MouseEvent&) { return GCC_WTF->handleLButtonDown(); });
 	onMouseMove([this](const MouseEvent& mouseEvent) { return GCC_WTF->handleMouseMove(mouseEvent); });
