@@ -305,7 +305,8 @@ void UsersFrame::handleSelectionChanged() {
 
 	auto info = idents[0].getInfo();
 	for(size_t i = 1; i < idents.size(); ++i) {
-		for(auto j = idents[i].getInfo().begin(); j != idents[i].getInfo().end(); ++j) {
+		auto info2 = idents[i].getInfo();
+		for(auto j = info2.begin(); j != info2.end(); ++j) {
 			info[j->first] = j->second;
 		}
 	}
