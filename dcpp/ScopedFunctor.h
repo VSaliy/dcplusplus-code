@@ -22,25 +22,25 @@
 namespace dcpp {
 
 /* helper class to run a functor when the object goes out of scope.
-the additional #defines facilitate the following:
-- compilers can't always deduce the type of some functors (especially lambdas), so we use decltype.
-- use __COUNTER__ to generate a unique object name.
+the additional #defines generate a unique object name thanks to the __COUNTER__ macro.
 for example, the call:
-	ScopedFunctor([] { printf("hello"); })
+	ScopedFunctor([] { printf("hello"); });
 will print "hello" when the current scope ends. */
+
 template<typename F>
 struct ScopedFunctor {
-	explicit ScopedFunctor(const F& f_) : f(f_) { }
+	explicit ScopedFunctor(F f_) : f(f_) { }
 	~ScopedFunctor() { f(); }
 private:
-	const F& f;
+	F f;
 };
+
+template<typename F>
+ScopedFunctor<F> makeScopedFunctor(F f) { return ScopedFunctor<F>(f); }
+
 #define ScopedFunctor_gen(ScopedFunctor_name, ScopedFunctor_counter) ScopedFunctor_name##ScopedFunctor_counter
 #define ScopedFunctor_(ScopedFunctor_f, ScopedFunctor_counter) \
-	auto ScopedFunctor_gen(ScopedFunctor_f_, ScopedFunctor_counter) = ScopedFunctor_f; \
-	ScopedFunctor<decltype(ScopedFunctor_gen(ScopedFunctor_f_, ScopedFunctor_counter))> \
-	ScopedFunctor_gen(ScopedFunctor_object, ScopedFunctor_counter) \
-	(ScopedFunctor_gen(ScopedFunctor_f_, ScopedFunctor_counter))
+	auto ScopedFunctor_gen(ScopedFunctor_object, ScopedFunctor_counter) = makeScopedFunctor(ScopedFunctor_f)
 #define ScopedFunctor(ScopedFunctor_f) ScopedFunctor_(ScopedFunctor_f, __COUNTER__)
 
 } // namespace dcpp
