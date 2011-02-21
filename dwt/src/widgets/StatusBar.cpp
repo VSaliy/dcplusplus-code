@@ -86,7 +86,7 @@ void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 	info.text = text;
 	if(part != fill) {
 		info.updateSize(this, alwaysResize);
-	} else {
+	} else if(!text.empty()) {
 		lastLines.push_back(text);
 		while(lastLines.size() > MAX_LINES) {
 			lastLines.erase(lastLines.begin());

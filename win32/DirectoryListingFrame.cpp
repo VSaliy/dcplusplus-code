@@ -27,12 +27,13 @@
 #include "resource.h"
 
 #include <dcpp/ADLSearch.h>
+#include <dcpp/ClientManager.h>
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/File.h>
 #include <dcpp/QueueManager.h>
-#include <dcpp/StringSearch.h>
-#include <dcpp/ClientManager.h>
 #include <dcpp/ShareManager.h>
+#include <dcpp/ScopedFunctor.h>
+#include <dcpp/StringSearch.h>
 #include <dcpp/WindowInfo.h>
 
 #include <dwt/widgets/FolderDialog.h>
@@ -246,7 +247,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	{
 		Button::Seed cs = WinUtil::Seeds::button;
 
-		searchGrid = grid->addChild(Grid::Seed(1, 4));
+		searchGrid = grid->addChild(Grid::Seed(1, 3));
 		grid->setWidget(searchGrid, 1, 0);
 		searchGrid->column(0).mode = GridInfo::FILL;
 
@@ -256,25 +257,20 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		searchBox->getTextBox()->onKeyDown(std::bind(&DirectoryListingFrame::handleSearchKeyDown, this, _1));
 		searchBox->getTextBox()->onChar(std::bind(&DirectoryListingFrame::handleSearchChar, this, _1));
 
-		cs.caption = T_("Find from the beginning");
+		cs.caption = T_("Find previous");
 		ButtonPtr button = searchGrid->addChild(cs);
-		button->setHelpId(IDH_FILE_LIST_FIND_START);
-		button->setImage(WinUtil::buttonIcon(IDI_SEARCH));
-		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_START));
-		addWidget(button);
-
-		cs.caption = T_("Previous");
-		button = searchGrid->addChild(cs);
 		button->setHelpId(IDH_FILE_LIST_FIND_PREV);
 		button->setImage(WinUtil::buttonIcon(IDI_LEFT));
-		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_PREV));
+		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, true));
 		addWidget(button);
 
-		cs.caption = T_("Next");
+		cs.caption = T_("Find next");
+		cs.style |= BS_DEFPUSHBUTTON;
 		button = searchGrid->addChild(cs);
+		cs.style &= ~BS_DEFPUSHBUTTON;
 		button->setHelpId(IDH_FILE_LIST_FIND_NEXT);
 		button->setImage(WinUtil::buttonIcon(IDI_RIGHT));
-		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, FIND_NEXT));
+		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, false));
 		addWidget(button);
 
 		cs.caption = T_("Subtract list");
@@ -406,9 +402,9 @@ void DirectoryListingFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
 
-void DirectoryListingFrame::handleFind(FindMode mode) {
+void DirectoryListingFrame::handleFind(bool reverse) {
 	searching = true;
-	findFile(mode);
+	findFile(reverse);
 	searching = false;
 	updateStatus();
 }
@@ -961,7 +957,9 @@ void DirectoryListingFrame::forward() {
 	}
 }
 
-pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos, vector<HTREEITEM>& collapse) {
+pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos,
+	HTREEITEM const start, vector<HTREEITEM>& collapse, bool& cycle)
+{
 	// try to match the names currently in the list pane
 	const int n = files->size();
 	if(reverse && pos == -1)
@@ -979,23 +977,28 @@ pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bo
 		collapse.push_back(item);
 	}
 	HTREEITEM next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
-	if(next) {
+	if(!next) {
+		next = reverse ? dirs->getLast() : treeRoot;
+		cycle = true;
+	}
+	if(next && next != start) {
 		if(reverse && dirs->getChild(next) && !dirs->isExpanded(next)) {
 			dirs->expand(next);
 			collapse.push_back(next);
-			next = dirs->getNext(item, TVGN_PREVIOUSVISIBLE);
+			if(!(next = dirs->getNext(item, TVGN_PREVIOUSVISIBLE)))
+				next = dirs->getLast();
 		}
 
 		// refresh the list pane to respect sorting etc
 		changeDir(dirs->getData(next)->dir);
 
-		return findFile(str, reverse, next, -1, collapse);
+		return findFile(str, reverse, next, -1, start, collapse, cycle);
 	}
 
 	return make_pair(nullptr, 0);
 }
 
-void DirectoryListingFrame::findFile(FindMode mode) {
+void DirectoryListingFrame::findFile(bool reverse) {
 	const tstring findStr = searchBox->getText();
 	if(findStr.empty())
 		return;
@@ -1017,37 +1020,41 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 		searchBox->insertValue(0, findStr);
 	}
 
+	status->setText(STATUS_STATUS, str(TF_("Searching for: %1%") % findStr));
+
+	// to make sure we set the status only after redrawing has been enabled back on the bar.
+	tstring finalStatus;
+	ScopedFunctor(([this, &finalStatus] { status->setText(STATUS_STATUS, finalStatus); }));
+
 	HoldRedraw hold(files);
 	HoldRedraw hold2(dirs);
 	HoldRedraw hold3(status);
 
-	HTREEITEM const oldDir = dirs->getSelected();
+	HTREEITEM const start = dirs->getSelected();
 
 	auto prevHistory = history;
 	auto prevHistoryIndex = historyIndex;
 
-	auto selectDir = [this, oldDir, &prevHistory, prevHistoryIndex](HTREEITEM newDir) {
+	auto selectDir = [this, start, &prevHistory, prevHistoryIndex](HTREEITEM dir) {
 		// SelectItem won't update the list if SetRedraw was set to FALSE and then
 		// to TRUE and the selected item is the same as the last one... workaround:
-		if(newDir == oldDir)
+		if(dir == start)
 			dirs->setSelected(nullptr);
-		dirs->setSelected(newDir);
-		dirs->ensureVisible(newDir);
+		dirs->setSelected(dir);
+		dirs->ensureVisible(dir);
 
-		if(newDir == oldDir) {
+		if(dir == start) {
 			history = prevHistory;
 			historyIndex = prevHistoryIndex;
 		}
 	};
 
-	if(mode == FIND_START) {
-		dirs->setSelected(treeRoot);
-		files->clearSelection();
-	}
-
 	vector<HTREEITEM> collapse;
-	auto search = findFile(StringSearch(Text::fromT(findStr)), mode == FIND_PREV,
-		(mode == FIND_START) ? treeRoot : oldDir, files->getSelected(), collapse);
+	bool cycle = false;
+	const auto fileSel = files->getSelected();
+
+	auto search = findFile(StringSearch(Text::fromT(findStr)), reverse, start, fileSel, start, collapse, cycle);
+
 	for(auto i = collapse.cbegin(), iend = collapse.cend(); i != iend; ++i)
 		dirs->collapse(*i);
 
@@ -1061,9 +1068,19 @@ void DirectoryListingFrame::findFile(FindMode mode) {
 		files->setSelected(search.second);
 		files->ensureVisible(search.second);
 
+		if(cycle) {
+			auto s_b(T_("beginning")), s_e(T_("end"));
+			finalStatus = str(TF_("Reached the %1% of the file list, continuing from the %2%")
+				% (reverse ? s_b : s_e) % (reverse ? s_e : s_b));
+		}
+
 	} else {
-		selectDir(oldDir);
-		dwt::MessageBox(this).show(T_("No matches found for:") + _T("\n") + findStr, T_("Search for file"));
+		// restore the previous view.
+		selectDir(start);
+		files->setSelected(fileSel);
+		files->ensureVisible(fileSel);
+
+		finalStatus = str(TF_("No matches found for: %1%") % findStr);
 	}
 }
 
@@ -1197,7 +1214,7 @@ bool DirectoryListingFrame::handleKeyDownFiles(int c) {
 
 bool DirectoryListingFrame::handleSearchKeyDown(int c) {
 	if(c == VK_RETURN && !(WinUtil::isShift() || WinUtil::isCtrl() || WinUtil::isAlt())) {
-		handleFind(FIND_START);
+		handleFind(false);
 		return true;
 	}
 	return false;
