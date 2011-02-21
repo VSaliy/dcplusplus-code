@@ -91,12 +91,6 @@ private:
 		COLUMN_LAST
 	};
 
-	enum FindMode {
-		FIND_START,
-		FIND_NEXT,
-		FIND_PREV
-	};
-
 	class ItemInfo : public FastAlloc<ItemInfo> {
 	public:
 		enum ItemType {
@@ -224,7 +218,7 @@ private:
 	void addShellPaths(const ShellMenuPtr& menu, const vector<ItemInfo*>& sel);
 	void addUserMenu(const MenuPtr& menu);
 
-	void handleFind(FindMode mode);
+	void handleFind(bool reverse);
 	void handleListDiff();
 	void handleMatchQueue();
 	void handleFindToggle();
@@ -271,8 +265,9 @@ private:
 	void initStatusText();
 	void updateStatus();
 
-	void findFile(FindMode mode);
-	pair<HTREEITEM, int> findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos, vector<HTREEITEM>& collapse);
+	void findFile(bool reverse);
+	pair<HTREEITEM, int> findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos,
+		HTREEITEM const start, vector<HTREEITEM>& collapse, bool& cycle);
 
 	// MDIChildFrame
 	void tabMenuImpl(dwt::MenuPtr& menu);
