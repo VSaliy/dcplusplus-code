@@ -26,6 +26,7 @@
 #include <dcpp/ClientManager.h>
 #include <dcpp/QueueManager.h>
 #include <dcpp/UploadManager.h>
+#include <dcpp/ScopedFunctor.h>
 
 #include <dcpp/version.h>
 
@@ -66,7 +67,8 @@ static const FieldName fields[] =
 	{ "SF", T_("Shared files"), &Text::toT },
 	{ "US", T_("Upload speed"), &Text::toT },
 	{ "DS", T_("Download speed"), &Text::toT },
-	{ "SL", T_("Slots"), &Text::toT },
+	{ "SL", T_("Total slots"), &Text::toT },
+	{ "FS", T_("Free slots"), &Text::toT },
 	{ "HN", T_("Hubs (normal)"), &Text::toT },
 	{ "HR", T_("Hubs (registered)"), &Text::toT },
 	{ "HO", T_("Hubs (op)"), &Text::toT },
@@ -77,6 +79,7 @@ static const FieldName fields[] =
 	{ "SU", T_("Features"), &Text::toT },
 	{ "VE", T_("Client"), &Text::toT },
 	{ "ID", T_("CID"), &Text::toT },
+	{ "KP", T_("TLS Keyprint"), &Text::toT },
 
 	{ "", _T(""), 0 }
 };
@@ -142,7 +145,7 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	}
 
 	{
-		Grid::Seed cs(0, 2);
+		Grid::Seed cs(0, 1);
 		cs.style |= WS_VSCROLL;
 		userInfo = addChild(cs);
 		splitter->setSecond(userInfo);
@@ -271,7 +274,11 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 		if(matches(*ui->second)) {
 			auto i = users->find(ui->second.get());
 			if(i != -1) {
-				users->update(i);
+				if(users->getSelected() == i) {
+					handleSelectionChanged();
+				} else {
+					users->update(i);
+				}
 			} else {
 				users->insert(ui->second.get());
 			}
@@ -280,6 +287,10 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 }
 
 void UsersFrame::handleSelectionChanged() {
+	ScopedFunctor([&] { layout(); userInfo->redraw(); });
+
+	HoldRedraw hold(userInfo);
+
 	// Clear old items
 	auto children = userInfo->getChildren<Control>();
 	auto v = std::vector<Control*>(children.first, children.second);
@@ -289,17 +300,20 @@ void UsersFrame::handleSelectionChanged() {
 	userInfo->clearRows();
 
 	if(users->countSelected() != 1) {
+		userInfo->redraw();
 		return;
 	}
 
 	auto sel = users->getSelectedData();
 	if(!sel) {
+		userInfo->redraw();
 		return;
 	}
 
 	auto user = sel->getUser();
 	auto idents = ClientManager::getInstance()->getIdentities(user);
 	if(idents.empty()) {
+		userInfo->redraw();
 		return;
 	}
 
@@ -312,55 +326,53 @@ void UsersFrame::handleSelectionChanged() {
 	}
 
 	userInfo->addRow(GridInfo());
-	auto general = userInfo->addChild(Label::Seed(T_("General information")));
-	userInfo->setWidget(general, 0, 0, 1, 2);
+	auto generalGroup = userInfo->addChild(GroupBox::Seed(T_("General information")));
+	auto generalGrid = generalGroup->addChild(Grid::Seed(0, 2));
 
 	for(auto f = fields; !f->field.empty(); ++f) {
 		auto i = info.find(f->field);
 		if(i != info.end()) {
-			userInfo->addRow(GridInfo());
-			userInfo->addChild(Label::Seed(f->name));
-			userInfo->addChild(Label::Seed(f->convert(i->second)));
+			generalGrid->addRow(GridInfo());
+			generalGrid->addChild(Label::Seed(f->name));
+			generalGrid->addChild(Label::Seed(f->convert(i->second)));
 			info.erase(i);
 		}
 	}
 
 	for(auto i = info.begin(); i != info.end(); ++i) {
-		userInfo->addRow(GridInfo());
-		userInfo->addChild(Label::Seed(Text::toT(i->first)));
-		userInfo->addChild(Label::Seed(Text::toT(i->second)));
+		generalGrid->addRow(GridInfo());
+		generalGrid->addChild(Label::Seed(Text::toT(i->first)));
+		generalGrid->addChild(Label::Seed(Text::toT(i->second)));
 	}
 
 	auto queued = QueueManager::getInstance()->getQueued(user);
 
 	if(queued.first) {
 		userInfo->addRow(GridInfo());
-		auto general = userInfo->addChild(Label::Seed(T_("Pending downloads information")));
-		userInfo->setWidget(general, userInfo->rowCount()-1, 0, 1, 2);
+		auto queuedGroup = userInfo->addChild(GroupBox::Seed(T_("Pending downloads information")));
+		auto queuedGrid = queuedGroup->addChild(Grid::Seed(0, 2));
 
-		userInfo->addRow(GridInfo());
-		userInfo->addChild(Label::Seed(T_("Queued files")));
-		userInfo->addChild(Label::Seed(Text::toT(Util::toString(queued.first))));
+		queuedGrid->addRow(GridInfo());
+		queuedGrid->addChild(Label::Seed(T_("Queued files")));
+		queuedGrid->addChild(Label::Seed(Text::toT(Util::toString(queued.first))));
 
-		userInfo->addRow(GridInfo());
-		userInfo->addChild(Label::Seed(T_("Queued bytes")));
-		userInfo->addChild(Label::Seed(Text::toT(Util::formatBytes(queued.second))));
+		queuedGrid->addRow(GridInfo());
+		queuedGrid->addChild(Label::Seed(T_("Queued bytes")));
+		queuedGrid->addChild(Label::Seed(Text::toT(Util::formatBytes(queued.second))));
 	}
 
 	auto files = UploadManager::getInstance()->getWaitingUserFiles(user);
 	if(!files.empty()) {
 		userInfo->addRow(GridInfo());
-		auto general = userInfo->addChild(Label::Seed(T_("Pending uploads information")));
-		userInfo->setWidget(general, userInfo->rowCount()-1, 0, 1, 2);
+		auto uploadsGroup = userInfo->addChild(GroupBox::Seed(T_("Pending uploads information")));
+		auto uploadsGrid = uploadsGroup->addChild(Grid::Seed(0, 2));
 
 		for(auto i = files.begin(); i != files.end(); ++i) {
-			userInfo->addRow(GridInfo());
-			userInfo->addChild(Label::Seed(T_("Filename")));
-			userInfo->addChild(Label::Seed(Text::toT(*i)));
+			uploadsGrid->addRow(GridInfo());
+			uploadsGrid->addChild(Label::Seed(T_("Filename")));
+			uploadsGrid->addChild(Label::Seed(Text::toT(*i)));
 		}
 	}
-
-	layout();
 }
 
 void UsersFrame::handleDescription() {
