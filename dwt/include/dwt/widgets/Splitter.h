@@ -41,9 +41,9 @@ namespace dwt {
 
 template<bool horizontal>
 class Splitter :
-	public Container
+	public Control
 {
-	typedef Container BaseType;
+	typedef Control BaseType;
 
 	friend class WidgetCreator<Splitter>;
 
@@ -169,7 +169,7 @@ private:
 
 template<bool horizontal>
 Splitter<horizontal>::Seed::Seed(double pos_) :
-BaseType::Seed(),
+BaseType::Seed(WS_CHILD, 0),
 pos(pos_)
 {
 }
@@ -197,7 +197,7 @@ void Splitter<horizontal>::create(const Seed& cs) {
 	onMouseMove([this](const MouseEvent& mouseEvent) { return GCC_WTF->handleMouseMove(mouseEvent); });
 	onLeftMouseUp([this](const MouseEvent&) { return GCC_WTF->handleLButtonUp(); });
 
-	addChild(ToolTip::Seed())->setText(Texts::get(Texts::resize));
+	WidgetCreator<ToolTip>::create(this, ToolTip::Seed())->setText(Texts::get(Texts::resize));
 }
 
 template<bool horizontal>
