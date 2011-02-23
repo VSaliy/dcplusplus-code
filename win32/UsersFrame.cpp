@@ -31,6 +31,7 @@
 #include <dcpp/version.h>
 
 #include <dwt/widgets/Splitter.h>
+#include <dwt/widgets/ScrolledContainer.h>
 
 const string UsersFrame::id = "Users";
 const string& UsersFrame::getId() const { return id; }
@@ -145,10 +146,9 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	}
 
 	{
-		Grid::Seed cs(0, 1);
-		cs.style |= WS_VSCROLL;
-		userInfo = addChild(cs);
-		splitter->setSecond(userInfo);
+		auto scroll = addChild(dwt::ScrolledContainer::Seed());
+		userInfo = scroll->addChild(Grid::Seed(0, 1));
+		splitter->setSecond(scroll);
 	}
 
 	{
