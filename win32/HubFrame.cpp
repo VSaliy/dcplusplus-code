@@ -395,13 +395,8 @@ void HubFrame::enterImpl(const tstring& s) {
 				openLog();
 			else if(Util::stricmp(param.c_str(), _T("status")) == 0)
 				openLog(true);
-		} else if(Util::stricmp(cmd.c_str(), _T("f")) == 0) {
-			if(param.empty())
-				param = chat->findTextPopup();
-
-			chat->findText(param);
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite, /f <text-to-find>"));
+			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
 			string::size_type j = param.find(_T(' '));
 			if(j != string::npos) {

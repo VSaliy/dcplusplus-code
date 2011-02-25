@@ -58,7 +58,8 @@ protected:
 		t().addAccel(FALT, 'M', std::bind(&dwt::Control::setFocus, message));
 		t().addAccel(FALT, 'S', std::bind(&ThisType::sendMessage_, this));
 		t().addAccel(0, VK_ESCAPE, std::bind(&ThisType::handleEscape, this));
-		t().addAccel(0, VK_F3, std::bind(&RichTextBox::findTextNext, chat));
+		t().addAccel(FCONTROL, 'F', [this] { chat->findTextNew(); });
+		t().addAccel(0, VK_F3, [this] { chat->findTextNext(); });
 	}
 
 	virtual ~AspectChat() { }
@@ -127,6 +128,10 @@ protected:
 				chat->setSelection();
 				chat->replaceSelection(_T(""));
 			}
+
+		} else if(Util::stricmp(cmd.c_str(), _T("f")) == 0) {
+			chat->findText(param.empty() ? chat->findTextPopup() : param);
+
 		} else if(Util::stricmp(cmd.c_str(), _T("ts")) == 0) {
 			timeStamps = !timeStamps;
 			if(timeStamps) {
@@ -134,6 +139,7 @@ protected:
 			} else {
 				status = T_("Timestamps disabled");
 			}
+
 		} else {
 			return false;
 		}

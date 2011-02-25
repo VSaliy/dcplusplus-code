@@ -41,11 +41,11 @@ public:
 	MenuPtr getMenu();
 
 	tstring findTextPopup();
+	void findTextNew();
 	void findTextNext();
 
 private:
 	bool handleKeyDown(int c);
-	void handleFind();
 };
 
 typedef RichTextBox::ObjectType RichTextBoxPtr;
