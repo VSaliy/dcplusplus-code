@@ -14,6 +14,7 @@
 * Continue from the beginning after reaching the end of a file list when searching (poy)
 * Report the progress of file list searches in the status bar (poy)
 * Repurpose Ctrl+F to in-place searches in chat windows & file lists (poy)
+* Prevent endless redirection loops with some Coral servers (poy)
 
 -- 0.781 2011-01-12 --
 * Add a dummy serial number to TLS certs to satisfy some parsers (poy)
