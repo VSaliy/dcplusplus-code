@@ -79,7 +79,7 @@ bool Icon::operator==(const Icon& rhs) const {
 	if(resId && rhs.resId)
 		return resId == rhs.resId;
 
-	return HandleType(resId) == HandleType(rhs.resId);
+	return HandleType() == HandleType(rhs);
 }
 
 }
