@@ -473,7 +473,7 @@ int TabView::addIcon(const IconPtr& icon) {
 	int image = -1;
 	if(icon) {
 		for(size_t i = 0; i < icons.size(); ++i) {
-			if(icon == icons[i]) {
+			if(*icon == *icons[i]) {
 				image = i;
 				break;
 			}

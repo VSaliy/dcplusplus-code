@@ -69,7 +69,7 @@ public:
 	  * @params size desired size, useful to pick up the correct image when the icon contains
 	  * multiple images. if 0, the system will figure out the size of the 1st image by itself.
 	  */
-	explicit Icon(unsigned resourceId, const Point& size = Point(0, 0));
+	explicit Icon(const unsigned resourceId, const Point& size = Point(0, 0));
 
 	/// RAII Constructor loading a icon from a file on disc
 	/** Note! <br>
@@ -86,9 +86,13 @@ public:
 	*/
 	Point getSize() const;
 
+	bool operator==(const Icon& rhs) const;
+
 private:
 	friend class Handle<IconPolicy>;
 	typedef Handle<IconPolicy> ResourceType;
+
+	const unsigned resId; // store the resource id to facilitate the comparison in operator==
 };
 
 }
