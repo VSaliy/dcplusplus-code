@@ -40,23 +40,26 @@
 namespace dwt {
 
 Icon::Icon(HICON icon, bool own) :
-ResourceType(icon, own)
+ResourceType(icon, own),
+resId(0)
 {
 }
 
-Icon::Icon(unsigned resourceId, const Point& size) :
+Icon::Icon(const unsigned resourceId, const Point& size) :
 /*
 * we use ::LoadImage instead of ::LoadIcon in order to be able to pick up the correct image,
 * depending on the "size" argument. also, our call to ::LoadImage should use LR_SHARED to match
 * ::LoadIcon more closely, but we don't pass that flag since all our icons are managed and
 * destroyed by DWT.
 */
-ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId), IMAGE_ICON, size.x, size.y, LR_DEFAULTCOLOR))
+ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId), IMAGE_ICON, size.x, size.y, LR_DEFAULTCOLOR)),
+resId(resourceId)
 {
 }
 
 Icon::Icon(const tstring& filePath) :
-ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE))
+ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE)),
+resId(0)
 {
 }
 
@@ -70,6 +73,13 @@ Point Icon::getSize() const {
 	Bitmap color(ii.hbmColor);
 
 	return color.getSize();
+}
+
+bool Icon::operator==(const Icon& rhs) const {
+	if(resId && rhs.resId)
+		return resId == rhs.resId;
+
+	return HandleType(resId) == HandleType(rhs.resId);
 }
 
 }
