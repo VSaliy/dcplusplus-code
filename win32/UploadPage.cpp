@@ -289,7 +289,7 @@ void UploadPage::addDirectory(const tstring& aPath) {
 				const string aLine = Text::fromT(line);
 				if(sm->hasVirtual(sm->validateVirtual(aLine))) {
 					if(dwt::MessageBox(this).show(str(TF_("A virtual directory named %1% already exists, do you wish to merge the contents?") % line),
-						_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDNO) {
+						_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) != IDYES) {
 						continue;
 					}
 				}
