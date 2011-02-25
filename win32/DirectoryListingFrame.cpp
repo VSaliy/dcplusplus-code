@@ -183,7 +183,7 @@ void DirectoryListingFrame::openWindow(TabViewPtr parent, const HintedUser& aUse
 }
 
 DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser& aUser, int64_t aSpeed) :
-	BaseType(parent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY),
+	BaseType(parent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY, false),
 	rebar(0),
 	pathBox(0),
 	grid(0),
@@ -334,6 +334,10 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 
 	ClientManager::getInstance()->addListener(this);
 	updateTitle();
+
+	addAccel(FCONTROL, 'F', [this] { if(searchGrid->getEnabled()) searchBox->setFocus(); else handleFindToggle(); });
+	addAccel(0, VK_F3, [this] { if(searchGrid->getEnabled()) handleFind(false); else handleFindToggle(); });
+	initAccels();
 
 	layout();
 

@@ -118,21 +118,21 @@ fullSlots(false)
 	initTransfers();
 	initTray();
 
-	addAccel(FCONTROL, '1', std::bind(&MainWindow::switchToolbar, this));
-	addAccel(FCONTROL, '2', std::bind(&MainWindow::switchTransfers, this));
-	addAccel(FCONTROL, '3', std::bind(&MainWindow::switchStatus, this));
+	addAccel(FCONTROL, '1', [this] { switchToolbar(); });
+	addAccel(FCONTROL, '2', [this] { switchTransfers(); });
+	addAccel(FCONTROL, '3', [this] { switchStatus(); });
 	addAccel(FCONTROL, 'D', [this] { QueueFrame::openWindow(getTabView()); });
-	addAccel(FCONTROL, 'E', std::bind(&MainWindow::handleRefreshFileList, this));
-	addAccel(FCONTROL, 'F', [this] { FavHubsFrame::openWindow(getTabView()); });
-	addAccel(FCONTROL, 'G', std::bind(&MainWindow::handleConnectFavHubGroup, this));
-	addAccel(FCONTROL, 'L', std::bind(&MainWindow::handleOpenFileList, this));
+	addAccel(FCONTROL, 'E', [this] { handleRefreshFileList(); });
+	addAccel(FCONTROL, 'G', [this] { handleConnectFavHubGroup(); });
+	addAccel(FCONTROL, 'H', [this] { FavHubsFrame::openWindow(getTabView()); });
+	addAccel(FCONTROL, 'L', [this] { handleOpenFileList(); });
 	addAccel(FCONTROL, 'N', [this] { NotepadFrame::openWindow(getTabView()); });
 	addAccel(FCONTROL, 'P', [this] { PublicHubsFrame::openWindow(getTabView()); });
-	addAccel(FCONTROL, 'Q', std::bind(&MainWindow::handleQuickConnect, this));
+	addAccel(FCONTROL, 'Q', [this] { handleQuickConnect(); });
 	addAccel(FCONTROL, 'S', [this] { SearchFrame::openWindow(getTabView()); });
 	addAccel(FCONTROL, 'U', [this] { UsersFrame::openWindow(getTabView()); });
-	addAccel(FCONTROL, VK_F3, std::bind(&MainWindow::handleSettings, this));
-	addAccel(0, VK_F5, std::bind(&MainWindow::handleRefreshFileList, this));
+	addAccel(FCONTROL, VK_F3, [this] { handleSettings(); });
+	addAccel(0, VK_F5, [this] { handleRefreshFileList(); });
 	initAccels();
 
 	onActivate(std::bind(&MainWindow::handleActivate, this, _1));
@@ -261,7 +261,7 @@ void MainWindow::initMenu() {
 
 		viewIndexes[PublicHubsFrame::id] = viewMenu->appendItem(T_("&Public Hubs\tCtrl+P"),
 			[this] { PublicHubsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_PUBLICHUBS));
-		viewIndexes[FavHubsFrame::id] = viewMenu->appendItem(T_("&Favorite Hubs\tCtrl+F"),
+		viewIndexes[FavHubsFrame::id] = viewMenu->appendItem(T_("&Favorite Hubs\tCtrl+H"),
 			[this] { FavHubsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		viewIndexes[UsersFrame::id] = viewMenu->appendItem(T_("&Users\tCtrl+U"),
 			[this] { UsersFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FAVORITE_USERS));

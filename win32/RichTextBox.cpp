@@ -62,9 +62,27 @@ MenuPtr RichTextBox::getMenu() {
 	MenuPtr menu = BaseType::getMenu();
 
 	menu->appendSeparator();
-	menu->appendItem(T_("&Find...\tF3"), [this]() { GCC_WTF->findText(this->findTextPopup()); }, dwt::IconPtr(), !getText().empty());
+	menu->appendItem(T_("&Find...\tCtrl+F"), [this] { findTextNew(); }, dwt::IconPtr(), !getText().empty());
+	menu->appendItem(T_("&Find Next\tF3"), [this] { findTextNext(); }, dwt::IconPtr(), !getText().empty());
 
 	return menu;
+}
+
+tstring RichTextBox::findTextPopup() {
+	tstring param = Util::emptyStringT;
+	ParamDlg lineFind(this, T_("Search"), T_("Specify search string"), Util::emptyStringT, false);
+	if(lineFind.run() == IDOK) {
+		param = lineFind.getValue();
+	}
+	return param;
+}
+
+void RichTextBox::findTextNew() {
+	findText(findTextPopup());
+}
+
+void RichTextBox::findTextNext() {
+	findText(currentNeedle.empty() ? findTextPopup() : currentNeedle);
 }
 
 bool RichTextBox::handleKeyDown(int c) {
@@ -79,17 +97,4 @@ bool RichTextBox::handleKeyDown(int c) {
 		return true;
 	}
 	return false;
-}
-
-tstring RichTextBox::findTextPopup() {
-	tstring param = Util::emptyStringT;
-	ParamDlg lineFind(this, T_("Search"), T_("Specify search string"), Util::emptyStringT, false);
-	if(lineFind.run() == IDOK) {
-		param = lineFind.getValue();
-	}
-	return param;
-}
-
-void RichTextBox::findTextNext() {
-	findText(currentNeedle.empty() ? findTextPopup() : currentNeedle);
 }
