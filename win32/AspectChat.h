@@ -58,8 +58,8 @@ protected:
 		t().addAccel(FALT, 'M', std::bind(&dwt::Control::setFocus, message));
 		t().addAccel(FALT, 'S', std::bind(&ThisType::sendMessage_, this));
 		t().addAccel(0, VK_ESCAPE, std::bind(&ThisType::handleEscape, this));
-		t().addAccel(FCONTROL, 'F', [this] { chat->findTextNew(); });
-		t().addAccel(0, VK_F3, [this] { chat->findTextNext(); });
+		t().addAccel(FCONTROL, 'F', [this] { GCC_WTF->chat->findTextNew(); });
+		t().addAccel(0, VK_F3, [this] { GCC_WTF->chat->findTextNext(); });
 	}
 
 	virtual ~AspectChat() { }
