@@ -96,19 +96,21 @@ void Taskbar::initTaskbar(WindowPtr window_) {
 #endif
 				if(::CoCreateInstance(CLSID_TaskbarList, 0, CLSCTX_INPROC_SERVER, IID_ITaskbarList,
 					reinterpret_cast<LPVOID*>(&taskbar)) != S_OK) { taskbar = 0; }
-				if(taskbar && taskbar->HrInit() == S_OK) {
-					LibraryLoader lib_user32(_T("user32"));
-					typedef BOOL (WINAPI *t_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, void*);
-					t_ChangeWindowMessageFilterEx ChangeWindowMessageFilterEx;
-					if(ChangeWindowMessageFilterEx = reinterpret_cast<t_ChangeWindowMessageFilterEx>(
-						lib_user32.getProcAddress(_T("ChangeWindowMessageFilterEx"))))
-					{
-						ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICTHUMBNAIL, 1/*MSGFLT_ALLOW*/, 0);
-						ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICLIVEPREVIEWBITMAP, 1/*MSGFLT_ALLOW*/, 0);
+				if(taskbar) {
+					if(taskbar->HrInit() == S_OK) {
+						LibraryLoader lib_user32(_T("user32"));
+						typedef BOOL (WINAPI *t_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, void*);
+						t_ChangeWindowMessageFilterEx ChangeWindowMessageFilterEx;
+						if(ChangeWindowMessageFilterEx = reinterpret_cast<t_ChangeWindowMessageFilterEx>(
+							lib_user32.getProcAddress(_T("ChangeWindowMessageFilterEx"))))
+						{
+							ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICTHUMBNAIL, 1/*MSGFLT_ALLOW*/, 0);
+							ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICLIVEPREVIEWBITMAP, 1/*MSGFLT_ALLOW*/, 0);
+						}
+					} else {
+						taskbar->Release();
+						taskbar = 0;
 					}
-				} else {
-					taskbar->Release();
-					taskbar = 0;
 				}
 			}
 			return 0;
