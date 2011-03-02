@@ -36,7 +36,7 @@
 #include <dcpp/version.h>
 #include <dcpp/WindowInfo.h>
 
-#include <dwt/widgets/Splitter.h>
+#include <dwt/widgets/SplitterContainer.h>
 
 const string HubFrame::id = WindowManager::hub();
 const string& HubFrame::getId() const { return id; }
@@ -135,11 +135,11 @@ currentUser(0),
 hubMenu(false),
 inTabComplete(false)
 {
-	paned = addChild(VSplitter::Seed(0.7));
+	paned = addChild(SplitterContainer::Seed(0.7));
 
+	createChat(paned);
 	chat->setHelpId(IDH_HUB_CHAT);
 	addWidget(chat);
-	paned->setFirst(chat);
 	chat->onContextMenu(std::bind(&HubFrame::handleChatContextMenu, this, _1));
 
 	message->setHelpId(IDH_HUB_MESSAGE);
@@ -149,11 +149,10 @@ inTabComplete(false)
 	message->onChar(std::bind(&HubFrame::handleMessageChar, this, _1));
 
 	{
-		userGrid = addChild(Grid::Seed(2, 2));
+		userGrid = paned->addChild(Grid::Seed(2, 2));
 		userGrid->column(0).mode = GridInfo::FILL;
 		userGrid->row(0).mode = GridInfo::FILL;
 		userGrid->row(0).align = GridInfo::STRETCH;
-		paned->setSecond(userGrid);
 
 		users = userGrid->addChild(WidgetUsers::Seed());
 		userGrid->setWidget(users, 0, 0, 1, 2);
@@ -272,12 +271,14 @@ void HubFrame::layout() {
 
 	r.size.y -= rm.size.y + border;
 
+	/* TODO
 	bool checked = showUsers->getChecked();
 	if(checked && !paned->getSecond()) {
 		paned->setSecond(userGrid);
 	} else if(!checked && paned->getSecond()) {
 		paned->setSecond(0);
 	}
+	*/
 	paned->layout(r);
 }
 

@@ -93,7 +93,7 @@ public:
 
 	template<typename T>
 	static Dispatcher& newClass(const IconPtr& icon = 0, const IconPtr& smallIcon = 0,
-		const HCURSOR& cursor = getDefaultCursor(), const HBRUSH& background = getDefaultBackground())
+		HCURSOR cursor = getDefaultCursor(), HBRUSH background = getDefaultBackground())
 	{
 		WNDCLASSEX cls = makeWndClass(className<T>());
 		if(icon)

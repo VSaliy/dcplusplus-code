@@ -29,7 +29,7 @@
 #include <dcpp/version.h>
 
 #include <dwt/widgets/FolderDialog.h>
-#include <dwt/widgets/Splitter.h>
+#include <dwt/widgets/SplitterContainer.h>
 
 const string QueueFrame::id = "Queue";
 const string& QueueFrame::getId() const { return id; }
@@ -63,12 +63,11 @@ queueSize(0),
 queueItems(0),
 fileLists(0)
 {
-	paned = addChild(VSplitter::Seed(SETTING(QUEUE_PANED_POS)));
+	paned = addChild(SplitterContainer::Seed(SETTING(QUEUE_PANED_POS)));
 
 	{
-		dirs = addChild(WidgetDirs::Seed());
+		dirs = paned->addChild(WidgetDirs::Seed());
 		addWidget(dirs);
-		paned->setFirst(dirs);
 
 		dirs->setNormalImageList(WinUtil::fileImages);
 
@@ -78,9 +77,8 @@ fileLists(0)
 	}
 
 	{
-		files = addChild(WidgetFiles::Seed());
+		files = paned->addChild(WidgetFiles::Seed());
 		addWidget(files, true);
-		paned->setSecond(files);
 
 		files->setSmallImageList(WinUtil::fileImages);
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(QUEUEFRAME_ORDER), SETTING(QUEUEFRAME_WIDTHS));
@@ -216,7 +214,7 @@ void QueueFrame::postClosing() {
 	}
 
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_SHOW_TREE, showTree->getChecked());
-	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getRelativePos());
+	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getSplitterPos(0));
 
 	for(DirectoryIter i = directories.begin(); i != directories.end(); ++i) {
 		delete i->second;
@@ -256,6 +254,7 @@ void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
 void QueueFrame::handleShowTreeClicked() {
 	bool checked = showTree->getChecked();
 
+	/* TODO
 	if(checked && !paned->getFirst()) {
 		paned->setFirst(dirs);
 	} else if(!checked && paned->getFirst()) {
@@ -264,7 +263,7 @@ void QueueFrame::handleShowTreeClicked() {
 
 	dirs->setVisible(checked);
 	paned->setVisible(checked);
-
+*/
 	layout();
 }
 

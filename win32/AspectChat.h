@@ -39,10 +39,13 @@ protected:
 	timeStamps(BOOLSETTING(TIME_STAMPS)),
 	curCommandPosition(0)
 	{
+	}
+
+	void createChat(dwt::Widget *parent) {
 		{
 			RichTextBox::Seed cs = WinUtil::Seeds::richTextBox;
 			cs.style |= ES_READONLY;
-			chat = t().addChild(cs);
+			chat = dwt::WidgetCreator<RichTextBox>::create(parent, cs);
 			chat->setTextLimit(65536);
 			WinUtil::handleDblClicks(chat);
 		}

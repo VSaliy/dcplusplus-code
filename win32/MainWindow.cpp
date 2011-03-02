@@ -70,7 +70,7 @@
 #include <dwt/widgets/Notification.h>
 #include <dwt/widgets/Rebar.h>
 #include <dwt/widgets/Spinner.h>
-#include <dwt/widgets/Splitter.h>
+#include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/ToolBar.h>
 
 #ifdef HAVE_HTMLHELP_H
@@ -221,7 +221,7 @@ void MainWindow::initWindow() {
 
 	rebar = addChild(Rebar::Seed());
 
-	paned = addChild(HSplitter::Seed(SETTING(TRANSFERS_PANED_POS)));
+	paned = addChild(SplitterContainer::Seed(SETTING(TRANSFERS_PANED_POS), true));
 }
 
 void MainWindow::initMenu() {
@@ -502,11 +502,10 @@ void MainWindow::initTabs() {
 	seed.closeIcon = WinUtil::tabIcon(IDI_EXIT);
 	seed.toggleActive = BOOLSETTING(TOGGLE_ACTIVE_WINDOW);
 	seed.ctrlTab = true;
-	tabs = addChild(seed);
+	tabs = paned->addChild(seed);
 	tabs->initTaskbar(this);
 	tabs->onTitleChanged(std::bind(&MainWindow::handleTabsTitleChanged, this, _1));
 	tabs->onHelp(std::bind(&WinUtil::help, _1, _2));
-	paned->setFirst(tabs);
 }
 
 void MainWindow::initTransfers() {
@@ -514,8 +513,7 @@ void MainWindow::initTransfers() {
 		return;
 
 	dcdebug("initTransfers\n");
-	transfers = new TransferView(this, getTabView());
-	paned->setSecond(transfers);
+	transfers = new TransferView(paned, getTabView());
 
 	viewMenu->checkItem(viewIndexes["Transfers"], true);
 }
@@ -811,7 +809,7 @@ void MainWindow::saveWindowSettings() {
 		}
 	}
 
-	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_PANED_POS, paned->getRelativePos());
+	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_PANED_POS, paned->getSplitterPos(0));
 
 	WINDOWPLACEMENT wp = { sizeof(wp)};
 	::GetWindowPlacement(this->handle(), &wp);
@@ -1299,6 +1297,7 @@ void MainWindow::switchToolbar() {
 }
 
 void MainWindow::switchTransfers() {
+	/* TODO
 	if(transfers) {
 		transfers->prepareClose();
 		::DestroyWindow(transfers->handle());
@@ -1312,7 +1311,7 @@ void MainWindow::switchTransfers() {
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_TRANSFERVIEW, true);
 		initTransfers();
 	}
-
+*/
 	layout();
 }
 

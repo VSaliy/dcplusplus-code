@@ -27,7 +27,7 @@
 #include <dcpp/ShareManager.h>
 
 #include <dwt/widgets/FolderDialog.h>
-#include <dwt/widgets/Splitter.h>
+#include <dwt/widgets/SplitterContainer.h>
 
 const string SearchFrame::id = "Search";
 const string& SearchFrame::getId() const { return id; }
@@ -80,7 +80,7 @@ int SearchFrame::SearchInfo::compareItems(SearchInfo* a, SearchInfo* b, int col)
 			return compare(a->srs[0]->getSlots(), b->srs[0]->getSlots());
 		else
 			return compare(a->srs[0]->getFreeSlots(), b->srs[0]->getFreeSlots());
-	case COLUMN_SIZE:
+	case COLUMN_SIZE: // Fall through
 	case COLUMN_EXACT_SIZE: return compare(a->srs[0]->getSize(), b->srs[0]->getSize());
 	default: return lstrcmpi(a->getText(col).c_str(), b->getText(col).c_str());
 	}
@@ -119,14 +119,13 @@ showUI(0),
 initialType(initialType_),
 droppedResults(0)
 {
-	paned = addChild(VSplitter::Seed(SETTING(SEARCH_PANED_POS)));
+	paned = addChild(SplitterContainer::Seed(SETTING(SEARCH_PANED_POS)));
 
 	{
-		options = addChild(Grid::Seed(5, 1));
+		options = paned->addChild(Grid::Seed(5, 1));
 		options->column(0).mode = GridInfo::FILL;
 		options->row(4).mode = GridInfo::FILL;
 		options->row(4).align = GridInfo::STRETCH;
-		paned->setFirst(options);
 
 		GroupBox::Seed gs = WinUtil::Seeds::group;
 
@@ -240,9 +239,8 @@ droppedResults(0)
 		hubs->setChecked(0, false);
 	}
 
-	results = addChild(WidgetResults::Seed());
+	results = paned->addChild(WidgetResults::Seed());
 	addWidget(results);
-	paned->setSecond(results);
 
 	results->setSmallImageList(WinUtil::fileImages);
 	WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
@@ -348,7 +346,7 @@ bool SearchFrame::preClosing() {
 }
 
 void SearchFrame::postClosing() {
-	SettingsManager::getInstance()->set(SettingsManager::SEARCH_PANED_POS, paned->getRelativePos());
+	SettingsManager::getInstance()->set(SettingsManager::SEARCH_PANED_POS, paned->getSplitterPos(0));
 
 	SettingsManager::getInstance()->set(SettingsManager::SEARCHFRAME_ORDER, WinUtil::toString(results->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::SEARCHFRAME_WIDTHS, WinUtil::toString(results->getColumnWidths()));
@@ -553,6 +551,7 @@ void SearchFrame::handleMergeClicked() {
 }
 
 void SearchFrame::handleShowUIClicked() {
+	/* TODO
 	bool checked = showUI->getChecked();
 
 	if(checked && !paned->getFirst()) {
@@ -564,7 +563,7 @@ void SearchFrame::handleShowUIClicked() {
 	options->setVisible(checked);
 	paned->setVisible(checked);
 
-	layout();
+	layout(); */
 }
 
 LRESULT SearchFrame::handleHubItemChanged(WPARAM wParam, LPARAM lParam) {

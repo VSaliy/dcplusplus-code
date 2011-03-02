@@ -39,7 +39,7 @@
 #include <dwt/widgets/FolderDialog.h>
 #include <dwt/widgets/Rebar.h>
 #include <dwt/widgets/SaveDialog.h>
-#include <dwt/widgets/Splitter.h>
+#include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/ToolBar.h>
 
 const string DirectoryListingFrame::id = "DirectoryListing";
@@ -213,12 +213,11 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	grid->setSpacing(0);
 
 	{
-		VSplitterPtr paned = grid->addChild(VSplitter::Seed(0.3));
+		auto paned = grid->addChild(SplitterContainer::Seed(0.3));
 
-		dirs = grid->addChild(WidgetDirs::Seed());
+		dirs = paned->addChild(WidgetDirs::Seed());
 		dirs->setHelpId(IDH_FILE_LIST_DIRS);
 		addWidget(dirs);
-		paned->setFirst(dirs);
 
 		dirs->setNormalImageList(WinUtil::fileImages);
 		dirs->onSelectionChanged(std::bind(&DirectoryListingFrame::handleSelectionChanged, this));
@@ -227,10 +226,9 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		dirs->onContextMenu(std::bind(&DirectoryListingFrame::handleDirsContextMenu, this, _1));
 		dirs->onXMouseUp(std::bind(&DirectoryListingFrame::handleXMouseUp, this, _1));
 
-		files = grid->addChild(WidgetFiles::Seed());
+		files = paned->addChild(WidgetFiles::Seed());
 		files->setHelpId(IDH_FILE_LIST_FILES);
 		addWidget(files);
-		paned->setSecond(files);
 
 		files->setSmallImageList(WinUtil::fileImages);
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(DIRECTORYLISTINGFRAME_ORDER), SETTING(DIRECTORYLISTINGFRAME_WIDTHS));
