@@ -17,6 +17,7 @@
 * Prevent endless redirection loops with some Coral servers (poy)
 * [L#590651] Plug a resource leak with regard to tab icons (poy)
 * [L#726254] Avoid a crash related to the Win 7 taskbar integration (poy)
+* Better splitter resizing
 
 -- 0.781 2011-01-12 --
 * Add a dummy serial number to TLS certs to satisfy some parsers (poy)

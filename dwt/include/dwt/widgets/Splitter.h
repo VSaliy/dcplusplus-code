@@ -36,10 +36,11 @@
 #include "ToolTip.h"
 #include <dwt/Texts.h>
 #include <dwt/dwt_vsstyle.h>
+#include "../Theme.h"
+#include "../resources/Brush.h"
 
 namespace dwt {
 
-template<bool horizontal>
 class Splitter :
 	public Control
 {
@@ -49,7 +50,7 @@ class Splitter :
 
 public:
 	/// Class type
-	typedef Splitter<horizontal> ThisType;
+	typedef Splitter ThisType;
 
 	/// Object type
 	typedef ThisType* ObjectType;
@@ -58,9 +59,14 @@ public:
 		typedef ThisType WidgetType;
 
 		double pos;
+		bool horizontal;
 
-		explicit Seed(double pos_ = 0.5);
+		explicit Seed(double pos_ = 0.5, bool horizontal = false);
 	};
+
+	bool isHorizontal() const {
+		return horizontal;
+	}
 
 	double getRelativePos() const {
 		return pos;
@@ -68,70 +74,38 @@ public:
 
 	void setRelativePos(double pos_) {
 		pos = pos_;
-		layout();
-	}
-
-	Widget* getFirst() {
-		return first;
-	}
-	void setFirst(Widget* first_) {
-		first = first_;
-		dwtassert(!first || first->getParent() == getParent(), _T("A splitter and its siblings must have the same parent"));
-	}
-
-	Widget* getSecond() {
-		return second;
-	}
-	void setSecond(Widget* second_) {
-		second = second_;
-		dwtassert(!second || second->getParent() == getParent(), _T("A splitter and its siblings must have the same parent"));
 	}
 
 	void create(const Seed& cs = Seed());
 
-	void layout(const Rectangle& r) {
+	typedef std::function<void(double)> OnMoveFunction;
+	void onMove(OnMoveFunction func);
+
+	virtual void layout(const Rectangle& r) {
 		rect = r;
-		layout();
+		BaseType::layout(r);
 	}
 
+	virtual Point getPreferredSize() { return horizontal ? Point(0, thickness()) : Point(thickness(), 0); }
 protected:
 	explicit Splitter(Widget* parent);
 
 	virtual ~Splitter() { }
 
 private:
-	Widget* first;
-	Widget* second;
-
 	Theme theme;
 
 	double pos;
 
 	bool hovering;
 	bool moving;
+	bool horizontal;
 
 	Rectangle rect;
 
-	Rectangle getSplitterRect();
-	void layout();
+	OnMoveFunction onMoveFunc;
 
-	void handlePainting(PaintCanvas& canvas) {
-		if(theme) {
-			int part, state;
-			if(hovering) {
-				part = horizontal ? PP_FILL : PP_FILLVERT;
-				state = horizontal ? PBFS_NORMAL : PBFVS_NORMAL;
-			} else {
-				part = horizontal ? PP_BAR : PP_BARVERT;
-				state = 0;
-			}
-			theme.drawBackground(canvas, part, state, canvas.getPaintRect());
-
-		} else if(hovering) {
-			// safe to assume that the text color is different enough from the default background.
-			canvas.fill(canvas.getPaintRect(), Brush(Brush::WindowText));
-		}
-	}
+	void handlePainting(PaintCanvas& canvas);
 
 	bool handleLButtonDown() {
 		::SetCapture(handle());
@@ -139,126 +113,33 @@ private:
 		return true;
 	}
 
-	bool handleMouseMove(const MouseEvent& mouseEvent) {
-		if(!hovering) {
-			hovering = true;
-			redraw();
-			onMouseLeave([this] {
-				GCC_WTF->hovering = false;
-				GCC_WTF->redraw();
-			});
-		}
-
-		if(moving && mouseEvent.ButtonPressed == MouseEvent::LEFT) {
-			ClientCoordinate cc(mouseEvent.pos, getParent());
-			double distance = horizontal ? cc.y() : cc.x();
-			double size = horizontal ? rect.size.y : rect.size.x;
-			double offset = horizontal ? rect.pos.y : rect.pos.x;
-			pos = (distance - offset) / size;
-			layout();
-		}
-		return true;
-	}
-
+	bool handleMouseMove(const MouseEvent& mouseEvent);
 	bool handleLButtonUp() {
 		::ReleaseCapture();
 		moving = false;
 		return true;
 	}
+
+	int thickness() { return ::GetSystemMetrics(horizontal ? SM_CYEDGE : SM_CXEDGE) + 2; }
 };
 
-template<bool horizontal>
-Splitter<horizontal>::Seed::Seed(double pos_) :
+inline Splitter::Seed::Seed(double pos_, bool horizontal) :
 BaseType::Seed(WS_CHILD, 0),
-pos(pos_)
+pos(pos_), horizontal(horizontal)
 {
 }
 
-template<bool horizontal>
-Splitter<horizontal>::Splitter(Widget* parent) :
-BaseType(parent, NormalDispatcher::newClass<ThisType>(0, 0, ::LoadCursor(0, horizontal ? IDC_SIZENS : IDC_SIZEWE))),
-first(0),
-second(0),
+inline Splitter::Splitter(Widget* parent) :
+BaseType(parent, NormalDispatcher::newClass<ThisType>(0, 0, NULL)),
 pos(0.5),
 hovering(false),
-moving(false)
+moving(false),
+horizontal(false)
 {
 }
 
-template<bool horizontal>
-void Splitter<horizontal>::create(const Seed& cs) {
-	pos = cs.pos;
-	BaseType::create(cs);
-
-	theme.load(VSCLASS_PROGRESS, this);
-	onPainting([this](PaintCanvas& canvas) { GCC_WTF->handlePainting(canvas); });
-
-	onLeftMouseDown([this](const MouseEvent&) { return GCC_WTF->handleLButtonDown(); });
-	onMouseMove([this](const MouseEvent& mouseEvent) { return GCC_WTF->handleMouseMove(mouseEvent); });
-	onLeftMouseUp([this](const MouseEvent&) { return GCC_WTF->handleLButtonUp(); });
-
-	WidgetCreator<ToolTip>::create(this, ToolTip::Seed())->setText(Texts::get(Texts::resize));
-}
-
-template<bool horizontal>
-Rectangle Splitter<horizontal>::getSplitterRect() {
-	// Sanity check
-	if(pos < 0.) {
-		pos = 0.0;
-	} else if(pos > 1.0) {
-		pos = 1.0;
-	}
-
-	Rectangle rc;
-	if(!first || !second) {
-		return rc;
-	}
-
-	rc = rect;
-	double splitterSize = ::GetSystemMetrics(horizontal ? SM_CYEDGE : SM_CXEDGE) + 2;
-	if(horizontal) {
-		rc.size.y = splitterSize;
-		rc.pos.y += pos * rect.height() - splitterSize / 2.;
-	} else {
-		rc.size.x = splitterSize;
-		rc.pos.x += pos * rect.width() - splitterSize / 2.;
-	}
-
-	return rc;
-}
-
-template<bool horizontal>
-void Splitter<horizontal>::layout() {
-	if(!first) {
-		if(second) {
-			second->layout(rect);
-		}
-		BaseType::layout(getSplitterRect());
-		return;
-	}
-	if(!second) {
-		first->layout(rect);
-		BaseType::layout(getSplitterRect());
-		return;
-	}
-
-	Rectangle left = rect, right = rect;
-	Rectangle rcSplit = getSplitterRect();
-
-	if(horizontal) {
-		left.size.y = rcSplit.y() - left.y();
-		right.pos.y = rcSplit.y() + rcSplit.height();
-		right.size.y = rect.height() - rcSplit.height() - left.height();
-	} else {
-		left.size.x = rcSplit.x() - left.x();
-		right.pos.x = rcSplit.x() + rcSplit.width();
-		right.size.x = rect.width() - rcSplit.width() - left.width();
-	}
-
-	first->layout(left);
-	second->layout(right);
-
-	BaseType::layout(rcSplit);
+inline void Splitter::onMove(OnMoveFunction onMove) {
+	onMoveFunc = onMove;
 }
 
 }

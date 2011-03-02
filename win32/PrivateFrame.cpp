@@ -120,6 +120,7 @@ replyTo(replyTo_),
 priv(FavoriteManager::getInstance()->isPrivate(replyTo.getUser().hint)),
 online(replyTo.getUser().user->isOnline())
 {
+	createChat(this);
 	chat->setHelpId(IDH_PM_CHAT);
 	addWidget(chat);
 	chat->onContextMenu(std::bind(&PrivateFrame::handleChatContextMenu, this, _1));

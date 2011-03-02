@@ -126,7 +126,7 @@ private:
 
 	WidgetUsersPtr users;
 	GridPtr userInfo;
-	VSplitterPtr splitter;
+	SplitterContainerPtr splitter;
 
 	TextBoxPtr filter;
 	CheckBoxPtr showFavs;

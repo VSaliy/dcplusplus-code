@@ -149,7 +149,7 @@ private:
 		}
 	};
 
-	VSplitterPtr paned;
+	SplitterContainerPtr paned;
 
 	GridPtr userGrid;
 

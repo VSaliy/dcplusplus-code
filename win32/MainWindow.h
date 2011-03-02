@@ -108,7 +108,7 @@ private:
 	};
 
 	RebarPtr rebar;
-	HSplitterPtr paned;
+	SplitterContainerPtr paned;
 	MenuPtr mainMenu;
 	MenuPtr viewMenu;
 	TransferView* transfers;

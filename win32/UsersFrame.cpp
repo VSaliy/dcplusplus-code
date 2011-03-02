@@ -32,6 +32,7 @@
 
 #include <dwt/widgets/Splitter.h>
 #include <dwt/widgets/ScrolledContainer.h>
+#include <dwt/widgets/SplitterContainer.h>
 
 const string UsersFrame::id = "Users";
 const string& UsersFrame::getId() const { return id; }
@@ -114,7 +115,7 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	showWaiting->setText(_T("Pending upload"));
 	showWaiting->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
 
-	splitter = addChild(VSplitter::Seed(0.7));
+	splitter = addChild(SplitterContainer::Seed(0.7));
 
 	if(!userIcons) {
 		userIcons = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
@@ -127,7 +128,7 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	{
 		WidgetUsers::Seed cs;
 		cs.lvStyle |= LVS_EX_SUBITEMIMAGES;
-		users = addChild(cs);
+		users = splitter->addChild(cs);
 		addWidget(users);
 
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(USERSFRAME_ORDER), SETTING(USERSFRAME_WIDTHS));
@@ -141,14 +142,11 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 		users->setSmallImageList(userIcons);
 		users->onLeftMouseDown(std::bind(&UsersFrame::handleClick, this, _1));
 		prepareUserList(users);
-
-		splitter->setFirst(users);
 	}
 
 	{
-		auto scroll = addChild(dwt::ScrolledContainer::Seed());
+		auto scroll = splitter->addChild(dwt::ScrolledContainer::Seed());
 		userInfo = scroll->addChild(Grid::Seed(0, 1));
-		splitter->setSecond(scroll);
 	}
 
 	{

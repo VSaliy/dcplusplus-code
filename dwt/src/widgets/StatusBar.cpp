@@ -41,7 +41,7 @@ namespace dwt {
 const TCHAR StatusBar::windowClass[] = STATUSCLASSNAME;
 
 StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip) :
-BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
+BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN),
 parts(parts_),
 fill(fill_)
 {
