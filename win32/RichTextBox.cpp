@@ -63,7 +63,7 @@ MenuPtr RichTextBox::getMenu() {
 
 	menu->appendSeparator();
 	menu->appendItem(T_("&Find...\tCtrl+F"), [this] { findTextNew(); }, dwt::IconPtr(), !getText().empty());
-	menu->appendItem(T_("&Find Next\tF3"), [this] { findTextNext(); }, dwt::IconPtr(), !getText().empty());
+	menu->appendItem(T_("Find &Next\tF3"), [this] { findTextNext(); }, dwt::IconPtr(), !getText().empty());
 
 	return menu;
 }

@@ -186,7 +186,7 @@ inTabComplete(false)
 		}
 		filterType->addValue(T_("Any"));
 		filterType->setSelected(COLUMN_LAST);
-		filterType->onSelectionChanged(std::bind(&HubFrame::updateUserList, this, (UserInfo*)0));
+		filterType->onSelectionChanged([this] { updateUserList(); });
 	}
 
 	showUsers = addChild(WinUtil::Seeds::splitCheckBox);
@@ -625,10 +625,7 @@ bool HubFrame::updateUser(const UserTask& u) {
 
 		resort = ui->update(u.identity, users->getSortColumn()) || resort;
 		if(showUsers->getChecked()) {
-			int pos = users->find(ui);
-			if(pos != -1) {
-				users->update(pos);
-			}
+			users->update(ui);
 			updateUserList(ui);
 		}
 
