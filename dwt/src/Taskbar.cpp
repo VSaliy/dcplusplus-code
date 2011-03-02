@@ -40,8 +40,6 @@
 
 namespace dwt {
 
-static const UINT taskbarButtonMsg = ::RegisterWindowMessage(_T("TaskbarButtonCreated"));
-
 typedef HRESULT (WINAPI *t_DwmInvalidateIconicBitmaps)(HWND);
 static t_DwmInvalidateIconicBitmaps DwmInvalidateIconicBitmaps = 0;
 
@@ -82,39 +80,36 @@ void Taskbar::initTaskbar(WindowPtr window_) {
 		window = window_;
 		dwtassert(window, _T("Taskbar: no widget set"));
 
-		// init the COM pointer on reception of the "TaskbarButtonCreated" message.
-		window->onRaw([this](WPARAM, LPARAM) -> LRESULT {
-			if(!taskbar) {
+		/* init the ITaskbarList3 COM pointer. MSDN recommends waiting for the
+		"TaskbarButtonCreated" message, but neither MFC nor Win SDK samples do that, so we don't
+		either. greatly simplifies the logic of this interface. */
 #ifdef __GNUC__
-				/// @todo remove when GCC knows about ITaskbarList
-				CLSID CLSID_TaskbarList;
-				OLECHAR tbl[] = L"{56FDF344-FD6D-11d0-958A-006097C9A090}";
-				CLSIDFromString(tbl, &CLSID_TaskbarList);
-				IID IID_ITaskbarList;
-				OLECHAR itbl[] = L"{56FDF342-FD6D-11d0-958A-006097C9A090}";
-				CLSIDFromString(itbl, &IID_ITaskbarList);
+		/// @todo remove when GCC knows about ITaskbarList
+		CLSID CLSID_TaskbarList;
+		OLECHAR tbl[] = L"{56FDF344-FD6D-11d0-958A-006097C9A090}";
+		CLSIDFromString(tbl, &CLSID_TaskbarList);
+		IID IID_ITaskbarList;
+		OLECHAR itbl[] = L"{56FDF342-FD6D-11d0-958A-006097C9A090}";
+		CLSIDFromString(itbl, &IID_ITaskbarList);
 #endif
-				if(::CoCreateInstance(CLSID_TaskbarList, 0, CLSCTX_INPROC_SERVER, IID_ITaskbarList,
-					reinterpret_cast<LPVOID*>(&taskbar)) != S_OK) { taskbar = 0; }
-				if(taskbar) {
-					if(taskbar->HrInit() == S_OK) {
-						LibraryLoader lib_user32(_T("user32"));
-						typedef BOOL (WINAPI *t_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, void*);
-						t_ChangeWindowMessageFilterEx ChangeWindowMessageFilterEx;
-						if(ChangeWindowMessageFilterEx = reinterpret_cast<t_ChangeWindowMessageFilterEx>(
-							lib_user32.getProcAddress(_T("ChangeWindowMessageFilterEx"))))
-						{
-							ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICTHUMBNAIL, 1/*MSGFLT_ALLOW*/, 0);
-							ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICLIVEPREVIEWBITMAP, 1/*MSGFLT_ALLOW*/, 0);
-						}
-					} else {
-						taskbar->Release();
-						taskbar = 0;
-					}
+		if(::CoCreateInstance(CLSID_TaskbarList, 0, CLSCTX_INPROC_SERVER, IID_ITaskbarList,
+			reinterpret_cast<LPVOID*>(&taskbar)) != S_OK) { taskbar = 0; }
+		if(taskbar) {
+			if(taskbar->HrInit() == S_OK) {
+				/* call ChangeWindowMessageFilterEx on the 2 messages we use to dispatch bitmaps to
+				the destktop manager to prevent blockings because of different privilege levels. */
+				LibraryLoader lib_user32(_T("user32"));
+				if(auto ChangeWindowMessageFilterEx = reinterpret_cast<BOOL (WINAPI *)(HWND, UINT, DWORD, void*)>(
+					lib_user32.getProcAddress(_T("ChangeWindowMessageFilterEx"))))
+				{
+					ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICTHUMBNAIL, 1/*MSGFLT_ALLOW*/, 0);
+					ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICLIVEPREVIEWBITMAP, 1/*MSGFLT_ALLOW*/, 0);
 				}
+			} else {
+				taskbar->Release();
+				taskbar = 0;
 			}
-			return 0;
-		}, Message(taskbarButtonMsg));
+		}
 	}
 }
 
