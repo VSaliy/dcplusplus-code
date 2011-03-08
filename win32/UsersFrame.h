@@ -137,7 +137,7 @@ private:
 	static dwt::ImageListPtr userIcons;
 
 	// TODO change to unique_ptr once g++ map supports it (no move insert in 4.5 it seems...)
-	std::unordered_map<UserPtr, shared_ptr<UserInfo>, User::Hash> userInfos;
+	std::unordered_map<UserPtr, dwt::shared_ptr<UserInfo>, User::Hash> userInfos;
 
 	bool startup;
 

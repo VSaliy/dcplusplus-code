@@ -21,6 +21,7 @@
 
 #include "SplashWindow.h"
 
+#include <dcpp/format.h>
 #include <dcpp/version.h>
 #include <dcpp/Text.h>
 

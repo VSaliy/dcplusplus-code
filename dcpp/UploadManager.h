@@ -29,6 +29,7 @@
 #include "Util.h"
 #include "TimerManager.h"
 #include "Speaker.h"
+#include "SettingsManager.h"
 
 namespace dcpp {
 

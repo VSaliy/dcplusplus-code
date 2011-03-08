@@ -25,6 +25,7 @@
 #include <dwt/widgets/FolderDialog.h>
 #include <dwt/widgets/Spinner.h>
 
+#include <dcpp/format.h>
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/version.h>

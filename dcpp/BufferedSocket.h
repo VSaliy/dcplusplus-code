@@ -19,7 +19,8 @@
 #ifndef DCPLUSPLUS_DCPP_BUFFERED_SOCKET_H
 #define DCPLUSPLUS_DCPP_BUFFERED_SOCKET_H
 
-#include "forward.h"
+#include "typedefs.h"
+
 #include "BufferedSocketListener.h"
 #include "Semaphore.h"
 #include "Thread.h"
@@ -141,7 +142,7 @@ private:
 	CriticalSection cs;
 
 	Semaphore taskSem;
-	deque<pair<Tasks, shared_ptr<TaskData> > > tasks;
+	deque<pair<Tasks, unique_ptr<TaskData> > > tasks;
 
 	Modes mode;
 	std::unique_ptr<UnZFilter> filterIn;

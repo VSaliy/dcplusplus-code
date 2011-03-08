@@ -24,6 +24,7 @@
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/StringTokenizer.h>
+#include <dcpp/format.h>
 #include <dcpp/version.h>
 #include "ParamDlg.h"
 

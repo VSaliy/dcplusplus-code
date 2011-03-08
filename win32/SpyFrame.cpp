@@ -21,6 +21,7 @@
 
 #include "SpyFrame.h"
 
+#include <dcpp/format.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/ClientManager.h>
 

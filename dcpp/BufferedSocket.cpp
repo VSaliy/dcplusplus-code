@@ -420,11 +420,11 @@ void BufferedSocket::threadSendData() throw(Exception) {
 
 bool BufferedSocket::checkEvents() throw(Exception) {
 	while(state == RUNNING ? taskSem.wait(0) : taskSem.wait()) {
-		pair<Tasks, shared_ptr<TaskData> > p;
+		pair<Tasks, unique_ptr<TaskData> > p;
 		{
 			Lock l(cs);
 			dcassert(tasks.size() > 0);
-			p = tasks.front();
+			p = move(tasks.front());
 			tasks.erase(tasks.begin());
 		}
 
@@ -509,7 +509,7 @@ void BufferedSocket::shutdown() {
 
 void BufferedSocket::addTask(Tasks task, TaskData* data) {
 	dcassert(task == DISCONNECT || task == SHUTDOWN || task == UPDATED || sock.get());
-	tasks.push_back(make_pair(task, data)); taskSem.signal();
+	tasks.push_back(make_pair(task, unique_ptr<TaskData>(data))); taskSem.signal();
 }
 
 } // namespace dcpp
