@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_RichTextBox_H_
 #define DCPLUSPLUS_WIN32_RichTextBox_H_
 
+#include <dcpp/typedefs.h>
+
 /// our rich text boxes that provide find functions
 class RichTextBox : public dwt::RichTextBox {
 	typedef dwt::RichTextBox BaseType;

@@ -23,6 +23,7 @@
 #include "FavHubGroupsDlg.h"
 
 #include <dcpp/FavoriteManager.h>
+#include <dcpp/format.h>
 #include <dcpp/version.h>
 
 #include "HoldRedraw.h"

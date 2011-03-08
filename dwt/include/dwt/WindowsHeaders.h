@@ -93,12 +93,4 @@
 #include <list>
 #include <boost/noncopyable.hpp>
 
-// pick the shared_ptr to use
-#ifndef SHARED_PTR_NS
-#define SHARED_PTR_NS std
-#endif
-using SHARED_PTR_NS::shared_ptr;
-using SHARED_PTR_NS::enable_shared_from_this;
-using SHARED_PTR_NS::make_shared;
-
 #endif // !WindowsHeaders_h

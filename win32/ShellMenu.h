@@ -21,6 +21,8 @@
 #ifndef DCPLUSPLUS_WIN32_SHELL_MENU_H
 #define DCPLUSPLUS_WIN32_SHELL_MENU_H
 
+#include <dcpp/typedefs.h>
+
 #include <dwt/widgets/Menu.h>
 
 class ShellMenu : public Menu
@@ -39,7 +41,7 @@ class ShellMenu : public Menu
 public:
 	typedef ShellMenu ThisType;
 
-	typedef shared_ptr<ShellMenu> ObjectType;
+	typedef dwt::shared_ptr<ShellMenu> ObjectType;
 
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;

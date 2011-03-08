@@ -247,7 +247,7 @@ void UsersFrame::addUser(const UserPtr& aUser) {
 
 	auto ui = userInfos.find(aUser);
 	if(ui == userInfos.end()) {
-		auto x = make_shared<UserInfo>(aUser);
+		auto x = dwt::make_shared<UserInfo>(aUser);
 		userInfos.insert(std::make_pair(aUser, x));
 
 		if(matches(*x)) {

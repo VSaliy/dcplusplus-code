@@ -62,7 +62,7 @@ public:
 	typedef Menu ThisType;
 
 	/// Object type
-	typedef shared_ptr<Menu> ObjectType;
+	typedef MenuPtr ObjectType;
 
 	/// Global colors, can be changed through the seed
 	struct Colors {

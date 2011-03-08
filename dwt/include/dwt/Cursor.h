@@ -42,41 +42,43 @@ namespace dwt {
 
 /// Class for manipulating the mouse cursor
 /** Use getCursor and store the returned object until you wish to change back to the
-  * previous cursor
-  */
-class Cursor
+ * previous cursor
+ */
+class Cursor : boost::noncopyable
 {
-	class Implementation
-	{
-		HCURSOR itsOld;
-	public:
-		Implementation( HCURSOR old )
-			: itsOld( old )
-		{}
+	explicit Cursor(HCURSOR old) : old(old), owner(true) { }
 
-		~Implementation()
-		{
-			::SetCursor( itsOld );
+	Cursor(Cursor &&rhs) {*this = std::move(rhs);}
+
+	Cursor &operator=(Cursor &&rhs) {
+		if(this != &rhs) {
+			old = rhs.old;
+			owner = true;
+			rhs.owner = false;
+			rhs.old = NULL;
 		}
-	};
 
-	shared_ptr< Implementation > itsImplementation;
-
-	Cursor( shared_ptr< Implementation > implementation )
-		: itsImplementation( implementation )
-	{}
-
+		return *this;
+	}
 public:
 	/// Returns a wait cursor
-	/** Store the returned object and when object goes out of scope or is freed old
-	  * cursor will be set again
-	  */
-	static Cursor getWaitCursor()
-	{
-		shared_ptr< Implementation > implementation( new Implementation( ::SetCursor( ::LoadCursor( 0, IDC_WAIT ) ) ) );
-		return Cursor( implementation );
-	}
-};
+		/** Store the returned object and when object goes out of scope or is freed old
+		 * cursor will be set again
+		 */
+		static Cursor getWaitCursor() {
+			return Cursor(::SetCursor( ::LoadCursor( 0, IDC_WAIT ) ) );
+		}
+
+		~Cursor() {
+			if(owner) {
+				::SetCursor(old);
+			}
+		}
+
+	private:
+		HCURSOR old;
+		bool owner;
+	};
 
 }
 
