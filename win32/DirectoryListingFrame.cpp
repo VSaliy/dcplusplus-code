@@ -301,7 +301,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 
 		StringList ids;
 		auto addButton = [toolbar, &ids](unsigned icon, const tstring& text, unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f) {
-			ids.push_back(string(1, '0' + ids.size()));
+			ids.push_back(std::string(1, '0' + ids.size()));
 			toolbar->addButton(ids.back(), WinUtil::toolbarIcon(icon), 0, text, helpId, f);
 		};
 		addButton(IDI_LEFT, T_("Back"), IDH_FILE_LIST_BACK, [this] { back(); });
