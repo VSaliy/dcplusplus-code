@@ -9,3 +9,7 @@ img {
 	border: 0;
 	vertical-align: middle;
 }
+
+td.cl {
+	text-align: left;
+}

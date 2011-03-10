@@ -8,6 +8,7 @@
 * Repurpose Ctrl+F to in-place searches in chat windows & file lists (poy)
 * Better splitter resizing
 * [L#730828] Prevent a stack overflow when searching within too big file lists (poy)
+* [L#710359] Add finished downloads log (emtee)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

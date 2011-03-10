@@ -40,6 +40,8 @@
 #include "MerkleCheckOutputStream.h"
 #include "SFVReader.h"
 #include "FilteredFile.h"
+#include "FinishedItem.h"
+#include "FinishedManager.h"
 
 #include <climits>
 
@@ -1139,6 +1141,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 						}
 
 						string dir;
+						bool crcError = false;
 						if(aDownload->getType() == Transfer::TYPE_FULL_LIST) {
 							dir = q->getTempTarget();
 							q->addSegment(Segment(0, q->getSize()));
@@ -1146,7 +1149,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 							q->addSegment(aDownload->getSegment());
 
 							if (q->isFinished() && BOOLSETTING(SFV_CHECK)) {
-								checkSfv(q, aDownload);
+								crcError = checkSfv(q, aDownload);
 							}
 						}
 
@@ -1154,6 +1157,10 @@ void QueueManager::putDownload(Download* aDownload, bool finished) throw() {
 							// Check if we need to move the file
 							if( aDownload->getType() == Transfer::TYPE_FILE && !aDownload->getTempTarget().empty() && (Util::stricmp(aDownload->getPath().c_str(), aDownload->getTempTarget().c_str()) != 0) ) {
 								moveFile(aDownload->getTempTarget(), aDownload->getPath());
+							}
+
+							if (BOOLSETTING(LOG_FINISHED_DOWNLOADS) && aDownload->getType() == Transfer::TYPE_FILE) {
+								logFinishedDownload(q, aDownload, crcError);
 							}
 
 							fire(QueueManagerListener::Finished(), q, dir, aDownload->getAverageSpeed());
@@ -1712,7 +1719,7 @@ void QueueManager::on(TimerManagerListener::Second, uint64_t aTick) throw() {
 	}
 }
 
-void QueueManager::checkSfv(QueueItem* qi, Download* d) {
+bool QueueManager::checkSfv(QueueItem* qi, Download* d) {
 	SFVReader sfv(qi->getTarget());
 
 	if(sfv.hasCRC()) {
@@ -1741,12 +1748,13 @@ void QueueManager::checkSfv(QueueItem* qi, Download* d) {
 			}
 
 			fire(QueueManagerListener::CRCFailed(), d, _("CRC32 inconsistency (SFV-Check)"));
-			return;
+			return true;
 		}
 
 		dcdebug("QueueManager: CRC32 match for %s\n", qi->getTarget().c_str());
 		fire(QueueManagerListener::CRCChecked(), d);
 	}
+	return false;
 }
 
 uint32_t QueueManager::calcCrc32(const string& file) throw(FileException) {
@@ -1762,4 +1770,72 @@ uint32_t QueueManager::calcCrc32(const string& file) throw(FileException) {
 	return f.getFilter().getValue();
 }
 
+void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcError)
+{
+	StringMap params;
+	params["target"] = qi->getTarget();
+	params["fileSI"] = Util::toString(qi->getSize());
+	params["fileSIshort"] = Util::formatBytes(qi->getSize());
+	params["fileTR"] = qi->getTTH().toBase32();
+	params["sfv"] = Util::toString(crcError ? 1 : 0);
+
+	{
+		auto lock = FinishedManager::getInstance()->lockLists();
+
+		const FinishedManager::MapByFile& map = FinishedManager::getInstance()->getMapByFile(false);
+		FinishedManager::MapByFile::const_iterator it = map.find(qi->getTarget());
+		if(it != map.end()) {
+			auto entry = it->second;
+			if (!entry->getUsers().empty()) {
+				StringList nicks, cids, ips, hubNames, hubUrls, temp;
+				string ip;
+				for(auto i = entry->getUsers().begin(), iend = entry->getUsers().end(); i != iend; ++i) {
+
+					nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks(*i)));
+					cids.push_back(i->user->getCID().toBase32());
+
+					ip.clear();
+					if (i->user->isOnline()) {
+						OnlineUser* u = ClientManager::getInstance()->findOnlineUser(*i, false);
+						if (u) {
+							ip = u->getIdentity().getIp();
+						}
+					}
+					if (ip.empty()) {
+						ip = _("Offline");
+					}
+					ips.push_back(ip);
+
+					temp = ClientManager::getInstance()->getHubNames(*i);
+					if(temp.empty()) {
+						temp.push_back(_("Offline"));
+					}
+					hubNames.push_back(Util::toString(temp));
+
+					temp = ClientManager::getInstance()->getHubs(*i);
+					if(temp.empty()) {
+						temp.push_back(_("Offline"));
+					}
+					hubUrls.push_back(Util::toString(temp));
+				}
+
+				params["userNI"] = Util::toString(nicks);
+				params["userCID"] = Util::toString(cids);
+				params["userI4"] = Util::toString(ips);
+				params["hubNI"] = Util::toString(hubNames);
+				params["hubURL"] = Util::toString(hubUrls);
+			}
+
+			params["fileSIsession"] = Util::toString(entry->getTransferred());
+			params["fileSIsessionshort"] = Util::formatBytes(entry->getTransferred());
+			params["fileSIactual"] = Util::toString(entry->getActual());
+			params["fileSIactualshort"] = Util::formatBytes(entry->getActual());
+
+			params["speed"] = str(F_("%1%/s") % Util::formatBytes(entry->getAverageSpeed()));
+			params["time"] = Util::formatSeconds(entry->getMilliSeconds() / 1000);
+		}
+	}
+
+	LOG(LogManager::FINISHED_DOWNLOAD, params);
+}
 } // namespace dcpp

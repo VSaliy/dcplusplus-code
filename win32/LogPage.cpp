@@ -30,8 +30,9 @@
 PropPage::ListItem LogPage::listItems[] = {
 	{ SettingsManager::LOG_MAIN_CHAT, N_("Log main chat"), IDH_SETTINGS_LOG_MAIN_CHAT },
 	{ SettingsManager::LOG_PRIVATE_CHAT, N_("Log private chat"), IDH_SETTINGS_LOG_PRIVATE_CHAT },
-	{ SettingsManager::LOG_DOWNLOADS, N_("Log downloads"), IDH_SETTINGS_LOG_DOWNLOADS },
-	{ SettingsManager::LOG_UPLOADS, N_("Log uploads"), IDH_SETTINGS_LOG_UPLOADS },
+	{ SettingsManager::LOG_DOWNLOADS, N_("Log downloaded segments"), IDH_SETTINGS_LOG_DOWNLOADS },
+	{ SettingsManager::LOG_FINISHED_DOWNLOADS, N_("Log finished downloads"), IDH_SETTINGS_LOG_FINISHED_DOWNLOADS },
+	{ SettingsManager::LOG_UPLOADS, N_("Log uploaded segments"), IDH_SETTINGS_LOG_UPLOADS },
 	{ SettingsManager::LOG_SYSTEM, N_("Log system messages"), IDH_SETTINGS_LOG_SYSTEM },
 	{ SettingsManager::LOG_STATUS_MESSAGES, N_("Log status messages"), IDH_SETTINGS_LOG_STATUS_MESSAGES },
 	{ SettingsManager::LOG_FILELIST_TRANSFERS, N_("Log filelist transfers"), IDH_SETTINGS_LOG_FILELIST_TRANSFERS },
