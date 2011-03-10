@@ -27,39 +27,132 @@ the application.</dd>
   <div>%[message] - Private chat message</div>
   <div><b>Default format:</b> [%Y-%m-%d %H:%M] %[message]</div>
   </dd>
-  <dt>Log downloads</dt>
-  <dd cshelp="IDH_SETTINGS_LOG_DOWNLOADS">Enables logging of completed downloads. File list downloads may not be logged if you've
-<a href="#filelist">disabled them</a>.
+  <dt>Log downloaded segments</dt>
+  <dd cshelp="IDH_SETTINGS_LOG_DOWNLOADS">Enables logging of completed downloaded segments and file lists. File list downloads may not be logged if you've <a href="#filelist">disabled them</a>.
   </dd>
-  <dt>Log uploads</dt>
-  <dd cshelp="IDH_SETTINGS_LOG_UPLOADS">Enables logging of completed uploads.
-File list uploads may not be logged if you've
-<a href="#filelist">disabled them</a>.</dd>
+  <dt>Log finished downloads</dt>
+  <dd cshelp="IDH_SETTINGS_LOG_FINISHED_DOWNLOADS">Enables logging of completed downloads.
+  </dd>
+  <dt>Log uploaded segments</dt>
+  <dd cshelp="IDH_SETTINGS_LOG_UPLOADS">Enables logging of uploaded segments and file lists. File list uploads may not be logged if you've <a href="#filelist">disabled them</a>.</dd>
   <dt>Download and upload log format</dt>
-  <dd>
-  <div>%[userNI] - User's nickname</div>
-  <div>%[userCID] - User's CID</div>
-  <div>%[userI4] - User's IP address</div>
-  <div>%[hubNI] - Hub name</div>
-  <div>%[hubURL] - Hub's IP address</div>
-  <div>%[fileSI] - File Size</div>
-  <div>%[fileSIshort] - File size, shortened and including units</div>
-  <div>%[fileSIchunk] - Size uploaded this session</div>
-  <div>%[fileSIchunkshort] - Size uploaded this session, short and including
-units</div>
-  <div>%[fileSIactual] - Actual uploaded bytes, affected by compression</div>
-  <div>%[fileSIactualshort] - Actual uploaded bytes, short and including units</div>
-  <div>%[speed] - Speed of the transfer</div>
-  <div>%[time] - Elapsed time of the transfer</div>
-  <!-- Readd this when we'll have real finished files log
-  <div>%[sfv] - Whether the file was checked against a SFV file (0 = no, 1 = yes).</div>
-  -->
-  <div>%[tth] - Base32 representation of the tiger tree root hash</div>
-  <div>Only for Download log: %[target] - Local path and filename</div>
-  <div>Only for Upload log: %[source] - Local path for the upload.</div>
+  <dd>The following format specifiers are available for the different type of transfer logs:
+  <table style="width: 70%; text-align: center;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Parameter</td>
+      <td style="font-weight: bold;">Downloaded segments log</td>
+      <td style="font-weight: bold;">Finished downloads log</td>
+      <td style="font-weight: bold;">Uploaded segments log</td>
+    </tr>
+    <tr>
+      <td class="cl">%[target]</td>
+      <td>Local target path and filename</td>
+      <td>Local target path and filename</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td class="cl">%[source]</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>Local path of the file the chunk uploaded from</td>
+    </tr>
+    <tr>
+      <td class="cl">%[userNI]</td>
+      <td>User's nickname</td>
+      <td>User nicknames</td>
+      <td>User's nickname</td>
+    </tr>
+    <tr>
+      <td class="cl">%[userCID]</td>
+      <td>User's CID</td>
+      <td>User CIDs</td>
+      <td>User's CID</td>
+    </tr>
+    <tr>
+      <td class="cl">%[userI4]</td>
+      <td>User's IPv4 address</td>
+      <td>User IPv4 addresses (available for ADC users only)</td>
+      <td>User's IPv4 address</td>
+    </tr>
+    <tr>
+      <td class="cl">%[hubNI]</td>
+      <td>Hub name</td>
+      <td>Hub names</td>
+      <td>Hub name</td>
+    </tr>
+    <tr>
+      <td class="cl">%[hubURL]</td>
+      <td>Hub's URL or IP address</td>
+      <td>Hub URLs or IP addresses</td>
+      <td>Hub's URL or IP address</td>
+    </tr>
+    <tr>
+      <td class="cl">%[fileSI]</td>
+      <td>Chunk size</td>
+      <td>Total file size</td>
+      <td>Chunk size</td>
+    </tr>
+    <tr>
+      <td class="cl">%[fileSIshort]</td>
+      <td>Chunk size, shortened and including units</td>
+      <td>Total file size, shortened and including units</td>
+      <td>Chunk size, shortened and including units</td>
+    </tr>
+    <tr>
+      <td class="cl">%[fileSIsession]</td>
+      <td>N/A</td>
+      <td>File size transferred in the current session</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td class="cl">%[fileSIsessionshort]</td>
+      <td>N/A</td>
+      <td>File size transferred in the current session, shortened and including units</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td class="cl">%[fileSIactual]</td>
+      <td>Actual transferred bytes, affected by compression</td>
+      <td>Actual transferred bytes (in the current session), affected by compression</td>
+      <td>Actual transferred bytes, affected by compression</td>
+    </tr>
+    <tr>
+      <td class="cl">%[fileSIactualshort]</td>
+      <td>Actual transferred bytes, short and including units</td>
+      <td>Actual transferred bytes (in the current session), short and including units</td>
+      <td>Actual transferred bytes, short and including units</td>
+    </tr>
+    <tr>
+      <td class="cl">%[speed]</td>
+      <td>Average speed of the transfer</td>
+      <td>Average speed of the transfer (in the current session)</td>
+      <td>Average speed of the transfer</td>
+    </tr>
+    <tr>
+      <td class="cl">%[time]</td>
+      <td>Actual chunk transfer time</td>
+      <td>Actual file transfer time in the current session</td>
+      <td>Actual chunk transfer time</td>
+    </tr>
+    <tr>
+      <td class="cl">%[fileTR]</td>
+      <td>TTH of the target file the chunk downloaded to</td>
+      <td>TTH of the target file</td>
+      <td>TTH of the target file the chunk uploaded from</td>
+    </tr>
+    <tr>
+      <td class="cl">%[sfv]</td>
+      <td>N/A</td>
+      <td>Whether the file was successfully checked against a SFV file (0 = no, 1 = yes)</td>
+      <td>N/A</td>
+    </tr>
+  </tbody>
+  </table>
   </dd>
-  <dd><div><b>Default download log format:</b> %Y-%m-%d %H:%M: %[target] downloaded from %[userNI] (%[userCID]), %[fileSI] (%[fileSIchunk]), %[speed], %[time]</div>
-  <div><b>Default upload log format:</b> %Y-%m-%d %H:%M: %[source] uploaded to %[userNI] (%[userCID]), %[fileSI] (%[fileSIchunk]), %[speed], %[time]</div>
+  <dd><div><b>Default downloaded segments log format:</b> %Y-%m-%d %H:%M: %[target] downloaded from %[userNI] (%[userCID]), %[fileSI] (%[fileSIactual]), %[speed], %[time], %[fileTR]</div>
+  <div><b>Default finished downloads log format:</b> %Y-%m-%d %H:%M: %[target] downloaded from %[userNI] (%[userCID]), %[fileSI] (%[fileSIsession]), %[speed], %[time], %[fileTR]</div>
+  <div><b>Default uploaded segments log format:</b> %Y-%m-%d %H:%M: %[source] uploaded to %[userNI] (%[userCID]), %[fileSI] (%[fileSIactual]), %[speed], %[time], %[fileTR]</div>
   </dd>
   <dt id="system">Log system messages</dt>
   <dd cshelp="IDH_SETTINGS_LOG_SYSTEM">Enables logging of system-level messages. Examples of
