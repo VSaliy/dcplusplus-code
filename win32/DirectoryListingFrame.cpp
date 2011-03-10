@@ -959,47 +959,6 @@ void DirectoryListingFrame::forward() {
 	}
 }
 
-pair<HTREEITEM, int> DirectoryListingFrame::findFile(const StringSearch& str, bool reverse, HTREEITEM item, int pos,
-	HTREEITEM const start, vector<HTREEITEM>& collapse, bool& cycle)
-{
-	// try to match the names currently in the list pane
-	const int n = files->size();
-	if(reverse && pos == -1)
-		pos = n;
-	for(reverse ? --pos : ++pos; reverse ? (pos >= 0) : (pos < n); reverse ? --pos : ++pos) {
-		const ItemInfo& ii = *files->getData(pos);
-		const string& name = (ii.type == ItemInfo::FILE) ? ii.file->getName() : ii.dir->getName();
-		if(str.match(name))
-			return make_pair(item, pos);
-	}
-
-	// flow to the next directory
-	if(!reverse && dirs->getChild(item) && !dirs->isExpanded(item)) {
-		dirs->expand(item);
-		collapse.push_back(item);
-	}
-	HTREEITEM next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
-	if(!next) {
-		next = reverse ? dirs->getLast() : treeRoot;
-		cycle = true;
-	}
-	if(next && next != start) {
-		if(reverse && dirs->getChild(next) && !dirs->isExpanded(next)) {
-			dirs->expand(next);
-			collapse.push_back(next);
-			if(!(next = dirs->getNext(item, TVGN_PREVIOUSVISIBLE)))
-				next = dirs->getLast();
-		}
-
-		// refresh the list pane to respect sorting etc
-		changeDir(dirs->getData(next)->dir);
-
-		return findFile(str, reverse, next, -1, start, collapse, cycle);
-	}
-
-	return make_pair(nullptr, 0);
-}
-
 void DirectoryListingFrame::findFile(bool reverse) {
 	const tstring findStr = searchBox->getText();
 	if(findStr.empty())
@@ -1051,24 +1010,70 @@ void DirectoryListingFrame::findFile(bool reverse) {
 		}
 	};
 
+	StringSearch search(Text::fromT(findStr));
 	vector<HTREEITEM> collapse;
 	bool cycle = false;
 	const auto fileSel = files->getSelected();
 
-	auto search = findFile(StringSearch(Text::fromT(findStr)), reverse, start, fileSel, start, collapse, cycle);
+	HTREEITEM item = start;
+	auto pos = fileSel;
+
+	while(true) {
+		// try to match the names currently in the list pane
+		const int n = files->size();
+		if(reverse && pos == -1)
+			pos = n;
+		bool found = false;
+		for(reverse ? --pos : ++pos; reverse ? (pos >= 0) : (pos < n); reverse ? --pos : ++pos) {
+			const ItemInfo& ii = *files->getData(pos);
+			if(search.match((ii.type == ItemInfo::FILE) ? ii.file->getName() : ii.dir->getName())) {
+				found = true;
+				break;
+			}
+		}
+		if(found)
+			break;
+
+		// flow to the next directory
+		if(!reverse && dirs->getChild(item) && !dirs->isExpanded(item)) {
+			dirs->expand(item);
+			collapse.push_back(item);
+		}
+		HTREEITEM next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
+		if(!next) {
+			next = reverse ? dirs->getLast() : treeRoot;
+			if(!next || next == start) {
+				item = nullptr;
+				break;
+			}
+			cycle = true;
+		}
+		if(reverse && dirs->getChild(next) && !dirs->isExpanded(next)) {
+			dirs->expand(next);
+			collapse.push_back(next);
+			if(!(next = dirs->getNext(item, TVGN_PREVIOUSVISIBLE)))
+				next = dirs->getLast();
+		}
+
+		// refresh the list pane to respect sorting etc
+		changeDir(dirs->getData(next)->dir);
+
+		item = next;
+		pos = -1;
+	}
 
 	for(auto i = collapse.cbegin(), iend = collapse.cend(); i != iend; ++i)
 		dirs->collapse(*i);
 
-	if(search.first) {
-		selectDir(search.first);
+	if(item) {
+		selectDir(item);
 
 		// Remove prev. selection from file list
 		files->clearSelection();
 
 		// Highlight the file
-		files->setSelected(search.second);
-		files->ensureVisible(search.second);
+		files->setSelected(pos);
+		files->ensureVisible(pos);
 
 		if(cycle) {
 			auto s_b(T_("beginning")), s_e(T_("end"));
