@@ -116,7 +116,7 @@ QueueFrame::~QueueFrame() {
 void QueueFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 	status->mapWidget(STATUS_SHOW_TREE, showTree);
 
 	paned->resize(r);

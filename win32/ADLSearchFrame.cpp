@@ -127,7 +127,7 @@ ADLSearchFrame::~ADLSearchFrame() {
 void ADLSearchFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 
 	grid->resize(r);
 }

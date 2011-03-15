@@ -329,7 +329,7 @@ void SearchFrame::searchTypesChanged() {
 void SearchFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 	status->mapWidget(STATUS_SHOW_UI, showUI);
 
 	paned->resize(r);

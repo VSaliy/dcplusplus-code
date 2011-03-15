@@ -262,7 +262,7 @@ void HubFrame::layout() {
 
 	dwt::Rectangle r(getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 	status->mapWidget(STATUS_SHOW_USERS, showUsers);
 
 	int ymessage = message->getTextSize(_T("A")).y * messageLines + 10;

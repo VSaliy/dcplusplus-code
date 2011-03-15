@@ -865,14 +865,13 @@ void MainWindow::layout() {
 	dwt::Rectangle r(getClientSize());
 
 	if(!rebar->empty()) {
-		rebar->refresh();
-		dwt::Point pt = rebar->getWindowSize();
-		r.pos.y += pt.y;
-		r.size.y -= pt.y;
+		auto y = rebar->refresh();
+		r.pos.y += y;
+		r.size.y -= y;
 	}
 
 	if(status) {
-		// TODO status->layout(r);
+		r.size.y -= status->refresh();
 		layoutSlotsSpin();
 	}
 

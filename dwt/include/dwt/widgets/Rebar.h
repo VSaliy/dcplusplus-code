@@ -87,7 +87,7 @@ public:
 	/** Call this one after the container widget has been resized to make sure the
 	  * Rebar is having the right size...
 	  */
-	void refresh();
+	int refresh();
 
 	/** @param style see the REBARBANDINFO doc for possible values (fStyle section) */
 	void add(Widget* w, unsigned style = 0, const tstring& text = tstring());
