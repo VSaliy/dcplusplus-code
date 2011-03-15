@@ -130,7 +130,7 @@ void StatsFrame::draw(dwt::Canvas& canvas, const dwt::Rectangle& rect) {
 void StatsFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 
 	width = r.width();
 	height = r.size.y - 1;

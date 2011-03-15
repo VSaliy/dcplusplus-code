@@ -49,9 +49,10 @@ void Rebar::create(const Seed& cs) {
 	BaseType::create(cs);
 }
 
-void Rebar::refresh() {
+int Rebar::refresh() {
 	// use dummy sizes to avoid flickering; the rebar will figure out the proper sizes by itself.
 	::MoveWindow(handle(), 0, 0, 0, 0, TRUE);
+	return BaseType::getWindowSize().y;
 }
 
 void Rebar::add(Widget* w, unsigned style, const tstring& text) {

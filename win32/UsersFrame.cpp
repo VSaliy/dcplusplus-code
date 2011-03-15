@@ -178,7 +178,7 @@ UsersFrame::~UsersFrame() {
 void UsersFrame::layout() {
 	dwt::Rectangle r(dwt::Point(0, 0), getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 
 	auto r2 = r;
 	auto r2y = filter->getPreferredSize().y;

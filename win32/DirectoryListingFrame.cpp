@@ -378,12 +378,11 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 void DirectoryListingFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	rebar->refresh();
-	dwt::Point pt = rebar->getWindowSize();
-	r.pos.y += pt.y;
-	r.size.y -= pt.y;
+	auto y = rebar->refresh();
+	r.pos.y += y;
+	r.size.y -= y;
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 
 	status->mapWidget(STATUS_FILE_LIST_DIFF, listDiff);
 	status->mapWidget(STATUS_MATCH_QUEUE, matchQueue);

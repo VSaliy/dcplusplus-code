@@ -164,7 +164,7 @@ protected:
 	void layout() {
 		dwt::Rectangle r(this->getClientSize());
 
-		//  TODO this->status->layout(r);
+		r.size.y -= this->status->refresh();
 		if(onlyFull)
 			this->status->mapWidget(STATUS_ONLY_FULL, onlyFull);
 

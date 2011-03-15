@@ -236,7 +236,7 @@ void PublicHubsFrame::postClosing() {
 void PublicHubsFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 
 	grid->resize(r);
 }

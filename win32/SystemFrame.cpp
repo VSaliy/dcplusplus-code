@@ -81,7 +81,7 @@ void SystemFrame::addLine(time_t t, const tstring& msg) {
 void SystemFrame::layout() {
 	dwt::Rectangle r(this->getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 
 	log->resize(r);
 }

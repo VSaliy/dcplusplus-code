@@ -95,7 +95,7 @@ SpyFrame::~SpyFrame() {
 void SpyFrame::layout() {
 	dwt::Rectangle r(this->getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 	status->mapWidget(STATUS_IGNORE_TTH, ignoreTTH);
 
 	searches->resize(r);
