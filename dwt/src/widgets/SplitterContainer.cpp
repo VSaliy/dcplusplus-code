@@ -31,8 +31,10 @@
 
 #include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/Splitter.h>
+#include <dwt/util/HoldResize.h>
 
 #include <boost/next_prior.hpp>
+#include <boost/range/distance.hpp>
 #include <boost/range/algorithm/for_each.hpp>
 
 namespace dwt {
@@ -101,6 +103,7 @@ void SplitterContainer::layout() {
 
 	auto splitter_iter = splitters.first;
 
+	util::HoldResize hr(this, boost::distance(children));
 	for_each(children, [&](Widget *w) {
 		if(isSplitter(w)) {
 			return;
@@ -109,17 +112,17 @@ void SplitterContainer::layout() {
 		if(splitter_iter == splitters.second) {
 			// Last splitter, the next control gets any remaining space
 			sz = std::max(avail - p, 0l);
-			::MoveWindow(w->handle(), rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
+			hr.resize(w, rc);
 		} else {
 			auto splitter = *splitter_iter;
 			auto ss = horizontal ? splitter->getPreferredSize().y : splitter->getPreferredSize().x;
 			sz = std::max(static_cast<int>(avail * splitter->getRelativePos() - ss / 2. - p), 0);
-			::MoveWindow(w->handle(), rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
+			hr.resize(w, rc);
 
 			p += sz;
 
 			sz = ss;
-			::MoveWindow(splitter->handle(), rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
+			hr.resize(splitter, rc);
 			p += sz;
 			splitter_iter++;
 		}

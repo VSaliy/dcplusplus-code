@@ -36,6 +36,7 @@
 #include <dcpp/version.h>
 #include <dcpp/WindowInfo.h>
 
+#include <dwt/util/HoldResize.h>
 #include <dwt/widgets/SplitterContainer.h>
 
 const string HubFrame::id = WindowManager::hub();
@@ -188,11 +189,11 @@ inTabComplete(false)
 		filterType->onSelectionChanged([this] { updateUserList(); });
 	}
 
+	initStatus();
 	showUsers = addChild(WinUtil::Seeds::splitCheckBox);
 	showUsers->setHelpId(IDH_HUB_SHOW_USERS);
 	showUsers->setChecked(BOOLSETTING(GET_USER_INFO));
 
-	initStatus();
 	status->setSize(STATUS_SHOW_USERS, showUsers->getPreferredSize().x);
 	status->onDblClicked(STATUS_STATUS, std::bind(&HubFrame::openLog, this, false));
 
@@ -265,9 +266,10 @@ void HubFrame::layout() {
 	r.size.y -= status->refresh();
 	status->mapWidget(STATUS_SHOW_USERS, showUsers);
 
+	dwt::util::HoldResize hr(this, 2);
 	int ymessage = message->getTextSize(_T("A")).y * messageLines + 10;
 	dwt::Rectangle rm(0, r.size.y - ymessage, r.width(), ymessage);
-	message->resize(rm);
+	hr.resize(message, rm);
 
 	r.size.y -= rm.size.y + border;
 
@@ -279,7 +281,7 @@ void HubFrame::layout() {
 		paned->setSecond(0);
 	}
 	*/
-	paned->resize(r);
+	hr.resize(paned, r);
 }
 
 void HubFrame::updateStatus() {
