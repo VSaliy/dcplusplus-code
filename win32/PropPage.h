@@ -26,9 +26,10 @@
 class PropPage : public dwt::ModelessDialog
 {
 public:
-	PropPage(dwt::Widget* parent);
+	PropPage(dwt::Widget* parent, int rows, int cols);
 	virtual ~PropPage();
 
+	virtual void layout();
 	virtual void write() { }
 
 	enum Type {
@@ -65,6 +66,7 @@ protected:
 	void handleBrowseDir(const Item& i);
 	void handleBrowseFile(const Item& i);
 
+	GridPtr grid;
 private:
 	unordered_map<TablePtr, const ListItem*> lists;
 

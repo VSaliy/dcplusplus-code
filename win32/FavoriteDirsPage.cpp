@@ -36,15 +36,14 @@ static const ColumnInfo columns[] = {
 };
 
 FavoriteDirsPage::FavoriteDirsPage(dwt::Widget* parent) :
-PropPage(parent),
-group(0),
+PropPage(parent, 1, 1),
 directories(0),
 rename(0),
 remove(0)
 {
 	setHelpId(IDH_FAVORITE_DIRSPAGE);
 
-	group = addChild(GroupBox::Seed(T_("Favorite download directories")));
+	auto group = grid->addChild(GroupBox::Seed(T_("Favorite download directories")));
 	group->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_FAVORITE_DIRECTORIES);
 	GridPtr grid = group->addChild(Grid::Seed(2, 3));
 	grid->column(0).mode = dwt::GridInfo::FILL;
@@ -87,11 +86,8 @@ remove(0)
 FavoriteDirsPage::~FavoriteDirsPage() {
 }
 
-void FavoriteDirsPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	group->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
+void FavoriteDirsPage::layout() {
+	PropPage::layout();
 
 	directories->setColumnWidth(1, directories->getWindowSize().x - 120);
 }

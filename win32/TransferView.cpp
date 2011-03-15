@@ -70,7 +70,7 @@ static bool noClose() {
 }
 
 static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
-	control->layout(dwt::Rectangle(parent->getClientSize()));
+	control->resize(dwt::Rectangle(parent->getClientSize()));
 }
 
 TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
@@ -167,7 +167,7 @@ void TransferView::handleSized(const dwt::SizedEvent& sz) {
 }
 
 void TransferView::layout() {
-	tabs->layout(dwt::Rectangle(getClientSize()));
+	tabs->resize(dwt::Rectangle(getClientSize()));
 }
 
 void TransferView::prepareClose() {

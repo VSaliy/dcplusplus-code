@@ -79,10 +79,13 @@ Point ComboBox::getPreferredSize() {
 	return ret;
 }
 
-void ComboBox::layout(const Rectangle& r) {
+void ComboBox::layout() {
+	/* TODO
 	Rectangle copy(r);
 	copy.size.y = dropDownHeight;
 	BaseType::layout(copy);
+	*/
+	BaseType::layout();
 }
 
 LPARAM ComboBox::getDataImpl(int i) {

@@ -164,11 +164,11 @@ protected:
 	void layout() {
 		dwt::Rectangle r(this->getClientSize());
 
-		this->status->layout(r);
+		//  TODO this->status->layout(r);
 		if(onlyFull)
 			this->status->mapWidget(STATUS_ONLY_FULL, onlyFull);
 
-		tabs->layout(r);
+		tabs->resize(r);
 	}
 
 	bool preClosing() {
@@ -382,7 +382,7 @@ private:
 	}
 
 	static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
-		control->layout(dwt::Rectangle(parent->getClientSize()));
+		control->resize(dwt::Rectangle(parent->getClientSize()));
 	}
 
 	bool handleFilesKeyDown(int c) {

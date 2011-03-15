@@ -262,12 +262,12 @@ void HubFrame::layout() {
 
 	dwt::Rectangle r(getClientSize());
 
-	status->layout(r);
+	// TODO status->layout(r);
 	status->mapWidget(STATUS_SHOW_USERS, showUsers);
 
 	int ymessage = message->getTextSize(_T("A")).y * messageLines + 10;
 	dwt::Rectangle rm(0, r.size.y - ymessage, r.width(), ymessage);
-	message->layout(rm);
+	message->resize(rm);
 
 	r.size.y -= rm.size.y + border;
 
@@ -279,7 +279,7 @@ void HubFrame::layout() {
 		paned->setSecond(0);
 	}
 	*/
-	paned->layout(r);
+	paned->resize(r);
 }
 
 void HubFrame::updateStatus() {

@@ -215,14 +215,14 @@ void PrivateFrame::layout() {
 
 	dwt::Rectangle r(getClientSize());
 
-	status->layout(r);
+	// TODO status->layout(r);
 
 	int ymessage = message->getTextSize(_T("A")).y * messageLines + 10;
 	dwt::Rectangle rm(0, r.size.y - ymessage, r.width(), ymessage);
-	message->layout(rm);
+	message->resize(rm);
 
 	r.size.y -= rm.size.y + border;
-	chat->layout(r);
+	chat->resize(r);
 }
 
 void PrivateFrame::updateOnlineStatus() {

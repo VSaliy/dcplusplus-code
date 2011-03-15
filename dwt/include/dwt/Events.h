@@ -40,7 +40,7 @@ namespace dwt {
 struct SizedEvent {
 	SizedEvent(const MSG& msg);
 
-	/// Sise
+	/// Size
 	/** New size of the window
 	  */
 	Point size;

@@ -159,9 +159,6 @@ Point Widget::getPreferredSize() {
 	return Point(0, 0);
 }
 
-void Widget::layout(const Rectangle& rc) {
-	::SetWindowPos(handle(), NULL, rc.left(), rc.top(), rc.width(), rc.height(), SWP_NOOWNERZORDER | SWP_NOACTIVATE
-		| SWP_NOZORDER);
-}
+void Widget::layout() { }
 
 }

@@ -178,18 +178,18 @@ UsersFrame::~UsersFrame() {
 void UsersFrame::layout() {
 	dwt::Rectangle r(dwt::Point(0, 0), getClientSize());
 
-	status->layout(r);
+	// TODO status->layout(r);
 
 	auto r2 = r;
 	auto r2y = filter->getPreferredSize().y;
 	r2.pos.y = r2.pos.y + r2.size.y - r2y;
 	r2.size.y = r2y;
 
-	filterGrid->layout(r2);
+	filterGrid->resize(r2);
 
 	r.size.y -= filter->getWindowSize().y + 3;
 
-	splitter->layout(r);
+	splitter->resize(r);
 }
 
 bool UsersFrame::preClosing() {

@@ -95,10 +95,10 @@ SpyFrame::~SpyFrame() {
 void SpyFrame::layout() {
 	dwt::Rectangle r(this->getClientSize());
 
-	status->layout(r);
+	// TODO status->layout(r);
 	status->mapWidget(STATUS_IGNORE_TTH, ignoreTTH);
 
-	searches->layout(r);
+	searches->resize(r);
 }
 
 void SpyFrame::initSecond() {

@@ -27,13 +27,10 @@ public:
 	ProxyPage(dwt::Widget* parent);
 	virtual ~ProxyPage();
 
-	virtual void layout(const dwt::Rectangle& rc);
 	virtual void write();
 
 private:
 	ItemList items;
-
-	GridPtr grid;
 
 	RadioButtonPtr directOut;
 	RadioButtonPtr socks5;

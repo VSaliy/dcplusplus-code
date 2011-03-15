@@ -54,15 +54,16 @@ void Label::create( const Seed & cs ) {
 		setFont( cs.font );
 }
 
-void Label::layout(const Rectangle& r_) {
+void Label::layout() {
+	/* TODO
 	Rectangle r = r_;
 
 	if(hasStyle(SS_ICON)) {
 		// icon control; we don't want the size to change.
 		r.size = getWindowSize();
-	}
+	} */
 
-	BaseType::layout(r);
+	BaseType::layout();
 }
 
 Point Label::getPreferredSize() {

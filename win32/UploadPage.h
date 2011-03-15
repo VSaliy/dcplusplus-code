@@ -27,13 +27,12 @@ public:
 	UploadPage(dwt::Widget* parent);
 	virtual ~UploadPage();
 
-	virtual void layout(const dwt::Rectangle& rect);
+	virtual void layout();
 	virtual void write();
 
 private:
 	ItemList items;
 
-	GridPtr grid;
 	TablePtr directories;
 	LabelPtr total;
 

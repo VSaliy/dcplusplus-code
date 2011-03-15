@@ -141,7 +141,7 @@ public:
 	  */
 	void create(const Seed& cs = Seed());
 
-	void layout(Rectangle& r);
+	void layout();
 
 	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
 

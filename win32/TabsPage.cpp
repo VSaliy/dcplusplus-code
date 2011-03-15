@@ -43,8 +43,7 @@ PropPage::ListItem TabsPage::listItems[] = {
 };
 
 TabsPage::TabsPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 4, 1),
 dcppDraw(0),
 buttonStyle(0),
 themeGroup(0),
@@ -55,11 +54,9 @@ options(0)
 {
 	setHelpId(IDH_TABSPAGE);
 
-	grid = addChild(Grid::Seed(4, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(3).mode = GridInfo::FILL;
 	grid->row(3).align = GridInfo::STRETCH;
-	grid->setSpacing(10);
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
@@ -140,13 +137,6 @@ options(0)
 TabsPage::~TabsPage() {
 }
 
-void TabsPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
-}
-
 void TabsPage::write() {
 	int tabStyle = 0;
 	if(dcppDraw->getChecked())
@@ -205,5 +195,5 @@ void TabsPage::createPreview() {
 	// refresh
 	dwt::Rectangle rect = previewGroup->getWindowRect();
 	rect.pos -= grid->getWindowRect().pos; // screen->client coords
-	previewGroup->layout(rect);
+	previewGroup->resize(rect);
 }

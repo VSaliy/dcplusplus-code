@@ -27,13 +27,10 @@ public:
 	QueuePage(dwt::Widget* parent);
 	virtual ~QueuePage();
 
-	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-
-	GridPtr grid;
 
 	static ListItem optionItems[];
 	TablePtr otherOptions;

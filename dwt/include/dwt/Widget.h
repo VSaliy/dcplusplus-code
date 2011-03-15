@@ -133,8 +133,8 @@ public:
 
 	virtual Point getPreferredSize();
 
-	/** Layout the widget in the specified rectangle (in client coordinates) */
-	virtual void layout(const Rectangle& rect);
+	/** Layout any child widgets in the widgets client area */
+	virtual void layout();
 
 	Rectangle getWindowRect() const;
 	Point getWindowSize() const;

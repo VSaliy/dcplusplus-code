@@ -27,7 +27,6 @@ public:
 	TabsPage(dwt::Widget* parent);
 	virtual ~TabsPage();
 
-	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:

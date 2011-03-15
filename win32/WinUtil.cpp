@@ -894,7 +894,7 @@ private:
 				return 0;
 			}
 
-			box->layout(rect);
+			box->resize(rect);
 		}
 
 		// now that the text control is correctly sized, resize the container window
@@ -911,7 +911,7 @@ private:
 		if(rect.bottom() > pt.y)
 			rect.pos.y -= rect.size.y;
 
-		layout(rect);
+		BaseType::resize(rect);
 
 		// go live!
 		setVisible(true);

@@ -28,8 +28,7 @@
 #include <dwt/util/win32/Version.h>
 
 ProxyPage::ProxyPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 1, 1),
 directOut(0),
 socks5(0),
 socksSettings(0),
@@ -37,7 +36,6 @@ socksServer(0)
 {
 	setHelpId(IDH_PROXYPAGE);
 
-	grid = addChild(Grid::Seed(1, 1));
 	grid->column(0).mode = GridInfo::FILL;
 
 	{
@@ -97,13 +95,6 @@ socksServer(0)
 }
 
 ProxyPage::~ProxyPage() {
-}
-
-void ProxyPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point gridSize = grid->getPreferredSize();
-	grid->layout(dwt::Rectangle(7, 4, getClientSize().x - 14, gridSize.y));
 }
 
 void ProxyPage::write()

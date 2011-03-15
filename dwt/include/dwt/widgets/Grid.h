@@ -87,7 +87,7 @@ public:
 		Seed(size_t rows_ = 1, size_t cols_ = 1);
 	};
 
-	virtual void layout(const Rectangle& r);
+	virtual void layout();
 	void addRow(const GridInfo& gp) { rows.push_back(gp); }
 	void addColumn(const GridInfo& gp) { columns.push_back(gp); }
 

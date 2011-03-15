@@ -29,12 +29,10 @@
 #include "WinUtil.h"
 
 DownloadPage::DownloadPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0)
+PropPage(parent, 3, 1)
 {
 	setHelpId(IDH_DOWNLOADPAGE);
 
-	grid = addChild(Grid::Seed(3, 1));
 	grid->column(0).mode = GridInfo::FILL;
 
 	{
@@ -122,13 +120,6 @@ grid(0)
 }
 
 DownloadPage::~DownloadPage() {
-}
-
-void DownloadPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point gridSize = grid->getPreferredSize();
-	grid->layout(dwt::Rectangle(7, 4, getClientSize().x - 14, gridSize.y));
 }
 
 void DownloadPage::write() {

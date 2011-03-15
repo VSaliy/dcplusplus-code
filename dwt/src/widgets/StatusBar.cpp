@@ -144,12 +144,12 @@ void StatusBar::onDblClicked(unsigned part, const F& f) {
 	parts[part].dblClickF = f;
 }
 
-void StatusBar::layout(Rectangle& r) {
+void StatusBar::layout() {
 	// The status bar will auto-resize itself - all we need to do is to layout the sections
-	sendMessage(WM_SIZE);
+	// TODO sendMessage(WM_SIZE);
 
 	Point sz(BaseType::getWindowSize());
-	r.size.y -= sz.y;
+	// TODO r.size.y -= sz.y;
 	layoutSections(sz);
 }
 

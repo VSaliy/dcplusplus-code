@@ -55,9 +55,9 @@ WaitingUsersFrame::WaitingUsersFrame(TabViewPtr parent) :
 void WaitingUsersFrame::layout() {
 	dwt::Rectangle r(this->getClientSize());
 
-	status->layout(r);
+	// TODO status->layout(r);
 
-	queued->layout(r);
+	queued->resize(r);
 }
 
 bool WaitingUsersFrame::preClosing() {

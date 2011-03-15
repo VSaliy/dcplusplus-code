@@ -59,7 +59,7 @@ TextFrame::TextFrame(TabViewPtr parent, const string& fileName) :
 void TextFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	status->layout(r);
+	// TODO status->layout(r);
 
-	pad->layout(r);
+	pad->resize(r);
 }

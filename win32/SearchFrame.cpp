@@ -329,10 +329,10 @@ void SearchFrame::searchTypesChanged() {
 void SearchFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	status->layout(r);
+	// TODO status->layout(r);
 	status->mapWidget(STATUS_SHOW_UI, showUI);
 
-	paned->layout(r);
+	paned->resize(r);
 }
 
 bool SearchFrame::preClosing() {

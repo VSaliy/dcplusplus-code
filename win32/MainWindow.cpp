@@ -872,11 +872,11 @@ void MainWindow::layout() {
 	}
 
 	if(status) {
-		status->layout(r);
+		// TODO status->layout(r);
 		layoutSlotsSpin();
 	}
 
-	paned->layout(r);
+	paned->resize(r);
 }
 
 void MainWindow::layoutSlotsSpin() {

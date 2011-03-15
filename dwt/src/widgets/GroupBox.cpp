@@ -69,13 +69,15 @@ Point GroupBox::getPreferredSize() {
 	return expand(ret);
 }
 
-void GroupBox::layout(const Rectangle& rect) {
+void GroupBox::layout() {
 	Widget* child = getChild();
 	if(child) {
-		child->layout(shrink(Rectangle(0, 0, rect.width(), rect.height())));
+		auto size = getClientSize();
+		auto rc = shrink(Rectangle(getClientSize()));
+		::MoveWindow(child->handle(), rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
 	}
 
-	BaseType::layout(rect);
+	BaseType::layout();
 }
 
 Rectangle GroupBox::shrink(const Rectangle& client) {

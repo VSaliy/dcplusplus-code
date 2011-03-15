@@ -40,8 +40,7 @@ PropPage::ListItem LogPage::listItems[] = {
 };
 
 LogPage::LogPage(dwt::Widget* parent) :
-PropPage(parent),
-group(0),
+PropPage(parent, 1, 1),
 dir(0),
 options(0),
 logFormat(0),
@@ -50,7 +49,7 @@ oldSelection(-1)
 {
 	setHelpId(IDH_LOGPAGE);
 
-	group = addChild(GroupBox::Seed(T_("Logging")));
+	auto group = grid->addChild(GroupBox::Seed(T_("Logging")));
 
 	GridPtr grid = group->addChild(Grid::Seed(3, 1));
 	grid->column(0).mode = GridInfo::FILL;
@@ -103,13 +102,6 @@ oldSelection(-1)
 }
 
 LogPage::~LogPage() {
-}
-
-void LogPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	group->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void LogPage::write() {

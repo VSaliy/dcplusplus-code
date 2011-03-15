@@ -38,8 +38,8 @@ Point ScrolledContainer::getPreferredSize() {
 	return child ? child->getPreferredSize() : Point(0, 0);
 }
 
-void ScrolledContainer::layout(const Rectangle &rect) {
-	BaseType::layout(rect);
+void ScrolledContainer::layout() {
+	BaseType::layout();
 	auto child = getChild();
 	if(!child) {
 		return;
@@ -61,7 +61,7 @@ void ScrolledContainer::layout(const Rectangle &rect) {
 		setScrollInfo(SB_VERT, clientSize.y, childSize.y);
 	}
 
-	child->layout(Rectangle(childSize));
+	::MoveWindow(child->handle(), 0, 0, clientSize.x, clientSize.y, TRUE);
 }
 
 void ScrolledContainer::setScrollInfo(int type, int page, int max, int pos) {

@@ -40,13 +40,11 @@ PropPage::ListItem QueuePage::optionItems[] = {
 };
 
 QueuePage::QueuePage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 3, 1),
 otherOptions(0)
 {
 	setHelpId(IDH_QUEUEPAGE);
 
-	grid = addChild(Grid::Seed(3, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(2).mode = GridInfo::FILL;
 	grid->row(2).align = GridInfo::STRETCH;
@@ -142,13 +140,6 @@ otherOptions(0)
 }
 
 QueuePage::~QueuePage() {
-}
-
-void QueuePage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void QueuePage::write() {

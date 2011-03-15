@@ -26,15 +26,12 @@
 #include "WinUtil.h"
 
 Advanced3Page::Advanced3Page(dwt::Widget* parent) :
-PropPage(parent),
-grid(0)
+PropPage(parent, 6, 2)
 {
 	setHelpId(IDH_ADVANCED3PAGE);
 
-	grid = addChild(Grid::Seed(6, 2));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
-	grid->setSpacing(10);
 
 	addItem(T_("Max hash speed"), SettingsManager::MAX_HASH_SPEED, true, IDH_SETTINGS_ADVANCED3_MAX_HASH_SPEED, T_("MiB/s"));
 	addItem(T_("Write buffer size"), SettingsManager::BUFFER_SIZE, true, IDH_SETTINGS_ADVANCED3_BUFFERSIZE, T_("KiB"));
@@ -52,13 +49,6 @@ grid(0)
 }
 
 Advanced3Page::~Advanced3Page() {
-}
-
-void Advanced3Page::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void Advanced3Page::write() {

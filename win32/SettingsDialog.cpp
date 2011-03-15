@@ -274,5 +274,5 @@ void SettingsDialog::write() {
 
 void SettingsDialog::layout() {
 	dwt::Point sz = getClientSize();
-	grid->layout(dwt::Rectangle(8, 8, sz.x - 16, sz.y - 16));
+	grid->resize(dwt::Rectangle(8, 8, sz.x - 16, sz.y - 16));
 }
