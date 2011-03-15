@@ -31,6 +31,9 @@
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/util/check.h>
+#include <dwt/util/HoldResize.h>
+
+#include <boost/range/distance.hpp>
 
 #include <algorithm>
 #include <numeric>
@@ -167,6 +170,7 @@ void Grid::layout() {
 	std::vector<size_t> rowSize = calcSizes(rows, columns, size.y, true);
 	std::vector<size_t> colSize = calcSizes(columns, rows, size.x, false);
 
+	util::HoldResize hr(this, boost::distance(children));
 	for(auto i = children.first; i != children.second; ++i) {
 		WidgetInfo* wi = getWidgetInfo((*i)->handle());
 		if(!wi || !wi->w)
@@ -215,7 +219,7 @@ void Grid::layout() {
 		case GridInfo::STRETCH: break; // Do nothing
 		}
 
-		::MoveWindow(wi->w->handle(), x, y, w, h, TRUE);
+		hr.resize(wi->w, Rectangle(x, y, w, h));
 	}
 }
 
