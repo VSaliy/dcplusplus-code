@@ -27,14 +27,12 @@ public:
 	BandwidthLimitPage(dwt::Widget* parent);
 	virtual ~BandwidthLimitPage();
 
-	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	void fixControls();
 	ItemList items;
 
-	GridPtr grid;
 	GroupBoxPtr main;
 	GroupBoxPtr secondaryToggle;
 	GroupBoxPtr secondary;

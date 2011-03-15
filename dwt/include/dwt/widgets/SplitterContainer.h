@@ -60,7 +60,7 @@ public:
 	void setSplitter(size_t n, double relativePos);
 	double getSplitterPos(size_t n);
 
-	virtual void layout(const Rectangle& r);
+	virtual void layout();
 
 private:
 protected:

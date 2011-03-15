@@ -27,13 +27,10 @@ public:
 	HistoryPage(dwt::Widget* parent);
 	virtual ~HistoryPage();
 
-	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-
-	GridPtr grid;
 
 	TextBoxPtr hub_recents;
 	TextBoxPtr pm_recents;

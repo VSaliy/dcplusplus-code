@@ -152,14 +152,13 @@ Point Grid::actualSpacing() const {
 	return Point(columns.empty() ? 0 : (columns.size()-1) * spacing, rows.empty() ? 0 : (rows.size()-1)*spacing);
 }
 
-void Grid::layout(const Rectangle& r) {
-	// Layout children first.
+void Grid::layout() {
+	auto size = getClientSize();
 	auto children = getChildren<Widget>();
 
 	// Make sure we have WidgetInfo's for every child...
 	std::for_each(children.first, children.second, [=](Widget* w) { getWidgetInfo(w->handle()); });
 
-	Point size = r.size;
 	Point as = actualSpacing();
 
 	if(as.x < size.x && as.y < size.y)
@@ -174,7 +173,7 @@ void Grid::layout(const Rectangle& r) {
 			continue;
 
 		if(wi->noResize) {
-			wi->w->layout(Rectangle());
+			wi->w->layout();
 			continue;
 		}
 
@@ -216,11 +215,8 @@ void Grid::layout(const Rectangle& r) {
 		case GridInfo::STRETCH: break; // Do nothing
 		}
 
-		wi->w->layout(Rectangle(x, y, w, h));
+		::MoveWindow(wi->w->handle(), x, y, w, h, TRUE);
 	}
-
-	// Layout the grid last.
-	BaseType::layout(r);
 }
 
 Grid::WidgetInfo* Grid::getWidgetInfo(HWND hwnd) {

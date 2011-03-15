@@ -136,7 +136,7 @@ public:
 	  */
 	void create(const Seed &cs = Seed());
 
-	virtual void layout(const Rectangle&);
+	virtual void layout();
 
 protected:
 	// Constructor Taking pointer to parent

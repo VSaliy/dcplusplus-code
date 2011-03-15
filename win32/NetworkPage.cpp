@@ -26,8 +26,7 @@
 #include "WinUtil.h"
 
 NetworkPage::NetworkPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 2, 1),
 directIn(0),
 upnp(0),
 nat(0),
@@ -39,7 +38,6 @@ tls(0)
 {
 	setHelpId(IDH_NETWORKPAGE);
 
-	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
 
 	{
@@ -145,13 +143,6 @@ void NetworkPage::setRadioButtons() {
 		case SettingsManager::INCOMING_FIREWALL_PASSIVE: passive->setChecked(); break;
 		default: directIn->setChecked(); break;
 	}
-}
-
-void NetworkPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point gridSize = grid->getPreferredSize();
-	grid->layout(dwt::Rectangle(7, 4, getClientSize().x - 14, gridSize.y));
 }
 
 void NetworkPage::write()

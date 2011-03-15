@@ -81,9 +81,9 @@ public:
 	typedef std::function<void(double)> OnMoveFunction;
 	void onMove(OnMoveFunction func);
 
-	virtual void layout(const Rectangle& r) {
-		rect = r;
-		BaseType::layout(r);
+	virtual void layout() {
+		// TODO rect = r;
+		BaseType::layout();
 	}
 
 	virtual Point getPreferredSize() { return horizontal ? Point(0, thickness()) : Point(thickness(), 0); }

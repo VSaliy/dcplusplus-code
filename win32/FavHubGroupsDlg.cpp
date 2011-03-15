@@ -302,7 +302,7 @@ void FavHubGroupsDlg::removeGroup(const GroupInfo* group) {
 
 void FavHubGroupsDlg::layout() {
 	dwt::Point sz = getClientSize();
-	grid->layout(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
+	grid->resize(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 
 	groups->setColumnWidth(0, groups->getWindowSize().x - 180);
 }

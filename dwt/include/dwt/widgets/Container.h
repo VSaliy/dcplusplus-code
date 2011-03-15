@@ -70,6 +70,8 @@ BaseType::Seed(tstring(), style | WS_CHILD | WS_CLIPSIBLINGS, exStyle) {
 
 inline void Container::create(const Seed& cs) {
 	BaseType::create(cs);
+	onWindowPosChanged([this] (const Rectangle &) { this->layout(); });
 }
+
 }
 #endif /*CONTAINER_H_*/

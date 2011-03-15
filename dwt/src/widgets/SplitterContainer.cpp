@@ -78,14 +78,16 @@ double SplitterContainer::getSplitterPos(size_t n) {
 	return splitter->getRelativePos();
 }
 
-void SplitterContainer::layout(const Rectangle &r) {
-	BaseType::layout(r);
+void SplitterContainer::layout() {
+	BaseType::layout();
 	ensureSplitters();
 
 	auto children = getChildren<Widget>();
 	auto splitters = getChildren<Splitter>();
 
-	auto avail = horizontal ? r.height() : r.width();
+	auto size = getClientSize();
+
+	auto avail = horizontal ? size.y : size.x;
 
 	for_each(splitters, [&](Splitter *w) {
 		avail -= horizontal ? w->getPreferredSize().y : w->getPreferredSize().x;
@@ -107,17 +109,17 @@ void SplitterContainer::layout(const Rectangle &r) {
 		if(splitter_iter == splitters.second) {
 			// Last splitter, the next control gets any remaining space
 			sz = std::max(avail - p, 0l);
-			w->layout(rc);
+			::MoveWindow(w->handle(), rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
 		} else {
 			auto splitter = *splitter_iter;
 			auto ss = horizontal ? splitter->getPreferredSize().y : splitter->getPreferredSize().x;
 			sz = std::max(static_cast<int>(avail * splitter->getRelativePos() - ss / 2. - p), 0);
-			w->layout(rc);
+			::MoveWindow(w->handle(), rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
 
 			p += sz;
 
 			sz = ss;
-			splitter->layout(rc);
+			::MoveWindow(splitter->handle(), rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
 			p += sz;
 			splitter_iter++;
 		}
@@ -145,7 +147,7 @@ void SplitterContainer::onMove(SplitterPtr splitter, double pos)
 	RECT rc;
 	::GetWindowRect(handle(), &rc);
 	::MapWindowPoints(NULL, getParent()->handle(), (LPPOINT) &rc, 2);
-	layout(Rectangle(rc));
+	layout();
 	redraw(true);
 }
 

@@ -93,7 +93,7 @@ public:
 
 	virtual Point getPreferredSize();
 
-	virtual void layout(const Rectangle& rect);
+	virtual void layout();
 
 protected:
 	/// Constructor Taking pointer to parent

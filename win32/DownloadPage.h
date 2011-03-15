@@ -27,13 +27,10 @@ public:
 	DownloadPage(dwt::Widget* parent);
 	virtual ~DownloadPage();
 
-	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-
-	GridPtr grid;
 
 	void handleConfigHubLists();
 };

@@ -36,8 +36,7 @@ static const ColumnInfo columns[] = {
 };
 
 SearchTypesPage::SearchTypesPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 2, 1),
 types(0),
 rename(0),
 remove(0),
@@ -45,7 +44,6 @@ modify(0)
 {
 	setHelpId(IDH_SEARCHTYPESPAGE);
 
-	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
@@ -113,11 +111,8 @@ modify(0)
 SearchTypesPage::~SearchTypesPage() {
 }
 
-void SearchTypesPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
+void SearchTypesPage::layout() {
+	PropPage::layout();
 
 	types->setColumnWidth(2, types->getWindowSize().x - 190);
 }

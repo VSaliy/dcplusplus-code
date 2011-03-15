@@ -37,8 +37,7 @@ Appearance2Page::SoundOption Appearance2Page::soundOptions[] = {
 };
 
 Appearance2Page::Appearance2Page(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 3, 1),
 example(0),
 sounds(0),
 beepFileLabel(0),
@@ -48,7 +47,6 @@ oldSelection(-1)
 {
 	setHelpId(IDH_APPEARANCE2PAGE);
 
-	grid = addChild(Grid::Seed(3, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(1).mode = GridInfo::FILL;
 	grid->row(1).align = GridInfo::STRETCH;
@@ -140,13 +138,6 @@ oldSelection(-1)
 }
 
 Appearance2Page::~Appearance2Page() {
-}
-
-void Appearance2Page::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void Appearance2Page::write() {

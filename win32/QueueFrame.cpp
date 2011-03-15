@@ -116,10 +116,10 @@ QueueFrame::~QueueFrame() {
 void QueueFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	status->layout(r);
+	// TODO status->layout(r);
 	status->mapWidget(STATUS_SHOW_TREE, showTree);
 
-	paned->layout(r);
+	paned->resize(r);
 }
 
 bool QueueFrame::handleKeyDownDirs(int c) {

@@ -27,13 +27,11 @@ public:
 	LogPage(dwt::Widget* parent);
 	virtual ~LogPage();
 
-	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
 
-	GroupBoxPtr group;
 	TextBoxPtr dir;
 
 	static ListItem listItems[];

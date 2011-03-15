@@ -100,7 +100,7 @@ public:
 	  */
 	void create( const Seed & cs = Seed() );
 
-	virtual void layout(const Rectangle& r_);
+	virtual void layout();
 
 	virtual Point getPreferredSize();
 

@@ -59,7 +59,7 @@ protected:
 
 		onClosing(std::bind(&ThisType::handleClosing, this));
 		onFocus(std::bind(&ThisType::handleFocus, this));
-		onSized(std::bind(&ThisType::handleSized, this, _1));
+		onWindowPosChanged(std::bind(&ThisType::handleSized, this, _1));
 		onActivate(std::bind(&ThisType::handleActivate, this, _1));
 		addDlgCodeMessage(this);
 
@@ -190,7 +190,7 @@ private:
 
 	}
 
-	void handleSized(const dwt::SizedEvent& sz) {
+	void handleSized(const dwt::Rectangle&) {
 		t().layout();
 	}
 

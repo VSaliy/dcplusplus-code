@@ -416,7 +416,7 @@ public:
 	  * queried for items when the control needs to get data to display.
 	  */
 	void resize( unsigned size );
-
+	using BaseType::resize;
 	/// Set the normal image list for the Data Grid.
 	/** normalImageList is the image list that contains the images
 	  * for the data grid icons in Icon View (big icons).

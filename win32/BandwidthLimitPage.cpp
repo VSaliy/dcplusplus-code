@@ -28,8 +28,7 @@
 #include "WinUtil.h"
 
 BandwidthLimitPage::BandwidthLimitPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 4, 1),
 main(0),
 secondaryToggle(0),
 secondary(0),
@@ -37,7 +36,6 @@ throttleTime(0)
 {
 	setHelpId(IDH_BWLIMITPAGE);
 
-	grid = addChild(Grid::Seed(4, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::AUTO;
 	grid->row(0).align = GridInfo::STRETCH;
@@ -150,13 +148,6 @@ throttleTime(0)
 }
 
 BandwidthLimitPage::~BandwidthLimitPage() {
-}
-
-void BandwidthLimitPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void BandwidthLimitPage::write() {

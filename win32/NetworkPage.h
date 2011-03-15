@@ -29,13 +29,11 @@ public:
 	NetworkPage(dwt::Widget* parent);
 	virtual ~NetworkPage();
 
-	virtual void layout(const dwt::Rectangle& rc);
 	virtual void write();
 
 private:
 	ItemList items;
 
-	GridPtr grid;
 	GroupBoxPtr incoming;
 
 	CheckBoxPtr autoDetect;

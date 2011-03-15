@@ -52,7 +52,7 @@ void Spinner::create(const Seed& cs) {
 		assignBuddy(cs.buddy);
 }
 
-void Spinner::layout(const dwt::Rectangle&) {
+void Spinner::layout() {
 	Widget* w = getBuddy();
 	if(w)
 		assignBuddy(w);

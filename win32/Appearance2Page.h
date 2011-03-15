@@ -27,7 +27,6 @@ public:
 	Appearance2Page(dwt::Widget* parent);
 	virtual ~Appearance2Page();
 
-	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
@@ -39,7 +38,6 @@ private:
 	};
 	static SoundOption soundOptions[];
 
-	GridPtr grid;
 	LabelPtr example;
 	TablePtr sounds;
 	LabelPtr beepFileLabel;

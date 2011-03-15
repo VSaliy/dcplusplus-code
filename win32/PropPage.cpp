@@ -28,11 +28,19 @@
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
-PropPage::PropPage(dwt::Widget* parent) : dwt::ModelessDialog(parent) {
+PropPage::PropPage(dwt::Widget* parent, int rows, int cols) : dwt::ModelessDialog(parent), grid(0) {
 	create();
+
+	grid = addChild(Grid::Seed(rows, cols));
+	grid->setSpacing(10);
 }
 
 PropPage::~PropPage() {
+}
+
+void PropPage::layout() {
+	auto clientSize = getClientSize();
+	grid->resize(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void PropPage::read(const ItemList& items) {

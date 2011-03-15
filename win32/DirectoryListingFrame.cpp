@@ -383,13 +383,13 @@ void DirectoryListingFrame::layout() {
 	r.pos.y += pt.y;
 	r.size.y -= pt.y;
 
-	status->layout(r);
+	// TODO status->layout(r);
 
 	status->mapWidget(STATUS_FILE_LIST_DIFF, listDiff);
 	status->mapWidget(STATUS_MATCH_QUEUE, matchQueue);
 	status->mapWidget(STATUS_FIND, find);
 
-	grid->layout(r);
+	grid->resize(r);
 }
 
 bool DirectoryListingFrame::preClosing() {

@@ -27,13 +27,10 @@ public:
 	Advanced3Page(dwt::Widget* parent);
 	virtual ~Advanced3Page();
 
-	virtual void layout(const dwt::Rectangle& rect);
 	virtual void write();
 
 private:
 	ItemList items;
-
-	GridPtr grid;
 
 	void addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2 = _T(""));
 };

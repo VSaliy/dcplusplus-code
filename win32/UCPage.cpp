@@ -35,13 +35,11 @@ static const ColumnInfo columns[] = {
 };
 
 UCPage::UCPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 2, 5),
 commands(0)
 {
 	setHelpId(IDH_UCPAGE);
 
-	grid = addChild(Grid::Seed(2, 5));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
 	grid->column(2).mode = GridInfo::FILL;
@@ -90,11 +88,8 @@ commands(0)
 UCPage::~UCPage() {
 }
 
-void UCPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
+void UCPage::layout() {
+	PropPage::layout();
 
 	commands->setColumnWidth(1, commands->getWindowSize().x - 220);
 }

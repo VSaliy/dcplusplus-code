@@ -40,8 +40,7 @@ static const ColumnInfo columns[] = {
 };
 
 UploadPage::UploadPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 2, 1),
 directories(0),
 total(0),
 rename(0),
@@ -49,7 +48,6 @@ remove(0)
 {
 	setHelpId(IDH_UPLOADPAGE);
 
-	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
@@ -142,11 +140,8 @@ remove(0)
 UploadPage::~UploadPage() {
 }
 
-void UploadPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
+void UploadPage::layout() {
+	PropPage::layout();
 
 	directories->setColumnWidth(1, directories->getWindowSize().x - 220);
 }

@@ -56,8 +56,7 @@ TextBoxPtr addBox(GridPtr grid, const tstring& text, unsigned helpId) {
 }
 
 HistoryPage::HistoryPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 3, 1),
 hub_recents(0),
 pm_recents(0),
 fl_recents(0),
@@ -66,9 +65,6 @@ pm_recents_init(WindowManager::getInstance()->getMaxRecentItems(PrivateFrame::id
 fl_recents_init(WindowManager::getInstance()->getMaxRecentItems(DirectoryListingFrame::id))
 {
 	setHelpId(IDH_HISTORYPAGE);
-
-	grid = addChild(Grid::Seed(3, 1));
-	grid->setSpacing(10);
 
 	GroupBox::Seed gs;
 	gs.style |= BS_RIGHT;
@@ -102,13 +98,6 @@ fl_recents_init(WindowManager::getInstance()->getMaxRecentItems(DirectoryListing
 }
 
 HistoryPage::~HistoryPage() {
-}
-
-void HistoryPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void HistoryPage::write() {

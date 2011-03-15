@@ -40,10 +40,10 @@ void GridDialog::layout() {
 
 	dwt::Point sz = getClientSize();
 	sz.y = grid->getPreferredSize().y;
-	grid->layout(dwt::Rectangle(spacing, spacing, sz.x - spacing * 2, sz.y));
+	grid->resize(dwt::Rectangle(spacing, spacing, sz.x - spacing * 2, sz.y));
 
 	// now resize the dialog itself
 	sz.x = width; // don't change the horizontal size
 	sz.y += spacing * 2 + getYBorders();
-	dwt::ModalDialog::layout(dwt::Rectangle(getWindowRect().pos, sz));
+	dwt::ModalDialog::resize(dwt::Rectangle(getWindowRect().pos, sz));
 }

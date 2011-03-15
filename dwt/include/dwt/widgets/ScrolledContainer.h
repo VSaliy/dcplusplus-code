@@ -56,10 +56,13 @@ public:
 		Seed(DWORD style = 0, DWORD exStyle = 0);
 	};
 
+	// Use our seed type
+	void create( const Seed& cs = Seed() );
+
 	virtual Point getPreferredSize();
 
 	/** Layout the widget in the specified rectangle (in client coordinates) */
-	virtual void layout(const Rectangle& rect);
+	virtual void layout();
 
 	/// Returns true if handled, else false
 	virtual bool handleMessage(const MSG &msg, LRESULT &retVal);
@@ -77,6 +80,11 @@ private:
 inline ScrolledContainer::Seed::Seed(DWORD style, DWORD exStyle) :
 BaseType::Seed(style | WS_CHILD | WS_HSCROLL | WS_VSCROLL, exStyle)
 {
+}
+
+inline void ScrolledContainer::create(const Seed& cs) {
+	BaseType::create(cs);
+	onWindowPosChanged([this] (const Rectangle &) { this->layout(); });
 }
 
 }

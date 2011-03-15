@@ -42,6 +42,14 @@
 
 namespace dwt {
 
+namespace detail {
+	inline Rectangle clientRectFromMSG(const MSG &msg) {
+		RECT rc;
+		::GetClientRect(msg.hwnd, &rc);
+		return Rectangle(rc);
+	}
+}
+
 /// \ingroup AspectClasses
 /// \ingroup WidgetLayout
 /// Aspect class used by Widgets that have the possibility of setting and getting a
@@ -68,7 +76,8 @@ class AspectSizable
 
 	HWND H() const { return W().handle(); }
 
-	typedef Dispatchers::ConvertBase<SizedEvent, &Dispatchers::convert<SizedEvent>, 0, false>  SizeDispatcher;
+	typedef Dispatchers::ConvertBase<Rectangle, &detail::clientRectFromMSG, 0, false> WindowPosDispatcher;
+	typedef Dispatchers::ConvertBase<SizedEvent, &Dispatchers::convert<SizedEvent>, 0, false> SizeDispatcher;
 	typedef Dispatchers::ConvertBase<Point, &Point::fromMSG, 0, false> MoveDispatcher;
 
 public:
@@ -102,6 +111,12 @@ public:
 
 	bool isIconic();
 	bool isZoomed();
+
+	void resize(const Rectangle &r);
+
+	void onWindowPosChanged(const typename WindowPosDispatcher::F &f) {
+		W().addCallback(Message( WM_WINDOWPOSCHANGED ), WindowPosDispatcher(f));
+	}
 
 	/// \ingroup EventHandlersAspectSizable
 	// Setting the event handler for the "sized" event
@@ -141,7 +156,7 @@ void AspectSizable< WidgetType >::centerWindow( Widget* target ) {
 		target = static_cast<WidgetType*>(this)->getParent();
 	}
 	Rectangle rc(target->getWindowRect());
-	W().layout(Rectangle(rc.left() + (rc.right() - rc.left())/2 - size.x/2, rc.top() + (rc.bottom() - rc.top())/2 - size.y/2, size.x, size.y)); /// @todo improve with methods of Rectangle like width() and height()?
+	resize(Rectangle(rc.left() + (rc.right() - rc.left())/2 - size.x/2, rc.top() + (rc.bottom() - rc.top())/2 - size.y/2, size.x, size.y)); /// @todo improve with methods of Rectangle like width() and height()?
 }
 
 template< class WidgetType >
@@ -168,6 +183,10 @@ bool AspectSizable< WidgetType >::isZoomed()
 	return ::IsZoomed(H()) > 0;
 }
 
+template<class WidgetType>
+void AspectSizable<WidgetType>::resize(const Rectangle &r) {
+	::MoveWindow(H(), r.left(), r.top(), r.width(), r.height(), TRUE);
+}
 }
 
 #endif

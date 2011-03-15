@@ -127,8 +127,7 @@ public:
 
 	virtual Point getPreferredSize();
 
-	/// Returns true if fired, else false
-	virtual void layout(const Rectangle& r);
+	virtual void layout();
 
 	void setDropDownHeight(size_t h);
 

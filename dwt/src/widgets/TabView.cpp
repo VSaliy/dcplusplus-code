@@ -293,7 +293,7 @@ void TabView::setActive(int i) {
 }
 
 void TabView::swapWidgets(ContainerPtr oldW, ContainerPtr newW) {
-	newW->layout(clientSize);
+	newW->resize(clientSize);
 	newW->setVisible(true);
 	if(oldW) {
 		oldW->sendMessage(WM_ACTIVATE, WA_INACTIVE, reinterpret_cast<LPARAM>(newW->handle()));
@@ -397,10 +397,9 @@ tstring TabView::formatTitle(tstring title) {
 }
 
 void TabView::layout() {
-	BaseType::redraw(Rectangle(Widget::getClientSize()));
-
 	Rectangle tmp = getUsableArea(true);
 	if(!(tmp == clientSize)) {
+		BaseType::redraw(Rectangle(Widget::getClientSize()));
 		clientSize = tmp;
 
 		// the client area has changed, update the selected tab synchronously.
@@ -408,7 +407,7 @@ void TabView::layout() {
 		TabInfo* ti = getTabInfo(getSelected());
 		if(ti) {
 			sel = ti->w;
-			sel->layout(clientSize);
+			ti->w->resize(clientSize);
 		}
 
 		// update background tabs too, but only asynchronously.
@@ -416,7 +415,7 @@ void TabView::layout() {
 			for(auto i = viewOrder.begin(); i != viewOrder.end(); ++i) {
 				ContainerPtr w = *i;
 				if(w != sel) {
-					w->layout(clientSize);
+					w->resize(clientSize);
 				}
 			}
 		});

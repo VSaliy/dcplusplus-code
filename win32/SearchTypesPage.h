@@ -27,10 +27,9 @@ public:
 	SearchTypesPage(dwt::Widget* parent);
 	virtual ~SearchTypesPage();
 
-	virtual void layout(const dwt::Rectangle& rect);
+	virtual void layout();
 
 private:
-	GridPtr grid;
 	TablePtr types;
 
 	ButtonPtr rename;

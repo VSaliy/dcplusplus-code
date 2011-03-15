@@ -27,10 +27,9 @@ public:
 	FavoriteDirsPage(dwt::Widget* parent);
 	virtual ~FavoriteDirsPage();
 
-	virtual void layout(const dwt::Rectangle& rc);
+	virtual void layout();
 
 private:
-	GroupBoxPtr group;
 	TablePtr directories;
 
 	ButtonPtr rename;

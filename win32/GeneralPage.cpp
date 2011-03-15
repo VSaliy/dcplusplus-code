@@ -26,14 +26,13 @@
 #include "WinUtil.h"
 
 GeneralPage::GeneralPage(dwt::Widget* parent) :
-PropPage(parent),
-group(0),
+PropPage(parent, 1, 1),
 nick(0),
 connections(0)
 {
 	setHelpId(IDH_GENERALPAGE);
 
-	group = addChild(GroupBox::Seed(T_("Personal Information")));
+	auto group = grid->addChild(GroupBox::Seed(T_("Personal Information")));
 	group->setHelpId(IDH_SETTINGS_GENERAL_PERSONAL_INFORMATION);
 
 	{
@@ -81,13 +80,6 @@ connections(0)
 }
 
 GeneralPage::~GeneralPage() {
-}
-
-void GeneralPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point groupSize = group->getPreferredSize();
-	group->layout(dwt::Rectangle(7, 4, getClientSize().x - 14, groupSize.y));
 }
 
 void GeneralPage::write() {

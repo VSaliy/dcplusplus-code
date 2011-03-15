@@ -50,14 +50,12 @@ WindowsPage::ListItem WindowsPage::confirmItems[] = {
 };
 
 WindowsPage::WindowsPage(dwt::Widget* parent) :
-PropPage(parent),
-grid(0),
+PropPage(parent, 2, 1),
 options(0),
 confirm(0)
 {
 	setHelpId(IDH_WINDOWSPAGE);
 
-	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
@@ -72,13 +70,6 @@ confirm(0)
 }
 
 WindowsPage::~WindowsPage() {
-}
-
-void WindowsPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	grid->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void WindowsPage::write() {

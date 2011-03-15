@@ -50,21 +50,14 @@ AdvancedPage::ListItem AdvancedPage::listItems[] = {
 	{ 0, 0 }
 };
 
-AdvancedPage::AdvancedPage(dwt::Widget* parent) : PropPage(parent) {
+AdvancedPage::AdvancedPage(dwt::Widget* parent) : PropPage(parent, 1, 1) {
 	setHelpId(IDH_ADVANCEDPAGE);
 
-	options = addChild(WinUtil::Seeds::Dialog::optionsTable);
+	options = grid->addChild(WinUtil::Seeds::Dialog::optionsTable);
 	PropPage::read(listItems, options);
 }
 
 AdvancedPage::~AdvancedPage() {
-}
-
-void AdvancedPage::layout(const dwt::Rectangle& rc) {
-	PropPage::layout(rc);
-
-	dwt::Point clientSize = getClientSize();
-	options->layout(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
 }
 
 void AdvancedPage::write() {
