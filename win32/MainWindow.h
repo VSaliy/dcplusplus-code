@@ -219,7 +219,7 @@ private:
 	virtual void on(PartialList, const HintedUser&, const string& text) throw();
 
 	// WindowManagerListener
-	virtual void on(WindowManagerListener::Window, const string& id, const StringMap& params) throw();
+	virtual void on(WindowManagerListener::Window, const string& id, const WindowParams& params) throw();
 };
 
 #endif // !defined(MAIN_FRM_H)

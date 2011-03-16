@@ -615,18 +615,18 @@ static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu
 		WinUtil::menuIcon(IDI_SETTINGS), true, true);
 	popup->appendSeparator();
 
-	WindowManager::RecentList::const_iterator it = recent.find(T::id);
+	auto it = recent.find(T::id);
 	if(it == recent.end()) {
 		popup->appendItem(T_("(No recent item found)"), 0, 0, false);
 	} else {
 
 		dwt::IconPtr favIcon = WinUtil::menuIcon(favIconId);
 
-		const WindowManager::WindowInfoList& list = it->second;
-		for(WindowManager::WindowInfoList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
-			StringMap params = i->getParams();
+		const auto& list = it->second;
+		for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
+			const auto& params = i->getParams();
 
-			StringMap::const_iterator title = params.find(WindowInfo::title);
+			auto title = params.find("Title");
 			if(title == params.end() || title->second.empty())
 				continue;
 
@@ -643,7 +643,7 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 	{
 		WindowManager* wm = WindowManager::getInstance();
 		auto lock = wm->lock();
-		const WindowManager::RecentList& recent = wm->getRecent();
+		const auto& recent = wm->getRecent();
 
 		typedef void (MainWindow::*configureF)(const string&, const tstring&);
 		configureF f = &MainWindow::handleConfigureRecent;
@@ -804,7 +804,7 @@ void MainWindow::saveWindowSettings() {
 			auto child = static_cast<MDIChildFrame<dwt::Container>*>(*i);
 			auto params = child->getWindowParams();
 			if(child == active)
-				params["Active"] = "1";
+				params["Active"] = WindowParam("1", false);
 			wm->add(child->getId(), params);
 		}
 	}
@@ -1429,7 +1429,7 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 	}
 }
 
-void MainWindow::on(WindowManagerListener::Window, const string& id, const StringMap& params) throw() {
+void MainWindow::on(WindowManagerListener::Window, const string& id, const WindowParams& params) throw() {
 	if(0);
 #define compare_id(frame) else if(frame::id == id) callAsync([this, params] { frame::parseWindowParams(getTabView(), params); })
 	compare_id(HubFrame);

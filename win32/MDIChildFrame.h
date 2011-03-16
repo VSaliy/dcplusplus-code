@@ -24,6 +24,7 @@
 #include "AspectStatus.h"
 #include <dwt/widgets/Menu.h>
 #include <dcpp/SettingsManager.h>
+#include <dcpp/WindowInfo.h>
 #include "resource.h"
 
 template<typename T>
@@ -131,7 +132,7 @@ protected:
 		getParent()->setIcon(this, WinUtil::tabIcon(iconId));
 	}
 
-	static bool parseActivateParam(const StringMap& params) {
+	static bool parseActivateParam(const WindowParams& params) {
 		auto i = params.find("Active");
 		return i != params.end() && i->second == "1";
 	}
@@ -141,8 +142,8 @@ public:
 		return Util::emptyString;
 	}
 
-	virtual const StringMap getWindowParams() const {
-		return StringMap();
+	virtual WindowParams getWindowParams() const {
+		return WindowParams();
 	}
 
 private:

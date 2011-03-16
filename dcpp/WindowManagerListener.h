@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_DCPP_WINDOW_MANAGER_LISTENER_H
 
 #include "forward.h"
+#include "WindowInfo.h"
 
 namespace dcpp {
 
@@ -30,7 +31,7 @@ public:
 
 	typedef X<0> Window;
 
-	virtual void on(Window, const string&, const StringMap&) throw() = 0;
+	virtual void on(Window, const string&, const WindowParams&) throw() = 0;
 };
 
 } // namespace dcpp

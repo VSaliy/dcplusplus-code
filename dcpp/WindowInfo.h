@@ -24,17 +24,28 @@
 
 namespace dcpp {
 
+struct WindowParam {
+	WindowParam() : identifies(false) { }
+	WindowParam(const string& content, bool identifies) : content(content), identifies(identifies) { }
+
+	string content;
+	bool identifies; /// whether this param determines the uniqueness of the WindowInfo holding it.
+
+	operator const string&() const { return content; }
+	template<typename T> bool operator==(const T& str) const { return content == str; }
+	bool empty() const { return content.empty(); }
+};
+
+typedef unordered_map<string, WindowParam> WindowParams;
+
 class WindowInfo {
 public:
-	explicit WindowInfo(const string& id_, const StringMap& params_);
+	explicit WindowInfo(const string& id_, const WindowParams& params_);
 
 	GETSET(string, id, Id);
-	GETSET(StringMap, params, Params);
+	GETSET(WindowParams, params, Params);
 
 	bool operator==(const WindowInfo& rhs) const;
-
-	/// special param used for displaying; ignored for identification.
-	static const string title;
 
 	/// special param for hub addresses.
 	static const string address;

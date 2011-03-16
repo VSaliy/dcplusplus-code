@@ -63,9 +63,9 @@ public:
 	static void closeAll();
 	static void closeAllOffline();
 
-	const StringMap getWindowParams() const;
-	static void parseWindowParams(TabViewPtr parent, const StringMap& params);
-	static bool isFavorite(const StringMap& params);
+	WindowParams getWindowParams() const;
+	static void parseWindowParams(TabViewPtr parent, const WindowParams& params);
+	static bool isFavorite(const WindowParams& params);
 
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
 

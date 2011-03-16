@@ -21,6 +21,7 @@
 
 #include "forward.h"
 #include "SettingsManager.h"
+#include "WindowInfo.h"
 #include "WindowManagerListener.h"
 
 namespace dcpp {
@@ -39,13 +40,13 @@ public:
 
 	Lock lock();
 
-	void add(const string& id, const StringMap& params);
+	void add(const string& id, const WindowParams& params);
 	void clear();
 
 	/// adds the referenced window if it doesn't exist, and moves it to the top of the stack.
-	void addRecent(const string& id, const StringMap& params);
+	void addRecent(const string& id, const WindowParams& params);
 	/// updates the title of the referenced window without changing its position in the stack.
-	void updateRecent(const string& id, const StringMap& params);
+	void updateRecent(const string& id, const WindowParams& params);
 	const RecentList& getRecent() const { return recent; }
 	void setMaxRecentItems(const string& id, unsigned max);
 	unsigned getMaxRecentItems(const string& id) const;
@@ -67,12 +68,12 @@ private:
 	WindowManager();
 	virtual ~WindowManager() throw();
 
-	inline void addRecent_(const string& id, const StringMap& params) { addRecent_(id, params, false); }
-	void addRecent_(const string& id, const StringMap& params, bool top);
+	inline void addRecent_(const string& id, const WindowParams& params) { addRecent_(id, params, false); }
+	void addRecent_(const string& id, const WindowParams& params, bool top);
 
 	void prepareSave(const WindowInfoList& infoList) const;
 
-	typedef void (WindowManager::*handler_type)(const std::string&, const StringMap&);
+	typedef void (WindowManager::*handler_type)(const std::string&, const WindowParams&);
 	void parseTags(SimpleXML& xml, handler_type handler);
 	void addTag(SimpleXML& xml, const WindowInfo& info) const;
 
