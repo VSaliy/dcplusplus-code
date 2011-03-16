@@ -164,7 +164,7 @@ void DirectoryListingFrame::parseWindowParams(TabViewPtr parent, const WindowPar
 
 bool DirectoryListingFrame::isFavorite(const WindowParams& params) {
 	auto path = params.find(WindowInfo::fileList);
-	if(path != params.end() && !(path->second.content == "OwnList") && File::getSize(path->second) != -1) {
+	if(path != params.end() && !(path->second == "OwnList") && File::getSize(path->second) != -1) {
 		UserPtr u = DirectoryListing::getUserFromFilename(path->second);
 		if(u)
 			return FavoriteManager::getInstance()->isFavoriteUser(u);
