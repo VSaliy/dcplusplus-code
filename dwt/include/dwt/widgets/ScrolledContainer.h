@@ -82,11 +82,6 @@ BaseType::Seed(style | WS_CHILD | WS_HSCROLL | WS_VSCROLL, exStyle)
 {
 }
 
-inline void ScrolledContainer::create(const Seed& cs) {
-	BaseType::create(cs);
-	onWindowPosChanged([this] (const Rectangle &) { this->layout(); });
-}
-
 }
 
 #endif /* DWT_SCROLLEDCONTAINER_H_ */
