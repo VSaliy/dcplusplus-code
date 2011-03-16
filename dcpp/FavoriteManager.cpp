@@ -509,9 +509,9 @@ void FavoriteManager::load(SimpleXML& aXml) {
 		if(i->second.connect) {
 			FavoriteHubEntryList hubs = getFavoriteHubs(i->first);
 			for(FavoriteHubEntryList::const_iterator hub = hubs.begin(), hub_end = hubs.end(); hub != hub_end; ++hub) {
-				StringMap map;
-				map[WindowInfo::address] = (*hub)->getServer();
-				WindowManager::getInstance()->add(WindowManager::hub(), map);
+				WindowParams params;
+				params[WindowInfo::address] = WindowParam((*hub)->getServer(), true);
+				WindowManager::getInstance()->add(WindowManager::hub(), params);
 			}
 		}
 	}

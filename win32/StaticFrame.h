@@ -53,7 +53,7 @@ public:
 		}
 	}
 
-	static void parseWindowParams(TabViewPtr parent, const StringMap& params) {
+	static void parseWindowParams(TabViewPtr parent, const WindowParams& params) {
 		openWindow(parent, false, BaseType::parseActivateParam(params));
 	}
 

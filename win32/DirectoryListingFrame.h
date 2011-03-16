@@ -74,12 +74,12 @@ private:
 	static void openWindow_(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, Activation activate);
 public:
 	static void openWindow(TabViewPtr parent, const HintedUser& aUser, const string& txt, int64_t aSpeed);
-	static void openOwnList(TabViewPtr parent, Activation activate = FOLLOW_SETTING);
+	static void openOwnList(TabViewPtr parent, const tstring& dir = Util::emptyStringT, Activation activate = FOLLOW_SETTING);
 	static void closeAll();
 
-	const StringMap getWindowParams() const;
-	static void parseWindowParams(TabViewPtr parent, const StringMap& params);
-	static bool isFavorite(const StringMap& params);
+	WindowParams getWindowParams() const;
+	static void parseWindowParams(TabViewPtr parent, const WindowParams& params);
+	static bool isFavorite(const WindowParams& params);
 
 private:
 	enum {

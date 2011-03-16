@@ -32,9 +32,17 @@ protected:
 		WindowManager::getInstance()->addRecent(t().getId(), t().getWindowParams());
 	}
 
+	void updateRecent() {
+		WindowManager::getInstance()->updateRecent(t().getId(), t().getWindowParams());
+	}
+
 	void setText(const tstring& text) {
 		t().MDIChildFrame<T>::setText(text);
-		WindowManager::getInstance()->updateRecent(t().getId(), t().getWindowParams());
+		updateRecent();
+	}
+
+	void addRecentParams(WindowParams& params) const {
+		params["Title"] = WindowParam(Text::fromT(t().getText()), false);
 	}
 };
 

@@ -85,27 +85,27 @@ void PrivateFrame::closeAllOffline() {
 	}
 }
 
-const StringMap PrivateFrame::getWindowParams() const {
-	StringMap ret;
-	ret[WindowInfo::title] = Text::fromT(getText());
-	ret[WindowInfo::cid] = replyTo.getUser().user->getCID().toBase32();
-	ret["Hub"] = replyTo.getUser().hint;
-	ret["LogPath"] = getLogPath();
+WindowParams PrivateFrame::getWindowParams() const {
+	WindowParams ret;
+	addRecentParams(ret);
+	ret[WindowInfo::cid] = WindowParam(replyTo.getUser().user->getCID().toBase32(), true);
+	ret["Hub"] = WindowParam(replyTo.getUser().hint, false);
+	ret["LogPath"] = WindowParam(getLogPath(), false);
 	return ret;
 }
 
-void PrivateFrame::parseWindowParams(TabViewPtr parent, const StringMap& params) {
-	StringMap::const_iterator cid = params.find(WindowInfo::cid);
-	StringMap::const_iterator hub = params.find("Hub");
+void PrivateFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params) {
+	auto cid = params.find(WindowInfo::cid);
+	auto hub = params.find("Hub");
 	if(cid != params.end() && hub != params.end()) {
-		StringMap::const_iterator logPath = params.find("LogPath");
+		auto logPath = params.find("LogPath");
 		openWindow(parent, HintedUser(ClientManager::getInstance()->getUser(CID(cid->second)), hub->second), Util::emptyStringT,
 			logPath != params.end() ? logPath->second : Util::emptyString, parseActivateParam(params));
 	}
 }
 
-bool PrivateFrame::isFavorite(const StringMap& params) {
-	StringMap::const_iterator cid = params.find(WindowInfo::cid);
+bool PrivateFrame::isFavorite(const WindowParams& params) {
+	auto cid = params.find(WindowInfo::cid);
 	if(cid != params.end()) {
 		UserPtr u = ClientManager::getInstance()->getUser(CID(cid->second));
 		if(u)

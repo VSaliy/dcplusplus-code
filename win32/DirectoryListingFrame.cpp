@@ -118,8 +118,8 @@ void DirectoryListingFrame::openWindow_(TabViewPtr parent, const tstring& aFile,
 	}
 }
 
-void DirectoryListingFrame::openOwnList(TabViewPtr parent, Activation activate) {
-	openWindow(parent, Text::toT(ShareManager::getInstance()->getOwnListFile()), Util::emptyStringT,
+void DirectoryListingFrame::openOwnList(TabViewPtr parent, const tstring& dir, Activation activate) {
+	openWindow(parent, Text::toT(ShareManager::getInstance()->getOwnListFile()), dir,
 		HintedUser(ClientManager::getInstance()->getMe(), Util::emptyString), 0, activate);
 }
 
@@ -128,37 +128,43 @@ void DirectoryListingFrame::closeAll(){
 		i->second->close(true);
 }
 
-const StringMap DirectoryListingFrame::getWindowParams() const {
-	StringMap ret;
-	ret[WindowInfo::title] = Text::fromT(getText());
-	ret[WindowInfo::cid] = dl->getUser().user->getCID().toBase32();
-	ret[WindowInfo::fileList] = (dl->getUser() == ClientManager::getInstance()->getMe()) ? "" : path;
-	ret["Hub"] = dl->getUser().hint;
-	ret["Speed"] = Util::toString(speed);
+WindowParams DirectoryListingFrame::getWindowParams() const {
+	WindowParams ret;
+	addRecentParams(ret);
+	ret[WindowInfo::cid] = WindowParam(dl->getUser().user->getCID().toBase32(), false);
+	ret[WindowInfo::fileList] = WindowParam((dl->getUser() == ClientManager::getInstance()->getMe()) ? "" : path, true);
+	ItemInfo* ii = dirs->getSelectedData();
+	if(ii && ii->type == ItemInfo::DIRECTORY)
+		ret["Directory"] = WindowParam(dl->getPath(ii->dir), false);
+	ret["Hub"] = WindowParam(dl->getUser().hint, false);
+	ret["Speed"] = WindowParam(Util::toString(speed), false);
 	return ret;
 }
 
-void DirectoryListingFrame::parseWindowParams(TabViewPtr parent, const StringMap& params) {
-	StringMap::const_iterator path = params.find(WindowInfo::fileList);
-	StringMap::const_iterator hub = params.find("Hub");
-	StringMap::const_iterator speed = params.find("Speed");
+void DirectoryListingFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params) {
+	auto path = params.find(WindowInfo::fileList);
+	auto dir = params.find("Directory");
+	auto hub = params.find("Hub");
+	auto speed = params.find("Speed");
 	if(path != params.end() && speed != params.end()) {
 		Activation activate = parseActivateParam(params) ? FORCE_ACTIVE : FORCE_INACTIVE;
 		if(path->second.empty()) {
-			openOwnList(parent, activate);
+			openOwnList(parent, (dir == params.end()) ? Util::emptyStringT : Text::toT(dir->second), activate);
 		} else if(File::getSize(path->second) != -1) {
 			UserPtr u = DirectoryListing::getUserFromFilename(path->second);
 			if(u) {
-				openWindow(parent, Text::toT(path->second), Util::emptyStringT, HintedUser(u,
-					(hub == params.end()) ? Util::emptyString : hub->second), Util::toInt64(speed->second), activate);
+				openWindow(parent, Text::toT(path->second),
+					(dir == params.end()) ? Util::emptyStringT : Text::toT(dir->second),
+					HintedUser(u, (hub == params.end()) ? Util::emptyString : hub->second),
+					Util::toInt64(speed->second), activate);
 			}
 		}
 	}
 }
 
-bool DirectoryListingFrame::isFavorite(const StringMap& params) {
-	StringMap::const_iterator path = params.find(WindowInfo::fileList);
-	if(path != params.end() && path->second != "OwnList" && File::getSize(path->second) != -1) {
+bool DirectoryListingFrame::isFavorite(const WindowParams& params) {
+	auto path = params.find(WindowInfo::fileList);
+	if(path != params.end() && !(path->second.content == "OwnList") && File::getSize(path->second) != -1) {
 		UserPtr u = DirectoryListing::getUserFromFilename(path->second);
 		if(u)
 			return FavoriteManager::getInstance()->isFavoriteUser(u);
@@ -397,6 +403,8 @@ bool DirectoryListingFrame::preClosing() {
 }
 
 void DirectoryListingFrame::postClosing() {
+	updateRecent();
+
 	clearList();
 
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));

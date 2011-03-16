@@ -97,21 +97,21 @@ void HubFrame::resortUsers() {
 		(*i)->resortForFavsFirst(true);
 }
 
-const StringMap HubFrame::getWindowParams() const {
-	StringMap ret;
-	ret[WindowInfo::title] = Text::fromT(getText());
-	ret[WindowInfo::address] = url;
+WindowParams HubFrame::getWindowParams() const {
+	WindowParams ret;
+	addRecentParams(ret);
+	ret[WindowInfo::address] = WindowParam(url, true);
 	return ret;
 }
 
-void HubFrame::parseWindowParams(TabViewPtr parent, const StringMap& params) {
-	StringMap::const_iterator i = params.find(WindowInfo::address);
+void HubFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params) {
+	auto i = params.find(WindowInfo::address);
 	if(i != params.end())
 		openWindow(parent, i->second, parseActivateParam(params));
 }
 
-bool HubFrame::isFavorite(const StringMap& params) {
-	StringMap::const_iterator i = params.find(WindowInfo::address);
+bool HubFrame::isFavorite(const WindowParams& params) {
+	auto i = params.find(WindowInfo::address);
 	if(i != params.end())
 		return FavoriteManager::getInstance()->isFavoriteHub(i->second);
 	return false;

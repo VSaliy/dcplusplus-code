@@ -70,9 +70,9 @@ public:
 	static void closeFavGroup(const string& group, bool reversed);
 	static void resortUsers();
 
-	const StringMap getWindowParams() const;
-	static void parseWindowParams(TabViewPtr parent, const StringMap& params);
-	static bool isFavorite(const StringMap& params);
+	WindowParams getWindowParams() const;
+	static void parseWindowParams(TabViewPtr parent, const WindowParams& params);
+	static bool isFavorite(const WindowParams& params);
 
 private:
 	friend class MainWindow;
