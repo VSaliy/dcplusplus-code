@@ -30,7 +30,6 @@ public:
 	virtual void write();
 
 private:
-	GridPtr grid;
 	RadioButtonPtr dcppDraw;
 	RadioButtonPtr buttonStyle;
 	GroupBoxPtr themeGroup;
