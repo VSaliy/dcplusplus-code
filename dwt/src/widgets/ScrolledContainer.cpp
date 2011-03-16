@@ -130,4 +130,9 @@ bool ScrolledContainer::handleMessage(const MSG &msg, LRESULT &retVal) {
 	return true;
 }
 
+void ScrolledContainer::create(const Seed& cs) {
+	BaseType::create(cs);
+	onWindowPosChanged([this] (const Rectangle &) { this->layout(); });
+}
+
 }
