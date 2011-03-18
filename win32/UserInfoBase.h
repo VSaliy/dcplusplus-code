@@ -32,14 +32,14 @@ class UserInfoBase {
 public:
 	UserInfoBase(const HintedUser& u) : user(u) { }
 
-	void getList();
-	void browseList();
-	void matchQueue();
-	void pm(TabViewPtr);
-	void grant();
-	void addFav();
-	void removeFromQueue();
-	void connectFav(TabViewPtr);
+	virtual void getList();
+	virtual void browseList();
+	virtual void matchQueue();
+	virtual void pm(TabViewPtr);
+	virtual void grant();
+	virtual void addFav();
+	virtual void removeFromQueue();
+	virtual void connectFav(TabViewPtr);
 
 	tstring getTooltip(bool priv) const;
 
@@ -116,9 +116,7 @@ protected:
 		handleUserFunction(std::bind(&UserInfoBase::connectFav, _1, parent));
 	}
 
-	void appendUserItems(TabViewPtr parent, dwt::MenuPtr menu,
-		bool defaultIsGetList = true, bool includeSendPM = true, bool includeGetList = true)
-	{
+	void appendUserItems(TabViewPtr parent, dwt::MenuPtr menu, bool defaultIsGetList = true, bool includeSendPM = true) {
 		UserInfoList users = t().selectedUsersImpl();
 		if(users.empty())
 			return;
@@ -126,12 +124,10 @@ protected:
 		UserInfoBase::UserTraits traits;
 		for_each(users.begin(), users.end(), std::bind(&UserInfoBase::UserTraits::parse, &traits, _1));
 
-		if(includeGetList) {
-			menu->appendItem(T_("&Get file list"), std::bind(&ThisType::handleGetList, this), dwt::IconPtr(), true, defaultIsGetList);
-			if(traits.adcOnly)
-				menu->appendItem(T_("&Browse file list"), std::bind(&ThisType::handleBrowseList, this));
-			menu->appendItem(T_("&Match queue"), std::bind(&ThisType::handleMatchQueue, this));
-		}
+		menu->appendItem(T_("&Get file list"), std::bind(&ThisType::handleGetList, this), dwt::IconPtr(), true, defaultIsGetList);
+		if(traits.adcOnly)
+			menu->appendItem(T_("&Browse file list"), std::bind(&ThisType::handleBrowseList, this));
+		menu->appendItem(T_("&Match queue"), std::bind(&ThisType::handleMatchQueue, this));
 		if(includeSendPM)
 			menu->appendItem(T_("&Send private message"), std::bind(&ThisType::handlePrivateMessage, this, parent), dwt::IconPtr(), true, !defaultIsGetList);
 		if(!traits.favOnly)

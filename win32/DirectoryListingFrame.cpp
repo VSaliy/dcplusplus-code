@@ -298,16 +298,17 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	searchGrid->setEnabled(false);
 	searchGrid->setVisible(false);
 
-	// create the rebar after the rest to make sure it doesn't grab the default focus.
-	rebar = addChild(Rebar::Seed());
-
 	{
+		// create the rebar after the rest to make sure it doesn't grab the default focus.
+		rebar = addChild(Rebar::Seed());
+
+		// create the first toolbar (on the left of the address bar).
 		auto seed = ToolBar::Seed();
 		seed.style &= ~CCS_ADJUSTABLE;
 		ToolBarPtr toolbar = addChild(seed);
 
 		StringList ids;
-		auto addButton = [toolbar, &ids](unsigned icon, const tstring& text, unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f) {
+		auto addButton = [&toolbar, &ids](unsigned icon, const tstring& text, unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f) {
 			ids.push_back(std::string(1, '0' + ids.size()));
 			toolbar->addButton(ids.back(), WinUtil::toolbarIcon(icon), 0, text, helpId, f);
 		};
@@ -318,16 +319,16 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		toolbar->setLayout(ids);
 
 		rebar->add(toolbar, RBBS_NOGRIPPER);
+
+		// create the address bar.
+		pathBox = addChild(WinUtil::Seeds::comboBoxEdit);
+		pathBox->getTextBox()->setReadOnly();
+		addWidget(pathBox);
+		pathBox->onSelectionChanged([this] { selectItem(Text::toT(history[pathBox->getSelected()])); });
+
+		rebar->add(pathBox, RBBS_NOGRIPPER);
+		rebar->sendMessage(RB_MAXIMIZEBAND, 1); // the address bar will occupy all the space it can.
 	}
-
-	pathBox = addChild(WinUtil::Seeds::comboBoxEdit);
-	pathBox->getTextBox()->setReadOnly();
-	addWidget(pathBox);
-	pathBox->onSelectionChanged([this] { selectItem(Text::toT(history[pathBox->getSelected()])); });
-
-	rebar->add(pathBox, RBBS_NOGRIPPER);
-
-	rebar->sendMessage(RB_MINIMIZEBAND); // minimize the toolbar band and maximize the path box
 
 	initStatus();
 
@@ -422,6 +423,10 @@ void DirectoryListingFrame::handleMatchQueue() {
 	status->setText(STATUS_STATUS, str(TFN_("Matched %1% file", "Matched %1% files", matched) % matched));
 }
 
+void DirectoryListingFrame::UserHolder::matchQueue() {
+	lists[user]->handleMatchQueue();
+}
+
 void DirectoryListingFrame::handleListDiff() {
 	tstring file;
 	if(WinUtil::browseFileList(this, file)) {
@@ -482,7 +487,9 @@ void DirectoryListingFrame::updateTitle() {
 		text += _T(" - ") + WinUtil::getHubNames(dl->getUser()).first;
 	else
 		text += _T(": ") + error;
-	setText(text);
+
+	// bypass the recent item updater if the file list hasn't been loaded yet.
+	if(loaded) setText(text); else BaseType::setText(text);
 
 	dirs->getData(treeRoot)->setText(text);
 	dirs->redraw();
@@ -558,7 +565,7 @@ void DirectoryListingFrame::addShellPaths(const ShellMenuPtr& menu, const vector
 }
 
 void DirectoryListingFrame::addUserMenu(const MenuPtr& menu) {
-	appendUserItems(getParent(), menu->appendPopup(T_("User")), true, true, false);
+	appendUserItems(getParent(), menu->appendPopup(T_("User")));
 }
 
 void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
