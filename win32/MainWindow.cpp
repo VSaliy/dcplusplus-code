@@ -607,7 +607,7 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 }
 
 void addActiveParam(WindowParams& params) {
-	params["Active"] = WindowParam("1", false);
+	params["Active"] = WindowParam("1");
 }
 
 template<typename T, typename configureF>

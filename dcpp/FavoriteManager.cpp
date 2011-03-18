@@ -510,7 +510,7 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			FavoriteHubEntryList hubs = getFavoriteHubs(i->first);
 			for(FavoriteHubEntryList::const_iterator hub = hubs.begin(), hub_end = hubs.end(); hub != hub_end; ++hub) {
 				WindowParams params;
-				params[WindowInfo::address] = WindowParam((*hub)->getServer(), true);
+				params[WindowInfo::address] = WindowParam((*hub)->getServer(), WindowParam::FLAG_IDENTIFIES);
 				WindowManager::getInstance()->add(WindowManager::hub(), params);
 			}
 		}

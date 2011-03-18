@@ -88,14 +88,14 @@ void PrivateFrame::closeAllOffline() {
 WindowParams PrivateFrame::getWindowParams() const {
 	WindowParams ret;
 	addRecentParams(ret);
-	ret[WindowInfo::cid] = WindowParam(replyTo.getUser().user->getCID().toBase32(), true);
-	ret["Hub"] = WindowParam(replyTo.getUser().hint, false);
-	ret["LogPath"] = WindowParam(getLogPath(), false);
+	ret["CID"] = WindowParam(replyTo.getUser().user->getCID().toBase32(), WindowParam::FLAG_IDENTIFIES | WindowParam::FLAG_CID);
+	ret["Hub"] = WindowParam(replyTo.getUser().hint);
+	ret["LogPath"] = WindowParam(getLogPath());
 	return ret;
 }
 
 void PrivateFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params) {
-	auto cid = params.find(WindowInfo::cid);
+	auto cid = params.find("CID");
 	auto hub = params.find("Hub");
 	if(cid != params.end() && hub != params.end()) {
 		auto logPath = params.find("LogPath");
@@ -105,7 +105,7 @@ void PrivateFrame::parseWindowParams(TabViewPtr parent, const WindowParams& para
 }
 
 bool PrivateFrame::isFavorite(const WindowParams& params) {
-	auto cid = params.find(WindowInfo::cid);
+	auto cid = params.find("CID");
 	if(cid != params.end()) {
 		UserPtr u = ClientManager::getInstance()->getUser(CID(cid->second));
 		if(u)

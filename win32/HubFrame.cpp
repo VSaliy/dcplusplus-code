@@ -100,7 +100,7 @@ void HubFrame::resortUsers() {
 WindowParams HubFrame::getWindowParams() const {
 	WindowParams ret;
 	addRecentParams(ret);
-	ret[WindowInfo::address] = WindowParam(url, true);
+	ret[WindowInfo::address] = WindowParam(url, WindowParam::FLAG_IDENTIFIES);
 	return ret;
 }
 

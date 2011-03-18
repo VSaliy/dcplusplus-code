@@ -131,18 +131,19 @@ void DirectoryListingFrame::closeAll(){
 WindowParams DirectoryListingFrame::getWindowParams() const {
 	WindowParams ret;
 	addRecentParams(ret);
-	ret[WindowInfo::cid] = WindowParam(dl->getUser().user->getCID().toBase32(), false);
-	ret[WindowInfo::fileList] = WindowParam((dl->getUser() == ClientManager::getInstance()->getMe()) ? "" : path, true);
+	ret["CID"] = WindowParam(dl->getUser().user->getCID().toBase32(), WindowParam::FLAG_CID);
+	ret["FileList"] = WindowParam((dl->getUser() == ClientManager::getInstance()->getMe()) ? "" : path,
+		WindowParam::FLAG_IDENTIFIES | WindowParam::FLAG_FILELIST);
 	ItemInfo* ii = dirs->getSelectedData();
 	if(ii && ii->type == ItemInfo::DIRECTORY)
-		ret["Directory"] = WindowParam(dl->getPath(ii->dir), false);
-	ret["Hub"] = WindowParam(dl->getUser().hint, false);
-	ret["Speed"] = WindowParam(Util::toString(speed), false);
+		ret["Directory"] = WindowParam(dl->getPath(ii->dir));
+	ret["Hub"] = WindowParam(dl->getUser().hint);
+	ret["Speed"] = WindowParam(Util::toString(speed));
 	return ret;
 }
 
 void DirectoryListingFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params) {
-	auto path = params.find(WindowInfo::fileList);
+	auto path = params.find("FileList");
 	auto dir = params.find("Directory");
 	auto hub = params.find("Hub");
 	auto speed = params.find("Speed");
@@ -163,7 +164,7 @@ void DirectoryListingFrame::parseWindowParams(TabViewPtr parent, const WindowPar
 }
 
 bool DirectoryListingFrame::isFavorite(const WindowParams& params) {
-	auto path = params.find(WindowInfo::fileList);
+	auto path = params.find("FileList");
 	if(path != params.end() && !(path->second == "OwnList") && File::getSize(path->second) != -1) {
 		UserPtr u = DirectoryListing::getUserFromFilename(path->second);
 		if(u)

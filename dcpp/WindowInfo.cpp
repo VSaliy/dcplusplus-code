@@ -24,8 +24,6 @@
 namespace dcpp {
 
 const string WindowInfo::address = "Address";
-const string WindowInfo::cid = "CID";
-const string WindowInfo::fileList = "FileList";
 
 WindowInfo::WindowInfo(const string& id_, const WindowParams& params_) :
 id(id_),
@@ -40,10 +38,10 @@ bool WindowInfo::operator==(const WindowInfo& rhs) const {
 	// compare every identifying params.
 	int rParams = 0;
 	for(auto i = rhs.params.cbegin(), iend = rhs.params.cend(); i != iend; ++i)
-		if(i->second.identifies)
+		if(i->second.isSet(WindowParam::FLAG_IDENTIFIES))
 			++rParams;
 	for(auto i = params.cbegin(), iend = params.cend(); i != iend; ++i) {
-		if(i->second.identifies) {
+		if(i->second.isSet(WindowParam::FLAG_IDENTIFIES)) {
 			auto ri = rhs.params.find(i->first);
 			if(ri == rhs.params.end())
 				return false;
