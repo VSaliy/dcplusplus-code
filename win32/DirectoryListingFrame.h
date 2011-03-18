@@ -174,8 +174,13 @@ private:
 	int64_t speed;		/**< Speed at which this file list was downloaded */
 
 	std::unique_ptr<DirectoryListing> dl;
-	UserInfoBase user;
 	string path;
+
+	// override the default match-queue method not to download the file list again.
+	struct UserHolder : UserInfoBase {
+		UserHolder(const HintedUser& u) : UserInfoBase(u) { }
+		void matchQueue();
+	} user;
 
 	tstring error;
 	bool usingDirMenu;
@@ -261,6 +266,8 @@ private:
 	void up();
 	void back();
 	void forward();
+
+	void refresh();
 
 	void initStatusText();
 	void updateStatus();
