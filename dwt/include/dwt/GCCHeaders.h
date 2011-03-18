@@ -60,10 +60,18 @@ typedef struct
 #define BUTTON_IMAGELIST_ALIGN_CENTER   4       // Doesn't draw text
 #endif
 
+#ifndef COLOR_MENUHILIGHT
 #define COLOR_MENUHILIGHT       29
+#endif
+#ifndef COLOR_MENUBAR
 #define COLOR_MENUBAR           30
+#endif
+#ifndef ODS_HOTLIGHT
 #define ODS_HOTLIGHT        0x0040
+#endif
+#ifndef ODS_INACTIVE
 #define ODS_INACTIVE        0x0080
+#endif
 #ifndef MN_GETHMENU
 #define MN_GETHMENU                     0x01E1
 #endif
@@ -135,7 +143,6 @@ typedef struct
 	#endif // !_WIN64
 #endif // !GetWindowLongPtr
 
-// these should be defined in CommCtrl.h, but the one in MinGW doesn't define them... (2007-11-06)
 #if (_WIN32_WINNT >= 0x0501)
 #ifndef HDF_SORTUP
 #define HDF_SORTUP              0x0400
@@ -257,9 +264,15 @@ typedef struct tagNMLVCUSTOMDRAW_
 #define LPNMLVCUSTOMDRAW LPNMLVCUSTOMDRAW_
 
 // dwItemType
+#ifndef LVCDI_ITEM
 #define LVCDI_ITEM      0x00000000
+#endif
+#ifndef LVCDI_GROUP
 #define LVCDI_GROUP     0x00000001
+#endif
+#ifndef LVCDI_ITEMSLIST
 #define LVCDI_ITEMSLIST 0x00000002
+#endif
 
 #ifndef LVHT_EX_GROUP
 #define LVHT_EX_GROUP_HEADER       0x10000000
