@@ -194,13 +194,10 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	rebar(0),
 	pathBox(0),
 	grid(0),
-	dirs(0),
-	files(0),
 	searchGrid(0),
 	searchBox(0),
-	listDiff(0),
-	matchQueue(0),
-	find(0),
+	dirs(0),
+	files(0),
 	speed(aSpeed),
 	dl(new DirectoryListing(aUser)),
 	user(aUser),
@@ -213,11 +210,44 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 {
 	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
-	grid->row(0).mode = GridInfo::FILL;
-	grid->row(0).align = GridInfo::STRETCH;
-	grid->row(1).size = 0;
-	grid->row(1).mode = GridInfo::STATIC;
+	grid->row(0).size = 0;
+	grid->row(0).mode = GridInfo::STATIC;
+	grid->row(1).mode = GridInfo::FILL;
+	grid->row(1).align = GridInfo::STRETCH;
 	grid->setSpacing(0);
+
+	{
+		Button::Seed cs = WinUtil::Seeds::button;
+
+		searchGrid = grid->addChild(Grid::Seed(1, 3));
+		grid->setWidget(searchGrid, 1, 0);
+		searchGrid->column(0).mode = GridInfo::FILL;
+
+		searchBox = searchGrid->addChild(WinUtil::Seeds::comboBoxEdit);
+		searchBox->setHelpId(IDH_FILE_LIST_SEARCH_BOX);
+		addWidget(searchBox);
+		searchBox->getTextBox()->onKeyDown(std::bind(&DirectoryListingFrame::handleSearchKeyDown, this, _1));
+		searchBox->getTextBox()->onChar(std::bind(&DirectoryListingFrame::handleSearchChar, this, _1));
+
+		cs.caption = T_("Find previous");
+		ButtonPtr button = searchGrid->addChild(cs);
+		button->setHelpId(IDH_FILE_LIST_FIND_PREV);
+		button->setImage(WinUtil::buttonIcon(IDI_LEFT));
+		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, true));
+		addWidget(button);
+
+		cs.caption = T_("Find next");
+		cs.style |= BS_DEFPUSHBUTTON;
+		button = searchGrid->addChild(cs);
+		cs.style &= ~BS_DEFPUSHBUTTON;
+		button->setHelpId(IDH_FILE_LIST_FIND_NEXT);
+		button->setImage(WinUtil::buttonIcon(IDI_RIGHT));
+		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, false));
+		addWidget(button);
+	}
+
+	searchGrid->setEnabled(false);
+	searchGrid->setVisible(false);
 
 	{
 		auto paned = grid->addChild(SplitterContainer::Seed(0.3));
@@ -250,55 +280,6 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	}
 
 	{
-		Button::Seed cs = WinUtil::Seeds::button;
-
-		searchGrid = grid->addChild(Grid::Seed(1, 3));
-		grid->setWidget(searchGrid, 1, 0);
-		searchGrid->column(0).mode = GridInfo::FILL;
-
-		searchBox = searchGrid->addChild(WinUtil::Seeds::comboBoxEdit);
-		searchBox->setHelpId(IDH_FILE_LIST_SEARCH_BOX);
-		addWidget(searchBox);
-		searchBox->getTextBox()->onKeyDown(std::bind(&DirectoryListingFrame::handleSearchKeyDown, this, _1));
-		searchBox->getTextBox()->onChar(std::bind(&DirectoryListingFrame::handleSearchChar, this, _1));
-
-		cs.caption = T_("Find previous");
-		ButtonPtr button = searchGrid->addChild(cs);
-		button->setHelpId(IDH_FILE_LIST_FIND_PREV);
-		button->setImage(WinUtil::buttonIcon(IDI_LEFT));
-		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, true));
-		addWidget(button);
-
-		cs.caption = T_("Find next");
-		cs.style |= BS_DEFPUSHBUTTON;
-		button = searchGrid->addChild(cs);
-		cs.style &= ~BS_DEFPUSHBUTTON;
-		button->setHelpId(IDH_FILE_LIST_FIND_NEXT);
-		button->setImage(WinUtil::buttonIcon(IDI_RIGHT));
-		button->onClicked(std::bind(&DirectoryListingFrame::handleFind, this, false));
-		addWidget(button);
-
-		cs.caption = T_("Subtract list");
-		listDiff = addChild(cs);
-		listDiff->setHelpId(IDH_FILE_LIST_SUBSTRACT);
-		listDiff->onClicked(std::bind(&DirectoryListingFrame::handleListDiff, this));
-
-		cs.caption = T_("Match queue");
-		matchQueue = addChild(cs);
-		matchQueue->setHelpId(IDH_FILE_LIST_MATCH_QUEUE);
-		matchQueue->onClicked(std::bind(&DirectoryListingFrame::handleMatchQueue, this));
-
-		cs.caption = T_("Find") + _T(" \u2206") /* up arrow */;
-		find = addChild(cs);
-		find->setHelpId(IDH_FILE_LIST_FIND);
-		find->setImage(WinUtil::buttonIcon(IDI_SEARCH));
-		find->onClicked(std::bind(&DirectoryListingFrame::handleFindToggle, this));
-	}
-
-	searchGrid->setEnabled(false);
-	searchGrid->setVisible(false);
-
-	{
 		// create the rebar after the rest to make sure it doesn't grab the default focus.
 		rebar = addChild(Rebar::Seed());
 
@@ -308,14 +289,14 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		ToolBarPtr toolbar = addChild(seed);
 
 		StringList ids;
-		auto addButton = [&toolbar, &ids](unsigned icon, const tstring& text, unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f) {
+		auto addButton = [&toolbar, &ids](unsigned icon, const tstring& text, bool showText, unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f) {
 			ids.push_back(std::string(1, '0' + ids.size()));
-			toolbar->addButton(ids.back(), WinUtil::toolbarIcon(icon), 0, text, helpId, f);
+			toolbar->addButton(ids.back(), icon ? WinUtil::toolbarIcon(icon) : 0, 0, text, showText, helpId, f);
 		};
-		addButton(IDI_LEFT, T_("Back"), IDH_FILE_LIST_BACK, [this] { back(); });
-		addButton(IDI_RIGHT, T_("Forward"), IDH_FILE_LIST_FORWARD, [this] { this->forward(); }); // explicit ns (vs std::forward)
+		addButton(IDI_LEFT, T_("Back"), false, IDH_FILE_LIST_BACK, [this] { back(); });
+		addButton(IDI_RIGHT, T_("Forward"), false, IDH_FILE_LIST_FORWARD, [this] { this->forward(); }); // explicit ns (vs std::forward)
 		ids.push_back(string());
-		addButton(IDI_UP, T_("Up one level"), IDH_FILE_LIST_UP, [this] { up(); });
+		addButton(IDI_UP, T_("Up one level"), false, IDH_FILE_LIST_UP, [this] { up(); });
 		toolbar->setLayout(ids);
 
 		rebar->add(toolbar, RBBS_NOGRIPPER);
@@ -328,13 +309,20 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 
 		rebar->add(pathBox, RBBS_NOGRIPPER);
 		rebar->sendMessage(RB_MAXIMIZEBAND, 1); // the address bar will occupy all the space it can.
+
+		// create the second toolbar (on the right of the address bar).
+		toolbar = addChild(seed);
+
+		ids.clear();
+		addButton(0, T_("Subtract list"), true, IDH_FILE_LIST_SUBSTRACT, [this] { handleListDiff(); });
+		addButton(0, T_("Match queue"), true, IDH_FILE_LIST_MATCH_QUEUE, [this] { handleMatchQueue(); });
+		addButton(IDI_SEARCH, T_("Find") + _T(" \u2207") /* down arrow */, true, IDH_FILE_LIST_FIND, [this] { handleFindToggle(); });
+		toolbar->setLayout(ids);
+
+		rebar->add(toolbar, RBBS_NOGRIPPER);
 	}
 
 	initStatus();
-
-	status->setSize(STATUS_FILE_LIST_DIFF, listDiff->getPreferredSize().x);
-	status->setSize(STATUS_MATCH_QUEUE, matchQueue->getPreferredSize().x);
-	status->setSize(STATUS_FIND, find->getPreferredSize().x);
 
 	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
 
@@ -392,10 +380,6 @@ void DirectoryListingFrame::layout() {
 
 	r.size.y -= status->refresh();
 
-	status->mapWidget(STATUS_FILE_LIST_DIFF, listDiff);
-	status->mapWidget(STATUS_MATCH_QUEUE, matchQueue);
-	status->mapWidget(STATUS_FIND, find);
-
 	grid->resize(r);
 }
 
@@ -448,13 +432,13 @@ void DirectoryListingFrame::handleFindToggle() {
 		searchBox->clear();
 		searchGrid->setEnabled(false);
 		searchGrid->setVisible(false);
-		grid->row(1).mode = GridInfo::STATIC;
+		grid->row(0).mode = GridInfo::STATIC;
 	} else {
 		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i)
 			searchBox->addValue(*i);
 		searchGrid->setEnabled(true);
 		searchGrid->setVisible(true);
-		grid->row(1).mode = GridInfo::AUTO;
+		grid->row(0).mode = GridInfo::AUTO;
 		searchBox->setFocus();
 	}
 	layout();

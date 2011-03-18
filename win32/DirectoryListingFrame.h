@@ -55,9 +55,6 @@ public:
 		STATUS_TOTAL_SIZE,
 		STATUS_SELECTED_FILES,
 		STATUS_SELECTED_SIZE,
-		STATUS_FILE_LIST_DIFF,
-		STATUS_MATCH_QUEUE,
-		STATUS_FIND,
 		STATUS_LAST
 	};
 
@@ -156,6 +153,9 @@ private:
 
 	GridPtr grid;
 
+	GridPtr searchGrid;
+	ComboBoxPtr searchBox;
+
 	typedef TypedTree<ItemInfo> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
 	WidgetDirsPtr dirs;
@@ -163,13 +163,6 @@ private:
 	typedef TypedTable<ItemInfo> WidgetFiles;
 	typedef WidgetFiles* WidgetFilesPtr;
 	WidgetFilesPtr files;
-
-	GridPtr searchGrid;
-	ComboBoxPtr searchBox;
-
-	ButtonPtr listDiff;
-	ButtonPtr matchQueue;
-	ButtonPtr find;
 
 	int64_t speed;		/**< Speed at which this file list was downloaded */
 
