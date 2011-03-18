@@ -403,8 +403,6 @@ bool DirectoryListingFrame::preClosing() {
 }
 
 void DirectoryListingFrame::postClosing() {
-	updateRecent();
-
 	clearList();
 
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
@@ -890,6 +888,8 @@ void DirectoryListingFrame::handleSelectionChanged() {
 	for(auto i = history.cbegin(), iend = history.cend(); i != iend; ++i)
 		pathBox->addValue(i->empty() ? getText() : Text::toT(*i));
 	pathBox->setSelected(historyIndex - 1);
+
+	updateRecent();
 }
 
 void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {

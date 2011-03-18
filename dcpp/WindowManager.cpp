@@ -152,7 +152,7 @@ void WindowManager::prepareSave(const WindowInfoList& infoList) const {
 			ClientManager::getInstance()->saveUser(CID(i->second));
 
 		i = wi->getParams().find(WindowInfo::fileList);
-		if(i != wi->getParams().end() && !i->second.content.empty())
+		if(i != wi->getParams().end() && !i->second.empty())
 			QueueManager::getInstance()->noDeleteFileList(i->second);
 	}
 }
@@ -189,7 +189,7 @@ void WindowManager::addTag(SimpleXML& xml, const WindowInfo& info) const {
 	if(!info.getParams().empty()) {
 		xml.stepIn();
 		for(auto i = info.getParams().cbegin(), iend = info.getParams().cend(); i != iend; ++i) {
-			xml.addTag("Param", i->second.content);
+			xml.addTag("Param", i->second);
 			xml.addChildAttrib("Id", i->first);
 			if(!i->second.identifies)
 				xml.addChildAttrib("Opt", true);

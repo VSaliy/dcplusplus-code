@@ -606,8 +606,12 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 	menu->open(pt);
 }
 
+void addActiveParam(WindowParams& params) {
+	params["Active"] = WindowParam("1", false);
+}
+
 template<typename T, typename configureF>
-static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, MainWindow* mainWindow,
+void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, MainWindow* mainWindow,
 						  const tstring& text, unsigned iconId, unsigned favIconId, configureF f)
 {
 	MenuPtr popup = menu->appendPopup(text, WinUtil::menuIcon(iconId));
@@ -624,11 +628,13 @@ static void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu
 
 		const auto& list = it->second;
 		for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
-			const auto& params = i->getParams();
+			auto params = i->getParams();
 
 			auto title = params.find("Title");
 			if(title == params.end() || title->second.empty())
 				continue;
+
+			addActiveParam(params);
 
 			popup->appendItem(escapeMenu(Text::toT(title->second)),
 				std::bind(&T::parseWindowParams, mainWindow->getTabView(), params),
@@ -645,8 +651,7 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 		auto lock = wm->lock();
 		const auto& recent = wm->getRecent();
 
-		typedef void (MainWindow::*configureF)(const string&, const tstring&);
-		configureF f = &MainWindow::handleConfigureRecent;
+		auto f = &MainWindow::handleConfigureRecent;
 		addRecentMenu<HubFrame>(recent, menu, this, T_("Recent hubs"), IDI_HUB, IDI_FAVORITE_HUBS, f);
 		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDI_PRIVATE, IDI_FAVORITE_USERS, f);
 		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDI_DIRECTORY, IDI_FAVORITE_USERS, f);
@@ -804,7 +809,7 @@ void MainWindow::saveWindowSettings() {
 			auto child = static_cast<MDIChildFrame<dwt::Container>*>(*i);
 			auto params = child->getWindowParams();
 			if(child == active)
-				params["Active"] = WindowParam("1", false);
+				addActiveParam(params);
 			wm->add(child->getId(), params);
 		}
 	}
