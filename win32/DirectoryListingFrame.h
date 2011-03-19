@@ -260,8 +260,6 @@ private:
 	void back();
 	void forward();
 
-	void refresh();
-
 	void initStatusText();
 	void updateStatus();
 
