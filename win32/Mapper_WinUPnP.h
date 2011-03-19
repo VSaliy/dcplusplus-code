@@ -28,7 +28,7 @@ struct IStaticPortMappingCollection;
 class Mapper_WinUPnP : public Mapper
 {
 public:
-	Mapper_WinUPnP() : Mapper(), initialized(false), pUN(0), lastPort(0) { }
+	Mapper_WinUPnP() : Mapper(), pUN(0), lastPort(0) { }
 
 private:
 	bool init();
@@ -45,10 +45,8 @@ private:
 	static const string name;
 	const string& getName() const { return name; }
 
-	bool initialized;
-
 	IUPnPNAT* pUN;
-	// this one can become invalidated so we can't cache it
+	// this one can become invalid so we can't cache it
 	IStaticPortMappingCollection* getStaticPortMappingCollection();
 
 	// need to save these to get the external IP...

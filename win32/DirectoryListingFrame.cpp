@@ -290,11 +290,10 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 
 		StringList ids;
 		auto addButton = [&toolbar, &ids](unsigned icon, const tstring& text, bool showText,
-			unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f) -> string
+			unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f)
 		{
 			ids.push_back(std::string(1, '0' + ids.size()));
 			toolbar->addButton(ids.back(), icon ? WinUtil::toolbarIcon(icon) : 0, 0, text, showText, helpId, f);
-			return ids.back();
 		};
 
 		addButton(IDI_LEFT, T_("Back"), false, IDH_FILE_LIST_BACK, [this] { back(); });
@@ -320,7 +319,10 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		ids.clear();
 		addButton(0, T_("Subtract list"), true, IDH_FILE_LIST_SUBSTRACT, [this] { handleListDiff(); });
 		addButton(0, T_("Match queue"), true, IDH_FILE_LIST_MATCH_QUEUE, [this] { handleMatchQueue(); });
-		auto findId = addButton(IDI_SEARCH, T_("Find") + _T(" \u2207") /* down arrow */, true, IDH_FILE_LIST_FIND, [this] { handleFindToggle(); });
+		ids.push_back("Find");
+		auto findId = ids.back();
+		toolbar->addButton(findId, WinUtil::toolbarIcon(IDI_SEARCH), 0, T_("Find"), true, IDH_FILE_LIST_FIND,
+			0, [this](const dwt::ScreenCoordinate&) { handleFindToggle(); });
 		toolbar->setLayout(ids);
 
 		rebar->add(toolbar, RBBS_NOGRIPPER);

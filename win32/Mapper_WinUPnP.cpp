@@ -31,7 +31,7 @@ const string Mapper_WinUPnP::name = "Windows UPnP";
 #include <natupnp.h>
 	
 bool Mapper_WinUPnP::init() {
-	if(initialized)
+	if(pUN)
 		return true;
 
 	// Lacking the __uuidof in mingw...
@@ -45,8 +45,7 @@ bool Mapper_WinUPnP::init() {
 	HRESULT hr = CoCreateInstance(upnp, 0, CLSCTX_INPROC_SERVER, iupnp, reinterpret_cast<LPVOID*>(&pUN));
 	if(FAILED(hr))
 		pUN = 0;
-	initialized = pUN;
-	return initialized;
+	return pUN;
 }
 
 void Mapper_WinUPnP::uninit() {
