@@ -100,7 +100,7 @@ void PrivateFrame::parseWindowParams(TabViewPtr parent, const WindowParams& para
 	if(cid != params.end() && hub != params.end()) {
 		auto logPath = params.find("LogPath");
 		openWindow(parent, HintedUser(ClientManager::getInstance()->getUser(CID(cid->second)), hub->second), Util::emptyStringT,
-			logPath != params.end() ? logPath->second : Util::emptyString, parseActivateParam(params));
+			logPath != params.end() ? logPath->second.content : Util::emptyString, parseActivateParam(params));
 	}
 }
 
