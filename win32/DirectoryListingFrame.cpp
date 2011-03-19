@@ -156,7 +156,7 @@ void DirectoryListingFrame::parseWindowParams(TabViewPtr parent, const WindowPar
 			if(u) {
 				openWindow(parent, Text::toT(path->second),
 					(dir == params.end()) ? Util::emptyStringT : Text::toT(dir->second),
-					HintedUser(u, (hub == params.end()) ? Util::emptyString : hub->second),
+					HintedUser(u, (hub == params.end()) ? Util::emptyString : hub->second.content),
 					Util::toInt64(speed->second), activate);
 			}
 		}
