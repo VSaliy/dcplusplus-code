@@ -50,15 +50,11 @@ DirectoryListing::~DirectoryListing() {
 }
 
 UserPtr DirectoryListing::getUserFromFilename(const string& fileName) {
-	// General file list name format: [username].[CID].[xml|xml.bz2|DcLst]
+	// General file list name format: [username].[CID].[xml|xml.bz2]
 
 	string name = Util::getFileName(fileName);
 
 	// Strip off any extensions
-	if(Util::stricmp(name.c_str() + name.length() - 6, ".DcLst") == 0) {
-		name.erase(name.length() - 6);
-	}
-
 	if(Util::stricmp(name.c_str() + name.length() - 4, ".bz2") == 0) {
 		name.erase(name.length() - 4);
 	}
