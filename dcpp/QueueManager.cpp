@@ -507,11 +507,6 @@ QueueManager::~QueueManager() throw() {
 		std::sort(filelists.begin(), filelists.end());
 		std::for_each(filelists.begin(), std::set_difference(filelists.begin(), filelists.end(),
 			protectedFileLists.begin(), protectedFileLists.end(), filelists.begin()), &File::deleteFile);
-
-		filelists = File::findFiles(path, "*.DcLst");
-		std::sort(filelists.begin(), filelists.end());
-		std::for_each(filelists.begin(), std::set_difference(filelists.begin(), filelists.end(),
-			protectedFileLists.begin(), protectedFileLists.end(), filelists.begin()), &File::deleteFile);
 	}
 }
 
