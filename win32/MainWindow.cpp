@@ -44,7 +44,6 @@
 #include "StatsFrame.h"
 #include "SystemFrame.h"
 #include "UsersFrame.h"
-#include "WaitingUsersFrame.h"
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ResourceManager.h>
@@ -270,8 +269,6 @@ void MainWindow::initMenu() {
 			[this] { QueueFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_QUEUE));
 		viewIndexes[FinishedDLFrame::id] = viewMenu->appendItem(T_("Finished Downloads"),
 			[this] { FinishedDLFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FINISHED_DL));
-		viewIndexes[WaitingUsersFrame::id] = viewMenu->appendItem(T_("Waiting Users"),
-			[this] { WaitingUsersFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_WAITING_USERS));
 		viewIndexes[FinishedULFrame::id] = viewMenu->appendItem(T_("Finished Uploads"),
 			[this] { FinishedULFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FINISHED_UL));
 		viewMenu->appendSeparator();
@@ -367,8 +364,6 @@ void MainWindow::initToolbar() {
 		IDH_TOOLBAR_QUEUE, [this] { QueueFrame::openWindow(getTabView()); });
 	toolbar->addButton(FinishedDLFrame::id, WinUtil::toolbarIcon(IDI_FINISHED_DL), 0, T_("Finished Downloads"), false,
 		IDH_TOOLBAR_FINISHED_DL, [this] { FinishedDLFrame::openWindow(getTabView()); });
-	toolbar->addButton(WaitingUsersFrame::id, WinUtil::toolbarIcon(IDI_WAITING_USERS), 0, T_("Waiting Users"), false,
-		IDH_TOOLBAR_WAITING_USERS, [this] { WaitingUsersFrame::openWindow(getTabView()); });
 	toolbar->addButton(FinishedULFrame::id, WinUtil::toolbarIcon(IDI_FINISHED_UL), 0, T_("Finished Uploads"), false,
 		IDH_TOOLBAR_FINISHED_UL, [this] { FinishedULFrame::openWindow(getTabView()); });
 	toolbar->addButton(SearchFrame::id, WinUtil::toolbarIcon(IDI_SEARCH), 0, T_("Search"), false,
@@ -405,7 +400,6 @@ void MainWindow::initToolbar() {
 			comma +
 			QueueFrame::id + comma +
 			FinishedDLFrame::id + comma +
-			WaitingUsersFrame::id + comma +
 			FinishedULFrame::id + comma +
 			comma +
 			SearchFrame::id + comma +
@@ -1446,7 +1440,6 @@ void MainWindow::on(WindowManagerListener::Window, const string& id, const Windo
 	compare_id(UsersFrame);
 	compare_id(QueueFrame);
 	compare_id(FinishedDLFrame);
-	compare_id(WaitingUsersFrame);
 	compare_id(FinishedULFrame);
 	compare_id(ADLSearchFrame);
 	compare_id(SpyFrame);
