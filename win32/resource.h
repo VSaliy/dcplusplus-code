@@ -20,7 +20,6 @@
 #define IDI_FAVORITE_USERS					112
 #define IDI_SPY						113
 #define IDI_NET_STATS				114
-#define IDI_WAITING_USERS			115
 #define IDI_MAGNET					116
 #define IDI_HUB_OFF					117
 #define IDI_PRIVATE_OFF					118

@@ -147,9 +147,6 @@ void SplitterContainer::onMove(SplitterPtr splitter, double pos)
 {
 	// TODO Check that one splitter does not move past another
 	splitter->setRelativePos(pos);
-	RECT rc;
-	::GetWindowRect(handle(), &rc);
-	::MapWindowPoints(NULL, getParent()->handle(), (LPPOINT) &rc, 2);
 	layout();
 	redraw(true);
 }

@@ -41,7 +41,7 @@ namespace dwt {
 const TCHAR StatusBar::windowClass[] = STATUSCLASSNAME;
 
 StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip) :
-BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN),
+BaseType::Seed(WS_CHILD),
 parts(parts_),
 fill(fill_)
 {
@@ -127,11 +127,11 @@ void StatusBar::mapWidget(unsigned part, Widget* widget, const Rectangle& paddin
 	POINT p[2];
 	sendMessage(SB_GETRECT, part, reinterpret_cast<LPARAM>(p));
 	::MapWindowPoints(handle(), getParent()->handle(), (POINT*)p, 2);
-	::MoveWindow(widget->handle(),
+	::SetWindowPos(widget->handle(), handle(),
 		p[0].x + padding.left(),
 		p[0].y + padding.top(),
 		p[1].x - p[0].x - padding.right(),
-		p[1].y - p[0].y - padding.bottom(), TRUE);
+		p[1].y - p[0].y - padding.bottom(), SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 }
 
 void StatusBar::onClicked(unsigned part, const F& f) {
