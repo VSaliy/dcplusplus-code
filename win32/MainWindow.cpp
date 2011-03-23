@@ -174,13 +174,15 @@ fullSlots(false)
 
 	callAsync(std::bind(&MainWindow::parseCommandLine, this, tstring(::GetCommandLine())));
 
-	int cmdShow = dwt::Application::instance().getCmdShow();
-	::ShowWindow(handle(), (cmdShow == SW_SHOWDEFAULT || cmdShow == SW_SHOWNORMAL) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
-	if(cmdShow == SW_MINIMIZE || cmdShow == SW_SHOWMINIMIZED || cmdShow == SW_SHOWMINNOACTIVE)
-		handleMinimized();
+	callAsync([this] {
+		int cmdShow = dwt::Application::instance().getCmdShow();
+		::ShowWindow(GCC_WTF->handle(), (cmdShow == SW_SHOWDEFAULT || cmdShow == SW_SHOWNORMAL) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
+		if(cmdShow == SW_MINIMIZE || cmdShow == SW_SHOWMINIMIZED || cmdShow == SW_SHOWMINNOACTIVE)
+			handleMinimized();
+	});
 
 	if(SETTING(NICK).empty()) {
-		callAsync([this]() {
+		callAsync([this] {
 			SystemFrame::openWindow(getTabView(), false, false);
 
 			WinUtil::help(this, IDH_GET_STARTED);
@@ -210,6 +212,7 @@ void MainWindow::initWindow() {
 		cs.location = dwt::Rectangle(pos_x, pos_y, size_x, size_y);
 	}
 
+	cs.style &= ~WS_VISIBLE;
 	cs.exStyle |= WS_EX_APPWINDOW;
 	if (ResourceManager::getInstance()->isRTL())
 		cs.exStyle |= WS_EX_RTLREADING;
