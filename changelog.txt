@@ -11,6 +11,7 @@
 * [L#710359] Add finished downloads log (emtee)
 * Save and restore the current directory of file lists (poy)
 * Move file list status bar buttons to the toolbar (poy)
+* Faster startup with many tabs
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
