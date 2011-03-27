@@ -37,6 +37,8 @@ socksServer(0)
 	setHelpId(IDH_PROXYPAGE);
 
 	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Proxy settings for outgoing connections")))->addChild(Grid::Seed(1, 2));

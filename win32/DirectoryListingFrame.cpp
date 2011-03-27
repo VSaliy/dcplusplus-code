@@ -220,7 +220,6 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		Button::Seed cs = WinUtil::Seeds::button;
 
 		searchGrid = grid->addChild(Grid::Seed(1, 3));
-		grid->setWidget(searchGrid, 1, 0);
 		searchGrid->column(0).mode = GridInfo::FILL;
 
 		searchBox = searchGrid->addChild(WinUtil::Seeds::comboBoxEdit);

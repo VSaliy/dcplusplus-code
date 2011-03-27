@@ -32,6 +32,10 @@ connections(0)
 {
 	setHelpId(IDH_GENERALPAGE);
 
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+
 	auto group = grid->addChild(GroupBox::Seed(T_("Personal Information")));
 	group->setHelpId(IDH_SETTINGS_GENERAL_PERSONAL_INFORMATION);
 

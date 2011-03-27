@@ -39,6 +39,8 @@ tls(0)
 	setHelpId(IDH_NETWORKPAGE);
 
 	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
 
 	{
 		GroupBoxPtr autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connection type detection")));

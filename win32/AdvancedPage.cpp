@@ -53,6 +53,10 @@ AdvancedPage::ListItem AdvancedPage::listItems[] = {
 AdvancedPage::AdvancedPage(dwt::Widget* parent) : PropPage(parent, 1, 1) {
 	setHelpId(IDH_ADVANCEDPAGE);
 
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+
 	options = grid->addChild(WinUtil::Seeds::Dialog::optionsTable);
 	PropPage::read(listItems, options);
 }

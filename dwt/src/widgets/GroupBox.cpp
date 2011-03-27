@@ -56,6 +56,7 @@ void GroupBox::create( const GroupBox::Seed & cs ) {
 	padding.y = ::GetSystemMetrics(SM_CYEDGE) + cs.padding.y * 2; // ignore the top border
 
 	onEnabled([this](bool b) { handleEnabled(b); });
+	onWindowPosChanged([this](const Rectangle &) { layout(); });
 }
 
 Point GroupBox::getPreferredSize() {
@@ -73,7 +74,7 @@ void GroupBox::layout() {
 	Widget* child = getChild();
 	if(child) {
 		auto size = getClientSize();
-		auto rc = shrink(Rectangle(getClientSize()));
+		auto rc = shrink(Rectangle(size));
 		::MoveWindow(child->handle(), rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
 	}
 
