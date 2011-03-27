@@ -49,6 +49,10 @@ oldSelection(-1)
 {
 	setHelpId(IDH_LOGPAGE);
 
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+
 	auto group = grid->addChild(GroupBox::Seed(T_("Logging")));
 
 	GridPtr grid = group->addChild(Grid::Seed(3, 1));

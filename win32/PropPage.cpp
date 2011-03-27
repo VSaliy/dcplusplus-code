@@ -33,6 +33,8 @@ PropPage::PropPage(dwt::Widget* parent, int rows, int cols) : dwt::ModelessDialo
 
 	grid = addChild(Grid::Seed(rows, cols));
 	grid->setSpacing(10);
+
+	onWindowPosChanged([this](const dwt::Rectangle &) { layout(); });
 }
 
 PropPage::~PropPage() {

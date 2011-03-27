@@ -43,6 +43,10 @@ remove(0)
 {
 	setHelpId(IDH_FAVORITE_DIRSPAGE);
 
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+
 	auto group = grid->addChild(GroupBox::Seed(T_("Favorite download directories")));
 	group->setHelpId(IDH_SETTINGS_FAVORITE_DIRS_FAVORITE_DIRECTORIES);
 	GridPtr grid = group->addChild(Grid::Seed(2, 3));
