@@ -134,6 +134,9 @@ typedef RichTextBox* RichTextBoxPtr;
 
 class SaveDialog;
 
+class ScrolledContainer;
+typedef ScrolledContainer* ScrolledContainerPtr;
+
 class Slider;
 typedef Slider* SliderPtr;
 

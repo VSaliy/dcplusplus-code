@@ -57,7 +57,7 @@ void ScrolledContainer::layout() {
 		setScrollInfo(SB_HORZ, clientSize.x, childSize.x);
 	}
 
-	if(childSize.y > childSize.y) {
+	if(childSize.y > clientSize.y) {
 		setScrollInfo(SB_VERT, clientSize.y, childSize.y);
 	}
 
@@ -85,8 +85,6 @@ bool ScrolledContainer::handleMessage(const MSG &msg, LRESULT &retVal) {
 	if(!child) {
 		return false;
 	}
-
-	auto childSize = child->getWindowSize();
 
 	SCROLLINFO si = { sizeof(SCROLLINFO), SIF_ALL };
 

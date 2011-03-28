@@ -89,6 +89,7 @@ static const FieldName fields[] =
 UsersFrame::UsersFrame(TabViewPtr parent) :
 	BaseType(parent, T_("Users"), IDH_FAVUSERS, IDI_FAVORITE_USERS),
 	users(0),
+	scroll(0),
 	startup(true)
 {
 	filterGrid = addChild(Grid::Seed(1, 5));
@@ -145,7 +146,7 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	}
 
 	{
-		auto scroll = splitter->addChild(dwt::ScrolledContainer::Seed());
+		scroll = splitter->addChild(dwt::ScrolledContainer::Seed());
 		userInfo = scroll->addChild(Grid::Seed(0, 1));
 	}
 
@@ -285,7 +286,7 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 }
 
 void UsersFrame::handleSelectionChanged() {
-	ScopedFunctor([&] { layout(); userInfo->redraw(); });
+	ScopedFunctor([&] { scroll->layout(); userInfo->layout(); userInfo->redraw(); });
 
 	HoldRedraw hold(userInfo);
 

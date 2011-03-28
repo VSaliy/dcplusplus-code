@@ -65,7 +65,7 @@ protected:
 };
 
 inline Container::Seed::Seed(DWORD style, DWORD exStyle) :
-BaseType::Seed(tstring(), style | WS_CHILD | WS_CLIPSIBLINGS, exStyle) {
+BaseType::Seed(tstring(), style | WS_CHILD, exStyle) {
 }
 
 inline void Container::create(const Seed& cs) {
