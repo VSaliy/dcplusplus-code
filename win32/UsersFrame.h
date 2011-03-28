@@ -133,6 +133,7 @@ private:
 	CheckBoxPtr showOnline;
 	CheckBoxPtr showQueue;
 	CheckBoxPtr showWaiting;
+	dwt::ScrolledContainerPtr scroll;
 
 	static dwt::ImageListPtr userIcons;
 
