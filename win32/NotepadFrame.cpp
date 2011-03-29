@@ -82,6 +82,6 @@ void NotepadFrame::save() {
 	}
 }
 
-void NotepadFrame::on(SettingsManagerListener::Save, SimpleXML&) throw() {
+void NotepadFrame::on(SettingsManagerListener::Save, SimpleXML&) noexcept {
 	callAsync([this] { save(); });
 }

@@ -83,7 +83,7 @@ private:
 	void add(const tstring& x);
 
 	// ClientManagerListener
-	virtual void on(ClientManagerListener::IncomingSearch, const string& s) throw();
+	virtual void on(ClientManagerListener::IncomingSearch, const string& s) noexcept;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_SPY_FRAME_H)

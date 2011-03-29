@@ -249,16 +249,16 @@ private:
 	WidgetResultsPtr getUserList() { return results; }
 
 	// SearchManagerListener
-	virtual void on(SearchManagerListener::SR, const SearchResultPtr& aResult) throw();
+	virtual void on(SearchManagerListener::SR, const SearchResultPtr& aResult) noexcept;
 	void addResult(SearchInfo* si);
 
 	// SettingsManagerListener
-	virtual void on(SettingsManagerListener::SearchTypesChanged) throw();
+	virtual void on(SettingsManagerListener::SearchTypesChanged) noexcept;
 
 	// ClientManagerListener
-	virtual void on(ClientConnected, Client* c) throw();
-	virtual void on(ClientUpdated, Client* c) throw();
-	virtual void on(ClientDisconnected, Client* c) throw();
+	virtual void on(ClientConnected, Client* c) noexcept;
+	virtual void on(ClientUpdated, Client* c) noexcept;
+	virtual void on(ClientDisconnected, Client* c) noexcept;
 
 	void onHubAdded(HubInfo* info);
 	void onHubChanged(HubInfo* info);

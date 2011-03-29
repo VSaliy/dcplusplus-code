@@ -188,7 +188,7 @@ string MappingManager::deviceString(Mapper& mapper) const {
 	return '"' + name + '"';
 }
 
-void MappingManager::on(TimerManagerListener::Minute, uint64_t tick) throw() {
+void MappingManager::on(TimerManagerListener::Minute, uint64_t tick) noexcept {
 	if(tick >= renewal && !busy.test_and_set())
 		start();
 }

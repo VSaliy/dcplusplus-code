@@ -22,18 +22,20 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/smart_ptr/detail/atomic_count.hpp>
 
+#include "noexcept.h"
+
 namespace dcpp {
 
 template<typename T>
 class intrusive_ptr_base
 {
 public:
-	bool unique() throw() {
+	bool unique() noexcept {
 		return (ref == 1);
 	}
 
 protected:
-	intrusive_ptr_base() throw() : ref(0) { }
+	intrusive_ptr_base() noexcept : ref(0) { }
 
 private:
 	friend void intrusive_ptr_add_ref(intrusive_ptr_base* p) { ++p->ref; }

@@ -764,29 +764,29 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 	return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
 }
 
-void HubFrame::on(Connecting, Client*) throw() {
+void HubFrame::on(Connecting, Client*) noexcept {
 	tstring hubUrl = Text::toT(client->getHubUrl());
 	callAsync([this, hubUrl]() { addStatus(boost::str(TF_("Connecting to %1%...") % hubUrl), true); });
 	callAsync([this, hubUrl]() { GCC_WTF->setText(hubUrl); });
 }
-void HubFrame::on(Connected, Client*) throw() {
+void HubFrame::on(Connected, Client*) noexcept {
 	callAsync(std::bind(&HubFrame::onConnected, this));
 }
-void HubFrame::on(UserUpdated, Client*, const OnlineUser& user) throw() {
+void HubFrame::on(UserUpdated, Client*, const OnlineUser& user) noexcept {
 	addTask(UPDATE_USER_JOIN, user);
 }
-void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) throw() {
+void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) noexcept {
 	for(OnlineUserList::const_iterator i = aList.begin(); i != aList.end(); ++i) {
 		tasks.add(UPDATE_USER, new UserTask(*(*i)));
 	}
 	updateUsers = true;
 }
 
-void HubFrame::on(ClientListener::UserRemoved, Client*, const OnlineUser& user) throw() {
+void HubFrame::on(ClientListener::UserRemoved, Client*, const OnlineUser& user) noexcept {
 	addTask(REMOVE_USER, user);
 }
 
-void HubFrame::on(Redirect, Client*, const string& line) throw() {
+void HubFrame::on(Redirect, Client*, const string& line) noexcept {
 	if(ClientManager::getInstance()->isConnected(line)) {
 		callAsync(std::bind(&HubFrame::addStatus, this, T_("Redirect request received to a hub that's already connected"), true));
 		return;
@@ -799,16 +799,16 @@ void HubFrame::on(Redirect, Client*, const string& line) throw() {
 	}
 }
 
-void HubFrame::on(Failed, Client*, const string& line) throw() {
+void HubFrame::on(Failed, Client*, const string& line) noexcept {
 	callAsync(std::bind(&HubFrame::addStatus, this, Text::toT(line), true));
 	callAsync(std::bind(&HubFrame::onDisconnected, this));
 }
 
-void HubFrame::on(GetPassword, Client*) throw() {
+void HubFrame::on(GetPassword, Client*) noexcept {
 	callAsync(std::bind(&HubFrame::onGetPassword, this));
 }
 
-void HubFrame::on(HubUpdated, Client*) throw() {
+void HubFrame::on(HubUpdated, Client*) noexcept {
 	string hubName = client->getHubName();
 	if(!client->getHubDescription().empty()) {
 		hubName += " - " + client->getHubDescription();
@@ -824,7 +824,7 @@ void HubFrame::on(HubUpdated, Client*) throw() {
 	callAsync([this, hubNameT]() { GCC_WTF->setText(hubNameT); });
 }
 
-void HubFrame::on(Message, Client*, const ChatMessage& message) throw() {
+void HubFrame::on(Message, Client*, const ChatMessage& message) noexcept {
 	if(message.to && message.replyTo) {
 		callAsync(std::bind(&HubFrame::onPrivateMessage, this,
 			message.from->getUser(), message.to->getUser(), message.replyTo->getUser(),
@@ -835,15 +835,15 @@ void HubFrame::on(Message, Client*, const ChatMessage& message) throw() {
 	}
 }
 
-void HubFrame::on(StatusMessage, Client*, const string& line, int statusFlags) throw() {
+void HubFrame::on(StatusMessage, Client*, const string& line, int statusFlags) noexcept {
 	onStatusMessage(line, statusFlags);
 }
 
-void HubFrame::on(NickTaken, Client*) throw() {
+void HubFrame::on(NickTaken, Client*) noexcept {
 	callAsync(std::bind(&HubFrame::addStatus, this, T_("Your nick was already taken, please change to something else!"), true));
 }
 
-void HubFrame::on(SearchFlood, Client*, const string& line) throw() {
+void HubFrame::on(SearchFlood, Client*, const string& line) noexcept {
 	onStatusMessage(str(F_("Search spam detected from %1%") % line), ClientListener::FLAG_IS_SPAM);
 }
 
@@ -896,10 +896,10 @@ tstring HubFrame::getStatusAverageShared() const {
 	return str(TF_("Average: %1%") % Text::toT(Util::formatBytes(userCount > 0 ? available / userCount : 0)));
 }
 
-void HubFrame::on(FavoriteManagerListener::UserAdded, const FavoriteUser& /*aUser*/) throw() {
+void HubFrame::on(FavoriteManagerListener::UserAdded, const FavoriteUser& /*aUser*/) noexcept {
 	resortForFavsFirst();
 }
-void HubFrame::on(FavoriteManagerListener::UserRemoved, const FavoriteUser& /*aUser*/) throw() {
+void HubFrame::on(FavoriteManagerListener::UserRemoved, const FavoriteUser& /*aUser*/) noexcept {
 	resortForFavsFirst();
 }
 

@@ -240,7 +240,7 @@ void RichTextBox::addTextSteady( const tstring & txtRaw, std::size_t len ) {
 	redraw();
 }
 
-void RichTextBox::findText(tstring const& needle) throw() {
+void RichTextBox::findText(tstring const& needle) {
 	// The code here is slightly longer than a pure getText/STL approach
 	// might allow, but it also ducks entirely the line-endings debacle.
 	int max = length();

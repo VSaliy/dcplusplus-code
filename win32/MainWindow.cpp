@@ -760,7 +760,7 @@ void MainWindow::statusMessage(time_t t, const string& m) {
 	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString(t) + "] " + message));
 }
 
-void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) throw() {
+void MainWindow::on(LogManagerListener::Message, time_t t, const string& m) noexcept {
 	callAsync(std::bind(&MainWindow::statusMessage, this, t, m));
 }
 
@@ -1120,7 +1120,7 @@ void MainWindow::handleOpenDownloadsDir() {
 	WinUtil::openFile(Text::toT(SETTING(DOWNLOAD_DIRECTORY)));
 }
 
-void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/, const string&, bool) throw() {
+void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/, const string&, bool) noexcept {
 	try {
 		SimpleXML xml;
 		xml.fromXML(versionInfo);
@@ -1403,20 +1403,20 @@ void MainWindow::handleWhatsThis() {
 	sendMessage(WM_SYSCOMMAND, SC_CONTEXTHELP);
 }
 
-void MainWindow::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw() {
+void MainWindow::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) noexcept {
 	versionInfo += string((const char*)buf, len);
 }
 
- void MainWindow::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) throw() {
+ void MainWindow::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) noexcept {
  	if (Connected)
  		versionInfo = Util::emptyString;
  }
 
-void MainWindow::on(PartialList, const HintedUser& aUser, const string& text) throw() {
+void MainWindow::on(PartialList, const HintedUser& aUser, const string& text) noexcept {
 	callAsync([this, aUser, text] { DirectoryListingFrame::openWindow(getTabView(), aUser, text, 0); });
 }
 
-void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) throw() {
+void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) noexcept {
 	if (qi->isSet(QueueItem::FLAG_CLIENT_VIEW)) {
 		if (qi->isSet(QueueItem::FLAG_USER_LIST)) {
 			tstring file = Text::toT(qi->getListName());
@@ -1432,7 +1432,7 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 	}
 }
 
-void MainWindow::on(WindowManagerListener::Window, const string& id, const WindowParams& params) throw() {
+void MainWindow::on(WindowManagerListener::Window, const string& id, const WindowParams& params) noexcept {
 	if(0);
 #define compare_id(frame) else if(frame::id == id) callAsync([this, params] { frame::parseWindowParams(getTabView(), params); })
 	compare_id(HubFrame);

@@ -662,17 +662,17 @@ private:
 		updateStatus();
 	}
 
-	virtual void on(AddedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
+	virtual void on(AddedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) noexcept {
 		if(upload == in_UL)
 			callAsync(std::bind(&ThisType::onAddedFile, this, file, entry));
 	}
 
-	virtual void on(AddedUser, bool upload, const HintedUser& user, const FinishedUserItemPtr& entry) throw() {
+	virtual void on(AddedUser, bool upload, const HintedUser& user, const FinishedUserItemPtr& entry) noexcept {
 		if(upload == in_UL)
 			callAsync(std::bind(&ThisType::onAddedUser, this, user, entry));
 	}
 
-	virtual void on(UpdatedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) throw() {
+	virtual void on(UpdatedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) noexcept {
 		if(upload == in_UL) {
 			if(bOnlyFull && entry->isFull())
 				callAsync(std::bind(&ThisType::onAddedFile, this, file, entry));
@@ -681,22 +681,22 @@ private:
 		}
 	}
 
-	virtual void on(UpdatedUser, bool upload, const HintedUser& user) throw() {
+	virtual void on(UpdatedUser, bool upload, const HintedUser& user) noexcept {
 		if(upload == in_UL)
 			callAsync(std::bind(&ThisType::onUpdatedUser, this, user));
 	}
 
-	virtual void on(RemovedFile, bool upload, const string& file) throw() {
+	virtual void on(RemovedFile, bool upload, const string& file) noexcept {
 		if(upload == in_UL)
 			callAsync(std::bind(&ThisType::onRemovedFile, this, file));
 	}
 
-	virtual void on(RemovedUser, bool upload, const HintedUser& user) throw() {
+	virtual void on(RemovedUser, bool upload, const HintedUser& user) noexcept {
 		if(upload == in_UL)
 			callAsync(std::bind(&ThisType::onRemovedUser, this, user));
 	}
 
-	virtual void on(RemovedAll, bool upload) throw() {
+	virtual void on(RemovedAll, bool upload) noexcept {
 		if(upload == in_UL)
 			callAsync(std::bind(&ThisType::onRemovedAll, this));
 	}

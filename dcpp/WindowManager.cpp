@@ -38,7 +38,7 @@ WindowManager::WindowManager() {
 	SettingsManager::getInstance()->addListener(this);
 }
 
-WindowManager::~WindowManager() throw() {
+WindowManager::~WindowManager() {
 	SettingsManager::getInstance()->removeListener(this);
 }
 
@@ -220,7 +220,7 @@ void WindowManager::addTag(SimpleXML& xml, const WindowInfo& info) const {
 	}
 }
 
-void WindowManager::on(SettingsManagerListener::Load, SimpleXML& xml) throw() {
+void WindowManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
 	Lock l(cs);
 	clear();
 
@@ -241,7 +241,7 @@ void WindowManager::on(SettingsManagerListener::Load, SimpleXML& xml) throw() {
 	}
 }
 
-void WindowManager::on(SettingsManagerListener::Save, SimpleXML& xml) throw() {
+void WindowManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcept {
 	Lock l(cs);
 
 	xml.addTag("Windows");

@@ -31,7 +31,7 @@ public:
 
 	typedef X<0> Window;
 
-	virtual void on(Window, const string&, const WindowParams&) throw() = 0;
+	virtual void on(Window, const string&, const WindowParams&) noexcept = 0;
 };
 
 } // namespace dcpp

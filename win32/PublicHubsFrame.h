@@ -135,11 +135,11 @@ private:
 
 	void onFinished(const tstring& s, bool success);
 
-	virtual void on(DownloadStarting, const string& l) throw();
-	virtual void on(DownloadFailed, const string& l) throw();
-	virtual void on(DownloadFinished, const string& l, bool fromCoral) throw();
-	virtual void on(LoadedFromCache, const string& l, const string& d) throw();
-	virtual void on(Corrupted, const string& l) throw();
+	virtual void on(DownloadStarting, const string& l) noexcept;
+	virtual void on(DownloadFailed, const string& l) noexcept;
+	virtual void on(DownloadFinished, const string& l, bool fromCoral) noexcept;
+	virtual void on(LoadedFromCache, const string& l, const string& d) noexcept;
+	virtual void on(Corrupted, const string& l) noexcept;
 };
 
 #endif // !defined(PUBLIC_HUBS_FRM_H)

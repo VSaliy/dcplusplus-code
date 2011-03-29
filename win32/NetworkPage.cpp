@@ -208,10 +208,10 @@ void NetworkPage::detectionFinished() {
 	detectNow->setEnabled(true);
 }
 
-void NetworkPage::on(Message, const string& message) throw() {
+void NetworkPage::on(Message, const string& message) noexcept {
 	callAsync(std::bind(&NetworkPage::addLogLine, this, Text::toT(message)));
 }
 
-void NetworkPage::on(Finished) throw() {
+void NetworkPage::on(Finished) noexcept {
 	callAsync(std::bind(&NetworkPage::detectionFinished, this));
 }

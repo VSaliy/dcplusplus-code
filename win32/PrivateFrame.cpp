@@ -300,15 +300,15 @@ PrivateFrame::UserInfoList PrivateFrame::selectedUsersImpl() {
 	return UserInfoList(1, &replyTo);
 }
 
-void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
+void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) noexcept {
 	if(replyTo.getUser() == aUser.getUser())
 		callAsync(std::bind(&PrivateFrame::updateOnlineStatus, this));
 }
-void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
+void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) noexcept {
 	if(replyTo.getUser() == aUser)
 		callAsync(std::bind(&PrivateFrame::updateOnlineStatus, this));
 }
-void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
+void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) noexcept {
 	if(replyTo.getUser() == aUser)
 		callAsync(std::bind(&PrivateFrame::updateOnlineStatus, this));
 }

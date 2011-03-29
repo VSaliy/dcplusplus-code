@@ -184,7 +184,7 @@ void ThrottleManager::shutdown() {
 }
 
 // TimerManagerListener
-void ThrottleManager::on(TimerManagerListener::Second, uint64_t /* aTick */) throw()
+void ThrottleManager::on(TimerManagerListener::Second, uint64_t /* aTick */) noexcept
 {
 	int newSlots = SettingsManager::getInstance()->get(getCurSetting(SettingsManager::SLOTS));
 	if(newSlots != SETTING(SLOTS)) {

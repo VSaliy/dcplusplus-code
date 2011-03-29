@@ -520,23 +520,23 @@ void PublicHubsFrame::onFinished(const tstring& s, bool success) {
 	listsGrid->setEnabled(true);
 }
 
-void PublicHubsFrame::on(DownloadStarting, const string& l) throw() {
+void PublicHubsFrame::on(DownloadStarting, const string& l) noexcept {
 	callAsync(std::bind(&dwt::StatusBar::setText, status, STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), false));
 }
 
-void PublicHubsFrame::on(DownloadFailed, const string& l) throw() {
+void PublicHubsFrame::on(DownloadFailed, const string& l) noexcept {
 	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Download failed: %1%") % Text::toT(l)), false));
 }
 
-void PublicHubsFrame::on(DownloadFinished, const string& l, bool fromCoral) throw() {
+void PublicHubsFrame::on(DownloadFinished, const string& l, bool fromCoral) noexcept {
 	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Hub list downloaded%1% (%2%)") % (fromCoral ? T_(" from Coral") : Util::emptyStringT) % Text::toT(l)), true));
 }
 
-void PublicHubsFrame::on(LoadedFromCache, const string& l, const string& d) throw() {
+void PublicHubsFrame::on(LoadedFromCache, const string& l, const string& d) noexcept {
 	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Locally cached (as of %1%) version of the hub list loaded (%2%)") % Text::toT(d) % Text::toT(l)), true));
 }
 
-void PublicHubsFrame::on(Corrupted, const string& l) throw() {
+void PublicHubsFrame::on(Corrupted, const string& l) noexcept {
 	if(l.empty()) {
 		callAsync(std::bind(&PublicHubsFrame::onFinished, this, T_("Cached hub list is corrupted or unsupported"), false));
 	} else {

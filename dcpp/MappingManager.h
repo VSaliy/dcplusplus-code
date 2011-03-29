@@ -51,7 +51,7 @@ private:
 	uint64_t renewal; /// when the next renewal should happen, if requested by the mapper.
 
 	MappingManager() : busy(false), renewal(0) { }
-	virtual ~MappingManager() throw() { join(); }
+	virtual ~MappingManager() { join(); }
 
 	int run();
 
@@ -59,7 +59,7 @@ private:
 	void log(const string& message);
 	string deviceString(Mapper& mapper) const;
 
-	void on(TimerManagerListener::Minute, uint64_t tick) throw();
+	void on(TimerManagerListener::Minute, uint64_t tick) noexcept;
 };
 
 } // namespace dcpp

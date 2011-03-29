@@ -275,24 +275,24 @@ private:
 	void addTask(int type, Task* ui);
 	void execTasks();
 
-	virtual void on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) throw();
-	virtual void on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) throw();
-	virtual void on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) throw();
-	virtual void on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) throw();
+	virtual void on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) noexcept;
+	virtual void on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) noexcept;
+	virtual void on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) noexcept;
+	virtual void on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) noexcept;
 
-	virtual void on(DownloadManagerListener::Requesting, Download* aDownload) throw();
-	virtual void on(DownloadManagerListener::Complete, Download* aDownload) throw();
-	virtual void on(DownloadManagerListener::Failed, Download* aDownload, const string& aReason) throw();
-	virtual void on(DownloadManagerListener::Starting, Download* aDownload) throw();
-	virtual void on(DownloadManagerListener::Tick, const DownloadList& aDownload) throw();
+	virtual void on(DownloadManagerListener::Requesting, Download* aDownload) noexcept;
+	virtual void on(DownloadManagerListener::Complete, Download* aDownload) noexcept;
+	virtual void on(DownloadManagerListener::Failed, Download* aDownload, const string& aReason) noexcept;
+	virtual void on(DownloadManagerListener::Starting, Download* aDownload) noexcept;
+	virtual void on(DownloadManagerListener::Tick, const DownloadList& aDownload) noexcept;
 
-	virtual void on(UploadManagerListener::Starting, Upload* aUpload) throw();
-	virtual void on(UploadManagerListener::Tick, const UploadList& aUpload) throw();
-	virtual void on(UploadManagerListener::Complete, Upload* aUpload) throw();
+	virtual void on(UploadManagerListener::Starting, Upload* aUpload) noexcept;
+	virtual void on(UploadManagerListener::Tick, const UploadList& aUpload) noexcept;
+	virtual void on(UploadManagerListener::Complete, Upload* aUpload) noexcept;
 
-	virtual void on(QueueManagerListener::StatusUpdated, QueueItem*) throw();
-	virtual void on(QueueManagerListener::Removed, QueueItem*) throw();
-	virtual void on(QueueManagerListener::CRCFailed, Download* aDownload, const string& aReason) throw();
+	virtual void on(QueueManagerListener::StatusUpdated, QueueItem*) noexcept;
+	virtual void on(QueueManagerListener::Removed, QueueItem*) noexcept;
+	virtual void on(QueueManagerListener::CRCFailed, Download* aDownload, const string& aReason) noexcept;
 
 	void onTransferTick(Transfer* aTransfer, bool isDownload);
 	void onTransferComplete(Transfer* aTransfer, bool isDownload);

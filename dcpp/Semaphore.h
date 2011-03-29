@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#if !defined(SEMAPHORE_H)
-#define SEMAPHORE_H
+#ifndef DCPLUSPLUS_DCPP_SEMAPHORE_H
+#define DCPLUSPLUS_DCPP_SEMAPHORE_H
 
 #ifndef _WIN32
 #include <errno.h>
@@ -25,24 +25,26 @@
 #include <sys/time.h>
 #endif
 
+#include "noexcept.h"
+
 namespace dcpp {
 
 class Semaphore
 {
 #ifdef _WIN32
 public:
-	Semaphore() throw() {
+	Semaphore() noexcept {
 		h = CreateSemaphore(NULL, 0, MAXLONG, NULL);
 	}
 
-	void signal() throw() {
+	void signal() noexcept {
 		ReleaseSemaphore(h, 1, NULL);
 	}
 
-	bool wait() throw() { return WaitForSingleObject(h, INFINITE) == WAIT_OBJECT_0; }
-	bool wait(uint32_t millis) throw() { return WaitForSingleObject(h, millis) == WAIT_OBJECT_0; }
+	bool wait() noexcept { return WaitForSingleObject(h, INFINITE) == WAIT_OBJECT_0; }
+	bool wait(uint32_t millis) noexcept { return WaitForSingleObject(h, millis) == WAIT_OBJECT_0; }
 
-	~Semaphore() throw() {
+	~Semaphore() {
 		CloseHandle(h);
 	}
 
@@ -50,19 +52,19 @@ private:
 	HANDLE h;
 #else
 public:
-	Semaphore() throw() { 
+	Semaphore() noexcept { 
 		sem_init(&semaphore, 0, 0); 
 	}
 	
-	~Semaphore() throw() { 
+	~Semaphore() {
 		sem_destroy(&semaphore); 
 	}
 
-	void signal() throw() { 
+	void signal() noexcept { 
 		sem_post(&semaphore); 
 	}
 
-	bool wait() throw() {
+	bool wait() noexcept {
 		int retval = 0;
 		do {
 			retval = sem_wait(&semaphore);
@@ -71,7 +73,7 @@ public:
 		return true;
 	}
 
-	bool wait(uint32_t millis) throw() {
+	bool wait(uint32_t millis) noexcept {
 		timeval timev;
 		timespec t;
 		gettimeofday(&timev, NULL);
@@ -100,4 +102,4 @@ private:
 
 } // namespace dcpp
 
-#endif // !defined(SEMAPHORE_H)
+#endif // DCPLUSPLUS_DCPP_SEMAPHORE_H

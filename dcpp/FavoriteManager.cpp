@@ -55,7 +55,7 @@ FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), 
 	addBlacklist("openhublist.org", "Domain used for spam purposes.");
 }
 
-FavoriteManager::~FavoriteManager() throw() {
+FavoriteManager::~FavoriteManager() {
 	ClientManager::getInstance()->removeListener(this);
 	SettingsManager::getInstance()->removeListener(this);
 	if(c) {
@@ -309,7 +309,7 @@ private:
 	HubEntryList& publicHubs;
 };
 
-bool FavoriteManager::onHttpFinished(bool fromHttp) throw() {
+bool FavoriteManager::onHttpFinished(bool fromHttp) noexcept {
 	MemoryInputStream mis(downloadBuf);
 	bool success = true;
 
@@ -800,12 +800,12 @@ UserCommand::List FavoriteManager::getUserCommands(int ctx, const StringList& hu
 }
 
 // HttpConnectionListener
-void FavoriteManager::on(Data, HttpConnection*, const uint8_t* buf, size_t len) throw() {
+void FavoriteManager::on(Data, HttpConnection*, const uint8_t* buf, size_t len) noexcept {
 	if(useHttp)
 		downloadBuf.append((const char*)buf, len);
 }
 
-void FavoriteManager::on(Failed, HttpConnection*, const string& aLine) throw() {
+void FavoriteManager::on(Failed, HttpConnection*, const string& aLine) noexcept {
 	c->removeListener(this);
 	lastServer++;
 	running = false;
@@ -814,7 +814,7 @@ void FavoriteManager::on(Failed, HttpConnection*, const string& aLine) throw() {
 		fire(FavoriteManagerListener::DownloadFailed(), aLine);
 	}
 }
-void FavoriteManager::on(Complete, HttpConnection*, const string& aLine, bool fromCoral) throw() {
+void FavoriteManager::on(Complete, HttpConnection*, const string& aLine, bool fromCoral) noexcept {
 	bool parseSuccess = false;
 	c->removeListener(this);
 	if(useHttp) {
@@ -825,27 +825,27 @@ void FavoriteManager::on(Complete, HttpConnection*, const string& aLine, bool fr
 		fire(FavoriteManagerListener::DownloadFinished(), aLine, fromCoral);
 	}
 }
-void FavoriteManager::on(Redirected, HttpConnection*, const string& aLine) throw() {
+void FavoriteManager::on(Redirected, HttpConnection*, const string& aLine) noexcept {
 	if(useHttp)
 		fire(FavoriteManagerListener::DownloadStarting(), aLine);
 }
-void FavoriteManager::on(TypeNormal, HttpConnection*) throw() {
+void FavoriteManager::on(TypeNormal, HttpConnection*) noexcept {
 	if(useHttp)
 		listType = TYPE_NORMAL;
 }
-void FavoriteManager::on(TypeBZ2, HttpConnection*) throw() {
+void FavoriteManager::on(TypeBZ2, HttpConnection*) noexcept {
 	if(useHttp)
 		listType = TYPE_BZIP2;
 }
-void FavoriteManager::on(Retried, HttpConnection*, const bool Connected) throw() {
+void FavoriteManager::on(Retried, HttpConnection*, const bool Connected) noexcept {
 	if (Connected)
 		downloadBuf = Util::emptyString;
 }
 
-void FavoriteManager::on(UserUpdated, const OnlineUser& user) throw() {
+void FavoriteManager::on(UserUpdated, const OnlineUser& user) noexcept {
 	userUpdated(user);
 }
-void FavoriteManager::on(UserDisconnected, const UserPtr& user) throw() {
+void FavoriteManager::on(UserDisconnected, const UserPtr& user) noexcept {
 	bool isFav = false;
 	{
 		Lock l(cs);
@@ -860,7 +860,7 @@ void FavoriteManager::on(UserDisconnected, const UserPtr& user) throw() {
 		fire(FavoriteManagerListener::StatusChanged(), user);
 }
 
-void FavoriteManager::on(UserConnected, const UserPtr& user) throw() {
+void FavoriteManager::on(UserConnected, const UserPtr& user) noexcept {
 	bool isFav = false;
 	{
 		Lock l(cs);

@@ -268,24 +268,24 @@ private:
 	void onPrivateMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, bool hub, bool bot, const tstring& m);
 
 	// FavoriteManagerListener
-	virtual void on(FavoriteManagerListener::UserAdded, const FavoriteUser& /*aUser*/) throw();
-	virtual void on(FavoriteManagerListener::UserRemoved, const FavoriteUser& /*aUser*/) throw();
+	virtual void on(FavoriteManagerListener::UserAdded, const FavoriteUser& /*aUser*/) noexcept;
+	virtual void on(FavoriteManagerListener::UserRemoved, const FavoriteUser& /*aUser*/) noexcept;
 	void resortForFavsFirst(bool justDoIt = false);
 
 	// ClientListener
-	virtual void on(Connecting, Client*) throw();
-	virtual void on(Connected, Client*) throw();
-	virtual void on(UserUpdated, Client*, const OnlineUser&) throw();
-	virtual void on(UsersUpdated, Client*, const OnlineUserList&) throw();
-	virtual void on(ClientListener::UserRemoved, Client*, const OnlineUser&) throw();
-	virtual void on(Redirect, Client*, const string&) throw();
-	virtual void on(Failed, Client*, const string&) throw();
-	virtual void on(GetPassword, Client*) throw();
-	virtual void on(HubUpdated, Client*) throw();
-	virtual void on(Message, Client*, const ChatMessage&) throw();
-	virtual void on(StatusMessage, Client*, const string&, int = ClientListener::FLAG_NORMAL) throw();
-	virtual void on(NickTaken, Client*) throw();
-	virtual void on(SearchFlood, Client*, const string&) throw();
+	virtual void on(Connecting, Client*) noexcept;
+	virtual void on(Connected, Client*) noexcept;
+	virtual void on(UserUpdated, Client*, const OnlineUser&) noexcept;
+	virtual void on(UsersUpdated, Client*, const OnlineUserList&) noexcept;
+	virtual void on(ClientListener::UserRemoved, Client*, const OnlineUser&) noexcept;
+	virtual void on(Redirect, Client*, const string&) noexcept;
+	virtual void on(Failed, Client*, const string&) noexcept;
+	virtual void on(GetPassword, Client*) noexcept;
+	virtual void on(HubUpdated, Client*) noexcept;
+	virtual void on(Message, Client*, const ChatMessage&) noexcept;
+	virtual void on(StatusMessage, Client*, const string&, int = ClientListener::FLAG_NORMAL) noexcept;
+	virtual void on(NickTaken, Client*) noexcept;
+	virtual void on(SearchFlood, Client*, const string&) noexcept;
 	void onStatusMessage(const string& line, int flags);
 };
 

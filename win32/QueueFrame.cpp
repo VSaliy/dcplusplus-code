@@ -1070,41 +1070,41 @@ void QueueFrame::onRechecked(const string& target, const tstring& message) {
 		str(TF_("Integrity check: %1% (%2%)") % message % Text::toT(target)), false));
 }
 
-void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) throw() {
+void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) noexcept {
 	callAsync(std::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
 }
 
-void QueueFrame::on(QueueManagerListener::Removed, QueueItem* aQI) throw() {
+void QueueFrame::on(QueueManagerListener::Removed, QueueItem* aQI) noexcept {
 	callAsync(std::bind(&QueueFrame::onRemoved, this, aQI->getTarget()));
 }
 
-void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) throw() {
+void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) noexcept {
 	callAsync(std::bind(&QueueFrame::onRemoved, this, oldTarget));
 	callAsync(std::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
 }
 
-void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) throw() {
+void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) noexcept {
 	callAsync(std::bind(&QueueFrame::onUpdated, this, new QueueItem(*aQI)));
 }
 
-void QueueFrame::on(QueueManagerListener::RecheckStarted, const string& target) throw() {
+void QueueFrame::on(QueueManagerListener::RecheckStarted, const string& target) noexcept {
 	onRechecked(target, T_("Started..."));
 }
-void QueueFrame::on(QueueManagerListener::RecheckNoFile, const string& target) throw() {
+void QueueFrame::on(QueueManagerListener::RecheckNoFile, const string& target) noexcept {
 	onRechecked(target, T_("Unfinished file not found"));
 }
-void QueueFrame::on(QueueManagerListener::RecheckFileTooSmall, const string& target) throw() {
+void QueueFrame::on(QueueManagerListener::RecheckFileTooSmall, const string& target) noexcept {
 	onRechecked(target, T_("Unfinished file too small"));
 }
-void QueueFrame::on(QueueManagerListener::RecheckDownloadsRunning, const string& target) throw() {
+void QueueFrame::on(QueueManagerListener::RecheckDownloadsRunning, const string& target) noexcept {
 	onRechecked(target, T_("Downloads running, please disconnect them"));
 }
-void QueueFrame::on(QueueManagerListener::RecheckNoTree, const string& target) throw() {
+void QueueFrame::on(QueueManagerListener::RecheckNoTree, const string& target) noexcept {
 	onRechecked(target, T_("No full tree available"));
 }
-void QueueFrame::on(QueueManagerListener::RecheckAlreadyFinished, const string& target) throw() {
+void QueueFrame::on(QueueManagerListener::RecheckAlreadyFinished, const string& target) noexcept {
 	onRechecked(target, T_("File is already finished"));
 }
-void QueueFrame::on(QueueManagerListener::RecheckDone, const string& target) throw() {
+void QueueFrame::on(QueueManagerListener::RecheckDone, const string& target) noexcept {
 	onRechecked(target, T_("Done."));
 }

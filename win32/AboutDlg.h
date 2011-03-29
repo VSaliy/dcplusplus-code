@@ -42,10 +42,10 @@ private:
 
 	void layout();
 
-	virtual void on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw();
-	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) throw();
-	virtual void on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) throw();
-	virtual void on(HttpConnectionListener::Retried, HttpConnection* conn, const bool Connected) throw();		
+	virtual void on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) noexcept;
+	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) noexcept;
+	virtual void on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) noexcept;
+	virtual void on(HttpConnectionListener::Retried, HttpConnection* conn, const bool Connected) noexcept;		
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ABOUT_DLG_H)

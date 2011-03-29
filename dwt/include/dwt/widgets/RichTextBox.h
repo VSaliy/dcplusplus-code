@@ -128,7 +128,7 @@ public:
 
 	void addTextSteady ( const tstring & txtRaw, std::size_t len );
 
-	void findText(tstring const& needle) throw();
+	void findText(tstring const& needle);
 
 	void clearCurrentNeedle();
 
