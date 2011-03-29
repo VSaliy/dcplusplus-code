@@ -32,7 +32,7 @@ TimerManager::TimerManager() {
 	mtx.lock();
 }
 
-TimerManager::~TimerManager() throw() {
+TimerManager::~TimerManager() {
 	dcassert(listeners.size() == 0);
 }
 

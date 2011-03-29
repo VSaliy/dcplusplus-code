@@ -33,8 +33,8 @@ public:
 	typedef X<0> Message;
 	typedef X<1> Finished;
 
-	virtual void on(Message, const string&) throw() { }
-	virtual void on(Finished) throw() { }
+	virtual void on(Message, const string&) noexcept { }
+	virtual void on(Finished) noexcept { }
 };
 
 class ConnectivityManager : public Singleton<ConnectivityManager>, public Speaker<ConnectivityManagerListener>
@@ -49,7 +49,7 @@ private:
 	friend class MappingManager;
 	
 	ConnectivityManager();
-	virtual ~ConnectivityManager() throw() { }
+	virtual ~ConnectivityManager() { }
 
 	void mappingFinished(bool success);
 	void log(const string& msg);

@@ -272,9 +272,9 @@ private:
 	UserInfoList selectedUsersImpl();
 
 	// ClientManagerListener
-	virtual void on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw();
-	virtual void on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw();
-	virtual void on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw();
+	virtual void on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) noexcept;
+	virtual void on(ClientManagerListener::UserConnected, const UserPtr& aUser) noexcept;
+	virtual void on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) noexcept;
 };
 
 #endif

@@ -206,7 +206,7 @@ void SpyFrame::add(const tstring& x) {
 	setDirty(SettingsManager::BOLD_SEARCH_SPY);
 }
 
-void SpyFrame::on(ClientManagerListener::IncomingSearch, const string& s) throw() {
+void SpyFrame::on(ClientManagerListener::IncomingSearch, const string& s) noexcept {
 	if(bIgnoreTTH && s.compare(0, 4, "TTH:") == 0)
 		return;
 	tstring x = Text::toT(s);

@@ -502,51 +502,51 @@ UsersFrame::UserInfoList UsersFrame::selectedUsersImpl() const {
 	return usersFromTable(users);
 }
 
-void UsersFrame::on(UserAdded, const FavoriteUser& aUser) throw() {
+void UsersFrame::on(UserAdded, const FavoriteUser& aUser) noexcept {
 	callAsync(std::bind(&UsersFrame::addUser, this, aUser.getUser()));
 }
 
-void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) throw() {
+void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) noexcept {
 	callAsync(std::bind(&UsersFrame::updateUser, this, aUser.getUser()));
 }
 
-void UsersFrame::on(StatusChanged, const UserPtr& aUser) throw() {
+void UsersFrame::on(StatusChanged, const UserPtr& aUser) noexcept {
 	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
 }
 
-void UsersFrame::on(UserConnected, const UserPtr& aUser) throw() {
+void UsersFrame::on(UserConnected, const UserPtr& aUser) noexcept {
 	callAsync(std::bind(&UsersFrame::addUser, this, aUser));
 }
 
-void UsersFrame::on(UserUpdated, const UserPtr& aUser) throw() {
+void UsersFrame::on(UserUpdated, const UserPtr& aUser) noexcept {
 	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
 }
 
-void UsersFrame::on(UserDisconnected, const UserPtr& aUser) throw() {
+void UsersFrame::on(UserDisconnected, const UserPtr& aUser) noexcept {
 	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
 }
 
-void UsersFrame::on(WaitingAddFile, const HintedUser& aUser, const string&) throw() {
+void UsersFrame::on(WaitingAddFile, const HintedUser& aUser, const string&) noexcept {
 	callAsync(std::bind(&UsersFrame::addUser, this, aUser.user));
 }
 
-void UsersFrame::on(WaitingRemoveUser, const HintedUser& aUser) throw() {
+void UsersFrame::on(WaitingRemoveUser, const HintedUser& aUser) noexcept {
 	callAsync(std::bind(&UsersFrame::updateUser, this, aUser.user));
 }
 
-void UsersFrame::on(Added, QueueItem* qi) throw() {
+void UsersFrame::on(Added, QueueItem* qi) noexcept {
 	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
 		callAsync(std::bind(&UsersFrame::addUser, this, i->getUser().user));
 	}
 }
 
-void UsersFrame::on(SourcesUpdated, QueueItem* qi) throw() {
+void UsersFrame::on(SourcesUpdated, QueueItem* qi) noexcept {
 	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
 		callAsync(std::bind(&UsersFrame::updateUser, this, i->getUser().user));
 	}
 }
 
-void UsersFrame::on(Removed, QueueItem* qi) throw() {
+void UsersFrame::on(Removed, QueueItem* qi) noexcept {
 	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
 		callAsync(std::bind(&UsersFrame::updateUser, this, i->getUser().user));
 	}

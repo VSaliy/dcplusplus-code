@@ -144,11 +144,11 @@ void AboutDlg::layout() {
 	grid->resize(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }
 
-void AboutDlg::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) throw() {
+void AboutDlg::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) noexcept {
 	downBuf.append((char*)buf, len);
 }
 
-void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) throw() {
+void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) noexcept {
 	tstring x;
 	if(!downBuf.empty()) {
 		try {
@@ -169,12 +169,12 @@ void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const 
 	conn->removeListener(this);
 }
 
-void AboutDlg::on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) throw() {
+void AboutDlg::on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) noexcept {
 	callAsync(std::bind(&Label::setText, version, Text::toT(aLine)));
 	conn->removeListener(this);
 }
 
-void AboutDlg::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) throw() {
+void AboutDlg::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) noexcept {
 	if (Connected)
 		downBuf = Util::emptyString;
 }

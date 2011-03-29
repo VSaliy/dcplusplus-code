@@ -61,8 +61,8 @@ private:
 	void detectionFinished();
 
 	//ConnectivityManagerListener
-	virtual void on(Message, const string& message) throw();
-	virtual void on(Finished) throw();
+	virtual void on(Message, const string& message) noexcept;
+	virtual void on(Finished) noexcept;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_NETWORK_PAGE_H)

@@ -50,7 +50,7 @@ private:
 	TextBoxPtr pad;
 
 	void save();
-	virtual void on(SettingsManagerListener::Save, SimpleXML&) throw();
+	virtual void on(SettingsManagerListener::Save, SimpleXML&) noexcept;
 };
 
 #endif

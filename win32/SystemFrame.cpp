@@ -115,6 +115,6 @@ bool SystemFrame::handleDoubleClick(const dwt::MouseEvent& mouseEvent) {
 	return false;
 }
 
-void SystemFrame::on(Message, time_t t, const string& message) throw() {
+void SystemFrame::on(Message, time_t t, const string& message) noexcept {
 	callAsync(std::bind(&SystemFrame::addLine, this, t, Text::toT(message)));
 }

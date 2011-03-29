@@ -788,7 +788,7 @@ void SearchFrame::addTargetDirMenu(const MenuPtr& parent, const StringPairList& 
 	}
 }
 
-void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) throw() {
+void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) noexcept {
 	// Check that this is really a relevant search result...
 	{
 		Lock l(cs);
@@ -1099,18 +1099,18 @@ bool SearchFrame::handleSearchChar(int c) {
 	return c == VK_RETURN;
 }
 
-void SearchFrame::on(ClientConnected, Client* c) throw() {
+void SearchFrame::on(ClientConnected, Client* c) noexcept {
 	callAsync(std::bind(&SearchFrame::onHubAdded, this, new HubInfo(c)));
 }
 
-void SearchFrame::on(ClientUpdated, Client* c) throw() {
+void SearchFrame::on(ClientUpdated, Client* c) noexcept {
 	callAsync(std::bind(&SearchFrame::onHubChanged, this, new HubInfo(c)));
 }
 
-void SearchFrame::on(ClientDisconnected, Client* c) throw() {
+void SearchFrame::on(ClientDisconnected, Client* c) noexcept {
 	callAsync(std::bind(&SearchFrame::onHubRemoved, this, new HubInfo(c)));
 }
 
-void SearchFrame::on(SettingsManagerListener::SearchTypesChanged) throw() {
+void SearchFrame::on(SettingsManagerListener::SearchTypesChanged) noexcept {
 	callAsync(std::bind(&SearchFrame::searchTypesChanged, this));
 }

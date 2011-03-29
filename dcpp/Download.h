@@ -22,7 +22,7 @@ public:
 		FLAG_XML_BZ_LIST = 1 << 4
 	};
 
-	Download(UserConnection& conn, QueueItem& qi, const string& path, bool supportsTrees) throw();
+	Download(UserConnection& conn, QueueItem& qi, const string& path, bool supportsTrees) noexcept;
 
 	virtual void getParams(const UserConnection& aSource, StringMap& params);
 

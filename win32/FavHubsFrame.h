@@ -98,8 +98,8 @@ private:
 	void select(const FavoriteHubEntryList& entries);
 	void openSelected();
 
-	virtual void on(FavoriteAdded, const FavoriteHubEntryPtr e) throw();
-	virtual void on(FavoriteRemoved, const FavoriteHubEntryPtr e) throw();
+	virtual void on(FavoriteAdded, const FavoriteHubEntryPtr e) noexcept;
+	virtual void on(FavoriteRemoved, const FavoriteHubEntryPtr e) noexcept;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_FAV_HUBS_FRAME_H)

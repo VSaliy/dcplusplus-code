@@ -54,7 +54,7 @@ private:
 	bool handleDoubleClick(const dwt::MouseEvent& mouseEvent);
 
 	// LogManagerListener
-	virtual void on(Message, time_t t, const string& message) throw();
+	virtual void on(Message, time_t t, const string& message) noexcept;
 };
 
 #endif

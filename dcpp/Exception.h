@@ -25,12 +25,12 @@ class Exception : public std::exception
 {
 public:
 	Exception() { }
-	Exception(const string& aError) throw() : error(aError) { dcdrun(if(error.size()>0)) dcdebug("Thrown: %s\n", error.c_str()); }
+	Exception(const string& aError) : error(aError) { dcdrun(if(error.size()>0)) dcdebug("Thrown: %s\n", error.c_str()); }
 
 	virtual const char* what() const throw() { return getError().c_str(); }
 
 	virtual ~Exception() throw() { }
-	virtual const string& getError() const throw() { return error; }
+	virtual const string& getError() const { return error; }
 protected:
 	string error;
 };
@@ -39,8 +39,8 @@ protected:
 
 #define STANDARD_EXCEPTION(name) class name : public Exception { \
 public:\
-	name() throw() : Exception(#name) { } \
-	name(const string& aError) throw() : Exception(#name ": " + aError) { } \
+	name() : Exception(#name) { } \
+	name(const string& aError) : Exception(#name ": " + aError) { } \
 	virtual ~name() throw() { } \
 }
 
@@ -48,8 +48,8 @@ public:\
 
 #define STANDARD_EXCEPTION(name) class name : public Exception { \
 public:\
-	name() throw() : Exception() { } \
-	name(const string& aError) throw() : Exception(aError) { } \
+	name() : Exception() { } \
+	name(const string& aError) : Exception(aError) { } \
 	virtual ~name() throw() { } \
 }
 #endif

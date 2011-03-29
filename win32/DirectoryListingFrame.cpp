@@ -1247,15 +1247,15 @@ DirectoryListingFrame::UserInfoList DirectoryListingFrame::selectedUsersImpl() {
 	return UserInfoList(1, &user);
 }
 
-void DirectoryListingFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) throw() {
+void DirectoryListingFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) noexcept {
 	if(aUser.getUser() == dl->getUser().user)
 		callAsync(std::bind(&DirectoryListingFrame::updateTitle, this));
 }
-void DirectoryListingFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) throw() {
+void DirectoryListingFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) noexcept {
 	if(aUser == dl->getUser().user)
 		callAsync(std::bind(&DirectoryListingFrame::updateTitle, this));
 }
-void DirectoryListingFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) throw() {
+void DirectoryListingFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) noexcept {
 	if(aUser == dl->getUser().user)
 		callAsync(std::bind(&DirectoryListingFrame::updateTitle, this));
 }

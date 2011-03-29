@@ -53,29 +53,19 @@ namespace dwt {
 class DWTException : public std::runtime_error {
 public:
 
-	DWTException( const std::string& err ) : std::runtime_error(err) {
-
-	}
-
-	virtual ~DWTException() throw() {
-	};
-
+	DWTException( const std::string& err ) : std::runtime_error(err) { }
+	virtual ~DWTException() throw() { };
 private:
 };
 
 /// Utility class for handling win32 errors - don't use it directly...
 class Win32Exception : public DWTException {
 public:
-	Win32Exception() : DWTException(translateLastError()), code(::GetLastError()) {
-
-	}
-
-	Win32Exception(const std::string& msg) : DWTException(msg + " (" + translateLastError() + ")"), code(::GetLastError()) {
-
-	}
+	Win32Exception() : DWTException(translateLastError()), code(::GetLastError()) { }
+	Win32Exception(const std::string& msg) : DWTException(msg + " (" + translateLastError() + ")"), code(::GetLastError()) { }
+	virtual ~Win32Exception() throw() { }
 
 	DWORD getCode() { return code; }
-
 private:
 	DWORD code;
 

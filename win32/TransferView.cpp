@@ -692,7 +692,7 @@ void TransferView::DownloadInfo::update() {
 	columns[DOWNLOAD_COLUMN_DONE] = Text::toT(Util::formatBytes(done));
 }
 
-void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) throw() {
+void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCqi) noexcept {
 	UpdateInfo* ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
 
 	ui->setStatus(ConnectionInfo::STATUS_WAITING);
@@ -700,7 +700,7 @@ void TransferView::on(ConnectionManagerListener::Added, ConnectionQueueItem* aCq
 	addTask(CONNECTIONS_ADD, ui);
 }
 
-void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) throw() {
+void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueItem* aCqi) noexcept {
 	UpdateInfo* ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
 
 	ui->setStatusString((aCqi->getState() == ConnectionQueueItem::CONNECTING) ? T_("Connecting") : T_("Waiting to retry"));
@@ -708,11 +708,11 @@ void TransferView::on(ConnectionManagerListener::StatusChanged, ConnectionQueueI
 	addTask(CONNECTIONS_UPDATE, ui);
 }
 
-void TransferView::on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) throw() {
+void TransferView::on(ConnectionManagerListener::Removed, ConnectionQueueItem* aCqi) noexcept {
 	addTask(CONNECTIONS_REMOVE, new UpdateInfo(aCqi->getUser(), aCqi->getDownload()));
 }
 
-void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) throw() {
+void TransferView::on(ConnectionManagerListener::Failed, ConnectionQueueItem* aCqi, const string& aReason) noexcept {
 	UpdateInfo* ui = new UpdateInfo(aCqi->getUser(), aCqi->getDownload());
 	if(aCqi->getUser().user->isSet(User::OLD_CLIENT)) {
 		ui->setStatusString(T_("Remote client does not fully support TTH - cannot download"));
@@ -749,7 +749,7 @@ void TransferView::starting(UpdateInfo* ui, Transfer* t) {
 	ui->setIP(Text::toT(uc.getRemoteIp()));
 }
 
-void TransferView::on(DownloadManagerListener::Requesting, Download* d) throw() {
+void TransferView::on(DownloadManagerListener::Requesting, Download* d) noexcept {
 	UpdateInfo* ui = new UpdateInfo(d->getHintedUser(), true);
 
 	starting(ui, d);
@@ -761,7 +761,7 @@ void TransferView::on(DownloadManagerListener::Requesting, Download* d) throw() 
 	addTask(DOWNLOADS_ADD_USER, new TickInfo(d->getPath()));
 }
 
-void TransferView::on(DownloadManagerListener::Starting, Download* d) throw() {
+void TransferView::on(DownloadManagerListener::Starting, Download* d) noexcept {
 	UpdateInfo* ui = new UpdateInfo(d->getHintedUser(), true);
 
 	tstring statusString;
@@ -796,7 +796,7 @@ void TransferView::onTransferTick(Transfer* t, bool isDownload) {
 	tasks.add(CONNECTIONS_UPDATE, ui);
 }
 
-void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) throw()  {
+void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noexcept  {
 	for(DownloadList::const_iterator i = dl.begin(); i != dl.end(); ++i) {
 		onTransferTick(*i, true);
 	}
@@ -830,11 +830,11 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) thr
 	callAsync(std::bind(&TransferView::execTasks, this));
 }
 
-void TransferView::on(DownloadManagerListener::Failed, Download* d, const string& aReason) throw() {
+void TransferView::on(DownloadManagerListener::Failed, Download* d, const string& aReason) noexcept {
 	onFailed(d, aReason);
 }
 
-void TransferView::on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) throw() {
+void TransferView::on(QueueManagerListener::CRCFailed, Download* d, const string& aReason) noexcept {
 	onFailed(d, aReason);
 }
 
@@ -848,7 +848,7 @@ void TransferView::onFailed(Download* d, const string& aReason) {
 	addTask(DOWNLOADS_REMOVE_USER, new TickInfo(d->getPath()));
 }
 
-void TransferView::on(UploadManagerListener::Starting, Upload* u) throw() {
+void TransferView::on(UploadManagerListener::Starting, Upload* u) noexcept {
 	UpdateInfo* ui = new UpdateInfo(u->getHintedUser(), false);
 
 	starting(ui, u);
@@ -875,7 +875,7 @@ void TransferView::on(UploadManagerListener::Starting, Upload* u) throw() {
 	addTask(CONNECTIONS_UPDATE, ui);
 }
 
-void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) throw() {
+void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) noexcept {
 	for(UploadList::const_iterator i = ul.begin(); i != ul.end(); ++i) {
 		onTransferTick(*i, false);
 	}
@@ -883,13 +883,13 @@ void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) throw()
 	callAsync(std::bind(&TransferView::execTasks, this));
 }
 
-void TransferView::on(DownloadManagerListener::Complete, Download* d) throw() {
+void TransferView::on(DownloadManagerListener::Complete, Download* d) noexcept {
 	onTransferComplete(d, true);
 
 	addTask(DOWNLOADS_REMOVE_USER, new TickInfo(d->getPath()));
 }
 
-void TransferView::on(UploadManagerListener::Complete, Upload* aUpload) throw() {
+void TransferView::on(UploadManagerListener::Complete, Upload* aUpload) noexcept {
 	onTransferComplete(aUpload, false);
 }
 
@@ -907,12 +907,12 @@ void TransferView::ConnectionInfo::disconnect() {
 	ConnectionManager::getInstance()->disconnect(user, download);
 }
 
-void TransferView::on(QueueManagerListener::StatusUpdated, QueueItem* qi) throw() {
+void TransferView::on(QueueManagerListener::StatusUpdated, QueueItem* qi) noexcept {
 	if(qi->isFinished() || qi->getPriority() == QueueItem::PAUSED || qi->countOnlineUsers() == 0) {
 		addTask(DOWNLOADS_REMOVED, new TickInfo(qi->getTarget()));
 	}
 }
 
-void TransferView::on(QueueManagerListener::Removed, QueueItem* qi) throw() {
+void TransferView::on(QueueManagerListener::Removed, QueueItem* qi) noexcept {
 	addTask(DOWNLOADS_REMOVED, new TickInfo(qi->getTarget()));
 }

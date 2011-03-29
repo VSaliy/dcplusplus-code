@@ -427,7 +427,7 @@ void FavHubsFrame::openSelected() {
 	}
 }
 
-void FavHubsFrame::on(FavoriteAdded, const FavoriteHubEntryPtr e) throw() {
+void FavHubsFrame::on(FavoriteAdded, const FavoriteHubEntryPtr e) noexcept {
 	{
 		StateKeeper keeper(hubs, false);
 		refresh();
@@ -435,6 +435,6 @@ void FavHubsFrame::on(FavoriteAdded, const FavoriteHubEntryPtr e) throw() {
 	hubs->ensureVisible(hubs->findData(reinterpret_cast<LPARAM>(e)));
 }
 
-void FavHubsFrame::on(FavoriteRemoved, const FavoriteHubEntryPtr e) throw() {
+void FavHubsFrame::on(FavoriteRemoved, const FavoriteHubEntryPtr e) noexcept {
 	hubs->erase(hubs->findData(reinterpret_cast<LPARAM>(e)));
 }

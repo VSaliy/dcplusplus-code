@@ -47,7 +47,7 @@ DownloadManager::DownloadManager() {
 	TimerManager::getInstance()->addListener(this);
 }
 
-DownloadManager::~DownloadManager() throw() {
+DownloadManager::~DownloadManager() {
 	TimerManager::getInstance()->removeListener(this);
 	while(true) {
 		{
@@ -59,7 +59,7 @@ DownloadManager::~DownloadManager() throw() {
 	}
 }
 
-void DownloadManager::on(TimerManagerListener::Second, uint64_t aTick) throw() {
+void DownloadManager::on(TimerManagerListener::Second, uint64_t aTick) noexcept {
 	typedef vector<pair<string, UserPtr> > TargetList;
 	TargetList dropTargets;
 
@@ -191,7 +191,7 @@ void DownloadManager::checkDownloads(UserConnection* aConn) {
 	aConn->send(d->getCommand(aConn->isSet(UserConnection::FLAG_SUPPORTS_ZLIB_GET)));
 }
 
-void DownloadManager::on(AdcCommand::SND, UserConnection* aSource, const AdcCommand& cmd) throw() {
+void DownloadManager::on(AdcCommand::SND, UserConnection* aSource, const AdcCommand& cmd) noexcept {
 	if(aSource->getState() != UserConnection::STATE_SND) {
 		dcdebug("DM::onFileLength Bad state, ignoring\n");
 		return;
@@ -275,7 +275,7 @@ void DownloadManager::startData(UserConnection* aSource, int64_t start, int64_t 
 	}
 }
 
-void DownloadManager::on(UserConnectionListener::Data, UserConnection* aSource, const uint8_t* aData, size_t aLen) throw() {
+void DownloadManager::on(UserConnectionListener::Data, UserConnection* aSource, const uint8_t* aData, size_t aLen) noexcept {
 	Download* d = aSource->getDownload();
 	dcassert(d != NULL);
 
@@ -364,7 +364,7 @@ void DownloadManager::logDownload(UserConnection* aSource, Download* d) {
 	LOG(LogManager::DOWNLOAD, params);
 }
 
-void DownloadManager::on(UserConnectionListener::MaxedOut, UserConnection* aSource) throw() {
+void DownloadManager::on(UserConnectionListener::MaxedOut, UserConnection* aSource) noexcept {
 	noSlots(aSource);
 }
 
@@ -424,12 +424,12 @@ void DownloadManager::removeDownload(Download* d) {
 	}
 }
 
-void DownloadManager::on(UserConnectionListener::FileNotAvailable, UserConnection* aSource) throw() {
+void DownloadManager::on(UserConnectionListener::FileNotAvailable, UserConnection* aSource) noexcept {
 	fileNotAvailable(aSource);
 }
 
 /** @todo Handle errors better */
-void DownloadManager::on(AdcCommand::STA, UserConnection* aSource, const AdcCommand& cmd) throw() {
+void DownloadManager::on(AdcCommand::STA, UserConnection* aSource, const AdcCommand& cmd) noexcept {
 	if(cmd.getParameters().size() < 2) {
 		aSource->disconnect();
 		return;
@@ -462,7 +462,7 @@ void DownloadManager::on(AdcCommand::STA, UserConnection* aSource, const AdcComm
 	aSource->disconnect();
 }
 
-void DownloadManager::on(UserConnectionListener::Updated, UserConnection* aSource) throw() {
+void DownloadManager::on(UserConnectionListener::Updated, UserConnection* aSource) noexcept {
 	{
 		Lock l(cs);
 		UserConnectionList::iterator i = find(idlers.begin(), idlers.end(), aSource);

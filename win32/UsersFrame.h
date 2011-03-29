@@ -161,23 +161,23 @@ private:
 	UserInfoList selectedUsersImpl() const;
 
 	// FavoriteManagerListener
-	virtual void on(UserAdded, const FavoriteUser& aUser) throw();
-	virtual void on(UserRemoved, const FavoriteUser& aUser) throw();
-	virtual void on(StatusChanged, const UserPtr& aUser) throw();
+	virtual void on(UserAdded, const FavoriteUser& aUser) noexcept;
+	virtual void on(UserRemoved, const FavoriteUser& aUser) noexcept;
+	virtual void on(StatusChanged, const UserPtr& aUser) noexcept;
 
 	// ClientManagerListner
-	virtual void on(UserConnected, const UserPtr& aUser) throw();
-	virtual void on(UserUpdated, const UserPtr& aUser) throw();
-	virtual void on(UserDisconnected, const UserPtr& aUser) throw();
+	virtual void on(UserConnected, const UserPtr& aUser) noexcept;
+	virtual void on(UserUpdated, const UserPtr& aUser) noexcept;
+	virtual void on(UserDisconnected, const UserPtr& aUser) noexcept;
 
 	// UploadManagerListener
-	virtual void on(WaitingAddFile, const HintedUser&, const string&) throw();
-	virtual void on(WaitingRemoveUser, const HintedUser&) throw();
+	virtual void on(WaitingAddFile, const HintedUser&, const string&) noexcept;
+	virtual void on(WaitingRemoveUser, const HintedUser&) noexcept;
 
 	// QueueManagerListener
-	virtual void on(Added, QueueItem*) throw();
-	virtual void on(SourcesUpdated, QueueItem*) throw();
-	virtual void on(Removed, QueueItem*) throw();
+	virtual void on(Added, QueueItem*) noexcept;
+	virtual void on(SourcesUpdated, QueueItem*) noexcept;
+	virtual void on(Removed, QueueItem*) noexcept;
 };
 
 #endif // !defined(USERS_FRAME_H)

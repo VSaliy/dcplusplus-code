@@ -706,7 +706,7 @@ bool Menu::handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrap
 
 	// try to get item info
 	if(::GetMenuItemInfo(handle(), wrapper->index, TRUE, &info) == FALSE)
-		throw DWTException ( "Couldn't get item info in Menu::handleMeasureItem" );
+		throw Win32Exception ( "Couldn't get item info in Menu::handleMeasureItem" );
 
 	// check if item is owner drawn
 	dwtassert( ( info.fType & MFT_OWNERDRAW ) != 0, _T( "Not an owner-drawn item in Menu::handleMeasureItem" ) );
