@@ -32,12 +32,8 @@
 #ifndef DWT_SPLITTER_H
 #define DWT_SPLITTER_H
 
-#include "Container.h"
-#include "ToolTip.h"
-#include <dwt/Texts.h>
-#include <dwt/dwt_vsstyle.h>
-#include "../Theme.h"
-#include "../resources/Brush.h"
+#include "Control.h"
+#include <dwt/Theme.h>
 
 namespace dwt {
 
@@ -81,12 +77,8 @@ public:
 	typedef std::function<void(double)> OnMoveFunction;
 	void onMove(OnMoveFunction func);
 
-	virtual void layout() {
-		// TODO rect = r;
-		BaseType::layout();
-	}
-
 	virtual Point getPreferredSize() { return horizontal ? Point(0, thickness()) : Point(thickness(), 0); }
+
 protected:
 	explicit Splitter(Widget* parent);
 
@@ -100,8 +92,6 @@ private:
 	bool hovering;
 	bool moving;
 	bool horizontal;
-
-	Rectangle rect;
 
 	OnMoveFunction onMoveFunc;
 

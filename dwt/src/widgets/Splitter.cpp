@@ -31,6 +31,12 @@
 
 #include <dwt/widgets/Splitter.h>
 
+#include <dwt/dwt_vsstyle.h>
+#include <dwt/Texts.h>
+#include <dwt/WidgetCreator.h>
+#include <dwt/resources/Brush.h>
+#include <dwt/widgets/ToolTip.h>
+
 namespace dwt {
 
 void Splitter::create(const Seed& cs) {

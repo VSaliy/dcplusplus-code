@@ -448,7 +448,7 @@ void DirectoryListingFrame::handleFindToggle() {
 		grid->row(0).mode = GridInfo::AUTO;
 		searchBox->setFocus();
 	}
-	layout();
+	grid->layout();
 }
 
 void DirectoryListingFrame::refreshTree(const tstring& root) {
