@@ -32,6 +32,7 @@
 #ifndef DWT_SPLITTERCONTAINER_H_
 #define DWT_SPLITTERCONTAINER_H_
 
+#include <dwt/forward.h>
 #include "Container.h"
 
 namespace dwt {
@@ -40,6 +41,10 @@ class SplitterContainer :
 	public Container
 {
 	typedef Container BaseType;
+
+	friend class WidgetCreator<SplitterContainer>;
+	friend class Splitter;
+
 public:
 	/// Class type
 	typedef SplitterContainer ThisType;
@@ -63,14 +68,13 @@ public:
 	virtual void layout();
 
 private:
-protected:
-	friend class WidgetCreator<SplitterContainer>;
-
 	explicit SplitterContainer( Widget * parent ) : BaseType(parent), horizontal(false), startPos(0.5) { }
 
 	size_t ensureSplitters();
 
-	void onMove(SplitterPtr splitter, double newPos);
+	double getMaxSize(SplitterPtr splitter);
+
+	void onMove();
 
 	bool horizontal;
 	double startPos;

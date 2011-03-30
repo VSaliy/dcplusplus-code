@@ -35,7 +35,7 @@ private:
 	GroupBoxPtr themeGroup;
 	RadioButtonPtr browserTheme;
 	SliderPtr tabWidth;
-	GroupBoxPtr previewGroup;
+	GridPtr previewGrid;
 
 	static ListItem listItems[];
 	TablePtr options;

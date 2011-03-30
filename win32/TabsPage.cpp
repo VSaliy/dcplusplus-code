@@ -49,7 +49,7 @@ buttonStyle(0),
 themeGroup(0),
 browserTheme(0),
 tabWidth(0),
-previewGroup(0),
+previewGrid(0),
 options(0)
 {
 	setHelpId(IDH_TABSPAGE);
@@ -125,9 +125,18 @@ options(0)
 		tabWidth->onScrollHorz(std::bind(&TabsPage::createPreview, this));
 	}
 
-	previewGroup = grid->addChild(GroupBox::Seed(T_("Preview")));
-	previewGroup->setHelpId(IDH_SETTINGS_TAB_PREVIEW);
-	createPreview();
+	{
+		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Preview")));
+		group->setHelpId(IDH_SETTINGS_TAB_PREVIEW);
+
+		previewGrid = group->addChild(Grid::Seed(1, 1));
+		previewGrid->column(0).mode = GridInfo::FILL;
+		previewGrid->row(0).size = 100;
+		previewGrid->row(0).mode = GridInfo::STATIC;
+		previewGrid->row(0).align = GridInfo::STRETCH;
+
+		createPreview();
+	}
 
 	options = grid->addChild(GroupBox::Seed(T_("Tab highlight on content change")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
 
@@ -153,13 +162,12 @@ void TabsPage::write() {
 }
 
 void TabsPage::createPreview() {
-	GridPtr cur = previewGroup->addChild(Grid::Seed(1, 1));
-	cur->column(0).mode = GridInfo::FILL;
-	cur->row(0).size = 100;
-	cur->row(0).mode = GridInfo::STATIC;
-	cur->row(0).align = GridInfo::STRETCH;
+	auto previous = *previewGrid->getChildren<TabView>().first;
+	if(previous)
+		previous->close();
 
 	TabView::Seed seed = WinUtil::Seeds::tabs;
+	seed.style &= ~TCS_TOOLTIPS;
 	seed.widthConfig = tabWidth->getPosition();
 	seed.style |= WS_DISABLED;
 	if(dcppDraw->getChecked()) {
@@ -172,10 +180,10 @@ void TabsPage::createPreview() {
 	if(buttonStyle->getChecked())
 		seed.style |= TCS_BUTTONS;
 	seed.closeIcon = WinUtil::tabIcon(IDI_EXIT);
-	TabViewPtr tabs = cur->addChild(seed);
+	TabViewPtr tabs = previewGrid->addChild(seed);
 
-	auto makeTab = [&tabs](const tstring& text) -> ContainerPtr {
-		Container::Seed cs;
+	Container::Seed cs;
+	auto makeTab = [&tabs, &cs](const tstring& text) -> ContainerPtr {
 		cs.caption = text;
 		ContainerPtr ret = dwt::WidgetCreator<Container>::create(tabs, cs);
 		// the tab control sends WM_ACTIVATE messages; catch them, otherwise the dialog gets messed up.
@@ -192,8 +200,5 @@ void TabsPage::createPreview() {
 	tabs->setSelected(1);
 	tabs->mark(highlighted);
 
-	// refresh
-	dwt::Rectangle rect = previewGroup->getWindowRect();
-	rect.pos -= grid->getWindowRect().pos; // screen->client coords
-	previewGroup->resize(rect);
+	previewGrid->layout();
 }

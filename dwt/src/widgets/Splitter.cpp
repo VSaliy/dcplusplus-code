@@ -35,6 +35,7 @@
 #include <dwt/Texts.h>
 #include <dwt/WidgetCreator.h>
 #include <dwt/resources/Brush.h>
+#include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/ToolTip.h>
 
 namespace dwt {
@@ -52,6 +53,10 @@ void Splitter::create(const Seed& cs) {
 	onLeftMouseUp([this](const MouseEvent&) { return GCC_WTF->handleLButtonUp(); });
 
 	WidgetCreator<ToolTip>::create(this, ToolTip::Seed())->setText(Texts::get(Texts::resize));
+}
+
+SplitterContainerPtr Splitter::getParent() const {
+	return static_cast<SplitterContainerPtr>(BaseType::getParent());
 }
 
 void Splitter::handlePainting(PaintCanvas& canvas) {
@@ -84,11 +89,10 @@ bool Splitter::handleMouseMove(const MouseEvent& mouseEvent) {
 		});
 	}
 
-	if(moving && mouseEvent.ButtonPressed == MouseEvent::LEFT && onMoveFunc) {
+	if(moving && mouseEvent.ButtonPressed == MouseEvent::LEFT) {
 		ClientCoordinate cc(mouseEvent.pos, getParent());
-		double pos = horizontal ? cc.y() : cc.x();
-		double size = horizontal ? getParent()->getClientSize().y : getParent()->getClientSize().x;
-		onMoveFunc(pos / size);
+		pos = (horizontal ? cc.y() : cc.x()) / getParent()->getMaxSize(this);
+		getParent()->onMove();
 	}
 
 	return true;

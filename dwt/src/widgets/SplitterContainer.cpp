@@ -30,11 +30,13 @@
 */
 
 #include <dwt/widgets/SplitterContainer.h>
+
 #include <dwt/widgets/Splitter.h>
 #include <dwt/util/HoldResize.h>
 
 #include <boost/next_prior.hpp>
 #include <boost/range/distance.hpp>
+#include <boost/range/algorithm/find.hpp>
 #include <boost/range/algorithm/for_each.hpp>
 
 namespace dwt {
@@ -44,6 +46,7 @@ namespace {
 	bool isNotSplitter(Widget *w) { return !isSplitter(w); }
 }
 
+using boost::find;
 using boost::for_each;
 using boost::next;
 
@@ -135,18 +138,35 @@ size_t SplitterContainer::ensureSplitters() {
 	for_each(children, [&](Widget *w) { isSplitter(w) ? ns++ : nc++; });
 
 	while(ns < nc - 1) {
-		auto splitter = addChild(Splitter::Seed(startPos, horizontal));
-		splitter->onMove([=] (double pos) { onMove(splitter, pos); });
+		addChild(Splitter::Seed(startPos, horizontal));
 		ns++;
 	}
 
 	return ns;
 }
 
-void SplitterContainer::onMove(SplitterPtr splitter, double pos)
-{
-	// TODO Check that one splitter does not move past another
-	splitter->setRelativePos(pos);
+double SplitterContainer::getMaxSize(SplitterPtr splitter) {
+	double ret = splitter->thickness();
+
+	auto children = getChildren<Widget>();
+	auto splitters = getChildren<Splitter>();
+
+	splitters.second = find(splitters, splitter);
+	auto n = boost::distance(splitters);
+
+	bool horizontal = splitter->horizontal;
+	auto pos = 0;
+	for_each(children, [&](Widget* w) {
+		if((pos == n || pos == n + 1) && w) {
+			ret += horizontal ? w->getClientSize().y : w->getClientSize().x;
+		}
+		++pos;
+	});
+
+	return ret;
+}
+
+void SplitterContainer::onMove() {
 	layout();
 	redraw(true);
 }

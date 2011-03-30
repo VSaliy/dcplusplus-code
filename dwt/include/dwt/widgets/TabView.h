@@ -51,7 +51,7 @@ namespace dwt {
 class TabView :
 	public CommonControl,
 	// Aspects
-	private AspectCollection<TabView, int>,
+	public AspectCollection<TabView, int>,
 	public AspectSelection< TabView, int >,
 	public AspectText< TabView >,
 	public Taskbar
