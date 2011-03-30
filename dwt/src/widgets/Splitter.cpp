@@ -92,6 +92,8 @@ bool Splitter::handleMouseMove(const MouseEvent& mouseEvent) {
 	if(moving && mouseEvent.ButtonPressed == MouseEvent::LEFT) {
 		ClientCoordinate cc(mouseEvent.pos, getParent());
 		pos = (horizontal ? cc.y() : cc.x()) / getParent()->getMaxSize(this);
+		if(pos < 0.) pos = 0.;
+		if(pos > 1.) pos = 1.;
 		getParent()->onMove();
 	}
 
