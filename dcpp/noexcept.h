@@ -19,7 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_NOEXCEPT_H
 #define DCPLUSPLUS_DCPP_NOEXCEPT_H
 
-// for compilers that don't support noexcept, use a noexcept specifier
+// for compilers that don't support noexcept, use an exception specifier
 
 #ifdef __GNUC__
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6) // GCC 4.6 is the first GCC to implement noexcept.
@@ -32,7 +32,7 @@
 #elif defined(_MSC_VER)
 
 #ifndef noexcept
-#define noexcept FIX_ME_BECAUSE_I_DON_T_KNOW
+#define noexcept throw()
 #endif
 
 #endif

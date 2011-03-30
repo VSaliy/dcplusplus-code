@@ -48,7 +48,7 @@ namespace dwt {
 const TCHAR TabView::windowClass[] = WC_TABCONTROL;
 
 TabView::Seed::Seed(unsigned widthConfig_, bool toggleActive_, bool ctrlTab_) :
-BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
+BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS |
 	TCS_FOCUSNEVER | TCS_HOTTRACK | TCS_MULTILINE | TCS_OWNERDRAWFIXED | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
 tabStyle(WinDefault),
 font(new Font(DefaultGuiFont)),

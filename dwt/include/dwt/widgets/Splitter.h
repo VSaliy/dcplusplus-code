@@ -32,6 +32,7 @@
 #ifndef DWT_SPLITTER_H
 #define DWT_SPLITTER_H
 
+#include <dwt/forward.h>
 #include "Control.h"
 #include <dwt/Theme.h>
 
@@ -43,6 +44,7 @@ class Splitter :
 	typedef Control BaseType;
 
 	friend class WidgetCreator<Splitter>;
+	friend class SplitterContainer;
 
 public:
 	/// Class type
@@ -74,8 +76,7 @@ public:
 
 	void create(const Seed& cs = Seed());
 
-	typedef std::function<void(double)> OnMoveFunction;
-	void onMove(OnMoveFunction func);
+	SplitterContainerPtr getParent() const;
 
 	virtual Point getPreferredSize() { return horizontal ? Point(0, thickness()) : Point(thickness(), 0); }
 
@@ -92,8 +93,6 @@ private:
 	bool hovering;
 	bool moving;
 	bool horizontal;
-
-	OnMoveFunction onMoveFunc;
 
 	void handlePainting(PaintCanvas& canvas);
 
@@ -126,10 +125,6 @@ hovering(false),
 moving(false),
 horizontal(false)
 {
-}
-
-inline void Splitter::onMove(OnMoveFunction onMove) {
-	onMoveFunc = onMove;
 }
 
 }
