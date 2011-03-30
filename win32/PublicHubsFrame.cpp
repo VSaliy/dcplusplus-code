@@ -268,7 +268,7 @@ void PublicHubsFrame::updateList() {
 			blacklist->setEnabled(false);
 			blacklist->setVisible(false);
 			upper->row(0).mode = GridInfo::STATIC;
-			layout();
+			upper->layout();
 		}
 	} else {
 		blacklist->setText(str(TF_(
@@ -282,7 +282,7 @@ void PublicHubsFrame::updateList() {
 		blacklist->setEnabled(true);
 		blacklist->setVisible(true);
 		upper->row(0).mode = GridInfo::AUTO;
-		layout();
+		upper->layout();
 	}
 
 	users = 0;
