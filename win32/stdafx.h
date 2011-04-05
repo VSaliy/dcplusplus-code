@@ -19,10 +19,11 @@
 #ifndef DCPLUSPLUS_WIN32_STDAFX_H
 #define DCPLUSPLUS_WIN32_STDAFX_H
 
-#include "compiler.h"
+#include <dcpp/compiler.h>
 
 #include <dcpp/stdinc.h>
 #include <dcpp/DCPlusPlus.h>
+#include <dcpp/w.h>
 
 using namespace dcpp;
 

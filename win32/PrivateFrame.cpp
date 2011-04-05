@@ -123,16 +123,16 @@ online(replyTo.getUser().user->isOnline())
 	createChat(this);
 	chat->setHelpId(IDH_PM_CHAT);
 	addWidget(chat);
-	chat->onContextMenu(std::bind(&PrivateFrame::handleChatContextMenu, this, _1));
+	chat->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleChatContextMenu(sc); });
 
 	message->setHelpId(IDH_PM_MESSAGE);
 	addWidget(message, true);
-	message->onKeyDown(std::bind(&PrivateFrame::handleMessageKeyDown, this, _1));
-	message->onSysKeyDown(std::bind(&PrivateFrame::handleMessageKeyDown, this, _1));
-	message->onChar(std::bind(&PrivateFrame::handleMessageChar, this, _1));
+	message->onKeyDown([this](int c) { return GCC_WTF->handleMessageKeyDown(c); });
+	message->onSysKeyDown([this](int c) { return GCC_WTF->handleMessageKeyDown(c); });
+	message->onChar([this](int c) { return GCC_WTF->handleMessageChar(c); });
 
 	initStatus();
-	status->onDblClicked(STATUS_STATUS, std::bind(&PrivateFrame::openLog, this));
+	status->onDblClicked(STATUS_STATUS, [this] { openLog(); });
 
 	updateOnlineStatus();
 
@@ -144,7 +144,7 @@ online(replyTo.getUser().user->isOnline())
 
 	ClientManager::getInstance()->addListener(this);
 
-	callAsync(std::bind(&PrivateFrame::updateOnlineStatus, this));
+	callAsync([this] { updateOnlineStatus(); });
 
 	frames.insert(std::make_pair(replyTo.getUser(), this));
 
@@ -302,15 +302,15 @@ PrivateFrame::UserInfoList PrivateFrame::selectedUsersImpl() {
 
 void PrivateFrame::on(ClientManagerListener::UserUpdated, const OnlineUser& aUser) noexcept {
 	if(replyTo.getUser() == aUser.getUser())
-		callAsync(std::bind(&PrivateFrame::updateOnlineStatus, this));
+		callAsync([this] { updateOnlineStatus(); });
 }
 void PrivateFrame::on(ClientManagerListener::UserConnected, const UserPtr& aUser) noexcept {
 	if(replyTo.getUser() == aUser)
-		callAsync(std::bind(&PrivateFrame::updateOnlineStatus, this));
+		callAsync([this] { updateOnlineStatus(); });
 }
 void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) noexcept {
 	if(replyTo.getUser() == aUser)
-		callAsync(std::bind(&PrivateFrame::updateOnlineStatus, this));
+		callAsync([this] { updateOnlineStatus(); });
 }
 
 void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {

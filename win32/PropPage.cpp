@@ -87,8 +87,8 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 
 	list->setColumnWidth(0, LVSCW_AUTOSIZE);
 
-	list->onHelp(std::bind(&PropPage::handleListHelp, this, list, _2));
-	list->setHelpId(std::bind(&PropPage::handleListHelpId, this, list, _1));
+	list->onHelp([this, list](Widget*, unsigned id) { handleListHelp(list, id); });
+	list->setHelpId([this, list](unsigned id) { handleListHelpId(list, id); });
 }
 
 void PropPage::write(const ItemList& items) {
@@ -118,20 +118,18 @@ void PropPage::write(TablePtr list) {
 		settings->set(SettingsManager::IntSetting(listItems[i].setting), list->isChecked(i));
 }
 
-void PropPage::handleBrowseDir(const Item& i) {
-	TextBoxPtr box = static_cast<TextBoxPtr>(i.widget);
+void PropPage::handleBrowseDir(TextBoxPtr box, int setting) {
 	tstring dir = box->getText();
 	if(dir.empty())
-		dir = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)i.setting));
+		dir = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)setting));
 	if(FolderDialog(this).open(dir))
 		box->setText(dir);
 }
 
-void PropPage::handleBrowseFile(const Item& i) {
-	TextBoxPtr box = static_cast<TextBoxPtr>(i.widget);
+void PropPage::handleBrowseFile(TextBoxPtr box, int setting) {
 	tstring target = box->getText();
 	if(target.empty())
-		target = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)i.setting));
+		target = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)setting));
 	if(LoadDialog(this).setInitialDirectory(target).open(target))
 		box->setText(target);
 }

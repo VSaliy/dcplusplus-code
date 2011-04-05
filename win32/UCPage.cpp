@@ -53,23 +53,23 @@ commands(0)
 	grid->setWidget(commands, 0, 0, 1, 5);
 
 	ButtonPtr button = grid->addChild(Button::Seed(T_("&Add")));
-	button->onClicked(std::bind(&UCPage::handleAddClicked, this));
+	button->onClicked([this] { handleAddClicked(); });
 	button->setHelpId(IDH_SETTINGS_UC_ADD);
 
 	button = grid->addChild(Button::Seed(T_("&Change")));
-	button->onClicked(std::bind(&UCPage::handleChangeClicked, this));
+	button->onClicked([this] { handleChangeClicked(); });
 	button->setHelpId(IDH_SETTINGS_UC_CHANGE);
 
 	button = grid->addChild(Button::Seed(T_("Move &Up")));
-	button->onClicked(std::bind(&UCPage::handleMoveUpClicked, this));
+	button->onClicked([this] { handleMoveUpClicked(); });
 	button->setHelpId(IDH_SETTINGS_UC_MOVE_UP);
 
 	button = grid->addChild(Button::Seed(T_("Move &Down")));
-	button->onClicked(std::bind(&UCPage::handleMoveDownClicked, this));
+	button->onClicked([this] { handleMoveDownClicked(); });
 	button->setHelpId(IDH_SETTINGS_UC_MOVE_DOWN);
 
 	button = grid->addChild(Button::Seed(T_("&Remove")));
-	button->onClicked(std::bind(&UCPage::handleRemoveClicked, this));
+	button->onClicked([this] { handleRemoveClicked(); });
 	button->setHelpId(IDH_SETTINGS_UC_REMOVE);
 
 	WinUtil::makeColumns(commands, columns, 3);
@@ -81,8 +81,8 @@ commands(0)
 			addEntry(uc);
 	}
 
-	commands->onDblClicked(std::bind(&UCPage::handleDoubleClick, this));
-	commands->onKeyDown(std::bind(&UCPage::handleKeyDown, this, _1));
+	commands->onDblClicked([this] { handleDoubleClick(); });
+	commands->onKeyDown([this](int c) { return handleKeyDown(c); });
 }
 
 UCPage::~UCPage() {

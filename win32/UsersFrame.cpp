@@ -94,27 +94,28 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 {
 	filterGrid = addChild(Grid::Seed(1, 5));
 
+	auto updated = [this] { handleFilterUpdated(); };
 	filter = filterGrid->addChild(WinUtil::Seeds::textBox);
-	filter->onUpdated(std::bind(&UsersFrame::handleFilterUpdated, this));
+	filter->onUpdated(updated);
 	filterGrid->column(0).mode = GridInfo::FILL;
 
 	showOnline = filterGrid->addChild(WinUtil::Seeds::checkBox);
 	showOnline->setText(_T("Online"));
 	showOnline->setChecked(); // TODO save / restore last state
-	showOnline->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
+	showOnline->onClicked(updated);
 
 	showFavs = filterGrid->addChild(WinUtil::Seeds::checkBox);
 	showFavs->setText(_T("Favorite"));
 	showFavs->setChecked();	// TODO save / restore last state
-	showFavs->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
+	showFavs->onClicked(updated);
 
 	showQueue = filterGrid->addChild(WinUtil::Seeds::checkBox);
 	showQueue->setText(_T("Pending download"));
-	showQueue->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
+	showQueue->onClicked(updated);
 
 	showWaiting = filterGrid->addChild(WinUtil::Seeds::checkBox);
 	showWaiting->setText(_T("Pending upload"));
-	showWaiting->onClicked(std::bind(&UsersFrame::handleFilterUpdated, this));
+	showWaiting->onClicked(updated);
 
 	splitter = addChild(SplitterContainer::Seed(0.7));
 
@@ -136,12 +137,12 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 		users->setSort(COLUMN_NICK);
 
 		// TODO check default (browse vs get)
-		users->onDblClicked(std::bind(&UsersFrame::handleGetList, this));
-		users->onKeyDown(std::bind(&UsersFrame::handleKeyDown, this, _1));
-		users->onContextMenu(std::bind(&UsersFrame::handleContextMenu, this, _1));
-		users->onSelectionChanged(std::bind(&UsersFrame::handleSelectionChanged, this));
+		users->onDblClicked([this] { GCC_WTF->handleGetList(); });
+		users->onKeyDown([this](int c) { return handleKeyDown(c); });
+		users->onContextMenu([this](dwt::ScreenCoordinate pt) { return handleContextMenu(pt); });
+		users->onSelectionChanged([this] { handleSelectionChanged(); });
 		users->setSmallImageList(userIcons);
-		users->onLeftMouseDown(std::bind(&UsersFrame::handleClick, this, _1));
+		users->onLeftMouseDown([this](const dwt::MouseEvent &me) { return handleClick(me); });
 		prepareUserList(users);
 	}
 
@@ -416,8 +417,8 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 		menu->setTitle((sel == 1) ? escapeMenu(users->getSelectedData()->getText(COLUMN_NICK)) : str(TF_("%1% users") % sel));
 		appendUserItems(getParent(), menu);
 		menu->appendSeparator();
-		menu->appendItem(T_("&Description"), std::bind(&UsersFrame::handleDescription, this));
-		menu->appendItem(T_("&Remove"), std::bind(&UsersFrame::handleRemove, this));
+		menu->appendItem(T_("&Description"), [this] { handleDescription(); });
+		menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 
 		menu->open(pt);
 
@@ -503,51 +504,56 @@ UsersFrame::UserInfoList UsersFrame::selectedUsersImpl() const {
 }
 
 void UsersFrame::on(UserAdded, const FavoriteUser& aUser) noexcept {
-	callAsync(std::bind(&UsersFrame::addUser, this, aUser.getUser()));
+	auto u = aUser.getUser();
+	callAsync([=] { addUser(u); });
 }
 
 void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) noexcept {
-	callAsync(std::bind(&UsersFrame::updateUser, this, aUser.getUser()));
+	auto u = aUser.getUser();
+	callAsync([=] { updateUser(u); });
 }
 
 void UsersFrame::on(StatusChanged, const UserPtr& aUser) noexcept {
-	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
+	callAsync([=] { updateUser(aUser); });
 }
 
 void UsersFrame::on(UserConnected, const UserPtr& aUser) noexcept {
-	callAsync(std::bind(&UsersFrame::addUser, this, aUser));
+	callAsync([=] { addUser(aUser); });
 }
 
 void UsersFrame::on(UserUpdated, const UserPtr& aUser) noexcept {
-	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
+	callAsync([=] { updateUser(aUser); });
 }
 
 void UsersFrame::on(UserDisconnected, const UserPtr& aUser) noexcept {
-	callAsync(std::bind(&UsersFrame::updateUser, this, aUser));
+	callAsync([=] { updateUser(aUser); });
 }
 
 void UsersFrame::on(WaitingAddFile, const HintedUser& aUser, const string&) noexcept {
-	callAsync(std::bind(&UsersFrame::addUser, this, aUser.user));
+	callAsync([=] { addUser(aUser); });
 }
 
 void UsersFrame::on(WaitingRemoveUser, const HintedUser& aUser) noexcept {
-	callAsync(std::bind(&UsersFrame::updateUser, this, aUser.user));
+	callAsync([=] { updateUser(aUser); });
 }
 
 void UsersFrame::on(Added, QueueItem* qi) noexcept {
 	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
-		callAsync(std::bind(&UsersFrame::addUser, this, i->getUser().user));
+		auto u = i->getUser().user;
+		callAsync([=] { addUser(u); });
 	}
 }
 
 void UsersFrame::on(SourcesUpdated, QueueItem* qi) noexcept {
 	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
-		callAsync(std::bind(&UsersFrame::updateUser, this, i->getUser().user));
+		auto u = i->getUser().user;
+		callAsync([=] { updateUser(u); });
 	}
 }
 
 void UsersFrame::on(Removed, QueueItem* qi) noexcept {
 	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
-		callAsync(std::bind(&UsersFrame::updateUser, this, i->getUser().user));
+		auto u = i->getUser().user;
+		callAsync([=] { updateUser(u); });
 	}
 }

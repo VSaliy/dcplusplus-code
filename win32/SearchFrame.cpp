@@ -143,20 +143,20 @@ droppedResults(0)
 
 		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i)
 			searchBox->addValue(*i);
-		searchBox->getTextBox()->onKeyDown(std::bind(&SearchFrame::handleSearchKeyDown, this, _1));
-		searchBox->getTextBox()->onChar(std::bind(&SearchFrame::handleSearchChar, this, _1));
+		searchBox->getTextBox()->onKeyDown([this](int c) { return handleSearchKeyDown(c); });
+		searchBox->getTextBox()->onChar([this] (int c) { return handleSearchChar(c); });
 
 		Button::Seed bs = WinUtil::Seeds::button;
 		bs.caption = T_("Purge");
 		ButtonPtr button = cur->addChild(bs);
 		button->setHelpId(IDH_SEARCH_PURGE);
-		button->onClicked(std::bind(&SearchFrame::handlePurgeClicked, this));
+		button->onClicked([this] { handlePurgeClicked(); });
 
 		bs.style |= BS_DEFPUSHBUTTON;
 		bs.caption = T_("Search");
 		button = cur->addChild(bs);
 		button->setHelpId(IDH_SEARCH_SEARCH);
-		button->onClicked(std::bind(&SearchFrame::runSearch, this));
+		button->onClicked([this] { runSearch(); });
 
 		gs.caption = T_("Size");
 		group = options->addChild(gs);
@@ -207,19 +207,19 @@ droppedResults(0)
 		slots = cur->addChild(cs);
 		slots->setHelpId(IDH_SEARCH_SLOTS);
 		slots->setChecked(onlyFree);
-		slots->onClicked(std::bind(&SearchFrame::handleSlotsClicked, this));
+		slots->onClicked([this] { handleSlotsClicked(); });
 
 		cs.caption = T_("Hide files already in share");
 		filter = cur->addChild(cs);
 		filter->setHelpId(IDH_SEARCH_SHARE);
 		filter->setChecked(filterShared);
-		filter->onClicked(std::bind(&SearchFrame::handleFilterClicked, this));
+		filter->onClicked([this] { handleFilterClicked(); });
 
 		cs.caption = T_("Merge results for the same file");
 		merge = cur->addChild(cs);
 		merge->setHelpId(IDH_SEARCH_MERGE);
 		merge->setChecked(bMerge);
-		merge->onClicked(std::bind(&SearchFrame::handleMergeClicked, this));
+		merge->onClicked([this] { handleMergeClicked(); });
 
 		gs.caption = T_("Hubs");
 		group = options->addChild(gs);
@@ -233,7 +233,7 @@ droppedResults(0)
 
 		hubs->createColumns(TStringList(1));
 
-		hubs->onRaw(std::bind(&SearchFrame::handleHubItemChanged, this, _1, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
+		hubs->onRaw([this](WPARAM w, LPARAM l) { return handleHubItemChanged(w, l); }, dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 
 		hubs->insert(new HubInfo(Util::emptyStringT, T_("Only where I'm op"), false));
 		hubs->setChecked(0, false);
@@ -245,13 +245,13 @@ droppedResults(0)
 	results->setSmallImageList(WinUtil::fileImages);
 	WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
 
-	results->onDblClicked(std::bind(&SearchFrame::handleDownload, this));
-	results->onKeyDown(std::bind(&SearchFrame::handleKeyDown, this, _1));
-	results->onContextMenu(std::bind(&SearchFrame::handleContextMenu, this, _1));
+	results->onDblClicked([this] { handleDownload(); });
+	results->onKeyDown([this](int c) { return handleKeyDown(c); });
+	results->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
 
 	showUI = addChild(WinUtil::Seeds::splitCheckBox);
 	showUI->setChecked(true);
-	showUI->onClicked(std::bind(&SearchFrame::handleShowUIClicked, this));
+	showUI->onClicked([this] { handleShowUIClicked(); });
 
 	initStatus();
 	status->setSize(STATUS_SHOW_UI, showUI->getPreferredSize().x);
@@ -716,11 +716,11 @@ MenuPtr SearchFrame::makeMenu() {
 	menu->setTitle(checkTTH.hasTTH ? escapeMenu(checkTTH.name) : str(TF_("%1% results") % results->countSelected()),
 		getParent()->getIcon(this));
 
-	menu->appendItem(T_("&Download"), std::bind(&SearchFrame::handleDownload, this), WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
+	menu->appendItem(T_("&Download"), [this] { handleDownload(); }, WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
 	addTargetMenu(menu, favoriteDirs, checkTTH);
-	menu->appendItem(T_("Download whole directory"), std::bind(&SearchFrame::handleDownloadDir, this));
+	menu->appendItem(T_("Download whole directory"), [this] { handleDownloadDir(); });
 	addTargetDirMenu(menu, favoriteDirs);
-	menu->appendItem(T_("&View as text"), std::bind(&SearchFrame::handleViewAsText, this));
+	menu->appendItem(T_("&View as text"), [this] { handleViewAsText(); });
 
 	if(checkTTH.hasTTH) {
 		menu->appendSeparator();
@@ -732,7 +732,7 @@ MenuPtr SearchFrame::makeMenu() {
 	WinUtil::addUserItems(menu, users.users, getParent(), users.dirs);
 
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), std::bind(&SearchFrame::handleRemove, this));
+	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 
 	prepareMenu(menu, UserCommand::CONTEXT_SEARCH, checkTTH.hubs);
 
@@ -744,17 +744,17 @@ void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& fav
 
 	int n = 0;
 	if(favoriteDirs.size() > 0) {
-		for(StringPairList::const_iterator i = favoriteDirs.begin(); i != favoriteDirs.end(); i++)
-			menu->appendItem(Text::toT(i->second), std::bind(&SearchFrame::handleDownloadFavoriteDirs, this, n++));
+		for(StringPairList::const_iterator i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
+			menu->appendItem(Text::toT(i->second), [=] { handleDownloadFavoriteDirs(n); });
 		menu->appendSeparator();
 	}
 
 	n = 0;
-	menu->appendItem(T_("&Browse..."), std::bind(&SearchFrame::handleDownloadTo, this));
+	menu->appendItem(T_("&Browse..."), [this] { handleDownloadTo(); });
 	if(WinUtil::lastDirs.size() > 0) {
 		menu->appendSeparator();
-		for(TStringIter i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i)
-			menu->appendItem(*i, std::bind(&SearchFrame::handleDownloadTarget, this, n++));
+		for(TStringIter i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
+			menu->appendItem(*i, [=] { handleDownloadTarget(n); });
 	}
 
 	if(checkTTH.hasTTH) {
@@ -763,8 +763,8 @@ void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& fav
 		QueueManager::getInstance()->getTargets(checkTTH.tth, targets);
 		if(targets.size() > 0) {
 			menu->appendSeparator();
-			for(StringIter i = targets.begin(); i != targets.end(); ++i)
-				menu->appendItem(Text::toT(*i), std::bind(&SearchFrame::handleDownloadTarget, this, n++));
+			for(StringIter i = targets.begin(); i != targets.end(); ++i, ++n)
+				menu->appendItem(Text::toT(*i), [=] { handleDownloadTarget(n); });
 		}
 	}
 }
@@ -774,21 +774,23 @@ void SearchFrame::addTargetDirMenu(const MenuPtr& parent, const StringPairList& 
 
 	int n = 0;
 	if(favoriteDirs.size() > 0) {
-		for(StringPairList::const_iterator i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i)
-			menu->appendItem(Text::toT(i->second), std::bind(&SearchFrame::handleDownloadWholeFavoriteDirs, this, n++));
+		for(StringPairList::const_iterator i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
+			menu->appendItem(Text::toT(i->second), [=] { handleDownloadWholeFavoriteDirs(n); });
 		menu->appendSeparator();
 	}
 
 	n = 0;
-	menu->appendItem(T_("&Browse..."), std::bind(&SearchFrame::handleDownloadDirTo, this));
+	menu->appendItem(T_("&Browse..."), [this] { handleDownloadDirTo(); });
 	if(WinUtil::lastDirs.size() > 0) {
 		menu->appendSeparator();
-		for(TStringIter i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i)
-			menu->appendItem(*i, std::bind(&SearchFrame::handleDownloadWholeTarget, this, n++));
+		for(TStringIter i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
+			menu->appendItem(*i, [=] { handleDownloadWholeTarget(n); });
 	}
 }
 
 void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) noexcept {
+	auto update = [this] { updateStatusFiltered(); };
+
 	// Check that this is really a relevant search result...
 	{
 		Lock l(cs);
@@ -799,14 +801,14 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 
 		if(!aResult->getToken().empty() && token != aResult->getToken()) {
 			droppedResults++;
-			callAsync(std::bind(&SearchFrame::updateStatusFiltered, this));
+			callAsync(update);
 			return;
 		}
 
 		if(isHash) {
 			if(aResult->getType() != SearchResult::TYPE_FILE || TTHValue(Text::fromT(currentSearch[0])) != aResult->getTTH()) {
 				droppedResults++;
-				callAsync(std::bind(&SearchFrame::updateStatusFiltered, this));
+				callAsync(update);
 				return;
 			}
 		} else {
@@ -817,7 +819,7 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 					)
 				{
 					droppedResults++;
-					callAsync(std::bind(&SearchFrame::updateStatusFiltered, this));
+					callAsync(update);
 					return;
 				}
 			}
@@ -829,7 +831,7 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 		const TTHValue& t = aResult->getTTH();
 		if( ShareManager::getInstance()->isTTHShared(t) ) {
 			droppedResults++;
-			callAsync(std::bind(&SearchFrame::updateStatusFiltered, this));
+			callAsync(update);
 			return;
 		}
 	}
@@ -838,11 +840,12 @@ void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) 
 	if((onlyFree && aResult->getFreeSlots() < 1))
 	{
 		droppedResults++;
-		callAsync(std::bind(&SearchFrame::updateStatusFiltered, this));
+		callAsync(update);
 		return;
 	}
 
-	callAsync(std::bind(&SearchFrame::addResult, this, new SearchInfo(aResult)));
+	auto si = new SearchInfo(aResult);
+	callAsync([=] { addResult(si); });
 }
 
 void SearchFrame::onHubAdded(HubInfo* info) {
@@ -1017,7 +1020,7 @@ void SearchFrame::updateStatusFiltered() {
 }
 
 void SearchFrame::initSecond() {
-	setTimer(std::bind(&SearchFrame::eachSecond, this), 1000);
+	setTimer([this] { return eachSecond(); }, 1000);
 }
 
 bool SearchFrame::eachSecond() {
@@ -1100,17 +1103,20 @@ bool SearchFrame::handleSearchChar(int c) {
 }
 
 void SearchFrame::on(ClientConnected, Client* c) noexcept {
-	callAsync(std::bind(&SearchFrame::onHubAdded, this, new HubInfo(c)));
+	auto hi = new HubInfo(c);
+	callAsync([=] { onHubAdded(hi); });
 }
 
 void SearchFrame::on(ClientUpdated, Client* c) noexcept {
-	callAsync(std::bind(&SearchFrame::onHubChanged, this, new HubInfo(c)));
+	auto hi = new HubInfo(c);
+	callAsync([=] { onHubChanged(hi); });
 }
 
 void SearchFrame::on(ClientDisconnected, Client* c) noexcept {
-	callAsync(std::bind(&SearchFrame::onHubRemoved, this, new HubInfo(c)));
+	auto hi = new HubInfo(c);
+	callAsync([=] { onHubRemoved(hi); });
 }
 
 void SearchFrame::on(SettingsManagerListener::SearchTypesChanged) noexcept {
-	callAsync(std::bind(&SearchFrame::searchTypesChanged, this));
+	callAsync([this] { searchTypesChanged(); });
 }

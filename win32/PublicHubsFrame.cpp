@@ -121,9 +121,9 @@ users(0)
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(PUBLICHUBSFRAME_ORDER), SETTING(PUBLICHUBSFRAME_WIDTHS));
 		hubs->setSort(COLUMN_USERS, false);
 
-		hubs->onDblClicked(std::bind(&PublicHubsFrame::openSelected, this));
-		hubs->onKeyDown(std::bind(&PublicHubsFrame::handleKeyDown, this, _1));
-		hubs->onContextMenu(std::bind(&PublicHubsFrame::handleContextMenu, this, _1));
+		hubs->onDblClicked([this] { openSelected(); });
+		hubs->onKeyDown([this](int c) { return handleKeyDown(c); });
+		hubs->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
 	}
 
 	{
@@ -153,7 +153,7 @@ users(0)
 		ts.style |= ES_AUTOHSCROLL;
 		filter = cur->addChild(ts);
 		addWidget(filter);
-		filter->onUpdated(std::bind(&PublicHubsFrame::handleFilterUpdated, this));
+		filter->onUpdated([this] { handleFilterUpdated(); });
 
 		filterSel = cur->addChild(WinUtil::Seeds::comboBoxStatic);
 		addWidget(filterSel);
@@ -168,20 +168,20 @@ users(0)
 
 		lists = listsGrid->addChild(WinUtil::Seeds::comboBoxStatic);
 		addWidget(lists);
-		lists->onSelectionChanged(std::bind(&PublicHubsFrame::handleListSelChanged, this));
+		lists->onSelectionChanged([this] { handleListSelChanged(); });
 
 		Button::Seed bs = WinUtil::Seeds::button;
 
 		bs.caption = T_("&Configure");
 		ButtonPtr button = listsGrid->addChild(bs);
 		addWidget(button);
-		button->onClicked(std::bind(&PublicHubsFrame::handleConfigure, this));
+		button->onClicked([this] { handleConfigure(); });
 
 		bs.caption = T_("&Refresh");
 		button = listsGrid->addChild(bs);
 		button->setHelpId(IDH_PUBLIC_HUBS_REFRESH);
 		addWidget(button);
-		button->onClicked(std::bind(&PublicHubsFrame::handleRefresh, this));
+		button->onClicked([this] { handleRefresh(); });
 	}
 
 	initStatus();
@@ -196,7 +196,7 @@ users(0)
 	}
 	filterSel->addValue(T_("Any"));
 	filterSel->setSelected(COLUMN_LAST);
-	filterSel->onSelectionChanged(std::bind(&PublicHubsFrame::updateList, this));
+	filterSel->onSelectionChanged([this] { updateList(); });
 
 	FavoriteManager::getInstance()->addListener(this);
 
@@ -206,7 +206,7 @@ users(0)
 	updateDropDown();
 	updateList();
 
-	addAccel(FALT, 'I', std::bind(&dwt::Control::setFocus, filter));
+	addAccel(FALT, 'I', [this] { filter->setFocus(); });
 	initAccels();
 
 	layout();
@@ -430,9 +430,9 @@ bool PublicHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		menu->setTitle(escapeMenu(hubs->getSelectedData()->getText(COLUMN_NAME)), getParent()->getIcon(this));
-		menu->appendItem(T_("&Connect"), std::bind(&PublicHubsFrame::handleConnect, this), dwt::IconPtr(), true, true);
-		menu->appendItem(T_("Add To &Favorites"), std::bind(&PublicHubsFrame::handleAdd, this), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
-		menu->appendItem(T_("Copy &address to clipboard"), std::bind(&PublicHubsFrame::handleCopyHub, this));
+		menu->appendItem(T_("&Connect"), [this] { handleConnect(); }, dwt::IconPtr(), true, true);
+		menu->appendItem(T_("Add To &Favorites"), [this] { handleAdd(); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
+		menu->appendItem(T_("Copy &address to clipboard"), [this] { handleCopyHub(); });
 
 		menu->open(pt);
 		return true;
@@ -521,25 +521,25 @@ void PublicHubsFrame::onFinished(const tstring& s, bool success) {
 }
 
 void PublicHubsFrame::on(DownloadStarting, const string& l) noexcept {
-	callAsync(std::bind(&dwt::StatusBar::setText, status, STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), false));
+	callAsync([=] { status->setText(STATUS_STATUS, str(TF_("Downloading public hub list... (%1%)") % Text::toT(l)), false); });
 }
 
 void PublicHubsFrame::on(DownloadFailed, const string& l) noexcept {
-	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Download failed: %1%") % Text::toT(l)), false));
+	callAsync([=] { onFinished(str(TF_("Download failed: %1%") % Text::toT(l)), false); });
 }
 
 void PublicHubsFrame::on(DownloadFinished, const string& l, bool fromCoral) noexcept {
-	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Hub list downloaded%1% (%2%)") % (fromCoral ? T_(" from Coral") : Util::emptyStringT) % Text::toT(l)), true));
+	callAsync([=] { onFinished(str(TF_("Hub list downloaded%1% (%2%)") % (fromCoral ? T_(" from Coral") : Util::emptyStringT) % Text::toT(l)), true); });
 }
 
 void PublicHubsFrame::on(LoadedFromCache, const string& l, const string& d) noexcept {
-	callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Locally cached (as of %1%) version of the hub list loaded (%2%)") % Text::toT(d) % Text::toT(l)), true));
+	callAsync([=] { onFinished(str(TF_("Locally cached (as of %1%) version of the hub list loaded (%2%)") % Text::toT(d) % Text::toT(l)), true); });
 }
 
 void PublicHubsFrame::on(Corrupted, const string& l) noexcept {
 	if(l.empty()) {
-		callAsync(std::bind(&PublicHubsFrame::onFinished, this, T_("Cached hub list is corrupted or unsupported"), false));
+		callAsync([this] { onFinished(T_("Cached hub list is corrupted or unsupported"), false); });
 	} else {
-		callAsync(std::bind(&PublicHubsFrame::onFinished, this, str(TF_("Downloaded hub list is corrupted or unsupported (%1%)") % Text::toT(l)), false));
+		callAsync([=] { onFinished(str(TF_("Downloaded hub list is corrupted or unsupported (%1%)") % Text::toT(l)), false); });
 	}
 }

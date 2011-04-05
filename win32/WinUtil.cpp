@@ -21,6 +21,7 @@
 #include "WinUtil.h"
 
 #include "resource.h"
+#include <mmsystem.h>
 
 #include <boost/lexical_cast.hpp>
 
@@ -405,7 +406,7 @@ bool WinUtil::checkNick() {
 }
 
 void WinUtil::handleDblClicks(dwt::TextBoxBase* box) {
-	box->onLeftMouseDblClick(std::bind(&WinUtil::handleBoxDblClick, box, _1));
+	box->onLeftMouseDblClick([box](const dwt::MouseEvent &me) { return WinUtil::handleBoxDblClick(box, me); });
 }
 
 bool WinUtil::handleBoxDblClick(dwt::TextBoxBase* box, const dwt::MouseEvent& ev) {
@@ -662,9 +663,9 @@ void WinUtil::reducePaths(string& message) {
 }
 
 void WinUtil::addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename, int64_t size) {
-	menu->appendItem(T_("Search for alternates"), std::bind(&WinUtil::searchHash, tth), menuIcon(IDI_SEARCH));
-	menu->appendItem(T_("Lookup TTH at Bitzi.com"), std::bind(WinUtil::bitziLink, tth));
-	menu->appendItem(T_("Copy magnet link to clipboard"), std::bind(&WinUtil::copyMagnet, tth, filename, size), menuIcon(IDI_MAGNET));
+	menu->appendItem(T_("Search for alternates"), [=] { searchHash(tth); }, menuIcon(IDI_SEARCH));
+	menu->appendItem(T_("Lookup TTH at Bitzi.com"), [=] { bitziLink(tth); });
+	menu->appendItem(T_("Copy magnet link to clipboard"), [=] { copyMagnet(tth, filename, size); }, menuIcon(IDI_MAGNET));
 }
 
 void WinUtil::bitziLink(const TTHValue& aHash) {
@@ -855,9 +856,9 @@ public:
 		Seed cs(WS_POPUP | WS_BORDER, WS_EX_CLIENTEDGE);
 		cs.location = dwt::Rectangle(pt, dwt::Point()); // set the position but not the size
 		create(cs);
-		onLeftMouseDown(std::bind(&HelpPopup::terminate, this));
-		onKeyDown(std::bind(&HelpPopup::terminate, this));
-		onHelp(std::bind(&HelpPopup::handleHelp, this));
+		onLeftMouseDown([this](const dwt::MouseEvent &) { return terminate(); });
+		onKeyDown([this](int c) { return terminate(); });
+		onHelp([this](Widget*, unsigned) { handleHelp(); });
 
 		// create the inner text control
 		ts = WinUtil::Seeds::richTextBox;
@@ -874,7 +875,7 @@ private:
 		box = addChild(ts);
 
 		// let the control figure out what the best size is
-		box->onRaw(std::bind(&HelpPopup::resize, this, _2), dwt::Message(WM_NOTIFY, EN_REQUESTRESIZE));
+		box->onRaw([this](WPARAM, LPARAM l) { return resize(l); }, dwt::Message(WM_NOTIFY, EN_REQUESTRESIZE));
 		box->sendMessage(EM_SETEVENTMASK, 0, ENM_REQUESTRESIZE); ///@todo move to dwt
 		box->setText(text);
 	}
@@ -890,7 +891,7 @@ private:
 		{
 			dwt::Rectangle rect(reinterpret_cast<REQRESIZE*> (lParam)->rc);
 			if(rect.width() > maxWidth && (ts.style & ES_MULTILINE) != ES_MULTILINE) {
-				callAsync(std::bind(&HelpPopup::multilineBox, this));
+				callAsync([this] { multilineBox(); });
 				return 0;
 			}
 
@@ -1294,16 +1295,16 @@ static void addUsers(MenuPtr menu, const tstring& text, const HintedUserList& us
 
 	if(users.size() > 1) {
 		menu = menu->appendPopup(text, icon);
-		menu->appendItem(T_("All"), std::bind(&eachUser, users, dirs, f));
+		menu->appendItem(T_("All"), [=] { eachUser(users, dirs, f); });
 
 		menu->appendSeparator();
 
 		for(size_t i = 0, iend = users.size(); i < iend; ++i) {
-			menu->appendItem(WinUtil::getNicks(users[i]), std::bind(&eachUser, HintedUserList(1, users[i]),
-				StringList(1, (i < dirs.size()) ? dirs[i] : string()), f));
+			menu->appendItem(WinUtil::getNicks(users[i]), [=] { eachUser(HintedUserList(1, users[i]),
+				StringList(1, (i < dirs.size()) ? dirs[i] : string()), f); });
 		}
 	} else {
-		menu->appendItem(text, std::bind(&eachUser, users, dirs, f), icon);
+		menu->appendItem(text, [=] { eachUser(users, dirs, f); }, icon);
 	}
 }
 
@@ -1328,27 +1329,27 @@ static bool isFav(const UserPtr& u) {
 void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs) {
 	QueueManager* qm = QueueManager::getInstance();
 
-	addUsers(menu, T_("&Get file list"), users, std::bind(&QueueManager::addList, qm, _1,
-		QueueItem::FLAG_CLIENT_VIEW, _2), dwt::IconPtr(), dirs);
+	addUsers(menu, T_("&Get file list"), users, [=](const HintedUser &u, const string& s) {
+		qm->addList(u, QueueItem::FLAG_CLIENT_VIEW, s); }, dwt::IconPtr(), dirs);
 
-	addUsers(menu, T_("&Browse file list"), filter(users, &isAdc), std::bind(&QueueManager::addList, qm, _1,
-		QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, _2), dwt::IconPtr(), dirs);
+	addUsers(menu, T_("&Browse file list"), filter(users, &isAdc), [=](const HintedUser &u, const string& s) {
+		qm->addList(u, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, s); }, dwt::IconPtr(), dirs);
 
-	addUsers(menu, T_("&Match queue"), users, std::bind(&QueueManager::addList, qm, _1,
-		QueueItem::FLAG_MATCH_QUEUE, Util::emptyString));
+	addUsers(menu, T_("&Match queue"), users, [=](const HintedUser &u, const string& s) {
+		qm->addList(u, QueueItem::FLAG_MATCH_QUEUE, Util::emptyString); });
 
 	addUsers(menu, T_("&Send private message"), users, [parent](const HintedUser& u, const string&) {
 		PrivateFrame::openWindow(parent, u); });
 
-	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav), std::bind(&FavoriteManager::addFavoriteUser,
-		FavoriteManager::getInstance(), _1), dwt::IconPtr(new dwt::Icon(IDI_FAVORITE_USERS)));
+	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav), [=](const HintedUser &u, const string& s) {
+		FavoriteManager::getInstance()->addFavoriteUser(u); }, dwt::IconPtr(new dwt::Icon(IDI_FAVORITE_USERS)));
 
-	addUsers(menu, T_("Grant &extra slot"), users, std::bind(&UploadManager::reserveSlot,
-		UploadManager::getInstance(), _1));
+	addUsers(menu, T_("Grant &extra slot"), users, [=](const HintedUser &u, const string& s) {
+		UploadManager::getInstance()->reserveSlot(u); });
 
 	typedef void (QueueManager::*qmp)(const UserPtr&, int);
-	addUsers(menu, T_("Remove user from queue"), users, std::bind((qmp) &QueueManager::removeSource, qm, _1,
-		(int) QueueItem::Source::FLAG_REMOVED));
+	addUsers(menu, T_("Remove user from queue"), users, [=](const HintedUser &u, const string& s) {
+		qm->removeSource(u, QueueItem::Source::FLAG_REMOVED); });
 }
 
 void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount, const string& order,

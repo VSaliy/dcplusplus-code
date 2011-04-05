@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_SEARCH_FRAME_H
 #define DCPLUSPLUS_WIN32_SEARCH_FRAME_H
 
+#include <set>
+
 #include "MDIChildFrame.h"
 #include "TypedTable.h"
 #include "AspectUserCommand.h"
@@ -27,6 +29,8 @@
 #include <dcpp/SearchManager.h>
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ClientManagerListener.h>
+
+using std::set;
 
 class SearchFrame :
 	public MDIChildFrame<SearchFrame>,

@@ -50,8 +50,8 @@ grid(0),
 tree(0),
 help(0)
 {
-	onInitDialog(std::bind(&SettingsDialog::initDialog, this));
-	onHelp(std::bind(&SettingsDialog::handleHelp, this, _1, _2));
+	onInitDialog([this] { return initDialog(); });
+	onHelp([this](Control* c, unsigned id) { handleHelp(c, id); });
 }
 
 int SettingsDialog::run() {
@@ -99,7 +99,7 @@ bool SettingsDialog::initDialog() {
 			seed.style |= WS_BORDER;
 			tree = cur->addChild(seed);
 			tree->setHelpId(IDH_SETTINGS_TREE);
-			tree->onSelectionChanged(std::bind(&SettingsDialog::handleSelectionChanged, this));
+			tree->onSelectionChanged([this] { handleSelectionChanged(); });
 		}
 
 		Grid::Seed seed(1, 1);
@@ -156,7 +156,7 @@ bool SettingsDialog::initDialog() {
 		ts.style &= ~ES_SUNKEN;
 		ts.exStyle &= ~WS_EX_CLIENTEDGE;
 		help = cur->addChild(ts);
-		help->onRaw(std::bind(&helpDlgCode, _1), dwt::Message(WM_GETDLGCODE));
+		help->onRaw([this](WPARAM w, LPARAM) { return helpDlgCode(w); }, dwt::Message(WM_GETDLGCODE));
 	}
 
 	{
@@ -166,15 +166,15 @@ bool SettingsDialog::initDialog() {
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 
 		WinUtil::addDlgButtons(cur,
-			std::bind(&SettingsDialog::handleOKClicked, this),
-			std::bind(&SettingsDialog::endDialog, this, IDCANCEL));
+			[this] { handleOKClicked(); },
+			[this] { GCC_WTF->endDialog(IDCANCEL); });
 
 		Button::Seed seed(T_("Help"));
 		seed.padding.x = 10;
 		ButtonPtr button = cur->addChild(seed);
 		button->setHelpId(IDH_DCPP_HELP);
 		button->setImage(WinUtil::buttonIcon(IDI_HELP));
-		button->onClicked(std::bind(&SettingsDialog::handleHelp, this, this, IDH_INDEX));
+		button->onClicked([this] { handleHelp(this, IDH_INDEX); });
 	}
 
 	/*
@@ -185,8 +185,8 @@ bool SettingsDialog::initDialog() {
 	/// @todo when dwt has better tracking of children, improve this
 	::EnumChildWindows(handle(), EnumChildProc, reinterpret_cast<LPARAM>(this));
 
-	addAccel(FCONTROL, VK_TAB, std::bind(&SettingsDialog::handleCtrlTab, this, false));
-	addAccel(FCONTROL | FSHIFT, VK_TAB, std::bind(&SettingsDialog::handleCtrlTab, this, true));
+	addAccel(FCONTROL, VK_TAB, [this] { handleCtrlTab(false); });
+	addAccel(FCONTROL | FSHIFT, VK_TAB, [this] { handleCtrlTab(true); });
 	initAccels();
 
 	updateTitle();
@@ -201,10 +201,10 @@ BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 	SettingsDialog* dialog = reinterpret_cast<SettingsDialog*>(lParam);
 	dwt::Control* widget = dwt::hwnd_cast<dwt::Control*>(hwnd);
 	if(widget && widget != dialog->help) {
-		widget->onFocus(std::bind(&SettingsDialog::handleChildHelp, dialog, widget));
+		widget->onFocus([=] { dialog->handleChildHelp(widget); });
 		TablePtr table = dynamic_cast<TablePtr>(widget);
 		if(table)
-			table->onSelectionChanged(std::bind(&SettingsDialog::handleChildHelp, dialog, widget));
+			table->onSelectionChanged([=] { dialog->handleChildHelp(widget); });
 	}
 	return TRUE;
 }

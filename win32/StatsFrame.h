@@ -19,8 +19,14 @@
 #ifndef DCPLUSPLUS_WIN32_STATS_FRAME_H
 #define DCPLUSPLUS_WIN32_STATS_FRAME_H
 
+#include <deque>
+#include <string>
+
 #include "StaticFrame.h"
 #include "resource.h"
+
+using std::deque;
+using std::string;
 
 class StatsFrame : public StaticFrame<StatsFrame>
 {

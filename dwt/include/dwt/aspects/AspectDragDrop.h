@@ -54,8 +54,8 @@ class AspectDragDrop
 
 	HWND H() const { return W().handle(); }
 
-	struct DragDropDispatcher : Dispatchers::Base<void (std::vector<tstring>, Point)> {
-		typedef Dispatchers::Base<void (std::vector<tstring>, Point)> BaseType;
+	struct DragDropDispatcher : Dispatchers::Base<void (const std::vector<tstring>&, Point)> {
+		typedef Dispatchers::Base<void (const std::vector<tstring>&, Point)> BaseType;
 		DragDropDispatcher(const F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {

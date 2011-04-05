@@ -28,6 +28,8 @@
 #include "HoldRedraw.h"
 #include "ADLSProperties.h"
 
+using std::swap;
+
 const string ADLSearchFrame::id = "ADLSearch";
 const string& ADLSearchFrame::getId() const { return id; }
 
@@ -64,10 +66,10 @@ items(0)
 
 		WinUtil::makeColumns(items, itemsColumns, COLUMN_LAST, SETTING(ADLSEARCHFRAME_ORDER), SETTING(ADLSEARCHFRAME_WIDTHS));
 
-		items->onDblClicked(std::bind(&ADLSearchFrame::handleDoubleClick, this));
-		items->onKeyDown(std::bind(&ADLSearchFrame::handleKeyDown, this, _1));
-		items->onRaw(std::bind(&ADLSearchFrame::handleItemChanged, this, _2), dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
-		items->onContextMenu(std::bind(&ADLSearchFrame::handleContextMenu, this, _1));
+		items->onDblClicked([this] { handleDoubleClick(); });
+		items->onKeyDown([this](int c) { return handleKeyDown(c); });
+		items->onRaw([this](WPARAM, LPARAM l) { return handleItemChanged(l); }, dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
+		items->onContextMenu([this](dwt::ScreenCoordinate sc) { return handleContextMenu(sc); });
 	}
 
 	{
@@ -77,37 +79,37 @@ items(0)
 		cs.caption = T_("&New...");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_ADLS_NEW);
-		button->onClicked(std::bind(&ADLSearchFrame::handleAdd, this));
+		button->onClicked([this] { handleAdd(); });
 		addWidget(button);
 
 		cs.caption = T_("&Properties");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_ADLS_PROPERTIES);
-		button->onClicked(std::bind(&ADLSearchFrame::handleProperties, this));
+		button->onClicked([this] { handleProperties(); });
 		addWidget(button);
 
 		cs.caption = T_("Move &Up");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_ADLS_MOVE_UP);
-		button->onClicked(std::bind(&ADLSearchFrame::handleUp, this));
+		button->onClicked([this] { handleUp(); });
 		addWidget(button);
 
 		cs.caption = T_("Move &Down");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_ADLS_MOVE_DOWN);
-		button->onClicked(std::bind(&ADLSearchFrame::handleDown, this));
+		button->onClicked([this] { handleDown(); });
 		addWidget(button);
 
 		cs.caption = T_("&Remove");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_ADLS_REMOVE);
-		button->onClicked(std::bind(&ADLSearchFrame::handleRemove, this));
+		button->onClicked([this] { handleRemove(); });
 		addWidget(button);
 
 		cs.caption = T_("&Help");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_DCPP_HELP);
-		button->onClicked(std::bind(&WinUtil::help, this, IDH_ADL_SEARCH));
+		button->onClicked([this] { WinUtil::help(this, IDH_ADL_SEARCH); });
 		addWidget(button);
 	}
 
@@ -310,9 +312,9 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 	menu->setTitle((sel == 0) ? getText() : (sel == 1) ? escapeMenu(items->getText(items->getSelected(), COLUMN_ACTIVE_SEARCH_STRING)) :
 		str(TF_("%1% items") % sel), getParent()->getIcon(this));
-	menu->appendItem(T_("&New..."), std::bind(&ADLSearchFrame::handleAdd, this));
-	menu->appendItem(T_("&Properties"), std::bind(&ADLSearchFrame::handleProperties, this), dwt::IconPtr(), sel);
-	menu->appendItem(T_("&Remove"), std::bind(&ADLSearchFrame::handleRemove, this), dwt::IconPtr(), sel);
+	menu->appendItem(T_("&New..."), [this] { handleAdd(); });
+	menu->appendItem(T_("&Properties"), [this] { handleProperties(); }, dwt::IconPtr(), sel);
+	menu->appendItem(T_("&Remove"), [this] { handleRemove(); }, dwt::IconPtr(), sel);
 
 	menu->open(pt);
 	return true;

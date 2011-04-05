@@ -141,13 +141,13 @@ inTabComplete(false)
 	createChat(paned);
 	chat->setHelpId(IDH_HUB_CHAT);
 	addWidget(chat);
-	chat->onContextMenu(std::bind(&HubFrame::handleChatContextMenu, this, _1));
+	chat->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleChatContextMenu(sc); });
 
 	message->setHelpId(IDH_HUB_MESSAGE);
 	addWidget(message, true, false);
-	message->onKeyDown(std::bind(&HubFrame::handleMessageKeyDown, this, _1));
-	message->onSysKeyDown(std::bind(&HubFrame::handleMessageKeyDown, this, _1));
-	message->onChar(std::bind(&HubFrame::handleMessageChar, this, _1));
+	message->onKeyDown([this](int c) { return handleMessageKeyDown(c); });
+	message->onSysKeyDown([this](int c) { return handleMessageKeyDown(c); });
+	message->onChar([this] (int c) { return handleMessageChar(c); });
 
 	{
 		userGrid = paned->addChild(Grid::Seed(2, 2));
@@ -164,9 +164,9 @@ inTabComplete(false)
 		users->setSort(COLUMN_NICK);
 
 		users->onSelectionChanged([this] { GCC_WTF->callAsync([&] { updateStatus(); }); });
-		users->onDblClicked(std::bind(&HubFrame::handleDoubleClickUsers, this));
-		users->onKeyDown(std::bind(&HubFrame::handleUsersKeyDown, this, _1));
-		users->onContextMenu(std::bind(&HubFrame::handleUsersContextMenu, this, _1));
+		users->onDblClicked([this] { handleDoubleClickUsers(); });
+		users->onKeyDown([this](int c) { return handleUsersKeyDown(c); });
+		users->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleUsersContextMenu(sc); });
 
 		prepareUserList(users, true);
 
@@ -175,7 +175,7 @@ inTabComplete(false)
 		filter = userGrid->addChild(cs);
 		filter->setHelpId(IDH_HUB_FILTER);
 		addWidget(filter);
-		filter->onUpdated(std::bind(&HubFrame::handleFilterUpdated, this));
+		filter->onUpdated([this] { handleFilterUpdated(); });
 
 		filterType = userGrid->addChild(WinUtil::Seeds::comboBoxStatic);
 		filterType->setHelpId(IDH_HUB_FILTER);
@@ -195,7 +195,7 @@ inTabComplete(false)
 	showUsers->setChecked(BOOLSETTING(GET_USER_INFO));
 
 	status->setSize(STATUS_SHOW_USERS, showUsers->getPreferredSize().x);
-	status->onDblClicked(STATUS_STATUS, std::bind(&HubFrame::openLog, this, false));
+	status->onDblClicked(STATUS_STATUS, [this] { openLog(false); });
 
 	status->setIcon(STATUS_USERS, WinUtil::statusIcon(IDI_USER));
 
@@ -205,11 +205,11 @@ inTabComplete(false)
 	status->setHelpId(STATUS_SHARED, IDH_HUB_SHARED);
 	status->setHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
 
-	addAccel(FALT, 'G', std::bind(&HubFrame::handleGetList, this));
-	addAccel(FCONTROL, 'R', std::bind(&HubFrame::handleReconnect, this));
-	addAccel(FCONTROL, 'T', std::bind(&HubFrame::handleFollow, this));
-	addAccel(FALT, 'P', std::bind(&HubFrame::handlePrivateMessage, this, getParent()));
-	addAccel(FALT, 'U', std::bind(&dwt::Control::setFocus, users));
+	addAccel(FALT, 'G', [this] { GCC_WTF->handleGetList(); });
+	addAccel(FCONTROL, 'R', [this] { handleReconnect(); });
+	addAccel(FCONTROL, 'T', [this] { handleFollow(); });
+	addAccel(FALT, 'P', [this] { GCC_WTF->handlePrivateMessage(GCC_WTF->getParent()); });
+	addAccel(FALT, 'U', [this] { users->setFocus(); });
 	initAccels();
 
 	layout();
@@ -224,7 +224,7 @@ inTabComplete(false)
 
 	frames.push_back(this);
 
-	showUsers->onClicked(std::bind(&HubFrame::handleShowUsersClicked, this));
+	showUsers->onClicked([this] { handleShowUsersClicked(); });
 
 	FavoriteManager::getInstance()->addListener(this);
 
@@ -311,13 +311,13 @@ void HubFrame::updateSecureStatus() {
 }
 
 void HubFrame::initSecond() {
-	setTimer(std::bind(&HubFrame::eachSecond, this), 1000);
+	setTimer([this] { return eachSecond(); }, 1000);
 }
 
 bool HubFrame::eachSecond() {
 	if(updateUsers) {
 		updateUsers = false;
-		callAsync(std::bind(&HubFrame::execTasks, this));
+		callAsync([this] { execTasks(); });
 	}
 
 	updateStatus();
@@ -500,24 +500,23 @@ void HubFrame::execTasks() {
 
 	HoldRedraw hold(users);
 
-	for(TaskQueue::Iter i = t.begin(); i != t.end(); ++i) {
+	for(auto i = t.begin(); i != t.end(); ++i) {
 		if(i->first == UPDATE_USER) {
-			updateUser(*static_cast<UserTask*>(i->second));
+			updateUser(static_cast<UserTask&>(*i->second));
 		} else if(i->first == UPDATE_USER_JOIN) {
-			UserTask& u = *static_cast<UserTask*>(i->second);
+			UserTask& u = static_cast<UserTask&>(*i->second);
 			if(updateUser(u)) {
 				if (showJoins || (favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
 					addStatus(str(TF_("*** Joins: %1%") % Text::toT(u.identity.getNick())));
 				}
 			}
 		} else if(i->first == REMOVE_USER) {
-			UserTask& u = *static_cast<UserTask*>(i->second);
+			UserTask& u = static_cast<UserTask&>(*i->second);
 			removeUser(u.user);
 			if (showJoins || (favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
 				addStatus(str(TF_("*** Parts: %1%") % Text::toT(u.identity.getNick())));
 			}
 		}
-		delete i->second;
 	}
 	if(resort && showUsers->getChecked()) {
 		users->resort();
@@ -770,7 +769,7 @@ void HubFrame::on(Connecting, Client*) noexcept {
 	callAsync([this, hubUrl]() { GCC_WTF->setText(hubUrl); });
 }
 void HubFrame::on(Connected, Client*) noexcept {
-	callAsync(std::bind(&HubFrame::onConnected, this));
+	callAsync([this] { onConnected(); });
 }
 void HubFrame::on(UserUpdated, Client*, const OnlineUser& user) noexcept {
 	addTask(UPDATE_USER_JOIN, user);
@@ -788,24 +787,24 @@ void HubFrame::on(ClientListener::UserRemoved, Client*, const OnlineUser& user) 
 
 void HubFrame::on(Redirect, Client*, const string& line) noexcept {
 	if(ClientManager::getInstance()->isConnected(line)) {
-		callAsync(std::bind(&HubFrame::addStatus, this, T_("Redirect request received to a hub that's already connected"), true));
+		callAsync([this] { addStatus(T_("Redirect request received to a hub that's already connected"), true); });
 		return;
 	}
 	redirect = line;
 	if(BOOLSETTING(AUTO_FOLLOW)) {
-		callAsync(std::bind(&HubFrame::handleFollow, this));
+		callAsync([this] { handleFollow(); });
 	} else {
-		callAsync(std::bind(&HubFrame::addStatus, this, str(TF_("Press the follow redirect button to connect to %1%") % Text::toT(line)), true));
+		callAsync([=] { addStatus(str(TF_("Press the follow redirect button to connect to %1%") % Text::toT(line)), true); });
 	}
 }
 
 void HubFrame::on(Failed, Client*, const string& line) noexcept {
-	callAsync(std::bind(&HubFrame::addStatus, this, Text::toT(line), true));
-	callAsync(std::bind(&HubFrame::onDisconnected, this));
+	callAsync([=] { addStatus(Text::toT(line), true); });
+	callAsync([this] { onDisconnected(); });
 }
 
 void HubFrame::on(GetPassword, Client*) noexcept {
-	callAsync(std::bind(&HubFrame::onGetPassword, this));
+	callAsync([this] { onGetPassword(); });
 }
 
 void HubFrame::on(HubUpdated, Client*) noexcept {
@@ -825,13 +824,13 @@ void HubFrame::on(HubUpdated, Client*) noexcept {
 }
 
 void HubFrame::on(Message, Client*, const ChatMessage& message) noexcept {
+	auto msg = Text::toT(message.format());
 	if(message.to && message.replyTo) {
-		callAsync(std::bind(&HubFrame::onPrivateMessage, this,
-			message.from->getUser(), message.to->getUser(), message.replyTo->getUser(),
-			message.replyTo->getIdentity().isHub(), message.replyTo->getIdentity().isBot(),
-			Text::toT(message.format())));
+		auto from = message.from->getUser(), to = message.to->getUser(), replyTo = message.replyTo->getUser();
+		auto isHub = message.replyTo->getIdentity().isHub(), isBot = message.replyTo->getIdentity().isBot();
+		callAsync([=] { onPrivateMessage(from, to, replyTo, isHub, isBot, msg); });
 	} else {
-		callAsync(std::bind(&HubFrame::addChat, this, Text::toT(message.format())));
+		callAsync([=] { addChat(msg); });
 	}
 }
 
@@ -840,16 +839,16 @@ void HubFrame::on(StatusMessage, Client*, const string& line, int statusFlags) n
 }
 
 void HubFrame::on(NickTaken, Client*) noexcept {
-	callAsync(std::bind(&HubFrame::addStatus, this, T_("Your nick was already taken, please change to something else!"), true));
+	callAsync([this] { addStatus(T_("Your nick was already taken, please change to something else!"), true); });
 }
 
 void HubFrame::on(SearchFlood, Client*, const string& line) noexcept {
-	onStatusMessage(str(F_("Search spam detected from %1%") % line), ClientListener::FLAG_IS_SPAM);
+	callAsync([=] { onStatusMessage(str(F_("Search spam detected from %1%") % line), ClientListener::FLAG_IS_SPAM); });
 }
 
 void HubFrame::onStatusMessage(const string& line, int flags) {
-	callAsync(std::bind(&HubFrame::addStatus, this, Text::toT(line),
-		!(flags & ClientListener::FLAG_IS_SPAM) || !BOOLSETTING(FILTER_MESSAGES)));
+	callAsync([=] { addStatus(Text::toT(line),
+		!(flags & ClientListener::FLAG_IS_SPAM) || !BOOLSETTING(FILTER_MESSAGES)); });
 }
 
 tstring HubFrame::getStatusShared() const {
@@ -906,7 +905,7 @@ void HubFrame::on(FavoriteManagerListener::UserRemoved, const FavoriteUser& /*aU
 void HubFrame::resortForFavsFirst(bool justDoIt /* = false */) {
 	if(justDoIt || BOOLSETTING(SORT_FAVUSERS_FIRST)) {
 		resort = true;
-		callAsync(std::bind(&HubFrame::execTasks, this));
+		callAsync([this] { execTasks(); });
 	}
 }
 
@@ -1140,7 +1139,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 		menu->appendSeparator();
 		MenuPtr copyMenu = menu->appendPopup(T_("&Copy"));
 		for(int j=0; j<COLUMN_LAST; j++) {
-			copyMenu->appendItem(T_(usersColumns[j].name), std::bind(&HubFrame::handleMultiCopy, this, j));
+			copyMenu->appendItem(T_(usersColumns[j].name), [this, j] { handleMultiCopy(j); });
 		}
 
 		prepareMenu(menu, UserCommand::CONTEXT_USER, url);
@@ -1154,11 +1153,11 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 
 void HubFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 	if(!FavoriteManager::getInstance()->isFavoriteHub(url)) {
-		menu->appendItem(T_("Add To &Favorites"), std::bind(&HubFrame::addAsFavorite, this), WinUtil::menuIcon(IDI_FAVORITE_HUBS));
+		menu->appendItem(T_("Add To &Favorites"), [this] { addAsFavorite(); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 	}
 
-	menu->appendItem(T_("&Reconnect\tCtrl+R"), std::bind(&HubFrame::handleReconnect, this), WinUtil::menuIcon(IDI_RECONNECT));
-	menu->appendItem(T_("Copy &address to clipboard"), std::bind(&HubFrame::handleCopyHub, this));
+	menu->appendItem(T_("&Reconnect\tCtrl+R"), [this] { handleReconnect(); }, WinUtil::menuIcon(IDI_RECONNECT));
+	menu->appendItem(T_("Copy &address to clipboard"), [this] { handleCopyHub(); });
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
 

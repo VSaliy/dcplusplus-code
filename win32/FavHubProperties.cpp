@@ -39,8 +39,8 @@ userDescription(0),
 groups(0),
 entry(_entry)
 {
-	onInitDialog(std::bind(&FavHubProperties::handleInitDialog, this));
-	onHelp(std::bind(&WinUtil::help, _1, _2));
+	onInitDialog([this] { return handleInitDialog(); });
+	onHelp(&WinUtil::help);
 }
 
 FavHubProperties::~FavHubProperties() {
@@ -88,14 +88,14 @@ bool FavHubProperties::handleInitDialog() {
 		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
 		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		nick->setText(Text::toT(entry->getNick(false)));
-		nick->onUpdated(std::bind(&FavHubProperties::handleTextChanged, this, nick));
+		nick->onUpdated([this, nick] { handleTextChanged(nick); });
 		nick->setHelpId(IDH_FAVORITE_HUB_NICK);
 
 		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
 		password = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		password->setPassword();
 		password->setText(Text::toT(entry->getPassword()));
-		password->onUpdated(std::bind(&FavHubProperties::handleTextChanged, this, password));
+		password->onUpdated([this, password] { handleTextChanged(password); });
 		password->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
@@ -118,12 +118,12 @@ bool FavHubProperties::handleInitDialog() {
 
 		ButtonPtr manage = cur->addChild(Button::Seed(T_("Manage &groups")));
 		manage->setHelpId(IDH_FAVORITE_HUBS_MANAGE_GROUPS);
-		manage->onClicked(std::bind(&FavHubProperties::handleGroups, this));
+		manage->onClicked([this] { handleGroups(); });
 	}
 
 	WinUtil::addDlgButtons(grid,
-		std::bind(&FavHubProperties::handleOKClicked, this),
-		std::bind(&FavHubProperties::endDialog, this, IDCANCEL));
+		[this] { handleOKClicked(); },
+		[this] { GCC_WTF->endDialog(IDCANCEL); });
 
 	fillGroups();
 

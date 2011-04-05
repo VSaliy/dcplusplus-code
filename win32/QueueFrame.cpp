@@ -71,9 +71,9 @@ fileLists(0)
 
 		dirs->setNormalImageList(WinUtil::fileImages);
 
-		dirs->onSelectionChanged(std::bind(&QueueFrame::updateFiles, this));
-		dirs->onKeyDown(std::bind(&QueueFrame::handleKeyDownDirs, this, _1));
-		dirs->onContextMenu(std::bind(&QueueFrame::handleDirsContextMenu, this, _1));
+		dirs->onSelectionChanged([this] { updateFiles(); });
+		dirs->onKeyDown([this](int c) { return handleKeyDownDirs(c); });
+		dirs->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleDirsContextMenu(sc); });
 	}
 
 	{
@@ -84,15 +84,15 @@ fileLists(0)
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(QUEUEFRAME_ORDER), SETTING(QUEUEFRAME_WIDTHS));
 		files->setSort(COLUMN_TARGET);
 
-		files->onKeyDown(std::bind(&QueueFrame::handleKeyDownFiles, this, _1));
+		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
 		files->onSelectionChanged([this] { GCC_WTF->callAsync([&] { updateStatus(); }); });
-		files->onContextMenu(std::bind(&QueueFrame::handleFilesContextMenu, this, _1));
+		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
 	}
 
 	showTree = addChild(WinUtil::Seeds::splitCheckBox);
 	showTree->setHelpId(IDH_QUEUE_SHOW_TREE);
 	showTree->setChecked(BOOLSETTING(QUEUEFRAME_SHOW_TREE));
-	showTree->onClicked(std::bind(&QueueFrame::handleShowTreeClicked, this));
+	showTree->onClicked([this] { handleShowTreeClicked(); });
 
 	initStatus();
 	status->setSize(STATUS_SHOW_TREE, showTree->getPreferredSize().x);
@@ -853,8 +853,8 @@ MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	menu->setTitle(escapeMenu(qii->getText(COLUMN_TARGET)), WinUtil::fileImages->getIcon(qii->getImage(0)));
 
 	WinUtil::addHashItems(menu, qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())), qii->getSize());
-	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
-	menu->appendItem(T_("Re&check integrity"), std::bind(&QueueFrame::handleRecheck, this));
+	menu->appendItem(T_("&Move/Rename"), [this] { handleMove(); });
+	menu->appendItem(T_("Re&check integrity"), [this] { handleRecheck(); });
 	addPriorityMenu(menu);
 	addBrowseMenu(menu, qii);
 	addPMMenu(menu, qii);
@@ -862,7 +862,7 @@ MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
 	addReaddMenu(menu, qii);
 	addRemoveMenu(menu, qii);
 	addRemoveSourcesMenu(menu, qii);
-	menu->appendItem(T_("&Remove"), std::bind(&QueueFrame::handleRemove, this));
+	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 	return menu;
 }
 
@@ -872,11 +872,11 @@ MenuPtr QueueFrame::makeMultiMenu() {
 	size_t sel = files->countSelected();
 	menu->setTitle(str(TF_("%1% files") % sel), getParent()->getIcon(this));
 
-	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
-	menu->appendItem(T_("Re&check integrity"), std::bind(&QueueFrame::handleRecheck, this));
+	menu->appendItem(T_("&Move/Rename"), [this] { handleMove(); });
+	menu->appendItem(T_("Re&check integrity"), [this] { handleRecheck(); });
 	addPriorityMenu(menu);
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), std::bind(&QueueFrame::handleRemove, this));
+	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 	return menu;
 }
 
@@ -888,20 +888,20 @@ MenuPtr QueueFrame::makeDirMenu() {
 		selData ? WinUtil::fileImages->getIcon(selData->getImage(0)) : getParent()->getIcon(this));
 
 	addPriorityMenu(menu);
-	menu->appendItem(T_("&Move/Rename"), std::bind(&QueueFrame::handleMove, this));
+	menu->appendItem(T_("&Move/Rename"), [this] { handleMove(); });
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), std::bind(&QueueFrame::handleRemove, this));
+	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 	return menu;
 }
 
 void QueueFrame::addPriorityMenu(const MenuPtr& parent) {
 	MenuPtr menu = parent->appendPopup(T_("Set priority"));
-	menu->appendItem(T_("Paused"), std::bind(&QueueFrame::handlePriority, this, QueueItem::PAUSED));
-	menu->appendItem(T_("Lowest"), std::bind(&QueueFrame::handlePriority, this, QueueItem::LOWEST));
-	menu->appendItem(T_("Low"), std::bind(&QueueFrame::handlePriority, this, QueueItem::LOW));
-	menu->appendItem(T_("Normal"), std::bind(&QueueFrame::handlePriority, this, QueueItem::NORMAL));
-	menu->appendItem(T_("High"), std::bind(&QueueFrame::handlePriority, this, QueueItem::HIGH));
-	menu->appendItem(T_("Highest"), std::bind(&QueueFrame::handlePriority, this, QueueItem::HIGHEST));
+	menu->appendItem(T_("Paused"), [this] { handlePriority(QueueItem::PAUSED); });
+	menu->appendItem(T_("Lowest"), [this] { handlePriority(QueueItem::LOWEST); });
+	menu->appendItem(T_("Low"), [this] { handlePriority(QueueItem::LOW); });
+	menu->appendItem(T_("Normal"), [this] { handlePriority(QueueItem::NORMAL); });
+	menu->appendItem(T_("High"), [this] { handlePriority(QueueItem::HIGH); });
+	menu->appendItem(T_("Highest"), [this] { handlePriority(QueueItem::HIGHEST); });
 }
 
 void QueueFrame::addBrowseMenu(const MenuPtr& parent, QueueItemInfo* qii) {
@@ -921,7 +921,7 @@ void QueueFrame::addPMMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 void QueueFrame::addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 	unsigned int pos = parent->getCount();
 	MenuPtr menu = parent->appendPopup(T_("Re-add source"));
-	menu->appendItem(T_("All"), std::bind(&QueueFrame::handleReadd, this, HintedUser(UserPtr(), Util::emptyString)));
+	menu->appendItem(T_("All"), [this] { handleReadd(HintedUser(UserPtr(), Util::emptyString)); });
 	menu->appendSeparator();
 	if(!addUsers(menu, &QueueFrame::handleReadd, qii->getBadSources(), true))
 		parent->setItemEnabled(pos, false);
@@ -930,7 +930,7 @@ void QueueFrame::addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 void QueueFrame::addRemoveMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 	unsigned int pos = parent->getCount();
 	MenuPtr menu = parent->appendPopup(T_("Remove source"));
-	menu->appendItem(T_("All"), std::bind(&QueueFrame::handleRemoveSource, this, HintedUser(UserPtr(), Util::emptyString)));
+	menu->appendItem(T_("All"), [this] { handleRemoveSource(HintedUser(UserPtr(), Util::emptyString)); });
 	menu->appendSeparator();
 	if(!addUsers(menu, &QueueFrame::handleRemoveSource, qii->getSources(), true))
 		parent->setItemEnabled(pos, false);
@@ -949,7 +949,7 @@ bool QueueFrame::addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const
 		const QueueItem::Source& source = *i;
 		const HintedUser& user = source.getUser();
 		if(offline || user.user->isOnline()) {
-			menu->appendItem(escapeMenu(WinUtil::getNicks(user)), std::bind(handler, this, user));
+			menu->appendItem(escapeMenu(WinUtil::getNicks(user)), [=] { (this->*handler)(user); });
 			added = true;
 		}
 	}
@@ -1066,25 +1066,29 @@ void QueueFrame::onUpdated(QueueItem* qi) {
 }
 
 void QueueFrame::onRechecked(const string& target, const tstring& message) {
-	callAsync(std::bind(&dwt::StatusBar::setText, status, STATUS_STATUS,
-		str(TF_("Integrity check: %1% (%2%)") % message % Text::toT(target)), false));
+	callAsync([=] { status->setText(STATUS_STATUS,
+		str(TF_("Integrity check: %1% (%2%)") % message % Text::toT(target)), false); });
 }
 
 void QueueFrame::on(QueueManagerListener::Added, QueueItem* aQI) noexcept {
-	callAsync(std::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
+	auto qii = new QueueItemInfo(*aQI);
+	callAsync([=] { onAdded(qii); });
 }
 
 void QueueFrame::on(QueueManagerListener::Removed, QueueItem* aQI) noexcept {
-	callAsync(std::bind(&QueueFrame::onRemoved, this, aQI->getTarget()));
+	auto target = aQI->getTarget();
+	callAsync([=] { onRemoved(target); });
 }
 
 void QueueFrame::on(QueueManagerListener::Moved, QueueItem* aQI, const string& oldTarget) noexcept {
-	callAsync(std::bind(&QueueFrame::onRemoved, this, oldTarget));
-	callAsync(std::bind(&QueueFrame::onAdded, this, new QueueItemInfo(*aQI)));
+	auto qii = new QueueItemInfo(*aQI);
+	callAsync([=] { onRemoved(oldTarget); });
+	callAsync([=] { onAdded(qii); });
 }
 
 void QueueFrame::on(QueueManagerListener::SourcesUpdated, QueueItem* aQI) noexcept {
-	callAsync(std::bind(&QueueFrame::onUpdated, this, new QueueItem(*aQI)));
+	auto qi = new QueueItem(*aQI);
+	callAsync([=] { onUpdated(qi); });
 }
 
 void QueueFrame::on(QueueManagerListener::RecheckStarted, const string& target) noexcept {

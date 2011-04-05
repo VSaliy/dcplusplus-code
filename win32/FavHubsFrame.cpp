@@ -20,12 +20,17 @@
 
 #include "FavHubsFrame.h"
 
+#include <set>
+
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 
 #include "HubFrame.h"
 #include "FavHubProperties.h"
 #include "FavHubGroupsDlg.h"
+
+using std::set;
+using std::swap;
 
 const string FavHubsFrame::id = "FavHubs";
 const string& FavHubsFrame::getId() const { return id; }
@@ -66,9 +71,9 @@ hubs(0)
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(FAVHUBSFRAME_ORDER), SETTING(FAVHUBSFRAME_WIDTHS));
 
-		hubs->onDblClicked(std::bind(&FavHubsFrame::handleDoubleClick, this));
-		hubs->onKeyDown(std::bind(&FavHubsFrame::handleKeyDown, this, _1));
-		hubs->onContextMenu(std::bind(&FavHubsFrame::handleContextMenu, this, _1));
+		hubs->onDblClicked([this] { handleDoubleClick(); });
+		hubs->onKeyDown([this](int c) { return handleKeyDown(c); });
+		hubs->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
 		hubs->handleGroupDraw(WinUtil::bgColor);
 	}
 
@@ -80,7 +85,7 @@ hubs(0)
 		cs.caption = T_("&Connect");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_CONNECT);
-		button->onClicked(std::bind(&FavHubsFrame::openSelected, this));
+		button->onClicked([this] { openSelected(); });
 		addWidget(button);
 		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->hasSelected()); });
 
@@ -89,34 +94,34 @@ hubs(0)
 		button = grid->addChild(cs);
 		cs.style |= WS_DISABLED;
 		button->setHelpId(IDH_FAVORITE_HUBS_NEW);
-		button->onClicked(std::bind(&FavHubsFrame::handleAdd, this));
+		button->onClicked([this] { handleAdd(); });
 		addWidget(button);
 
 		cs.caption = T_("&Properties");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_PROPERTIES);
-		button->onClicked(std::bind(&FavHubsFrame::handleProperties, this));
+		button->onClicked([this] { handleProperties(); });
 		addWidget(button);
 		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->countSelected() == 1); });
 
 		cs.caption = T_("Move &Up");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_MOVE_UP);
-		button->onClicked(std::bind(&FavHubsFrame::handleMove, this, true));
+		button->onClicked([this] { handleMove(true); });
 		addWidget(button);
 		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->hasSelected()); });
 
 		cs.caption = T_("Move &Down");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_MOVE_DOWN);
-		button->onClicked(std::bind(&FavHubsFrame::handleMove, this, false));
+		button->onClicked([this] { handleMove(false); });
 		addWidget(button);
 		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->hasSelected()); });
 
 		cs.caption = T_("&Remove");
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_REMOVE);
-		button->onClicked(std::bind(&FavHubsFrame::handleRemove, this));
+		button->onClicked([this] { handleRemove(); });
 		addWidget(button);
 		hubs->onSelectionChanged([this, button] { button->setEnabled(hubs->hasSelected()); });
 
@@ -131,7 +136,7 @@ hubs(0)
 		cs.style &= ~WS_DISABLED;
 		button = grid->addChild(cs);
 		button->setHelpId(IDH_FAVORITE_HUBS_MANAGE_GROUPS);
-		button->onClicked(std::bind(&FavHubsFrame::handleGroups, this));
+		button->onClicked([this] { handleGroups(); });
 		addWidget(button);
 	}
 
@@ -336,21 +341,21 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 	menu->setTitle((sel == 0) ? getText() : (sel == 1) ? escapeMenu(hubs->getText(hubs->getSelected(), COLUMN_NAME)) :
 		str(TF_("%1% hubs") % sel), getParent()->getIcon(this));
-	menu->appendItem(T_("&Connect"), std::bind(&FavHubsFrame::openSelected, this), dwt::IconPtr(), sel, true);
+	menu->appendItem(T_("&Connect"), [this] { openSelected(); }, dwt::IconPtr(), sel, true);
 	menu->appendSeparator();
-	menu->appendItem(T_("&New..."), std::bind(&FavHubsFrame::handleAdd, this));
-	menu->appendItem(T_("&Properties"), std::bind(&FavHubsFrame::handleProperties, this), dwt::IconPtr(), sel == 1);
-	menu->appendItem(T_("Move &Up"), std::bind(&FavHubsFrame::handleMove, this, true), dwt::IconPtr(), sel);
-	menu->appendItem(T_("Move &Down"), std::bind(&FavHubsFrame::handleMove, this, false), dwt::IconPtr(), sel);
+	menu->appendItem(T_("&New..."), [this] { handleAdd(); });
+	menu->appendItem(T_("&Properties"), [this] { handleProperties(); }, dwt::IconPtr(), sel == 1);
+	menu->appendItem(T_("Move &Up"), [this] { handleMove(true); }, dwt::IconPtr(), sel);
+	menu->appendItem(T_("Move &Down"), [this] { handleMove(false); }, dwt::IconPtr(), sel);
 	menu->appendSeparator();
-	menu->appendItem(T_("&Remove"), std::bind(&FavHubsFrame::handleRemove, this), dwt::IconPtr(), sel);
+	menu->appendItem(T_("&Remove"), [this] { handleRemove(); }, dwt::IconPtr(), sel);
 	menu->appendSeparator();
 	if(sel) {
 		fillGroupMenu(menu->appendPopup(T_("&Move to group")));
 	} else {
 		menu->appendItem(T_("&Move to group"), 0, dwt::IconPtr(), false);
 	}
-	menu->appendItem(T_("Manage &groups"), std::bind(&FavHubsFrame::handleGroups, this));
+	menu->appendItem(T_("Manage &groups"), [this] { handleGroups(); });
 
 	menu->open(pt);
 	return true;

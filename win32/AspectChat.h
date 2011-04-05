@@ -54,15 +54,15 @@ protected:
 			TextBox::Seed cs = WinUtil::Seeds::textBox;
 			cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL;
 			message = t().addChild(cs);
-			message->onUpdated(std::bind(&ThisType::handleMessageUpdated, this));
+			message->onUpdated([this] { this->handleMessageUpdated(); });
 		}
 
-		t().addAccel(FALT, 'C', std::bind(&dwt::Control::setFocus, chat));
-		t().addAccel(FALT, 'M', std::bind(&dwt::Control::setFocus, message));
-		t().addAccel(FALT, 'S', std::bind(&ThisType::sendMessage_, this));
-		t().addAccel(0, VK_ESCAPE, std::bind(&ThisType::handleEscape, this));
-		t().addAccel(FCONTROL, 'F', [this] { GCC_WTF->chat->findTextNew(); });
-		t().addAccel(0, VK_F3, [this] { GCC_WTF->chat->findTextNext(); });
+		t().addAccel(FALT, 'C', [this] { this->chat->setFocus(); });
+		t().addAccel(FALT, 'M', [this] { this->message->setFocus(); });
+		t().addAccel(FALT, 'S', [this] { this->sendMessage_(); });
+		t().addAccel(0, VK_ESCAPE, [this] { this->handleEscape(); });
+		t().addAccel(FCONTROL, 'F', [this] { this->chat->findTextNew(); });
+		t().addAccel(0, VK_F3, [this] { this->chat->findTextNext(); });
 	}
 
 	virtual ~AspectChat() { }

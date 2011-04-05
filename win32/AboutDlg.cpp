@@ -53,7 +53,7 @@ dwt::ModalDialog(parent),
 grid(0),
 version(0)
 {
-	onInitDialog(std::bind(&AboutDlg::handleInitDialog, this));
+	onInitDialog([this] { return handleInitDialog(); });
 }
 
 AboutDlg::~AboutDlg() {
@@ -125,8 +125,9 @@ bool AboutDlg::handleInitDialog() {
 	version = grid->addChild(gs)->addChild(ls);
 
 	WinUtil::addDlgButtons(grid,
-		std::bind(&AboutDlg::endDialog, this, IDOK),
-		std::bind(&AboutDlg::endDialog, this, IDCANCEL)).second->setVisible(false);
+		[this] { GCC_WTF->endDialog(IDOK); },
+		[this] { GCC_WTF->endDialog(IDCANCEL); }
+		).second->setVisible(false);
 
 	setText(T_("About DC++"));
 
@@ -164,13 +165,13 @@ void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const 
 	}
 	if(x.empty())
 		x = T_("Error processing version information");
-	callAsync(std::bind(&Label::setText, version, x));
+	callAsync([=] { version->setText(x); });
 
 	conn->removeListener(this);
 }
 
 void AboutDlg::on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) noexcept {
-	callAsync(std::bind(&Label::setText, version, Text::toT(aLine)));
+	callAsync([=] { version->setText(Text::toT(aLine)); });
 	conn->removeListener(this);
 }
 
