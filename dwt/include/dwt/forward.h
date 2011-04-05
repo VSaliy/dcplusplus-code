@@ -33,6 +33,8 @@
 #ifndef DWT_FORWARD_H_
 #define DWT_FORWARD_H_
 
+#include "WindowsHeaders.h"
+
 #include "shared_ptr.h"
 
 namespace boost {

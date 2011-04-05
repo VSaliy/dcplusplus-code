@@ -54,11 +54,11 @@ tls(0)
 		autoDetect = cur2->addChild(CheckBox::Seed(T_("Enable automatic incoming connection type detection")));
 		autoDetect->setHelpId(IDH_SETTINGS_NETWORK_AUTODETECT);
 		items.push_back(Item(autoDetect, SettingsManager::AUTO_DETECT_CONNECTION, PropPage::T_BOOL));
-		autoDetect->onClicked(std::bind(&NetworkPage::handleAutoClicked, this));
+		autoDetect->onClicked([this] { handleAutoClicked(); });
 
 		detectNow = cur2->addChild(Button::Seed(T_("Detect now")));
 		detectNow->setHelpId(IDH_SETTINGS_NETWORK_DETECT_NOW);
-		detectNow->onClicked(std::bind(&NetworkPage::handleDetectClicked, this));
+		detectNow->onClicked([this] { handleDetectClicked(); });
 
 		GroupBoxPtr logGroup = cur->addChild(GroupBox::Seed(T_("Detection log")));
 		log = logGroup->addChild(WinUtil::Seeds::Dialog::richTextBox);
@@ -209,9 +209,9 @@ void NetworkPage::detectionFinished() {
 }
 
 void NetworkPage::on(Message, const string& message) noexcept {
-	callAsync(std::bind(&NetworkPage::addLogLine, this, Text::toT(message)));
+	callAsync([=] { addLogLine(Text::toT(message)); });
 }
 
 void NetworkPage::on(Finished) noexcept {
-	callAsync(std::bind(&NetworkPage::detectionFinished, this));
+	callAsync([this] { detectionFinished(); });
 }

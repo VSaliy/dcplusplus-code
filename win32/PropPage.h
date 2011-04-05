@@ -63,8 +63,8 @@ protected:
 	void write(const ItemList& items);
 	void write(TablePtr list);
 
-	void handleBrowseDir(const Item& i);
-	void handleBrowseFile(const Item& i);
+	void handleBrowseDir(TextBoxPtr box, int setting);
+	void handleBrowseFile(TextBoxPtr box, int setting);
 
 	GridPtr grid;
 private:

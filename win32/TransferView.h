@@ -254,7 +254,6 @@ private:
 
 	StringMap ucLineParams;
 
-	void handleSized(const dwt::SizedEvent& sz);
 	bool handleConnectionsMenu(dwt::ScreenCoordinate pt);
 	bool handleDownloadsMenu(dwt::ScreenCoordinate pt);
 	LRESULT handleDestroy();

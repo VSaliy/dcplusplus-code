@@ -92,8 +92,8 @@ socksServer(0)
 	PropPage::read(items);
 
 	fixControlsOut();
-	directOut->onClicked(std::bind(&ProxyPage::fixControlsOut, this));
-	socks5->onClicked(std::bind(&ProxyPage::fixControlsOut, this));
+	directOut->onClicked([this] { fixControlsOut(); });
+	socks5->onClicked([this] { fixControlsOut(); });
 }
 
 ProxyPage::~ProxyPage() {

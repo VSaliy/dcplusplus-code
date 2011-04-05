@@ -56,7 +56,7 @@ options(0)
 		items.push_back(Item(box, SettingsManager::TLS_PRIVATE_KEY_FILE, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);
 		ButtonPtr button = cur->addChild(dots);
-		button->onClicked(std::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
+		button->onClicked([=] { GCC_WTF->handleBrowseFile(box, SettingsManager::TLS_PRIVATE_KEY_FILE); });
 		button->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);
 
 		cur->addChild(Label::Seed(T_("Own certificate file")))->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);
@@ -64,7 +64,7 @@ options(0)
 		items.push_back(Item(box, SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);
 		button = cur->addChild(dots);
-		button->onClicked(std::bind(&CertificatesPage::handleBrowseFile, this, items.back()));
+		button->onClicked([=] { GCC_WTF->handleBrowseFile(box, SettingsManager::TLS_CERTIFICATE_FILE); });
 		button->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);
 
 		cur->addChild(Label::Seed(T_("Trusted certificates path")))->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);
@@ -72,7 +72,7 @@ options(0)
 		items.push_back(Item(box, SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);
 		button = cur->addChild(dots);
-		button->onClicked(std::bind(&CertificatesPage::handleBrowseDir, this, items.back()));
+		button->onClicked([=] { GCC_WTF->handleBrowseDir(box, SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH); });
 		button->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);
 	}
 
@@ -82,7 +82,7 @@ options(0)
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 
 		ButtonPtr gen = cur->addChild(Button::Seed(T_("Generate certificates")));
-		gen->onClicked(std::bind(&CertificatesPage::handleGenerateCertsClicked, this));
+		gen->onClicked([this] { handleGenerateCertsClicked(); });
 	}
 
 	options = grid->addChild(WinUtil::Seeds::Dialog::optionsTable);

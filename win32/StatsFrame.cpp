@@ -56,7 +56,7 @@ StatsFrame::StatsFrame(TabViewPtr parent) :
 
 	layout();
 
-	setTimer(std::bind(&StatsFrame::eachSecond, this), 1000);
+	setTimer([this] { return eachSecond(); }, 1000);
 }
 
 StatsFrame::~StatsFrame() {

@@ -18,6 +18,8 @@
 
 #include "stdafx.h"
 
+#include <exception>
+
 #include "SingleInstance.h"
 #include "WinUtil.h"
 #include "MainWindow.h"
@@ -75,7 +77,7 @@ void term_handler() {
 
 int SmartWinMain(dwt::Application& app) {
 #ifdef _DEBUG
-	old_handler = set_terminate(&term_handler);
+	old_handler = std::set_terminate(&term_handler);
 
 #ifndef CONSOLE
 	// attach to the parent console, or create one

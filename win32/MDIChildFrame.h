@@ -56,16 +56,16 @@ protected:
 
 		tabView->add(this, iconId ? WinUtil::tabIcon(iconId) : dwt::IconPtr());
 
-		this->onTabContextMenu(std::bind(&ThisType::handleContextMenu, this, _1));
+		this->onTabContextMenu([this](const dwt::ScreenCoordinate &sc) { return this->handleContextMenu(sc); });
 
-		onClosing(std::bind(&ThisType::handleClosing, this));
-		onFocus(std::bind(&ThisType::handleFocus, this));
-		onWindowPosChanged(std::bind(&ThisType::handleSized, this, _1));
-		onActivate(std::bind(&ThisType::handleActivate, this, _1));
+		onClosing([this] { return this->handleClosing(); });
+		onFocus([this] { this->handleFocus(); });
+		onWindowPosChanged([this](const dwt::Rectangle &r) { this->handleSized(r); });
+		onActivate([this](bool active) { this->handleActivate(active); });
 		addDlgCodeMessage(this);
 
-		addAccel(FCONTROL, 'W', std::bind(&ThisType::close, this, true));
-		addAccel(FCONTROL, VK_F4, std::bind(&ThisType::close, this, true));
+		addAccel(FCONTROL, 'W', [this] { this->close(true); });
+		addAccel(FCONTROL, VK_F4, [this] { this->close(true); });
 		if(manageAccels)
 			initAccels();
 	}
@@ -153,15 +153,15 @@ private:
 	bool reallyClose;
 
 	void addDlgCodeMessage(ComboBox* widget, bool autoTab = true) {
-		widget->onRaw(std::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
+		widget->onRaw([=](WPARAM w, LPARAM) { return this->handleGetDlgCode(w, autoTab); }, dwt::Message(WM_GETDLGCODE));
 		TextBox* text = widget->getTextBox();
 		if(text)
-			text->onRaw(std::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
+			text->onRaw([=](WPARAM w, LPARAM) { return this->handleGetDlgCode(w, autoTab); }, dwt::Message(WM_GETDLGCODE));
 	}
 
 	template<typename W>
 	void addDlgCodeMessage(W* widget, bool autoTab = true) {
-		widget->onRaw(std::bind(&ThisType::handleGetDlgCode, this, _1, autoTab), dwt::Message(WM_GETDLGCODE));
+		widget->onRaw([=](WPARAM w, LPARAM) { return this->handleGetDlgCode(w, autoTab); }, dwt::Message(WM_GETDLGCODE));
 	}
 
 	void addColor(ComboBox* widget) {
@@ -219,7 +219,7 @@ private:
 		menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
 
 		tabMenuImpl(menu);
-		menu->appendItem(T_("&Close"), std::bind(&ThisType::close, this, true), WinUtil::menuIcon(IDI_EXIT));
+		menu->appendItem(T_("&Close"), [this] { GCC_WTF->close(true); }, WinUtil::menuIcon(IDI_EXIT));
 
 		menu->open(pt);
 		return true;

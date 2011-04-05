@@ -54,7 +54,7 @@ public:
 					for(StringList::const_iterator i = uc->getDisplayName().begin(), iend = uc->getDisplayName().end(); i != iend; ++i) {
 						tstring name = Text::toT(*i);
 						if(i + 1 == iend) {
-							cur->appendItem(name, std::bind(&T::runUserCommand, static_cast<T*>(this), std::cref(*uc)));
+							cur->appendItem(name, [=] { static_cast<T*>(this)->runUserCommand(*uc); });
 						} else {
 							bool found = false;
 							// Let's see if we find an existing item...

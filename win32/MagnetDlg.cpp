@@ -35,7 +35,7 @@ mHash(aHash),
 mFileName(aFileName),
 mKeySearch(aKeySearch)
 {
-	onInitDialog(std::bind(&MagnetDlg::handleInitDialog, this));
+	onInitDialog([this] { return handleInitDialog(); });
 }
 
 MagnetDlg::~MagnetDlg() {
@@ -108,8 +108,8 @@ bool MagnetDlg::handleInitDialog() {
 		//remember = cur->addChild(CheckBox::Seed(T_("Do the same action next time without asking")));
 
 		WinUtil::addDlgButtons(bottom->addChild(Grid::Seed(2, 1)),
-			std::bind(&MagnetDlg::handleOKClicked, this),
-			std::bind(&MagnetDlg::endDialog, this, IDCANCEL));
+			[this] { handleOKClicked(); },
+			[this] { GCC_WTF->endDialog(IDCANCEL); });
 	}
 
 	setText(T_("MAGNET Link detected"));

@@ -74,23 +74,23 @@ modify(0)
 
 			ButtonPtr button = row->addChild(Button::Seed(T_("&Add")));
 			button->setHelpId(IDH_SETTINGS_SEARCHTYPES_ADD);
-			button->onClicked(std::bind(&SearchTypesPage::handleAddClicked, this));
+			button->onClicked([this] { handleAddClicked(); });
 
 			modify = row->addChild(Button::Seed(T_("M&odify")));
 			modify->setHelpId(IDH_SETTINGS_SEARCHTYPES_MODIFY);
-			modify->onClicked(std::bind(&SearchTypesPage::handleModClicked, this));
+			modify->onClicked([this] { handleModClicked(); });
 
 			rename = row->addChild(Button::Seed(T_("Re&name")));
 			rename->setHelpId(IDH_SETTINGS_SEARCHTYPES_RENAME);
-			rename->onClicked(std::bind(&SearchTypesPage::handleRenameClicked, this));
+			rename->onClicked([this] { handleRenameClicked(); });
 
 			remove = row->addChild(Button::Seed(T_("&Remove")));
 			remove->setHelpId(IDH_SETTINGS_SEARCHTYPES_REMOVE);
-			remove->onClicked(std::bind(&SearchTypesPage::handleRemoveClicked, this));
+			remove->onClicked([this] { handleRemoveClicked(); });
 
 			button = row->addChild(Button::Seed(T_("&Defaults")));
 			button->setHelpId(IDH_SETTINGS_SEARCHTYPES_DEFAULTS);
-			button->onClicked(std::bind(&SearchTypesPage::handleDefaultsClicked, this));
+			button->onClicked([this] { handleDefaultsClicked(); });
 		}
 
 		cur->addChild(Label::Seed(T_("Note; Custom search types will only be applied to ADC hubs!")));
@@ -103,9 +103,9 @@ modify(0)
 
 	handleSelectionChanged();
 
-	types->onDblClicked(std::bind(&SearchTypesPage::handleDoubleClick, this));
-	types->onKeyDown(std::bind(&SearchTypesPage::handleKeyDown, this, _1));
-	types->onSelectionChanged(std::bind(&SearchTypesPage::handleSelectionChanged, this));
+	types->onDblClicked([this] { handleDoubleClick(); });
+	types->onKeyDown([this](int c) { return handleKeyDown(c); });
+	types->onSelectionChanged([this] { handleSelectionChanged(); });
 }
 
 SearchTypesPage::~SearchTypesPage() {

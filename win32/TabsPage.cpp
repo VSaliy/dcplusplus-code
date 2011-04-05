@@ -61,18 +61,19 @@ options(0)
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
 
+		auto cp = [this] { createPreview(); };
 		GroupBoxPtr group = cur->addChild(GroupBox::Seed());
 		group->setHelpId(IDH_SETTINGS_TABS_DRAW);
 		GridPtr cur2 = group->addChild(Grid::Seed(2, 1));
 		dcppDraw = cur2->addChild(RadioButton::Seed(T_("Let DC++ draw tabs")));
-		dcppDraw->onClicked(std::bind(&TabsPage::createPreview, this));
+		dcppDraw->onClicked(cp);
 		dcppDraw->onClicked([this]() {
 			themeGroup->setEnabled(true);
 			if(!dwt::util::win32::ensureVersion(dwt::util::win32::VISTA))
 				browserTheme->setEnabled(false);
 		});
 		RadioButtonPtr button = cur2->addChild(RadioButton::Seed(T_("Use standard Windows tabs")));
-		button->onClicked(std::bind(&TabsPage::createPreview, this));
+		button->onClicked(cp);
 		button->onClicked([this]() { themeGroup->setEnabled(false); });
 		if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_OD)
 			dcppDraw->setChecked();
@@ -83,9 +84,9 @@ options(0)
 		group->setHelpId(IDH_SETTINGS_TABS_STYLE);
 		cur2 = group->addChild(Grid::Seed(2, 1));
 		button = cur2->addChild(RadioButton::Seed(T_("Tab style")));
-		button->onClicked(std::bind(&TabsPage::createPreview, this));
+		button->onClicked(cp);
 		buttonStyle = cur2->addChild(RadioButton::Seed(T_("Button style")));
-		buttonStyle->onClicked(std::bind(&TabsPage::createPreview, this));
+		buttonStyle->onClicked(cp);
 		if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BUTTONS)
 			buttonStyle->setChecked();
 		else
@@ -95,10 +96,10 @@ options(0)
 		themeGroup->setHelpId(IDH_SETTINGS_TABS_STYLE);
 		cur2 = themeGroup->addChild(Grid::Seed(2, 1));
 		button = cur2->addChild(RadioButton::Seed(T_("Default theme")));
-		button->onClicked(std::bind(&TabsPage::createPreview, this));
+		button->onClicked(cp);
 		browserTheme = cur2->addChild(RadioButton::Seed(T_("Browser theme")));
 		if(dwt::util::win32::ensureVersion(dwt::util::win32::VISTA))
-			browserTheme->onClicked(std::bind(&TabsPage::createPreview, this));
+			browserTheme->onClicked(cp);
 		else
 			browserTheme->setEnabled(false);
 		if(browserTheme->getEnabled() && (SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BROWSER))
@@ -122,7 +123,7 @@ options(0)
 		tabWidth = cur->addChild(Slider::Seed());
 		tabWidth->setRange(100, 1000);
 		tabWidth->setPosition(SETTING(TAB_WIDTH));
-		tabWidth->onScrollHorz(std::bind(&TabsPage::createPreview, this));
+		tabWidth->onScrollHorz([this] { createPreview(); });
 	}
 
 	{

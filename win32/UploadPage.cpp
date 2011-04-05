@@ -73,13 +73,13 @@ remove(0)
 			row->addChild(Label::Seed(T_("Total size:")));
 			total = row->addChild(Label::Seed(Text::toT(Util::formatBytes(ShareManager::getInstance()->getShareSize()))));
 
-			row->addChild(Button::Seed(T_("&Add folder")))->onClicked(std::bind(&UploadPage::handleAddClicked, this));
+			row->addChild(Button::Seed(T_("&Add folder")))->onClicked([this] { handleAddClicked(); });
 
 			rename = row->addChild(Button::Seed(T_("Re&name")));
-			rename->onClicked(std::bind(&UploadPage::handleRenameClicked, this));
+			rename->onClicked([this] { handleRenameClicked(); });
 
 			remove = row->addChild(Button::Seed(T_("&Remove")));
-			remove->onClicked(std::bind(&UploadPage::handleRemoveClicked, this));
+			remove->onClicked([this] { handleRemoveClicked(); });
 		}
 
 		cur->addChild(Label::Seed(T_("Note; Files appear in the share only after they've been hashed!")));
@@ -87,7 +87,8 @@ remove(0)
 		// dummy grid so that the check-box doesn't fill the whole row.
 		CheckBoxPtr shareHidden = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Share hidden files")));
 		items.push_back(Item(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL));
-		shareHidden->onClicked(std::bind(&UploadPage::handleShareHiddenClicked, this, shareHidden, items.back()));
+		auto last = items.back();
+		shareHidden->onClicked([=] { handleShareHiddenClicked(shareHidden, SettingsManager::SHARE_HIDDEN); });
 		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);
 	}
 
@@ -131,10 +132,10 @@ remove(0)
 
 	handleSelectionChanged();
 
-	directories->onDblClicked(std::bind(&UploadPage::handleDoubleClick, this));
-	directories->onKeyDown(std::bind(&UploadPage::handleKeyDown, this, _1));
-	directories->onSelectionChanged(std::bind(&UploadPage::handleSelectionChanged, this));
-	directories->onDragDrop(std::bind(&UploadPage::handleDragDrop, this, _1));
+	directories->onDblClicked([this] { handleDoubleClick(); });
+	directories->onKeyDown([this](int c) { return handleKeyDown(c); });
+	directories->onSelectionChanged([this] { handleSelectionChanged(); });
+	directories->onDragDrop([this] (const TStringList &files, dwt::Point) { handleDragDrop(files); });
 }
 
 UploadPage::~UploadPage() {
@@ -188,9 +189,9 @@ void UploadPage::handleDragDrop(const TStringList& files) {
 			addDirectory(*i);
 }
 
-void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox, Item& item) {
+void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox, int setting) {
 	// Save the checkbox state so that ShareManager knows to include/exclude hidden files
-	SettingsManager::getInstance()->set((SettingsManager::IntSetting)item.setting, checkBox->getChecked());
+	SettingsManager::getInstance()->set((SettingsManager::IntSetting)setting, checkBox->getChecked());
 
 	// Refresh the share. This is a blocking refresh. Might cause problems?
 	// Hopefully people won't click the checkbox enough for it to be an issue. :-)

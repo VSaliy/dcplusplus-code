@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_QUEUE_FRAME_H
 #define DCPLUSPLUS_WIN32_QUEUE_FRAME_H
 
+#include <unordered_map>
+
 #include "StaticFrame.h"
 #include "TypedTable.h"
 #include "TypedTree.h"
@@ -27,6 +29,8 @@
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/QueueItem.h>
 #include "resource.h"
+
+using std::unordered_multimap;
 
 class QueueFrame :
 	public StaticFrame<QueueFrame>,

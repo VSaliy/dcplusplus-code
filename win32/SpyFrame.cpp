@@ -59,8 +59,8 @@ SpyFrame::SpyFrame(TabViewPtr parent) :
 		WinUtil::makeColumns(searches, searchesColumns, COLUMN_LAST, SETTING(SPYFRAME_ORDER), SETTING(SPYFRAME_WIDTHS));
 		searches->setSort(COLUMN_COUNT, dwt::Table::SORT_INT, false);
 
-		searches->onColumnClick(std::bind(&SpyFrame::handleColumnClick, this, _1));
-		searches->onContextMenu(std::bind(&SpyFrame::handleContextMenu, this, _1));
+		searches->onColumnClick([this](int column) { handleColumnClick(column); });
+		searches->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
 	}
 
 	{
@@ -69,7 +69,7 @@ SpyFrame::SpyFrame(TabViewPtr parent) :
 		ignoreTTH = addChild(seed);
 		ignoreTTH->setHelpId(IDH_SPY_IGNORE_TTH);
 		ignoreTTH->setChecked(bIgnoreTTH);
-		ignoreTTH->onClicked(std::bind(&SpyFrame::handleIgnoreTTHClicked, this));
+		ignoreTTH->onClicked([this] { handleIgnoreTTHClicked(); });
 	}
 
 	initStatus();
@@ -102,7 +102,7 @@ void SpyFrame::layout() {
 }
 
 void SpyFrame::initSecond() {
-	setTimer(std::bind(&SpyFrame::eachSecond, this), 1000);
+	setTimer([this] { return eachSecond(); }, 1000);
 }
 
 bool SpyFrame::eachSecond() {
@@ -156,7 +156,7 @@ bool SpyFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		MenuPtr menu = addChild(WinUtil::Seeds::menu);
 		menu->setTitle(escapeMenu(selText), getParent()->getIcon(this));
-		menu->appendItem(T_("&Search"), std::bind(&SpyFrame::handleSearch, this, selText), WinUtil::menuIcon(IDI_SEARCH));
+		menu->appendItem(T_("&Search"), [=] { handleSearch(selText); }, WinUtil::menuIcon(IDI_SEARCH));
 
 		menu->open(pt);
 		return true;
@@ -214,5 +214,5 @@ void SpyFrame::on(ClientManagerListener::IncomingSearch, const string& s) noexce
 	while( (i=x.find(_T('$'))) != string::npos) {
 		x[i] = _T(' ');
 	}
-	callAsync(std::bind(&SpyFrame::add, this, x));
+	callAsync([=] { add(x); });
 }
