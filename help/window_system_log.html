@@ -38,16 +38,16 @@
 	<dd>The client received a <a href="settings_advanced.html#registrymagnet">magnet link</a> handle request.</dd>
 	<dt>Generated new TLS certificate</dt>
 	<dd>As <a href="settings_certs.html">Security certificates</a> enabled but no existing TLS certificate files found (or they are invalid), new certificate files generated in the 'Certificates' subfolder of the directory where DC++ configuraton files are stored.</dd>
-	<dt>UPnP: Successfully created port mappings (TCP: [port1], UDP: [port2], TLS: [port3]), mapped using the [interface name] interface</dt>
-	<dd>The UPnP framework found a UPnP capable device and successfully mapped the shown ports for their respective protocols.</dd>
+	<dt>Port mapping: Successfully created port mappings (Transfers: [port1], Searches: [port2], Encrypted transfers: [port3]) on the [router name] device with the [interface identification] interface</dt>
+	<dd>DC++ has managed to automatically create port forwarding rules on the router with <a href="faq_mapping.html">NAT-PMP or UPnP</a>.</dd>
 	<dt>Connectivity: Determining connection type...</dt>
-	<dd>This message signs that <a href="settings_connection.html#autoconn">Automatic incoming connection type detection</a> is started.</dd>
+	<dd>This message signs that <a href="settings_connectivity.html#autoconn">Automatic incoming connection type detection</a> is started.</dd>
 	<dt>Connectivity: Public IP address detected, selecting active mode with direct connection</dt>
-	<dd>It means that <a href="settings_connection.html#autoconn">Automatic connection type detection</a> determined that you have a public IP address so it assumed that you are directly connected to the Internet. The appropriate connection type selected.</dd>
+	<dd>It means that <a href="settings_connectivity.html#autoconn">Automatic connection type detection</a> determined that you have a public IP address so it assumed that you are directly connected to the Internet. The appropriate connection type selected.</dd>
 	<dt>Connectivity: Local network with possible NAT detected, trying to map the ports using UPnP...</dt>
-	<dd><a href="settings_connection.html#autoconn">Automatic connection type detection</a> determined that you have a <a href="non-routable.html">private</a> IP address and it started to discover for a possible UPnP capable gateway (router).</dd>
+	<dd><a href="settings_connectivity.html#autoconn">Automatic connection type detection</a> determined that you have a <a href="non-routable.html">private</a> IP address and it started to discover for a possible UPnP capable gateway (router).</dd>
 	<dt>Connectivity: Automatic setup of active mode has failed. You may want to set up your connection manually for better connectivity</dt>
-	<dd><a href="settings_connection.html#autoconn">Automatic incoming connection type detection</a> did not find any way to configure any kind of active connection so as a last resort it selected passive connection mode with <a href="http://en.wikipedia.org/wiki/NAT_traversal" target="_blank" class="external">NAT traversal</a> capability.</dd>
+	<dd><a href="settings_connectivity.html#autoconn">Automatic incoming connection type detection</a> did not find any way to configure any kind of active connection so as a last resort it selected passive connection mode with <a href="http://en.wikipedia.org/wiki/NAT_traversal" target="_blank" class="external">NAT traversal</a> capability.</dd>
 </dl>
 
 <h2>Error messages</h2>
@@ -57,20 +57,20 @@
 	<dt>Error registering adc(s):// link handler</dt>
 	<dt>Error registering Magnet link handler</dt>
 	<dd>These errors mean that DC++ was unable to register the appropriate link handler(s) in Windows, per the <a href="settings_advanced.html#registrymagnet">Register with Windows to handle magnet: URI links</a> and <a href="settings_advanced.html#registrydchubadc">Register with Windows to handle dchub://, adc:// and adcs:// URL links</a> settings. The most common reason of an unsuccesful registration is that the user account under which DC++ is running does not have appropriate rights for (write) access the required parts of the Windows Registry.</dd>
-	<dt>UPnP: Failed to get external IP</dt>
-	<dd>This error message can appear when DC++ tries to map ports for incoming connections via UPnP and means that while port mappings were successful, DC++ couldn't get external IP address from the UPnP device. If this message persists it may be because of broken UPnP support of the device. If its <a href="settings_connection.html#noipoverride">allowed</a> DC++ will try to get the external IP from connected hubs.</dd>
+	<dt>Port mapping: Failed to get external IP</dt>
+	<dd>This error message can appear when DC++ tries to map ports for incoming connections via NAT-PMP / UPnP and means that although port mappings were successful, DC++ couldn't get the external IP address from the UPnP device. If this message persists, it may be because of broken NAT-PMP / UPnP support of the device. This is not very important, since DC++ can still gather the external IP from connected hubs <a href="settings_connectivity_manual.html#noipoverride">if it is allowed to do so</a>.</dd>
 	<dt>UPnP: Failed to create port mappings</dt>
-	<dd>This error message can appear when DC++ tries to map ports for incoming connections via UPnP. It means that no UPnP device can be found or its not responding. It can happen that you get this message when <a href="settings_connection.html#autoconn">Automatic connection type detection</a> is enabled as DC++ trying to discover a possible UPnP device for setting up active mode. This message is a real problem only if you selected the 'Use UPnP to let DC++ configure my router' option manually in <a href="settings_connection.html#connection">Incoming connection settings</a>. In this case refer to the <a href="faq_upnp.html">UPnP FAQ</a> for more information.</dd>
+	<dd>This error message can appear when DC++ tries to map ports for incoming connections via UPnP. It means that no UPnP device can be found or its not responding. It can happen that you get this message when <a href="settings_connectivity.html#autoconn">Automatic connection type detection</a> is enabled as DC++ trying to discover a possible UPnP device for setting up active mode. This message is a real problem only if you selected the 'Use UPnP to let DC++ configure my router' option manually in <a href="settings_connectivity_manual.html#connection">Incoming connection settings</a>. In this case refer to the <a href="faq_upnp.html">UPnP FAQ</a> for more information.</dd>
 	<dt>UPnP: Failed to remove port mappings</dt>
 	<dd>This message can appear mostly at shutdown of DC++ and means that UPnP port mappings created before couldn't be successfully removed. If this message persists the most probable reason is broken UPnP support of the (router) device.</dd>
 	<dt>UPnP: Another UPnP port mapping attempt is in progress...</dt>
-	<dd>This means that an <a href="settings_connection.html#autoconn">automatic connection type detection</a> attempt was started too soon (the previous operation has not been finished). Try restarting DC++ if this message persists. If restart DC++ does not help the most probable reason is broken UPnP support of your (router) device.</dd>
+	<dd>This means that an <a href="settings_connectivity.html#autoconn">automatic connection type detection</a> attempt was started too soon (the previous operation has not been finished). Try restarting DC++ if this message persists. If restart DC++ does not help the most probable reason is broken UPnP support of your (router) device.</dd>
 	<dt>UPnP: Failed to initalize the [interface name] interface</dt>
 	<dd>DC++ failed to initalize one of its UPnP interface and will try to use the next one in the row.</dd>
 	<dt>UPnP: The [interface name] interface has failed to map the [TCP/UDP/TLS] [port number] port</dt>
 	<dd>The currently used UPnP interface failed to map the shown port. DC++ will try to use the next UPnP interface in the row.</dd>
 	<dt>Connectivity: Unable to open TCP/UDP/TLS port(s). You must set up your connection manually</dt>
-	<dd>You can get this message only when <a href="settings_connection.html#autoconn">Automatic connection type detection</a> is enabled and DC++ failed to open port(s) before trying to determine the available conncetion types. Possible reasons include the choosen port(s) are already occupied by another application or DC++ is blocked by a <a href="get_started.html#firewall">software firewall</a>.</dd>
+	<dd>You can get this message only when <a href="settings_connectivity.html#autoconn">Automatic connection type detection</a> is enabled and DC++ failed to open port(s) before trying to determine the available conncetion types. Possible reasons include the choosen port(s) are already occupied by another application or DC++ is blocked by a <a href="get_started.html#firewall">software firewall</a>.</dd>
 	<dt>Not listening for connections - please restart DC++</dt>
 	<dd>An unrecoverable low level networking error keeps DC++ from listening for connections. Search and download won't work until you restart DC++.</dd>
 	<dt>Connectivity error: [error message]</dt>

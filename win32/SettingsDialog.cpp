@@ -24,24 +24,31 @@
 #include "WinUtil.h"
 
 #include "GeneralPage.h"
-#include "NetworkPage.h"
+
+#include "ConnectivityPage.h"
+#include "ConnectivityManualPage.h"
+#include "BandwidthLimitPage.h"
+#include "ProxyPage.h"
+
 #include "DownloadPage.h"
 #include "FavoriteDirsPage.h"
 #include "QueuePage.h"
+
 #include "UploadPage.h"
+
 #include "AppearancePage.h"
 #include "Appearance2Page.h"
 #include "TabsPage.h"
 #include "WindowsPage.h"
+
 #include "HistoryPage.h"
 #include "LogPage.h"
+
 #include "AdvancedPage.h"
-#include "Advanced3Page.h"
+#include "ExpertsPage.h"
 #include "UCPage.h"
 #include "CertificatesPage.h"
-#include "BandwidthLimitPage.h"
 #include "SearchTypesPage.h"
-#include "ProxyPage.h"
 
 SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
@@ -112,9 +119,10 @@ bool SettingsDialog::initDialog() {
 		addPage(T_("Personal information"), new GeneralPage(cur));
 
 		{
-			HTREEITEM item = addPage(T_("Connection settings"), new NetworkPage(cur));
-			addPage(T_("Bandwidth Limiting"), new BandwidthLimitPage(cur), item);
-			addPage(T_("Proxy Settings"), new ProxyPage(cur), item);
+			HTREEITEM item = addPage(T_("Connectivity"), new ConnectivityPage(cur));
+			addPage(T_("Manual configuration"), new ConnectivityManualPage(cur), item);
+			addPage(T_("Bandwidth limiting"), new BandwidthLimitPage(cur), item);
+			addPage(T_("Proxy"), new ProxyPage(cur), item);
 		}
 
 		{
@@ -139,10 +147,10 @@ bool SettingsDialog::initDialog() {
 
 		{
 			HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(cur));
-			addPage(T_("Experts only"), new Advanced3Page(cur), item);
-			addPage(T_("User Commands"), new UCPage(cur), item);
-			addPage(T_("Security Certificates"), new CertificatesPage(cur), item);
-			addPage(T_("Search Types"), new SearchTypesPage(cur), item);
+			addPage(T_("Experts only"), new ExpertsPage(cur), item);
+			addPage(T_("User commands"), new UCPage(cur), item);
+			addPage(T_("Security certificates"), new CertificatesPage(cur), item);
+			addPage(T_("Search types"), new SearchTypesPage(cur), item);
 		}
 	}
 
@@ -262,8 +270,13 @@ void SettingsDialog::handleCtrlTab(bool shift) {
 }
 
 void SettingsDialog::updateTitle() {
-	tstring title = tree->getSelectedText();
-	setText(title.empty() ? T_("Settings") : T_("Settings") + _T(" - [") + title + _T("]"));
+	tstring title;
+	auto item = tree->getSelected();
+	while(item) {
+		title = _T(" > ") + tree->getText(item) + title;
+		item = tree->getParent(item);
+	}
+	setText(T_("Settings") + title);
 }
 
 void SettingsDialog::write() {

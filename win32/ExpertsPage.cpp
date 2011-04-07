@@ -20,15 +20,15 @@
 
 #include "resource.h"
 
-#include "Advanced3Page.h"
+#include "ExpertsPage.h"
 
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
-Advanced3Page::Advanced3Page(dwt::Widget* parent) :
+ExpertsPage::ExpertsPage(dwt::Widget* parent) :
 PropPage(parent, 6, 2)
 {
-	setHelpId(IDH_ADVANCED3PAGE);
+	setHelpId(IDH_EXPERTSPAGE);
 
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
@@ -38,7 +38,6 @@ PropPage(parent, 6, 2)
 	addItem(T_("Auto-search limit"), SettingsManager::AUTO_SEARCH_LIMIT, true, IDH_SETTINGS_ADVANCED3_AUTO_SEARCH_LIMIT);
 	addItem(T_("Mini slot size"), SettingsManager::SET_MINISLOT_SIZE, true, IDH_SETTINGS_ADVANCED3_MINISLOT_SIZE, T_("KiB"));
 	addItem(T_("Max filelist size"), SettingsManager::MAX_FILELIST_SIZE, true, IDH_SETTINGS_ADVANCED3_MAX_FILELIST_SIZE, T_("MiB"));
-	addItem(T_("Bind address"), SettingsManager::BIND_ADDRESS, false, IDH_SETTINGS_ADVANCED3_BIND_ADDRESS);
 	addItem(T_("PID"), SettingsManager::PRIVATE_ID, false, IDH_SETTINGS_ADVANCED3_PRIVATE_ID);
 	addItem(T_("Auto refresh time"), SettingsManager::AUTO_REFRESH_TIME, true, IDH_SETTINGS_ADVANCED3_AUTO_REFRESH_TIME, T_("minutes"));
 	addItem(T_("Settings save interval"), SettingsManager::SETTINGS_SAVE_INTERVAL, true, IDH_SETTINGS_ADVANCED3_SETTINGS_SAVE_INTERVAL, T_("minutes"));
@@ -48,10 +47,10 @@ PropPage(parent, 6, 2)
 	PropPage::read(items);
 }
 
-Advanced3Page::~Advanced3Page() {
+ExpertsPage::~ExpertsPage() {
 }
 
-void Advanced3Page::write() {
+void ExpertsPage::write() {
 	PropPage::write(items);
 
 	SettingsManager* settings = SettingsManager::getInstance();
@@ -63,7 +62,7 @@ void Advanced3Page::write() {
 		settings->set(SettingsManager::AUTO_SEARCH_LIMIT, 1);
 }
 
-void Advanced3Page::addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2) {
+void ExpertsPage::addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2) {
 	GroupBoxPtr group = grid->addChild(GroupBox::Seed(text));
 	group->setHelpId(helpId);
 

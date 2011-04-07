@@ -26,6 +26,8 @@ class Mapper_NATPMP : public Mapper
 public:
 	Mapper_NATPMP() : Mapper(), lifetime(0) { }
 
+	static const string name;
+
 private:
 	bool init();
 	void uninit();
@@ -38,7 +40,6 @@ private:
 	string getDeviceName();
 	string getExternalIP();
 
-	static const string name;
 	const string& getName() const { return name; }
 
 	string gateway;

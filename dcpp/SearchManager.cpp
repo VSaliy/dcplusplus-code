@@ -87,18 +87,13 @@ void SearchManager::search(StringList& who, const string& aName, int64_t aSize /
 }
 
 void SearchManager::listen() {
-
 	disconnect();
 
 	try {
 		socket.reset(new Socket);
 		socket->create(Socket::TYPE_UDP);
 		socket->setBlocking(true);
-		if (BOOLSETTING(AUTO_DETECT_CONNECTION)) {
-			port = socket->bind(0, Util::emptyString);
-		} else {
-			port = socket->bind(static_cast<uint16_t>(SETTING(UDP_PORT)), SETTING(BIND_ADDRESS));
-		}
+		port = socket->bind(static_cast<uint16_t>(SETTING(UDP_PORT)), SETTING(BIND_ADDRESS));
 		start();
 	} catch(...) {
 		socket.reset();
@@ -146,7 +141,7 @@ int SearchManager::run() {
 				socket->disconnect();
 				socket->create(Socket::TYPE_UDP);
 				socket->setBlocking(true);
-				socket->bind(port, BOOLSETTING(AUTO_DETECT_CONNECTION) ? Util::emptyString : SETTING(BIND_ADDRESS));
+				socket->bind(port, SETTING(BIND_ADDRESS));
 				if(failed) {
 					LogManager::getInstance()->message(_("Search enabled again"));
 					failed = false;

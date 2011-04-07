@@ -30,6 +30,8 @@ class Mapper_WinUPnP : public Mapper
 public:
 	Mapper_WinUPnP() : Mapper(), pUN(0), lastPort(0) { }
 
+	static const string name;
+
 private:
 	bool init();
 	void uninit();
@@ -42,7 +44,6 @@ private:
 	string getDeviceName();
 	string getExternalIP();
 
-	static const string name;
 	const string& getName() const { return name; }
 
 	IUPnPNAT* pUN;

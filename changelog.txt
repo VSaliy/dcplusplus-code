@@ -12,6 +12,9 @@
 * Save and restore the current directory of file lists (poy)
 * Move file list status bar buttons to the toolbar (poy)
 * Faster startup with many tabs
+* Reduce flickering when resizing
+* Reorganize connectivity settings (poy)
+* [L#748623] MiniUPnP respects the bind address (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

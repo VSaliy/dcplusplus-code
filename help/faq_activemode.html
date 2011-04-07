@@ -15,7 +15,7 @@ as outgoing access on all ports for both TCP and UDP.</p>
 <h2>If you are NOT behind a router:</h2>
 <ul>
 	<li>	
-      Click on File menu and then Settings. Click on <a href="settings_connection.html">Connection Settings</a>.
+      Click on File menu and then Settings. Click on <a href="settings_connectivity_manual.html">Connection Settings</a>.
 	</li>	
 	<li>	
       Select the <b>My computer is directly connected to Internet (no router)</b> radio button.  Leave the IP fields blank. This will make DC++ use the current IP assigned to your network card. You must NOT have an internal IP address for this to work. 
@@ -36,12 +36,10 @@ as outgoing access on all ports for both TCP and UDP.</p>
 
 <h2>If you are behind a router:</h2>
 
-<p>You can simplify the process of setting up active mode if your
-router and operating system is <acronym title="Universal Plug and Play">UPnP
-</acronym> compatible (UPnP is available only on Windows XP, Windows Vista or Windows 7).
-For setting up active mode with UPnP or get help how to decide that your router
-is UPnP compatible or not, please read the <a href="faq_upnp.html">How to set up UPnP FAQ</a>.
-If UPnP does not work or is not an option, follow the steps below.</p>
+<p>You can simplify the process of setting up active mode if your router supports NAT-PMP or
+<acronym title="Universal Plug and Play">UPnP</acronym>. For more information, see
+<a href="faq_upnp.html">What is NAT-PMP / UPnP?</a>. If you are unable to automate port forwarding
+with NAT-PMP or UPnP, follow the steps below.</p>
 
 <p>The second option for using active mode behind a router or a gateway is to <i>set up port forwarding manually</i>.
 For an in-depth, but still easy to understand explanation of port forwarding, read 
@@ -63,7 +61,7 @@ Make sure you select the corresponding protocol types (TCP, UDP or Both) when yo
 <i>ipconfig</i> (Start Menu -&gt; Run
 -&gt; <i>cmd /k ipconfig</i>)</li>
   <li>When you have mapped the port(s) on the router, open up DC++ and
-go to <a href="settings_connection.html#connection">Incoming connection settings</a>. 
+go to <a href="settings_connectivity_manual.html#connection">Incoming connection settings</a>. 
 Select <b>Manual port forwarding (I have configured my router by myself)</b>. In the port fields, enter the port
 number(s) that you forwarded on the router. </li>
   <li>In the External / WAN IP field, you need to enter the <b>external</b> IP address of your router.
@@ -93,13 +91,13 @@ such as <a href="http://www.no-ip.com/" target="_blank"
  <a href="http://www.dynip.com/" target="_blank"
  class="external">Dynip</a>  or <a
  href="http://www.dyndns.org/" target="_blank" class="external">DynDns</a>
-    and put your dynamic DNS address into the External / WAN IP field in DC++ <a href="settings_connection.html#connection">Connection Settings</a>. Each DDNS provider has a downloadable IP updater software what updates the dynamic name service with your latest IP. Make sure you download, configure and  run this program while using DC++. Many router models have DDNS client software included for specific DDNS provider(s) so it worth a check in your router configurations before choosing a provider. After you setup the built-in DDNS client you won't need to run any IP updater software, your router will automatically take care of updating your DNS name.</li>
+    and put your dynamic DNS address into the External / WAN IP field in DC++ <a href="settings_connectivity_manual.html#connection">Connection Settings</a>. Each DDNS provider has a downloadable IP updater software what updates the dynamic name service with your latest IP. Make sure you download, configure and  run this program while using DC++. Many router models have DDNS client software included for specific DDNS provider(s) so it worth a check in your router configurations before choosing a provider. After you setup the built-in DDNS client you won't need to run any IP updater software, your router will automatically take care of updating your DNS name.</li>
 	<li>
 If you find that your internal IP changes when you restart your computer then your operating system is obtaining an IP address from your router at boot using <a href="http://www.portforward.com/networking/dhcp.htm" target="_blank" class="external">DHCP protocol</a>. If you want your computer to always have the same internal IP address you must setup Static DHCP in your router configuration. Static DHCP is a useful feature which makes your router always assign the same IP address to a specific computer on your network. You will have to <a href="http://www.dur.ac.uk/its/services/network/lan/mac/windows/" target="_blank" class="external">find MAC address of your network card</a> to set up Static DHCP.<br/>
 Another option to ensure you'll always have the same internal IP address is to set up static IP address for your computer. Here's a <a href="http://www.portforward.com/networking/staticip.htm" target="_blank" class="external">FAQ</a> how to do this for different versions of Windows.
     </li>
 </ul>    
-<p>Besides normal file transfers DC++ is capable of <a href="settings_certs.html">secure</a> (<a href="http://en.wikipedia.org/wiki/Secure_Sockets_Layer" target="_blank" class="external">SSL encrypted</a>) way of receiving and transmitting files on ADC hubs. If you plan (or required) to use this feature and you <i>use DC++ in active mode with manual port forwarding</i> you should forward one more port for SSL handshake. You must choose and forward another free port between 1024 - 65535 for TLS which is <b>different than the one(s) you use for TCP and UDP</b>. In the port forwarding rule you should set the protocol type to <b>TCP or Both</b> for the TLS port. Finally you must put the port number to the TLS field in <a href="settings_connection.html#connection">Incoming connections settings</a> to be able to download from users who have secure transfers enabled.</p>
+<p>Besides normal file transfers DC++ is capable of <a href="settings_certs.html">secure</a> (<a href="http://en.wikipedia.org/wiki/Secure_Sockets_Layer" target="_blank" class="external">SSL encrypted</a>) way of receiving and transmitting files on ADC hubs. If you plan (or required) to use this feature and you <i>use DC++ in active mode with manual port forwarding</i> you should forward one more port for SSL handshake. You must choose and forward another free port between 1024 - 65535 for TLS which is <b>different than the one(s) you use for TCP and UDP</b>. In the port forwarding rule you should set the protocol type to <b>TCP or Both</b> for the TLS port. Finally you must put the port number to the TLS field in <a href="settings_connectivity_manual.html#connection">Incoming connections settings</a> to be able to download from users who have secure transfers enabled.</p>
 	
 
 <h2 id="firewall">Troubleshooting Windows built-in firewall</h2>

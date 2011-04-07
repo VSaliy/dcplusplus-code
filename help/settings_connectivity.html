@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link type="text/css" rel="stylesheet" href="office11.css"/>
+<link type="text/css" rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<h1>Connectivity</h1>
+<h2 id="autoconn">Automatic connection type detection</h2>
+<p>
+Your incoming connection type must be correctly chosen for searches and downloads to work. In most
+cases, DC++ is able to detect the best connection type as long as the automatic detection option is
+enabled (recommended). Otherwise, this page offers manual tweaking of connection settings.
+</p>
+<dl style="margin-left: 40px;">
+  <dt>Enable automatic incoming connection type detection</dt>
+  <dd cshelp="IDH_SETTINGS_CONNECTIVITY_AUTODETECT">
+  Select this to let DC++ determine the best connection type on your behalf. This should work with
+  the majority of network structures DC++ is generally used in. The success rate depends on
+  operating system configuration and on the network topology.<br/>
+  Note that when this option is active, <u>manual connection settings will be ignored</u>.
+  <p>It is recommended to disable this option and to manually set up connectivity settings when the network topology is not easy for DC++ to figure out, such as:
+  	<ul>
+  		<li>When there is more than one physical network device (eg. network cards, 3G USB modems) plugged in the computer (the bind address will have to be fiddled with).</li>
+  		<li>In the presence of network tunneling, a <a href="http://en.wikipedia.org/wiki/Vpn" target="_blank" class="external">VPN</a> service or any other software that leads to virtual network devices.</li>
+  		<li>When DC++ is only supposed to connect to local network hubs (eg. in a campus).</li>
+  	</ul>
+  </p></dd>
+  <dt>Detect now</dt>
+  <dd cshelp="IDH_SETTINGS_CONNECTIVITY_DETECT_NOW">With this button, you can force DC++ to (re)detect the best connection
+   mode available to you. Details and result of the operation will be shown in the Detection log box below.</dd>
+  <dt>Detection log</dt>
+  <dd cshelp="IDH_SETTINGS_CONNECTIVITY_DETECTION_LOG">This box contains the log and result of the last connection type
+  detection started by clicking the Detect now button. It contains the detection steps, possible error messages and shows
+  why a certain connection mode was chosen. This information is helpful in case of errors or when the result
+  is other than expected. Detection messages appear in the System log as well; descriptions of the various
+  messages are available in the <a href="window_system_log.html">list of System log messages</a>.</dd>
+</dl>
+</body>
+</html>

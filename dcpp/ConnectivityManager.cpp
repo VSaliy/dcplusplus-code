@@ -51,13 +51,20 @@ void ConnectivityManager::startSocket() {
 }
 
 void ConnectivityManager::detectConnection() {
-	if (running)
+	if(running)
 		return;
-
 	running = true;
 
-	SettingsManager::getInstance()->set(SettingsManager::EXTERNAL_IP, Util::emptyString);
-	SettingsManager::getInstance()->set(SettingsManager::NO_IP_OVERRIDE, false);
+	fire(ConnectivityManagerListener::Started());
+
+	// restore connectivity settings to their default value.
+	SettingsManager::getInstance()->unset(SettingsManager::TCP_PORT);
+	SettingsManager::getInstance()->unset(SettingsManager::UDP_PORT);
+	SettingsManager::getInstance()->unset(SettingsManager::TLS_PORT);
+	SettingsManager::getInstance()->unset(SettingsManager::EXTERNAL_IP);
+	SettingsManager::getInstance()->unset(SettingsManager::NO_IP_OVERRIDE);
+	SettingsManager::getInstance()->unset(SettingsManager::MAPPER);
+	SettingsManager::getInstance()->unset(SettingsManager::BIND_ADDRESS);
 
 	if (MappingManager::getInstance()->getOpened()) {
 		MappingManager::getInstance()->close();
@@ -65,12 +72,12 @@ void ConnectivityManager::detectConnection() {
 
 	disconnect();
 
-	log(_("Determining connection type..."));
+	log(_("Determining the best connectivity settings..."));
 	try {
 		listen();
 	} catch(const Exception& e) {
 		SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, SettingsManager::INCOMING_FIREWALL_PASSIVE);
-		log(str(F_("Unable to open %1% port(s). You must set up your connection manually") % e.getError()));
+		log(str(F_("Unable to open %1% port(s); connectivity settings must be configured manually") % e.getError()));
 		fire(ConnectivityManagerListener::Finished());
 		running = false;
 		return;
@@ -88,18 +95,18 @@ void ConnectivityManager::detectConnection() {
 
 	SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, SettingsManager::INCOMING_FIREWALL_UPNP);
 	log(_("Local network with possible NAT detected, trying to map the ports..."));
-	
+
 	if (!MappingManager::getInstance()->open()) {
 		running = false;
 	}
 }
 
-void ConnectivityManager::setup(bool settingsChanged, int lastConnectionMode) {
+void ConnectivityManager::setup(bool settingsChanged) {
 	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
 		if (!autoDetected) detectConnection();
 	} else {
 		if(autoDetected || settingsChanged) {
-			if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_UPNP || lastConnectionMode == SettingsManager::INCOMING_FIREWALL_UPNP) {
+			if(settingsChanged || (SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_UPNP)) {
 				MappingManager::getInstance()->close();
 			}
 			startSocket();
@@ -110,12 +117,14 @@ void ConnectivityManager::setup(bool settingsChanged, int lastConnectionMode) {
 	}
 }
 
-void ConnectivityManager::mappingFinished(bool success) {
+void ConnectivityManager::mappingFinished(const string& mapper) {
 	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
-		if (!success) {
+		if(mapper.empty()) {
 			disconnect();
 			SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, SettingsManager::INCOMING_FIREWALL_PASSIVE);
-			log(_("Automatic setup of active mode has failed. You may want to set up your connection manually for better connectivity"));
+			log(_("Active mode could not be achieved; a manual configuration is recommended for better connectivity"));
+		} else {
+			SettingsManager::getInstance()->set(SettingsManager::MAPPER, mapper);
 		}
 		fire(ConnectivityManagerListener::Finished());
 	}
@@ -127,13 +136,13 @@ void ConnectivityManager::listen() {
 	try {
 		ConnectionManager::getInstance()->listen();
 	} catch(const Exception&) {
-		throw Exception(_("TCP/TLS"));
+		throw Exception(_("Transfer (TCP)"));
 	}
 
 	try {
 		SearchManager::getInstance()->listen();
 	} catch(const Exception&) {
-		throw Exception(_("UDP"));
+		throw Exception(_("Search (UDP)"));
 	}
 }
 

@@ -52,7 +52,7 @@ const string SettingsManager::settingTags[] =
 	"LogFormatSystem", "LogFormatStatus", "DirectoryListingFrameOrder", "DirectoryListingFrameWidths",
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
 	"Language", "DownloadsOrder", "DownloadsWidth", "Toolbar", "LastSearchType",
-	"SoundMainChat", "SoundPM", "SoundPMWindow",
+	"SoundMainChat", "SoundPM", "SoundPMWindow", "Mapper",
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
@@ -414,20 +414,19 @@ void SettingsManager::load(string const& aFileName)
 		// if(v < 0.x) { // Fix old settings here }
 
 		if(v <= 0.674) {
-
 			// Formats changed, might as well remove these...
-			set(LOG_FORMAT_POST_DOWNLOAD, Util::emptyString);
-			set(LOG_FORMAT_POST_UPLOAD, Util::emptyString);
-			set(LOG_FORMAT_MAIN_CHAT, Util::emptyString);
-			set(LOG_FORMAT_PRIVATE_CHAT, Util::emptyString);
-			set(LOG_FORMAT_STATUS, Util::emptyString);
-			set(LOG_FORMAT_SYSTEM, Util::emptyString);
-			set(LOG_FILE_MAIN_CHAT, Util::emptyString);
-			set(LOG_FILE_STATUS, Util::emptyString);
-			set(LOG_FILE_PRIVATE_CHAT, Util::emptyString);
-			set(LOG_FILE_UPLOAD, Util::emptyString);
-			set(LOG_FILE_DOWNLOAD, Util::emptyString);
-			set(LOG_FILE_SYSTEM, Util::emptyString);
+			unset(LOG_FORMAT_POST_DOWNLOAD);
+			unset(LOG_FORMAT_POST_UPLOAD);
+			unset(LOG_FORMAT_MAIN_CHAT);
+			unset(LOG_FORMAT_PRIVATE_CHAT);
+			unset(LOG_FORMAT_STATUS);
+			unset(LOG_FORMAT_SYSTEM);
+			unset(LOG_FILE_MAIN_CHAT);
+			unset(LOG_FILE_STATUS);
+			unset(LOG_FILE_PRIVATE_CHAT);
+			unset(LOG_FILE_UPLOAD);
+			unset(LOG_FILE_DOWNLOAD);
+			unset(LOG_FILE_SYSTEM);
 		}
 
 		if(v <= 0.770 && SETTING(INCOMING_CONNECTIONS) != INCOMING_FIREWALL_PASSIVE) {
@@ -436,8 +435,8 @@ void SettingsManager::load(string const& aFileName)
 
 		if(v <= 0.781) {
 			// These were remade completely...
-			set(USERSFRAME_ORDER, Util::emptyString);
-			set(USERSFRAME_WIDTHS, Util::emptyString);
+			unset(USERSFRAME_ORDER);
+			unset(USERSFRAME_WIDTHS);
 
 			// the id has changed
 			if(isSet[TOOLBAR])
