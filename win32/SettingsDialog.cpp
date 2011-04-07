@@ -62,7 +62,7 @@ help(0)
 }
 
 int SettingsDialog::run() {
-	create(Seed(dwt::Point(700 * WinUtil::dpiFactor, 580 * WinUtil::dpiFactor), DS_CONTEXTHELP));
+	create(Seed(dwt::Point(700, 580), DS_CONTEXTHELP));
 	return show();
 }
 

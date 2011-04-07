@@ -42,7 +42,7 @@ MagnetDlg::~MagnetDlg() {
 }
 
 int MagnetDlg::run() {
-	create(dwt::Point(460 * WinUtil::dpiFactor, 180 * WinUtil::dpiFactor));
+	create(dwt::Point(460, 180));
 	return show();
 }
 
