@@ -79,7 +79,7 @@ bool read(natpmpresp_t& response) {
 		}
 
 		res = readnatpmpresponseorretry(&nat, &response);
-	} while(res == NATPMP_TRYAGAIN && nat.try_number <= 3); // don't wait for 9 failures as that takes too long.
+	} while(res == NATPMP_TRYAGAIN && nat.try_number <= 5); // don't wait for 9 failures as that takes too long.
 	return res >= 0;
 }
 

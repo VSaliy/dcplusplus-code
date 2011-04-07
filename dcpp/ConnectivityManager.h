@@ -31,17 +31,21 @@ public:
 	template<int I>	struct X { enum { TYPE = I }; };
 
 	typedef X<0> Message;
-	typedef X<1> Finished;
+	typedef X<1> Started;
+	typedef X<2> Finished;
+	typedef X<3> SettingChanged; // auto-detection has been enabled / disabled
 
 	virtual void on(Message, const string&) noexcept { }
+	virtual void on(Started) noexcept { }
 	virtual void on(Finished) noexcept { }
+	virtual void on(SettingChanged) noexcept { }
 };
 
 class ConnectivityManager : public Singleton<ConnectivityManager>, public Speaker<ConnectivityManagerListener>
 {
 public:
 	void detectConnection();
-	void setup(bool settingsChanged, int lastConnectionMode);
+	void setup(bool settingsChanged);
 	bool isRunning() const { return running; }
 
 private:
@@ -51,7 +55,7 @@ private:
 	ConnectivityManager();
 	virtual ~ConnectivityManager() { }
 
-	void mappingFinished(bool success);
+	void mappingFinished(const string& mapper);
 	void log(const string& msg);
 
 	void startSocket();

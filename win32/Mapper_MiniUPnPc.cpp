@@ -20,6 +20,7 @@
 
 #include "Mapper_MiniUPnPc.h"
 
+#include <dcpp/SettingsManager.h>
 #include <dcpp/Util.h>
 
 extern "C" {
@@ -36,7 +37,9 @@ bool Mapper_MiniUPnPc::init() {
 	if(initialized)
 		return true;
 
-	UPNPDev* devices = upnpDiscover(2000, 0, 0, 0);
+	UPNPDev* devices = upnpDiscover(2000,
+		SettingsManager::getInstance()->isDefault(SettingsManager::BIND_ADDRESS) ? nullptr : SETTING(BIND_ADDRESS).c_str(),
+		0, 0);
 	if(!devices)
 		return false;
 

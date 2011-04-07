@@ -765,7 +765,7 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 
 void HubFrame::on(Connecting, Client*) noexcept {
 	tstring hubUrl = Text::toT(client->getHubUrl());
-	callAsync([this, hubUrl]() { addStatus(boost::str(TF_("Connecting to %1%...") % hubUrl), true); });
+	callAsync([this, hubUrl]() { addStatus(str(TF_("Connecting to %1%...") % hubUrl), true); });
 	callAsync([this, hubUrl]() { GCC_WTF->setText(hubUrl); });
 }
 void HubFrame::on(Connected, Client*) noexcept {

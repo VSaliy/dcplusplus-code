@@ -51,6 +51,9 @@ public:
 	virtual string getDeviceName() = 0;
 	virtual string getExternalIP() = 0;
 
+	/* by contract, implementations of this class should define a public user-friendly name in:
+	static const string name; */
+
 	/** user-friendly name for this implementation. */
 	virtual const string& getName() const = 0;
 

@@ -30,6 +30,13 @@
 
 namespace dcpp {
 
+StringList MappingManager::getMappers() const {
+	StringList ret;
+	for(auto i = mappers.cbegin(), iend = mappers.cend(); i != iend; ++i)
+		ret.push_back(i->first);
+	return ret;
+}
+
 bool MappingManager::open() {
 	if(getOpened())
 		return false;
@@ -84,13 +91,13 @@ int MappingManager::run() {
 		auto addRule = [this, &mapper](const unsigned short port, Mapper::Protocol protocol, const string& description) {
 			// just launch renewal requests - don't bother with possible failures.
 			if(port) {
-				mapper.open(port, protocol, boost::str(F_("%1% %2% port (%3% %4%)") %
+				mapper.open(port, protocol, str(F_("%1% %2% port (%3% %4%)") %
 					APPNAME % description % port % Mapper::protocols[protocol]));
 			}
 		};
 
 		addRule(conn_port, Mapper::PROTOCOL_TCP, _("Transfer"));
-		addRule(secure_port, Mapper::PROTOCOL_TCP, _("Encrypted Transfer"));
+		addRule(secure_port, Mapper::PROTOCOL_TCP, _("Encrypted transfer"));
 		addRule(search_port, Mapper::PROTOCOL_UDP, _("Search"));
 
 		auto minutes = mapper.renewal();
@@ -103,22 +110,25 @@ int MappingManager::run() {
 		return 0;
 	}
 
+	const auto& setting = SETTING(MAPPER);
 	for(auto i = mappers.begin(); i != mappers.end(); ++i) {
-		unique_ptr<Mapper> pMapper((*i)());
+		if(!setting.empty() && i->first != setting)
+			continue;
+
+		unique_ptr<Mapper> pMapper(i->second());
 		Mapper& mapper = *pMapper;
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });
-
 		if(!mapper.init()) {
 			log(str(F_("Failed to initalize the %1% interface") % mapper.getName()));
 			continue;
 		}
 
 		auto addRule = [this, &mapper](const unsigned short port, Mapper::Protocol protocol, const string& description) -> bool {
-			if(port && !mapper.open(port, protocol, boost::str(F_("%1% %2% port (%3% %4%)") %
+			if(port && !mapper.open(port, protocol, str(F_("%1% %2% port (%3% %4%)") %
 				APPNAME % description % port % Mapper::protocols[protocol])))
 			{
-				this->log(boost::str(F_("Failed to map the %1% port (%2% %3%) with the %4% interface") %
+				this->log(str(F_("Failed to map the %1% port (%2% %3%) with the %4% interface") %
 					description % port % Mapper::protocols[protocol] % mapper.getName()));
 				mapper.close();
 				return false;
@@ -127,11 +137,11 @@ int MappingManager::run() {
 		};
 
 		if(!(addRule(conn_port, Mapper::PROTOCOL_TCP, _("Transfer")) &&
-			addRule(secure_port, Mapper::PROTOCOL_TCP, _("Encrypted Transfer")) &&
+			addRule(secure_port, Mapper::PROTOCOL_TCP, _("Encrypted transfer")) &&
 			addRule(search_port, Mapper::PROTOCOL_UDP, _("Search"))))
 			continue;
 
-		log(str(F_("Successfully created port mappings (TCP: %1%, UDP: %2%, TLS: %3%) on the %4% device with the %5% interface") %
+		log(str(F_("Successfully created port mappings (Transfers: %1%, Search: %2%, Encrypted transfers: %3%) on the %4% device with the %5% interface") %
 			conn_port % search_port % secure_port % deviceString(mapper) % mapper.getName()));
 
 		working = move(pMapper);
@@ -146,7 +156,7 @@ int MappingManager::run() {
 			}
 		}
 
-		ConnectivityManager::getInstance()->mappingFinished(true);
+		ConnectivityManager::getInstance()->mappingFinished(mapper.getName());
 
 		auto minutes = mapper.renewal();
 		if(minutes) {
@@ -158,7 +168,7 @@ int MappingManager::run() {
 
 	if(!getOpened()) {
 		log(_("Failed to create port mappings"));
-		ConnectivityManager::getInstance()->mappingFinished(false);
+		ConnectivityManager::getInstance()->mappingFinished(Util::emptyString);
 	}
 
 	return 0;

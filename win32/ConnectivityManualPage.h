@@ -16,23 +16,47 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_ADVANCED_3_PAGE_H
-#define DCPLUSPLUS_WIN32_ADVANCED_3_PAGE_H
+#ifndef DCPLUSPLUS_WIN32_CONNECTIVITY_MANUAL_PAGE_H
+#define DCPLUSPLUS_WIN32_CONNECTIVITY_MANUAL_PAGE_H
 
 #include "PropPage.h"
 
-class Advanced3Page : public PropPage
+#include <dcpp/ConnectivityManager.h>
+
+class ConnectivityManualPage : public PropPage, private ConnectivityManagerListener
 {
 public:
-	Advanced3Page(dwt::Widget* parent);
-	virtual ~Advanced3Page();
+	ConnectivityManualPage(dwt::Widget* parent);
+	virtual ~ConnectivityManualPage();
 
 	virtual void write();
 
 private:
 	ItemList items;
 
-	void addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2 = _T(""));
+	RadioButtonPtr directIn;
+	RadioButtonPtr upnp;
+	RadioButtonPtr nat;
+	RadioButtonPtr passive;
+
+	TextBoxPtr externalIP;
+	CheckBoxPtr overrideIP;
+
+	TextBoxPtr tcp;
+	TextBoxPtr udp;
+	TextBoxPtr tls;
+
+	ComboBoxPtr mapper;
+
+	TextBoxPtr bindAddress;
+
+	void setGroupEnabled();
+	void setRadioButtons();
+	void fillMappers();
+
+	// ConnectivityManagerListener
+	virtual void on(Finished) noexcept;
+	virtual void on(SettingChanged) noexcept;
 };
 
-#endif // !defined(DCPLUSPLUS_WIN32_ADVANCED_3_PAGE_H)
+#endif // !defined(DCPLUSPLUS_WIN32_CONNECTIVITY_MANUAL_PAGE_H)

@@ -88,14 +88,14 @@ bool FavHubProperties::handleInitDialog() {
 		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
 		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		nick->setText(Text::toT(entry->getNick(false)));
-		nick->onUpdated([this, nick] { handleTextChanged(nick); });
+		nick->onUpdated([this] { handleTextChanged(nick); });
 		nick->setHelpId(IDH_FAVORITE_HUB_NICK);
 
 		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
 		password = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		password->setPassword();
 		password->setText(Text::toT(entry->getPassword()));
-		password->onUpdated([this, password] { handleTextChanged(password); });
+		password->onUpdated([this] { handleTextChanged(password); });
 		password->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
@@ -181,20 +181,17 @@ void FavHubProperties::handleGroups() {
 
 void FavHubProperties::fillGroups() {
 	const string& entryGroup = entry->getGroup();
-	bool needSel = true;
+	int sel = 0;
 
 	groups->addValue(_T(""));
 
 	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
 	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
 		const string& name = i->first;
-		int pos = groups->addValue(Text::toT(name));
-
-		if(needSel && name == entryGroup) {
-			groups->setSelected(pos);
-			needSel = false;
-		}
+		auto pos = groups->addValue(Text::toT(name));
+		if(!sel && name == entryGroup)
+			sel = pos;
 	}
-	if(needSel)
-		groups->setSelected(0);
+
+	groups->setSelected(sel);
 }

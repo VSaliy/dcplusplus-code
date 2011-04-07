@@ -16,53 +16,23 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_NETWORK_PAGE_H
-#define DCPLUSPLUS_WIN32_NETWORK_PAGE_H
+#ifndef DCPLUSPLUS_WIN32_EXPERTS_PAGE_H
+#define DCPLUSPLUS_WIN32_EXPERTS_PAGE_H
 
 #include "PropPage.h"
 
-#include <dcpp/ConnectivityManager.h>
-
-class NetworkPage : public PropPage, private ConnectivityManagerListener
+class ExpertsPage : public PropPage
 {
 public:
-	NetworkPage(dwt::Widget* parent);
-	virtual ~NetworkPage();
+	ExpertsPage(dwt::Widget* parent);
+	virtual ~ExpertsPage();
 
 	virtual void write();
 
 private:
 	ItemList items;
 
-	GroupBoxPtr incoming;
-
-	CheckBoxPtr autoDetect;
-	ButtonPtr detectNow;
-	RichTextBoxPtr log;
-
-	RadioButtonPtr directIn;
-	RadioButtonPtr upnp;
-	RadioButtonPtr nat;
-	RadioButtonPtr passive;
-
-	TextBoxPtr externalIP;
-	CheckBoxPtr overrideIP;
-
-	TextBoxPtr tcp;
-	TextBoxPtr udp;
-	TextBoxPtr tls;
-
-	void setRadioButtons();
-
-	void handleAutoClicked();
-	void handleDetectClicked();
-
-	void addLogLine(const tstring& msg);
-	void detectionFinished();
-
-	//ConnectivityManagerListener
-	virtual void on(Message, const string& message) noexcept;
-	virtual void on(Finished) noexcept;
+	void addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2 = _T(""));
 };
 
-#endif // !defined(DCPLUSPLUS_WIN32_NETWORK_PAGE_H)
+#endif // !defined(DCPLUSPLUS_WIN32_EXPERTS_PAGE_H)

@@ -16,37 +16,37 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_MAPPER_MINIUPNPC_H
-#define DCPLUSPLUS_WIN32_MAPPER_MINIUPNPC_H
+#ifndef DCPLUSPLUS_WIN32_CONNECTIVITY_PAGE_H
+#define DCPLUSPLUS_WIN32_CONNECTIVITY_PAGE_H
 
-#include <dcpp/Mapper.h>
+#include "PropPage.h"
 
-class Mapper_MiniUPnPc : public Mapper
+#include <dcpp/ConnectivityManager.h>
+
+class ConnectivityPage : public PropPage, private ConnectivityManagerListener
 {
 public:
-	Mapper_MiniUPnPc() : Mapper(), initialized(false) { }
+	ConnectivityPage(dwt::Widget* parent);
+	virtual ~ConnectivityPage();
 
-	static const string name;
+	virtual void write();
 
 private:
-	bool init();
-	void uninit();
+	ItemList items;
 
-	bool add(const unsigned short port, const Protocol protocol, const string& description);
-	bool remove(const unsigned short port, const Protocol protocol);
+	CheckBoxPtr autoDetect;
+	ButtonPtr detectNow;
+	RichTextBoxPtr log;
 
-	uint32_t renewal() const { return 0; }
+	void handleAutoClicked();
 
-	string getDeviceName();
-	string getExternalIP();
+	void addLogLine(const tstring& msg);
 
-	const string& getName() const { return name; }
-
-	bool initialized;
-
-	string url;
-	string service;
-	string device;
+	// ConnectivityManagerListener
+	virtual void on(Message, const string& message) noexcept;
+	virtual void on(Started) noexcept;
+	virtual void on(Finished) noexcept;
+	virtual void on(SettingChanged) noexcept;
 };
 
-#endif
+#endif // !defined(DCPLUSPLUS_WIN32_CONNECTIVITY_PAGE_H)

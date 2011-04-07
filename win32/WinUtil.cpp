@@ -856,8 +856,8 @@ public:
 		Seed cs(WS_POPUP | WS_BORDER, WS_EX_CLIENTEDGE);
 		cs.location = dwt::Rectangle(pt, dwt::Point()); // set the position but not the size
 		create(cs);
-		onLeftMouseDown([this](const dwt::MouseEvent &) { return terminate(); });
-		onKeyDown([this](int c) { return terminate(); });
+		onLeftMouseDown([this](const dwt::MouseEvent&) { return close(); });
+		onKeyDown([this](int) { return close(); });
 		onHelp([this](Widget*, unsigned) { handleHelp(); });
 
 		// create the inner text control
@@ -921,9 +921,9 @@ private:
 		return 0;
 	}
 
-	bool terminate() {
+	bool close() {
 		::ReleaseCapture();
-		close(true);
+		BaseType::close(true);
 		return true;
 	}
 
@@ -1301,7 +1301,7 @@ static void addUsers(MenuPtr menu, const tstring& text, const HintedUserList& us
 
 		for(size_t i = 0, iend = users.size(); i < iend; ++i) {
 			menu->appendItem(WinUtil::getNicks(users[i]), [=] { eachUser(HintedUserList(1, users[i]),
-				StringList(1, (i < dirs.size()) ? dirs[i] : string()), f); });
+				StringList(1, (i < dirs.size()) ? dirs[i] : Util::emptyString), f); });
 		}
 	} else {
 		menu->appendItem(text, [=] { eachUser(users, dirs, f); }, icon);

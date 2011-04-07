@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_DCPP_MAPPING_MANAGER_H
 
 #include "forward.h"
+#include "typedefs.h"
 #include "Mapper.h"
 #include "TimerManager.h"
 
@@ -34,8 +35,9 @@ class MappingManager :
 {
 public:
 	/** add an implementation derived from the base Mapper class, passed as template parameter.
-	the first added mapper will be tried first. */
-	template<typename T> void addImplementation() { mappers.push_back([] { return new T(); }); }
+	the first added mapper will be tried first, unless the "MAPPER" setting is not empty. */
+	template<typename T> void addMapper() { mappers.push_back(make_pair(T::name, [] { return new T(); })); }
+	StringList getMappers() const;
 
 	bool open();
 	void close();
@@ -44,7 +46,7 @@ public:
 private:
 	friend class Singleton<MappingManager>;
 
-	vector<function<Mapper* ()>> mappers;
+	vector<pair<string, function<Mapper* ()>>> mappers;
 
 	atomic_flag busy;
 	unique_ptr<Mapper> working; /// currently working implementation.

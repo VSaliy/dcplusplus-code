@@ -165,7 +165,7 @@ fullSlots(false)
 	File::ensureDirectory(SETTING(LOG_DIRECTORY));
 
 	try {
-		ConnectivityManager::getInstance()->setup(true, SettingsManager::INCOMING_DIRECT);
+		ConnectivityManager::getInstance()->setup(true);
 	} catch (const Exception& e) {
 		showPortsError(e.getError());
 	}
@@ -972,6 +972,9 @@ void MainWindow::handleSettings() {
 	unsigned short lastTLS = static_cast<unsigned short>(SETTING(TLS_PORT));
 
 	int lastConn = SETTING(INCOMING_CONNECTIONS);
+	string lastMapper = SETTING(MAPPER);
+	string lastBind = SETTING(BIND_ADDRESS);
+
 	bool lastSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
 	bool lastURLReg = BOOLSETTING(URL_HANDLER);
 	bool lastMagnetReg = BOOLSETTING(MAGNET_REGISTER);
@@ -981,7 +984,9 @@ void MainWindow::handleSettings() {
 		SettingsManager::getInstance()->save();
 
 		try {
-			ConnectivityManager::getInstance()->setup(SETTING(INCOMING_CONNECTIONS) != lastConn || SETTING(TCP_PORT) != lastTCP || SETTING(UDP_PORT) != lastUDP || SETTING(TLS_PORT) != lastTLS, lastConn);
+			ConnectivityManager::getInstance()->setup(SETTING(INCOMING_CONNECTIONS) != lastConn ||
+				SETTING(TCP_PORT) != lastTCP || SETTING(UDP_PORT) != lastUDP || SETTING(TLS_PORT) != lastTLS ||
+				SETTING(MAPPER) != lastMapper || SETTING(BIND_ADDRESS) != lastBind);
 		} catch (const Exception& e) {
 			showPortsError(e.getError());
 		}

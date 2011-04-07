@@ -150,9 +150,9 @@ int SmartWinMain(dwt::Application& app) {
 			SetProcessDefaultLayout(LAYOUT_RTL);
 		}
 
-		MappingManager::getInstance()->addImplementation<Mapper_NATPMP>();
-		MappingManager::getInstance()->addImplementation<Mapper_MiniUPnPc>();
-		MappingManager::getInstance()->addImplementation<Mapper_WinUPnP>();
+		MappingManager::getInstance()->addMapper<Mapper_NATPMP>();
+		MappingManager::getInstance()->addMapper<Mapper_MiniUPnPc>();
+		MappingManager::getInstance()->addMapper<Mapper_WinUPnP>();
 
 		WinUtil::init();
 		MainWindow* wnd = new MainWindow;
@@ -161,9 +161,9 @@ int SmartWinMain(dwt::Application& app) {
 		splash->close();
 		app.run();
 	} catch(const std::exception& e) {
-		printf("Exception: %s\n", e.what());
+		dcdebug("Exception: %s\n", e.what());
 	} catch(...) {
-		printf("Unknown exception");
+		dcdebug("Unknown exception");
 	}
 	WinUtil::uninit();
 
