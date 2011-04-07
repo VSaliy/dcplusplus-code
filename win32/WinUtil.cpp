@@ -83,7 +83,6 @@ dwt::ImageListPtr WinUtil::fileImages;
 dwt::ImageListPtr WinUtil::userImages;
 TStringList WinUtil::lastDirs;
 MainWindow* WinUtil::mainWindow = 0;
-float WinUtil::dpiFactor = 0;
 bool WinUtil::urlDcADCRegistered = false;
 bool WinUtil::urlMagnetRegistered = false;
 WinUtil::ImageMap WinUtil::fileIndexes;
@@ -120,9 +119,6 @@ void WinUtil::init() {
 	textColor = SETTING(TEXT_COLOR);
 	bgColor = SETTING(BACKGROUND_COLOR);
 	bgBrush = dwt::BrushPtr(new dwt::Brush(bgColor));
-
-	// Conversion for DPI awareness, see <http://msdn.microsoft.com/en-us/library/dd464660(VS.85).aspx>.
-	dpiFactor = static_cast<float>(dwt::UpdateCanvas(reinterpret_cast<HWND>(0)).getDeviceCaps(LOGPIXELSX)) / 96.0;
 
 	if(SettingsManager::getInstance()->isDefault(SettingsManager::MAIN_FONT)) {
 		NONCLIENTMETRICS metrics = { sizeof(NONCLIENTMETRICS) };
@@ -344,7 +340,7 @@ void WinUtil::enableDEP() {
 tstring WinUtil::encodeFont(LOGFONT const& font) {
 	tstring res(font.lfFaceName);
 	res += _T(',');
-	res += Text::toT(Util::toString(static_cast<int>(font.lfHeight / dpiFactor)));
+	res += Text::toT(Util::toString(static_cast<int>(font.lfHeight / dwt::util::dpiFactor())));
 	res += _T(',');
 	res += Text::toT(Util::toString(font.lfWeight));
 	res += _T(',');
@@ -376,7 +372,7 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 	tstring face;
 	if(sl.size() >= 4) {
 		face = sl[0];
-		dest.lfHeight = Util::toInt(Text::fromT(sl[1])) * dpiFactor;
+		dest.lfHeight = Util::toInt(Text::fromT(sl[1])) * dwt::util::dpiFactor();
 		dest.lfWeight = Util::toInt(Text::fromT(sl[2]));
 		dest.lfItalic = static_cast<BYTE>(Util::toInt(Text::fromT(sl[3])));
 		if(sl.size() >= 5) {

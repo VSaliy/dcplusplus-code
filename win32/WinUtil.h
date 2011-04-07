@@ -84,7 +84,6 @@ public:
 	static dwt::ImageListPtr userImages;
 	static TStringList lastDirs;
 	static MainWindow* mainWindow;
-	static float dpiFactor;
 
 	typedef unordered_map<string, size_t> ImageMap;
 	typedef ImageMap::iterator ImageIter;

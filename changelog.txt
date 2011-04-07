@@ -15,6 +15,7 @@
 * Reduce flickering when resizing
 * Reorganize connectivity settings (poy)
 * [L#748623] MiniUPnP respects the bind address (poy)
+* Make more parts of the interface DPI-aware (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

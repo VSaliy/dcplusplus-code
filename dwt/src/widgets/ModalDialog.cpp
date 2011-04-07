@@ -30,7 +30,9 @@
 */
 
 #include <dwt/widgets/ModalDialog.h>
+
 #include <dwt/Application.h>
+#include <dwt/util/GDI.h>
 
 namespace dwt {
 
@@ -40,6 +42,8 @@ ModalDialog::Seed::Seed(const Point& size, DWORD styles_) :
 BaseType::Seed(tstring(), styles_ | WS_POPUP | WS_CAPTION | WS_SYSMENU, WS_EX_CONTROLPARENT | WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE)
 {
 	location.size = size;
+	location.size.x *= util::dpiFactor();
+	location.size.y *= util::dpiFactor();
 }
 
 ModalDialog::ModalDialog(Widget* parent) :

@@ -31,6 +31,9 @@
 
 #include <dwt/util/GDI.h>
 
+#include <dwt/CanvasClasses.h>
+#include <dwt/resources/Bitmap.h>
+#include <dwt/resources/Icon.h>
 #include <dwt/util/check.h>
 
 namespace dwt { namespace util {
@@ -50,6 +53,13 @@ BitmapPtr merge(const std::vector<IconPtr>& icons) {
 		canvas.drawIcon(*i, rect);
 
 	return ret;
+}
+
+const float& dpiFactor() {
+	static float factor = 0;
+	if(!factor)
+		factor = static_cast<float>(UpdateCanvas(reinterpret_cast<HWND>(0)).getDeviceCaps(LOGPIXELSX)) / 96.0;
+	return factor;
 }
 
 } }

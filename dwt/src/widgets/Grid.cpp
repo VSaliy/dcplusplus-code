@@ -30,7 +30,9 @@
 */
 
 #include <dwt/widgets/Grid.h>
+
 #include <dwt/util/check.h>
+#include <dwt/util/GDI.h>
 #include <dwt/util/HoldResize.h>
 
 #include <boost/range/distance.hpp>
@@ -124,6 +126,7 @@ std::vector<size_t> Grid::calcSizes(const GridInfoList& x, const GridInfoList& y
 
 		switch(x[i].mode) {
 		case GridInfo::STATIC:
+			ret[i] *= util::dpiFactor();
 			break;
 		case GridInfo::FILL:
 			fills++;

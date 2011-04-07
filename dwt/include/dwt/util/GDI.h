@@ -32,11 +32,14 @@
 #ifndef DWT_UTIL_GDI_H
 #define DWT_UTIL_GDI_H
 
-#include <dwt/CanvasClasses.h>
+#include <dwt/forward.h>
 
 namespace dwt { namespace util {
 
 BitmapPtr merge(const std::vector<IconPtr>& icons);
+
+/// Conversion factor for DPI awareness, see <http://msdn.microsoft.com/en-us/library/dd464660(VS.85).aspx>.
+const float& dpiFactor();
 
 } }
 
