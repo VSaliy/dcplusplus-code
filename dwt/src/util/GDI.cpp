@@ -56,9 +56,7 @@ BitmapPtr merge(const std::vector<IconPtr>& icons) {
 }
 
 const float& dpiFactor() {
-	static float factor = 0;
-	if(!factor)
-		factor = static_cast<float>(UpdateCanvas(reinterpret_cast<HWND>(0)).getDeviceCaps(LOGPIXELSX)) / 96.0;
+	static float factor = static_cast<float>(UpdateCanvas(reinterpret_cast<HWND>(0)).getDeviceCaps(LOGPIXELSX)) / 96.0;
 	return factor;
 }
 

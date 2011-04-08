@@ -103,28 +103,21 @@ void ToolBar::addButton(const std::string& id, const IconPtr& icon, const IconPt
 void ToolBar::addButton(const std::string& id, int image, const tstring& text, bool showText,
 	unsigned helpId, const Dispatcher::F& f, const DropDownFunction& dropDownF)
 {
-	TBBUTTON tb = { 0 };
-	tb.iBitmap = image;
-	tb.idCommand = id_offset + buttons.size();
-	tb.fsState = TBSTATE_ENABLED;
-	tb.fsStyle = BTNS_AUTOSIZE;
+	TBBUTTON tb = { image, id_offset + buttons.size(), TBSTATE_ENABLED, BTNS_AUTOSIZE };
 	if(dropDownF)
 		tb.fsStyle |= f ? BTNS_DROPDOWN : BTNS_WHOLEDROPDOWN;
-	if(showText)
+	if(showText) {
 		tb.fsStyle |= BTNS_SHOWTEXT;
+		tstring str = text;
+		str.push_back('\0'); // terminated by 2 nulls
+		tb.iString = sendMessage(TB_ADDSTRING, 0, reinterpret_cast<LPARAM>(str.c_str()));
+	} else {
+		static tstring emptyString;
+		tb.iString = reinterpret_cast<INT_PTR>(emptyString.c_str());
+	}
 
 	Button button = { tb, id, text, helpId, f, dropDownF };
 	buttons.push_back(button);
-
-	Button& b = buttons.back();
-	if(hasStyle(CCS_ADJUSTABLE)) {
-		/* in a customizable toolbar, shift + drag gets messed up when we add text here; so resort
-		to an empty string. not a problem for tooltips since we manually handle TBN_GETINFOTIP. */
-		static tstring emptyString;
-		b.button.iString = reinterpret_cast<INT_PTR>(emptyString.c_str());
-	} else {
-		b.button.iString = sendMessage(TB_ADDSTRING, 0, reinterpret_cast<LPARAM>(b.text.c_str()));
-	}
 }
 
 std::vector<std::string> ToolBar::getLayout() const {
