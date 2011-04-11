@@ -28,6 +28,8 @@
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
+const dwt::Rectangle padding(7, 4, 14, 21);
+
 PropPage::PropPage(dwt::Widget* parent, int rows, int cols) : dwt::ModelessDialog(parent), grid(0) {
 	create();
 
@@ -42,7 +44,7 @@ PropPage::~PropPage() {
 
 void PropPage::layout() {
 	auto clientSize = getClientSize();
-	grid->resize(dwt::Rectangle(7, 4, clientSize.x - 14, clientSize.y - 21));
+	grid->resize(dwt::Rectangle(padding.left(), padding.top(), clientSize.x - padding.width(), clientSize.y - padding.height()));
 }
 
 void PropPage::read(const ItemList& items) {
@@ -135,7 +137,7 @@ void PropPage::handleBrowseFile(TextBoxPtr box, int setting) {
 }
 
 dwt::Point PropPage::getPreferredSize() {
-	return grid->getPreferredSize();
+	return grid->getPreferredSize() + dwt::Point(padding.right(), padding.bottom());
 }
 
 void PropPage::handleListHelp(TablePtr list, unsigned id) {

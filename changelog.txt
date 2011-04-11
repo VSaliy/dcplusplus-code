@@ -17,6 +17,7 @@
 * [L#748623] Port mappers respect the bind address (poy)
 * Make more parts of the interface DPI-aware (poy)
 * Resizable and scrollable settings dialog
+* Remember the last settings page (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

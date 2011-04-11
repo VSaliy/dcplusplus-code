@@ -121,38 +121,46 @@ bool SettingsDialog::initDialog() {
 		}
 
 		auto container = cur->addChild(dwt::ScrolledContainer::Seed(WS_BORDER));
+		const auto setting = Text::toT(SETTING(SETTINGS_PAGE));
+		auto addPage = [this, container, &setting](const tstring& title, PropPage* page, HTREEITEM parent) -> HTREEITEM {
+			pages.push_back(page);
+			auto ret = tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
+			if(title == setting)
+				callAsync([=] { tree->setSelected(ret); });
+			return ret;
+		};
 
-		addPage(T_("Personal information"), new GeneralPage(container));
+		addPage(T_("Personal information"), new GeneralPage(container), TVI_ROOT);
 
 		{
-			HTREEITEM item = addPage(T_("Connectivity"), new ConnectivityPage(container));
+			HTREEITEM item = addPage(T_("Connectivity"), new ConnectivityPage(container), TVI_ROOT);
 			addPage(T_("Manual configuration"), new ConnectivityManualPage(container), item);
 			addPage(T_("Bandwidth limiting"), new BandwidthLimitPage(container), item);
 			addPage(T_("Proxy"), new ProxyPage(container), item);
 		}
 
 		{
-			HTREEITEM item = addPage(T_("Downloads"), new DownloadPage(container));
+			HTREEITEM item = addPage(T_("Downloads"), new DownloadPage(container), TVI_ROOT);
 			addPage(T_("Favorites"), new FavoriteDirsPage(container), item);
 			addPage(T_("Queue"), new QueuePage(container), item);
 		}
 
-		addPage(T_("Sharing"), new UploadPage(container));
+		addPage(T_("Sharing"), new UploadPage(container), TVI_ROOT);
 
 		{
-			HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(container));
+			HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(container), TVI_ROOT);
 			addPage(T_("Colors and sounds"), new Appearance2Page(container), item);
 			addPage(T_("Tabs"), new TabsPage(container), item);
 			addPage(T_("Windows"), new WindowsPage(container), item);
 		}
 
 		{
-			HTREEITEM item = addPage(T_("History"), new HistoryPage(container));
+			HTREEITEM item = addPage(T_("History"), new HistoryPage(container), TVI_ROOT);
 			addPage(T_("Logs"), new LogPage(container), item);
 		}
 
 		{
-			HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(container));
+			HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(container), TVI_ROOT);
 			addPage(T_("Experts only"), new ExpertsPage(container), item);
 			addPage(T_("User commands"), new UCPage(container), item);
 			addPage(T_("Security certificates"), new CertificatesPage(container), item);
@@ -227,11 +235,6 @@ void SettingsDialog::handleChildHelp(dwt::Control* widget) {
 	help->setText(Text::toT(WinUtil::getHelpText(widget->getHelpId())));
 }
 
-HTREEITEM SettingsDialog::addPage(const tstring& title, PropPage* page, HTREEITEM parent) {
-	pages.push_back(page);
-	return tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
-}
-
 void SettingsDialog::handleHelp(dwt::Control* widget, unsigned id) {
 	if(id == IDH_INDEX && currentPage)
 		id = currentPage->getHelpId();
@@ -244,6 +247,8 @@ bool SettingsDialog::handleClosing() {
 		static_cast<int>(static_cast<float>(pt.x) / dwt::util::dpiFactor()));
 	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_HEIGHT,
 		static_cast<int>(static_cast<float>(pt.y) / dwt::util::dpiFactor()));
+
+	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_PAGE, Text::fromT(tree->getSelectedText()));
 
 	return true;
 }
