@@ -61,9 +61,10 @@ const string SettingsManager::settingTags[] =
 	"ListDuplicates", "BufferSize", "DownloadSlots", "MaxDownloadSpeed", "LogMainChat", "LogPrivateChat",
 	"LogDownloads", "LogFinishedDownloads", "LogUploads", "StatusInChat", "ShowJoins",
 	"UseSystemIcons", "PopupPMs", "MinUploadSpeed", "GetUserInfo", "UrlHandler", "MainWindowState",
-	"MainWindowSizeX", "MainWindowSizeY", "MainWindowPosX", "MainWindowPosY", "AutoAway",
+	"MainWindowSizeX", "MainWindowSizeY", "MainWindowPosX", "MainWindowPosY",
+	"SettingsWidth", "SettingsHeight",
 	"SocksPort", "SocksResolve", "KeepLists", "AutoKick", "QueueFrameShowTree",
-	"CompressTransfers", "SFVCheck",
+	"CompressTransfers", "SFVCheck", "AutoAway",
 	"MaxCompression", "NoAwayMsgToBots", "SkipZeroByte", "AdlsBreakOnFirst",
 	"HubUserCommands", "AutoSearchAutoMatch", "DownloadBarColor", "UploadBarColor", "LogSystem",
 	"LogFilelistTransfers", "SendUnknownCommands", "MaxHashSpeed", "OpenUserCmdHelp",
@@ -190,8 +191,9 @@ SettingsManager::SettingsManager()
 	setDefault(LOG_FILE_SYSTEM, "system.log");
 	setDefault(GET_USER_INFO, true);
 	setDefault(URL_HANDLER, false);
-	setDefault(AUTO_AWAY, false);
 	setDefault(BIND_ADDRESS, "0.0.0.0");
+	setDefault(SETTINGS_WIDTH, 700);
+	setDefault(SETTINGS_HEIGHT, 600);
 	setDefault(SOCKS_PORT, 1080);
 	setDefault(SOCKS_RESOLVE, 1);
 	setDefault(CONFIG_VERSION, "0.181");		// 0.181 is the last version missing configversion
@@ -200,6 +202,7 @@ SettingsManager::SettingsManager()
 	setDefault(QUEUEFRAME_SHOW_TREE, true);
 	setDefault(COMPRESS_TRANSFERS, true);
 	setDefault(SFV_CHECK, true);
+	setDefault(AUTO_AWAY, false);
 	setDefault(DEFAULT_AWAY_MESSAGE, "I'm away. State your business and I might answer later if you're lucky.");
 	setDefault(TIME_STAMPS_FORMAT, "%H:%M");
 	setDefault(MAX_COMPRESSION, 6);

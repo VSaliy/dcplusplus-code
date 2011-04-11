@@ -597,6 +597,10 @@ string Util::formatExactSize(int64_t aBytes) {
 }
 
 string Util::getLocalIp() {
+	if(!SettingsManager::getInstance()->isDefault(SettingsManager::BIND_ADDRESS)) {
+		return SETTING(BIND_ADDRESS);
+	}
+
 	string tmp;
 
 	char buf[256];

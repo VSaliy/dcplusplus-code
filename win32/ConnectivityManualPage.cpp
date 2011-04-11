@@ -27,8 +27,12 @@
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
 
+#include <boost/range/algorithm/for_each.hpp>
+
 ConnectivityManualPage::ConnectivityManualPage(dwt::Widget* parent) :
 PropPage(parent, 8, 1),
+autoGroup(0),
+autoDetect(0),
 directIn(0),
 upnp(0),
 nat(0),
@@ -45,7 +49,15 @@ bindAddress(0)
 
 	grid->column(0).mode = GridInfo::FILL;
 
-	directIn = grid->addChild(RadioButton::Seed(T_("My computer is directly connected to Internet (no router)")));
+	{
+		autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connectivity setup")));
+		autoGroup->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
+
+		autoDetect = autoGroup->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
+		autoDetect->onClicked([this] { handleAutoClicked(); });
+	}
+
+	directIn = grid->addChild(RadioButton::Seed(T_("My computer is directly connected to the Internet (no router)")));
 	directIn->setHelpId(IDH_SETTINGS_CONNECTIVITY_DIRECT);
 
 	upnp = grid->addChild(RadioButton::Seed(T_("Let DC++ configure my router (NAT-PMP / UPnP)")));
@@ -93,21 +105,24 @@ bindAddress(0)
 		items.push_back(Item(tls, SettingsManager::TLS_PORT, PropPage::T_INT));
 	}
 
-	mapper = grid->addChild(GroupBox::Seed(T_("Preferred port mapping interface")))->addChild(WinUtil::Seeds::Dialog::comboBox);
-
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Bind address")));
+		auto cur = grid->addChild(Grid::Seed(1, 2));
+		cur->column(1).mode = GridInfo::FILL;
+
+		auto group = cur->addChild(GroupBox::Seed(T_("Preferred port mapping interface")));
+		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_MAPPER);
+
+		mapper = group->addChild(WinUtil::Seeds::Dialog::comboBox);
+
+		group = cur->addChild(GroupBox::Seed(T_("Bind address")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS);
 
 		bindAddress = group->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(bindAddress, SettingsManager::BIND_ADDRESS, PropPage::T_STR));
 	}
 
-	PropPage::read(items);
-
-	setGroupEnabled();
-	setRadioButtons();
-	fillMappers();
+	read();
+	updateAuto();
 
 	ConnectivityManager::getInstance()->addListener(this);
 }
@@ -134,28 +149,28 @@ void ConnectivityManualPage::write() {
 		SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, c);
 	}
 
-	auto sel = mapper->getSelected();
-	SettingsManager::getInstance()->set(SettingsManager::MAPPER, sel ? Text::fromT(mapper->getValue(sel)) : Util::emptyString);
+	SettingsManager::getInstance()->set(SettingsManager::MAPPER, Text::fromT(mapper->getText()));
 }
 
-void ConnectivityManualPage::setGroupEnabled() {
-	grid->setEnabled(!BOOLSETTING(AUTO_DETECT_CONNECTION));
+void ConnectivityManualPage::handleAutoClicked() {
+	// apply immediately so that ConnectivityManager updates.
+	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
+	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
 }
 
-void ConnectivityManualPage::setRadioButtons() {
+void ConnectivityManualPage::read() {
 	switch(SETTING(INCOMING_CONNECTIONS)) {
 		case SettingsManager::INCOMING_FIREWALL_UPNP: upnp->setChecked(); break;
 		case SettingsManager::INCOMING_FIREWALL_NAT: nat->setChecked(); break;
 		case SettingsManager::INCOMING_FIREWALL_PASSIVE: passive->setChecked(); break;
 		default: directIn->setChecked(); break;
 	}
-}
 
-void ConnectivityManualPage::fillMappers() {
+	PropPage::read(items);
+
 	const auto& setting = SETTING(MAPPER);
 	int sel = 0;
 
-	mapper->addValue(_T("All of them"));
 	auto mappers = MappingManager::getInstance()->getMappers();
 	for(auto i = mappers.cbegin(), iend = mappers.cend(); i != iend; ++i) {
 		const auto& name = *i;
@@ -167,21 +182,31 @@ void ConnectivityManualPage::fillMappers() {
 	mapper->setSelected(sel);
 }
 
+void ConnectivityManualPage::updateAuto() {
+	bool setting = BOOLSETTING(AUTO_DETECT_CONNECTION);
+	autoDetect->setChecked(setting);
+
+	auto controls = grid->getChildren<Control>();
+	boost::for_each(controls, [this, setting](Control* control) {
+		if(control != autoGroup) {
+			control->setEnabled(!setting);
+		}
+	});
+}
+
 void ConnectivityManualPage::on(Finished) noexcept {
 	callAsync([this] {
 		directIn->setChecked(false);
 		upnp->setChecked(false);
 		nat->setChecked(false);
 		passive->setChecked(false);
-		setRadioButtons();
-
-		this->PropPage::read(items);
 
 		mapper->clear();
-		fillMappers();
+
+		read();
 	});
 }
 
 void ConnectivityManualPage::on(SettingChanged) noexcept {
-	callAsync([this] { setGroupEnabled(); });
+	callAsync([this] { updateAuto(); });
 }

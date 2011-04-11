@@ -51,6 +51,7 @@ private:
 	static BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
 	void handleChildHelp(dwt::Control* widget);
 	void handleHelp(dwt::Control* widget, unsigned id);
+	bool handleClosing();
 	void handleSelectionChanged();
 	void handleOKClicked();
 	void handleCtrlTab(bool shift);

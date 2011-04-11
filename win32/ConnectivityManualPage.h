@@ -34,6 +34,9 @@ public:
 private:
 	ItemList items;
 
+	GroupBoxPtr autoGroup;
+	CheckBoxPtr autoDetect;
+
 	RadioButtonPtr directIn;
 	RadioButtonPtr upnp;
 	RadioButtonPtr nat;
@@ -50,9 +53,10 @@ private:
 
 	TextBoxPtr bindAddress;
 
-	void setGroupEnabled();
-	void setRadioButtons();
-	void fillMappers();
+	void handleAutoClicked();
+
+	void read();
+	void updateAuto();
 
 	// ConnectivityManagerListener
 	virtual void on(Finished) noexcept;

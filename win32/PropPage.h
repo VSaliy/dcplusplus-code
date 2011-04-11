@@ -67,11 +67,14 @@ protected:
 	void handleBrowseFile(TextBoxPtr box, int setting);
 
 	GridPtr grid;
+
 private:
-	unordered_map<TablePtr, const ListItem*> lists;
+	virtual dwt::Point getPreferredSize();
 
 	void handleListHelp(TablePtr list, unsigned id);
 	void handleListHelpId(TablePtr list, unsigned& id);
+
+	unordered_map<TablePtr, const ListItem*> lists;
 };
 
 #endif // !defined(PROP_PAGE_H)
