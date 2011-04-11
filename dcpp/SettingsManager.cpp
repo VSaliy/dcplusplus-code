@@ -52,7 +52,7 @@ const string SettingsManager::settingTags[] =
 	"LogFormatSystem", "LogFormatStatus", "DirectoryListingFrameOrder", "DirectoryListingFrameWidths",
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
 	"Language", "DownloadsOrder", "DownloadsWidth", "Toolbar", "LastSearchType",
-	"SoundMainChat", "SoundPM", "SoundPMWindow", "Mapper",
+	"SoundMainChat", "SoundPM", "SoundPMWindow", "Mapper", "SettingsPage",
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
