@@ -38,18 +38,19 @@ log(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GroupBoxPtr autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connection type detection")));
-		GridPtr cur = autoGroup->addChild(Grid::Seed(2, 1));
+		auto group = grid->addChild(GroupBox::Seed(T_("Automatic connectivity setup")));
+		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
+
+		auto cur = group->addChild(Grid::Seed(2, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(1).mode = GridInfo::FILL;
 		cur->row(1).align = GridInfo::STRETCH;
 
-		GridPtr cur2 = cur->addChild(Grid::Seed(1, 2));
+		auto cur2 = cur->addChild(Grid::Seed(1, 2));
 		cur2->column(1).mode = GridInfo::FILL;
 		cur2->column(1).align = GridInfo::BOTTOM_RIGHT;
 
-		autoDetect = cur2->addChild(CheckBox::Seed(T_("Enable automatic incoming connection type detection")));
-		autoDetect->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
+		autoDetect = cur2->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
 		items.push_back(Item(autoDetect, SettingsManager::AUTO_DETECT_CONNECTION, PropPage::T_BOOL));
 		autoDetect->onClicked([this] { handleAutoClicked(); });
 
@@ -57,12 +58,12 @@ log(0)
 		detectNow->setHelpId(IDH_SETTINGS_CONNECTIVITY_DETECT_NOW);
 		detectNow->onClicked([] { ConnectivityManager::getInstance()->detectConnection(); });
 
-		GroupBoxPtr logGroup = cur->addChild(GroupBox::Seed(T_("Detection log")));
-		logGroup->setHelpId(IDH_SETTINGS_CONNECTIVITY_DETECTION_LOG);
+		group = cur->addChild(GroupBox::Seed(T_("Detection log")));
+		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_DETECTION_LOG);
 
 		auto seed = WinUtil::Seeds::Dialog::richTextBox;
 		seed.lines = 0;
-		log = logGroup->addChild(seed);
+		log = group->addChild(seed);
 	}
 
 	PropPage::read(items);
@@ -109,6 +110,8 @@ void ConnectivityPage::on(Finished) noexcept {
 
 void ConnectivityPage::on(SettingChanged) noexcept {
 	callAsync([this] {
-		detectNow->setEnabled(BOOLSETTING(AUTO_DETECT_CONNECTION) && !ConnectivityManager::getInstance()->isRunning());
+		bool setting = BOOLSETTING(AUTO_DETECT_CONNECTION);
+		autoDetect->setChecked(setting);
+		detectNow->setEnabled(setting && !ConnectivityManager::getInstance()->isRunning());
 	});
 }

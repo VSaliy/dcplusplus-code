@@ -134,6 +134,10 @@ void PropPage::handleBrowseFile(TextBoxPtr box, int setting) {
 		box->setText(target);
 }
 
+dwt::Point PropPage::getPreferredSize() {
+	return grid->getPreferredSize();
+}
+
 void PropPage::handleListHelp(TablePtr list, unsigned id) {
 	// we have the help id of the whole list-view; convert to the one of the specific option the user wants help for
 	int item =

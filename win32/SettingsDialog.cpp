@@ -18,8 +18,14 @@
 
 #include "stdafx.h"
 
-#include "SettingsDialog.h"
 #include "resource.h"
+
+#include "SettingsDialog.h"
+
+#include <dcpp/SettingsManager.h>
+
+#include <dwt/util/GDI.h>
+#include <dwt/widgets/ScrolledContainer.h>
 
 #include "WinUtil.h"
 
@@ -59,10 +65,15 @@ help(0)
 {
 	onInitDialog([this] { return initDialog(); });
 	onHelp([this](Control* c, unsigned id) { handleHelp(c, id); });
+	onClosing([this] { return handleClosing(); });
 }
 
 int SettingsDialog::run() {
-	create(Seed(dwt::Point(700, 580), DS_CONTEXTHELP));
+	auto sizeVal = [](SettingsManager::IntSetting setting) {
+		return std::max(SettingsManager::getInstance()->get(setting), 100) * dwt::util::dpiFactor();
+	};
+	create(Seed(dwt::Point(sizeVal(SettingsManager::SETTINGS_WIDTH), sizeVal(SettingsManager::SETTINGS_HEIGHT)),
+		WS_SIZEBOX | DS_CONTEXTHELP));
 	return show();
 }
 
@@ -109,48 +120,43 @@ bool SettingsDialog::initDialog() {
 			tree->onSelectionChanged([this] { handleSelectionChanged(); });
 		}
 
-		Grid::Seed seed(1, 1);
-		seed.style |= WS_BORDER;
-		cur = cur->addChild(seed);
-		cur->column(0).mode = GridInfo::FILL;
-		cur->row(0).mode = GridInfo::FILL;
-		cur->row(0).align = GridInfo::STRETCH;
+		auto container = cur->addChild(dwt::ScrolledContainer::Seed(WS_BORDER));
 
-		addPage(T_("Personal information"), new GeneralPage(cur));
+		addPage(T_("Personal information"), new GeneralPage(container));
 
 		{
-			HTREEITEM item = addPage(T_("Connectivity"), new ConnectivityPage(cur));
-			addPage(T_("Manual configuration"), new ConnectivityManualPage(cur), item);
-			addPage(T_("Bandwidth limiting"), new BandwidthLimitPage(cur), item);
-			addPage(T_("Proxy"), new ProxyPage(cur), item);
+			HTREEITEM item = addPage(T_("Connectivity"), new ConnectivityPage(container));
+			addPage(T_("Manual configuration"), new ConnectivityManualPage(container), item);
+			addPage(T_("Bandwidth limiting"), new BandwidthLimitPage(container), item);
+			addPage(T_("Proxy"), new ProxyPage(container), item);
 		}
 
 		{
-			HTREEITEM item = addPage(T_("Downloads"), new DownloadPage(cur));
-			addPage(T_("Favorites"), new FavoriteDirsPage(cur), item);
-			addPage(T_("Queue"), new QueuePage(cur), item);
+			HTREEITEM item = addPage(T_("Downloads"), new DownloadPage(container));
+			addPage(T_("Favorites"), new FavoriteDirsPage(container), item);
+			addPage(T_("Queue"), new QueuePage(container), item);
 		}
 
-		addPage(T_("Sharing"), new UploadPage(cur));
+		addPage(T_("Sharing"), new UploadPage(container));
 
 		{
-			HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(cur));
-			addPage(T_("Colors and sounds"), new Appearance2Page(cur), item);
-			addPage(T_("Tabs"), new TabsPage(cur), item);
-			addPage(T_("Windows"), new WindowsPage(cur), item);
-		}
-
-		{
-			HTREEITEM item = addPage(T_("History"), new HistoryPage(cur));
-			addPage(T_("Logs"), new LogPage(cur), item);
+			HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(container));
+			addPage(T_("Colors and sounds"), new Appearance2Page(container), item);
+			addPage(T_("Tabs"), new TabsPage(container), item);
+			addPage(T_("Windows"), new WindowsPage(container), item);
 		}
 
 		{
-			HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(cur));
-			addPage(T_("Experts only"), new ExpertsPage(cur), item);
-			addPage(T_("User commands"), new UCPage(cur), item);
-			addPage(T_("Security certificates"), new CertificatesPage(cur), item);
-			addPage(T_("Search types"), new SearchTypesPage(cur), item);
+			HTREEITEM item = addPage(T_("History"), new HistoryPage(container));
+			addPage(T_("Logs"), new LogPage(container), item);
+		}
+
+		{
+			HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(container));
+			addPage(T_("Experts only"), new ExpertsPage(container), item);
+			addPage(T_("User commands"), new UCPage(container), item);
+			addPage(T_("Security certificates"), new CertificatesPage(container), item);
+			addPage(T_("Search types"), new SearchTypesPage(container), item);
 		}
 	}
 
@@ -174,8 +180,8 @@ bool SettingsDialog::initDialog() {
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 
 		WinUtil::addDlgButtons(cur,
-			[this] { handleOKClicked(); },
-			[this] { GCC_WTF->endDialog(IDCANCEL); });
+			[this] { handleClosing(); handleOKClicked(); },
+			[this] { handleClosing(); GCC_WTF->endDialog(IDCANCEL); });
 
 		Button::Seed seed(T_("Help"));
 		seed.padding.x = 10;
@@ -199,8 +205,8 @@ bool SettingsDialog::initDialog() {
 
 	updateTitle();
 
-	layout();
 	centerWindow();
+	onWindowPosChanged([this](const dwt::Rectangle &) { layout(); });
 
 	return false;
 }
@@ -222,7 +228,6 @@ void SettingsDialog::handleChildHelp(dwt::Control* widget) {
 }
 
 HTREEITEM SettingsDialog::addPage(const tstring& title, PropPage* page, HTREEITEM parent) {
-	static_cast<GridPtr>(page->getParent())->setWidget(page, 0, 0);
 	pages.push_back(page);
 	return tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
 }
@@ -233,6 +238,16 @@ void SettingsDialog::handleHelp(dwt::Control* widget, unsigned id) {
 	WinUtil::help(widget, id);
 }
 
+bool SettingsDialog::handleClosing() {
+	dwt::Point pt = getWindowSize();
+	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_WIDTH,
+		static_cast<int>(static_cast<float>(pt.x) / dwt::util::dpiFactor()));
+	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_HEIGHT,
+		static_cast<int>(static_cast<float>(pt.y) / dwt::util::dpiFactor()));
+
+	return true;
+}
+
 void SettingsDialog::handleSelectionChanged() {
 	PropPage* page = reinterpret_cast<PropPage*>(tree->getData(tree->getSelected()));
 	if(page) {
@@ -241,7 +256,7 @@ void SettingsDialog::handleSelectionChanged() {
 			currentPage = 0;
 		}
 
-		page->setVisible(true);
+		::SetWindowPos(page->handle(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_SHOWWINDOW);
 		currentPage = page;
 
 		updateTitle();
@@ -288,4 +303,6 @@ void SettingsDialog::write() {
 void SettingsDialog::layout() {
 	dwt::Point sz = getClientSize();
 	grid->resize(dwt::Rectangle(8, 8, sz.x - 16, sz.y - 16));
+
+	currentPage->getParent()->layout();
 }

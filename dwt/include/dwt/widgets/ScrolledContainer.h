@@ -78,7 +78,7 @@ private:
 };
 
 inline ScrolledContainer::Seed::Seed(DWORD style, DWORD exStyle) :
-BaseType::Seed(style | WS_CHILD | WS_HSCROLL | WS_VSCROLL, exStyle)
+BaseType::Seed(style | WS_CHILD | WS_HSCROLL | WS_VSCROLL, exStyle | WS_EX_CONTROLPARENT)
 {
 }
 

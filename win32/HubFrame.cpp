@@ -377,7 +377,7 @@ void HubFrame::enterImpl(const tstring& s) {
 		} else if(Util::stricmp(cmd.c_str(), _T("userlist")) == 0) {
 			showUsers->setChecked(!showUsers->getChecked());
 		} else if(Util::stricmp(cmd.c_str(), _T("connection")) == 0) {
-			addStatus(str(TF_("IP: %1%, Port: %2%/%3%/%4%") % Text::toT(client->getLocalIp())
+			addStatus(str(TF_("IP: %1%, Transfer port: %2%, Search port: %3%, Encrypted transfer port: %4%") % Text::toT(client->getLocalIp())
 				% ConnectionManager::getInstance()->getPort()
 				% SearchManager::getInstance()->getPort()
 				% ConnectionManager::getInstance()->getSecurePort()

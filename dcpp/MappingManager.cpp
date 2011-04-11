@@ -110,11 +110,20 @@ int MappingManager::run() {
 		return 0;
 	}
 
+	// move the preferred mapper to the top of the stack.
 	const auto& setting = SETTING(MAPPER);
 	for(auto i = mappers.begin(); i != mappers.end(); ++i) {
-		if(!setting.empty() && i->first != setting)
-			continue;
+		if(i->first == setting) {
+			if(i != mappers.begin()) {
+				auto mapper = *i;
+				mappers.erase(i);
+				mappers.insert(mappers.begin(), mapper);
+			}
+			break;
+		}
+	}
 
+	for(auto i = mappers.begin(); i != mappers.end(); ++i) {
 		unique_ptr<Mapper> pMapper(i->second());
 		Mapper& mapper = *pMapper;
 
