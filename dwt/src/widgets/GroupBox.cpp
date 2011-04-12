@@ -61,7 +61,7 @@ void GroupBox::create( const GroupBox::Seed & cs ) {
 
 Point GroupBox::getPreferredSize() {
 	Point ret(0, 0);
-	Widget* w = getChild();
+	auto w = getChild();
 
 	if(w) {
 		ret = w->getPreferredSize();
@@ -71,11 +71,11 @@ Point GroupBox::getPreferredSize() {
 }
 
 void GroupBox::layout() {
-	Widget* child = getChild();
+	auto child = getChild();
 	if(child) {
 		auto size = getClientSize();
 		auto rc = shrink(Rectangle(size));
-		::MoveWindow(child->handle(), rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
+		child->resize(rc);
 	}
 
 	BaseType::layout();
@@ -119,7 +119,7 @@ Point GroupBox::expand(const Point& child) {
 }
 
 void GroupBox::handleEnabled(bool enabled) {
-	Widget* child = getChild();
+	auto child = getChild();
 	if(child)
 		child->setEnabled(enabled);
 }

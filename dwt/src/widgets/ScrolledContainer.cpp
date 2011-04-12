@@ -61,17 +61,11 @@ void ScrolledContainer::layout() {
 		setScrollInfo(SB_VERT, clientSize.y, childSize.y);
 	}
 
-	::MoveWindow(child->handle(), 0, 0, clientSize.x, clientSize.y, TRUE);
+	child->resize(Rectangle(0, 0, std::max(childSize.x, clientSize.x), std::max(childSize.y, clientSize.y)));
 }
 
 void ScrolledContainer::setScrollInfo(int type, int page, int max, int pos) {
-	SCROLLINFO si = { sizeof(SCROLLINFO) };
-
-	si.fMask = SIF_ALL;
-	si.nMin = 0;
-	si.nMax = max - 1;
-	si.nPos = pos;
-	si.nPage = type == SB_HORZ ? getClientSize().x : getClientSize().y;
+	SCROLLINFO si = { sizeof(SCROLLINFO), SIF_ALL, 0, max - 1, page, pos };
 	::SetScrollInfo(handle(), type, &si, TRUE);
 }
 
@@ -101,10 +95,10 @@ bool ScrolledContainer::handleMessage(const MSG &msg, LRESULT &retVal) {
     	si.nPos = si.nMax;
     	break;
     case SB_LINELEFT:
-        si.nPos -= 1;
+        si.nPos -= 10;
         break;
     case SB_LINERIGHT:
-        si.nPos += 1;
+        si.nPos += 10;
         break;
     case SB_PAGELEFT:
         si.nPos -= si.nPage;
@@ -117,7 +111,7 @@ bool ScrolledContainer::handleMessage(const MSG &msg, LRESULT &retVal) {
         break;
     }
 
-    ::SetScrollInfo(handle(), type, &si, FALSE);
+    ::SetScrollInfo(handle(), type, &si, TRUE);
 
 	::GetScrollInfo(handle(), type, &si);
 	auto hDiff = type == SB_HORZ ? orig - si.nPos : 0;
