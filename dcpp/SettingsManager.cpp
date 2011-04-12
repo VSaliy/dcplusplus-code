@@ -52,7 +52,7 @@ const string SettingsManager::settingTags[] =
 	"LogFormatSystem", "LogFormatStatus", "DirectoryListingFrameOrder", "DirectoryListingFrameWidths",
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
 	"Language", "DownloadsOrder", "DownloadsWidth", "Toolbar", "LastSearchType",
-	"SoundMainChat", "SoundPM", "SoundPMWindow", "Mapper", "SettingsPage",
+	"SoundMainChat", "SoundPM", "SoundPMWindow", "Mapper",
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
@@ -62,7 +62,7 @@ const string SettingsManager::settingTags[] =
 	"LogDownloads", "LogFinishedDownloads", "LogUploads", "StatusInChat", "ShowJoins",
 	"UseSystemIcons", "PopupPMs", "MinUploadSpeed", "GetUserInfo", "UrlHandler", "MainWindowState",
 	"MainWindowSizeX", "MainWindowSizeY", "MainWindowPosX", "MainWindowPosY",
-	"SettingsWidth", "SettingsHeight",
+	"SettingsWidth", "SettingsHeight", "SettingsPage",
 	"SocksPort", "SocksResolve", "KeepLists", "AutoKick", "QueueFrameShowTree",
 	"CompressTransfers", "SFVCheck", "AutoAway",
 	"MaxCompression", "NoAwayMsgToBots", "SkipZeroByte", "AdlsBreakOnFirst",

@@ -70,7 +70,7 @@ help(0)
 
 int SettingsDialog::run() {
 	auto sizeVal = [](SettingsManager::IntSetting setting) {
-		return std::max(SettingsManager::getInstance()->get(setting), 100) * dwt::util::dpiFactor();
+		return std::max(SettingsManager::getInstance()->get(setting), 200);
 	};
 	create(Seed(dwt::Point(sizeVal(SettingsManager::SETTINGS_WIDTH), sizeVal(SettingsManager::SETTINGS_HEIGHT)),
 		WS_SIZEBOX | DS_CONTEXTHELP));
@@ -121,12 +121,13 @@ bool SettingsDialog::initDialog() {
 		}
 
 		auto container = cur->addChild(dwt::ScrolledContainer::Seed(WS_BORDER));
-		const auto setting = Text::toT(SETTING(SETTINGS_PAGE));
-		auto addPage = [this, container, &setting](const tstring& title, PropPage* page, HTREEITEM parent) -> HTREEITEM {
-			pages.push_back(page);
+
+		const size_t setting = SETTING(SETTINGS_PAGE);
+		auto addPage = [this, container, setting](const tstring& title, PropPage* page, HTREEITEM parent) -> HTREEITEM {
 			auto ret = tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
-			if(title == setting)
+			if(pages.size() == setting)
 				callAsync([=] { tree->setSelected(ret); });
+			pages.push_back(page);
 			return ret;
 		};
 
@@ -248,7 +249,7 @@ bool SettingsDialog::handleClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_HEIGHT,
 		static_cast<int>(static_cast<float>(pt.y) / dwt::util::dpiFactor()));
 
-	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_PAGE, Text::fromT(tree->getSelectedText()));
+	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_PAGE, find(pages.begin(), pages.end(), currentPage) - pages.begin());
 
 	return true;
 }
