@@ -263,8 +263,8 @@ droppedResults(0)
 	{
 		auto lock = clientMgr->lock();
 		clientMgr->addListener(this);
-		Client::List& clients = clientMgr->getClients();
-		for(Client::List::iterator it = clients.begin(); it != clients.end(); ++it) {
+		auto& clients = clientMgr->getClients();
+		for(auto it = clients.begin(); it != clients.end(); ++it) {
 			Client* client = *it;
 			if(!client->isConnected())
 				continue;

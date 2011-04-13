@@ -19,6 +19,9 @@
 #ifndef DCPLUSPLUS_DCPP_QUEUE_MANAGER_H
 #define DCPLUSPLUS_DCPP_QUEUE_MANAGER_H
 
+#include <functional>
+#include <unordered_map>
+
 #include "TimerManager.h"
 
 #include "CriticalSection.h"
@@ -35,6 +38,10 @@
 #include "ClientManagerListener.h"
 
 namespace dcpp {
+
+using std::function;
+using std::pair;
+using std::unordered_multimap;
 
 STANDARD_EXCEPTION(QueueException);
 

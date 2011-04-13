@@ -17,12 +17,11 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "Text.h"
-#include "Util.h"
 
-#ifndef _WIN32
+#ifdef _WIN32
+#include "w.h"
+#else
 #include <errno.h>
 #include <iconv.h>
 #include <langinfo.h>
@@ -32,6 +31,8 @@
 #endif
 
 #endif
+
+#include "Util.h"
 
 namespace dcpp {
 

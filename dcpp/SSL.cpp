@@ -1,7 +1,6 @@
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "SSL.h"
+
 #include "Util.h"
 
 namespace dcpp {

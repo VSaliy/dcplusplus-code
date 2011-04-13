@@ -24,6 +24,9 @@
 
 #include <dcpp/SimpleXML.h>
 #include <dcpp/version.h>
+#include <dcpp/format.h>
+#include <dcpp/SettingsManager.h>
+
 #include "WinUtil.h"
 
 static const char thanks[] = "Big thanks to all donators and people who have contributed with ideas "

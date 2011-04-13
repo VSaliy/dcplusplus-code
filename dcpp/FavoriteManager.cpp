@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "FavoriteManager.h"
 
 #include "ClientManager.h"
@@ -35,6 +33,9 @@
 #include "FilteredFile.h"
 
 namespace dcpp {
+
+using std::make_pair;
+using std::swap;
 
 FavoriteManager::FavoriteManager() : lastId(0), useHttp(false), running(false), c(NULL), lastServer(0), listType(TYPE_NORMAL), dontSave(false) {
 	SettingsManager::getInstance()->addListener(this);

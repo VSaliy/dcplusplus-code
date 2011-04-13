@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "ClientManager.h"
 
 #include "ShareManager.h"
@@ -29,7 +27,7 @@
 #include "SimpleXML.h"
 #include "UserCommand.h"
 #include "SearchResult.h"
-
+#include "File.h"
 #include "AdcHub.h"
 #include "NmdcHub.h"
 
@@ -47,7 +45,7 @@ Client* ClientManager::getClient(const string& aHubURL) {
 
 	{
 		Lock l(cs);
-		clients.push_back(c);
+		clients.insert(c);
 	}
 
 	c->addListener(this);
@@ -61,7 +59,7 @@ void ClientManager::putClient(Client* aClient) {
 
 	{
 		Lock l(cs);
-		clients.remove(aClient);
+		clients.erase(aClient);
 	}
 	aClient->shutdown();
 	delete aClient;
@@ -199,7 +197,7 @@ int64_t ClientManager::getAvailable() const {
 bool ClientManager::isConnected(const string& aUrl) const {
 	Lock l(cs);
 
-	for(Client::List::const_iterator i = clients.begin(); i != clients.end(); ++i) {
+	for(auto i = clients.begin(); i != clients.end(); ++i) {
 		if((*i)->getHubUrl() == aUrl) {
 			return true;
 		}
@@ -221,7 +219,7 @@ string ClientManager::findHub(const string& ipPort) const {
 	}
 
 	string url;
-	for(Client::List::const_iterator i = clients.begin(); i != clients.end(); ++i) {
+	for(auto i = clients.begin(); i != clients.end(); ++i) {
 		const Client* c = *i;
 		if(c->getIp() == ip) {
 			// If exact match is found, return it
@@ -239,7 +237,7 @@ string ClientManager::findHub(const string& ipPort) const {
 string ClientManager::findHubEncoding(const string& aUrl) const {
 	Lock l(cs);
 
-	for(Client::List::const_iterator i = clients.begin(); i != clients.end(); ++i) {
+	for(auto i = clients.begin(); i != clients.end(); ++i) {
 		if((*i)->getHubUrl() == aUrl) {
 			return (*i)->getEncoding();
 		}
@@ -456,7 +454,7 @@ void ClientManager::send(AdcCommand& cmd, const CID& cid) {
 
 void ClientManager::infoUpdated() {
 	Lock l(cs);
-	for(Client::Iter i = clients.begin(); i != clients.end(); ++i) {
+	for(auto i = clients.begin(); i != clients.end(); ++i) {
 		if((*i)->isConnected()) {
 			(*i)->info(false);
 		}
@@ -534,7 +532,7 @@ void ClientManager::on(AdcSearch, Client*, const AdcCommand& adc, const CID& fro
 void ClientManager::search(int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken) {
 	Lock l(cs);
 
-	for(Client::Iter i = clients.begin(); i != clients.end(); ++i) {
+	for(auto i = clients.begin(); i != clients.end(); ++i) {
 		if((*i)->isConnected()) {
 			(*i)->search(aSizeMode, aSize, aFileType, aString, aToken, StringList() /*ExtList*/);
 		}
@@ -546,7 +544,7 @@ void ClientManager::search(StringList& who, int aSizeMode, int64_t aSize, int aF
 
 	for(StringIter it = who.begin(); it != who.end(); ++it) {
 		string& client = *it;
-		for(Client::Iter j = clients.begin(); j != clients.end(); ++j) {
+		for(auto j = clients.begin(); j != clients.end(); ++j) {
 			Client* c = *j;
 			if(c->isConnected() && c->getHubUrl() == client) {
 				c->search(aSizeMode, aSize, aFileType, aString, aToken, aExtList);
@@ -568,7 +566,7 @@ void ClientManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) noexc
 		}
 	}
 
-	for(Client::Iter j = clients.begin(); j != clients.end(); ++j) {
+	for(auto j = clients.begin(); j != clients.end(); ++j) {
 		(*j)->info(false);
 	}
 }

@@ -26,7 +26,7 @@
 
 #include "resource.h"
 
-//#include <dcpp/nullptr.h>
+#include <dcpp/nullptr.h>
 #include <dcpp/ADLSearch.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/FavoriteManager.h>

@@ -17,9 +17,10 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "SearchManager.h"
+
+#include <boost/scoped_array.hpp>
+
 #include "UploadManager.h"
 #include "format.h"
 #include "ClientManager.h"

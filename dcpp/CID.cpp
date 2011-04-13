@@ -16,33 +16,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPP_DCPLUSPLUS_DEBUG_H_
-#define DCPP_DCPLUSPLUS_DEBUG_H_
+#include "stdinc.h"
+#include "CID.h"
 
-#include <stdio.h>
+#include "Util.h"
 
-#ifdef _DEBUG
+namespace dcpp {
 
-#include <assert.h>
+CID CID::generate() {
+	uint8_t data[CID::SIZE];
+	for(size_t i = 0; i < sizeof(data); ++i) {
+		data[i] = (uint8_t)Util::rand();
+	}
+	return CID(data);
+}
 
-#define dcdebug printf
-#ifdef _MSC_VER
 
-#include <crtdbg.h>
-
-#define dcassert(exp) \
-do { if (!(exp)) { \
-	dcdebug("Assertion hit in %s(%d): " #exp "\n", __FILE__, __LINE__); \
-	if(1 == _CrtDbgReport(_CRT_ASSERT, __FILE__, __LINE__, NULL, #exp)) \
-_CrtDbgBreak(); } } while(false)
-#else
-#define dcassert(exp) assert(exp)
-#endif
-#define dcdrun(exp) exp
-#else //_DEBUG
-#define dcdebug if (false) printf
-#define dcassert(exp)
-#define dcdrun(exp)
-#endif //_DEBUG
-
-#endif /* DCPP_DCPLUSPLUS_DEBUG_H_ */
+}

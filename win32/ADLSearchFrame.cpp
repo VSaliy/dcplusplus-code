@@ -24,6 +24,7 @@
 
 #include <dcpp/Client.h>
 #include <dcpp/version.h>
+#include <dcpp/format.h>
 
 #include "HoldRedraw.h"
 #include "ADLSProperties.h"

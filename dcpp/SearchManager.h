@@ -22,14 +22,11 @@
 #include "SettingsManager.h"
 
 #include "Socket.h"
-#include "User.h"
 #include "Thread.h"
-#include "Client.h"
 #include "Singleton.h"
 
 #include "SearchManagerListener.h"
 #include "TimerManager.h"
-#include "AdcCommand.h"
 
 namespace dcpp {
 

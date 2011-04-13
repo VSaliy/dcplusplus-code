@@ -26,6 +26,7 @@
 #include "AspectUserCommand.h"
 #include "UserInfoBase.h"
 
+#include <dcpp/OnlineUser.h>
 #include <dcpp/forward.h>
 #include <dcpp/ClientListener.h>
 #include <dcpp/TaskQueue.h>

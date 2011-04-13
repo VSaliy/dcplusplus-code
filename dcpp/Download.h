@@ -2,10 +2,11 @@
 #define DCPLUSPLUS_DCPP_DOWNLOAD_H_
 
 #include "forward.h"
+#include "noexcept.h"
 #include "Transfer.h"
 #include "MerkleTree.h"
 #include "Flags.h"
-#include "Streams.h"
+#include "Util.h"
 
 namespace dcpp {
 

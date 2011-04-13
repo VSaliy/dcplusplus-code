@@ -19,24 +19,16 @@
 #ifndef DCPLUSPLUS_DCPP_FILE_H
 #define DCPLUSPLUS_DCPP_FILE_H
 
-#include "SettingsManager.h"
-
-#include "Util.h"
-#include "Text.h"
 #include "Streams.h"
 
-#ifndef _WIN32
+#ifdef _WIN32
+#include "w.h"
+#else
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <dirent.h>
 #include <fnmatch.h>
-#endif
-
-#ifdef _WIN32
-#include "../zlib/zlib.h"
-#else
-#include <zlib.h>
 #endif
 
 namespace dcpp {

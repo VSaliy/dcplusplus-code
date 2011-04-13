@@ -31,6 +31,7 @@
 #include <dcpp/ClientManager.h>
 #include <dcpp/Download.h>
 #include <dcpp/Upload.h>
+#include <dcpp/UserConnection.h>
 
 #include <dwt/resources/Pen.h>
 
@@ -65,10 +66,6 @@ static const ColumnInfo downloadColumns[] = {
 
 static bool noClose() {
 	return false;
-}
-
-static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
-	control->resize(dwt::Rectangle(parent->getClientSize()));
 }
 
 TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
@@ -466,7 +463,7 @@ int TransferView::ConnectionInfo::compareItems(ConnectionInfo* a, ConnectionInfo
 }
 
 void TransferView::addTask(int type, Task* ui) {
-	tasks.add(type, ui);
+	tasks.add(type, unique_ptr<Task>(ui));
 	callAsync([this] { execTasks(); });
 }
 
@@ -783,7 +780,7 @@ void TransferView::onTransferTick(Transfer* t, bool isDownload) {
 	ui->setTransfered(t->getPos(), t->getActual());
 	ui->setSpeed(t->getAverageSpeed());
 	ui->setChunk(t->getPos(), t->getSize());
-	tasks.add(CONNECTIONS_UPDATE, ui);
+	tasks.add(CONNECTIONS_UPDATE, unique_ptr<Task>(ui));
 }
 
 void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noexcept  {
@@ -814,7 +811,7 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noe
 		ti->done += d->getPos();
 	}
 	for(std::vector<TickInfo*>::iterator i = dis.begin(); i != dis.end(); ++i) {
-		tasks.add(DOWNLOADS_TICK, *i);
+		tasks.add(DOWNLOADS_TICK, unique_ptr<Task>(*i));
 	}
 
 	callAsync([this] { execTasks(); });

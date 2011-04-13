@@ -1,7 +1,7 @@
 #ifndef CLIENTLISTENER_H_
 #define CLIENTLISTENER_H_
 
-#include "forward.h"
+#include "typedefs.h"
 
 namespace dcpp {
 

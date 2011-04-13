@@ -19,7 +19,9 @@
 #ifndef DCPLUSPLUS_DCPP_SEMAPHORE_H
 #define DCPLUSPLUS_DCPP_SEMAPHORE_H
 
-#ifndef _WIN32
+#ifdef _WIN32
+#include "w.h"
+#else
 #include <errno.h>
 #include <semaphore.h>
 #include <sys/time.h>

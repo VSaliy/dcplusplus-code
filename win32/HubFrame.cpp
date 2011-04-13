@@ -489,7 +489,7 @@ void HubFrame::addStatus(const tstring& aLine, bool legitimate /* = true */) {
 }
 
 void HubFrame::addTask(Tasks s, const OnlineUser& u) {
-	tasks.add(s, new UserTask(u));
+	tasks.add(s, unique_ptr<Task>(new UserTask(u)));
 	updateUsers = true;
 }
 
@@ -776,7 +776,7 @@ void HubFrame::on(UserUpdated, Client*, const OnlineUser& user) noexcept {
 }
 void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) noexcept {
 	for(OnlineUserList::const_iterator i = aList.begin(); i != aList.end(); ++i) {
-		tasks.add(UPDATE_USER, new UserTask(*(*i)));
+		tasks.add(UPDATE_USER, unique_ptr<Task>(new UserTask(*(*i))));
 	}
 	updateUsers = true;
 }

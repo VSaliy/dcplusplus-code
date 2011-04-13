@@ -21,7 +21,6 @@
 
 #include "Singleton.h"
 #include "Socket.h"
-#include "Thread.h"
 #include "TimerManager.h"
 #include "SettingsManager.h"
 
@@ -69,12 +68,12 @@ namespace dcpp
 
 		friend class Singleton<ThrottleManager>;
 
-		ThrottleManager(void) : activeWaiter(-1), downTokens(0), upTokens(0)
+		ThrottleManager() : activeWaiter(-1), downTokens(0), upTokens(0)
 		{
 			TimerManager::getInstance()->addListener(this);
 		}
 
-		~ThrottleManager(void);
+		virtual ~ThrottleManager();
 
 		bool getCurThrottling();
 		void waitToken();

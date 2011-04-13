@@ -17,9 +17,8 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "AdcCommand.h"
+
 #include "ClientManager.h"
 
 namespace dcpp {

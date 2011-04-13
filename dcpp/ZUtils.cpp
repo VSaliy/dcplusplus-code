@@ -17,14 +17,14 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "ZUtils.h"
 
 #include "format.h"
 #include "Exception.h"
 
 namespace dcpp {
+
+using std::max;
 
 const double ZFilter::MIN_COMPRESSION_LEVEL = 0.9;
 

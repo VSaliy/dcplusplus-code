@@ -28,7 +28,6 @@
 #include "Singleton.h"
 #include "MerkleTree.h"
 #include "Speaker.h"
-#include "File.h"
 
 namespace dcpp {
 

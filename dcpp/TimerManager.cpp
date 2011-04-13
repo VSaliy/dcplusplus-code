@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "TimerManager.h"
 
 #include <boost/date_time/posix_time/ptime.hpp>

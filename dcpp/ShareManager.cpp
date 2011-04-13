@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "ShareManager.h"
 
 #include "CryptoManager.h"
@@ -50,6 +48,8 @@
 #include <limits>
 
 namespace dcpp {
+
+using std::numeric_limits;
 
 ShareManager::ShareManager() : hits(0), xmlListLen(0), bzXmlListLen(0),
 	xmlDirty(true), forceXmlRefresh(true), refreshDirs(false), update(false), initial(true), listN(0), refreshing(false),

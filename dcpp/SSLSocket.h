@@ -28,10 +28,6 @@
 #define SSL_SUCCESS 1
 #endif
 
-#ifdef YASSL_VERSION
-using namespace yaSSL;
-#endif
-
 namespace dcpp {
 
 class SSLSocketException : public SocketException {

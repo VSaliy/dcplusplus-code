@@ -17,9 +17,8 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "SimpleXML.h"
+#include "Streams.h"
 
 namespace dcpp {
 
@@ -198,6 +197,13 @@ void SimpleXML::fromXML(const string& aXML) {
 
 	current = &root;
 	resetCurrentChild();
+}
+
+string SimpleXML::toXML() {
+	string tmp;
+	StringOutputStream os(tmp);
+	toXML(&os);
+	return tmp;
 }
 
 } // namespace dcpp

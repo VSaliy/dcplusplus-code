@@ -24,17 +24,16 @@
 #ifndef DCPLUSPLUS_DCPP_A_D_L_SEARCH_H
 #define DCPLUSPLUS_DCPP_A_D_L_SEARCH_H
 
+#include <boost/regex.hpp>
+#include <boost/variant.hpp>
+
 #include "Util.h"
 
 #include "SettingsManager.h"
 
 #include "StringSearch.h"
-#include "StringTokenizer.h"
 #include "Singleton.h"
 #include "DirectoryListing.h"
-
-#include <boost/regex.hpp>
-#include <boost/variant.hpp>
 
 namespace dcpp {
 
@@ -155,7 +154,7 @@ private:
 	// Finalize destination directories
 	void finalizeDestinationDirectories(DestDirList& destDirVector, DirectoryListing::Directory* root);
 
-	string getConfigFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "ADLSearch.xml"; }
+	static string getConfigFile();
 };
 
 } // namespace dcpp

@@ -19,26 +19,24 @@
 #ifndef DCPLUSPLUS_DCPP_HASH_MANAGER_H
 #define DCPLUSPLUS_DCPP_HASH_MANAGER_H
 
+#include <map>
+
 #include "Singleton.h"
 #include "MerkleTree.h"
 #include "Thread.h"
 #include "CriticalSection.h"
 #include "Semaphore.h"
 #include "TimerManager.h"
-#include "Util.h"
-#include "FastAlloc.h"
-#include "Text.h"
-#include "Streams.h"
 #include "HashManagerListener.h"
+#include "Util.h"
 
 namespace dcpp {
 
+using std::map;
+
 STANDARD_EXCEPTION(HashException);
-class File;
-class CRC32Filter;
 
 class HashLoader;
-class FileException;
 
 class HashManager : public Singleton<HashManager>, public Speaker<HashManagerListener>,
 	private TimerManagerListener
@@ -214,8 +212,8 @@ private:
 		bool loadTree(File& dataFile, const TreeInfo& ti, const TTHValue& root, TigerTree& tt);
 		int64_t saveTree(File& dataFile, const TigerTree& tt);
 
-		string getIndexFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "HashIndex.xml"; }
-		string getDataFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "HashData.dat"; }
+		static string getIndexFile();
+		static string getDataFile();
 	};
 
 	friend class HashLoader;

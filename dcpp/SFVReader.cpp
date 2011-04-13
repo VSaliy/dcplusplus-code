@@ -17,11 +17,10 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "SFVReader.h"
 
 #include "StringTokenizer.h"
+#include "File.h"
 
 #ifndef _WIN32
 #include <dirent.h>
@@ -31,7 +30,6 @@
 namespace dcpp {
 
 bool SFVReader::tryFile(const string& sfvFile, const string& fileName) {
-
 	string sfv = File(sfvFile, File::READ, File::OPEN).read();
 
 	string::size_type i = 0;

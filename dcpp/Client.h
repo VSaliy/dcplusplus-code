@@ -19,25 +19,25 @@
 #ifndef DCPLUSPLUS_DCPP_CLIENT_H
 #define DCPLUSPLUS_DCPP_CLIENT_H
 
+#include "compiler.h"
+
+#include <atomic>
+
 #include "forward.h"
 
-#include "User.h"
 #include "Speaker.h"
 #include "BufferedSocketListener.h"
 #include "TimerManager.h"
 #include "ClientListener.h"
-
-#include <atomic>
+#include "OnlineUser.h"
 
 namespace dcpp {
+
+using std::atomic;
 
 /** Yes, this should probably be called a Hub */
 class Client : public Speaker<ClientListener>, public BufferedSocketListener, protected TimerManagerListener {
 public:
-	typedef Client* Ptr;
-	typedef list<Ptr> List;
-	typedef List::iterator Iter;
-
 	virtual void connect();
 	virtual void disconnect(bool graceless);
 

@@ -23,6 +23,8 @@
 
 namespace dcpp {
 
+using std::make_pair;
+
 const char* Mapper::protocols[PROTOCOL_LAST] = {
 	"TCP",
 	"UDP"

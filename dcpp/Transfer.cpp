@@ -17,12 +17,11 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "Transfer.h"
 
 #include "UserConnection.h"
 #include "ClientManager.h"
+#include "format.h"
 
 namespace dcpp {
 

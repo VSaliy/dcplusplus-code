@@ -1,7 +1,7 @@
 #ifndef HASHMANAGERLISTENER_H_
 #define HASHMANAGERLISTENER_H_
 
-#include "MerkleTree.h"
+#include "forward.h"
 
 namespace dcpp {
 

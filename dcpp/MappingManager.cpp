@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "MappingManager.h"
 
 #include "ConnectionManager.h"
@@ -27,6 +25,7 @@
 #include "SearchManager.h"
 #include "ScopedFunctor.h"
 #include "version.h"
+#include "format.h"
 
 namespace dcpp {
 

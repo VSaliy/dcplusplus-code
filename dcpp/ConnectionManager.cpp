@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "ConnectionManager.h"
 
 #include "DownloadManager.h"
@@ -27,7 +25,7 @@
 #include "ClientManager.h"
 #include "QueueManager.h"
 #include "LogManager.h"
-
+#include "Client.h"
 #include "UserConnection.h"
 
 namespace dcpp {

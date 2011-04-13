@@ -16,8 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#if !defined(Z_UTILS_H)
-#define Z_UTILS_H
+#ifndef DCPLUSPLUS_DCPP_Z_UTILS_H
+#define DCPLUSPLUS_DCPP_Z_UTILS_H
+
+#include <stddef.h>
+#include <stdint.h>
 
 #ifdef _WIN32
 #include "../zlib/zlib.h"

@@ -25,6 +25,7 @@
 #include "TypedTable.h"
 #include "AspectUserCommand.h"
 
+#include <dcpp/Client.h>
 #include <dcpp/SearchResult.h>
 #include <dcpp/SearchManager.h>
 #include <dcpp/SettingsManager.h>

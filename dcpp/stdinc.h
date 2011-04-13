@@ -21,94 +21,69 @@
 
 #include "compiler.h"
 
-#ifndef _REENTRANT
-# define _REENTRANT 1
-#endif
-
 #ifndef BZ_NO_STDIO
 #define BZ_NO_STDIO 1
 #endif
 
-#ifdef _MSC_VER
-
-//disable the deprecated warnings for the CRT functions.
-#define _CRT_SECURE_NO_DEPRECATE 1
-#define _ATL_SECURE_NO_DEPRECATE 1
-#define _CRT_NON_CONFORMING_SWPRINTFS 1
-
-# ifndef CDECL
-#  define CDECL _cdecl
-# endif
-
-#else // _MSC_VER
-
-# ifndef CDECL
-#  define CDECL
-# endif
-
-#endif // _MSC_VER
+#ifndef NO_PCH
 
 #ifdef _WIN32
-# define _WIN32_WINNT 0x0502
-# define _WIN32_IE	0x0501
-# define WINVER 0x501
-
-#define STRICT
-#define WIN32_LEAN_AND_MEAN
-
-#include <winsock2.h>
-
-#include <windows.h>
-#include <mmsystem.h>
-
-#include <tchar.h>
-#include <shlobj.h>
-
+#include "w.h"
+#include "../bzip2/bzlib.h"
 #else
+#include <arpa/inet.h>
+#include <bzlib.h>
+#include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <fnmatch.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <pthread.h>
+#include <sched.h>
+#include <semaphore.h>
+#include <stdlib.h>
+#include <sys/ioctl.h>
+#include <sys/resource.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
 #include <unistd.h>
 #endif
 
-#ifdef _MSC_VER
-#include <crtdbg.h>
-#else
-#include <assert.h>
-#endif
-
-#include <cctype>
-#include <clocale>
-#include <cstdarg>
-#include <cstdint>
-#include <cstdio>
-#include <ctime>
-
-#include <memory.h>
-#include <sys/types.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <algorithm>
-#include <vector>
-#include <string>
-#include <map>
-#include <set>
+#include <atomic>
 #include <deque>
-#include <list>
-#include <utility>
 #include <functional>
+#include <list>
+#include <map>
 #include <memory>
-#include <numeric>
-#include <limits>
+#include <set>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
+#include <vector>
 
-#include <libintl.h>
-
-#include <boost/format.hpp>
-#include <boost/scoped_array.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/range/algorithm/find_if.hpp>
+#include <boost/range/algorithm/find.hpp>
+#include <boost/regex.hpp>
+#include <boost/scoped_array.hpp>
+#include <boost/smart_ptr/detail/atomic_count.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
+#include <boost/variant.hpp>
 
-#include "nullptr.h"
+#include <time.h>
+#include <openssl/ssl.h>
 
-namespace dcpp {
-using namespace std;
-}
+#endif
 
 #endif // !defined(STDINC_H)

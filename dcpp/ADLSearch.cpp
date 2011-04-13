@@ -22,8 +22,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "ADLSearch.h"
 
 #include "ClientManager.h"
@@ -31,6 +29,7 @@
 #include "LogManager.h"
 #include "QueueManager.h"
 #include "SimpleXML.h"
+#include "StringTokenizer.h"
 
 namespace dcpp {
 
@@ -512,6 +511,10 @@ void ADLSearchManager::matchRecurse(DestDirList &aDestList, DirectoryListing::Di
 		matchesFile(aDestList, *fileIt, aPath);
 	}
 	stepUpDirectory(aDestList);
+}
+
+string ADLSearchManager::getConfigFile() {
+	 return Util::getPath(Util::PATH_USER_CONFIG) + "ADLSearch.xml";
 }
 
 } // namespace dcpp

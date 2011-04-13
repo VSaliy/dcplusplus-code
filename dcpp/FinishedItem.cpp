@@ -17,10 +17,9 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "FinishedItem.h"
 
+#include "HintedUser.h"
 #include "User.h"
 
 namespace dcpp {

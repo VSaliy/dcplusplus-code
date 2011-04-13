@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "ConnectivityManager.h"
 
 #include "ClientManager.h"
@@ -27,6 +25,7 @@
 #include "MappingManager.h"
 #include "SearchManager.h"
 #include "SettingsManager.h"
+#include "format.h"
 
 namespace dcpp {
 

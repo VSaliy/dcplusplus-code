@@ -17,9 +17,9 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "UploadManager.h"
+
+#include <cmath>
 
 #include "ConnectionManager.h"
 #include "LogManager.h"
@@ -33,9 +33,7 @@
 #include "CryptoManager.h"
 #include "Upload.h"
 #include "UserConnection.h"
-
-#include <functional>
-#include <cmath>
+#include "File.h"
 
 namespace dcpp {
 
