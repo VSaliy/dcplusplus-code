@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "DirectoryListing.h"
 
 #include "QueueManager.h"
@@ -348,6 +346,11 @@ struct DirectoryEmpty {
 		return r;
 	}
 };
+
+DirectoryListing::Directory::~Directory() {
+	for_each(directories.begin(), directories.end(), DeleteFunction());
+	for_each(files.begin(), files.end(), DeleteFunction());
+}
 
 void DirectoryListing::Directory::filterList(DirectoryListing& dirList) {
 		DirectoryListing::Directory* d = dirList.getRoot();

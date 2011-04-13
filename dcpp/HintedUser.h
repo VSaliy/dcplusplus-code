@@ -16,33 +16,36 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPP_DCPLUSPLUS_DEBUG_H_
-#define DCPP_DCPLUSPLUS_DEBUG_H_
+#ifndef DCPLUSPLUS_DCPP_HINTEDUSER_H_
+#define DCPLUSPLUS_DCPP_HINTEDUSER_H_
 
-#include <stdio.h>
+#include <string>
 
-#ifdef _DEBUG
+#include "forward.h"
+#include "User.h"
 
-#include <assert.h>
+namespace dcpp {
 
-#define dcdebug printf
-#ifdef _MSC_VER
+using std::string;
 
-#include <crtdbg.h>
+/** User pointer associated to a hub url */
+struct HintedUser {
+	UserPtr user;
+	string hint;
 
-#define dcassert(exp) \
-do { if (!(exp)) { \
-	dcdebug("Assertion hit in %s(%d): " #exp "\n", __FILE__, __LINE__); \
-	if(1 == _CrtDbgReport(_CRT_ASSERT, __FILE__, __LINE__, NULL, #exp)) \
-_CrtDbgBreak(); } } while(false)
-#else
-#define dcassert(exp) assert(exp)
-#endif
-#define dcdrun(exp) exp
-#else //_DEBUG
-#define dcdebug if (false) printf
-#define dcassert(exp)
-#define dcdrun(exp)
-#endif //_DEBUG
+	explicit HintedUser(const UserPtr& user_, const string& hint_) : user(user_), hint(hint_) { }
 
-#endif /* DCPP_DCPLUSPLUS_DEBUG_H_ */
+	bool operator==(const UserPtr& rhs) const {
+		return user == rhs;
+	}
+	bool operator==(const HintedUser& rhs) const {
+		return user == rhs.user;
+		// ignore the hint, we don't want lists with multiple instances of the same user...
+	}
+
+	operator UserPtr() const { return user; }
+};
+
+}
+
+#endif /* HINTEDUSER_H_ */

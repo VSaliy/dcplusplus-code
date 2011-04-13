@@ -21,6 +21,8 @@
 
 #include "typedefs.h"
 
+#include <boost/noncopyable.hpp>
+
 namespace dcpp {
 
 class SimpleXMLReader {
@@ -31,7 +33,7 @@ public:
 		virtual void endTag(const std::string& name, const std::string& data) = 0;
 
 	protected:
-		static const std::string& getAttrib(dcpp::StringPairList& attribs, const std::string& name, size_t hint);
+		static const std::string& getAttrib(StringPairList& attribs, const std::string& name, size_t hint);
 	};
 
 	SimpleXMLReader(CallBack* callback);
@@ -121,7 +123,7 @@ private:
 	std::string::size_type bufPos;
 	uint64_t pos;
 
-	dcpp::StringPairList attribs;
+	StringPairList attribs;
 	std::string value;
 
 	CallBack* cb;
@@ -129,7 +131,7 @@ private:
 
 	ParseState state;
 
-	dcpp::StringList elements;
+	StringList elements;
 
 	void append(std::string& str, size_t maxLen, int c);
 	void append(std::string& str, size_t maxLen, std::string::const_iterator begin, std::string::const_iterator end);

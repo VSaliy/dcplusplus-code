@@ -16,18 +16,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#if !defined(CONNECTION_MANAGER_H)
-#define CONNECTION_MANAGER_H
+#ifndef DCPLUSPLUS_DCPP_CONNECTION_MANAGER_H
+#define DCPLUSPLUS_DCPP_CONNECTION_MANAGER_H
 
 #include "TimerManager.h"
 
-#include "UserConnection.h"
-#include "User.h"
+#include "UserConnectionListener.h"
 #include "CriticalSection.h"
 #include "Singleton.h"
 #include "Util.h"
-
+#include "BufferedSocket.h"
 #include "ConnectionManagerListener.h"
+#include "HintedUser.h"
 
 namespace dcpp {
 

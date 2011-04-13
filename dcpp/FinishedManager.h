@@ -27,8 +27,8 @@
 #include "CriticalSection.h"
 #include "Singleton.h"
 #include "FinishedManagerListener.h"
-#include "Util.h"
 #include "User.h"
+#include "HintedUser.h"
 
 namespace dcpp {
 

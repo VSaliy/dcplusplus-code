@@ -24,6 +24,7 @@
 #include <dcpp/User.h>
 #include <dcpp/forward.h>
 #include <dcpp/MerkleTree.h>
+#include <dcpp/HintedUser.h>
 
 // Some utilities for handling HLS colors, taken from Jean-Michel LE FOL's codeproject
 // article on WTL OfficeXP Menus

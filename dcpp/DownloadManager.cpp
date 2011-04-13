@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "DownloadManager.h"
 
 #include "QueueManager.h"

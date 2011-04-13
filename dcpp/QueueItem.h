@@ -19,14 +19,21 @@
 #ifndef DCPLUSPLUS_DCPP_QUEUE_ITEM_H
 #define DCPLUSPLUS_DCPP_QUEUE_ITEM_H
 
+#include <list>
+#include <set>
+
 #include "User.h"
 #include "FastAlloc.h"
 #include "MerkleTree.h"
 #include "Flags.h"
 #include "forward.h"
 #include "Segment.h"
+#include "Util.h"
+#include "HintedUser.h"
 
 namespace dcpp {
+
+using std::set;
 
 class QueueManager;
 

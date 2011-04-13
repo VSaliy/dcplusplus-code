@@ -19,19 +19,28 @@
 #ifndef DCPLUSPLUS_DCPP_UPLOAD_MANAGER_H
 #define DCPLUSPLUS_DCPP_UPLOAD_MANAGER_H
 
+#include <algorithm>
+#include <list>
+#include <set>
+#include <unordered_map>
+
 #include "forward.h"
 #include "UserConnectionListener.h"
 #include "Singleton.h"
 #include "UploadManagerListener.h"
 #include "ClientManagerListener.h"
-#include "MerkleTree.h"
 #include "User.h"
-#include "Util.h"
 #include "TimerManager.h"
 #include "Speaker.h"
 #include "SettingsManager.h"
+#include "HintedUser.h"
 
 namespace dcpp {
+
+using std::max;
+using std::list;
+using std::set;
+using std::unordered_map;
 
 class UploadManager : private ClientManagerListener, private UserConnectionListener, public Speaker<UploadManagerListener>, private TimerManagerListener, public Singleton<UploadManager>
 {

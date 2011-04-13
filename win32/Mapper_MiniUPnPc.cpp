@@ -22,6 +22,7 @@
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/Util.h>
+#include <dcpp/nullptr.h>
 
 extern "C" {
 #ifndef STATICLIB

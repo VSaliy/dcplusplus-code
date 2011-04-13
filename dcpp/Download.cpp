@@ -17,13 +17,12 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "Download.h"
 
 #include "UserConnection.h"
 #include "QueueItem.h"
 #include "HashManager.h"
+#include "SettingsManager.h"
 
 namespace dcpp {
 

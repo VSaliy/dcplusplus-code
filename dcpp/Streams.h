@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_DCPP_STREAMS_H
 #define DCPLUSPLUS_DCPP_STREAMS_H
 
+#include <algorithm>
+
 #include "typedefs.h"
 #include "format.h"
 
@@ -26,6 +28,8 @@
 #include "Exception.h"
 
 namespace dcpp {
+
+using std::min;
 
 STANDARD_EXCEPTION(FileException);
 

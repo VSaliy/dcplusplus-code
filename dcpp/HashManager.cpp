@@ -17,9 +17,10 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "HashManager.h"
+
+#include <boost/scoped_array.hpp>
+
 #include "SimpleXML.h"
 #include "LogManager.h"
 #include "File.h"
@@ -33,6 +34,8 @@
 #endif
 
 namespace dcpp {
+
+using std::swap;
 
 #define HASH_FILE_VERSION_STRING "2"
 static const uint32_t HASH_FILE_VERSION = 2;
@@ -332,6 +335,9 @@ void HashManager::HashStore::save() {
 		}
 	}
 }
+
+string HashManager::HashStore::getIndexFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "HashIndex.xml"; }
+string HashManager::HashStore::getDataFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "HashData.dat"; }
 
 class HashLoader: public SimpleXMLReader::CallBack {
 public:

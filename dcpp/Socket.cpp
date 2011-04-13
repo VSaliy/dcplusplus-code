@@ -17,9 +17,8 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "Socket.h"
+
 #include "format.h"
 #include "SettingsManager.h"
 #include "TimerManager.h"
@@ -32,6 +31,8 @@
 #endif
 
 namespace dcpp {
+
+using std::min;
 
 string Socket::udpServer;
 uint16_t Socket::udpPort;

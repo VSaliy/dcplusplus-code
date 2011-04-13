@@ -24,6 +24,7 @@
 
 #include <dwt/widgets/ProgressBar.h>
 
+#include <dcpp/format.h>
 #include <dcpp/HashManager.h>
 #include "WinUtil.h"
 

@@ -19,7 +19,13 @@
 #ifndef DCPLUSPLUS_DCPP_EXCEPTION_H
 #define DCPLUSPLUS_DCPP_EXCEPTION_H
 
+#include <string>
+
+#include "debug.h"
+
 namespace dcpp {
+
+using std::string;
 
 class Exception : public std::exception
 {

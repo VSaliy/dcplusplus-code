@@ -1,5 +1,8 @@
 // for compilers that don't support nullptr, use the workaround in section 1.1 of the proposal.
 
+#ifndef DCPLUSPLUS_DCPP_NULLPTR_H
+#define DCPLUSPLUS_DCPP_NULLPTR_H
+
 #ifdef __GNUC__
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6) // GCC 4.6 is the first GCC to implement nullptr.
 
@@ -17,4 +20,6 @@ private:
 } nullptr = {}; // and whose name is nullptr
 
 #endif
+#endif
+
 #endif

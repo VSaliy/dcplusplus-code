@@ -20,8 +20,11 @@
 #define DCPLUSPLUS_DCPP_BUFFEREDSOCKETLISTENER_H_
 
 #include "noexcept.h"
+#include <string>
 
 namespace dcpp {
+
+using std::string;
 
 class BufferedSocketListener {
 public:

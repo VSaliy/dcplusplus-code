@@ -19,17 +19,23 @@
 #ifndef DCPLUSPLUS_DCPP_BUFFERED_SOCKET_H
 #define DCPLUSPLUS_DCPP_BUFFERED_SOCKET_H
 
+#include <atomic>
+#include <deque>
+#include <memory>
+
 #include "typedefs.h"
 
 #include "BufferedSocketListener.h"
 #include "Semaphore.h"
 #include "Thread.h"
 #include "Speaker.h"
-#include "Util.h"
 #include "Socket.h"
-#include <atomic>
 
 namespace dcpp {
+
+using std::deque;
+using std::pair;
+using std::unique_ptr;
 
 class BufferedSocket : public Speaker<BufferedSocketListener>, private Thread {
 public:

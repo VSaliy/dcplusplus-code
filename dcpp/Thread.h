@@ -19,12 +19,15 @@
 #ifndef DCPLUSPLUS_DCPP_THREAD_H
 #define DCPLUSPLUS_DCPP_THREAD_H
 
-#ifndef _WIN32
+#ifdef _WIN32
+#include "w.h"
+#else
 #include <pthread.h>
 #include <sched.h>
 #include <sys/resource.h>
 #endif
 
+#include <boost/noncopyable.hpp>
 #include "Exception.h"
 
 namespace dcpp {

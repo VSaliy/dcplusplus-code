@@ -17,9 +17,10 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "BufferedSocket.h"
+
+#include <algorithm>
+#include <boost/scoped_array.hpp>
 
 #include "TimerManager.h"
 #include "SettingsManager.h"
@@ -32,6 +33,9 @@
 #include "ThrottleManager.h"
 
 namespace dcpp {
+
+using std::min;
+using std::max;
 
 // Polling is used for tasks...should be fixed...
 #define POLL_TIMEOUT 250

@@ -19,9 +19,11 @@
 #ifndef DCPLUSPLUS_DCPP_SIMPLE_XML_H
 #define DCPLUSPLUS_DCPP_SIMPLE_XML_H
 
+#include "forward.h"
+#include "noexcept.h"
 #include "Exception.h"
+#include "Util.h"
 
-#include "Streams.h"
 #include "SimpleXMLReader.h"
 
 namespace dcpp {
@@ -125,7 +127,7 @@ public:
 	}
 
 	void fromXML(const string& aXML);
-	string toXML() { string tmp; StringOutputStream os(tmp); toXML(&os); return tmp; }
+	string toXML();
 	void toXML(OutputStream* f) { if(!root.children.empty()) root.children[0]->toXML(0, f); }
 
 	static const string& escape(const string& str, string& tmp, bool aAttrib, bool aLoading = false, const string &encoding = Text::utf8) {

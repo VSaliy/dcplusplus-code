@@ -19,17 +19,26 @@
 #ifndef DCPLUSPLUS_DCPP_CLIENT_MANAGER_H
 #define DCPLUSPLUS_DCPP_CLIENT_MANAGER_H
 
+#include <unordered_map>
+#include <unordered_set>
+
 #include "TimerManager.h"
 
-#include "Client.h"
 #include "Singleton.h"
 #include "SettingsManager.h"
-#include "User.h"
+#include "OnlineUser.h"
 #include "Socket.h"
-
+#include "CID.h"
+#include "ClientListener.h"
 #include "ClientManagerListener.h"
+#include "HintedUser.h"
 
 namespace dcpp {
+
+using std::pair;
+using std::unordered_map;
+using std::unordered_multimap;
+using std::unordered_set;
 
 class UserCommand;
 
@@ -38,6 +47,7 @@ class ClientManager : public Speaker<ClientManagerListener>,
 	private TimerManagerListener
 {
 public:
+	typedef unordered_set<Client*> ClientList;
 	typedef unordered_map<CID, UserPtr> UserMap;
 
 	Client* getClient(const string& aHubURL);
@@ -111,8 +121,7 @@ public:
 
 	Lock lock() { return Lock(cs); }
 
-	Client::List& getClients() { return clients; }
-
+	const ClientList& getClients() const { return clients; }
 	const UserMap& getUsers() const { return users; }
 
 	CID getMyCID();
@@ -137,7 +146,7 @@ private:
 	typedef pair<OnlineIter, OnlineIter> OnlinePair;
 	typedef pair<OnlineIterC, OnlineIterC> OnlinePairC;
 
-	Client::List clients;
+	ClientList clients;
 	mutable CriticalSection cs;
 
 	UserMap users;

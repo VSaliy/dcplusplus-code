@@ -19,15 +19,39 @@
 #ifndef DCPLUSPLUS_DCPP_UTIL_H
 #define DCPLUSPLUS_DCPP_UTIL_H
 
-#ifndef _WIN32
+#include "compiler.h"
+
+#include <stdlib.h>
+#include <time.h>
+
+#include <map>
+
+#include <boost/range/algorithm/find_if.hpp>
+
+#include "compiler.h"
+
+#ifdef _WIN32
+
+# define PATH_SEPARATOR '\\'
+# define PATH_SEPARATOR_STR "\\"
+
+#else
+
+# define PATH_SEPARATOR '/'
+# define PATH_SEPARATOR_STR "/"
+
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdlib.h>
+
 #endif
 
 #include "Text.h"
 
 namespace dcpp {
+
+using boost::find_if;
+using std::map;
 
 template<typename T, bool flag> struct ReferenceSelector {
 	typedef T ResultType;
@@ -58,7 +82,7 @@ public: TypeTraits<type>::ParameterType get##name2() const { return name; } \
 #define LIT(x) x, (sizeof(x)-1)
 
 /** Evaluates op(pair<T1, T2>.first, compareTo) */
-template<class T1, class T2, class op = equal_to<T1> >
+template<class T1, class T2, class op = std::equal_to<T1> >
 class CompareFirst {
 public:
 	CompareFirst(const T1& compareTo) : a(compareTo) { }
@@ -69,7 +93,7 @@ private:
 };
 
 /** Evaluates op(pair<T1, T2>.second, compareTo) */
-template<class T1, class T2, class op = equal_to<T2> >
+template<class T1, class T2, class op = std::equal_to<T2> >
 class CompareSecond {
 public:
 	CompareSecond(const T2& compareTo) : a(compareTo) { }
@@ -121,15 +145,7 @@ public:
 	static void initialize(PathsMap pathOverrides = PathsMap());
 
 	/** Path of temporary storage */
-	static string getTempPath() {
-#ifdef _WIN32
-		TCHAR buf[MAX_PATH + 1];
-		DWORD x = GetTempPath(MAX_PATH, buf);
-		return Text::fromT(tstring(buf, x));
-#else
-		return "/tmp/";
-#endif
-	}
+	static string getTempPath();
 
 	/** Path of configuration files */
 	static const string& getPath(Paths path) { return paths[path]; }
@@ -374,8 +390,8 @@ public:
 
 	template<typename T>
 	static T& intersect(T& t1, const T& t2) {
-		for(typename T::iterator i = t1.begin(); i != t1.end();) {
-			if(find_if(t2.begin(), t2.end(), bind1st(equal_to<typename T::value_type>(), *i)) == t2.end())
+		for(auto i = t1.begin(); i != t1.end();) {
+			if(find_if(t2, [&](const typename T::value_type &v) { return v == *i; }) == t2.end())
 				i = t1.erase(i);
 			else
 				++i;

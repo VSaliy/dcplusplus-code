@@ -19,8 +19,9 @@
 #ifndef DCPLUSPLUS_DCPP_FILTERED_FILE_H
 #define DCPLUSPLUS_DCPP_FILTERED_FILE_H
 
+#include <boost/scoped_array.hpp>
+
 #include "Streams.h"
-#include "Util.h"
 
 #include "Exception.h"
 

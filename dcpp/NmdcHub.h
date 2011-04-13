@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_DCPP_NMDC_HUB_H
 #define DCPLUSPLUS_DCPP_NMDC_HUB_H
 
+#include <list>
+
 #include "TimerManager.h"
 #include "SettingsManager.h"
 
@@ -29,7 +31,7 @@
 
 namespace dcpp {
 
-class ClientManager;
+using std::list;
 
 class NmdcHub : public Client, private Flags
 {

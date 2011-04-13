@@ -17,8 +17,6 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "NmdcHub.h"
 
 #include "ChatMessage.h"
@@ -33,6 +31,7 @@
 #include "Socket.h"
 #include "UserCommand.h"
 #include "StringTokenizer.h"
+#include "format.h"
 
 namespace dcpp {
 

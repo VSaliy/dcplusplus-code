@@ -19,12 +19,19 @@
 #ifndef DCPLUSPLUS_DCPP_MERKLE_TREE_H
 #define DCPLUSPLUS_DCPP_MERKLE_TREE_H
 
+#include <algorithm>
+
+#include "debug.h"
 #include "typedefs.h"
 #include "TigerHash.h"
 #include "Encoder.h"
 #include "HashValue.h"
 
 namespace dcpp {
+
+using std::make_pair;
+using std::max;
+using std::min;
 
 /**
  * A class that represents a Merkle Tree hash. Storing

@@ -17,14 +17,14 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "UserConnection.h"
+
 #include "ClientManager.h"
 
 #include "StringTokenizer.h"
 #include "AdcCommand.h"
 #include "Transfer.h"
+#include "format.h"
 
 namespace dcpp {
 
@@ -256,6 +256,11 @@ void UserConnection::updateChunkSize(int64_t leafSize, int64_t lastChunk, uint64
 	}
 
 	chunkSize = targetSize;
+}
+
+void UserConnection::send(const string& aString) {
+	lastActivity = GET_TICK();
+	socket->write(aString);
 }
 
 } // namespace dcpp

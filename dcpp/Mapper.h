@@ -16,10 +16,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_MAPPER_H
-#define DCPLUSPLUS_WIN32_MAPPER_H
+#ifndef DCPLUSPLUS_DCPP_MAPPER_H
+#define DCPLUSPLUS_DCPP_MAPPER_H
+
+#include <string>
+#include <vector>
+#include <boost/noncopyable.hpp>
 
 namespace dcpp {
+
+using std::string;
 
 /** abstract class to represent an implementation usable by MappingManager. */
 class Mapper : boost::noncopyable

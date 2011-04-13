@@ -17,9 +17,10 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "AdcHub.h"
+
+#include <boost/scoped_array.hpp>
+#include <boost/format.hpp>
 
 #include "ChatMessage.h"
 #include "ClientManager.h"
@@ -34,10 +35,13 @@
 #include "LogManager.h"
 #include "ThrottleManager.h"
 #include "UploadManager.h"
+#include "format.h"
 
 #include <cmath>
 
 namespace dcpp {
+
+using std::make_pair;
 
 const string AdcHub::CLIENT_PROTOCOL("ADC/1.0");
 const string AdcHub::SECURE_CLIENT_PROTOCOL_TEST("ADCS/0.10");

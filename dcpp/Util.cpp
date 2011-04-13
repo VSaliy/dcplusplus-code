@@ -17,9 +17,14 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "Util.h"
+
+#ifdef _WIN32
+
+#include "w.h"
+#include "shlobj.h"
+
+#endif
 
 #include "CID.h"
 #include "ClientManager.h"
@@ -43,6 +48,8 @@
 #include <locale.h>
 
 namespace dcpp {
+
+using std::make_pair;
 
 #ifndef _DEBUG
 FastCriticalSection FastAllocBase::cs;
@@ -1106,6 +1113,16 @@ void Util::setAway(bool aAway) {
 
 void Util::switchAway() {
 	setAway(!away);
+}
+
+string Util::getTempPath() {
+#ifdef _WIN32
+	TCHAR buf[MAX_PATH + 1];
+	DWORD x = GetTempPath(MAX_PATH, buf);
+	return Text::fromT(tstring(buf, x));
+#else
+	return "/tmp/";
+#endif
 }
 
 } // namespace dcpp

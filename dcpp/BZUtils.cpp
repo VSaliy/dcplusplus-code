@@ -17,13 +17,16 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "BZUtils.h"
+
+#include <algorithm>
+
 #include "Exception.h"
 #include "format.h"
 
 namespace dcpp {
+
+using std::max;
 
 BZFilter::BZFilter() {
 	memset(&zs, 0, sizeof(zs));

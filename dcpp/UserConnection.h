@@ -25,8 +25,7 @@
 #include "BufferedSocketListener.h"
 #include "BufferedSocket.h"
 #include "CriticalSection.h"
-#include "File.h"
-#include "User.h"
+#include "HintedUser.h"
 #include "AdcCommand.h"
 #include "MerkleTree.h"
 
@@ -202,10 +201,7 @@ private:
 
 	void onLine(const string& aLine) noexcept;
 
-	void send(const string& aString) {
-		lastActivity = GET_TICK();
-		socket->write(aString);
-	}
+	void send(const string& aString);
 
 	virtual void on(Connected) noexcept;
 	virtual void on(Line, const string&) noexcept;

@@ -41,6 +41,8 @@ class ClientManager;
 
 class ConnectionQueueItem;
 
+class CRC32Filter;
+
 class Download;
 typedef Download* DownloadPtr;
 
@@ -59,6 +61,9 @@ typedef boost::intrusive_ptr<FinishedUserItem> FinishedUserItemPtr;
 
 class FinishedManager;
 
+template<class Hasher>
+struct HashValue;
+
 struct HintedUser;
 
 class HubEntry;
@@ -72,6 +77,8 @@ class LogManager;
 class OnlineUser;
 typedef OnlineUser* OnlineUserPtr;
 
+class OutputStream;
+
 class QueueItem;
 
 class SearchResult;
@@ -82,7 +89,11 @@ class SocketException;
 
 class StringSearch;
 
+class TigerHash;
+
 class Transfer;
+
+typedef HashValue<TigerHash> TTHValue;
 
 class UnZFilter;
 

@@ -16,10 +16,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#if !defined(ENCODER_H)
-#define ENCODER_H
+#ifndef DCPLUSPLUS_DCPP_ENCODER_H
+#define DCPLUSPLUS_DCPP_ENCODER_H
+
+#include <string>
 
 namespace dcpp {
+
+using std::string;
 
 class Encoder
 {

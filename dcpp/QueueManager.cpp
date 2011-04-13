@@ -17,9 +17,8 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "QueueManager.h"
+
 #include "format.h"
 
 #include "ClientManager.h"
@@ -42,6 +41,7 @@
 #include "FilteredFile.h"
 #include "FinishedItem.h"
 #include "FinishedManager.h"
+#include "ZUtils.h"
 
 #include <climits>
 

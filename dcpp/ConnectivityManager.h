@@ -19,11 +19,14 @@
 #ifndef DCPLUSPLUS_DCPP_CONNECTIVITY_MANAGER_H
 #define DCPLUSPLUS_DCPP_CONNECTIVITY_MANAGER_H
 
-#include "Util.h"
+#include <string>
+
 #include "Speaker.h"
 #include "Singleton.h"
 
 namespace dcpp {
+
+using std::string;
 
 class ConnectivityManagerListener {
 public:

@@ -126,7 +126,7 @@ bool SettingsDialog::initDialog() {
 		auto addPage = [this, container, setting](const tstring& title, PropPage* page, HTREEITEM parent) -> HTREEITEM {
 			auto ret = tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
 			if(pages.size() == setting)
-				callAsync([=] { tree->setSelected(ret); });
+				GCC_WTF->callAsync([=] { GCC_WTF->tree->setSelected(ret); });
 			pages.push_back(page);
 			return ret;
 		};

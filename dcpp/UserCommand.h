@@ -19,8 +19,9 @@
 #ifndef DCPLUSPLUS_DCPP_USER_COMMAND_H
 #define DCPLUSPLUS_DCPP_USER_COMMAND_H
 
-#include "Util.h"
 #include "Flags.h"
+#include "Util.h"
+#include "noexcept.h"
 
 namespace dcpp {
 
