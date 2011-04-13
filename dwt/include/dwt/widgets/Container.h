@@ -59,6 +59,7 @@ public:
 	// Use our seed type
 	void create( const Seed& cs = Seed() );
 
+	virtual void layout();
 protected:
 	Container(Widget* parent, Dispatcher& dispatcher = NormalDispatcher::getDefault()) :
 		 BaseType(parent, dispatcher) { }
@@ -71,6 +72,14 @@ BaseType::Seed(tstring(), style | WS_CHILD, exStyle) {
 inline void Container::create(const Seed& cs) {
 	BaseType::create(cs);
 	onWindowPosChanged([this] (const Rectangle &) { this->layout(); });
+}
+
+inline void Container::layout() {
+	// Default layout is to give the first child the whole client area
+	auto c = getChildren<Control>();
+	if(c.first != c.second) {
+		(*c.first)->resize(Rectangle(getClientSize()));
+	}
 }
 
 }
