@@ -1079,10 +1079,10 @@ void MainWindow::handleMatchAll() {
 }
 
 void MainWindow::handleActivate(bool active) {
-	// Forward to active tab window
+	// focus the active tab window
 	Container* w = getTabView()->getActive();
 	if(w) {
-		w->sendMessage(WM_ACTIVATE, active ? WA_ACTIVE : WA_INACTIVE);
+		w->setFocus();
 	}
 }
 

@@ -134,7 +134,7 @@ protected:
 				onlyFull->onClicked([this] { this->handleOnlyFullClicked(); });
 			}
 
-			filesWindow->onActivate([this](bool active) { this->onlyFull->setVisible(active); });
+			filesWindow->onVisibilityChanged([this](bool b) { this->onlyFull->setVisible(b); });
 		}
 
 		this->initStatus();
@@ -148,8 +148,8 @@ protected:
 
 		layout();
 
-		filesWindow->onActivate([this](bool active) { this->updateStatus(active); });
-		usersWindow->onActivate([this](bool active) { this->updateStatus(active); });
+		filesWindow->onVisibilityChanged([this](bool b) { if(b) this->updateStatus(); });
+		usersWindow->onVisibilityChanged([this](bool b) { if(b) this->updateStatus(); });
 
 		FinishedManager::getInstance()->addListener(this);
 
@@ -524,10 +524,7 @@ private:
 		updateStatus();
 	}
 
-	void updateStatus(bool activate = true) {
-		if(!activate)
-			return;
-
+	void updateStatus() {
 		size_t count = 0;
 		int64_t bytes = 0;
 		int64_t time = 0;

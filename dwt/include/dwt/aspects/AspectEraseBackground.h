@@ -38,6 +38,7 @@
 
 #include "../Message.h"
 #include "../CanvasClasses.h"
+#include "../Dispatchers.h"
 
 namespace dwt {
 

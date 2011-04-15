@@ -113,6 +113,24 @@ void Taskbar::initTaskbar(WindowPtr window_) {
 	}
 }
 
+class Proxy : public Frame {
+	typedef Frame BaseType;
+	friend class WidgetCreator<Proxy>;
+
+public:
+	typedef Proxy ThisType;
+	typedef ThisType* ObjectType;
+	struct Seed : BaseType::Seed {
+		typedef ThisType WidgetType;
+		Seed(const tstring& caption) : BaseType::Seed(caption, 0, 0) {
+			style = WS_POPUP | WS_CAPTION;
+			exStyle = WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE;
+			location = Rectangle();
+		}
+	};
+	Proxy(Widget* parent) : BaseType(parent, NormalDispatcher::getDefault()) { }
+};
+
 void Taskbar::addToTaskbar(ContainerPtr tab) {
 	/* for Windows to acknowledge that our tab window is worthy of having its own thumbnail in the
 	taskbar, we have to create an invisible popup window that will act as a proxy between the
@@ -120,16 +138,7 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 	this technique is illustrated in MFC as well as the Windows SDK sample at
 	"Samples\winui\shell\appshellintegration\TabThumbnails". */
 
-	ContainerPtr proxy;
-	{
-		Container::Seed seed;
-		seed.caption = tab->getText();
-		seed.style &= ~WS_VISIBLE;
-		seed.style |= WS_POPUP | WS_CAPTION;
-		seed.exStyle |= WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE;
-		seed.location = Rectangle();
-		proxy = window->addChild(seed);
-	}
+	auto proxy = window->addChild(Proxy::Seed(tab->getText()));
 	tabs[tab] = proxy;
 
 	// keep the proxy window in sync with the actual tab window.
@@ -187,9 +196,9 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 }
 
 void Taskbar::removeFromTaskbar(ContainerPtr tab) {
-	ContainerPtr proxy = tabs[tab];
+	auto proxy = tabs[tab];
 	taskbar->UnregisterTab(proxy->handle());
-	::DestroyWindow(proxy->handle());
+	proxy->close();
 	tabs.erase(tab);
 }
 

@@ -79,6 +79,9 @@ typedef boost::intrusive_ptr<Font> FontPtr;
 
 class FontDialog;
 
+class Frame;
+typedef Frame* FramePtr;
+
 class Grid;
 typedef Grid* GridPtr;
 class GridInfo;

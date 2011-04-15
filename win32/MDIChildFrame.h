@@ -60,8 +60,8 @@ protected:
 
 		onClosing([this] { return this->handleClosing(); });
 		onFocus([this] { this->handleFocus(); });
+		onVisibilityChanged([this](bool b) { this->handleVisibilityChanged(b); });
 		onWindowPosChanged([this](const dwt::Rectangle &r) { this->handleSized(r); });
-		onActivate([this](bool active) { this->handleActivate(active); });
 		addDlgCodeMessage(this);
 
 		addAccel(FCONTROL, 'W', [this] { this->close(true); });
@@ -72,12 +72,6 @@ protected:
 
 	virtual ~MDIChildFrame() {
 		getParent()->remove(this);
-	}
-
-	void handleFocus() {
-		if(lastFocus != NULL) {
-			::SetFocus(lastFocus);
-		}
 	}
 
 	/**
@@ -195,14 +189,17 @@ private:
 		t().layout();
 	}
 
-	void handleActivate(bool active) {
-		if(active) {
-			if(lastFocus) {
-				::SetFocus(lastFocus);
-			}
-		} else if(!alwaysSameFocus) {
+	void handleFocus() {
+		if(lastFocus) {
+			::SetFocus(lastFocus);
+		}
+	}
+
+	void handleVisibilityChanged(bool b) {
+		if(!b && !alwaysSameFocus) {
+			// remember the previously focused window.
 			HWND focus = ::GetFocus();
-			if(focus != NULL && ::IsChild(t().handle(), focus))
+			if(focus && ::IsChild(t().handle(), focus))
 				lastFocus = focus;
 		}
 	}

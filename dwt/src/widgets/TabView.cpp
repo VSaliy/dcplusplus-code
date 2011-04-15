@@ -296,10 +296,9 @@ void TabView::swapWidgets(ContainerPtr oldW, ContainerPtr newW) {
 	newW->resize(clientSize);
 	newW->setVisible(true);
 	if(oldW) {
-		oldW->sendMessage(WM_ACTIVATE, WA_INACTIVE, reinterpret_cast<LPARAM>(newW->handle()));
 		oldW->setVisible(false);
 	}
-	newW->sendMessage(WM_ACTIVATE, WA_ACTIVE, oldW ? reinterpret_cast<LPARAM>(oldW->handle()) : 0);
+	newW->setFocus();
 }
 
 void TabView::handleTabSelected() {
