@@ -18,6 +18,8 @@
 * Make more parts of the interface DPI-aware (poy)
 * Resizable and scrollable settings dialog
 * Remember the last settings page (poy)
+* Fix focus problems in dialogs (poy)
+* Fix Ctrl+W / Ctrl+F4 sometimes closing the wrong tab (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

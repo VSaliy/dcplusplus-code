@@ -37,39 +37,16 @@
 #define DWT_Frame_h
 
 #include "../resources/Icon.h"
+#include "../aspects/AspectActivate.h"
 #include "../aspects/AspectMinMax.h"
 #include "Composite.h"
 
 namespace dwt {
 
-/// Main Window class
-/** \ingroup WidgetControls
-  * \WidgetUsageInfo
-  * \image html widgetwindow.png
-  * This class defines a "normal" window or the most commonly used "container
-  * Widget", normally you would define your own class which (indirectly) derives from
-  * this one. <br>
-  * You would normally derive directly from WidgetFactory and then supply this class
-  * as the first template parameter. <br>
-  * The second parameter would then be YOUR CLASS. <br>
-  * Example <br>
-  * <b>class MyMainWindow : public dwt::WidgetFactory<dwt::Window,
-  * MyMainWindow> { ... };</b> <br>
-  * Note especially that the second template argument to the WidgetFactory template
-  * class would almost ALWAYS be the name of your class derived from WidgetFactory.
-  * <br>
-  * You can also derive directly from Window and skip around the WidgetFactory
-  * factory class, the inheritance string would then become: <br>
-  * <b>class MyMainWindow : public dwt::Window<MyMainWindow></b> <br>
-  * But then you wouldn't have access to all the "createxxx" functions from class
-  * WidgetFactory which automatically gurantees that your Widgets get the right parent
-  * etc. <br>
-  * Look at (almost) any of the example projects distributed with the main download of
-  * the library residing in the dwtUnitTests directory for an example of how to
-  * use  this class with the factory class WidgetFactory.
-  */
+/** Base class for a top-level window (either a main app window or a dialog). */
 class Frame :
 	public Composite,
+	public AspectActivate<Frame>,
 	public AspectMinMax<Frame>
 {
 	typedef Composite BaseType;

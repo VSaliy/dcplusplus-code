@@ -112,7 +112,7 @@ void DirectoryListingFrame::openWindow_(TabViewPtr parent, const tstring& aFile,
 		frame->activate();
 	} else {
 		frame->setDirty(SettingsManager::BOLD_FL);
-		frame->onActivate([frame, aDir](bool b) {
+		frame->onVisibilityChanged([frame, aDir](bool b) {
 			if(b && !frame->loaded && !WinUtil::mainWindow->closing())
 				frame->loadFile(aDir);
 		});

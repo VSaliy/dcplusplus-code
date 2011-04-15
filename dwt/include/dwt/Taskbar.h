@@ -64,7 +64,7 @@ private:
 	virtual void setActive(ContainerPtr) = 0;
 
 	WindowPtr window;
-	std::unordered_map<ContainerPtr, ContainerPtr> tabs;
+	std::unordered_map<ContainerPtr, FramePtr> tabs;
 };
 
 }
