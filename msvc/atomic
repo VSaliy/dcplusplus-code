@@ -3,7 +3,9 @@
 
 #include <boost/atomic.hpp>
 
-using boost::atomic;
-using boost::atomic_flag;
+namespace std {
+	using boost::atomic;
+	using boost::atomic_flag;
+}
 
 // vim: set filetype=cpp :

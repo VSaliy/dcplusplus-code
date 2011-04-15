@@ -29,6 +29,7 @@
 #include "FavHubProperties.h"
 #include "FavHubGroupsDlg.h"
 
+using std::for_each;
 using std::set;
 using std::swap;
 

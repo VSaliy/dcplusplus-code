@@ -42,10 +42,10 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <sys/utsname.h>
-#include <ctype.h>
-#include <string.h>
+#include <cctype>
+#include <cstring>
 #endif
-#include <locale.h>
+#include <clocale>
 
 namespace dcpp {
 

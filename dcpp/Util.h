@@ -21,14 +21,12 @@
 
 #include "compiler.h"
 
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 
 #include <map>
 
 #include <boost/range/algorithm/find_if.hpp>
-
-#include "compiler.h"
 
 #ifdef _WIN32
 
@@ -42,7 +40,7 @@
 
 #include <sys/stat.h>
 #include <unistd.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #endif
 

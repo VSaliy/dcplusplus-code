@@ -19,14 +19,10 @@
 #ifndef DCPLUSPLUS_DCPP_Z_UTILS_H
 #define DCPLUSPLUS_DCPP_Z_UTILS_H
 
-#include <stddef.h>
-#include <stdint.h>
+#include <cstddef>
+#include <cstdint>
 
-#ifdef _WIN32
-#include "../zlib/zlib.h"
-#else
 #include <zlib.h>
-#endif
 
 namespace dcpp {
 

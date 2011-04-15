@@ -149,7 +149,7 @@ fullSlots(false)
 
 	onClosing([this] { return handleClosing(); });
 
-	onRaw([this](WPARAM w, LPARAM l) { return handleActivateApp(w); }, dwt::Message(WM_ACTIVATEAPP));
+	onRaw([this](WPARAM w, LPARAM) { return handleActivateApp(w); }, dwt::Message(WM_ACTIVATEAPP));
 	onRaw([this](WPARAM, LPARAM) { return handleEndSession(); }, dwt::Message(WM_ENDSESSION));
 	onRaw([this](WPARAM, LPARAM l) { return handleCopyData(l); }, dwt::Message(WM_COPYDATA));
 	onRaw([this](WPARAM, LPARAM) { return handleWhereAreYou(); }, dwt::Message(SingleInstance::WMU_WHERE_ARE_YOU));

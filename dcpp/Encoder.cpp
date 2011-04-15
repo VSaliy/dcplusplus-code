@@ -19,7 +19,7 @@
 #include "stdinc.h"
 #include "Encoder.h"
 
-#include <string.h>
+#include <cstring>
 
 #include "debug.h"
 
