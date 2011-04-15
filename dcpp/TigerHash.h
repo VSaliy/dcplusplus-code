@@ -32,8 +32,8 @@
 #ifndef DCPLUSPLUS_DCPP_TIGER_HASH_H
 #define DCPLUSPLUS_DCPP_TIGER_HASH_H
 
-#include <stddef.h>
-#include <stdint.h>
+#include <cstddef>
+#include <cstdint>
 
 namespace dcpp {
 

@@ -34,6 +34,8 @@
 #include <dwt/widgets/ScrolledContainer.h>
 #include <dwt/widgets/SplitterContainer.h>
 
+using std::for_each;
+
 const string UsersFrame::id = "Users";
 const string& UsersFrame::getId() const { return id; }
 

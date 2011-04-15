@@ -46,7 +46,7 @@
 #ifdef _DEBUG
 // Enable memory leak detection with file/line tracing.
 #define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
+#include <cstdlib>
 #include <crtdbg.h>
 #endif
 #endif

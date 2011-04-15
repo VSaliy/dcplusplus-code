@@ -19,11 +19,11 @@
 #ifndef DCPP_DCPLUSPLUS_DEBUG_H_
 #define DCPP_DCPLUSPLUS_DEBUG_H_
 
-#include <stdio.h>
+#include <cstdio>
 
 #ifdef _DEBUG
 
-#include <assert.h>
+#include <cassert>
 
 #define dcdebug printf
 #ifdef _MSC_VER

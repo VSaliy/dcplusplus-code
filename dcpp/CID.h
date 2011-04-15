@@ -19,7 +19,7 @@
 #ifndef DCPLUSPLUS_DCPP_CID_H
 #define DCPLUSPLUS_DCPP_CID_H
 
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 
 #include "Encoder.h"

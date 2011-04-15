@@ -17,7 +17,7 @@ if 'HAVE_HTMLHELP_H' in env['CPPDEFINES']:
 
 env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
 
-env.Append(CPPPATH = ['#/openssl/include', '#/miniupnpc', '#/dwt/include'])
+env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib', '#/miniupnpc', '#/dwt/include'])
 
 openssl_lib = '#/openssl/lib/'
 if env['arch'] != 'x86':

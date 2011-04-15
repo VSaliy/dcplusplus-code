@@ -33,10 +33,10 @@
 
 namespace dcpp {
 
+using std::atomic;
 using std::deque;
 using std::pair;
 using std::unique_ptr;
-using std::atomic;
 
 class BufferedSocket : public Speaker<BufferedSocketListener>, private Thread {
 public:

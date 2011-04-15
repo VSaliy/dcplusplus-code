@@ -29,10 +29,8 @@
 
 #ifdef _WIN32
 #include "w.h"
-#include "../bzip2/bzlib.h"
 #else
 #include <arpa/inet.h>
-#include <bzlib.h>
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -42,7 +40,6 @@
 #include <pthread.h>
 #include <sched.h>
 #include <semaphore.h>
-#include <stdlib.h>
 #include <sys/ioctl.h>
 #include <sys/resource.h>
 #include <sys/socket.h>
@@ -51,10 +48,11 @@
 #include <unistd.h>
 #endif
 
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 
 #include <algorithm>
 #include <atomic>
@@ -81,7 +79,8 @@
 #include <boost/thread/recursive_mutex.hpp>
 #include <boost/variant.hpp>
 
-#include <time.h>
+#include <bzlib.h>
+
 #include <openssl/ssl.h>
 
 #endif

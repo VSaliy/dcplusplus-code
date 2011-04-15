@@ -3,7 +3,6 @@
 
 #include <openssl/ssl.h>
 
-#include <stdint.h>
 #include <vector>
 
 namespace dcpp {

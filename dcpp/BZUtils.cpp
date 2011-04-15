@@ -19,8 +19,6 @@
 #include "stdinc.h"
 #include "BZUtils.h"
 
-#include <algorithm>
-
 #include "Exception.h"
 #include "format.h"
 

@@ -21,7 +21,7 @@
 
 #include "forward.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 #include <string>
 #include <unordered_map>
