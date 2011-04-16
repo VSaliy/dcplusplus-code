@@ -178,6 +178,7 @@ bool SettingsDialog::initDialog() {
 		auto ts = WinUtil::Seeds::Dialog::richTextBox;
 		ts.style &= ~ES_SUNKEN;
 		ts.exStyle &= ~WS_EX_CLIENTEDGE;
+		ts.lines = 6;
 		help = cur->addChild(ts);
 		help->onRaw([this](WPARAM w, LPARAM) { return helpDlgCode(w); }, dwt::Message(WM_GETDLGCODE));
 	}

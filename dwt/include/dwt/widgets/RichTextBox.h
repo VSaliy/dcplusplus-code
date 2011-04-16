@@ -80,8 +80,8 @@ public:
 		typedef RichTextBox::ThisType WidgetType;
 
 		FontPtr font;
-		COLORREF foregroundColor;
-		COLORREF backgroundColor;
+		int64_t foregroundColor; /// either a COLORREF or -1 for the default
+		int64_t backgroundColor; /// either a COLORREF or -1 for the default
 		bool scrollBarHorizontallyFlag;
 		bool scrollBarVerticallyFlag;
 
@@ -96,14 +96,9 @@ public:
 	  */
 	void create( const Seed & cs = Seed() );
 
-	/// Sets the background color of the RichTextBox
-	/** Call this function to alter the background color of the WidgetRichEdit. <br>
-	  * To create a COLORREF ( color ) use the RGB macro.
-	  */
-	void setBackgroundColor( COLORREF color );
+	void setBackgroundColor(COLORREF color);
 
-	/// Sets default character formatting of the WidgetRichTextBox
-	void setDefaultCharFormat( CHARFORMAT cf );
+	void setDefaultCharFormat(const CHARFORMAT& cf);
 
 	int charFromPos(const ScreenCoordinate& pt);
 
@@ -175,14 +170,12 @@ inline RichTextBox::RichTextBox( dwt::Widget * parent )
 {
 }
 
-inline void RichTextBox::setBackgroundColor( COLORREF color )
-{
-	this->sendMessage(EM_SETBKGNDCOLOR, 0, static_cast< LPARAM >( color ) );
+inline void RichTextBox::setBackgroundColor(COLORREF color) {
+	this->sendMessage(EM_SETBKGNDCOLOR, 0, static_cast<LPARAM>(color));
 }
 
-inline void RichTextBox::setDefaultCharFormat( CHARFORMAT cf )
-{
-	this->sendMessage(EM_SETCHARFORMAT, 0, reinterpret_cast< LPARAM >(&cf));
+inline void RichTextBox::setDefaultCharFormat(const CHARFORMAT& cf) {
+	this->sendMessage(EM_SETCHARFORMAT, 0, reinterpret_cast<LPARAM>(&cf));
 }
 
 // end namespace dwt

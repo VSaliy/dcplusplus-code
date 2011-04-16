@@ -242,7 +242,7 @@ void WinUtil::init() {
 
 	xTabs.font = font;
 
-	xtreeView.style |= TVS_HASBUTTONS | TVS_LINESATROOT | TVS_HASLINES | TVS_SHOWSELALWAYS | TVS_DISABLEDRAGDROP;
+	xtreeView.style |= TVS_HASBUTTONS | TVS_LINESATROOT;
 	xtreeView.exStyle = WS_EX_CLIENTEDGE;
 	xtreeView.font = font;
 
@@ -255,10 +255,6 @@ void WinUtil::init() {
 
 	xdRichTextBox.style |= ES_READONLY | ES_SUNKEN;
 	xdRichTextBox.exStyle = WS_EX_CLIENTEDGE;
-	xdRichTextBox.font = font;
-	xdRichTextBox.lines = 6;
-	xdRichTextBox.foregroundColor = ::GetSysColor(COLOR_WINDOWTEXT);
-	xdRichTextBox.backgroundColor = ::GetSysColor(COLOR_WINDOW);
 
 	xdTable.style |= WS_HSCROLL | WS_VSCROLL | LVS_SHOWSELALWAYS | LVS_NOSORTHEADER;
 	xdTable.exStyle = WS_EX_CLIENTEDGE;
