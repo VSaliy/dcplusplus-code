@@ -40,28 +40,26 @@
 
 namespace dwt {
 
-/// Aspect class used by Widgets that have the possibility of being "clicked".
-/** \ingroup AspectClasses
-  * E.g. the Button have a "clicked" Aspect therefore it realizes the
-  * AspectClickable through inheritance. When you click a Widget which realizes this
-  * Aspect the onClicked event will be raised.
-  */
-template< class WidgetType >
-class AspectClickable
-{
+/// Aspect class used by controls that handle clicks (mouse-down / mouse-up).
+template<class WidgetType>
+class AspectClickable {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	typedef Dispatchers::VoidVoid<> ClickableDispatcher;
+	typedef Dispatchers::VoidVoid<> Dispatcher;
 
 public:
-	/// \ingroup EventHandlersAspectClickable
-	/// Setting the event handler for the "clicked" event
-	/** All Widgets that realize this Aspect will raise this event when Widget is
-	  * being "clicked". To be clicked differs from Widget types, for a button it is
-	  * pressing the button and releasing it, for another Widget it might be
-	  * something else. No parameters are passed.
-	  */
-	void onClicked(const typename ClickableDispatcher::F& f) {
-		W().addCallback(WidgetType::getClickMessage(), ClickableDispatcher(f));
+	/// register a function to be called after a left click.
+	void onClicked(const typename Dispatcher::F& f) {
+		W().addCallback(WidgetType::getClickMessage(), Dispatcher(f));
+	}
+
+	/// register a function to be called after a right click.
+	void onRightClicked(const typename Dispatcher::F& f) {
+		W().addCallback(WidgetType::getRightClickMessage(), Dispatcher(f));
+	}
+
+	/// register a function to be called after a double-click.
+	void onDblClicked(const Dispatcher::F& f) {
+		W().addCallback(WidgetType::getDblClickMessage(), Dispatcher(f));
 	}
 
 protected:

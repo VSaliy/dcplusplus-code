@@ -36,8 +36,6 @@
 #ifndef DWT_StatusBar_h
 #define DWT_StatusBar_h
 
-#include "../aspects/AspectClickable.h"
-#include "../aspects/AspectDblClickable.h"
 #include "Control.h"
 
 #include <vector>
@@ -59,19 +57,10 @@ namespace dwt {
   * process you are currently etc...
   */
 class StatusBar :
-	public CommonControl,
-
-	// Aspects
-	public AspectClickable<StatusBar>,
-	public AspectDblClickable<StatusBar>
+	public CommonControl
 {
 	typedef CommonControl BaseType;
-	typedef AspectClickable<StatusBar> ClickType;
-	typedef AspectDblClickable<StatusBar> DblClickType;
-
 	friend class WidgetCreator<StatusBar>;
-	friend class AspectClickable<StatusBar>;
-	friend class AspectDblClickable<StatusBar>;
 
 	typedef Dispatchers::VoidVoid<>::F F;
 
@@ -132,6 +121,7 @@ public:
 	void mapWidget(unsigned part, Widget* widget, const Rectangle& padding = Rectangle(0, 0, 0, 0));
 
 	void onClicked(unsigned part, const F& f);
+	void onRightClicked(unsigned part, const F& f);
 	void onDblClicked(unsigned part, const F& f);
 
 	/// Actually creates the StatusBar
@@ -154,18 +144,12 @@ protected:
 	virtual ~StatusBar()
 	{}
 
-	// Contract needed by AspectClickable Aspect class
-	static Message getClickMessage() { return Message(WM_NOTIFY, NM_CLICK); }
-
-	// Contract needed by AspectDblClickable Aspect class
-	static Message getDblClickMessage() { return Message(WM_NOTIFY, NM_DBLCLK); }
-
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
 	struct Part {
-		Part() : size(0), icon(0), helpId(0), clickF(0), dblClickF(0) { }
+		Part() : size(0), icon(0), helpId(0), clickF(0), rightClickF(0), dblClickF(0) { }
 
 		unsigned size;
 
@@ -176,6 +160,7 @@ private:
 		unsigned helpId;
 
 		F clickF;
+		F rightClickF;
 		F dblClickF;
 
 		void updateSize(StatusBar* bar, bool alwaysResize);
@@ -195,6 +180,7 @@ private:
 
 	void handleToolTip(tstring& text);
 	void handleClicked();
+	void handleRightClicked();
 	void handleDblClicked();
 
 	// AspectHelp

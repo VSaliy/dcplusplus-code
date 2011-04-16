@@ -43,7 +43,6 @@
 #include "../aspects/AspectCollection.h"
 #include "../aspects/AspectColor.h"
 #include "../aspects/AspectData.h"
-#include "../aspects/AspectDblClickable.h"
 #include "../aspects/AspectScrollable.h"
 #include "../aspects/AspectSelection.h"
 #include "Control.h"
@@ -75,7 +74,6 @@ class Table :
 	public AspectCollection<Table, int>,
 	public AspectColor<Table>,
 	public AspectData<Table, int>,
-	public AspectDblClickable< Table >,
 	public AspectScrollable< Table >,
 	public AspectSelection< Table, int >
 {
@@ -102,7 +100,6 @@ class Table :
 	friend class AspectData<Table, int>;
 	friend class AspectSelection<Table, int>;
 	friend class AspectClickable<Table>;
-	friend class AspectDblClickable<Table>;
 
 public:
 	/// Class type
@@ -553,14 +550,11 @@ private:
 	int getSelectedImpl() const;
 	void setSelectedImpl( int idx );
 	size_t countSelectedImpl() const;
-
-	// Aspect expectation implementation
 	static Message getSelectionChangedMessage();
 
-	// Contract needed by AspectClickable Aspect class
+	// AspectClickable
 	static Message getClickMessage();
-
-	// Contract needed by AspectDblClickable Aspect class
+	static Message getRightClickMessage();
 	static Message getDblClickMessage();
 };
 
@@ -569,15 +563,19 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline Message Table::getSelectionChangedMessage() {
-	return Message( WM_NOTIFY, LVN_ITEMCHANGED );
+	return Message(WM_NOTIFY, LVN_ITEMCHANGED);
 }
 
 inline Message Table::getClickMessage() {
-	return Message( WM_NOTIFY, NM_CLICK );
+	return Message(WM_NOTIFY, NM_CLICK);
+}
+
+inline Message Table::getRightClickMessage() {
+	return Message(WM_NOTIFY, NM_RCLICK);
 }
 
 inline Message Table::getDblClickMessage() {
-	return Message( WM_NOTIFY, NM_DBLCLK );
+	return Message(WM_NOTIFY, NM_DBLCLK);
 }
 
 #ifdef PORT_ME

@@ -45,9 +45,7 @@
   * add up your RadioButtons into an object of this type
   */
 #include "../aspects/AspectColor.h"
-#include "../aspects/AspectClickable.h"
 #include "../aspects/AspectChild.h"
-#include "../aspects/AspectDblClickable.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
 

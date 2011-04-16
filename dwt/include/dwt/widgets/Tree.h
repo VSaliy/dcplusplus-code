@@ -42,7 +42,6 @@
 #include "../aspects/AspectCollection.h"
 #include "../aspects/AspectColor.h"
 #include "../aspects/AspectData.h"
-#include "../aspects/AspectDblClickable.h"
 #include "../aspects/AspectSelection.h"
 #include "Control.h"
 
@@ -78,10 +77,10 @@ class Tree :
 	public AspectCollection<Tree, HTREEITEM>,
 	public AspectColor<Tree>,
 	public AspectData<Tree, HTREEITEM>,
-	public AspectDblClickable< Tree >,
 	public AspectSelection< Tree, HTREEITEM >
 {
 	typedef CommonControl BaseType;
+
 protected:
 	struct Dispatcher
 	{
@@ -109,7 +108,6 @@ protected:
 	friend class AspectData<Tree, HTREEITEM>;
 	friend class AspectSelection<Tree, HTREEITEM>;
 	friend class AspectClickable<Tree>;
-	friend class AspectDblClickable<Tree>;
 
 public:
 	/// Class type
@@ -303,15 +301,12 @@ private:
 	HTREEITEM getSelectedImpl() const;
 	void setSelectedImpl( HTREEITEM item );
 	size_t countSelectedImpl() const;
+	static Message getSelectionChangedMessage();
 
-	// Contract needed by AspectClickable Aspect class
-	static const Message & getSelectionChangedMessage();
-
-	// Contract needed by AspectClickable Aspect class
-	static const Message& getClickMessage();
-
-	// Contract needed by AspectDblClickable Aspect class
-	static const Message& getDblClickMessage();
+	// AspectClickable
+	static Message getClickMessage();
+	static Message getRightClickMessage();
+	static Message getDblClickMessage();
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -413,19 +408,20 @@ inline void Tree::setEditLabels( bool value ) {
 	this->Widget::addRemoveStyle( TVS_EDITLABELS, value );
 }
 
-inline const Message & Tree::getSelectionChangedMessage() {
-	static const Message retVal( WM_NOTIFY, TVN_SELCHANGED );
-	return retVal;
+inline Message Tree::getSelectionChangedMessage() {
+	return Message(WM_NOTIFY, TVN_SELCHANGED);
 }
 
-inline const Message & Tree::getClickMessage() {
-	static const Message retVal( WM_NOTIFY, NM_CLICK );
-	return retVal;
+inline Message Tree::getClickMessage() {
+	return Message(WM_NOTIFY, NM_CLICK);
 }
 
-inline const Message & Tree::getDblClickMessage() {
-	static const Message retVal( WM_NOTIFY, NM_DBLCLK );
-	return retVal;
+inline Message Tree::getRightClickMessage() {
+	return Message(WM_NOTIFY, NM_RCLICK);
+}
+
+inline Message Tree::getDblClickMessage() {
+	return Message(WM_NOTIFY, NM_DBLCLK);
 }
 
 inline HTREEITEM Tree::getSelectedImpl() const {
