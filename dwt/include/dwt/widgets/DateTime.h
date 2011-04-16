@@ -205,7 +205,7 @@ private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
-	// Aspect expectation implementation
+	// AspectClickable
 	static Message getClickMessage();
 };
 
@@ -214,7 +214,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 inline Message DateTime::getClickMessage() {
-	return Message( WM_NOTIFY, DTN_DROPDOWN );
+	return Message(WM_NOTIFY, DTN_DROPDOWN);
 }
 
 inline SYSTEMTIME DateTime::getDateTime()

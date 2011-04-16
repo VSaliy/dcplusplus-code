@@ -38,7 +38,6 @@
 
 #include "../aspects/AspectColor.h"
 #include "../aspects/AspectClickable.h"
-#include "../aspects/AspectDblClickable.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
 
@@ -62,13 +61,12 @@ class Label :
 	public AspectClickable< Label >,
 	public AspectColor< Label >,
 	public AspectColorCtlImpl<Label>,
-	public AspectDblClickable< Label >,
 	public AspectText< Label >
 {
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< Label >;
 	friend class AspectClickable<Label>;
-	friend class AspectDblClickable<Label>;
+
 public:
 	/// Class type
 	typedef Label ThisType;
@@ -117,19 +115,17 @@ private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
-	// Contract needed by AspectClickable Aspect class
-	static Message getClickMessage();
-
-	// Contract needed by AspectDblClickable Aspect class
+	// AspectClickable
+	static Message getLeftClickMessage();
 	static Message getDblClickMessage();
 };
 
-inline Message Label::getClickMessage() {
-	return Message( WM_COMMAND, MAKEWPARAM(0, STN_CLICKED) );
+inline Message Label::getLeftClickMessage() {
+	return Message(WM_COMMAND, MAKEWPARAM(0, STN_CLICKED));
 }
 
 inline Message Label::getDblClickMessage() {
-	return Message( WM_COMMAND, MAKEWPARAM(0, STN_DBLCLK) );
+	return Message(WM_COMMAND, MAKEWPARAM(0, STN_DBLCLK));
 }
 
 inline Label::Label( Widget * parent )

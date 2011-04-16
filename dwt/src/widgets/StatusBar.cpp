@@ -70,9 +70,6 @@ void StatusBar::create(const Seed& cs) {
 
 	tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
 	tip->setTool(this, [this](tstring& text) { handleToolTip(text); });
-
-	ClickType::onClicked([this] { handleClicked(); });
-	DblClickType::onDblClicked([this] { handleDblClicked(); });
 }
 
 void StatusBar::setSize(unsigned part, unsigned size) {
@@ -137,11 +134,25 @@ void StatusBar::mapWidget(unsigned part, Widget* widget, const Rectangle& paddin
 void StatusBar::onClicked(unsigned part, const F& f) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
 	parts[part].clickF = f;
+
+	// imitate the default onClicked but with a setCallback.
+	setCallback(Message(WM_NOTIFY, NM_CLICK), Dispatchers::VoidVoid<>([this] { handleClicked(); }));
+}
+
+void StatusBar::onRightClicked(unsigned part, const F& f) {
+	dwtassert(part < parts.size(), _T("Invalid part number."));
+	parts[part].rightClickF = f;
+
+	// imitate the default onRightClicked but with a setCallback.
+	setCallback(Message(WM_NOTIFY, NM_RCLICK), Dispatchers::VoidVoid<>([this] { handleRightClicked(); }));
 }
 
 void StatusBar::onDblClicked(unsigned part, const F& f) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
 	parts[part].dblClickF = f;
+
+	// imitate the default onDblClicked but with a setCallback.
+	setCallback(Message(WM_NOTIFY, NM_DBLCLK), Dispatchers::VoidVoid<>([this] { handleDblClicked(); }));
 }
 
 int StatusBar::refresh() {
@@ -235,6 +246,12 @@ void StatusBar::handleClicked() {
 	Part* part = getClickedPart();
 	if(part && part->clickF)
 		part->clickF();
+}
+
+void StatusBar::handleRightClicked() {
+	Part* part = getClickedPart();
+	if(part && part->rightClickF)
+		part->rightClickF();
 }
 
 void StatusBar::handleDblClicked() {

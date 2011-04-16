@@ -40,7 +40,6 @@
 #include "../aspects/AspectClickable.h"
 #include "../aspects/AspectCollection.h"
 #include "../aspects/AspectData.h"
-#include "../aspects/AspectDblClickable.h"
 #include "../aspects/AspectSelection.h"
 #include "../aspects/AspectText.h"
 #include "../util/check.h"
@@ -64,7 +63,6 @@ class ComboBox :
 	public AspectColor< ComboBox >,
 	public AspectColorCtlImpl<ComboBox>,
 	public AspectData<ComboBox, int>,
-	public AspectDblClickable< ComboBox >,
 	public AspectSelection< ComboBox, int >,
 	public AspectText< ComboBox >
 {
@@ -75,7 +73,6 @@ class ComboBox :
 	friend class AspectSelection<ComboBox, int>;
 	friend class AspectClickable<ComboBox>;
 	friend class AspectData<ComboBox, int>;
-	friend class AspectDblClickable<ComboBox>;
 
 public:
 	/// Class type
@@ -158,33 +155,28 @@ private:
 	LPARAM getDataImpl(int i);
 	void setDataImpl(int i, LPARAM data);
 
-	// Aspect expectation implementation
-	static const Message& getSelectionChangedMessage();
+	// AspectSelection
+	static Message getSelectionChangedMessage();
 
-	// Aspect expectation implementation
-	static const Message& getClickMessage();
-
-	// Aspect expectation implementation
-	static const Message& getDblClickMessage();
+	// AspectClickable
+	static Message getClickMessage();
+	static Message getDblClickMessage();
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline const Message& ComboBox::getSelectionChangedMessage() {
-	static const Message retVal( WM_COMMAND, CBN_SELENDOK );
-	return retVal;
+inline Message ComboBox::getSelectionChangedMessage() {
+	return Message(WM_COMMAND, CBN_SELENDOK);
 }
 
-inline const Message& ComboBox::getClickMessage() {
-	static const Message retVal( WM_COMMAND, CBN_DROPDOWN );
-	return retVal;
+inline Message ComboBox::getClickMessage() {
+	return Message(WM_COMMAND, CBN_DROPDOWN);
 }
 
-inline const Message& ComboBox::getDblClickMessage() {
-	static const Message retVal( WM_COMMAND, CBN_DBLCLK );
-	return retVal;
+inline Message ComboBox::getDblClickMessage() {
+	return Message(WM_COMMAND, CBN_DBLCLK);
 }
 
 inline int ComboBox::getSelectedImpl() const {

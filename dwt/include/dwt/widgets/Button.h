@@ -38,7 +38,6 @@
 
 #include "../aspects/AspectColor.h"
 #include "../aspects/AspectClickable.h"
-#include "../aspects/AspectDblClickable.h"
 #include "../aspects/AspectText.h"
 #include "Control.h"
 
@@ -50,13 +49,12 @@ class Button :
 	public AspectClickable<Button>,
 	public AspectColor<Button>,
 	public AspectColorCtlImpl<Button>,
-	public AspectDblClickable<Button>,
 	public AspectText< Button >
 {
 	typedef CommonControl BaseType;
 	friend class AspectClickable<Button>;
-	friend class AspectDblClickable<Button>;
 	friend class WidgetCreator<Button>;
+
 public:
 	/// Class type
 	typedef Button ThisType;
@@ -97,20 +95,17 @@ private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
-	// Contract needed by AspectClickable Aspect class
+	// AspectClickable
 	static Message getClickMessage();
-
-	// Contract needed by AspectDblClickable Aspect class
 	static Message getDblClickMessage();
-
 };
 
 inline Message Button::getClickMessage() {
-	return Message( WM_COMMAND, MAKEWPARAM(0, BN_CLICKED) );
+	return Message(WM_COMMAND, MAKEWPARAM(0, BN_CLICKED));
 }
 
 inline Message Button::getDblClickMessage() {
-	return Message( WM_COMMAND, MAKEWPARAM(0, BN_DBLCLK) );
+	return Message(WM_COMMAND, MAKEWPARAM(0, BN_DBLCLK));
 }
 
 inline Button::Button(Widget* parent) :
