@@ -49,8 +49,8 @@ const TCHAR RichTextBox::windowClass[] = RICHEDIT_CLASS;
 RichTextBox::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL),
 	font(new Font(DefaultGuiFont)),
-	foregroundColor(RGB( 0, 0, 0 )),
-	backgroundColor(RGB( 255, 255, 255 )),
+	foregroundColor(-1),
+	backgroundColor(-1),
 	scrollBarHorizontallyFlag(false),
 	scrollBarVerticallyFlag(false)
 {
@@ -63,22 +63,18 @@ Dispatcher& RichTextBox::makeDispatcher() {
 }
 
 void RichTextBox::create(const Seed& cs) {
-	dwtassert((cs.style & WS_CHILD) == WS_CHILD, _T("Widget must have WS_CHILD style"));
-	BaseType::create( cs );
+	BaseType::create(cs);
 	if(cs.font)
-		setFont( cs.font );
+		setFont(cs.font);
 
-	setBackgroundColor( cs.backgroundColor );
+	setBackgroundColor((cs.backgroundColor == -1) ? ::GetSysColor(COLOR_WINDOW) : cs.backgroundColor);
 
-	CHARFORMAT textFormat;
-	textFormat.cbSize = sizeof(textFormat);
-	textFormat.dwMask = CFM_COLOR;
-	textFormat.dwEffects = 0;
-	textFormat.crTextColor = cs.foregroundColor;
+	CHARFORMAT textFormat = { sizeof(CHARFORMAT), CFM_COLOR };
+	textFormat.crTextColor = (cs.foregroundColor == -1) ? ::GetSysColor(COLOR_WINDOWTEXT) : cs.foregroundColor;
 	setDefaultCharFormat(textFormat);
 
-	setScrollBarHorizontally( cs.scrollBarHorizontallyFlag );
-	setScrollBarVertically( cs.scrollBarVerticallyFlag );
+	setScrollBarHorizontally(cs.scrollBarHorizontallyFlag);
+	setScrollBarVertically(cs.scrollBarVerticallyFlag);
 
 	sendMessage(EM_AUTOURLDETECT, FALSE);
 

@@ -61,9 +61,7 @@ log(0)
 		group = cur->addChild(GroupBox::Seed(T_("Detection log")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_DETECTION_LOG);
 
-		auto seed = WinUtil::Seeds::Dialog::richTextBox;
-		seed.lines = 0;
-		log = group->addChild(seed);
+		log = group->addChild(WinUtil::Seeds::Dialog::richTextBox);
 	}
 
 	PropPage::read(items);

@@ -36,7 +36,7 @@ namespace dwt {
 const TCHAR Tree::windowClass[] = WC_TREEVIEW;
 
 Tree::Seed::Seed() :
-	BaseType::Seed(WS_CHILD | WS_TABSTOP),
+	BaseType::Seed(WS_CHILD | WS_TABSTOP | TVS_DISABLEDRAGDROP | TVS_HASLINES | TVS_SHOWSELALWAYS),
 	font(new Font(DefaultGuiFont))
 {
 }
