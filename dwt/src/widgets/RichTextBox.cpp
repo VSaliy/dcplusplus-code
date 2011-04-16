@@ -67,10 +67,13 @@ void RichTextBox::create(const Seed& cs) {
 	if(cs.font)
 		setFont(cs.font);
 
-	setBackgroundColor((cs.backgroundColor == -1) ? ::GetSysColor(COLOR_WINDOW) : cs.backgroundColor);
+	COLORREF bg = (cs.backgroundColor == -1) ? ::GetSysColor(COLOR_WINDOW) : cs.backgroundColor;
+	COLORREF fg = (cs.foregroundColor == -1) ? ::GetSysColor(COLOR_WINDOWTEXT) : cs.foregroundColor;
+
+	setBackgroundColor(bg);
 
 	CHARFORMAT textFormat = { sizeof(CHARFORMAT), CFM_COLOR };
-	textFormat.crTextColor = (cs.foregroundColor == -1) ? ::GetSysColor(COLOR_WINDOWTEXT) : cs.foregroundColor;
+	textFormat.crTextColor = fg;
 	setDefaultCharFormat(textFormat);
 
 	setScrollBarHorizontally(cs.scrollBarHorizontallyFlag);
@@ -81,11 +84,11 @@ void RichTextBox::create(const Seed& cs) {
 	/* unlike other common controls, Rich Edits ignore WM_PRINTCLIENT messages. as per
 	<http://msdn.microsoft.com/en-us/library/bb787875(VS.85).aspx>, we have to handle the printing
 	by ourselves. this is crucial for taskbar thumbnails and "Aero Peek" previews. */
-	onPrinting([this, cs](Canvas& canvas) {
+	onPrinting([this, bg](Canvas& canvas) {
 		Rectangle rect(GCC_WTF->getClientSize());
 
 		// paint a background in case the text doesn't span the whole box.
-		canvas.fill(rect, Brush(cs.backgroundColor));
+		canvas.fill(rect, Brush(bg));
 
 		::FORMATRANGE format = { canvas.handle(), canvas.handle() };
 		format.rc = rect;
