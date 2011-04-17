@@ -149,6 +149,7 @@ private:
 	void handleFavHubsDropDown(const dwt::ScreenCoordinate& pt);
 	void handleRecent(const dwt::ScreenCoordinate& pt);
 	void handleConfigureRecent(const string& id, const tstring& title);
+	void handleLimiterMenu(bool upload);
 	void handleQuickConnect();
 	void handleConnectFavHubGroup();
 	void handleOpenFileList();

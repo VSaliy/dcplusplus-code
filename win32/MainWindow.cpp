@@ -457,8 +457,23 @@ void MainWindow::initStatusBar() {
 		status->setIcon(STATUS_UP_DIFF, icon_UL);
 	}
 
-	status->onDblClicked(STATUS_STATUS, [] { WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)))); });
+	{
+		auto f = [this] { handleLimiterMenu(false); };
+		status->onClicked(STATUS_DOWN_LIMIT, f);
+		status->onRightClicked(STATUS_DOWN_LIMIT, f);
+	}
+	{
+		auto f = [this] { handleLimiterMenu(true); };
+		status->onClicked(STATUS_UP_LIMIT, f);
+		status->onRightClicked(STATUS_UP_LIMIT, f);
+	}
+
+	status->onDblClicked(STATUS_STATUS, [] {
+		WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM))));
+	});
+
 	status->onDblClicked(STATUS_AWAY, &Util::switchAway);
+
 	{
 		auto f = [this] { StatsFrame::openWindow(getTabView(), false); };
 		status->onDblClicked(STATUS_DOWN_TOTAL, f);
@@ -666,6 +681,46 @@ void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
 			dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
 		WindowManager::getInstance()->setMaxRecentItems(id, max);
 	}
+}
+
+void fillLimiterMenu(MenuPtr menu, bool upload) {
+	menu->setTitle(upload ? T_("Upload limit") : T_("Download limit"));
+
+	const auto setting = ThrottleManager::getInstance()->getCurSetting(
+		upload ? SettingsManager::MAX_UPLOAD_SPEED_MAIN : SettingsManager::MAX_DOWNLOAD_SPEED_MAIN);
+	auto x = SettingsManager::getInstance()->get(setting);
+
+	int arr[] = { 0 /* disabled */, x /* current value */,
+		x + 1, x + 2, x + 5, x + 10, x + 20, x + 50, x + 100,
+		x - 1, x - 2, x - 5, x - 10, x - 20, x - 50, x - 100,
+		x * 1.5, x * 2, x * 3, x * 4, x * 5, x * 10, x * 100,
+		x / 1.5, x / 2, x / 3, x / 4, x / 5, x / 10, x / 100 };
+
+	// set ensures unique members; remove_if performs range and relevancy checking.
+	set<int> values(arr, std::remove_if(arr, arr + sizeof(arr) / sizeof(int), [x](int i) {
+		return i < 0 || i > UD_MAXVAL || // same max value as the one imposed by settings spinners
+			(i != x && abs(i - x) < 20 * x / 1024); // not too close to the original value
+	}));
+
+	for(auto i = values.cbegin(), iend = values.cend(); i != iend; ++i) {
+		auto value = *i;
+		auto same = value == x;
+		auto formatted = Text::toT(Util::formatBytes(value * 1024));
+		auto pos = menu->appendItem(value ? escapeMenu(str(TF_("%1%/s") % formatted)) : T_("Disabled"), [setting, value] {
+			SettingsManager::getInstance()->set(setting, value);
+			ClientManager::getInstance()->infoUpdated();
+		}, nullptr, !same);
+		if(same)
+			menu->checkItem(pos);
+		if(!value)
+			menu->appendSeparator();
+	}
+}
+
+void MainWindow::handleLimiterMenu(bool upload) {
+	auto menu = addChild(WinUtil::Seeds::menu);
+	fillLimiterMenu(menu, upload);
+	menu->open(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
 }
 
 void MainWindow::handleReconnect() {
@@ -944,8 +999,13 @@ void MainWindow::updateStatus() {
 	status->setText(STATUS_UP_DIFF, str(TF_("%1%/s") % s));
 	status->setToolTip(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % s % UploadManager::getInstance()->getUploadCount()));
 
-	status->setText(STATUS_DOWN_LIMIT, str(TF_("D Lim: %1%/s") % Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getDownLimit()*1024))));
-	status->setText(STATUS_UP_LIMIT, str(TF_("U Lim: %1%/s") % Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getUpLimit()*1024))));
+	s = Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getDownLimit() * 1024));
+	status->setText(STATUS_DOWN_LIMIT, str(TF_("D Lim: %1%/s") % s));
+	status->setToolTip(STATUS_DOWN_LIMIT, str(TF_("Download limit: %1%/s - Click to adjust") % s));
+
+	s = Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getUpLimit() * 1024));
+	status->setText(STATUS_UP_LIMIT, str(TF_("U Lim: %1%/s") % s));
+	status->setToolTip(STATUS_UP_LIMIT, str(TF_("Upload limit: %1%/s - Click to adjust") % s));
 
 	layoutSlotsSpin();
 }
@@ -1373,17 +1433,20 @@ bool MainWindow::handleMessage(const MSG& msg, LRESULT& retVal) {
 }
 
 void MainWindow::handleTrayContextMenu() {
-	MenuPtr trayMenu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 
-	trayMenu->appendItem(T_("Show"), [this] { handleRestore(); }, WinUtil::menuIcon(IDI_DCPP), true, true);
-	trayMenu->appendItem(T_("Open downloads directory"), [this] { handleOpenDownloadsDir(); }, WinUtil::menuIcon(IDI_OPEN_DL_DIR));
-	trayMenu->appendItem(T_("Settings"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));
-	trayMenu->appendSeparator();
-	trayMenu->appendItem(T_("Exit"), [this] { GCC_WTF->close(true); }, WinUtil::menuIcon(IDI_EXIT));
+	menu->appendItem(T_("Show"), [this] { handleRestore(); }, WinUtil::menuIcon(IDI_DCPP), true, true);
+	menu->appendItem(T_("Open downloads directory"), [this] { handleOpenDownloadsDir(); }, WinUtil::menuIcon(IDI_OPEN_DL_DIR));
+	menu->appendSeparator();
+	menu->appendItem(T_("Settings"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));
+	fillLimiterMenu(menu->appendPopup(T_("Download limit")), false);
+	fillLimiterMenu(menu->appendPopup(T_("Upload limit")), true);
+	menu->appendSeparator();
+	menu->appendItem(T_("Exit"), [this] { GCC_WTF->close(true); }, WinUtil::menuIcon(IDI_EXIT));
 
 	dwt::ScreenCoordinate pt;
 	::GetCursorPos(&pt.getPoint());
-	trayMenu->open(pt, TPM_BOTTOMALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON);
+	menu->open(pt, TPM_BOTTOMALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON);
 }
 
 void MainWindow::handleTrayClicked() {
