@@ -20,6 +20,7 @@
 * Remember the last settings page (poy)
 * Fix focus problems in dialogs (poy)
 * Fix Ctrl+W / Ctrl+F4 sometimes closing the wrong tab (poy)
+* [L#604983] Fix transfers dying on setting upload/download throttle to 0 (cologic)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
