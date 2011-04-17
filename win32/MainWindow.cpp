@@ -693,8 +693,8 @@ void fillLimiterMenu(MenuPtr menu, bool upload) {
 	int arr[] = { 0 /* disabled */, x /* current value */,
 		x + 1, x + 2, x + 5, x + 10, x + 20, x + 50, x + 100,
 		x - 1, x - 2, x - 5, x - 10, x - 20, x - 50, x - 100,
-		x * 1.5, x * 2, x * 3, x * 4, x * 5, x * 10, x * 100,
-		x / 1.5, x / 2, x / 3, x / 4, x / 5, x / 10, x / 100 };
+		x * 3 / 2, x * 2, x * 3, x * 4, x * 5, x * 10, x * 100,
+		x * 2 / 3, x / 2, x / 3, x / 4, x / 5, x / 10, x / 100 };
 
 	// set ensures unique members; remove_if performs range and relevancy checking.
 	set<int> values(arr, std::remove_if(arr, arr + sizeof(arr) / sizeof(int), [x](int i) {
@@ -709,7 +709,7 @@ void fillLimiterMenu(MenuPtr menu, bool upload) {
 		auto pos = menu->appendItem(value ? escapeMenu(str(TF_("%1%/s") % formatted)) : T_("Disabled"), [setting, value] {
 			SettingsManager::getInstance()->set(setting, value);
 			ClientManager::getInstance()->infoUpdated();
-		}, nullptr, !same);
+		}, 0, !same);
 		if(same)
 			menu->checkItem(pos);
 		if(!value)
