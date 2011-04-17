@@ -46,7 +46,7 @@ namespace dwt {
 /** Common stuff for all buttons */
 class Button :
 	public CommonControl,
-	public AspectClickable<Button>,
+	private AspectClickable<Button>,
 	public AspectColor<Button>,
 	public AspectColorCtlImpl<Button>,
 	public AspectText< Button >
@@ -85,6 +85,9 @@ public:
 	void setImage(IconPtr icon);
 
 	virtual Point getPreferredSize();
+
+	using AspectClickable<ThisType>::onClicked;
+	using AspectClickable<ThisType>::onDblClicked;
 
 protected:
 	typedef Button ButtonType;
