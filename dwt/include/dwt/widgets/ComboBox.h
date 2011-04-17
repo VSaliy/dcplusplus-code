@@ -58,7 +58,7 @@ namespace dwt {
 class ComboBox :
 	public CommonControl,
 	// Aspects
-	public AspectClickable< ComboBox >,
+	private AspectClickable< ComboBox >,
 	public AspectCollection<ComboBox, int>,
 	public AspectColor< ComboBox >,
 	public AspectColorCtlImpl<ComboBox>,
@@ -127,6 +127,9 @@ public:
 	virtual void layout();
 
 	void setDropDownHeight(size_t h);
+
+	using AspectClickable<ThisType>::onClicked;
+	using AspectClickable<ThisType>::onDblClicked;
 
 protected:
 	ComboBox(Widget* parent);

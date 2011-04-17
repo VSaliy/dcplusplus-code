@@ -58,7 +58,7 @@ namespace dwt {
 class Label :
 	public CommonControl,
 	// Aspects
-	public AspectClickable< Label >,
+	private AspectClickable< Label >,
 	public AspectColor< Label >,
 	public AspectColorCtlImpl<Label>,
 	public AspectText< Label >
@@ -102,6 +102,9 @@ public:
 
 	virtual Point getPreferredSize();
 
+	using AspectClickable<ThisType>::onClicked;
+	using AspectClickable<ThisType>::onDblClicked;
+
 protected:
 	// Constructor Taking pointer to parent
 	explicit Label( dwt::Widget * parent );
@@ -116,11 +119,11 @@ private:
 	static const TCHAR windowClass[];
 
 	// AspectClickable
-	static Message getLeftClickMessage();
+	static Message getClickMessage();
 	static Message getDblClickMessage();
 };
 
-inline Message Label::getLeftClickMessage() {
+inline Message Label::getClickMessage() {
 	return Message(WM_COMMAND, MAKEWPARAM(0, STN_CLICKED));
 }
 

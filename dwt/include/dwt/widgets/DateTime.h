@@ -54,7 +54,7 @@ namespace dwt {
 class DateTime :
 	public CommonControl,
 	// Aspects
-	public AspectClickable< DateTime >
+	private AspectClickable< DateTime >
 {
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< DateTime >;
@@ -191,6 +191,8 @@ public:
 	  * Only if you DERIVE from class you should call this function directly.
 	  */
 	void create( const Seed & cs = Seed() );
+
+	using AspectClickable<ThisType>::onClicked;
 
 protected:
 	/// Constructor Taking pointer to parent
