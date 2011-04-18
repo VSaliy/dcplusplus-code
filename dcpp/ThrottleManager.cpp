@@ -148,6 +148,11 @@ int ThrottleManager::getDownLimit() {
 	return SettingsManager::getInstance()->get(getCurSetting(SettingsManager::MAX_DOWNLOAD_SPEED_MAIN));
 }
 
+void ThrottleManager::setSetting(SettingsManager::IntSetting setting, int value) {
+	SettingsManager::getInstance()->set(setting, value);
+	ClientManager::getInstance()->infoUpdated();
+}
+
 bool ThrottleManager::getCurThrottling() {
 	Lock l(stateCS);
 	return activeWaiter != -1;
@@ -188,8 +193,7 @@ void ThrottleManager::on(TimerManagerListener::Second, uint64_t /* aTick */) noe
 {
 	int newSlots = SettingsManager::getInstance()->get(getCurSetting(SettingsManager::SLOTS));
 	if(newSlots != SETTING(SLOTS)) {
-		SettingsManager::getInstance()->set(SettingsManager::SLOTS, newSlots);
-		ClientManager::getInstance()->infoUpdated();
+		setSetting(SettingsManager::SLOTS, newSlots);
 	}
 
 	{

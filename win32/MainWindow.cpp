@@ -437,7 +437,7 @@ void MainWindow::initStatusBar() {
 
 	slotsSpin = addChild(Spinner::Seed(1));
 	slotsSpin->setHelpId(IDH_MAIN_SLOTS_SPIN);
-	slotsSpin->onUpdate([this](int pos, int delta) { return handleSlotsUpdate(pos, delta); });
+	slotsSpin->onUpdate([this](int, int delta) { return handleSlotsUpdate(delta); });
 
 	initStatus(true);
 	status->setSize(STATUS_SLOTS_SPIN, 22);
@@ -683,38 +683,47 @@ void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
 	}
 }
 
-void fillLimiterMenu(MenuPtr menu, bool upload) {
-	menu->setTitle(upload ? T_("Upload limit") : T_("Download limit"));
+void MainWindow::fillLimiterMenu(MenuPtr menu, bool upload) {
+	const auto title = upload ? T_("Upload limit") : T_("Download limit");
+	menu->setTitle(title);
 
-	const auto setting = ThrottleManager::getInstance()->getCurSetting(
+	const auto setting = ThrottleManager::getCurSetting(
 		upload ? SettingsManager::MAX_UPLOAD_SPEED_MAIN : SettingsManager::MAX_DOWNLOAD_SPEED_MAIN);
-	auto x = SettingsManager::getInstance()->get(setting);
+	const auto x = SettingsManager::getInstance()->get(setting);
 
 	int arr[] = { 0 /* disabled */, x /* current value */,
 		x + 1, x + 2, x + 5, x + 10, x + 20, x + 50, x + 100,
 		x - 1, x - 2, x - 5, x - 10, x - 20, x - 50, x - 100,
-		x * 3 / 2, x * 2, x * 3, x * 4, x * 5, x * 10, x * 100,
-		x * 2 / 3, x / 2, x / 3, x / 4, x / 5, x / 10, x / 100 };
+		x * 11 / 10, x * 6 / 5, x * 3 / 2, x * 2, x * 3, x * 4, x * 5, x * 10, x * 100,
+		x * 10 / 11, x * 5 / 6, x * 2 / 3, x / 2, x / 3, x / 4, x / 5, x / 10, x / 100 };
 
-	// set ensures unique members; remove_if performs range and relevancy checking.
-	set<int> values(arr, std::remove_if(arr, arr + sizeof(arr) / sizeof(int), [x](int i) {
-		return i < 0 || i > UD_MAXVAL || // same max value as the one imposed by settings spinners
-			(i != x && abs(i - x) < 20 * x / 1024); // not too close to the original value
+	// set ensures ordered unique members; remove_if performs range and relevancy checking.
+	auto minDelta = (x >= 1024) ? (20 * pow(1024, floor(log(static_cast<float>(x)) / log(1024.)) - 1)) : 0;
+	set<int> values(arr, std::remove_if(arr, arr + sizeof(arr) / sizeof(int), [x, minDelta](int i) {
+		return i < 0 || i > ThrottleManager::MAX_LIMIT ||
+			(minDelta && i != x && abs(i - x) < minDelta); // not too close to the original value
 	}));
 
 	for(auto i = values.cbegin(), iend = values.cend(); i != iend; ++i) {
 		auto value = *i;
 		auto same = value == x;
 		auto formatted = Text::toT(Util::formatBytes(value * 1024));
-		auto pos = menu->appendItem(value ? escapeMenu(str(TF_("%1%/s") % formatted)) : T_("Disabled"), [setting, value] {
-			SettingsManager::getInstance()->set(setting, value);
-			ClientManager::getInstance()->infoUpdated();
-		}, 0, !same);
+		auto pos = menu->appendItem(value ? escapeMenu(str(TF_("%1%/s") % formatted)) : T_("Disabled"),
+			[setting, value] { ThrottleManager::setSetting(setting, value); }, 0, !same);
 		if(same)
 			menu->checkItem(pos);
 		if(!value)
 			menu->appendSeparator();
 	}
+
+	menu->appendSeparator();
+	menu->appendItem(T_("Custom..."), [this, title, setting, x] {
+		ParamDlg dlg(this, title);
+		dlg.addIntTextBox(T_("New limit (KiB/s) (0 = infinite)"), Text::toT(Util::toString(x)), 0, ThrottleManager::MAX_LIMIT);
+		if(dlg.run() == IDOK) {
+			ThrottleManager::setSetting(setting, Util::toUInt(Text::fromT(dlg.getValue())));
+		}
+	});
 }
 
 void MainWindow::handleLimiterMenu(bool upload) {
@@ -999,11 +1008,11 @@ void MainWindow::updateStatus() {
 	status->setText(STATUS_UP_DIFF, str(TF_("%1%/s") % s));
 	status->setToolTip(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % s % UploadManager::getInstance()->getUploadCount()));
 
-	s = Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getDownLimit() * 1024));
+	s = Text::toT(Util::formatBytes(ThrottleManager::getDownLimit() * 1024));
 	status->setText(STATUS_DOWN_LIMIT, str(TF_("D Lim: %1%/s") % s));
 	status->setToolTip(STATUS_DOWN_LIMIT, str(TF_("Download limit: %1%/s - Click to adjust") % s));
 
-	s = Text::toT(Util::formatBytes(ThrottleManager::getInstance()->getUpLimit() * 1024));
+	s = Text::toT(Util::formatBytes(ThrottleManager::getUpLimit() * 1024));
 	status->setText(STATUS_UP_LIMIT, str(TF_("U Lim: %1%/s") % s));
 	status->setToolTip(STATUS_UP_LIMIT, str(TF_("Upload limit: %1%/s - Click to adjust") % s));
 
@@ -1399,14 +1408,12 @@ void MainWindow::switchStatus() {
 	layout();
 }
 
-bool MainWindow::handleSlotsUpdate(int /* pos */, int delta) {
+bool MainWindow::handleSlotsUpdate(int delta) {
 	// Prevent double-info-updated
 	int newSlots = SETTING(SLOTS) + delta;
 	SettingsManager::getInstance()->set(SettingsManager::SLOTS, newSlots);
-
-	SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::SLOTS), newSlots);
+	ThrottleManager::setSetting(SettingsManager::SLOTS, newSlots);
 	updateStatus();
-	ClientManager::getInstance()->infoUpdated();
 	return true;
 }
 

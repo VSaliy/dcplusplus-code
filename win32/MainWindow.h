@@ -170,7 +170,7 @@ private:
 	void switchToolbar();
 	void switchTransfers();
 	void switchStatus();
-	bool handleSlotsUpdate(int pos, int delta);
+	bool handleSlotsUpdate(int delta);
 	void handleReconnect();
 	void handleRedirect();
 	void forwardHub(void (HubFrame::*f_t)());
@@ -198,6 +198,7 @@ private:
 	void saveWindowSettings();
 	void parseCommandLine(const tstring& line);
 	bool chooseFavHubGroup(const tstring& title, tstring& group);
+	void fillLimiterMenu(MenuPtr menu, bool upload);
 	void statusMessage(time_t t, const string& m);
 
 	bool filter(MSG& msg);

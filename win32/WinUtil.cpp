@@ -467,9 +467,8 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	} else if(Util::stricmp(cmd.c_str(), _T("slots")) == 0) {
 		int j = Util::toInt(Text::fromT(param));
 		if(j > 0) {
-			SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::SLOTS), j);
+			ThrottleManager::setSetting(ThrottleManager::getCurSetting(SettingsManager::SLOTS), j);
 			status = T_("Slots set");
-			ClientManager::getInstance()->infoUpdated();
 		} else {
 			status = T_("Invalid number of slots");
 		}
@@ -525,30 +524,13 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	} else if(Util::stricmp(cmd.c_str(), _T("rebuild")) == 0) {
 		HashManager::getInstance()->rebuild();
 	} else if(Util::stricmp(cmd.c_str(), _T("upload")) == 0) {
-		SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::MAX_UPLOAD_SPEED_MAIN), Util::toInt(Text::fromT(param)));
-		ClientManager::getInstance()->infoUpdated();
-		if(Util::toInt(Text::fromT(param))) {
-			TCHAR* temp;
-			temp = new TCHAR[T_("Upload limit set to %d KiB/s").size() + 32];
-			_stprintf(temp, T_("Upload limit set to %d KiB/s").c_str(), Util::toInt(Text::fromT(param)));
-			status = temp;
-			delete[] temp;
-		} else {
-			status = T_("Upload limit disabled").c_str();
-		}
+		auto value = Util::toInt(Text::fromT(param));
+		ThrottleManager::setSetting(ThrottleManager::getCurSetting(SettingsManager::MAX_UPLOAD_SPEED_MAIN), value);
+		status = value ? str(TF_("Upload limit set to %1% KiB/s") % value) : T_("Upload limit disabled");
 	} else if(Util::stricmp(cmd.c_str(), _T("download")) == 0) {
-		SettingsManager::getInstance()->set(ThrottleManager::getInstance()->getCurSetting(SettingsManager::MAX_DOWNLOAD_SPEED_MAIN),
-			Util::toInt(Text::fromT(param)));
-		ClientManager::getInstance()->infoUpdated();
-		if(Util::toInt(Text::fromT(param))) {
-			TCHAR* temp;
-			temp = new TCHAR[T_("Download limit set to %d KiB/s").size() + 32];
-			_stprintf(temp, T_("Download limit set to %d KiB/s").c_str(), Util::toInt(Text::fromT(param)));
-			status = temp;
-			delete[] temp;
-		} else {
-			status = T_("Download limit disabled");
-		}
+		auto value = Util::toInt(Text::fromT(param));
+		ThrottleManager::setSetting(ThrottleManager::getCurSetting(SettingsManager::MAX_DOWNLOAD_SPEED_MAIN), value);
+		status = value ? str(TF_("Download limit set to %1% KiB/s") % value) : T_("Download limit disabled");
 	} else {
 		return false;
 	}
