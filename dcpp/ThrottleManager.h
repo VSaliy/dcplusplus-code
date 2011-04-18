@@ -46,12 +46,17 @@ namespace dcpp
 		 */
 		int write(Socket* sock, void* buffer, size_t& len);
 
-		SettingsManager::IntSetting getCurSetting(SettingsManager::IntSetting setting);
-
-		int getUpLimit();
-		int getDownLimit();
-
 		void shutdown();
+
+		static SettingsManager::IntSetting getCurSetting(SettingsManager::IntSetting setting);
+
+		static int getUpLimit();
+		static int getDownLimit();
+
+		static void setSetting(SettingsManager::IntSetting setting, int value);
+
+		static const unsigned MAX_LIMIT = 1024 * 1024; // 1 GiB/s
+
 	private:
 		// stack up throttled read & write threads
 		CriticalSection stateCS;

@@ -25,6 +25,7 @@
 #include <dwt/widgets/Spinner.h>
 
 #include <dcpp/SettingsManager.h>
+#include <dcpp/ThrottleManager.h>
 #include "WinUtil.h"
 
 BandwidthLimitPage::BandwidthLimitPage(dwt::Widget* parent) :
@@ -49,14 +50,14 @@ throttleTime(0)
 	{
 		main = grid->addChild(GroupBox::Seed(T_("Transfer Rate Limiting")));
 		GridPtr cur = main->addChild(Grid::Seed(2, 2));
-		cur->column(0).size = 50;
+		cur->column(0).size = 70;
 		cur->column(0).mode = GridInfo::STATIC;
 
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		box->setHelpId(IDH_SETTINGS_BWLIMIT_UPLOAD);
 		items.push_back(Item(box, SettingsManager::MAX_UPLOAD_SPEED_MAIN, PropPage::T_INT_WITH_SPIN));
 
-		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, ThrottleManager::MAX_LIMIT, box));
 		spin->setHelpId(IDH_SETTINGS_BWLIMIT_UPLOAD);
 		cur->setWidget(spin);
 
@@ -66,7 +67,7 @@ throttleTime(0)
 		box->setHelpId(IDH_SETTINGS_BWLIMIT_DOWNLOAD);
 		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED_MAIN, PropPage::T_INT_WITH_SPIN));
 
-		spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		spin = cur->addChild(Spinner::Seed(0, ThrottleManager::MAX_LIMIT, box));
 		spin->setHelpId(IDH_SETTINGS_BWLIMIT_DOWNLOAD);
 		cur->setWidget(spin);
 
@@ -108,14 +109,14 @@ throttleTime(0)
 	{
 		secondary = grid->addChild(GroupBox::Seed(T_("Secondary Transfer Rate Limiting Settings")));
 		GridPtr cur = secondary->addChild(Grid::Seed(3, 2));
-		cur->column(0).size = 50;
+		cur->column(0).size = 70;
 		cur->column(0).mode = GridInfo::STATIC;
 
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		box->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_UPLOAD);
 		items.push_back(Item(box, SettingsManager::MAX_UPLOAD_SPEED_ALTERNATE, PropPage::T_INT_WITH_SPIN));
 
-		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, ThrottleManager::MAX_LIMIT, box));
 		spin->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_UPLOAD);
 		cur->setWidget(spin);
 
@@ -125,7 +126,7 @@ throttleTime(0)
 		box->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_DOWNLOAD);
 		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED_ALTERNATE, PropPage::T_INT_WITH_SPIN));
 
-		spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		spin = cur->addChild(Spinner::Seed(0, ThrottleManager::MAX_LIMIT, box));
 		spin->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_DOWNLOAD);
 		cur->setWidget(spin);
 
