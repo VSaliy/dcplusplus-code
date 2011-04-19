@@ -120,52 +120,62 @@ bool SettingsDialog::initDialog() {
 			tree->onSelectionChanged([this] { handleSelectionChanged(); });
 		}
 
+		const dwt::Point size(16, 16);
+		dwt::ImageListPtr images(new dwt::ImageList(size));
+		tree->setNormalImageList(images);
+
 		auto container = cur->addChild(dwt::ScrolledContainer::Seed(WS_BORDER));
 
 		const size_t setting = SETTING(SETTINGS_PAGE);
-		auto addPage = [this, container, setting](const tstring& title, PropPage* page, HTREEITEM parent) -> HTREEITEM {
-			auto ret = tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true);
-			if(pages.size() == setting)
+		auto addPage = [&](const tstring& title, PropPage* page, unsigned icon, HTREEITEM parent) -> HTREEITEM {
+			auto index = pages.size();
+			images->add(dwt::Icon(icon, size));
+			page->onVisibilityChanged([=](bool b) { if(b) {
+				setSmallIcon(WinUtil::createIcon(icon, 16));
+				setLargeIcon(WinUtil::createIcon(icon, 32));
+			} });
+			auto ret = tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true, index);
+			if(index == setting)
 				GCC_WTF->callAsync([=] { tree->setSelected(ret); });
 			pages.push_back(page);
 			return ret;
 		};
 
-		addPage(T_("Personal information"), new GeneralPage(container), TVI_ROOT);
+		addPage(T_("Personal information"), new GeneralPage(container), IDI_USER, TVI_ROOT);
 
 		{
-			HTREEITEM item = addPage(T_("Connectivity"), new ConnectivityPage(container), TVI_ROOT);
-			addPage(T_("Manual configuration"), new ConnectivityManualPage(container), item);
-			addPage(T_("Bandwidth limiting"), new BandwidthLimitPage(container), item);
-			addPage(T_("Proxy"), new ProxyPage(container), item);
+			HTREEITEM item = addPage(T_("Connectivity"), new ConnectivityPage(container), IDI_CONN_RED, TVI_ROOT);
+			addPage(T_("Manual configuration"), new ConnectivityManualPage(container), IDI_CONN_GREY, item);
+			addPage(T_("Bandwidth limiting"), new BandwidthLimitPage(container), IDI_CONN_BLUE, item);
+			addPage(T_("Proxy"), new ProxyPage(container), IDI_PROXY, item);
 		}
 
 		{
-			HTREEITEM item = addPage(T_("Downloads"), new DownloadPage(container), TVI_ROOT);
-			addPage(T_("Favorites"), new FavoriteDirsPage(container), item);
-			addPage(T_("Queue"), new QueuePage(container), item);
+			HTREEITEM item = addPage(T_("Downloads"), new DownloadPage(container), IDI_DOWNLOAD, TVI_ROOT);
+			addPage(T_("Favorites"), new FavoriteDirsPage(container), IDI_FAVORITE_DIRS, item);
+			addPage(T_("Queue"), new QueuePage(container), IDI_QUEUE, item);
 		}
 
-		addPage(T_("Sharing"), new UploadPage(container), TVI_ROOT);
+		addPage(T_("Sharing"), new UploadPage(container), IDI_UPLOAD, TVI_ROOT);
 
 		{
-			HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(container), TVI_ROOT);
-			addPage(T_("Colors and sounds"), new Appearance2Page(container), item);
-			addPage(T_("Tabs"), new TabsPage(container), item);
-			addPage(T_("Windows"), new WindowsPage(container), item);
-		}
-
-		{
-			HTREEITEM item = addPage(T_("History"), new HistoryPage(container), TVI_ROOT);
-			addPage(T_("Logs"), new LogPage(container), item);
+			HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(container), IDI_DCPP, TVI_ROOT);
+			addPage(T_("Colors and sounds"), new Appearance2Page(container), IDI_COLORS, item);
+			addPage(T_("Tabs"), new TabsPage(container), IDI_TABS, item);
+			addPage(T_("Windows"), new WindowsPage(container), IDI_WINDOWS, item);
 		}
 
 		{
-			HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(container), TVI_ROOT);
-			addPage(T_("Experts only"), new ExpertsPage(container), item);
-			addPage(T_("User commands"), new UCPage(container), item);
-			addPage(T_("Security certificates"), new CertificatesPage(container), item);
-			addPage(T_("Search types"), new SearchTypesPage(container), item);
+			HTREEITEM item = addPage(T_("History"), new HistoryPage(container), IDI_CLOCK, TVI_ROOT);
+			addPage(T_("Logs"), new LogPage(container), IDI_LOGS, item);
+		}
+
+		{
+			HTREEITEM item = addPage(T_("Advanced"), new AdvancedPage(container), IDI_ADVANCED, TVI_ROOT);
+			addPage(T_("Experts only"), new ExpertsPage(container), IDI_EXPERT, item);
+			addPage(T_("User commands"), new UCPage(container), IDI_USER_OP, item);
+			addPage(T_("Security certificates"), new CertificatesPage(container), IDI_SECURE, item);
+			addPage(T_("Search types"), new SearchTypesPage(container), IDI_SEARCH, item);
 		}
 	}
 
@@ -259,12 +269,13 @@ bool SettingsDialog::handleClosing() {
 void SettingsDialog::handleSelectionChanged() {
 	PropPage* page = reinterpret_cast<PropPage*>(tree->getData(tree->getSelected()));
 	if(page) {
+		// move to the top of the Z order so the ScrolledContainer thinks this is the only child.
+		::SetWindowPos(page->handle(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
+		page->setVisible(true);
+
 		if(currentPage) {
 			currentPage->setVisible(false);
-			currentPage = 0;
 		}
-
-		::SetWindowPos(page->handle(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_SHOWWINDOW);
 		currentPage = page;
 
 		updateTitle();
