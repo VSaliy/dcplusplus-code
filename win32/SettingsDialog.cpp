@@ -250,7 +250,8 @@ bool SettingsDialog::handleClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_HEIGHT,
 		static_cast<int>(static_cast<float>(pt.y) / dwt::util::dpiFactor()));
 
-	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_PAGE, find(pages.begin(), pages.end(), currentPage) - pages.begin());
+	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_PAGE,
+		static_cast<int>(find(pages.begin(), pages.end(), currentPage) - pages.begin()));
 
 	return true;
 }
