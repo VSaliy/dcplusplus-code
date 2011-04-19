@@ -88,10 +88,10 @@ public:
 	void setMaximizeBox( bool value = true );
 
 	/// Sets the small icon for the Widget (the small icon appears typically in the top left corner of the Widget)
-	void setIconSmall( const IconPtr& icon );
+	void setSmallIcon(const IconPtr& icon);
 
 	/// Sets the large icon for the Widget (the large icon appears e.g. when you press ALT+Tab)
-	void setIconLarge( const IconPtr& icon );
+	void setLargeIcon(const IconPtr& icon);
 
 protected:
 	struct Seed : public BaseType::Seed {
@@ -105,6 +105,10 @@ protected:
 	// directly
 	virtual ~Frame()
 	{}
+
+private:
+	IconPtr smallIcon;
+	IconPtr largeIcon;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,19 +153,20 @@ inline void Frame::setMaximizeBox( bool value )
 	Widget::addRemoveStyle( WS_MAXIMIZEBOX, value );
 }
 
-inline void Frame::setIconSmall( const IconPtr& icon )
-{
-	sendMessage(WM_SETICON, ICON_SMALL, reinterpret_cast< LPARAM >( icon->handle() ) );
+inline void Frame::setSmallIcon(const IconPtr& icon) {
+	smallIcon = icon;
+	sendMessage(WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(smallIcon->handle()));
 }
 
-
-inline void Frame::setIconLarge( const IconPtr& icon )
-{
-	sendMessage(WM_SETICON, ICON_BIG, reinterpret_cast< LPARAM >( icon->handle() ) );
+inline void Frame::setLargeIcon(const IconPtr& icon) {
+	largeIcon = icon;
+	sendMessage(WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(largeIcon->handle()));
 }
 
-inline Frame::Frame(Widget * parent, Dispatcher& dispatcher)
-	: Composite(parent, dispatcher)
+inline Frame::Frame(Widget * parent, Dispatcher& dispatcher) :
+Composite(parent, dispatcher),
+smallIcon(0),
+largeIcon(0)
 {
 }
 

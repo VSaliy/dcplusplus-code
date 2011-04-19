@@ -64,6 +64,19 @@
 #define IDI_GRANT_SLOT_ON 157
 #define IDI_GRANT_SLOT_OFF 158
 #define IDI_SLOTS_FULL 159
+#define IDI_ADVANCED 160
+#define IDI_CLOCK 161
+#define IDI_COLORS 162
+#define IDI_CONN_BLUE 163
+#define IDI_CONN_GREY 164
+#define IDI_CONN_RED 165
+#define IDI_EXPERT 166
+#define IDI_FAVORITE_DIRS 167
+#define IDI_LOGS 168
+#define IDI_NOTIFICATIONS 169
+#define IDI_PROXY 170
+#define IDI_TABS 171
+#define IDI_WINDOWS 172
 
 // Stuff that uses multiple id's
 
