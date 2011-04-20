@@ -161,6 +161,9 @@ public:
 	HTREEITEM getFirst();
 	HTREEITEM getLast();
 
+	int getItemHeight();
+	void setItemHeight(int h);
+
 	ScreenCoordinate getContextMenuPos();
 
 	bool isExpanded(HTREEITEM node);

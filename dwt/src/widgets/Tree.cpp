@@ -36,7 +36,7 @@ namespace dwt {
 const TCHAR Tree::windowClass[] = WC_TREEVIEW;
 
 Tree::Seed::Seed() :
-	BaseType::Seed(WS_CHILD | WS_TABSTOP | TVS_DISABLEDRAGDROP | TVS_HASLINES | TVS_SHOWSELALWAYS),
+	BaseType::Seed(WS_CHILD | WS_TABSTOP | TVS_DISABLEDRAGDROP | TVS_HASLINES | TVS_NONEVENHEIGHT | TVS_SHOWSELALWAYS),
 	font(new Font(DefaultGuiFont))
 {
 }
@@ -137,6 +137,14 @@ void Tree::setDataImpl(HTREEITEM item, LPARAM lParam) {
 	TVITEM tvitem = { TVIF_PARAM | TVIF_HANDLE, item };
 	tvitem.lParam = lParam;
 	TreeView_SetItem(handle(), &tvitem);
+}
+
+int Tree::getItemHeight() {
+	return TreeView_GetItemHeight(handle());
+}
+
+void Tree::setItemHeight(int h) {
+	TreeView_SetItemHeight(handle(), h);
 }
 
 ScreenCoordinate Tree::getContextMenuPos() {

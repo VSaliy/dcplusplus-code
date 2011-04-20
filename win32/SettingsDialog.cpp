@@ -117,6 +117,7 @@ bool SettingsDialog::initDialog() {
 			seed.style |= WS_BORDER;
 			tree = cur->addChild(seed);
 			tree->setHelpId(IDH_SETTINGS_TREE);
+			tree->setItemHeight(tree->getItemHeight() * 5 / 4);
 			tree->onSelectionChanged([this] { handleSelectionChanged(); });
 		}
 
@@ -131,12 +132,17 @@ bool SettingsDialog::initDialog() {
 			auto index = pages.size();
 			images->add(dwt::Icon(icon, size));
 			page->onVisibilityChanged([=](bool b) { if(b) {
-				setSmallIcon(WinUtil::createIcon(icon, 16));
-				setLargeIcon(WinUtil::createIcon(icon, 32));
+#ifdef __GNUC__ // MSVC doesn't like the explicit "this"...
+#define GCC_WTF2(x) this->x
+#else
+#define GCC_WTF2(x) x
+#endif
+				GCC_WTF2(setSmallIcon(WinUtil::createIcon(icon, 16)));
+				GCC_WTF2(setLargeIcon(WinUtil::createIcon(icon, 32)));
 			} });
 			auto ret = tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true, index);
 			if(index == setting)
-				GCC_WTF->callAsync([=] { tree->setSelected(ret); });
+				GCC_WTF->callAsync([=] { tree->setSelected(ret); tree->ensureVisible(ret); });
 			pages.push_back(page);
 			return ret;
 		};
