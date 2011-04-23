@@ -19,11 +19,7 @@
 #ifndef DCPLUSPLUS_WIN32_PROP_PAGE_H
 #define DCPLUSPLUS_WIN32_PROP_PAGE_H
 
-#define SETTINGS_BUF_LEN 1024
-
-#include <dwt/aspects/AspectChild.h>
-
-class PropPage : public dwt::ModelessDialog
+class PropPage : public dwt::Container
 {
 public:
 	PropPage(dwt::Widget* parent, int rows, int cols);
