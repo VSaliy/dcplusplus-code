@@ -122,11 +122,12 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 	splitter = addChild(SplitterContainer::Seed(0.7));
 
 	if(!userIcons) {
-		userIcons = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
-		userIcons->add(dwt::Icon(IDI_FAVORITE_USER_OFF));
-		userIcons->add(dwt::Icon(IDI_FAVORITE_USER_ON));
-		userIcons->add(dwt::Icon(IDI_GRANT_SLOT_OFF));
-		userIcons->add(dwt::Icon(IDI_GRANT_SLOT_ON));
+		const dwt::Point size(16, 16);
+		userIcons = dwt::ImageListPtr(new dwt::ImageList(size));
+		userIcons->add(dwt::Icon(IDI_FAVORITE_USER_OFF, size));
+		userIcons->add(dwt::Icon(IDI_FAVORITE_USER_ON, size));
+		userIcons->add(dwt::Icon(IDI_GRANT_SLOT_OFF, size));
+		userIcons->add(dwt::Icon(IDI_GRANT_SLOT_ON, size));
 	}
 
 	{

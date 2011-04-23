@@ -23,7 +23,8 @@
 * [L#604983] Fix transfers dying on setting upload/download throttle to 0 (cologic)
 * [L#591626] Menus to adjust the bw limit from the tray menu & status bar (poy, iceman50)
 * Increase the max bandwidth limit from 32 MiB/s to 1 GiB/s
-* More icons
+* More icons (many from the Crystal Clear project, thanks to them)
+* Add notifications via balloon popups and sound (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

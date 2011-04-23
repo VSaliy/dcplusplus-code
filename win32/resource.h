@@ -77,6 +77,8 @@
 #define IDI_PROXY 170
 #define IDI_TABS 171
 #define IDI_WINDOWS 172
+#define IDI_BALLOON 173
+#define IDI_SOUND 174
 
 // Stuff that uses multiple id's
 

@@ -49,8 +49,8 @@ const string SettingsManager::settingTags[] =
 	"LogFileStatus", "LogFileUpload", "LogFileDownload", "LogFileFinishedDownload", "LogFileSystem",
 	"LogFormatSystem", "LogFormatStatus", "DirectoryListingFrameOrder", "DirectoryListingFrameWidths",
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
-	"Language", "DownloadsOrder", "DownloadsWidth", "Toolbar", "LastSearchType",
-	"SoundMainChat", "SoundPM", "SoundPMWindow", "Mapper",
+	"Language", "DownloadsOrder", "DownloadsWidth", "Toolbar", "LastSearchType", "Mapper",
+	"SoundMainChat", "SoundPM", "SoundPMWindow", "SoundFinishedDL", "SoundFinishedFL",
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
@@ -90,6 +90,7 @@ const string SettingsManager::settingTags[] =
 	"MaxUploadSpeedTime", "MaxDownloadSpeedPrimary", "MaxUploadSpeedPrimary",
 	"SlotsAlternateLimiting", "SlotsPrimaryLimiting",
 	"AutoDetectIncomingConnection", "SettingsSaveInterval",
+	"BalloonMainChat", "BalloonPM", "BalloonPMWindow", "BalloonFinishedDL", "BalloonFinishedFL",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -313,6 +314,11 @@ SettingsManager::SettingsManager()
 	setDefault(SLOTS_ALTERNATE_LIMITING, 1);
 	setDefault(SLOTS_PRIMARY, 3);
 	setDefault(SETTINGS_SAVE_INTERVAL, 10);
+	setDefault(BALLOON_MAIN_CHAT, false);
+	setDefault(BALLOON_PM, false);
+	setDefault(BALLOON_PM_WINDOW, false);
+	setDefault(BALLOON_FINISHED_DL, true);
+	setDefault(BALLOON_FINISHED_FL, false);
 
 	setSearchTypeDefaults();
 

@@ -38,6 +38,14 @@ const UINT Notification::message = ::RegisterWindowMessage(_T("dwt::Notification
 
 static const UINT taskbarMsg = ::RegisterWindowMessage(_T("TaskbarCreated"));
 
+Notification::Notification(WindowPtr parent_) :
+parent(parent_),
+visible(false),
+balloons(0),
+lastTick(0)
+{
+}
+
 Notification::~Notification() {
 	setVisible(false);
 }
@@ -57,14 +65,15 @@ void Notification::setIcon(const IconPtr& icon_) {
 }
 
 void Notification::setVisible(bool visible_) {
-	if(visible == visible_)
+	if(visible == visible_) {
+		if(visible && balloons)
+			balloons = 0;
 		return;
+	}
 
 	visible = visible_;
 
-	NOTIFYICONDATA nid = { sizeof(NOTIFYICONDATA) };
-
-	nid.hWnd = parent->handle();
+	NOTIFYICONDATA nid = { sizeof(NOTIFYICONDATA), parent->handle() };
 
 	if(visible) {
 		nid.uFlags = NIF_MESSAGE;
@@ -72,7 +81,7 @@ void Notification::setVisible(bool visible_) {
 
 		if(!tip.empty()) {
 			nid.uFlags |= NIF_TIP;
-			tip.copy(nid.szTip, (sizeof(nid.szTip) / sizeof(nid.szTip[0])) - 1);
+			tip.copy(nid.szTip, sizeof(nid.szTip) / sizeof(nid.szTip[0]) - 1);
 		}
 
 		if(icon) {
@@ -91,12 +100,25 @@ void Notification::setTooltip(const tstring& tip_) {
 	lastTick = ::GetTickCount();
 
 	if(visible) {
-		NOTIFYICONDATA nid = { sizeof(NOTIFYICONDATA) };
-		nid.hWnd = parent->handle();
+		NOTIFYICONDATA nid = { sizeof(NOTIFYICONDATA), parent->handle() };
 		nid.uFlags = NIF_TIP;
-		tip.copy(nid.szTip, (sizeof(nid.szTip) / sizeof(nid.szTip[0])) - 1);
+		tip.copy(nid.szTip, sizeof(nid.szTip) / sizeof(nid.szTip[0]) - 1);
 		::Shell_NotifyIcon(NIM_MODIFY, &nid);
 	}
+}
+
+void Notification::addMessage(const tstring& title, const tstring& message) {
+	if(!visible || balloons)
+		++balloons;
+	if(!visible)
+		setVisible(true);
+
+	NOTIFYICONDATA nid = { sizeof(NOTIFYICONDATA), parent->handle() };
+	nid.uFlags = NIF_INFO;
+	message.copy(nid.szInfo, sizeof(nid.szInfo) / sizeof(nid.szInfo[0]) - 1);
+	title.copy(nid.szInfoTitle, sizeof(nid.szInfoTitle) / sizeof(nid.szInfoTitle[0]) - 1);
+	nid.dwInfoFlags = NIIF_INFO;
+	::Shell_NotifyIcon(NIM_MODIFY, &nid);
 }
 
 bool Notification::redisplay() {
@@ -107,41 +129,60 @@ bool Notification::redisplay() {
 	return false;
 }
 
-// Mingw headers miss this
+// Mingw headers miss these
 #ifndef NIN_BALLOONUSERCLICK
+#define NIN_BALLOONHIDE (WM_USER + 3)
+#define NIN_BALLOONTIMEOUT (WM_USER + 4)
 #define NIN_BALLOONUSERCLICK (WM_USER + 5)
 #endif
 
 bool Notification::trayHandler(const MSG& msg) {
 	switch(msg.lParam) {
-	case WM_LBUTTONUP: {
-		if(iconClicked) {
-			iconClicked();
-		}
-	} break;
-	case WM_RBUTTONUP: {
-		if(contextMenu) {
-			// Work-around for windows bug (KB135788)
-			::SetForegroundWindow(parent->handle());
-			contextMenu();
-			parent->postMessage(WM_NULL);
-		}
-	} break;
-	case WM_MOUSEMOVE: {
-		if(updateTip) {
-			DWORD now = ::GetTickCount();
-			if(now - 1000 > lastTick) {
-				updateTip();
-				lastTick = now;
+	case WM_LBUTTONUP:
+		{
+			if(iconClicked) {
+				iconClicked();
 			}
+			break;
 		}
-	}
 
-	case NIN_BALLOONUSERCLICK: {
-		if(notificationClicked) {
-			notificationClicked();
+	case WM_RBUTTONUP:
+		{
+			if(contextMenu) {
+				// Work-around for windows bug (KB135788)
+				::SetForegroundWindow(parent->handle());
+				contextMenu();
+				parent->postMessage(WM_NULL);
+			}
+			break;
 		}
-	} break;
+
+	case WM_MOUSEMOVE:
+		{
+			if(updateTip) {
+				DWORD now = ::GetTickCount();
+				if(now - 1000 > lastTick) {
+					updateTip();
+					lastTick = now;
+				}
+			}
+			break;
+		}
+
+	case NIN_BALLOONUSERCLICK:
+		{
+			if(balloonClicked) {
+				balloonClicked();
+			}
+		} // fall through
+	case NIN_BALLOONHIDE: // fall through
+	case NIN_BALLOONTIMEOUT:
+		{
+			if(balloons && !--balloons) {
+				setVisible(false);
+			}
+			break;
+		}
 	}
 
 	return true;

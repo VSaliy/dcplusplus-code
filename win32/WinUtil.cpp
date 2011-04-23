@@ -538,13 +538,22 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	return true;
 }
 
-void WinUtil::playSound(int setting) {
-	string sound = SettingsManager::getInstance()->get((SettingsManager::StrSetting) setting);
-	if(!sound.empty()) {
-		if(sound == "beep")
-			::MessageBeep(MB_OK);
-		else
-			::PlaySound(Text::toT(sound).c_str(), NULL, SND_FILENAME | SND_ASYNC);
+void WinUtil::notify(int soundSetting, int balloonSetting, const tstring& balloonTitle, const tstring& balloonText) {
+	const string& s = SettingsManager::getInstance()->get((SettingsManager::StrSetting)soundSetting);
+	if(!s.empty()) {
+		playSound(Text::toT(s));
+	}
+
+	if(SettingsManager::getInstance()->getBool((SettingsManager::IntSetting)balloonSetting)) {
+		mainWindow->notify(balloonTitle, balloonText);
+	}
+}
+
+void WinUtil::playSound(const tstring& sound) {
+	if(sound == _T("beep")) {
+		::MessageBeep(MB_OK);
+	} else {
+		::PlaySound(sound.c_str(), 0, SND_FILENAME | SND_ASYNC);
 	}
 }
 

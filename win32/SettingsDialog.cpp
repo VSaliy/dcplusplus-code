@@ -43,9 +43,11 @@
 #include "UploadPage.h"
 
 #include "AppearancePage.h"
-#include "Appearance2Page.h"
+#include "ColorsPage.h"
 #include "TabsPage.h"
 #include "WindowsPage.h"
+
+#include "NotificationsPage.h"
 
 #include "HistoryPage.h"
 #include "LogPage.h"
@@ -94,36 +96,34 @@ bool SettingsDialog::initDialog() {
 	*/
 	setHelpId(IDH_INDEX);
 
-	grid = addChild(Grid::Seed(3, 1));
-	grid->setSpacing(8);
-
+	grid = addChild(Grid::Seed(1, 2));
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
-	grid->column(0).mode = GridInfo::FILL;
+	grid->setSpacing(8);
+
+	grid->column(0).size = 170;
+	grid->column(0).mode = GridInfo::STATIC;
+	grid->column(1).mode = GridInfo::FILL;
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
-		cur->setSpacing(8);
+		auto seed = Tree::Seed();
+		seed.style |= WS_BORDER;
+		tree = grid->addChild(seed);
+		tree->setHelpId(IDH_SETTINGS_TREE);
+		tree->setItemHeight(tree->getItemHeight() * 5 / 4);
+		tree->onSelectionChanged([this] { handleSelectionChanged(); });
+	}
 
-		cur->row(0).mode = GridInfo::FILL;
-		cur->row(0).align = GridInfo::STRETCH;
-
-		cur->column(0).size = 170;
-		cur->column(0).mode = GridInfo::STATIC;
-		cur->column(1).mode = GridInfo::FILL;
-
-		{
-			auto seed = Tree::Seed();
-			seed.style |= WS_BORDER;
-			tree = cur->addChild(seed);
-			tree->setHelpId(IDH_SETTINGS_TREE);
-			tree->setItemHeight(tree->getItemHeight() * 5 / 4);
-			tree->onSelectionChanged([this] { handleSelectionChanged(); });
-		}
-
+	{
 		const dwt::Point size(16, 16);
 		dwt::ImageListPtr images(new dwt::ImageList(size));
 		tree->setNormalImageList(images);
+
+		auto cur = grid->addChild(Grid::Seed(3, 1));
+		cur->row(0).mode = GridInfo::FILL;
+		cur->row(0).align = GridInfo::STRETCH;
+		cur->column(0).mode = GridInfo::FILL;
+		cur->setSpacing(grid->getSpacing());
 
 		auto container = cur->addChild(dwt::ScrolledContainer::Seed(WS_BORDER));
 
@@ -166,10 +166,12 @@ bool SettingsDialog::initDialog() {
 
 		{
 			HTREEITEM item = addPage(T_("Appearance"), new AppearancePage(container), IDI_DCPP, TVI_ROOT);
-			addPage(T_("Colors and sounds"), new Appearance2Page(container), IDI_COLORS, item);
+			addPage(T_("Colors"), new ColorsPage(container), IDI_COLORS, item);
 			addPage(T_("Tabs"), new TabsPage(container), IDI_TABS, item);
 			addPage(T_("Windows"), new WindowsPage(container), IDI_WINDOWS, item);
 		}
+
+		addPage(T_("Notifications"), new NotificationsPage(container), IDI_NOTIFICATIONS, TVI_ROOT);
 
 		{
 			HTREEITEM item = addPage(T_("History"), new HistoryPage(container), IDI_CLOCK, TVI_ROOT);
@@ -183,27 +185,23 @@ bool SettingsDialog::initDialog() {
 			addPage(T_("Security certificates"), new CertificatesPage(container), IDI_SECURE, item);
 			addPage(T_("Search types"), new SearchTypesPage(container), IDI_SEARCH, item);
 		}
-	}
 
-	{
 		Grid::Seed gs(1, 1);
 		gs.style |= WS_BORDER;
-		auto cur = grid->addChild(gs);
-		cur->column(0).mode = GridInfo::FILL;
+		auto helpGrid = cur->addChild(gs);
+		helpGrid->column(0).mode = GridInfo::FILL;
 
 		auto ts = WinUtil::Seeds::Dialog::richTextBox;
 		ts.style &= ~ES_SUNKEN;
 		ts.exStyle &= ~WS_EX_CLIENTEDGE;
 		ts.lines = 6;
-		help = cur->addChild(ts);
+		help = helpGrid->addChild(ts);
 		help->onRaw([this](WPARAM w, LPARAM) { return helpDlgCode(w); }, dwt::Message(WM_GETDLGCODE));
-	}
 
-	{
-		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
-		cur->setSpacing(8);
+		cur = cur->addChild(Grid::Seed(1, 3));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
+		cur->setSpacing(grid->getSpacing());
 
 		WinUtil::addDlgButtons(cur,
 			[this] { handleClosing(); handleOKClicked(); },

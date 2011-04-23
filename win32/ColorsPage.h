@@ -16,50 +16,30 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_APPEARANCE_2_PAGE_H
-#define DCPLUSPLUS_WIN32_APPEARANCE_2_PAGE_H
+#ifndef DCPLUSPLUS_WIN32_COLORS_PAGE_H
+#define DCPLUSPLUS_WIN32_COLORS_PAGE_H
 
 #include "PropPage.h"
 
-class Appearance2Page : public PropPage
+class ColorsPage : public PropPage
 {
 public:
-	Appearance2Page(dwt::Widget* parent);
-	virtual ~Appearance2Page();
+	ColorsPage(dwt::Widget* parent);
+	virtual ~ColorsPage();
 
 	virtual void write();
 
 private:
-	struct SoundOption {
-		const char* text;
-		int setting;
-		tstring file;
-		unsigned helpId;
-	};
-	static SoundOption soundOptions[];
-
 	LabelPtr example;
-	TablePtr sounds;
-	LabelPtr beepFileLabel;
-	TextBoxPtr beepFile;
-	ButtonPtr browse;
 
 	COLORREF fg, bg, upBar, downBar;
 	dwt::FontPtr font;
 	LOGFONT logFont;
-	int oldSelection;
 
 	void handleBackgroundClicked();
 	void handleTextClicked();
 	void handleULClicked();
 	void handleDLClicked();
-	void handleSelectionChanged();
-	void handleSoundsHelp(unsigned id);
-	void handleSoundsHelpId(unsigned& id);
-	void handleBrowseClicked();
-
-	void setBeepEnabled(bool enabled);
-	void saveSoundOptions();
 };
 
-#endif // !defined(DCPLUSPLUS_WIN32_APPEARANCE_2_PAGE_H)
+#endif // !defined(DCPLUSPLUS_WIN32_COLORS_PAGE_H)
