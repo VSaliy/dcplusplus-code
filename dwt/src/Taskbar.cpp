@@ -211,7 +211,7 @@ void Taskbar::setActiveOnTaskbar(ContainerPtr tab) {
 }
 
 void Taskbar::setTaskbarIcon(ContainerPtr tab, const IconPtr& icon) {
-	tabs[tab]->sendMessage(WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(icon->handle()));
+	tabs[tab]->setSmallIcon(icon);
 }
 
 BitmapPtr Taskbar::getBitmap(ContainerPtr tab, LPARAM thumbnailSize) {
