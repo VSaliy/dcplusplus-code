@@ -30,13 +30,11 @@
 
 const dwt::Rectangle padding(7, 4, 14, 21);
 
-PropPage::PropPage(dwt::Widget* parent, int rows, int cols) : dwt::ModelessDialog(parent), grid(0) {
-	create();
+PropPage::PropPage(dwt::Widget* parent, int rows, int cols) : dwt::Container(parent), grid(0) {
+	create(Seed(0, WS_EX_CONTROLPARENT));
 
 	grid = addChild(Grid::Seed(rows, cols));
 	grid->setSpacing(10);
-
-	onWindowPosChanged([this](const dwt::Rectangle &) { layout(); });
 }
 
 PropPage::~PropPage() {
