@@ -139,7 +139,8 @@ public:
 	 */
 	static bool checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson);
 
-	static void playSound(int setting);
+	static void notify(int soundSetting, int balloonSetting, const tstring& balloonTitle, const tstring& balloonText);
+	static void playSound(const tstring& sound);
 
 	static void openFile(const tstring& file);
 	static void openFolder(const tstring& file);

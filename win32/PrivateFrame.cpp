@@ -66,10 +66,10 @@ void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 			if(!(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT)))
 				p->sendMessage(Text::toT(Util::getAwayMessage()));
 		}
-		WinUtil::playSound(SettingsManager::SOUND_PM_WINDOW);
+		WinUtil::notify(SettingsManager::SOUND_PM_WINDOW, SettingsManager::BALLOON_PM_WINDOW, T_("Private message window"), aMessage);
 	} else {
 		i->second->addChat(aMessage);
-		WinUtil::playSound(SettingsManager::SOUND_PM);
+		WinUtil::notify(SettingsManager::SOUND_PM, SettingsManager::BALLOON_PM, T_("Private message"), aMessage);
 	}
 }
 

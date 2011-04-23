@@ -444,14 +444,10 @@ void Table::clearImpl() {
 	}
 }
 
-void Table::setIcon( unsigned row, int newIconIndex ) {
-	LVITEM it = { LVIF_IMAGE };
-	it.iItem = row;
-	it.iImage = newIconIndex;
-	//Set item
-	if(ListView_SetItem( handle(), &it) != TRUE) {
-		dwtWin32DebugFail("Something went wrong while trying to change the selected item of the Table");
-	}
+void Table::setIcon(unsigned row, unsigned column, int newIconIndex) {
+	LVITEM item = { LVIF_IMAGE, row, column };
+	item.iImage = newIconIndex;
+	ListView_SetItem(handle(), &item);
 }
 
 void Table::setNormalImageList( ImageListPtr imageList ) {

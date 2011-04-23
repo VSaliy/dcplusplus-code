@@ -67,6 +67,7 @@ public:
 
 	void handleSettings();
 
+	void notify(const tstring& title, const tstring& message);
 	void setStaticWindowState(const string& id, bool open);
 	void TrayPM();
 
@@ -135,7 +136,7 @@ private:
 	bool fullSlots;
 
 	dwt::Application::FilterIter filterIter;
-	dwt::NotificationPtr notify;
+	dwt::NotificationPtr notifier;
 
 	void initWindow();
 	void initMenu();

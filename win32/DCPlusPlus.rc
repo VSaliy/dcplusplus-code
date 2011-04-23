@@ -111,6 +111,8 @@ IDI_NOTIFICATIONS       ICON                    "res/Notifications.ico"
 IDI_PROXY               ICON                    "res/Proxy.ico"
 IDI_TABS                ICON                    "res/Tabs.ico"
 IDI_WINDOWS             ICON                    "res/Windows.ico"
+IDI_BALLOON             ICON                    "res/Balloon.ico"
+IDI_SOUND               ICON                    "res/Sound.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

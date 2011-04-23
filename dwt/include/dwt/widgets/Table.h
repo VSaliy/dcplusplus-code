@@ -226,7 +226,7 @@ public:
 	/// Change the current icon of an item
 	/** Sets a new icon for a given item
 	  */
-	void setIcon( unsigned row, int newIconIndex );
+	void setIcon(unsigned row, unsigned column, int newIconIndex);
 
 	/// Returns a boolean indicating if the Grid is in "read only" mode or not
 	/** If the return value is true the Grid is in "read only" mode and cannot be

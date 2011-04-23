@@ -530,13 +530,14 @@ void MainWindow::initTransfers() {
 
 void MainWindow::initTray() {
 	dcdebug("initTray\n");
-	notify = dwt::NotificationPtr(new dwt::Notification(this));
-	notify->create(dwt::Notification::Seed(mainSmallIcon));
-	notify->onContextMenu([this] { handleTrayContextMenu(); });
-	notify->onIconClicked([this] { handleTrayClicked(); });
-	notify->onUpdateTip([this] { handleTrayUpdate(); });
+	notifier = dwt::NotificationPtr(new dwt::Notification(this));
+	notifier->create(dwt::Notification::Seed(mainSmallIcon));
+	notifier->onContextMenu([this] { handleTrayContextMenu(); });
+	notifier->onIconClicked([this] { handleTrayClicked(); });
+	notifier->onUpdateTip([this] { handleTrayUpdate(); });
+	notifier->onBalloonClicked([this] { handleRestore(); });
 	if(SETTING(ALWAYS_TRAY)) {
-		notify->setVisible(true);
+		notifier->setVisible(true);
 	}
 }
 
@@ -561,6 +562,10 @@ bool MainWindow::filter(MSG& msg) {
 	return false;
 }
 
+void MainWindow::notify(const tstring& title, const tstring& message) {
+	notifier->addMessage(_T("DC++ - ") + title, message);
+}
+
 void MainWindow::setStaticWindowState(const string& id, bool open) {
 	if(toolbar)
 		toolbar->setButtonChecked(id, open);
@@ -571,9 +576,8 @@ void MainWindow::setStaticWindowState(const string& id, bool open) {
 }
 
 void MainWindow::TrayPM() {
-	if(!tray_pm && notify->isVisible() && ::GetAncestor(::GetForegroundWindow(), GA_ROOTOWNER) != handle()) {
-		static dwt::IconPtr icon(WinUtil::createIcon(IDI_TRAY_PM, 16));
-		notify->setIcon(icon);
+	if(!tray_pm && notifier->isVisible() && ::GetAncestor(::GetForegroundWindow(), GA_ROOTOWNER) != handle()) {
+		notifier->setIcon(WinUtil::createIcon(IDI_TRAY_PM, 16));
 		tray_pm = true;
 	}
 }
@@ -786,7 +790,7 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 			Util::setAway(false);
 		}
 		if(!SETTING(ALWAYS_TRAY)) {
-			notify->setVisible(false);
+			notifier->setVisible(false);
 		}
 		layout();
 	}
@@ -798,7 +802,7 @@ void MainWindow::handleMinimized() {
 	}
 	if(BOOLSETTING(MINIMIZE_TRAY) != WinUtil::isShift()) {
 		if(!SETTING(ALWAYS_TRAY)) {
-			notify->setVisible(true);
+			notifier->setVisible(true);
 		}
 		setVisible(false);
 	}
@@ -807,7 +811,7 @@ void MainWindow::handleMinimized() {
 
 LRESULT MainWindow::handleActivateApp(WPARAM wParam) {
 	if(wParam == TRUE && tray_pm) {
-		notify->setIcon(mainSmallIcon);
+		notifier->setIcon(mainSmallIcon);
 		tray_pm = false;
 	}
 	return 0;
@@ -1465,7 +1469,7 @@ void MainWindow::handleTrayClicked() {
 }
 
 void MainWindow::handleTrayUpdate() {
-	notify->setTooltip(Text::toT(str(F_("D: %1%/s (%2%)\r\nU: %3%/s (%4%)") %
+	notifier->setTooltip(Text::toT(str(F_("D: %1%/s (%2%)\r\nU: %3%/s (%4%)") %
 		Util::formatBytes(DownloadManager::getInstance()->getRunningAverage()) %
 		DownloadManager::getInstance()->getDownloadCount() %
 		Util::formatBytes(UploadManager::getInstance()->getRunningAverage()) %
@@ -1490,18 +1494,31 @@ void MainWindow::on(PartialList, const HintedUser& aUser, const string& text) no
 }
 
 void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) noexcept {
-	if (qi->isSet(QueueItem::FLAG_CLIENT_VIEW)) {
-		if (qi->isSet(QueueItem::FLAG_USER_LIST)) {
-			tstring file = Text::toT(qi->getListName());
-			HintedUser user = qi->getDownloads()[0]->getHintedUser();
-			callAsync([this, file, dir, user, speed] { DirectoryListingFrame::openWindow(getTabView(), file, Text::toT(dir), user, speed); });
-		} else if (qi->isSet(QueueItem::FLAG_TEXT)) {
-			string file = qi->getTarget();
+	if(qi->isSet(QueueItem::FLAG_CLIENT_VIEW)) {
+		if(qi->isSet(QueueItem::FLAG_USER_LIST)) {
+			auto file = qi->getListName();
+			auto user = qi->getDownloads()[0]->getHintedUser();
+			callAsync([this, file, dir, user, speed] {
+				DirectoryListingFrame::openWindow(getTabView(), Text::toT(file), Text::toT(dir), user, speed);
+				WinUtil::notify(SettingsManager::SOUND_FINISHED_FL, SettingsManager::BALLOON_FINISHED_FL,
+					T_("File list downloaded"), Text::toT(Util::getFileName(file)));
+			});
+
+		} else if(qi->isSet(QueueItem::FLAG_TEXT)) {
+			auto file = qi->getTarget();
 			callAsync([this, file] {
 				TextFrame::openWindow(getTabView(), file);
 				File::deleteFile(file);
 			});
 		}
+	}
+
+	if(!qi->isSet(QueueItem::FLAG_USER_LIST)) {
+		auto file = qi->getTarget();
+		callAsync([file] {
+			WinUtil::notify(SettingsManager::SOUND_FINISHED_DL, SettingsManager::BALLOON_FINISHED_DL,
+				T_("Download finished"), Text::toT(file));
+		});
 	}
 }
 
