@@ -69,7 +69,14 @@ void Splitter::handlePainting(PaintCanvas& canvas) {
 			part = horizontal ? PP_BAR : PP_BARVERT;
 			state = 0;
 		}
-		theme.drawBackground(canvas, part, state, canvas.getPaintRect());
+
+		// don't draw edges.
+		Rectangle rect(canvas.getPaintRect());
+		(horizontal ? rect.pos.x : rect.pos.y) -= 2;
+		(horizontal ? rect.size.x : rect.size.y) += 4;
+
+		theme.drawBackground(canvas, part, state, rect);
+
 	} else if(hovering) {
 		// safe to assume that the text color is different enough from the default background.
 		canvas.fill(canvas.getPaintRect(), Brush(Brush::WindowText));
