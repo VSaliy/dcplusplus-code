@@ -249,12 +249,12 @@ droppedResults(0)
 	results->onKeyDown([this](int c) { return handleKeyDown(c); });
 	results->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
 
+	initStatus();
+
 	showUI = addChild(WinUtil::Seeds::splitCheckBox);
 	showUI->setChecked(true);
 	showUI->onClicked([this] { handleShowUIClicked(); });
-
-	initStatus();
-	status->setSize(STATUS_SHOW_UI, showUI->getPreferredSize().x);
+	status->setWidget(STATUS_SHOW_UI, showUI);
 
 	layout();
 	activate();
@@ -330,7 +330,6 @@ void SearchFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
 	r.size.y -= status->refresh();
-	status->mapWidget(STATUS_SHOW_UI, showUI);
 
 	paned->resize(r);
 }

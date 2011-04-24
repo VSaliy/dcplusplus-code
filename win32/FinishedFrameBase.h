@@ -123,6 +123,8 @@ protected:
 			users->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return this->handleUsersContextMenu(sc); });
 		}
 
+		this->initStatus();
+
 		if(!in_UL) {
 			bOnlyFull = BOOLSETTING(FINISHED_DL_ONLY_FULL);
 			{
@@ -132,15 +134,16 @@ protected:
 				onlyFull->setHelpId(IDH_FINISHED_DL_ONLY_FULL);
 				onlyFull->setChecked(bOnlyFull);
 				onlyFull->onClicked([this] { this->handleOnlyFullClicked(); });
+				this->status->setWidget(STATUS_ONLY_FULL, onlyFull);
 			}
 
 			filesWindow->onVisibilityChanged([this](bool b) { this->onlyFull->setVisible(b); });
 		}
 
-		this->initStatus();
-		if(onlyFull)
-			this->status->setSize(STATUS_ONLY_FULL, onlyFull->getPreferredSize().x);
-		this->status->onDblClicked(STATUS_STATUS, [] { WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(in_UL ? LogManager::UPLOAD : LogManager::DOWNLOAD)))); });
+		this->status->onDblClicked(STATUS_STATUS, [] {
+			WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(
+				in_UL ? LogManager::UPLOAD : LogManager::DOWNLOAD))));
+		});
 
 		this->status->setHelpId(STATUS_COUNT, in_UL ? IDH_FINISHED_UL_COUNT : IDH_FINISHED_DL_COUNT);
 		this->status->setHelpId(STATUS_BYTES, in_UL ? IDH_FINISHED_UL_BYTES : IDH_FINISHED_DL_BYTES);
@@ -162,8 +165,6 @@ protected:
 		dwt::Rectangle r(this->getClientSize());
 
 		r.size.y -= this->status->refresh();
-		if(onlyFull)
-			this->status->mapWidget(STATUS_ONLY_FULL, onlyFull);
 
 		tabs->resize(r);
 	}
