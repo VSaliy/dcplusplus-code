@@ -30,8 +30,6 @@
 
 namespace dcpp {
 
-
-
 CryptoManager::CryptoManager()
 :
 	certsLoaded(false),
@@ -362,7 +360,6 @@ SSLSocket* CryptoManager::getClientSocket(bool allowUntrusted) {
 SSLSocket* CryptoManager::getServerSocket(bool allowUntrusted) {
 	return new SSLSocket(allowUntrusted ? serverContext : serverVerContext);
 }
-
 
 void CryptoManager::decodeBZ2(const uint8_t* is, size_t sz, string& os) {
 	bz_stream bs = { 0 };

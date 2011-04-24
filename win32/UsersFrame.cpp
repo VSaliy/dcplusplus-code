@@ -103,7 +103,6 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 
 	showOnline = filterGrid->addChild(WinUtil::Seeds::checkBox);
 	showOnline->setText(_T("Online"));
-	showOnline->setChecked(); // TODO save / restore last state
 	showOnline->onClicked(updated);
 
 	showFavs = filterGrid->addChild(WinUtil::Seeds::checkBox);
@@ -482,24 +481,32 @@ bool UsersFrame::matches(const UserInfo &ui) {
 	return show(ui.getUser(), false);
 }
 
+static bool isFav(const UserPtr &u) { return FavoriteManager::getInstance()->isFavoriteUser(u); }
+static bool isWaiting(const UserPtr &u) { return UploadManager::getInstance()->isWaiting(u); }
+static bool hasDownload(const UserPtr &u) { return QueueManager::getInstance()->getQueued(u).first > 0; }
+
 bool UsersFrame::show(const UserPtr &u, bool any) const {
-	if((any || showOnline->getChecked()) && u->isOnline()) {
+	if(any && (u->isOnline() || isFav(u) || isWaiting(u) || hasDownload(u))) {
 		return true;
 	}
 
-	if((any || showFavs->getChecked()) && FavoriteManager::getInstance()->isFavoriteUser(u)) {
-		return true;
+	if(showOnline->getChecked() && !u->isOnline()) {
+		return false;
 	}
 
-	if((any || showWaiting->getChecked()) && UploadManager::getInstance()->isWaiting(u)) {
-		return true;
+	if(showFavs->getChecked() && !isFav(u)) {
+		return false;
 	}
 
-	if((any || showQueue->getChecked()) && QueueManager::getInstance()->getQueued(u).first > 0) {
-		return true;
+	if(showWaiting->getChecked() && isWaiting(u)) {
+		return false;
 	}
 
-	return false;
+	if(showQueue->getChecked() && hasDownload(u)) {
+		return false;
+	}
+
+	return true;
 }
 
 UsersFrame::UserInfoList UsersFrame::selectedUsersImpl() const {

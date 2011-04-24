@@ -758,9 +758,7 @@ void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& fav
 	}
 
 	if(checkTTH.hasTTH) {
-		targets.clear();
-
-		QueueManager::getInstance()->getTargets(checkTTH.tth, targets);
+		targets = QueueManager::getInstance()->getTargets(checkTTH.tth);
 		if(targets.size() > 0) {
 			menu->appendSeparator();
 			for(StringIter i = targets.begin(); i != targets.end(); ++i, ++n)

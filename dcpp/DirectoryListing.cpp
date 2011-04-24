@@ -94,7 +94,7 @@ void DirectoryListing::loadFile(const string& name) {
 	}
 }
 
-class ListLoader : public dcpp::SimpleXMLReader::CallBack {
+class ListLoader : public SimpleXMLReader::CallBack {
 public:
 	ListLoader(DirectoryListing::Directory* root, bool aUpdating) : cur(root), base("/"), inListing(false), updating(aUpdating) {
 	}
@@ -122,7 +122,7 @@ string DirectoryListing::updateXML(const string& xml) {
 string DirectoryListing::loadXML(InputStream& is, bool updating) {
 	ListLoader ll(getRoot(), updating);
 
-	dcpp::SimpleXMLReader(&ll).parse(is, SETTING(MAX_FILELIST_SIZE) ? (size_t)SETTING(MAX_FILELIST_SIZE)*1024*1024 : 0);
+	SimpleXMLReader(&ll).parse(is, SETTING(MAX_FILELIST_SIZE) ? (size_t)SETTING(MAX_FILELIST_SIZE)*1024*1024 : 0);
 
 	return ll.getBase();
 }
