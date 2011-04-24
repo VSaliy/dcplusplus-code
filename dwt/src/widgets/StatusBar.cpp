@@ -41,7 +41,7 @@ namespace dwt {
 const TCHAR StatusBar::windowClass[] = STATUSCLASSNAME;
 
 StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip) :
-BaseType::Seed(WS_CHILD),
+BaseType::Seed(WS_CHILD | WS_CLIPSIBLINGS),
 parts(parts_),
 fill(fill_)
 {
@@ -79,7 +79,7 @@ void StatusBar::setSize(unsigned part, unsigned size) {
 
 void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
-	Part& info = parts[part];
+	Part& info = getPart(part);
 	info.text = text;
 	if(part != fill) {
 		info.updateSize(this, alwaysResize);
@@ -102,7 +102,7 @@ void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 
 void StatusBar::setIcon(unsigned part, const IconPtr& icon, bool alwaysResize) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
-	Part& info = parts[part];
+	Part& info = getPart(part);
 	info.icon = icon;
 	if(part != fill)
 		info.updateSize(this, alwaysResize);
@@ -111,29 +111,25 @@ void StatusBar::setIcon(unsigned part, const IconPtr& icon, bool alwaysResize) {
 
 void StatusBar::setToolTip(unsigned part, const tstring& text) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
-	parts[part].tip = text;
+	getPart(part).tip = text;
 }
 
 void StatusBar::setHelpId(unsigned part, unsigned id) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
-	parts[part].helpId = id;
+	getPart(part).helpId = id;
 }
 
-void StatusBar::mapWidget(unsigned part, Widget* widget, const Rectangle& padding) {
+void StatusBar::setWidget(unsigned part, Control* widget, const Rectangle& padding) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
-	POINT p[2];
-	sendMessage(SB_GETRECT, part, reinterpret_cast<LPARAM>(p));
-	::MapWindowPoints(handle(), getParent()->handle(), (POINT*)p, 2);
-	::SetWindowPos(widget->handle(), handle(),
-		p[0].x + padding.left(),
-		p[0].y + padding.top(),
-		p[1].x - p[0].x - padding.right(),
-		p[1].y - p[0].y - padding.bottom(), SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+	auto p = new WidgetPart(widget, padding);
+	p->size = widget->getPreferredSize().x;
+	p->helpId = widget->getHelpId();
+	parts.insert(parts.erase(parts.begin() + part), p);
 }
 
 void StatusBar::onClicked(unsigned part, const F& f) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
-	parts[part].clickF = f;
+	getPart(part).clickF = f;
 
 	// imitate the default onClicked but with a setCallback.
 	setCallback(Message(WM_NOTIFY, NM_CLICK), Dispatchers::VoidVoid<>([this] { handleClicked(); }));
@@ -141,7 +137,7 @@ void StatusBar::onClicked(unsigned part, const F& f) {
 
 void StatusBar::onRightClicked(unsigned part, const F& f) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
-	parts[part].rightClickF = f;
+	getPart(part).rightClickF = f;
 
 	// imitate the default onRightClicked but with a setCallback.
 	setCallback(Message(WM_NOTIFY, NM_RCLICK), Dispatchers::VoidVoid<>([this] { handleRightClicked(); }));
@@ -149,7 +145,7 @@ void StatusBar::onRightClicked(unsigned part, const F& f) {
 
 void StatusBar::onDblClicked(unsigned part, const F& f) {
 	dwtassert(part < parts.size(), _T("Invalid part number."));
-	parts[part].dblClickF = f;
+	getPart(part).dblClickF = f;
 
 	// imitate the default onDblClicked but with a setCallback.
 	setCallback(Message(WM_NOTIFY, NM_DBLCLK), Dispatchers::VoidVoid<>([this] { handleDblClicked(); }));
@@ -196,14 +192,31 @@ void StatusBar::Part::updateSize(StatusBar* bar, bool alwaysResize) {
 	}
 }
 
+void StatusBar::WidgetPart::layout(POINT* offset) {
+	::SetWindowPos(widget->handle(), HWND_TOP,
+		offset[0].x + padding.left(), offset[0].y + padding.top(),
+		offset[1].x - offset[0].x - padding.right(), offset[1].y - offset[0].y - padding.bottom(),
+		SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+}
+
+StatusBar::Part& StatusBar::getPart(unsigned part) {
+	auto& ret = parts[part];
+	if(!dynamic_cast<Part*>(&ret)) {
+		auto p = new Part();
+		parts.insert(parts.erase(parts.begin() + part), p);
+		return *p;
+	}
+	return static_cast<Part&>(ret);
+}
+
 void StatusBar::layoutSections() {
 	layoutSections(getWindowSize());
 }
 
 void StatusBar::layoutSections(const Point& sz) {
-	std::vector<unsigned> sizes;
-	for(Parts::const_iterator i = parts.begin(); i != parts.end(); ++i)
-		sizes.push_back(i->size);
+	std::vector<unsigned> sizes(parts.size());
+	for(size_t i = 0, n = sizes.size(); i < n; ++i)
+		sizes[i] = parts[i].size;
 
 	sizes[fill] = 0;
 	parts[fill].size = sizes[fill] = sz.x - std::accumulate(sizes.begin(), sizes.end(), 0);
@@ -218,15 +231,26 @@ void StatusBar::layoutSections(const Point& sz) {
 	const unsigned * intArr = & newVec[0];
 	const size_t size = newVec.size();
 	sendMessage(SB_SETPARTS, static_cast< WPARAM >( size ), reinterpret_cast< LPARAM >( intArr ) );
+
+	// reposition embedded widgets.
+	for(auto i = parts.begin(); i != parts.end(); ++i) {
+		auto wp = dynamic_cast<WidgetPart*>(&*i);
+		if(wp) {
+			POINT p[2];
+			sendMessage(SB_GETRECT, i - parts.begin(), reinterpret_cast<LPARAM>(p));
+			::MapWindowPoints(handle(), getParent()->handle(), p, 2);
+			wp->layout(p);
+		}
+	}
 }
 
 StatusBar::Part* StatusBar::getClickedPart() {
 	unsigned x = ClientCoordinate(ScreenCoordinate(Point::fromLParam(::GetMessagePos())), this).x();
 	unsigned total = 0;
-	for(Parts::iterator i = parts.begin(); i != parts.end(); ++i) {
+	for(auto i = parts.begin(); i != parts.end(); ++i) {
 		total += i->size;
 		if(total > x)
-			return &*i;
+			return dynamic_cast<Part*>(&*i);
 	}
 
 	return 0;

@@ -89,13 +89,13 @@ fileLists(0)
 		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
 	}
 
+	initStatus();
+
 	showTree = addChild(WinUtil::Seeds::splitCheckBox);
 	showTree->setHelpId(IDH_QUEUE_SHOW_TREE);
 	showTree->setChecked(BOOLSETTING(QUEUEFRAME_SHOW_TREE));
 	showTree->onClicked([this] { handleShowTreeClicked(); });
-
-	initStatus();
-	status->setSize(STATUS_SHOW_TREE, showTree->getPreferredSize().x);
+	status->setWidget(STATUS_SHOW_TREE, showTree);
 
 	status->setHelpId(STATUS_PARTIAL_COUNT, IDH_QUEUE_PARTIAL_COUNT);
 	status->setHelpId(STATUS_PARTIAL_BYTES, IDH_QUEUE_PARTIAL_BYTES);
@@ -117,7 +117,6 @@ void QueueFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
 	r.size.y -= status->refresh();
-	status->mapWidget(STATUS_SHOW_TREE, showTree);
 
 	paned->resize(r);
 }

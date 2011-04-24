@@ -38,7 +38,7 @@
 
 #include "Control.h"
 
-#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace dwt {
 
@@ -118,7 +118,8 @@ public:
 	/// Sets the help id of the given part. If not set, the help id of the whole status bar is used instead.
 	void setHelpId(unsigned part, unsigned id);
 
-	void mapWidget(unsigned part, Widget* widget, const Rectangle& padding = Rectangle(0, 0, 0, 0));
+	/// embed a widget into a part. the widget will be automatically positioned.
+	void setWidget(unsigned part, Control* widget, const Rectangle& padding = Rectangle(0, 0, 0, 0));
 
 	void onClicked(unsigned part, const F& f);
 	void onRightClicked(unsigned part, const F& f);
@@ -148,16 +149,22 @@ private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
-	struct Part {
-		Part() : size(0), icon(0), helpId(0), clickF(0), rightClickF(0), dblClickF(0) { }
+	// base class for all kinds of parts.
+	struct PartBase {
+		PartBase() : size(0), helpId(0) { }
+		virtual ~PartBase() { }
 
 		unsigned size;
+		unsigned helpId;
+	};
+
+	// standard part (with icon / text).
+	struct Part : PartBase {
+		Part() : PartBase(), icon(0), clickF(0), rightClickF(0), dblClickF(0) { }
 
 		tstring text;
 		IconPtr icon;
 		tstring tip;
-
-		unsigned helpId;
 
 		F clickF;
 		F rightClickF;
@@ -165,8 +172,18 @@ private:
 
 		void updateSize(StatusBar* bar, bool alwaysResize);
 	};
-	typedef std::vector<Part> Parts;
-	Parts parts;
+
+	// part that embeds an external widget.
+	struct WidgetPart : PartBase {
+		WidgetPart(Control* widget, const Rectangle& padding) : PartBase(), widget(widget), padding(padding) { }
+
+		Control* widget;
+		Rectangle padding;
+
+		void layout(POINT* offset);
+	};
+
+	boost::ptr_vector<PartBase> parts;
 	unsigned fill;
 
 	ToolTipPtr tip;
@@ -174,6 +191,7 @@ private:
 	std::vector<tstring> lastLines;
 	enum { MAX_LINES = 10 }; /// @todo configurable?
 
+	Part& getPart(unsigned part);
 	void layoutSections();
 	void layoutSections(const Point& sz);
 	Part* getClickedPart();

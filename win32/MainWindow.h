@@ -190,7 +190,6 @@ private:
 	void handleTrayUpdate();
 
 	void layout();
-	void layoutSlotsSpin();
 	void updateStatus();
 	void updateAwayStatus();
 	void showPortsError(const string& port);

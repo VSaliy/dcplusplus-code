@@ -190,14 +190,15 @@ inTabComplete(false)
 	}
 
 	initStatus();
-	showUsers = addChild(WinUtil::Seeds::splitCheckBox);
-	showUsers->setHelpId(IDH_HUB_SHOW_USERS);
-	showUsers->setChecked(BOOLSETTING(GET_USER_INFO));
 
-	status->setSize(STATUS_SHOW_USERS, showUsers->getPreferredSize().x);
 	status->onDblClicked(STATUS_STATUS, [this] { openLog(false); });
 
 	status->setIcon(STATUS_USERS, WinUtil::statusIcon(IDI_USER));
+
+	showUsers = addChild(WinUtil::Seeds::splitCheckBox);
+	showUsers->setHelpId(IDH_HUB_SHOW_USERS);
+	showUsers->setChecked(BOOLSETTING(GET_USER_INFO));
+	status->setWidget(STATUS_SHOW_USERS, showUsers);
 
 	status->setHelpId(STATUS_STATUS, IDH_HUB_STATUS);
 	status->setHelpId(STATUS_SECURE, IDH_HUB_SECURE_STATUS);
@@ -264,7 +265,6 @@ void HubFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
 	r.size.y -= status->refresh();
-	status->mapWidget(STATUS_SHOW_USERS, showUsers);
 
 	dwt::util::HoldResize hr(this, 2);
 	int ymessage = message->getTextSize(_T("A")).y * messageLines + 10;

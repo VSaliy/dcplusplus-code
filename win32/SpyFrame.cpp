@@ -65,6 +65,8 @@ SpyFrame::SpyFrame(TabViewPtr parent) :
 		searches->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
 	}
 
+	initStatus();
+
 	{
 		CheckBox::Seed seed = WinUtil::Seeds::checkBox;
 		seed.caption = T_("Ignore TTH searches");
@@ -72,10 +74,8 @@ SpyFrame::SpyFrame(TabViewPtr parent) :
 		ignoreTTH->setHelpId(IDH_SPY_IGNORE_TTH);
 		ignoreTTH->setChecked(bIgnoreTTH);
 		ignoreTTH->onClicked([this] { handleIgnoreTTHClicked(); });
+		status->setWidget(STATUS_IGNORE_TTH, ignoreTTH);
 	}
-
-	initStatus();
-	status->setSize(STATUS_IGNORE_TTH, ignoreTTH->getPreferredSize().x);
 
 	status->setHelpId(STATUS_TOTAL, IDH_SPY_TOTAL);
 	status->setHelpId(STATUS_AVG_PER_SECOND, IDH_SPY_AVG_PER_SECOND);
@@ -98,7 +98,6 @@ void SpyFrame::layout() {
 	dwt::Rectangle r(this->getClientSize());
 
 	r.size.y -= status->refresh();
-	status->mapWidget(STATUS_IGNORE_TTH, ignoreTTH);
 
 	searches->resize(r);
 }

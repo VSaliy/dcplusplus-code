@@ -434,17 +434,18 @@ void MainWindow::initStatusBar() {
 		return;
 
 	dcdebug("initStatusBar\n");
+	initStatus(true);
+
+	updateAwayStatus();
 
 	slotsSpin = addChild(Spinner::Seed(1));
 	slotsSpin->setHelpId(IDH_MAIN_SLOTS_SPIN);
 	slotsSpin->onUpdate([this](int, int delta) { return handleSlotsUpdate(delta); });
-
-	initStatus(true);
+	status->setWidget(STATUS_SLOTS_SPIN, slotsSpin, dwt::Rectangle(0, 1, 3, 2));
 	status->setSize(STATUS_SLOTS_SPIN, 22);
-	///@todo set to checkbox width + resizedrag width really
-	status->setSize(STATUS_DUMMY, 32);
 
-	updateAwayStatus();
+	/// @todo set to resizedrag width really
+	status->setSize(STATUS_DUMMY, 32);
 
 	status->setIcon(STATUS_COUNTS, WinUtil::statusIcon(IDI_HUB));
 	status->setIcon(STATUS_SLOTS, WinUtil::statusIcon(IDI_SLOTS));
@@ -941,14 +942,9 @@ void MainWindow::layout() {
 
 	if(status) {
 		r.size.y -= status->refresh();
-		layoutSlotsSpin();
 	}
 
 	paned->resize(r);
-}
-
-void MainWindow::layoutSlotsSpin() {
-	status->mapWidget(STATUS_SLOTS_SPIN, slotsSpin, dwt::Rectangle(0, 1, 3, 2));
 }
 
 LRESULT MainWindow::handleWhereAreYou() {
@@ -1019,8 +1015,6 @@ void MainWindow::updateStatus() {
 	s = Text::toT(Util::formatBytes(ThrottleManager::getUpLimit() * 1024));
 	status->setText(STATUS_UP_LIMIT, str(TF_("U Lim: %1%/s") % s));
 	status->setToolTip(STATUS_UP_LIMIT, str(TF_("Upload limit: %1%/s - Click to adjust") % s));
-
-	layoutSlotsSpin();
 }
 
 void MainWindow::updateAwayStatus() {
