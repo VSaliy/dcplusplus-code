@@ -39,8 +39,6 @@
 #include "ThrottleManager.h"
 #include "ConnectivityManager.h"
 
-#include "StringTokenizer.h"
-
 #ifdef _STLP_DEBUG
 void __stl_debug_terminate() {
 	int* x = 0;

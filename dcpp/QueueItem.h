@@ -39,15 +39,7 @@ class QueueManager;
 
 class QueueItem : public Flags, public FastAlloc<QueueItem> {
 public:
-	typedef QueueItem* Ptr;
-	typedef std::list<Ptr> List;
-	typedef List::iterator Iter;
-	typedef unordered_map<string*, Ptr, noCaseStringHash, noCaseStringEq> StringMap;
-	typedef StringMap::iterator StringIter;
-	typedef unordered_map<UserPtr, Ptr, User::Hash> UserMap;
-	typedef UserMap::iterator UserIter;
-	typedef unordered_map<UserPtr, List, User::Hash> UserListMap;
-	typedef UserListMap::iterator UserListIter;
+	typedef unordered_map<string*, QueueItemPtr, noCaseStringHash, noCaseStringEq> StringMap;
 
 	enum Priority {
 		DEFAULT = -1,

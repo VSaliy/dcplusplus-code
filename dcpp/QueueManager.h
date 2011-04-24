@@ -36,12 +36,15 @@
 #include "QueueManagerListener.h"
 #include "SearchManagerListener.h"
 #include "ClientManagerListener.h"
+#include "BundleItem.h"
 
 namespace dcpp {
 
 using std::function;
+using std::list;
 using std::pair;
 using std::unordered_multimap;
+using std::unordered_map;
 
 STANDARD_EXCEPTION(QueueException);
 
@@ -79,9 +82,13 @@ class QueueManager : public Singleton<QueueManager>, public Speaker<QueueManager
 	private SearchManagerListener, private ClientManagerListener
 {
 public:
+	typedef list<QueueItemPtr> QueueItemList;
+
 	/** Add a file to the queue. */
 	void add(const string& aTarget, int64_t aSize, const TTHValue& root, const HintedUser& aUser,
-		int aFlags = 0, bool addBad = true);
+		int aFlags = 0, bool addBad = true, const BundlePtr &bundle = BundlePtr());
+	void add(const string& aRoot, const BundlePtr& bundle, const HintedUser& aUser, int aFlags = 0);
+
 	/** Add a user's filelist to the queue. */
 	void addList(const HintedUser& HintedUser, int aFlags, const string& aInitialDir = Util::emptyString);
 	/** Readd a source that was removed */
@@ -108,7 +115,7 @@ public:
 
 	void setPriority(const string& aTarget, QueueItem::Priority p) noexcept;
 
-	void getTargets(const TTHValue& tth, StringList& sl);
+	StringList getTargets(const TTHValue& tth);
 
 	using Speaker<QueueManagerListener>::addListener;
 	void addListener(QueueManagerListener* l, const function<void(const QueueItem::StringMap&)>& currentQueue);
@@ -176,17 +183,13 @@ private:
 	class FileQueue {
 	public:
 		FileQueue() : lastInsert(queue.end()) { }
-		~FileQueue() {
-			for(QueueItem::StringIter i = queue.begin(); i != queue.end(); ++i)
-				delete i->second;
-		}
+		~FileQueue();
 		void add(QueueItem* qi);
 		QueueItem* add(const string& aTarget, int64_t aSize, int aFlags, QueueItem::Priority p,
 			const string& aTempTarget, time_t aAdded, const TTHValue& root);
 
 		QueueItem* find(const string& target);
-		void find(QueueItem::List& sl, int64_t aSize, const string& ext);
-		void find(QueueItem::List& ql, const TTHValue& tth);
+		QueueItemList find(const TTHValue& tth);
 
 		QueueItem* findAutoSearch(StringList& recent);
 		size_t getSize() { return queue.size(); }
@@ -196,7 +199,7 @@ private:
 	private:
 		QueueItem::StringMap queue;
 		/** A hint where to insert an item... */
-		QueueItem::StringIter lastInsert;
+		QueueItem::StringMap::iterator lastInsert;
 	};
 
 	/** All queue items indexed by user (this is a cache for the FileQueue really...) */
@@ -208,21 +211,21 @@ private:
 		QueueItem* getRunning(const UserPtr& aUser);
 		void addDownload(QueueItem* qi, Download* d);
 		void removeDownload(QueueItem* qi, const UserPtr& d);
-		QueueItem::UserListMap& getList(int p) { return userQueue[p]; }
 		void remove(QueueItem* qi, bool removeRunning = true);
 		void remove(QueueItem* qi, const UserPtr& aUser, bool removeRunning = true);
 		void setPriority(QueueItem* qi, QueueItem::Priority p);
 
-		QueueItem::UserMap& getRunning() { return running; }
+		unordered_map<UserPtr, QueueItemList, User::Hash> getList(size_t i) { return userQueue[i]; }
 		bool isRunning(const UserPtr& aUser) const {
 			return (running.find(aUser) != running.end());
 		}
+
 		pair<size_t, int64_t> getQueued(const UserPtr& aUser) const;
 	private:
 		/** QueueItems by priority and user (this is where the download order is determined) */
-		QueueItem::UserListMap userQueue[QueueItem::LAST];
+		unordered_map<UserPtr, QueueItemList, User::Hash> userQueue[QueueItem::LAST];
 		/** Currently running downloads, a QueueItem is always either here or in the userQueue */
-		QueueItem::UserMap running;
+		unordered_map<UserPtr, QueueItemPtr, User::Hash> running;
 	};
 
 	friend class QueueLoader;
@@ -233,6 +236,8 @@ private:
 
 	mutable CriticalSection cs;
 
+	/** Bundles queued for download */
+	map<TTHValue, BundleItem> bundles;
 	/** QueueItems by target */
 	FileQueue fileQueue;
 	/** QueueItems by user */

@@ -33,7 +33,6 @@
 #include "LogManager.h"
 #include "SettingsManager.h"
 #include "SimpleXML.h"
-#include "StringTokenizer.h"
 #include "version.h"
 
 #ifndef _WIN32

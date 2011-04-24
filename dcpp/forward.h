@@ -31,6 +31,9 @@ class AdcCommand;
 
 class BufferedSocket;
 
+class Bundle;
+typedef boost::intrusive_ptr<Bundle> BundlePtr;
+
 struct ChatMessage;
 
 class CID;
@@ -80,6 +83,7 @@ typedef OnlineUser* OnlineUserPtr;
 class OutputStream;
 
 class QueueItem;
+typedef QueueItem* QueueItemPtr;
 
 class SearchResult;
 typedef boost::intrusive_ptr<SearchResult> SearchResultPtr;

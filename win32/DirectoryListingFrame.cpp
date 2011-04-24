@@ -577,7 +577,7 @@ void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
 	targets.clear();
 
 	if(ii && ii->type == ItemInfo::FILE) {
-		QueueManager::getInstance()->getTargets(ii->file->getTTH(), targets);
+		targets = QueueManager::getInstance()->getTargets(ii->file->getTTH());
 		if(!targets.empty()) {
 			menu->appendSeparator();
 			for(i = 0; i < targets.size(); ++i) {
