@@ -31,11 +31,13 @@
 
 #include <dwt/widgets/Spinner.h>
 
+#include <dwt/util/check.h>
+
 namespace dwt {
 
 const TCHAR Spinner::windowClass[] = UPDOWN_CLASS;
 
-Spinner::Seed::Seed(int minValue_, int maxValue_, Widget* buddy_) :
+Spinner::Seed::Seed(int minValue_, int maxValue_, Control* buddy_) :
 BaseType::Seed(WS_CHILD | UDS_ARROWKEYS | UDS_NOTHOUSANDS),
 minValue(minValue_),
 maxValue(maxValue_),
@@ -45,6 +47,11 @@ buddy(buddy_)
 		style |= UDS_ALIGNRIGHT | UDS_SETBUDDYINT;
 }
 
+Spinner::Spinner(Widget * parent) :
+BaseType(parent, ChainingDispatcher::superClass<Spinner>())
+{
+}
+
 void Spinner::create(const Seed& cs) {
 	BaseType::create(cs);
 	setRange(cs.minValue, cs.maxValue);
@@ -52,10 +59,46 @@ void Spinner::create(const Seed& cs) {
 		assignBuddy(cs.buddy);
 }
 
-void Spinner::layout() {
-	Widget* w = getBuddy();
-	if(w)
-		assignBuddy(w);
+void Spinner::setRange(int minimum, int maximum) {
+	sendMessage(UDM_SETRANGE32, static_cast<WPARAM>(minimum), static_cast<LPARAM>(maximum));
+}
+
+void Spinner::assignBuddy(Control* buddy) {
+	dwtassert(buddy && buddy->handle() && buddy->getParent() == getParent(), _T("A spinner and its buddy must have the same parent"));
+	assignBuddy_(buddy);
+	buddy->onSized([this](const SizedEvent&) { handleSized(); });
+}
+
+Control* Spinner::getBuddy() const {
+	return hwnd_cast<Control*>(reinterpret_cast<HWND>(sendMessage(UDM_GETBUDDY)));
+}
+
+int Spinner::getValue() {
+	return sendMessage(UDM_GETPOS32);
+}
+
+int Spinner::setValue(int v) {
+	return sendMessage(UDM_SETPOS32, 0, v);
+}
+
+void Spinner::onUpdate(const Dispatcher::F& f) {
+	setCallback(Message(WM_NOTIFY, UDN_DELTAPOS), Dispatcher(f));
+}
+
+void Spinner::handleSized() {
+	// the widget will be resized to accomodate the spinner - avoid recursion.
+	static bool recursion = false;
+	if(recursion)
+		return;
+	recursion = true;
+
+	assignBuddy_(getBuddy());
+
+	recursion = false;
+}
+
+void Spinner::assignBuddy_(Control* buddy) {
+	sendMessage(UDM_SETBUDDY, reinterpret_cast<WPARAM>(buddy->handle()));
 }
 
 }

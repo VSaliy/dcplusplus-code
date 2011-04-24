@@ -118,8 +118,15 @@ public:
 	/// Sets the help id of the given part. If not set, the help id of the whole status bar is used instead.
 	void setHelpId(unsigned part, unsigned id);
 
-	/// embed a widget into a part. the widget will be automatically positioned.
-	void setWidget(unsigned part, Control* widget, const Rectangle& padding = Rectangle(0, 0, 0, 0));
+	/** embed a widget into a part. the widget will be automatically positioned.
+	@param padding Rectangle to denote padding space, where:
+	- left pos of the rectangle = left padding.
+	- top pos of the rectangle = top padding.
+	- width of the rectangle = right padding.
+	- height of the rectangle = bottom padding.
+	(these conventions play well with Rectangle constructors, which also function by width/height.)
+	*/
+	void setWidget(unsigned part, Control* widget, const Rectangle& padding = Rectangle());
 
 	void onClicked(unsigned part, const F& f);
 	void onRightClicked(unsigned part, const F& f);

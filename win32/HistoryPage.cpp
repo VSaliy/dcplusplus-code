@@ -35,7 +35,7 @@
 template<typename T>
 GridPtr addSubGrid(T parent, size_t rows) {
 	GridPtr grid = parent->addChild(Grid::Seed(rows, 2));
-	grid->column(0).mode = GridInfo::AUTO;
+	grid->column(0).mode = GridInfo::FILL;
 	grid->column(0).align = GridInfo::BOTTOM_RIGHT;
 	grid->column(1).size = 40;
 	grid->column(1).mode = GridInfo::STATIC;
@@ -66,9 +66,8 @@ fl_recents_init(WindowManager::getInstance()->getMaxRecentItems(DirectoryListing
 {
 	setHelpId(IDH_HISTORYPAGE);
 
-	grid->column(0).mode = GridInfo::FILL;
-
 	GroupBox::Seed gs;
+	gs.style |= BS_RIGHT;
 
 	{
 		gs.caption = T_("Chat lines to recall from history when opening a window");
