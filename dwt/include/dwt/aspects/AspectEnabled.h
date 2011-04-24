@@ -58,8 +58,8 @@ class AspectEnabled
 
 	static bool isEnabled(const MSG& msg) { return msg.wParam > 0; }
 
-	typedef Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled> EnabledDispatcher;
-	friend class Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled>;
+	typedef Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled, 0, false> EnabledDispatcher;
+	friend class Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled, 0, false>;
 
 public:
 

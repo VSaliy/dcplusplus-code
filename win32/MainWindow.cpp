@@ -438,10 +438,10 @@ void MainWindow::initStatusBar() {
 
 	updateAwayStatus();
 
-	slotsSpin = addChild(Spinner::Seed(1));
+	slotsSpin = addChild(Spinner::Seed());
 	slotsSpin->setHelpId(IDH_MAIN_SLOTS_SPIN);
 	slotsSpin->onUpdate([this](int, int delta) { return handleSlotsUpdate(delta); });
-	status->setWidget(STATUS_SLOTS_SPIN, slotsSpin, dwt::Rectangle(0, 1, 3, 2));
+	status->setWidget(STATUS_SLOTS_SPIN, slotsSpin, dwt::Rectangle(0, 0, 3, 1));
 	status->setSize(STATUS_SLOTS_SPIN, 22);
 
 	/// @todo set to resizedrag width really
@@ -1407,10 +1407,9 @@ void MainWindow::switchStatus() {
 }
 
 bool MainWindow::handleSlotsUpdate(int delta) {
-	// Prevent double-info-updated
 	int newSlots = SETTING(SLOTS) + delta;
 	SettingsManager::getInstance()->set(SettingsManager::SLOTS, newSlots);
-	ThrottleManager::setSetting(SettingsManager::SLOTS, newSlots);
+	ThrottleManager::setSetting(ThrottleManager::getCurSetting(SettingsManager::SLOTS), newSlots);
 	updateStatus();
 	return true;
 }

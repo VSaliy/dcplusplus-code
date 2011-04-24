@@ -90,10 +90,10 @@ public:
 		int minValue;
 		int maxValue;
 
-		Widget* buddy;
+		Control* buddy;
 
 		/// Fills with default parameters
-		Seed(int minValue_ = UD_MINVAL, int maxValue_ = UD_MAXVAL, Widget* buddy_ = 0);
+		Seed(int minValue_ = UD_MINVAL, int maxValue_ = UD_MAXVAL, Control* buddy_ = 0);
 	};
 
 	/// Sets the range of the Spinner
@@ -111,9 +111,9 @@ public:
 	  * And if you change the value of the buddy control the Spinner Control will
 	  * automatically also change its value.
 	  */
-	void assignBuddy(Widget* buddy);
+	void assignBuddy(Control* buddy);
 
-	Widget* getBuddy() const;
+	Control* getBuddy() const;
 
 	/// Returns the value of the control
 	/** The value can be any value between the minimum and maximum range defined in
@@ -136,69 +136,21 @@ public:
 	  */
 	void create(const Seed &cs = Seed());
 
-	virtual void layout();
-
 protected:
 	// Constructor Taking pointer to parent
-	explicit Spinner( Widget * parent );
+	explicit Spinner(Widget* parent);
 
 	// Protected to avoid direct instantiation, you can inherit and use
 	// WidgetFactory class which is friend
 	virtual ~Spinner() { }
+
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
+
+	void handleSized();
+	void assignBuddy_(Control* buddy);
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-inline void Spinner::setRange( int minimum, int maximum )
-{
-	sendMessage(UDM_SETRANGE32, static_cast< WPARAM >( minimum ), static_cast< LPARAM >( maximum ));
-}
-
-inline void Spinner::assignBuddy(Widget* buddy) {
-	assert(buddy && buddy->handle() && buddy->getParent() == getParent());
-	sendMessage(UDM_SETBUDDY, reinterpret_cast< WPARAM >( buddy->handle() ));
-}
-
-inline Widget* Spinner::getBuddy() const {
-	return hwnd_cast<Widget*>(reinterpret_cast<HWND>(sendMessage(UDM_GETBUDDY)));
-}
-
-inline int Spinner::getValue()
-{
-#ifdef WINCE
-	LRESULT retVal = sendMessage(UDM_GETPOS);
-	if ( HIWORD( retVal ) != 0 )
-	{
-		dwtWin32DebugFail(" Something went wrong while trying to retrieve value if Spinner");
-	}
-	return LOWORD( retVal );
-#else
-	return sendMessage(UDM_GETPOS32);
-#endif //! WINCE
-}
-
-inline int Spinner::setValue( int v )
-{
-#ifdef WINCE
-	return sendMessage(UDM_SETPOS, 0, v);
-#else
-	return sendMessage(UDM_SETPOS32, 0, v);
-#endif
-}
-
-inline void Spinner::onUpdate(const Dispatcher::F& f) {
-	setCallback(Message(WM_NOTIFY, UDN_DELTAPOS), Dispatcher(f));
-}
-
-inline Spinner::Spinner(dwt::Widget * parent )
-	: BaseType(parent, ChainingDispatcher::superClass<Spinner>())
-{
-}
 
 }
 

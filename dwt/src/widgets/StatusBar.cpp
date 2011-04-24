@@ -195,7 +195,7 @@ void StatusBar::Part::updateSize(StatusBar* bar, bool alwaysResize) {
 void StatusBar::WidgetPart::layout(POINT* offset) {
 	::SetWindowPos(widget->handle(), HWND_TOP,
 		offset[0].x + padding.left(), offset[0].y + padding.top(),
-		offset[1].x - offset[0].x - padding.right(), offset[1].y - offset[0].y - padding.bottom(),
+		offset[1].x - offset[0].x - padding.width(), offset[1].y - offset[0].y - padding.height(),
 		SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 }
 

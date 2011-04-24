@@ -180,7 +180,6 @@ void Grid::layout() {
 			continue;
 
 		if(wi->noResize) {
-			wi->w->layout();
 			continue;
 		}
 

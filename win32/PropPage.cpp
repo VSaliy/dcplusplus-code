@@ -31,7 +31,11 @@
 const dwt::Rectangle padding(7, 4, 14, 21);
 
 PropPage::PropPage(dwt::Widget* parent, int rows, int cols) : dwt::Container(parent), grid(0) {
-	create(Seed(0, WS_EX_CONTROLPARENT));
+	{
+		Seed seed(0, WS_EX_CONTROLPARENT);
+		seed.style &= ~WS_VISIBLE;
+		create(seed);
+	}
 
 	grid = addChild(Grid::Seed(rows, cols));
 	grid->setSpacing(10);
