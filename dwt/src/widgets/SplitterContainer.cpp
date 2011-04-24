@@ -84,7 +84,6 @@ double SplitterContainer::getSplitterPos(size_t n) {
 }
 
 void SplitterContainer::layout() {
-	BaseType::layout();
 	ensureSplitters();
 
 	auto children = getChildren<Widget>();
@@ -119,7 +118,7 @@ void SplitterContainer::layout() {
 		} else {
 			auto splitter = *splitter_iter;
 			auto ss = horizontal ? splitter->getPreferredSize().y : splitter->getPreferredSize().x;
-			sz = std::max(static_cast<int>(avail * splitter->getRelativePos() - ss / 2. - p), 0);
+			sz = std::max(avail * splitter->getRelativePos() - ss / 2. - p, 0.);
 			hr.resize(w, rc);
 
 			p += sz;
