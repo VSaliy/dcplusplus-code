@@ -577,7 +577,7 @@ void MainWindow::setStaticWindowState(const string& id, bool open) {
 }
 
 void MainWindow::TrayPM() {
-	if(!tray_pm && notifier->isVisible() && ::GetAncestor(::GetForegroundWindow(), GA_ROOTOWNER) != handle()) {
+	if(!tray_pm && notifier->isVisible() && !onForeground()) {
 		notifier->setIcon(WinUtil::createIcon(IDI_TRAY_PM, 16));
 		tray_pm = true;
 	}

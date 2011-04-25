@@ -36,7 +36,7 @@ private:
 		int soundSetting;
 		tstring sound;
 		int balloonSetting;
-		bool balloon;
+		int balloon;
 		unsigned helpId;
 	};
 	static Option options[];
@@ -49,13 +49,19 @@ private:
 		COLUMN_LAST
 	};
 
+	enum {
+		IMAGE_DISABLED,
+		IMAGE_SOUND,
+		IMAGE_BALLOON
+	};
+
 	TablePtr table;
 	CheckBoxPtr sound;
 	CheckBoxPtr balloon;
-	GroupBoxPtr beepGroup;
-	TextBoxPtr beepFile;
-
-	int prevSelection;
+	GroupBoxPtr soundGroup;
+	TextBoxPtr soundFile;
+	GroupBoxPtr balloonGroup;
+	CheckBoxPtr balloonBg;
 
 	void handleSelectionChanged();
 	void handleDblClicked();
@@ -64,10 +70,13 @@ private:
 	void handleSoundClicked();
 	void handleBalloonClicked();
 	void handlePlayClicked();
+	void handleSoundChanged();
 	void handleBrowseClicked();
+	void handleBalloonBgClicked();
 	void handleExampleClicked();
 
-	void update(size_t row, size_t column, bool enable);
+	void updateSound(size_t row);
+	void updateBalloon(size_t row);
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_NOTIFICATIONS_PAGE_H)

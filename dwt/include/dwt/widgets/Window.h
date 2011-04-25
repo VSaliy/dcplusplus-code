@@ -88,6 +88,9 @@ public:
 	explicit Window(Widget* parent = 0, Dispatcher& dispatcher = NormalDispatcher::getDefault());
 
 	virtual ~Window();
+
+	/// @return whether this window (or a dialog it owns) is the current foreground window.
+	bool onForeground() const;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

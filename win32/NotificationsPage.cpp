@@ -30,15 +30,15 @@
 
 NotificationsPage::Option NotificationsPage::options[] = {
 	{ N_("Download finished"), SettingsManager::SOUND_FINISHED_DL, Util::emptyStringT,
-	SettingsManager::BALLOON_FINISHED_DL, false, IDH_SETTINGS_NOTIFICATIONS_FINISHED_DL },
+	SettingsManager::BALLOON_FINISHED_DL, 0, IDH_SETTINGS_NOTIFICATIONS_FINISHED_DL },
 	{ N_("File list downloaded"), SettingsManager::SOUND_FINISHED_FL, Util::emptyStringT,
-	SettingsManager::BALLOON_FINISHED_FL, false, IDH_SETTINGS_NOTIFICATIONS_FINISHED_FL },
+	SettingsManager::BALLOON_FINISHED_FL, 0, IDH_SETTINGS_NOTIFICATIONS_FINISHED_FL },
 	{ N_("Main chat message received"), SettingsManager::SOUND_MAIN_CHAT, Util::emptyStringT,
-	SettingsManager::BALLOON_MAIN_CHAT, false, IDH_SETTINGS_NOTIFICATIONS_MAIN_CHAT },
+	SettingsManager::BALLOON_MAIN_CHAT, 0, IDH_SETTINGS_NOTIFICATIONS_MAIN_CHAT },
 	{ N_("Private message received"), SettingsManager::SOUND_PM, Util::emptyStringT,
-	SettingsManager::BALLOON_PM, false, IDH_SETTINGS_NOTIFICATIONS_PM },
+	SettingsManager::BALLOON_PM, 0, IDH_SETTINGS_NOTIFICATIONS_PM },
 	{ N_("Private message window opened"), SettingsManager::SOUND_PM_WINDOW, Util::emptyStringT,
-	SettingsManager::BALLOON_PM_WINDOW, false, IDH_SETTINGS_NOTIFICATIONS_PM_WINDOW }
+	SettingsManager::BALLOON_PM_WINDOW, 0, IDH_SETTINGS_NOTIFICATIONS_PM_WINDOW }
 };
 
 static const ColumnInfo columns[] = {
@@ -49,13 +49,14 @@ static const ColumnInfo columns[] = {
 };
 
 NotificationsPage::NotificationsPage(dwt::Widget* parent) :
-PropPage(parent, 5, 1),
+PropPage(parent, 6, 1),
 table(0),
 sound(0),
 balloon(0),
-beepGroup(0),
-beepFile(0),
-prevSelection(-1)
+soundGroup(0),
+soundFile(0),
+balloonGroup(0),
+balloonBg(0)
 {
 	setHelpId(IDH_NOTIFICATIONSPAGE);
 
@@ -98,19 +99,28 @@ prevSelection(-1)
 	}
 
 	{
-		beepGroup = grid->addChild(GroupBox::Seed(T_("Notification sound")));
-		beepGroup->setHelpId(IDH_SETTINGS_NOTIFICATIONS_BEEPFILE);
+		soundGroup = grid->addChild(GroupBox::Seed(T_("Sound settings")));
+		soundGroup->setHelpId(IDH_SETTINGS_NOTIFICATIONS_SOUND_FILE);
 
-		auto cur = beepGroup->addChild(Grid::Seed(1, 3));
+		auto cur = soundGroup->addChild(Grid::Seed(1, 3));
 		cur->column(1).mode = GridInfo::FILL;
 
 		auto button = cur->addChild(Button::Seed(T_("Play")));
 		button->setImage(WinUtil::buttonIcon(IDI_SOUND));
 		button->onClicked([this] { handlePlayClicked(); });
 
-		beepFile = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		soundFile = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		soundFile->onUpdated([this] { handleSoundChanged(); });
 
 		cur->addChild(Button::Seed(T_("&Browse...")))->onClicked([this] { handleBrowseClicked(); });
+	}
+
+	{
+		balloonGroup = grid->addChild(GroupBox::Seed(T_("Balloon settings")));
+
+		balloonBg = balloonGroup->addChild(CheckBox::Seed(T_("Display the balloon only when DC++ is in the background")));
+		balloonBg->setHelpId(IDH_SETTINGS_NOTIFICATIONS_BALLOON_BG);
+		balloonBg->onClicked([this] { handleBalloonBgClicked(); });
 	}
 
 	{
@@ -124,14 +134,14 @@ prevSelection(-1)
 
 	for(size_t i = 0, n = sizeof(options) / sizeof(Option); i < n; ++i) {
 		options[i].sound = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)options[i].soundSetting));
-		options[i].balloon = SettingsManager::getInstance()->getBool((SettingsManager::IntSetting)options[i].balloonSetting);
+		options[i].balloon = SettingsManager::getInstance()->get((SettingsManager::IntSetting)options[i].balloonSetting);
 
 		TStringList row(COLUMN_LAST);
 		row[COLUMN_TEXT] = T_(options[i].text);
 		table->insert(row);
 
-		update(i, COLUMN_SOUND, !options[i].sound.empty());
-		update(i, COLUMN_BALLOON, options[i].balloon);
+		updateSound(i);
+		updateBalloon(i);
 	}
 
 	handleSelectionChanged();
@@ -153,8 +163,6 @@ void NotificationsPage::layout() {
 }
 
 void NotificationsPage::write() {
-	table->clearSelection(); // to save the current sound file
-
 	SettingsManager* settings = SettingsManager::getInstance();
 	for(size_t i = 0, n = sizeof(options) / sizeof(Option); i < n; ++i) {
 		settings->set((SettingsManager::StrSetting)options[i].soundSetting, Text::fromT(options[i].sound));
@@ -180,17 +188,15 @@ void NotificationsPage::handleTableHelpId(unsigned& id) {
 }
 
 void NotificationsPage::handleSelectionChanged() {
-	if(prevSelection >= 0) {
-		auto& s = options[prevSelection].sound;
-		if(s == _T("beep") && beepFile->length() > 0)
-			s = beepFile->getText();
-	}
-
 	int sel = table->getSelected();
 	if(sel >= 0) {
 		auto& s = options[sel].sound;
-		beepGroup->setEnabled(!s.empty());
-		beepFile->setText((s == _T("beep")) ? Util::emptyStringT : s);
+		soundGroup->setEnabled(!s.empty());
+		soundFile->setText((s == _T("beep")) ? Util::emptyStringT : s);
+
+		auto& b = options[sel].balloon;
+		balloonGroup->setEnabled(b != SettingsManager::BALLOON_DISABLED);
+		balloonBg->setChecked(b == SettingsManager::BALLOON_BACKGROUND);
 
 		sound->setChecked(!s.empty());
 		sound->setEnabled(true);
@@ -199,8 +205,11 @@ void NotificationsPage::handleSelectionChanged() {
 		balloon->setEnabled(true);
 
 	} else {
-		beepGroup->setEnabled(false);
-		beepFile->setText(Util::emptyStringT);
+		soundGroup->setEnabled(false);
+		soundFile->setText(Util::emptyStringT);
+
+		balloonGroup->setEnabled(false);
+		balloonBg->setChecked(false);
 
 		sound->setChecked(false);
 		sound->setEnabled(false);
@@ -208,8 +217,6 @@ void NotificationsPage::handleSelectionChanged() {
 		balloon->setChecked(false);
 		balloon->setEnabled(false);
 	}
-
-	prevSelection = sel;
 }
 
 void NotificationsPage::handleDblClicked() {
@@ -232,7 +239,7 @@ void NotificationsPage::handleSoundClicked() {
 			s = _T("beep");
 		else
 			s.clear();
-		update(sel, COLUMN_SOUND, !s.empty());
+		updateSound(sel);
 		handleSelectionChanged();
 	}
 }
@@ -241,29 +248,55 @@ void NotificationsPage::handleBalloonClicked() {
 	auto sel = table->getSelected();
 	if(sel >= 0) {
 		auto& b = options[sel].balloon;
-		b = !b;
-		update(sel, COLUMN_BALLOON, b);
+		b = (b == SettingsManager::BALLOON_DISABLED) ? SettingsManager::BALLOON_ALWAYS : SettingsManager::BALLOON_DISABLED;
+		updateBalloon(sel);
 		handleSelectionChanged();
 	}
 }
 
 void NotificationsPage::handlePlayClicked() {
-	auto s = beepFile->getText();
-	WinUtil::playSound(s.empty() ? _T("beep") : s);
+	WinUtil::playSound(options[table->getSelected()].sound);
+}
+
+void NotificationsPage::handleSoundChanged() {
+	if(!soundFile->getEnabled())
+		return;
+
+	auto sel = table->getSelected();
+	auto& s = options[sel].sound;
+	s = soundFile->getText();
+	if(s.empty())
+		s = _T("beep");
+	updateSound(sel);
 }
 
 void NotificationsPage::handleBrowseClicked() {
-	tstring x = beepFile->getText();
+	tstring x = soundFile->getText();
 	if(LoadDialog(this).open(x)) {
-		beepFile->setText(x);
+		soundFile->setText(x);
 	}
+}
+
+void NotificationsPage::handleBalloonBgClicked() {
+	auto sel = table->getSelected();
+	auto& b = options[sel].balloon;
+	b = balloonBg->getChecked() ? SettingsManager::BALLOON_BACKGROUND : SettingsManager::BALLOON_ALWAYS;
+	updateBalloon(sel);
 }
 
 void NotificationsPage::handleExampleClicked() {
 	WinUtil::mainWindow->notify(T_("Balloon popup example"), T_("This is an example of a balloon popup notification!"));
 }
 
-void NotificationsPage::update(size_t row, size_t column, bool enable) {
-	table->setIcon(row, column, enable ? (column - COLUMN_TEXT) : 0);
-	table->setText(row, column, enable ? T_("Yes") : T_("No"));
+void NotificationsPage::updateSound(size_t row) {
+	auto& s = options[row].sound;
+	table->setIcon(row, COLUMN_SOUND, s.empty() ? IMAGE_DISABLED : IMAGE_SOUND);
+	table->setText(row, COLUMN_SOUND, s.empty() ? T_("No") : (s == _T("beep")) ? T_("Beep") : T_("Custom"));
+}
+
+void NotificationsPage::updateBalloon(size_t row) {
+	auto& b = options[row].balloon;
+	table->setIcon(row, COLUMN_BALLOON, (b == SettingsManager::BALLOON_DISABLED) ? IMAGE_DISABLED : IMAGE_BALLOON);
+	table->setText(row, COLUMN_BALLOON, (b == SettingsManager::BALLOON_DISABLED) ? T_("No") :
+		(b == SettingsManager::BALLOON_ALWAYS) ? T_("Yes") : T_("Yes (bg)"));
 }
