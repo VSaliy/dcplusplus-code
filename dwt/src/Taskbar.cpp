@@ -52,6 +52,9 @@ static t_DwmSetIconicThumbnail DwmSetIconicThumbnail = 0;
 typedef HRESULT (WINAPI *t_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
 static t_DwmSetWindowAttribute DwmSetWindowAttribute = 0;
 
+typedef BOOL (WINAPI *t_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, void*);
+static t_ChangeWindowMessageFilterEx ChangeWindowMessageFilterEx = 0;
+
 Taskbar::Taskbar() :
 taskbar(0),
 window(0)
@@ -77,6 +80,13 @@ void Taskbar::initTaskbar(WindowPtr window_) {
 		get(DwmSetWindowAttribute);
 #undef get
 
+		if(!ChangeWindowMessageFilterEx) {
+			LibraryLoader lib_user32(_T("user32"));
+			ChangeWindowMessageFilterEx = reinterpret_cast<t_ChangeWindowMessageFilterEx>(
+				lib_user32.getProcAddress(_T("ChangeWindowMessageFilterEx")));
+			// ignore failures, this isn't a vital call to have.
+		}
+
 		window = window_;
 		dwtassert(window, _T("Taskbar: no widget set"));
 
@@ -94,21 +104,9 @@ void Taskbar::initTaskbar(WindowPtr window_) {
 #endif
 		if(::CoCreateInstance(CLSID_TaskbarList, 0, CLSCTX_INPROC_SERVER, IID_ITaskbarList,
 			reinterpret_cast<LPVOID*>(&taskbar)) != S_OK) { taskbar = 0; }
-		if(taskbar) {
-			if(taskbar->HrInit() == S_OK) {
-				/* call ChangeWindowMessageFilterEx on the 2 messages we use to dispatch bitmaps to
-				the destktop manager to prevent blockings because of different privilege levels. */
-				LibraryLoader lib_user32(_T("user32"));
-				if(auto ChangeWindowMessageFilterEx = reinterpret_cast<BOOL (WINAPI *)(HWND, UINT, DWORD, void*)>(
-					lib_user32.getProcAddress(_T("ChangeWindowMessageFilterEx"))))
-				{
-					ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICTHUMBNAIL, 1/*MSGFLT_ALLOW*/, 0);
-					ChangeWindowMessageFilterEx(window->handle(), WM_DWMSENDICONICLIVEPREVIEWBITMAP, 1/*MSGFLT_ALLOW*/, 0);
-				}
-			} else {
+		if(taskbar && taskbar->HrInit() != S_OK) {
 				taskbar->Release();
 				taskbar = 0;
-			}
 		}
 	}
 }
@@ -120,6 +118,7 @@ class Proxy : public Frame {
 public:
 	typedef Proxy ThisType;
 	typedef ThisType* ObjectType;
+
 	struct Seed : BaseType::Seed {
 		typedef ThisType WidgetType;
 		Seed(const tstring& caption) : BaseType::Seed(caption, 0, 0) {
@@ -128,6 +127,7 @@ public:
 			location = Rectangle();
 		}
 	};
+
 	Proxy(Widget* parent) : BaseType(parent, NormalDispatcher::getDefault()) { }
 };
 
@@ -140,6 +140,13 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 
 	auto proxy = window->addChild(Proxy::Seed(tab->getText()));
 	tabs[tab] = proxy;
+
+	/* call ChangeWindowMessageFilterEx on the 2 messages we use to dispatch bitmaps to the
+	destktop manager to prevent blockings because of different privilege levels. */
+	if(ChangeWindowMessageFilterEx) {
+		ChangeWindowMessageFilterEx(proxy->handle(), WM_DWMSENDICONICTHUMBNAIL, 1/*MSGFLT_ALLOW*/, 0);
+		ChangeWindowMessageFilterEx(proxy->handle(), WM_DWMSENDICONICLIVEPREVIEWBITMAP, 1/*MSGFLT_ALLOW*/, 0);
+	}
 
 	// keep the proxy window in sync with the actual tab window.
 	tab->onTextChanging([proxy](const tstring& text) { proxy->setText(text); });
