@@ -314,11 +314,11 @@ SettingsManager::SettingsManager()
 	setDefault(SLOTS_ALTERNATE_LIMITING, 1);
 	setDefault(SLOTS_PRIMARY, 3);
 	setDefault(SETTINGS_SAVE_INTERVAL, 10);
-	setDefault(BALLOON_MAIN_CHAT, false);
-	setDefault(BALLOON_PM, false);
-	setDefault(BALLOON_PM_WINDOW, false);
-	setDefault(BALLOON_FINISHED_DL, true);
-	setDefault(BALLOON_FINISHED_FL, false);
+	setDefault(BALLOON_MAIN_CHAT, BALLOON_DISABLED);
+	setDefault(BALLOON_PM, BALLOON_DISABLED);
+	setDefault(BALLOON_PM_WINDOW, BALLOON_DISABLED);
+	setDefault(BALLOON_FINISHED_DL, BALLOON_ALWAYS);
+	setDefault(BALLOON_FINISHED_FL, BALLOON_DISABLED);
 
 	setSearchTypeDefaults();
 

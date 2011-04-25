@@ -40,4 +40,8 @@ void Window::create(const Seed& cs) {
 	BaseType::create(cs);
 }
 
+bool Window::onForeground() const {
+	return ::GetAncestor(::GetForegroundWindow(), GA_ROOTOWNER) == handle();
+}
+
 }

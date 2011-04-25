@@ -544,7 +544,8 @@ void WinUtil::notify(int soundSetting, int balloonSetting, const tstring& balloo
 		playSound(Text::toT(s));
 	}
 
-	if(SettingsManager::getInstance()->getBool((SettingsManager::IntSetting)balloonSetting)) {
+	int b = SettingsManager::getInstance()->get((SettingsManager::IntSetting)balloonSetting);
+	if(b == SettingsManager::BALLOON_ALWAYS || (b == SettingsManager::BALLOON_BACKGROUND && !mainWindow->onForeground())) {
 		mainWindow->notify(balloonTitle, balloonText);
 	}
 }
