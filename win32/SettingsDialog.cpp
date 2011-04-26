@@ -152,7 +152,7 @@ bool SettingsDialog::initDialog() {
 		{
 			HTREEITEM item = addPage(T_("Connectivity"), new ConnectivityPage(container), IDI_CONN_RED, TVI_ROOT);
 			addPage(T_("Manual configuration"), new ConnectivityManualPage(container), IDI_CONN_GREY, item);
-			addPage(T_("Bandwidth limiting"), new BandwidthLimitPage(container), IDI_CONN_BLUE, item);
+			addPage(T_("Bandwidth limiting"), new BandwidthLimitPage(container), IDI_BW_LIMITER, item);
 			addPage(T_("Proxy"), new ProxyPage(container), IDI_PROXY, item);
 		}
 

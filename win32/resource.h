@@ -67,7 +67,7 @@
 #define IDI_ADVANCED 160
 #define IDI_CLOCK 161
 #define IDI_COLORS 162
-#define IDI_CONN_BLUE 163
+#define IDI_BW_LIMITER 163
 #define IDI_CONN_GREY 164
 #define IDI_CONN_RED 165
 #define IDI_EXPERT 166
