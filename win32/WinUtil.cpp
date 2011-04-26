@@ -151,9 +151,9 @@ void WinUtil::init() {
 
 	// create the incomplete directory icon (DIR_ICON_INCOMPLETE).
 	{
-		vector<dwt::IconPtr> icons;
-		icons.push_back(fileImages->getIcon(DIR_ICON));
-		icons.push_back(createIcon(IDI_EXEC, 16));
+		dwt::ImageList icons(dwt::Point(16, 16));
+		icons.add(*fileImages->getIcon(DIR_ICON));
+		icons.add(*createIcon(IDI_EXEC, 16));
 		fileImages->add(*dwt::util::merge(icons));
 	}
 
@@ -161,7 +161,8 @@ void WinUtil::init() {
 	fileImages->add(*createIcon(IDI_FILE, 16));
 
 	{
-		userImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
+		const dwt::Point size(16, 16);
+		userImages = dwt::ImageListPtr(new dwt::ImageList(size));
 
 		const unsigned baseCount = USER_ICON_MOD_START;
 		const unsigned modifierCount = USER_ICON_LAST - USER_ICON_MOD_START;
@@ -172,13 +173,13 @@ void WinUtil::init() {
 
 		for(size_t iBase = 0; iBase < baseCount; ++iBase) {
 			for(size_t i = 0, n = modifierCount * modifierCount; i < n; ++i) {
-				vector<dwt::IconPtr> icons;
+				dwt::ImageList icons(size);
 
-				icons.push_back(bases[iBase]);
+				icons.add(*bases[iBase]);
 
 				for(size_t iMod = 0; iMod < modifierCount; ++iMod)
 					if(i & (1 << iMod))
-						icons.push_back(modifiers[iMod]);
+						icons.add(*modifiers[iMod]);
 
 				userImages->add(*dwt::util::merge(icons));
 			}

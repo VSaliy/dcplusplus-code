@@ -32,31 +32,33 @@
 #include <dwt/util/GDI.h>
 
 #include <dwt/CanvasClasses.h>
-#include <dwt/resources/Bitmap.h>
 #include <dwt/resources/Icon.h>
+#include <dwt/resources/ImageList.h>
 #include <dwt/util/check.h>
 
 namespace dwt { namespace util {
 
-BitmapPtr merge(const std::vector<IconPtr>& icons) {
-	dwtassert(!icons.empty(), _T("No icons to merge"));
-	const Point size = icons[0]->getSize();
+IconPtr merge(const ImageList& icons) {
+	const size_t n = icons.size();
+	dwtassert(n > 0, _T("No icons to merge"));
 
-	UpdateCanvas screen_canvas(reinterpret_cast<HWND>(0));
-	BitmapPtr ret(new Bitmap(::CreateCompatibleBitmap(screen_canvas.handle(), size.x, size.y)));
+	// only 1 icon, just return it back.
+	if(n == 1)
+		return icons.getIcon(0);
 
-	CompatibleCanvas canvas(screen_canvas.handle());
-	auto select(canvas.select(*ret));
+	// merge the 2 first icons.
+	ImageListPtr temp(new ImageList(ImageList_Merge(icons.handle(), 0, icons.handle(), 1, 0, 0)));
 
-	Rectangle rect(size);
-	for(auto i = icons.cbegin(), iend = icons.cend(); i != iend; ++i)
-		canvas.drawIcon(*i, rect);
+	// merge the rest.
+	for(size_t i = 2; i < n; ++i) {
+		temp.reset(new ImageList(ImageList_Merge(temp->handle(), 0, icons.handle(), i, 0, 0)));
+	}
 
-	return ret;
+	return temp->getIcon(0);
 }
 
 const float& dpiFactor() {
-	static float factor = static_cast<float>(UpdateCanvas(reinterpret_cast<HWND>(0)).getDeviceCaps(LOGPIXELSX)) / 96.0;
+	static const float factor = static_cast<float>(UpdateCanvas(reinterpret_cast<HWND>(0)).getDeviceCaps(LOGPIXELSX)) / 96.0;
 	return factor;
 }
 

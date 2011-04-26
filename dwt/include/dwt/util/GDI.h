@@ -36,7 +36,7 @@
 
 namespace dwt { namespace util {
 
-BitmapPtr merge(const std::vector<IconPtr>& icons);
+IconPtr merge(const ImageList& icons);
 
 /// Conversion factor for DPI awareness, see <http://msdn.microsoft.com/en-us/library/dd464660(VS.85).aspx>.
 const float& dpiFactor();
