@@ -16,38 +16,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_SHA1HASH_H_
-#define DCPLUSPLUS_DCPP_SHA1HASH_H_
+#ifndef DCPLUSPLUS_DCPP_MD5HASH_H_
+#define DCPLUSPLUS_DCPP_MD5HASH_H_
 
-#include <openssl/sha.h>
+#include <openssl/md5.h>
 
 #include "HashValue.h"
 
 namespace dcpp {
 
-class SHA1Hash {
+class MD5Hash {
 public:
 	/** Hash size in bytes */
-	static const size_t BITS = 160;
+	static const size_t BITS = 128;
 	static const size_t BYTES = BITS / 8;
 
-	SHA1Hash() { SHA1_Init(&ctx); }
+	MD5Hash() { MD5_Init(&ctx); }
 
-	~SHA1Hash() { }
+	~MD5Hash() { }
 
 	/** Calculates the Tiger hash of the data. */
-	void update(const void* data, size_t len) { SHA1_Update(&ctx, data, len); }
+	void update(const void* data, size_t len) { MD5_Update(&ctx, data, len); }
 	/** Call once all data has been processed. */
-	uint8_t* finalize() { SHA1_Final(reinterpret_cast<unsigned char*>(&res), &ctx); return res; }
+	uint8_t* finalize() { MD5_Final(reinterpret_cast<unsigned char*>(&res), &ctx); return res; }
 
 	uint8_t* getResult() { return res; }
 private:
-	SHA_CTX ctx;
+	MD5_CTX ctx;
 	uint8_t res[BYTES];
 };
 
-typedef HashValue<SHA1Hash> SHA1Value;
+typedef HashValue<MD5Hash> MD5Value;
 
 } // namespace dcpp
 
-#endif /* DCPLUSPLUS_DCPP_SHA1HASH_H_ */
+#endif /* DCPLUSPLUS_DCPP_MD5HASH_H_ */

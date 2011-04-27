@@ -4,14 +4,13 @@
 #include <dcpp/SimpleXMLReader.h>
 #include <unordered_map>
 
-#define BOOST_TEST_MODULE testxml
-#include <boost/test/included/unit_test.hpp>
+#include "gtest.h"
 
 #define _(x)
 
 using namespace dcpp;
 
-typedef std::tr1::unordered_map<std::string, int> Counter;
+typedef std::unordered_map<std::string, int> Counter;
 
 class Collector : public SimpleXMLReader::CallBack {
 public:
@@ -42,7 +41,7 @@ public:
 	Counter dataValues;
 };
 
-BOOST_AUTO_TEST_CASE( test_simple )
+TEST(testxml, test_simple)
 {
 	Collector collector;
     SimpleXMLReader reader(&collector);
@@ -52,19 +51,19 @@ BOOST_AUTO_TEST_CASE( test_simple )
     	reader.parse(xml + i, 1, true);
     }
 
-    BOOST_CHECK_EQUAL(collector.simpleTags["simple"], 1);
-    BOOST_CHECK_EQUAL(collector.startTags["complex"], 1);
-    BOOST_CHECK_EQUAL(collector.endTags["complex"], 1);
-    BOOST_CHECK_EQUAL(collector.attribKeys["a"], 1);
-    BOOST_CHECK_EQUAL(collector.attribValues["1"], 1);
-    BOOST_CHECK_EQUAL(collector.attribKeys["b"], 1);
-    BOOST_CHECK_EQUAL(collector.attribValues["2"], 1);
-    BOOST_CHECK_EQUAL(collector.startTags["complex2"], 1);
-    BOOST_CHECK_EQUAL(collector.endTags["complex2"], 1);
-    BOOST_CHECK_EQUAL(collector.dataValues[" data "], 1);
+    ASSERT_EQ(collector.simpleTags["simple"], 1);
+    ASSERT_EQ(collector.startTags["complex"], 1);
+    ASSERT_EQ(collector.endTags["complex"], 1);
+    ASSERT_EQ(collector.attribKeys["a"], 1);
+    ASSERT_EQ(collector.attribValues["1"], 1);
+    ASSERT_EQ(collector.attribKeys["b"], 1);
+    ASSERT_EQ(collector.attribValues["2"], 1);
+    ASSERT_EQ(collector.startTags["complex2"], 1);
+    ASSERT_EQ(collector.endTags["complex2"], 1);
+    ASSERT_EQ(collector.dataValues[" data "], 1);
 }
 
-BOOST_AUTO_TEST_CASE(test_entref)
+TEST(testxml, test_entref)
 {
 	Collector collector;
 	SimpleXMLReader reader(&collector);
@@ -74,14 +73,14 @@ BOOST_AUTO_TEST_CASE(test_entref)
     	reader.parse(xml + i, 1, true);
     }
 
-    BOOST_CHECK_EQUAL(collector.startTags["root"], 1);
-    BOOST_CHECK_EQUAL(collector.endTags["root"], 1);
-    BOOST_CHECK_EQUAL(collector.attribKeys["ab"], 1);
-    BOOST_CHECK_EQUAL(collector.attribValues["'&\""], 1);
-    BOOST_CHECK_EQUAL(collector.dataValues["<>"], 1);
+    ASSERT_EQ(collector.startTags["root"], 1);
+    ASSERT_EQ(collector.endTags["root"], 1);
+    ASSERT_EQ(collector.attribKeys["ab"], 1);
+    ASSERT_EQ(collector.attribValues["'&\""], 1);
+    ASSERT_EQ(collector.dataValues["<>"], 1);
 }
 
-BOOST_AUTO_TEST_CASE(test_comment)
+TEST(testxml, test_comment)
 {
 	Collector collector;
 	SimpleXMLReader reader(&collector);
@@ -91,13 +90,13 @@ BOOST_AUTO_TEST_CASE(test_comment)
     	reader.parse(xml + i, 1, true);
     }
 
-    BOOST_CHECK_EQUAL(collector.startTags["root"], 1);
-    BOOST_CHECK_EQUAL(collector.endTags["root"], 1);
+    ASSERT_EQ(collector.startTags["root"], 1);
+    ASSERT_EQ(collector.endTags["root"], 1);
 }
 
 #include <dcpp/File.h>
 
-BOOST_AUTO_TEST_CASE(test_file)
+TEST(testxml, test_file)
 {
 	if(File::getSize("test.xml") != -1) {
 		Collector collector;
@@ -105,7 +104,7 @@ BOOST_AUTO_TEST_CASE(test_file)
 		File f("test.xml", File::READ, File::OPEN);
 		reader.parse(f);
 	} else {
-		BOOST_WARN_MESSAGE(true, "test.xml not found");
+		SUCCEED() << "test.xml not found";
 	}
 }
 

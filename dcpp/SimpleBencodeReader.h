@@ -28,13 +28,15 @@ using std::string;
 class SimpleBencodeReader {
 public:
 	struct Callback : boost::noncopyable {
+		virtual ~Callback() { }
+
 		virtual void intValue(int64_t) { }
-		virtual void stringValue(string) { }
+		virtual void stringValue(const string &) { }
 
 		virtual void startList() { }
 		virtual void endList() { }
 
-		virtual void startDictEntry(string) { }
+		virtual void startDictEntry(const string &) { }
 		virtual void endDictEntry() { }
 	};
 
