@@ -2,7 +2,13 @@
  
 Import('dev source_path')
 
-env, target, sources = dev.prepare_build(source_path, 'testxml', source_glob='testxml.cpp', in_bin=False)
+def runUnitTest(env,target,source):
+	import subprocess
+	app = str(source[0].abspath)
+	if not subprocess.call(app):
+		open(str(target[0]),'w').write("PASSED\n")
+		
+env, target, sources = dev.prepare_build(source_path, 'gtest', source_glob="*.cpp", in_bin=False)
 
 if env['CC'] == 'cl': # MSVC
 	if env['mode'] == 'debug':
@@ -17,12 +23,24 @@ if 'HAVE_HTMLHELP_H' in env['CPPDEFINES']:
 
 env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
 
-env.Append(CPPPATH = ['#/openssl/include', '#/miniupnpc', '#/dwt/include', '#/'])
+env.Append(CPPPATH = ['#/openssl/include', '#/miniupnpc', '#/dwt/include', '#/', '#/bzip2'])
 
+if '-mwindows' in env['CCFLAGS']:
+	env['CCFLAGS'].remove('-mwindows')
+
+if '-mwindows' in env['LINKFLAGS']:
+	env['LINKFLAGS'].remove('-mwindows')
+
+env.Append(CCFLAGS = ['-mconsole'])	
+env.Append(LINKFLAGS = ['-mconsole'])	
+	
 openssl_lib = '#/openssl/lib/'
 if env['arch'] != 'x86':
 	openssl_lib += env['arch'] + '/'
 env.Append(LIBPATH = [openssl_lib])
 
-ret = env.Program(target, [sources, dev.client, dev.zlib, dev.bzip2, dev.dwt, dev.intl])
+ret = env.Program(target, [sources, dev.client, dev.zlib, dev.bzip2, dev.intl])
+
+ret = env.Command(dev.get_target(source_path, 'gtest.passed', in_bin=False), ret[0].abspath, runUnitTest)
+
 Return('ret')

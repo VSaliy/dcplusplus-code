@@ -255,6 +255,7 @@ dev.client = dev.build('dcpp/')
 dev.help = dev.build('help/')
 if dev.env['test']:
 	dev.test = dev.build('test/')
+	env.Default(dev.test)
 else:
 	dev.win32 = dev.build('win32/')
 dev.installer = dev.build('installer/')

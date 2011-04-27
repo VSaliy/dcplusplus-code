@@ -20,6 +20,7 @@
 #include "SimpleBencodeReader.h"
 
 #include "Exception.h"
+#include "debug.h"
 
 namespace dcpp {
 
@@ -68,7 +69,7 @@ void SimpleBencodeReader::decode(const char **data, const char *end) {
 		++(*data);
 
 		return;
-	} else if (**data == 'd') {
+	} else if (**data == 'i') {
 		++(*data);
 		cb.intValue(readInt(data));
 
@@ -82,6 +83,7 @@ void SimpleBencodeReader::decode(const char **data, const char *end) {
 		cb.stringValue(readString(data, end));
 		return;
 	} else {
+		dcdebug("Unexpected %c after %c", **data, (*data)[-1]);
 		throw Exception("Unexpected token");
 	}
 }
