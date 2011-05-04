@@ -19,10 +19,11 @@
 #ifndef DCPLUSPLUS_WIN32_TYPED_LIST_VIEW_H
 #define DCPLUSPLUS_WIN32_TYPED_LIST_VIEW_H
 
+#include "forward.h"
 #include "Table.h"
 #include "WinUtil.h"
 
-template<class ContentType, bool managed = true>
+template<class ContentType, bool managed>
 class TypedTable : public Table
 {
 	typedef Table BaseType;
@@ -47,7 +48,7 @@ public:
 		}
 	};
 
-	~TypedTable() {
+	virtual ~TypedTable() {
 		if(managed)
 			this->clear();
 	}

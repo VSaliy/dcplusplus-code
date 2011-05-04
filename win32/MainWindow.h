@@ -19,18 +19,16 @@
 #ifndef DCPLUSPLUS_WIN32_MAIN_WINDOW_H
 #define DCPLUSPLUS_WIN32_MAIN_WINDOW_H
 
-#include <dcpp/forward.h>
-
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/LogManagerListener.h>
 #include <dcpp/WindowManagerListener.h>
 #include <dcpp/HttpConnection.h>
 #include <dcpp/User.h>
 
-#include "AspectStatus.h"
+#include <dwt/widgets/Window.h>
 
-class TransferView;
-class HubFrame;
+#include "forward.h"
+#include "AspectStatus.h"
 
 class MainWindow :
 	public dwt::Window,

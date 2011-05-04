@@ -2,6 +2,7 @@
 #define DCPLUSPLUS_DCPP_UPLOADMANAGERLISTENER_H_
 
 #include "forward.h"
+#include "typedefs.h"
 
 #include "noexcept.h"
 

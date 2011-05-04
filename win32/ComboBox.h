@@ -19,6 +19,10 @@
 #ifndef DCPLUSPLUS_WIN32_ComboBox_H_
 #define DCPLUSPLUS_WIN32_ComboBox_H_
 
+#include <dwt/widgets/ComboBox.h>
+
+#include "forward.h"
+
 /// @todo this should obviously be moved somewhere else
 /** Wraps the drop-down control of a ComboBox */
 class ListBox :

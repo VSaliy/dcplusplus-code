@@ -17,16 +17,23 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "FavHubGroupsDlg.h"
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/format.h>
 #include <dcpp/version.h>
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/MessageBox.h>
+
+#include "resource.h"
 #include "HoldRedraw.h"
+#include "TypedTable.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
 
 static const ColumnInfo columns[] = {
 	{ N_("Group name"), 100, false },

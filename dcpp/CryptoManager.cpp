@@ -27,6 +27,7 @@
 #include "version.h"
 
 #include <openssl/bn.h>
+#include <bzlib.h>
 
 namespace dcpp {
 

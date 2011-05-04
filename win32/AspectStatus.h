@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_ASPECTSTATUS_H_
 
 #include <dwt/widgets/StatusBar.h>
+
 #include "WinUtil.h"
 
 template<class WidgetType>

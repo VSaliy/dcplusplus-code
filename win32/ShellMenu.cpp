@@ -19,11 +19,14 @@
 // Based on <http://www.codeproject.com/shell/shellcontextmenu.asp> by R. Engels.
 
 #include "stdafx.h"
-
 #include "ShellMenu.h"
+
+#include <dwt/util/StringUtils.h>
 
 #include "resource.h"
 #include "WinUtil.h"
+
+using dwt::util::escapeMenu;
 
 ShellMenu::Seed::Seed() :
 BaseType::Seed()

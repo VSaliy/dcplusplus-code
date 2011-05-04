@@ -32,6 +32,8 @@
 #include "stdinc.h"
 #include "TigerHash.h"
 
+#include <algorithm>
+#include <cstring>
 #include <boost/detail/endian.hpp>
 
 #include "debug.h"

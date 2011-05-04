@@ -17,17 +17,24 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "SearchTypesPage.h"
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/SearchManager.h>
 #include <dcpp/version.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/MessageBox.h>
+
+#include "resource.h"
 #include "ParamDlg.h"
 #include "WinUtil.h"
 #include "SearchTypeDlg.h" 
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
 
 static const ColumnInfo columns[] = {
 	{ N_("Search type"), 110, false },
@@ -49,10 +56,10 @@ modify(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Search types")));
+		auto group = grid->addChild(GroupBox::Seed(T_("Search types")));
 		group->setHelpId(IDH_SETTINGS_SEARCHTYPES_LIST);
 
-		GridPtr cur = group->addChild(Grid::Seed(4, 1));
+		auto cur = group->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
@@ -65,7 +72,7 @@ modify(0)
 		}
 
 		{
-			GridPtr row = cur->addChild(Grid::Seed(1, 5));
+			auto row = cur->addChild(Grid::Seed(1, 5));
 			row->column(0).mode = GridInfo::FILL;
 			row->column(1).mode = GridInfo::FILL;
 			row->column(2).mode = GridInfo::FILL;

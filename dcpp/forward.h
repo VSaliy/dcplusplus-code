@@ -29,6 +29,8 @@ namespace dcpp {
 
 class AdcCommand;
 
+class ADLSearch;
+
 class BufferedSocket;
 
 class Bundle;

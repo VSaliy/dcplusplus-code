@@ -19,19 +19,18 @@
 #ifndef DCPLUSPLUS_WIN32_HUB_FRAME_H
 #define DCPLUSPLUS_WIN32_HUB_FRAME_H
 
-#include "MDIChildFrame.h"
-#include "IRecent.h"
-#include "AspectChat.h"
-#include "TypedTable.h"
-#include "AspectUserCommand.h"
-#include "UserInfoBase.h"
-
 #include <dcpp/OnlineUser.h>
 #include <dcpp/forward.h>
 #include <dcpp/ClientListener.h>
 #include <dcpp/TaskQueue.h>
 #include <dcpp/User.h>
 #include <dcpp/FavoriteManagerListener.h>
+
+#include "MDIChildFrame.h"
+#include "IRecent.h"
+#include "AspectChat.h"
+#include "AspectUserCommand.h"
+#include "UserInfoBase.h"
 
 class HubFrame :
 	public MDIChildFrame<HubFrame>,

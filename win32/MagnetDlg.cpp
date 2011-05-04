@@ -17,12 +17,19 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "MagnetDlg.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/RadioButton.h>
+
 #include "WinUtil.h"
+#include "resource.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::RadioButton;
 
 MagnetDlg::MagnetDlg(dwt::Widget* parent, const tstring& aHash, const tstring& aFileName, const tstring& aKeySearch) :
 dwt::ModalDialog(parent),
@@ -53,7 +60,7 @@ bool MagnetDlg::handleInitDialog() {
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		auto cur = grid->addChild(Grid::Seed(1, 2));
 		cur->column(1).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
@@ -65,11 +72,11 @@ bool MagnetDlg::handleInitDialog() {
 	}
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(2, 2));
+		auto cur = grid->addChild(Grid::Seed(2, 2));
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
+		auto seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_READONLY;
 
 		if (!mHash.empty()) {
@@ -87,12 +94,12 @@ bool MagnetDlg::handleInitDialog() {
 	}
 
 	{
-		GridPtr bottom = grid->addChild(Grid::Seed(1, 2));
+		auto bottom = grid->addChild(Grid::Seed(1, 2));
 		bottom->column(1).mode = GridInfo::FILL;
 		bottom->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		//GridPtr cur = bottom->addChild(Grid::Seed(4, 1));
-		GridPtr cur = bottom->addChild(Grid::Seed(2, 1));
+		auto cur = bottom->addChild(Grid::Seed(2, 1));
 
 		//queue = cur->addChild(RadioButton::Seed(T_("Add this file to your download queue")));
 		//queue->onClicked(std::bind(&MagnetDlg::handleRadioButtonClicked, this, queue));

@@ -18,15 +18,20 @@
 
 #include "stdafx.h"
 
-#include "resource.h"
-
 #include "NotificationsPage.h"
 
+#include <dcpp/SettingsManager.h>
+
+#include <dwt/widgets/Grid.h>
 #include <dwt/widgets/LoadDialog.h>
 
-#include <dcpp/SettingsManager.h>
+#include "resource.h"
 #include "MainWindow.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::LoadDialog;
 
 NotificationsPage::Option NotificationsPage::options[] = {
 	{ N_("Download finished"), SettingsManager::SOUND_FINISHED_DL, Util::emptyStringT,

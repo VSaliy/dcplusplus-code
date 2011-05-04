@@ -19,6 +19,12 @@
 #ifndef DCPLUSPLUS_WIN32_MAGNET_DLG_H
 #define DCPLUSPLUS_WIN32_MAGNET_DLG_H
 
+#include <dcpp/typedefs.h>
+
+#include <dwt/widgets/ModalDialog.h>
+
+#include "forward.h"
+
 // (Modders) Enjoy my liberally commented out source code.  The plan is to enable the
 // magnet link add an entry to the download queue, with just the hash (if that is the
 // only information the magnet contains).  DC++ has to find sources for the file anyway,

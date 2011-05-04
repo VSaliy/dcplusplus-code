@@ -22,7 +22,9 @@
 
 #include <dcpp/File.h>
 #include <dcpp/LogManager.h>
+
 #include "HoldRedraw.h"
+#include "ShellMenu.h"
 #include "WinUtil.h"
 
 const string SystemFrame::id = "SystemLog";

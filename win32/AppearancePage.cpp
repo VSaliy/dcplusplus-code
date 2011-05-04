@@ -17,18 +17,23 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "AppearancePage.h"
-
-#include <dwt/widgets/LoadDialog.h>
-#include <dwt/widgets/Spinner.h>
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/File.h>
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/LoadDialog.h>
+#include <dwt/widgets/Spinner.h>
+
 #include "WinUtil.h"
+#include "resource.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::Spinner;
 
 PropPage::ListItem AppearancePage::listItems[] = {
 	{ SettingsManager::ALT_SORT_ORDER, N_("Sort all downloads first"), IDH_SETTINGS_APPEARANCE_ALT_SORT_ORDER },

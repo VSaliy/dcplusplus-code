@@ -19,6 +19,14 @@
 #ifndef DCPLUSPLUS_WIN32_PROP_PAGE_H
 #define DCPLUSPLUS_WIN32_PROP_PAGE_H
 
+#include <unordered_map>
+#include <dcpp/typedefs.h>
+#include <dwt/widgets/Container.h>
+
+#include "forward.h"
+
+using std::unordered_map;
+
 class PropPage : public dwt::Container
 {
 public:

@@ -32,6 +32,8 @@
 #ifndef DWT_TEXTS_H
 #define DWT_TEXTS_H
 
+#include "tstring.h"
+
 namespace dwt {
 
 struct Texts {

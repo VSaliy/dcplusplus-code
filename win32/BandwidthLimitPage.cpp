@@ -17,16 +17,22 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "BandwidthLimitPage.h"
-
-#include <dwt/widgets/Spinner.h>
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ThrottleManager.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/Spinner.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::Spinner;
 
 BandwidthLimitPage::BandwidthLimitPage(dwt::Widget* parent) :
 PropPage(parent, 4, 1),

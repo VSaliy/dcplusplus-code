@@ -17,16 +17,25 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "CommandDlg.h"
 
 #include <dcpp/UserCommand.h>
 #include <dcpp/AdcCommand.h>
 #include <dcpp/NmdcHub.h>
 #include <dcpp/version.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/MessageBox.h>
+#include <dwt/widgets/RadioButton.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::RadioButton;
 
 CommandDlg::CommandDlg(dwt::Widget* parent, int type_, int ctx_, const tstring& name_, const tstring& command_,
 					   const tstring& to_, const tstring& hub_) :

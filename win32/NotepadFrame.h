@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_NOTEPAD_FRAME_H
 
 #include "StaticFrame.h"
-#include "resource.h"
 
 class NotepadFrame :
 	public StaticFrame<NotepadFrame>,

@@ -18,15 +18,22 @@
 
 #include "stdafx.h"
 
-#include "resource.h"
-
 #include "DownloadPage.h"
 
+#include <dcpp/SettingsManager.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
 #include <dwt/widgets/Spinner.h>
 
-#include <dcpp/SettingsManager.h>
+#include "resource.h"
 #include "HubListsDlg.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::Spinner;
 
 DownloadPage::DownloadPage(dwt::Widget* parent) :
 PropPage(parent, 3, 1)
@@ -81,7 +88,7 @@ PropPage(parent, 3, 1)
 		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 
-		SpinnerPtr spin = cur2->addChild(Spinner::Seed(0, 100, box));
+		auto spin = cur2->addChild(Spinner::Seed(0, 100, box));
 		cur2->setWidget(spin);
 		spin->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 

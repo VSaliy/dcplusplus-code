@@ -19,7 +19,7 @@
 #ifndef DCPLUSPLUS_WIN32_A_D_L_S_PROPERTIES_H
 #define DCPLUSPLUS_WIN32_A_D_L_S_PROPERTIES_H
 
-#include <dcpp/ADLSearch.h>
+#include <dcpp/forward.h>
 
 #include "GridDialog.h"
 

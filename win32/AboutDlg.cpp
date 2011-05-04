@@ -18,8 +18,6 @@
 
 #include "stdafx.h"
 
-#include "resource.h"
-
 #include "AboutDlg.h"
 
 #include <dcpp/SimpleXML.h>
@@ -27,7 +25,15 @@
 #include <dcpp/format.h>
 #include <dcpp/SettingsManager.h>
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
 
 static const char thanks[] = "Big thanks to all donators and people who have contributed with ideas "
 "and code! Thanks go out to sourceforge.net for hosting the project. "
@@ -81,7 +87,7 @@ bool AboutDlg::handleInitDialog() {
 	ls.style |= SS_CENTER;
 
 	{
-		GridPtr cur = grid->addChild(gs)->addChild(Grid::Seed(3, 1));
+		auto cur = grid->addChild(gs)->addChild(Grid::Seed(3, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::CENTER;
 
@@ -93,7 +99,7 @@ bool AboutDlg::handleInitDialog() {
 		cur->addChild(ls);
 
 		gs.caption = T_("TTH");
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
+		auto seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_READONLY;
 		seed.exStyle &= ~WS_EX_CLIENTEDGE;
 		seed.caption = WinUtil::tth;
@@ -102,7 +108,7 @@ bool AboutDlg::handleInitDialog() {
 
 	{
 		gs.caption = T_("Greetz and Contributors");
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
+		auto seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style &= ~ES_AUTOHSCROLL;
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_READONLY;
 		seed.caption = Text::toT(thanks);
@@ -111,7 +117,7 @@ bool AboutDlg::handleInitDialog() {
 
 	{
 		gs.caption = T_("Totals");
-		GridPtr cur = grid->addChild(gs)->addChild(Grid::Seed(2, 1));
+		auto cur = grid->addChild(gs)->addChild(Grid::Seed(2, 1));
 		cur->column(0).mode = GridInfo::FILL;
 
 		ls.caption = str(TF_("Upload: %1%, Download: %2%") % Text::toT(Util::formatBytes(SETTING(TOTAL_UPLOAD))) % Text::toT(Util::formatBytes(SETTING(TOTAL_DOWNLOAD))));

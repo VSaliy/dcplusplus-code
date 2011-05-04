@@ -17,13 +17,17 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "WindowsPage.h"
 
 #include <dcpp/SettingsManager.h>
+
+#include <dwt/widgets/Grid.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
 
 WindowsPage::ListItem WindowsPage::optionItems[] = {
 	{ SettingsManager::POPUP_PMS, N_("Open private messages in their own window"), IDH_SETTINGS_WINDOWS_POPUP_PMS },

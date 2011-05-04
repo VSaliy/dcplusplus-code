@@ -19,6 +19,10 @@
 #ifndef DCPLUSPLUS_WIN32_GRIDDIALOG_H
 #define DCPLUSPLUS_WIN32_GRIDDIALOG_H
 
+#include <dwt/widgets/ModalDialog.h>
+
+#include "forward.h"
+
 /// base for a dialog that contains a grid and adapts to the grid's preferred height
 class GridDialog : public dwt::ModalDialog
 {

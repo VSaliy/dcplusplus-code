@@ -17,14 +17,19 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "ADLSProperties.h"
 
 #include <dcpp/ADLSearch.h>
 #include <dcpp/FavoriteManager.h>
+
+#include <dwt/widgets/Grid.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::CheckBox;
+using dwt::Grid;
+using dwt::GridInfo;
 
 ADLSProperties::ADLSProperties(dwt::Widget* parent, ADLSearch& search_) :
 GridDialog(parent, 290, DS_CONTEXTHELP),

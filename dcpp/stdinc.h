@@ -25,7 +25,7 @@
 #define BZ_NO_STDIO 1
 #endif
 
-#ifndef NO_PCH
+#ifdef HAS_PCH
 
 #ifdef _WIN32
 #include "w.h"

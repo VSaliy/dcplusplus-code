@@ -19,13 +19,19 @@
 #ifndef DCPLUSPLUS_WIN32_MDI_CHILD_FRAME_H_
 #define DCPLUSPLUS_WIN32_MDI_CHILD_FRAME_H_
 
-#include "WinUtil.h"
+#include <functional>
 
-#include "AspectStatus.h"
-#include <dwt/widgets/Menu.h>
 #include <dcpp/SettingsManager.h>
 #include <dcpp/WindowInfo.h>
+
+#include <dwt/widgets/Container.h>
+#include <dwt/util/StringUtils.h>
+
+#include "AspectStatus.h"
+#include "WinUtil.h"
 #include "resource.h"
+
+using dwt::util::escapeMenu;
 
 template<typename T>
 class MDIChildFrame :
@@ -211,7 +217,7 @@ private:
 	}
 
 	bool handleContextMenu(const dwt::ScreenCoordinate& pt) {
-		dwt::Menu::ObjectType menu = addChild(WinUtil::Seeds::menu);
+		auto menu = addChild(WinUtil::Seeds::menu);
 
 		menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
 

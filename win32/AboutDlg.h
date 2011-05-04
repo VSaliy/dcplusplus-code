@@ -21,6 +21,10 @@
 
 #include <dcpp/HttpConnection.h>
 
+#include <dwt/widgets/ModalDialog.h>
+
+#include "forward.h"
+
 class AboutDlg :
 	public dwt::ModalDialog,
 	private HttpConnectionListener

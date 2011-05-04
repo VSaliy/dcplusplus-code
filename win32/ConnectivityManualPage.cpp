@@ -17,17 +17,24 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "ConnectivityManualPage.h"
+
+#include <boost/range/algorithm/for_each.hpp>
 
 #include <dcpp/format.h>
 #include <dcpp/MappingManager.h>
 #include <dcpp/SettingsManager.h>
-#include "WinUtil.h"
 
-#include <boost/range/algorithm/for_each.hpp>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/RadioButton.h>
+
+#include "WinUtil.h"
+#include "resource.h"
+
+using dwt::Control;
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::RadioButton;
 
 ConnectivityManualPage::ConnectivityManualPage(dwt::Widget* parent) :
 PropPage(parent, 8, 1),

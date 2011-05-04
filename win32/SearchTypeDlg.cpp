@@ -17,15 +17,16 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "SearchTypeDlg.h"
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/StringTokenizer.h>
 #include <dcpp/format.h>
 #include <dcpp/version.h>
+
+#include <dwt/widgets/MessageBox.h>
+
+#include "resource.h"
 #include "ParamDlg.h"
 
 SearchTypeDlg::SearchTypeDlg(dwt::Widget* parent, const tstring& name_, const TStringList& extList) :

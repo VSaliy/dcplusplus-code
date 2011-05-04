@@ -28,7 +28,8 @@
 #include <dcpp/MerkleTree.h>
 #include <dcpp/Util.h>
 
-#include "TypedTable.h"
+#include <dwt/widgets/Container.h>
+
 #include "AspectUserCommand.h"
 
 #include "UserInfoBase.h"

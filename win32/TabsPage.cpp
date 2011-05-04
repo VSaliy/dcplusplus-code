@@ -17,16 +17,22 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "TabsPage.h"
 
+#include <dcpp/SettingsManager.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/RadioButton.h>
 #include <dwt/widgets/Slider.h>
 #include <dwt/util/win32/Version.h>
 
-#include <dcpp/SettingsManager.h>
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::RadioButton;
+using dwt::Slider;
 
 PropPage::ListItem TabsPage::listItems[] = {
 	{ SettingsManager::BOLD_HUB, N_("Hub"), IDH_SETTINGS_TABS_BOLD_HUB },

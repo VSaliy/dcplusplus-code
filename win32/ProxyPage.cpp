@@ -17,15 +17,23 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "ProxyPage.h"
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/Socket.h>
-#include "WinUtil.h"
+
+#include <dwt/widgets/RadioButton.h>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
 #include <dwt/util/win32/Version.h>
+
+#include "resource.h"
+#include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::RadioButton;
 
 ProxyPage::ProxyPage(dwt::Widget* parent) :
 PropPage(parent, 1, 1),

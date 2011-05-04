@@ -17,16 +17,23 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "FavHubProperties.h"
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/MessageBox.h>
+
+#include "resource.h"
 #include "FavHubGroupsDlg.h"
 #include "HoldRedraw.h"
+#include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
 
 FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry) :
 GridDialog(parent, 320, DS_CONTEXTHELP),

@@ -17,13 +17,15 @@
  */
 
 #include "stdafx.h"
-
 #include "FavHubsFrame.h"
 
 #include <set>
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/MessageBox.h>
 
 #include "HubFrame.h"
 #include "FavHubProperties.h"
@@ -32,6 +34,9 @@
 using std::for_each;
 using std::set;
 using std::swap;
+
+using dwt::Grid;
+using dwt::GridInfo;
 
 const string FavHubsFrame::id = "FavHubs";
 const string& FavHubsFrame::getId() const { return id; }

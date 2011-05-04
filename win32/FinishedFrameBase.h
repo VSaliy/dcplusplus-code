@@ -19,12 +19,6 @@
 #ifndef DCPLUSPLUS_WIN32_FINISHED_FRAME_BASE_H
 #define DCPLUSPLUS_WIN32_FINISHED_FRAME_BASE_H
 
-#include "StaticFrame.h"
-#include "TypedTable.h"
-#include "TextFrame.h"
-#include "HoldRedraw.h"
-#include "DirectoryListingFrame.h"
-
 #include <dcpp/File.h>
 #include <dcpp/FinishedItem.h>
 #include <dcpp/FinishedManager.h>
@@ -34,6 +28,17 @@
 #include <dcpp/DirectoryListing.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/ClientManager.h>
+
+#include <dwt/util/StringUtils.h>
+
+#include "StaticFrame.h"
+#include "TypedTable.h"
+#include "TextFrame.h"
+#include "HoldRedraw.h"
+#include "DirectoryListingFrame.h"
+#include "ShellMenu.h"
+
+using dwt::util::escapeMenu;
 
 template<class T, bool in_UL>
 class FinishedFrameBase :

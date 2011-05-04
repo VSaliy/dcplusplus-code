@@ -17,19 +17,23 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "ADLSearchFrame.h"
 
 #include <dcpp/Client.h>
 #include <dcpp/version.h>
 #include <dcpp/format.h>
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/MessageBox.h>
+
+#include "resource.h"
+
 #include "HoldRedraw.h"
 #include "ADLSProperties.h"
 
 using std::swap;
+using dwt::Grid;
+using dwt::GridInfo;
 
 const string ADLSearchFrame::id = "ADLSearch";
 const string& ADLSearchFrame::getId() const { return id; }
@@ -59,7 +63,7 @@ items(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		Table::Seed cs = WinUtil::Seeds::table;
+		auto cs = WinUtil::Seeds::table;
 		cs.lvStyle |= LVS_EX_CHECKBOXES;
 		items = grid->addChild(cs);
 		grid->setWidget(items, 0, 0, 1, 6);
@@ -74,11 +78,10 @@ items(0)
 	}
 
 	{
-		ButtonPtr button;
-		Button::Seed cs = WinUtil::Seeds::button;
+		auto cs = WinUtil::Seeds::button;
 
 		cs.caption = T_("&New...");
-		button = grid->addChild(cs);
+		auto button = grid->addChild(cs);
 		button->setHelpId(IDH_ADLS_NEW);
 		button->onClicked([this] { handleAdd(); });
 		addWidget(button);

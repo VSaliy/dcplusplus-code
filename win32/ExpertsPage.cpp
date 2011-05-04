@@ -17,13 +17,20 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "ExpertsPage.h"
 
 #include <dcpp/SettingsManager.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+#include <dwt/widgets/Label.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
 
 ExpertsPage::ExpertsPage(dwt::Widget* parent) :
 PropPage(parent, 6, 2)
@@ -63,13 +70,13 @@ void ExpertsPage::write() {
 }
 
 void ExpertsPage::addItem(const tstring& text, int setting, bool isInt, unsigned helpId, const tstring& text2) {
-	GroupBoxPtr group = grid->addChild(GroupBox::Seed(text));
+	auto group = grid->addChild(GroupBox::Seed(text));
 	group->setHelpId(helpId);
 
-	GridPtr cur = group->addChild(Grid::Seed(1, 2));
+	auto cur = group->addChild(Grid::Seed(1, 2));
 	cur->column(0).mode = GridInfo::FILL;
 
-	TextBoxPtr box = cur->addChild(isInt ? WinUtil::Seeds::Dialog::intTextBox : WinUtil::Seeds::Dialog::textBox);
+	auto box = cur->addChild(isInt ? WinUtil::Seeds::Dialog::intTextBox : WinUtil::Seeds::Dialog::textBox);
 	items.push_back(Item(box, setting, isInt ? PropPage::T_INT : PropPage::T_STR));
 
 	if(text2.empty())

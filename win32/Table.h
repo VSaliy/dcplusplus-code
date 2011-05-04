@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_Table_H_
 #define DCPLUSPLUS_WIN32_Table_H_
 
+#include <dwt/widgets/Table.h>
+
 /** Our own flavour of list views that handle the Ctrl+A shortcut */
 class Table : public dwt::Table {
 private:
@@ -38,7 +40,5 @@ public:
 
 	explicit Table(dwt::Widget* parent);
 };
-
-typedef Table::ObjectType TablePtr;
 
 #endif /*Table_H_*/

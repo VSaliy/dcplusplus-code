@@ -19,12 +19,36 @@
 #ifndef DCPLUSPLUS_WIN32_WIN_UTIL_H
 #define DCPLUSPLUS_WIN32_WIN_UTIL_H
 
+#include <unordered_map>
+
 #include <dcpp/StringTokenizer.h>
 #include <dcpp/Util.h>
 #include <dcpp/User.h>
 #include <dcpp/forward.h>
 #include <dcpp/MerkleTree.h>
 #include <dcpp/HintedUser.h>
+
+#include <dwt/forward.h>
+#include <dwt/widgets/Button.h>
+#include <dwt/widgets/CheckBox.h>
+#include <dwt/widgets/GroupBox.h>
+#include <dwt/widgets/TabView.h>
+#include <dwt/widgets/Tree.h>
+
+#include "forward.h"
+#include "ComboBox.h"
+#include "RichTextBox.h"
+#include "Table.h"
+
+using std::unordered_map;
+
+using dwt::Button;
+using dwt::CheckBox;
+using dwt::GroupBox;
+using dwt::Menu;
+using dwt::TextBox;
+using dwt::TabView;
+using dwt::Tree;
 
 // Some utilities for handling HLS colors, taken from Jean-Michel LE FOL's codeproject
 // article on WTL OfficeXP Menus
@@ -87,7 +111,6 @@ public:
 	static MainWindow* mainWindow;
 
 	typedef unordered_map<string, size_t> ImageMap;
-	typedef ImageMap::iterator ImageIter;
 	static ImageMap fileIndexes;
 
 	struct Seeds {

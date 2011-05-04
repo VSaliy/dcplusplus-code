@@ -17,14 +17,7 @@
  */
 
 #include "stdafx.h"
-
 #include "DirectoryListingFrame.h"
-
-#include "MainWindow.h"
-#include "TextFrame.h"
-#include "HoldRedraw.h"
-
-#include "resource.h"
 
 #include <dcpp/nullptr.h>
 #include <dcpp/ADLSearch.h>
@@ -38,10 +31,28 @@
 #include <dcpp/WindowInfo.h>
 
 #include <dwt/widgets/FolderDialog.h>
+#include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Rebar.h>
 #include <dwt/widgets/SaveDialog.h>
 #include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/ToolBar.h>
+
+#include "TypedTable.h"
+#include "TypedTree.h"
+#include "ShellMenu.h"
+#include "MainWindow.h"
+#include "TextFrame.h"
+#include "HoldRedraw.h"
+
+#include "resource.h"
+
+using dwt::FolderDialog;
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::SplitterContainer;
+using dwt::Rebar;
+using dwt::SaveDialog;
+using dwt::ToolBar;
 
 const string DirectoryListingFrame::id = "DirectoryListing";
 const string& DirectoryListingFrame::getId() const { return id; }
@@ -93,7 +104,7 @@ int DirectoryListingFrame::ItemInfo::compareItems(ItemInfo* a, ItemInfo* b, int 
 }
 
 void DirectoryListingFrame::openWindow(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, Activation activate) {
-	UserIter prev = lists.find(aUser);
+	auto prev = lists.find(aUser);
 	if(prev == lists.end()) {
 		openWindow_(parent, aFile, aDir, aUser, aSpeed, activate);
 	} else {
@@ -124,8 +135,8 @@ void DirectoryListingFrame::openOwnList(TabViewPtr parent, const tstring& dir, A
 		HintedUser(ClientManager::getInstance()->getMe(), Util::emptyString), 0, activate);
 }
 
-void DirectoryListingFrame::closeAll(){
-	for(UserIter i = lists.begin(); i != lists.end(); ++i)
+void DirectoryListingFrame::closeAll() {
+	for(auto i = lists.begin(); i != lists.end(); ++i)
 		i->second->close(true);
 }
 
@@ -175,7 +186,7 @@ bool DirectoryListingFrame::isFavorite(const WindowParams& params) {
 }
 
 void DirectoryListingFrame::openWindow(TabViewPtr parent, const HintedUser& aUser, const string& txt, int64_t aSpeed) {
-	UserIter i = lists.find(aUser);
+	auto i = lists.find(aUser);
 	if(i != lists.end()) {
 		i->second->speed = aSpeed;
 		i->second->loadXML(txt);
@@ -635,7 +646,7 @@ bool DirectoryListingFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 
 	if(dirs->getSelected()) {
 		ItemInfo* ii = dirs->getSelectedData();
-		ShellMenuPtr menu = makeDirMenu(ii);
+		auto menu = makeDirMenu(ii);
 
 		if(ii && dl->getUser() == ClientManager::getInstance()->getMe()) {
 			addShellPaths(menu, vector<ItemInfo*>(1, ii));

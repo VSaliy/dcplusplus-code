@@ -17,16 +17,21 @@
  */
 
 #include "stdafx.h"
-
 #include "PublicHubsFrame.h"
+
+#include <dcpp/FavoriteManager.h>
+#include <dcpp/version.h>
+
+#include <dwt/widgets/Grid.h>
 
 #include "resource.h"
 #include "HubFrame.h"
 #include "HoldRedraw.h"
 #include "HubListsDlg.h"
+#include "TypedTable.h"
 
-#include <dcpp/FavoriteManager.h>
-#include <dcpp/version.h>
+using dwt::Grid;
+using dwt::GridInfo;
 
 const string PublicHubsFrame::id = "PublicHubs";
 const string& PublicHubsFrame::getId() const { return id; }

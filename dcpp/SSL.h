@@ -4,6 +4,7 @@
 #include <openssl/ssl.h>
 
 #include <vector>
+#include <cstdint>
 
 namespace dcpp {
 

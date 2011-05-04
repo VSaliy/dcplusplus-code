@@ -30,6 +30,9 @@
 #include <dcpp/User.h>
 #include <dcpp/WindowInfo.h>
 
+using dwt::Grid;
+using dwt::GridInfo;
+
 const string PrivateFrame::id = "PM";
 const string& PrivateFrame::getId() const { return id; }
 

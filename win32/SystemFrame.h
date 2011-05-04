@@ -19,9 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_SYSTEM_FRAME_H
 #define DCPLUSPLUS_WIN32_SYSTEM_FRAME_H
 
-#include "StaticFrame.h"
-
 #include <dcpp/LogManagerListener.h>
+
+#include "StaticFrame.h"
 
 class SystemFrame : public StaticFrame<SystemFrame>,
 	private LogManagerListener

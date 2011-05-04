@@ -19,6 +19,12 @@
 #ifndef DCPLUSPLUS_WIN32_STRING_LIST_DLG_H
 #define DCPLUSPLUS_WIN32_STRING_LIST_DLG_H
 
+#include <dwt/widgets/ModalDialog.h>
+
+#include <dcpp/typedefs.h>
+
+#include "forward.h"
+
 /// generic dialog to manage a list of strings, that can be used as is or specialized.
 class StringListDlg : public dwt::ModalDialog
 {

@@ -19,9 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_STATIC_FRAME_H_
 #define DCPLUSPLUS_WIN32_STATIC_FRAME_H_
 
-#include "MDIChildFrame.h"
-
 #include <dcpp/Text.h>
+
+#include "MDIChildFrame.h"
 
 template<class T>
 class StaticFrame : public MDIChildFrame<T> {

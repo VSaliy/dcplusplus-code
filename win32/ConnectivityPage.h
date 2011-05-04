@@ -19,9 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_CONNECTIVITY_PAGE_H
 #define DCPLUSPLUS_WIN32_CONNECTIVITY_PAGE_H
 
-#include "PropPage.h"
-
 #include <dcpp/ConnectivityManager.h>
+
+#include "PropPage.h"
 
 class ConnectivityPage : public PropPage, private ConnectivityManagerListener
 {

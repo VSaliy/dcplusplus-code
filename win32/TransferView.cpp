@@ -17,11 +17,7 @@
  */
 
 #include "stdafx.h"
-
 #include "TransferView.h"
-#include "resource.h"
-#include "WinUtil.h"
-#include "HoldRedraw.h"
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ConnectionManager.h>
@@ -34,6 +30,14 @@
 #include <dcpp/UserConnection.h>
 
 #include <dwt/resources/Pen.h>
+#include <dwt/util/StringUtils.h>
+
+#include "resource.h"
+#include "TypedTable.h"
+#include "WinUtil.h"
+#include "HoldRedraw.h"
+
+using dwt::util::escapeMenu;
 
 int TransferView::connectionIndexes[] = { CONNECTION_COLUMN_USER, CONNECTION_COLUMN_HUB, CONNECTION_COLUMN_STATUS, CONNECTION_COLUMN_SPEED, CONNECTION_COLUMN_CHUNK, CONNECTION_COLUMN_TRANSFERED, CONNECTION_COLUMN_QUEUED, CONNECTION_COLUMN_CIPHER, CONNECTION_COLUMN_IP, CONNECTION_COLUMN_COUNTRY };
 int TransferView::connectionSizes[] = { 125, 100, 375, 100, 125, 125, 75, 100, 100, 100 };

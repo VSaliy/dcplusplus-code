@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_PARAMDLG_H
 #define DCPLUSPLUS_WIN32_PARAMDLG_H
 
+#include <functional>
+
 #include <dcpp/Util.h>
 
 #include "GridDialog.h"

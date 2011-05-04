@@ -23,7 +23,6 @@
 #include <string>
 
 #include "StaticFrame.h"
-#include "resource.h"
 
 using std::deque;
 using std::string;

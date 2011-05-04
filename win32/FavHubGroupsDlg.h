@@ -19,9 +19,14 @@
 #ifndef DCPLUSPLUS_WIN32_FAVHUBGROUPSDLG_H
 #define DCPLUSPLUS_WIN32_FAVHUBGROUPSDLG_H
 
+#include <dcpp/typedefs.h>
 #include <dcpp/FavHubGroup.h>
+#include <dcpp/FastAlloc.h>
+#include <dcpp/HubEntry.h>
 
-#include "TypedTable.h"
+#include <dwt/widgets/ModalDialog.h>
+
+#include "forward.h"
 
 class FavHubGroupsDlg : public dwt::ModalDialog
 {

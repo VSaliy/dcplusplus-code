@@ -19,10 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_FAV_HUBS_FRAME_H
 #define DCPLUSPLUS_WIN32_FAV_HUBS_FRAME_H
 
-#include "StaticFrame.h"
-
 #include <dcpp/FavoriteManagerListener.h>
-#include "resource.h"
+
+#include "StaticFrame.h"
 
 class FavHubsFrame :
 	public StaticFrame<FavHubsFrame>,

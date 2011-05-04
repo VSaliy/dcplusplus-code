@@ -23,12 +23,18 @@
 #include "FavoriteDirsPage.h"
 
 #include <dwt/widgets/FolderDialog.h>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/MessageBox.h>
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/version.h>
 #include "WinUtil.h"
 #include "ParamDlg.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::FolderDialog;
 
 static const ColumnInfo columns[] = {
 	{ N_("Favorite name"), 100, false },

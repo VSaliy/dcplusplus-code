@@ -25,6 +25,7 @@
 #include <dcpp/SettingsManager.h>
 
 #include <dwt/util/GDI.h>
+#include <dwt/widgets/Grid.h>
 #include <dwt/widgets/ScrolledContainer.h>
 
 #include "WinUtil.h"
@@ -57,6 +58,9 @@
 #include "UCPage.h"
 #include "CertificatesPage.h"
 #include "SearchTypesPage.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
 
 SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
