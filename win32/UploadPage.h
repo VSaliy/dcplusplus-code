@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_UPLOAD_PAGE_H
 #define DCPLUSPLUS_WIN32_UPLOAD_PAGE_H
 
+#include <dcpp/typedefs.h>
+
 #include "PropPage.h"
 
 class UploadPage : public PropPage

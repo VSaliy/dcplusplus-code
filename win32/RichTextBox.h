@@ -21,6 +21,10 @@
 
 #include <dcpp/typedefs.h>
 
+#include <dwt/widgets/RichTextBox.h>
+
+#include "forward.h"
+
 /// our rich text boxes that provide find functions
 class RichTextBox : public dwt::RichTextBox {
 	typedef dwt::RichTextBox BaseType;

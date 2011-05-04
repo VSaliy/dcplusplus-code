@@ -27,7 +27,7 @@
 
 using namespace dcpp;
 
-#include <libintl.h>
+#ifdef HAS_PCH
 
 #include <dwt/forward.h>
 #include <dwt/util/StringUtils.h>
@@ -50,52 +50,14 @@ using namespace dcpp;
 #include <dwt/widgets/Tree.h>
 #include <dwt/widgets/Window.h>
 
-using dwt::util::escapeMenu;
-using dwt::Button;
-using dwt::ButtonPtr;
-using dwt::CheckBox;
-using dwt::CheckBoxPtr;
-using dwt::ColorDialog;
-using dwt::Container;
-using dwt::ContainerPtr;
-using dwt::FolderDialog;
-using dwt::FontDialog;
-using dwt::Label;
-using dwt::LabelPtr;
-using dwt::Menu;
-using dwt::MenuPtr;
-using dwt::Grid;
-using dwt::GridInfo;
-using dwt::GridPtr;
-using dwt::GroupBox;
-using dwt::GroupBoxPtr;
-using dwt::LoadDialog;
-using dwt::ProgressBar;
-using dwt::ProgressBarPtr;
-using dwt::RadioButton;
-using dwt::RadioButtonPtr;
-using dwt::Rebar;
-using dwt::RebarPtr;
-using dwt::SaveDialog;
-using dwt::Slider;
-using dwt::SliderPtr;
-using dwt::Spinner;
-using dwt::SpinnerPtr;
-using dwt::Splitter;
-using dwt::SplitterPtr;
-using dwt::SplitterContainer;
-using dwt::SplitterContainerPtr;
-using dwt::TabView;
-using dwt::TabViewPtr;
-using dwt::TextBox;
-using dwt::TextBoxPtr;
-using dwt::ToolBar;
-using dwt::ToolBarPtr;
-using dwt::Tree;
-using dwt::TreePtr;
+#include "ComboBox.h"
+#include "RichTextBox.h"
+#include "ShellMenu.h"
+#include "Table.h"
 
-using std::placeholders::_1;
-using std::placeholders::_2;
+#endif
+
+#include <libintl.h>
 
 #define LOCALEDIR dcpp::Util::getPath(Util::PATH_LOCALE).c_str()
 #define PACKAGE "dcpp-win32"
@@ -114,8 +76,3 @@ using std::placeholders::_2;
 #define TFN_(String1,String2, N) dcpp_fmt(dcpp::Text::toT(ngettext(String1, String2, N)))
 #endif
 #endif
-
-#include "ComboBox.h"
-#include "RichTextBox.h"
-#include "ShellMenu.h"
-#include "Table.h"

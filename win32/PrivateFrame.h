@@ -19,14 +19,14 @@
 #ifndef DCPLUSPLUS_WIN32_PRIVATE_FRAME_H
 #define DCPLUSPLUS_WIN32_PRIVATE_FRAME_H
 
+#include <dcpp/ClientManagerListener.h>
+#include <dcpp/User.h>
+
 #include "MDIChildFrame.h"
 #include "IRecent.h"
 #include "AspectChat.h"
 #include "UserInfoBase.h"
 #include "AspectUserCommand.h"
-
-#include <dcpp/ClientManagerListener.h>
-#include <dcpp/User.h>
 
 class PrivateFrame :
 	public MDIChildFrame<PrivateFrame>,

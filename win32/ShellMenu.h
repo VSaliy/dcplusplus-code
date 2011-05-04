@@ -25,7 +25,9 @@
 
 #include <dwt/widgets/Menu.h>
 
-class ShellMenu : public Menu
+#include "forward.h"
+
+class ShellMenu : public dwt::Menu
 {
 	typedef Menu BaseType;
 
@@ -76,7 +78,6 @@ private:
 	bool dispatch(const MSG& msg, LRESULT& ret);
 };
 
-typedef ShellMenu::ObjectType ShellMenuPtr;
 /// @todo rename to just Menu to override dwt::Menu
 
 #endif // !defined(DCPLUSPLUS_WIN32_SHELL_MENU_H)

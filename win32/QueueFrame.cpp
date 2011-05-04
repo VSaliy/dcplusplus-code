@@ -17,19 +17,28 @@
  */
 
 #include "stdafx.h"
-
 #include "QueueFrame.h"
+
+#include <dcpp/QueueManager.h>
+#include <dcpp/version.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/FolderDialog.h>
+#include <dwt/widgets/MessageBox.h>
+#include <dwt/widgets/SplitterContainer.h>
 
 #include "WinUtil.h"
 #include "resource.h"
 #include "HoldRedraw.h"
 #include "PrivateFrame.h"
+#include "TypedTable.h"
+#include "TypedTree.h"
 
-#include <dcpp/QueueManager.h>
-#include <dcpp/version.h>
-
-#include <dwt/widgets/FolderDialog.h>
-#include <dwt/widgets/SplitterContainer.h>
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::SplitterContainer;
+using dwt::FolderDialog;
 
 const string QueueFrame::id = "Queue";
 const string& QueueFrame::getId() const { return id; }

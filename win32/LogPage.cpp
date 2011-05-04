@@ -17,15 +17,21 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "LogPage.h"
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/File.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
 
 PropPage::ListItem LogPage::listItems[] = {
 	{ SettingsManager::LOG_MAIN_CHAT, N_("Log main chat"), IDH_SETTINGS_LOG_MAIN_CHAT },

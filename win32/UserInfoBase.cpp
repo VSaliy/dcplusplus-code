@@ -138,7 +138,7 @@ tstring UserInfoBase::getTooltip(bool priv) const {
 	return ret;
 }
 
-void UserInfoBase::UserTraits::parse(UserInfoBase* ui) {
+void UserInfoBase::UserTraits::parse(const UserInfoBase* ui) {
 	if(ui->getUser().user->isSet(User::NMDC))
 		adcOnly = false;
 	bool fav = FavoriteManager::getInstance()->isFavoriteUser(ui->getUser());

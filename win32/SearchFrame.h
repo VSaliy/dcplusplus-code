@@ -21,15 +21,13 @@
 
 #include <set>
 
-#include "MDIChildFrame.h"
-#include "TypedTable.h"
-#include "AspectUserCommand.h"
-
 #include <dcpp/Client.h>
-#include <dcpp/SearchResult.h>
 #include <dcpp/SearchManager.h>
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ClientManagerListener.h>
+
+#include "MDIChildFrame.h"
+#include "AspectUserCommand.h"
 
 using std::set;
 
@@ -81,7 +79,7 @@ private:
 	class SearchInfo {
 	public:
 		SearchInfo(const SearchResultPtr& aSR);
-		~SearchInfo() {	}
+		~SearchInfo();
 
 		void view();
 

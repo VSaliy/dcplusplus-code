@@ -17,8 +17,12 @@ o * Copyright (C) 2001-2011 Jacek Sieka, arnetheduck on gmail point com
  */
 
 #include "stdafx.h"
-
 #include "ComboBox.h"
+
+#include <dwt/widgets/TextBox.h>
+#include <dwt/WidgetCreator.h>
+
+using dwt::TextBox;
 
 const TCHAR ListBox::windowClass[] = WC_LISTBOX;
 

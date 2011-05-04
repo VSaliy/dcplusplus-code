@@ -38,7 +38,7 @@ class Dev:
 				prefix = self.env['prefix']
 			elif sys.platform != 'win32':
 				prefix = 'i386-mingw32-'
-
+			
 			self.env['CC'] = prefix + 'gcc'
 			self.env['CXX'] = prefix + 'g++'
 			self.env['LINK'] = prefix + 'g++'
@@ -79,7 +79,7 @@ class Dev:
 
 		sources = self.get_sources(source_path, source_glob)
 
-		if precompiled_header is not None:
+		if precompiled_header is not None and env['pch']:
 			for i, source in enumerate(sources):
 				if source.find(precompiled_header + '.cpp') != -1:
 					# the PCH/GCH builder will take care of this one

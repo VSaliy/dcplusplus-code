@@ -23,10 +23,16 @@
 #include "PropPage.h"
 
 #include <dwt/widgets/FolderDialog.h>
+#include <dwt/widgets/Grid.h>
 #include <dwt/widgets/LoadDialog.h>
 
 #include <dcpp/SettingsManager.h>
 #include "WinUtil.h"
+
+using dwt::FolderDialog;
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::LoadDialog;
 
 const dwt::Rectangle padding(7, 4, 14, 21);
 

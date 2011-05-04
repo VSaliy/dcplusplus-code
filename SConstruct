@@ -75,7 +75,7 @@ opts = Variables('custom.py', ARGUMENTS)
 opts.AddVariables(
 	EnumVariable('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
 	EnumVariable('mode', 'Compile mode', 'debug', ['debug', 'release']),
-	BoolVariable('gch', 'Use GCH when compiling GUI (disable if you have linking problems with mingw)', 'yes'),
+	BoolVariable('pch', 'Use pre-compiled headers', 'gcc' not in defEnv['TOOLS']),
 	BoolVariable('verbose', 'Show verbose command lines', 'no'),
 	BoolVariable('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
 	BoolVariable('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
@@ -153,6 +153,9 @@ if 'gcc' in env['TOOLS']:
 # TODO When versions of GCC for MinGW that don't need this workaround are available, remove any
 # mention of "GCC_WTF". Until then, use it to facilitate search & replace.
 env.Append(CPPDEFINES = ['GCC_WTF="this"'])
+
+if env['pch']:
+	env.Append(CPPDEFINES = ['HAS_PCH'])
 
 if env['unicode']:
 	env.Append(CPPDEFINES = ['UNICODE', '_UNICODE'])

@@ -19,6 +19,8 @@
 #include "stdinc.h"
 #include "SimpleBencodeReader.h"
 
+#include <cstdlib>
+
 #include "Exception.h"
 #include "debug.h"
 

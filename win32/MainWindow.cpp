@@ -19,6 +19,35 @@
 #include "stdafx.h"
 
 #include "MainWindow.h"
+
+#include <dcpp/SettingsManager.h>
+#include <dcpp/ResourceManager.h>
+#include <dcpp/version.h>
+#include <dcpp/DownloadManager.h>
+#include <dcpp/UploadManager.h>
+#include <dcpp/FavoriteManager.h>
+#include <dcpp/LogManager.h>
+#include <dcpp/Client.h>
+#include <dcpp/TimerManager.h>
+#include <dcpp/SearchManager.h>
+#include <dcpp/ConnectionManager.h>
+#include <dcpp/ShareManager.h>
+#include <dcpp/QueueManager.h>
+#include <dcpp/ClientManager.h>
+#include <dcpp/ConnectivityManager.h>
+#include <dcpp/Download.h>
+#include <dcpp/WindowInfo.h>
+#include <dcpp/SimpleXML.h>
+#include <dcpp/ThrottleManager.h>
+
+#include <dwt/Application.h>
+#include <dwt/widgets/MessageBox.h>
+#include <dwt/widgets/Notification.h>
+#include <dwt/widgets/Rebar.h>
+#include <dwt/widgets/Spinner.h>
+#include <dwt/widgets/SplitterContainer.h>
+#include <dwt/widgets/ToolBar.h>
+
 #include "resource.h"
 
 #include "ParamDlg.h"
@@ -45,36 +74,15 @@
 #include "SystemFrame.h"
 #include "UsersFrame.h"
 
-#include <dcpp/SettingsManager.h>
-#include <dcpp/ResourceManager.h>
-#include <dcpp/version.h>
-#include <dcpp/DownloadManager.h>
-#include <dcpp/UploadManager.h>
-#include <dcpp/FavoriteManager.h>
-#include <dcpp/LogManager.h>
-#include <dcpp/Client.h>
-#include <dcpp/TimerManager.h>
-#include <dcpp/SearchManager.h>
-#include <dcpp/ConnectionManager.h>
-#include <dcpp/ShareManager.h>
-#include <dcpp/QueueManager.h>
-#include <dcpp/ClientManager.h>
-#include <dcpp/ConnectivityManager.h>
-#include <dcpp/Download.h>
-#include <dcpp/WindowInfo.h>
-#include <dcpp/SimpleXML.h>
-#include <dcpp/ThrottleManager.h>
-
-#include <dwt/Application.h>
-#include <dwt/widgets/Notification.h>
-#include <dwt/widgets/Rebar.h>
-#include <dwt/widgets/Spinner.h>
-#include <dwt/widgets/SplitterContainer.h>
-#include <dwt/widgets/ToolBar.h>
-
 #ifdef HAVE_HTMLHELP_H
 #include <htmlhelp.h>
 #endif
+
+using dwt::Container;
+using dwt::Rebar;
+using dwt::SplitterContainer;
+using dwt::Spinner;
+using dwt::ToolBar;
 
 static dwt::IconPtr mainIcon(WinUtil::createIcon(IDI_DCPP, 32));
 static dwt::IconPtr mainSmallIcon(WinUtil::createIcon(IDI_DCPP, 16));

@@ -38,18 +38,20 @@
 #include <dcpp/UploadManager.h>
 #include <dcpp/ThrottleManager.h>
 
+#include <dwt/DWTException.h>
+#include <dwt/LibraryLoader.h>
+#include <dwt/util/GDI.h>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/LoadDialog.h>
+#include <dwt/widgets/MessageBox.h>
+#include <dwt/widgets/SaveDialog.h>
+
 #include "ParamDlg.h"
 #include "MagnetDlg.h"
 #include "HubFrame.h"
 #include "SearchFrame.h"
 #include "MainWindow.h"
 #include "PrivateFrame.h"
-
-#include <dwt/DWTException.h>
-#include <dwt/LibraryLoader.h>
-#include <dwt/util/GDI.h>
-#include <dwt/widgets/LoadDialog.h>
-#include <dwt/widgets/SaveDialog.h>
 
 #ifdef HAVE_HTMLHELP_H
 #include <htmlhelp.h>
@@ -69,6 +71,13 @@ extern "C" {
 #undef HH_GS_CALL
 #endif
 #endif
+
+using dwt::Container;
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::LoadDialog;
+using dwt::SaveDialog;
+using dwt::Widget;
 
 // def taken from <gettextP.h>
 extern "C" const char *_nl_locale_name_default(void);

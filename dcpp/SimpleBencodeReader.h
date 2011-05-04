@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_DCPP_SIMPLEBENCODEREADER_H_
 
 #include <string>
+#include <boost/noncopyable.hpp>
 
 namespace dcpp {
 

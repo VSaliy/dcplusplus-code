@@ -20,11 +20,6 @@
 
 #include "HubFrame.h"
 
-#include "MainWindow.h"
-#include "PrivateFrame.h"
-#include "ParamDlg.h"
-#include "HoldRedraw.h"
-
 #include <dcpp/AdcHub.h>
 #include <dcpp/ChatMessage.h>
 #include <dcpp/ClientManager.h>
@@ -37,7 +32,21 @@
 #include <dcpp/WindowInfo.h>
 
 #include <dwt/util/HoldResize.h>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/MessageBox.h>
 #include <dwt/widgets/SplitterContainer.h>
+
+#include "MainWindow.h"
+#include "PrivateFrame.h"
+#include "ParamDlg.h"
+#include "HoldRedraw.h"
+#include "TypedTable.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::SplitterContainer;
 
 const string HubFrame::id = WindowManager::hub();
 const string& HubFrame::getId() const { return id; }

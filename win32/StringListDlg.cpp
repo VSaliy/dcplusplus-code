@@ -17,14 +17,20 @@
  */
 
 #include "stdafx.h"
+#include "StringListDlg.h"
+
+#include <dwt/widgets/Button.h>
+#include <dwt/widgets/Grid.h>
 
 #include "resource.h"
-
-#include "StringListDlg.h"
 
 #include "HoldRedraw.h"
 #include "ParamDlg.h"
 #include "WinUtil.h"
+
+using dwt::Button;
+using dwt::Grid;
+using dwt::GridInfo;
 
 StringListDlg::StringListDlg(dwt::Widget* parent, const TStringList& initialValues, bool ensureUniqueness) :
 dwt::ModalDialog(parent),
@@ -127,7 +133,7 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 	}
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(6, 1));
+		auto cur = grid->addChild(Grid::Seed(6, 1));
 		cur->row(4).mode = GridInfo::FILL;
 		cur->row(4).align = GridInfo::BOTTOM_RIGHT;
 

@@ -19,10 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_SPY_FRAME_H
 #define DCPLUSPLUS_WIN32_SPY_FRAME_H
 
-#include "StaticFrame.h"
-
 #include <dcpp/ClientManagerListener.h>
-#include "resource.h"
+
+#include "StaticFrame.h"
 
 class SpyFrame : public StaticFrame<SpyFrame>, private ClientManagerListener {
 	typedef StaticFrame<SpyFrame> BaseType;

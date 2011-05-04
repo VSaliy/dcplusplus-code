@@ -17,13 +17,19 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "ConnectivityPage.h"
 
 #include <dcpp/SettingsManager.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::GroupBox;
 
 ConnectivityPage::ConnectivityPage(dwt::Widget* parent) :
 PropPage(parent, 1, 1),

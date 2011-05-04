@@ -19,16 +19,14 @@
 #ifndef DCPLUSPLUS_WIN32_QUEUE_FRAME_H
 #define DCPLUSPLUS_WIN32_QUEUE_FRAME_H
 
+#include <memory>
 #include <unordered_map>
-
-#include "StaticFrame.h"
-#include "TypedTable.h"
-#include "TypedTree.h"
 
 #include <dcpp/FastAlloc.h>
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/QueueItem.h>
-#include "resource.h"
+
+#include "StaticFrame.h"
 
 using std::unordered_multimap;
 

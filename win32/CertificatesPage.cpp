@@ -17,14 +17,21 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "CertificatesPage.h"
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/CryptoManager.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/MessageBox.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
 
 PropPage::ListItem CertificatesPage::listItems[] = {
 	{ SettingsManager::USE_TLS, N_("Use TLS when remote client supports it"), IDH_SETTINGS_CERTIFICATES_USE_TLS },
@@ -44,7 +51,7 @@ options(0)
 	grid->row(2).align = GridInfo::STRETCH;
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(3, 3));
+		auto cur = grid->addChild(Grid::Seed(3, 3));
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
@@ -77,21 +84,18 @@ options(0)
 	}
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(1, 1));
+		auto cur = grid->addChild(Grid::Seed(1, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 
-		ButtonPtr gen = cur->addChild(Button::Seed(T_("Generate certificates")));
+		auto gen = cur->addChild(Button::Seed(T_("Generate certificates")));
 		gen->onClicked([this] { handleGenerateCertsClicked(); });
 	}
 
 	options = grid->addChild(WinUtil::Seeds::Dialog::optionsTable);
 
-	{
-		LabelPtr label = grid->addChild(Label::Seed(T_("Under construction, restart DC++ to see effects...")));
-
-		label = grid->addChild(Label::Seed(T_("Experimental feature, don't consider DC++ secure in any way")));
-	}
+	grid->addChild(Label::Seed(T_("Under construction, restart DC++ to see effects...")));
+	grid->addChild(Label::Seed(T_("Experimental feature, don't consider DC++ secure in any way")));
 
 	PropPage::read(items);
 	PropPage::read(listItems, options);

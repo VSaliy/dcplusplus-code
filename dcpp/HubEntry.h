@@ -19,7 +19,14 @@
 #ifndef DCPLUSPLUS_DCPP_HUBENTRY_H_
 #define DCPLUSPLUS_DCPP_HUBENTRY_H_
 
+#include <string>
+
+#include "SettingsManager.h"
+#include "Util.h"
+
 namespace dcpp {
+
+using std::string;
 
 class HubEntry {
 public:

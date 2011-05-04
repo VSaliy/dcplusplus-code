@@ -19,8 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_U_C_PAGE_H
 #define DCPLUSPLUS_WIN32_U_C_PAGE_H
 
-#include "PropPage.h"
 #include <dcpp/UserCommand.h>
+
+#include "PropPage.h"
 
 class UCPage : public PropPage
 {

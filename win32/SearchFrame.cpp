@@ -17,17 +17,25 @@
  */
 
 #include "stdafx.h"
-#include "resource.h"
-
 #include "SearchFrame.h"
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/QueueManager.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/ShareManager.h>
+#include <dcpp/SearchResult.h>
 
 #include <dwt/widgets/FolderDialog.h>
 #include <dwt/widgets/SplitterContainer.h>
+#include <dwt/widgets/Grid.h>
+
+#include "resource.h"
+#include "TypedTable.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::FolderDialog;
+using dwt::SplitterContainer;
 
 const string SearchFrame::id = "Search";
 const string& SearchFrame::getId() const { return id; }
@@ -50,6 +58,8 @@ static const ColumnInfo resultsColumns[] = {
 TStringList SearchFrame::lastSearches;
 
 SearchFrame::FrameSet SearchFrame::frames;
+
+SearchFrame::SearchInfo::~SearchInfo() { }
 
 int SearchFrame::SearchInfo::getImage(int col) const {
 	if(col != 0) {
@@ -127,13 +137,13 @@ droppedResults(0)
 		options->row(4).mode = GridInfo::FILL;
 		options->row(4).align = GridInfo::STRETCH;
 
-		GroupBox::Seed gs = WinUtil::Seeds::group;
+		auto gs = WinUtil::Seeds::group;
 
 		gs.caption = T_("Search for");
-		GroupBoxPtr group = options->addChild(gs);
+		auto group = options->addChild(gs);
 		group->setHelpId(IDH_SEARCH_SEARCH_FOR);
 
-		GridPtr cur = group->addChild(Grid::Seed(2, 2));
+		auto cur = group->addChild(Grid::Seed(2, 2));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(1).mode = GridInfo::FILL;
 

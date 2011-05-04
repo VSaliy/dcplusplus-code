@@ -20,6 +20,8 @@
 #define DCPLUSPLUS_WIN32_USER_COMMAND_H
 
 #include <dcpp/FavoriteManager.h>
+#include <dwt/widgets/Menu.h>
+
 #include "resource.h"
 
 template<class T>

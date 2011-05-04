@@ -19,14 +19,18 @@
 #ifndef USERINFOBASE_H_
 #define USERINFOBASE_H_
 
+#include <boost/range/algorithm/for_each.hpp>
+
 #include <dcpp/forward.h>
 #include <dcpp/Text.h>
 #include <dcpp/User.h>
 
+#include <dwt/widgets/Menu.h>
+
 #include "resource.h"
 #include "WinUtil.h"
 
-#include <dwt/widgets/Menu.h>
+using boost::range::for_each;
 
 class UserInfoBase {
 public:
@@ -48,7 +52,7 @@ public:
 	struct UserTraits {
 		UserTraits() : adcOnly(true), favOnly(true), nonFavOnly(true) { }
 
-		void parse(UserInfoBase* ui);
+		void parse(const UserInfoBase* ui);
 
 		bool adcOnly;
 		bool favOnly;
@@ -86,57 +90,56 @@ protected:
 private:
 	template<typename FunctionType>
 	void handleUserFunction(const FunctionType& userFunction) {
-		UserInfoList users = t().selectedUsersImpl();
-		for_each(users.begin(), users.end(), userFunction);
+		for_each(t().selectedUsersImpl(), userFunction);
 	}
 
 protected:
 	void handleMatchQueue() {
-		handleUserFunction(std::bind(&UserInfoBase::matchQueue, _1));
+		handleUserFunction([](UserInfoBase* u) { u->matchQueue(); });
 	}
 	void handleGetList() {
-		handleUserFunction(std::bind(&UserInfoBase::getList, _1));
+		handleUserFunction([](UserInfoBase* u) { u->getList(); });
 	}
 	void handleBrowseList() {
-		handleUserFunction(std::bind(&UserInfoBase::browseList, _1));
+		handleUserFunction([](UserInfoBase* u) { u->browseList(); });
 	}
 	void handleAddFavorite() {
-		handleUserFunction(std::bind(&UserInfoBase::addFav, _1));
+		handleUserFunction([](UserInfoBase* u) { u->addFav(); });
 	}
 	void handlePrivateMessage(TabViewPtr parent) {
-		handleUserFunction(std::bind(&UserInfoBase::pm, _1, parent));
+		handleUserFunction([&](UserInfoBase* u) { u->pm(parent); });
 	}
 	void handleGrantSlot() {
-		handleUserFunction(std::bind(&UserInfoBase::grant, _1));
+		handleUserFunction([](UserInfoBase* u) { u->grant(); });
 	}
 	void handleRemoveFromQueue() {
-		handleUserFunction(std::bind(&UserInfoBase::removeFromQueue, _1));
+		handleUserFunction([](UserInfoBase* u) { u->removeFromQueue(); });
 	}
 	void handleConnectFav(TabViewPtr parent) {
-		handleUserFunction(std::bind(&UserInfoBase::connectFav, _1, parent));
+		handleUserFunction([&](UserInfoBase* u) { u->connectFav(parent); });
 	}
 
 	void appendUserItems(TabViewPtr parent, dwt::MenuPtr menu, bool defaultIsGetList = true, bool includeSendPM = true) {
-		UserInfoList users = t().selectedUsersImpl();
+		auto users = t().selectedUsersImpl();
 		if(users.empty())
 			return;
 
 		UserInfoBase::UserTraits traits;
-		for_each(users.begin(), users.end(), std::bind(&UserInfoBase::UserTraits::parse, &traits, _1));
+		for_each(users, [&](const UserInfoBase* u) { traits.parse(u); });
 
-		menu->appendItem(T_("&Get file list"), std::bind(&ThisType::handleGetList, this), dwt::IconPtr(), true, defaultIsGetList);
+		menu->appendItem(T_("&Get file list"), [this] { this->t().handleGetList(); }, dwt::IconPtr(), true, defaultIsGetList);
 		if(traits.adcOnly)
-			menu->appendItem(T_("&Browse file list"), std::bind(&ThisType::handleBrowseList, this));
-		menu->appendItem(T_("&Match queue"), std::bind(&ThisType::handleMatchQueue, this));
+			menu->appendItem(T_("&Browse file list"), [this] { this->t().handleBrowseList(); });
+		menu->appendItem(T_("&Match queue"), [this] { this->t().handleMatchQueue(); });
 		if(includeSendPM)
-			menu->appendItem(T_("&Send private message"), std::bind(&ThisType::handlePrivateMessage, this, parent), dwt::IconPtr(), true, !defaultIsGetList);
+			menu->appendItem(T_("&Send private message"), [=] { this->t().handlePrivateMessage(parent); }, dwt::IconPtr(), true, !defaultIsGetList);
 		if(!traits.favOnly)
-			menu->appendItem(T_("Add To &Favorites"), std::bind(&ThisType::handleAddFavorite, this), WinUtil::menuIcon(IDI_FAVORITE_USERS));
-		menu->appendItem(T_("Grant &extra slot"), std::bind(&ThisType::handleGrantSlot, this));
+			menu->appendItem(T_("Add To &Favorites"), [this] { this->t().handleAddFavorite(); }, WinUtil::menuIcon(IDI_FAVORITE_USERS));
+		menu->appendItem(T_("Grant &extra slot"), [this] { this->t().handleGrantSlot(); });
 		if(!traits.nonFavOnly)
-			menu->appendItem(T_("Connect to hub"), std::bind(&ThisType::handleConnectFav, this, parent), WinUtil::menuIcon(IDI_HUB));
+			menu->appendItem(T_("Connect to hub"), [=] { this->t().handleConnectFav(parent); }, WinUtil::menuIcon(IDI_HUB));
 		menu->appendSeparator();
-		menu->appendItem(T_("Remove user from queue"), std::bind(&ThisType::handleRemoveFromQueue, this));
+		menu->appendItem(T_("Remove user from queue"), [this] { this->t().handleRemoveFromQueue(); });
 	}
 
 	template<typename TableType>

@@ -23,6 +23,9 @@
 #include "UploadPage.h"
 
 #include <dwt/widgets/FolderDialog.h>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/MessageBox.h>
 #include <dwt/widgets/Spinner.h>
 
 #include <dcpp/format.h>
@@ -32,6 +35,12 @@
 #include "ParamDlg.h"
 #include "HashProgressDlg.h"
 #include "WinUtil.h"
+
+using dwt::FolderDialog;
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::Spinner;
 
 static const ColumnInfo columns[] = {
 	{ N_("Virtual name"), 100, false },
@@ -53,10 +62,10 @@ remove(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Shared directories")));
+		auto group = grid->addChild(GroupBox::Seed(T_("Shared directories")));
 		group->setHelpId(IDH_SETTINGS_UPLOAD_DIRECTORIES);
 
-		GridPtr cur = group->addChild(Grid::Seed(4, 1));
+		auto cur = group->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
@@ -105,7 +114,7 @@ remove(0)
 		items.push_back(Item(box, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
 		box->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 
-		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
+		auto spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
 		cur->setWidget(spin);
 		spin->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 

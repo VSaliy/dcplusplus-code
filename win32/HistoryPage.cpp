@@ -17,20 +17,25 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "HistoryPage.h"
-
-#include <dwt/widgets/Spinner.h>
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/WindowManager.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/Spinner.h>
 
 #include "DirectoryListingFrame.h"
 #include "HubFrame.h"
 #include "PrivateFrame.h"
 #include "WinUtil.h"
+#include "resource.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::Spinner;
 
 template<typename T>
 GridPtr addSubGrid(T parent, size_t rows) {

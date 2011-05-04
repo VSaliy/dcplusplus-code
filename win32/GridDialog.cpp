@@ -20,8 +20,13 @@
 
 #include "GridDialog.h"
 
+#include <dwt/widgets/Grid.h>
+
 #include <dwt/util/GDI.h>
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
 
 GridDialog::GridDialog(dwt::Widget* parent, const long width_, const DWORD styles_) :
 dwt::ModalDialog(parent),
@@ -39,12 +44,12 @@ int GridDialog::run() {
 void GridDialog::layout() {
 	size_t spacing = grid->getSpacing();
 
-	dwt::Point sz = getClientSize();
+	auto sz = getClientSize();
 	sz.y = grid->getPreferredSize().y;
 	grid->resize(dwt::Rectangle(spacing, spacing, sz.x - spacing * 2, sz.y));
 
 	// now resize the dialog itself
 	sz.x = width * dwt::util::dpiFactor(); // don't change the horizontal size
 	sz.y += spacing * 2 + getYBorders();
-	dwt::ModalDialog::resize(dwt::Rectangle(getWindowRect().pos, sz));
+	resize(dwt::Rectangle(getWindowRect().pos, sz));
 }

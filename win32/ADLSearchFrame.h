@@ -19,8 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_ADL_SEARCH_FRAME_H
 #define DCPLUSPLUS_WIN32_ADL_SEARCH_FRAME_H
 
-#include "StaticFrame.h"
 #include <dcpp/ADLSearch.h>
+
+#include "StaticFrame.h"
 
 class ADLSearchFrame :
 	public StaticFrame<ADLSearchFrame>

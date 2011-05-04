@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_SETTINGS_DIALOG_H
 #define DCPLUSPLUS_WIN32_SETTINGS_DIALOG_H
 
+#include <dwt/widgets/ModalDialog.h>
+
 #include "PropPage.h"
 
 class SettingsDialog : public dwt::ModalDialog

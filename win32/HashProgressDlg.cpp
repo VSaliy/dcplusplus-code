@@ -22,11 +22,18 @@
 
 #include "HashProgressDlg.h"
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
 #include <dwt/widgets/ProgressBar.h>
 
 #include <dcpp/format.h>
 #include <dcpp/HashManager.h>
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::ProgressBar;
 
 HashProgressDlg::HashProgressDlg(dwt::Widget* parent, bool aAutoClose) :
 GridDialog(parent, 657, DS_CONTEXTHELP),

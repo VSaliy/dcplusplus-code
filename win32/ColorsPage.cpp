@@ -17,16 +17,26 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "ColorsPage.h"
 
+#include <dcpp/SettingsManager.h>
+
+#include <dwt/widgets/Button.h>
 #include <dwt/widgets/ColorDialog.h>
 #include <dwt/widgets/FontDialog.h>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/GroupBox.h>
+#include <dwt/widgets/Label.h>
 
-#include <dcpp/SettingsManager.h>
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Button;
+using dwt::ColorDialog;
+using dwt::FontDialog;
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
 
 ColorsPage::ColorsPage(dwt::Widget* parent) :
 PropPage(parent, 2, 1),
@@ -37,7 +47,7 @@ example(0)
 	grid->column(0).mode = GridInfo::FILL;
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Colors")))->addChild(Grid::Seed(2, 3));
+		auto cur = grid->addChild(GroupBox::Seed(T_("Colors")))->addChild(Grid::Seed(2, 3));
 		cur->column(1).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
 		cur->setHelpId(IDH_SETTINGS_COLORS_COLORS);
@@ -52,15 +62,15 @@ example(0)
 		cur->setWidget(example, 0, 1, 2, 1);
 		example->setHelpId(IDH_SETTINGS_COLORS_COLORS);
 
-		ButtonPtr uploads = cur->addChild(Button::Seed(T_("Uploads")));
+		auto uploads = cur->addChild(Button::Seed(T_("Uploads")));
 		uploads->onClicked([this] { handleULClicked(); });
 		uploads->setHelpId(IDH_SETTINGS_COLORS_UPLOAD_BAR_COLOR);
 
-		ButtonPtr textStyle	= cur->addChild(Button::Seed(T_("Select &text style")));
+		auto textStyle	= cur->addChild(Button::Seed(T_("Select &text style")));
 		textStyle->onClicked([this] { handleTextClicked(); });
 		textStyle->setHelpId(IDH_SETTINGS_COLORS_SELTEXT);
 
-		ButtonPtr downloads	= cur->addChild(Button::Seed(T_("Downloads")));
+		auto downloads	= cur->addChild(Button::Seed(T_("Downloads")));
 		downloads->onClicked([this] { handleDLClicked(); });
 		downloads->setHelpId(IDH_SETTINGS_COLORS_DOWNLOAD_BAR_COLOR);
 	}

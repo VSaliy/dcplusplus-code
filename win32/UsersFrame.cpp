@@ -17,10 +17,7 @@
  */
 
 #include "stdafx.h"
-
 #include "UsersFrame.h"
-#include "ParamDlg.h"
-#include "HoldRedraw.h"
 
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/ClientManager.h>
@@ -30,11 +27,22 @@
 
 #include <dcpp/version.h>
 
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+#include <dwt/widgets/MessageBox.h>
 #include <dwt/widgets/Splitter.h>
 #include <dwt/widgets/ScrolledContainer.h>
 #include <dwt/widgets/SplitterContainer.h>
 
+#include "ParamDlg.h"
+#include "HoldRedraw.h"
+#include "TypedTable.h"
+
 using std::for_each;
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
+using dwt::SplitterContainer;
 
 const string UsersFrame::id = "Users";
 const string& UsersFrame::getId() const { return id; }

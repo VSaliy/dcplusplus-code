@@ -17,12 +17,16 @@
  */
 
 #include "stdafx.h"
-
 #include "ParamDlg.h"
 
+#include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Spinner.h>
 
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Spinner;
 
 ParamDlg::ParamDlg(dwt::Widget* parent, const tstring& title) :
 GridDialog(parent, width),
@@ -60,7 +64,7 @@ void ParamDlg::addComboBox(const tstring& name, const TStringList& choices, size
 }
 
 void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool password) {
-	TextBoxPtr box = left->addChild(GroupBox::Seed(name))->addChild(WinUtil::Seeds::Dialog::textBox);
+	auto box = left->addChild(GroupBox::Seed(name))->addChild(WinUtil::Seeds::Dialog::textBox);
 	if(password) {
 		box->setPassword();
 	}
@@ -69,10 +73,10 @@ void ParamDlg::initTextBox(const tstring& name, const tstring& value, bool passw
 }
 
 void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const int min, const int max) {
-	GridPtr cur = left->addChild(GroupBox::Seed(name))->addChild(Grid::Seed(1, 1));
+	auto cur = left->addChild(GroupBox::Seed(name))->addChild(Grid::Seed(1, 1));
 	cur->column(0).mode = GridInfo::FILL;
 
-	TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+	auto box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 	box->setText(value);
 
 	cur->setWidget(cur->addChild(Spinner::Seed(min, max, box)));
@@ -81,7 +85,7 @@ void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const i
 }
 
 void ParamDlg::initComboBox(const tstring& name, const TStringList& choices, size_t sel, bool edit) {
-	ComboBoxPtr box = left->addChild(GroupBox::Seed(name))->addChild(edit ? WinUtil::Seeds::Dialog::comboBoxEdit : WinUtil::Seeds::Dialog::comboBox);
+	auto box = left->addChild(GroupBox::Seed(name))->addChild(edit ? WinUtil::Seeds::Dialog::comboBoxEdit : WinUtil::Seeds::Dialog::comboBox);
 	for(TStringList::const_iterator i = choices.begin(), iend = choices.end(); i != iend; ++i)
 		box->addValue(*i);
 	box->setSelected(sel);

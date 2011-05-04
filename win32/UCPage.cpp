@@ -17,16 +17,21 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "UCPage.h"
 
 #include <dcpp/SettingsManager.h>
 #include <dcpp/FavoriteManager.h>
+
+#include <dwt/widgets/Grid.h>
+
+#include "resource.h"
+
 #include "CommandDlg.h"
 #include "HoldRedraw.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
 
 static const ColumnInfo columns[] = {
 	{ N_("Name"), 100, false },
@@ -52,7 +57,7 @@ commands(0)
 	commands = grid->addChild(WinUtil::Seeds::Dialog::table);
 	grid->setWidget(commands, 0, 0, 1, 5);
 
-	ButtonPtr button = grid->addChild(Button::Seed(T_("&Add")));
+	auto button = grid->addChild(Button::Seed(T_("&Add")));
 	button->onClicked([this] { handleAddClicked(); });
 	button->setHelpId(IDH_SETTINGS_UC_ADD);
 

@@ -23,6 +23,9 @@
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
 
+using dwt::Grid;
+using dwt::GridInfo;
+
 const string NotepadFrame::id = "Notepad";
 const string& NotepadFrame::getId() const { return id; }
 

@@ -19,13 +19,10 @@
 #ifndef DCPLUSPLUS_WIN32_PUBLIC_HUBS_FRAME_H
 #define DCPLUSPLUS_WIN32_PUBLIC_HUBS_FRAME_H
 
-#include "StaticFrame.h"
-
-#include "TypedTable.h"
-
 #include <dcpp/HubEntry.h>
 #include <dcpp/FavoriteManagerListener.h>
-#include "resource.h"
+
+#include "StaticFrame.h"
 
 class PublicHubsFrame :
 	public StaticFrame<PublicHubsFrame>,

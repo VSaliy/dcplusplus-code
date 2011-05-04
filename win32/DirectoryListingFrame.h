@@ -19,18 +19,16 @@
 #ifndef DCPLUSPLUS_WIN32_DIRECTORY_LISTING_FRAME_H
 #define DCPLUSPLUS_WIN32_DIRECTORY_LISTING_FRAME_H
 
-#include "MDIChildFrame.h"
-#include "IRecent.h"
-#include "TypedTable.h"
-#include "TypedTree.h"
-#include "UserInfoBase.h"
-#include "AspectUserCommand.h"
-
 #include <dcpp/forward.h>
 #include <dcpp/FastAlloc.h>
 #include <dcpp/DirectoryListing.h>
 #include <dcpp/ClientManagerListener.h>
 #include <dcpp/User.h>
+
+#include "MDIChildFrame.h"
+#include "IRecent.h"
+#include "UserInfoBase.h"
+#include "AspectUserCommand.h"
 
 class DirectoryListingFrame :
 	public MDIChildFrame<DirectoryListingFrame>,
@@ -194,7 +192,6 @@ private:
 	StringMap ucLineParams;
 
 	typedef unordered_map<UserPtr, DirectoryListingFrame*, User::Hash> UserMap;
-	typedef UserMap::iterator UserIter;
 
 	static UserMap lists;
 

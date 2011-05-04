@@ -17,13 +17,16 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "AdvancedPage.h"
 
+#include <dwt/widgets/Grid.h>
 #include <dcpp/SettingsManager.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
 
 AdvancedPage::ListItem AdvancedPage::listItems[] = {
 	{ SettingsManager::AUTO_AWAY, N_("Auto-away on minimize (and back on restore)"), IDH_SETTINGS_ADVANCED_AUTO_AWAY },

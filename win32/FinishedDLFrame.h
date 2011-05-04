@@ -20,7 +20,6 @@
 #define DCPLUSPLUS_WIN32_FINISHED_DL_FRAME_H
 
 #include "FinishedFrameBase.h"
-#include "resource.h"
 
 class FinishedDLFrame : public FinishedFrameBase<FinishedDLFrame, false>
 {

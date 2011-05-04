@@ -19,10 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H
 #define DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H
 
-#include <dcpp/forward.h>
-
 #include "GridDialog.h"
 
+#include <dcpp/HubEntry.h>
 class FavHubProperties : public GridDialog
 {
 public:

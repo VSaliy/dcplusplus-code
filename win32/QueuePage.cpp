@@ -17,13 +17,19 @@
  */
 
 #include "stdafx.h"
-
-#include "resource.h"
-
 #include "QueuePage.h"
 
 #include <dcpp/SettingsManager.h>
+
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/Label.h>
+
+#include "resource.h"
 #include "WinUtil.h"
+
+using dwt::Grid;
+using dwt::GridInfo;
+using dwt::Label;
 
 PropPage::ListItem QueuePage::optionItems[] = {
 	{ SettingsManager::PRIO_LOWEST, N_("Set lowest prio for newly added files larger than Low prio size"), IDH_SETTINGS_QUEUE_PRIO_LOWEST },
@@ -50,7 +56,7 @@ otherOptions(0)
 	grid->row(2).align = GridInfo::STRETCH;
 
 	{
-		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Auto priority settings")))->addChild(Grid::Seed(2, 6));
+		auto cur = grid->addChild(GroupBox::Seed(T_("Auto priority settings")))->addChild(Grid::Seed(2, 6));
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).size = 40;
 		cur->column(1).mode = GridInfo::STATIC;
@@ -61,7 +67,7 @@ otherOptions(0)
 		cur->setHelpId(IDH_SETTINGS_QUEUE_AUTOPRIO);
 
 		cur->addChild(Label::Seed(T_("Highest prio max size")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGHEST);
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		auto box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT));
 		box->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGHEST);
 		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGHEST);

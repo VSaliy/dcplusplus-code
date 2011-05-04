@@ -26,10 +26,7 @@
 
 #include "StaticFrame.h"
 #include "WinUtil.h"
-#include "TypedTable.h"
-
 #include "UserInfoBase.h"
-#include "resource.h"
 
 class UsersFrame :
 	public StaticFrame<UsersFrame>,
