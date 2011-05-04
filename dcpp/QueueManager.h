@@ -215,7 +215,7 @@ private:
 		void remove(QueueItem* qi, const UserPtr& aUser, bool removeRunning = true);
 		void setPriority(QueueItem* qi, QueueItem::Priority p);
 
-		unordered_map<UserPtr, QueueItemList, User::Hash> getList(size_t i) { return userQueue[i]; }
+		unordered_map<UserPtr, QueueItemList, User::Hash>& getList(size_t i) { return userQueue[i]; }
 		bool isRunning(const UserPtr& aUser) const {
 			return (running.find(aUser) != running.end());
 		}
