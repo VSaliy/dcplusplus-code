@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_DCPP_LOG_MANAGER_LISTENER_H
 #define DCPLUSPLUS_DCPP_LOG_MANAGER_LISTENER_H
 
+#include "noexcept.h"
+
 namespace dcpp {
 
 class LogManagerListener {
