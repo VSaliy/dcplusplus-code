@@ -42,7 +42,7 @@ protected:
 	}
 
 	void addRecentParams(WindowParams& params) const {
-		params["Title"] = WindowParam(Text::fromT(t().getText()), false);
+		params["Title"] = WindowParam(Text::fromT(t().getText()));
 	}
 };
 

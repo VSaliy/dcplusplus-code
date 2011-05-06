@@ -22,13 +22,11 @@
 #include "forward.h"
 #include "SettingsManager.h"
 #include "WindowInfo.h"
-#include "WindowManagerListener.h"
 
 namespace dcpp {
 
 class WindowManager :
 	public Singleton<WindowManager>,
-	public Speaker<WindowManagerListener>,
 	private SettingsManagerListener
 {
 	typedef std::unordered_map<string, unsigned> MaxRecentItems;
@@ -36,12 +34,11 @@ public:
 	typedef std::vector<WindowInfo> WindowInfoList;
 	typedef std::unordered_map<string, WindowInfoList> RecentList;
 
-	void autoOpen(bool skipHubs);
-
 	Lock lock();
 
 	void add(const string& id, const WindowParams& params);
 	void clear();
+	const WindowInfoList& getList();
 
 	/// adds the referenced window if it doesn't exist, and moves it to the top of the stack.
 	void addRecent(const string& id, const WindowParams& params);

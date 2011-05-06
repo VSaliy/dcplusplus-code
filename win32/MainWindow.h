@@ -21,9 +21,9 @@
 
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/LogManagerListener.h>
-#include <dcpp/WindowManagerListener.h>
 #include <dcpp/HttpConnection.h>
 #include <dcpp/User.h>
+#include <dcpp/WindowInfo.h>
 
 #include <dwt/widgets/Window.h>
 
@@ -35,7 +35,6 @@ class MainWindow :
 	private HttpConnectionListener,
 	private QueueManagerListener,
 	private LogManagerListener,
-	private WindowManagerListener,
 	public AspectStatus<MainWindow>
 {
 public:
@@ -187,6 +186,7 @@ private:
 	void handleTrayClicked();
 	void handleTrayUpdate();
 
+	void openWindow(const string& id, const WindowParams& params);
 	void layout();
 	void updateStatus();
 	void updateAwayStatus();
@@ -217,9 +217,6 @@ private:
 	// QueueManagerListener
 	virtual void on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) noexcept;
 	virtual void on(PartialList, const HintedUser&, const string& text) noexcept;
-
-	// WindowManagerListener
-	virtual void on(WindowManagerListener::Window, const string& id, const WindowParams& params) noexcept;
 };
 
 #endif // !defined(MAIN_FRM_H)

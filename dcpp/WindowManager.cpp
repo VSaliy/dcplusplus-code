@@ -40,16 +40,6 @@ WindowManager::~WindowManager() {
 	SettingsManager::getInstance()->removeListener(this);
 }
 
-void WindowManager::autoOpen(bool skipHubs) {
-	Lock l(cs);
-	for(WindowInfoList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
-		const string& id = i->getId();
-		if(skipHubs && id == hub())
-			continue;
-		fire(WindowManagerListener::Window(), id, i->getParams());
-	}
-}
-
 Lock WindowManager::lock() {
 	return Lock(cs);
 }
@@ -60,6 +50,10 @@ void WindowManager::add(const string& id, const WindowParams& params) {
 
 void WindowManager::clear() {
 	list.clear();
+}
+
+const WindowManager::WindowInfoList& WindowManager::getList() {
+	return list;
 }
 
 void WindowManager::addRecent(const string& id, const WindowParams& params) {
