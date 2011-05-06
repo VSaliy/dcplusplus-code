@@ -125,7 +125,7 @@ void Encoder::fromBase16(const char* src, uint8_t* dst, size_t len) {
 		// Skip what we don't recognise
 		auto tmp = decode16(src[i]);
 		auto tmp2 = decode16(src[i+1]);
-		dst[i/2] = (tmp << 4) + tmp;
+		dst[i/2] = (tmp << 4) + tmp2;
 	}
 }
 
