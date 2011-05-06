@@ -50,6 +50,7 @@ public:
 	void detectConnection();
 	void setup(bool settingsChanged);
 	bool isRunning() const { return running; }
+	const string& getStatus() { return status; }
 
 private:
 	friend class Singleton<ConnectivityManager>;
@@ -67,6 +68,8 @@ private:
 
 	bool autoDetected;
 	bool running;
+
+	string status;
 };
 
 } // namespace dcpp

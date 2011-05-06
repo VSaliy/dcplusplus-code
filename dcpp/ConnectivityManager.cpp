@@ -54,6 +54,7 @@ void ConnectivityManager::detectConnection() {
 		return;
 	running = true;
 
+	status.clear();
 	fire(ConnectivityManagerListener::Started());
 
 	// restore connectivity settings to their default value.
@@ -151,8 +152,9 @@ void ConnectivityManager::disconnect() {
 
 void ConnectivityManager::log(const string& message) {
 	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
-		LogManager::getInstance()->message(_("Connectivity: ") + message);
-		fire(ConnectivityManagerListener::Message(), message);
+		status = move(message);
+		LogManager::getInstance()->message(_("Connectivity: ") + status);
+		fire(ConnectivityManagerListener::Message(), status);
 	} else {
 		LogManager::getInstance()->message(message);
 	}
