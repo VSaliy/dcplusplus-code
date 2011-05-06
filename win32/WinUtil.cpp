@@ -948,14 +948,18 @@ void WinUtil::help(dwt::Control* widget, unsigned id) {
 }
 
 string WinUtil::getHelpText(unsigned id) {
-	if(id < IDH_CSHELP_BEGIN)
-		return Util::emptyString;
-	id -= IDH_CSHELP_BEGIN;
+	if(id >= IDH_CSHELP_BEGIN) {
+		id -= IDH_CSHELP_BEGIN;
 
-	if(id >= helpTexts.size())
-		return Util::emptyString;
+		if(id < helpTexts.size()) {
+			const auto& ret = helpTexts[id];
+			if(!ret.empty()) {
+				return ret;
+			}
+		}
+	}
 
-	return helpTexts[id];
+	return _("No help information available");
 }
 
 void WinUtil::toInts(const string& str, std::vector<int>& array) {
