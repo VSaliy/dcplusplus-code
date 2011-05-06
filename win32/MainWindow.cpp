@@ -153,7 +153,6 @@ fullSlots(false)
 
 	QueueManager::getInstance()->addListener(this);
 	LogManager::getInstance()->addListener(this);
-	WindowManager::getInstance()->addListener(this);
 
 	onClosing([this] { return handleClosing(); });
 
@@ -178,7 +177,23 @@ fullSlots(false)
 		showPortsError(e.getError());
 	}
 
-	WindowManager::getInstance()->autoOpen(WinUtil::isShift());
+	{
+		bool skipHubCon = WinUtil::isShift();
+
+		WindowManager* wm = WindowManager::getInstance();
+		auto lock = wm->lock();
+		const auto& list = wm->getList();
+
+		for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
+			auto id = i->getId();
+			auto params = i->getParams();
+
+			if(skipHubCon && id == WindowManager::hub())
+				params["NoConnect"] = WindowParam(Util::emptyString);
+
+			callAsync([this, id, params] { openWindow(id, params); });
+		}
+	}
 
 	callAsync([this] { parseCommandLine(tstring(::GetCommandLine())); });
 
@@ -915,7 +930,6 @@ bool MainWindow::handleClosing() {
 			if(transfers)
 				transfers->prepareClose();
 
-			WindowManager::getInstance()->removeListener(this);
 			LogManager::getInstance()->removeListener(this);
 			QueueManager::getInstance()->removeListener(this);
 
@@ -1523,9 +1537,9 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 	}
 }
 
-void MainWindow::on(WindowManagerListener::Window, const string& id, const WindowParams& params) noexcept {
+void MainWindow::openWindow(const string& id, const WindowParams& params) {
 	if(0);
-#define compare_id(frame) else if(frame::id == id) callAsync([this, params] { frame::parseWindowParams(getTabView(), params); })
+#define compare_id(frame) else if(frame::id == id) frame::parseWindowParams(getTabView(), params)
 	compare_id(HubFrame);
 	compare_id(PrivateFrame);
 	compare_id(DirectoryListingFrame);

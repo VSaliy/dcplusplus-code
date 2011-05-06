@@ -25,6 +25,7 @@
 * More icons (many from the Crystal Clear project, thanks to them)
 * Add notifications via balloon popups and sound (poy)
 * Fix taskbar thumbnails and "Aero Peek" live previews when DC++ is elevated (poy)
+* When holding shift at start, hubs are opened but not connected to (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

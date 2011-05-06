@@ -65,7 +65,7 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void openWindow(TabViewPtr parent, const string& url, bool activate = true);
+	static void openWindow(TabViewPtr parent, const string& url, bool activate = true, bool connect = true);
 	static void closeAll(bool all);
 	static void closeFavGroup(const string& group, bool reversed);
 	static void resortUsers();
@@ -189,7 +189,7 @@ private:
 	typedef FrameList::iterator FrameIter;
 	static FrameList frames;
 
-	HubFrame(TabViewPtr parent, const string& url);
+	HubFrame(TabViewPtr parent, const string& url, bool connect);
 	virtual ~HubFrame();
 
 	void layout();

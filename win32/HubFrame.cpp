@@ -65,7 +65,7 @@ static const ColumnInfo usersColumns[] = {
 
 HubFrame::FrameList HubFrame::frames;
 
-void HubFrame::openWindow(TabViewPtr parent, const string& url, bool activate) {
+void HubFrame::openWindow(TabViewPtr parent, const string& url, bool activate, bool connect) {
 	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
 		HubFrame* frame = *i;
 		if(frame->url == url) {
@@ -77,7 +77,7 @@ void HubFrame::openWindow(TabViewPtr parent, const string& url, bool activate) {
 		}
 	}
 
-	auto frame = new HubFrame(parent, url);
+	auto frame = new HubFrame(parent, url, connect);
 	if(activate)
 		frame->activate();
 }
@@ -114,9 +114,9 @@ WindowParams HubFrame::getWindowParams() const {
 }
 
 void HubFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params) {
-	auto i = params.find(WindowInfo::address);
-	if(i != params.end())
-		openWindow(parent, i->second, parseActivateParam(params));
+	auto address = params.find(WindowInfo::address);
+	if(address != params.end())
+		openWindow(parent, address->second, parseActivateParam(params), params.find("NoConnect") == params.end());
 }
 
 bool HubFrame::isFavorite(const WindowParams& params) {
@@ -126,7 +126,7 @@ bool HubFrame::isFavorite(const WindowParams& params) {
 	return false;
 }
 
-HubFrame::HubFrame(TabViewPtr parent, const string& url_) :
+HubFrame::HubFrame(TabViewPtr parent, const string& url_, bool connect) :
 BaseType(parent, Text::toT(url_), IDH_HUB, IDI_HUB_OFF, false),
 paned(0),
 userGrid(0),
@@ -228,7 +228,8 @@ inTabComplete(false)
 
 	client = ClientManager::getInstance()->getClient(url);
 	client->addListener(this);
-	client->connect();
+	if(connect)
+		client->connect();
 
 	readLog(getLogPath(), SETTING(HUB_LAST_LOG_LINES));
 
