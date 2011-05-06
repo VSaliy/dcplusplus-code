@@ -19,6 +19,7 @@
 #include "stdafx.h"
 #include "ConnectivityPage.h"
 
+#include <dcpp/format.h>
 #include <dcpp/SettingsManager.h>
 
 #include <dwt/widgets/Grid.h>
@@ -72,7 +73,14 @@ log(0)
 
 	PropPage::read(items);
 
-	handleAutoClicked();
+	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
+		const auto& status = ConnectivityManager::getInstance()->getStatus();
+		if(!status.empty()) {
+			addLogLine(Text::toT(status));
+		}
+	} else {
+		addLogLine(T_("Automatic connectivity setup is currently disabled"));
+	}
 
 	ConnectivityManager::getInstance()->addListener(this);
 }

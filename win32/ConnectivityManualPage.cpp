@@ -37,7 +37,7 @@ using dwt::GridInfo;
 using dwt::RadioButton;
 
 ConnectivityManualPage::ConnectivityManualPage(dwt::Widget* parent) :
-PropPage(parent, 8, 1),
+PropPage(parent, 5, 1),
 autoGroup(0),
 autoDetect(0),
 directIn(0),
@@ -64,17 +64,23 @@ bindAddress(0)
 		autoDetect->onClicked([this] { handleAutoClicked(); });
 	}
 
-	directIn = grid->addChild(RadioButton::Seed(T_("My computer is directly connected to the Internet (no router)")));
-	directIn->setHelpId(IDH_SETTINGS_CONNECTIVITY_DIRECT);
+	{
+		auto cur = grid->addChild(GroupBox::Seed())->addChild(Grid::Seed(4, 1));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->setSpacing(grid->getSpacing());
 
-	upnp = grid->addChild(RadioButton::Seed(T_("Let DC++ configure my router (NAT-PMP / UPnP)")));
-	upnp->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_UPNP);
+		directIn = cur->addChild(RadioButton::Seed(T_("My computer is directly connected to the Internet (no router)")));
+		directIn->setHelpId(IDH_SETTINGS_CONNECTIVITY_DIRECT);
 
-	nat = grid->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
-	nat->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_NAT);
+		upnp = cur->addChild(RadioButton::Seed(T_("Let DC++ configure my router (NAT-PMP / UPnP)")));
+		upnp->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_UPNP);
 
-	passive = grid->addChild(RadioButton::Seed(T_("Passive mode (last resort - has serious limitations)")));
-	passive->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_PASSIVE);
+		nat = cur->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
+		nat->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_NAT);
+
+		passive = cur->addChild(RadioButton::Seed(T_("Passive mode (last resort - has serious limitations)")));
+		passive->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_PASSIVE);
+	}
 
 	{
 		auto group = grid->addChild(GroupBox::Seed(T_("External / WAN IP")));
@@ -93,13 +99,17 @@ bindAddress(0)
 
 	{
 		auto cur = grid->addChild(Grid::Seed(1, 3));
-		cur->column(0).mode = cur->column(1).mode = cur->column(2).mode = GridInfo::FILL;
-		cur->setSpacing(10);
+		cur->setSpacing(grid->getSpacing());
 
 		auto addPortBox = [this, cur](const tstring& text, unsigned helpId) -> TextBoxPtr {
 			auto group = cur->addChild(GroupBox::Seed(str(TF_("%1% port") % text)));
 			group->setHelpId(helpId);
-			return group->addChild(WinUtil::Seeds::Dialog::intTextBox);
+
+			auto boxGrid = group->addChild(Grid::Seed(1, 1));
+			boxGrid->column(0).size = 40;
+			boxGrid->column(0).mode = GridInfo::STATIC;
+
+			return boxGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		};
 
 		tcp = addPortBox(T_("Transfer"), IDH_SETTINGS_CONNECTIVITY_PORT_TCP);

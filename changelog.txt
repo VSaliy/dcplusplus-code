@@ -1,7 +1,6 @@
 * Fav users frame becomes users frame and shows all users
 * Experimental implementation of KEYP ADC extension
 * Display the name of the device MiniUPnP has bound to (poy)
-* More status bar icons
 * Add NAT-PMP for port mappings as an alternative to UPnP (poy)
 * Continue from the beginning after reaching the end of a file list when searching (poy)
 * Report the progress of file list searches in the status bar (poy)
