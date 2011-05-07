@@ -51,9 +51,9 @@ public:
 		bool strikeout; /// if false, the "Strikeout" check-box will be hidden
 		bool underline; /// if false, the "Underline" check-box will be hidden
 
-		int64_t bgColor; /// either a COLORREF or -1 for the default
+		COLORREF bgColor; /// background color of the preview control, or NaC for the default
 
-		Options() : strikeout(true), underline(true), bgColor(-1) { }
+		Options() : strikeout(true), underline(true), bgColor(NaC) { }
 	};
 
 	/** Shows the dialog

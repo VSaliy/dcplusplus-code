@@ -80,8 +80,8 @@ public:
 		typedef RichTextBox::ThisType WidgetType;
 
 		FontPtr font;
-		int64_t foregroundColor; /// either a COLORREF or -1 for the default
-		int64_t backgroundColor; /// either a COLORREF or -1 for the default
+		COLORREF foregroundColor; /// the text color, or NaC for the default
+		COLORREF backgroundColor; /// the background color, or NaC for the default
 		bool scrollBarHorizontallyFlag;
 		bool scrollBarVerticallyFlag;
 

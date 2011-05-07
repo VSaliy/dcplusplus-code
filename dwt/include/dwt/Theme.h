@@ -56,16 +56,16 @@ public:
 	void drawBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent = true);
 	/**
 	* @param textFlags see the DrawText doc for possible values.
-	* @param color either a COLORREF or -1 for the default theme color.
+	* @param color text color, or NaC for the default theme color.
 	*/
-	void drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect, int64_t color = -1);
+	void drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect, COLORREF color = NaC);
 	/// @param textFlags see the DrawText doc for possible values.
 	void formatTextRect(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, Rectangle& rect);
 	/**
 	* @param specifier color property of the theme, see the TMT_COLOR doc for possible values.
-	* @return either a COLORREF or -1 if not specified.
+	* may return NaC if no color is available.
 	*/
-	int64_t getColor(int part, int state, int specifier);
+	COLORREF getColor(int part, int state, int specifier);
 	bool getPartSize(Canvas& canvas, int part, int state, Point& ret);
 	bool isBackgroundPartiallyTransparent(int part, int state);
 
