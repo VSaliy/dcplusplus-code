@@ -67,7 +67,7 @@ UINT_PTR CALLBACK FontDialog::CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 				::ShowWindow(box, SW_HIDE);
 			}
 
-			if(options.bgColor != -1) {
+			if(options.bgColor != NaC) {
 				::SetProp(hwnd, _T("bgColor"), &options.bgColor);
 			}
 

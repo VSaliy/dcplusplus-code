@@ -123,12 +123,12 @@ void Theme::drawBackground(Canvas& canvas, int part, int state, const Rectangle&
 	DrawThemeBackground(theme, canvas.handle(), part, state, &rc, 0);
 }
 
-void Theme::drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect, int64_t color) {
+void Theme::drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect, COLORREF color) {
 	::RECT rc = rect;
 
 	if(DrawThemeTextEx) {
 		DTTOPTS opts = { sizeof(DTTOPTS) };
-		if(color != -1) {
+		if(color != NaC) {
 			opts.dwFlags |= DTT_TEXTCOLOR;
 			opts.crText = color;
 		}
@@ -155,11 +155,11 @@ void Theme::formatTextRect(Canvas& canvas, int part, int state, const tstring& t
 		? rcOut : rc);
 }
 
-int64_t Theme::getColor(int part, int state, int specifier) {
+COLORREF Theme::getColor(int part, int state, int specifier) {
 	COLORREF color;
 	if(GetThemeColor(theme, part, state, specifier, &color) == S_OK)
 		return color;
-	return -1;
+	return NaC;
 }
 
 bool Theme::getPartSize(Canvas& canvas, int part, int state, Point& ret) {

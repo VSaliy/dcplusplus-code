@@ -49,8 +49,8 @@ const TCHAR RichTextBox::windowClass[] = RICHEDIT_CLASS;
 RichTextBox::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL),
 	font(new Font(DefaultGuiFont)),
-	foregroundColor(-1),
-	backgroundColor(-1),
+	foregroundColor(NaC),
+	backgroundColor(NaC),
 	scrollBarHorizontallyFlag(false),
 	scrollBarVerticallyFlag(false)
 {
@@ -67,8 +67,8 @@ void RichTextBox::create(const Seed& cs) {
 	if(cs.font)
 		setFont(cs.font);
 
-	COLORREF bg = (cs.backgroundColor == -1) ? ::GetSysColor(COLOR_WINDOW) : cs.backgroundColor;
-	COLORREF fg = (cs.foregroundColor == -1) ? ::GetSysColor(COLOR_WINDOWTEXT) : cs.foregroundColor;
+	COLORREF bg = (cs.backgroundColor == NaC) ? ::GetSysColor(COLOR_WINDOW) : cs.backgroundColor;
+	COLORREF fg = (cs.foregroundColor == NaC) ? ::GetSysColor(COLOR_WINDOWTEXT) : cs.foregroundColor;
 
 	setBackgroundColor(bg);
 

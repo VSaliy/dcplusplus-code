@@ -385,10 +385,8 @@ void Table::handleGroupDraw(COLORREF bgColor) {
 			case CDDS_PREPAINT:
 				{
 					// got a group! get the current theme text color and compare it to the bg.
-					int64_t color = -1;
-					if(theme)
-						color = theme.getColor(LVP_GROUPHEADER, LVGH_OPEN, TMT_HEADING1TEXTCOLOR);
-					if(color == -1)
+					COLORREF color = theme ? theme.getColor(LVP_GROUPHEADER, LVGH_OPEN, TMT_HEADING1TEXTCOLOR) : NaC;
+					if(color == NaC)
 						color = 0; // assume black
 					auto r = GetRValue(bgColor), g = GetGValue(bgColor), b = GetBValue(bgColor);
 					if(abs(GetRValue(color) + GetGValue(color) + GetBValue(color) - r - g - b) < 300) {
