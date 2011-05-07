@@ -115,12 +115,11 @@ class IOStream : public InputStream, public OutputStream {
 template<bool managed>
 class LimitedInputStream : public InputStream {
 public:
-	LimitedInputStream(InputStream* is, int64_t aMaxBytes) : s(is), maxBytes(aMaxBytes) { 	}
+	LimitedInputStream(InputStream* is, uint64_t aMaxBytes) : s(is), maxBytes(aMaxBytes) { 	}
 	virtual ~LimitedInputStream() { if(managed) delete s; }
 
 	size_t read(void* buf, size_t& len) {
-		dcassert(maxBytes >= 0);
-		len = (size_t)min(maxBytes, (int64_t)len);
+		len = (size_t)min(maxBytes, (uint64_t)len);
 		if(len == 0)
 			return 0;
 		size_t x = s->read(buf, len);
@@ -130,14 +129,14 @@ public:
 
 private:
 	InputStream* s;
-	int64_t maxBytes;
+	uint64_t maxBytes;
 };
 
 /** Limits the number of bytes that are requested to be written (not the number actually written!) */
 template<bool managed>
 class LimitedOutputStream : public OutputStream {
 public:
-	LimitedOutputStream(OutputStream* os, int64_t aMaxBytes) : s(os), maxBytes(aMaxBytes) {	}
+	LimitedOutputStream(OutputStream* os, uint64_t aMaxBytes) : s(os), maxBytes(aMaxBytes) {	}
 	virtual ~LimitedOutputStream() { if(managed) delete s; }
 
 	virtual size_t write(const void* buf, size_t len) {
@@ -155,7 +154,7 @@ public:
 	virtual bool eof() { return maxBytes == 0; }
 private:
 	OutputStream* s;
-	int64_t maxBytes;
+	uint64_t maxBytes;
 };
 
 template<bool managed>
