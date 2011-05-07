@@ -274,13 +274,20 @@ StringList DirectoryListing::getLocalPaths(const Directory* d) const {
 }
 
 void DirectoryListing::download(Directory* aDir, const string& aTarget, bool highPrio) {
+	auto bundle = BundlePtr(new Bundle);
+	bundle->name = aDir->getName();
+	download(aDir, aTarget, highPrio, "", *bundle);
+	QueueManager::getInstance()->add(aTarget, bundle, getUser(), 0);
+}
+
+void DirectoryListing::download(Directory* aDir, const string& aTarget, bool highPrio, const string& path, Bundle &bundle) {
 	string tmp;
 	string target = (aDir == getRoot()) ? aTarget : aTarget + aDir->getName() + PATH_SEPARATOR;
 	// First, recurse over the directories
 	Directory::List& lst = aDir->directories;
 	sort(lst.begin(), lst.end(), Directory::DirSort());
 	for(Directory::Iter j = lst.begin(); j != lst.end(); ++j) {
-		download(*j, target, highPrio);
+		download(*j, target, highPrio, path + (*j)->getName() + PATH_SEPARATOR, bundle);
 	}
 	// Then add the files
 	File::List& l = aDir->files;
@@ -289,6 +296,7 @@ void DirectoryListing::download(Directory* aDir, const string& aTarget, bool hig
 		File* file = *i;
 		try {
 			download(file, target + file->getName(), false, highPrio);
+			bundle.entries.insert(Bundle::Entry(path + file->getName(), file->getSize(), file->getTTH(), true));
 		} catch(const QueueException&) {
 			// Catch it here to allow parts of directories to be added...
 		} catch(const FileException&) {
