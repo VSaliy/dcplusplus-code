@@ -59,6 +59,7 @@ static const ColumnInfo filesColumns[] = {
 };
 
 #define FILE_LIST_NAME _T("File Lists")
+#define BUNDLE_INFO_NAME _T("Bundles")
 
 QueueFrame::QueueFrame(TabViewPtr parent) :
 BaseType(parent, T_("Download Queue"), IDH_QUEUE, IDI_QUEUE),
@@ -70,7 +71,8 @@ dirty(true),
 usingDirMenu(false),
 queueSize(0),
 queueItems(0),
-fileLists(0)
+fileLists(0),
+bundles(0)
 {
 	paned = addChild(SplitterContainer::Seed(SETTING(QUEUE_PANED_POS)));
 
@@ -111,7 +113,7 @@ fileLists(0)
 	status->setHelpId(STATUS_TOTAL_COUNT, IDH_QUEUE_TOTAL_COUNT);
 	status->setHelpId(STATUS_TOTAL_BYTES, IDH_QUEUE_TOTAL_BYTES);
 
-	QueueManager::getInstance()->addListener(this, [this](const QueueItem::StringMap& qsm) { addQueueList(qsm); });
+	QueueManager::getInstance()->addListener(this, [this](const QueueItem::StringMap& qsm, const BundleItem::Map &bim) { addQueueList(qsm, bim); });
 
 	updateStatus();
 
@@ -150,14 +152,18 @@ bool QueueFrame::handleKeyDownFiles(int c) {
 	return false;
 }
 
-void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
+void QueueFrame::addQueueList(const QueueItem::StringMap& li, const BundleItem::Map& bim) {
 	HoldRedraw hold(files);
 	HoldRedraw hold2(dirs);
 
-	for(QueueItem::StringMap::const_iterator j = li.begin(); j != li.end(); ++j) {
+	for(auto j = li.begin(); j != li.end(); ++j) {
 		QueueItem* aQI = j->second;
 		QueueItemInfo* ii = new QueueItemInfo(*aQI);
 		addQueueItem(ii, true);
+	}
+
+	for(auto i = bim.begin(); i != bim.end(); ++i) {
+		addBundle(i->second);
 	}
 
 	files->resort();
@@ -165,8 +171,8 @@ void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
 
 QueueFrame::QueueItemInfo* QueueFrame::getItemInfo(const string& target) {
 	string path = Util::getFilePath(target);
-	DirectoryPair items = directories.equal_range(path);
-	for(DirectoryIter i = items.first; i != items.second; ++i) {
+	auto items = directories.equal_range(path);
+	for(auto i = items.first; i != items.second; ++i) {
 		if(i->second->getTarget() == target) {
 			return i->second;
 		}
@@ -224,7 +230,7 @@ void QueueFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_SHOW_TREE, showTree->getChecked());
 	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getSplitterPos(0));
 
-	for(DirectoryIter i = directories.begin(); i != directories.end(); ++i) {
+	for(auto i = directories.begin(); i != directories.end(); ++i) {
 		delete i->second;
 	}
 	directories.clear();
@@ -279,15 +285,11 @@ void QueueFrame::updateFiles() {
 	HoldRedraw hold(files);
 
 	files->clear();
-	pair<DirectoryIter, DirectoryIter> i;
-	if(showTree->getChecked()) {
-		i = directories.equal_range(getSelectedDir());
-	} else {
-		i.first = directories.begin();
-		i.second = directories.end();
-	}
+	auto i = showTree->getChecked()
+		? directories.equal_range(getSelectedDir())
+		: make_pair(directories.begin(), directories.end());
 
-	for(DirectoryIter j = i.first; j != i.second; ++j) {
+	for(auto j = i.first; j != i.second; ++j) {
 		QueueItemInfo* ii = j->second;
 		ii->update();
 		files->insert(files->size(), ii);
@@ -670,9 +672,9 @@ void QueueFrame::moveDir(HTREEITEM ht, const string& target) {
 	}
 	const string& dir = getDir(ht);
 
-	DirectoryPair p = directories.equal_range(dir);
+	auto p = directories.equal_range(dir);
 
-	for(DirectoryIter i = p.first; i != p.second; ++i) {
+	for(auto i = p.first; i != p.second; ++i) {
 		QueueItemInfo* ii = i->second;
 		QueueManager::getInstance()->move(ii->getTarget(), target + Util::getFileName(ii->getTarget()));
 	}
@@ -765,8 +767,8 @@ void QueueFrame::removeDir(HTREEITEM ht) {
 		child = dirs->getNextSibling(child);
 	}
 	const string& name = getDir(ht);
-	DirectoryPair dp = directories.equal_range(name);
-	for(DirectoryIter i = dp.first; i != dp.second; ++i) {
+	auto dp = directories.equal_range(name);
+	for(auto i = dp.first; i != dp.second; ++i) {
 		QueueManager::getInstance()->remove(i->second->getTarget());
 	}
 }
@@ -808,8 +810,8 @@ void QueueFrame::setPriority(HTREEITEM ht, const QueueItem::Priority& p) {
 		child = dirs->getNextSibling(child);
 	}
 	const string& name = getDir(ht);
-	DirectoryPair dp = directories.equal_range(name);
-	for(DirectoryIter i = dp.first; i != dp.second; ++i) {
+	auto dp = directories.equal_range(name);
+	for(auto i = dp.first; i != dp.second; ++i) {
 		QueueManager::getInstance()->setPriority(i->second->getTarget(), p);
 	}
 }
@@ -1005,6 +1007,35 @@ bool QueueFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 	return false;
 }
 
+
+void QueueFrame::addBundle(const BundleItem& bi) {
+	bundleInfos[bi.getBundle()->getHash()] = new BundleItemInfo(bi);
+	if(!bundles) {
+		bundles = dirs->insert(NULL, new DirItemInfo("", BUNDLE_INFO_NAME), true);
+	}
+	dirs->insert(bundles, new DirItemInfo(bi.getBundle()->getHash().toBase32(), Text::toT(bi.getBundle()->name)));
+}
+
+void QueueFrame::removeBundle(const TTHValue& tth) {
+	auto b = bundleInfos.find(tth);
+	if(b == bundleInfos.end()) {
+		return;
+	}
+
+	auto hash = tth.toBase32();
+	if(bundles != NULL) {
+		for(auto h = dirs->getChild(bundles); h; h = dirs->getNextSibling(h)) {
+			auto di = dirs->getData(h);
+			if(di->getDir() == hash) {
+				dirs->erase(h);
+				break;
+			}
+		}
+	}
+
+	bundleInfos.erase(tth);
+}
+
 void QueueFrame::onAdded(QueueItemInfo* ii) {
 	dcassert(files->find(ii) == -1);
 	addQueueItem(ii, false);
@@ -1032,9 +1063,9 @@ void QueueFrame::onRemoved(const string& s) {
 	queueItems--;
 	dcassert(queueItems >= 0);
 
-	pair<DirectoryIter, DirectoryIter> i = directories.equal_range(ii->getPath());
-	DirectoryIter j;
-	for(j = i.first; j != i.second; ++j) {
+	auto i = directories.equal_range(ii->getPath());
+	auto j = i.first;
+	for(; j != i.second; ++j) {
 		if(j->second == ii)
 			break;
 	}
@@ -1119,4 +1150,13 @@ void QueueFrame::on(QueueManagerListener::RecheckAlreadyFinished, const string& 
 }
 void QueueFrame::on(QueueManagerListener::RecheckDone, const string& target) noexcept {
 	onRechecked(target, T_("Done."));
+}
+
+void QueueFrame::on(Added, const BundleItem& bi) noexcept {
+	callAsync([=] { addBundle(bi); });
+}
+
+void QueueFrame::on(Removed, const BundleItem& bi) noexcept {
+	auto tth = bi.getBundle()->getHash();
+	callAsync([=] { removeBundle(tth); });
 }

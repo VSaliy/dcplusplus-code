@@ -50,31 +50,6 @@ STANDARD_EXCEPTION(QueueException);
 
 class UserConnection;
 
-class DirectoryItem {
-public:
-	typedef DirectoryItem* Ptr;
-	typedef unordered_multimap<UserPtr, Ptr, User::Hash> DirectoryMap;
-	typedef DirectoryMap::iterator DirectoryIter;
-	typedef pair<DirectoryIter, DirectoryIter> DirectoryPair;
-
-	typedef vector<Ptr> List;
-	typedef List::iterator Iter;
-
-	DirectoryItem() : priority(QueueItem::DEFAULT) { }
-	DirectoryItem(const UserPtr& aUser, const string& aName, const string& aTarget,
-		QueueItem::Priority p) : name(aName), target(aTarget), priority(p), user(aUser) { }
-	~DirectoryItem() { }
-
-	UserPtr& getUser() { return user; }
-	void setUser(const UserPtr& aUser) { user = aUser; }
-
-	GETSET(string, name, Name);
-	GETSET(string, target, Target);
-	GETSET(QueueItem::Priority, priority, Priority);
-private:
-	UserPtr user;
-};
-
 class ConnectionQueueItem;
 class QueueLoader;
 
@@ -108,6 +83,7 @@ public:
 	void move(const string& aSource, const string& aTarget) noexcept;
 
 	void remove(const string& aTarget) noexcept;
+	void removeBundle(const TTHValue &tth) noexcept;
 	void removeSource(const string& aTarget, const UserPtr& aUser, int reason, bool removeConn = true) noexcept;
 	void removeSource(const UserPtr& aUser, int reason) noexcept;
 
@@ -118,7 +94,7 @@ public:
 	StringList getTargets(const TTHValue& tth);
 
 	using Speaker<QueueManagerListener>::addListener;
-	void addListener(QueueManagerListener* l, const function<void(const QueueItem::StringMap&)>& currentQueue);
+	void addListener(QueueManagerListener* l, const function<void(const QueueItem::StringMap&, const BundleItem::Map&)>& currentQueue);
 
 	Download* getDownload(UserConnection& aSource, bool supportsTrees) noexcept;
 	void putDownload(Download* aDownload, bool finished) noexcept;
@@ -237,13 +213,13 @@ private:
 	mutable CriticalSection cs;
 
 	/** Bundles queued for download */
-	map<TTHValue, BundleItem> bundles;
+	BundleItem::Map bundles;
 	/** QueueItems by target */
 	FileQueue fileQueue;
 	/** QueueItems by user */
 	UserQueue userQueue;
 	/** Directories queued for downloading */
-	DirectoryItem::DirectoryMap directories;
+	unordered_multimap<UserPtr, DirectoryItemPtr, User::Hash> directories;
 	/** Recent searches list, to avoid searching for the same thing too often */
 	StringList recent;
 	/** The queue needs to be saved */
@@ -264,6 +240,9 @@ private:
 	static void moveFile_(const string& source, const string& target);
 	void moveStuckFile(QueueItem* qi);
 	void rechecked(QueueItem* qi);
+
+	BundleItem* getBundle(QueueItem* qi) noexcept;
+	bool isFinished(const BundleItem &bi) noexcept;
 
 	void setDirty();
 

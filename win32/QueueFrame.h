@@ -25,9 +25,11 @@
 #include <dcpp/FastAlloc.h>
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/QueueItem.h>
+#include <dcpp/BundleItem.h>
 
 #include "StaticFrame.h"
 
+using std::unordered_map;
 using std::unordered_multimap;
 
 class QueueFrame :
@@ -187,6 +189,12 @@ private:
 		QueueItemInfo& operator=(const QueueItemInfo&);
 	};
 
+	class BundleItemInfo {
+	public:
+		BundleItemInfo(const BundleItem &b) : bundleItem(b) { }
+		GETSET(BundleItem, bundleItem, BundleItem);
+	};
+
 	SplitterContainerPtr paned;
 
 	typedef TypedTree<DirItemInfo> WidgetDirs;
@@ -200,9 +208,9 @@ private:
 	CheckBoxPtr showTree;
 
 	typedef unordered_multimap<string, QueueItemInfo*, noCaseStringHash, noCaseStringEq> DirectoryMap;
-	typedef DirectoryMap::iterator DirectoryIter;
-	typedef pair<DirectoryIter, DirectoryIter> DirectoryPair;
 	DirectoryMap directories;
+	typedef unordered_map<TTHValue, BundleItemInfo*> BundleInfoMap;
+	BundleInfoMap bundleInfos;
 
 	std::string curDir;
 
@@ -213,6 +221,7 @@ private:
 	int queueItems;
 
 	HTREEITEM fileLists;
+	HTREEITEM bundles;
 
 	QueueFrame(TabViewPtr parent);
 	virtual ~QueueFrame();
@@ -221,7 +230,10 @@ private:
 	void updateFiles();
 
 	void addQueueItem(QueueItemInfo* qi, bool noSort);
-	void addQueueList(const QueueItem::StringMap& l);
+	void addQueueList(const QueueItem::StringMap& l, const BundleItem::Map &b);
+
+	void addBundle(const BundleItem &bi);
+	void removeBundle(const TTHValue& tth);
 
 	HTREEITEM addDirectory(const string& dir, bool isFileList = false, HTREEITEM startAt = NULL);
 	void removeDirectories(HTREEITEM ht);
@@ -300,6 +312,9 @@ private:
 	virtual void on(QueueManagerListener::RecheckNoTree, const string& target) noexcept;
 	virtual void on(QueueManagerListener::RecheckAlreadyFinished, const string& target) noexcept;
 	virtual void on(QueueManagerListener::RecheckDone, const string& target) noexcept;
+
+	virtual void on(Added, const BundleItem&) noexcept;
+	virtual void on(Removed, const BundleItem&) noexcept;
 };
 
 #endif // !defined(QUEUE_FRAME_H)
