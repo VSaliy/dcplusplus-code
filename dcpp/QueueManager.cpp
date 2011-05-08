@@ -1260,7 +1260,7 @@ void QueueManager::processList(const string& name, const HintedUser& user, int f
 		{
 			Lock l(cs);
 			auto dp = directories.equal_range(user) | map_values;
-			dl.assign(begin(dp), end(dp));
+			dl.assign(boost::begin(dp), boost::end(dp));
 			directories.erase(user);
 		}
 
