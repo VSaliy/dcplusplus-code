@@ -1925,7 +1925,7 @@ BundleItem* QueueManager::getBundle(QueueItem *qi) noexcept {
 }
 
 bool QueueManager::isFinished(const BundleItem &bi) noexcept {
-	return find_if(bi.getBundle()->entries, [&](const Bundle::Entry &e) {
+	return find_if(bi.getBundle()->entries, [&](const Bundle::Entry &e) -> bool {
 		auto qi = fileQueue.find(bi.getRoot() + e.name);
 		return qi && !qi->isFinished();
 	}) != bi.getBundle()->entries.end();
