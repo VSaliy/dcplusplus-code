@@ -38,7 +38,7 @@ const dwt::Rectangle padding(7, 4, 14, 21);
 
 PropPage::PropPage(dwt::Widget* parent, int rows, int cols) : dwt::Container(parent), grid(0) {
 	{
-		Seed seed(0, WS_EX_CONTROLPARENT);
+		Seed seed(0, WS_EX_CONTROLPARENT | WS_EX_TRANSPARENT);
 		seed.style &= ~WS_VISIBLE;
 		create(seed);
 	}

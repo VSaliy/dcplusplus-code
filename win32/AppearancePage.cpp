@@ -52,7 +52,7 @@ PropPage::ListItem AppearancePage::listItems[] = {
 };
 
 AppearancePage::AppearancePage(dwt::Widget* parent) :
-PropPage(parent, 5, 2),
+PropPage(parent, 5, 1),
 options(0),
 languages(0)
 {
@@ -62,35 +62,32 @@ languages(0)
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
-	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Options")));
-		grid->setWidget(group, 0, 0, 1, 2);
-		options = group->addChild(WinUtil::Seeds::Dialog::optionsTable);
-	}
+	options = grid->addChild(GroupBox::Seed(T_("Options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Default away message")));
+		auto cur = grid->addChild(Grid::Seed(1, 2));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->setSpacing(grid->getSpacing());
+
+		auto group = cur->addChild(GroupBox::Seed(T_("Default away message")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
 
 		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
-		TextBoxPtr box = group->addChild(seed);
+		auto box = group->addChild(seed);
 		box->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
 		items.push_back(Item(box, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
-	}
 
-	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Set timestamps")));
+		group = cur->addChild(GroupBox::Seed(T_("Set timestamps")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);
 
-		TextBoxPtr box = group->addChild(WinUtil::Seeds::Dialog::textBox);
+		box = group->addChild(WinUtil::Seeds::Dialog::textBox);
 		box->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);
 		items.push_back(Item(box, SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
 	}
 
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Height of the message editing box")));
-		grid->setWidget(group, 2, 0, 1, 2);
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_MESSAGE_LINES);
 
 		GridPtr cur = group->addChild(Grid::Seed(1, 5));
@@ -118,7 +115,6 @@ languages(0)
 
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Language")));
-		grid->setWidget(group, 3, 0, 1, 2);
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
 
 		languages = group->addChild(WinUtil::Seeds::Dialog::comboBox);
@@ -127,7 +123,6 @@ languages(0)
 
 	LabelPtr label = grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")));
 	label->setHelpId(IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART);
-	grid->setWidget(label, 4, 0, 1, 2);
 
 	PropPage::read(items);
 	PropPage::read(listItems, options);
