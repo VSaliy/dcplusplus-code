@@ -64,7 +64,7 @@ public:
 
 	void handleSettings();
 
-	void notify(const tstring& title, const tstring& message);
+	void notify(const tstring& title, const tstring& message, const dwt::IconPtr& balloonIcon = 0);
 	void setStaticWindowState(const string& id, bool open);
 	void TrayPM();
 

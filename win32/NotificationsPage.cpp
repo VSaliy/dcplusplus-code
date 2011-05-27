@@ -27,24 +27,10 @@
 
 #include "resource.h"
 #include "MainWindow.h"
-#include "WinUtil.h"
 
 using dwt::Grid;
 using dwt::GridInfo;
 using dwt::LoadDialog;
-
-NotificationsPage::Option NotificationsPage::options[] = {
-	{ N_("Download finished"), SettingsManager::SOUND_FINISHED_DL, Util::emptyStringT,
-	SettingsManager::BALLOON_FINISHED_DL, 0, IDH_SETTINGS_NOTIFICATIONS_FINISHED_DL },
-	{ N_("File list downloaded"), SettingsManager::SOUND_FINISHED_FL, Util::emptyStringT,
-	SettingsManager::BALLOON_FINISHED_FL, 0, IDH_SETTINGS_NOTIFICATIONS_FINISHED_FL },
-	{ N_("Main chat message received"), SettingsManager::SOUND_MAIN_CHAT, Util::emptyStringT,
-	SettingsManager::BALLOON_MAIN_CHAT, 0, IDH_SETTINGS_NOTIFICATIONS_MAIN_CHAT },
-	{ N_("Private message received"), SettingsManager::SOUND_PM, Util::emptyStringT,
-	SettingsManager::BALLOON_PM, 0, IDH_SETTINGS_NOTIFICATIONS_PM },
-	{ N_("Private message window opened"), SettingsManager::SOUND_PM_WINDOW, Util::emptyStringT,
-	SettingsManager::BALLOON_PM_WINDOW, 0, IDH_SETTINGS_NOTIFICATIONS_PM_WINDOW }
-};
 
 static const ColumnInfo columns[] = {
 	{ "", 0, false },
@@ -64,6 +50,12 @@ balloonGroup(0),
 balloonBg(0)
 {
 	setHelpId(IDH_NOTIFICATIONSPAGE);
+
+	options[WinUtil::NOTIFICATION_FINISHED_DL].helpId = IDH_SETTINGS_NOTIFICATIONS_FINISHED_DL;
+	options[WinUtil::NOTIFICATION_FINISHED_FL].helpId = IDH_SETTINGS_NOTIFICATIONS_FINISHED_FL;
+	options[WinUtil::NOTIFICATION_MAIN_CHAT].helpId = IDH_SETTINGS_NOTIFICATIONS_MAIN_CHAT;
+	options[WinUtil::NOTIFICATION_PM].helpId = IDH_SETTINGS_NOTIFICATIONS_PM;
+	options[WinUtil::NOTIFICATION_PM_WINDOW].helpId = IDH_SETTINGS_NOTIFICATIONS_PM_WINDOW;
 
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
@@ -137,12 +129,12 @@ balloonBg(0)
 
 	WinUtil::makeColumns(table, columns, COLUMN_LAST);
 
-	for(size_t i = 0, n = sizeof(options) / sizeof(Option); i < n; ++i) {
-		options[i].sound = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)options[i].soundSetting));
-		options[i].balloon = SettingsManager::getInstance()->get((SettingsManager::IntSetting)options[i].balloonSetting);
+	for(size_t i = 0; i < WinUtil::NOTIFICATION_LAST; ++i) {
+		options[i].sound = Text::toT(SettingsManager::getInstance()->get((SettingsManager::StrSetting)WinUtil::notifications[i].sound));
+		options[i].balloon = SettingsManager::getInstance()->get((SettingsManager::IntSetting)WinUtil::notifications[i].balloon);
 
 		TStringList row(COLUMN_LAST);
-		row[COLUMN_TEXT] = T_(options[i].text);
+		row[COLUMN_TEXT] = T_(WinUtil::notifications[i].title);
 		table->insert(row);
 
 		updateSound(i);
@@ -170,8 +162,8 @@ void NotificationsPage::layout() {
 void NotificationsPage::write() {
 	SettingsManager* settings = SettingsManager::getInstance();
 	for(size_t i = 0, n = sizeof(options) / sizeof(Option); i < n; ++i) {
-		settings->set((SettingsManager::StrSetting)options[i].soundSetting, Text::fromT(options[i].sound));
-		settings->set((SettingsManager::IntSetting)options[i].balloonSetting, options[i].balloon);
+		settings->set((SettingsManager::StrSetting)WinUtil::notifications[i].sound, Text::fromT(options[i].sound));
+		settings->set((SettingsManager::IntSetting)WinUtil::notifications[i].balloon, options[i].balloon);
 	}
 }
 

@@ -586,8 +586,8 @@ bool MainWindow::filter(MSG& msg) {
 	return false;
 }
 
-void MainWindow::notify(const tstring& title, const tstring& message) {
-	notifier->addMessage(_T("DC++ - ") + title, message);
+void MainWindow::notify(const tstring& title, const tstring& message, const dwt::IconPtr& balloonIcon) {
+	notifier->addMessage(_T("DC++ - ") + title, message, balloonIcon);
 }
 
 void MainWindow::setStaticWindowState(const string& id, bool open) {
@@ -1515,8 +1515,7 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 			auto user = qi->getDownloads()[0]->getHintedUser();
 			callAsync([this, file, dir, user, speed] {
 				DirectoryListingFrame::openWindow(getTabView(), Text::toT(file), Text::toT(dir), user, speed);
-				WinUtil::notify(SettingsManager::SOUND_FINISHED_FL, SettingsManager::BALLOON_FINISHED_FL,
-					T_("File list downloaded"), Text::toT(Util::getFileName(file)));
+				WinUtil::notify(WinUtil::NOTIFICATION_FINISHED_FL, Text::toT(Util::getFileName(file)));
 			});
 
 		} else if(qi->isSet(QueueItem::FLAG_TEXT)) {
@@ -1531,8 +1530,7 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 	if(!qi->isSet(QueueItem::FLAG_USER_LIST)) {
 		auto file = qi->getTarget();
 		callAsync([file] {
-			WinUtil::notify(SettingsManager::SOUND_FINISHED_DL, SettingsManager::BALLOON_FINISHED_DL,
-				T_("Download finished"), Text::toT(file));
+			WinUtil::notify(WinUtil::NOTIFICATION_FINISHED_DL, Text::toT(file));
 		});
 	}
 }

@@ -82,6 +82,14 @@ using dwt::Widget;
 // def taken from <gettextP.h>
 extern "C" const char *_nl_locale_name_default(void);
 
+WinUtil::Notification WinUtil::notifications[NOTIFICATION_LAST] = {
+	{ SettingsManager::SOUND_FINISHED_DL, SettingsManager::BALLOON_FINISHED_DL, N_("Download finished"), IDI_DOWNLOAD },
+	{ SettingsManager::SOUND_FINISHED_FL, SettingsManager::BALLOON_FINISHED_FL, N_("File list downloaded"), IDI_DIRECTORY },
+	{ SettingsManager::SOUND_MAIN_CHAT, SettingsManager::BALLOON_MAIN_CHAT, N_("Main chat message received"), IDI_BALLOON },
+	{ SettingsManager::SOUND_PM, SettingsManager::BALLOON_PM, N_("Private message received"), IDI_PRIVATE },
+	{ SettingsManager::SOUND_PM_WINDOW, SettingsManager::BALLOON_PM_WINDOW, N_("Private message window opened"), IDI_PRIVATE }
+};
+
 tstring WinUtil::tth;
 dwt::BrushPtr WinUtil::bgBrush;
 COLORREF WinUtil::textColor = 0;
@@ -548,15 +556,17 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	return true;
 }
 
-void WinUtil::notify(int soundSetting, int balloonSetting, const tstring& balloonTitle, const tstring& balloonText) {
-	const string& s = SettingsManager::getInstance()->get((SettingsManager::StrSetting)soundSetting);
+void WinUtil::notify(NotificationType notification, const tstring& balloonText) {
+	const auto& n = notifications[notification];
+
+	const string& s = SettingsManager::getInstance()->get((SettingsManager::StrSetting)n.sound);
 	if(!s.empty()) {
 		playSound(Text::toT(s));
 	}
 
-	int b = SettingsManager::getInstance()->get((SettingsManager::IntSetting)balloonSetting);
+	int b = SettingsManager::getInstance()->get((SettingsManager::IntSetting)n.balloon);
 	if(b == SettingsManager::BALLOON_ALWAYS || (b == SettingsManager::BALLOON_BACKGROUND && !mainWindow->onForeground())) {
-		mainWindow->notify(balloonTitle, balloonText);
+		mainWindow->notify(Text::toT(n.title), balloonText, createIcon(n.icon, 16));
 	}
 }
 

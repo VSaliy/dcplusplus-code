@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_NOTIFICATIONS_PAGE_H
 
 #include "PropPage.h"
+#include "WinUtil.h"
 
 class NotificationsPage : public PropPage
 {
@@ -32,14 +33,12 @@ public:
 
 private:
 	struct Option {
-		const char* text;
-		int soundSetting;
 		tstring sound;
-		int balloonSetting;
 		int balloon;
 		unsigned helpId;
+		Option() : balloon(0), helpId(0) { }
 	};
-	static Option options[];
+	Option options[WinUtil::NOTIFICATION_LAST];
 
 	enum {
 		COLUMN_DUMMY, // so that the first column doesn't have a blank space.
