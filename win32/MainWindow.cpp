@@ -95,7 +95,6 @@ transfers(0),
 toolbar(0),
 tabs(0),
 slotsSpin(0),
-maximized(false),
 tray_pm(false),
 c(0),
 stopperThread(NULL),
@@ -809,7 +808,7 @@ void MainWindow::handleConnectFavHubGroup() {
 void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 	if(sz.isMinimized) {
 		handleMinimized();
-	} else if( sz.isMaximized || sz.isRestored ) {
+	} else if(sz.isMaximized || sz.isRestored) {
 		if(BOOLSETTING(AUTO_AWAY) && !Util::getManualAway()) {
 			Util::setAway(false);
 		}
@@ -830,7 +829,6 @@ void MainWindow::handleMinimized() {
 		}
 		setVisible(false);
 	}
-	maximized = isZoomed();
 }
 
 LRESULT MainWindow::handleActivateApp(WPARAM wParam) {
@@ -1442,12 +1440,11 @@ void MainWindow::handleRefreshFileList() {
 }
 
 void MainWindow::handleRestore() {
-	setVisible(true);
-	if(maximized) {
-		maximize();
-	} else {
+	::SetForegroundWindow(handle());
+	if(isIconic())
 		restore();
-	}
+	else
+		setVisible(true);
 }
 
 bool MainWindow::handleMessage(const MSG& msg, LRESULT& retVal) {
