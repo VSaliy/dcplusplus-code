@@ -97,6 +97,25 @@ public:
 		USER_ICON_LAST
 	};
 
+	enum NotificationType {
+		NOTIFICATION_FINISHED_DL,
+		NOTIFICATION_FINISHED_FL,
+		NOTIFICATION_MAIN_CHAT,
+		NOTIFICATION_PM,
+		NOTIFICATION_PM_WINDOW,
+
+		NOTIFICATION_LAST
+	};
+
+	struct Notification {
+		int sound;
+		int balloon;
+		const char* title;
+		unsigned icon;
+	};
+
+	static Notification notifications[NOTIFICATION_LAST];
+
 	static tstring tth;
 
 	static dwt::BrushPtr bgBrush;
@@ -162,7 +181,7 @@ public:
 	 */
 	static bool checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson);
 
-	static void notify(int soundSetting, int balloonSetting, const tstring& balloonTitle, const tstring& balloonText);
+	static void notify(NotificationType notification, const tstring& balloonText);
 	static void playSound(const tstring& sound);
 
 	static void openFile(const tstring& file);

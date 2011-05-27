@@ -463,7 +463,7 @@ void HubFrame::clearTaskList() {
 void HubFrame::addChat(const tstring& aLine) {
 	ChatType::addChat(client, aLine);
 
-	WinUtil::notify(SettingsManager::SOUND_MAIN_CHAT, SettingsManager::BALLOON_MAIN_CHAT, T_("Main chat message"), aLine);
+	WinUtil::notify(WinUtil::NOTIFICATION_MAIN_CHAT, aLine);
 	setDirty(SettingsManager::BOLD_HUB);
 
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {
