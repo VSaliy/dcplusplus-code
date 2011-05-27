@@ -58,7 +58,9 @@ public:
 
 	void setTooltip(const tstring& tip);
 
-	void addMessage(const tstring& title, const tstring& message);
+	/** show a balloon popup.
+	@param balloonIcon icon shown next to the title, only available on >= Vista. */
+	void addMessage(const tstring& title, const tstring& message, const IconPtr& balloonIcon = 0);
 
 	// TODO Fix callback parameters
 	typedef std::function<void ()> Callback;
@@ -89,6 +91,8 @@ private:
 	Callback iconClicked;
 	Callback balloonClicked;
 	Callback updateTip;
+
+	NOTIFYICONDATA makeNID() const;
 
 	/// Last tick that tip was updated
 	DWORD lastTick;

@@ -30,13 +30,35 @@
 */
 
 #include <dwt/widgets/Notification.h>
+
 #include <dwt/Application.h>
+#include <dwt/util/win32/Version.h>
 
 namespace dwt {
 
 const UINT Notification::message = ::RegisterWindowMessage(_T("dwt::Notification"));
 
 static const UINT taskbarMsg = ::RegisterWindowMessage(_T("TaskbarCreated"));
+
+/* the following dance adds the hBalloonIcon member to NOTIFYICONDATA without requiring a global
+switch of WINVER / _WIN32_WINNT / etc to Vista values. */
+typedef NOTIFYICONDATA legacyNOTIFYICONDATA;
+#if(_WIN32_WINNT < 0x600)
+struct NOTIFYICONDATA_ : NOTIFYICONDATA {
+	HICON hBalloonIcon;
+	NOTIFYICONDATA_(const NOTIFYICONDATA& nid) : NOTIFYICONDATA(nid), hBalloonIcon(0) { }
+};
+#define NOTIFYICONDATA NOTIFYICONDATA_
+#define NIF_SHOWTIP 0x80
+#endif
+
+legacyNOTIFYICONDATA Notification::makeNID() const {
+	bool vista = util::win32::ensureVersion(util::win32::VISTA);
+	legacyNOTIFYICONDATA nid = { vista ? sizeof(NOTIFYICONDATA) : sizeof(legacyNOTIFYICONDATA), parent->handle() };
+	if(vista)
+		nid.uFlags |= NIF_SHOWTIP;
+	return nid;
+}
 
 Notification::Notification(WindowPtr parent_) :
 parent(parent_),
@@ -73,10 +95,10 @@ void Notification::setVisible(bool visible_) {
 
 	visible = visible_;
 
-	NOTIFYICONDATA nid = { sizeof(NOTIFYICONDATA), parent->handle() };
+	NOTIFYICONDATA nid = makeNID();
 
 	if(visible) {
-		nid.uFlags = NIF_MESSAGE;
+		nid.uFlags |= NIF_MESSAGE;
 		nid.uCallbackMessage = message;
 
 		if(!tip.empty()) {
@@ -90,6 +112,7 @@ void Notification::setVisible(bool visible_) {
 		}
 
 		::Shell_NotifyIcon(NIM_ADD, &nid);
+
 	} else {
 		::Shell_NotifyIcon(NIM_DELETE, &nid);
 	}
@@ -100,24 +123,33 @@ void Notification::setTooltip(const tstring& tip_) {
 	lastTick = ::GetTickCount();
 
 	if(visible) {
-		NOTIFYICONDATA nid = { sizeof(NOTIFYICONDATA), parent->handle() };
-		nid.uFlags = NIF_TIP;
+		NOTIFYICONDATA nid = makeNID();
+		nid.uFlags |= NIF_TIP;
 		tip.copy(nid.szTip, sizeof(nid.szTip) / sizeof(nid.szTip[0]) - 1);
 		::Shell_NotifyIcon(NIM_MODIFY, &nid);
 	}
 }
 
-void Notification::addMessage(const tstring& title, const tstring& message) {
+void Notification::addMessage(const tstring& title, const tstring& message, const IconPtr& balloonIcon) {
 	if(!visible || balloons)
 		++balloons;
 	if(!visible)
 		setVisible(true);
 
-	NOTIFYICONDATA nid = { sizeof(NOTIFYICONDATA), parent->handle() };
-	nid.uFlags = NIF_INFO;
+	NOTIFYICONDATA nid = makeNID();
+	nid.uFlags |= NIF_INFO;
+
 	message.copy(nid.szInfo, sizeof(nid.szInfo) / sizeof(nid.szInfo[0]) - 1);
+
 	title.copy(nid.szInfoTitle, sizeof(nid.szInfoTitle) / sizeof(nid.szInfoTitle[0]) - 1);
-	nid.dwInfoFlags = NIIF_INFO;
+
+	if(balloonIcon && util::win32::ensureVersion(util::win32::VISTA)) {
+		nid.dwInfoFlags = NIIF_USER;
+		nid.hBalloonIcon = balloonIcon->handle();
+	} else {
+		nid.dwInfoFlags = NIIF_INFO;
+	}
+
 	::Shell_NotifyIcon(NIM_MODIFY, &nid);
 }
 
