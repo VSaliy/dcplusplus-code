@@ -161,13 +161,6 @@ bool Notification::redisplay() {
 	return false;
 }
 
-// Mingw headers miss these
-#ifndef NIN_BALLOONUSERCLICK
-#define NIN_BALLOONHIDE (WM_USER + 3)
-#define NIN_BALLOONTIMEOUT (WM_USER + 4)
-#define NIN_BALLOONUSERCLICK (WM_USER + 5)
-#endif
-
 bool Notification::trayHandler(const MSG& msg) {
 	switch(msg.lParam) {
 	case WM_LBUTTONUP:

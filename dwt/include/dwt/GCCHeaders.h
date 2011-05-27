@@ -90,7 +90,18 @@ typedef struct
 #endif
 #endif
 
-// Additional (gcc, normally) stuff
+// defs for the notification area & balloons
+#ifndef NIIF_INFO
+#define NIIF_INFO 0x1
+#endif
+#ifndef NIIF_USER
+#define NIIF_USER 0x4
+#endif
+#ifndef NIN_BALLOONUSERCLICK
+#define NIN_BALLOONHIDE (WM_USER + 3)
+#define NIN_BALLOONTIMEOUT (WM_USER + 4)
+#define NIN_BALLOONUSERCLICK (WM_USER + 5)
+#endif
 
 #ifndef SPI_GETUIEFFECTS
 	#define SPI_GETUIEFFECTS 0x103E
@@ -99,7 +110,6 @@ typedef struct
 #ifndef SPI_SETUIEFFECTS
 	#define SPI_SETUIEFFECTS 0x103F
 #endif //! SPI_SETUIEFFECTS
-
 
 #ifndef GCLP_HCURSOR
 	#define GCLP_HCURSOR (-12)
