@@ -45,7 +45,7 @@ void Splitter::create(const Seed& cs) {
 	horizontal = cs.horizontal;
 	BaseType::create(cs);
 
-	theme.load(VSCLASS_PROGRESS, this);
+	theme.load(VSCLASS_WINDOW, this);
 	onPainting([this](PaintCanvas& canvas) { GCC_WTF->handlePainting(canvas); });
 
 	onLeftMouseDown([this](const MouseEvent&) { return GCC_WTF->handleLButtonDown(); });
@@ -61,21 +61,12 @@ SplitterContainerPtr Splitter::getParent() const {
 
 void Splitter::handlePainting(PaintCanvas& canvas) {
 	if(theme) {
-		int part, state;
-		if(hovering) {
-			part = horizontal ? PP_FILL : PP_FILLVERT;
-			state = horizontal ? PBFS_NORMAL : PBFVS_NORMAL;
-		} else {
-			part = horizontal ? PP_BAR : PP_BARVERT;
-			state = 0;
-		}
-
 		// don't draw edges.
 		Rectangle rect(canvas.getPaintRect());
 		(horizontal ? rect.pos.x : rect.pos.y) -= 2;
 		(horizontal ? rect.size.x : rect.size.y) += 4;
 
-		theme.drawBackground(canvas, part, state, rect);
+		theme.drawBackground(canvas, WP_CAPTION, hovering ? CS_ACTIVE : CS_INACTIVE, rect);
 
 	} else if(hovering) {
 		// safe to assume that the text color is different enough from the default background.
