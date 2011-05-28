@@ -66,11 +66,14 @@ void Splitter::handlePainting(PaintCanvas& canvas) {
 		(horizontal ? rect.pos.x : rect.pos.y) -= 2;
 		(horizontal ? rect.size.x : rect.size.y) += 4;
 
-		theme.drawBackground(canvas, WP_CAPTION, hovering ? CS_ACTIVE : CS_INACTIVE, rect, true, canvas.getPaintRect());
+		theme.drawBackground(canvas, WP_CAPTION, CS_ACTIVE, rect, true, canvas.getPaintRect());
 
-	} else if(hovering) {
-		// safe to assume that the text color is different enough from the default background.
-		canvas.fill(canvas.getPaintRect(), Brush(Brush::WindowText));
+	} else {
+		canvas.fill(canvas.getPaintRect(), Brush(Brush::ActiveCaption));
+	}
+
+	if(hovering) {
+		canvas.invert(Region(canvas.getPaintRect()));
 	}
 }
 
