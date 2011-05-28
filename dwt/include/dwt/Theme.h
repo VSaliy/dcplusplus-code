@@ -56,7 +56,8 @@ public:
 	* drawing the transparent bits yourself.
 	* @param clip only draw within this rectangle (useful for partial painting from a PaintCanvas).
 	*/
-	void drawBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent = true, boost::optional<Rectangle> clip = 0);
+	void drawBackground(Canvas& canvas, int part, int state, const Rectangle& rect,
+		bool drawParent = true, boost::optional<Rectangle> clip = boost::optional<Rectangle>());
 	/**
 	* @param textFlags see the DrawText doc for possible values.
 	* @param color text color, or NaC for the default theme color.
