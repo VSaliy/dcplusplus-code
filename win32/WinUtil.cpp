@@ -566,7 +566,7 @@ void WinUtil::notify(NotificationType notification, const tstring& balloonText) 
 
 	int b = SettingsManager::getInstance()->get((SettingsManager::IntSetting)n.balloon);
 	if(b == SettingsManager::BALLOON_ALWAYS || (b == SettingsManager::BALLOON_BACKGROUND && !mainWindow->onForeground())) {
-		mainWindow->notify(Text::toT(n.title), balloonText, createIcon(n.icon, 16));
+		mainWindow->notify(T_(n.title), balloonText, createIcon(n.icon, 16));
 	}
 }
 

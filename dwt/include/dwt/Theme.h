@@ -36,6 +36,8 @@
 
 #include <uxtheme.h>
 
+#include <boost/optional/optional.hpp>
+
 namespace dwt {
 
 /** helper class to manage a theme. this class:
@@ -52,8 +54,9 @@ public:
 	/**
 	* @param drawParent if false, you have to call isThemeBackgroundPartiallyTransparent and handle
 	* drawing the transparent bits yourself.
+	* @param clip only draw within this rectangle (useful for partial painting from a PaintCanvas).
 	*/
-	void drawBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent = true);
+	void drawBackground(Canvas& canvas, int part, int state, const Rectangle& rect, bool drawParent = true, boost::optional<Rectangle> clip = 0);
 	/**
 	* @param textFlags see the DrawText doc for possible values.
 	* @param color text color, or NaC for the default theme color.

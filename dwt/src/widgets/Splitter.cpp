@@ -61,12 +61,12 @@ SplitterContainerPtr Splitter::getParent() const {
 
 void Splitter::handlePainting(PaintCanvas& canvas) {
 	if(theme) {
+		Rectangle rect(getClientSize());
 		// don't draw edges.
-		Rectangle rect(canvas.getPaintRect());
 		(horizontal ? rect.pos.x : rect.pos.y) -= 2;
 		(horizontal ? rect.size.x : rect.size.y) += 4;
 
-		theme.drawBackground(canvas, WP_CAPTION, hovering ? CS_ACTIVE : CS_INACTIVE, rect);
+		theme.drawBackground(canvas, WP_CAPTION, hovering ? CS_ACTIVE : CS_INACTIVE, rect, true, canvas.getPaintRect());
 
 	} else if(hovering) {
 		// safe to assume that the text color is different enough from the default background.
