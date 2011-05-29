@@ -69,6 +69,7 @@ private:
 	static void openWindow_(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, Activation activate);
 public:
 	static void openWindow(TabViewPtr parent, const HintedUser& aUser, const string& txt, int64_t aSpeed);
+	static void activateWindow(const HintedUser& aUser);
 	static void openOwnList(TabViewPtr parent, const tstring& dir = Util::emptyStringT, Activation activate = FOLLOW_SETTING);
 	static void closeAll();
 

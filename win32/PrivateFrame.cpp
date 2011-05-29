@@ -69,11 +69,17 @@ void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 			if(!(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT)))
 				p->sendMessage(Text::toT(Util::getAwayMessage()));
 		}
-		WinUtil::notify(WinUtil::NOTIFICATION_PM_WINDOW, aMessage);
+		WinUtil::notify(WinUtil::NOTIFICATION_PM_WINDOW, aMessage, [user] { activateWindow(user); });
 	} else {
 		i->second->addChat(aMessage);
-		WinUtil::notify(WinUtil::NOTIFICATION_PM, aMessage);
+		WinUtil::notify(WinUtil::NOTIFICATION_PM, aMessage, [user] { activateWindow(user); });
 	}
+}
+
+void PrivateFrame::activateWindow(const UserPtr& u) {
+	auto i = frames.find(u);
+	if(i != frames.end())
+		i->second->activate();
 }
 
 void PrivateFrame::closeAll(){

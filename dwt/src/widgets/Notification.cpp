@@ -63,7 +63,7 @@ legacyNOTIFYICONDATA Notification::makeNID() const {
 Notification::Notification(WindowPtr parent_) :
 parent(parent_),
 visible(false),
-balloons(0),
+onlyBalloons(false),
 lastTick(0)
 {
 }
@@ -88,8 +88,8 @@ void Notification::setIcon(const IconPtr& icon_) {
 
 void Notification::setVisible(bool visible_) {
 	if(visible == visible_) {
-		if(visible && balloons)
-			balloons = 0;
+		if(visible && onlyBalloons)
+			onlyBalloons = false;
 		return;
 	}
 
@@ -130,11 +130,13 @@ void Notification::setTooltip(const tstring& tip_) {
 	}
 }
 
-void Notification::addMessage(const tstring& title, const tstring& message, const IconPtr& balloonIcon) {
-	if(!visible || balloons)
-		++balloons;
-	if(!visible)
+void Notification::addMessage(const tstring& title, const tstring& message, const Callback& callback, const IconPtr& balloonIcon) {
+	if(!visible) {
 		setVisible(true);
+		onlyBalloons = true;
+	}
+
+	balloons.push_back(callback);
 
 	NOTIFYICONDATA nid = makeNID();
 	nid.uFlags |= NIF_INFO;
@@ -162,7 +164,8 @@ bool Notification::redisplay() {
 }
 
 bool Notification::trayHandler(const MSG& msg) {
-	switch(msg.lParam) {
+	switch(LOWORD(msg.lParam)) {
+
 	case WM_LBUTTONUP:
 		{
 			if(iconClicked) {
@@ -196,14 +199,13 @@ bool Notification::trayHandler(const MSG& msg) {
 
 	case NIN_BALLOONUSERCLICK:
 		{
-			if(balloonClicked) {
-				balloonClicked();
-			}
+			balloons.front()();
 		} // fall through
 	case NIN_BALLOONHIDE: // fall through
 	case NIN_BALLOONTIMEOUT:
 		{
-			if(balloons && !--balloons) {
+			balloons.pop_front();
+			if(onlyBalloons && balloons.empty()) {
 				setVisible(false);
 			}
 			break;

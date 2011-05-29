@@ -556,7 +556,7 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	return true;
 }
 
-void WinUtil::notify(NotificationType notification, const tstring& balloonText) {
+void WinUtil::notify(NotificationType notification, const tstring& balloonText, const std::function<void ()>& balloonCallback) {
 	const auto& n = notifications[notification];
 
 	const string& s = SettingsManager::getInstance()->get((SettingsManager::StrSetting)n.sound);
@@ -566,7 +566,7 @@ void WinUtil::notify(NotificationType notification, const tstring& balloonText) 
 
 	int b = SettingsManager::getInstance()->get((SettingsManager::IntSetting)n.balloon);
 	if(b == SettingsManager::BALLOON_ALWAYS || (b == SettingsManager::BALLOON_BACKGROUND && !mainWindow->onForeground())) {
-		mainWindow->notify(T_(n.title), balloonText, createIcon(n.icon, 16));
+		mainWindow->notify(T_(n.title), balloonText, balloonCallback, createIcon(n.icon, 16));
 	}
 }
 

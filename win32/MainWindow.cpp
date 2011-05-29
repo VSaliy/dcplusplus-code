@@ -558,7 +558,6 @@ void MainWindow::initTray() {
 	notifier->onContextMenu([this] { handleTrayContextMenu(); });
 	notifier->onIconClicked([this] { handleTrayClicked(); });
 	notifier->onUpdateTip([this] { handleTrayUpdate(); });
-	notifier->onBalloonClicked([this] { handleRestore(); });
 	if(SETTING(ALWAYS_TRAY)) {
 		notifier->setVisible(true);
 	}
@@ -585,8 +584,8 @@ bool MainWindow::filter(MSG& msg) {
 	return false;
 }
 
-void MainWindow::notify(const tstring& title, const tstring& message, const dwt::IconPtr& balloonIcon) {
-	notifier->addMessage(_T("DC++ - ") + title, message, balloonIcon);
+void MainWindow::notify(const tstring& title, const tstring& message, const std::function<void ()>& callback, const dwt::IconPtr& balloonIcon) {
+	notifier->addMessage(str(TF_("DC++ - %1%") % title), message, [this, callback] { handleRestore(); if(callback) callback(); }, balloonIcon);
 }
 
 void MainWindow::setStaticWindowState(const string& id, bool open) {
@@ -1512,7 +1511,8 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 			auto user = qi->getDownloads()[0]->getHintedUser();
 			callAsync([this, file, dir, user, speed] {
 				DirectoryListingFrame::openWindow(getTabView(), Text::toT(file), Text::toT(dir), user, speed);
-				WinUtil::notify(WinUtil::NOTIFICATION_FINISHED_FL, Text::toT(Util::getFileName(file)));
+				WinUtil::notify(WinUtil::NOTIFICATION_FINISHED_FL, Text::toT(Util::getFileName(file)),
+					[=] { DirectoryListingFrame::activateWindow(user); });
 			});
 
 		} else if(qi->isSet(QueueItem::FLAG_TEXT)) {
@@ -1526,8 +1526,11 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 
 	if(!qi->isSet(QueueItem::FLAG_USER_LIST)) {
 		auto file = qi->getTarget();
-		callAsync([file] {
-			WinUtil::notify(WinUtil::NOTIFICATION_FINISHED_DL, Text::toT(file));
+		callAsync([this, file] {
+			WinUtil::notify(WinUtil::NOTIFICATION_FINISHED_DL, Text::toT(file), [=] {
+				FinishedDLFrame::openWindow(getTabView(), false);
+				///@todo focus the file in the finished download list?
+			});
 		});
 	}
 }
