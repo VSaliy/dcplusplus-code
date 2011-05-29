@@ -201,6 +201,13 @@ void DirectoryListingFrame::openWindow(TabViewPtr parent, const HintedUser& aUse
 	}
 }
 
+void DirectoryListingFrame::activateWindow(const HintedUser& aUser) {
+	auto i = lists.find(aUser);
+	if(i != lists.end()) {
+		i->second->activate();
+	}
+}
+
 DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser& aUser, int64_t aSpeed) :
 	BaseType(parent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY, false),
 	rebar(0),

@@ -82,6 +82,15 @@ void HubFrame::openWindow(TabViewPtr parent, const string& url, bool activate, b
 		frame->activate();
 }
 
+void HubFrame::activateWindow(const string& url) {
+	for(auto i = frames.cbegin(), iend = frames.cend(); i != iend; ++i) {
+		auto frame = *i;
+		if(frame->url == url) {
+			frame->activate();
+		}
+	}
+}
+
 void HubFrame::closeAll(bool all) {
 	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
 		HubFrame* frame = *i;
@@ -463,7 +472,10 @@ void HubFrame::clearTaskList() {
 void HubFrame::addChat(const tstring& aLine) {
 	ChatType::addChat(client, aLine);
 
-	WinUtil::notify(WinUtil::NOTIFICATION_MAIN_CHAT, aLine);
+	{
+		auto u = url;
+		WinUtil::notify(WinUtil::NOTIFICATION_MAIN_CHAT, aLine, [u] { activateWindow(u); });
+	}
 	setDirty(SettingsManager::BOLD_HUB);
 
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {

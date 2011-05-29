@@ -66,6 +66,7 @@ public:
 	const string& getId() const;
 
 	static void openWindow(TabViewPtr parent, const string& url, bool activate = true, bool connect = true);
+	static void activateWindow(const string& url);
 	static void closeAll(bool all);
 	static void closeFavGroup(const string& group, bool reversed);
 	static void resortUsers();

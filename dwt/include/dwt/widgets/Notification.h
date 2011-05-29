@@ -34,6 +34,8 @@
 #include "../resources/Icon.h"
 #include "Window.h"
 
+#include <deque>
+
 namespace dwt {
 
 /** A notification object represents a tray icon and a short message notification service */
@@ -58,20 +60,17 @@ public:
 
 	void setTooltip(const tstring& tip);
 
-	/** show a balloon popup.
-	@param balloonIcon icon shown next to the title, only available on >= Vista. */
-	void addMessage(const tstring& title, const tstring& message, const IconPtr& balloonIcon = 0);
-
-	// TODO Fix callback parameters
 	typedef std::function<void ()> Callback;
+
+	/** show a balloon popup.
+	@param callback callback called when the balloon has been clicked.
+	@param balloonIcon icon shown next to the title, only available on >= Vista. */
+	void addMessage(const tstring& title, const tstring& message, const Callback& callback, const IconPtr& balloonIcon = 0);
 
 	void onContextMenu(const Callback& callback_) { contextMenu = callback_; }
 
 	/// The icon was left-clicked / selected
 	void onIconClicked(const Callback& callback_) { iconClicked = callback_; }
-
-	/// The message added by addMessage was clicked
-	void onBalloonClicked(const Callback& callback_) { balloonClicked = callback_; }
 
 	/// This is sent when the tooltip text should be updated
 	void onUpdateTip(const Callback& callback_) { updateTip = callback_; }
@@ -81,16 +80,15 @@ private:
 	IconPtr icon;
 
 	bool visible;
-	size_t balloons; /// amount of queued balloons (to know when to disable a message-only icon).
 
 	tstring tip;
-	/** List of messages to display */
-	std::list<tstring> messages;
 
 	Callback contextMenu;
 	Callback iconClicked;
-	Callback balloonClicked;
 	Callback updateTip;
+
+	std::deque<Callback> balloons;
+	bool onlyBalloons; /// the icon has been created solely for balloons; it will disappear afterwards.
 
 	NOTIFYICONDATA makeNID() const;
 
