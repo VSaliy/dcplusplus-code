@@ -57,8 +57,7 @@ public:
 		openWindow(parent, false, BaseType::parseActivateParam(params));
 	}
 
-private:
-	friend class MDIChildFrame<T>;
+protected:
 	static T* frame;
 };
 

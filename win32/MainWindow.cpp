@@ -1511,8 +1511,9 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 			auto user = qi->getDownloads()[0]->getHintedUser();
 			callAsync([this, file, dir, user, speed] {
 				DirectoryListingFrame::openWindow(getTabView(), Text::toT(file), Text::toT(dir), user, speed);
-				WinUtil::notify(WinUtil::NOTIFICATION_FINISHED_FL, Text::toT(Util::getFileName(file)),
-					[=] { DirectoryListingFrame::activateWindow(user); });
+				WinUtil::notify(WinUtil::NOTIFICATION_FINISHED_FL, Text::toT(Util::getFileName(file)), [=] {
+					DirectoryListingFrame::activateWindow(user);
+				});
 			});
 
 		} else if(qi->isSet(QueueItem::FLAG_TEXT)) {
@@ -1528,8 +1529,7 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 		auto file = qi->getTarget();
 		callAsync([this, file] {
 			WinUtil::notify(WinUtil::NOTIFICATION_FINISHED_DL, Text::toT(file), [=] {
-				FinishedDLFrame::openWindow(getTabView(), false);
-				///@todo focus the file in the finished download list?
+				FinishedDLFrame::focusFile(getTabView(), file);
 			});
 		});
 	}

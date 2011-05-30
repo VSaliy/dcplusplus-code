@@ -87,8 +87,8 @@ private:
 	Callback iconClicked;
 	Callback updateTip;
 
-	std::deque<Callback> balloons;
-	bool onlyBalloons; /// the icon has been created solely for balloons; it will disappear afterwards.
+	std::deque<std::pair<Callback, IconPtr>> balloons; // keep a ref of the icon until the balloon has been shown.
+	bool onlyBalloons; /// the tray icon has been created solely for balloons; it will disappear afterwards.
 
 	NOTIFYICONDATA makeNID() const;
 
