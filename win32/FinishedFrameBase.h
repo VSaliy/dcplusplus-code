@@ -58,6 +58,11 @@ public:
 		STATUS_LAST
 	};
 
+	static void focusFile(TabViewPtr parent, const string& file) {
+		openWindow(parent, false);
+		frame->focusFile(file);
+	}
+
 protected:
 	friend class StaticFrame<T>;
 	friend class MDIChildFrame<T>;
@@ -380,12 +385,19 @@ private:
 	dwt::CheckBoxPtr onlyFull;
 	bool bOnlyFull;
 
-	static bool noClose() {
-		return false;
+	void focusFile(const string& file) {
+		tabs->setActive(filesWindow);
+		files->forEachT([this, &file](FileInfo* fi) {
+			if(fi->file == file) {
+				auto pos = files->find(fi);
+				files->setSelected(pos);
+				files->ensureVisible(pos);
+			}
+		});
 	}
 
-	static void fills(dwt::ContainerPtr parent, dwt::TablePtr control) {
-		control->resize(dwt::Rectangle(parent->getClientSize()));
+	static bool noClose() {
+		return false;
 	}
 
 	bool handleFilesKeyDown(int c) {

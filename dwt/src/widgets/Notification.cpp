@@ -136,7 +136,7 @@ void Notification::addMessage(const tstring& title, const tstring& message, cons
 		onlyBalloons = true;
 	}
 
-	balloons.push_back(callback);
+	balloons.push_back(std::make_pair(callback, balloonIcon));
 
 	NOTIFYICONDATA nid = makeNID();
 	nid.uFlags |= NIF_INFO;
@@ -199,7 +199,7 @@ bool Notification::trayHandler(const MSG& msg) {
 
 	case NIN_BALLOONUSERCLICK:
 		{
-			balloons.front()();
+			balloons.front().first();
 		} // fall through
 	case NIN_BALLOONHIDE: // fall through
 	case NIN_BALLOONTIMEOUT:
