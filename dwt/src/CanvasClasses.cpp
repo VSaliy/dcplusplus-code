@@ -36,6 +36,58 @@
 
 namespace dwt {
 
+COLORREF Color::darken(COLORREF color, double factor) {
+	if ( factor > 0.0 && factor <= 1.0 )
+	{
+		BYTE red = GetRValue( color );
+		BYTE green = GetGValue( color );
+		BYTE blue = GetBValue( color );
+
+		BYTE lightred = ( BYTE )( red - ( factor * red ) );
+		BYTE lightgreen = ( BYTE )( green - ( factor * green ) );
+		BYTE lightblue = ( BYTE )( blue - ( factor * blue ) );
+
+		color = RGB( lightred, lightgreen, lightblue );
+	}
+	return color;
+}
+
+COLORREF Color::lighten(COLORREF color, double factor) {
+	if ( factor > 0.0 && factor <= 1.0 )
+	{
+		BYTE red = GetRValue( color );
+		BYTE green = GetGValue( color );
+		BYTE blue = GetBValue( color );
+
+		BYTE lightred = ( BYTE )( ( factor * ( 255 - red ) ) + red );
+		BYTE lightgreen = ( BYTE )( ( factor * ( 255 - green ) ) + green );
+		BYTE lightblue = ( BYTE )( ( factor * ( 255 - blue ) ) + blue );
+
+		color = RGB( lightred, lightgreen, lightblue );
+	}
+	return color;
+}
+
+COLORREF Color::alphaBlend(COLORREF color, COLORREF factor) {
+	float aRed = GetRValue( factor );
+	float aGreen = GetGValue( factor );
+	float aBlue = GetBValue( factor );
+	float red = GetRValue( color );
+	float green = GetGValue( color );
+	float blue = GetBValue( color );
+
+	BYTE lightred = ( BYTE )( ( aRed / 255.0 ) * red );
+	BYTE lightgreen = ( BYTE )( ( aGreen / 255.0 ) * green );
+	BYTE lightblue = ( BYTE )( ( aBlue / 255.0 ) * blue );
+
+	color = RGB( lightred, lightgreen, lightblue );
+	return color;
+}
+
+COLORREF Color::predefined(int index) {
+	return ::GetSysColor(index);
+}
+
 int Canvas::getDeviceCaps( int nIndex )
 {
 	return( ::GetDeviceCaps( itsHdc, nIndex ) );
@@ -243,11 +295,6 @@ Canvas::BkMode Canvas::setBkMode(bool transparent) {
 COLORREF Canvas::getBkColor()
 {
 	return ::GetBkColor( itsHdc );
-}
-
-COLORREF Canvas::getSysColor( int index )
-{
-	return ::GetSysColor( index );
 }
 
 unsigned Canvas::setTextAlign( unsigned fMode )

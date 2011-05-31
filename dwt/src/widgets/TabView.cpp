@@ -746,7 +746,7 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 	if(theme) {
 		theme.drawText(canvas, part, state, text, dtFormat, rect);
 	} else {
-		canvas.setTextColor(::GetSysColor(isSelected ? COLOR_WINDOWTEXT : isHighlighted ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
+		canvas.setTextColor(Color::predefined(isSelected ? COLOR_WINDOWTEXT : isHighlighted ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
 		canvas.drawText(text, rect, dtFormat);
 	}
 

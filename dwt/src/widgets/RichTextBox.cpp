@@ -67,8 +67,8 @@ void RichTextBox::create(const Seed& cs) {
 	if(cs.font)
 		setFont(cs.font);
 
-	COLORREF bg = (cs.backgroundColor == NaC) ? ::GetSysColor(COLOR_WINDOW) : cs.backgroundColor;
-	COLORREF fg = (cs.foregroundColor == NaC) ? ::GetSysColor(COLOR_WINDOWTEXT) : cs.foregroundColor;
+	COLORREF bg = (cs.backgroundColor == NaC) ? Color::predefined(COLOR_WINDOW) : cs.backgroundColor;
+	COLORREF fg = (cs.foregroundColor == NaC) ? Color::predefined(COLOR_WINDOWTEXT) : cs.foregroundColor;
 
 	setBackgroundColor(bg);
 
