@@ -52,34 +52,32 @@
 
 namespace dwt {
 
+Menu::Colors Menu::colors;
+
 const int Menu::borderGap = 3;
 const int Menu::pointerGap = 5;
 const int Menu::textIconGap = 8;
 const int Menu::textBorderGap = 4;
 const unsigned Menu::minWidth = 150;
 
-/// @todo menus should re-init the cached default colors on WM_SYSCOLORCHANGE
-
-const COLORREF Menu::Colors::text = ::GetSysColor(COLOR_MENUTEXT);
-const COLORREF Menu::Colors::gray = ::GetSysColor(COLOR_GRAYTEXT);
-
-Menu::Colors::Colors() :
-background(::GetSysColor(COLOR_MENU)),
-menuBar(::GetSysColor(util::win32::ensureVersion(util::win32::VISTA) ? COLOR_MENUBAR : COLOR_3DFACE)),
-stripBar(ColorUtilities::darkenColor(background, 0.06)),
-highlightBackground(::GetSysColor(COLOR_HIGHLIGHT)),
-highlightText(::GetSysColor(COLOR_HIGHLIGHTTEXT)),
-titleText(::GetSysColor(COLOR_MENUTEXT))
-{
+Menu::Colors::Colors() {
+	reset();
 }
 
-Menu::Seed::Seed(bool ownerDrawn_,
-				 const Colors& colors_,
-				 const Point& iconSize_,
-				 FontPtr font_) :
+void Menu::Colors::reset() {
+	text = Color::predefined(COLOR_MENUTEXT);
+	gray = Color::predefined(COLOR_GRAYTEXT);
+	background = Color::predefined(COLOR_MENU);
+	menuBar = Color::predefined(util::win32::ensureVersion(util::win32::VISTA) ? COLOR_MENUBAR : COLOR_3DFACE);
+	stripBar = Color::darken(background, 0.06);
+	highlightBackground = Color::predefined(COLOR_HIGHLIGHT);
+	highlightText = Color::predefined(COLOR_HIGHLIGHTTEXT);
+	titleText = Color::predefined(COLOR_MENUTEXT);
+}
+
+Menu::Seed::Seed(bool ownerDrawn_, const Point& iconSize_, FontPtr font_) :
 popup(true),
 ownerDrawn(ownerDrawn_),
-colors(colors_),
 iconSize(iconSize_),
 font(font_)
 {
@@ -87,12 +85,12 @@ font(font_)
 
 Menu::Menu(Widget* parent) :
 parentMenu(0),
-itsParent(parent),
+parent(parent),
 ownerDrawn(true),
 popup(true),
 drawSidebar(false)
 {
-	dwtassert(dynamic_cast<Control*>(itsParent), _T("A Menu must have a parent derived from dwt::Control"));
+	dwtassert(dynamic_cast<Control*>(parent), _T("A Menu must have a parent derived from dwt::Control"));
 }
 
 void Menu::createHelper(const Seed& cs) {
@@ -100,7 +98,6 @@ void Menu::createHelper(const Seed& cs) {
 	popup = cs.popup;
 
 	if(ownerDrawn) {
-		colors = cs.colors;
 		iconSize = cs.iconSize;
 
 		if(cs.font)
@@ -114,7 +111,11 @@ void Menu::createHelper(const Seed& cs) {
 			itsTitleFont = boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
 		}
 
-		theme.load(VSCLASS_MENU, itsParent, !popup);
+		if(!popup) {
+			getParent()->addCallback(Message(WM_SYSCOLORCHANGE), Dispatchers::VoidVoid<0, false>([] { colors.reset(); }));
+		}
+
+		theme.load(VSCLASS_MENU, getParent(), !popup);
 	}
 }
 
@@ -151,7 +152,7 @@ void Menu::attach(HMENU hMenu, const Seed& cs) {
 			MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_FTYPE | MIIM_SUBMENU };
 			if(::GetMenuItemInfo(itsHandle, i, TRUE, &info)) {
 				if(info.hSubMenu) {
-					ObjectType subMenu(new Menu(itsParent));
+					ObjectType subMenu(new Menu(getParent()));
 					subMenu->attach(info.hSubMenu, cs);
 					itsChildren.push_back(subMenu);
 				}
@@ -233,7 +234,7 @@ void Menu::setMenu() {
 Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon, bool subTitle) {
 	// create the sub-menu
 	ObjectType sub(new Menu(getParent()));
-	sub->create(Seed(ownerDrawn, colors, iconSize, font));
+	sub->create(Seed(ownerDrawn, iconSize, font));
 	sub->parentMenu = this;
 
 	if(subTitle && popup) {
@@ -277,10 +278,10 @@ Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon, boo
 Menu::ObjectType Menu::getSystemMenu()
 {
 	// get system menu for the utmost parent
-	HMENU handle = ::GetSystemMenu( itsParent->handle(), FALSE );
+	HMENU handle = ::GetSystemMenu( getParent()->handle(), FALSE );
 
 	// create pointer to system menu
-	ObjectType sysMenu( new Menu( itsParent->handle() ) );
+	ObjectType sysMenu( new Menu( getParent()->handle() ) );
 
 	// create(take) system menu
 	sysMenu->create( handle, false );
@@ -565,7 +566,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			rectangle.pos.y += rectangle.height() / 2 - 1;
 
 			// select color
-			auto select(canvas.select(*PenPtr(new Pen(Colors::gray))));
+			auto select(canvas.select(*PenPtr(new Pen(colors.gray))));
 
 			// draw separator
 			canvas.moveTo( rectangle.left(), rectangle.top() );
@@ -627,10 +628,10 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 				auto bkMode(canvas.setBkMode(true));
 
 				canvas.setTextColor(
-					isGrayed ? Colors::gray :
+					isGrayed ? colors.gray :
 					wrapper->isTitle ? colors.titleText :
 					highlight ? colors.highlightText :
-					wrapper->textColor);
+					colors.text);
 
 				canvas.drawText(text, textRectangle, drawTextFormat);
 				if(!accelerator.empty())
@@ -680,7 +681,7 @@ bool Menu::handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper) {
 			stripRectangle.pos.y += 1;
 			stripRectangle.size.x -= 2;
 			stripRectangle.size.y -= 2;
-			auto select(canvas.select(*PenPtr(new Pen(Colors::gray))));
+			auto select(canvas.select(*PenPtr(new Pen(colors.gray))));
 			canvas.line(stripRectangle);
 		}
 	}

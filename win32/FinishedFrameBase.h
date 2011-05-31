@@ -59,8 +59,8 @@ public:
 	};
 
 	static void focusFile(TabViewPtr parent, const string& file) {
-		openWindow(parent, false);
-		frame->focusFile(file);
+		BaseType::openWindow(parent, false);
+		BaseType::frame->focusFile(file);
 	}
 
 protected:
@@ -389,9 +389,9 @@ private:
 		tabs->setActive(filesWindow);
 		files->forEachT([this, &file](FileInfo* fi) {
 			if(fi->file == file) {
-				auto pos = files->find(fi);
-				files->setSelected(pos);
-				files->ensureVisible(pos);
+				auto pos = this->files->find(fi);
+				this->files->setSelected(pos);
+				this->files->ensureVisible(pos);
 			}
 		});
 	}

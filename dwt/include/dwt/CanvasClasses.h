@@ -48,52 +48,20 @@ namespace dwt {
 /** Helper class for manipulating COLORREF values, contains static functions for
   * darken and lightening colors etc. COLORREF values (color variables) etc.
   */
-class ColorUtilities
-{
-public:
+struct Color {
 	/// Darkens given color by specified factor
 	/** Factor is in (0..1] range, the higher the factor the more dark the result
 	  * will be. <br>
 	  * Returns the manipulated value
 	  */
-	static COLORREF darkenColor( COLORREF color, double factor )
-	{
-		if ( factor > 0.0 && factor <= 1.0 )
-		{
-			BYTE red = GetRValue( color );
-			BYTE green = GetGValue( color );
-			BYTE blue = GetBValue( color );
-
-			BYTE lightred = ( BYTE )( red - ( factor * red ) );
-			BYTE lightgreen = ( BYTE )( green - ( factor * green ) );
-			BYTE lightblue = ( BYTE )( blue - ( factor * blue ) );
-
-			color = RGB( lightred, lightgreen, lightblue );
-		}
-		return color;
-	}
+	static COLORREF darken(COLORREF color, double factor);
 
 	/// Lightens given color by specified factor
 	/** Factor is in (0..1] range, the higher the factor the more light the result
 	  * will be. <br>
 	  * Returns the manipulated value
 	  */
-	static COLORREF lightenColor( COLORREF color, double factor )
-	{
-		if ( factor > 0.0 && factor <= 1.0 )
-		{
-			BYTE red = GetRValue( color );
-			BYTE green = GetGValue( color );
-			BYTE blue = GetBValue( color );
-
-			BYTE lightred = ( BYTE )( ( factor * ( 255 - red ) ) + red );
-			BYTE lightgreen = ( BYTE )( ( factor * ( 255 - green ) ) + green );
-			BYTE lightblue = ( BYTE )( ( factor * ( 255 - blue ) ) + blue );
-
-			color = RGB( lightred, lightgreen, lightblue );
-		}
-		return color;
-	}
+	static COLORREF lighten(COLORREF color, double factor);
 
 	/// Alpha blends color
 	/** Factor is in R/255, G/255 and B/255 meaning a value of 255, 255, 255 or
@@ -101,22 +69,10 @@ public:
 	  * will keep all read and blue and discard all green. <br>
 	  * Returns the manipulated value.
 	  */
-	static COLORREF alphaBlend( COLORREF color, COLORREF factor )
-	{
-		float aRed = GetRValue( factor );
-		float aGreen = GetGValue( factor );
-		float aBlue = GetBValue( factor );
-		float red = GetRValue( color );
-		float green = GetGValue( color );
-		float blue = GetBValue( color );
+	static COLORREF alphaBlend(COLORREF color, COLORREF factor);
 
-		BYTE lightred = ( BYTE )( ( aRed / 255.0 ) * red );
-		BYTE lightgreen = ( BYTE )( ( aGreen / 255.0 ) * green );
-		BYTE lightblue = ( BYTE )( ( aBlue / 255.0 ) * blue );
-
-		color = RGB( lightred, lightgreen, lightblue );
-		return color;
-	}
+	/// wrapper around GetSysColor, see its doc for possible params.
+	static COLORREF predefined(int index);
 };
 
 // Forward declarations
@@ -416,11 +372,6 @@ public:
 	  * Returns the current background color.
 	  */
 	COLORREF getBkColor();
-
-	/// Gets the color for an system display object.
-	/** Example: getSysColor( COLOR_WINDOW )
-	  */
-	COLORREF getSysColor( int index );
 
 	/// Sets the alignment mode for text operations
 	/** Returns the previous alignement mode and changes the current mode of text

@@ -130,8 +130,8 @@ const Table::Seed WinUtil::Seeds::Dialog::optionsTable;
 
 void WinUtil::init() {
 
-	SettingsManager::getInstance()->setDefault(SettingsManager::BACKGROUND_COLOR, (int) (GetSysColor(COLOR_WINDOW)));
-	SettingsManager::getInstance()->setDefault(SettingsManager::TEXT_COLOR, (int) (GetSysColor(COLOR_WINDOWTEXT)));
+	SettingsManager::getInstance()->setDefault(SettingsManager::BACKGROUND_COLOR, dwt::Color::predefined(COLOR_WINDOW));
+	SettingsManager::getInstance()->setDefault(SettingsManager::TEXT_COLOR, dwt::Color::predefined(COLOR_WINDOWTEXT));
 
 	textColor = SETTING(TEXT_COLOR);
 	bgColor = SETTING(BACKGROUND_COLOR);
@@ -869,8 +869,8 @@ public:
 		ts.style = WS_CHILD | WS_VISIBLE | ES_READONLY;
 		ts.exStyle = 0;
 		ts.location = dwt::Rectangle(margins, dwt::Point(maxWidth, 0));
-		ts.foregroundColor = ::GetSysColor(COLOR_INFOTEXT);
-		ts.backgroundColor = ::GetSysColor(COLOR_INFOBK);
+		ts.foregroundColor = dwt::Color::predefined(COLOR_INFOTEXT);
+		ts.backgroundColor = dwt::Color::predefined(COLOR_INFOBK);
 		createBox();
 	}
 

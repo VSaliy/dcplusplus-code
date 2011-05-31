@@ -57,18 +57,12 @@ class Menu : private boost::noncopyable
 
 	typedef Dispatchers::VoidVoid<> Dispatcher;
 
-public:
-	/// Type of object
-	typedef Menu ThisType;
-
-	/// Object type
-	typedef MenuPtr ObjectType;
-
-	/// Global colors, can be changed through the seed
-	struct Colors {
+	static struct Colors {
 		Colors();
-		static const COLORREF text;
-		static const COLORREF gray;
+		void reset();
+
+		COLORREF text;
+		COLORREF gray;
 		COLORREF background;
 		COLORREF menuBar;
 		COLORREF stripBar;
@@ -77,16 +71,21 @@ public:
 		COLORREF titleText;
 	} colors;
 
+public:
+	/// Type of object
+	typedef Menu ThisType;
+
+	/// Object type
+	typedef MenuPtr ObjectType;
+
 	struct Seed {
 		typedef ThisType WidgetType;
 
 		Seed(bool ownerDrawn_ = true,
-			const Colors& colors_ = Colors(),
 			const Point& iconSize_ = Point(16, 16),
 			FontPtr font_ = 0);
 		bool popup;
 		bool ownerDrawn;
-		Colors colors;
 		Point iconSize;
 		FontPtr font;
 	};
@@ -102,7 +101,7 @@ public:
 	}
 
 	Widget* getParent() const {
-		return itsParent;
+		return parent;
 	}
 
 	/// Actually creates the menu
@@ -291,9 +290,6 @@ private:
 		// Specifies if item is menu title
 		bool isTitle;
 
-		/// Menu item text color
-		COLORREF textColor;
-
 		/// Menu item icon
 		const IconPtr icon;
 
@@ -308,7 +304,6 @@ private:
 			index(index_),
 			isDefault(false),
 			isTitle(isTitle_),
-			textColor(Colors::text),
 			icon(icon_)
 		{}
 	};
@@ -342,7 +337,7 @@ private:
 
 	Menu* parentMenu; /// only defined for sub-menus; this is a link to their container menu
 	HMENU itsHandle;
-	Widget* itsParent;
+	Widget* parent;
 
 	bool ownerDrawn;
 	bool popup;
