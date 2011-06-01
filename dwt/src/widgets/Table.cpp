@@ -388,15 +388,16 @@ void Table::handleGroupDraw(COLORREF bgColor) {
 					COLORREF color = theme ? theme.getColor(LVP_GROUPHEADER, LVGH_OPEN, TMT_HEADING1TEXTCOLOR) : NaC;
 					if(color == NaC)
 						color = 0; // assume black
-					auto r = GetRValue(bgColor), g = GetGValue(bgColor), b = GetBValue(bgColor);
-					if(abs(GetRValue(color) + GetGValue(color) + GetBValue(color) - r - g - b) < 300) {
+					if(abs(GetRValue(color) + GetGValue(color) + GetBValue(color)
+						- GetRValue(bgColor) - GetGValue(bgColor) - GetBValue(bgColor)) < 300)
+					{
 						/* the theme color and the bg color are too close to each other; start by
 						filling the canvas with an invert of the bg, then invert the whole canvas
 						after everything has been drawn (after CDDS_POSTPAINT). */
 						Rectangle rect(data.rcText);
 						if(!theme && util::win32::ensureVersion(util::win32::VISTA))
 							rect.size.y += 6;
-						FreeCanvas(data.nmcd.hdc).fill(rect, Brush(RGB(255 - r, 255 - g, 255 - b)));
+						FreeCanvas(data.nmcd.hdc).fill(rect, Brush(0xFFFFFF - bgColor));
 
 						// set a flag so we don't have to re-compare colors on CDDS_POSTPAINT.
 						data.nmcd.lItemlParam = 1;

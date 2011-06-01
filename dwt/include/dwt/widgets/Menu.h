@@ -255,9 +255,9 @@ public:
 	virtual ~Menu();
 
 	template<typename T>
-	static bool handlePainting(T t) {
-		ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t->itemData);
-		return wrapper->menu->handlePainting(t, wrapper);
+	static bool handlePainting(T& t) {
+		ItemDataWrapper* wrapper = reinterpret_cast<ItemDataWrapper*>(t.itemData);
+		return wrapper->menu->handlePainting(t, *wrapper);
 	}
 
 protected:
@@ -308,25 +308,8 @@ private:
 		{}
 	};
 
-	/// Setting event handler for Draw Item Event
-	/** The Draw Item Event will be raised when the menu needs to draw itself, if you
-	* wish to truly be creative and be 100% in control you must handle this Event
-	* and do the actualy drawing of the Menu yourself, but for most people it will
-	* be enough to just manipulate the background colors etc of the MenuItemData
-	* given to the menu in the appendItem function <br>
-	* Note! <br>
-	* If this event is handled you also MUST handle the Measure Item Event!!
-	*/
-	bool handlePainting(LPDRAWITEMSTRUCT drawInfo, ItemDataWrapper* wrapper);
-
-	/// Setting event handler for Measure Item Event
-	/** The Measure Item Event is nessecary to handle if you want to draw the menu
-	* yourself since it is inside this Event Handler you're telling the system how
-	* much space you need to actually do the drawing <br>
-	* Note! <br>
-	* If this event is handled you also MUST handle the Draw Item Event!!
-	*/
-	bool handlePainting(LPMEASUREITEMSTRUCT measureInfo, ItemDataWrapper* wrapper);
+	bool handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper);
+	bool handlePainting(MEASUREITEMSTRUCT& measureInfo, ItemDataWrapper& wrapper);
 
 	LRESULT handleNCPaint(UINT message, WPARAM wParam, long menuWidth);
 

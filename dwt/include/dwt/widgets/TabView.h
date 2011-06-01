@@ -131,11 +131,11 @@ public:
 	using Widget::layout;
 
 	// tab controls only use WM_DRAWITEM
-	static bool handlePainting(LPDRAWITEMSTRUCT t) {
-		TabInfo* ti = reinterpret_cast<TabInfo*>(t->itemData);
+	static bool handlePainting(DRAWITEMSTRUCT& t) {
+		TabInfo* ti = reinterpret_cast<TabInfo*>(t.itemData);
 		return ti->control->handlePainting(t, ti);
 	}
-	static bool handlePainting(LPMEASUREITEMSTRUCT) { return false; }
+	static bool handlePainting(MEASUREITEMSTRUCT) { return false; }
 
 protected:
 	explicit TabView(Widget* parent);
@@ -202,7 +202,7 @@ private:
 	bool handleXMouseUp(const MouseEvent& mouseEvent);
 	bool handleMouseMove(const MouseEvent& mouseEvent);
 	void handleMouseLeave();
-	bool handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti);
+	bool handlePainting(DRAWITEMSTRUCT& info, TabInfo* ti);
 	void handlePainting(PaintCanvas& canvas);
 
 	tstring formatTitle(tstring title);

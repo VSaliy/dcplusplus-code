@@ -141,19 +141,24 @@ void Theme::drawText(Canvas& canvas, int part, int state, const tstring& text, u
 	}
 }
 
-void Theme::formatTextRect(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, Rectangle& rect) {
+void Theme::formatRect(Canvas& canvas, int part, int state, Rectangle& rect) {
 	::RECT rc = rect;
-
 	MARGINS margins = { 0 };
 	if(GetThemeMargins(theme, canvas.handle(), part, state, TMT_CONTENTMARGINS, &rc, &margins) == S_OK) {
 		rc.left += margins.cxLeftWidth; rc.right -= margins.cxRightWidth;
 		rc.top += margins.cyTopHeight; rc.bottom -= margins.cyBottomHeight;
+		rect = Rectangle(rc);
 	}
+}
 
+void Theme::formatTextRect(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, Rectangle& rect) {
+	formatRect(canvas, part, state, rect);
+
+	::RECT rc = rect;
 	::RECT rcOut;
-	rect = Rectangle(
-		(GetThemeTextExtent(theme, canvas.handle(), part, state, text.c_str(), text.size(), textFlags, &rc, &rcOut) == S_OK)
-		? rcOut : rc);
+	if(GetThemeTextExtent(theme, canvas.handle(), part, state, text.c_str(), text.size(), textFlags, &rc, &rcOut) == S_OK) {
+		rect = Rectangle(rcOut);
+	}
 }
 
 COLORREF Theme::getColor(int part, int state, int specifier) {

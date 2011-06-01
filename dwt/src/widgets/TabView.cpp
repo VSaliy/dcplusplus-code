@@ -647,11 +647,11 @@ void TabView::handleMouseLeave() {
 	}
 }
 
-bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
-	FreeCanvas canvas(info->hDC);
+bool TabView::handlePainting(DRAWITEMSTRUCT& info, TabInfo* ti) {
+	FreeCanvas canvas(info.hDC);
 	auto bkMode(canvas.setBkMode(true));
 
-	Rectangle rect(info->rcItem);
+	Rectangle rect(info.rcItem);
 	if(theme) {
 		// remove some borders
 		rect.pos.x -= 1;
@@ -660,7 +660,7 @@ bool TabView::handlePainting(LPDRAWITEMSTRUCT info, TabInfo* ti) {
 		rect.size.y += 1;
 	}
 
-	draw(canvas, info->itemID, std::move(rect), (info->itemState & ODS_SELECTED) == ODS_SELECTED);
+	draw(canvas, info.itemID, std::move(rect), (info.itemState & ODS_SELECTED) == ODS_SELECTED);
 	return true;
 }
 
