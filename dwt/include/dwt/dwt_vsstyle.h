@@ -47,6 +47,7 @@
 #define MENU_POPUPCHECKBACKGROUND 12
 #define MENU_POPUPITEM 14
 #define MENU_POPUPSEPARATOR 15
+#define MENU_POPUPSUBMENU 16
 #define MB_ACTIVE 1
 #define MBI_NORMAL 1
 #define MBI_HOT 2
@@ -58,6 +59,8 @@
 #define MPI_HOT 2
 #define MPI_DISABLED 3
 #define MPI_DISABLEDHOT 4
+#define MSM_NORMAL 1
+#define MSM_DISABLED 2
 
 #define VSCLASS_TAB L"TAB"
 #define TABP_TABITEM 1
@@ -68,7 +71,6 @@
 #define VSCLASS_WINDOW L"WINDOW"
 #define WP_CAPTION 1
 #define CS_ACTIVE 1
-#define CS_INACTIVE 2
 
 #else
 #include <vsstyle.h>

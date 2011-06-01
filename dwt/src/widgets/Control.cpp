@@ -84,13 +84,13 @@ bool Control::filter(MSG& msg) {
 
 template<typename T>
 static bool forwardPainting(const MSG& msg) {
-	T t = reinterpret_cast<T>(msg.lParam);
+	T* t = reinterpret_cast<T*>(msg.lParam);
 	if(!t)
 		return false;
 
 	switch(t->CtlType) {
-	case ODT_MENU: if(msg.wParam == 0) return Menu::handlePainting(t); break;
-	case ODT_TAB: return TabView::handlePainting(t); break;
+	case ODT_MENU: if(msg.wParam == 0) return Menu::handlePainting(*t); break;
+	case ODT_TAB: return TabView::handlePainting(*t); break;
 	}
 	return false;
 }
@@ -103,13 +103,13 @@ bool Control::handleMessage(const MSG& msg, LRESULT& retVal) {
 	switch(msg.message)
 	{
 	case WM_DRAWITEM:
-		if(forwardPainting<LPDRAWITEMSTRUCT>(msg)) {
+		if(forwardPainting<DRAWITEMSTRUCT>(msg)) {
 			retVal = TRUE;
 			return true;
 		}
 		break;
 	case WM_MEASUREITEM:
-		if(forwardPainting<LPMEASUREITEMSTRUCT>(msg)) {
+		if(forwardPainting<MEASUREITEMSTRUCT>(msg)) {
 			retVal = TRUE;
 			return true;
 		}

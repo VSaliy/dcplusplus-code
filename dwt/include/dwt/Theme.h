@@ -63,6 +63,7 @@ public:
 	* @param color text color, or NaC for the default theme color.
 	*/
 	void drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect, COLORREF color = NaC);
+	void formatRect(Canvas& canvas, int part, int state, Rectangle& rect);
 	/// @param textFlags see the DrawText doc for possible values.
 	void formatTextRect(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, Rectangle& rect);
 	/**
