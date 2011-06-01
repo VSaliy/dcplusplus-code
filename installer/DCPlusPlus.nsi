@@ -50,9 +50,6 @@ InstallDirRegKey HKLM SOFTWARE\DC++ "Install_Dir"
 !define MUI_LANGDLL_REGISTRY_VALUENAME "Install_Language"
 !define MUI_LANGDLL_WINDOWTITLE "$(^NameDA) language selection"
 
-!define MUI_LICENSEPAGE_TEXT_TOP $(LICENSE_TOP)
-!insertmacro MUI_PAGE_LICENSE "License.txt"
-
 !define MUI_COMPONENTSPAGE_NODESC
 !insertmacro MUI_PAGE_COMPONENTS
 
