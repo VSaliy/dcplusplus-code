@@ -66,14 +66,11 @@ HANDLE Application::itsMutex = 0;
 void Application::init(int nCmdShow) {
 	itsInstance = new Application(nCmdShow);
 
-#ifndef WINCE
 	BOOL enable;
-	::SystemParametersInfo(SPI_GETUIEFFECTS, 0, &enable, 0);
-	if (!enable) {
+	if(::SystemParametersInfo(SPI_GETUIEFFECTS, 0, &enable, 0) && !enable) {
 		enable = TRUE;
 		::SystemParametersInfo(SPI_SETUIEFFECTS, 0, &enable, 0);
 	}
-#endif
 
 	// Initializing Common Controls...
 	INITCOMMONCONTROLSEX init = {

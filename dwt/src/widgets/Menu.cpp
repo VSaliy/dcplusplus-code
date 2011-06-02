@@ -68,7 +68,6 @@ void Menu::Colors::reset() {
 	text = Color::predefined(COLOR_MENUTEXT);
 	gray = Color::predefined(COLOR_GRAYTEXT);
 	background = Color::predefined(COLOR_MENU);
-	menuBar = Color::predefined(util::win32::ensureVersion(util::win32::SEVEN) ? COLOR_MENUBAR : COLOR_3DFACE);
 	stripBar = Color::darken(background, 0.06);
 	highlightBackground = Color::predefined(COLOR_HIGHLIGHT);
 	highlightText = Color::predefined(COLOR_HIGHLIGHTTEXT);
@@ -524,11 +523,18 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 		theme.drawBackground(canvas, part, state, rect, false);
 
 	} else {
-		canvas.fill(rect, Brush(
-			highlight ? colors.highlightBackground :
-			!popup ? colors.menuBar :
-			wrapper.isTitle ? colors.stripBar :
-			colors.background));
+		COLORREF color;
+		if(highlight) {
+			color = colors.highlightBackground;
+		} else if(!popup) {
+			BOOL flat;
+			color = (::SystemParametersInfo(SPI_GETFLATMENU, 0, &flat, 0) && flat) ? Color::predefined(COLOR_MENUBAR) : colors.background;
+		} else if(wrapper.isTitle) {
+			color = colors.stripBar;
+		} else {
+			color = colors.background;
+		}
+		canvas.fill(rect, Brush(color));
 	}
 
 	Rectangle stripRect(rect);
