@@ -64,7 +64,6 @@ class Menu : private boost::noncopyable
 		COLORREF text;
 		COLORREF gray;
 		COLORREF background;
-		COLORREF menuBar;
 		COLORREF stripBar;
 		COLORREF highlightBackground;
 		COLORREF highlightText;
