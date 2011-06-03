@@ -45,20 +45,21 @@ resId(0)
 {
 }
 
-Icon::Icon(const unsigned resourceId, const Point& size) :
 /*
 * we use ::LoadImage instead of ::LoadIcon in order to be able to pick up the correct image,
 * depending on the "size" argument. also, our call to ::LoadImage should use LR_SHARED to match
 * ::LoadIcon more closely, but we don't pass that flag since all our icons are managed and
 * destroyed by DWT.
 */
+
+Icon::Icon(const unsigned resourceId, const Point& size) :
 ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId), IMAGE_ICON, size.x, size.y, LR_DEFAULTCOLOR)),
 resId(resourceId)
 {
 }
 
-Icon::Icon(const tstring& filePath) :
-ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE)),
+Icon::Icon(const tstring& filePath, const Point& size) :
+ResourceType((HICON)::LoadImage(0, filePath.c_str(), IMAGE_ICON, size.x, size.y, LR_DEFAULTCOLOR | LR_LOADFROMFILE)),
 resId(0)
 {
 }
