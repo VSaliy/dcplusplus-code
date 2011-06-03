@@ -42,7 +42,6 @@
 #include <dwt/DWTException.h>
 #include <dwt/util/check.h>
 #include <dwt/util/StringUtils.h>
-#include <dwt/util/win32/Version.h>
 #include <dwt/dwt_vsstyle.h>
 
 #include <algorithm>
