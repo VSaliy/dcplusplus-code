@@ -35,6 +35,7 @@
 #include <dwt/Texts.h>
 #include <dwt/WidgetCreator.h>
 #include <dwt/resources/Brush.h>
+#include <dwt/resources/Pen.h>
 #include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/ToolTip.h>
 
@@ -60,20 +61,34 @@ SplitterContainerPtr Splitter::getParent() const {
 }
 
 void Splitter::handlePainting(PaintCanvas& canvas) {
-	if(theme) {
-		Rectangle rect(getClientSize());
-		// don't draw edges.
-		(horizontal ? rect.pos.x : rect.pos.y) -= 2;
-		(horizontal ? rect.size.x : rect.size.y) += 4;
+	if(hovering) {
+		if(theme) {
+			Rectangle rect(getClientSize());
+			// don't draw edges.
+			(horizontal ? rect.pos.x : rect.pos.y) -= 2;
+			(horizontal ? rect.size.x : rect.size.y) += 4;
 
-		theme.drawBackground(canvas, WP_CAPTION, CS_ACTIVE, rect, true, canvas.getPaintRect());
+			theme.drawBackground(canvas, WP_CAPTION, CS_ACTIVE, rect, true, canvas.getPaintRect());
+
+		} else {
+			canvas.fill(canvas.getPaintRect(), Brush(Brush::ActiveCaption));
+		}
 
 	} else {
-		canvas.fill(canvas.getPaintRect(), Brush(Brush::ActiveCaption));
-	}
+		auto size = getClientSize();
 
-	if(hovering) {
-		canvas.invert(Region(canvas.getPaintRect()));
+		Pen pen(Color::predefined(COLOR_3DSHADOW));
+		auto select(canvas.select(pen));
+
+		if(horizontal) {
+			auto mid = size.y / 2;
+			canvas.line(0, mid - 1, size.x, mid - 1);
+			canvas.line(0, mid, size.x, mid);
+		} else {
+			auto mid = size.x / 2;
+			canvas.line(mid - 1, 0, mid - 1, size.y);
+			canvas.line(mid, 0, mid, size.y);
+		}
 	}
 }
 
