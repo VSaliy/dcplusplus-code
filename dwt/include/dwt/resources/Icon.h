@@ -55,28 +55,19 @@ struct IconPolicy : public NullPolicy<HICON> {
 class Icon : public Handle<IconPolicy>
 {
 public:
-	/// RAII Constructor taking a HICON
-	/** Note! <br>
-	  * Class takes "control" of HICON meaning it will automatically free the
-	  * contained HICON upon destruction
-	  */
 	explicit Icon(HICON icon, bool own = true);
 
-	/// RAII Constructor loading a icon from a resource ID
-	/** Note! <br>
-	  * Class takes "control" of HICON meaning it will automatically free the
-	  * contained HICON upon destruction
-	  * @params size desired size, useful to pick up the correct image when the icon contains
-	  * multiple images. if 0, the system will figure out the size of the 1st image by itself.
-	  */
+	/** Construct an icon from a resource id.
+	 * @param size desired size, useful to pick up the correct image when the icon contains
+	 * multiple images. if 0, the system will figure out the size of the 1st image by itself.
+	 */
 	explicit Icon(const unsigned resourceId, const Point& size = Point(0, 0));
 
-	/// RAII Constructor loading a icon from a file on disc
-	/** Note! <br>
-	  * Class takes "control" of HICON meaning it will automatically free the
-	  * contained HICON upon destruction
-	  */
-	explicit Icon(const tstring& filePath);
+	/** Construct an icon from a file.
+	 * @param size desired size, useful to pick up the correct image when the icon contains
+	 * multiple images. if 0, the system will figure out the size of the 1st image by itself.
+	 */
+	explicit Icon(const tstring& filePath, const Point& size = Point(0, 0));
 
 	/**
 	* get the size of the icon, in pixels. note: icons can contain multiple images with different
