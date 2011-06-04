@@ -99,7 +99,6 @@ no_backup:
   File "License.txt"
   File "LICENSE-GeoIP.txt"
   File "LICENSE-OpenSSL.txt"
-  File "mingwm10.dll"
 
   ; Add the whole locale directory
   File /r "locale"
@@ -203,7 +202,7 @@ Section "un.Uninstall"
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\LICENSE-GeoIP.txt"
   Delete "$INSTDIR\LICENSE-OpenSSL.txt"
-  Delete "$INSTDIR\mingwm10.dll"
+  Delete "$INSTDIR\mingwm10.dll" ; no longer required, remove if present.
   Delete "$INSTDIR\GeoIPCountryWhois.csv"
 
   ; Delete the whole locale directory
