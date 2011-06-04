@@ -54,7 +54,7 @@ struct NOTIFYICONDATA_ : NOTIFYICONDATA {
 
 legacyNOTIFYICONDATA Notification::makeNID() const {
 	bool vista = util::win32::ensureVersion(util::win32::VISTA);
-	legacyNOTIFYICONDATA nid = { vista ? sizeof(NOTIFYICONDATA) : sizeof(legacyNOTIFYICONDATA), parent->handle() };
+	legacyNOTIFYICONDATA nid = { static_cast<DWORD>(vista ? sizeof(NOTIFYICONDATA) : sizeof(legacyNOTIFYICONDATA)), parent->handle() };
 	if(vista)
 		nid.uFlags |= NIF_SHOWTIP;
 	return nid;

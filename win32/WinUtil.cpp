@@ -66,10 +66,13 @@
 extern "C" {
 	void HH_GS_CALL __GSHandlerCheck() { }
 	void HH_GS_CALL __security_check_cookie(uintptr_t) { }
+#ifndef _WIN64
 	uintptr_t __security_cookie;
+#endif
 }
 #undef HH_GS_CALL
 #endif
+
 #endif
 
 using dwt::Container;
