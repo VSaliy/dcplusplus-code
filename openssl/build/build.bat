@@ -15,7 +15,7 @@ tar -xzf *.tar.gz
 cd openssl*
 patch -p1 -i../patch.patch
 bash --login -i -c "cd '%CD%'"
-bash -c "./Configure mingw --cross-compile-prefix=i686-w64-mingw32-"
+bash -c "./Configure mingw --cross-compile-prefix=i686-pc-mingw32-"
 bash -c "make"
 if errorlevel 1 goto end
 mv crypto/opensslconf.h ../../include/openssl/opensslconf-mingw-x86.h

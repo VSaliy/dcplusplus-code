@@ -103,7 +103,7 @@ void ToolBar::addButton(const std::string& id, const IconPtr& icon, const IconPt
 void ToolBar::addButton(const std::string& id, int image, const tstring& text, bool showText,
 	unsigned helpId, const Dispatcher::F& f, const DropDownFunction& dropDownF)
 {
-	TBBUTTON tb = { image, id_offset + buttons.size(), TBSTATE_ENABLED, BTNS_AUTOSIZE };
+	TBBUTTON tb = { image, static_cast<int>(id_offset + buttons.size()), TBSTATE_ENABLED, BTNS_AUTOSIZE };
 	if(dropDownF)
 		tb.fsStyle |= f ? BTNS_DROPDOWN : BTNS_WHOLEDROPDOWN;
 	if(showText) {

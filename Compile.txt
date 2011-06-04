@@ -63,8 +63,15 @@
 
 		Make sure that MinGW\bin is in your PATH environment variable.
 
-		Also grab natupnp.h from the .Net 1.1 SDK and place it in the root of the repository.
-		<http://www.microsoft.com/downloads/details.aspx?FamilyID=9b3a2ca6-3647-4070-9f41-a333c6b9181d&DisplayLang=en>
+		Alternatively, if you have Cygwin, a MinGW compiler can be installed as part of Cygwin:
+		select it in the "Devel" category when running the Cygwin installer.
+		To make DC++ use it, add "prefix=i686-pc-mingw32-" to the scons arguments or create a
+		custom.py file containing:
+			prefix='i686-pc-mingw32-'
+		Make sure that Cygwin\bin is in your PATH environment variable.
+
+		Also grab natupnp.h from the Windows SDK and place it in the root of the repository.
+		<http://msdn.microsoft.com/en-us/windows/bb980924>
 
 	b. Microsoft Visual C++ 10 (2010):
 	<http://msdn.microsoft.com/en-us/visualc/default.aspx>

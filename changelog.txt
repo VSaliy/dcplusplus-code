@@ -29,6 +29,7 @@
 * Fix an integer overflow when starting a search 25 days after the previous one
 * DC++ survives a Windows theme change better (poy)
 * Remove the license page from the installer
+* Update OpenSSL to version 1.0.0d
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
