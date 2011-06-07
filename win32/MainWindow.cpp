@@ -558,7 +558,7 @@ void MainWindow::initTray() {
 	notifier->onContextMenu([this] { handleTrayContextMenu(); });
 	notifier->onIconClicked([this] { handleTrayClicked(); });
 	notifier->onUpdateTip([this] { handleTrayUpdate(); });
-	if(SETTING(ALWAYS_TRAY)) {
+	if(BOOLSETTING(ALWAYS_TRAY)) {
 		notifier->setVisible(true);
 	}
 }
@@ -811,7 +811,7 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 		if(BOOLSETTING(AUTO_AWAY) && !Util::getManualAway()) {
 			Util::setAway(false);
 		}
-		if(!SETTING(ALWAYS_TRAY)) {
+		if(!BOOLSETTING(ALWAYS_TRAY)) {
 			notifier->setVisible(false);
 		}
 		layout();
@@ -823,7 +823,7 @@ void MainWindow::handleMinimized() {
 		Util::setAway(true);
 	}
 	if(BOOLSETTING(MINIMIZE_TRAY) != WinUtil::isShift()) {
-		if(!SETTING(ALWAYS_TRAY)) {
+		if(!BOOLSETTING(ALWAYS_TRAY)) {
 			notifier->setVisible(true);
 		}
 		setVisible(false);
@@ -1061,6 +1061,7 @@ void MainWindow::handleSettings() {
 	string lastMapper = SETTING(MAPPER);
 	string lastBind = SETTING(BIND_ADDRESS);
 
+	bool lastTray = BOOLSETTING(ALWAYS_TRAY);
 	bool lastSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
 	bool lastURLReg = BOOLSETTING(URL_HANDLER);
 	bool lastMagnetReg = BOOLSETTING(MAGNET_REGISTER);
@@ -1076,6 +1077,9 @@ void MainWindow::handleSettings() {
 		} catch (const Exception& e) {
 			showPortsError(e.getError());
 		}
+
+		if(BOOLSETTING(ALWAYS_TRAY) != lastTray)
+			notifier->setVisible(BOOLSETTING(ALWAYS_TRAY));
 
 		if(BOOLSETTING(SORT_FAVUSERS_FIRST) != lastSortFavUsersFirst)
 			HubFrame::resortUsers();
