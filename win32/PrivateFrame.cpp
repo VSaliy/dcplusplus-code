@@ -72,8 +72,8 @@ void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 		WinUtil::notify(WinUtil::NOTIFICATION_PM_WINDOW, aMessage, [user] { activateWindow(user); });
 	} else {
 		i->second->addChat(aMessage);
-		WinUtil::notify(WinUtil::NOTIFICATION_PM, aMessage, [user] { activateWindow(user); });
 	}
+	WinUtil::notify(WinUtil::NOTIFICATION_PM, aMessage, [user] { activateWindow(user); });
 }
 
 void PrivateFrame::activateWindow(const UserPtr& u) {
