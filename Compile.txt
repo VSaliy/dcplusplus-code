@@ -107,12 +107,16 @@
 
 4.  Other information and submitting patches
 
-		a. By the way, with doxygen, graphviz and some luck you can use the supplied doxygen
-		configuration file to generate some nice docs...just check that the paths in doxyfile are
-		correct (graphviz)...
-		
+		a. With doxygen, graphviz and some luck, you can use the supplied doxygen configuration
+		file to generate some nice docs. Just check that the paths in the doxyfile are correct.
+
 		b. In the event you experience crashing you can check the howto guide for debugging
 		at <https://answers.launchpad.net/dcplusplus/+faq/337>
+
+		Note that DCPlusPlus.exe is stripped by default when it has been built with MinGW;
+		debugging symbols instead reside in DCPlusPlus.pdb. To get GDB to swallow it, start it with
+		the following command:
+			gdb -e DCPlusPlus.exe -s DCPlusPlus.pdb
 
 		c. Linux / Unix:
 

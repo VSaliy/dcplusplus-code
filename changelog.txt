@@ -30,6 +30,7 @@
 * DC++ survives a Windows theme change better (poy)
 * Remove the license page from the installer
 * Update OpenSSL to version 1.0.0d
+* [L#189241] Store crash reports in a CrashLog.txt file (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

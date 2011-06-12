@@ -17,6 +17,13 @@ if 'HAVE_HTMLHELP_H' in env['CPPDEFINES']:
 
 env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
 
+# add libs for the crash logger.
+if env['LINK'] == 'g++': # MinGW
+	if 'HAVE_BFD_H' in env['CPPDEFINES']:
+		env.Append(LIBS = ['bfd', 'iberty', 'imagehlp'])
+elif env['LINK'] == 'link': # MSVC
+	env.Append(LIBS = ['dbghelp'])
+
 env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib', '#/miniupnpc', '#/dwt/include'])
 
 openssl_lib = '#/openssl/lib/'
@@ -38,4 +45,9 @@ headers=dev.get_sources(source_path, "*.h")
 dev.i18n(source_path, env, [sources,headers], 'dcpp-win32')
 
 ret = env.Program(target, [sources, res, dev.client, dev.zlib, dev.boost, dev.bzip2, dev.miniupnpc, dev.natpmp, dev.dwt, dev.intl])
+
+if 'gcc' in env['TOOLS']:
+	# strip debug info to a separate PDB file
+	env.Command(target + '.pdb', target + '.exe', 'strip --only-keep-debug "$SOURCE" -o "$TARGET"')
+
 Return('ret')

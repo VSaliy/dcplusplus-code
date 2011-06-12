@@ -96,9 +96,9 @@ no_backup:
   File "dcppboot.xml"
   File "DCPlusPlus.chm"
   File "DCPlusPlus.exe"
+  File "DCPlusPlus.pdb"
   File "License.txt"
-  File "LICENSE-GeoIP.txt"
-  File "LICENSE-OpenSSL.txt"
+  File "ThirdPartyLicenses.txt"
 
   ; Add the whole locale directory
   File /r "locale"
@@ -199,11 +199,13 @@ Section "un.Uninstall"
   Delete "$INSTDIR\cshelp.rtf"
   Delete "$INSTDIR\dcppboot.xml"
   Delete "$INSTDIR\DCPlusPlus.chm"
+  Delete "$INSTDIR\DCPlusPlus.pdb"
   Delete "$INSTDIR\License.txt"
-  Delete "$INSTDIR\LICENSE-GeoIP.txt"
-  Delete "$INSTDIR\LICENSE-OpenSSL.txt"
+  Delete "$INSTDIR\LICENSE-GeoIP.txt" ; now in ThirdPartyLicenses; remove if present.
+  Delete "$INSTDIR\LICENSE-OpenSSL.txt" ; now in ThirdPartyLicenses; remove if present.
   Delete "$INSTDIR\mingwm10.dll" ; no longer required, remove if present.
   Delete "$INSTDIR\GeoIPCountryWhois.csv"
+  Delete "$INSTDIR\ThirdPartyLicenses.txt"
 
   ; Delete the whole locale directory
   RMDir /r "$INSTDIR\locale"

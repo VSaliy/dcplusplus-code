@@ -41,7 +41,7 @@
 #include <dwt/widgets/Control.h>
 #include <assert.h>
 
-extern int SmartWinMain(dwt::Application & app);
+extern int dwtMain(dwt::Application& app);
 
 namespace dwt {
 
@@ -275,13 +275,11 @@ void Application::removeFilter(const FilterIter& i) {
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	unsigned int retVal = 0;
-
 	dwt::Application::init(nCmdShow);
 
-	retVal = SmartWinMain(dwt::Application::instance()); // Call library user's startup function.
+	int ret = dwtMain(dwt::Application::instance()); // Call library user's startup function.
 
 	dwt::Application::uninit();
 
-	return retVal;
+	return ret;
 }
