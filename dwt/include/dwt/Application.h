@@ -130,8 +130,7 @@ public:
 	void callAsync(const Callback& f);
 
 	/** Runs the message pump, and doesn't return until application should quit.
-	 * Normally this function will be called from your
-	 * "SmartWinMain(SmartWin::Application & app )" function as the last function.
+	 * Normally this function is called from dwtMain.
 	 */
 	void run();
 

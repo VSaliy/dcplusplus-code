@@ -245,6 +245,8 @@ if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
 	conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
 if conf.CheckCXXHeader('natupnp.h', '<>'):
 	conf.env.Append(CPPDEFINES='HAVE_NATUPNP_H')
+if 'gcc' in env['TOOLS'] and conf.CheckCXXHeader('bfd.h', '<>'):
+	conf.env.Append(CPPDEFINES='HAVE_BFD_H')
 env = conf.Finish()
 
 dev.boost = dev.build('boost/')

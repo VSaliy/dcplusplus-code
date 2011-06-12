@@ -20,6 +20,7 @@
 
 #include <exception>
 
+#include "CrashLogger.h"
 #include "SingleInstance.h"
 #include "WinUtil.h"
 #include "MainWindow.h"
@@ -75,7 +76,7 @@ void term_handler() {
 }
 #endif
 
-int SmartWinMain(dwt::Application& app) {
+int dwtMain(dwt::Application& app) {
 #ifdef _DEBUG
 	old_handler = std::set_terminate(&term_handler);
 
@@ -92,6 +93,8 @@ int SmartWinMain(dwt::Application& app) {
 	WinUtil::enableDEP();
 
 	Util::initialize();
+
+	CrashLogger crashLogger;
 
 	string configPathHash;
 	{
