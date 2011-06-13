@@ -104,13 +104,13 @@ IP address before use. To determine your external IP address, follow the
 <p cshelp="IDH_SETTINGS_CONNECTIVITY_MAPPER">
 DC++ has several interfaces available it can use to try to automatically map the ports it requires
 on the router:
-<li>
-<ul>NAT-PMP: A lightweight protocol that is not widely used by generic routers; but open-source
-	firmwares generally implement it.</ul>
-<ul>MiniUPnP: An open-source UPnP library.</ul>
-<ul>Windows UPnP: Use Windows discovery services. Note that the DC++ implementation of Windows UPnP
-	is partial and prone to random failures. MiniUPnP is recommended instead.</ul>
-</li>
+<ul>
+<li>NAT-PMP: A lightweight protocol that is not widely used by generic routers; but open-source
+	firmwares generally implement it.</li>
+<li>MiniUPnP: An open-source UPnP library.</li>
+<li>Windows UPnP: Use Windows discovery services. Note that the DC++ implementation of Windows UPnP
+	is partial and prone to random failures. MiniUPnP is recommended instead.</li>
+</ul>
 The interface selected here will be tried first; other available interfaces will then be tried if
 the preferred port mapping interface were to fail.
 </p>
