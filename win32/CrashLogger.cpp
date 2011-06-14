@@ -99,7 +99,7 @@ bool init_bfd_ctx(bfd_ctx *bc, const char * procname)
 
 	bfd *b = bfd_openr(procname, 0);
 	if (!b) {
-		fprintf(f, "Failed to open bfd from %s\r\n", procname);
+		fprintf(f, "Failed to open bfd from %s\n", procname);
 		return false;
 	}
 
@@ -109,7 +109,7 @@ bool init_bfd_ctx(bfd_ctx *bc, const char * procname)
 
 	if (!(r1 && r2 && r3)) {
 		bfd_close(b);
-		fprintf(f, "Failed to init bfd from %s\r\n", procname);
+		fprintf(f, "Failed to init bfd from %s\n", procname);
 		return false;
 	}
 
@@ -120,7 +120,7 @@ bool init_bfd_ctx(bfd_ctx *bc, const char * procname)
 		if (bfd_read_minisymbols(b, TRUE, &symbol_table, &dummy) < 0) {
 			free(symbol_table);
 			bfd_close(b);
-			fprintf(f, "Failed to read symbols from %s\r\n", procname);
+			fprintf(f, "Failed to read symbols from %s\n", procname);
 			return false;
 		}
 	}
@@ -196,11 +196,11 @@ void release_set(bfd_set *set)
 #endif
 
 inline void writeAppInfo() {
-	fputs(Util::formatTime(APPNAME " has crashed on %Y-%m-%d at %H:%M:%S.\r\n", time(0)).c_str(), f);
-	fputs("Please report this data to the " APPNAME " team for further investigation.\r\n\r\n", f);
+	fputs(Util::formatTime(APPNAME " has crashed on %Y-%m-%d at %H:%M:%S.\n", time(0)).c_str(), f);
+	fputs("Please report this data to the " APPNAME " team for further investigation.\n\n", f);
 
-	fprintf(f, APPNAME " version: %s\r\n", fullVersionString.c_str());
-	fprintf(f, "TTH: %S\r\n", WinUtil::tth.c_str());
+	fprintf(f, APPNAME " version: %s\n", fullVersionString.c_str());
+	fprintf(f, "TTH: %S\n", WinUtil::tth.c_str());
 
 #ifdef __MINGW32__
 	fputs("Compiled with GCC " __VERSION__, f);
@@ -213,7 +213,7 @@ inline void writeAppInfo() {
 #ifdef _WIN64
 	fputs(" (x64)", f);
 #endif
-	fputs("\r\n", f);
+	fputs("\n", f);
 }
 
 inline void writePlatformInfo() {
@@ -222,11 +222,11 @@ inline void writePlatformInfo() {
 		ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
 	if(::GetVersionEx(reinterpret_cast<LPOSVERSIONINFO>(&ver))) {
-		fprintf(f, "Windows version: major = %d, minor = %d, build = %d, SP = %d, type = %d\r\n",
+		fprintf(f, "Windows version: major = %d, minor = %d, build = %d, SP = %d, type = %d\n",
 			ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber, ver.wServicePackMajor, ver.wProductType);
 
 	} else {
-		fprintf(f, "Windows version: unknown\r\n");
+		fputs("Windows version: unknown\n", f);
 	}
 
 	SYSTEM_INFO info;
@@ -252,7 +252,7 @@ inline void writeBacktrace(LPCONTEXT context)
 #endif
 
 	if(!SymInitialize(process, 0, TRUE)) {
-		fputs("Failed to init symbol context\r\n", f);
+		fputs("Failed to init symbol context\n", f);
 		return;
 	}
 
@@ -348,9 +348,9 @@ inline void writeBacktrace(LPCONTEXT context)
 #endif
 
 		if(func == 0) {
-			fprintf(f, "0x%x - %s - %s\r\n", frame.AddrPC.Offset, module_name, file);
+			fprintf(f, "%s - %s\n", module_name, file);
 		} else {
-			fprintf(f, "0x%x - %s - %s (%d) - in function %s\r\n", frame.AddrPC.Offset, module_name, file, line, func);
+			fprintf(f, "%s - %s (%d) - in function %s\n", module_name, file, line, func);
 		}
 	}
 
@@ -369,18 +369,18 @@ LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info)
 	if(f) {
 		writeAppInfo();
 
-		fprintf(f, "Exception code: %x\r\n", info->ExceptionRecord->ExceptionCode);
+		fprintf(f, "Exception code: %x\n", info->ExceptionRecord->ExceptionCode);
 
 		writePlatformInfo();
 
 #ifdef NO_BACKTRACE
-		fputs("\r\nStack trace unavailable: this program hasn't been compiled with backtrace support\r\n", f);
+		fputs("\nStack trace unavailable: this program hasn't been compiled with backtrace support\n", f);
 #else
-		fputs("\r\nWriting the stack trace...\r\n\r\n", f);
+		fputs("\nWriting the stack trace...\n\n", f);
 		writeBacktrace(info->ContextRecord);
 #endif
 
-		fputs("\r\nInformation about the crash has been written.\r\n", f);
+		fputs("\nInformation about the crash has been written.\n", f);
 		fclose(f);
 	}
 	return EXCEPTION_CONTINUE_SEARCH;
