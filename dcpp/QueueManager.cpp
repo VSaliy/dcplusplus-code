@@ -658,7 +658,14 @@ connect:
 }
 
 void QueueManager::add(const string& aRoot, const BundlePtr& bundle, const HintedUser& aUser, int aFlags) {
-	for_each(bundle->entries, [&](const Bundle::Entry& e) { add(aRoot + e.name, e.size, e.tth, aUser, aFlags, true, bundle); });
+	for_each(bundle->entries, [&](const Bundle::Entry& e) {
+		try {
+			add(aRoot + e.name, e.size, e.tth, aUser, aFlags, true, bundle);
+		} catch(...) {
+			// TODO Report exceptions?
+		}
+	});
+
 	Lock l(cs);
 
     auto i = bundles.insert(make_pair(bundle->getHash(), BundleItem(aRoot, bundle)));
@@ -1181,18 +1188,35 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 
 							fire(QueueManagerListener::Finished(), q, dir, aDownload->getAverageSpeed());
 
-							auto bi = getBundle(q);
-							if(bi && isFinished(*bi)) {
-								fire(QueueManagerListener::Finished(), *bi);
-							}
-
 							userQueue.remove(q);
 
-							if(!BOOLSETTING(KEEP_FINISHED_FILES) || aDownload->getType() == Transfer::TYPE_FULL_LIST) {
-								fire(QueueManagerListener::Removed(), q);
-								fileQueue.remove(q);
+							if(aDownload->getType() == Transfer::TYPE_FILE) {
+								auto bi = getBundle(q);
+								if(bi) {
+									if(isFinished(*bi)) {
+										if(!BOOLSETTING(KEEP_FINISHED_FILES)) {
+											auto &b = bi->getBundle();
+											for_each(b->entries, [&](const Bundle::Entry& entry) {
+												auto bqi = fileQueue.find(bi->getRoot() + entry.name);
+												if(bqi) {
+													fileQueue.remove(bqi);
+												}
+											});
+
+											removeBundle(bi);
+										} else {
+											fire(QueueManagerListener::StatusUpdated(), q);
+										}
+
+										fire(QueueManagerListener::Finished(), *bi);
+									} else {
+										fire(QueueManagerListener::StatusUpdated(), q);
+									}
+								} else {
+									remove(q, aDownload->getType() == Transfer::TYPE_FULL_LIST);
+								}
 							} else {
-								fire(QueueManagerListener::StatusUpdated(), q);
+								remove(q, aDownload->getType() == Transfer::TYPE_FULL_LIST);
 							}
 						} else {
 							userQueue.removeDownload(q, aDownload->getUser());
@@ -1243,6 +1267,15 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 
 	if(!fl_fname.empty()) {
 		processList(fl_fname, fl_user, fl_flag);
+	}
+}
+
+void QueueManager::remove(QueueItem* qi, bool isList) {
+	if(!BOOLSETTING(KEEP_FINISHED_FILES) || isList) {
+		fire(QueueManagerListener::Removed(), qi);
+		fileQueue.remove(qi);
+	} else {
+		fire(QueueManagerListener::StatusUpdated(), qi);
 	}
 }
 
@@ -1922,6 +1955,12 @@ BundleItem* QueueManager::getBundle(QueueItem *qi) noexcept {
 		}
 	}
 	return 0;
+}
+
+void QueueManager::removeBundle(BundleItem *bi) noexcept {
+	fire(QueueManagerListener::Removed(), *bi);
+	bundles.erase(bi->getBundle()->getHash());
+	delete bi;
 }
 
 bool QueueManager::isFinished(const BundleItem &bi) noexcept {

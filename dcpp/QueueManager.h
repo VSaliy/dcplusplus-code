@@ -228,6 +228,7 @@ private:
 	uint64_t nextSearch;
 	/** File lists not to delete */
 	StringList protectedFileLists;
+
 	/** Sanity check for the target filename */
 	static string checkTarget(const string& aTarget, bool checkExsistence);
 	/** Add a source to an existing queue item */
@@ -240,9 +241,11 @@ private:
 	static void moveFile_(const string& source, const string& target);
 	void moveStuckFile(QueueItem* qi);
 	void rechecked(QueueItem* qi);
+	void remove(QueueItem* qi, bool isList);
 
 	BundleItem* getBundle(QueueItem* qi) noexcept;
 	bool isFinished(const BundleItem &bi) noexcept;
+	void removeBundle(BundleItem* bi) noexcept;
 
 	void setDirty();
 
