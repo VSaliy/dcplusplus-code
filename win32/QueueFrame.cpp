@@ -171,7 +171,7 @@ void QueueFrame::addQueueList(const QueueItem::StringMap& li, const BundleItem::
 
 QueueFrame::QueueItemInfo* QueueFrame::getItemInfo(const string& target) {
 	string path = Util::getFilePath(target);
-	auto items = directories.equal_range(path);
+	auto items = directories.equal_range(&path);
 	for(auto i = items.first; i != items.second; ++i) {
 		if(i->second->getTarget() == target) {
 			return i->second;
@@ -249,8 +249,8 @@ void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
 
 	const string& dir = ii->getPath();
 
-	bool updateDir = (directories.find(dir) == directories.end());
-	directories.insert(make_pair(dir, ii));
+	bool updateDir = (directories.find(&dir) == directories.end());
+	directories.insert(make_pair(&dir, ii));
 
 	if(updateDir) {
 		addDirectory(dir, ii->isSet(QueueItem::FLAG_USER_LIST));
@@ -286,7 +286,7 @@ void QueueFrame::updateFiles() {
 
 	files->clear();
 	auto i = showTree->getChecked()
-		? directories.equal_range(getSelectedDir())
+		? directories.equal_range(&getSelectedDir())
 		: make_pair(directories.begin(), directories.end());
 
 	for(auto j = i.first; j != i.second; ++j) {
@@ -595,7 +595,7 @@ void QueueFrame::removeDirectory(const string& dir, bool isFileList /* = false *
 
 	next = parent;
 
-	while((dirs->getChild(next) == NULL) && (directories.find(getDir(next)) == directories.end())) {
+	while((dirs->getChild(next) == NULL) && (directories.find(&getDir(next)) == directories.end())) {
 		delete dirs->getData(next);
 		parent = dirs->getParent(next);
 
@@ -667,7 +667,7 @@ void QueueFrame::moveDir(HTREEITEM ht, const string& target) {
 	}
 	const string& dir = getDir(ht);
 
-	auto p = directories.equal_range(dir);
+	auto p = directories.equal_range(&dir);
 
 	for(auto i = p.first; i != p.second; ++i) {
 		QueueItemInfo* ii = i->second;
@@ -765,7 +765,7 @@ void QueueFrame::removeDir(HTREEITEM ht) {
 	if(dii->getIsBundle()) {
 		QueueManager::getInstance()->removeBundle(TTHValue(dii->getDir()));
 	} else {
-		auto dp = directories.equal_range(dii->getDir());
+		auto dp = directories.equal_range(&dii->getDir());
 		for(auto i = dp.first; i != dp.second; ++i) {
 			QueueManager::getInstance()->remove(i->second->getTarget());
 		}
@@ -809,7 +809,7 @@ void QueueFrame::setPriority(HTREEITEM ht, const QueueItem::Priority& p) {
 		child = dirs->getNextSibling(child);
 	}
 	const string& name = getDir(ht);
-	auto dp = directories.equal_range(name);
+	auto dp = directories.equal_range(&name);
 	for(auto i = dp.first; i != dp.second; ++i) {
 		QueueManager::getInstance()->setPriority(i->second->getTarget(), p);
 	}
@@ -1068,7 +1068,7 @@ void QueueFrame::onRemoved(const string& s) {
 	queueItems--;
 	dcassert(queueItems >= 0);
 
-	auto i = directories.equal_range(ii->getPath());
+	auto i = directories.equal_range(&ii->getPath());
 	auto j = i.first;
 	for(; j != i.second; ++j) {
 		if(j->second == ii)
@@ -1076,7 +1076,7 @@ void QueueFrame::onRemoved(const string& s) {
 	}
 	dcassert(j != i.second);
 	directories.erase(j);
-	if(directories.count(ii->getPath()) == 0) {
+	if(directories.count(&ii->getPath()) == 0) {
 		removeDirectory(ii->getPath(), ii->isSet(QueueItem::FLAG_USER_LIST));
 		if(isCurDir(ii->getPath()))
 			curDir.clear();
