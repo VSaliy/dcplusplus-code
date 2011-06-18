@@ -74,15 +74,17 @@ private:
 
 	class DirItemInfo : public FastAlloc<DirItemInfo> {
 	public:
-		DirItemInfo(const string& dir);
-		DirItemInfo(const string& dir_, const tstring& text_) : dir(dir_), text(text_) { }
+		DirItemInfo(const string& dir, bool isBundle);
+		DirItemInfo(const string& dir_, const tstring& text_, bool isBundle) : dir(dir_), text(text_), isBundle(isBundle) { }
 		const tstring& getText() const { return text; }
 		int getImage(int col = 0);
 		int getSelectedImage();
 		const string& getDir() const { return dir; }
+		bool getIsBundle() const { return isBundle; }
 	private:
 		string dir;
 		tstring text;
+		bool isBundle;
 	};
 
 	class QueueItemInfo;
@@ -236,13 +238,14 @@ private:
 	void removeBundle(const TTHValue& tth);
 
 	HTREEITEM addDirectory(const string& dir, bool isFileList = false, HTREEITEM startAt = NULL);
-	void removeDirectories(HTREEITEM ht);
 	void removeDirectory(const string& dir, bool isFileList = false);
 
 	bool isCurDir(const string& aDir) const;
 
 	QueueItemInfo* getItemInfo(const string& target);
 
+	bool isSpecial(HTREEITEM item);
+	bool isBundle(HTREEITEM item);
 	void clearTree(HTREEITEM item);
 
 	void moveSelected();
