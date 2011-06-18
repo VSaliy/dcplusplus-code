@@ -209,7 +209,7 @@ private:
 
 	CheckBoxPtr showTree;
 
-	typedef unordered_multimap<string, QueueItemInfo*, noCaseStringHash, noCaseStringEq> DirectoryMap;
+	typedef unordered_multimap<const string*, QueueItemInfo*, noCaseStringHash, noCaseStringEq> DirectoryMap;
 	DirectoryMap directories;
 	typedef unordered_map<TTHValue, BundleItemInfo*> BundleInfoMap;
 	BundleInfoMap bundleInfos;
