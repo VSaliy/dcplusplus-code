@@ -98,7 +98,11 @@ void startup(void (*f)(void*, const string&), void* p) {
 	}
 #endif
 
+	if(f != NULL)
+		(*f)(p, _("Users"));
+	ClientManager::getInstance()->loadUsers();
 	FavoriteManager::getInstance()->load();
+
 	CryptoManager::getInstance()->loadCertificates();
 
 	if(f != NULL)
@@ -112,10 +116,6 @@ void startup(void (*f)(void*, const string&), void* p) {
 	if(f != NULL)
 		(*f)(p, _("Download Queue"));
 	QueueManager::getInstance()->loadQueue();
-
-	if(f != NULL)
-		(*f)(p, _("Users"));
-	ClientManager::getInstance()->loadUsers();
 }
 
 void shutdown() {
