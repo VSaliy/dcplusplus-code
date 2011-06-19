@@ -241,6 +241,7 @@ private:
 	void removeDirectory(const string& dir, bool isFileList = false);
 
 	bool isCurDir(const string& aDir) const;
+	bool isVisible(const QueueItemInfo *qii) const;
 
 	QueueItemInfo* getItemInfo(const string& target);
 
