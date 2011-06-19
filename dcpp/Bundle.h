@@ -52,6 +52,7 @@ public:
 	};
 
 	TTHValue getHash() const;
+	bool contains(const TTHValue& tth) const;
 
 	string name;
 
