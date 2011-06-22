@@ -474,7 +474,7 @@ void HubFrame::addChat(const tstring& aLine) {
 
 	{
 		auto u = url;
-		WinUtil::notify(WinUtil::NOTIFICATION_MAIN_CHAT, aLine, [u] { activateWindow(u); });
+		WinUtil::notify(WinUtil::NOTIFICATION_MAIN_CHAT, aLine, [this, u] { activateWindow(u); });
 	}
 	setDirty(SettingsManager::BOLD_HUB);
 
