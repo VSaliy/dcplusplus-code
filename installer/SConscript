@@ -21,8 +21,8 @@ if env['distro']:
 		raise Exception('makensis.exe not found in PATH - Unicode NSIS is required to build the distro')
 	if env.WhereIs('bzr') is None:
 		raise Exception('"bzr" is required to build the distro; this tree must be under bzr version control')
-	if env.WhereIs('strip') is None:
-		raise Exception('"strip" is required to build the distro; it should be part of MinGW / binutils')
+	if env.WhereIs(env['strip']) is None:
+		raise Exception('"' + env['strip'] + '" is required to build the distro; it should be part of MinGW / binutils')
 	if env.WhereIs('zip') is None:
 		raise Exception('"zip" is required to build the distro; get the one from MSYS or Cygwin')
 

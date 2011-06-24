@@ -45,6 +45,7 @@ class Dev:
 			self.env['AR'] = prefix + 'ar'
 			self.env['RANLIB'] = prefix + 'ranlib'
 			self.env['RC'] = prefix + 'windres'
+			self.env['strip'] = prefix + 'strip'
 
 			if sys.platform != 'win32':
 				self.env['PROGSUFFIX'] = '.exe'
