@@ -27,160 +27,222 @@ namespace {
 
 FILE* f;
 
-#if defined(__MINGW32__) && defined(HAVE_BFD_H) && !defined(_WIN64)
+#if defined(__MINGW32__) && !defined(_WIN64)
 
-/* This backtrace writer for MinGW comes from the backtrace-mingw project by Cloud Wu:
-<http://code.google.com/p/backtrace-mingw/> */
-
-/*
-	Copyright (c) 2010 ,
-		Cloud Wu . All rights reserved.
-
-		http://www.codingnow.com
-
-	Use, modification and distribution are subject to the "New BSD License"
-	as listed at <url: http://www.opensource.org/licenses/bsd-license.php >.
-*/
-
-#include <bfd.h>
 #include <imagehlp.h>
 
-struct bfd_ctx {
-	bfd * handle;
-	asymbol ** symbol;
-};
+#include <dwarf.h>
+#include <libdwarf.h>
 
-struct bfd_set {
-	char * name;
-	bfd_ctx * bc;
-	bfd_set *next;
-};
+/* The following functions are called by libdwarf to get information about the sections in our
+file. libdwarf was originally designed for ELF, but it fortunately provides abstract methods one
+can use to load sections in a different format, such as PE/COFF in our case.
+Section indexes are offset to 1 because the first section (index 0) is reserved in libdwarf.
+The "obj" parameter passed to our callbacks is a PLOADED_IMAGE. */
 
-struct find_info {
-	asymbol **symbol;
-	bfd_vma counter;
-	const char *file;
-	const char *func;
-	unsigned line;
-};
+int get_section_info(void* obj, Dwarf_Half section_index, Dwarf_Obj_Access_Section* return_section, int* error) {
+	if(section_index == 0) {
+		// simulate the ELF empty section at index 0, as recommended in various comments in dwarf_init_finish.c.
+		return_section->addr = 0;
+		return_section->size = 0;
+		static char emptyStr = '\0';
+		return_section->name = &emptyStr;
+		return_section->link = 0;
+		return DW_DLV_OK;
+	}
 
-void lookup_section(bfd *abfd, asection *sec, void *opaque_data)
-{
-	find_info *data = reinterpret_cast<find_info*>(opaque_data);
+	auto image = reinterpret_cast<PLOADED_IMAGE>(obj);
+	auto section = image->Sections + section_index - 1;
+	if(!section) {
+		return DW_DLV_ERROR;
+	};
 
-	if (data->func)
+	return_section->addr = 0; // 0 is ok for non-ELF as per the comments in dwarf_opaque.h.
+	return_section->size = section->SizeOfRawData;
+	return_section->name = reinterpret_cast<const char*>(section->Name);
+	if(return_section->name[0] == '/') {
+		/* This is a long string (> 8 characters) in the format "/x", where "x" is an offset of the
+		actual string in the COFF string table. As documented in the PE/COFF doc, the COFF string
+		table is immediately following the COFF symbol table.
+		The "18" multiplier is the size of a COFF symbol. */
+		auto& header = image->FileHeader->FileHeader;
+		return_section->name = reinterpret_cast<const char*>(image->MappedAddress +
+			header.PointerToSymbolTable + header.NumberOfSymbols * 18 + atoi(return_section->name + 1));
+	}
+	return_section->link = 0;
+	return DW_DLV_OK;
+}
+
+Dwarf_Endianness get_byte_order(void*) {
+	return DW_OBJECT_LSB; // always little-endian on Windows
+}
+
+Dwarf_Small get_length_size(void*) {
+	return 4;
+}
+
+Dwarf_Small get_pointer_size(void*) {
+	return 4;
+}
+
+Dwarf_Unsigned get_section_count(void* obj) {
+	return reinterpret_cast<PLOADED_IMAGE>(obj)->NumberOfSections + 1;
+}
+
+int load_section(void* obj, Dwarf_Half section_index, Dwarf_Small** return_data, int* error) {
+	if(section_index == 0) {
+		return DW_DLV_NO_ENTRY;
+	}
+
+	auto image = reinterpret_cast<PLOADED_IMAGE>(obj);
+	auto section = image->Sections + section_index - 1;
+	if(!section) {
+		return DW_DLV_ERROR;
+	};
+
+	*return_data = image->MappedAddress + section->PointerToRawData;
+	return DW_DLV_OK;
+}
+
+void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column) {
+	if(path.empty())
 		return;
+	// replace the extension by "pdb".
+	auto dot = path.rfind('.');
+	if(dot != string::npos)
+		path.replace(dot, path.size() - dot, ".pdb");
 
-	if (!(bfd_get_section_flags(abfd, sec) & SEC_ALLOC))
+	auto image = ImageLoad(&path[0], 0);
+	if(!image) {
+		fprintf(f, "[Failed to load the debugging data into memory (error: %d)] ", GetLastError());
 		return;
-
-	bfd_vma vma = bfd_get_section_vma(abfd, sec);
-	if (data->counter < vma || vma + bfd_get_section_size(sec) <= data->counter)
-		return;
-
-	bfd_find_nearest_line(abfd, sec, data->symbol, data->counter - vma, &(data->file), &(data->func), &(data->line));
-}
-
-void find(bfd_ctx * b, DWORD offset, const char **file, const char **func, unsigned *line)
-{
-	find_info data = { b->symbol, offset };
-
-	bfd_map_over_sections(b->handle, &lookup_section, &data);
-
-	*file = data.file;
-	*func = data.func;
-	*line = data.line;
-}
-
-bool init_bfd_ctx(bfd_ctx *bc, const char * procname)
-{
-	bc->handle = 0;
-	bc->symbol = 0;
-
-	bfd *b = bfd_openr(procname, 0);
-	if (!b) {
-		fprintf(f, "Failed to open bfd from %s\n", procname);
-		return false;
 	}
 
-	int r1 = bfd_check_format(b, bfd_object);
-	int r2 = bfd_check_format_matches(b, bfd_object, 0);
-	int r3 = bfd_get_file_flags(b) & HAS_SYMS;
+	Dwarf_Debug dbg;
+	Dwarf_Error error = 0;
 
-	if (!(r1 && r2 && r3)) {
-		bfd_close(b);
-		fprintf(f, "Failed to init bfd from %s\n", procname);
-		return false;
-	}
+	/* initialize libdwarf using the "custom" interface that allows one to read the DWARF
+	information contained in non-ELF files (PE/COFF in our case). */
+	Dwarf_Obj_Access_Methods methods = {
+		get_section_info,
+		get_byte_order,
+		get_length_size,
+		get_pointer_size,
+		get_section_count,
+		load_section
+	};
+	Dwarf_Obj_Access_Interface access = { image, &methods };
+	if(dwarf_object_init(&access, 0, 0, &dbg, &error) == DW_DLV_OK) {
 
-	void *symbol_table;
+		/* use the ".debug_aranges" DWARF section to pinpoint the CU (Compilation Unit) that
+		corresponds to the address we want to find information about. */
+		Dwarf_Arange* aranges;
+		Dwarf_Signed arange_count;
+		if(dwarf_get_aranges(dbg, &aranges, &arange_count, &error) == DW_DLV_OK) {
 
-	unsigned dummy = 0;
-	if (bfd_read_minisymbols(b, FALSE, &symbol_table, &dummy) == 0) {
-		if (bfd_read_minisymbols(b, TRUE, &symbol_table, &dummy) < 0) {
-			free(symbol_table);
-			bfd_close(b);
-			fprintf(f, "Failed to read symbols from %s\n", procname);
-			return false;
+			Dwarf_Arange arange;
+			if(dwarf_get_arange(aranges, arange_count, addr, &arange, &error) == DW_DLV_OK) {
+
+				/* great, got a range that matches. let's find the CU it describes, and the DIE
+				(Debugging Information Entry) related to that CU. */
+				Dwarf_Off die_offset;
+				if(dwarf_get_cu_die_offset(arange, &die_offset, &error) == DW_DLV_OK) {
+
+					Dwarf_Die die;
+					if(dwarf_offdie(dbg, die_offset, &die, &error) == DW_DLV_OK) {
+
+						/* inside this CU, find the exact statement (DWARF calls it a "line") that
+						corresponds to the address we want to find information about. */
+						Dwarf_Line* lines;
+						Dwarf_Signed line_count;
+						if(dwarf_srclines(die, &lines, &line_count, &error) == DW_DLV_OK) {
+
+							/* skim through all available statements to find the one that fits best
+							(with an address <= "addr", as close as possible to "addr"). */
+							Dwarf_Line best = 0;
+
+							int delta = 65;
+							for(Dwarf_Signed i = 0; i < line_count; ++i) {
+								auto& l = lines[i];
+								Dwarf_Addr lineaddr;
+								if(dwarf_lineaddr(l, &lineaddr, &error) == DW_DLV_OK) {
+									int d = addr - lineaddr;
+									if(d >= 0 && d < delta) {
+										best = l;
+										delta = d;
+									}
+								}
+							}
+
+							if(best) {
+								// get the source file behind this statement.
+								char* linesrc;
+								if(dwarf_linesrc(best, &linesrc, &error) == DW_DLV_OK) {
+									file = linesrc;
+									dwarf_dealloc(dbg, linesrc, DW_DLA_STRING);
+
+									// get the line number inside that source file.
+									Dwarf_Unsigned lineno;
+									if(dwarf_lineno(best, &lineno, &error) == DW_DLV_OK) {
+										line = lineno;
+
+										// get the column number as well if available.
+										Dwarf_Signed lineoff;
+										if(dwarf_lineoff(best, &lineoff, &error) == DW_DLV_OK) {
+											column = lineoff;
+										}
+									}
+								}
+							}
+
+							dwarf_srclines_dealloc(dbg, lines, line_count);
+						}
+
+						if(file.empty()) {
+							/* could not get a precise statement within this CU; resort to showing
+							the global name of this CU's DIE which, according to section 3.1 of the
+							DWARF 2 spec, is almost what we want. */
+							char* name;
+							if(dwarf_diename(die, &name, &error) == DW_DLV_OK) {
+								file = name;
+								dwarf_dealloc(dbg, name, DW_DLA_STRING);
+							}
+						}
+
+						dwarf_dealloc(dbg, die, DW_DLA_DIE);
+					}
+
+				}
+
+			}
+
+			for(Dwarf_Signed i = 0; i < arange_count; ++i) {
+				dwarf_dealloc(dbg, aranges[i], DW_DLA_ARANGE);
+			}
+			dwarf_dealloc(dbg, aranges, DW_DLA_LIST);
 		}
+
+		dwarf_object_finish(dbg, &error);
 	}
 
-	bc->handle = b;
-	bc->symbol = reinterpret_cast<asymbol**>(symbol_table);
+	ImageUnload(image);
 
-	return true;
-}
-
-void close_bfd_ctx(bfd_ctx *bc)
-{
-	if (bc) {
-		if (bc->symbol) {
-			free(bc->symbol);
-		}
-		if (bc->handle) {
-			bfd_close(bc->handle);
-		}
-	}
-}
-
-bfd_ctx * get_bc(bfd_set *set, const char *procname)
-{
-	while(set->name) {
-		if (strcmp(set->name, procname) == 0) {
-			return set->bc;
-		}
-		set = set->next;
-	}
-	bfd_ctx bc;
-	if(!init_bfd_ctx(&bc, procname)) {
-		return 0;
-	}
-	set->next = reinterpret_cast<bfd_set*>(calloc(1, sizeof(*set)));
-	set->bc = reinterpret_cast<bfd_ctx*>(malloc(sizeof(bfd_ctx)));
-	memcpy(set->bc, &bc, sizeof(bc));
-	set->name = strdup(procname);
-
-	return set->bc;
-}
-
-void release_set(bfd_set *set)
-{
-	while(set) {
-		bfd_set * temp = set->next;
-		free(set->name);
-		close_bfd_ctx(set->bc);
-		free(set);
-		set = temp;
+	if(error) {
+		fprintf(f, "[libdwarf error: %s] ", dwarf_errmsg(error));
 	}
 }
 
 // add some x64 defs that MinGW is missing.
 #define DWORD64 DWORD
-#define STACKFRAME64 STACKFRAME
+#define IMAGEHLP_LINE64 IMAGEHLP_LINE
+#define IMAGEHLP_MODULE64 IMAGEHLP_MODULE
 #define IMAGEHLP_SYMBOL64 IMAGEHLP_SYMBOL
+#define STACKFRAME64 STACKFRAME
 #define StackWalk64 StackWalk
 #define SymFunctionTableAccess64 SymFunctionTableAccess
+#define SymGetLineFromAddr64 SymGetLineFromAddr
 #define SymGetModuleBase64 SymGetModuleBase
+#define SymGetModuleInfo64 SymGetModuleInfo
 #define SymGetSymFromAddr64 SymGetSymFromAddr
 
 #elif defined(_MSC_VER)
@@ -242,8 +304,8 @@ inline void writePlatformInfo() {
 
 inline void writeBacktrace(LPCONTEXT context)
 {
-	HANDLE process = GetCurrentProcess();
-	HANDLE thread = GetCurrentThread();
+	HANDLE const process = GetCurrentProcess();
+	HANDLE const thread = GetCurrentThread();
 
 #ifdef __MINGW32__
 	SymSetOptions(SYMOPT_DEFERRED_LOADS);
@@ -252,16 +314,9 @@ inline void writeBacktrace(LPCONTEXT context)
 #endif
 
 	if(!SymInitialize(process, 0, TRUE)) {
-		fputs("Failed to init symbol context\n", f);
+		fprintf(f, "Failed to initialize the symbol handler (error: %d)\n", GetLastError());
 		return;
 	}
-
-#ifdef __MINGW32__
-	bfd_init();
-	bfd_set *set = reinterpret_cast<bfd_set*>(calloc(1, sizeof(*set)));
-
-	bfd_ctx *bc = 0;
-#endif
 
 	STACKFRAME64 frame;
 	memset(&frame, 0, sizeof(frame));
@@ -286,77 +341,63 @@ inline void writeBacktrace(LPCONTEXT context)
 
 #endif
 
-	char symbol_buffer[sizeof(IMAGEHLP_SYMBOL64) + 255];
-	char module_name_raw[MAX_PATH];
+	char symbolBuf[sizeof(IMAGEHLP_SYMBOL64) + 255];
 
-	// get the current module address.
-	HMODULE module = ::GetModuleHandle(0);
+	for(uint8_t step = 0; step < 128; ++step) { // 128 steps max to avoid too long traces
 
-	for(uint8_t depth = 0; depth <= 128; ++depth) {
+		/* in case something unexpected happens when reading the next address, we want to at least
+		record the information that has been gathered so far. */
+		fflush(f);
 
 		if(!StackWalk64(WALK_ARCH, process, thread, &frame, context,
 			0, SymFunctionTableAccess64, SymGetModuleBase64, 0)) { break; }
 
-		HMODULE module_base = reinterpret_cast<HMODULE>(SymGetModuleBase64(process, frame.AddrPC.Offset));
+		string file;
+		int line = -1;
+		int column = -1;
 
-		const char * module_name = 0;
-		if(module_base) {
-			if(module_base == module) {
-				module_name = "DCPlusPlus.pdb";
-			} else if(GetModuleFileNameA(module_base, module_name_raw, MAX_PATH)) {
-				module_name = module_name_raw;
-			}
-		}
-		if(module_name) {
-#ifdef __MINGW32__
-			bc = get_bc(set, module_name);
-#endif
-		} else {
-			module_name = "[unknown module]";
-		}
-
-		const char* file = 0;
-		const char* func = 0;
-		unsigned line = 0;
+		IMAGEHLP_MODULE64 module = { sizeof(IMAGEHLP_MODULE64) };
+		if(!SymGetModuleInfo64(process, frame.AddrPC.Offset, &module))
+			continue;
+		fprintf(f, "%s: ", module.ModuleName);
 
 #ifdef __MINGW32__
-		if(bc) {
-			find(bc, frame.AddrPC.Offset, &file, &func, &line);
-		}
+		// read DWARF debugging info if available.
+		getDebugInfo(module.LoadedImageName, frame.AddrPC.Offset, file, line, column);
 #endif
 
-		if(file == 0) {
-			DWORD64 dummy = 0;
-			IMAGEHLP_SYMBOL64* symbol = reinterpret_cast<IMAGEHLP_SYMBOL64*>(symbol_buffer);
-			symbol->SizeOfStruct = (sizeof *symbol) + 255;
+		/* this is the usual Windows PDB reading method. we try it on MinGW too if reading DWARF
+		data has failed, just in case Windows can extract some information. */
+		if(file.empty()) {
+			IMAGEHLP_SYMBOL64* symbol = reinterpret_cast<IMAGEHLP_SYMBOL64*>(symbolBuf);
+			symbol->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL64);
 			symbol->MaxNameLength = 254;
-			if(SymGetSymFromAddr64(process, frame.AddrPC.Offset, &dummy, symbol)) {
+			if(SymGetSymFromAddr64(process, frame.AddrPC.Offset, 0, symbol)) {
 				file = symbol->Name;
 			} else {
-				file = "[unknown file]";
+				file = "?";
+			}
+
+			IMAGEHLP_LINE64 info = { sizeof(IMAGEHLP_LINE64) };
+			DWORD col;
+			if(SymGetLineFromAddr64(process, frame.AddrPC.Offset, &col, &info)) {
+				file = info.FileName;
+				line = info.LineNumber;
+				column = col;
 			}
 		}
 
-#ifdef _MSC_VER
-		IMAGEHLP_LINE64 info = { sizeof(IMAGEHLP_LINE64) };
-		DWORD dummy = 0;
-		if(SymGetLineFromAddr64(process, frame.AddrPC.Offset, &dummy, &info)) {
-			func = file;
-			file = info.FileName;
-			line = info.LineNumber;
+		// write the data collected about this frame to the file.
+		fprintf(f, "%s", file.c_str());
+		if(line >= 0) {
+			fprintf(f, " (%d", line);
+			if(column >= 0) {
+				fprintf(f, ":%d", column);
+			}
+			fputs(")", f);
 		}
-#endif
-
-		if(func == 0) {
-			fprintf(f, "%s - %s\n", module_name, file);
-		} else {
-			fprintf(f, "%s - %s (%d) - in function %s\n", module_name, file, line, func);
-		}
+		fputs("\n", f);
 	}
-
-#ifdef __MINGW32__
-	release_set(set);
-#endif
 
 	SymCleanup(process);
 }

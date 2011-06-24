@@ -155,6 +155,7 @@ hubMenu(false),
 inTabComplete(false)
 {
 	paned = addChild(SplitterContainer::Seed(0.7));
+	int* x=0; *x=2;
 
 	createChat(paned);
 	chat->setHelpId(IDH_HUB_CHAT);
