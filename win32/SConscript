@@ -48,6 +48,6 @@ ret = env.Program(target, [sources, res, dev.client, dev.dwarf, dev.zlib, dev.bo
 
 if 'gcc' in env['TOOLS']:
 	# strip debug info to a separate PDB file
-	env.Command(target + '.pdb', target + '.exe', 'strip --only-keep-debug "$SOURCE" -o "$TARGET"')
+	env.Command(target + '.pdb', target + '.exe', Action(env['strip'] + ' --only-keep-debug "$SOURCE" -o "$TARGET"', 'Extracting debugging symbols to $TARGET'))
 
 Return('ret')
