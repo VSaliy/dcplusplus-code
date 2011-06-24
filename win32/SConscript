@@ -18,9 +18,9 @@ if 'HAVE_HTMLHELP_H' in env['CPPDEFINES']:
 env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi', 'winmm', 'shlwapi', 'oleaut32', 'uuid'])
 
 # add libs for the crash logger.
-if env['LINK'] == 'g++': # MinGW
-	if 'HAVE_BFD_H' in env['CPPDEFINES']:
-		env.Append(LIBS = ['bfd', 'iberty', 'imagehlp'])
+if 'g++' in env['LINK']: # MinGW
+	env.Append(CPPPATH = ['#/dwarf'])
+	env.Append(LIBS = ['imagehlp'])
 elif env['LINK'] == 'link': # MSVC
 	env.Append(LIBS = ['dbghelp'])
 
@@ -44,7 +44,7 @@ env.Depends(res, 'resource.h')
 headers=dev.get_sources(source_path, "*.h")
 dev.i18n(source_path, env, [sources,headers], 'dcpp-win32')
 
-ret = env.Program(target, [sources, res, dev.client, dev.zlib, dev.boost, dev.bzip2, dev.miniupnpc, dev.natpmp, dev.dwt, dev.intl])
+ret = env.Program(target, [sources, res, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.miniupnpc, dev.natpmp, dev.dwt, dev.intl])
 
 if 'gcc' in env['TOOLS']:
 	# strip debug info to a separate PDB file
