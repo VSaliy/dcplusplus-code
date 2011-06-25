@@ -406,7 +406,7 @@ inline void writeBacktrace(LPCONTEXT context)
 
 LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info)
 {
-	f = fopen((Util::getPath(Util::PATH_USER_LOCAL) + "CrashLog.txt").c_str(), "w");
+	f = fopen(CrashLogger::getPath().c_str(), "w");
 	if(f) {
 		writeAppInfo();
 
@@ -437,4 +437,8 @@ CrashLogger::CrashLogger() {
 
 CrashLogger::~CrashLogger() {
 	SetUnhandledExceptionFilter(prevFilter);
+}
+
+string CrashLogger::getPath() {
+	return Util::getPath(Util::PATH_USER_LOCAL) + "CrashLog.txt";
 }
