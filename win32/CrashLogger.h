@@ -22,6 +22,8 @@
 struct CrashLogger {
 	CrashLogger();
 	~CrashLogger();
+
+	static string getPath();
 };
 
 #endif // DCPLUSPLUS_WIN32_CRASH_LOGGER_H

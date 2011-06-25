@@ -50,6 +50,7 @@
 
 #include "resource.h"
 
+#include "CrashLogger.h"
 #include "ParamDlg.h"
 #include "HashProgressDlg.h"
 #include "SettingsDialog.h"
@@ -273,6 +274,7 @@ void MainWindow::initMenu() {
 		file->appendItem(T_("Match downloaded lists"), [this] { handleMatchAll(); });
 		file->appendItem(T_("Refresh file list\tF5"), [this] { handleRefreshFileList(); }, WinUtil::menuIcon(IDI_REFRESH));
 		file->appendItem(T_("Open downloads directory"), [this] { handleOpenDownloadsDir(); }, WinUtil::menuIcon(IDI_OPEN_DL_DIR));
+		file->appendItem(T_("Open crash log"), [this] { TextFrame::openWindow(getTabView(), CrashLogger::getPath()); });
 		file->appendSeparator();
 
 		file->appendItem(T_("Settings\tCtrl+F3"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));
