@@ -104,7 +104,46 @@ int load_section(void* obj, Dwarf_Half section_index, Dwarf_Small** return_data,
 	return DW_DLV_OK;
 }
 
-void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column) {
+/* this recursive function browses through the children and siblings of a DIE, looking for the one
+DIE that specifically describes the enclosing function of the given address. */
+Dwarf_Die browseDIE(Dwarf_Debug dbg, Dwarf_Addr addr, Dwarf_Die die, Dwarf_Error& error) {
+
+	Dwarf_Addr lowpc, highpc;
+	if(dwarf_lowpc(die, &lowpc, &error) == DW_DLV_OK && dwarf_highpc(die, &highpc, &error) == DW_DLV_OK && addr >= lowpc && addr <= highpc) {
+		// found one! make sure it represents a function (section 3.3 of the DWARF 2 spec).
+		Dwarf_Half tag;
+		if(dwarf_tag(die, &tag, &error) == DW_DLV_OK && (tag == DW_TAG_subprogram || tag == DW_TAG_inlined_subroutine)) {
+			return die;
+		}
+	}
+
+	// flow to the next DIE. start with children then move to siblings.
+	Dwarf_Die next;
+
+	if(dwarf_child(die, &next, &error) == DW_DLV_OK) {
+		Dwarf_Die ret = browseDIE(dbg, addr, next, error);
+		if(ret) {
+			if(next != ret) {
+				dwarf_dealloc(dbg, next, DW_DLA_DIE);
+			}
+			return ret;
+		}
+	}
+
+	if(dwarf_siblingof(dbg, die, &next, &error) == DW_DLV_OK) {
+		Dwarf_Die ret = browseDIE(dbg, addr, next, error);
+		if(ret) {
+			if(next != ret) {
+				dwarf_dealloc(dbg, next, DW_DLA_DIE);
+			}
+			return ret;
+		}
+	}
+
+	return 0;
+}
+
+void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column, string& function) {
 	if(path.empty())
 		return;
 	// replace the extension by "pdb".
@@ -148,14 +187,14 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column)
 				Dwarf_Off die_offset;
 				if(dwarf_get_cu_die_offset(arange, &die_offset, &error) == DW_DLV_OK) {
 
-					Dwarf_Die die;
-					if(dwarf_offdie(dbg, die_offset, &die, &error) == DW_DLV_OK) {
+					Dwarf_Die cu_die;
+					if(dwarf_offdie(dbg, die_offset, &cu_die, &error) == DW_DLV_OK) {
 
 						/* inside this CU, find the exact statement (DWARF calls it a "line") that
 						corresponds to the address we want to find information about. */
 						Dwarf_Line* lines;
 						Dwarf_Signed line_count;
-						if(dwarf_srclines(die, &lines, &line_count, &error) == DW_DLV_OK) {
+						if(dwarf_srclines(cu_die, &lines, &line_count, &error) == DW_DLV_OK) {
 
 							/* skim through all available statements to find the one that fits best
 							(with an address <= "addr", as close as possible to "addr"). */
@@ -203,13 +242,45 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column)
 							the global name of this CU's DIE which, according to section 3.1 of the
 							DWARF 2 spec, is almost what we want. */
 							char* name;
-							if(dwarf_diename(die, &name, &error) == DW_DLV_OK) {
+							if(dwarf_diename(cu_die, &name, &error) == DW_DLV_OK) {
 								file = name;
 								dwarf_dealloc(dbg, name, DW_DLA_STRING);
 							}
 						}
 
-						dwarf_dealloc(dbg, die, DW_DLA_DIE);
+						/* to find the enclosing function, skim through the children and siblings
+						of this CU's DIE to find the one DIE that contains the frame address. */
+						Dwarf_Die die = browseDIE(dbg, addr, cu_die, error);
+						if(die) {
+
+							/* check if the DIE has a "specification" attribute which, according to
+							section 5.5.5 of the DWARF 2 spec, is a pointer to the DIE that
+							actually describes the function. */
+							Dwarf_Attribute attr;
+							if(dwarf_attr(die, DW_AT_specification, &attr, &error) == DW_DLV_OK) {
+								Dwarf_Off spec_offset;
+								if(dwarf_global_formref(attr, &spec_offset, &error) == DW_DLV_OK) {
+									Dwarf_Die spec_die;
+									if(dwarf_offdie(dbg, spec_offset, &spec_die, &error) == DW_DLV_OK) {
+										// replace the previous DIE by this new one.
+										dwarf_dealloc(dbg, die, DW_DLA_DIE);
+										die = spec_die;
+									}
+								}
+							}
+
+							/* as specified in section 3.3.1 of the DWARF 2 spec, the name of this
+							function-representing DIE should be what we are looking for. */
+							char* name;
+							if(dwarf_diename(die, &name, &error) == DW_DLV_OK) {
+								function = name;
+								dwarf_dealloc(dbg, name, DW_DLA_STRING);
+							}
+
+							dwarf_dealloc(dbg, die, DW_DLA_DIE);
+						}
+
+						dwarf_dealloc(dbg, cu_die, DW_DLA_DIE);
 					}
 
 				}
@@ -355,6 +426,7 @@ inline void writeBacktrace(LPCONTEXT context)
 		string file;
 		int line = -1;
 		int column = -1;
+		string function;
 
 		IMAGEHLP_MODULE64 module = { sizeof(IMAGEHLP_MODULE64) };
 		if(!SymGetModuleInfo64(process, frame.AddrPC.Offset, &module))
@@ -363,7 +435,7 @@ inline void writeBacktrace(LPCONTEXT context)
 
 #ifdef __MINGW32__
 		// read DWARF debugging info if available.
-		getDebugInfo(module.LoadedImageName, frame.AddrPC.Offset, file, line, column);
+		getDebugInfo(module.LoadedImageName, frame.AddrPC.Offset, file, line, column, function);
 #endif
 
 		/* this is the usual Windows PDB reading method. we try it on MinGW too if reading DWARF
@@ -374,13 +446,12 @@ inline void writeBacktrace(LPCONTEXT context)
 			symbol->MaxNameLength = 254;
 			if(SymGetSymFromAddr64(process, frame.AddrPC.Offset, 0, symbol)) {
 				file = symbol->Name;
-			} else {
-				file = "?";
 			}
 
 			IMAGEHLP_LINE64 info = { sizeof(IMAGEHLP_LINE64) };
 			DWORD col;
 			if(SymGetLineFromAddr64(process, frame.AddrPC.Offset, &col, &info)) {
+				function = file;
 				file = info.FileName;
 				line = info.LineNumber;
 				column = col;
@@ -388,13 +459,16 @@ inline void writeBacktrace(LPCONTEXT context)
 		}
 
 		// write the data collected about this frame to the file.
-		fprintf(f, "%s", file.c_str());
+		fprintf(f, "%s", file.empty() ? "?" : file.c_str());
 		if(line >= 0) {
 			fprintf(f, " (%d", line);
 			if(column >= 0) {
 				fprintf(f, ":%d", column);
 			}
 			fputs(")", f);
+		}
+		if(!function.empty()) {
+			fprintf(f, " in function %s", function.c_str());
 		}
 		fputs("\n", f);
 	}
@@ -429,7 +503,7 @@ LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info)
 
 LPTOP_LEVEL_EXCEPTION_FILTER prevFilter;
 
-} // anonymous namespace
+} // unnamed namespace
 
 CrashLogger::CrashLogger() {
 	prevFilter = SetUnhandledExceptionFilter(exception_filter);
