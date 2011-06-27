@@ -126,9 +126,8 @@ void TabView::create(const Seed & cs) {
 		setFont(font);
 	}
 
-	imageList = new ImageList(Point(16, 16));
-
-	TabCtrl_SetImageList(handle(), imageList->handle());
+	icons = new ImageList(Point(16, 16));
+	TabCtrl_SetImageList(handle(), icons->handle());
 
 	onSelectionChanged([this] { handleTabSelected(); });
 	onLeftMouseDown([this](const MouseEvent& me) { return handleLeftMouseDown(me); });
@@ -145,12 +144,10 @@ void TabView::create(const Seed & cs) {
 }
 
 void TabView::add(ContainerPtr w, const IconPtr& icon) {
-	int image = addIcon(icon);
+	const size_t pos = size();
 
-	size_t tabs = size();
-
-	TabInfo* ti = new TabInfo(this, w);
-	TCITEM item = {  TCIF_PARAM };
+	TabInfo* ti = new TabInfo(this, w, icon);
+	TCITEM item = { TCIF_PARAM };
 	item.lParam = reinterpret_cast<LPARAM>(ti);
 
 	if(!hasStyle(TCS_OWNERDRAWFIXED)) {
@@ -159,19 +156,19 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 		item.pszText = const_cast<LPTSTR>(ti->text.c_str());
 	}
 
-	if(image != -1) {
+	if(icon) {
 		item.mask |= TCIF_IMAGE;
-		item.iImage = image;
+		item.iImage = addIcon(icon);
 	}
 
-	int newIdx = TabCtrl_InsertItem( handle(), tabs, &item );
+	int newIdx = TabCtrl_InsertItem(handle(), pos, &item);
 	if ( newIdx == - 1 ) {
 		throw Win32Exception("Error while trying to add page into Tab Sheet");
 	}
 
 	if(taskbar) {
 		addToTaskbar(w);
-		if(image != -1) {
+		if(icon) {
 			setTaskbarIcon(w, icon);
 		}
 	}
@@ -184,7 +181,7 @@ void TabView::add(ContainerPtr w, const IconPtr& icon) {
 		} else {
 			swapWidgets(0, w);
 		}
-		setActive(tabs);
+		setActive(pos);
 	}
 
 	layout();
@@ -198,7 +195,7 @@ ContainerPtr TabView::getActive() const {
 }
 
 void TabView::remove(ContainerPtr w) {
-	int i = findTab(w);
+	auto i = findTab(w);
 	if(i == -1) {
 		return;
 	}
@@ -213,6 +210,8 @@ void TabView::remove(ContainerPtr w) {
 
 	if(w == dragging)
 		dragging = 0;
+
+	removeIcon(i);
 
 	delete getTabInfo(i);
 	erase(i);
@@ -234,35 +233,27 @@ void TabView::remove(ContainerPtr w) {
 	}
 }
 
-IconPtr TabView::getIcon(unsigned index) const {
-	TCITEM item = { TCIF_IMAGE };
-	TabCtrl_GetItem(handle(), index, &item);
-	if(item.iImage >= 0 && item.iImage < imageList->size())
-		return imageList->getIcon(item.iImage);
-	return IconPtr();
+IconPtr TabView::getIcon(ContainerPtr w) const {
+	auto ti = getTabInfo(w);
+	return ti ? ti->icon : 0;
 }
 
 void TabView::setIcon(ContainerPtr w, const IconPtr& icon) {
-	int i = findTab(w);
-	if(i != -1) {
-		int image = addIcon(icon);
-		if(image != -1) {
-			TCITEM item = { TCIF_IMAGE };
-			item.iImage = image;
-			TabCtrl_SetItem(this->handle(), i, &item);
+	auto i = findTab(w);
+	auto ti = getTabInfo(i);
+	if(ti) {
+		removeIcon(i);
 
-			if(taskbar) {
-				setTaskbarIcon(w, icon);
-			}
+		ti->icon = icon;
+
+		TCITEM item = { TCIF_IMAGE };
+		item.iImage = icon ? addIcon(icon) : -1;
+		TabCtrl_SetItem(handle(), i, &item);
+
+		if(taskbar) {
+			setTaskbarIcon(w, icon);
 		}
 	}
-}
-
-IconPtr TabView::getIcon(ContainerPtr w) const {
-	int i = findTab(w);
-	if(i != -1)
-		return getIcon(i);
-	return IconPtr();
 }
 
 void TabView::onTabContextMenu(ContainerPtr w, const ContextMenuFunction& f) {
@@ -368,8 +359,9 @@ TabView::TabInfo* TabView::getTabInfo(ContainerPtr w) const {
 TabView::TabInfo* TabView::getTabInfo(int i) const {
 	if(i != -1) {
 		TCITEM item = { TCIF_PARAM };
-		TabCtrl_GetItem(handle(), i, &item);
-		return reinterpret_cast<TabInfo*>(item.lParam);
+		if(TabCtrl_GetItem(handle(), i, &item)) {
+			return reinterpret_cast<TabInfo*>(item.lParam);
+		}
 	}
 	return 0;
 }
@@ -468,21 +460,50 @@ void TabView::setTop(ContainerPtr wnd) {
 }
 
 int TabView::addIcon(const IconPtr& icon) {
-	int image = -1;
-	if(icon) {
-		for(size_t i = 0; i < icons.size(); ++i) {
-			if(*icon == *icons[i]) {
-				image = i;
-				break;
+	// see if one of the current tabs already has the icon; in that case, reuse it.
+	for(size_t i = 0, n = size(); i < n; ++i) {
+		auto ti = getTabInfo(i);
+		if(ti && ti->icon && *ti->icon == *icon) {
+			auto image = getImage(i);
+			if(image != -1) {
+				return image;
 			}
 		}
-		if(image == -1) {
-			image = icons.size();
-			icons.push_back(icon);
-			getImageList()->add(*icon);
+	}
+
+	auto ret = icons->size();
+	icons->add(*icon);
+	return ret;
+}
+
+int TabView::getImage(unsigned index) {
+	TCITEM item = { TCIF_IMAGE };
+	if(TabCtrl_GetItem(handle(), index, &item)) {
+		return item.iImage;
+	}
+	return -1;
+}
+
+void TabView::removeIcon(unsigned index) {
+	auto t = getTabInfo(index);
+	if(!t || !t->icon)
+		return;
+
+	// make sure no other tab is still using this icon.
+	for(size_t i = 0, n = size(); i < n; ++i) {
+		if(i == index) {
+			continue;
+		}
+		auto ti = getTabInfo(i);
+		if(ti && ti->icon && *ti->icon == *t->icon) {
+			return;
 		}
 	}
-	return image;
+
+	auto image = getImage(index);
+	if(image != -1) {
+		TabCtrl_RemoveImage(handle(), image);
+	}
 }
 
 LRESULT TabView::handleToolTip(LPARAM lParam) {
@@ -724,13 +745,12 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 	rect.pos += margin;
 	rect.size -= margin + margin;
 
-	IconPtr icon = getIcon(index);
-	if(icon) {
-		Point size = icon->getSize();
+	if(ti->icon) {
+		Point size = ti->icon->getSize();
 		Point pos = rect.pos;
 		if(size.y < rect.size.y)
 			pos.y += (rect.size.y - size.y) / 2; // center the icon vertically
-		canvas.drawIcon(icon, Rectangle(pos, size));
+		canvas.drawIcon(ti->icon, Rectangle(pos, size));
 
 		size.x += margin.x;
 		rect.pos.x += size.x;
@@ -874,10 +894,6 @@ dwt::Rectangle TabView::getUsableArea(bool cutBorders) const
 		rect.size.y += border + upStretching;
 	}
 	return rect;
-}
-
-const ImageListPtr& TabView::getImageList() const {
-	return imageList;
 }
 
 int TabView::hitTest(const ScreenCoordinate& pt) {
