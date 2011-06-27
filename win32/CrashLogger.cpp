@@ -143,6 +143,62 @@ Dwarf_Die browseDIE(Dwarf_Debug dbg, Dwarf_Addr addr, Dwarf_Die die, Dwarf_Error
 	return 0;
 }
 
+// utility function that retrieves the name of a DIE.
+bool getName(Dwarf_Debug dbg, Dwarf_Die die, string& ret, Dwarf_Error& error) {
+	char* name;
+	if(dwarf_diename(die, &name, &error) == DW_DLV_OK) {
+		ret = name;
+		dwarf_dealloc(dbg, name, DW_DLA_STRING);
+		return true;
+	}
+	return false;
+}
+
+// utility function that follows a reference-type attribute (one that points to another DIE).
+Dwarf_Die followRef(Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attribute, Dwarf_Error& error) {
+	Dwarf_Die ret = 0;
+	Dwarf_Attribute attr;
+	if(dwarf_attr(die, attribute, &attr, &error) == DW_DLV_OK) {
+		Dwarf_Off offset;
+		if(dwarf_global_formref(attr, &offset, &error) == DW_DLV_OK) {
+			dwarf_offdie(dbg, offset, &ret, &error);
+		}
+		dwarf_dealloc(dbg, attr, DW_DLA_ATTR);
+	}
+	return ret;
+}
+
+/* retrieve the name of the DIE pointed to by the "type" attribute of a DIE. for a function DIE,
+this is the return value of the function (section 3.3.2 of the DWARF 2 spec). for an object DIE,
+this is the type of that object (section 4.1.4 of the DWARF 2 spec). */
+string getType(Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Error& error, bool recursing = false) {
+	string ret;
+
+	// follow section 5 of the DWARF 2 spec. multiple type DIEs may be chained together.
+	if(recursing && getName(dbg, die, ret, error)) {
+		return ret;
+	}
+	Dwarf_Die type_die = followRef(dbg, die, DW_AT_type, error);
+	if(type_die) {
+		ret = getType(dbg, type_die, error, true);
+		Dwarf_Half tag;
+		if(dwarf_tag(die, &tag, &error) == DW_DLV_OK) {
+			switch(tag) {
+			case DW_TAG_const_type: ret += " const"; break;
+			case DW_TAG_pointer_type: ret += '*'; break;
+			case DW_TAG_reference_type: ret += '&'; break;
+			case DW_TAG_volatile_type: ret += " volatile"; break;
+			}
+		}
+		dwarf_dealloc(dbg, type_die, DW_DLA_DIE);
+	}
+
+	if(ret.empty())
+		ret = "void/unknown";
+
+	return ret;
+}
+
 void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column, string& function) {
 	if(path.empty())
 		return;
@@ -241,11 +297,7 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column,
 							/* could not get a precise statement within this CU; resort to showing
 							the global name of this CU's DIE which, according to section 3.1 of the
 							DWARF 2 spec, is almost what we want. */
-							char* name;
-							if(dwarf_diename(cu_die, &name, &error) == DW_DLV_OK) {
-								file = name;
-								dwarf_dealloc(dbg, name, DW_DLA_STRING);
-							}
+							getName(dbg, cu_die, file, error);
 						}
 
 						/* to find the enclosing function, skim through the children and siblings
@@ -256,25 +308,45 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column,
 							/* check if the DIE has a "specification" attribute which, according to
 							section 5.5.5 of the DWARF 2 spec, is a pointer to the DIE that
 							actually describes the function. */
-							Dwarf_Attribute attr;
-							if(dwarf_attr(die, DW_AT_specification, &attr, &error) == DW_DLV_OK) {
-								Dwarf_Off spec_offset;
-								if(dwarf_global_formref(attr, &spec_offset, &error) == DW_DLV_OK) {
-									Dwarf_Die spec_die;
-									if(dwarf_offdie(dbg, spec_offset, &spec_die, &error) == DW_DLV_OK) {
-										// replace the previous DIE by this new one.
-										dwarf_dealloc(dbg, die, DW_DLA_DIE);
-										die = spec_die;
-									}
-								}
-							}
+							Dwarf_Die spec_die = followRef(dbg, die, DW_AT_specification, error);
 
 							/* as specified in section 3.3.1 of the DWARF 2 spec, the name of this
 							function-representing DIE should be what we are looking for. */
-							char* name;
-							if(dwarf_diename(die, &name, &error) == DW_DLV_OK) {
-								function = name;
-								dwarf_dealloc(dbg, name, DW_DLA_STRING);
+							getName(dbg, spec_die ? spec_die : die, function, error);
+
+							if(!function.empty()) {
+								/* according to section 3.3.2 of the DWARF 2 spec, the type of this
+								function-representing DIE is the return value of the function. */
+								function = getType(dbg, spec_die ? spec_die : die, error) + ' ' + function + '(';
+
+								/* now get the parameters of the function. each parameter is
+								represented by a DIE that is a child of the function-representing
+								DIE (section 3.3.4 of the DWARF 2 spec). */
+								Dwarf_Die child;
+								if(dwarf_child(die, &child, &error) == DW_DLV_OK) {
+									Dwarf_Die next = 0;
+									string name;
+									while(true) {
+										if(getName(dbg, child, name, error)) {
+											if(next) // not the first iteration
+												function += ", ";
+											function += getType(dbg, child, error) + ' ' + name;
+										}
+										bool ok = dwarf_siblingof(dbg, child, &next, &error) == DW_DLV_OK;
+										dwarf_dealloc(dbg, child, DW_DLA_DIE);
+										if(ok) {
+											child = next;
+										} else {
+											break;
+										}
+									}
+								}
+
+								function += ')';
+
+								if(spec_die) {
+									dwarf_dealloc(dbg, spec_die, DW_DLA_DIE);
+								}
 							}
 
 							dwarf_dealloc(dbg, die, DW_DLA_DIE);
@@ -468,7 +540,7 @@ inline void writeBacktrace(LPCONTEXT context)
 			fputs(")", f);
 		}
 		if(!function.empty()) {
-			fprintf(f, " in function %s", function.c_str());
+			fprintf(f, ", function: %s", function.c_str());
 		}
 		fputs("\n", f);
 	}
