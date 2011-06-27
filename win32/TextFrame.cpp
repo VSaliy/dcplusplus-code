@@ -22,8 +22,9 @@
 
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
+#include <dcpp/WindowInfo.h>
 
-const string TextFrame::id = "TextPad";
+const string TextFrame::id = "Text";
 const string& TextFrame::getId() const { return id; }
 
 static const size_t MAX_TEXT_LEN = 64*1024;
@@ -32,9 +33,23 @@ void TextFrame::openWindow(TabViewPtr parent, const string& fileName) {
 	new TextFrame(parent, fileName);
 }
 
+WindowParams TextFrame::getWindowParams() const {
+	WindowParams ret;
+	ret["Path"] = WindowParam(fileName, WindowParam::FLAG_IDENTIFIES);
+	return ret;
+}
+
+void TextFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params) {
+	auto path = params.find("Path");
+	if(path != params.end()) {
+		openWindow(parent, path->second);
+	}
+}
+
 TextFrame::TextFrame(TabViewPtr parent, const string& fileName) :
-	BaseType(parent, Text::toT(Util::getFileName(fileName))),
-	pad(0)
+BaseType(parent, Text::toT(Util::getFileName(fileName))),
+pad(0),
+fileName(fileName)
 {
 	TextBox::Seed cs = WinUtil::Seeds::textBox;
 	cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;

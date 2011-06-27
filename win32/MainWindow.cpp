@@ -1558,5 +1558,6 @@ void MainWindow::openWindow(const string& id, const WindowParams& params) {
 	compare_id(NotepadFrame);
 	compare_id(SystemFrame);
 	compare_id(StatsFrame);
+	compare_id(TextFrame);
 #undef compare_id
 }
