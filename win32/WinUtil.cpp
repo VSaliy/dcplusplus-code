@@ -626,9 +626,9 @@ pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& hintUrl, 
 	return formatHubNames(ClientManager::getInstance()->getHubNames(cid, hintUrl, priv));
 }
 
-size_t WinUtil::getFileIcon(const tstring& aFileName) {
+size_t WinUtil::getFileIcon(const string& fileName) {
 	if(BOOLSETTING(USE_SYSTEM_ICONS)) {
-		string ext = Text::toLower(Util::getFileExt(Text::fromT(aFileName)));
+		string ext = Text::toLower(Util::getFileExt(fileName));
 		if(!ext.empty()) {
 			auto index = fileIndexes.find(ext);
 			if(index != fileIndexes.end())
@@ -636,7 +636,7 @@ size_t WinUtil::getFileIcon(const tstring& aFileName) {
 		}
 
 		::SHFILEINFO info;
-		if(::SHGetFileInfo(Text::toT(Text::toLower(Util::getFileName(Text::fromT(aFileName)))).c_str(), FILE_ATTRIBUTE_NORMAL,
+		if(::SHGetFileInfo(Text::toT(Text::toLower(Util::getFileName(fileName))).c_str(), FILE_ATTRIBUTE_NORMAL,
 			&info, sizeof(info), SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES) && info.hIcon)
 		{
 			size_t ret = fileImages->size();
@@ -650,6 +650,10 @@ size_t WinUtil::getFileIcon(const tstring& aFileName) {
 	}
 
 	return FILE_ICON_GENERIC;
+}
+
+size_t WinUtil::getFileIcon(const tstring& fileName) {
+	return getFileIcon(Text::fromT(fileName));
 }
 
 void WinUtil::reducePaths(string& message) {

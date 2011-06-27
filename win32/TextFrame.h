@@ -41,13 +41,13 @@ public:
 private:
 	friend class MDIChildFrame<TextFrame>;
 
-	TextFrame(TabViewPtr parent, const string& fileName);
+	TextFrame(TabViewPtr parent, const string& path);
 	virtual ~TextFrame() { }
 
 	void layout();
 
 	TextBoxPtr pad;
-	const string fileName;
+	const string path;
 };
 
 #endif

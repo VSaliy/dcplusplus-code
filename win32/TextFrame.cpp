@@ -24,6 +24,8 @@
 #include <dcpp/Text.h>
 #include <dcpp/WindowInfo.h>
 
+#include "WinUtil.h"
+
 const string TextFrame::id = "Text";
 const string& TextFrame::getId() const { return id; }
 
@@ -35,7 +37,7 @@ void TextFrame::openWindow(TabViewPtr parent, const string& fileName) {
 
 WindowParams TextFrame::getWindowParams() const {
 	WindowParams ret;
-	ret["Path"] = WindowParam(fileName, WindowParam::FLAG_IDENTIFIES);
+	ret["Path"] = WindowParam(path, WindowParam::FLAG_IDENTIFIES);
 	return ret;
 }
 
@@ -46,11 +48,13 @@ void TextFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params)
 	}
 }
 
-TextFrame::TextFrame(TabViewPtr parent, const string& fileName) :
-BaseType(parent, Text::toT(Util::getFileName(fileName))),
+TextFrame::TextFrame(TabViewPtr parent, const string& path) :
+BaseType(parent, Text::toT(Util::getFileName(path))),
 pad(0),
-fileName(fileName)
+path(path)
 {
+	setIcon(WinUtil::fileImages->getIcon(WinUtil::getFileIcon(path)));
+
 	TextBox::Seed cs = WinUtil::Seeds::textBox;
 	cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
 	cs.font = WinUtil::monoFont;
@@ -60,7 +64,7 @@ fileName(fileName)
 	pad->setTextLimit(0);
 
 	try {
-		pad->setText(Text::toT(Text::toDOS(File(fileName, File::READ, File::OPEN).read(MAX_TEXT_LEN))));
+		pad->setText(Text::toT(Text::toDOS(File(path, File::READ, File::OPEN).read(MAX_TEXT_LEN))));
 	} catch(const FileException& e) {
 		pad->setText(Text::toT(e.getError()));
 	}

@@ -135,7 +135,7 @@ private:
 		}
 
 		int getImage(int col) const {
-			return col == 0 ? WinUtil::getFileIcon(Text::toT(getTarget())) : -1;
+			return col == 0 ? WinUtil::getFileIcon(getTarget()) : -1;
 		}
 
 		static int compareItems(QueueItemInfo* a, QueueItemInfo* b, int col) {
