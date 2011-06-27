@@ -30,6 +30,9 @@ public:
 
 	static void openWindow(TabViewPtr parent, const string& fileName);
 
+	WindowParams getWindowParams() const;
+	static void parseWindowParams(TabViewPtr parent, const WindowParams& params);
+
 	enum Status {
 		STATUS_STATUS,
 		STATUS_LAST
@@ -39,11 +42,12 @@ private:
 	friend class MDIChildFrame<TextFrame>;
 
 	TextFrame(TabViewPtr parent, const string& fileName);
-	TextBoxPtr pad;
-
 	virtual ~TextFrame() { }
 
 	void layout();
+
+	TextBoxPtr pad;
+	const string fileName;
 };
 
 #endif
