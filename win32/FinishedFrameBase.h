@@ -266,7 +266,7 @@ private:
 			return columns[col];
 		}
 		int getImage(int col) const {
-			return col == 0 ? WinUtil::getFileIcon(Text::toT(file)) : -1;
+			return col == 0 ? WinUtil::getFileIcon(file) : -1;
 		}
 
 		static int compareItems(FileInfo* a, FileInfo* b, int col) {

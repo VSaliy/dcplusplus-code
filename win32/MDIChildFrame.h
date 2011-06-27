@@ -128,8 +128,11 @@ protected:
 		return static_cast<TabViewPtr>(BaseType::getParent());
 	}
 
+	void setIcon(dwt::IconPtr icon) {
+		getParent()->setIcon(this, icon);
+	}
 	void setIcon(unsigned iconId) {
-		getParent()->setIcon(this, WinUtil::tabIcon(iconId));
+		setIcon(WinUtil::tabIcon(iconId));
 	}
 
 	static bool parseActivateParam(const WindowParams& params) {

@@ -661,7 +661,7 @@ TransferView::DownloadInfo::DownloadInfo(const string& target, int64_t size_, co
 }
 
 int TransferView::DownloadInfo::getImage(int col) const {
-	return col == 0 ? WinUtil::getFileIcon(Text::toT(path)) : -1;
+	return col == 0 ? WinUtil::getFileIcon(path) : -1;
 }
 
 void TransferView::DownloadInfo::update(const TransferView::TickInfo& ti) {

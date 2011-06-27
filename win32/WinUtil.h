@@ -226,7 +226,8 @@ public:
 		return ret;
 	}
 
-	static size_t getFileIcon(const tstring& aFileName);
+	static size_t getFileIcon(const string& fileName);
+	static size_t getFileIcon(const tstring& fileName);
 
 	static bool isShift() { return (::GetKeyState(VK_SHIFT) & 0x8000) > 0; }
 	static bool isAlt() { return (::GetKeyState(VK_MENU) & 0x8000) > 0; }
