@@ -155,12 +155,12 @@ inline void Frame::setMaximizeBox( bool value )
 
 inline void Frame::setSmallIcon(const IconPtr& icon) {
 	smallIcon = icon;
-	sendMessage(WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(smallIcon->handle()));
+	sendMessage(WM_SETICON, ICON_SMALL, smallIcon ? reinterpret_cast<LPARAM>(smallIcon->handle()) : 0);
 }
 
 inline void Frame::setLargeIcon(const IconPtr& icon) {
 	largeIcon = icon;
-	sendMessage(WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(largeIcon->handle()));
+	sendMessage(WM_SETICON, ICON_BIG, largeIcon ? reinterpret_cast<LPARAM>(largeIcon->handle()) : 0);
 }
 
 inline Frame::Frame(Widget * parent, Dispatcher& dispatcher) :

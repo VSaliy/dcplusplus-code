@@ -150,9 +150,12 @@ private:
 		TabView* control; // for painting messages
 		ContainerPtr w;
 		tstring text;
+		IconPtr icon;
 		ContextMenuFunction handleContextMenu;
 		bool marked;
-		TabInfo(TabView* control_, ContainerPtr w_) : control(control_), w(w_), handleContextMenu(0), marked(false) { }
+
+		TabInfo(TabView* control, ContainerPtr w, IconPtr icon) :
+		control(control), w(w), icon(icon), handleContextMenu(0), marked(false) { }
 	};
 
 	Theme theme;
@@ -176,8 +179,7 @@ private:
 	typedef WindowList::iterator WindowIter;
 	WindowList viewOrder;
 	Rectangle clientSize;
-	ImageListPtr imageList;
-	std::vector<IconPtr> icons;
+	ImageListPtr icons;
 	int active;
 	ContainerPtr dragging;
 	tstring tipText;
@@ -208,10 +210,14 @@ private:
 	tstring formatTitle(tstring title);
 	void layout();
 
+	/** @internal add an icon to the icon cache.
+	@param icon must be a valid icon.
+	@return the index of the icon in the icon cache. */
 	int addIcon(const IconPtr& icon);
+	int getImage(unsigned index);
+	void removeIcon(unsigned index);
 	void swapWidgets(ContainerPtr oldW, ContainerPtr newW);
 
-	IconPtr getIcon(unsigned index) const;
 	void setText(unsigned idx, const tstring& text);
 	void redraw(unsigned index);
 	void draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSelected);
@@ -230,8 +236,6 @@ private:
 	void setSelectedImpl( int idx );
 	// AspectSelection expectation implementation
 	static Message getSelectionChangedMessage();
-
-	const ImageListPtr& getImageList() const;
 
 	int hitTest(const ScreenCoordinate& pt);
 
