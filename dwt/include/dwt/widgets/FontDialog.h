@@ -50,10 +50,11 @@ public:
 	struct Options {
 		bool strikeout; /// if false, the "Strikeout" check-box will be hidden
 		bool underline; /// if false, the "Underline" check-box will be hidden
+		bool color; /// if false, the "Color" drop-down box will be hidden
 
 		COLORREF bgColor; /// background color of the preview control, or NaC for the default
 
-		Options() : strikeout(true), underline(true), bgColor(NaC) { }
+		Options() : strikeout(true), underline(true), color(true), bgColor(NaC) { }
 	};
 
 	/** Shows the dialog

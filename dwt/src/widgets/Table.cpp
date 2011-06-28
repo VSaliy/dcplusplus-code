@@ -51,18 +51,15 @@ BitmapPtr Table::downArrow = 0;
 
 Table::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | LVS_REPORT),
-	font(new Font(DefaultGuiFont)),
+	font(0),
 	lvStyle(LVS_EX_DOUBLEBUFFER)
 {
 }
 
 void Table::create( const Seed & cs )
 {
-	dwtassert((cs.style & WS_CHILD) == WS_CHILD, _T("Widget must have WS_CHILD style"));
 	BaseType::create(cs);
-
-	if(cs.font)
-		setFont(cs.font);
+	setFont(cs.font);
 	if(cs.lvStyle != 0)
 		setTableStyle(cs.lvStyle);
 

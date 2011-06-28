@@ -38,7 +38,7 @@ const TCHAR DateTime::windowClass[] = DATETIMEPICK_CLASS;
 
 DateTime::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | DTS_SHORTDATEFORMAT),
-	font(new Font(DefaultGuiFont)),
+	font(0),
 	format(_T( "yyyy.MM.dd" )),
 	backgroundColor(0x000080),
 	monthBackgroundColor(0x808080),
@@ -53,8 +53,7 @@ DateTime::Seed::Seed() :
 void DateTime::create( const Seed & cs )
 {
 	ControlType::create(cs);
-	if(cs.font)
-		setFont( cs.font );
+	setFont(cs.font);
 	setFormat( cs.format );
 	setDateTime( cs.initialDateTime );
 	setBackgroundColor( cs.backgroundColor );

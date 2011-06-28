@@ -39,15 +39,14 @@ const TCHAR Button::windowClass[] = WC_BUTTON;
 
 Button::Seed::Seed(const tstring& caption, DWORD style) :
 BaseType::Seed(style | WS_CHILD | WS_TABSTOP, 0, caption),
-font(new Font(DefaultGuiFont)),
+font(0),
 padding(3, 2)
 {
 }
 
 void Button::create(const Seed& cs) {
 	BaseType::create(cs);
-	if(cs.font)
-		setFont(cs.font);
+	setFont(cs.font);
 
 	::RECT rect = { cs.padding.x, cs.padding.y, cs.padding.x, cs.padding.y };
 	sendMessage(BCM_SETTEXTMARGIN, 0, reinterpret_cast<LPARAM>(&rect));

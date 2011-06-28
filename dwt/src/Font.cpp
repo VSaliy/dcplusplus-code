@@ -37,36 +37,26 @@
 
 namespace dwt {
 
-	FontPtr createFont( PredefinedFontTypes fontType )
-	{
-		FontPtr retVal( new Font( fontType ) );
-		return retVal;
-	}
+Font::Font(HFONT font, bool owned) :
+ResourceType(font, owned)
+{
+}
 
-	FontPtr createFont
-		( const tstring & faceName
-		, int height
-		, int width
-		, int weight
-		, DWORD charSet
-		, bool italic
-		, bool underline
-		, bool strikeOut
-		, int escapementOrientation
-		, DWORD outputPrecision
-		, DWORD clipPrecision
-		, DWORD quality
-		, DWORD pitchAndFamliy
-		 )
-	{
-		FontPtr retVal(
-			new Font
-				( faceName, height, width, weight, charSet, italic, underline
-				, strikeOut, escapementOrientation, outputPrecision, clipPrecision
-				, quality, pitchAndFamliy
-				)
-			);
-		return retVal;
-	}
+Font::Font(LOGFONT& lf) :
+ResourceType(::CreateFontIndirect(&lf), true)
+{
+}
+
+Font::Font(Predefined predef) :
+ResourceType(reinterpret_cast<HFONT>(::GetStockObject(predef)), true)
+{
+}
+
+FontPtr Font::makeBold() const {
+	LOGFONT lf;
+	::GetObject(handle(), sizeof(lf), &lf);
+	lf.lfWeight = FW_BOLD;
+	return new Font(lf);
+}
 
 }

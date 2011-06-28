@@ -67,14 +67,13 @@ void TextBoxBase::create(const Seed& cs) {
 
 TextBox::Seed::Seed(const tstring& caption) :
 BaseType::Seed(WS_CHILD | WS_TABSTOP, WS_EX_CLIENTEDGE, caption),
-font(new Font(DefaultGuiFont))
+font(0)
 {
 }
 
 void TextBox::create(const Seed& cs) {
 	BaseType::create(cs);
-	if(cs.font)
-		setFont(cs.font);
+	setFont(cs.font);
 
 	// multiline text-boxes don't handle ctrl + A so we have do it ourselves...
 	if((cs.style & ES_MULTILINE) == ES_MULTILINE)
@@ -166,7 +165,8 @@ Point TextBoxBase::getPreferredSize() {
 
 	TEXTMETRIC tmSys = { 0 };
 	{
-		auto select(c.select(*FontPtr(new Font(SystemFont))));
+		Font sysFont(Font::System);
+		auto select(c.select(sysFont));
 		c.getTextMetrics(tmSys);
 	}
 

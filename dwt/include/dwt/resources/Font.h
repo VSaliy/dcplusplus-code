@@ -38,38 +38,9 @@
 
 #include "../WindowsHeaders.h"
 #include "../forward.h"
-#include "../tstring.h"
 #include "Handle.h"
 
 namespace dwt {
-
-#ifndef WINCE
-/// Type of default installed fonts you can create with the Font class
-/** If you want to use one of the default fonts from windows you can use this enum
-  * and the Constructor to the Font class which takes the FontType parameter.
-  */
- enum PredefinedFontTypes
-	{
-		SystemFixedFont = SYSTEM_FIXED_FONT,
-		SystemFont = SYSTEM_FONT,
-		OemFixedFont = OEM_FIXED_FONT,
-		DefaultGuiFont = DEFAULT_GUI_FONT,
-		DeviceDefaultFont = DEVICE_DEFAULT_FONT,
-		AnsiVarFont = ANSI_VAR_FONT,
-		AnsiFixedFont = ANSI_FIXED_FONT
-	};
-#else
-/// Type of default installed fonts you can create with the Font class
-/** If you want to use one of the default fonts from windows you can use this enum
-  * and the Constructor to the Font class which takes the FontType parameter. Windows
-  * CE only supports ONE type of predefined font for the moment which is SystemFont!
-  */
-typedef enum PredefinedFontTypes
-{
-	DefaultGuiFont = SYSTEM_FONT,
-	SystemFont = SYSTEM_FONT
-};
-#endif
 
 /// Class for creating a Font object.
 /** This class is the type sent to the AspectFont realizing classes. <br>
@@ -78,84 +49,33 @@ typedef enum PredefinedFontTypes
   * One instance of this class can be shared among different Widgets ( even different
   * types of Widgets )
   */
-class Font : public Handle<GdiPolicy<HFONT> >
+class Font : public Handle<GdiPolicy<HFONT>>
 {
 public:
+	Font(HFONT font, bool owned);
 
-	Font( PredefinedFontTypes inFontType )
-		: ResourceType(static_cast< HFONT >( ::GetStockObject( inFontType ) ), true )
-	{
-	}
+	Font(LOGFONT& lf);
 
-	/// Constructor taking all parameters
-	/** The object can't be manipulated after creation so when creating an instance
-	  * of this class be sure you are certain that you know what you want.
-	  */
-	Font( const tstring & faceName, int height = 10,
-		int width = 10,
-		int weight = 2,
-		DWORD charSet = ANSI_CHARSET,
-		bool italic = false,
-		bool underline = false,
-		bool strikeOut = false,
-		int escapementOrientation = 0,
-		DWORD outputPrecision = OUT_DEFAULT_PRECIS,
-		DWORD clipPrecision = CLIP_DEFAULT_PRECIS,
-		DWORD quality = DEFAULT_QUALITY,
-		DWORD pitchAndFamliy = FF_DONTCARE )
+	/** Load a system font with the GetStockObject API. These fonts are obsolete and should only be
+	used as a last resort. */
+	enum Predefined {
+		SystemFixed = SYSTEM_FIXED_FONT,
+		System = SYSTEM_FONT,
+		OemFixed = OEM_FIXED_FONT,
+		DefaultGui = DEFAULT_GUI_FONT,
+		DeviceDefault = DEVICE_DEFAULT_FONT,
+		AnsiVar = ANSI_VAR_FONT,
+		AnsiFixed = ANSI_FIXED_FONT
+	};
+	Font(Predefined predef);
 
-	{
-		LOGFONT lf;
-		lf.lfHeight = height;
-		lf.lfWidth = width;
-		lf.lfWeight = weight;
-		lf.lfItalic = italic ? TRUE : FALSE;
-		lf.lfUnderline = underline ? TRUE : FALSE;
-		lf.lfStrikeOut = strikeOut ? TRUE : FALSE;
-		lf.lfCharSet = static_cast< BYTE >( charSet );
-		lf.lfOutPrecision = static_cast< BYTE >( outputPrecision );
-		lf.lfClipPrecision = static_cast< BYTE >( clipPrecision );
-		lf.lfQuality = static_cast< BYTE >( quality );
-		lf.lfPitchAndFamily = static_cast< BYTE >( pitchAndFamliy );
-#ifndef _tcscpy_s
-		_tcsncpy( lf.lfFaceName, faceName.c_str(), 32 );
-#else
-		_tcscpy_s( lf.lfFaceName, 32, faceName.c_str() );
-#endif
-		lf.lfEscapement = escapementOrientation;
-		init(::CreateFontIndirect( & lf ), true);
-	}
-
-	Font( HFONT font, bool owner ) : ResourceType( font, owner ) {
-	}
-
+	/// get a new font with the same characteristics as this one, but bold.
+	FontPtr makeBold() const;
 
 private:
-	friend class Handle<GdiPolicy<HFONT> >;
-	typedef Handle<GdiPolicy<HFONT> > ResourceType;
+	friend class Handle<GdiPolicy<HFONT>>;
+	typedef Handle<GdiPolicy<HFONT>> ResourceType;
 };
-
-//TODO: shouldn't this be within #ifndef WINCE ... #endif
-/// \ingroup GlobalStuff
-/// Creates a Font from a StockId value and returns a pointer to it.
-FontPtr createFont( PredefinedFontTypes fontType );
-
-/// \ingroup GlobalStuff
-/// Creates a Font and returns a pointer to it.
-FontPtr createFont( const tstring & faceName,
- int height = 10,
- int width = 10,
- int weight = 2,
- DWORD charSet = ANSI_CHARSET,
- bool italic = false,
- bool underline = false,
- bool strikeOut = false,
- int escapementOrientation = 0,
- DWORD outputPrecision = OUT_DEFAULT_PRECIS,
- DWORD clipPrecision = CLIP_DEFAULT_PRECIS,
- DWORD quality = DEFAULT_QUALITY,
- DWORD pitchAndFamliy = FF_DONTCARE
- );
 
 }
 

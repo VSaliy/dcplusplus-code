@@ -51,8 +51,6 @@ SplashWindow::SplashWindow() : dwt::Window(0) {
 		text = addChild(cs);
 	}
 
-	text->setFont(dwt::DefaultGuiFont);
-
 	dwt::Point textSize(text->getTextSize(caption));
 	dwt::Point desktopSize(getDesktopSize());
 	int xmid = desktopSize.x / 2;

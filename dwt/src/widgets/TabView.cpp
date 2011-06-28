@@ -51,7 +51,7 @@ TabView::Seed::Seed(unsigned widthConfig_, bool toggleActive_, bool ctrlTab_) :
 BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS |
 	TCS_FOCUSNEVER | TCS_HOTTRACK | TCS_MULTILINE | TCS_OWNERDRAWFIXED | TCS_RAGGEDRIGHT | TCS_TOOLTIPS),
 tabStyle(WinDefault),
-font(new Font(DefaultGuiFont)),
+font(0),
 widthConfig(widthConfig_),
 toggleActive(toggleActive_),
 ctrlTab(ctrlTab_)
@@ -81,14 +81,11 @@ void TabView::create(const Seed & cs) {
 	}
 
 	BaseType::create(cs);
+	setFont(cs.font);
+	font = getFont();
 
 	widthConfig = cs.widthConfig;
 	toggleActive = cs.toggleActive;
-
-	if(cs.font)
-		font = cs.font;
-	else
-		font = new Font(DefaultGuiFont);
 
 	if(cs.style & TCS_OWNERDRAWFIXED) {
 		dwtassert(dynamic_cast<Control*>(getParent()), _T("Owner-drawn tabs must have a parent derived from dwt::Control"));
@@ -97,10 +94,7 @@ void TabView::create(const Seed & cs) {
 			widthConfig = 100;
 		TabCtrl_SetMinTabWidth(handle(), widthConfig);
 
-		LOGFONT lf;
-		::GetObject(font->handle(), sizeof(lf), &lf);
-		lf.lfWeight = FW_BOLD;
-		boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
+		boldFont = font->makeBold();
 
 		closeIcon = cs.closeIcon;
 
@@ -122,8 +116,6 @@ void TabView::create(const Seed & cs) {
 	} else {
 		if(widthConfig <= 3)
 			widthConfig = 0;
-
-		setFont(font);
 	}
 
 	icons = new ImageList(Point(16, 16));

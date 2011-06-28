@@ -158,11 +158,15 @@ int dwtMain(dwt::Application& app) {
 		MappingManager::getInstance()->addMapper<Mapper_WinUPnP>();
 
 		WinUtil::init();
+
 		MainWindow* wnd = new MainWindow;
 		WinUtil::mainWindow = wnd;
 		//WinUtil::mdiParent = wnd->getMDIParent();
+
 		splash->close();
+
 		app.run();
+
 	} catch(const std::exception& e) {
 		dcdebug("Exception: %s\n", e.what());
 	} catch(...) {

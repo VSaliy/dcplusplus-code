@@ -98,16 +98,8 @@ void Menu::createHelper(const Seed& cs) {
 	if(ownerDrawn) {
 		iconSize = cs.iconSize;
 
-		if(cs.font)
-			font = cs.font;
-		else
-			font = new Font(DefaultGuiFont);
-		{
-			LOGFONT lf;
-			::GetObject(font->handle(), sizeof(lf), &lf);
-			lf.lfWeight = FW_BOLD;
-			itsTitleFont = boldFont = FontPtr(new Font(::CreateFontIndirect(&lf), true));
-		}
+		font = cs.font ? cs.font : new Font(Font::DefaultGui);
+		itsTitleFont = boldFont = font->makeBold();
 
 		if(!popup) {
 			getParent()->addCallback(Message(WM_SYSCOLORCHANGE), Dispatchers::VoidVoid<0, false>([] { colors.reset(); }));
@@ -454,7 +446,8 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 		lf.lfOrientation = lf.lfEscapement = 900;
 
 		// create title font from logical info and select it
-		auto select(canvas.select(*FontPtr(new Font(::CreateFontIndirect(&lf), true))));
+		Font vertFont(lf);
+		auto select(canvas.select(vertFont));
 
 		// set sidebar width to text height
 		sidebarWidth = canvas.getTextExtent(itsTitle).y;

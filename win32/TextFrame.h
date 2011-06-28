@@ -28,7 +28,7 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void openWindow(TabViewPtr parent, const string& fileName);
+	static void openWindow(TabViewPtr parent, const string& fileName, bool activate = true);
 
 	WindowParams getWindowParams() const;
 	static void parseWindowParams(TabViewPtr parent, const WindowParams& params);
@@ -46,7 +46,11 @@ private:
 
 	void layout();
 
+	void handleFontChange();
+
+	GridPtr grid;
 	TextBoxPtr pad;
+
 	const string path;
 };
 

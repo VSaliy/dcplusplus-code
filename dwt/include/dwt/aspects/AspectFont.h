@@ -75,12 +75,6 @@ public:
 	  */
 	const FontPtr& getFont();
 
-	// TODO: Remove credits and put on website!
-	/// Function taking a PredefinedFontTypes type
-	/** Examples are SystemFixedFont, SystemFont or DefaultGuiFont.
-	  * -- credit to mm.
-	  */
-	void setFont( PredefinedFontTypes stockObjectFont, bool forceUpdate = true );
 private:
 	// Keep a reference around so it doesn't get deleted
 	FontPtr font;
@@ -106,7 +100,7 @@ Point AspectFont< WidgetType >::getTextSize( const tstring & text )
 template< class WidgetType >
 void AspectFont< WidgetType >::setFont( const FontPtr& font_, bool forceUpdate )
 {
-	font = font_;
+	font = font_ ? font_ : new Font(Font::DefaultGui);
 	W().sendMessage(WM_SETFONT, reinterpret_cast< WPARAM >( font->handle() ), static_cast< LPARAM >( forceUpdate ) );
 }
 
@@ -114,18 +108,9 @@ template< class WidgetType >
 const FontPtr& AspectFont< WidgetType >::getFont()
 {
 	if(!font) {
-		HFONT f = ( HFONT )W().sendMessage(WM_GETFONT);
-		font = FontPtr( new Font( f, false ) );
+		font = new Font(reinterpret_cast<HFONT>(W().sendMessage(WM_GETFONT)), false);
 	}
 	return font;
-}
-
-template< class WidgetType >
-void AspectFont< WidgetType >::setFont( PredefinedFontTypes stockObjectFont, bool forceUpdate )
-{
-	font = FontPtr();
-	HANDLE hFont = static_cast< HFONT >( ::GetStockObject( stockObjectFont ) );
-	W().sendMessage(WM_SETFONT, reinterpret_cast< WPARAM >( hFont ), static_cast< LPARAM >( forceUpdate ) );
 }
 
 }
