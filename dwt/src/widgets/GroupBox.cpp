@@ -42,15 +42,14 @@ const TCHAR GroupBox::windowClass[] = WC_BUTTON;
 
 GroupBox::Seed::Seed(const tstring& caption) :
 BaseType::Seed(BS_GROUPBOX | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_CONTROLPARENT | WS_EX_TRANSPARENT, caption),
-font(new Font(DefaultGuiFont)),
+font(0),
 padding(6, 6)
 {
 }
 
 void GroupBox::create( const GroupBox::Seed & cs ) {
 	BaseType::create(cs);
-	if(cs.font)
-		setFont( cs.font );
+	setFont(cs.font);
 
 	padding.x = ::GetSystemMetrics(SM_CXEDGE) * 2 + cs.padding.x * 2;
 	padding.y = ::GetSystemMetrics(SM_CYEDGE) + cs.padding.y * 2; // ignore the top border

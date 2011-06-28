@@ -46,7 +46,6 @@ PropPage::ListItem AppearancePage::listItems[] = {
 	{ SettingsManager::FAV_SHOW_JOINS, N_("Only show joins / parts for favorite users"), IDH_SETTINGS_APPEARANCE_FAV_SHOW_JOINS },
 	{ SettingsManager::SORT_FAVUSERS_FIRST, N_("Sort favorite users first"), IDH_SETTINGS_APPEARANCE_SORT_FAVUSERS_FIRST },
 	{ SettingsManager::USE_SYSTEM_ICONS, N_("Use system icons when browsing files (slows browsing down a bit)"), IDH_SETTINGS_APPEARANCE_USE_SYSTEM_ICONS },
-	{ SettingsManager::USE_OEM_MONOFONT, N_("Use OEM monospaced font for viewing text files"), IDH_SETTINGS_APPEARANCE_USE_OEM_MONOFONT },
 	{ SettingsManager::GET_USER_COUNTRY, N_("Guess user country from IP"), IDH_SETTINGS_APPEARANCE_GET_USER_COUNTRY },
 	{ 0, 0 }
 };

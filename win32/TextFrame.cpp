@@ -24,15 +24,23 @@
 #include <dcpp/Text.h>
 #include <dcpp/WindowInfo.h>
 
+#include <dwt/widgets/FontDialog.h>
+
 #include "WinUtil.h"
+
+using dwt::FontDialog;
+using dwt::Grid;
+using dwt::GridInfo;
 
 const string TextFrame::id = "Text";
 const string& TextFrame::getId() const { return id; }
 
 static const size_t MAX_TEXT_LEN = 64*1024;
 
-void TextFrame::openWindow(TabViewPtr parent, const string& fileName) {
-	new TextFrame(parent, fileName);
+void TextFrame::openWindow(TabViewPtr parent, const string& fileName, bool activate) {
+	auto window = new TextFrame(parent, fileName);
+	if(activate)
+		window->activate();
 }
 
 WindowParams TextFrame::getWindowParams() const {
@@ -44,22 +52,48 @@ WindowParams TextFrame::getWindowParams() const {
 void TextFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params) {
 	auto path = params.find("Path");
 	if(path != params.end()) {
-		openWindow(parent, path->second);
+		openWindow(parent, path->second, parseActivateParam(params));
 	}
 }
 
 TextFrame::TextFrame(TabViewPtr parent, const string& path) :
-BaseType(parent, Text::toT(Util::getFileName(path))),
+BaseType(parent, Text::toT(Util::getFileName(path)), IDH_TEXT_VIEWER),
+grid(0),
 pad(0),
 path(path)
 {
 	setIcon(WinUtil::fileImages->getIcon(WinUtil::getFileIcon(path)));
 
-	TextBox::Seed cs = WinUtil::Seeds::textBox;
-	cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
-	cs.font = WinUtil::monoFont;
-	pad = addChild(cs);
-	addWidget(pad);
+	grid = addChild(Grid::Seed(2, 1));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
+
+	{
+		TextBox::Seed cs = WinUtil::Seeds::textBox;
+		cs.style |= WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_READONLY;
+		if(!SettingsManager::getInstance()->isDefault(SettingsManager::TEXT_VIEWER_FONT)) {
+			// the user has configured a different font for text files; use it.
+			LOGFONT lf;
+			WinUtil::decodeFont(Text::toT(SETTING(TEXT_VIEWER_FONT)), lf);
+			cs.font = dwt::FontPtr(new dwt::Font(lf));
+		}
+		pad = grid->addChild(cs);
+		addWidget(pad);
+		WinUtil::handleDblClicks(pad);
+	}
+
+	{
+		Button::Seed seed = WinUtil::Seeds::button;
+		seed.caption = T_("Change the text viewer font");
+		auto changeFont = grid->addChild(Grid::Seed(1, 1))->addChild(seed);
+		changeFont->setHelpId(IDH_TEXT_FONT);
+		changeFont->onClicked([this] { handleFontChange(); });
+		addWidget(changeFont);
+	}
+
+	initStatus();
+	status->setText(STATUS_STATUS, str(TF_("Viewing text file: %1%") % Text::toT(path)));
 
 	pad->setTextLimit(0);
 
@@ -69,16 +103,30 @@ path(path)
 		pad->setText(Text::toT(e.getError()));
 	}
 
-	initStatus();
-
 	layout();
-	activate();
 }
 
 void TextFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
-	// TODO status->layout(r);
+	r.size.y -= status->refresh();
 
-	pad->resize(r);
+	r.size.y -= grid->getSpacing(); // add a bottom margin not to be too stuck to the status bar.
+	grid->resize(r);
+}
+
+void TextFrame::handleFontChange() {
+	LOGFONT logFont;
+	WinUtil::decodeFont(Text::toT(
+		SettingsManager::getInstance()->isDefault(SettingsManager::TEXT_VIEWER_FONT) ?
+		SETTING(MAIN_FONT) : SETTING(TEXT_VIEWER_FONT)), logFont);
+	DWORD color = 0;
+	FontDialog::Options options;
+	options.strikeout = false;
+	options.underline = false;
+	options.color = false;
+	if(FontDialog(this).open(logFont, color, &options)) {
+		SettingsManager::getInstance()->set(SettingsManager::TEXT_VIEWER_FONT, Text::fromT(WinUtil::encodeFont(logFont)));
+		pad->setFont(new dwt::Font(logFont));
+	}
 }

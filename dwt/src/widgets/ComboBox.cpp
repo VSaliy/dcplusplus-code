@@ -36,9 +36,9 @@ namespace dwt {
 const TCHAR ComboBox::windowClass[] = WC_COMBOBOX;
 
 ComboBox::Seed::Seed() :
-	BaseType::Seed(CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_CHILD | WS_TABSTOP | WS_VSCROLL),
-	font(new Font(DefaultGuiFont)),
-	extended(true)
+BaseType::Seed(CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_CHILD | WS_TABSTOP | WS_VSCROLL),
+font(0),
+extended(true)
 {
 }
 
@@ -48,8 +48,7 @@ ComboBox::ComboBox(Widget* parent ) : BaseType(parent, ChainingDispatcher::super
 
 void ComboBox::create( const Seed & cs ) {
 	BaseType::create(cs);
-	if(cs.font)
-		setFont( cs.font );
+	setFont(cs.font);
 	if(cs.extended)
 		sendMessage(CB_SETEXTENDEDUI, TRUE);
 }

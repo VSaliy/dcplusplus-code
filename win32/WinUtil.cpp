@@ -98,7 +98,6 @@ dwt::BrushPtr WinUtil::bgBrush;
 COLORREF WinUtil::textColor = 0;
 COLORREF WinUtil::bgColor = 0;
 dwt::FontPtr WinUtil::font;
-dwt::FontPtr WinUtil::monoFont;
 dwt::ImageListPtr WinUtil::fileImages;
 dwt::ImageListPtr WinUtil::userImages;
 TStringList WinUtil::lastDirs;
@@ -149,9 +148,8 @@ void WinUtil::init() {
 	{
 		LOGFONT lf;
 		decodeFont(Text::toT(SETTING(MAIN_FONT)), lf);
-		font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&lf), true));
+		font = dwt::FontPtr(new dwt::Font(lf));
 	}
-	monoFont = dwt::FontPtr(new dwt::Font((BOOLSETTING(USE_OEM_MONOFONT) ? dwt::OemFixedFont : dwt::AnsiFixedFont)));
 
 	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 
@@ -398,7 +396,6 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 	}
 
 	if(!face.empty()) {
-		::ZeroMemory(dest.lfFaceName, LF_FACESIZE);
 		_tcscpy(dest.lfFaceName, face.c_str());
 	}
 }

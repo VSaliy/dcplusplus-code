@@ -39,7 +39,7 @@ const TCHAR Label::windowClass[] = WC_STATIC;
 
 Label::Seed::Seed(const tstring& caption) :
 BaseType::Seed(WS_CHILD | SS_NOTIFY | SS_NOPREFIX, 0, caption),
-font(new Font(DefaultGuiFont))
+font(0)
 {
 }
 
@@ -50,8 +50,7 @@ BaseType::Seed(WS_CHILD | SS_NOTIFY | SS_ICON, 0, _T('#') + boost::lexical_cast<
 
 void Label::create( const Seed & cs ) {
 	BaseType::create(cs);
-	if(cs.font)
-		setFont( cs.font );
+	setFont(cs.font);
 }
 
 void Label::layout() {

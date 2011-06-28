@@ -122,7 +122,6 @@ public:
 	static COLORREF textColor;
 	static COLORREF bgColor;
 	static dwt::FontPtr font;
-	static dwt::FontPtr monoFont;
 	static tstring commands;
 	static dwt::ImageListPtr fileImages;
 	static dwt::ImageListPtr userImages;
@@ -157,6 +156,7 @@ public:
 		};
 	};
 
+	static void initFonts();
 	static void init();
 	static void uninit();
 

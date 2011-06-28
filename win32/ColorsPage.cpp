@@ -83,7 +83,7 @@ example(0)
 	downBar = SETTING(DOWNLOAD_BAR_COLOR);
 
 	WinUtil::decodeFont(Text::toT(SETTING(MAIN_FONT)), logFont);
-	font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&logFont), true));
+	font = dwt::FontPtr(new dwt::Font(logFont));
 
 	example->setColor(fg, bg);
 	example->setFont(font);
@@ -117,7 +117,7 @@ void ColorsPage::handleTextClicked() {
 	options.underline = false;
 	options.bgColor = bg;
 	if(FontDialog(this).open(logFont, fg, &options)) {
-		font = dwt::FontPtr(new dwt::Font(::CreateFontIndirect(&logFont), true));
+		font = dwt::FontPtr(new dwt::Font(logFont));
 		example->setColor(fg, bg);
 		example->setFont(font);
 		example->redraw();

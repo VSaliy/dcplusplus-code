@@ -42,6 +42,7 @@ const TCHAR StatusBar::windowClass[] = STATUSCLASSNAME;
 
 StatusBar::Seed::Seed(unsigned parts_, unsigned fill_, bool sizeGrip) :
 BaseType::Seed(WS_CHILD | WS_CLIPSIBLINGS),
+font(0),
 parts(parts_),
 fill(fill_)
 {
@@ -65,8 +66,7 @@ void StatusBar::create(const Seed& cs) {
 	fill = cs.fill;
 
 	BaseType::create(cs);
-	if(cs.font)
-		setFont(cs.font);
+	setFont(cs.font);
 
 	tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
 	tip->setTool(this, [this](tstring& text) { handleToolTip(text); });

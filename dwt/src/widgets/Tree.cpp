@@ -37,15 +37,14 @@ const TCHAR Tree::windowClass[] = WC_TREEVIEW;
 
 Tree::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | TVS_DISABLEDRAGDROP | TVS_HASLINES | TVS_NONEVENHEIGHT | TVS_SHOWSELALWAYS),
-	font(new Font(DefaultGuiFont))
+	font(0)
 {
 }
 
 void Tree::create( const Seed & cs )
 {
 	BaseType::create(cs);
-	if(cs.font)
-		setFont( cs.font );
+	setFont(cs.font);
 }
 
 HTREEITEM Tree::insert(const tstring& text, HTREEITEM parent, LPARAM param, bool expanded, int iconIndex, int selectedIconIndex) {

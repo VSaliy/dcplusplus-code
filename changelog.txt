@@ -31,7 +31,7 @@
 * Remove the license page from the installer
 * Update OpenSSL to version 1.0.0d
 * [L#189241] Store crash reports in a CrashLog.txt file (poy)
-* Save and restore "View as text" windows (poy)
+* Improve "View as text" windows (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
