@@ -836,9 +836,9 @@ void HubFrame::on(HubUpdated, Client*) noexcept {
 	}
 	hubName += " (" + client->getHubUrl() + ")";
 #ifdef _DEBUG
-	string version = client->getHubIdentity().get("VE");
-	if(!version.empty()) {
-		hubName += " - " + version;
+	auto application = client->getHubIdentity().getApplication();
+	if(!application.empty()) {
+		hubName += " - " + application;
 	}
 #endif
 	tstring hubNameT = Text::toT(hubName);

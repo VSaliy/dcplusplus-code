@@ -89,7 +89,8 @@ static const FieldName fields[] =
 	{ "U4", T_("Search port (v4)"), &Text::toT },
 	{ "U6", T_("Search port (v6)"), &Text::toT },
 	{ "SU", T_("Features"), &Text::toT },
-	{ "VE", T_("Client"), &Text::toT },
+	{ "VE", T_("Application version"), &Text::toT },
+    { "AP", T_("Application"), &Text::toT },
 	{ "ID", T_("CID"), &Text::toT },
 	{ "KP", T_("TLS Keyprint"), &Text::toT },
 
