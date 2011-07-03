@@ -86,7 +86,7 @@ def gen_installer(target, source, env):
 		name = os.path.basename(node.path)
 
 		if name == 'DCPlusPlus.exe':
-			env.Execute('strip "' + nixify(node.path) + '" -o "' + build_path + name + '"')
+			env.Execute(env['strip'] + ' "' + nixify(node.path) + '" -o "' + build_path + name + '"')
 
 		elif name[-3:] == '.po' or name[-4:] == '.pot':
 			# find the corresponding name among the NSIS language files

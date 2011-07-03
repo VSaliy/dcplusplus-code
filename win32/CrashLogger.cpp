@@ -264,6 +264,8 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column,
 									int d = addr - lineaddr;
 									if(d >= 0 && d < delta) {
 										best = l;
+										if(d == 0) // found a perfect match.
+											break;
 										delta = d;
 									}
 								}
