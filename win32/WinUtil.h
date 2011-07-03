@@ -156,7 +156,6 @@ public:
 		};
 	};
 
-	static void initFonts();
 	static void init();
 	static void uninit();
 
