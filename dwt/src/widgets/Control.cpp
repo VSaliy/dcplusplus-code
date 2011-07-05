@@ -96,6 +96,11 @@ static bool forwardPainting(const MSG& msg) {
 }
 
 bool Control::handleMessage(const MSG& msg, LRESULT& retVal) {
+	if(msg.message == WM_CLOSE && !getRoot()->getEnabled()) {
+		// disallow closing disabled windows.
+		return true;
+	}
+
 	bool handled = BaseType::handleMessage(msg, retVal);
 	if(handled)
 		return handled;

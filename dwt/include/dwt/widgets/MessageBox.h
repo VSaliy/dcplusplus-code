@@ -41,18 +41,6 @@
 
 namespace dwt {
 
-/// MessageBox class
-/** \ingroup WidgetControls
-  * \image html messagebox.PNG
-  * Class for showing a MessageBox. <br>
-  * Either derive from it, call WidgetFactory::createMessageBox or use normal
-  * Constructor. <br>
-  * Note! <br>
-  * If you wish to use this class with Parent classes other than those from SmartWin
-  * you need to expose a public function called "parent" taking no arguments returning
-  * and HWND in the Parent template parameter. <br>
-  * The complete signature of the function will then be "HWND parent()"
-  */
 class MessageBox
 {
 public:
@@ -67,7 +55,7 @@ public:
 	~MessageBox()
 	{}
 
-	explicit MessageBox( dwt::Widget * parent = 0 );
+	explicit MessageBox(Widget* parent);
 
 	// Next three enums are here INTENTIONALLY to abstract away Win32API
 	/// Enums for which buttons you want the MessageBox to have.
@@ -113,38 +101,13 @@ public:
 		RETBOX_YES = IDYES
 	};
 
-	/// Shows the actual MessageBox
-	/** First parameter is the body shown inside the Message Box. <br>
-	  * Second parameter is the HEADER of the Message Box ( the text shown in the
-	  * blue line, optional parameter ) <br>
-	  * Third parameter is the Buttons you want the Message Box to have ( optional
-	  * parameter ) <br>
-	  * Fourth parameter is the Icon you want the Message Box to display ( normally
-	  * in the upper left corner )
-	  */
-	RetVal show( const tstring & body,
-		const tstring & header = _T( "Message" ),
-		Buttons buttons = BOX_OK,
-		Icon icon = BOX_ICONINFORMATION );
+	RetVal show(const tstring& message, const tstring& title, Buttons buttons = BOX_OK, Icon icon = BOX_ICONINFORMATION);
+
+	Widget* getParent() const { return parent; }
 
 private:
-	Widget* itsParent;
-
-	HWND getParentHandle() { return itsParent ? itsParent->handle() : NULL; }
+	Widget* parent;
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-inline MessageBox::MessageBox( Widget * parent )
-	: itsParent( parent )
-{}
-
-inline MessageBox::RetVal MessageBox::show( const tstring & body, const tstring & header, Buttons buttons, Icon icon )
-{
-	return static_cast< RetVal >( ::MessageBox( getParentHandle(), body.c_str(), header.c_str(), buttons | icon ) );
-}
 
 }
 

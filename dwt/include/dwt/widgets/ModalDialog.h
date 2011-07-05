@@ -95,18 +95,6 @@ public:
 		Seed(const Point& size, DWORD styles_ = 0);
 	};
 
-	/// Creates a Modal Dialog Window defined in C++ alone.
-	/** This version creates a dialog window without using a Dialog Resource ID. <br>
-	  * To be called by the invoker of the dialog. <br>
-	  * The return comes from the parameter to endDialog() <br>
-	  * You must call onInitDialog( &MyModalDialogWidget::initDialog ); in the
-	  * constructor of your dialog, <br>
-	  * and in your initDialog you create the dialog's Widgets yourself. <br>
-	  * Example : <br>
-	  * LabelPtr prompt = createLabel(); <br>
-	  * prompt->setBounds( 10, 100, 100, 50 ); <br>
-	  * prompt->setText( _T("testing") );
-	  */
 	void create(const Seed& cs);
 
 	/// Display the dialog and return only when the dialog has been dismissed
@@ -143,14 +131,6 @@ protected:
 	explicit ModalDialog( Widget * parent = 0 );
 
 	virtual ~ModalDialog();
-
-	/// Specify how a resourceless dialog's window appears.
-	/** The derived pure dialog class can control the DLGTEMPLATE parameters used in
-	  * create() with this protected call. <br>
-	  * The calling layer is prevented from doing so. <br>
-	  * See DLGTEMPLATE as used in ::DialogBoxIndirectParam for details.
-	  */
-	void setDlgTemplate( DLGTEMPLATE inTemplate );
 
 	/// Called by default when WM_CLOSE is posted to the dialog
 	bool defaultClosing() {

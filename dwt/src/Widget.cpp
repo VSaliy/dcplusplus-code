@@ -98,6 +98,10 @@ void Widget::setHandle(HWND h) {
 	::SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc::wndProc));
 }
 
+Widget* Widget::getRoot() const {
+	return hwnd_cast<Widget*>(::GetAncestor(handle(), GA_ROOT));
+}
+
 void Widget::addRemoveStyle(DWORD addStyle, bool add) {
 	util::win32::updateStyle(handle(), GWL_STYLE, addStyle, add);
 }
