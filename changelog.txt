@@ -33,6 +33,7 @@
 * [L#189241] Store crash reports in a CrashLog.txt file (poy)
 * Improve "View as text" windows (poy)
 * [L#804024] [ADC] Separate application and version in INF (ullner)
+* [L#696761] Modal dialog fixes (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

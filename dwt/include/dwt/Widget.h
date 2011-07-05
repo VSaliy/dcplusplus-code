@@ -157,6 +157,9 @@ public:
 	 */
 	void setHandle(HWND hwnd);
 
+	/// get the top-most parent window of this widget (either a main window or a modal dialog).
+	Widget* getRoot() const;
+
 protected:
 	/** Most Widgets can override the creational parameters which sets the style and the
 	  * initial position of the Widget, those Widgets will take an object of this type to
