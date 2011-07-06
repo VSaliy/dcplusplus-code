@@ -25,6 +25,7 @@
 #include <dcpp/WindowInfo.h>
 
 #include <dwt/widgets/FontDialog.h>
+#include <dwt/widgets/Grid.h>
 
 #include "WinUtil.h"
 
