@@ -666,12 +666,14 @@ void QueueManager::add(const string& aRoot, const BundlePtr& bundle, const Hinte
 		}
 	});
 
-	Lock l(cs);
+	if(BOOLSETTING(BUNDLES)) {
+		Lock l(cs);
 
-    auto i = bundles.insert(make_pair(bundle->getHash(), BundleItem(aRoot, bundle)));
-    if(i.second) {
-    	fire(QueueManagerListener::Added(), i.first->second);
-    }
+		auto i = bundles.insert(make_pair(bundle->getHash(), BundleItem(aRoot, bundle)));
+		if(i.second) {
+			fire(QueueManagerListener::Added(), i.first->second);
+		}
+	}
 }
 
 void QueueManager::readd(const string& target, const HintedUser& aUser) {
@@ -1353,12 +1355,14 @@ void QueueManager::remove(const string& aTarget) noexcept {
 }
 
 void QueueManager::removeBundle(const TTHValue& tth) noexcept {
-	Lock l(cs);
-	// TODO remove queueitems (probably...)
-	auto i = bundles.find(tth);
-	if(i != bundles.end()) {
-		fire(QueueManagerListener::Removed(), i->second);
-		bundles.erase(i);
+	if(BOOLSETTING(BUNDLES)) {
+		Lock l(cs);
+		// TODO remove queueitems (probably...)
+		auto i = bundles.find(tth);
+		if(i != bundles.end()) {
+			fire(QueueManagerListener::Removed(), i->second);
+			bundles.erase(i);
+		}
 	}
 }
 
@@ -1540,32 +1544,34 @@ void QueueManager::saveQueue(bool force) noexcept {
 			}
 		}
 
-		for(auto i = bundles.begin(); i != bundles.end(); ++i) {
-			auto& bi = i->second;
+		if(BOOLSETTING(BUNDLES)) {
+			for(auto i = bundles.begin(); i != bundles.end(); ++i) {
+				auto& bi = i->second;
 
-			f.write(LIT("\t<BundleItem Root=\""));
-			f.write(SimpleXML::escape(bi.getRoot(), tmp, true));
-			f.write(LIT("\">\r\n"));
+				f.write(LIT("\t<BundleItem Root=\""));
+				f.write(SimpleXML::escape(bi.getRoot(), tmp, true));
+				f.write(LIT("\">\r\n"));
 
-			auto& b = *bi.getBundle();
+				auto& b = *bi.getBundle();
 
-			f.write(LIT("\t\t<Bundle Name=\""));
-			f.write(SimpleXML::escape(b.name, tmp, true));
-			f.write(LIT("\">\r\n"));
-			for(auto j = b.entries.begin(); j != b.entries.end(); ++j) {
-				f.write(LIT("\t\t\t<Entry Name=\""));
-				f.write(SimpleXML::escape(j->name, tmp, true));
-				f.write(LIT("\" Size=\""));
-				f.write(Util::toString(j->size));
-				f.write(LIT("\" Include=\""));
-				f.write(Util::toString((int)j->include));
-				b32tmp.clear();
-				f.write(LIT("\" TTH=\""));
-				f.write(j->tth.toBase32(b32tmp));
-				f.write(LIT("\"/>\r\n"));
+				f.write(LIT("\t\t<Bundle Name=\""));
+				f.write(SimpleXML::escape(b.name, tmp, true));
+				f.write(LIT("\">\r\n"));
+				for(auto j = b.entries.begin(); j != b.entries.end(); ++j) {
+					f.write(LIT("\t\t\t<Entry Name=\""));
+					f.write(SimpleXML::escape(j->name, tmp, true));
+					f.write(LIT("\" Size=\""));
+					f.write(Util::toString(j->size));
+					f.write(LIT("\" Include=\""));
+					f.write(Util::toString((int)j->include));
+					b32tmp.clear();
+					f.write(LIT("\" TTH=\""));
+					f.write(j->tth.toBase32(b32tmp));
+					f.write(LIT("\"/>\r\n"));
+				}
+				f.write(LIT("\t\t</Bundle>\r\n"));
+				f.write(LIT("\t</BundleItem>\r\n"));
 			}
-			f.write(LIT("\t\t</Bundle>\r\n"));
-			f.write(LIT("\t</BundleItem>\r\n"));
 		}
 
 		f.write("</Downloads>\r\n");
@@ -1734,7 +1740,7 @@ void QueueLoader::endTag(const string& name, const string&) {
 			cur = NULL;
 		} else if(name == "Downloads") {
 			inDownloads = false;
-		} else if(name == sBundleItem) {
+		} else if(name == sBundleItem && BOOLSETTING(BUNDLES)) {
 			qm->bundles[bundle->getBundle()->getHash()] = *bundle;
 			delete bundle;
 			bundle = 0;
@@ -1947,20 +1953,25 @@ void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcError
 }
 
 BundleItem* QueueManager::getBundle(QueueItem *qi) noexcept {
-	for(auto i = bundles.begin(); i != bundles.end(); ++i) {
-		if(find_if(i->second.getBundle()->entries, [&](const Bundle::Entry& e) {
-			return Util::stricmp(i->second.getRoot() + e.name, qi->getTarget()) == 0;
-		}) != i->second.getBundle()->entries.end()) {
-			return &i->second;
+	if(BOOLSETTING(BUNDLES)) {
+		for(auto i = bundles.begin(); i != bundles.end(); ++i) {
+			if(find_if(i->second.getBundle()->entries, [&](const Bundle::Entry& e) {
+				return Util::stricmp(i->second.getRoot() + e.name, qi->getTarget()) == 0;
+			}) != i->second.getBundle()->entries.end()) {
+				return &i->second;
+			}
 		}
 	}
+
 	return 0;
 }
 
 void QueueManager::removeBundle(BundleItem *bi) noexcept {
-	fire(QueueManagerListener::Removed(), *bi);
-	bundles.erase(bi->getBundle()->getHash());
-	delete bi;
+	if(BOOLSETTING(BUNDLES)) {
+		fire(QueueManagerListener::Removed(), *bi);
+		bundles.erase(bi->getBundle()->getHash());
+		delete bi;
+	}
 }
 
 bool QueueManager::isFinished(const BundleItem &bi) noexcept {
