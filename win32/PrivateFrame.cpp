@@ -337,6 +337,11 @@ bool PrivateFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 	MenuPtr menu = chat->getMenu();
 
 	menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
+	
+	menu->appendItem(T_("Clear chat"), [this] {
+	chat->setSelection();
+	chat->replaceSelection(_T("")); 
+	});
 
 	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubs(replyTo.getUser().user->getCID(),
 		replyTo.getUser().hint, priv));
