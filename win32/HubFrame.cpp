@@ -1136,6 +1136,11 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 	MenuPtr menu = chat->getMenu();
 
 	menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
+	
+	menu->appendItem(T_("Clear chat"), [this] {
+	chat->setSelection();
+	chat->replaceSelection(_T("")); 
+	});
 
 	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
 
