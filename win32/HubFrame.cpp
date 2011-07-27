@@ -939,6 +939,9 @@ void HubFrame::addAsFavorite() {
 		aEntry.setName(client->getHubName());
 		aEntry.setDescription(client->getHubDescription());
 		aEntry.setNick(client->getMyNick());
+		if(client->getPassword().size() > 0)  {
+			aEntry.setPassword(client->getPassword());
+		}
 		FavoriteManager::getInstance()->addFavorite(aEntry);
 		addStatus(T_("Favorite hub added"));
 	} else {
