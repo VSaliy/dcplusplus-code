@@ -91,7 +91,7 @@ const string SettingsManager::settingTags[] =
 	"MaxUploadSpeedTime", "MaxDownloadSpeedPrimary", "MaxUploadSpeedPrimary",
 	"SlotsAlternateLimiting", "SlotsPrimaryLimiting",
 	"AutoDetectIncomingConnection", "SettingsSaveInterval",
-	"BalloonMainChat", "BalloonPM", "BalloonPMWindow", "BalloonFinishedDL", "BalloonFinishedFL", "Bundles",
+	"BalloonMainChat", "BalloonPM", "BalloonPMWindow", "BalloonFinishedDL", "BalloonFinishedFL",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -103,6 +103,7 @@ const string SettingsManager::settingTags[] =
 
 SettingsManager::SettingsManager()
 {
+
 	connectionSpeeds.push_back("0.005");
 	connectionSpeeds.push_back("0.01");
 	connectionSpeeds.push_back("0.02");
@@ -318,7 +319,6 @@ SettingsManager::SettingsManager()
 	setDefault(BALLOON_PM_WINDOW, BALLOON_DISABLED);
 	setDefault(BALLOON_FINISHED_DL, BALLOON_ALWAYS);
 	setDefault(BALLOON_FINISHED_FL, BALLOON_DISABLED);
-	setDefault(BUNDLES, false);
 
 	setSearchTypeDefaults();
 
