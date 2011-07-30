@@ -53,23 +53,6 @@ namespace dcpp {
 using boost::adaptors::map_values;
 using boost::range::for_each;
 
-class DirectoryItem {
-public:
-	DirectoryItem() : priority(QueueItem::DEFAULT) { }
-	DirectoryItem(const UserPtr& aUser, const string& aName, const string& aTarget,
-		QueueItem::Priority p) : name(aName), target(aTarget), priority(p), user(aUser) { }
-	~DirectoryItem() { }
-
-	UserPtr& getUser() { return user; }
-	void setUser(const UserPtr& aUser) { user = aUser; }
-
-	GETSET(string, name, Name);
-	GETSET(string, target, Target);
-	GETSET(QueueItem::Priority, priority, Priority);
-private:
-	UserPtr user;
-};
-
 QueueManager::FileQueue::~FileQueue() {
 	for_each(queue | map_values, DeleteFunction());
 }
@@ -169,7 +152,7 @@ static QueueItem* findCandidate(QueueItem* cand, QueueItem::StringMap::iterator 
 
 QueueItem* QueueManager::FileQueue::findAutoSearch(StringList& recent) {
 	// We pick a start position at random, hoping that we will find something to search for...
-	auto start = (QueueItem::StringMap::difference_type)Util::rand((uint32_t)queue.size());
+	QueueItem::StringMap::size_type start = (QueueItem::StringMap::size_type)Util::rand((uint32_t)queue.size());
 
 	auto i = queue.begin();
 	advance(i, start);
@@ -338,7 +321,6 @@ int QueueManager::FileMover::run() {
 		}
 		moveFile_(next.first, next.second);
 	}
-	return 0;
 }
 
 void QueueManager::Rechecker::add(const string& file) {
@@ -660,11 +642,7 @@ connect:
 void QueueManager::add(const string& aRoot, const BundlePtr& bundle, const HintedUser& aUser, int aFlags) {
 	for_each(bundle->entries, [&](const Bundle::Entry& e) { add(aRoot + e.name, e.size, e.tth, aUser, aFlags, true, bundle); });
 	Lock l(cs);
-
-    auto i = bundles.insert(make_pair(bundle->getHash(), BundleItem(aRoot, bundle)));
-    if(i.second) {
-    	fire(QueueManagerListener::Added(), i.first->second);
-    }
+	bundles.insert(make_pair(bundle->getHash(), BundleItem(aRoot, bundle)));
 }
 
 void QueueManager::readd(const string& target, const HintedUser& aUser) {
@@ -753,9 +731,9 @@ void QueueManager::addDirectory(const string& aDir, const HintedUser& aUser, con
 	{
 		Lock l(cs);
 
-		auto dp = directories.equal_range(aUser);
+		DirectoryItem::DirectoryPair dp = directories.equal_range(aUser);
 
-		for(auto i = dp.first; i != dp.second; ++i) {
+		for(DirectoryItem::DirectoryIter i = dp.first; i != dp.second; ++i) {
 			if(Util::stricmp(aTarget.c_str(), i->second->getName().c_str()) == 0)
 				return;
 		}
@@ -810,7 +788,7 @@ int QueueManager::matchListing(const DirectoryListing& dl) noexcept {
 		tthMap.clear();
 		buildMap(dl.getRoot());
 
-		for(auto i = fileQueue.getQueue().begin(); i != fileQueue.getQueue().end(); ++i) {
+		for(QueueItem::StringMap::const_iterator i = fileQueue.getQueue().begin(); i != fileQueue.getQueue().end(); ++i) {
 			QueueItem* qi = i->second;
 			if(qi->isFinished())
 				continue;
@@ -906,11 +884,11 @@ StringList QueueManager::getTargets(const TTHValue& tth) {
 	return sl;
 }
 
-void QueueManager::addListener(QueueManagerListener* ql, const function<void (const QueueItem::StringMap&, const BundleItem::Map&)>& currentQueue) {
+void QueueManager::addListener(QueueManagerListener* ql, const function<void (const QueueItem::StringMap&)>& currentQueue) {
 	Lock l(cs);
 	Speaker<QueueManagerListener>::addListener(ql);
 	if(currentQueue) {
-		currentQueue(fileQueue.getQueue(), bundles);
+		currentQueue(fileQueue.getQueue());
 	}
 }
 
@@ -1181,11 +1159,6 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 
 							fire(QueueManagerListener::Finished(), q, dir, aDownload->getAverageSpeed());
 
-							auto bi = getBundle(q);
-							if(bi && isFinished(*bi)) {
-								fire(QueueManagerListener::Finished(), *bi);
-							}
-
 							userQueue.remove(q);
 
 							if(!BOOLSETTING(KEEP_FINISHED_FILES) || aDownload->getType() == Transfer::TYPE_FULL_LIST) {
@@ -1256,7 +1229,7 @@ void QueueManager::processList(const string& name, const HintedUser& user, int f
 	}
 
 	if(flags & QueueItem::FLAG_DIRECTORY_DOWNLOAD) {
-		vector<DirectoryItemPtr> dl;
+		DirectoryItem::List dl;
 		{
 			Lock l(cs);
 			auto dp = directories.equal_range(user) | map_values;
@@ -1264,7 +1237,7 @@ void QueueManager::processList(const string& name, const HintedUser& user, int f
 			directories.erase(user);
 		}
 
-		for(auto i = dl.begin(); i != dl.end(); ++i) {
+		for(DirectoryItem::Iter i = dl.begin(); i != dl.end(); ++i) {
 			DirectoryItem* di = *i;
 			dirList.download(di->getName(), di->getTarget(), false);
 			delete di;
@@ -1292,7 +1265,10 @@ void QueueManager::remove(const string& aTarget) noexcept {
 
 		if(q->isSet(QueueItem::FLAG_DIRECTORY_DOWNLOAD)) {
 			dcassert(q->getSources().size() == 1);
-			for_each(directories.equal_range(q->getSources()[0].getUser()) | map_values, DeleteFunction());
+			DirectoryItem::DirectoryPair dp = directories.equal_range(q->getSources()[0].getUser());
+			for(DirectoryItem::DirectoryIter i = dp.first; i != dp.second; ++i) {
+				delete i->second;
+			}
 			directories.erase(q->getSources()[0].getUser());
 		}
 
@@ -1314,18 +1290,8 @@ void QueueManager::remove(const string& aTarget) noexcept {
 		setDirty();
 	}
 
-	for(auto i = x.begin(); i != x.end(); ++i) {
+	for(UserList::iterator i = x.begin(); i != x.end(); ++i) {
 		ConnectionManager::getInstance()->disconnect(*i, true);
-	}
-}
-
-void QueueManager::removeBundle(const TTHValue& tth) noexcept {
-	Lock l(cs);
-	// TODO remove queueitems (probably...)
-	auto i = bundles.find(tth);
-	if(i != bundles.end()) {
-		fire(QueueManagerListener::Removed(), i->second);
-		bundles.erase(i);
 	}
 }
 
@@ -1507,34 +1473,6 @@ void QueueManager::saveQueue(bool force) noexcept {
 			}
 		}
 
-		for(auto i = bundles.begin(); i != bundles.end(); ++i) {
-			auto& bi = i->second;
-
-			f.write(LIT("\t<BundleItem Root=\""));
-			f.write(SimpleXML::escape(bi.getRoot(), tmp, true));
-			f.write(LIT("\">\r\n"));
-
-			auto& b = *bi.getBundle();
-
-			f.write(LIT("\t\t<Bundle Name=\""));
-			f.write(SimpleXML::escape(b.name, tmp, true));
-			f.write(LIT("\">\r\n"));
-			for(auto j = b.entries.begin(); j != b.entries.end(); ++j) {
-				f.write(LIT("\t\t\t<Entry Name=\""));
-				f.write(SimpleXML::escape(j->name, tmp, true));
-				f.write(LIT("\" Size=\""));
-				f.write(Util::toString(j->size));
-				f.write(LIT("\" Include=\""));
-				f.write(Util::toString((int)j->include));
-				b32tmp.clear();
-				f.write(LIT("\" TTH=\""));
-				f.write(j->tth.toBase32(b32tmp));
-				f.write(LIT("\"/>\r\n"));
-			}
-			f.write(LIT("\t\t</Bundle>\r\n"));
-			f.write(LIT("\t</BundleItem>\r\n"));
-		}
-
 		f.write("</Downloads>\r\n");
 		f.flush();
 		ff.close();
@@ -1553,7 +1491,7 @@ void QueueManager::saveQueue(bool force) noexcept {
 
 class QueueLoader : public SimpleXMLReader::CallBack {
 public:
-	QueueLoader() : cur(NULL), inDownloads(false), bundle(0) { }
+	QueueLoader() : cur(NULL), inDownloads(false) { }
 	virtual ~QueueLoader() { }
 	virtual void startTag(const string& name, StringPairList& attribs, bool simple);
 	virtual void endTag(const string& name, const string& data);
@@ -1562,8 +1500,6 @@ private:
 
 	QueueItem* cur;
 	bool inDownloads;
-
-	BundleItem* bundle;
 };
 
 void QueueManager::loadQueue() noexcept {
@@ -1600,18 +1536,14 @@ static const string sSize = "Size";
 static const string sDownloaded = "Downloaded";
 static const string sPriority = "Priority";
 static const string sSource = "Source";
+static const string sNick = "Nick";
+static const string sDirectory = "Directory";
 static const string sAdded = "Added";
 static const string sTTH = "TTH";
 static const string sCID = "CID";
 static const string sHubHint = "Hub";
 static const string sSegment = "Segment";
 static const string sStart = "Start";
-static const string sBundleItem = "BundleItem";
-static const string sRoot = "Root";
-static const string sBundle = "Bundle";
-static const string sInclude = "Include";
-static const string sEntry = "Entry";
-static const string sName = "Name";
 
 void QueueLoader::startTag(const string& name, StringPairList& attribs, bool simple) {
 	QueueManager* qm = QueueManager::getInstance();
@@ -1679,32 +1611,16 @@ void QueueLoader::startTag(const string& name, StringPairList& attribs, bool sim
 			} catch(const Exception&) {
 				return;
 			}
-		} else if(!bundle && name == sBundleItem) {
-			const string& root = getAttrib(attribs, sRoot, 0);
-			bundle = new BundleItem(root, BundlePtr(new Bundle));
-		} else if(bundle && name == sBundle) {
-			bundle->getBundle()->name = getAttrib(attribs, sName, 0);
-		} else if(bundle && name == sEntry) {
-			auto &n = getAttrib(attribs, sName, 0);
-			auto s = Util::toInt64(getAttrib(attribs, sSize, 1));
-			auto i = getAttrib(attribs, sInclude, 2) == "1";
-			auto t = TTHValue(getAttrib(attribs, sTTH, 3));
-			bundle->getBundle()->entries.insert(Bundle::Entry(n, s, t, i));
 		}
 	}
 }
 
 void QueueLoader::endTag(const string& name, const string&) {
-	QueueManager* qm = QueueManager::getInstance();
 	if(inDownloads) {
 		if(name == sDownload) {
 			cur = NULL;
 		} else if(name == "Downloads") {
 			inDownloads = false;
-		} else if(name == sBundleItem) {
-			qm->bundles[bundle->getBundle()->getHash()] = *bundle;
-			delete bundle;
-			bundle = 0;
 		}
 	}
 }
@@ -1912,23 +1828,4 @@ void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcError
 
 	LOG(LogManager::FINISHED_DOWNLOAD, params);
 }
-
-BundleItem* QueueManager::getBundle(QueueItem *qi) noexcept {
-	for(auto i = bundles.begin(); i != bundles.end(); ++i) {
-		if(find_if(i->second.getBundle()->entries, [&](const Bundle::Entry& e) {
-			return Util::stricmp(i->second.getRoot() + e.name, qi->getTarget()) == 0;
-		}) != i->second.getBundle()->entries.end()) {
-			return &i->second;
-		}
-	}
-	return 0;
-}
-
-bool QueueManager::isFinished(const BundleItem &bi) noexcept {
-	return find_if(bi.getBundle()->entries, [&](const Bundle::Entry &e) -> bool {
-		auto qi = fileQueue.find(bi.getRoot() + e.name);
-		return qi && !qi->isFinished();
-	}) != bi.getBundle()->entries.end();
-}
-
 } // namespace dcpp
