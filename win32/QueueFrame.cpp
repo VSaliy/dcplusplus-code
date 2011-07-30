@@ -22,11 +22,6 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/version.h>
 
-#include <boost/range/adaptor/filtered.hpp>
-#include <boost/range/adaptor/map.hpp>
-#include <boost/range/algorithm/find.hpp>
-#include <boost/range/algorithm/for_each.hpp>
-
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/FolderDialog.h>
 #include <dwt/widgets/MessageBox.h>
@@ -44,11 +39,6 @@ using dwt::GridInfo;
 using dwt::Label;
 using dwt::SplitterContainer;
 using dwt::FolderDialog;
-
-using boost::for_each;
-using boost::find;
-using boost::adaptors::filtered;
-using boost::adaptors::map_values;
 
 const string QueueFrame::id = "Queue";
 const string& QueueFrame::getId() const { return id; }
@@ -265,7 +255,7 @@ void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
 	if(updateDir) {
 		addDirectory(dir, ii->isSet(QueueItem::FLAG_USER_LIST));
 	}
-	if(isVisible(ii)) {
+	if(!showTree->getChecked() || isCurDir(dir)) {
 		ii->update();
 		if(noSort) {
 			files->insert(files->size(), ii);
@@ -291,46 +281,18 @@ void QueueFrame::handleShowTreeClicked() {
 	layout();
 }
 
-bool QueueFrame::isVisible(const QueueItemInfo* qii) const {
-	if(!showTree->getChecked()) { return true; }
-
-	auto selected = dirs->getSelectedData();
-	if(!selected) { return false; }
-
-	if(selected->getIsBundle()) {
-		auto bii = bundleInfos.find(TTHValue(selected->getDir()));
-		if(bii == bundleInfos.end()) { return false; }
-		return bii->second->getBundleItem().getBundle()->contains(qii->getTTH());
-	}
-	return isCurDir(qii->getPath());
-}
-
 void QueueFrame::updateFiles() {
 	HoldRedraw hold(files);
 
 	files->clear();
+	auto i = showTree->getChecked()
+		? directories.equal_range(getSelectedDir())
+		: make_pair(directories.begin(), directories.end());
 
-	auto add = [&](QueueItemInfo* qii) {
-		qii->update();
-		files->insert(files->size(), qii);
-	};
-
-	if(showTree->getChecked()) {
-		auto sel = dirs->getSelectedData();
-		if(sel) {
-			if(sel->getIsBundle()) {
-				auto bii = bundleInfos.find(TTHValue(sel->getDir()));
-				if(bii != bundleInfos.end()) {
-					auto filter = [&](QueueItemInfo* qii) {
-						return bii->second->getBundleItem().getBundle()->contains(qii->getTTH());
-					};
-
-					for_each(directories | map_values | filtered(filter), add);
-				}
-			} else {
-				for_each(directories.equal_range(sel->getDir()) | map_values, add);
-			}
-		}
+	for(auto j = i.first; j != i.second; ++j) {
+		QueueItemInfo* ii = j->second;
+		ii->update();
+		files->insert(files->size(), ii);
 	}
 
 	files->resort();
@@ -1092,7 +1054,7 @@ void QueueFrame::onRemoved(const string& s) {
 		return;
 	}
 
-	if(isVisible(ii)) {
+	if(!showTree->getChecked() || isCurDir(ii->getPath()) ) {
 		dcassert(files->find(ii) != -1);
 		files->erase(ii);
 	}
@@ -1138,7 +1100,7 @@ void QueueFrame::onUpdated(QueueItem* qi) {
 
 	ii->updateMask |= QueueItemInfo::MASK_PRIORITY | QueueItemInfo::MASK_USERS | QueueItemInfo::MASK_ERRORS | QueueItemInfo::MASK_STATUS | QueueItemInfo::MASK_DOWNLOADED;
 
-	if(isVisible(ii)) {
+	if(!showTree->getChecked() || isCurDir(ii->getPath())) {
 		dcassert(files->find(ii) != -1);
 		ii->update();
 		files->update(ii);
