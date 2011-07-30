@@ -157,7 +157,7 @@ private:
 
 	Directory* find(const string& aName, Directory* current);
 
-	void makeBundle(const Directory* aDir, const string& path, Bundle& bundle);
+	void download(Directory* aDir, const string& aTarget, bool highPrio, const string& path, Bundle& bundle);
 };
 
 inline bool operator==(DirectoryListing::Directory::Ptr a, const string& b) { return Util::stricmp(a->getName(), b) == 0; }
