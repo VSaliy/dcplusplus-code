@@ -433,9 +433,8 @@ static tstring getDisplayName(const string& name) {
 	return Text::toT(name.substr(0, name.length() - 1));
 }
 
-QueueFrame::DirItemInfo::DirItemInfo(const string& dir_, bool isBundle) :
-	dir(dir_), text(getDisplayName(dir_)), isBundle(isBundle)
-{
+QueueFrame::DirItemInfo::DirItemInfo(const string& dir_) : dir(dir_), text(getDisplayName(dir_)) {
+
 }
 
 int QueueFrame::DirItemInfo::getImage(int col) {
@@ -470,7 +469,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 		next = dirs->getRoot();
 
 		while(next != NULL) {
-			if(next != fileLists && next != bundles) {
+			if(next != fileLists) {
 				if(Util::strnicmp(getDir(next), dir, 3) == 0)
 					break;
 			}
@@ -481,10 +480,10 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			// First addition, set commonStart to the dir minus the last part...
 			i = dir.rfind('\\', dir.length()-2);
 			if(i != string::npos) {
-				next = dirs->insert(NULL, new DirItemInfo(dir.substr(0, i+1), false), true);
+				next = dirs->insert(NULL, new DirItemInfo(dir.substr(0, i+1)), true);
 			} else {
 				dcassert(dir.length() == 3);
-				next = dirs->insert(NULL, new DirItemInfo(dir, Text::toT(dir), false), true);
+				next = dirs->insert(NULL, new DirItemInfo(dir, Text::toT(dir)), true);
 			}
 		}
 
@@ -508,7 +507,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			HTREEITEM oldRoot = next;
 
 			// Create a new root
-			HTREEITEM newRoot = dirs->insert(NULL, new DirItemInfo(rootStr.substr(0, i), false), true);
+			HTREEITEM newRoot = dirs->insert(NULL, new DirItemInfo(rootStr.substr(0, i)), true);
 
 			parent = addDirectory(rootStr, false, newRoot);
 
@@ -534,7 +533,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 
 	while( i < dir.length() ) {
 		while(next != NULL) {
-			if(next != fileLists && next != bundles) {
+			if(next != fileLists) {
 				const string& n = getDir(next);
 				if(Util::strnicmp(n.c_str()+i, dir.c_str()+i, n.length()-i) == 0) {
 					// Found a part, we assume it's the best one we can find...
@@ -552,7 +551,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			// We didn't find it, add...
 			j = dir.find('\\', i);
 			dcassert(j != string::npos);
-			parent = dirs->insert(parent, new DirItemInfo(dir.substr(0, j+1), Text::toT(dir.substr(i, j-i)), false), true);
+			parent = dirs->insert(parent, new DirItemInfo(dir.substr(0, j+1), Text::toT(dir.substr(i, j-i))), true);
 			i = j + 1;
 		}
 	}
@@ -576,7 +575,7 @@ void QueueFrame::removeDirectory(const string& dir, bool isFileList /* = false *
 	} else {
 		while(i < dir.length()) {
 			while(next != NULL) {
-				if(!isSpecial(next)) {
+				if(next != fileLists) {
 					const string& n = getDir(next);
 					if(Util::strnicmp(n.c_str()+i, dir.c_str()+i, n.length()-i) == 0) {
 						// Match!
@@ -606,8 +605,14 @@ void QueueFrame::removeDirectory(const string& dir, bool isFileList /* = false *
 	}
 }
 
-bool QueueFrame::isSpecial(HTREEITEM item) {
-	return item == bundles || item == fileLists;
+void QueueFrame::removeDirectories(HTREEITEM ht) {
+	HTREEITEM next = dirs->getChild(ht);
+	while(next != NULL) {
+		removeDirectories(next);
+		next = dirs->getNextSibling(ht);
+	}
+	delete dirs->getData(ht);
+	dirs->erase(ht);
 }
 
 void QueueFrame::removeSelected() {
@@ -761,14 +766,10 @@ void QueueFrame::removeDir(HTREEITEM ht) {
 		removeDir(child);
 		child = dirs->getNextSibling(child);
 	}
-	auto dii = dirs->getData(ht);
-	if(dii->getIsBundle()) {
-		QueueManager::getInstance()->removeBundle(TTHValue(dii->getDir()));
-	} else {
-		auto dp = directories.equal_range(dii->getDir());
-		for(auto i = dp.first; i != dp.second; ++i) {
-			QueueManager::getInstance()->remove(i->second->getTarget());
-		}
+	const string& name = getDir(ht);
+	auto dp = directories.equal_range(name);
+	for(auto i = dp.first; i != dp.second; ++i) {
+		QueueManager::getInstance()->remove(i->second->getTarget());
 	}
 }
 
@@ -1010,9 +1011,9 @@ bool QueueFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 void QueueFrame::addBundle(const BundleItem& bi) {
 	bundleInfos[bi.getBundle()->getHash()] = new BundleItemInfo(bi);
 	if(!bundles) {
-		bundles = dirs->insert(NULL, new DirItemInfo("", BUNDLE_INFO_NAME, false), true);
+		bundles = dirs->insert(NULL, new DirItemInfo("", BUNDLE_INFO_NAME), true);
 	}
-	dirs->insert(bundles, new DirItemInfo(bi.getBundle()->getHash().toBase32(), Text::toT(bi.getBundle()->name), true));
+	dirs->insert(bundles, new DirItemInfo(bi.getBundle()->getHash().toBase32(), Text::toT(bi.getBundle()->name)));
 }
 
 void QueueFrame::removeBundle(const TTHValue& tth) {
@@ -1021,8 +1022,8 @@ void QueueFrame::removeBundle(const TTHValue& tth) {
 		return;
 	}
 
+	auto hash = tth.toBase32();
 	if(bundles != NULL) {
-		auto hash = tth.toBase32();
 		for(auto h = dirs->getChild(bundles); h; h = dirs->getNextSibling(h)) {
 			auto di = dirs->getData(h);
 			if(di->getDir() == hash) {
@@ -1033,12 +1034,6 @@ void QueueFrame::removeBundle(const TTHValue& tth) {
 	}
 
 	bundleInfos.erase(tth);
-
-	if(bundleInfos.empty()) {
-		delete dirs->getData(bundles);
-		dirs->erase(bundles);
-		bundles = NULL;
-	}
 }
 
 void QueueFrame::onAdded(QueueItemInfo* ii) {
