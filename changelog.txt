@@ -34,6 +34,10 @@
 * Improve "View as text" windows (poy)
 * [L#804024] [ADC] Separate application and version in INF (ullner)
 * [L#696761] Modal dialog fixes (poy)
+* Link with DEP and ASLR support (thanks cologic)
+* Add "Clear chat" context menu to chat windows (thanks iceman50)
+* Store the password (if available) using "Add to favorites" (thanks iceman50)
+* Fix queries in http downloads (thanks bigmuscle)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
