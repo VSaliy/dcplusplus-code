@@ -88,7 +88,6 @@ public:
 	void setMode(Modes mode, size_t aRollback = 0);
 	Modes getMode() const { return mode; }
 	const string& getIp() const { return sock->getIp(); }
-	bool isConnected() const { return sock->isConnected(); }
 
 	bool isSecure() const { return sock->isSecure(); }
 	bool isTrusted() const { return sock->isTrusted(); }
@@ -179,6 +178,7 @@ private:
 	void checkSocket();
 
 	void setSocket(std::unique_ptr<Socket> s);
+	void setOptions();
 	void shutdown();
 	void addTask(Tasks task, TaskData* data);
 };

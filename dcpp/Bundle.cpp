@@ -19,12 +19,10 @@
 #include "stdinc.h"
 #include "Bundle.h"
 
-#include <boost/range/algorithm/find_if.hpp>
 #include <boost/range/algorithm/for_each.hpp>
 
 namespace dcpp {
 
-using boost::find_if;
 using boost::for_each;
 
 TTHValue Bundle::getHash() const {
@@ -33,10 +31,6 @@ TTHValue Bundle::getHash() const {
 	for_each(entries, [&](const Entry &e) { ret.update(e.tth.data, TTHValue::BYTES); });
 
 	return TTHValue(ret.finalize());
-}
-
-bool Bundle::contains(const TTHValue &tth) const {
-	return find_if(entries, [&](const Entry &e) { return e.tth == tth; }) != entries.end();
 }
 
 }

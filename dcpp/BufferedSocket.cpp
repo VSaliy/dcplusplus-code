@@ -76,15 +76,14 @@ void BufferedSocket::setMode (Modes aMode, size_t aRollback) {
 
 void BufferedSocket::setSocket(std::unique_ptr<Socket> s) {
 	dcassert(!sock.get());
-	if(SETTING(SOCKET_IN_BUFFER) > 0)
-		s->setSocketOpt(SO_RCVBUF, SETTING(SOCKET_IN_BUFFER));
-	if(SETTING(SOCKET_OUT_BUFFER) > 0)
-		s->setSocketOpt(SO_SNDBUF, SETTING(SOCKET_OUT_BUFFER));
-	s->setSocketOpt(SO_REUSEADDR, 1);	// NAT traversal
-
-	inbuf.resize(s->getSocketOptInt(SO_RCVBUF));
-
 	sock = move(s);
+}
+
+void BufferedSocket::setOptions() {
+	if(SETTING(SOCKET_IN_BUFFER) > 0)
+		sock->setSocketOpt(SO_RCVBUF, SETTING(SOCKET_IN_BUFFER));
+	if(SETTING(SOCKET_OUT_BUFFER) > 0)
+		sock->setSocketOpt(SO_SNDBUF, SETTING(SOCKET_OUT_BUFFER));
 }
 
 void BufferedSocket::accept(const Socket& srv, bool secure, bool allowUntrusted) {
@@ -95,6 +94,7 @@ void BufferedSocket::accept(const Socket& srv, bool secure, bool allowUntrusted)
 	s->accept(srv);
 
 	setSocket(move(s));
+	setOptions();
 
 	Lock l(cs);
 	addTask(ACCEPTED, 0);
@@ -108,9 +108,9 @@ void BufferedSocket::connect(const string& aAddress, uint16_t aPort, uint16_t lo
 	dcdebug("BufferedSocket::connect() %p\n", (void*)this);
 	std::unique_ptr<Socket> s(secure ? (natRole == NAT_SERVER ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : CryptoManager::getInstance()->getClientSocket(allowUntrusted)) : new Socket);
 
-	s->create();
+	s->setLocalIp4(SETTING(BIND_ADDRESS));
+
 	setSocket(move(s));
-	sock->bind(localPort, SETTING(BIND_ADDRESS));
 
 	Lock l(cs);
 	addTask(CONNECT, new ConnectInfo(aAddress, aPort, localPort, natRole, proxy && (SETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5)));
@@ -133,15 +133,18 @@ void BufferedSocket::threadConnect(const string& aAddr, uint16_t aPort, uint16_t
 			if(proxy) {
 				sock->socksConnect(aAddr, aPort, LONG_TIMEOUT);
 			} else {
-				sock->connect(aAddr, aPort);
+				sock->connect(aAddr, aPort, localPort);
 			}
 
+			setOptions();
 			bool connSucceeded;
 			while(!(connSucceeded = sock->waitConnected(POLL_TIMEOUT)) && endTime >= GET_TICK()) {
 				if(disconnecting) return;
 			}
 
 			if (connSucceeded) {
+				inbuf.resize(sock->getSocketOptInt(SO_RCVBUF));
+
 				fire(BufferedSocketListener::Connected());
 				return;
 			}
@@ -164,6 +167,8 @@ void BufferedSocket::threadAccept() {
 	dcdebug("threadAccept\n");
 
 	state = RUNNING;
+
+	inbuf.resize(sock->getSocketOptInt(SO_RCVBUF));
 
 	uint64_t startTime = GET_TICK();
 	while(!sock->waitAccepted(POLL_TIMEOUT)) {
@@ -188,6 +193,7 @@ void BufferedSocket::threadRead() {
 		// This socket has been closed...
 		throw SocketException(_("Connection closed"));
 	}
+
 	string::size_type pos = 0;
 	// always uncompressed data
 	string l;

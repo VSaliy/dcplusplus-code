@@ -427,7 +427,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		if(j == string::npos) {
 			return;
 		}
-		string server = Socket::resolve(param.substr(i, j-i));
+		string server = Socket::resolve(param.substr(i, j-i), AF_INET);
 		if(isProtectedIP(server))
 			return;
 		if(j+1 >= param.size()) {
@@ -985,7 +985,7 @@ void NmdcHub::on(Minute, uint64_t aTick) noexcept {
 		protectedIPs.push_back("hublista.hu");
 		protectedIPs.push_back("adcportal.com");
 		for(StringIter i = protectedIPs.begin(); i != protectedIPs.end();) {
-			*i = Socket::resolve(*i);
+			*i = Socket::resolve(*i, AF_INET);
 			if(Util::isPrivateIp(*i))
 				i = protectedIPs.erase(i);
 			else

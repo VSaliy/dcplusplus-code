@@ -19,6 +19,7 @@
 #include "stdinc.h"
 #include "QueueItem.h"
 
+#include "HashManager.h"
 #include "Download.h"
 #include "File.h"
 #include "Util.h"
@@ -151,7 +152,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 			}
 		}
 
-		for(auto i = downloads.begin(); !overlaps && i !=downloads.end(); ++i) {
+		for(DownloadList::const_iterator i = downloads.begin(); !overlaps && i !=downloads.end(); ++i) {
 			overlaps = block.overlaps((*i)->getSegment());
 		}
 
@@ -172,7 +173,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 
 int64_t QueueItem::getDownloadedBytes() const {
 	int64_t total = 0;
-	for(auto i = done.begin(); i != done.end(); ++i) {
+	for(SegmentSet::const_iterator i = done.begin(); i != done.end(); ++i) {
 		total += i->getSize();
 	}
 	return total;

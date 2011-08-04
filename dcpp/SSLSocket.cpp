@@ -31,7 +31,7 @@ SSLSocket::SSLSocket(SSL_CTX* context) : ctx(context), ssl(0) {
 
 }
 
-void SSLSocket::connect(const string& aIp, uint16_t aPort) {
+void SSLSocket::connect(const string& aIp, const string& aPort) {
 	Socket::connect(aIp, aPort);
 
 	waitConnected(0);
@@ -46,7 +46,7 @@ bool SSLSocket::waitConnected(uint32_t millis) {
 		if(!ssl)
 			checkSSL(-1);
 
-		checkSSL(SSL_set_fd(ssl, sock));
+		checkSSL(SSL_set_fd(ssl, getSock()));
 	}
 
 	if(SSL_is_init_finished(ssl)) {
@@ -80,7 +80,7 @@ bool SSLSocket::waitAccepted(uint32_t millis) {
 		if(!ssl)
 			checkSSL(-1);
 
-		checkSSL(SSL_set_fd(ssl, sock));
+		checkSSL(SSL_set_fd(ssl, getSock()));
 	}
 
 	if(SSL_is_init_finished(ssl)) {

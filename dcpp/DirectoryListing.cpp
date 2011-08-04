@@ -31,15 +31,11 @@
 #include "SimpleXMLReader.h"
 #include "File.h"
 
-#include <boost/range/algorithm/for_each.hpp>
-
 #ifdef ff
 #undef ff
 #endif
 
 namespace dcpp {
-
-using boost::for_each;
 
 DirectoryListing::DirectoryListing(const HintedUser& aUser) :
 user(aUser),
@@ -278,22 +274,27 @@ StringList DirectoryListing::getLocalPaths(const Directory* d) const {
 }
 
 void DirectoryListing::download(Directory* aDir, const string& aTarget, bool highPrio) {
-	auto bundle = BundlePtr(new Bundle);
-	bundle->name = aDir->getName();
-	makeBundle(aDir, "", *bundle);
-	QueueManager::getInstance()->add(aTarget + bundle->name + PATH_SEPARATOR, bundle, getUser(), 0);
-}
-
-void DirectoryListing::makeBundle(const Directory* aDir, const string& path, Bundle &bundle) {
+	string tmp;
+	string target = (aDir == getRoot()) ? aTarget : aTarget + aDir->getName() + PATH_SEPARATOR;
 	// First, recurse over the directories
-	for_each(aDir->directories, [&](const Directory* child) {
-		makeBundle(child, path + child->getName() + PATH_SEPARATOR, bundle);
-	});
-
+	Directory::List& lst = aDir->directories;
+	sort(lst.begin(), lst.end(), Directory::DirSort());
+	for(Directory::Iter j = lst.begin(); j != lst.end(); ++j) {
+		download(*j, target, highPrio);
+	}
 	// Then add the files
-	for_each(aDir->files, [&](const File* file) {
-		bundle.entries.insert(Bundle::Entry(path + file->getName(), file->getSize(), file->getTTH(), true));
-	});
+	File::List& l = aDir->files;
+	sort(l.begin(), l.end(), File::FileSort());
+	for(File::Iter i = aDir->files.begin(); i != aDir->files.end(); ++i) {
+		File* file = *i;
+		try {
+			download(file, target + file->getName(), false, highPrio);
+		} catch(const QueueException&) {
+			// Catch it here to allow parts of directories to be added...
+		} catch(const FileException&) {
+			//..
+		}
+	}
 }
 
 void DirectoryListing::download(const string& aDir, const string& aTarget, bool highPrio) {
