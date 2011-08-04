@@ -995,7 +995,7 @@ void AdcHub::info(bool /*alwaysSend*/) {
 
 #ifndef DISABLE_NAT_TRAVERSAL
 	if(BOOLSETTING(NO_IP_OVERRIDE) && !SETTING(EXTERNAL_IP).empty()) {
-		addParam(lastInfoMap, c, "I4", Socket::resolve(SETTING(EXTERNAL_IP)));
+		addParam(lastInfoMap, c, "I4", Socket::resolve(SETTING(EXTERNAL_IP), AF_INET));
 	} else {
 		addParam(lastInfoMap, c, "I4", "0.0.0.0");
 	}

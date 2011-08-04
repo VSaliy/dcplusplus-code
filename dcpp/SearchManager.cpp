@@ -91,10 +91,10 @@ void SearchManager::listen() {
 	disconnect();
 
 	try {
-		socket.reset(new Socket);
-		socket->create(Socket::TYPE_UDP);
+		socket.reset(new Socket(Socket::TYPE_UDP));
+		socket->setLocalIp4(SETTING(BIND_ADDRESS));
+		port = socket->listen(Util::toString(SETTING(UDP_PORT)), AF_INET);
 		socket->setBlocking(true);
-		port = socket->bind(static_cast<uint16_t>(SETTING(UDP_PORT)), SETTING(BIND_ADDRESS));
 		start();
 	} catch(...) {
 		socket.reset();
@@ -140,9 +140,8 @@ int SearchManager::run() {
 		while(!stop) {
 			try {
 				socket->disconnect();
-				socket->create(Socket::TYPE_UDP);
+				port = socket->listen(Util::toString(SETTING(UDP_PORT)), AF_INET);
 				socket->setBlocking(true);
-				socket->bind(port, SETTING(BIND_ADDRESS));
 				if(failed) {
 					LogManager::getInstance()->message(_("Search enabled again"));
 					failed = false;

@@ -71,11 +71,7 @@ public:
 	virtual void on(FileMoved, const string&) noexcept { }
 
 	virtual void on(CRCFailed, Download*, const string&) noexcept { }
-	virtual void on(CRCChecked, Download*) noexcept { }
-
-	virtual void on(Added, const BundleItem&) noexcept { }
-	virtual void on(Finished, const BundleItem&) noexcept { }
-	virtual void on(Removed, const BundleItem&) noexcept { }
+	virtual void on(CRCChecked, Download*) noexcept { } 
 };
 
 } // namespace dcpp

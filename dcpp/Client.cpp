@@ -205,7 +205,7 @@ string Client::getLocalIp() const {
 	}
 
 	if(!SETTING(EXTERNAL_IP).empty()) {
-		return Socket::resolve(SETTING(EXTERNAL_IP));
+		return Socket::resolve(SETTING(EXTERNAL_IP), AF_INET);
 	}
 
 	if(localIp.empty()) {

@@ -123,7 +123,7 @@ private:
 
 	class Server : public Thread {
 	public:
-		Server(bool secure_, uint16_t port, const string& ip = "0.0.0.0");
+		Server(bool secure_, uint16_t port, const string& ip);
 		uint16_t getPort() { return port; }
 		virtual ~Server() { die = true; join(); }
 	private:
@@ -131,7 +131,6 @@ private:
 
 		Socket sock;
 		uint16_t port;
-		string ip;
 		bool secure;
 		bool die;
 	};

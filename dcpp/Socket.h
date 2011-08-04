@@ -44,6 +44,9 @@ const int INVALID_SOCKET = -1;
 #include "Util.h"
 #include "Exception.h"
 
+#include <boost/noncopyable.hpp>
+#include <memory>
+
 namespace dcpp {
 
 class SocketException : public Exception {
@@ -60,7 +63,24 @@ private:
 	static string errorToString(int aError) noexcept;
 };
 
-class Socket
+/** RAII socket handle */
+class SocketHandle : boost::noncopyable {
+public:
+	SocketHandle() : sock(INVALID_SOCKET) { }
+	SocketHandle(socket_t sock) : sock(sock) { }
+	~SocketHandle() { reset(); }
+
+	operator socket_t() const { return get(); }
+	SocketHandle& operator=(socket_t s) { reset(s); return *this; }
+
+	socket_t get() const { return sock; }
+	bool valid() const { return sock != INVALID_SOCKET; }
+	void reset(socket_t s = INVALID_SOCKET);
+private:
+	socket_t sock;
+};
+
+class Socket : boost::noncopyable
 {
 public:
 	enum {
@@ -70,14 +90,14 @@ public:
 		WAIT_WRITE = 0x04
 	};
 
-	enum {
-		TYPE_TCP,
-		TYPE_UDP
+	enum SocketType {
+		TYPE_TCP = IPPROTO_TCP,
+		TYPE_UDP = IPPROTO_UDP
 	};
 
-	Socket() : sock(INVALID_SOCKET), connected(false) { }
-	Socket(const string& aIp, uint16_t aPort) : sock(INVALID_SOCKET), connected(false) { connect(aIp, aPort); }
-	virtual ~Socket() { Socket::disconnect(); }
+	Socket(SocketType type = TYPE_TCP) : type(type) { }
+
+	virtual ~Socket() { }
 
 	/**
 	 * Connects a socket to an address/ip, closing any other connections made with
@@ -86,8 +106,9 @@ public:
 	 * @param aPort Server port.
 	 * @throw SocketException If any connection error occurs.
 	 */
-	virtual void connect(const string& aIp, uint16_t aPort);
-	void connect(const string& aIp, const string& aPort) { connect(aIp, static_cast<uint16_t>(Util::toInt(aPort))); }
+	virtual void connect(const string& aIp, const string& aPort, const string& localPort = Util::emptyString);
+	void connect(const string& aIp, uint16_t aPort, uint16_t localPort = 0) { connect(aIp, aPort == 0 ? Util::emptyString : Util::toString(aPort), localPort == 0 ? Util::emptyString : Util::toString(localPort)); }
+
 	/**
 	 * Same as connect(), but through the SOCKS5 server
 	 */
@@ -137,37 +158,21 @@ public:
 	int readAll(void* aBuffer, int aBufLen, uint32_t timeout = 0);
 
 	virtual int wait(uint32_t millis, int waitFor);
-	bool isConnected() { return connected; }
 
-	static string resolve(const string& aDns);
+	typedef std::unique_ptr<addrinfo, decltype(&freeaddrinfo)> addrinfo_p;
+	static string resolve(const string& aDns, int af = AF_UNSPEC);
+	addrinfo_p resolveAddr(const string& name, const string& port, int family = AF_UNSPEC, int flags = 0);
+
 	static uint64_t getTotalDown() { return stats.totalDown; }
 	static uint64_t getTotalUp() { return stats.totalUp; }
 
-#ifdef _WIN32
-	void setBlocking(bool block) noexcept {
-		u_long b = block ? 0 : 1;
-		ioctlsocket(sock, FIONBIO, &b);
-	}
-#else
-	void setBlocking(bool block) noexcept {
-		int flags = fcntl(sock, F_GETFL, 0);
-		if(block) {
-			fcntl(sock, F_SETFL, flags & (~O_NONBLOCK));
-		} else {
-			fcntl(sock, F_SETFL, flags | O_NONBLOCK);
-		}
-	}
-#endif
+	void setBlocking(bool block) noexcept;
 
 	string getLocalIp() noexcept;
 	uint16_t getLocalPort() noexcept;
 
-	// Low level interface
-	virtual void create(int aType = TYPE_TCP);
-
 	/** Binds a socket to a certain local port and possibly IP. */
-	virtual uint16_t bind(uint16_t aPort = 0, const string& aIp = "0.0.0.0");
-	virtual void listen();
+	virtual uint16_t listen(const string& port, int af);
 	virtual void accept(const Socket& listeningSocket);
 
 	int getSocketOptInt(int option);
@@ -182,10 +187,22 @@ public:
 	static void socksUpdated();
 
 	GETSET(string, ip, Ip);
+	GETSET(string, localIp4, LocalIp4);
+	GETSET(string, localIp6, LocalIp6);
 protected:
-	socket_t sock;
-	int type;
-	bool connected;
+	typedef union {
+		sockaddr sa;
+		sockaddr_in sai;
+		sockaddr_in6 sai6;
+		sockaddr_storage sas;
+	} addr;
+
+	socket_t getSock() const;
+
+	mutable SocketHandle sock4;
+	mutable SocketHandle sock6;
+
+	SocketType type;
 
 	class Stats {
 	public:
@@ -194,57 +211,15 @@ protected:
 	};
 	static Stats stats;
 
-	static string udpServer;
-	static uint16_t udpPort;
-
+	static addr udpAddr;
+	static socklen_t udpAddrLen;
 private:
-	Socket(const Socket&);
-	Socket& operator=(const Socket&);
-
 	void socksAuth(uint32_t timeout);
+	socket_t setSock(socket_t s, int af);
 
-#ifdef _WIN32
-	static int getLastError() { return ::WSAGetLastError(); }
-	static int checksocket(int ret) {
-		if(ret == SOCKET_ERROR) {
-			throw SocketException(getLastError());
-		}
-		return ret;
-	}
-
-	static int check(int ret, bool blockOk = false) {
-		if(ret == SOCKET_ERROR) {
-			int error = getLastError();
-			if(blockOk && error == WSAEWOULDBLOCK) {
-				return -1;
-			} else {
-				throw SocketException(error);
-			}
-		}
-		return ret;
-	}
-#else
-	static int getLastError() { return errno; }
-	static int checksocket(int ret) {
-		if(ret < 0) {
-			throw SocketException(getLastError());
-		}
-		return ret;
-	}
-
-	static int check(int ret, bool blockOk = false) {
-		if(ret == -1) {
-			int error = getLastError();
-			if(blockOk && (error == EWOULDBLOCK || error == ENOBUFS || error == EINPROGRESS || error == EAGAIN) ) {
-				return -1;
-			} else {
-				throw SocketException(error);
-			}
-		}
-		return ret;
-	}
-#endif
-
+	// Low level interface
+	socket_t create(const addrinfo& ai);
+	static string resolveName(const sockaddr* sa, socklen_t sa_len, int flags = NI_NUMERICHOST);
 };
 
 } // namespace dcpp

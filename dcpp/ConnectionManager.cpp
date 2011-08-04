@@ -211,11 +211,9 @@ void ConnectionManager::on(TimerManagerListener::Minute, uint64_t aTick) noexcep
 static const uint32_t FLOOD_TRIGGER = 20000;
 static const uint32_t FLOOD_ADD = 2000;
 
-ConnectionManager::Server::Server(bool secure_, uint16_t aPort, const string& ip_ /* = "0.0.0.0" */) : port(0), secure(secure_), die(false) {
-	sock.create();
-	ip = ip_;
-	port = sock.bind(aPort, ip);
-	sock.listen();
+ConnectionManager::Server::Server(bool secure_, uint16_t aPort, const string& ip) : port(0), secure(secure_), die(false) {
+	sock.setLocalIp4(ip);
+	port = sock.listen(Util::toString(aPort), AF_INET);
 
 	start();
 }
@@ -239,9 +237,8 @@ int ConnectionManager::Server::run() noexcept {
 		while(!die) {
 			try {
 				sock.disconnect();
-				sock.create();
-				sock.bind(port, ip);
-				sock.listen();
+				port = sock.listen(Util::toString(port), AF_INET);
+
 				if(failed) {
 					LogManager::getInstance()->message(_("Connectivity restored"));
 					failed = false;

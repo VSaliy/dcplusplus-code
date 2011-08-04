@@ -36,8 +36,6 @@ class BufferedSocket;
 class Bundle;
 typedef boost::intrusive_ptr<Bundle> BundlePtr;
 
-class BundleItem;
-
 struct ChatMessage;
 
 class CID;
@@ -49,9 +47,6 @@ class ClientManager;
 class ConnectionQueueItem;
 
 class CRC32Filter;
-
-class DirectoryItem;
-typedef DirectoryItem* DirectoryItemPtr;
 
 class Download;
 typedef Download* DownloadPtr;
