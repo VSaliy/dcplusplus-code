@@ -88,6 +88,10 @@ public:
 	std::pair<ChildIterator<T>, ChildIterator<T> > getChildren() {
 		return std::make_pair(ChildIterator<T>::first(&W()), ChildIterator<T>());
 	}
+
+	void removeChild(Widget *w) {
+		::DestroyWindow(w->handle());
+	}
 };
 
 }

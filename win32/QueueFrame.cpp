@@ -96,6 +96,10 @@ fileLists(0)
 		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
 		files->onSelectionChanged([this] { GCC_WTF->callAsync([&] { updateStatus(); }); });
 		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
+
+		if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
+			paned->maximize(files);
+		}
 	}
 
 	initStatus();
@@ -260,19 +264,7 @@ void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
 }
 
 void QueueFrame::handleShowTreeClicked() {
-	bool checked = showTree->getChecked();
-
-	/* TODO
-	if(checked && !paned->getFirst()) {
-		paned->setFirst(dirs);
-	} else if(!checked && paned->getFirst()) {
-		paned->setFirst(0);
-	}
-
-	dirs->setVisible(checked);
-	paned->setVisible(checked);
-*/
-	layout();
+	paned->maximize(showTree->getChecked() ? NULL : files);
 }
 
 void QueueFrame::updateFiles() {
@@ -308,7 +300,7 @@ void QueueFrame::QueueItemInfo::update() {
 			display->columns[COLUMN_TARGET] = Text::toT(Util::getFileName(getTarget()));
 		}
 		int online = 0;
-		if(colMask & MASK_USERS || colMask & MASK_STATUS) {
+		if(colMask & (MASK_USERS | MASK_STATUS)) {
 			tstring tmp;
 
 			for(QueueItem::SourceIter j = getSources().begin(); j != getSources().end(); ++j) {

@@ -1394,22 +1394,19 @@ void MainWindow::switchToolbar() {
 }
 
 void MainWindow::switchTransfers() {
-	/* TODO
 	if(transfers) {
 		transfers->prepareClose();
-		::DestroyWindow(transfers->handle());
+		paned->removeChild(transfers);
 		transfers = 0;
-		paned->setSecond(transfers);
 
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_TRANSFERVIEW, false);
 		viewMenu->checkItem(viewIndexes["Transfers"], false);
-
 	} else {
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_TRANSFERVIEW, true);
 		initTransfers();
 	}
-*/
-	layout();
+
+	paned->layout();
 }
 
 void MainWindow::switchStatus() {

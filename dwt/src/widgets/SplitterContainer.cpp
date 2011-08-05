@@ -36,6 +36,7 @@
 
 #include <boost/next_prior.hpp>
 #include <boost/range/distance.hpp>
+#include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/algorithm/find.hpp>
 #include <boost/range/algorithm/for_each.hpp>
 
@@ -49,6 +50,7 @@ namespace {
 using boost::find;
 using boost::for_each;
 using boost::next;
+using boost::adaptors::filtered;
 
 SplitterContainer::Seed::Seed(double startPos, bool horizontal) :
 BaseType::Seed(0, WS_EX_CONTROLPARENT),
@@ -89,46 +91,57 @@ void SplitterContainer::layout() {
 	auto children = getChildren<Widget>();
 	auto splitters = getChildren<Splitter>();
 
-	auto size = getClientSize();
+	auto rc = Rectangle(getClientSize());
+	util::HoldResize hr(this, boost::distance(children));
 
-	auto avail = horizontal ? size.y : size.x;
+	if(maximized) {
+		for_each(children, [&](Widget *w) {
+			if(w == maximized) {
+				hr.resize(w, rc);
+			} else {
+				hr.resize(w, Rectangle());
+			}
+		});
+
+		return;
+	}
+
+	auto &pos = horizontal ? rc.pos.y : rc.pos.x;
+	auto &size = horizontal ? rc.size.y : rc.size.x;
+
+	auto avail = size;
 
 	for_each(splitters, [&](Splitter *w) {
 		avail -= horizontal ? w->getPreferredSize().y : w->getPreferredSize().x;
 	});
 
-	auto rc = Rectangle(getClientSize());
-	auto &sz = horizontal ? rc.size.y : rc.size.x;
-	auto &p = horizontal ? rc.pos.y : rc.pos.x;
-
-	sz = 0;
-
 	auto splitter_iter = splitters.first;
 
-	util::HoldResize hr(this, boost::distance(children));
-	for_each(children, [&](Widget *w) {
-		if(isSplitter(w)) {
-			return;
-		}
-
-		if(splitter_iter == splitters.second) {
-			// Last splitter, the next control gets any remaining space
-			sz = std::max(avail - p, 0l);
+	auto nc = boost::distance(children | filtered(&isNotSplitter));
+	auto i = 0;
+	for_each(children | filtered(&isNotSplitter), [&](Widget *w) {
+		if(i++ == nc-1) {
+			// Last child - give it any remaining space
+			size = std::max(avail - pos, 0l);
 			hr.resize(w, rc);
 		} else {
 			auto splitter = *splitter_iter;
 			auto ss = horizontal ? splitter->getPreferredSize().y : splitter->getPreferredSize().x;
-			sz = std::max(avail * splitter->getRelativePos() - ss / 2. - p, 0.);
+			size = std::max(avail * splitter->getRelativePos() - ss / 2. - pos, 0.);
 			hr.resize(w, rc);
 
-			p += sz;
+			pos += size;
 
-			sz = ss;
+			size = ss;
 			hr.resize(splitter, rc);
-			p += sz;
+			pos += size;
 			splitter_iter++;
 		}
 	});
+
+	for(auto s = splitter_iter; s != splitters.second; ++s) {
+		hr.resize(*s, Rectangle());
+	}
 }
 
 size_t SplitterContainer::ensureSplitters() {
@@ -168,6 +181,13 @@ double SplitterContainer::getMaxSize(SplitterPtr splitter) {
 void SplitterContainer::onMove() {
 	layout();
 	redraw(true);
+}
+
+void SplitterContainer::maximize(Widget* w) {
+	if(w != maximized) {
+		maximized = w;
+		layout();
+	}
 }
 
 }
