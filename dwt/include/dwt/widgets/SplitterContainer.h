@@ -65,10 +65,12 @@ public:
 	void setSplitter(size_t n, double relativePos);
 	double getSplitterPos(size_t n);
 
+	void maximize(Widget *w);
+
 	virtual void layout();
 
 private:
-	explicit SplitterContainer( Widget * parent ) : BaseType(parent), horizontal(false), startPos(0.5) { }
+	explicit SplitterContainer( Widget * parent ) : BaseType(parent), maximized(0), horizontal(false), startPos(0.5) { }
 
 	size_t ensureSplitters();
 
@@ -76,6 +78,7 @@ private:
 
 	void onMove();
 
+	Widget *maximized;
 	bool horizontal;
 	double startPos;
 };

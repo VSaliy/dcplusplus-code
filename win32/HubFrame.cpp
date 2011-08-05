@@ -292,15 +292,8 @@ void HubFrame::layout() {
 
 	r.size.y -= rm.size.y + border;
 
-	/* TODO
-	bool checked = showUsers->getChecked();
-	if(checked && !paned->getSecond()) {
-		paned->setSecond(userGrid);
-	} else if(!checked && paned->getSecond()) {
-		paned->setSecond(0);
-	}
-	*/
 	hr.resize(paned, r);
+	paned->maximize(showUsers->getChecked() ? NULL : message);
 }
 
 void HubFrame::updateStatus() {
