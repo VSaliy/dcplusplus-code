@@ -47,6 +47,7 @@ class DirectoryListingFrame :
 
 public:
 	enum Status {
+		STATUS_SHOW_TREE,
 		STATUS_STATUS,
 		STATUS_SPEED,
 		STATUS_TOTAL_FILES,
@@ -146,6 +147,9 @@ private:
 	private:
 		tstring columns[COLUMN_LAST];
 	};
+	
+	SplitterContainerPtr paned;
+	CheckBoxPtr showTree;
 
 	RebarPtr rebar;
 	ComboBoxPtr pathBox;
