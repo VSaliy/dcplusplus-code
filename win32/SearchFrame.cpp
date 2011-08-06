@@ -560,19 +560,7 @@ void SearchFrame::handleMergeClicked() {
 }
 
 void SearchFrame::handleShowUIClicked() {
-	/* TODO
-	bool checked = showUI->getChecked();
-
-	if(checked && !paned->getFirst()) {
-		paned->setFirst(options);
-	} else if(!checked && paned->getFirst()) {
-		paned->setFirst(0);
-	}
-
-	options->setVisible(checked);
-	paned->setVisible(checked);
-
-	layout(); */
+	paned->maximize(showUI->getChecked() ? NULL : results);
 }
 
 LRESULT SearchFrame::handleHubItemChanged(WPARAM wParam, LPARAM lParam) {
