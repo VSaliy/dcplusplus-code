@@ -148,9 +148,6 @@ private:
 		tstring columns[COLUMN_LAST];
 	};
 	
-	SplitterContainerPtr paned;
-	CheckBoxPtr showTree;
-
 	RebarPtr rebar;
 	ComboBoxPtr pathBox;
 
@@ -166,6 +163,8 @@ private:
 	typedef TypedTable<ItemInfo> WidgetFiles;
 	typedef WidgetFiles* WidgetFilesPtr;
 	WidgetFilesPtr files;
+
+	CheckBoxPtr showTree;
 
 	int64_t speed;		/**< Speed at which this file list was downloaded */
 

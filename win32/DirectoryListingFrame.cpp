@@ -217,6 +217,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	searchBox(0),
 	dirs(0),
 	files(0),
+	showTree(0),
 	speed(aSpeed),
 	dl(new DirectoryListing(aUser)),
 	user(aUser),
@@ -225,8 +226,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	treeRoot(NULL),
 	loaded(false),
 	updating(false),
-	searching(false),
-	showTree(0)
+	searching(false)
 {
 	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
@@ -268,9 +268,9 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	searchGrid->setEnabled(false);
 	searchGrid->setVisible(false);
 
-	{
-		paned = grid->addChild(SplitterContainer::Seed(0.3));
+	auto paned = grid->addChild(SplitterContainer::Seed(0.3));
 
+	{
 		dirs = paned->addChild(WidgetDirs::Seed());
 		dirs->setHelpId(IDH_FILE_LIST_DIRS);
 		addWidget(dirs);
@@ -350,10 +350,14 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	}
 
 	initStatus();
-	
+
 	showTree = addChild(WinUtil::Seeds::splitCheckBox);
 	showTree->setChecked(true);
-	showTree->onClicked([this] { handleShowTreeClicked(); });
+	showTree->onClicked([this, paned] {
+		auto checked = showTree->getChecked();
+		dirs->setEnabled(checked);
+		paned->maximize(checked ? nullptr : files);
+	});
 	status->setWidget(STATUS_SHOW_TREE, showTree);
 
 	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
@@ -559,10 +563,6 @@ ShellMenuPtr DirectoryListingFrame::makeDirMenu(ItemInfo* ii) {
 	menu->appendItem(T_("&Download"), [this] { handleDownload(); }, WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
 	addTargets(menu);
 	return menu;
-}
-
-void DirectoryListingFrame::handleShowTreeClicked() {
-	paned->maximize(showTree->getChecked() ? NULL : files);
 }
 
 void DirectoryListingFrame::addUserCommands(const MenuPtr& parent) {
