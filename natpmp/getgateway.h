@@ -30,12 +30,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define __GETGATEWAY_H__
 
 #ifdef WIN32
-#if !defined(_MSC_VER)
 #include <stdint.h>
-#else
-typedef unsigned long uint32_t;
-typedef unsigned short uint16_t;
-#endif
 #define in_addr_t uint32_t
 #endif
 #include "declspec.h"
