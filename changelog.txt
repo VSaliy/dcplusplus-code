@@ -37,6 +37,7 @@
 * Link with DEP and ASLR support (thanks cologic)
 * Store the password (if available) using "Add to favorites" (thanks iceman50)
 * Fix queries in http downloads (thanks bigmuscle)
+* Update MiniUPnPc to version 1.6
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
