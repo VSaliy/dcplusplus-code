@@ -32,15 +32,51 @@ OnlineUser::OnlineUser(const UserPtr& ptr, Client& client_, uint32_t sid_) : ide
 }
 
 bool Identity::isTcpActive() const {
-	return (!user->isSet(User::NMDC)) ?
-		!getIp().empty() && supports(AdcHub::TCP4_FEATURE) :
-		!user->isSet(User::PASSIVE);
+	return isTcp4Active() || isTcp6Active();
+}
+
+bool Identity::isTcp4Active() const {
+	if(getIp4().empty())
+		return false;
+	return user->isSet(User::NMDC) ? !user->isSet(User::PASSIVE) : supports(AdcHub::TCP4_FEATURE);
+}
+
+bool Identity::isTcp6Active() const {
+	if(getIp6().empty())
+		return false;
+	return user->isSet(User::NMDC) ? false : supports(AdcHub::TCP6_FEATURE);
 }
 
 bool Identity::isUdpActive() const {
-	if(getIp().empty() || getUdpPort().empty())
+	return isUdp4Active() || isUdp6Active();
+}
+
+bool Identity::isUdp4Active() const {
+	if(getIp4().empty() || getUdp4Port().empty())
 		return false;
-	return (!user->isSet(User::NMDC)) ? supports(AdcHub::UDP4_FEATURE) : !user->isSet(User::PASSIVE);
+	return user->isSet(User::NMDC) ? !user->isSet(User::PASSIVE) : supports(AdcHub::UDP4_FEATURE);
+}
+
+bool Identity::isUdp6Active() const {
+	if(getIp6().empty() || getUdp6Port().empty())
+		return false;
+	return user->isSet(User::NMDC) ? false : supports(AdcHub::UDP6_FEATURE);
+}
+
+string Identity::getUdpPort() const {
+	if(getIp6().empty() || getUdp6Port().empty()) {
+		return getUdp4Port();
+	}
+
+	return getUdp6Port();
+}
+
+string Identity::getIp() const {
+	if(getIp6().empty() || getUdp6Port().empty()) {
+		return getIp4();
+	}
+
+	return getIp6();
 }
 
 void Identity::getParams(StringMap& sm, const string& prefix, bool compatibility) const {

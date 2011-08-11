@@ -100,15 +100,16 @@ void BufferedSocket::accept(const Socket& srv, bool secure, bool allowUntrusted)
 	addTask(ACCEPTED, 0);
 }
 
-void BufferedSocket::connect(const string& aAddress, uint16_t aPort, bool secure, bool allowUntrusted, bool proxy) {
-	connect(aAddress, aPort, 0, NAT_NONE, secure, allowUntrusted, proxy);
+void BufferedSocket::connect(const string& aAddress, const string& aPort, bool secure, bool allowUntrusted, bool proxy) {
+	connect(aAddress, aPort, Util::emptyString, NAT_NONE, secure, allowUntrusted, proxy);
 }
 
-void BufferedSocket::connect(const string& aAddress, uint16_t aPort, uint16_t localPort, NatRoles natRole, bool secure, bool allowUntrusted, bool proxy) {
+void BufferedSocket::connect(const string& aAddress, const string& aPort, const string& localPort, NatRoles natRole, bool secure, bool allowUntrusted, bool proxy) {
 	dcdebug("BufferedSocket::connect() %p\n", (void*)this);
 	std::unique_ptr<Socket> s(secure ? (natRole == NAT_SERVER ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : CryptoManager::getInstance()->getClientSocket(allowUntrusted)) : new Socket);
 
 	s->setLocalIp4(SETTING(BIND_ADDRESS));
+	s->setLocalIp6(SETTING(BIND_ADDRESS6));
 
 	setSocket(move(s));
 
@@ -118,17 +119,16 @@ void BufferedSocket::connect(const string& aAddress, uint16_t aPort, uint16_t lo
 
 #define LONG_TIMEOUT 30000
 #define SHORT_TIMEOUT 1000
-void BufferedSocket::threadConnect(const string& aAddr, uint16_t aPort, uint16_t localPort, NatRoles natRole, bool proxy) {
+void BufferedSocket::threadConnect(const string& aAddr, const string& aPort, const string& localPort, NatRoles natRole, bool proxy) {
 	dcassert(state == STARTING);
 
-	dcdebug("threadConnect %s:%d/%d\n", aAddr.c_str(), (int)localPort, (int)aPort);
 	fire(BufferedSocketListener::Connecting());
 
 	const uint64_t endTime = GET_TICK() + LONG_TIMEOUT;
 	state = RUNNING;
 
 	while (GET_TICK() < endTime) {
-		dcdebug("threadConnect attempt to addr \"%s\"\n", aAddr.c_str());
+		dcdebug("threadConnect attempt %s %s:%s\n", localPort.c_str(), aAddr.c_str(), aPort.c_str());
 		try {
 			if(proxy) {
 				sock->socksConnect(aAddr, aPort, LONG_TIMEOUT);

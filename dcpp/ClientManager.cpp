@@ -209,13 +209,13 @@ string ClientManager::findHub(const string& ipPort) const {
 	Lock l(cs);
 
 	string ip;
-	uint16_t port = 411;
-	string::size_type i = ipPort.find(':');
+	string port = "411";
+	string::size_type i = ipPort.rfind(':');
 	if(i == string::npos) {
 		ip = ipPort;
 	} else {
 		ip = ipPort.substr(0, i);
-		port = static_cast<uint16_t>(Util::toInt(ipPort.substr(i+1)));
+		port = ipPort.substr(i+1);
 	}
 
 	string url;
@@ -444,7 +444,7 @@ void ClientManager::send(AdcCommand& cmd, const CID& cid) {
 			u.getClient().send(cmd);
 		} else {
 			try {
-				udp.writeTo(u.getIdentity().getIp(), static_cast<uint16_t>(Util::toInt(u.getIdentity().getUdpPort())), cmd.toString(getMe()->getCID()));
+				udp.writeTo(u.getIdentity().getIp(), u.getIdentity().getUdpPort(), cmd.toString(getMe()->getCID()));
 			} catch(const SocketException&) {
 				dcdebug("Socket exception sending ADC UDP command\n");
 			}
@@ -494,15 +494,14 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 
 		} else {
 			try {
-				string ip, file, proto, query, fragment;
-				uint16_t port = 0;
+				string ip, port, file, proto, query, fragment;
 
 				Util::decodeUrl(aSeeker, proto, ip, port, file, query, fragment);
 				ip = Socket::resolve(ip, AF_INET);
 				if(static_cast<NmdcHub*>(aClient)->isProtectedIP(ip))
 					return;
-				if(port == 0)
-					port = 412;
+				if(port.empty())
+					port = "412";
 				for(SearchResultList::const_iterator i = l.begin(); i != l.end(); ++i) {
 					const SearchResultPtr& sr = *i;
 					udp.writeTo(ip, port, sr->toSR(*aClient));
@@ -580,6 +579,10 @@ UserPtr& ClientManager::getMe() {
 		}
 	}
 	return me;
+}
+
+bool ClientManager::isActive() const {
+	return SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_PASSIVE;
 }
 
 const CID& ClientManager::getMyPID() {

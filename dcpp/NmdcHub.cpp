@@ -435,7 +435,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		}
 		string port = param.substr(j+1);
 		// For simplicity, we make the assumption that users on a hub have the same character encoding
-		ConnectionManager::getInstance()->nmdcConnect(server, (uint16_t)Util::toInt(port), getMyNick(), getHubUrl(), getEncoding());
+		ConnectionManager::getInstance()->nmdcConnect(server, port, getMyNick(), getHubUrl(), getEncoding());
 	} else if(cmd == "$RevConnectToMe") {
 		if(state != STATE_NORMAL) {
 			return;
@@ -610,7 +610,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 				if(!u)
 					continue;
 
-				u->getIdentity().setIp(it->substr(j+1));
+				u->getIdentity().setIp4(it->substr(j+1));
 				if(u->getUser() == getMyIdentity().getUser()) {
 					setMyIdentity(u->getIdentity());
 				}

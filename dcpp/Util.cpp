@@ -428,7 +428,7 @@ string Util::getShortTimeString(time_t t) {
  * http:// -> port 80
  * dchub:// -> port 411
  */
-void Util::decodeUrl(const string& url, string& protocol, string& host, uint16_t& port, string& path, string& query, string& fragment) {
+void Util::decodeUrl(const string& url, string& protocol, string& host, string& port, string& path, string& query, string& fragment) {
 	auto fragmentEnd = url.size();
 	auto fragmentStart = url.rfind('#');
 
@@ -502,15 +502,15 @@ void Util::decodeUrl(const string& url, string& protocol, string& host, uint16_t
 
 		if(portStart == string::npos) {
 			if(protocol == "http") {
-				port = 80;
+				port = "80";
 			} else if(protocol == "https") {
-				port = 443;
+				port = "443";
 			} else if(protocol == "dchub"  || protocol.empty()) {
-				port = 411;
+				port = "411";
 			}
 		} else {
 			dcdebug("p");
-			port = static_cast<uint16_t>(Util::toInt(url.substr(portStart, authorityEnd - portStart)));
+			port = url.substr(portStart, authorityEnd - portStart);
 		}
 	}
 

@@ -305,14 +305,14 @@ namespace {
 	}
 }
 
-void Socket::socksConnect(const string& aAddr, uint16_t aPort, uint32_t timeout) {
+void Socket::socksConnect(const string& aAddr, const string& aPort, uint32_t timeout) {
 	if(SETTING(SOCKS_SERVER).empty() || SETTING(SOCKS_PORT) == 0) {
 		throw SocketException(_("The socks server failed establish a connection"));
 	}
 
 	uint64_t start = GET_TICK();
 
-	connect(SETTING(SOCKS_SERVER), static_cast<uint16_t>(SETTING(SOCKS_PORT)));
+	connect(SETTING(SOCKS_SERVER), Util::toString(SETTING(SOCKS_PORT)));
 
 	if(wait(timeLeft(start, timeout), WAIT_CONNECT) != WAIT_CONNECT) {
 		throw SocketException(_("The socks server failed establish a connection"));
@@ -338,7 +338,7 @@ void Socket::socksConnect(const string& aAddr, uint16_t aPort, uint32_t timeout)
 		connStr.insert(connStr.end(), paddr, paddr+4);
 	}
 
-	uint16_t port = htons(aPort);
+	uint16_t port = htons(static_cast<uint16_t>(Util::toInt(aPort)));
 	uint8_t* pport = (uint8_t*)&port;
 	connStr.push_back(pport[0]);
 	connStr.push_back(pport[1]);
@@ -519,11 +519,11 @@ int Socket::write(const void* aBuffer, int aLen) {
  * @param aLen Data length
  * @throw SocketExcpetion Send failed.
  */
-void Socket::writeTo(const string& aAddr, uint16_t aPort, const void* aBuffer, int aLen, bool proxy) {
+void Socket::writeTo(const string& aAddr, const string& aPort, const void* aBuffer, int aLen, bool proxy) {
 	if(aLen <= 0)
 		return;
 
-	if(aAddr.empty() || aPort == 0) {
+	if(aAddr.empty() || aPort.empty()) {
 		throw SocketException(EADDRNOTAVAIL);
 	}
 
@@ -548,7 +548,7 @@ void Socket::writeTo(const string& aAddr, uint16_t aPort, const void* aBuffer, i
 			connStr.push_back((uint8_t)aAddr.size());
 			connStr.insert(connStr.end(), aAddr.begin(), aAddr.end());
 		} else {
-			auto ai = resolveAddr(aAddr, Util::toString(aPort));
+			auto ai = resolveAddr(aAddr, aPort);
 
 			if(ai->ai_family == AF_INET) {
 				connStr.push_back(1);		// Address type: IPv4
@@ -565,7 +565,7 @@ void Socket::writeTo(const string& aAddr, uint16_t aPort, const void* aBuffer, i
 
 		sent = check([&] { return ::sendto(getSock(), (const char*)&connStr[0], (int)connStr.size(), 0, &udpAddr.sa, udpAddrLen); });
 	} else {
-		auto ai = resolveAddr(aAddr, Util::toString(aPort));
+		auto ai = resolveAddr(aAddr, aPort);
 		sent = check([&] { return ::sendto(getSock(), (const char*)aBuffer, (int)aLen, 0, ai->ai_addr, ai->ai_addrlen); });
 	}
 

@@ -297,7 +297,7 @@ void ConnectionManager::accept(const Socket& sock, bool secure) noexcept {
 	}
 }
 
-void ConnectionManager::nmdcConnect(const string& aServer, uint16_t aPort, const string& aNick, const string& hubUrl, const string& encoding) {
+void ConnectionManager::nmdcConnect(const string& aServer, const string& aPort, const string& aNick, const string& hubUrl, const string& encoding) {
 	if(shuttingDown)
 		return;
 
@@ -308,18 +308,18 @@ void ConnectionManager::nmdcConnect(const string& aServer, uint16_t aPort, const
 	uc->setState(UserConnection::STATE_CONNECT);
 	uc->setFlag(UserConnection::FLAG_NMDC);
 	try {
-		uc->connect(aServer, aPort, 0, BufferedSocket::NAT_NONE);
+		uc->connect(aServer, aPort, Util::emptyString, BufferedSocket::NAT_NONE);
 	} catch(const Exception&) {
 		putConnection(uc);
 		delete uc;
 	}
 }
 
-void ConnectionManager::adcConnect(const OnlineUser& aUser, uint16_t aPort, const string& aToken, bool secure) {
-	adcConnect(aUser, aPort, 0, BufferedSocket::NAT_NONE, aToken, secure);
+void ConnectionManager::adcConnect(const OnlineUser& aUser, const string& aPort, const string& aToken, bool secure) {
+	adcConnect(aUser, aPort, Util::emptyString, BufferedSocket::NAT_NONE, aToken, secure);
 }
 
-void ConnectionManager::adcConnect(const OnlineUser& aUser, uint16_t aPort, uint16_t localPort, BufferedSocket::NatRoles natRole, const string& aToken, bool secure) {
+void ConnectionManager::adcConnect(const OnlineUser& aUser, const string& aPort, const string& localPort, BufferedSocket::NatRoles natRole, const string& aToken, bool secure) {
 	if(shuttingDown)
 		return;
 
