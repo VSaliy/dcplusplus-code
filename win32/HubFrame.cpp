@@ -293,7 +293,14 @@ void HubFrame::layout() {
 	r.size.y -= rm.size.y + border;
 
 	hr.resize(paned, r);
-	paned->maximize(showUsers->getChecked() ? NULL : message);
+
+	if(showUsers->getChecked()) {
+		userGrid->setVisible(true);
+		paned->maximize(NULL);
+	} else {
+		paned->maximize(chat);
+		userGrid->setVisible(false);
+	}
 }
 
 void HubFrame::updateStatus() {
@@ -1186,9 +1193,6 @@ void HubFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 
 void HubFrame::handleShowUsersClicked() {
 	bool checked = showUsers->getChecked();
-
-	userGrid->setVisible(checked);
-	paned->setVisible(checked);
 
 	if(checked) {
 		updateUserList();
