@@ -1174,8 +1174,7 @@ void WinUtil::openLink(const tstring& url) {
 
 bool WinUtil::parseDBLClick(const tstring& str) {
 	auto url = Text::fromT(str);
-	string proto, host, file, query, fragment;
-	uint16_t port;
+	string proto, host, port, file, query, fragment;
 	Util::decodeUrl(url, proto, host, port, file, query, fragment);
 
 	if(Util::stricmp(proto.c_str(), "adc") == 0 ||

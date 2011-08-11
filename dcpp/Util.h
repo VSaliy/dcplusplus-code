@@ -213,7 +213,7 @@ public:
 		replace(string_t(search), string_t(replacement), str);
 	}
 
-	static void decodeUrl(const string& aUrl, string& protocol, string& host, uint16_t& port, string& path, string& query, string& fragment);
+	static void decodeUrl(const string& aUrl, string& protocol, string& host, string& port, string& path, string& query, string& fragment);
 	static map<string, string> decodeQuery(const string& query);
 
 	static string validateFileName(string aFile);

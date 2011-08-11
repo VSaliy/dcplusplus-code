@@ -25,7 +25,6 @@
 #include "TimerManager.h"
 
 #include "Singleton.h"
-#include "SettingsManager.h"
 #include "OnlineUser.h"
 #include "Socket.h"
 #include "CID.h"
@@ -116,9 +115,7 @@ public:
 	void connect(const HintedUser& user, const string& token);
 	void privateMessage(const HintedUser& user, const string& msg, bool thirdPerson);
 	void userCommand(const HintedUser& user, const UserCommand& uc, StringMap& params, bool compatibility);
-
-	bool isActive() { return SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_PASSIVE; }
-
+	bool isActive() const;
 	Lock lock() { return Lock(cs); }
 
 	const ClientList& getClients() const { return clients; }

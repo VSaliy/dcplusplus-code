@@ -25,6 +25,7 @@
 #include "AdcCommand.h"
 #include "Transfer.h"
 #include "format.h"
+#include "SettingsManager.h"
 
 namespace dcpp {
 
@@ -133,7 +134,7 @@ void UserConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 	}
 }
 
-void UserConnection::connect(const string& aServer, uint16_t aPort, uint16_t localPort, BufferedSocket::NatRoles natRole) {
+void UserConnection::connect(const string& aServer, const string& aPort, const string& localPort, BufferedSocket::NatRoles natRole) {
 	dcassert(!socket);
 
 	socket = BufferedSocket::getSocket(0);

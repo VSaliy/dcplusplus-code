@@ -65,8 +65,10 @@ public:
 #define GS(n, x) string get##n() const { return get(x); } void set##n(const string& v) { set(x, v); }
 	GS(Nick, "NI")
 	GS(Description, "DE")
-	GS(Ip, "I4")
-	GS(UdpPort, "U4")
+	GS(Ip4, "I4")
+	GS(Ip6, "I6")
+	GS(Udp4Port, "U4")
+	GS(Udp6Port, "U6")
 	GS(Email, "EM")
 	GS(Connection, "CO")
 
@@ -88,7 +90,14 @@ public:
 	bool isBot() const { return isClientType(CT_BOT) || isSet("BO"); }
 	bool isAway() const { return isSet("AW"); }
 	bool isTcpActive() const;
+	bool isTcp4Active() const;
+	bool isTcp6Active() const;
 	bool isUdpActive() const;
+	bool isUdp4Active() const;
+	bool isUdp6Active() const;
+	string getIp() const;
+	string getUdpPort() const;
+
 	std::map<string, string> getInfo() const;
 	string get(const char* name) const;
 	void set(const char* name, const string& val);
