@@ -213,7 +213,7 @@ static const uint32_t FLOOD_ADD = 2000;
 
 ConnectionManager::Server::Server(bool secure_, uint16_t aPort, const string& ip) : port(0), secure(secure_), die(false) {
 	sock.setLocalIp4(ip);
-	port = sock.listen(Util::toString(aPort), AF_INET);
+	port = sock.listen(Util::toString(aPort));
 
 	start();
 }
@@ -237,7 +237,7 @@ int ConnectionManager::Server::run() noexcept {
 		while(!die) {
 			try {
 				sock.disconnect();
-				port = sock.listen(Util::toString(port), AF_INET);
+				port = sock.listen(Util::toString(port));
 
 				if(failed) {
 					LogManager::getInstance()->message(_("Connectivity restored"));

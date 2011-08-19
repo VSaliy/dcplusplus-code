@@ -134,6 +134,21 @@ inline bool isConnected(socket_t sock) {
 	return false;
 }
 
+inline int readable(socket_t sock0, socket_t sock1) {
+	fd_set rfd;
+	struct timeval tv = { 0 };
+
+	FD_ZERO(&rfd);
+	FD_SET(sock0, &rfd);
+	FD_SET(sock1, &rfd);
+
+    if(::select(std::max(sock0, sock1) + 1, &rfd, NULL, NULL, &tv) > 0) {
+        return FD_ISSET(sock0, &rfd) ? sock0 : sock1;
+    }
+
+	return sock0;
+}
+
 }
 
 Socket::addr Socket::udpAddr;
@@ -243,7 +258,9 @@ void Socket::accept(const Socket& listeningSocket) {
 	addr sock_addr = { { 0 } };
 	socklen_t sz = sizeof(sock_addr);
 
-	auto sock = setSock(check([&] { return ::accept(listeningSocket.getSock(), &sock_addr.sa, &sz); }), sock_addr.sa.sa_family);
+	auto sock = setSock(check([&] {
+		return ::accept(readable(listeningSocket.sock4, listeningSocket.sock6), &sock_addr.sa, &sz);
+	}), sock_addr.sa.sa_family);
 
 #ifdef _WIN32
 	// Make sure we disable any inherited windows message things for this socket.
@@ -253,21 +270,54 @@ void Socket::accept(const Socket& listeningSocket) {
 	setIp(resolveName(&sock_addr.sa, sz));
 }
 
-uint16_t Socket::listen(const string& port, int af) {
+uint16_t Socket::listen(const string& port) {
 	disconnect();
 
-	auto &localIp = af == AF_INET ? getLocalIp4() : getLocalIp6();
+	//auto &localIp = af == AF_INET ? getLocalIp4() : getLocalIp6();
 
-	auto ai = resolveAddr(localIp, port, af, AI_PASSIVE | AI_ADDRCONFIG);
+	auto ai = resolveAddr(/*localIp*/ "", port, AF_UNSPEC, AI_PASSIVE | AI_ADDRCONFIG);
 
-	create(*ai); // TODO What if more than one is returned?
-	check([&] { return ::bind(getSock(), ai->ai_addr, ai->ai_addrlen); });
+	uint16_t p = 0;
 
-	if(type == TYPE_TCP) {
-		check([&] { return ::listen(getSock(), 20); });
+	// For server sockets we create both ipv4 and ipv6 if possible
+	// We use the same port for both sockets to deal with the fact that
+	// there's no way in ADC to have different ports for v4 and v6 TCP sockets
+	for(auto a = ai.get(); a; a = a->ai_next) {
+		if(!sock4.valid() && a->ai_family == AF_INET) {
+			create(*a);
+			if(p != 0) {
+				((sockaddr_in*)a->ai_addr)->sin_port = p;
+			}
+
+			check([&] { return ::bind(sock4, a->ai_addr, a->ai_addrlen); });
+			check([&] { return ::getsockname(sock4, a->ai_addr, (socklen_t*)&a->ai_addrlen); });
+			p = ((sockaddr_in*)a->ai_addr)->sin_port;
+
+			if(type == TYPE_TCP) {
+				check([&] { return ::listen(sock4, 20); });
+			}
+		}
+
+		if(!sock6.valid() && a->ai_family == AF_INET6) {
+			create(*a);
+			if(p != 0) {
+				((sockaddr_in6*)a->ai_addr)->sin6_port = p;
+			}
+
+			check([&] { return ::bind(sock6, a->ai_addr, a->ai_addrlen); });
+			check([&] { return ::getsockname(sock6, a->ai_addr, (socklen_t*)&a->ai_addrlen); });
+			p = ((sockaddr_in6*)a->ai_addr)->sin6_port;
+
+			if(type == TYPE_TCP) {
+				check([&] { return ::listen(sock6, 20); });
+			}
+		}
 	}
 
-	return getLocalPort();
+	if(p == 0) {
+		throw SocketException(_("Could not open port for listening"));
+	}
+	return ntohs(p);
 }
 
 void Socket::connect(const string& aAddr, const string& aPort, const string& localPort) {
@@ -456,7 +506,7 @@ int Socket::read(void* aBuffer, int aBufLen, string &aIP) {
 	socklen_t addr_length = sizeof(remote_addr);
 
 	auto len = check([&] {
-		return ::recvfrom(getSock(), (char*)aBuffer, aBufLen, 0, &remote_addr.sa, &addr_length);
+		return ::recvfrom(readable(sock4, sock6), (char*)aBuffer, aBufLen, 0, &remote_addr.sa, &addr_length);
 	}, true);
 
 	if(len > 0) {
@@ -527,6 +577,9 @@ void Socket::writeTo(const string& aAddr, const string& aPort, const void* aBuff
 		throw SocketException(EADDRNOTAVAIL);
 	}
 
+	if(!sock4.valid() || !sock6.valid()) {
+
+	}
 	auto buf = (const uint8_t*)aBuffer;
 
 	int sent;
@@ -563,10 +616,15 @@ void Socket::writeTo(const string& aAddr, const string& aPort, const void* aBuff
 
 		connStr.insert(connStr.end(), buf, buf + aLen);
 
-		sent = check([&] { return ::sendto(getSock(), (const char*)&connStr[0], (int)connStr.size(), 0, &udpAddr.sa, udpAddrLen); });
+		sent = check([&] { return ::sendto(udpAddr.sa.sa_family == AF_INET ? sock4 : sock6,
+			(const char*)&connStr[0], (int)connStr.size(), 0, &udpAddr.sa, udpAddrLen); });
 	} else {
 		auto ai = resolveAddr(aAddr, aPort);
-		sent = check([&] { return ::sendto(getSock(), (const char*)aBuffer, (int)aLen, 0, ai->ai_addr, ai->ai_addrlen); });
+		if((ai->ai_family == AF_INET && !sock4.valid()) || (ai->ai_family == AF_INET6 && !sock6.valid())) {
+			create(*ai);
+		}
+		sent = check([&] { return ::sendto(ai->ai_family == AF_INET ? sock4 : sock6,
+			(const char*)aBuffer, (int)aLen, 0, ai->ai_addr, ai->ai_addrlen); });
 	}
 
 	stats.totalUp += sent;
@@ -639,31 +697,49 @@ int Socket::wait(uint32_t millis, int waitFor) {
 		return 0;
 	}
 
-	auto sock = getSock();
 	check([&] () -> int {
+		int nfds = -1;
+
 		if(waitFor & WAIT_READ) {
 			dcassert(!(waitFor & WAIT_CONNECT));
 			rfdp = &rfd;
 			FD_ZERO(rfdp);
-			FD_SET(sock, rfdp);
+			if(sock4.valid()) {
+				FD_SET(sock4, &rfd);
+				nfds = std::max((int)sock4, nfds);
+			}
+
+			if(sock6.valid()) {
+				FD_SET(sock6, &rfd);
+				nfds = std::max((int)sock6, nfds);
+			}
 		}
 
 		if(waitFor & WAIT_WRITE) {
 			dcassert(!(waitFor & WAIT_CONNECT));
 			wfdp = &wfd;
 			FD_ZERO(wfdp);
-			FD_SET(sock, wfdp);
+			if(sock4.valid()) {
+				FD_SET(sock4, &wfd);
+				nfds = std::max((int)sock4, nfds);
+			}
+
+			if(sock6.valid()) {
+				FD_SET(sock6, &wfd);
+				nfds = std::max((int)sock6, nfds);
+			}
 		}
 
-		return ::select((int)(sock+1), rfdp, wfdp, NULL, &tv);
+		return ::select(nfds + 1, rfdp, wfdp, NULL, &tv);
 	});
 
 	waitFor = WAIT_NONE;
 
-	if(rfdp && FD_ISSET(sock, rfdp)) {
+	if(rfdp && ((sock4.valid() && FD_ISSET(sock4, rfdp)) || (sock6.valid() && FD_ISSET(sock6, rfdp)))) {
 		waitFor |= WAIT_READ;
 	}
-	if(wfdp && FD_ISSET(sock, wfdp)) {
+
+	if(wfdp && ((sock4.valid() && FD_ISSET(sock4, wfdp)) || (sock6.valid() && FD_ISSET(sock6, wfdp)))) {
 		waitFor |= WAIT_WRITE;
 	}
 
