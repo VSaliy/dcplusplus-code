@@ -80,9 +80,9 @@ bool HashProgressDlg::handleInitDialog() {
 	progress->setRange(0, 10000);
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(1, 3));
-		cur->column(2).mode = GridInfo::FILL;
-		cur->column(2).align = GridInfo::BOTTOM_RIGHT;
+		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		pair<ButtonPtr, ButtonPtr> buttons = WinUtil::addDlgButtons(cur,
 			[this] { GCC_WTF->endDialog(IDOK); },
@@ -91,7 +91,8 @@ bool HashProgressDlg::handleInitDialog() {
 		buttons.second->setVisible(false);
 
 		pauseResume = cur->addChild(Button::Seed());
-		pauseResume->onClicked([this] { handlePauseResume(); });
+		cur->setWidget(pauseResume, 0, 1);
+		pauseResume->onClicked([this, cur] { handlePauseResume(); cur->layout(); pauseResume->redraw(); });
 		setButtonState();
 	}
 
@@ -128,6 +129,7 @@ bool HashProgressDlg::updateStats() {
 		close(true);
 		return true;
 	}
+
 	double diff = tick - startTime;
 	bool paused = HashManager::getInstance()->isHashingPaused();
 	if(diff < 1000 || files == 0 || bytes == 0 || paused) {
@@ -137,7 +139,6 @@ bool HashProgressDlg::updateStats() {
 			left->setText(T_("Paused"));
 		} else {
 			left->setText(T_("-:--:-- left"));
-			progress->setPosition(0);
 		}
 	} else {
 		double filestat = (((double)(startFiles - files)) * 60 * 60 * 1000) / diff;
@@ -178,7 +179,6 @@ void HashProgressDlg::handlePauseResume() {
 	}
 
 	setButtonState();
-	layout();
 }
 
 void HashProgressDlg::setButtonState() {
