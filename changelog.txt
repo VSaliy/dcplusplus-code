@@ -40,6 +40,8 @@
 * Update MiniUPnPc to version 1.6
 * [L#309402] Initial IPv6 support
 * Update boost to version 1.47
+* COM initialization fix for the Windows UPnP mapper (thanks bigmuscle)
+* Show country codes next to country names (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

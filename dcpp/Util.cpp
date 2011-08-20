@@ -204,11 +204,9 @@ void Util::initialize(PathsMap pathOverrides) {
 		string data = File(file, File::READ, File::OPEN).read();
 
 		const char* start = data.c_str();
-		string::size_type linestart = 0;
-		string::size_type lineend = 0;
+		string::size_type linestart = 0, lineend, pos, pos2;
 		auto last = countries.end();
-		uint32_t startIP = 0;
-		uint32_t endIP = 0, endIPprev = 0;
+		uint32_t startIP = 0, endIP = 0, endIPprev = 0;
 
 		countryNames.push_back(_("Unknown"));
 		auto addCountry = [](const string& countryName) -> size_t {
@@ -221,7 +219,7 @@ void Util::initialize(PathsMap pathOverrides) {
 		};
 
 		while(true) {
-			auto pos = data.find(',', linestart);
+			pos = data.find(',', linestart);
 			if(pos == string::npos) break;
 			pos = data.find(',', pos + 1);
 			if(pos == string::npos) break;
@@ -233,15 +231,19 @@ void Util::initialize(PathsMap pathOverrides) {
 
 			pos = data.find(',', pos + 1);
 			if(pos == string::npos) break;
-			pos = data.find(',', pos + 1);
-			if(pos == string::npos) break;
-			lineend = data.find('\n', pos);
+
+			pos2 = data.find(',', pos + 1);
+			if(pos2 == string::npos) break;
+
+			lineend = data.find('\n', pos2);
 			if(lineend == string::npos) break;
 
 			if(startIP != endIPprev)
 				last = countries.insert(last, make_pair(startIP, 0));
 			pos += 2;
-			last = countries.insert(last, make_pair(endIP, addCountry(data.substr(pos, lineend - 1 - pos))));
+			pos2 += 2;
+			last = countries.insert(last, make_pair(endIP, addCountry(str(F_("%1% - %2%") %
+				data.substr(pos, 2) % data.substr(pos2, lineend - 1 - pos2)))));
 
 			endIPprev = endIP;
 			linestart = lineend + 1;
