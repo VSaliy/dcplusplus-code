@@ -31,6 +31,10 @@ const string Mapper_WinUPnP::name = "Windows UPnP";
 #include <natupnp.h>
 	
 bool Mapper_WinUPnP::init() {
+	HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+	if(FAILED(hr))
+		return false;
+
 	if(pUN)
 		return true;
 
@@ -42,13 +46,14 @@ bool Mapper_WinUPnP::init() {
 	OLECHAR iupnps[] = L"{B171C812-CC76-485A-94D8-B6B3A2794E99}";
 	CLSIDFromString(iupnps, &iupnp);
 	pUN = 0;
-	HRESULT hr = CoCreateInstance(upnp, 0, CLSCTX_INPROC_SERVER, iupnp, reinterpret_cast<LPVOID*>(&pUN));
+	hr = ::CoCreateInstance(upnp, 0, CLSCTX_INPROC_SERVER, iupnp, reinterpret_cast<LPVOID*>(&pUN));
 	if(FAILED(hr))
 		pUN = 0;
 	return pUN;
 }
 
 void Mapper_WinUPnP::uninit() {
+	::CoUninitialize();
 }
 
 bool Mapper_WinUPnP::add(const unsigned short port, const Protocol protocol, const string& description) {
