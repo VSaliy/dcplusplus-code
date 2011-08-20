@@ -69,6 +69,10 @@ static tstring formatBytes(const string& val) {
 	return Text::toT(Util::formatBytes(val));
 }
 
+static tstring formatSpeed(const string& val) {
+	return Text::toT(Util::formatBytes(val) + "/s");
+}
+
 static const FieldName fields[] =
 {
 	{ "NI", T_("Nick"), &Text::toT },
@@ -77,8 +81,8 @@ static const FieldName fields[] =
 	{ "EM", T_("E-Mail"), &Text::toT },
 	{ "SS", T_("Shared bytes"), &formatBytes },
 	{ "SF", T_("Shared files"), &Text::toT },
-	{ "US", T_("Upload speed"), &Text::toT },
-	{ "DS", T_("Download speed"), &Text::toT },
+	{ "US", T_("Upload speed"), &formatSpeed },
+	{ "DS", T_("Download speed"), &formatSpeed },
 	{ "SL", T_("Total slots"), &Text::toT },
 	{ "FS", T_("Free slots"), &Text::toT },
 	{ "HN", T_("Hubs (normal)"), &Text::toT },
@@ -90,9 +94,12 @@ static const FieldName fields[] =
 	{ "U6", T_("Search port (v6)"), &Text::toT },
 	{ "SU", T_("Features"), &Text::toT },
 	{ "VE", T_("Application version"), &Text::toT },
-    { "AP", T_("Application"), &Text::toT },
+	{ "AP", T_("Application"), &Text::toT },
 	{ "ID", T_("CID"), &Text::toT },
 	{ "KP", T_("TLS Keyprint"), &Text::toT },
+	{ "CO", T_("Connection"), &Text::toT },
+	{ "CT", T_("Client type"), &Text::toT },
+	{ "TA", T_("Tag"), &Text::toT },
 
 	{ "", _T(""), 0 }
 };
