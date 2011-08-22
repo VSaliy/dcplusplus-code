@@ -187,10 +187,6 @@ void AdcHub::handle(AdcCommand::INF, AdcCommand& c) noexcept {
 		u->getUser()->setFlag(User::TLS);
 	}
 
-	if(!u->getIdentity().get("US").empty()) {
-		u->getIdentity().setConnection(str(F_("%1%/s") % Util::formatBytes(u->getIdentity().get("US"))));
-	}
-
 	if(u->getUser() == getMyIdentity().getUser()) {
 		state = STATE_NORMAL;
 		setAutoReconnect(true);

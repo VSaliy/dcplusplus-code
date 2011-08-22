@@ -22,6 +22,7 @@
 #include "AdcHub.h"
 #include "FavoriteUser.h"
 #include "StringTokenizer.h"
+#include "format.h"
 
 namespace dcpp {
 
@@ -138,6 +139,13 @@ string Identity::getApplication() const {
 	}
 
 	return application + ' ' + version;
+}
+
+string Identity::getConnection() const {
+	if(!get("US").empty())
+		return str(F_("%1%/s") % Util::formatBytes(get("US")));
+
+	return get("CO");
 }
 
 const string& Identity::getCountry() const {

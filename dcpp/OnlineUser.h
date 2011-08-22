@@ -70,7 +70,6 @@ public:
 	GS(Udp4Port, "U4")
 	GS(Udp6Port, "U6")
 	GS(Email, "EM")
-	GS(Connection, "CO")
 
 	void setBytesShared(const string& bs) { set("SS", bs); }
 	int64_t getBytesShared() const { return Util::toInt64(get("SS")); }
@@ -81,6 +80,7 @@ public:
 	void setHidden(bool hidden) { set("HI", hidden ? "1" : Util::emptyString); }
 	string getTag() const;
 	string getApplication() const;
+	string getConnection() const;
 	const string& getCountry() const;
 	bool supports(const string& name) const;
 	bool isHub() const { return isClientType(CT_HUB) || isSet("HU"); }

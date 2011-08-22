@@ -70,7 +70,7 @@ static tstring formatBytes(const string& val) {
 }
 
 static tstring formatSpeed(const string& val) {
-	return Text::toT(Util::formatBytes(val) + "/s");
+	return Text::toT(str(F_("%1%/s") % Util::formatBytes(val)));
 }
 
 static const FieldName fields[] =
@@ -514,11 +514,11 @@ bool UsersFrame::show(const UserPtr &u, bool any) const {
 		return false;
 	}
 
-	if(showWaiting->getChecked() && isWaiting(u)) {
+	if(showWaiting->getChecked() && !isWaiting(u)) {
 		return false;
 	}
 
-	if(showQueue->getChecked() && hasDownload(u)) {
+	if(showQueue->getChecked() && !hasDownload(u)) {
 		return false;
 	}
 

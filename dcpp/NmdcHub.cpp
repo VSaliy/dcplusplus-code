@@ -382,7 +382,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 
 		u.getIdentity().setHub(false);
 
-		u.getIdentity().setConnection(connection);
+		u.getIdentity().set("CO", connection); 
 		i = j + 1;
 		j = param.find('$', i);
 
