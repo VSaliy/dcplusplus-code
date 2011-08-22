@@ -507,7 +507,7 @@ void HashManager::Hasher::stopHashing(const string& baseDir) {
 	}
 }
 
-void HashManager::Hasher::getStats(string& curFile, int64_t& bytesLeft, size_t& filesLeft) {
+void HashManager::Hasher::getStats(string& curFile, uint64_t& bytesLeft, size_t& filesLeft) const {
 	Lock l(cs);
 	curFile = currentFile;
 	filesLeft = w.size();
