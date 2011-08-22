@@ -36,7 +36,7 @@ private:
 	ButtonPtr pauseResume;
 
 	bool autoClose;
-	int64_t startBytes;
+	uint64_t startBytes;
 	size_t startFiles;
 	uint64_t startTime;
 

@@ -35,6 +35,8 @@ using dwt::GridInfo;
 using dwt::Label;
 using dwt::ProgressBar;
 
+namespace { const int progressBarMax = 10000; }
+
 HashProgressDlg::HashProgressDlg(dwt::Widget* parent, bool aAutoClose) :
 GridDialog(parent, 657, DS_CONTEXTHELP),
 file(0),
@@ -77,7 +79,7 @@ bool HashProgressDlg::handleInitDialog() {
 	}
 
 	progress = grid->addChild(ProgressBar::Seed());
-	progress->setRange(0, 10000);
+	progress->setRange(0, progressBarMax);
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
@@ -114,11 +116,12 @@ bool HashProgressDlg::handleInitDialog() {
 
 bool HashProgressDlg::updateStats() {
 	string path;
-	int64_t bytes = 0;
+	uint64_t bytes = 0;
 	size_t files = 0;
 	uint64_t tick = GET_TICK();
 
 	HashManager::getInstance()->getStats(path, bytes, files);
+
 	if(bytes > startBytes)
 		startBytes = bytes;
 
@@ -130,42 +133,36 @@ bool HashProgressDlg::updateStats() {
 		return true;
 	}
 
-	double diff = tick - startTime;
+	file->setText(files ? Text::toT(path) : T_("Done"));
+
+	double timeDiff = tick - startTime;
+
 	bool paused = HashManager::getInstance()->isHashingPaused();
-	if(diff < 1000 || files == 0 || bytes == 0 || paused) {
+	if(timeDiff < 1000 || files == 0 || bytes == 0 || paused) {
 		stat->setText(str(TF_("-.-- files/h, %1% files left") % (uint32_t)files));
 		speed->setText(str(TF_("-.-- B/s, %1% left") % Text::toT(Util::formatBytes(bytes))));
 		if(paused) {
 			left->setText(T_("Paused"));
 		} else {
-			left->setText(T_("-:--:-- left"));
+			left->setText(str(TF_("%1% left") % T_("-:--:--")));
+			progress->setPosition(0);
 		}
+
 	} else {
-		double filestat = (((double)(startFiles - files)) * 60 * 60 * 1000) / diff;
-		double speedStat = (((double)(startBytes - bytes)) * 1000) / diff;
+		auto fileDiff = startFiles - files;
+		auto byteDiff = startBytes - bytes;
 
-		stat->setText(str(TF_("%1% files/h, %2% files left") % filestat % (uint32_t)files));
-		speed->setText(str(TF_("%1%/s, %2% left") % Text::toT(Util::formatBytes((int64_t)speedStat)) % Text::toT(Util::formatBytes(bytes))));
+		double fileStat = static_cast<double>(fileDiff) * 60. * 60. * 1000. / timeDiff;
+		double speedStat = static_cast<double>(byteDiff) * 1000. / timeDiff;
 
-		if(filestat == 0 || speedStat == 0) {
-			left->setText(T_("-:--:-- left"));
-		} else {
-			double fs = files * 60 * 60 / filestat;
-			double ss = bytes / speedStat;
-			left->setText(str(TF_("%1% left") % Text::toT(Util::formatSeconds((int64_t)(fs + ss) / 2))));
-		}
-	}
+		stat->setText(str(TF_("%1% files/h, %2% files left") % fileStat % static_cast<uint32_t>(files)));
+		speed->setText(str(TF_("%1%/s, %2% left") % Text::toT(Util::formatBytes(speedStat)) % Text::toT(Util::formatBytes(bytes))));
 
-	if(files == 0) {
-		file->setText(T_("Done"));
-	} else {
-		file->setText(Text::toT(path));
-	}
+		double timeLeft = speedStat ? static_cast<double>(bytes) / speedStat : fileStat ? static_cast<double>(files) * 60. * 60. / fileStat : 0;
+		left->setText(str(TF_("%1% left") % (timeLeft ? Text::toT(Util::formatSeconds(timeLeft)) : T_("-:--:--"))));
 
-	if(startFiles == 0 || startBytes == 0) {
-		progress->setPosition(0);
-	} else {
-		progress->setPosition((int)(10000 * ((0.5 * (startFiles - files)/startFiles) + 0.5 * (startBytes - bytes) / startBytes)));
+		progress->setPosition(progressBarMax * (startBytes ? static_cast<double>(byteDiff / startBytes) :
+			startFiles ? static_cast<double>(fileDiff / startFiles) : 0));
 	}
 
 	return true;

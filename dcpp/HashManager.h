@@ -75,7 +75,7 @@ public:
 	}
 	void addTree(const TigerTree& tree) { Lock l(cs); store.addTree(tree); }
 
-	void getStats(string& curFile, int64_t& bytesLeft, size_t& filesLeft) {
+	void getStats(string& curFile, uint64_t& bytesLeft, size_t& filesLeft) const {
 		hasher.getStats(curFile, bytesLeft, filesLeft);
 	}
 
@@ -121,7 +121,7 @@ private:
 		void stopHashing(const string& baseDir);
 		virtual int run();
 		bool fastHash(const string& fname, uint8_t* buf, TigerTree& tth, int64_t size, CRC32Filter* xcrc32);
-		void getStats(string& curFile, int64_t& bytesLeft, size_t& filesLeft);
+		void getStats(string& curFile, uint64_t& bytesLeft, size_t& filesLeft) const;
 		void shutdown() { stop = true; if(paused) s.signal(); s.signal(); }
 		void scheduleRebuild() { rebuild = true; if(paused) s.signal(); s.signal(); }
 
