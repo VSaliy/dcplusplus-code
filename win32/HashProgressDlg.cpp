@@ -149,11 +149,11 @@ bool HashProgressDlg::updateStats() {
 		}
 
 	} else {
-		auto fileDiff = startFiles - files;
-		auto byteDiff = startBytes - bytes;
+		double fileDiff = startFiles - files;
+		double byteDiff = startBytes - bytes;
 
-		double fileStat = static_cast<double>(fileDiff) * 60. * 60. * 1000. / timeDiff;
-		double speedStat = static_cast<double>(byteDiff) * 1000. / timeDiff;
+		double fileStat = fileDiff * 60. * 60. * 1000. / timeDiff;
+		double speedStat = byteDiff * 1000. / timeDiff;
 
 		stat->setText(str(TF_("%1% files/h, %2% files left") % fileStat % static_cast<uint32_t>(files)));
 		speed->setText(str(TF_("%1%/s, %2% left") % Text::toT(Util::formatBytes(speedStat)) % Text::toT(Util::formatBytes(bytes))));
@@ -161,8 +161,8 @@ bool HashProgressDlg::updateStats() {
 		double timeLeft = speedStat ? static_cast<double>(bytes) / speedStat : fileStat ? static_cast<double>(files) * 60. * 60. / fileStat : 0;
 		left->setText(str(TF_("%1% left") % (timeLeft ? Text::toT(Util::formatSeconds(timeLeft)) : T_("-:--:--"))));
 
-		progress->setPosition(progressBarMax * (startBytes ? static_cast<double>(byteDiff / startBytes) :
-			startFiles ? static_cast<double>(fileDiff / startFiles) : 0));
+		progress->setPosition(progressBarMax * (startBytes ? byteDiff / static_cast<double>(startBytes) :
+			startFiles ? fileDiff / static_cast<double>(startFiles) : 0));
 	}
 
 	return true;
