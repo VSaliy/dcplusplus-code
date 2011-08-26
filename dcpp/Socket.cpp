@@ -113,9 +113,9 @@ inline int getSocketOptInt2(socket_t sock, int option) {
 	return val;
 }
 
-inline int setSocketOpt2(socket_t sock, int option, int val) {
+inline int setSocketOpt2(socket_t sock, int level, int option, int val) {
 	int len = sizeof(val);
-	return ::setsockopt(sock, SOL_SOCKET, option, (char*)&val, len);
+	return ::setsockopt(sock, level, option, (char*)&val, len);
 }
 
 inline bool isConnected(socket_t sock) {
@@ -204,18 +204,21 @@ string SocketException::errorToString(int aError) noexcept {
 
 socket_t Socket::setSock(socket_t s, int af) {
 	setBlocking2(s, false);
-	setSocketOpt2(s, SO_REUSEADDR, 1);
+	setSocketOpt2(s, SOL_SOCKET, SO_REUSEADDR, 1);
 
-#ifdef IPV6_V6ONLY
-	setSocketOpt2(s, IPV6_V6ONLY, 1);
-#endif
 
 	if(af == AF_INET) {
 		dcassert(sock4 == INVALID_SOCKET);
 		sock4 = s;
-	} else {
+	} else if(af == AF_INET6) {
+#ifdef IPV6_V6ONLY
+		setSocketOpt2(s, IPPROTO_IPV6, IPV6_V6ONLY, 1);
+#endif
+
 		dcassert(sock6 == INVALID_SOCKET);
 		sock6 = s;
+	} else {
+		throw SocketException(str(F_("Unknown protocol %d") % af));
 	}
 
 	return s;
@@ -577,9 +580,6 @@ void Socket::writeTo(const string& aAddr, const string& aPort, const void* aBuff
 		throw SocketException(EADDRNOTAVAIL);
 	}
 
-	if(!sock4.valid() || !sock6.valid()) {
-
-	}
 	auto buf = (const uint8_t*)aBuffer;
 
 	int sent;
@@ -761,14 +761,13 @@ string Socket::resolve(const string& aDns, int af) {
 
 	addrinfo *result = 0;
 
+	std::string ret;
 	if(getaddrinfo(aDns.c_str(), NULL, &hints, &result) == 0) {
-		if (result->ai_addr != NULL)
-			return string(inet_ntoa(((sockaddr_in*)(result->ai_addr))->sin_addr));
-
-		freeaddrinfo(result);
+		ret = resolveName(result->ai_addr, result->ai_addrlen);
+		::freeaddrinfo(result);
 	}
 
-	return string();
+	return ret;
 }
 
 Socket::addrinfo_p Socket::resolveAddr(const string& name, const string& port, int family, int flags) {
