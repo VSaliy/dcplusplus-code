@@ -58,7 +58,7 @@ inline auto check(F f, bool blockOk = false) -> decltype(f()) {
 
 		auto error = getLastError();
 		if(blockOk && error == WSAEWOULDBLOCK) {
-			return -1;
+			return static_cast<decltype(ret)>(-1);
 		}
 
 		if(error != EINTR) {
@@ -761,11 +761,13 @@ string Socket::resolve(const string& aDns, int af) {
 
 	addrinfo *result = 0;
 
-	std::string ret;
-	if(getaddrinfo(aDns.c_str(), NULL, &hints, &result) == 0) {
-		ret = resolveName(result->ai_addr, result->ai_addrlen);
-		::freeaddrinfo(result);
+	auto err = ::getaddrinfo(aDns.c_str(), NULL, &hints, &result);
+	if(err) {
+		throw SocketException(err);
 	}
+
+	auto ret = resolveName(result->ai_addr, result->ai_addrlen);
+	::freeaddrinfo(result);
 
 	return ret;
 }
@@ -776,9 +778,13 @@ Socket::addrinfo_p Socket::resolveAddr(const string& name, const string& port, i
 	hints.ai_flags = flags;
 	hints.ai_socktype = type == TYPE_TCP ? SOCK_STREAM : SOCK_DGRAM;
 	hints.ai_protocol = type;
+
 	addrinfo *result = 0;
 
-	check([&] { return ::getaddrinfo(name.empty() ? NULL : name.c_str(), port.empty() ? NULL : port.c_str(), &hints, &result); });
+	auto err = ::getaddrinfo(name.empty() ? NULL : name.c_str(), port.empty() ? NULL : port.c_str(), &hints, &result);
+	if(err) {
+		throw SocketException(err);
+	}
 
 	dcdebug("Resolved %s:%s to %s, next is %p\n", name.c_str(), port.c_str(),
 		resolveName(result->ai_addr, result->ai_addrlen).c_str(), result->ai_next);
@@ -788,7 +794,12 @@ Socket::addrinfo_p Socket::resolveAddr(const string& name, const string& port, i
 
 string Socket::resolveName(const sockaddr* sa, socklen_t sa_len, int flags) {
 	char buf[1024];
-	check([&] { return ::getnameinfo(sa, sa_len, buf, sizeof(buf), NULL, 0, flags); });
+
+	auto err = ::getnameinfo(sa, sa_len, buf, sizeof(buf), NULL, 0, flags);
+	if(err) {
+		throw SocketException(err);
+	}
+
 	return string(buf);
 }
 
