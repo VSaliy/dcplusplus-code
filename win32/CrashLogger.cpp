@@ -345,12 +345,11 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column,
 								}
 
 								function += ')';
-
-								if(spec_die) {
-									dwarf_dealloc(dbg, spec_die, DW_DLA_DIE);
-								}
 							}
 
+							if(spec_die) {
+								dwarf_dealloc(dbg, spec_die, DW_DLA_DIE);
+							}
 							dwarf_dealloc(dbg, die, DW_DLA_DIE);
 						}
 
@@ -447,8 +446,7 @@ inline void writePlatformInfo() {
 
 #ifndef NO_BACKTRACE
 
-inline void writeBacktrace(LPCONTEXT context)
-{
+inline void writeBacktrace(LPCONTEXT context) {
 	HANDLE const process = GetCurrentProcess();
 	HANDLE const thread = GetCurrentThread();
 
@@ -552,8 +550,12 @@ inline void writeBacktrace(LPCONTEXT context)
 
 #endif // NO_BACKTRACE
 
-LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info)
-{
+LONG WINAPI exceptionFilter(LPEXCEPTION_POINTERS info) {
+	if(f) {
+		// only log the first exception.
+		return EXCEPTION_CONTINUE_EXECUTION;
+	}
+
 	f = fopen(CrashLogger::getPath().c_str(), "w");
 	if(f) {
 		writeAppInfo();
@@ -580,7 +582,7 @@ LPTOP_LEVEL_EXCEPTION_FILTER prevFilter;
 } // unnamed namespace
 
 CrashLogger::CrashLogger() {
-	prevFilter = SetUnhandledExceptionFilter(exception_filter);
+	prevFilter = SetUnhandledExceptionFilter(exceptionFilter);
 }
 
 CrashLogger::~CrashLogger() {
