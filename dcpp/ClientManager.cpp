@@ -33,6 +33,14 @@
 
 namespace dcpp {
 
+ClientManager::ClientManager() : udp(Socket::TYPE_UDP) {
+	TimerManager::getInstance()->addListener(this);
+}
+
+ClientManager::~ClientManager() {
+	TimerManager::getInstance()->removeListener(this);
+}
+
 Client* ClientManager::getClient(const string& aHubURL) {
 	Client* c;
 	if(Util::strnicmp("adc://", aHubURL.c_str(), 6) == 0) {

@@ -27,7 +27,7 @@
 
 namespace dcpp {
 
-SSLSocket::SSLSocket(SSL_CTX* context) : ctx(context), ssl(0) {
+SSLSocket::SSLSocket(SSL_CTX* context) : Socket(TYPE_TCP), ctx(context), ssl(0) {
 
 }
 
@@ -103,9 +103,9 @@ bool SSLSocket::waitWant(int ret, uint32_t millis) {
 	int err = SSL_get_error(ssl, ret);
 	switch(err) {
 	case SSL_ERROR_WANT_READ:
-		return wait(millis, Socket::WAIT_READ) == WAIT_READ;
+		return wait(millis, true, false).first;
 	case SSL_ERROR_WANT_WRITE:
-		return wait(millis, Socket::WAIT_WRITE) == WAIT_WRITE;
+		return wait(millis, true, false).second;
 	// Check if this is a fatal error...
 	default: checkSSL(ret);
 	}
@@ -164,14 +164,14 @@ int SSLSocket::checkSSL(int ret) {
 	return ret;
 }
 
-int SSLSocket::wait(uint32_t millis, int waitFor) {
-	if(ssl && (waitFor & Socket::WAIT_READ)) {
+std::pair<bool, bool> SSLSocket::wait(uint32_t millis, bool checkRead, bool checkWrite) {
+	if(ssl && checkRead) {
 		/** @todo Take writing into account as well if reading is possible? */
 		char c;
 		if(SSL_peek(ssl, &c, 1) > 0)
-			return WAIT_READ;
+			return std::make_pair(true, false);
 	}
-	return Socket::wait(millis, waitFor);
+	return Socket::wait(millis, checkRead, checkWrite);
 }
 
 bool SSLSocket::isTrusted() const noexcept {

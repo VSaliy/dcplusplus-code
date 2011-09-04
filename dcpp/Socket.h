@@ -83,19 +83,12 @@ private:
 class Socket : boost::noncopyable
 {
 public:
-	enum {
-		WAIT_NONE = 0x00,
-		WAIT_CONNECT = 0x01,
-		WAIT_READ = 0x02,
-		WAIT_WRITE = 0x04
-	};
-
 	enum SocketType {
 		TYPE_TCP = IPPROTO_TCP,
 		TYPE_UDP = IPPROTO_UDP
 	};
 
-	Socket(SocketType type = TYPE_TCP) : type(type) { }
+	explicit Socket(SocketType type) : type(type) { }
 
 	virtual ~Socket() { }
 
@@ -157,7 +150,7 @@ public:
 	 */
 	int readAll(void* aBuffer, int aBufLen, uint32_t timeout = 0);
 
-	virtual int wait(uint32_t millis, int waitFor);
+	virtual std::pair<bool, bool> wait(uint32_t millis, bool checkRead, bool checkWrite);
 
 	typedef std::unique_ptr<addrinfo, decltype(&freeaddrinfo)> addrinfo_p;
 	static string resolve(const string& aDns, int af = AF_UNSPEC);

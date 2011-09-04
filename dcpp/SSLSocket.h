@@ -51,7 +51,7 @@ public:
 	virtual void connect(const string& aIp, const string& aPort);
 	virtual int read(void* aBuffer, int aBufLen);
 	virtual int write(const void* aBuffer, int aLen);
-	virtual int wait(uint32_t millis, int waitFor);
+	virtual std::pair<bool, bool> wait(uint32_t millis, bool checkRead, bool checkWrite);
 	virtual void shutdown() noexcept;
 	virtual void close() noexcept;
 

@@ -89,7 +89,7 @@ void BufferedSocket::setOptions() {
 void BufferedSocket::accept(const Socket& srv, bool secure, bool allowUntrusted) {
 	dcdebug("BufferedSocket::accept() %p\n", (void*)this);
 
-	std::unique_ptr<Socket> s(secure ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : new Socket);
+	std::unique_ptr<Socket> s(secure ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : new Socket(Socket::TYPE_TCP));
 
 	s->accept(srv);
 
@@ -106,7 +106,7 @@ void BufferedSocket::connect(const string& aAddress, const string& aPort, bool s
 
 void BufferedSocket::connect(const string& aAddress, const string& aPort, const string& localPort, NatRoles natRole, bool secure, bool allowUntrusted, bool proxy) {
 	dcdebug("BufferedSocket::connect() %p\n", (void*)this);
-	std::unique_ptr<Socket> s(secure ? (natRole == NAT_SERVER ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : CryptoManager::getInstance()->getClientSocket(allowUntrusted)) : new Socket);
+	std::unique_ptr<Socket> s(secure ? (natRole == NAT_SERVER ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : CryptoManager::getInstance()->getClientSocket(allowUntrusted)) : new Socket(Socket::TYPE_TCP));
 
 	s->setLocalIp4(SETTING(BIND_ADDRESS));
 	s->setLocalIp6(SETTING(BIND_ADDRESS6));
@@ -368,11 +368,11 @@ void BufferedSocket::threadSendFile(InputStream* file) {
 					}
 				} else {
 					while(!disconnecting) {
-						int w = sock->wait(POLL_TIMEOUT, Socket::WAIT_WRITE | Socket::WAIT_READ);
-						if(w & Socket::WAIT_READ) {
+						auto w = sock->wait(POLL_TIMEOUT, true, true);
+						if(w.first) {
 							threadRead();
 						}
-						if(w & Socket::WAIT_WRITE) {
+						if(w.second) {
 							break;
 						}
 					}
@@ -411,13 +411,13 @@ void BufferedSocket::threadSendData() {
 			return;
 		}
 
-		int w = sock->wait(POLL_TIMEOUT, Socket::WAIT_READ | Socket::WAIT_WRITE);
+		auto w = sock->wait(POLL_TIMEOUT, true, true);
 
-		if(w & Socket::WAIT_READ) {
+		if(w.first) {
 			threadRead();
 		}
 
-		if(w & Socket::WAIT_WRITE) {
+		if(w.second) {
 			int n = sock->write(&sendBuf[done], left);
 			if(n > 0) {
 				left -= n;
@@ -470,9 +470,9 @@ bool BufferedSocket::checkEvents() {
 }
 
 void BufferedSocket::checkSocket() {
-	int waitFor = sock->wait(POLL_TIMEOUT, Socket::WAIT_READ);
+	auto w = sock->wait(POLL_TIMEOUT, true, false);
 
-	if(waitFor & Socket::WAIT_READ) {
+	if(w.first) {
 		threadRead();
 	}
 }

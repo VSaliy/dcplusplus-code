@@ -158,13 +158,8 @@ private:
 
 	friend class Singleton<ClientManager>;
 
-	ClientManager() {
-		TimerManager::getInstance()->addListener(this);
-	}
-
-	virtual ~ClientManager() {
-		TimerManager::getInstance()->removeListener(this);
-	}
+	ClientManager();
+	virtual ~ClientManager();
 
 	void updateNick(const OnlineUser& user) noexcept;
 
