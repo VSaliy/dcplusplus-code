@@ -211,7 +211,9 @@ void ConnectionManager::on(TimerManagerListener::Minute, uint64_t aTick) noexcep
 static const uint32_t FLOOD_TRIGGER = 20000;
 static const uint32_t FLOOD_ADD = 2000;
 
-ConnectionManager::Server::Server(bool secure_, uint16_t aPort, const string& ip) : port(0), secure(secure_), die(false) {
+ConnectionManager::Server::Server(bool secure_, uint16_t aPort, const string& ip) :
+	sock(Socket::TYPE_TCP), port(0), secure(secure_), die(false)
+{
 	sock.setLocalIp4(ip);
 	port = sock.listen(Util::toString(aPort));
 
@@ -224,8 +226,8 @@ int ConnectionManager::Server::run() noexcept {
 	while(!die) {
 		try {
 			while(!die) {
-				auto ret = sock.wait(POLL_TIMEOUT, Socket::WAIT_READ);
-				if(ret == Socket::WAIT_READ) {
+				auto ret = sock.wait(POLL_TIMEOUT, true, false);
+				if(ret.first) {
 					ConnectionManager::getInstance()->accept(sock, secure);
 				}
 			}
@@ -273,7 +275,7 @@ void ConnectionManager::accept(const Socket& sock, bool secure) noexcept {
 		floodCounter = now + FLOOD_ADD;
 	} else {
 		if(false && now + FLOOD_TRIGGER < floodCounter) {
-			Socket s;
+			Socket s(Socket::TYPE_TCP);
 			try {
 				s.accept(sock);
 			} catch(const SocketException&) {

@@ -60,7 +60,8 @@ const string AdcHub::BLO0_SUPPORT("ADBLO0");
 
 const vector<StringList> AdcHub::searchExts;
 
-AdcHub::AdcHub(const string& aHubURL, bool secure) : Client(aHubURL, '\n', secure), oldPassword(false), sid(0) {
+AdcHub::AdcHub(const string& aHubURL, bool secure) :
+	Client(aHubURL, '\n', secure), oldPassword(false), udp(Socket::TYPE_UDP), sid(0) {
 	TimerManager::getInstance()->addListener(this);
 }
 
