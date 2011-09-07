@@ -480,9 +480,9 @@ void Util::decodeUrl(const string& url, string& protocol, string& host, string& 
 				return;
 			}
 
-			host = url.substr(authorityStart, hostEnd - authorityStart);
+			host = url.substr(authorityStart + 1, hostEnd - authorityStart - 1);
 			if(hostEnd + 1 < url.size() && url[hostEnd + 1] == ':') {
-				portStart = hostEnd + 1;
+				portStart = hostEnd + 2;
 			}
 		} else {
 			size_t hostEnd;
@@ -519,7 +519,7 @@ void Util::decodeUrl(const string& url, string& protocol, string& host, string& 
 	dcdebug("\n");
 	path = url.substr(fileStart, fileEnd - fileStart);
 	query = url.substr(queryStart, queryEnd - queryStart);
-	fragment = url.substr(fragmentStart, fragmentStart);
+	fragment = url.substr(fragmentStart, fragmentEnd - fragmentStart);
 }
 
 map<string, string> Util::decodeQuery(const string& query) {
