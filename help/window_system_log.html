@@ -23,6 +23,8 @@
 	be added for each hashed file (see below).</dd>
 	<dt>File list refresh finished</dt>
 	<dd>This indicates an end of the current hashing procedure. As long as your shared files remain unchaged the filelist reflects the current state of your share.</dd>
+	<dt>File list [path] generated</dt>
+	<dd>A new file containing your own file list has just been generated. Own file lists are created before the first upload request.</dd>
 	<dt>Finished hashing: [path] ([size] at [speed])</dt>
 	<dd>Shown for each successfully hashed file including the full path, filesize and hashing speed. Speed value may won't be added for small files.</dd>
 	<dt>[Nick]: matched [x] files</dt>
@@ -39,14 +41,16 @@
 	<dt>Generated new TLS certificate</dt>
 	<dd>As <a href="settings_certs.html">Security certificates</a> enabled but no existing TLS certificate files found (or they are invalid), new certificate files generated in the 'Certificates' subfolder of the directory where DC++ configuraton files are stored.</dd>
 	<dt>Port mapping: Successfully created port mappings (Transfers: [port1], Searches: [port2], Encrypted transfers: [port3]) on the [router name] device with the [interface identification] interface</dt>
-	<dd>DC++ has managed to automatically create port forwarding rules on the router with <a href="faq_mapping.html">NAT-PMP or UPnP</a>.</dd>
+	<dd>DC++ has managed to automatically create port forwarding rules on the router using <a href="faq_mapping.html">NAT-PMP or UPnP</a>.</dd>
+	<dt>Port mapping: Successfully removed port mappings from the [router name] device with the [interface identification] interface</dt>
+	<dd>DC++ has managed to remove the existing port forwarding rules from the router made by <a href="faq_mapping.html">NAT-PMP or UPnP</a>.</dd>
 	<dt>Connectivity: Determining the best connectivity settings...</dt>
 	<dd>This message signals that <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> has started.</dd>
 	<dt>Connectivity: Public IP address detected, selecting active mode with direct connection</dt>
 	<dd>It means that <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> determined that you have a public IP address so it assumed that you are directly connected to the Internet.</dd>
-	<dt>Connectivity: Local network with possible NAT detected, trying to map the ports using UPnP...</dt>
-	<dd><a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> determined that you have a <a href="non-routable.html">private</a> IP address and it started to discover for a possible UPnP capable gateway (router).</dd>
-	<dt>Connectivity: Automatic setup of active mode has failed. You may want to set up your connection manually for better connectivity</dt>
+	<dt>Connectivity: Local network with possible NAT detected, trying to map the ports...</dt>
+	<dd><a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> determined that you have a <a href="non-routable.html">private</a> IP address and it started to discover for a possible gateway (router) capable of automatic port mapping.</dd>
+	<dt>Connectivity: Active mode could not be achieved; a manual configuration is recommended for better connectivity</dt>
 	<dd><a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> did not find any way to configure any kind of active connection so as a last resort it selected passive connection mode with <a href="http://en.wikipedia.org/wiki/NAT_traversal" target="_blank" class="external">NAT traversal</a> capability.</dd>
 </dl>
 
@@ -58,18 +62,20 @@
 	<dt>Error registering Magnet link handler</dt>
 	<dd>These errors mean that DC++ was unable to register the appropriate link handler(s) in Windows, per the <a href="settings_advanced.html#registrymagnet">Register with Windows to handle magnet: URI links</a> and <a href="settings_advanced.html#registrydchubadc">Register with Windows to handle dchub://, adc:// and adcs:// URL links</a> settings. The most common reason of an unsuccesful registration is that the user account under which DC++ is running does not have appropriate rights for (write) access the required parts of the Windows Registry.</dd>
 	<dt>Port mapping: Failed to get external IP</dt>
-	<dd>This error message can appear when DC++ tries to map ports for incoming connections via NAT-PMP / UPnP and means that although port mappings were successful, DC++ couldn't get the external IP address from the UPnP device. If this message persists, it may be because of broken NAT-PMP / UPnP support of the device. This is not very important, since DC++ can still gather the external IP from connected hubs <a href="settings_connectivity_manual.html#noipoverride">if it is allowed to do so</a>.</dd>
+	<dd>This error message can appear when DC++ tries to map ports for incoming connections via NAT-PMP / UPnP and means that although port mappings were successful, DC++ couldn't get the external IP address from the gateway (router) device. If this message persists, it may be because of broken NAT-PMP / UPnP support of the device. This is not very important, since DC++ can still gather the external IP from connected hubs <a href="settings_connectivity_manual.html#noipoverride">if it is allowed to do so</a>.</dd>
 	<dt>Port mapping: Failed to create port mappings</dt>
-	<dd>This error message can appear when DC++ tries to map ports for incoming connections via NAT-PMP / UPnP. It means that no compatible device could be found or that the device in question is not responding. This message can occur during <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a>, when DC++ is trying to discover a possible NAT-PMP / UPnP device for setting up active mode. This message is a real problem only if you selected the 'Use UPnP to let DC++ configure my router' option manually in <a href="settings_connectivity_manual.html#connection">Incoming connection settings</a>. In this case, refer to the <a href="faq_mapping.html">port mapping FAQ</a> for more information.</dd>
+	<dd>This error message can appear when DC++ tries to map ports for incoming connections via NAT-PMP / UPnP. It means that no compatible device could be found or that the device in question is not responding. This message can occur during <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a>, when DC++ is trying to discover a possible NAT-PMP / UPnP device for setting up active mode. This message is a real problem only if you selected the 'Let DC++ configure my router (NAT-PMP / UPnP)' option manually in <a href="settings_connectivity_manual.html#connection">Incoming connection settings</a>. In this case, refer to the <a href="faq_mapping.html">port mapping FAQ</a> for more information.</dd>
 	<dt>Port mapping: Failed to remove port mappings</dt>
-	<dd>This message can appear mostly at shutdown of DC++ and means that UPnP port mappings created before couldn't be successfully removed. If this message persists the most probable reason is broken UPnP support of the (router) device.</dd>
-	<dt>Port mapping: Another UPnP port mapping attempt is in progress...</dt>
-	<dd>This means that an <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> attempt was started too soon (the previous operation has not been finished). Try restarting DC++ if this message persists. If restart DC++ does not help the most probable reason is broken UPnP support of your (router) device.</dd>
-	<dt>Port mapping: Failed to initalize the [interface name] interface</dt>
-	<dd>DC++ failed to initalize one of its UPnP interface and will try to use the next one in the row.</dd>
-	<dt>Port mapping: The [interface name] interface has failed to map the [TCP/UDP/TLS] [port number] port</dt>
-	<dd>The currently used UPnP interface failed to map the shown port. DC++ will try to use the next UPnP interface in the row.</dd>
-	<dt>Connectivity: Unable to open TCP/UDP/TLS port(s). You must set up your connection manually</dt>
+	<dd>This message can appear mostly at shutdown of DC++ and means that port mappings created before couldn't be successfully removed. If this message persists the most probable reason is broken NAT-PMP / UPnP support of the (router) device.</dd>
+	<dt>Port mapping: Another port mapping attempt is in progress...</dt>
+	<dd>This means that an <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> attempt was started too soon (the previous operation has not been finished). Try restarting DC++ if this message persists. If restart DC++ does not help the most probable reason is broken NAT-PMP / UPnP support of your (router) device.</dd>
+	<dt>Port mapping: Failed to initalize the [interface identification] interface</dt>
+	<dd>DC++ failed to initalize one of its NAT-PMP or UPnP interfaces and will try to use the next one in the row.</dd>
+	<dt>Port mapping: Failed to map the [Transfer/Encrypted transfer/Search] port ([port number] [TCP/UDP]) with the [interface identification] interface</dt>
+	<dd>The currently used port mapping interface failed to map the shown port. DC++ will try to use the next automatic port mapper interface in the row.</dd>
+	<dt>Port mapping: Failed to remove port mappings from the [router name] device with the [interface identification] interface</dt>
+	<dd>DC++ has failed to remove the existing port forwarding rules from the router made by <a href="faq_mapping.html">NAT-PMP or UPnP</a>.</dd>
+	<dt>Connectivity: Unable to open TCP/UDP/TLS port(s); connectivity settings must be configured manually</dt>
 	<dd>You can get this message only when <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> is enabled and DC++ failed to open port(s) before trying to determine the available conncetion types. Possible reasons include the choosen port(s) are already occupied by another application or DC++ is blocked by a <a href="get_started.html#firewall">software firewall</a>.</dd>
 	<dt>Not listening for connections - please restart DC++</dt>
 	<dd>An unrecoverable low level networking error keeps DC++ from listening for connections. Search and download won't work until you restart DC++.</dd>
@@ -80,15 +86,19 @@
 	<dt>Search enabled again</dt>
 	<dd>Because of a low level networking error DC++ does not listen for search results. The problem lasts until the next 'Search enabled again' message.</dd>
 	<dt>Failed to load certificate file</dt>
-	<dd>There was a problem loading the certificate file, its contents are damaged or invalid.</dd>
+	<dd>There was a problem loading your own certificate file, its contents are damaged or invalid.</dd>
 	<dt>Failed to load private key</dt>
-	<dd>There was a problem loading the private key file, its contents are damaged or invalid.</dd>
+	<dd>There was a problem loading your own private key file, its contents are damaged or invalid.</dd>
+	<dt>Failed to load trusted certificate from [path]</dt>
+	<dd>There was a problem loading one of the trusted certificate files, its contents are damaged or invalid.</dd>
 	<dt>TLS disabled, failed to generate certificate: [error message]</dt>
 	<dd>TLS certificate files are missing or could not be opened. DC++ tried to regenrerate them but it wasn't successful, either. Make sure you have write access rights to the 'Certificates' subfolder of the directory where DC++ configuraton files are stored.</dd>
 	<dt>TLS disabled, no certificate file set</dt>
 	<dd>TLS can't be used because no certificate files set. You should set or generate them properly in the <a href="settings_certs.html">Security certificates</a> page.</dd>
 	<dt>CRC32 inconsistency (SFV-Check) : [path]</dt>
 	<dd>You have <a href="settings_advanced.html#sfvcheck">automatic SFV checking enabled</a> and a downloaded file is not passed the SFV-check. The file will be downloaded again.</dd>
+	<dt>File list refresh in progress, please wait for it to finish before trying to refresh again</dt>
+	<dd>Only one file list refreshing operation can be run at the same time.</dd>
 	<dt>File list refresh failed: [error message]</dt>
 	<dd>The background process for refreshing file list is failed to start.</dd>
 	<dt>Hashing failed: [error message]</dt>
@@ -109,13 +119,15 @@
 	<dd>There were problems opening a downloaded filelist, its corrupted or its size is <a href="settings_expert.html#maxlistsize">bigger than the maximum size allowed to open</a>.</dd>
 	<dt>Unable to send file [path]: [error message]</dt>
 	<dd>There was a problem preparing file [path] upon an upload request by a peer.</dd>
-	
+	<dt>Invalid ADL Search regular expression: [regex]</dt>
+	<dd>There was a problem applying an existing enabled ADLSearch filter with [regex] to a file list.</dd>
+
 	<!-- This can be reused when the message will go to the log again...
 	<dt>Someone is trying to use your client to spam [ip address], please urge hub owner to fix this</dt>
 	<dd>You are connected to an insecure DC hub where malicious people using your DC client to attack a web server. The owner the hub should
 	either upgrade the hubsoftware or set it up correctly to avoid this kind of attacks. As long as you are logged into this hub in its current state you help malicious people to block normal operation of victim servers; not to mention the extra strain the flood causes on <i>your</i> connection.</dd>
 	-->
-</dl>	
+</dl>
 
 </body>
 </html>
