@@ -130,13 +130,15 @@ void BufferedSocket::threadConnect(const string& aAddr, const string& aPort, con
 	while (GET_TICK() < endTime) {
 		dcdebug("threadConnect attempt %s %s:%s\n", localPort.c_str(), aAddr.c_str(), aPort.c_str());
 		try {
+
+			setOptions();
+
 			if(proxy) {
 				sock->socksConnect(aAddr, aPort, LONG_TIMEOUT);
 			} else {
 				sock->connect(aAddr, aPort, localPort);
 			}
 
-			setOptions();
 			bool connSucceeded;
 			while(!(connSucceeded = sock->waitConnected(POLL_TIMEOUT)) && endTime >= GET_TICK()) {
 				if(disconnecting) return;
