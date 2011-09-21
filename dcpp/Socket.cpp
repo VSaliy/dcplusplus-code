@@ -636,7 +636,7 @@ void Socket::writeTo(const string& aAddr, const string& aPort, const void* aBuff
  * @throw SocketException Select or the connection attempt failed.
  */
 std::pair<bool, bool> Socket::wait(uint32_t millis, bool checkRead, bool checkWrite) {
-	timeval tv { millis/1000, (millis%1000)*1000 };
+	timeval tv = { millis/1000, (millis%1000)*1000 };
 	fd_set rfd, wfd;
 	fd_set *rfdp = NULL, *wfdp = NULL;
 
