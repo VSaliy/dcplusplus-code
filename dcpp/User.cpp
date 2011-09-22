@@ -37,15 +37,13 @@ bool Identity::isTcpActive() const {
 }
 
 bool Identity::isTcp4Active() const {
-	if(getIp4().empty())
-		return false;
-	return user->isSet(User::NMDC) ? !user->isSet(User::PASSIVE) : supports(AdcHub::TCP4_FEATURE);
+	return (!user->isSet(User::NMDC)) ?
+		!getIp4().empty() && supports(AdcHub::TCP4_FEATURE) :
+		!user->isSet(User::PASSIVE);
 }
 
 bool Identity::isTcp6Active() const {
-	if(getIp6().empty())
-		return false;
-	return user->isSet(User::NMDC) ? false : supports(AdcHub::TCP6_FEATURE);
+	return !getIp6().empty() && supports(AdcHub::TCP6_FEATURE);
 }
 
 bool Identity::isUdpActive() const {
@@ -73,11 +71,7 @@ string Identity::getUdpPort() const {
 }
 
 string Identity::getIp() const {
-	if(getIp6().empty() || getUdp6Port().empty()) {
-		return getIp4();
-	}
-
-	return getIp6();
+	return getIp6().empty() ? getIp4() : getIp6();
 }
 
 void Identity::getParams(StringMap& sm, const string& prefix, bool compatibility) const {
