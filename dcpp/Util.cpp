@@ -30,6 +30,7 @@
 #include "ClientManager.h"
 #include "FastAlloc.h"
 #include "File.h"
+#include "GeoIP.h"
 #include "LogManager.h"
 #include "SettingsManager.h"
 #include "SimpleXML.h"
@@ -54,6 +55,8 @@ using std::make_pair;
 FastCriticalSection FastAllocBase::cs;
 #endif
 
+GeoIP geo6, geo4;
+
 string Util::emptyString;
 wstring Util::emptyStringW;
 tstring Util::emptyStringT;
@@ -62,9 +65,6 @@ bool Util::away = false;
 bool Util::manualAway = false;
 string Util::awayMsg;
 time_t Util::awayTime;
-
-Util::CountryList Util::countries;
-StringList Util::countryNames;
 
 string Util::paths[Util::PATH_LAST];
 
@@ -197,59 +197,8 @@ void Util::initialize(PathsMap pathOverrides) {
 	File::ensureDirectory(paths[PATH_USER_CONFIG]);
 	File::ensureDirectory(paths[PATH_USER_LOCAL]);
 
-	try {
-		// This product includes GeoIP data created by MaxMind, available from http://maxmind.com/
-		// Updates at http://www.maxmind.com/app/geoip_country
-		string file = getPath(PATH_RESOURCES) + "GeoIpCountryWhois.csv";
-		string data = File(file, File::READ, File::OPEN).read();
-
-		const char* start = data.c_str();
-		string::size_type linestart = 0, lineend, pos, pos2;
-		auto last = countries.end();
-		uint32_t startIP = 0, endIP = 0, endIPprev = 0;
-
-		countryNames.push_back(_("Unknown"));
-		auto addCountry = [](const string& countryName) -> size_t {
-			auto begin = countryNames.cbegin(), end = countryNames.cend();
-			auto pos = std::find(begin, end, countryName);
-			if(pos != end)
-				return pos - begin;
-			countryNames.push_back(countryName);
-			return countryNames.size() - 1;
-		};
-
-		while(true) {
-			pos = data.find(',', linestart);
-			if(pos == string::npos) break;
-			pos = data.find(',', pos + 1);
-			if(pos == string::npos) break;
-			startIP = toUInt32(start + pos + 2) - 1;
-
-			pos = data.find(',', pos + 1);
-			if(pos == string::npos) break;
-			endIP = toUInt32(start + pos + 2);
-
-			pos = data.find(',', pos + 1);
-			if(pos == string::npos) break;
-
-			pos2 = data.find(',', pos + 1);
-			if(pos2 == string::npos) break;
-
-			lineend = data.find('\n', pos2);
-			if(lineend == string::npos) break;
-
-			if(startIP != endIPprev)
-				last = countries.insert(last, make_pair(startIP, 0));
-			pos += 2;
-			pos2 += 2;
-			last = countries.insert(last, make_pair(endIP, addCountry(str(F_("%1% - %2%") %
-				data.substr(pos, 2) % data.substr(pos2, lineend - 1 - pos2)))));
-
-			endIPprev = endIP;
-			linestart = lineend + 1;
-		}
-	} catch(const FileException&) {
-	}
+	geo6.init(getPath(PATH_USER_LOCAL) + "GeoIPv6.dat");
+	geo4.init(getPath(PATH_USER_LOCAL) + "GeoIP.dat");
 }
 
 void Util::migrate(const string& file) {
@@ -996,29 +945,17 @@ uint32_t Util::rand() {
 	return y;
 }
 
-/*	getIpCountry
-	This function returns the full country name of an ip, eg "Portugal".
-	more info: http://www.maxmind.com/app/csv
-*/
-const string& Util::getIpCountry(const string& IP) {
-	if(BOOLSETTING(GET_USER_COUNTRY)) {
-		if(count(IP.begin(), IP.end(), '.') != 3)
-			return emptyString;
+string Util::getCountry(const string& ip, int flags) {
+	if(BOOLSETTING(GET_USER_COUNTRY) && !ip.empty()) {
 
-		//e.g IP 23.24.25.26 : w=23, x=24, y=25, z=26
-		string::size_type a = IP.find('.');
-		string::size_type b = IP.find('.', a+1);
-		string::size_type c = IP.find('.', b+2);
+		if(flags & V6) {
+			auto ret = geo6.getCountry(ip);
+			if(!ret.empty())
+				return ret;
+		}
 
-		/// @todo this is impl dependant and is working by chance because we are currently using atoi!
-		uint32_t ipnum = (toUInt32(IP.c_str()) << 24) |
-			(toUInt32(IP.c_str() + a + 1) << 16) |
-			(toUInt32(IP.c_str() + b + 1) << 8) |
-			(toUInt32(IP.c_str() + c + 1) );
-
-		auto i = countries.lower_bound(ipnum);
-		if(i != countries.end()) {
-			return countryNames[i->second];
+		if(flags & V4) {
+			return geo4.getCountry(ip);
 		}
 	}
 

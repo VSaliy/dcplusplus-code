@@ -489,7 +489,7 @@ void SearchFrame::SearchInfo::update() {
 		columns[COLUMN_IP] = Text::toT(sr->getIP());
 		if(!columns[COLUMN_IP].empty()) {
 			// Only attempt to grab a country mapping if we actually have an IP address
-			const string& country = Util::getIpCountry(sr->getIP());
+			auto country = Util::getCountry(sr->getIP());
 			if(!country.empty())
 				columns[COLUMN_IP] = Text::toT(country) + _T(" (") + columns[COLUMN_IP] + _T(")");
 		}

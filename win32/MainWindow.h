@@ -90,7 +90,8 @@ private:
 	struct {
 		tstring homepage;
 		tstring downloads;
-		tstring geoipfile;
+		tstring geoip6;
+		tstring geoip4;
 		tstring faq;
 		tstring help;
 		tstring discuss;

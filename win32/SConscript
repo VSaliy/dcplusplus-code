@@ -24,7 +24,7 @@ if 'g++' in env['LINK']: # MinGW
 elif env['LINK'] == 'link': # MSVC
 	env.Append(LIBS = ['dbghelp'])
 
-env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib', '#/miniupnpc', '#/dwt/include'])
+env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/dwt/include'])
 
 openssl_lib = '#/openssl/lib/'
 if env['arch'] != 'x86':
@@ -44,7 +44,7 @@ env.Depends(res, 'resource.h')
 headers=dev.get_sources(source_path, "*.h")
 dev.i18n(source_path, env, [sources,headers], 'dcpp-win32')
 
-ret = env.Program(target, [sources, res, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.miniupnpc, dev.natpmp, dev.dwt, dev.intl])
+ret = env.Program(target, [sources, res, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.dwt, dev.intl])
 
 if 'gcc' in env['TOOLS']:
 	# strip debug info to a separate PDB file

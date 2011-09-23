@@ -734,7 +734,7 @@ void TransferView::starting(UpdateInfo* ui, Transfer* t) {
 	ui->setChunk(t->getPos(), t->getSize());
 	const UserConnection& uc = t->getUserConnection();
 	ui->setCipher(Text::toT(uc.getCipherName()));
-	const string& country = Util::getIpCountry(uc.getRemoteIp());
+	auto country = Util::getCountry(uc.getRemoteIp());
 	if(!country.empty())
 		ui->setCountry(Text::toT(country));
 	ui->setIP(Text::toT(uc.getRemoteIp()));
