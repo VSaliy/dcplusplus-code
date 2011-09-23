@@ -1,0 +1,18 @@
+Import('dev source_path')
+
+env, target, sources = dev.prepare_build(source_path, 'geoip', source_glob = '*.c', in_bin = False)
+
+if dev.is_win32():
+	env.Append(CPPDEFINES = ['WIN32', '_WIN32_WINNT=0x501', '_WIN32_IE=0x501', 'WINVER=0x501', 'WIN32_LEAN_AND_MEAN', 'HAVE_STDINT_H=1', 'PACKAGE_VERSION=0'])
+
+	if env['CC'] == 'cl': # MSVC
+		env.Append(CPPDEFINES = ['ssize_t=SSIZE_T'])
+
+ret = env.StaticLibrary(target, sources)
+
+# copy the DB to the build dir.
+import os
+for file in Glob('db/*.gz'):
+	env.Command(dev.get_build_path('bin/') + os.path.basename(str(file)), file, Copy('$TARGET', '$SOURCE'))
+
+Return('ret')
