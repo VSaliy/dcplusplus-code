@@ -125,8 +125,9 @@ no_backup:
 SectionEnd
 
 Section $(SECTION_IP_COUNTRY)
-  SetOutPath $INSTDIR
-  File "GeoIPCountryWhois.csv"
+  SetOutPath "$LOCALAPPDATA\DC++"
+  File "GeoIPv6.dat.gz"
+  File "GeoIP.dat.gz"
 SectionEnd
 
 Section $(SECTION_START_MENU)
@@ -204,7 +205,7 @@ Section "un.Uninstall"
   Delete "$INSTDIR\LICENSE-GeoIP.txt" ; now in ThirdPartyLicenses; remove if present.
   Delete "$INSTDIR\LICENSE-OpenSSL.txt" ; now in ThirdPartyLicenses; remove if present.
   Delete "$INSTDIR\mingwm10.dll" ; no longer required, remove if present.
-  Delete "$INSTDIR\GeoIPCountryWhois.csv"
+  Delete "$INSTDIR\GeoIPCountryWhois.csv" ; no longer required, remove if present.
   Delete "$INSTDIR\ThirdPartyLicenses.txt"
 
   ; Delete the whole locale directory

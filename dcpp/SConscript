@@ -28,7 +28,7 @@ Import('dev source_path')
 
 env, target, sources = dev.prepare_build(source_path, 'dcpp', in_bin = False, precompiled_header = 'stdinc')
 
-env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib'])
+env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib', '#/geoip'])
 
 env.Append(CPPDEFINES=["BUILDING_DCPP=1"])
 

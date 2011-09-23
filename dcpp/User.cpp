@@ -142,8 +142,9 @@ string Identity::getConnection() const {
 	return get("CO");
 }
 
-const string& Identity::getCountry() const {
-	return Util::getIpCountry(getIp());
+string Identity::getCountry() const {
+	bool v6 = !getIp6().empty();
+	return Util::getCountry(v6 ? getIp6() : getIp4(), v6 ? Util::V6 : Util::V4);
 }
 
 string Identity::get(const char* name) const {

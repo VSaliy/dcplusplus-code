@@ -428,7 +428,8 @@ public:
 	static int stricmp(const wstring& a, const wstring& b) { return stricmp(a.c_str(), b.c_str()); }
 	static int strnicmp(const wstring& a, const wstring& b, size_t n) { return strnicmp(a.c_str(), b.c_str(), n); }
 
-	static const string& getIpCountry(const string& IP);
+	enum { V6 = 1 << 1, V4 = 1 << 2 };
+	static string getCountry(const string& ip, int flags = V6 | V4);
 
 	static bool getAway();
 	static void setAway(bool aAway);
@@ -455,10 +456,6 @@ private:
 	static bool manualAway;
 	static string awayMsg;
 	static time_t awayTime;
-
-	typedef map<uint32_t, size_t> CountryList;
-	static CountryList countries;
-	static StringList countryNames;
 
 	static void loadBootConfig();
 };

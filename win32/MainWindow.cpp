@@ -107,7 +107,8 @@ fullSlots(false)
 {
 	links.homepage = _T("http://dcplusplus.sourceforge.net/");
 	links.downloads = links.homepage + _T("download/");
-	links.geoipfile = _T("http://www.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip");
+	links.geoip6 = _T("http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz");
+	links.geoip4 = _T("http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz");
 	links.faq = links.homepage + _T("faq/");
 	links.help = links.homepage + _T("help/");
 	links.discuss = links.homepage + _T("discussion/");
@@ -360,7 +361,8 @@ void MainWindow::initMenu() {
 		help->appendItem(T_("Community news"), [this] { WinUtil::openLink(links.community); });
 		help->appendSeparator();
 
-		help->appendItem(T_("GeoIP database update"), [this] { WinUtil::openLink(links.geoipfile); });
+		help->appendItem(T_("GeoIP database update (IPv6)"), [this] { WinUtil::openLink(links.geoip6); });
+		help->appendItem(T_("GeoIP database update (IPv4)"), [this] { WinUtil::openLink(links.geoip4); });
 	}
 
 	mainMenu->setMenu();
@@ -1259,8 +1261,11 @@ void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/,
 				links.downloads = Text::toT(xml.getChildData());
 			}
 			xml.resetCurrentChild();
-			if(xml.findChild("GeoIP database update")) {
-				links.geoipfile = Text::toT(xml.getChildData());
+			if(xml.findChild("GeoIPv6")) {
+				links.geoip6 = Text::toT(xml.getChildData());
+			}
+			if(xml.findChild("GeoIPv4")) {
+				links.geoip4 = Text::toT(xml.getChildData());
 			}
 			xml.resetCurrentChild();
 			if(xml.findChild("Faq")) {
