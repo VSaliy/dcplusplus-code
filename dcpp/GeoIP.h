@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_DCPP_GEOIP_H
 
 #include <GeoIP.h>
+#include <string>
 
 namespace dcpp {
 
