@@ -63,6 +63,8 @@ unsigned HubListsDlg::getHelpId(HelpFields field) const {
 		case HELP_EDIT: return IDH_PUBLIC_HUB_LISTS_EDIT;
 		case HELP_REMOVE: return IDH_PUBLIC_HUB_LISTS_REMOVE;
 	}
+
+	return 0;
 }
 
 void HubListsDlg::add(const tstring& s) {

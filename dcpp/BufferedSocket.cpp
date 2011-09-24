@@ -40,9 +40,9 @@ using std::max;
 // Polling is used for tasks...should be fixed...
 #define POLL_TIMEOUT 250
 
-BufferedSocket::BufferedSocket(char aSeparator) :
+BufferedSocket::BufferedSocket(char aSeparator, bool v4only) :
 separator(aSeparator), mode(MODE_LINE), dataBytes(0), rollback(0), state(STARTING),
-disconnecting(false)
+disconnecting(false), v4only(v4only)
 {
 	start();
 
@@ -74,7 +74,7 @@ void BufferedSocket::setMode (Modes aMode, size_t aRollback) {
 	mode = aMode;
 }
 
-void BufferedSocket::setSocket(std::unique_ptr<Socket> s) {
+void BufferedSocket::setSocket(unique_ptr<Socket>&& s) {
 	dcassert(!sock.get());
 	sock = move(s);
 }
@@ -89,7 +89,7 @@ void BufferedSocket::setOptions() {
 void BufferedSocket::accept(const Socket& srv, bool secure, bool allowUntrusted) {
 	dcdebug("BufferedSocket::accept() %p\n", (void*)this);
 
-	std::unique_ptr<Socket> s(secure ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : new Socket(Socket::TYPE_TCP));
+	unique_ptr<Socket> s(secure ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : new Socket(Socket::TYPE_TCP));
 
 	s->accept(srv);
 
@@ -106,7 +106,7 @@ void BufferedSocket::connect(const string& aAddress, const string& aPort, bool s
 
 void BufferedSocket::connect(const string& aAddress, const string& aPort, const string& localPort, NatRoles natRole, bool secure, bool allowUntrusted, bool proxy) {
 	dcdebug("BufferedSocket::connect() %p\n", (void*)this);
-	std::unique_ptr<Socket> s(secure ? (natRole == NAT_SERVER ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : CryptoManager::getInstance()->getClientSocket(allowUntrusted)) : new Socket(Socket::TYPE_TCP));
+	unique_ptr<Socket> s(secure ? (natRole == NAT_SERVER ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : CryptoManager::getInstance()->getClientSocket(allowUntrusted)) : new Socket(Socket::TYPE_TCP));
 
 	s->setLocalIp4(SETTING(BIND_ADDRESS));
 	s->setLocalIp6(SETTING(BIND_ADDRESS6));

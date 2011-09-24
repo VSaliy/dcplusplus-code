@@ -120,6 +120,7 @@ private:
 	void updateFromTag(Identity& id, const string& tag);
 
 	virtual string checkNick(const string& aNick);
+	virtual bool v4only() const { return true; }
 
 	// TimerManagerListener
 	virtual void on(Second, uint64_t aTick) noexcept;

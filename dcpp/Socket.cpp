@@ -298,7 +298,7 @@ uint16_t Socket::listen(const string& port) {
 			}
 		}
 
-		if(!sock6.valid() && a->ai_family == AF_INET6) {
+		if(!sock6.valid() && a->ai_family == AF_INET6 && !v4only) {
 			create(*a);
 			if(ret != 0) {
 				((sockaddr_in6*)a->ai_addr)->sin6_port = ret;
@@ -328,7 +328,7 @@ void Socket::connect(const string& aAddr, const string& aPort, const string& loc
 
 	for(auto ai = addr.get(); ai; ai = ai->ai_next) {
 		if((ai->ai_family == AF_INET && !sock4.valid()) ||
-			(ai->ai_family == AF_INET6 && !sock6.valid()))
+			(ai->ai_family == AF_INET6 && !sock6.valid() && !v4only))
 		{
 			auto sock = create(*ai);
 			auto &localIp = ai->ai_family == AF_INET ? getLocalIp4() : getLocalIp6();

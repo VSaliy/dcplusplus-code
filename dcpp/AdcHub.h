@@ -130,6 +130,7 @@ private:
 	void unknownProtocol(uint32_t target, const string& protocol, const string& token);
 	bool secureAvail(uint32_t target, const string& protocol, const string& token);
 
+	virtual bool v4only() const { return false; }
 	virtual void on(Connecting) noexcept { fire(ClientListener::Connecting(), this); }
 	virtual void on(Connected) noexcept;
 	virtual void on(Line, const string& aLine) noexcept;

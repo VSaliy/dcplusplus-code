@@ -96,7 +96,7 @@ remove(0)
 		// dummy grid so that the check-box doesn't fill the whole row.
 		CheckBoxPtr shareHidden = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Share hidden files")));
 		items.push_back(Item(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL));
-		auto last = items.back();
+
 		shareHidden->onClicked([=] { handleShareHiddenClicked(shareHidden, SettingsManager::SHARE_HIDDEN); });
 		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);
 	}

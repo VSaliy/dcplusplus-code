@@ -57,8 +57,8 @@ public:
 	 * @param sep Line separator
 	 * @return An unconnected socket
 	 */
-	static BufferedSocket* getSocket(char sep) {
-		return new BufferedSocket(sep);
+	static BufferedSocket* getSocket(char sep, bool v4only = false) {
+		return new BufferedSocket(sep, v4only);
 	}
 
 	static void putSocket(BufferedSocket* aSock) {
@@ -141,7 +141,7 @@ private:
 		InputStream* stream;
 	};
 
-	BufferedSocket(char aSeparator);
+	BufferedSocket(char aSeparator, bool v4only);
 
 	virtual ~BufferedSocket();
 
@@ -162,6 +162,7 @@ private:
 	std::unique_ptr<Socket> sock;
 	State state;
 	bool disconnecting;
+	bool v4only;
 
 	virtual int run();
 
@@ -177,7 +178,7 @@ private:
 	bool checkEvents();
 	void checkSocket();
 
-	void setSocket(std::unique_ptr<Socket> s);
+	void setSocket(std::unique_ptr<Socket>&& s);
 	void setOptions();
 	void shutdown();
 	void addTask(Tasks task, TaskData* data);
