@@ -94,6 +94,7 @@ unsigned StringListDlg::getHelpId(HelpFields field) const {
 		case HELP_EDIT: return IDH_STRING_LIST_EDIT;
 		case HELP_REMOVE: return IDH_STRING_LIST_REMOVE;
 	}
+	return 0;
 }
 
 void StringListDlg::add(const tstring& s) {

@@ -136,7 +136,7 @@ protected:
 		STATE_DISCONNECTED,	///< Nothing in particular
 	} state;
 
-	BufferedSocket* sock;
+	std::unique_ptr<BufferedSocket, void(*)(BufferedSocket*)> sock;
 
 	void updateCounts(bool aRemove);
 	void updateActivity() { lastActivity = GET_TICK(); }
@@ -154,6 +154,7 @@ protected:
 	virtual void on(Line, const string& aLine) noexcept;
 	virtual void on(Failed, const string&) noexcept;
 
+	virtual bool v4only() const = 0;
 private:
 
 	Client(const Client&);

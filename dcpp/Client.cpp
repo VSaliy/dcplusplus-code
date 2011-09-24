@@ -32,7 +32,7 @@ atomic<long> Client::counts[COUNT_UNCOUNTED];
 Client::Client(const string& hubURL, char separator_, bool secure_) :
 	myIdentity(ClientManager::getInstance()->getMe(), 0),
 	reconnDelay(120), lastActivity(GET_TICK()), registered(false), autoReconnect(false),
-	encoding(Text::systemCharset), state(STATE_DISCONNECTED), sock(0),
+	encoding(Text::systemCharset), state(STATE_DISCONNECTED), sock(NULL, &BufferedSocket::putSocket),
 	hubUrl(hubURL),separator(separator_),
 	secure(secure_), countType(COUNT_UNCOUNTED)
 {
@@ -66,10 +66,7 @@ void Client::reconnect() {
 }
 
 void Client::shutdown() {
-	if(sock) {
-		BufferedSocket::putSocket(sock);
-		sock = 0;
-	}
+	sock.reset();
 }
 
 void Client::reloadSettings(bool updateNick) {
@@ -96,7 +93,7 @@ void Client::reloadSettings(bool updateNick) {
 
 void Client::connect() {
 	if(sock)
-		BufferedSocket::putSocket(sock);
+		sock.reset();
 
 	setAutoReconnect(true);
 	setReconnDelay(120 + Util::rand(0, 60));
@@ -108,7 +105,7 @@ void Client::connect() {
 	state = STATE_CONNECTING;
 
 	try {
-		sock = BufferedSocket::getSocket(separator);
+		sock.reset(BufferedSocket::getSocket(separator, v4only()));
 		sock->addListener(this);
 		sock->connect(address, port, secure, BOOLSETTING(ALLOW_UNTRUSTED_HUBS), true);
 	} catch(const Exception& e) {
