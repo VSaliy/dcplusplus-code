@@ -19,8 +19,9 @@
 #ifndef DCPLUSPLUS_DCPP_GEOIP_H
 #define DCPLUSPLUS_DCPP_GEOIP_H
 
-#include <GeoIP.h>
 #include <string>
+
+typedef struct GeoIPTag GeoIP;
 
 namespace dcpp {
 
