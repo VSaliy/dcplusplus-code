@@ -22,8 +22,9 @@
 #include "File.h"
 #include "format.h"
 #include "Util.h"
+#include "ZUtils.h"
 
-#include <zlib.h>
+#include <GeoIP.h>
 
 namespace dcpp {
 
@@ -40,31 +41,9 @@ void GeoIP::init(const string& path) {
 			return;
 		}
 
-		// decompress the file.
-		try {
-			auto gz = gzopen((path + ".gz").c_str(), "rb");
-			if(!gz) {
-				return;
-			}
-			File dat(path, File::WRITE, File::CREATE);
-
-			const size_t BUF_SIZE = 64 * 1024;
-			ByteVector buf(BUF_SIZE);
-
-			while(true) {
-				auto read = gzread(gz, &buf[0], BUF_SIZE);
-				if(read >= 0) {
-					dat.write(&buf[0], read);
-				}
-				if(read < BUF_SIZE) {
-					break;
-				}
-			}
-
-			gzclose(gz);
-		} catch(const Exception&) {
-			return;
-		}
+		// there is a .gz file but no .dat; decompress the .gz.
+		try { GZ::decompress(path + ".gz", path); }
+		catch(const Exception&) { return; }
 	}
 
 	geo = GeoIP_open(path.c_str(), GEOIP_STANDARD);
