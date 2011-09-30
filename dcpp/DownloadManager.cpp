@@ -357,7 +357,7 @@ int64_t DownloadManager::getRunningAverage() {
 }
 
 void DownloadManager::logDownload(UserConnection* aSource, Download* d) {
-	StringMap params;
+	ParamMap params;
 	d->getParams(*aSource, params);
 	LOG(LogManager::DOWNLOAD, params);
 }

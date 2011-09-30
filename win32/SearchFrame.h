@@ -202,7 +202,7 @@ private:
 
 	CriticalSection cs;
 
-	StringMap ucLineParams;
+	ParamMap ucLineParams;
 
 	std::string token;
 

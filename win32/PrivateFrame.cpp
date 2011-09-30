@@ -178,8 +178,8 @@ void PrivateFrame::addChat(const tstring& aLine, bool log) {
 	setDirty(SettingsManager::BOLD_PM);
 
 	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
-		StringMap params;
-		params["message"] = Text::fromT(aLine);
+		ParamMap params;
+		params["message"] = [&aLine] { return Text::fromT(aLine); };
 		fillLogParams(params);
 		LOG(LogManager::PM, params);
 	}
@@ -200,7 +200,7 @@ bool PrivateFrame::preClosing() {
 }
 
 string PrivateFrame::getLogPath() const {
-	StringMap params;
+	ParamMap params;
 	fillLogParams(params);
 	return Util::validateFileName(LogManager::getInstance()->getPath(LogManager::PM, params));
 }
@@ -209,14 +209,14 @@ void PrivateFrame::openLog() {
 	WinUtil::openFile(Text::toT(getLogPath()));
 }
 
-void PrivateFrame::fillLogParams(StringMap& params) const {
+void PrivateFrame::fillLogParams(ParamMap& params) const {
 	const CID& cid = replyTo.getUser().user->getCID();
 	const string& hint = replyTo.getUser().hint;
-	params["hubNI"] = Util::toString(ClientManager::getInstance()->getHubNames(cid, hint, priv));
-	params["hubURL"] = Util::toString(ClientManager::getInstance()->getHubs(cid, hint, priv));
-	params["userCID"] = cid.toBase32();
-	params["userNI"] = ClientManager::getInstance()->getNicks(cid, hint, priv)[0];
-	params["myCID"] = ClientManager::getInstance()->getMe()->getCID().toBase32();
+	params["hubNI"] = [&] { return Util::toString(ClientManager::getInstance()->getHubNames(cid, hint, priv)); };
+	params["hubURL"] = [&] { return Util::toString(ClientManager::getInstance()->getHubs(cid, hint, priv)); };
+	params["userCID"] = [&cid] { return cid.toBase32(); };
+	params["userNI"] = [&] { return ClientManager::getInstance()->getNicks(cid, hint, priv)[0]; };
+	params["myCID"] = [] { return ClientManager::getInstance()->getMe()->getCID().toBase32(); };
 }
 
 void PrivateFrame::layout() {
@@ -349,7 +349,6 @@ void PrivateFrame::runUserCommand(const UserCommand& uc) {
 	if(!WinUtil::getUCParams(this, uc, ucLineParams))
 		return;
 
-	StringMap ucParams = ucLineParams;
-
+	auto ucParams = ucLineParams;
 	ClientManager::getInstance()->userCommand(replyTo.getUser(), uc, ucParams, true);
 }

@@ -258,7 +258,7 @@ void TransferView::runUserCommand(const UserCommand& uc) {
 	if(!WinUtil::getUCParams(this, uc, ucLineParams))
 		return;
 
-	StringMap ucParams = ucLineParams;
+	auto ucParams = ucLineParams;
 
 	int i = -1;
 	while((i = connections->getNext(i, LVNI_SELECTED)) != -1) {
@@ -266,7 +266,7 @@ void TransferView::runUserCommand(const UserCommand& uc) {
 		if(!itemI->getUser().user->isOnline())
 			continue;
 
-		StringMap tmp = ucParams;
+		auto tmp = ucParams;
 		/// @todo tmp["fileFN"] = Text::fromT(itemI->path + itemI->file);
 
 		// compatibility with 0.674 and earlier

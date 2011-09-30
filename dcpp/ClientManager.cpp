@@ -423,7 +423,7 @@ void ClientManager::privateMessage(const HintedUser& user, const string& msg, bo
 	}
 }
 
-void ClientManager::userCommand(const HintedUser& user, const UserCommand& uc, StringMap& params, bool compatibility) {
+void ClientManager::userCommand(const HintedUser& user, const UserCommand& uc, ParamMap& params, bool compatibility) {
 	Lock l(cs);
 	/** @todo we allow wrong hints for now ("false" param of findOnlineUser) because users
 	 * extracted from search results don't always have a correct hint; see
@@ -437,7 +437,6 @@ void ClientManager::userCommand(const HintedUser& user, const UserCommand& uc, S
 	ou->getIdentity().getParams(params, "user", compatibility);
 	ou->getClient().getHubIdentity().getParams(params, "hub", false);
 	ou->getClient().getMyIdentity().getParams(params, "my", compatibility);
-	ou->getClient().escapeParams(params);
 	ou->getClient().sendUserCmd(uc, params);
 }
 

@@ -28,6 +28,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include <boost/variant.hpp>
+
 namespace dcpp {
 
 using std::pair;
@@ -103,6 +105,8 @@ typedef vector<SearchResultPtr> SearchResultList;
 typedef vector<UploadPtr> UploadList;
 typedef vector<UserPtr> UserList;
 typedef vector<UserConnectionPtr> UserConnectionList;
+
+typedef unordered_map<string, boost::variant<string, std::function<string ()>>> ParamMap;
 
 }
 

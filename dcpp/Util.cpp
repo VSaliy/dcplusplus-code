@@ -231,15 +231,19 @@ void Util::loadBootConfig() {
 		}
 
 		if(boot.findChild("ConfigPath")) {
-			StringMap params;
+			ParamMap params;
 #ifdef _WIN32
-			// @todo load environment variables instead? would make it more useful on *nix
-			TCHAR path[MAX_PATH];
-
-			params["APPDATA"] = Text::fromT((::SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, path), path));
-			params["PERSONAL"] = Text::fromT((::SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path), path));
+			/// @todo load environment variables instead? would make it more useful on *nix
+			params["APPDATA"] = []() -> string {
+				TCHAR path[MAX_PATH];
+				return Text::fromT((::SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, path), path));
+			};
+			params["PERSONAL"] = []() -> string {
+				TCHAR path[MAX_PATH];
+				return Text::fromT((::SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path), path));
+			};
 #endif
-			paths[PATH_USER_CONFIG] = Util::formatParams(boot.getChildData(), params, false);
+			paths[PATH_USER_CONFIG] = Util::formatParams(boot.getChildData(), params);
 		}
 	} catch(const Exception& ) {
 		// Unable to load boot settings...
@@ -349,13 +353,13 @@ bool Util::checkExtension(const string& tmp) {
 	return true;
 }
 
-string Util::cleanPathChars(string aNick) {
+string Util::cleanPathChars(const string& str) {
+	string ret(str);
 	string::size_type i = 0;
-
-	while( (i = aNick.find_first_of("/.\\", i)) != string::npos) {
-		aNick[i] = '_';
+	while((i = ret.find_first_of("/.\\", i)) != string::npos) {
+		ret[i] = '_';
 	}
-	return aNick;
+	return ret;
 }
 
 string Util::addBrackets(const string& s) {
@@ -789,6 +793,12 @@ string Util::encodeURI(const string& aString, bool reverse) {
 	return tmp;
 }
 
+// used to parse the boost::variant params of the formatParams function.
+struct GetString : boost::static_visitor<string> {
+	string operator()(const string& s) const { return s; }
+	string operator()(const std::function<string ()>& f) const { return f(); }
+};
+
 /**
  * This function takes a string and a set of parameters and transforms them according to
  * a simple formatting rule, similar to strftime. In the message, every parameter should be
@@ -797,7 +807,7 @@ string Util::encodeURI(const string& aString, bool reverse) {
  * date/time and then finally written to the log file. If the parameter is not present at all,
  * it is removed from the string completely...
  */
-string Util::formatParams(const string& msg, const StringMap& params, bool filter) {
+string Util::formatParams(const string& msg, const ParamMap& params, FilterF filter) {
 	string result = msg;
 
 	string::size_type i, j, k;
@@ -806,33 +816,25 @@ string Util::formatParams(const string& msg, const StringMap& params, bool filte
 		if( (result.size() < j + 2) || ((k = result.find(']', j + 2)) == string::npos) ) {
 			break;
 		}
-		string name = result.substr(j + 2, k - j - 2);
-		StringMap::const_iterator smi = params.find(name);
-		if(smi == params.end()) {
-			result.erase(j, k-j + 1);
-			i = j;
-		} else {
-			if(smi->second.find_first_of("%\\./") != string::npos) {
-				string tmp = smi->second;	// replace all % in params with %% for strftime
-				string::size_type m = 0;
-				while(( m = tmp.find('%', m)) != string::npos) {
-					tmp.replace(m, 1, "%%");
-					m+=2;
-				}
-				if(filter) {
-					// Filter chars that produce bad effects on file systems
-					m = 0;
-					while(( m = tmp.find_first_of("\\./", m)) != string::npos) {
-						tmp[m] = '_';
-					}
-				}
 
-				result.replace(j, k-j + 1, tmp);
-				i = j + tmp.size();
-			} else {
-				result.replace(j, k-j + 1, smi->second);
-				i = j + smi->second.size();
+		auto param = params.find(result.substr(j + 2, k - j - 2));
+
+		if(param == params.end()) {
+			result.erase(j, k - j + 1);
+			i = j;
+
+		} else {
+			auto replacement = boost::apply_visitor(GetString(), param->second);
+
+			// replace all % in params with %% for strftime
+			replace("%", "%%", replacement);
+
+			if(filter) {
+				replacement = filter(replacement);
 			}
+
+			result.replace(j, k - j + 1, replacement);
+			i = j + replacement.size();
 		}
 	}
 

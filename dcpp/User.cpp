@@ -74,32 +74,32 @@ string Identity::getIp() const {
 	return getIp6().empty() ? getIp4() : getIp6();
 }
 
-void Identity::getParams(StringMap& sm, const string& prefix, bool compatibility) const {
+void Identity::getParams(ParamMap& params, const string& prefix, bool compatibility) const {
 	{
 		FastLock l(cs);
 		for(InfMap::const_iterator i = info.begin(); i != info.end(); ++i) {
-			sm[prefix + string((char*)(&i->first), 2)] = i->second;
+			params[prefix + string((char*)(&i->first), 2)] = i->second;
 		}
 	}
 	if(user) {
-		sm[prefix + "SID"] = getSIDString();
-		sm[prefix + "CID"] = user->getCID().toBase32();
-		sm[prefix + "TAG"] = getTag();
-		sm[prefix + "SSshort"] = Util::formatBytes(get("SS"));
+		params[prefix + "SID"] = getSIDString();
+		params[prefix + "CID"] = user->getCID().toBase32();
+		params[prefix + "TAG"] = getTag();
+		params[prefix + "SSshort"] = Util::formatBytes(get("SS"));
 
 		if(compatibility) {
 			if(prefix == "my") {
-				sm["mynick"] = getNick();
-				sm["mycid"] = user->getCID().toBase32();
+				params["mynick"] = getNick();
+				params["mycid"] = user->getCID().toBase32();
 			} else {
-				sm["nick"] = getNick();
-				sm["cid"] = user->getCID().toBase32();
-				sm["ip"] = get("I4");
-				sm["tag"] = getTag();
-				sm["description"] = get("DE");
-				sm["email"] = get("EM");
-				sm["share"] = get("SS");
-				sm["shareshort"] = Util::formatBytes(get("SS"));
+				params["nick"] = getNick();
+				params["cid"] = user->getCID().toBase32();
+				params["ip"] = get("I4");
+				params["tag"] = getTag();
+				params["description"] = get("DE");
+				params["email"] = get("EM");
+				params["share"] = get("SS");
+				params["shareshort"] = Util::formatBytes(get("SS"));
 			}
 		}
 	}

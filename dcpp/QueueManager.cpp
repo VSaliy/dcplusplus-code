@@ -1762,7 +1762,7 @@ uint32_t QueueManager::calcCrc32(const string& file) {
 
 void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcError)
 {
-	StringMap params;
+	ParamMap params;
 	params["target"] = qi->getTarget();
 	params["fileSI"] = Util::toString(qi->getSize());
 	params["fileSIshort"] = Util::formatBytes(qi->getSize());

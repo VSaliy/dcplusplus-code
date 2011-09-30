@@ -770,7 +770,7 @@ void WinUtil::setClipboard(const tstring& str) {
 	CloseClipboard();
 }
 
-bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap& sm) noexcept {
+bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, ParamMap& params) noexcept {
 	ParamDlg dlg(parent, Text::toT(Util::toString(" > ", uc.getDisplayName())));
 
 	string::size_type i = 0;
@@ -814,14 +814,14 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 					Util::replace(_T("\t"), _T("/"), *i);
 
 				// if the combo has already been displayed before, retrieve the prev value and bypass combo_sel
-				TStringIterC prev = find(combo_values.begin(), combo_values.end(), Text::toT(sm["line:" + name]));
+				TStringIterC prev = find(combo_values.begin(), combo_values.end(), Text::toT(boost::get<string>(params["line:" + name])));
 				if(prev != combo_values.end())
 					combo_sel = prev - combo_values.begin();
 
 				dlg.addComboBox(combo_caption, combo_values, combo_sel);
 
 			} else {
-				dlg.addTextBox(caption, Text::toT(sm["line:" + name]));
+				dlg.addTextBox(caption, Text::toT(boost::get<string>(params["line:" + name])));
 			}
 
 			names.push_back(name);
@@ -835,7 +835,7 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, StringMap&
 	if(dlg.run() == IDOK) {
 		const TStringList& values = dlg.getValues();
 		for(size_t i = 0, iend = values.size(); i < iend; ++i) {
-			sm["line:" + names[i]] = Text::fromT(values[i]);
+			params["line:" + names[i]] = Text::fromT(values[i]);
 		}
 		return true;
 	}
