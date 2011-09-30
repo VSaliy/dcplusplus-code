@@ -26,8 +26,7 @@ it will give you a small menu.</dd>
   <dd cshelp="IDH_SETTINGS_APPEARANCE_TIME_STAMPS">This option will show time stamps on chat lined in newly opened
 hubs. In order to show them in an already open hub, use the <a
  href="chat_commands.html#ts">/ts chat command</a>. To customize the
-format of the time stamps, see the <a href="#set_timestamps">Set
-Timestamps</a> option below.</dd>
+format of the time stamps, see the <a href="#timestamp_format">Timestamp format</a> option below.</dd>
   <dt id="viewstatus">View status messages in main chat</dt>
   <dd cshelp="IDH_SETTINGS_APPEARANCE_STATUS_IN_CHAT">Show some messages destined for the Status Bar in main chat as
 well. <i>It's generally a good idea to leave this enabled.</i></dd>
@@ -66,11 +65,22 @@ can activate away mode by using the <a
  href="settings_advanced.html#autoaway">Auto-away on Minimize option</a>.
 All time formatting variables are available, see <a
  href="settings_logs.html#timeformat">Logs</a>. Use Ctrl + Enter to create a new line. <br/>(default: "I'm away. State your business and I might answer later if you're lucky.")</dd>
-  <dt id="set_timestamps">Set timestamps</dt>
-  <dd cshelp="IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT">This lets you select the format of the time stamps that can
+  <dt id="timestamp_format">Timestamp format</dt>
+  <dd cshelp="IDH_SETTINGS_APPEARANCE_TIMESTAMP_FORMAT">This lets you select the format of the time stamps that can
 appear in the chat and private message windows. For the available
 formatting variables, please see <a
 	href="settings_logs.html#timeformat">Logs</a>. <br/>(default: %H:%M)</dd>
+<dt>Country format</dt>
+<dd cshelp="IDH_SETTINGS_APPEARANCE_COUNTRY_FORMAT">
+This box allows customization of the way user country information is displayed throughout the
+interface. <b>Default: %[2code] - %[name]</b><br/><br/>
+Available variables:
+<ul>
+	<li><b>%[2code]</b> gets replaced by a 2-letters country code</li>
+	<li><b>%[3code]</b> gets replaced by a 3-letters country code</li>
+	<li><b>%[name]</b> gets replaced by the full country name</li>
+</ul>
+</dd>
 <dt id="messagelines">Height of the message editing box</dt>
 <dd cshelp="IDH_SETTINGS_APPEARANCE_MESSAGE_LINES">
 Use these 2 boxes to control how much you want message editing boxes (in <placeholder><a href="window_hub.html">Hub</a></placeholder> and <placeholder><a href="window_pm.html">Private Message</a></placeholder> windows) to resize themselves when you are composing a multiline message. Both settings can have the same value, in which case the message editing box will never redraw itself. Minimum value: 1. Default values: 1 and 10.

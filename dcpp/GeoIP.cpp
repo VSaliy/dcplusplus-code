@@ -21,6 +21,7 @@
 
 #include "File.h"
 #include "format.h"
+#include "SettingsManager.h"
 #include "Util.h"
 #include "ZUtils.h"
 
@@ -52,23 +53,21 @@ void GeoIP::init(const string& path) {
 	}
 }
 
+namespace { string forwardRet(const char* ret) { return ret ? ret : Util::emptyString; } }
+
 string GeoIP::getCountry(const string& ip) const {
 	if(geo) {
 
 		auto id = (v6() ? GeoIP_id_by_addr_v6 : GeoIP_id_by_addr)(geo, ip.c_str());
 		if(id > 0) {
 
-			auto code = GeoIP_code_by_id(id);
-			auto name = GeoIP_country_name_by_id(geo, id);
+			ParamMap params;
 
-			if(code && name)
-				return str(F_("%1% - %2%") % code % name);
+			params["2code"] = [id] { return forwardRet(GeoIP_code_by_id(id)); };
+			params["3code"] = [id] { return forwardRet(GeoIP_code3_by_id(id)); };
+			params["name"] = [this, id] { return forwardRet(GeoIP_country_name_by_id(geo, id)); };
 
-			if(code && !name)
-				return code;
-
-			if(name && !code)
-				return name;
+			return Util::formatParams(SETTING(COUNTRY_FORMAT), params);
 		}
 	}
 

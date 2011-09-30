@@ -51,7 +51,7 @@ PropPage::ListItem AppearancePage::listItems[] = {
 };
 
 AppearancePage::AppearancePage(dwt::Widget* parent) :
-PropPage(parent, 5, 1),
+PropPage(parent, 6, 1),
 options(0),
 languages(0)
 {
@@ -64,32 +64,36 @@ languages(0)
 	options = grid->addChild(GroupBox::Seed(T_("Options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
 
 	{
-		auto cur = grid->addChild(Grid::Seed(1, 2));
-		cur->column(0).mode = GridInfo::FILL;
-		cur->setSpacing(grid->getSpacing());
-
-		auto group = cur->addChild(GroupBox::Seed(T_("Default away message")));
+		auto group = grid->addChild(GroupBox::Seed(T_("Default away message")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
 
-		TextBox::Seed seed = WinUtil::Seeds::Dialog::textBox;
+		auto seed = WinUtil::Seeds::Dialog::textBox;
 		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
 		auto box = group->addChild(seed);
 		box->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
 		items.push_back(Item(box, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
-
-		group = cur->addChild(GroupBox::Seed(T_("Set timestamps")));
-		group->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);
-
-		box = group->addChild(WinUtil::Seeds::Dialog::textBox);
-		box->setHelpId(IDH_SETTINGS_APPEARANCE_TIME_STAMPS_FORMAT);
-		items.push_back(Item(box, SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
 	}
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Height of the message editing box")));
+		auto cur = grid->addChild(Grid::Seed(1, 2));
+		cur->setSpacing(grid->getSpacing());
+
+		auto group = cur->addChild(GroupBox::Seed(T_("Timestamp format")));
+		group->setHelpId(IDH_SETTINGS_APPEARANCE_TIMESTAMP_FORMAT);
+
+		items.push_back(Item(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
+
+		group = cur->addChild(GroupBox::Seed(T_("Country format")));
+		group->setHelpId(IDH_SETTINGS_APPEARANCE_COUNTRY_FORMAT);
+
+		items.push_back(Item(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::COUNTRY_FORMAT, PropPage::T_STR));
+	}
+
+	{
+		auto group = grid->addChild(GroupBox::Seed(T_("Height of the message editing box")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_MESSAGE_LINES);
 
-		GridPtr cur = group->addChild(Grid::Seed(1, 5));
+		auto cur = group->addChild(Grid::Seed(1, 5));
 		cur->column(1).size = 40;
 		cur->column(1).mode = GridInfo::STATIC;
 		cur->column(3).size = 40;
@@ -97,9 +101,9 @@ languages(0)
 
 		cur->addChild(Label::Seed(T_("Keep it between")));
 
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+		auto box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.push_back(Item(box, SettingsManager::MIN_MESSAGE_LINES, PropPage::T_INT_WITH_SPIN));
-		SpinnerPtr spin = cur->addChild(Spinner::Seed(1, UD_MAXVAL, box));
+		auto spin = cur->addChild(Spinner::Seed(1, UD_MAXVAL, box));
 		cur->setWidget(spin);
 
 		cur->addChild(Label::Seed(T_("and")));
@@ -113,14 +117,14 @@ languages(0)
 	}
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Language")));
+		auto group = grid->addChild(GroupBox::Seed(T_("Language")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
 
 		languages = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 		languages->setHelpId(IDH_SETTINGS_APPEARANCE_LANGUAGE);
 	}
 
-	LabelPtr label = grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")));
+	auto label = grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")));
 	label->setHelpId(IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART);
 
 	PropPage::read(items);
