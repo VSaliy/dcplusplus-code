@@ -114,7 +114,7 @@ public:
 
 	void connect(const HintedUser& user, const string& token);
 	void privateMessage(const HintedUser& user, const string& msg, bool thirdPerson);
-	void userCommand(const HintedUser& user, const UserCommand& uc, StringMap& params, bool compatibility);
+	void userCommand(const HintedUser& user, const UserCommand& uc, ParamMap& params, bool compatibility);
 	bool isActive() const;
 	Lock lock() { return Lock(cs); }
 

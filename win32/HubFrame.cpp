@@ -479,10 +479,10 @@ void HubFrame::addChat(const tstring& aLine) {
 	setDirty(SettingsManager::BOLD_HUB);
 
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {
-		StringMap params;
-		params["message"] = Text::fromT(aLine);
+		ParamMap params;
+		params["message"] = [&aLine] { return Text::fromT(aLine); };
 		client->getHubIdentity().getParams(params, "hub", false);
-		params["hubURL"] = client->getHubUrl();
+		params["hubURL"] = [this] { return client->getHubUrl(); };
 		client->getMyIdentity().getParams(params, "my", true);
 		LOG(LogManager::CHAT, params);
 	}
@@ -501,11 +501,11 @@ void HubFrame::addStatus(const tstring& aLine, bool legitimate /* = true */) {
 	}
 
 	if(BOOLSETTING(LOG_STATUS_MESSAGES)) {
-		StringMap params;
+		ParamMap params;
 		client->getHubIdentity().getParams(params, "hub", false);
-		params["hubURL"] = client->getHubUrl();
+		params["hubURL"] = [this] { return client->getHubUrl(); };
 		client->getMyIdentity().getParams(params, "my", true);
-		params["message"] = Text::fromT(aLine);
+		params["message"] = [&aLine] { return Text::fromT(aLine); };
 		LOG(LogManager::STATUS, params);
 	}
 }
@@ -1238,7 +1238,7 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 	if(!WinUtil::getUCParams(this, uc, ucLineParams))
 		return;
 
-	StringMap ucParams = ucLineParams;
+	auto ucParams = ucLineParams;
 
 	// imitate ClientManager::userCommand, except some params are cached for multiple selections
 
@@ -1246,24 +1246,22 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 	client->getHubIdentity().getParams(ucParams, "hub", false);
 
 	if(hubMenu) {
-		client->escapeParams(ucParams);
 		client->sendUserCmd(uc, ucParams);
 	} else {
-		UserInfoList sel = selectedUsersImpl();
-		for(UserInfoList::const_iterator i = sel.begin(), iend = sel.end(); i != iend; ++i) {
-			StringMap tmp = ucParams;
+		auto sel = selectedUsersImpl();
+		for(auto i = sel.cbegin(), iend = sel.cend(); i != iend; ++i) {
+			auto tmp = ucParams;
 			static_cast<UserInfo*>(*i)->getIdentity().getParams(tmp, "user", true);
-			client->escapeParams(tmp);
 			client->sendUserCmd(uc, tmp);
 		}
 	}
 }
 
 string HubFrame::getLogPath(bool status) const {
-	StringMap params;
-	params["hubNI"] = client->getHubName();
-	params["hubURL"] = client->getHubUrl();
-	params["myNI"] = client->getMyNick();
+	ParamMap params;
+	params["hubNI"] = [this] { return client->getHubName(); };
+	params["hubURL"] = [this] { return client->getHubUrl(); };
+	params["myNI"] = [this] { return client->getMyNick(); };
 	return Util::validateFileName(LogManager::getInstance()->getPath(status ? LogManager::STATUS : LogManager::CHAT, params));
 }
 

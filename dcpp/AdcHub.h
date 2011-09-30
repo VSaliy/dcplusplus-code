@@ -39,7 +39,7 @@ public:
 
 	virtual void hubMessage(const string& aMessage, bool thirdPerson = false);
 	virtual void privateMessage(const OnlineUser& user, const string& aMessage, bool thirdPerson = false);
-	virtual void sendUserCmd(const UserCommand& command, const StringMap& params);
+	virtual void sendUserCmd(const UserCommand& command, const ParamMap& params);
 	virtual void search(int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken, const StringList& aExtList);
 	virtual void password(const string& pwd);
 	virtual void info(bool alwaysSend);
@@ -47,7 +47,7 @@ public:
 	virtual size_t getUserCount() const { Lock l(cs); return users.size(); }
 	virtual int64_t getAvailable() const;
 
-	virtual string escape(string const& str) const { return AdcCommand::escape(str, false); }
+	static string escape(const string& str) { return AdcCommand::escape(str, false); }
 	virtual void send(const AdcCommand& cmd);
 
 	string getMySID() { return AdcCommand::fromSID(sid); }

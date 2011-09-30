@@ -1130,7 +1130,7 @@ void DirectoryListingFrame::runUserCommand(const UserCommand& uc) {
 	if(!WinUtil::getUCParams(this, uc, ucLineParams))
 		return;
 
-	StringMap ucParams = ucLineParams;
+	auto ucParams = ucLineParams;
 
 	set<UserPtr> users;
 
@@ -1144,19 +1144,19 @@ void DirectoryListingFrame::runUserCommand(const UserCommand& uc) {
 		}
 		if(!dl->getUser().user->isOnline())
 			return;
-		ucParams["fileTR"] = "NONE";
+		ucParams["fileTR"] = [] { return _("NONE"); };
 		if(ii->type == ItemInfo::FILE) {
-			ucParams["type"] = "File";
-			ucParams["fileFN"] = dl->getPath(ii->file) + ii->file->getName();
-			ucParams["fileSI"] = Util::toString(ii->file->getSize());
-			ucParams["fileSIshort"] = Util::formatBytes(ii->file->getSize());
-			ucParams["fileTR"] = ii->file->getTTH().toBase32();
-			ucParams["fileMN"] = WinUtil::makeMagnet(ii->file->getTTH(), ii->file->getName(), ii->file->getSize());
+			ucParams["type"] = [] { return _("File"); };
+			ucParams["fileFN"] = [this, ii] { return dl->getPath(ii->file) + ii->file->getName(); };
+			ucParams["fileSI"] = [ii] { return Util::toString(ii->file->getSize()); };
+			ucParams["fileSIshort"] = [ii] { return Util::formatBytes(ii->file->getSize()); };
+			ucParams["fileTR"] = [ii] { return ii->file->getTTH().toBase32(); };
+			ucParams["fileMN"] = [ii] { return WinUtil::makeMagnet(ii->file->getTTH(), ii->file->getName(), ii->file->getSize()); };
 		} else {
-			ucParams["type"] = "Directory";
-			ucParams["fileFN"] = dl->getPath(ii->dir) + ii->dir->getName();
-			ucParams["fileSI"] = Util::toString(ii->dir->getTotalSize());
-			ucParams["fileSIshort"] = Util::formatBytes(ii->dir->getTotalSize());
+			ucParams["type"] = [] { return _("Directory"); };
+			ucParams["fileFN"] = [this, ii] { return dl->getPath(ii->dir) + ii->dir->getName(); };
+			ucParams["fileSI"] = [ii] { return Util::toString(ii->dir->getTotalSize()); };
+			ucParams["fileSIshort"] = [ii] { return Util::formatBytes(ii->dir->getTotalSize()); };
 		}
 
 		// compatibility with 0.674 and earlier
@@ -1165,7 +1165,7 @@ void DirectoryListingFrame::runUserCommand(const UserCommand& uc) {
 		ucParams["filesizeshort"] = ucParams["fileSIshort"];
 		ucParams["tth"] = ucParams["fileTR"];
 
-		StringMap tmp = ucParams;
+		auto tmp = ucParams;
 		ClientManager::getInstance()->userCommand(dl->getUser(), uc, tmp, true);
 	}
 }

@@ -71,7 +71,7 @@ public:
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
 
 private:
-	StringMap ucLineParams;
+	ParamMap ucLineParams;
 
 	UserInfoBase replyTo;
 	const bool priv;
@@ -89,7 +89,7 @@ private:
 
 	string getLogPath() const;
 	void openLog();
-	void fillLogParams(StringMap& params) const;
+	void fillLogParams(ParamMap& params) const;
 	void addChat(const tstring& aLine, bool log = true);
 	void addStatus(const tstring& aLine, bool log = true);
 	void updateOnlineStatus();

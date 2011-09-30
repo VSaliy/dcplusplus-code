@@ -263,7 +263,7 @@ public:
 
 	static void setClipboard(const tstring& str);
 
-	static bool getUCParams(dwt::Widget* parent, const UserCommand& cmd, StringMap& sm) noexcept;
+	static bool getUCParams(dwt::Widget* parent, const UserCommand& cmd, ParamMap& params) noexcept;
 
 	static bool parseDBLClick(const tstring& aString);
 	static void parseMagnetUri(const tstring& /*aUrl*/, bool aOverride = false);

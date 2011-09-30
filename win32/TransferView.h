@@ -253,7 +253,7 @@ private:
 
 	TaskQueue tasks; // todo get rid of TaskQueue
 
-	StringMap ucLineParams;
+	ParamMap ucLineParams;
 
 	bool handleConnectionsMenu(dwt::ScreenCoordinate pt);
 	bool handleDownloadsMenu(dwt::ScreenCoordinate pt);

@@ -97,7 +97,7 @@ private:
 	boost::variant<StringSearch::List, boost::regex> v;
 
 	/// Prepare search
-	void prepare(StringMap& params);
+	void prepare(ParamMap& params);
 
 	/// Search for file match
 	bool matchesFile(const string& f, const string& fp, int64_t size);
@@ -150,7 +150,7 @@ private:
 	void stepUpDirectory(DestDirList& destDirVector);
 
 	// Prepare destination directory indexing
-	void prepareDestinationDirectories(DestDirList& destDirVector, DirectoryListing::Directory* root, StringMap& params);
+	void prepareDestinationDirectories(DestDirList& destDirVector, DirectoryListing::Directory* root, ParamMap& params);
 	// Finalize destination directories
 	void finalizeDestinationDirectories(DestDirList& destDirVector, DirectoryListing::Directory* root);
 

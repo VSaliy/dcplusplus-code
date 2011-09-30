@@ -179,7 +179,7 @@ private:
 
 	tstring filterString;
 
-	StringMap ucLineParams;
+	ParamMap ucLineParams;
 	bool hubMenu;
 
 	tstring complete;

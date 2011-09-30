@@ -1045,15 +1045,15 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 	if(!WinUtil::getUCParams(this, uc, ucLineParams))
 		return;
 
-	StringMap ucParams = ucLineParams;
+	auto ucParams = ucLineParams;
 
 	set<CID> users;
 
 	int sel = -1;
 	while((sel = results->getNext(sel, LVNI_SELECTED)) != -1) {
-		SearchInfo* si = results->getData(sel);
-		for(SearchResultList::const_iterator i = si->srs.begin(), iend = si->srs.end(); i != iend; ++i) {
-			const SearchResultPtr& sr = *i;
+		auto si = results->getData(sel);
+		for(auto i = si->srs.cbegin(), iend = si->srs.cend(); i != iend; ++i) {
+			auto sr = *i;
 
 			if(!sr->getUser()->isOnline())
 				continue;
@@ -1064,13 +1064,13 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 				users.insert(sr->getUser()->getCID());
 			}
 
-			ucParams["fileFN"] = sr->getFile();
-			ucParams["fileSI"] = Util::toString(sr->getSize());
-			ucParams["fileSIshort"] = Util::formatBytes(sr->getSize());
+			ucParams["fileFN"] = [sr] { return sr->getFile(); };
+			ucParams["fileSI"] = [sr] { return Util::toString(sr->getSize()); };
+			ucParams["fileSIshort"] = [sr] { return Util::formatBytes(sr->getSize()); };
 			if(sr->getType() == SearchResult::TYPE_FILE) {
-				ucParams["fileTR"] = sr->getTTH().toBase32();
+				ucParams["fileTR"] = [sr] { return sr->getTTH().toBase32(); };
 			}
-			ucParams["fileMN"] = WinUtil::makeMagnet(sr->getTTH(), sr->getFile(), sr->getSize());
+			ucParams["fileMN"] = [sr] { return WinUtil::makeMagnet(sr->getTTH(), sr->getFile(), sr->getSize()); };
 
 			// compatibility with 0.674 and earlier
 			ucParams["file"] = ucParams["fileFN"];
@@ -1078,7 +1078,7 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 			ucParams["filesizeshort"] = ucParams["fileSIshort"];
 			ucParams["tth"] = ucParams["fileTR"];
 
-			StringMap tmp = ucParams;
+			auto tmp = ucParams;
 			ClientManager::getInstance()->userCommand(HintedUser(sr->getUser(), sr->getHubURL()), uc, tmp, true);
 		}
 	}

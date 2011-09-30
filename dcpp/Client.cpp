@@ -212,6 +212,12 @@ string Client::getLocalIp() const {
 	return localIp;
 }
 
+string Client::getCounts() {
+	char buf[128];
+	return string(buf, snprintf(buf, sizeof(buf), "%ld/%ld/%ld",
+		counts[COUNT_NORMAL].load(), counts[COUNT_REGISTERED].load(), counts[COUNT_OP].load()));
+}
+
 void Client::on(Line, const string& /*aLine*/) noexcept {
 	updateActivity();
 }

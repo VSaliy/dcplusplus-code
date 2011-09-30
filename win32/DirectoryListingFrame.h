@@ -193,7 +193,7 @@ private:
 
 	static TStringList lastSearches;
 
-	StringMap ucLineParams;
+	ParamMap ucLineParams;
 
 	typedef unordered_map<UserPtr, DirectoryListingFrame*, User::Hash> UserMap;
 

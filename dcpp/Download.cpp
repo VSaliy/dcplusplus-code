@@ -86,7 +86,7 @@ AdcCommand Download::getCommand(bool zlib) {
 	return cmd;
 }
 
-void Download::getParams(const UserConnection& aSource, StringMap& params) {
+void Download::getParams(const UserConnection& aSource, ParamMap& params) {
 	Transfer::getParams(aSource, params);
 	params["target"] = getPath();
 }

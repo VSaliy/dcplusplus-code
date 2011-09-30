@@ -43,11 +43,11 @@ public:
 	enum Area { CHAT, PM, DOWNLOAD, FINISHED_DOWNLOAD, UPLOAD, SYSTEM, STATUS, LAST };
 	enum { FILE, FORMAT };
 
-	void log(Area area, StringMap& params) noexcept;
+	void log(Area area, ParamMap& params) noexcept;
 	void message(const string& msg);
 
 	List getLastLogs();
-	string getPath(Area area, StringMap& params) const;
+	string getPath(Area area, ParamMap& params) const;
 	string getPath(Area area) const;
 
 	const string& getSetting(int area, int sel) const;

@@ -44,7 +44,7 @@ public:
 	virtual void connect(const OnlineUser& user, const string& token) = 0;
 	virtual void hubMessage(const string& aMessage, bool thirdPerson = false) = 0;
 	virtual void privateMessage(const OnlineUser& user, const string& aMessage, bool thirdPerson = false) = 0;
-	virtual void sendUserCmd(const UserCommand& command, const StringMap& params) = 0;
+	virtual void sendUserCmd(const UserCommand& command, const ParamMap& params) = 0;
 	virtual void search(int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken, const StringList& aExtList) = 0;
 	virtual void password(const string& pwd) = 0;
 	virtual void info(bool force) = 0;
@@ -53,8 +53,6 @@ public:
 	virtual int64_t getAvailable() const = 0;
 
 	virtual void send(const AdcCommand& command) = 0;
-
-	virtual string escape(string const& str) const { return str; }
 
 	bool isConnected() const { return state != STATE_DISCONNECTED; }
 	bool isReady() const { return state != STATE_CONNECTING && state != STATE_DISCONNECTED; }
@@ -74,18 +72,7 @@ public:
 
 	void updated(const OnlineUser& aUser) { fire(ClientListener::UserUpdated(), this, aUser); }
 
-	static string getCounts() {
-		char buf[128];
-		return string(buf, snprintf(buf, sizeof(buf), "%ld/%ld/%ld",
-				counts[COUNT_NORMAL].load(), counts[COUNT_REGISTERED].load(), counts[COUNT_OP].load()));
-	}
-
-	StringMap& escapeParams(StringMap& sm) {
-		for(StringMapIter i = sm.begin(); i != sm.end(); ++i) {
-			i->second = escape(i->second);
-		}
-		return sm;
-	}
+	static string getCounts();
 
 	void reconnect();
 	void shutdown();
