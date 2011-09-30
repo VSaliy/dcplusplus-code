@@ -66,6 +66,7 @@ string GeoIP::getCountry(const string& ip) const {
 			params["2code"] = [id] { return forwardRet(GeoIP_code_by_id(id)); };
 			params["3code"] = [id] { return forwardRet(GeoIP_code3_by_id(id)); };
 			params["name"] = [this, id] { return forwardRet(GeoIP_country_name_by_id(geo, id)); };
+			params["continent"] = [id] { return forwardRet(GeoIP_continent_by_id(id)); };
 
 			return Util::formatParams(SETTING(COUNTRY_FORMAT), params);
 		}

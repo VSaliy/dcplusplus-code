@@ -43,7 +43,8 @@
 * COM initialization fix for the Windows UPnP mapper (thanks bigmuscle)
 * Show country codes next to country names (poy)
 * [L#425667] More accurate indexing time left calculation (poy)
-* Switch to binary GeoIP databases and add IPv6 support (poy)
+* Switch to binary GeoIP databases, add the IPv6 one (poy)
+* The country format can be customized, see help for available codes (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
