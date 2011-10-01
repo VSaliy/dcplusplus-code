@@ -1226,9 +1226,11 @@ void MainWindow::completeVersionUpdate() {
 			if(xml.findChild("Downloads")) {
 				links.downloads = Text::toT(xml.getChildData());
 			}
+			xml.resetCurrentChild();
 			if(xml.findChild("GeoIPv6")) {
 				links.geoip6 = Text::toT(xml.getChildData());
 			}
+			xml.resetCurrentChild();
 			if(xml.findChild("GeoIPv4")) {
 				links.geoip4 = Text::toT(xml.getChildData());
 			}
