@@ -27,6 +27,23 @@ namespace dcpp {
 
 static const std::string CORAL_SUFFIX = ".nyud.net";
 
+HttpConnection::HttpConnection(CoralizeState coralizeState) :
+ok(false),
+port("80"),
+size(-1),
+moved302(false),
+coralizeState(coralizeState),
+socket(0)
+{
+}
+
+HttpConnection::~HttpConnection() {
+	if(socket) {
+		socket->removeListener(this);
+		BufferedSocket::putSocket(socket);
+	}
+}
+
 /**
  * Downloads a file and returns it as a string
  * @todo Report exceptions
@@ -125,7 +142,7 @@ void HttpConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 					downloadFile(currentUrl);
 					return;
 				}
-				fire(HttpConnectionListener::Failed(), this, aLine + " (" + currentUrl + ")");
+				fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % aLine % currentUrl));
 				coralizeState = CST_DEFAULT;
 				return;
 			}

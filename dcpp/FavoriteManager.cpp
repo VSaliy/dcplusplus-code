@@ -836,9 +836,9 @@ void FavoriteManager::on(TypeBZ2, HttpConnection*) noexcept {
 	if(useHttp)
 		listType = TYPE_BZIP2;
 }
-void FavoriteManager::on(Retried, HttpConnection*, const bool Connected) noexcept {
-	if (Connected)
-		downloadBuf = Util::emptyString;
+void FavoriteManager::on(Retried, HttpConnection*, bool connected) noexcept {
+	if(connected)
+		downloadBuf.clear();
 }
 
 void FavoriteManager::on(UserUpdated, const OnlineUser& user) noexcept {

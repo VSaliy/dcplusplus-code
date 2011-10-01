@@ -44,26 +44,19 @@ public:
 	virtual void on(Redirected, HttpConnection*, const string&) noexcept { }
 	virtual void on(TypeNormal, HttpConnection*) noexcept { }
 	virtual void on(TypeBZ2, HttpConnection*) noexcept { }
-	virtual void on(Retried, HttpConnection*, const bool) noexcept { }
+	virtual void on(Retried, HttpConnection*, bool) noexcept { }
 };
 
-class HttpConnection : BufferedSocketListener, public Speaker<HttpConnectionListener>
+class HttpConnection : BufferedSocketListener, public Speaker<HttpConnectionListener>, boost::noncopyable
 {
 public:
+	enum CoralizeState { CST_DEFAULT, CST_CONNECTED, CST_NOCORALIZE };
+	HttpConnection(CoralizeState coralizeState = CST_DEFAULT);
+	virtual ~HttpConnection();
+
 	void downloadFile(const string& aUrl);
-	HttpConnection() : ok(false), port("80"), size(-1), moved302(false), coralizeState(CST_DEFAULT), socket(NULL) { }
-	virtual ~HttpConnection() {
-		if(socket) {
-			socket->removeListener(this);
-			BufferedSocket::putSocket(socket);
-		}
-	}
 
 private:
-
-	HttpConnection(const HttpConnection&);
-	HttpConnection& operator=(const HttpConnection&);
-
 	string currentUrl;
 	string file;
 	string server;
@@ -72,8 +65,7 @@ private:
 	int64_t size;
 	bool moved302;
 
-	enum CoralizeStates {CST_DEFAULT, CST_CONNECTED, CST_NOCORALIZE};
-	CoralizeStates coralizeState;
+	CoralizeState coralizeState;
 
 	BufferedSocket* socket;
 
@@ -86,7 +78,6 @@ private:
 
 	void onConnected();
 	void onLine(const string& aLine);
-
 };
 
 } // namespace dcpp
