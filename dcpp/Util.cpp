@@ -197,8 +197,8 @@ void Util::initialize(PathsMap pathOverrides) {
 	File::ensureDirectory(paths[PATH_USER_CONFIG]);
 	File::ensureDirectory(paths[PATH_USER_LOCAL]);
 
-	geo6.init(getPath(PATH_USER_LOCAL) + "GeoIPv6.dat");
-	geo4.init(getPath(PATH_USER_LOCAL) + "GeoIP.dat");
+	geo6.init(getGeoPath(true));
+	geo4.init(getGeoPath(false));
 }
 
 void Util::migrate(const string& file) {
@@ -248,6 +248,10 @@ void Util::loadBootConfig() {
 	} catch(const Exception& ) {
 		// Unable to load boot settings...
 	}
+}
+
+string Util::getGeoPath(bool v6) {
+	return getPath(PATH_USER_LOCAL) + (v6 ? "GeoIPv6.dat" : "GeoIP.dat");
 }
 
 #ifdef _WIN32

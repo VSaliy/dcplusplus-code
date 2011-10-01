@@ -157,6 +157,8 @@ public:
 	static string getHubListsPath() { return getPath(PATH_HUB_LISTS); }
 	/** Notepad filename */
 	static string getNotepadFile() { return getPath(PATH_NOTEPAD); }
+	/** GeoIP database path */
+	static string getGeoPath(bool v6);
 
 	static string translateError(int aError);
 

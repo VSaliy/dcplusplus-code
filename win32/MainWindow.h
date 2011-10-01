@@ -102,9 +102,29 @@ private:
 		tstring community;
 	} links;
 
+	struct HttpConnWrapper : boost::noncopyable {
+		HttpConnection* c;
+		string buf;
+		MainWindow* mw;
+		typedef std::function<void ()> CompletionF;
+		CompletionF f;
+
+		explicit HttpConnWrapper(const string& address, MainWindow* mw, CompletionF f,
+			HttpConnection::CoralizeState coralizeState = HttpConnection::CST_DEFAULT);
+		~HttpConnWrapper();
+	};
+
 	enum {
 		TIMER_STATUS,
 		TIMER_SAVE
+	};
+
+	enum {
+		CONN_VERSION,
+		CONN_GEO_V6,
+		CONN_GEO_V4,
+
+		CONN_LAST
 	};
 
 	RebarPtr rebar;
@@ -121,8 +141,7 @@ private:
 
 	bool tray_pm;
 
-	HttpConnection* c;
-	string versionInfo;
+	unique_ptr<HttpConnWrapper> conns[CONN_LAST];
 
 	HANDLE stopperThread;
 
@@ -199,6 +218,12 @@ private:
 	void fillLimiterMenu(MenuPtr menu, bool upload);
 	void statusMessage(time_t t, const string& m);
 
+	void completeVersionUpdate();
+	void checkGeoUpdate(bool v6);
+	void updateGeo(bool v6);
+	void completeGeoUpdate(bool v6);
+	HttpConnWrapper* getConn(HttpConnection* conn) const;
+
 	bool filter(MSG& msg);
 
 	bool handleClosing();
@@ -207,16 +232,17 @@ private:
 	static DWORD WINAPI stopper(void* p);
 
 	// LogManagerListener
-	virtual void on(LogManagerListener::Message, time_t t, const string& m) noexcept;
+	void on(LogManagerListener::Message, time_t t, const string& m) noexcept;
 
 	// HttpConnectionListener
-	virtual void on(HttpConnectionListener::Complete, HttpConnection* conn, string const& /*aLine*/, bool /*fromCoral*/) noexcept;
-	virtual void on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) noexcept;
-	virtual void on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) noexcept;		
-		
+	void on(HttpConnectionListener::Data, HttpConnection* conn, const uint8_t* buf, size_t len) noexcept;
+	void on(HttpConnectionListener::Failed, HttpConnection* conn, const string&) noexcept;
+	void on(HttpConnectionListener::Complete, HttpConnection* conn, const string& /*aLine*/, bool /*fromCoral*/) noexcept;
+	void on(HttpConnectionListener::Retried, HttpConnection* conn, bool connected) noexcept;
+
 	// QueueManagerListener
-	virtual void on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) noexcept;
-	virtual void on(PartialList, const HintedUser&, const string& text) noexcept;
+	void on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) noexcept;
+	void on(PartialList, const HintedUser&, const string& text) noexcept;
 };
 
 #endif // !defined(MAIN_FRM_H)

@@ -135,7 +135,7 @@ void GZ::decompress(const string& source, const string& target) {
 	if(!gz) {
 		throw Exception(_("Error during decompression"));
 	}
-	File f(target, File::WRITE, File::CREATE);
+	File f(target, File::WRITE, File::CREATE | File::TRUNCATE);
 
 	const size_t BUF_SIZE = 64 * 1024;
 	ByteVector buf(BUF_SIZE);

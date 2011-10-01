@@ -161,7 +161,7 @@ private:
 	virtual void on(Redirected, HttpConnection*, const string&) noexcept;
 	virtual void on(TypeNormal, HttpConnection*) noexcept;
 	virtual void on(TypeBZ2, HttpConnection*) noexcept;
-	virtual void on(Retried, HttpConnection*, const bool) noexcept; 
+	virtual void on(Retried, HttpConnection*, bool) noexcept; 
 
 	bool onHttpFinished(bool fromHttp) noexcept;
 

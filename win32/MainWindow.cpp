@@ -20,25 +20,26 @@
 
 #include "MainWindow.h"
 
-#include <dcpp/SettingsManager.h>
-#include <dcpp/ResourceManager.h>
-#include <dcpp/version.h>
-#include <dcpp/DownloadManager.h>
-#include <dcpp/UploadManager.h>
-#include <dcpp/FavoriteManager.h>
-#include <dcpp/LogManager.h>
 #include <dcpp/Client.h>
-#include <dcpp/TimerManager.h>
-#include <dcpp/SearchManager.h>
-#include <dcpp/ConnectionManager.h>
-#include <dcpp/ShareManager.h>
-#include <dcpp/QueueManager.h>
 #include <dcpp/ClientManager.h>
+#include <dcpp/ConnectionManager.h>
 #include <dcpp/ConnectivityManager.h>
 #include <dcpp/Download.h>
-#include <dcpp/WindowInfo.h>
+#include <dcpp/DownloadManager.h>
+#include <dcpp/FavoriteManager.h>
+#include <dcpp/LogManager.h>
+#include <dcpp/QueueManager.h>
+#include <dcpp/ResourceManager.h>
+#include <dcpp/ScopedFunctor.h>
+#include <dcpp/SearchManager.h>
+#include <dcpp/SettingsManager.h>
+#include <dcpp/ShareManager.h>
 #include <dcpp/SimpleXML.h>
 #include <dcpp/ThrottleManager.h>
+#include <dcpp/TimerManager.h>
+#include <dcpp/UploadManager.h>
+#include <dcpp/version.h>
+#include <dcpp/WindowInfo.h>
 
 #include <dwt/Application.h>
 #include <dwt/widgets/MessageBox.h>
@@ -97,7 +98,6 @@ toolbar(0),
 tabs(0),
 slotsSpin(0),
 tray_pm(false),
-c(0),
 stopperThread(NULL),
 lastUp(0),
 lastDown(0),
@@ -164,13 +164,16 @@ fullSlots(false)
 
 	filterIter = dwt::Application::instance().addFilter([this](MSG &msg) { return filter(msg); });
 
+	File::ensureDirectory(SETTING(LOG_DIRECTORY));
+
 	TimerManager::getInstance()->start();
 
-	c = new HttpConnection;
-	c->addListener(this);
-	c->downloadFile("http://dcplusplus.sourceforge.net/version.xml");
+	conns[CONN_VERSION].reset(new HttpConnWrapper("http://dcplusplus.sourceforge.net/version.xml", this, [this] { completeVersionUpdate(); }));
 
-	File::ensureDirectory(SETTING(LOG_DIRECTORY));
+	if(BOOLSETTING(GET_USER_COUNTRY)) {
+		checkGeoUpdate(true);
+		checkGeoUpdate(false);
+	}
 
 	try {
 		ConnectivityManager::getInstance()->setup(true);
@@ -280,6 +283,8 @@ void MainWindow::initMenu() {
 
 		file->appendItem(T_("Settings\tCtrl+F3"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));
 		file->appendSeparator();
+		file->appendItem(T_("GeoIP database update"), [this] { updateGeo(true); updateGeo(false); });
+		file->appendSeparator();
 		file->appendItem(T_("E&xit\tAlt+F4"), [this] { GCC_WTF->close(true); }, WinUtil::menuIcon(IDI_EXIT));
 	}
 
@@ -359,10 +364,6 @@ void MainWindow::initMenu() {
 		help->appendItem(T_("Donate (paypal)"), [this] { WinUtil::openLink(links.donate); }, WinUtil::menuIcon(IDI_DONATE));
 		help->appendItem(T_("Blog"), [this] { WinUtil::openLink(links.blog); });
 		help->appendItem(T_("Community news"), [this] { WinUtil::openLink(links.community); });
-		help->appendSeparator();
-
-		help->appendItem(T_("GeoIP database update (IPv6)"), [this] { WinUtil::openLink(links.geoip6); });
-		help->appendItem(T_("GeoIP database update (IPv4)"), [this] { WinUtil::openLink(links.geoip4); });
 	}
 
 	mainMenu->setMenu();
@@ -920,11 +921,10 @@ void MainWindow::saveWindowSettings() {
 bool MainWindow::handleClosing() {
 	if(!closing()) {
 		if ( !BOOLSETTING(CONFIRM_EXIT) || (dwt::MessageBox(this).show(T_("Really exit?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)) {
-			if (c != NULL) {
-				c->removeListener(this);
-				delete c;
-				c = NULL;
-			}
+
+			for(uint8_t i = 0; i < CONN_LAST; ++i)
+				conns[i].reset();
+
 			saveWindowSettings();
 
 			setVisible(false);
@@ -1180,47 +1180,10 @@ void MainWindow::handleActivate(bool active) {
 	}
 }
 
-void MainWindow::parseCommandLine(const tstring& cmdLine)
-{
-	string::size_type i = 0;
-	string::size_type j;
-
-	if( (j = cmdLine.find(_T("dchub://"), i)) != string::npos ||
-		(j = cmdLine.find(_T("adc://"), i)) != string::npos ||
-		(j = cmdLine.find(_T("adcs://"), i)) != string::npos ||
-		(j = cmdLine.find(_T("magnet:?"), i)) != string::npos )
-	{
-		WinUtil::parseDBLClick(cmdLine.substr(j));
-	}
-}
-
-LRESULT MainWindow::handleCopyData(LPARAM lParam) {
-	parseCommandLine(Text::toT(WinUtil::getAppName() + " ") + reinterpret_cast<LPCTSTR>(reinterpret_cast<COPYDATASTRUCT*>(lParam)->lpData));
-	return TRUE;
-}
-
-void MainWindow::handleHashProgress() {
-	HashProgressDlg(this, false).run();
-}
-
-void MainWindow::handleCloseFavGroup(bool reversed) {
-	tstring group;
-	if(chooseFavHubGroup(reversed ? T_("Close hubs not in a favorite group") : T_("Close all hubs of a favorite group"), group))
-		HubFrame::closeFavGroup(Text::fromT(group), reversed);
-}
-
-void MainWindow::handleAbout() {
-	AboutDlg(this).run();
-}
-
-void MainWindow::handleOpenDownloadsDir() {
-	WinUtil::openFile(Text::toT(SETTING(DOWNLOAD_DIRECTORY)));
-}
-
-void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/, const string&, bool) noexcept {
+void MainWindow::completeVersionUpdate() {
 	try {
 		SimpleXML xml;
-		xml.fromXML(versionInfo);
+		xml.fromXML(conns[CONN_VERSION]->buf);
 		xml.stepIn();
 
 		string url = Text::fromT(links.homepage);
@@ -1241,7 +1204,10 @@ void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/,
 							const string& msg = xml.getChildData();
 							dwt::MessageBox(this).show(Text::toT(msg), Text::toT(title));
 						} else {
-							if(dwt::MessageBox(this).show(str(TF_("%1%\nOpen download page?") % Text::toT(xml.getChildData())), Text::toT(title), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES) {
+							if(dwt::MessageBox(this).show(
+								str(TF_("%1%\nOpen download page?") % Text::toT(xml.getChildData())), Text::toT(title),
+								dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)
+							{
 								WinUtil::openLink(Text::toT(url));
 							}
 						}
@@ -1260,7 +1226,6 @@ void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/,
 			if(xml.findChild("Downloads")) {
 				links.downloads = Text::toT(xml.getChildData());
 			}
-			xml.resetCurrentChild();
 			if(xml.findChild("GeoIPv6")) {
 				links.geoip6 = Text::toT(xml.getChildData());
 			}
@@ -1314,18 +1279,85 @@ void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* /*aConn*/,
 		}
 
 		xml.stepOut();
-	} catch (const Exception&) {
-		// ...
+	} catch (const Exception&) { }
+
+	conns[CONN_VERSION].reset();
+}
+
+void MainWindow::checkGeoUpdate(bool v6) {
+	// update when the database is non-existent or older than 16 days (GeoIP updates every month).
+	try {
+		File f(Util::getGeoPath(v6) + ".gz", File::READ, File::OPEN);
+		if(f.getSize() > 0 && f.getLastModified() > GET_TIME() - 3600 * 24 * 16) {
+			return;
+		}
+	} catch(const FileException&) { }
+	updateGeo(v6);
+}
+
+void MainWindow::updateGeo(bool v6) {
+	auto& conn = conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4];
+	if(conn.get())
+		return;
+
+	LogManager::getInstance()->message(str(F_("Updating the %1% GeoIP database...") % (v6 ? "IPv6" : "IPv4")));
+	conn.reset(new HttpConnWrapper(Text::fromT(v6 ? links.geoip6 : links.geoip4), this,
+		[this, v6] { completeGeoUpdate(v6); }, HttpConnection::CST_NOCORALIZE));
+}
+
+void MainWindow::completeGeoUpdate(bool v6) {
+	auto& conn = conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4];
+	ScopedFunctor([&conn] { conn.reset(); });
+
+	if(!conn->buf.empty()) {
+		try {
+			File(Util::getGeoPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE).write(conn->buf);
+			File f(Util::getGeoPath(v6), File::WRITE, File::CREATE | File::TRUNCATE); // clear the previous db
+			LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated; restart DC++ to apply") % (v6 ? "IPv6" : "IPv4")));
+			return;
+		} catch(const FileException&) { }
+	}
+	LogManager::getInstance()->message(str(F_("The %1% GeoIP database could not be updated") % (v6 ? "IPv6" : "IPv4")));
+}
+
+void MainWindow::parseCommandLine(const tstring& cmdLine)
+{
+	string::size_type i = 0;
+	string::size_type j;
+
+	if( (j = cmdLine.find(_T("dchub://"), i)) != string::npos ||
+		(j = cmdLine.find(_T("adc://"), i)) != string::npos ||
+		(j = cmdLine.find(_T("adcs://"), i)) != string::npos ||
+		(j = cmdLine.find(_T("magnet:?"), i)) != string::npos )
+	{
+		WinUtil::parseDBLClick(cmdLine.substr(j));
 	}
 }
 
-LRESULT MainWindow::handleEndSession() {
-	if (c != NULL) {
-		c->removeListener(this);
-		delete c;
-		c = NULL;
-	}
+LRESULT MainWindow::handleCopyData(LPARAM lParam) {
+	parseCommandLine(Text::toT(WinUtil::getAppName() + " ") + reinterpret_cast<LPCTSTR>(reinterpret_cast<COPYDATASTRUCT*>(lParam)->lpData));
+	return TRUE;
+}
 
+void MainWindow::handleHashProgress() {
+	HashProgressDlg(this, false).run();
+}
+
+void MainWindow::handleCloseFavGroup(bool reversed) {
+	tstring group;
+	if(chooseFavHubGroup(reversed ? T_("Close hubs not in a favorite group") : T_("Close all hubs of a favorite group"), group))
+		HubFrame::closeFavGroup(Text::fromT(group), reversed);
+}
+
+void MainWindow::handleAbout() {
+	AboutDlg(this).run();
+}
+
+void MainWindow::handleOpenDownloadsDir() {
+	WinUtil::openFile(Text::toT(SETTING(DOWNLOAD_DIRECTORY)));
+}
+
+LRESULT MainWindow::handleEndSession() {
 	saveSettings();
 	QueueManager::getInstance()->saveQueue();
 
@@ -1499,14 +1531,48 @@ void MainWindow::handleWhatsThis() {
 	sendMessage(WM_SYSCOMMAND, SC_CONTEXTHELP);
 }
 
-void MainWindow::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) noexcept {
-	versionInfo += string((const char*)buf, len);
+MainWindow::HttpConnWrapper::HttpConnWrapper(const string& address, MainWindow* mw, CompletionF f, HttpConnection::CoralizeState coralizeState) :
+c(new HttpConnection(coralizeState)),
+mw(mw),
+f(f)
+{
+	c->addListener(mw);
+	c->downloadFile(address);
 }
 
- void MainWindow::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) noexcept {
- 	if (Connected)
- 		versionInfo = Util::emptyString;
- }
+MainWindow::HttpConnWrapper::~HttpConnWrapper() {
+	c->removeListener(mw);
+	delete c;
+}
+
+MainWindow::HttpConnWrapper* MainWindow::getConn(HttpConnection* conn) const {
+	for(uint8_t i = 0; i < CONN_LAST; ++i) {
+		if(conns[i].get() && conns[i]->c == conn) {
+			return conns[i].get();
+		}
+	}
+	return 0;
+}
+
+void MainWindow::on(HttpConnectionListener::Data, HttpConnection* conn, const uint8_t* buf, size_t len) noexcept {
+	getConn(conn)->buf.append(reinterpret_cast<const char*>(buf), len);
+}
+
+void MainWindow::on(HttpConnectionListener::Failed, HttpConnection* conn, const string&) noexcept {
+	auto c = getConn(conn);
+	c->buf.clear();
+	callAsync([c] { c->f(); });
+}
+
+void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) noexcept {
+	auto c = getConn(conn);
+	callAsync([c] { c->f(); });
+}
+
+void MainWindow::on(HttpConnectionListener::Retried, HttpConnection* conn, bool connected) noexcept {
+	if(connected)
+		getConn(conn)->buf.clear();
+}
 
 void MainWindow::on(PartialList, const HintedUser& aUser, const string& text) noexcept {
 	callAsync([this, aUser, text] { DirectoryListingFrame::openWindow(getTabView(), aUser, text, 0); });

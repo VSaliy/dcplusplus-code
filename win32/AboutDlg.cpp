@@ -185,9 +185,7 @@ void AboutDlg::on(HttpConnectionListener::Failed, HttpConnection* conn, const st
 	conn->removeListener(this);
 }
 
-void AboutDlg::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, const bool Connected) noexcept {
-	if (Connected)
-		downBuf = Util::emptyString;
+void AboutDlg::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, bool connected) noexcept {
+	if(connected)
+		downBuf.clear();
 }
-
-
