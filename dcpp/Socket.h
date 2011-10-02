@@ -88,7 +88,7 @@ public:
 		TYPE_UDP = IPPROTO_UDP
 	};
 
-	explicit Socket(SocketType type, bool v4only = false) : type(type), v4only(true) { }
+	explicit Socket(SocketType type, bool v4only = false) : type(type), v4only(v4only) { }
 
 	virtual ~Socket() { }
 
