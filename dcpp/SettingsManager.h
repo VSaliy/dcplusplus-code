@@ -266,7 +266,7 @@ private:
 
 	bool isSet[SETTINGS_LAST];
 
-	string getConfigFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "DCPlusPlus.xml"; }
+	static string getConfigFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "DCPlusPlus.xml"; }
 
 	// Search types
 	SearchTypes searchTypes; // name, extlist

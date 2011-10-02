@@ -19,15 +19,15 @@
 #ifndef DCPLUSPLUS_WIN32_ABOUT_DLG_H
 #define DCPLUSPLUS_WIN32_ABOUT_DLG_H
 
-#include <dcpp/HttpConnection.h>
+#include <dcpp/forward.h>
 
 #include <dwt/widgets/ModalDialog.h>
 
 #include "forward.h"
 
-class AboutDlg :
-	public dwt::ModalDialog,
-	private HttpConnectionListener
+using std::unique_ptr;
+
+class AboutDlg : public dwt::ModalDialog
 {
 public:
 	AboutDlg(dwt::Widget* parent);
@@ -39,17 +39,13 @@ private:
 	GridPtr grid;
 	LabelPtr version;
 
-	HttpConnection c;
-	string downBuf;
+	unique_ptr<HttpDownload> c;
 
 	bool handleInitDialog();
 
 	void layout();
 
-	void on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) noexcept;
-	void on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) noexcept;
-	void on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) noexcept;
-	void on(HttpConnectionListener::Retried, HttpConnection* conn, bool connected) noexcept;		
+	void completeDownload();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ABOUT_DLG_H)

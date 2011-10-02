@@ -19,44 +19,25 @@
 #ifndef DCPLUSPLUS_DCPP_HTTP_CONNECTION_H
 #define DCPLUSPLUS_DCPP_HTTP_CONNECTION_H
 
-#include "BufferedSocket.h"
+#include "BufferedSocketListener.h"
+#include "HttpConnectionListener.h"
+#include "Speaker.h"
 
 namespace dcpp {
 
-class HttpConnection;
-
-class HttpConnectionListener {
-public:
-	virtual ~HttpConnectionListener() { }
-	template<int I>	struct X { enum { TYPE = I }; };
-
-	typedef X<0> Data;
-	typedef X<1> Failed;
-	typedef X<2> Complete;
-	typedef X<3> Redirected;
-	typedef X<4> TypeNormal;
-	typedef X<5> TypeBZ2;
-	typedef X<6> Retried;
-
-	virtual void on(Data, HttpConnection*, const uint8_t*, size_t) noexcept = 0;
-	virtual void on(Failed, HttpConnection*, const string&) noexcept { }
-	virtual void on(Complete, HttpConnection*, const string&, bool) noexcept { }
-	virtual void on(Redirected, HttpConnection*, const string&) noexcept { }
-	virtual void on(TypeNormal, HttpConnection*) noexcept { }
-	virtual void on(TypeBZ2, HttpConnection*) noexcept { }
-	virtual void on(Retried, HttpConnection*, bool) noexcept { }
-};
+using std::string;
 
 class HttpConnection : BufferedSocketListener, public Speaker<HttpConnectionListener>, boost::noncopyable
 {
 public:
-	enum CoralizeState { CST_DEFAULT, CST_CONNECTED, CST_NOCORALIZE };
-	HttpConnection(CoralizeState coralizeState = CST_DEFAULT);
+	HttpConnection(bool coralize = true);
 	virtual ~HttpConnection();
 
 	void downloadFile(const string& aUrl);
 
 private:
+	enum CoralizeState { CST_DEFAULT, CST_CONNECTED, CST_NOCORALIZE };
+
 	string currentUrl;
 	string file;
 	string server;
@@ -70,11 +51,11 @@ private:
 	BufferedSocket* socket;
 
 	// BufferedSocketListener
-	virtual void on(Connected) noexcept;
-	virtual void on(Line, const string&) noexcept;
-	virtual void on(Data, uint8_t*, size_t) noexcept;
-	virtual void on(ModeChange) noexcept;
-	virtual void on(Failed, const string&) noexcept;
+	void on(Connected) noexcept;
+	void on(Line, const string&) noexcept;
+	void on(Data, uint8_t*, size_t) noexcept;
+	void on(ModeChange) noexcept;
+	void on(Failed, const string&) noexcept;
 
 	void onConnected();
 	void onLine(const string& aLine);

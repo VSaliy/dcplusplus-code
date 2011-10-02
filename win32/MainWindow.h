@@ -19,9 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_MAIN_WINDOW_H
 #define DCPLUSPLUS_WIN32_MAIN_WINDOW_H
 
-#include <dcpp/QueueManagerListener.h>
+#include <dcpp/forward.h>
 #include <dcpp/LogManagerListener.h>
-#include <dcpp/HttpConnection.h>
+#include <dcpp/QueueManagerListener.h>
 #include <dcpp/User.h>
 #include <dcpp/WindowInfo.h>
 
@@ -30,9 +30,10 @@
 #include "forward.h"
 #include "AspectStatus.h"
 
+using std::unique_ptr;
+
 class MainWindow :
 	public dwt::Window,
-	private HttpConnectionListener,
 	private QueueManagerListener,
 	private LogManagerListener,
 	public AspectStatus<MainWindow>
@@ -102,18 +103,6 @@ private:
 		tstring community;
 	} links;
 
-	struct HttpConnWrapper : boost::noncopyable {
-		HttpConnection* c;
-		string buf;
-		MainWindow* mw;
-		typedef std::function<void ()> CompletionF;
-		CompletionF f;
-
-		explicit HttpConnWrapper(const string& address, MainWindow* mw, CompletionF f,
-			HttpConnection::CoralizeState coralizeState = HttpConnection::CST_DEFAULT);
-		~HttpConnWrapper();
-	};
-
 	enum {
 		TIMER_STATUS,
 		TIMER_SAVE
@@ -141,7 +130,7 @@ private:
 
 	bool tray_pm;
 
-	unique_ptr<HttpConnWrapper> conns[CONN_LAST];
+	unique_ptr<HttpDownload> conns[CONN_LAST];
 
 	HANDLE stopperThread;
 
@@ -222,7 +211,6 @@ private:
 	void checkGeoUpdate(bool v6);
 	void updateGeo(bool v6);
 	void completeGeoUpdate(bool v6);
-	HttpConnWrapper* getConn(HttpConnection* conn) const;
 
 	bool filter(MSG& msg);
 
@@ -233,12 +221,6 @@ private:
 
 	// LogManagerListener
 	void on(LogManagerListener::Message, time_t t, const string& m) noexcept;
-
-	// HttpConnectionListener
-	void on(HttpConnectionListener::Data, HttpConnection* conn, const uint8_t* buf, size_t len) noexcept;
-	void on(HttpConnectionListener::Failed, HttpConnection* conn, const string&) noexcept;
-	void on(HttpConnectionListener::Complete, HttpConnection* conn, const string& /*aLine*/, bool /*fromCoral*/) noexcept;
-	void on(HttpConnectionListener::Retried, HttpConnection* conn, bool connected) noexcept;
 
 	// QueueManagerListener
 	void on(QueueManagerListener::Finished, QueueItem* qi, const string& dir, int64_t speed) noexcept;
