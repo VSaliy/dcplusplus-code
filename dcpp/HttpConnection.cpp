@@ -19,6 +19,7 @@
 #include "stdinc.h"
 #include "HttpConnection.h"
 
+#include "BufferedSocket.h"
 #include "format.h"
 #include "SettingsManager.h"
 #include "version.h"
@@ -27,12 +28,12 @@ namespace dcpp {
 
 static const std::string CORAL_SUFFIX = ".nyud.net";
 
-HttpConnection::HttpConnection(CoralizeState coralizeState) :
+HttpConnection::HttpConnection(bool coralize) :
 ok(false),
 port("80"),
 size(-1),
 moved302(false),
-coralizeState(coralizeState),
+coralizeState(coralize ? CST_DEFAULT : CST_NOCORALIZE),
 socket(0)
 {
 }
@@ -204,7 +205,7 @@ void HttpConnection::on(BufferedSocketListener::Failed, const string& aLine) noe
 		return;
 	}
 	coralizeState = CST_DEFAULT;
-	fire(HttpConnectionListener::Failed(), this, aLine + " (" + currentUrl + ")");
+	fire(HttpConnectionListener::Failed(), this, str(F_("%1% (%2%)") % aLine % currentUrl));
 }
 
 void HttpConnection::on(BufferedSocketListener::ModeChange) noexcept {

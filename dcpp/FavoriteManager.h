@@ -22,7 +22,7 @@
 #include "SettingsManager.h"
 
 #include "CriticalSection.h"
-#include "HttpConnection.h"
+#include "HttpConnectionListener.h"
 #include "UserCommand.h"
 #include "FavoriteUser.h"
 #include "Singleton.h"
@@ -150,29 +150,29 @@ private:
 	FavoriteHubEntryList::iterator getFavoriteHub(const string& aServer);
 
 	// ClientManagerListener
-	virtual void on(UserUpdated, const OnlineUser& user) noexcept;
-	virtual void on(UserConnected, const UserPtr& user) noexcept;
-	virtual void on(UserDisconnected, const UserPtr& user) noexcept;
+	void on(UserUpdated, const OnlineUser& user) noexcept;
+	void on(UserConnected, const UserPtr& user) noexcept;
+	void on(UserDisconnected, const UserPtr& user) noexcept;
 
 	// HttpConnectionListener
-	virtual void on(Data, HttpConnection*, const uint8_t*, size_t) noexcept;
-	virtual void on(Failed, HttpConnection*, const string&) noexcept;
-	virtual void on(Complete, HttpConnection*, const string&, bool) noexcept;
-	virtual void on(Redirected, HttpConnection*, const string&) noexcept;
-	virtual void on(TypeNormal, HttpConnection*) noexcept;
-	virtual void on(TypeBZ2, HttpConnection*) noexcept;
-	virtual void on(Retried, HttpConnection*, bool) noexcept; 
+	void on(Data, HttpConnection*, const uint8_t*, size_t) noexcept;
+	void on(Failed, HttpConnection*, const string&) noexcept;
+	void on(Complete, HttpConnection*, const string&, bool) noexcept;
+	void on(Redirected, HttpConnection*, const string&) noexcept;
+	void on(TypeNormal, HttpConnection*) noexcept;
+	void on(TypeBZ2, HttpConnection*) noexcept;
+	void on(Retried, HttpConnection*, bool) noexcept; 
 
 	bool onHttpFinished(bool fromHttp) noexcept;
 
 	// SettingsManagerListener
-	virtual void on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
+	void on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
 		load(xml);
 	}
 
 	void load(SimpleXML& aXml);
 
-	string getConfigFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "Favorites.xml"; }
+	static string getConfigFile() { return Util::getPath(Util::PATH_USER_CONFIG) + "Favorites.xml"; }
 };
 
 } // namespace dcpp

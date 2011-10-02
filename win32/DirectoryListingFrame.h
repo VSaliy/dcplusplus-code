@@ -30,6 +30,8 @@
 #include "UserInfoBase.h"
 #include "AspectUserCommand.h"
 
+using std::deque;
+
 class DirectoryListingFrame :
 	public MDIChildFrame<DirectoryListingFrame>,
 	public IRecent<DirectoryListingFrame>,

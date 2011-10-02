@@ -20,10 +20,11 @@
 
 #include "AboutDlg.h"
 
+#include <dcpp/format.h>
+#include <dcpp/HttpDownload.h>
+#include <dcpp/SettingsManager.h>
 #include <dcpp/SimpleXML.h>
 #include <dcpp/version.h>
-#include <dcpp/format.h>
-#include <dcpp/SettingsManager.h>
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Label.h>
@@ -144,8 +145,8 @@ bool AboutDlg::handleInitDialog() {
 	layout();
 	centerWindow();
 
-	c.addListener(this);
-	c.downloadFile("http://dcplusplus.sourceforge.net/version.xml");
+	c.reset(new HttpDownload("http://dcplusplus.sourceforge.net/version.xml",
+		[this] { callAsync([=] { completeDownload(); }); }));
 
 	return false;
 }
@@ -155,37 +156,28 @@ void AboutDlg::layout() {
 	grid->resize(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }
 
-void AboutDlg::on(HttpConnectionListener::Data, HttpConnection* /*conn*/, const uint8_t* buf, size_t len) noexcept {
-	downBuf.append((char*)buf, len);
-}
+void AboutDlg::completeDownload() {
+	tstring str;
 
-void AboutDlg::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) noexcept {
-	tstring x;
-	if(!downBuf.empty()) {
+	if(!c->buf.empty()) {
 		try {
 			SimpleXML xml;
-			xml.fromXML(downBuf);
+			xml.fromXML(c->buf);
 			if(xml.findChild("DCUpdate")) {
 				xml.stepIn();
 				if(xml.findChild("Version")) {
-					x = Text::toT(xml.getChildData());
+					const auto& ver = xml.getChildData();
+					if(!ver.empty()) {
+						str = Text::toT(ver);
+					}
 				}
 			}
-		} catch(const SimpleXMLException&) { }
+		} catch(const SimpleXMLException&) {
+			str = T_("Error processing version information");
+		}
 	}
-	if(x.empty())
-		x = T_("Error processing version information");
-	callAsync([=] { version->setText(x); });
 
-	conn->removeListener(this);
-}
+	version->setText(str.empty() ? Text::toT(c->status) : str);
 
-void AboutDlg::on(HttpConnectionListener::Failed, HttpConnection* conn, const string& aLine) noexcept {
-	callAsync([=] { version->setText(Text::toT(aLine)); });
-	conn->removeListener(this);
-}
-
-void AboutDlg::on(HttpConnectionListener::Retried, HttpConnection* /*conn*/, bool connected) noexcept {
-	if(connected)
-		downBuf.clear();
+	c.reset();
 }

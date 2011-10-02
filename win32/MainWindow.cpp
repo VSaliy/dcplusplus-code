@@ -27,6 +27,7 @@
 #include <dcpp/Download.h>
 #include <dcpp/DownloadManager.h>
 #include <dcpp/FavoriteManager.h>
+#include <dcpp/HttpDownload.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/QueueManager.h>
 #include <dcpp/ResourceManager.h>
@@ -168,7 +169,8 @@ fullSlots(false)
 
 	TimerManager::getInstance()->start();
 
-	conns[CONN_VERSION].reset(new HttpConnWrapper("http://dcplusplus.sourceforge.net/version.xml", this, [this] { completeVersionUpdate(); }));
+	conns[CONN_VERSION].reset(new HttpDownload("http://dcplusplus.sourceforge.net/version.xml",
+		[this] { callAsync([=] { completeVersionUpdate(); }); }));
 
 	if(BOOLSETTING(GET_USER_COUNTRY)) {
 		checkGeoUpdate(true);
@@ -1303,8 +1305,8 @@ void MainWindow::updateGeo(bool v6) {
 		return;
 
 	LogManager::getInstance()->message(str(F_("Updating the %1% GeoIP database...") % (v6 ? "IPv6" : "IPv4")));
-	conn.reset(new HttpConnWrapper(Text::fromT(v6 ? links.geoip6 : links.geoip4), this,
-		[this, v6] { completeGeoUpdate(v6); }, HttpConnection::CST_NOCORALIZE));
+	conn.reset(new HttpDownload(Text::fromT(v6 ? links.geoip6 : links.geoip4),
+		[this, v6] { callAsync([=] { completeGeoUpdate(v6); }); }, false));
 }
 
 void MainWindow::completeGeoUpdate(bool v6) {
@@ -1531,49 +1533,6 @@ void MainWindow::handleTrayUpdate() {
 
 void MainWindow::handleWhatsThis() {
 	sendMessage(WM_SYSCOMMAND, SC_CONTEXTHELP);
-}
-
-MainWindow::HttpConnWrapper::HttpConnWrapper(const string& address, MainWindow* mw, CompletionF f, HttpConnection::CoralizeState coralizeState) :
-c(new HttpConnection(coralizeState)),
-mw(mw),
-f(f)
-{
-	c->addListener(mw);
-	c->downloadFile(address);
-}
-
-MainWindow::HttpConnWrapper::~HttpConnWrapper() {
-	c->removeListener(mw);
-	delete c;
-}
-
-MainWindow::HttpConnWrapper* MainWindow::getConn(HttpConnection* conn) const {
-	for(uint8_t i = 0; i < CONN_LAST; ++i) {
-		if(conns[i].get() && conns[i]->c == conn) {
-			return conns[i].get();
-		}
-	}
-	return 0;
-}
-
-void MainWindow::on(HttpConnectionListener::Data, HttpConnection* conn, const uint8_t* buf, size_t len) noexcept {
-	getConn(conn)->buf.append(reinterpret_cast<const char*>(buf), len);
-}
-
-void MainWindow::on(HttpConnectionListener::Failed, HttpConnection* conn, const string&) noexcept {
-	auto c = getConn(conn);
-	c->buf.clear();
-	callAsync([c] { c->f(); });
-}
-
-void MainWindow::on(HttpConnectionListener::Complete, HttpConnection* conn, const string&, bool) noexcept {
-	auto c = getConn(conn);
-	callAsync([c] { c->f(); });
-}
-
-void MainWindow::on(HttpConnectionListener::Retried, HttpConnection* conn, bool connected) noexcept {
-	if(connected)
-		getConn(conn)->buf.clear();
 }
 
 void MainWindow::on(PartialList, const HintedUser& aUser, const string& text) noexcept {
