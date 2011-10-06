@@ -98,7 +98,7 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 	list->setColumnWidth(0, LVSCW_AUTOSIZE);
 
 	list->onHelp([this, list](Widget*, unsigned id) { handleListHelp(list, id); });
-	list->setHelpId([this, list](unsigned id) { handleListHelpId(list, id); });
+	list->setHelpId([this, list](unsigned& id) { handleListHelpId(list, id); });
 }
 
 void PropPage::write(const ItemList& items) {
