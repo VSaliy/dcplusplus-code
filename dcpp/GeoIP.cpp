@@ -33,29 +33,40 @@ GeoIP::GeoIP() : geo(0) {
 }
 
 GeoIP::~GeoIP() {
-	GeoIP_delete(geo);
+	Lock l(cs);
+	close();
 }
 
-void GeoIP::init(const string& path) {
-	if(File::getSize(path) <= 0) {
-		if(File::getSize(path + ".gz") <= 0) {
-			return;
+void GeoIP::init(const string& path_) {
+	path = move(path_);
+	init();
+}
+
+namespace {
+
+string forwardRet(const char* ret) {
+	return ret ? ret : Util::emptyString;
+}
+
+#ifdef _WIN32
+string getGeoInfo(int id, GEOTYPE type) {
+	id = GeoIP_Win_GEOID_by_id(id);
+	if(id) {
+		tstring str(GetGeoInfo(id, type, 0, 0, 0), 0);
+		str.resize(GetGeoInfo(id, type, &str[0], str.size(), 0));
+		if(!str.empty()) {
+			return Text::fromT(str);
 		}
-
-		// there is a .gz file but no .dat; decompress the .gz.
-		try { GZ::decompress(path + ".gz", path); }
-		catch(const Exception&) { return; }
 	}
-
-	geo = GeoIP_open(path.c_str(), GEOIP_STANDARD);
-	if(geo) {
-		GeoIP_set_charset(geo, GEOIP_CHARSET_UTF8);
-	}
+	return Util::emptyString;
 }
+#endif
 
-namespace { string forwardRet(const char* ret) { return ret ? ret : Util::emptyString; } }
+} // unnamed namespace
 
 string GeoIP::getCountry(const string& ip) const {
+	Lock l(cs);
+
 	if(geo) {
 
 		auto id = (v6() ? GeoIP_id_by_addr_v6 : GeoIP_id_by_addr)(geo, ip.c_str());
@@ -65,14 +76,69 @@ string GeoIP::getCountry(const string& ip) const {
 
 			params["2code"] = [id] { return forwardRet(GeoIP_code_by_id(id)); };
 			params["3code"] = [id] { return forwardRet(GeoIP_code3_by_id(id)); };
-			params["name"] = [this, id] { return forwardRet(GeoIP_country_name_by_id(geo, id)); };
 			params["continent"] = [id] { return forwardRet(GeoIP_continent_by_id(id)); };
+			params["engname"] = [id] { return forwardRet(GeoIP_name_by_id(id)); };
+#ifdef _WIN32
+			params["name"] = [id]() -> string {
+				auto str = getGeoInfo(id, GEO_FRIENDLYNAME);
+				return str.empty() ? forwardRet(GeoIP_name_by_id(id)) : str;
+			};
+			params["officialname"] = [id]() -> string {
+				auto str = getGeoInfo(id, GEO_OFFICIALNAME);
+				return str.empty() ? forwardRet(GeoIP_name_by_id(id)) : str;
+			};
+#else
+			/// @todo any way to get localized country names on non-Windows?
+			params["name"] = [id] { return forwardRet(GeoIP_name_by_id(id)); };
+			params["officialname"] = [id] { return forwardRet(GeoIP_name_by_id(id)); };
+#endif
 
 			return Util::formatParams(SETTING(COUNTRY_FORMAT), params);
 		}
 	}
 
 	return Util::emptyString;
+}
+
+void GeoIP::update() {
+	Lock l(cs);
+
+	close();
+
+	if(decompress()) {
+		open();
+	}
+}
+
+void GeoIP::init() {
+	if(File::getSize(path) <= 0 && !decompress()) {
+		return;
+	}
+
+	open();
+}
+
+bool GeoIP::decompress() const {
+	if(File::getSize(path + ".gz") <= 0) {
+		return false;
+	}
+
+	try { GZ::decompress(path + ".gz", path); }
+	catch(const Exception&) { return false; }
+
+	return true;
+}
+
+void GeoIP::open() {
+	geo = GeoIP_open(path.c_str(), GEOIP_STANDARD);
+	if(geo) {
+		GeoIP_set_charset(geo, GEOIP_CHARSET_UTF8);
+	}
+}
+
+void GeoIP::close() {
+	GeoIP_delete(geo);
+	geo = 0;
 }
 
 bool GeoIP::v6() const {

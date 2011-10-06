@@ -968,6 +968,10 @@ string Util::getCountry(const string& ip, int flags) {
 	return emptyString;
 }
 
+void Util::updateCountryDb(bool v6) {
+	(v6 ? geo6 : geo4).update();
+}
+
 string Util::getTimeString() {
 	char buf[64];
 	time_t _tt;

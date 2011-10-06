@@ -10,9 +10,4 @@ if dev.is_win32():
 
 ret = env.StaticLibrary(target, sources)
 
-# copy the DB to the build dir.
-import os
-for file in Glob('db/*.gz'):
-	env.Command(dev.get_build_path('bin/') + os.path.basename(str(file)), file, Copy('$TARGET', '$SOURCE'))
-
 Return('ret')

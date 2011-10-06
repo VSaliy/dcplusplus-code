@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_DCPP_GEOIP_H
 #define DCPLUSPLUS_DCPP_GEOIP_H
 
+#include "CriticalSection.h"
+
 #include <string>
 
 typedef struct GeoIPTag GeoIP;
@@ -32,13 +34,21 @@ public:
 	GeoIP();
 	~GeoIP();
 
-	void init(const string& path);
+	void init(const string& path_);
 	string getCountry(const string& ip) const;
+	void update();
 
 private:
+	void init();
+	bool decompress() const;
+	void open();
+	void close();
 	bool v6() const;
 
+	mutable CriticalSection cs;
 	::GeoIP* geo;
+
+	string path;
 };
 
 } // namespace dcpp

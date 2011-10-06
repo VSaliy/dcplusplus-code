@@ -146,7 +146,6 @@ extern const char *GeoIPCityConfidenceFileName;
  * program with newer GeoIP versions */
 extern const char GeoIP_country_code[254][3];
 extern const char GeoIP_country_code3[254][4];
-extern const char * GeoIP_country_name[254];
 extern const char * GeoIP_utf8_country_name[254];
 extern const char GeoIP_country_continent[254][3];
 
@@ -243,6 +242,11 @@ GEOIP_API const char* GeoIP_name_by_id(int id);
 
 /** return continent of country */
 GEOIP_API const char* GeoIP_continent_by_id(int id);
+
+#ifdef _WIN32
+/** return a Windows GEOID */
+GEOIP_API int GeoIP_Win_GEOID_by_id(int id);
+#endif
 
 /** return id by country code **/
 GEOIP_API int GeoIP_id_by_code(const char *country);
