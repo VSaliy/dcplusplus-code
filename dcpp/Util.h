@@ -434,6 +434,7 @@ public:
 
 	enum { V6 = 1 << 1, V4 = 1 << 2 };
 	static string getCountry(const string& ip, int flags = V6 | V4);
+	static void updateCountryDb(bool v6);
 
 	static bool getAway();
 	static void setAway(bool aAway);

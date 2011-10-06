@@ -2,7 +2,6 @@
 <Strings>
 	<SECTION_DCPP>DC++ (required)</SECTION_DCPP>
 	<BACKUP_QUESTION>A previous installation of DC++ has been found; backup settings and queue to '$R0'?</BACKUP_QUESTION>
-	<SECTION_IP_COUNTRY>IP -&gt; country mappings</SECTION_IP_COUNTRY>
 	<SECTION_START_MENU>Start menu shortcuts</SECTION_START_MENU>
 	<SECTION_LOCAL>Store settings in the user profile directory</SECTION_LOCAL>
 	<LOCAL_WARNING>Unchecking this box will make DC++ store its settings in the program directory. This is strongly discouraged on Windows Vista and later; settings or downloads might get lost.</LOCAL_WARNING>

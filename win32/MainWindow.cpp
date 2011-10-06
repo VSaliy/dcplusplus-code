@@ -1316,8 +1316,8 @@ void MainWindow::completeGeoUpdate(bool v6) {
 	if(!conn->buf.empty()) {
 		try {
 			File(Util::getGeoPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE).write(conn->buf);
-			File f(Util::getGeoPath(v6), File::WRITE, File::CREATE | File::TRUNCATE); // clear the previous db
-			LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated; restart DC++ to apply") % (v6 ? "IPv6" : "IPv4")));
+			Util::updateCountryDb(v6);
+			LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % (v6 ? "IPv6" : "IPv4")));
 			return;
 		} catch(const FileException&) { }
 	}

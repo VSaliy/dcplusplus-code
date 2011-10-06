@@ -157,34 +157,37 @@ const char GeoIP_country_code3[254][4] = { "--","AP","EU","AND","ARE","AFG","ATG
 	"ZMB","MNE","ZWE","A1","A2","O1","ALA","GGY","IMN","JEY",
   "BLM","MAF", "BES"};
 
-const char * GeoIP_utf8_country_name[254] = {"N/A","Asia/Pacific Region","Europe","Andorra","United Arab Emirates","Afghanistan","Antigua and Barbuda","Anguilla","Albania","Armenia","Cura" "\xc3\xa7" "ao",
-	"Angola","Antarctica","Argentina","American Samoa","Austria","Australia","Aruba","Azerbaijan","Bosnia and Herzegovina","Barbados",
-	"Bangladesh","Belgium","Burkina Faso","Bulgaria","Bahrain","Burundi","Benin","Bermuda","Brunei Darussalam","Bolivia",
-	"Brazil","Bahamas","Bhutan","Bouvet Island","Botswana","Belarus","Belize","Canada","Cocos (Keeling) Islands","Congo, The Democratic Republic of the",
-	"Central African Republic","Congo","Switzerland","Cote D'Ivoire","Cook Islands","Chile","Cameroon","China","Colombia","Costa Rica",
-	"Cuba","Cape Verde","Christmas Island","Cyprus","Czech Republic","Germany","Djibouti","Denmark","Dominica","Dominican Republic",
-	"Algeria","Ecuador","Estonia","Egypt","Western Sahara","Eritrea","Spain","Ethiopia","Finland","Fiji",
-	"Falkland Islands (Malvinas)","Micronesia, Federated States of","Faroe Islands","France","Sint Maarten (Dutch part)","Gabon","United Kingdom","Grenada","Georgia","French Guiana",
-	"Ghana","Gibraltar","Greenland","Gambia","Guinea","Guadeloupe","Equatorial Guinea","Greece","South Georgia and the South Sandwich Islands","Guatemala",
-	"Guam","Guinea-Bissau","Guyana","Hong Kong","Heard Island and McDonald Islands","Honduras","Croatia","Haiti","Hungary","Indonesia",
-	"Ireland","Israel","India","British Indian Ocean Territory","Iraq","Iran, Islamic Republic of","Iceland","Italy","Jamaica","Jordan",
-	"Japan","Kenya","Kyrgyzstan","Cambodia","Kiribati","Comoros","Saint Kitts and Nevis","Korea, Democratic People's Republic of","Korea, Republic of","Kuwait",
-	"Cayman Islands","Kazakhstan","Lao People's Democratic Republic","Lebanon","Saint Lucia","Liechtenstein","Sri Lanka","Liberia","Lesotho","Lithuania",
-	"Luxembourg","Latvia","Libyan Arab Jamahiriya","Morocco","Monaco","Moldova, Republic of","Madagascar","Marshall Islands","Macedonia","Mali",
-	"Myanmar","Mongolia","Macau","Northern Mariana Islands","Martinique","Mauritania","Montserrat","Malta","Mauritius","Maldives",
-	"Malawi","Mexico","Malaysia","Mozambique","Namibia","New Caledonia","Niger","Norfolk Island","Nigeria","Nicaragua",
-	"Netherlands","Norway","Nepal","Nauru","Niue","New Zealand","Oman","Panama","Peru","French Polynesia",
-	"Papua New Guinea","Philippines","Pakistan","Poland","Saint Pierre and Miquelon","Pitcairn Islands","Puerto Rico","Palestinian Territory","Portugal","Palau",
-	"Paraguay","Qatar","Reunion","Romania","Russian Federation","Rwanda","Saudi Arabia","Solomon Islands","Seychelles","Sudan",
-	"Sweden","Singapore","Saint Helena","Slovenia","Svalbard and Jan Mayen","Slovakia","Sierra Leone","San Marino","Senegal","Somalia","Suriname",
-	"Sao Tome and Principe","El Salvador","Syrian Arab Republic","Swaziland","Turks and Caicos Islands","Chad","French Southern Territories","Togo","Thailand",
-	"Tajikistan","Tokelau","Turkmenistan","Tunisia","Tonga","Timor-Leste","Turkey","Trinidad and Tobago","Tuvalu","Taiwan",
-	"Tanzania, United Republic of","Ukraine","Uganda","United States Minor Outlying Islands","United States","Uruguay","Uzbekistan","Holy See (Vatican City State)","Saint Vincent and the Grenadines","Venezuela",
-	"Virgin Islands, British","Virgin Islands, U.S.","Vietnam","Vanuatu","Wallis and Futuna","Samoa","Yemen","Mayotte","Serbia","South Africa",
-	"Zambia","Montenegro","Zimbabwe","Anonymous Proxy","Satellite Provider","Other","Aland Islands","Guernsey","Isle of Man","Jersey",
-  "Saint Barthelemy","Saint Martin", "Bonaire, Saint Eustatius and Saba"};
+#ifdef _WIN32
+// from <http://msdn.microsoft.com/en-us/library/dd374073.aspx>
+int GeoIP_Win_GEOID[254] = { 0x0,0x0,0x0,0x8,0xE0,0x3,0x2,0x12C,0x6,0x7,0x0,
+	0x9,0x12D,0xB,0xA,0xE,0xC,0x12E,0x5,0x19,0x12,
+	0x17,0x15,0xF5,0x23,0x11,0x26,0x1C,0x14,0x25,0x1A,
+	0x20,0x16,0x22,0x132,0x13,0x1D,0x18,0x27,0x137,0x2C,
+	0x37,0x2B,0xDF,0x77,0x138,0x2E,0x31,0x2D,0x33,0x36,
+	0x38,0x39,0x135,0x3B,0x4B,0x5E,0x3E,0x3D,0x3F,0x41,
+	0x4,0x42,0x46,0x43,0x0,0x47,0xD9,0x49,0x4D,0x4E,
+	0x13B,0x50,0x51,0x54,0x0,0x57,0xF2,0x5B,0x58,0x13D,
+	0x59,0x5A,0x5D,0x56,0x64,0x141,0x45,0x62,0x156,0x63,
+	0x142,0xC4,0x65,0x68,0x145,0x6A,0x6C,0x67,0x6D,0x6F,
+	0x44,0x75,0x71,0x72,0x79,0x74,0x6E,0x76,0x7C,0x7E,
+	0x7A,0x81,0x82,0x28,0x85,0x32,0xCF,0x83,0x86,0x88,
+	0x133,0x89,0x8A,0x8B,0xDA,0x91,0x2A,0x8E,0x92,0x8D,
+	0x93,0x8C,0x94,0x9F,0x9E,0x98,0x95,0xC7,0x4CA2,0x9D,
+	0x1B,0x9A,0x97,0x151,0x14A,0xA2,0x14C,0xA3,0xA0,0xA5,
+	0x9C,0xA6,0xA7,0xA8,0xFE,0x14E,0xAD,0x150,0xAF,0xB6,
+	0xB0,0xB1,0xB2,0xB4,0x14F,0xB7,0xA4,0xC0,0xBB,0x13E,
+	0xC2,0xC9,0xBE,0xBF,0xCE,0x153,0xCA,0xB8,0xC1,0xC3,
+	0xB9,0xC5,0xC6,0xC8,0xCB,0xCC,0xCD,0x1E,0xD0,0xDB,
+	0xDD,0xD7,0x157,0xD4,0xDC,0x8F,0xD5,0xD6,0xD2,0xD8,0xB5,
+	0xE9,0x48,0xDE,0x104,0x15D,0x29,0x13F,0xE8,0xE3,
+	0xE4,0x15B,0xEE,0xEA,0xE7,0x6F60E7,0xEB,0xE1,0xEC,0xED,
+	0xEF,0xF1,0xF0,0xF4,0xF4,0xF6,0xF7,0xFD,0xF8,0xF9,
+	0x15F,0xFC,0xFB,0xAE,0x160,0x103,0x105,0x14B,0x10F,0xD1,
+	0x107,0x10E,0x108,0x0,0x0,0x0,0x0,0x144,0x3B16,0x148,
+	0x0,0x0,0x0 };
+#endif
 
-const char * GeoIP_country_name[254] = {"N/A","Asia/Pacific Region","Europe","Andorra","United Arab Emirates","Afghanistan","Antigua and Barbuda","Anguilla","Albania","Armenia","Cura" "\xe7" "ao",
+const char * GeoIP_utf8_country_name[254] = {"N/A","Asia/Pacific Region","Europe","Andorra","United Arab Emirates","Afghanistan","Antigua and Barbuda","Anguilla","Albania","Armenia","Cura" "\xc3\xa7" "ao",
 	"Angola","Antarctica","Argentina","American Samoa","Austria","Australia","Aruba","Azerbaijan","Bosnia and Herzegovina","Barbados",
 	"Bangladesh","Belgium","Burkina Faso","Bulgaria","Bahrain","Burundi","Benin","Bermuda","Brunei Darussalam","Bolivia",
 	"Brazil","Bahamas","Bhutan","Bouvet Island","Botswana","Belarus","Belize","Canada","Cocos (Keeling) Islands","Congo, The Democratic Republic of the",
@@ -1910,18 +1913,16 @@ const char* GeoIP_country_name_by_id(GeoIP * gi, int id)
        /* return NULL also even for index 0 for backward compatibility */
        if (id <= 0 || id >= (int) num_GeoIP_countries)
                return NULL;
-       return ((gi->charset == GEOIP_CHARSET_UTF8)
-         ? GeoIP_utf8_country_name[id]
-         : GeoIP_country_name[id]);
+       return GeoIP_utf8_country_name[id];
 }
 
-/** return full name of country in iso-8859-1 */
+/** return full name of country in utf-8 */
 const char* GeoIP_name_by_id(int id)
 {
        if (id < 0 || id >= (int) num_GeoIP_countries)
                return NULL;
 
-       return GeoIP_country_name[id];
+       return GeoIP_utf8_country_name[id];
 }
 
 /** return continent of country */
@@ -1932,6 +1933,17 @@ const char* GeoIP_continent_by_id(int id)
 
        return GeoIP_country_continent[id];
 }
+
+#ifdef _WIN32
+/** return a Windows GEOID */
+int GeoIP_Win_GEOID_by_id(int id)
+{
+       if (id < 0 || id >= (int) num_GeoIP_countries)
+               return 0;
+
+       return GeoIP_Win_GEOID[id];
+}
+#endif
 
 /** return id by country code **/
 int GeoIP_id_by_code(const char *country)

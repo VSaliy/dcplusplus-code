@@ -124,12 +124,6 @@ no_backup:
   WriteUninstaller "uninstall.exe"
 SectionEnd
 
-Section $(SECTION_IP_COUNTRY)
-  SetOutPath "$LOCALAPPDATA\DC++"
-  File "GeoIPv6.dat.gz"
-  File "GeoIP.dat.gz"
-SectionEnd
-
 Section $(SECTION_START_MENU)
   CreateDirectory "$SMPROGRAMS\DC++"
   CreateShortCut "$SMPROGRAMS\DC++\DC++.lnk" "$INSTDIR\DCPlusPlus.exe" "" "$INSTDIR\DCPlusPlus.exe" 0 "" "" "$(SM_DCPP_DESCR)"
