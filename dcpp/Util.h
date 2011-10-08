@@ -157,8 +157,6 @@ public:
 	static string getHubListsPath() { return getPath(PATH_HUB_LISTS); }
 	/** Notepad filename */
 	static string getNotepadFile() { return getPath(PATH_NOTEPAD); }
-	/** GeoIP database path */
-	static string getGeoPath(bool v6);
 
 	static string translateError(int aError);
 
@@ -431,10 +429,6 @@ public:
 	static int strnicmp(const string& a, const string& b, size_t n) { return strnicmp(a.c_str(), b.c_str(), n); }
 	static int stricmp(const wstring& a, const wstring& b) { return stricmp(a.c_str(), b.c_str()); }
 	static int strnicmp(const wstring& a, const wstring& b, size_t n) { return strnicmp(a.c_str(), b.c_str(), n); }
-
-	enum { V6 = 1 << 1, V4 = 1 << 2 };
-	static string getCountry(const string& ip, int flags = V6 | V4);
-	static void updateCountryDb(bool v6);
 
 	static bool getAway();
 	static void setAway(bool aAway);

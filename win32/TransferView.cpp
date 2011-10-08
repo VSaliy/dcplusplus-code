@@ -19,23 +19,24 @@
 #include "stdafx.h"
 #include "TransferView.h"
 
-#include <dcpp/SettingsManager.h>
-#include <dcpp/ConnectionManager.h>
-#include <dcpp/DownloadManager.h>
-#include <dcpp/UploadManager.h>
-#include <dcpp/QueueManager.h>
 #include <dcpp/ClientManager.h>
+#include <dcpp/ConnectionManager.h>
 #include <dcpp/Download.h>
+#include <dcpp/DownloadManager.h>
+#include <dcpp/GeoManager.h>
+#include <dcpp/QueueManager.h>
+#include <dcpp/SettingsManager.h>
 #include <dcpp/Upload.h>
+#include <dcpp/UploadManager.h>
 #include <dcpp/UserConnection.h>
 
 #include <dwt/resources/Pen.h>
 #include <dwt/util/StringUtils.h>
 
 #include "resource.h"
+#include "HoldRedraw.h"
 #include "TypedTable.h"
 #include "WinUtil.h"
-#include "HoldRedraw.h"
 
 using dwt::util::escapeMenu;
 
@@ -734,7 +735,7 @@ void TransferView::starting(UpdateInfo* ui, Transfer* t) {
 	ui->setChunk(t->getPos(), t->getSize());
 	const UserConnection& uc = t->getUserConnection();
 	ui->setCipher(Text::toT(uc.getCipherName()));
-	auto country = Util::getCountry(uc.getRemoteIp());
+	auto country = GeoManager::getInstance()->getCountry(uc.getRemoteIp());
 	if(!country.empty())
 		ui->setCountry(Text::toT(country));
 	ui->setIP(Text::toT(uc.getRemoteIp()));

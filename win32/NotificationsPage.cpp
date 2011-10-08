@@ -147,7 +147,7 @@ balloonBg(0)
 	table->onDblClicked([this] { handleDblClicked(); });
 
 	table->onHelp([this](Widget*, unsigned id) { handleTableHelp(id); });
-	table->setHelpId([this](unsigned id) { handleTableHelpId(id); });
+	table->setHelpId([this](unsigned& id) { handleTableHelpId(id); });
 }
 
 NotificationsPage::~NotificationsPage() {

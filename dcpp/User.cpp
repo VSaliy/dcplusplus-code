@@ -21,8 +21,9 @@
 
 #include "AdcHub.h"
 #include "FavoriteUser.h"
-#include "StringTokenizer.h"
 #include "format.h"
+#include "GeoManager.h"
+#include "StringTokenizer.h"
 
 namespace dcpp {
 
@@ -82,24 +83,24 @@ void Identity::getParams(ParamMap& params, const string& prefix, bool compatibil
 		}
 	}
 	if(user) {
-		params[prefix + "SID"] = getSIDString();
-		params[prefix + "CID"] = user->getCID().toBase32();
-		params[prefix + "TAG"] = getTag();
-		params[prefix + "SSshort"] = Util::formatBytes(get("SS"));
+		params[prefix + "SID"] = [this] { return getSIDString(); };
+		params[prefix + "CID"] = [this] { return user->getCID().toBase32(); };
+		params[prefix + "TAG"] = [this] { return getTag(); };
+		params[prefix + "SSshort"] = [this] { return Util::formatBytes(get("SS")); };
 
 		if(compatibility) {
 			if(prefix == "my") {
-				params["mynick"] = getNick();
-				params["mycid"] = user->getCID().toBase32();
+				params["mynick"] = [this] { return getNick(); };
+				params["mycid"] = [this] { return user->getCID().toBase32(); };
 			} else {
-				params["nick"] = getNick();
-				params["cid"] = user->getCID().toBase32();
-				params["ip"] = get("I4");
-				params["tag"] = getTag();
-				params["description"] = get("DE");
-				params["email"] = get("EM");
-				params["share"] = get("SS");
-				params["shareshort"] = Util::formatBytes(get("SS"));
+				params["nick"] = [this] { return getNick(); };
+				params["cid"] = [this] { return user->getCID().toBase32(); };
+				params["ip"] = [this] { return get("I4"); };
+				params["tag"] = [this] { return getTag(); };
+				params["description"] = [this] { return get("DE"); };
+				params["email"] = [this] { return get("EM"); };
+				params["share"] = [this] { return get("SS"); };
+				params["shareshort"] = [this] { return Util::formatBytes(get("SS")); };
 			}
 		}
 	}
@@ -144,7 +145,7 @@ string Identity::getConnection() const {
 
 string Identity::getCountry() const {
 	bool v6 = !getIp6().empty();
-	return Util::getCountry(v6 ? getIp6() : getIp4(), v6 ? Util::V6 : Util::V4);
+	return GeoManager::getInstance()->getCountry(v6 ? getIp6() : getIp4(), v6 ? GeoManager::V6 : GeoManager::V4);
 }
 
 string Identity::get(const char* name) const {

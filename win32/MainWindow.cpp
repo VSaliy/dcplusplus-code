@@ -27,6 +27,7 @@
 #include <dcpp/Download.h>
 #include <dcpp/DownloadManager.h>
 #include <dcpp/FavoriteManager.h>
+#include <dcpp/GeoManager.h>
 #include <dcpp/HttpDownload.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/QueueManager.h>
@@ -172,11 +173,6 @@ fullSlots(false)
 	conns[CONN_VERSION].reset(new HttpDownload("http://dcplusplus.sourceforge.net/version.xml",
 		[this] { callAsync([=] { completeVersionUpdate(); }); }));
 
-	if(BOOLSETTING(GET_USER_COUNTRY)) {
-		checkGeoUpdate(true);
-		checkGeoUpdate(false);
-	}
-
 	try {
 		ConnectivityManager::getInstance()->setup(true);
 	} catch (const Exception& e) {
@@ -285,7 +281,7 @@ void MainWindow::initMenu() {
 
 		file->appendItem(T_("Settings\tCtrl+F3"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));
 		file->appendSeparator();
-		file->appendItem(T_("GeoIP database update"), [this] { updateGeo(true); updateGeo(false); });
+		file->appendItem(T_("GeoIP database update"), [this] { updateGeo(); });
 		file->appendSeparator();
 		file->appendItem(T_("E&xit\tAlt+F4"), [this] { GCC_WTF->close(true); }, WinUtil::menuIcon(IDI_EXIT));
 	}
@@ -922,7 +918,9 @@ void MainWindow::saveWindowSettings() {
 
 bool MainWindow::handleClosing() {
 	if(!closing()) {
-		if ( !BOOLSETTING(CONFIRM_EXIT) || (dwt::MessageBox(this).show(T_("Really exit?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)) {
+		if(!BOOLSETTING(CONFIRM_EXIT) || (dwt::MessageBox(this).show(T_("Really exit?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+			dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES))
+		{
 
 			for(uint8_t i = 0; i < CONN_LAST; ++i)
 				conns[i].reset();
@@ -1057,53 +1055,71 @@ void MainWindow::handleSettings() {
 	if(isIconic())
 		handleRestore();
 
-	SettingsDialog dlg(this);
+	auto prevTCP = SETTING(TCP_PORT);
+	auto prevUDP = SETTING(UDP_PORT);
+	auto prevTLS = SETTING(TLS_PORT);
 
-	unsigned short lastTCP = static_cast<unsigned short>(SETTING(TCP_PORT));
-	unsigned short lastUDP = static_cast<unsigned short>(SETTING(UDP_PORT));
-	unsigned short lastTLS = static_cast<unsigned short>(SETTING(TLS_PORT));
+	auto prevConn = SETTING(INCOMING_CONNECTIONS);
+	auto prevMapper = SETTING(MAPPER);
+	auto prevBind = SETTING(BIND_ADDRESS);
 
-	int lastConn = SETTING(INCOMING_CONNECTIONS);
-	string lastMapper = SETTING(MAPPER);
-	string lastBind = SETTING(BIND_ADDRESS);
+	auto prevGeo = BOOLSETTING(GET_USER_COUNTRY);
+	auto prevGeoFormat = SETTING(COUNTRY_FORMAT);
 
-	bool lastTray = BOOLSETTING(ALWAYS_TRAY);
-	bool lastSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
-	bool lastURLReg = BOOLSETTING(URL_HANDLER);
-	bool lastMagnetReg = BOOLSETTING(MAGNET_REGISTER);
-	int lastSettingsSave = SETTING(SETTINGS_SAVE_INTERVAL);
+	auto prevTray = BOOLSETTING(ALWAYS_TRAY);
+	auto prevSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
+	auto prevURLReg = BOOLSETTING(URL_HANDLER);
+	auto prevMagnetReg = BOOLSETTING(MAGNET_REGISTER);
+	auto prevSettingsSave = SETTING(SETTINGS_SAVE_INTERVAL);
 
-	if(dlg.run() == IDOK) {
+	if(SettingsDialog(this).run() == IDOK) {
 		SettingsManager::getInstance()->save();
 
 		try {
-			ConnectivityManager::getInstance()->setup(SETTING(INCOMING_CONNECTIONS) != lastConn ||
-				SETTING(TCP_PORT) != lastTCP || SETTING(UDP_PORT) != lastUDP || SETTING(TLS_PORT) != lastTLS ||
-				SETTING(MAPPER) != lastMapper || SETTING(BIND_ADDRESS) != lastBind);
+			ConnectivityManager::getInstance()->setup(SETTING(INCOMING_CONNECTIONS) != prevConn ||
+				SETTING(TCP_PORT) != prevTCP || SETTING(UDP_PORT) != prevUDP || SETTING(TLS_PORT) != prevTLS ||
+				SETTING(MAPPER) != prevMapper || SETTING(BIND_ADDRESS) != prevBind);
 		} catch (const Exception& e) {
 			showPortsError(e.getError());
 		}
 
-		if(BOOLSETTING(ALWAYS_TRAY) != lastTray)
-			notifier->setVisible(BOOLSETTING(ALWAYS_TRAY));
-
-		if(BOOLSETTING(SORT_FAVUSERS_FIRST) != lastSortFavUsersFirst)
-			HubFrame::resortUsers();
-
-		if(BOOLSETTING(URL_HANDLER) != lastURLReg)
-			WinUtil::registerHubHandlers();
-		if(BOOLSETTING(MAGNET_REGISTER) != lastMagnetReg)
-			WinUtil::registerMagnetHandler();
-
 		ClientManager::getInstance()->infoUpdated();
 
-		if(SETTING(SETTINGS_SAVE_INTERVAL) != lastSettingsSave)
+		bool rebuildGeo = prevGeo && SETTING(COUNTRY_FORMAT) != prevGeoFormat;
+		if(BOOLSETTING(GET_USER_COUNTRY) != prevGeo) {
+			if(BOOLSETTING(GET_USER_COUNTRY)) {
+				GeoManager::getInstance()->init();
+				checkGeoUpdate();
+			} else {
+				GeoManager::getInstance()->close();
+				rebuildGeo = false;
+			}
+		}
+		if(rebuildGeo) {
+			GeoManager::getInstance()->rebuild();
+		}
+
+		if(BOOLSETTING(ALWAYS_TRAY) != prevTray)
+			notifier->setVisible(BOOLSETTING(ALWAYS_TRAY));
+
+		if(BOOLSETTING(SORT_FAVUSERS_FIRST) != prevSortFavUsersFirst)
+			HubFrame::resortUsers();
+
+		if(BOOLSETTING(URL_HANDLER) != prevURLReg)
+			WinUtil::registerHubHandlers();
+		if(BOOLSETTING(MAGNET_REGISTER) != prevMagnetReg)
+			WinUtil::registerMagnetHandler();
+
+		if(SETTING(SETTINGS_SAVE_INTERVAL) != prevSettingsSave)
 			setSaveTimer();
 	}
 }
 
 void MainWindow::showPortsError(const string& port) {
-	dwt::MessageBox(this).show(Text::toT(str(F_("Unable to open %1% port. Searching or file transfers will not work correctly until you change settings or turn off any application that might be using that port.") % port)), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+	dwt::MessageBox(this).show(Text::toT(str(F_(
+		"Unable to open %1% port. Searching or file transfers will not work correctly until you "
+		"change settings or turn off any application that might be using that port."
+		) % port)), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
 }
 
 void MainWindow::handleOpenFileList() {
@@ -1113,7 +1129,8 @@ void MainWindow::handleOpenFileList() {
 		if (u) {
 			DirectoryListingFrame::openWindow(getTabView(), file, Util::emptyStringT, HintedUser(u, Util::emptyString), 0);
 		} else {
-			dwt::MessageBox(this).show(T_("Invalid file list name"), _T(APPNAME) _T(" ") _T(VERSIONSTRING));
+			dwt::MessageBox(this).show(T_("Invalid file list name"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+				dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 		}
 	}
 }
@@ -1286,17 +1303,37 @@ void MainWindow::completeVersionUpdate() {
 	} catch (const Exception&) { }
 
 	conns[CONN_VERSION].reset();
+
+	// check after the version.xml download in case it contains updated GeoIP links.
+	if(BOOLSETTING(GET_USER_COUNTRY)) {
+		checkGeoUpdate();
+	}
+}
+
+void MainWindow::checkGeoUpdate() {
+	checkGeoUpdate(true);
+	checkGeoUpdate(false);
 }
 
 void MainWindow::checkGeoUpdate(bool v6) {
 	// update when the database is non-existent or older than 16 days (GeoIP updates every month).
 	try {
-		File f(Util::getGeoPath(v6) + ".gz", File::READ, File::OPEN);
+		File f(GeoManager::getDbPath(v6) + ".gz", File::READ, File::OPEN);
 		if(f.getSize() > 0 && f.getLastModified() > GET_TIME() - 3600 * 24 * 16) {
 			return;
 		}
 	} catch(const FileException&) { }
 	updateGeo(v6);
+}
+
+void MainWindow::updateGeo() {
+	if(BOOLSETTING(GET_USER_COUNTRY)) {
+		updateGeo(true);
+		updateGeo(false);
+	} else {
+		dwt::MessageBox(this).show(T_("IP -> country mappings are disabled. Turn them back on via Settings > Appearance."),
+			_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
+	}
 }
 
 void MainWindow::updateGeo(bool v6) {
@@ -1315,8 +1352,8 @@ void MainWindow::completeGeoUpdate(bool v6) {
 
 	if(!conn->buf.empty()) {
 		try {
-			File(Util::getGeoPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE).write(conn->buf);
-			Util::updateCountryDb(v6);
+			File(GeoManager::getDbPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE).write(conn->buf);
+			GeoManager::getInstance()->update(v6);
 			LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % (v6 ? "IPv6" : "IPv4")));
 			return;
 		} catch(const FileException&) { }
