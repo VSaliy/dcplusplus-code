@@ -208,7 +208,9 @@ private:
 	void statusMessage(time_t t, const string& m);
 
 	void completeVersionUpdate();
+	void checkGeoUpdate();
 	void checkGeoUpdate(bool v6);
+	void updateGeo();
 	void updateGeo(bool v6);
 	void completeGeoUpdate(bool v6);
 

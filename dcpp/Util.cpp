@@ -30,7 +30,6 @@
 #include "ClientManager.h"
 #include "FastAlloc.h"
 #include "File.h"
-#include "GeoIP.h"
 #include "LogManager.h"
 #include "SettingsManager.h"
 #include "SimpleXML.h"
@@ -54,8 +53,6 @@ using std::make_pair;
 #ifndef _DEBUG
 FastCriticalSection FastAllocBase::cs;
 #endif
-
-GeoIP geo6, geo4;
 
 string Util::emptyString;
 wstring Util::emptyStringW;
@@ -196,9 +193,6 @@ void Util::initialize(PathsMap pathOverrides) {
 
 	File::ensureDirectory(paths[PATH_USER_CONFIG]);
 	File::ensureDirectory(paths[PATH_USER_LOCAL]);
-
-	geo6.init(getGeoPath(true));
-	geo4.init(getGeoPath(false));
 }
 
 void Util::migrate(const string& file) {
@@ -248,10 +242,6 @@ void Util::loadBootConfig() {
 	} catch(const Exception& ) {
 		// Unable to load boot settings...
 	}
-}
-
-string Util::getGeoPath(bool v6) {
-	return getPath(PATH_USER_LOCAL) + (v6 ? "GeoIPv6.dat" : "GeoIP.dat");
 }
 
 #ifdef _WIN32
@@ -949,27 +939,6 @@ uint32_t Util::rand() {
 	y ^= TEMPERING_SHIFT_L(y);
 
 	return y;
-}
-
-string Util::getCountry(const string& ip, int flags) {
-	if(BOOLSETTING(GET_USER_COUNTRY) && !ip.empty()) {
-
-		if(flags & V6) {
-			auto ret = geo6.getCountry(ip);
-			if(!ret.empty())
-				return ret;
-		}
-
-		if(flags & V4) {
-			return geo4.getCountry(ip);
-		}
-	}
-
-	return emptyString;
-}
-
-void Util::updateCountryDb(bool v6) {
-	(v6 ? geo6 : geo4).update();
 }
 
 string Util::getTimeString() {

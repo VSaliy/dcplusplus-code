@@ -29,7 +29,12 @@
 
 namespace dcpp {
 
-GeoIP::GeoIP() : geo(0) {
+GeoIP::GeoIP(const string&& path) : geo(0), path(path) {
+	if(File::getSize(path) <= 0 && !decompress()) {
+		return;
+	}
+
+	open();
 }
 
 GeoIP::~GeoIP() {
@@ -37,9 +42,25 @@ GeoIP::~GeoIP() {
 	close();
 }
 
-void GeoIP::init(const string& path_) {
-	path = move(path_);
-	init();
+string GeoIP::getCountry(const string& ip) const {
+	Lock l(cs);
+	if(geo) {
+		auto id = (v6() ? GeoIP_id_by_addr_v6 : GeoIP_id_by_addr)(geo, ip.c_str());
+		if(id > 0 && id < cache.size()) {
+			return cache[id];
+		}
+	}
+	return Util::emptyString;
+}
+
+void GeoIP::update() {
+	Lock l(cs);
+
+	close();
+
+	if(decompress()) {
+		open();
+	}
 }
 
 namespace {
@@ -64,13 +85,14 @@ string getGeoInfo(int id, GEOTYPE type) {
 
 } // unnamed namespace
 
-string GeoIP::getCountry(const string& ip) const {
+void GeoIP::rebuild() {
 	Lock l(cs);
-
 	if(geo) {
+		const auto& setting = SETTING(COUNTRY_FORMAT);
 
-		auto id = (v6() ? GeoIP_id_by_addr_v6 : GeoIP_id_by_addr)(geo, ip.c_str());
-		if(id > 0) {
+		auto size = GeoIP_num_countries();
+		cache.resize(size);
+		for(int id = 1; id < size; ++id) {
 
 			ParamMap params;
 
@@ -93,29 +115,9 @@ string GeoIP::getCountry(const string& ip) const {
 			params["officialname"] = [id] { return forwardRet(GeoIP_name_by_id(id)); };
 #endif
 
-			return Util::formatParams(SETTING(COUNTRY_FORMAT), params);
+			cache[id] = Util::formatParams(setting, params);
 		}
 	}
-
-	return Util::emptyString;
-}
-
-void GeoIP::update() {
-	Lock l(cs);
-
-	close();
-
-	if(decompress()) {
-		open();
-	}
-}
-
-void GeoIP::init() {
-	if(File::getSize(path) <= 0 && !decompress()) {
-		return;
-	}
-
-	open();
 }
 
 bool GeoIP::decompress() const {
@@ -137,6 +139,8 @@ void GeoIP::open() {
 }
 
 void GeoIP::close() {
+	cache.clear();
+
 	GeoIP_delete(geo);
 	geo = 0;
 }

@@ -19,15 +19,16 @@
 #include "stdafx.h"
 #include "SearchFrame.h"
 
-#include <dcpp/FavoriteManager.h>
-#include <dcpp/QueueManager.h>
 #include <dcpp/ClientManager.h>
-#include <dcpp/ShareManager.h>
+#include <dcpp/FavoriteManager.h>
+#include <dcpp/GeoManager.h>
+#include <dcpp/QueueManager.h>
 #include <dcpp/SearchResult.h>
+#include <dcpp/ShareManager.h>
 
 #include <dwt/widgets/FolderDialog.h>
-#include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/Grid.h>
+#include <dwt/widgets/SplitterContainer.h>
 
 #include "resource.h"
 #include "TypedTable.h"
@@ -486,13 +487,9 @@ void SearchFrame::SearchInfo::update() {
 		columns[COLUMN_NICK] = WinUtil::getNicks(sr->getUser(), sr->getHubURL());
 		columns[COLUMN_CONNECTION] = Text::toT(ClientManager::getInstance()->getConnection(sr->getUser()->getCID()));
 		columns[COLUMN_SLOTS] = Text::toT(sr->getSlotString());
-		columns[COLUMN_IP] = Text::toT(sr->getIP());
-		if(!columns[COLUMN_IP].empty()) {
-			// Only attempt to grab a country mapping if we actually have an IP address
-			auto country = Util::getCountry(sr->getIP());
-			if(!country.empty())
-				columns[COLUMN_IP] = Text::toT(country) + _T(" (") + columns[COLUMN_IP] + _T(")");
-		}
+		const auto& ip = sr->getIP();
+		auto country = GeoManager::getInstance()->getCountry(ip);
+		columns[COLUMN_IP] = Text::toT(country.empty() ? ip : str(F_("%1% (%2%)") % country % ip));
 		columns[COLUMN_HUB] = Text::toT(sr->getHubName());
 		columns[COLUMN_CID] = Text::toT(sr->getUser()->getCID().toBase32());
 	}

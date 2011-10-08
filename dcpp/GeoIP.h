@@ -22,24 +22,25 @@
 #include "CriticalSection.h"
 
 #include <string>
+#include <vector>
 
 typedef struct GeoIPTag GeoIP;
 
 namespace dcpp {
 
 using std::string;
+using std::vector;
 
-class GeoIP {
+class GeoIP : boost::noncopyable {
 public:
-	GeoIP();
+	explicit GeoIP(const string&& path);
 	~GeoIP();
 
-	void init(const string& path_);
 	string getCountry(const string& ip) const;
 	void update();
+	void rebuild();
 
 private:
-	void init();
 	bool decompress() const;
 	void open();
 	void close();
@@ -48,7 +49,8 @@ private:
 	mutable CriticalSection cs;
 	::GeoIP* geo;
 
-	string path;
+	const string path;
+	vector<string> cache;
 };
 
 } // namespace dcpp
