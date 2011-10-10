@@ -1,4 +1,4 @@
-/*
+/* .
    Copyright (C) 2000-2006 Silicon Graphics, Inc.  All Rights Reserved.
    Portions Copyright (C) 2007-2011 David Anderson. All Rights Reserved.
    Portions Copyright (C) 2010 SN Systems Ltd. All Rights Reserved.
@@ -139,8 +139,9 @@ dwarf_srcfiles(Dwarf_Die die,
 
     /*  ***** BEGIN CODE ***** */
     /*  Reset error. */
-    if (error != NULL)
+    if (error != NULL) {
         *error = NULL;
+    }
 
     CHECK_DIE(die, DW_DLV_ERROR);
     dbg = die->di_cu_context->cc_dbg;
@@ -1672,7 +1673,8 @@ dwarf_read_line_table_prefix(Dwarf_Debug dbg,
     prefix_out->pf_version = version;
     line_ptr += sizeof(Dwarf_Half);
     if (version != CURRENT_VERSION_STAMP &&
-        version != CURRENT_VERSION_STAMP3) {
+        version != CURRENT_VERSION_STAMP3 &&
+        version != CURRENT_VERSION_STAMP4) {
         _dwarf_error(dbg, err, DW_DLE_VERSION_STAMP_ERROR);
         return (DW_DLV_ERROR);
     }
@@ -1797,6 +1799,10 @@ dwarf_read_line_table_prefix(Dwarf_Debug dbg,
     memset(prefix_out->pf_include_directories, 0,
         sizeof(Dwarf_Small *) * directories_malloc);
 
+    if (line_ptr >= line_ptr_end) {
+        _dwarf_error(dbg, err, DW_DLE_LINE_NUMBER_HEADER_ERROR);
+        return (DW_DLV_ERROR);
+    }
     while ((*(char *) line_ptr) != '\0') {
         if (directories_count >= directories_malloc) {
             Dwarf_Unsigned expand = 2 * directories_malloc;
@@ -1819,6 +1825,10 @@ dwarf_read_line_table_prefix(Dwarf_Debug dbg,
             line_ptr;
         line_ptr = line_ptr + strlen((char *) line_ptr) + 1;
         directories_count++;
+        if (line_ptr >= line_ptr_end) {
+            _dwarf_error(dbg, err, DW_DLE_LINE_NUMBER_HEADER_ERROR);
+            return (DW_DLV_ERROR);
+        }
     }
     prefix_out->pf_include_directories_count = directories_count;
     line_ptr++;
@@ -1834,6 +1844,10 @@ dwarf_read_line_table_prefix(Dwarf_Debug dbg,
     memset(prefix_out->pf_line_table_file_entries, 0,
         sizeof(struct Line_Table_File_Entry_s) * files_malloc);
 
+    if (line_ptr >= line_ptr_end) {
+        _dwarf_error(dbg, err, DW_DLE_LINE_NUMBER_HEADER_ERROR);
+        return (DW_DLV_ERROR);
+    }
     while (*(char *) line_ptr != '\0') {
         Dwarf_Unsigned utmp;
         Dwarf_Unsigned dir_index = 0;
@@ -1882,6 +1896,10 @@ dwarf_read_line_table_prefix(Dwarf_Debug dbg,
         curline->lte_length_of_file = file_length;
 
         ++files_count;
+        if (line_ptr >= line_ptr_end) {
+            _dwarf_error(dbg, err, DW_DLE_LINE_NUMBER_HEADER_ERROR);
+            return (DW_DLV_ERROR);
+        }
 
     }
     prefix_out->pf_files_count = files_count;

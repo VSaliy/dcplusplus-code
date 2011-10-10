@@ -216,7 +216,7 @@ const char *_dwarf_errmsgs[] = {
     "DW_DLE_MAKE_CU_CONTEXT_FAIL",
     "DW_DLE_REL_ALLOC",
     "DW_DLE_ARANGE_OFFSET_BAD",
-    "DW_DLE_SEGMENT_SIZE_BAD",
+    "DW_DLE_SEGMENT_SIZE_BAD (135) Size of a segment selector should usually be less than 8 (bytes).",
     "DW_DLE_ARANGE_LENGTH_BAD",
     "DW_DLE_ARANGE_DECODE_ERROR",
     "DW_DLE_ARANGES_NULL",
@@ -315,7 +315,13 @@ const char *_dwarf_errmsgs[] = {
     "DW_DLE_NOT_REF_FORM(226)",
     "DW_DLE_DEBUG_FRAME_LENGTH_NOT_MULTIPLE(227)",
     "DW_DLE_REF_SIG8_NOT_HANDLED (228)",
-    "DW_DLE_DEBUG_FRAME_POSSIBLE_ADDRESS_BOTCH (229)"
+    "DW_DLE_DEBUG_FRAME_POSSIBLE_ADDRESS_BOTCH (229)",
+    "DW_DLE_LOC_BAD_TERMINATION (230) the last location operator in an expression is missing some associated data, an operator ended too soon",
+    "DW_DLE_SYMTAB_SECTION_LENGTH_ODD (231) so doing relocations seems unsafe",
+    "DW_DLE_RELOC_SECTION_SYMBOL_INDEX_BAD (232) so doing a relocation seems unsafe",
+    "DW_DLE_RELOC_SECTION_RELOC_TARGET_SIZE_UNKNOWN (233) so doing a relocation is unsafe",
+    "DW_DLE_SYMTAB_SECTION_ENTRYSIZE_ZERO(234)",
+    "DW_DLE_LINE_NUMBER_HEADER_ERROR (235), a line number program header seems incomplete (perhaps the header_length is wrong?).",
 };
 
 
