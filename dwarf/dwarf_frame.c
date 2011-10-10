@@ -2317,9 +2317,17 @@ dwarf_set_frame_undefined_value(Dwarf_Debug dbg, Dwarf_Half value)
     return orig;
 }
 
-
-
-
+/*  Does something only if value passed in is greater than 0 and
+    a size than we can handle (in number of bytes).  */
+Dwarf_Small dwarf_set_default_address_size(Dwarf_Debug dbg,
+    Dwarf_Small value  )
+{
+    Dwarf_Small orig = dbg->de_pointer_size;
+    if (value > 0 && value <= sizeof(Dwarf_Addr)) {
+        dbg->de_pointer_size = value;
+    }
+    return orig;
+}
 
 static int 
 init_reg_rules_alloc(Dwarf_Debug dbg,struct Dwarf_Frame_s *f,

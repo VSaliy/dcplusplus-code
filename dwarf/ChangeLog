@@ -1,3 +1,84 @@
+2011-10-09  DavidAnderson <davea42@earthlink.net> .
+     * dwarf_die_deliv.c, dwarf_elf_access.c: Fix bad indentation.
+2011-10-05  DavidAnderson <davea42@earthlink.net> .
+     * dwarf_die_deliv.c: When relocations fail, record
+       a 'harmless error' and continue the CU loading.
+       No way to be sure the error is really harmless, of course.
+       But it seems to often be harmless.
+       For some if() tests add {} to make the clause extent clear.
+     * dwarf_harmless.c: Add a comment prefix to dwarf_harmless_init().
+2011-10-03  DavidAnderson <davea42@earthlink.net>
+     * dwarf_line.c: Introduce {} in a test to avoid future mistakes.
+2011-09-23  DavidAnderson <davea42@earthlink.net>
+     * dwarf_arange.c: Test for a zero address-size: that indicates
+       broken dwarf generation.
+     * dwarf_line.c: Test for irrational line number header data and
+       error off with DW_DLE_LINE_NUMBER_HEADER_ERROR if we find it.
+       Add accidentally-omitted check for version 4.
+     * dwarf_error.c, libdwarf.h: New error code 
+       DW_DLE_LINE_NUMBER_HEADER_ERROR.
+2011-09-16  DavidAnderson <davea42@earthlink.net>
+     * dwarf_elf_access.c: Give up relocating if the Elf symtab 
+       header sh_entrysize is zero, and refine the test for 
+       invalid symbol index to be a >= test.
+     * dwarf_error.c: Define text message for 
+       DW_DLE_SYMTAB_SECTION_ENTRYSIZE_ZERO.
+     * libdwarf.h: New error code DW_DLE_SYMTAB_SECTION_ENTRYSIZE_ZERO.
+2011-09-15  DavidAnderson <davea42@earthlink.net>
+     * dwarf_elf_access.c: Adding fields to the object
+       structs dwarf uses and using them for error checks
+       when processing relocations.  
+     * dwarf_error.c: Adding descriptions of new error messages
+       for Elf object file interpretation problems.
+     * dwarf_init_finish.c: Adding 'entrysize' field about objects
+       do dwarf_elf_access.c can check for object and relocation  
+       data errors and avoid a coredump.  And we memset() a struct
+       to ensure there are no uninitialized contents.
+     * dwarf_opaque.h: Adding new dss_entrysize and
+       dss_reloc_entrysize fields so elf error
+       checks can be added to dwarf_elf_access.c.  These changes mean
+       you must recompile all of libdwarf source, not 
+       just a subset, when rebuilding (the first time one sees this change).
+     * libdwarf.h: Adding entrysize element to Dwarf_Obj_Access_Section_s.
+       Non-elf object formats can just set this field zero and ignore it.
+       Added new elf-specific error codes for the new checks in
+       dwarf_elf_access.c.
+2011-09-14  DavidAnderson <davea42@earthlink.net>
+     * BLDLIBDWARFTAR: Moved a local disk file. Irrelevant
+       to everyone but DA.
+     * dwarf_arange.c: check that the address_size and segment 
+       selector size fields are sensible.
+     * dwarf_die_deliv.c,dwarf_frame2.c: Give
+       DW_DLE_ADDRESS_SIZE_ERROR or DW_DLE_CU_ADDRESS_SIZE_BAD 
+       if the address size read from a section is obviously wrong.
+       Similarly for a bad segment-selector-size give
+       DW_DLE_SEGMENT_SIZE_BAD.
+     * dwarf_error.c: Added text for the DW_DLE_SEGMENT_SIZE_BAD
+       error.
+     * dwarf_frame.c: If dwarf_set_default_address_size() is handed
+       an address_size that we cannot handle, ignore the input so
+       we don't wind up coredumping the library or consumer code.
+     * libdwarf2.1.mm: Updated list of error codes a little bit. Rev 1.99
+     * libdwarf2.1.pdf: Regenerated.
+2011-09-08  DavidAnderson <davea42@earthlink.net>
+     * dwarf_frame.c: Fixed bad indents.
+2011-09-02  DavidAnderson <davea42@earthlink.net>
+     * libdwarf2.1.mm: Document the new function 
+       dwarf_set_default_address_size(). Updated revision to 1.97.
+     * libdwarf2.1.pdf: Regenerated.
+     * dwarf_frame.c: Implement dwarf_set_default_address_size().
+     * libdwarf.h: Declare the new function dwarf_set_default_address_size().
+     * dwarf_form.c(dwarf_formref): Removed c99-ish
+       declaration so C90 can compile the code. 
+     * Makefile.in, configure.in: If building shared lib
+       CFLAGS gets -fPIC  added in.
+     * configure: Fegenerated.
+     * dwarf_loc.c: New test returns DW_DLE_LOC_BAD_TERMINATION
+       in case of compiler bug in location expression.
+     * dwarf_error.c, libdwarf.h: Define and document the new
+       error.
+     * pro_opaque.h: Fixed a bad indent.
+
 2011-06-12  DavidAnderson <davea42@earthlink.net>
      * libdwarf.h: Added dwarf_producer_init_c() and its
        callback functions. Adds a user_data void* to the
