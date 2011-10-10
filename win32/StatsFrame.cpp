@@ -50,7 +50,7 @@ StatsFrame::StatsFrame(TabViewPtr parent) :
 			return;
 		draw(canvas, rect);
 	});
-	onPrinting([this](dwt::Canvas& canvas) { draw(canvas, dwt::Rectangle(GCC_WTF->getClientSize())); });
+	onPrinting([this](dwt::Canvas& canvas) { draw(canvas, dwt::Rectangle(getClientSize())); });
 
 	initStatus();
 

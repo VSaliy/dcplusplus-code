@@ -17,8 +17,8 @@
  */
 
 #if defined(__GNUC__)
-#if __GNUC__ < 4 || (__GNUC__ == 4 && (__GNUC_MINOR__ < 5 || (__GNUC_MINOR__ == 5 && __GNUC_PATCHLEVEL__ < 2)))
-#error GCC 4.5.2 is required
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
+#error GCC 4.6 is required
 #endif
 
 #elif defined(_MSC_VER)

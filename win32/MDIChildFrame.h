@@ -225,7 +225,7 @@ private:
 		menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
 
 		tabMenuImpl(menu);
-		menu->appendItem(T_("&Close"), [this] { GCC_WTF->close(true); }, WinUtil::menuIcon(IDI_EXIT));
+		menu->appendItem(T_("&Close"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
 
 		menu->open(pt);
 		return true;

@@ -105,7 +105,7 @@ bool ParamDlg::initDialog(const tstring& title) {
 
 	WinUtil::addDlgButtons(grid->addChild(Grid::Seed(2, 1)),
 		[this] { okClicked(); },
-		[this] { GCC_WTF->endDialog(IDCANCEL); });
+		[this] { endDialog(IDCANCEL); });
 
 	setText(title);
 

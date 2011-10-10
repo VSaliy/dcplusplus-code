@@ -54,7 +54,7 @@
 
 2. Compiler
 
-	a. MinGW (GCC 4.5.2 or later):
+	a. MinGW (GCC 4.6 or later):
 	<http://sourceforge.net/projects/mingw/files/>
 
 		The easiest way to install is via mingw-get. Extract it to C:\MinGW and run:

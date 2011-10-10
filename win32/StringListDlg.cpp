@@ -163,7 +163,7 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 		::SetWindowLongPtr(
 			WinUtil::addDlgButtons(cur,
 				[this] { handleOKClicked(); },
-				[this] { GCC_WTF->endDialog(IDCANCEL); })
+				[this] { endDialog(IDCANCEL); })
 			.first->handle(), GWLP_ID, 0); // the def button is the "Add" button
 	}
 

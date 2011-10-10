@@ -136,8 +136,8 @@ bool AboutDlg::handleInitDialog() {
 	version = grid->addChild(gs)->addChild(ls);
 
 	WinUtil::addDlgButtons(grid,
-		[this] { GCC_WTF->endDialog(IDOK); },
-		[this] { GCC_WTF->endDialog(IDCANCEL); }
+		[this] { endDialog(IDOK); },
+		[this] { endDialog(IDCANCEL); }
 		).second->setVisible(false);
 
 	setText(T_("About DC++"));

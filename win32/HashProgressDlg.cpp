@@ -87,8 +87,8 @@ bool HashProgressDlg::handleInitDialog() {
 		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		pair<ButtonPtr, ButtonPtr> buttons = WinUtil::addDlgButtons(cur,
-			[this] { GCC_WTF->endDialog(IDOK); },
-			[this] { GCC_WTF->endDialog(IDCANCEL); });
+			[this] { endDialog(IDOK); },
+			[this] { endDialog(IDCANCEL); });
 		buttons.first->setText(T_("Run in background"));
 		buttons.second->setVisible(false);
 

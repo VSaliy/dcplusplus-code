@@ -155,7 +155,7 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 		users->setSort(COLUMN_NICK);
 
 		// TODO check default (browse vs get)
-		users->onDblClicked([this] { GCC_WTF->handleGetList(); });
+		users->onDblClicked([this] { handleGetList(); });
 		users->onKeyDown([this](int c) { return handleKeyDown(c); });
 		users->onContextMenu([this](dwt::ScreenCoordinate pt) { return handleContextMenu(pt); });
 		users->onSelectionChanged([this] { handleSelectionChanged(); });

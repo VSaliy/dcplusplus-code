@@ -20,8 +20,8 @@
 #define DCPLUSPLUS_DCPP_COMPILER_H
 
 #if defined(__GNUC__)
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5)
-#error GCC 4.5 is required
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
+#error GCC 4.6 is required
 
 #endif
 

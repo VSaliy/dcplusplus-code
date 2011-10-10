@@ -162,7 +162,7 @@ bool CommandDlg::handleInitDialog() {
 
 	WinUtil::addDlgButtons(grid,
 		[this] { handleOKClicked(); },
-		[this] { GCC_WTF->endDialog(IDCANCEL); });
+		[this] { endDialog(IDCANCEL); });
 
 	{
 		ButtonPtr button = grid->addChild(Button::Seed(T_("Help")));

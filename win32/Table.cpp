@@ -28,5 +28,5 @@ BaseType::Seed()
 Table::Table(dwt::Widget* parent) :
 BaseType(parent)
 {
-	addAccel(FCONTROL, 'A', [this] { GCC_WTF->selectAll(); });
+	addAccel(FCONTROL, 'A', [this] { selectAll(); });
 }
