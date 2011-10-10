@@ -554,13 +554,26 @@ typedef struct Dwarf_Obj_Access_Section_s     Dwarf_Obj_Access_Section;
     names in the 'name' field.  libdwarf does
     not free the strings in 'name'. */
 struct Dwarf_Obj_Access_Section_s {
+    /*  addr is the virtual address of the first byte of
+        the section data.  Usually zero when the address
+        makes no sense for a given section. */
     Dwarf_Addr     addr;
+
+    /* Size in bytes of the section. */
     Dwarf_Unsigned size;
+
+    /*  Having an accurate section name makes debugging of libdwarf easier. 
+        and is essential to find the .debug_ sections.  */
     const char*    name;
     /*  Set link to zero if it is meaningless.  If non-zero
         it should be a link to a rela section or from symtab
         to strtab.  In Elf it is sh_link. */
     Dwarf_Unsigned link;
+    /*  Elf sections that are tables have a non-zero entrysize so
+        the count of entries can be calculated even without
+        the right structure definition. If your object format
+        does not have this data leave this zero. */
+    Dwarf_Unsigned entrysize;
 };
 
 /*  Returned by the get_endianness function in 
@@ -1037,11 +1050,16 @@ struct Dwarf_Obj_Access_Interface_s {
 #define DW_DLE_DEBUG_FRAME_LENGTH_NOT_MULTIPLE 227
 #define DW_DLE_REF_SIG8_NOT_HANDLED            228
 #define DW_DLE_DEBUG_FRAME_POSSIBLE_ADDRESS_BOTCH 229
-
+#define DW_DLE_LOC_BAD_TERMINATION             230
+#define DW_DLE_SYMTAB_SECTION_LENGTH_ODD       231
+#define DW_DLE_RELOC_SECTION_SYMBOL_INDEX_BAD  232
+#define DW_DLE_RELOC_SECTION_RELOC_TARGET_SIZE_UNKNOWN  233
+#define DW_DLE_SYMTAB_SECTION_ENTRYSIZE_ZERO   234
+#define DW_DLE_LINE_NUMBER_HEADER_ERROR        235
 
 
     /* DW_DLE_LAST MUST EQUAL LAST ERROR NUMBER */
-#define DW_DLE_LAST        229
+#define DW_DLE_LAST        235
 #define DW_DLE_LO_USER     0x10000
 
     /*  Taken as meaning 'undefined value', this is not
@@ -2639,12 +2657,14 @@ dwarf_get_section_max_offsets(Dwarf_Debug /*dbg*/,
     Dwarf_Unsigned * /*debug_ranges_size*/,
     Dwarf_Unsigned * /*debug_pubtypes_size*/);
 
+/*  The 'set' calls here return the original (before any change
+    by these set routines) of the respective fields. */
 /*  Multiple releases spelled 'initial' as 'inital' . 
     The 'inital' spelling should not be used. */ 
 Dwarf_Half dwarf_set_frame_rule_inital_value(Dwarf_Debug /*dbg*/,
     Dwarf_Half /*value*/);
 /*  Additional interface with correct 'initial' spelling. */
-/*  It is likely you will want to call the following 5 functions
+/*  It is likely you will want to call the following 6 functions
     before accessing any frame information.  All are useful
     to tailor handling of pseudo-registers needed to turn
     frame operation references into simpler forms and to
@@ -2661,6 +2681,10 @@ Dwarf_Half dwarf_set_frame_same_value(Dwarf_Debug /*dbg*/,
     Dwarf_Half /*value*/);
 Dwarf_Half dwarf_set_frame_undefined_value(Dwarf_Debug /*dbg*/, 
     Dwarf_Half /*value*/);
+/*  dwarf_set_default_address_size only sets 'value' if value is 
+    greater than zero. */
+Dwarf_Small dwarf_set_default_address_size(Dwarf_Debug /*dbg*/, 
+    Dwarf_Small /* value */);
 
 /*  As of April 27, 2009, this version with no diepointer is
     obsolete though supported.  Use dwarf_get_ranges_a() instead. */
