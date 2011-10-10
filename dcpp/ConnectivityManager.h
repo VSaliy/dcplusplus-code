@@ -60,7 +60,7 @@ private:
 	virtual ~ConnectivityManager() { }
 
 	void mappingFinished(const string& mapper);
-	void log(const string& msg);
+	void log(string&& message);
 
 	void startSocket();
 	void listen();

@@ -33,7 +33,7 @@ using std::vector;
 
 class GeoIP : boost::noncopyable {
 public:
-	explicit GeoIP(const string&& path);
+	explicit GeoIP(string&& path);
 	~GeoIP();
 
 	string getCountry(const string& ip) const;

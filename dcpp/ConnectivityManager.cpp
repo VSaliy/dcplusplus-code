@@ -150,9 +150,9 @@ void ConnectivityManager::disconnect() {
 	ConnectionManager::getInstance()->disconnect();
 }
 
-void ConnectivityManager::log(const string& message) {
+void ConnectivityManager::log(string&& message) {
 	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
-		status = move(message);
+		status = forward<string>(message);
 		LogManager::getInstance()->message(_("Connectivity: ") + status);
 		fire(ConnectivityManagerListener::Message(), status);
 	} else {
