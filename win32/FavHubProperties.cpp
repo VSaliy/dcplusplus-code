@@ -188,7 +188,7 @@ void FavHubProperties::handleGroups() {
 
 void FavHubProperties::fillGroups() {
 	const string& entryGroup = entry->getGroup();
-	int sel = 0;
+	bool needSel = true;
 
 	groups->addValue(_T(""));
 
@@ -196,9 +196,12 @@ void FavHubProperties::fillGroups() {
 	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
 		const string& name = i->first;
 		auto pos = groups->addValue(Text::toT(name));
-		if(!sel && name == entryGroup)
-			sel = pos;
+		if(needSel && name == entryGroup) {
+			groups->setSelected(pos);
+			needSel = false;
+		}
 	}
 
-	groups->setSelected(sel);
+	if(needSel)
+		groups->setSelected(0);
 }
