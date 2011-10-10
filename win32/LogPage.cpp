@@ -77,7 +77,7 @@ oldSelection(-1)
 		dir->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
 
 		ButtonPtr browse = cur->addChild(Button::Seed(T_("&Browse...")));
-		browse->onClicked([this] { GCC_WTF->handleBrowseDir(dir, SettingsManager::LOG_DIRECTORY); });
+		browse->onClicked([this] { handleBrowseDir(dir, SettingsManager::LOG_DIRECTORY); });
 		browse->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
 	}
 

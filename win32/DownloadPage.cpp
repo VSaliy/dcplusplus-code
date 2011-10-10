@@ -58,7 +58,7 @@ PropPage(parent, 3, 1)
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
 
 		ButtonPtr browse = cur->addChild(Button::Seed(T_("Browse...")));
-		browse->onClicked([=] { GCC_WTF->handleBrowseDir(box, SettingsManager::DOWNLOAD_DIRECTORY); });
+		browse->onClicked([this, box] { handleBrowseDir(box, SettingsManager::DOWNLOAD_DIRECTORY); });
 		browse->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
 
 		label = cur->addChild(Label::Seed(T_("Unfinished downloads directory")));
@@ -70,7 +70,7 @@ PropPage(parent, 3, 1)
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
 
 		browse = cur->addChild(Button::Seed(T_("Browse...")));
-		browse->onClicked([=] { GCC_WTF->handleBrowseDir(box, SettingsManager::TEMP_DOWNLOAD_DIRECTORY); });
+		browse->onClicked([this, box] { handleBrowseDir(box, SettingsManager::TEMP_DOWNLOAD_DIRECTORY); });
 		browse->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
 	}
 

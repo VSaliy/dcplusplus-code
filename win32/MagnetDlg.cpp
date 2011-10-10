@@ -116,7 +116,7 @@ bool MagnetDlg::handleInitDialog() {
 
 		WinUtil::addDlgButtons(bottom->addChild(Grid::Seed(2, 1)),
 			[this] { handleOKClicked(); },
-			[this] { GCC_WTF->endDialog(IDCANCEL); });
+			[this] { endDialog(IDCANCEL); });
 	}
 
 	setText(T_("MAGNET Link detected"));

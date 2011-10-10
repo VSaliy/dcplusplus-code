@@ -201,7 +201,7 @@ fullSlots(false)
 
 	callAsync([this] {
 		int cmdShow = dwt::Application::instance().getCmdShow();
-		::ShowWindow(GCC_WTF->handle(), (cmdShow == SW_SHOWDEFAULT || cmdShow == SW_SHOWNORMAL) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
+		::ShowWindow(handle(), (cmdShow == SW_SHOWDEFAULT || cmdShow == SW_SHOWNORMAL) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
 		if(cmdShow == SW_MINIMIZE || cmdShow == SW_SHOWMINIMIZED || cmdShow == SW_SHOWMINNOACTIVE)
 			handleMinimized();
 	});
@@ -283,7 +283,7 @@ void MainWindow::initMenu() {
 		file->appendSeparator();
 		file->appendItem(T_("GeoIP database update"), [this] { updateGeo(); });
 		file->appendSeparator();
-		file->appendItem(T_("E&xit\tAlt+F4"), [this] { GCC_WTF->close(true); }, WinUtil::menuIcon(IDI_EXIT));
+		file->appendItem(T_("E&xit\tAlt+F4"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
 	}
 
 	{
@@ -1545,7 +1545,7 @@ void MainWindow::handleTrayContextMenu() {
 	fillLimiterMenu(menu->appendPopup(T_("Download limit")), false);
 	fillLimiterMenu(menu->appendPopup(T_("Upload limit")), true);
 	menu->appendSeparator();
-	menu->appendItem(T_("Exit"), [this] { GCC_WTF->close(true); }, WinUtil::menuIcon(IDI_EXIT));
+	menu->appendItem(T_("Exit"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
 
 	dwt::ScreenCoordinate pt;
 	::GetCursorPos(&pt.getPoint());

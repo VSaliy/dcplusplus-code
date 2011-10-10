@@ -94,7 +94,7 @@ fileLists(0)
 		files->setSort(COLUMN_TARGET);
 
 		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
-		files->onSelectionChanged([this] { GCC_WTF->callAsync([&] { updateStatus(); }); });
+		files->onSelectionChanged([this] { callAsync([&] { updateStatus(); }); });
 		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
 
 		if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {

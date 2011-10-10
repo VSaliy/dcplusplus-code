@@ -120,7 +120,7 @@ bool ADLSProperties::handleInitDialog() {
 
 	WinUtil::addDlgButtons(grid,
 		[this] { handleOKClicked(); },
-		[this] { GCC_WTF->endDialog(IDCANCEL); });
+		[this] { endDialog(IDCANCEL); });
 
 	setText(T_("ADLSearch Properties"));
 

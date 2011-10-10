@@ -181,7 +181,7 @@ inTabComplete(false)
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
 		users->setSort(COLUMN_NICK);
 
-		users->onSelectionChanged([this] { GCC_WTF->callAsync([&] { updateStatus(); }); });
+		users->onSelectionChanged([this] { callAsync([&] { updateStatus(); }); });
 		users->onDblClicked([this] { handleDoubleClickUsers(); });
 		users->onKeyDown([this](int c) { return handleUsersKeyDown(c); });
 		users->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleUsersContextMenu(sc); });
@@ -224,10 +224,10 @@ inTabComplete(false)
 	status->setHelpId(STATUS_SHARED, IDH_HUB_SHARED);
 	status->setHelpId(STATUS_AVERAGE_SHARED, IDH_HUB_AVERAGE_SHARED);
 
-	addAccel(FALT, 'G', [this] { GCC_WTF->handleGetList(); });
+	addAccel(FALT, 'G', [this] { handleGetList(); });
 	addAccel(FCONTROL, 'R', [this] { handleReconnect(); });
 	addAccel(FCONTROL, 'T', [this] { handleFollow(); });
-	addAccel(FALT, 'P', [this] { GCC_WTF->handlePrivateMessage(GCC_WTF->getParent()); });
+	addAccel(FALT, 'P', [this] { handlePrivateMessage(getParent()); });
 	addAccel(FALT, 'U', [this] { users->setFocus(); });
 	initAccels();
 
@@ -787,8 +787,8 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 
 void HubFrame::on(Connecting, Client*) noexcept {
 	tstring hubUrl = Text::toT(client->getHubUrl());
-	callAsync([this, hubUrl]() { addStatus(str(TF_("Connecting to %1%...") % hubUrl), true); });
-	callAsync([this, hubUrl]() { GCC_WTF->setText(hubUrl); });
+	callAsync([this, hubUrl] { addStatus(str(TF_("Connecting to %1%...") % hubUrl), true); });
+	callAsync([this, hubUrl] { setText(hubUrl); });
 }
 void HubFrame::on(Connected, Client*) noexcept {
 	callAsync([this] { onConnected(); });
@@ -842,7 +842,7 @@ void HubFrame::on(HubUpdated, Client*) noexcept {
 	}
 #endif
 	tstring hubNameT = Text::toT(hubName);
-	callAsync([this, hubNameT]() { GCC_WTF->setText(hubNameT); });
+	callAsync([this, hubNameT] { setText(hubNameT); });
 }
 
 void HubFrame::on(Message, Client*, const ChatMessage& message) noexcept {

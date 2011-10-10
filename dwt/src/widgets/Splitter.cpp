@@ -47,11 +47,11 @@ void Splitter::create(const Seed& cs) {
 	BaseType::create(cs);
 
 	theme.load(VSCLASS_WINDOW, this);
-	onPainting([this](PaintCanvas& canvas) { GCC_WTF->handlePainting(canvas); });
+	onPainting([this](PaintCanvas& canvas) { handlePainting(canvas); });
 
-	onLeftMouseDown([this](const MouseEvent&) { return GCC_WTF->handleLButtonDown(); });
-	onMouseMove([this](const MouseEvent& mouseEvent) { return GCC_WTF->handleMouseMove(mouseEvent); });
-	onLeftMouseUp([this](const MouseEvent&) { return GCC_WTF->handleLButtonUp(); });
+	onLeftMouseDown([this](const MouseEvent&) { return handleLButtonDown(); });
+	onMouseMove([this](const MouseEvent& mouseEvent) { return handleMouseMove(mouseEvent); });
+	onLeftMouseUp([this](const MouseEvent&) { return handleLButtonUp(); });
 
 	WidgetCreator<ToolTip>::create(this, ToolTip::Seed())->setText(Texts::get(Texts::resize));
 }
@@ -98,10 +98,9 @@ bool Splitter::handleMouseMove(const MouseEvent& mouseEvent) {
 		redraw();
 		::SetCursor(::LoadCursor(0, horizontal ? IDC_SIZENS : IDC_SIZEWE));
 		onMouseLeave([this] {
-			GCC_WTF->hovering = false;
-			GCC_WTF->redraw();
+			hovering = false;
+			redraw();
 			::SetCursor(NULL);
-
 		});
 	}
 

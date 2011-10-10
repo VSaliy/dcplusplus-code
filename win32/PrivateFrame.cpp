@@ -136,9 +136,9 @@ online(replyTo.getUser().user->isOnline())
 
 	message->setHelpId(IDH_PM_MESSAGE);
 	addWidget(message, true);
-	message->onKeyDown([this](int c) { return GCC_WTF->handleMessageKeyDown(c); });
-	message->onSysKeyDown([this](int c) { return GCC_WTF->handleMessageKeyDown(c); });
-	message->onChar([this](int c) { return GCC_WTF->handleMessageChar(c); });
+	message->onKeyDown([this](int c) { return handleMessageKeyDown(c); });
+	message->onSysKeyDown([this](int c) { return handleMessageKeyDown(c); });
+	message->onChar([this](int c) { return handleMessageChar(c); });
 
 	initStatus();
 	status->onDblClicked(STATUS_STATUS, [this] { openLog(); });
