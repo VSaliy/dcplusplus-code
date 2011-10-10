@@ -100,9 +100,9 @@ void startup(void (*f)(void*, const string&), void* p) {
 	}
 #endif
 
-	auto announce = [&f, &p](const string&& str) {
+	auto announce = [&f, &p](const string& str) {
 		if(f)
-			(*f)(p, forward<const string>(str));
+			(*f)(p, str);
 	};
 
 	announce(_("Users"));
