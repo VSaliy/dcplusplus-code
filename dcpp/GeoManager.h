@@ -46,7 +46,7 @@ public:
 
 	enum { V6 = 1 << 1, V4 = 1 << 2 };
 	/** Map an IP address to a country. The flags specify which database(s) to look into. */
-	string getCountry(const string& ip, int flags = V6 | V4);
+	const string& getCountry(const string& ip, int flags = V6 | V4);
 
 	static string getDbPath(bool v6);
 

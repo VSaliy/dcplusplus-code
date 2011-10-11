@@ -36,7 +36,7 @@ public:
 	explicit GeoIP(string&& path);
 	~GeoIP();
 
-	string getCountry(const string& ip) const;
+	const string& getCountry(const string& ip) const;
 	void update();
 	void rebuild();
 
