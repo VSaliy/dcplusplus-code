@@ -30,11 +30,9 @@
 namespace dcpp {
 
 GeoIP::GeoIP(string&& path) : geo(0), path(forward<string>(path)) {
-	if(File::getSize(path) <= 0 && !decompress()) {
-		return;
+	if(File::getSize(path) > 0 || decompress()) {
+		open();
 	}
-
-	open();
 }
 
 GeoIP::~GeoIP() {
@@ -42,7 +40,7 @@ GeoIP::~GeoIP() {
 	close();
 }
 
-string GeoIP::getCountry(const string& ip) const {
+const string& GeoIP::getCountry(const string& ip) const {
 	Lock l(cs);
 	if(geo) {
 		auto id = (v6() ? GeoIP_id_by_addr_v6 : GeoIP_id_by_addr)(geo, ip.c_str());

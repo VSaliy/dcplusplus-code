@@ -49,11 +49,11 @@ void GeoManager::close() {
 	geo4.reset();
 }
 
-string GeoManager::getCountry(const string& ip, int flags) {
+const string& GeoManager::getCountry(const string& ip, int flags) {
 	if(!ip.empty()) {
 
 		if((flags & V6) && geo6.get()) {
-			auto ret = geo6->getCountry(ip);
+			const auto& ret = geo6->getCountry(ip);
 			if(!ret.empty())
 				return ret;
 		}

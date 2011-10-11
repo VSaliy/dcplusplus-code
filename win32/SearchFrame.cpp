@@ -488,7 +488,7 @@ void SearchFrame::SearchInfo::update() {
 		columns[COLUMN_CONNECTION] = Text::toT(ClientManager::getInstance()->getConnection(sr->getUser()->getCID()));
 		columns[COLUMN_SLOTS] = Text::toT(sr->getSlotString());
 		const auto& ip = sr->getIP();
-		auto country = GeoManager::getInstance()->getCountry(ip);
+		const auto& country = GeoManager::getInstance()->getCountry(ip);
 		columns[COLUMN_IP] = Text::toT(country.empty() ? ip : str(F_("%1% (%2%)") % country % ip));
 		columns[COLUMN_HUB] = Text::toT(sr->getHubName());
 		columns[COLUMN_CID] = Text::toT(sr->getUser()->getCID().toBase32());
