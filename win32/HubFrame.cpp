@@ -793,7 +793,7 @@ void HubFrame::on(Connecting, Client*) noexcept {
 void HubFrame::on(Connected, Client*) noexcept {
 	callAsync([this] { onConnected(); });
 }
-void HubFrame::on(UserUpdated, Client*, const OnlineUser& user) noexcept {
+void HubFrame::on(ClientListener::UserUpdated, Client*, const OnlineUser& user) noexcept {
 	addTask(UPDATE_USER_JOIN, user);
 }
 void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) noexcept {

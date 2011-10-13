@@ -70,6 +70,7 @@
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/optional.hpp>
 #include <boost/range/algorithm/find_if.hpp>
 #include <boost/range/algorithm/find.hpp>
 #include <boost/regex.hpp>
