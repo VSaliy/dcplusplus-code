@@ -38,14 +38,7 @@ Client::Client(const string& hubURL, char separator_, bool secure_) :
 {
 	string file, proto, query, fragment;
 	Util::decodeUrl(hubURL, proto, address, port, file, query, fragment);
-
-	if(!query.empty()) {
-		auto q = Util::decodeQuery(query);
-		auto kp = q.find("kp");
-		if(kp != q.end()) {
-			keyprint = kp->second;
-		}
-	}
+	keyprint = Util::decodeQuery(query)["kp"];
 
 	TimerManager::getInstance()->addListener(this);
 }
@@ -92,8 +85,7 @@ void Client::reloadSettings(bool updateNick) {
 }
 
 void Client::connect() {
-	if(sock)
-		sock.reset();
+	sock.reset();
 
 	setAutoReconnect(true);
 	setReconnDelay(120 + Util::rand(0, 60));
@@ -109,8 +101,8 @@ void Client::connect() {
 		sock->addListener(this);
 		sock->connect(address, port, secure, BOOLSETTING(ALLOW_UNTRUSTED_HUBS), true);
 	} catch(const Exception& e) {
-		shutdown();
-		/// @todo at this point, this hub instance is completely useless
+		sock.reset();
+		state = STATE_DISCONNECTED;
 		fire(ClientListener::Failed(), this, e.getError());
 	}
 	updateActivity();
@@ -151,7 +143,6 @@ void Client::on(Connected) noexcept {
 void Client::on(Failed, const string& aLine) noexcept {
 	state = STATE_DISCONNECTED;
 	FavoriteManager::getInstance()->removeUserCommand(getHubUrl());
-	sock->removeListener(this);
 	fire(ClientListener::Failed(), this, aLine);
 }
 
