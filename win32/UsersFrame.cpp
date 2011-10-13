@@ -226,38 +226,51 @@ void UsersFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::USERSFRAME_WIDTHS, WinUtil::toString(users->getColumnWidths()));
 }
 
-UsersFrame::UserInfo::UserInfo(const FavoriteUser& u) :
-UserInfoBase(HintedUser(u.getUser(), Util::emptyString)) /// @todo fav users aren't aware of hub hints for now
+UsersFrame::UserInfo::UserInfo(const UserPtr& u, bool visible) :
+UserInfoBase(HintedUser(u, Util::emptyString))
 {
-	update(u);
-}
-
-UsersFrame::UserInfo::UserInfo(const UserPtr& u) :
-UserInfoBase(HintedUser(u, Util::emptyString)) /// @todo fav users aren't aware of hub hints for now
-{
-	update(u);
+	update(u, visible);
 }
 
 void UsersFrame::UserInfo::remove() {
 	FavoriteManager::getInstance()->removeFavoriteUser(user);
 }
 
-void UsersFrame::UserInfo::update(const UserPtr& u) {
-	columns[COLUMN_NICK] = WinUtil::getNicks(u, Util::emptyString);
-	columns[COLUMN_HUB] = u->isOnline() ? WinUtil::getHubNames(u, Util::emptyString).first : Util::emptyStringT;
-	columns[COLUMN_SEEN] = u->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", FavoriteManager::getInstance()->getLastSeen(u)));
+void UsersFrame::UserInfo::update(const UserPtr& u, bool visible) {
+	auto fu = FavoriteManager::getInstance()->getFavoriteUser(u);
+	if(fu) {
+		isFavorite = true;
+		grantSlot = fu->isSet(FavoriteUser::FLAG_GRANTSLOT);
+		columns[COLUMN_NICK] = Text::toT(fu->getNick());
+		if(!visible) {
+			return;
+		}
+		columns[COLUMN_DESCRIPTION] = Text::toT(fu->getDescription());
+
+		if(u->isOnline()) {
+			columns[COLUMN_SEEN] = T_("Online");
+			columns[COLUMN_HUB] = WinUtil::getHubNames(u, Util::emptyString).first;
+		} else {
+			columns[COLUMN_SEEN] = fu->getLastSeen() > 0 ? Text::toT(Util::formatTime("%Y-%m-%d %H:%M", fu->getLastSeen())) : T_("Offline");
+			columns[COLUMN_HUB] = Text::toT(fu->getUrl());
+		}
+	} else {
+		isFavorite = false;
+		grantSlot = false;
+		columns[COLUMN_NICK] = WinUtil::getNicks(u, Util::emptyString);
+
+		if(!visible) {
+			return;
+		}
+		if(u->isOnline()) {
+			columns[COLUMN_SEEN] = T_("Online");
+			columns[COLUMN_HUB] = WinUtil::getHubNames(u, Util::emptyString).first;
+		} else {
+			columns[COLUMN_SEEN] = T_("Offline");
+		}
+	}
+
 	columns[COLUMN_CID] = Text::toT(u->getCID().toBase32());
-
-	isFavorite = FavoriteManager::getInstance()->isFavoriteUser(u);
-	grantSlot = FavoriteManager::getInstance()->hasSlot(u);
-}
-
-void UsersFrame::UserInfo::update(const FavoriteUser& u) {
-	columns[COLUMN_NICK] = Text::toT(u.getNick());
-	columns[COLUMN_HUB] = u.getUser()->isOnline() ? WinUtil::getHubNames(u.getUser(), Util::emptyString).first : Text::toT(u.getUrl());
-	columns[COLUMN_SEEN] = u.getUser()->isOnline() ? T_("Online") : Text::toT(Util::formatTime("%Y-%m-%d %H:%M", u.getLastSeen()));
-	columns[COLUMN_DESCRIPTION] = Text::toT(u.getDescription());
-	columns[COLUMN_CID] = Text::toT(u.getUser()->getCID().toBase32());
 }
 
 void UsersFrame::addUser(const UserPtr& aUser) {
@@ -267,11 +280,11 @@ void UsersFrame::addUser(const UserPtr& aUser) {
 
 	auto ui = userInfos.find(aUser);
 	if(ui == userInfos.end()) {
-		auto x = dwt::make_shared<UserInfo>(aUser);
-		userInfos.insert(std::make_pair(aUser, x));
+		auto x = userInfos.insert(std::make_pair(aUser, UserInfo(aUser, false))).first;
 
-		if(matches(*x)) {
-			users->insert(x.get());
+		if(matches(x->second)) {
+			x->second.update(aUser, true);
+			users->insert(&x->second);
 		}
 	} else {
 		updateUser(aUser);
@@ -281,16 +294,19 @@ void UsersFrame::addUser(const UserPtr& aUser) {
 void UsersFrame::updateUser(const UserPtr& aUser) {
 	auto ui = userInfos.find(aUser);
 	if(ui != userInfos.end()) {
-		if(!show(aUser, true)) {
-			users->erase(ui->second.get());
-			userInfos.erase(ui);
+		ui->second.update(aUser, false);
+
+		if(!show(aUser, false)) {
+			users->erase(&ui->second);
+			if(!show(aUser, true)) {
+				userInfos.erase(aUser);
+			}
 			return;
 		}
 
-		ui->second->update(aUser);
-
-		if(matches(*ui->second)) {
-			auto i = users->find(ui->second.get());
+		if(matches(ui->second)) {
+			ui->second.update(aUser, true);
+			auto i = users->find(&ui->second);
 			if(i != -1) {
 				if(users->getSelected() == i) {
 					handleSelectionChanged();
@@ -298,7 +314,7 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 					users->update(i);
 				}
 			} else {
-				users->insert(ui->second.get());
+				users->insert(&ui->second);
 			}
 		}
 	}
@@ -460,15 +476,10 @@ bool UsersFrame::handleClick(const dwt::MouseEvent &me) {
 		} else {
 			FavoriteManager::getInstance()->addFavoriteUser(ui->getUser());
 		}
-
-		ui->isFavorite = !ui->isFavorite;
-		users->update(item.first);
 		break;
 
 	case COLUMN_SLOT:
 		FavoriteManager::getInstance()->setAutoGrant(ui->getUser(), !ui->grantSlot);
-		ui->grantSlot = !ui->grantSlot;
-		users->update(item.first);
 		break;
 
 	default:
@@ -482,8 +493,9 @@ void UsersFrame::handleFilterUpdated() {
 	HoldRedraw h(users);
 	users->clear();
 	for(auto i = userInfos.begin(); i != userInfos.end(); ++i) {
-		if(matches(*i->second)) {
-			users->insert(i->second.get());
+		if(matches(i->second)) {
+			i->second.update(i->first, true);
+			users->insert(&i->second);
 		}
 	}
 }
@@ -534,6 +546,10 @@ void UsersFrame::on(UserAdded, const FavoriteUser& aUser) noexcept {
 	callAsync([=] { addUser(u); });
 }
 
+void UsersFrame::on(FavoriteManagerListener::UserUpdated, const FavoriteUser& aUser) noexcept {
+	auto u = aUser.getUser();
+	callAsync([=] { updateUser(u); });
+}
 void UsersFrame::on(UserRemoved, const FavoriteUser& aUser) noexcept {
 	auto u = aUser.getUser();
 	callAsync([=] { updateUser(u); });
@@ -547,7 +563,7 @@ void UsersFrame::on(UserConnected, const UserPtr& aUser) noexcept {
 	callAsync([=] { addUser(aUser); });
 }
 
-void UsersFrame::on(UserUpdated, const UserPtr& aUser) noexcept {
+void UsersFrame::on(ClientManagerListener::UserUpdated, const UserPtr& aUser) noexcept {
 	callAsync([=] { updateUser(aUser); });
 }
 

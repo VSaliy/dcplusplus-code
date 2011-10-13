@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_DCPP_FAVORITE_MANAGER_H
 #define DCPLUSPLUS_DCPP_FAVORITE_MANAGER_H
 
+#include <boost/optional.hpp>
+
 #include "SettingsManager.h"
 
 #include "CriticalSection.h"
@@ -33,6 +35,8 @@
 #include "User.h"
 
 namespace dcpp {
+
+using boost::optional;
 
 class SimpleXML;
 
@@ -72,6 +76,7 @@ public:
 	bool isFavoriteUser(const UserPtr& aUser) const { Lock l(cs); return users.find(aUser->getCID()) != users.end(); }
 	void removeFavoriteUser(const UserPtr& aUser);
 
+	optional<FavoriteUser> getFavoriteUser(const UserPtr& aUser) const;
 	bool hasSlot(const UserPtr& aUser) const;
 	void setUserDescription(const UserPtr& aUser, const string& description);
 	void setAutoGrant(const UserPtr& aUser, bool grant);

@@ -82,8 +82,7 @@ private:
 
 	class UserInfo : public UserInfoBase {
 	public:
-		UserInfo(const UserPtr& u);
-		UserInfo(const FavoriteUser& u);
+		UserInfo(const UserPtr& u, bool visible);
 
 		const tstring& getText(int col) const {
 			return columns[col];
@@ -107,8 +106,7 @@ private:
 
 		void remove();
 
-		void update(const UserPtr& u);
-		void update(const FavoriteUser& u);
+		void update(const UserPtr& u, bool visible);
 
 		tstring columns[COLUMN_LAST];
 
@@ -134,8 +132,7 @@ private:
 
 	static dwt::ImageListPtr userIcons;
 
-	// TODO change to unique_ptr once g++ map supports it (no move insert in 4.5 it seems...)
-	std::unordered_map<UserPtr, dwt::shared_ptr<UserInfo>, User::Hash> userInfos;
+	std::unordered_map<UserPtr, UserInfo, User::Hash> userInfos;
 
 	bool startup;
 
@@ -159,12 +156,13 @@ private:
 
 	// FavoriteManagerListener
 	virtual void on(UserAdded, const FavoriteUser& aUser) noexcept;
+	virtual void on(FavoriteManagerListener::UserUpdated, const FavoriteUser& aUser) noexcept;
 	virtual void on(UserRemoved, const FavoriteUser& aUser) noexcept;
 	virtual void on(StatusChanged, const UserPtr& aUser) noexcept;
 
 	// ClientManagerListner
 	virtual void on(UserConnected, const UserPtr& aUser) noexcept;
-	virtual void on(UserUpdated, const UserPtr& aUser) noexcept;
+	virtual void on(ClientManagerListener::UserUpdated, const UserPtr& aUser) noexcept;
 	virtual void on(UserDisconnected, const UserPtr& aUser) noexcept;
 
 	// UploadManagerListener

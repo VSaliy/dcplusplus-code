@@ -276,7 +276,7 @@ private:
 	// ClientListener
 	virtual void on(Connecting, Client*) noexcept;
 	virtual void on(Connected, Client*) noexcept;
-	virtual void on(UserUpdated, Client*, const OnlineUser&) noexcept;
+	virtual void on(ClientListener::UserUpdated, Client*, const OnlineUser&) noexcept;
 	virtual void on(UsersUpdated, Client*, const OnlineUserList&) noexcept;
 	virtual void on(ClientListener::UserRemoved, Client*, const OnlineUser&) noexcept;
 	virtual void on(Redirect, Client*, const string&) noexcept;

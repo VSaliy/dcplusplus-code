@@ -580,6 +580,7 @@ void FavoriteManager::userUpdated(const OnlineUser& info) {
 	if(i != users.end()) {
 		FavoriteUser& fu = i->second;
 		fu.update(info);
+		fire(FavoriteManagerListener::UserUpdated(), i->second);
 		save();
 	}
 }
@@ -618,6 +619,12 @@ bool FavoriteManager::isPrivate(const string& url) const {
 	return false;
 }
 
+optional<FavoriteUser> FavoriteManager::getFavoriteUser(const UserPtr &aUser) const {
+	Lock l(cs);
+	auto i = users.find(aUser->getCID());
+	return i == users.end() ? optional<FavoriteUser>() : i->second;
+}
+
 bool FavoriteManager::hasSlot(const UserPtr& aUser) const {
 	Lock l(cs);
 	FavoriteMap::const_iterator i = users.find(aUser->getCID());
@@ -643,6 +650,9 @@ void FavoriteManager::setAutoGrant(const UserPtr& aUser, bool grant) {
 		i->second.setFlag(FavoriteUser::FLAG_GRANTSLOT);
 	else
 		i->second.unsetFlag(FavoriteUser::FLAG_GRANTSLOT);
+
+	fire(FavoriteManagerListener::UserUpdated(), i->second);
+
 	save();
 }
 void FavoriteManager::setUserDescription(const UserPtr& aUser, const string& description) {
@@ -651,6 +661,9 @@ void FavoriteManager::setUserDescription(const UserPtr& aUser, const string& des
 	if(i == users.end())
 		return;
 	i->second.setDescription(description);
+
+	fire(FavoriteManagerListener::UserUpdated(), i->second);
+
 	save();
 }
 
