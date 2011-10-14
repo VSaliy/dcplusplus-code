@@ -123,7 +123,7 @@ protected:
 		STATE_DISCONNECTED,	///< Nothing in particular
 	} state;
 
-	std::unique_ptr<BufferedSocket, void(*)(BufferedSocket*)> sock;
+	BufferedSocket *sock;
 
 	void updateCounts(bool aRemove);
 	void updateActivity() { lastActivity = GET_TICK(); }
