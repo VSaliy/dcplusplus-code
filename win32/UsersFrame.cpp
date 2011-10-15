@@ -51,10 +51,10 @@ dwt::ImageListPtr UsersFrame::userIcons;
 
 static const ColumnInfo usersColumns[] = {
 	{ N_("Favorite"), 25, false },
-	{ N_("Grant slot"), 25, false },
+	{ N_("Auto grant slot"), 25, false },
 	{ N_("Nick"), 125, false },
 	{ N_("Hub (last seen in, if offline)"), 300, false },
-	{ N_("Time last seen"), 150, false },
+	{ N_("Status / Time last seen"), 150, false },
 	{ N_("Description"), 200, false },
 	{ N_("CID"), 300, false }
 };
@@ -105,33 +105,42 @@ static const FieldName fields[] =
 };
 
 UsersFrame::UsersFrame(TabViewPtr parent) :
-	BaseType(parent, T_("Users"), IDH_FAVUSERS, IDI_FAVORITE_USERS),
+	BaseType(parent, T_("Users"), IDH_USERS, IDI_USERS),
 	users(0),
 	scroll(0),
 	startup(true)
 {
-	filterGrid = addChild(Grid::Seed(1, 5));
+	filterGrid = addChild(Grid::Seed(1, 6));
 
 	auto updated = [this] { handleFilterUpdated(); };
+	filterGrid->addChild(Label::Seed(T_("Nick filter:")));
 	filter = filterGrid->addChild(WinUtil::Seeds::textBox);
+	filter->setHelpId(IDH_USERS_FILTER_NICK);
 	filter->onUpdated(updated);
-	filterGrid->column(0).mode = GridInfo::FILL;
+	filterGrid->column(1).mode = GridInfo::FILL;
 
 	showOnline = filterGrid->addChild(WinUtil::Seeds::checkBox);
+	showOnline->setHelpId(IDH_USERS_FILTER_ONLINE);
 	showOnline->setText(_T("Online"));
+	showOnline->setChecked(BOOLSETTING(USERS_FILTER_ONLINE));
 	showOnline->onClicked(updated);
 
 	showFavs = filterGrid->addChild(WinUtil::Seeds::checkBox);
+	showFavs->setHelpId(IDH_USERS_FILTER_FAVORITE);
 	showFavs->setText(_T("Favorite"));
-	showFavs->setChecked();	// TODO save / restore last state
+	showFavs->setChecked(BOOLSETTING(USERS_FILTER_FAVORITE));
 	showFavs->onClicked(updated);
 
 	showQueue = filterGrid->addChild(WinUtil::Seeds::checkBox);
+	showQueue->setHelpId(IDH_USERS_FILTER_QUEUE);
 	showQueue->setText(_T("Pending download"));
+	showQueue->setChecked(BOOLSETTING(USERS_FILTER_QUEUE));
 	showQueue->onClicked(updated);
 
 	showWaiting = filterGrid->addChild(WinUtil::Seeds::checkBox);
+	showWaiting->setHelpId(IDH_USERS_FILTER_WAITING);
 	showWaiting->setText(_T("Pending upload"));
+	showWaiting->setChecked(BOOLSETTING(USERS_FILTER_WAITING));
 	showWaiting->onClicked(updated);
 
 	splitter = addChild(SplitterContainer::Seed(0.7));
@@ -185,6 +194,9 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 
 	initStatus();
 
+	addAccel(FALT, 'I', [this] { filter->setFocus(); });
+	initAccels();
+
 	layout();
 
 	startup = false;
@@ -224,6 +236,11 @@ bool UsersFrame::preClosing() {
 void UsersFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::USERSFRAME_ORDER, WinUtil::toString(users->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::USERSFRAME_WIDTHS, WinUtil::toString(users->getColumnWidths()));
+
+	SettingsManager::getInstance()->set(SettingsManager::USERS_FILTER_ONLINE, showOnline->getChecked());
+	SettingsManager::getInstance()->set(SettingsManager::USERS_FILTER_FAVORITE, showFavs->getChecked());
+	SettingsManager::getInstance()->set(SettingsManager::USERS_FILTER_QUEUE, showQueue->getChecked());
+	SettingsManager::getInstance()->set(SettingsManager::USERS_FILTER_WAITING, showWaiting->getChecked());
 }
 
 UsersFrame::UserInfo::UserInfo(const UserPtr& u, bool visible) :

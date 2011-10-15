@@ -294,7 +294,7 @@ void MainWindow::initMenu() {
 		viewIndexes[FavHubsFrame::id] = viewMenu->appendItem(T_("&Favorite Hubs\tCtrl+H"),
 			[this] { FavHubsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		viewIndexes[UsersFrame::id] = viewMenu->appendItem(T_("&Users\tCtrl+U"),
-			[this] { UsersFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FAVORITE_USERS));
+			[this] { UsersFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FAVORITE_USER_ON));
 		viewMenu->appendSeparator();
 		viewIndexes[QueueFrame::id] = viewMenu->appendItem(T_("&Download Queue\tCtrl+D"),
 			[this] { QueueFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_QUEUE));
@@ -383,8 +383,8 @@ void MainWindow::initToolbar() {
 	toolbar->addButton(FavHubsFrame::id, WinUtil::toolbarIcon(IDI_FAVORITE_HUBS), 0, T_("Favorite Hubs"), false,
 		IDH_TOOLBAR_FAVORITE_HUBS, [this] { FavHubsFrame::openWindow(getTabView()); },
 		[this](const dwt::ScreenCoordinate& pt) { handleFavHubsDropDown(pt); });
-	toolbar->addButton(UsersFrame::id, WinUtil::toolbarIcon(IDI_FAVORITE_USERS), 0, T_("Users"), false,
-		IDH_TOOLBAR_FAVORITE_USERS, [this] { UsersFrame::openWindow(getTabView()); });
+	toolbar->addButton(UsersFrame::id, WinUtil::toolbarIcon(IDI_USERS), 0, T_("Users"), false,
+		IDH_TOOLBAR_USERS, [this] { UsersFrame::openWindow(getTabView()); });
 	toolbar->addButton(QueueFrame::id, WinUtil::toolbarIcon(IDI_QUEUE), 0, T_("Download Queue"), false,
 		IDH_TOOLBAR_QUEUE, [this] { QueueFrame::openWindow(getTabView()); });
 	toolbar->addButton(FinishedDLFrame::id, WinUtil::toolbarIcon(IDI_FINISHED_DL), 0, T_("Finished Downloads"), false,
@@ -693,8 +693,8 @@ void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 
 		auto f = &MainWindow::handleConfigureRecent;
 		addRecentMenu<HubFrame>(recent, menu, this, T_("Recent hubs"), IDI_HUB, IDI_FAVORITE_HUBS, f);
-		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDI_PRIVATE, IDI_FAVORITE_USERS, f);
-		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDI_DIRECTORY, IDI_FAVORITE_USERS, f);
+		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDI_PRIVATE, IDI_FAVORITE_USER_ON, f);
+		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDI_DIRECTORY, IDI_FAVORITE_USER_ON, f);
 	}
 
 	menu->open(pt);

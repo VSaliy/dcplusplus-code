@@ -1353,7 +1353,7 @@ void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr
 		PrivateFrame::openWindow(parent, u); });
 
 	addUsers(menu, T_("Add To &Favorites"), filter(users, &isFav), [=](const HintedUser &u, const string& s) {
-		FavoriteManager::getInstance()->addFavoriteUser(u); }, dwt::IconPtr(new dwt::Icon(IDI_FAVORITE_USERS)));
+		FavoriteManager::getInstance()->addFavoriteUser(u); }, dwt::IconPtr(new dwt::Icon(IDI_FAVORITE_USER_ON)));
 
 	addUsers(menu, T_("Grant &extra slot"), users, [=](const HintedUser &u, const string& s) {
 		UploadManager::getInstance()->reserveSlot(u); });

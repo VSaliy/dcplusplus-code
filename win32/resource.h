@@ -17,7 +17,7 @@
 #define IDI_FINISHED_DL				109
 #define IDI_FINISHED_UL				110
 #define IDI_ADLSEARCH				111
-#define IDI_FAVORITE_USERS					112
+#define IDI_USERS					112
 #define IDI_SPY						113
 #define IDI_NET_STATS				114
 #define IDI_MAGNET					116
