@@ -134,7 +134,7 @@ protected:
 		if(includeSendPM)
 			menu->appendItem(T_("&Send private message"), [=] { this->t().handlePrivateMessage(parent); }, dwt::IconPtr(), true, !defaultIsGetList);
 		if(!traits.favOnly)
-			menu->appendItem(T_("Add To &Favorites"), [this] { this->t().handleAddFavorite(); }, WinUtil::menuIcon(IDI_FAVORITE_USERS));
+			menu->appendItem(T_("Add To &Favorites"), [this] { this->t().handleAddFavorite(); }, WinUtil::menuIcon(IDI_FAVORITE_USER_ON));
 		menu->appendItem(T_("Grant &extra slot"), [this] { this->t().handleGrantSlot(); });
 		if(!traits.nonFavOnly)
 			menu->appendItem(T_("Connect to hub"), [=] { this->t().handleConnectFav(parent); }, WinUtil::menuIcon(IDI_HUB));
