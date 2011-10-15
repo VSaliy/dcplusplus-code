@@ -444,7 +444,7 @@ void SettingsManager::load(string const& aFileName)
 			set(AUTO_DETECT_CONNECTION, false); //Don't touch if it works
 		}
 
-		if(v <= 0.781) {
+		if(v <= 0.782) {
 			// These were remade completely...
 			unset(USERSFRAME_ORDER);
 			unset(USERSFRAME_WIDTHS);
