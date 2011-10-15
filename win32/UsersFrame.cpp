@@ -53,7 +53,7 @@ static const ColumnInfo usersColumns[] = {
 	{ N_("Favorite"), 25, false },
 	{ N_("Auto grant slot"), 25, false },
 	{ N_("Nick"), 125, false },
-	{ N_("Hub (last seen in, if offline)"), 300, false },
+	{ N_("Hub(s)"), 300, false },
 	{ N_("Status / Time last seen"), 150, false },
 	{ N_("Description"), 200, false },
 	{ N_("CID"), 300, false }
