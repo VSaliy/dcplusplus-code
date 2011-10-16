@@ -18,3 +18,5 @@ natupnp.h
 config.log
 .sconsign.dblite
 openssl/build/openssl*
+./msvc/debug-*
+./msvc/release-*

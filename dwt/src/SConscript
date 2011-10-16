@@ -1,17 +1,20 @@
-# vim: set filetype=py
- 
 Import('dev source_path')
 
-env, target, sources = dev.prepare_build(source_path, 'dwt', in_bin=False)
+env, target, sources = dev.prepare_build(source_path, 'dwt', in_bin = False)
 
-env.Append(CPPPATH=["#dwt/include"])
+env.Append(CPPPATH = ['#/dwt/include'])
 
-ret = []
+def get_msvcproj_files(name):
+	def parse_patterns(patterns):
+		array = []
+		for pattern in patterns:
+			for file in env.Glob('#/' + name + '/' + pattern):
+				array.append(file)
+		return array
+	return (parse_patterns(['*.h', 'include/*.h', 'include/*/*.h', 'include/*/*/*.h']),
+			parse_patterns(['*.cpp', 'src/*.cpp', 'src/*/*.cpp', 'src/*/*/*.cpp']))
 
-ret += dev.build('util/')
-ret += dev.build('widgets/')
+ret = [dev.build('util/'), dev.build('widgets/')]
 
-ret += env.StaticLibrary(target, [sources, ret])
-
+ret.append(dev.build_lib(env, target, [sources, ret], get_msvcproj_files, 'dwt'))
 Return('ret')
-

@@ -83,6 +83,9 @@
 		(read their instructions file; it's a matter of adding "debug" in the do_* file you use).
 		Rename debug libraries to libeay32d.lib and ssleay32d.lib; put them in openssl/lib.
 
+		To generate project files for MSVC, run "scons" with "msvcproj=1" and "tools=default".
+		The resulting solution file (DCPlusPlus.sln) will be in msvc/[mode-arch]/.
+
 
 3. Starting the build process
 

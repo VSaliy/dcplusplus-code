@@ -44,7 +44,10 @@ env.Depends(res, 'resource.h')
 headers=dev.get_sources(source_path, "*.h")
 dev.i18n(source_path, env, [sources,headers], 'dcpp-win32')
 
-ret = env.Program(target, [sources, res, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.dwt, dev.intl])
+if env['msvcproj']:
+	ret = dev.build_lib(env, target, sources, dev.cpp_lib)
+else:
+	ret = env.Program(target, [sources, res, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.dwt, dev.intl])
 
 if 'gcc' in env['TOOLS']:
 	# strip debug info to a separate PDB file
