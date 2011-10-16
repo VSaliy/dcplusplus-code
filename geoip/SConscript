@@ -8,6 +8,5 @@ if dev.is_win32():
 	if env['CC'] == 'cl': # MSVC
 		env.Append(CPPDEFINES = ['ssize_t=SSIZE_T'])
 
-ret = env.StaticLibrary(target, sources)
-
+ret = dev.build_lib(env, target, sources, dev.c_lib)
 Return('ret')

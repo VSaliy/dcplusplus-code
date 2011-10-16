@@ -56,6 +56,38 @@ class Dev:
 			# some distros of windres fail when they receive Win paths as input, so convert...
 			self.env['RCCOM'] = self.env['RCCOM'].replace('-i $SOURCE', '-i ${SOURCE.posix}', 1)
 
+		if self.env['msvcproj']:
+			if 'msvs' not in self.env['TOOLS']:
+				raise Exception('This is not an MSVC build; specify tools=default')
+			msvcproj_arch = self.env['arch']
+			if msvcproj_arch == 'x86':
+				msvcproj_arch = 'Win32'
+			# TODO SCons doesn't seem to support multiple configs per project, so each config goes
+			# to a separate directory. when this is fixed, generate all projects in the root dir.
+			self.msvcproj_path = '#/msvc/' + self.env['mode'] + '-' + self.env['arch'] + '/'
+			self.msvcproj_variant = self.env['mode'] + '|' + msvcproj_arch
+			self.msvcproj_projects = []
+
+			# set up the command called when building from the VS IDE.
+			self.env['MSVSSCONSFLAGS'] = (self.env['MSVSSCONSFLAGS'] +
+				' tools=' + self.env['tools'] +
+				' mode=' + self.env['mode'] +
+				' arch=' + self.env['arch'])
+
+			# work around a few bugs in MSVC project generation, see msvcproj_workarounds for details.
+			from SCons.Action import Action
+			from SCons.Tool.msvs import GenerateProject
+			self.env['MSVSPROJECTCOM'] = [Action(GenerateProject, None), Action(msvcproj_workarounds, None)]
+
+	def finalize(self):
+		if self.env['msvcproj']:
+			path = self.msvcproj_path + 'DCPlusPlus' + self.env['MSVSSOLUTIONSUFFIX']
+			self.env.Precious(path)
+			self.env.MSVSSolution(
+				target = path,
+				variant = self.msvcproj_variant,
+				projects = self.msvcproj_projects)
+
 	def is_win32(self):
 		return sys.platform == 'win32' or 'mingw' in self.env['TOOLS']
 
@@ -74,6 +106,14 @@ class Dev:
 	def get_sources(self, source_path, source_glob):
 		return map(lambda x: self.get_build_path(source_path) + x, glob.glob(source_glob))
 
+	# execute the SConscript file in the specified sub-directory.
+	def build(self, source_path, local_env = None):
+		if not local_env:
+			local_env = self.env
+		full_path = local_env.Dir('.').path + '/' + source_path	
+		return local_env.SConscript(source_path + 'SConscript', exports = { 'dev': self, 'source_path': full_path })
+
+	# create a build environment and set up sources and targets.
 	def prepare_build(self, source_path, name, source_glob = '*.cpp', in_bin = True, precompiled_header = None):
 		env = self.env.Clone()
 		env.VariantDir(self.get_build_path(source_path), '.', duplicate = 0)
@@ -94,11 +134,34 @@ class Dev:
 
 		return (env, self.get_target(source_path, name, in_bin), sources)
 
-	def build(self, source_path, local_env = None):
-		if not local_env:
-			local_env = self.env
-		full_path = local_env.Dir('.').path + '/' + source_path	
-		return local_env.SConscript(source_path + 'SConscript', exports={'dev' : self, 'source_path' : full_path })
+	# helpers for the MSVC project builder (see build_lib)
+	def simple_lib(inc_ext, src_ext):
+		return lambda self, name: (self.env.Glob('#/' + name + '/*.' + inc_ext), self.env.Glob('#/' + name + '/*.' + src_ext))
+	c_lib = simple_lib('h', 'c')
+	cpp_lib = simple_lib('h', 'cpp')
+
+	def build_lib(self, env, target, sources, msvcproj_glob = None, msvcproj_name = None):
+		if env['msvcproj']:
+			if msvcproj_glob is None:
+				return
+			if msvcproj_name is None:
+				import os
+				msvcproj_name = os.path.basename(os.path.dirname(sources[0]))
+			glob_inc, glob_src = msvcproj_glob(msvcproj_name)
+			path = self.msvcproj_path + msvcproj_name + env['MSVSPROJECTSUFFIX']
+			env.Precious(path)
+			self.msvcproj_projects.append(env.MSVSProject(
+				path,
+				variant = self.msvcproj_variant,
+				auto_build_solution = 0,
+				incs = [f.abspath for f in glob_inc],
+				srcs = [f.abspath for f in glob_src],
+				# we cheat a bit here: only the main project will be buildable. this is to avoid
+				# simulatenous builds of all the projects at the same time and general mayhem.
+				MSVSSCONSCOM = env['MSVSSCONSCOM'] if msvcproj_name == 'win32' else ''))
+			return
+
+		return env.StaticLibrary(target, sources)
 
 	def i18n (self, source_path, buildenv, sources, name):
 		if not self.env['i18n']:
@@ -233,3 +296,26 @@ def html_to_rtf(string):
 		re.sub('^(' + line + ')', '', re.sub('(' + line + ')$', '',
 		re.sub('(' + line + ')+', line, re.sub('\s*<br ?/?>\s*', line,
 		string.replace('\\', '\\\\').replace('{', '\\{').replace('}', '\\}'))))))).replace('<u>', '{\\ul ')
+
+
+def msvcproj_workarounds(target, source, env):
+	f = open(str(target[0]), 'rb')
+	contents = f.read()
+	f.close()
+
+	import re
+
+	# include paths in MSVC projects are not expanded; expand them manually.
+	# bug: <http://scons.tigris.org/issues/show_bug.cgi?id=2382>
+	# TODO remove this when the bug is fixed in SCons.
+	contents = contents.replace('#/', env.Dir('#').abspath + '/')
+
+	# clean up empty commands for non-built projects to avoid build failures.
+	contents = re.sub('echo Starting SCons &amp;&amp;\s*(-c)?\s*&quot;&quot;', '', contents)
+
+	# remove SConstruct from included files since it points nowhere anyway.
+	contents = re.sub('<ItemGroup>\s*<None Include="SConstruct" />\s*</ItemGroup>', '', contents)
+
+	f = open(str(target[0]), 'wb')
+	f.write(contents)
+	f.close()

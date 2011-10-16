@@ -10,6 +10,5 @@ if dev.is_win32():
 	env.Append(CPPDEFINES = ['WIN32', '_WIN32_WINNT=0x501', '_WIN32_IE=0x501', 'WINVER=0x501', 'WIN32_LEAN_AND_MEAN'])
 env.Append(CPPPATH = ['#/dwarf'])
 
-ret = env.StaticLibrary(target, sources)
-
+ret = dev.build_lib(env, target, sources)
 Return('ret')
