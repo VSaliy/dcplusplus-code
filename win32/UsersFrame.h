@@ -124,17 +124,11 @@ private:
 	SplitterContainerPtr splitter;
 
 	TextBoxPtr filter;
-	CheckBoxPtr showFavs;
-	CheckBoxPtr showOnline;
-	CheckBoxPtr showQueue;
-	CheckBoxPtr showWaiting;
 	dwt::ScrolledContainerPtr scroll;
 
 	static dwt::ImageListPtr userIcons;
 
 	std::unordered_map<UserPtr, UserInfo, User::Hash> userInfos;
-
-	bool startup;
 
 	void addUser(const UserPtr& aUser);
 	void updateUser(const UserPtr& aUser);

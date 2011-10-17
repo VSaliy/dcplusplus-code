@@ -126,7 +126,6 @@ merge(0),
 bMerge(BOOLSETTING(SEARCH_MERGE)),
 hubs(0),
 results(0),
-showUI(0),
 initialType(initialType_),
 droppedResults(0)
 {
@@ -262,10 +261,12 @@ droppedResults(0)
 
 	initStatus();
 
-	showUI = addChild(WinUtil::Seeds::splitCheckBox);
-	showUI->setChecked(true);
-	showUI->onClicked([this] { handleShowUIClicked(); });
-	status->setWidget(STATUS_SHOW_UI, showUI);
+	{
+		auto showUI = addChild(WinUtil::Seeds::splitCheckBox);
+		showUI->setChecked(true);
+		showUI->onClicked([this, showUI] { paned->maximize(showUI->getChecked() ? nullptr : results); });
+		status->setWidget(STATUS_SHOW_UI, showUI);
+	}
 
 	layout();
 	activate();
@@ -554,10 +555,6 @@ void SearchFrame::handleFilterClicked() {
 
 void SearchFrame::handleMergeClicked() {
 	bMerge = merge->getChecked();
-}
-
-void SearchFrame::handleShowUIClicked() {
-	paned->maximize(showUI->getChecked() ? NULL : results);
 }
 
 LRESULT SearchFrame::handleHubItemChanged(WPARAM wParam, LPARAM lParam) {
