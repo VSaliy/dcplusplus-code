@@ -216,7 +216,6 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	searchBox(0),
 	dirs(0),
 	files(0),
-	showTree(0),
 	speed(aSpeed),
 	dl(new DirectoryListing(aUser)),
 	user(aUser),
@@ -350,14 +349,16 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 
 	initStatus();
 
-	showTree = addChild(WinUtil::Seeds::splitCheckBox);
-	showTree->setChecked(true);
-	showTree->onClicked([this, paned] {
-		auto checked = showTree->getChecked();
-		dirs->setEnabled(checked);
-		paned->maximize(checked ? nullptr : files);
-	});
-	status->setWidget(STATUS_SHOW_TREE, showTree);
+	{
+		auto showTree = addChild(WinUtil::Seeds::splitCheckBox);
+		showTree->setChecked(true);
+		showTree->onClicked([this, showTree, paned] {
+			auto checked = showTree->getChecked();
+			dirs->setEnabled(checked);
+			paned->maximize(checked ? nullptr : files);
+		});
+		status->setWidget(STATUS_SHOW_TREE, showTree);
+	}
 
 	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
 

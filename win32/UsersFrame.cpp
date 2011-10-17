@@ -105,43 +105,39 @@ static const FieldName fields[] =
 };
 
 UsersFrame::UsersFrame(TabViewPtr parent) :
-	BaseType(parent, T_("Users"), IDH_USERS, IDI_USERS),
-	users(0),
-	scroll(0),
-	startup(true)
+BaseType(parent, T_("Users"), IDH_USERS, IDI_USERS, false),
+filterGrid(0),
+users(0),
+userInfo(0),
+splitter(0),
+filter(0),
+scroll(0)
 {
 	filterGrid = addChild(Grid::Seed(1, 6));
 
-	auto updated = [this] { handleFilterUpdated(); };
 	filterGrid->addChild(Label::Seed(T_("Nick filter:")));
 	filter = filterGrid->addChild(WinUtil::Seeds::textBox);
 	filter->setHelpId(IDH_USERS_FILTER_NICK);
-	filter->onUpdated(updated);
+	filter->onUpdated([this] { handleFilterUpdated(); });
 	filterGrid->column(1).mode = GridInfo::FILL;
 
-	showOnline = filterGrid->addChild(WinUtil::Seeds::checkBox);
-	showOnline->setHelpId(IDH_USERS_FILTER_ONLINE);
-	showOnline->setText(_T("Online"));
-	showOnline->setChecked(BOOLSETTING(USERS_FILTER_ONLINE));
-	showOnline->onClicked(updated);
+	{
+		auto addFilterBox = [this](const tstring& text, SettingsManager::IntSetting setting, unsigned helpId) {
+			auto box = filterGrid->addChild(WinUtil::Seeds::checkBox);
+			box->setHelpId(helpId);
+			box->setText(text);
+			box->setChecked(SettingsManager::getInstance()->getBool(setting, true));
+			box->onClicked([=] {
+				SettingsManager::getInstance()->set(setting, box->getChecked());
+				handleFilterUpdated();
+			});
+		};
 
-	showFavs = filterGrid->addChild(WinUtil::Seeds::checkBox);
-	showFavs->setHelpId(IDH_USERS_FILTER_FAVORITE);
-	showFavs->setText(_T("Favorite"));
-	showFavs->setChecked(BOOLSETTING(USERS_FILTER_FAVORITE));
-	showFavs->onClicked(updated);
-
-	showQueue = filterGrid->addChild(WinUtil::Seeds::checkBox);
-	showQueue->setHelpId(IDH_USERS_FILTER_QUEUE);
-	showQueue->setText(_T("Pending download"));
-	showQueue->setChecked(BOOLSETTING(USERS_FILTER_QUEUE));
-	showQueue->onClicked(updated);
-
-	showWaiting = filterGrid->addChild(WinUtil::Seeds::checkBox);
-	showWaiting->setHelpId(IDH_USERS_FILTER_WAITING);
-	showWaiting->setText(_T("Pending upload"));
-	showWaiting->setChecked(BOOLSETTING(USERS_FILTER_WAITING));
-	showWaiting->onClicked(updated);
+		addFilterBox(T_("Online"), SettingsManager::USERS_FILTER_ONLINE, IDH_USERS_FILTER_ONLINE);
+		addFilterBox(T_("Favorite"), SettingsManager::USERS_FILTER_FAVORITE, IDH_USERS_FILTER_FAVORITE);
+		addFilterBox(T_("Pending download"), SettingsManager::USERS_FILTER_QUEUE, IDH_USERS_FILTER_QUEUE);
+		addFilterBox(T_("Pending upload"), SettingsManager::USERS_FILTER_WAITING, IDH_USERS_FILTER_WAITING);
+	}
 
 	splitter = addChild(SplitterContainer::Seed(0.7));
 
@@ -199,8 +195,6 @@ UsersFrame::UsersFrame(TabViewPtr parent) :
 
 	layout();
 
-	startup = false;
-
 	handleFilterUpdated();
 }
 
@@ -236,11 +230,6 @@ bool UsersFrame::preClosing() {
 void UsersFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::USERSFRAME_ORDER, WinUtil::toString(users->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::USERSFRAME_WIDTHS, WinUtil::toString(users->getColumnWidths()));
-
-	SettingsManager::getInstance()->set(SettingsManager::USERS_FILTER_ONLINE, showOnline->getChecked());
-	SettingsManager::getInstance()->set(SettingsManager::USERS_FILTER_FAVORITE, showFavs->getChecked());
-	SettingsManager::getInstance()->set(SettingsManager::USERS_FILTER_QUEUE, showQueue->getChecked());
-	SettingsManager::getInstance()->set(SettingsManager::USERS_FILTER_WAITING, showWaiting->getChecked());
 }
 
 UsersFrame::UserInfo::UserInfo(const UserPtr& u, bool visible) :
@@ -535,19 +524,19 @@ bool UsersFrame::show(const UserPtr &u, bool any) const {
 		return true;
 	}
 
-	if(showOnline->getChecked() && !u->isOnline()) {
+	if(BOOLSETTING(USERS_FILTER_ONLINE) && !u->isOnline()) {
 		return false;
 	}
 
-	if(showFavs->getChecked() && !isFav(u)) {
+	if(BOOLSETTING(USERS_FILTER_FAVORITE) && !isFav(u)) {
 		return false;
 	}
 
-	if(showWaiting->getChecked() && !isWaiting(u)) {
+	if(BOOLSETTING(USERS_FILTER_WAITING) && !isWaiting(u)) {
 		return false;
 	}
 
-	if(showQueue->getChecked() && !hasDownload(u)) {
+	if(BOOLSETTING(USERS_FILTER_QUEUE) && !hasDownload(u)) {
 		return false;
 	}
 

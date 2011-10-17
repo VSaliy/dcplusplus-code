@@ -189,8 +189,6 @@ private:
 	typedef WidgetResults* WidgetResultsPtr;
 	WidgetResultsPtr results;
 
-	CheckBoxPtr showUI;
-
 	SearchManager::TypeModes initialType;
 
 	static TStringList lastSearches;
@@ -213,7 +211,6 @@ private:
 	void handleSlotsClicked();
 	void handleFilterClicked();
 	void handleMergeClicked();
-	void handleShowUIClicked();
 	LRESULT handleHubItemChanged(WPARAM wParam, LPARAM lParam);
 	bool handleKeyDown(int c);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);

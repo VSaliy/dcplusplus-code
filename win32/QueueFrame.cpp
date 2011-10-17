@@ -65,7 +65,6 @@ BaseType(parent, T_("Download Queue"), IDH_QUEUE, IDI_QUEUE),
 paned(0),
 dirs(0),
 files(0),
-showTree(0),
 dirty(true),
 usingDirMenu(false),
 queueSize(0),
@@ -104,11 +103,17 @@ fileLists(0)
 
 	initStatus();
 
-	showTree = addChild(WinUtil::Seeds::splitCheckBox);
-	showTree->setHelpId(IDH_QUEUE_SHOW_TREE);
-	showTree->setChecked(BOOLSETTING(QUEUEFRAME_SHOW_TREE));
-	showTree->onClicked([this] { handleShowTreeClicked(); });
-	status->setWidget(STATUS_SHOW_TREE, showTree);
+	{
+		auto showTree = addChild(WinUtil::Seeds::splitCheckBox);
+		showTree->setHelpId(IDH_QUEUE_SHOW_TREE);
+		showTree->setChecked(BOOLSETTING(QUEUEFRAME_SHOW_TREE));
+		showTree->onClicked([this, showTree] {
+			auto checked = showTree->getChecked();
+			SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_SHOW_TREE, checked);
+			paned->maximize(checked ? nullptr : files);
+		});
+		status->setWidget(STATUS_SHOW_TREE, showTree);
+	}
 
 	status->setHelpId(STATUS_PARTIAL_COUNT, IDH_QUEUE_PARTIAL_COUNT);
 	status->setHelpId(STATUS_PARTIAL_BYTES, IDH_QUEUE_PARTIAL_BYTES);
@@ -187,7 +192,7 @@ void QueueFrame::updateStatus() {
 	int cnt = files->countSelected();
 	if(cnt < 2) {
 		cnt = files->size();
-		if(showTree->getChecked()) {
+		if(BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
 			for(int i = 0; i < cnt; ++i) {
 				QueueItemInfo* ii = files->getData(i);
 				total += (ii->getSize() > 0) ? ii->getSize() : 0;
@@ -225,7 +230,6 @@ void QueueFrame::postClosing() {
 		ht = dirs->getNextSibling(ht);
 	}
 
-	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_SHOW_TREE, showTree->getChecked());
 	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getSplitterPos(0));
 
 	for(DirectoryIter i = directories.begin(); i != directories.end(); ++i) {
@@ -253,7 +257,7 @@ void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
 	if(updateDir) {
 		addDirectory(dir, ii->isSet(QueueItem::FLAG_USER_LIST));
 	}
-	if(!showTree->getChecked() || isCurDir(dir)) {
+	if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(dir)) {
 		ii->update();
 		if(noSort) {
 			files->insert(files->size(), ii);
@@ -263,16 +267,12 @@ void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
 	}
 }
 
-void QueueFrame::handleShowTreeClicked() {
-	paned->maximize(showTree->getChecked() ? NULL : files);
-}
-
 void QueueFrame::updateFiles() {
 	HoldRedraw hold(files);
 
 	files->clear();
 	pair<DirectoryIter, DirectoryIter> i;
-	if(showTree->getChecked()) {
+	if(BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
 		i = directories.equal_range(getSelectedDir());
 	} else {
 		i.first = directories.begin();
@@ -627,7 +627,7 @@ void QueueFrame::moveSelected() {
 		}
 	} else if(n > 1) {
 		tstring name;
-		if(showTree->getChecked()) {
+		if(BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
 			name = Text::toT(curDir);
 		}
 		if(FolderDialog(this).open(name)) {
@@ -1010,7 +1010,7 @@ void QueueFrame::onRemoved(const string& s) {
 		return;
 	}
 
-	if(!showTree->getChecked() || isCurDir(ii->getPath()) ) {
+	if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(ii->getPath()) ) {
 		dcassert(files->find(ii) != -1);
 		files->erase(ii);
 	}
@@ -1056,7 +1056,7 @@ void QueueFrame::onUpdated(QueueItem* qi) {
 
 	ii->updateMask |= QueueItemInfo::MASK_PRIORITY | QueueItemInfo::MASK_USERS | QueueItemInfo::MASK_ERRORS | QueueItemInfo::MASK_STATUS | QueueItemInfo::MASK_DOWNLOADED;
 
-	if(!showTree->getChecked() || isCurDir(ii->getPath())) {
+	if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(ii->getPath())) {
 		dcassert(files->find(ii) != -1);
 		ii->update();
 		files->update(ii);

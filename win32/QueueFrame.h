@@ -197,8 +197,6 @@ private:
 	typedef WidgetFiles* WidgetFilesPtr;
 	WidgetFilesPtr files;
 
-	CheckBoxPtr showTree;
-
 	typedef unordered_multimap<string, QueueItemInfo*, noCaseStringHash, noCaseStringEq> DirectoryMap;
 	typedef DirectoryMap::iterator DirectoryIter;
 	typedef pair<DirectoryIter, DirectoryIter> DirectoryPair;
@@ -266,7 +264,6 @@ private:
 	bool preClosing();
 	void postClosing();
 
-	void handleShowTreeClicked();
 	void handleMove();
 	void handleRemove();
 	void handleRecheck();

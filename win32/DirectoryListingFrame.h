@@ -166,8 +166,6 @@ private:
 	typedef WidgetFiles* WidgetFilesPtr;
 	WidgetFilesPtr files;
 
-	CheckBoxPtr showTree;
-
 	int64_t speed;		/**< Speed at which this file list was downloaded */
 
 	std::unique_ptr<DirectoryListing> dl;

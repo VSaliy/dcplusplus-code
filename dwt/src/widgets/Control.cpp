@@ -58,9 +58,10 @@ void Control::addAccel(BYTE fVirt, WORD key, const CommandDispatcher::F& f) {
 }
 
 void Control::initAccels() {
+	dwtassert(!accel, "Control::initAccels called twice on the same control");
 	accel = ::CreateAcceleratorTable(&accels[0], accels.size());
 	if(!accel) {
-		throw Win32Exception("Control::create: CreateAcceleratorTable failed");
+		throw Win32Exception("Control::initAccels: CreateAcceleratorTable failed");
 	}
 }
 
