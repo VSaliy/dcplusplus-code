@@ -566,7 +566,7 @@ ShellMenuPtr DirectoryListingFrame::makeDirMenu(ItemInfo* ii) {
 }
 
 void DirectoryListingFrame::addUserCommands(const MenuPtr& parent) {
-	prepareMenu(parent, UserCommand::CONTEXT_FILELIST, ClientManager::getInstance()->getHubs(dl->getUser().user->getCID(), dl->getUser().hint));
+	prepareMenu(parent, UserCommand::CONTEXT_FILELIST, ClientManager::getInstance()->getHubUrls(dl->getUser()));
 }
 
 void DirectoryListingFrame::addShellPaths(const ShellMenuPtr& menu, const vector<ItemInfo*>& sel) {

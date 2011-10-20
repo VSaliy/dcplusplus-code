@@ -1802,7 +1802,7 @@ void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcError
 					}
 					hubNames.push_back(Util::toString(temp));
 
-					temp = ClientManager::getInstance()->getHubs(*i);
+					temp = ClientManager::getInstance()->getHubUrls(*i);
 					if(temp.empty()) {
 						temp.push_back(_("Offline"));
 					}
