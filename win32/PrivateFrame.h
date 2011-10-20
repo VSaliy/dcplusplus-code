@@ -48,6 +48,7 @@ class PrivateFrame :
 
 public:
 	enum Status {
+		STATUS_HUBS,
 		STATUS_STATUS,
 		STATUS_LAST
 	};
@@ -71,6 +72,8 @@ public:
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
 
 private:
+	ComboBoxPtr hubBox;
+	StringPairList hubs;
 	ParamMap ucLineParams;
 
 	UserInfoBase replyTo;

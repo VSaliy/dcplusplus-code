@@ -55,18 +55,20 @@ public:
 	size_t getUserCount() const;
 	int64_t getAvailable() const;
 
-	StringList getHubs(const CID& cid, const string& hintUrl);
-	StringList getHubNames(const CID& cid, const string& hintUrl);
-	StringList getNicks(const CID& cid, const string& hintUrl);
+	StringList getHubUrls(const CID& cid, const string& hintUrl = Util::emptyString);
+	StringList getHubNames(const CID& cid, const string& hintUrl = Util::emptyString);
+	StringList getNicks(const CID& cid, const string& hintUrl = Util::emptyString);
 	string getField(const CID& cid, const string& hintUrl, const char* field) const;
 
-	StringList getHubs(const CID& cid, const string& hintUrl, bool priv);
+	StringList getHubUrls(const CID& cid, const string& hintUrl, bool priv);
 	StringList getHubNames(const CID& cid, const string& hintUrl, bool priv);
 	StringList getNicks(const CID& cid, const string& hintUrl, bool priv);
 
 	StringList getNicks(const HintedUser& user) { return getNicks(user.user->getCID(), user.hint); }
 	StringList getHubNames(const HintedUser& user) { return getHubNames(user.user->getCID(), user.hint); }
-	StringList getHubs(const HintedUser& user) { return getHubs(user.user->getCID(), user.hint); }
+	StringList getHubUrls(const HintedUser& user) { return getHubUrls(user.user->getCID(), user.hint); }
+
+	StringPairList getHubs(const CID& cid, const string& hintUrl, bool priv);
 
 	vector<Identity> getIdentities(const UserPtr &u) const;
 

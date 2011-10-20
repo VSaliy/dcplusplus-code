@@ -18,6 +18,7 @@
 
 #include "stdafx.h"
 
+#include <boost/range/algorithm/for_each.hpp>
 #include "PrivateFrame.h"
 
 #include "HoldRedraw.h"
@@ -32,6 +33,8 @@
 
 using dwt::Grid;
 using dwt::GridInfo;
+
+using boost::range::for_each;
 
 const string PrivateFrame::id = "PM";
 const string& PrivateFrame::getId() const { return id; }
@@ -141,9 +144,9 @@ online(replyTo.getUser().user->isOnline())
 	message->onChar([this](int c) { return handleMessageChar(c); });
 
 	initStatus();
-	status->onDblClicked(STATUS_STATUS, [this] { openLog(); });
+	hubBox = addChild(WinUtil::Seeds::comboBoxStatic);
 
-	updateOnlineStatus();
+	status->onDblClicked(STATUS_STATUS, [this] { openLog(); });
 
 	initAccels();
 
@@ -151,9 +154,10 @@ online(replyTo.getUser().user->isOnline())
 
 	readLog(logPath, SETTING(PM_LAST_LOG_LINES));
 
-	ClientManager::getInstance()->addListener(this);
-
-	callAsync([this] { updateOnlineStatus(); });
+	callAsync([this] {
+		ClientManager::getInstance()->addListener(this);
+		updateOnlineStatus();
+	});
 
 	frames.insert(std::make_pair(replyTo.getUser(), this));
 
@@ -213,7 +217,7 @@ void PrivateFrame::fillLogParams(ParamMap& params) const {
 	const CID& cid = replyTo.getUser().user->getCID();
 	const string& hint = replyTo.getUser().hint;
 	params["hubNI"] = [&] { return Util::toString(ClientManager::getInstance()->getHubNames(cid, hint, priv)); };
-	params["hubURL"] = [&] { return Util::toString(ClientManager::getInstance()->getHubs(cid, hint, priv)); };
+	params["hubURL"] = [&] { return Util::toString(ClientManager::getInstance()->getHubUrls(cid, hint, priv)); };
 	params["userCID"] = [&cid] { return cid.toBase32(); };
 	params["userNI"] = [&] { return ClientManager::getInstance()->getNicks(cid, hint, priv)[0]; };
 	params["myCID"] = [] { return ClientManager::getInstance()->getMe()->getCID().toBase32(); };
@@ -238,12 +242,35 @@ void PrivateFrame::updateOnlineStatus() {
 	const CID& cid = replyTo.getUser().user->getCID();
 	const string& hint = replyTo.getUser().hint;
 
-	pair<tstring, bool> hubs = WinUtil::getHubNames(cid, hint, priv);
+	pair<tstring, bool> hubNames = WinUtil::getHubNames(cid, hint, priv);
 
-	setText(WinUtil::getNicks(cid, hint, priv) + _T(" - ") + hubs.first);
+	setText(WinUtil::getNicks(cid, hint, priv) + _T(" - ") + hubNames.first);
 
-	online = hubs.second;
+	online = hubNames.second;
 	setIcon(online ? IDI_PRIVATE : IDI_PRIVATE_OFF);
+
+	hubs = ClientManager::getInstance()->getHubs(cid, hint, priv);
+	hubBox->clear();
+
+	if(hubs.empty()) {
+		hubBox->setEnabled(false);
+	} else {
+		hubBox->setEnabled(true);
+
+		for_each(hubs, [&](const StringPair &hub) {
+			auto idx = hubBox->addValue(Text::toT(hub.second));
+			if(hub.first == replyTo.getUser().hint) {
+				hubBox->setSelected(idx);
+			}
+		});
+
+		if(hubBox->getSelected() == -1) {
+			hubBox->setSelected(0);
+		}
+	}
+
+	status->setWidget(STATUS_HUBS, hubBox);
+	status->refresh();
 }
 
 void PrivateFrame::enterImpl(const tstring& s) {
@@ -302,7 +329,8 @@ void PrivateFrame::enterImpl(const tstring& s) {
 }
 
 void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
-	ClientManager::getInstance()->privateMessage(replyTo.getUser(), Text::fromT(msg), thirdPerson);
+	auto url = hubs[hubBox->getSelected()].first;
+	ClientManager::getInstance()->privateMessage(HintedUser(replyTo.getUser().user, url), Text::fromT(msg), thirdPerson);
 }
 
 PrivateFrame::UserInfoList PrivateFrame::selectedUsersImpl() {
@@ -324,7 +352,7 @@ void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aU
 
 void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {
 	appendUserItems(getParent(), menu, false, false);
-	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubs(replyTo.getUser().user->getCID(),
+	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubUrls(replyTo.getUser().user->getCID(),
 		replyTo.getUser().hint, priv));
 	menu->appendSeparator();
 }
@@ -338,7 +366,7 @@ bool PrivateFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 
 	menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
 
-	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubs(replyTo.getUser().user->getCID(),
+	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubUrls(replyTo.getUser().user->getCID(),
 		replyTo.getUser().hint, priv));
 
 	menu->open(pt);

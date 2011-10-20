@@ -80,7 +80,7 @@ void Transfer::getParams(const UserConnection& aSource, ParamMap& params) {
 	if(hubNames.empty())
 		hubNames.push_back(_("Offline"));
 	params["hub"] = Util::toString(hubNames);
-	StringList hubs = ClientManager::getInstance()->getHubs(aSource.getUser()->getCID(), aSource.getHubUrl());
+	StringList hubs = ClientManager::getInstance()->getHubUrls(aSource.getUser()->getCID(), aSource.getHubUrl());
 	if(hubs.empty())
 		hubs.push_back(_("Offline"));
 	params["hubURL"] = Util::toString(hubs);

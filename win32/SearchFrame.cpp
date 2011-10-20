@@ -435,10 +435,10 @@ void SearchFrame::SearchInfo::CheckTTH::operator()(SearchInfo* si) {
 	}
 
 	if(firstHubs && hubs.empty()) {
-		hubs = ClientManager::getInstance()->getHubs(sr->getUser()->getCID(), sr->getHubURL());
+		hubs = ClientManager::getInstance()->getHubUrls(sr->getUser()->getCID(), sr->getHubURL());
 		firstHubs = false;
 	} else if(!hubs.empty()) {
-		Util::intersect(hubs, ClientManager::getInstance()->getHubs(sr->getUser()->getCID(), sr->getHubURL()));
+		Util::intersect(hubs, ClientManager::getInstance()->getHubUrls(sr->getUser()->getCID(), sr->getHubURL()));
 	}
 }
 

@@ -78,8 +78,8 @@ size_t ClientManager::getUserCount() const {
 	return onlineUsers.size();
 }
 
-StringList ClientManager::getHubs(const CID& cid, const string& hintUrl) {
-	return getHubs(cid, hintUrl, FavoriteManager::getInstance()->isPrivate(hintUrl));
+StringList ClientManager::getHubUrls(const CID& cid, const string& hintUrl) {
+	return getHubUrls(cid, hintUrl, FavoriteManager::getInstance()->isPrivate(hintUrl));
 }
 
 StringList ClientManager::getHubNames(const CID& cid, const string& hintUrl) {
@@ -90,7 +90,7 @@ StringList ClientManager::getNicks(const CID& cid, const string& hintUrl) {
 	return getNicks(cid, hintUrl, FavoriteManager::getInstance()->isPrivate(hintUrl));
 }
 
-StringList ClientManager::getHubs(const CID& cid, const string& hintUrl, bool priv) {
+StringList ClientManager::getHubUrls(const CID& cid, const string& hintUrl, bool priv) {
 	Lock l(cs);
 	StringList lst;
 	if(!priv) {
@@ -148,6 +148,22 @@ StringList ClientManager::getNicks(const CID& cid, const string& hintUrl, bool p
 	}
 
 	return StringList(ret.begin(), ret.end());
+}
+
+StringPairList ClientManager::getHubs(const CID& cid, const string& hintUrl, bool priv) {
+	Lock l(cs);
+	StringPairList lst;
+	if(!priv) {
+		auto op = onlineUsers.equal_range(cid);
+		for(auto i = op.first; i != op.second; ++i) {
+			lst.push_back(make_pair(i->second->getClient().getHubUrl(), i->second->getClient().getHubName()));
+		}
+	} else {
+		OnlineUser* u = findOnlineUserHint(cid, hintUrl);
+		if(u)
+			lst.push_back(make_pair(u->getClient().getHubUrl(), u->getClient().getHubName()));
+	}
+	return lst;
 }
 
 vector<Identity> ClientManager::getIdentities(const UserPtr &u) const {
