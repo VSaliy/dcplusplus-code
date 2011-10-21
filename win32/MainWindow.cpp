@@ -294,7 +294,7 @@ void MainWindow::initMenu() {
 		viewIndexes[FavHubsFrame::id] = viewMenu->appendItem(T_("&Favorite Hubs\tCtrl+H"),
 			[this] { FavHubsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		viewIndexes[UsersFrame::id] = viewMenu->appendItem(T_("&Users\tCtrl+U"),
-			[this] { UsersFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_FAVORITE_USER_ON));
+			[this] { UsersFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_USERS));
 		viewMenu->appendSeparator();
 		viewIndexes[QueueFrame::id] = viewMenu->appendItem(T_("&Download Queue\tCtrl+D"),
 			[this] { QueueFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_QUEUE));
