@@ -211,7 +211,7 @@ inTabComplete(false)
 
 	status->onDblClicked(STATUS_STATUS, [this] { openLog(false); });
 
-	status->setIcon(STATUS_USERS, WinUtil::statusIcon(IDI_USER));
+	status->setIcon(STATUS_USERS, WinUtil::statusIcon(IDI_USERS));
 
 	showUsers = addChild(WinUtil::Seeds::splitCheckBox);
 	showUsers->setHelpId(IDH_HUB_SHOW_USERS);
