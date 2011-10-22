@@ -68,6 +68,7 @@ private:
 	void close(Mapper& mapper);
 	void log(const string& message);
 	string deviceString(Mapper& mapper) const;
+	void renewLater(Mapper& mapper);
 
 	void on(TimerManagerListener::Minute, uint64_t tick) noexcept;
 };

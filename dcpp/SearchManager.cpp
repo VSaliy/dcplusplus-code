@@ -21,12 +21,13 @@
 
 #include <boost/scoped_array.hpp>
 
-#include "UploadManager.h"
-#include "format.h"
 #include "ClientManager.h"
-#include "ShareManager.h"
-#include "SearchResult.h"
+#include "ConnectivityManager.h"
+#include "format.h"
 #include "LogManager.h"
+#include "UploadManager.h"
+#include "SearchResult.h"
+#include "ShareManager.h"
 
 namespace dcpp {
 
@@ -46,7 +47,6 @@ const char* SearchManager::getTypeStr(int type) {
 }
 
 SearchManager::SearchManager() :
-	port(0),
 	stop(false),
 	lastSearch(GET_TICK())
 {
@@ -92,8 +92,9 @@ void SearchManager::listen() {
 
 	try {
 		socket.reset(new Socket(Socket::TYPE_UDP));
-		socket->setLocalIp4(SETTING(BIND_ADDRESS));
-		port = socket->listen(Util::toString(SETTING(UDP_PORT)));
+		socket->setLocalIp4(CONNSETTING(BIND_ADDRESS));
+		socket->setLocalIp6(CONNSETTING(BIND_ADDRESS6));
+		port = socket->listen(Util::toString(CONNSETTING(UDP_PORT)));
 		start();
 	} catch(...) {
 		socket.reset();
@@ -105,7 +106,7 @@ void SearchManager::disconnect() noexcept {
 	if(socket.get()) {
 		stop = true;
 		socket->disconnect();
-		port = 0;
+		port.clear();
 
 		join();
 
@@ -139,7 +140,7 @@ int SearchManager::run() {
 		while(!stop) {
 			try {
 				socket->disconnect();
-				port = socket->listen(Util::toString(SETTING(UDP_PORT)));
+				port = socket->listen(Util::toString(CONNSETTING(UDP_PORT)));
 				if(failed) {
 					LogManager::getInstance()->message(_("Search enabled again"));
 					failed = false;

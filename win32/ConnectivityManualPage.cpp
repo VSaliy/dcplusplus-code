@@ -45,12 +45,7 @@ upnp(0),
 nat(0),
 passive(0),
 externalIP(0),
-overrideIP(0),
-tcp(0),
-udp(0),
-tls(0),
-mapper(0),
-bindAddress(0)
+mapper(0)
 {
 	setHelpId(IDH_CONNECTIVITYMANUALPAGE);
 
@@ -92,7 +87,7 @@ bindAddress(0)
 		externalIP = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR));
 
-		overrideIP = cur->addChild(CheckBox::Seed(T_("Don't allow hubs/NAT-PMP/UPnP to override")));
+		auto overrideIP = cur->addChild(CheckBox::Seed(T_("Don't allow hubs/NAT-PMP/UPnP to override")));
 		items.push_back(Item(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL));
 		overrideIP->setHelpId(IDH_SETTINGS_CONNECTIVITY_OVERRIDE);
 	}
@@ -101,7 +96,7 @@ bindAddress(0)
 		auto cur = grid->addChild(Grid::Seed(1, 3));
 		cur->setSpacing(grid->getSpacing());
 
-		auto addPortBox = [this, cur](const tstring& text, unsigned helpId) -> TextBoxPtr {
+		auto addPortBox = [this, cur](const tstring& text, int setting, unsigned helpId) {
 			auto group = cur->addChild(GroupBox::Seed(str(TF_("%1% port") % text)));
 			group->setHelpId(helpId);
 
@@ -109,17 +104,12 @@ bindAddress(0)
 			boxGrid->column(0).size = 40;
 			boxGrid->column(0).mode = GridInfo::STATIC;
 
-			return boxGrid->addChild(WinUtil::Seeds::Dialog::intTextBox);
+			items.push_back(PropPage::Item(boxGrid->addChild(WinUtil::Seeds::Dialog::intTextBox), setting, PropPage::T_INT));
 		};
 
-		tcp = addPortBox(T_("Transfer"), IDH_SETTINGS_CONNECTIVITY_PORT_TCP);
-		items.push_back(Item(tcp, SettingsManager::TCP_PORT, PropPage::T_INT));
-
-		udp = addPortBox(T_("Search"), IDH_SETTINGS_CONNECTIVITY_PORT_UDP);
-		items.push_back(Item(udp, SettingsManager::UDP_PORT, PropPage::T_INT));
-
-		tls = addPortBox(T_("Encrypted transfer"), IDH_SETTINGS_CONNECTIVITY_PORT_TLS);
-		items.push_back(Item(tls, SettingsManager::TLS_PORT, PropPage::T_INT));
+		addPortBox(T_("Transfer"), SettingsManager::TCP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TCP);
+		addPortBox(T_("Encrypted transfer"), SettingsManager::TLS_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TLS);
+		addPortBox(T_("Search"), SettingsManager::UDP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_UDP);
 	}
 
 	{
@@ -134,11 +124,11 @@ bindAddress(0)
 		group = cur->addChild(GroupBox::Seed(T_("Bind address")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS);
 
-		bindAddress = group->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(bindAddress, SettingsManager::BIND_ADDRESS, PropPage::T_STR));
+		items.push_back(Item(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::BIND_ADDRESS, PropPage::T_STR));
 	}
 
 	read();
+
 	updateAuto();
 
 	ConnectivityManager::getInstance()->addListener(this);
@@ -175,12 +165,24 @@ void ConnectivityManualPage::handleAutoClicked() {
 	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
 }
 
+void ConnectivityManualPage::updateAuto() {
+	bool setting = BOOLSETTING(AUTO_DETECT_CONNECTION);
+	autoDetect->setChecked(setting);
+
+	auto controls = grid->getChildren<Control>();
+	boost::for_each(controls, [this, setting](Control* control) {
+		if(control != autoGroup) {
+			control->setEnabled(!setting);
+		}
+	});
+}
+
 void ConnectivityManualPage::read() {
 	switch(SETTING(INCOMING_CONNECTIONS)) {
-		case SettingsManager::INCOMING_FIREWALL_UPNP: upnp->setChecked(); break;
-		case SettingsManager::INCOMING_FIREWALL_NAT: nat->setChecked(); break;
-		case SettingsManager::INCOMING_FIREWALL_PASSIVE: passive->setChecked(); break;
-		default: directIn->setChecked(); break;
+	case SettingsManager::INCOMING_FIREWALL_UPNP: upnp->setChecked(); break;
+	case SettingsManager::INCOMING_FIREWALL_NAT: nat->setChecked(); break;
+	case SettingsManager::INCOMING_FIREWALL_PASSIVE: passive->setChecked(); break;
+	default: directIn->setChecked(); break;
 	}
 
 	PropPage::read(items);
@@ -199,20 +201,12 @@ void ConnectivityManualPage::read() {
 	mapper->setSelected(sel);
 }
 
-void ConnectivityManualPage::updateAuto() {
-	bool setting = BOOLSETTING(AUTO_DETECT_CONNECTION);
-	autoDetect->setChecked(setting);
-
-	auto controls = grid->getChildren<Control>();
-	boost::for_each(controls, [this, setting](Control* control) {
-		if(control != autoGroup) {
-			control->setEnabled(!setting);
-		}
-	});
-}
-
-void ConnectivityManualPage::on(Finished) noexcept {
+void ConnectivityManualPage::on(SettingChanged) noexcept {
 	callAsync([this] {
+		updateAuto();
+
+		// reload settings in case they have been changed (eg by the "Edit detected settings" feature).
+
 		directIn->setChecked(false);
 		upnp->setChecked(false);
 		nat->setChecked(false);
@@ -222,8 +216,4 @@ void ConnectivityManualPage::on(Finished) noexcept {
 
 		read();
 	});
-}
-
-void ConnectivityManualPage::on(SettingChanged) noexcept {
-	callAsync([this] { updateAuto(); });
 }

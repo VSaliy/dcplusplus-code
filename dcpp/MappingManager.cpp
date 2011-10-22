@@ -21,11 +21,11 @@
 
 #include "ConnectionManager.h"
 #include "ConnectivityManager.h"
-#include "LogManager.h"
-#include "SearchManager.h"
-#include "ScopedFunctor.h"
-#include "version.h"
 #include "format.h"
+#include "LogManager.h"
+#include "ScopedFunctor.h"
+#include "SearchManager.h"
+#include "version.h"
 
 namespace dcpp {
 
@@ -56,7 +56,10 @@ bool MappingManager::open() {
 }
 
 void MappingManager::close() {
-	TimerManager::getInstance()->removeListener(this);
+	if(renewal) {
+		renewal = 0;
+		TimerManager::getInstance()->removeListener(this);
+	}
 
 	if(working.get()) {
 		close(*working);
@@ -71,8 +74,8 @@ bool MappingManager::getOpened() const {
 int MappingManager::run() {
 	ScopedFunctor([this] { busy.clear(); });
 
-	// cache these
-	const unsigned short
+	// shortcuts
+	const auto&
 		conn_port = ConnectionManager::getInstance()->getPort(),
 		secure_port = ConnectionManager::getInstance()->getSecurePort(),
 		search_port = SearchManager::getInstance()->getPort();
@@ -83,13 +86,13 @@ int MappingManager::run() {
 		ScopedFunctor([&mapper] { mapper.uninit(); });
 		if(!mapper.init()) {
 			// can't renew; try again later.
-			renewal = GET_TICK() + std::max(mapper.renewal(), 10u) * 60 * 1000;
+			renewLater(mapper);
 			return 0;
 		}
 
-		auto addRule = [this, &mapper](const unsigned short port, Mapper::Protocol protocol, const string& description) {
+		auto addRule = [this, &mapper](const string& port, Mapper::Protocol protocol, const string& description) {
 			// just launch renewal requests - don't bother with possible failures.
-			if(port) {
+			if(!port.empty()) {
 				mapper.open(port, protocol, str(F_("%1% %2% port (%3% %4%)") %
 					APPNAME % description % port % Mapper::protocols[protocol]));
 			}
@@ -99,13 +102,7 @@ int MappingManager::run() {
 		addRule(secure_port, Mapper::PROTOCOL_TCP, _("Encrypted transfer"));
 		addRule(search_port, Mapper::PROTOCOL_UDP, _("Search"));
 
-		auto minutes = mapper.renewal();
-		if(minutes) {
-			renewal = GET_TICK() + std::max(minutes, 10u) * 60 * 1000;
-		} else {
-			TimerManager::getInstance()->removeListener(this);
-		}
-
+		renewLater(mapper);
 		return 0;
 	}
 
@@ -132,8 +129,8 @@ int MappingManager::run() {
 			continue;
 		}
 
-		auto addRule = [this, &mapper](const unsigned short port, Mapper::Protocol protocol, const string& description) -> bool {
-			if(port && !mapper.open(port, protocol, str(F_("%1% %2% port (%3% %4%)") %
+		auto addRule = [this, &mapper](const string& port, Mapper::Protocol protocol, const string& description) -> bool {
+			if(!port.empty() && !mapper.open(port, protocol, str(F_("%1% %2% port (%3% %4%)") %
 				APPNAME % description % port % Mapper::protocols[protocol])))
 			{
 				this->log(str(F_("Failed to map the %1% port (%2% %3%) with the %4% interface") %
@@ -149,15 +146,15 @@ int MappingManager::run() {
 			addRule(search_port, Mapper::PROTOCOL_UDP, _("Search"))))
 			continue;
 
-		log(str(F_("Successfully created port mappings (Transfers: %1%, Search: %2%, Encrypted transfers: %3%) on the %4% device with the %5% interface") %
-			conn_port % search_port % secure_port % deviceString(mapper) % mapper.getName()));
+		log(str(F_("Successfully created port mappings (Transfers: %1%, Encrypted transfers: %2%, Search: %3%) on the %4% device with the %5% interface") %
+			conn_port % secure_port % search_port % deviceString(mapper) % mapper.getName()));
 
 		working = move(pMapper);
 
-		if(!BOOLSETTING(NO_IP_OVERRIDE)) {
+		if(!CONNSETTING(NO_IP_OVERRIDE)) {
 			string externalIP = mapper.getExternalIP();
 			if(!externalIP.empty()) {
-				SettingsManager::getInstance()->set(SettingsManager::EXTERNAL_IP, externalIP);
+				ConnectivityManager::getInstance()->set(SettingsManager::EXTERNAL_IP, externalIP);
 			} else {
 				// no cleanup because the mappings work and hubs will likely provide the correct IP.
 				log(_("Failed to get external IP"));
@@ -166,11 +163,7 @@ int MappingManager::run() {
 
 		ConnectivityManager::getInstance()->mappingFinished(mapper.getName());
 
-		auto minutes = mapper.renewal();
-		if(minutes) {
-			renewal = GET_TICK() + std::max(minutes, 10u) * 60 * 1000;
-			TimerManager::getInstance()->addListener(this);
-		}
+		renewLater(mapper);
 		break;
 	}
 
@@ -184,11 +177,8 @@ int MappingManager::run() {
 
 void MappingManager::close(Mapper& mapper) {
 	if(mapper.hasRules()) {
-		bool ret = mapper.init();
-		if(ret) {
-			ret = mapper.close();
-			mapper.uninit();
-		}
+		bool ret = mapper.init() && mapper.close();
+		mapper.uninit();
 		log(ret ?
 			str(F_("Successfully removed port mappings from the %1% device with the %2% interface") % deviceString(mapper) % mapper.getName()) :
 			str(F_("Failed to remove port mappings from the %1% device with the %2% interface") % deviceString(mapper) % mapper.getName()));
@@ -204,6 +194,21 @@ string MappingManager::deviceString(Mapper& mapper) const {
 	if(name.empty())
 		name = _("Generic");
 	return '"' + name + '"';
+}
+
+void MappingManager::renewLater(Mapper& mapper) {
+	auto minutes = mapper.renewal();
+	if(minutes) {
+		bool addTimer = !renewal;
+		renewal = GET_TICK() + std::max(minutes, 10u) * 60 * 1000;
+		if(addTimer) {
+			TimerManager::getInstance()->addListener(this);
+		}
+
+	} else if(renewal) {
+		renewal = 0;
+		TimerManager::getInstance()->removeListener(this);
+	}
 }
 
 void MappingManager::on(TimerManagerListener::Minute, uint64_t tick) noexcept {

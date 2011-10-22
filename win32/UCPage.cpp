@@ -152,10 +152,10 @@ void UCPage::handleChangeClicked() {
 
 void UCPage::handleMoveUpClicked() {
 	if(commands->countSelected() == 1) {
-		int i = commands->getSelected();
+		auto i = commands->getSelected();
 		if(i == 0)
 			return;
-		int n = commands->getData(i);
+		auto n = commands->getData(i);
 		FavoriteManager::getInstance()->moveUserCommand(n, -1);
 		HoldRedraw hold(commands);
 		commands->erase(i);
@@ -169,10 +169,10 @@ void UCPage::handleMoveUpClicked() {
 
 void UCPage::handleMoveDownClicked() {
 	if(commands->countSelected() == 1) {
-		int i = commands->getSelected();
+		auto i = commands->getSelected();
 		if(i == commands->size() - 1)
 			return;
-		int n = commands->getData(i);
+		auto n = commands->getData(i);
 		FavoriteManager::getInstance()->moveUserCommand(n, 1);
 		HoldRedraw hold(commands);
 		commands->erase(i);

@@ -19,18 +19,19 @@
 #include "stdinc.h"
 #include "ConnectionManager.h"
 
-#include "DownloadManager.h"
-#include "UploadManager.h"
-#include "CryptoManager.h"
-#include "ClientManager.h"
-#include "QueueManager.h"
-#include "LogManager.h"
 #include "Client.h"
+#include "ClientManager.h"
+#include "ConnectivityManager.h"
+#include "CryptoManager.h"
+#include "DownloadManager.h"
+#include "LogManager.h"
+#include "QueueManager.h"
+#include "UploadManager.h"
 #include "UserConnection.h"
 
 namespace dcpp {
 
-ConnectionManager::ConnectionManager() : floodCounter(0), server(0), secureServer(0), shuttingDown(false) {
+ConnectionManager::ConnectionManager() : floodCounter(0), shuttingDown(false) {
 	TimerManager::getInstance()->addListener(this);
 
 	features.push_back(UserConnection::FEATURE_MINISLOTS);
@@ -46,15 +47,13 @@ ConnectionManager::ConnectionManager() : floodCounter(0), server(0), secureServe
 }
 
 void ConnectionManager::listen() {
-	disconnect();
-
-	server = new Server(false, static_cast<uint16_t>(SETTING(TCP_PORT)), SETTING(BIND_ADDRESS));
+	server.reset(new Server(false, Util::toString(CONNSETTING(TCP_PORT)), CONNSETTING(BIND_ADDRESS)));
 
 	if(!CryptoManager::getInstance()->TLSOk()) {
-		dcdebug("Skipping secure port: %d\n", SETTING(TLS_PORT));
+		dcdebug("Skipping secure port: %d\n", CONNSETTING(TLS_PORT));
 		return;
 	}
-	secureServer = new Server(true, static_cast<uint16_t>(SETTING(TLS_PORT)), SETTING(BIND_ADDRESS));
+	secureServer.reset(new Server(true, Util::toString(CONNSETTING(TLS_PORT)), CONNSETTING(BIND_ADDRESS)));
 }
 
 /**
@@ -208,14 +207,22 @@ void ConnectionManager::on(TimerManagerListener::Minute, uint64_t aTick) noexcep
 	}
 }
 
+const string& ConnectionManager::getPort() const {
+	return server.get() ? server->getPort() : Util::emptyString;
+}
+
+const string& ConnectionManager::getSecurePort() const {
+	return secureServer.get() ? secureServer->getPort() : Util::emptyString;
+}
+
 static const uint32_t FLOOD_TRIGGER = 20000;
 static const uint32_t FLOOD_ADD = 2000;
 
-ConnectionManager::Server::Server(bool secure_, uint16_t aPort, const string& ip) :
-	sock(Socket::TYPE_TCP), port(0), secure(secure_), die(false)
+ConnectionManager::Server::Server(bool secure, const string& port_, const string& ip) :
+sock(Socket::TYPE_TCP), secure(secure), die(false)
 {
 	sock.setLocalIp4(ip);
-	port = sock.listen(Util::toString(aPort));
+	port = sock.listen(port_);
 
 	start();
 }
@@ -239,7 +246,7 @@ int ConnectionManager::Server::run() noexcept {
 		while(!die) {
 			try {
 				sock.disconnect();
-				port = sock.listen(Util::toString(port));
+				port = sock.listen(port);
 
 				if(failed) {
 					LogManager::getInstance()->message(_("Connectivity restored"));
@@ -342,10 +349,8 @@ void ConnectionManager::adcConnect(const OnlineUser& aUser, const string& aPort,
 }
 
 void ConnectionManager::disconnect() noexcept {
-	delete server;
-	delete secureServer;
-
-	server = secureServer = 0;
+	server.reset();
+	secureServer.reset();
 }
 
 void ConnectionManager::on(AdcCommand::SUP, UserConnection* aSource, const AdcCommand& cmd) noexcept {

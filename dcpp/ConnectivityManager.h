@@ -19,14 +19,18 @@
 #ifndef DCPLUSPLUS_DCPP_CONNECTIVITY_MANAGER_H
 #define DCPLUSPLUS_DCPP_CONNECTIVITY_MANAGER_H
 
-#include <string>
-
+#include "SettingsManager.h"
 #include "Speaker.h"
 #include "Singleton.h"
+
+#include <string>
+#include <unordered_map>
+#include <boost/variant.hpp>
 
 namespace dcpp {
 
 using std::string;
+using std::unordered_map;
 
 class ConnectivityManagerListener {
 public:
@@ -47,10 +51,16 @@ public:
 class ConnectivityManager : public Singleton<ConnectivityManager>, public Speaker<ConnectivityManagerListener>
 {
 public:
+	const string& get(SettingsManager::StrSetting setting) const;
+	int get(SettingsManager::IntSetting setting) const;
+	void set(SettingsManager::StrSetting setting, const string& str);
+
 	void detectConnection();
 	void setup(bool settingsChanged);
+	void editAutoSettings();
+	bool ok() const { return autoDetected; }
 	bool isRunning() const { return running; }
-	const string& getStatus() { return status; }
+	const string& getStatus() const { return status; }
 
 private:
 	friend class Singleton<ConnectivityManager>;
@@ -70,7 +80,14 @@ private:
 	bool running;
 
 	string status;
+
+	/* contains auto-detected settings. they are stored separately from manual connectivity
+	settings (stored in SettingsManager) in case the user wants to keep the manually set ones for
+	future use. */
+	unordered_map<int, boost::variant<int, string>> autoSettings;
 };
+
+#define CONNSETTING(k) SettingsManager::getInstance()->get(SettingsManager::k)
 
 } // namespace dcpp
 

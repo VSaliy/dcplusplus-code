@@ -396,11 +396,9 @@ void HubFrame::enterImpl(const tstring& s) {
 		} else if(Util::stricmp(cmd.c_str(), _T("userlist")) == 0) {
 			showUsers->setChecked(!showUsers->getChecked());
 		} else if(Util::stricmp(cmd.c_str(), _T("connection")) == 0) {
-			addStatus(str(TF_("IP: %1%, Transfer port: %2%, Search port: %3%, Encrypted transfer port: %4%") % Text::toT(client->getLocalIp())
-				% ConnectionManager::getInstance()->getPort()
-				% SearchManager::getInstance()->getPort()
-				% ConnectionManager::getInstance()->getSecurePort()
-				));
+			addStatus(Text::toT(str(F_("IP: %1%, Transfer port: %2%, Encrypted transfer port: %3%, Search port: %4%") %
+				client->getLocalIp() % ConnectionManager::getInstance()->getPort() %
+				ConnectionManager::getInstance()->getSecurePort() % SearchManager::getInstance()->getPort())));
 		} else if((Util::stricmp(cmd.c_str(), _T("favorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("fav")) == 0)) {
 			addAsFavorite();
 		} else if((Util::stricmp(cmd.c_str(), _T("removefavorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("removefav")) == 0)) {

@@ -20,17 +20,17 @@
 #include "BufferedSocket.h"
 
 #include <algorithm>
+
 #include <boost/scoped_array.hpp>
 
-#include "TimerManager.h"
-#include "SettingsManager.h"
-
-#include "Streams.h"
-#include "SSLSocket.h"
+#include "ConnectivityManager.h"
 #include "CryptoManager.h"
-#include "ZUtils.h"
-
+#include "SettingsManager.h"
+#include "SSLSocket.h"
+#include "Streams.h"
 #include "ThrottleManager.h"
+#include "TimerManager.h"
+#include "ZUtils.h"
 
 namespace dcpp {
 
@@ -108,8 +108,8 @@ void BufferedSocket::connect(const string& aAddress, const string& aPort, const 
 	dcdebug("BufferedSocket::connect() %p\n", (void*)this);
 	unique_ptr<Socket> s(secure ? (natRole == NAT_SERVER ? CryptoManager::getInstance()->getServerSocket(allowUntrusted) : CryptoManager::getInstance()->getClientSocket(allowUntrusted)) : new Socket(Socket::TYPE_TCP));
 
-	s->setLocalIp4(SETTING(BIND_ADDRESS));
-	s->setLocalIp6(SETTING(BIND_ADDRESS6));
+	s->setLocalIp4(CONNSETTING(BIND_ADDRESS));
+	s->setLocalIp6(CONNSETTING(BIND_ADDRESS6));
 
 	setSocket(move(s));
 

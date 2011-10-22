@@ -36,8 +36,8 @@ private:
 	bool init();
 	void uninit();
 
-	bool add(const unsigned short port, const Protocol protocol, const string& description);
-	bool remove(const unsigned short port, const Protocol protocol);
+	bool add(const string& port, const Protocol protocol, const string& description);
+	bool remove(const string& port, const Protocol protocol);
 
 	uint32_t renewal() const { return 0; }
 
@@ -51,7 +51,7 @@ private:
 	IStaticPortMappingCollection* getStaticPortMappingCollection();
 
 	// need to save these to get the external IP...
-	unsigned short lastPort;
+	long lastPort;
 	Protocol lastProtocol;
 };
 
