@@ -20,6 +20,7 @@
 
 #include "Mapper_MiniUPnPc.h"
 
+#include <dcpp/ConnectivityManager.h>
 #include <dcpp/SettingsManager.h>
 #include <dcpp/Util.h>
 
@@ -34,47 +35,45 @@ extern "C" {
 const string Mapper_MiniUPnPc::name = "MiniUPnP";
 
 bool Mapper_MiniUPnPc::init() {
-	if(initialized)
+	if(!url.empty())
 		return true;
 
-	UPNPDev* devices = upnpDiscover(2000,
-		SettingsManager::getInstance()->isDefault(SettingsManager::BIND_ADDRESS) ? nullptr : SETTING(BIND_ADDRESS).c_str(),
-		0, 0, 0, 0);
+	auto bindAddr = CONNSETTING(BIND_ADDRESS);
+
+	UPNPDev* devices = upnpDiscover(2000, bindAddr.empty() ? nullptr : bindAddr.c_str(), 0, 0, 0, 0);
 	if(!devices)
 		return false;
 
 	UPNPUrls urls;
 	IGDdatas data;
 
-	auto res = UPNP_GetValidIGD(devices, &urls, &data, 0, 0);
+	auto ret = UPNP_GetValidIGD(devices, &urls, &data, 0, 0);
 
-	initialized = res == 1;
-	if(initialized) {
+	bool ok = ret == 1;
+	if(ok) {
 		url = urls.controlURL;
 		service = data.first.servicetype;
 		device = data.CIF.friendlyName;
 	}
 
-	if(res) {
+	if(ret) {
 		FreeUPNPUrls(&urls);
 		freeUPNPDevlist(devices);
 	}
 
-	return initialized;
+	return ok;
 }
 
 void Mapper_MiniUPnPc::uninit() {
 }
 
-bool Mapper_MiniUPnPc::add(const unsigned short port, const Protocol protocol, const string& description) {
-	const string port_ = Util::toString(port);
-	return UPNP_AddPortMapping(url.c_str(), service.c_str(), port_.c_str(), port_.c_str(),
+bool Mapper_MiniUPnPc::add(const string& port, const Protocol protocol, const string& description) {
+	return UPNP_AddPortMapping(url.c_str(), service.c_str(), port.c_str(), port.c_str(),
 		Util::getLocalIp().c_str(), description.c_str(), protocols[protocol], 0, 0) == UPNPCOMMAND_SUCCESS;
 }
 
-bool Mapper_MiniUPnPc::remove(const unsigned short port, const Protocol protocol) {
-	return UPNP_DeletePortMapping(url.c_str(), service.c_str(), Util::toString(port).c_str(),
-		protocols[protocol], 0) == UPNPCOMMAND_SUCCESS;
+bool Mapper_MiniUPnPc::remove(const string& port, const Protocol protocol) {
+	return UPNP_DeletePortMapping(url.c_str(), service.c_str(), port.c_str(), protocols[protocol], 0) == UPNPCOMMAND_SUCCESS;
 }
 
 string Mapper_MiniUPnPc::getDeviceName() {

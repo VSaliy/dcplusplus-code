@@ -19,23 +19,24 @@
 #include "stdinc.h"
 #include "AdcHub.h"
 
-#include <boost/scoped_array.hpp>
 #include <boost/format.hpp>
+#include <boost/scoped_array.hpp>
 
+#include "AdcCommand.h"
 #include "ChatMessage.h"
 #include "ClientManager.h"
+#include "ConnectionManager.h"
+#include "ConnectivityManager.h"
+#include "CryptoManager.h"
+#include "format.h"
+#include "LogManager.h"
 #include "ShareManager.h"
 #include "StringTokenizer.h"
-#include "AdcCommand.h"
-#include "ConnectionManager.h"
-#include "version.h"
-#include "Util.h"
-#include "UserCommand.h"
-#include "CryptoManager.h"
-#include "LogManager.h"
 #include "ThrottleManager.h"
 #include "UploadManager.h"
-#include "format.h"
+#include "UserCommand.h"
+#include "Util.h"
+#include "version.h"
 
 #include <cmath>
 
@@ -676,13 +677,13 @@ void AdcHub::connect(const OnlineUser& user, string const& token, bool secure) {
 	}
 
 	if(ClientManager::getInstance()->isActive()) {
-		uint16_t port = secure ? ConnectionManager::getInstance()->getSecurePort() : ConnectionManager::getInstance()->getPort();
-		if(port == 0) {
+		const string& port = secure ? ConnectionManager::getInstance()->getSecurePort() : ConnectionManager::getInstance()->getPort();
+		if(port.empty()) {
 			// Oops?
 			LogManager::getInstance()->message(str(F_("Not listening for connections - please restart %1%") % APPNAME));
 			return;
 		}
-		send(AdcCommand(AdcCommand::CMD_CTM, user.getIdentity().getSID(), AdcCommand::TYPE_DIRECT).addParam(*proto).addParam(Util::toString(port)).addParam(token));
+		send(AdcCommand(AdcCommand::CMD_CTM, user.getIdentity().getSID(), AdcCommand::TYPE_DIRECT).addParam(*proto).addParam(port).addParam(token));
 	} else {
 		send(AdcCommand(AdcCommand::CMD_RCM, user.getIdentity().getSID(), AdcCommand::TYPE_DIRECT).addParam(*proto).addParam(token));
 	}
@@ -1010,13 +1011,13 @@ void AdcHub::info(bool /*alwaysSend*/) {
 		addParam(lastInfoMap, c, "KP", "SHA256/" + Encoder::toBase32(&kp[0], kp.size()));
 	}
 
-	if(BOOLSETTING(NO_IP_OVERRIDE) && !SETTING(EXTERNAL_IP).empty()) {
-		addParam(lastInfoMap, c, "I4", Socket::resolve(SETTING(EXTERNAL_IP), AF_INET));
+	if(CONNSETTING(NO_IP_OVERRIDE) && !CONNSETTING(EXTERNAL_IP).empty()) {
+		addParam(lastInfoMap, c, "I4", Socket::resolve(CONNSETTING(EXTERNAL_IP), AF_INET));
 	} else {
 		addParam(lastInfoMap, c, "I4", "0.0.0.0");
 	}
 	if(ClientManager::getInstance()->isActive()) {
-		addParam(lastInfoMap, c, "U4", Util::toString(SearchManager::getInstance()->getPort()));
+		addParam(lastInfoMap, c, "U4", SearchManager::getInstance()->getPort());
 		su += "," + TCP4_FEATURE;
 		su += "," + UDP4_FEATURE;
 	} else {

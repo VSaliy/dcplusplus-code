@@ -28,6 +28,7 @@
 
 #include "CID.h"
 #include "ClientManager.h"
+#include "ConnectivityManager.h"
 #include "FastAlloc.h"
 #include "File.h"
 #include "LogManager.h"
@@ -552,8 +553,9 @@ string Util::formatExactSize(int64_t aBytes) {
 }
 
 string Util::getLocalIp() {
-	if(!SettingsManager::getInstance()->isDefault(SettingsManager::BIND_ADDRESS)) {
-		return SETTING(BIND_ADDRESS);
+	auto bindAddr = CONNSETTING(BIND_ADDRESS);
+	if(!bindAddr.empty()) {
+		return bindAddr;
 	}
 
 	string tmp;

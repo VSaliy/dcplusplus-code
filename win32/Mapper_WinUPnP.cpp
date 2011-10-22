@@ -56,7 +56,7 @@ void Mapper_WinUPnP::uninit() {
 	::CoUninitialize();
 }
 
-bool Mapper_WinUPnP::add(const unsigned short port, const Protocol protocol, const string& description) {
+bool Mapper_WinUPnP::add(const string& port, const Protocol protocol, const string& description) {
 	IStaticPortMappingCollection* pSPMC = getStaticPortMappingCollection();
 	if(!pSPMC)
 		return false;
@@ -65,9 +65,10 @@ bool Mapper_WinUPnP::add(const unsigned short port, const Protocol protocol, con
 	BSTR protocol_ = SysAllocString(Text::toT(protocols[protocol]).c_str());
 	BSTR description_ = SysAllocString(Text::toT(description).c_str());
 	BSTR localIP = SysAllocString(Text::toT(Util::getLocalIp()).c_str());
+	auto port_ = Util::toInt(port);
 
 	IStaticPortMapping* pSPM = 0;
-	HRESULT hr = pSPMC->Add(port, protocol_, port, localIP, VARIANT_TRUE, description_, &pSPM);
+	HRESULT hr = pSPMC->Add(port_, protocol_, port_, localIP, VARIANT_TRUE, description_, &pSPM);
 
 	SysFreeString(protocol_);
 	SysFreeString(description_);
@@ -77,28 +78,29 @@ bool Mapper_WinUPnP::add(const unsigned short port, const Protocol protocol, con
 	if(ret) {
 		pSPM->Release();
 
-		lastPort = port;
+		lastPort = port_;
 		lastProtocol = protocol;
 	}
 	pSPMC->Release();
 	return ret;
 }
 
-bool Mapper_WinUPnP::remove(const unsigned short port, const Protocol protocol) {
+bool Mapper_WinUPnP::remove(const string& port, const Protocol protocol) {
 	IStaticPortMappingCollection* pSPMC = getStaticPortMappingCollection();
 	if(!pSPMC)
 		return false;
 
 	/// @todo use a BSTR wrapper
 	BSTR protocol_ = SysAllocString(Text::toT(protocols[protocol]).c_str());
+	auto port_ = Util::toInt(port);
 
-	HRESULT hr = pSPMC->Remove(port, protocol_);
+	HRESULT hr = pSPMC->Remove(port_, protocol_);
 	pSPMC->Release();
 
 	SysFreeString(protocol_);
 
 	bool ret = SUCCEEDED(hr);
-	if(ret && port == lastPort && protocol == lastProtocol) {
+	if(ret && port_ == lastPort && protocol == lastProtocol) {
 		lastPort = 0;
 	}
 	return ret;

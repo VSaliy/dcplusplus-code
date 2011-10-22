@@ -29,24 +29,25 @@ public:
 	ConnectivityPage(dwt::Widget* parent);
 	virtual ~ConnectivityPage();
 
-	virtual void write();
-
 private:
 	ItemList items;
 
 	CheckBoxPtr autoDetect;
 	ButtonPtr detectNow;
 	RichTextBoxPtr log;
+	ButtonPtr edit;
 
 	void handleAutoClicked();
+	void handleEdit();
 
+	void updateAuto();
 	void addLogLine(const tstring& msg);
 
 	// ConnectivityManagerListener
-	virtual void on(Message, const string& message) noexcept;
-	virtual void on(Started) noexcept;
-	virtual void on(Finished) noexcept;
-	virtual void on(SettingChanged) noexcept;
+	void on(Message, const string& message) noexcept;
+	void on(Started) noexcept;
+	void on(Finished) noexcept;
+	void on(SettingChanged) noexcept;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_CONNECTIVITY_PAGE_H)

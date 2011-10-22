@@ -20,10 +20,10 @@
 #include "Client.h"
 
 #include "BufferedSocket.h"
-
+#include "ClientManager.h"
+#include "ConnectivityManager.h"
 #include "FavoriteManager.h"
 #include "TimerManager.h"
-#include "ClientManager.h"
 
 namespace dcpp {
 
@@ -193,12 +193,12 @@ void Client::updateCounts(bool aRemove) {
 
 string Client::getLocalIp() const {
 	// Best case - the server detected it
-	if((!BOOLSETTING(NO_IP_OVERRIDE) || SETTING(EXTERNAL_IP).empty()) && !getMyIdentity().getIp().empty()) {
+	if((!CONNSETTING(NO_IP_OVERRIDE) || CONNSETTING(EXTERNAL_IP).empty()) && !getMyIdentity().getIp().empty()) {
 		return getMyIdentity().getIp();
 	}
 
-	if(!SETTING(EXTERNAL_IP).empty()) {
-		return Socket::resolve(SETTING(EXTERNAL_IP), AF_INET);
+	if(!CONNSETTING(EXTERNAL_IP).empty()) {
+		return Socket::resolve(CONNSETTING(EXTERNAL_IP), AF_INET);
 	}
 
 	if(localIp.empty()) {

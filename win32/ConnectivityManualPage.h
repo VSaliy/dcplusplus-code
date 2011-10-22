@@ -29,7 +29,7 @@ public:
 	ConnectivityManualPage(dwt::Widget* parent);
 	virtual ~ConnectivityManualPage();
 
-	virtual void write();
+	void write();
 
 private:
 	ItemList items;
@@ -43,15 +43,8 @@ private:
 	RadioButtonPtr passive;
 
 	TextBoxPtr externalIP;
-	CheckBoxPtr overrideIP;
-
-	TextBoxPtr tcp;
-	TextBoxPtr udp;
-	TextBoxPtr tls;
 
 	ComboBoxPtr mapper;
-
-	TextBoxPtr bindAddress;
 
 	void handleAutoClicked();
 
@@ -59,8 +52,7 @@ private:
 	void updateAuto();
 
 	// ConnectivityManagerListener
-	virtual void on(Finished) noexcept;
-	virtual void on(SettingChanged) noexcept;
+	void on(SettingChanged) noexcept;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_CONNECTIVITY_MANUAL_PAGE_H)

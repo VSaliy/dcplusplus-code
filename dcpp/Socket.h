@@ -165,7 +165,7 @@ public:
 	uint16_t getLocalPort() noexcept;
 
 	/** Binds a socket to a certain local port and possibly IP. */
-	virtual uint16_t listen(const string& port);
+	virtual string listen(const string& port);
 	virtual void accept(const Socket& listeningSocket);
 
 	int getSocketOptInt(int option);

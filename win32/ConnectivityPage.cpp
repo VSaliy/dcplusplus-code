@@ -21,11 +21,14 @@
 
 #include <dcpp/format.h>
 #include <dcpp/SettingsManager.h>
+#include <dcpp/version.h>
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/GroupBox.h>
 
+#include "ConnectivityManualPage.h"
 #include "resource.h"
+#include "SettingsDialog.h"
 #include "WinUtil.h"
 
 using dwt::Grid;
@@ -36,7 +39,8 @@ ConnectivityPage::ConnectivityPage(dwt::Widget* parent) :
 PropPage(parent, 1, 1),
 autoDetect(0),
 detectNow(0),
-log(0)
+log(0),
+edit(0)
 {
 	setHelpId(IDH_CONNECTIVITYPAGE);
 
@@ -48,7 +52,7 @@ log(0)
 		auto group = grid->addChild(GroupBox::Seed(T_("Automatic connectivity setup")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
 
-		auto cur = group->addChild(Grid::Seed(2, 1));
+		auto cur = group->addChild(Grid::Seed(3, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(1).mode = GridInfo::FILL;
 		cur->row(1).align = GridInfo::STRETCH;
@@ -69,9 +73,19 @@ log(0)
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_DETECTION_LOG);
 
 		log = group->addChild(WinUtil::Seeds::Dialog::richTextBox);
+
+		cur2 = cur->addChild(Grid::Seed(1, 1));
+		cur2->column(0).mode = GridInfo::FILL;
+		cur2->column(0).align = GridInfo::BOTTOM_RIGHT;
+
+		edit = cur2->addChild(Button::Seed(T_("Edit detected settings")));
+		edit->setHelpId(IDH_SETTINGS_CONNECTIVITY_EDIT);
+		edit->onClicked([this] { handleEdit(); });
 	}
 
 	PropPage::read(items);
+
+	updateAuto();
 
 	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
 		const auto& status = ConnectivityManager::getInstance()->getStatus();
@@ -89,14 +103,30 @@ ConnectivityPage::~ConnectivityPage() {
 	ConnectivityManager::getInstance()->removeListener(this);
 }
 
-void ConnectivityPage::write() {
-	PropPage::write(items);
-}
-
 void ConnectivityPage::handleAutoClicked() {
 	// apply immediately so that ConnectivityManager updates.
 	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
 	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
+}
+
+void ConnectivityPage::handleEdit() {
+	if(dwt::MessageBox(this).show(T_(
+		"Automatic connectivity setup will be disabled.\n\n"
+		"Manually configured settings will be overwritten by automatically detected ones.\n\n"
+		"Proceed?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)
+	{
+		ConnectivityManager::getInstance()->editAutoSettings();
+		static_cast<SettingsDialog*>(getRoot())->activatePage<ConnectivityManualPage>();
+	}
+}
+
+void ConnectivityPage::updateAuto() {
+	bool enable = BOOLSETTING(AUTO_DETECT_CONNECTION);
+	autoDetect->setChecked(enable);
+
+	enable = enable && !ConnectivityManager::getInstance()->isRunning();
+	detectNow->setEnabled(enable);
+	edit->setEnabled(enable && ConnectivityManager::getInstance()->ok());
 }
 
 void ConnectivityPage::addLogLine(const tstring& msg) {
@@ -113,17 +143,17 @@ void ConnectivityPage::on(Started) noexcept {
 	callAsync([this] {
 		detectNow->setEnabled(false);
 		this->log->setText(Util::emptyStringT);
+		edit->setEnabled(false);
 	});
 }
 
 void ConnectivityPage::on(Finished) noexcept {
-	callAsync([this] { detectNow->setEnabled(true); });
+	callAsync([this] {
+		detectNow->setEnabled(true);
+		edit->setEnabled(true);
+	});
 }
 
 void ConnectivityPage::on(SettingChanged) noexcept {
-	callAsync([this] {
-		bool setting = BOOLSETTING(AUTO_DETECT_CONNECTION);
-		autoDetect->setChecked(setting);
-		detectNow->setEnabled(setting && !ConnectivityManager::getInstance()->isRunning());
-	});
+	callAsync([this] { updateAuto(); });
 }

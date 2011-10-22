@@ -32,10 +32,19 @@ public:
 
 	virtual ~SettingsDialog();
 
+	template<typename T> void activatePage() {
+		for(auto i = pages.cbegin(), iend = pages.cend(); i != iend; ++i) {
+			if(dynamic_cast<T*>(i->first)) {
+				tree->setSelected(i->second);
+				break;
+			}
+		}
+	}
+
 private:
 	friend class PropPage;
 
-	typedef std::vector<PropPage*> PageList;
+	typedef std::vector<std::pair<PropPage*, HTREEITEM>> PageList;
 	PageList pages;
 	PropPage* currentPage;
 

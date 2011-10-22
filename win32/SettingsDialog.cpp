@@ -139,11 +139,11 @@ bool SettingsDialog::initDialog() {
 				setSmallIcon(WinUtil::createIcon(icon, 16));
 				setLargeIcon(WinUtil::createIcon(icon, 32));
 			} });
-			auto ret = tree->insert(title, parent, reinterpret_cast<LPARAM>(page), true, index);
+			auto item = tree->insert(title, parent, 0, true, index);
 			if(index == setting)
-				callAsync([=] { tree->setSelected(ret); tree->ensureVisible(ret); });
-			pages.push_back(page);
-			return ret;
+				callAsync([=] { tree->setSelected(item); tree->ensureVisible(item); });
+			pages.push_back(std::make_pair(page, item));
+			return item;
 		};
 
 		addPage(T_("Personal information"), new GeneralPage(container), IDI_USER, TVI_ROOT);
@@ -264,14 +264,16 @@ bool SettingsDialog::handleClosing() {
 		static_cast<int>(static_cast<float>(pt.y) / dwt::util::dpiFactor()));
 
 	SettingsManager::getInstance()->set(SettingsManager::SETTINGS_PAGE,
-		static_cast<int>(find(pages.begin(), pages.end(), currentPage) - pages.begin()));
+		static_cast<int>(find_if(pages.begin(), pages.end(), CompareFirst<PropPage*, HTREEITEM>(currentPage)) - pages.begin()));
 
 	return true;
 }
 
 void SettingsDialog::handleSelectionChanged() {
-	PropPage* page = reinterpret_cast<PropPage*>(tree->getData(tree->getSelected()));
-	if(page) {
+	auto sel = tree->getSelected();
+	if(sel) {
+		auto page = find_if(pages.begin(), pages.end(), CompareSecond<PropPage*, HTREEITEM>(sel))->first;
+
 		// move to the top of the Z order so the ScrolledContainer thinks this is the only child.
 		::SetWindowPos(page->handle(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
 		page->setVisible(true);
@@ -318,7 +320,7 @@ void SettingsDialog::updateTitle() {
 
 void SettingsDialog::write() {
 	for(PageList::iterator i = pages.begin(); i != pages.end(); ++i) {
-		(*i)->write();
+		i->first->write();
 	}
 }
 

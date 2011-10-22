@@ -270,7 +270,7 @@ void Socket::accept(const Socket& listeningSocket) {
 	setIp(resolveName(&sock_addr.sa, sz));
 }
 
-uint16_t Socket::listen(const string& port) {
+string Socket::listen(const string& port) {
 	disconnect();
 
 	//auto &localIp = af == AF_INET ? getLocalIp4() : getLocalIp6();
@@ -317,7 +317,7 @@ uint16_t Socket::listen(const string& port) {
 	if(ret == 0) {
 		throw SocketException(_("Could not open port for listening"));
 	}
-	return ntohs(ret);
+	return Util::toString(ntohs(ret));
 }
 
 void Socket::connect(const string& aAddr, const string& aPort, const string& localPort) {

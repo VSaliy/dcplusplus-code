@@ -31,6 +31,8 @@
 
 namespace dcpp {
 
+using std::unique_ptr;
+
 class SocketException;
 
 class ConnectionQueueItem : boost::noncopyable {
@@ -117,20 +119,23 @@ public:
 	void listen();
 	void disconnect() noexcept;
 
-	uint16_t getPort() { return server ? static_cast<uint16_t>(server->getPort()) : 0; }
-	uint16_t getSecurePort() { return secureServer ? static_cast<uint16_t>(secureServer->getPort()) : 0; }
+	const string& getPort() const;
+	const string& getSecurePort() const;
+
 private:
 
 	class Server : public Thread {
 	public:
-		Server(bool secure_, uint16_t port, const string& ip);
-		uint16_t getPort() { return port; }
+		Server(bool secure, const string& port_, const string& ip);
 		virtual ~Server() { die = true; join(); }
+
+		const string& getPort() const { return port; }
+
 	private:
 		virtual int run() noexcept;
 
 		Socket sock;
-		uint16_t port;
+		string port;
 		bool secure;
 		bool die;
 	};
@@ -153,8 +158,8 @@ private:
 
 	uint32_t floodCounter;
 
-	Server* server;
-	Server* secureServer;
+	unique_ptr<Server> server;
+	unique_ptr<Server> secureServer;
 
 	bool shuttingDown;
 
