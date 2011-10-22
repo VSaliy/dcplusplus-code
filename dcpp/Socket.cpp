@@ -758,7 +758,7 @@ Socket::addrinfo_p Socket::resolveAddr(const string& name, const string& port, i
 
 	addrinfo *result = 0;
 
-	auto err = ::getaddrinfo(name.empty() ? NULL : name.c_str(), port.empty() ? NULL : port.c_str(), &hints, &result);
+	auto err = ::getaddrinfo(name.c_str(), port.empty() ? NULL : port.c_str(), &hints, &result);
 	if(err) {
 		throw SocketException(err);
 	}
