@@ -10,7 +10,7 @@ def runUnitTest(env,target,source):
 		
 env, target, sources = dev.prepare_build(source_path, 'gtest', source_glob="*.cpp", in_bin=False)
 
-if env['CC'] == 'cl': # MSVC
+if 'msvc' in env['TOOLS']:
 	if env['mode'] == 'debug':
 		env.Prepend(LIBS = ['ssleay32d', 'libeay32d'])
 	else:

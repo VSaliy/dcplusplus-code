@@ -75,11 +75,11 @@ opts = Variables('custom.py', ARGUMENTS)
 opts.AddVariables(
 	EnumVariable('tools', 'Toolset to compile with, default = platform default (msvc under windows)', 'mingw', ['mingw', 'default']),
 	EnumVariable('mode', 'Compile mode', 'debug', ['debug', 'release']),
-	BoolVariable('pch', 'Use pre-compiled headers', 'gcc' not in defEnv['TOOLS']),
+	BoolVariable('pch', 'Use precompiled headers', 'yes'),
 	BoolVariable('verbose', 'Show verbose command lines', 'no'),
 	BoolVariable('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
 	BoolVariable('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
-	BoolVariable('i18n', 'Rebuild i18n files in debug build', 'no'),
+	BoolVariable('i18n', 'Rebuild i18n files', 'no'),
 	BoolVariable('help', 'Build help files (requires i18n=1)', 'yes'),
 	BoolVariable('webhelp', 'Build help files for the web (requires help=1)', 'no'),
 	BoolVariable('test', 'Build test suite', 'no'),
@@ -155,7 +155,7 @@ if env['pch']:
 if env['unicode']:
 	env.Append(CPPDEFINES = ['UNICODE', '_UNICODE'])
 
-if env['CC'] == 'cl': # MSVC
+if 'msvc' in env['TOOLS']:
 	flags = msvc_flags
 	xxflags = msvc_xxflags
 	link_flags = msvc_link_flags
