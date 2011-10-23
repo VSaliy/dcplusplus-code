@@ -4,7 +4,7 @@ Import('dev source_path')
 
 env, target, sources = dev.prepare_build(source_path, 'DCPlusPlus', precompiled_header = 'stdafx')
 
-if env['CC'] == 'cl': # MSVC
+if 'msvc' in env['TOOLS']:
 	if env['mode'] == 'debug':
 		env.Prepend(LIBS = ['ssleay32d', 'libeay32d'])
 	else:

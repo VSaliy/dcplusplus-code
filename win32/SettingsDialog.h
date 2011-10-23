@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_SETTINGS_DIALOG_H
 
 #include <dwt/widgets/ModalDialog.h>
+#include <dwt/widgets/Tree.h>
 
 #include "PropPage.h"
 

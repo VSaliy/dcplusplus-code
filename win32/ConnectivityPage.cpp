@@ -25,6 +25,7 @@
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/GroupBox.h>
+#include <dwt/widgets/MessageBox.h>
 
 #include "ConnectivityManualPage.h"
 #include "resource.h"

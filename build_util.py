@@ -115,8 +115,9 @@ class Dev:
 
 	# create a build environment and set up sources and targets.
 	def prepare_build(self, source_path, name, source_glob = '*.cpp', in_bin = True, precompiled_header = None):
+		build_path = self.get_build_path(source_path)
 		env = self.env.Clone()
-		env.VariantDir(self.get_build_path(source_path), '.', duplicate = 0)
+		env.VariantDir(build_path, '.', duplicate = 0)
 
 		sources = self.get_sources(source_path, source_glob)
 
@@ -126,11 +127,15 @@ class Dev:
 					# the PCH/GCH builder will take care of this one
 					del sources[i]
 
-			if env['CC'] == 'cl': # MSVC
+			if 'msvc' in env['TOOLS']:
 				env['PCHSTOP'] = precompiled_header + '.h'
-				env['PCH'] = env.PCH(self.get_target(source_path, precompiled_header + '.pch', False), precompiled_header + '.cpp')[0]
+				env['PCH'] = env.PCH(build_path + precompiled_header + '.pch', precompiled_header + '.cpp')[0]
+
 			elif 'gcc' in env['TOOLS']:
-				env['Gch'] = env.Gch(self.get_target(source_path, precompiled_header + '.gch', False), precompiled_header + '.h')[0]
+				env['Gch'] = env.Gch(build_path + precompiled_header + '.h.gch', precompiled_header + '.h')[0]
+
+				# little dance to add the pch object to include paths, while overriding the current directory
+				env['CXXCOM'] = env['CXXCOM'] + ' -include ' + env.Dir(build_path).abspath + '/' + precompiled_header + '.h'
 
 		return (env, self.get_target(source_path, name, in_bin), sources)
 
