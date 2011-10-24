@@ -227,7 +227,7 @@ static const int64_t MIN_CHUNK_SIZE = 256*1024;
 void UserConnection::updateChunkSize(int64_t leafSize, int64_t lastChunk, uint64_t ticks) {
 
 	if(chunkSize == 0) {
-		chunkSize = std::max((int64_t)64*1024, std::min(lastChunk, (int64_t)1024*1024));
+		chunkSize = std::max(MIN_CHUNK_SIZE, std::min(lastChunk, (int64_t)1024*1024));
 		return;
 	}
 
