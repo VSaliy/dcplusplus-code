@@ -46,6 +46,7 @@
 * The country format can be customized, see help for available codes (poy)
 * Handle GeoIP database updates from within the program (iceman50, poy)
 * [L#783516] ZLIF compression support (iceman50)
+* Increase minimum download segment size from 64KiB to 256KiB (cologic)
 
 
 -- 0.782 2011-03-05 --
