@@ -19,17 +19,18 @@
 #include "stdinc.h"
 #include "ClientManager.h"
 
-#include "ShareManager.h"
-#include "SearchManager.h"
+#include "AdcHub.h"
 #include "ConnectionManager.h"
+#include "ConnectivityManager.h"
 #include "CryptoManager.h"
 #include "FavoriteManager.h"
+#include "File.h"
+#include "NmdcHub.h"
+#include "SearchManager.h"
+#include "SearchResult.h"
+#include "ShareManager.h"
 #include "SimpleXML.h"
 #include "UserCommand.h"
-#include "SearchResult.h"
-#include "File.h"
-#include "AdcHub.h"
-#include "NmdcHub.h"
 
 namespace dcpp {
 
@@ -605,7 +606,7 @@ UserPtr& ClientManager::getMe() {
 }
 
 bool ClientManager::isActive() const {
-	return SETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_PASSIVE;
+	return CONNSETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_PASSIVE;
 }
 
 const CID& ClientManager::getMyPID() {

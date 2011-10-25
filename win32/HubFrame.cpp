@@ -23,11 +23,12 @@
 #include <dcpp/AdcHub.h>
 #include <dcpp/ChatMessage.h>
 #include <dcpp/ClientManager.h>
-#include <dcpp/LogManager.h>
-#include <dcpp/User.h>
-#include <dcpp/FavoriteManager.h>
 #include <dcpp/ConnectionManager.h>
+#include <dcpp/ConnectivityManager.h>
+#include <dcpp/FavoriteManager.h>
+#include <dcpp/LogManager.h>
 #include <dcpp/SearchManager.h>
+#include <dcpp/User.h>
 #include <dcpp/version.h>
 #include <dcpp/WindowInfo.h>
 
@@ -735,7 +736,7 @@ int HubFrame::UserInfo::getImage(int col) const {
 	int image = identity.isBot() ? WinUtil::USER_ICON_BOT : identity.isAway() ? WinUtil::USER_ICON_AWAY : WinUtil::USER_ICON;
 	image *= WinUtil::USER_ICON_MOD_START * WinUtil::USER_ICON_MOD_START;
 
-	if(SETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_PASSIVE &&
+	if(CONNSETTING(INCOMING_CONNECTIONS) == SettingsManager::INCOMING_FIREWALL_PASSIVE &&
 		!identity.isBot() && !identity.isTcpActive() && !identity.supports(AdcHub::NAT0_FEATURE))
 	{
 		// Users we can't connect to
