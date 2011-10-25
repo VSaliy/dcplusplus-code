@@ -62,6 +62,7 @@ public:
 	bool ok() const { return autoDetected; }
 	bool isRunning() const { return running; }
 	const string& getStatus() const { return status; }
+	string getInformation() const;
 
 private:
 	friend class Singleton<ConnectivityManager>;
