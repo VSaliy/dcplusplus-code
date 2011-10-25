@@ -206,6 +206,14 @@ public:
 		isSet[key] = true;
 	}
 
+	const string& getDefault(StrSetting key) const {
+		return strDefaults[key - STR_FIRST];
+	}
+
+	int getDefault(IntSetting key) const {
+		return intDefaults[key - INT_FIRST];
+	}
+
 	void setDefault(StrSetting key, string const& value) {
 		strDefaults[key - STR_FIRST] = value;
 	}

@@ -35,14 +35,14 @@ running(false)
 {
 }
 
-const string& ConnectivityManager::get(SettingsManager::StrSetting setting) const {
+const string& ConnectivityManager::get(SettingsManager::StrSetting setting, bool useDefault) const {
 	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
 		auto i = autoSettings.find(setting);
 		if(i != autoSettings.end()) {
 			return boost::get<const string&>(i->second);
 		}
 	}
-	return SettingsManager::getInstance()->get(setting);
+	return SettingsManager::getInstance()->get(setting, useDefault);
 }
 
 int ConnectivityManager::get(SettingsManager::IntSetting setting) const {
@@ -83,9 +83,10 @@ void ConnectivityManager::detectConnection() {
 		SettingsManager::BIND_ADDRESS, SettingsManager::BIND_ADDRESS6, SettingsManager::INCOMING_CONNECTIONS };
 	std::for_each(settings, settings + sizeof(settings) / sizeof(settings[0]), [this](int setting) {
 		if(setting >= SettingsManager::STR_FIRST && setting < SettingsManager::STR_LAST) {
-			autoSettings[setting] = string();
+			auto s = static_cast<SettingsManager::StrSetting>(setting);
+			autoSettings[setting] = SettingsManager::getInstance()->isDefault(s) ? string() : SettingsManager::getInstance()->getDefault(s);
 		} else if(setting >= SettingsManager::INT_FIRST && setting < SettingsManager::INT_LAST) {
-			autoSettings[setting] = 0;
+			autoSettings[setting] = SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(setting));
 		}
 	});
 

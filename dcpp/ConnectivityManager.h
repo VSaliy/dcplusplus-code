@@ -51,7 +51,8 @@ public:
 class ConnectivityManager : public Singleton<ConnectivityManager>, public Speaker<ConnectivityManagerListener>
 {
 public:
-	const string& get(SettingsManager::StrSetting setting) const;
+	/// @param useDefault return an empty string if the value hasn't been configured (rather than the SettingsManager default).
+	const string& get(SettingsManager::StrSetting setting, bool useDefault = true) const;
 	int get(SettingsManager::IntSetting setting) const;
 	void set(SettingsManager::StrSetting setting, const string& str);
 
@@ -87,7 +88,7 @@ private:
 	unordered_map<int, boost::variant<int, string>> autoSettings;
 };
 
-#define CONNSETTING(k) SettingsManager::getInstance()->get(SettingsManager::k)
+#define CONNSETTING(k) ConnectivityManager::getInstance()->get(SettingsManager::k)
 
 } // namespace dcpp
 
