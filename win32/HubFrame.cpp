@@ -396,10 +396,8 @@ void HubFrame::enterImpl(const tstring& s) {
 			close(true);
 		} else if(Util::stricmp(cmd.c_str(), _T("userlist")) == 0) {
 			showUsers->setChecked(!showUsers->getChecked());
-		} else if(Util::stricmp(cmd.c_str(), _T("connection")) == 0) {
-			addStatus(Text::toT(str(F_("IP: %1%, Transfer port: %2%, Encrypted transfer port: %3%, Search port: %4%") %
-				client->getLocalIp() % ConnectionManager::getInstance()->getPort() %
-				ConnectionManager::getInstance()->getSecurePort() % SearchManager::getInstance()->getPort())));
+		} else if(Util::stricmp(cmd.c_str(), _T("conn")) == 0 || Util::stricmp(cmd.c_str(), _T("connection")) == 0) {
+			addStatus(Text::toT(ConnectivityManager::getInstance()->getInformation()));
 		} else if((Util::stricmp(cmd.c_str(), _T("favorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("fav")) == 0)) {
 			addAsFavorite();
 		} else if((Util::stricmp(cmd.c_str(), _T("removefavorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("removefav")) == 0)) {
@@ -417,7 +415,9 @@ void HubFrame::enterImpl(const tstring& s) {
 			else if(Util::stricmp(param.c_str(), _T("status")) == 0)
 				openLog(true);
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addChat(_T("*** ") + WinUtil::commands + _T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, /connection, /favorite, /pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefavorite"));
+			addChat(_T("*** ") + WinUtil::commands +
+				_T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, /conn[ection], /fav[orite], ")
+				_T("/pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefav[orite]"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
 			string::size_type j = param.find(_T(' '));
 			if(j != string::npos) {

@@ -21,11 +21,12 @@
 
 #include "ClientManager.h"
 #include "ConnectionManager.h"
+#include "format.h"
 #include "LogManager.h"
 #include "MappingManager.h"
 #include "SearchManager.h"
 #include "SettingsManager.h"
-#include "format.h"
+#include "version.h"
 
 namespace dcpp {
 
@@ -154,6 +155,50 @@ void ConnectivityManager::editAutoSettings() {
 	autoSettings.clear();
 
 	fire(ConnectivityManagerListener::SettingChanged());
+}
+
+string ConnectivityManager::getInformation() const {
+	string autoStatus = ok() ? str(F_("enabled - %1%") % getStatus()) : _("disabled");
+
+	string mode;
+
+	switch(CONNSETTING(INCOMING_CONNECTIONS)) {
+	case SettingsManager::INCOMING_DIRECT:
+		{
+			mode = _("Direct connection to the Internet (no router)");
+			break;
+		}
+	case SettingsManager::INCOMING_FIREWALL_UPNP:
+		{
+			mode = str(F_("Connection behind a router that %1% has configured with %2%") % APPNAME % SETTING(MAPPER));
+			break;
+		}
+	case SettingsManager::INCOMING_FIREWALL_NAT:
+		{
+			mode = _("Active mode behind a router");
+			break;
+		}
+	case SettingsManager::INCOMING_FIREWALL_PASSIVE:
+		{
+			mode = _("Passive mode");
+			break;
+		}
+	}
+
+	string ip = CONNSETTING(EXTERNAL_IP);
+	if(ip.empty()) {
+		ip = _("undefined");
+	}
+
+	return str(F_(
+		"Connectivity information:\n\n"
+		"Automatic connectivity setup is: %1%\n\n"
+		"\t%2%\n"
+		"\tExternal IP: %3%\n"
+		"\tTransfer port: %4%\n"
+		"\tEncrypted transfer port: %5%\n"
+		"\tSearch port: %6%") % autoStatus % mode % ip % ConnectionManager::getInstance()->getPort() %
+		ConnectionManager::getInstance()->getSecurePort() % SearchManager::getInstance()->getPort());
 }
 
 void ConnectivityManager::mappingFinished(const string& mapper) {
