@@ -139,6 +139,8 @@ SettingsManager::SettingsManager()
 
 	setDefault(DOWNLOAD_DIRECTORY, Util::getPath(Util::PATH_DOWNLOADS));
 	setDefault(TEMP_DOWNLOAD_DIRECTORY, Util::getPath(Util::PATH_USER_LOCAL) + "Incomplete" PATH_SEPARATOR_STR);
+	setDefault(BIND_ADDRESS, "0.0.0.0");
+	setDefault(BIND_ADDRESS6, "::");
 	setDefault(SLOTS, 1);
 	setDefault(TCP_PORT, 0);
 	setDefault(UDP_PORT, 0);
