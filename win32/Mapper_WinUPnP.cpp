@@ -175,11 +175,11 @@ bool Mapper_WinUPnP::init() {
 void Mapper_WinUPnP::uninit() {
 }
 
-bool Mapper_WinUPnP::add(const unsigned short port, const Protocol protocol, const string& description) {
+bool Mapper_WinUPnP::add(const string& port, const Protocol protocol, const string& description) {
 	return false;
 }
 
-bool Mapper_WinUPnP::remove(const unsigned short port, const Protocol protocol) {
+bool Mapper_WinUPnP::remove(const string& port, const Protocol protocol) {
 	return false;
 }
 
