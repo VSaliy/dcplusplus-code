@@ -346,10 +346,11 @@ void WinUtil::enableDEP() {
 	dwt::LibraryLoader kernel(_T("kernel32.dll"));
 	typedef BOOL (WINAPI *SPDP)(DWORD);
 	SPDP spdp = (SPDP)kernel.getProcAddress(_T("SetProcessDEPPolicy"));
-	if (spdp)
+	if (spdp) {
 		dcdebug("SetProcessDEPPolicy %s\n", (*spdp)(1)?"succeeded":"failed");
-	else
-		dcdebug("SetProcessDEPPolicy not present\n");	
+	} else {
+		dcdebug("SetProcessDEPPolicy not present\n");
+	}
 }
 
 tstring WinUtil::encodeFont(LOGFONT const& font) {
