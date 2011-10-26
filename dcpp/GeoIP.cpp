@@ -90,7 +90,7 @@ void GeoIP::rebuild() {
 
 		auto size = GeoIP_num_countries();
 		cache.resize(size);
-		for(int id = 1; id < size; ++id) {
+		for(unsigned id = 1; id < size; ++id) {
 
 			ParamMap params;
 

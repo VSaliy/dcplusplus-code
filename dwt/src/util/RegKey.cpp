@@ -143,7 +143,7 @@ std::vector<tstring> RegKey::getValues(void)
 	std::vector<tstring> v;
 	if(REGKEYINFO.cValues) {
 		TCHAR* tmp = (TCHAR*)malloc((REGKEYINFO.cchMaxValue + 1) * sizeof(TCHAR));
-		for(int i=0; i<REGKEYINFO.cValues; i++) {
+		for(unsigned int i=0; i<REGKEYINFO.cValues; i++) {
 			memset(tmp,0,(REGKEYINFO.cchMaxValue + 1) * sizeof(TCHAR));
 			cbName = 16383;
 			lResult = RegEnumValue(m_hKeyHandle, i,
@@ -177,7 +177,7 @@ std::vector<tstring> RegKey::getSubkeys(void)
 	if(REGKEYINFO.cSubKeys) {
 		TCHAR* tmp = (TCHAR*)malloc((REGKEYINFO.cbMaxSubKey + 1) * sizeof(TCHAR));
 		FILETIME ftLastWriteTime;
-		for(int i=0; i<REGKEYINFO.cSubKeys; i++) {
+		for(unsigned int i=0; i<REGKEYINFO.cSubKeys; i++) {
 			memset(tmp,0,(REGKEYINFO.cbMaxSubKey + 1) * sizeof(TCHAR));
 			cbName = 255;
 			lResult = RegEnumKeyEx(m_hKeyHandle, i,
