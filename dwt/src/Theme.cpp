@@ -32,48 +32,10 @@
 #include <dwt/Theme.h>
 
 #include <dwt/Dispatchers.h>
-#include <dwt/LibraryLoader.h>
 #include <dwt/util/check.h>
-#include <dwt/util/win32/Version.h>
 #include <dwt/dwt_vssym32.h>
 
 namespace dwt {
-
-typedef HRESULT (WINAPI *t_CloseThemeData)(HTHEME);
-static t_CloseThemeData CloseThemeData = 0;
-
-typedef HRESULT (WINAPI *t_DrawThemeBackground)(HTHEME, HDC, int, int, const RECT*, const RECT*);
-static t_DrawThemeBackground DrawThemeBackground = 0;
-
-typedef HRESULT (WINAPI *t_DrawThemeParentBackground)(HWND, HDC, const RECT*);
-static t_DrawThemeParentBackground DrawThemeParentBackground = 0;
-
-typedef HRESULT (WINAPI *t_DrawThemeText)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, DWORD, LPCRECT);
-static t_DrawThemeText DrawThemeText = 0;
-
-typedef HRESULT (WINAPI *t_DrawThemeTextEx)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, LPRECT, const DTTOPTS*);
-static t_DrawThemeTextEx DrawThemeTextEx = 0;
-
-typedef HRESULT (WINAPI *t_GetThemeColor)(HTHEME, int, int, int, COLORREF*);
-static t_GetThemeColor GetThemeColor = 0;
-
-typedef HRESULT (WINAPI *t_GetThemeMargins)(HTHEME, HDC, int, int, int, LPRECT, MARGINS*);
-static t_GetThemeMargins GetThemeMargins = 0;
-
-typedef HRESULT (WINAPI *t_GetThemePartSize)(HTHEME, HDC, int, int, LPCRECT, THEMESIZE, SIZE*);
-static t_GetThemePartSize GetThemePartSize = 0;
-
-typedef HRESULT (WINAPI *t_GetThemeTextExtent)(HTHEME, HDC, int, int, LPCWSTR, int, DWORD, LPCRECT, LPRECT);
-static t_GetThemeTextExtent GetThemeTextExtent = 0;
-
-typedef BOOL (WINAPI *t_IsAppThemed)();
-static t_IsAppThemed IsAppThemed = 0;
-
-typedef BOOL (WINAPI *t_IsThemeBackgroundPartiallyTransparent)(HTHEME, int, int);
-static t_IsThemeBackgroundPartiallyTransparent IsThemeBackgroundPartiallyTransparent = 0;
-
-typedef HWND (WINAPI *t_OpenThemeData)(HTHEME, LPCWSTR);
-static t_OpenThemeData OpenThemeData = 0;
 
 Theme::Theme() : theme(0)
 {
@@ -84,34 +46,16 @@ Theme::~Theme() {
 }
 
 void Theme::load(const tstring& classes, Widget* w_, bool handleThemeChanges) {
-	static LibraryLoader lib(_T("uxtheme"), true);
-	if(lib.loaded()) {
+	w = w_;
+	dwtassert(w, _T("Theme: no widget set"));
 
-#define get(name) if(!name) { if(!(name = reinterpret_cast<t_##name>(lib.getProcAddress(_T(#name))))) { return; } }
-		get(CloseThemeData);
-		get(DrawThemeBackground);
-		get(DrawThemeParentBackground);
-		if(util::win32::ensureVersion(util::win32::VISTA)) { get(DrawThemeTextEx); } else { get(DrawThemeText); }
-		get(GetThemeColor);
-		get(GetThemeMargins);
-		get(GetThemePartSize);
-		get(GetThemeTextExtent);
-		get(IsAppThemed);
-		get(IsThemeBackgroundPartiallyTransparent);
-		get(OpenThemeData);
-#undef get
+	open(classes);
 
-		w = w_;
-		dwtassert(w, _T("Theme: no widget set"));
-
-		open(classes);
-
-		if(handleThemeChanges) {
-			w->addCallback(Message(WM_THEMECHANGED), Dispatchers::VoidVoid<0, false>([this, classes] {
-				close();
-				open(classes);
-			}));
-		}
+	if(handleThemeChanges) {
+		w->addCallback(Message(WM_THEMECHANGED), Dispatchers::VoidVoid<0, false>([this, classes] {
+			close();
+			open(classes);
+		}));
 	}
 }
 
@@ -124,21 +68,9 @@ void Theme::drawBackground(Canvas& canvas, int part, int state, const Rectangle&
 	DrawThemeBackground(theme, canvas.handle(), part, state, &rc, clip ? &rcClip.get() : 0);
 }
 
-void Theme::drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect, COLORREF color) {
+void Theme::drawText(Canvas& canvas, int part, int state, const tstring& text, unsigned textFlags, const Rectangle& rect) {
 	::RECT rc = rect;
-
-	if(DrawThemeTextEx) {
-		DTTOPTS opts = { sizeof(DTTOPTS) };
-		if(color != NaC) {
-			opts.dwFlags |= DTT_TEXTCOLOR;
-			opts.crText = color;
-		}
-
-		DrawThemeTextEx(theme, canvas.handle(), part, state, text.c_str(), text.size(), textFlags, &rc, &opts);
-
-	} else {
-		DrawThemeText(theme, canvas.handle(), part, state, text.c_str(), text.size(), textFlags, 0, &rc);
-	}
+	DrawThemeText(theme, canvas.handle(), part, state, text.c_str(), text.size(), textFlags, 0, &rc);
 }
 
 void Theme::formatRect(Canvas& canvas, int part, int state, Rectangle& rect) {
