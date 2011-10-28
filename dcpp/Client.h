@@ -54,8 +54,7 @@ public:
 
 	virtual void send(const AdcCommand& command) = 0;
 
-	bool isConnected() const { return state != STATE_DISCONNECTED; }
-	bool isReady() const { return state != STATE_CONNECTING && state != STATE_DISCONNECTED; }
+	bool isConnected() const { return state != STATE_CONNECTING && state != STATE_DISCONNECTED; }
 	bool isSecure() const;
 	bool isTrusted() const;
 	std::string getCipherName() const;

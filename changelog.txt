@@ -47,7 +47,7 @@
 * Handle GeoIP database updates from within the program (iceman50, poy)
 * [L#783516] ZLIF compression support (iceman50)
 * Increase minimum download segment size from 64KiB to 256KiB (cologic)
-
+* [L#874282] Fix the "Close disconnected hubs" command (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
