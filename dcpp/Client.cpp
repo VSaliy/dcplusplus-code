@@ -114,7 +114,7 @@ void Client::connect() {
 }
 
 void Client::send(const char* aMessage, size_t aLen) {
-	if(!isReady()) {
+	if(!isConnected()) {
 		dcassert(0);
 		return;
 	}
@@ -157,19 +157,19 @@ void Client::disconnect(bool graceLess) {
 }
 
 bool Client::isSecure() const {
-	return isReady() && sock->isSecure();
+	return isConnected() && sock->isSecure();
 }
 
 bool Client::isTrusted() const {
-	return isReady() && sock->isTrusted();
+	return isConnected() && sock->isTrusted();
 }
 
 std::string Client::getCipherName() const {
-	return isReady() ? sock->getCipherName() : Util::emptyString;
+	return isConnected() ? sock->getCipherName() : Util::emptyString;
 }
 
 vector<uint8_t> Client::getKeyprint() const {
-	return isReady() ? sock->getKeyprint() : vector<uint8_t>();
+	return isConnected() ? sock->getKeyprint() : vector<uint8_t>();
 }
 
 void Client::updateCounts(bool aRemove) {
