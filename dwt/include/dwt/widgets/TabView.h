@@ -181,6 +181,7 @@ private:
 	Rectangle clientSize;
 	ImageListPtr icons;
 	int active;
+	ContainerPtr middleClosing;
 	ContainerPtr dragging;
 	tstring tipText;
 	Rectangle closeRect;
@@ -201,6 +202,7 @@ private:
 	bool handleLeftMouseUp(const MouseEvent& mouseEvent);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	bool handleMiddleMouseDown(const MouseEvent& mouseEvent);
+	bool handleMiddleMouseUp(const MouseEvent& mouseEvent);
 	bool handleXMouseUp(const MouseEvent& mouseEvent);
 	bool handleMouseMove(const MouseEvent& mouseEvent);
 	void handleMouseLeave();
