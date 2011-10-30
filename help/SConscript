@@ -87,7 +87,7 @@ CHM_sources.sort()
 # additional dependencies (that have to be built before the help file)
 CHM_dependencies = ['addendum.txt', 'cshelp.h']
 
-from build_util import gen_po_name, get_lcid, nixify, scoped_cmd
+from build_util import gen_po_name, get_lcid, nixify
 import filecmp
 from gen_toc import gen_toc
 from set_hhp_locale import set_hhp_locale
@@ -97,12 +97,6 @@ env['po4a_cmd'] = lambda prog, options: 'perl -I"' + po4a_path + 'lib" "' + po4a
 
 # define our CHM builder
 def gen_CHM(target, source, env):
-	# create the temporary build directory
-	build_dir = 'build/help'
-	build_path = build_dir + '/'
-	env.Execute([Delete(build_dir), Mkdir(build_dir)])
-	dir_cleaner = scoped_cmd(lambda: env.Execute(Delete(build_dir)))
-
 	# find the translation file
 	po_node = None
 	for node in source:
@@ -120,6 +114,11 @@ def gen_CHM(target, source, env):
 	else:
 		lang = os.path.basename(po_node.path).replace('.po', '')
 		lcid = get_lcid(lang)
+
+	# create the temporary build directory
+	build_dir = 'build/help/' + lang
+	build_path = build_dir + '/'
+	env.Execute([Delete(build_dir), Mkdir(build_dir)])
 
 	if env['webhelp']:
 		# create the dir for localized web help files
