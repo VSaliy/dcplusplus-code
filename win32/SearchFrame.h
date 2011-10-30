@@ -155,7 +155,6 @@ private:
 	};
 
 	typedef set<SearchFrame*> FrameSet;
-	typedef FrameSet::iterator FrameIter;
 	static FrameSet frames;
 
 	SplitterContainerPtr paned;

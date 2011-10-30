@@ -44,25 +44,19 @@ PrivateFrame::FrameMap PrivateFrame::frames;
 void PrivateFrame::openWindow(TabViewPtr parent, const HintedUser& replyTo_, const tstring& msg,
 	const string& logPath, bool activate)
 {
-	PrivateFrame* pf;
-	FrameIter i = frames.find(replyTo_);
-	if(i == frames.end()) {
-		pf = new PrivateFrame(parent, replyTo_, logPath);
-	} else {
-		pf = i->second;
-	}
+	auto i = frames.find(replyTo_);
+	auto frame = (i == frames.end()) ? new PrivateFrame(parent, replyTo_, logPath) : i->second;
 	if(activate)
-		pf->activate();
+		frame->activate();
 	if(!msg.empty())
-		pf->sendMessage(msg);
-
+		frame->sendMessage(msg);
 }
 
 void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
 							  const tstring& aMessage, const string& hubHint)
 {
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
-	FrameIter i = frames.find(user);
+	auto i = frames.find(user);
 	if(i == frames.end()) {
 		auto p = new PrivateFrame(parent, HintedUser(user, hubHint));
 		if(!BOOLSETTING(POPUNDER_PM))
@@ -85,15 +79,11 @@ void PrivateFrame::activateWindow(const UserPtr& u) {
 		i->second->activate();
 }
 
-void PrivateFrame::closeAll(){
-	for(FrameIter i = frames.begin(); i != frames.end(); ++i)
-		i->second->close(true);
-}
-
-void PrivateFrame::closeAllOffline() {
-	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
-		if(!i->second->online)
+void PrivateFrame::closeAll(bool offline) {
+	for(auto i = frames.begin(); i != frames.end(); ++i) {
+		if(!offline || !i->second->online) {
 			i->second->close(true);
+		}
 	}
 }
 

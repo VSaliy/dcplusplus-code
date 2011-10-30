@@ -325,14 +325,14 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr window = mainMenu->appendPopup(T_("&Window"));
 
-		window->appendItem(T_("Close all hubs"), [] { HubFrame::closeAll(true); }, WinUtil::menuIcon(IDI_HUB));
-		window->appendItem(T_("Close disconnected hubs"), [] { HubFrame::closeAll(false); }, WinUtil::menuIcon(IDI_HUB_OFF));
+		window->appendItem(T_("Close all hubs"), [] { HubFrame::closeAll(false); }, WinUtil::menuIcon(IDI_HUB));
+		window->appendItem(T_("Close disconnected hubs"), [] { HubFrame::closeAll(true); }, WinUtil::menuIcon(IDI_HUB_OFF));
 		window->appendItem(T_("Close all hubs of a favorite group"), [this] { handleCloseFavGroup(false); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		window->appendItem(T_("Close hubs not in a favorite group"), [this] { handleCloseFavGroup(true); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 		window->appendSeparator();
 
-		window->appendItem(T_("Close all PM windows"), &PrivateFrame::closeAll, WinUtil::menuIcon(IDI_PRIVATE));
-		window->appendItem(T_("Close all offline PM windows"), &PrivateFrame::closeAllOffline, WinUtil::menuIcon(IDI_PRIVATE_OFF));
+		window->appendItem(T_("Close all PM windows"), [] { PrivateFrame::closeAll(false); }, WinUtil::menuIcon(IDI_PRIVATE));
+		window->appendItem(T_("Close all offline PM windows"), [] { PrivateFrame::closeAll(true); }, WinUtil::menuIcon(IDI_PRIVATE_OFF));
 		window->appendSeparator();
 
 		window->appendItem(T_("Close all file list windows"), &DirectoryListingFrame::closeAll, WinUtil::menuIcon(IDI_DIRECTORY));

@@ -67,52 +67,63 @@ static const ColumnInfo usersColumns[] = {
 HubFrame::FrameList HubFrame::frames;
 
 void HubFrame::openWindow(TabViewPtr parent, const string& url, bool activate, bool connect) {
-	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
-		HubFrame* frame = *i;
-		if(frame->url == url) {
-			if(activate)
-				frame->activate();
-			else
-				frame->setDirty(SettingsManager::BOLD_HUB);
-			return;
-		}
-	}
+	auto i = find_if(frames.begin(), frames.end(), [&url](HubFrame* frame) { return frame->url == url; });
 
-	auto frame = new HubFrame(parent, url, connect);
-	if(activate)
-		frame->activate();
+	if(i == frames.end()) {
+		auto frame = new HubFrame(parent, url, connect);
+		if(activate)
+			frame->activate();
+
+	} else {
+		auto frame = *i;
+		if(activate)
+			frame->activate();
+		else
+			frame->setDirty(SettingsManager::BOLD_HUB);
+	}
 }
 
 void HubFrame::activateWindow(const string& url) {
-	for(auto i = frames.cbegin(), iend = frames.cend(); i != iend; ++i) {
-		auto frame = *i;
-		if(frame->url == url) {
-			frame->activate();
+	auto i = find_if(frames.begin(), frames.end(), [&url](HubFrame* frame) { return frame->url == url; });
+	if(i != frames.end()) {
+		(*i)->activate();
+	}
+}
+
+void HubFrame::closeAll(ClosePred f) {
+	if(!WinUtil::mainWindow->getEnabled())
+		return;
+
+	auto toClose = frames;
+	if(f) {
+		toClose.erase(std::remove_if(toClose.begin(), toClose.end(), f), toClose.end());
+	}
+
+	if(!toClose.empty() && (!BOOLSETTING(CONFIRM_HUB_CLOSING) || dwt::MessageBox(WinUtil::mainWindow).show(
+		str(TF_("Really close %1% hub windows?") % toClose.size()), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+		dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES))
+	{
+		for(auto i = toClose.begin(); i != toClose.end(); ++i) {
+			auto frame = *i;
+			frame->confirmClose = false;
+			frame->close(true);
 		}
 	}
 }
 
-void HubFrame::closeAll(bool all) {
-	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
-		HubFrame* frame = *i;
-		if(all || !(frame->client->isConnected())) {
-			frame->close(true);
-		}
-	}
+void HubFrame::closeAll(bool disconnected) {
+	closeAll(disconnected ? [](HubFrame* frame) { return frame->client->isConnected(); } : ClosePred());
 }
 
 void HubFrame::closeFavGroup(const string& group, bool reversed) {
-	for(FrameIter i = frames.begin(); i != frames.end(); ++i) {
-		HubFrame* frame = *i;
+	closeAll([&](HubFrame* frame) -> bool {
 		FavoriteHubEntry* fav = FavoriteManager::getInstance()->getFavoriteHubEntry(frame->url);
-		if((fav && fav->getGroup() == group) ^ reversed) {
-			frame->close(true);
-		}
-	}
+		return (fav && fav->getGroup() == group) ^ !reversed;
+	});
 }
 
 void HubFrame::resortUsers() {
-	for(FrameIter i = frames.begin(); i != frames.end(); ++i)
+	for(auto i = frames.begin(); i != frames.end(); ++i)
 		(*i)->resortForFavsFirst(true);
 }
 
@@ -151,6 +162,7 @@ waitingForPW(false),
 resort(false),
 showJoins(BOOLSETTING(SHOW_JOINS)),
 favShowJoins(BOOLSETTING(FAV_SHOW_JOINS)),
+confirmClose(true),
 currentUser(0),
 hubMenu(false),
 inTabComplete(false)
@@ -259,9 +271,12 @@ HubFrame::~HubFrame() {
 }
 
 bool HubFrame::preClosing() {
-	if(BOOLSETTING(CONFIRM_HUB_CLOSING) && !WinUtil::mainWindow->closing() &&
-		dwt::MessageBox(this).show(getText() + _T("\n\n") + T_("Really close?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) != IDYES)
+	if(BOOLSETTING(CONFIRM_HUB_CLOSING) && confirmClose && !WinUtil::mainWindow->closing() &&
+		dwt::MessageBox(this).show(getText() + _T("\n\n") + T_("Really close?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+		dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) != IDYES)
+	{
 		return false;
+	}
 
 	FavoriteManager::getInstance()->removeListener(this);
 	client->removeListener(this);

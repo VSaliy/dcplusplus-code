@@ -62,8 +62,7 @@ public:
 		const string& logPath = Util::emptyString, bool activate = true);
 	static void activateWindow(const UserPtr& u);
 	static bool isOpen(const UserPtr& u) { return frames.find(u) != frames.end(); }
-	static void closeAll();
-	static void closeAllOffline();
+	static void closeAll(bool offline);
 
 	WindowParams getWindowParams() const;
 	static void parseWindowParams(TabViewPtr parent, const WindowParams& params);
@@ -81,7 +80,6 @@ private:
 	bool online;
 
 	typedef unordered_map<UserPtr, PrivateFrame*, User::Hash> FrameMap;
-	typedef FrameMap::iterator FrameIter;
 	static FrameMap frames;
 
 	PrivateFrame(TabViewPtr parent, const HintedUser& replyTo_, const string& logPath = Util::emptyString);

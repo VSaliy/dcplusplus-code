@@ -104,7 +104,7 @@ void SearchFrame::openWindow(TabViewPtr parent, const tstring& str, SearchManage
 }
 
 void SearchFrame::closeAll() {
-	for(FrameIter i = frames.begin(); i != frames.end(); ++i)
+	for(auto i = frames.begin(); i != frames.end(); ++i)
 		(*i)->close(true);
 }
 
