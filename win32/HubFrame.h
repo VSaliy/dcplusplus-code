@@ -67,8 +67,14 @@ public:
 
 	static void openWindow(TabViewPtr parent, const string& url, bool activate = true, bool connect = true);
 	static void activateWindow(const string& url);
-	static void closeAll(bool all);
+
+private:
+	typedef std::function<bool (HubFrame*)> ClosePred;
+	static void closeAll(ClosePred f = 0);
+public:
+	static void closeAll(bool disconnected);
 	static void closeFavGroup(const string& group, bool reversed);
+
 	static void resortUsers();
 
 	WindowParams getWindowParams() const;
@@ -172,6 +178,7 @@ private:
 	bool resort;
 	bool showJoins;
 	bool favShowJoins;
+	bool confirmClose;
 
 	TaskQueue tasks; // todo get rid of TaskQueue
 
@@ -187,7 +194,6 @@ private:
 	bool inTabComplete;
 
 	typedef std::vector<HubFrame*> FrameList;
-	typedef FrameList::iterator FrameIter;
 	static FrameList frames;
 
 	HubFrame(TabViewPtr parent, const string& url, bool connect);
