@@ -70,6 +70,7 @@ highlighted(-1),
 highlightClose(false),
 closeAuthorized(false),
 active(-1),
+middleClosing(0),
 dragging(0)
 {
 }
@@ -126,6 +127,7 @@ void TabView::create(const Seed & cs) {
 	onLeftMouseUp([this](const MouseEvent& me) { return handleLeftMouseUp(me); });
 	onContextMenu([this](const ScreenCoordinate& sc) { return handleContextMenu(sc); });
 	onMiddleMouseDown([this](const MouseEvent& me) { return handleMiddleMouseDown(me); });
+	onMiddleMouseUp([this](const MouseEvent& me) { return handleMiddleMouseUp(me); });
 	onXMouseUp([this](const MouseEvent& me) { return handleXMouseUp(me); });
 
 	if(cs.style & TCS_TOOLTIPS) {
@@ -200,6 +202,8 @@ void TabView::remove(ContainerPtr w) {
 
 	viewOrder.remove(w);
 
+	if(w == middleClosing)
+		middleClosing = 0;
 	if(w == dragging)
 		dragging = 0;
 
@@ -511,17 +515,13 @@ LRESULT TabView::handleToolTip(LPARAM lParam) {
 bool TabView::handleLeftMouseDown(const MouseEvent& mouseEvent) {
 	TabInfo* ti = getTabInfo(hitTest(mouseEvent.pos));
 	if(ti) {
-		if(mouseEvent.isShiftPressed)
-			ti->w->close();
-		else {
-			dragging = ti->w;
-			::SetCapture(handle());
-			if(hasStyle(TCS_OWNERDRAWFIXED)) {
-				int index = findTab(dragging);
-				if(index == active) {
-					closeAuthorized = inCloseRect(mouseEvent.pos);
-					redraw(index);
-				}
+		dragging = ti->w;
+		::SetCapture(handle());
+		if(hasStyle(TCS_OWNERDRAWFIXED)) {
+			int index = findTab(dragging);
+			if(index == active) {
+				closeAuthorized = inCloseRect(mouseEvent.pos);
+				redraw(index);
 			}
 		}
 	}
@@ -555,7 +555,7 @@ bool TabView::handleLeftMouseUp(const MouseEvent& mouseEvent) {
 		if(dropPos == dragPos) {
 			// the tab hasn't moved; handle the click
 			if(dropPos == active) {
-				if(closeAuth && inCloseRect(mouseEvent.pos)) {
+				if(mouseEvent.isShiftPressed || (closeAuth && inCloseRect(mouseEvent.pos))) {
 					TabInfo* ti = getTabInfo(active);
 					if(ti)
 						ti->w->close();
@@ -617,8 +617,22 @@ bool TabView::handleContextMenu(ScreenCoordinate pt) {
 
 bool TabView::handleMiddleMouseDown(const MouseEvent& mouseEvent) {
 	TabInfo* ti = getTabInfo(hitTest(mouseEvent.pos));
-	if(ti)
-		ti->w->close();
+	if(ti) {
+		middleClosing = ti->w;
+		::SetCapture(handle());
+	}
+	return true;
+}
+
+bool TabView::handleMiddleMouseUp(const MouseEvent& mouseEvent) {
+	::ReleaseCapture();
+	if(middleClosing) {
+		TabInfo* ti = getTabInfo(hitTest(mouseEvent.pos));
+		if(ti && ti->w == middleClosing) {
+			middleClosing->close();
+		}
+		middleClosing = 0;
+	}
 	return true;
 }
 
