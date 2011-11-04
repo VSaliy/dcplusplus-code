@@ -577,6 +577,7 @@ void DirectoryListingFrame::addShellPaths(const ShellMenuPtr& menu, const vector
 		switch(ii->type) {
 			case ItemInfo::FILE: paths = dl->getLocalPaths(ii->file); break;
 			case ItemInfo::DIRECTORY: paths = dl->getLocalPaths(ii->dir); break;
+			case ItemInfo::USER: break;
 		}
 		if(!paths.empty())
 			ShellMenuPaths.insert(ShellMenuPaths.end(), paths.begin(), paths.end());
@@ -1200,6 +1201,7 @@ bool DirectoryListingFrame::handleXMouseUp(const dwt::MouseEvent& mouseEvent) {
 	switch(mouseEvent.ButtonPressed) {
 	case dwt::MouseEvent::X1: back(); break;
 	case dwt::MouseEvent::X2: forward(); break;
+	default: break;
 	}
 	return true;
 }

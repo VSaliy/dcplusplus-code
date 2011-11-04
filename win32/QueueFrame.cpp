@@ -785,6 +785,7 @@ void QueueFrame::changePriority(bool inc){
 			case QueueItem::LOW:     p = inc ? QueueItem::NORMAL  : QueueItem::LOWEST; break;
 			case QueueItem::LOWEST:  p = inc ? QueueItem::LOW     : QueueItem::PAUSED; break;
 			case QueueItem::PAUSED:  p = inc ? QueueItem::LOWEST : QueueItem::PAUSED; break;
+			default: dcassert(false); break;
 		}
 
 		QueueManager::getInstance()->setPriority(ii->getTarget(), p);

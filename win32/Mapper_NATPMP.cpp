@@ -51,16 +51,20 @@ void Mapper_NATPMP::uninit() {
 namespace {
 
 int reqType(Mapper::Protocol protocol) {
-	switch(protocol) {
-	case Mapper::PROTOCOL_TCP: return NATPMP_PROTOCOL_TCP;
-	case Mapper::PROTOCOL_UDP: return NATPMP_PROTOCOL_UDP;
+	if (protocol == Mapper::PROTOCOL_TCP) {
+		return NATPMP_PROTOCOL_TCP;
+	} else {
+		dcassert(protocol == Mapper::PROTOCOL_UDP);
+		return NATPMP_PROTOCOL_UDP;
 	}
 }
 
 int respType(Mapper::Protocol protocol) {
-	switch(protocol) {
-	case Mapper::PROTOCOL_TCP: return NATPMP_RESPTYPE_TCPPORTMAPPING;
-	case Mapper::PROTOCOL_UDP: return NATPMP_RESPTYPE_UDPPORTMAPPING;
+	if (protocol == Mapper::PROTOCOL_TCP) {
+		return NATPMP_RESPTYPE_TCPPORTMAPPING;
+	} else {
+		dcassert(protocol == Mapper::PROTOCOL_UDP);
+		return  NATPMP_RESPTYPE_UDPPORTMAPPING;
 	}
 }
 

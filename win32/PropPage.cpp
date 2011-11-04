@@ -78,6 +78,8 @@ void PropPage::read(const ItemList& items) {
 		case T_BOOL:
 			static_cast<CheckBoxPtr>(i->widget)->setChecked(settings->getBool((SettingsManager::IntSetting)i->setting));
 			break;
+		case T_END:
+			dcassert(false); break;
 		}
 	}
 }
@@ -116,6 +118,8 @@ void PropPage::write(const ItemList& items) {
 		case T_BOOL:
 			settings->set((SettingsManager::IntSetting)i->setting, static_cast<CheckBoxPtr>(i->widget)->getChecked());
 			break;
+		case T_END:
+			dcassert(false); break;
 		}
 	}
 }
