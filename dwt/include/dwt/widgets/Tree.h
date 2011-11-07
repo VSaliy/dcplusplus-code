@@ -41,6 +41,7 @@
 #include "../aspects/AspectClickable.h"
 #include "../aspects/AspectCollection.h"
 #include "../aspects/AspectColor.h"
+#include "../aspects/CustomDraw.h"
 #include "../aspects/AspectData.h"
 #include "../aspects/AspectSelection.h"
 #include "Control.h"
@@ -72,10 +73,10 @@ private:
    */
 class Tree :
 	public CommonControl,
-	// Aspects
 	public AspectClickable< Tree >,
 	public AspectCollection<Tree, HTREEITEM>,
 	public AspectColor<Tree>,
+	public aspects::CustomDraw<Tree, NMTVCUSTOMDRAW>,
 	public AspectData<Tree, HTREEITEM>,
 	public AspectSelection< Tree, HTREEITEM >
 {

@@ -37,6 +37,7 @@
 #define DWT_ToolBar_h
 
 #include "../Dispatchers.h"
+#include "../aspects/CustomDraw.h"
 #include "../resources/ImageList.h"
 #include "../DWTException.h"
 #include "Control.h"
@@ -54,7 +55,8 @@ namespace dwt {
   * to view the log of URL's you have been to etc...
   */
 class ToolBar :
-	public Control
+	public Control,
+	public aspects::CustomDraw<ToolBar, NMTBCUSTOMDRAW>
 {
 	typedef Control BaseType;
 	typedef Dispatchers::VoidVoid<> Dispatcher;

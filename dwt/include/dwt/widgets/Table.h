@@ -42,6 +42,7 @@
 #include "../aspects/AspectClickable.h"
 #include "../aspects/AspectCollection.h"
 #include "../aspects/AspectColor.h"
+#include "../aspects/CustomDraw.h"
 #include "../aspects/AspectData.h"
 #include "../aspects/AspectScrollable.h"
 #include "../aspects/AspectSelection.h"
@@ -73,6 +74,7 @@ class Table :
 	public AspectClickable< Table >,
 	public AspectCollection<Table, int>,
 	public AspectColor<Table>,
+	public aspects::CustomDraw<Table, NMLVCUSTOMDRAW>,
 	public AspectData<Table, int>,
 	public AspectScrollable< Table >,
 	public AspectSelection< Table, int >
@@ -618,41 +620,6 @@ void Table::onValidate( typename MessageMapControl< EventHandlerClass, Table >::
 	);
 }
 
-
-void Table::onCustomPainting( typename MessageMapControl< EventHandlerClass, Table >::itsVoidUnsignedUnsignedBoolCanvasRectangle eventHandler )
-{
-	MessageMapType * ptrThis = boost::polymorphic_cast< MessageMapType * >( this );
-	ptrThis->addCallback(
-		typename MessageMapType::SignalTupleType(
-			private_::SignalContent(
-				Message( WM_NOTIFY, NM_CUSTOMDRAW ),
-				reinterpret_cast< itsVoidFunction >( eventHandler ),
-				ptrThis
-			),
-			typename MessageMapType::SignalType(
-				typename MessageMapType::SignalType::SlotType( & DispatcherList::dispatchDrawItemThis )
-			)
-		)
-	);
-}
-
-
-	void Table::onCustomPainting( typename MessageMapControl< EventHandlerClass, Table >::voidUnsignedUnsignedBoolCanvasRectangle eventHandler )
-{
-	MessageMapType * ptrThis = boost::polymorphic_cast< MessageMapType * >( this );
-	ptrThis->addCallback(
-		typename MessageMapType::SignalTupleType(
-			private_::SignalContent(
-				Message( WM_NOTIFY, NM_CUSTOMDRAW ),
-				reinterpret_cast< private_::SignalContent::voidFunctionTakingVoid >( eventHandler ),
-				ptrThis
-			),
-			typename MessageMapType::SignalType(
-				typename MessageMapType::SignalType::SlotType( & DispatcherList::dispatchDrawItem )
-			)
-		)
-	);
-}
 #endif
 
 inline void Table::onColumnClick( const HeaderDispatcher::F& f ) {

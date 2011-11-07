@@ -170,7 +170,7 @@ void UCPage::handleMoveUpClicked() {
 void UCPage::handleMoveDownClicked() {
 	if(commands->countSelected() == 1) {
 		auto i = commands->getSelected();
-		if(i == commands->size() - 1)
+		if(i == static_cast<int>(commands->size()) - 1)
 			return;
 		auto n = commands->getData(i);
 		FavoriteManager::getInstance()->moveUserCommand(n, 1);

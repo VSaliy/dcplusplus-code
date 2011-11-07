@@ -264,6 +264,7 @@ private:
 	void runUserCommand(const UserCommand& uc);
 	bool handleKeyDown(int c);
 	void handleDblClicked();
+	LRESULT handleCustomDraw(NMLVCUSTOMDRAW& data);
 
 	int find(const string& path);
 
@@ -298,8 +299,6 @@ private:
 	void onTransferComplete(Transfer* aTransfer, bool isDownload);
 	void onFailed(Download* aDownload, const string& aReason);
 	void starting(UpdateInfo* ui, Transfer* t);
-
-	LRESULT handleCustomDraw(WPARAM wParam, LPARAM lParam);
 };
 
 #endif // !defined(TRANSFER_VIEW_H)
