@@ -373,45 +373,42 @@ tstring Table::getGroup(unsigned id) const {
 void Table::handleGroupDraw(COLORREF bgColor) {
 	theme.load(VSCLASS_LISTVIEW, this);
 
-	onRaw([this, bgColor](WPARAM, LPARAM lParam) -> LRESULT {
-		if(!grouped || !lParam)
+	onCustomDraw([this, bgColor](NMLVCUSTOMDRAW& data) -> LRESULT {
+		if(!grouped || data.dwItemType != LVCDI_GROUP)
 			return CDRF_DODEFAULT;
-		auto& data = *reinterpret_cast<LPNMLVCUSTOMDRAW>(lParam);
-		if(data.dwItemType == LVCDI_GROUP) {
-			switch(data.nmcd.dwDrawStage) {
-			case CDDS_PREPAINT:
+		switch(data.nmcd.dwDrawStage) {
+		case CDDS_PREPAINT:
+			{
+				// got a group! get the current theme text color and compare it to the bg.
+				COLORREF color = theme ? theme.getColor(LVP_GROUPHEADER, LVGH_OPEN, TMT_HEADING1TEXTCOLOR) : NaC;
+				if(color == NaC)
+					color = 0; // assume black
+				if(abs(GetRValue(color) + GetGValue(color) + GetBValue(color)
+					- GetRValue(bgColor) - GetGValue(bgColor) - GetBValue(bgColor)) < 300)
 				{
-					// got a group! get the current theme text color and compare it to the bg.
-					COLORREF color = theme ? theme.getColor(LVP_GROUPHEADER, LVGH_OPEN, TMT_HEADING1TEXTCOLOR) : NaC;
-					if(color == NaC)
-						color = 0; // assume black
-					if(abs(GetRValue(color) + GetGValue(color) + GetBValue(color)
-						- GetRValue(bgColor) - GetGValue(bgColor) - GetBValue(bgColor)) < 300)
-					{
-						/* the theme color and the bg color are too close to each other; start by
-						filling the canvas with an invert of the bg, then invert the whole canvas
-						after everything has been drawn (after CDDS_POSTPAINT). */
-						Rectangle rect(data.rcText);
-						if(!theme && util::win32::ensureVersion(util::win32::VISTA))
-							rect.size.y += 6;
-						FreeCanvas(data.nmcd.hdc).fill(rect, Brush(0xFFFFFF - bgColor));
+					/* the theme color and the bg color are too close to each other; start by
+					filling the canvas with an invert of the bg, then invert the whole canvas after
+					everything has been drawn (after CDDS_POSTPAINT). */
+					Rectangle rect(data.rcText);
+					if(!theme && util::win32::ensureVersion(util::win32::VISTA))
+						rect.size.y += 6;
+					FreeCanvas(data.nmcd.hdc).fill(rect, Brush(0xFFFFFF - bgColor));
 
-						// set a flag so we don't have to re-compare colors on CDDS_POSTPAINT.
-						data.nmcd.lItemlParam = 1;
-					}
-					break;
+					// set a flag so we don't have to re-compare colors on CDDS_POSTPAINT.
+					data.nmcd.lItemlParam = 1;
 				}
-			case CDDS_POSTPAINT:
-				{
-					if(data.nmcd.lItemlParam) {
-						FreeCanvas(data.nmcd.hdc).invert(Region(Rectangle(data.rcText)));
-					}
-					break;
+				break;
+			}
+		case CDDS_POSTPAINT:
+			{
+				if(data.nmcd.lItemlParam) {
+					FreeCanvas(data.nmcd.hdc).invert(Region(Rectangle(data.rcText)));
 				}
+				break;
 			}
 		}
 		return CDRF_DODEFAULT;
-	}, Message(WM_NOTIFY, NM_CUSTOMDRAW));
+	});
 }
 
 LPARAM Table::getDataImpl(int idx) {

@@ -102,8 +102,7 @@ public:
 	};
 
 	void forEach(void (ContentType::*func)()) {
-		unsigned n = this->size();
-		for(unsigned i = 0; i < n; ++i)
+		for(size_t i = 0, n = this->size(); i < n; ++i)
 			(getData(i)->*func)();
 	}
 	void forEachSelected(void (ContentType::*func)(), bool removing = false) {
@@ -113,8 +112,7 @@ public:
 	}
 	template<class _Function>
 	_Function forEachT(_Function pred) {
-		unsigned n = this->size();
-		for(unsigned i = 0; i < n; ++i)
+		for(size_t i = 0, n = this->size(); i < n; ++i)
 			pred(getData(i));
 		return pred;
 	}
@@ -122,9 +120,7 @@ public:
 	_Function forEachSelectedT(_Function pred, bool removing = false) {
 		int i = -1;
 		while((i = ListView_GetNextItem(this->handle(), removing ? -1 : i, LVNI_SELECTED)) != -1) {
-			// Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=35569
-			ContentType* uib = getData(i);
-			pred(uib);
+			pred(getData(i));
 		}
 		return pred;
 	}

@@ -33,6 +33,7 @@
 #define DWT_ToolTip_H_
 
 #include "../Widget.h"
+#include "../aspects/CustomDraw.h"
 #include "../aspects/AspectEnabled.h"
 #include "../aspects/AspectFont.h"
 #include "../aspects/AspectRaw.h"
@@ -43,8 +44,7 @@ namespace dwt {
 
 class ToolTip :
 	public Widget,
-
-	// Aspects
+	public aspects::CustomDraw<ToolTip, NMTTCUSTOMDRAW>,
 	public AspectEnabled< ToolTip >,
 	public AspectFont< ToolTip >,
 	public AspectRaw< ToolTip >,

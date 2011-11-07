@@ -126,7 +126,7 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 		connections->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleConnectionsMenu(sc); });
 		connections->onKeyDown([this](int c) { return handleKeyDown(c); });
 		connections->onDblClicked([this] { handleDblClicked(); });
-		connections->onRaw([this](WPARAM w, LPARAM l) { return handleCustomDraw(w, l); }, dwt::Message(WM_NOTIFY, NM_CUSTOMDRAW));
+		connections->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return handleCustomDraw(data); });
 
 		prepareUserList(connections);
 	}
@@ -140,7 +140,7 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 		downloads->setSmallImageList(WinUtil::fileImages);
 
 		downloads->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleDownloadsMenu(sc); });
-		downloads->onRaw([this](WPARAM w, LPARAM l) { return handleCustomDraw(w, l); }, dwt::Message(WM_NOTIFY, NM_CUSTOMDRAW));
+		downloads->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return handleCustomDraw(data); });
 	}
 
 	onRaw([this](WPARAM, LPARAM) { return handleDestroy(); }, dwt::Message(WM_DESTROY));
@@ -376,12 +376,11 @@ static inline void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item,
 	::SetBkMode(hdc, oldMode);
 }
 
-LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
-	LPNMLVCUSTOMDRAW cd = (LPNMLVCUSTOMDRAW)lParam;
-	int item = (int)cd->nmcd.dwItemSpec;
-	int column = cd->iSubItem;
+LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
+	int item = static_cast<int>(data.nmcd.dwItemSpec);
+	int column = data.iSubItem;
 
-	switch(cd->nmcd.dwDrawStage) {
+	switch(data.nmcd.dwDrawStage) {
 	case CDDS_PREPAINT:
 		return CDRF_NOTIFYITEMDRAW;
 
@@ -390,9 +389,9 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 
 	case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
 		// Let's draw a box if needed...
-		if(cd->nmcd.hdr.hwndFrom == connections->handle() && column == CONNECTION_COLUMN_STATUS) {
-			HDC hdc = cd->nmcd.hdc;
-			ConnectionInfo* ci = reinterpret_cast<ConnectionInfo*>(cd->nmcd.lItemlParam);
+		if(data.nmcd.hdr.hwndFrom == connections->handle() && column == CONNECTION_COLUMN_STATUS) {
+			HDC hdc = data.nmcd.hdc;
+			ConnectionInfo* ci = reinterpret_cast<ConnectionInfo*>(data.nmcd.lItemlParam);
 
 			if(ci->status == ConnectionInfo::STATUS_RUNNING && ci->chunk > 0 && ci->chunkPos >= 0) {
 				const tstring& text = ci->columns[column];
@@ -406,9 +405,9 @@ LRESULT TransferView::handleCustomDraw(WPARAM wParam, LPARAM lParam) {
 
 				return CDRF_SKIPDEFAULT;
 			}
-		} else if(cd->nmcd.hdr.hwndFrom == downloads->handle() && column == DOWNLOAD_COLUMN_STATUS) {
-			HDC hdc = cd->nmcd.hdc;
-			DownloadInfo* di = reinterpret_cast<DownloadInfo*>(cd->nmcd.lItemlParam);
+		} else if(data.nmcd.hdr.hwndFrom == downloads->handle() && column == DOWNLOAD_COLUMN_STATUS) {
+			HDC hdc = data.nmcd.hdc;
+			DownloadInfo* di = reinterpret_cast<DownloadInfo*>(data.nmcd.lItemlParam);
 			if(di->size > 0 && di->done >= 0) {
 				const tstring& text = di->columns[column];
 

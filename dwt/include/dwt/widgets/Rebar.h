@@ -37,6 +37,7 @@
 #define DWT_Rebar_h
 
 #include "Control.h"
+#include "../aspects/CustomDraw.h"
 
 namespace dwt {
 
@@ -52,7 +53,8 @@ namespace dwt {
   * complex Widgets lke for instance a ComboBox, a TextBox and so on...
   */
 class Rebar :
-	public Control
+	public Control,
+	public aspects::CustomDraw<Rebar, NMCUSTOMDRAW>
 {
 	typedef Control BaseType;
 
