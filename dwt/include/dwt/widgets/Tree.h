@@ -73,37 +73,17 @@ private:
    */
 class Tree :
 	public CommonControl,
-	public aspects::Clickable< Tree >,
+	public aspects::Clickable<Tree>,
 	public aspects::Collection<Tree, HTREEITEM>,
 	public aspects::Colorable<Tree>,
 	public aspects::CustomDraw<Tree, NMTVCUSTOMDRAW>,
 	public aspects::Data<Tree, HTREEITEM>,
-	public aspects::Selection< Tree, HTREEITEM >
+	public aspects::Selection<Tree, HTREEITEM>
 {
 	typedef CommonControl BaseType;
 
 protected:
-	struct Dispatcher
-	{
-		typedef std::function<bool (const tstring&)> F;
-
-		Dispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			bool update = false;
-			NMTVDISPINFO * nmDisp = reinterpret_cast< NMTVDISPINFO * >( msg.lParam );
-			if ( nmDisp->item.pszText != 0 )
-			{
-				tstring newText = nmDisp->item.pszText;
-				update = f(newText);
-			}
-			return update ? TRUE : FALSE;
-		}
-
-		F f;
-	};
-
-	friend class WidgetCreator< Tree >;
+	friend class WidgetCreator<Tree>;
 	friend class aspects::Collection<Tree, HTREEITEM>;
 	friend class aspects::Colorable<Tree>;
 	friend class aspects::Data<Tree, HTREEITEM>;
@@ -247,21 +227,6 @@ public:
 	/** Returns the text of a particular node.
 	  */
 	tstring getText( HTREEITEM node );
-
-	/// \ingroup EventHandlersTree
-	/// Sets the event handler for what function to be called when a label is edited.
-	/** Event handler signature is must be "bool foo( Tree *,
-	  * tstring & )" and it must be contained as a member of the class
-	  * that is defined as the EventHandlerClass, normally either the Window
-	  * derived class or the class derived from Tree. <br>
-	  * Return true from your event handler if you wish the label to actually become
-	  * updated or false if you want to disallow the item to actually become updated!
-	  */
-	void onValidateEditLabels(const Dispatcher::F& f) {
-		addCallback(
-			Message( WM_NOTIFY, TVN_ENDLABELEDIT ), Dispatcher(f)
-		);
-	}
 
 	/// Returns true if fired, else false
 	virtual bool handleMessage( const MSG & msg, LRESULT & retVal );

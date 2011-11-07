@@ -37,7 +37,6 @@
 #define DWT_aspects_Keyboard_h
 
 #include "../Message.h"
-#include "../Dispatchers.h"
 
 namespace dwt { namespace aspects {
 
@@ -112,32 +111,24 @@ class Keyboard : public KeyboardBase
 
 	HWND H() const { return W().handle(); }
 
-	typedef Dispatchers::VoidVoid<0, false> FocusDispatcher;
-
-	struct KeyDispatcher
-	{
-		typedef std::function<bool (int)> F;
-
-		KeyDispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			return f(static_cast< int >( msg.wParam ));
-		}
-
-		F f;
-	};
+	typedef std::function<void ()> FocusF;
+	typedef std::function<bool (int)> KeyF;
 
 public:
 	/// Gives the Widget the keyboard focus
 	/** Use this function if you wish to give the Focus to a specific Widget
 	  */
-	void setFocus();
+	void setFocus() {
+		::SetFocus(H());
+	}
 
 	/// Retrieves the focus property of the Widget
 	/** Use this function to check if the Widget has focus or not. If the Widget has
 	  * focus this function will return true.
 	  */
-	bool hasFocus() const;
+	bool hasFocus() const {
+		return ::GetFocus() == H();
+	}
 
 	/// \ingroup EventHandlersaspects::AspectFocus
 	/// Sets the event handler for what function to be called when control loses focus.
@@ -145,8 +136,8 @@ public:
 	  * before the other Widget which is supposed to get focus retrieves it. No
 	  * parameters are passed.
 	  */
-	void onKillFocus(const typename FocusDispatcher::F& f) {
-		W().addCallback(Message( WM_KILLFOCUS ), FocusDispatcher(f));
+	void onKillFocus(FocusF f) {
+		onFocus(WM_KILLFOCUS, f);
 	}
 
 	/// \ingroup EventHandlersaspects::AspectFocus
@@ -154,8 +145,8 @@ public:
 	/** This function will be called just after the Widget has gained focus. No
 	  * parameters are passed.
 	  */
-	void onFocus(const typename FocusDispatcher::F& f) {
-		W().addCallback(Message( WM_SETFOCUS ), FocusDispatcher(f));
+	void onFocus(FocusF f) {
+		onFocus(WM_SETFOCUS, f);
 	}
 
 	/// \ingroup EventHandlersaspects::Keyboard
@@ -174,42 +165,40 @@ public:
 	  * Use virtualKeyToChar to transform virtual key code to a char, though this
 	  * will obviously not work for e.g. arrow keys etc...
 	  */
-	void onKeyDown(const typename KeyDispatcher::F& f) {
+	void onKeyDown(KeyF f) {
 		onKey(WM_KEYDOWN, f);
 	}
 
-	void onChar(const typename KeyDispatcher::F& f) {
+	void onChar(KeyF f) {
 		onKey(WM_CHAR, f);
 	}
 
-	void onKeyUp(const typename KeyDispatcher::F& f) {
+	void onKeyUp(KeyF f) {
 		onKey(WM_KEYUP, f);
 	}
 
-	void onSysKeyDown(const typename KeyDispatcher::F& f) {
+	void onSysKeyDown(KeyF f) {
 		onKey(WM_SYSKEYDOWN, f);
 	}
 
-	void onSysKeyUp(const typename KeyDispatcher::F& f) {
+	void onSysKeyUp(KeyF f) {
 		onKey(WM_SYSKEYUP, f);
 	}
 
-	void onKey(UINT msg, const typename KeyDispatcher::F& f) {
-		W().addCallback(Message( msg ), KeyDispatcher(f));
+private:
+	void onKey(unsigned message, KeyF f) {
+		W().addCallback(Message(message), [f](const MSG& msg, LRESULT&) -> bool {
+			return f(static_cast<int>(msg.wParam));
+		});
+	}
+
+	void onFocus(unsigned message, FocusF f) {
+		W().addCallback(Message(message), [f](const MSG&, LRESULT&) -> bool {
+			f();
+			return false;
+		});
 	}
 };
-
-template< class WidgetType >
-void Keyboard< WidgetType >::setFocus()
-{
-	::SetFocus( H() );
-}
-
-template< class WidgetType >
-bool Keyboard< WidgetType >::hasFocus() const
-{
-	return ::GetFocus() == H();
-}
 
 } }
 

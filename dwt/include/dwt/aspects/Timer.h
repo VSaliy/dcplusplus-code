@@ -38,43 +38,32 @@ namespace dwt { namespace aspects {
 
 template< class WidgetType >
 class Timer {
+	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	HWND H() { return W().handle(); }
 
-	struct TimerDispatcher : Dispatchers::Base<bool ()> {
-		typedef Dispatchers::Base<bool ()> BaseType;
-		TimerDispatcher(const F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			if(!f()) {
-				/// @todo remove from message map as well...
-				::KillTimer(msg.hwnd, msg.wParam);
-			}
-			return true;
-		}
-	};
+	HWND H() const { return W().handle(); }
 
 public:
 	/// Creates a timer object.
-	/** The supplied function must have the signature bool foo() <br>
-	  * The event function will be called when at least milliSeconds seconds have elapsed.
+	/** The event function will be called when at least milliSeconds seconds have elapsed.
 	  * If your event handler returns true, it will keep getting called periodically, otherwise
 	  * it will be removed.
 	  */
-	void setTimer(const typename TimerDispatcher::F& f, unsigned int milliSeconds, unsigned int id = 0);
-};
-
-template< class WidgetType >
-void Timer< WidgetType >::setTimer( const typename TimerDispatcher::F& f,
-	unsigned int milliSecond, unsigned int id)
-{
-	if(milliSecond) {
-		::SetTimer(H(), id, milliSecond, 0);
-		W().setCallback(Message(WM_TIMER, id), TimerDispatcher(f));
-	} else {
-		::KillTimer(H(), id);
+	void setTimer(std::function<bool ()> f, unsigned int milliSeconds, unsigned int id = 0) {
+		if(milliSeconds) {
+			::SetTimer(H(), id, milliSeconds, 0);
+			W().setCallback(Message(WM_TIMER, id), [f](const MSG& msg, LRESULT&) -> bool {
+				if(!f()) {
+					/// @todo remove from message map as well...
+					::KillTimer(msg.hwnd, msg.wParam);
+				}
+				return true;
+			});
+		} else {
+			::KillTimer(H(), id);
+		}
 	}
-}
+};
 
 } }
 

@@ -78,27 +78,16 @@ class Table :
 {
 	typedef CommonControl BaseType;
 
-	struct HeaderDispatcher : Dispatchers::Base<void (int)> {
-		typedef Dispatchers::Base<void (int)> BaseType;
-		HeaderDispatcher(const F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const;
-	};
-
-	struct TooltipDispatcher : Dispatchers::Base<tstring (int)> {
-		typedef Dispatchers::Base<tstring (int)> BaseType;
-		TooltipDispatcher(const F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const;
-	};
-
-	// Need to be friend to access private data...
-	friend class WidgetCreator< Table >;
+	friend class WidgetCreator<Table>;
 	friend class aspects::Collection<Table, int>;
 	friend class aspects::Colorable<Table>;
 	friend class aspects::Data<Table, int>;
 	friend class aspects::Selection<Table, int>;
 	friend class aspects::Clickable<Table>;
+
+	typedef std::function<int (LPARAM a, LPARAM b)> SortFunction;
+	typedef std::function<void (int)> HeaderF;
+	typedef std::function<tstring (int)> TooltipF;
 
 public:
 	/// Class type
@@ -106,8 +95,6 @@ public:
 
 	/// Object type
 	typedef ThisType* ObjectType;
-
-	typedef std::function<int (LPARAM a, LPARAM b)> SortFunction;
 
 	/// Seed class
 	/** This class contains all of the values needed to create the widget. It also
@@ -164,7 +151,7 @@ public:
 	  * This function will be called MANY times when you sort a grid so you probably
 	  * will NOT want to run a costly operation within this event handler.
 	  */
-	void onSortItems( const SortFunction& f );
+	void onSortItems(SortFunction f);
 
 	/// \ingroup EventHandlersTable
 	/// Event Handler for the Column Header Click event
@@ -173,7 +160,7 @@ public:
 	  * Parameters passed is int which defines which header from left to right ( zero
 	  * indexed ) is being clicked!
 	  */
-	void onColumnClick( const HeaderDispatcher::F& f );
+	void onColumnClick(HeaderF f);
 
 	/// Sorts the list
 	/** Call this function to sort the list, it's IMPERATIVE that you before calling
@@ -354,7 +341,7 @@ public:
 	  */
 	void setSingleRowSelection( bool value = true );
 
-	void setTooltips(const TooltipDispatcher::F& f);
+	void setTooltips(TooltipF f);
 
 	/// Adds (or removes) grid lines.
 	/** A grid with grid lines will have lines surrounding every cell in it. <br>
@@ -615,12 +602,6 @@ void Table::onValidate( typename MessageMapControl< EventHandlerClass, Table >::
 
 #endif
 
-inline void Table::onColumnClick( const HeaderDispatcher::F& f ) {
-	this->addCallback(
-		Message( WM_NOTIFY, LVN_COLUMNCLICK ), HeaderDispatcher(f)
-	);
-}
-
 inline void Table::resort() {
 	if(sortColumn != -1) {
 		if(sortType == SORT_CALLBACK) {
@@ -693,7 +674,7 @@ inline void Table::setGridLines( bool value ) {
 	addRemoveTableExtendedStyle( LVS_EX_GRIDLINES, value );
 }
 
-inline void Table::onSortItems(const SortFunction& f) {
+inline void Table::onSortItems(SortFunction f) {
 	fun = f;
 }
 

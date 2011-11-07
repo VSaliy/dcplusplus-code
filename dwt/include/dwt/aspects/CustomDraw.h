@@ -32,29 +32,21 @@
 #ifndef DWT_CUSTOMDRAW_H
 #define DWT_CUSTOMDRAW_H
 
-#include "../Dispatchers.h"
 #include "../Message.h"
 
 namespace dwt { namespace aspects {
 
 template<typename WidgetType, typename DataType>
 class CustomDraw {
-	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct Dispatcher : Dispatchers::Base<LRESULT (DataType&)> {
-		typedef Dispatchers::Base<LRESULT (DataType&)> BaseType;
-		Dispatcher(const typename BaseType::F& f) : BaseType(f) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			ret = f(*reinterpret_cast<DataType*>(msg.lParam));
-			return true;
-		}
-	};
-
 public:
-	void onCustomDraw(const typename Dispatcher::F& f) {
-		W().setCallback(Message(WM_NOTIFY, NM_CUSTOMDRAW), Dispatcher(f));
+	void onCustomDraw(std::function<LRESULT (DataType&)> f) {
+		W().setCallback(Message(WM_NOTIFY, NM_CUSTOMDRAW), [f](const MSG& msg, LRESULT& ret) -> bool {
+			auto& data = *reinterpret_cast<DataType*>(msg.lParam);
+			ret = f(data);
+			return true;
+		});
 	}
 };
 

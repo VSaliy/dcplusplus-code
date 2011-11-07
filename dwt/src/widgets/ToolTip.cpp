@@ -60,7 +60,7 @@ void ToolTip::setText(Widget* widget, const tstring& text_) {
 	setTool(widget, [this](tstring& t) { handleGetTip(t); });
 }
 
-void ToolTip::setTool(Widget* widget, const Dispatcher::F& f) {
+void ToolTip::setTool(Widget* widget, F f) {
 	onGetTip(f);
 
 	TOOLINFO ti = { sizeof(TOOLINFO), TTF_IDISHWND | TTF_SUBCLASS, getParent()->handle(),
@@ -76,6 +76,18 @@ void ToolTip::setActive(bool b) {
 void ToolTip::refresh() {
 	setActive(false);
 	setActive(true);
+}
+
+void ToolTip::onGetTip(F f) {
+	setCallback(Message(WM_NOTIFY, TTN_GETDISPINFO), [f](const MSG& msg, LRESULT&) -> bool {
+		auto& ttdi = *reinterpret_cast<LPNMTTDISPINFO>(msg.lParam);
+		auto tip = hwnd_cast<ToolTip*>(ttdi.hdr.hwndFrom);
+		if(tip) {
+			f(tip->text);
+			ttdi.lpszText = const_cast<LPTSTR>(tip->text.c_str());
+		}
+		return true;
+	});
 }
 
 void ToolTip::handleGetTip(tstring& ret) {

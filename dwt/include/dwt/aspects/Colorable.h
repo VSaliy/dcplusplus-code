@@ -58,25 +58,16 @@ class ColorableCtlImpl {
 
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct ColorDispatcher {
-		ColorDispatcher(COLORREF text_, COLORREF bg_) : brush(new Brush(bg_)), text(text_), bg(bg_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			HDC dc = (HDC) msg.wParam;
-			::SetTextColor(dc, text);
-			::SetBkColor(dc, bg);
-			ret = brush ? reinterpret_cast< LRESULT >( brush->handle() ) : 0;
-			return true;
-		}
-
-		BrushPtr brush;
-		COLORREF text;
-		COLORREF bg;
-	};
-
 	/// Set the background, text and text colors
 	void setColorImpl(COLORREF text, COLORREF background) {
-		W().setCallback(Message(WM_CTLCOLOR), ColorDispatcher(text, background));
+		BrushPtr brush(new Brush(background));
+		W().setCallback(Message(WM_CTLCOLOR), [text, background, brush](const MSG& msg, LRESULT& ret) -> bool {
+			HDC dc = reinterpret_cast<HDC>(msg.wParam);
+			::SetTextColor(dc, text);
+			::SetBkColor(dc, background);
+			ret = brush ? reinterpret_cast<LRESULT>(brush->handle()) : 0;
+			return true;
+		});
 	}
 };
 

@@ -54,11 +54,23 @@ class DragDrop
 
 	HWND H() const { return W().handle(); }
 
-	struct DragDropDispatcher : Dispatchers::Base<void (const std::vector<tstring>&, Point)> {
-		typedef Dispatchers::Base<void (const std::vector<tstring>&, Point)> BaseType;
-		DragDropDispatcher(const F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
+public:
+	/// \ingroup EventHandlersaspects::AspectDragDrop
+	/// Setting the event handler for the "drop files" event
+	/** If supplied event handler is called when a file is dropped over the widget.
+	  * The function would receive a vector with all file paths and the coordinats where the files were dropped <br>
+	  *
+	  * Example:
+	  *
+	  * void DropFile(const std::vector<tstring>& files, Point droppoint) {
+	  * 	tstring path = files.at(0);
+	  * 	setText(path);
+	  * 	int x = droppoint.x;
+	  * 	int y = droppoint.y;
+	  * }
+	  */
+	void onDragDrop(std::function<void (const std::vector<tstring>&, Point)> f) {
+		W().addCallback(Message(WM_DROPFILES), [f](const MSG& msg, LRESULT& ret) -> bool {
 			std::vector<tstring> files;
 			Point pt;
 
@@ -77,37 +89,16 @@ class DragDrop
 
 			f(files, pt);
 			return false;
-		}
-	};
-
-public:
-	/// \ingroup EventHandlersaspects::AspectDragDrop
-	/// Setting the event handler for the "drop files" event
-	/** If supplied event handler is called when a file is dropped over the widget.
-	  * The function would receive a vector with all file paths and the coordinats where the files were dropped <br>
-	  *
-	  * Example:
-	  *
-	  * void DropFile(std::vector<tstring> files, Point droppoint) {
-	  * 	tstring path = files.at(0);
-	  * 	setText(path);
-	  * 	int x = droppoint.x;
-	  * 	int y = droppoint.y;
-	  * }
-	  */
-	void onDragDrop(const typename DragDropDispatcher::F& f) {
-		W().addCallback(Message( WM_DROPFILES ), DragDropDispatcher(f));
+		});
 	}
-	/// Setup Drag & Drop for this dialog
-	/** This setup the ability to receive an WM_DROPFILES msg if you drop a file on dialog
-	*/
-	void setDragAcceptFiles(bool accept = true);
-};
 
-template<class WidgetType>
-void DragDrop<WidgetType>::setDragAcceptFiles(bool accept) {
-	::DragAcceptFiles(H(), accept);
-}
+	/// Setup Drag & Drop for this dialog
+	/** This sets up the ability to receive an WM_DROPFILES msg if you drop a file on the dialog
+	*/
+	void setDragAcceptFiles(bool accept = true) {
+		::DragAcceptFiles(H(), accept);
+	}
+};
 
 } }
 

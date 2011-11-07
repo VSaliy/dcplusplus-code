@@ -63,22 +63,9 @@ namespace dwt {
 
 class ModalDialog :
 	public Frame,
-	public aspects::Dialog<ModalDialog >
+	public aspects::Dialog<ModalDialog>
 {
 	typedef Frame BaseType;
-	struct Dispatcher
-	{
-		typedef std::function<bool ()> F;
-
-		Dispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			ret = f() ? TRUE : FALSE;
-			return true;
-		}
-
-		F f;
-	};
 
 public:
 	/// Class type
@@ -120,10 +107,11 @@ public:
 	  * which control to initially have focus according to the tab order of the
 	  * controls!
 	  */
-	void onInitDialog(const Dispatcher::F& f) {
-		addCallback(
-			Message(WM_INITDIALOG), Dispatcher(f)
-		);
+	void onInitDialog(std::function<bool ()> f) {
+		addCallback(Message(WM_INITDIALOG), [f](const MSG&, LRESULT& ret) -> bool {
+			ret = f() ? TRUE : FALSE;
+			return true;
+		});
 	}
 
 protected:
