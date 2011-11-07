@@ -185,7 +185,7 @@ private:
 	}
 
 	template<typename A>
-	void addColor(dwt::AspectColor<A>* widget) {
+	void addColor(dwt::aspects::Colorable<A>* widget) {
 		widget->setColor(WinUtil::textColor, WinUtil::bgColor);
 	}
 

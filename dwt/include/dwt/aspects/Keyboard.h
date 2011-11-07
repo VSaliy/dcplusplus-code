@@ -33,18 +33,18 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectKeyboard_h
-#define DWT_AspectKeyboard_h
+#ifndef DWT_aspects_Keyboard_h
+#define DWT_aspects_Keyboard_h
 
 #include "../Message.h"
 #include "../Dispatchers.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
 /**
  * Base functionality that doesn't depend on template parameters
  */
-class AspectKeyboardBase {
+class KeyboardBase {
 public:
 	static bool isKeyPressed(int vkey) {
 		return ::GetKeyState(vkey) < 0;
@@ -101,11 +101,11 @@ public:
 };
 
 /// Aspect class used by Widgets that have the possibility of trapping keyboard events.
-/** \ingroup AspectClasses
-  * E.g. the Table can trap "key pressed events" therefore they realize the AspectKeyboard through inheritance.
+/** \ingroup aspects::Classes
+  * E.g. the Table can trap "key pressed events" therefore they realize the aspects::Keyboard through inheritance.
   */
 template< class WidgetType >
-class AspectKeyboard : public AspectKeyboardBase
+class Keyboard : public KeyboardBase
 {
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
@@ -139,7 +139,7 @@ public:
 	  */
 	bool hasFocus() const;
 
-	/// \ingroup EventHandlersAspectAspectFocus
+	/// \ingroup EventHandlersaspects::AspectFocus
 	/// Sets the event handler for what function to be called when control loses focus.
 	/** This function will be called just after the Widget is losing focus and just
 	  * before the other Widget which is supposed to get focus retrieves it. No
@@ -149,7 +149,7 @@ public:
 		W().addCallback(Message( WM_KILLFOCUS ), FocusDispatcher(f));
 	}
 
-	/// \ingroup EventHandlersAspectAspectFocus
+	/// \ingroup EventHandlersaspects::AspectFocus
 	/// Sets the event handler for what function to be called when control loses focus.
 	/** This function will be called just after the Widget has gained focus. No
 	  * parameters are passed.
@@ -158,7 +158,7 @@ public:
 		W().addCallback(Message( WM_SETFOCUS ), FocusDispatcher(f));
 	}
 
-	/// \ingroup EventHandlersAspectKeyboard
+	/// \ingroup EventHandlersaspects::Keyboard
 	/// Setting the event handler for the "key pressed" event
 	/** If supplied event handler is called when control has the focus and a key is
 	  * being pressed (before it is released) <br>
@@ -194,27 +194,23 @@ public:
 		onKey(WM_SYSKEYUP, f);
 	}
 
-protected:
-	virtual ~AspectKeyboard()
-	{}
-
 	void onKey(UINT msg, const typename KeyDispatcher::F& f) {
 		W().addCallback(Message( msg ), KeyDispatcher(f));
 	}
 };
 
 template< class WidgetType >
-void AspectKeyboard< WidgetType >::setFocus()
+void Keyboard< WidgetType >::setFocus()
 {
 	::SetFocus( H() );
 }
 
 template< class WidgetType >
-bool AspectKeyboard< WidgetType >::hasFocus() const
+bool Keyboard< WidgetType >::hasFocus() const
 {
 	return ::GetFocus() == H();
 }
 
-}
+} }
 
 #endif

@@ -36,9 +36,9 @@
 #ifndef DWT_ASPECTBUTTON_H_
 #define DWT_ASPECTBUTTON_H_
 
-#include "../aspects/AspectColor.h"
-#include "../aspects/AspectClickable.h"
-#include "../aspects/AspectText.h"
+#include "../aspects/Caption.h"
+#include "../aspects/Colorable.h"
+#include "../aspects/Clickable.h"
 #include "Control.h"
 
 namespace dwt {
@@ -46,13 +46,13 @@ namespace dwt {
 /** Common stuff for all buttons */
 class Button :
 	public CommonControl,
-	private AspectClickable<Button>,
-	public AspectColor<Button>,
-	public AspectColorCtlImpl<Button>,
-	public AspectText< Button >
+	public aspects::Caption<Button>,
+	private aspects::Clickable<Button>,
+	public aspects::Colorable<Button>,
+	public aspects::ColorableCtlImpl<Button>
 {
 	typedef CommonControl BaseType;
-	friend class AspectClickable<Button>;
+	friend class aspects::Clickable<Button>;
 	friend class WidgetCreator<Button>;
 
 public:
@@ -86,8 +86,8 @@ public:
 
 	virtual Point getPreferredSize();
 
-	using AspectClickable<ThisType>::onClicked;
-	using AspectClickable<ThisType>::onDblClicked;
+	using aspects::Clickable<ThisType>::onClicked;
+	using aspects::Clickable<ThisType>::onDblClicked;
 
 protected:
 	typedef Button ButtonType;
@@ -98,7 +98,7 @@ private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
-	// AspectClickable
+	// aspects::Clickable
 	static Message getClickMessage();
 	static Message getDblClickMessage();
 };

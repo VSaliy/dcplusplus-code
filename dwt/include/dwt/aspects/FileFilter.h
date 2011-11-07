@@ -33,24 +33,24 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectFileFilter_h
-#define DWT_AspectFileFilter_h
+#ifndef DWT_aspects_FileFilter_h
+#define DWT_aspects_FileFilter_h
 
 #include "../WindowsHeaders.h"
 #include "../tstring.h"
 #include "../util/check.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
 /// Class for adding a filter to e.g. a LoadDialog dialog.
-/** \ingroup AspectClasses
+/** \ingroup aspects::Classes
   * Class is an Aspect class which should be realized into classes that needs it.
   * <br>
   * Help the LoadDialog and the SaveDialog to add up filters on which file
   * types to look for!
   */
 template<typename WidgetType>
-class AspectFileFilter
+class FileFilter
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
@@ -125,7 +125,7 @@ public:
 	}
 
 protected:
-	AspectFileFilter(Widget* parent)
+	FileFilter(Widget* parent)
 		: itsParent(parent), itsActiveFilter( 0 )
 	{}
 
@@ -154,6 +154,6 @@ private:
 	}
 };
 
-}
+} }
 
 #endif

@@ -121,7 +121,7 @@ class Dev:
 
 		sources = self.get_sources(source_path, source_glob)
 
-		if precompiled_header is not None and env['pch']:
+		if precompiled_header is not None and env['pch'] and not env['msvcproj']:
 			for i, source in enumerate(sources):
 				if source.find(precompiled_header + '.cpp') != -1:
 					# the PCH/GCH builder will take care of this one

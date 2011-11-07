@@ -3,10 +3,6 @@
 
   Copyright (c) 2007-2011, Jacek Sieka
 
-  SmartWin++
-
-  Copyright (c) 2005 Thomas Hansen
-
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification,
@@ -17,7 +13,7 @@
       * Redistributions in binary form must reproduce the above copyright notice,
         this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
+      * Neither the name of the DWT nor the names of its contributors
         may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
@@ -33,63 +29,32 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectColor_h
-#define DWT_AspectColor_h
+#ifndef DWT_ASPECTCOMMAND_
+#define DWT_ASPECTCOMMAND_
 
 #include "../Message.h"
-#include "../resources/Brush.h"
+#include "../Dispatchers.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
-/// Aspect class used by Widgets that have the possibility of handling the
-/// erase background property
-/** \ingroup AspectClasses
-  * E.g. the Window has a background Aspect to it, therefore Table
-  * realizes the AspectEnabled through inheritance.
-  */
-template<class WidgetType>
-class AspectColor {
+template<typename WidgetType>
+class Command {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 public:
-	void setColor(COLORREF text, COLORREF background) {
-		W().setColorImpl(text, background);
+	typedef Dispatchers::VoidVoid<> CommandDispatcher;
+	void onCommand(const CommandDispatcher::F& f, unsigned id) {
+		W().addCallback(Message(WM_COMMAND, id), CommandDispatcher(f));
 	}
 
-protected:
-	virtual ~AspectColor() { }
-};
-
-template< class WidgetType >
-class AspectColorCtlImpl {
-	friend class AspectColor<WidgetType>;
-
-	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-
-	struct ColorDispatcher {
-		ColorDispatcher(COLORREF text_, COLORREF bg_) : brush(new Brush(bg_)), text(text_), bg(bg_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			HDC dc = (HDC) msg.wParam;
-			::SetTextColor(dc, text);
-			::SetBkColor(dc, bg);
-			ret = brush ? reinterpret_cast< LRESULT >( brush->handle() ) : 0;
-			return true;
-		}
-
-		BrushPtr brush;
-		COLORREF text;
-		COLORREF bg;
-	};
-
-	/// Set the background, text and text colors
-	void setColorImpl(COLORREF text, COLORREF background) {
-		W().setCallback(Message(WM_CTLCOLOR), ColorDispatcher(text, background));
+	void onCommand(const CommandDispatcher::F& f, unsigned controlId, unsigned code) {
+		W().addCallback(Message(WM_COMMAND, MAKEWPARAM(controlId, code)), CommandDispatcher(f));
 	}
 
-protected:
-	virtual ~AspectColorCtlImpl() { }
+	void onSysCommand(const CommandDispatcher::F& f, unsigned id) {
+		W().addCallback(Message(WM_SYSCOMMAND, id), CommandDispatcher(f));
+	}
 };
 
-}
+} }
 
-#endif
+#endif /*ASPECTCOMMAND_*/

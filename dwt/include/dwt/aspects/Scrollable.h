@@ -33,22 +33,22 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectScrollable_h
-#define DWT_AspectScrollable_h
+#ifndef DWT_aspects_Scrollable_h
+#define DWT_aspects_Scrollable_h
 
 #include "../Dispatchers.h"
 #include "../DWTException.h"
 #include "../Message.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
 /// Aspect class used by Widgets that have the possibility of scrolling
-/** \ingroup AspectClasses
+/** \ingroup aspects::Classes
   * E.g. the Slider have a scroll Aspect to it therefore Slider realize
-  * the AspectScrollable through inheritance.
+  * the aspects::Scrollable through inheritance.
   */
 template< class WidgetType >
-class AspectScrollable
+class Scrollable
 {
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
@@ -62,7 +62,7 @@ public:
 	SCROLLINFO getScrollInfo(int fnBar, int mask = SIF_ALL) const;
 	bool scrollIsAtEnd() const;
 
-	/// \ingroup EventHandlersAspectScrollable
+	/// \ingroup EventHandlersaspects::Scrollable
 	/// Setting the event handler for the "scrolling horizontally" event
 	/** A scrolling event occurs when for instance a Sliders value is being
 	  * manipulated through user interaction. Such an action would raise this event.
@@ -73,7 +73,7 @@ public:
 		W().addCallback(Message( WM_HSCROLL ), ScrollableDispatcher(f));
 	}
 
-	/// \ingroup EventHandlersAspectScrollable
+	/// \ingroup EventHandlersaspects::Scrollable
 	/// Setting the event handler for the "scrolling vertically" event
 	/** A scrolling event occurs when for instance a Sliders value is being
 	  * manipulated through user interaction. Such an action would raise this event.
@@ -84,10 +84,6 @@ public:
 		W().addCallback(Message( WM_VSCROLL ), ScrollableDispatcher(f));
 	}
 
-protected:
-	virtual ~AspectScrollable()
-	{}
-
 private:
 	/// override if the derived widget needs to be adjusted when determining the scroll pos.
 	virtual int scrollOffsetImpl() const {
@@ -96,20 +92,20 @@ private:
 };
 
 template<class WidgetType>
-SCROLLINFO AspectScrollable<WidgetType>::getScrollInfo(int fnBar, int mask) const {
+SCROLLINFO Scrollable<WidgetType>::getScrollInfo(int fnBar, int mask) const {
 	SCROLLINFO info = { sizeof(SCROLLINFO), mask };
 	if(!::GetScrollInfo(H(), fnBar, &info)) {
-		throw Win32Exception("AspectScrollable: Can't get scroll info");
+		throw Win32Exception("aspects::Scrollable: Can't get scroll info");
 	}
 	return info;
 }
 
 template<class WidgetType>
-bool AspectScrollable<WidgetType>::scrollIsAtEnd() const {
+bool Scrollable<WidgetType>::scrollIsAtEnd() const {
 	SCROLLINFO scrollInfo = getScrollInfo(SB_VERT, SIF_RANGE | SIF_PAGE | SIF_POS);
 	return !scrollInfo.nPage || scrollInfo.nPos >= static_cast<int>(scrollInfo.nMax - scrollInfo.nPage) + scrollOffsetImpl();
 }
 
-}
+} }
 
 #endif

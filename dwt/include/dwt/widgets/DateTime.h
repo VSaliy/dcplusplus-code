@@ -36,7 +36,7 @@
 #ifndef DWT_DateTime_h
 #define DWT_DateTime_h
 
-#include "../aspects/AspectClickable.h"
+#include "../aspects/Clickable.h"
 #include "../util/check.h"
 #include "Control.h"
 
@@ -53,12 +53,12 @@ namespace dwt {
   */
 class DateTime :
 	public CommonControl,
-	// Aspects
-	private AspectClickable< DateTime >
+	// aspects::s
+	private aspects::Clickable< DateTime >
 {
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< DateTime >;
-	friend class AspectClickable<DateTime>;
+	friend class aspects::Clickable<DateTime>;
 
 	struct Dispatcher
 	{
@@ -192,7 +192,7 @@ public:
 	  */
 	void create( const Seed & cs = Seed() );
 
-	using AspectClickable<ThisType>::onClicked;
+	using aspects::Clickable<ThisType>::onClicked;
 
 protected:
 	/// Constructor Taking pointer to parent
@@ -207,7 +207,7 @@ private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
-	// AspectClickable
+	// aspects::Clickable
 	static Message getClickMessage();
 };
 

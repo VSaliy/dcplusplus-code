@@ -33,85 +33,75 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectText_h
-#define DWT_AspectText_h
+#ifndef DWT_aspects_Activate_h
+#define DWT_aspects_Activate_h
 
-#include "../tstring.h"
-#include "../Dispatchers.h"
 #include "../Message.h"
-#include "../util/win32/ApiHelpers.h"
+#include "../Dispatchers.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
-/// Aspect class used by Widgets that have the possibility of setting the "text"
-/// property of their objects.
-/** \ingroup AspectClasses
-  * E.g. the AspectTextBox have a "text" Aspect therefore they realize the AspectText
-  * through inheritance.
+/// Aspect class used by Widgets that can be activated.
+/** \ingroup aspects::Classes
+  * When a Widget is being activated it means that it becomes the "active" Widget
+  * meaning that it receives keyboard input and normally if it is a text Widget gets
+  * to own the caret. This Aspect is closely related to the aspects::Focus Aspect.
   */
-template<typename WidgetType>
-class AspectText
+template< class WidgetType >
+class Activate
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 
 	HWND H() const { return W().handle(); }
 
-	static tstring getText(const MSG& msg) {
-		return tstring( reinterpret_cast< TCHAR * >( msg.lParam ) );
+	static bool isActive(const MSG& msg) {
+		return LOWORD( msg.wParam ) == WA_ACTIVE || LOWORD( msg.wParam ) == WA_CLICKACTIVE;
 	}
 
-	typedef Dispatchers::ConvertBase<tstring, &AspectText<WidgetType>::getText, 0, false> TextDispatcher;
-	friend class Dispatchers::ConvertBase<tstring, &AspectText<WidgetType>::getText, 0, false>;
+	typedef Dispatchers::ConvertBase<bool, &Activate<WidgetType>::isActive> ActivateDispatcher;
+	friend class Dispatchers::ConvertBase<bool, &Activate<WidgetType>::isActive>;
 public:
-	/// Sets the text of the AspectText realizing class
-	/** The txt parameter is the new text to put into the realizing object.
-	  * note: the caller should make sure the string is correctly formatted for the current context
-	  * (eg, make sure there are no new lines in tab controls) - DWT won't do any runtime checking.
+	/// Activates the Widget
+	/** Changes the activated property of the Widget. <br>
+	  * Use this function to change the activated property of the Widget to true or
+	  * with other words make this Widget  the currently active Widget.
 	  */
-	virtual void setText( const tstring & txt );
+	void setActive();
 
-	/// Gets the text of the AspectText realizing class
-	/** The Return value is the text of the realizing class.
+	/// Retrieves the activated property of the Widget
+	/** Use this function to check if the Widget is active or not. <br>
+	  * If the Widget is active this function will return true.
 	  */
-	tstring getText() const;
+	bool isActive() const;
 
-	/// Length of text in characters
-	size_t length() const;
-
-	/// \ingroup EventHandlersAspectText
-	/// Setting the event handler for the "setText" event
-	/** When the text changes in the Widget this event will be raised. <br>
-	  * The parameter passed is tstring & which is the new text of the
-	  * Widget.
+	/// \ingroup EventHandlersaspects::Activate
+	/// Setting the member event handler for the "activated" event
+	/** Sets the event handler for changes to the active property of the Widget, if
+	  * the active status of the Widget changes the supplied event handler will be
+	  * called with either true or false indicating the active state of the Widget.
+	  * Parameter passed is bool
 	  */
-	void onTextChanging(const typename TextDispatcher::F& f) {
-		W().addCallback(Message( WM_SETTEXT ), TextDispatcher(f));
+	void onActivate(const typename ActivateDispatcher::F& f) {
+		W().addCallback(Message(WM_ACTIVATE), ActivateDispatcher(f));
 	}
-protected:
-	virtual ~AspectText()
-	{}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template< class WidgetType >
-void AspectText< WidgetType >::setText( const tstring & txt ) {
-	W().sendMessage(WM_SETTEXT, 0, reinterpret_cast< LPARAM >(txt.c_str()) );
-}
-
-template< class WidgetType >
-size_t AspectText< WidgetType >::length( ) const {
-	return util::win32::getWindowTextLength(H());
-}
-
-template< class WidgetType >
-tstring AspectText< WidgetType >::getText() const
+void Activate< WidgetType >::setActive()
 {
-	return util::win32::getWindowText(H());
+	::SetActiveWindow( H() );
 }
 
+template< class WidgetType >
+bool Activate< WidgetType >::isActive() const
+{
+	return ::GetActiveWindow() == H();
 }
+
+} }
 
 #endif

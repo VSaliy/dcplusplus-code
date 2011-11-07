@@ -37,7 +37,7 @@
 #define DWT_SaveDialog_h
 
 #include "../Widget.h"
-#include "../aspects/AspectFileFilter.h"
+#include "../aspects/FileFilter.h"
 
 namespace dwt {
 
@@ -46,13 +46,13 @@ namespace dwt {
   * \image html savefile.PNG
   * Class for showing a Save File Dialog.
   * \sa LoadDialog
-  * \sa AspectFileFilter
+  * \sa aspects::FileFilter
   */
 class SaveDialog
-	: public AspectFileFilter<SaveDialog>
+	: public aspects::FileFilter<SaveDialog>
 {
-	typedef AspectFileFilter<SaveDialog> BaseType;
-	friend class AspectFileFilter<SaveDialog>;
+	typedef aspects::FileFilter<SaveDialog> BaseType;
+	friend class aspects::FileFilter<SaveDialog>;
 
 public:
 	/// Class type
@@ -67,7 +67,7 @@ public:
 	explicit SaveDialog( Widget * parent = 0 );
 
 private:
-	// AspectFileFilter
+	// aspects::FileFilter
 	bool openImpl(OPENFILENAME& ofn);
 };
 

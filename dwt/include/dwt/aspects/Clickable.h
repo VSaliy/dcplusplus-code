@@ -3,6 +3,10 @@
 
   Copyright (c) 2007-2011, Jacek Sieka
 
+  SmartWin++
+
+  Copyright (c) 2005 Thomas Hansen
+
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification,
@@ -13,7 +17,7 @@
       * Redistributions in binary form must reproduce the above copyright notice,
         this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor the names of its contributors
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
         may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
@@ -29,33 +33,36 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ASPECTDATA_H_
-#define DWT_ASPECTDATA_H_
+#ifndef DWT_aspects_Clickable_h
+#define DWT_aspects_Clickable_h
 
-/** A Widget that associates some sort of data with each item */
-template<typename WidgetType, typename IndexType>
-class AspectData {
+#include "../Dispatchers.h"
+
+namespace dwt { namespace aspects {
+
+/// Aspect class used by controls that handle clicks (mouse-down / mouse-up).
+template<class WidgetType>
+class Clickable {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+	typedef Dispatchers::VoidVoid<> Dispatcher;
+
 public:
-	IndexType findData(LPARAM data) {
-		return W().findDataImpl(data);
+	/// register a function to be called after a left click.
+	void onClicked(const typename Dispatcher::F& f) {
+		W().addCallback(WidgetType::getClickMessage(), Dispatcher(f));
 	}
 
-	IndexType findData(LPARAM data, IndexType start) {
-		return W().findDataImpl(data, start);
+	/// register a function to be called after a right click.
+	void onRightClicked(const typename Dispatcher::F& f) {
+		W().addCallback(WidgetType::getRightClickMessage(), Dispatcher(f));
 	}
 
-	LPARAM getData(IndexType i) {
-		return W().getDataImpl(i);
-	}
-
-	void setData(IndexType i, LPARAM data) {
-		return W().setDataImpl(i, data);
-	}
-
-	LPARAM operator[](IndexType i) {
-		return getData(i);
+	/// register a function to be called after a double-click.
+	void onDblClicked(const Dispatcher::F& f) {
+		W().addCallback(WidgetType::getDblClickMessage(), Dispatcher(f));
 	}
 };
 
-#endif /*ASPECTDATA_H_*/
+} }
+
+#endif

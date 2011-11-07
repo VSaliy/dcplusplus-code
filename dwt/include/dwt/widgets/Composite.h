@@ -32,9 +32,9 @@
 #ifndef DWT_COMPOSITE_H_
 #define DWT_COMPOSITE_H_
 
-#include "../aspects/AspectContainer.h"
-#include "../aspects/AspectEraseBackground.h"
-#include "../aspects/AspectText.h"
+#include "../aspects/Caption.h"
+#include "../aspects/Children.h"
+#include "../aspects/EraseBackground.h"
 #include "../resources/Icon.h"
 #include "../WidgetCreator.h"
 #include "Control.h"
@@ -43,10 +43,9 @@ namespace dwt {
 
 class Composite :
 	public Control,
-	// Aspects
-	public AspectContainer<Composite>,
-	public AspectEraseBackground<Composite>,
-	public AspectText<Composite>
+	public aspects::Caption<Composite>,
+	public aspects::Children<Composite>,
+	public aspects::EraseBackground<Composite>
 {
 	typedef Control BaseType;
 

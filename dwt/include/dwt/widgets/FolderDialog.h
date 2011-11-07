@@ -69,8 +69,8 @@ public:
 	/// Shows the dialog
 	/** Returns string() or "empty string" if user press cancel. <br>
 	  * Returns a "folder path" if user presses ok. <br>
-	  * Use the inherited functions AspectfolderFilter::addFilter and
-	  * AspectfolderFilter::activeFilter <br>
+	  * Use the inherited functions aspects::folderFilter::addFilter and
+	  * aspects::folderFilter::activeFilter <br>
 	  * before calling this function, if you wish the dialog to show only certain
 	  * types of folders.
 	  */

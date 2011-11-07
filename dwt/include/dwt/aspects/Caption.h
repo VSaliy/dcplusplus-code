@@ -33,61 +33,77 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectBorder_h
-#define DWT_AspectBorder_h
+#ifndef DWT_aspects_Caption_h
+#define DWT_aspects_Caption_h
 
-namespace dwt {
+#include "../tstring.h"
+#include "../Dispatchers.h"
+#include "../Message.h"
+#include "../util/win32/ApiHelpers.h"
 
-/// Aspect class used by Widgets that have borders which can have multiple styles.
-/** \ingroup AspectClasses
-  * E.g. the Table have a "border" Aspect therefore it realizes the AspectBorder
-  * through inheritance.
-  */
-template< class WidgetType >
-class AspectBorder
+namespace dwt { namespace aspects {
+
+/// Aspect class used by Widgets that have the possibility of setting their main text caption
+template<typename WidgetType>
+class Caption
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
+
+	HWND H() const { return W().handle(); }
+
+	static tstring getText(const MSG& msg) {
+		return tstring( reinterpret_cast< TCHAR * >( msg.lParam ) );
+	}
+
+	typedef Dispatchers::ConvertBase<tstring, &Caption<WidgetType>::getText, 0, false> TextDispatcher;
+	friend class Dispatchers::ConvertBase<tstring, &Caption<WidgetType>::getText, 0, false>;
 public:
-	/// Set or remove the simple border (solid line)
-	void setBorder( bool value = true );
+	/// Sets the text of the aspects::Text realizing class
+	/** The txt parameter is the new text to put into the realizing object.
+	  * note: the caller should make sure the string is correctly formatted for the current context
+	  * (eg, make sure there are no new lines in tab controls) - DWT won't do any runtime checking.
+	  */
+	virtual void setText( const tstring & txt );
 
-	/// Set or remove the sunken border (like in text box widgets)
-	void setSunkenBorder( bool value = true );
+	/// Gets the text of the aspects::Text realizing class
+	/** The Return value is the text of the realizing class.
+	  */
+	tstring getText() const;
 
-	/// Set or remove the smooth sunken border (generally used in read only text boxes)
-	void setSmoothSunkenBorder( bool value = true );
+	/// Length of text in characters
+	size_t length() const;
 
-	/// Set or remove the raised border (like in buttons)
-	void setRaisedBorder( bool value = true );
+	/// \ingroup EventHandlersaspects::Text
+	/// Setting the event handler for the "setText" event
+	/** When the text changes in the Widget this event will be raised. <br>
+	  * The parameter passed is tstring & which is the new text of the
+	  * Widget.
+	  */
+	void onTextChanging(const typename TextDispatcher::F& f) {
+		W().addCallback(Message( WM_SETTEXT ), TextDispatcher(f));
+	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template< class WidgetType >
-void AspectBorder< WidgetType >::setBorder( bool value )
-{
-	W().addRemoveStyle( WS_BORDER, value );
+void Caption< WidgetType >::setText( const tstring & txt ) {
+	W().sendMessage(WM_SETTEXT, 0, reinterpret_cast< LPARAM >(txt.c_str()) );
 }
 
 template< class WidgetType >
-void AspectBorder< WidgetType >::setSunkenBorder( bool value )
-{
-	W().addRemoveExStyle( WS_EX_CLIENTEDGE, value );
+size_t Caption< WidgetType >::length( ) const {
+	return util::win32::getWindowTextLength(H());
 }
 
 template< class WidgetType >
-void AspectBorder< WidgetType >::setSmoothSunkenBorder( bool value )
+tstring Caption< WidgetType >::getText() const
 {
-	W().addRemoveExStyle( WS_EX_STATICEDGE, value );
+	return util::win32::getWindowText(H());
 }
 
-template< class WidgetType >
-void AspectBorder< WidgetType >::setRaisedBorder( bool value )
-{
-	W().addRemoveStyle( WS_THICKFRAME, value );
-}
-
-}
+} }
 
 #endif

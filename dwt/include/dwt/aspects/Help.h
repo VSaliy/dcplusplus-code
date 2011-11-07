@@ -35,10 +35,10 @@
 #include "../Message.h"
 #include <functional>
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
 template<typename WidgetType>
-class AspectHelp {
+class Help {
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
@@ -125,6 +125,6 @@ private:
 	}
 };
 
-}
+} }
 
 #endif /*ASPECTHELP_H_*/

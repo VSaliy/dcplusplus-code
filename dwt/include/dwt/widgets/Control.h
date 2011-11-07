@@ -34,21 +34,21 @@
 
 #include "../Widget.h"
 
-#include "../aspects/AspectBorder.h"
-#include "../aspects/AspectCloseable.h"
-#include "../aspects/AspectCommand.h"
-#include "../aspects/AspectContextMenu.h"
-#include "../aspects/AspectDragDrop.h"
-#include "../aspects/AspectEnabled.h"
-#include "../aspects/AspectFont.h"
-#include "../aspects/AspectHelp.h"
-#include "../aspects/AspectKeyboard.h"
-#include "../aspects/AspectMouse.h"
-#include "../aspects/AspectPainting.h"
-#include "../aspects/AspectRaw.h"
-#include "../aspects/AspectSizable.h"
-#include "../aspects/AspectTimer.h"
-#include "../aspects/AspectVisible.h"
+#include "../aspects/Border.h"
+#include "../aspects/Closeable.h"
+#include "../aspects/Command.h"
+#include "../aspects/ContextMenu.h"
+#include "../aspects/DragDrop.h"
+#include "../aspects/Enabled.h"
+#include "../aspects/Fonts.h"
+#include "../aspects/Help.h"
+#include "../aspects/Keyboard.h"
+#include "../aspects/Mouse.h"
+#include "../aspects/Painting.h"
+#include "../aspects/Raw.h"
+#include "../aspects/Sizable.h"
+#include "../aspects/Timer.h"
+#include "../aspects/Visible.h"
 
 namespace dwt {
 
@@ -56,21 +56,21 @@ namespace dwt {
 class Control:
 	public Widget,
 
-	public AspectBorder<Control>,
-	public AspectCloseable<Control>,
-	public AspectCommand<Control>,
-	public AspectContextMenu<Control>,
-	public AspectDragDrop<Control>,
-	public AspectEnabled<Control>,
-	public AspectFont<Control>,
-	public AspectHelp<Control>,
-	public AspectKeyboard<Control>,
-	public AspectMouse<Control>,
-	public AspectPainting<Control>,
-	public AspectRaw<Control>,
-	public AspectSizable<Control>,
-	public AspectTimer<Control>,
-	public AspectVisible<Control>
+	public aspects::Border<Control>,
+	public aspects::Closeable<Control>,
+	public aspects::Command<Control>,
+	public aspects::ContextMenu<Control>,
+	public aspects::DragDrop<Control>,
+	public aspects::Enabled<Control>,
+	public aspects::Fonts<Control>,
+	public aspects::Help<Control>,
+	public aspects::Keyboard<Control>,
+	public aspects::Mouse<Control>,
+	public aspects::Painting<Control>,
+	public aspects::Raw<Control>,
+	public aspects::Sizable<Control>,
+	public aspects::Timer<Control>,
+	public aspects::Visible<Control>
 {
 	struct CreateDispatcher
 	{

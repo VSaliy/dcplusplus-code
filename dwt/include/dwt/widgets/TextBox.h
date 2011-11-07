@@ -36,10 +36,10 @@
 #ifndef DWT_TextBox_h
 #define DWT_TextBox_h
 
-#include "../aspects/AspectColor.h"
-#include "../aspects/AspectScrollable.h"
-#include "../aspects/AspectText.h"
-#include "../aspects/AspectUpdate.h"
+#include "../aspects/Caption.h"
+#include "../aspects/Colorable.h"
+#include "../aspects/Scrollable.h"
+#include "../aspects/Update.h"
 #include "Control.h"
 #include "Menu.h"
 
@@ -61,16 +61,15 @@ namespace dwt {
   */
 class TextBoxBase :
 	public CommonControl,
-	// Aspect classes
-	public AspectColor< TextBoxBase >,
-	public AspectColorCtlImpl<TextBoxBase>,
-	public AspectScrollable< TextBoxBase >,
-	public AspectText< TextBoxBase >,
-	public AspectUpdate< TextBoxBase >
+	public aspects::Caption<TextBoxBase>,
+	public aspects::Colorable<TextBoxBase>,
+	public aspects::ColorableCtlImpl<TextBoxBase>,
+	public aspects::Scrollable<TextBoxBase>,
+	public aspects::Update<TextBoxBase>
 {
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< TextBoxBase >;
-	friend class AspectUpdate<TextBoxBase>;
+	friend class aspects::Update<TextBoxBase>;
 
 public:
 	/// Sets the current selection of the Edit Control
@@ -196,7 +195,7 @@ protected:
 
 	void create(const Seed& cs);
 
-	// Contract needed by AspectUpdate Aspect class
+	// Contract needed by aspects::Update Aspect class
 	static Message getUpdateMessage();
 
 private:
@@ -305,7 +304,7 @@ private:
 
 	bool handleKeyDown(int c);
 
-	// AspectScrollable
+	// aspects::Scrollable
 	int scrollOffsetImpl() const {
 		return 1;
 	}

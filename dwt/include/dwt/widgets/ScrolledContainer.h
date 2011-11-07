@@ -32,7 +32,7 @@
 #ifndef DWT_SCROLLEDCONTAINER_H_
 #define DWT_SCROLLEDCONTAINER_H_
 
-#include "../aspects/AspectChild.h"
+#include "../aspects/Child.h"
 
 #include "Control.h"
 
@@ -40,8 +40,8 @@ namespace dwt {
 
 class ScrolledContainer :
 	public Control,
-	// Aspects
-	public AspectChild<ScrolledContainer>
+	// aspects::s
+	public aspects::Child<ScrolledContainer>
 {
 	typedef Control BaseType;
 

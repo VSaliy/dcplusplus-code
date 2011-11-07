@@ -5,7 +5,7 @@
 /** \defgroup WidgetControls Widgets
   */
 
-/** \defgroup AspectClasses Aspect Classes
+/** \defgroup aspects::Classes Aspect Classes
   */
 
 /** \defgroup GlobalStuff Global typedefs and functions
@@ -28,71 +28,71 @@
 */
 
 
-/** \defgroup EventHandlersAspectClickable Event Handlers for AspectClickable
+/** \defgroup EventHandlersaspects::Clickable Event Handlers for aspects::Clickable
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectDblClickable Event Handlers for AspectDblClickable
+/** \defgroup EventHandlersaspects::DblClickable Event Handlers for aspects::DblClickable
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectKeyboard Event Handlers for AspectKeyboard
+/** \defgroup EventHandlersaspects::Keyboard Event Handlers for aspects::Keyboard
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectMouse Event Handlers for AspectMouse
+/** \defgroup EventHandlersaspects::Mouse Event Handlers for aspects::Mouse
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectPainting Event Handlers for AspectPainting
+/** \defgroup EventHandlersaspects::Painting Event Handlers for aspects::Painting
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectSelection Event Handlers for AspectSelection
+/** \defgroup EventHandlersaspects::Selection Event Handlers for aspects::Selection
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectSizable Event Handlers for AspectSizable
+/** \defgroup EventHandlersaspects::Sizable Event Handlers for aspects::Sizable
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectEnabled Event Handlers for AspectEnabled
+/** \defgroup EventHandlersaspects::Enabled Event Handlers for aspects::Enabled
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectEraseBackground Event Handlers for AspectEraseBackground
+/** \defgroup EventHandlersaspects::EraseBackground Event Handlers for aspects::EraseBackground
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectActivate Event Handlers for AspectActivate
+/** \defgroup EventHandlersaspects::Activate Event Handlers for aspects::Activate
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectBackgroundColor Event Handlers for AspectBackgroundColor
+/** \defgroup EventHandlersaspects::BackgroundColor Event Handlers for aspects::BackgroundColor
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectAspectFocus Event Handlers for AspectFocus
+/** \defgroup EventHandlersaspects::AspectFocus Event Handlers for aspects::Focus
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectScrollable Event Handlers for AspectScrollable
+/** \defgroup EventHandlersaspects::Scrollable Event Handlers for aspects::Scrollable
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectText Event Handlers for AspectText
+/** \defgroup EventHandlersaspects::Text Event Handlers for aspects::Text
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectUpdate Event Handlers for AspectUpdate
+/** \defgroup EventHandlersaspects::Update Event Handlers for aspects::Update
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectVisible Event Handlers for AspectVisible
+/** \defgroup EventHandlersaspects::Visible Event Handlers for aspects::Visible
   * \EventHandlerGenericInfo
   */
 
-/** \defgroup EventHandlersAspectRightClickable Event Handlers for AspectRightClickable
+/** \defgroup EventHandlersaspects::RightClickable Event Handlers for aspects::RightClickable
   * \EventHandlerGenericInfo
   */
 

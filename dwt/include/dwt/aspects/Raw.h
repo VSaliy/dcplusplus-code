@@ -33,15 +33,15 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectRaw_h
-#define DWT_AspectRaw_h
+#ifndef DWT_aspects_Raw_h
+#define DWT_aspects_Raw_h
 
 #include "../Message.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
 /// Aspect class used by Widgets that can handle "raw" events.
-/** \ingroup AspectClasses
+/** \ingroup aspects::Classes
   * If any of the predefined Event Handlers aree not powerful enough you can use this
   * one to handle a "generic" event and parse the message yourself. <br>
   * Note! <br>
@@ -51,7 +51,7 @@ namespace dwt {
   * This is a "last resort" event type.
   */
 template< class WidgetType >
-class AspectRaw
+class Raw
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	struct RawDispatcher {
@@ -67,7 +67,7 @@ class AspectRaw
 		F f;
 	};
 public:
-	/// \ingroup EventHandlersAspectRaw
+	/// \ingroup EventHandlersaspects::Raw
 	/// Setting the member event handler for a "raw" event
 	/** Sets the event handler for the "raw" event handler. Use this if any of the
 	  * predefined Event Handlers are not powerful enough or if you can't find the
@@ -89,12 +89,8 @@ public:
 	void onRaw(const typename RawDispatcher::F& f, const Message & msg) {
 		W().addCallback(msg, RawDispatcher(f));
 	}
-
-protected:
-	virtual ~AspectRaw()
-	{}
 };
 
-}
+} }
 
 #endif

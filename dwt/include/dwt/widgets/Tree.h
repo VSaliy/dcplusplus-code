@@ -38,12 +38,12 @@
 
 #include "../Rectangle.h"
 #include "../resources/ImageList.h"
-#include "../aspects/AspectClickable.h"
-#include "../aspects/AspectCollection.h"
-#include "../aspects/AspectColor.h"
+#include "../aspects/Clickable.h"
+#include "../aspects/Collection.h"
+#include "../aspects/Colorable.h"
 #include "../aspects/CustomDraw.h"
-#include "../aspects/AspectData.h"
-#include "../aspects/AspectSelection.h"
+#include "../aspects/Data.h"
+#include "../aspects/Selection.h"
 #include "Control.h"
 
 namespace dwt {
@@ -73,12 +73,12 @@ private:
    */
 class Tree :
 	public CommonControl,
-	public AspectClickable< Tree >,
-	public AspectCollection<Tree, HTREEITEM>,
-	public AspectColor<Tree>,
+	public aspects::Clickable< Tree >,
+	public aspects::Collection<Tree, HTREEITEM>,
+	public aspects::Colorable<Tree>,
 	public aspects::CustomDraw<Tree, NMTVCUSTOMDRAW>,
-	public AspectData<Tree, HTREEITEM>,
-	public AspectSelection< Tree, HTREEITEM >
+	public aspects::Data<Tree, HTREEITEM>,
+	public aspects::Selection< Tree, HTREEITEM >
 {
 	typedef CommonControl BaseType;
 
@@ -104,11 +104,11 @@ protected:
 	};
 
 	friend class WidgetCreator< Tree >;
-	friend class AspectCollection<Tree, HTREEITEM>;
-	friend class AspectColor<Tree>;
-	friend class AspectData<Tree, HTREEITEM>;
-	friend class AspectSelection<Tree, HTREEITEM>;
-	friend class AspectClickable<Tree>;
+	friend class aspects::Collection<Tree, HTREEITEM>;
+	friend class aspects::Colorable<Tree>;
+	friend class aspects::Data<Tree, HTREEITEM>;
+	friend class aspects::Selection<Tree, HTREEITEM>;
+	friend class aspects::Clickable<Tree>;
 
 public:
 	/// Class type
@@ -289,25 +289,25 @@ private:
 	ImageListPtr itsNormalImageList;
 	ImageListPtr itsStateImageList;
 
-	// AspectData
+	// aspects::Data
 	LPARAM getDataImpl(HTREEITEM item);
 	void setDataImpl(HTREEITEM item, LPARAM data);
 
-	// AspectCollection
+	// aspects::Collection
 	void eraseImpl( HTREEITEM node );
 	void clearImpl();
 	size_t sizeImpl() const;
 
-	// AspectColor
+	// aspects::Colorable
 	void setColorImpl(COLORREF text, COLORREF background);
 
-	// AspectSelection
+	// aspects::Selection
 	HTREEITEM getSelectedImpl() const;
 	void setSelectedImpl( HTREEITEM item );
 	size_t countSelectedImpl() const;
 	static Message getSelectionChangedMessage();
 
-	// AspectClickable
+	// aspects::Clickable
 	static Message getClickMessage();
 	static Message getRightClickMessage();
 	static Message getDblClickMessage();

@@ -38,7 +38,7 @@
 
 #include "../Widget.h"
 #include "../tstring.h"
-#include "../aspects/AspectFileFilter.h"
+#include "../aspects/FileFilter.h"
 #include <vector>
 
 namespace dwt {
@@ -48,13 +48,13 @@ namespace dwt {
   * \image html loadfile.PNG
   * Class for showing a LoadFileDialog box. <br>
   * \sa SaveDialog
-  * \sa AspectFileFilter
+  * \sa aspects::FileFilter
   */
 class LoadDialog
-	: public AspectFileFilter<LoadDialog>
+	: public aspects::FileFilter<LoadDialog>
 {
-	typedef AspectFileFilter<LoadDialog> BaseType;
-	friend class AspectFileFilter<LoadDialog>;
+	typedef aspects::FileFilter<LoadDialog> BaseType;
+	friend class aspects::FileFilter<LoadDialog>;
 
 public:
 	/// Class type
@@ -68,8 +68,8 @@ public:
 	/// Shows the dialog
 	/** Returns an empty vector if user press cancel. <br>
 	  * Returns a vector of "file paths" if user presses ok. <br>
-	  * Use the inherited functions AspectFileFilter::addFilter and
-	  * AspectFileFilter::activeFilter <br>
+	  * Use the inherited functions aspects::FileFilter::addFilter and
+	  * aspects::FileFilter::activeFilter <br>
 	  * before calling this function, if you wish the dialog to show only certain
 	  * types of files.
 	  */
@@ -79,7 +79,7 @@ public:
 	explicit LoadDialog( Widget * parent = 0 );
 
 private:
-	// AspectFileFilter
+	// aspects::FileFilter
 	bool openImpl(OPENFILENAME& ofn);
 };
 

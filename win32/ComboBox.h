@@ -27,8 +27,8 @@
 /** Wraps the drop-down control of a ComboBox */
 class ListBox :
 	public dwt::Control,
-	public dwt::AspectColor<ListBox>,
-	public dwt::AspectColorCtlImpl<ListBox>
+	public dwt::aspects::Colorable<ListBox>,
+	public dwt::aspects::ColorableCtlImpl<ListBox>
 {
 	typedef dwt::Control BaseType;
 	friend class dwt::WidgetCreator<ListBox>;
