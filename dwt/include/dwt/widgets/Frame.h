@@ -37,8 +37,8 @@
 #define DWT_Frame_h
 
 #include "../resources/Icon.h"
-#include "../aspects/AspectActivate.h"
-#include "../aspects/AspectMinMax.h"
+#include "../aspects/Activate.h"
+#include "../aspects/MinMax.h"
 #include "Composite.h"
 
 namespace dwt {
@@ -46,8 +46,8 @@ namespace dwt {
 /** Base class for a top-level window (either a main app window or a dialog). */
 class Frame :
 	public Composite,
-	public AspectActivate<Frame>,
-	public AspectMinMax<Frame>
+	public aspects::Activate<Frame>,
+	public aspects::MinMax<Frame>
 {
 	typedef Composite BaseType;
 public:

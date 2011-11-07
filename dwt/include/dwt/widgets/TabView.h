@@ -34,9 +34,9 @@
 
 #include "../resources/ImageList.h"
 #include "../Rectangle.h"
-#include "../aspects/AspectCollection.h"
-#include "../aspects/AspectSelection.h"
-#include "../aspects/AspectText.h"
+#include "../aspects/Caption.h"
+#include "../aspects/Collection.h"
+#include "../aspects/Selection.h"
 #include "Control.h"
 #include <dwt/Taskbar.h>
 #include <dwt/Theme.h>
@@ -50,15 +50,14 @@ namespace dwt {
  */
 class TabView :
 	public CommonControl,
-	// Aspects
-	public AspectCollection<TabView, int>,
-	public AspectSelection< TabView, int >,
-	public AspectText< TabView >,
+	public aspects::Caption<TabView>,
+	public aspects::Collection<TabView, int>,
+	public aspects::Selection<TabView, int>,
 	public Taskbar
 {
 	typedef CommonControl BaseType;
-	friend class AspectCollection<TabView, int>;
-	friend class AspectSelection<TabView, int>;
+	friend class aspects::Collection<TabView, int>;
+	friend class aspects::Selection<TabView, int>;
 	friend class WidgetCreator< TabView >;
 	typedef std::function<void (const tstring&)> TitleChangedFunction;
 	typedef std::function<bool (const ScreenCoordinate&)> ContextMenuFunction;
@@ -225,18 +224,18 @@ private:
 	void draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSelected);
 	bool inCloseRect(const ScreenCoordinate& pos) const;
 
-	// AspectCollection
+	// aspects::Collection
 	void eraseImpl( int row );
 	void clearImpl();
 	size_t sizeImpl() const;
 
-	// AspectHelp
+	// aspects::Help
 	void helpImpl(unsigned& id);
 
-	// AspectSelection
+	// aspects::Selection
 	int getSelectedImpl() const;
 	void setSelectedImpl( int idx );
-	// AspectSelection expectation implementation
+	// aspects::Selection expectation implementation
 	static Message getSelectionChangedMessage();
 
 	int hitTest(const ScreenCoordinate& pt);

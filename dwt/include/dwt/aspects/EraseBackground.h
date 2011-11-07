@@ -33,39 +33,62 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectClickable_h
-#define DWT_AspectClickable_h
+#ifndef DWT_aspects_EraseBackground_h
+#define DWT_aspects_EraseBackground_h
 
+#include "../Message.h"
+#include "../CanvasClasses.h"
 #include "../Dispatchers.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
-/// Aspect class used by controls that handle clicks (mouse-down / mouse-up).
-template<class WidgetType>
-class AspectClickable {
+/// Aspect class used by Widgets that have the possibility of handling the erase
+/// background property
+/** \ingroup aspects::Classes
+  * E.g. the Window have a aspects::EraseBackground Aspect to it therefore
+  * Table realize the aspects::EraseBackground through  inheritance. When the
+  * Widget needs to erase its background this event will be called with a Canvas
+  * object which can be used for  manipulating the colors etc the system uses to
+  * erase the background of the Widget with.
+  */
+template< class WidgetType >
+class EraseBackground
+{
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	typedef Dispatchers::VoidVoid<> Dispatcher;
+
+	struct EraseBackgroundDispatcher : Dispatchers::Base<bool (Canvas&)> {
+		typedef Dispatchers::Base<bool (Canvas&)> BaseType;
+		EraseBackgroundDispatcher(const F& f_) : BaseType(f_) { }
+
+		bool operator()(const MSG& msg, LRESULT& ret) const {
+			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
+			ret = f(canvas);
+			return ret;
+		}
+	};
 
 public:
-	/// register a function to be called after a left click.
-	void onClicked(const typename Dispatcher::F& f) {
-		W().addCallback(WidgetType::getClickMessage(), Dispatcher(f));
+	/// \ingroup EventHandlersaspects::EraseBackground
+	/// Setting the event handler for the "erase background" event
+	/** This event handler will be called just before Widget is about to erase its
+	  * background, the canvas passed can be used to draw upon etc to manipulate the
+	  * background property of the Widget.
+	  */
+	void onEraseBackground(const typename EraseBackgroundDispatcher::F& f) {
+		W().setCallback(Message(WM_ERASEBKGND), EraseBackgroundDispatcher(f));
 	}
 
-	/// register a function to be called after a right click.
-	void onRightClicked(const typename Dispatcher::F& f) {
-		W().addCallback(WidgetType::getRightClickMessage(), Dispatcher(f));
-	}
-
-	/// register a function to be called after a double-click.
-	void onDblClicked(const Dispatcher::F& f) {
-		W().addCallback(WidgetType::getDblClickMessage(), Dispatcher(f));
+	void noEraseBackground() {
+		W().setCallback(Message(WM_ERASEBKGND), &aspects::EraseBackground<WidgetType>::noEraseDispatcher);
 	}
 
 protected:
-	virtual ~AspectClickable() { }
+	static bool noEraseDispatcher(const MSG& msg, LRESULT& ret) {
+		ret = 1;
+		return true;
+	}
 };
 
-}
+} }
 
 #endif

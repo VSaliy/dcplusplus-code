@@ -3,6 +3,10 @@
 
   Copyright (c) 2007-2011, Jacek Sieka
 
+  SmartWin++
+
+  Copyright (c) 2005 Thomas Hansen
+
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification,
@@ -13,7 +17,7 @@
       * Redistributions in binary form must reproduce the above copyright notice,
         this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor the names of its contributors
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
         may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
@@ -29,32 +33,49 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ASPECTCOMMAND_
-#define DWT_ASPECTCOMMAND_
+#ifndef DWT_aspects_Enabled_h
+#define DWT_aspects_Enabled_h
 
 #include "../Message.h"
 #include "../Dispatchers.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
-template<typename WidgetType>
-class AspectCommand {
+/// Aspect class used by Widgets that have the possibility of changing the enabled
+/// property
+/** \ingroup aspects::Classes
+  * The Table has an enabled Aspect to it; therefore it realizes this
+  * aspects::Enabled through inheritance. <br>
+  * When a Widget is enabled it is possible to interact with it in some way, e.g. a
+  * button can be pushed, a ComboBox can change value etc. When the Widget is not
+  * enabled it cannot change its "value" or be interacted with but is normally still
+  * visible.
+  */
+template< class WidgetType >
+class Enabled
+{
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+
+	static bool isEnabled(const MSG& msg) { return msg.wParam > 0; }
+
+	typedef Dispatchers::ConvertBase<bool, &aspects::Enabled<WidgetType>::isEnabled, 0, false> EnabledDispatcher;
+	friend class Dispatchers::ConvertBase<bool, &aspects::Enabled<WidgetType>::isEnabled, 0, false>;
+
 public:
-	typedef Dispatchers::VoidVoid<> CommandDispatcher;
-	void onCommand(const CommandDispatcher::F& f, unsigned id) {
-		W().addCallback(Message(WM_COMMAND, id), CommandDispatcher(f));
-	}
 
-	void onCommand(const CommandDispatcher::F& f, unsigned controlId, unsigned code) {
-		W().addCallback(Message(WM_COMMAND, MAKEWPARAM(controlId, code)), CommandDispatcher(f));
-	}
-
-	void onSysCommand(const CommandDispatcher::F& f, unsigned id) {
-		W().addCallback(Message(WM_SYSCOMMAND, id), CommandDispatcher(f));
+	/// \ingroup EventHandlersaspects::Enabled
+	/// Setting the event handler for the "enabled" event
+	/** This event handler will be raised when the enabled property of the Widget is
+	  * being changed. <br>
+	  * The bool value passed to your Event Handler defines if the widget has just
+	  * been enabled or if it has been disabled! <br>
+	  * No parameters are passed.
+	  */
+	void onEnabled(const typename EnabledDispatcher::F& f) {
+		W().addCallback(Message( WM_ENABLE ), EnabledDispatcher(f));
 	}
 };
 
-}
+} }
 
-#endif /*ASPECTCOMMAND_*/
+#endif

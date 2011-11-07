@@ -3,6 +3,10 @@
 
   Copyright (c) 2007-2011, Jacek Sieka
 
+  SmartWin++
+
+  Copyright (c) 2005 Thomas Hansen
+
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification,
@@ -13,7 +17,7 @@
       * Redistributions in binary form must reproduce the above copyright notice,
         this list of conditions and the following disclaimer in the documentation
         and/or other materials provided with the distribution.
-      * Neither the name of the DWT nor the names of its contributors
+      * Neither the name of the DWT nor SmartWin++ nor the names of its contributors
         may be used to endorse or promote products derived from this software
         without specific prior written permission.
 
@@ -29,53 +33,67 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ASPECTTIMER_H_
-#define DWT_ASPECTTIMER_H_
+#ifndef DWT_aspects_Painting_h
+#define DWT_aspects_Painting_h
 
-#include "../Message.h"
+#include "../CanvasClasses.h"
+#include "../Dispatchers.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
+/// Aspect class used by Widgets that can be custom painted.
+/** \ingroup aspects::Classes
+  * When a Painting Event is raised the Widget needs to be repainted.
+  */
 template< class WidgetType >
-class AspectTimer {
+class Painting
+{
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	HWND H() { return W().handle(); }
 
-	struct TimerDispatcher : Dispatchers::Base<bool ()> {
-		typedef Dispatchers::Base<bool ()> BaseType;
-		TimerDispatcher(const F& f_) : BaseType(f_) { }
+	struct PaintDispatcher : Dispatchers::Base<void (PaintCanvas&)> {
+		typedef Dispatchers::Base<void (PaintCanvas&)> BaseType;
+		PaintDispatcher(const typename BaseType::F& f, Widget* widget_) :
+		BaseType(f),
+		widget(widget_)
+		{ }
+
+		bool operator()(const MSG& msg, LRESULT&) const {
+			PaintCanvas canvas(widget);
+			f(canvas);
+			return true;
+		}
+
+	private:
+		Widget* widget;
+	};
+
+	struct PrintDispatcher : Dispatchers::Base<void (Canvas&)> {
+		typedef Dispatchers::Base<void (Canvas&)> BaseType;
+		PrintDispatcher(const F& f_) : BaseType(f_) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
-			if(!f()) {
-				/// @todo remove from message map as well...
-				::KillTimer(msg.hwnd, msg.wParam);
-			}
+			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
+			f(canvas);
 			return true;
 		}
 	};
 
 public:
-	/// Creates a timer object.
-	/** The supplied function must have the signature bool foo() <br>
-	  * The event function will be called when at least milliSeconds seconds have elapsed.
-	  * If your event handler returns true, it will keep getting called periodically, otherwise
-	  * it will be removed.
+	/// \ingroup EventHandlersaspects::Painting
+	/// Painting event handler setter
+	/** If supplied, event handler is called with a PaintCanvas& which you can use to
+	  * paint stuff onto the window with. <br>
+	  * Parameters passed is PaintCanvas&
 	  */
-	void setTimer(const typename TimerDispatcher::F& f, unsigned int milliSeconds, unsigned int id = 0);
+	void onPainting(const typename PaintDispatcher::F& f) {
+		W().addCallback(Message(WM_PAINT), PaintDispatcher(f, &W()));
+	}
+
+	void onPrinting(const typename PrintDispatcher::F& f) {
+		W().addCallback(Message(WM_PRINTCLIENT), PrintDispatcher(f));
+	}
 };
 
-template< class WidgetType >
-void AspectTimer< WidgetType >::setTimer( const typename TimerDispatcher::F& f,
-	unsigned int milliSecond, unsigned int id)
-{
-	if(milliSecond) {
-		::SetTimer(H(), id, milliSecond, 0);
-		W().setCallback(Message(WM_TIMER, id), TimerDispatcher(f));
-	} else {
-		::KillTimer(H(), id);
-	}
-}
+} }
 
-}
-
-#endif /*ASPECTTIMER_H_*/
+#endif

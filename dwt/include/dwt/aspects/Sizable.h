@@ -33,14 +33,14 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectSizable_h
-#define DWT_AspectSizable_h
+#ifndef DWT_aspects_Sizable_h
+#define DWT_aspects_Sizable_h
 
 #include "../Widget.h"
 #include "../Dispatchers.h"
 #include "../Events.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
 namespace detail {
 	inline Rectangle clientRectFromMSG(const MSG &msg) {
@@ -50,12 +50,12 @@ namespace detail {
 	}
 }
 
-/// \ingroup AspectClasses
+/// \ingroup aspects::Classes
 /// \ingroup WidgetLayout
 /// Aspect class used by Widgets that have the possibility of setting and getting a
 /// "size" property of their objects.
 /** E.g. the TextBox have a "size" Aspect therefore it realizes the
-  * AspectSizable through inheritance. <br>
+  * aspects::Sizable through inheritance. <br>
   * Note! <br>
   * All coordinates have zenith top-left corner of either the desktop display or the
   * client area of the parent Widget. <br>
@@ -69,7 +69,7 @@ namespace detail {
   * their down right coordinates in SIZES and not in POSITIONS!
   */
 template< class WidgetType >
-class AspectSizable
+class Sizable
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
@@ -118,7 +118,7 @@ public:
 		W().addCallback(Message( WM_WINDOWPOSCHANGED ), WindowPosDispatcher(f));
 	}
 
-	/// \ingroup EventHandlersAspectSizable
+	/// \ingroup EventHandlersaspects::Sizable
 	// Setting the event handler for the "sized" event
 	/** The size submitted to the event handler is the new client area size. The
 	  * parameter passed is WidgetSizedEventResult which contains the new size
@@ -128,7 +128,7 @@ public:
 		W().addCallback(Message( WM_SIZE ), SizeDispatcher(f));
 	}
 
-	/// \ingroup EventHandlersAspectSizable
+	/// \ingroup EventHandlersaspects::Sizable
 	// Setting the event handler for the "moved" event
 	/** This event will be raised when the Widget is being moved. The parameter
 	  * passed is Point which is the new position of the Widget
@@ -136,13 +136,10 @@ public:
 	void onMoved(const typename MoveDispatcher::F& f) {
 		W().addCallback(Message( WM_MOVE ), MoveDispatcher(f));
 	}
-
-protected:
-	virtual ~AspectSizable() { }
 };
 
 template< class WidgetType >
-Point AspectSizable< WidgetType >::getDesktopSize()
+Point Sizable< WidgetType >::getDesktopSize()
 {
 	RECT rc;
 	::GetWindowRect( ::GetDesktopWindow(), & rc );
@@ -150,7 +147,7 @@ Point AspectSizable< WidgetType >::getDesktopSize()
 }
 
 template< class WidgetType >
-void AspectSizable< WidgetType >::centerWindow( Widget* target ) {
+void Sizable< WidgetType >::centerWindow( Widget* target ) {
 	Point size = W().getWindowSize();
 	if(!target) {
 		target = static_cast<WidgetType*>(this)->getParent();
@@ -160,33 +157,34 @@ void AspectSizable< WidgetType >::centerWindow( Widget* target ) {
 }
 
 template< class WidgetType >
-void AspectSizable< WidgetType >::bringToFront()
+void Sizable< WidgetType >::bringToFront()
 {
 	::SetWindowPos(H(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
 }
 
 template< class WidgetType >
-void AspectSizable< WidgetType >::bringToBottom()
+void Sizable< WidgetType >::bringToBottom()
 {
 	::SetWindowPos(H(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
 }
 
 template< class WidgetType >
-bool AspectSizable< WidgetType >::isIconic()
+bool Sizable< WidgetType >::isIconic()
 {
 	return ::IsIconic(H()) > 0;
 }
 
 template< class WidgetType >
-bool AspectSizable< WidgetType >::isZoomed()
+bool Sizable< WidgetType >::isZoomed()
 {
 	return ::IsZoomed(H()) > 0;
 }
 
 template<class WidgetType>
-void AspectSizable<WidgetType>::resize(const Rectangle &r) {
+void Sizable<WidgetType>::resize(const Rectangle &r) {
 	::MoveWindow(H(), r.left(), r.top(), r.width(), r.height(), TRUE);
 }
-}
+
+} }
 
 #endif

@@ -3,10 +3,6 @@
 
   Copyright (c) 2007-2011, Jacek Sieka
 
-  SmartWin++
-
-  Copyright (c) 2005 Thomas Hansen
-
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification,
@@ -33,50 +29,38 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_Font_h
-#define DWT_Font_h
+#ifndef DWT_ASPECTCOLLECTION_H_
+#define DWT_ASPECTCOLLECTION_H_
 
-#include "../WindowsHeaders.h"
-#include "../forward.h"
-#include "Handle.h"
+namespace dwt { namespace aspects {
 
-namespace dwt {
-
-/// Class for creating a Font object.
-/** This class is the type sent to the aspects::Font realizing classes. <br>
-  * Normally you would make an instance of this class and then stuff it into any
-  * class object that realizes the aspects::Font Aspect. <br>
-  * One instance of this class can be shared among different Widgets ( even different
-  * types of Widgets )
-  */
-class Font : public Handle<GdiPolicy<HFONT>>
-{
+/** A control that holds a collection of items, such as a list or tree */
+template<typename WidgetType, typename IndexType>
+class Collection {
+	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 public:
-	Font(HFONT font, bool owned);
+	/** Erase a particular item */
+	void erase(IndexType i) {
+		W().eraseImpl(i);
+	}
 
-	Font(LOGFONT& lf);
+	/** Erase all items from collection */
+	void clear() {
+		W().clearImpl();
+	}
 
-	/** Load a system font with the GetStockObject API. These fonts are obsolete and should only be
-	used as a last resort. */
-	enum Predefined {
-		SystemFixed = SYSTEM_FIXED_FONT,
-		System = SYSTEM_FONT,
-		OemFixed = OEM_FIXED_FONT,
-		DefaultGui = DEFAULT_GUI_FONT,
-		DeviceDefault = DEVICE_DEFAULT_FONT,
-		AnsiVar = ANSI_VAR_FONT,
-		AnsiFixed = ANSI_FIXED_FONT
-	};
-	Font(Predefined predef);
+	/** Return number of items in collection */
+	size_t size() const {
+		return W().sizeImpl();
+	}
 
-	/// get a new font with the same characteristics as this one, but bold.
-	FontPtr makeBold() const;
+	bool empty() const {
+		return size() == 0;
+	}
 
-private:
-	friend class Handle<GdiPolicy<HFONT>>;
-	typedef Handle<GdiPolicy<HFONT>> ResourceType;
 };
 
-}
+} }
 
-#endif
+#endif /*ASPECTCOLLECTION_H_*/

@@ -33,27 +33,27 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectSelection_h
-#define DWT_AspectSelection_h
+#ifndef DWT_aspects_Selection_h
+#define DWT_aspects_Selection_h
 
 #include "../Dispatchers.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
 /// Aspect class used by Widgets that have the possibility of being "selecting"
 /// item(s).
-/** \ingroup AspectClasses
+/** \ingroup aspects::Classes
   * E.g. the ComboBox have a "selected" Aspect therefore it realizes the
-  * AspectSelection through inheritance.
+  * aspects::Selection through inheritance.
   */
 template< class WidgetType, typename IndexType >
-class AspectSelection {
+class Selection {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 
 	typedef Dispatchers::VoidVoid<> SelectionDispatcher;
 public:
-	/// \ingroup EventHandlersAspectSelection
+	/// \ingroup EventHandlersaspects::Selection
 	/// Setting the event handler for the "selection changed" event
 	/** This event will be raised when the selected property of the Widget have
 	  * changed either due to user interaction or due to some other reason. <br>
@@ -82,31 +82,28 @@ public:
 	size_t countSelected() const;
 
 	bool hasSelected() const;
-
-protected:
-	virtual ~AspectSelection() { }
 };
 
 template< class WidgetType, typename IndexType >
-IndexType AspectSelection<WidgetType, IndexType>::getSelected() const {
+IndexType Selection<WidgetType, IndexType>::getSelected() const {
 	return W().getSelectedImpl();
 }
 
 template< class WidgetType, typename IndexType >
-void AspectSelection<WidgetType, IndexType>::setSelected(IndexType item) {
+void Selection<WidgetType, IndexType>::setSelected(IndexType item) {
 	W().setSelectedImpl(item);
 }
 
 template< class WidgetType, typename IndexType >
-size_t AspectSelection<WidgetType, IndexType>::countSelected() const {
+size_t Selection<WidgetType, IndexType>::countSelected() const {
 	return W().countSelectedImpl();
 }
 
 template< class WidgetType, typename IndexType >
-bool AspectSelection<WidgetType, IndexType>::hasSelected() const {
+bool Selection<WidgetType, IndexType>::hasSelected() const {
 	return countSelected() > 0;
 }
 
-}
+} }
 
 #endif

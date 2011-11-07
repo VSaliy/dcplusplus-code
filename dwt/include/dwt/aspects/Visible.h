@@ -33,19 +33,19 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectVisible_h
-#define DWT_AspectVisible_h
+#ifndef DWT_aspects_Visible_h
+#define DWT_aspects_Visible_h
 
 #include "../Dispatchers.h"
 #include "../Rectangle.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
-/// \ingroup AspectClasses
+/// \ingroup aspects::Classes
 /// Aspect class used by Widgets that have the possibility of manipulating the
 /// visibility property
 /** E.g. the Table have a Visibility Aspect to it therefore Table
-  * realizes AspectVisible through inheritance. <br>
+  * realizes aspects::Visible through inheritance. <br>
   * Most Widgets realize this Aspect since they can become visible and invisible.
   * When the visibilty state of the Widget changes in one way or another the visible
   * event is raised. <br>
@@ -53,7 +53,7 @@ namespace dwt {
   * event.
   */
 template< class WidgetType >
-class AspectVisible
+class Visible
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
@@ -61,8 +61,8 @@ class AspectVisible
 
 	static bool isVisible(const MSG& msg) { return msg.wParam > 0; }
 
-	typedef Dispatchers::ConvertBase<bool, &AspectVisible<WidgetType>::isVisible> VisibleDispatcher;
-	friend class Dispatchers::ConvertBase<bool, &AspectVisible<WidgetType>::isVisible>;
+	typedef Dispatchers::ConvertBase<bool, &Visible<WidgetType>::isVisible> VisibleDispatcher;
+	friend class Dispatchers::ConvertBase<bool, &Visible<WidgetType>::isVisible>;
 
 public:
 	/// Sets the visibility property of the Widget
@@ -77,7 +77,7 @@ public:
 	  */
 	bool getVisible() const;
 
-	/// \ingroup EventHandlersAspectVisible
+	/// \ingroup EventHandlersaspects::Visible
 	/// Setting the event handler for the "visible" event
 	/** When the visible state of the Widget has changed, this event will be raised.
 	  * <br>
@@ -95,38 +95,34 @@ public:
 	void redraw(bool now = false);
 
 	void redraw(const Rectangle& r, bool now = false);
-
-protected:
-	virtual ~AspectVisible()
-	{}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template< class WidgetType >
-void AspectVisible< WidgetType >::setVisible( bool visible )
+void Visible< WidgetType >::setVisible( bool visible )
 {
 	::ShowWindow( H(), visible ? SW_SHOW : SW_HIDE );
 }
 
 template< class WidgetType >
-bool AspectVisible< WidgetType >::getVisible() const
+bool Visible< WidgetType >::getVisible() const
 {
 	return ::IsWindowVisible( H() ) != 0;
 }
 
 template<class WidgetType>
-void AspectVisible<WidgetType>::redraw(bool now) {
+void Visible<WidgetType>::redraw(bool now) {
 	::RedrawWindow(H(), NULL, NULL, RDW_ERASE | RDW_INVALIDATE | (now ? RDW_UPDATENOW : 0));
 }
 
 template<class WidgetType>
-void AspectVisible<WidgetType>::redraw(const Rectangle& r, bool now) {
+void Visible<WidgetType>::redraw(const Rectangle& r, bool now) {
 	RECT rc = r;
 	::RedrawWindow(H(), &rc, NULL, RDW_ERASE | RDW_INVALIDATE | (now ? RDW_UPDATENOW : 0));
 }
 
-}
+} }
 
 #endif

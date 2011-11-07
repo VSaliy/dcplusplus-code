@@ -224,7 +224,7 @@ bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
 	if(!handled && msg.message == WM_CONTEXTMENU) {
 		// process this here to give the host a chance to handle it differently.
 
-		// imitate AspectContextMenu
+		// imitate aspects::ContextMenu
 		ScreenCoordinate pt(Point::fromLParam(msg.lParam));
 		if(pt.x() == -1 || pt.y() == -1) {
 			pt = getContextMenuPos();

@@ -36,7 +36,7 @@
 #ifndef DWT_ModalDialog_h
 #define DWT_ModalDialog_h
 
-#include "../aspects/AspectDialog.h"
+#include "../aspects/Dialog.h"
 #include "Frame.h"
 #include "../Application.h"
 
@@ -63,7 +63,7 @@ namespace dwt {
 
 class ModalDialog :
 	public Frame,
-	public AspectDialog<ModalDialog >
+	public aspects::Dialog<ModalDialog >
 {
 	typedef Frame BaseType;
 	struct Dispatcher

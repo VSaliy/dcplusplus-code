@@ -44,9 +44,9 @@
   * A Group Box Widget is a Widget which can contain other Widgets, normally you would
   * add up your RadioButtons into an object of this type
   */
-#include "../aspects/AspectColor.h"
-#include "../aspects/AspectChild.h"
-#include "../aspects/AspectText.h"
+#include "../aspects/Caption.h"
+#include "../aspects/Colorable.h"
+#include "../aspects/Child.h"
 #include "Control.h"
 
 namespace dwt {
@@ -54,10 +54,10 @@ namespace dwt {
 /** Common stuff for all buttons */
 class GroupBox :
 	public CommonControl,
-	public AspectColor<GroupBox>,
-	public AspectColorCtlImpl<GroupBox>,
-	public AspectChild<GroupBox>,
-	public AspectText< GroupBox >
+	public aspects::Caption<GroupBox>,
+	public aspects::Colorable<GroupBox>,
+	public aspects::ColorableCtlImpl<GroupBox>,
+	public aspects::Child<GroupBox>
 {
 	typedef CommonControl BaseType;
 

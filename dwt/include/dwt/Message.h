@@ -43,7 +43,7 @@
 namespace dwt {
 
 /// Class for comparing messages
-/** Class helps out abstract away System Messages, used in e.g. AspectRaw to let user
+/** Class helps out abstract away System Messages, used in e.g. aspects::Raw to let user
   * be able to handle any type of generic Message! <br>
   * To understand usage check out google or MSDN and look for Windows Message
   * Procedure or WM_ etc...
@@ -52,7 +52,7 @@ struct Message
 {
 public:
 	/// Constructor taking a System Message
-	/** Use this one if you need to e.g. handle an AspectRaw::onRaw Event and the
+	/** Use this one if you need to e.g. handle an aspects::Raw::onRaw Event and the
 	  * only interesting parameter to figure out what Message to handle is the actual
 	  * Message.
 	  */
@@ -62,7 +62,7 @@ public:
 	/** In such cases WM_COMMAND or WM_NOTIFY should be added as the msg and the
 	  * notification code or command code should be added as the extraCode parameter.
 	  * <br>
-	  * Use this one if you need to e.g. handle an AspectRaw::onRaw Event and it's a
+	  * Use this one if you need to e.g. handle an aspects::Raw::onRaw Event and it's a
 	  * WM_COMMAND, WM_NOTIFY or similar type of Message
 	  */
 	explicit Message( UINT msg, LPARAM param );

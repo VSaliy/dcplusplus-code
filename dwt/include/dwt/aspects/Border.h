@@ -33,79 +33,61 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectActivate_h
-#define DWT_AspectActivate_h
+#ifndef DWT_aspects_Border_h
+#define DWT_aspects_Border_h
 
-#include "../Message.h"
-#include "../Dispatchers.h"
+namespace dwt { namespace aspects {
 
-namespace dwt {
-
-/// Aspect class used by Widgets that can be activated.
-/** \ingroup AspectClasses
-  * When a Widget is being activated it means that it becomes the "active" Widget
-  * meaning that it receives keyboard input and normally if it is a text Widget gets
-  * to own the caret. This Aspect is closely related to the AspectFocus Aspect.
+/// Aspect class used by Widgets that have borders which can have multiple styles.
+/** \ingroup aspects::Classes
+  * E.g. the Table have a "border" Aspect therefore it realizes the aspects::Border
+  * through inheritance.
   */
 template< class WidgetType >
-class AspectActivate
+class Border
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
-
-	HWND H() const { return W().handle(); }
-
-	static bool isActive(const MSG& msg) {
-		return LOWORD( msg.wParam ) == WA_ACTIVE || LOWORD( msg.wParam ) == WA_CLICKACTIVE;
-	}
-
-	typedef Dispatchers::ConvertBase<bool, &AspectActivate<WidgetType>::isActive> ActivateDispatcher;
-	friend class Dispatchers::ConvertBase<bool, &AspectActivate<WidgetType>::isActive>;
 public:
-	/// Activates the Widget
-	/** Changes the activated property of the Widget. <br>
-	  * Use this function to change the activated property of the Widget to true or
-	  * with other words make this Widget  the currently active Widget.
-	  */
-	void setActive();
+	/// Set or remove the simple border (solid line)
+	void setBorder( bool value = true );
 
-	/// Retrieves the activated property of the Widget
-	/** Use this function to check if the Widget is active or not. <br>
-	  * If the Widget is active this function will return true.
-	  */
-	bool isActive() const;
+	/// Set or remove the sunken border (like in text box widgets)
+	void setSunkenBorder( bool value = true );
 
-	/// \ingroup EventHandlersAspectActivate
-	/// Setting the member event handler for the "activated" event
-	/** Sets the event handler for changes to the active property of the Widget, if
-	  * the active status of the Widget changes the supplied event handler will be
-	  * called with either true or false indicating the active state of the Widget.
-	  * Parameter passed is bool
-	  */
-	void onActivate(const typename ActivateDispatcher::F& f) {
-		W().addCallback(Message(WM_ACTIVATE), ActivateDispatcher(f));
-	}
+	/// Set or remove the smooth sunken border (generally used in read only text boxes)
+	void setSmoothSunkenBorder( bool value = true );
 
-protected:
-	virtual ~AspectActivate() { }
-
+	/// Set or remove the raised border (like in buttons)
+	void setRaisedBorder( bool value = true );
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template< class WidgetType >
-void AspectActivate< WidgetType >::setActive()
+void Border< WidgetType >::setBorder( bool value )
 {
-	::SetActiveWindow( H() );
+	W().addRemoveStyle( WS_BORDER, value );
 }
 
 template< class WidgetType >
-bool AspectActivate< WidgetType >::isActive() const
+void Border< WidgetType >::setSunkenBorder( bool value )
 {
-	return ::GetActiveWindow() == H();
+	W().addRemoveExStyle( WS_EX_CLIENTEDGE, value );
 }
 
+template< class WidgetType >
+void Border< WidgetType >::setSmoothSunkenBorder( bool value )
+{
+	W().addRemoveExStyle( WS_EX_STATICEDGE, value );
 }
+
+template< class WidgetType >
+void Border< WidgetType >::setRaisedBorder( bool value )
+{
+	W().addRemoveStyle( WS_THICKFRAME, value );
+}
+
+} }
 
 #endif

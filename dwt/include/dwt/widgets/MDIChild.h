@@ -61,7 +61,7 @@ namespace dwt {
 class MDIChild :
 	public Composite,
 
-	public AspectMinMax<MDIChild>
+	public aspects::MinMax<MDIChild>
 
 {
 	typedef Composite BaseType;

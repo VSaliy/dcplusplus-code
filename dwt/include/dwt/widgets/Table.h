@@ -38,13 +38,13 @@
 
 #include "../Rectangle.h"
 #include "../resources/ImageList.h"
-#include "../aspects/AspectClickable.h"
-#include "../aspects/AspectCollection.h"
-#include "../aspects/AspectColor.h"
+#include "../aspects/Clickable.h"
+#include "../aspects/Collection.h"
+#include "../aspects/Colorable.h"
 #include "../aspects/CustomDraw.h"
-#include "../aspects/AspectData.h"
-#include "../aspects/AspectScrollable.h"
-#include "../aspects/AspectSelection.h"
+#include "../aspects/Data.h"
+#include "../aspects/Scrollable.h"
+#include "../aspects/Selection.h"
 #include "Control.h"
 #include <dwt/Theme.h>
 
@@ -68,14 +68,13 @@ namespace dwt {
   */
 class Table :
 	public CommonControl,
-	// Aspect classes
-	public AspectClickable< Table >,
-	public AspectCollection<Table, int>,
-	public AspectColor<Table>,
+	public aspects::Clickable<Table>,
+	public aspects::Collection<Table, int>,
+	public aspects::Colorable<Table>,
 	public aspects::CustomDraw<Table, NMLVCUSTOMDRAW>,
-	public AspectData<Table, int>,
-	public AspectScrollable< Table >,
-	public AspectSelection< Table, int >
+	public aspects::Data<Table, int>,
+	public aspects::Scrollable<Table>,
+	public aspects::Selection<Table, int>
 {
 	typedef CommonControl BaseType;
 
@@ -95,11 +94,11 @@ class Table :
 
 	// Need to be friend to access private data...
 	friend class WidgetCreator< Table >;
-	friend class AspectCollection<Table, int>;
-	friend class AspectColor<Table>;
-	friend class AspectData<Table, int>;
-	friend class AspectSelection<Table, int>;
-	friend class AspectClickable<Table>;
+	friend class aspects::Collection<Table, int>;
+	friend class aspects::Colorable<Table>;
+	friend class aspects::Data<Table, int>;
+	friend class aspects::Selection<Table, int>;
+	friend class aspects::Clickable<Table>;
 
 public:
 	/// Class type
@@ -529,26 +528,26 @@ private:
 	// Calculates the adjustment from the columns of an item.
 	int xoffFromColumn( int column, int & logicalColumn );
 
-	// AspectData
+	// aspects::Data
 	int findDataImpl(LPARAM data, int start = -1);
 	LPARAM getDataImpl(int idx);
 	void setDataImpl(int i, LPARAM data);
 
-	// AspectCollection
+	// aspects::Collection
 	void eraseImpl( int row );
 	void clearImpl();
 	size_t sizeImpl() const;
 
-	// AspectColor
+	// aspects::Colorable
 	void setColorImpl(COLORREF text, COLORREF background);
 
-	// AspectSelection
+	// aspects::Selection
 	int getSelectedImpl() const;
 	void setSelectedImpl( int idx );
 	size_t countSelectedImpl() const;
 	static Message getSelectionChangedMessage();
 
-	// AspectClickable
+	// aspects::Clickable
 	static Message getClickMessage();
 	static Message getRightClickMessage();
 	static Message getDblClickMessage();

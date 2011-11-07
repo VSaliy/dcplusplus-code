@@ -29,62 +29,33 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ASPECTDIALOG_H_
-#define DWT_ASPECTDIALOG_H_
+#ifndef DWT_ASPECTCHILD_H_
+#define DWT_ASPECTCHILD_H_
 
-#include "../tstring.h"
-#include "../WidgetCreator.h"
+#include <dwt/forward.h>
+#include <dwt/widgets/Control.h>
 
-#include <type_traits>
+namespace dwt { namespace aspects {
 
-namespace dwt {
-
+/** Classes using this aspect may contain a single child window (see aspects::Children) */
 template<typename WidgetType>
-class AspectDialog {
-	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	HWND H() { return W().handle(); }
-
+class Child {
 public:
-	HWND getItem(int id) {
-		return ::GetDlgItem(H(), id);
-	}
-
-	void setItemText(int id, const tstring& text) {
-		::SetDlgItemText(H(), id, text.c_str());
-	}
-
-	template<typename T>
-	void attachChild(T& childPtr, int id) {
-		childPtr = attachChild<typename std::remove_pointer<T>::type >(id);
-	}
-
-	template<typename T>
-	typename T::ObjectType attachChild(int id) {
-		return WidgetCreator<T>::attach(&W(), id);
-	}
-
-protected:
-	static INT_PTR CALLBACK dialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-	static unsigned getYBorders() {
-		static unsigned ret = 0;
-		if(!ret) {
-			ret = ::GetSystemMetrics(SM_CYSIZE) + 2 * ::GetSystemMetrics(SM_CYEDGE) + 2 * ::GetSystemMetrics(SM_CXFIXEDFRAME);
+	template<typename SeedType>
+	typename SeedType::WidgetType::ObjectType addChild(const SeedType& seed) {
+		// Only allow a single child
+		auto child = getChild();
+		if(child) {
+			child->close();
 		}
-		return ret;
+		return WidgetCreator<typename SeedType::WidgetType>::create(static_cast<WidgetType*>(this), seed);
+	}
+
+	Control* getChild() {
+		return hwnd_cast<Control*>(::GetWindow(static_cast<WidgetType*>(this)->handle(), GW_CHILD));
 	}
 };
 
-/**
- * Dummy dialog procedure - we superclass the dialog window class and handle the message
- * loop outside of the dialog box procedure.
- *
- * This is similar to http://blogs.msdn.com/oldnewthing/archive/2003/11/13/55662.aspx
- */
-template<typename WidgetType>
-INT_PTR CALLBACK AspectDialog<WidgetType>::dialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	return FALSE;
-}
-}
+} }
 
-#endif /*ASPECTDIALOG_H_*/
+#endif /* DWT_ASPECTCHILD_H_ */

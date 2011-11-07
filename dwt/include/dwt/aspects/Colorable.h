@@ -33,52 +33,53 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectEnabled_h
-#define DWT_AspectEnabled_h
+#ifndef DWT_aspects_Colorable_h
+#define DWT_aspects_Colorable_h
 
 #include "../Message.h"
-#include "../Dispatchers.h"
+#include "../resources/Brush.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
-/// Aspect class used by Widgets that have the possibility of changing the enabled
-/// property
-/** \ingroup AspectClasses
-  * The Table has an enabled Aspect to it; therefore it realizes this
-  * AspectEnabled through inheritance. <br>
-  * When a Widget is enabled it is possible to interact with it in some way, e.g. a
-  * button can be pushed, a ComboBox can change value etc. When the Widget is not
-  * enabled it cannot change its "value" or be interacted with but is normally still
-  * visible.
-  */
-template< class WidgetType >
-class AspectEnabled
-{
+/// Aspect class used by Widgets that have the possibility of changing colors
+template<class WidgetType>
+class Colorable {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-
-	static bool isEnabled(const MSG& msg) { return msg.wParam > 0; }
-
-	typedef Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled, 0, false> EnabledDispatcher;
-	friend class Dispatchers::ConvertBase<bool, &AspectEnabled<WidgetType>::isEnabled, 0, false>;
-
 public:
-
-	/// \ingroup EventHandlersAspectEnabled
-	/// Setting the event handler for the "enabled" event
-	/** This event handler will be raised when the enabled property of the Widget is
-	  * being changed. <br>
-	  * The bool value passed to your Event Handler defines if the widget has just
-	  * been enabled or if it has been disabled! <br>
-	  * No parameters are passed.
-	  */
-	void onEnabled(const typename EnabledDispatcher::F& f) {
-		W().addCallback(Message( WM_ENABLE ), EnabledDispatcher(f));
+	void setColor(COLORREF text, COLORREF background) {
+		W().setColorImpl(text, background);
 	}
-
-protected:
-	virtual ~AspectEnabled() { }
 };
 
-}
+/// Helper class for controls that are colorable via WM_CTLCOLOR
+template< class WidgetType >
+class ColorableCtlImpl {
+	friend class Colorable<WidgetType>;
+
+	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+
+	struct ColorDispatcher {
+		ColorDispatcher(COLORREF text_, COLORREF bg_) : brush(new Brush(bg_)), text(text_), bg(bg_) { }
+
+		bool operator()(const MSG& msg, LRESULT& ret) const {
+			HDC dc = (HDC) msg.wParam;
+			::SetTextColor(dc, text);
+			::SetBkColor(dc, bg);
+			ret = brush ? reinterpret_cast< LRESULT >( brush->handle() ) : 0;
+			return true;
+		}
+
+		BrushPtr brush;
+		COLORREF text;
+		COLORREF bg;
+	};
+
+	/// Set the background, text and text colors
+	void setColorImpl(COLORREF text, COLORREF background) {
+		W().setCallback(Message(WM_CTLCOLOR), ColorDispatcher(text, background));
+	}
+};
+
+} }
 
 #endif

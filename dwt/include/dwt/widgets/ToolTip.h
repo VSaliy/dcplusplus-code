@@ -34,10 +34,10 @@
 
 #include "../Widget.h"
 #include "../aspects/CustomDraw.h"
-#include "../aspects/AspectEnabled.h"
-#include "../aspects/AspectFont.h"
-#include "../aspects/AspectRaw.h"
-#include "../aspects/AspectVisible.h"
+#include "../aspects/Enabled.h"
+#include "../aspects/Fonts.h"
+#include "../aspects/Raw.h"
+#include "../aspects/Visible.h"
 #include "../util/check.h"
 
 namespace dwt {
@@ -45,10 +45,10 @@ namespace dwt {
 class ToolTip :
 	public Widget,
 	public aspects::CustomDraw<ToolTip, NMTTCUSTOMDRAW>,
-	public AspectEnabled< ToolTip >,
-	public AspectFont< ToolTip >,
-	public AspectRaw< ToolTip >,
-	public AspectVisible< ToolTip >
+	public aspects::Enabled<ToolTip>,
+	public aspects::Fonts<ToolTip>,
+	public aspects::Raw<ToolTip>,
+	public aspects::Visible<ToolTip>
 {
 	typedef Widget BaseType;
 	friend class WidgetCreator< ToolTip >;

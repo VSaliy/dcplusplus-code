@@ -33,27 +33,18 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectFont_h
-#define DWT_AspectFont_h
+#ifndef DWT_aspects_Fonts_h
+#define DWT_aspects_Fonts_h
 
 #include "../resources/Font.h"
 #include "../CanvasClasses.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
 /// Aspect class used by Widgets that have the possibility of setting the
 /// "font" property of their objects.
-/** \ingroup AspectClasses
-  * E.g. the Table have a "font" Aspect therefore it realizes the AspectFont
-  * through inheritance. <br>
-  * Realizing the AspectFont means that a Widget can set the font used to render text
-  * in the Widget, for a ComboBox this means that it will render items in the
-  * dropdownlist and in the selected area with the given font while for a textbox
-  * this means that it will render all text with the given font. <br>
-  * Most Widgets which can render text in some way realize this Aspect.
-  */
 template< class WidgetType >
-class AspectFont
+class Fonts
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 public:
@@ -85,7 +76,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template< class WidgetType >
-Point AspectFont< WidgetType >::getTextSize( const tstring & text )
+Point Fonts< WidgetType >::getTextSize( const tstring & text )
 {
 	UpdateCanvas c(&W());
 	auto select(c.select(*W().getFont()));
@@ -98,14 +89,14 @@ Point AspectFont< WidgetType >::getTextSize( const tstring & text )
 
 
 template< class WidgetType >
-void AspectFont< WidgetType >::setFont( const FontPtr& font_, bool forceUpdate )
+void Fonts< WidgetType >::setFont( const FontPtr& font_, bool forceUpdate )
 {
 	font = font_ ? font_ : new Font(Font::DefaultGui);
 	W().sendMessage(WM_SETFONT, reinterpret_cast< WPARAM >( font->handle() ), static_cast< LPARAM >( forceUpdate ) );
 }
 
 template< class WidgetType >
-const FontPtr& AspectFont< WidgetType >::getFont()
+const FontPtr& Fonts< WidgetType >::getFont()
 {
 	if(!font) {
 		font = new Font(reinterpret_cast<HFONT>(W().sendMessage(WM_GETFONT)), false);
@@ -113,6 +104,6 @@ const FontPtr& AspectFont< WidgetType >::getFont()
 	return font;
 }
 
-}
+} }
 
 #endif

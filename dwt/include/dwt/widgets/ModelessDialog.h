@@ -36,7 +36,7 @@
 #ifndef DWT_ModelessDialog_h
 #define DWT_ModelessDialog_h
 
-#include "../aspects/AspectDialog.h"
+#include "../aspects/Dialog.h"
 #include "Frame.h"
 
 namespace dwt {
@@ -52,7 +52,7 @@ namespace dwt {
   */
 class ModelessDialog :
 	public Frame,
-	public AspectDialog<ModelessDialog>
+	public aspects::Dialog<ModelessDialog>
 {
 	typedef Frame BaseType;
 public:

@@ -33,21 +33,21 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectDragDrop_h
-#define DWT_AspectDragDrop_h
+#ifndef DWT_aspects_DragDrop_h
+#define DWT_aspects_DragDrop_h
 
 #include "../Message.h"
 #include "../Point.h"
 #include "../tstring.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
 /// Aspect class used by dialog Widgets that have the possibility of trapping "drop files events".
-/** \ingroup AspectClasses
-  * E.g. the ModalDialog can trap "drop files events" therefore they realize the AspectDragDrop through inheritance.
+/** \ingroup aspects::Classes
+  * E.g. the ModalDialog can trap "drop files events" therefore they realize the aspects::DragDrop through inheritance.
   */
 template< class WidgetType >
-class AspectDragDrop
+class DragDrop
 {
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
@@ -81,7 +81,7 @@ class AspectDragDrop
 	};
 
 public:
-	/// \ingroup EventHandlersAspectAspectDragDrop
+	/// \ingroup EventHandlersaspects::AspectDragDrop
 	/// Setting the event handler for the "drop files" event
 	/** If supplied event handler is called when a file is dropped over the widget.
 	  * The function would receive a vector with all file paths and the coordinats where the files were dropped <br>
@@ -102,17 +102,13 @@ public:
 	/** This setup the ability to receive an WM_DROPFILES msg if you drop a file on dialog
 	*/
 	void setDragAcceptFiles(bool accept = true);
-
-protected:
-	virtual ~AspectDragDrop()
-	{}
 };
 
 template<class WidgetType>
-void AspectDragDrop<WidgetType>::setDragAcceptFiles(bool accept) {
+void DragDrop<WidgetType>::setDragAcceptFiles(bool accept) {
 	::DragAcceptFiles(H(), accept);
 }
 
-}
+} }
 
 #endif

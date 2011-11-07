@@ -36,7 +36,7 @@
 #ifndef DWT_Spinner_h
 #define DWT_Spinner_h
 
-#include "../aspects/AspectScrollable.h"
+#include "../aspects/Scrollable.h"
 #include "Control.h"
 #include "../Dispatchers.h"
 
@@ -55,8 +55,8 @@ namespace dwt {
   */
 class Spinner :
 	public CommonControl,
-	// Aspects
-	public AspectScrollable< Spinner >
+	// aspects::s
+	public aspects::Scrollable< Spinner >
 {
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< Spinner >;

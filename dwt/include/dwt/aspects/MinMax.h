@@ -33,19 +33,19 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectMinMax_h
-#define DWT_AspectMinMax_h
+#ifndef DWT_aspects_MinMax_h
+#define DWT_aspects_MinMax_h
 
 #include "../WindowsHeaders.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
-/// \ingroup AspectClasses
+/// \ingroup aspects::Classes
 /// \ingroup WidgetLayout
 /// Aspect class used by Widgets that have the possibility of setting and getting a
 /// "size" property of their objects.
 /** E.g. the TextBox have a "size" Aspect therefore it realizes the
-  * AspectMinMax through inheritance. <br>
+  * aspects::MinMax through inheritance. <br>
   * Note! <br>
   * All coordinates have zenith top-left corner of either the desktop display or the
   * client area of the parent Widget. <br>
@@ -59,7 +59,7 @@ namespace dwt {
   * their down right coordinates in SIZES and not in POSITIONS!
   */
 template< class WidgetType >
-class AspectMinMax
+class MinMax
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
@@ -88,29 +88,26 @@ public:
 	  * from Frame.
 	  */
 	void restore();
-
-protected:
-	virtual ~AspectMinMax() { }
 };
 
 template< class WidgetType >
-void AspectMinMax< WidgetType >::maximize()
+void MinMax< WidgetType >::maximize()
 {
 	::ShowWindow(H(), SW_SHOWMAXIMIZED );
 }
 
 template< class WidgetType >
-void AspectMinMax< WidgetType >::minimize()
+void MinMax< WidgetType >::minimize()
 {
 	::ShowWindow(H(), SW_MINIMIZE );
 }
 
 template< class WidgetType >
-void AspectMinMax< WidgetType >::restore()
+void MinMax< WidgetType >::restore()
 {
 	::ShowWindow(H(), SW_RESTORE );
 }
 
-}
+} }
 
 #endif

@@ -36,12 +36,12 @@
 #ifndef DWT_ComboBox_h
 #define DWT_ComboBox_h
 
-#include "../aspects/AspectColor.h"
-#include "../aspects/AspectClickable.h"
-#include "../aspects/AspectCollection.h"
-#include "../aspects/AspectData.h"
-#include "../aspects/AspectSelection.h"
-#include "../aspects/AspectText.h"
+#include "../aspects/Caption.h"
+#include "../aspects/Colorable.h"
+#include "../aspects/Clickable.h"
+#include "../aspects/Collection.h"
+#include "../aspects/Data.h"
+#include "../aspects/Selection.h"
 #include "../util/check.h"
 #include "Control.h"
 
@@ -57,22 +57,21 @@ namespace dwt {
   */
 class ComboBox :
 	public CommonControl,
-	// Aspects
-	private AspectClickable< ComboBox >,
-	public AspectCollection<ComboBox, int>,
-	public AspectColor< ComboBox >,
-	public AspectColorCtlImpl<ComboBox>,
-	public AspectData<ComboBox, int>,
-	public AspectSelection< ComboBox, int >,
-	public AspectText< ComboBox >
+	public aspects::Caption<ComboBox>,
+	private aspects::Clickable<ComboBox>,
+	public aspects::Collection<ComboBox, int>,
+	public aspects::Colorable<ComboBox>,
+	public aspects::ColorableCtlImpl<ComboBox>,
+	public aspects::Data<ComboBox, int>,
+	public aspects::Selection<ComboBox, int>
 {
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< ComboBox >;
-	friend class AspectCollection<ComboBox, int>;
-	friend class AspectColor<ComboBox>;
-	friend class AspectSelection<ComboBox, int>;
-	friend class AspectClickable<ComboBox>;
-	friend class AspectData<ComboBox, int>;
+	friend class aspects::Collection<ComboBox, int>;
+	friend class aspects::Colorable<ComboBox>;
+	friend class aspects::Selection<ComboBox, int>;
+	friend class aspects::Clickable<ComboBox>;
+	friend class aspects::Data<ComboBox, int>;
 
 public:
 	/// Class type
@@ -128,8 +127,8 @@ public:
 
 	void setDropDownHeight(size_t h);
 
-	using AspectClickable<ThisType>::onClicked;
-	using AspectClickable<ThisType>::onDblClicked;
+	using aspects::Clickable<ThisType>::onClicked;
+	using aspects::Clickable<ThisType>::onDblClicked;
 
 protected:
 	ComboBox(Widget* parent);
@@ -145,23 +144,23 @@ private:
 
 	size_t dropDownHeight;
 
-	// AspectSelection
+	// aspects::Selection
 	int getSelectedImpl() const;
 	void setSelectedImpl( int idx );
 
-	// AspectCollection
+	// aspects::Collection
 	void eraseImpl( int row );
 	void clearImpl();
 	size_t sizeImpl() const;
 
-	// AspectData
+	// aspects::Data
 	LPARAM getDataImpl(int i);
 	void setDataImpl(int i, LPARAM data);
 
-	// AspectSelection
+	// aspects::Selection
 	static Message getSelectionChangedMessage();
 
-	// AspectClickable
+	// aspects::Clickable
 	static Message getClickMessage();
 	static Message getDblClickMessage();
 };

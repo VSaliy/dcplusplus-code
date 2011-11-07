@@ -36,9 +36,9 @@
 #ifndef DWT_Label_h
 #define DWT_Label_h
 
-#include "../aspects/AspectColor.h"
-#include "../aspects/AspectClickable.h"
-#include "../aspects/AspectText.h"
+#include "../aspects/Caption.h"
+#include "../aspects/Colorable.h"
+#include "../aspects/Clickable.h"
 #include "Control.h"
 
 namespace dwt {
@@ -57,15 +57,14 @@ namespace dwt {
   */
 class Label :
 	public CommonControl,
-	// Aspects
-	private AspectClickable< Label >,
-	public AspectColor< Label >,
-	public AspectColorCtlImpl<Label>,
-	public AspectText< Label >
+	public aspects::Caption<Label>,
+	private aspects::Clickable<Label>,
+	public aspects::Colorable<Label>,
+	public aspects::ColorableCtlImpl<Label>
 {
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< Label >;
-	friend class AspectClickable<Label>;
+	friend class aspects::Clickable<Label>;
 
 public:
 	/// Class type
@@ -102,8 +101,8 @@ public:
 
 	virtual Point getPreferredSize();
 
-	using AspectClickable<ThisType>::onClicked;
-	using AspectClickable<ThisType>::onDblClicked;
+	using aspects::Clickable<ThisType>::onClicked;
+	using aspects::Clickable<ThisType>::onDblClicked;
 
 protected:
 	// Constructor Taking pointer to parent
@@ -118,7 +117,7 @@ private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
-	// AspectClickable
+	// aspects::Clickable
 	static Message getClickMessage();
 	static Message getDblClickMessage();
 };

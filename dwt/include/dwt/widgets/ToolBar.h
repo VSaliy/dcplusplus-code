@@ -255,7 +255,7 @@ private:
 	const Button* getButton(unsigned position) const;
 	int getIntId(const std::string& id) const;
 
-	// AspectHelp
+	// aspects::Help
 	void helpImpl(unsigned& id);
 };
 

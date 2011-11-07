@@ -50,7 +50,7 @@ bool RichTextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
 
 	case WM_KEYDOWN:
 		{
-			// imitate AspectKeyboard
+			// imitate aspects::Keyboard
 			return handleKeyDown(static_cast<int>(msg.wParam));
 		}
 	}

@@ -29,34 +29,37 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ASPECTCOLLECTION_H_
-#define DWT_ASPECTCOLLECTION_H_
+#ifndef DWT_ASPECTDATA_H_
+#define DWT_ASPECTDATA_H_
 
-/** A control that holds a collection of items, such as a list or tree */
+namespace dwt { namespace aspects {
+
+/** A Widget that associates some sort of data with each item */
 template<typename WidgetType, typename IndexType>
-class AspectCollection {
+class Data {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 public:
-	/** Erase a particular item */
-	void erase(IndexType i) {
-		W().eraseImpl(i);
+	IndexType findData(LPARAM data) {
+		return W().findDataImpl(data);
 	}
 
-	/** Erase all items from collection */
-	void clear() {
-		W().clearImpl();
+	IndexType findData(LPARAM data, IndexType start) {
+		return W().findDataImpl(data, start);
 	}
 
-	/** Return number of items in collection */
-	size_t size() const {
-		return W().sizeImpl();
+	LPARAM getData(IndexType i) {
+		return W().getDataImpl(i);
 	}
 
-	bool empty() const {
-		return size() == 0;
+	void setData(IndexType i, LPARAM data) {
+		return W().setDataImpl(i, data);
 	}
 
+	LPARAM operator[](IndexType i) {
+		return getData(i);
+	}
 };
 
-#endif /*ASPECTCOLLECTION_H_*/
+} }
+
+#endif /*ASPECTDATA_H_*/

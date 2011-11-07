@@ -33,72 +33,36 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_AspectPainting_h
-#define DWT_AspectPainting_h
+#ifndef DWT_aspects_Update_h
+#define DWT_aspects_Update_h
 
-#include "../CanvasClasses.h"
 #include "../Dispatchers.h"
 
-namespace dwt {
+namespace dwt { namespace aspects {
 
-
-/// Aspect class used by Widgets that can be custom painted.
-/** \ingroup AspectClasses
-  * When a Painting Event is raised the Widget needs to be repainted.
+/// Aspect class used by Widgets that have the possibility of Updating their text property
+/** \ingroup aspects::Classes
+  * E.g. the TextBox have an Update Aspect to it therefore TextBox
+  * realize the aspects::Update through inheritance. When a Widget realizes the Update
+  * Aspect it normally means that when the "value" part of the Widget changes, like
+  * for instance when a TextBox changes the text value the update event fill be
+  * raised.
   */
 template< class WidgetType >
-class AspectPainting
+class Update
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-
-	struct PaintDispatcher : Dispatchers::Base<void (PaintCanvas&)> {
-		typedef Dispatchers::Base<void (PaintCanvas&)> BaseType;
-		PaintDispatcher(const typename BaseType::F& f, Widget* widget_) :
-		BaseType(f),
-		widget(widget_)
-		{ }
-
-		bool operator()(const MSG& msg, LRESULT&) const {
-			PaintCanvas canvas(widget);
-			f(canvas);
-			return true;
-		}
-
-	private:
-		Widget* widget;
-	};
-
-	struct PrintDispatcher : Dispatchers::Base<void (Canvas&)> {
-		typedef Dispatchers::Base<void (Canvas&)> BaseType;
-		PrintDispatcher(const F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
-			f(canvas);
-			return true;
-		}
-	};
-
+	typedef Dispatchers::VoidVoid<> UpdateDispatcher;
 public:
-	/// \ingroup EventHandlersAspectPainting
-	/// Painting event handler setter
-	/** If supplied, event handler is called with a PaintCanvas& which you can use to
-	  * paint stuff onto the window with. <br>
-	  * Parameters passed is PaintCanvas&
+	/// \ingroup EventHandlersaspects::Update
+	/// Sets the event handler for the Updated event.
+	/** When the Widget value/text is being updated this event will be raised.
 	  */
-	void onPainting(const typename PaintDispatcher::F& f) {
-		W().addCallback(Message(WM_PAINT), PaintDispatcher(f, &W()));
+	void onUpdated(const UpdateDispatcher::F& f) {
+		W().addCallback(WidgetType::getUpdateMessage(), UpdateDispatcher(f));
 	}
-
-	void onPrinting(const typename PrintDispatcher::F& f) {
-		W().addCallback(Message(WM_PRINTCLIENT), PrintDispatcher(f));
-	}
-
-protected:
-	virtual ~AspectPainting()
-	{}
 };
 
-}
+} }
 
 #endif

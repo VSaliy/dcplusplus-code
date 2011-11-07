@@ -208,7 +208,7 @@ private:
 	void handleRightClicked();
 	void handleDblClicked();
 
-	// AspectHelp
+	// aspects::Help
 	void helpImpl(unsigned& id);
 };
 
