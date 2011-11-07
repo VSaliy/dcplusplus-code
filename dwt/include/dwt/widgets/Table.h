@@ -36,7 +36,6 @@
 #ifndef DWT_TABLE_H
 #define DWT_TABLE_H
 
-#include "../Point.h"
 #include "../Rectangle.h"
 #include "../resources/ImageList.h"
 #include "../aspects/AspectClickable.h"
@@ -47,7 +46,6 @@
 #include "../aspects/AspectScrollable.h"
 #include "../aspects/AspectSelection.h"
 #include "Control.h"
-#include "WidgetListViewEditBox.h"
 #include <dwt/Theme.h>
 
 #include <utility>
@@ -520,13 +518,9 @@ private:
 	bool ascending;
 	SortFunction fun;
 
-	static BitmapPtr upArrow;
-	static BitmapPtr downArrow;
-
 	static int CALLBACK compareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 	static int CALLBACK compareFuncCallback( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 
-	void createArrows();
 	void updateArrow();
 #ifdef PORT_ME
 	// Private validate function, this ones returns the "read only" property of the list

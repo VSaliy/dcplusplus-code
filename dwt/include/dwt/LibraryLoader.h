@@ -114,11 +114,6 @@ public:
 	  */
 	~LibraryLoader();
 
-	#define PACK_COMCTL_VERSION(major,minor) MAKELONG(minor,major)
-	static DWORD getCommonControlsVersion();
-	/// @return whether we're running under Common Controls version >= 6.00
-	static bool onComCtl6();
-
 private:
 	HMODULE itsHMod;
 };

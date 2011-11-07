@@ -81,27 +81,4 @@ FARPROC LibraryLoader::getProcAddress( long procedureOrdinal ) {
 	return ::GetProcAddress( itsHMod, (LPCSTR)0 + procedureOrdinal );
 }
 
-DWORD LibraryLoader::getCommonControlsVersion() {
-	static DWORD version = 0;
-	if(version == 0) {
-		try {
-			LibraryLoader lib(_T("comctl32.dll"));
-			DLLGETVERSIONPROC pDllGetVersion = (DLLGETVERSIONPROC)lib.getProcAddress(_T("DllGetVersion"));
-			if(pDllGetVersion) {
-				DLLVERSIONINFO dvi = { sizeof(dvi) };
-				if(SUCCEEDED((*pDllGetVersion)(&dvi))) {
-					version = PACK_COMCTL_VERSION(dvi.dwMajorVersion, dvi.dwMinorVersion);
-				}
-			}
-		} catch(...) {
-			// Ignore loading exceptions...
-		}
-	}
-	return version;
-}
-
-bool LibraryLoader::onComCtl6() {
-	return getCommonControlsVersion() >= PACK_COMCTL_VERSION(6, 00);
-}
-
 }
