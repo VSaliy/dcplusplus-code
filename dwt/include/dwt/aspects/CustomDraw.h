@@ -44,7 +44,7 @@ class CustomDraw {
 
 	struct Dispatcher : Dispatchers::Base<LRESULT (DataType&)> {
 		typedef Dispatchers::Base<LRESULT (DataType&)> BaseType;
-		Dispatcher(const F& f) : BaseType(f) { }
+		Dispatcher(const typename BaseType::F& f) : BaseType(f) { }
 
 		bool operator()(const MSG& msg, LRESULT& ret) const {
 			ret = f(*reinterpret_cast<DataType*>(msg.lParam));
