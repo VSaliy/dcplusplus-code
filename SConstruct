@@ -61,7 +61,7 @@ msvc_defs = {
 }
 
 gcc_defs = {
-	'common' : ['_REENTRANT'],
+	'common' : ['_REENTRANT', 'NO_VIZ'],
 	'debug' : ['_DEBUG'],
 	'release' : ['NDEBUG']
 }
