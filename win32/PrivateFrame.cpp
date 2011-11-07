@@ -319,7 +319,9 @@ void PrivateFrame::enterImpl(const tstring& s) {
 }
 
 void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
-	auto url = hubs[hubBox->getSelected()].first;
+	auto sel = hubBox->getSelected();
+
+	auto &url = sel >= 0 && static_cast<size_t>(sel) < hubs.size() ? hubs[static_cast<size_t>(sel)].first : replyTo.getUser().hint;
 	ClientManager::getInstance()->privateMessage(HintedUser(replyTo.getUser().user, url), Text::fromT(msg), thirdPerson);
 }
 
