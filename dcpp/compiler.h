@@ -66,30 +66,12 @@
 
 #ifdef _WIN32
 
-#ifndef _WIN32_WINNT
-# define _WIN32_WINNT 0x0502
-#elif _WIN32_WINNT < 0x0502
-#error Version too low
+#if _WIN32_WINNT < 0x502 || WINVER < 0x502
+#error _WIN32_WINNT / WINVER must require Windows XP SP2 (0x502)
 #endif
 
-#ifndef _WIN32_IE
-# define _WIN32_IE	0x0501
-#endif
-
-#ifndef WINVER
-# define WINVER 0x501
-#endif
-
-#ifndef STRICT
-#define STRICT 1
-#endif
-
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-
-#ifndef NOMINMAX
-#define NOMINMAX 1
+#if _WIN32_IE < 0x600
+#error _WIN32_IE must require Common Controls 6 (0x600)
 #endif
 
 #endif

@@ -32,7 +32,6 @@
 #include <dwt/widgets/Table.h>
 
 #include <dwt/CanvasClasses.h>
-#include <dwt/LibraryLoader.h>
 #include <dwt/util/check.h>
 #include <dwt/util/StringUtils.h>
 #include <dwt/util/win32/Version.h>
@@ -45,9 +44,6 @@
 namespace dwt {
 
 const TCHAR Table::windowClass[] = WC_LISTVIEW;
-
-BitmapPtr Table::upArrow = 0;
-BitmapPtr Table::downArrow = 0;
 
 Table::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | LVS_REPORT),
@@ -62,13 +58,6 @@ void Table::create( const Seed & cs )
 	setFont(cs.font);
 	if(cs.lvStyle != 0)
 		setTableStyle(cs.lvStyle);
-
-	// Setting default event handler for beenValidate to a function returning "read
-	// only" property of control Note! If you supply a beenValidate event handler
-	// this will have no effect
-#ifdef PORT_ME
-	onValidate( Table::defaultValidate );
-#endif
 }
 
 Table::Table(dwt::Widget* parent) :
@@ -84,7 +73,6 @@ sortColumn(-1),
 sortType(SORT_CALLBACK),
 ascending(true)
 {
-	createArrows();
 }
 
 bool Table::HeaderDispatcher::operator()(const MSG& msg, LRESULT& ret) const {
@@ -115,28 +103,7 @@ void Table::setSort(int aColumn, SortType aType, bool aAscending) {
 }
 
 void Table::updateArrow() {
-	if(LibraryLoader::onComCtl6()) {
-		int flag = isAscending() ? HDF_SORTUP : HDF_SORTDOWN;
-		HWND header = ListView_GetHeader(handle());
-		int count = Header_GetItemCount(header);
-		for (int i=0; i < count; ++i)
-		{
-			HDITEM item;
-			item.mask = HDI_FORMAT;
-			Header_GetItem(header, i, &item);
-			item.fmt &= ~(HDF_SORTUP | HDF_SORTDOWN);
-			if (i == this->getSortColumn())
-				item.fmt |= flag;
-			Header_SetItem(header, i, &item);
-		}
-		return;
-	}
-
-	if(!upArrow || !downArrow)
-		return;
-
-	HBITMAP bitmap = (isAscending() ? upArrow : downArrow)->handle();
-
+	int flag = isAscending() ? HDF_SORTUP : HDF_SORTDOWN;
 	HWND header = ListView_GetHeader(handle());
 	int count = Header_GetItemCount(header);
 	for (int i=0; i < count; ++i)
@@ -144,14 +111,9 @@ void Table::updateArrow() {
 		HDITEM item;
 		item.mask = HDI_FORMAT;
 		Header_GetItem(header, i, &item);
-		item.mask = HDI_FORMAT | HDI_BITMAP;
-		if (i == this->getSortColumn()) {
-			item.fmt |= HDF_BITMAP | HDF_BITMAP_ON_RIGHT;
-			item.hbm = bitmap;
-		} else {
-			item.fmt &= ~(HDF_BITMAP | HDF_BITMAP_ON_RIGHT);
-			item.hbm = 0;
-		}
+		item.fmt &= ~(HDF_SORTUP | HDF_SORTDOWN);
+		if (i == this->getSortColumn())
+			item.fmt |= flag;
 		Header_SetItem(header, i, &item);
 	}
 }
@@ -338,7 +300,7 @@ std::vector<int> Table::getColumnWidths() {
 }
 
 void Table::setGroups(const std::vector<tstring>& groups) {
-	grouped = LibraryLoader::onComCtl6() && (ListView_EnableGroupView(handle(), TRUE) >= 0);
+	grouped = ListView_EnableGroupView(handle(), TRUE) >= 0;
 	if(!grouped)
 		return;
 
@@ -566,49 +528,6 @@ int Table::xoffFromColumn( int column, int & logicalColumn )
 	}
 
 	return xOffset;
-}
-
-void Table::createArrows() {
-	if(LibraryLoader::onComCtl6() || upArrow || downArrow)
-		return;
-
-	const Point size(11, 6);
-	const Rectangle rect(size);
-
-	std::vector<Point> triangle;
-	triangle.push_back(Point(5, 0));
-	triangle.push_back(Point(0, 6));
-	triangle.push_back(Point(10, 6));
-
-	UpdateCanvas dc(this);
-	CompatibleCanvas dc_compat(dc.handle());
-
-	upArrow = BitmapPtr(new Bitmap(::CreateCompatibleBitmap(dc.handle(), size.x, size.y)));
-	downArrow = BitmapPtr(new Bitmap(::CreateCompatibleBitmap(dc.handle(), size.x, size.y)));
-
-	Brush brush_bg(Brush::BtnFace);
-	Brush brush_arrow(Brush::BtnShadow);
-
-	Region region(triangle);
-
-	{
-		// create up arrow
-		auto select(dc_compat.select(*upArrow));
-
-		dc_compat.fill(rect, brush_bg);
-
-		dc_compat.fill(region, brush_arrow);
-	}
-
-	{
-		// create down arrow
-		auto select(dc_compat.select(*downArrow));
-
-		dc_compat.fill(rect, brush_bg);
-
-		XFORM xform = { 1, 0, 0, -1, 0, static_cast<FLOAT>(size.y) }; // horizontal reflection then downwards translation
-		dc_compat.fill(*region.transform(&xform), brush_arrow);
-	}
 }
 
 std::pair<int, int> Table::hitTest(const ScreenCoordinate& pt) {

@@ -139,8 +139,17 @@ env.SConsignFile()
 
 env.Append(CPPPATH = ['#/', '#/boost/', '#/intl/'])
 
-# boost defines
 if dev.is_win32():
+	# Windows header defines <http://msdn.microsoft.com/en-us/library/aa383745(VS.85).aspx>
+	env.Append(CPPDEFINES = [
+		'_WIN32_WINNT=0x502', # Windows XP SP2
+		'WINVER=0x502', # Windows XP SP2
+		'_WIN32_IE=0x600', # Common Controls 6
+
+		# other defs that influence Windows headers
+		'NOMINMAX', 'STRICT', 'WIN32_LEAN_AND_MEAN'])
+
+	# boost defines
 	env.Append(CPPDEFINES = ['BOOST_ALL_NO_LIB', 'BOOST_USE_WINDOWS_H'])
 
 if 'gcc' in env['TOOLS']:
