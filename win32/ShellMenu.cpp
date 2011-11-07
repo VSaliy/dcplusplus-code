@@ -120,17 +120,17 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 	}
 
 	callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->addCallback(dwt::Message(WM_DRAWITEM),
-		Dispatcher([this](const MSG &msg, LRESULT &l) { return handleDrawItem(msg, l); }))));
+		[this](const MSG& msg, LRESULT& ret) { return handleDrawItem(msg, ret); })));
 	callbacks.push_back(make_pair(dwt::Message(WM_MEASUREITEM), getParent()->addCallback(dwt::Message(WM_MEASUREITEM),
-		Dispatcher([this](const MSG &msg, LRESULT &l) { return handleMeasureItem(msg, l); }))));
+		[this](const MSG& msg, LRESULT& ret) { return handleMeasureItem(msg, ret); })));
 	callbacks.push_back(make_pair(dwt::Message(WM_MENUCHAR), getParent()->addCallback(dwt::Message(WM_MENUCHAR),
-		Dispatcher([this](const MSG &msg, LRESULT &l) { return dispatch(msg, l); }))));
+		[this](const MSG& msg, LRESULT& ret) { return dispatch(msg, ret); })));
 	callbacks.push_back(make_pair(dwt::Message(WM_INITMENUPOPUP), getParent()->addCallback(dwt::Message(WM_INITMENUPOPUP),
-		Dispatcher([this](const MSG &msg, LRESULT &l) { return handleInitMenuPopup(msg, l); }))));
+		[this](const MSG& msg, LRESULT& ret) { return handleInitMenuPopup(msg, ret); })));
 	callbacks.push_back(make_pair(dwt::Message(WM_UNINITMENUPOPUP), getParent()->addCallback(dwt::Message(WM_UNINITMENUPOPUP),
-		Dispatcher([this](const MSG &msg, LRESULT &l) { return handleUnInitMenuPopup(msg, l); }))));
+		[this](const MSG& msg, LRESULT& ret) { return handleUnInitMenuPopup(msg, ret); })));
 	callbacks.push_back(make_pair(dwt::Message(WM_MENUSELECT), getParent()->addCallback(dwt::Message(WM_MENUSELECT),
-		Dispatcher([this](const MSG &msg, LRESULT &) { return handleMenuSelect(msg); }))));
+		[this](const MSG& msg, LRESULT&) { return handleMenuSelect(msg); })));
 }
 
 ShellMenu::~ShellMenu() {

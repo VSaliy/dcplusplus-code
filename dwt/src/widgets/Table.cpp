@@ -75,21 +75,6 @@ ascending(true)
 {
 }
 
-bool Table::HeaderDispatcher::operator()(const MSG& msg, LRESULT& ret) const {
-	f(reinterpret_cast<LPNMLISTVIEW>(msg.lParam)->iSubItem);
-	return true;
-}
-
-bool Table::TooltipDispatcher::operator()(const MSG& msg, LRESULT& ret) const {
-	NMLVGETINFOTIP& tip = *reinterpret_cast<LPNMLVGETINFOTIP>(msg.lParam);
-	if(tip.cchTextMax <= 2)
-		return true;
-	tstring text(f(tip.iItem));
-	util::cutStr(text, tip.cchTextMax - 1);
-	_tcscpy(tip.pszText, text.c_str());
-	return true;
-}
-
 void Table::setSort(int aColumn, SortType aType, bool aAscending) {
 	bool doUpdateArrow = (aColumn != sortColumn || aAscending != ascending);
 
@@ -222,6 +207,13 @@ int Table::insert(int mask, int i, LPCTSTR text, UINT state, UINT stateMask, int
 	item.iImage = image;
 	item.lParam = lparam;
 	return ListView_InsertItem(handle(), &item);
+}
+
+void Table::onColumnClick(HeaderF f) {
+	addCallback(Message(WM_NOTIFY, LVN_COLUMNCLICK), [f](const MSG& msg, LRESULT&) -> bool {
+		f(reinterpret_cast<LPNMLISTVIEW>(msg.lParam)->iSubItem);
+		return true;
+	});
 }
 
 ScreenCoordinate Table::getContextMenuPos() {
@@ -535,14 +527,22 @@ std::pair<int, int> Table::hitTest(const ScreenCoordinate& pt) {
 	return ListView_SubItemHitTest(handle(), &lvi) == -1 ? std::make_pair(-1, -1) : std::make_pair(lvi.iItem, lvi.iSubItem);
 }
 
-void Table::setTooltips(const TooltipDispatcher::F& f) {
+void Table::setTooltips(TooltipF f) {
 	addRemoveTableExtendedStyle(LVS_EX_INFOTIP, true);
 	HWND tip = ListView_GetToolTips(handle());
 	if(tip) {
 		// make tooltips last longer
 		::SendMessage(tip, TTM_SETDELAYTIME, TTDT_AUTOPOP, MAKELPARAM(::SendMessage(tip, TTM_GETDELAYTIME, TTDT_AUTOPOP, 0) * 3, 0));
 	}
-	addCallback(Message(WM_NOTIFY, LVN_GETINFOTIP), TooltipDispatcher(f));
+	addCallback(Message(WM_NOTIFY, LVN_GETINFOTIP), [f](const MSG& msg, LRESULT&) -> bool {
+		auto& tip = *reinterpret_cast<LPNMLVGETINFOTIP>(msg.lParam);
+		if(tip.cchTextMax <= 2)
+			return true;
+		tstring text(f(tip.iItem));
+		util::cutStr(text, tip.cchTextMax - 1);
+		_tcscpy(tip.pszText, text.c_str());
+		return true;
+	});
 }
 
 }

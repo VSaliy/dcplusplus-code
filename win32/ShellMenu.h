@@ -31,15 +31,6 @@ class ShellMenu : public dwt::Menu
 {
 	typedef Menu BaseType;
 
-	struct Dispatcher : dwt::Dispatchers::Base<bool (const MSG&, LRESULT& ret)> {
-		typedef dwt::Dispatchers::Base<bool (const MSG&, LRESULT& ret)> BaseType;
-		Dispatcher(const BaseType::F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			return f(msg, ret);
-		}
-	};
-
 public:
 	typedef ShellMenu ThisType;
 

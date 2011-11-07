@@ -53,26 +53,11 @@ namespace dwt {
   */
 class DateTime :
 	public CommonControl,
-	// aspects::s
-	private aspects::Clickable< DateTime >
+	private aspects::Clickable<DateTime>
 {
 	typedef CommonControl BaseType;
-	friend class WidgetCreator< DateTime >;
+	friend class WidgetCreator<DateTime>;
 	friend class aspects::Clickable<DateTime>;
-
-	struct Dispatcher
-	{
-		typedef std::function<void (const SYSTEMTIME &)> F;
-
-		Dispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			f(reinterpret_cast< NMDATETIMECHANGE * >( msg.lParam )->st);
-			return true;
-		}
-
-		F f;
-	};
 
 public:
 	/// Class type
@@ -111,8 +96,11 @@ public:
 	  * If you supply an event handler for this event your handler will be called
 	  * when the DateTime date value is changed.
 	  */
-	void onDateTimeChanged(const Dispatcher::F& f) {
-		addCallback(Message( WM_NOTIFY, DTN_DATETIMECHANGE ), Dispatcher(f));
+	void onDateTimeChanged(std::function<void (const SYSTEMTIME &)> f) {
+		addCallback(Message(WM_NOTIFY, DTN_DATETIMECHANGE), [f](const MSG& msg, LRESULT&) -> bool {
+			f(reinterpret_cast<NMDATETIMECHANGE*>(msg.lParam)->st);
+			return true;
+		});
 	}
 
 	/// Retrieves the time value of the DateTimePicker control

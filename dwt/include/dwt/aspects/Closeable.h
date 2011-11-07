@@ -40,18 +40,6 @@ template< class WidgetType >
 class Closeable {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct CloseableDispatcher {
-		typedef std::function<bool ()> F;
-
-		CloseableDispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			return !f();
-		}
-
-		F f;
-	};
-
 public:
 	/// Closes the window
 	/** Call this function to raise the "Closing" event. <br>
@@ -66,7 +54,12 @@ public:
 	  * function will return immediately and the close event will be handled when the
 	  * close event pops up in the event handler que.
 	  */
-	void close( bool asyncron = false );
+	void close(bool asyncron = false) {
+		if(asyncron)
+			W().postMessage(WM_CLOSE); // Return now
+		else
+			W().sendMessage(WM_CLOSE); // Return after close is done.
+	}
 
 	/// Event Handler setter for the Closing Event
 	/** If supplied event handler is called before the window is closed. <br>
@@ -74,21 +67,12 @@ public:
 	  * If you return true from your event handler the window is closed, otherwise
 	  * the window is NOT allowed to actually close!!
 	  */
-	void onClosing(const typename CloseableDispatcher::F& f);
+	void onClosing(std::function<bool ()> f) {
+		W().addCallback(Message(WM_CLOSE), [f](const MSG&, LRESULT&) -> bool {
+			return !f();
+		});
+	}
 };
-
-template< class WidgetType >
-void Closeable< WidgetType >::close( bool asyncron ) {
-	if ( asyncron )
-		W().postMessage(WM_CLOSE); // Return now
-	else
-		W().sendMessage(WM_CLOSE); // Return after close is done.
-}
-
-template<typename WidgetType>
-void Closeable<WidgetType>::onClosing(const typename CloseableDispatcher::F& f) {
-	W().addCallback(Message(WM_CLOSE), CloseableDispatcher(f));
-}
 
 } }
 

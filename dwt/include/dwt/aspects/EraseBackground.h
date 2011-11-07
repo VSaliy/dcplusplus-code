@@ -38,7 +38,6 @@
 
 #include "../Message.h"
 #include "../CanvasClasses.h"
-#include "../Dispatchers.h"
 
 namespace dwt { namespace aspects {
 
@@ -56,17 +55,6 @@ class EraseBackground
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct EraseBackgroundDispatcher : Dispatchers::Base<bool (Canvas&)> {
-		typedef Dispatchers::Base<bool (Canvas&)> BaseType;
-		EraseBackgroundDispatcher(const F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
-			ret = f(canvas);
-			return ret;
-		}
-	};
-
 public:
 	/// \ingroup EventHandlersaspects::EraseBackground
 	/// Setting the event handler for the "erase background" event
@@ -74,8 +62,12 @@ public:
 	  * background, the canvas passed can be used to draw upon etc to manipulate the
 	  * background property of the Widget.
 	  */
-	void onEraseBackground(const typename EraseBackgroundDispatcher::F& f) {
-		W().setCallback(Message(WM_ERASEBKGND), EraseBackgroundDispatcher(f));
+	void onEraseBackground(std::function<bool (Canvas&)> f) {
+		W().setCallback(Message(WM_ERASEBKGND), [f](const MSG& msg, LRESULT& ret) -> bool {
+			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
+			ret = f(canvas);
+			return ret;
+		});
 	}
 
 	void noEraseBackground() {

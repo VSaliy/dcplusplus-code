@@ -54,18 +54,7 @@ template< class WidgetType >
 class Raw
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-	struct RawDispatcher {
-		typedef std::function<LRESULT (WPARAM, LPARAM)> F;
 
-		RawDispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			ret = f(msg.wParam, msg.lParam);
-			return true;
-		}
-
-		F f;
-	};
 public:
 	/// \ingroup EventHandlersaspects::Raw
 	/// Setting the member event handler for a "raw" event
@@ -81,13 +70,12 @@ public:
 	  * If there are other events which will handle the message, USE THOSE instead of
 	  * this one!!! <br>
 	  * <b>This is a "last resort" event type.</b> <br>
-	  * Two parameters are passed: LPARAM and WPARAM <br>
-	  * Return value is HRESULT which will be passed on to the System
 	  */
-	/// WARNING, this function uses the natural wparam/lparam order, not the inverted that previous
-	/// smartwin versions did. The two functions above emulate the old behaviour though...
-	void onRaw(const typename RawDispatcher::F& f, const Message & msg) {
-		W().addCallback(msg, RawDispatcher(f));
+	void onRaw(std::function<LRESULT (WPARAM, LPARAM)> f, const Message & msg) {
+		W().addCallback(msg, [f](const MSG& msg, LRESULT& ret) -> bool {
+			ret = f(msg.wParam, msg.lParam);
+			return true;
+		});
 	}
 };
 

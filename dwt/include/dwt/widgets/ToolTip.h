@@ -51,25 +51,9 @@ class ToolTip :
 	public aspects::Visible<ToolTip>
 {
 	typedef Widget BaseType;
-	friend class WidgetCreator< ToolTip >;
+	friend class WidgetCreator<ToolTip>;
 
-	struct Dispatcher {
-		typedef std::function<void (tstring&)> F;
-
-		Dispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			LPNMTTDISPINFO ttdi = reinterpret_cast< LPNMTTDISPINFO >( msg.lParam );
-			ToolTip* tip = hwnd_cast<ToolTip*>(ttdi->hdr.hwndFrom);
-			if(tip) {
-				f(tip->text);
-				ttdi->lpszText = const_cast<LPTSTR>(tip->text.c_str());
-			}
-			return true;
-		}
-
-		F f;
-	};
+	typedef std::function<void (tstring&)> F;
 
 public:
 	/// Class type
@@ -89,14 +73,14 @@ public:
 
 	void setText(const tstring& text_);
 	void setText(Widget* widget, const tstring& text);
-	void setTool(Widget* widget, const Dispatcher::F& callback);
+	void setTool(Widget* widget, F callback);
 
 	void setMaxTipWidth(int width);
 
 	void setActive(bool b);
 	void refresh();
 
-	void onGetTip(const Dispatcher::F& f);
+	void onGetTip(F f);
 
 	/// Actually creates the Toolbar
 	/** You should call WidgetFactory::createToolbar if you instantiate class
@@ -131,10 +115,6 @@ inline ToolTip::ToolTip(Widget *parent)
 
 inline void ToolTip::setMaxTipWidth(int width) {
 	sendMessage(TTM_SETMAXTIPWIDTH, 0, static_cast<LPARAM>(width));
-}
-
-inline void ToolTip::onGetTip(const Dispatcher::F& f) {
-	setCallback(Message(WM_NOTIFY, TTN_GETDISPINFO), Dispatcher(f));
 }
 
 }

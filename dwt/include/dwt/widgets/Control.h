@@ -72,21 +72,6 @@ class Control:
 	public aspects::Timer<Control>,
 	public aspects::Visible<Control>
 {
-	struct CreateDispatcher
-	{
-		typedef std::function<void (const CREATESTRUCT&)> F;
-
-		CreateDispatcher(const F& f_) : f(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			const CREATESTRUCT* cs = reinterpret_cast<const CREATESTRUCT*>( msg.lParam );
-			f(*cs);
-			return false;
-		}
-
-		F f;
-	};
-
 	typedef Widget BaseType;
 
 public:
@@ -97,10 +82,12 @@ public:
 	  * If you supply an event handler for this event your handler will be called
 	  * when Widget is initially created. <br>
 	  */
-	void onCreate(const CreateDispatcher::F& f) {
-		addCallback(
-			Message( WM_CREATE ), CreateDispatcher(f)
-		);
+	void onCreate(std::function<void (const CREATESTRUCT&)> f) {
+		addCallback(Message(WM_CREATE), [f](const MSG& msg, LRESULT&) -> bool {
+			auto cs = reinterpret_cast<const CREATESTRUCT*>(msg.lParam);
+			f(*cs);
+			return false;
+		});
 	}
 
 	/**

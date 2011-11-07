@@ -37,7 +37,6 @@
 #define DWT_aspects_Painting_h
 
 #include "../CanvasClasses.h"
-#include "../Dispatchers.h"
 
 namespace dwt { namespace aspects {
 
@@ -50,34 +49,6 @@ class Painting
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 
-	struct PaintDispatcher : Dispatchers::Base<void (PaintCanvas&)> {
-		typedef Dispatchers::Base<void (PaintCanvas&)> BaseType;
-		PaintDispatcher(const typename BaseType::F& f, Widget* widget_) :
-		BaseType(f),
-		widget(widget_)
-		{ }
-
-		bool operator()(const MSG& msg, LRESULT&) const {
-			PaintCanvas canvas(widget);
-			f(canvas);
-			return true;
-		}
-
-	private:
-		Widget* widget;
-	};
-
-	struct PrintDispatcher : Dispatchers::Base<void (Canvas&)> {
-		typedef Dispatchers::Base<void (Canvas&)> BaseType;
-		PrintDispatcher(const F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
-			f(canvas);
-			return true;
-		}
-	};
-
 public:
 	/// \ingroup EventHandlersaspects::Painting
 	/// Painting event handler setter
@@ -85,12 +56,20 @@ public:
 	  * paint stuff onto the window with. <br>
 	  * Parameters passed is PaintCanvas&
 	  */
-	void onPainting(const typename PaintDispatcher::F& f) {
-		W().addCallback(Message(WM_PAINT), PaintDispatcher(f, &W()));
+	void onPainting(std::function<void (PaintCanvas&)> f) {
+		W().addCallback(Message(WM_PAINT), [f, this](const MSG&, LRESULT&) -> bool {
+			PaintCanvas canvas(&W());
+			f(canvas);
+			return true;
+		});
 	}
 
-	void onPrinting(const typename PrintDispatcher::F& f) {
-		W().addCallback(Message(WM_PRINTCLIENT), PrintDispatcher(f));
+	void onPrinting(std::function<void (Canvas&)> f) {
+		W().addCallback(Message(WM_PRINTCLIENT), [f](const MSG& msg, LRESULT&) -> bool {
+			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
+			f(canvas);
+			return true;
+		});
 	}
 };
 

@@ -81,8 +81,12 @@ int Spinner::setValue(int v) {
 	return sendMessage(UDM_SETPOS32, 0, v);
 }
 
-void Spinner::onUpdate(const Dispatcher::F& f) {
-	setCallback(Message(WM_NOTIFY, UDN_DELTAPOS), Dispatcher(f));
+void Spinner::onUpdate(UpdateF f) {
+	setCallback(Message(WM_NOTIFY, UDN_DELTAPOS), [f](const MSG& msg, LRESULT& ret) -> bool {
+		auto lpnmud = reinterpret_cast<LPNMUPDOWN>(msg.lParam);
+		ret = !f(lpnmud->iPos, lpnmud->iDelta);
+		return true;
+	});
 }
 
 void Spinner::handleSized() {

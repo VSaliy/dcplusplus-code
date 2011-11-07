@@ -38,7 +38,6 @@
 
 #include "../aspects/Scrollable.h"
 #include "Control.h"
-#include "../Dispatchers.h"
 
 namespace dwt {
 
@@ -55,22 +54,10 @@ namespace dwt {
   */
 class Spinner :
 	public CommonControl,
-	// aspects::s
-	public aspects::Scrollable< Spinner >
+	public aspects::Scrollable<Spinner>
 {
 	typedef CommonControl BaseType;
-	friend class WidgetCreator< Spinner >;
-
-	struct Dispatcher : Dispatchers::Base<bool (int, int)> {
-		typedef Dispatchers::Base<bool (int, int)> BaseType;
-		Dispatcher(const F& f_) : BaseType(f_) { }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			LPNMUPDOWN lpnmud = reinterpret_cast<LPNMUPDOWN>(msg.lParam);
-			ret = !f(lpnmud->iPos, lpnmud->iDelta);
-			return true;
-		}
-	};
+	friend class WidgetCreator<Spinner>;
 
 public:
 	/// Class type
@@ -127,7 +114,8 @@ public:
 	  */
 	int setValue( int v );
 
-	void onUpdate(const Dispatcher::F& f);
+	typedef std::function<bool (int, int)> UpdateF;
+	void onUpdate(UpdateF f);
 
 	/// Actually creates the Spinner Control
 	/** You should call WidgetFactory::createSpinner if you instantiate class

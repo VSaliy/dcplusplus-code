@@ -44,41 +44,6 @@ class Help {
 
 	HWND H() const { return W().handle(); }
 
-	struct HelpDispatcher : Dispatchers::Base<void (WidgetType*, unsigned)> {
-		typedef Dispatchers::Base<void (WidgetType*, unsigned)> BaseType;
-		HelpDispatcher(const typename BaseType::F& f, const WidgetType* const widget_) :
-		BaseType(f),
-		widget(widget_)
-		{ }
-
-		bool operator()(const MSG& msg, LRESULT& ret) const {
-			LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(msg.lParam);
-			if(lphi->iContextType != HELPINFO_WINDOW)
-				return false;
-
-			HWND hWnd = reinterpret_cast<HWND>(lphi->hItemHandle);
-			// make sure this handle is ours
-			if(hWnd != widget->handle() && !::IsChild(widget->handle(), hWnd))
-				return false;
-
-			WidgetType* w = hwnd_cast<WidgetType*>(hWnd);
-			if(!w)
-				return false;
-
-			unsigned id = lphi->dwContextId;
-			w->helpImpl(id);
-
-			f(w, id);
-
-			ret = TRUE;
-			return true;
-		}
-
-	private:
-		/// the widget that catches WM_HELP messages (not necessarily the one that sent them)
-		const WidgetType* const widget;
-	};
-
 	typedef std::function<void (unsigned&)> id_function_type;
 
 public:
@@ -104,12 +69,33 @@ public:
 	* from WM_HELP. in order to modify help ids dispatched via the function defined in onHelp, use
 	* helpImpl.
 	*/
-	void setHelpId(const id_function_type& f) {
+	void setHelpId(id_function_type f) {
 		id_function = f;
 	}
 
-	void onHelp(const typename HelpDispatcher::F& f) {
-		W().addCallback(Message(WM_HELP), HelpDispatcher(f, &W()));
+	void onHelp(std::function<void (WidgetType*, unsigned)> f) {
+		W().addCallback(Message(WM_HELP), [f, this](const MSG& msg, LRESULT& ret) -> bool {
+			LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(msg.lParam);
+			if(lphi->iContextType != HELPINFO_WINDOW)
+				return false;
+
+			HWND hWnd = reinterpret_cast<HWND>(lphi->hItemHandle);
+			// make sure this handle is ours
+			if(hWnd != H() && !::IsChild(H(), hWnd))
+				return false;
+
+			WidgetType* widget = hwnd_cast<WidgetType*>(hWnd);
+			if(!widget)
+				return false;
+
+			unsigned id = lphi->dwContextId;
+			widget->helpImpl(id);
+
+			f(widget, id);
+
+			ret = TRUE;
+			return true;
+		});
 	}
 
 private:
