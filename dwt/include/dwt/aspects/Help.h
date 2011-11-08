@@ -76,12 +76,12 @@ public:
 	void onHelp(std::function<void (WidgetType*, unsigned)> f) {
 		W().addCallback(Message(WM_HELP), [f, this](const MSG& msg, LRESULT& ret) -> bool {
 			LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(msg.lParam);
-			if(lphi->iContextType != HELPINFO_WINDOW)
+			if(!lphi || lphi->iContextType != HELPINFO_WINDOW)
 				return false;
 
 			HWND hWnd = reinterpret_cast<HWND>(lphi->hItemHandle);
 			// make sure this handle is ours
-			if(hWnd != H() && !::IsChild(H(), hWnd))
+			if(hWnd != this->H() && !::IsChild(this->H(), hWnd)) /// @todo why does GCC need a "this->"?
 				return false;
 
 			WidgetType* widget = hwnd_cast<WidgetType*>(hWnd);

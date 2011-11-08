@@ -58,7 +58,7 @@ public:
 	  */
 	void onPainting(std::function<void (PaintCanvas&)> f) {
 		W().addCallback(Message(WM_PAINT), [f, this](const MSG&, LRESULT&) -> bool {
-			PaintCanvas canvas(&W());
+			PaintCanvas canvas(&this->W()); /// @todo why does GCC need a "this->"?
 			f(canvas);
 			return true;
 		});

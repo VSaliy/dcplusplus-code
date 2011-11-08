@@ -1,9 +1,6 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
-#define WINVER 0x0501
-#define _WIN32_IE 0x0501
-#define _WIN32_WINNT 0x0501
 #include <winuser.h>
 #include <commctrl.h>
 /////////////////////////////////////////////////////////////////////////////
