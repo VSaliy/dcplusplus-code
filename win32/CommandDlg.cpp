@@ -175,7 +175,7 @@ bool CommandDlg::handleInitDialog() {
 		WinUtil::help(this, IDH_USER_COMMAND);
 	}
 
-	int newType;
+	int newType = -1;
 	if(type == UserCommand::TYPE_SEPARATOR) {
 		separator->setChecked(true);
 		newType = 0;

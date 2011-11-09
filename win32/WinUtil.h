@@ -74,12 +74,9 @@ struct ColumnInfo {
 class WinUtil {
 public:
 	// pre-defined icon indexes used by the "fileImages" image list - see also getFileIcon.
-	enum {
-		DIR_ICON,
-		DIR_ICON_INCOMPLETE,
-
-		FILE_ICON_GENERIC
-	};
+	static const int DIR_ICON = 0;
+	static const int DIR_ICON_INCOMPLETE = 1;
+	static const int FILE_ICON_GENERIC = 2;
 
 	// icon indexes to use with the "userImages" image list.
 	enum {
