@@ -40,7 +40,7 @@ namespace dwt { namespace util {
 
 #else
 
-#define dwtDebugFail(m)
+#define dwtDebugFail(m) do {} while(false)
 
 #endif
 
