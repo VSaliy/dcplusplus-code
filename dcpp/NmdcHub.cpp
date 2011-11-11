@@ -983,7 +983,7 @@ void NmdcHub::on(Minute, uint64_t aTick) noexcept {
 		protectedIPs.push_back("dcpp.net");
 		protectedIPs.push_back("dchublist.com");
 		protectedIPs.push_back("hublista.hu");
-		protectedIPs.push_back("adcportal.com");
+		protectedIPs.push_back("dcbase.org");
 		for(StringIter i = protectedIPs.begin(); i != protectedIPs.end();) {
 			*i = Socket::resolve(*i, AF_INET);
 			if(Util::isPrivateIp(*i))
