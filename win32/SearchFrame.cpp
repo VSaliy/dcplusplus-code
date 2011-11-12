@@ -235,7 +235,7 @@ droppedResults(0)
 		group = options->addChild(gs);
 		group->setHelpId(IDH_SEARCH_HUBS);
 
-		WidgetHubs::Seed ls;
+		WidgetHubs::Seed ls(WinUtil::Seeds::table);
 		ls.style |= LVS_NOCOLUMNHEADER;
 		ls.lvStyle |= LVS_EX_CHECKBOXES;
 		hubs = group->addChild(ls);
@@ -249,7 +249,7 @@ droppedResults(0)
 		hubs->setChecked(0, false);
 	}
 
-	results = paned->addChild(WidgetResults::Seed());
+	results = paned->addChild(WidgetResults::Seed(WinUtil::Seeds::table));
 	addWidget(results);
 
 	results->setSmallImageList(WinUtil::fileImages);

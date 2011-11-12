@@ -81,7 +81,7 @@ public:
 
 			HWND hWnd = reinterpret_cast<HWND>(lphi->hItemHandle);
 			// make sure this handle is ours
-			if(hWnd != this->H() && !::IsChild(this->H(), hWnd)) /// @todo why does GCC need a "this->"?
+			if(hWnd != this->H() && !::IsChild(this->H(), hWnd))
 				return false;
 
 			WidgetType* widget = hwnd_cast<WidgetType*>(hWnd);

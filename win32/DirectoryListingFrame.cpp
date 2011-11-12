@@ -269,7 +269,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	auto paned = grid->addChild(SplitterContainer::Seed(0.3));
 
 	{
-		dirs = paned->addChild(WidgetDirs::Seed());
+		dirs = paned->addChild(WidgetDirs::Seed(WinUtil::Seeds::treeView));
 		dirs->setHelpId(IDH_FILE_LIST_DIRS);
 		addWidget(dirs);
 
@@ -280,7 +280,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		dirs->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleDirsContextMenu(sc); });
 		dirs->onXMouseUp([this](const dwt::MouseEvent &me) { return handleXMouseUp(me); });
 
-		files = paned->addChild(WidgetFiles::Seed());
+		files = paned->addChild(WidgetFiles::Seed(WinUtil::Seeds::table));
 		files->setHelpId(IDH_FILE_LIST_FILES);
 		addWidget(files);
 

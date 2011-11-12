@@ -186,7 +186,7 @@ inTabComplete(false)
 		userGrid->row(0).mode = GridInfo::FILL;
 		userGrid->row(0).align = GridInfo::STRETCH;
 
-		users = userGrid->addChild(WidgetUsers::Seed());
+		users = userGrid->addChild(WidgetUsers::Seed(WinUtil::Seeds::table));
 		userGrid->setWidget(users, 0, 0, 1, 2);
 		addWidget(users);
 
