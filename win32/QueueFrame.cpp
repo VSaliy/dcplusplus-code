@@ -74,7 +74,7 @@ fileLists(0)
 	paned = addChild(SplitterContainer::Seed(SETTING(QUEUE_PANED_POS)));
 
 	{
-		dirs = paned->addChild(WidgetDirs::Seed());
+		dirs = paned->addChild(WidgetDirs::Seed(WinUtil::Seeds::treeView));
 		addWidget(dirs);
 
 		dirs->setNormalImageList(WinUtil::fileImages);
@@ -85,7 +85,7 @@ fileLists(0)
 	}
 
 	{
-		files = paned->addChild(WidgetFiles::Seed());
+		files = paned->addChild(WidgetFiles::Seed(WinUtil::Seeds::table));
 		addWidget(files, true);
 
 		files->setSmallImageList(WinUtil::fileImages);

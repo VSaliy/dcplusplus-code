@@ -151,7 +151,7 @@ scroll(0)
 	}
 
 	{
-		WidgetUsers::Seed cs;
+		WidgetUsers::Seed cs(WinUtil::Seeds::table);
 		cs.lvStyle |= LVS_EX_SUBITEMIMAGES;
 		users = splitter->addChild(cs);
 		addWidget(users);

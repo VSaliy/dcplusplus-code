@@ -90,14 +90,8 @@ bool FavHubGroupsDlg::handleInitDialog() {
 	grid->row(0).mode = GridInfo::FILL;
 	grid->row(0).align = GridInfo::STRETCH;
 
-	{
-		Groups::Seed seed;
-		// remove some of the WinUtil styles that have been imported...
-		seed.exStyle &= ~WS_EX_CLIENTEDGE;
-		seed.font = 0;
-		groups = grid->addChild(seed);
-		groups->setHelpId(IDH_FAV_HUB_GROUPS_LIST);
-	}
+	groups = grid->addChild(Groups::Seed(WinUtil::Seeds::Dialog::table));
+	groups->setHelpId(IDH_FAV_HUB_GROUPS_LIST);
 
 	{
 		GridPtr cur = grid->addChild(Grid::Seed(1, 2));

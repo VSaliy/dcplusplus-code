@@ -35,11 +35,7 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		Seed() : BaseType::Seed() {
-			// @todo find a better way to directly use styles set in WinUtil...
-			style = WinUtil::Seeds::treeView.style;
-			exStyle = WinUtil::Seeds::treeView.exStyle;
-			font = WinUtil::Seeds::treeView.font;
+		explicit Seed(const BaseType::Seed& seed) : BaseType::Seed(seed) {
 		}
 	};
 

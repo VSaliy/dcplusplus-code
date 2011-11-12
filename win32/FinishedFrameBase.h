@@ -103,7 +103,7 @@ protected:
 		}
 
 		{
-			files = filesWindow->addChild(typename WidgetFiles::Seed());
+			files = filesWindow->addChild(typename WidgetFiles::Seed(WinUtil::Seeds::table));
 			files->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
 			addWidget(files);
 
@@ -119,7 +119,7 @@ protected:
 		}
 
 		{
-			users = usersWindow->addChild(typename WidgetUsers::Seed());
+			users = usersWindow->addChild(typename WidgetUsers::Seed(WinUtil::Seeds::table));
 			users->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
 			addWidget(users);
 

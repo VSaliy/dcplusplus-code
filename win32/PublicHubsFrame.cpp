@@ -118,7 +118,7 @@ users(0)
 		}
 
 		{
-			WidgetHubs::Seed seed;
+			WidgetHubs::Seed seed(WinUtil::Seeds::table);
 			seed.style |= LVS_SINGLESEL;
 			hubs = upper->addChild(seed);
 			addWidget(hubs);

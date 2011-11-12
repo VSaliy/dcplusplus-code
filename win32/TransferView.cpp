@@ -111,7 +111,7 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 	}
 
 	{
-		connections = connectionsWindow->addChild(WidgetConnections::Seed());
+		connections = connectionsWindow->addChild(WidgetConnections::Seed(WinUtil::Seeds::table));
 
 		arrows = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 		arrows->add(*WinUtil::createIcon(IDI_DOWNLOAD, 16));
@@ -132,7 +132,7 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 	}
 
 	{
-		downloads = downloadsWindow->addChild(WidgetDownloads::Seed());
+		downloads = downloadsWindow->addChild(WidgetDownloads::Seed(WinUtil::Seeds::table));
 
 		WinUtil::makeColumns(downloads, downloadColumns, DOWNLOAD_COLUMN_LAST, SETTING(DOWNLOADS_ORDER), SETTING(DOWNLOADS_WIDTHS));
 		downloads->setSort(DOWNLOAD_COLUMN_STATUS);
