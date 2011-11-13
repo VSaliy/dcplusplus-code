@@ -42,7 +42,7 @@
 namespace dwt { namespace aspects {
 
 /// Aspect class used by Widgets that have the possibility of changing colors
-template<class WidgetType>
+template<typename WidgetType>
 class Colorable {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
 public:
@@ -52,7 +52,7 @@ public:
 };
 
 /// Helper class for controls that are colorable via WM_CTLCOLOR
-template< class WidgetType >
+template<typename WidgetType>
 class ColorableCtlImpl {
 	friend class Colorable<WidgetType>;
 
@@ -65,7 +65,7 @@ class ColorableCtlImpl {
 			HDC dc = reinterpret_cast<HDC>(msg.wParam);
 			::SetTextColor(dc, text);
 			::SetBkColor(dc, background);
-			ret = brush ? reinterpret_cast<LRESULT>(brush->handle()) : 0;
+			ret = reinterpret_cast<LRESULT>(brush->handle());
 			return true;
 		});
 	}

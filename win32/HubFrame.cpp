@@ -771,6 +771,15 @@ int HubFrame::UserInfo::getImage(int col) const {
 	return image;
 }
 
+int HubFrame::UserInfo::getColor(COLORREF& text, COLORREF& bg, int) const {
+	if(identity.isOp()) {
+		text = 0xFFFFFF - text;
+		bg = 0xFFFFFF - bg;
+		return CDRF_NEWFONT;
+	}
+	return CDRF_DODEFAULT;
+}
+
 HubFrame::UserTask::UserTask(const OnlineUser& ou) :
 user(ou.getUser(), ou.getClient().getHubUrl()),
 identity(ou.getIdentity())

@@ -16,18 +16,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_TYPED_LIST_VIEW_H
-#define DCPLUSPLUS_WIN32_TYPED_LIST_VIEW_H
+#ifndef DCPLUSPLUS_WIN32_TYPED_TABLE_H
+#define DCPLUSPLUS_WIN32_TYPED_TABLE_H
 
 #include "forward.h"
 #include "Table.h"
 #include "WinUtil.h"
 
-template<class ContentType, bool managed>
+/** Table with an object associated to each item.
+
+@tparam ContentType Type of the objects associated to each item.
+
+@tparam managed Whether this class should handle deleting associated objects.
+
+@tparam customColors Custom colors per item (whole row) or per sub-item (each cell).
+The ContentType class must provide a int getColor(COLORREF& text, COLORREF& bg, int col) function.
+It is called a first time with col=-1 to set colors for the whole item. It can return:
+- CDRF_DODEFAULT to keep default colors for the item.
+- CDRF_NEWFONT to change colors for the item.
+- CDRF_NOTIFYSUBITEMDRAW to request custom colors for each sub-item (get Color will then be called
+for each sub-item). */
+template<typename ContentType, bool managed, bool customColors>
 class TypedTable : public Table
 {
 	typedef Table BaseType;
-	typedef TypedTable<ContentType, managed> ThisType;
+	typedef TypedTable<ContentType, managed, customColors> ThisType;
 
 public:
 	typedef ThisType* ObjectType;
@@ -39,7 +52,7 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		explicit Seed(const BaseType::Seed& seed) : BaseType::Seed(seed) {
+		Seed(const BaseType::Seed& seed) : BaseType::Seed(seed) {
 		}
 	};
 
@@ -48,14 +61,17 @@ public:
 			this->clear();
 	}
 
-	void create( const typename BaseType::Seed & cs = BaseType::Seed() ) {
-		BaseType::create(cs);
+	void create(const Seed& seed) {
+		BaseType::create(seed);
 
-		this->addCallback(
-			dwt::Message( WM_NOTIFY, LVN_GETDISPINFO ), &ThisType::TypedTableDispatcher
-		);
+		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
+			auto& data = *reinterpret_cast<NMLVDISPINFO*>(lParam);
+			this->handleDisplay(data);
+			return 0;
+		}, dwt::Message(WM_NOTIFY, LVN_GETDISPINFO));
 		this->onColumnClick([this](int column) { this->handleColumnClick(column); });
 		this->onSortItems([this](LPARAM lhs, LPARAM rhs) { return this->handleSort(lhs, rhs); });
+		addColorEvent<void>();
 	}
 
 	int insert(ContentType* item) {
@@ -171,27 +187,26 @@ public:
 	void setSort(int col = -1, bool ascending = true) {
 		BaseType::setSort(col, BaseType::SORT_CALLBACK, ascending);
 	}
+
 private:
-
-	int handleSort(LPARAM lhs, LPARAM rhs) {
-		return ContentType::compareItems(reinterpret_cast<ContentType*>(lhs), reinterpret_cast<ContentType*>(rhs), this->getSortColumn());
+	template<typename Ret> typename std::enable_if<customColors, Ret>::type addColorEvent() {
+		this->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return this->handleCustomDraw<LRESULT>(data); });
 	}
+	template<typename Ret> typename std::enable_if<!customColors, Ret>::type addColorEvent() { }
 
-	static bool TypedTableDispatcher(const MSG& msg, LRESULT& res) {
-		NMLVDISPINFO * nm = reinterpret_cast< NMLVDISPINFO * >( msg.lParam );
-		if(nm->item.mask & LVIF_TEXT) {
-			ContentType* content = reinterpret_cast<ContentType*>(nm->item.lParam);
-			const tstring& text = content->getText(nm->item.iSubItem);
-			_tcsncpy(nm->item.pszText, text.data(), std::min(text.size(), (size_t)nm->item.cchTextMax));
-			if(text.size() < static_cast<size_t>(nm->item.cchTextMax)) {
-				nm->item.pszText[text.size()] = 0;
+	void handleDisplay(NMLVDISPINFO& data) {
+		if(data.item.mask & LVIF_TEXT) {
+			ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
+			const tstring& text = content->getText(data.item.iSubItem);
+			_tcsncpy(data.item.pszText, text.data(), std::min(text.size(), static_cast<size_t>(data.item.cchTextMax)));
+			if(text.size() < static_cast<size_t>(data.item.cchTextMax)) {
+				data.item.pszText[text.size()] = 0;
 			}
 		}
-		if(nm->item.mask & LVIF_IMAGE) {
-			ContentType* content = reinterpret_cast<ContentType*>(nm->item.lParam);
-			nm->item.iImage = content->getImage(nm->item.iSubItem);
+		if(data.item.mask & LVIF_IMAGE) {
+			ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
+			data.item.iImage = content->getImage(data.item.iSubItem);
 		}
-		return true;
 	}
 
 	void handleColumnClick(int column) {
@@ -204,6 +219,25 @@ private:
 		}
 	}
 
+	int handleSort(LPARAM lhs, LPARAM rhs) {
+		return ContentType::compareItems(reinterpret_cast<ContentType*>(lhs), reinterpret_cast<ContentType*>(rhs), this->getSortColumn());
+	}
+
+	template<typename Ret> typename std::enable_if<customColors, Ret>::type handleCustomDraw(NMLVCUSTOMDRAW& data) {
+		switch(data.nmcd.dwDrawStage) {
+		case CDDS_PREPAINT:
+			return CDRF_NOTIFYITEMDRAW;
+
+		case CDDS_ITEMPREPAINT:
+			return reinterpret_cast<ContentType*>(data.nmcd.lItemlParam)->getColor(data.clrText, data.clrTextBk, -1);
+
+		case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
+			return reinterpret_cast<ContentType*>(data.nmcd.lItemlParam)->getColor(data.clrText, data.clrTextBk, data.iSubItem);
+
+		default:
+			return CDRF_DODEFAULT;
+		}
+	}
 };
 
-#endif // !defined(TYPED_LIST_VIEW_CTRL_H)
+#endif

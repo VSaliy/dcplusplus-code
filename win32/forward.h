@@ -57,10 +57,10 @@ typedef Table* TablePtr;
 
 class TransferView;
 
-template<class ContentType, bool managed = true>
+template<typename ContentType, bool managed = true, bool customColors = false>
 class TypedTable;
 
-template<class ContentType>
+template<typename ContentType>
 class TypedTree;
 
 #endif /* FORWARD_H_ */
