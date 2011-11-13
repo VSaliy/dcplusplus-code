@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_TYPED_TREE_VIEW_H
-#define DCPLUSPLUS_WIN32_TYPED_TREE_VIEW_H
+#ifndef DCPLUSPLUS_WIN32_TYPED_TREE_H
+#define DCPLUSPLUS_WIN32_TYPED_TREE_H
 
 #include "WinUtil.h"
 
-template<class ContentType>
+template<typename ContentType>
 class TypedTree : public dwt::Tree
 {
 	typedef typename dwt::Tree BaseType;
@@ -35,15 +35,18 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		explicit Seed(const BaseType::Seed& seed) : BaseType::Seed(seed) {
+		Seed(const BaseType::Seed& seed) : BaseType::Seed(seed) {
 		}
 	};
 
-	void create( const typename BaseType::Seed & cs = BaseType::Seed() ) {
-		BaseType::create(cs);
-		this->addCallback(
-			dwt::Message( WM_NOTIFY, TVN_GETDISPINFO ), &TypedTreeDispatcher
-		);
+	void create(const Seed& seed) {
+		BaseType::create(seed);
+
+		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
+			auto& data = *reinterpret_cast<NMTVDISPINFO*>(lParam);
+			this->handleDisplay(data);
+			return 0;
+		}, dwt::Message(WM_NOTIFY, TVN_GETDISPINFO));
 	}
 
 	HTREEITEM insert(HTREEITEM parent, ContentType* data, bool expanded = false) {
@@ -80,29 +83,26 @@ public:
 	void setItemState(HTREEITEM item, int state, int mask) {
 		TreeView_SetItemState(this->handle(), item, state, mask);
 	}
-private:
 
-	static bool TypedTreeDispatcher(const MSG& msg, LRESULT& res) {
-		NMTVDISPINFO * nm = reinterpret_cast< NMTVDISPINFO * >( msg.lParam );
-		if(nm->item.mask & TVIF_TEXT) {
-			ContentType* content = reinterpret_cast<ContentType*>(nm->item.lParam);
+private:
+	void handleDisplay(NMTVDISPINFO& data) {
+		if(data.item.mask & TVIF_TEXT) {
+			ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
 			const tstring& text = content->getText();
-			_tcsncpy(nm->item.pszText, text.data(), std::min(text.size(), (size_t)nm->item.cchTextMax));
-			if(text.size() < static_cast<size_t>(nm->item.cchTextMax)) {
-				nm->item.pszText[text.size()] = 0;
+			_tcsncpy(data.item.pszText, text.data(), std::min(text.size(), static_cast<size_t>(data.item.cchTextMax)));
+			if(text.size() < static_cast<size_t>(data.item.cchTextMax)) {
+				data.item.pszText[text.size()] = 0;
 			}
 		}
-		if(nm->item.mask & TVIF_IMAGE) {
-			ContentType* content = reinterpret_cast<ContentType*>(nm->item.lParam);
-			nm->item.iImage = content->getImage();
+		if(data.item.mask & TVIF_IMAGE) {
+			ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
+			data.item.iImage = content->getImage();
 		}
-		if(nm->item.mask & TVIF_SELECTEDIMAGE) {
-			ContentType* content = reinterpret_cast<ContentType*>(nm->item.lParam);
-			nm->item.iSelectedImage = content->getSelectedImage();
+		if(data.item.mask & TVIF_SELECTEDIMAGE) {
+			ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
+			data.item.iSelectedImage = content->getSelectedImage();
 		}
-		return 0;
 	}
-
 };
 
-#endif // !defined(TYPED_TREE_VIEW_H)
+#endif

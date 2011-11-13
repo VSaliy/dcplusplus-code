@@ -377,9 +377,6 @@ static inline void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item,
 }
 
 LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
-	int item = static_cast<int>(data.nmcd.dwItemSpec);
-	int column = data.iSubItem;
-
 	switch(data.nmcd.dwDrawStage) {
 	case CDDS_PREPAINT:
 		return CDRF_NOTIFYITEMDRAW;
@@ -388,6 +385,10 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 		return CDRF_NOTIFYSUBITEMDRAW;
 
 	case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
+	{
+		int item = static_cast<int>(data.nmcd.dwItemSpec);
+		int column = data.iSubItem;
+
 		// Let's draw a box if needed...
 		if(data.nmcd.hdr.hwndFrom == connections->handle() && column == CONNECTION_COLUMN_STATUS) {
 			HDC hdc = data.nmcd.hdc;
@@ -421,6 +422,7 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 				return CDRF_SKIPDEFAULT;
 			}
 		}
+	}
 		// Fall through
 	default:
 		return CDRF_DODEFAULT;

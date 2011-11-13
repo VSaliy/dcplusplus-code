@@ -129,6 +129,7 @@ private:
 			return columns[col];
 		}
 		int getImage(int col) const;
+		int getColor(COLORREF& text, COLORREF& bg, int) const;
 
 		static int compareItems(const UserInfo* a, const UserInfo* b, int col);
 		bool update(const Identity& identity, int sortCol);
@@ -160,7 +161,7 @@ private:
 
 	GridPtr userGrid;
 
-	typedef TypedTable<UserInfo, false> WidgetUsers;
+	typedef TypedTable<UserInfo, false, true> WidgetUsers;
 	typedef WidgetUsers* WidgetUsersPtr;
 	WidgetUsersPtr users;
 
