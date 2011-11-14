@@ -74,10 +74,6 @@ const tstring& FavHubGroupsDlg::GroupInfo::getText(int col) const {
 	return columns[col];
 }
 
-int FavHubGroupsDlg::GroupInfo::getImage(int) const {
-	return -1;
-}
-
 int FavHubGroupsDlg::GroupInfo::compareItems(const GroupInfo* a, const GroupInfo* b, int col) {
 	return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
 }
@@ -163,10 +159,10 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		groups->setSort(COLUMN_NAME);
 	}
 
+	handleSelectionChanged();
+
 	groups->onKeyDown([this](int c) { return handleKeyDown(c); });
 	groups->onSelectionChanged([this] { handleSelectionChanged(); });
-
-	handleSelectionChanged();
 
 	setText(T_("Favorite hub groups"));
 

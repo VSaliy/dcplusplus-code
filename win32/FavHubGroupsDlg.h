@@ -45,12 +45,11 @@ private:
 		COLUMN_LAST
 	};
 
-	class GroupInfo : public FastAlloc<GroupInfo> {
+	class GroupInfo {
 	public:
 		GroupInfo(const FavHubGroup& group_);
 
 		const tstring& getText(int col) const;
-		int getImage(int) const;
 
 		static int compareItems(const GroupInfo* a, const GroupInfo* b, int col);
 

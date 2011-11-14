@@ -110,6 +110,19 @@ inline int compare(const T1& v1, const T1& v2) { return (v1 < v2) ? -1 : ((v1 ==
 
 template<typename T1> inline double fraction(T1 a, T1 b) { return static_cast<double>(a) / b; }
 
+/** Uses SFINAE to determine whether a type provides a function; stores the result in "value".
+Inspired by <http://stackoverflow.com/questions/257288#264088>. */
+/// @todo simplify when MSVC supports default template arguments on functions...
+#define HAS_FUNC(name, func, signature) \
+	template<typename T> struct name { \
+		typedef char yes[1]; \
+		typedef char no[2]; \
+		template<typename T, T> struct type_check; \
+		template<typename T> static yes& check(type_check<signature, &T::func>*); \
+		template<typename> static no& check(...); \
+		enum { value = sizeof(check<T>(0)) == sizeof(yes) }; \
+	}
+
 class Util
 {
 public:

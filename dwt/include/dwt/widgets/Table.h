@@ -173,11 +173,9 @@ public:
 
 	void setSort(int aColumn, SortType aType, bool aAscending = true);
 
-	bool isAscending();
-
-	int getSortColumn();
-
-	SortType getSortType();
+	bool isAscending() const;
+	int getSortColumn() const;
+	SortType getSortType() const;
 
 	/// Returns the text of the given cell
 	/** The column is which column you wish to retrieve the text for. <br>
@@ -724,15 +722,15 @@ inline Rectangle Table::getRect( int item, int subitem, int code )
 	return Rectangle(r);
 }
 
-inline bool Table::isAscending() {
+inline bool Table::isAscending() const {
 	return ascending;
 }
 
-inline int Table::getSortColumn() {
+inline int Table::getSortColumn() const {
 	return sortColumn;
 }
 
-inline Table::SortType Table::getSortType() {
+inline Table::SortType Table::getSortType() const {
 	return sortType;
 }
 
