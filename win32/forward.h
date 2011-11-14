@@ -57,7 +57,7 @@ typedef Table* TablePtr;
 
 class TransferView;
 
-template<typename ContentType, bool managed = true, bool customColors = false>
+template<typename ContentType, bool managed = true>
 class TypedTable;
 
 template<typename ContentType>

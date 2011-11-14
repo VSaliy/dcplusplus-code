@@ -29,18 +29,28 @@
 
 @tparam managed Whether this class should handle deleting associated objects.
 
-@tparam customColors Custom colors per item (whole row) or per sub-item (each cell).
-The ContentType class must provide a int getColor(COLORREF& text, COLORREF& bg, int col) function.
-It is called a first time with col=-1 to set colors for the whole item. It can return:
+@note Support for texts:
+The ContentType class must provide a const tstring& getText(int col) const function.
+
+@note Support for images:
+The ContentType class must provide a int getImage(int col) const function.
+
+@note Support for item sorting:
+The ContentType class must provide a
+static int compareItems(ContentType* a, ContentType* b, int col) function.
+
+@note Support for custom colors per item (whole row) or per sub-item (each cell):
+The ContentType class must provide a int getColor(COLORREF& text, COLORREF& bg, int col) const
+function. It is called a first time with col=-1 to set colors for the whole item. It can return:
 - CDRF_DODEFAULT to keep default colors for the item.
 - CDRF_NEWFONT to change colors for the item.
 - CDRF_NOTIFYSUBITEMDRAW to request custom colors for each sub-item (get Color will then be called
 for each sub-item). */
-template<typename ContentType, bool managed, bool customColors>
+template<typename ContentType, bool managed>
 class TypedTable : public Table
 {
 	typedef Table BaseType;
-	typedef TypedTable<ContentType, managed, customColors> ThisType;
+	typedef TypedTable<ContentType, managed> ThisType;
 
 public:
 	typedef ThisType* ObjectType;
@@ -64,18 +74,14 @@ public:
 	void create(const Seed& seed) {
 		BaseType::create(seed);
 
-		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
-			auto& data = *reinterpret_cast<NMLVDISPINFO*>(lParam);
-			this->handleDisplay(data);
-			return 0;
-		}, dwt::Message(WM_NOTIFY, LVN_GETDISPINFO));
-		this->onColumnClick([this](int column) { this->handleColumnClick(column); });
-		this->onSortItems([this](LPARAM lhs, LPARAM rhs) { return this->handleSort(lhs, rhs); });
-		addColorEvent<void>();
+		addTextEvent<ContentType>();
+		addImageEvent<ContentType>();
+		addSortEvent<ContentType>();
+		addColorEvent<ContentType>();
 	}
 
 	int insert(ContentType* item) {
-		return insert(getSortPos(item), item);
+		return insert(getSortPos<ContentType>(item), item);
 	}
 
 	int insert(int i, ContentType* item) {
@@ -147,7 +153,57 @@ public:
 
 	void erase(ContentType* item) { int i = find(item); if(i != -1) this->erase(i); }
 
-	int getSortPos(ContentType* a) {
+	void setSort(int col = -1, bool ascending = true) {
+		BaseType::setSort(col, BaseType::SORT_CALLBACK, ascending);
+	}
+
+private:
+	HAS_FUNC(HasText_, getText, const tstring& (ContentType::*)(int) const);
+#define HasText HasText_<ContentType>::value
+
+	HAS_FUNC(HasImage_, getImage, int (ContentType::*)(int) const);
+#define HasImage HasImage_<ContentType>::value
+
+	HAS_FUNC(HasSort_, compareItems, int (*)(const ContentType*, const ContentType*, int));
+#define HasSort HasSort_<ContentType>::value
+
+	HAS_FUNC(HasColor_, getColor, int (ContentType::*)(COLORREF&, COLORREF&, int) const);
+#define HasColor HasColor_<ContentType>::value
+
+	template<typename ContentType> typename std::enable_if<HasText, void>::type addTextEvent() {
+		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
+			auto& data = *reinterpret_cast<NMLVDISPINFO*>(lParam);
+			if(data.item.mask & LVIF_TEXT) {
+				this->handleText<ContentType>(data);
+			}
+			return 0;
+		}, dwt::Message(WM_NOTIFY, LVN_GETDISPINFO));
+	}
+	template<typename ContentType> typename std::enable_if<!HasText, void>::type addTextEvent() { }
+
+	template<typename ContentType> typename std::enable_if<HasImage, void>::type addImageEvent() {
+		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
+			auto& data = *reinterpret_cast<NMLVDISPINFO*>(lParam);
+			if(data.item.mask & LVIF_IMAGE) {
+				this->handleImage<ContentType>(data);
+			}
+			return 0;
+		}, dwt::Message(WM_NOTIFY, LVN_GETDISPINFO));
+	}
+	template<typename ContentType> typename std::enable_if<!HasImage, void>::type addImageEvent() { }
+
+	template<typename ContentType> typename std::enable_if<HasSort, void>::type addSortEvent() {
+		this->onSortItems([this](LPARAM lhs, LPARAM rhs) { return this->handleSort<ContentType>(lhs, rhs); });
+		this->onColumnClick([this](int column) { this->handleColumnClick<ContentType>(column); });
+	}
+	template<typename ContentType> typename std::enable_if<!HasSort, void>::type addSortEvent() { }
+
+	template<typename ContentType> typename std::enable_if<HasColor, void>::type addColorEvent() {
+		this->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return this->handleCustomDraw<ContentType>(data); });
+	}
+	template<typename ContentType> typename std::enable_if<!HasColor, void>::type addColorEvent() { }
+
+	template<typename ContentType> typename std::enable_if<HasSort, int>::type getSortPos(ContentType* a) {
 		int high = this->size();
 		if((this->getSortColumn() == -1) || (high == 0))
 			return high;
@@ -183,33 +239,25 @@ public:
 
 		return mid;
 	}
-
-	void setSort(int col = -1, bool ascending = true) {
-		BaseType::setSort(col, BaseType::SORT_CALLBACK, ascending);
+	template<typename ContentType> typename std::enable_if<!HasSort, int>::type getSortPos(ContentType* a) {
+		return this->size();
 	}
 
-private:
-	template<typename Ret> typename std::enable_if<customColors, Ret>::type addColorEvent() {
-		this->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return this->handleCustomDraw<LRESULT>(data); });
-	}
-	template<typename Ret> typename std::enable_if<!customColors, Ret>::type addColorEvent() { }
-
-	void handleDisplay(NMLVDISPINFO& data) {
-		if(data.item.mask & LVIF_TEXT) {
-			ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
-			const tstring& text = content->getText(data.item.iSubItem);
-			_tcsncpy(data.item.pszText, text.data(), std::min(text.size(), static_cast<size_t>(data.item.cchTextMax)));
-			if(text.size() < static_cast<size_t>(data.item.cchTextMax)) {
-				data.item.pszText[text.size()] = 0;
-			}
-		}
-		if(data.item.mask & LVIF_IMAGE) {
-			ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
-			data.item.iImage = content->getImage(data.item.iSubItem);
+	template<typename ContentType> typename std::enable_if<HasText, void>::type handleText(NMLVDISPINFO& data) {
+		ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
+		const tstring& text = content->getText(data.item.iSubItem);
+		_tcsncpy(data.item.pszText, text.data(), std::min(text.size(), static_cast<size_t>(data.item.cchTextMax)));
+		if(text.size() < static_cast<size_t>(data.item.cchTextMax)) {
+			data.item.pszText[text.size()] = 0;
 		}
 	}
 
-	void handleColumnClick(int column) {
+	template<typename ContentType> typename std::enable_if<HasImage, void>::type handleImage(NMLVDISPINFO& data) {
+		ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
+		data.item.iImage = content->getImage(data.item.iSubItem);
+	}
+
+	template<typename ContentType> typename std::enable_if<HasSort, void>::type handleColumnClick(int column) {
 		if(column != this->getSortColumn()) {
 			this->setSort(column, true);
 		} else if(this->isAscending()) {
@@ -219,11 +267,11 @@ private:
 		}
 	}
 
-	int handleSort(LPARAM lhs, LPARAM rhs) {
+	template<typename ContentType> typename std::enable_if<HasSort, int>::type handleSort(LPARAM lhs, LPARAM rhs) {
 		return ContentType::compareItems(reinterpret_cast<ContentType*>(lhs), reinterpret_cast<ContentType*>(rhs), this->getSortColumn());
 	}
 
-	template<typename Ret> typename std::enable_if<customColors, Ret>::type handleCustomDraw(NMLVCUSTOMDRAW& data) {
+	template<typename ContentType> typename std::enable_if<HasColor, LRESULT>::type handleCustomDraw(NMLVCUSTOMDRAW& data) {
 		switch(data.nmcd.dwDrawStage) {
 		case CDDS_PREPAINT:
 			return CDRF_NOTIFYITEMDRAW;

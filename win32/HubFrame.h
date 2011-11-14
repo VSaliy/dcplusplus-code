@@ -161,7 +161,7 @@ private:
 
 	GridPtr userGrid;
 
-	typedef TypedTable<UserInfo, false, true> WidgetUsers;
+	typedef TypedTable<UserInfo, false> WidgetUsers;
 	typedef WidgetUsers* WidgetUsersPtr;
 	WidgetUsersPtr users;
 
