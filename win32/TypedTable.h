@@ -37,14 +37,15 @@ The ContentType class must provide a int getImage(int col) const function.
 
 @note Support for item sorting:
 The ContentType class must provide a
-static int compareItems(ContentType* a, ContentType* b, int col) function.
+static int compareItems(const ContentType* a, const ContentType* b, int col) function.
 
-@note Support for custom colors per item (whole row) or per sub-item (each cell):
-The ContentType class must provide a int getColor(COLORREF& text, COLORREF& bg, int col) const
-function. It is called a first time with col=-1 to set colors for the whole item. It can return:
-- CDRF_DODEFAULT to keep default colors for the item.
-- CDRF_NEWFONT to change colors for the item.
-- CDRF_NOTIFYSUBITEMDRAW to request custom colors for each sub-item (get Color will then be called
+@note Support for custom styles per item (whole row) or per sub-item (each cell):
+The ContentType class must provide a
+int getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int col) const function. It is
+called a first time with col=-1 to set the style of the whole item. It can return:
+- CDRF_DODEFAULT to keep the default style for the item.
+- CDRF_NEWFONT to change the style of the item.
+- CDRF_NOTIFYSUBITEMDRAW to request custom styles for each sub-item (getStyle will then be called
 for each sub-item). */
 template<typename ContentType, bool managed>
 class TypedTable : public Table
@@ -77,7 +78,7 @@ public:
 		addTextEvent<ContentType>();
 		addImageEvent<ContentType>();
 		addSortEvent<ContentType>();
-		addColorEvent<ContentType>();
+		addStyleEvent<ContentType>();
 	}
 
 	int insert(ContentType* item) {
@@ -167,8 +168,8 @@ private:
 	HAS_FUNC(HasSort_, compareItems, int (*)(const ContentType*, const ContentType*, int));
 #define HasSort HasSort_<ContentType>::value
 
-	HAS_FUNC(HasColor_, getColor, int (ContentType::*)(COLORREF&, COLORREF&, int) const);
-#define HasColor HasColor_<ContentType>::value
+	HAS_FUNC(HasStyle_, getStyle, int (ContentType::*)(HFONT&, COLORREF&, COLORREF&, int) const);
+#define HasStyle HasStyle_<ContentType>::value
 
 	template<typename ContentType> typename std::enable_if<HasText, void>::type addTextEvent() {
 		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
@@ -198,10 +199,10 @@ private:
 	}
 	template<typename ContentType> typename std::enable_if<!HasSort, void>::type addSortEvent() { }
 
-	template<typename ContentType> typename std::enable_if<HasColor, void>::type addColorEvent() {
+	template<typename ContentType> typename std::enable_if<HasStyle, void>::type addStyleEvent() {
 		this->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return this->handleCustomDraw<ContentType>(data); });
 	}
-	template<typename ContentType> typename std::enable_if<!HasColor, void>::type addColorEvent() { }
+	template<typename ContentType> typename std::enable_if<!HasStyle, void>::type addStyleEvent() { }
 
 	template<typename ContentType> typename std::enable_if<HasSort, int>::type getSortPos(ContentType* a) {
 		int high = this->size();
@@ -271,20 +272,22 @@ private:
 		return ContentType::compareItems(reinterpret_cast<ContentType*>(lhs), reinterpret_cast<ContentType*>(rhs), this->getSortColumn());
 	}
 
-	template<typename ContentType> typename std::enable_if<HasColor, LRESULT>::type handleCustomDraw(NMLVCUSTOMDRAW& data) {
-		switch(data.nmcd.dwDrawStage) {
-		case CDDS_PREPAINT:
+	template<typename ContentType> typename std::enable_if<HasStyle, LRESULT>::type handleCustomDraw(NMLVCUSTOMDRAW& data) {
+		if(data.nmcd.dwDrawStage == CDDS_PREPAINT) {
 			return CDRF_NOTIFYITEMDRAW;
-
-		case CDDS_ITEMPREPAINT:
-			return reinterpret_cast<ContentType*>(data.nmcd.lItemlParam)->getColor(data.clrText, data.clrTextBk, -1);
-
-		case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
-			return reinterpret_cast<ContentType*>(data.nmcd.lItemlParam)->getColor(data.clrText, data.clrTextBk, data.iSubItem);
-
-		default:
-			return CDRF_DODEFAULT;
 		}
+
+		if((data.nmcd.dwDrawStage & CDDS_ITEMPREPAINT) == CDDS_ITEMPREPAINT) {
+			HFONT font = nullptr;
+			auto ret = reinterpret_cast<ContentType*>(data.nmcd.lItemlParam)->getStyle(font, data.clrText, data.clrTextBk,
+				((data.nmcd.dwDrawStage & CDDS_SUBITEM) == CDDS_SUBITEM) ? data.iSubItem : -1);
+			if(ret == CDRF_NEWFONT && font) {
+				::SelectObject(data.nmcd.hdc, font);
+			}
+			return ret;
+		}
+
+		return CDRF_DODEFAULT;
 	}
 };
 

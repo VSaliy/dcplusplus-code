@@ -771,10 +771,10 @@ int HubFrame::UserInfo::getImage(int col) const {
 	return image;
 }
 
-int HubFrame::UserInfo::getColor(COLORREF& text, COLORREF& bg, int) const {
+int HubFrame::UserInfo::getColor(HFONT&, COLORREF& textColor, COLORREF& bgColor, int) const {
 	if(identity.isOp()) {
-		text = 0xFFFFFF - text;
-		bg = 0xFFFFFF - bg;
+		textColor = 0xFFFFFF - textColor;
+		bgColor = 0xFFFFFF - bgColor;
 		return CDRF_NEWFONT;
 	}
 	return CDRF_DODEFAULT;
