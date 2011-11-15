@@ -71,7 +71,16 @@ Point Label::getPreferredSize() {
 		return getWindowSize();
 	}
 
-	return getTextSize(getText());
+	auto ret = getTextSize(getText());
+
+	/// @todo there are other types of borders that should be accounted for
+
+	if(hasExStyle(WS_EX_CLIENTEDGE)) {
+		ret.x += GetSystemMetrics(SM_CXEDGE) * 2;
+		ret.y += GetSystemMetrics(SM_CYEDGE) * 2;
+	}
+
+	return ret;
 }
 
 }

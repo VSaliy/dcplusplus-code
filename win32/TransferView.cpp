@@ -402,7 +402,7 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 
 				double pos = static_cast<double>(ci->chunkPos) / ci->chunk;
 
-				drawProgress(hdc, dwt::Rectangle(r), item, column, text, pos, ci->download ? SETTING(DOWNLOAD_BAR_COLOR) : SETTING(UPLOAD_BAR_COLOR));
+				drawProgress(hdc, dwt::Rectangle(r), item, column, text, pos, ci->download ? SETTING(DOWNLOAD_BG_COLOR) : SETTING(UPLOAD_BG_COLOR));
 
 				return CDRF_SKIPDEFAULT;
 			}
@@ -417,7 +417,7 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 
 				double pos = static_cast<double>(di->done) / di->size;
 
-				drawProgress(hdc, dwt::Rectangle(r), item, column, text, pos, SETTING(DOWNLOAD_BAR_COLOR));
+				drawProgress(hdc, dwt::Rectangle(r), item, column, text, pos, SETTING(DOWNLOAD_BG_COLOR));
 
 				return CDRF_SKIPDEFAULT;
 			}

@@ -98,6 +98,7 @@ public:
 	void addRemoveStyle(DWORD addStyle, bool add);
 
 	bool hasStyle(DWORD style) const;
+	bool hasExStyle(DWORD style) const;
 
 	/// Use this function to add or remove windows exStyles.
 	/** The first parameter is the type of style you wish to add/remove. <br>
@@ -256,6 +257,10 @@ inline Widget* Widget::getParent() const {
 
 inline bool Widget::hasStyle(DWORD style) const {
 	return (::GetWindowLong(handle(), GWL_STYLE) & style) == style;
+}
+
+inline bool Widget::hasExStyle(DWORD style) const {
+	return (::GetWindowLong(handle(), GWL_EXSTYLE) & style) == style;
 }
 
 inline Widget::CallbackCollectionType& Widget::getCallbacks() {

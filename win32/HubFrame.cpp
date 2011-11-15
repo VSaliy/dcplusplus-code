@@ -771,7 +771,7 @@ int HubFrame::UserInfo::getImage(int col) const {
 	return image;
 }
 
-int HubFrame::UserInfo::getColor(HFONT&, COLORREF& textColor, COLORREF& bgColor, int) const {
+int HubFrame::UserInfo::getStyle(HFONT&, COLORREF& textColor, COLORREF& bgColor, int) const {
 	if(identity.isOp()) {
 		textColor = 0xFFFFFF - textColor;
 		bgColor = 0xFFFFFF - bgColor;
