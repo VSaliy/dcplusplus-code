@@ -148,7 +148,9 @@ bool FontDialog::open(LOGFONT& font, DWORD& color, Options* options, DWORD flags
 
 	if(::ChooseFont(&cf)) {
 		font = *cf.lpLogFont;
-		color = cf.rgbColors;
+		if(!options || options->color) {
+			color = cf.rgbColors;
+		}
 		return true;
 	}
 	return false;

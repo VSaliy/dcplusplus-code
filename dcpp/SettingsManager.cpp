@@ -36,7 +36,7 @@ const string SettingsManager::settingTags[] =
 {
 	// Strings
 	"Nick", "UploadSpeed", "Description", "DownloadDirectory", "EMail", "ExternalIp", "ExternalIp6",
-	"MainFont", "TextViewerFont",
+	"MainFont", "TextViewerFont", "UploadFont", "DownloadFont",
 	"ConnectionsOrder", "ConnectionsWidths", "HubFrameOrder", "HubFrameWidths",
 	"SearchFrameOrder", "SearchFrameWidths", "FavHubsFrameOrder", "FavHubsFrameWidths",
 	"HublistServers", "QueueFrameOrder", "QueueFrameWidths", "PublicHubsFrameOrder", "PublicHubsFrameWidths",
@@ -55,7 +55,8 @@ const string SettingsManager::settingTags[] =
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
-	"BackgroundColor", "TextColor", "ShareHidden", "FilterMessages", "MinimizeToTray", "AlwaysTray",
+	"TextColor", "BackgroundColor", "UploadTextColor", "UploadBgColor", "DownloadTextColor", "DownloadBgColor",
+	"ShareHidden", "FilterMessages", "MinimizeToTray", "AlwaysTray",
 	"AutoSearch", "TimeStamps", "PopupHubPms", "PopupBotPms", "IgnoreHubPms", "IgnoreBotPms",
 	"ListDuplicates", "BufferSize", "DownloadSlots", "MaxDownloadSpeed", "LogMainChat", "LogPrivateChat",
 	"LogDownloads", "LogFinishedDownloads", "LogUploads", "StatusInChat", "ShowJoins",
@@ -65,7 +66,7 @@ const string SettingsManager::settingTags[] =
 	"SocksPort", "SocksResolve", "KeepLists", "AutoKick", "QueueFrameShowTree",
 	"CompressTransfers", "SFVCheck", "AutoAway",
 	"MaxCompression", "NoAwayMsgToBots", "SkipZeroByte", "AdlsBreakOnFirst",
-	"HubUserCommands", "AutoSearchAutoMatch", "DownloadBarColor", "UploadBarColor", "LogSystem",
+	"HubUserCommands", "AutoSearchAutoMatch", "LogSystem",
 	"LogFilelistTransfers", "SendUnknownCommands", "MaxHashSpeed", "OpenUserCmdHelp",
 	"GetUserCountry", "FavShowJoins", "LogStatusMessages", "ShowStatusbar",
 	"ShowToolbar", "ShowTransferview", "PopunderPm", "PopunderFilelist", "MagnetAsk", "MagnetAction", "MagnetRegister",
@@ -334,9 +335,8 @@ SettingsManager::SettingsManager()
 	setDefault(MAIN_WINDOW_SIZE_Y, CW_USEDEFAULT);
 	setDefault(MAIN_WINDOW_POS_X, CW_USEDEFAULT);
 	setDefault(MAIN_WINDOW_POS_Y, CW_USEDEFAULT);
-	setDefault(UPLOAD_BAR_COLOR, RGB(205, 60, 55));
-	setDefault(DOWNLOAD_BAR_COLOR, RGB(55, 170, 85));
-
+	setDefault(UPLOAD_BG_COLOR, RGB(205, 60, 55));
+	setDefault(DOWNLOAD_BG_COLOR, RGB(55, 170, 85));
 #endif
 }
 

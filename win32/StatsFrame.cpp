@@ -31,8 +31,8 @@ const string& StatsFrame::getId() const { return id; }
 StatsFrame::StatsFrame(TabViewPtr parent) :
 	BaseType(parent, T_("Network Statistics"), IDH_NET_STATS, IDI_NET_STATS),
 	pen(new dwt::Pen(WinUtil::textColor)),
-	upPen(new dwt::Pen(SETTING(UPLOAD_BAR_COLOR))),
-	downPen(new dwt::Pen(SETTING(DOWNLOAD_BAR_COLOR))),
+	upPen(new dwt::Pen(SETTING(UPLOAD_BG_COLOR))),
+	downPen(new dwt::Pen(SETTING(DOWNLOAD_BG_COLOR))),
 	width(0),
 	height(0),
 	twidth(0),
