@@ -292,10 +292,8 @@ public:
 	bool isGrouped() const { return grouped; }
 
 	/** tell dwt to take over painting of group headers in order to allow custom colors that match
-	* the background. the theme will be respected.
-	* @param bgColor the background of the current widget.
-	*/
-	void handleGroupDraw(COLORREF bgColor);
+	the background. the theme will be respected. */
+	void handleGroupDraw();
 
 	/// Returns the checked state of the given row
 	/** A list view can have checkboxes in each row, if the checkbox for the given
@@ -505,6 +503,7 @@ private:
 	static int CALLBACK compareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 	static int CALLBACK compareFuncCallback( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 
+	void setIndex(LVITEM& item, int index) const;
 	void updateArrow();
 #ifdef PORT_ME
 	// Private validate function, this ones returns the "read only" property of the list

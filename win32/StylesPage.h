@@ -33,7 +33,15 @@ public:
 private:
 	enum {
 		COLUMN_TEXT,
+
 		COLUMN_LAST
+	};
+
+	enum {
+		GROUP_GENERAL,
+		GROUP_TRANSFERS,
+
+		GROUP_LAST
 	};
 
 	class Data {
@@ -51,11 +59,11 @@ private:
 		void write();
 
 		const tstring text;
-		unsigned helpId;
+		const unsigned helpId;
 
-		int fontSetting;
-		int textColorSetting;
-		int bgColorSetting;
+		const int fontSetting;
+		const int textColorSetting;
+		const int bgColorSetting;
 
 		bool customFont;
 		dwt::FontPtr font;
