@@ -167,16 +167,7 @@ int Table::insert(const std::vector<tstring>& row, LPARAM lPar, int index, int i
 
 	lvi.lParam = lPar;
 
-	if(grouped) {
-		dwtassert(index >= 0, _T("Table::insert in grouped mode: index must be >= 0 since it is a group id"));
-		lvi.mask |= LVIF_GROUPID;
-		lvi.iGroupId = index;
-
-	} else {
-		if(index == -1)
-			index = size();
-		lvi.iItem = index;
-	}
+	setIndex(lvi, index);
 
 	int ret = ListView_InsertItem(handle(), &lvi);
 	if(ret == - 1) {
@@ -200,13 +191,24 @@ int Table::insert(const std::vector<tstring>& row, LPARAM lPar, int index, int i
 
 int Table::insert(int mask, int i, LPCTSTR text, UINT state, UINT stateMask, int image, LPARAM lparam) {
 	LVITEM item = { mask };
-	item.iItem = i;
 	item.state = state;
 	item.stateMask = stateMask;
 	item.pszText = const_cast<LPTSTR>(text);
 	item.iImage = image;
 	item.lParam = lparam;
+	setIndex(item, i);
 	return ListView_InsertItem(handle(), &item);
+}
+
+void Table::setIndex(LVITEM& item, int index) const {
+	if(grouped) {
+		dwtassert(index >= 0, _T("Table::insert in grouped mode: index must be >= 0 since it is a group id"));
+		item.mask |= LVIF_GROUPID;
+		item.iGroupId = index;
+
+	} else {
+		item.iItem = (index == -1) ? size() : index;
+	}
 }
 
 void Table::onColumnClick(HeaderF f) {
@@ -324,19 +326,20 @@ tstring Table::getGroup(unsigned id) const {
 	return tstring();
 }
 
-void Table::handleGroupDraw(COLORREF bgColor) {
+void Table::handleGroupDraw() {
 	theme.load(VSCLASS_LISTVIEW, this);
 
-	onCustomDraw([this, bgColor](NMLVCUSTOMDRAW& data) -> LRESULT {
+	onCustomDraw([this](NMLVCUSTOMDRAW& data) -> LRESULT {
 		if(!grouped || data.dwItemType != LVCDI_GROUP)
 			return CDRF_DODEFAULT;
 		switch(data.nmcd.dwDrawStage) {
 		case CDDS_PREPAINT:
 			{
 				// got a group! get the current theme text color and compare it to the bg.
-				COLORREF color = theme ? theme.getColor(LVP_GROUPHEADER, LVGH_OPEN, TMT_HEADING1TEXTCOLOR) : NaC;
+				auto color = theme ? theme.getColor(LVP_GROUPHEADER, LVGH_OPEN, TMT_HEADING1TEXTCOLOR) : NaC;
 				if(color == NaC)
 					color = 0; // assume black
+				auto bgColor = ListView_GetBkColor(handle());
 				if(abs(GetRValue(color) + GetGValue(color) + GetBValue(color)
 					- GetRValue(bgColor) - GetGValue(bgColor) - GetBValue(bgColor)) < 300)
 				{

@@ -72,6 +72,7 @@ bgColor(0)
 			seed.style &= ~LVS_SHOWSELALWAYS;
 			seed.style |= LVS_SINGLESEL | LVS_NOCOLUMNHEADER;
 			table = cur->addChild(Table::Seed(seed));
+			table->handleGroupDraw();
 		}
 
 		{
@@ -113,18 +114,23 @@ bgColor(0)
 
 	WinUtil::makeColumns(table, columns, COLUMN_LAST);
 
-	auto add = [this](tstring&& text, unsigned helpId, int fontSetting, int textColorSetting, int bgColorSetting) -> Data* {
+	TStringList groups(GROUP_LAST);
+	groups[GROUP_GENERAL] = T_("General");
+	groups[GROUP_TRANSFERS] = T_("Transfers");
+	table->setGroups(groups);
+
+	auto add = [this](tstring&& text, unsigned helpId, int group, int fontSetting, int textColorSetting, int bgColorSetting) -> Data* {
 		auto data = new Data(forward<tstring>(text), helpId, fontSetting, textColorSetting, bgColorSetting);
-		table->insert(data);
+		table->insert(group, data);
 		return data;
 	};
 
-	globalData = add(T_("Global application style"), 0/*IDH_SETTINGS_STYLES_GLOBAL*/, SettingsManager::MAIN_FONT,
-		SettingsManager::TEXT_COLOR, SettingsManager::BACKGROUND_COLOR);
-	add(T_("Uploads"), 0/*IDH_SETTINGS_STYLES_UPLOADS*/, SettingsManager::UPLOAD_FONT,
-		SettingsManager::UPLOAD_TEXT_COLOR, SettingsManager::UPLOAD_BG_COLOR);
-	add(T_("Downloads"), 0/*IDH_SETTINGS_STYLES_DOWNLOADS*/, SettingsManager::DOWNLOAD_FONT,
-		SettingsManager::DOWNLOAD_TEXT_COLOR, SettingsManager::DOWNLOAD_BG_COLOR);
+	globalData = add(T_("Global application style"), 0/*IDH_SETTINGS_STYLES_GLOBAL*/, GROUP_GENERAL,
+		SettingsManager::MAIN_FONT, SettingsManager::TEXT_COLOR, SettingsManager::BACKGROUND_COLOR);
+	add(T_("Uploads"), 0/*IDH_SETTINGS_STYLES_UPLOADS*/, GROUP_TRANSFERS,
+		SettingsManager::UPLOAD_FONT, SettingsManager::UPLOAD_TEXT_COLOR, SettingsManager::UPLOAD_BG_COLOR);
+	add(T_("Downloads"), 0/*IDH_SETTINGS_STYLES_DOWNLOADS*/, GROUP_TRANSFERS,
+		SettingsManager::DOWNLOAD_FONT, SettingsManager::DOWNLOAD_TEXT_COLOR, SettingsManager::DOWNLOAD_BG_COLOR);
 
 	globalData->customFont = true;
 	globalData->customTextColor = true;

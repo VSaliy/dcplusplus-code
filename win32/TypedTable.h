@@ -277,7 +277,7 @@ private:
 			return CDRF_NOTIFYITEMDRAW;
 		}
 
-		if((data.nmcd.dwDrawStage & CDDS_ITEMPREPAINT) == CDDS_ITEMPREPAINT) {
+		if((data.nmcd.dwDrawStage & CDDS_ITEMPREPAINT) == CDDS_ITEMPREPAINT && data.dwItemType == LVCDI_ITEM && data.nmcd.lItemlParam) {
 			HFONT font = nullptr;
 			auto ret = reinterpret_cast<ContentType*>(data.nmcd.lItemlParam)->getStyle(font, data.clrText, data.clrTextBk,
 				((data.nmcd.dwDrawStage & CDDS_SUBITEM) == CDDS_SUBITEM) ? data.iSubItem : -1);

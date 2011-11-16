@@ -80,7 +80,7 @@ hubs(0)
 		hubs->onDblClicked([this] { handleDoubleClick(); });
 		hubs->onKeyDown([this](int c) { return handleKeyDown(c); });
 		hubs->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
-		hubs->handleGroupDraw(WinUtil::bgColor);
+		hubs->handleGroupDraw();
 	}
 
 	{

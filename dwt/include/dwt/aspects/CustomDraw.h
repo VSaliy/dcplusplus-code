@@ -42,9 +42,14 @@ class CustomDraw {
 
 public:
 	void onCustomDraw(std::function<LRESULT (DataType&)> f) {
-		W().setCallback(Message(WM_NOTIFY, NM_CUSTOMDRAW), [f](const MSG& msg, LRESULT& ret) -> bool {
+		W().addCallback(Message(WM_NOTIFY, NM_CUSTOMDRAW), [f](const MSG& msg, LRESULT& ret) -> bool {
 			auto& data = *reinterpret_cast<DataType*>(msg.lParam);
-			ret = f(data);
+			auto newRet = f(data);
+			/* make sure multiple custom draw handlers can be applied to the same control without
+			stepping on each other. */
+			if(!ret || ret == CDRF_DODEFAULT) {
+				ret = newRet;
+			}
 			return true;
 		});
 	}
