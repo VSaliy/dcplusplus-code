@@ -160,18 +160,18 @@ public:
 
 private:
 	HAS_FUNC(HasText_, getText, const tstring& (ContentType::*)(int) const);
-#define HasText HasText_<ContentType>::value
+#define HasText HasText_<T>::value
 
 	HAS_FUNC(HasImage_, getImage, int (ContentType::*)(int) const);
-#define HasImage HasImage_<ContentType>::value
+#define HasImage HasImage_<T>::value
 
 	HAS_FUNC(HasSort_, compareItems, int (*)(const ContentType*, const ContentType*, int));
-#define HasSort HasSort_<ContentType>::value
+#define HasSort HasSort_<T>::value
 
 	HAS_FUNC(HasStyle_, getStyle, int (ContentType::*)(HFONT&, COLORREF&, COLORREF&, int) const);
-#define HasStyle HasStyle_<ContentType>::value
+#define HasStyle HasStyle_<T>::value
 
-	template<typename ContentType> typename std::enable_if<HasText, void>::type addTextEvent() {
+	template<typename T> typename std::enable_if<HasText, void>::type addTextEvent() {
 		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
 			auto& data = *reinterpret_cast<NMLVDISPINFO*>(lParam);
 			if(data.item.mask & LVIF_TEXT) {
@@ -180,9 +180,9 @@ private:
 			return 0;
 		}, dwt::Message(WM_NOTIFY, LVN_GETDISPINFO));
 	}
-	template<typename ContentType> typename std::enable_if<!HasText, void>::type addTextEvent() { }
+	template<typename T> typename std::enable_if<!HasText, void>::type addTextEvent() { }
 
-	template<typename ContentType> typename std::enable_if<HasImage, void>::type addImageEvent() {
+	template<typename T> typename std::enable_if<HasImage, void>::type addImageEvent() {
 		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
 			auto& data = *reinterpret_cast<NMLVDISPINFO*>(lParam);
 			if(data.item.mask & LVIF_IMAGE) {
@@ -191,20 +191,20 @@ private:
 			return 0;
 		}, dwt::Message(WM_NOTIFY, LVN_GETDISPINFO));
 	}
-	template<typename ContentType> typename std::enable_if<!HasImage, void>::type addImageEvent() { }
+	template<typename T> typename std::enable_if<!HasImage, void>::type addImageEvent() { }
 
-	template<typename ContentType> typename std::enable_if<HasSort, void>::type addSortEvent() {
+	template<typename T> typename std::enable_if<HasSort, void>::type addSortEvent() {
 		this->onSortItems([this](LPARAM lhs, LPARAM rhs) { return this->handleSort<ContentType>(lhs, rhs); });
 		this->onColumnClick([this](int column) { this->handleColumnClick<ContentType>(column); });
 	}
-	template<typename ContentType> typename std::enable_if<!HasSort, void>::type addSortEvent() { }
+	template<typename T> typename std::enable_if<!HasSort, void>::type addSortEvent() { }
 
-	template<typename ContentType> typename std::enable_if<HasStyle, void>::type addStyleEvent() {
+	template<typename T> typename std::enable_if<HasStyle, void>::type addStyleEvent() {
 		this->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return this->handleCustomDraw<ContentType>(data); });
 	}
-	template<typename ContentType> typename std::enable_if<!HasStyle, void>::type addStyleEvent() { }
+	template<typename T> typename std::enable_if<!HasStyle, void>::type addStyleEvent() { }
 
-	template<typename ContentType> typename std::enable_if<HasSort, int>::type getSortPos(ContentType* a) {
+	template<typename T> typename std::enable_if<HasSort, int>::type getSortPos(ContentType* a) {
 		int high = this->size();
 		if((this->getSortColumn() == -1) || (high == 0))
 			return high;
@@ -240,11 +240,11 @@ private:
 
 		return mid;
 	}
-	template<typename ContentType> typename std::enable_if<!HasSort, int>::type getSortPos(ContentType* a) {
+	template<typename T> typename std::enable_if<!HasSort, int>::type getSortPos(ContentType* a) {
 		return this->size();
 	}
 
-	template<typename ContentType> typename std::enable_if<HasText, void>::type handleText(NMLVDISPINFO& data) {
+	template<typename T> typename std::enable_if<HasText, void>::type handleText(NMLVDISPINFO& data) {
 		ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
 		const tstring& text = content->getText(data.item.iSubItem);
 		_tcsncpy(data.item.pszText, text.data(), std::min(text.size(), static_cast<size_t>(data.item.cchTextMax)));
@@ -253,12 +253,12 @@ private:
 		}
 	}
 
-	template<typename ContentType> typename std::enable_if<HasImage, void>::type handleImage(NMLVDISPINFO& data) {
+	template<typename T> typename std::enable_if<HasImage, void>::type handleImage(NMLVDISPINFO& data) {
 		ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
 		data.item.iImage = content->getImage(data.item.iSubItem);
 	}
 
-	template<typename ContentType> typename std::enable_if<HasSort, void>::type handleColumnClick(int column) {
+	template<typename T> typename std::enable_if<HasSort, void>::type handleColumnClick(int column) {
 		if(column != this->getSortColumn()) {
 			this->setSort(column, true);
 		} else if(this->isAscending()) {
@@ -268,11 +268,11 @@ private:
 		}
 	}
 
-	template<typename ContentType> typename std::enable_if<HasSort, int>::type handleSort(LPARAM lhs, LPARAM rhs) {
+	template<typename T> typename std::enable_if<HasSort, int>::type handleSort(LPARAM lhs, LPARAM rhs) {
 		return ContentType::compareItems(reinterpret_cast<ContentType*>(lhs), reinterpret_cast<ContentType*>(rhs), this->getSortColumn());
 	}
 
-	template<typename ContentType> typename std::enable_if<HasStyle, LRESULT>::type handleCustomDraw(NMLVCUSTOMDRAW& data) {
+	template<typename T> typename std::enable_if<HasStyle, LRESULT>::type handleCustomDraw(NMLVCUSTOMDRAW& data) {
 		if(data.nmcd.dwDrawStage == CDDS_PREPAINT) {
 			return CDRF_NOTIFYITEMDRAW;
 		}
