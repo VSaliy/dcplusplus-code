@@ -117,8 +117,8 @@ Inspired by <http://stackoverflow.com/questions/257288#264088>. */
 	template<typename T> struct name { \
 		typedef char yes[1]; \
 		typedef char no[2]; \
-		template<typename T, T> struct type_check; \
-		template<typename T> static yes& check(type_check<signature, &T::func>*); \
+		template<typename U, U> struct type_check; \
+		template<typename U> static yes& check(type_check<signature, &U::func>*); \
 		template<typename> static no& check(...); \
 		enum { value = sizeof(check<T>(0)) == sizeof(yes) }; \
 	}
