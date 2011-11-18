@@ -68,7 +68,6 @@ class ComboBox :
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< ComboBox >;
 	friend class aspects::Collection<ComboBox, int>;
-	friend class aspects::Colorable<ComboBox>;
 	friend class aspects::Selection<ComboBox, int>;
 	friend class aspects::Clickable<ComboBox>;
 	friend class aspects::Data<ComboBox, int>;
