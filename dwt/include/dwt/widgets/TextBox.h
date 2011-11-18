@@ -62,13 +62,11 @@ namespace dwt {
 class TextBoxBase :
 	public CommonControl,
 	public aspects::Caption<TextBoxBase>,
-	public aspects::Colorable<TextBoxBase>,
-	public aspects::ColorableCtlImpl<TextBoxBase>,
 	public aspects::Scrollable<TextBoxBase>,
 	public aspects::Update<TextBoxBase>
 {
 	typedef CommonControl BaseType;
-	friend class WidgetCreator< TextBoxBase >;
+	friend class WidgetCreator<TextBoxBase>;
 	friend class aspects::Update<TextBoxBase>;
 
 public:
@@ -204,9 +202,12 @@ private:
 };
 
 class TextBox :
-	public TextBoxBase
+	public TextBoxBase,
+	public aspects::Colorable<TextBox>,
+	public aspects::ColorableCtlImpl<TextBox>
 {
 	typedef TextBoxBase BaseType;
+
 public:
 	typedef TextBox ThisType;
 

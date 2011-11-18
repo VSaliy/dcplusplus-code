@@ -41,10 +41,13 @@
 
 namespace dwt { namespace aspects {
 
-/// Aspect class used by Widgets that have the possibility of changing colors
+/** Aspect class used by Widgets that have the possibility of changing colors. They must provide a
+void setColorImpl(COLORREF text, COLORREF background) function. If they understand WM_CTLCOLOR,
+that function can be provided by using ColorableCtlImpl as a base class. */
 template<typename WidgetType>
 class Colorable {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+
 public:
 	void setColor(COLORREF text, COLORREF background) {
 		W().setColorImpl(text, background);

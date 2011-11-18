@@ -256,8 +256,6 @@ void WinUtil::init() {
 
 	xRichTextBox.exStyle = WS_EX_CLIENTEDGE;
 	xRichTextBox.font = font;
-	xRichTextBox.foregroundColor = textColor;
-	xRichTextBox.backgroundColor = bgColor;
 
 	xTabs.font = font;
 
@@ -874,14 +872,13 @@ public:
 		ts.style = WS_CHILD | WS_VISIBLE | ES_READONLY;
 		ts.exStyle = 0;
 		ts.location = dwt::Rectangle(margins, dwt::Point(maxWidth, 0));
-		ts.foregroundColor = dwt::Color::predefined(COLOR_INFOTEXT);
-		ts.backgroundColor = dwt::Color::predefined(COLOR_INFOBK);
 		createBox();
 	}
 
 private:
 	void createBox() {
 		box = addChild(ts);
+		box->setColor(dwt::Color::predefined(COLOR_INFOTEXT), dwt::Color::predefined(COLOR_INFOBK));
 
 		// let the control figure out what the best size is
 		box->onRaw([this](WPARAM, LPARAM l) { return resize(l); }, dwt::Message(WM_NOTIFY, EN_REQUESTRESIZE));

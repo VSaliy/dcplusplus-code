@@ -36,8 +36,6 @@
 #ifndef DWT_RichTextBox_h
 #define DWT_RichTextBox_h
 
-#ifndef WINCE // Doesn't exist in Windows CE based systems
-
 #include "TextBox.h"
 #include "../tstring.h"
 #include <richedit.h>
@@ -59,10 +57,14 @@ namespace dwt {
   * notepad ( TextBox ) and wordpad ( RichTextBox )
   */
 class RichTextBox :
-	public TextBoxBase
+	public TextBoxBase,
+	public aspects::Colorable<RichTextBox>
 {
-	friend class WidgetCreator< RichTextBox >;
+	friend class WidgetCreator<RichTextBox>;
 	typedef TextBoxBase BaseType;
+
+	friend class aspects::Colorable<RichTextBox>;
+
 public:
 	/// Class type
 	typedef RichTextBox ThisType;
@@ -95,10 +97,6 @@ public:
 	  * Only if you DERIVE from class you should call this function directly.
 	  */
 	void create( const Seed & cs = Seed() );
-
-	void setBackgroundColor(COLORREF color);
-
-	void setDefaultCharFormat(const CHARFORMAT& cf);
 
 	int charFromPos(const ScreenCoordinate& pt);
 
@@ -159,28 +157,14 @@ private:
 
 	void setTextA(const std::string& txt);
 	void setTextEx(const std::string& txt, DWORD format);
+
+	// aspects::Colorable
+	void setColorImpl(COLORREF text, COLORREF background);
+
+	COLORREF bgColor; // store the current bg color for the onPrinting handler.
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-inline RichTextBox::RichTextBox( dwt::Widget * parent )
-	: TextBoxBase(parent, makeDispatcher())
-{
-}
-
-inline void RichTextBox::setBackgroundColor(COLORREF color) {
-	this->sendMessage(EM_SETBKGNDCOLOR, 0, static_cast<LPARAM>(color));
-}
-
-inline void RichTextBox::setDefaultCharFormat(const CHARFORMAT& cf) {
-	this->sendMessage(EM_SETCHARFORMAT, 0, reinterpret_cast<LPARAM>(&cf));
-}
 
 // end namespace dwt
 }
-
-#endif //! WINCE
 
 #endif

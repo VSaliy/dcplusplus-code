@@ -66,15 +66,6 @@ void RichTextBox::create(const Seed& cs) {
 	BaseType::create(cs);
 	setFont(cs.font);
 
-	COLORREF bg = (cs.backgroundColor == NaC) ? Color::predefined(COLOR_WINDOW) : cs.backgroundColor;
-	COLORREF fg = (cs.foregroundColor == NaC) ? Color::predefined(COLOR_WINDOWTEXT) : cs.foregroundColor;
-
-	setBackgroundColor(bg);
-
-	CHARFORMAT textFormat = { sizeof(CHARFORMAT), CFM_COLOR };
-	textFormat.crTextColor = fg;
-	setDefaultCharFormat(textFormat);
-
 	setScrollBarHorizontally(cs.scrollBarHorizontallyFlag);
 	setScrollBarVertically(cs.scrollBarVerticallyFlag);
 
@@ -83,11 +74,11 @@ void RichTextBox::create(const Seed& cs) {
 	/* unlike other common controls, Rich Edits ignore WM_PRINTCLIENT messages. as per
 	<http://msdn.microsoft.com/en-us/library/bb787875(VS.85).aspx>, we have to handle the printing
 	by ourselves. this is crucial for taskbar thumbnails and "Aero Peek" previews. */
-	onPrinting([this, bg](Canvas& canvas) {
+	onPrinting([this](Canvas& canvas) {
 		Rectangle rect(getClientSize());
 
 		// paint a background in case the text doesn't span the whole box.
-		canvas.fill(rect, Brush(bg));
+		canvas.fill(rect, Brush(bgColor));
 
 		::FORMATRANGE format = { canvas.handle(), canvas.handle() };
 		format.rc = rect;
@@ -101,6 +92,11 @@ void RichTextBox::create(const Seed& cs) {
 		sendMessage(EM_FORMATRANGE, 1, reinterpret_cast<LPARAM>(&format));
 		sendMessage(EM_FORMATRANGE); // "free the cached information" as MSDN recommends.
 	});
+}
+
+RichTextBox::RichTextBox(dwt::Widget* parent) :
+TextBoxBase(parent, makeDispatcher())
+{
 }
 
 inline int RichTextBox::charFromPos(const ScreenCoordinate& pt) {
@@ -327,6 +323,15 @@ tstring RichTextBox::rtfEscape(const tstring& str) {
 	boost::find_format_all_copy(std::back_inserter(escaped), str,
 		boost::first_finder(L"\x7f", _1 == '{' || _1 == '}' || _1 == '\\' || _1 == '\n' || _1 == '\r'), rtfEscapeFormatter);
 	return escaped;
+}
+
+void RichTextBox::setColorImpl(COLORREF text, COLORREF background) {
+	CHARFORMAT textFormat = { sizeof(CHARFORMAT), CFM_COLOR };
+	textFormat.crTextColor = text;
+	sendMessage(EM_SETCHARFORMAT, SCF_DEFAULT, reinterpret_cast<LPARAM>(&textFormat));
+
+	bgColor = background;
+	sendMessage(EM_SETBKGNDCOLOR, 0, static_cast<LPARAM>(bgColor));
 }
 
 }
