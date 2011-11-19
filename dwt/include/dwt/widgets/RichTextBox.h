@@ -57,13 +57,10 @@ namespace dwt {
   * notepad ( TextBox ) and wordpad ( RichTextBox )
   */
 class RichTextBox :
-	public TextBoxBase,
-	public aspects::Colorable<RichTextBox>
+	public TextBoxBase
 {
 	friend class WidgetCreator<RichTextBox>;
 	typedef TextBoxBase BaseType;
-
-	friend class aspects::Colorable<RichTextBox>;
 
 public:
 	/// Class type

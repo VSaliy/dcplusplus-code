@@ -1050,6 +1050,18 @@ MainWindow::~MainWindow() {
 	dwt::Application::instance().removeFilter(filterIter);
 }
 
+namespace {
+
+BOOL CALLBACK updateColors(HWND hwnd, LPARAM) {
+	dwt::Control* widget = dwt::hwnd_cast<dwt::Control*>(hwnd);
+	if(widget) {
+		widget->sendCommand(ID_UPDATECOLOR);
+	}
+	return TRUE;
+}
+
+} // unnamed namespace
+
 void MainWindow::handleSettings() {
 	// this may be called directly from the tray icon when the main window is still hidden
 	if(isIconic())
@@ -1097,6 +1109,19 @@ void MainWindow::handleSettings() {
 		}
 		if(rebuildGeo) {
 			GeoManager::getInstance()->rebuild();
+		}
+
+		bool newColors = false;
+		if(static_cast<COLORREF>(SETTING(TEXT_COLOR)) != WinUtil::textColor) {
+			WinUtil::textColor = SETTING(TEXT_COLOR);
+			newColors = true;
+		}
+		if(static_cast<COLORREF>(SETTING(BACKGROUND_COLOR)) != WinUtil::bgColor) {
+			WinUtil::bgColor = SETTING(BACKGROUND_COLOR);
+			newColors = true;
+		}
+		if(newColors) {
+			::EnumChildWindows(handle(), updateColors, 0);
 		}
 
 		if(BOOLSETTING(ALWAYS_TRAY) != prevTray)

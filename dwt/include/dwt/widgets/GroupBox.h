@@ -45,7 +45,6 @@
   * add up your RadioButtons into an object of this type
   */
 #include "../aspects/Caption.h"
-#include "../aspects/Colorable.h"
 #include "../aspects/Child.h"
 #include "Control.h"
 
@@ -55,8 +54,6 @@ namespace dwt {
 class GroupBox :
 	public CommonControl,
 	public aspects::Caption<GroupBox>,
-	public aspects::Colorable<GroupBox>,
-	public aspects::ColorableCtlImpl<GroupBox>,
 	public aspects::Child<GroupBox>
 {
 	typedef CommonControl BaseType;

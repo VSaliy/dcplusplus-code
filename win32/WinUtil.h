@@ -225,6 +225,8 @@ public:
 		return ret;
 	}
 
+	static void setColor(dwt::Control* widget);
+
 	static size_t getFileIcon(const string& fileName);
 	static size_t getFileIcon(const tstring& fileName);
 

@@ -37,7 +37,6 @@
 #define DWT_Label_h
 
 #include "../aspects/Caption.h"
-#include "../aspects/Colorable.h"
 #include "../aspects/Clickable.h"
 #include "Control.h"
 
@@ -58,9 +57,7 @@ namespace dwt {
 class Label :
 	public CommonControl,
 	public aspects::Caption<Label>,
-	private aspects::Clickable<Label>,
-	public aspects::Colorable<Label>,
-	public aspects::ColorableCtlImpl<Label>
+	private aspects::Clickable<Label>
 {
 	typedef CommonControl BaseType;
 	friend class WidgetCreator< Label >;

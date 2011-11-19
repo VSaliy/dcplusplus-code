@@ -37,7 +37,6 @@
 #define DWT_ASPECTBUTTON_H_
 
 #include "../aspects/Caption.h"
-#include "../aspects/Colorable.h"
 #include "../aspects/Clickable.h"
 #include "Control.h"
 
@@ -47,9 +46,7 @@ namespace dwt {
 class Button :
 	public CommonControl,
 	public aspects::Caption<Button>,
-	private aspects::Clickable<Button>,
-	public aspects::Colorable<Button>,
-	public aspects::ColorableCtlImpl<Button>
+	private aspects::Clickable<Button>
 {
 	typedef CommonControl BaseType;
 	friend class aspects::Clickable<Button>;

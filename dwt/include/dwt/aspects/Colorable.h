@@ -41,9 +41,9 @@
 
 namespace dwt { namespace aspects {
 
-/** Aspect class used by Widgets that have the possibility of changing colors. They must provide a
-void setColorImpl(COLORREF text, COLORREF background) function. If they understand WM_CTLCOLOR,
-that function can be provided by using ColorableCtlImpl as a base class. */
+/** Aspect class used by Widgets that have the possibility of changing colors. By default, this is
+done by catching WM_CTLCOLOR. Widgets that don't support WM_CTLCOLOR can customize this behavior by
+providing a void setColorImpl(COLORREF text, COLORREF background) function. */
 template<typename WidgetType>
 class Colorable {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
@@ -52,17 +52,9 @@ public:
 	void setColor(COLORREF text, COLORREF background) {
 		W().setColorImpl(text, background);
 	}
-};
 
-/// Helper class for controls that are colorable via WM_CTLCOLOR
-template<typename WidgetType>
-class ColorableCtlImpl {
-	friend class Colorable<WidgetType>;
-
-	WidgetType& W() { return *static_cast<WidgetType*>(this); }
-
-	/// Set the background, text and text colors
-	void setColorImpl(COLORREF text, COLORREF background) {
+private:
+	virtual void setColorImpl(COLORREF text, COLORREF background) {
 		BrushPtr brush(new Brush(background));
 		W().setCallback(Message(WM_CTLCOLOR), [text, background, brush](const MSG& msg, LRESULT& ret) -> bool {
 			HDC dc = reinterpret_cast<HDC>(msg.wParam);

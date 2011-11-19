@@ -40,7 +40,6 @@
 #include "../resources/ImageList.h"
 #include "../aspects/Clickable.h"
 #include "../aspects/Collection.h"
-#include "../aspects/Colorable.h"
 #include "../aspects/CustomDraw.h"
 #include "../aspects/Data.h"
 #include "../aspects/Scrollable.h"
@@ -70,7 +69,6 @@ class Table :
 	public CommonControl,
 	public aspects::Clickable<Table>,
 	public aspects::Collection<Table, int>,
-	public aspects::Colorable<Table>,
 	public aspects::CustomDraw<Table, NMLVCUSTOMDRAW>,
 	public aspects::Data<Table, int>,
 	public aspects::Scrollable<Table>,
@@ -80,7 +78,6 @@ class Table :
 
 	friend class WidgetCreator<Table>;
 	friend class aspects::Collection<Table, int>;
-	friend class aspects::Colorable<Table>;
 	friend class aspects::Data<Table, int>;
 	friend class aspects::Selection<Table, int>;
 	friend class aspects::Clickable<Table>;

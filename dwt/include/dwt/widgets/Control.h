@@ -36,6 +36,7 @@
 
 #include "../aspects/Border.h"
 #include "../aspects/Closeable.h"
+#include "../aspects/Colorable.h"
 #include "../aspects/Command.h"
 #include "../aspects/ContextMenu.h"
 #include "../aspects/DragDrop.h"
@@ -58,6 +59,7 @@ class Control:
 
 	public aspects::Border<Control>,
 	public aspects::Closeable<Control>,
+	public aspects::Colorable<Control>,
 	public aspects::Command<Control>,
 	public aspects::ContextMenu<Control>,
 	public aspects::DragDrop<Control>,

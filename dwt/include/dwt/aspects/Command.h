@@ -39,9 +39,14 @@ namespace dwt { namespace aspects {
 
 template<typename WidgetType>
 class Command {
+	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+
+	HWND H() const { return W().handle(); }
+
 public:
 	typedef Dispatchers::VoidVoid<> CommandDispatcher;
+
 	void onCommand(const CommandDispatcher::F& f, unsigned id) {
 		W().addCallback(Message(WM_COMMAND, id), CommandDispatcher(f));
 	}
@@ -52,6 +57,10 @@ public:
 
 	void onSysCommand(const CommandDispatcher::F& f, unsigned id) {
 		W().addCallback(Message(WM_SYSCOMMAND, id), CommandDispatcher(f));
+	}
+
+	void sendCommand(unsigned id) {
+		W().sendMessage(WM_COMMAND, MAKEWPARAM(0, id), reinterpret_cast<LPARAM>(H()));
 	}
 };
 

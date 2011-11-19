@@ -37,7 +37,6 @@
 #define DWT_ComboBox_h
 
 #include "../aspects/Caption.h"
-#include "../aspects/Colorable.h"
 #include "../aspects/Clickable.h"
 #include "../aspects/Collection.h"
 #include "../aspects/Data.h"
@@ -60,8 +59,6 @@ class ComboBox :
 	public aspects::Caption<ComboBox>,
 	private aspects::Clickable<ComboBox>,
 	public aspects::Collection<ComboBox, int>,
-	public aspects::Colorable<ComboBox>,
-	public aspects::ColorableCtlImpl<ComboBox>,
 	public aspects::Data<ComboBox, int>,
 	public aspects::Selection<ComboBox, int>
 {
