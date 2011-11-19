@@ -89,4 +89,7 @@
 #define IDH_BEGIN 10000
 #define IDH_END 11999
 
+// WM_APP messages
+#define ID_UPDATECOLOR (WM_APP + 0)
+
 #endif

@@ -40,7 +40,6 @@
 #include "../resources/ImageList.h"
 #include "../aspects/Clickable.h"
 #include "../aspects/Collection.h"
-#include "../aspects/Colorable.h"
 #include "../aspects/CustomDraw.h"
 #include "../aspects/Data.h"
 #include "../aspects/Selection.h"
@@ -75,7 +74,6 @@ class Tree :
 	public CommonControl,
 	public aspects::Clickable<Tree>,
 	public aspects::Collection<Tree, HTREEITEM>,
-	public aspects::Colorable<Tree>,
 	public aspects::CustomDraw<Tree, NMTVCUSTOMDRAW>,
 	public aspects::Data<Tree, HTREEITEM>,
 	public aspects::Selection<Tree, HTREEITEM>
@@ -85,7 +83,6 @@ class Tree :
 protected:
 	friend class WidgetCreator<Tree>;
 	friend class aspects::Collection<Tree, HTREEITEM>;
-	friend class aspects::Colorable<Tree>;
 	friend class aspects::Data<Tree, HTREEITEM>;
 	friend class aspects::Selection<Tree, HTREEITEM>;
 	friend class aspects::Clickable<Tree>;

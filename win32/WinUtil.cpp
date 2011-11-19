@@ -1004,6 +1004,15 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid)
 	return make_pair(ok, cancel);
 }
 
+void WinUtil::setColor(dwt::Control* widget) {
+	widget->setColor(textColor, bgColor);
+
+	widget->onCommand([widget] {
+		widget->setColor(textColor, bgColor);
+		widget->redraw();
+	}, ID_UPDATECOLOR);
+}
+
 HLSCOLOR RGB2HLS(COLORREF rgb) {
 	unsigned char minval = min(GetRValue(rgb), min(GetGValue(rgb), GetBValue(rgb)));
 	unsigned char maxval = max(GetRValue(rgb), max(GetGValue(rgb), GetBValue(rgb)));

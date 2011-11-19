@@ -37,7 +37,6 @@
 #define DWT_TextBox_h
 
 #include "../aspects/Caption.h"
-#include "../aspects/Colorable.h"
 #include "../aspects/Scrollable.h"
 #include "../aspects/Update.h"
 #include "Control.h"
@@ -202,9 +201,7 @@ private:
 };
 
 class TextBox :
-	public TextBoxBase,
-	public aspects::Colorable<TextBox>,
-	public aspects::ColorableCtlImpl<TextBox>
+	public TextBoxBase
 {
 	typedef TextBoxBase BaseType;
 

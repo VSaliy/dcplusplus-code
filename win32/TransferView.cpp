@@ -120,7 +120,7 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 
 		WinUtil::makeColumns(connections, connectionColumns, CONNECTION_COLUMN_LAST, SETTING(CONNECTIONS_ORDER), SETTING(CONNECTIONS_WIDTHS));
 
-		connections->setColor(WinUtil::textColor, WinUtil::bgColor);
+		WinUtil::setColor(connections);
 		connections->setSort(CONNECTION_COLUMN_USER);
 
 		connections->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleConnectionsMenu(sc); });
@@ -136,7 +136,7 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 
 		WinUtil::makeColumns(downloads, downloadColumns, DOWNLOAD_COLUMN_LAST, SETTING(DOWNLOADS_ORDER), SETTING(DOWNLOADS_WIDTHS));
 		downloads->setSort(DOWNLOAD_COLUMN_STATUS);
-		downloads->setColor(WinUtil::textColor, WinUtil::bgColor);
+		WinUtil::setColor(downloads);
 		downloads->setSmallImageList(WinUtil::fileImages);
 
 		downloads->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleDownloadsMenu(sc); });
