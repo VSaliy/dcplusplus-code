@@ -1056,6 +1056,10 @@ BOOL CALLBACK updateFont(HWND hwnd, LPARAM prevFont) {
 	dwt::Control* widget = dwt::hwnd_cast<dwt::Control*>(hwnd);
 	if(widget && widget->getFont()->handle() == reinterpret_cast<HFONT>(prevFont)) {
 		widget->setFont(WinUtil::font);
+		widget->layout();
+		if(dynamic_cast<dwt::Grid*>(widget->getParent())) {
+			widget->getParent()->layout();
+		}
 	}
 	return TRUE;
 }
