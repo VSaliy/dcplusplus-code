@@ -162,7 +162,7 @@ private:
 	void setColorImpl(COLORREF text, COLORREF background);
 
 	// aspects::Font
-	void setFontImpl(FontPtr font);
+	void setFontImpl();
 
 	// store current colors for the onPrinting handler and for setFontImpl.
 	COLORREF textColor;

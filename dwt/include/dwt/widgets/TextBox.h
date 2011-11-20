@@ -193,7 +193,7 @@ protected:
 	void create(const Seed& cs);
 
 	// aspects::Font
-	virtual void setFontImpl(FontPtr font);
+	virtual void setFontImpl();
 
 	// Contract needed by aspects::Update Aspect class
 	static Message getUpdateMessage();

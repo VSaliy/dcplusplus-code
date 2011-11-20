@@ -237,9 +237,9 @@ bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
 	return handled;
 }
 
-void TextBoxBase::setFontImpl(FontPtr font) {
-	BaseType::setFontImpl(font);
-	menuSeed.font = font;
+void TextBoxBase::setFontImpl() {
+	BaseType::setFontImpl();
+	menuSeed.font = getFont();
 }
 
 bool TextBox::handleMessage(const MSG& msg, LRESULT& retVal) {

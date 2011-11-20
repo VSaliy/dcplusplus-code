@@ -230,7 +230,7 @@ private:
 	size_t sizeImpl() const;
 
 	// aspects::Font
-	void setFontImpl(FontPtr font);
+	void setFontImpl();
 
 	// aspects::Help
 	void helpImpl(unsigned& id);

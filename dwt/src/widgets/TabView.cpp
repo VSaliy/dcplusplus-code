@@ -816,11 +816,11 @@ bool TabView::inCloseRect(const ScreenCoordinate& pos) const {
 	return false;
 }
 
-void TabView::setFontImpl(FontPtr font) {
-	BaseType::setFontImpl(font);
-	this->font = getFont(); // might be a default font, so get it this way.
+void TabView::setFontImpl() {
+	BaseType::setFontImpl();
+	font = getFont();
 	if(hasStyle(TCS_OWNERDRAWFIXED)) {
-		boldFont = this->font->makeBold();
+		boldFont = font->makeBold();
 	}
 }
 
