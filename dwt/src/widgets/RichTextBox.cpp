@@ -337,9 +337,9 @@ void RichTextBox::setColorImpl(COLORREF text, COLORREF background) {
 	sendMessage(EM_SETBKGNDCOLOR, 0, static_cast<LPARAM>(bgColor));
 }
 
-void RichTextBox::setFontImpl(FontPtr font) {
+void RichTextBox::setFontImpl() {
 	// changing the default font resets the default text color.
-	BaseType::setFontImpl(font);
+	BaseType::setFontImpl();
 	updateTextColor();
 }
 

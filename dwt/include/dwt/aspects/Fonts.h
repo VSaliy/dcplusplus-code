@@ -43,7 +43,7 @@ namespace dwt { namespace aspects {
 
 /** Aspect class used by Widgets that have the possibility of changing their main font. By default,
 this is done by sending a WM_SETFONT message. Widgets that want to customize this behavior can
-provide a void setFontImpl(FontPtr font) function. */
+provide a void setFontImpl() function. */
 template<typename WidgetType>
 class Fonts
 {
@@ -68,7 +68,7 @@ public:
 	/// Sets the font used by the Widget
 	void setFont(FontPtr font) {
 		this->font = font ? font : new Font(Font::DefaultGui);
-		W().setFontImpl(this->font);
+		W().setFontImpl();
 	}
 
 	/// Returns the font used by the Widget
@@ -80,7 +80,7 @@ public:
 	}
 
 protected:
-	virtual void setFontImpl(FontPtr) {
+	virtual void setFontImpl() {
 		W().sendMessage(WM_SETFONT, reinterpret_cast<WPARAM>(font->handle()), TRUE);
 	}
 
