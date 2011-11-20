@@ -145,11 +145,7 @@ void WinUtil::init() {
 		SettingsManager::getInstance()->setDefault(SettingsManager::MAIN_FONT, Text::fromT(encodeFont(metrics.lfMessageFont)));
 	}
 
-	{
-		LOGFONT lf;
-		decodeFont(Text::toT(SETTING(MAIN_FONT)), lf);
-		font = dwt::FontPtr(new dwt::Font(lf));
-	}
+	initFont();
 
 	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 
@@ -207,6 +203,23 @@ void WinUtil::init() {
 	registerHubHandlers();
 	registerMagnetHandler();
 
+	initHelpPath();
+
+	if(!helpPath.empty()) {
+		// load up context-sensitive help texts
+		try {
+			helpTexts = StringTokenizer<string> (File(Util::getFilePath(Text::fromT(helpPath)) + "cshelp.rtf",
+				File::READ, File::OPEN).read(), "\r\n").getTokens();
+		} catch (const FileException&) {
+		}
+	}
+
+#ifdef HAVE_HTMLHELP_H
+	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR> (&helpCookie));
+#endif
+}
+
+void WinUtil::initSeeds() {
 	// Const so that noone else will change them after they've been initialized
 	Button::Seed& xbutton = const_cast<Button::Seed&> (Seeds::button);
 	ComboBox::Seed& xcomboBoxEdit = const_cast<ComboBox::Seed&> (Seeds::comboBoxEdit);
@@ -285,24 +298,9 @@ void WinUtil::init() {
 	xdTextBox.menuSeed = Seeds::menu;
 	xRichTextBox.menuSeed = Seeds::menu;
 	xdRichTextBox.menuSeed = Seeds::menu;
-
-	init_helpPath();
-
-	if(!helpPath.empty()) {
-		// load up context-sensitive help texts
-		try {
-			helpTexts = StringTokenizer<string> (File(Util::getFilePath(Text::fromT(helpPath)) + "cshelp.rtf",
-				File::READ, File::OPEN).read(), "\r\n").getTokens();
-		} catch (const FileException&) {
-		}
-	}
-
-#ifdef HAVE_HTMLHELP_H
-	::HtmlHelp(NULL, NULL, HH_INITIALIZE, reinterpret_cast<DWORD_PTR> (&helpCookie));
-#endif
 }
 
-void WinUtil::init_helpPath() {
+void WinUtil::initHelpPath() {
 	// find the current locale
 	string lang = SETTING(LANGUAGE);
 	if(lang.empty())
@@ -349,6 +347,14 @@ void WinUtil::enableDEP() {
 	} else {
 		dcdebug("SetProcessDEPPolicy not present\n");
 	}
+}
+
+void WinUtil::initFont() {
+	LOGFONT lf;
+	decodeFont(Text::toT(SETTING(MAIN_FONT)), lf);
+	font.reset(new dwt::Font(lf));
+
+	initSeeds();
 }
 
 tstring WinUtil::encodeFont(LOGFONT const& font) {

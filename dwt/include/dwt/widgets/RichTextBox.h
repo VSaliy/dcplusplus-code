@@ -79,8 +79,6 @@ public:
 		typedef RichTextBox::ThisType WidgetType;
 
 		FontPtr font;
-		COLORREF foregroundColor; /// the text color, or NaC for the default
-		COLORREF backgroundColor; /// the background color, or NaC for the default
 		bool scrollBarHorizontallyFlag;
 		bool scrollBarVerticallyFlag;
 
@@ -126,6 +124,9 @@ public:
 	/// escape Rich Edit control chars: {, }, and \, as well as \n which becomes \line.
 	static tstring rtfEscape(const tstring& str);
 
+	void setTextColor(COLORREF color);
+	void setBgColor(COLORREF color);
+
 protected:
 	tstring currentNeedle;		// search in chat window
 	int currentNeedlePos;		// search in chat window
@@ -155,10 +156,17 @@ private:
 	void setTextA(const std::string& txt);
 	void setTextEx(const std::string& txt, DWORD format);
 
+	void updateTextColor();
+
 	// aspects::Colorable
 	void setColorImpl(COLORREF text, COLORREF background);
 
-	COLORREF bgColor; // store the current bg color for the onPrinting handler.
+	// aspects::Font
+	void setFontImpl(FontPtr font);
+
+	// store current colors for the onPrinting handler and for setFontImpl.
+	COLORREF textColor;
+	COLORREF bgColor;
 };
 
 // end namespace dwt

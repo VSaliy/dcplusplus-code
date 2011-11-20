@@ -83,7 +83,6 @@ void TabView::create(const Seed & cs) {
 
 	BaseType::create(cs);
 	setFont(cs.font);
-	font = getFont();
 
 	widthConfig = cs.widthConfig;
 	toggleActive = cs.toggleActive;
@@ -94,8 +93,6 @@ void TabView::create(const Seed & cs) {
 		if(widthConfig < 100)
 			widthConfig = 100;
 		TabCtrl_SetMinTabWidth(handle(), widthConfig);
-
-		boldFont = font->makeBold();
 
 		closeIcon = cs.closeIcon;
 
@@ -817,6 +814,14 @@ bool TabView::inCloseRect(const ScreenCoordinate& pos) const {
 		return ::PtInRect(&rc, pos.getPoint());
 	}
 	return false;
+}
+
+void TabView::setFontImpl(FontPtr font) {
+	BaseType::setFontImpl(font);
+	this->font = getFont(); // might be a default font, so get it this way.
+	if(hasStyle(TCS_OWNERDRAWFIXED)) {
+		boldFont = this->font->makeBold();
+	}
 }
 
 void TabView::helpImpl(unsigned& id) {

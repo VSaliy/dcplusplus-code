@@ -1052,9 +1052,18 @@ MainWindow::~MainWindow() {
 
 namespace {
 
+BOOL CALLBACK updateFont(HWND hwnd, LPARAM prevFont) {
+	dwt::Control* widget = dwt::hwnd_cast<dwt::Control*>(hwnd);
+	if(widget && widget->getFont()->handle() == reinterpret_cast<HFONT>(prevFont)) {
+		widget->setFont(WinUtil::font);
+	}
+	return TRUE;
+}
+
 BOOL CALLBACK updateColors(HWND hwnd, LPARAM) {
 	dwt::Control* widget = dwt::hwnd_cast<dwt::Control*>(hwnd);
 	if(widget) {
+		// not every widget is custom colored; those that are also catch ID_UPDATECOLOR (see WinUtil::setColor).
 		widget->sendCommand(ID_UPDATECOLOR);
 	}
 	return TRUE;
@@ -1077,6 +1086,8 @@ void MainWindow::handleSettings() {
 
 	auto prevGeo = BOOLSETTING(GET_USER_COUNTRY);
 	auto prevGeoFormat = SETTING(COUNTRY_FORMAT);
+
+	auto prevFont = SETTING(MAIN_FONT);
 
 	auto prevTray = BOOLSETTING(ALWAYS_TRAY);
 	auto prevSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
@@ -1109,6 +1120,14 @@ void MainWindow::handleSettings() {
 		}
 		if(rebuildGeo) {
 			GeoManager::getInstance()->rebuild();
+		}
+
+		if(SETTING(MAIN_FONT) != prevFont) {
+			auto prev = WinUtil::font;
+			WinUtil::initFont();
+			::EnumChildWindows(handle(), updateFont, reinterpret_cast<LPARAM>(prev->handle()));
+			mainMenu->setFont(WinUtil::font);
+			::DrawMenuBar(handle());
 		}
 
 		bool newColors = false;

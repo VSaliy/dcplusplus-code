@@ -229,6 +229,9 @@ private:
 	void clearImpl();
 	size_t sizeImpl() const;
 
+	// aspects::Font
+	void setFontImpl(FontPtr font);
+
 	// aspects::Help
 	void helpImpl(unsigned& id);
 

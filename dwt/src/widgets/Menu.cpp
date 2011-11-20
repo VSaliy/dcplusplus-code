@@ -98,8 +98,7 @@ void Menu::createHelper(const Seed& cs) {
 	if(ownerDrawn) {
 		iconSize = cs.iconSize;
 
-		font = cs.font ? cs.font : new Font(Font::DefaultGui);
-		itsTitleFont = boldFont = font->makeBold();
+		setFont(cs.font);
 
 		if(!popup) {
 			getParent()->addCallback(Message(WM_SYSCOLORCHANGE), Dispatchers::VoidVoid<0, false>([] { colors.reset(); }));
@@ -301,9 +300,14 @@ void Menu::destroyItemDataWrapper( ItemDataWrapper * wrapper )
 	wrapper = 0;
 }
 
-void Menu::setTitleFont( FontPtr font )
-{
-	itsTitleFont = font;
+void Menu::setFont(FontPtr font) {
+	this->font = font ? font : new Font(Font::DefaultGui);
+	titleFont = boldFont = this->font->makeBold();
+	std::for_each(itsChildren.begin(), itsChildren.end(), [this](MenuPtr sub) { sub->setFont(this->font); });
+}
+
+void Menu::setTitleFont(FontPtr font) {
+	titleFont = font;
 }
 
 void Menu::clearTitle( bool clearSidebar /* = false */)
@@ -440,7 +444,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 	if(drawSidebar) {
 		// get logical info for title font
 		LOGFONT lf;
-		::GetObject(itsTitleFont->handle(), sizeof(lf), &lf);
+		::GetObject(titleFont->handle(), sizeof(lf), &lf);
 
 		// 90 degree rotation and bold
 		lf.lfOrientation = lf.lfEscapement = 900;
@@ -591,7 +595,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 
 			// Select item font
 			auto select(canvas.select(*(
-				wrapper.isTitle ? itsTitleFont :
+				wrapper.isTitle ? titleFont :
 				wrapper.isDefault ? boldFont :
 				font)));
 
@@ -759,7 +763,7 @@ bool Menu::handlePainting(MEASUREITEMSTRUCT& measureInfo, ItemDataWrapper& wrapp
 	}
 
 	Point textSize = getTextSize(getText(wrapper.index),
-		wrapper.isTitle ? itsTitleFont :
+		wrapper.isTitle ? titleFont :
 		wrapper.isDefault ? boldFont :
 		font);
 	if(!wrapper.isTitle) // the title will adjust its hor size per others and add ellipsis if needed
@@ -781,7 +785,7 @@ bool Menu::handlePainting(MEASUREITEMSTRUCT& measureInfo, ItemDataWrapper& wrapp
 
 	// adjust width for sidebar
 	if(drawSidebar)
-		itemWidth += getTextSize(getText(0), itsTitleFont).y; // 0 is the title index
+		itemWidth += getTextSize(getText(0), titleFont).y; // 0 is the title index
 
 	// make sure the calculated size is acceptable
 	if(getRootMenu()->popup) {

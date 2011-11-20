@@ -204,11 +204,13 @@ public:
 	*/
 	void setTitle(const tstring& title, const IconPtr& icon = IconPtr(), bool drawSidebar = false);
 
+	void setFont(FontPtr font);
+
 	/// Sets title font
 	/** Create a font through e.g. createFont in WidgetFactory or similar and set the
 	* title font to the menu title through using this function
 	*/
-	void setTitleFont( FontPtr font );
+	void setTitleFont(FontPtr font);
 
 	/// Removes menu title
 	/** If clearSidebar is true, sidebar is removed
@@ -339,12 +341,10 @@ private:
 
 	FontPtr font;
 	FontPtr boldFont; // for default items
+	FontPtr titleFont; // Menu title font
 
 	// Menu title
 	tstring itsTitle;
-
-	// Menu title font
-	FontPtr itsTitleFont;
 
 	// if true title is drawn as sidebar
 	bool drawSidebar;
