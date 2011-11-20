@@ -53,7 +53,7 @@ public:
 		W().setColorImpl(text, background);
 	}
 
-private:
+protected:
 	virtual void setColorImpl(COLORREF text, COLORREF background) {
 		BrushPtr brush(new Brush(background));
 		W().setCallback(Message(WM_CTLCOLOR), [text, background, brush](const MSG& msg, LRESULT& ret) -> bool {

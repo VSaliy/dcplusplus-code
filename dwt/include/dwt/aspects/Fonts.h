@@ -41,68 +41,53 @@
 
 namespace dwt { namespace aspects {
 
-/// Aspect class used by Widgets that have the possibility of setting the
-/// "font" property of their objects.
-template< class WidgetType >
+/** Aspect class used by Widgets that have the possibility of changing their main font. By default,
+this is done by sending a WM_SETFONT message. Widgets that want to customize this behavior can
+provide a void setFontImpl(FontPtr font) function. */
+template<typename WidgetType>
 class Fonts
 {
 	WidgetType& W() { return *static_cast<WidgetType*>(this); }
+
 public:
 	/// Fills a Point with the size of text to be drawn in the Widget's font.
 	/** getTextSize determines the height and width that text will take. <br>
 	  * This is useful if you want to allocate enough space to fit known text. <br>
 	  * It accounts for the set font too.
 	  */
-	Point getTextSize(const tstring& text);
+	Point getTextSize(const tstring& text) {
+		UpdateCanvas c(&W());
+		auto select(c.select(*W().getFont()));
+
+		Rectangle rect;
+		c.drawText(text, rect, DT_CALCRECT | DT_NOPREFIX);
+
+		return rect.size;
+	}
 
 	/// Sets the font used by the Widget
-	/** Changes the font of the Widget to the given font. Use the class Font to
-	  * construct a font in which to set by this function.
-	  */
-	void setFont( const FontPtr& font, bool forceUpdate = true );
+	void setFont(FontPtr font) {
+		this->font = font ? font : new Font(Font::DefaultGui);
+		W().setFontImpl(this->font);
+	}
 
 	/// Returns the font used by the Widget
-	/** Returns the Font object currently being used by the Widget
-	  */
-	const FontPtr& getFont();
+	const FontPtr& getFont() {
+		if(!font) {
+			font = new Font(reinterpret_cast<HFONT>(W().sendMessage(WM_GETFONT)), false);
+		}
+		return font;
+	}
+
+protected:
+	virtual void setFontImpl(FontPtr) {
+		W().sendMessage(WM_SETFONT, reinterpret_cast<WPARAM>(font->handle()), TRUE);
+	}
 
 private:
 	// Keep a reference around so it doesn't get deleted
 	FontPtr font;
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-template< class WidgetType >
-Point Fonts< WidgetType >::getTextSize( const tstring & text )
-{
-	UpdateCanvas c(&W());
-	auto select(c.select(*W().getFont()));
-
-	Rectangle rect;
-	c.drawText(text, rect, DT_CALCRECT | DT_NOPREFIX);
-
-	return rect.size;
-}
-
-
-template< class WidgetType >
-void Fonts< WidgetType >::setFont( const FontPtr& font_, bool forceUpdate )
-{
-	font = font_ ? font_ : new Font(Font::DefaultGui);
-	W().sendMessage(WM_SETFONT, reinterpret_cast< WPARAM >( font->handle() ), static_cast< LPARAM >( forceUpdate ) );
-}
-
-template< class WidgetType >
-const FontPtr& Fonts< WidgetType >::getFont()
-{
-	if(!font) {
-		font = new Font(reinterpret_cast<HFONT>(W().sendMessage(WM_GETFONT)), false);
-	}
-	return font;
-}
 
 } }
 

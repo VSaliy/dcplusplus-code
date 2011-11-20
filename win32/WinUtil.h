@@ -161,6 +161,9 @@ public:
 
 	static void enableDEP();
 
+	static void initSeeds();
+
+	static void initFont();
 	static tstring encodeFont(LOGFONT const& font);
 	static void decodeFont(const tstring& setting, LOGFONT &dest);
 
@@ -301,7 +304,7 @@ public:
 private:
 	static bool handleBoxDblClick(dwt::TextBoxBase* box, const dwt::MouseEvent& ev);
 
-	static void init_helpPath();
+	static void initHelpPath();
 
 	static DWORD helpCookie;
 	static tstring helpPath;

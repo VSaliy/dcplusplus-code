@@ -49,8 +49,6 @@ const TCHAR RichTextBox::windowClass[] = RICHEDIT_CLASS;
 RichTextBox::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL),
 	font(0),
-	foregroundColor(NaC),
-	backgroundColor(NaC),
 	scrollBarHorizontallyFlag(false),
 	scrollBarVerticallyFlag(false)
 {
@@ -325,13 +323,24 @@ tstring RichTextBox::rtfEscape(const tstring& str) {
 	return escaped;
 }
 
-void RichTextBox::setColorImpl(COLORREF text, COLORREF background) {
+void RichTextBox::updateTextColor() {
 	CHARFORMAT textFormat = { sizeof(CHARFORMAT), CFM_COLOR };
-	textFormat.crTextColor = text;
+	textFormat.crTextColor = textColor;
 	sendMessage(EM_SETCHARFORMAT, SCF_DEFAULT, reinterpret_cast<LPARAM>(&textFormat));
+}
+
+void RichTextBox::setColorImpl(COLORREF text, COLORREF background) {
+	textColor = text;
+	updateTextColor();
 
 	bgColor = background;
 	sendMessage(EM_SETBKGNDCOLOR, 0, static_cast<LPARAM>(bgColor));
+}
+
+void RichTextBox::setFontImpl(FontPtr font) {
+	// changing the default font resets the default text color.
+	BaseType::setFontImpl(font);
+	updateTextColor();
 }
 
 }
