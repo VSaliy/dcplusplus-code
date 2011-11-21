@@ -80,7 +80,7 @@ int DirectoryListingFrame::ItemInfo::getImage(int col) const {
 	return WinUtil::getFileIcon(getText(COLUMN_FILENAME));
 }
 
-int DirectoryListingFrame::ItemInfo::compareItems(ItemInfo* a, ItemInfo* b, int col) {
+int DirectoryListingFrame::ItemInfo::compareItems(const ItemInfo* a, const ItemInfo* b, int col) {
 	if(a->type == DIRECTORY) {
 		if(b->type == DIRECTORY) {
 			switch(col) {

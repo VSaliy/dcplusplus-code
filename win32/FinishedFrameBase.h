@@ -269,7 +269,7 @@ private:
 			return col == 0 ? WinUtil::getFileIcon(file) : -1;
 		}
 
-		static int compareItems(FileInfo* a, FileInfo* b, int col) {
+		static int compareItems(const FileInfo* a, const FileInfo* b, int col) {
 			switch(col) {
 				case FILES_COLUMN_TRANSFERRED: return compare(a->entry->getTransferred(), b->entry->getTransferred());
 				case FILES_COLUMN_FILESIZE: return compare(a->entry->getFileSize(), b->entry->getFileSize());
@@ -350,7 +350,7 @@ private:
 			return 0;
 		}
 
-		static int compareItems(UserInfo* a, UserInfo* b, int col) {
+		static int compareItems(const UserInfo* a, const UserInfo* b, int col) {
 			switch(col) {
 				case USERS_COLUMN_TRANSFERRED: return compare(a->entry->getTransferred(), b->entry->getTransferred());
 				case USERS_COLUMN_SPEED: return compare(a->entry->getAverageSpeed(), b->entry->getAverageSpeed());

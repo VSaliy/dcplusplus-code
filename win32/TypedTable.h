@@ -30,18 +30,18 @@
 @tparam managed Whether this class should handle deleting associated objects.
 
 @note Support for texts:
-The ContentType class must provide a const tstring& getText(int col) const function.
+The ContentType class must provide a const tstring& getText(int col) [const] function.
 
 @note Support for images:
-The ContentType class must provide a int getImage(int col) const function.
+The ContentType class must provide a int getImage(int col) [const] function.
 
 @note Support for item sorting:
 The ContentType class must provide a
-static int compareItems(const ContentType* a, const ContentType* b, int col) function.
+static int compareItems([const] ContentType* a, [const] ContentType* b, int col) function.
 
 @note Support for custom styles per item (whole row) or per sub-item (each cell):
 The ContentType class must provide a
-int getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int col) const function. It is
+int getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int col) [const] function. It is
 called a first time with col=-1 to set the style of the whole item. It can return:
 - CDRF_DODEFAULT to keep the default style for the item.
 - CDRF_NEWFONT to change the style of the item.
@@ -159,17 +159,21 @@ public:
 	}
 
 private:
-	HAS_FUNC(HasText_, getText, const tstring& (ContentType::*)(int) const);
-#define HasText HasText_<T>::value
+	HAS_FUNC(HasText_, getText, const tstring& (ContentType::*)(int));
+	HAS_FUNC(HasTextC_, getText, const tstring& (ContentType::*)(int) const);
+#define HasText (HasText_<T>::value || HasTextC_<T>::value)
 
-	HAS_FUNC(HasImage_, getImage, int (ContentType::*)(int) const);
-#define HasImage HasImage_<T>::value
+	HAS_FUNC(HasImage_, getImage, int (ContentType::*)(int));
+	HAS_FUNC(HasImageC_, getImage, int (ContentType::*)(int) const);
+#define HasImage (HasImage_<T>::value || HasImageC_<T>::value)
 
-	HAS_FUNC(HasSort_, compareItems, int (*)(const ContentType*, const ContentType*, int));
-#define HasSort HasSort_<T>::value
+	HAS_FUNC(HasSort_, compareItems, int (*)(ContentType*, ContentType*, int));
+	HAS_FUNC(HasSortC_, compareItems, int (*)(const ContentType*, const ContentType*, int));
+#define HasSort (HasSort_<T>::value || HasSortC_<T>::value)
 
-	HAS_FUNC(HasStyle_, getStyle, int (ContentType::*)(HFONT&, COLORREF&, COLORREF&, int) const);
-#define HasStyle HasStyle_<T>::value
+	HAS_FUNC(HasStyle_, getStyle, int (ContentType::*)(HFONT&, COLORREF&, COLORREF&, int));
+	HAS_FUNC(HasStyleC_, getStyle, int (ContentType::*)(HFONT&, COLORREF&, COLORREF&, int) const);
+#define HasStyle (HasStyle_<T>::value || HasStyleC_<T>::value)
 
 	template<typename T> typename std::enable_if<HasText, void>::type addTextEvent() {
 		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
