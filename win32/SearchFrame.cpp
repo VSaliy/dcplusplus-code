@@ -71,8 +71,7 @@ int SearchFrame::SearchInfo::getImage(int col) const {
 	return sr->getType() == SearchResult::TYPE_FILE ? WinUtil::getFileIcon(sr->getFile()) : static_cast<int>(WinUtil::DIR_ICON);
 }
 
-int SearchFrame::SearchInfo::compareItems(SearchInfo* a, SearchInfo* b, int col) {
-
+int SearchFrame::SearchInfo::compareItems(const SearchInfo* a, const SearchInfo* b, int col) {
 	switch(col) {
 	case COLUMN_NICK:
 		if(a->srs.size() > 1 && b->srs.size() > 1)

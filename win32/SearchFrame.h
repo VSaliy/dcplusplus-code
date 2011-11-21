@@ -125,7 +125,7 @@ private:
 		const tstring& getText(int col) const { return columns[col]; }
 		int getImage(int col) const;
 
-		static int compareItems(SearchInfo* a, SearchInfo* b, int col);
+		static int compareItems(const SearchInfo* a, const SearchInfo* b, int col);
 
 		void update();
 
@@ -146,7 +146,7 @@ private:
 		int getImage(int) const {
 			return 0;
 		}
-		static int compareItems(HubInfo* a, HubInfo* b, int col) {
+		static int compareItems(const HubInfo* a, const HubInfo* b, int col) {
 			return (col == 0) ? lstrcmpi(a->name.c_str(), b->name.c_str()) : 0;
 		}
 		tstring url;

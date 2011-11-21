@@ -96,7 +96,7 @@ private:
 			}
 		}
 
-		static int compareItems(UserInfo* a, UserInfo* b, int col) {
+		static int compareItems(const UserInfo* a, const UserInfo* b, int col) {
 			switch(col) {
 			case COLUMN_FAVORITE: return compare(a->isFavorite, b->isFavorite);
 			case COLUMN_SLOT: return compare(a->grantSlot, b->grantSlot);

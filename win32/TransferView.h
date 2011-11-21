@@ -134,7 +134,7 @@ private:
 			return col == 0 ? (download ? IMAGE_DOWNLOAD : IMAGE_UPLOAD) : -1;
 		}
 
-		static int compareItems(ConnectionInfo* a, ConnectionInfo* b, int col);
+		static int compareItems(const ConnectionInfo* a, const ConnectionInfo* b, int col);
 	};
 
 	struct UpdateInfo : public Task {
@@ -205,7 +205,7 @@ private:
 
 		int getImage(int col) const;
 
-		static int compareItems(DownloadInfo* a, DownloadInfo* b, int col) {
+		static int compareItems(const DownloadInfo* a, const DownloadInfo* b, int col) {
 			switch(col) {
 			case DOWNLOAD_COLUMN_STATUS: return compare(fraction(a->size, a->done), fraction(b->size, b->done));
 			case DOWNLOAD_COLUMN_TIMELEFT: return compare(a->timeleft(), b->timeleft());
@@ -219,7 +219,7 @@ private:
 		void update();
 		void update(const TickInfo& ti);
 
-		int64_t timeleft() { return bps == 0 ? 0 : (size - done) / bps; }
+		int64_t timeleft() const { return bps == 0 ? 0 : (size - done) / bps; }
 		string path;
 		int64_t done;
 		int64_t size;

@@ -145,7 +145,7 @@ private:
 			int64_t total;
 		};
 
-		static int compareItems(ItemInfo* a, ItemInfo* b, int col);
+		static int compareItems(const ItemInfo* a, const ItemInfo* b, int col);
 	private:
 		tstring columns[COLUMN_LAST];
 	};
