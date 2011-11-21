@@ -43,7 +43,7 @@ static const ColumnInfo columns[] = {
 };
 
 SearchTypesPage::SearchTypesPage(dwt::Widget* parent) :
-PropPage(parent, 2, 1),
+PropPage(parent, 1, 1),
 types(0),
 rename(0),
 remove(0),
@@ -59,7 +59,7 @@ modify(0)
 		auto group = grid->addChild(GroupBox::Seed(T_("Search types")));
 		group->setHelpId(IDH_SETTINGS_SEARCHTYPES_LIST);
 
-		auto cur = group->addChild(Grid::Seed(4, 1));
+		auto cur = group->addChild(Grid::Seed(3, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;

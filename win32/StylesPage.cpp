@@ -43,8 +43,17 @@ static const ColumnInfo columns[] = {
 	{ "", 100, false }
 };
 
+/// @todo help
+#define IDH_SETTINGS_STYLES_PREVIEW 0
+#define IDH_SETTINGS_STYLES_FONT 0
+#define IDH_SETTINGS_STYLES_TEXT 0
+#define IDH_SETTINGS_STYLES_BG 0
+#define IDH_SETTINGS_STYLES_GLOBAL 0
+#define IDH_SETTINGS_STYLES_UPLOADS 0
+#define IDH_SETTINGS_STYLES_DOWNLOADS 0
+
 StylesPage::StylesPage(dwt::Widget* parent) :
-PropPage(parent, 2, 1),
+PropPage(parent, 1, 1),
 table(0),
 preview(0),
 customFont(0),
@@ -79,11 +88,11 @@ bgColor(0)
 			Label::Seed seed;
 			seed.exStyle |= WS_EX_CLIENTEDGE;
 			preview = cur->addChild(seed);
-			//preview->setHelpId(IDH_SETTINGS_STYLES_PREVIEW);
+			preview->setHelpId(IDH_SETTINGS_STYLES_PREVIEW);
 		}
 
 		auto cur2 = cur->addChild(Grid::Seed(1, 2));
-		//cur2->setHelpId(IDH_SETTINGS_STYLES_FONT);
+		cur2->setHelpId(IDH_SETTINGS_STYLES_FONT);
 
 		customFont = cur2->addChild(CheckBox::Seed(T_("Custom font")));
 		customFont->onClicked([this] { handleCustomFont(); });
@@ -92,7 +101,7 @@ bgColor(0)
 		font->onClicked([this] { handleFont(); });
 
 		cur2 = cur->addChild(Grid::Seed(1, 2));
-		//cur2->setHelpId(IDH_SETTINGS_STYLES_TEXT);
+		cur2->setHelpId(IDH_SETTINGS_STYLES_TEXT);
 
 		customTextColor = cur2->addChild(CheckBox::Seed(T_("Custom text color")));
 		customTextColor->onClicked([this] { handleCustomTextColor(); });
@@ -101,7 +110,7 @@ bgColor(0)
 		textColor->onClicked([this] { handleTextColor(); });
 
 		cur2 = cur->addChild(Grid::Seed(1, 2));
-		//cur2->setHelpId(IDH_SETTINGS_STYLES_BG);
+		cur2->setHelpId(IDH_SETTINGS_STYLES_BG);
 
 		customBgColor = cur2->addChild(CheckBox::Seed(T_("Custom background color")));
 		customBgColor->onClicked([this] { handleCustomBgColor(); });
@@ -110,26 +119,25 @@ bgColor(0)
 		bgColor->onClicked([this] { handleBgColor(); });
 	}
 
-	grid->addChild(Label::Seed(T_("Note; most of these options require that you restart DC++")))->setHelpId(IDH_SETTINGS_APPEARANCE_REQUIRES_RESTART);
-
 	WinUtil::makeColumns(table, columns, COLUMN_LAST);
 
 	TStringList groups(GROUP_LAST);
 	groups[GROUP_GENERAL] = T_("General");
 	groups[GROUP_TRANSFERS] = T_("Transfers");
 	table->setGroups(groups);
+	auto grouped = table->isGrouped();
 
-	auto add = [this](tstring&& text, unsigned helpId, int group, int fontSetting, int textColorSetting, int bgColorSetting) -> Data* {
+	auto add = [this, grouped](tstring&& text, unsigned helpId, int group, int fontSetting, int textColorSetting, int bgColorSetting) -> Data* {
 		auto data = new Data(forward<tstring>(text), helpId, fontSetting, textColorSetting, bgColorSetting);
-		table->insert(group, data);
+		table->insert(grouped ? group : -1, data);
 		return data;
 	};
 
-	globalData = add(T_("Global application style"), 0/*IDH_SETTINGS_STYLES_GLOBAL*/, GROUP_GENERAL,
+	globalData = add(T_("Global application style"), IDH_SETTINGS_STYLES_GLOBAL, GROUP_GENERAL,
 		SettingsManager::MAIN_FONT, SettingsManager::TEXT_COLOR, SettingsManager::BACKGROUND_COLOR);
-	add(T_("Uploads"), 0/*IDH_SETTINGS_STYLES_UPLOADS*/, GROUP_TRANSFERS,
+	add(T_("Uploads"), IDH_SETTINGS_STYLES_UPLOADS, GROUP_TRANSFERS,
 		SettingsManager::UPLOAD_FONT, SettingsManager::UPLOAD_TEXT_COLOR, SettingsManager::UPLOAD_BG_COLOR);
-	add(T_("Downloads"), 0/*IDH_SETTINGS_STYLES_DOWNLOADS*/, GROUP_TRANSFERS,
+	add(T_("Downloads"), IDH_SETTINGS_STYLES_DOWNLOADS, GROUP_TRANSFERS,
 		SettingsManager::DOWNLOAD_FONT, SettingsManager::DOWNLOAD_TEXT_COLOR, SettingsManager::DOWNLOAD_BG_COLOR);
 
 	globalData->customFont = true;
@@ -328,7 +336,7 @@ void StylesPage::colorDialog(COLORREF& color) {
 
 void StylesPage::update(Data* const data) {
 	if(data == globalData) {
-		table->setFont(globalData->font, false);
+		table->setFont(globalData->font);
 		table->setColor(globalData->textColor, globalData->bgColor);
 		table->Control::redraw(true);
 	} else {
@@ -339,7 +347,7 @@ void StylesPage::update(Data* const data) {
 }
 
 void StylesPage::updatePreview(Data* const data) {
-	preview->setFont(data->customFont ? data->font : globalData->font, false);
+	preview->setFont(data->customFont ? data->font : globalData->font);
 	auto textColor = data->getTextColor();
 	auto bgColor = data->getBgColor();
 	preview->setColor((textColor >= 0) ? textColor : globalData->textColor, (bgColor >= 0) ? bgColor : globalData->bgColor);
