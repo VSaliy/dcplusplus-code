@@ -140,9 +140,6 @@ bgColor(0)
 	add(T_("Downloads"), IDH_SETTINGS_STYLES_DOWNLOADS, GROUP_TRANSFERS,
 		SettingsManager::DOWNLOAD_FONT, SettingsManager::DOWNLOAD_TEXT_COLOR, SettingsManager::DOWNLOAD_BG_COLOR);
 
-	globalData->customFont = true;
-	globalData->customTextColor = true;
-	globalData->customBgColor = true;
 	update(globalData);
 
 	handleSelectionChanged();
@@ -178,8 +175,8 @@ textColor(SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSe
 customBgColor(!SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::IntSetting>(bgColorSetting))),
 bgColor(SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(bgColorSetting)))
 {
-	WinUtil::decodeFont(Text::toT(SettingsManager::getInstance()->get(static_cast<SettingsManager::StrSetting>(fontSetting))), logFont);
-	updateFont();
+	makeFont(font, SettingsManager::getInstance()->get(static_cast<SettingsManager::StrSetting>(fontSetting)));
+	makeFont(defaultFont, SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::StrSetting>(fontSetting)));
 }
 
 const tstring& StylesPage::Data::getText(int) const {
@@ -187,18 +184,26 @@ const tstring& StylesPage::Data::getText(int) const {
 }
 
 int StylesPage::Data::getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int) const {
-	if(customFont) {
-		font = this->font->handle();
+	auto f = getFont();
+	if(f.first) {
+		font = f.first->handle();
 	}
+
 	auto color = getTextColor();
 	if(color >= 0) {
 		textColor = color;
 	}
+
 	color = getBgColor();
 	if(color >= 0) {
 		bgColor = color;
 	}
+
 	return CDRF_NEWFONT;
+}
+
+const StylesPage::Data::Font& StylesPage::Data::getFont() const {
+	return customFont ? font : defaultFont;
 }
 
 COLORREF StylesPage::Data::getTextColor() const {
@@ -209,13 +214,9 @@ COLORREF StylesPage::Data::getBgColor() const {
 	return customBgColor ? bgColor : SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(bgColorSetting));
 }
 
-void StylesPage::Data::updateFont() {
-	font.reset(customFont ? new dwt::Font(logFont) : nullptr);
-}
-
 void StylesPage::Data::write() {
 	if(customFont) {
-		SettingsManager::getInstance()->set(static_cast<SettingsManager::StrSetting>(fontSetting), Text::fromT(WinUtil::encodeFont(logFont)));
+		SettingsManager::getInstance()->set(static_cast<SettingsManager::StrSetting>(fontSetting), Text::fromT(WinUtil::encodeFont(font.second)));
 	} else {
 		SettingsManager::getInstance()->unset(static_cast<SettingsManager::StrSetting>(fontSetting));
 	}
@@ -233,6 +234,13 @@ void StylesPage::Data::write() {
 	}
 }
 
+void StylesPage::Data::makeFont(Font& dest, const string& setting) {
+	if(!setting.empty()) {
+		WinUtil::decodeFont(Text::toT(setting), dest.second);
+		dest.first.reset(new dwt::Font(dest.second));
+	}
+}
+
 void StylesPage::handleSelectionChanged() {
 	auto data = table->getSelectedData();
 
@@ -245,21 +253,19 @@ void StylesPage::handleSelectionChanged() {
 	preview->setVisible(enable);
 	preview->getParent()->layout();
 
-	bool customizable = data && data != globalData;
-
 	enable = data && data->customFont;
 	customFont->setChecked(enable);
-	customFont->setEnabled(customizable);
+	customFont->setEnabled(data);
 	font->setEnabled(enable);
 
 	enable = data && data->customTextColor;
 	customTextColor->setChecked(enable);
-	customTextColor->setEnabled(customizable);
+	customTextColor->setEnabled(data);
 	textColor->setEnabled(enable);
 
 	enable = data && data->customBgColor;
 	customBgColor->setChecked(enable);
-	customBgColor->setEnabled(customizable);
+	customBgColor->setEnabled(data);
 	bgColor->setEnabled(enable);
 }
 
@@ -283,7 +289,6 @@ void StylesPage::handleTableHelpId(unsigned& id) {
 void StylesPage::handleCustomFont() {
 	auto data = table->getSelectedData();
 	data->customFont = customFont->getChecked();
-	data->updateFont();
 	update(data);
 	handleSelectionChanged();
 }
@@ -295,8 +300,12 @@ void StylesPage::handleFont() {
 	options.underline = false;
 	options.color = false;
 	options.bgColor = data->bgColor;
-	if(FontDialog(this).open(data->logFont, data->textColor, &options)) {
-		data->updateFont();
+	if(!data->font.first) {
+		// initialize the LOGFONT structure.
+		data->font.second = data->defaultFont.first ? data->defaultFont.second : globalData->getFont().second;
+	}
+	if(FontDialog(this).open(data->font.second, data->textColor, &options)) {
+		data->font.first.reset(new dwt::Font(data->font.second));
 		update(data);
 	}
 }
@@ -336,8 +345,8 @@ void StylesPage::colorDialog(COLORREF& color) {
 
 void StylesPage::update(Data* const data) {
 	if(data == globalData) {
-		table->setFont(globalData->font);
-		table->setColor(globalData->textColor, globalData->bgColor);
+		table->setFont(globalData->getFont().first);
+		table->setColor(globalData->getTextColor(), globalData->getBgColor());
 		table->Control::redraw(true);
 	} else {
 		table->update(data);
@@ -347,9 +356,10 @@ void StylesPage::update(Data* const data) {
 }
 
 void StylesPage::updatePreview(Data* const data) {
-	preview->setFont(data->customFont ? data->font : globalData->font);
+	auto font = data->getFont();
+	preview->setFont(font.first ? font.first : globalData->getFont().first);
 	auto textColor = data->getTextColor();
 	auto bgColor = data->getBgColor();
-	preview->setColor((textColor >= 0) ? textColor : globalData->textColor, (bgColor >= 0) ? bgColor : globalData->bgColor);
+	preview->setColor((textColor >= 0) ? textColor : globalData->getTextColor(), (bgColor >= 0) ? bgColor : globalData->getBgColor());
 	preview->redraw(true);
 }

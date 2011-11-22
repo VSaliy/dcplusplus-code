@@ -45,16 +45,17 @@ private:
 	};
 
 	class Data {
+		typedef pair<dwt::FontPtr, LOGFONT> Font;
+
 	public:
 		Data(tstring&& text, unsigned helpId, int fontSetting, int textColorSetting, int bgColorSetting);
 
 		const tstring& getText(int) const;
 		int getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int) const;
 
+		const Font& getFont() const;
 		COLORREF getTextColor() const;
 		COLORREF getBgColor() const;
-
-		void updateFont();
 
 		void write();
 
@@ -66,14 +67,17 @@ private:
 		const int bgColorSetting;
 
 		bool customFont;
-		dwt::FontPtr font;
-		LOGFONT logFont;
+		Font font;
+		Font defaultFont;
 
 		bool customTextColor;
 		COLORREF textColor;
 
 		bool customBgColor;
 		COLORREF bgColor;
+
+	private:
+		static void makeFont(Font& dest, const string& setting);
 	};
 
 	Data* globalData;

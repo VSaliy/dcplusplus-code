@@ -64,6 +64,8 @@ void RichTextBox::create(const Seed& cs) {
 	BaseType::create(cs);
 	setFont(cs.font);
 
+	setColor(Color::predefined(COLOR_WINDOWTEXT), Color::predefined(COLOR_WINDOW));
+
 	setScrollBarHorizontally(cs.scrollBarHorizontallyFlag);
 	setScrollBarVertically(cs.scrollBarVerticallyFlag);
 

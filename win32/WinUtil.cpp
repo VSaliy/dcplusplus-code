@@ -139,7 +139,7 @@ void WinUtil::init() {
 	bgColor = SETTING(BACKGROUND_COLOR);
 	bgBrush = dwt::BrushPtr(new dwt::Brush(bgColor));
 
-	if(SettingsManager::getInstance()->isDefault(SettingsManager::MAIN_FONT)) {
+	{
 		NONCLIENTMETRICS metrics = { sizeof(NONCLIENTMETRICS) };
 		::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &metrics, 0);
 		SettingsManager::getInstance()->setDefault(SettingsManager::MAIN_FONT, Text::fromT(encodeFont(metrics.lfMessageFont)));
