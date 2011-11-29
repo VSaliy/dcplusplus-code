@@ -16,7 +16,7 @@ hubs using the earlier <a href="http://en.wikipedia.org/wiki/Direct_Connect_netw
 file sharing using a protocol called <a href="http://adc.sourceforge.net/" target="_blank" class="external">Advanced Direct Connect (ADC)</a>.</p> 
 
 <p>The newest version of DC++ should work well on any officially supported Windows
-client operating system, including XP SP3, Vista SP1 and Windows 7. Some older 
+client operating system, including XP SP3, Vista SP2 and Windows 7. Some older 
 versions will run on Windows 2000 or Win9x/ME but using DC++ on these old, discontinued
 and vulnerable operating systems is neither recommended nor supported. 
 As long as it downloaded from the <a href="http://dcplusplus.sourceforge.net/" target="_blank" class="external">official site</a>,
@@ -77,70 +77,46 @@ enjoy all the possibilities and benefits of Direct Connect.</p>
 
 <h2>Basic settings and usage</h2>
 
-<p><a href="http://dcplusplus.sourceforge.net/tutorial.html#settings" target="_blank" class="external">The DC++ Quick Start Tutorial</a> is an easy to understand guide to newcomers. It contains plenty of screenshots and 
-explains basic DC++ usage and the minimum settings required to get things up
-and running. Make sure you gone through the guide and configured all the minimum 
-required settings (eg. entered a unique nick in <a href="settings_general.html">General settings</a>, etc...) or
-you won't be able to connect to any hub.</p>
+<p><a href="http://dcplusplus.sourceforge.net/tutorial.html#settings" target="_blank" class="external">The DC++ Quick Start Tutorial</a> is an easy to understand guide to newcomers. It contains plenty of screenshots as well as
+a video tutorial that explains basic DC++ usage and the minimum settings required to 
+get things up and running. Make sure you gone through the tutorial and configured all
+the minimum required settings (eg. entered a unique nick in <a href="settings_general.html">General settings</a>, etc...)
+or you won't be able to connect to any hub.</p>
 
-<h2 id="firewall">Checking software firewall settings</h2>
+<p>In most cases, after concluding this basic setup you must be able to connect to hubs,
+search for files and download from any user. If you don't experience any issues then 
+you can entirely <a href="#morehelp">skip the next section</a>.</p>
 
-<p>Software firewalls often cause problems as they can completely prevent DC++
-from connecting to the Internet. You can skip this section if you can download
-hublists and connect to hubs. However, if you can't connect to any hub or
-download any hublist <u>while your other programs are able to access the
-Internet</u> then it's possible that a software firewall is blocking DC++.
-</p>
+<h2>Troubleshooting connectivity problems</h2>
 
-<p>All officially supported Windows operating systems (XP with Service Pack 3, Vista and Windows 7) have
-a built in firewall enabled by default. Moreover, almost all anti-virus suites
-(Norton, McAfee, CA, Eset, Kaspersky, F-Secure, AVG, etc.) include a firewall
-component with their "typical" install method. Because of this, you can still
-have a firewall running even if you've never installed a separate firewall
-product or seen a sign of its operation.</p>
+<p>If you experience any connectivity problems after the required basic setup
+(eg. not able to connect to any hub, no search results, downloads don't start) then you 
+may need to do some additional configuration. Beside some less frequent issues in most 
+cases the possible source of the connectivity issues can be narrowed down to reasons:</p>
 
-<p>If you use Windows XP with third party software firewall installed then make 
-sure you have the <a href="http://support.microsoft.com/kb/283673" target="_blank" class="external">internal Windows firewall disabled</a>. 
-On Vista and Windows 7 this should be automatically done by your 3rd party firewall application.
-</p>
+<ul>
+	<li><p><u>DC++ itself or its access to the Internet is blocked by some security software</u>.
+	Typical sympthoms of this problem are that you cannot connect to hubs and unable to download
+	hublists or you cannot start DC++ itself at all.</p>
+	<p>In this case you have to allow (unblock) DC++ in <b>all</b> the installed security 
+	software (firewall, anti-virus, anti-spyware, etc..). For additional information and
+	tips about how to unblock DC++ in the Windows firewall and other 3rd party security 
+	software follow <a href="faq_unblock.html">this FAQ</a>.</p></li>
 
-<p>The easiest way to check if DC++ is blocked is to go the Help/About menu in
-DC++ and check if it can download the Latest Version number (bottom box of the
-window). A version number should appear in the box soon. If you get error
-message instead it means something is preventing DC++ from accessing the
-Internet.</p>
+	<li><p><u>Misconfigured or incorrectly detected connectivity settings</u>. The most obivious
+	sign of this problem is that you are <i>able</i> to pull down the hublists and can connect
+	to hubs without problems, even <b>others can upload from you</b> but searches and/or
+	downloads are not working (no search results / connection timeouts).</p>
+	<p>In most cases DC++ should be able to configure connectivity settings on your behalf, provided
+	the <a href="settings_connectivity.html">Automatic connectivity setup</a> feature is enabled.
+	If searches and/or downloads are not working, make sure that the <a href="settings_connectivity.html">
+	Let DC++ determine the best connectivity settings</a> option is enabled. If it doesn't help
+	(or it forces you into <a href="faq_whyactive.html">passive mode</a> and you want to improve 
+	your connectivity) then follow <a href="faq_connection.html">the FAQ that explains how to manually
+	configure DC++ connectivity settings</a>.</p></li>
+</ul>
 
-<p><a href="faq_activemode.html#firewall">Here are some tips</a> how to try to unblock DC++ in the built-in Windows firewall.</p>
-
-<p>The method for unblocking programs in 3rd party firewalls varies from product to product.
-Check your firewall's help or manual for instructions. The best general practice is to
-exit DC++ and remove ALL the rules for DC++ in the firewall configuration. In
-most cases the time of next start of DC++ you'll be shown a popup window where
-you can re-enable DC++. You can find configuration instructions for some
-popular firewall software <a href="http://www.dslreports.com/faq/dc/3.1_Software_Firewalls" target="_blank" class="external">here</a>.</p>
-
-<h2 id="connection">Setting up your connection</h2>
-
-<p>To make your life easier while using DC++ your connection must be set up correctly.
-In other words your incoming connection type must be correctly chosen for searches and
-downloads to work. The available connection modes depend on the structure of your network
-and the way you access the Internet. From a protocol perspective, there are two connection
-methods available: <b>active mode</b> and <b>passive mode</b>. While passive
-mode is almost guaranteed to work, it does not work as well as a properly
-configured active mode connection. For a more in-depth explanation, read
-<a href="faq_whyactive.html">Why do I need active mode?</a></p>
-
-<p>In most cases DC++ should be able to configure connectivity settings on your behalf, provided
-the <a href="settings_connectivity.html">Automatic connectivity setup</a> feature is enabled.
-If you able to search and download from the users of the hubs you are connected to, then
-you're done.</p>
-
-<p>If searches and/or downloads are not working, make sure that the <a href="settings_connectivity.html">
-Let DC++ determine the best connectivity settings</a> option is enabled. If it doesn't help
-(or it forces you into passive mode and you want to improve your connectivity) then follow
-<a href="faq_connection.html">the FAQ that explains how to manually configure connectivity settings.</a></p>
-
-<h2>Help resources</h2>
+<h2 id="morehelp">Help resources</h2>
 <p>
 Need more help?
 </p>

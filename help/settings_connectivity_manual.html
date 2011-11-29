@@ -11,7 +11,8 @@
 	</h1>
 <h2 id="connection">Incoming connection settings</h2>
 <p>
-Use these settings to manually configure DC++ for incoming connections. If unsure, you may want to follow the <a href="get_started.html#connection">connection setup part</a> of the <a href="get_started.html">Get Started guide</a>.
+Use these settings to manually configure DC++ for incoming connections. If unsure about these settings, 
+you may want to follow the <a href="faq_connection.html">Manual connection setup guide</a>.
 </p>
 <p style="margin-left: 40px;">Before setting up the following settings, make sure you are familiar
 with the meaning of each connection mode and with the <a href="faq_whyactive.html">differences
@@ -19,7 +20,7 @@ with the meaning of each connection mode and with the <a href="faq_whyactive.htm
 	users</a> of the DC network.</p>
   <h3 style="margin-left: 40px;"><u>Active connection modes</u></h3>
   <p style="margin-left: 40px;">Active mode is highly preferred in the DC network. For more
-  information, refer to the <a href="faq_activemode.html">Active mode FAQ</a>.</p>
+  information, refer to the <a href="faq_whyactive.html">FAQ that explains the advantages of the active mode</a>.</p>
 <dl style="margin-left: 40px;">
   <dt>My computer is directly connected to the Internet (no router)</dt>
   <dd cshelp="IDH_SETTINGS_CONNECTIVITY_DIRECT">Select this mode if your computer is connected directly to the
@@ -27,8 +28,8 @@ internet or you plan to connect to hubs in your local network only. <b>Do <u>not
 you have a router or any external firewall.</b> 
 If your computer is not behind a router all you have to do is to choose this option and usually 
 you don't need to alter anything more in the connection settings. However, if you have a software firewall
-installed or built-in Windows firewall enabled, you may need further configuration in the firewall 
-to allow Internet access for DC++.</dd>
+installed or built-in Windows firewall enabled, you may need <a href="faq_unblock.html">further configuration 
+in the firewall or other security software</a> to allow Internet access for DC++.</dd>
   <dt>Let DC++ configure my router (NAT-PMP / UPnP)</dt>
   <dd cshelp="IDH_SETTINGS_CONNECTIVITY_FIREWALL_UPNP">
   Select this mode if you are behind a router that supports standard port forwarding methods such
@@ -43,7 +44,7 @@ to allow Internet access for DC++.</dd>
   external IP address of your router in the field below as well (although in most cases, hubs you
   connect to - especially ADC ones - will fill it on your behalf). Use this mode only if the
   previous ones are not options for you. For more information, refer to the
-  <a href="faq_activemode.html">Active mode guide</a>.</dd>
+  <a href="faq_portforward.html">Manual port forwarding guide</a>.</dd>
 </dl>
   <h3 style="margin-left: 40px;"><u>Passive connection mode</u></h3> 
 <dl style="margin-left: 40px;">
@@ -66,7 +67,7 @@ Note that DC++ tries NAT Traversal on ADC hubs to allow passive users to connect
 <dd><p>These settings specify the communication ports DC++ listens on for incoming connections.
 Generally you don't need to add specific ports unless you configured your port forwarding settings
 manually. If port settings are left blank, DC++ will let the operating system generate a random
-port number. Port values are ignored when <a href="autoconn">Automatic connectivity setup</a> is
+port number. Port values are ignored when <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> is
 enabled.</p>
 <dl>
 	<dt>Transfer port (TCP)</dt>
@@ -85,7 +86,7 @@ enabled.</p>
 	search results.</dd>
 </dl>
 </dd>
-<dt>External / WAN IP</dt>
+<dt id="extip">External / WAN IP</dt>
 <dd cshelp="IDH_SETTINGS_CONNECTIVITY_EXTERNAL_IP">
 This field specifies your external IP address. <i>If you are unsure and use any other connection mode
 	option than 'Manual port forwarding (I have configured my router by myself)', then leave this
@@ -93,19 +94,15 @@ This field specifies your external IP address. <i>If you are unsure and use any 
 external IP will be the same and can easily be automatically detected. Fill this box <b>only</b> if
 you need to override said auto-detection. Ordinarily, only users behind a router (NAT
 device) need to fill in this box. If you put a DNS name here, DC++ will try to resolve it into an
-IP address before use. To determine your external IP address, follow the
-<a href="get_started.html#connection">connection setup part</a> of the
-<a href="get_started.html">Get Started guide</a> or the detailed
-<a href="faq_activemode.html">Active mode FAQ</a>. The IP address set here will be erased if the
-<a href="autoconn">Automatic connectivity setup</a> feature is in use.</dd>
+IP address before use. For additional information like how to determine your external IP address, follow the
+<a href="faq_connection.html">Manual connection setup guide</a>.</dd>
   <dt id="noipoverride">Don't allow hubs/NAT-PMP/UPnP to override</dt>
   <dd cshelp="IDH_SETTINGS_CONNECTIVITY_OVERRIDE">Enable this to always use the IP address in "External
   / WAN IP", and not let either NAT-PMP, UPnP nor connected hubs change it. If unsure, leave
-  this setting disabled. This option will be cleared out if the
-  <a href="autoconn">Automatic connectivity setup</a> feature is in use.</dd>
+  this setting disabled.</dd>
 </dl>
 
-<h2>Preferred port mapping interface</h2>
+<h2 id="prefmap">Preferred port mapping interface</h2>
 <p cshelp="IDH_SETTINGS_CONNECTIVITY_MAPPER">
 DC++ has several interfaces available it can use to try to automatically map the ports it requires
 on the router:
@@ -120,12 +117,19 @@ The interface selected here will be tried first; other available interfaces will
 the preferred port mapping interface were to fail.
 </p>
 
-<h2>Bind address</h2>
+<h2 id="bindaddress">Bind address</h2>
 <p cshelp="IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS">
-This setting allows binding DC++ network connections to a specific IP address, rather than relying
-on the operating system to find the best adapter. If binding fails, it will do so silently and
-INADDR_ANY will be used instead. This value is ignored when
-<a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> is enabled.
+This setting allows binding DC++ network connections to a specific network adapter by its IP address.
+Useful when you have more than one physical or virtual network adapter installed and you want to
+assign a specfic device for all the network traffic generated by DC++.<br/>
+If this setting is empty (it is by default) it means that DC++ is relying on the operating system to
+find the best adapter. In case of the adapter offered by the operating system does not suit you, you can
+override it here by specifying the local IP address of the required adapter. To get the list of
+available network adapters with their IP adresses open up a Command Prompt window and use the 'ipconfig'
+command.<br/>
+If binding with the given IP address fails, it will do so silently and the default value (INADDR_ANY)
+will be used instead. This setting is ignored when <a href="settings_connectivity.html#autoconn">
+Automatic connectivity setup</a> is enabled.
 </p>
 </body>
 </html>
