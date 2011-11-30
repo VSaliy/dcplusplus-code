@@ -88,17 +88,23 @@ public:
 	};
 
 	virtual void layout();
-	void addRow(const GridInfo& gp) { rows.push_back(gp); }
-	void addColumn(const GridInfo& gp) { columns.push_back(gp); }
 
-	void removeRow(size_t i) { rows.erase(rows.begin() + i); }
-	void removeColumn(size_t i) { columns.erase(columns.begin() + i); }
+	size_t addRow(const GridInfo& gp);
+	size_t addColumn(const GridInfo& gp);
 
-	void clearRows() { rows.clear(); }
-	void clearColumns() { columns.clear(); }
+	/// Remove the row that contains the specified widget.
+	void removeRow(Control* w);
+	/// Remove the row that contains the specified widget.
+	void removeColumn(Control* w);
 
-	void setWidget(Widget* w, size_t row, size_t column, size_t rowSpan = 1, size_t colSpan = 1);
-	void setWidget(Widget* w);
+	void removeRow(size_t row);
+	void removeColumn(size_t column);
+
+	void clearRows();
+	void clearColumns();
+
+	void setWidget(Control* w, size_t row, size_t column, size_t rowSpan = 1, size_t colSpan = 1);
+	void setWidget(Control* w);
 
 	size_t getSpacing() const { return spacing; }
 	void setSpacing(size_t spacing_) { spacing = spacing_; }
@@ -124,12 +130,12 @@ protected:
 private:
 
 	struct WidgetInfo {
-		WidgetInfo(Widget* w_, size_t row_, size_t column_, size_t rowSpan_, size_t colSpan_) :
+		WidgetInfo(Control* w_, size_t row_, size_t column_, size_t rowSpan_, size_t colSpan_) :
 			w(w_), row(row_), column(column_), rowSpan(rowSpan_), colSpan(colSpan_), noResize(false) { }
-		WidgetInfo(Widget* w_) :
+		WidgetInfo(Control* w_) :
 			w(w_), noResize(true) { }
 
-		Widget* w;
+		Control* w;
 
 		size_t row;
 		size_t column;
@@ -158,7 +164,7 @@ private:
 
 	Point actualSpacing() const;
 
-	WidgetInfo* getWidgetInfo(HWND hwnd);
+	WidgetInfo* getWidgetInfo(Control* w);
 
 	void handleEnabled(bool enabled);
 };
