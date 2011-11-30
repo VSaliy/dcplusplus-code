@@ -66,8 +66,8 @@ void Grid::create( const Seed & cs )
 
 Point Grid::getPreferredSize() {
 	// Make sure we have WidgetInfo's for every child...
-	auto children = getChildren<Widget>();
-	std::for_each(children.first, children.second, [=](Widget* w) { getWidgetInfo(w->handle()); });
+	auto children = getChildren<Control>();
+	std::for_each(children.first, children.second, [this](Control* w) { getWidgetInfo(w); });
 
 	std::vector<size_t> rowSize = calcSizes(rows, columns, 0, true);
 	std::vector<size_t> colSize = calcSizes(columns, rows, 0, false);
@@ -160,10 +160,10 @@ Point Grid::actualSpacing() const {
 
 void Grid::layout() {
 	auto size = getClientSize();
-	auto children = getChildren<Widget>();
+	auto children = getChildren<Control>();
 
 	// Make sure we have WidgetInfo's for every child...
-	std::for_each(children.first, children.second, [=](Widget* w) { getWidgetInfo(w->handle()); });
+	std::for_each(children.first, children.second, [this](Control* w) { getWidgetInfo(w); });
 
 	Point as = actualSpacing();
 
@@ -175,11 +175,8 @@ void Grid::layout() {
 
 	util::HoldResize hr(this, boost::distance(children));
 	for(auto i = children.first; i != children.second; ++i) {
-		WidgetInfo* wi = getWidgetInfo((*i)->handle());
-		if(!wi || !wi->w)
-			continue;
-
-		if(wi->noResize) {
+		WidgetInfo* wi = getWidgetInfo(*i);
+		if(!wi || wi->noResize) {
 			continue;
 		}
 
@@ -225,9 +222,9 @@ void Grid::layout() {
 	}
 }
 
-Grid::WidgetInfo* Grid::getWidgetInfo(HWND hwnd) {
+Grid::WidgetInfo* Grid::getWidgetInfo(Control* w) {
 	for(WidgetInfoList::iterator i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
-		if(i->w->handle() == hwnd) {
+		if(i->w == w) {
 			return &(*i);
 		}
 	}
@@ -255,17 +252,88 @@ Grid::WidgetInfo* Grid::getWidgetInfo(HWND hwnd) {
 		return 0;
 	}
 
-	Widget* w = hwnd_cast<Widget*>(hwnd);
-	if(!w) {
-		return 0;
-	}
-
 	widgetInfo.push_back(WidgetInfo(w, r, c, 1, 1));
 	return &widgetInfo.back();
 }
 
-void Grid::setWidget(Widget* w, size_t row, size_t column, size_t rowSpan, size_t colSpan) {
-	dwtassert(w->getParent() == this, _T("Widget must be a child of the grid"));
+size_t Grid::addRow(const GridInfo& gp) {
+	rows.push_back(gp);
+	return rows.size() - 1;
+}
+
+size_t Grid::addColumn(const GridInfo& gp) {
+	columns.push_back(gp);
+	return columns.size() - 1;
+}
+
+void Grid::removeRow(Control* w) {
+	for(auto i = widgetInfo.cbegin(), iend = widgetInfo.cend(); i != iend; ++i) {
+		if(i->w == w) {
+			removeRow(i->row);
+			break;
+		}
+	}
+}
+
+void Grid::removeColumn(Control* w) {
+	for(auto i = widgetInfo.cbegin(), iend = widgetInfo.cend(); i != iend; ++i) {
+		if(i->w == w) {
+			removeColumn(i->column);
+			break;
+		}
+	}
+}
+
+void Grid::removeRow(size_t row) {
+	rows.erase(rows.begin() + row);
+
+	for(auto i = widgetInfo.begin(); i != widgetInfo.end();) {
+
+		if(i->row == row) {
+			auto w = i->w;
+			i = widgetInfo.erase(i);
+			w->close();
+
+		} else {
+			if(i->row > row) {
+				--i->row;
+			}
+
+			++i;
+		}
+	}
+}
+
+void Grid::removeColumn(size_t column) {
+	columns.erase(columns.begin() + column);
+
+	for(auto i = widgetInfo.begin(); i != widgetInfo.end();) {
+
+		if(i->column == column) {
+			auto w = i->w;
+			i = widgetInfo.erase(i);
+			w->close();
+
+		} else {
+			if(i->column > column) {
+				--i->column;
+			}
+
+			++i;
+		}
+	}
+}
+
+void Grid::clearRows() {
+	rows.clear();
+}
+
+void Grid::clearColumns() {
+	columns.clear();
+}
+
+void Grid::setWidget(Control* w, size_t row, size_t column, size_t rowSpan, size_t colSpan) {
+	dwtassert(w->getParent() == this, _T("Control must be a child of the grid"));
 
 	for(WidgetInfoList::iterator i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
 		if(i->w == w) {
@@ -280,7 +348,7 @@ void Grid::setWidget(Widget* w, size_t row, size_t column, size_t rowSpan, size_
 	widgetInfo.push_back(WidgetInfo(w, row, column, rowSpan, colSpan));
 }
 
-void Grid::setWidget(Widget* w) {
+void Grid::setWidget(Control* w) {
 	for(WidgetInfoList::iterator i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
 		if(i->w == w) {
 			i->noResize = true;
