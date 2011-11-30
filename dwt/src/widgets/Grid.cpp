@@ -256,6 +256,14 @@ Grid::WidgetInfo* Grid::getWidgetInfo(Control* w) {
 	return &widgetInfo.back();
 }
 
+size_t Grid::addRow() {
+	return addRow(GridInfo(0, GridInfo::AUTO, GridInfo::CENTER));
+}
+
+size_t Grid::addColumn() {
+	return addColumn(GridInfo(0, GridInfo::AUTO, GridInfo::STRETCH));
+}
+
 size_t Grid::addRow(const GridInfo& gp) {
 	rows.push_back(gp);
 	return rows.size() - 1;

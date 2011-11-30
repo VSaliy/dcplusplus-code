@@ -365,14 +365,14 @@ void UsersFrame::handleSelectionChanged() {
 		}
 	}
 
-	userInfo->addRow(GridInfo());
+	userInfo->addRow();
 	auto generalGroup = userInfo->addChild(GroupBox::Seed(T_("General information")));
 	auto generalGrid = generalGroup->addChild(Grid::Seed(0, 2));
 
 	for(auto f = fields; !f->field.empty(); ++f) {
 		auto i = info.find(f->field);
 		if(i != info.end()) {
-			generalGrid->addRow(GridInfo());
+			generalGrid->addRow();
 			generalGrid->addChild(Label::Seed(f->name));
 			generalGrid->addChild(Label::Seed(f->convert(i->second)));
 			info.erase(i);
@@ -380,7 +380,7 @@ void UsersFrame::handleSelectionChanged() {
 	}
 
 	for(auto i = info.begin(); i != info.end(); ++i) {
-		generalGrid->addRow(GridInfo());
+		generalGrid->addRow();
 		generalGrid->addChild(Label::Seed(Text::toT(i->first)));
 		generalGrid->addChild(Label::Seed(Text::toT(i->second)));
 	}
@@ -388,27 +388,27 @@ void UsersFrame::handleSelectionChanged() {
 	auto queued = QueueManager::getInstance()->getQueued(user);
 
 	if(queued.first) {
-		userInfo->addRow(GridInfo());
+		userInfo->addRow();
 		auto queuedGroup = userInfo->addChild(GroupBox::Seed(T_("Pending downloads information")));
 		auto queuedGrid = queuedGroup->addChild(Grid::Seed(0, 2));
 
-		queuedGrid->addRow(GridInfo());
+		queuedGrid->addRow();
 		queuedGrid->addChild(Label::Seed(T_("Queued files")));
 		queuedGrid->addChild(Label::Seed(Text::toT(Util::toString(queued.first))));
 
-		queuedGrid->addRow(GridInfo());
+		queuedGrid->addRow();
 		queuedGrid->addChild(Label::Seed(T_("Queued bytes")));
 		queuedGrid->addChild(Label::Seed(Text::toT(Util::formatBytes(queued.second))));
 	}
 
 	auto files = UploadManager::getInstance()->getWaitingUserFiles(user);
 	if(!files.empty()) {
-		userInfo->addRow(GridInfo());
+		userInfo->addRow();
 		auto uploadsGroup = userInfo->addChild(GroupBox::Seed(T_("Pending uploads information")));
 		auto uploadsGrid = uploadsGroup->addChild(Grid::Seed(0, 2));
 
 		for(auto i = files.begin(); i != files.end(); ++i) {
-			uploadsGrid->addRow(GridInfo());
+			uploadsGrid->addRow();
 			uploadsGrid->addChild(Label::Seed(T_("Filename")));
 			uploadsGrid->addChild(Label::Seed(Text::toT(*i)));
 		}
