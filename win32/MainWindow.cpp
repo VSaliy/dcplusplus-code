@@ -118,7 +118,7 @@ fullSlots(false)
 	links.bugs = links.homepage + _T("bugs/");
 	links.donate = _T("https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=arnetheduck%40gmail%2ecom&item_name=DCPlusPlus&no_shipping=1&return=http%3a%2f%2fdcplusplus%2esf%2enet%2f&cancel_return=http%3a%2f%2fdcplusplus%2esf%2enet%2f&cn=Greeting&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8");
 	links.blog = _T("http://dcpp.wordpress.com");
-	links.community = _T("http://adcportal.sf.net");
+	links.community = _T("http://dcbase.org");
 
 	initWindow();
 	initTabs();

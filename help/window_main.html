@@ -30,11 +30,11 @@
 			<dt><img src="Follow.ico" width="16" height="16" alt="Follow last redirect"/> Follow last redirect</dt>
 			<dd>You are able to follow the redirection offered by the hub which is currently in the foreground. If the active window is not a hub, it does nothing.</dd>
 			<dt><img src="OpenFileList.ico" width="16" height="16" alt="Open file list..."/> Open file list...</dt>
-			<dd>This menu is for opening a previously downloaded filelist. It defaults to the FileLists directory in your DC++ program folder.</dd>
+			<dd>This menu is for opening a previously downloaded filelist. It defaults to the FileLists folder inside the <a href="faq_settings_files.html">directory used to store DC++ settings files</a>.</dd>
 			<dt>Open own list</dt>
 			<dd>You can open and check how your own file list looks like. Useful to see what's displayed to others when they get your file list.</dd>
 			<dt>Match downloaded lists</dt>
-			<dd>This function is used to match your download queue for already downloaded file lists (they stored in the FileLists directory in your DC++ program folder).</dd>
+			<dd>This function is used to match your download queue for already downloaded file lists (they stored in the FileLists folder inside the <a href="faq_settings_files.html">directory used to store DC++ settings files</a>).</dd>
 			<dt><img src="Refresh.ico" width="16" height="16" alt="Refresh file list"/> Refresh file list</dt>
 			<dd>This will immediately rescan your shared directories for new or changed content and updates your file list.</dd>
 			<dt><img src="OpenDLDir.ico" width="16" height="16" alt="Open downloads directory"/> Open downloads directory</dt>
@@ -44,8 +44,7 @@
 			When DC++ encounters a crash, it writes a "CrashLog.txt" file. This command helps view
 			the contents of the crash log in a
 			<placeholder><a href="window_text_viewer.html">Text viewer</a></placeholder>
-			window.
-			</dd>
+			window. You're encouraged to report crash logs in the <a href="links.html">official DC++ bug tracker.</a></dd>
 			<dt><img src="Settings.ico" width="16" height="16" alt="Settings"/> Settings</dt>
 			<dd>Opens the Settings panel.</dd>
 			<dt>GeoIP database update</dt>
@@ -186,7 +185,7 @@
 			<dt>Blog</dt>
 			<dd>Opens the DC++ blog in your web browser.</dd>
 			<dt>Community news</dt>
-			<dd>Opens ADCPortal in your web browser.</dd>
+			<dd>Opens the DCBase portal in your web browser.</dd>
 			</dl>
 
 			</dd>
@@ -304,6 +303,7 @@ following additional features:</p>
 <li>Tabs can be closed with: <ul>
 <li>Middle mouse click</li>
 <li>Shift + left mouse click</li>
+<li>Left mouse click on the <img src="Exit.ico" width="16" height="16" alt="Close tab button"/> button on the right of the tabs (appears only if <a href="settings_tabs.html#tabstyle">DC++'s own tab style</a> is used)</li>
 <li>The &quot;Close&quot; command from the tab context-menu</li>
 <li>Ctrl+W</li>
 <li>Ctrl+F4</li>
@@ -318,11 +318,11 @@ The main status bar is always visible in the bottom of the DC++ window. You can 
     <dt>System messages</dt>
     <dd cshelp="IDH_MAIN_STATUS">The first part of the status bar contains the last system message with a timestamp. To see more from the recent system messages you can move the mouse pointer above the statusbar - the last 10 lines of the messages will be shown as a tooltip shortly. To see all system messages of the current session open the <a href="window_system_log.html">System Log</a> window from the <a href="#viewmenu">View menu</a> or simply double-click on this part of the status bar.</dd>
 
-    <dt>Away indicator</dt>
-	<dd cshelp="IDH_MAIN_AWAY">Shows &quot;AWAY&quot; when DC++ is in <a href="settings_appearance.html#awaymsg">away mode</a>.<br/>
+    <dt><img src="User.ico" width="16" height="16" alt="Online user"/><img src="UserAway.ico" width="16" height="16" alt="Away user"/> Away indicator</dt>
+	<dd cshelp="IDH_MAIN_AWAY">The user icon turns from green to grey when DC++ is in <a href="settings_appearance.html#awaymsg">away mode</a>.<br/>
 	Double-click to switch away mode on and off.</dd>
 
-    <dt>Hubs</dt>
+    <dt><img src="HubOn.ico" width="16" height="16" alt="Hubs"/> Hubs</dt>
     <dd cshelp="IDH_MAIN_HUBS">Shows the number of hubs you are currently connected to in the following format: x/y/z, where:
     	<p style="margin-left: 20px;">
 		x = number of connected hubs where you're not a registered user;<br/>
@@ -332,25 +332,25 @@ The main status bar is always visible in the bottom of the DC++ window. You can 
         just the same way as in the <a href="faq_plusplus_tag.html">DC++ tags</a> of the users listed on a hub.
     </dd>
 
-    <dt>Slots</dt>
+    <dt><img src="Slots.ico" width="16" height="16" alt="Slots"/><img src="SlotsFull.ico" width="16" height="16" alt="Slots full"/> Slots</dt>
     <dd cshelp="IDH_MAIN_SLOTS">Indicates the number of currently free upload slots out of the total number of slots opened.</dd>
 
     <dt>Slots up-down control</dt>
     <dd cshelp="IDH_MAIN_SLOTS_SPIN">Use this control, which consists of 2 arrows, to increase (up arrow) or decrease (down arrow) the number of upload slots you want to have opened.</dd>
 
-    <dt>Total downloaded bytes</dt>
+    <dt><img src="Download.ico" width="16" height="16" alt="Downloaded bytes"/> Total downloaded bytes</dt>
 	<dd cshelp="IDH_MAIN_DOWN_TOTAL"><div>Shows the total number of bytes received in the current session, including file transfers, hub-client communication and hublists.</div>
 	<div>Double-click to open the <placeholder><a href="window_network_stats.html">Network Statistics</a></placeholder> window.</div></dd>
 
-    <dt>Total uploaded bytes</dt>
+    <dt><img src="Upload.ico" width="16" height="16" alt="Uploaded bytes"/> Total uploaded bytes</dt>
 	<dd cshelp="IDH_MAIN_UP_TOTAL"><div>Shows the total number of bytes sent in the current session, including file transfers and hub-client communication.</div>
 	<div>Double-click to open the <placeholder><a href="window_network_stats.html">Network Statistics</a></placeholder> window.</div></dd>
 
-    <dt>Current download speed</dt>
+    <dt><img src="Download.ico" width="16" height="16" alt="Download speed"/> Current download speed</dt>
 	<dd cshelp="IDH_MAIN_DOWN_DIFF"><div>Shows the current overall download speed and the number of current download connections in parentheses (updated in every second).</div>
 	<div>Double-click to open the <placeholder><a href="window_network_stats.html">Network Statistics</a></placeholder> window.</div></dd>
 
-    <dt>Current upload speed</dt>
+    <dt><img src="Upload.ico" width="16" height="16" alt="Upload speed"/> Current upload speed</dt>
 	<dd cshelp="IDH_MAIN_UP_DIFF"><div>Shows the current overall upload speed and the number of current upload connections in parentheses (updated in every second).</div>
 	<div>Double-click to open the <placeholder><a href="window_network_stats.html">Network Statistics</a></placeholder> window.</div></dd>
 
