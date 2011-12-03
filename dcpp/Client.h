@@ -69,7 +69,8 @@ public:
 	string getIpPort() const { return getIp() + ':' + port; }
 	string getLocalIp() const;
 
-	void updated(const OnlineUser& aUser) { fire(ClientListener::UserUpdated(), this, aUser); }
+	void updated(OnlineUser& user);
+	void updated(OnlineUserList& users);
 
 	static string getCounts();
 

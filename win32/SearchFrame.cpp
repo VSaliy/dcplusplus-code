@@ -174,7 +174,7 @@ droppedResults(0)
 		cur = group->addChild(Grid::Seed(1, 3));
 		cur->column(1).mode = GridInfo::FILL;
 
-		mode = cur->addChild(WinUtil::Seeds::comboBoxStatic);
+		mode = cur->addChild(WinUtil::Seeds::comboBox);
 		addWidget(mode);
 
 		mode->addValue(T_("Normal"));
@@ -186,7 +186,7 @@ droppedResults(0)
 		size = cur->addChild(ts);
 		addWidget(size);
 
-		sizeMode = cur->addChild(WinUtil::Seeds::comboBoxStatic);
+		sizeMode = cur->addChild(WinUtil::Seeds::comboBox);
 		addWidget(sizeMode);
 
 		sizeMode->addValue(T_("B"));
@@ -200,7 +200,7 @@ droppedResults(0)
 		group->setHelpId(IDH_SEARCH_TYPE);
 
 		{
-			ComboBox::Seed cs = WinUtil::Seeds::comboBoxStatic;
+			ComboBox::Seed cs = WinUtil::Seeds::comboBox;
 			cs.style |= CBS_SORT;
 			fileType = group->addChild(cs);
 			addWidget(fileType);
@@ -304,20 +304,19 @@ SearchFrame::~SearchFrame() {
 }
 
 void SearchFrame::fillFileType(const tstring& toSelect) {
-	typedef vector<pair<string, int> > values_type;
-	values_type values;
+	vector<pair<string, int>> values;
 	for(int type = SearchManager::TYPE_ANY; type != SearchManager::TYPE_LAST; ++type)
 		values.push_back(make_pair(SearchManager::getTypeStr(type), type));
 
-	const SettingsManager::SearchTypes& searchTypes = SettingsManager::getInstance()->getSearchTypes();
-	for(SettingsManager::SearchTypesIterC i = searchTypes.begin(), iend = searchTypes.end(); i != iend; ++i) {
+	const auto& searchTypes = SettingsManager::getInstance()->getSearchTypes();
+	for(auto i = searchTypes.cbegin(), iend = searchTypes.cend(); i != iend; ++i) {
 		if(i->first.size() > 1 || i->first[0] < '1' || i->first[0] > '6') { //Custom type
 			values.push_back(make_pair(i->first, SearchManager::TYPE_ANY));
 		}
 	}
 
 	bool selected = false;
-	for(values_type::const_iterator i = values.begin(), iend = values.end(); i != iend; ++i) {
+	for(auto i = values.cbegin(), iend = values.cend(); i != iend; ++i) {
 		tstring value = Text::toT(i->first);
 		int pos = fileType->addValue(value);
 		if(i->second != SearchManager::TYPE_ANY)

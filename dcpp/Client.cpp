@@ -24,6 +24,7 @@
 #include "ConnectivityManager.h"
 #include "FavoriteManager.h"
 #include "TimerManager.h"
+#include "UserMatchManager.h"
 
 namespace dcpp {
 
@@ -212,6 +213,18 @@ string Client::getCounts() {
 	char buf[128];
 	return string(buf, snprintf(buf, sizeof(buf), "%ld/%ld/%ld",
 		counts[COUNT_NORMAL].load(), counts[COUNT_REGISTERED].load(), counts[COUNT_OP].load()));
+}
+
+void Client::updated(OnlineUser& user) {
+	UserMatchManager::getInstance()->match(user.getIdentity());
+
+	fire(ClientListener::UserUpdated(), this, user);
+}
+
+void Client::updated(OnlineUserList& users) {
+	std::for_each(users.begin(), users.end(), [](OnlineUser* user) { UserMatchManager::getInstance()->match(user->getIdentity()); });
+
+	fire(ClientListener::UsersUpdated(), this, users);
 }
 
 void Client::on(Line, const string& /*aLine*/) noexcept {

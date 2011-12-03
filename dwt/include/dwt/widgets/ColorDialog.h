@@ -107,7 +107,7 @@ public:
 	  * If basic is true dialog will be showed with only basic functionality, if
 	  * allowFullOpen is true dialog will allow the user to show "more info".
 	  */
-	bool open( ColorParams& params, bool basic = true, bool allowFullOpen = true );
+	bool open( ColorParams& params, bool basic = false, bool allowFullOpen = true );
 
 	/// Expicit constructor taking pointer to parent
 	explicit ColorDialog( Widget * parent = 0 );

@@ -47,10 +47,7 @@ public:
 class SettingsManager : public Singleton<SettingsManager>, public Speaker<SettingsManagerListener>
 {
 public:
-
 	typedef std::unordered_map<string, StringList> SearchTypes;
-	typedef SearchTypes::iterator SearchTypesIter;
-	typedef SearchTypes::const_iterator SearchTypesIterC;
 
 	static StringList connectionSpeeds;
 
@@ -281,7 +278,7 @@ private:
 	// Search types
 	SearchTypes searchTypes; // name, extlist
 
-	SearchTypesIter getSearchType(const string& name);
+	SearchTypes::iterator getSearchType(const string& name);
 };
 
 // Shorthand accessor macros

@@ -63,7 +63,7 @@ public:
 	* @param flags additional flags besides those that dwt automatically adds (see the CHOOSEFONT doc)
 	* @return whether the user pressed OK
 	*/
-	bool open(LOGFONT& font, DWORD& color, Options* options = 0, DWORD flags = 0);
+	bool open(LOGFONT& font, COLORREF& color, Options* options = 0, DWORD flags = 0);
 
 private:
 	Widget* itsParent;

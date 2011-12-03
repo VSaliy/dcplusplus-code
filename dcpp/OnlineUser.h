@@ -28,6 +28,7 @@
 #include "FastAlloc.h"
 #include "Util.h"
 #include "User.h"
+#include "UserMatch.h"
 
 namespace dcpp {
 
@@ -55,7 +56,15 @@ public:
 	Identity() : sid(0) { }
 	Identity(const UserPtr& ptr, uint32_t aSID) : user(ptr), sid(aSID) { }
 	Identity(const Identity& rhs) : Flags(), sid(0) { *this = rhs; } // Use operator= since we have to lock before reading...
-	Identity& operator=(const Identity& rhs) { FastLock l(cs); *static_cast<Flags*>(this) = rhs; user = rhs.user; sid = rhs.sid; info = rhs.info; return *this; }
+	Identity& operator=(const Identity& rhs) {
+		FastLock l(cs);
+		*static_cast<Flags*>(this) = rhs;
+		user = rhs.user;
+		sid = rhs.sid;
+		match = rhs.match;
+		info = rhs.info;
+		return *this;
+	}
 
 // GS is already defined on some systems (e.g. OpenSolaris)
 #ifdef GS
@@ -110,6 +119,9 @@ public:
 	UserPtr& getUser() { return user; }
 	GETSET(UserPtr, user, User);
 	GETSET(uint32_t, sid, SID);
+
+	UserMatchPropsPtr match;
+
 private:
 	typedef std::unordered_map<short, string> InfMap;
 	typedef InfMap::iterator InfIter;

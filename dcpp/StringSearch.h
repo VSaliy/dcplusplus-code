@@ -36,7 +36,8 @@ class StringSearch {
 public:
 	typedef vector<StringSearch> List;
 
-	explicit StringSearch(const string& aPattern) noexcept : pattern(Text::toLower(aPattern)) {
+	StringSearch() { }
+	StringSearch(const string& aPattern) noexcept : pattern(Text::toLower(aPattern)) {
 		initDelta1();
 	}
 	StringSearch(const StringSearch& rhs) noexcept : pattern(rhs.pattern) {

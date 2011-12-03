@@ -132,7 +132,7 @@ UINT_PTR CALLBACK FontDialog::CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 	return 0;
 }
 
-bool FontDialog::open(LOGFONT& font, DWORD& color, Options* options, DWORD flags) {
+bool FontDialog::open(LOGFONT& font, COLORREF& color, Options* options, DWORD flags) {
 	CHOOSEFONT cf = { sizeof(CHOOSEFONT) };
 
 	cf.hwndOwner = getParentHandle();

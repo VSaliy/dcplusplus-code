@@ -242,7 +242,7 @@ void SearchTypesPage::handleRemoveClicked() {
 		return;
 
 	if(dwt::MessageBox(this).show(T_("Do you really want to delete this search type?"),
-		_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONEXCLAMATION) == IDYES)
+		_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)
 	{
 		int cur = types->getSelected();
 		try {
@@ -272,8 +272,8 @@ void SearchTypesPage::findRealName(string& name) const {
 }
 
 void SearchTypesPage::fillList() {
-	const SettingsManager::SearchTypes& searchTypes = SettingsManager::getInstance()->getSearchTypes();
-	for(SettingsManager::SearchTypesIterC i = searchTypes.begin(), iend = searchTypes.end(); i != iend; ++i) {
+	const auto& searchTypes = SettingsManager::getInstance()->getSearchTypes();
+	for(auto i = searchTypes.cbegin(), iend = searchTypes.cend(); i != iend; ++i) {
 		string name = i->first;
 		bool predefined = false;
 		if(name.size() == 1 && name[0] >= '1' && name[0] <= '6') {

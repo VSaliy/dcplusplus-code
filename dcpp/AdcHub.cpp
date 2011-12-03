@@ -201,7 +201,7 @@ void AdcHub::handle(AdcCommand::INF, AdcCommand& c) noexcept {
 		setHubIdentity(u->getIdentity());
 		fire(ClientListener::HubUpdated(), this);
 	} else {
-		fire(ClientListener::UserUpdated(), this, *u);
+		updated(*u);
 	}
 }
 
@@ -251,10 +251,13 @@ void AdcHub::handle(AdcCommand::MSG, AdcCommand& c) noexcept {
 	if(c.getParameters().empty())
 		return;
 
-	ChatMessage message = { c.getParam(0), findUser(c.getFrom()) };
-
-	if(!message.from)
+	auto from = findUser(c.getFrom());
+	if(!from)
 		return;
+	if(from->getIdentity().match && from->getIdentity().match->noChat)
+		return;
+
+	ChatMessage message = { c.getParam(0), from };
 
 	string temp;
 	if(c.getParam("PM", 1, temp)) { // add PM<group-cid> as well
@@ -798,8 +801,8 @@ const vector<StringList>& AdcHub::getSearchExts() {
 StringList AdcHub::parseSearchExts(int flag) {
 	StringList ret;
 	const auto& searchExts = getSearchExts();
-	for(auto i = searchExts.cbegin(), iend = searchExts.cend(); i != iend; ++i) {
-		if(flag & (1 << (i - searchExts.cbegin()))) {
+	for(auto i = searchExts.cbegin(), ibegin = i, iend = searchExts.cend(); i != iend; ++i) {
+		if(flag & (1 << (i - ibegin))) {
 			ret.insert(ret.begin(), i->begin(), i->end());
 		}
 	}
@@ -842,7 +845,7 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 			StringList rx;
 
 			const auto& searchExts = getSearchExts();
-			for(auto i = searchExts.cbegin(), iend = searchExts.cend(); i != iend; ++i) {
+			for(auto i = searchExts.cbegin(), ibegin = i, iend = searchExts.cend(); i != iend; ++i) {
 				const StringList& def = *i;
 
 				// gather the exts not present in any of the lists
@@ -869,7 +872,7 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 					continue;
 
 				// let's include this group!
-				gr += 1 << (i - searchExts.cbegin());
+				gr += 1 << (i - ibegin);
 
 				exts = temp; // the exts to still add (that were not defined in the group)
 

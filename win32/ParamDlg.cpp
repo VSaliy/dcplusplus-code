@@ -95,6 +95,7 @@ void ParamDlg::initComboBox(const tstring& name, const TStringList& choices, siz
 bool ParamDlg::initDialog(const tstring& title) {
 	grid = addChild(Grid::Seed(1, 2));
 	grid->column(0).mode = GridInfo::FILL;
+	grid->setSpacing(6);
 
 	const size_t n = initFs.size();
 	left = grid->addChild(Grid::Seed(n, 1));
