@@ -33,6 +33,17 @@ public:
 
 	virtual ~SettingsDialog();
 
+	template<typename T> T* getPage() {
+		for(auto i = pages.cbegin(), iend = pages.cend(); i != iend; ++i) {
+			auto page = dynamic_cast<T*>(i->first);
+			if(page) {
+				return page;
+			}
+		}
+		dcassert(0);
+		return nullptr;
+	}
+
 	template<typename T> void activatePage() {
 		for(auto i = pages.cbegin(), iend = pages.cend(); i != iend; ++i) {
 			if(dynamic_cast<T*>(i->first)) {

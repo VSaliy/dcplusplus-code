@@ -34,7 +34,7 @@ using dwt::Grid;
 using dwt::GridInfo;
 using dwt::LoadDialog;
 
-const dwt::Rectangle padding(7, 4, 14, 21);
+namespace { ::RECT padding = { 7, 4, 7, 8 }; }
 
 PropPage::PropPage(dwt::Widget* parent, int rows, int cols) : dwt::Container(parent), grid(0) {
 	{
@@ -52,7 +52,7 @@ PropPage::~PropPage() {
 
 void PropPage::layout() {
 	auto clientSize = getClientSize();
-	grid->resize(dwt::Rectangle(padding.left(), padding.top(), clientSize.x - padding.width(), clientSize.y - padding.height()));
+	grid->resize(dwt::Rectangle(padding.left, padding.top, clientSize.x - padding.left - padding.right, clientSize.y - padding.top - padding.bottom));
 }
 
 void PropPage::read(const ItemList& items) {
@@ -149,7 +149,7 @@ void PropPage::handleBrowseFile(TextBoxPtr box, int setting) {
 }
 
 dwt::Point PropPage::getPreferredSize() {
-	return grid->getPreferredSize() + dwt::Point(padding.right(), padding.bottom());
+	return grid->getPreferredSize() + dwt::Point(padding.left + padding.right, padding.top + padding.bottom);
 }
 
 void PropPage::handleListHelp(TablePtr list, unsigned id) {

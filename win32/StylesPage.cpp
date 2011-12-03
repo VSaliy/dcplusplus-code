@@ -29,7 +29,9 @@
 #include <dwt/widgets/Label.h>
 
 #include "resource.h"
+#include "SettingsDialog.h"
 #include "TypedTable.h"
+#include "UserMatchPage.h"
 #include "WinUtil.h"
 
 using dwt::Button;
@@ -48,12 +50,15 @@ static const ColumnInfo columns[] = {
 #define IDH_SETTINGS_STYLES_FONT 0
 #define IDH_SETTINGS_STYLES_TEXT 0
 #define IDH_SETTINGS_STYLES_BG 0
+#define IDH_SETTINGS_STYLES_CONF_USER_MATCHING 0
 #define IDH_SETTINGS_STYLES_GLOBAL 0
 #define IDH_SETTINGS_STYLES_UPLOADS 0
 #define IDH_SETTINGS_STYLES_DOWNLOADS 0
+#define IDH_SETTINGS_STYLES_USER_MATCH 0
+#define IDH_SETTINGS_STYLES_NO_USER_MATCH 0
 
 StylesPage::StylesPage(dwt::Widget* parent) :
-PropPage(parent, 1, 1),
+PropPage(parent, 2, 1),
 table(0),
 preview(0),
 customFont(0),
@@ -70,7 +75,7 @@ bgColor(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		auto cur = grid->addChild(GroupBox::Seed(T_("Styles")))->addChild(Grid::Seed(5, 1));
+		auto cur = grid->addChild(GroupBox::Seed(T_("Styles")))->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
@@ -91,7 +96,11 @@ bgColor(0)
 			preview->setHelpId(IDH_SETTINGS_STYLES_PREVIEW);
 		}
 
-		auto cur2 = cur->addChild(Grid::Seed(1, 2));
+		auto row = cur->addChild(Grid::Seed(1, 2));
+		row->column(0).mode = GridInfo::FILL;
+		row->setSpacing(cur->getSpacing());
+
+		auto cur2 = row->addChild(Grid::Seed(1, 2));
 		cur2->setHelpId(IDH_SETTINGS_STYLES_FONT);
 
 		customFont = cur2->addChild(CheckBox::Seed(T_("Custom font")));
@@ -100,7 +109,7 @@ bgColor(0)
 		font = cur2->addChild(Button::Seed(T_("Select font")));
 		font->onClicked([this] { handleFont(); });
 
-		cur2 = cur->addChild(Grid::Seed(1, 2));
+		cur2 = row->addChild(Grid::Seed(1, 2));
 		cur2->setHelpId(IDH_SETTINGS_STYLES_TEXT);
 
 		customTextColor = cur2->addChild(CheckBox::Seed(T_("Custom text color")));
@@ -109,7 +118,12 @@ bgColor(0)
 		textColor = cur2->addChild(Button::Seed(T_("Select color")));
 		textColor->onClicked([this] { handleTextColor(); });
 
-		cur2 = cur->addChild(Grid::Seed(1, 2));
+		row = cur->addChild(Grid::Seed(1, 1));
+		row->column(0).mode = GridInfo::FILL;
+		row->column(0).align = GridInfo::BOTTOM_RIGHT;
+		row->setSpacing(cur->getSpacing());
+
+		cur2 = row->addChild(Grid::Seed(1, 2));
 		cur2->setHelpId(IDH_SETTINGS_STYLES_BG);
 
 		customBgColor = cur2->addChild(CheckBox::Seed(T_("Custom background color")));
@@ -119,22 +133,30 @@ bgColor(0)
 		bgColor->onClicked([this] { handleBgColor(); });
 	}
 
+	{
+		auto button = grid->addChild(Grid::Seed(1, 1))->addChild(Button::Seed(T_("Configure user matching definitions")));
+		button->setHelpId(IDH_SETTINGS_STYLES_CONF_USER_MATCHING);
+		button->onClicked([this] { static_cast<SettingsDialog*>(getRoot())->activatePage<UserMatchPage>(); });
+	}
+
 	WinUtil::makeColumns(table, columns, COLUMN_LAST);
 
 	TStringList groups(GROUP_LAST);
 	groups[GROUP_GENERAL] = T_("General");
 	groups[GROUP_TRANSFERS] = T_("Transfers");
+	groups[GROUP_USERS] = T_("Users");
 	table->setGroups(groups);
 	auto grouped = table->isGrouped();
 
-	auto add = [this, grouped](tstring&& text, unsigned helpId, int group, int fontSetting, int textColorSetting, int bgColorSetting) -> Data* {
-		auto data = new Data(forward<tstring>(text), helpId, fontSetting, textColorSetting, bgColorSetting);
+	auto add = [this, grouped](tstring&& text, unsigned helpId, int group, int fontSetting, int textColorSetting, int bgColorSetting) -> SettingsData* {
+		auto data = new SettingsData(forward<tstring>(text), helpId, fontSetting, textColorSetting, bgColorSetting);
 		table->insert(grouped ? group : -1, data);
 		return data;
 	};
 
 	globalData = add(T_("Global application style"), IDH_SETTINGS_STYLES_GLOBAL, GROUP_GENERAL,
 		SettingsManager::MAIN_FONT, SettingsManager::TEXT_COLOR, SettingsManager::BACKGROUND_COLOR);
+
 	add(T_("Uploads"), IDH_SETTINGS_STYLES_UPLOADS, GROUP_TRANSFERS,
 		SettingsManager::UPLOAD_FONT, SettingsManager::UPLOAD_TEXT_COLOR, SettingsManager::UPLOAD_BG_COLOR);
 	add(T_("Downloads"), IDH_SETTINGS_STYLES_DOWNLOADS, GROUP_TRANSFERS,
@@ -163,20 +185,28 @@ void StylesPage::write() {
 	table->forEach(&StylesPage::Data::write);
 }
 
-StylesPage::Data::Data(tstring&& text, unsigned helpId, int fontSetting, int textColorSetting, int bgColorSetting) :
+void StylesPage::updateUserMatches(std::vector<UserMatch>& userMatches) {
+	for(size_t i = 0; i < table->size();) {
+		if(dynamic_cast<UserMatchData*>(table->getData(i))) {
+			table->erase(i);
+		} else {
+			++i;
+		}
+	}
+
+	if(userMatches.empty()) {
+		table->insert(table->isGrouped() ? GROUP_USERS : -1, new Data(T_("No user matching definition has been set yet"), IDH_SETTINGS_STYLES_NO_USER_MATCH));
+	} else {
+		for(auto i = userMatches.begin(), iend = userMatches.end(); i != iend; ++i) {
+			table->insert(table->isGrouped() ? GROUP_USERS : -1, new UserMatchData(*i));
+		}
+	}
+}
+
+StylesPage::Data::Data(tstring&& text, const unsigned helpId) :
 text(forward<tstring>(text)),
-helpId(helpId),
-fontSetting(fontSetting),
-textColorSetting(textColorSetting),
-bgColorSetting(bgColorSetting),
-customFont(!SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::StrSetting>(fontSetting))),
-customTextColor(!SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::IntSetting>(textColorSetting))),
-textColor(SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(textColorSetting))),
-customBgColor(!SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::IntSetting>(bgColorSetting))),
-bgColor(SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(bgColorSetting)))
+helpId(helpId)
 {
-	makeFont(font, SettingsManager::getInstance()->get(static_cast<SettingsManager::StrSetting>(fontSetting)));
-	makeFont(defaultFont, SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::StrSetting>(fontSetting)));
 }
 
 const tstring& StylesPage::Data::getText(int) const {
@@ -202,19 +232,43 @@ int StylesPage::Data::getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgCol
 	return CDRF_NEWFONT;
 }
 
-const StylesPage::Data::Font& StylesPage::Data::getFont() const {
+void StylesPage::Data::makeFont(Font& dest, const string& setting) {
+	if(!setting.empty()) {
+		WinUtil::decodeFont(Text::toT(setting), dest.second);
+		dest.first.reset(new dwt::Font(dest.second));
+	}
+}
+
+StylesPage::SettingsData::SettingsData(tstring&& text, unsigned helpId, int fontSetting, int textColorSetting, int bgColorSetting) :
+Data(forward<tstring>(text), helpId),
+fontSetting(fontSetting),
+textColorSetting(textColorSetting),
+bgColorSetting(bgColorSetting)
+{
+	customFont = !SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::StrSetting>(fontSetting));
+	makeFont(font, SettingsManager::getInstance()->get(static_cast<SettingsManager::StrSetting>(fontSetting)));
+	makeFont(defaultFont, SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::StrSetting>(fontSetting)));
+
+	customTextColor = !SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::IntSetting>(textColorSetting));
+	textColor = SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(textColorSetting));
+
+	customBgColor = !SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::IntSetting>(bgColorSetting));
+	bgColor = SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(bgColorSetting));
+}
+
+const StylesPage::Data::Font& StylesPage::SettingsData::getFont() const {
 	return customFont ? font : defaultFont;
 }
 
-COLORREF StylesPage::Data::getTextColor() const {
+int StylesPage::SettingsData::getTextColor() const {
 	return customTextColor ? textColor : SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(textColorSetting));
 }
 
-COLORREF StylesPage::Data::getBgColor() const {
+int StylesPage::SettingsData::getBgColor() const {
 	return customBgColor ? bgColor : SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(bgColorSetting));
 }
 
-void StylesPage::Data::write() {
+void StylesPage::SettingsData::write() {
 	if(customFont) {
 		SettingsManager::getInstance()->set(static_cast<SettingsManager::StrSetting>(fontSetting), Text::fromT(WinUtil::encodeFont(font.second)));
 	} else {
@@ -222,23 +276,48 @@ void StylesPage::Data::write() {
 	}
 
 	if(customTextColor) {
-		SettingsManager::getInstance()->set(static_cast<SettingsManager::IntSetting>(textColorSetting), static_cast<int>(textColor));
+		SettingsManager::getInstance()->set(static_cast<SettingsManager::IntSetting>(textColorSetting), textColor);
 	} else {
 		SettingsManager::getInstance()->unset(static_cast<SettingsManager::IntSetting>(textColorSetting));
 	}
 
 	if(customBgColor) {
-		SettingsManager::getInstance()->set(static_cast<SettingsManager::IntSetting>(bgColorSetting), static_cast<int>(bgColor));
+		SettingsManager::getInstance()->set(static_cast<SettingsManager::IntSetting>(bgColorSetting), bgColor);
 	} else {
 		SettingsManager::getInstance()->unset(static_cast<SettingsManager::IntSetting>(bgColorSetting));
 	}
 }
 
-void StylesPage::Data::makeFont(Font& dest, const string& setting) {
-	if(!setting.empty()) {
-		WinUtil::decodeFont(Text::toT(setting), dest.second);
-		dest.first.reset(new dwt::Font(dest.second));
-	}
+StylesPage::UserMatchData::UserMatchData(UserMatch& matcher) :
+Data(Text::toT(matcher.name), IDH_SETTINGS_STYLES_USER_MATCH),
+props(matcher.props)
+{
+	customFont = !props->font.empty();
+	makeFont(font, props->font);
+
+	customTextColor = props->textColor >= 0;
+	textColor = props->textColor;
+
+	customBgColor = props->bgColor >= 0;
+	bgColor = props->bgColor;
+}
+
+const StylesPage::Data::Font& StylesPage::UserMatchData::getFont() const {
+	return customFont ? font : defaultFont;
+}
+
+int StylesPage::UserMatchData::getTextColor() const {
+	return customTextColor ? textColor : -1;
+}
+
+int StylesPage::UserMatchData::getBgColor() const {
+	return customBgColor ? bgColor : -1;
+}
+
+void StylesPage::UserMatchData::update() {
+	props->font = customFont ? Text::fromT(WinUtil::encodeFont(font.second)) : Util::emptyString;
+	props->textColor = customTextColor ? textColor : -1;
+	props->bgColor = customBgColor ? bgColor : -1;
 }
 
 void StylesPage::handleSelectionChanged() {
@@ -299,12 +378,13 @@ void StylesPage::handleFont() {
 	options.strikeout = false;
 	options.underline = false;
 	options.color = false;
-	options.bgColor = data->bgColor;
+	options.bgColor = getBgColor(data);
 	if(!data->font.first) {
 		// initialize the LOGFONT structure.
 		data->font.second = data->defaultFont.first ? data->defaultFont.second : globalData->getFont().second;
 	}
-	if(FontDialog(this).open(data->font.second, data->textColor, &options)) {
+	auto color = getTextColor(data);
+	if(FontDialog(this).open(data->font.second, color, &options)) {
 		data->font.first.reset(new dwt::Font(data->font.second));
 		update(data);
 	}
@@ -319,7 +399,10 @@ void StylesPage::handleCustomTextColor() {
 
 void StylesPage::handleTextColor() {
 	auto data = table->getSelectedData();
-	colorDialog(data->textColor);
+	auto color = colorDialog(getTextColor(data));
+	if(color >= 0) {
+		data->textColor = color;
+	}
 	update(data);
 }
 
@@ -332,18 +415,34 @@ void StylesPage::handleCustomBgColor() {
 
 void StylesPage::handleBgColor() {
 	auto data = table->getSelectedData();
-	colorDialog(data->bgColor);
+	auto color = colorDialog(getBgColor(data));
+	if(color >= 0) {
+		data->bgColor = color;
+	}
 	update(data);
 }
 
-void StylesPage::colorDialog(COLORREF& color) {
+int StylesPage::colorDialog(COLORREF color) {
 	ColorDialog::ColorParams colorParams(color);
 	if(ColorDialog(this).open(colorParams)) {
-		color = colorParams.getColor();
+		return colorParams.getColor();
 	}
+	return -1;
+}
+
+COLORREF StylesPage::getTextColor(const Data* const data) const {
+	auto color = data->getTextColor();
+	return (color >= 0) ? color : globalData->getTextColor();
+}
+
+COLORREF StylesPage::getBgColor(const Data* const data) const {
+	auto color = data->getBgColor();
+	return (color >= 0) ? color : globalData->getBgColor();
 }
 
 void StylesPage::update(Data* const data) {
+	data->update();
+
 	if(data == globalData) {
 		table->setFont(globalData->getFont().first);
 		table->setColor(globalData->getTextColor(), globalData->getBgColor());
@@ -351,15 +450,18 @@ void StylesPage::update(Data* const data) {
 	} else {
 		table->update(data);
 	}
+
 	updatePreview(data);
 	preview->getParent()->layout();
+
+	if(dynamic_cast<UserMatchData* const>(data)) {
+		static_cast<SettingsDialog*>(getRoot())->getPage<UserMatchPage>()->setDirty();
+	}
 }
 
 void StylesPage::updatePreview(Data* const data) {
-	auto font = data->getFont();
+	const auto& font = data->getFont();
 	preview->setFont(font.first ? font.first : globalData->getFont().first);
-	auto textColor = data->getTextColor();
-	auto bgColor = data->getBgColor();
-	preview->setColor((textColor >= 0) ? textColor : globalData->getTextColor(), (bgColor >= 0) ? bgColor : globalData->getBgColor());
+	preview->setColor(getTextColor(data), getBgColor(data));
 	preview->redraw(true);
 }

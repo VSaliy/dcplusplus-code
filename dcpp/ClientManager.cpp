@@ -621,7 +621,7 @@ CID ClientManager::getMyCID() {
 	return CID(tiger.finalize());
 }
 
-void ClientManager::updateNick(const OnlineUser& user) noexcept {
+void ClientManager::updateUser(const OnlineUser& user) noexcept {
 	if(!user.getIdentity().getNick().empty()) {
 		Lock l(cs);
 		NickMap::iterator i = nicks.find(user.getUser()->getCID());
@@ -631,6 +631,8 @@ void ClientManager::updateNick(const OnlineUser& user) noexcept {
 			i->second.first = user.getIdentity().getNick();
 		}
 	}
+
+	fire(ClientManagerListener::UserUpdated(), user);
 }
 
 void ClientManager::loadUsers() {
@@ -696,14 +698,12 @@ void ClientManager::on(Connected, Client* c) noexcept {
 }
 
 void ClientManager::on(UserUpdated, Client*, const OnlineUser& user) noexcept {
-	updateNick(user);
-	fire(ClientManagerListener::UserUpdated(), user);
+	updateUser(user);
 }
 
-void ClientManager::on(UsersUpdated, Client* c, const OnlineUserList& l) noexcept {
-	for(OnlineUserList::const_iterator i = l.begin(), iend = l.end(); i != iend; ++i) {
-		updateNick(*(*i));
-		fire(ClientManagerListener::UserUpdated(), *(*i));
+void ClientManager::on(UsersUpdated, Client*, const OnlineUserList& l) noexcept {
+	for(auto i = l.cbegin(), iend = l.cend(); i != iend; ++i) {
+		updateUser(**i);
 	}
 }
 

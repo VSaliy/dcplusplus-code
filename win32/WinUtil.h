@@ -122,6 +122,7 @@ public:
 	static COLORREF textColor;
 	static COLORREF bgColor;
 	static dwt::FontPtr font;
+	static unordered_map<string, dwt::FontPtr> userMatchFonts;
 	static tstring commands;
 	static dwt::ImageListPtr fileImages;
 	static dwt::ImageListPtr userImages;
@@ -133,7 +134,7 @@ public:
 
 	struct Seeds {
 		static const Button::Seed button;
-		static const ComboBox::Seed comboBoxStatic;
+		static const ComboBox::Seed comboBox;
 		static const ComboBox::Seed comboBoxEdit;
 		static const CheckBox::Seed checkBox;
 		static const CheckBox::Seed splitCheckBox; // +/-
@@ -166,6 +167,7 @@ public:
 	static void initFont();
 	static tstring encodeFont(LOGFONT const& font);
 	static void decodeFont(const tstring& setting, LOGFONT &dest);
+	static void updateUserMatchFonts();
 
 	static void setStaticWindowState(const string& id, bool open);
 
@@ -221,12 +223,14 @@ private:
 public:
 	/// @return pair of the ok and cancel buttons.
 	template<typename Tok, typename Tcancel>
-	static pair<ButtonPtr, ButtonPtr> addDlgButtons(GridPtr grid, const Tok& f_ok, const Tcancel& f_cancel) {
+	static pair<ButtonPtr, ButtonPtr> addDlgButtons(GridPtr grid, Tok f_ok, Tcancel f_cancel) {
 		auto ret = addDlgButtons(grid);
 		ret.first->onClicked(f_ok);
 		ret.second->onClicked(f_cancel);
 		return ret;
 	}
+
+	static ButtonPtr addHelpButton(GridPtr grid);
 
 	static void setColor(dwt::Control* widget);
 

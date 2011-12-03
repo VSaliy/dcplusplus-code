@@ -29,6 +29,7 @@
 #include <dcpp/LogManager.h>
 #include <dcpp/SearchManager.h>
 #include <dcpp/User.h>
+#include <dcpp/UserMatch.h>
 #include <dcpp/version.h>
 #include <dcpp/WindowInfo.h>
 
@@ -208,7 +209,7 @@ inTabComplete(false)
 		addWidget(filter);
 		filter->onUpdated([this] { handleFilterUpdated(); });
 
-		filterType = userGrid->addChild(WinUtil::Seeds::comboBoxStatic);
+		filterType = userGrid->addChild(WinUtil::Seeds::comboBox);
 		filterType->setHelpId(IDH_HUB_FILTER);
 		addWidget(filterType);
 
@@ -771,13 +772,29 @@ int HubFrame::UserInfo::getImage(int col) const {
 	return image;
 }
 
-int HubFrame::UserInfo::getStyle(HFONT&, COLORREF& textColor, COLORREF& bgColor, int) const {
-	if(identity.isOp()) {
-		textColor = 0xFFFFFF - textColor;
-		bgColor = 0xFFFFFF - bgColor;
-		return CDRF_NEWFONT;
+int HubFrame::UserInfo::getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int) const {
+	if(!identity.match) {
+		return CDRF_DODEFAULT;
 	}
-	return CDRF_DODEFAULT;
+	const auto& match = *identity.match;
+
+	if(!match.font.empty()) {
+		// cache lookup might fail when refreshing the list of user matching defs...
+		auto cached = WinUtil::userMatchFonts.find(match.font);
+		if(cached != WinUtil::userMatchFonts.end()) {
+			font = cached->second->handle();
+		}
+	}
+
+	if(match.textColor != -1) {
+		textColor = match.textColor;
+	}
+
+	if(match.bgColor != -1) {
+		bgColor = match.bgColor;
+	}
+
+	return CDRF_NEWFONT;
 }
 
 HubFrame::UserTask::UserTask(const OnlineUser& ou) :

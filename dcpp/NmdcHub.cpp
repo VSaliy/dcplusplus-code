@@ -211,14 +211,18 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			return;
 		}
 
-		ChatMessage chatMessage = { unescape(message), findUser(nick) };
+		auto from = findUser(nick);
+		if(from && from->getIdentity().match && from->getIdentity().match->noChat)
+			return;
+
+		ChatMessage chatMessage = { unescape(message), from };
 
 		if(!chatMessage.from) {
 			OnlineUser& o = getUser(nick);
 			// Assume that messages from unknown users come from the hub
 			o.getIdentity().setHub(true);
 			o.getIdentity().setHidden(true);
-			fire(ClientListener::UserUpdated(), this, o);
+			updated(o);
 
 			chatMessage.from = &o;
 		}
@@ -583,7 +587,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 				myInfo(true);
 			}
 
-			fire(ClientListener::UserUpdated(), this, u);
+			updated(u);
 		}
 	} else if(cmd == "$ForceMove") {
 		disconnect(false);
@@ -617,7 +621,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 				v.push_back(u);
 			}
 
-			fire(ClientListener::UsersUpdated(), this, v);
+			updated(v);
 		}
 	} else if(cmd == "$NickList") {
 		if(!param.empty()) {
@@ -647,7 +651,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 				}
 			}
 
-			fire(ClientListener::UsersUpdated(), this, v);
+			updated(v);
 		}
 	} else if(cmd == "$OpList") {
 		if(!param.empty()) {
@@ -665,7 +669,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 				v.push_back(&ou);
 			}
 
-			fire(ClientListener::UsersUpdated(), this, v);
+			updated(v);
 			updateCounts(false);
 
 			// Special...to avoid op's complaining that their count is not correctly
@@ -701,7 +705,12 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		if(param.size() < j + 2) {
 			return;
 		}
-		ChatMessage message = { unescape(param.substr(j + 2)), findUser(fromNick), &getUser(getMyNick()), findUser(rtNick) };
+
+		auto from = findUser(fromNick);
+		if(from && from->getIdentity().match && from->getIdentity().match->noChat)
+			return;
+
+		ChatMessage message = { unescape(param.substr(j + 2)), from, &getUser(getMyNick()), findUser(rtNick) };
 
 		if(!message.replyTo || !message.from) {
 			if(!message.replyTo) {
@@ -709,14 +718,14 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 				OnlineUser& replyTo = getUser(rtNick);
 				replyTo.getIdentity().setHub(true);
 				replyTo.getIdentity().setHidden(true);
-				fire(ClientListener::UserUpdated(), this, replyTo);
+				updated(replyTo);
 			}
 			if(!message.from) {
 				// Assume it's from the hub
 				OnlineUser& from = getUser(fromNick);
 				from.getIdentity().setHub(true);
 				from.getIdentity().setHidden(true);
-				fire(ClientListener::UserUpdated(), this, from);
+				updated(from);
 			}
 
 			// Update pointers just in case they've been invalidated
@@ -725,6 +734,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		}
 
 		fire(ClientListener::Message(), this, message);
+
 	} else if(cmd == "$GetPass") {
 		OnlineUser& ou = getUser(getMyNick());
 		ou.getIdentity().set("RG", "1");

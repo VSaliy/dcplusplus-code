@@ -89,11 +89,8 @@ public:
 
 	virtual void layout();
 
-	size_t addRow();
-	size_t addColumn();
-
-	size_t addRow(const GridInfo& gp);
-	size_t addColumn(const GridInfo& gp);
+	size_t addRow(const GridInfo& gp = GridInfo(0, GridInfo::AUTO, GridInfo::CENTER));
+	size_t addColumn(const GridInfo& gp = GridInfo(0, GridInfo::AUTO, GridInfo::STRETCH));
 
 	/// Remove the row that contains the specified widget.
 	void removeRow(Control* w);

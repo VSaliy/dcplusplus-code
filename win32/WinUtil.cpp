@@ -37,6 +37,7 @@
 #include <dcpp/UserCommand.h>
 #include <dcpp/UploadManager.h>
 #include <dcpp/ThrottleManager.h>
+#include <dcpp/UserMatchManager.h>
 
 #include <dwt/DWTException.h>
 #include <dwt/LibraryLoader.h>
@@ -98,6 +99,7 @@ dwt::BrushPtr WinUtil::bgBrush;
 COLORREF WinUtil::textColor = 0;
 COLORREF WinUtil::bgColor = 0;
 dwt::FontPtr WinUtil::font;
+unordered_map<string, dwt::FontPtr> WinUtil::userMatchFonts;
 dwt::ImageListPtr WinUtil::fileImages;
 dwt::ImageListPtr WinUtil::userImages;
 TStringList WinUtil::lastDirs;
@@ -110,7 +112,7 @@ tstring WinUtil::helpPath;
 StringList WinUtil::helpTexts;
 
 const Button::Seed WinUtil::Seeds::button;
-const ComboBox::Seed WinUtil::Seeds::comboBoxStatic;
+const ComboBox::Seed WinUtil::Seeds::comboBox;
 const ComboBox::Seed WinUtil::Seeds::comboBoxEdit;
 const CheckBox::Seed WinUtil::Seeds::checkBox;
 const CheckBox::Seed WinUtil::Seeds::splitCheckBox;
@@ -146,6 +148,8 @@ void WinUtil::init() {
 	}
 
 	initFont();
+
+	updateUserMatchFonts();
 
 	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 
@@ -223,7 +227,7 @@ void WinUtil::initSeeds() {
 	// Const so that noone else will change them after they've been initialized
 	Button::Seed& xbutton = const_cast<Button::Seed&> (Seeds::button);
 	ComboBox::Seed& xcomboBoxEdit = const_cast<ComboBox::Seed&> (Seeds::comboBoxEdit);
-	ComboBox::Seed& xcomboBoxStatic = const_cast<ComboBox::Seed&> (Seeds::comboBoxStatic);
+	ComboBox::Seed& xcomboBox = const_cast<ComboBox::Seed&> (Seeds::comboBox);
 	CheckBox::Seed& xCheckBox = const_cast<CheckBox::Seed&> (Seeds::checkBox);
 	CheckBox::Seed& xSplitCheckBox = const_cast<CheckBox::Seed&> (Seeds::splitCheckBox);
 	GroupBox::Seed& xgroup = const_cast<GroupBox::Seed&> (Seeds::group);
@@ -242,8 +246,8 @@ void WinUtil::initSeeds() {
 
 	xbutton.font = font;
 
-	xcomboBoxStatic.style |= CBS_DROPDOWNLIST;
-	xcomboBoxStatic.font = font;
+	xcomboBox.style |= CBS_DROPDOWNLIST;
+	xcomboBox.font = font;
 
 	xcomboBoxEdit.font = font;
 
@@ -402,6 +406,19 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 
 	if(!face.empty()) {
 		_tcscpy(dest.lfFaceName, face.c_str());
+	}
+}
+
+void WinUtil::updateUserMatchFonts() {
+	userMatchFonts.clear();
+
+	auto list = UserMatchManager::getInstance()->getList();
+	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
+		if(!i->props->font.empty()) {
+			LOGFONT lf;
+			decodeFont(Text::toT(i->props->font), lf);
+			userMatchFonts[i->props->font] = new dwt::Font(lf);
+		}
 	}
 }
 
@@ -989,8 +1006,7 @@ void WinUtil::toInts(const string& str, std::vector<int>& array) {
 	}
 }
 
-pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid)
-{
+pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid) {
 	Button::Seed seed;
 
 	seed.caption = T_("OK");
@@ -1008,6 +1024,15 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid)
 	cancel->setImage(buttonIcon(IDI_CANCEL));
 
 	return make_pair(ok, cancel);
+}
+
+ButtonPtr WinUtil::addHelpButton(GridPtr grid) {
+	Button::Seed seed(T_("Help"));
+	seed.padding.x = 10;
+	ButtonPtr button = grid->addChild(seed);
+	button->setHelpId(IDH_DCPP_HELP);
+	button->setImage(buttonIcon(IDI_HELP));
+	return button;
 }
 
 void WinUtil::setColor(dwt::Control* widget) {

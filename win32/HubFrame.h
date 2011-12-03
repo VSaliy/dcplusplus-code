@@ -129,7 +129,7 @@ private:
 			return columns[col];
 		}
 		int getImage(int col) const;
-		int getStyle(HFONT&, COLORREF& textColor, COLORREF& bgColor, int) const;
+		int getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int) const;
 
 		static int compareItems(const UserInfo* a, const UserInfo* b, int col);
 		bool update(const Identity& identity, int sortCol);

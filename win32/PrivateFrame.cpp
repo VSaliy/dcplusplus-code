@@ -134,7 +134,7 @@ online(replyTo.getUser().user->isOnline())
 	message->onChar([this](int c) { return handleMessageChar(c); });
 
 	initStatus();
-	hubBox = addChild(WinUtil::Seeds::comboBoxStatic);
+	hubBox = addChild(WinUtil::Seeds::comboBox);
 
 	status->onDblClicked(STATUS_STATUS, [this] { openLog(); });
 

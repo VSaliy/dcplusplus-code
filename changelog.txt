@@ -50,7 +50,8 @@
 * [L#874282] Fix the "Close disconnected hubs" command (poy)
 * [L#721102] Close tabs when releasing the mouse button (poy)
 * [L#729684] Fix the /userlist chat command (poy)
-* No need to restart DC++ to apply new styles (poy)
+* Revamp style settings (poy)
+* Add user matching settings (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

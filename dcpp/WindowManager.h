@@ -74,8 +74,8 @@ private:
 	void parseTags(SimpleXML& xml, handler_type handler);
 	void addTag(SimpleXML& xml, const WindowInfo& info) const;
 
-	virtual void on(SettingsManagerListener::Load, SimpleXML& xml) noexcept;
-	virtual void on(SettingsManagerListener::Save, SimpleXML& xml) noexcept;
+	void on(SettingsManagerListener::Load, SimpleXML& xml) noexcept;
+	void on(SettingsManagerListener::Save, SimpleXML& xml) noexcept;
 };
 
 } // namespace dcpp

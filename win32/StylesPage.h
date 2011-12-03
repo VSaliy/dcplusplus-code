@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_WIN32_STYLES_PAGE_H
 #define DCPLUSPLUS_WIN32_STYLES_PAGE_H
 
+#include <dcpp/UserMatch.h>
+
 #include "PropPage.h"
 
 class StylesPage : public PropPage
@@ -30,6 +32,8 @@ public:
 	virtual void layout();
 	virtual void write();
 
+	void updateUserMatches(std::vector<UserMatch>& userMatches);
+
 private:
 	enum {
 		COLUMN_TEXT,
@@ -40,47 +44,77 @@ private:
 	enum {
 		GROUP_GENERAL,
 		GROUP_TRANSFERS,
+		GROUP_USERS,
 
 		GROUP_LAST
 	};
 
 	class Data {
+	protected:
 		typedef pair<dwt::FontPtr, LOGFONT> Font;
 
 	public:
-		Data(tstring&& text, unsigned helpId, int fontSetting, int textColorSetting, int bgColorSetting);
+		Data(tstring&& text, const unsigned helpId);
+		virtual ~Data() { }
 
 		const tstring& getText(int) const;
 		int getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int) const;
 
-		const Font& getFont() const;
-		COLORREF getTextColor() const;
-		COLORREF getBgColor() const;
+		virtual const Font& getFont() const { return defaultFont; }
+		virtual int getTextColor() const { return -1; }
+		virtual int getBgColor() const { return -1; }
 
-		void write();
+		virtual void update() { }
+		virtual void write() { }
 
 		const tstring text;
 		const unsigned helpId;
-
-		const int fontSetting;
-		const int textColorSetting;
-		const int bgColorSetting;
 
 		bool customFont;
 		Font font;
 		Font defaultFont;
 
 		bool customTextColor;
-		COLORREF textColor;
+		int textColor;
 
 		bool customBgColor;
-		COLORREF bgColor;
+		int bgColor;
 
-	private:
+	protected:
 		static void makeFont(Font& dest, const string& setting);
 	};
 
-	Data* globalData;
+	class SettingsData : public Data {
+	public:
+		SettingsData(tstring&& text, unsigned helpId, int fontSetting, int textColorSetting, int bgColorSetting);
+
+		const Font& getFont() const;
+		int getTextColor() const;
+		int getBgColor() const;
+
+		void write();
+
+	private:
+		const int fontSetting;
+		const int textColorSetting;
+		const int bgColorSetting;
+	};
+
+	class UserMatchData : public Data {
+	public:
+		UserMatchData(UserMatch& matcher);
+
+		const Font& getFont() const;
+		int getTextColor() const;
+		int getBgColor() const;
+
+		void update();
+
+	private:
+		UserMatchPropsPtr props;
+	};
+
+	SettingsData* globalData;
 
 	typedef TypedTable<Data> Table;
 	Table* table;
@@ -109,7 +143,9 @@ private:
 	void handleCustomBgColor();
 	void handleBgColor();
 
-	void colorDialog(COLORREF& color);
+	int colorDialog(COLORREF color);
+	COLORREF getTextColor(const Data* const data) const;
+	COLORREF getBgColor(const Data* const data) const;
 	void update(Data* const data);
 	void updatePreview(Data* const data);
 };

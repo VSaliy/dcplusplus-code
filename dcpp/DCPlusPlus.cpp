@@ -38,14 +38,8 @@
 #include "ShareManager.h"
 #include "ThrottleManager.h"
 #include "UploadManager.h"
+#include "UserMatchManager.h"
 #include "WindowManager.h"
-
-#ifdef _STLP_DEBUG
-void __stl_debug_terminate() {
-	int* x = 0;
-	*x = 0;
-}
-#endif
 
 extern "C" int _nl_msg_cat_cntr;
 
@@ -86,6 +80,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 	ConnectivityManager::newInstance();
 	MappingManager::newInstance();
 	GeoManager::newInstance();
+	UserMatchManager::newInstance();
 	WindowManager::newInstance();
 
 	SettingsManager::getInstance()->load();
@@ -142,6 +137,7 @@ void shutdown() {
 	SettingsManager::getInstance()->save();
 
 	WindowManager::deleteInstance();
+	UserMatchManager::deleteInstance();
 	GeoManager::deleteInstance();
 	MappingManager::deleteInstance();
 	ConnectivityManager::deleteInstance();

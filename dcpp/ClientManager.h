@@ -45,10 +45,17 @@ class ClientManager : public Speaker<ClientManagerListener>,
 	private ClientListener, public Singleton<ClientManager>,
 	private TimerManagerListener
 {
-public:
 	typedef unordered_set<Client*> ClientList;
+
 	typedef unordered_map<CID, UserPtr> UserMap;
 
+	typedef unordered_multimap<CID, OnlineUser*> OnlineMap;
+	typedef OnlineMap::iterator OnlineIter;
+	typedef OnlineMap::const_iterator OnlineIterC;
+	typedef pair<OnlineIter, OnlineIter> OnlinePair;
+	typedef pair<OnlineIterC, OnlineIterC> OnlinePairC;
+
+public:
 	Client* getClient(const string& aHubURL);
 	void putClient(Client* aClient);
 
@@ -118,10 +125,19 @@ public:
 	void privateMessage(const HintedUser& user, const string& msg, bool thirdPerson);
 	void userCommand(const HintedUser& user, const UserCommand& uc, ParamMap& params, bool compatibility);
 	bool isActive() const;
+
 	Lock lock() { return Lock(cs); }
 
+	/// Access current hubs - lock this with lock()!
 	const ClientList& getClients() const { return clients; }
+
+	/// Access known users (online and offline) - lock this with lock()!
 	const UserMap& getUsers() const { return users; }
+	UserMap& getUsers() { return users; }
+
+	/// Access online users - lock this with lock()!
+	const OnlineMap& getOnlineUsers() const { return onlineUsers; }
+	OnlineMap& getOnlineUsers() { return onlineUsers; }
 
 	CID getMyCID();
 	const CID& getMyPID();
@@ -138,12 +154,6 @@ private:
 
 	typedef std::pair<std::string, bool> NickMapEntry; // the boolean being true means "save this".
 	typedef unordered_map<CID, NickMapEntry> NickMap;
-
-	typedef unordered_multimap<CID, OnlineUser*> OnlineMap;
-	typedef OnlineMap::iterator OnlineIter;
-	typedef OnlineMap::const_iterator OnlineIterC;
-	typedef pair<OnlineIter, OnlineIter> OnlinePair;
-	typedef pair<OnlineIterC, OnlineIterC> OnlinePairC;
 
 	ClientList clients;
 	mutable CriticalSection cs;
@@ -163,7 +173,7 @@ private:
 	ClientManager();
 	virtual ~ClientManager();
 
-	void updateNick(const OnlineUser& user) noexcept;
+	void updateUser(const OnlineUser& user) noexcept;
 
 	/// @return OnlineUser* found by CID and hint; discard any user that doesn't match the hint.
 	OnlineUser* findOnlineUserHint(const CID& cid, const string& hintUrl) const {

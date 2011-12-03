@@ -335,7 +335,9 @@ SettingsManager::SettingsManager()
 	setDefault(MAIN_WINDOW_SIZE_Y, CW_USEDEFAULT);
 	setDefault(MAIN_WINDOW_POS_X, CW_USEDEFAULT);
 	setDefault(MAIN_WINDOW_POS_Y, CW_USEDEFAULT);
+	setDefault(UPLOAD_TEXT_COLOR, -1);
 	setDefault(UPLOAD_BG_COLOR, RGB(205, 60, 55));
+	setDefault(DOWNLOAD_TEXT_COLOR, -1);
 	setDefault(DOWNLOAD_BG_COLOR, RGB(55, 170, 85));
 #endif
 }
@@ -399,24 +401,20 @@ void SettingsManager::load(string const& aFileName)
 
 		xml.resetCurrentChild();
 		if(xml.findChild("SearchTypes")) {
-			try {
-				searchTypes.clear();
-				xml.stepIn();
-				while(xml.findChild("SearchType")) {
-					const string& extensions = xml.getChildData();
-					if(extensions.empty()) {
-						continue;
-					}
-					const string& name = xml.getChildAttrib("Id");
-					if(name.empty()) {
-						continue;
-					}
-					searchTypes[name] = StringTokenizer<string>(extensions, ';').getTokens();
+			searchTypes.clear();
+			xml.stepIn();
+			while(xml.findChild("SearchType")) {
+				const string& extensions = xml.getChildData();
+				if(extensions.empty()) {
+					continue;
 				}
-				xml.stepOut();
-			} catch(const SimpleXMLException&) {
-				setSearchTypeDefaults();
+				const string& name = xml.getChildAttrib("Id");
+				if(name.empty()) {
+					continue;
+				}
+				searchTypes[name] = StringTokenizer<string>(extensions, ';').getTokens();
 			}
+			xml.stepOut();
 		}
 
 		if(SETTING(PRIVATE_ID).length() != 39 || CID(SETTING(PRIVATE_ID)).isZero()) {
@@ -533,7 +531,7 @@ void SettingsManager::save(string const& aFileName) {
 	
 	xml.addTag("SearchTypes");
 	xml.stepIn();
-	for(SearchTypesIterC i = searchTypes.begin(); i != searchTypes.end(); ++i) {
+	for(auto i = searchTypes.cbegin(), iend = searchTypes.cend(); i != iend; ++i) {
 		xml.addTag("SearchType", Util::toString(";", i->second));
 		xml.addChildAttrib("Id", i->first);
 	}
@@ -612,8 +610,8 @@ const StringList& SettingsManager::getExtensions(const string& name) {
 	return getSearchType(name)->second;
 }
 
-SettingsManager::SearchTypesIter SettingsManager::getSearchType(const string& name) {
-	SearchTypesIter ret = searchTypes.find(name);
+SettingsManager::SearchTypes::iterator SettingsManager::getSearchType(const string& name) {
+	auto ret = searchTypes.find(name);
 	if(ret == searchTypes.end()) {
 		throw SearchTypeException(_("No such search type"));
 	}

@@ -58,6 +58,7 @@
 #include "UCPage.h"
 #include "CertificatesPage.h"
 #include "SearchTypesPage.h"
+#include "UserMatchPage.h"
 
 using dwt::Grid;
 using dwt::GridInfo;
@@ -183,6 +184,7 @@ bool SettingsDialog::initDialog() {
 			addPage(T_("User commands"), new UCPage(container), IDI_USER_OP, item);
 			addPage(T_("Security certificates"), new CertificatesPage(container), IDI_SECURE, item);
 			addPage(T_("Search types"), new SearchTypesPage(container), IDI_SEARCH, item);
+			addPage(T_("User matching"), new UserMatchPage(container), IDI_USERS, item);
 		}
 
 		Grid::Seed gs(1, 1);
@@ -206,12 +208,7 @@ bool SettingsDialog::initDialog() {
 			[this] { handleClosing(); handleOKClicked(); },
 			[this] { handleClosing(); endDialog(IDCANCEL); });
 
-		Button::Seed seed(T_("Help"));
-		seed.padding.x = 10;
-		ButtonPtr button = cur->addChild(seed);
-		button->setHelpId(IDH_DCPP_HELP);
-		button->setImage(WinUtil::buttonIcon(IDI_HELP));
-		button->onClicked([this] { handleHelp(this, IDH_INDEX); });
+		WinUtil::addHelpButton(cur)->onClicked([this] { handleHelp(this, IDH_INDEX); });
 	}
 
 	/*

@@ -161,7 +161,7 @@ users(0)
 		addWidget(filter);
 		filter->onUpdated([this] { handleFilterUpdated(); });
 
-		filterSel = cur->addChild(WinUtil::Seeds::comboBoxStatic);
+		filterSel = cur->addChild(WinUtil::Seeds::comboBox);
 		addWidget(filterSel);
 
 		gs.caption = T_("Configured Public Hub Lists");
@@ -172,7 +172,7 @@ users(0)
 		listsGrid = group->addChild(Grid::Seed(1, 3));
 		listsGrid->column(0).mode = GridInfo::FILL;
 
-		lists = listsGrid->addChild(WinUtil::Seeds::comboBoxStatic);
+		lists = listsGrid->addChild(WinUtil::Seeds::comboBox);
 		addWidget(lists);
 		lists->onSelectionChanged([this] { handleListSelChanged(); });
 

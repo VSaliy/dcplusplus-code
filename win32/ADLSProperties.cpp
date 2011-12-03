@@ -71,7 +71,7 @@ bool ADLSProperties::handleInitDialog() {
 
 	group = grid->addChild(GroupBox::Seed(T_("Source Type")));
 	group->setHelpId(IDH_ADLSP_SOURCE_TYPE);
-	searchType = group->addChild(WinUtil::Seeds::comboBoxStatic);
+	searchType = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 	searchType->addValue(T_("Filename"));
 	searchType->addValue(T_("Directory"));
 	searchType->addValue(T_("Full Path"));
@@ -95,7 +95,7 @@ bool ADLSProperties::handleInitDialog() {
 
 	group = grid->addChild(GroupBox::Seed(T_("Size Type")));
 	group->setHelpId(IDH_ADLSP_SIZE_TYPE);
-	sizeType = group->addChild(WinUtil::Seeds::comboBoxStatic);
+	sizeType = group->addChild(WinUtil::Seeds::Dialog::comboBox);
 	sizeType->addValue(T_("B"));
 	sizeType->addValue(T_("KiB"));
 	sizeType->addValue(T_("MiB"));

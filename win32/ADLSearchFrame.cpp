@@ -110,9 +110,7 @@ items(0)
 		button->onClicked([this] { handleRemove(); });
 		addWidget(button);
 
-		cs.caption = T_("&Help");
-		button = grid->addChild(cs);
-		button->setHelpId(IDH_DCPP_HELP);
+		button = WinUtil::addHelpButton(grid);
 		button->onClicked([this] { WinUtil::help(this, IDH_ADL_SEARCH); });
 		addWidget(button);
 	}

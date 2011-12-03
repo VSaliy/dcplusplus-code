@@ -164,11 +164,7 @@ bool CommandDlg::handleInitDialog() {
 		[this] { handleOKClicked(); },
 		[this] { endDialog(IDCANCEL); });
 
-	{
-		ButtonPtr button = grid->addChild(Button::Seed(T_("Help")));
-		button->setHelpId(IDH_DCPP_HELP);
-		button->onClicked([this] { WinUtil::help(this, IDH_USER_COMMAND); });
-	}
+	WinUtil::addHelpButton(grid)->onClicked([this] { WinUtil::help(this, IDH_USER_COMMAND); });
 
 	if(bOpenHelp) {
 		// launch the help file, instead of having the help in the dialog
