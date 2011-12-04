@@ -1087,6 +1087,7 @@ void MainWindow::handleSettings() {
 	auto prevConn = SETTING(INCOMING_CONNECTIONS);
 	auto prevMapper = SETTING(MAPPER);
 	auto prevBind = SETTING(BIND_ADDRESS);
+	auto prevBind6 = SETTING(BIND_ADDRESS6);
 
 	auto prevGeo = BOOLSETTING(GET_USER_COUNTRY);
 	auto prevGeoFormat = SETTING(COUNTRY_FORMAT);
@@ -1105,7 +1106,7 @@ void MainWindow::handleSettings() {
 		try {
 			ConnectivityManager::getInstance()->setup(SETTING(INCOMING_CONNECTIONS) != prevConn ||
 				SETTING(TCP_PORT) != prevTCP || SETTING(UDP_PORT) != prevUDP || SETTING(TLS_PORT) != prevTLS ||
-				SETTING(MAPPER) != prevMapper || SETTING(BIND_ADDRESS) != prevBind);
+				SETTING(MAPPER) != prevMapper || SETTING(BIND_ADDRESS) != prevBind || SETTING(BIND_ADDRESS6) != prevBind6);
 		} catch (const Exception& e) {
 			showPortsError(e.getError());
 		}

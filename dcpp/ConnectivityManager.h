@@ -51,8 +51,7 @@ public:
 class ConnectivityManager : public Singleton<ConnectivityManager>, public Speaker<ConnectivityManagerListener>
 {
 public:
-	/// @param useDefault return an empty string if the value hasn't been configured (rather than the SettingsManager default).
-	const string& get(SettingsManager::StrSetting setting, bool useDefault = true) const;
+	const string& get(SettingsManager::StrSetting setting) const;
 	int get(SettingsManager::IntSetting setting) const;
 	void set(SettingsManager::StrSetting setting, const string& str);
 
