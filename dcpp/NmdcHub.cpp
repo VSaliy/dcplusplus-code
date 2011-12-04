@@ -212,7 +212,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		}
 
 		auto from = findUser(nick);
-		if(from && from->getIdentity().match && from->getIdentity().match->noChat)
+		if(from && from->getIdentity().noChat())
 			return;
 
 		ChatMessage chatMessage = { unescape(message), from };
@@ -405,7 +405,8 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			setMyIdentity(u.getIdentity());
 		}
 
-		fire(ClientListener::UserUpdated(), this, u);
+		updated(u);
+
 	} else if(cmd == "$Quit") {
 		if(!param.empty()) {
 			const string& nick = param;
@@ -707,7 +708,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		}
 
 		auto from = findUser(fromNick);
-		if(from && from->getIdentity().match && from->getIdentity().match->noChat)
+		if(from && from->getIdentity().noChat())
 			return;
 
 		ChatMessage message = { unescape(param.substr(j + 2)), from, &getUser(getMyNick()), findUser(rtNick) };

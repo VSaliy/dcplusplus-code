@@ -114,7 +114,8 @@ private:
 		UserMatchPropsPtr props;
 	};
 
-	SettingsData* globalData;
+	Data* globalData;
+	Data* noUserMatchData;
 
 	typedef TypedTable<Data> Table;
 	Table* table;

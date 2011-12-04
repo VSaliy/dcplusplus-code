@@ -252,9 +252,7 @@ void AdcHub::handle(AdcCommand::MSG, AdcCommand& c) noexcept {
 		return;
 
 	auto from = findUser(c.getFrom());
-	if(!from)
-		return;
-	if(from->getIdentity().match && from->getIdentity().match->noChat)
+	if(!from || from->getIdentity().noChat())
 		return;
 
 	ChatMessage message = { c.getParam(0), from };

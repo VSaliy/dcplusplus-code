@@ -113,6 +113,10 @@ public:
 	bool isSet(const char* name) const;
 	string getSIDString() const { return string((const char*)&sid, 4); }
 
+	UserMatchPropsPtr getMatch() const;
+	void setMatch(UserMatchPropsPtr match);
+	bool noChat() const;
+
 	bool isClientType(ClientType ct) const;
 
 	void getParams(ParamMap& params, const string& prefix, bool compatibility) const;
@@ -120,12 +124,12 @@ public:
 	GETSET(UserPtr, user, User);
 	GETSET(uint32_t, sid, SID);
 
-	UserMatchPropsPtr match;
-
 private:
 	typedef std::unordered_map<short, string> InfMap;
 	typedef InfMap::iterator InfIter;
 	InfMap info;
+
+	UserMatchPropsPtr match;
 
 	static FastCriticalSection cs;
 };

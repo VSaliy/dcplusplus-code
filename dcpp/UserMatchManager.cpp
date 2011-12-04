@@ -61,7 +61,7 @@ void UserMatchManager::match(Identity& identity) const {
 			return;
 		}
 	}
-	identity.match.reset();
+	identity.setMatch(nullptr);
 }
 
 void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
