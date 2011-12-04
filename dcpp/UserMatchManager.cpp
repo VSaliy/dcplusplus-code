@@ -46,7 +46,12 @@ void UserMatchManager::setList(UserMatches&& newList) {
 	auto lock = cm->lock();
 
 	// swap the new list.
+#ifdef __GNUC__ /// @todo GCC doesn't seem to support vector swapping to an rvalue ref...
+	auto& lvalueList = newList;
+	const_cast<UserMatches&>(list).swap(lvalueList);
+#else
 	const_cast<UserMatches&>(list).swap(std::forward<UserMatches>(newList));
+#endif
 
 	// refresh user matches.
 	auto& users = cm->getOnlineUsers();
