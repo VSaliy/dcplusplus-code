@@ -122,7 +122,7 @@ bool UserMatch::match(Identity& identity) const {
 		}
 	}
 
-	identity.match = props;
+	identity.setMatch(props);
 	return true;
 }
 

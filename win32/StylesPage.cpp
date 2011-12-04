@@ -59,6 +59,8 @@ static const ColumnInfo columns[] = {
 
 StylesPage::StylesPage(dwt::Widget* parent) :
 PropPage(parent, 2, 1),
+globalData(0),
+noUserMatchData(0),
 table(0),
 preview(0),
 customFont(0),
@@ -148,7 +150,7 @@ bgColor(0)
 	table->setGroups(groups);
 	auto grouped = table->isGrouped();
 
-	auto add = [this, grouped](tstring&& text, unsigned helpId, int group, int fontSetting, int textColorSetting, int bgColorSetting) -> SettingsData* {
+	auto add = [this, grouped](tstring&& text, unsigned helpId, int group, int fontSetting, int textColorSetting, int bgColorSetting) -> Data* {
 		auto data = new SettingsData(forward<tstring>(text), helpId, fontSetting, textColorSetting, bgColorSetting);
 		table->insert(grouped ? group : -1, data);
 		return data;
@@ -187,7 +189,11 @@ void StylesPage::write() {
 
 void StylesPage::updateUserMatches(std::vector<UserMatch>& userMatches) {
 	for(size_t i = 0; i < table->size();) {
-		if(dynamic_cast<UserMatchData*>(table->getData(i))) {
+		auto data = table->getData(i);
+		if(data == noUserMatchData) {
+			table->erase(i);
+			noUserMatchData = 0;
+		} else if(dynamic_cast<UserMatchData*>(data)) {
 			table->erase(i);
 		} else {
 			++i;
@@ -195,7 +201,8 @@ void StylesPage::updateUserMatches(std::vector<UserMatch>& userMatches) {
 	}
 
 	if(userMatches.empty()) {
-		table->insert(table->isGrouped() ? GROUP_USERS : -1, new Data(T_("No user matching definition has been set yet"), IDH_SETTINGS_STYLES_NO_USER_MATCH));
+		noUserMatchData = new Data(T_("No user matching definition has been set yet"), IDH_SETTINGS_STYLES_NO_USER_MATCH);
+		table->insert(table->isGrouped() ? GROUP_USERS : -1, noUserMatchData);
 	} else {
 		for(auto i = userMatches.begin(), iend = userMatches.end(); i != iend; ++i) {
 			table->insert(table->isGrouped() ? GROUP_USERS : -1, new UserMatchData(*i));
@@ -322,6 +329,9 @@ void StylesPage::UserMatchData::update() {
 
 void StylesPage::handleSelectionChanged() {
 	auto data = table->getSelectedData();
+	if(data == noUserMatchData) {
+		data = nullptr;
+	}
 
 	bool enable = data;
 	if(data) {

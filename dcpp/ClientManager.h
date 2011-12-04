@@ -93,7 +93,7 @@ public:
 	string findHub(const string& ipPort) const;
 	string findHubEncoding(const string& aUrl) const;
 
-	/**
+	/** Get an OnlineUser object - lock it with lock()!
 	* @param priv discard any user that doesn't match the hint.
 	* @return OnlineUser* found by CID and hint; might be only by CID if priv is false.
 	*/

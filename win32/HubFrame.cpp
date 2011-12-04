@@ -773,25 +773,25 @@ int HubFrame::UserInfo::getImage(int col) const {
 }
 
 int HubFrame::UserInfo::getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int) const {
-	if(!identity.match) {
+	auto match = identity.getMatch();
+	if(!match) {
 		return CDRF_DODEFAULT;
 	}
-	const auto& match = *identity.match;
 
-	if(!match.font.empty()) {
+	if(!match->font.empty()) {
 		// cache lookup might fail when refreshing the list of user matching defs...
-		auto cached = WinUtil::userMatchFonts.find(match.font);
+		auto cached = WinUtil::userMatchFonts.find(match->font);
 		if(cached != WinUtil::userMatchFonts.end()) {
 			font = cached->second->handle();
 		}
 	}
 
-	if(match.textColor != -1) {
-		textColor = match.textColor;
+	if(match->textColor != -1) {
+		textColor = match->textColor;
 	}
 
-	if(match.bgColor != -1) {
-		bgColor = match.bgColor;
+	if(match->bgColor != -1) {
+		bgColor = match->bgColor;
 	}
 
 	return CDRF_NEWFONT;
