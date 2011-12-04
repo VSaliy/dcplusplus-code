@@ -273,32 +273,15 @@ void Socket::accept(const Socket& listeningSocket) {
 string Socket::listen(const string& port) {
 	disconnect();
 
-	//auto &localIp = af == AF_INET ? getLocalIp4() : getLocalIp6();
-
-	auto ai = resolveAddr(/*localIp*/ "", port, AF_UNSPEC, AI_PASSIVE | AI_ADDRCONFIG);
-
 	uint16_t ret = 0;
 
 	// For server sockets we create both ipv4 and ipv6 if possible
 	// We use the same port for both sockets to deal with the fact that
 	// there's no way in ADC to have different ports for v4 and v6 TCP sockets
-	for(auto a = ai.get(); a; a = a->ai_next) {
-		if(!sock4.valid() && a->ai_family == AF_INET) {
-			create(*a);
-			if(ret != 0) {
-				((sockaddr_in*)a->ai_addr)->sin_port = ret;
-			}
 
-			check([&] { return ::bind(sock4, a->ai_addr, a->ai_addrlen); });
-			check([&] { return ::getsockname(sock4, a->ai_addr, (socklen_t*)&a->ai_addrlen); });
-			ret = ((sockaddr_in*)a->ai_addr)->sin_port;
-
-			if(type == TYPE_TCP) {
-				check([&] { return ::listen(sock4, 20); });
-			}
-		}
-
-		if(!sock6.valid() && a->ai_family == AF_INET6 && !v4only) {
+	if(!v4only) {
+		auto ai = resolveAddr(localIp6, port, AF_INET6, AI_PASSIVE | AI_ADDRCONFIG);
+		for(auto a = ai.get(); a && !sock6.valid(); a = a->ai_next) {
 			create(*a);
 			if(ret != 0) {
 				((sockaddr_in6*)a->ai_addr)->sin6_port = ret;
@@ -311,6 +294,22 @@ string Socket::listen(const string& port) {
 			if(type == TYPE_TCP) {
 				check([&] { return ::listen(sock6, 20); });
 			}
+		}
+	}
+
+	auto ai = resolveAddr(localIp4, port, AF_INET, AI_PASSIVE | AI_ADDRCONFIG);
+	for(auto a = ai.get(); a && !sock4.valid(); a = a->ai_next) {
+		create(*a);
+		if(ret != 0) {
+			((sockaddr_in*)a->ai_addr)->sin_port = ret;
+		}
+
+		check([&] { return ::bind(sock4, a->ai_addr, a->ai_addrlen); });
+		check([&] { return ::getsockname(sock4, a->ai_addr, (socklen_t*)&a->ai_addrlen); });
+		ret = ((sockaddr_in*)a->ai_addr)->sin_port;
+
+		if(type == TYPE_TCP) {
+			check([&] { return ::listen(sock4, 20); });
 		}
 	}
 

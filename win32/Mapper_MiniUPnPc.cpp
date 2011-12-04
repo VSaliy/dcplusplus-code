@@ -38,9 +38,10 @@ bool Mapper_MiniUPnPc::init() {
 	if(!url.empty())
 		return true;
 
-	const auto& bindAddr = ConnectivityManager::getInstance()->get(SettingsManager::BIND_ADDRESS, false);
-
-	UPNPDev* devices = upnpDiscover(2000, bindAddr.empty() ? nullptr : bindAddr.c_str(), 0, 0, 0, 0);
+	const auto& bindAddr = CONNSETTING(BIND_ADDRESS);
+	UPNPDev* devices = upnpDiscover(2000,
+		(bindAddr.empty() || bindAddr == SettingsManager::getInstance()->getDefault(SettingsManager::BIND_ADDRESS)) ? nullptr : bindAddr.c_str(),
+		0, 0, 0, 0);
 	if(!devices)
 		return false;
 

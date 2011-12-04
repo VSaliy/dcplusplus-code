@@ -553,8 +553,8 @@ string Util::formatExactSize(int64_t aBytes) {
 }
 
 string Util::getLocalIp() {
-	const auto& bindAddr = ConnectivityManager::getInstance()->get(SettingsManager::BIND_ADDRESS, false);
-	if(!bindAddr.empty()) {
+	const auto& bindAddr = CONNSETTING(BIND_ADDRESS);
+	if(!bindAddr.empty() && bindAddr != SettingsManager::getInstance()->getDefault(SettingsManager::BIND_ADDRESS)) {
 		return bindAddr;
 	}
 
