@@ -33,7 +33,8 @@
 
 using dwt::Grid;
 using dwt::GridInfo;
-
+using dwt::Label;
+	
 using boost::range::for_each;
 
 const string PrivateFrame::id = "PM";
@@ -134,8 +135,11 @@ online(replyTo.getUser().user->isOnline())
 	message->onChar([this](int c) { return handleMessageChar(c); });
 
 	initStatus();
-	hubBox = addChild(WinUtil::Seeds::comboBox);
 
+	hubGrid = addChild(Grid::Seed(1, 2));
+	hubGrid->addChild(Label::Seed(T_("Messages to go through : ")));
+	hubBox = hubGrid->addChild(WinUtil::Seeds::comboBox);
+	
 	status->onDblClicked(STATUS_STATUS, [this] { openLog(); });
 
 	initAccels();
@@ -259,7 +263,12 @@ void PrivateFrame::updateOnlineStatus() {
 		}
 	}
 
-	status->setWidget(STATUS_HUBS, hubBox);
+	status->setWidget(STATUS_HUBS, hubGrid);
+
+	if(!online || replyTo.getUser().user->isNMDC()) {
+		status->setSize(STATUS_HUBS, 0);
+	}
+
 	status->refresh();
 }
 
