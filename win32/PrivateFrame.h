@@ -71,6 +71,7 @@ public:
 	void sendMessage(const tstring& msg, bool thirdPerson = false);
 
 private:
+	GridPtr hubGrid;
 	ComboBoxPtr hubBox;
 	StringPairList hubs;
 	ParamMap ucLineParams;
