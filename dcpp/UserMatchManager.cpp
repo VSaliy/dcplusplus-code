@@ -45,13 +45,8 @@ void UserMatchManager::setList(UserMatches&& newList) {
 	auto cm = ClientManager::getInstance();
 	auto lock = cm->lock();
 
-	// swap the new list.
-#ifdef __GNUC__ /// @todo GCC doesn't seem to support vector swapping to an rvalue ref...
-	auto& lvalueList = newList;
-	const_cast<UserMatches&>(list).swap(lvalueList);
-#else
-	const_cast<UserMatches&>(list).swap(std::forward<UserMatches>(newList));
-#endif
+	// assign the new list.
+	const_cast<UserMatches&>(list) = std::forward<UserMatches>(newList);
 
 	// refresh user matches.
 	auto& users = cm->getOnlineUsers();
@@ -60,13 +55,14 @@ void UserMatchManager::setList(UserMatches&& newList) {
 	}
 }
 
-void UserMatchManager::match(Identity& identity) const {
+void UserMatchManager::match(OnlineUser& user) const {
 	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
-		if(i->match(identity)) {
+		if(i->match(user)) {
+			user.getIdentity().setMatch(i->props);
 			return;
 		}
 	}
-	identity.setMatch(nullptr);
+	user.getIdentity().setMatch(nullptr);
 }
 
 void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
@@ -97,10 +93,9 @@ void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcep
 			while(xml.findChild("Rule")) {
 				UserMatch::Rule rule;
 
-				if(xml.getBoolChildAttrib("Regex")) { rule.setRegEx(true); }
-
 				rule.field = static_cast<decltype(rule.field)>(xml.getIntChildAttrib("Field"));
 				rule.pattern = xml.getChildData();
+				rule.setMethod(static_cast<UserMatch::Rule::Method>(xml.getIntChildAttrib("Method")));
 
 				match.addRule(std::move(rule));
 			}
@@ -136,10 +131,8 @@ void UserMatchManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcep
 		xml.stepIn();
 		for(auto rule = i->rules.cbegin(), rule_end = i->rules.cend(); rule != rule_end; ++rule) {
 			xml.addTag("Rule", rule->pattern);
-
-			if(rule->isRegEx()) { xml.addChildAttrib("Regex", true); }
-
 			xml.addChildAttrib("Field", rule->field);
+			xml.addChildAttrib("Method", rule->getMethod());
 		}
 		xml.stepOut();
 	}

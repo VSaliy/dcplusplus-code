@@ -216,13 +216,13 @@ string Client::getCounts() {
 }
 
 void Client::updated(OnlineUser& user) {
-	UserMatchManager::getInstance()->match(user.getIdentity());
+	UserMatchManager::getInstance()->match(user);
 
 	fire(ClientListener::UserUpdated(), this, user);
 }
 
 void Client::updated(OnlineUserList& users) {
-	std::for_each(users.begin(), users.end(), [](OnlineUser* user) { UserMatchManager::getInstance()->match(user->getIdentity()); });
+	std::for_each(users.begin(), users.end(), [](OnlineUser* user) { UserMatchManager::getInstance()->match(*user); });
 
 	fire(ClientListener::UsersUpdated(), this, users);
 }

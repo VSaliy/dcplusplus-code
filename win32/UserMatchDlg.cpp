@@ -38,7 +38,7 @@ using dwt::GridInfo;
 using dwt::Label;
 
 UserMatchDlg::UserMatchDlg(dwt::Widget* parent, const UserMatch* initialMatcher) :
-GridDialog(parent, 500, DS_CONTEXTHELP),
+GridDialog(parent, 700, DS_CONTEXTHELP),
 name(0),
 favs(0),
 ops(0),
@@ -143,7 +143,7 @@ void UserMatchDlg::handleOKClicked() {
 	int8_t counter = -1;
 	std::unique_ptr<UserMatch::Rule> rule;
 	boost::for_each(controls, [this, &counter, &rule](Control* control) {
-		enum { RuleField, RuleSearch, RuleRegex, RuleRemove };
+		enum { RuleField, RuleSearch, RuleMethod, RuleRemove };
 		switch(++counter) {
 		case RuleField:
 			{
@@ -156,10 +156,9 @@ void UserMatchDlg::handleOKClicked() {
 				rule->pattern = Text::fromT(static_cast<TextBoxPtr>(control)->getText());
 				break;
 			}
-		case RuleRegex:
+		case RuleMethod:
 			{
-				if(static_cast<CheckBoxPtr>(control)->getChecked())
-					rule->setRegEx(true);
+				rule->setMethod(static_cast<UserMatch::Rule::Method>(static_cast<ComboBoxPtr>(control)->getSelected()));
 				break;
 			}
 		case RuleRemove:
@@ -200,7 +199,7 @@ void UserMatchDlg::addRow(const UserMatch::Rule* rule) {
 
 	auto search = rules->addChild(WinUtil::Seeds::Dialog::textBox);
 
-	auto regex = rules->addChild(CheckBox::Seed(_T("RE")));
+	auto method = rules->addChild(WinUtil::Seeds::Dialog::comboBox);
 
 	{
 		auto seed = Button::Seed(_T("X"));
@@ -212,12 +211,15 @@ void UserMatchDlg::addRow(const UserMatch::Rule* rule) {
 		}); });
 	}
 
-	tstring fields[UserMatch::Rule::FIELD_LAST] = { T_("Nick"), T_("CID"), T_("IP") };
+	tstring fields[UserMatch::Rule::FIELD_LAST] = { T_("Nick"), T_("CID"), T_("IP"), T_("Hub address") };
 	std::for_each(fields, fields + UserMatch::Rule::FIELD_LAST, [field](const tstring& str) { field->addValue(str); });
 	field->setSelected(rule ? rule->field : 0);
 
+	tstring methods[UserMatch::Rule::METHOD_LAST] = { T_("Partial match"), T_("Exact match"), T_("Regular Expression") };
+	std::for_each(methods, methods + UserMatch::Rule::METHOD_LAST, [method](const tstring& str) { method->addValue(str); });
+	method->setSelected(rule ? rule->getMethod() : 0);
+
 	if(rule) {
 		search->setText(Text::toT(rule->pattern));
-		if(rule->isRegEx()) { regex->setChecked(true); }
 	}
 }

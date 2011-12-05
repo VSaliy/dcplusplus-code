@@ -36,12 +36,12 @@ class UserMatchManager :
 public:
 	/// Retrieve a copy of the list of user matching definitions.
 	UserMatches getList() const;
-	/// Swap a new list of user matching definitions. All current users will be re-matched.
+	/// Assign a new list of user matching definitions. All current users will be re-matched.
 	void setList(UserMatches&& newList);
 
-	/** Match the given identity against current user matching definitions. The "match" member of
-	the identity object will point to the properties of the matched definition on success. */
-	void match(Identity& identity) const;
+	/** Match the given user against current user matching definitions. The "match" member of the
+	user's identity object will point to the properties of the matched definition on success. */
+	void match(OnlineUser& user) const;
 
 private:
 	friend class Singleton<UserMatchManager>;

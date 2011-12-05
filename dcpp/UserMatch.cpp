@@ -19,6 +19,7 @@
 #include "stdinc.h"
 #include "UserMatch.h"
 
+#include "Client.h"
 #include "FavoriteManager.h"
 #include "format.h"
 #include "LogManager.h"
@@ -26,21 +27,27 @@
 
 namespace dcpp {
 
-bool UserMatch::Rule::isRegEx() const {
-	return boost::get<boost::regex>(&search);
+UserMatch::Rule::Method UserMatch::Rule::getMethod() const {
+	return boost::get<StringSearch>(&search) ? PARTIAL : boost::get<string>(&search) ? EXACT : REGEX;
 }
 
-void UserMatch::Rule::setRegEx(bool b) {
-	if(b)
-		search = boost::regex();
-	else
-		search = StringSearch();
+void UserMatch::Rule::setMethod(Method method) {
+	switch(method) {
+	case PARTIAL: search = StringSearch(); break;
+	case EXACT: search = string(); break;
+	case REGEX: search = boost::regex(); break;
+	}
 }
 	
 struct Prepare : boost::static_visitor<bool> {
 	Prepare(const string& pattern) : pattern(pattern) { }
 
 	bool operator()(StringSearch& s) const {
+		s = pattern;
+		return true;
+	}
+
+	bool operator()(string& s) const {
 		s = pattern;
 		return true;
 	}
@@ -70,6 +77,10 @@ struct Match : boost::static_visitor<bool> {
 		return s.match(str);
 	}
 
+	bool operator()(const string& s) const {
+		return str == s;
+	}
+
 	bool operator()(const boost::regex& r) const {
 		try {
 			return !r.empty() && boost::regex_search(str, r);
@@ -97,7 +108,9 @@ bool UserMatch::empty() const {
 	return !isSet(FAVS) && !isSet(OPS) && !isSet(BOTS) && rules.empty();
 }
 
-bool UserMatch::match(Identity& identity) const {
+bool UserMatch::match(OnlineUser& user) const {
+	const auto& identity = user.getIdentity();
+
 	if(isSet(FAVS) && !FavoriteManager::getInstance()->isFavoriteUser(identity.getUser())) {
 		return false;
 	}
@@ -116,13 +129,13 @@ bool UserMatch::match(Identity& identity) const {
 		case UserMatch::Rule::NICK: str = identity.getNick(); break;
 		case UserMatch::Rule::CID: str = identity.getUser()->getCID().toBase32(); break;
 		case UserMatch::Rule::IP: str = identity.getIp(); break;
+		case UserMatch::Rule::HUB_ADDRESS: str = user.getClient().getHubUrl(); break;
 		}
 		if(!i->match(str)) {
 			return false;
 		}
 	}
 
-	identity.setMatch(props);
 	return true;
 }
 
