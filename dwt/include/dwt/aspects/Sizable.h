@@ -97,7 +97,28 @@ public:
 	  */
 	void bringToFront();
 
-	void centerWindow(Widget* target = 0);
+	void centerWindow() {
+		// this is greatly inspired by MFC (wincore.cpp - CWnd::CenterWindow). 
+
+		/// @todo this only works for top-level windows (ie dialogs); for child windows, coords will need conversion.
+		auto root = W().getParent()->getRoot();
+		auto size = W().getWindowSize();
+		auto rect = root->getWindowRect();
+		rect.pos.x = (rect.left() + rect.right() - size.x) / 2;
+		rect.pos.y = (rect.top() + rect.bottom() - size.y) / 2;
+		rect.size = size;
+
+		// make sure the window is still in the screen area.
+		MONITORINFO mi = { sizeof(MONITORINFO) };
+		if(::GetMonitorInfo(::MonitorFromWindow(root->handle(), MONITOR_DEFAULTTONEAREST), &mi)) {
+			if(rect.right() > mi.rcWork.right) { rect.pos.x = mi.rcWork.right - rect.width(); }
+			if(rect.left() < mi.rcWork.left) { rect.pos.x = mi.rcWork.left; }
+			if(rect.bottom() > mi.rcWork.bottom) { rect.pos.y = mi.rcWork.bottom - rect.height(); }
+			if(rect.top() < mi.rcWork.top) { rect.pos.y = mi.rcWork.top; }
+		}
+
+		resize(rect);
+	}
 
 	/// Brings the widget to the bottom
 	/** Makes the widget become the bottom most widget meaning it will be obscured by
@@ -144,16 +165,6 @@ Point Sizable< WidgetType >::getDesktopSize()
 	RECT rc;
 	::GetWindowRect( ::GetDesktopWindow(), & rc );
 	return Point( rc.right - rc.left, rc.bottom - rc.top );
-}
-
-template< class WidgetType >
-void Sizable< WidgetType >::centerWindow( Widget* target ) {
-	Point size = W().getWindowSize();
-	if(!target) {
-		target = static_cast<WidgetType*>(this)->getParent();
-	}
-	Rectangle rc(target->getWindowRect());
-	resize(Rectangle(rc.left() + (rc.right() - rc.left())/2 - size.x/2, rc.top() + (rc.bottom() - rc.top())/2 - size.y/2, size.x, size.y)); /// @todo improve with methods of Rectangle like width() and height()?
 }
 
 template< class WidgetType >
