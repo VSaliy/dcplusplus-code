@@ -50,20 +50,29 @@ struct UserMatch : public Flags {
 			NICK,
 			CID,
 			IP,
+			HUB_ADDRESS,
 
 			FIELD_LAST
 		} field;
 
 		string pattern;
 
-		bool isRegEx() const;
-		void setRegEx(bool b);
+		enum Method {
+			PARTIAL,
+			EXACT,
+			REGEX,
+
+			METHOD_LAST
+		};
+
+		Method getMethod() const;
+		void setMethod(Method method);
 
 	private:
 		friend struct UserMatch;
 		bool prepare();
 		bool match(const string& str) const;
-		boost::variant<StringSearch, boost::regex> search;
+		boost::variant<StringSearch, string, boost::regex> search;
 	};
 
 	vector<Rule> rules;
@@ -73,7 +82,7 @@ struct UserMatch : public Flags {
 	void addRule(Rule&& rule);
 	bool empty() const;
 
-	bool match(Identity& identity) const;
+	bool match(OnlineUser& user) const;
 };
 
 /** Stores properties to be applied to matched users. */
