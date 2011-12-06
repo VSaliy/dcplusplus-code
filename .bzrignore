@@ -6,6 +6,7 @@
 custom.py
 *.lib
 *.pdb
+./dcpp/version-revno.inc
 ./htmlhelp/include/htmlhelp.h
 ./htmlhelp/lib/htmlhelp.lib
 natupnp.h

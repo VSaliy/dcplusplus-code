@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include <string>
+
 #define APPNAME "DC++"
 
 // don't forget to update the .rc file as well!
@@ -23,5 +25,5 @@
 #define VERSIONFLOAT 0.785
 
 namespace dcpp {
-extern const string fullVersionString;
+extern const std::string fullVersionString;
 }
