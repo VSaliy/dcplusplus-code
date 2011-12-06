@@ -17,18 +17,13 @@
  */
 
 #include "stdinc.h"
-#include "DCPlusPlus.h"
-
 #include "version.h"
 
-#ifndef DCPP_REVISION
-#define DCPP_REVISION 0
-#endif
+#include "version-revno.inc" // should #define DCPP_REVISION
 
 #define xstrver(s) strver(s)
 #define strver(s) #s
 
 namespace dcpp {
-const string fullVersionString(APPNAME " v" VERSIONSTRING " (r" xstrver(DCPP_REVISION) ")");
+const std::string fullVersionString(APPNAME " v" VERSIONSTRING " (r" xstrver(DCPP_REVISION) ")");
 }
-

@@ -1,39 +1,22 @@
 # vim: set filetype=py
 
-def getRevision(env):
-	try:
-		import bzrlib
-		import bzrlib.builtins
-
-		tree = bzrlib.builtins.WorkingTree.open_containing(env.Dir("#").abspath)[0]
-
-		return tree.branch.revision_id_to_revno(tree.last_revision())
-
-	except:
-		f = None
-		try:
-			f = open(env.Dir("#").abspath+"/.bzr/branch/last-revision",'r')
-			line = f.read()
-			pos = line.find(' ')
-			if pos > 0:
-				return int(line[:pos])
-		except:
-			pass
-		finally:
-			if f:
-				f.close()
-		return 0
-
 Import('dev source_path')
 
 env, target, sources = dev.prepare_build(source_path, 'dcpp', in_bin = False, precompiled_header = 'stdinc')
 
 env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib', '#/geoip'])
 
-env.Append(CPPDEFINES = ['BUILDING_DCPP=1', 'DCPP_REVISION=' + str(getRevision(env))])
+env.Append(CPPDEFINES = ['BUILDING_DCPP=1'])
 
 headers=dev.get_sources(source_path, "*.h")
 dev.i18n(source_path, env, [sources, headers], 'libdcpp')
 
 ret = dev.build_lib(env, target, sources, dev.cpp_lib)
+
+if ret:
+	revno = '#/dcpp/version-revno.inc'
+	from gen_revno import gen_revno
+	env.Command(revno, None, Action(gen_revno, 'Generating $TARGET'))
+	env.AlwaysBuild(revno)
+
 Return('ret')
