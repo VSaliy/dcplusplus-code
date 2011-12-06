@@ -278,10 +278,11 @@ string Socket::listen(const string& port) {
 	// there's no way in ADC to have different ports for v4 and v6 TCP sockets
 
 	uint16_t ret = 0;
-	string error;
+
+	addrinfo_p ai(nullptr, nullptr);
 
 	if(!v4only) {
-		auto ai = resolveAddr(localIp6, port, AF_INET6, AI_PASSIVE | AI_ADDRCONFIG);
+		try { ai = resolveAddr(localIp6, port, AF_INET6, AI_PASSIVE | AI_ADDRCONFIG); } catch(const SocketException&) { }
 		for(auto a = ai.get(); a && !sock6.valid(); a = a->ai_next) {
 			try {
 				create(*a);
@@ -296,13 +297,11 @@ string Socket::listen(const string& port) {
 				if(type == TYPE_TCP) {
 					check([&] { return ::listen(sock6, 20); });
 				}
-			} catch(const SocketException& e) {
-				error = e.getError();
-			}
+			} catch(const SocketException&) { }
 		}
 	}
 
-	auto ai = resolveAddr(localIp4, port, AF_INET, AI_PASSIVE | AI_ADDRCONFIG);
+	try { ai = resolveAddr(localIp4, port, AF_INET, AI_PASSIVE | AI_ADDRCONFIG); } catch(const SocketException&) { }
 	for(auto a = ai.get(); a && !sock4.valid(); a = a->ai_next) {
 		try {
 			create(*a);
@@ -317,13 +316,11 @@ string Socket::listen(const string& port) {
 			if(type == TYPE_TCP) {
 				check([&] { return ::listen(sock4, 20); });
 			}
-		} catch(const SocketException& e) {
-			error = e.getError();
-		}
+		} catch(const SocketException&) { }
 	}
 
 	if(ret == 0) {
-		throw SocketException(error.empty() ? _("Could not open port for listening") : error);
+		throw SocketException(_("Could not open port for listening"));
 	}
 	return Util::toString(ntohs(ret));
 }
