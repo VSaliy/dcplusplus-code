@@ -56,6 +56,8 @@ bool MappingManager::open() {
 }
 
 void MappingManager::close() {
+	join();
+
 	if(renewal) {
 		renewal = 0;
 		TimerManager::getInstance()->removeListener(this);
@@ -74,8 +76,8 @@ bool MappingManager::getOpened() const {
 int MappingManager::run() {
 	ScopedFunctor([this] { busy.clear(); });
 
-	// shortcuts
-	const auto&
+	// cache ports
+	auto
 		conn_port = ConnectionManager::getInstance()->getPort(),
 		secure_port = ConnectionManager::getInstance()->getSecurePort(),
 		search_port = SearchManager::getInstance()->getPort();

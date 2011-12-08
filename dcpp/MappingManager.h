@@ -61,7 +61,7 @@ private:
 	uint64_t renewal; /// when the next renewal should happen, if requested by the mapper.
 
 	MappingManager() : busy(false), renewal(0) { }
-	virtual ~MappingManager() { join(); }
+	virtual ~MappingManager() { }
 
 	int run();
 
