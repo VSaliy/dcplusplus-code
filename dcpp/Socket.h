@@ -153,7 +153,7 @@ public:
 	virtual std::pair<bool, bool> wait(uint32_t millis, bool checkRead, bool checkWrite);
 
 	typedef std::unique_ptr<addrinfo, decltype(&freeaddrinfo)> addrinfo_p;
-	static string resolve(const string& aDns, int af = AF_UNSPEC);
+	static string resolve(const string& aDns, int af = AF_UNSPEC) noexcept;
 	addrinfo_p resolveAddr(const string& name, const string& port, int family = AF_UNSPEC, int flags = 0);
 
 	static uint64_t getTotalDown() { return stats.totalDown; }
