@@ -17,7 +17,7 @@ if ret:
 	revno = '#/dcpp/version-revno.inc'
 	from gen_revno import gen_revno
 	env.Command(revno, None, Action(gen_revno, 'Generating $TARGET'))
-	env.Depends(ret, revno)
+	env.Depends(sources, revno)
 	env.AlwaysBuild(revno)
 
 Return('ret')
