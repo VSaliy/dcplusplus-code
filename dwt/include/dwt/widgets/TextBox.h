@@ -303,8 +303,6 @@ private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 
-	bool handleKeyDown(int c);
-
 	// aspects::Scrollable
 	int scrollOffsetImpl() const {
 		return 1;

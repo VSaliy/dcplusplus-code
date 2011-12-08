@@ -72,12 +72,11 @@ font(0)
 }
 
 void TextBox::create(const Seed& cs) {
+	// some text-boxes don't handle ctrl + A so we have do it ourselves...
+	addAccel(FCONTROL, 'A', [this] { setSelection(); });
+
 	BaseType::create(cs);
 	setFont(cs.font);
-
-	// multiline text-boxes don't handle ctrl + A so we have do it ourselves...
-	if((cs.style & ES_MULTILINE) == ES_MULTILINE)
-		onKeyDown([this](int c) { return handleKeyDown(c); });
 }
 
 void TextBox::setText(const tstring& txt) {
@@ -263,14 +262,6 @@ bool TextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
 		return true;
 	}
 
-	return false;
-}
-
-bool TextBox::handleKeyDown(int c) {
-	if(c == 'A' && isControlPressed() && !isAltPressed()) {
-		setSelection();
-		return true;
-	}
 	return false;
 }
 
