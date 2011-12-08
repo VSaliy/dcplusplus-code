@@ -52,6 +52,7 @@
 * [L#729684] Fix the /userlist chat command (poy)
 * Revamp style settings (poy)
 * Add user matching settings (poy)
+* [L#887021] No beep on ctrl+A in some text-boxes (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
