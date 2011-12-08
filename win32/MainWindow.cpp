@@ -182,9 +182,7 @@ fullSlots(false)
 	{
 		bool skipHubCon = WinUtil::isShift();
 
-		WindowManager* wm = WindowManager::getInstance();
-		auto lock = wm->lock();
-		const auto& list = wm->getList();
+		const auto& list = WindowManager::getInstance()->getList();
 
 		for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
 			auto id = i->getId();
@@ -651,14 +649,13 @@ void addActiveParam(WindowParams& params) {
 }
 
 template<typename T, typename configureF>
-void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, MainWindow* mainWindow,
-						  const tstring& text, unsigned iconId, unsigned favIconId, configureF f)
-{
+void addRecentMenu(MenuPtr& menu, MainWindow* mainWindow, const tstring& text, unsigned iconId, unsigned favIconId, configureF f) {
 	MenuPtr popup = menu->appendPopup(text, WinUtil::menuIcon(iconId));
 	popup->appendItem(T_("&Configure..."), std::bind(f, mainWindow, T::id, text),
 		WinUtil::menuIcon(IDI_SETTINGS), true, true);
 	popup->appendSeparator();
 
+	const auto& recent = WindowManager::getInstance()->getRecent();
 	auto it = recent.find(T::id);
 	if(it == recent.end()) {
 		popup->appendItem(T_("(No recent item found)"), 0, 0, false);
@@ -686,16 +683,10 @@ void addRecentMenu(const WindowManager::RecentList& recent, MenuPtr& menu, MainW
 void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
 	MenuPtr menu = addChild(WinUtil::Seeds::menu);
 
-	{
-		WindowManager* wm = WindowManager::getInstance();
-		auto lock = wm->lock();
-		const auto& recent = wm->getRecent();
-
-		auto f = &MainWindow::handleConfigureRecent;
-		addRecentMenu<HubFrame>(recent, menu, this, T_("Recent hubs"), IDI_HUB, IDI_FAVORITE_HUBS, f);
-		addRecentMenu<PrivateFrame>(recent, menu, this, T_("Recent PMs"), IDI_PRIVATE, IDI_FAVORITE_USER_ON, f);
-		addRecentMenu<DirectoryListingFrame>(recent, menu, this, T_("Recent file lists"), IDI_DIRECTORY, IDI_FAVORITE_USER_ON, f);
-	}
+	auto f = &MainWindow::handleConfigureRecent;
+	addRecentMenu<HubFrame>(menu, this, T_("Recent hubs"), IDI_HUB, IDI_FAVORITE_HUBS, f);
+	addRecentMenu<PrivateFrame>(menu, this, T_("Recent PMs"), IDI_PRIVATE, IDI_FAVORITE_USER_ON, f);
+	addRecentMenu<DirectoryListingFrame>(menu, this, T_("Recent file lists"), IDI_DIRECTORY, IDI_FAVORITE_USER_ON, f);
 
 	menu->open(pt);
 }
@@ -889,8 +880,7 @@ void MainWindow::saveWindowSettings() {
 		const auto& views = tabs->getChildren();
 		auto active = tabs->getActive();
 
-		WindowManager* wm = WindowManager::getInstance();
-		auto lock = wm->lock();
+		auto wm = WindowManager::getInstance();
 		wm->clear();
 
 		for(auto i = views.cbegin(), iend = views.cend(); i != iend; ++i) {

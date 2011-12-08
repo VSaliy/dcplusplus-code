@@ -40,10 +40,6 @@ WindowManager::~WindowManager() {
 	SettingsManager::getInstance()->removeListener(this);
 }
 
-Lock WindowManager::lock() {
-	return Lock(cs);
-}
-
 void WindowManager::add(const string& id, const WindowParams& params) {
 	list.push_back(WindowInfo(id, params));
 }
@@ -57,7 +53,6 @@ const WindowManager::WindowInfoList& WindowManager::getList() {
 }
 
 void WindowManager::addRecent(const string& id, const WindowParams& params) {
-	Lock l(cs);
 	addRecent_(id, params, true);
 }
 
@@ -97,7 +92,6 @@ void WindowManager::addRecent_(const string& id, const WindowParams& params, boo
 }
 
 void WindowManager::updateRecent(const string& id, const WindowParams& params) {
-	Lock l(cs);
 	RecentList::iterator ri = recent.find(id);
 	if(ri != recent.end()) {
 		WindowInfo info(id, params);
@@ -108,7 +102,6 @@ void WindowManager::updateRecent(const string& id, const WindowParams& params) {
 }
 
 void WindowManager::setMaxRecentItems(const string& id, unsigned max) {
-	Lock l(cs);
 	maxRecentItems[id] = max;
 
 	RecentList::iterator i = recent.find(id);
@@ -123,7 +116,6 @@ void WindowManager::setMaxRecentItems(const string& id, unsigned max) {
 }
 
 unsigned WindowManager::getMaxRecentItems(const string& id) const {
-	Lock l(cs);
 	MaxRecentItems::const_iterator i = maxRecentItems.find(id);
 	if(i == maxRecentItems.end())
 		return MAX_RECENTS_DEFAULT;
@@ -131,7 +123,6 @@ unsigned WindowManager::getMaxRecentItems(const string& id) const {
 }
 
 void WindowManager::prepareSave() const {
-	Lock l(cs);
 	prepareSave(list);
 	for(RecentList::const_iterator i = recent.begin(), iend = recent.end(); i != iend; ++i)
 		prepareSave(i->second);
@@ -213,7 +204,6 @@ void WindowManager::addTag(SimpleXML& xml, const WindowInfo& info) const {
 }
 
 void WindowManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
-	Lock l(cs);
 	clear();
 
 	xml.resetCurrentChild();
@@ -234,8 +224,6 @@ void WindowManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
 }
 
 void WindowManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcept {
-	Lock l(cs);
-
 	xml.addTag("Windows");
 	xml.stepIn();
 	for(WindowInfoList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i)

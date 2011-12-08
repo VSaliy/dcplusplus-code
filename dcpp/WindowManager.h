@@ -34,8 +34,6 @@ public:
 	typedef std::vector<WindowInfo> WindowInfoList;
 	typedef std::unordered_map<string, WindowInfoList> RecentList;
 
-	Lock lock();
-
 	void add(const string& id, const WindowParams& params);
 	void clear();
 	const WindowInfoList& getList();
@@ -57,7 +55,6 @@ public:
 private:
 	friend class Singleton<WindowManager>;
 
-	mutable CriticalSection cs;
 	WindowInfoList list;
 	RecentList recent;
 	MaxRecentItems maxRecentItems;
