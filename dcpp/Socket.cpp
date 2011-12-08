@@ -282,7 +282,8 @@ string Socket::listen(const string& port) {
 	addrinfo_p ai(nullptr, nullptr);
 
 	if(!v4only) {
-		try { ai = resolveAddr(localIp6, port, AF_INET6, AI_PASSIVE | AI_ADDRCONFIG); } catch(const SocketException&) { }
+		try { ai = resolveAddr(localIp6, port, AF_INET6, AI_PASSIVE | AI_ADDRCONFIG); }
+		catch(const SocketException&) { ai.reset(); }
 		for(auto a = ai.get(); a && !sock6.valid(); a = a->ai_next) {
 			try {
 				create(*a);
@@ -301,7 +302,8 @@ string Socket::listen(const string& port) {
 		}
 	}
 
-	try { ai = resolveAddr(localIp4, port, AF_INET, AI_PASSIVE | AI_ADDRCONFIG); } catch(const SocketException&) { }
+	try { ai = resolveAddr(localIp4, port, AF_INET, AI_PASSIVE | AI_ADDRCONFIG); }
+	catch(const SocketException&) { ai.reset(); }
 	for(auto a = ai.get(); a && !sock4.valid(); a = a->ai_next) {
 		try {
 			create(*a);
@@ -737,19 +739,20 @@ bool Socket::waitAccepted(uint32_t millis) {
 	return true;
 }
 
-string Socket::resolve(const string& aDns, int af) {
+string Socket::resolve(const string& aDns, int af) noexcept {
 	addrinfo hints = { 0 };
 	hints.ai_family = af;
 
 	addrinfo *result = 0;
 
-	auto err = ::getaddrinfo(aDns.c_str(), NULL, &hints, &result);
-	if(err) {
-		throw SocketException(err);
-	}
+	string ret;
 
-	auto ret = resolveName(result->ai_addr, result->ai_addrlen);
-	::freeaddrinfo(result);
+	if(!::getaddrinfo(aDns.c_str(), NULL, &hints, &result)) {
+		try { ret = resolveName(result->ai_addr, result->ai_addrlen); }
+		catch(const SocketException&) { }
+
+		::freeaddrinfo(result);
+	}
 
 	return ret;
 }
