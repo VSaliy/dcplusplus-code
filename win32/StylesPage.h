@@ -131,6 +131,8 @@ private:
 	CheckBoxPtr customBgColor;
 	ButtonPtr bgColor;
 
+	CheckBoxPtr showGen;
+
 	void handleSelectionChanged();
 	void handleTableHelp(unsigned id);
 	void handleTableHelpId(unsigned& id);
@@ -145,6 +147,7 @@ private:
 	void handleBgColor();
 
 	int colorDialog(COLORREF color);
+	void initFont(Data* const data) const;
 	COLORREF getTextColor(const Data* const data) const;
 	COLORREF getBgColor(const Data* const data) const;
 	void update(Data* const data);

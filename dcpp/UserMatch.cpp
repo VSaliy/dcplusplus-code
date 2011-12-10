@@ -38,6 +38,10 @@ void UserMatch::Rule::setMethod(Method method) {
 	case REGEX: search = boost::regex(); break;
 	}
 }
+
+bool UserMatch::Rule::operator==(const Rule& rhs) const {
+	return field == rhs.field && pattern == rhs.pattern && getMethod() == rhs.getMethod();
+}
 	
 struct Prepare : boost::static_visitor<bool> {
 	Prepare(const string& pattern) : pattern(pattern) { }

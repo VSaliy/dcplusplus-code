@@ -121,7 +121,7 @@ private:
 
 	class UserInfo : public UserInfoBase, public FastAlloc<UserInfo> {
 	public:
-		UserInfo(const UserTask& u) : UserInfoBase(u.user) {
+		UserInfo(const UserTask& u) : UserInfoBase(u.user, true) {
 			update(u.identity, -1);
 		}
 

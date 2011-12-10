@@ -412,7 +412,7 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 void WinUtil::updateUserMatchFonts() {
 	userMatchFonts.clear();
 
-	auto list = UserMatchManager::getInstance()->getList();
+	const auto& list = UserMatchManager::getInstance()->getList();
 	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
 		if(!i->props->font.empty()) {
 			LOGFONT lf;
