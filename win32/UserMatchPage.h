@@ -33,6 +33,7 @@ public:
 	virtual void write();
 
 	void setDirty();
+	void updateStyles();
 
 private:
 	TablePtr table;
@@ -52,7 +53,6 @@ private:
 	void handleRemoveClicked();
 
 	void addEntry(const UserMatch& matcher, int index = -1);
-	void updateStyles();
 };
 
 #endif

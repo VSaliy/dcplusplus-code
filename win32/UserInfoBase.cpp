@@ -26,6 +26,7 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/UploadManager.h>
 #include <dcpp/User.h>
+#include <dcpp/UserMatchManager.h>
 
 #include <dwt/util/StringUtils.h>
 
@@ -81,12 +82,14 @@ void UserInfoBase::connectFav(TabViewPtr parent) {
 	}
 }
 
+void UserInfoBase::ignoreChat(bool ignore) {
+	UserMatchManager::getInstance()->ignoreChat(user, ignore);
+}
+
 const size_t maxChars = 100; // max chars per tooltip line
 
-tstring UserInfoBase::getTooltip(bool priv) const {
-	bool hubSet = priv;
-	if(!priv)
-		priv = FavoriteManager::getInstance()->isPrivate(user.hint);
+tstring UserInfoBase::getTooltip() const {
+	auto priv = keepHub();
 
 	tstring ret(WinUtil::getNicks(user, priv));
 	dwt::util::cutStr(ret, maxChars);
@@ -100,12 +103,12 @@ tstring UserInfoBase::getTooltip(bool priv) const {
 		addLine(str(TF_("Hubs: %1%") % WinUtil::getHubNames(user, priv).first));
 
 	auto lock = ClientManager::getInstance()->lock();
-	OnlineUser* ou = ClientManager::getInstance()->findOnlineUser(user, priv);
+	auto ou = ClientManager::getInstance()->findOnlineUser(user, priv);
 	if(!ou)
 		return ret;
 	const Identity& id = ou->getIdentity();
 
-	auto addValue = [&id, &addLine](const tstring& descr, const string& value) {
+	auto addValue = [&addLine](const tstring& descr, const string& value) {
 		if(!value.empty())
 			addLine(str(TF_("%1%: %2%") % descr % Text::toT(value)));
 	};
@@ -138,12 +141,33 @@ tstring UserInfoBase::getTooltip(bool priv) const {
 	return ret;
 }
 
-void UserInfoBase::UserTraits::parse(const UserInfoBase* ui) {
-	if(ui->getUser().user->isSet(User::NMDC))
-		adcOnly = false;
+bool UserInfoBase::keepHub() const {
+	return hubSet || FavoriteManager::getInstance()->isPrivate(user.hint);
+}
+
+UserTraits::UserTraits() :
+Flags(adcOnly | favOnly | nonFavOnly | chatIgnoredOnly | chatNotIgnoredOnly)
+{
+}
+
+void UserTraits::parse(const UserInfoBase* ui) {
+	if(ui->getUser().user->isSet(User::NMDC)) {
+		unsetFlag(adcOnly);
+	}
+
 	bool fav = FavoriteManager::getInstance()->isFavoriteUser(ui->getUser());
-	if(fav)
-		nonFavOnly = false;
-	else
-		favOnly = false;
+	if(fav) {
+		unsetFlag(nonFavOnly);
+	} else {
+		unsetFlag(favOnly);
+	}
+
+	auto priv = ui->keepHub();
+	auto lock = ClientManager::getInstance()->lock();
+	auto ou = ClientManager::getInstance()->findOnlineUser(ui->getUser(), priv);
+	if(ou && ou->getIdentity().noChat()) {
+		unsetFlag(chatNotIgnoredOnly);
+	} else {
+		unsetFlag(chatIgnoredOnly);
+	}
 }

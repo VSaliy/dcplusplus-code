@@ -22,6 +22,7 @@
 #include <boost/range/algorithm/for_each.hpp>
 
 #include <dcpp/forward.h>
+#include <dcpp/Flags.h>
 #include <dcpp/Text.h>
 #include <dcpp/User.h>
 
@@ -34,7 +35,7 @@ using boost::range::for_each;
 
 class UserInfoBase {
 public:
-	UserInfoBase(const HintedUser& u) : user(u) { }
+	UserInfoBase(const HintedUser& u, bool hubSet = false) : user(u), hubSet(hubSet) { }
 
 	virtual void getList();
 	virtual void browseList();
@@ -44,23 +45,34 @@ public:
 	virtual void addFav();
 	virtual void removeFromQueue();
 	virtual void connectFav(TabViewPtr);
+	virtual void ignoreChat(bool ignore);
 
-	tstring getTooltip(bool priv) const;
+	tstring getTooltip() const;
 
 	const HintedUser& getUser() const { return user; }
-
-	struct UserTraits {
-		UserTraits() : adcOnly(true), favOnly(true), nonFavOnly(true) { }
-
-		void parse(const UserInfoBase* ui);
-
-		bool adcOnly;
-		bool favOnly;
-		bool nonFavOnly;
-	};
+	bool keepHub() const;
 
 protected:
 	HintedUser user;
+
+private:
+	bool hubSet; // always respect the user's hub hint
+};
+
+struct UserTraits : Flags {
+	enum {
+		adcOnly = 1 << 1,
+		favOnly = 1 << 2,
+		nonFavOnly = 1 << 3,
+		chatIgnoredOnly = 1 << 4,
+		chatNotIgnoredOnly = 1 << 5
+	};
+
+	UserMatchPropsPtr match;
+
+	UserTraits();
+
+	void parse(const UserInfoBase* ui);
 };
 
 template<typename T>
@@ -118,33 +130,42 @@ protected:
 	void handleConnectFav(TabViewPtr parent) {
 		handleUserFunction([&](UserInfoBase* u) { u->connectFav(parent); });
 	}
+	void handleIgnoreChat(bool ignore) {
+		handleUserFunction([ignore](UserInfoBase* u) { u->ignoreChat(ignore); });
+	}
 
 	void appendUserItems(TabViewPtr parent, dwt::MenuPtr menu, bool defaultIsGetList = true, bool includeSendPM = true) {
 		auto users = t().selectedUsersImpl();
 		if(users.empty())
 			return;
 
-		UserInfoBase::UserTraits traits;
+		UserTraits traits;
 		for_each(users, [&](const UserInfoBase* u) { traits.parse(u); });
 
 		menu->appendItem(T_("&Get file list"), [this] { this->t().handleGetList(); }, dwt::IconPtr(), true, defaultIsGetList);
-		if(traits.adcOnly)
+		if(traits.isSet(UserTraits::adcOnly))
 			menu->appendItem(T_("&Browse file list"), [this] { this->t().handleBrowseList(); });
 		menu->appendItem(T_("&Match queue"), [this] { this->t().handleMatchQueue(); });
 		if(includeSendPM)
-			menu->appendItem(T_("&Send private message"), [=] { this->t().handlePrivateMessage(parent); }, dwt::IconPtr(), true, !defaultIsGetList);
-		if(!traits.favOnly)
+			menu->appendItem(T_("&Send private message"), [this, parent] { this->t().handlePrivateMessage(parent); }, dwt::IconPtr(), true, !defaultIsGetList);
+		if(!traits.isSet(UserTraits::favOnly))
 			menu->appendItem(T_("Add To &Favorites"), [this] { this->t().handleAddFavorite(); }, WinUtil::menuIcon(IDI_FAVORITE_USER_ON));
 		menu->appendItem(T_("Grant &extra slot"), [this] { this->t().handleGrantSlot(); });
-		if(!traits.nonFavOnly)
-			menu->appendItem(T_("Connect to hub"), [=] { this->t().handleConnectFav(parent); }, WinUtil::menuIcon(IDI_HUB));
+		if(!traits.isSet(UserTraits::nonFavOnly))
+			menu->appendItem(T_("Connect to hub"), [this, parent] { this->t().handleConnectFav(parent); }, WinUtil::menuIcon(IDI_HUB));
 		menu->appendSeparator();
 		menu->appendItem(T_("Remove user from queue"), [this] { this->t().handleRemoveFromQueue(); });
+
+		menu->appendSeparator();
+		if(!traits.isSet(UserTraits::chatIgnoredOnly))
+			menu->appendItem(T_("Ignore chat"), [this] { this->t().handleIgnoreChat(true); });
+		if(!traits.isSet(UserTraits::chatNotIgnoredOnly))
+			menu->appendItem(T_("Un-ignore chat"), [this] { this->t().handleIgnoreChat(false); });
 	}
 
 	template<typename TableType>
-	void prepareUserList(TableType* table, bool priv = false) {
-		table->setTooltips([table, priv](int i) -> tstring { return table->getData(i)->getTooltip(priv); });
+	void prepareUserList(TableType* table) {
+		table->setTooltips([table](int i) -> tstring { return table->getData(i)->getTooltip(); });
 	}
 };
 

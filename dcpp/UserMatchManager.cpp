@@ -21,7 +21,10 @@
 
 #include "Client.h"
 #include "ClientManager.h"
+#include "format.h"
+#include "ScopedFunctor.h"
 #include "SimpleXML.h"
+#include "version.h"
 
 namespace dcpp {
 
@@ -33,7 +36,7 @@ UserMatchManager::~UserMatchManager() {
 	SettingsManager::getInstance()->removeListener(this);
 }
 
-UserMatchManager::UserMatches UserMatchManager::getList() const {
+const UserMatchManager::UserMatches& UserMatchManager::getList() const {
 	return list;
 }
 
@@ -65,6 +68,60 @@ void UserMatchManager::match(OnlineUser& user) const {
 	user.getIdentity().setMatch(nullptr);
 }
 
+void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
+	auto nick = ClientManager::getInstance()->getNicks(user)[0];
+
+	UserMatch matcher;
+	matcher.setFlag(UserMatch::GENERATED);
+
+	matcher.name = str(F_("Match %1% (added by %2%)") % nick % APPNAME);
+
+	if(!user.user->isNMDC()) {
+		// for ADC, just match the CID.
+		UserMatch::Rule rule;
+		rule.field = UserMatch::Rule::CID;
+		rule.pattern = user.user->getCID().toBase32();
+		rule.setMethod(UserMatch::Rule::EXACT);
+		matcher.addRule(std::move(rule));
+
+	} else {
+		// for NMDC, match both the nick and the hub name.
+		UserMatch::Rule rule;
+		rule.field = UserMatch::Rule::NICK;
+		rule.pattern = nick;
+		rule.setMethod(UserMatch::Rule::EXACT);
+		matcher.addRule(std::move(rule));
+
+		rule = UserMatch::Rule();
+		rule.field = UserMatch::Rule::HUB_ADDRESS;
+		rule.pattern = user.hint;
+		rule.setMethod(UserMatch::Rule::EXACT);
+		matcher.addRule(std::move(rule));
+	}
+
+	auto newList = list;
+
+	ScopedFunctor(([this, &newList, &matcher] {
+		newList.insert(newList.begin(), std::move(matcher));
+		setList(std::move(newList));
+	}));
+
+	// first, see if an automatic matcher with these rules already exists.
+	for(auto i = newList.begin(), iend = newList.end(); i != iend; ++i) {
+		if(i->isSet(UserMatch::GENERATED) && i->rules == matcher.rules) {
+			matcher.props = i->props;
+			matcher.props->noChat = ignore;
+			newList.erase(i);
+			return;
+		}
+	}
+
+	matcher.props = new UserMatchProps();
+	matcher.props->noChat = ignore;
+	matcher.props->textColor = -1;
+	matcher.props->bgColor = -1;
+}
+
 void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
 	UserMatches newList;
 
@@ -78,6 +135,7 @@ void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcep
 
 			match.name = xml.getChildAttrib("Name");
 
+			if(xml.getBoolChildAttrib("Generated")) { match.setFlag(UserMatch::GENERATED); }
 			if(xml.getBoolChildAttrib("Favs")) { match.setFlag(UserMatch::FAVS); }
 			if(xml.getBoolChildAttrib("Ops")) { match.setFlag(UserMatch::OPS); }
 			if(xml.getBoolChildAttrib("Bots")) { match.setFlag(UserMatch::BOTS); }
@@ -119,6 +177,7 @@ void UserMatchManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcep
 
 		xml.addChildAttrib("Name", i->name);
 
+		if(i->isSet(UserMatch::GENERATED)) { xml.addChildAttrib("Generated", true); }
 		if(i->isSet(UserMatch::FAVS)) { xml.addChildAttrib("Favs", true); }
 		if(i->isSet(UserMatch::OPS)) { xml.addChildAttrib("Ops", true); }
 		if(i->isSet(UserMatch::BOTS)) { xml.addChildAttrib("Bots", true); }

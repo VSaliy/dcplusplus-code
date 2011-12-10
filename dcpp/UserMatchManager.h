@@ -34,14 +34,16 @@ class UserMatchManager :
 	typedef std::vector<UserMatch> UserMatches;
 
 public:
-	/// Retrieve a copy of the list of user matching definitions.
-	UserMatches getList() const;
+	/// Retrieve the list of user matching definitions.
+	const UserMatches& getList() const;
 	/// Assign a new list of user matching definitions. All current users will be re-matched.
 	void setList(UserMatches&& newList);
 
 	/** Match the given user against current user matching definitions. The "match" member of the
 	user's identity object will point to the properties of the matched definition on success. */
 	void match(OnlineUser& user) const;
+
+	void ignoreChat(const HintedUser& user, bool ignore);
 
 private:
 	friend class Singleton<UserMatchManager>;

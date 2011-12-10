@@ -145,6 +145,10 @@ void UserMatchPage::setDirty() {
 	dirty = true;
 }
 
+void UserMatchPage::updateStyles() {
+	static_cast<SettingsDialog*>(getRoot())->getPage<StylesPage>()->updateUserMatches(list);
+}
+
 void UserMatchPage::handleDoubleClick() {
 	if(table->hasSelected()) {
 		handleEditClicked();
@@ -257,8 +261,4 @@ void UserMatchPage::handleRemoveClicked() {
 
 void UserMatchPage::addEntry(const UserMatch& matcher, int index) {
 	table->insert(TStringList(1, Text::toT(matcher.name)), 0, index);
-}
-
-void UserMatchPage::updateStyles() {
-	static_cast<SettingsDialog*>(getRoot())->getPage<StylesPage>()->updateUserMatches(list);
 }
