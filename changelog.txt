@@ -39,7 +39,7 @@
 * Fix queries in http downloads (thanks bigmuscle)
 * Update MiniUPnPc to version 1.6
 * [L#309402] Initial IPv6 support
-* Update boost to version 1.47
+* Update boost to version 1.48
 * COM initialization fix for the Windows UPnP mapper (thanks bigmuscle)
 * [L#425667] More accurate indexing time left calculation (poy)
 * Switch to binary GeoIP databases, add the IPv6 one (poy)
