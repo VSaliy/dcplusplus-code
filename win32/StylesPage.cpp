@@ -310,16 +310,16 @@ void StylesPage::SettingsData::write() {
 
 StylesPage::UserMatchData::UserMatchData(UserMatch& matcher) :
 Data(Text::toT(matcher.name), IDH_SETTINGS_STYLES_USER_MATCH),
-props(matcher.props)
+matcher(matcher)
 {
-	customFont = !props->font.empty();
-	makeFont(font, props->font);
+	customFont = !matcher.style.font.empty();
+	makeFont(font, matcher.style.font);
 
-	customTextColor = props->textColor >= 0;
-	textColor = props->textColor;
+	customTextColor = matcher.style.textColor >= 0;
+	textColor = matcher.style.textColor;
 
-	customBgColor = props->bgColor >= 0;
-	bgColor = props->bgColor;
+	customBgColor = matcher.style.bgColor >= 0;
+	bgColor = matcher.style.bgColor;
 }
 
 const StylesPage::Data::Font& StylesPage::UserMatchData::getFont() const {
@@ -335,9 +335,10 @@ int StylesPage::UserMatchData::getBgColor() const {
 }
 
 void StylesPage::UserMatchData::update() {
-	props->font = customFont ? Text::fromT(WinUtil::encodeFont(font.second)) : Util::emptyString;
-	props->textColor = customTextColor ? textColor : -1;
-	props->bgColor = customBgColor ? bgColor : -1;
+	matcher.style.font = customFont ? Text::fromT(WinUtil::encodeFont(font.second)) : Util::emptyString;
+	matcher.style.textColor = customTextColor ? textColor : -1;
+	matcher.style.bgColor = customBgColor ? bgColor : -1;
+	matcher.unsetFlag(UserMatch::GENERATED);
 }
 
 void StylesPage::handleSelectionChanged() {

@@ -414,10 +414,10 @@ void WinUtil::updateUserMatchFonts() {
 
 	const auto& list = UserMatchManager::getInstance()->getList();
 	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
-		if(!i->props->font.empty()) {
+		if(!i->style.font.empty()) {
 			LOGFONT lf;
-			decodeFont(Text::toT(i->props->font), lf);
-			userMatchFonts[i->props->font] = new dwt::Font(lf);
+			decodeFont(Text::toT(i->style.font), lf);
+			userMatchFonts[i->style.font] = new dwt::Font(lf);
 		}
 	}
 }

@@ -190,19 +190,24 @@ std::map<string, string> Identity::getInfo() const {
 	return ret;
 }
 
-UserMatchPropsPtr Identity::getMatch() const {
-	FastLock l(cs);
-	return match;
-}
-
-void Identity::setMatch(UserMatchPropsPtr match) {
-	FastLock l(cs);
-	this->match = match;
-}
-
 bool Identity::noChat() const {
 	FastLock l(cs);
-	return match && match->noChat;
+	return ignoreChat;
+}
+
+void Identity::setNoChat(bool ignoreChat) {
+	FastLock l(cs);
+	this->ignoreChat = ignoreChat;
+}
+
+Style Identity::getStyle() const {
+	FastLock l(cs);
+	return style;
+}
+
+void Identity::setStyle(Style&& style) {
+	FastLock l(cs);
+	this->style = std::forward<Style>(style);
 }
 
 void FavoriteUser::update(const OnlineUser& info) {

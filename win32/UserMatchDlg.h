@@ -35,7 +35,7 @@ private:
 	TextBoxPtr name;
 	CheckBoxPtr favs, ops, bots;
 	GridPtr rules;
-	CheckBoxPtr noChat;
+	CheckBoxPtr forceChat, ignoreChat;
 
 	UserMatch result;
 

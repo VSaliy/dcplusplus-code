@@ -59,13 +59,35 @@ void UserMatchManager::setList(UserMatches&& newList) {
 }
 
 void UserMatchManager::match(OnlineUser& user) const {
+	auto& identity = user.getIdentity();
+
+	bool chatSet = false;
+	Style style;
+
 	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
 		if(i->match(user)) {
-			user.getIdentity().setMatch(i->props);
-			return;
+
+			if(!chatSet && (i->isSet(UserMatch::FORCE_CHAT) || i->isSet(UserMatch::IGNORE_CHAT))) {
+				identity.setNoChat(i->isSet(UserMatch::IGNORE_CHAT));
+				chatSet = true;
+			}
+
+			if(style.font.empty() && !i->style.font.empty()) {
+				style.font = i->style.font;
+			}
+
+			if(style.textColor < 0 && i->style.textColor >= 0) {
+				style.textColor = i->style.textColor;
+			}
+
+			if(style.bgColor < 0 && i->style.bgColor >= 0) {
+				style.bgColor = i->style.bgColor;
+			}
 		}
 	}
-	user.getIdentity().setMatch(nullptr);
+
+	if(!chatSet) { identity.setNoChat(false); }
+	identity.setStyle(std::move(style));
 }
 
 void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
@@ -73,6 +95,7 @@ void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
 
 	UserMatch matcher;
 	matcher.setFlag(UserMatch::GENERATED);
+	matcher.setFlag(ignore ? UserMatch::IGNORE_CHAT : UserMatch::FORCE_CHAT);
 
 	matcher.name = str(F_("Match %1% (added by %2%)") % nick % APPNAME);
 
@@ -106,20 +129,14 @@ void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
 		setList(std::move(newList));
 	}));
 
-	// first, see if an automatic matcher with these rules already exists.
+	// see if an automatic matcher with these rules already exists.
 	for(auto i = newList.begin(), iend = newList.end(); i != iend; ++i) {
 		if(i->isSet(UserMatch::GENERATED) && i->rules == matcher.rules) {
-			matcher.props = i->props;
-			matcher.props->noChat = ignore;
+			matcher.style = i->style;
 			newList.erase(i);
 			return;
 		}
 	}
-
-	matcher.props = new UserMatchProps();
-	matcher.props->noChat = ignore;
-	matcher.props->textColor = -1;
-	matcher.props->bgColor = -1;
 }
 
 void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
@@ -139,12 +156,12 @@ void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcep
 			if(xml.getBoolChildAttrib("Favs")) { match.setFlag(UserMatch::FAVS); }
 			if(xml.getBoolChildAttrib("Ops")) { match.setFlag(UserMatch::OPS); }
 			if(xml.getBoolChildAttrib("Bots")) { match.setFlag(UserMatch::BOTS); }
+			if(xml.getBoolChildAttrib("ForceChat")) { match.setFlag(UserMatch::FORCE_CHAT); }
+			if(xml.getBoolChildAttrib("IgnoreChat")) { match.setFlag(UserMatch::IGNORE_CHAT); }
 
-			match.props = new UserMatchProps();
-			match.props->noChat = xml.getBoolChildAttrib("NoChat");
-			match.props->font = xml.getChildAttrib("Font");
-			match.props->textColor = xml.getIntChildAttrib("TextColor");
-			match.props->bgColor = xml.getIntChildAttrib("BgColor");
+			match.style.font = xml.getChildAttrib("Font");
+			match.style.textColor = xml.getIntChildAttrib("TextColor");
+			match.style.bgColor = xml.getIntChildAttrib("BgColor");
 
 			xml.stepIn();
 
@@ -181,11 +198,12 @@ void UserMatchManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcep
 		if(i->isSet(UserMatch::FAVS)) { xml.addChildAttrib("Favs", true); }
 		if(i->isSet(UserMatch::OPS)) { xml.addChildAttrib("Ops", true); }
 		if(i->isSet(UserMatch::BOTS)) { xml.addChildAttrib("Bots", true); }
+		if(i->isSet(UserMatch::FORCE_CHAT)) { xml.addChildAttrib("ForceChat", true); }
+		if(i->isSet(UserMatch::IGNORE_CHAT)) { xml.addChildAttrib("IgnoreChat", true); }
 
-		if(i->props->noChat) { xml.addChildAttrib("NoChat", true); }
-		xml.addChildAttrib("Font", i->props->font);
-		xml.addChildAttrib("TextColor", i->props->textColor);
-		xml.addChildAttrib("BgColor", i->props->bgColor);
+		xml.addChildAttrib("Font", i->style.font);
+		xml.addChildAttrib("TextColor", i->style.textColor);
+		xml.addChildAttrib("BgColor", i->style.bgColor);
 
 		xml.stepIn();
 		for(auto rule = i->rules.cbegin(), rule_end = i->rules.cend(); rule != rule_end; ++rule) {

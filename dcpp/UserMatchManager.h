@@ -39,8 +39,8 @@ public:
 	/// Assign a new list of user matching definitions. All current users will be re-matched.
 	void setList(UserMatches&& newList);
 
-	/** Match the given user against current user matching definitions. The "match" member of the
-	user's identity object will point to the properties of the matched definition on success. */
+	/** Match the given user against current user matching definitions. The user's identity object
+	will be modified accordingly. */
 	void match(OnlineUser& user) const;
 
 	void ignoreChat(const HintedUser& user, bool ignore);
