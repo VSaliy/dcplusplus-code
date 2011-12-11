@@ -120,9 +120,6 @@ typedef UserConnection* UserConnectionPtr;
 
 struct UserMatch;
 
-struct UserMatchProps;
-typedef boost::intrusive_ptr<UserMatchProps> UserMatchPropsPtr;
-
 class WindowInfo;
 
 } // namespace dcpp

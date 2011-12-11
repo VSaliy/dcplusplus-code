@@ -53,32 +53,29 @@ public:
 		CT_HIDDEN = 64
 	};
 
-	Identity() : sid(0) { }
-	Identity(const UserPtr& ptr, uint32_t aSID) : user(ptr), sid(aSID) { }
+	Identity() : sid(0), ignoreChat(false) { }
+	Identity(const UserPtr& ptr, uint32_t aSID) : user(ptr), sid(aSID), ignoreChat(false) { }
 	Identity(const Identity& rhs) : Flags(), sid(0) { *this = rhs; } // Use operator= since we have to lock before reading...
 	Identity& operator=(const Identity& rhs) {
 		FastLock l(cs);
 		*static_cast<Flags*>(this) = rhs;
 		user = rhs.user;
 		sid = rhs.sid;
-		match = rhs.match;
+		ignoreChat = rhs.ignoreChat;
+		style = rhs.style;
 		info = rhs.info;
 		return *this;
 	}
 
-// GS is already defined on some systems (e.g. OpenSolaris)
-#ifdef GS
-#undef GS
-#endif
-
-#define GS(n, x) string get##n() const { return get(x); } void set##n(const string& v) { set(x, v); }
-	GS(Nick, "NI")
-	GS(Description, "DE")
-	GS(Ip4, "I4")
-	GS(Ip6, "I6")
-	GS(Udp4Port, "U4")
-	GS(Udp6Port, "U6")
-	GS(Email, "EM")
+#define GETSET_FIELD(n, x) string get##n() const { return get(x); } void set##n(const string& v) { set(x, v); }
+	GETSET_FIELD(Nick, "NI")
+	GETSET_FIELD(Description, "DE")
+	GETSET_FIELD(Ip4, "I4")
+	GETSET_FIELD(Ip6, "I6")
+	GETSET_FIELD(Udp4Port, "U4")
+	GETSET_FIELD(Udp6Port, "U6")
+	GETSET_FIELD(Email, "EM")
+#undef GETSET_FIELD
 
 	void setBytesShared(const string& bs) { set("SS", bs); }
 	int64_t getBytesShared() const { return Util::toInt64(get("SS")); }
@@ -113,23 +110,30 @@ public:
 	bool isSet(const char* name) const;
 	string getSIDString() const { return string((const char*)&sid, 4); }
 
-	UserMatchPropsPtr getMatch() const;
-	void setMatch(UserMatchPropsPtr match);
-	bool noChat() const;
-
 	bool isClientType(ClientType ct) const;
 
 	void getParams(ParamMap& params, const string& prefix, bool compatibility) const;
+
+	const UserPtr& getUser() const { return user; }
 	UserPtr& getUser() { return user; }
-	GETSET(UserPtr, user, User);
-	GETSET(uint32_t, sid, SID);
+	uint32_t getSID() const { return sid; }
+
+	bool noChat() const;
+	void setNoChat(bool ignoreChat);
+
+	Style getStyle() const;
+	void setStyle(Style&& style);
 
 private:
+	UserPtr user;
+	uint32_t sid;
+
 	typedef std::unordered_map<short, string> InfMap;
 	typedef InfMap::iterator InfIter;
 	InfMap info;
 
-	UserMatchPropsPtr match;
+	bool ignoreChat;
+	Style style;
 
 	static FastCriticalSection cs;
 };

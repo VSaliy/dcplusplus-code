@@ -789,25 +789,22 @@ int HubFrame::UserInfo::getImage(int col) const {
 }
 
 int HubFrame::UserInfo::getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int) const {
-	auto match = identity.getMatch();
-	if(!match) {
-		return CDRF_DODEFAULT;
-	}
+	auto style = identity.getStyle();
 
-	if(!match->font.empty()) {
+	if(!style.font.empty()) {
 		// cache lookup might fail when refreshing the list of user matching defs...
-		auto cached = WinUtil::userMatchFonts.find(match->font);
+		auto cached = WinUtil::userMatchFonts.find(style.font);
 		if(cached != WinUtil::userMatchFonts.end()) {
 			font = cached->second->handle();
 		}
 	}
 
-	if(match->textColor != -1) {
-		textColor = match->textColor;
+	if(style.textColor != -1) {
+		textColor = style.textColor;
 	}
 
-	if(match->bgColor != -1) {
-		bgColor = match->bgColor;
+	if(style.bgColor != -1) {
+		bgColor = style.bgColor;
 	}
 
 	return CDRF_NEWFONT;

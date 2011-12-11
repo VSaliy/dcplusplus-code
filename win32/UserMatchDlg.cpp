@@ -44,7 +44,8 @@ favs(0),
 ops(0),
 bots(0),
 rules(0),
-noChat(0)
+forceChat(0),
+ignoreChat(0)
 {
 	onInitDialog([this, initialMatcher] { return handleInitDialog(initialMatcher); });
 	onHelp(&WinUtil::help);
@@ -83,10 +84,13 @@ bool UserMatchDlg::handleInitDialog(const UserMatch* initialMatcher) {
 	}
 
 	{
-		auto cur = grid->addChild(GroupBox::Seed())->addChild(Grid::Seed(1, 1));
+		auto cur = grid->addChild(GroupBox::Seed())->addChild(Grid::Seed(1, 2));
 		cur->setSpacing(grid->getSpacing());
 
-		noChat = cur->addChild(CheckBox::Seed(T_("Ignore chat messages")));
+		forceChat = cur->addChild(CheckBox::Seed(T_("Always show chat messages")));
+		forceChat->onClicked([this] { if(forceChat->getChecked()) ignoreChat->setChecked(false); });
+		ignoreChat = cur->addChild(CheckBox::Seed(T_("Ignore chat messages")));
+		ignoreChat->onClicked([this] { if(ignoreChat->getChecked()) forceChat->setChecked(false); });
 	}
 
 	{
@@ -113,9 +117,10 @@ bool UserMatchDlg::handleInitDialog(const UserMatch* initialMatcher) {
 			addRow(&*i);
 		}
 
-		if(initialMatcher->props->noChat) { noChat->setChecked(true); }
+		if(initialMatcher->isSet(UserMatch::FORCE_CHAT)) { forceChat->setChecked(true); }
+		else if(initialMatcher->isSet(UserMatch::IGNORE_CHAT)) { ignoreChat->setChecked(true); }
 
-		result.props = initialMatcher->props;
+		result.style = initialMatcher->style;
 	}
 
 	setText(T_("User matching definition"));
@@ -176,12 +181,8 @@ void UserMatchDlg::handleOKClicked() {
 		return;
 	}
 
-	if(!result.props) {
-		result.props = new UserMatchProps();
-		result.props->textColor = -1;
-		result.props->bgColor = -1;
-	}
-	result.props->noChat = noChat->getChecked();
+	if(forceChat->getChecked()) { result.setFlag(UserMatch::FORCE_CHAT); }
+	else if(ignoreChat->getChecked()) { result.setFlag(UserMatch::IGNORE_CHAT); }
 
 	endDialog(IDOK);
 }

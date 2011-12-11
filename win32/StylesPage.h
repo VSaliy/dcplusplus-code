@@ -111,7 +111,7 @@ private:
 		void update();
 
 	private:
-		UserMatchPropsPtr props;
+		UserMatch& matcher;
 	};
 
 	Data* globalData;

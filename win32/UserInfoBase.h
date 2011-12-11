@@ -68,8 +68,6 @@ struct UserTraits : Flags {
 		chatNotIgnoredOnly = 1 << 5
 	};
 
-	UserMatchPropsPtr match;
-
 	UserTraits();
 
 	void parse(const UserInfoBase* ui);
