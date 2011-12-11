@@ -303,10 +303,14 @@ void PrivateFrame::enterImpl(const tstring& s) {
 			addStatus(T_("Favorite user added"));
 		} else if(Util::stricmp(cmd.c_str(), _T("getlist")) == 0) {
 			handleGetList();
+		} else if(Util::stricmp(cmd.c_str(), _T("ignore")) == 0) {
+			handleIgnoreChat(true);
+		} else if(Util::stricmp(cmd.c_str(), _T("unignore")) == 0) {
+			handleIgnoreChat(false);
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addStatus(_T("*** ") + WinUtil::commands + _T(", /getlist, /grant, /close, /favorite, /log <system, downloads, uploads>"));
+			addStatus(_T("*** ") + WinUtil::commands + _T(", /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>"));
 		} else {
 			send = true;
 		}

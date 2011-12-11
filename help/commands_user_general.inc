@@ -9,12 +9,19 @@
 	users. 2 files are considered to be the same if their TTH is the same. If matches are found in one user's file list,
 	she will be added as a source for the relevant downloads.</dd>
 	<dt>Send private message</dt>
-	<dd>Open <a href="window_pm.html">private message</a> windows to chat privately with the selected users.</dd>
+	<dd>Open <placeholder><a href="window_pm.html">Private Message</a></placeholder> windows to
+	chat privately with the selected users.</dd>
 	<dt>Grant extra slot</dt>
-	<dd>Beyond your set slots an extra upload slot will be given to the selected users until the
-	end of the current DC++ session.</dd>
+	<dd>In addition to your regular upload slots, an extra upload slot will be given to the
+	selected users until the end of the current DC++ session.</dd>
 	<dt>Remove user from queue</dt>
-	<dd>Removes the selected user from the source list of all queued files. Pending filelist requests
-	will be removed as well.</dd>
+	<dd>Remove the selected users from the source list of all queued files. Pending file list
+	requests will be removed as well.</dd>
+	<dt>Ignore chat</dt>
+	<dd>Add user matching definitions (or modify existing ones, if possible) to ignore chat
+	messages from the selected users.</dd>
+	<dt>Un-ignore chat</dt>
+	<dd>Add user matching definitions (or modify existing ones, if possible) to stop ignoring chat
+	messages from the selected users.</dd>
 </dl>
 
