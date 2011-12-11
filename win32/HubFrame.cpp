@@ -419,11 +419,25 @@ void HubFrame::enterImpl(const tstring& s) {
 			addAsFavorite();
 		} else if((Util::stricmp(cmd.c_str(), _T("removefavorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("removefav")) == 0)) {
 			removeFavoriteHub();
-		} else if(Util::stricmp(cmd.c_str(), _T("getlist")) == 0){
-			if( !param.empty() ){
-				UserInfo* ui = findUser(param);
+		} else if(Util::stricmp(cmd.c_str(), _T("getlist")) == 0) {
+			if(!param.empty()) {
+				auto ui = findUser(param);
 				if(ui) {
 					ui->getList();
+				}
+			}
+		} else if(Util::stricmp(cmd.c_str(), _T("ignore")) == 0) {
+			if(!param.empty()) {
+				auto ui = findUser(param);
+				if(ui) {
+					ui->ignoreChat(true);
+				}
+			}
+		} else if(Util::stricmp(cmd.c_str(), _T("unignore")) == 0) {
+			if(!param.empty()) {
+				auto ui = findUser(param);
+				if(ui) {
+					ui->ignoreChat(false);
 				}
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
@@ -433,8 +447,10 @@ void HubFrame::enterImpl(const tstring& s) {
 				openLog(true);
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
 			addChat(_T("*** ") + WinUtil::commands +
-				_T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, /conn[ection], /fav[orite], ")
-				_T("/pm <user> [message], /getlist <user>, /log <status, system, downloads, uploads>, /removefav[orite]"));
+				_T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, ")
+				_T("/conn[ection], /fav[orite], /removefav[orite], ")
+				_T("/pm <user> [message], /getlist <user>, /ignore <user>, /unignore <user>, ")
+				_T("/log <status, system, downloads, uploads>"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
 			string::size_type j = param.find(_T(' '));
 			if(j != string::npos) {
