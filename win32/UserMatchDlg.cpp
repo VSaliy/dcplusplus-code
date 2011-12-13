@@ -146,29 +146,29 @@ void UserMatchDlg::handleOKClicked() {
 
 	auto controls = rules->getChildren<Control>();
 	int8_t counter = -1;
-	std::unique_ptr<UserMatch::Rule> rule;
+	UserMatch::Rule rule;
 	boost::for_each(controls, [this, &counter, &rule](Control* control) {
 		enum { RuleField, RuleSearch, RuleMethod, RuleRemove };
 		switch(++counter) {
 		case RuleField:
 			{
-				rule.reset(new UserMatch::Rule());
-				rule->field = static_cast<decltype(rule->field)>(static_cast<ComboBoxPtr>(control)->getSelected());
+				rule = UserMatch::Rule();
+				rule.field = static_cast<decltype(rule.field)>(static_cast<ComboBoxPtr>(control)->getSelected());
 				break;
 			}
 		case RuleSearch:
 			{
-				rule->pattern = Text::fromT(static_cast<TextBoxPtr>(control)->getText());
+				rule.pattern = Text::fromT(static_cast<TextBoxPtr>(control)->getText());
 				break;
 			}
 		case RuleMethod:
 			{
-				rule->setMethod(static_cast<UserMatch::Rule::Method>(static_cast<ComboBoxPtr>(control)->getSelected()));
+				rule.setMethod(static_cast<UserMatch::Rule::Method>(static_cast<ComboBoxPtr>(control)->getSelected()));
 				break;
 			}
 		case RuleRemove:
 			{
-				this->result.addRule(std::move(*rule));
+				this->result.addRule(std::move(rule));
 				counter = -1;
 				break;
 			}

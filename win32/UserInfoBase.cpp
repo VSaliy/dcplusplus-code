@@ -165,9 +165,15 @@ void UserTraits::parse(const UserInfoBase* ui) {
 	auto priv = ui->keepHub();
 	auto lock = ClientManager::getInstance()->lock();
 	auto ou = ClientManager::getInstance()->findOnlineUser(ui->getUser(), priv);
-	if(ou && ou->getIdentity().noChat()) {
-		unsetFlag(chatNotIgnoredOnly);
+	if(ou) {
+		if(ou->getIdentity().noChat()) {
+			unsetFlag(chatNotIgnoredOnly);
+		} else {
+			unsetFlag(chatIgnoredOnly);
+		}
 	} else {
+		// offline user: show both ignore & un-ignore commands
+		unsetFlag(chatNotIgnoredOnly);
 		unsetFlag(chatIgnoredOnly);
 	}
 }
