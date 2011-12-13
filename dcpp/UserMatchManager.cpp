@@ -22,7 +22,6 @@
 #include "Client.h"
 #include "ClientManager.h"
 #include "format.h"
-#include "ScopedFunctor.h"
 #include "SimpleXML.h"
 #include "version.h"
 
@@ -97,7 +96,7 @@ void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
 	matcher.setFlag(UserMatch::GENERATED);
 	matcher.setFlag(ignore ? UserMatch::IGNORE_CHAT : UserMatch::FORCE_CHAT);
 
-	matcher.name = str(F_("Match %1% (added by %2%)") % nick % APPNAME);
+	matcher.name = str(F_("%1% %2% (added by %3%)") % (ignore ? _("Ignore") : _("Un-ignore")) % nick % APPNAME);
 
 	if(!user.user->isNMDC()) {
 		// for ADC, just match the CID.
@@ -124,19 +123,17 @@ void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
 
 	auto newList = list;
 
-	ScopedFunctor(([this, &newList, &matcher] {
-		newList.insert(newList.begin(), std::move(matcher));
-		setList(std::move(newList));
-	}));
-
 	// see if an automatic matcher with these rules already exists.
 	for(auto i = newList.begin(), iend = newList.end(); i != iend; ++i) {
 		if(i->isSet(UserMatch::GENERATED) && i->rules == matcher.rules) {
 			matcher.style = i->style;
 			newList.erase(i);
-			return;
+			break;
 		}
 	}
+
+	newList.insert(newList.begin(), std::move(matcher));
+	setList(std::move(newList));
 }
 
 void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {

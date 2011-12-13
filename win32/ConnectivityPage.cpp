@@ -81,6 +81,7 @@ edit(0)
 
 		edit = cur2->addChild(Button::Seed(T_("Edit detected settings")));
 		edit->setHelpId(IDH_SETTINGS_CONNECTIVITY_EDIT);
+		edit->setImage(WinUtil::buttonIcon(IDI_CONN_GREY));
 		edit->onClicked([this] { handleEdit(); });
 	}
 

@@ -105,6 +105,7 @@ dirty(false)
 	{
 		auto button = grid->addChild(Grid::Seed(1, 1))->addChild(Button::Seed(T_("Configure styles (fonts / colors) for these user matching definitions")));
 		button->setHelpId(IDH_SETTINGS_USER_MATCH_STYLES);
+		button->setImage(WinUtil::buttonIcon(IDI_STYLES));
 		button->onClicked([this] { static_cast<SettingsDialog*>(getRoot())->activatePage<StylesPage>(); });
 	}
 
