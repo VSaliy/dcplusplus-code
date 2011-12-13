@@ -45,6 +45,38 @@ namespace dwt {
 
 const TCHAR Table::windowClass[] = WC_LISTVIEW;
 
+/* the following dance adds Vista members to LVGROUP (notably iTitleImage to have group icons)
+without requiring a global switch of WINVER / _WIN32_WINNT / etc to Vista values. */
+typedef LVGROUP legacyLVGROUP;
+#if(_WIN32_WINNT < 0x600)
+struct LVGROUP_ : LVGROUP {
+	LPWSTR  pszSubtitle;
+    UINT    cchSubtitle;
+    LPWSTR  pszTask;
+    UINT    cchTask;
+    LPWSTR  pszDescriptionTop;
+    UINT    cchDescriptionTop;
+    LPWSTR  pszDescriptionBottom;
+    UINT    cchDescriptionBottom;
+    int     iTitleImage;
+    int     iExtendedImage;
+    int     iFirstItem;
+    UINT    cItems;
+    LPWSTR  pszSubsetTitle;
+    UINT    cchSubsetTitle;
+	LVGROUP_(const LVGROUP& lvg) : LVGROUP(lvg) { }
+};
+#define LVGROUP LVGROUP_
+#define LVGF_TITLEIMAGE 0x00001000
+#define ListView_SetGroupHeaderImageList(hwnd, himl) \
+    (HIMAGELIST)SNDMSG((hwnd), LVM_SETIMAGELIST, (WPARAM)LVSIL_GROUPHEADER, (LPARAM)(HIMAGELIST)(himl))
+#endif
+
+namespace { legacyLVGROUP makeLVGROUP() {
+	legacyLVGROUP lvg = { util::win32::ensureVersion(util::win32::VISTA) ? sizeof(LVGROUP) : sizeof(legacyLVGROUP) };
+	return lvg;
+} }
+
 Table::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | LVS_REPORT),
 	font(0),
@@ -294,18 +326,26 @@ std::vector<int> Table::getColumnWidths() {
 }
 
 void Table::setGroups(const std::vector<tstring>& groups) {
-	grouped = ListView_EnableGroupView(handle(), TRUE) >= 0;
-	if(!grouped)
-		return;
+	if(!grouped) {
+		grouped = ListView_EnableGroupView(handle(), TRUE) >= 0;
+		if(!grouped)
+			return;
 
-	LVGROUP group = { sizeof(LVGROUP) };
-	for(std::vector<tstring>::const_iterator i = groups.begin(), iend = groups.end(); i != iend; ++i) {
+		initGroupSupport();
+	}
+
+	LVGROUP group = makeLVGROUP();
+	for(auto i = groups.cbegin(), iend = groups.cend(); i != iend; ++i) {
 		if(i->empty()) {
 			group.mask = LVGF_GROUPID;
 			group.pszHeader = 0;
 		} else {
 			group.mask = LVGF_GROUPID | LVGF_HEADER;
 			group.pszHeader = const_cast<LPWSTR>(i->c_str());
+		}
+		if(groupImageList) {
+			group.mask |= LVGF_TITLEIMAGE;
+			group.iTitleImage = group.iGroupId;
 		}
 		if(ListView_InsertGroup(handle(), -1, &group) == -1) {
 			throw DWTException("Group insertion failed in Table::setGroups");
@@ -316,22 +356,16 @@ void Table::setGroups(const std::vector<tstring>& groups) {
 	grouped = true;
 }
 
-tstring Table::getGroup(unsigned id) const {
-	if(grouped) {
-		LVGROUP group = { sizeof(LVGROUP), LVGF_HEADER };
-		if(ListView_GetGroupInfo(handle(), id, &group) == static_cast<int>(id)) {
-			return tstring(group.pszHeader, group.cchHeader);
-		}
-	}
-	return tstring();
-}
+void Table::initGroupSupport() {
+	/* fiddle with the painting of group headers to allow custom colors that match the background (the
+	theme will be respected). */
 
-void Table::handleGroupDraw() {
 	theme.load(VSCLASS_LISTVIEW, this);
 
 	onCustomDraw([this](NMLVCUSTOMDRAW& data) -> LRESULT {
-		if(!grouped || data.dwItemType != LVCDI_GROUP)
+		if(data.dwItemType != LVCDI_GROUP)
 			return CDRF_DODEFAULT;
+
 		switch(data.nmcd.dwDrawStage) {
 		case CDDS_PREPAINT:
 			{
@@ -346,20 +380,57 @@ void Table::handleGroupDraw() {
 					/* the theme color and the bg color are too close to each other; start by
 					filling the canvas with an invert of the bg, then invert the whole canvas after
 					everything has been drawn (after CDDS_POSTPAINT). */
+					FreeCanvas canvas(data.nmcd.hdc);
+					Brush brush(0xFFFFFF - bgColor);
+
 					Rectangle rect(data.rcText);
 					if(!theme && util::win32::ensureVersion(util::win32::VISTA))
 						rect.size.y += 6;
-					FreeCanvas(data.nmcd.hdc).fill(rect, Brush(0xFFFFFF - bgColor));
+
+					LONG iconPos = 0;
+
+					if(groupImageList) {
+						// don't invert the icon. let's find out where it is placed...
+						if(theme) {
+							auto temp = rect;
+							theme.formatRect(canvas, LVP_GROUPHEADER, LVGH_OPEN, temp);
+							iconPos = temp.left() - rect.left();
+						}
+						if(iconPos <= 0)
+							iconPos = 10; // assume a 10px margin for unthemed visual styles
+
+						rect.size.x = iconPos;
+						canvas.fill(rect, brush);
+
+						rect.pos.x = rect.right() + 16;
+						rect.size.x = data.rcText.right - rect.pos.x;
+					}
+
+					canvas.fill(rect, brush);
 
 					// set a flag so we don't have to re-compare colors on CDDS_POSTPAINT.
-					data.nmcd.lItemlParam = 1;
+					data.nmcd.lItemlParam = std::max(iconPos, 0L) + 1;
 				}
 				break;
 			}
+
 		case CDDS_POSTPAINT:
 			{
 				if(data.nmcd.lItemlParam) {
-					FreeCanvas(data.nmcd.hdc).invert(Region(Rectangle(data.rcText)));
+					LONG iconPos = data.nmcd.lItemlParam - 1;
+
+					FreeCanvas canvas(data.nmcd.hdc);
+					Rectangle rect(data.rcText);
+
+					if(iconPos > 0) {
+						rect.size.x = iconPos;
+						canvas.invert(Region(rect));
+
+						rect.pos.x = rect.right() + 16;
+						rect.size.x = data.rcText.right - rect.pos.x;
+					}
+
+					canvas.invert(Region(rect));
 				}
 				break;
 			}
@@ -413,6 +484,13 @@ void Table::setSmallImageList( ImageListPtr imageList ) {
 void Table::setStateImageList( ImageListPtr imageList ) {
 	  itsStateImageList = imageList;
 	  ListView_SetImageList( handle(), imageList->getImageList(), LVSIL_STATE );
+}
+
+void Table::setGroupImageList(ImageListPtr imageList) {
+	if(util::win32::ensureVersion(util::win32::VISTA)) {
+		groupImageList = imageList;
+		ListView_SetGroupHeaderImageList(handle(), groupImageList->handle());
+	}
 }
 
 void Table::setView( int view ) {
