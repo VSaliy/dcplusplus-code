@@ -92,7 +92,12 @@ showGen(0)
 			seed.style &= ~LVS_SHOWSELALWAYS;
 			seed.style |= LVS_SINGLESEL | LVS_NOCOLUMNHEADER;
 			table = cur->addChild(Table::Seed(seed));
-			table->handleGroupDraw();
+
+			dwt::ImageListPtr images(new dwt::ImageList(dwt::Point(16, 16)));
+			images->add(*WinUtil::createIcon(IDI_DCPP, 16));
+			images->add(*WinUtil::createIcon(IDI_NET_STATS, 16)); /// @todo better icon for the "transfers" group?
+			images->add(*WinUtil::createIcon(IDI_USERS, 16));
+			table->setGroupImageList(images);
 		}
 
 		{
@@ -418,7 +423,9 @@ void StylesPage::handleFont() {
 void StylesPage::handleCustomTextColor() {
 	auto data = table->getSelectedData();
 	data->customTextColor = customTextColor->getChecked();
-	data->textColor = getTextColor(data);
+	if(data->customTextColor) {
+		data->textColor = getTextColor(data);
+	}
 	update(data);
 	handleSelectionChanged();
 }
@@ -435,7 +442,9 @@ void StylesPage::handleTextColor() {
 void StylesPage::handleCustomBgColor() {
 	auto data = table->getSelectedData();
 	data->customBgColor = customBgColor->getChecked();
-	data->bgColor = getBgColor(data);
+	if(data->customBgColor) {
+		data->bgColor = getBgColor(data);
+	}
 	update(data);
 	handleSelectionChanged();
 }

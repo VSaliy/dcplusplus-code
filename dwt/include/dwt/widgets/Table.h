@@ -281,16 +281,12 @@ public:
 	  */
 	void setColumnWidth( unsigned columnNo, int width );
 
-	/** Enable group support (only for ComCtrl 6), and insert each given group. The group id used
-	will be the position of the group in the vector. */
+	/** Enable group support, and insert each given group. The group id used as the "index" param
+	of the insert function will be the position of the group in the vector given here.
+	Once a table has been set into grouped mode, it cannot be switched back to non-grouped mode. */
 	void setGroups(const std::vector<tstring>& groups);
-	tstring getGroup(unsigned id) const;
 
 	bool isGrouped() const { return grouped; }
-
-	/** tell dwt to take over painting of group headers in order to allow custom colors that match
-	the background. the theme will be respected. */
-	void handleGroupDraw();
 
 	/// Returns the checked state of the given row
 	/** A list view can have checkboxes in each row, if the checkbox for the given
@@ -397,19 +393,22 @@ public:
 	/** normalImageList is the image list that contains the images
 	  * for the data grid icons in Icon View (big icons).
 	  */
-	void setNormalImageList( ImageListPtr normalImageList );
+	void setNormalImageList(ImageListPtr imageList);
 
 	/// Set the small image list for the Data Grid.
 	/** smallImageList is the image list that contains the images
 	  * for the data grid icons in Report, List & Small Icon Views.
 	  */
-	void setSmallImageList( ImageListPtr smallImageList );
+	void setSmallImageList(ImageListPtr imageList);
 
 	/// Set the state image list for the Data Grid.
 	/** stateImageList is the image list that contains the images
 	  * for the data grid icons states.
 	  */
-	void setStateImageList( ImageListPtr stateImageList );
+	void setStateImageList(ImageListPtr imageList);
+
+	/** Set the image list to find icons from when adding groups. Only available on >= Visa. */
+	void setGroupImageList(ImageListPtr imageList);
 
 	/// Change the view for the Data Grid.
 	/** The view parameter can be one of LVS_ICON, LVS_SMALLICON, LVS_LIST or
@@ -486,6 +485,7 @@ private:
 	ImageListPtr itsNormalImageList;
 	ImageListPtr itsSmallImageList;
 	ImageListPtr itsStateImageList;
+	ImageListPtr groupImageList;
 
 	// If true the grid is in "read only mode" meaning that cell values cannot be edited.
 	// A simpler version of defining a beenValidate always returning false
@@ -501,6 +501,7 @@ private:
 	static int CALLBACK compareFuncCallback( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 
 	void setIndex(LVITEM& item, int index) const;
+	void initGroupSupport();
 	void updateArrow();
 #ifdef PORT_ME
 	// Private validate function, this ones returns the "read only" property of the list
