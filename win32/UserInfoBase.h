@@ -160,11 +160,6 @@ protected:
 		if(!traits.isSet(UserTraits::chatNotIgnoredOnly))
 			menu->appendItem(T_("Un-ignore chat"), [this] { this->t().handleIgnoreChat(false); });
 	}
-
-	template<typename TableType>
-	void prepareUserList(TableType* table) {
-		table->setTooltips([table](int i) -> tstring { return table->getData(i)->getTooltip(); });
-	}
 };
 
 #endif /*USERINFOBASE_H_*/

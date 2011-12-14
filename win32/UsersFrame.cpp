@@ -166,7 +166,6 @@ scroll(0)
 		users->onSelectionChanged([this] { handleSelectionChanged(); });
 		users->setSmallImageList(userIcons);
 		users->onLeftMouseDown([this](const dwt::MouseEvent &me) { return handleClick(me); });
-		prepareUserList(users);
 	}
 
 	{
