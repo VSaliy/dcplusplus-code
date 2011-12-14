@@ -288,6 +288,9 @@ public:
 
 	bool isGrouped() const { return grouped; }
 
+	/** Get the rectangle of the specified group's header. Only available on >= Vista. */
+	bool getGroupRect(unsigned groupId, Rectangle& rect) const;
+
 	/// Returns the checked state of the given row
 	/** A list view can have checkboxes in each row, if the checkbox for the given
 	  * row is CHECKED this funtion returns true.
@@ -407,7 +410,7 @@ public:
 	  */
 	void setStateImageList(ImageListPtr imageList);
 
-	/** Set the image list to find icons from when adding groups. Only available on >= Visa. */
+	/** Set the image list to find icons from when adding groups. Only available on >= Vista. */
 	void setGroupImageList(ImageListPtr imageList);
 
 	/// Change the view for the Data Grid.
