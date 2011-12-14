@@ -86,10 +86,10 @@ void UserInfoBase::ignoreChat(bool ignore) {
 	UserMatchManager::getInstance()->ignoreChat(user, ignore);
 }
 
-const size_t maxChars = 100; // max chars per tooltip line
-
 tstring UserInfoBase::getTooltip() const {
 	auto priv = keepHub();
+
+	static const size_t maxChars = 100; // max chars per tooltip line
 
 	tstring ret(WinUtil::getNicks(user, priv));
 	dwt::util::cutStr(ret, maxChars);
