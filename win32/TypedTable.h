@@ -46,7 +46,11 @@ called a first time with col=-1 to set the style of the whole item. It can retur
 - CDRF_DODEFAULT to keep the default style for the item.
 - CDRF_NEWFONT to change the style of the item.
 - CDRF_NOTIFYSUBITEMDRAW to request custom styles for each sub-item (getStyle will then be called
-for each sub-item). */
+for each sub-item).
+
+@note Support for tooltips:
+The ContentType class must provide a tstring getTooltip() [const] function. Note that tooltips are
+only for the first column. */
 template<typename ContentType, bool managed>
 class TypedTable : public Table
 {
@@ -73,12 +77,16 @@ public:
 	}
 
 	void create(const Seed& seed) {
+#ifdef _DEBUG
+		writeDebugInfo();
+#endif
 		BaseType::create(seed);
 
 		addTextEvent<ContentType>();
 		addImageEvent<ContentType>();
 		addSortEvent<ContentType>();
 		addStyleEvent<ContentType>();
+		addTooltipEvent<ContentType>();
 	}
 
 	int insert(ContentType* item) {
@@ -175,6 +183,10 @@ private:
 	HAS_FUNC(HasStyleC_, getStyle, int (ContentType::*)(HFONT&, COLORREF&, COLORREF&, int) const);
 #define HasStyle (HasStyle_<T>::value || HasStyleC_<T>::value)
 
+	HAS_FUNC(HasTooltip_, getTooltip, tstring (ContentType::*)());
+	HAS_FUNC(HasTooltipC_, getTooltip, tstring (ContentType::*)() const);
+#define HasTooltip (HasTooltip_<T>::value || HasTooltipC_<T>::value)
+
 	template<typename T> typename std::enable_if<HasText, void>::type addTextEvent() {
 		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
 			auto& data = *reinterpret_cast<NMLVDISPINFO*>(lParam);
@@ -207,6 +219,19 @@ private:
 		this->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return this->handleCustomDraw<ContentType>(data); });
 	}
 	template<typename T> typename std::enable_if<!HasStyle, void>::type addStyleEvent() { }
+
+	template<typename T> typename std::enable_if<HasTooltip, void>::type addTooltipEvent() {
+		this->setTooltips([this](int i) -> tstring { return this->getData(i)->getTooltip(); });
+	}
+	template<typename T> typename std::enable_if<!HasTooltip, void>::type addTooltipEvent() { }
+
+#ifdef _DEBUG
+	void writeDebugInfo() {
+		typedef ContentType T;
+		printf("Creating a TypedTable<%s>; text: %d, images: %d, sorting: %d, custom styles: %d, tooltips: %d\n",
+			typeid(T).name(), HasText, HasImage, HasSort, HasStyle, HasTooltip);
+	}
+#endif
 
 	template<typename T> typename std::enable_if<HasSort, int>::type getSortPos(ContentType* a) {
 		int high = this->size();

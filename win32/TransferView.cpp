@@ -127,8 +127,6 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 		connections->onKeyDown([this](int c) { return handleKeyDown(c); });
 		connections->onDblClicked([this] { handleDblClicked(); });
 		connections->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return handleCustomDraw(data); });
-
-		prepareUserList(connections);
 	}
 
 	{

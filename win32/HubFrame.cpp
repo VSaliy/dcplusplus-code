@@ -200,8 +200,6 @@ inTabComplete(false)
 		users->onKeyDown([this](int c) { return handleUsersKeyDown(c); });
 		users->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleUsersContextMenu(sc); });
 
-		prepareUserList(users);
-
 		TextBox::Seed cs = WinUtil::Seeds::textBox;
 		cs.style |= ES_AUTOHSCROLL;
 		filter = userGrid->addChild(cs);
