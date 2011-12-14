@@ -45,6 +45,7 @@ private:
 	void handleDoubleClick();
 	bool handleKeyDown(int c);
 	void handleSelectionChanged();
+	tstring handleTooltip(int i);
 
 	void handleAddClicked();
 	void handleEditClicked();

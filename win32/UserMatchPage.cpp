@@ -19,9 +19,11 @@
 #include "stdafx.h"
 #include "UserMatchPage.h"
 
+#include <dcpp/format.h>
 #include <dcpp/UserMatchManager.h>
 #include <dcpp/version.h>
 
+#include <dwt/util/StringUtils.h>
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/MessageBox.h>
 
@@ -121,6 +123,7 @@ dirty(false)
 	table->onDblClicked([this] { handleDoubleClick(); });
 	table->onKeyDown([this](int c) { return handleKeyDown(c); });
 	table->onSelectionChanged([this] { handleSelectionChanged(); });
+	table->setTooltips([this](int i) { return handleTooltip(i); });
 
 	// async to avoid problems if one page gets init'd before the other.
 	callAsync([this] { updateStyles(); });
@@ -176,6 +179,47 @@ void UserMatchPage::handleSelectionChanged() {
 	up->setEnabled(sel > 0);
 	down->setEnabled(sel > 0);
 	remove->setEnabled(sel > 0);
+}
+
+tstring UserMatchPage::handleTooltip(int i) {
+	auto& matcher = list[i];
+
+	static const size_t maxChars = 100; // max chars per tooltip line
+
+	tstring ret = str(TF_("Name: %1%") % Text::toT(matcher.name));
+	dwt::util::cutStr(ret, maxChars);
+
+	auto addLine = [&ret](tstring line) {
+		dwt::util::cutStr(line, maxChars);
+		ret += _T("\r\n") + line;
+	};
+
+	if(matcher.isSet(UserMatch::FAVS))
+		addLine(T_("Match favorites"));
+	if(matcher.isSet(UserMatch::OPS))
+		addLine(T_("Match operators"));
+	if(matcher.isSet(UserMatch::BOTS))
+		addLine(T_("Match bots"));
+
+	tstring fields[UserMatch::Rule::FIELD_LAST] = { T_("Nick"), T_("CID"), T_("IP"), T_("Hub address") };
+	tstring methods[UserMatch::Rule::METHOD_LAST] = { T_("Partial match"), T_("Exact match"), T_("Regular Expression") };
+	for(auto rule = matcher.rules.cbegin(), rule_end = matcher.rules.cend(); rule != rule_end; ++rule) {
+		addLine(str(TF_("%1% %2%: %3%") % fields[rule->field] % methods[rule->getMethod()] % Text::toT(rule->pattern)));
+	}
+
+	if(matcher.isSet(UserMatch::FORCE_CHAT))
+		addLine(T_("Always show chat messages"));
+	else if(matcher.isSet(UserMatch::IGNORE_CHAT))
+		addLine(T_("Ignore chat messages"));
+
+	if(!matcher.style.font.empty())
+		addLine(T_("Custom font"));
+	if(matcher.style.textColor >= 0)
+		addLine(T_("Custom text color"));
+	if(matcher.style.bgColor >= 0)
+		addLine(T_("Custom background color"));
+
+	return ret;
 }
 
 void UserMatchPage::handleAddClicked() {
