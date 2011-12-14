@@ -244,6 +244,44 @@ typedef struct tagLVGROUP
 #define LVGA_FOOTER_RIGHT   0x00000020  // Don't forget to validate exclusivity
 #endif
 
+#ifndef LVVGR_HEADER
+#define LVGGR_HEADER        1
+#endif
+#ifndef LVSIL_GROUPHEADER
+#define LVSIL_GROUPHEADER       3
+#endif
+#ifndef LVM_GETGROUPRECT
+#define LVM_GETGROUPRECT               (LVM_FIRST + 98)
+#endif
+#ifndef ListView_GetGroupRect
+#define ListView_GetGroupRect(hwnd, iGroupId, type, prc) \
+    SNDMSG((hwnd), LVM_GETGROUPRECT, (WPARAM)(iGroupId), \
+        ((prc) ? (((RECT*)(prc))->top = (type)), (LPARAM)(RECT*)(prc) : (LPARAM)(RECT*)NULL))
+#endif
+
+#ifndef LVGMF_NONE
+#define LVGMF_NONE          0x00000000
+#define LVGMF_BORDERSIZE    0x00000001
+#define LVGMF_BORDERCOLOR   0x00000002
+#define LVGMF_TEXTCOLOR     0x00000004
+
+typedef struct tagLVGROUPMETRICS
+{
+    UINT cbSize;
+    UINT mask;
+    UINT Left;
+    UINT Top;
+    UINT Right;
+    UINT Bottom;
+    COLORREF crLeft;
+    COLORREF crTop;
+    COLORREF crRight;
+    COLORREF crBottom;
+    COLORREF crHeader;
+    COLORREF crFooter;
+} LVGROUPMETRICS, *PLVGROUPMETRICS;
+#endif
+
 // MinGW doesn't have all the fields in the following structure, so re-define it better.
 typedef struct tagNMLVCUSTOMDRAW_
 {

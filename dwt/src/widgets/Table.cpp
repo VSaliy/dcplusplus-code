@@ -356,7 +356,24 @@ void Table::setGroups(const std::vector<tstring>& groups) {
 	grouped = true;
 }
 
+bool Table::getGroupRect(unsigned groupId, Rectangle& rect) const {
+	if(util::win32::ensureVersion(util::win32::VISTA)) {
+		::RECT rc;
+		if(ListView_GetGroupRect(handle(), groupId, LVGGR_HEADER, &rc)) {
+			rect = Rectangle(rc);
+			return true;
+		}
+	}
+	return false;
+}
+
 void Table::initGroupSupport() {
+	// add some spacing between groups.
+	LVGROUPMETRICS metrics = { sizeof(LVGROUPMETRICS), LVGMF_BORDERSIZE };
+	ListView_GetGroupMetrics(handle(), &metrics);
+	metrics.Bottom += std::max(metrics.Top, 12u);
+	ListView_SetGroupMetrics(handle(), &metrics);
+
 	/* fiddle with the painting of group headers to allow custom colors that match the background (the
 	theme will be respected). */
 
@@ -383,9 +400,9 @@ void Table::initGroupSupport() {
 					FreeCanvas canvas(data.nmcd.hdc);
 					Brush brush(0xFFFFFF - bgColor);
 
-					Rectangle rect(data.rcText);
-					if(!theme && util::win32::ensureVersion(util::win32::VISTA))
-						rect.size.y += 6;
+					Rectangle rect;
+					if(!getGroupRect(data.nmcd.dwItemSpec, rect))
+						rect = Rectangle(data.rcText);
 
 					LONG iconPos = 0;
 
@@ -409,7 +426,7 @@ void Table::initGroupSupport() {
 					canvas.fill(rect, brush);
 
 					// set a flag so we don't have to re-compare colors on CDDS_POSTPAINT.
-					data.nmcd.lItemlParam = std::max(iconPos, 0L) + 1;
+					data.nmcd.lItemlParam = iconPos + 1;
 				}
 				break;
 			}
@@ -420,7 +437,10 @@ void Table::initGroupSupport() {
 					LONG iconPos = data.nmcd.lItemlParam - 1;
 
 					FreeCanvas canvas(data.nmcd.hdc);
-					Rectangle rect(data.rcText);
+
+					Rectangle rect;
+					if(!getGroupRect(data.nmcd.dwItemSpec, rect))
+						rect = Rectangle(data.rcText);
 
 					if(iconPos > 0) {
 						rect.size.x = iconPos;

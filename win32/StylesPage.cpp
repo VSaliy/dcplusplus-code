@@ -195,7 +195,7 @@ StylesPage::~StylesPage() {
 void StylesPage::layout() {
 	PropPage::layout();
 
-	table->setColumnWidth(COLUMN_TEXT, table->getWindowSize().x - 20);
+	table->setColumnWidth(COLUMN_TEXT, table->getWindowSize().x - 30);
 }
 
 void StylesPage::write() {
