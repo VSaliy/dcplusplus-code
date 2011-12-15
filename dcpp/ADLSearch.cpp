@@ -26,10 +26,8 @@
 
 #include "ClientManager.h"
 #include "File.h"
-#include "LogManager.h"
 #include "QueueManager.h"
 #include "SimpleXML.h"
-#include "StringTokenizer.h"
 
 namespace dcpp {
 
@@ -103,47 +101,16 @@ int64_t ADLSearch::GetSizeBase() {
 }
 
 bool ADLSearch::isRegEx() const {
-	return boost::get<boost::regex>(&v);
+	return match.getMethod() == StringMatch::REGEX;
 }
 
 void ADLSearch::setRegEx(bool b) {
-	if(b)
-		v = boost::regex();
-	else
-		v = StringSearch::List();
+	match.setMethod(b ? StringMatch::REGEX : StringMatch::PARTIAL);
 }
 
-struct Prepare : boost::static_visitor<> {
-	Prepare(const string& s_) : s(s_) { }
-
-	void operator()(StringSearch::List& stringSearches) const {
-		// Prepare quick search of substrings
-		stringSearches.clear();
-
-		// Split into substrings
-		StringTokenizer<string> st(s, ' ');
-		for(auto i = st.getTokens().begin(), iend = st.getTokens().end(); i != iend; ++i) {
-			if(!i->empty()) {
-				// Add substring search
-				stringSearches.push_back(StringSearch(*i));
-			}
-		}
-	}
-
-	void operator()(boost::regex& r) const {
-		try {
-			r.assign(s);
-		} catch(const std::runtime_error&) {
-			LogManager::getInstance()->message(str(F_("Invalid ADL Search regular expression: %1%") % s));
-		}
-	}
-
-private:
-	const string& s;
-};
-
 void ADLSearch::prepare(ParamMap& params) {
-	boost::apply_visitor(Prepare(Util::formatParams(searchString, params)), v);
+	match.pattern = Util::formatParams(searchString, params);
+	match.prepare();
 }
 
 bool ADLSearch::matchesFile(const string& f, const string& fp, int64_t size) {
@@ -186,34 +153,8 @@ bool ADLSearch::matchesDirectory(const string& d) {
 	return searchAll(d);
 }
 
-struct SearchAll : boost::static_visitor<bool> {
-	SearchAll(const string& s_) : s(s_) { }
-
-	bool operator()(StringSearch::List& stringSearches) const {
-		// Match all substrings
-		for(auto i = stringSearches.begin(), iend = stringSearches.end(); i != iend; ++i) {
-			if(!i->match(s)) {
-				return false;
-			}
-		}
-		return !stringSearches.empty();
-	}
-
-	bool operator()(boost::regex& r) const {
-		try {
-			return !r.empty() && boost::regex_search(s, r);
-		} catch(const std::runtime_error&) {
-			// most likely a stack overflow, ignore...
-			return false;
-		}
-	}
-
-private:
-	const string& s;
-};
-
 bool ADLSearch::searchAll(const string& s) {
-	return boost::apply_visitor(SearchAll(s), v);
+	return match.match(s);
 }
 
 ADLSearchManager::ADLSearchManager() : user(UserPtr(), Util::emptyString) {

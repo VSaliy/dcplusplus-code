@@ -24,16 +24,11 @@
 #ifndef DCPLUSPLUS_DCPP_A_D_L_SEARCH_H
 #define DCPLUSPLUS_DCPP_A_D_L_SEARCH_H
 
-#include <boost/regex.hpp>
-#include <boost/variant.hpp>
-
-#include "Util.h"
-
-#include "SettingsManager.h"
-
-#include "StringSearch.h"
-#include "Singleton.h"
 #include "DirectoryListing.h"
+#include "SettingsManager.h"
+#include "Singleton.h"
+#include "StringMatch.h"
+#include "Util.h"
 
 namespace dcpp {
 
@@ -94,7 +89,7 @@ public:
 private:
 	friend class ADLSearchManager;
 
-	boost::variant<StringSearch::List, boost::regex> v;
+	StringMatch match;
 
 	/// Prepare search
 	void prepare(ParamMap& params);

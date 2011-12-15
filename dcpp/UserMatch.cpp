@@ -21,85 +21,12 @@
 
 #include "Client.h"
 #include "FavoriteManager.h"
-#include "format.h"
-#include "LogManager.h"
 #include "OnlineUser.h"
 
 namespace dcpp {
 
-UserMatch::Rule::Method UserMatch::Rule::getMethod() const {
-	return boost::get<StringSearch>(&search) ? PARTIAL : boost::get<string>(&search) ? EXACT : REGEX;
-}
-
-void UserMatch::Rule::setMethod(Method method) {
-	switch(method) {
-	case PARTIAL: search = StringSearch(); break;
-	case EXACT: search = string(); break;
-	case REGEX: search = boost::regex(); break;
-	}
-}
-
 bool UserMatch::Rule::operator==(const Rule& rhs) const {
-	return field == rhs.field && pattern == rhs.pattern && getMethod() == rhs.getMethod();
-}
-	
-struct Prepare : boost::static_visitor<bool> {
-	Prepare(const string& pattern) : pattern(pattern) { }
-
-	bool operator()(StringSearch& s) const {
-		s = pattern;
-		return true;
-	}
-
-	bool operator()(string& s) const {
-		s = pattern;
-		return true;
-	}
-
-	bool operator()(boost::regex& r) const {
-		try {
-			r.assign(pattern);
-			return true;
-		} catch(const std::runtime_error&) {
-			LogManager::getInstance()->message(str(F_("Invalid user matching regular expression: %1%") % pattern));
-			return false;
-		}
-	}
-
-private:
-	const string& pattern;
-};
-
-bool UserMatch::Rule::prepare() {
-	return !pattern.empty() && boost::apply_visitor(Prepare(pattern), search);
-}
-
-struct Match : boost::static_visitor<bool> {
-	Match(const string& str) : str(str) { }
-
-	bool operator()(const StringSearch& s) const {
-		return s.match(str);
-	}
-
-	bool operator()(const string& s) const {
-		return str == s;
-	}
-
-	bool operator()(const boost::regex& r) const {
-		try {
-			return !r.empty() && boost::regex_search(str, r);
-		} catch(const std::runtime_error&) {
-			// most likely a stack overflow, ignore...
-			return false;
-		}
-	}
-
-private:
-	const string& str;
-};
-
-bool UserMatch::Rule::match(const string& str) const {
-	return boost::apply_visitor(Match(str), search);
+	return field == rhs.field && StringMatch::operator==(rhs);
 }
 
 void UserMatch::addRule(Rule&& rule) {
