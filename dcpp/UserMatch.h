@@ -21,8 +21,7 @@
 
 #include "forward.h"
 #include "Flags.h"
-#include "Pointer.h"
-#include "StringSearch.h"
+#include "StringMatch.h"
 
 #include <string>
 #include <vector>
@@ -69,7 +68,7 @@ struct UserMatch : public Flags {
 
 	string name;
 
-	struct Rule {
+	struct Rule : StringMatch {
 		enum {
 			NICK,
 			CID,
@@ -79,26 +78,7 @@ struct UserMatch : public Flags {
 			FIELD_LAST
 		} field;
 
-		string pattern;
-
-		enum Method {
-			PARTIAL,
-			EXACT,
-			REGEX,
-
-			METHOD_LAST
-		};
-
-		Method getMethod() const;
-		void setMethod(Method method);
-
 		bool operator==(const Rule& rhs) const;
-
-	private:
-		friend struct UserMatch;
-		bool prepare();
-		bool match(const string& str) const;
-		boost::variant<StringSearch, string, boost::regex> search;
 	};
 
 	vector<Rule> rules;
