@@ -117,6 +117,7 @@ const ComboBox::Seed WinUtil::Seeds::comboBoxEdit;
 const CheckBox::Seed WinUtil::Seeds::checkBox;
 const CheckBox::Seed WinUtil::Seeds::splitCheckBox;
 const GroupBox::Seed WinUtil::Seeds::group;
+const Label::Seed WinUtil::Seeds::label;
 const Menu::Seed WinUtil::Seeds::menu;
 const Table::Seed WinUtil::Seeds::table;
 const TextBox::Seed WinUtil::Seeds::textBox;
@@ -231,6 +232,7 @@ void WinUtil::initSeeds() {
 	CheckBox::Seed& xCheckBox = const_cast<CheckBox::Seed&> (Seeds::checkBox);
 	CheckBox::Seed& xSplitCheckBox = const_cast<CheckBox::Seed&> (Seeds::splitCheckBox);
 	GroupBox::Seed& xgroup = const_cast<GroupBox::Seed&> (Seeds::group);
+	Label::Seed& xlabel = const_cast<Label::Seed&> (Seeds::label);
 	Menu::Seed& xmenu = const_cast<Menu::Seed&> (Seeds::menu);
 	Table::Seed& xTable = const_cast<Table::Seed&> (Seeds::table);
 	TextBox::Seed& xtextBox = const_cast<TextBox::Seed&> (Seeds::textBox);
@@ -258,6 +260,8 @@ void WinUtil::initSeeds() {
 	xSplitCheckBox.style &= ~WS_TABSTOP;
 
 	xgroup.font = font;
+
+	xlabel.font = font;
 
 	xmenu.ownerDrawn = BOOLSETTING(OWNER_DRAWN_MENUS);
 	if(xmenu.ownerDrawn)
@@ -1413,7 +1417,7 @@ void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, siz
 		n[i] = T_(columnInfo[i].name);
 		o[i] = i;
 		w[i] = columnInfo[i].size;
-		a[i] = columnInfo[i].rightAlign;
+		a[i] = columnInfo[i].numerical;
 	}
 	toInts(order, o);
 	toInts(widths, w);

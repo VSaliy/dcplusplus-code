@@ -21,6 +21,8 @@
 
 #include <dcpp/WindowManager.h>
 
+#include "MDIChildFrame.h"
+
 /** Recent instances of windows implementing this interface are tracked using dcpp::WindowManager. */
 template<typename T>
 class IRecent {

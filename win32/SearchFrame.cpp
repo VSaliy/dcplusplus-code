@@ -148,6 +148,7 @@ droppedResults(0)
 
 		searchBox = cur->addChild(WinUtil::Seeds::comboBoxEdit);
 		cur->setWidget(searchBox, 0, 0, 1, 2);
+		searchBox->getTextBox()->setCue(T_("Enter search here"));
 		addWidget(searchBox);
 
 		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i)

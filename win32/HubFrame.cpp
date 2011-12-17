@@ -153,8 +153,8 @@ BaseType(parent, Text::toT(url_), IDH_HUB, IDI_HUB_OFF, false),
 paned(0),
 userGrid(0),
 users(0),
-filter(0),
-filterType(0),
+filter(usersColumns, COLUMN_LAST, [this] { updateUserList(); }),
+filterOpts(0),
 showUsers(0),
 client(0),
 url(url_),
@@ -182,13 +182,12 @@ inTabComplete(false)
 	message->onChar([this] (int c) { return handleMessageChar(c); });
 
 	{
-		userGrid = paned->addChild(Grid::Seed(2, 2));
+		userGrid = paned->addChild(Grid::Seed(2, 1));
 		userGrid->column(0).mode = GridInfo::FILL;
 		userGrid->row(0).mode = GridInfo::FILL;
 		userGrid->row(0).align = GridInfo::STRETCH;
 
 		users = userGrid->addChild(WidgetUsers::Seed(WinUtil::Seeds::table));
-		userGrid->setWidget(users, 0, 0, 1, 2);
 		addWidget(users);
 
 		users->setSmallImageList(WinUtil::userImages);
@@ -200,23 +199,30 @@ inTabComplete(false)
 		users->onKeyDown([this](int c) { return handleUsersKeyDown(c); });
 		users->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleUsersContextMenu(sc); });
 
-		TextBox::Seed cs = WinUtil::Seeds::textBox;
-		cs.style |= ES_AUTOHSCROLL;
-		filter = userGrid->addChild(cs);
-		filter->setHelpId(IDH_HUB_FILTER);
-		addWidget(filter);
-		filter->onUpdated([this] { handleFilterUpdated(); });
+		filter.createTextBox(userGrid);
+		filter.text->setHelpId(IDH_HUB_FILTER);
+		filter.text->setCue(T_("Filter users"));
+		addWidget(filter.text);
+	}
 
-		filterType = userGrid->addChild(WinUtil::Seeds::comboBox);
-		filterType->setHelpId(IDH_HUB_FILTER);
-		addWidget(filterType);
+	{
+		auto seed = Grid::Seed(1, 2);
+		seed.exStyle |= WS_EX_TRANSPARENT;
+		filterOpts = addChild(seed);
+		filterOpts->setHelpId(IDH_HUB_FILTER);
 
-		for(int j=0; j<COLUMN_LAST; j++) {
-			filterType->addValue(T_(usersColumns[j].name));
-		}
-		filterType->addValue(T_("Any"));
-		filterType->setSelected(COLUMN_LAST);
-		filterType->onSelectionChanged([this] { updateUserList(); });
+		filter.createColumnBox(filterOpts);
+		addWidget(filter.column, false, false);
+
+		filter.createMethodBox(filterOpts);
+		addWidget(filter.method, false, false);
+
+		hideFilterOpts(nullptr);
+
+		filter.text->onFocus([this] { showFilterOpts(); });
+		filter.text->onKillFocus([this](dwt::Widget* w) { hideFilterOpts(w); });
+		filter.column->onKillFocus([this](dwt::Widget* w) { hideFilterOpts(w); });
+		filter.method->onKillFocus([this](dwt::Widget* w) { hideFilterOpts(w); });
 	}
 
 	initStatus();
@@ -306,12 +312,24 @@ void HubFrame::layout() {
 	hr.resize(message, rm);
 
 	r.size.y -= rm.size.y + border;
-
 	hr.resize(paned, r);
 
 	if(showUsers->getChecked()) {
 		userGrid->setVisible(true);
-		paned->maximize(NULL);
+		paned->maximize(0);
+
+		if(filterOpts->hasStyle(WS_VISIBLE)) {
+			filterOpts->bringToTop();
+			filter.column->bringToTop();
+			filter.method->bringToTop();
+
+			auto r = filter.text->getWindowRect();
+			r.pos = dwt::ClientCoordinate(dwt::ScreenCoordinate(r.pos), filterOpts->getParent()).getPoint();
+			r.pos.y += r.height();
+			r.size = filterOpts->getPreferredSize();
+			hr.resize(filterOpts, r);
+		}
+
 	} else {
 		paned->maximize(chat);
 		userGrid->setVisible(false);
@@ -668,7 +686,7 @@ bool HubFrame::updateUser(const UserTask& u) {
 		if(!ui->isHidden() && showUsers->getChecked())
 			users->insert(ui);
 
-		if(!filterString.empty())
+		if(!filter.empty())
 			updateUserList(ui);
 		return true;
 	} else {
@@ -1011,93 +1029,23 @@ void HubFrame::removeFavoriteHub() {
 	}
 }
 
-bool HubFrame::parseFilter(FilterModes& mode, int64_t& size) {
-	tstring::size_type start = static_cast<tstring::size_type>(tstring::npos);
-	tstring::size_type end = static_cast<tstring::size_type>(tstring::npos);
-	int64_t multiplier = 1;
-
-	if(filterString.empty()) {
-		return false;
-	}
-	if(filterString.compare(0, 2, _T(">=")) == 0) {
-		mode = GREATER_EQUAL;
-		start = 2;
-	} else if(filterString.compare(0, 2, _T("<=")) == 0) {
-		mode = LESS_EQUAL;
-		start = 2;
-	} else if(filterString.compare(0, 2, _T("==")) == 0) {
-		mode = EQUAL;
-		start = 2;
-	} else if(filterString.compare(0, 2, _T("!=")) == 0) {
-		mode = NOT_EQUAL;
-		start = 2;
-	} else if(filterString[0] == _T('<')) {
-		mode = LESS;
-		start = 1;
-	} else if(filterString[0] == _T('>')) {
-		mode = GREATER;
-		start = 1;
-	} else if(filterString[0] == _T('=')) {
-		mode = EQUAL;
-		start = 1;
-	}
-
-	if(start == tstring::npos)
-		return false;
-	if(filterString.length() <= start)
-		return false;
-
-	if((end = Util::findSubString(filterString, _T("TiB"))) != tstring::npos) {
-		multiplier = 1024LL * 1024LL * 1024LL * 1024LL;
-	} else if((end = Util::findSubString(filterString, _T("GiB"))) != tstring::npos) {
-		multiplier = 1024*1024*1024;
-	} else if((end = Util::findSubString(filterString, _T("MiB"))) != tstring::npos) {
-		multiplier = 1024*1024;
-	} else if((end = Util::findSubString(filterString, _T("KiB"))) != tstring::npos) {
-		multiplier = 1024;
-	} else if((end = Util::findSubString(filterString, _T("TB"))) != tstring::npos) {
-		multiplier = 1000LL * 1000LL * 1000LL * 1000LL;
-	} else if((end = Util::findSubString(filterString, _T("GB"))) != tstring::npos) {
-		multiplier = 1000*1000*1000;
-	} else if((end = Util::findSubString(filterString, _T("MB"))) != tstring::npos) {
-		multiplier = 1000*1000;
-	} else if((end = Util::findSubString(filterString, _T("kB"))) != tstring::npos) {
-		multiplier = 1000;
-	} else if((end = Util::findSubString(filterString, _T("B"))) != tstring::npos) {
-		multiplier = 1;
-	}
-
-	if(end == tstring::npos) {
-		end = filterString.length();
-	}
-
-	tstring tmpSize = filterString.substr(start, end-start);
-	size = static_cast<int64_t>(Util::toDouble(Text::fromT(tmpSize)) * multiplier);
-
-	return true;
-}
-
 void HubFrame::updateUserList(UserInfo* ui) {
-	int64_t size = -1;
-	FilterModes mode = NONE;
-
-	int sel = filterType->getSelected();
-
-	bool doSizeCompare = parseFilter(mode, size) && sel == COLUMN_SHARED;
+	auto filterPrep = filter.prepare();
+	auto filterInfoF = [this, &ui](int column) { return Text::fromT(ui->getText(column)); };
 
 	//single update?
 	//avoid refreshing the whole list and just update the current item
 	//instead
-	if(ui != NULL) {
+	if(ui) {
 		if(ui->isHidden()) {
 			return;
 		}
-		if(filterString.empty()) {
+		if(filter.empty()) {
 			if(users->find(ui) == -1) {
 				users->insert(ui);
 			}
 		} else {
-			if(matchFilter(*ui, sel, doSizeCompare, mode, size)) {
+			if(filter.match(filterPrep, filterInfoF)) {
 				if(users->find(ui) == -1) {
 					users->insert(ui);
 				}
@@ -1107,57 +1055,26 @@ void HubFrame::updateUserList(UserInfo* ui) {
 				users->erase(ui);
 			}
 		}
+
 	} else {
 		HoldRedraw hold(users);
 		users->clear();
 
-		if(filterString.empty()) {
-			for(UserMapIter i = userMap.begin(); i != userMap.end(); ++i){
-				UserInfo* ui = i->second;
+		if(filter.empty()) {
+			for(UserMapIter i = userMap.begin(); i != userMap.end(); ++i) {
+				ui = i->second;
 				if(!ui->isHidden())
 					users->insert(i->second);
 			}
 		} else {
 			for(UserMapIter i = userMap.begin(); i != userMap.end(); ++i) {
-				UserInfo* ui = i->second;
-				if(!ui->isHidden() && matchFilter(*ui, sel, doSizeCompare, mode, size)) {
+				ui = i->second;
+				if(!ui->isHidden() && filter.match(filterPrep, filterInfoF)) {
 					users->insert(ui);
 				}
 			}
 		}
 	}
-}
-
-bool HubFrame::matchFilter(const UserInfo& ui, int sel, bool doSizeCompare, FilterModes mode, int64_t size) {
-	if(filterString.empty())
-		return true;
-
-	bool insert = false;
-	if(doSizeCompare) {
-		switch(mode) {
-			case EQUAL: insert = (size == ui.getIdentity().getBytesShared()); break;
-			case GREATER_EQUAL: insert = (size <= ui.getIdentity().getBytesShared()); break;
-			case LESS_EQUAL: insert = (size >= ui.getIdentity().getBytesShared()); break;
-			case GREATER: insert = (size < ui.getIdentity().getBytesShared()); break;
-			case LESS: insert = (size > ui.getIdentity().getBytesShared()); break;
-			case NOT_EQUAL: insert = (size != ui.getIdentity().getBytesShared()); break;
-			case NONE: ; break;
-		}
-	} else {
-		if(sel >= COLUMN_LAST) {
-			for(int i = COLUMN_FIRST; i < COLUMN_LAST; ++i) {
-				if(Util::findSubString(ui.getText(i), filterString) != string::npos) {
-					insert = true;
-					break;
-				}
-			}
-		} else {
-			if(Util::findSubString(ui.getText(sel), filterString) != string::npos)
-				insert = true;
-		}
-	}
-
-	return insert;
 }
 
 bool HubFrame::userClick(const dwt::ScreenCoordinate& pt) {
@@ -1453,11 +1370,17 @@ void HubFrame::handleFollow() {
 	}
 }
 
-void HubFrame::handleFilterUpdated() {
-	tstring newText = filter->getText();
-	if(newText != filterString) {
-		filterString = newText;
-		updateUserList();
+void HubFrame::showFilterOpts() {
+	filterOpts->setEnabled(true);
+	filterOpts->setVisible(true);
+
+	layout();
+}
+
+void HubFrame::hideFilterOpts(dwt::Widget* w) {
+	if(w != filter.text && w != filter.column && w != filter.method) {
+		filterOpts->setEnabled(false);
+		filterOpts->setVisible(false);
 	}
 }
 

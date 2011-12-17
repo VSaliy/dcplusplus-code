@@ -32,6 +32,7 @@
 #include <dwt/widgets/Button.h>
 #include <dwt/widgets/CheckBox.h>
 #include <dwt/widgets/GroupBox.h>
+#include <dwt/widgets/Label.h>
 #include <dwt/widgets/TabView.h>
 #include <dwt/widgets/Tree.h>
 
@@ -45,6 +46,7 @@ using std::unordered_map;
 using dwt::Button;
 using dwt::CheckBox;
 using dwt::GroupBox;
+using dwt::Label;
 using dwt::Menu;
 using dwt::TextBox;
 using dwt::TabView;
@@ -68,7 +70,7 @@ class MainWindow;
 struct ColumnInfo {
 	const char* name;
 	const int size;
-	const bool rightAlign;
+	const bool numerical;
 };
 
 class WinUtil {
@@ -139,6 +141,7 @@ public:
 		static const CheckBox::Seed checkBox;
 		static const CheckBox::Seed splitCheckBox; // +/-
 		static const GroupBox::Seed group;
+		static const Label::Seed label;
 		static const Menu::Seed menu;
 		static const Table::Seed table;
 		static const TextBox::Seed textBox;

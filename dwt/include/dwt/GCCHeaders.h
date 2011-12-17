@@ -90,6 +90,21 @@ typedef struct
 #endif
 #endif
 
+#ifndef ECM_FIRST
+#define ECM_FIRST               0x1500
+#endif
+#ifndef EM_SETCUEBANNER
+#define EM_SETCUEBANNER     (ECM_FIRST + 1)
+#endif
+#ifndef Edit_SetCueBannerText
+#define Edit_SetCueBannerText(hwnd, lpcwText) \
+        (BOOL)SNDMSG((hwnd), EM_SETCUEBANNER, 0, (LPARAM)(lpcwText))
+#endif
+#ifndef Edit_SetCueBannerTextFocused
+#define Edit_SetCueBannerTextFocused(hwnd, lpcwText, fDrawFocused) \
+        (BOOL)SNDMSG((hwnd), EM_SETCUEBANNER, (WPARAM)fDrawFocused, (LPARAM)lpcwText)
+#endif
+
 // defs for the notification area & balloons
 #ifndef NIIF_INFO
 #define NIIF_INFO 0x1

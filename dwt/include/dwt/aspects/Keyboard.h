@@ -111,7 +111,6 @@ class Keyboard : public KeyboardBase
 
 	HWND H() const { return W().handle(); }
 
-	typedef std::function<void ()> FocusF;
 	typedef std::function<bool (int)> KeyF;
 
 public:
@@ -130,23 +129,21 @@ public:
 		return ::GetFocus() == H();
 	}
 
-	/// \ingroup EventHandlersaspects::AspectFocus
-	/// Sets the event handler for what function to be called when control loses focus.
-	/** This function will be called just after the Widget is losing focus and just
-	  * before the other Widget which is supposed to get focus retrieves it. No
-	  * parameters are passed.
-	  */
-	void onKillFocus(FocusF f) {
-		onFocus(WM_KILLFOCUS, f);
+	/** set the function to be called when the control gains focus. */
+	void onFocus(std::function<void ()> f) {
+		W().addCallback(Message(WM_SETFOCUS), [f](const MSG&, LRESULT&) -> bool {
+			f();
+			return false;
+		});
 	}
 
-	/// \ingroup EventHandlersaspects::AspectFocus
-	/// Sets the event handler for what function to be called when control loses focus.
-	/** This function will be called just after the Widget has gained focus. No
-	  * parameters are passed.
-	  */
-	void onFocus(FocusF f) {
-		onFocus(WM_SETFOCUS, f);
+	/** set the function to be called before the control looses focus. the control being activated,
+	if available, will be passed as a parameter. */
+	void onKillFocus(std::function<void (Widget*)> f) {
+		W().addCallback(Message(WM_KILLFOCUS), [f](const MSG& msg, LRESULT&) -> bool {
+			f(msg.wParam ? hwnd_cast<Widget*>(reinterpret_cast<HWND>(msg.wParam)) : nullptr);
+			return false;
+		});
 	}
 
 	/// \ingroup EventHandlersaspects::Keyboard
@@ -189,13 +186,6 @@ private:
 	void onKey(unsigned message, KeyF f) {
 		W().addCallback(Message(message), [f](const MSG& msg, LRESULT&) -> bool {
 			return f(static_cast<int>(msg.wParam));
-		});
-	}
-
-	void onFocus(unsigned message, FocusF f) {
-		W().addCallback(Message(message), [f](const MSG&, LRESULT&) -> bool {
-			f();
-			return false;
 		});
 	}
 };
