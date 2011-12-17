@@ -105,10 +105,14 @@ private:
  * Compares two values
  * @return -1 if v1 < v2, 0 if v1 == v2 and 1 if v1 > v2
  */
-template<typename T1>
-inline int compare(const T1& v1, const T1& v2) { return (v1 < v2) ? -1 : ((v1 == v2) ? 0 : 1); }
+template<typename T>
+inline int compare(const T& v1, const T& v2) {
+	static_assert(!std::is_same<T, string>::value && !std::is_same<T, wstring>::value, "trying to numerically compare strings");
 
-template<typename T1> inline double fraction(T1 a, T1 b) { return static_cast<double>(a) / b; }
+	return (v1 < v2) ? -1 : ((v1 == v2) ? 0 : 1);
+}
+
+template<typename T> inline double fraction(T a, T b) { return static_cast<double>(a) / b; }
 
 /** Uses SFINAE to determine whether a type provides a function; stores the result in "value".
 Inspired by <http://stackoverflow.com/questions/257288#264088>. */

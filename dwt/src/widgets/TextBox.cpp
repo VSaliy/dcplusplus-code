@@ -35,6 +35,7 @@
 #include <dwt/Texts.h>
 #include <dwt/WidgetCreator.h>
 #include <dwt/util/check.h>
+#include <dwt/util/win32/Version.h>
 
 namespace dwt {
 
@@ -86,6 +87,14 @@ void TextBox::setText(const tstring& txt) {
 	if(hasStyle(ES_MULTILINE)) {
 		sendCommand(EN_UPDATE);
 		sendCommand(EN_CHANGE);
+	}
+}
+
+void TextBox::setCue(const tstring& text) {
+	if(util::win32::ensureVersion(util::win32::VISTA)) {
+		Edit_SetCueBannerTextFocused(handle(), text.c_str(), TRUE);
+	} else {
+		Edit_SetCueBannerText(handle(), text.c_str());
 	}
 }
 

@@ -234,6 +234,10 @@ public:
 
 	void setText(const tstring& txt);
 
+	/** Set a "cue banner text", a text that will be displayed in dim color when the control
+	doesn't have any text set. Only works for single-line controls. */
+	void setCue(const tstring& text);
+
 	/// Returns the current selected text from the text box
 	/** The selected text of the text box is the return value from this.
 	  */

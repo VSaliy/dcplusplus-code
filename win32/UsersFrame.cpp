@@ -106,51 +106,29 @@ static const FieldName fields[] =
 
 UsersFrame::UsersFrame(TabViewPtr parent) :
 BaseType(parent, T_("Users"), IDH_USERS, IDI_USERS, false),
-filterGrid(0),
+grid(0),
 users(0),
+scroll(0),
 userInfo(0),
-splitter(0),
-filter(0),
-scroll(0)
+filter(usersColumns, COLUMN_LAST, [this] { updateList(); })
 {
-	filterGrid = addChild(Grid::Seed(1, 6));
-
-	filterGrid->addChild(Label::Seed(T_("Nick filter:")));
-	filter = filterGrid->addChild(WinUtil::Seeds::textBox);
-	filter->setHelpId(IDH_USERS_FILTER_NICK);
-	filter->onUpdated([this] { handleFilterUpdated(); });
-	filterGrid->column(1).mode = GridInfo::FILL;
+	grid = addChild(Grid::Seed(2, 1));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(0).mode = GridInfo::FILL;
+	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		auto addFilterBox = [this](const tstring& text, SettingsManager::IntSetting setting, unsigned helpId) {
-			auto box = filterGrid->addChild(WinUtil::Seeds::checkBox);
-			box->setHelpId(helpId);
-			box->setText(text);
-			box->setChecked(SettingsManager::getInstance()->getBool(setting, true));
-			box->onClicked([=] {
-				SettingsManager::getInstance()->set(setting, box->getChecked());
-				handleFilterUpdated();
-			});
-		};
+		auto splitter = grid->addChild(SplitterContainer::Seed(0.7));
 
-		addFilterBox(T_("Online"), SettingsManager::USERS_FILTER_ONLINE, IDH_USERS_FILTER_ONLINE);
-		addFilterBox(T_("Favorite"), SettingsManager::USERS_FILTER_FAVORITE, IDH_USERS_FILTER_FAVORITE);
-		addFilterBox(T_("Pending download"), SettingsManager::USERS_FILTER_QUEUE, IDH_USERS_FILTER_QUEUE);
-		addFilterBox(T_("Pending upload"), SettingsManager::USERS_FILTER_WAITING, IDH_USERS_FILTER_WAITING);
-	}
+		if(!userIcons) {
+			const dwt::Point size(16, 16);
+			userIcons = dwt::ImageListPtr(new dwt::ImageList(size));
+			userIcons->add(dwt::Icon(IDI_FAVORITE_USER_OFF, size));
+			userIcons->add(dwt::Icon(IDI_FAVORITE_USER_ON, size));
+			userIcons->add(dwt::Icon(IDI_GRANT_SLOT_OFF, size));
+			userIcons->add(dwt::Icon(IDI_GRANT_SLOT_ON, size));
+		}
 
-	splitter = addChild(SplitterContainer::Seed(0.7));
-
-	if(!userIcons) {
-		const dwt::Point size(16, 16);
-		userIcons = dwt::ImageListPtr(new dwt::ImageList(size));
-		userIcons->add(dwt::Icon(IDI_FAVORITE_USER_OFF, size));
-		userIcons->add(dwt::Icon(IDI_FAVORITE_USER_ON, size));
-		userIcons->add(dwt::Icon(IDI_GRANT_SLOT_OFF, size));
-		userIcons->add(dwt::Icon(IDI_GRANT_SLOT_ON, size));
-	}
-
-	{
 		WidgetUsers::Seed cs(WinUtil::Seeds::table);
 		cs.lvStyle |= LVS_EX_SUBITEMIMAGES;
 		users = splitter->addChild(cs);
@@ -166,11 +144,48 @@ scroll(0)
 		users->onSelectionChanged([this] { handleSelectionChanged(); });
 		users->setSmallImageList(userIcons);
 		users->onLeftMouseDown([this](const dwt::MouseEvent &me) { return handleClick(me); });
+
+		scroll = splitter->addChild(dwt::ScrolledContainer::Seed());
+		userInfo = scroll->addChild(Grid::Seed(0, 1));
 	}
 
 	{
-		scroll = splitter->addChild(dwt::ScrolledContainer::Seed());
-		userInfo = scroll->addChild(Grid::Seed(0, 1));
+		auto cur = grid->addChild(Grid::Seed(1, 8));
+		cur->column(1).mode = GridInfo::FILL;
+
+		auto ls = WinUtil::Seeds::label;
+		ls.caption = T_("Filter:");
+		cur->addChild(ls);
+
+		filter.createTextBox(cur);
+		filter.text->setHelpId(IDH_USERS_FILTER);
+		filter.text->setCue(T_("Filter users"));
+		addWidget(filter.text);
+
+		filter.createColumnBox(cur);
+		filter.column->setHelpId(IDH_USERS_FILTER);
+		addWidget(filter.column);
+
+		filter.createMethodBox(cur);
+		filter.method->setHelpId(IDH_USERS_FILTER);
+		addWidget(filter.method);
+
+		auto addFilterBox = [this, cur](const tstring& text, SettingsManager::IntSetting setting, unsigned helpId) {
+			auto box = cur->addChild(WinUtil::Seeds::checkBox);
+			box->setHelpId(helpId);
+			addWidget(box);
+			box->setText(text);
+			box->setChecked(SettingsManager::getInstance()->getBool(setting, true));
+			box->onClicked([=] {
+				SettingsManager::getInstance()->set(setting, box->getChecked());
+				updateList();
+			});
+		};
+
+		addFilterBox(T_("Online"), SettingsManager::USERS_FILTER_ONLINE, IDH_USERS_FILTER_ONLINE);
+		addFilterBox(T_("Favorite"), SettingsManager::USERS_FILTER_FAVORITE, IDH_USERS_FILTER_FAVORITE);
+		addFilterBox(T_("Pending download"), SettingsManager::USERS_FILTER_QUEUE, IDH_USERS_FILTER_QUEUE);
+		addFilterBox(T_("Pending upload"), SettingsManager::USERS_FILTER_WAITING, IDH_USERS_FILTER_WAITING);
 	}
 
 	{
@@ -189,32 +204,23 @@ scroll(0)
 
 	initStatus();
 
-	addAccel(FALT, 'I', [this] { filter->setFocus(); });
+	addAccel(FALT, 'I', [this] { filter.text->setFocus(); });
 	initAccels();
 
 	layout();
 
-	handleFilterUpdated();
+	updateList();
 }
 
 UsersFrame::~UsersFrame() {
 }
 
 void UsersFrame::layout() {
-	dwt::Rectangle r(dwt::Point(0, 0), getClientSize());
+	dwt::Rectangle r(getClientSize());
 
 	r.size.y -= status->refresh();
 
-	auto r2 = r;
-	auto r2y = filter->getPreferredSize().y;
-	r2.pos.y = r2.pos.y + r2.size.y - r2y;
-	r2.size.y = r2y;
-
-	filterGrid->resize(r2);
-
-	r.size.y -= filter->getWindowSize().y + 3;
-
-	splitter->resize(r);
+	grid->resize(r);
 }
 
 bool UsersFrame::preClosing() {
@@ -494,11 +500,16 @@ bool UsersFrame::handleClick(const dwt::MouseEvent &me) {
 	return true;
 }
 
-void UsersFrame::handleFilterUpdated() {
+void UsersFrame::updateList() {
+	auto i = userInfos.begin();
+
+	auto filterPrep = filter.prepare();
+	auto filterInfoF = [this, &i](int column) { return Text::fromT(i->second.getText(column)); };
+
 	HoldRedraw h(users);
 	users->clear();
-	for(auto i = userInfos.begin(); i != userInfos.end(); ++i) {
-		if(matches(i->second)) {
+	for(; i != userInfos.end(); ++i) {
+		if((filter.empty() || filter.match(filterPrep, filterInfoF)) && show(i->second.getUser(), false)) {
 			i->second.update(i->first, true);
 			users->insert(&i->second);
 		}
@@ -506,8 +517,7 @@ void UsersFrame::handleFilterUpdated() {
 }
 
 bool UsersFrame::matches(const UserInfo &ui) {
-	auto txt = filter->getText();
-	if(!txt.empty() && Util::findSubString(ui.columns[COLUMN_NICK], txt) == string::npos) {
+	if(!filter.empty() && !filter.match(filter.prepare(), [this, &ui](int column) { return Text::fromT(ui.getText(column)); })) {
 		return false;
 	}
 

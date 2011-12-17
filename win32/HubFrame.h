@@ -19,17 +19,18 @@
 #ifndef DCPLUSPLUS_WIN32_HUB_FRAME_H
 #define DCPLUSPLUS_WIN32_HUB_FRAME_H
 
-#include <dcpp/OnlineUser.h>
 #include <dcpp/forward.h>
+#include <dcpp/OnlineUser.h>
 #include <dcpp/ClientListener.h>
 #include <dcpp/TaskQueue.h>
 #include <dcpp/User.h>
 #include <dcpp/FavoriteManagerListener.h>
 
-#include "MDIChildFrame.h"
-#include "IRecent.h"
 #include "AspectChat.h"
 #include "AspectUserCommand.h"
+#include "ListFilter.h"
+#include "IRecent.h"
+#include "MDIChildFrame.h"
 #include "UserInfoBase.h"
 
 class HubFrame :
@@ -83,16 +84,6 @@ public:
 
 private:
 	friend class MainWindow;
-
-	enum FilterModes{
-		NONE,
-		EQUAL,
-		GREATER_EQUAL,
-		LESS_EQUAL,
-		GREATER,
-		LESS,
-		NOT_EQUAL
-	};
 
 	enum {
 		COLUMN_FIRST,
@@ -166,8 +157,9 @@ private:
 	typedef WidgetUsers* WidgetUsersPtr;
 	WidgetUsersPtr users;
 
-	TextBoxPtr filter;
-	ComboBoxPtr filterType;
+	ListFilter filter;
+	GridPtr filterOpts;
+
 	CheckBoxPtr showUsers;
 
 	UserMap userMap;
@@ -185,8 +177,6 @@ private:
 	TaskQueue tasks; // todo get rid of TaskQueue
 
 	UserInfo* currentUser; /// only for situations when the user list is hidden
-
-	tstring filterString;
 
 	ParamMap ucLineParams;
 	bool hubMenu;
@@ -249,9 +239,8 @@ private:
 	void handleReconnect();
 	void handleFollow();
 
-	void handleFilterUpdated();
-	bool parseFilter(FilterModes& mode, int64_t& size);
-	bool matchFilter(const UserInfo& ui, int sel, bool doSizeCompare = false, FilterModes mode = NONE, int64_t size = 0);
+	void showFilterOpts();
+	void hideFilterOpts(dwt::Widget* w);
 
 	string getLogPath(bool status = false) const;
 	void openLog(bool status = false);

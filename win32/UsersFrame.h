@@ -19,13 +19,13 @@
 #ifndef DCPLUSPLUS_WIN32_USERS_FRAME_H
 #define DCPLUSPLUS_WIN32_USERS_FRAME_H
 
-#include <dcpp/FavoriteManagerListener.h>
 #include <dcpp/ClientManagerListener.h>
-#include <dcpp/UploadManagerListener.h>
+#include <dcpp/FavoriteManagerListener.h>
 #include <dcpp/QueueManagerListener.h>
+#include <dcpp/UploadManagerListener.h>
 
+#include "ListFilter.h"
 #include "StaticFrame.h"
-#include "WinUtil.h"
 #include "UserInfoBase.h"
 
 class UsersFrame :
@@ -115,17 +115,16 @@ private:
 		bool grantSlot;
 	};
 
+	GridPtr grid;
+
 	typedef TypedTable<UserInfo, false> WidgetUsers;
 	typedef WidgetUsers* WidgetUsersPtr;
-
-	GridPtr filterGrid;
-
 	WidgetUsersPtr users;
-	GridPtr userInfo;
-	SplitterContainerPtr splitter;
 
-	TextBoxPtr filter;
 	dwt::ScrolledContainerPtr scroll;
+	GridPtr userInfo;
+
+	ListFilter filter;
 
 	static dwt::ImageListPtr userIcons;
 
@@ -141,9 +140,9 @@ private:
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	void handleSelectionChanged();
 	bool handleClick(const dwt::MouseEvent &me);
-	void handleFilterUpdated();
-	bool matches(const UserInfo& ui);
 
+	void updateList();
+	bool matches(const UserInfo& ui);
 	bool show(const UserPtr& u, bool any) const;
 
 	// AspectUserInfo

@@ -19,9 +19,10 @@
 #ifndef DCPLUSPLUS_WIN32_PUBLIC_HUBS_FRAME_H
 #define DCPLUSPLUS_WIN32_PUBLIC_HUBS_FRAME_H
 
-#include <dcpp/HubEntry.h>
 #include <dcpp/FavoriteManagerListener.h>
+#include <dcpp/HubEntry.h>
 
+#include "ListFilter.h"
 #include "StaticFrame.h"
 
 class PublicHubsFrame :
@@ -64,22 +65,12 @@ private:
 		COLUMN_LAST
 	};
 
-	enum FilterModes{
-		NONE,
-		EQUAL,
-		GREATER_EQUAL,
-		LESS_EQUAL,
-		GREATER,
-		LESS,
-		NOT_EQUAL
-	};
-
 	class HubInfo {
 	public:
 		HubInfo(const HubEntry* entry_);
 
-		static int compareItems(const HubInfo* a, const HubInfo* b, int col);
 		const tstring& getText(int column) const { return columns[column]; }
+		static int compareItems(const HubInfo* a, const HubInfo* b, int col);
 
 		const HubEntry* entry;
 
@@ -96,15 +87,13 @@ private:
 	typedef WidgetHubs* WidgetHubsPtr;
 	WidgetHubsPtr hubs;
 
-	TextBoxPtr filter;
-	ComboBoxPtr filterSel;
+	ListFilter filter;
+
 	ComboBoxPtr lists;
 	GridPtr listsGrid;
 
 	size_t visibleHubs;
 	int users;
-
-	string filterString;
 
 	HubEntryList entries;
 
@@ -119,15 +108,12 @@ private:
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 	bool handleKeyDown(int c);
 	void handleListSelChanged();
-	void handleFilterUpdated();
 
 	void updateStatus();
 	void updateList();
 	void updateDropDown();
 	void openSelected();
-
-	bool parseFilter(FilterModes& mode, double& size);
-	bool matchFilter(const HubEntry& entry, const int& sel, bool doSizeCompare, const FilterModes& mode, const double& size);
+	string getText(const HubEntry& entry, size_t column) const;
 
 	void onFinished(const tstring& s, bool success);
 

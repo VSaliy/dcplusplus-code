@@ -108,7 +108,7 @@ private:
 };
 
 bool StringMatch::match(const string& str) const {
-	return boost::apply_visitor(Match(str), search);
+	return !str.empty() && boost::apply_visitor(Match(str), search);
 }
 
 } // namespace dcpp

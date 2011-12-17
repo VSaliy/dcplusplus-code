@@ -23,6 +23,7 @@
 
 #include "HoldRedraw.h"
 #include "RichTextBox.h"
+#include "WinUtil.h"
 
 template<typename T>
 class AspectChat {

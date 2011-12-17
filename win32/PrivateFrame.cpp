@@ -137,9 +137,13 @@ online(replyTo.getUser().user->isOnline())
 	initStatus();
 
 	hubGrid = addChild(Grid::Seed(1, 2));
-	hubGrid->addChild(Label::Seed(T_("Messages to go through : ")));
+	{
+		auto seed = WinUtil::Seeds::label;
+		seed.caption = T_("Hub to send messages through:");
+		hubGrid->addChild(seed);
+	}
 	hubBox = hubGrid->addChild(WinUtil::Seeds::comboBox);
-	
+
 	status->onDblClicked(STATUS_STATUS, [this] { openLog(); });
 
 	initAccels();
