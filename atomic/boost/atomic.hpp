@@ -121,7 +121,8 @@ typedef atomic<bool> atomic_bool;
 
 class atomic_flag {
 public:
-	atomic_flag(void) : v_(false) {}
+	atomic_flag() : v_(false) {}
+	atomic_flag(bool b) : v_(b) {}
 	
 	bool
 	test_and_set(memory_order order = memory_order_seq_cst)
