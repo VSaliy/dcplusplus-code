@@ -60,7 +60,7 @@ private:
 	unique_ptr<Mapper> working; /// currently working implementation.
 	uint64_t renewal; /// when the next renewal should happen, if requested by the mapper.
 
-	MappingManager() : renewal(0) { }
+	MappingManager() : busy(false), renewal(0) { }
 	virtual ~MappingManager() { }
 
 	int run();
