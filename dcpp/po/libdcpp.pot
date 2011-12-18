@@ -8,184 +8,225 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libdcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2011-01-03 21:20+0100\n"
+"POT-Creation-Date: 2011-12-18 19:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: dcpp\UPnPManager.cpp:83
-#, boost-format
-msgid " Encrypted Transfer Port (%1% TCP)"
-msgstr ""
-
-#: dcpp\UPnPManager.cpp:88
-#, boost-format
-msgid " Search Port (%1% UDP)"
-msgstr ""
-
-#: dcpp\UPnPManager.cpp:78
-#, boost-format
-msgid " Transfer Port (%1% TCP)"
-msgstr ""
-
-#: dcpp\Util.cpp:517
+#: dcpp\Util.cpp:550
 #, c-format, boost-format
 msgid "%'lld B"
 msgstr ""
 
-#: dcpp\Util.cpp:479
+#: dcpp\Util.cpp:512
 #, c-format, boost-format
 msgid "%.02f GiB"
 msgstr ""
 
-#: dcpp\Util.cpp:475
+#: dcpp\Util.cpp:508
 #, c-format, boost-format
 msgid "%.02f KiB"
 msgstr ""
 
-#: dcpp\Util.cpp:477
+#: dcpp\Util.cpp:510
 #, c-format, boost-format
 msgid "%.02f MiB"
 msgstr ""
 
-#: dcpp\Util.cpp:483
+#: dcpp\Util.cpp:516
 #, c-format, boost-format
 msgid "%.02f PiB"
 msgstr ""
 
-#: dcpp\Util.cpp:481
+#: dcpp\Util.cpp:514
 #, c-format, boost-format
 msgid "%.02f TiB"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:148
+#: dcpp\UserMatchManager.cpp:99
+#, boost-format
+msgid "%1% %2% (added by %3%)"
+msgstr ""
+
+#: dcpp\MappingManager.cpp:98 dcpp\MappingManager.cpp:135
+#, boost-format
+msgid "%1% %2% port (%3% %4%)"
+msgstr ""
+
+#: dcpp\HttpConnection.cpp:146 dcpp\HttpConnection.cpp:208
+#, boost-format
+msgid "%1% (%2%)"
+msgstr ""
+
+#: dcpp\AdcHub.cpp:157
 #, boost-format
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr ""
 
-#: dcpp\NmdcHub.cpp:288
+#: dcpp\NmdcHub.cpp:291
 #, boost-format
 msgid "%1% (Nick unknown)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:860
+#: dcpp\HashManager.cpp:866
 #, boost-format
 msgid "%1% not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr ""
 
-#: dcpp\AdcHub.cpp:297
+#: dcpp\AdcHub.cpp:303
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:300
+#: dcpp\AdcHub.cpp:306
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:185
+#: dcpp\QueueManager.cpp:1824 dcpp\Transfer.cpp:91 dcpp\User.cpp:141
 #, boost-format
 msgid "%1%/s"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:489
+#: dcpp\DownloadManager.cpp:487
 #, boost-format
 msgid "%1%: File not available"
 msgstr ""
 
-#: dcpp\Util.cpp:473
+#: dcpp\Util.cpp:506
 #, c-format, boost-format
 msgid "%d B"
 msgstr ""
 
-#: dcpp\Util.cpp:513
+#: dcpp\Util.cpp:546
 #, c-format, boost-format
 msgid "%s B"
 msgstr ""
 
-#: dcpp\ADLSearch.cpp:38
+#: dcpp\ADLSearch.cpp:35
 msgid "<Enter string>"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:633
+#: dcpp\QueueManager.cpp:624
 msgid "A file with a different TTH root already exists in the queue"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:630
+#: dcpp\QueueManager.cpp:621
 msgid "A file with a different size already exists in the queue"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:576
+#: dcpp\QueueManager.cpp:568
 msgid "A file with the same hash already exists in your share"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:193
+#: dcpp\ConnectivityManager.cpp:177
+msgid "Active mode behind a router"
+msgstr ""
+
+#: dcpp\ConnectivityManager.cpp:208
+msgid "Active mode could not be achieved; a manual configuration is recommended for better connectivity"
+msgstr ""
+
+#: dcpp\ConnectionManager.cpp:176
 msgid "All download slots taken"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:46
-msgid "Another UPnP port mapping attempt is in progress..."
-msgstr ""
-
-#: dcpp\SearchManager.cpp:33
-msgid "Any"
-msgstr ""
-
-#: dcpp\SearchManager.cpp:34
-msgid "Audio"
-msgstr ""
-
-#: dcpp\FavoriteManager.cpp:489
-msgid "Auto-connect group (converted)"
-msgstr ""
-
-#: dcpp\ConnectivityManager.cpp:117
-msgid "Automatic setup of active mode has failed. You may want to set up your connection manually for better connectivity"
-msgstr ""
-
-#: dcpp\QueueManager.cpp:1732 dcpp\QueueManager.cpp:1741
-msgid "CRC32 inconsistency (SFV-Check)"
+#: dcpp\MappingManager.cpp:49
+msgid "Another port mapping attempt is in progress..."
 msgstr ""
 
 #: dcpp\SearchManager.cpp:35
+msgid "Any"
+msgstr ""
+
+#: dcpp\SearchManager.cpp:36
+msgid "Audio"
+msgstr ""
+
+#: dcpp\FavoriteManager.cpp:495
+msgid "Auto-connect group (converted)"
+msgstr ""
+
+#: dcpp\QueueManager.cpp:1740
+msgid "CRC32 inconsistency (SFV-Check)"
+msgstr ""
+
+#: dcpp\QueueManager.cpp:1731
+#, boost-format
+msgid "CRC32 inconsistency (SFV-Check): %1%"
+msgstr ""
+
+#: dcpp\SearchManager.cpp:37
 msgid "Compressed"
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:185 dcpp\SSLSocket.cpp:154
+#: dcpp\ConnectivityManager.cpp:172
+#, boost-format
+msgid "Connection behind a router that %1% has configured with %2%"
+msgstr ""
+
+#: dcpp\BufferedSocket.cpp:196 dcpp\SSLSocket.cpp:154
 msgid "Connection closed"
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:154 dcpp\BufferedSocket.cpp:170
-#: dcpp\ConnectionManager.cpp:200 dcpp\Socket.cpp:161
+#: dcpp\BufferedSocket.cpp:163 dcpp\BufferedSocket.cpp:181
+#: dcpp\ConnectionManager.cpp:183 dcpp\Socket.cpp:361
 msgid "Connection timeout"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:269
+#: dcpp\ConnectionManager.cpp:260
 #, boost-format
 msgid "Connectivity error: %1%"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:261
+#: dcpp\ConnectivityManager.cpp:193
+#, boost-format
+msgid ""
+"Connectivity information:\n"
+"\n"
+"Automatic connectivity setup is: %1%\n"
+"\n"
+"\t%2%\n"
+"\tExternal IP: %3%\n"
+"\tTransfer port: %4%\n"
+"\tEncrypted transfer port: %5%\n"
+"\tSearch port: %6%"
+msgstr ""
+
+#: dcpp\ConnectionManager.cpp:252
 msgid "Connectivity restored"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:146
+#: dcpp\ConnectivityManager.cpp:221
 msgid "Connectivity: "
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:234
+#: dcpp\Socket.cpp:325
+msgid "Could not open port for listening"
+msgstr ""
+
+#: dcpp\DownloadManager.cpp:232
 #, boost-format
 msgid "Could not open target file: %1%"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:67
-msgid "Determining connection type..."
+#: dcpp\DCPlusPlus.cpp:120
+msgid "Country information"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:40
+#: dcpp\ConnectivityManager.cpp:93
+msgid "Determining the best connectivity settings..."
+msgstr ""
+
+#: dcpp\ConnectivityManager.cpp:167
+msgid "Direct connection to the Internet (no router)"
+msgstr ""
+
+#: dcpp\SearchManager.cpp:42
 msgid "Directory"
 msgstr ""
 
@@ -197,28 +238,28 @@ msgstr ""
 msgid "Directory is hidden"
 msgstr ""
 
-#: dcpp\DirectoryListing.cpp:163
+#: dcpp\DirectoryListing.cpp:176
 msgid "Directory missing name attribute"
 msgstr ""
 
-#: dcpp\ADLSearch.cpp:474
+#: dcpp\ADLSearch.cpp:414
 msgid "Discard"
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:453
+#: dcpp\BufferedSocket.cpp:465
 msgid "Disconnected"
 msgstr ""
 
-#: dcpp\UploadManager.cpp:454
+#: dcpp\UploadManager.cpp:462
 #, boost-format
 msgid "Disconnected user leaving the hub: %1%"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:36
+#: dcpp\SearchManager.cpp:38
 msgid "Document"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:115
+#: dcpp\DCPlusPlus.cpp:116
 msgid "Download Queue"
 msgstr ""
 
@@ -227,82 +268,97 @@ msgstr ""
 msgid "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %3%"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:708 dcpp\QueueManager.cpp:712
+#: dcpp\QueueManager.cpp:705 dcpp\QueueManager.cpp:709
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr ""
 
-#: dcpp\HashManager.cpp:463
+#: dcpp\MappingManager.cpp:104 dcpp\MappingManager.cpp:147
+msgid "Encrypted transfer"
+msgstr ""
+
+#: dcpp\HttpConnection.cpp:177
+#, boost-format
+msgid "Endless redirection loop (%1%)"
+msgstr ""
+
+#: dcpp\HashManager.cpp:469
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr ""
 
-#: dcpp\BZUtils.cpp:31 dcpp\BZUtils.cpp:52 dcpp\BZUtils.cpp:60
-#: dcpp\ZUtils.cpp:33 dcpp\ZUtils.cpp:54 dcpp\ZUtils.cpp:76 dcpp\ZUtils.cpp:86
+#: dcpp\BZUtils.cpp:33 dcpp\BZUtils.cpp:54 dcpp\BZUtils.cpp:62
+#: dcpp\ZUtils.cpp:36 dcpp\ZUtils.cpp:57 dcpp\ZUtils.cpp:79 dcpp\ZUtils.cpp:89
 msgid "Error during compression"
 msgstr ""
 
-#: dcpp\BZUtils.cpp:72 dcpp\BZUtils.cpp:94 dcpp\BZUtils.cpp:97
-#: dcpp\CryptoManager.cpp:344 dcpp\CryptoManager.cpp:363
-#: dcpp\CryptoManager.cpp:377 dcpp\ZUtils.cpp:100 dcpp\ZUtils.cpp:123
+#: dcpp\BZUtils.cpp:74 dcpp\BZUtils.cpp:96 dcpp\BZUtils.cpp:99
+#: dcpp\CryptoManager.cpp:369 dcpp\CryptoManager.cpp:388
+#: dcpp\CryptoManager.cpp:402 dcpp\ZUtils.cpp:103 dcpp\ZUtils.cpp:126
+#: dcpp\ZUtils.cpp:136
 msgid "Error during decompression"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:154
+#: dcpp\CryptoManager.cpp:146
 msgid "Error generating certificate"
 msgstr ""
 
-#: dcpp\HashManager.cpp:865
+#: dcpp\HashManager.cpp:871
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr ""
 
-#: dcpp\HashManager.cpp:117 dcpp\HashManager.cpp:331
+#: dcpp\HashManager.cpp:120 dcpp\HashManager.cpp:334
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:37
+#: dcpp\SearchManager.cpp:39
 msgid "Executable"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:116
+#: dcpp\MappingManager.cpp:173
 msgid "Failed to create port mappings"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:106
+#: dcpp\MappingManager.cpp:162
 msgid "Failed to get external IP"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:74
+#: dcpp\MappingManager.cpp:130
 #, boost-format
 msgid "Failed to initalize the %1% interface"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:228 dcpp\CryptoManager.cpp:232
-#: dcpp\CryptoManager.cpp:237 dcpp\CryptoManager.cpp:241
+#: dcpp\CryptoManager.cpp:225 dcpp\CryptoManager.cpp:229
+#: dcpp\CryptoManager.cpp:234 dcpp\CryptoManager.cpp:238
 msgid "Failed to load certificate file"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:246 dcpp\CryptoManager.cpp:250
-#: dcpp\CryptoManager.cpp:255 dcpp\CryptoManager.cpp:259
+#: dcpp\CryptoManager.cpp:243 dcpp\CryptoManager.cpp:247
+#: dcpp\CryptoManager.cpp:252 dcpp\CryptoManager.cpp:256
 msgid "Failed to load private key"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:220
+#: dcpp\MappingManager.cpp:138
+#, boost-format
+msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
+msgstr ""
+
+#: dcpp\AdcHub.cpp:225
 msgid "Failed to negotiate base protocol"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:127
+#: dcpp\MappingManager.cpp:186
 #, boost-format
-msgid "Failed to remove port mappings with the %1% interface"
+msgid "Failed to remove port mappings from the %1% device with the %2% interface"
 msgstr ""
 
-#: dcpp\Socket.cpp:409
+#: dcpp\Socket.cpp:593
 msgid "Failed to set up the socks server for UDP relay (check socks address and port)"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:695
+#: dcpp\QueueManager.cpp:692
 msgid "File already exists at the target location"
 msgstr ""
 
@@ -328,53 +384,56 @@ msgstr ""
 msgid "File list refresh initiated"
 msgstr ""
 
-#: dcpp\HashManager.cpp:88
+#: dcpp\HashManager.cpp:91
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr ""
 
-#: dcpp\HashManager.cpp:82
+#: dcpp\HashManager.cpp:85
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:85
+#: dcpp\HashManager.cpp:88
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:313
+#: dcpp\DownloadManager.cpp:311
 msgid "Full tree does not match TTH root"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:221
+#: dcpp\CryptoManager.cpp:218
 msgid "Generated new TLS certificate"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:107
+#: dcpp\MappingManager.cpp:197
+msgid "Generic"
+msgstr ""
+
+#: dcpp\DCPlusPlus.cpp:110
 msgid "Hash database"
 msgstr ""
 
-#: dcpp\HashManager.cpp:767
+#: dcpp\HashManager.cpp:773
 msgid "Hash database rebuilt"
 msgstr ""
 
-#: dcpp\HashManager.cpp:75 dcpp\HashManager.cpp:275
+#: dcpp\HashManager.cpp:78 dcpp\HashManager.cpp:278
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:226
+#: dcpp\AdcHub.cpp:231
 msgid "Hub probably uses an old version of ADC, please encourage the owner to upgrade"
 msgstr ""
 
-#: dcpp\ADLSearch.cpp:138
-#, boost-format
-msgid "Invalid ADL Search regular expression: %1%"
+#: dcpp\UserMatchManager.cpp:99
+msgid "Ignore"
 msgstr ""
 
-#: dcpp\UserConnection.cpp:50 dcpp\UserConnection.cpp:64
-#: dcpp\UserConnection.cpp:132
+#: dcpp\UserConnection.cpp:51 dcpp\UserConnection.cpp:65
+#: dcpp\UserConnection.cpp:133
 msgid "Invalid data"
 msgstr ""
 
@@ -383,39 +442,40 @@ msgstr ""
 msgid "Invalid file name found while hashing folder %1%"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:536
+#: dcpp\StringMatch.cpp:68
+#, boost-format
+msgid "Invalid regular expression: %1%"
+msgstr ""
+
+#: dcpp\SettingsManager.cpp:558
 msgid "Invalid search type name"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:222
+#: dcpp\DownloadManager.cpp:220
 msgid "Invalid size"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:679 dcpp\QueueManager.cpp:687
+#: dcpp\QueueManager.cpp:676 dcpp\QueueManager.cpp:684
 msgid "Invalid target file (missing directory, check default download directory setting)"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:437
+#: dcpp\FavoriteManager.cpp:443
 msgid "Kick user(s)"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:89
-msgid "Local network with possible NAT detected, trying to map the ports using UPnP..."
+#: dcpp\ConnectivityManager.cpp:115
+msgid "Local network with possible NAT detected, trying to map the ports..."
 msgstr ""
 
-#: dcpp\BufferedSocket.cpp:276
+#: dcpp\BufferedSocket.cpp:288
 msgid "Maximum command length exceeded"
 msgstr ""
 
-#: dcpp\Streams.h:140
+#: dcpp\Streams.h:144
 msgid "More bytes written than requested"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:41
-msgid "No UPnP implementation available"
-msgstr ""
-
-#: dcpp\CryptoManager.cpp:143
+#: dcpp\CryptoManager.cpp:134
 msgid "No certificate file chosen"
 msgstr ""
 
@@ -423,42 +483,56 @@ msgstr ""
 msgid "No directory specified"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:140
+#: dcpp\MappingManager.cpp:44
+msgid "No port mapping interface available"
+msgstr ""
+
+#: dcpp\CryptoManager.cpp:131
 msgid "No private key file chosen"
 msgstr ""
 
-#: dcpp\DownloadManager.cpp:378
+#: dcpp\DownloadManager.cpp:376
 msgid "No slots available"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:594
+#: dcpp\SettingsManager.cpp:616
 msgid "No such search type"
 msgstr ""
 
-#: dcpp\UserConnection.cpp:56
+#: dcpp\UserConnection.cpp:57
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:668
+#: dcpp\AdcHub.cpp:684
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
 
-#: dcpp\ClientManager.cpp:153 dcpp\SearchManager.cpp:256
-#: dcpp\SearchManager.cpp:319 dcpp\SearchManager.cpp:321 dcpp\Transfer.cpp:82
-#: dcpp\Transfer.cpp:86
+#: dcpp\ClientManager.cpp:209 dcpp\QueueManager.cpp:1795
+#: dcpp\QueueManager.cpp:1801 dcpp\QueueManager.cpp:1807
+#: dcpp\SearchManager.cpp:255 dcpp\SearchManager.cpp:318
+#: dcpp\SearchManager.cpp:320 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:38
+#: dcpp\ConnectivityManager.cpp:182
+msgid "Passive mode"
+msgstr ""
+
+#: dcpp\SearchManager.cpp:40
 msgid "Picture"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:82
+#: dcpp\MappingManager.cpp:191
+#, boost-format
+msgid "Port mapping: %1%"
+msgstr ""
+
+#: dcpp\ConnectivityManager.cpp:108
 msgid "Public IP address detected, selecting active mode with direct connection"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:441
+#: dcpp\FavoriteManager.cpp:447
 msgid "Redirect user(s)"
 msgstr ""
 
@@ -466,11 +540,7 @@ msgstr ""
 msgid "Remove all subdirectories before adding this one"
 msgstr ""
 
-#: dcpp\BitInputStream.h:40
-msgid "Request to seek beyond the end of data"
-msgstr ""
-
-#: dcpp\DownloadManager.cpp:227
+#: dcpp\DownloadManager.cpp:225
 msgid "Response does not match request"
 msgstr ""
 
@@ -479,51 +549,59 @@ msgstr ""
 msgid "SSL Error: %1% (%2%, %3%)"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:154
+#: dcpp\MappingManager.cpp:105 dcpp\MappingManager.cpp:148
+msgid "Search"
+msgstr ""
+
+#: dcpp\ConnectivityManager.cpp:252
+msgid "Search (UDP)"
+msgstr ""
+
+#: dcpp\SearchManager.cpp:153
 #, boost-format
 msgid "Search disabled: %1%"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:146
+#: dcpp\SearchManager.cpp:145
 msgid "Search enabled again"
 msgstr ""
 
-#: dcpp\ChatMessage.cpp:34
+#: dcpp\DCPlusPlus.cpp:107
+msgid "Security certificates"
+msgstr ""
+
+#: dcpp\ChatMessage.cpp:33
 msgid "Sent "
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:111
+#: dcpp\DCPlusPlus.cpp:113
 msgid "Shared Files"
 msgstr ""
 
-#: dcpp\Socket.cpp:270 dcpp\Socket.cpp:274
+#: dcpp\Socket.cpp:469 dcpp\Socket.cpp:473
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:95
+#: dcpp\MappingManager.cpp:151
 #, boost-format
-msgid "Successfully created port mappings (TCP: %1%, UDP: %2%, TLS: %3%), mapped using the %4% interface"
+msgid "Successfully created port mappings (Transfers: %1%, Encrypted transfers: %2%, Search: %3%) on the %4% device with the %5% interface"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:126
+#: dcpp\MappingManager.cpp:185
 #, boost-format
-msgid "Successfully removed port mappings with the %1% interface"
+msgid "Successfully removed port mappings from the %1% device with the %2% interface"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:129
-msgid "TCP/TLS"
-msgstr ""
-
-#: dcpp\CryptoManager.cpp:223
+#: dcpp\CryptoManager.cpp:220
 #, boost-format
 msgid "TLS disabled, failed to generate certificate: %1%"
 msgstr ""
 
-#: dcpp\CryptoManager.cpp:213
+#: dcpp\CryptoManager.cpp:210
 msgid "TLS disabled, no certificate file set"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:41
+#: dcpp\SearchManager.cpp:43
 msgid "TTH"
 msgstr ""
 
@@ -531,33 +609,28 @@ msgstr ""
 msgid "TTH inconsistency"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:997
+#: dcpp\QueueManager.cpp:995
 msgid "Target file is missing or wrong size"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:674 dcpp\QueueManager.cpp:683
+#: dcpp\QueueManager.cpp:671 dcpp\QueueManager.cpp:680
 msgid "Target filename too long"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:989
+#: dcpp\QueueManager.cpp:987
 msgid "Target removed"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:79 dcpp\UPnPManager.cpp:84 dcpp\UPnPManager.cpp:89
-#, boost-format
-msgid "The %1% interface has failed to map the %2% %3% port"
-msgstr ""
-
-#: dcpp\Socket.cpp:256
+#: dcpp\Socket.cpp:455
 msgid "The socks server doesn't support login / password authentication"
 msgstr ""
 
-#: dcpp\Socket.cpp:169 dcpp\Socket.cpp:177 dcpp\Socket.cpp:210
-#: dcpp\Socket.cpp:214 dcpp\Socket.cpp:238 dcpp\Socket.cpp:253
+#: dcpp\Socket.cpp:368 dcpp\Socket.cpp:376 dcpp\Socket.cpp:409
+#: dcpp\Socket.cpp:413 dcpp\Socket.cpp:437 dcpp\Socket.cpp:452
 msgid "The socks server failed establish a connection"
 msgstr ""
 
-#: dcpp\Socket.cpp:242
+#: dcpp\Socket.cpp:441
 msgid "The socks server requires authentication"
 msgstr ""
 
@@ -565,90 +638,107 @@ msgstr ""
 msgid "The temporary download directory cannot be shared"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:637
+#: dcpp\QueueManager.cpp:628
 msgid "This file has already finished downloading"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:618
+#: dcpp\QueueManager.cpp:609
 msgid "This file is already queued"
 msgstr ""
 
-#: dcpp\NmdcHub.cpp:941
+#: dcpp\NmdcHub.cpp:951
 #, boost-format
 msgid "This hub is trying to use your client to spam %1%, please urge hub owner to fix this"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:540 dcpp\SettingsManager.cpp:562
+#: dcpp\SettingsManager.cpp:562 dcpp\SettingsManager.cpp:584
 msgid "This search type already exists"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:135
-msgid "UDP"
+#: dcpp\MappingManager.cpp:103 dcpp\MappingManager.cpp:146
+msgid "Transfer"
 msgstr ""
 
-#: dcpp\UPnPManager.cpp:132
-#, boost-format
-msgid "UPnP: %1%"
+#: dcpp\ConnectivityManager.cpp:246
+msgid "Transfer (TCP)"
+msgstr ""
+
+#: dcpp\UserMatchManager.cpp:99
+msgid "Un-ignore"
 msgstr ""
 
 #: dcpp\Thread.cpp:30 dcpp\Thread.cpp:38
 msgid "Unable to create thread"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1049
+#: dcpp\QueueManager.cpp:1047
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1046
+#: dcpp\QueueManager.cpp:1044
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:72
+#: dcpp\ConnectivityManager.cpp:98
 #, boost-format
-msgid "Unable to open %1% port(s). You must set up your connection manually"
+msgid "Unable to open %1% port(s); connectivity settings must be configured manually"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1224
+#: dcpp\QueueManager.cpp:1227
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr ""
 
-#: dcpp\HashManager.cpp:130
+#: dcpp\HashManager.cpp:133
 msgid "Unable to read hash data file"
 msgstr ""
 
-#: dcpp\UploadManager.cpp:150
+#: dcpp\UploadManager.cpp:148
 #, boost-format
 msgid "Unable to send file %1%: %2%"
 msgstr ""
 
-#: dcpp\Util.cpp:207
-msgid "Unknown"
-msgstr ""
-
-#: dcpp\Socket.cpp:61
+#: dcpp\Socket.cpp:199
 #, c-format, boost-format
 msgid "Unknown error: 0x%1$x"
 msgstr ""
 
-#: dcpp\DCPlusPlus.cpp:119
+#: dcpp\Socket.cpp:218
+#, c-format, boost-format
+msgid "Unknown protocol %d"
+msgstr ""
+
+#: dcpp\DCPlusPlus.cpp:103
 msgid "Users"
 msgstr ""
 
-#: dcpp\SearchManager.cpp:39
+#: dcpp\SearchManager.cpp:41
 msgid "Video"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:570
+#: dcpp\QueueManager.cpp:562
 msgid "You're trying to download from yourself!"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:176
+#: dcpp\ConnectivityManager.cpp:160
+msgid "disabled"
+msgstr ""
+
+#: dcpp\SettingsManager.cpp:181 dcpp\SettingsManager.cpp:182
 msgid "downloaded from"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:177
+#: dcpp\ConnectivityManager.cpp:160
+#, boost-format
+msgid "enabled - %1%"
+msgstr ""
+
+#: dcpp\ConnectivityManager.cpp:189
+msgid "undefined"
+msgstr ""
+
+#: dcpp\SettingsManager.cpp:183
 msgid "uploaded to"
 msgstr ""
