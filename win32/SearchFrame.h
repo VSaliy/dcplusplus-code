@@ -19,16 +19,19 @@
 #ifndef DCPLUSPLUS_WIN32_SEARCH_FRAME_H
 #define DCPLUSPLUS_WIN32_SEARCH_FRAME_H
 
+#include <list>
 #include <set>
 
 #include <dcpp/Client.h>
+#include <dcpp/ClientManagerListener.h>
 #include <dcpp/SearchManager.h>
 #include <dcpp/SettingsManager.h>
-#include <dcpp/ClientManagerListener.h>
 
-#include "MDIChildFrame.h"
 #include "AspectUserCommand.h"
+#include "ListFilter.h"
+#include "MDIChildFrame.h"
 
+using std::list;
 using std::set;
 
 class SearchFrame :
@@ -44,7 +47,7 @@ public:
 		STATUS_SHOW_UI,
 		STATUS_STATUS,
 		STATUS_COUNT,
-		STATUS_FILTERED,
+		STATUS_DROPPED,
 		STATUS_LAST
 	};
 
@@ -76,8 +79,7 @@ private:
 		COLUMN_LAST
 	};
 
-	class SearchInfo {
-	public:
+	struct SearchInfo {
 		SearchInfo(const SearchResultPtr& aSR);
 		~SearchInfo();
 
@@ -171,22 +173,22 @@ private:
 
 	ComboBoxPtr fileType;
 
-	CheckBoxPtr slots;
 	bool onlyFree;
-
-	CheckBoxPtr filter;
-	bool filterShared;
-
-	CheckBoxPtr merge;
-	bool bMerge;
+	bool hideShared;
+	bool merge;
 
 	typedef TypedTable<HubInfo> WidgetHubs;
 	typedef WidgetHubs* WidgetHubsPtr;
 	WidgetHubsPtr hubs;
 
-	typedef TypedTable<SearchInfo> WidgetResults;
+	typedef TypedTable<SearchInfo, false> WidgetResults;
 	typedef WidgetResults* WidgetResultsPtr;
 	WidgetResultsPtr results;
+
+	list<SearchInfo> searchResults; /* the LPARAM data of table entries are direct pointers to
+									objects stored by this container, hence the std::list. */
+
+	ListFilter filter;
 
 	SearchManager::TypeModes initialType;
 
@@ -197,8 +199,6 @@ private:
 	TStringList currentSearch;
 	StringList targets;
 
-	CriticalSection cs;
-
 	ParamMap ucLineParams;
 
 	std::string token;
@@ -208,7 +208,7 @@ private:
 
 	void handlePurgeClicked();
 	void handleSlotsClicked();
-	void handleFilterClicked();
+	void handleHideSharedClicked();
 	void handleMergeClicked();
 	LRESULT handleHubItemChanged(WPARAM wParam, LPARAM lParam);
 	bool handleKeyDown(int c);
@@ -239,17 +239,17 @@ private:
 
 	void runUserCommand(const UserCommand& uc);
 	void runSearch();
-	void updateStatusFiltered();
+	void updateStatusCount();
+	void addDropped();
+	void addResult(SearchResultPtr psr);
+	void updateList();
 
 	MenuPtr makeMenu();
 	void addTargetMenu(const MenuPtr& parent, const StringPairList& favoriteDirs, const SearchInfo::CheckTTH& checkTTH);
 	void addTargetDirMenu(const MenuPtr& parent, const StringPairList& favoriteDirs);
 
-	WidgetResultsPtr getUserList() { return results; }
-
 	// SearchManagerListener
-	virtual void on(SearchManagerListener::SR, const SearchResultPtr& aResult) noexcept;
-	void addResult(SearchInfo* si);
+	virtual void on(SearchManagerListener::SR, const SearchResultPtr& sr) noexcept;
 
 	// SettingsManagerListener
 	virtual void on(SettingsManagerListener::SearchTypesChanged) noexcept;
