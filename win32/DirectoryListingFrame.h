@@ -20,15 +20,16 @@
 #define DCPLUSPLUS_WIN32_DIRECTORY_LISTING_FRAME_H
 
 #include <dcpp/forward.h>
-#include <dcpp/FastAlloc.h>
-#include <dcpp/DirectoryListing.h>
 #include <dcpp/ClientManagerListener.h>
+#include <dcpp/DirectoryListing.h>
+#include <dcpp/FastAlloc.h>
+#include <dcpp/StringMatch.h>
 #include <dcpp/User.h>
 
-#include "MDIChildFrame.h"
-#include "IRecent.h"
-#include "UserInfoBase.h"
 #include "AspectUserCommand.h"
+#include "IRecent.h"
+#include "MDIChildFrame.h"
+#include "UserInfoBase.h"
 
 using std::deque;
 
@@ -157,6 +158,7 @@ private:
 
 	GridPtr searchGrid;
 	ComboBoxPtr searchBox;
+	ComboBoxPtr filterMethod;
 
 	typedef TypedTree<ItemInfo> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
@@ -191,7 +193,9 @@ private:
 	bool updating;
 	bool searching;
 
-	static TStringList lastSearches;
+	typedef std::pair<tstring, StringMatch::Method> LastSearchPair;
+	typedef std::vector<std::unique_ptr<LastSearchPair>> LastSearches;
+	static LastSearches lastSearches;
 
 	ParamMap ucLineParams;
 
@@ -217,6 +221,7 @@ private:
 	void addShellPaths(const ShellMenuPtr& menu, const vector<ItemInfo*>& sel);
 	void addUserMenu(const MenuPtr& menu);
 
+	void handleSearchSelChanged();
 	void handleFind(bool reverse);
 	void handleListDiff();
 	void handleMatchQueue();

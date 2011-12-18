@@ -26,7 +26,6 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/ScopedFunctor.h>
-#include <dcpp/StringSearch.h>
 #include <dcpp/WindowInfo.h>
 
 #include <dwt/widgets/FolderDialog.h>
@@ -66,7 +65,7 @@ static const ColumnInfo filesColumns[] = {
 
 DirectoryListingFrame::UserMap DirectoryListingFrame::lists;
 
-TStringList DirectoryListingFrame::lastSearches;
+DirectoryListingFrame::LastSearches DirectoryListingFrame::lastSearches;
 
 int DirectoryListingFrame::ItemInfo::getImage(int col) const {
 	if(col != 0) {
@@ -214,6 +213,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	grid(0),
 	searchGrid(0),
 	searchBox(0),
+	filterMethod(0),
 	dirs(0),
 	files(0),
 	speed(aSpeed),
@@ -235,28 +235,39 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	grid->setSpacing(0);
 
 	{
-		Button::Seed cs = WinUtil::Seeds::button;
-
-		searchGrid = grid->addChild(Grid::Seed(1, 3));
+		searchGrid = grid->addChild(Grid::Seed(1, 4));
 		searchGrid->column(0).mode = GridInfo::FILL;
 
 		searchBox = searchGrid->addChild(WinUtil::Seeds::comboBoxEdit);
 		searchBox->setHelpId(IDH_FILE_LIST_SEARCH_BOX);
+		searchBox->getTextBox()->setCue(T_("Find files"));
 		addWidget(searchBox);
 		searchBox->getTextBox()->onKeyDown([this](int c) { return handleSearchKeyDown(c); });
 		searchBox->getTextBox()->onChar([this] (int c) { return handleSearchChar(c); });
 
-		cs.caption = T_("Find previous");
-		ButtonPtr button = searchGrid->addChild(cs);
+		searchBox->getTextBox()->addRemoveStyle(WS_CLIPCHILDREN, true);
+		WinUtil::addSearchIcon(searchBox->getTextBox());
+
+		filterMethod = searchGrid->addChild(WinUtil::Seeds::comboBox);
+		filterMethod->setHelpId(IDH_FILE_LIST_SEARCH_BOX);
+		addWidget(filterMethod);
+
+		WinUtil::addFilterMethods(filterMethod);
+		filterMethod->setSelected(StringMatch::PARTIAL);
+
+		searchBox->onSelectionChanged([this] { handleSearchSelChanged(); });
+
+		auto seed = WinUtil::Seeds::button;
+		seed.caption = T_("Find previous");
+		ButtonPtr button = searchGrid->addChild(seed);
 		button->setHelpId(IDH_FILE_LIST_FIND_PREV);
 		button->setImage(WinUtil::buttonIcon(IDI_LEFT));
 		button->onClicked([this] { handleFind(true); });
 		addWidget(button);
 
-		cs.caption = T_("Find next");
-		cs.style |= BS_DEFPUSHBUTTON;
-		button = searchGrid->addChild(cs);
-		cs.style &= ~BS_DEFPUSHBUTTON;
+		seed.caption = T_("Find next");
+		seed.style |= BS_DEFPUSHBUTTON;
+		button = searchGrid->addChild(seed);
 		button->setHelpId(IDH_FILE_LIST_FIND_NEXT);
 		button->setImage(WinUtil::buttonIcon(IDI_RIGHT));
 		button->onClicked([this] { handleFind(false); });
@@ -431,6 +442,13 @@ void DirectoryListingFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
 
+void DirectoryListingFrame::handleSearchSelChanged() {
+	auto p = reinterpret_cast<LastSearchPair*>(searchBox->getData(searchBox->getSelected()));
+	if(p) {
+		filterMethod->setSelected(p->second);
+	}
+}
+
 void DirectoryListingFrame::handleFind(bool reverse) {
 	searching = true;
 	findFile(reverse);
@@ -470,8 +488,10 @@ void DirectoryListingFrame::handleFindToggle() {
 		searchGrid->setVisible(false);
 		grid->row(0).mode = GridInfo::STATIC;
 	} else {
-		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i)
-			searchBox->addValue(*i);
+		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i) {
+			auto p = i->get();
+			searchBox->setData(searchBox->addValue(p->first), reinterpret_cast<LPARAM>(p));
+		}
 		searchGrid->setEnabled(true);
 		searchGrid->setVisible(true);
 		grid->row(0).mode = GridInfo::AUTO;
@@ -999,10 +1019,13 @@ void DirectoryListingFrame::findFile(bool reverse) {
 	const tstring findStr = searchBox->getText();
 	if(findStr.empty())
 		return;
+	const auto method = static_cast<StringMatch::Method>(filterMethod->getSelected());
 
 	{
 		// make sure the new search string is at the top of the list
-		auto prev = std::find(lastSearches.begin(), lastSearches.end(), findStr);
+		auto p = make_pair(findStr, method);
+		auto prev = std::find_if(lastSearches.begin(), lastSearches.end(),
+			[p](const std::unique_ptr<LastSearchPair>& ptr) { return *ptr == p; });
 		if(prev == lastSearches.end()) {
 			size_t i = max(SETTING(SEARCH_HISTORY) - 1, 0);
 			while(lastSearches.size() > i) {
@@ -1013,8 +1036,9 @@ void DirectoryListingFrame::findFile(bool reverse) {
 			searchBox->setText(findStr); // it erases the text-box too...
 			lastSearches.erase(prev);
 		}
-		lastSearches.push_back(findStr);
-		searchBox->insertValue(0, findStr);
+		auto ptr = new LastSearchPair(p);
+		lastSearches.push_back(std::unique_ptr<LastSearchPair>(ptr));
+		searchBox->setData(searchBox->insertValue(0, findStr), reinterpret_cast<LPARAM>(ptr));
 	}
 
 	status->setText(STATUS_STATUS, str(TF_("Searching for: %1%") % findStr));
@@ -1046,7 +1070,11 @@ void DirectoryListingFrame::findFile(bool reverse) {
 		}
 	};
 
-	StringSearch search(Text::fromT(findStr));
+	StringMatch matcher;
+	matcher.pattern = Text::fromT(findStr);
+	matcher.setMethod(method);
+	matcher.prepare();
+
 	vector<HTREEITEM> collapse;
 	bool cycle = false;
 	const auto fileSel = files->getSelected();
@@ -1062,7 +1090,7 @@ void DirectoryListingFrame::findFile(bool reverse) {
 		bool found = false;
 		for(reverse ? --pos : ++pos; reverse ? (pos >= 0) : (pos < n); reverse ? --pos : ++pos) {
 			const ItemInfo& ii = *files->getData(pos);
-			if(search.match((ii.type == ItemInfo::FILE) ? ii.file->getName() : ii.dir->getName())) {
+			if(matcher.match((ii.type == ItemInfo::FILE) ? ii.file->getName() : ii.dir->getName())) {
 				found = true;
 				break;
 			}
