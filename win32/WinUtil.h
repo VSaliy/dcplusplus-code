@@ -232,8 +232,9 @@ public:
 		ret.second->onClicked(f_cancel);
 		return ret;
 	}
-
 	static ButtonPtr addHelpButton(GridPtr grid);
+	static void addSearchIcon(TextBoxPtr box);
+	static void addFilterMethods(ComboBoxPtr box);
 
 	static void setColor(dwt::Control* widget);
 

@@ -25,22 +25,25 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <dcpp/SettingsManager.h>
-#include <dcpp/ShareManager.h>
 #include <dcpp/ClientManager.h>
+#include <dcpp/debug.h>
+#include <dcpp/File.h>
 #include <dcpp/HashManager.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/QueueManager.h>
+#include <dcpp/SettingsManager.h>
+#include <dcpp/ShareManager.h>
+#include <dcpp/StringMatch.h>
 #include <dcpp/StringTokenizer.h>
-#include <dcpp/version.h>
-#include <dcpp/File.h>
+#include <dcpp/ThrottleManager.h>
 #include <dcpp/UserCommand.h>
 #include <dcpp/UploadManager.h>
-#include <dcpp/ThrottleManager.h>
 #include <dcpp/UserMatchManager.h>
+#include <dcpp/version.h>
 
 #include <dwt/DWTException.h>
 #include <dwt/LibraryLoader.h>
+#include <dwt/WidgetCreator.h>
 #include <dwt/util/GDI.h>
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/LoadDialog.h>
@@ -1037,6 +1040,29 @@ ButtonPtr WinUtil::addHelpButton(GridPtr grid) {
 	button->setHelpId(IDH_DCPP_HELP);
 	button->setImage(buttonIcon(IDI_HELP));
 	return button;
+}
+
+void WinUtil::addSearchIcon(TextBoxPtr box) {
+	// add a search icon by creating a transparent label on top of the text control.
+
+	dcassert(box->hasStyle(WS_CLIPCHILDREN));
+
+	// structure of the right border: text | spacing | icon | margin | right border
+	const int spacing = 2, size = 16;
+	const auto margin = HIWORD(box->sendMessage(EM_GETMARGINS));
+	box->sendMessage(EM_SETMARGINS, EC_RIGHTMARGIN, MAKELONG(0, spacing + size + margin));
+
+	auto label = dwt::WidgetCreator<Label>::create(box, Label::Seed(IDI_SEARCH));
+	label->onRaw([](WPARAM, LPARAM) { return reinterpret_cast<LRESULT>(::GetStockObject(NULL_BRUSH)); }, dwt::Message(WM_CTLCOLOR));
+	box->onSized([box, label, size, margin](const dwt::SizedEvent&) {
+		auto sz = box->getClientSize();
+		label->resize(dwt::Rectangle(sz.x - margin - size, std::max(sz.y - size, 0L) / 2, size, size));
+	});
+}
+
+void WinUtil::addFilterMethods(ComboBoxPtr box) {
+	tstring methods[StringMatch::METHOD_LAST] = { T_("Partial match"), T_("Exact match"), T_("Regular Expression") };
+	std::for_each(methods, methods + StringMatch::METHOD_LAST, [box](const tstring& str) { box->addValue(str); });
 }
 
 void WinUtil::setColor(dwt::Control* widget) {

@@ -216,8 +216,7 @@ void UserMatchDlg::addRow(const UserMatch::Rule* rule) {
 	std::for_each(fields, fields + UserMatch::Rule::FIELD_LAST, [field](const tstring& str) { field->addValue(str); });
 	field->setSelected(rule ? rule->field : 0);
 
-	tstring methods[UserMatch::Rule::METHOD_LAST] = { T_("Partial match"), T_("Exact match"), T_("Regular Expression") };
-	std::for_each(methods, methods + UserMatch::Rule::METHOD_LAST, [method](const tstring& str) { method->addValue(str); });
+	WinUtil::addFilterMethods(method);
 	method->setSelected(rule ? rule->getMethod() : 0);
 
 	if(rule) {

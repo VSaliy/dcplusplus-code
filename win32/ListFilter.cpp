@@ -19,10 +19,6 @@
 #include "stdafx.h"
 #include "ListFilter.h"
 
-#include <dwt/WidgetCreator.h>
-
-#include "resource.h"
-
 ListFilter::ListFilter(const ColumnInfo* columns, size_t colCount, UpdateF updateF) :
 columns(columns),
 colCount(colCount),
@@ -33,24 +29,11 @@ updateF(updateF)
 void ListFilter::createTextBox(GridPtr grid) {
 	auto seed = WinUtil::Seeds::textBox;
 	seed.style |= ES_AUTOHSCROLL | WS_CLIPCHILDREN;
-	seed.exStyle |= WS_EX_TRANSPARENT;
 	text = grid->addChild(seed);
 
 	text->onUpdated([this] { textUpdated(); });
 
-	// add a search icon by creating a transparent label on top of the text control.
-
-	// structure of the right border: text | spacing | icon | margin | right border
-	const int spacing = 2, size = 16;
-	const auto margin = HIWORD(text->sendMessage(EM_GETMARGINS));
-	text->sendMessage(EM_SETMARGINS, EC_RIGHTMARGIN, MAKELONG(0, spacing + size + margin));
-
-	auto label = dwt::WidgetCreator<Label>::create(text, Label::Seed(IDI_SEARCH));
-	label->onRaw([](WPARAM, LPARAM) { return reinterpret_cast<LRESULT>(::GetStockObject(NULL_BRUSH)); }, dwt::Message(WM_CTLCOLOR));
-	text->onSized([this, label, size, margin](const dwt::SizedEvent&) {
-		auto box = text->getClientSize();
-		label->resize(dwt::Rectangle(box.x - margin - size, std::max(box.y - size, 0L) / 2, size, size));
-	});
+	WinUtil::addSearchIcon(text);
 }
 
 void ListFilter::createColumnBox(GridPtr grid) {
@@ -68,8 +51,7 @@ void ListFilter::createColumnBox(GridPtr grid) {
 void ListFilter::createMethodBox(GridPtr grid) {
 	method = grid->addChild(WinUtil::Seeds::comboBox);
 
-	tstring methods[StringMatch::METHOD_LAST] = { T_("Partial match"), T_("Exact match"), T_("Regular Expression") };
-	std::for_each(methods, methods + StringMatch::METHOD_LAST, [this](const tstring& str) { method->addValue(str); });
+	WinUtil::addFilterMethods(method);
 	method->setSelected(StringMatch::PARTIAL);
 
 	method->onSelectionChanged([this] { updateF(); });
