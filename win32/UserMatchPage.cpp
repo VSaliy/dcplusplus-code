@@ -42,17 +42,8 @@ static const ColumnInfo columns[] = {
 	{ "", 100, false }
 };
 
-/// @todo help
-#define IDH_SETTINGS_USER_MATCH_LIST 0
-#define IDH_SETTINGS_USER_MATCH_ADD 0
-#define IDH_SETTINGS_USER_MATCH_EDIT 0
-#define IDH_SETTINGS_USER_MATCH_MOVE_UP 0
-#define IDH_SETTINGS_USER_MATCH_MOVE_DOWN 0
-#define IDH_SETTINGS_USER_MATCH_REMOVE 0
-#define IDH_SETTINGS_USER_MATCH_STYLES 0
-
 UserMatchPage::UserMatchPage(dwt::Widget* parent) :
-PropPage(parent, 2, 1),
+PropPage(parent, 1, 1),
 table(0),
 edit(0),
 up(0),
@@ -67,13 +58,9 @@ dirty(false)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		auto cur = grid->addChild(GroupBox::Seed(T_("User matching definitions")))->addChild(Grid::Seed(2, 5));
+		auto cur = grid->addChild(GroupBox::Seed(T_("User matching definitions")))->addChild(Grid::Seed(3, 1));
 		cur->setHelpId(IDH_SETTINGS_USER_MATCH_LIST);
 		cur->column(0).mode = GridInfo::FILL;
-		cur->column(1).mode = GridInfo::FILL;
-		cur->column(2).mode = GridInfo::FILL;
-		cur->column(3).mode = GridInfo::FILL;
-		cur->column(4).mode = GridInfo::FILL;
 		cur->row(0).mode = GridInfo::FILL;
 		cur->row(0).align = GridInfo::STRETCH;
 		cur->setSpacing(grid->getSpacing());
@@ -81,31 +68,37 @@ dirty(false)
 		Table::Seed seed = WinUtil::Seeds::Dialog::table;
 		seed.style |= LVS_NOCOLUMNHEADER;
 		table = cur->addChild(seed);
-		cur->setWidget(table, 0, 0, 1, 5);
 
-		auto button = cur->addChild(Button::Seed(T_("&Add")));
+		auto row = cur->addChild(Grid::Seed(1, 5));
+		row->column(0).mode = GridInfo::FILL;
+		row->column(1).mode = GridInfo::FILL;
+		row->column(2).mode = GridInfo::FILL;
+		row->column(3).mode = GridInfo::FILL;
+		row->column(4).mode = GridInfo::FILL;
+		row->setSpacing(cur->getSpacing());
+
+		auto button = row->addChild(Button::Seed(T_("&Add")));
 		button->setHelpId(IDH_SETTINGS_USER_MATCH_ADD);
 		button->onClicked([this] { handleAddClicked(); });
 
-		edit = cur->addChild(Button::Seed(T_("&Edit")));
+		edit = row->addChild(Button::Seed(T_("&Edit")));
 		edit->setHelpId(IDH_SETTINGS_USER_MATCH_EDIT);
 		edit->onClicked([this] { handleEditClicked(); });
 
-		up = cur->addChild(Button::Seed(T_("Move &Up")));
+		up = row->addChild(Button::Seed(T_("Move &Up")));
 		up->setHelpId(IDH_SETTINGS_USER_MATCH_MOVE_UP);
 		up->onClicked([this] { handleMoveUpClicked(); });
 
-		down = cur->addChild(Button::Seed(T_("Move &Down")));
+		down = row->addChild(Button::Seed(T_("Move &Down")));
 		down->setHelpId(IDH_SETTINGS_USER_MATCH_MOVE_DOWN);
 		down->onClicked([this] { handleMoveDownClicked(); });
 
-		remove = cur->addChild(Button::Seed(T_("&Remove")));
+		remove = row->addChild(Button::Seed(T_("&Remove")));
 		remove->setHelpId(IDH_SETTINGS_USER_MATCH_REMOVE);
 		remove->onClicked([this] { handleRemoveClicked(); });
-	}
 
-	{
-		auto button = grid->addChild(Grid::Seed(1, 1))->addChild(Button::Seed(T_("Configure styles (fonts / colors) for these user matching definitions")));
+		button = cur->addChild(Grid::Seed(1, 1))->addChild(
+			Button::Seed(T_("Configure styles (fonts / colors) for these user matching definitions")));
 		button->setHelpId(IDH_SETTINGS_USER_MATCH_STYLES);
 		button->setImage(WinUtil::buttonIcon(IDI_STYLES));
 		button->onClicked([this] { static_cast<SettingsDialog*>(getRoot())->activatePage<StylesPage>(); });
