@@ -30,6 +30,7 @@
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/SplitterContainer.h>
 
+#include "HoldRedraw.h"
 #include "resource.h"
 #include "TypedTable.h"
 
@@ -117,14 +118,12 @@ mode(0),
 size(0),
 sizeMode(0),
 fileType(0),
-slots(0),
 onlyFree(BOOLSETTING(SEARCH_ONLY_FREE_SLOTS)),
-filter(0),
-filterShared(BOOLSETTING(SEARCH_FILTER_SHARED)),
-merge(0),
-bMerge(BOOLSETTING(SEARCH_MERGE)),
+hideShared(BOOLSETTING(SEARCH_FILTER_SHARED)),
+merge(BOOLSETTING(SEARCH_MERGE)),
 hubs(0),
 results(0),
+filter(resultsColumns, COLUMN_LAST, [this] { updateList(); }),
 initialType(initialType_),
 droppedResults(0)
 {
@@ -214,22 +213,22 @@ droppedResults(0)
 		CheckBox::Seed cs = WinUtil::Seeds::checkBox;
 		
 		cs.caption = T_("Only users with free slots");
-		slots = cur->addChild(cs);
-		slots->setHelpId(IDH_SEARCH_SLOTS);
-		slots->setChecked(onlyFree);
-		slots->onClicked([this] { handleSlotsClicked(); });
+		auto box = cur->addChild(cs);
+		box->setHelpId(IDH_SEARCH_SLOTS);
+		box->setChecked(onlyFree);
+		box->onClicked([this, box] { onlyFree = box->getChecked(); });
 
 		cs.caption = T_("Hide files already in share");
-		filter = cur->addChild(cs);
-		filter->setHelpId(IDH_SEARCH_SHARE);
-		filter->setChecked(filterShared);
-		filter->onClicked([this] { handleFilterClicked(); });
+		box = cur->addChild(cs);
+		box->setHelpId(IDH_SEARCH_SHARE);
+		box->setChecked(hideShared);
+		box->onClicked([this, box] { hideShared = box->getChecked(); });
 
 		cs.caption = T_("Merge results for the same file");
-		merge = cur->addChild(cs);
-		merge->setHelpId(IDH_SEARCH_MERGE);
-		merge->setChecked(bMerge);
-		merge->onClicked([this] { handleMergeClicked(); });
+		box = cur->addChild(cs);
+		box->setHelpId(IDH_SEARCH_MERGE);
+		box->setChecked(merge);
+		box->onClicked([this, box] { merge = box->getChecked(); });
 
 		gs.caption = T_("Hubs");
 		group = options->addChild(gs);
@@ -249,22 +248,47 @@ droppedResults(0)
 		hubs->setChecked(0, false);
 	}
 
-	results = paned->addChild(WidgetResults::Seed(WinUtil::Seeds::table));
-	addWidget(results);
+	{
+		auto cur = paned->addChild(Grid::Seed(2, 1));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->row(0).mode = GridInfo::FILL;
+		cur->row(0).align = GridInfo::STRETCH;
 
-	results->setSmallImageList(WinUtil::fileImages);
-	WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
+		results = cur->addChild(WidgetResults::Seed(WinUtil::Seeds::table));
+		addWidget(results);
 
-	results->onDblClicked([this] { handleDownload(); });
-	results->onKeyDown([this](int c) { return handleKeyDown(c); });
-	results->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
+		results->setSmallImageList(WinUtil::fileImages);
+		WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
+
+		results->onDblClicked([this] { handleDownload(); });
+		results->onKeyDown([this](int c) { return handleKeyDown(c); });
+		results->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleContextMenu(sc); });
+
+		cur = cur->addChild(Grid::Seed(1, 4));
+		cur->column(1).mode = GridInfo::FILL;
+		cur->setHelpId(IDH_SEARCH_FILTER);
+
+		auto ls = WinUtil::Seeds::label;
+		ls.caption = T_("Filter search results:");
+		cur->addChild(ls);
+
+		filter.createTextBox(cur);
+		filter.text->setCue(T_("Filter search results"));
+		addWidget(filter.text);
+
+		filter.createColumnBox(cur);
+		addWidget(filter.column);
+
+		filter.createMethodBox(cur);
+		addWidget(filter.method);
+	}
 
 	initStatus();
 
 	{
 		auto showUI = addChild(WinUtil::Seeds::splitCheckBox);
 		showUI->setChecked(true);
-		showUI->onClicked([this, showUI] { paned->maximize(showUI->getChecked() ? nullptr : results); });
+		showUI->onClicked([this, showUI] { paned->maximize(showUI->getChecked() ? nullptr : results->getParent()); });
 		status->setWidget(STATUS_SHOW_UI, showUI);
 	}
 
@@ -495,65 +519,113 @@ void SearchFrame::SearchInfo::update() {
 	}
 }
 
-void SearchFrame::addResult(SearchInfo* si) {
-	bool added = false;
+void SearchFrame::addResult(SearchResultPtr psr) {
+	auto& sr = *psr;
 
-	// Newly added ones always have just one result - we combine here
-	dcassert(si->srs.size() == 1);
-	const SearchResultPtr& sr = si->srs[0];
+	// Check that this is really a relevant search result...
+	if(currentSearch.empty()) {
+		return;
+	}
+	if(!sr.getToken().empty() && sr.getToken() != token) {
+		addDropped();
+		return;
+	}
+	if(isHash) {
+		if(sr.getType() != SearchResult::TYPE_FILE || TTHValue(Text::fromT(currentSearch[0])) != sr.getTTH()) {
+			addDropped();
+			return;
+		}
+	} else {
+		for(auto i = currentSearch.cbegin(), iend = currentSearch.cend(); i != iend; ++i) {
+			if((*i->begin() != _T('-') && Util::findSubString(sr.getFile(), Text::fromT(*i)) == tstring::npos) ||
+				(*i->begin() == _T('-') && i->size() != 1 && Util::findSubString(sr.getFile(), Text::fromT(i->substr(1))) != tstring::npos))
+			{
+				addDropped();
+				return;
+			}
+		}
+	}
+
+	// Drop results for already shared files
+	if(hideShared && ShareManager::getInstance()->isTTHShared(sr.getTTH())) {
+		addDropped();
+		return;
+	}
+
+	// Reject results without free slots
+	if(onlyFree && sr.getFreeSlots() < 1) {
+		addDropped();
+		return;
+	}
+
+	SearchInfo* si = nullptr;
 
 	// Check previous search results for dupes
-	for(int i = 0, iend = results->size(); !added && i < iend; ++i) {
-		SearchInfo* si2 = results->getData(i);
-		for(SearchResultList::iterator j = si2->srs.begin(), jend = si2->srs.end(); j != jend; ++j) {
-			SearchResultPtr& sr2 = *j;
+	for(auto i = searchResults.begin(), iend = searchResults.end(); !si && i != iend; ++i) {
+		auto& si2 = *i;
 
-			bool sameUser = sr->getUser()->getCID() == sr2->getUser()->getCID();
-			if(sameUser && (sr->getFile() == sr2->getFile())) {
-				// dupe
-				delete si;
-				return;
-			} else if(sr->getType() == SearchResult::TYPE_FILE && sr2->getType() == SearchResult::TYPE_FILE && sr->getTTH() == sr2->getTTH()) {
-				if(sameUser || (sr->getSize() != sr2->getSize())) {
-					// dupe
-					delete si;
-					return;
+		for(auto j = si2.srs.begin(), jend = si2.srs.end(); j != jend; ++j) {
+			auto& sr2 = **j;
+
+			bool sameUser = sr.getUser()->getCID() == sr2.getUser()->getCID();
+			if(sameUser && sr.getFile() == sr2.getFile()) {
+				return; // dupe
+			}
+			if(sr.getType() == SearchResult::TYPE_FILE && sr2.getType() == SearchResult::TYPE_FILE && sr.getTTH() == sr2.getTTH()) {
+				if(sameUser || sr.getSize() != sr2.getSize()) {
+					return; // dupe
 				}
 
-				if(bMerge) {
-					si2->srs.push_back(sr);
-					si2->update();
-					delete si;
-					added = true;
-					results->update(i);
+				if(merge) {
+					si2.srs.push_back(psr);
+					si2.update();
+					si = &si2;
 				}
 				break;
 			}
 		}
 	}
 
-	if(!added) {
-		results->insert(si);
+	if(!si) {
+		searchResults.push_back(SearchInfo(psr));
+		si = &searchResults.back();
 	}
-	status->setText(STATUS_COUNT, str(TFN_("%1% item", "%1% items", results->size()) % results->size()));
+
+	auto i = results->find(si);
+	if(filter.empty() || filter.match(filter.prepare(), [this, si](int column) { return Text::fromT(si->getText(column)); })) {
+		if(i == -1) {
+			results->insert(si);
+		} else {
+			results->update(i);
+		}
+	} else if(i != -1) {
+		results->erase(i);
+	}
+
+	updateStatusCount();
 	setDirty(SettingsManager::BOLD_SEARCH);
+}
+
+void SearchFrame::updateList() {
+	auto i = searchResults.begin();
+
+	auto filterPrep = filter.prepare();
+	auto filterInfoF = [this, &i](int column) { return Text::fromT(i->getText(column)); };
+
+	HoldRedraw h(results);
+	results->clear();
+	for(; i != searchResults.end(); ++i) {
+		if(filter.empty() || filter.match(filterPrep, filterInfoF)) {
+			results->insert(&*i);
+		}
+	}
+
+	updateStatusCount();
 }
 
 void SearchFrame::handlePurgeClicked() {
 	searchBox->clear();
 	lastSearches.clear();
-}
-
-void SearchFrame::handleSlotsClicked() {
-	onlyFree = slots->getChecked();
-}
-
-void SearchFrame::handleFilterClicked() {
-	filterShared = filter->getChecked();
-}
-
-void SearchFrame::handleMergeClicked() {
-	bMerge = merge->getChecked();
 }
 
 LRESULT SearchFrame::handleHubItemChanged(WPARAM wParam, LPARAM lParam) {
@@ -677,9 +749,15 @@ void SearchFrame::handleViewAsText() {
 void SearchFrame::handleRemove() {
 	int i = -1;
 	while((i = results->getNext(-1, LVNI_SELECTED)) != -1) {
+		auto data = results->getData(i);
 		results->erase(i);
+		if(data) {
+			searchResults.erase(std::remove_if(searchResults.begin(), searchResults.end(),
+				[data](const SearchInfo& si) { return &si == data; }), searchResults.end());
+		}
 	}
-	status->setText(STATUS_COUNT, str(TFN_("%1% item", "%1% items", results->size()) % results->size()));
+
+	updateStatusCount();
 }
 
 struct UserCollector {
@@ -776,64 +854,8 @@ void SearchFrame::addTargetDirMenu(const MenuPtr& parent, const StringPairList& 
 	}
 }
 
-void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& aResult) noexcept {
-	auto update = [this] { updateStatusFiltered(); };
-
-	// Check that this is really a relevant search result...
-	{
-		Lock l(cs);
-
-		if(currentSearch.empty()) {
-			return;
-		}
-
-		if(!aResult->getToken().empty() && token != aResult->getToken()) {
-			droppedResults++;
-			callAsync(update);
-			return;
-		}
-
-		if(isHash) {
-			if(aResult->getType() != SearchResult::TYPE_FILE || TTHValue(Text::fromT(currentSearch[0])) != aResult->getTTH()) {
-				droppedResults++;
-				callAsync(update);
-				return;
-			}
-		} else {
-			// match all here
-			for(TStringIter j = currentSearch.begin(); j != currentSearch.end(); ++j) {
-				if((*j->begin() != _T('-') && Util::findSubString(aResult->getFile(), Text::fromT(*j)) == tstring::npos) ||
-					(*j->begin() == _T('-') && j->size() != 1 && Util::findSubString(aResult->getFile(), Text::fromT(j->substr(1))) != tstring::npos)
-					)
-				{
-					droppedResults++;
-					callAsync(update);
-					return;
-				}
-			}
-		}
-	}
-
-	// Filter already shared files
-	if( filterShared ) {
-		const TTHValue& t = aResult->getTTH();
-		if( ShareManager::getInstance()->isTTHShared(t) ) {
-			droppedResults++;
-			callAsync(update);
-			return;
-		}
-	}
-
-	// Reject results without free slots
-	if((onlyFree && aResult->getFreeSlots() < 1))
-	{
-		droppedResults++;
-		callAsync(update);
-		return;
-	}
-
-	auto si = new SearchInfo(aResult);
-	callAsync([=] { addResult(si); });
+void SearchFrame::on(SearchManagerListener::SR, const SearchResultPtr& sr) noexcept {
+	callAsync([this, sr] { addResult(sr); });
 }
 
 void SearchFrame::onHubAdded(HubInfo* info) {
@@ -876,51 +898,42 @@ void SearchFrame::onHubRemoved(HubInfo* info) {
 }
 
 void SearchFrame::runSearch() {
-	StringList clients;
-
-	// Change Default Settings If Changed
-	if (onlyFree != BOOLSETTING(SEARCH_ONLY_FREE_SLOTS))
+	// change settings if changed
+	if(onlyFree != BOOLSETTING(SEARCH_ONLY_FREE_SLOTS))
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_ONLY_FREE_SLOTS, onlyFree);
-	if (filterShared != BOOLSETTING(SEARCH_FILTER_SHARED))
-		SettingsManager::getInstance()->set(SettingsManager::SEARCH_FILTER_SHARED, filterShared);
-	if (bMerge != BOOLSETTING(SEARCH_MERGE))
-		SettingsManager::getInstance()->set(SettingsManager::SEARCH_MERGE, bMerge);
+	if(hideShared != BOOLSETTING(SEARCH_FILTER_SHARED))
+		SettingsManager::getInstance()->set(SettingsManager::SEARCH_FILTER_SHARED, hideShared);
+	if(merge != BOOLSETTING(SEARCH_MERGE))
+		SettingsManager::getInstance()->set(SettingsManager::SEARCH_MERGE, merge);
 	if(initialType == SearchManager::TYPE_ANY) {
 		string text = Text::fromT(fileType->getText());
 		if(text != SETTING(LAST_SEARCH_TYPE))
 			SettingsManager::getInstance()->set(SettingsManager::LAST_SEARCH_TYPE, text);
 	}
 
-	tstring s = searchBox->getText();
-
+	auto s = searchBox->getText();
 	if(s.empty())
 		return;
 
-	int n = hubs->size();
-	for(int i = 0; i < n; i++) {
+	StringList clients;
+	for(size_t i = 0, n = hubs->size(); i < n; ++i) {
 		if(hubs->isChecked(i)) {
 			clients.push_back(Text::fromT(hubs->getData(i)->url));
 		}
 	}
-
 	if(clients.empty())
 		return;
 
-	tstring tsize = size->getText();
-
-	double lsize = Util::toDouble(Text::fromT(tsize));
+	auto lsize = Util::toDouble(Text::fromT(size->getText()));
 	switch(sizeMode->getSelected()) {
-	case 1:
-		lsize*=1024.0; break;
-	case 2:
-		lsize*=1024.0*1024.0; break;
-	case 3:
-		lsize*=1024.0*1024.0*1024.0; break;
+	case 1: lsize *= 1024.0; break;
+	case 2: lsize *= 1024.0 * 1024.0; break;
+	case 3: lsize *= 1024.0 * 1024.0 * 1024.0; break;
 	}
-
-	int64_t llsize = (int64_t)lsize;
+	auto llsize = static_cast<int64_t>(lsize);
 
 	results->clear();
+	searchResults.clear();
 
 	// Add new searches to the last-search dropdown list
 	if(find(lastSearches.begin(), lastSearches.end(), s) == lastSearches.end())
@@ -937,24 +950,21 @@ void SearchFrame::runSearch() {
 		lastSearches.push_back(s);
 	}
 
-	{
-		Lock l(cs);
-		currentSearch = StringTokenizer<tstring>(s, ' ').getTokens();
-		s.clear();
-		//strip out terms beginning with -
-		for(TStringList::iterator si = currentSearch.begin(); si != currentSearch.end(); ) {
-			if(si->empty()) {
-				si = currentSearch.erase(si);
-				continue;
-			}
-			if ((*si)[0] != _T('-'))
-				s += *si + _T(' ');
-			++si;
+	currentSearch = StringTokenizer<tstring>(s, ' ').getTokens();
+	s.clear();
+	//strip out terms beginning with -
+	for(auto si = currentSearch.begin(); si != currentSearch.end();) {
+		if(si->empty()) {
+			si = currentSearch.erase(si);
+			continue;
 		}
-
-		s = s.substr(0, max(s.size(), static_cast<tstring::size_type>(1)) - 1);
-		token = Util::toString(Util::rand());
+		if((*si)[0] != _T('-'))
+			s += *si + _T(' ');
+		++si;
 	}
+
+	s = s.substr(0, max(s.size(), static_cast<tstring::size_type>(1)) - 1);
+	token = Util::toString(Util::rand());
 
 	SearchManager::SizeModes searchMode((SearchManager::SizeModes)mode->getSelected());
 	if(llsize == 0)
@@ -978,7 +988,7 @@ void SearchFrame::runSearch() {
 
 	status->setText(STATUS_STATUS, str(TF_("Searching for %1%...") % s));
 	status->setText(STATUS_COUNT, Util::emptyStringT);
-	status->setText(STATUS_FILTERED, Util::emptyStringT);
+	status->setText(STATUS_DROPPED, Util::emptyStringT);
 	droppedResults = 0;
 	isHash = (ftype == SearchManager::TYPE_TTH);
 
@@ -989,22 +999,30 @@ void SearchFrame::runSearch() {
 			(SearchManager::TypeModes)ftype, searchMode, token, extList);
 		if(BOOLSETTING(CLEAR_SEARCH)) // Only clear if the search was sent
 			searchBox->setText(Util::emptyStringT);
+
 	} else {
-		int32_t waitFor = SearchManager::getInstance()->timeToSearch();
+		auto waitFor = SearchManager::getInstance()->timeToSearch();
 		tstring msg = str(TFN_("Searching too soon, next search in %1% second", "Searching too soon, next search in %1% seconds", waitFor) % waitFor);
-
 		status->setText(STATUS_STATUS, msg);
-		status->setText(STATUS_COUNT, Util::emptyStringT);
-		status->setText(STATUS_FILTERED, Util::emptyStringT);
-
 		setText(str(TF_("Search - %1%") % msg));
 		// Start the countdown timer
 		initSecond();
 	}
 }
 
-void SearchFrame::updateStatusFiltered() {
-	status->setText(STATUS_FILTERED, str(TF_("%1% filtered") % droppedResults));
+void SearchFrame::updateStatusCount() {
+	auto current = results->size();
+	auto total = searchResults.size();
+	if(current >= total) {
+		status->setText(STATUS_COUNT, str(TFN_("%1% item", "%1% items", current) % current));
+	} else {
+		status->setText(STATUS_COUNT, str(TFN_("%1% / %2% item", "%1% / %2% items", current) % current % total));
+	}
+}
+
+void SearchFrame::addDropped() {
+	++droppedResults;
+	status->setText(STATUS_DROPPED, str(TF_("%1% dropped") % droppedResults));
 }
 
 void SearchFrame::initSecond() {
