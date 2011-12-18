@@ -17,9 +17,9 @@
  */
 
 #include "stdafx.h"
+#include "PrivateFrame.h"
 
 #include <boost/range/algorithm/for_each.hpp>
-#include "PrivateFrame.h"
 
 #include "HoldRedraw.h"
 #include "MainWindow.h"
@@ -119,11 +119,32 @@ bool PrivateFrame::isFavorite(const WindowParams& params) {
 
 PrivateFrame::PrivateFrame(TabViewPtr parent, const HintedUser& replyTo_, const string& logPath) :
 BaseType(parent, _T(""), IDH_PM, IDI_PRIVATE, false),
+grid(0),
+hubGrid(0),
+hubBox(0),
 replyTo(replyTo_),
 priv(FavoriteManager::getInstance()->isPrivate(replyTo.getUser().hint)),
 online(replyTo.getUser().user->isOnline())
 {
-	createChat(this);
+	grid = addChild(Grid::Seed(2, 1));
+	grid->column(0).mode = GridInfo::FILL;
+	grid->row(1).mode = GridInfo::FILL;
+	grid->row(1).align = GridInfo::STRETCH;
+
+	hubGrid = grid->addChild(Grid::Seed(1, 2));
+	hubGrid->setHelpId(IDH_PM_HUB);
+	{
+		auto seed = WinUtil::Seeds::label;
+		seed.caption = T_("Hub to send messages through:");
+		hubGrid->addChild(seed);
+	}
+	hubBox = hubGrid->addChild(WinUtil::Seeds::comboBox);
+	addWidget(hubBox);
+
+	hubGrid->setEnabled(false);
+	hubGrid->setVisible(false);
+
+	createChat(grid);
 	chat->setHelpId(IDH_PM_CHAT);
 	addWidget(chat);
 	chat->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleChatContextMenu(sc); });
@@ -135,14 +156,6 @@ online(replyTo.getUser().user->isOnline())
 	message->onChar([this](int c) { return handleMessageChar(c); });
 
 	initStatus();
-
-	hubGrid = addChild(Grid::Seed(1, 2));
-	{
-		auto seed = WinUtil::Seeds::label;
-		seed.caption = T_("Hub to send messages through:");
-		hubGrid->addChild(seed);
-	}
-	hubBox = hubGrid->addChild(WinUtil::Seeds::comboBox);
 
 	status->onDblClicked(STATUS_STATUS, [this] { openLog(); });
 
@@ -233,7 +246,7 @@ void PrivateFrame::layout() {
 	message->resize(rm);
 
 	r.size.y -= rm.size.y + border;
-	chat->resize(r);
+	grid->resize(r);
 }
 
 void PrivateFrame::updateOnlineStatus() {
@@ -250,10 +263,13 @@ void PrivateFrame::updateOnlineStatus() {
 	hubs = ClientManager::getInstance()->getHubs(cid, hint, priv);
 	hubBox->clear();
 
-	if(hubs.empty()) {
-		hubBox->setEnabled(false);
-	} else {
-		hubBox->setEnabled(true);
+	if(online && !replyTo.getUser().user->isNMDC() && !hubs.empty()) {
+		if(!hubGrid->hasStyle(WS_VISIBLE)) {
+			hubGrid->setEnabled(true);
+			hubGrid->setVisible(true);
+
+			grid->layout();
+		}
 
 		for_each(hubs, [&](const StringPair &hub) {
 			auto idx = hubBox->addValue(Text::toT(hub.second));
@@ -265,15 +281,15 @@ void PrivateFrame::updateOnlineStatus() {
 		if(hubBox->getSelected() == -1) {
 			hubBox->setSelected(0);
 		}
+
+		hubGrid->layout();
+
+	} else if(hubGrid->hasStyle(WS_VISIBLE)) {
+		hubGrid->setEnabled(false);
+		hubGrid->setVisible(false);
+
+		grid->layout();
 	}
-
-	status->setWidget(STATUS_HUBS, hubGrid);
-
-	if(!online || replyTo.getUser().user->isNMDC()) {
-		status->setSize(STATUS_HUBS, 0);
-	}
-
-	status->refresh();
 }
 
 void PrivateFrame::enterImpl(const tstring& s) {
