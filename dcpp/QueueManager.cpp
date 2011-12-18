@@ -930,7 +930,7 @@ Download* QueueManager::getDownload(UserConnection& aSource, bool supportsTrees)
 		}
 	}
 
-	Download* d = new Download(aSource, *q, q->isSet(QueueItem::FLAG_PARTIAL_LIST) ? q->getTempTarget() : q->getTarget(), supportsTrees);
+	Download* d = new Download(aSource, *q, q->getTarget(), supportsTrees);
 
 	userQueue.addDownload(q, d);
 
@@ -1090,7 +1090,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 		aDownload->setFile(0);
 
 		if(aDownload->getType() == Transfer::TYPE_PARTIAL_LIST) {
-			QueueItem* q = fileQueue.find(getListPath(aDownload->getHintedUser()));
+			QueueItem* q = fileQueue.find(aDownload->getPath());
 			if(q) {
 				if(finished) {
 					fire(QueueManagerListener::PartialList(), aDownload->getHintedUser(), aDownload->getPFS());
