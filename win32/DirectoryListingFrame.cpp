@@ -1051,7 +1051,9 @@ void DirectoryListingFrame::findFile(bool reverse) {
 	HoldRedraw hold2(dirs);
 	HoldRedraw hold3(status);
 
-	HTREEITEM const start = dirs->getSelected();
+	auto start = dirs->getSelected();
+	if(!start)
+		start = treeRoot;
 
 	auto prevHistory = history;
 	auto prevHistoryIndex = historyIndex;
@@ -1106,17 +1108,17 @@ void DirectoryListingFrame::findFile(bool reverse) {
 		HTREEITEM next = dirs->getNext(item, reverse ? TVGN_PREVIOUSVISIBLE : TVGN_NEXTVISIBLE);
 		if(!next) {
 			next = reverse ? dirs->getLast() : treeRoot;
-			if(!next || next == start) {
-				item = nullptr;
-				break;
-			}
 			cycle = true;
 		}
-		if(reverse && dirs->getChild(next) && !dirs->isExpanded(next)) {
+		while(reverse && dirs->getChild(next) && !dirs->isExpanded(next)) {
 			dirs->expand(next);
 			collapse.push_back(next);
 			if(!(next = dirs->getNext(item, TVGN_PREVIOUSVISIBLE)))
 				next = dirs->getLast();
+		}
+		if(next == start) {
+			item = nullptr;
+			break;
 		}
 
 		// refresh the list pane to respect sorting etc
