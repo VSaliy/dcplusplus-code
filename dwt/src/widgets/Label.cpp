@@ -31,8 +31,6 @@
 
 #include <dwt/widgets/Label.h>
 
-#include <boost/lexical_cast.hpp>
-
 namespace dwt {
 
 const TCHAR Label::windowClass[] = WC_STATIC;
@@ -43,32 +41,25 @@ font(0)
 {
 }
 
-Label::Seed::Seed(unsigned iconId) :
-BaseType::Seed(WS_CHILD | SS_NOTIFY | SS_ICON, 0, _T('#') + boost::lexical_cast<tstring>(iconId))
+Label::Seed::Seed(IconPtr icon) :
+BaseType::Seed(WS_CHILD | SS_NOTIFY | SS_ICON),
+icon(icon)
 {
 }
 
-void Label::create( const Seed & cs ) {
-	BaseType::create(cs);
-	setFont(cs.font);
-}
-
-void Label::layout() {
-	/* TODO
-	Rectangle r = r_;
-
-	if(hasStyle(SS_ICON)) {
-		// icon control; we don't want the size to change.
-		r.size = getWindowSize();
-	} */
-
-	BaseType::layout();
+void Label::create(const Seed& seed) {
+	BaseType::create(seed);
+	if(seed.icon) {
+		icon = seed.icon;
+		sendMessage(STM_SETICON, reinterpret_cast<WPARAM>(icon->handle()));
+	} else {
+		setFont(seed.font);
+	}
 }
 
 Point Label::getPreferredSize() {
-	if(hasStyle(SS_ICON)) {
-		// icon control; the control should have already resized itself to its preferred size.
-		return getWindowSize();
+	if(icon) {
+		return icon->getSize();
 	}
 
 	auto ret = getTextSize(getText());

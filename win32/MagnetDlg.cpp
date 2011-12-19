@@ -66,7 +66,7 @@ bool MagnetDlg::handleInitDialog() {
 		cur->row(0).align = GridInfo::STRETCH;
 		cur->setSpacing(10);
 
-		cur->addChild(Label::Seed(IDI_MAGNET));
+		cur->addChild(Grid::Seed(1, 1))->addChild(Label::Seed(WinUtil::createIcon(IDI_MAGNET, 32)));
 
 		cur->addChild(Label::Seed(T_("DC++ has detected a MAGNET link with a file hash that can be searched for on the Direct Connect network.  What would you like to do?")));
 	}
@@ -120,6 +120,8 @@ bool MagnetDlg::handleInitDialog() {
 	}
 
 	setText(T_("MAGNET Link detected"));
+	setSmallIcon(WinUtil::createIcon(IDI_MAGNET, 16));
+	setLargeIcon(WinUtil::createIcon(IDI_MAGNET, 32));
 
 	layout();
 	centerWindow();

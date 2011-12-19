@@ -1052,8 +1052,8 @@ void WinUtil::addSearchIcon(TextBoxPtr box) {
 	const auto margin = HIWORD(box->sendMessage(EM_GETMARGINS));
 	box->sendMessage(EM_SETMARGINS, EC_RIGHTMARGIN, MAKELONG(0, spacing + size + margin));
 
-	auto label = dwt::WidgetCreator<Label>::create(box, Label::Seed(IDI_SEARCH));
-	label->onRaw([](WPARAM, LPARAM) { return reinterpret_cast<LRESULT>(::GetStockObject(NULL_BRUSH)); }, dwt::Message(WM_CTLCOLOR));
+	auto label = dwt::WidgetCreator<Label>::create(box, Label::Seed(createIcon(IDI_SEARCH, 16)));
+	setColor(label);
 	box->onSized([box, label, size, margin](const dwt::SizedEvent&) {
 		auto sz = box->getClientSize();
 		label->resize(dwt::Rectangle(sz.x - margin - size, std::max(sz.y - size, 0L) / 2, size, size));

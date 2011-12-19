@@ -107,6 +107,8 @@ bool HashProgressDlg::handleInitDialog() {
 	setTimer([this] { return updateStats(); }, 1000);
 
 	setText(T_("Creating file index..."));
+	setSmallIcon(WinUtil::createIcon(IDI_INDEXING, 16));
+	setLargeIcon(WinUtil::createIcon(IDI_INDEXING, 32));
 
 	layout();
 	centerWindow();
