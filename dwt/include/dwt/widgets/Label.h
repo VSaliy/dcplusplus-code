@@ -80,11 +80,13 @@ public:
 
 		FontPtr font;
 
-		/// Fills with default parameters
+		IconPtr icon;
+
+		/// Make the control display text.
 		Seed(const tstring& caption_ = tstring());
 
-		/// Make the control display an icon. The control handles loading the icon and resizing by itself.
-		Seed(unsigned iconId);
+		/// Make the control display an icon.
+		Seed(IconPtr icon);
 	};
 
 	/// Actually creates the Static Control
@@ -92,9 +94,7 @@ public:
 	  * directly. <br>
 	  * Only if you DERIVE from class you should call this function directly.
 	  */
-	void create( const Seed & cs = Seed() );
-
-	virtual void layout();
+	void create(const Seed& seed = Seed());
 
 	virtual Point getPreferredSize();
 
@@ -113,6 +113,8 @@ protected:
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
+
+	IconPtr icon; // keep a reference
 
 	// aspects::Clickable
 	static Message getClickMessage();

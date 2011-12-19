@@ -93,7 +93,7 @@ bool AboutDlg::handleInitDialog() {
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::CENTER;
 
-		cur->addChild(Label::Seed(IDI_DCPP));
+		cur->addChild(Label::Seed(WinUtil::createIcon(IDI_DCPP, 48)));
 
 		ls.caption = Text::toT(dcpp::fullVersionString) + _T("\n(c) Copyright 2001-2011 Jacek Sieka\n");
 		ls.caption += T_("Ex-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL\n");
@@ -141,6 +141,8 @@ bool AboutDlg::handleInitDialog() {
 		).second->setVisible(false);
 
 	setText(T_("About DC++"));
+	setSmallIcon(WinUtil::createIcon(IDI_DCPP, 16));
+	setLargeIcon(WinUtil::createIcon(IDI_DCPP, 32));
 
 	layout();
 	centerWindow();
