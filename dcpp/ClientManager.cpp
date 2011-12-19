@@ -356,7 +356,7 @@ void ClientManager::putOnline(OnlineUser* ou) noexcept {
 }
 
 void ClientManager::putOffline(OnlineUser* ou, bool disconnect) noexcept {
-	bool lastUser = false;
+	OnlineIter::difference_type diff = 0;
 	{
 		Lock l(cs);
 		OnlinePair op = onlineUsers.equal_range(ou->getUser()->getCID());
@@ -364,19 +364,21 @@ void ClientManager::putOffline(OnlineUser* ou, bool disconnect) noexcept {
 		for(OnlineIter i = op.first; i != op.second; ++i) {
 			OnlineUser* ou2 = i->second;
 			if(ou == ou2) {
-				lastUser = (distance(op.first, op.second) == 1);
+				diff = distance(op.first, op.second);
 				onlineUsers.erase(i);
 				break;
 			}
 		}
 	}
 
-	if(lastUser) {
+	if(diff == 1) { //last user
 		UserPtr& u = ou->getUser();
 		u->unsetFlag(User::ONLINE);
 		if(disconnect)
 			ConnectionManager::getInstance()->disconnect(u);
 		fire(ClientManagerListener::UserDisconnected(), u);
+	} else if(diff > 1) {
+			fire(ClientManagerListener::UserUpdated(), *ou);
 	}
 }
 
