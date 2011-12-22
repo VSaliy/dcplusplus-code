@@ -735,7 +735,7 @@ void WinUtil::searchHash(const TTHValue& aHash) {
 }
 
 void WinUtil::addLastDir(const tstring& dir) {
-	TStringIter i = find(lastDirs.begin(), lastDirs.end(), dir);
+	auto i = find(lastDirs.begin(), lastDirs.end(), dir);
 	if(i != lastDirs.end()) {
 		lastDirs.erase(i);
 	}
@@ -746,8 +746,8 @@ void WinUtil::addLastDir(const tstring& dir) {
 }
 
 bool WinUtil::browseSaveFile(dwt::Widget* parent, tstring& file) {
-	tstring ext = Util::getFileExt(file);
-	tstring path = Util::getFilePath(file);
+	auto ext = Util::getFileExt(file);
+	auto path = Util::getFilePath(file);
 
 	SaveDialog dlg(parent);
 
@@ -826,7 +826,7 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, ParamMap& 
 			TStringList combo_values = StringTokenizer<tstring>(combo_caption, _T('/')).getTokens();
 			if(combo_values.size() > 2) { // must contain at least: caption, default sel, 1 value
 
-				TStringIter first = combo_values.begin();
+				auto first = combo_values.begin();
 				combo_caption = *first;
 				combo_values.erase(first);
 
@@ -839,11 +839,11 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, ParamMap& 
 			}
 
 			if(combo_sel >= 0) {
-				for(TStringIter i = combo_values.begin(), iend = combo_values.end(); i != iend; ++i)
+				for(auto i = combo_values.begin(), iend = combo_values.end(); i != iend; ++i)
 					Util::replace(_T("\t"), _T("/"), *i);
 
 				// if the combo has already been displayed before, retrieve the prev value and bypass combo_sel
-				TStringIterC prev = find(combo_values.begin(), combo_values.end(), Text::toT(boost::get<string>(params["line:" + name])));
+				auto prev = find(combo_values.begin(), combo_values.end(), Text::toT(boost::get<string>(params["line:" + name])));
 				if(prev != combo_values.end())
 					combo_sel = prev - combo_values.begin();
 
@@ -1295,7 +1295,7 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 		typedef map<tstring, tstring> MagMap;
 		MagMap hashes;
 		tstring fname, fhash, type, param, fkey;
-		for(TStringList::iterator idx = mag.getTokens().begin(); idx != mag.getTokens().end(); ++idx) {
+		for(auto idx = mag.getTokens().begin(); idx != mag.getTokens().end(); ++idx) {
 			// break into pairs
 			string::size_type pos = idx->find(_T('='));
 			if(pos != string::npos) {
@@ -1356,7 +1356,7 @@ typedef std::function<void(const HintedUser&, const string&)> UserFunction;
 
 static void eachUser(const HintedUserList& list, const StringList& dirs, const UserFunction& f) {
 	size_t j = 0;
-	for(HintedUserList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i) {
+	for(auto i = list.begin(), iend = list.end(); i != iend; ++i) {
 		try {
 			f(*i, (j < dirs.size()) ? dirs[j] : string());
 		} catch (const Exception& e) {
@@ -1390,7 +1390,7 @@ static void addUsers(MenuPtr menu, const tstring& text, const HintedUserList& us
 template<typename F>
 HintedUserList filter(const HintedUserList& l, F f) {
 	HintedUserList ret;
-	for(HintedUserList::const_iterator i = l.begin(), iend = l.end(); i != iend; ++i) {
+	for(auto i = l.begin(), iend = l.end(); i != iend; ++i) {
 		if(f(i->user)) {
 			ret.push_back(*i);
 		}

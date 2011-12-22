@@ -80,7 +80,7 @@ connections(0)
 	nick->onUpdated([this] { handleNickTextChanged(); });
 
 	int selected = 0, j = 0;
-	for(StringIter i = SettingsManager::connectionSpeeds.begin(); i != SettingsManager::connectionSpeeds.end(); ++i, ++j) {
+	for(auto i = SettingsManager::connectionSpeeds.begin(); i != SettingsManager::connectionSpeeds.end(); ++i, ++j) {
 		connections->addValue(Text::toT(*i).c_str());
 		if(selected == 0 && SETTING(UPLOAD_SPEED) == *i) {
 			selected = j;

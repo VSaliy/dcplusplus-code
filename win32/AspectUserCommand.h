@@ -53,7 +53,7 @@ public:
 				} else if(uc->isRaw() || uc->isChat()) {
 					cur = menu;
 
-					for(StringList::const_iterator i = uc->getDisplayName().begin(), iend = uc->getDisplayName().end(); i != iend; ++i) {
+					for(auto i = uc->getDisplayName().begin(), iend = uc->getDisplayName().end(); i != iend; ++i) {
 						tstring name = Text::toT(*i);
 						if(i + 1 == iend) {
 							cur->appendItem(name, [=] { static_cast<T*>(this)->runUserCommand(*uc); });

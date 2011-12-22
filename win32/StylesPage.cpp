@@ -188,7 +188,7 @@ void StylesPage::write() {
 }
 
 void StylesPage::updateUserMatches(std::vector<UserMatch>& userMatches) {
-	for(size_t i = 0; i < table->size();) {
+	for(auto i = 0; i < table->size();) {
 		auto data = table->getData(i);
 		if(data == noUserMatchData) {
 			table->erase(i);

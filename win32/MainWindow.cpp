@@ -593,7 +593,7 @@ void MainWindow::setStaticWindowState(const string& id, bool open) {
 	if(toolbar)
 		toolbar->setButtonChecked(id, open);
 
-	ViewIndexes::const_iterator i = viewIndexes.find(id);
+	auto i = viewIndexes.find(id);
 	if(i != viewIndexes.end())
 		viewMenu->checkItem(i->second, open);
 }
@@ -611,7 +611,7 @@ void MainWindow::handleTabsTitleChanged(const tstring& title) {
 
 static void multiConnect(const string& group, TabViewPtr parent) {
 	FavoriteHubEntryList hubs = FavoriteManager::getInstance()->getFavoriteHubs(group);
-	for(FavoriteHubEntryList::const_iterator i = hubs.begin(), iend = hubs.end(); i != iend; ++i)
+	for(auto i = hubs.begin(), iend = hubs.end(); i != iend; ++i)
 		HubFrame::openWindow(parent, (*i)->getServer());
 }
 
@@ -622,10 +622,10 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 	GroupMenus groupMenus;
 
 	const FavHubGroups& groups = FavoriteManager::getInstance()->getFavHubGroups();
-	for(FavHubGroups::const_iterator i = groups.begin(), iend = groups.end(); i != iend; ++i)
+	for(auto i = groups.begin(), iend = groups.end(); i != iend; ++i)
 		groupMenus.insert(make_pair(i->first, MenuPtr()));
 
-	for(GroupMenus::iterator i = groupMenus.begin(); i != groupMenus.end(); ++i) {
+	for(auto i = groupMenus.begin(); i != groupMenus.end(); ++i) {
 		i->second = menu->appendPopup(escapeMenu(Text::toT(i->first)));
 		auto group = i->first;
 		i->second->appendItem(T_("Connect to all hubs in this group"), [=] { multiConnect(group, getTabView()); });
@@ -633,9 +633,9 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 	}
 
 	const FavoriteHubEntryList& hubs = FavoriteManager::getInstance()->getFavoriteHubs();
-	for(FavoriteHubEntryList::const_iterator i = hubs.begin(), iend = hubs.end(); i != iend; ++i) {
+	for(auto i = hubs.begin(), iend = hubs.end(); i != iend; ++i) {
 		FavoriteHubEntry* entry = *i;
-		GroupMenus::iterator groupMenu = groupMenus.find(entry->getGroup());
+		auto groupMenu = groupMenus.find(entry->getGroup());
 		((groupMenu == groupMenus.end()) ? menu : groupMenu->second)->appendItem(
 			escapeMenu(Text::toT(entry->getName())),
 			[this, entry] { HubFrame::openWindow(getTabView(), entry->getServer()); });
@@ -792,7 +792,7 @@ void MainWindow::handleConnectFavHubGroup() {
 	tstring group;
 	if(chooseFavHubGroup(T_("Connect to a favorite hub group"), group)) {
 		FavoriteHubEntryList hubs = FavoriteManager::getInstance()->getFavoriteHubs(Text::fromT(group));
-		for(FavoriteHubEntryList::const_iterator hub = hubs.begin(), hub_end = hubs.end(); hub != hub_end; ++hub) {
+		for(auto hub = hubs.begin(), hub_end = hubs.end(); hub != hub_end; ++hub) {
 			HubFrame::openWindow(getTabView(), (*hub)->getServer());
 		}
 	}
@@ -855,7 +855,7 @@ bool MainWindow::chooseFavHubGroup(const tstring& title, tstring& group) {
 		return false;
 	}
 
-	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
+	for(auto i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
 		groups.insert(Text::toT(i->first));
 
 	ParamDlg dlg(this, title, T_("Select a favorite hub group"), TStringList(groups.begin(), groups.end()));
@@ -1198,7 +1198,7 @@ public:
 
 	}
 	virtual int run() {
-		for (StringIter i = files.begin(); i != files.end(); ++i) {
+		for (auto i = files.begin(); i != files.end(); ++i) {
 			UserPtr u = DirectoryListing::getUserFromFilename(*i);
 			if (!u)
 				continue;
@@ -1447,7 +1447,7 @@ LRESULT MainWindow::handleEndSession() {
 void MainWindow::handleToolbarCustomized() {
 	string setting;
 	StringList list = toolbar->getLayout();
-	for(StringIterC i = list.begin(), iend = list.end(); i != iend; ++i) {
+	for(auto i = list.begin(), iend = list.end(); i != iend; ++i) {
 		setting += *i;
 		if(i != iend - 1)
 			setting += ',';

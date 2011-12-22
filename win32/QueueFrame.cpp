@@ -163,7 +163,7 @@ void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
 	HoldRedraw hold(files);
 	HoldRedraw hold2(dirs);
 
-	for(QueueItem::StringMap::const_iterator j = li.begin(); j != li.end(); ++j) {
+	for(auto j = li.begin(); j != li.end(); ++j) {
 		QueueItem* aQI = j->second;
 		QueueItemInfo* ii = new QueueItemInfo(*aQI);
 		addQueueItem(ii, true);
@@ -173,9 +173,9 @@ void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
 }
 
 QueueFrame::QueueItemInfo* QueueFrame::getItemInfo(const string& target) {
-	string path = Util::getFilePath(target);
-	DirectoryPair items = directories.equal_range(path);
-	for(DirectoryIter i = items.first; i != items.second; ++i) {
+	auto path = Util::getFilePath(target);
+	auto items = directories.equal_range(path);
+	for(auto i = items.first; i != items.second; ++i) {
 		if(i->second->getTarget() == target) {
 			return i->second;
 		}
@@ -193,7 +193,7 @@ void QueueFrame::updateStatus() {
 	if(cnt < 2) {
 		cnt = files->size();
 		if(BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
-			for(int i = 0; i < cnt; ++i) {
+			for(auto i = 0; i < cnt; ++i) {
 				QueueItemInfo* ii = files->getData(i);
 				total += (ii->getSize() > 0) ? ii->getSize() : 0;
 			}
@@ -232,7 +232,7 @@ void QueueFrame::postClosing() {
 
 	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getSplitterPos(0));
 
-	for(DirectoryIter i = directories.begin(); i != directories.end(); ++i) {
+	for(auto i = directories.begin(); i != directories.end(); ++i) {
 		delete i->second;
 	}
 	directories.clear();
@@ -279,7 +279,7 @@ void QueueFrame::updateFiles() {
 		i.second = directories.end();
 	}
 
-	for(DirectoryIter j = i.first; j != i.second; ++j) {
+	for(auto j = i.first; j != i.second; ++j) {
 		QueueItemInfo* ii = j->second;
 		ii->update();
 		files->insert(files->size(), ii);
@@ -303,7 +303,7 @@ void QueueFrame::QueueItemInfo::update() {
 		if(colMask & (MASK_USERS | MASK_STATUS)) {
 			tstring tmp;
 
-			for(QueueItem::SourceIter j = getSources().begin(); j != getSources().end(); ++j) {
+			for(auto j = getSources().begin(); j != getSources().end(); ++j) {
 				if(tmp.size() > 0)
 					tmp += _T(", ");
 
@@ -365,7 +365,7 @@ void QueueFrame::QueueItemInfo::update() {
 
 		if(colMask & MASK_ERRORS) {
 			tstring tmp;
-			for(QueueItem::SourceIter j = getBadSources().begin(); j != getBadSources().end(); ++j) {
+			for(auto j = getBadSources().begin(); j != getBadSources().end(); ++j) {
 				if(!j->isSet(QueueItem::Source::FLAG_REMOVED)) {
 					if(tmp.size() > 0)
 						tmp += _T(", ");
@@ -662,9 +662,9 @@ void QueueFrame::moveDir(HTREEITEM ht, const string& target) {
 	}
 	const string& dir = getDir(ht);
 
-	DirectoryPair p = directories.equal_range(dir);
+	auto p = directories.equal_range(dir);
 
-	for(DirectoryIter i = p.first; i != p.second; ++i) {
+	for(auto i = p.first; i != p.second; ++i) {
 		QueueItemInfo* ii = i->second;
 		QueueManager::getInstance()->move(ii->getTarget(), target + Util::getFileName(ii->getTarget()));
 	}
@@ -687,7 +687,7 @@ void QueueFrame::handleReadd(const HintedUser& user) {
 
 		if(!user.user) {
 			// re-add all sources
-			for(QueueItem::SourceIter s = ii->getBadSources().begin(); s != ii->getBadSources().end(); ++s) {
+			for(auto s = ii->getBadSources().begin(); s != ii->getBadSources().end(); ++s) {
 				QueueManager::getInstance()->readd(ii->getTarget(), s->getUser());
 			}
 		} else {
@@ -718,7 +718,7 @@ void QueueFrame::handleRemoveSource(const HintedUser& user) {
 		QueueItemInfo* ii = files->getSelectedData();
 
 		if(!user.user) {
-			for(QueueItem::SourceIter si = ii->getSources().begin(); si != ii->getSources().end(); ++si) {
+			for(auto si = ii->getSources().begin(); si != ii->getSources().end(); ++si) {
 				QueueManager::getInstance()->removeSource(ii->getTarget(), si->getUser(), QueueItem::Source::FLAG_REMOVED);
 			}
 		} else {
@@ -742,7 +742,7 @@ void QueueFrame::handlePriority(QueueItem::Priority p) {
 		setPriority(dirs->getSelected(), p);
 	} else {
 		std::vector<unsigned> selected = files->getSelection();
-		for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
+		for(auto i = selected.begin(); i != selected.end(); ++i) {
 			QueueManager::getInstance()->setPriority(files->getData(*i)->getTarget(), p);
 		}
 	}
@@ -757,8 +757,8 @@ void QueueFrame::removeDir(HTREEITEM ht) {
 		child = dirs->getNextSibling(child);
 	}
 	const string& name = getDir(ht);
-	DirectoryPair dp = directories.equal_range(name);
-	for(DirectoryIter i = dp.first; i != dp.second; ++i) {
+	auto dp = directories.equal_range(name);
+	for(auto i = dp.first; i != dp.second; ++i) {
 		QueueManager::getInstance()->remove(i->second->getTarget());
 	}
 }
@@ -768,7 +768,7 @@ void QueueFrame::removeDir(HTREEITEM ht) {
  */
 void QueueFrame::changePriority(bool inc){
 	std::vector<unsigned> selected = files->getSelection();
-	for(std::vector<unsigned>::iterator i = selected.begin(); i != selected.end(); ++i) {
+	for(auto i = selected.begin(); i != selected.end(); ++i) {
 		QueueItemInfo* ii = files->getData(*i);
 		QueueItem::Priority p = ii->getPriority();
 
@@ -801,8 +801,8 @@ void QueueFrame::setPriority(HTREEITEM ht, const QueueItem::Priority& p) {
 		child = dirs->getNextSibling(child);
 	}
 	const string& name = getDir(ht);
-	DirectoryPair dp = directories.equal_range(name);
-	for(DirectoryIter i = dp.first; i != dp.second; ++i) {
+	auto dp = directories.equal_range(name);
+	for(auto i = dp.first; i != dp.second; ++i) {
 		QueueManager::getInstance()->setPriority(i->second->getTarget(), p);
 	}
 }
@@ -946,7 +946,7 @@ void QueueFrame::addRemoveSourcesMenu(const MenuPtr& parent, QueueItemInfo* qii)
 
 bool QueueFrame::addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const HintedUser&), const QueueItem::SourceList& sources, bool offline) {
 	bool added = false;
-	for(QueueItem::SourceConstIter i = sources.begin(); i != sources.end(); ++i) {
+	for(auto i = sources.begin(); i != sources.end(); ++i) {
 		const QueueItem::Source& source = *i;
 		const HintedUser& user = source.getUser();
 		if(offline || user.user->isOnline()) {
@@ -1025,9 +1025,9 @@ void QueueFrame::onRemoved(const string& s) {
 	queueItems--;
 	dcassert(queueItems >= 0);
 
-	pair<DirectoryIter, DirectoryIter> i = directories.equal_range(ii->getPath());
-	DirectoryIter j;
-	for(j = i.first; j != i.second; ++j) {
+	auto i = directories.equal_range(ii->getPath());
+	auto j = i.first;
+	for(; j != i.second; ++j) {
 		if(j->second == ii)
 			break;
 	}

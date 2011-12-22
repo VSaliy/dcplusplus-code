@@ -152,7 +152,7 @@ private:
 	FavoriteManager();
 	virtual ~FavoriteManager();
 
-	FavoriteHubEntryList::iterator getFavoriteHub(const string& aServer);
+	FavoriteHubEntryPtr getFavoriteHub(const string& aServer);
 
 	// ClientManagerListener
 	void on(UserUpdated, const OnlineUser& user) noexcept;

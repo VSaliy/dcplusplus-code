@@ -139,7 +139,7 @@ public:
 	bool isSource(const UserPtr& aUser) const { return getSource(aUser) != sources.end(); }
 	bool isBadSource(const UserPtr& aUser) const { return getBadSource(aUser) != badSources.end(); }
 	bool isBadSourceExcept(const UserPtr& aUser, Flags::MaskType exceptions) const {
-		SourceConstIter i = getBadSource(aUser);
+		auto i = getBadSource(aUser);
 		if(i != badSources.end())
 			return i->isAnySet(exceptions^Source::FLAG_MASK);
 		return false;

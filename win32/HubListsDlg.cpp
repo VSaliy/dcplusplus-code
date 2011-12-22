@@ -69,7 +69,7 @@ unsigned HubListsDlg::getHelpId(HelpFields field) const {
 
 void HubListsDlg::add(const tstring& s) {
 	StringTokenizer<tstring> t(s, ';');
-	for(TStringIterC i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i)
+	for(auto i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i)
 		if(!i->empty())
 			insert(*i);
 }
@@ -79,7 +79,7 @@ void HubListsDlg::edit(unsigned row, const tstring& s) {
 	if(dlg.run() == IDOK) {
 		bool modified = false;
 		StringTokenizer<tstring> t(dlg.getValue(), ';');
-		for(TStringIterC i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i)
+		for(auto i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i)
 			if(!i->empty()) {
 				if(!modified) {
 					modify(row, *i);
@@ -94,7 +94,7 @@ void HubListsDlg::edit(unsigned row, const tstring& s) {
 TStringList HubListsDlg::getHubLists() {
 	TStringList ret;
 	StringList lists(FavoriteManager::getInstance()->getHubLists());
-	for(StringIterC i = lists.begin(), iend = lists.end(); i != iend; ++i)
+	for(auto i = lists.begin(), iend = lists.end(); i != iend; ++i)
 		ret.push_back(Text::toT(*i));
 	return ret;
 }

@@ -68,7 +68,7 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 	typedef std::vector<valid_pair> valid_type;
 	valid_type valid;
 
-	for(StringIterC i = paths.begin(); i != paths.end(); ++i) {
+	for(auto i = paths.begin(); i != paths.end(); ++i) {
 		// ParseDisplayName creates a PIDL from a file system path relative to the IShellFolder interface
 		// but since we use the Desktop as our interface and the Desktop is the namespace root
 		// that means that it's a fully qualified PIDL, which is what we need
@@ -100,7 +100,7 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 
 #undef check
 
-	for(pidls_type::iterator i = pidls.begin(); i != pidls.end(); ++i)
+	for(auto i = pidls.begin(); i != pidls.end(); ++i)
 		lpMalloc->Free(*i);
 	lpMalloc->Release();
 
@@ -115,7 +115,7 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 		handlers.push_back(make_pair(appendPopup(T_("Shell menu"), dwt::IconPtr(), false), valid[0].second));
 	else {
 		MenuPtr popup = appendPopup(T_("Shell menus"));
-		for(valid_type::const_iterator i = valid.begin(); i != valid.end(); ++i)
+		for(auto i = valid.begin(); i != valid.end(); ++i)
 			handlers.push_back(make_pair(popup->appendPopup(escapeMenu(Text::toT(i->first)), dwt::IconPtr(), false), i->second));
 	}
 
@@ -134,10 +134,10 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 }
 
 ShellMenu::~ShellMenu() {
-	for(callbacks_type::iterator i = callbacks.begin(); i != callbacks.end(); ++i)
+	for(auto i = callbacks.begin(); i != callbacks.end(); ++i)
 		getParent()->clearCallback(i->first, i->second);
 
-	for(handlers_type::iterator i = handlers.begin(); i != handlers.end(); ++i)
+	for(auto i = handlers.begin(); i != handlers.end(); ++i)
 		i->second->Release();
 }
 
@@ -188,7 +188,7 @@ bool ShellMenu::handleMeasureItem(const MSG& msg, LRESULT& ret) {
 
 bool ShellMenu::handleInitMenuPopup(const MSG& msg, LRESULT& ret) {
 	HMENU menu = reinterpret_cast<HMENU>(msg.wParam);
-	for(handlers_type::iterator i = handlers.begin(); i != handlers.end(); ++i) {
+	for(auto i = handlers.begin(); i != handlers.end(); ++i) {
 		if(i->first->handle() == menu) {
 			handler = i->second;
 			handler->QueryContextMenu(i->first->handle(), 0, ID_SHELLCONTEXTMENU_MIN, ID_SHELLCONTEXTMENU_MAX, CMF_NORMAL | CMF_EXPLORE);
@@ -201,7 +201,7 @@ bool ShellMenu::handleInitMenuPopup(const MSG& msg, LRESULT& ret) {
 
 bool ShellMenu::handleUnInitMenuPopup(const MSG& msg, LRESULT& ret) {
 	HMENU menu = reinterpret_cast<HMENU>(msg.wParam);
-	for(handlers_type::iterator i = handlers.begin(); i != handlers.end(); ++i)
+	for(auto i = handlers.begin(); i != handlers.end(); ++i)
 		if(i->first->handle() == menu)
 			i->first->removeAllItems();
 

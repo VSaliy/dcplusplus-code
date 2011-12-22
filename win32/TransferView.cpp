@@ -788,19 +788,19 @@ void TransferView::onTransferTick(Transfer* t, bool isDownload) {
 }
 
 void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noexcept  {
-	for(DownloadList::const_iterator i = dl.begin(); i != dl.end(); ++i) {
+	for(auto i = dl.begin(); i != dl.end(); ++i) {
 		onTransferTick(*i, true);
 	}
 
 	std::vector<TickInfo*> dis;
-	for(DownloadList::const_iterator i = dl.begin(); i != dl.end(); ++i) {
+	for(auto i = dl.begin(); i != dl.end(); ++i) {
 		Download* d = *i;
 		if(d->getType() != Transfer::TYPE_FILE) {
 			continue;
 		}
 
 		TickInfo* ti = 0;
-		for(std::vector<TickInfo*>::iterator j = dis.begin(); j != dis.end(); ++j) {
+		for(auto j = dis.begin(); j != dis.end(); ++j) {
 			TickInfo* ti2 = *j;
 			if(Util::stricmp(ti2->path, d->getPath()) == 0) {
 				ti = ti2;
@@ -814,7 +814,7 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noe
 		ti->bps += d->getAverageSpeed();
 		ti->done += d->getPos();
 	}
-	for(std::vector<TickInfo*>::iterator i = dis.begin(); i != dis.end(); ++i) {
+	for(auto i = dis.begin(); i != dis.end(); ++i) {
 		tasks.add(DOWNLOADS_TICK, unique_ptr<Task>(*i));
 	}
 
@@ -867,7 +867,7 @@ void TransferView::on(UploadManagerListener::Starting, Upload* u) noexcept {
 }
 
 void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) noexcept {
-	for(UploadList::const_iterator i = ul.begin(); i != ul.end(); ++i) {
+	for(auto i = ul.begin(); i != ul.end(); ++i) {
 		onTransferTick(*i, false);
 	}
 

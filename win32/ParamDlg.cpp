@@ -86,7 +86,7 @@ void ParamDlg::initIntTextBox(const tstring& name, const tstring& value, const i
 
 void ParamDlg::initComboBox(const tstring& name, const TStringList& choices, size_t sel, bool edit) {
 	auto box = left->addChild(GroupBox::Seed(name))->addChild(edit ? WinUtil::Seeds::Dialog::comboBoxEdit : WinUtil::Seeds::Dialog::comboBox);
-	for(TStringList::const_iterator i = choices.begin(), iend = choices.end(); i != iend; ++i)
+	for(auto i = choices.begin(), iend = choices.end(); i != iend; ++i)
 		box->addValue(*i);
 	box->setSelected(sel);
 	valueFs.push_back([box] { return box->getText(); });

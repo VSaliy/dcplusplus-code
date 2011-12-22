@@ -39,7 +39,7 @@ namespace {
 
 int QueueItem::countOnlineUsers() const {
 	int n = 0;
-	for(SourceConstIter i = sources.begin(), iend = sources.end(); i != iend; ++i) {
+	for(auto i = sources.begin(), iend = sources.end(); i != iend; ++i) {
 		if(i->getUser().user->isOnline())
 			n++;
 	}
@@ -47,14 +47,14 @@ int QueueItem::countOnlineUsers() const {
 }
 
 void QueueItem::getOnlineUsers(HintedUserList& l) const {
-	for(SourceConstIter i = sources.begin(), iend = sources.end(); i != iend; ++i)
+	for(auto i = sources.begin(), iend = sources.end(); i != iend; ++i)
 		if(i->getUser().user->isOnline())
 			l.push_back(i->getUser());
 }
 
 void QueueItem::addSource(const HintedUser& aUser) {
 	dcassert(!isSource(aUser.user));
-	SourceIter i = getBadSource(aUser);
+	auto i = getBadSource(aUser);
 	if(i != badSources.end()) {
 		sources.push_back(*i);
 		badSources.erase(i);
@@ -64,7 +64,7 @@ void QueueItem::addSource(const HintedUser& aUser) {
 }
 
 void QueueItem::removeSource(const UserPtr& aUser, int reason) {
-	SourceIter i = getSource(aUser);
+	auto i = getSource(aUser);
 	dcassert(i != sources.end());
 	i->setFlag(reason);
 	badSources.push_back(*i);
@@ -139,7 +139,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 		int64_t end = std::min(getSize(), start + curSize);
 		Segment block(start, end - start);
 		bool overlaps = false;
-		for(SegmentConstIter i = done.begin(); !overlaps && i != done.end(); ++i) {
+		for(auto i = done.begin(); !overlaps && i != done.end(); ++i) {
 			if(curSize <= blockSize) {
 				int64_t dstart = i->getStart();
 				int64_t dend = i->getEnd();
@@ -152,7 +152,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 			}
 		}
 
-		for(DownloadList::const_iterator i = downloads.begin(); !overlaps && i !=downloads.end(); ++i) {
+		for(auto i = downloads.begin(); !overlaps && i !=downloads.end(); ++i) {
 			overlaps = block.overlaps((*i)->getSegment());
 		}
 
@@ -173,7 +173,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 
 int64_t QueueItem::getDownloadedBytes() const {
 	int64_t total = 0;
-	for(SegmentSet::const_iterator i = done.begin(); i != done.end(); ++i) {
+	for(auto i = done.begin(); i != done.end(); ++i) {
 		total += i->getSize();
 	}
 	return total;
@@ -186,8 +186,8 @@ void QueueItem::addSegment(const Segment& segment) {
 	if(done.size() == 1)
 		return;
 
-	for(SegmentSet::iterator i = ++done.begin() ; i != done.end(); ) {
-		SegmentSet::iterator prev = i;
+	for(auto i = ++done.begin() ; i != done.end(); ) {
+		auto prev = i;
 		prev--;
 		if(prev->getEnd() >= i->getStart()) {
 			Segment big(prev->getStart(), i->getEnd() - prev->getStart());

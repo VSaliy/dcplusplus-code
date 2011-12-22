@@ -222,9 +222,9 @@ void StatusBar::layoutSections(const Point& sz) {
 	parts[fill].size = sizes[fill] = sz.x - std::accumulate(sizes.begin(), sizes.end(), 0);
 
 	std::vector< unsigned > newVec( sizes );
-	std::vector< unsigned >::const_iterator origIdx = sizes.begin();
+	auto origIdx = sizes.begin();
 	unsigned offset = 0;
-	for ( std::vector< unsigned >::iterator idx = newVec.begin(); idx != newVec.end(); ++idx, ++origIdx ) {
+	for(auto idx = newVec.begin(); idx != newVec.end(); ++idx, ++origIdx ) {
 		* idx = ( * origIdx ) + offset;
 		offset += * origIdx;
 	}

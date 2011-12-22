@@ -143,11 +143,11 @@ void Widget::callAsync(const Application::Callback& f) {
 bool Widget::handleMessage(const MSG &msg, LRESULT &retVal) {
 	// First we must create a "comparable" message...
 	Message msgComparer(msg);
-	CallbackCollectionType::iterator i = handlers.find(msgComparer);
+	auto i = handlers.find(msgComparer);
 	bool handled = false;
 	if(i != handlers.end()) {
 		CallbackList& list = i->second;
-		for(CallbackList::iterator j = list.begin(); j != list.end(); ++j) {
+		for(auto j = list.begin(); j != list.end(); ++j) {
 			handled |= (*j)(msg, retVal);
 		}
 	}

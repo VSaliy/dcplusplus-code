@@ -165,8 +165,8 @@ bool StatsFrame::eachSecond() {
 	addTick(udiff, tdiff, up, upAvg, scroll);
 
 	int64_t mspeed = 0;
-	StatIter i;
-	for(i = down.begin(); i != down.end(); ++i) {
+	auto i = down.begin();
+	for(; i != down.end(); ++i) {
 		if(mspeed < i->speed)
 			mspeed = i->speed;
 	}
@@ -186,8 +186,8 @@ bool StatsFrame::eachSecond() {
 }
 
 void StatsFrame::drawLine(dwt::Canvas& canvas, StatIter begin, StatIter end, const dwt::Rectangle& rect, long clientRight) {
-	StatIter i;
-	for(i = begin; i != end; ++i) {
+	auto i = begin;
+	for(; i != end; ++i) {
 		if((clientRight - (long)i->scroll) < rect.right())
 			break;
 		clientRight -= i->scroll;
@@ -220,7 +220,7 @@ void StatsFrame::addTick(int64_t bdiff, int64_t tdiff, StatList& lst, AvgList& a
 
 	bspeed = 0;
 
-	for(AvgIter ai = avg.begin(); ai != avg.end(); ++ai) {
+	for(auto ai = avg.begin(); ai != avg.end(); ++ai) {
 		bspeed += *ai;
 	}
 

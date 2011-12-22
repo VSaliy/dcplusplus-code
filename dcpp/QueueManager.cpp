@@ -173,7 +173,7 @@ void QueueManager::FileQueue::move(QueueItem* qi, const string& aTarget) {
 }
 
 void QueueManager::UserQueue::add(QueueItem* qi) {
-	for(QueueItem::SourceConstIter i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
+	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
 		add(qi, i->getUser());
 	}
 }
@@ -234,7 +234,7 @@ void QueueManager::UserQueue::addDownload(QueueItem* qi, Download* d) {
 void QueueManager::UserQueue::removeDownload(QueueItem* qi, const UserPtr& user) {
 	running.erase(user);
 
-	for(DownloadList::iterator i = qi->getDownloads().begin(); i != qi->getDownloads().end(); ++i) {
+	for(auto i = qi->getDownloads().begin(); i != qi->getDownloads().end(); ++i) {
 		if((*i)->getUser() == user) {
 			qi->getDownloads().erase(i);
 			break;
@@ -274,7 +274,7 @@ QueueItem* QueueManager::UserQueue::getRunning(const UserPtr& aUser) {
 }
 
 void QueueManager::UserQueue::remove(QueueItem* qi, bool removeRunning) {
-	for(QueueItem::SourceConstIter i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
+	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
 		remove(qi, i->getUser(), removeRunning);
 	}
 }
@@ -337,7 +337,7 @@ int QueueManager::Rechecker::run() {
 		string file;
 		{
 			Lock l(cs);
-			StringIter i = files.begin();
+			auto i = files.begin();
 			if(i == files.end()) {
 				active = false;
 				return 0;
@@ -464,7 +464,7 @@ int QueueManager::Rechecker::run() {
 			continue;
 		}
 
-		for(Sizes::const_iterator i = sizes.begin(); i != sizes.end(); ++i)
+		for(auto i = sizes.begin(); i != sizes.end(); ++i)
 			q->addSegment(Segment(i->first, i->second));
 
 		qm->rechecked(q);
@@ -733,7 +733,7 @@ void QueueManager::addDirectory(const string& aDir, const HintedUser& aUser, con
 
 		DirectoryItem::DirectoryPair dp = directories.equal_range(aUser);
 
-		for(DirectoryItem::DirectoryIter i = dp.first; i != dp.second; ++i) {
+		for(auto i = dp.first; i != dp.second; ++i) {
 			if(Util::stricmp(aTarget.c_str(), i->second->getName().c_str()) == 0)
 				return;
 		}
@@ -769,12 +769,12 @@ typedef unordered_map<TTHValue, const DirectoryListing::File*> TTHMap;
 static TTHMap tthMap;
 
 void buildMap(const DirectoryListing::Directory* dir) noexcept {
-	for(DirectoryListing::Directory::List::const_iterator j = dir->directories.begin(); j != dir->directories.end(); ++j) {
+	for(auto j = dir->directories.begin(); j != dir->directories.end(); ++j) {
 		if(!(*j)->getAdls())
 			buildMap(*j);
 	}
 
-	for(DirectoryListing::File::List::const_iterator i = dir->files.begin(); i != dir->files.end(); ++i) {
+	for(auto i = dir->files.begin(); i != dir->files.end(); ++i) {
 		const DirectoryListing::File* df = *i;
 		tthMap.insert(make_pair(df->getTTH(), df));
 	}
@@ -788,13 +788,13 @@ int QueueManager::matchListing(const DirectoryListing& dl) noexcept {
 		tthMap.clear();
 		buildMap(dl.getRoot());
 
-		for(QueueItem::StringMap::const_iterator i = fileQueue.getQueue().begin(); i != fileQueue.getQueue().end(); ++i) {
+		for(auto i = fileQueue.getQueue().begin(); i != fileQueue.getQueue().end(); ++i) {
 			QueueItem* qi = i->second;
 			if(qi->isFinished())
 				continue;
 			if(qi->isSet(QueueItem::FLAG_USER_LIST))
 				continue;
-			TTHMap::iterator j = tthMap.find(qi->getTTH());
+			auto j = tthMap.find(qi->getTTH());
 			if(j != tthMap.end() && i->second->getSize() == qi->getSize()) {
 				try {
 					addSource(qi, dl.getUser(), QueueItem::Source::FLAG_FILE_NOT_AVAILABLE);
@@ -859,7 +859,7 @@ void QueueManager::move(const string& aSource, const string& aTarget) noexcept {
 			if(qs->getSize() != qt->getSize() || qs->getTTH() != qt->getTTH())
 				return;
 
-			for(QueueItem::SourceConstIter i = qs->getSources().begin(); i != qs->getSources().end(); ++i) {
+			for(auto i = qs->getSources().begin(); i != qs->getSources().end(); ++i) {
 				try {
 					addSource(qt, i->getUser(), QueueItem::Source::FLAG_MASK);
 				} catch(const Exception&) {
@@ -1210,7 +1210,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 		delete aDownload;
 	}
 
-	for(HintedUserList::iterator i = getConn.begin(); i != getConn.end(); ++i) {
+	for(auto i = getConn.begin(); i != getConn.end(); ++i) {
 		ConnectionManager::getInstance()->getDownloadConnection(*i);
 	}
 
@@ -1237,7 +1237,7 @@ void QueueManager::processList(const string& name, const HintedUser& user, int f
 			directories.erase(user);
 		}
 
-		for(DirectoryItem::Iter i = dl.begin(); i != dl.end(); ++i) {
+		for(auto i = dl.begin(); i != dl.end(); ++i) {
 			DirectoryItem* di = *i;
 			dirList.download(di->getName(), di->getTarget(), false);
 			delete di;
@@ -1265,15 +1265,15 @@ void QueueManager::remove(const string& aTarget) noexcept {
 
 		if(q->isSet(QueueItem::FLAG_DIRECTORY_DOWNLOAD)) {
 			dcassert(q->getSources().size() == 1);
-			DirectoryItem::DirectoryPair dp = directories.equal_range(q->getSources()[0].getUser());
-			for(DirectoryItem::DirectoryIter i = dp.first; i != dp.second; ++i) {
+			auto dp = directories.equal_range(q->getSources()[0].getUser());
+			for(auto i = dp.first; i != dp.second; ++i) {
 				delete i->second;
 			}
 			directories.erase(q->getSources()[0].getUser());
 		}
 
 		if(q->isRunning()) {
-			for(DownloadList::iterator i = q->getDownloads().begin(); i != q->getDownloads().end(); ++i) {
+			for(auto i = q->getDownloads().begin(); i != q->getDownloads().end(); ++i) {
 				x.push_back((*i)->getUser());
 			}
 		} else if(!q->getTempTarget().empty() && q->getTempTarget() != q->getTarget()) {
@@ -1290,7 +1290,7 @@ void QueueManager::remove(const string& aTarget) noexcept {
 		setDirty();
 	}
 
-	for(UserList::iterator i = x.begin(); i != x.end(); ++i) {
+	for(auto i = x.begin(); i != x.end(); ++i) {
 		ConnectionManager::getInstance()->disconnect(*i, true);
 	}
 }
@@ -1405,7 +1405,7 @@ void QueueManager::setPriority(const string& aTarget, QueueItem::Priority p) noe
 		}
 	}
 
-	for(HintedUserList::iterator i = getConn.begin(); i != getConn.end(); ++i) {
+	for(auto i = getConn.begin(); i != getConn.end(); ++i) {
 		ConnectionManager::getInstance()->getDownloadConnection(*i);
 	}
 }
@@ -1446,7 +1446,7 @@ void QueueManager::saveQueue(bool force) noexcept {
 				}
 				f.write(LIT("\">\r\n"));
 
-				for(QueueItem::SegmentSet::const_iterator i = qi->getDone().begin(); i != qi->getDone().end(); ++i) {
+				for(auto i = qi->getDone().begin(); i != qi->getDone().end(); ++i) {
 					f.write(LIT("\t\t<Segment Start=\""));
 					f.write(Util::toString(i->getStart()));
 					f.write(LIT("\" Size=\""));
@@ -1454,7 +1454,7 @@ void QueueManager::saveQueue(bool force) noexcept {
 					f.write(LIT("\"/>\r\n"));
 				}
 
-				for(QueueItem::SourceConstIter j = qi->sources.begin(); j != qi->sources.end(); ++j) {
+				for(auto j = qi->sources.begin(); j != qi->sources.end(); ++j) {
 					const CID& cid = j->getUser().user->getCID();
 					const string& hint = j->getUser().hint;
 
@@ -1522,7 +1522,7 @@ int QueueManager::countOnlineSources(const string& aTarget) {
 	if(!qi)
 		return 0;
 	int onlineSources = 0;
-	for(QueueItem::SourceConstIter i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
+	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
 		if(i->getUser().user->isOnline())
 			onlineSources++;
 	}
@@ -1733,7 +1733,7 @@ bool QueueManager::checkSfv(QueueItem* qi, Download* d) {
 			setPriority(qi->getTarget(), QueueItem::PAUSED);
 
 			QueueItem::SourceList sources = qi->getSources();
-			for(QueueItem::SourceConstIter i = sources.begin(); i != sources.end(); ++i) {
+			for(auto i = sources.begin(); i != sources.end(); ++i) {
 				removeSource(qi->getTarget(), i->getUser(), QueueItem::Source::FLAG_CRC_FAILED, false);
 			}
 

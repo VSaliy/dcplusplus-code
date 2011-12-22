@@ -184,7 +184,7 @@ ensureVisible(ensureVisible_)
 
 	// in grouped mode, the indexes of each item are completely random, so use entry pointers instead
 	std::vector<unsigned> selection = hubs->getSelection();
-	for(std::vector<unsigned>::const_iterator i = selection.begin(), iend = selection.end(); i != iend; ++i)
+	for(auto i = selection.begin(), iend = selection.end(); i != iend; ++i)
 		selected.push_back(reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i)));
 
 	scroll = hubs->getScrollInfo(SB_VERT, SIF_POS).nPos;
@@ -196,7 +196,7 @@ FavHubsFrame::StateKeeper::~StateKeeper() {
 
 	hubs->scroll(0, scroll);
 
-	for(FavoriteHubEntryList::const_iterator i = selected.begin(), iend = selected.end(); i != iend; ++i) {
+	for(auto i = selected.begin(), iend = selected.end(); i != iend; ++i) {
 		int pos = hubs->findData(reinterpret_cast<LPARAM>(*i));
 		hubs->select(pos);
 		if(ensureVisible)
@@ -248,19 +248,19 @@ void FavHubsFrame::handleMove(bool up) {
 	if(!up)
 		reverse(fh_copy.begin(), fh_copy.end());
 	FavoriteHubEntryList moved;
-	for(FavoriteHubEntryList::iterator i = fh_copy.begin(); i != fh_copy.end(); ++i) {
+	for(auto i = fh_copy.begin(); i != fh_copy.end(); ++i) {
 		if(find(selected.begin(), selected.end(), *i) == selected.end())
 			continue;
 		if(find(moved.begin(), moved.end(), *i) != moved.end())
 			continue;
 		const string& group = (*i)->getGroup();
-		for(FavoriteHubEntryList::iterator j = i; ;) {
+		for(auto j = i; ;) {
 			if(j == fh_copy.begin()) {
 				// couldn't move within the same group; change group.
 				TStringList groups(getSortedGroups());
 				if(!up)
 					reverse(groups.begin(), groups.end());
-				TStringIterC ig = find(groups.begin(), groups.end(), Text::toT(group));
+				auto ig = find(groups.begin(), groups.end(), Text::toT(group));
 				if(ig != groups.begin()) {
 					FavoriteHubEntryPtr f = *i;
 					f->setGroup(Text::fromT(*(ig - 1)));
@@ -369,7 +369,7 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 TStringList FavHubsFrame::getSortedGroups() const {
 	set<tstring, noCaseStringLess> sorted_groups;
 	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
-	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
+	for(auto i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
 		sorted_groups.insert(Text::toT(i->first));
 
 	TStringList groups(sorted_groups.begin(), sorted_groups.end());
@@ -391,7 +391,7 @@ void FavHubsFrame::fillList() {
 	bool grouped = hubs->isGrouped();
 
 	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
-	for(FavoriteHubEntryList::const_iterator i = fl.begin(), iend = fl.end(); i != iend; ++i) {
+	for(auto i = fl.begin(), iend = fl.end(); i != iend; ++i) {
 		const FavoriteHubEntryPtr& entry = *i;
 		const string& group = entry->getGroup();
 
@@ -399,7 +399,7 @@ void FavHubsFrame::fillList() {
 		if(grouped) {
 			index = 0;
 			if(!group.empty()) {
-				TStringIterC groupI = find(groups.begin() + 1, groups.end(), Text::toT(group));
+				auto groupI = find(groups.begin() + 1, groups.end(), Text::toT(group));
 				if(groupI != groups.end())
 					index = groupI - groups.begin();
 			}
@@ -432,7 +432,7 @@ void FavHubsFrame::openSelected() {
 		return;
 
 	std::vector<unsigned> items = hubs->getSelection();
-	for(std::vector<unsigned>::const_iterator i = items.begin(), iend = items.end(); i != iend; ++i) {
+	for(auto i = items.begin(), iend = items.end(); i != iend; ++i) {
 		HubFrame::openWindow(getParent(), reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i))->getServer());
 	}
 }

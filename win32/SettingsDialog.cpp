@@ -316,7 +316,7 @@ void SettingsDialog::updateTitle() {
 }
 
 void SettingsDialog::write() {
-	for(PageList::iterator i = pages.begin(); i != pages.end(); ++i) {
+	for(auto i = pages.begin(); i != pages.end(); ++i) {
 		i->first->write();
 	}
 }

@@ -60,7 +60,7 @@ void FinishedManager::remove(bool upload, const string& file) {
 	{
 		Lock l(cs);
 		MapByFile& map = upload ? ULByFile : DLByFile;
-		MapByFile::iterator it = map.find(file);
+		auto it = map.find(file);
 		if(it != map.end())
 			map.erase(it);
 		else
@@ -73,7 +73,7 @@ void FinishedManager::remove(bool upload, const HintedUser& user) {
 	{
 		Lock l(cs);
 		MapByUser& map = upload ? ULByUser : DLByUser;
-		MapByUser::iterator it = map.find(user);
+		auto it = map.find(user);
 		if(it != map.end())
 			map.erase(it);
 		else
@@ -132,7 +132,7 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 
 		{
 			MapByFile& map = upload ? ULByFile : DLByFile;
-			MapByFile::iterator it = map.find(file);
+			auto it = map.find(file);
 			if(it == map.end()) {
 				FinishedFileItemPtr p = new FinishedFileItem(
 					t->getPos(),
@@ -161,7 +161,7 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 
 		{
 			MapByUser& map = upload ? ULByUser : DLByUser;
-			MapByUser::iterator it = map.find(user);
+			auto it = map.find(user);
 			if(it == map.end()) {
 				FinishedUserItemPtr p = new FinishedUserItem(
 					t->getPos(),

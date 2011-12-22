@@ -212,7 +212,7 @@ bool Application::dispatch() {
 		}
 	}
 
-	for(FilterIter i = filters.begin(); i != filters.end(); ++i) {
+	for(auto i = filters.begin(); i != filters.end(); ++i) {
 		if ((*i)(msg)) {
 			return true;
 		}

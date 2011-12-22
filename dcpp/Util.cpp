@@ -186,7 +186,7 @@ void Util::initialize(PathsMap pathOverrides) {
 	paths[PATH_NOTEPAD] = paths[PATH_USER_CONFIG] + "Notepad.txt";
 
 	// Override core generated paths
-	for (PathsMap::const_iterator it = pathOverrides.begin(); it != pathOverrides.end(); ++it)
+	for (auto it = pathOverrides.begin(); it != pathOverrides.end(); ++it)
 	{
 		if (!it->second.empty())
 			paths[it->first] = it->second;

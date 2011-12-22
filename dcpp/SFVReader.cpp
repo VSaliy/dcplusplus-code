@@ -54,7 +54,7 @@ void SFVReader::load(const string& fileName) noexcept {
 	string fname = Util::getFileName(fileName);
 	StringList files = File::findFiles(path, "*.sfv");
 
-	for(StringIter i = files.begin(); i != files.end(); ++i) {
+	for(auto i = files.begin(); i != files.end(); ++i) {
 		try {
 			if (tryFile(*i, fname)) {
 				return;

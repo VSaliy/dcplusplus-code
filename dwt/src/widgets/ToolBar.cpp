@@ -144,12 +144,12 @@ void ToolBar::setLayout(const std::vector<std::string>& ids) {
 	while(size() > 0)
 		removeButton(0);
 
-	for(std::vector<std::string>::const_iterator id = ids.begin(), id_end = ids.end(); id != id_end; ++id) {
+	for(auto id = ids.begin(), id_end = ids.end(); id != id_end; ++id) {
 		const TBBUTTON* ptb = 0;
 		if(id->empty())
 			ptb = &getSeparator();
 		else {
-			for(Buttons::const_iterator button = buttons.begin(), button_end = buttons.end(); button != button_end; ++button) {
+			for(auto button = buttons.begin(), button_end = buttons.end(); button != button_end; ++button) {
 				if(button->id == *id) {
 					ptb = &(button->button);
 				}
@@ -303,7 +303,7 @@ const ToolBar::Button* ToolBar::getButton(unsigned position) const {
 }
 
 int ToolBar::getIntId(const std::string& id) const {
-	for(Buttons::const_iterator i = buttons.begin(), iend = buttons.end(); i != iend; ++i) {
+	for(auto i = buttons.begin(), iend = buttons.end(); i != iend; ++i) {
 		if(i->id == id)
 			return i->button.idCommand;
 	}

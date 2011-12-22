@@ -59,7 +59,7 @@ void WindowManager::addRecent(const string& id, const WindowParams& params) {
 void WindowManager::addRecent_(const string& id, const WindowParams& params, bool top) {
 	unsigned max;
 	{
-		MaxRecentItems::const_iterator i = maxRecentItems.find(id);
+		auto i = maxRecentItems.find(id);
 		if(i == maxRecentItems.end()) {
 			maxRecentItems[id] = max = MAX_RECENTS_DEFAULT;
 		} else {
@@ -78,7 +78,7 @@ void WindowManager::addRecent_(const string& id, const WindowParams& params, boo
 
 	WindowInfoList& infoList = recent[id];
 	if(top) {
-		WindowInfoList::iterator i = std::find(infoList.begin(), infoList.end(), info);
+		auto i = std::find(infoList.begin(), infoList.end(), info);
 		if(i == infoList.end()) {
 			infoList.insert(infoList.begin(), info);
 			if(infoList.size() > max)
@@ -92,10 +92,10 @@ void WindowManager::addRecent_(const string& id, const WindowParams& params, boo
 }
 
 void WindowManager::updateRecent(const string& id, const WindowParams& params) {
-	RecentList::iterator ri = recent.find(id);
+	auto ri = recent.find(id);
 	if(ri != recent.end()) {
 		WindowInfo info(id, params);
-		WindowInfoList::iterator i = std::find(ri->second.begin(), ri->second.end(), info);
+		auto i = std::find(ri->second.begin(), ri->second.end(), info);
 		if(i != ri->second.end())
 			i->setParams(params);
 	}
@@ -104,7 +104,7 @@ void WindowManager::updateRecent(const string& id, const WindowParams& params) {
 void WindowManager::setMaxRecentItems(const string& id, unsigned max) {
 	maxRecentItems[id] = max;
 
-	RecentList::iterator i = recent.find(id);
+	auto i = recent.find(id);
 	if(i != recent.end()) {
 		if(max == 0) {
 			recent.erase(i);
@@ -116,7 +116,7 @@ void WindowManager::setMaxRecentItems(const string& id, unsigned max) {
 }
 
 unsigned WindowManager::getMaxRecentItems(const string& id) const {
-	MaxRecentItems::const_iterator i = maxRecentItems.find(id);
+	auto i = maxRecentItems.find(id);
 	if(i == maxRecentItems.end())
 		return MAX_RECENTS_DEFAULT;
 	return i->second;
@@ -124,7 +124,7 @@ unsigned WindowManager::getMaxRecentItems(const string& id) const {
 
 void WindowManager::prepareSave() const {
 	prepareSave(list);
-	for(RecentList::const_iterator i = recent.begin(), iend = recent.end(); i != iend; ++i)
+	for(auto i = recent.begin(), iend = recent.end(); i != iend; ++i)
 		prepareSave(i->second);
 }
 
@@ -226,20 +226,20 @@ void WindowManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
 void WindowManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcept {
 	xml.addTag("Windows");
 	xml.stepIn();
-	for(WindowInfoList::const_iterator i = list.begin(), iend = list.end(); i != iend; ++i)
+	for(auto i = list.begin(), iend = list.end(); i != iend; ++i)
 		addTag(xml, *i);
 	xml.stepOut();
 
 	xml.addTag("Recent");
 	xml.stepIn();
-	for(MaxRecentItems::const_iterator i = maxRecentItems.begin(), iend = maxRecentItems.end(); i != iend; ++i) {
+	for(auto i = maxRecentItems.begin(), iend = maxRecentItems.end(); i != iend; ++i) {
 		xml.addTag("Configuration");
 		xml.addChildAttrib("Id", i->first);
 		xml.addChildAttrib("MaxItems", i->second);
 	}
-	for(RecentList::const_iterator ri = recent.begin(), riend = recent.end(); ri != riend; ++ri) {
+	for(auto ri = recent.begin(), riend = recent.end(); ri != riend; ++ri) {
 		const WindowInfoList& infoList = ri->second;
-		for(WindowInfoList::const_iterator i = infoList.begin(), iend = infoList.end(); i != iend; ++i)
+		for(auto i = infoList.begin(), iend = infoList.end(); i != iend; ++i)
 			addTag(xml, *i);
 	}
 	xml.stepOut();

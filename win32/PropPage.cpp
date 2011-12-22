@@ -58,7 +58,7 @@ void PropPage::layout() {
 void PropPage::read(const ItemList& items) {
 	SettingsManager* settings = SettingsManager::getInstance();
 
-	for(ItemList::const_iterator i = items.begin(); i != items.end(); ++i)
+	for(auto i = items.begin(); i != items.end(); ++i)
 	{
 		switch(i->type)
 		{
@@ -106,7 +106,7 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 void PropPage::write(const ItemList& items) {
 	SettingsManager* settings = SettingsManager::getInstance();
 
-	for(ItemList::const_iterator i = items.begin(); i != items.end(); ++i) {
+	for(auto i = items.begin(); i != items.end(); ++i) {
 		switch(i->type) {
 		case T_STR:
 				settings->set((SettingsManager::StrSetting)i->setting, Text::fromT(static_cast<TextBoxPtr>(i->widget)->getText()));

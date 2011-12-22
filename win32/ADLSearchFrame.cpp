@@ -121,7 +121,7 @@ items(0)
 
 	// Load all searches
 	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
-	for(ADLSearchManager::SearchCollection::iterator i = collection.begin(); i != collection.end(); ++i)
+	for(auto i = collection.begin(); i != collection.end(); ++i)
 		addEntry(*i, /*itemCount*/ -1, /*scroll*/ false);
 }
 
@@ -174,7 +174,7 @@ void ADLSearchFrame::handleProperties() {
 
 	// Get selection info
 	std::vector<unsigned> selected = items->getSelection();
-	for(std::vector<unsigned>::const_iterator i = selected.begin(); i != selected.end(); ++i) {
+	for(auto i = selected.begin(); i != selected.end(); ++i) {
 		// Edit existing
 		ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
 		ADLSearch search = collection[*i];
@@ -204,7 +204,7 @@ void ADLSearchFrame::handleUp() {
 
 	HoldRedraw hold(items);
 	std::vector<unsigned> selected = items->getSelection();
-	for(std::vector<unsigned>::const_iterator i = selected.begin(); i != selected.end(); ++i) {
+	for(auto i = selected.begin(); i != selected.end(); ++i) {
 		if(*i > 0) {
 			ADLSearch search = collection[*i];
 			swap(collection[*i], collection[*i - 1]);
@@ -225,8 +225,8 @@ void ADLSearchFrame::handleDown() {
 	bool save = false;
 
 	HoldRedraw hold(items);
-	std::vector<unsigned> selected = items->getSelection();
-	for(std::vector<unsigned>::reverse_iterator i = selected.rbegin(); i != selected.rend(); ++i) {
+	auto selected = items->getSelection();
+	for(auto i = selected.rbegin(); i != selected.rend(); ++i) {
 		if(*i < items->size() - 1) {
 			ADLSearch search = collection[*i];
 			swap(collection[*i], collection[*i + 1]);
