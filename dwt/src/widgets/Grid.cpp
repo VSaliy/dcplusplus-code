@@ -81,7 +81,7 @@ Point Grid::getPreferredSize() {
 Point Grid::getPreferredSize(size_t row, size_t column) const {
 	Point ret(0, 0);
 
-	for(WidgetInfoList::const_iterator i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
+	for(auto i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
 		if(i->inCell(row, column) && i->w->hasStyle(WS_VISIBLE)) {
 			ret = i->w->getPreferredSize();
 			// TODO consider fractions...
@@ -223,7 +223,7 @@ void Grid::layout() {
 }
 
 Grid::WidgetInfo* Grid::getWidgetInfo(Control* w) {
-	for(WidgetInfoList::iterator i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
+	for(auto i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
 		if(i->w == w) {
 			return &(*i);
 		}
@@ -234,7 +234,7 @@ Grid::WidgetInfo* Grid::getWidgetInfo(Control* w) {
 
 	while(taken) {
 		taken = false;
-		for(WidgetInfoList::const_iterator i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
+		for(auto i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
 			size_t r = pos / columns.size();
 			size_t c = pos % columns.size();
 			if(i->inCell(r, c)) {
@@ -335,7 +335,7 @@ void Grid::clearColumns() {
 void Grid::setWidget(Control* w, size_t row, size_t column, size_t rowSpan, size_t colSpan) {
 	dwtassert(w->getParent() == this, _T("Control must be a child of the grid"));
 
-	for(WidgetInfoList::iterator i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
+	for(auto i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
 		if(i->w == w) {
 			i->row = row;
 			i->column = column;
@@ -349,7 +349,7 @@ void Grid::setWidget(Control* w, size_t row, size_t column, size_t rowSpan, size
 }
 
 void Grid::setWidget(Control* w) {
-	for(WidgetInfoList::iterator i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
+	for(auto i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
 		if(i->w == w) {
 			i->noResize = true;
 			return;

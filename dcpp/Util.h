@@ -381,7 +381,7 @@ public:
 	template<typename string_t>
 	static string_t toString(const string_t& sep, const vector<string_t>& lst) {
 		string_t ret;
-		for(typename vector<string_t>::const_iterator i = lst.begin(), iend = lst.end(); i != iend; ++i) {
+		for(auto i = lst.begin(), iend = lst.end(); i != iend; ++i) {
 			ret += *i;
 			if(i + 1 != iend)
 				ret += sep;

@@ -155,7 +155,7 @@ int SearchManager::run() {
 				}
 
 				// Spin for 60 seconds
-				for(int i = 0; i < 60 && !stop; ++i) {
+				for(auto i = 0; i < 60 && !stop; ++i) {
 					Thread::sleep(1000);
 				}
 			}
@@ -296,7 +296,7 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 	string tth;
 	string token;
 
-	for(StringIterC i = cmd.getParameters().begin(); i != cmd.getParameters().end(); ++i) {
+	for(auto i = cmd.getParameters().begin(); i != cmd.getParameters().end(); ++i) {
 		const string& str = *i;
 		if(str.compare(0, 2, "FN") == 0) {
 			file = Util::toNmdcFile(str.substr(2));
@@ -348,7 +348,7 @@ void SearchManager::respond(const AdcCommand& adc, const CID& from,  bool isUdpA
 	if(results.empty())
 		return;
 
-	for(SearchResultList::const_iterator i = results.begin(); i != results.end(); ++i) {
+	for(auto i = results.begin(); i != results.end(); ++i) {
 		AdcCommand cmd = (*i)->toRES(AdcCommand::TYPE_UDP);
 		if(!token.empty())
 			cmd.addParam("TO", token);

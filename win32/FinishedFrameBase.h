@@ -248,7 +248,7 @@ private:
 
 			{
 				StringList nicks;
-				for(HintedUserList::const_iterator i = entry->getUsers().begin(), iend = entry->getUsers().end(); i != iend; ++i)
+				for(auto i = entry->getUsers().begin(), iend = entry->getUsers().end(); i != iend; ++i)
 					nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks(*i)));
 				columns[FILES_COLUMN_NICKS] = Text::toT(Util::toString(nicks));
 			}
@@ -529,13 +529,13 @@ private:
 		{
 			HoldRedraw hold(files);
 			const FinishedManager::MapByFile& map = FinishedManager::getInstance()->getMapByFile(in_UL);
-			for(FinishedManager::MapByFile::const_iterator i = map.begin(); i != map.end(); ++i)
+			for(auto i = map.begin(); i != map.end(); ++i)
 				addFile(i->first, i->second);
 		}
 		{
 			HoldRedraw hold(users);
 			const FinishedManager::MapByUser& map = FinishedManager::getInstance()->getMapByUser(in_UL);
-			for(FinishedManager::MapByUser::const_iterator i = map.begin(); i != map.end(); ++i)
+			for(auto i = map.begin(); i != map.end(); ++i)
 				addUser(i->first, i->second);
 		}
 

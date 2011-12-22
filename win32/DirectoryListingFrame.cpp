@@ -865,8 +865,8 @@ HTREEITEM DirectoryListingFrame::findItem(HTREEITEM ht, const tstring& name) {
 	if(i == string::npos)
 		return ht;
 
-	for(HTREEITEM child = dirs->getChild(ht); child != NULL; child = dirs->getNextSibling(child)) {
-		DirectoryListing::Directory* d = dirs->getData(child)->dir;
+	for(auto child = dirs->getChild(ht); child != NULL; child = dirs->getNextSibling(child)) {
+		auto d = dirs->getData(child)->dir;
 		if(Text::toT(d->getName()) == name.substr(0, i)) {
 			return findItem(child, name.substr(i+1));
 		}
@@ -875,7 +875,7 @@ HTREEITEM DirectoryListingFrame::findItem(HTREEITEM ht, const tstring& name) {
 }
 
 void DirectoryListingFrame::selectItem(const tstring& name) {
-	HTREEITEM ht = findItem(treeRoot, name);
+	auto ht = findItem(treeRoot, name);
 	if(ht != NULL) {
 		dirs->setSelected(ht);
 		dirs->ensureVisible(ht);
@@ -883,7 +883,7 @@ void DirectoryListingFrame::selectItem(const tstring& name) {
 }
 
 void DirectoryListingFrame::updateTree(DirectoryListing::Directory* aTree, HTREEITEM aParent) {
-	for(DirectoryListing::Directory::Iter i = aTree->directories.begin(); i != aTree->directories.end(); ++i) {
+	for(auto i = aTree->directories.begin(); i != aTree->directories.end(); ++i) {
 		HTREEITEM ht = dirs->insert(aParent, new ItemInfo(*i));
 		if((*i)->getAdls())
 			dirs->setItemState(ht, TVIS_BOLD, TVIS_BOLD);
@@ -946,10 +946,10 @@ void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 	updating = true;
 	clearList();
 
-	for(DirectoryListing::Directory::Iter i = d->directories.begin(); i != d->directories.end(); ++i) {
+	for(auto i = d->directories.begin(); i != d->directories.end(); ++i) {
 		files->insert(files->size(), new ItemInfo(*i));
 	}
-	for(DirectoryListing::File::Iter j = d->files.begin(); j != d->files.end(); ++j) {
+	for(auto j = d->files.begin(); j != d->files.end(); ++j) {
 		ItemInfo* ii = new ItemInfo(*j);
 		files->insert(files->size(), ii);
 	}

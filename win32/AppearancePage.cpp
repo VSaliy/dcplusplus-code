@@ -135,7 +135,7 @@ languages(0)
 	langs["en"] = "English (United States)";
 
 	StringList dirs = File::findFiles(Util::getPath(Util::PATH_LOCALE), "*");
-	for(StringList::const_iterator i = dirs.begin(); i != dirs.end(); ++i) {
+	for(auto i = dirs.begin(); i != dirs.end(); ++i) {
 		string dir = *i + "LC_MESSAGES" PATH_SEPARATOR_STR;
 		StringList files = File::findFiles(dir, "*.mo");
 		if(find(files.begin(), files.end(), dir + "dcpp.mo") == files.end() && find(files.begin(), files.end(), dir + "dcpp-win32.mo") == files.end()) {
@@ -154,7 +154,7 @@ languages(0)
 
 	int selected = 0, j = 1;
 	const string& cur = SETTING(LANGUAGE);
-	for(lang_map::const_iterator i = langs.begin(); i != langs.end(); ++i, ++j) {
+	for(auto i = langs.begin(); i != langs.end(); ++i, ++j) {
 		string text = i->first;
 		if(!i->second.empty())
 			text += ": " + i->second;

@@ -78,7 +78,7 @@ string Identity::getIp() const {
 void Identity::getParams(ParamMap& params, const string& prefix, bool compatibility) const {
 	{
 		FastLock l(cs);
-		for(InfMap::const_iterator i = info.begin(); i != info.end(); ++i) {
+		for(auto i = info.begin(); i != info.end(); ++i) {
 			params[prefix + string((char*)(&i->first), 2)] = i->second;
 		}
 	}
@@ -150,13 +150,13 @@ const string& Identity::getCountry() const {
 
 string Identity::get(const char* name) const {
 	FastLock l(cs);
-	InfMap::const_iterator i = info.find(*(short*)name);
+	auto i = info.find(*(short*)name);
 	return i == info.end() ? Util::emptyString : i->second;
 }
 
 bool Identity::isSet(const char* name) const {
 	FastLock l(cs);
-	InfMap::const_iterator i = info.find(*(short*)name);
+	auto i = info.find(*(short*)name);
 	return i != info.end();
 }
 
@@ -172,7 +172,7 @@ void Identity::set(const char* name, const string& val) {
 bool Identity::supports(const string& name) const {
 	string su = get("SU");
 	StringTokenizer<string> st(su, ',');
-	for(StringIter i = st.getTokens().begin(); i != st.getTokens().end(); ++i) {
+	for(auto i = st.getTokens().begin(); i != st.getTokens().end(); ++i) {
 		if(*i == name)
 			return true;
 	}

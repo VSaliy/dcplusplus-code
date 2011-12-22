@@ -445,7 +445,7 @@ void TabView::next(bool reverse) {
 }
 
 void TabView::setTop(ContainerPtr wnd) {
-	WindowIter i = std::find(viewOrder.begin(), viewOrder.end(), wnd);
+	auto i = std::find(viewOrder.begin(), viewOrder.end(), wnd);
 	if(i != viewOrder.end() && i != --viewOrder.end()) {
 		viewOrder.erase(i);
 		viewOrder.push_back(wnd);

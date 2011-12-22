@@ -506,7 +506,7 @@ void HubFrame::enterImpl(const tstring& s) {
 
 void HubFrame::clearUserList() {
 	users->clear();
-	for(UserMapIter i = userMap.begin(); i != userMap.end(); ++i) {
+	for(auto i = userMap.begin(); i != userMap.end(); ++i) {
 		delete i->second;
 	}
 	currentUser = 0;
@@ -662,7 +662,7 @@ void HubFrame::onPrivateMessage(const UserPtr& from, const UserPtr& to, const Us
 }
 
 HubFrame::UserInfo* HubFrame::findUser(const tstring& nick) {
-	for(UserMapIter i = userMap.begin(); i != userMap.end(); ++i) {
+	for(auto i = userMap.begin(); i != userMap.end(); ++i) {
 		if(i->second->getText(COLUMN_NICK) == nick)
 			return i->second;
 	}
@@ -670,7 +670,7 @@ HubFrame::UserInfo* HubFrame::findUser(const tstring& nick) {
 }
 
 const tstring& HubFrame::getNick(const UserPtr& aUser) {
-	UserMapIter i = userMap.find(aUser);
+	auto i = userMap.find(aUser);
 	if(i == userMap.end())
 		return Util::emptyStringT;
 
@@ -679,7 +679,7 @@ const tstring& HubFrame::getNick(const UserPtr& aUser) {
 }
 
 bool HubFrame::updateUser(const UserTask& u) {
-	UserMapIter i = userMap.find(u.user);
+	auto i = userMap.find(u.user);
 	if(i == userMap.end()) {
 		UserInfo* ui = new UserInfo(u);
 		userMap.insert(make_pair(u.user, ui));
@@ -730,7 +730,7 @@ bool HubFrame::UserInfo::update(const Identity& identity, int sortCol) {
 }
 
 void HubFrame::removeUser(const UserPtr& aUser) {
-	UserMapIter i = userMap.find(aUser);
+	auto i = userMap.find(aUser);
 	if(i == userMap.end()) {
 		// Should never happen?
 		dcassert(i != userMap.end());
@@ -867,7 +867,7 @@ void HubFrame::on(ClientListener::UserUpdated, Client*, const OnlineUser& user) 
 	addTask(UPDATE_USER_JOIN, user);
 }
 void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) noexcept {
-	for(OnlineUserList::const_iterator i = aList.begin(); i != aList.end(); ++i) {
+	for(auto i = aList.begin(); i != aList.end(); ++i) {
 		tasks.add(UPDATE_USER, unique_ptr<Task>(new UserTask(*(*i))));
 	}
 	updateUsers = true;
@@ -955,7 +955,7 @@ tstring HubFrame::getStatusShared() const {
 
 pair<size_t, tstring> HubFrame::getStatusUsers() const {
 	size_t userCount = 0;
-	for(UserMap::const_iterator i = userMap.begin(); i != userMap.end(); ++i){
+	for(auto i = userMap.begin(); i != userMap.end(); ++i){
 		UserInfo* ui = i->second;
 		if(!ui->isHidden())
 			userCount++;
@@ -977,7 +977,7 @@ tstring HubFrame::getStatusAverageShared() const {
 		userCount = users->countSelected();
 	} else {
 		available = std::for_each(userMap.begin(), userMap.end(), CountAvailable()).available;
-		for(UserMap::const_iterator i = userMap.begin(); i != userMap.end(); ++i){
+		for(auto i = userMap.begin(); i != userMap.end(); ++i){
 			UserInfo* ui = i->second;
 			if(!ui->isHidden())
 				userCount++;
@@ -1061,13 +1061,13 @@ void HubFrame::updateUserList(UserInfo* ui) {
 		users->clear();
 
 		if(filter.empty()) {
-			for(UserMapIter i = userMap.begin(); i != userMap.end(); ++i) {
+			for(auto i = userMap.begin(); i != userMap.end(); ++i) {
 				ui = i->second;
 				if(!ui->isHidden())
 					users->insert(i->second);
 			}
 		} else {
-			for(UserMapIter i = userMap.begin(); i != userMap.end(); ++i) {
+			for(auto i = userMap.begin(); i != userMap.end(); ++i) {
 				ui = i->second;
 				if(!ui->isHidden() && filter.match(filterPrep, filterInfoF)) {
 					users->insert(ui);
@@ -1182,7 +1182,7 @@ void HubFrame::handleMultiCopy(unsigned index) {
 
 	UserInfoList sel = selectedUsersImpl();
 	tstring tmpstr;
-	for(UserInfoList::const_iterator i = sel.begin(), iend = sel.end(); i != iend; ++i) {
+	for(auto i = sel.begin(), iend = sel.end(); i != iend; ++i) {
 		tmpstr += static_cast<UserInfo*>(*i)->getText(index);
 		tmpstr += _T(" / ");
 	}
@@ -1259,7 +1259,7 @@ static bool compareCharsNoCase(string::value_type a, string::value_type b) {
 tstring HubFrame::scanNickPrefix(const tstring& prefixT) {
 	string prefix = Text::fromT(prefixT), maxPrefix;
 	tabCompleteNicks.clear();
-	for (UserMap::const_iterator i = userMap.begin(); i != userMap.end(); ++i) {
+	for (auto i = userMap.begin(); i != userMap.end(); ++i) {
 		string prevNick, nick = i->second->getIdentity().getNick(), wholeNick = nick;
 
 		do {
@@ -1314,7 +1314,7 @@ bool HubFrame::tab() {
 		if (inTabComplete) {
 			// Already pressed tab once. Output nick candidate list.
 			tstring nicks;
-			for (StringList::const_iterator i = tabCompleteNicks.begin(); i < tabCompleteNicks.end(); i+=2)
+			for (auto i = tabCompleteNicks.begin(); i < tabCompleteNicks.end(); i+=2)
 				nicks.append(Text::toT(*i + " "));
 			addChat(nicks);
 			inTabComplete = false;

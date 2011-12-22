@@ -77,7 +77,7 @@ string& SimpleXML::escape(string& aString, bool aAttrib, bool aLoading /* = fals
 }
 
 void SimpleXML::Tag::appendAttribString(string& tmp) {
-	for(StringPairIter i = attribs.begin(); i!= attribs.end(); ++i) {
+	for(auto i = attribs.begin(); i!= attribs.end(); ++i) {
 		tmp.append(i->first);
 		tmp.append("=\"", 2);
 		if(needsEscape(i->second, true)) {
@@ -128,7 +128,7 @@ void SimpleXML::Tag::toXML(int indent, OutputStream* f) {
 			tmp.append(">\r\n", 3);
 			f->write(tmp);
 			tmp.clear();
-			for(Iter i = children.begin(); i!=children.end(); ++i) {
+			for(auto i = children.begin(); i!=children.end(); ++i) {
 				(*i)->toXML(indent + 1, f);
 			}
 			tmp.append(indent, '\t');

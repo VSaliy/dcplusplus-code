@@ -83,7 +83,7 @@ bool SimpleXMLReader::error(const char* e) {
 const string& SimpleXMLReader::CallBack::getAttrib(StringPairList& attribs, const string& name, size_t hint) {
 	hint = min(hint, attribs.size());
 
-	StringPairIter i = find_if(attribs.begin() + hint, attribs.end(), CompareFirst<string, string>(name));
+	auto i = find_if(attribs.begin() + hint, attribs.end(), CompareFirst<string, string>(name));
 	if(i == attribs.end()) {
 		i = find_if(attribs.begin(), attribs.begin() + hint, CompareFirst<string, string>(name));
 		return ((i == (attribs.begin() + hint)) ? Util::emptyString : i->second);

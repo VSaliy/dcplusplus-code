@@ -92,13 +92,13 @@ OnlineUser& AdcHub::getUser(const uint32_t aSID, const CID& aCID) {
 
 OnlineUser* AdcHub::findUser(const uint32_t aSID) const {
 	Lock l(cs);
-	SIDMap::const_iterator i = users.find(aSID);
+	auto i = users.find(aSID);
 	return i == users.end() ? NULL : i->second;
 }
 
 OnlineUser* AdcHub::findUser(const CID& aCID) const {
 	Lock l(cs);
-	for(SIDMap::const_iterator i = users.begin(); i != users.end(); ++i) {
+	for(auto i = users.begin(); i != users.end(); ++i) {
 		if(i->second->getUser()->getCID() == aCID) {
 			return i->second;
 		}
@@ -110,7 +110,7 @@ void AdcHub::putUser(const uint32_t aSID, bool disconnect) {
 	OnlineUser* ou = 0;
 	{
 		Lock l(cs);
-		SIDIter i = users.find(aSID);
+		auto i = users.find(aSID);
 		if(i == users.end())
 			return;
 		ou = i->second;
@@ -131,7 +131,7 @@ void AdcHub::clearUsers() {
 		users.swap(tmp);
 	}
 
-	for(SIDIter i = tmp.begin(); i != tmp.end(); ++i) {
+	for(auto i = tmp.begin(); i != tmp.end(); ++i) {
 		if(i->first != AdcCommand::HUB_SID)
 			ClientManager::getInstance()->putOffline(i->second);
 		delete i->second;
@@ -173,7 +173,7 @@ void AdcHub::handle(AdcCommand::INF, AdcCommand& c) noexcept {
 		return;
 	}
 
-	for(StringIterC i = c.getParameters().begin(); i != c.getParameters().end(); ++i) {
+	for(auto i = c.getParameters().begin(); i != c.getParameters().end(); ++i) {
 		if(i->length() < 2)
 			continue;
 
@@ -210,7 +210,7 @@ void AdcHub::handle(AdcCommand::SUP, AdcCommand& c) noexcept {
 		return;
 	bool baseOk = false;
 	bool tigrOk = false;
-	for(StringIter i = c.getParameters().begin(); i != c.getParameters().end(); ++i) {
+	for(auto i = c.getParameters().begin(); i != c.getParameters().end(); ++i) {
 		if(*i == BAS0_SUPPORT) {
 			baseOk = true;
 			tigrOk = true;
@@ -431,7 +431,7 @@ void AdcHub::sendUDP(const AdcCommand& cmd) noexcept {
 	string port;
 	{
 		Lock l(cs);
-		SIDMap::const_iterator i = users.find(cmd.getTo());
+		auto i = users.find(cmd.getTo());
 		if(i == users.end()) {
 			dcdebug("AdcHub::sendUDP: invalid user\n");
 			return;
@@ -721,7 +721,7 @@ void AdcHub::sendUserCmd(const UserCommand& command, const ParamMap& params) {
 		} else {
 			const string& to = command.getTo();
 			Lock l(cs);
-			for(SIDMap::const_iterator i = users.begin(); i != users.end(); ++i) {
+			for(auto i = users.begin(); i != users.end(); ++i) {
 				if(i->second->getIdentity().getNick() == to) {
 					privateMessage(*i->second, cmd);
 					return;
@@ -827,7 +827,7 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 		}
 
 		StringTokenizer<string> st(aString, ' ');
-		for(StringIter i = st.getTokens().begin(); i != st.getTokens().end(); ++i) {
+		for(auto i = st.getTokens().begin(); i != st.getTokens().end(); ++i) {
 			c.addParam("AN", *i);
 		}
 
@@ -945,7 +945,7 @@ void AdcHub::password(const string& pwd) {
 }
 
 static void addParam(StringMap& lastInfoMap, AdcCommand& c, const string& var, const string& value) {
-	StringMapIter i = lastInfoMap.find(var);
+	auto i = lastInfoMap.find(var);
 
 	if(i != lastInfoMap.end()) {
 		if(i->second != value) {
@@ -1036,7 +1036,7 @@ void AdcHub::info(bool /*alwaysSend*/) {
 int64_t AdcHub::getAvailable() const {
 	Lock l(cs);
 	int64_t x = 0;
-	for(SIDMap::const_iterator i = users.begin(); i != users.end(); ++i) {
+	for(auto i = users.begin(); i != users.end(); ++i) {
 		x+=i->second->getIdentity().getBytesShared();
 	}
 	return x;

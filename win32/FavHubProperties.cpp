@@ -193,7 +193,7 @@ void FavHubProperties::fillGroups() {
 	groups->addValue(_T(""));
 
 	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
-	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
+	for(auto i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
 		const string& name = i->first;
 		auto pos = groups->addValue(Text::toT(name));
 		if(needSel && name == entryGroup) {

@@ -403,7 +403,7 @@ void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) {
 }
 
 void SearchFrame::SearchInfo::Download::addFile(SearchInfo* si, const string& target) {
-	for(SearchResultList::const_iterator i = si->srs.begin(); i != si->srs.end(); ++i) {
+	for(auto i = si->srs.begin(); i != si->srs.end(); ++i) {
 		total++;
 		const SearchResultPtr& sr = *i;
 		try {
@@ -503,7 +503,7 @@ void SearchFrame::SearchInfo::update() {
 		columns[COLUMN_CID].clear();
 
 		std::set<std::string> hubs;
-		for(SearchResultList::const_iterator i = srs.begin(), iend = srs.end(); i != iend; ++i) {
+		for(auto i = srs.begin(), iend = srs.end(); i != iend; ++i) {
 			hubs.insert((*i)->getHubName());
 		}
 		columns[COLUMN_HUB] = Text::toT(Util::toString(StringList(hubs.begin(), hubs.end())));
@@ -763,7 +763,7 @@ void SearchFrame::handleRemove() {
 struct UserCollector {
 	template<typename T>
 	void operator()(T* si) {
-		for(SearchResultList::const_iterator i = si->srs.begin(), iend = si->srs.end(); i != iend; ++i) {
+		for(auto i = si->srs.begin(), iend = si->srs.end(); i != iend; ++i) {
 			const SearchResultPtr& sr = *i;
 			if(std::find(users.begin(), users.end(), sr->getUser()) == users.end()) {
 				users.push_back(HintedUser(sr->getUser(), sr->getHubURL()));
@@ -812,7 +812,7 @@ void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& fav
 
 	int n = 0;
 	if(favoriteDirs.size() > 0) {
-		for(StringPairList::const_iterator i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
+		for(auto i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
 			menu->appendItem(Text::toT(i->second), [=] { handleDownloadFavoriteDirs(n); });
 		menu->appendSeparator();
 	}
@@ -821,7 +821,7 @@ void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& fav
 	menu->appendItem(T_("&Browse..."), [this] { handleDownloadTo(); });
 	if(WinUtil::lastDirs.size() > 0) {
 		menu->appendSeparator();
-		for(TStringIter i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
+		for(auto i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
 			menu->appendItem(*i, [=] { handleDownloadTarget(n); });
 	}
 
@@ -829,7 +829,7 @@ void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& fav
 		targets = QueueManager::getInstance()->getTargets(checkTTH.tth);
 		if(targets.size() > 0) {
 			menu->appendSeparator();
-			for(StringIter i = targets.begin(); i != targets.end(); ++i, ++n)
+			for(auto i = targets.begin(); i != targets.end(); ++i, ++n)
 				menu->appendItem(Text::toT(*i), [=] { handleDownloadTarget(n); });
 		}
 	}
@@ -840,7 +840,7 @@ void SearchFrame::addTargetDirMenu(const MenuPtr& parent, const StringPairList& 
 
 	int n = 0;
 	if(favoriteDirs.size() > 0) {
-		for(StringPairList::const_iterator i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
+		for(auto i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
 			menu->appendItem(Text::toT(i->second), [=] { handleDownloadWholeFavoriteDirs(n); });
 		menu->appendSeparator();
 	}
@@ -849,7 +849,7 @@ void SearchFrame::addTargetDirMenu(const MenuPtr& parent, const StringPairList& 
 	menu->appendItem(T_("&Browse..."), [this] { handleDownloadDirTo(); });
 	if(WinUtil::lastDirs.size() > 0) {
 		menu->appendSeparator();
-		for(TStringIter i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
+		for(auto i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
 			menu->appendItem(*i, [=] { handleDownloadWholeTarget(n); });
 	}
 }

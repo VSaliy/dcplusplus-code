@@ -209,7 +209,7 @@ int Table::insert(const std::vector<tstring>& row, LPARAM lPar, int index, int i
 	// now insert sub-items (for columns)
 	lvi.mask = LVIF_TEXT | LVIF_IMAGE;
 	lvi.iSubItem = 1;
-	for(std::vector<tstring>::const_iterator i = row.begin() + 1, iend = row.end(); i != iend; ++i) {
+	for(auto i = row.begin() + 1, iend = row.end(); i != iend; ++i) {
 		lvi.pszText = const_cast<LPTSTR>(i->c_str());
 		lvi.cchTextMax = static_cast<int>(i->size());
 		if(!ListView_SetItem(handle(), &lvi)) {

@@ -178,7 +178,7 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 			bool incomp = getAttrib(attribs, sIncomplete, 1) == "1";
 			DirectoryListing::Directory* d = NULL;
 			if(updating) {
-				for(DirectoryListing::Directory::Iter i = cur->directories.begin(); i != cur->directories.end(); ++i) {
+				for(auto i = cur->directories.begin(); i != cur->directories.end(); ++i) {
 					/// @todo comparisons should be case-insensitive but it takes too long - add a cache
 					if((*i)->getName() == n) {
 						d = *i;
@@ -205,9 +205,9 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 			base = b;
 		}
 		StringList sl = StringTokenizer<string>(base.substr(1), '/').getTokens();
-		for(StringIter i = sl.begin(); i != sl.end(); ++i) {
+		for(auto i = sl.begin(); i != sl.end(); ++i) {
 			DirectoryListing::Directory* d = NULL;
-			for(DirectoryListing::Directory::Iter j = cur->directories.begin(); j != cur->directories.end(); ++j) {
+			for(auto j = cur->directories.begin(); j != cur->directories.end(); ++j) {
 				if((*j)->getName() == *i) {
 					d = *j;
 					break;
@@ -279,13 +279,13 @@ void DirectoryListing::download(Directory* aDir, const string& aTarget, bool hig
 	// First, recurse over the directories
 	Directory::List& lst = aDir->directories;
 	sort(lst.begin(), lst.end(), Directory::DirSort());
-	for(Directory::Iter j = lst.begin(); j != lst.end(); ++j) {
+	for(auto j = lst.begin(); j != lst.end(); ++j) {
 		download(*j, target, highPrio);
 	}
 	// Then add the files
 	File::List& l = aDir->files;
 	sort(l.begin(), l.end(), File::FileSort());
-	for(File::Iter i = aDir->files.begin(); i != aDir->files.end(); ++i) {
+	for(auto i = aDir->files.begin(); i != aDir->files.end(); ++i) {
 		File* file = *i;
 		try {
 			download(file, target + file->getName(), false, highPrio);
@@ -315,11 +315,11 @@ void DirectoryListing::download(File* aFile, const string& aTarget, bool view, b
 }
 
 DirectoryListing::Directory* DirectoryListing::find(const string& aName, Directory* current) {
-	string::size_type end = aName.find('\\');
+	auto end = aName.find('\\');
 	dcassert(end != string::npos);
-	string name = aName.substr(0, end);
+	auto name = aName.substr(0, end);
 
-	Directory::Iter i = std::find(current->directories.begin(), current->directories.end(), name);
+	auto i = std::find(current->directories.begin(), current->directories.end(), name);
 	if(i != current->directories.end()) {
 		if(end == (aName.size() - 1))
 			return *i;
@@ -361,19 +361,19 @@ void DirectoryListing::Directory::filterList(DirectoryListing& dirList) {
 }
 
 void DirectoryListing::Directory::filterList(DirectoryListing::Directory::TTHSet& l) {
-	for(Iter i = directories.begin(); i != directories.end(); ++i) (*i)->filterList(l);
+	for(auto i = directories.begin(); i != directories.end(); ++i) (*i)->filterList(l);
 	directories.erase(std::remove_if(directories.begin(),directories.end(),DirectoryEmpty()),directories.end());
 	files.erase(std::remove_if(files.begin(),files.end(),HashContained(l)),files.end());
 }
 
 void DirectoryListing::Directory::getHashList(DirectoryListing::Directory::TTHSet& l) {
-	for(Iter i = directories.begin(); i != directories.end(); ++i) (*i)->getHashList(l);
-	for(DirectoryListing::File::Iter i = files.begin(); i != files.end(); ++i) l.insert((*i)->getTTH());
+	for(auto i = directories.begin(); i != directories.end(); ++i) (*i)->getHashList(l);
+	for(auto i = files.begin(); i != files.end(); ++i) l.insert((*i)->getTTH());
 }
 
 int64_t DirectoryListing::Directory::getTotalSize(bool adl) {
 	int64_t x = getSize();
-	for(Iter i = directories.begin(); i != directories.end(); ++i) {
+	for(auto i = directories.begin(); i != directories.end(); ++i) {
 		if(!(adl && (*i)->getAdls()))
 			x += (*i)->getTotalSize(adls);
 	}
@@ -382,7 +382,7 @@ int64_t DirectoryListing::Directory::getTotalSize(bool adl) {
 
 size_t DirectoryListing::Directory::getTotalFileCount(bool adl) {
 	size_t x = getFileCount();
-	for(Iter i = directories.begin(); i != directories.end(); ++i) {
+	for(auto i = directories.begin(); i != directories.end(); ++i) {
 		if(!(adl && (*i)->getAdls()))
 			x += (*i)->getTotalFileCount(adls);
 	}

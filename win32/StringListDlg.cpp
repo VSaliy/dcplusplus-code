@@ -169,7 +169,7 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 
 	list->createColumns(TStringList(1));
 
-	for(TStringIterC i = initialValues.begin(), iend = initialValues.end(); i != iend; ++i)
+	for(auto i = initialValues.begin(), iend = initialValues.end(); i != iend; ++i)
 		insert(*i);
 
 	handleSelectionChanged();
@@ -235,7 +235,7 @@ void StringListDlg::handleAddClicked() {
 void StringListDlg::handleMoveUpClicked() {
 	HoldRedraw hold(list);
 	std::vector<unsigned> selected = list->getSelection();
-	for(std::vector<unsigned>::const_iterator i = selected.begin(); i != selected.end(); ++i) {
+	for(auto i = selected.begin(); i != selected.end(); ++i) {
 		if(*i > 0) {
 			tstring selText = list->getText(*i, 0);
 			list->erase(*i);
@@ -247,8 +247,8 @@ void StringListDlg::handleMoveUpClicked() {
 
 void StringListDlg::handleMoveDownClicked() {
 	HoldRedraw hold(list);
-	std::vector<unsigned> selected = list->getSelection();
-	for(std::vector<unsigned>::reverse_iterator i = selected.rbegin(); i != selected.rend(); ++i) {
+	auto selected = list->getSelection();
+	for(auto i = selected.rbegin(); i != selected.rend(); ++i) {
 		if(*i < list->size() - 1) {
 			tstring selText = list->getText(*i, 0);
 			list->erase(*i);

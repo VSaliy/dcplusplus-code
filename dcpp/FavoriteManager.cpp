@@ -80,7 +80,7 @@ UserCommand FavoriteManager::addUserCommand(int type, int ctx, int flags, const 
 
 bool FavoriteManager::getUserCommand(int cid, UserCommand& uc) {
 	Lock l(cs);
-	for(UserCommand::List::iterator i = userCommands.begin(); i != userCommands.end(); ++i) {
+	for(auto i = userCommands.begin(); i != userCommands.end(); ++i) {
 		if(i->getId() == cid) {
 			uc = *i;
 			return true;
@@ -92,7 +92,7 @@ bool FavoriteManager::getUserCommand(int cid, UserCommand& uc) {
 bool FavoriteManager::moveUserCommand(int cid, int pos) {
 	dcassert(pos == -1 || pos == 1);
 	Lock l(cs);
-	for(UserCommand::List::iterator i = userCommands.begin(); i != userCommands.end(); ++i) {
+	for(auto i = userCommands.begin(); i != userCommands.end(); ++i) {
 		if(i->getId() == cid) {
 			swap(*i, *(i + pos));
 			return true;
@@ -104,7 +104,7 @@ bool FavoriteManager::moveUserCommand(int cid, int pos) {
 void FavoriteManager::updateUserCommand(const UserCommand& uc) {
 	bool nosave = true;
 	Lock l(cs);
-	for(UserCommand::List::iterator i = userCommands.begin(); i != userCommands.end(); ++i) {
+	for(auto i = userCommands.begin(); i != userCommands.end(); ++i) {
 		if(i->getId() == uc.getId()) {
 			*i = uc;
 			nosave = uc.isSet(UserCommand::FLAG_NOSAVE);
@@ -117,7 +117,7 @@ void FavoriteManager::updateUserCommand(const UserCommand& uc) {
 
 int FavoriteManager::findUserCommand(const string& aName, const string& aUrl) {
 	Lock l(cs);
-	for(UserCommand::List::iterator i = userCommands.begin(); i != userCommands.end(); ++i) {
+	for(auto i = userCommands.begin(); i != userCommands.end(); ++i) {
 		if(i->getName() == aName && i->getHub() == aUrl) {
 			return i->getId();
 		}
@@ -128,7 +128,7 @@ int FavoriteManager::findUserCommand(const string& aName, const string& aUrl) {
 void FavoriteManager::removeUserCommand(int cid) {
 	bool nosave = true;
 	Lock l(cs);
-	for(UserCommand::List::iterator i = userCommands.begin(); i != userCommands.end(); ++i) {
+	for(auto i = userCommands.begin(); i != userCommands.end(); ++i) {
 		if(i->getId() == cid) {
 			nosave = i->isSet(UserCommand::FLAG_NOSAVE);
 			userCommands.erase(i);
@@ -140,7 +140,7 @@ void FavoriteManager::removeUserCommand(int cid) {
 }
 void FavoriteManager::removeUserCommand(const string& srv) {
 	Lock l(cs);
-	for(UserCommand::List::iterator i = userCommands.begin(); i != userCommands.end(); ) {
+	for(auto i = userCommands.begin(); i != userCommands.end(); ) {
 		if((i->getHub() == srv) && i->isSet(UserCommand::FLAG_NOSAVE)) {
 			i = userCommands.erase(i);
 		} else {
@@ -151,7 +151,7 @@ void FavoriteManager::removeUserCommand(const string& srv) {
 
 void FavoriteManager::removeHubUserCommands(int ctx, const string& hub) {
 	Lock l(cs);
-	for(UserCommand::List::iterator i = userCommands.begin(); i != userCommands.end(); ) {
+	for(auto i = userCommands.begin(); i != userCommands.end(); ) {
 		if(i->getHub() == hub && i->isSet(UserCommand::FLAG_NOSAVE) && i->getCtx() & ctx) {
 			i = userCommands.erase(i);
 		} else {
@@ -173,7 +173,7 @@ void FavoriteManager::addFavoriteUser(const UserPtr& aUser) {
 			if(nicks.empty())
 				nicks.push_back(Util::emptyString);
 
-			FavoriteMap::iterator i = users.insert(make_pair(aUser->getCID(), FavoriteUser(aUser, nicks[0], urls[0]))).first;
+			auto i = users.insert(make_pair(aUser->getCID(), FavoriteUser(aUser, nicks[0], urls[0]))).first;
 			fire(FavoriteManagerListener::UserAdded(), i->second);
 			save();
 		}
@@ -184,7 +184,7 @@ void FavoriteManager::addFavoriteUser(const UserPtr& aUser) {
 
 void FavoriteManager::removeFavoriteUser(const UserPtr& aUser) {
 	Lock l(cs);
-	FavoriteMap::iterator i = users.find(aUser->getCID());
+	auto i = users.find(aUser->getCID());
 	if(i != users.end()) {
 		fire(FavoriteManagerListener::UserRemoved(), i->second);
 		users.erase(i);
@@ -194,7 +194,7 @@ void FavoriteManager::removeFavoriteUser(const UserPtr& aUser) {
 
 std::string FavoriteManager::getUserURL(const UserPtr& aUser) const {
 	Lock l(cs);
-	FavoriteMap::const_iterator i = users.find(aUser->getCID());
+	auto i = users.find(aUser->getCID());
 	if(i != users.end()) {
 		const FavoriteUser& fu = i->second;
 		return fu.getUrl();
@@ -205,7 +205,7 @@ std::string FavoriteManager::getUserURL(const UserPtr& aUser) const {
 void FavoriteManager::addFavorite(const FavoriteHubEntry& aEntry) {
 	FavoriteHubEntry* f;
 
-	FavoriteHubEntryList::iterator i = getFavoriteHub(aEntry.getServer());
+	auto i = getFavoriteHub(aEntry.getServer());
 	if(i != favoriteHubs.end()) {
 		return;
 	}
@@ -216,7 +216,7 @@ void FavoriteManager::addFavorite(const FavoriteHubEntry& aEntry) {
 }
 
 void FavoriteManager::removeFavorite(FavoriteHubEntry* entry) {
-	FavoriteHubEntryList::iterator i = find(favoriteHubs.begin(), favoriteHubs.end(), entry);
+	auto i = find(favoriteHubs.begin(), favoriteHubs.end(), entry);
 	if(i == favoriteHubs.end()) {
 		return;
 	}
@@ -228,11 +228,7 @@ void FavoriteManager::removeFavorite(FavoriteHubEntry* entry) {
 }
 
 bool FavoriteManager::isFavoriteHub(const std::string& url) {
-	FavoriteHubEntryList::iterator i = getFavoriteHub(url);
-	if(i != favoriteHubs.end()) {
-		return true;
-	}
-	return false;
+	return (bool)getFavoriteHub(url);
 }
 
 bool FavoriteManager::addFavoriteDir(const string& aDirectory, const string & aName){
@@ -241,7 +237,7 @@ bool FavoriteManager::addFavoriteDir(const string& aDirectory, const string & aN
 	if( path[ path.length() -1 ] != PATH_SEPARATOR )
 		path += PATH_SEPARATOR;
 
-	for(StringPairIter i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i) {
+	for(auto i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i) {
 		if((Util::strnicmp(path, i->first, i->first.length()) == 0) && (Util::strnicmp(path, i->first, path.length()) == 0)) {
 			return false;
 		}
@@ -260,7 +256,7 @@ bool FavoriteManager::removeFavoriteDir(const string& aName) {
 	if(d[d.length() - 1] != PATH_SEPARATOR)
 		d += PATH_SEPARATOR;
 
-	for(StringPairIter j = favoriteDirs.begin(); j != favoriteDirs.end(); ++j) {
+	for(auto j = favoriteDirs.begin(); j != favoriteDirs.end(); ++j) {
 		if(Util::stricmp(j->first.c_str(), d.c_str()) == 0) {
 			favoriteDirs.erase(j);
 			save();
@@ -272,7 +268,7 @@ bool FavoriteManager::removeFavoriteDir(const string& aName) {
 
 bool FavoriteManager::renameFavoriteDir(const string& aName, const string& anotherName) {
 
-	for(StringPairIter j = favoriteDirs.begin(); j != favoriteDirs.end(); ++j) {
+	for(auto j = favoriteDirs.begin(); j != favoriteDirs.end(); ++j) {
 		if(Util::stricmp(j->second.c_str(), aName.c_str()) == 0) {
 			j->second = anotherName;
 			save();
@@ -359,14 +355,14 @@ void FavoriteManager::save() {
 		xml.addTag("Hubs");
 		xml.stepIn();
 
-		for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
+		for(auto i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
 			xml.addTag("Group");
 			xml.addChildAttrib("Name", i->first);
 			xml.addChildAttrib("Private", i->second.priv);
 			xml.addChildAttrib("Connect", i->second.connect);
 		}
 
-		for(FavoriteHubEntryList::const_iterator i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i) {
+		for(auto i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i) {
 			xml.addTag("Hub");
 			xml.addChildAttrib("Name", (*i)->getName());
 			xml.addChildAttrib("Description", (*i)->getDescription());
@@ -382,7 +378,7 @@ void FavoriteManager::save() {
 
 		xml.addTag("Users");
 		xml.stepIn();
-		for(FavoriteMap::const_iterator i = users.begin(), iend = users.end(); i != iend; ++i) {
+		for(auto i = users.begin(), iend = users.end(); i != iend; ++i) {
 			xml.addTag("User");
 			xml.addChildAttrib("LastSeen", i->second.getLastSeen());
 			xml.addChildAttrib("GrantSlot", i->second.isSet(FavoriteUser::FLAG_GRANTSLOT));
@@ -395,7 +391,7 @@ void FavoriteManager::save() {
 
 		xml.addTag("UserCommands");
 		xml.stepIn();
-		for(UserCommand::List::const_iterator i = userCommands.begin(), iend = userCommands.end(); i != iend; ++i) {
+		for(auto i = userCommands.begin(), iend = userCommands.end(); i != iend; ++i) {
 			if(!i->isSet(UserCommand::FLAG_NOSAVE)) {
 				xml.addTag("UserCommand");
 				xml.addChildAttrib("Type", i->getType());
@@ -412,7 +408,7 @@ void FavoriteManager::save() {
 		xml.addTag("FavoriteDirs");
 		xml.stepIn();
 		StringPairList spl = getFavoriteDirs();
-		for(StringPairIter i = spl.begin(), iend = spl.end(); i != iend; ++i) {
+		for(auto i = spl.begin(), iend = spl.end(); i != iend; ++i) {
 			xml.addTag("Directory", i->first);
 			xml.addChildAttrib("Name", i->second);
 		}
@@ -506,10 +502,10 @@ void FavoriteManager::load(SimpleXML& aXml) {
 	}
 
 	// parse groups that have the "Connect" param and send their hubs to WindowManager
-	for(FavHubGroups::const_iterator i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
+	for(auto i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i) {
 		if(i->second.connect) {
 			FavoriteHubEntryList hubs = getFavoriteHubs(i->first);
-			for(FavoriteHubEntryList::const_iterator hub = hubs.begin(), hub_end = hubs.end(); hub != hub_end; ++hub) {
+			for(auto hub = hubs.begin(), hub_end = hubs.end(); hub != hub_end; ++hub) {
 				WindowParams params;
 				params[WindowInfo::address] = WindowParam((*hub)->getServer(), WindowParam::FLAG_IDENTIFIES);
 				WindowManager::getInstance()->add(WindowManager::hub(), params);
@@ -535,7 +531,7 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			}
 
 			ClientManager::getInstance()->saveUser(u->getCID());
-			FavoriteMap::iterator i = users.insert(make_pair(u->getCID(), FavoriteUser(u, nick, hubUrl))).first;
+			auto i = users.insert(make_pair(u->getCID(), FavoriteUser(u, nick, hubUrl))).first;
 
 			if(aXml.getBoolChildAttrib("GrantSlot"))
 				i->second.setFlag(FavoriteUser::FLAG_GRANTSLOT);
@@ -576,7 +572,7 @@ void FavoriteManager::load(SimpleXML& aXml) {
 
 void FavoriteManager::userUpdated(const OnlineUser& info) {
 	Lock l(cs);
-	FavoriteMap::iterator i = users.find(info.getUser()->getCID());
+	auto i = users.find(info.getUser()->getCID());
 	if(i != users.end()) {
 		FavoriteUser& fu = i->second;
 		fu.update(info);
@@ -586,7 +582,7 @@ void FavoriteManager::userUpdated(const OnlineUser& info) {
 }
 
 FavoriteHubEntryPtr FavoriteManager::getFavoriteHubEntry(const string& aServer) const {
-	for(FavoriteHubEntryList::const_iterator i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i) {
+	for(auto i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i) {
 		FavoriteHubEntry* hub = *i;
 		if(Util::stricmp(hub->getServer(), aServer) == 0) {
 			return hub;
@@ -597,7 +593,7 @@ FavoriteHubEntryPtr FavoriteManager::getFavoriteHubEntry(const string& aServer) 
 
 FavoriteHubEntryList FavoriteManager::getFavoriteHubs(const string& group) const {
 	FavoriteHubEntryList ret;
-	for(FavoriteHubEntryList::const_iterator i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i)
+	for(auto i = favoriteHubs.begin(), iend = favoriteHubs.end(); i != iend; ++i)
 		if((*i)->getGroup() == group)
 			ret.push_back(*i);
 	return ret;
@@ -611,7 +607,7 @@ bool FavoriteManager::isPrivate(const string& url) const {
 	if(fav) {
 		const string& name = fav->getGroup();
 		if(!name.empty()) {
-			FavHubGroups::const_iterator group = favHubGroups.find(name);
+			auto group = favHubGroups.find(name);
 			if(group != favHubGroups.end())
 				return group->second.priv;
 		}
@@ -627,7 +623,7 @@ optional<FavoriteUser> FavoriteManager::getFavoriteUser(const UserPtr &aUser) co
 
 bool FavoriteManager::hasSlot(const UserPtr& aUser) const {
 	Lock l(cs);
-	FavoriteMap::const_iterator i = users.find(aUser->getCID());
+	auto i = users.find(aUser->getCID());
 	if(i == users.end())
 		return false;
 	return i->second.isSet(FavoriteUser::FLAG_GRANTSLOT);
@@ -635,7 +631,7 @@ bool FavoriteManager::hasSlot(const UserPtr& aUser) const {
 
 time_t FavoriteManager::getLastSeen(const UserPtr& aUser) const {
 	Lock l(cs);
-	FavoriteMap::const_iterator i = users.find(aUser->getCID());
+	auto i = users.find(aUser->getCID());
 	if(i == users.end())
 		return 0;
 	return i->second.getLastSeen();
@@ -643,7 +639,7 @@ time_t FavoriteManager::getLastSeen(const UserPtr& aUser) const {
 
 void FavoriteManager::setAutoGrant(const UserPtr& aUser, bool grant) {
 	Lock l(cs);
-	FavoriteMap::iterator i = users.find(aUser->getCID());
+	auto i = users.find(aUser->getCID());
 	if(i == users.end())
 		return;
 	if(grant)
@@ -657,7 +653,7 @@ void FavoriteManager::setAutoGrant(const UserPtr& aUser, bool grant) {
 }
 void FavoriteManager::setUserDescription(const UserPtr& aUser, const string& description) {
 	Lock l(cs);
-	FavoriteMap::iterator i = users.find(aUser->getCID());
+	auto i = users.find(aUser->getCID());
 	if(i == users.end())
 		return;
 	i->second.setDescription(description);
@@ -687,7 +683,7 @@ const string& FavoriteManager::blacklisted() const {
 	if(pos != string::npos)
 		server = server.substr(pos + 1);
 
-	StringMap::const_iterator i = blacklist.find(server);
+	auto i = blacklist.find(server);
 	if(i == blacklist.end())
 		return Util::emptyString;
 	return i->second;
@@ -699,13 +695,14 @@ void FavoriteManager::addBlacklist(const string& domain, const string& reason) {
 	blacklist[domain] = reason;
 }
 
-FavoriteHubEntryList::iterator FavoriteManager::getFavoriteHub(const string& aServer) {
-	for(FavoriteHubEntryList::iterator i = favoriteHubs.begin(); i != favoriteHubs.end(); ++i) {
+FavoriteHubEntryPtr FavoriteManager::getFavoriteHub(const string& aServer) {
+	for(auto i = favoriteHubs.begin(); i != favoriteHubs.end(); ++i) {
 		if(Util::stricmp((*i)->getServer(), aServer) == 0) {
-			return i;
+			return *i;
 		}
 	}
-	return favoriteHubs.end();
+
+	return nullptr;
 }
 
 void FavoriteManager::setHubList(int aHubList) {
@@ -779,7 +776,7 @@ UserCommand::List FavoriteManager::getUserCommands(int ctx, const StringList& hu
 
 	Lock l(cs);
 	UserCommand::List lst;
-	for(UserCommand::List::iterator i = userCommands.begin(); i != userCommands.end(); ++i) {
+	for(auto i = userCommands.begin(); i != userCommands.end(); ++i) {
 		UserCommand& uc = *i;
 		if(!(uc.getCtx() & ctx)) {
 			continue;
@@ -861,7 +858,7 @@ void FavoriteManager::on(UserDisconnected, const UserPtr& user) noexcept {
 	bool isFav = false;
 	{
 		Lock l(cs);
-		FavoriteMap::iterator i = users.find(user->getCID());
+		auto i = users.find(user->getCID());
 		if(i != users.end()) {
 			isFav = true;
 			i->second.setLastSeen(GET_TIME());
@@ -876,7 +873,7 @@ void FavoriteManager::on(UserConnected, const UserPtr& user) noexcept {
 	bool isFav = false;
 	{
 		Lock l(cs);
-		FavoriteMap::iterator i = users.find(user->getCID());
+		auto i = users.find(user->getCID());
 		if(i != users.end()) {
 			isFav = true;
 		}

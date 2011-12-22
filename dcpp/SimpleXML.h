@@ -182,7 +182,7 @@ private:
 		}
 
 		const string& getAttrib(const string& aName, const string& aDefault = Util::emptyString) {
-			StringPairIter i = find_if(attribs.begin(), attribs.end(), CompareFirst<string,string>(aName));
+			auto i = find_if(attribs.begin(), attribs.end(), CompareFirst<string,string>(aName));
 			return (i == attribs.end()) ? aDefault : i->second;
 		}
 		void toXML(int indent, OutputStream* f);
@@ -190,7 +190,7 @@ private:
 		void appendAttribString(string& tmp);
 		/** Delete all children! */
 		~Tag() {
-			for(Iter i = children.begin(); i != children.end(); ++i) {
+			for(auto i = children.begin(); i != children.end(); ++i) {
 				delete *i;
 			}
 		}

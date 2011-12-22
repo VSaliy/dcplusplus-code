@@ -281,8 +281,7 @@ const wstring& toLower(const wstring& str, wstring& tmp) noexcept {
 		return Util::emptyStringW;
 	tmp.clear();
 	tmp.reserve(str.length());
-	wstring::const_iterator end = str.end();
-	for(wstring::const_iterator i = str.begin(); i != end; ++i) {
+	for(auto i = str.begin(), iend = str.end(); i != iend; ++i) {
 		tmp += toLower(*i);
 	}
 	return tmp;
