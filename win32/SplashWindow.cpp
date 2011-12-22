@@ -17,62 +17,72 @@
  */
 
 #include "stdafx.h"
-#include <dcpp/DCPlusPlus.h>
-
 #include "SplashWindow.h"
 
 #include <dcpp/format.h>
-#include <dcpp/version.h>
 #include <dcpp/Text.h>
+#include <dcpp/version.h>
 
+#include "resource.h"
 #include "WinUtil.h"
 
-SplashWindow::SplashWindow() : dwt::Window(0) {
+const long iconSize = 256;
+
+SplashWindow::SplashWindow() :
+dwt::Window(0),
+icon(WinUtil::createIcon(IDI_DCPP, iconSize))
+{
 	{
-		Seed cs;
-		cs.style = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-		cs.exStyle = WS_EX_STATICEDGE;
-		cs.caption = _T(APPNAME);
-		tmp = new dwt::Window(0);
-		tmp->create(cs);
-	}
-	{
-		Seed cs;
-		cs.style = WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-		cs.exStyle = WS_EX_STATICEDGE;
-		cs.caption = _T(APPNAME);
-		create(cs);
-	}
-	tstring caption = _T(APPNAME) _T(" ") _T(VERSIONSTRING);
-	{
-		dwt::TextBox::Seed cs;
-		cs.style = WS_CHILD | ES_CENTER | ES_READONLY;
-		cs.exStyle = WS_EX_STATICEDGE;
-		text = addChild(cs);
+		// create a layered window (WS_EX_LAYERED); it will be shown later with UpdateLayeredWindow.
+		Seed seed(_T(APPNAME) _T(" ") _T(VERSIONSTRING));
+		seed.style = WS_POPUP | WS_VISIBLE;
+		seed.exStyle = WS_EX_LAYERED;
+		create(seed);
 	}
 
-	dwt::Point textSize(text->getTextSize(caption));
-	dwt::Point desktopSize(getDesktopSize());
-	int xmid = desktopSize.x / 2;
-	int ymid = desktopSize.y / 2;
-	int xtext = 300;
-	int ytext = textSize.y + 6;
+	setFont(0); // default font since settings haven't been loaded yet
 
-	dwt::Rectangle r(xmid - xtext/2, ymid - ytext/2, xtext, ytext);
-	resize(r);
-	text->resize(dwt::Rectangle(0, 0, xtext, ytext));
-
-	::HideCaret(text->handle());
-	text->setVisible(true);
-	text->bringToFront();
-	text->redraw(true);
+	// start showing when loading settings. language info isn't loaded at this point...
+	operator()(Text::fromT(_T(APPNAME)));
 }
 
 SplashWindow::~SplashWindow() {
-	tmp->close();
 }
 
 void SplashWindow::operator()(const string& status) {
-	text->setText(str(TF_("Loading DC++, please wait... (%1%)") % Text::toT(status) ));
-	text->redraw(true);
+	auto text = str(TF_("Loading DC++, please wait... (%1%)") % Text::toT(status));
+	auto textSize = getTextSize(text);
+
+	const long spacing = 6; // space between the icon and the text
+	SIZE size = { std::max(iconSize, textSize.x), iconSize + spacing + textSize.y };
+
+	dwt::UpdateCanvas windowCanvas(this);
+	dwt::CompatibleCanvas canvas(windowCanvas.handle());
+
+	// create the bitmap with CreateDIBSection to have access to its bits (used when drawing text).
+	BITMAPINFO info = { { sizeof(BITMAPINFOHEADER), size.cx, -size.cy, 1, 32, BI_RGB } };
+	RGBQUAD* bits;
+	dwt::Bitmap bitmap(::CreateDIBSection(windowCanvas.handle(), &info, DIB_RGB_COLORS, &reinterpret_cast<void*&>(bits), 0, 0));
+	auto select(canvas.select(bitmap));
+
+	canvas.drawIcon(icon, dwt::Rectangle(std::max(textSize.x - iconSize, 0L) / 2, 0, iconSize, iconSize));
+
+	dwt::Rectangle textRect(std::max(iconSize - textSize.x, 0L) / 2, size.cy - textSize.y, textSize.x, textSize.y);
+	auto bkMode(canvas.setBkMode(true));
+	canvas.fill(textRect, dwt::Brush(dwt::Brush::Window));
+	canvas.setTextColor(dwt::Color::predefined(COLOR_WINDOWTEXT));
+	auto selectFont(canvas.select(*getFont()));
+	canvas.drawText(text.c_str(), textRect, DT_LEFT | DT_TOP | DT_SINGLELINE | DT_NOPREFIX);
+	// set bits within the text rectangle to not be transparent. rgbReserved is the alpha value.
+	for(long x = textRect.left(); x < textRect.right(); ++x) {
+		for(long y = textRect.top(); y < textRect.bottom(); ++y) {
+			bits[x + y * size.cx].rgbReserved = 255;
+		}
+	}
+
+	auto desktop = getDesktopSize();
+	POINT pt = { std::max(desktop.x - size.cx, 0L) / 2, std::max(desktop.y - size.cy - iconSize, 0L) / 2 };
+	POINT canvasPt = { 0 };
+	BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
+	::UpdateLayeredWindow(handle(), windowCanvas.handle(), &pt, &size, canvas.handle(), &canvasPt, 0, &blend, ULW_ALPHA);
 }
