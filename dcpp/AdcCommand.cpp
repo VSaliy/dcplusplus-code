@@ -237,6 +237,10 @@ string AdcCommand::getParamString(bool nmdc) const {
 	return tmp;
 }
 
+const string& AdcCommand::getParam(size_t n) const {
+	return getParameters().size() > n ? getParameters()[n] : Util::emptyString;
+}
+
 bool AdcCommand::getParam(const char* name, size_t start, string& ret) const {
 	for(auto i = start; i < getParameters().size(); ++i) {
 		if(toCode(name) == toCode(getParameters()[i].c_str())) {

@@ -34,6 +34,7 @@
 #include "Speaker.h"
 #include "SettingsManager.h"
 #include "HintedUser.h"
+#include "GetSet.h"
 
 namespace dcpp {
 

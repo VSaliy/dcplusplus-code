@@ -20,11 +20,9 @@
 #define DCPLUSPLUS_DCPP_CONNECTION_MANAGER_H
 
 #include "TimerManager.h"
-
 #include "UserConnectionListener.h"
 #include "CriticalSection.h"
 #include "Singleton.h"
-#include "Util.h"
 #include "BufferedSocket.h"
 #include "ConnectionManagerListener.h"
 #include "HintedUser.h"

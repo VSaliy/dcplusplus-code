@@ -22,7 +22,7 @@
 #include <string>
 
 #include "SettingsManager.h"
-#include "Util.h"
+#include "GetSet.h"
 
 namespace dcpp {
 

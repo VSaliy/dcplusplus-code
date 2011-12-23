@@ -4,6 +4,7 @@
 #include "forward.h"
 #include "Transfer.h"
 #include "Flags.h"
+#include "GetSet.h"
 
 namespace dcpp {
 

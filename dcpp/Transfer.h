@@ -25,7 +25,7 @@
 #include "MerkleTree.h"
 #include "CriticalSection.h"
 #include "Segment.h"
-#include "Util.h"
+#include "GetSet.h"
 
 namespace dcpp {
 
