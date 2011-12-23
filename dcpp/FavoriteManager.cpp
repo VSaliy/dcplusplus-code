@@ -206,7 +206,7 @@ void FavoriteManager::addFavorite(const FavoriteHubEntry& aEntry) {
 	FavoriteHubEntry* f;
 
 	auto i = getFavoriteHub(aEntry.getServer());
-	if(i != favoriteHubs.end()) {
+	if(!i) {
 		return;
 	}
 	f = new FavoriteHubEntry(aEntry);
