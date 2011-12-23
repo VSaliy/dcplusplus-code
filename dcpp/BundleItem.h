@@ -8,13 +8,15 @@
 #ifndef BUNDLEITEM_H_
 #define BUNDLEITEM_H_
 
+#include <string>
 #include <map>
 
 #include "Bundle.h"
-#include "Util.h"
+#include "GetSet.h"
 
 namespace dcpp {
 
+using std::string;
 using std::map;
 
 class BundleItem {

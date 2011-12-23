@@ -28,7 +28,7 @@
 #include "Semaphore.h"
 #include "TimerManager.h"
 #include "HashManagerListener.h"
-#include "Util.h"
+#include "GetSet.h"
 
 namespace dcpp {
 

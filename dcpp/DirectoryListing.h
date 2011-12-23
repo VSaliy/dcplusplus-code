@@ -25,6 +25,7 @@
 #include "HintedUser.h"
 #include "FastAlloc.h"
 #include "MerkleTree.h"
+#include "GetSet.h"
 #include "Util.h"
 
 namespace dcpp {

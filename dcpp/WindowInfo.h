@@ -19,11 +19,17 @@
 #ifndef DCPLUSPLUS_DCPP_WINDOW_INFO_H
 #define DCPLUSPLUS_DCPP_WINDOW_INFO_H
 
+#include <string>
+#include <unordered_map>
+
 #include "forward.h"
 #include "Flags.h"
-#include "Util.h"
+#include "GetSet.h"
 
 namespace dcpp {
+
+using std::string;
+using std::unordered_map;
 
 struct WindowParam : Flags {
 	WindowParam() : Flags() { }

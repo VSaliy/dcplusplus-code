@@ -6,7 +6,7 @@
 #include "Transfer.h"
 #include "MerkleTree.h"
 #include "Flags.h"
-#include "Util.h"
+#include "GetSet.h"
 
 namespace dcpp {
 
@@ -30,10 +30,7 @@ public:
 	virtual ~Download();
 
 	/** @return Target filename without path. */
-	string getTargetFileName() {
-		return Util::getFileName(getPath());
-	}
-
+	string getTargetFileName();
 	/** @internal */
 	const string& getDownloadTarget() {
 		return (getTempTarget().empty() ? getPath() : getTempTarget());

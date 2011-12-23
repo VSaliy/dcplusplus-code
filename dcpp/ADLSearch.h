@@ -28,7 +28,6 @@
 #include "SettingsManager.h"
 #include "Singleton.h"
 #include "StringMatch.h"
-#include "Util.h"
 
 namespace dcpp {
 

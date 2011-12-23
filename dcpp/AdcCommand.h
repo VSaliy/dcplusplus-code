@@ -22,7 +22,6 @@
 #include "typedefs.h"
 
 #include "Exception.h"
-#include "Util.h"
 
 namespace dcpp {
 
@@ -147,9 +146,7 @@ public:
 		parameters.push_back(str);
 		return *this;
 	}
-	const string& getParam(size_t n) const {
-		return getParameters().size() > n ? getParameters()[n] : Util::emptyString;
-	}
+	const string& getParam(size_t n) const;
 	/** Return a named parameter where the name is a two-letter code */
 	bool getParam(const char* name, size_t start, string& ret) const;
 	bool hasFlag(const char* name, size_t start) const;

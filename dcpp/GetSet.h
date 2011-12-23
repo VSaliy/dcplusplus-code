@@ -16,30 +16,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "stdinc.h"
-#include "UserCommand.h"
+#ifndef DCPLUSPLUS_DCPP_GET_SET_H
+#define DCPLUSPLUS_DCPP_GET_SET_H
 
-#include "StringTokenizer.h"
-#include "Util.h"
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+#include <type_traits>
 
-namespace dcpp {
+#define REF_OR_COPY(t) boost::mpl::eval_if_c<std::is_class<t>::value, std::add_lvalue_reference<std::add_const<t>::type>, boost::mpl::identity<t>>::type
 
-bool UserCommand::adc(const string& h) {
-	return h.compare(0, 6, "adc://") == 0 || h.compare(0, 7, "adcs://") == 0;
-}
+#define GETSET(type, name, name2) \
+private: type name; \
+public: REF_OR_COPY(type) get##name2() const { return name; } \
+	void set##name2(REF_OR_COPY(type) name) { this->name = name; }
 
-const StringList& UserCommand::getDisplayName() const {
-	return displayName;
-}
-
-void UserCommand::setDisplayName() {
-	string name_ = name;
-	Util::replace("//", "\t", name_);
-	StringTokenizer<string> t(name_, '/');
-	for(auto i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i) {
-		displayName.push_back(*i);
-		Util::replace("\t", "/", displayName.back());
-	}
-}
-
-} // namespace dcpp
+#endif /* GETSET_H_ */
