@@ -435,7 +435,7 @@ bool BufferedSocket::checkEvents() {
 		pair<Tasks, unique_ptr<TaskData> > p;
 		{
 			Lock l(cs);
-			dcassert(tasks.size() > 0);
+			dcassert(!tasks.empty());
 			p = move(tasks.front());
 			tasks.erase(tasks.begin());
 		}
