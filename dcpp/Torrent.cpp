@@ -135,7 +135,7 @@ struct TorrentReader : SimpleBencodeReader::Callback {
 	std::vector<State> states;
 
 	bool inState(State state) {
-		return states.size() > 0 && find(states, state) != states.end();
+		return !states.empty() && find(states, state) != states.end();
 	}
 
 	size_t skipDepth;
