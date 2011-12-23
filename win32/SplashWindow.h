@@ -29,6 +29,7 @@ public:
 	void operator()(const string& status);
 
 private:
+	long iconSize;
 	dwt::IconPtr icon;
 };
 
