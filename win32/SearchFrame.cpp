@@ -752,8 +752,7 @@ void SearchFrame::handleRemove() {
 		auto data = results->getData(i);
 		results->erase(i);
 		if(data) {
-			searchResults.erase(std::remove_if(searchResults.begin(), searchResults.end(),
-				[data](const SearchInfo& si) { return &si == data; }), searchResults.end());
+			searchResults.remove_if([data](const SearchInfo& si) { return &si == data; });
 		}
 	}
 

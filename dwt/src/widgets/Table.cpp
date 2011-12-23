@@ -209,14 +209,14 @@ int Table::insert(const std::vector<tstring>& row, LPARAM lPar, int index, int i
 	// now insert sub-items (for columns)
 	lvi.mask = LVIF_TEXT | LVIF_IMAGE;
 	lvi.iSubItem = 1;
-	for(auto i = row.begin() + 1, iend = row.end(); i != iend; ++i) {
-		lvi.pszText = const_cast<LPTSTR>(i->c_str());
-		lvi.cchTextMax = static_cast<int>(i->size());
+	std::for_each(row.cbegin() + 1, row.cend(), [this, &lvi](const tstring& text) {
+		lvi.pszText = const_cast<LPTSTR>(text.c_str());
+		lvi.cchTextMax = static_cast<int>(text.size());
 		if(!ListView_SetItem(handle(), &lvi)) {
 			throw Win32Exception("Error while trying to insert row sub-item in Table");
 		}
 		lvi.iSubItem++;
-	}
+	});
 
 	return ret;
 }
