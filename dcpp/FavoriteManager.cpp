@@ -203,13 +203,10 @@ std::string FavoriteManager::getUserURL(const UserPtr& aUser) const {
 }
 
 void FavoriteManager::addFavorite(const FavoriteHubEntry& aEntry) {
-	FavoriteHubEntry* f;
-
-	auto i = getFavoriteHub(aEntry.getServer());
-	if(!i) {
+	if(getFavoriteHub(aEntry.getServer())) {
 		return;
 	}
-	f = new FavoriteHubEntry(aEntry);
+	auto f = new FavoriteHubEntry(aEntry);
 	favoriteHubs.push_back(f);
 	fire(FavoriteManagerListener::FavoriteAdded(), f);
 	save();
