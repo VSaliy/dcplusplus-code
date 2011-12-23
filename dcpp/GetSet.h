@@ -19,11 +19,10 @@
 #ifndef DCPLUSPLUS_DCPP_GET_SET_H
 #define DCPLUSPLUS_DCPP_GET_SET_H
 
-#include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/identity.hpp>
+#include <boost/mpl/if.hpp>
 #include <type_traits>
 
-#define REF_OR_COPY(t) boost::mpl::eval_if_c<std::is_class<t>::value, std::add_lvalue_reference<std::add_const<t>::type>, boost::mpl::identity<t>>::type
+#define REF_OR_COPY(t) boost::mpl::if_c<std::is_class<t>::value, const t&, t>::type
 
 #define GETSET(type, name, name2) \
 private: type name; \
