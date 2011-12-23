@@ -124,6 +124,8 @@ public:
 	static COLORREF textColor;
 	static COLORREF bgColor;
 	static dwt::FontPtr font;
+	static dwt::FontPtr uploadFont;
+	static dwt::FontPtr downloadFont;
 	static unordered_map<string, dwt::FontPtr> userMatchFonts;
 	static tstring commands;
 	static dwt::ImageListPtr fileImages;
@@ -170,7 +172,11 @@ public:
 	static void initFont();
 	static tstring encodeFont(LOGFONT const& font);
 	static void decodeFont(const tstring& setting, LOGFONT &dest);
+	static void updateFont(dwt::FontPtr& font, int setting);
 	static void updateUserMatchFonts();
+
+	static void updateUploadFont();
+	static void updateDownloadFont();
 
 	static void setStaticWindowState(const string& id, bool open);
 

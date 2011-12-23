@@ -1083,6 +1083,8 @@ void MainWindow::handleSettings() {
 	auto prevGeoFormat = SETTING(COUNTRY_FORMAT);
 
 	auto prevFont = SETTING(MAIN_FONT);
+	auto prevUploadFont = SETTING(UPLOAD_FONT);
+	auto prevDownloadFont = SETTING(DOWNLOAD_FONT);
 
 	auto prevTray = BOOLSETTING(ALWAYS_TRAY);
 	auto prevSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
@@ -1123,6 +1125,12 @@ void MainWindow::handleSettings() {
 			::EnumChildWindows(handle(), updateFont, reinterpret_cast<LPARAM>(prev->handle()));
 			mainMenu->setFont(WinUtil::font);
 			::DrawMenuBar(handle());
+		}
+		if(SETTING(UPLOAD_FONT) != prevUploadFont) {
+			WinUtil::updateUploadFont();
+		}
+		if(SETTING(DOWNLOAD_FONT) != prevDownloadFont) {
+			WinUtil::updateDownloadFont();
 		}
 
 		bool newColors = false;

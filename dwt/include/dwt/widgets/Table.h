@@ -445,6 +445,12 @@ public:
 
 	std::pair<int, int> hitTest(const ScreenCoordinate& pt);
 
+	/// Returns the rect for the item per code (wraps ListView_GetItemRect)
+	Rectangle getRect(int item, int code);
+
+	/// Returns the rect for the subitem item per code (wraps ListView_GetSubItemRect)
+	Rectangle getRect(int item, int subitem, int code);
+
 	/// Actually creates the Data Grid Control
 	/** You should call WidgetFactory::createTable if you instantiate class
 	  * directly. <br>
@@ -463,12 +469,6 @@ protected:
 	// WidgetFactory class which is friend
 	virtual ~Table() {
 	}
-
-	// Returns the rect for the item per code (wraps ListView_GetItemRect)
-	Rectangle getRect( int item, int code );
-
-	// Returns the rect for the subitem item per code (wraps ListView_GetSubItemRect)
-	Rectangle getRect( int item, int subitem, int code );
 
 private:
 	friend class ChainingDispatcher;

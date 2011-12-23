@@ -301,9 +301,9 @@ void TransferView::handleCopyNick() {
 	}
 }
 
-static inline void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, int column, const tstring& text, double pos, COLORREF fgColor) {
+namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, int column, const tstring& text, double pos, bool download) {
 	// draw something nice...
-	COLORREF barBase = fgColor;
+	COLORREF barBase = download ? SETTING(DOWNLOAD_BG_COLOR) : SETTING(UPLOAD_BG_COLOR);
 	COLORREF bgBase = WinUtil::bgColor;
 	int mod = (HLS_L(RGB2HLS(bgBase)) >= 128) ? -30 : 30;
 
@@ -313,66 +313,84 @@ static inline void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item,
 	// Two shades of the background color
 	COLORREF bgPal[2] = { HLS_TRANSFORM(bgBase, mod, 0), HLS_TRANSFORM(bgBase, mod/2, 0) };
 
+	dwt::FreeCanvas canvas(hdc);
+
 	dwt::Rectangle rc = rcItem;
 
 	// draw background
-	HGDIOBJ oldbr = ::SelectObject(hdc, ::CreateSolidBrush(bgPal[1]));
-	HGDIOBJ oldpen = ::SelectObject(hdc, ::CreatePen(PS_SOLID, 0, bgPal[0]));
 
-	// TODO Don't draw where the finished part will be drawn
-	::Rectangle(hdc, rc.left(), rc.top() - 1, rc.right(), rc.bottom());
+	{
+		dwt::Brush brush(::CreateSolidBrush(bgPal[1]));
+		auto selectBg(canvas.select(brush));
+
+		dwt::Pen pen(bgPal[0]);
+		auto selectPen(canvas.select(pen));
+
+		// TODO Don't draw where the finished part will be drawn
+		canvas.rectangle(rc.left(), rc.top() - 1, rc.right(), rc.bottom());
+	}
 
 	rc.pos.x += 1;
 	rc.size.x -= 2;
 	rc.size.y -= 1;
 
-	long w = rc.width();
+	dwt::Rectangle textRect;
 
-	::DeleteObject(::SelectObject(hdc, ::CreateSolidBrush(barPal[1])));
-	::DeleteObject(::SelectObject(hdc, ::CreatePen(PS_SOLID, 0, barPal[0])));
+	{
+		dwt::Brush brush(::CreateSolidBrush(barPal[1]));
+		auto selectBg(canvas.select(brush));
 
-	// "Finished" part
-	rc.size.x = (int) (w * pos);
+		{
+			dwt::Pen pen(barPal[0]);
+			auto selectPen(canvas.select(pen));
 
-	::Rectangle(hdc, rc.left(), rc.top(), rc.right(), rc.bottom());
+			// "Finished" part
+			rc.size.x = (int) (rc.width() * pos);
 
-	RECT textRect = rc;
+			canvas.rectangle(rc.left(), rc.top(), rc.right(), rc.bottom());
+		}
 
-	// draw progressbar highlight
-	if(rc.width()>2) {
-		::DeleteObject(::SelectObject(hdc, ::CreatePen(PS_SOLID, 1, barPal[2])));
+		textRect = rc;
 
-		rc.pos.y += 2;
-		::MoveToEx(hdc, rc.left()+1, rc.top(), (LPPOINT)NULL);
-		::LineTo(hdc, rc.right()-2, rc.top());
+		// draw progressbar highlight
+		if(rc.width() > 2) {
+			dwt::Pen pen(barPal[2], dwt::Pen::Solid, 1);
+			auto selectPen(canvas.select(pen));
+
+			rc.pos.y += 2;
+			canvas.moveTo(rc.left() + 1, rc.top());
+			canvas.lineTo(rc.right() - 2, rc.top());
+		}
 	}
 
 	// draw status text
-	::DeleteObject(::SelectObject(hdc, oldpen));
-	::DeleteObject(::SelectObject(hdc, oldbr));
 
-	int oldMode = ::SetBkMode(hdc, TRANSPARENT);
+	canvas.setBkMode(true);
+	auto& font = download ? WinUtil::downloadFont : WinUtil::uploadFont;
+	if(!font.get()) {
+		font = WinUtil::font;
+	}
+	auto selectFont(canvas.select(*font));
 
-	textRect.left += 6;
+	textRect.pos.x += 6;
 
-	long left = textRect.left;
+	long left = textRect.left();
 
-	// todo use dwt's canvas and put this there
 	TEXTMETRIC tm;
-	::GetTextMetrics(hdc, &tm);
-	long top = textRect.top + (textRect.bottom - textRect.top - tm.tmHeight) / 2;
+	canvas.getTextMetrics(tm);
+	long top = textRect.top() + (textRect.bottom() - textRect.top() - tm.tmHeight) / 2;
 
-	::SetTextColor(hdc, RGB(255, 255, 255));
-	::ExtTextOut(hdc, left, top, ETO_CLIPPED, &textRect, text.c_str(), text.size(), NULL);
+	canvas.setTextColor(download ? SETTING(DOWNLOAD_TEXT_COLOR) : SETTING(UPLOAD_TEXT_COLOR));
+	/// @todo ExtTextOut to dwt
+	::RECT r = textRect;
+	::ExtTextOut(hdc, left, top, ETO_CLIPPED, &r, text.c_str(), text.size(), NULL);
 
-	textRect.left = textRect.right;
-	textRect.right = rcItem.right();
+	r.left = r.right;
+	r.right = rcItem.right();
 
-	::SetTextColor(hdc, WinUtil::textColor);
-	::ExtTextOut(hdc, left, top, ETO_CLIPPED, &textRect, text.c_str(), text.size(), NULL);
-
-	::SetBkMode(hdc, oldMode);
-}
+	canvas.setTextColor(WinUtil::textColor);
+	::ExtTextOut(hdc, left, top, ETO_CLIPPED, &r, text.c_str(), text.size(), NULL);
+} }
 
 LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 	switch(data.nmcd.dwDrawStage) {
@@ -384,39 +402,23 @@ LRESULT TransferView::handleCustomDraw(NMLVCUSTOMDRAW& data) {
 
 	case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
 	{
-		int item = static_cast<int>(data.nmcd.dwItemSpec);
 		int column = data.iSubItem;
 
 		// Let's draw a box if needed...
 		if(data.nmcd.hdr.hwndFrom == connections->handle() && column == CONNECTION_COLUMN_STATUS) {
-			HDC hdc = data.nmcd.hdc;
-			ConnectionInfo* ci = reinterpret_cast<ConnectionInfo*>(data.nmcd.lItemlParam);
-
-			if(ci->status == ConnectionInfo::STATUS_RUNNING && ci->chunk > 0 && ci->chunkPos >= 0) {
-				const tstring& text = ci->columns[column];
-
-				RECT r;
-				ListView_GetSubItemRect( connections->handle(), item, column, LVIR_BOUNDS, &r );
-
-				double pos = static_cast<double>(ci->chunkPos) / ci->chunk;
-
-				drawProgress(hdc, dwt::Rectangle(r), item, column, text, pos, ci->download ? SETTING(DOWNLOAD_BG_COLOR) : SETTING(UPLOAD_BG_COLOR));
-
+			const auto& info = *reinterpret_cast<ConnectionInfo*>(data.nmcd.lItemlParam);
+			if(info.status == ConnectionInfo::STATUS_RUNNING && info.chunk > 0 && info.chunkPos >= 0) {
+				int item = static_cast<int>(data.nmcd.dwItemSpec);
+				drawProgress(data.nmcd.hdc, connections->getRect(item, column, LVIR_BOUNDS), item, column,
+					info.getText(column), static_cast<double>(info.chunkPos) / static_cast<double>(info.chunk), info.download);
 				return CDRF_SKIPDEFAULT;
 			}
 		} else if(data.nmcd.hdr.hwndFrom == downloads->handle() && column == DOWNLOAD_COLUMN_STATUS) {
-			HDC hdc = data.nmcd.hdc;
-			DownloadInfo* di = reinterpret_cast<DownloadInfo*>(data.nmcd.lItemlParam);
-			if(di->size > 0 && di->done >= 0) {
-				const tstring& text = di->columns[column];
-
-				RECT r;
-				ListView_GetSubItemRect( downloads->handle(), item, column, LVIR_BOUNDS, &r );
-
-				double pos = static_cast<double>(di->done) / di->size;
-
-				drawProgress(hdc, dwt::Rectangle(r), item, column, text, pos, SETTING(DOWNLOAD_BG_COLOR));
-
+			const auto& info = *reinterpret_cast<DownloadInfo*>(data.nmcd.lItemlParam);
+			if(info.size > 0 && info.done >= 0) {
+				int item = static_cast<int>(data.nmcd.dwItemSpec);
+				drawProgress(data.nmcd.hdc, downloads->getRect(item, column, LVIR_BOUNDS), item, column,
+					info.getText(column), static_cast<double>(info.done) / static_cast<double>(info.size), true);
 				return CDRF_SKIPDEFAULT;
 			}
 		}
