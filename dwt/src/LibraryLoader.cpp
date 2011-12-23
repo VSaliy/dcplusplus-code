@@ -67,7 +67,7 @@ void LibraryLoader::load(const tstring& libraryName, bool allowFailure) {
 
 	// TODO: Rewrite xAssert to get support for submitting tstrings (could show library name)
 	if(!allowFailure) {
-		dwtassert( itsHMod != 0, _T( "Error while trying to load library or dll!" ) );
+		dwtassert(itsHMod != 0, "Error while trying to load library or dll!");
 	}
 }
 

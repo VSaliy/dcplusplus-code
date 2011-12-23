@@ -88,7 +88,7 @@ void Taskbar::initTaskbar(WindowPtr window_) {
 		}
 
 		window = window_;
-		dwtassert(window, _T("Taskbar: no widget set"));
+		dwtassert(window, "Taskbar: no widget set");
 
 		/* init the ITaskbarList3 COM pointer. MSDN recommends waiting for the
 		"TaskbarButtonCreated" message, but neither MFC nor Win SDK samples do that, so we don't

@@ -56,12 +56,18 @@ Icon::Icon(const unsigned resourceId, const Point& size) :
 ResourceType((HICON)::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId), IMAGE_ICON, size.x, size.y, LR_DEFAULTCOLOR)),
 resId(resourceId)
 {
+	if(!handle()) {
+		throw Win32Exception("Failed to create an icon from a resource");
+	}
 }
 
 Icon::Icon(const tstring& filePath, const Point& size) :
 ResourceType((HICON)::LoadImage(0, filePath.c_str(), IMAGE_ICON, size.x, size.y, LR_DEFAULTCOLOR | LR_LOADFROMFILE)),
 resId(0)
 {
+	if(!handle()) {
+		throw Win32Exception("Failed to create an icon from a file");
+	}
 }
 
 Point Icon::getSize() const {

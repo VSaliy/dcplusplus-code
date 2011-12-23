@@ -47,7 +47,7 @@ Theme::~Theme() {
 
 void Theme::load(const tstring& classes, Widget* w_, bool handleThemeChanges) {
 	w = w_;
-	dwtassert(w, _T("Theme: no widget set"));
+	dwtassert(w, "Theme: no widget set");
 
 	open(classes);
 

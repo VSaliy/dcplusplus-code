@@ -88,7 +88,7 @@ void TabView::create(const Seed & cs) {
 	toggleActive = cs.toggleActive;
 
 	if(cs.style & TCS_OWNERDRAWFIXED) {
-		dwtassert(dynamic_cast<Control*>(getParent()), _T("Owner-drawn tabs must have a parent derived from dwt::Control"));
+		dwtassert(dynamic_cast<Control*>(getParent()), "Owner-drawn tabs must have a parent derived from dwt::Control");
 
 		if(widthConfig < 100)
 			widthConfig = 100;

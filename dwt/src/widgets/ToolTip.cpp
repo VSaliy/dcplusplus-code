@@ -41,7 +41,7 @@ ToolTip::Seed::Seed() :
 }
 
 void ToolTip::create( const Seed & cs ) {
-	dwtassert((cs.style & WS_POPUP) == WS_POPUP, _T("Widget must have WS_POPUP style"));
+	dwtassert((cs.style & WS_POPUP) == WS_POPUP, "ToolTips must have the WS_POPUP style");
 
 	BaseType::create(cs);
 }

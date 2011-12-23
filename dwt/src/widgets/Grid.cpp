@@ -333,7 +333,7 @@ void Grid::clearColumns() {
 }
 
 void Grid::setWidget(Control* w, size_t row, size_t column, size_t rowSpan, size_t colSpan) {
-	dwtassert(w->getParent() == this, _T("Control must be a child of the grid"));
+	dwtassert(w->getParent() == this, "Control must be a child of the grid");
 
 	for(auto i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
 		if(i->w == w) {

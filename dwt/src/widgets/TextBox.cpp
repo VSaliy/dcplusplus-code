@@ -43,8 +43,7 @@ TextBoxBase::TextBoxBase(Widget *parent, Dispatcher& dispatcher) :
 BaseType(parent, dispatcher),
 lines(1)
 {
-	// Can't have a text box without a parent...
-	dwtassert( parent, _T( "Cant have a TextBox without a parent..." ) );
+	dwtassert(parent, "Cant have a TextBox without a parent...");
 }
 
 TextBox::TextBox(Widget* parent) :

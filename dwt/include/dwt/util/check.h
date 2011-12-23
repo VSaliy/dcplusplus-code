@@ -32,21 +32,28 @@
 #ifndef DWT_CHECK_H_
 #define DWT_CHECK_H_
 
+#include <dwt/DWTException.h>
+
 namespace dwt { namespace util {
 
 #ifdef _DEBUG
 
-#define dwtDebugFail(m) assert( (false && (m)) )
+#define dwtDebugFail(m) throw DWTException(m)
+#define dwtWin32DebugFail(m) throw Win32Exception(m)
+
+#define dwtassert(x, m) do { bool assertCheck = x; if(!assertCheck) dwtDebugFail(m); } while(false)
+#define dwtWin32Assert(x, m) do { bool assertCheck = x; if(!assertCheck) dwtWin32DebugFail(m); } while(false)
 
 #else
 
-#define dwtDebugFail(m) do {} while(false)
+#define dwtDebugFail(m)
+#define dwtWin32DebugFail(m)
+
+#define dwtassert(x, m)
+#define dwtWin32Assert(x, m)
 
 #endif
 
-#define dwtassert(x, m) assert( (x) && (m) )
-
-#define dwtWin32DebugFail(m) dwtDebugFail(m)
-
 } }
+
 #endif /*CHECK_H_*/
