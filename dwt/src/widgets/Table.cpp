@@ -234,7 +234,7 @@ int Table::insert(int mask, int i, LPCTSTR text, UINT state, UINT stateMask, int
 
 void Table::setIndex(LVITEM& item, int index) const {
 	if(grouped) {
-		dwtassert(index >= 0, _T("Table::insert in grouped mode: index must be >= 0 since it is a group id"));
+		dwtassert(index >= 0, "Table::insert in grouped mode: index must be >= 0 since it is a group id");
 		item.mask |= LVIF_GROUPID;
 		item.iGroupId = index;
 
@@ -527,7 +527,7 @@ void Table::setView( int view ) {
 }
 
 void Table::eraseColumn( unsigned columnNo ) {
-	dwtassert( columnNo != 0, _T( "Can't delete the leftmost column" ) );
+	dwtassert(columnNo != 0, "Can't delete the leftmost column");
 	ListView_DeleteColumn( handle(), columnNo );
 }
 

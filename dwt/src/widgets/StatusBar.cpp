@@ -73,12 +73,12 @@ void StatusBar::create(const Seed& cs) {
 }
 
 void StatusBar::setSize(unsigned part, unsigned size) {
-	dwtassert(part < parts.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), "Invalid part number");
 	parts[part].size = size;
 }
 
 void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
-	dwtassert(part < parts.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), "Invalid part number");
 	Part& info = getPart(part);
 	info.text = text;
 	if(part != fill) {
@@ -101,7 +101,7 @@ void StatusBar::setText(unsigned part, const tstring& text, bool alwaysResize) {
 }
 
 void StatusBar::setIcon(unsigned part, const IconPtr& icon, bool alwaysResize) {
-	dwtassert(part < parts.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), "Invalid part number");
 	Part& info = getPart(part);
 	info.icon = icon;
 	if(part != fill)
@@ -110,17 +110,17 @@ void StatusBar::setIcon(unsigned part, const IconPtr& icon, bool alwaysResize) {
 }
 
 void StatusBar::setToolTip(unsigned part, const tstring& text) {
-	dwtassert(part < parts.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), "Invalid part number");
 	getPart(part).tip = text;
 }
 
 void StatusBar::setHelpId(unsigned part, unsigned id) {
-	dwtassert(part < parts.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), "Invalid part number");
 	getPart(part).helpId = id;
 }
 
 void StatusBar::setWidget(unsigned part, Control* widget, const Rectangle& padding) {
-	dwtassert(part < parts.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), "Invalid part number");
 	auto p = new WidgetPart(widget, padding);
 	p->size = widget->getPreferredSize().x;
 	p->helpId = widget->getHelpId();
@@ -128,7 +128,7 @@ void StatusBar::setWidget(unsigned part, Control* widget, const Rectangle& paddi
 }
 
 void StatusBar::onClicked(unsigned part, const F& f) {
-	dwtassert(part < parts.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), "Invalid part number");
 	getPart(part).clickF = f;
 
 	// imitate the default onClicked but with a setCallback.
@@ -136,7 +136,7 @@ void StatusBar::onClicked(unsigned part, const F& f) {
 }
 
 void StatusBar::onRightClicked(unsigned part, const F& f) {
-	dwtassert(part < parts.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), "Invalid part number");
 	getPart(part).rightClickF = f;
 
 	// imitate the default onRightClicked but with a setCallback.
@@ -144,7 +144,7 @@ void StatusBar::onRightClicked(unsigned part, const F& f) {
 }
 
 void StatusBar::onDblClicked(unsigned part, const F& f) {
-	dwtassert(part < parts.size(), _T("Invalid part number."));
+	dwtassert(part < parts.size(), "Invalid part number");
 	getPart(part).dblClickF = f;
 
 	// imitate the default onDblClicked but with a setCallback.

@@ -37,7 +37,6 @@
 #define DWT_DateTime_h
 
 #include "../aspects/Clickable.h"
-#include "../util/check.h"
 #include "Control.h"
 
 namespace dwt {
@@ -227,8 +226,6 @@ inline void DateTime::setFormat( const tstring & format )
 inline DateTime::DateTime( Widget* parent )
 	: BaseType(parent, ChainingDispatcher::superClass<DateTime>())
 {
-	// Can't have a text box without a parent...
-	dwtassert( parent, _T( "Can't have a TextBox without a parent..." ) );
 }
 
 inline void DateTime::setBackgroundColor( COLORREF color )

@@ -88,7 +88,7 @@ ownerDrawn(true),
 popup(true),
 drawSidebar(false)
 {
-	dwtassert(dynamic_cast<Control*>(parent), _T("A Menu must have a parent derived from dwt::Control"));
+	dwtassert(dynamic_cast<Control*>(parent), "A Menu must have a parent derived from dwt::Control");
 }
 
 void Menu::createHelper(const Seed& cs) {
@@ -202,7 +202,7 @@ LRESULT Menu::handleNCPaint(UINT message, WPARAM wParam, long menuWidth) {
 }
 
 void Menu::setMenu() {
-	dwtassert(!popup, _T("Only non-popup menus may call setMenu (change the Seed accordingly)"));
+	dwtassert(!popup,"Only non-popup menus may call setMenu (change the Seed accordingly)");
 
 	if(!::SetMenu(getParent()->handle(), handle()))
 		throw Win32Exception("SetMenu in Menu::setMenu failed");
@@ -418,7 +418,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 	if(!::GetMenuItemInfo(handle(), wrapper.index, TRUE, &info))
 		throw Win32Exception("Couldn't get menu item info when drawing");
 
-	dwtassert((info.fType & MFT_OWNERDRAW) != 0, _T("Trying to draw a menu item that is not owner-drawn"));
+	dwtassert((info.fType & MFT_OWNERDRAW) != 0, "Trying to draw a menu item that is not owner-drawn");
 
 	// get state info
 	bool isGrayed = ( drawInfo.itemState & ODS_GRAYED ) == ODS_GRAYED;
@@ -742,7 +742,7 @@ bool Menu::handlePainting(MEASUREITEMSTRUCT& measureInfo, ItemDataWrapper& wrapp
 	if(!::GetMenuItemInfo(handle(), wrapper.index, TRUE, &info))
 		throw Win32Exception("Couldn't get menu item info when measuring");
 
-	dwtassert((info.fType & MFT_OWNERDRAW) != 0, _T("Trying to measure a menu item that is not owner-drawn"));
+	dwtassert((info.fType & MFT_OWNERDRAW) != 0, "Trying to measure a menu item that is not owner-drawn");
 
 	// check if separator
 	if(info.fType & MFT_SEPARATOR) {

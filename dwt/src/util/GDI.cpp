@@ -40,7 +40,7 @@ namespace dwt { namespace util {
 
 IconPtr merge(const ImageList& icons) {
 	const size_t n = icons.size();
-	dwtassert(n > 0, _T("No icons to merge"));
+	dwtassert(n > 0, "No icons to merge");
 
 	// only 1 icon, just return it back.
 	if(n == 1)

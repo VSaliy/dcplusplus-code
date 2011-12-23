@@ -38,7 +38,7 @@ namespace dwt {
 MessageBox::MessageBox(Widget* parent) :
 parent(parent)
 {
-	dwtassert(parent, _T("A MessageBox must have a valid parent"));
+	dwtassert(parent, "A MessageBox must have a valid parent");
 }
 
 MessageBox::RetVal MessageBox::show(const tstring& message, const tstring& title, Buttons buttons, Icon icon) {

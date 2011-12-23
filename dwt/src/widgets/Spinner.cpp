@@ -64,7 +64,7 @@ void Spinner::setRange(int minimum, int maximum) {
 }
 
 void Spinner::assignBuddy(Control* buddy) {
-	dwtassert(buddy && buddy->handle() && buddy->getParent() == getParent(), _T("A spinner and its buddy must have the same parent"));
+	dwtassert(buddy && buddy->handle() && buddy->getParent() == getParent(), "A spinner and its buddy must have the same parent");
 	assignBuddy_(buddy);
 	buddy->onSized([this](const SizedEvent&) { handleSized(); });
 }

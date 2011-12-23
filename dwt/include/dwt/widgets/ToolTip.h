@@ -110,7 +110,7 @@ private:
 inline ToolTip::ToolTip(Widget *parent)
 	: BaseType(parent, ChainingDispatcher::superClass<ToolTip>())
 {
-	dwtassert( parent, _T( "Can't have a ToolTip without a parent..." ) );
+	dwtassert(parent, "Can't have a ToolTip without a parent...");
 }
 
 inline void ToolTip::setMaxTipWidth(int width) {

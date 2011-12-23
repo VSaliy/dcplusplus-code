@@ -148,8 +148,7 @@ protected:
 inline MDIParent::MDIParent( Widget * parent )
 	: BaseType(parent, NormalDispatcher::getDefault())
 {
-	// Can't have a text box without a parent...
-	dwtassert( parent, _T( "Can't have a MDIParent without a parent..." ) );
+	dwtassert(parent, "Can't have a MDIParent without a parent...");
 }
 
 // end namespace dwt
