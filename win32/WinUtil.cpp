@@ -102,6 +102,8 @@ dwt::BrushPtr WinUtil::bgBrush;
 COLORREF WinUtil::textColor = 0;
 COLORREF WinUtil::bgColor = 0;
 dwt::FontPtr WinUtil::font;
+dwt::FontPtr WinUtil::uploadFont;
+dwt::FontPtr WinUtil::downloadFont;
 unordered_map<string, dwt::FontPtr> WinUtil::userMatchFonts;
 dwt::ImageListPtr WinUtil::fileImages;
 dwt::ImageListPtr WinUtil::userImages;
@@ -152,7 +154,8 @@ void WinUtil::init() {
 	}
 
 	initFont();
-
+	updateUploadFont();
+	updateDownloadFont();
 	updateUserMatchFonts();
 
 	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
@@ -361,9 +364,7 @@ void WinUtil::enableDEP() {
 }
 
 void WinUtil::initFont() {
-	LOGFONT lf;
-	decodeFont(Text::toT(SETTING(MAIN_FONT)), lf);
-	font.reset(new dwt::Font(lf));
+	updateFont(font, SettingsManager::MAIN_FONT);
 
 	initSeeds();
 }
@@ -416,6 +417,17 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 	}
 }
 
+void WinUtil::updateFont(dwt::FontPtr& font, int setting) {
+	auto text = SettingsManager::getInstance()->get(static_cast<SettingsManager::StrSetting>(setting));
+	if(text.empty()) {
+		font.reset();
+	} else {
+		LOGFONT lf;
+		decodeFont(Text::toT(text), lf);
+		font.reset(new dwt::Font(lf));
+	}
+}
+
 void WinUtil::updateUserMatchFonts() {
 	userMatchFonts.clear();
 
@@ -427,6 +439,14 @@ void WinUtil::updateUserMatchFonts() {
 			userMatchFonts[i->style.font] = new dwt::Font(lf);
 		}
 	}
+}
+
+void WinUtil::updateUploadFont() {
+	updateFont(uploadFont, SettingsManager::UPLOAD_FONT);
+}
+
+void WinUtil::updateDownloadFont() {
+	updateFont(downloadFont, SettingsManager::DOWNLOAD_FONT);
 }
 
 void WinUtil::setStaticWindowState(const string& id, bool open) {
