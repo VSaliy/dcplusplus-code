@@ -1247,6 +1247,8 @@ void MainWindow::handleActivate(bool active) {
 }
 
 void MainWindow::completeVersionUpdate() {
+	if(!conns[CONN_VERSION]) { return; }
+
 	try {
 		SimpleXML xml;
 		xml.fromXML(conns[CONN_VERSION]->buf);
@@ -1385,7 +1387,7 @@ void MainWindow::updateGeo() {
 
 void MainWindow::updateGeo(bool v6) {
 	auto& conn = conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4];
-	if(conn.get())
+	if(conn)
 		return;
 
 	LogManager::getInstance()->message(str(F_("Updating the %1% GeoIP database...") % (v6 ? "IPv6" : "IPv4")));
@@ -1395,6 +1397,7 @@ void MainWindow::updateGeo(bool v6) {
 
 void MainWindow::completeGeoUpdate(bool v6) {
 	auto& conn = conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4];
+	if(!conn) { return; }
 	ScopedFunctor([&conn] { conn.reset(); });
 
 	if(!conn->buf.empty()) {
