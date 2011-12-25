@@ -49,6 +49,7 @@ private:
 	bool preClosing();
 
 	void addLine(time_t t, const tstring& msg);
+	void openFile(const string& path) const;
 
 	bool handleContextMenu(const dwt::ScreenCoordinate& pt);
 	bool handleDoubleClick(const dwt::MouseEvent& mouseEvent);

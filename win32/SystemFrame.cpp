@@ -20,9 +20,12 @@
 
 #include "SystemFrame.h"
 
+#include <dcpp/DirectoryListing.h>
 #include <dcpp/File.h>
 #include <dcpp/LogManager.h>
+#include <dcpp/ShareManager.h>
 
+#include "DirectoryListingFrame.h"
 #include "HoldRedraw.h"
 #include "ShellMenu.h"
 #include "WinUtil.h"
@@ -46,8 +49,9 @@ SystemFrame::SystemFrame(TabViewPtr parent) :
 
 	initStatus();
 
-	auto path = Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM)));
-	status->onDblClicked(STATUS_STATUS, [path] { WinUtil::openFile(path); });
+	status->onDblClicked(STATUS_STATUS, [] {
+		WinUtil::openFile(Text::toT(Util::validateFileName(LogManager::getInstance()->getPath(LogManager::SYSTEM))));
+	});
 
 	layout();
 
@@ -82,6 +86,24 @@ void SystemFrame::addLine(time_t t, const tstring& msg) {
 	setDirty(SettingsManager::BOLD_SYSTEM_LOG);
 }
 
+void SystemFrame::openFile(const string& path) const {
+	// see if we are opening our own file list.
+	if(path == ShareManager::getInstance()->getBZXmlFile()) {
+		DirectoryListingFrame::openOwnList(getParent(), Util::emptyStringT, DirectoryListingFrame::FORCE_ACTIVE);
+		return;
+	}
+
+	// see if we are opening a file list.
+	auto u = DirectoryListing::getUserFromFilename(path);
+	if(u) {
+		DirectoryListingFrame::openWindow(getParent(), Text::toT(path), Util::emptyStringT,
+			HintedUser(u, Util::emptyString), 0, DirectoryListingFrame::FORCE_ACTIVE);
+		return;
+	}
+
+	WinUtil::openFile(Text::toT(path));
+}
+
 void SystemFrame::layout() {
 	dwt::Rectangle r(this->getClientSize());
 
@@ -101,8 +123,8 @@ bool SystemFrame::handleContextMenu(const dwt::ScreenCoordinate& pt) {
 	if(File::getSize(path_a) != -1) {
 		ShellMenuPtr menu = addChild(ShellMenu::Seed());
 		menu->setTitle(escapeMenu(path), WinUtil::fileImages->getIcon(WinUtil::getFileIcon(path_a)));
-		menu->appendItem(T_("&Open"), [path] { WinUtil::openFile(path); }, dwt::IconPtr(), true, true);
-		menu->appendItem(T_("Open &folder"), [path] { WinUtil::openFolder(path); });
+		menu->appendItem(T_("&Open"), [this, &path_a] { openFile(path_a); }, dwt::IconPtr(), true, true);
+		menu->appendItem(T_("Open &folder"), [&path] { WinUtil::openFolder(path); });
 		menu->appendShellMenu(StringList(1, path_a));
 		menu->open(pt);
 		return true;
@@ -111,9 +133,9 @@ bool SystemFrame::handleContextMenu(const dwt::ScreenCoordinate& pt) {
 }
 
 bool SystemFrame::handleDoubleClick(const dwt::MouseEvent& mouseEvent) {
-	tstring path = log->textUnderCursor(mouseEvent.pos, true);
-	if(File::getSize(Text::fromT(path)) != -1) {
-		WinUtil::openFile(path);
+	string path = Text::fromT(log->textUnderCursor(mouseEvent.pos, true));
+	if(File::getSize(path) != -1) {
+		openFile(path);
 		return true;
 	}
 	return false;
