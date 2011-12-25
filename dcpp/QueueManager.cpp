@@ -1087,7 +1087,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 		Lock l(cs);
 
 		delete aDownload->getFile();
-		aDownload->setFile(0);
+		aDownload->setFile(nullptr);
 
 		if(aDownload->getType() == Transfer::TYPE_PARTIAL_LIST) {
 			QueueItem* q = fileQueue.find(aDownload->getPath());
