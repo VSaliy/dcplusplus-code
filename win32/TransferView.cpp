@@ -345,9 +345,9 @@ namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, i
 			auto selectPen(canvas.select(pen));
 
 			// "Finished" part
-			rc.size.x = (int) (rc.width() * pos);
+			rc.size.x *= pos;
 
-			canvas.rectangle(rc.left(), rc.top(), rc.right(), rc.bottom());
+			canvas.rectangle(rc);
 		}
 
 		textRect = rc;
@@ -365,7 +365,7 @@ namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, i
 
 	// draw status text
 
-	canvas.setBkMode(true);
+	auto bkMode(canvas.setBkMode(true));
 	auto& font = download ? WinUtil::downloadFont : WinUtil::uploadFont;
 	if(!font.get()) {
 		font = WinUtil::font;
@@ -373,6 +373,7 @@ namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, i
 	auto selectFont(canvas.select(*font));
 
 	textRect.pos.x += 6;
+	textRect.size.x -= 6;
 
 	long left = textRect.left();
 
