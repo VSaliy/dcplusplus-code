@@ -1,6 +1,8 @@
 #ifndef DCPLUSPLUS_DCPP_DOWNLOAD_H_
 #define DCPLUSPLUS_DCPP_DOWNLOAD_H_
 
+#include <string>
+
 #include "forward.h"
 #include "noexcept.h"
 #include "Transfer.h"
@@ -9,6 +11,8 @@
 #include "GetSet.h"
 
 namespace dcpp {
+
+using std::string;
 
 /**
  * Comes as an argument in the DownloadManagerListener functions.
