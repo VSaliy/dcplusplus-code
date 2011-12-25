@@ -1172,9 +1172,10 @@ void MainWindow::showPortsError(const string& port) {
 void MainWindow::handleOpenFileList() {
 	tstring file;
 	if(WinUtil::browseFileList(this, file)) {
-		UserPtr u = DirectoryListing::getUserFromFilename(Text::fromT(file));
-		if (u) {
-			DirectoryListingFrame::openWindow(getTabView(), file, Util::emptyStringT, HintedUser(u, Util::emptyString), 0);
+		auto u = DirectoryListing::getUserFromFilename(Text::fromT(file));
+		if(u) {
+			DirectoryListingFrame::openWindow(getTabView(), file, Util::emptyStringT,
+				HintedUser(u, Util::emptyString), 0, DirectoryListingFrame::FORCE_ACTIVE);
 		} else {
 			dwt::MessageBox(this).show(T_("Invalid file list name"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
 				dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);

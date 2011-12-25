@@ -106,7 +106,8 @@ void DirectoryListingFrame::openWindow(TabViewPtr parent, const tstring& aFile, 
 	if(prev == lists.end()) {
 		openWindow_(parent, aFile, aDir, aUser, aSpeed, activate);
 	} else {
-		activate = prev->second->isActive() ? FORCE_ACTIVE : FOLLOW_SETTING;
+		if(activate != FORCE_ACTIVE && prev->second->isActive())
+			activate = FORCE_ACTIVE;
 		prev->second->close();
 		parent->callAsync([=] { openWindow_(parent, aFile, aDir, aUser, aSpeed, activate); });
 	}
