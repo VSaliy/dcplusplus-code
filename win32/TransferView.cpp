@@ -141,7 +141,7 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 		downloads->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return handleCustomDraw(data); });
 	}
 
-	onRaw([this](WPARAM, LPARAM) { return handleDestroy(); }, dwt::Message(WM_DESTROY));
+	onDestroy([this] { handleDestroy(); });
 	noEraseBackground();
 
 	layout();
@@ -167,14 +167,12 @@ void TransferView::prepareClose() {
 	UploadManager::getInstance()->removeListener(this);
 }
 
-LRESULT TransferView::handleDestroy() {
+void TransferView::handleDestroy() {
 	SettingsManager::getInstance()->set(SettingsManager::CONNECTIONS_ORDER, WinUtil::toString(connections->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::CONNECTIONS_WIDTHS, WinUtil::toString(connections->getColumnWidths()));
 
 	SettingsManager::getInstance()->set(SettingsManager::DOWNLOADS_ORDER, WinUtil::toString(downloads->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::DOWNLOADS_WIDTHS, WinUtil::toString(downloads->getColumnWidths()));
-
-	return 0;
 }
 
 bool TransferView::handleConnectionsMenu(dwt::ScreenCoordinate pt) {

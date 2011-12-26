@@ -254,7 +254,6 @@ private:
 	void updateTree(DirectoryListing::Directory* tree, HTREEITEM treeItem);
 	HTREEITEM findItem(HTREEITEM ht, const tstring& name);
 	void selectItem(const tstring& name);
-	void clearList();
 	void updateTitle();
 
 	void loadFile(const tstring& dir);

@@ -437,8 +437,6 @@ bool DirectoryListingFrame::preClosing() {
 }
 
 void DirectoryListingFrame::postClosing() {
-	clearList();
-
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
@@ -945,7 +943,7 @@ void DirectoryListingFrame::handleSelectionChanged() {
 void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 
 	updating = true;
-	clearList();
+	files->clear();
 
 	for(auto i = d->directories.begin(); i != d->directories.end(); ++i) {
 		files->insert(files->size(), new ItemInfo(*i));
@@ -972,10 +970,6 @@ void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 			status->setText(STATUS_STATUS, T_("User offline"));
 		}
 	}
-}
-
-void DirectoryListingFrame::clearList() {
-	files->clear();
 }
 
 void DirectoryListingFrame::addHistory(const string& name) {

@@ -60,7 +60,7 @@ class TransferView;
 template<typename ContentType, bool managed = true>
 class TypedTable;
 
-template<typename ContentType>
+template<typename ContentType, bool managed = true>
 class TypedTree;
 
 #endif /* FORWARD_H_ */
