@@ -19,6 +19,7 @@
 #include "stdinc.h"
 #include "Socket.h"
 
+#include "ConnectivityManager.h"
 #include "format.h"
 #include "SettingsManager.h"
 #include "TimerManager.h"
@@ -588,7 +589,7 @@ void Socket::writeTo(const string& aAddr, const string& aPort, const void* aBuff
 	auto buf = (const uint8_t*)aBuffer;
 
 	int sent;
-	if(SETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5 && proxy) {
+	if(proxy && CONNSETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5) {
 		if(udpAddr.sa.sa_family == 0) {
 			throw SocketException(_("Failed to set up the socks server for UDP relay (check socks address and port)"));
 		}
@@ -821,7 +822,7 @@ void Socket::socksUpdated() {
 	memset(&udpAddr, 0, sizeof(udpAddr));
 	udpAddrLen = sizeof(udpAddr);
 
-	if(SETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5) {
+	if(CONNSETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5) {
 		try {
 			Socket s(TYPE_TCP);
 			s.setBlocking(false);

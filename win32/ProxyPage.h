@@ -19,9 +19,11 @@
 #ifndef DCPLUSPLUS_WIN32_PROXY_PAGE_H
 #define DCPLUSPLUS_WIN32_PROXY_PAGE_H
 
+#include <dcpp/ConnectivityManager.h>
+
 #include "PropPage.h"
 
-class ProxyPage : public PropPage
+class ProxyPage : public PropPage, private ConnectivityManagerListener
 {
 public:
 	ProxyPage(dwt::Widget* parent);
@@ -32,6 +34,9 @@ public:
 private:
 	ItemList items;
 
+	GroupBoxPtr autoGroup;
+	CheckBoxPtr autoDetect;
+
 	RadioButtonPtr directOut;
 	RadioButtonPtr socks5;
 
@@ -39,7 +44,14 @@ private:
 	TextBoxPtr socksServer;
 	CheckBoxPtr socksResolve;
 
+	void handleAutoClicked();
+
+	void read();
+	void updateAuto();
 	void fixControlsOut();
+
+	// ConnectivityManagerListener
+	void on(SettingChanged) noexcept;
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_PROXY_PAGE_H)

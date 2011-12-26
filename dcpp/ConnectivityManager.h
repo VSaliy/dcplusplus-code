@@ -19,9 +19,10 @@
 #ifndef DCPLUSPLUS_DCPP_CONNECTIVITY_MANAGER_H
 #define DCPLUSPLUS_DCPP_CONNECTIVITY_MANAGER_H
 
+#include "noexcept.h"
 #include "SettingsManager.h"
-#include "Speaker.h"
 #include "Singleton.h"
+#include "Speaker.h"
 
 #include <string>
 #include <unordered_map>

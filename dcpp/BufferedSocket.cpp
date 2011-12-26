@@ -114,7 +114,7 @@ void BufferedSocket::connect(const string& aAddress, const string& aPort, const 
 	setSocket(move(s));
 
 	Lock l(cs);
-	addTask(CONNECT, new ConnectInfo(aAddress, aPort, localPort, natRole, proxy && (SETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5)));
+	addTask(CONNECT, new ConnectInfo(aAddress, aPort, localPort, natRole, proxy && (CONNSETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5)));
 }
 
 #define LONG_TIMEOUT 30000
