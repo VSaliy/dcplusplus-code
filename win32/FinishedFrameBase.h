@@ -451,7 +451,7 @@ private:
 			FileChecker checker = files->forEachSelectedT(FileChecker());
 			auto selData = (sel == 1) ? files->getSelectedData() : 0;
 
-			ShellMenuPtr menu = filesWindow->addChild(ShellMenu::Seed());
+			auto menu = filesWindow->addChild(ShellMenu::Seed(WinUtil::Seeds::menu));
 			menu->setTitle(selData ? escapeMenu(selData->getText(FILES_COLUMN_FILE)) : str(TF_("%1% files") % sel),
 				selData ? WinUtil::fileImages->getIcon(selData->getImage(0)) : tabs->getIcon(filesWindow));
 			menu->appendItem(T_("&View as text"), [this] { this->handleViewAsText(); }, dwt::IconPtr(), checker.allFilesExist && !checker.isBz2);

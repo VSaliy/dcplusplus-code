@@ -537,7 +537,7 @@ void DirectoryListingFrame::updateTitle() {
 }
 
 ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
-	ShellMenuPtr menu = addChild(ShellMenu::Seed());
+	auto menu = addChild(ShellMenu::Seed(WinUtil::Seeds::menu));
 
 	menu->setTitle(escapeMenu(ii->getText(COLUMN_FILENAME)), WinUtil::fileImages->getIcon(ii->getImage(0)));
 
@@ -563,7 +563,7 @@ ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 }
 
 ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
-	ShellMenuPtr menu = addChild(ShellMenu::Seed());
+	auto menu = addChild(ShellMenu::Seed(WinUtil::Seeds::menu));
 
 	size_t sel = files->countSelected();
 	menu->setTitle(str(TF_("%1% items") % sel), getParent()->getIcon(this));
@@ -576,7 +576,7 @@ ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
 }
 
 ShellMenuPtr DirectoryListingFrame::makeDirMenu(ItemInfo* ii) {
-	ShellMenuPtr menu = addChild(ShellMenu::Seed());
+	auto menu = addChild(ShellMenu::Seed(WinUtil::Seeds::menu));
 
 	menu->setTitle(escapeMenu(ii ? ii->getText(COLUMN_FILENAME) : getText()),
 		ii ? WinUtil::fileImages->getIcon(ii->getImage(0)) : getParent()->getIcon(this));
