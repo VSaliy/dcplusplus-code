@@ -335,9 +335,9 @@ SettingsManager::SettingsManager()
 	setDefault(MAIN_WINDOW_SIZE_Y, CW_USEDEFAULT);
 	setDefault(MAIN_WINDOW_POS_X, CW_USEDEFAULT);
 	setDefault(MAIN_WINDOW_POS_Y, CW_USEDEFAULT);
-	setDefault(UPLOAD_TEXT_COLOR, -1);
+	setDefault(UPLOAD_TEXT_COLOR, RGB(255, 255, 255));
 	setDefault(UPLOAD_BG_COLOR, RGB(205, 60, 55));
-	setDefault(DOWNLOAD_TEXT_COLOR, -1);
+	setDefault(DOWNLOAD_TEXT_COLOR, RGB(255, 255, 255));
 	setDefault(DOWNLOAD_BG_COLOR, RGB(55, 170, 85));
 #endif
 }
