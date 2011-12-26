@@ -1104,7 +1104,8 @@ void MainWindow::handleSettings() {
 			showPortsError(e.getError());
 		}
 
-		if(CONNSETTING(OUTGOING_CONNECTIONS) != prevProxy) {
+		auto outConns = CONNSETTING(OUTGOING_CONNECTIONS);
+		if(outConns != prevProxy || outConns == SettingsManager::OUTGOING_SOCKS5) {
 			Socket::socksUpdated();
 		}
 
