@@ -185,8 +185,6 @@ protected:
 	}
 
 	void postClosing() {
-		clearTables();
-
 		saveColumns(files,
 			in_UL ? SettingsManager::FINISHED_UL_FILES_ORDER : SettingsManager::FINISHED_DL_FILES_ORDER,
 			in_UL ? SettingsManager::FINISHED_UL_FILES_WIDTHS : SettingsManager::FINISHED_DL_FILES_WIDTHS);

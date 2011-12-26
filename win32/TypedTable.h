@@ -72,8 +72,6 @@ public:
 	};
 
 	virtual ~TypedTable() {
-		if(managed)
-			this->clear();
 	}
 
 	void create(const Seed& seed) {
@@ -87,6 +85,10 @@ public:
 		addSortEvent<ContentType>();
 		addStyleEvent<ContentType>();
 		addTooltipEvent<ContentType>();
+
+		if(managed) {
+			onDestroy([this] { this->clear(); });
+		}
 	}
 
 	int insert(ContentType* item) {

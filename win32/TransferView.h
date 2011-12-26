@@ -258,7 +258,7 @@ private:
 
 	bool handleConnectionsMenu(dwt::ScreenCoordinate pt);
 	bool handleDownloadsMenu(dwt::ScreenCoordinate pt);
-	LRESULT handleDestroy();
+	void handleDestroy();
 	void handleForce();
 	void handleCopyNick();
 	void handleDisconnect();

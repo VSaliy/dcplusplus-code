@@ -92,6 +92,14 @@ public:
 		});
 	}
 
+	/// Callback to execute right before destroying the control.
+	void onDestroy(std::function<void ()> f) {
+		addCallback(Message(WM_DESTROY), [f](const MSG&, LRESULT&) -> bool {
+			f();
+			return false;
+		});
+	}
+
 	/**
 	* add a combination of keys that will launch a function when they are hit. see the ACCEL
 	* structure doc for information about the "fVirt" and "key" arguments.

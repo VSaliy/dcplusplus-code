@@ -229,8 +229,6 @@ private:
 
 	QueueItemInfo* getItemInfo(const string& target);
 
-	void clearTree(HTREEITEM item);
-
 	void moveSelected();
 	void moveSelectedDir();
 	void moveDir(HTREEITEM ht, const string& target);

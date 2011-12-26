@@ -19,13 +19,19 @@
 #ifndef DCPLUSPLUS_WIN32_TYPED_TREE_H
 #define DCPLUSPLUS_WIN32_TYPED_TREE_H
 
+#include "forward.h"
 #include "WinUtil.h"
 
-template<typename ContentType>
+/** Tree with an object associated to each item.
+
+@tparam ContentType Type of the objects associated to each item.
+
+@tparam managed Whether this class should handle deleting associated objects. */
+template<typename ContentType, bool managed>
 class TypedTree : public dwt::Tree
 {
 	typedef typename dwt::Tree BaseType;
-	typedef TypedTree<ContentType> ThisType;
+	typedef TypedTree<ContentType, managed> ThisType;
 
 public:
 	typedef ThisType* ObjectType;
@@ -39,6 +45,9 @@ public:
 		}
 	};
 
+	virtual ~TypedTree() {
+	}
+
 	void create(const Seed& seed) {
 		BaseType::create(seed);
 
@@ -47,6 +56,10 @@ public:
 			this->handleDisplay(data);
 			return 0;
 		}, dwt::Message(WM_NOTIFY, TVN_GETDISPINFO));
+
+		if(managed) {
+			onDestroy([this] { this->clear(); });
+		}
 	}
 
 	HTREEITEM insert(HTREEITEM parent, ContentType* data, bool expanded = false) {
@@ -84,6 +97,20 @@ public:
 		TreeView_SetItemState(this->handle(), item, state, mask);
 	}
 
+	void clear() {
+		if(managed) {
+			auto item = this->getRoot();
+			while(item) {
+				this->clear(item);
+				item = this->getNextSibling(item);
+			}
+		}
+
+		this->BaseType::clear();
+	}
+
+	void erase(HTREEITEM item) { if(managed) delete getData(item); this->BaseType::erase(item); }
+
 private:
 	void handleDisplay(NMTVDISPINFO& data) {
 		if(data.item.mask & TVIF_TEXT) {
@@ -102,6 +129,15 @@ private:
 			ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
 			data.item.iSelectedImage = content->getSelectedImage();
 		}
+	}
+
+	void clear(HTREEITEM item) {
+		auto next = this->getChild(item);
+		while(next) {
+			clear(next);
+			next = this->getNextSibling(next);
+		}
+		delete this->getData(item);
 	}
 };
 

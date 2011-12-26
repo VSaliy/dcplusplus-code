@@ -224,20 +224,14 @@ bool QueueFrame::preClosing() {
 }
 
 void QueueFrame::postClosing() {
-	HTREEITEM ht = dirs->getRoot();
-	while(ht != NULL) {
-		clearTree(ht);
-		ht = dirs->getNextSibling(ht);
-	}
-
-	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getSplitterPos(0));
-
+	dirs->clear();
+	files->clear();
 	for(auto i = directories.begin(); i != directories.end(); ++i) {
 		delete i->second;
 	}
 	directories.clear();
-	files->clear();
 
+	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getSplitterPos(0));
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
@@ -479,8 +473,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 
 		// Ok, next now points to x:\... find how much is common
 
-		DirItemInfo* rootInfo = dirs->getData(next);
-		const string& rootStr = rootInfo->getDir();
+		const string& rootStr = dirs->getData(next)->getDir();
 
 		i = 0;
 
@@ -506,7 +499,6 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 				moveNode(next, parent);
 				next = dirs->getChild(oldRoot);
 			}
-			delete rootInfo;
 			dirs->erase(oldRoot);
 			parent = newRoot;
 		} else {
@@ -558,7 +550,6 @@ void QueueFrame::removeDirectory(const string& dir, bool isFileList /* = false *
 
 	if(isFileList) {
 		dcassert(fileLists != NULL);
-		delete dirs->getData(fileLists);
 		dirs->erase(fileLists);
 		fileLists = NULL;
 		return;
@@ -585,9 +576,7 @@ void QueueFrame::removeDirectory(const string& dir, bool isFileList /* = false *
 	next = parent;
 
 	while((dirs->getChild(next) == NULL) && (directories.find(getDir(next)) == directories.end())) {
-		delete dirs->getData(next);
 		parent = dirs->getParent(next);
-
 		dirs->erase(next);
 		if(parent == NULL)
 			break;
@@ -601,7 +590,6 @@ void QueueFrame::removeDirectories(HTREEITEM ht) {
 		removeDirectories(next);
 		next = dirs->getNextSibling(ht);
 	}
-	delete dirs->getData(ht);
 	dirs->erase(ht);
 }
 
@@ -805,16 +793,6 @@ void QueueFrame::setPriority(HTREEITEM ht, const QueueItem::Priority& p) {
 	for(auto i = dp.first; i != dp.second; ++i) {
 		QueueManager::getInstance()->setPriority(i->second->getTarget(), p);
 	}
-}
-
-
-void QueueFrame::clearTree(HTREEITEM item) {
-	HTREEITEM next = dirs->getChild(item);
-	while(next != NULL) {
-		clearTree(next);
-		next = dirs->getNextSibling(next);
-	}
-	delete dirs->getData(item);
 }
 
 // Put it here to avoid a copy for each recursion...
