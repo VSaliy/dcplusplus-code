@@ -28,14 +28,6 @@
 
 using dwt::util::escapeMenu;
 
-ShellMenu::Seed::Seed() :
-BaseType::Seed()
-{
-	/// @todo find a better way to directly use styles set in WinUtil (see TypedTable/TypedTree)...
-	ownerDrawn = WinUtil::Seeds::menu.ownerDrawn;
-	font = WinUtil::Seeds::menu.font;
-}
-
 ShellMenu::ShellMenu(dwt::Widget* parent) :
 BaseType(parent),
 handler(0),

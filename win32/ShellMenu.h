@@ -39,7 +39,8 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		Seed();
+		Seed(const BaseType::Seed& seed) : BaseType::Seed(seed) {
+		}
 	};
 
 	explicit ShellMenu(dwt::Widget* parent);
