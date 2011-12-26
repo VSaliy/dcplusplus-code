@@ -1078,6 +1078,7 @@ void MainWindow::handleSettings() {
 	auto prevMapper = SETTING(MAPPER);
 	auto prevBind = SETTING(BIND_ADDRESS);
 	auto prevBind6 = SETTING(BIND_ADDRESS6);
+	auto prevProxy = CONNSETTING(OUTGOING_CONNECTIONS);
 
 	auto prevGeo = BOOLSETTING(GET_USER_COUNTRY);
 	auto prevGeoFormat = SETTING(COUNTRY_FORMAT);
@@ -1101,6 +1102,10 @@ void MainWindow::handleSettings() {
 				SETTING(MAPPER) != prevMapper || SETTING(BIND_ADDRESS) != prevBind || SETTING(BIND_ADDRESS6) != prevBind6);
 		} catch (const Exception& e) {
 			showPortsError(e.getError());
+		}
+
+		if(CONNSETTING(OUTGOING_CONNECTIONS) != prevProxy) {
+			Socket::socksUpdated();
 		}
 
 		ClientManager::getInstance()->infoUpdated();

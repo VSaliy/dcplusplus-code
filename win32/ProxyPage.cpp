@@ -19,13 +19,14 @@
 #include "stdafx.h"
 #include "ProxyPage.h"
 
+#include <boost/range/algorithm/for_each.hpp>
+
 #include <dcpp/SettingsManager.h>
 #include <dcpp/Socket.h>
 
-#include <dwt/widgets/RadioButton.h>
-#include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Label.h>
-#include <dwt/util/win32/Version.h>
+#include <dwt/widgets/Grid.h>
+#include <dwt/widgets/RadioButton.h>
 
 #include "resource.h"
 #include "WinUtil.h"
@@ -36,7 +37,9 @@ using dwt::Label;
 using dwt::RadioButton;
 
 ProxyPage::ProxyPage(dwt::Widget* parent) :
-PropPage(parent, 1, 1),
+PropPage(parent, 2, 1),
+autoGroup(0),
+autoDetect(0),
 directOut(0),
 socks5(0),
 socksSettings(0),
@@ -45,8 +48,16 @@ socksServer(0)
 	setHelpId(IDH_PROXYPAGE);
 
 	grid->column(0).mode = GridInfo::FILL;
-	grid->row(0).mode = GridInfo::FILL;
-	grid->row(0).align = GridInfo::STRETCH;
+	grid->row(1).mode = GridInfo::FILL;
+	grid->row(1).align = GridInfo::STRETCH;
+
+	{
+		autoGroup = grid->addChild(GroupBox::Seed(T_("Automatic connectivity setup")));
+		autoGroup->setHelpId(IDH_SETTINGS_CONNECTIVITY_AUTODETECT);
+
+		autoDetect = autoGroup->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
+		autoDetect->onClicked([this] { handleAutoClicked(); });
+	}
 
 	{
 		GridPtr cur = grid->addChild(GroupBox::Seed(T_("Proxy settings for outgoing connections")))->addChild(Grid::Seed(1, 2));
@@ -92,23 +103,22 @@ socksServer(0)
 		socksResolve->setHelpId(IDH_SETTINGS_PROXY_SOCKS_RESOLVE);
 	}
 
-	switch(SETTING(OUTGOING_CONNECTIONS)) {
-		case SettingsManager::OUTGOING_SOCKS5: socks5->setChecked(); break;
-		default: directOut->setChecked(); break;
-	}
+	read();
 
-	PropPage::read(items);
+	updateAuto();
 
 	fixControlsOut();
 	directOut->onClicked([this] { fixControlsOut(); });
 	socks5->onClicked([this] { fixControlsOut(); });
+
+	ConnectivityManager::getInstance()->addListener(this);
 }
 
 ProxyPage::~ProxyPage() {
+	ConnectivityManager::getInstance()->removeListener(this);
 }
 
-void ProxyPage::write()
-{
+void ProxyPage::write() {
 	tstring x = socksServer->getText();
 	tstring::size_type i;
 
@@ -118,17 +128,51 @@ void ProxyPage::write()
 
 	PropPage::write(items);
 
-	int ct = SettingsManager::OUTGOING_DIRECT;
+	SettingsManager::getInstance()->set(SettingsManager::OUTGOING_CONNECTIONS,
+		socks5->getChecked() ? SettingsManager::OUTGOING_SOCKS5 : SettingsManager::OUTGOING_DIRECT);
+}
 
-	if(socks5->getChecked())
-		ct = SettingsManager::OUTGOING_SOCKS5;
-
-	if(SETTING(OUTGOING_CONNECTIONS) != ct) {
-		SettingsManager::getInstance()->set(SettingsManager::OUTGOING_CONNECTIONS, ct);
-		Socket::socksUpdated();
+void ProxyPage::read() {
+	switch(SETTING(OUTGOING_CONNECTIONS)) {
+	case SettingsManager::OUTGOING_SOCKS5: socks5->setChecked(); break;
+	default: directOut->setChecked(); break;
 	}
+
+	PropPage::read(items);
+}
+
+void ProxyPage::handleAutoClicked() {
+	// apply immediately so that ConnectivityManager updates.
+	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, autoDetect->getChecked());
+	ConnectivityManager::getInstance()->fire(ConnectivityManagerListener::SettingChanged());
+}
+
+void ProxyPage::updateAuto() {
+	bool setting = BOOLSETTING(AUTO_DETECT_CONNECTION);
+	autoDetect->setChecked(setting);
+
+	auto controls = grid->getChildren<Control>();
+	boost::for_each(controls, [this, setting](Control* control) {
+		if(control != autoGroup) {
+			control->setEnabled(!setting);
+		}
+	});
 }
 
 void ProxyPage::fixControlsOut() {
-	socksSettings->setEnabled(socks5->getChecked());
+	socksSettings->setEnabled(socks5->getEnabled() && socks5->getChecked());
+}
+
+void ProxyPage::on(SettingChanged) noexcept {
+	callAsync([this] {
+		updateAuto();
+
+		// reload settings in case they have been changed (eg by the "Edit detected settings" feature).
+
+		directOut->setChecked(false);
+		socks5->setChecked(false);
+
+		read();
+		fixControlsOut();
+	});
 }

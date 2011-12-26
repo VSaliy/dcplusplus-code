@@ -21,17 +21,17 @@
 
 #include "ChatMessage.h"
 #include "ClientManager.h"
+#include "ConnectionManager.h"
+#include "ConnectivityManager.h"
+#include "CryptoManager.h"
+#include "format.h"
 #include "SearchManager.h"
 #include "ShareManager.h"
-#include "CryptoManager.h"
-#include "ConnectionManager.h"
-#include "ThrottleManager.h"
-#include "version.h"
-
 #include "Socket.h"
-#include "UserCommand.h"
 #include "StringTokenizer.h"
-#include "format.h"
+#include "ThrottleManager.h"
+#include "UserCommand.h"
+#include "version.h"
 
 namespace dcpp {
 
@@ -803,7 +803,7 @@ void NmdcHub::myInfo(bool alwaysSend) {
 		tmp2[i]++; tmp3[i]++; tmp4[i]++; tmp5[i]++;
 	}
 	char modeChar = '?';
-	if(SETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5)
+	if(CONNSETTING(OUTGOING_CONNECTIONS) == SettingsManager::OUTGOING_SOCKS5)
 		modeChar = '5';
 	else if(ClientManager::getInstance()->isActive())
 		modeChar = 'A';
