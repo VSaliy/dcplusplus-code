@@ -731,7 +731,7 @@ void QueueManager::addDirectory(const string& aDir, const HintedUser& aUser, con
 	{
 		Lock l(cs);
 
-		DirectoryItem::DirectoryPair dp = directories.equal_range(aUser);
+		auto dp = directories.equal_range(aUser);
 
 		for(auto i = dp.first; i != dp.second; ++i) {
 			if(Util::stricmp(aTarget.c_str(), i->second->getName().c_str()) == 0)
@@ -1529,6 +1529,7 @@ int QueueManager::countOnlineSources(const string& aTarget) {
 	return onlineSources;
 }
 
+static const string sDownloads = "Downloads";
 static const string sDownload = "Download";
 static const string sTempTarget = "TempTarget";
 static const string sTarget = "Target";
@@ -1536,8 +1537,6 @@ static const string sSize = "Size";
 static const string sDownloaded = "Downloaded";
 static const string sPriority = "Priority";
 static const string sSource = "Source";
-static const string sNick = "Nick";
-static const string sDirectory = "Directory";
 static const string sAdded = "Added";
 static const string sTTH = "TTH";
 static const string sCID = "CID";
@@ -1547,7 +1546,7 @@ static const string sStart = "Start";
 
 void QueueLoader::startTag(const string& name, StringPairList& attribs, bool simple) {
 	QueueManager* qm = QueueManager::getInstance();
-	if(!inDownloads && name == "Downloads") {
+	if(!inDownloads && name == sDownloads) {
 		inDownloads = true;
 	} else if(inDownloads) {
 		if(cur == NULL && name == sDownload) {
@@ -1619,7 +1618,7 @@ void QueueLoader::endTag(const string& name, const string&) {
 	if(inDownloads) {
 		if(name == sDownload) {
 			cur = NULL;
-		} else if(name == "Downloads") {
+		} else if(name == sDownloads) {
 			inDownloads = false;
 		}
 	}
