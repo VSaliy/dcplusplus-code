@@ -19,7 +19,6 @@
 #ifndef DCPLUSPLUS_DCPP_SHARE_MANAGER_H
 #define DCPLUSPLUS_DCPP_SHARE_MANAGER_H
 
-#include <atomic>
 #include <list>
 #include <memory>
 #include <set>
@@ -40,12 +39,13 @@
 #include "MerkleTree.h"
 #include "Pointer.h"
 
+#include "atomic.hpp"
+
 namespace dcpp {
 
 using std::set;
 using std::unique_ptr;
 using std::unordered_map;
-using std::atomic_flag;
 
 STANDARD_EXCEPTION(ShareException);
 

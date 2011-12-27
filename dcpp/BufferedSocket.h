@@ -19,7 +19,6 @@
 #ifndef DCPLUSPLUS_DCPP_BUFFERED_SOCKET_H
 #define DCPLUSPLUS_DCPP_BUFFERED_SOCKET_H
 
-#include <atomic>
 #include <deque>
 #include <memory>
 
@@ -30,10 +29,10 @@
 #include "Thread.h"
 #include "Speaker.h"
 #include "Socket.h"
+#include "atomic.hpp"
 
 namespace dcpp {
 
-using std::atomic;
 using std::deque;
 using std::pair;
 using std::unique_ptr;
