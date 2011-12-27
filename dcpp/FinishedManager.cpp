@@ -44,7 +44,7 @@ FinishedManager::~FinishedManager() {
 	clearULs();
 }
 
-Lock FinishedManager::lockLists() {
+Lock FinishedManager::lock() {
 	return Lock(cs);
 }
 

@@ -244,6 +244,7 @@ private:
 			if(sortCol != -1)
 				old = columns[sortCol];
 
+			auto lock = FinishedManager::getInstance()->lock();
 			{
 				StringList nicks;
 				for(auto i = entry->getUsers().begin(), iend = entry->getUsers().end(); i != iend; ++i)
@@ -331,6 +332,7 @@ private:
 			if(sortCol != -1)
 				old = columns[sortCol];
 
+			auto lock = FinishedManager::getInstance()->lock();
 			columns[USERS_COLUMN_NICK] = WinUtil::getNicks(user);
 			columns[USERS_COLUMN_HUB] = Text::toT(Util::toString(ClientManager::getInstance()->getHubNames(user)));
 			columns[USERS_COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(entry->getTransferred()));
@@ -524,7 +526,7 @@ private:
 	}
 
 	void updateLists() {
-		auto lock = FinishedManager::getInstance()->lockLists();
+		auto lock = FinishedManager::getInstance()->lock();
 		{
 			HoldRedraw hold(files);
 			const FinishedManager::MapByFile& map = FinishedManager::getInstance()->getMapByFile(in_UL);
