@@ -35,6 +35,8 @@
 #include <boost/mpl/if.hpp>
 #include <type_traits>
 
+#ifndef DCPLUSPLUS_SIMPLE_GETSET
+
 #define GETSET(t, name, name2) \
 private: t name; \
 public: boost::mpl::if_c<std::is_class<t>::value, const t&, t>::type get##name2() const { return name; } \
@@ -47,5 +49,14 @@ public: boost::mpl::if_c<std::is_class<t>::value, const t&, t>::type get##name2(
 	\
 	template<typename GetSetT> typename std::enable_if<std::is_class<GetSetT>::value, void>::type \
 	set##name2(const GetSetT& name) { this->name = name; } /* large type: copy the parameter */
+
+#else
+
+// This version is for my stupid editor =)
+#define GETSET(t, name, name2) \
+	private: t name; \
+	public: t get##name2() const; void set##name2(t name);
+
+#endif
 
 #endif /* GETSET_H_ */
