@@ -150,6 +150,7 @@ public:
 	static UserPtr getUserFromFilename(const string& fileName);
 
 	GETSET(HintedUser, user, User);
+	GETSET(bool, abort, Abort);
 
 private:
 	friend class ListLoader;

@@ -39,6 +39,7 @@ namespace dcpp {
 
 DirectoryListing::DirectoryListing(const HintedUser& aUser) :
 user(aUser),
+abort(false),
 root(new Directory(NULL, Util::emptyString, false, false))
 {
 }
@@ -96,16 +97,24 @@ void DirectoryListing::loadFile(const string& name) {
 
 class ListLoader : public SimpleXMLReader::CallBack {
 public:
-	ListLoader(DirectoryListing::Directory* root, bool aUpdating) : cur(root), base("/"), inListing(false), updating(aUpdating) {
+	ListLoader(DirectoryListing* list, DirectoryListing::Directory* root, bool aUpdating) :
+	list(list),
+	cur(root),
+	base("/"),
+	inListing(false),
+	updating(aUpdating)
+	{
 	}
 
 	virtual ~ListLoader() { }
 
-	virtual void startTag(const string& name, StringPairList& attribs, bool simple);
-	virtual void endTag(const string& name, const string& data);
+	void startTag(const string& name, StringPairList& attribs, bool simple);
+	void endTag(const string& name, const string& data);
 
 	const string& getBase() const { return base; }
+
 private:
+	DirectoryListing* list;
 	DirectoryListing::Directory* cur;
 
 	StringMap params;
@@ -120,7 +129,7 @@ string DirectoryListing::updateXML(const string& xml) {
 }
 
 string DirectoryListing::loadXML(InputStream& is, bool updating) {
-	ListLoader ll(getRoot(), updating);
+	ListLoader ll(this, getRoot(), updating);
 
 	SimpleXMLReader(&ll).parse(is, SETTING(MAX_FILELIST_SIZE) ? (size_t)SETTING(MAX_FILELIST_SIZE)*1024*1024 : 0);
 
@@ -137,6 +146,10 @@ static const string sSize = "Size";
 static const string sTTH = "TTH";
 
 void ListLoader::startTag(const string& name, StringPairList& attribs, bool simple) {
+	if(list->getAbort()) {
+		throw Exception();
+	}
+
 	if(inListing) {
 		if(name == sFile) {
 			const string& n = getAttrib(attribs, sName, 0);
