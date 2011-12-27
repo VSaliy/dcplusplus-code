@@ -19,7 +19,6 @@
 #ifndef DCPLUSPLUS_DCPP_MAPPING_MANAGER_H
 #define DCPLUSPLUS_DCPP_MAPPING_MANAGER_H
 
-#include <atomic>
 #include <memory>
 #include <functional>
 #include <vector>
@@ -28,10 +27,10 @@
 #include "typedefs.h"
 #include "Mapper.h"
 #include "TimerManager.h"
+#include "atomic.hpp"
 
 namespace dcpp {
 
-using std::atomic_flag;
 using std::function;
 using std::unique_ptr;
 using std::vector;

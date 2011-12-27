@@ -21,8 +21,6 @@
 
 #include "compiler.h"
 
-#include <atomic>
-
 #include "forward.h"
 
 #include "Speaker.h"
@@ -30,10 +28,9 @@
 #include "TimerManager.h"
 #include "ClientListener.h"
 #include "OnlineUser.h"
+#include "atomic.hpp"
 
 namespace dcpp {
-
-using std::atomic;
 
 /** Yes, this should probably be called a Hub */
 class Client : public Speaker<ClientListener>, public BufferedSocketListener, protected TimerManagerListener {

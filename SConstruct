@@ -138,7 +138,7 @@ dev.prepare()
 
 env.SConsignFile()
 
-env.Append(CPPPATH = ['#/', '#/boost/', '#/intl/'])
+env.Append(CPPPATH = ['#/', '#/boost/', '#/intl/', '#/atomic/'])
 
 if dev.is_win32():
 	# Windows header defines <http://msdn.microsoft.com/en-us/library/aa383745(VS.85).aspx>
@@ -171,9 +171,6 @@ if 'msvc' in env['TOOLS']:
 	link_flags = msvc_link_flags
 	defs = msvc_defs
 
-	# MSVC 10 doesn't have <atomic> so add this regardless of the stdatomic setting
-	env.Append(CPPPATH = ['#/atomic/'])
-
 	env.Append(LIBS = ['User32', 'shell32', 'Advapi32'])
 
 else:
@@ -191,9 +188,6 @@ else:
 			env.Append(CPPDEFINES = ['CONSOLE'])
 
 	env.Tool("gch", toolpath=".")
-
-	if not env['stdatomic']:
-		env.Append(CPPPATH = ['#/atomic/'])
 
 	env.Append(CPPPATH = ['#/htmlhelp/preload/', '#/htmlhelp/include/'])
 	html_lib = '#/htmlhelp/lib/'
