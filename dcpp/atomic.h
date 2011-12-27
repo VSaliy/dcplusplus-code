@@ -21,9 +21,9 @@
 
 // GCC 4.6 and below has issues with atomic - see https://bugs.launchpad.net/dcplusplus/+bug/735512
 // MSVC 10 doesn't have atomic at all
-#if defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)) || defined(_MSC_VER)
+#if defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 7)) || defined(_MSC_VER)
 
-#include <boost/atomic/atomic.h>
+#include <boost/atomic.hpp>
 
 namespace dcpp
 {
