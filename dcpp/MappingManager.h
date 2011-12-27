@@ -27,7 +27,7 @@
 #include "typedefs.h"
 #include "Mapper.h"
 #include "TimerManager.h"
-#include "atomic.hpp"
+#include "atomic.h"
 
 namespace dcpp {
 
