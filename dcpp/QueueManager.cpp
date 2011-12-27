@@ -1770,7 +1770,7 @@ void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcError
 	params["sfv"] = Util::toString(crcError ? 1 : 0);
 
 	{
-		auto lock = FinishedManager::getInstance()->lockLists();
+		auto lock = FinishedManager::getInstance()->lock();
 
 		auto& map = FinishedManager::getInstance()->getMapByFile(false);
 		auto it = map.find(qi->getTarget());
