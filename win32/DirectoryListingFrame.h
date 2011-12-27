@@ -33,6 +33,8 @@
 
 using std::deque;
 
+class FileListLoader;
+
 class DirectoryListingFrame :
 	public MDIChildFrame<DirectoryListingFrame>,
 	public IRecent<DirectoryListingFrame>,
@@ -150,7 +152,10 @@ private:
 	private:
 		tstring columns[COLUMN_LAST];
 	};
-	
+
+	FileListLoader* loader;
+	LabelPtr loading;
+
 	RebarPtr rebar;
 	ComboBoxPtr pathBox;
 

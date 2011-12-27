@@ -58,6 +58,7 @@
 * Plug memory leaks in list and tree controls (poy)
 * [L#735512] Switch to Boost.Atomic to solve freezes (poy)
 * [L#871975] Safer updating of the finished transfer window (poy)
+* Load file lists in a separate thread (bigmuscle, poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)

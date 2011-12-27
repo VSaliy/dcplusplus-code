@@ -1208,12 +1208,10 @@ DWORD WINAPI MainWindow::stopper(void* p) {
 
 class ListMatcher : public Thread {
 public:
-	ListMatcher(StringList files_) :
-		files(files_) {
+	ListMatcher(StringList&& files) : files(std::forward<StringList>(files)) { }
 
-	}
-	virtual int run() {
-		for (auto i = files.begin(); i != files.end(); ++i) {
+	int run() {
+		for(auto i = files.cbegin(), iend = files.cend(); i != iend; ++i) {
 			UserPtr u = DirectoryListing::getUserFromFilename(*i);
 			if (!u)
 				continue;
@@ -1226,21 +1224,22 @@ public:
 				% Util::toString(ClientManager::getInstance()->getNicks(user))
 				% matched));
 			} catch(const Exception&) {
-
 			}
 		}
 		delete this;
 		return 0;
 	}
+
+private:
 	StringList files;
 };
 
 void MainWindow::handleMatchAll() {
-	ListMatcher* matcher = new ListMatcher(File::findFiles(Util::getListPath(), "*.xml*"));
+	auto matcher = new ListMatcher(File::findFiles(Util::getListPath(), "*.xml*"));
 	try {
 		matcher->start();
-	} catch(const ThreadException&) {
-		///@todo add error message
+	} catch(const ThreadException& e) {
+		LogManager::getInstance()->message(e.getError());
 		delete matcher;
 	}
 }

@@ -26,6 +26,7 @@
 #include <dcpp/QueueManager.h>
 #include <dcpp/ShareManager.h>
 #include <dcpp/ScopedFunctor.h>
+#include <dcpp/Thread.h>
 #include <dcpp/WindowInfo.h>
 
 #include <dwt/widgets/FolderDialog.h>
@@ -123,7 +124,7 @@ void DirectoryListingFrame::openWindow_(TabViewPtr parent, const tstring& aFile,
 	} else {
 		frame->setDirty(SettingsManager::BOLD_FL);
 		frame->onVisibilityChanged([frame, aDir](bool b) {
-			if(b && !frame->loaded && !WinUtil::mainWindow->closing())
+			if(b && !frame->loaded && !frame->loader && !WinUtil::mainWindow->closing())
 				frame->loadFile(aDir);
 		});
 	}
@@ -209,6 +210,8 @@ void DirectoryListingFrame::activateWindow(const HintedUser& aUser) {
 
 DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser& aUser, int64_t aSpeed) :
 	BaseType(parent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY, false),
+	loader(0),
+	loading(0),
 	rebar(0),
 	pathBox(0),
 	grid(0),
@@ -391,17 +394,90 @@ DirectoryListingFrame::~DirectoryListingFrame() {
 	lists.erase(dl->getUser());
 }
 
+class FileListLoader : public Thread {
+	typedef std::function<void ()> SuccessF;
+	typedef std::function<void (tstring)> ErrorF;
+
+public:
+	FileListLoader(DirectoryListing* dl, const string& path, SuccessF successF, ErrorF errorF) :
+	dl(dl),
+	path(path),
+	successF(successF),
+	errorF(errorF)
+	{
+	}
+
+	int run() {
+		try {
+			dl->loadFile(path);
+			ADLSearchManager::getInstance()->matchListing(*dl);
+			successF();
+		} catch(const Exception& e) {
+			errorF(Text::toT(e.getError()));
+		}
+		return 0;
+	}
+
+private:
+	DirectoryListing* dl;
+	const string& path;
+	SuccessF successF;
+	ErrorF errorF;
+};
+
 void DirectoryListingFrame::loadFile(const tstring& dir) {
-	loaded = true;
+	setEnabled(false);
+
+	{
+		// this control will cover the whole window.
+		Label::Seed seed(WinUtil::createIcon(IDI_OPEN_FILE_LIST, 32));
+		seed.style |= SS_CENTERIMAGE;
+		loading = addChild(seed);
+		WinUtil::setColor(loading);
+		layout();
+	}
+
+	loader = new FileListLoader(dl.get(), path, [this, dir] { callAsync([=] {
+		// success callback
+		delete loader;
+		loader = 0;
+		setEnabled(true);
+		loading->close(true);
+		loaded = true;
+		addRecent();
+		refreshTree(dir);
+		layout();
+		setDirty(SettingsManager::BOLD_FL);
+	}); }, [this](tstring s) { callAsync([=] {
+		// error callback
+		delete loader;
+		loader = 0;
+		setEnabled(true);
+		loading->close(true);
+		error = std::move(s);
+		updateTitle();
+		layout();
+		setDirty(SettingsManager::BOLD_FL);
+	}); });
+
+	onDestroy([this] {
+		if(loader) {
+			dl->setAbort(true);
+			loader->join();
+		}
+	});
 
 	try {
-		dl->loadFile(path);
-		addRecent();
-		ADLSearchManager::getInstance()->matchListing(*dl);
-		refreshTree(dir);
-	} catch(const Exception& e) {
-		error = Text::toT(": " + e.getError());
+		loader->start();
+
+	} catch(const ThreadException& e) {
+		delete loader;
+		loader = 0;
+		setEnabled(true);
+		loading->close(true);
+		error = Text::toT(e.getError());
 		updateTitle();
+		layout();
 	}
 
 	initStatusText();
@@ -413,7 +489,8 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 	try {
 		refreshTree(Text::toT(Util::toNmdcFile(dl->updateXML(txt))));
 	} catch(const Exception& e) {
-		error = Text::toT(": " + e.getError());
+		error = Text::toT(e.getError());
+		updateTitle();
 	}
 
 	initStatusText();
@@ -421,6 +498,12 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 
 void DirectoryListingFrame::layout() {
 	dwt::Rectangle r(getClientSize());
+
+	if(loading) {
+		loading->bringToFront();
+		loading->resize(r);
+		return;
+	}
 
 	auto y = rebar->refresh();
 	r.pos.y += y;
@@ -522,10 +605,11 @@ void DirectoryListingFrame::refreshTree(const tstring& root) {
 
 void DirectoryListingFrame::updateTitle() {
 	tstring text = WinUtil::getNicks(dl->getUser());
-	if(error.empty())
+	if(error.empty()) {
 		text += _T(" - ") + WinUtil::getHubNames(dl->getUser()).first;
-	else
-		text += _T(": ") + error;
+	} else {
+		text = str(TF_("%1%: %2%") % text % error);
+	}
 
 	// bypass the recent item updater if the file list hasn't been loaded yet.
 	if(loaded) setText(text); else BaseType::setText(text);
