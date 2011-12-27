@@ -29,7 +29,7 @@
 #include "Thread.h"
 #include "Speaker.h"
 #include "Socket.h"
-#include "atomic.hpp"
+#include "atomic.h"
 
 namespace dcpp {
 

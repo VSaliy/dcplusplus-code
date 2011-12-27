@@ -28,7 +28,7 @@
 #include "TimerManager.h"
 #include "ClientListener.h"
 #include "OnlineUser.h"
-#include "atomic.hpp"
+#include "atomic.h"
 
 namespace dcpp {
 

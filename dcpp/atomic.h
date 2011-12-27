@@ -23,7 +23,7 @@
 // MSVC 10 doesn't have atomic at all
 #if defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)) || defined(_MSC_VER)
 
-#include <boost/atomic/atomic.hpp>
+#include <boost/atomic/atomic.h>
 
 namespace dcpp
 {

@@ -39,7 +39,7 @@
 #include "MerkleTree.h"
 #include "Pointer.h"
 
-#include "atomic.hpp"
+#include "atomic.h"
 
 namespace dcpp {
 
