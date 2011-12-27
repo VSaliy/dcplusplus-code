@@ -813,7 +813,7 @@ void QueueFrame::moveNode(HTREEITEM item, HTREEITEM parent) {
 		moveNode(next, ht);
 		next = dirs->getChild(item);
 	}
-	dirs->erase(item);
+	TreeView_DeleteItem(dirs->handle(), item);
 }
 
 const string& QueueFrame::getSelectedDir() {
