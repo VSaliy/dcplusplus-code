@@ -79,7 +79,7 @@ opts.AddVariables(
 	BoolVariable('verbose', 'Show verbose command lines', 'no'),
 	BoolVariable('savetemps', 'Save intermediate compilation files (assembly output)', 'no'),
 	BoolVariable('unicode', 'Build a Unicode version which fully supports international characters', 'yes'),
-	BoolVariable('stdatomic', 'Use a standard implementation of <atomic> (turn off to switch to Boost.Atomic)', 'yes'),
+	BoolVariable('stdatomic', 'Use a standard implementation of <atomic> (turn off to switch to Boost.Atomic)', 'no'),
 	BoolVariable('i18n', 'Rebuild i18n files', 'no'),
 	BoolVariable('help', 'Build help files (requires i18n=1)', 'yes'),
 	BoolVariable('webhelp', 'Build help files for the web (requires help=1)', 'no'),

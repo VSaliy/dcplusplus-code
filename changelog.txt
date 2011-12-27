@@ -56,6 +56,7 @@
 * [L#901237] Fix a possible crash on parital list removal from the queue (thanks bigmuscle)
 * [L#900650] Fix removal of same ADC users logged into multiple hubs when they go offline (emtee)
 * Plug memory leaks in list and tree controls (poy)
+* [L#735512] Switch to Boost.Atomic to solve freezes (poy)
 
 -- 0.782 2011-03-05 --
 * Prevent a remote crash triggered via malformed user commands (poy)
