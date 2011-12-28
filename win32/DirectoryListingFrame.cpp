@@ -375,6 +375,8 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		status->setWidget(STATUS_SHOW_TREE, showTree);
 	}
 
+	dirs->setFocus();
+
 	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
 
 	ClientManager::getInstance()->addListener(this);
@@ -437,27 +439,30 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		layout();
 	}
 
-	loader = new FileListLoader(dl.get(), path, [this, dir] { callAsync([=] {
-		// success callback
+	auto finishLoad = [this] {
 		delete loader;
 		loader = 0;
 		setEnabled(true);
 		loading->close(true);
+		loading = 0;
+		layout();
+		if(!error.empty()) {
+			updateTitle();
+			status->setText(STATUS_STATUS, error);
+		}
+		setDirty(SettingsManager::BOLD_FL);
+	};
+
+	loader = new FileListLoader(dl.get(), path, [this, dir, finishLoad] { callAsync([=] {
+		// success callback
 		loaded = true;
+		finishLoad();
 		addRecent();
 		refreshTree(dir);
-		layout();
-		setDirty(SettingsManager::BOLD_FL);
-	}); }, [this](tstring s) { callAsync([=] {
+	}); }, [this, finishLoad](tstring s) { callAsync([=] {
 		// error callback
-		delete loader;
-		loader = 0;
-		setEnabled(true);
-		loading->close(true);
 		error = std::move(s);
-		updateTitle();
-		layout();
-		setDirty(SettingsManager::BOLD_FL);
+		finishLoad();
 	}); });
 
 	onDestroy([this] {
@@ -471,13 +476,8 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		loader->start();
 
 	} catch(const ThreadException& e) {
-		delete loader;
-		loader = 0;
-		setEnabled(true);
-		loading->close(true);
 		error = Text::toT(e.getError());
-		updateTitle();
-		layout();
+		finishLoad();
 	}
 
 	initStatusText();
@@ -502,6 +502,7 @@ void DirectoryListingFrame::layout() {
 	if(loading) {
 		loading->bringToFront();
 		loading->resize(r);
+		loading->redraw(true);
 		return;
 	}
 

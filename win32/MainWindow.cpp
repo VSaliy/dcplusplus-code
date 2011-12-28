@@ -270,7 +270,7 @@ void MainWindow::initMenu() {
 		file->appendSeparator();
 
 		file->appendItem(T_("Open file list...\tCtrl+L"), [this] { handleOpenFileList(); }, WinUtil::menuIcon(IDI_OPEN_FILE_LIST));
-		file->appendItem(T_("Open own list"), [this] { DirectoryListingFrame::openOwnList(getTabView()); });
+		file->appendItem(T_("Open own list"), [this] { DirectoryListingFrame::openOwnList(getTabView(), Util::emptyStringT, DirectoryListingFrame::FORCE_ACTIVE); });
 		file->appendItem(T_("Match downloaded lists"), [this] { handleMatchAll(); });
 		file->appendItem(T_("Refresh file list\tF5"), [this] { handleRefreshFileList(); }, WinUtil::menuIcon(IDI_REFRESH));
 		file->appendItem(T_("Open downloads directory"), [this] { handleOpenDownloadsDir(); }, WinUtil::menuIcon(IDI_OPEN_DL_DIR));
