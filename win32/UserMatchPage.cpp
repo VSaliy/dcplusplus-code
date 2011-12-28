@@ -188,7 +188,7 @@ tstring UserMatchPage::handleTooltip(int i) {
 	};
 
 	if(matcher.isSet(UserMatch::FAVS))
-		addLine(T_("Match favorites"));
+		addLine(T_("Match favorite users"));
 	if(matcher.isSet(UserMatch::OPS))
 		addLine(T_("Match operators"));
 	if(matcher.isSet(UserMatch::BOTS))

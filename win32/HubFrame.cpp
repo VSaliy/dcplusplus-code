@@ -430,7 +430,7 @@ void HubFrame::enterImpl(const tstring& s) {
 			showUsers->setChecked(!showUsers->getChecked());
 			handleShowUsersClicked();
 		} else if(Util::stricmp(cmd.c_str(), _T("conn")) == 0 || Util::stricmp(cmd.c_str(), _T("connection")) == 0) {
-			addStatus(Text::toT(ConnectivityManager::getInstance()->getInformation()));
+			addChat(Text::toT(ConnectivityManager::getInstance()->getInformation()));
 		} else if((Util::stricmp(cmd.c_str(), _T("favorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("fav")) == 0)) {
 			addAsFavorite();
 		} else if((Util::stricmp(cmd.c_str(), _T("removefavorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("removefav")) == 0)) {
