@@ -1473,7 +1473,7 @@ void QueueManager::saveQueue(bool force) noexcept {
 			}
 		}
 
-		f.write("</Downloads>\r\n");
+		f.write(LIT("</Downloads>\r\n"));
 		f.flush();
 		ff.close();
 		File::deleteFile(getQueueFile());
@@ -1486,7 +1486,7 @@ void QueueManager::saveQueue(bool force) noexcept {
 	// Put this here to avoid very many saves tries when disk is full...
 	lastSave = GET_TICK();
 
-	std::for_each(cids.begin(), cids.end(), [](const CID& cid) { ClientManager::getInstance()->saveUser(cid); });
+	for_each(cids, [](const CID& cid) { ClientManager::getInstance()->saveUser(cid); });
 }
 
 class QueueLoader : public SimpleXMLReader::CallBack {
@@ -1768,62 +1768,7 @@ void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcError
 	params["fileTR"] = qi->getTTH().toBase32();
 	params["sfv"] = Util::toString(crcError ? 1 : 0);
 
-	{
-		auto lock = FinishedManager::getInstance()->lock();
-
-		auto& map = FinishedManager::getInstance()->getMapByFile(false);
-		auto it = map.find(qi->getTarget());
-		if(it != map.end()) {
-			auto entry = it->second;
-			if (!entry->getUsers().empty()) {
-				StringList nicks, cids, ips, hubNames, hubUrls, temp;
-				string ip;
-				for(auto i = entry->getUsers().begin(), iend = entry->getUsers().end(); i != iend; ++i) {
-
-					nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks(*i)));
-					cids.push_back(i->user->getCID().toBase32());
-
-					ip.clear();
-					if (i->user->isOnline()) {
-						OnlineUser* u = ClientManager::getInstance()->findOnlineUser(*i, false);
-						if (u) {
-							ip = u->getIdentity().getIp();
-						}
-					}
-					if (ip.empty()) {
-						ip = _("Offline");
-					}
-					ips.push_back(ip);
-
-					temp = ClientManager::getInstance()->getHubNames(*i);
-					if(temp.empty()) {
-						temp.push_back(_("Offline"));
-					}
-					hubNames.push_back(Util::toString(temp));
-
-					temp = ClientManager::getInstance()->getHubUrls(*i);
-					if(temp.empty()) {
-						temp.push_back(_("Offline"));
-					}
-					hubUrls.push_back(Util::toString(temp));
-				}
-
-				params["userNI"] = Util::toString(nicks);
-				params["userCID"] = Util::toString(cids);
-				params["userI4"] = Util::toString(ips);
-				params["hubNI"] = Util::toString(hubNames);
-				params["hubURL"] = Util::toString(hubUrls);
-			}
-
-			params["fileSIsession"] = Util::toString(entry->getTransferred());
-			params["fileSIsessionshort"] = Util::formatBytes(entry->getTransferred());
-			params["fileSIactual"] = Util::toString(entry->getActual());
-			params["fileSIactualshort"] = Util::formatBytes(entry->getActual());
-
-			params["speed"] = str(F_("%1%/s") % Util::formatBytes(entry->getAverageSpeed()));
-			params["time"] = Util::formatSeconds(entry->getMilliSeconds() / 1000);
-		}
-	}
+	FinishedManager::getInstance()->update(qi->getTarget(), params);
 
 	LOG(LogManager::FINISHED_DOWNLOAD, params);
 }

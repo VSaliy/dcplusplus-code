@@ -35,6 +35,8 @@ namespace dcpp {
 
 class File : public IOStream {
 public:
+	using OutputStream::write;
+
 	enum {
 		OPEN = 0x01,
 		CREATE = 0x02,
@@ -97,7 +99,7 @@ public:
 
 	string read(size_t len);
 	string read();
-	void write(const string& aString) { write((void*)aString.data(), aString.size()); }
+
 	static StringList findFiles(const string& path, const string& pattern);
 
 protected:
