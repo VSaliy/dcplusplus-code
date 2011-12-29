@@ -20,7 +20,7 @@ using std::unique_ptr;
  * Comes as an argument in the DownloadManagerListener functions.
  * Use it to retrieve information about the ongoing transfer.
  */
-class Download : public Transfer, public Flags, boost::noncopyable
+class Download : public Transfer, public Flags
 {
 public:
 	enum {
