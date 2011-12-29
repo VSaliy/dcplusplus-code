@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libdcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2011-12-18 19:38+0100\n"
+"POT-Creation-Date: 2011-12-29 14:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,7 +87,7 @@ msgstr ""
 msgid "%1% was kicked: %2%"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1824 dcpp\Transfer.cpp:91 dcpp\User.cpp:141
+#: dcpp\FinishedManager.cpp:160 dcpp\Transfer.cpp:91 dcpp\User.cpp:141
 #, boost-format
 msgid "%1%/s"
 msgstr ""
@@ -111,23 +111,23 @@ msgstr ""
 msgid "<Enter string>"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:624
+#: dcpp\QueueManager.cpp:625
 msgid "A file with a different TTH root already exists in the queue"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:621
+#: dcpp\QueueManager.cpp:622
 msgid "A file with a different size already exists in the queue"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:568
+#: dcpp\QueueManager.cpp:569
 msgid "A file with the same hash already exists in your share"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:177
+#: dcpp\ConnectivityManager.cpp:178
 msgid "Active mode behind a router"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:208
+#: dcpp\ConnectivityManager.cpp:209
 msgid "Active mode could not be achieved; a manual configuration is recommended for better connectivity"
 msgstr ""
 
@@ -147,15 +147,15 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:495
+#: dcpp\FavoriteManager.cpp:488
 msgid "Auto-connect group (converted)"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1740
+#: dcpp\QueueManager.cpp:1701
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1731
+#: dcpp\QueueManager.cpp:1692
 #, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr ""
@@ -164,7 +164,7 @@ msgstr ""
 msgid "Compressed"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:172
+#: dcpp\ConnectivityManager.cpp:173
 #, boost-format
 msgid "Connection behind a router that %1% has configured with %2%"
 msgstr ""
@@ -174,7 +174,7 @@ msgid "Connection closed"
 msgstr ""
 
 #: dcpp\BufferedSocket.cpp:163 dcpp\BufferedSocket.cpp:181
-#: dcpp\ConnectionManager.cpp:183 dcpp\Socket.cpp:361
+#: dcpp\ConnectionManager.cpp:183 dcpp\Socket.cpp:362
 msgid "Connection timeout"
 msgstr ""
 
@@ -183,7 +183,7 @@ msgstr ""
 msgid "Connectivity error: %1%"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:193
+#: dcpp\ConnectivityManager.cpp:194
 #, boost-format
 msgid ""
 "Connectivity information:\n"
@@ -201,11 +201,11 @@ msgstr ""
 msgid "Connectivity restored"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:221
+#: dcpp\ConnectivityManager.cpp:222
 msgid "Connectivity: "
 msgstr ""
 
-#: dcpp\Socket.cpp:325
+#: dcpp\Socket.cpp:326
 msgid "Could not open port for listening"
 msgstr ""
 
@@ -218,11 +218,11 @@ msgstr ""
 msgid "Country information"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:93
+#: dcpp\ConnectivityManager.cpp:94
 msgid "Determining the best connectivity settings..."
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:167
+#: dcpp\ConnectivityManager.cpp:168
 msgid "Direct connection to the Internet (no router)"
 msgstr ""
 
@@ -238,7 +238,7 @@ msgstr ""
 msgid "Directory is hidden"
 msgstr ""
 
-#: dcpp\DirectoryListing.cpp:176
+#: dcpp\DirectoryListing.cpp:189
 msgid "Directory missing name attribute"
 msgstr ""
 
@@ -268,7 +268,7 @@ msgstr ""
 msgid "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %3%"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:705 dcpp\QueueManager.cpp:709
+#: dcpp\QueueManager.cpp:706 dcpp\QueueManager.cpp:710
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr ""
@@ -354,11 +354,11 @@ msgstr ""
 msgid "Failed to remove port mappings from the %1% device with the %2% interface"
 msgstr ""
 
-#: dcpp\Socket.cpp:593
+#: dcpp\Socket.cpp:594
 msgid "Failed to set up the socks server for UDP relay (check socks address and port)"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:692
+#: dcpp\QueueManager.cpp:693
 msgid "File already exists at the target location"
 msgstr ""
 
@@ -455,15 +455,15 @@ msgstr ""
 msgid "Invalid size"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:676 dcpp\QueueManager.cpp:684
+#: dcpp\QueueManager.cpp:677 dcpp\QueueManager.cpp:685
 msgid "Invalid target file (missing directory, check default download directory setting)"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:443
+#: dcpp\FavoriteManager.cpp:436
 msgid "Kick user(s)"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:115
+#: dcpp\ConnectivityManager.cpp:116
 msgid "Local network with possible NAT detected, trying to map the ports..."
 msgstr ""
 
@@ -508,14 +508,14 @@ msgstr ""
 msgid "Not listening for connections - please restart %1%"
 msgstr ""
 
-#: dcpp\ClientManager.cpp:209 dcpp\QueueManager.cpp:1795
-#: dcpp\QueueManager.cpp:1801 dcpp\QueueManager.cpp:1807
+#: dcpp\ClientManager.cpp:209 dcpp\FinishedManager.cpp:131
+#: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
 #: dcpp\SearchManager.cpp:255 dcpp\SearchManager.cpp:318
 #: dcpp\SearchManager.cpp:320 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:182
+#: dcpp\ConnectivityManager.cpp:183
 msgid "Passive mode"
 msgstr ""
 
@@ -528,11 +528,11 @@ msgstr ""
 msgid "Port mapping: %1%"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:108
+#: dcpp\ConnectivityManager.cpp:109
 msgid "Public IP address detected, selecting active mode with direct connection"
 msgstr ""
 
-#: dcpp\FavoriteManager.cpp:447
+#: dcpp\FavoriteManager.cpp:440
 msgid "Redirect user(s)"
 msgstr ""
 
@@ -553,7 +553,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:252
+#: dcpp\ConnectivityManager.cpp:253
 msgid "Search (UDP)"
 msgstr ""
 
@@ -578,7 +578,7 @@ msgstr ""
 msgid "Shared Files"
 msgstr ""
 
-#: dcpp\Socket.cpp:469 dcpp\Socket.cpp:473
+#: dcpp\Socket.cpp:470 dcpp\Socket.cpp:474
 msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 
@@ -609,28 +609,28 @@ msgstr ""
 msgid "TTH inconsistency"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:995
+#: dcpp\QueueManager.cpp:957
 msgid "Target file is missing or wrong size"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:671 dcpp\QueueManager.cpp:680
+#: dcpp\QueueManager.cpp:672 dcpp\QueueManager.cpp:681
 msgid "Target filename too long"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:987
+#: dcpp\QueueManager.cpp:949
 msgid "Target removed"
 msgstr ""
 
-#: dcpp\Socket.cpp:455
+#: dcpp\Socket.cpp:456
 msgid "The socks server doesn't support login / password authentication"
 msgstr ""
 
-#: dcpp\Socket.cpp:368 dcpp\Socket.cpp:376 dcpp\Socket.cpp:409
-#: dcpp\Socket.cpp:413 dcpp\Socket.cpp:437 dcpp\Socket.cpp:452
+#: dcpp\Socket.cpp:369 dcpp\Socket.cpp:377 dcpp\Socket.cpp:410
+#: dcpp\Socket.cpp:414 dcpp\Socket.cpp:438 dcpp\Socket.cpp:453
 msgid "The socks server failed establish a connection"
 msgstr ""
 
-#: dcpp\Socket.cpp:441
+#: dcpp\Socket.cpp:442
 msgid "The socks server requires authentication"
 msgstr ""
 
@@ -638,11 +638,11 @@ msgstr ""
 msgid "The temporary download directory cannot be shared"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:628
+#: dcpp\QueueManager.cpp:629
 msgid "This file has already finished downloading"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:609
+#: dcpp\QueueManager.cpp:610
 msgid "This file is already queued"
 msgstr ""
 
@@ -659,7 +659,7 @@ msgstr ""
 msgid "Transfer"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:246
+#: dcpp\ConnectivityManager.cpp:247
 msgid "Transfer (TCP)"
 msgstr ""
 
@@ -671,22 +671,22 @@ msgstr ""
 msgid "Unable to create thread"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1047
+#: dcpp\QueueManager.cpp:1009
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1044
+#: dcpp\QueueManager.cpp:1006
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:98
+#: dcpp\ConnectivityManager.cpp:99
 #, boost-format
 msgid "Unable to open %1% port(s); connectivity settings must be configured manually"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:1227
+#: dcpp\QueueManager.cpp:1189
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr ""
@@ -700,12 +700,12 @@ msgstr ""
 msgid "Unable to send file %1%: %2%"
 msgstr ""
 
-#: dcpp\Socket.cpp:199
+#: dcpp\Socket.cpp:200
 #, c-format, boost-format
 msgid "Unknown error: 0x%1$x"
 msgstr ""
 
-#: dcpp\Socket.cpp:218
+#: dcpp\Socket.cpp:219
 #, c-format, boost-format
 msgid "Unknown protocol %d"
 msgstr ""
@@ -718,11 +718,11 @@ msgstr ""
 msgid "Video"
 msgstr ""
 
-#: dcpp\QueueManager.cpp:562
+#: dcpp\QueueManager.cpp:563
 msgid "You're trying to download from yourself!"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:160
+#: dcpp\ConnectivityManager.cpp:161
 msgid "disabled"
 msgstr ""
 
@@ -730,12 +730,12 @@ msgstr ""
 msgid "downloaded from"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:160
+#: dcpp\ConnectivityManager.cpp:161
 #, boost-format
 msgid "enabled - %1%"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:189
+#: dcpp\ConnectivityManager.cpp:190
 msgid "undefined"
 msgstr ""
 

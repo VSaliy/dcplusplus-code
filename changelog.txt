@@ -1,3 +1,4 @@
+-- 0.790 2011-12-29 --
 * Fav users frame becomes users frame and shows all users
 * Experimental implementation of KEYP ADC extension
 * Display the name of the device MiniUPnP has bound to (poy)
