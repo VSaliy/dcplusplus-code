@@ -120,7 +120,7 @@ public:
 	using Speaker<QueueManagerListener>::addListener;
 	void addListener(QueueManagerListener* l, const function<void(const QueueItem::StringMap&)>& currentQueue);
 
-	Download* getDownload(UserConnection& aSource, bool supportsTrees) noexcept;
+	Download* getDownload(UserConnection& aSource) noexcept;
 	void putDownload(Download* aDownload, bool finished) noexcept;
 	void setFile(Download* download);
 
