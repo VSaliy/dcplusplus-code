@@ -55,7 +55,7 @@ from xml.dom.minidom import parse
 # gather the files necessary to create the installer
 sources = Glob('*.*')
 reg = re.compile('^\W*File.+"([^"]+)"')
-f = codecs.open('DCPlusPlus.nsi', 'rb', 'utf_8')
+f = codecs.open('DCPlusPlus.nsi', 'rb', 'utf_16_le')
 for line in f:
 	match = reg.search(line)
 	if match:
@@ -79,7 +79,8 @@ def gen_installer(target, source, env):
 	dir_cleaner = scoped_cmd(lambda: env.Execute(Delete(build_dir)))
 
 	# the file, included by the installer, that lists all available translations
-	f_i18n = codecs.open(build_path + 'i18n.nsh', 'wb', 'utf_8')
+	f_i18n = codecs.open(build_path + 'i18n.nsh', 'wb', 'utf_16_le')
+	f_i18n.write(unicode(codecs.BOM_UTF16_LE, 'utf_16_le'))
 
 	# copy the source files to the build directory
 	for node in source:
@@ -108,7 +109,8 @@ def gen_installer(target, source, env):
 				# translate our strings
 				env.Execute(env['po4a_cmd']('po4a-translate', '-m "installer/Strings.xml" -l "' + xml_file + '" -p "' + nixify(str(node)) + '" -k 0'))
 				# parse translated strings to generate a message catalog included by i18n.nsh
-				f_nsh = codecs.open(build_path + '_' + name + '.nsh', 'wb', 'utf_8')
+				f_nsh = codecs.open(build_path + '_' + name + '.nsh', 'wb', 'utf_16_le')
+				f_nsh.write(unicode(codecs.BOM_UTF16_LE, 'utf_16_le'))
 				f_nsh.write('!insertmacro LANGFILE_EXT "' + name + '"\n')
 				dom = parse(xml_file)
 				for elem in dom.firstChild.childNodes:
