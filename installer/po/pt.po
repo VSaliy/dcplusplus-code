@@ -28,7 +28,7 @@ msgstr "DC++ (obrigatório)"
 #: installer/Strings.xml:4
 #, no-wrap
 msgid "A previous installation of DC++ has been found; backup settings and queue to '$R0'?"
-msgstr "Foi encontrada uma instalação do DC++; copiar definições e colocar em espera para \"$R0\" ?"
+msgstr "Foi encontrada uma instalação do DC++; copiar definições e colocar em espera para '$R0' ?"
 
 #. type: Content of: <Strings><SECTION_START_MENU>
 #: installer/Strings.xml:5
@@ -52,7 +52,7 @@ msgstr "Ao desmarcar esta opção, o DC++ irá guardar as definições no diret�
 #: installer/Strings.xml:8
 #, no-wrap
 msgid "Warning: the 'locale' directory ($INSTDIR\\locale) will be completely erased!"
-msgstr "Atenção: o diretório \"locale\" em ($INSTDIR\\locale) vai ser totalmente apagado!"
+msgstr "Atenção: o diretório 'locale' em ($INSTDIR\\locale) vai ser totalmente apagado!"
 
 #. type: Content of: <Strings><SM_DCPP_DESCR>
 #: installer/Strings.xml:9
