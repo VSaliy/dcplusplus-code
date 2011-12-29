@@ -138,7 +138,7 @@ public:
 
 	const UserPtr& getUser() const { return user; }
 	UserPtr& getUser() { return user; }
-	const HintedUser getHintedUser() const { return HintedUser(user, hubUrl); }
+	HintedUser getHintedUser() const { return HintedUser(user, hubUrl); }
 
 	bool isSecure() const { return socket && socket->isSecure(); }
 	bool isTrusted() const { return socket && socket->isTrusted(); }
@@ -164,6 +164,8 @@ public:
 
 	int64_t getChunkSize() const { return chunkSize; }
 	void updateChunkSize(int64_t leafSize, int64_t lastChunk, uint64_t ticks);
+
+	bool supportsTrees() const { return isSet(FLAG_SUPPORTS_TTHL); }
 
 	GETSET(string, hubUrl, HubUrl);
 	GETSET(string, token, Token);

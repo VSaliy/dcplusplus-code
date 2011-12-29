@@ -103,7 +103,7 @@ void FinishedManager::clearULs() {
 	ULByUser.clear();
 }
 
-void FinishedManager::update(const string & target, ParamMap& params) {
+void FinishedManager::getParams(const string & target, ParamMap& params) {
 	Lock l(cs);
 
 	auto it = DLByFile.find(target);

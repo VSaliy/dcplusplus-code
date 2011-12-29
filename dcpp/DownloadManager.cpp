@@ -23,11 +23,7 @@
 #include "Download.h"
 #include "LogManager.h"
 #include "User.h"
-#include "File.h"
-#include "FilteredFile.h"
-#include "MerkleCheckOutputStream.h"
 #include "UserConnection.h"
-#include "ZUtils.h"
 
 #include <limits>
 #include <cmath>
@@ -163,7 +159,7 @@ void DownloadManager::checkDownloads(UserConnection* aConn) {
 		return;
 	}
 
-	Download* d = QueueManager::getInstance()->getDownload(*aConn, aConn->isSet(UserConnection::FLAG_SUPPORTS_TTHL));
+	Download* d = QueueManager::getInstance()->getDownload(*aConn);
 
 	if(!d) {
 		Lock l(cs);
@@ -227,32 +223,13 @@ void DownloadManager::startData(UserConnection* aSource, int64_t start, int64_t 
 	}
 
 	try {
-		QueueManager::getInstance()->setFile(d);
+		d->open(bytes, z);
 	} catch(const FileException& e) {
 		failDownload(aSource, str(F_("Could not open target file: %1%") % e.getError()));
 		return;
 	} catch(const Exception& e) {
 		failDownload(aSource, e.getError());
 		return;
-	}
-
-	if((d->getType() == Transfer::TYPE_FILE || d->getType() == Transfer::TYPE_FULL_LIST) && SETTING(BUFFER_SIZE) > 0 ) {
-		d->setFile(new BufferedOutputStream<true>(d->getFile()));
-	}
-
-	if(d->getType() == Transfer::TYPE_FILE) {
-		typedef MerkleCheckOutputStream<TigerTree, true> MerkleStream;
-
-		d->setFile(new MerkleStream(d->getTigerTree(), d->getFile(), d->getStartPos()));
-		d->setFlag(Download::FLAG_TTH_CHECK);
-	}
-
-	// Check that we don't get too many bytes
-	d->setFile(new LimitedOutputStream<true>(d->getFile(), bytes));
-
-	if(z) {
-		d->setFlag(Download::FLAG_ZDOWNLOAD);
-		d->setFile(new FilteredOutputStream<UnZFilter, true>(d->getFile()));
 	}
 
 	d->setStart(GET_TICK());
@@ -278,10 +255,10 @@ void DownloadManager::on(UserConnectionListener::Data, UserConnection* aSource, 
 	dcassert(d != NULL);
 
 	try {
-		d->addPos(d->getFile()->write(aData, aLen), aLen);
+		d->addPos(d->getOutput()->write(aData, aLen), aLen);
 		d->tick();
 
-		if(d->getFile()->eof()) {
+		if(d->getOutput()->eof()) {
 			endData(aSource);
 			aSource->setLineMode(0);
 		}
@@ -297,7 +274,7 @@ void DownloadManager::endData(UserConnection* aSource) {
 	dcassert(d != NULL);
 
 	if(d->getType() == Transfer::TYPE_TREE) {
-		d->getFile()->flush();
+		d->getOutput()->flush();
 
 		int64_t bl = 1024;
 		while(bl * (int64_t)d->getTigerTree().getLeaves().size() < d->getTigerTree().getFileSize())
@@ -321,7 +298,7 @@ void DownloadManager::endData(UserConnection* aSource) {
 	} else {
 		// First, finish writing the file (flushing the buffers and closing the file...)
 		try {
-			d->getFile()->flush();
+			d->getOutput()->flush();
 		} catch(const Exception& e) {
 			d->resetPos();
 			failDownload(aSource, e.getError());
@@ -405,10 +382,10 @@ void DownloadManager::removeConnection(UserConnectionPtr aConn) {
 }
 
 void DownloadManager::removeDownload(Download* d) {
-	if(d->getFile()) {
+	if(d->getOutput()) {
 		if(d->getActual() > 0) {
 			try {
-				d->getFile()->flush();
+				d->getOutput()->flush();
 			} catch(const Exception&) {
 			}
 		}

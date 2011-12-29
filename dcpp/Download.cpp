@@ -23,11 +23,16 @@
 #include "QueueItem.h"
 #include "HashManager.h"
 #include "SettingsManager.h"
+#include "MerkleCheckOutputStream.h"
+#include "MerkleTreeOutputStream.h"
+#include "File.h"
+#include "FilteredFile.h"
+#include "ZUtils.h"
 
 namespace dcpp {
 
-Download::Download(UserConnection& conn, QueueItem& qi, const string& path, bool supportsTrees) noexcept : Transfer(conn, path, qi.getTTH()),
-	tempTarget(qi.getTempTarget()), file(0), treeValid(false)
+Download::Download(UserConnection& conn, QueueItem& qi) noexcept : Transfer(conn, qi.getTarget(), qi.getTTH()),
+	tempTarget(qi.getTempTarget()), treeValid(false)
 {
 	conn.setDownload(this);
 
@@ -38,17 +43,17 @@ Download::Download(UserConnection& conn, QueueItem& qi, const string& path, bool
 	}
 
 	if(qi.getSize() != -1) {
-		if(HashManager::getInstance()->getTree(getTTH(), getTigerTree())) {
+		if(HashManager::getInstance()->getTree(getTTH(), tt)) {
 			setTreeValid(true);
 			setSegment(qi.getNextSegment(getTigerTree().getBlockSize(), conn.getChunkSize()));
-		} else if(supportsTrees && !qi.getSource(conn.getUser())->isSet(QueueItem::Source::FLAG_NO_TREE) && qi.getSize() > HashManager::MIN_BLOCK_SIZE) {
+		} else if(conn.supportsTrees() && !qi.getSource(conn.getUser())->isSet(QueueItem::Source::FLAG_NO_TREE) && qi.getSize() > HashManager::MIN_BLOCK_SIZE) {
 			// Get the tree unless the file is small (for small files, we'd probably only get the root anyway)
 			setType(TYPE_TREE);
-			getTigerTree().setFileSize(qi.getSize());
+			tt.setFileSize(qi.getSize());
 			setSegment(Segment(0, -1));
 		} else {
 			// Use the root as tree to get some sort of validation at least...
-			getTigerTree() = TigerTree(qi.getSize(), qi.getSize(), getTTH());
+			tt = TigerTree(qi.getSize(), qi.getSize(), getTTH());
 			setTreeValid(true);
 			setSegment(qi.getNextSegment(getTigerTree().getBlockSize(), 0));
 		}
@@ -91,8 +96,78 @@ void Download::getParams(const UserConnection& aSource, ParamMap& params) {
 	params["target"] = getPath();
 }
 
-string Download::getTargetFileName() {
+string Download::getTargetFileName() const {
 	return Util::getFileName(getPath());
+}
+
+const string& Download::getDownloadTarget() const {
+	return (getTempTarget().empty() ? getPath() : getTempTarget());
+}
+
+void Download::open(int64_t bytes, bool z) {
+	if(getType() == Transfer::TYPE_FILE) {
+		auto target = getDownloadTarget();
+		auto fullSize = tt.getFileSize();
+
+		if(getSegment().getStart() > 0) {
+			if(File::getSize(target) != fullSize) {
+				// When trying the download the next time, the resume pos will be reset
+				throw Exception(_("Target file is missing or wrong size"));
+			}
+		} else {
+			File::ensureDirectory(target);
+		}
+
+		unique_ptr<File> f(new File(target, File::WRITE, File::OPEN | File::CREATE | File::SHARED));
+
+		if(f->getSize() != fullSize) {
+			f->setSize(fullSize);
+		}
+
+		f->setPos(getSegment().getStart());
+		output = move(f);
+		tempTarget = target;
+	} else if(getType() == Transfer::TYPE_FULL_LIST) {
+		auto target = getPath();
+		File::ensureDirectory(target);
+
+		if(isSet(Download::FLAG_XML_BZ_LIST)) {
+			target += ".xml.bz2";
+		} else {
+			target += ".xml";
+		}
+
+		output.reset(new File(target, File::WRITE, File::OPEN | File::TRUNCATE | File::CREATE));
+		tempTarget = target;
+	} else if(getType() == Transfer::TYPE_PARTIAL_LIST) {
+		output.reset(new StringOutputStream(pfs));
+	} else if(getType() == Transfer::TYPE_TREE) {
+		output.reset(new MerkleTreeOutputStream<TigerTree>(tt));
+	}
+
+	if((getType() == Transfer::TYPE_FILE || getType() == Transfer::TYPE_FULL_LIST) && SETTING(BUFFER_SIZE) > 0 ) {
+		output.reset(new BufferedOutputStream<true>(output.release()));
+	}
+
+	if(getType() == Transfer::TYPE_FILE) {
+		typedef MerkleCheckOutputStream<TigerTree, true> MerkleStream;
+
+		output.reset(new MerkleStream(tt, output.release(), getStartPos()));
+		setFlag(Download::FLAG_TTH_CHECK);
+	}
+
+	// Check that we don't get too many bytes
+	output.reset(new LimitedOutputStream<true>(output.release(), bytes));
+
+	if(z) {
+		setFlag(Download::FLAG_ZDOWNLOAD);
+		output.reset(new FilteredOutputStream<UnZFilter, true>(output.release()));
+	}
+}
+
+void Download::close()
+{
+	output.reset();
 }
 
 } // namespace dcpp
