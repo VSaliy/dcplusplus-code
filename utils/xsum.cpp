@@ -25,8 +25,8 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	auto direct = argc < 2 ? true : argv[2][0] == '0';
-	auto bufSize = argc < 3 ? 0 : Util::toInt(argv[3]);
+	auto direct = argc < 3 ? true : argv[2][0] == '0';
+	auto bufSize = argc < 4 ? 0 : Util::toInt(argv[3]);
 
 	try {
 		auto start = microsec_clock::universal_time();
