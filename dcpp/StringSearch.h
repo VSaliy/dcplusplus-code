@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_DCPP_STRING_SEARCH_H
 #define DCPLUSPLUS_DCPP_STRING_SEARCH_H
 
+#include <string.h>
+
 #include "Text.h"
 
 #include "noexcept.h"

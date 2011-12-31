@@ -44,6 +44,7 @@
 #include <dcpp/WindowInfo.h>
 
 #include <dwt/Application.h>
+#include <dwt/widgets/Grid.h>
 #include <dwt/widgets/MessageBox.h>
 #include <dwt/widgets/Notification.h>
 #include <dwt/widgets/Rebar.h>

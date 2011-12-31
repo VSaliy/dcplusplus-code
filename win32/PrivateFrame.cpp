@@ -21,6 +21,8 @@
 
 #include <boost/range/algorithm/for_each.hpp>
 
+#include <dwt/widgets/Grid.h>
+
 #include "HoldRedraw.h"
 #include "MainWindow.h"
 #include "resource.h"

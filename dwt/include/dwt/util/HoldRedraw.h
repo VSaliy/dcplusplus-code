@@ -19,6 +19,8 @@
 #ifndef DWT_HOLDREDRAW_H_
 #define DWT_HOLDREDRAW_H_
 
+#include "../Widget.h"
+
 namespace dwt { namespace util {
 
 class HoldRedraw {

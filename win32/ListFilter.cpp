@@ -19,6 +19,8 @@
 #include "stdafx.h"
 #include "ListFilter.h"
 
+#include <dwt/widgets/Grid.h>
+
 ListFilter::ListFilter(const ColumnInfo* columns, size_t colCount, UpdateF updateF) :
 columns(columns),
 colCount(colCount),
