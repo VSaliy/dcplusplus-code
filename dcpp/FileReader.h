@@ -71,7 +71,8 @@ private:
 	vector<uint8_t> buffer;
 
 	/** Return an aligned buffer which is at least twice the size of ret.second */
-	pair<void*, size_t> getBuffer(size_t alignment);
+	size_t getBlockSize(size_t alignment);
+	void* align(void* buf, size_t alignment);
 
 	size_t readDirect(const string& file, const DataCallback& callback);
 	size_t readMapped(const string& file, const DataCallback& callback);

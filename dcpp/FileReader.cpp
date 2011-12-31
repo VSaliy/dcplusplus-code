@@ -36,28 +36,34 @@ size_t FileReader::read(const string& file, const DataCallback& callback) {
 
 /** Read entire file, never returns READ_FAILED */
 size_t FileReader::readCached(const string& file, const DataCallback& callback) {
-	auto buf = getBuffer(512);
+	buffer.resize(getBlockSize(0));
 
+	auto buf = &buffer[0];
 	File f(file, File::READ, File::OPEN | File::SHARED);
 
 	size_t total = 0;
-	size_t n = buf.second;
-	while(f.read(buf.first, n) > 0) {
-		callback(buf.first, n);
+	size_t n = buffer.size();
+	while(f.read(buf, n) > 0) {
+		callback(buf, n);
 		total += n;
-		n = buf.second;
+		n = buffer.size();
 	}
 
 	return total;
 }
 
-pair<void*, size_t> FileReader::getBuffer(size_t alignment) {
-	auto block = (((blockSize == 0 ? DEFAULT_BLOCK_SIZE : blockSize) + alignment - 1) / alignment) * alignment;
+size_t FileReader::getBlockSize(size_t alignment) {
+	auto block = blockSize < DEFAULT_BLOCK_SIZE ? DEFAULT_BLOCK_SIZE : blockSize;
+	if(alignment > 0) {
+		block = ((block + alignment - 1) / alignment) * alignment;
+	}
 
-	buffer.resize(block * 2 + alignment); // Prepare for worst case alignment
+	return block;
+}
 
-	auto start = reinterpret_cast<void*>(((reinterpret_cast<size_t>(&buffer[0]) + alignment - 1) / alignment) * alignment);
-	return make_pair(start, block);
+void* FileReader::align(void *buf, size_t alignment) {
+	return alignment == 0 ? buf
+		: reinterpret_cast<void*>(((reinterpret_cast<size_t>(buf) + alignment - 1) / alignment) * alignment);
 }
 
 #ifdef _WIN32
@@ -86,64 +92,66 @@ size_t FileReader::readDirect(const string& file, const DataCallback& callback) 
 
 	if (tmp == INVALID_HANDLE_VALUE) {
 		dcdebug("Failed to open unbuffered file: %s\n", Util::translateError(::GetLastError()).c_str());
-		return false;
+		return READ_FAILED;
 	}
 
 	Handle h(tmp);
 
-	auto buf = getBuffer(sector);
-	DWORD bufSize = static_cast<DWORD>(buf.second);
+	DWORD bufSize = static_cast<DWORD>(getBlockSize(sector));
+	buffer.resize(bufSize * 2 + sector);
+
+	auto buf = align(&buffer[0], sector);
 
 	DWORD hn = 0;
 	DWORD rn = 0;
-	uint8_t* hbuf = static_cast<uint8_t*>(buf.first) + bufSize;
-	uint8_t* rbuf = static_cast<uint8_t*>(buf.first);
+	uint8_t* hbuf = static_cast<uint8_t*>(buf) + bufSize;
+	uint8_t* rbuf = static_cast<uint8_t*>(buf);
 	OVERLAPPED over = { 0 };
 
 	// Read the first block
-	auto res = ::ReadFile(h, hbuf, buf.second, &hn, &over);
+	auto res = ::ReadFile(h, hbuf, bufSize, NULL, &over);
+	auto err = ::GetLastError();
 
-	if(!res) {
-		auto err = ::GetLastError();
-		if (err == ERROR_HANDLE_EOF) {
-			hn = 0;
-		} else if(err == ERROR_IO_PENDING) {
-			// Finish the read and see how it went
-			if(!GetOverlappedResult(h, &over, &hn, TRUE)) {
-				if (::GetLastError() == ERROR_HANDLE_EOF) {
-					hn = 0;
-				} else {
-					dcdebug("First overlapped read failed: %s\n", Util::translateError(::GetLastError()).c_str());
-					return READ_FAILED;
-				}
-			}
+	if(!res && err != ERROR_IO_PENDING) {
+		if(err != ERROR_HANDLE_EOF) {
+			dcdebug("First overlapped read failed: %s\n", Util::translateError(::GetLastError()).c_str());
+			return READ_FAILED;
 		}
 	}
 
+	// Finish the read and see how it went
+	if(!GetOverlappedResult(h, &over, &hn, TRUE)) {
+		err = ::GetLastError();
+		if(err != ERROR_HANDLE_EOF) {
+			dcdebug("First overlapped read failed: %s\n", Util::translateError(::GetLastError()).c_str());
+			return READ_FAILED;
+		}
+	}
 	over.Offset = hn;
 
-	for (; hn > 0;) {
-		// Last read returned some bytes, start a new overlapped read
-		res = ::ReadFile(h, rbuf, buf.second, &rn, &over);
+	for (; hn == bufSize;) {
+		// Start a new overlapped read
+		res = ::ReadFile(h, rbuf, bufSize, NULL, &over);
+		auto err = ::GetLastError();
 
+		// Process the previously read data
 		callback(hbuf, hn);
 
-		if (!res) {
-			auto err = ::GetLastError();
-			if(err == ERROR_HANDLE_EOF) {
-				rn = 0;
-			} else if(err == ERROR_IO_PENDING) {
-				// Finish the read
-				if (!GetOverlappedResult(h, &over, &rn, TRUE)) {
-					err = ::GetLastError();
-					if(err != ERROR_HANDLE_EOF) {
-						throw FileException(Util::translateError(err));
-					}
+		if (!res && err != ERROR_IO_PENDING) {
+			if(err != ERROR_HANDLE_EOF) {
+				throw FileException(Util::translateError(err));
+			}
 
-					rn = 0;
+			rn = 0;
+		} else {
+			// Finish the new read
+			if (!GetOverlappedResult(h, &over, &rn, TRUE)) {
+				err = ::GetLastError();
+				if(err != ERROR_HANDLE_EOF) {
+					throw FileException(Util::translateError(err));
 				}
-			} else {
-				throw FileException(Util::translateError(::GetLastError()));
+
+				rn = 0;
 			}
 		}
 
@@ -153,11 +161,64 @@ size_t FileReader::readDirect(const string& file, const DataCallback& callback) 
 		swap(rn, hn);
 	}
 
+	if(hn != 0) {
+		// Process leftovers
+		callback(hbuf, hn);
+	}
+
 	return *((uint64_t*)&over.Offset);
 }
 
 size_t FileReader::readMapped(const string& file, const DataCallback& callback) {
-	return READ_FAILED;
+	auto tfile = Text::toT(file);
+
+	auto tmp = ::CreateFile(tfile.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
+		FILE_FLAG_SEQUENTIAL_SCAN, NULL);
+
+	if (tmp == INVALID_HANDLE_VALUE) {
+		dcdebug("Failed to open unbuffered file: %s\n", Util::translateError(::GetLastError()).c_str());
+		return READ_FAILED;
+	}
+
+	Handle h(tmp);
+
+	LARGE_INTEGER size = { 0 };
+	if(!::GetFileSizeEx(h, &size)) {
+		dcdebug("Couldn't get file size: %s\n", Util::translateError(::GetLastError()).c_str());
+		return READ_FAILED;
+	}
+
+	if(!(tmp = ::CreateFileMapping(h, NULL, PAGE_READONLY, 0, 0, NULL))) {
+		dcdebug("Couldn't create file mapping: %s\n", Util::translateError(::GetLastError()).c_str());
+		return READ_FAILED;
+	}
+
+	Handle hmap(tmp);
+
+	SYSTEM_INFO si = { 0 };
+	::GetSystemInfo(&si);
+
+	auto blockSize = getBlockSize(si.dwPageSize);
+
+	LARGE_INTEGER total = { 0 };
+	while(size.QuadPart > 0) {
+		auto n = min(size.QuadPart, (int64_t)blockSize);
+		auto p = ::MapViewOfFile(hmap, FILE_MAP_READ, total.HighPart, total.LowPart, static_cast<DWORD>(n));
+		if(!p) {
+			throw FileException(Util::translateError(::GetLastError()));
+		}
+
+		callback(p, n);
+
+		if(!::UnmapViewOfFile(p)) {
+			throw FileException(Util::translateError(::GetLastError()));
+		}
+
+		size.QuadPart -= n;
+		total.QuadPart += n;
+	}
+
+	return total.QuadPart;
 }
 
 #else
