@@ -501,7 +501,7 @@ string Util::getAwayMessage() {
 }
 
 string Util::formatBytes(int64_t aBytes) {
-	char buf[128];
+	char buf[128] = { 0 };
 	if(aBytes < 1024) {
 		snprintf(buf, sizeof(buf), _("%d B"), (int)(aBytes&0xffffffff));
 	} else if(aBytes < 1024*1024) {

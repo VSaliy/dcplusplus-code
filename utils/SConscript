@@ -2,13 +2,7 @@
  
 Import('dev source_path')
 
-def runUnitTest(env,target,source):
-	import subprocess
-	app = str(source[0].abspath)
-	if not subprocess.call(app):
-		open(str(target[0]),'w').write("PASSED\n")
-		
-env, target, sources = dev.prepare_build(source_path, 'gtest', source_glob="*.cpp", in_bin=False)
+env, target, sources = dev.prepare_build(source_path, 'xsum', source_glob="xsum.cpp", in_bin=False)
 
 if 'msvc' in env['TOOLS']:
 	if env['mode'] == 'debug':
@@ -40,7 +34,5 @@ if env['arch'] != 'x86':
 env.Append(LIBPATH = [openssl_lib])
 
 ret = env.Program(target, [sources, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl])
-
-ret = env.Command(dev.get_target(source_path, 'gtest.passed', in_bin=False), ret[0].abspath, runUnitTest)
 
 Return('ret')
