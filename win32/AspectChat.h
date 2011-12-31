@@ -21,6 +21,8 @@
 
 #include <dcpp/File.h>
 
+#include <dwt/WidgetCreator.h>
+
 #include "HoldRedraw.h"
 #include "RichTextBox.h"
 #include "WinUtil.h"
