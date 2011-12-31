@@ -25,9 +25,12 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	auto direct = argc < 2 ? true : argv[2][0] == '0';
+	auto bufSize = argc < 3 ? 0 : Util::toInt(argv[3]);
+
 	try {
 		auto start = microsec_clock::universal_time();
-		FileReader fr(argc == 2 ? true : argv[2][0] == '0', 0);
+		FileReader fr(direct, bufSize);
 
 		TigerTree tt;
 		size_t total = 0;
