@@ -178,7 +178,6 @@ online(replyTo.getUser().user->isOnline())
 }
 
 PrivateFrame::~PrivateFrame() {
-	frames.erase(replyTo.getUser());
 }
 
 void PrivateFrame::addChat(const tstring& aLine, bool log) {
@@ -213,6 +212,8 @@ void PrivateFrame::addStatus(const tstring& aLine, bool log) {
 
 bool PrivateFrame::preClosing() {
 	ClientManager::getInstance()->removeListener(this);
+
+	frames.erase(replyTo.getUser());
 	return true;
 }
 

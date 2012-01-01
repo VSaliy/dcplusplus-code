@@ -97,10 +97,8 @@ int SearchFrame::SearchInfo::compareItems(const SearchInfo* a, const SearchInfo*
 	}
 }
 
-
 void SearchFrame::openWindow(TabViewPtr parent, const tstring& str, SearchManager::TypeModes type) {
-	SearchFrame* pChild = new SearchFrame(parent, str, type);
-	frames.insert(pChild);
+	frames.insert(new SearchFrame(parent, str, type));
 }
 
 void SearchFrame::closeAll() {
@@ -375,7 +373,6 @@ bool SearchFrame::preClosing() {
 	ClientManager::getInstance()->removeListener(this);
 
 	frames.erase(this);
-
 	return true;
 }
 
