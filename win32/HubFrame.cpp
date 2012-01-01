@@ -271,7 +271,6 @@ inTabComplete(false)
 
 HubFrame::~HubFrame() {
 	ClientManager::getInstance()->putClient(client);
-	frames.erase(std::remove(frames.begin(), frames.end(), this), frames.end());
 	clearTaskList();
 }
 
@@ -286,6 +285,8 @@ bool HubFrame::preClosing() {
 	FavoriteManager::getInstance()->removeListener(this);
 	client->removeListener(this);
 	client->disconnect(true);
+
+	frames.erase(std::remove(frames.begin(), frames.end(), this), frames.end());
 	return true;
 }
 

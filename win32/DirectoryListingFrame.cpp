@@ -392,8 +392,6 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 }
 
 DirectoryListingFrame::~DirectoryListingFrame() {
-	dcassert(lists.find(dl->getUser()) != lists.end());
-	lists.erase(dl->getUser());
 }
 
 class FileListLoader : public Thread {
@@ -517,6 +515,8 @@ void DirectoryListingFrame::layout() {
 
 bool DirectoryListingFrame::preClosing() {
 	ClientManager::getInstance()->removeListener(this);
+
+	lists.erase(dl->getUser());
 	return true;
 }
 
