@@ -27,12 +27,9 @@
 #include "ConnectionManager.h"
 #include "Download.h"
 #include "FileReader.h"
-#include "FilteredFile.h"
-#include "FinishedItem.h"
 #include "FinishedManager.h"
 #include "HashManager.h"
 #include "LogManager.h"
-#include "MerkleTreeOutputStream.h"
 #include "SearchManager.h"
 #include "SearchResult.h"
 #include "SFVReader.h"
@@ -1029,9 +1026,9 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 		} else { // Finished
 			if(d->getType() == Transfer::TYPE_PARTIAL_LIST) {
 				userQueue.remove(q);
-				fileQueue.remove(q);
 				fire(QueueManagerListener::PartialList(), d->getHintedUser(), d->getPFS());
 				fire(QueueManagerListener::Removed(), q);
+				fileQueue.remove(q);
 			} else if(d->getType() == Transfer::TYPE_TREE) {
 				// Got a full tree, now add it to the HashManager
 				dcassert(d->getTreeValid());
@@ -1061,8 +1058,8 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 				userQueue.remove(q);
 				fire(QueueManagerListener::Finished(), q, dir, d->getAverageSpeed());
 
-				fileQueue.remove(q);
 				fire(QueueManagerListener::Removed(), q);
+				fileQueue.remove(q);
 			} else if(d->getType() == Transfer::TYPE_FILE) {
 				q->addSegment(d->getSegment());
 
@@ -1084,8 +1081,8 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 					if(BOOLSETTING(KEEP_FINISHED_FILES)) {
 						fire(QueueManagerListener::StatusUpdated(), q);
 					} else {
-						fileQueue.remove(q);
 						fire(QueueManagerListener::Removed(), q);
+						fileQueue.remove(q);
 					}
 				} else {
 					userQueue.removeDownload(q, d->getUser());
