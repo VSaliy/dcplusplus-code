@@ -2,7 +2,7 @@
  
 Import('dev source_path')
 
-env, target, sources = dev.prepare_build(source_path, 'xsum', source_glob="xsum.cpp", in_bin=False)
+env = dev.env.Clone()
 
 if 'msvc' in env['TOOLS']:
 	if env['mode'] == 'debug':
@@ -21,18 +21,26 @@ env.Append(CPPPATH = ['#/openssl/include', '#/miniupnpc', '#/dwt/include', '#/',
 
 if '-mwindows' in env['CCFLAGS']:
 	env['CCFLAGS'].remove('-mwindows')
+	env.Append(CCFLAGS = ['-mconsole'])
 
 if '-mwindows' in env['LINKFLAGS']:
 	env['LINKFLAGS'].remove('-mwindows')
+	env.Append(LINKFLAGS = ['-mconsole'])
 
-env.Append(CCFLAGS = ['-mconsole'])	
-env.Append(LINKFLAGS = ['-mconsole'])	
-	
+if '/SUBSYSTEM:WINDOWS' in env['LINKFLAGS']:
+	env['LINKFLAGS'].remove('/SUBSYSTEM:WINDOWS')
+
 openssl_lib = '#/openssl/lib/'
 if env['arch'] != 'x86':
 	openssl_lib += env['arch'] + '/'
 env.Append(LIBPATH = [openssl_lib])
 
-ret = env.Program(target, [sources, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl])
+# imitate build_util's prepare_build
+env.VariantDir(dev.get_build_path(source_path), '.', duplicate = 0)
+import os
+ret = []
+for f in Glob('*.cpp'):
+	sources = dev.get_sources(source_path, str(f))
+	ret.append(env.Program(dev.get_target(source_path, os.path.basename(str(f)).replace('.cpp', ''), in_bin = False), [sources, dev.client, dev.dwarf, dev.zlib, dev.boost, dev.bzip2, dev.geoip, dev.miniupnpc, dev.natpmp, dev.intl]))
 
 Return('ret')
