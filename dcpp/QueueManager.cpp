@@ -21,16 +21,17 @@
 
 #include <boost/range/adaptor/map.hpp>
 #include <boost/range/algorithm/for_each.hpp>
+#include <boost/range/algorithm_ext/for_each.hpp>
 
 #include "ClientManager.h"
 #include "ConnectionManager.h"
 #include "Download.h"
+#include "FileReader.h"
 #include "FilteredFile.h"
 #include "FinishedItem.h"
 #include "FinishedManager.h"
 #include "HashManager.h"
 #include "LogManager.h"
-#include "MerkleCheckOutputStream.h"
 #include "MerkleTreeOutputStream.h"
 #include "SearchManager.h"
 #include "SearchResult.h"
@@ -409,47 +410,14 @@ int QueueManager::Rechecker::run() {
 			tempTarget = q->getTempTarget();
 		}
 
-		//Merklecheck
-		int64_t startPos=0;
-		DummyOutputStream dummy;
-		int64_t blockSize = tt.getBlockSize();
-		bool hasBadBlocks = false;
+		TigerTree ttFile(tt.getBlockSize());
 
-		vector<uint8_t> buf((size_t)min((int64_t)1024*1024, blockSize));
-
-		typedef pair<int64_t, int64_t> SizePair;
-		typedef vector<SizePair> Sizes;
-		Sizes sizes;
-
-		{
-			File inFile(tempTarget, File::READ, File::OPEN);
-
-			while(startPos < tempSize) {
-				try {
-					MerkleCheckOutputStream<TigerTree, false> check(tt, &dummy, startPos);
-
-					inFile.setPos(startPos);
-					int64_t bytesLeft = min((tempSize - startPos),blockSize); //Take care of the last incomplete block
-					int64_t segmentSize = bytesLeft;
-					while(bytesLeft > 0) {
-						size_t n = (size_t)min((int64_t)buf.size(), bytesLeft);
-						size_t nr = inFile.read(&buf[0], n);
-						check.write(&buf[0], nr);
-						bytesLeft -= nr;
-						if(bytesLeft > 0 && nr == 0) {
-							// Huh??
-							throw Exception();
-						}
-					}
-					check.flush();
-
-					sizes.push_back(make_pair(startPos, segmentSize));
-				} catch(const Exception&) {
-					hasBadBlocks = true;
-					dcdebug("Found bad block at " I64_FMT "\n", startPos);
-				}
-				startPos += blockSize;
-			}
+		try {
+			FileReader().read(tempTarget, [&](const void* x, size_t n) {
+				return ttFile.update(x, n), true;
+			});
+		} catch(const FileException & e) {
+			dcdebug("Error while reading file: %s\n", e.what());
 		}
 
 		Lock l(qm->cs);
@@ -459,17 +427,26 @@ int QueueManager::Rechecker::run() {
 		if(!q)
 			continue;
 
-		//If no bad blocks then the file probably got stuck in the temp folder for some reason
-		if(!hasBadBlocks) {
+		ttFile.finalize();
+
+		if(ttFile.getRoot() == tth) {
+			//If no bad blocks then the file probably got stuck in the temp folder for some reason
 			qm->moveStuckFile(q);
 			continue;
 		}
 
-		for(auto i = sizes.begin(); i != sizes.end(); ++i)
-			q->addSegment(Segment(i->first, i->second));
+		size_t pos = 0;
+		boost::for_each(tt.getLeaves(), ttFile.getLeaves(), [&](const TTHValue& our, const TTHValue& file) {
+			if(our == file) {
+				q->addSegment(Segment(pos, pos + tt.getBlockSize()));
+			}
+
+			pos += tt.getBlockSize();
+		});
 
 		qm->rechecked(q);
 	}
+
 	return 0;
 }
 
@@ -1659,16 +1636,11 @@ bool QueueManager::checkSfv(QueueItem* qi, Download* d) {
 }
 
 uint32_t QueueManager::calcCrc32(const string& file) {
-	File ff(file, File::READ, File::OPEN);
-	CalcInputStream<CRC32Filter, false> f(&ff);
-
-	const size_t BUF_SIZE = 1024*1024;
-	boost::scoped_array<uint8_t> b(new uint8_t[BUF_SIZE]);
-	size_t n = BUF_SIZE;
-	while(f.read(&b[0], n) > 0)
-		;		// Keep on looping...
-
-	return f.getFilter().getValue();
+	CRC32Filter crc32;
+	FileReader().read(file, [&](const void* x, size_t n) {
+		return crc32(x, n), true;
+	});
+	return crc32.getValue();
 }
 
 void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcError)

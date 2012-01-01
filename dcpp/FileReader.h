@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_CONNECTION_MANAGER_H
-#define DCPLUSPLUS_DCPP_CONNECTION_MANAGER_H
+#ifndef DCPLUSPLUS_DCPP_FILE_READER_H
+#define DCPLUSPLUS_DCPP_FILE_READER_H
 
 #include <functional>
 #include <string>
