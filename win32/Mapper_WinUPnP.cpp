@@ -56,6 +56,10 @@ void Mapper_WinUPnP::uninit() {
 	::CoUninitialize();
 }
 
+#ifndef PORTMAPTOOL
+namespace { string getLocalIp() { return Util::getLocalIp(); } }
+#endif
+
 bool Mapper_WinUPnP::add(const string& port, const Protocol protocol, const string& description) {
 	IStaticPortMappingCollection* pSPMC = getStaticPortMappingCollection();
 	if(!pSPMC)
@@ -64,7 +68,7 @@ bool Mapper_WinUPnP::add(const string& port, const Protocol protocol, const stri
 	/// @todo use a BSTR wrapper
 	BSTR protocol_ = SysAllocString(Text::toT(protocols[protocol]).c_str());
 	BSTR description_ = SysAllocString(Text::toT(description).c_str());
-	BSTR localIP = SysAllocString(Text::toT(Util::getLocalIp()).c_str());
+	BSTR localIP = SysAllocString(Text::toT(getLocalIp()).c_str());
 	auto port_ = Util::toInt(port);
 
 	IStaticPortMapping* pSPM = 0;

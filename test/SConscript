@@ -27,13 +27,15 @@ env.Append(CPPPATH = ['#/openssl/include', '#/miniupnpc', '#/dwt/include', '#/',
 
 if '-mwindows' in env['CCFLAGS']:
 	env['CCFLAGS'].remove('-mwindows')
+	env.Append(CCFLAGS = ['-mconsole'])
 
 if '-mwindows' in env['LINKFLAGS']:
 	env['LINKFLAGS'].remove('-mwindows')
+	env.Append(LINKFLAGS = ['-mconsole'])
 
-env.Append(CCFLAGS = ['-mconsole'])	
-env.Append(LINKFLAGS = ['-mconsole'])	
-	
+if '/SUBSYSTEM:WINDOWS' in env['LINKFLAGS']:
+	env['LINKFLAGS'].remove('/SUBSYSTEM:WINDOWS')
+
 openssl_lib = '#/openssl/lib/'
 if env['arch'] != 'x86':
 	openssl_lib += env['arch'] + '/'
