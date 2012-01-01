@@ -80,13 +80,12 @@ void File::close() noexcept {
 }
 
 int64_t File::getSize() noexcept {
-	DWORD x;
-	DWORD l = ::GetFileSize(h, &x);
-
-	if( (l == INVALID_FILE_SIZE) && (GetLastError() != NO_ERROR))
+	LARGE_INTEGER x;
+	if(!::GetFileSizeEx(h, &x)) {
 		return -1;
+	}
 
-	return (int64_t)l | ((int64_t)x)<<32;
+	return x.QuadPart;
 }
 int64_t File::getPos() noexcept {
 	LONG x = 0;
