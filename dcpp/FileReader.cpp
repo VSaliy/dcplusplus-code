@@ -43,8 +43,9 @@ size_t FileReader::readCached(const string& file, const DataCallback& callback) 
 
 	size_t total = 0;
 	size_t n = buffer.size();
-	while(f.read(buf, n) > 0) {
-		callback(buf, n);
+	bool go = true;
+	while(f.read(buf, n) > 0 && go) {
+		go = callback(buf, n);
 		total += n;
 		n = buffer.size();
 	}
@@ -129,13 +130,14 @@ size_t FileReader::readDirect(const string& file, const DataCallback& callback) 
 	}
 	over.Offset = hn;
 
-	for (; hn == bufSize;) {
+	bool go = true;
+	for (; hn == bufSize && go;) {
 		// Start a new overlapped read
 		res = ::ReadFile(h, rbuf, bufSize, NULL, &over);
 		auto err = ::GetLastError();
 
 		// Process the previously read data
-		callback(hbuf, hn);
+		go = callback(hbuf, hn);
 
 		if (!res && err != ERROR_IO_PENDING) {
 			if(err != ERROR_HANDLE_EOF) {
@@ -201,14 +203,15 @@ size_t FileReader::readMapped(const string& file, const DataCallback& callback) 
 	auto blockSize = getBlockSize(si.dwPageSize);
 
 	LARGE_INTEGER total = { 0 };
-	while(size.QuadPart > 0) {
+	bool go = true;
+	while(size.QuadPart > 0 && go) {
 		auto n = min(size.QuadPart, (int64_t)blockSize);
 		auto p = ::MapViewOfFile(hmap, FILE_MAP_READ, total.HighPart, total.LowPart, static_cast<DWORD>(n));
 		if(!p) {
 			throw FileException(Util::translateError(::GetLastError()));
 		}
 
-		callback(p, n);
+		go = callback(p, n);
 
 		if(!::UnmapViewOfFile(p)) {
 			throw FileException(Util::translateError(::GetLastError()));
@@ -223,12 +226,98 @@ size_t FileReader::readMapped(const string& file, const DataCallback& callback) 
 
 #else
 
+#include <sys/mman.h> // mmap, munmap, madvise
+#include <signal.h>  // for handling read errors from previous trio
+#include <setjmp.h>
+
 size_t FileReader::readDirect(const string& file, const DataCallback& callback) {
 	return READ_FAILED;
 }
 
-size_t FileReader::readMapped(const string& file, const DataCallback& callback) {
-	return READ_FAILED;
+static const int64_t BUF_SIZE = 0x1000000 - (0x1000000 % getpagesize());
+static sigjmp_buf sb_env;
+
+static void sigbus_handler(int signum, siginfo_t* info, void* context) {
+	// Jump back to the readMapped which will return error. Apparently truncating
+	// a file in Solaris sets si_code to BUS_OBJERR
+	if (signum == SIGBUS && (info->si_code == BUS_ADRERR || info->si_code == BUS_OBJERR))
+		siglongjmp(sb_env, 1);
+}
+
+size_t FileReader::readMapped(const string& filename, const DataCallback& callback) {
+	int fd = open(Text::fromUtf8(filename).c_str(), O_RDONLY);
+	if(fd == -1) {
+		dcdebug("Error opening file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+		return READ_FAILED;
+	}
+
+	int64_t pos = 0;
+	auto size =0;
+
+	// Prepare and setup a signal handler in case of SIGBUS during mmapped file reads.
+	// SIGBUS can be sent when the file is truncated or in case of read errors.
+	struct sigaction act, oldact;
+	sigset_t signalset;
+
+	sigemptyset(&signalset);
+
+	act.sa_handler = NULL;
+	act.sa_sigaction = sigbus_handler;
+	act.sa_mask = signalset;
+	act.sa_flags = SA_SIGINFO | SA_RESETHAND;
+
+	if (sigaction(SIGBUS, &act, &oldact) == -1) {
+		dcdebug("Failed to set signal handler for fastHash\n");
+		close(fd);
+		return READ_FAILED;	// Better luck with the slow hash.
+	}
+
+	void* buf = NULL;
+	int64_t size_read = 0;
+
+	uint64_t lastRead = GET_TICK();
+	while (pos < size) {
+		size_read = std::min(size - pos, BUF_SIZE);
+		buf = mmap(0, size_read, PROT_READ, MAP_SHARED, fd, pos);
+		if (buf == MAP_FAILED) {
+			dcdebug("Error calling mmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+			break;
+		}
+
+		if (sigsetjmp(sb_env, 1)) {
+			dcdebug("Caught SIGBUS for file %s\n", filename.c_str());
+			break;
+		}
+
+		if (posix_madvise(buf, size_read, POSIX_MADV_SEQUENTIAL | POSIX_MADV_WILLNEED) == -1) {
+			dcdebug("Error calling madvise for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+			break;
+		}
+
+		if(!callback(buf, size_read)) {
+			break;
+		}
+
+		if (munmap(buf, size_read) == -1) {
+			dcdebug("Error calling munmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+			break;
+		}
+
+		buf = NULL;
+		pos += size_read;
+	}
+
+	if (buf != NULL && buf != MAP_FAILED && munmap(buf, size_read) == -1) {
+		dcdebug("Error calling munmap for file %s: %s\n", filename.c_str(), Util::translateError(errno).c_str());
+	}
+
+	::close(fd);
+
+	if (sigaction(SIGBUS, &oldact, NULL) == -1) {
+		dcdebug("Failed to reset old signal handler for SIGBUS\n");
+	}
+
+	return pos == size ? pos : READ_FAILED;
 }
 
 #endif

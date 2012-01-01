@@ -34,12 +34,14 @@ int main(int argc, char** argv)
 
 		TigerTree tt;
 		size_t total = 0;
-		fr.read(x, [&](void* x, size_t n) {
+		fr.read(x, [&](const void* x, size_t n) -> bool {
 			tt.update(x, n);
 			total += n;
 			if(total % (1024*1024) == 0) {
 				std::cout << ".";
 			}
+
+			return true;
 		});
 
 		cout << endl << Encoder::toBase32(tt.finalize(), TigerTree::BYTES);
