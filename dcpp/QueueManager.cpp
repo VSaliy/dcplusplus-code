@@ -435,7 +435,7 @@ int QueueManager::Rechecker::run() {
 		size_t pos = 0;
 		boost::for_each(tt.getLeaves(), ttFile.getLeaves(), [&](const TTHValue& our, const TTHValue& file) {
 			if(our == file) {
-				q->addSegment(Segment(pos, pos + tt.getBlockSize()));
+				q->addSegment(Segment(pos, tt.getBlockSize()));
 			}
 
 			pos += tt.getBlockSize();
