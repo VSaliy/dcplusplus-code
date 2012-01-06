@@ -19,17 +19,17 @@
 #include "stdinc.h"
 #include "DirectoryListing.h"
 
-#include "QueueManager.h"
-#include "ClientManager.h"
-
-#include "StringTokenizer.h"
-#include "SimpleXML.h"
-#include "FilteredFile.h"
 #include "BZUtils.h"
+#include "ClientManager.h"
 #include "CryptoManager.h"
-#include "ShareManager.h"
-#include "SimpleXMLReader.h"
 #include "File.h"
+#include "FilteredFile.h"
+#include "QueueManager.h"
+#include "ShareManager.h"
+#include "SimpleXML.h"
+#include "SimpleXMLReader.h"
+#include "StringTokenizer.h"
+#include "version.h"
 
 #ifdef ff
 #undef ff
@@ -214,9 +214,13 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 		}
 	} else if(name == sFileListing) {
 		const string& b = getAttrib(attribs, sBase, 2);
-		if(b.size() >= 1 && b[0] == '/' && b[b.size()-1] == '/') {
+		if(b.size() >= 1 && b[0] == '/' && *(b.end() - 1) == '/') {
 			base = b;
+			if(list->base.empty() || base.size() < list->base.size()) {
+				list->base = base;
+			}
 		}
+
 		StringList sl = StringTokenizer<string>(base.substr(1), '/').getTokens();
 		for(auto i = sl.begin(); i != sl.end(); ++i) {
 			DirectoryListing::Directory* d = NULL;
@@ -251,6 +255,67 @@ void ListLoader::endTag(const string& name, const string&) {
 			inListing = false;
 		}
 	}
+}
+
+void DirectoryListing::save(const string& path) const {
+	dcassert(!base.empty());
+	dcpp::File stream(path, dcpp::File::WRITE, dcpp::File::CREATE | dcpp::File::TRUNCATE);
+	stream.write(SimpleXML::utf8Header);
+	string indent("\t"), tmp;
+	stream.write("<FileListing Version=\"1\" CID=\"" + user.user->getCID().toBase32() + "\" Base=\"" + SimpleXML::escape(base, tmp, true) + "\" Generator=\"" APPNAME " " VERSIONSTRING "\">\r\n");
+	auto start = find(Util::toNmdcFile(base), root);
+	if(start) {
+		std::for_each(start->directories.cbegin(), start->directories.cend(), [&](Directory* d) {
+			d->save(stream, indent, tmp);
+		});
+		std::for_each(start->files.cbegin(), start->files.cend(), [&](File* f) {
+			f->save(stream, indent, tmp);
+		});
+	}
+	stream.write("</FileListing>");
+}
+
+void DirectoryListing::Directory::save(OutputStream& stream, string& indent, string& tmp) const {
+	if(adls)
+		return;
+
+	stream.write(indent);
+	stream.write(LIT("<Directory Name=\""));
+	stream.write(SimpleXML::escape(name, tmp, true));
+
+	if(!getComplete()) {
+		stream.write(LIT("\" Incomplete=\"1"));
+	}
+
+	if(directories.empty() && files.empty()) {
+		stream.write(LIT("\" />\r\n"));
+	} else {
+		stream.write(LIT("\">\r\n"));
+		indent += '\t';
+
+		std::for_each(directories.cbegin(), directories.cend(), [&](Directory* d) {
+			d->save(stream, indent, tmp);
+		});
+		std::for_each(files.cbegin(), files.cend(), [&](File* f) {
+			f->save(stream, indent, tmp);
+		});
+
+		indent.erase(indent.end() - 1);
+		stream.write(indent);
+		stream.write(LIT("</Directory>\r\n"));
+	}
+}
+
+void DirectoryListing::File::save(OutputStream& stream, string& indent, string& tmp) const {
+	stream.write(indent);
+	stream.write(LIT("<File Name=\""));
+	stream.write(SimpleXML::escape(getName(), tmp, true));
+	stream.write(LIT("\" Size=\""));
+	stream.write(Util::toString(getSize()));
+	stream.write(LIT("\" TTH=\""));
+	tmp.clear();
+	stream.write(getTTH().toBase32(tmp));
+	stream.write(LIT("\"/>\r\n"));
 }
 
 string DirectoryListing::getPath(const Directory* d) const {
@@ -327,13 +392,13 @@ void DirectoryListing::download(File* aFile, const string& aTarget, bool view, b
 		QueueManager::getInstance()->setPriority(aTarget, QueueItem::HIGHEST);
 }
 
-DirectoryListing::Directory* DirectoryListing::find(const string& aName, Directory* current) {
+DirectoryListing::Directory* DirectoryListing::find(const string& aName, Directory* current) const {
 	auto end = aName.find('\\');
 	dcassert(end != string::npos);
 	auto name = aName.substr(0, end);
 
-	auto i = std::find(current->directories.begin(), current->directories.end(), name);
-	if(i != current->directories.end()) {
+	auto i = std::find(current->directories.cbegin(), current->directories.cend(), name);
+	if(i != current->directories.cend()) {
 		if(end == (aName.size() - 1))
 			return *i;
 		else

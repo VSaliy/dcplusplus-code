@@ -19,9 +19,10 @@
 #include "stdinc.h"
 #include "ZUtils.h"
 
-#include "format.h"
 #include "Exception.h"
 #include "File.h"
+#include "format.h"
+#include "ScopedFunctor.h"
 
 namespace dcpp {
 
@@ -135,6 +136,8 @@ void GZ::decompress(const string& source, const string& target) {
 	if(!gz) {
 		throw Exception(_("Error during decompression"));
 	}
+	ScopedFunctor([&gz] { gzclose(gz); });
+
 	File f(target, File::WRITE, File::CREATE | File::TRUNCATE);
 
 	const size_t BUF_SIZE = 64 * 1024;
@@ -149,8 +152,6 @@ void GZ::decompress(const string& source, const string& target) {
 			break;
 		}
 	}
-
-	gzclose(gz);
 }
 
 } // namespace dcpp

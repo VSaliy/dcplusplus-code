@@ -154,7 +154,7 @@ private:
 
 class Canvas : private boost::noncopyable
 {
-	class Selector {
+	class Selector : boost::noncopyable {
 	public:
 		template<typename T>
 		Selector(Canvas& canvas_, T& t) : canvas(canvas_), h(::SelectObject(canvas.handle(), t.handle())) { }
@@ -166,7 +166,7 @@ class Canvas : private boost::noncopyable
 		HGDIOBJ h;
 	};
 
-	class BkMode {
+	class BkMode : boost::noncopyable {
 	public:
 		BkMode(Canvas& canvas_, int mode);
 		~BkMode();
@@ -522,95 +522,6 @@ public:
 	explicit CompatibleCanvas(HDC hdc);
 
 	virtual ~CompatibleCanvas();
-};
-
-#ifndef WINCE
-// TODO: Create custom enums for typesafety... ?
-/// Helper class for setting and resetting the ROP2 mode
-/** The ROP2 mode is used for telling windows which type of brush you want while
-  * painting. <br>
-  * this class ensures we reset the ROP2 mode after we have fiinished with it. <br>
-  * Used in combination with e.g. UpdateCanvas or PaintCanvas. <br>
-  * Supported modes are those supported in Windows API
-  * <ul>
-  * <li>R2_BLACK Pixel is always 0. </li>
-  * <li>R2_COPYPEN Pixel is the pen color. </li>
-  * <li>R2_MASKNOTPEN Pixel is a combination of the colors common to both the screen and the inverse of the pen. </li>
-  * <li>R2_MASKPEN Pixel is a combination of the colors common to both the pen and the screen. </li>
-  * <li>R2_MASKPENNOT Pixel is a combination of the colors common to both the pen and the inverse of the screen. </li>
-  * <li>R2_MERGENOTPEN Pixel is a combination of the screen color and the inverse of the pen color. </li>
-  * <li>R2_MERGEPEN Pixel is a combination of the pen color and the screen color. </li>
-  * <li>R2_MERGEPENNOT Pixel is a combination of the pen color and the inverse of the screen color. </li>
-  * <li>R2_NOP Pixel remains unchanged. </li>
-  * <li>R2_NOT Pixel is the inverse of the screen color. </li>
-  * <li>R2_NOTCOPYPEN Pixel is the inverse of the pen color. </li>
-  * <li>R2_NOTMASKPEN Pixel is the inverse of the R2_MASKPEN color. </li>
-  * <li>R2_NOTMERGEPEN Pixel is the inverse of the R2_MERGEPEN color. </li>
-  * <li>R2_NOTXORPEN Pixel is the inverse of the R2_XORPEN color. </li>
-  * <li>R2_WHITE Pixel is always 1. </li>
-  * <li>R2_XORPEN Pixel is a combination of the colors in the pen and in the screen, but not in both.</li>
-  * </ul>
-  * Related classes
-  * <ul>
-  * <li>UpdateCanvas</li>
-  * <li>PaintCanvas</li>
-  * <li>FreeCanvas</li>
-  * <li>Canvas</li>
-  * <li>Pen</li>
-  * </ul>
-  */
-class HdcModeSetter
-{
-public:
-	/// Constructor setting the ROP2 of the given Device Context.
-	/** The mode is any of the above enums.
-	  */
-	HdcModeSetter( Canvas & canvas, int mode );
-
-	/// Automatically resets the ROP2
-	/** Resets the mode back to what it was before this object was created. Note this
-	  * object cannot have longer lifetime than the Canvas given to the Constructor
-	  * since this will cause undefined behavior.
-	  */
-	~HdcModeSetter();
-
-private:
-	int itsOldMode;
-	Canvas & itsCanvas;
-};
-#endif //! WINCE
-
-/// Class for control of the text color lifetime
-/** Constructor takes a COLORREF. (Use the RGB macro. <br>
-  * Class ensures that the previous text color is restored on object destruction.
-  * <br>
-  * Related classes<br>
-  * <ul>
-  * <li>Canvas</li>
-  * <li>Pen</li>
-  * </ul>
-  */
-class TextPen
-{
-public:
-	/// Constructor taking a Canvas and a COLORREF
-	/** Build a COLORREF argument with windows.h's RGB( red, green, blue )
-	  */
-	TextPen( Canvas & canvas, COLORREF color );
-
-	/// Automatically restores the old TextColor.
-	/** Since this is a RAII structure it ensures the old pen is restored upon
-	  * destruction. Be careful though since if this oulives the Canvas object given
-	  * undefined behaviour will occur!
-	  */
-	~TextPen();
-
-private:
-	// Handle to the old color which will be restored in the DTOR of the object)
-	COLORREF itsColorOld;
-
-	// Handle to its Device Context.
-	Canvas & itsCanvas;
 };
 
 inline HDC Canvas::handle() const { return itsHdc; }

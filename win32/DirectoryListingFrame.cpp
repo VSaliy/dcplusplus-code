@@ -482,10 +482,13 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 }
 
 void DirectoryListingFrame::loadXML(const string& txt) {
-	loaded = true;
-
 	try {
-		refreshTree(Text::toT(Util::toNmdcFile(dl->updateXML(txt))));
+		path = QueueManager::getInstance()->getListPath(dl->getUser()) + ".xml";
+		auto base = dl->updateXML(txt);
+		dl->save(path);
+		loaded = true;
+		addRecent();
+		refreshTree(Text::toT(Util::toNmdcFile(base)));
 	} catch(const Exception& e) {
 		error = Text::toT(e.getError());
 		updateTitle();
