@@ -134,10 +134,12 @@ public:
 	void loadQueue() noexcept;
 	void saveQueue(bool force = false) noexcept;
 
+	string getListPath(const HintedUser& user);
 	void noDeleteFileList(const string& path);
 
 	GETSET(uint64_t, lastSave, LastSave);
 	GETSET(string, queueFile, QueueFile);
+
 private:
 	enum { MOVER_LIMIT = 10*1024*1024 };
 	class FileMover : public Thread {
@@ -266,8 +268,6 @@ private:
 	void rechecked(QueueItem* qi);
 
 	void setDirty();
-
-	string getListPath(const HintedUser& user);
 
 	bool checkSfv(QueueItem* qi, Download* d);
 	uint32_t calcCrc32(const string& file);

@@ -1,4 +1,4 @@
-* Prevent crashes when closing hub, PM or file list windows (poy)
+* Save and restore file lists dl'd with "browse file list" (poy)
 
 -- 0.790 2011-12-29 --
 * Fav users frame becomes users frame and shows all users

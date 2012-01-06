@@ -344,29 +344,4 @@ CompatibleCanvas::~CompatibleCanvas() {
 	::DeleteDC(itsHdc);
 }
 
-#ifndef WINCE
-HdcModeSetter::HdcModeSetter( Canvas & canvas, int mode )
-	: itsOldMode( ::GetROP2( canvas.handle() ) ),
-	itsCanvas( canvas )
-{
-	::SetROP2( itsCanvas.handle(), mode );
-}
-
-HdcModeSetter::~HdcModeSetter()
-{
-	::SetROP2( itsCanvas.handle(), itsOldMode );
-}
-#endif //! WINCE
-
-TextPen::TextPen( Canvas & canvas, COLORREF color )
-	: itsCanvas( canvas )
-{
-	itsColorOld = itsCanvas.setTextColor( color );
-}
-
-TextPen::~TextPen()
-{
-	::SetTextColor( itsCanvas.handle(), itsColorOld );
-}
-
 }

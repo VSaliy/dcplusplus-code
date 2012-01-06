@@ -64,6 +64,8 @@ public:
 
 		~File() { }
 
+		void save(OutputStream& stream, string& indent, string& tmp) const;
+
 		GETSET(string, name, Name);
 		GETSET(int64_t, size, Size);
 		GETSET(Directory*, parent, Parent);
@@ -97,10 +99,11 @@ public:
 		void filterList(DirectoryListing& dirList);
 		void filterList(TTHSet& l);
 		void getHashList(TTHSet& l);
+		void save(OutputStream& stream, string& indent, string& tmp) const;
 
-		size_t getFileCount() { return files.size(); }
+		size_t getFileCount() const { return files.size(); }
 
-		int64_t getSize() {
+		int64_t getSize() const {
 			int64_t x = 0;
 			for(auto i = files.begin(); i != files.end(); ++i) {
 				x+=(*i)->getSize();
@@ -129,6 +132,9 @@ public:
 	string updateXML(const std::string&);
 	string loadXML(InputStream& xml, bool updating);
 
+	/** write an XML representation of this file list to the specified file. */
+	void save(const string& path) const;
+
 	void download(const string& aDir, const string& aTarget, bool highPrio);
 	void download(Directory* aDir, const string& aTarget, bool highPrio);
 	void download(File* aFile, const string& aTarget, bool view, bool highPrio);
@@ -156,8 +162,9 @@ private:
 	friend class ListLoader;
 
 	Directory* root;
+	string base;
 
-	Directory* find(const string& aName, Directory* current);
+	Directory* find(const string& aName, Directory* current) const;
 };
 
 inline bool operator==(DirectoryListing::Directory::Ptr a, const string& b) { return Util::stricmp(a->getName(), b) == 0; }

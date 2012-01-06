@@ -471,7 +471,7 @@ QueueManager::~QueueManager() {
 
 		std::sort(protectedFileLists.begin(), protectedFileLists.end());
 
-		StringList filelists = File::findFiles(path, "*.xml.bz2");
+		auto filelists = File::findFiles(path, "*.xml*");
 		std::sort(filelists.begin(), filelists.end());
 		std::for_each(filelists.begin(), std::set_difference(filelists.begin(), filelists.end(),
 			protectedFileLists.begin(), protectedFileLists.end(), filelists.begin()), &File::deleteFile);
