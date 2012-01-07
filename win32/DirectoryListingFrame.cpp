@@ -506,7 +506,6 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 		loaded = true;
 		addRecent();
 
-		refreshTree(Text::toT(Util::toNmdcFile(base)));
 		std::for_each(dl->getRoot()->directories.cbegin(), dl->getRoot()->directories.cend(),
 			[this](DirectoryListing::Directory* d)
 		{
@@ -514,6 +513,7 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 				addDir(d, treeRoot);
 			}
 		});
+		refreshTree(Text::toT(Util::toNmdcFile(base)));
 
 	} catch(const Exception& e) {
 		error = Text::toT(e.getError());
