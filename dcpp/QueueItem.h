@@ -56,18 +56,25 @@ public:
 	enum FileFlags {
 		/** Normal download, no flags set */
 		FLAG_NORMAL = 0x00,
+
 		/** This is a user file listing download */
 		FLAG_USER_LIST = 0x02,
+
 		/** The file list is downloaded to use for directory download (used with USER_LIST) */
 		FLAG_DIRECTORY_DOWNLOAD = 0x04,
+
 		/** The file is downloaded to be viewed in the gui */
 		FLAG_CLIENT_VIEW = 0x08,
+
 		/** Flag to indicate that file should be viewed as a text file */
 		FLAG_TEXT = 0x20,
+
 		/** Match the queue against this list */
 		FLAG_MATCH_QUEUE = 0x80,
+
 		/** The file list downloaded was actually an .xml.bz2 list */
 		FLAG_XML_BZLIST = 0x100,
+
 		/** Only download a part of the file list */
 		FLAG_PARTIAL_LIST = 0x200
 	};
@@ -168,14 +175,7 @@ public:
 		return downloads.empty();
 	}
 
-	string getListName() const {
-		dcassert(isSet(QueueItem::FLAG_USER_LIST));
-		if(isSet(QueueItem::FLAG_XML_BZLIST)) {
-			return getTarget() + ".xml.bz2";
-		} else {
-			return getTarget() + ".xml";
-		}
-	}
+	string getListName() const;
 
 	const string& getTempTarget();
 	void setTempTarget(const string& aTempTarget) { tempTarget = aTempTarget; }

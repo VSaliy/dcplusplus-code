@@ -279,13 +279,13 @@ COLORREF Canvas::setBkColor( COLORREF crColor )
 }
 
 Canvas::BkMode::BkMode(Canvas& canvas_, int mode) :
-canvas(canvas_), prevMode(::SetBkMode(canvas.handle(), mode))
+canvas(&canvas_), prevMode(::SetBkMode(canvas->handle(), mode))
 {
 }
 
 Canvas::BkMode::~BkMode() {
-	if(prevMode)
-		::SetBkMode(canvas.handle(), prevMode);
+	if(canvas && prevMode)
+		::SetBkMode(canvas->handle(), prevMode);
 }
 
 Canvas::BkMode Canvas::setBkMode(bool transparent) {

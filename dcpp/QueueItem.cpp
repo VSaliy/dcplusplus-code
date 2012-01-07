@@ -200,4 +200,13 @@ void QueueItem::addSegment(const Segment& segment) {
 	}
 }
 
+string QueueItem::getListName() const {
+	dcassert(isSet(QueueItem::FLAG_USER_LIST));
+	if(isSet(QueueItem::FLAG_XML_BZLIST)) {
+		return getTarget() + ".xml.bz2";
+	} else {
+		return getTarget() + ".xml";
+	}
+}
+
 }

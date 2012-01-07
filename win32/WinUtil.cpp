@@ -1444,7 +1444,6 @@ void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr
 	addUsers(menu, T_("Grant &extra slot"), users, [=](const HintedUser &u, const string& s) {
 		UploadManager::getInstance()->reserveSlot(u); });
 
-	typedef void (QueueManager::*qmp)(const UserPtr&, int);
 	addUsers(menu, T_("Remove user from queue"), users, [=](const HintedUser &u, const string& s) {
 		qm->removeSource(u, QueueItem::Source::FLAG_REMOVED); });
 }
