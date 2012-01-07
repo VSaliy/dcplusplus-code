@@ -351,6 +351,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		ids.clear();
 		addButton(0, T_("Subtract list"), true, IDH_FILE_LIST_SUBSTRACT, [this] { handleListDiff(); });
 		addButton(0, T_("Match queue"), true, IDH_FILE_LIST_MATCH_QUEUE, [this] { handleMatchQueue(); });
+		addButton(0, T_("Download full list"), true, IDH_FILE_LIST_DOWNLOAD_FULL, [this] { user.getList(); });
 		ids.push_back("Find");
 		auto findId = ids.back();
 		toolbar->addButton(findId, WinUtil::toolbarIcon(IDI_SEARCH), 0, T_("Find"), true, IDH_FILE_LIST_FIND,
