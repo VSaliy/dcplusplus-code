@@ -111,7 +111,6 @@ public:
 		DirectoryListing::Directory* dir;
 		DirectoryListing::Directory* subdir;
 		bool fileAdded;
-		DestDir() : name(""), dir(NULL), subdir(NULL) {}
 	};
 	typedef vector<DestDir> DestDirList;
 
@@ -131,7 +130,7 @@ public:
 	GETSET(HintedUser, user, User)
 
 	// @remarks Used to add ADLSearch directories to an existing DirectoryListing
-	void matchListing(DirectoryListing& /*aDirList*/) noexcept;
+	void matchListing(DirectoryListing& aDirList) noexcept;
 
 private:
 	// @internal
@@ -144,9 +143,9 @@ private:
 	void stepUpDirectory(DestDirList& destDirVector);
 
 	// Prepare destination directory indexing
-	void prepareDestinationDirectories(DestDirList& destDirVector, DirectoryListing::Directory* root, ParamMap& params);
+	void prepareDestinationDirectories(DestDirList& destDirs, DirectoryListing::Directory* root, ParamMap& params);
 	// Finalize destination directories
-	void finalizeDestinationDirectories(DestDirList& destDirVector, DirectoryListing::Directory* root);
+	void finalizeDestinationDirectories(DestDirList& destDirs, DirectoryListing::Directory* root);
 
 	static string getConfigFile();
 };
