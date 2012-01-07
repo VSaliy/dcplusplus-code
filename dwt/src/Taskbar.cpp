@@ -183,7 +183,7 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 		// generate a preview of the tab to be shown in "Aero Peek" when the user hovers the thumbnail.
 		BitmapPtr bitmap = getBitmap(tab, 0);
 		if(bitmap) {
-			Point offset;
+			POINT offset { 0 };
 			::MapWindowPoints(tab->handle(), window->handle(), &offset, 1);
 			MENUBARINFO info = { sizeof(MENUBARINFO) };
 			if(::GetMenuBarInfo(window->handle(), OBJID_MENU, 0, &info))

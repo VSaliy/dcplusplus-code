@@ -41,8 +41,11 @@ SizedEvent::SizedEvent( const MSG& msg ) :
 {
 }
 
-MouseEvent::MouseEvent(const MSG& msg) : pos(Point::fromLParam(msg.lParam)) {
-	::ClientToScreen(msg.hwnd, &pos.getPoint());
+MouseEvent::MouseEvent(const MSG& msg) {
+	POINT pt = { GET_X_LPARAM( msg.lParam ), GET_Y_LPARAM( msg.lParam ) };
+	::ClientToScreen(msg.hwnd, &pt);
+
+	pos = ScreenCoordinate(Point(pt));
 
 	DWORD keys;
 	if(msg.message == WM_XBUTTONDOWN || msg.message == WM_XBUTTONUP || msg.message == WM_XBUTTONDBLCLK) {
