@@ -658,8 +658,7 @@ void QueueFrame::moveDir(HTREEITEM ht, const string& target) {
 	}
 }
 
-void QueueFrame::handleBrowseList(const HintedUser& user) {
-
+void QueueFrame::handleGetList(const HintedUser& user) {
 	if(files->countSelected() == 1) {
 		try {
 			QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW);
@@ -886,7 +885,7 @@ void QueueFrame::addPriorityMenu(const MenuPtr& parent) {
 void QueueFrame::addBrowseMenu(const MenuPtr& parent, QueueItemInfo* qii) {
 	unsigned int pos = parent->getCount();
 	MenuPtr menu = parent->appendPopup(T_("&Get file list"));
-	if(!addUsers(menu, &QueueFrame::handleBrowseList, qii->getSources(), false))
+	if(!addUsers(menu, &QueueFrame::handleGetList, qii->getSources(), false))
 		parent->setItemEnabled(pos, false);
 }
 
