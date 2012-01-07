@@ -157,22 +157,29 @@ class Canvas : private boost::noncopyable
 	class Selector : boost::noncopyable {
 	public:
 		template<typename T>
-		Selector(Canvas& canvas_, T& t) : canvas(canvas_), h(::SelectObject(canvas.handle(), t.handle())) { }
+		Selector(Canvas& canvas_, T& t) : canvas(&canvas_), h(::SelectObject(canvas->handle(), t.handle())) { }
 
-		~Selector() { ::SelectObject(canvas.handle(), h); }
+		Selector(Selector &&rhs) : canvas(rhs.canvas), h(rhs.h) { rhs.canvas = nullptr; }
+		Selector& operator=(Selector &&rhs) { if(&rhs != this) { canvas = rhs.canvas; h = rhs.h; rhs.canvas = nullptr; } return *this; }
+
+		~Selector() { if(canvas) ::SelectObject(canvas->handle(), h); }
 
 	private:
-		Canvas& canvas;
+		Canvas* canvas;
 		HGDIOBJ h;
 	};
 
 	class BkMode : boost::noncopyable {
 	public:
 		BkMode(Canvas& canvas_, int mode);
+
+		BkMode(BkMode &&rhs) : canvas(rhs.canvas), prevMode(rhs.prevMode) { rhs.canvas = nullptr; }
+		BkMode& operator=(BkMode &&rhs) { if(&rhs != this) { canvas = rhs.canvas; prevMode = rhs.prevMode; rhs.canvas = nullptr; } return *this; }
+
 		~BkMode();
 
 	private:
-		Canvas& canvas;
+		Canvas* canvas;
 		int prevMode;
 	};
 
