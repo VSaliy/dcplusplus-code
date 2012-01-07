@@ -1418,9 +1418,6 @@ HintedUserList filter(const HintedUserList& l, F f) {
 	return ret;
 }
 
-static bool isAdc(const UserPtr& u) {
-	return !u->isSet(User::NMDC);
-}
 static bool isFav(const UserPtr& u) {
 	return !FavoriteManager::getInstance()->isFavoriteUser(u);
 }
@@ -1429,10 +1426,11 @@ void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr
 	QueueManager* qm = QueueManager::getInstance();
 
 	addUsers(menu, T_("&Get file list"), users, [=](const HintedUser &u, const string& s) {
-		qm->addList(u, QueueItem::FLAG_CLIENT_VIEW, s); }, dwt::IconPtr(), dirs);
-
-	addUsers(menu, T_("&Browse file list"), filter(users, &isAdc), [=](const HintedUser &u, const string& s) {
-		qm->addList(u, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, s); }, dwt::IconPtr(), dirs);
+		int flags = QueueItem::FLAG_CLIENT_VIEW;
+		if(!u.user->isSet(User::NMDC)) {
+			flags |= QueueItem::FLAG_PARTIAL_LIST;
+		}
+		qm->addList(u, flags, s); }, dwt::IconPtr(), dirs);
 
 	addUsers(menu, T_("&Match queue"), users, [=](const HintedUser &u, const string& s) {
 		qm->addList(u, QueueItem::FLAG_MATCH_QUEUE, Util::emptyString); });
