@@ -841,7 +841,7 @@ void ShareManager::generateXmlList() {
 				newXmlFile.write(SimpleXML::utf8Header);
 				newXmlFile.write("<FileListing Version=\"1\" CID=\"" + ClientManager::getInstance()->getMe()->getCID().toBase32() + "\" Base=\"/\" Generator=\"" APPNAME " " VERSIONSTRING "\">\r\n");
 				for(auto i = directories.begin(); i != directories.end(); ++i) {
-					(*i)->toXml(newXmlFile, indent, tmp2, true);
+					(*i)->toXml(newXmlFile, indent, tmp2, -1);
 				}
 				newXmlFile.write("</FileListing>");
 				newXmlFile.flush();
@@ -894,7 +894,7 @@ MemoryInputStream* ShareManager::generatePartialList(const string& dir, bool rec
 	if(dir == "/") {
 		for(auto i = directories.begin(); i != directories.end(); ++i) {
 			tmp.clear();
-			(*i)->toXml(sos, indent, tmp, recurse);
+			(*i)->toXml(sos, indent, tmp, recurse ? -1 : 0);
 		}
 	} else {
 		string::size_type i = 1, j = 1;
@@ -930,7 +930,7 @@ MemoryInputStream* ShareManager::generatePartialList(const string& dir, bool rec
 			return 0;
 
 		for(auto it2 = root->directories.begin(); it2 != root->directories.end(); ++it2) {
-			it2->second->toXml(sos, indent, tmp, recurse);
+			it2->second->toXml(sos, indent, tmp, recurse ? -1 : 0);
 		}
 		root->filesToXml(sos, indent, tmp);
 	}
@@ -939,25 +939,36 @@ MemoryInputStream* ShareManager::generatePartialList(const string& dir, bool rec
 	return new MemoryInputStream(xml);
 }
 
+/* params for partial file lists - when any of these params is not satisfied, an incomplete dir is
+returned rather than a full dir list. */
+const int8_t maxLevel = 2;
+const size_t maxItemsPerLevel[maxLevel] = { 16, 4 };
+
 #define LITERAL(n) n, sizeof(n)-1
-void ShareManager::Directory::toXml(OutputStream& xmlFile, string& indent, string& tmp2, bool fullList) const {
+void ShareManager::Directory::toXml(OutputStream& xmlFile, string& indent, string& tmp2, int8_t level) const {
 	xmlFile.write(indent);
 	xmlFile.write(LITERAL("<Directory Name=\""));
 	xmlFile.write(SimpleXML::escape(name, tmp2, true));
 
-	if(fullList) {
+	if(level < 0 || (level < maxLevel && directories.size() + files.size() <= maxItemsPerLevel[level])) {
 		xmlFile.write(LITERAL("\">\r\n"));
 
 		indent += '\t';
-		for(auto i = directories.begin(); i != directories.end(); ++i) {
-			i->second->toXml(xmlFile, indent, tmp2, fullList);
-		}
+		if(level >= 0)
+			++level;
 
+		for(auto i = directories.begin(); i != directories.end(); ++i) {
+			i->second->toXml(xmlFile, indent, tmp2, level);
+		}
 		filesToXml(xmlFile, indent, tmp2);
 
+		if(level >= 0)
+			--level;
 		indent.erase(indent.length()-1);
+
 		xmlFile.write(indent);
 		xmlFile.write(LITERAL("</Directory>\r\n"));
+
 	} else {
 		if(directories.empty() && files.empty()) {
 			xmlFile.write(LITERAL("\" />\r\n"));

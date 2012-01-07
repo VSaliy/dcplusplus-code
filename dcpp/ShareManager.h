@@ -185,7 +185,8 @@ private:
 		void search(SearchResultList& aResults, StringSearch::List& aStrings, int aSearchType, int64_t aSize, int aFileType, Client* aClient, StringList::size_type maxResults) const noexcept;
 		void search(SearchResultList& aResults, AdcSearch& aStrings, StringList::size_type maxResults) const noexcept;
 
-		void toXml(OutputStream& xmlFile, string& indent, string& tmp2, bool fullList) const;
+		/// @param level -1 to include all levels, or the current level.
+		void toXml(OutputStream& xmlFile, string& indent, string& tmp2, int8_t level) const;
 		void filesToXml(OutputStream& xmlFile, string& indent, string& tmp2) const;
 
 		File::Set::const_iterator findFile(const string& aFile) const { return find_if(files.begin(), files.end(), Directory::File::StringComp(aFile)); }

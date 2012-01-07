@@ -1,5 +1,6 @@
 * Save and restore partial file lists (poy)
 * Apply ADL searches in partial file lists (poy)
+* [ADC] Heuristics to send additional levels of info in partial file lists (poy)
 
 -- 0.790 2011-12-29 --
 * Fav users frame becomes users frame and shows all users
