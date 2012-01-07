@@ -1474,24 +1474,3 @@ dwt::IconPtr WinUtil::createIcon(unsigned id, long size) {
 dwt::IconPtr WinUtil::toolbarIcon(unsigned id) {
 	return createIcon(id, SETTING(TOOLBAR_SIZE));
 }
-
-#ifdef PORT_ME
-
-double WinUtil::toBytes(TCHAR* aSize) {
-	double bytes = _tstof(aSize);
-
-	if (_tcsstr(aSize, CT_("PiB"))) {
-		return bytes * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0;
-	} else if (_tcsstr(aSize, CT_("TiB"))) {
-		return bytes * 1024.0 * 1024.0 * 1024.0 * 1024.0;
-	} else if (_tcsstr(aSize, CT_("GiB"))) {
-		return bytes * 1024.0 * 1024.0 * 1024.0;
-	} else if (_tcsstr(aSize, CT_("MiB"))) {
-		return bytes * 1024.0 * 1024.0;
-	} else if (_tcsstr(aSize, CT_("KiB"))) {
-		return bytes * 1024.0;
-	} else {
-		return bytes;
-	}
-}
-#endif
