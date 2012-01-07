@@ -40,7 +40,7 @@ namespace dcpp {
 DirectoryListing::DirectoryListing(const HintedUser& aUser) :
 user(aUser),
 abort(false),
-root(new Directory(NULL, Util::emptyString, false, false))
+root(new Directory(nullptr, Util::emptyString, false, false))
 {
 }
 
@@ -189,7 +189,7 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 				throw SimpleXMLException(_("Directory missing name attribute"));
 			}
 			bool incomp = getAttrib(attribs, sIncomplete, 1) == "1";
-			DirectoryListing::Directory* d = NULL;
+			DirectoryListing::Directory* d = nullptr;
 			if(updating) {
 				for(auto i = cur->directories.begin(); i != cur->directories.end(); ++i) {
 					/// @todo comparisons should be case-insensitive but it takes too long - add a cache
@@ -201,7 +201,7 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 					}
 				}
 			}
-			if(d == NULL) {
+			if(!d) {
 				d = new DirectoryListing::Directory(cur, n, false, !incomp);
 				cur->directories.push_back(d);
 			}
@@ -223,14 +223,14 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 
 		StringList sl = StringTokenizer<string>(base.substr(1), '/').getTokens();
 		for(auto i = sl.begin(); i != sl.end(); ++i) {
-			DirectoryListing::Directory* d = NULL;
+			DirectoryListing::Directory* d = nullptr;
 			for(auto j = cur->directories.begin(); j != cur->directories.end(); ++j) {
 				if((*j)->getName() == *i) {
 					d = *j;
 					break;
 				}
 			}
-			if(d == NULL) {
+			if(!d) {
 				d = new DirectoryListing::Directory(cur, *i, false, false);
 				cur->directories.push_back(d);
 			}
@@ -259,11 +259,19 @@ void ListLoader::endTag(const string& name, const string&) {
 
 void DirectoryListing::save(const string& path) const {
 	dcassert(!base.empty());
+
 	dcpp::File stream(path, dcpp::File::WRITE, dcpp::File::CREATE | dcpp::File::TRUNCATE);
 	stream.write(SimpleXML::utf8Header);
+
 	string indent("\t"), tmp;
-	stream.write("<FileListing Version=\"1\" CID=\"" + user.user->getCID().toBase32() + "\" Base=\"" + SimpleXML::escape(base, tmp, true) + "\" Generator=\"" APPNAME " " VERSIONSTRING "\">\r\n");
-	auto start = find(Util::toNmdcFile(base), root);
+
+	stream.write(LIT("<FileListing Version=\"1\" CID=\""));
+	stream.write(user.user->getCID().toBase32());
+	stream.write(LIT("\" Base=\""));
+	stream.write(SimpleXML::escape(base, tmp, true));
+	stream.write(LIT("\" Generator=\"" APPNAME " " VERSIONSTRING "\">\r\n"));
+
+	auto start = (base == "/") ? root : find(Util::toNmdcFile(base), root);
 	if(start) {
 		std::for_each(start->directories.cbegin(), start->directories.cend(), [&](Directory* d) {
 			d->save(stream, indent, tmp);
@@ -272,7 +280,8 @@ void DirectoryListing::save(const string& path) const {
 			f->save(stream, indent, tmp);
 		});
 	}
-	stream.write("</FileListing>");
+
+	stream.write(LIT("</FileListing>"));
 }
 
 void DirectoryListing::Directory::save(OutputStream& stream, string& indent, string& tmp) const {
@@ -379,7 +388,7 @@ void DirectoryListing::download(const string& aDir, const string& aTarget, bool 
 	dcassert(aDir.size() > 2);
 	dcassert(aDir[aDir.size() - 1] == '\\'); // This should not be PATH_SEPARATOR
 	Directory* d = find(aDir, getRoot());
-	if(d != NULL)
+	if(d)
 		download(d, aTarget, highPrio);
 }
 
@@ -404,7 +413,7 @@ DirectoryListing::Directory* DirectoryListing::find(const string& aName, Directo
 		else
 			return find(aName.substr(end + 1), *i);
 	}
-	return NULL;
+	return nullptr;
 }
 
 struct HashContained {

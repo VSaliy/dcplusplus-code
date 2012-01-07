@@ -486,9 +486,35 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 		path = QueueManager::getInstance()->getListPath(dl->getUser()) + ".xml";
 		auto base = dl->updateXML(txt);
 		dl->save(path);
+
+		// remove previous ADLS matches.
+		for(auto dir = dirs->getChild(treeRoot); dir; dir = dirs->getNextSibling(dir)) {
+			auto d = dirs->getData(dir)->dir;
+			if(d->getAdls()) {
+				HTREEITEM child;
+				while(child = dirs->getChild(dir)) {
+					dirs->erase(child);
+				}
+				dirs->erase(dir);
+				auto& pdirs = d->getParent()->directories;
+				pdirs.erase(std::remove(pdirs.begin(), pdirs.end(), d), pdirs.end());
+				delete d;
+			}
+		}
+		ADLSearchManager::getInstance()->matchListing(*dl);
+
 		loaded = true;
 		addRecent();
+
 		refreshTree(Text::toT(Util::toNmdcFile(base)));
+		std::for_each(dl->getRoot()->directories.cbegin(), dl->getRoot()->directories.cend(),
+			[this](DirectoryListing::Directory* d)
+		{
+			if(d->getAdls()) {
+				addDir(d, treeRoot);
+			}
+		});
+
 	} catch(const Exception& e) {
 		error = Text::toT(e.getError());
 		updateTitle();
@@ -588,20 +614,19 @@ void DirectoryListingFrame::handleFindToggle() {
 
 void DirectoryListingFrame::refreshTree(const tstring& root) {
 	HoldRedraw hold(dirs);
-	HTREEITEM ht = findItem(treeRoot, root);
-	if(ht == NULL) {
+	auto ht = findItem(treeRoot, root);
+	if(!ht) {
 		ht = treeRoot;
 	}
 
-	DirectoryListing::Directory* d = dirs->getData(ht)->dir;
-
-	HTREEITEM next = NULL;
-	while((next = dirs->getChild(ht)) != NULL) {
-		dirs->erase(next);
+	auto d = dirs->getData(ht)->dir;
+	HTREEITEM child;
+	while(child = dirs->getChild(ht)) {
+		dirs->erase(child);
 	}
-	updateTree(d, ht);
+	updateDir(d, ht);
 
-	dirs->setSelected(NULL);
+	dirs->setSelected(nullptr);
 	selectItem(root);
 
 	dirs->expand(treeRoot);
@@ -969,12 +994,16 @@ void DirectoryListingFrame::selectItem(const tstring& name) {
 	}
 }
 
-void DirectoryListingFrame::updateTree(DirectoryListing::Directory* aTree, HTREEITEM aParent) {
-	for(auto i = aTree->directories.begin(); i != aTree->directories.end(); ++i) {
-		HTREEITEM ht = dirs->insert(aParent, new ItemInfo(*i));
-		if((*i)->getAdls())
-			dirs->setItemState(ht, TVIS_BOLD, TVIS_BOLD);
-		updateTree(*i, ht);
+void DirectoryListingFrame::addDir(DirectoryListing::Directory* d, HTREEITEM parent) {
+	auto item = dirs->insert(parent, new ItemInfo(d));
+	if(d->getAdls())
+		dirs->setItemState(item, TVIS_BOLD, TVIS_BOLD);
+	updateDir(d, item);
+}
+
+void DirectoryListingFrame::updateDir(DirectoryListing::Directory* d, HTREEITEM parent) {
+	for(auto i = d->directories.begin(); i != d->directories.end(); ++i) {
+		addDir(*i, parent);
 	}
 }
 
