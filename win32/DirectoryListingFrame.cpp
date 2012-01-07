@@ -1047,6 +1047,20 @@ void DirectoryListingFrame::handleSelectionChanged() {
 	HoldRedraw hold(files);
 	changeDir(d);
 
+	if(!d->getComplete()) {
+		dcdebug("Directory %s incomplete, downloading...\n", d->getName().c_str());
+		if(dl->getUser().user->isOnline()) {
+			try {
+				QueueManager::getInstance()->addList(dl->getUser(), QueueItem::FLAG_PARTIAL_LIST, dl->getPath(d));
+				status->setText(STATUS_STATUS, T_("Downloading list..."));
+			} catch(const QueueException& e) {
+				status->setText(STATUS_STATUS, Text::toT(e.getError()));
+			}
+		} else {
+			status->setText(STATUS_STATUS, T_("User offline"));
+		}
+	}
+
 	addHistory(dl->getPath(d));
 
 	pathBox->clear();
@@ -1058,7 +1072,6 @@ void DirectoryListingFrame::handleSelectionChanged() {
 }
 
 void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
-
 	updating = true;
 	files->clear();
 
@@ -1073,20 +1086,6 @@ void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 
 	updating = false;
 	updateStatus();
-
-	if(!d->getComplete()) {
-		dcdebug("Directory incomplete\n");
-		if(dl->getUser().user->isOnline()) {
-			try {
-				QueueManager::getInstance()->addList(dl->getUser(), QueueItem::FLAG_PARTIAL_LIST, dl->getPath(d));
-				status->setText(STATUS_STATUS, T_("Downloading list..."));
-			} catch(const QueueException& e) {
-				status->setText(STATUS_STATUS, Text::toT(e.getError()));
-			}
-		} else {
-			status->setText(STATUS_STATUS, T_("User offline"));
-		}
-	}
 }
 
 void DirectoryListingFrame::addHistory(const string& name) {
