@@ -78,18 +78,22 @@ Point operator -( const Point & lhs, const Point & rhs ) {
 
 ClientCoordinate::ClientCoordinate(const ClientCoordinate& cc, Widget* w_) : point(cc.getPoint()), w(w_) {
 	if(cc.w != w) {
-		::MapWindowPoints(cc.w->handle(), w->handle(), &point, 1);
+		auto pt = point.toPOINT();
+		::MapWindowPoints(cc.w->handle(), w->handle(), &pt, 1);
+		point = pt;
 	}
 }
 
 ClientCoordinate::ClientCoordinate(const ScreenCoordinate& sc, Widget* w_) : point(sc.getPoint()), w(w_) {
-	::ScreenToClient(w->handle(), &point);
+	auto pt = point.toPOINT();
+	::ScreenToClient(w->handle(), &pt);
+	point = pt;
 }
 
 ClientCoordinate::operator ScreenCoordinate() const {
-	ScreenCoordinate pt(getPoint());
-	::ClientToScreen(w->handle(), &pt.getPoint());
-	return pt;
+	auto pt = point.toPOINT();
+	::ClientToScreen(w->handle(), &pt);
+	return ScreenCoordinate(Point(pt));
 }
 
 }

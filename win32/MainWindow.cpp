@@ -1604,9 +1604,9 @@ void MainWindow::handleTrayContextMenu() {
 	menu->appendSeparator();
 	menu->appendItem(T_("Exit"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
 
-	dwt::ScreenCoordinate pt;
-	::GetCursorPos(&pt.getPoint());
-	menu->open(pt, TPM_BOTTOMALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON);
+	POINT pt;
+	::GetCursorPos(&pt);
+	menu->open(dwt::ScreenCoordinate(dwt::Point(pt)), TPM_BOTTOMALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON);
 }
 
 void MainWindow::handleTrayClicked() {

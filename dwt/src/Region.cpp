@@ -29,6 +29,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <boost/range/algorithm/transform.hpp>
 #include <dwt/resources/Region.h>
 
 #include <dwt/DWTException.h>
@@ -40,7 +41,12 @@ Region::Region(HRGN h, bool own) : ResourceType(h, own) { }
 
 Region::Region(const Rectangle& rect) : ResourceType(::CreateRectRgn(rect.left(), rect.top(), rect.right(), rect.bottom()), true) { }
 
-Region::Region(const std::vector<Point>& points, PolyFillMode mode) : ResourceType(::CreatePolygonRgn(&points[0], points.size(), mode), true) { }
+Region::Region(const std::vector<Point>& points, PolyFillMode mode)
+{
+	std::vector<POINT> tmp(points.size());
+	boost::transform(points, tmp.begin(), [](const Point& pt) { return pt.toPOINT(); });
+	init(::CreatePolygonRgn(&tmp[0], tmp.size(), mode), true);
+}
 
 RegionPtr Region::transform(const PXFORM pxform) const {
 	DWORD bytes = ::GetRegionData(handle(), 0, NULL);

@@ -72,7 +72,7 @@ public:
 	void onDragDrop(std::function<void (const std::vector<tstring>&, Point)> f) {
 		W().addCallback(Message(WM_DROPFILES), [f](const MSG& msg, LRESULT& ret) -> bool {
 			std::vector<tstring> files;
-			Point pt;
+			POINT pt = { 0 };
 
 			HDROP handle = reinterpret_cast<HDROP>(msg.wParam);
 			if(handle) {
