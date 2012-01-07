@@ -311,10 +311,6 @@ public:
 	static inline dwt::IconPtr tabIcon(unsigned id) { return createIcon(id, 16); }
 	static dwt::IconPtr toolbarIcon(unsigned id);
 
-#ifdef PORT_ME
-	static double toBytes(TCHAR* aSize);
-#endif
-
 private:
 	static bool handleBoxDblClick(dwt::TextBoxBase* box, const dwt::MouseEvent& ev);
 

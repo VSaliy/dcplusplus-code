@@ -118,21 +118,6 @@ public:
 		SORT_FLOAT
 	};
 
-#ifdef PORT_ME
-	/// \ingroup EventHandlersTable
-	/// Validation event handler setter
-	/** If supplied event handler is called after a cell has been edited but before
-	  * the value is actually changed. <br>
-	  * If the event handler returns false, the new value is NOT inserted; if the
-	  * return value is true, the old value is replaced with the new. Parameters
-	  * passed is unsigned column, unsigned row and tstring reference
-	  * which is the new value, the value can be manipulated and changed within your
-	  * event handler.
-	  */
-	void onValidate( typename MessageMapType::itsBoolValidationFunc eventHandler );
-	void onValidate( typename MessageMapType::boolValidationFunc eventHandler );
-
-#endif
 	/// \ingroup EventHandlersTable
 	/// Event handler for the SortItems event
 	/** When you sort a Table you need to supply a callback function for
@@ -506,10 +491,6 @@ private:
 	void setIndex(LVITEM& item, int index) const;
 	void initGroupSupport();
 	void updateArrow();
-#ifdef PORT_ME
-	// Private validate function, this ones returns the "read only" property of the list
-	static bool defaultValidate( EventHandlerClass * parent, Table * list, unsigned int col, unsigned int row, tstring & newValue );
-#endif
 	// Calculates the adjustment from the columns of an item.
 	int xoffFromColumn( int column, int & logicalColumn );
 
@@ -557,48 +538,6 @@ inline Message Table::getRightClickMessage() {
 inline Message Table::getDblClickMessage() {
 	return Message(WM_NOTIFY, NM_DBLCLK);
 }
-
-#ifdef PORT_ME
-
-void Table::onValidate( typename MessageMapControl< EventHandlerClass, Table >::itsBoolValidationFunc eventHandler )
-{
-	if ( this->getReadOnly() )
-		this->setReadOnly( false );
-	MessageMapType * ptrThis = boost::polymorphic_cast< MessageMapType * >( this );
-	ptrThis->addCallback(
-		typename MessageMapType::SignalTupleType(
-			private_::SignalContent(
-				Message( WM_NOTIFY, LVN_ENDLABELEDIT ),
-				reinterpret_cast< itsVoidFunction >( eventHandler ),
-				ptrThis
-			),
-			typename MessageMapType::SignalType(
-				typename MessageMapType::SignalType::SlotType( & DispatcherList::dispatchBoolIntIntStringThis )
-			)
-		)
-	);
-}
-
-void Table::onValidate( typename MessageMapControl< EventHandlerClass, Table >::boolValidationFunc eventHandler )
-{
-	if ( this->getReadOnly() )
-		this->setReadOnly( false );
-	MessageMapType * ptrThis = boost::polymorphic_cast< MessageMapType * >( this );
-	ptrThis->addCallback(
-		typename MessageMapType::SignalTupleType(
-			private_::SignalContent(
-				Message( WM_NOTIFY, LVN_ENDLABELEDIT ),
-				reinterpret_cast< private_::SignalContent::voidFunctionTakingVoid >( eventHandler ),
-				ptrThis
-			),
-			typename MessageMapType::SignalType(
-				typename MessageMapType::SignalType::SlotType( & DispatcherList::dispatchBoolIntIntString )
-			)
-		)
-	);
-}
-
-#endif
 
 inline void Table::resort() {
 	if(sortColumn != -1) {
@@ -699,13 +638,6 @@ inline size_t Table::sizeImpl() const {
 	return ListView_GetItemCount( handle() );
 }
 
-#ifdef PORT_ME
-bool Table::defaultValidate( EventHandlerClass * parent, Table * list, unsigned int col, unsigned int row, tstring & newValue )
-{
-	list->updateWidget();
-	return !list->getReadOnly();
-}
-#endif
 // Calculates the adjustment from the columns of an item.
 
 inline Rectangle Table::getRect( int item, int code )
@@ -765,175 +697,6 @@ inline void Table::setColorImpl(COLORREF text, COLORREF background) {
 	ListView_SetTextBkColor(handle(), background);
 	ListView_SetBkColor(handle(), background);
 }
-
-#ifdef PORT_ME
-// TODO: Should these
-
-LRESULT Table::sendWidgetMessage( HWND hWnd, UINT msg, WPARAM & wPar, LPARAM & lPar )
-{
-	switch ( msg )
-	{
-	// WinCE can't retrieve mouse pos in Double Click message handler since mouse
-	// isn't around... therefore we need to "store" it like we do here...!!
-	case WM_LBUTTONDOWN :
-		{
-			// TODO: Dispatch events
-			itsXMousePosition = LOWORD( lPar );
-			itsYMousePosition = HIWORD( lPar );
-		} break;
-
-	case WM_PAINT :
-		if ( itsEditingCurrently )
-		{
-			// In order to prevent a mistaken update of the first column which leads
-			// to a blank cell while editing an inner cell's contents, we
-			// validate this area and thus prevent its repaint.
-			// Don't need to update to the left or right of the editing rect.
-			RECT editRect = getSubItemRect( itsEditRow, itsEditColumn, LVIR_LABEL );
-			RECT rowRect = getItemRect( itsEditRow, LVIR_LABEL );
-			RECT validRect;
-			if ( editRect.left > rowRect.left )
-			{
-				validRect = rowRect; validRect.right = editRect.left;
-				ValidateRect( handle(), & validRect );
-			}
-			ValidateRect( handle(), & rowRect );
-		}
-		break;
-
-	// TODO: Dispatch events
-	case WM_NOTIFY :
-		{
-			NMHDR * na = reinterpret_cast< NMHDR * >( lPar );
-			switch ( na->code )
-			{
-			case LVN_BEGINLABELEDIT :
-				{
-					itsEditingCurrently = true;
-					int logicalColumn;
-					int xOffset = xoffFromColumn( itsEditColumn, logicalColumn );
-
-					// NOW we have found our "sub" label!
-					RECT r = getItemRect( itsEditRow, LVIR_BOUNDS );
-					RECT rs = getSubItemRect( itsEditRow, itsEditColumn, LVIR_BOUNDS );
-
-#ifndef WINCE // WinCE doesn't support repositioning the edit control anyway...
-					// Checking to see if we need to scroll
-					RECT cr;
-					::GetClientRect( handle(), & cr );
-					if ( xOffset + r.left < 0 || xOffset + r.left > cr.right )
-					{
-						int x = xOffset - r.left;
-						ListView_Scroll( handle(), x, 0 );
-						r.left -= x;
-					}
-					// Get column alignment
-					LV_COLUMN lv =
-					{0
-					};
-					lv.mask = LVCF_FMT;
-					ListView_GetColumn( handle(), logicalColumn, & lv );
-					DWORD dwStyle;
-					if ( ( lv.fmt & LVCFMT_JUSTIFYMASK ) == LVCFMT_LEFT )
-						dwStyle = ES_LEFT;
-					else if ( ( lv.fmt & LVCFMT_JUSTIFYMASK ) == LVCFMT_RIGHT )
-						dwStyle = ES_RIGHT;
-					else
-						dwStyle = ES_CENTER;
-					r.left += xOffset + 4;
-					r.right = r.left + ( ListView_GetColumnWidth( handle(), itsEditColumn ) - 3 );
-					if ( r.right > cr.right )
-						r.right = cr.right;
-					dwStyle |= WS_BORDER | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL;
-#endif
-
-					// Creating text Widget and placing it above cell
-					HWND editControl = ListView_GetEditControl( handle() );
-					if ( editControl == 0 )
-					{
-						xCeption err( _T( "Couldn't attach to List View editcontrol" ) );
-						throw err;
-					}
-
-					private_::TableEditBox< Table > * text
-						= new private_::TableEditBox< Table >( this );
-					text->createSubclass( editControl );
-
-#ifndef WINCE
-					text->itsRect = dwt::Rectangle( r.left, r.top, r.right, r.bottom );
-					text->setBounds( text->itsRect );
-					text->setScrollBarHorizontally( false );
-					text->setScrollBarVertically( false );
-					::SetWindowLong( editControl, GWL_STYLE, dwStyle );
-#endif
-					// Getting text of cell and inserting into text Widget
-					const int BUFFER_MAX = 260; // List view cells have a maximum of 260 characters
-					TCHAR buffer[BUFFER_MAX];
-					ListView_GetItemText( handle(), itsEditRow, itsEditColumn, buffer, BUFFER_MAX );
-					text->setText( buffer );
-
-					// Select all end give focus
-					text->setSelection();
-					text->setFocus();
-					return FALSE;
-				} break;
-
-			case LVN_ENDLABELEDIT :
-				{ itsEditingCurrently = false;
-					break;
-				}
-
-			case NM_CLICK :
-				{
-					//TODO: only works with comctl v4.71, is this OK?
-#ifdef WINCE
-					LPNMTable item = (LPNMTable) lPar;
-#else
-					LPNMITEMACTIVATE item = (LPNMITEMACTIVATE) lPar;
-#endif
-					itsXMousePosition = item->ptAction.x;
-					itsYMousePosition = item->ptAction.y;
-				} break;
-
-			// TODO: Dispatch events
-			case NM_DBLCLK :
-				{
-					LVHITTESTINFO info;
-					info.pt.x = itsXMousePosition;
-					info.pt.y = itsYMousePosition;
-					ListView_SubItemHitTest( handle(), & info );
-					// User has clicked the Table
-					if ( info.iItem != - 1 )
-					{
-						// User has clicked an ITEM in Table
-						if ( info.iSubItem >= 0 )
-						{
-							UINT state = ListView_GetItemState( handle(), info.iItem, LVIS_FOCUSED );
-							if ( ! ( state & LVIS_FOCUSED ) )
-							{
-								//SetFocus( itsHandle );   // TODO: This was catched by devcpp ... what was intended?
-								SetFocus( handle() ); // ASW add
-							}
-
-							// Check to verify items are editable
-							if ( ::GetWindowLong( handle(), GWL_STYLE ) & LVS_EDITLABELS )
-							{
-								itsEditRow = info.iItem;
-								itsEditColumn = info.iSubItem;
-								ListView_EditLabel( handle(), info.iItem );
-								return 0; // Processed
-							}
-						}
-					}
-				} break;
-			default:
-				return MessageMapType::sendWidgetMessage( hWnd, msg, wPar, lPar );
-			}
-		} break;
-	}
-	return MessageMapType::sendWidgetMessage( hWnd, msg, wPar, lPar );
-}
-#endif
 
 }
 

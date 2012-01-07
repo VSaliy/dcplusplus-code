@@ -265,26 +265,6 @@ Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon, boo
 	return sub;
 }
 
-#ifdef PORT_ME
-Menu::ObjectType Menu::getSystemMenu()
-{
-	// get system menu for the utmost parent
-	HMENU handle = ::GetSystemMenu( getParent()->handle(), FALSE );
-
-	// create pointer to system menu
-	ObjectType sysMenu( new Menu( getParent()->handle() ) );
-
-	// create(take) system menu
-	sysMenu->create( handle, false );
-
-	// We're assuming that the system menu has the same lifespan as the "this" menu, we must keep a reference to te system menu
-	// otherwise it will be "lost", therefore we add it up as a child to the "this" menu...
-	itsChildren.push_back( sysMenu );
-
-	return sysMenu;
-}
-#endif
-
 Menu::~Menu()
 {
 	// Destroy this menu
