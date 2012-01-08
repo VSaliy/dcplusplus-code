@@ -140,7 +140,7 @@ tstring RichTextBox::getSelection() const {
 Point RichTextBox::getScrollPos() const {
 	POINT scrollPos;
 	sendMessage(EM_GETSCROLLPOS, 0, reinterpret_cast< LPARAM >(&scrollPos));
-	return scrollPos;
+	return Point(scrollPos);
 }
 
 void RichTextBox::setScrollPos(Point& scrollPos) {

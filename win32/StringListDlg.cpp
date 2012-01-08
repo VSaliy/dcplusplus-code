@@ -167,7 +167,7 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 			.first->handle(), GWLP_ID, 0); // the def button is the "Add" button
 	}
 
-	list->createColumns(TStringList(1));
+	list->addColumn();
 
 	for(auto i = initialValues.begin(), iend = initialValues.end(); i != iend; ++i)
 		insert(*i);

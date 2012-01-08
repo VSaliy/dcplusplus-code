@@ -62,6 +62,7 @@ struct Rectangle {
 	  */
 	explicit Rectangle( const Point & pSize ) : pos(0, 0), size(pSize) { }
 
+	::RECT toRECT() const;
 	operator ::RECT() const;
 
 	/// Constructor initializing the rectangle with longs instead of Points.

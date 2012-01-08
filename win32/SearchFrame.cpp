@@ -238,7 +238,7 @@ droppedResults(0)
 		hubs = group->addChild(ls);
 		addWidget(hubs);
 
-		hubs->createColumns(TStringList(1));
+		hubs->addColumn();
 
 		hubs->onRaw([this](WPARAM w, LPARAM l) { return handleHubItemChanged(w, l); }, dwt::Message(WM_NOTIFY, LVN_ITEMCHANGED));
 

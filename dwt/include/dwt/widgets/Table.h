@@ -40,6 +40,7 @@
 #include "../resources/ImageList.h"
 #include "../aspects/Clickable.h"
 #include "../aspects/Collection.h"
+#include "../aspects/Columns.h"
 #include "../aspects/CustomDraw.h"
 #include "../aspects/Data.h"
 #include "../aspects/Scrollable.h"
@@ -69,6 +70,7 @@ class Table :
 	public CommonControl,
 	public aspects::Clickable<Table>,
 	public aspects::Collection<Table, int>,
+	public aspects::Columns<Table>,
 	public aspects::CustomDraw<Table, NMLVCUSTOMDRAW>,
 	public aspects::Data<Table, int>,
 	public aspects::Scrollable<Table>,
@@ -78,6 +80,7 @@ class Table :
 
 	friend class WidgetCreator<Table>;
 	friend class aspects::Collection<Table, int>;
+	friend class aspects::Columns<Table>;
 	friend class aspects::Data<Table, int>;
 	friend class aspects::Selection<Table, int>;
 	friend class aspects::Clickable<Table>;
@@ -214,57 +217,6 @@ public:
 	  * event handler by calling "beenValidate"< /b >
 	  */
 	void setReadOnly( bool value = true );
-
-	/// Returns the number of column in the grid
-	/** Returns the number of columns in the Data Grid. <br>
-	  * Useful if you need to know how many values you must use when inserting rows
-	  * into the List View
-	  */
-	unsigned getColumnCount();
-
-	/// Returns the name of a specific column
-	/** Which column you wish to retrieve the name for is supplied in the "id" parameter.
-	  */
-	tstring getColumnName( unsigned col );
-
-	bool setColumnOrder(const std::vector<int>& columns);
-
-	std::vector<int> getColumnOrder();
-
-	void setColumnWidths(const std::vector<int>& widths);
-
-	std::vector<int> getColumnWidths();
-
-	/// Create columns in the grid
-	/** Normally this would be called just after creation of the grid, it MUST be
-	  * called before adding items to the grid. <br>
-	  * The vector parameter is a vector containing the column names of the columns.
-	  * <br>
-	  * Columns will be added the way they sequentially appear in the vector.
-	  */
-	void createColumns( const std::vector< tstring > & colNames, const std::vector<int>& widths = std::vector<int>(),
-		const std::vector<bool>& alignment = std::vector<bool>(), const std::vector<int>& order = std::vector<int>());
-
-	/// Deletes the given column
-	/** Column zero CANNOT be deleted.
-	  */
-	void eraseColumn( unsigned columnNo );
-
-	/// Sets the width of a given column
-	/** Sets the width of the given column, the columnNo parameter is a zero - based
-	  * index of the column you wish to change, the width parameter is number of
-	  * pixels you wish the column to be. <br>
-	  * If you submit LVSCW_AUTOSIZE as the width parameter the column is being
-	  * "autosized" meaning it will aquire the width needed to display the "widest"
-	  * cell content in that column, if you submit LVSCW_AUTOSIZE_USEHEADER as the
-	  * width parameter it will be as wide as it needs to minimum display the
-	  * complete header text of the column. <br>
-	  * If you use the LVSCW_AUTOSIZE_USEHEADER on the last column of the list it
-	  * will be resized to be as wide as it needs to completely fill the remaining
-	  * width of the list which is quite useful to make the Data Grid fill its whole
-	  * client area.
-	  */
-	void setColumnWidth( unsigned columnNo, int width );
 
 	/** Enable group support, and insert each given group. The group id used as the "index" param
 	of the insert function will be the position of the group in the vector given here.
@@ -517,6 +469,17 @@ private:
 	static Message getClickMessage();
 	static Message getRightClickMessage();
 	static Message getDblClickMessage();
+
+	// aspects::Columns
+	int insertColumnImpl(const Column& column, int after);
+	void eraseColumnImpl(unsigned column);
+	unsigned getColumnCountImpl() const;
+	std::vector<Column> getColumnsImpl() const;
+	Column getColumnImpl(unsigned column) const;
+	std::vector<int> getColumnOrderImpl() const;
+	void setColumnOrderImpl(const std::vector<int>& columns);
+	std::vector<int> getColumnWidthsImpl() const;
+	void setColumnWidthImpl( unsigned column, int width );
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -569,18 +532,6 @@ inline bool Table::getReadOnly() {
 inline void Table::setReadOnly( bool value ) {
 	isReadOnly = value;
 	this->Widget::addRemoveStyle( LVS_EDITLABELS, !value );
-}
-
-inline tstring Table::getColumnName( unsigned col ) {
-	// TODO: Fix
-	const int BUFFER_MAX = 2048;
-	TCHAR buffer[BUFFER_MAX + 1];
-	LV_COLUMN colInfo;
-	colInfo.mask = LVCF_TEXT;
-	colInfo.cchTextMax = BUFFER_MAX;
-	colInfo.pszText = buffer;
-	ListView_GetColumn( handle(), col, & colInfo );
-	return colInfo.pszText;
 }
 
 inline bool Table::isChecked( unsigned row ) {
@@ -666,8 +617,8 @@ inline Table::SortType Table::getSortType() const {
 	return sortType;
 }
 
-inline bool Table::setColumnOrder(const std::vector<int>& columns) {
-	return ::SendMessage(handle(), LVM_SETCOLUMNORDERARRAY, static_cast<WPARAM>(columns.size()), reinterpret_cast<LPARAM>(&columns[0])) > 0;
+inline void Table::setColumnOrderImpl(const std::vector<int>& columns) {
+	::SendMessage(handle(), LVM_SETCOLUMNORDERARRAY, static_cast<WPARAM>(columns.size()), reinterpret_cast<LPARAM>(&columns[0])) > 0;
 }
 
 inline void Table::setTableStyle(int style) {
