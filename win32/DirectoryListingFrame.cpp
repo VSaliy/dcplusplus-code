@@ -116,7 +116,16 @@ void DirectoryListingFrame::openWindow(TabViewPtr parent, const tstring& aFile, 
 
 void DirectoryListingFrame::openWindow_(TabViewPtr parent, const tstring& aFile, const tstring& aDir, const HintedUser& aUser, int64_t aSpeed, Activation activate) {
 	DirectoryListingFrame* frame = new DirectoryListingFrame(parent, aUser, aSpeed);
-	frame->path = Text::fromT(aFile);
+
+	/* save the path now in case the tab is closed without having been loaded (the file list will
+	only be loaded upon tab activation), to still have it in WindowManager. */
+	auto& path = frame->path;
+	path = Text::fromT(aFile);
+	auto n = path.size();
+	if(n > 4 && Util::stricmp(path.substr(n - 4), ".bz2") == 0) {
+		// strip the .bz2 ext - the file list loader will now where to find the file list anyway.
+		path.erase(n - 4);
+	}
 
 	if(activate == FORCE_ACTIVE || (activate == FOLLOW_SETTING && !BOOLSETTING(POPUNDER_FILELIST))) {
 		frame->loadFile(aDir);
@@ -527,6 +536,8 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 		if(!sel.empty()) {
 			selectItem(Text::toT(sel));
 		}
+
+		status->setText(STATUS_STATUS, T_("Partial file list loaded"));
 
 	} catch(const Exception& e) {
 		error = Text::toT(e.getError());
