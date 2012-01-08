@@ -16,8 +16,8 @@ TEST(testtorrent, test_single )
 {
 	Torrent u(ubuntu);
 
-	ASSERT_EQ(1, u.files.size());
-	ASSERT_EQ(728754176, u.files[0].length);
-	ASSERT_EQ(1, u.files[0].path.size());
-	ASSERT_EQ("ubuntu-10.10-desktop-amd64.iso", u.files[0].path[0]);
+	ASSERT_EQ(1, u.getFiles().size());
+	ASSERT_EQ(728754176, u.getFiles()[0].length);
+	ASSERT_EQ(1, u.getFiles()[0].path.size());
+	ASSERT_EQ("ubuntu-10.10-desktop-amd64.iso", u.getFiles()[0].path[0]);
 }
