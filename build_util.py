@@ -1,6 +1,7 @@
 import glob
 import sys
 import os
+import fnmatch
 
 class Dev:
 	def __init__(self, env):
@@ -103,8 +104,14 @@ class Dev:
 		else:
 			return self.get_build_root() + source_path + name
 
-	def get_sources(self, source_path, source_glob):
-		return map(lambda x: self.get_build_path(source_path) + x, glob.glob(source_glob))
+	def get_sources(self, source_path, source_glob, recursive = False):
+		matches = []
+		for root, dirnames, filenames in os.walk('.'):
+			for filename in fnmatch.filter(filenames, source_glob):
+				matches.append(os.path.join(root, filename))
+			if not recursive:
+				dirnames[:] = []
+		return map(lambda x: self.get_build_path(source_path) + x, matches)
 
 	# execute the SConscript file in the specified sub-directory.
 	def build(self, source_path, local_env = None):
@@ -114,12 +121,12 @@ class Dev:
 		return local_env.SConscript(source_path + 'SConscript', exports = { 'dev': self, 'source_path': full_path })
 
 	# create a build environment and set up sources and targets.
-	def prepare_build(self, source_path, name, source_glob = '*.cpp', in_bin = True, precompiled_header = None):
+	def prepare_build(self, source_path, name, source_glob = '*.cpp', in_bin = True, precompiled_header = None, recursive = False):
 		build_path = self.get_build_path(source_path)
 		env = self.env.Clone()
 		env.VariantDir(build_path, '.', duplicate = 0)
 
-		sources = self.get_sources(source_path, source_glob)
+		sources = self.get_sources(source_path, source_glob, recursive)
 
 		if precompiled_header is not None and env['pch'] and not env['msvcproj']:
 			for i, source in enumerate(sources):
