@@ -3,6 +3,7 @@
 * Heuristics to send additional levels of info in partial file lists (poy)
 * Add a "Download full list" button in the file list toolbar (poy)
 * "Get file list" now defaults to partial file lists (poy)
+* Reclaim memory after a file list match
 
 -- 0.790 2011-12-29 --
 * Fav users frame becomes users frame and shows all users
