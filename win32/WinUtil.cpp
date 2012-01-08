@@ -1282,7 +1282,7 @@ bool WinUtil::parseDBLClick(const tstring& str) {
 			try {
 				UserPtr user = ClientManager::getInstance()->findLegacyUser(file);
 				if(user)
-					QueueManager::getInstance()->addList(HintedUser(user, url), QueueItem::FLAG_CLIENT_VIEW);
+					QueueManager::getInstance()->addList(HintedUser(user, url), QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
 				// @todo else report error
 			} catch (const Exception&) {
 				// ...
@@ -1426,11 +1426,7 @@ void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr
 	QueueManager* qm = QueueManager::getInstance();
 
 	addUsers(menu, T_("&Get file list"), users, [=](const HintedUser &u, const string& s) {
-		int flags = QueueItem::FLAG_CLIENT_VIEW;
-		if(!u.user->isSet(User::NMDC)) {
-			flags |= QueueItem::FLAG_PARTIAL_LIST;
-		}
-		qm->addList(u, flags, s); }, dwt::IconPtr(), dirs);
+		qm->addList(u, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, s); }, dwt::IconPtr(), dirs);
 
 	addUsers(menu, T_("&Match queue"), users, [=](const HintedUser &u, const string& s) {
 		qm->addList(u, QueueItem::FLAG_MATCH_QUEUE, Util::emptyString); });
