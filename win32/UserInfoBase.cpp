@@ -42,11 +42,7 @@ void UserInfoBase::matchQueue() {
 }
 void UserInfoBase::getList() {
 	try {
-		int flags = QueueItem::FLAG_CLIENT_VIEW;
-		if(!user.user->isSet(User::NMDC)) {
-			flags |= QueueItem::FLAG_PARTIAL_LIST;
-		}
-		QueueManager::getInstance()->addList(user, flags);
+		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}
