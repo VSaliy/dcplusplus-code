@@ -31,6 +31,9 @@
 
 #include <dwt/widgets/Table.h>
 
+#include <boost/scoped_array.hpp>
+#include <boost/range/algorithm/for_each.hpp>
+
 #include <dwt/CanvasClasses.h>
 #include <dwt/util/check.h>
 #include <dwt/util/StringUtils.h>
@@ -39,9 +42,9 @@
 #include <dwt/dwt_vsstyle.h>
 #include <dwt/dwt_vssym32.h>
 
-#include <boost/scoped_array.hpp>
-
 namespace dwt {
+
+using boost::range::for_each;
 
 const TCHAR Table::windowClass[] = WC_LISTVIEW;
 
@@ -158,33 +161,27 @@ void Table::clearSelection() {
 	}
 }
 
-void Table::createColumns(const std::vector<tstring>& names, const std::vector<int>& widths,
-	const std::vector<bool>& alignment, const std::vector<int>& order)
-{
-	// Deleting all data
-	clear();
-	while ( ListView_DeleteColumn( handle(), 0 ) == TRUE );
+int Table::insertColumnImpl(const Column& column, int n) {
+	LVCOLUMN lvColumn = { LVCF_FMT };
 
-	for(size_t i = 0; i < names.size(); ++i) {
-		LVCOLUMN lvColumn = { LVCF_TEXT };
+	lvColumn.fmt |= column.alignment == Column::LEFT ? LVCFMT_LEFT : column.alignment == Column::CENTER ? LVCFMT_CENTER : LVCFMT_RIGHT;
 
-		lvColumn.pszText = const_cast < TCHAR * >( names[i].c_str() );
-		if(i < widths.size()) {
-			lvColumn.mask |= LVCF_WIDTH;
-			lvColumn.cx = widths[i];
-		}
-		if(i < alignment.size()) {
-			lvColumn.mask |= LVCF_FMT;
-			lvColumn.fmt |= alignment[i] ? LVCFMT_RIGHT : LVCFMT_LEFT;
-		}
-		if ( ListView_InsertColumn( handle(), i, &lvColumn) == - 1 ) {
-			throw Win32Exception("Error while trying to create Columns in list view" );
-		}
+	if(!column.header.empty()) {
+		lvColumn.mask |= LVCF_TEXT,
+		lvColumn.pszText = const_cast < TCHAR * >( column.header.c_str() );
 	}
 
-	if(order.size() == names.size()) {
-		setColumnOrder(order);
+	if(column.width >= 0) {
+		lvColumn.mask |= LVCF_WIDTH;
+		lvColumn.cx = column.width;
 	}
+
+	auto ret = ListView_InsertColumn( handle(), n, &lvColumn);
+	if ( ret == - 1 ) {
+		throw Win32Exception("Error while trying to create column in list view" );
+	}
+
+	return ret;
 }
 
 int Table::insert(const std::vector<tstring>& row, LPARAM lPar, int index, int iconIndex) {
@@ -285,7 +282,7 @@ std::vector< unsigned > Table::getSelection() const
 	return retVal;
 }
 
-unsigned Table::getColumnCount() {
+unsigned Table::getColumnCountImpl() const {
 	HWND header = ListView_GetHeader(handle());
 	return Header_GetItemCount(header);
 }
@@ -303,7 +300,7 @@ void Table::addRemoveTableExtendedStyle( DWORD addStyle, bool add ) {
 	ListView_SetExtendedListViewStyle( handle(), newStyle );
 }
 
-std::vector<int> Table::getColumnOrder() {
+std::vector<int> Table::getColumnOrderImpl() const {
 	std::vector<int> ret(this->getColumnCount());
 	if(!::SendMessage(handle(), LVM_GETCOLUMNORDERARRAY, static_cast<WPARAM>(ret.size()), reinterpret_cast<LPARAM>(&ret[0]))) {
 		ret.clear();
@@ -311,13 +308,7 @@ std::vector<int> Table::getColumnOrder() {
 	return ret;
 }
 
-void Table::setColumnWidths(const std::vector<int>& widths) {
-	for(size_t i = 0; i < widths.size(); ++i) {
-		this->setColumnWidth(i, widths[i]);
-	}
-}
-
-std::vector<int> Table::getColumnWidths() {
+std::vector<int> Table::getColumnWidthsImpl() const {
 	std::vector<int> ret(this->getColumnCount());
 	for(size_t i = 0; i < ret.size(); ++i) {
 		ret[i] = ::SendMessage(handle(), LVM_GETCOLUMNWIDTH, static_cast<WPARAM>(i), 0);
@@ -526,12 +517,12 @@ void Table::setView( int view ) {
 	}
 }
 
-void Table::eraseColumn( unsigned columnNo ) {
+void Table::eraseColumnImpl( unsigned columnNo ) {
 	dwtassert(columnNo != 0, "Can't delete the leftmost column");
 	ListView_DeleteColumn( handle(), columnNo );
 }
 
-void Table::setColumnWidth( unsigned columnNo, int width ) {
+void Table::setColumnWidthImpl( unsigned columnNo, int width ) {
 	if ( ListView_SetColumnWidth( handle(), columnNo, width ) == FALSE ) {
 		dwtWin32DebugFail("Couldn't resize columns of Table");
 	}

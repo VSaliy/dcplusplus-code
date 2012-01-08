@@ -16,11 +16,24 @@ int dwtMain(dwt::Application& app)
 
 	auto table = window->addChild(dwt::Table::Seed());
 
-	std::vector<tstring> columns;
-	columns.push_back(_T("A"));
-	columns.push_back(_T("B"));
-	table->createColumns(columns);
-	table->insert(columns);
+	table->addColumn(dwt::Column(_T("Column A")));
+	table->addColumn(dwt::Column(_T("Column B")));
+
+	table->eraseColumn(1);
+	table->addColumn(_T("Column C"), dwt::Column::SIZE_TO_HEADER);
+
+	table->setColumnWidth(0, 100);
+
+	auto order = table->getColumnOrder();
+	order[0] = 1;
+	order[1] = 0;
+	table->setColumnOrder(order);
+
+	std::vector<tstring> rows;
+	rows.push_back(_T("A"));
+	rows.push_back(_T("B"));
+
+	table->insert(rows);
 
 	table->resize(dwt::Rectangle(window->getClientSize()));
 

@@ -37,10 +37,14 @@ Rectangle::Rectangle( long x, long y, long width, long height )
 	: pos( x, y ), size( width, height )
 {}
 
-Rectangle::operator RECT() const
+::RECT Rectangle::toRECT() const
 {
 	RECT retVal = { left(), top(), right(), bottom() };
 	return retVal;
+}
+
+Rectangle::operator ::RECT() const {
+	return toRECT();
 }
 
 Rectangle Rectangle::subRect( double xFraction, double yFraction,

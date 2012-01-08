@@ -1447,20 +1447,22 @@ void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr
 void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount, const string& order,
 	const string& widths)
 {
-	std::vector<tstring> n(columnCount);
+	std::vector<dwt::Column> n(columnCount);
 	std::vector<int> o(columnCount);
-	std::vector<int> w(columnCount);
-	std::vector<bool> a(columnCount);
 
 	for(size_t i = 0; i < columnCount; ++i) {
-		n[i] = T_(columnInfo[i].name);
+		n[i].header = Text::toT(columnInfo[i].name);
+		n[i].width = columnInfo[i].size;
+		n[i].alignment = columnInfo[i].numerical ? dwt::Column::RIGHT : dwt::Column::LEFT;
 		o[i] = i;
-		w[i] = columnInfo[i].size;
-		a[i] = columnInfo[i].numerical;
 	}
+
 	toInts(order, o);
-	toInts(widths, w);
-	table->createColumns(n, w, a, o);
+	size_t i = 0;
+	Text::tokenize(widths, ',', [&] (const string& w) { if(i < n.size()) n[i++].width = Util::toInt(w); });
+
+	table->setColumns(n);
+	table->setColumnOrder(o);
 }
 
 dwt::IconPtr WinUtil::createIcon(unsigned id, long size) {

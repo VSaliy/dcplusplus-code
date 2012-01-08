@@ -88,7 +88,7 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 	dcassert(listItems && list);
 	lists[list] = listItems;
 
-	list->createColumns(TStringList(1));
+	list->addColumn();
 
 	SettingsManager* settings = SettingsManager::getInstance();
 	for(size_t i = 0; listItems[i].setting != 0; ++i) {
