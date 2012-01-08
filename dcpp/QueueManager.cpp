@@ -736,35 +736,33 @@ QueueItem::Priority QueueManager::hasDownload(const UserPtr& aUser) noexcept {
 	}
 	return qi->getPriority();
 }
-namespace {
+
 typedef unordered_map<TTHValue, const DirectoryListing::File*> TTHMap;
 
-// *** WARNING ***
-// Lock(cs) makes sure that there's only one thread accessing this
-static TTHMap tthMap;
+namespace {
+void buildMap(const DirectoryListing::Directory* dir, TTHMap& tthMap) noexcept {
+	std::for_each(dir->directories.cbegin(), dir->directories.cend(), [&](DirectoryListing::Directory* d) {
+		if(!d->getAdls())
+			buildMap(d, tthMap);
+	});
 
-void buildMap(const DirectoryListing::Directory* dir) noexcept {
-	for(auto j = dir->directories.begin(); j != dir->directories.end(); ++j) {
-		if(!(*j)->getAdls())
-			buildMap(*j);
-	}
-
-	for(auto i = dir->files.begin(); i != dir->files.end(); ++i) {
-		const DirectoryListing::File* df = *i;
-		tthMap.insert(make_pair(df->getTTH(), df));
-	}
+	std::for_each(dir->files.cbegin(), dir->files.cend(), [&](DirectoryListing::File* f) {
+		tthMap.insert(make_pair(f->getTTH(), f));
+	});
 }
 }
 
 int QueueManager::matchListing(const DirectoryListing& dl) noexcept {
 	int matches = 0;
+
 	{
 		Lock l(cs);
-		tthMap.clear();
-		buildMap(dl.getRoot());
 
-		for(auto i = fileQueue.getQueue().begin(); i != fileQueue.getQueue().end(); ++i) {
-			QueueItem* qi = i->second;
+		TTHMap tthMap;
+		buildMap(dl.getRoot(), tthMap);
+
+		for(auto i = fileQueue.getQueue().cbegin(), iend = fileQueue.getQueue().cend(); i != iend; ++i) {
+			auto qi = i->second;
 			if(qi->isFinished())
 				continue;
 			if(qi->isSet(QueueItem::FLAG_USER_LIST))
