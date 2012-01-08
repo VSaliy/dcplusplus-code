@@ -83,8 +83,6 @@ opts.AddVariables(
 	BoolVariable('i18n', 'Rebuild i18n files', 'no'),
 	BoolVariable('help', 'Build help files (requires i18n=1)', 'yes'),
 	BoolVariable('webhelp', 'Build help files for the web (requires help=1)', 'no'),
-	BoolVariable('test', 'Build test suite', 'no'),
-	BoolVariable('utils', 'Build utils suite', 'no'),
 	('prefix', 'Prefix to use when cross compiling', ''),
 	EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64']),
 	BoolVariable('msvcproj', 'Build MSVC project files', 'no'),
@@ -262,14 +260,11 @@ dev.natpmp = dev.build('natpmp/')
 dev.dwt = dev.build('dwt/')
 dev.client = dev.build('dcpp/')
 dev.help = dev.build('help/')
-if dev.env['test']:
-	dev.test = dev.build('test/')
-	env.Default(dev.test)
-elif dev.env['utils']:
-	dev.utils = dev.build('utils/')
-	env.Default(dev.utils)
-else:
-	dev.win32 = dev.build('win32/')
+dev.test = dev.build('test/')
+dev.utils = dev.build('utils/')
+dev.win32 = dev.build('win32/')
+
+Default(dev.win32)
 	
 dev.installer = dev.build('installer/')
 
