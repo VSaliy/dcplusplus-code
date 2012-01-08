@@ -31,10 +31,6 @@
 #include "StringTokenizer.h"
 #include "version.h"
 
-#ifdef ff
-#undef ff
-#endif
-
 namespace dcpp {
 
 DirectoryListing::DirectoryListing(const HintedUser& aUser) :
@@ -80,18 +76,32 @@ UserPtr DirectoryListing::getUserFromFilename(const string& fileName) {
 	return ClientManager::getInstance()->getUser(cid);
 }
 
-void DirectoryListing::loadFile(const string& name) {
-	string txt;
+void DirectoryListing::loadFile(const string& path) {
+	string actualPath;
+	if(dcpp::File::getSize(path + ".bz2") != -1) {
+		actualPath = path + ".bz2";
+	}
 
 	// For now, we detect type by ending...
-	string ext = Util::getFileExt(name);
+	auto ext = Util::getFileExt(actualPath.empty() ? path : actualPath);
 
-    dcpp::File ff(name, dcpp::File::READ, dcpp::File::OPEN);
-	if(Util::stricmp(ext, ".bz2") == 0) {
-		FilteredInputStream<UnBZFilter, false> f(&ff);
-		loadXML(f, false);
-	} else if(Util::stricmp(ext, ".xml") == 0) {
-		loadXML(ff, false);
+	{
+		dcpp::File file(actualPath.empty() ? path : actualPath, dcpp::File::READ, dcpp::File::OPEN);
+
+		if(Util::stricmp(ext, ".bz2") == 0) {
+			FilteredInputStream<UnBZFilter, false> f(&file);
+			loadXML(f, false);
+		} else if(Util::stricmp(ext, ".xml") == 0) {
+			loadXML(file, false);
+		} else {
+			throw Exception(_("Invalid file list extension (must be .xml or .bz2)"));
+		}
+	}
+
+	if(!actualPath.empty()) {
+		// save the uncompressed file.
+		save(path);
+		dcpp::File::deleteFile(actualPath);
 	}
 }
 

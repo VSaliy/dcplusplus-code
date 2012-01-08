@@ -127,7 +127,7 @@ public:
 	DirectoryListing(const HintedUser& aUser);
 	~DirectoryListing();
 
-	void loadFile(const string& name);
+	void loadFile(const string& path);
 
 	string updateXML(const std::string&);
 	string loadXML(InputStream& xml, bool updating);
