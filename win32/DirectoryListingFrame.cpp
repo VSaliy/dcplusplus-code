@@ -484,7 +484,19 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 
 void DirectoryListingFrame::loadXML(const string& txt) {
 	try {
+		string prevDir;
+		auto sel = dirs->getSelectedData();
+		if(sel && sel->type == ItemInfo::DIRECTORY) {
+			prevDir = dl->getPath(sel->dir);
+		}
+
 		path = QueueManager::getInstance()->getListPath(dl->getUser()) + ".xml";
+
+		if(!loaded && File::getSize(path) != -1) {
+			// load the cached list.
+			dl->updateXML(File(path, File::READ, File::OPEN).read());
+		}
+
 		auto base = dl->updateXML(txt);
 		dl->save(path);
 
@@ -515,6 +527,10 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 			}
 		});
 		refreshTree(Text::toT(Util::toNmdcFile(base)));
+
+		if(!prevDir.empty()) {
+			selectItem(Text::toT(prevDir));
+		}
 
 	} catch(const Exception& e) {
 		error = Text::toT(e.getError());
