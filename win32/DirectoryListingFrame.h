@@ -178,9 +178,13 @@ private:
 	std::unique_ptr<DirectoryListing> dl;
 	string path;
 
-	// override the default match-queue method not to download the file list again.
 	struct UserHolder : UserInfoBase {
 		UserHolder(const HintedUser& u) : UserInfoBase(u) { }
+
+		// override the get-list method to keep the current directory and dl a full list.
+		void getList();
+
+		// override the default match-queue method not to download the file list again.
 		void matchQueue();
 	} user;
 
@@ -260,6 +264,7 @@ private:
 	void updateDir(DirectoryListing::Directory* d, HTREEITEM parent);
 	HTREEITEM findItem(HTREEITEM ht, const tstring& name);
 	void selectItem(const tstring& name);
+	string getSelectedDir() const;
 	void updateTitle();
 
 	void loadFile(const tstring& dir);

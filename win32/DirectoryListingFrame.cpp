@@ -484,11 +484,7 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 
 void DirectoryListingFrame::loadXML(const string& txt) {
 	try {
-		string prevDir;
-		auto sel = dirs->getSelectedData();
-		if(sel && sel->type == ItemInfo::DIRECTORY) {
-			prevDir = dl->getPath(sel->dir);
-		}
+		auto sel = getSelectedDir();
 
 		path = QueueManager::getInstance()->getListPath(dl->getUser()) + ".xml";
 
@@ -528,8 +524,8 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 		});
 		refreshTree(Text::toT(Util::toNmdcFile(base)));
 
-		if(!prevDir.empty()) {
-			selectItem(Text::toT(prevDir));
+		if(!sel.empty()) {
+			selectItem(Text::toT(sel));
 		}
 
 	} catch(const Exception& e) {
@@ -588,6 +584,16 @@ void DirectoryListingFrame::handleFind(bool reverse) {
 void DirectoryListingFrame::handleMatchQueue() {
 	int matched = QueueManager::getInstance()->matchListing(*dl);
 	status->setText(STATUS_STATUS, str(TFN_("Matched %1% file", "Matched %1% files", matched) % matched));
+}
+
+void DirectoryListingFrame::UserHolder::getList() {
+	// imitate UserInfoBase::getList but keep the current dir and dl a full list.
+	auto w = lists[user];
+	try {
+		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW, w->getSelectedDir());
+	} catch(const Exception& e) {
+		w->status->setText(STATUS_STATUS, Text::toT(e.getError()));
+	}
 }
 
 void DirectoryListingFrame::UserHolder::matchQueue() {
@@ -1005,10 +1011,18 @@ HTREEITEM DirectoryListingFrame::findItem(HTREEITEM ht, const tstring& name) {
 
 void DirectoryListingFrame::selectItem(const tstring& name) {
 	auto ht = findItem(treeRoot, name);
-	if(ht != NULL) {
+	if(ht) {
 		dirs->setSelected(ht);
 		dirs->ensureVisible(ht);
 	}
+}
+
+string DirectoryListingFrame::getSelectedDir() const {
+	auto sel = dirs->getSelectedData();
+	if(sel && sel->type == ItemInfo::DIRECTORY) {
+		return dl->getPath(sel->dir);
+	}
+	return Util::emptyString;
 }
 
 void DirectoryListingFrame::addDir(DirectoryListing::Directory* d, HTREEITEM parent) {
