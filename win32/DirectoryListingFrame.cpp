@@ -1232,12 +1232,19 @@ void DirectoryListingFrame::findFile(bool reverse) {
 
 	vector<HTREEITEM> collapse;
 	bool cycle = false;
+	bool incomplete = false;
 	const auto fileSel = files->getSelected();
 
 	HTREEITEM item = start;
 	auto pos = fileSel;
 
 	while(true) {
+		if(!incomplete && item) {
+			auto data = dirs->getData(item);
+			if(data && !data->dir->getComplete())
+				incomplete = true;
+		}
+
 		// try to match the names currently in the list pane
 		const int n = files->size();
 		if(reverse && pos == -1)
@@ -1307,6 +1314,12 @@ void DirectoryListingFrame::findFile(bool reverse) {
 		files->ensureVisible(fileSel);
 
 		finalStatus = str(TF_("No matches found for: %1%") % findStr);
+	}
+
+	if(incomplete) {
+		if(!finalStatus.empty())
+			finalStatus += _T(" ");
+		finalStatus += T_("[Ignored some incomplete directories]");
 	}
 }
 
