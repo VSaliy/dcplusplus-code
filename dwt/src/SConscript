@@ -1,6 +1,6 @@
 Import('dev source_path')
 
-env, target, sources = dev.prepare_build(source_path, 'dwt', in_bin = False)
+env, target, sources = dev.prepare_build(source_path, 'dwt', in_bin = False, recursive=True)
 
 env.Append(CPPPATH = ['#/dwt/include'])
 
@@ -14,7 +14,6 @@ def get_msvcproj_files(name):
 	return (parse_patterns(['*.h', 'include/dwt/*.h', 'include/dwt/*/*.h', 'include/dwt/*/*/*.h']),
 			parse_patterns(['*.cpp', 'src/*.cpp', 'src/*/*.cpp', 'src/*/*/*.cpp']))
 
-ret = [dev.build('util/'), dev.build('widgets/')]
+ret = dev.build_lib(env, target, sources, get_msvcproj_files, 'dwt')
 
-ret.append(dev.build_lib(env, target, [sources, ret], get_msvcproj_files, 'dwt'))
 Return('ret')
