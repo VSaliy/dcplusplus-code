@@ -108,16 +108,16 @@ class Dev:
 		matches = []
 		for root, dirnames, filenames in os.walk('.'):
 			for filename in fnmatch.filter(filenames, source_glob):
-				matches.append(os.path.join(root, filename))
+				matches.append(root + '/' + filename)
 			if not recursive:
 				dirnames[:] = []
-		return map(lambda x: self.get_build_path(source_path) + x, matches)
+		return map(lambda x: os.path.normpath(self.get_build_path(source_path) + x), matches)
 
 	# execute the SConscript file in the specified sub-directory.
 	def build(self, source_path, local_env = None):
 		if not local_env:
 			local_env = self.env
-		full_path = local_env.Dir('.').path + '/' + source_path	
+		full_path = local_env.Dir('.').path + '/' + source_path
 		return local_env.SConscript(source_path + 'SConscript', exports = { 'dev': self, 'source_path': full_path })
 
 	# create a build environment and set up sources and targets.
@@ -148,7 +148,7 @@ class Dev:
 
 	# helpers for the MSVC project builder (see build_lib)
 	def simple_lib(inc_ext, src_ext):
-		return lambda self, name: (self.env.Glob('#/' + name + '/*.' + inc_ext), self.env.Glob('#/' + name + '/*.' + src_ext))
+		return lambda self, env: (env.Glob('*.' + inc_ext), env.Glob('*.' + src_ext))
 	c_lib = simple_lib('h', 'c')
 	cpp_lib = simple_lib('h', 'cpp')
 
@@ -159,7 +159,10 @@ class Dev:
 			if msvcproj_name is None:
 				import os
 				msvcproj_name = os.path.basename(os.path.dirname(sources[0]))
-			glob_inc, glob_src = msvcproj_glob(msvcproj_name)
+			glob_inc, glob_src = msvcproj_glob(env)
+			# when there's only 1 file, SCons strips directories from the path...
+			if len(glob_inc) == 1: glob_inc.append(env.File('dummy'))
+			if len(glob_src) == 1: glob_src.append(env.File('dummy'))
 			path = self.msvcproj_path + msvcproj_name + env['MSVSPROJECTSUFFIX']
 			env.Precious(path)
 			self.msvcproj_projects.append(env.MSVSProject(

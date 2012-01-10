@@ -264,9 +264,5 @@ dev.help = dev.build('help/')
 dev.test = dev.build('test/')
 dev.utils = dev.build('utils/')
 dev.win32 = dev.build('win32/')
-
-Default(dev.win32)
-	
 dev.installer = dev.build('installer/')
-
 dev.finalize()
