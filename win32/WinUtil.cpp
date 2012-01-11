@@ -891,121 +891,132 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, ParamMap& 
 	return false;
 }
 
-class HelpPopup: public Container {
-	typedef Container BaseType;
+template<bool tooltip>
+class HelpPopup : private RichTextBox {
+	typedef HelpPopup<tooltip> ThisType;
+	typedef RichTextBox BaseType;
 
 public:
-	explicit HelpPopup(dwt::Control* parent, const tstring& text_) :
-		BaseType(parent, dwt::NormalDispatcher::newClass<HelpPopup>(0, 0, dwt::Dispatcher::getDefaultCursor(),
-			reinterpret_cast<HBRUSH> (COLOR_INFOBK + 1))), text(text_)
+	HelpPopup(dwt::Widget* parent, const tstring& text, unsigned timeout = 0, bool multiline = false) :
+		BaseType(parent), text(text), timeout(timeout)
 	{
-		// where to position the tooltip
+		// where to position the popup.
 		dwt::Point pt;
 		if(isKeyPressed(VK_F1)) {
-			dwt::Rectangle rect = parent->getWindowRect();
+			auto rect = parent->getWindowRect();
 			pt.x = rect.left() + rect.width() / 2;
 			pt.y = rect.top();
 		} else {
 			pt = dwt::Point::fromLParam(::GetMessagePos());
+			if(tooltip) {
+				// don't cover the parent when showing as a tooltip.
+				pt.y = parent->getWindowRect().bottom() + margin;
+			}
 		}
 
-		// create the popup container (invisible at first)
-		Seed cs(WS_POPUP | WS_BORDER, WS_EX_CLIENTEDGE);
-		cs.location = dwt::Rectangle(pt, dwt::Point()); // set the position but not the size
-		create(cs);
-		onLeftMouseDown([this](const dwt::MouseEvent&) { return close(); });
-		onKeyDown([this](int) { return close(); });
-		onHelp([this](Widget*, unsigned) { handleHelp(); });
+		// create the box as an invisible popup window.
+		auto seed = WinUtil::Seeds::richTextBox;
+		seed.style = WS_POPUP | ES_READONLY;
+		if(multiline)
+			seed.style |= ES_MULTILINE;
+		seed.exStyle = WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_CLIENTEDGE;
+		seed.location.size.x = std::min(getDesktopSize().x, static_cast<long>(maxWidth * dwt::util::dpiFactor()));
+		create(seed);
 
-		// create the inner text control
-		ts = WinUtil::Seeds::richTextBox;
-		ts.style = WS_CHILD | WS_VISIBLE | ES_READONLY;
-		ts.exStyle = 0;
-		ts.location = dwt::Rectangle(margins, dwt::Point(maxWidth, 0));
-		createBox();
+		const auto margins = sendMessage(EM_GETMARGINS);
+		sendMessage(EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(LOWORD(margins) + margin, HIWORD(margins) + margin));
+
+		// let the control figure out what the best size is.
+		onRaw([this, pt](WPARAM, LPARAM l) { return this->resize(l, pt); }, dwt::Message(WM_NOTIFY, EN_REQUESTRESIZE));
+		sendMessage(EM_SETEVENTMASK, 0, ENM_REQUESTRESIZE); ///@todo move to dwt
+		setText(text);
 	}
 
 private:
-	void createBox() {
-		box = addChild(ts);
-		box->setColor(dwt::Color::predefined(COLOR_INFOTEXT), dwt::Color::predefined(COLOR_INFOBK));
+	LRESULT resize(LPARAM lParam, const dwt::Point& pos) {
+		if(getVisible())
+			return 0;
 
-		// let the control figure out what the best size is
-		box->onRaw([this](WPARAM, LPARAM l) { return resize(l); }, dwt::Message(WM_NOTIFY, EN_REQUESTRESIZE));
-		box->sendMessage(EM_SETEVENTMASK, 0, ENM_REQUESTRESIZE); ///@todo move to dwt
-		box->setText(text);
-	}
+		dwt::Rectangle rect(reinterpret_cast<REQRESIZE*>(lParam)->rc);
 
-	void multilineBox() {
-		// can't add ES_MULTILINE at run time, so we create the control again
-		::DestroyWindow(box->handle());
-		ts.style |= ES_MULTILINE;
-		createBox();
-	}
-
-	LRESULT resize(LPARAM lParam) {
-		{
-			dwt::Rectangle rect(reinterpret_cast<REQRESIZE*> (lParam)->rc);
-			if(rect.width() > maxWidth && (ts.style & ES_MULTILINE) != ES_MULTILINE) {
-				callAsync([this] { multilineBox(); });
-				return 0;
-			}
-
-			box->resize(rect);
+		if(rect.width() > getWindowRect().width() && !hasStyle(ES_MULTILINE)) {
+			// can't add ES_MULTILINE at run time, so create the control again.
+			new ThisType(getParent(), text, timeout, true);
+			close();
+			return 0;
 		}
 
-		// now that the text control is correctly sized, resize the container window
-		dwt::Rectangle rect = box->getWindowRect();
-		rect.pos -= margins;
-		rect.size += margins + margins;
+		rect.pos = pos;
 		rect.size.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
-		rect.size.y += ::GetSystemMetrics(SM_CYEDGE) * 2;
+		rect.size.y += ::GetSystemMetrics(SM_CYEDGE) * 2 + margin;
 
 		// make sure the window fits in within the screen
-		dwt::Point pt = getDesktopSize();
-		if(rect.right() > pt.x)
-			rect.pos.x -= rect.size.x;
-		if(rect.bottom() > pt.y)
-			rect.pos.y -= rect.size.y;
+		const auto screen = getDesktopSize();
+		if(rect.right() > screen.x) { rect.pos.x -= rect.right() - screen.x; }
+		if(rect.left() < 0) { rect.pos.x = 0; }
+		if(!tooltip && rect.bottom() > screen.y) { rect.pos.y -= rect.bottom() - screen.y; }
+		if(!tooltip && rect.top() < 0) { rect.pos.y = 0; }
 
-		BaseType::resize(rect);
+		setColor(dwt::Color::predefined(COLOR_INFOTEXT), dwt::Color::predefined(COLOR_INFOBK));
+
+		if(tooltip) {
+			setTimer([this] { return !this->close(); }, timeout);
+
+		} else {
+			// capture the mouse.
+			onLeftMouseDown([this](const dwt::MouseEvent&) { return this->close(); });
+			::SetCapture(handle());
+			onDestroy([] { ::ReleaseCapture(); });
+
+			// capture the keyboard.
+			auto focus = dwt::hwnd_cast<dwt::Widget*>(::GetFocus());
+			if(focus) {
+				auto cb1 = focus->addCallback(dwt::Message(WM_KEYDOWN), [this](const MSG&, LRESULT&) { return this->close(); });
+				auto cb2 = focus->addCallback(dwt::Message(WM_HELP), [this](const MSG&, LRESULT&) { return this->close(); });
+				onDestroy([this, focus, cb1, cb2] {
+					auto cb1_ = cb1; focus->clearCallback(dwt::Message(WM_KEYDOWN), cb1_);
+					auto cb2_ = cb2; focus->clearCallback(dwt::Message(WM_KEYDOWN), cb2_);
+				});
+			}
+		}
 
 		// go live!
-		setVisible(true);
-		::SetCapture(handle());
+		::SetWindowPos(handle(), 0, rect.left(), rect.top(), rect.width(), rect.height(),
+			SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOZORDER | SWP_SHOWWINDOW);
 
 		return 0;
 	}
 
 	bool close() {
-		::ReleaseCapture();
 		BaseType::close(true);
 		return true;
 	}
 
-	void handleHelp() {
-		// someone pressed F1 while the popup was shown... do nothing.
-	}
-
-	static const dwt::Point margins;
+	static const long margin = 6;
 	static const long maxWidth = 400;
 
-	RichTextBoxPtr box;
-	RichTextBox::Seed ts;
-	tstring text;
+	const tstring text;
+	unsigned timeout;
 };
-const dwt::Point HelpPopup::margins(6, 6);
 
 void WinUtil::help(dwt::Control* widget, unsigned id) {
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help
-		new HelpPopup(widget, Text::toT(getHelpText(id)));
+		new HelpPopup<false>(widget, Text::toT(getHelpText(id)));
 	} else {
 #ifdef HAVE_HTMLHELP_H
 		if(id < IDH_BEGIN || id > IDH_END)
 			id = IDH_INDEX;
 		::HtmlHelp(widget->handle(), helpPath.c_str(), HH_HELP_CONTEXT, id);
 #endif
+	}
+}
+
+void WinUtil::helpTooltip(dwt::Control* widget, unsigned timeout) {
+	auto id = widget->getHelpId();
+	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
+		// context-sensitive help
+		new HelpPopup<true>(widget, Text::toT(getHelpText(id)), timeout);
 	}
 }
 

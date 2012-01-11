@@ -618,7 +618,7 @@ inline Table::SortType Table::getSortType() const {
 }
 
 inline void Table::setColumnOrderImpl(const std::vector<int>& columns) {
-	::SendMessage(handle(), LVM_SETCOLUMNORDERARRAY, static_cast<WPARAM>(columns.size()), reinterpret_cast<LPARAM>(&columns[0])) > 0;
+	sendMessage(LVM_SETCOLUMNORDERARRAY, static_cast<WPARAM>(columns.size()), reinterpret_cast<LPARAM>(&columns[0]));
 }
 
 inline void Table::setTableStyle(int style) {

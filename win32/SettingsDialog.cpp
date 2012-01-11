@@ -27,6 +27,7 @@
 #include <dwt/util/GDI.h>
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/ScrolledContainer.h>
+#include <dwt/widgets/ToolTip.h>
 
 #include "WinUtil.h"
 
@@ -63,12 +64,15 @@
 using dwt::Grid;
 using dwt::GridInfo;
 
+using dwt::ToolTip;
+
 SettingsDialog::SettingsDialog(dwt::Widget* parent) :
 dwt::ModalDialog(parent),
 currentPage(0),
 grid(0),
 tree(0),
-help(0)
+help(0),
+tip(0)
 {
 	onInitDialog([this] { return initDialog(); });
 	onHelp([this](Control* c, unsigned id) { handleHelp(c, id); });
@@ -211,6 +215,19 @@ bool SettingsDialog::initDialog() {
 		WinUtil::addHelpButton(cur)->onClicked([this] { handleHelp(this, IDH_INDEX); });
 	}
 
+	/* use a hidden tooltip to determine when to show the help tooltip, so we don't have to manage
+	timers etc. */
+	tip = addChild(ToolTip::Seed());
+	auto timeout = tip->sendMessage(TTM_GETDELAYTIME, TTDT_AUTOPOP);
+	tip->addCallback(dwt::Message(WM_NOTIFY, TTN_GETDISPINFO), [timeout](const MSG& msg, LRESULT&) -> bool {
+		auto& ttdi = *reinterpret_cast<LPNMTTDISPINFO>(msg.lParam);
+		auto widget = dwt::hwnd_cast<dwt::Control*>(reinterpret_cast<HWND>(ttdi.hdr.idFrom));
+		if(widget) {
+			WinUtil::helpTooltip(widget, timeout);
+		}
+		return true;
+	});
+
 	/*
 	* catch WM_SETFOCUS messages (onFocus events) sent to every children of this dialog. the normal
 	* way to do it would be to use an Application::Filter, but unfortunately these messages don't
@@ -234,11 +251,19 @@ bool SettingsDialog::initDialog() {
 BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 	SettingsDialog* dialog = reinterpret_cast<SettingsDialog*>(lParam);
 	dwt::Control* widget = dwt::hwnd_cast<dwt::Control*>(hwnd);
+
 	if(widget && widget != dialog->help) {
 		widget->onFocus([=] { dialog->handleChildHelp(widget); });
+
 		TablePtr table = dynamic_cast<TablePtr>(widget);
 		if(table)
 			table->onSelectionChanged([=] { dialog->handleChildHelp(widget); });
+
+		auto id = widget->getHelpId();
+		if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
+			// this widget has a valid cshelp id; associate a tooltip tool to it.
+			dialog->tip->addTool(widget);
+		}
 	}
 	return TRUE;
 }

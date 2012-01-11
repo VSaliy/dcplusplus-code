@@ -16,20 +16,24 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "stdafx.h"
-
+#include "stdinc.h"
 #include "Mapper_WinUPnP.h"
 
-#include <dcpp/Util.h>
-#include <dcpp/Text.h>
+#include "Util.h"
+#include "Text.h"
+#include "w.h"
 
+#ifdef HAVE_NATUPNP_H
 #include <ole2.h>
+#include <natupnp.h>
+#endif // HAVE_NATUPNP_H
+
+namespace dcpp {
 
 const string Mapper_WinUPnP::name = "Windows UPnP";
 
 #ifdef HAVE_NATUPNP_H
-#include <natupnp.h>
-	
+
 bool Mapper_WinUPnP::init() {
 	HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 	if(FAILED(hr))
@@ -170,7 +174,10 @@ IStaticPortMappingCollection* Mapper_WinUPnP::getStaticPortMappingCollection() {
 	return ret;
 }
 
-#else
+#else // HAVE_NATUPNP_H
+
+struct IUPnPNAT { };
+struct IStaticPortMappingCollection { };
 
 bool Mapper_WinUPnP::init() {
 	return false;
@@ -199,4 +206,6 @@ IStaticPortMappingCollection* Mapper_WinUPnP::getStaticPortMappingCollection() {
 	return 0;
 }
 
-#endif
+#endif // HAVE_NATUPNP_H
+
+} // dcpp namespace

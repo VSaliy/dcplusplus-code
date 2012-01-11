@@ -16,13 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "stdafx.h"
-
+#include "stdinc.h"
 #include "Mapper_MiniUPnPc.h"
 
-#include <dcpp/ConnectivityManager.h>
-#include <dcpp/SettingsManager.h>
-#include <dcpp/Util.h>
+#include "ConnectivityManager.h"
+#include "SettingsManager.h"
+#include "Util.h"
 
 extern "C" {
 #ifndef STATICLIB
@@ -31,6 +30,8 @@ extern "C" {
 #include <miniupnpc/miniupnpc.h>
 #include <miniupnpc/upnpcommands.h>
 }
+
+namespace dcpp {
 
 const string Mapper_MiniUPnPc::name = "MiniUPnP";
 
@@ -95,3 +96,5 @@ string Mapper_MiniUPnPc::getExternalIP() {
 		return buf;
 	return Util::emptyString;
 }
+
+} // dcpp namespace

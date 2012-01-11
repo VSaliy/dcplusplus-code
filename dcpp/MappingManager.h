@@ -32,6 +32,7 @@
 namespace dcpp {
 
 using std::function;
+using std::make_pair;
 using std::unique_ptr;
 using std::vector;
 
@@ -59,7 +60,7 @@ private:
 	unique_ptr<Mapper> working; /// currently working implementation.
 	uint64_t renewal; /// when the next renewal should happen, if requested by the mapper.
 
-	MappingManager() : busy(false), renewal(0) { }
+	MappingManager();
 	virtual ~MappingManager() { }
 
 	int run();

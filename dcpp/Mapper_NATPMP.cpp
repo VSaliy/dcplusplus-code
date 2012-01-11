@@ -16,11 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "stdafx.h"
-
+#include "stdinc.h"
 #include "Mapper_NATPMP.h"
 
-#include <dcpp/Util.h>
+#include "Util.h"
 
 extern "C" {
 #ifndef STATICLIB
@@ -29,6 +28,8 @@ extern "C" {
 #include <natpmp/getgateway.h>
 #include <natpmp/natpmp.h>
 }
+
+namespace dcpp {
 
 const string Mapper_NATPMP::name = "NAT-PMP";
 
@@ -125,3 +126,5 @@ string Mapper_NATPMP::getExternalIP() {
 	}
 	return Util::emptyString;
 }
+
+} // dcpp namespace

@@ -16,15 +16,21 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_MAPPER_NATPMP_H
-#define DCPLUSPLUS_WIN32_MAPPER_NATPMP_H
+#ifndef DCPLUSPLUS_DCPP_MAPPER_WINUPNP_H
+#define DCPLUSPLUS_DCPP_MAPPER_WINUPNP_H
 
-#include <dcpp/Mapper.h>
+#include "Mapper.h"
 
-class Mapper_NATPMP : public Mapper
+struct IUPnPNAT;
+struct IStaticPortMappingCollection;
+
+namespace dcpp {
+
+/// @todo this class is far from complete (should register callbacks, etc)
+class Mapper_WinUPnP : public Mapper
 {
 public:
-	Mapper_NATPMP() : Mapper(), lifetime(0) { }
+	Mapper_WinUPnP() : Mapper(), pUN(0), lastPort(0) { }
 
 	static const string name;
 
@@ -35,15 +41,22 @@ private:
 	bool add(const string& port, const Protocol protocol, const string& description);
 	bool remove(const string& port, const Protocol protocol);
 
-	uint32_t renewal() const { return lifetime / 2; }
+	uint32_t renewal() const { return 0; }
 
 	string getDeviceName();
 	string getExternalIP();
 
 	const string& getName() const { return name; }
 
-	string gateway;
-	uint32_t lifetime;
+	IUPnPNAT* pUN;
+	// this one can become invalid so we can't cache it
+	IStaticPortMappingCollection* getStaticPortMappingCollection();
+
+	// need to save these to get the external IP...
+	long lastPort;
+	Protocol lastProtocol;
 };
+
+} // dcpp namespace
 
 #endif

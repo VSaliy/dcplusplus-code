@@ -40,9 +40,9 @@ string getLocalIp() {
 	return tmp;
 }
 
-#include <win32/Mapper_MiniUPnPc.cpp>
-#include <win32/Mapper_NATPMP.cpp>
-#include <win32/Mapper_WinUPnP.cpp>
+#include <dcpp/Mapper_MiniUPnPc.cpp>
+#include <dcpp/Mapper_NATPMP.cpp>
+#include <dcpp/Mapper_WinUPnP.cpp>
 
 void help() {
 	cout << "Arguments to run portmap with:" << endl << "\t portmap <port> <type> <description> <method> [remove]" << endl

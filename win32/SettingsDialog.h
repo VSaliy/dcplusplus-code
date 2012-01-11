@@ -24,6 +24,7 @@
 #include <dwt/widgets/ModalDialog.h>
 #include <dwt/widgets/Tree.h>
 
+#include "forward.h"
 #include "PropPage.h"
 
 class SettingsDialog : public dwt::ModalDialog
@@ -65,6 +66,7 @@ private:
 	GridPtr grid;
 	TreePtr tree;
 	RichTextBoxPtr help;
+	ToolTipPtr tip;
 
 	void updateTitle();
 	void write();

@@ -23,11 +23,22 @@
 #include "ConnectivityManager.h"
 #include "format.h"
 #include "LogManager.h"
+#include "Mapper_MiniUPnPc.h"
+#include "Mapper_NATPMP.h"
+#include "Mapper_WinUPnP.h"
 #include "ScopedFunctor.h"
 #include "SearchManager.h"
 #include "version.h"
 
 namespace dcpp {
+
+MappingManager::MappingManager() : busy(false), renewal(0) {
+	addMapper<Mapper_NATPMP>();
+	addMapper<Mapper_MiniUPnPc>();
+#ifdef HAVE_NATUPNP_H
+	addMapper<Mapper_WinUPnP>();
+#endif
+}
 
 StringList MappingManager::getMappers() const {
 	StringList ret;

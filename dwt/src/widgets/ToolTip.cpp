@@ -57,16 +57,19 @@ void ToolTip::setText(const tstring& text_) {
 
 void ToolTip::setText(Widget* widget, const tstring& text_) {
 	text = text_;
-	setTool(widget, [this](tstring& t) { handleGetTip(t); });
+	setTool(widget, [this](tstring& ret) { ret = text; });
 }
 
-void ToolTip::setTool(Widget* widget, F f) {
-	onGetTip(f);
-
+void ToolTip::addTool(Widget* widget) {
 	TOOLINFO ti = { sizeof(TOOLINFO), TTF_IDISHWND | TTF_SUBCLASS, getParent()->handle(),
 		reinterpret_cast<UINT_PTR>(widget->handle()) };
 	ti.lpszText = LPSTR_TEXTCALLBACK;
 	sendMessage(TTM_ADDTOOL, 0, reinterpret_cast<LPARAM>(&ti));
+}
+
+void ToolTip::setTool(Widget* widget, F f) {
+	onGetTip(f);
+	addTool(widget);
 }
 
 void ToolTip::setActive(bool b) {
@@ -88,10 +91,6 @@ void ToolTip::onGetTip(F f) {
 		}
 		return true;
 	});
-}
-
-void ToolTip::handleGetTip(tstring& ret) {
-	ret = text;
 }
 
 }
