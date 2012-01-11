@@ -126,7 +126,7 @@ inline int Columns<WidgetType>::insertColumn(const Column& column, int after) {
 template<typename WidgetType>
 inline void Columns<WidgetType>::setColumns(const std::vector<Column>& columns) {
 	for(auto i = 0u, iend = getColumnCount(); i < iend; ++i) eraseColumn(i);
-	for(auto i = 0u, iend = columns.size(); i < iend; ++i) insertColumn(columns[i], i);
+	for(size_t i = 0, iend = columns.size(); i < iend; ++i) insertColumn(columns[i], i);
 }
 
 template<typename WidgetType>

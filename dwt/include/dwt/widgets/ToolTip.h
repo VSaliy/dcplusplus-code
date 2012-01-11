@@ -73,6 +73,7 @@ public:
 
 	void setText(const tstring& text_);
 	void setText(Widget* widget, const tstring& text);
+	void addTool(Widget* widget);
 	void setTool(Widget* widget, F callback);
 
 	void setMaxTipWidth(int width);
@@ -101,8 +102,6 @@ protected:
 	tstring text;
 
 private:
-	void handleGetTip(tstring& ret);
-
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
 };

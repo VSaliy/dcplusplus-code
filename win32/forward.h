@@ -40,6 +40,7 @@ using dwt::TabViewPtr;
 using dwt::TextBoxPtr;
 using dwt::TreePtr;
 using dwt::ToolBarPtr;
+using dwt::ToolTipPtr;
 
 class ComboBox;
 typedef ComboBox* ComboBoxPtr;

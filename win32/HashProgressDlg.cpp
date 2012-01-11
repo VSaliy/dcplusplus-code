@@ -132,7 +132,7 @@ bool HashProgressDlg::updateStats() {
 
 	if(autoClose && files == 0) {
 		close(true);
-		return true;
+		return false;
 	}
 
 	file->setText(files ? Text::toT(path) : T_("Done"));

@@ -26,10 +26,6 @@
 #include "MainWindow.h"
 #include "SplashWindow.h"
 
-#include "Mapper_NATPMP.h"
-#include "Mapper_MiniUPnPc.h"
-#include "Mapper_WinUPnP.h"
-
 #include <dcpp/MerkleTree.h>
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
@@ -152,10 +148,6 @@ int dwtMain(dwt::Application& app) {
 		if(ResourceManager::getInstance()->isRTL()) {
 			SetProcessDefaultLayout(LAYOUT_RTL);
 		}
-
-		MappingManager::getInstance()->addMapper<Mapper_NATPMP>();
-		MappingManager::getInstance()->addMapper<Mapper_MiniUPnPc>();
-		MappingManager::getInstance()->addMapper<Mapper_WinUPnP>();
 
 		WinUtil::init();
 
