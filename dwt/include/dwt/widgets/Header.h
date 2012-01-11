@@ -3,10 +3,6 @@
 
   Copyright (c) 2007-2011, Jacek Sieka
 
-  SmartWin++
-
-  Copyright (c) 2005 Thomas Hansen
-
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification,
@@ -33,62 +29,101 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_ModelessDialog_h
-#define DWT_ModelessDialog_h
+#ifndef DWT_HEADER_H_
+#define DWT_HEADER_H_
 
-#include "../aspects/Dialog.h"
-#include "Frame.h"
+#include "Control.h"
+
+#include "../aspects/Collection.h"
+#include "../aspects/Data.h"
 
 namespace dwt {
 
-/// Dialog class
-/** \ingroup WidgetControls
-  * \WidgetUsageInfo
-  * \image html dialog.PNG
-  * Class for creating a Modeless Dialog based upon an embedded resource. <br>
-  * Use the create function to actually create a dialog. <br>
-  * Class is a public superclass of Frame and therefor can use all features
-  * of Frame.
-  */
-class ModelessDialog :
-	public Frame,
-	public aspects::Dialog<ModelessDialog>
+/** Header control like the one used for Table */
+class Header :
+	public CommonControl,
+	public aspects::Collection<Header, int>,
+	public aspects::Data<Header, int>
 {
-	typedef Frame BaseType;
+	typedef CommonControl BaseType;
+
+	friend class WidgetCreator<Header>;
+	friend class aspects::Collection<Header, int>;
+	friend class aspects::Data<Header, int>;
 public:
 	/// Class type
-	typedef ModelessDialog ThisType;
+	typedef Header ThisType;
 
 	/// Object type
-	typedef ThisType * ObjectType;
+	typedef ThisType* ObjectType;
 
+	/// Seed class
+	/** This class contains all of the values needed to create the widget. It also
+	  * knows the type of the class whose seed values it contains. Every widget
+	  * should define one of these.
+	  */
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		Seed(const Point& size = Point(), DWORD styles_ = 0);
+		/// Fills with default parameters
+		Seed();
 	};
 
-	void create(const Seed& cs = Seed());
+	/// Actually creates the Header
+	void create( const Seed & cs = Seed() );
+
+	int insert(const tstring& header, int width, LPARAM lParam = 0, int after = -1);
+
+	virtual Point getPreferredSize();
 
 protected:
-	// Protected since this Widget we HAVE to inherit from
-	explicit ModelessDialog( Widget * parent = 0 );
+	/// Constructor Taking pointer to parent
+	explicit Header( Widget * parent );
 
-	virtual ~ModelessDialog()
+	// Protected to avoid direct instantiation, you can inherit and use
+	// WidgetFactory class which is friend
+	virtual ~Header()
 	{}
 
 private:
 	friend class ChainingDispatcher;
-	static const TCHAR *windowClass;
+	static const TCHAR windowClass[];
+
+	// aspects::Collection
+	void eraseImpl(int row);
+	void clearImpl();
+	size_t sizeImpl() const;
+
+	// aspects::Data
+	int findDataImpl(LPARAM data, int start = -1);
+	LPARAM getDataImpl(int idx);
+	void setDataImpl(int i, LPARAM data);
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implementation of class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-inline ModelessDialog::ModelessDialog( Widget * parent )
-	: BaseType(parent, ChainingDispatcher::superClass<ModelessDialog>())
-{}
+
+inline Header::Header( Widget * parent )
+	: BaseType(parent, ChainingDispatcher::superClass<Header>())
+{
+}
+
+inline void Header::eraseImpl( int row ) {
+	Header_DeleteItem(handle(), row);
+}
+
+inline size_t Header::sizeImpl() const {
+	return Header_GetItemCount(handle());
+}
+
+inline void Header::clearImpl() {
+	for(size_t i = 0, iend = size(); i < iend; ++i) {
+		erase(0);
+	}
+}
 
 }
 
-#endif
+#endif /* HEADER_H_ */

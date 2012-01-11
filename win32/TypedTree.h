@@ -77,7 +77,7 @@ public:
 	}
 
 	HTREEITEM insert(TVINSERTSTRUCT* tvis) {
-		return TreeView_InsertItem(this->handle(), tvis);
+		return TreeView_InsertItem(this->treeHandle(), tvis);
 	}
 
 	ContentType* getData(HTREEITEM item) {
@@ -85,7 +85,7 @@ public:
 	}
 
 	void getItem(TVITEMEX* item) {
-		TreeView_GetItem(this->handle(), item);
+		TreeView_GetItem(this->treeHandle(), item);
 	}
 
 	ContentType* getSelectedData() {
@@ -94,7 +94,7 @@ public:
 	}
 
 	void setItemState(HTREEITEM item, int state, int mask) {
-		TreeView_SetItemState(this->handle(), item, state, mask);
+		TreeView_SetItemState(this->treeHandle(), item, state, mask);
 	}
 
 	void clear() {

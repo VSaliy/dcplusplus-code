@@ -29,40 +29,69 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <dwt/widgets/ModelessDialog.h>
+#include <dwt/widgets/Header.h>
 
 namespace dwt {
 
-const TCHAR *ModelessDialog::windowClass = WC_DIALOG;
+const TCHAR Header::windowClass[] = WC_HEADER;
 
-ModelessDialog::Seed::Seed(const Point& size, DWORD styles_) :
-BaseType::Seed(tstring(), styles_ | DS_CONTROL | WS_CHILD, WS_EX_CONTROLPARENT)
+Header::Seed::Seed() :
+BaseType::Seed(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS)
 {
-	location.size = size;
 }
 
-void ModelessDialog::create(const Seed& cs) {
-	Seed cs2 = cs;
+void Header::create( const Header::Seed & cs ) {
+	BaseType::create(cs);
+}
 
-	if((cs.style & DS_CONTEXTHELP) == DS_CONTEXTHELP) {
-		cs2.exStyle |= WS_EX_CONTEXTHELP;
+Point Header::getPreferredSize() {
+	RECT rc = { 0, 0, ::GetSystemMetrics(SM_CXSCREEN), ::GetSystemMetrics(SM_CYSCREEN) };
+	WINDOWPOS wp = { 0 };
+	HDLAYOUT hl = { &rc, &wp };
+	if(Header_Layout(handle(), &hl)) {
+		return Point(wp.cx, wp.cy);
 	}
 
-	if((cs.style & DS_CONTROL) == DS_CONTROL) {
-		cs2.style &= ~WS_CAPTION;
-		cs2.style &= ~WS_SYSMENU;
+	return Point(0, 0);
+}
+
+int Header::insert(const tstring& header, int width, LPARAM lParam, int after) {
+	if(after == -1) after = size();
+
+	HDITEM item = { HDI_FORMAT };
+	item.fmt = HDF_LEFT;// TODO
+	if(!header.empty()) {
+		item.mask |= HDI_TEXT;
+		item.pszText = const_cast<LPTSTR>(header.c_str());
 	}
 
-	cs2.style &= ~WS_VISIBLE;
-
-	BaseType::create(cs2);
-
-	SetWindowLongPtr(handle(), DWLP_DLGPROC, (LPARAM)dialogProc);
-
-	HWND hwndDefaultFocus = GetNextDlgTabItem(handle(), NULL, FALSE);
-	if (sendMessage(WM_INITDIALOG, (WPARAM)hwndDefaultFocus)) {
-		 sendMessage(WM_NEXTDLGCTL, (WPARAM)hwndDefaultFocus, TRUE);
+	if(width >= 0) {
+		item.mask |= HDI_WIDTH;
+		item.cxy = width;
 	}
+
+	return Header_InsertItem(handle(), after, &item);
+}
+
+int Header::findDataImpl(LPARAM data, int start) {
+    LVFINDINFO fi = { LVFI_PARAM, NULL, data };
+    return ListView_FindItem(handle(), start, &fi);
+}
+
+LPARAM Header::getDataImpl(int idx) {
+	HDITEM item = { HDI_LPARAM };
+
+	if(!Header_GetItem(handle(), idx, &item)) {
+		return 0;
+	}
+	return item.lParam;
+}
+
+void Header::setDataImpl(int idx, LPARAM data) {
+	LVITEM item = { HDI_LPARAM };
+	item.lParam = data;
+
+	Header_SetItem(handle(), idx, &item);
 }
 
 }

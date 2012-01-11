@@ -30,10 +30,33 @@
 */
 
 #include <dwt/widgets/Tree.h>
+#include <dwt/widgets/Header.h>
+#include <dwt/WidgetCreator.h>
 
 namespace dwt {
 
-const TCHAR Tree::windowClass[] = WC_TREEVIEW;
+const TCHAR Tree::TreeView::windowClass[] = WC_TREEVIEW;
+
+Tree::TreeView::TreeView(Widget* parent) : Control(parent, ChainingDispatcher::superClass<TreeView>()) { }
+
+bool Tree::TreeView::handleMessage(const MSG& msg, LRESULT &retVal) {
+	if(BaseType::handleMessage(msg, retVal)) {
+		return true;
+	}
+
+	if(msg.message == WM_NOTIFY) {
+		// Forward tree notifications
+		return getParent()->handleMessage(msg, retVal);
+	}
+
+	if(msg.message == WM_RBUTTONDOWN) {
+		// Tree view control does strange things to rbuttondown, preventing wm_contextmenu from reaching it
+		retVal = ::DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+		return true;
+	}
+
+	return false;
+}
 
 Tree::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | TVS_DISABLEDRAGDROP | TVS_HASLINES | TVS_NONEVENHEIGHT | TVS_SHOWSELALWAYS),
@@ -43,8 +66,17 @@ Tree::Seed::Seed() :
 
 void Tree::create( const Seed & cs )
 {
-	BaseType::create(cs);
+	Control::Seed mySeed(WS_CHILD);
+
+	BaseType::create(mySeed);
+	tree = WidgetCreator<TreeView>::create(this, cs);
+
+	onSized([&](const SizedEvent& e) { layout(); });
+
+	tree->onCustomDraw([=](NMTVCUSTOMDRAW& x) { return draw(x); });
+
 	setFont(cs.font);
+	layout();
 }
 
 HTREEITEM Tree::insert(const tstring& text, HTREEITEM parent, LPARAM param, bool expanded, int iconIndex, int selectedIconIndex) {
@@ -73,11 +105,11 @@ HTREEITEM Tree::insert(const tstring& text, HTREEITEM parent, LPARAM param, bool
 #else
 	tv.itemex = t;
 #endif
-	return TreeView_InsertItem(handle(), &tv);
+	return TreeView_InsertItem(treeHandle(), &tv);
 }
 
 tstring Tree::getSelectedText() {
-	return getText(TreeView_GetSelection(handle()));
+	return getText(TreeView_GetSelection(treeHandle()));
 }
 
 tstring Tree::getText( HTREEITEM node )
@@ -91,7 +123,7 @@ tstring Tree::getText( HTREEITEM node )
 	buffer[0] = '\0';
 	item.cchTextMax = 1022;
 	item.pszText = buffer;
-	if ( TreeView_GetItem(handle(), &item) )
+	if ( TreeView_GetItem(treeHandle(), &item) )
 	{
 		return buffer;
 	}
@@ -116,17 +148,17 @@ void Tree::eraseChildren( HTREEITEM node )
 
 void Tree::setNormalImageList( ImageListPtr imageList ) {
 	  itsNormalImageList = imageList;
-	  TreeView_SetImageList(handle(), imageList->getImageList(), TVSIL_NORMAL);
+	  TreeView_SetImageList(treeHandle(), imageList->getImageList(), TVSIL_NORMAL);
 }
 
 void Tree::setStateImageList( ImageListPtr imageList ) {
 	  itsStateImageList = imageList;
-	  TreeView_SetImageList(handle(), imageList->getImageList(), TVSIL_STATE);
+	  TreeView_SetImageList(treeHandle(), imageList->getImageList(), TVSIL_STATE);
 }
 
 LPARAM Tree::getDataImpl(HTREEITEM item) {
 	TVITEM tvitem = { TVIF_PARAM | TVIF_HANDLE, item };
-	if(!TreeView_GetItem(handle(), &tvitem)) {
+	if(!TreeView_GetItem(treeHandle(), &tvitem)) {
 		return 0;
 	}
 	return tvitem.lParam;
@@ -135,15 +167,15 @@ LPARAM Tree::getDataImpl(HTREEITEM item) {
 void Tree::setDataImpl(HTREEITEM item, LPARAM lParam) {
 	TVITEM tvitem = { TVIF_PARAM | TVIF_HANDLE, item };
 	tvitem.lParam = lParam;
-	TreeView_SetItem(handle(), &tvitem);
+	TreeView_SetItem(treeHandle(), &tvitem);
 }
 
 int Tree::getItemHeight() {
-	return TreeView_GetItemHeight(handle());
+	return TreeView_GetItemHeight(treeHandle());
 }
 
 void Tree::setItemHeight(int h) {
-	TreeView_SetItemHeight(handle(), h);
+	TreeView_SetItemHeight(treeHandle(), h);
 }
 
 ScreenCoordinate Tree::getContextMenuPos() {
@@ -166,19 +198,105 @@ void Tree::select(const ScreenCoordinate& pt) {
 
 Rectangle Tree::getItemRect(HTREEITEM item) {
 	RECT rc;
-	TreeView_GetItemRect(handle(), item, &rc, TRUE);
+	TreeView_GetItemRect(treeHandle(), item, &rc, TRUE);
 	return Rectangle(rc);
 }
 
-/// Returns true if fired, else false
-bool Tree::handleMessage( const MSG & msg, LRESULT & retVal ) {
-	bool handled = BaseType::handleMessage(msg, retVal);
-	if(!handled && msg.message == WM_RBUTTONDOWN) {
-		// Tree view control does strange things to rbuttondown, preventing wm_contextmenu from reaching it
-		retVal = ::DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);
-		return true;
+HeaderPtr Tree::getHeader() {
+	if(header == NULL) {
+		header = WidgetCreator<Header>::create(this);
+		layout();
 	}
-	return handled;
+
+	return header;
+}
+
+void Tree::layout() {
+	auto client = getClientSize();
+	if(header) {
+		auto hsize = header->getPreferredSize();
+		header->resize(Rectangle(0, 0, client.x, hsize.y));
+		tree->resize(Rectangle(0, hsize.y, client.x, client.y - hsize.y));
+	} else {
+		tree->resize(Rectangle(client));
+	}
+}
+
+int Tree::insertColumnImpl(const Column& column, int after) {
+	auto h = getHeader();
+
+	return h->insert(column.header, column.width, 0, after);
+}
+
+void Tree::eraseColumnImpl(unsigned column) {
+	if(!header) {
+		return;
+	}
+
+	header->erase(column);
+	if(getColumnCount() == 0) {
+		header->close(false);
+		header = 0;
+
+		layout();
+	}
+}
+
+unsigned Tree::getColumnCountImpl() const {
+	return header ? header->size() : 0;
+}
+
+Column Tree::getColumnImpl(unsigned column) const {
+	if(!header) {
+		return Column();
+	}
+
+	HDITEM item = { HDI_FORMAT | HDI_TEXT | HDI_WIDTH };
+	TCHAR buf[1024] = { 0 };
+	item.pszText = buf;
+	item.cchTextMax = 1023;
+	Header_GetItem(header->handle(), column, &item);
+
+	return Column(item.pszText, item.cxy); // TODO fmt
+}
+
+std::vector<Column> Tree::getColumnsImpl() const {
+	std::vector<Column> ret;
+	if(!header) {
+		return ret;
+	}
+
+	ret.resize(getColumnCount());
+	for(size_t i = 0; i < ret.size(); ++i) {
+		ret[i] = getColumn(i);
+	}
+
+	return ret;
+}
+
+std::vector<int> Tree::getColumnOrderImpl() const {
+	return std::vector<int>(); // TODO
+}
+
+void Tree::setColumnOrderImpl(const std::vector<int>& columns) {
+	// TODO
+}
+
+std::vector<int> Tree::getColumnWidthsImpl() const {
+	return std::vector<int>(); // TODO
+}
+
+void Tree::setColumnWidthImpl(unsigned column, int width) {
+	// TODO
+}
+
+LRESULT Tree::draw(NMTVCUSTOMDRAW& x) {
+	if(getColumnCount() < 2) {
+		return CDRF_DODEFAULT;
+	}
+
+	//TODO
+	return CDRF_DODEFAULT;
 }
 
 }

@@ -36,7 +36,7 @@
 
 namespace dwt {
 
-LPCTSTR ModalDialog::windowClass = WC_DIALOG;
+const TCHAR* ModalDialog::windowClass = WC_DIALOG;
 
 ModalDialog::Seed::Seed(const Point& size, DWORD styles_) :
 BaseType::Seed(tstring(), styles_ | WS_POPUP | WS_CAPTION | WS_SYSMENU, WS_EX_CONTROLPARENT | WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE)
