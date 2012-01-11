@@ -3,6 +3,11 @@
 Import('dev source_path')
 
 def runUnitTest(env,target,source):
+	import sys
+	if sys.platform != 'win32':
+		open(str(target[0]),'w').write("SKIPPED\n")
+		return
+		
 	import subprocess
 	app = str(source[0].abspath)
 	if not subprocess.call(app):

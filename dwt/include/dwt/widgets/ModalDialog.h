@@ -129,7 +129,7 @@ protected:
 	virtual void kill();
 private:
 	friend class ChainingDispatcher;
-	static LPCTSTR windowClass;
+	static const TCHAR* windowClass;
 
 	bool quit;
 	int ret;

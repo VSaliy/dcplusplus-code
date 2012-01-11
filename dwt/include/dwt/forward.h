@@ -66,6 +66,9 @@ typedef ComboBox* ComboBoxPtr;
 class Container;
 typedef Container* ContainerPtr;
 
+class Control;
+typedef Control* ControlPtr;
+
 class CoolBar;
 typedef CoolBar* CoolBarPtr;
 
@@ -88,6 +91,9 @@ class GridInfo;
 
 class GroupBox;
 typedef GroupBox* GroupBoxPtr;
+
+class Header;
+typedef Header* HeaderPtr;
 
 class Icon;
 typedef boost::intrusive_ptr<Icon> IconPtr;

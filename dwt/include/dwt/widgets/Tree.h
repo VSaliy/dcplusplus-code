@@ -3,10 +3,6 @@
 
   Copyright (c) 2007-2011, Jacek Sieka
 
-  SmartWin++
-
-  Copyright (c) 2005 Thomas Hansen
-
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification,
@@ -33,13 +29,14 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_Tree_h
-#define DWT_Tree_h
+#ifndef DWT_TREE_H
+#define DWT_TREE_H
 
 #include "../Rectangle.h"
 #include "../resources/ImageList.h"
 #include "../aspects/Clickable.h"
 #include "../aspects/Collection.h"
+#include "../aspects/Columns.h"
 #include "../aspects/CustomDraw.h"
 #include "../aspects/Data.h"
 #include "../aspects/Selection.h"
@@ -60,29 +57,48 @@ private:
 	HTREEITEM handle;
 };
 
-/// TreeView class
  /** \ingroup WidgetControls
    * \WidgetUsageInfo
-   * \image html treeview.PNG
-   * A Tree is a treview control, like for instance the documentation to
-   * dwt which you are probably reading right now would ( in the web version )
-   * have a tree view to the left. <br>
-   * Another good example of a tree view is the Explorer of Windows, it has a tree
-   * view to the left where you can see the different directories.
    */
 class Tree :
-	public CommonControl,
+	public Control,
 	public aspects::Clickable<Tree>,
 	public aspects::Collection<Tree, HTREEITEM>,
-	public aspects::CustomDraw<Tree, NMTVCUSTOMDRAW>,
+	public aspects::Columns<Tree>,
 	public aspects::Data<Tree, HTREEITEM>,
 	public aspects::Selection<Tree, HTREEITEM>
 {
-	typedef CommonControl BaseType;
+	typedef Control BaseType;
+
+	class TreeView :
+		public Control,
+		public aspects::CustomDraw<TreeView, NMTVCUSTOMDRAW>
+		{
+		friend class WidgetCreator<TreeView>;
+	public:
+		typedef Tree::Seed Seed;
+		typedef Control BaseType;
+
+		/// Class type
+		typedef TreeView ThisType;
+
+		/// Object type
+		typedef ThisType* ObjectType;
+
+		static const TCHAR windowClass[];
+
+		TreeView(Widget* parent);
+
+		/// Returns true if handled, else false
+		virtual bool handleMessage(const MSG &msg, LRESULT &retVal);
+	};
+
+	typedef TreeView* TreeViewPtr;
 
 protected:
 	friend class WidgetCreator<Tree>;
 	friend class aspects::Collection<Tree, HTREEITEM>;
+	friend class aspects::Columns<Tree>;
 	friend class aspects::Data<Tree, HTREEITEM>;
 	friend class aspects::Selection<Tree, HTREEITEM>;
 	friend class aspects::Clickable<Tree>;
@@ -109,21 +125,6 @@ public:
 	};
 
 	/// Inserts a "node" into the TreeView
-	/** The return value from a call to this function is a Node. <br>
-	  * If you later wish to inserts CHILDREN to that node, pass the return value
-	  * from the first call as the second parameter into this function. <br>
-	  * If you wish to insert a ( a TreeView can have several "root" nodes ) "root"
-	  * node then don't pass anything as the second parameter. ( or pass Node() )
-	  * <br>
-	  * The "param" parameter ( optionally ) is a unique unsigned integer which must
-	  * be higher than 0 and can later be used to retrieve unique identification of
-	  * which item was e.g. selected etc... <br>
-	  * Especially useful when text of nodes is not unique or text might change.
-	  * The "iconIndex" optionally specifies the icon index of the item in the
-	  * associated image list, if there is one. <br>
-	  * The "selectedIconIndex" optionally specifies the icon index of the item in the
-	  * selected state (if not specified or -1, it defaults to the iconIndex)
-	  */
 	HTREEITEM insert(const tstring& text, HTREEITEM parent = NULL, LPARAM param = 0, bool expanded = false, int iconIndex = - 1, int selectedIconIndex = - 1);
 
 	HTREEITEM getNext(HTREEITEM node, unsigned flag);
@@ -225,9 +226,6 @@ public:
 	  */
 	tstring getText( HTREEITEM node );
 
-	/// Returns true if fired, else false
-	virtual bool handleMessage( const MSG & msg, LRESULT & retVal );
-
 	/// Actually creates the TreeView
 	/** You should call WidgetFactory::createTreeView if you instantiate class
 	  * directly. <br>
@@ -235,6 +233,7 @@ public:
 	  */
 	void create( const Seed & cs = Seed() );
 
+	virtual void layout();
 protected:
 	// Constructor Taking pointer to parent
 	explicit Tree( Widget * parent );
@@ -244,12 +243,15 @@ protected:
 	virtual ~Tree()
 	{}
 
+	HWND treeHandle() const { return tree->handle(); }
 private:
-	friend class ChainingDispatcher;
-	static const TCHAR windowClass[];
-
 	ImageListPtr itsNormalImageList;
 	ImageListPtr itsStateImageList;
+
+	TreeViewPtr tree;
+	HeaderPtr header;
+
+	HeaderPtr getHeader();
 
 	// aspects::Data
 	LPARAM getDataImpl(HTREEITEM item);
@@ -273,81 +275,90 @@ private:
 	static Message getClickMessage();
 	static Message getRightClickMessage();
 	static Message getDblClickMessage();
+
+	// aspects::Columns
+	int insertColumnImpl(const Column& column, int after);
+	void eraseColumnImpl(unsigned column);
+	unsigned getColumnCountImpl() const;
+	std::vector<Column> getColumnsImpl() const;
+	Column getColumnImpl(unsigned column) const;
+	std::vector<int> getColumnOrderImpl() const;
+	void setColumnOrderImpl(const std::vector<int>& columns);
+	std::vector<int> getColumnWidthsImpl() const;
+	void setColumnWidthImpl( unsigned column, int width );
+
+	LRESULT draw(NMTVCUSTOMDRAW& x);
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 inline HTREEITEM Tree::getNext( HTREEITEM node, unsigned flag ) {
-	return TreeView_GetNextItem( handle(), node, flag );
+	return TreeView_GetNextItem(treeHandle(), node, flag);
 }
 
 inline HTREEITEM Tree::getChild(HTREEITEM node) {
-	return TreeView_GetChild(handle(), node);
+	return TreeView_GetChild(treeHandle(), node);
 }
 
 inline HTREEITEM Tree::getNextSibling(HTREEITEM node) {
-	return TreeView_GetNextSibling(handle(), node);
+	return TreeView_GetNextSibling(treeHandle(), node);
 }
 
 inline HTREEITEM Tree::getParent(HTREEITEM node) {
-	return TreeView_GetParent(handle(), node);
+	return TreeView_GetParent(treeHandle(), node);
 }
 
 inline HTREEITEM Tree::getRoot() {
-	return TreeView_GetRoot(handle());
+	return TreeView_GetRoot(treeHandle());
 }
 
 inline HTREEITEM Tree::getFirst() {
-	return TreeView_GetFirstVisible(handle());
+	return TreeView_GetFirstVisible(treeHandle());
 }
 
 inline HTREEITEM Tree::getLast() {
-	return TreeView_GetLastVisible(handle());
+	return TreeView_GetLastVisible(treeHandle());
 }
 
 inline void Tree::setColorImpl(COLORREF text, COLORREF background) {
-	TreeView_SetTextColor(handle(), text);
-	TreeView_SetBkColor(handle(), background);
+	TreeView_SetTextColor(treeHandle(), text);
+	TreeView_SetBkColor(treeHandle(), background);
 }
 
 inline HTREEITEM Tree::hitTest(const ScreenCoordinate& pt) {
 	ClientCoordinate cc(pt, this);
 	TVHITTESTINFO tvhti = { cc.getPoint() };
-	return TreeView_HitTest(handle(), &tvhti);
+	return TreeView_HitTest(treeHandle(), &tvhti);
 }
 
 inline bool Tree::isExpanded(HTREEITEM node) {
-	return TreeView_GetItemState(handle(), node, TVIS_EXPANDED) & TVIS_EXPANDED;
+	return TreeView_GetItemState(treeHandle(), node, TVIS_EXPANDED) & TVIS_EXPANDED;
 }
 
 inline void Tree::expand(HTREEITEM node) {
-	TreeView_Expand(handle(), node, TVE_EXPAND);
+	TreeView_Expand(treeHandle(), node, TVE_EXPAND);
 }
 
 inline void Tree::collapse(HTREEITEM node) {
-	TreeView_Expand(handle(), node, TVE_COLLAPSE);
+	TreeView_Expand(treeHandle(), node, TVE_COLLAPSE);
 }
 
 inline void Tree::clearImpl() {
-	TreeView_DeleteAllItems( handle() );
+	TreeView_DeleteAllItems(treeHandle());
 }
 
 inline void Tree::eraseImpl( HTREEITEM node ) {
-	TreeView_DeleteItem( handle(), node );
+	TreeView_DeleteItem(treeHandle(), node);
 }
 
 inline size_t Tree::sizeImpl() const {
-	return static_cast<size_t>(TreeView_GetCount(handle()));
+	return static_cast<size_t>(TreeView_GetCount(treeHandle()));
 }
 
 inline void Tree::editLabel( HTREEITEM node ) {
-	static_cast<void>(TreeView_EditLabel( handle(), node ));
+	static_cast<void>(TreeView_EditLabel(treeHandle(), node));
 }
 
 inline void Tree::ensureVisible( HTREEITEM node ) {
-	TreeView_EnsureVisible( handle(), node );
+	TreeView_EnsureVisible(treeHandle(), node);
 }
 
 inline void Tree::setHasButtons( bool value ) {
@@ -391,11 +402,11 @@ inline Message Tree::getDblClickMessage() {
 }
 
 inline HTREEITEM Tree::getSelectedImpl() const {
-	return TreeView_GetSelection( handle() );
+	return TreeView_GetSelection(treeHandle());
 }
 
 inline void Tree::setSelectedImpl(HTREEITEM item) {
-	TreeView_SelectItem( handle(), item );
+	TreeView_SelectItem(treeHandle(), item );
 }
 
 inline size_t Tree::countSelectedImpl() const {
@@ -403,7 +414,7 @@ inline size_t Tree::countSelectedImpl() const {
 }
 
 inline Tree::Tree( Widget * parent )
-	: BaseType(parent, ChainingDispatcher::superClass<Tree>())
+	: BaseType(parent, NormalDispatcher::newClass<Tree>()), tree(nullptr), header(nullptr)
 {
 }
 
