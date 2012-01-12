@@ -146,7 +146,6 @@ balloonBg(0)
 	table->onSelectionChanged([this] { handleSelectionChanged(); });
 	table->onDblClicked([this] { handleDblClicked(); });
 
-	table->onHelp([this](Widget*, unsigned id) { handleTableHelp(id); });
 	table->setHelpId([this](unsigned& id) { handleTableHelpId(id); });
 }
 
@@ -167,19 +166,10 @@ void NotificationsPage::write() {
 	}
 }
 
-void NotificationsPage::handleTableHelp(unsigned id) {
-	// same as PropPage::handleListHelp
-	int item =
-		isKeyPressed(VK_F1) ? table->getSelected() :
-		table->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos()))).first;
-	if(item >= 0 && options[item].helpId)
-		id = options[item].helpId;
-	WinUtil::help(table, id);
-}
-
 void NotificationsPage::handleTableHelpId(unsigned& id) {
 	// same as PropPage::handleListHelpId
-	int item = table->getSelected();
+	int item = isAnyKeyPressed() ? table->getSelected() :
+		table->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos()))).first;
 	if(item >= 0 && options[item].helpId)
 		id = options[item].helpId;
 }

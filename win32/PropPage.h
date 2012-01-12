@@ -75,7 +75,6 @@ protected:
 private:
 	virtual dwt::Point getPreferredSize();
 
-	void handleListHelp(TablePtr list, unsigned id);
 	void handleListHelpId(TablePtr list, unsigned& id);
 
 	unordered_map<TablePtr, const ListItem*> lists;

@@ -99,7 +99,6 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 
 	list->setColumnWidth(0, LVSCW_AUTOSIZE);
 
-	list->onHelp([this, list](Widget*, unsigned id) { handleListHelp(list, id); });
 	list->setHelpId([this, list](unsigned& id) { handleListHelpId(list, id); });
 }
 
@@ -152,20 +151,10 @@ dwt::Point PropPage::getPreferredSize() {
 	return grid->getPreferredSize() + dwt::Point(padding.left + padding.right, padding.top + padding.bottom);
 }
 
-void PropPage::handleListHelp(TablePtr list, unsigned id) {
-	// we have the help id of the whole list-view; convert to the one of the specific option the user wants help for
-	int item =
-		isKeyPressed(VK_F1) ? list->getSelected() :
-		list->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos()))).first;
-	const ListItem* listItems = lists[list];
-	if(item >= 0 && listItems[item].helpId)
-		id = listItems[item].helpId;
-	WinUtil::help(list, id);
-}
-
 void PropPage::handleListHelpId(TablePtr list, unsigned& id) {
 	// we have the help id of the whole list-view; convert to the one of the specific option the user wants help for
-	int item = list->getSelected();
+	int item = isAnyKeyPressed() ? list->getSelected() :
+		list->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos()))).first;
 	const ListItem* listItems = lists[list];
 	if(item >= 0 && listItems[item].helpId)
 		id = listItems[item].helpId;

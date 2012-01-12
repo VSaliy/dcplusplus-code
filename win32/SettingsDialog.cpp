@@ -75,7 +75,7 @@ help(0),
 tip(0)
 {
 	onInitDialog([this] { return initDialog(); });
-	onHelp([this](Control* c, unsigned id) { handleHelp(c, id); });
+	onHelp(&WinUtil::help);
 	onClosing([this] { return handleClosing(); });
 }
 
@@ -98,11 +98,9 @@ static LRESULT helpDlgCode(WPARAM wParam) {
 }
 
 bool SettingsDialog::initDialog() {
-	/*
-	* set this to IDH_INDEX so that clicking in an empty space of the dialog generates a WM_HELP
-	* message with no error; then SettingsDialog::handleHelp will convert IDH_INDEX to the current
-	* page's help id.
-	*/
+	/* set this to IDH_INDEX so that clicking in an empty space of the dialog generates a WM_HELP
+	message with no error; then SettingsDialog::helpImpl will convert IDH_INDEX to the current
+	page's help id. */
 	setHelpId(IDH_INDEX);
 
 	grid = addChild(Grid::Seed(1, 2));
@@ -212,13 +210,17 @@ bool SettingsDialog::initDialog() {
 			[this] { handleClosing(); handleOKClicked(); },
 			[this] { handleClosing(); endDialog(IDCANCEL); });
 
-		WinUtil::addHelpButton(cur)->onClicked([this] { handleHelp(this, IDH_INDEX); });
+		WinUtil::addHelpButton(cur)->onClicked([this] { WinUtil::help(this); });
 	}
 
 	/* use a hidden tooltip to determine when to show the help tooltip, so we don't have to manage
 	timers etc. */
 	tip = addChild(ToolTip::Seed());
-	auto timeout = tip->sendMessage(TTM_GETDELAYTIME, TTDT_AUTOPOP);
+
+	// make tooltips last longer
+	auto timeout = tip->getDelay(TTDT_AUTOPOP) * 3;
+	tip->setDelay(TTDT_AUTOPOP, timeout);
+
 	tip->addCallback(dwt::Message(WM_NOTIFY, TTN_GETDISPINFO), [timeout](const MSG& msg, LRESULT&) -> bool {
 		auto& ttdi = *reinterpret_cast<LPNMTTDISPINFO>(msg.lParam);
 		auto widget = dwt::hwnd_cast<dwt::Control*>(reinterpret_cast<HWND>(ttdi.hdr.idFrom));
@@ -253,16 +255,30 @@ BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 	dwt::Control* widget = dwt::hwnd_cast<dwt::Control*>(hwnd);
 
 	if(widget && widget != dialog->help) {
-		widget->onFocus([=] { dialog->handleChildHelp(widget); });
+		// update the bottom help box on focus / sel change.
+		widget->onFocus([dialog, widget] { dialog->handleChildHelp(widget); });
 
 		TablePtr table = dynamic_cast<TablePtr>(widget);
 		if(table)
-			table->onSelectionChanged([=] { dialog->handleChildHelp(widget); });
+			table->onSelectionChanged([dialog, widget] { dialog->handleChildHelp(widget); });
 
+		// associate a tooltip with widgets that may provide a valid cshelp id.
 		auto id = widget->getHelpId();
-		if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
-			// this widget has a valid cshelp id; associate a tooltip tool to it.
+		if((id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) || table) {
 			dialog->tip->addTool(widget);
+
+			// special refresh logic for tables as they may have different help ids for each item.
+			if(table) {
+				table->onMouseMove([dialog, table](const dwt::MouseEvent&) -> bool {
+					const auto id = table->getHelpId();
+					static int prevId = -1;
+					if(static_cast<int>(id) != prevId) {
+						prevId = static_cast<int>(id);
+						dialog->tip->sendMessage(TTM_UPDATE);
+					}
+					return false;
+				});
+			}
 		}
 	}
 	return TRUE;
@@ -270,12 +286,6 @@ BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 
 void SettingsDialog::handleChildHelp(dwt::Control* widget) {
 	help->setText(Text::toT(WinUtil::getHelpText(widget->getHelpId())));
-}
-
-void SettingsDialog::handleHelp(dwt::Control* widget, unsigned id) {
-	if(id == IDH_INDEX && currentPage)
-		id = currentPage->getHelpId();
-	WinUtil::help(widget, id);
 }
 
 bool SettingsDialog::handleClosing() {
@@ -351,4 +361,9 @@ void SettingsDialog::layout() {
 	grid->resize(dwt::Rectangle(8, 8, sz.x - 16, sz.y - 16));
 
 	currentPage->getParent()->layout();
+}
+
+void SettingsDialog::helpImpl(unsigned& id) {
+	if(id == IDH_INDEX && currentPage)
+		id = currentPage->getHelpId();
 }

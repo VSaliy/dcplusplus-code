@@ -64,7 +64,6 @@ private:
 
 	void handleSelectionChanged();
 	void handleDblClicked();
-	void handleTableHelp(unsigned id);
 	void handleTableHelpId(unsigned& id);
 	void handleSoundClicked();
 	void handleBalloonClicked();

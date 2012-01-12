@@ -287,7 +287,8 @@ public:
 	static bool parseDBLClick(const tstring& aString);
 	static void parseMagnetUri(const tstring& /*aUrl*/, bool aOverride = false);
 
-	static void help(dwt::Control* widget, unsigned id);
+	static void help(dwt::Control* widget);
+	static void helpId(dwt::Control* widget, unsigned id);
 	static void helpTooltip(dwt::Control* widget, unsigned timeout);
 	static string getHelpText(unsigned id);
 

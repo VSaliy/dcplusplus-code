@@ -891,6 +891,13 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, ParamMap& 
 	return false;
 }
 
+dwt::Control* helpPopup = nullptr; // only have 1 help popup at any given time.
+
+/** Display a help popup.
+Help popups display RTF text within a Rich Edit control. They visually look similar to a regular
+tooltip, but with a yellow background and thicker borders.
+@tparam tooltip Whether this help popup should act as an inactive tooltip that doesn't receive
+input but closes itself once its timer runs out. */
 template<bool tooltip>
 class HelpPopup : private RichTextBox {
 	typedef HelpPopup<tooltip> ThisType;
@@ -902,14 +909,14 @@ public:
 	{
 		// where to position the popup.
 		dwt::Point pt;
-		if(isKeyPressed(VK_F1)) {
+		if(!tooltip && isAnyKeyPressed()) {
 			auto rect = parent->getWindowRect();
 			pt.x = rect.left() + rect.width() / 2;
-			pt.y = rect.top();
+			pt.y = rect.bottom() + margin;
 		} else {
 			pt = dwt::Point::fromLParam(::GetMessagePos());
 			if(tooltip) {
-				// don't cover the parent when showing as a tooltip.
+				// don't cover the parent window.
 				pt.y = parent->getWindowRect().bottom() + margin;
 			}
 		}
@@ -946,6 +953,14 @@ private:
 			return 0;
 		}
 
+		// ok, ready to show the popup! make sure there's only 1 at any given time.
+		if(helpPopup) {
+			helpPopup->close();
+		}
+		helpPopup = this;
+		onDestroy([this] { if(this == helpPopup) helpPopup = nullptr; });
+
+		// adjust the size to account for borders and margins.
 		rect.pos = pos;
 		rect.size.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
 		rect.size.y += ::GetSystemMetrics(SM_CYEDGE) * 2 + margin;
@@ -954,13 +969,15 @@ private:
 		const auto screen = getDesktopSize();
 		if(rect.right() > screen.x) { rect.pos.x -= rect.right() - screen.x; }
 		if(rect.left() < 0) { rect.pos.x = 0; }
-		if(!tooltip && rect.bottom() > screen.y) { rect.pos.y -= rect.bottom() - screen.y; }
-		if(!tooltip && rect.top() < 0) { rect.pos.y = 0; }
+		if(rect.bottom() > screen.y) { rect.pos.y -= rect.bottom() - screen.y; }
+		if(rect.top() < 0) { rect.pos.y = 0; }
 
 		setColor(dwt::Color::predefined(COLOR_INFOTEXT), dwt::Color::predefined(COLOR_INFOBK));
 
 		if(tooltip) {
+			// this help popup acts as a tooltip; it will close by itself.
 			setTimer([this] { return !this->close(); }, timeout);
+			onMouseMove([this](const dwt::MouseEvent&) { return this->close(); });
 
 		} else {
 			// capture the mouse.
@@ -975,7 +992,7 @@ private:
 				auto cb2 = focus->addCallback(dwt::Message(WM_HELP), [this](const MSG&, LRESULT&) { return this->close(); });
 				onDestroy([this, focus, cb1, cb2] {
 					auto cb1_ = cb1; focus->clearCallback(dwt::Message(WM_KEYDOWN), cb1_);
-					auto cb2_ = cb2; focus->clearCallback(dwt::Message(WM_KEYDOWN), cb2_);
+					auto cb2_ = cb2; focus->clearCallback(dwt::Message(WM_HELP), cb2_);
 				});
 			}
 		}
@@ -999,7 +1016,11 @@ private:
 	unsigned timeout;
 };
 
-void WinUtil::help(dwt::Control* widget, unsigned id) {
+void WinUtil::help(dwt::Control* widget) {
+	helpId(widget, widget->getHelpId());
+}
+
+void WinUtil::helpId(dwt::Control* widget, unsigned id) {
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help
 		new HelpPopup<false>(widget, Text::toT(getHelpText(id)));

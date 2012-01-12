@@ -66,7 +66,7 @@ Tree::Seed::Seed() :
 
 void Tree::create( const Seed & cs )
 {
-	Control::Seed mySeed(WS_CHILD);
+	Control::Seed mySeed(WS_CHILD, WS_EX_CONTROLPARENT);
 
 	BaseType::create(mySeed);
 	tree = WidgetCreator<TreeView>::create(this, cs);

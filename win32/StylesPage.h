@@ -134,7 +134,6 @@ private:
 	CheckBoxPtr showGen;
 
 	void handleSelectionChanged();
-	void handleTableHelp(unsigned id);
 	void handleTableHelpId(unsigned& id);
 
 	void handleCustomFont();

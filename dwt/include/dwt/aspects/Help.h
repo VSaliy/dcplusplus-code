@@ -47,13 +47,14 @@ class Help {
 	typedef std::function<void (unsigned&)> id_function_type;
 
 public:
-	unsigned getHelpId() const {
+	unsigned getHelpId() {
 		unsigned ret = ::GetWindowContextHelpId(H());
 		if(!ret) {
 			WidgetType* parent = dynamic_cast<WidgetType*>(W().getParent());
 			if(parent)
 				ret = parent->getHelpId();
 		}
+		helpImpl(ret);
 		if(id_function)
 			id_function(ret);
 		return ret;
@@ -63,17 +64,12 @@ public:
 		::SetWindowContextHelpId(H(), id);
 	}
 
-	/**
-	* set a callback function that can modify the id returned by getHelpId. note that the
-	* dispatcher used by onHelp doesn't call getHelpId, so this won't affect messages dispatched
-	* from WM_HELP. in order to modify help ids dispatched via the function defined in onHelp, use
-	* helpImpl.
-	*/
+	/** set a callback function that can modify the id returned by getHelpId. */
 	void setHelpId(id_function_type f) {
 		id_function = f;
 	}
 
-	void onHelp(std::function<void (WidgetType*, unsigned)> f) {
+	void onHelp(std::function<void (WidgetType*)> f) {
 		W().addCallback(Message(WM_HELP), [f, this](const MSG& msg, LRESULT& ret) -> bool {
 			LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(msg.lParam);
 			if(!lphi || lphi->iContextType != HELPINFO_WINDOW)
@@ -88,10 +84,7 @@ public:
 			if(!widget)
 				return false;
 
-			unsigned id = lphi->dwContextId;
-			widget->helpImpl(id);
-
-			f(widget, id);
+			f(widget);
 
 			ret = TRUE;
 			return true;
@@ -102,10 +95,7 @@ private:
 	id_function_type id_function;
 
 	/** implement this in the derived widget in order to change the help id before it is
-	* dispatched. if you are not using onHelp to define callbacks but simply calling getHelpId when
-	* necessary, then it is the setHelpId overload which takes a function as input that you are
-	* looking for.
-	*/
+	dispatched. */
 	virtual void helpImpl(unsigned& id) {
 		// empty on purpose.
 	}
