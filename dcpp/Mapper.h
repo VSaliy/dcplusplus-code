@@ -31,7 +31,7 @@ using std::string;
 class Mapper : boost::noncopyable
 {
 public:
-	Mapper() { }
+	Mapper(string&& localIp);
 	virtual ~Mapper() { }
 
 	enum Protocol {
@@ -62,6 +62,9 @@ public:
 
 	/** user-friendly name for this implementation. */
 	virtual const string& getName() const = 0;
+
+protected:
+	const string localIp;
 
 private:
 	/** add a port mapping rule. */

@@ -19,8 +19,6 @@
 #include "stdinc.h"
 #include "Mapper_MiniUPnPc.h"
 
-#include "ConnectivityManager.h"
-#include "SettingsManager.h"
 #include "Util.h"
 
 extern "C" {
@@ -35,18 +33,16 @@ namespace dcpp {
 
 const string Mapper_MiniUPnPc::name = "MiniUPnP";
 
+Mapper_MiniUPnPc::Mapper_MiniUPnPc(string&& localIp) :
+Mapper(std::forward<string>(localIp))
+{
+}
+
 bool Mapper_MiniUPnPc::init() {
 	if(!url.empty())
 		return true;
 
-#ifndef PORTMAPTOOL
-	const auto& bindAddr = CONNSETTING(BIND_ADDRESS);
-	UPNPDev* devices = upnpDiscover(2000,
-		(bindAddr.empty() || bindAddr == SettingsManager::getInstance()->getDefault(SettingsManager::BIND_ADDRESS)) ? nullptr : bindAddr.c_str(),
-		0, 0, 0, 0);
-#else
-	UPNPDev* devices = upnpDiscover(2000, nullptr, 0, 0, 0, 0);
-#endif
+	UPNPDev* devices = upnpDiscover(2000, localIp.empty() ? nullptr : localIp.c_str(), 0, 0, 0, 0);
 	if(!devices)
 		return false;
 
@@ -73,13 +69,9 @@ bool Mapper_MiniUPnPc::init() {
 void Mapper_MiniUPnPc::uninit() {
 }
 
-#ifndef PORTMAPTOOL
-namespace { string getLocalIp() { return Util::getLocalIp(); } }
-#endif
-
 bool Mapper_MiniUPnPc::add(const string& port, const Protocol protocol, const string& description) {
 	return UPNP_AddPortMapping(url.c_str(), service.c_str(), port.c_str(), port.c_str(),
-		getLocalIp().c_str(), description.c_str(), protocols[protocol], 0, 0) == UPNPCOMMAND_SUCCESS;
+		localIp.c_str(), description.c_str(), protocols[protocol], 0, 0) == UPNPCOMMAND_SUCCESS;
 }
 
 bool Mapper_MiniUPnPc::remove(const string& port, const Protocol protocol) {

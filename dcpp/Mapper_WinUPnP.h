@@ -30,7 +30,7 @@ namespace dcpp {
 class Mapper_WinUPnP : public Mapper
 {
 public:
-	Mapper_WinUPnP() : Mapper(), pUN(0), lastPort(0) { }
+	Mapper_WinUPnP(string&& localIp);
 
 	static const string name;
 

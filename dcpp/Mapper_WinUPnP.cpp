@@ -26,11 +26,21 @@
 #ifdef HAVE_NATUPNP_H
 #include <ole2.h>
 #include <natupnp.h>
+#else // HAVE_NATUPNP_H
+struct IUPnPNAT { };
+struct IStaticPortMappingCollection { };
 #endif // HAVE_NATUPNP_H
 
 namespace dcpp {
 
 const string Mapper_WinUPnP::name = "Windows UPnP";
+
+Mapper_WinUPnP::Mapper_WinUPnP(string&& localIp) :
+Mapper(std::forward<string>(localIp)),
+pUN(0),
+lastPort(0)
+{
+}
 
 #ifdef HAVE_NATUPNP_H
 
@@ -60,10 +70,6 @@ void Mapper_WinUPnP::uninit() {
 	::CoUninitialize();
 }
 
-#ifndef PORTMAPTOOL
-namespace { string getLocalIp() { return Util::getLocalIp(); } }
-#endif
-
 bool Mapper_WinUPnP::add(const string& port, const Protocol protocol, const string& description) {
 	IStaticPortMappingCollection* pSPMC = getStaticPortMappingCollection();
 	if(!pSPMC)
@@ -72,7 +78,7 @@ bool Mapper_WinUPnP::add(const string& port, const Protocol protocol, const stri
 	/// @todo use a BSTR wrapper
 	BSTR protocol_ = SysAllocString(Text::toT(protocols[protocol]).c_str());
 	BSTR description_ = SysAllocString(Text::toT(description).c_str());
-	BSTR localIP = SysAllocString(Text::toT(getLocalIp()).c_str());
+	BSTR localIP = SysAllocString(Text::toT(localIp).c_str());
 	auto port_ = Util::toInt(port);
 
 	IStaticPortMapping* pSPM = 0;
@@ -175,9 +181,6 @@ IStaticPortMappingCollection* Mapper_WinUPnP::getStaticPortMappingCollection() {
 }
 
 #else // HAVE_NATUPNP_H
-
-struct IUPnPNAT { };
-struct IStaticPortMappingCollection { };
 
 bool Mapper_WinUPnP::init() {
 	return false;

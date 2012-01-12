@@ -26,7 +26,7 @@ namespace dcpp {
 class Mapper_MiniUPnPc : public Mapper
 {
 public:
-	Mapper_MiniUPnPc() : Mapper() { }
+	Mapper_MiniUPnPc(string&& localIp);
 
 	static const string name;
 
