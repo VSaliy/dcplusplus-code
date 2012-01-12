@@ -32,6 +32,9 @@
 #ifndef DWT_TREE_H
 #define DWT_TREE_H
 
+#include <map>
+#include <vector>
+
 #include "../Rectangle.h"
 #include "../resources/ImageList.h"
 #include "../aspects/Clickable.h"
@@ -224,7 +227,9 @@ public:
 	/// Returns the text of a particular node
 	/** Returns the text of a particular node.
 	  */
-	tstring getText( HTREEITEM node );
+	tstring getText( HTREEITEM node, int column = 0);
+
+	void setText(HTREEITEM item, int column, const tstring& text);
 
 	/// Actually creates the TreeView
 	/** You should call WidgetFactory::createTreeView if you instantiate class
@@ -250,6 +255,8 @@ private:
 
 	TreeViewPtr tree;
 	HeaderPtr header;
+
+	std::map<HTREEITEM, std::vector<tstring>> texts;
 
 	HeaderPtr getHeader();
 
@@ -288,6 +295,10 @@ private:
 	void setColumnWidthImpl( unsigned column, int width );
 
 	LRESULT draw(NMTVCUSTOMDRAW& x);
+	LRESULT prePaint(NMTVCUSTOMDRAW &nmdc);
+	LRESULT prePaintItem(NMTVCUSTOMDRAW &nmcd);
+	LRESULT postPaintItem(NMTVCUSTOMDRAW &nmcd);
+	LRESULT postPaint(NMTVCUSTOMDRAW &nmcd);
 };
 
 inline HTREEITEM Tree::getNext( HTREEITEM node, unsigned flag ) {
