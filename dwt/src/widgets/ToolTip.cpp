@@ -72,6 +72,14 @@ void ToolTip::setTool(Widget* widget, F f) {
 	addTool(widget);
 }
 
+int ToolTip::getDelay(int param) {
+	return sendMessage(TTM_GETDELAYTIME, param);
+}
+
+void ToolTip::setDelay(int param, int delay) {
+	sendMessage(TTM_SETDELAYTIME, param, (delay >= 0) ? MAKELPARAM(delay, 0) : -1);
+}
+
 void ToolTip::setActive(bool b) {
 	sendMessage(TTM_ACTIVATE, b ? TRUE : FALSE);
 }

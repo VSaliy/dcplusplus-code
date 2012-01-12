@@ -164,11 +164,11 @@ bool CommandDlg::handleInitDialog() {
 		[this] { handleOKClicked(); },
 		[this] { endDialog(IDCANCEL); });
 
-	WinUtil::addHelpButton(grid)->onClicked([this] { WinUtil::help(this, IDH_USER_COMMAND); });
+	WinUtil::addHelpButton(grid)->onClicked([this] { WinUtil::help(this); });
 
 	if(bOpenHelp) {
 		// launch the help file, instead of having the help in the dialog
-		WinUtil::help(this, IDH_USER_COMMAND);
+		WinUtil::help(this);
 	}
 
 	int newType = -1;

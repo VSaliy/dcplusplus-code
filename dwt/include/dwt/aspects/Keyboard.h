@@ -53,6 +53,19 @@ public:
 	static bool isControlPressed() { return isKeyPressed(VK_CONTROL); }
 	static bool isAltPressed() { return isKeyPressed(VK_MENU); }
 
+	static bool isAnyKeyPressed() {
+		BYTE keys[256];
+		if(::GetKeyboardState(keys)) {
+			for(size_t i = 0; i < 256; ++i) {
+				// ignore virtual key codes for mouse buttons. for the rest, look at the high-order bit.
+				if(i != VK_LBUTTON && i != VK_RBUTTON && i != VK_MBUTTON && i != VK_XBUTTON1 && i != VK_XBUTTON2 && keys[i] & 0x80) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	/// Checks if Caps Lock is on
 	/** Use this function if you need to determine if Caps Lock is ON
 	  */

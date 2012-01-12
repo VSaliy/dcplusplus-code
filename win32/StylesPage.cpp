@@ -170,7 +170,6 @@ showGen(0)
 
 	table->onSelectionChanged([this] { handleSelectionChanged(); });
 
-	table->onHelp([this](Widget*, unsigned id) { handleTableHelp(id); });
 	table->setHelpId([this](unsigned& id) { handleTableHelpId(id); });
 }
 
@@ -363,19 +362,10 @@ void StylesPage::handleSelectionChanged() {
 	bgColor->setEnabled(enable);
 }
 
-void StylesPage::handleTableHelp(unsigned id) {
-	// same as PropPage::handleListHelp
-	int item =
-		isKeyPressed(VK_F1) ? table->getSelected() :
-		table->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos()))).first;
-	if(item >= 0)
-		id = table->getData(item)->helpId;
-	WinUtil::help(table, id);
-}
-
 void StylesPage::handleTableHelpId(unsigned& id) {
 	// same as PropPage::handleListHelpId
-	int item = table->getSelected();
+	int item = isAnyKeyPressed() ? table->getSelected() :
+		table->hitTest(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos()))).first;
 	if(item >= 0)
 		id = table->getData(item)->helpId;
 }

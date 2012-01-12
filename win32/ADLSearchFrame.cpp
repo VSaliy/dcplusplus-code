@@ -111,7 +111,7 @@ items(0)
 		addWidget(button);
 
 		button = WinUtil::addHelpButton(grid);
-		button->onClicked([this] { WinUtil::help(this, IDH_ADL_SEARCH); });
+		button->onClicked([this] { WinUtil::help(this); });
 		addWidget(button);
 	}
 

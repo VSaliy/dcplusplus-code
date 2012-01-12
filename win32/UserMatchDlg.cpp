@@ -113,7 +113,7 @@ bool UserMatchDlg::handleInitDialog(const UserMatch* initialMatcher) {
 			[this] { handleOKClicked(); },
 			[this] { endDialog(IDCANCEL); });
 
-		WinUtil::addHelpButton(cur)->onClicked([this] { WinUtil::help(this, IDH_USER_MATCH); });
+		WinUtil::addHelpButton(cur)->onClicked([this] { WinUtil::help(this); });
 	}
 
 	if(initialMatcher) {

@@ -209,7 +209,7 @@ fullSlots(false)
 		callAsync([this] {
 			SystemFrame::openWindow(getTabView(), false, false);
 
-			WinUtil::help(this, IDH_GET_STARTED);
+			WinUtil::helpId(this, IDH_GET_STARTED);
 			handleSettings();
 		});
 	}
@@ -343,10 +343,10 @@ void MainWindow::initMenu() {
 	{
 		MenuPtr help = mainMenu->appendPopup(T_("&Help"));
 
-		help->appendItem(T_("Help &Contents\tF1"), [this] { WinUtil::help(this, IDH_INDEX); }, WinUtil::menuIcon(IDI_HELP));
-		help->appendItem(T_("Get started"), [this] { WinUtil::help(this, IDH_GET_STARTED); }, WinUtil::menuIcon(IDI_GET_STARTED));
+		help->appendItem(T_("Help &Contents\tF1"), [this] { WinUtil::helpId(this, IDH_INDEX); }, WinUtil::menuIcon(IDI_HELP));
+		help->appendItem(T_("Get started"), [this] { WinUtil::helpId(this, IDH_GET_STARTED); }, WinUtil::menuIcon(IDI_GET_STARTED));
 		help->appendSeparator();
-		help->appendItem(T_("Change Log"), [this] { WinUtil::help(this, IDH_CHANGELOG); }, WinUtil::menuIcon(IDI_CHANGELOG));
+		help->appendItem(T_("Change Log"), [this] { WinUtil::helpId(this, IDH_CHANGELOG); }, WinUtil::menuIcon(IDI_CHANGELOG));
 		help->appendItem(T_("About DC++"), [this] { handleAbout(); }, WinUtil::menuIcon(IDI_DCPP));
 		help->appendSeparator();
 
@@ -443,7 +443,7 @@ void MainWindow::initToolbar() {
 	}
 	toolbar->setLayout(StringTokenizer<string>(SETTING(TOOLBAR), ',').getTokens());
 	toolbar->onCustomized([this] { handleToolbarCustomized(); });
-	toolbar->onCustomizeHelp([this] { WinUtil::help(toolbar, IDH_CUSTOMIZE_TB); });
+	toolbar->onCustomizeHelp([this] { WinUtil::helpId(toolbar, IDH_CUSTOMIZE_TB); });
 	toolbar->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleToolbarContextMenu(sc); });
 
 	toolbar->onHelp(&WinUtil::help);

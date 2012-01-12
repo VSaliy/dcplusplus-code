@@ -41,6 +41,8 @@
 #include <dwt/DWTException.h>
 #include <dwt/dwt_vsstyle.h>
 #include <dwt/dwt_vssym32.h>
+#include <dwt/WidgetCreator.h>
+#include <dwt/widgets/ToolTip.h>
 
 namespace dwt {
 
@@ -621,10 +623,11 @@ std::pair<int, int> Table::hitTest(const ScreenCoordinate& pt) {
 
 void Table::setTooltips(TooltipF f) {
 	addRemoveTableExtendedStyle(LVS_EX_INFOTIP, true);
-	HWND tip = ListView_GetToolTips(handle());
-	if(tip) {
+	HWND tipH = ListView_GetToolTips(handle());
+	if(tipH) {
 		// make tooltips last longer
-		::SendMessage(tip, TTM_SETDELAYTIME, TTDT_AUTOPOP, MAKELPARAM(::SendMessage(tip, TTM_GETDELAYTIME, TTDT_AUTOPOP, 0) * 3, 0));
+		auto tip = WidgetCreator<ToolTip>::attach(this, tipH);
+		tip->setDelay(TTDT_AUTOPOP, tip->getDelay(TTDT_AUTOPOP) * 3);
 	}
 	addCallback(Message(WM_NOTIFY, LVN_GETINFOTIP), [f](const MSG& msg, LRESULT&) -> bool {
 		auto& tip = *reinterpret_cast<LPNMLVGETINFOTIP>(msg.lParam);

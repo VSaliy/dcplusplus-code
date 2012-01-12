@@ -77,6 +77,10 @@ public:
 	void setTool(Widget* widget, F callback);
 
 	void setMaxTipWidth(int width);
+	/** get a delay value. see the TTM_GETDELAYTIME doc for possible params. */
+	int getDelay(int param);
+	/** set a delay value. see the TTM_GETDELAYTIME doc for possible params. use -1 for default. */
+	void setDelay(int param, int delay);
 
 	void setActive(bool b);
 	void refresh();
