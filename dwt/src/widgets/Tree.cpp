@@ -30,10 +30,17 @@
 */
 
 #include <dwt/widgets/Tree.h>
+
+#include <boost/range/adaptor/map.hpp>
+#include <boost/range/algorithm/for_each.hpp>
+
 #include <dwt/widgets/Header.h>
 #include <dwt/WidgetCreator.h>
 
 namespace dwt {
+
+using boost::range::for_each;
+using boost::adaptors::map_values;
 
 const TCHAR Tree::TreeView::windowClass[] = WC_TREEVIEW;
 
@@ -112,22 +119,41 @@ tstring Tree::getSelectedText() {
 	return getText(TreeView_GetSelection(treeHandle()));
 }
 
-tstring Tree::getText( HTREEITEM node )
+tstring Tree::getText( HTREEITEM node, int column)
 {
 	if(node == NULL) {
 		return tstring();
 	}
 
-	TVITEMEX item = { TVIF_HANDLE | TVIF_TEXT, node };
-	TCHAR buffer[1024];
-	buffer[0] = '\0';
-	item.cchTextMax = 1022;
-	item.pszText = buffer;
-	if ( TreeView_GetItem(treeHandle(), &item) )
-	{
-		return buffer;
+	if(column == 0) {
+		TVITEMEX item = { TVIF_HANDLE | TVIF_TEXT, node };
+		TCHAR buffer[1024];
+		buffer[0] = '\0';
+		item.cchTextMax = 1022;
+		item.pszText = buffer;
+		if ( TreeView_GetItem(treeHandle(), &item) ) {
+			return buffer;
+		}
+	} else {
+		auto i = texts.find(node);
+		if(i != texts.end() && i->second.size() > column) {
+			return i->second[column];
+		}
 	}
+
 	return tstring();
+}
+
+void Tree::setText(HTREEITEM node, int column, const tstring& text) {
+	if(column == 0) {
+		TVITEMEX item = { TVIF_HANDLE | TVIF_TEXT, node };
+		item.pszText = const_cast<LPTSTR>(text.c_str());
+		TreeView_SetItem(treeHandle(), &item);
+	} else if(column < getColumnCount()) {
+		auto &v = texts[node];
+		if(v.size() <= column) v.resize(column + 1);
+		v[column] = text;
+	}
 }
 
 void Tree::eraseChildren( HTREEITEM node )
@@ -240,6 +266,19 @@ void Tree::eraseColumnImpl(unsigned column) {
 
 		layout();
 	}
+
+	if(column == 0 && getColumnCount() >= 1) {
+		for_each(texts, [&](const std::pair<HTREEITEM, std::vector<tstring>> & item) {
+			setText(item.first, 0, item.second.empty() ? tstring() : item.second[0]);
+		});
+
+	}
+
+	for_each(texts | map_values, [&](std::vector<tstring> & v) {
+		if(column < v.size()) {
+			v.erase(v.begin() + column);
+		}
+	});
 }
 
 unsigned Tree::getColumnCountImpl() const {
@@ -290,12 +329,89 @@ void Tree::setColumnWidthImpl(unsigned column, int width) {
 	// TODO
 }
 
-LRESULT Tree::draw(NMTVCUSTOMDRAW& x) {
-	if(getColumnCount() < 2) {
+static const int INSET = 3;
+
+LRESULT Tree::prePaint(NMTVCUSTOMDRAW& nmcd) {
+	return CDRF_NOTIFYITEMDRAW | CDRF_NOTIFYPOSTPAINT;
+}
+
+LRESULT Tree::prePaintItem(NMTVCUSTOMDRAW& nmcd) {
+	// Clip the default item drawing to the column width
+	auto clipRect = nmcd.nmcd.rc;
+	auto w = header->getWidth(0);
+	clipRect.right = clipRect.left + w;
+
+	auto hRgn = ::CreateRectRgn (clipRect.left, clipRect.top, clipRect.right, clipRect.bottom);
+	POINT pt = { 0 };
+
+	auto hDC = nmcd.nmcd.hdc;
+	::GetWindowOrgEx(hDC, &pt);
+	::OffsetRgn (hRgn, -pt.x, -pt.y);
+	::SelectClipRgn (hDC, hRgn);
+	::DeleteObject (hRgn);
+
+	::SaveDC(hDC);
+	return CDRF_DODEFAULT | CDRF_NOTIFYPOSTPAINT;
+}
+
+LRESULT Tree::postPaintItem(NMTVCUSTOMDRAW& nmcd) {
+	auto hDC = nmcd.nmcd.hdc;
+	::RestoreDC (hDC, -1);
+
+	// Remove previously set clip region
+	::SelectClipRgn(hDC, NULL);
+
+	auto item = (HTREEITEM)nmcd.nmcd.dwItemSpec;
+
+	if (item == NULL) return CDRF_DODEFAULT;
+
+	auto clientSize = tree->getClientSize();
+
+	int x = header->getWidth(0);
+	auto columns = getColumnCount();
+
+	::SetTextColor(hDC, nmcd.clrText);
+	::SetBkColor(hDC, nmcd.clrTextBk);
+
+	for(size_t i = 1; i < columns; ++i) {
+		auto width = header->getWidth(i);
+
+		RECT rect = { x, nmcd.nmcd.rc.top, x + width, nmcd.nmcd.rc.bottom };
+
+		rect.left += INSET - 1;
+
+		if (rect.left < rect.right) {
+			auto text = getText(item, i);
+
+			if (!text.empty()) {
+				int flags = DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS;
+				::DrawText (hDC, text.c_str(), text.size (), &rect, flags);
+			}
+		}
+
+		x += width;
+		if (x > clientSize.x) break;
+	}
+
+	return CDRF_DODEFAULT;
+}
+
+LRESULT Tree::postPaint(NMTVCUSTOMDRAW& nmcd) {
+	return CDRF_DODEFAULT;
+}
+
+LRESULT Tree::draw(NMTVCUSTOMDRAW& nmcd) {
+	if(nmcd.nmcd.rc.left >= nmcd.nmcd.rc.right || nmcd.nmcd.rc.top >= nmcd.nmcd.rc.bottom || getColumnCount() < 2) {
 		return CDRF_DODEFAULT;
 	}
 
-	//TODO
+	switch(nmcd.nmcd.dwDrawStage) {
+	case CDDS_PREPAINT: return prePaint(nmcd);
+	case CDDS_ITEMPREPAINT: return prePaintItem(nmcd);
+	case CDDS_ITEMPOSTPAINT: return postPaintItem(nmcd);
+	case CDDS_POSTPAINT: return postPaint(nmcd);
+	}
+
 	return CDRF_DODEFAULT;
 }
 

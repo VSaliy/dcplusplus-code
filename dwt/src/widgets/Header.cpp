@@ -94,4 +94,13 @@ void Header::setDataImpl(int idx, LPARAM data) {
 	Header_SetItem(handle(), idx, &item);
 }
 
+int Header::getWidth(int idx) const {
+	HDITEM item = { HDI_WIDTH };
+
+	if(!Header_GetItem(handle(), idx, &item)) {
+		return 0;
+	}
+	return item.cxy;
+}
+
 }

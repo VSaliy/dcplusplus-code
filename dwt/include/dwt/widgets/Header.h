@@ -74,6 +74,8 @@ public:
 
 	int insert(const tstring& header, int width, LPARAM lParam = 0, int after = -1);
 
+	int getWidth(int i) const;
+
 	virtual Point getPreferredSize();
 
 protected:

@@ -28,12 +28,14 @@ int dwtMain(dwt::Application& app)
 		name.back() += i;
 
 		auto item = tree->insert(name, NULL, 1);
+		tree->setText(item, 1, _T("sub") + name);
+
 		assert(tree->getData(item) == 1);
 		for (int j = 0; j < 4; j++) {
 			tstring subname(_T("item 1"));
 			subname.back() += j;
 			auto subItem = tree->insert(subname, item);
-
+			tree->setText(subItem, 1, _T("sub") + subname);
 		}
 	}
 
