@@ -28,6 +28,11 @@ const char* Mapper::protocols[PROTOCOL_LAST] = {
 	"UDP"
 };
 
+Mapper::Mapper(string&& localIp) :
+localIp(std::forward<string>(localIp))
+{
+}
+
 bool Mapper::open(const string& port, const Protocol protocol, const string& description) {
 	if(!add(port, protocol, description))
 		return false;

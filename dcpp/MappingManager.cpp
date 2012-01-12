@@ -35,9 +35,7 @@ namespace dcpp {
 MappingManager::MappingManager() : busy(false), renewal(0) {
 	addMapper<Mapper_NATPMP>();
 	addMapper<Mapper_MiniUPnPc>();
-#ifdef HAVE_NATUPNP_H
 	addMapper<Mapper_WinUPnP>();
-#endif
 }
 
 StringList MappingManager::getMappers() const {
@@ -133,7 +131,7 @@ int MappingManager::run() {
 	}
 
 	for(auto i = mappers.begin(); i != mappers.end(); ++i) {
-		unique_ptr<Mapper> pMapper(i->second());
+		unique_ptr<Mapper> pMapper(i->second(Util::getLocalIp()));
 		Mapper& mapper = *pMapper;
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });

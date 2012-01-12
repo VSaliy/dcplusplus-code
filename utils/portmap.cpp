@@ -4,23 +4,36 @@
 
 #include <iostream>
 
-#include <dcpp/Mapper.h>
+#include <dcpp/Mapper_MiniUPnPc.h>
+#include <dcpp/Mapper_NATPMP.h>
+#include <dcpp/Mapper_WinUPnP.h>
 #include <dcpp/ScopedFunctor.h>
 #include <dcpp/Util.h>
 
 using namespace std;
 using namespace dcpp;
 
-#define PORTMAPTOOL
+void help() {
+	cout << "Arguments to run portmap with:" << endl << "\t portmap <port> <type> <description> <method> [remove]" << endl
+		<< "<port> is a port number to forward." << endl
+		<< "<type> must be either 0 (for TCP) or 1 (for UDP)." << endl
+		<< "<description> is the description of the port forwarding rule." << endl
+		<< "<method> must be either 0, 1, 2 (for NAT-PMP, MiniUPnP, Win UPnP)." << endl
+		<< "[remove] (optional) may be set to 1 to remove the rule." << endl;
+}
+
+enum { Port = 1, Type, Description, Method, LastCompulsory = Method, Remove };
+
 string getLocalIp() {
-	// imitate Util::getLocalIp
+	// imitate Util::getLocalIp but avoid calls to managers that haven't been initialized.
+
 	string tmp;
 
 	char buf[256];
 	gethostname(buf, 255);
 	hostent* he = gethostbyname(buf);
 	if(he == NULL || he->h_addr_list[0] == 0)
-		return string();
+		return Util::emptyString;
 	sockaddr_in dest;
 	int i = 0;
 
@@ -39,21 +52,6 @@ string getLocalIp() {
 	}
 	return tmp;
 }
-
-#include <dcpp/Mapper_MiniUPnPc.cpp>
-#include <dcpp/Mapper_NATPMP.cpp>
-#include <dcpp/Mapper_WinUPnP.cpp>
-
-void help() {
-	cout << "Arguments to run portmap with:" << endl << "\t portmap <port> <type> <description> <method> [remove]" << endl
-		<< "<port> is a port number to forward." << endl
-		<< "<type> must be either 0 (for TCP) or 1 (for UDP)." << endl
-		<< "<description> is the description of the port forwarding rule." << endl
-		<< "<method> must be either 0, 1, 2 (for NAT-PMP, MiniUPnP, Win UPnP)." << endl
-		<< "[remove] (optional) may be set to 1 to remove the rule." << endl;
-}
-
-enum { Port = 1, Type, Description, Method, LastCompulsory = Method, Remove };
 
 int main(int argc, char* argv[]) {
 #ifdef _WIN32
@@ -77,9 +75,9 @@ int main(int argc, char* argv[]) {
 
 	unique_ptr<Mapper> pMapper;
 	switch(argv[Method][0]) {
-	case '0': pMapper.reset(new Mapper_NATPMP()); break;
-	case '1': pMapper.reset(new Mapper_MiniUPnPc()); break;
-	case '2': pMapper.reset(new Mapper_WinUPnP()); break;
+	case '0': pMapper.reset(new Mapper_NATPMP(getLocalIp())); break;
+	case '1': pMapper.reset(new Mapper_MiniUPnPc(getLocalIp())); break;
+	case '2': pMapper.reset(new Mapper_WinUPnP(getLocalIp())); break;
 	default: cout << "Error: invalid method." << endl; help(); return 1;
 	}
 	auto& mapper = *pMapper;

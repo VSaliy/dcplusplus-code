@@ -26,7 +26,7 @@ namespace dcpp {
 class Mapper_NATPMP : public Mapper
 {
 public:
-	Mapper_NATPMP() : Mapper(), lifetime(0) { }
+	Mapper_NATPMP(string&& localIp);
 
 	static const string name;
 
