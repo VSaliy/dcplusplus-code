@@ -551,7 +551,7 @@ void DirectoryListingFrame::layout() {
 	dwt::Rectangle r(getClientSize());
 
 	if(loading) {
-		loading->bringToFront();
+		loading->setZOrder(HWND_TOPMOST);
 		loading->resize(r);
 		loading->redraw(true);
 		return;

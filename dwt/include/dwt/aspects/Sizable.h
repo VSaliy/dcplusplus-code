@@ -81,16 +81,6 @@ class Sizable
 	typedef Dispatchers::ConvertBase<Point, &Point::fromMSG, 0, false> MoveDispatcher;
 
 public:
-	/// Brings the widget to the front
-	/** Makes the widget become the front most widget meaning it will not be obscured
-	  * by other widgets which are contained in the same container widget. <br>
-	  * For instance if you have two widgets which partially hides eachother and you
-	  * call bringToFront on one of them it will make sure that the widget you call
-	  * bringToFront on will be the one which will be all visible and the other one
-	  * will be partially hidden by the parts which are obscured by the this widget.
-	  */
-	void bringToFront();
-
 	void centerWindow() {
 		// this is greatly inspired by MFC (wincore.cpp - CWnd::CenterWindow). 
 
@@ -104,16 +94,6 @@ public:
 
 		resize(rect.ensureVisibility(root));
 	}
-
-	/// Brings the widget to the bottom
-	/** Makes the widget become the bottom most widget meaning it will be obscured by
-	  * all other widgets which are contained in the same container widget. <br>
-	  * For instance if you have two widgets which partially hides eachother and you
-	  * call bringToBottom on one of them it will make sure that the widget you call
-	  * bringToBottom on will be the one which will be invisible and the other one
-	  * will be all visible by the parts which are obscured by the this widget.
-	  */
-	void bringToBottom();
 
 	bool isIconic();
 	bool isZoomed();
@@ -143,19 +123,7 @@ public:
 		W().addCallback(Message( WM_MOVE ), MoveDispatcher(f));
 	}
 };
-
-template< class WidgetType >
-void Sizable< WidgetType >::bringToFront()
-{
-	::SetWindowPos(H(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
-}
-
-template< class WidgetType >
-void Sizable< WidgetType >::bringToBottom()
-{
-	::SetWindowPos(H(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
-}
-
+ 
 template< class WidgetType >
 bool Sizable< WidgetType >::isIconic()
 {

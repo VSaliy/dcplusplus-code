@@ -186,4 +186,8 @@ Rectangle Widget::getDesktopSize(HMONITOR mon) {
 	return Rectangle(rc);
 }
 
+void Widget::setZOrder(HWND insertAfter) {
+	::SetWindowPos(handle(), insertAfter, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
+}
+
 }

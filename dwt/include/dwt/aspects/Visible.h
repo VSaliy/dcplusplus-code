@@ -95,11 +95,6 @@ public:
 	void redraw(bool now = false);
 
 	void redraw(const Rectangle& r, bool now = false);
-
-	/// move the widget to the top of the Z order.
-	void bringToTop() {
-		::SetWindowPos(H(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
-	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -146,6 +146,10 @@ public:
 	/** Return the desktop size of the monitor closest to this widget. */
 	Rectangle getDesktopSize() const;
 
+	/** Change the Z order of this widget. See the SetWindowPos doc for special values the
+	"insertAfter" parameter can take. */
+	void setZOrder(HWND insertAfter);
+
 	/// Sets the enabled property of the Widget
 	/** Changes the enabled property of the Widget. Use this function to change the
 	  * enabled property of the Widget
