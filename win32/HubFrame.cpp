@@ -320,9 +320,9 @@ void HubFrame::layout() {
 		paned->maximize(0);
 
 		if(filterOpts->hasStyle(WS_VISIBLE)) {
-			filterOpts->bringToTop();
-			filter.column->bringToTop();
-			filter.method->bringToTop();
+			filterOpts->setZOrder(HWND_TOP);
+			filter.column->setZOrder(HWND_TOP);
+			filter.method->setZOrder(HWND_TOP);
 
 			auto r = filter.text->getWindowRect();
 			r.pos = dwt::ClientCoordinate(dwt::ScreenCoordinate(r.pos), filterOpts->getParent()).getPoint();

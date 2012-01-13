@@ -307,7 +307,7 @@ void SettingsDialog::handleSelectionChanged() {
 		auto page = find_if(pages.begin(), pages.end(), CompareSecond<PropPage*, HTREEITEM>(sel))->first;
 
 		// move to the top of the Z order so the ScrolledContainer thinks this is the only child.
-		page->bringToTop();
+		page->setZOrder(HWND_TOP);
 		page->setVisible(true);
 
 		if(currentPage) {
