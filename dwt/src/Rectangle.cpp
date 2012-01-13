@@ -31,6 +31,8 @@
 
 #include <dwt/Rectangle.h>
 
+#include <dwt/Widget.h>
+
 namespace dwt {
 
 Rectangle::Rectangle( long x, long y, long width, long height )
@@ -181,6 +183,15 @@ Rectangle Rectangle::cropRight( const int a_ToRemove ) const
 	register int d_NewSize = size.x - a_ToRemove;
 
 	return Rectangle( pos.x, pos.y, d_NewSize > 0 ? d_NewSize : 0, size.y );
+}
+
+Rectangle& Rectangle::ensureVisibility(Widget* base) {
+	auto desktop = base->getDesktopSize();
+	if(right() > desktop.right()) { pos.x = desktop.right() - width(); }
+	if(left() < desktop.left()) { pos.x = desktop.left(); }
+	if(bottom() > desktop.bottom()) { pos.y = desktop.bottom() - height(); }
+	if(top() < desktop.top()) { pos.y = desktop.top(); }
+	return *this;
 }
 
 bool operator==(const Rectangle& lhs, const Rectangle& rhs) {

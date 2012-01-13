@@ -119,10 +119,6 @@ public:
 
 	virtual Point getPreferredSize();
 
-	virtual void layout();
-
-	void setDropDownHeight(size_t h);
-
 	using aspects::Clickable<ThisType>::onClicked;
 	using aspects::Clickable<ThisType>::onDblClicked;
 
@@ -137,8 +133,6 @@ protected:
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
-
-	size_t dropDownHeight;
 
 	// aspects::Selection
 	int getSelectedImpl() const;

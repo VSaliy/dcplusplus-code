@@ -81,12 +81,6 @@ class Sizable
 	typedef Dispatchers::ConvertBase<Point, &Point::fromMSG, 0, false> MoveDispatcher;
 
 public:
-	/// Returns the screen size.
-	/** This is the screen size, and useful for making applications that must adapt
-	 * to different screen sizes.
-	 */
-	static Point getDesktopSize();
-
 	/// Brings the widget to the front
 	/** Makes the widget become the front most widget meaning it will not be obscured
 	  * by other widgets which are contained in the same container widget. <br>
@@ -108,16 +102,7 @@ public:
 		rect.pos.y = (rect.top() + rect.bottom() - size.y) / 2;
 		rect.size = size;
 
-		// make sure the window is still in the screen area.
-		MONITORINFO mi = { sizeof(MONITORINFO) };
-		if(::GetMonitorInfo(::MonitorFromWindow(root->handle(), MONITOR_DEFAULTTONEAREST), &mi)) {
-			if(rect.right() > mi.rcWork.right) { rect.pos.x = mi.rcWork.right - rect.width(); }
-			if(rect.left() < mi.rcWork.left) { rect.pos.x = mi.rcWork.left; }
-			if(rect.bottom() > mi.rcWork.bottom) { rect.pos.y = mi.rcWork.bottom - rect.height(); }
-			if(rect.top() < mi.rcWork.top) { rect.pos.y = mi.rcWork.top; }
-		}
-
-		resize(rect);
+		resize(rect.ensureVisibility(root));
 	}
 
 	/// Brings the widget to the bottom
@@ -158,14 +143,6 @@ public:
 		W().addCallback(Message( WM_MOVE ), MoveDispatcher(f));
 	}
 };
-
-template< class WidgetType >
-Point Sizable< WidgetType >::getDesktopSize()
-{
-	RECT rc;
-	::GetWindowRect( ::GetDesktopWindow(), & rc );
-	return Point( rc.right - rc.left, rc.bottom - rc.top );
-}
 
 template< class WidgetType >
 void Sizable< WidgetType >::bringToFront()

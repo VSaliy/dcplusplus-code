@@ -200,7 +200,27 @@ fullSlots(false)
 
 	callAsync([this] {
 		int cmdShow = dwt::Application::instance().getCmdShow();
-		::ShowWindow(handle(), (cmdShow == SW_SHOWDEFAULT || cmdShow == SW_SHOWNORMAL) ? SETTING(MAIN_WINDOW_STATE) : cmdShow);
+		if(cmdShow == SW_SHOWDEFAULT || cmdShow == SW_SHOWNORMAL)
+			cmdShow = SETTING(MAIN_WINDOW_STATE);
+
+		int pos_x = SETTING(MAIN_WINDOW_POS_X);
+		int pos_y = SETTING(MAIN_WINDOW_POS_Y);
+		int size_x = SETTING(MAIN_WINDOW_SIZE_X);
+		int size_y = SETTING(MAIN_WINDOW_SIZE_Y);
+		if(pos_x != static_cast<int>(CW_USEDEFAULT) && pos_y != static_cast<int>(CW_USEDEFAULT) &&
+			size_x != static_cast<int>(CW_USEDEFAULT) && size_y != static_cast<int>(CW_USEDEFAULT) &&
+			size_x > 10 && size_y > 10)
+		{
+			WINDOWPLACEMENT wp = { sizeof(WINDOWPLACEMENT) };
+			wp.showCmd = cmdShow;
+			wp.rcNormalPosition = dwt::Rectangle(pos_x, pos_y, size_x, size_y);
+			::SetWindowPlacement(handle(), &wp);
+		} else {
+			/* invalid pos / size values; just show the window (Windows will have decided a
+			position for the window by itself). */
+			::ShowWindow(handle(), cmdShow);
+		}
+
 		if(cmdShow == SW_MINIMIZE || cmdShow == SW_SHOWMINIMIZED || cmdShow == SW_SHOWMINNOACTIVE)
 			handleMinimized();
 	});
@@ -223,18 +243,6 @@ void MainWindow::initWindow() {
 	dcdebug("initWindow\n");
 
 	Seed cs(_T(APPNAME) _T(" ") _T(VERSIONSTRING));
-
-	int pos_x = SETTING(MAIN_WINDOW_POS_X);
-	int pos_y = SETTING(MAIN_WINDOW_POS_Y);
-	int size_x = SETTING(MAIN_WINDOW_SIZE_X);
-	int size_y = SETTING(MAIN_WINDOW_SIZE_Y);
-	if(pos_x != static_cast<int>(CW_USEDEFAULT) && pos_y != static_cast<int>(CW_USEDEFAULT) &&
-		size_x != static_cast<int>(CW_USEDEFAULT) && size_y != static_cast<int>(CW_USEDEFAULT) &&
-		pos_x > 0 && pos_y > 0 && size_x > 10 && size_y > 10 &&
-		pos_x < getDesktopSize().x && pos_y < getDesktopSize().y)
-	{
-		cs.location = dwt::Rectangle(pos_x, pos_y, size_x, size_y);
-	}
 
 	cs.style &= ~WS_VISIBLE;
 	cs.exStyle |= WS_EX_APPWINDOW;
@@ -895,16 +903,19 @@ void MainWindow::saveWindowSettings() {
 
 	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_PANED_POS, paned->getSplitterPos(0));
 
-	WINDOWPLACEMENT wp = { sizeof(wp)};
-	::GetWindowPlacement(this->handle(), &wp);
-	if(wp.showCmd == SW_SHOW || wp.showCmd == SW_SHOWNORMAL) {
-		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_X, static_cast<int>(wp.rcNormalPosition.left));
-		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_Y, static_cast<int>(wp.rcNormalPosition.top));
-		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_SIZE_X, static_cast<int>(wp.rcNormalPosition.right - wp.rcNormalPosition.left));
-		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_SIZE_Y, static_cast<int>(wp.rcNormalPosition.bottom - wp.rcNormalPosition.top));
+	WINDOWPLACEMENT wp = { sizeof(wp) };
+	if(::GetWindowPlacement(this->handle(), &wp)) {
+
+		dwt::Rectangle rect(wp.rcNormalPosition);
+		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_X, static_cast<int>(rect.left()));
+		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_Y, static_cast<int>(rect.top()));
+		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_SIZE_X, static_cast<int>(rect.width()));
+		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_SIZE_Y, static_cast<int>(rect.height()));
+
+		if(wp.showCmd == SW_SHOWNORMAL || wp.showCmd == SW_SHOW || wp.showCmd == SW_SHOWMAXIMIZED || wp.showCmd == SW_MAXIMIZE) {
+			SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_STATE, static_cast<int>(wp.showCmd));
+		}
 	}
-	if(wp.showCmd == SW_SHOWNORMAL || wp.showCmd == SW_SHOW || wp.showCmd == SW_SHOWMAXIMIZED || wp.showCmd == SW_MAXIMIZE)
-	SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_STATE, (int)wp.showCmd);
 }
 
 bool MainWindow::handleClosing() {
