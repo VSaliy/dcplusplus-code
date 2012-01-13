@@ -6,6 +6,7 @@
 * Reclaim memory after a file list match
 * Improve file reading operations
 * [L#678432] Context-sensitive help tooltips in the settings dialog (poy)
+* [L#804993] Improve multiple monitor support (poy)
 
 -- 0.790 2011-12-29 --
 * Fav users frame becomes users frame and shows all users

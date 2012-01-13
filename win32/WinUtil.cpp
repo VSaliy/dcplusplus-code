@@ -927,7 +927,7 @@ public:
 		if(multiline)
 			seed.style |= ES_MULTILINE;
 		seed.exStyle = WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_CLIENTEDGE;
-		seed.location.size.x = std::min(getDesktopSize().x, static_cast<long>(maxWidth * dwt::util::dpiFactor()));
+		seed.location.size.x = std::min(getParent()->getDesktopSize().width(), static_cast<long>(maxWidth * dwt::util::dpiFactor()));
 		create(seed);
 
 		const auto margins = sendMessage(EM_GETMARGINS);
@@ -965,12 +965,8 @@ private:
 		rect.size.x += ::GetSystemMetrics(SM_CXEDGE) * 2;
 		rect.size.y += ::GetSystemMetrics(SM_CYEDGE) * 2 + margin;
 
-		// make sure the window fits in within the screen
-		const auto screen = getDesktopSize();
-		if(rect.right() > screen.x) { rect.pos.x -= rect.right() - screen.x; }
-		if(rect.left() < 0) { rect.pos.x = 0; }
-		if(rect.bottom() > screen.y) { rect.pos.y -= rect.bottom() - screen.y; }
-		if(rect.top() < 0) { rect.pos.y = 0; }
+		// make sure the window fits in within the desktop of the parent widget.
+		rect.ensureVisibility(getParent());
 
 		setColor(dwt::Color::predefined(COLOR_INFOTEXT), dwt::Color::predefined(COLOR_INFOBK));
 

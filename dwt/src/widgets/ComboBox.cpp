@@ -42,8 +42,9 @@ extended(true)
 {
 }
 
-ComboBox::ComboBox(Widget* parent ) : BaseType(parent, ChainingDispatcher::superClass<ComboBox>()), dropDownHeight(::GetSystemMetrics(SM_CYSCREEN) / 3) {
-
+ComboBox::ComboBox(Widget* parent ) :
+BaseType(parent, ChainingDispatcher::superClass<ComboBox>())
+{
 }
 
 void ComboBox::create( const Seed & cs ) {
@@ -76,15 +77,6 @@ Point ComboBox::getPreferredSize() {
 	ret.x += ::GetSystemMetrics(SM_CYFIXEDFRAME) * 2 + ::GetSystemMetrics(SM_CXSMICON) + MARGIN;
 	ret.y = sendMessage(CB_GETITEMHEIGHT, -1) + ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2;
 	return ret;
-}
-
-void ComboBox::layout() {
-	/* TODO
-	Rectangle copy(r);
-	copy.size.y = dropDownHeight;
-	BaseType::layout(copy);
-	*/
-	BaseType::layout();
 }
 
 LPARAM ComboBox::getDataImpl(int i) {

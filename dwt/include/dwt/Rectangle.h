@@ -299,6 +299,10 @@ struct Rectangle {
 
 	/// Produce a Rectangle with the right portion removed
 	Rectangle cropRight( const int a_ToRemove ) const;
+
+	/** Adjust the rectangle to make sure it is not outside of the desktop of the monitor closest
+	to the given base widget. */
+	Rectangle& ensureVisibility(Widget* base);
 };
 
 bool operator==(const Rectangle& lhs, const Rectangle& rhs);

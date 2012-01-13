@@ -141,6 +141,11 @@ public:
 	Point getWindowSize() const;
 	Point getClientSize() const;
 
+	/** Return the desktop size of the primary monitor (at coords 0, 0). */
+	static Point getPrimaryDesktopSize();
+	/** Return the desktop size of the monitor closest to this widget. */
+	Rectangle getDesktopSize() const;
+
 	/// Sets the enabled property of the Widget
 	/** Changes the enabled property of the Widget. Use this function to change the
 	  * enabled property of the Widget
@@ -224,6 +229,8 @@ protected:
 private:
 	friend class Application;
 	template<typename T> friend T hwnd_cast(HWND hwnd);
+
+	static Rectangle getDesktopSize(HMONITOR mon);
 
 	// Contains the list of signals we're (this window) processing
 	CallbackCollectionType handlers;

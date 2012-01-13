@@ -88,7 +88,7 @@ void SplashWindow::operator()(const string& status) {
 		}
 	}
 
-	auto desktop = getDesktopSize();
+	auto desktop = getPrimaryDesktopSize();
 	POINT pt = { std::max(desktop.x - size.cx, 0L) / 2, std::max(desktop.y - size.cy - iconSize, 0L) / 2 };
 	POINT canvasPt = { 0 };
 	BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };

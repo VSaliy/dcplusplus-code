@@ -165,4 +165,25 @@ Point Widget::getPreferredSize() {
 
 void Widget::layout() { }
 
+Point Widget::getPrimaryDesktopSize() {
+	POINT pt = { 0 };
+	return getDesktopSize(::MonitorFromPoint(pt, MONITOR_DEFAULTTOPRIMARY)).size;
+}
+
+Rectangle Widget::getDesktopSize() const {
+	return getDesktopSize(::MonitorFromWindow(handle(), MONITOR_DEFAULTTONEAREST));
+}
+
+Rectangle Widget::getDesktopSize(HMONITOR mon) {
+	MONITORINFO mi = { sizeof(MONITORINFO) };
+	if(::GetMonitorInfo(mon, &mi)) {
+		return Rectangle(mi.rcWork);
+	}
+
+	// the following should never be needed, but better be safe...
+	RECT rc = { 0 };
+	::GetWindowRect(::GetDesktopWindow(), &rc);
+	return Rectangle(rc);
+}
+
 }
