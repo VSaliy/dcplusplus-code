@@ -79,6 +79,16 @@ connections(0)
 
 	nick->onUpdated([this] { handleNickTextChanged(); });
 
+	if(SETTING(NICK).empty()) {
+		// fill the Nick field with the Win user account name.
+		DWORD size = 0;
+		::GetUserName(0, &size);
+		tstring str(size - 1, 0);
+		if(::GetUserName(&str[0], &size)) {
+			nick->setText(str);
+		}
+	}
+
 	int selected = 0, j = 0;
 	for(auto i = SettingsManager::connectionSpeeds.begin(); i != SettingsManager::connectionSpeeds.end(); ++i, ++j) {
 		connections->addValue(Text::toT(*i).c_str());
