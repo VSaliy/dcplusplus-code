@@ -236,12 +236,13 @@ void TabView::setIcon(ContainerPtr w, const IconPtr& icon) {
 	auto ti = getTabInfo(i);
 	if(ti) {
 		removeIcon(i);
-
-		ti->icon = icon;
+		ti->icon = 0;
 
 		TCITEM item = { TCIF_IMAGE };
 		item.iImage = icon ? addIcon(icon) : -1;
-		TabCtrl_SetItem(handle(), i, &item);
+		if(TabCtrl_SetItem(handle(), i, &item)) {
+			ti->icon = icon;
+		}
 
 		if(taskbar) {
 			setTaskbarIcon(w, icon);
