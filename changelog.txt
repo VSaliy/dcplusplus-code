@@ -9,6 +9,9 @@
 * [L#804993] Improve multiple monitor support (poy)
 * Propose a default nick using the Win user account name (poy)
 
+-- 0.791 2012-01-14 --
+* Update translations
+
 -- 0.790 2011-12-29 --
 * Fav users frame becomes users frame and shows all users
 * Experimental implementation of KEYP ADC extension
