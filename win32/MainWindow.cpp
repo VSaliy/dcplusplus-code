@@ -1278,6 +1278,7 @@ void MainWindow::completeVersionUpdate() {
 			url = xml.getChildData();
 		}
 
+#ifndef _DEBUG
 		xml.resetCurrentChild();
 		if(xml.findChild("Version")) {
 			if(Util::toDouble(xml.getChildData()) > VERSIONFLOAT) {
@@ -1301,6 +1302,7 @@ void MainWindow::completeVersionUpdate() {
 				}
 			}
 		}
+#endif
 
 		xml.resetCurrentChild();
 		if(xml.findChild("Links")) {
