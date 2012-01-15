@@ -82,6 +82,7 @@
 #ifdef HAVE_HTMLHELP_H
 #include <htmlhelp.h>
 #endif
+#include <wtsapi32.h>
 
 using dwt::Container;
 using dwt::Rebar;
@@ -179,6 +180,17 @@ fullSlots(false)
 	} catch (const Exception& e) {
 		showPortsError(e.getError());
 	}
+
+	// track when the computer is locked / unlocked.
+	::WTSRegisterSessionNotification(handle(), NOTIFY_FOR_THIS_SESSION);
+	onRaw([](WPARAM wParam, LPARAM) -> LRESULT {
+		switch(wParam) {
+		case WTS_SESSION_LOCK: if(BOOLSETTING(AWAY_COMP_LOCK)) Util::incAway(); break;
+		case WTS_SESSION_UNLOCK: if(BOOLSETTING(AWAY_COMP_LOCK)) Util::decAway(); break;
+		}
+		return 0;
+	}, dwt::Message(WM_WTSSESSION_CHANGE));
+	onDestroy([this] { ::WTSUnRegisterSessionNotification(handle()); });
 
 	{
 		bool skipHubCon = WinUtil::isShift();
@@ -811,8 +823,8 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 	if(sz.isMinimized) {
 		handleMinimized();
 	} else if(sz.isMaximized || sz.isRestored) {
-		if(BOOLSETTING(AUTO_AWAY) && !Util::getManualAway()) {
-			Util::setAway(false);
+		if(BOOLSETTING(AUTO_AWAY)) {
+			Util::decAway();
 		}
 		if(!BOOLSETTING(ALWAYS_TRAY)) {
 			notifier->setVisible(false);
@@ -822,8 +834,8 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 }
 
 void MainWindow::handleMinimized() {
-	if(BOOLSETTING(AUTO_AWAY) && !Util::getManualAway()) {
-		Util::setAway(true);
+	if(BOOLSETTING(AUTO_AWAY)) {
+		Util::incAway();
 	}
 	if(BOOLSETTING(MINIMIZE_TRAY) != WinUtil::isShift()) {
 		if(!BOOLSETTING(ALWAYS_TRAY)) {

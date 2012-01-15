@@ -29,7 +29,6 @@ using dwt::Grid;
 using dwt::GridInfo;
 
 AdvancedPage::ListItem AdvancedPage::listItems[] = {
-	{ SettingsManager::AUTO_AWAY, N_("Auto-away on minimize (and back on restore)"), IDH_SETTINGS_ADVANCED_AUTO_AWAY },
 	{ SettingsManager::AUTO_FOLLOW, N_("Automatically follow redirects"), IDH_SETTINGS_ADVANCED_AUTO_FOLLOW },
 	{ SettingsManager::CLEAR_SEARCH, N_("Clear search box after each search"), IDH_SETTINGS_ADVANCED_CLEAR_SEARCH },
 	{ SettingsManager::LIST_DUPES, N_("Keep duplicate files in your file list"), IDH_SETTINGS_ADVANCED_LIST_DUPES },

@@ -51,7 +51,7 @@ PropPage::ListItem AppearancePage::listItems[] = {
 };
 
 AppearancePage::AppearancePage(dwt::Widget* parent) :
-PropPage(parent, 6, 1),
+PropPage(parent, 5, 1),
 options(0),
 languages(0)
 {
@@ -62,17 +62,6 @@ languages(0)
 	grid->row(0).align = GridInfo::STRETCH;
 
 	options = grid->addChild(GroupBox::Seed(T_("Options")))->addChild(WinUtil::Seeds::Dialog::optionsTable);
-
-	{
-		auto group = grid->addChild(GroupBox::Seed(T_("Default away message")));
-		group->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
-
-		auto seed = WinUtil::Seeds::Dialog::textBox;
-		seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
-		auto box = group->addChild(seed);
-		box->setHelpId(IDH_SETTINGS_APPEARANCE_DEFAULT_AWAY_MESSAGE);
-		items.push_back(Item(box, SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
-	}
 
 	{
 		auto cur = grid->addChild(Grid::Seed(1, 2));

@@ -422,11 +422,10 @@ public:
 	static int strnicmp(const wstring& a, const wstring& b, size_t n) { return strnicmp(a.c_str(), b.c_str(), n); }
 
 	static bool getAway();
-	static void setAway(bool aAway);
+	static void incAway();
+	static void decAway();
+	static void setAway(bool b);
 	static void switchAway();
-
-	static bool getManualAway() { return manualAway; }
-	static void setManualAway(bool aManualAway) { manualAway = aManualAway;	}
 
 	static string getAwayMessage();
 	static void setAwayMessage(const string& aMsg) { awayMsg = aMsg; }
@@ -442,12 +441,12 @@ private:
 
 	static string paths[PATH_LAST];
 
-	static bool away;
-	static bool manualAway;
+	static uint8_t away; // in away mode when != 0.
 	static string awayMsg;
 	static time_t awayTime;
 
 	static void loadBootConfig();
+	static void setAwayCounter(uint8_t i);
 };
 
 /** Case insensitive hash function for strings */

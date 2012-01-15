@@ -32,47 +32,76 @@ using dwt::GridInfo;
 using dwt::Label;
 
 GeneralPage::GeneralPage(dwt::Widget* parent) :
-PropPage(parent, 1, 1),
+PropPage(parent, 2, 1),
 nick(0),
 connections(0)
 {
 	setHelpId(IDH_GENERALPAGE);
 
 	grid->column(0).mode = GridInfo::FILL;
-	grid->row(0).mode = GridInfo::FILL;
-	grid->row(0).align = GridInfo::STRETCH;
-
-	auto group = grid->addChild(GroupBox::Seed(T_("Personal Information")));
-	group->setHelpId(IDH_SETTINGS_GENERAL_PERSONAL_INFORMATION);
 
 	{
-		GridPtr grid = group->addChild(Grid::Seed(4, 2));
-		grid->column(0).align = GridInfo::BOTTOM_RIGHT;
-		grid->column(1).mode = GridInfo::FILL;
+		auto group = grid->addChild(GroupBox::Seed(T_("Personal information")));
+		group->setHelpId(IDH_SETTINGS_GENERAL_PERSONAL_INFORMATION);
 
-		grid->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_SETTINGS_GENERAL_NICK);
-		nick = grid->addChild(WinUtil::Seeds::Dialog::textBox);
+		auto cur = group->addChild(Grid::Seed(4, 2));
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
+		cur->column(1).mode = GridInfo::FILL;
+		cur->setSpacing(grid->getSpacing());
+
+		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_SETTINGS_GENERAL_NICK);
+		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(nick, SettingsManager::NICK, PropPage::T_STR));
 		nick->setHelpId(IDH_SETTINGS_GENERAL_NICK);
 
-		grid->addChild(Label::Seed(T_("E-Mail")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
-		TextBoxPtr box = grid->addChild(WinUtil::Seeds::Dialog::textBox);
+		cur->addChild(Label::Seed(T_("E-Mail")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
+		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(box, SettingsManager::EMAIL, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
 
-		grid->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
-		box = grid->addChild(WinUtil::Seeds::Dialog::textBox);
+		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
+		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.push_back(Item(box, SettingsManager::DESCRIPTION, PropPage::T_STR));
 		box->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
 
-		grid->addChild(Label::Seed(T_("Line speed (upload)")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
+		cur->addChild(Label::Seed(T_("Line speed (upload)")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
-		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		{
+			auto conn = cur->addChild(Grid::Seed(1, 2));
+			conn->setSpacing(cur->getSpacing());
 
-		connections = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
-		connections->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
+			connections = conn->addChild(WinUtil::Seeds::Dialog::comboBox);
+			connections->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
-		cur->addChild(Label::Seed(T_("MiBits/s")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
+			conn->addChild(Label::Seed(T_("MiBits/s")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
+		}
+	}
+
+	{
+		auto group = grid->addChild(GroupBox::Seed(T_("Away mode")));
+		group->setHelpId(IDH_SETTINGS_GENERAL_AWAY_MODE);
+
+		auto cur = group->addChild(Grid::Seed(3, 1));
+		cur->column(0).mode = GridInfo::FILL;
+		cur->setSpacing(grid->getSpacing());
+
+		{
+			group = cur->addChild(GroupBox::Seed(T_("Default away message")));
+			group->setHelpId(IDH_SETTINGS_GENERAL_DEFAULT_AWAY_MESSAGE);
+
+			auto seed = WinUtil::Seeds::Dialog::textBox;
+			seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
+			items.push_back(Item(group->addChild(seed), SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
+		}
+
+		// dummy grid so that the check-box doesn't fill the whole row.
+		auto box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Auto-away on minimize (and back on restore)")));
+		box->setHelpId(IDH_SETTINGS_GENERAL_AUTO_AWAY);
+		items.push_back(Item(box, SettingsManager::AUTO_AWAY, PropPage::T_BOOL));
+
+		box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Auto-away when Windows is locked (and back when unlocked)")));
+		box->setHelpId(IDH_SETTINGS_GENERAL_AWAY_COMP_LOCK);
+		items.push_back(Item(box, SettingsManager::AWAY_COMP_LOCK, PropPage::T_BOOL));
 	}
 
 	PropPage::read(items);
