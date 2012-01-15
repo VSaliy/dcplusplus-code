@@ -6,7 +6,9 @@
 <link type="text/css" rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<h2>Personal Information</h2>
+	<h1>Personal information</h1>
+
+<h2>Personal information</h2>
 <p cshelp="IDH_SETTINGS_GENERAL_PERSONAL_INFORMATION">
 This is general information about yourself. The nick is required,
 though it's suggested that you pick the correct upload line speed value as well.
@@ -26,5 +28,40 @@ MiB/s), please choose the one closest to your own. Do not put
 in your download speed; this setting is a measure of how fast a source 
 you are likely to be for other users. This value will be shown for the users on NMDC hubs only.</dd>
 </dl>
+
+<h2 id="away">Away mode</h2>
+<p cshelp="IDH_SETTINGS_GENERAL_AWAY_MODE">
+These settings control the away mode. It is a mode that DC++ can be switched to to signify that you
+are away from DC++ and unavailable at the time. You can activate away mode by using the
+<a href="window_main.html#awayindic">Away indicator in the status bar of the main window</a>, the
+<a href="chat_commands.html#awayback">/away &lt;message&gt; and /back chat commands</a>, the
+<a href="settings_general.html#autoaway">Auto-away on minimize option</a> or the
+<a href="settings_general.html#awaycomplock">Auto-away when Windows is locked option</a>.
+</p>
+
+<dl style="margin-left: 40px;">
+
+	<dt id="awaymsg">Default away message</dt>
+	<dd cshelp="IDH_SETTINGS_GENERAL_DEFAULT_AWAY_MESSAGE">
+	This is the default away message that will appear when someone PMs you for the first time while
+	you are in the away mode. All time formatting variables are available, see
+	<a href="settings_logs.html#timeformat">Logs</a>. Use Ctrl + Enter to create a new line. <br/>
+	(default: "I'm away. State your business and I might answer later if you're lucky.")
+	</dd>
+
+	<dt id="autoaway">Auto-away on minimize (and back on restore)</dt>
+	<dd cshelp="IDH_SETTINGS_GENERAL_AUTO_AWAY">
+	Switch to away mode whenever the client is minimized in the Windows taskbar or in the
+	notification area (and set away mode off whenever restored).
+	</dd>
+
+	<dt id="awaycomplock">Auto-away when Windows is locked (and back when unlocked)</dt>
+	<dd cshelp="IDH_SETTINGS_GENERAL_AWAY_COMP_LOCK">
+	Switch to away mode whenever the Windows session is locked (generally by Windows key + L or via
+	Ctrl + Alt + Del), and set away mode off when the session is unlocked.
+	</dd>
+
+</dl>
+
 </body>
 </html>

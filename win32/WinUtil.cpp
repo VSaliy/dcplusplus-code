@@ -558,17 +558,14 @@ bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstri
 	} else if(Util::stricmp(cmd.c_str(), _T("away")) == 0) {
 		if(Util::getAway() && param.empty()) {
 			Util::setAway(false);
-			Util::setManualAway(false);
 			status = T_("Away mode off");
 		} else {
 			Util::setAway(true);
-			Util::setManualAway(true);
 			Util::setAwayMessage(Text::fromT(param));
 			status = str(TF_("Away mode on: %1%") % Text::toT(Util::getAwayMessage()));
 		}
 	} else if(Util::stricmp(cmd.c_str(), _T("back")) == 0) {
 		Util::setAway(false);
-		Util::setManualAway(false);
 		status = T_("Away mode off");
 	} else if(Util::stricmp(cmd.c_str(), _T("g")) == 0) {
 		if(param.empty()) {

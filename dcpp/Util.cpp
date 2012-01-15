@@ -59,8 +59,7 @@ string Util::emptyString;
 wstring Util::emptyStringW;
 tstring Util::emptyStringT;
 
-bool Util::away = false;
-bool Util::manualAway = false;
+uint8_t Util::away = 0;
 string Util::awayMsg;
 time_t Util::awayTime;
 
@@ -1016,22 +1015,37 @@ string Util::translateError(int aError) {
 }
 
 bool Util::getAway() {
-	return away;
+	return away != 0;
 }
 
-void Util::setAway(bool aAway) {
-	bool changed = aAway != away;
+void Util::incAway() {
+	setAwayCounter(away + 1);
+}
 
-	away = aAway;
-	if(away)
-		awayTime = time(NULL);
+void Util::decAway() {
+	setAwayCounter((away > 0) ? away - 1 : 0);
+}
 
-	if(changed)
-		ClientManager::getInstance()->infoUpdated();
+void Util::setAway(bool b) {
+	setAwayCounter(b ? (away + 1) : 0);
 }
 
 void Util::switchAway() {
-	setAway(!away);
+	setAway(!getAway());
+}
+
+void Util::setAwayCounter(uint8_t i) {
+	auto prev = getAway();
+
+	away = i;
+
+	if(getAway() != prev) {
+		if(getAway()) {
+			awayTime = time(0);
+		}
+		printf("updating away!!!!!!!!!!! b = %d\n", getAway());
+		ClientManager::getInstance()->infoUpdated();
+	}
 }
 
 string Util::getTempPath() {
