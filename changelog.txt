@@ -8,6 +8,7 @@
 * [L#678432] Context-sensitive help tooltips in the settings dialog (poy)
 * [L#804993] Improve multiple monitor support (poy)
 * Propose a default nick using the Win user account name (poy)
+* [L#914457] Fix missing tab icons (poy)
 
 -- 0.791 2012-01-14 --
 * Update translations
