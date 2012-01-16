@@ -41,12 +41,14 @@ are away from DC++ and unavailable at the time. You can activate away mode by us
 
 <dl style="margin-left: 40px;">
 
-	<dt id="awaymsg">Default away message</dt>
+	<dt id="awaymsg">Away message (empty = no away message)</dt>
 	<dd cshelp="IDH_SETTINGS_GENERAL_DEFAULT_AWAY_MESSAGE">
-	This is the default away message that will appear when someone PMs you for the first time while
-	you are in the away mode. All time formatting variables are available, see
-	<a href="settings_logs.html#timeformat">Logs</a>. Use Ctrl + Enter to create a new line. <br/>
-	(default: "I'm away. State your business and I might answer later if you're lucky.")
+	This defines the default away message. An away message is a message that is automatically sent
+	back as a response to private messages received by DC++ while it is in away mode. All time
+	formatting variables are available, see <a href="settings_logs.html#timeformat">Logs</a>. Use
+	Ctrl + Enter to create a new line. When this field is empty, no default away message is set.
+	Note that this default message can be overridden by specifying a custom message with the
+	<a href="chat_commands.html#awayback">/away &lt;message&gt; chat command</a>.
 	</dd>
 
 	<dt id="autoaway">Auto-away on minimize (and back on restore)</dt>

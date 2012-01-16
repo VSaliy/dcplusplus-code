@@ -86,7 +86,7 @@ connections(0)
 		cur->setSpacing(grid->getSpacing());
 
 		{
-			group = cur->addChild(GroupBox::Seed(T_("Default away message")));
+			group = cur->addChild(GroupBox::Seed(T_("Away message (empty = no away message)")));
 			group->setHelpId(IDH_SETTINGS_GENERAL_DEFAULT_AWAY_MESSAGE);
 
 			auto seed = WinUtil::Seeds::Dialog::textBox;
@@ -112,9 +112,11 @@ connections(0)
 		// fill the Nick field with the Win user account name.
 		DWORD size = 0;
 		::GetUserName(0, &size);
-		tstring str(size - 1, 0);
-		if(::GetUserName(&str[0], &size)) {
-			nick->setText(str);
+		if(size > 1) {
+			tstring str(size - 1, 0);
+			if(::GetUserName(&str[0], &size)) {
+				nick->setText(str);
+			}
 		}
 	}
 

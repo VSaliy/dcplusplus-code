@@ -206,7 +206,6 @@ SettingsManager::SettingsManager()
 	setDefault(SFV_CHECK, true);
 	setDefault(AUTO_AWAY, false);
 	setDefault(AWAY_COMP_LOCK, false);
-	setDefault(DEFAULT_AWAY_MESSAGE, "I'm away. State your business and I might answer later if you're lucky.");
 	setDefault(TIME_STAMPS_FORMAT, "%H:%M");
 	setDefault(COUNTRY_FORMAT, "%[2code] - %[name]");
 	setDefault(MAX_COMPRESSION, 6);
@@ -452,6 +451,13 @@ void SettingsManager::load(string const& aFileName)
 			// the id has changed
 			if(isSet[TOOLBAR])
 				Util::replace("FavUsers", "Users", strSettings[TOOLBAR - STR_FIRST]);
+		}
+
+		if(v <= 0.791) {
+			// the meaning of a default away message has changed: it now means "no away message".
+			if(SETTING(DEFAULT_AWAY_MESSAGE).empty()) {
+				set(DEFAULT_AWAY_MESSAGE, "I'm away. State your business and I might answer later if you're lucky.");
+			}
 		}
 
 		if(SETTING(SET_MINISLOT_SIZE) < 64)
