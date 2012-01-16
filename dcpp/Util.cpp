@@ -496,7 +496,8 @@ map<string, string> Util::decodeQuery(const string& query) {
 }
 
 string Util::getAwayMessage() {
-	return (formatTime(awayMsg.empty() ? SETTING(DEFAULT_AWAY_MESSAGE) : awayMsg, awayTime)) + " <" APPNAME " v" VERSIONSTRING ">";
+	const auto& msg = awayMsg.empty() ? SETTING(DEFAULT_AWAY_MESSAGE) : awayMsg;
+	return msg.empty() ? msg : formatTime(msg, awayTime) + " <" APPNAME " v" VERSIONSTRING ">";
 }
 
 string Util::formatBytes(int64_t aBytes) {
@@ -1043,7 +1044,6 @@ void Util::setAwayCounter(uint8_t i) {
 		if(getAway()) {
 			awayTime = time(0);
 		}
-		printf("updating away!!!!!!!!!!! b = %d\n", getAway());
 		ClientManager::getInstance()->infoUpdated();
 	}
 }

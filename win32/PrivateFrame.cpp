@@ -64,15 +64,22 @@ void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 		auto p = new PrivateFrame(parent, HintedUser(user, hubHint));
 		if(!BOOLSETTING(POPUNDER_PM))
 			p->activate();
+
 		p->addChat(aMessage);
-		if(Util::getAway()) {
-			if(!(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT)))
-				p->sendMessage(Text::toT(Util::getAwayMessage()));
+
+		if(Util::getAway() && !(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT))) {
+			auto awayMessage = Util::getAwayMessage();
+			if(!awayMessage.empty()) {
+				p->sendMessage(Text::toT(awayMessage));
+			}
 		}
+
 		WinUtil::notify(WinUtil::NOTIFICATION_PM_WINDOW, aMessage, [user] { activateWindow(user); });
+
 	} else {
 		i->second->addChat(aMessage);
 	}
+
 	WinUtil::notify(WinUtil::NOTIFICATION_PM, aMessage, [user] { activateWindow(user); });
 }
 
