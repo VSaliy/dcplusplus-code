@@ -63,18 +63,14 @@
 	<dd>These errors mean that DC++ was unable to register the appropriate link handler(s) in Windows, per the <a href="settings_advanced.html#registrymagnet">Register with Windows to handle magnet: URI links</a> and <a href="settings_advanced.html#registrydchubadc">Register with Windows to handle dchub://, adc:// and adcs:// URL links</a> settings. The most common reason of an unsuccesful registration is that the user account under which DC++ is running does not have appropriate rights for (write) access the required parts of the Windows Registry.</dd>
 	<dt>Port mapping: Failed to get external IP</dt>
 	<dd>This error message can appear when DC++ tries to map ports for incoming connections via NAT-PMP / UPnP and means that although port mappings were successful, DC++ couldn't get the external IP address from the gateway (router) device. If this message persists, it may be because of broken NAT-PMP / UPnP support of the device. This is not very important, since DC++ can still gather the external IP from connected hubs <a href="settings_connectivity_manual.html#noipoverride">if it is allowed to do so</a>.</dd>
-	<dt>Port mapping: Failed to create port mappings</dt>
-	<dd>This error message can appear when DC++ tries to map ports for incoming connections via NAT-PMP / UPnP. It means that no compatible device could be found or that the device in question is not responding. This message can occur during <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a>, when DC++ is trying to discover a possible NAT-PMP / UPnP device for setting up active mode. This message is a real problem only if you selected the 'Let DC++ configure my router (NAT-PMP / UPnP)' option manually in <a href="settings_connectivity_manual.html#connection">Incoming connection settings</a>. In this case, refer to the <a href="faq_mapping.html">port mapping FAQ</a> for more information.</dd>
-	<dt>Port mapping: Failed to remove port mappings</dt>
-	<dd>This message can appear mostly at shutdown of DC++ and means that port mappings created before couldn't be successfully removed. If this message persists the most probable reason is broken NAT-PMP / UPnP support of the (router) device.</dd>
 	<dt>Port mapping: Another port mapping attempt is in progress...</dt>
 	<dd>This means that an <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> attempt was started too soon (the previous operation has not been finished). Try restarting DC++ if this message persists. If restart DC++ does not help the most probable reason is broken NAT-PMP / UPnP support of your (router) device.</dd>
 	<dt>Port mapping: Failed to initalize the [interface identification] interface</dt>
 	<dd>DC++ failed to initalize one of its NAT-PMP or UPnP interfaces and will try to use the next one in the row.</dd>
 	<dt>Port mapping: Failed to map the [Transfer/Encrypted transfer/Search] port ([port number] [TCP/UDP]) with the [interface identification] interface</dt>
-	<dd>The currently used port mapping interface failed to map the shown port. DC++ will try to use the next automatic port mapper interface in the row.</dd>
+	<dd>The currently used port mapping interface failed to map the shown port. This error message can appear when DC++ tries to map ports for incoming connections via NAT-PMP / UPnP. It means that no compatible device could be found or that the device in question is not responding. DC++ will try to use the next automatic port mapper interface in the row. This message can occur during <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a>, when DC++ is trying to discover a possible NAT-PMP / UPnP device for setting up active mode. This message is a real problem only if you selected the 'Let DC++ configure my router (NAT-PMP / UPnP)' option manually in <a href="settings_connectivity_manual.html#connection">Incoming connection settings</a>. In this case, refer to the <a href="faq_mapping.html">port mapping FAQ</a> for more information.</dd>
 	<dt>Port mapping: Failed to remove port mappings from the [router name] device with the [interface identification] interface</dt>
-	<dd>DC++ has failed to remove the existing port forwarding rules from the router made by <a href="faq_mapping.html">NAT-PMP or UPnP</a>.</dd>
+	<dd>DC++ has failed to remove the existing port forwarding rules from the router made by <a href="faq_mapping.html">NAT-PMP or UPnP</a>. This message can appear at shutdown or during an <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> attempt and it means that existing port mappings created earlier couldn't be removed successfully. If this message persists the most probable reason is broken NAT-PMP / UPnP support of the (router) device.</dd>
 	<dt>Connectivity: Unable to open TCP/UDP/TLS port(s); connectivity settings must be configured manually</dt>
 	<dd>You can get this message only when <a href="settings_connectivity.html#autoconn">Automatic connectivity setup</a> is enabled and DC++ failed to open port(s) before trying to determine the available conncetion types. Possible reasons include the choosen port(s) are already occupied by another application or <a href="faq_unblock.html">DC++ is blocked by a software firewall</a>.</dd>
 	<dt>Not listening for connections - please restart DC++</dt>
@@ -119,8 +115,8 @@
 	<dd>There were problems opening a downloaded filelist, its corrupted or its size is <a href="settings_expert.html#maxlistsize">bigger than the maximum size allowed to open</a>.</dd>
 	<dt>Unable to send file [path]: [error message]</dt>
 	<dd>There was a problem preparing file [path] upon an upload request by a peer.</dd>
-	<dt>Invalid ADL Search regular expression: [regex]</dt>
-	<dd>There was a problem applying an existing enabled ADLSearch filter with [regex] to a file list.</dd>
+	<dt>Invalid regular expression: [regex]</dt>
+	<dd>There was a problem applying a regular experssion [regex] specified in one of the filter functions.</dd>
 
 	<!-- This can be reused when the message will go to the log again...
 	<dt>Someone is trying to use your client to spam [ip address], please urge hub owner to fix this</dt>

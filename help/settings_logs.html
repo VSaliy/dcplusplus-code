@@ -46,103 +46,103 @@ the application.</dd>
       <td style="font-weight: bold;">Uploaded segments log</td>
     </tr>
     <tr>
-      <td class="cl">%[target]</td>
+      <td class="cl"><untranslated>%[target]</untranslated></td>
       <td>Local target path and filename</td>
       <td>Local target path and filename</td>
       <td>N/A</td>
     </tr>
     <tr>
-      <td class="cl">%[source]</td>
+      <td class="cl"><untranslated>%[source]</untranslated></td>
       <td>N/A</td>
       <td>N/A</td>
       <td>Local path of the file the chunk uploaded from</td>
     </tr>
     <tr>
-      <td class="cl">%[userNI]</td>
+      <td class="cl"><untranslated>%[userNI]</untranslated></td>
       <td>User's nickname</td>
       <td>User nicknames</td>
       <td>User's nickname</td>
     </tr>
     <tr>
-      <td class="cl">%[userCID]</td>
+      <td class="cl"><untranslated>%[userCID]</untranslated></td>
       <td>User's CID</td>
       <td>User CIDs</td>
       <td>User's CID</td>
     </tr>
     <tr>
-      <td class="cl">%[userI4]</td>
+      <td class="cl"><untranslated>%[userI4]</untranslated></td>
       <td>User's IPv4 address</td>
       <td>User IPv4 addresses (available for ADC users only)</td>
       <td>User's IPv4 address</td>
     </tr>
     <tr>
-      <td class="cl">%[hubNI]</td>
+      <td class="cl"><untranslated>%[hubNI]</untranslated></td>
       <td>Hub name</td>
       <td>Hub names</td>
       <td>Hub name</td>
     </tr>
     <tr>
-      <td class="cl">%[hubURL]</td>
+      <td class="cl"><untranslated>%[hubURL]</untranslated></td>
       <td>Hub's URL or IP address</td>
       <td>Hub URLs or IP addresses</td>
       <td>Hub's URL or IP address</td>
     </tr>
     <tr>
-      <td class="cl">%[fileSI]</td>
+      <td class="cl"><untranslated>%[fileSI]</untranslated></td>
       <td>Chunk size</td>
       <td>Total file size</td>
       <td>Chunk size</td>
     </tr>
     <tr>
-      <td class="cl">%[fileSIshort]</td>
+      <td class="cl"><untranslated>%[fileSIshort]</untranslated></td>
       <td>Chunk size, shortened and including units</td>
       <td>Total file size, shortened and including units</td>
       <td>Chunk size, shortened and including units</td>
     </tr>
     <tr>
-      <td class="cl">%[fileSIsession]</td>
+      <td class="cl"><untranslated>%[fileSIsession]</untranslated></td>
       <td>N/A</td>
       <td>File size transferred in the current session</td>
       <td>N/A</td>
     </tr>
     <tr>
-      <td class="cl">%[fileSIsessionshort]</td>
+      <td class="cl"><untranslated>%[fileSIsessionshort]</untranslated></td>
       <td>N/A</td>
       <td>File size transferred in the current session, shortened and including units</td>
       <td>N/A</td>
     </tr>
     <tr>
-      <td class="cl">%[fileSIactual]</td>
+      <td class="cl"><untranslated>%[fileSIactual]</untranslated></td>
       <td>Actual transferred bytes, affected by compression</td>
       <td>Actual transferred bytes (in the current session), affected by compression</td>
       <td>Actual transferred bytes, affected by compression</td>
     </tr>
     <tr>
-      <td class="cl">%[fileSIactualshort]</td>
+      <td class="cl"><untranslated>%[fileSIactualshort]</untranslated></td>
       <td>Actual transferred bytes, short and including units</td>
       <td>Actual transferred bytes (in the current session), short and including units</td>
       <td>Actual transferred bytes, short and including units</td>
     </tr>
     <tr>
-      <td class="cl">%[speed]</td>
+      <td class="cl"><untranslated>%[speed]</untranslated></td>
       <td>Average speed of the transfer</td>
       <td>Average speed of the transfer (in the current session)</td>
       <td>Average speed of the transfer</td>
     </tr>
     <tr>
-      <td class="cl">%[time]</td>
+      <td class="cl"><untranslated>%[time]</untranslated></td>
       <td>Actual chunk transfer time</td>
       <td>Actual file transfer time in the current session</td>
       <td>Actual chunk transfer time</td>
     </tr>
     <tr>
-      <td class="cl">%[fileTR]</td>
+      <td class="cl"><untranslated>%[fileTR]</untranslated></td>
       <td>TTH of the target file the chunk downloaded to</td>
       <td>TTH of the target file</td>
       <td>TTH of the target file the chunk uploaded from</td>
     </tr>
     <tr>
-      <td class="cl">%[sfv]</td>
+      <td class="cl"><untranslated>%[sfv]</untranslated></td>
       <td>N/A</td>
       <td>Whether the file was successfully checked against a SFV file (0 = no, 1 = yes)</td>
       <td>N/A</td>
@@ -225,13 +225,14 @@ characters if time zone is unknown</div>
 		  they will be replaced with underscores.</div>
   <div>Ex: Main chat: %[hubaddr]\%Y-%m.log - would result in this: example.no-ip.org\2004-12.log
 		  (if you are in the hub example.no-ip.org and it is december 2004)</div>
-  <p style="font-weight: bold">Default:</p>
+  <p style="font-weight: bold">Default file name formats:</p>
   <ul>
       <li>Hub chat: %[hubURL].log</li>
       <li>Hub status: %[hubURL]_status.log</li>
       <li>Private message: %[userNI].%[userCID].log</li>
-      <li>Download: Downloads.log</li>
-      <li>Upload: Uploads.log</li>
+      <li>Finished downloads: Finished_downloads.log</li>
+      <li>Downloaded segments: Downloads.log</li>
+      <li>Uploaded segments: Uploads.log</li>
       <li>System: system.log</li>
   </ul>
   </dd>

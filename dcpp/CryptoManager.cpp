@@ -268,7 +268,7 @@ void CryptoManager::loadCertificates() noexcept {
 			SSL_CTX_load_verify_locations(serverContext, i->c_str(), NULL) != SSL_SUCCESS ||
 			SSL_CTX_load_verify_locations(serverVerContext, i->c_str(), NULL) != SSL_SUCCESS
 		) {
-			LogManager::getInstance()->message("Failed to load trusted certificate from " + *i);
+			LogManager::getInstance()->message(str(F_("Failed to load trusted certificate from %1%") % Util::addBrackets(*i)));
 		}
 	}
 
