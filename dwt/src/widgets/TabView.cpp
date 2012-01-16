@@ -293,17 +293,16 @@ void TabView::handleTabSelected() {
 	}
 
 	TabInfo* old = getTabInfo(active);
-
 	TabInfo* ti = getTabInfo(i);
+	active = i;
 
-	if(ti == old)
+	if(!ti || ti == old)
 		return;
 
 	swapWidgets(old ? old->w : 0, ti->w);
 
 	if(!inTab)
 		setTop(ti->w);
-	active = i;
 
 	if(ti->marked) {
 		ti->marked = false;
