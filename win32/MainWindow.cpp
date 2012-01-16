@@ -106,7 +106,8 @@ stopperThread(NULL),
 lastUp(0),
 lastDown(0),
 lastTick(GET_TICK()),
-prevAway(false),
+away(false),
+awayIdle(false),
 fullSlots(false)
 {
 	links.homepage = _T("http://dcplusplus.sourceforge.net/");
@@ -1008,11 +1009,19 @@ void MainWindow::updateStatus() {
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_UPLOAD, SETTING(TOTAL_UPLOAD) + static_cast<int64_t>(updiff));
 	SettingsManager::getInstance()->set(SettingsManager::TOTAL_DOWNLOAD, SETTING(TOTAL_DOWNLOAD) + static_cast<int64_t>(downdiff));
 
+	if(SETTING(AWAY_IDLE)) {
+		LASTINPUTINFO info = { sizeof(LASTINPUTINFO) };
+		if((::GetLastInputInfo(&info) && static_cast<int>(::GetTickCount() - info.dwTime) > SETTING(AWAY_IDLE) * 60 * 1000) ^ awayIdle) {
+			awayIdle = !awayIdle;
+			awayIdle ? Util::incAway() : Util::decAway();
+		}
+	}
+
 	if(!status)
 		return;
 
-	if(Util::getAway() != prevAway) {
-		prevAway = !prevAway;
+	if(Util::getAway() != away) {
+		away = !away;
 		updateAwayStatus();
 	}
 
@@ -1055,8 +1064,8 @@ void MainWindow::updateStatus() {
 }
 
 void MainWindow::updateAwayStatus() {
-	status->setIcon(STATUS_AWAY, WinUtil::statusIcon(prevAway ? IDI_USER_AWAY : IDI_USER));
-	status->setToolTip(STATUS_AWAY, prevAway ? (T_("Status: Away - Double-click to switch to Available")) :
+	status->setIcon(STATUS_AWAY, WinUtil::statusIcon(away ? IDI_USER_AWAY : IDI_USER));
+	status->setToolTip(STATUS_AWAY, away ? (T_("Status: Away - Double-click to switch to Available")) :
 		(T_("Status: Available - Double-click to switch to Away")));
 }
 

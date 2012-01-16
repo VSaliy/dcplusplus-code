@@ -23,6 +23,7 @@
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Label.h>
+#include <dwt/widgets/Spinner.h>
 
 #include "resource.h"
 #include "WinUtil.h"
@@ -30,6 +31,7 @@
 using dwt::Grid;
 using dwt::GridInfo;
 using dwt::Label;
+using dwt::Spinner;
 
 GeneralPage::GeneralPage(dwt::Widget* parent) :
 PropPage(parent, 2, 1),
@@ -68,12 +70,11 @@ connections(0)
 
 		{
 			auto conn = cur->addChild(Grid::Seed(1, 2));
-			conn->setSpacing(cur->getSpacing());
+			conn->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
 			connections = conn->addChild(WinUtil::Seeds::Dialog::comboBox);
-			connections->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 
-			conn->addChild(Label::Seed(T_("MiBits/s")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
+			conn->addChild(Label::Seed(T_("MiBits/s")));
 		}
 	}
 
@@ -81,7 +82,7 @@ connections(0)
 		auto group = grid->addChild(GroupBox::Seed(T_("Away mode")));
 		group->setHelpId(IDH_SETTINGS_GENERAL_AWAY_MODE);
 
-		auto cur = group->addChild(Grid::Seed(3, 1));
+		auto cur = group->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->setSpacing(grid->getSpacing());
 
@@ -95,13 +96,28 @@ connections(0)
 		}
 
 		// dummy grid so that the check-box doesn't fill the whole row.
-		auto box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Auto-away on minimize (and back on restore)")));
+		auto box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Enable away mode when DC++ is minimized")));
 		box->setHelpId(IDH_SETTINGS_GENERAL_AUTO_AWAY);
 		items.push_back(Item(box, SettingsManager::AUTO_AWAY, PropPage::T_BOOL));
 
-		box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Auto-away when Windows is locked (and back when unlocked)")));
+		box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Enable away mode when the Windows session is locked")));
 		box->setHelpId(IDH_SETTINGS_GENERAL_AWAY_COMP_LOCK);
 		items.push_back(Item(box, SettingsManager::AWAY_COMP_LOCK, PropPage::T_BOOL));
+
+		{
+			auto idle = cur->addChild(Grid::Seed(1, 3));
+			idle->setHelpId(IDH_SETTINGS_GENERAL_AWAY_IDLE);
+			idle->column(1).size = 40;
+			idle->column(1).mode = GridInfo::STATIC;
+
+			idle->addChild(Label::Seed(T_("Enable away mode after")));
+
+			auto box = idle->addChild(WinUtil::Seeds::Dialog::intTextBox);
+			items.push_back(Item(box, SettingsManager::AWAY_IDLE, PropPage::T_INT_WITH_SPIN));
+			idle->setWidget(idle->addChild(Spinner::Seed(0, UD_MAXVAL, box)));
+
+			idle->addChild(Label::Seed(T_("minutes of inactivity (0 = disabled)")));
+		}
 	}
 
 	PropPage::read(items);

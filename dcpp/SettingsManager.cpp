@@ -64,7 +64,7 @@ const string SettingsManager::settingTags[] =
 	"MainWindowSizeX", "MainWindowSizeY", "MainWindowPosX", "MainWindowPosY",
 	"SettingsWidth", "SettingsHeight", "SettingsPage",
 	"SocksPort", "SocksResolve", "KeepLists", "AutoKick", "QueueFrameShowTree",
-	"CompressTransfers", "SFVCheck", "AutoAway", "AwayCompLock",
+	"CompressTransfers", "SFVCheck", "AutoAway", "AwayCompLock", "AwayIdle",
 	"MaxCompression", "NoAwayMsgToBots", "SkipZeroByte", "AdlsBreakOnFirst",
 	"HubUserCommands", "AutoSearchAutoMatch", "LogSystem",
 	"LogFilelistTransfers", "SendUnknownCommands", "MaxHashSpeed", "OpenUserCmdHelp",
@@ -205,7 +205,8 @@ SettingsManager::SettingsManager()
 	setDefault(COMPRESS_TRANSFERS, true);
 	setDefault(SFV_CHECK, true);
 	setDefault(AUTO_AWAY, false);
-	setDefault(AWAY_COMP_LOCK, false);
+	setDefault(AWAY_COMP_LOCK, true);
+	setDefault(AWAY_IDLE, 10);
 	setDefault(TIME_STAMPS_FORMAT, "%H:%M");
 	setDefault(COUNTRY_FORMAT, "%[2code] - %[name]");
 	setDefault(MAX_COMPRESSION, 6);

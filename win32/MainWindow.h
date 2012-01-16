@@ -137,7 +137,8 @@ private:
 	int64_t lastUp;
 	int64_t lastDown;
 	uint64_t lastTick;
-	bool prevAway;
+	bool away;
+	bool awayIdle;
 	bool fullSlots;
 
 	dwt::Application::FilterIter filterIter;

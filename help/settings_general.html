@@ -32,11 +32,10 @@ you are likely to be for other users. This value will be shown for the users on 
 <h2 id="away">Away mode</h2>
 <p cshelp="IDH_SETTINGS_GENERAL_AWAY_MODE">
 These settings control the away mode. It is a mode that DC++ can be switched to to signify that you
-are away from DC++ and unavailable at the time. You can activate away mode by using the
-<a href="window_main.html#awayindic">Away indicator in the status bar of the main window</a>, the
-<a href="chat_commands.html#awayback">/away &lt;message&gt; and /back chat commands</a>, the
-<a href="settings_general.html#autoaway">Auto-away on minimize option</a> or the
-<a href="settings_general.html#awaycomplock">Auto-away when Windows is locked option</a>.
+are away from DC++ and unavailable at the time. This mode can be manually activated by using the
+<a href="window_main.html#awayindic">Away indicator in the status bar of the main window</a> or the
+<a href="chat_commands.html#awayback">/away &lt;message&gt; and /back chat commands</a>. It can
+also be automatically activated according to the settings below.
 </p>
 
 <dl style="margin-left: 40px;">
@@ -51,16 +50,23 @@ are away from DC++ and unavailable at the time. You can activate away mode by us
 	<a href="chat_commands.html#awayback">/away &lt;message&gt; chat command</a>.
 	</dd>
 
-	<dt id="autoaway">Auto-away on minimize (and back on restore)</dt>
+	<dt>Enable away mode when DC++ is minimized</dt>
 	<dd cshelp="IDH_SETTINGS_GENERAL_AUTO_AWAY">
-	Switch to away mode whenever the client is minimized in the Windows taskbar or in the
-	notification area (and set away mode off whenever restored).
+	Switch to away mode whenever the DC++ window is minimized in the Windows taskbar or in the
+	notification area; disable away mode when the DC++ window is restored.
 	</dd>
 
-	<dt id="awaycomplock">Auto-away when Windows is locked (and back when unlocked)</dt>
+	<dt>Enable away mode when the Windows session is locked</dt>
 	<dd cshelp="IDH_SETTINGS_GENERAL_AWAY_COMP_LOCK">
 	Switch to away mode whenever the Windows session is locked (generally by Windows key + L or via
-	Ctrl + Alt + Del), and set away mode off when the session is unlocked.
+	Ctrl + Alt + Del); disable away mode when the Windows session is unlocked.
+	</dd>
+
+	<dt>Enable away mode after X minutes of inactivity</dt>
+	<dd cshelp="IDH_SETTINGS_GENERAL_AWAY_IDLE">
+	Switch to away mode whenever the Windows session hasn't received any mouse or keyboard input
+	for the last X minutes; disable away mode when input is received again. Set to <b>0</b> to
+	disable this functionality. The default value is <b>10</b> minutes.
 	</dd>
 
 </dl>

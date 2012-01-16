@@ -11,6 +11,7 @@
 * [L#914457] Fix missing tab icons (poy)
 * Add a setting to enable away mode when Windows is locked (poy)
 * Make the away message optional (poy)
+* [L#704502] Away mode after some time of inactivity (poy)
 
 -- 0.791 2012-01-14 --
 * Update translations
