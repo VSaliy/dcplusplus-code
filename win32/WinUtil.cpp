@@ -156,7 +156,8 @@ void WinUtil::init() {
 	initFont();
 	updateUploadFont();
 	updateDownloadFont();
-	updateUserMatchFonts();
+
+	initUserMatching();
 
 	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 
@@ -426,6 +427,48 @@ void WinUtil::updateFont(dwt::FontPtr& font, int setting) {
 		decodeFont(Text::toT(text), lf);
 		font.reset(new dwt::Font(lf));
 	}
+}
+
+void WinUtil::initUserMatching() {
+	// make sure predefined definitions are here.
+	bool favDefHere = false, opDefHere = false;
+	const auto& list = UserMatchManager::getInstance()->getList();
+	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
+		if(i->isSet(UserMatch::PREDEFINED)) {
+			if(i->isSet(UserMatch::FAVS)) { favDefHere = true; }
+			else if(i->isSet(UserMatch::OPS)) { opDefHere = true; }
+			if(favDefHere && opDefHere) { break; }
+		}
+	}
+
+	if(!favDefHere || !opDefHere) {
+		auto newList = list;
+
+		if(!favDefHere) {
+			// add a matcher for favs.
+			UserMatch matcher;
+			matcher.setFlag(UserMatch::PREDEFINED);
+			matcher.setFlag(UserMatch::FAVS);
+			matcher.name = str(F_("Favorite users (added by %1%)") % APPNAME);
+			matcher.style.font = Text::fromT(encodeFont(font->makeBold()->getLogFont()));
+			matcher.style.textColor = modRed(SETTING(TEXT_COLOR), 127); // more red
+			newList.push_back(std::move(matcher));
+		}
+
+		if(!opDefHere) {
+			// add a matcher for ops.
+			UserMatch matcher;
+			matcher.setFlag(UserMatch::PREDEFINED);
+			matcher.setFlag(UserMatch::OPS);
+			matcher.name = str(F_("Operators (added by %1%)") % APPNAME);
+			matcher.style.textColor = modBlue(SETTING(TEXT_COLOR), 127); // more blue
+			newList.push_back(std::move(matcher));
+		}
+
+		UserMatchManager::getInstance()->setList(std::move(newList));
+	}
+
+	updateUserMatchFonts();
 }
 
 void WinUtil::updateUserMatchFonts() {
@@ -1204,6 +1247,45 @@ COLORREF HLS_TRANSFORM(COLORREF rgb, int percent_L, int percent_S) {
 		s = BYTE((s * (100 + percent_S)) / 100);
 	}
 	return HLS2RGB(HLS(h, l, s));
+}
+
+COLORREF modRed(COLORREF col, int16_t mod) {
+	int16_t r = GetRValue(col) + mod, g = GetGValue(col), b = GetBValue(col);
+	if(r > 255) {
+		int16_t delta = r - 255;
+		r = 255;
+		g -= delta;
+		b -= delta;
+		if(g < 0) { g = 0; }
+		if(b < 0) { b = 0; }
+	}
+	return RGB(r, g, b);
+}
+
+COLORREF modGreen(COLORREF col, int16_t mod) {
+	int16_t r = GetRValue(col), g = GetGValue(col) + mod, b = GetBValue(col);
+	if(g > 255) {
+		int16_t delta = g - 255;
+		r -= delta;
+		g = 255;
+		b -= delta;
+		if(r < 0) { r = 0; }
+		if(b < 0) { b = 0; }
+	}
+	return RGB(r, g, b);
+}
+
+COLORREF modBlue(COLORREF col, int16_t mod) {
+	int16_t r = GetRValue(col), g = GetGValue(col), b = GetBValue(col) + mod;
+	if(b > 255) {
+		int16_t delta = b - 255;
+		r -= delta;
+		g -= delta;
+		b = 255;
+		if(r < 0) { r = 0; }
+		if(g < 0) { g = 0; }
+	}
+	return RGB(r, g, b);
 }
 
 bool registerHandler_(const tstring& name) {

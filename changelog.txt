@@ -12,6 +12,8 @@
 * Add a setting to enable away mode when Windows is locked (poy)
 * Make the away message optional (poy)
 * [L#704502] Away mode after some time of inactivity (poy)
+* Allow empty user matching definitions that match every user (poy)
+* Add predefined user matching defs for favs (bold, more red) & ops (more blue) (poy)
 
 -- 0.791 2012-01-14 --
 * Update translations

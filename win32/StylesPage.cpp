@@ -48,7 +48,6 @@ static const ColumnInfo columns[] = {
 StylesPage::StylesPage(dwt::Widget* parent) :
 PropPage(parent, 1, 1),
 globalData(0),
-noUserMatchData(0),
 table(0),
 preview(0),
 customFont(0),
@@ -187,29 +186,20 @@ void StylesPage::write() {
 }
 
 void StylesPage::updateUserMatches(std::vector<UserMatch>& userMatches) {
+	// remove previous user matching rows.
 	for(size_t i = 0; i < table->size();) {
-		auto data = table->getData(i);
-		if(data == noUserMatchData) {
-			table->erase(i);
-			noUserMatchData = 0;
-		} else if(dynamic_cast<UserMatchData*>(data)) {
+		if(dynamic_cast<UserMatchData*>(table->getData(i))) {
 			table->erase(i);
 		} else {
 			++i;
 		}
 	}
 
-	bool added = false;
+	// add current user matching rows.
 	for(auto i = userMatches.begin(), iend = userMatches.end(); i != iend; ++i) {
 		if(showGen->getChecked() || !i->isSet(UserMatch::GENERATED)) {
 			table->insert(table->isGrouped() ? GROUP_USERS : -1, new UserMatchData(*i));
-			added = true;
 		}
-	}
-
-	if(!added) {
-		noUserMatchData = new Data(T_("No user matching definition has been set yet"), IDH_SETTINGS_STYLES_NO_USER_MATCH);
-		table->insert(table->isGrouped() ? GROUP_USERS : -1, noUserMatchData);
 	}
 }
 
@@ -333,11 +323,8 @@ void StylesPage::UserMatchData::update() {
 
 void StylesPage::handleSelectionChanged() {
 	auto data = table->getSelectedData();
-	if(data == noUserMatchData) {
-		data = nullptr;
-	}
-
 	bool enable = data;
+
 	if(data) {
 		updatePreview(data);
 	}

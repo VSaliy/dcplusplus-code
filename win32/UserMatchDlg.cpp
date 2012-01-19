@@ -185,12 +185,6 @@ void UserMatchDlg::handleOKClicked() {
 		}
 	});
 
-	if(result.empty()) {
-		dwt::MessageBox(this).show(T_("This user matching definition won't match any user; specify some rules"),
-			_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
-		return;
-	}
-
 	if(forceChat->getChecked()) { result.setFlag(UserMatch::FORCE_CHAT); }
 	else if(ignoreChat->getChecked()) { result.setFlag(UserMatch::IGNORE_CHAT); }
 
