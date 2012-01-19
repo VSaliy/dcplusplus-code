@@ -149,6 +149,7 @@ void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcep
 
 			match.name = xml.getChildAttrib("Name");
 
+			if(xml.getBoolChildAttrib("Predefined")) { match.setFlag(UserMatch::PREDEFINED); }
 			if(xml.getBoolChildAttrib("Generated")) { match.setFlag(UserMatch::GENERATED); }
 			if(xml.getBoolChildAttrib("Favs")) { match.setFlag(UserMatch::FAVS); }
 			if(xml.getBoolChildAttrib("Ops")) { match.setFlag(UserMatch::OPS); }
@@ -191,6 +192,7 @@ void UserMatchManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcep
 
 		xml.addChildAttrib("Name", i->name);
 
+		if(i->isSet(UserMatch::PREDEFINED)) { xml.addChildAttrib("Predefined", true); }
 		if(i->isSet(UserMatch::GENERATED)) { xml.addChildAttrib("Generated", true); }
 		if(i->isSet(UserMatch::FAVS)) { xml.addChildAttrib("Favs", true); }
 		if(i->isSet(UserMatch::OPS)) { xml.addChildAttrib("Ops", true); }

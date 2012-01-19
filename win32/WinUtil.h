@@ -65,6 +65,11 @@ COLORREF HLS2RGB (HLSCOLOR hls);
 
 COLORREF HLS_TRANSFORM (COLORREF rgb, int percent_L, int percent_S);
 
+// rudimentary functions to adjust the red / green / blue value of a color.
+COLORREF modRed(COLORREF col, int16_t mod);
+COLORREF modGreen(COLORREF col, int16_t mod);
+COLORREF modBlue(COLORREF col, int16_t mod);
+
 class MainWindow;
 
 struct ColumnInfo {
@@ -316,6 +321,7 @@ public:
 private:
 	static bool handleBoxDblClick(dwt::TextBoxBase* box, const dwt::MouseEvent& ev);
 
+	static void initUserMatching();
 	static void initHelpPath();
 
 	static DWORD helpCookie;

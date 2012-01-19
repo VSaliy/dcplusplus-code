@@ -69,6 +69,8 @@ public:
 	};
 	Font(Predefined predef);
 
+	LOGFONT getLogFont() const;
+
 	/// get a new font with the same characteristics as this one, but bold.
 	FontPtr makeBold() const;
 

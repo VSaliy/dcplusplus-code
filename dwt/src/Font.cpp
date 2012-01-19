@@ -52,9 +52,14 @@ ResourceType(reinterpret_cast<HFONT>(::GetStockObject(predef)), true)
 {
 }
 
-FontPtr Font::makeBold() const {
+LOGFONT Font::getLogFont() const {
 	LOGFONT lf;
 	::GetObject(handle(), sizeof(lf), &lf);
+	return lf;
+}
+
+FontPtr Font::makeBold() const {
+	auto lf = getLogFont();
 	lf.lfWeight = FW_BOLD;
 	return new Font(lf);
 }

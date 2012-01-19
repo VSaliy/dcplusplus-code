@@ -423,8 +423,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 
 	if(drawSidebar) {
 		// get logical info for title font
-		LOGFONT lf;
-		::GetObject(titleFont->handle(), sizeof(lf), &lf);
+		auto lf = titleFont->getLogFont();
 
 		// 90 degree rotation and bold
 		lf.lfOrientation = lf.lfEscapement = 900;
