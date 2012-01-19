@@ -59,10 +59,13 @@ SplashWindow::~SplashWindow() {
 
 void SplashWindow::operator()(const string& status) {
 	auto text = str(TF_("Loading DC++, please wait... (%1%)") % Text::toT(status));
-	auto textSize = getTextSize(text);
 
+	// set up sizes.
 	const long spacing = 6; // space between the icon and the text
+	const dwt::Point padding(4, 4); // padding borders around the text
+	const auto textSize = getTextSize(text) + padding + padding;
 	SIZE size = { std::max(iconSize, textSize.x), iconSize + spacing + textSize.y };
+	dwt::Rectangle textRect(std::max(iconSize - textSize.x, 0L) / 2, size.cy - textSize.y, textSize.x, textSize.y);
 
 	dwt::UpdateCanvas windowCanvas(this);
 	dwt::CompatibleCanvas canvas(windowCanvas.handle());
@@ -73,17 +76,22 @@ void SplashWindow::operator()(const string& status) {
 	dwt::Bitmap bitmap(::CreateDIBSection(windowCanvas.handle(), &info, DIB_RGB_COLORS, &reinterpret_cast<void*&>(bits), 0, 0));
 	auto select(canvas.select(bitmap));
 
+	// draw the icon.
 	canvas.drawIcon(icon, dwt::Rectangle(std::max(textSize.x - iconSize, 0L) / 2, 0, iconSize, iconSize));
 
-	dwt::Rectangle textRect(std::max(iconSize - textSize.x, 0L) / 2, size.cy - textSize.y, textSize.x, textSize.y);
+	// draw text borders and fill the text background.
+	::RECT rc = textRect;
+	::DrawEdge(canvas.handle(), &rc, EDGE_BUMP, BF_RECT | BF_MIDDLE);
+
+	// draw the text.
 	auto bkMode(canvas.setBkMode(true));
-	canvas.fill(textRect, dwt::Brush(dwt::Brush::Window));
 	canvas.setTextColor(dwt::Color::predefined(COLOR_WINDOWTEXT));
 	auto selectFont(canvas.select(*getFont()));
-	canvas.drawText(text.c_str(), textRect, DT_LEFT | DT_TOP | DT_SINGLELINE | DT_NOPREFIX);
+	canvas.drawText(text.c_str(), textRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
+
 	// set bits within the text rectangle to not be transparent. rgbReserved is the alpha value.
-	for(long x = textRect.left(); x < textRect.right(); ++x) {
-		for(long y = textRect.top(); y < textRect.bottom(); ++y) {
+	for(long x = textRect.left(), xn = textRect.right(); x < xn; ++x) {
+		for(long y = textRect.top(), yn = textRect.bottom(); y < yn; ++y) {
 			bits[x + y * size.cx].rgbReserved = 255;
 		}
 	}
