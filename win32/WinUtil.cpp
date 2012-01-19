@@ -1249,42 +1249,40 @@ COLORREF HLS_TRANSFORM(COLORREF rgb, int percent_L, int percent_S) {
 	return HLS2RGB(HLS(h, l, s));
 }
 
+// check that col0 is within COLORREF bounds; adjust col1 & col2 otherwise.
+namespace { void checkColor(int16_t& col0, int16_t& col1, int16_t& col2) {
+	if(col0 < 0) {
+		int16_t delta = -col0;
+		col0 = 0;
+		col1 += delta;
+		col2 += delta;
+		if(col1 > 255) { col1 = 255; }
+		if(col2 > 255) { col2 = 255; }
+	} else if(col0 > 255) {
+		int16_t delta = col0 - 255;
+		col0 = 255;
+		col1 -= delta;
+		col2 -= delta;
+		if(col1 < 0) { col1 = 0; }
+		if(col2 < 0) { col2 = 0; }
+	}
+} }
+
 COLORREF modRed(COLORREF col, int16_t mod) {
 	int16_t r = GetRValue(col) + mod, g = GetGValue(col), b = GetBValue(col);
-	if(r > 255) {
-		int16_t delta = r - 255;
-		r = 255;
-		g -= delta;
-		b -= delta;
-		if(g < 0) { g = 0; }
-		if(b < 0) { b = 0; }
-	}
+	checkColor(r, g, b);
 	return RGB(r, g, b);
 }
 
 COLORREF modGreen(COLORREF col, int16_t mod) {
 	int16_t r = GetRValue(col), g = GetGValue(col) + mod, b = GetBValue(col);
-	if(g > 255) {
-		int16_t delta = g - 255;
-		r -= delta;
-		g = 255;
-		b -= delta;
-		if(r < 0) { r = 0; }
-		if(b < 0) { b = 0; }
-	}
+	checkColor(g, r, b);
 	return RGB(r, g, b);
 }
 
 COLORREF modBlue(COLORREF col, int16_t mod) {
 	int16_t r = GetRValue(col), g = GetGValue(col), b = GetBValue(col) + mod;
-	if(b > 255) {
-		int16_t delta = b - 255;
-		r -= delta;
-		g -= delta;
-		b = 255;
-		if(r < 0) { r = 0; }
-		if(g < 0) { g = 0; }
-	}
+	checkColor(b, r, g);
 	return RGB(r, g, b);
 }
 
