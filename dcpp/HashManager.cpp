@@ -575,7 +575,7 @@ int HashManager::Hasher::run() {
 
 				auto lastRead = GET_TICK();
 
-				FileReader fr;
+				FileReader fr(true);
 
 				fr.read(fname, [&](const void* buf, size_t n) -> bool {
 					if(SETTING(MAX_HASH_SPEED)> 0) {

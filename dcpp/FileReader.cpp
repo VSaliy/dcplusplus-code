@@ -20,6 +20,7 @@
 
 #include "FileReader.h"
 
+#include "debug.h"
 #include "File.h"
 #include "Text.h"
 #include "Util.h"
@@ -37,13 +38,16 @@ size_t FileReader::read(const string& file, const DataCallback& callback) {
 	size_t ret = READ_FAILED;
 
 	if(direct) {
+		dcdebug("Reading [overlapped] %s\n", file.c_str());
 		ret = readDirect(file, callback);
 	}
 
 	if(ret == READ_FAILED) {
+		dcdebug("Reading [mapped] %s\n", file.c_str());
 		ret = readMapped(file, callback);
 
 		if(ret == READ_FAILED) {
+			dcdebug("Reading [full] %s\n", file.c_str());
 			ret = readCached(file, callback);
 		}
 	}

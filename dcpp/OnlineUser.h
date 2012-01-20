@@ -27,9 +27,9 @@
 #include "Flags.h"
 #include "FastAlloc.h"
 #include "GetSet.h"
+#include "Style.h"
 #include "Util.h"
 #include "User.h"
-#include "UserMatch.h"
 
 namespace dcpp {
 
