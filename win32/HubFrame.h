@@ -249,7 +249,7 @@ private:
 	tstring scanNickPrefix(const tstring& prefix);
 
 	// MDIChildFrame
-	void tabMenuImpl(dwt::MenuPtr& menu);
+	void tabMenuImpl(dwt::Menu* menu);
 
 	// AspectChat
 	void enterImpl(const tstring& s);

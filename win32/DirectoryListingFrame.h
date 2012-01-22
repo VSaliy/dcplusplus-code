@@ -225,10 +225,10 @@ private:
 
 	void runUserCommand(const UserCommand& uc);
 
-	void addTargets(const MenuPtr& menu, ItemInfo* ii = 0);
-	void addUserCommands(const MenuPtr& menu);
-	void addShellPaths(const ShellMenuPtr& menu, const vector<ItemInfo*>& sel);
-	void addUserMenu(const MenuPtr& menu);
+	void addTargets(Menu* menu, ItemInfo* ii = 0);
+	void addUserCommands(Menu* menu);
+	void addShellPaths(ShellMenu* menu, const vector<ItemInfo*>& sel);
+	void addUserMenu(Menu* menu);
 
 	void handleSearchSelChanged();
 	void handleFind(bool reverse);
@@ -282,7 +282,7 @@ private:
 	void findFile(bool reverse);
 
 	// MDIChildFrame
-	void tabMenuImpl(dwt::MenuPtr& menu);
+	void tabMenuImpl(dwt::Menu* menu);
 
 	// AspectUserInfo
 	UserInfoList selectedUsersImpl();

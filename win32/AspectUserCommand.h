@@ -24,29 +24,31 @@
 
 #include "resource.h"
 
+using dwt::Menu;
+
 template<class T>
 class AspectUserCommand {
 public:
 	AspectUserCommand() { }
 	virtual ~AspectUserCommand() { }
 
-	void prepareMenu(dwt::MenuPtr menu, int ctx, const string& hubUrl) {
+	void prepareMenu(Menu* menu, int ctx, const string& hubUrl) {
 		prepareMenu(menu, ctx, StringList(1, hubUrl));
 	}
 
-	void prepareMenu(dwt::MenuPtr menu, int ctx, const StringList& hubs) {
+	void prepareMenu(Menu* menu, int ctx, const StringList& hubs) {
 		userCommands = FavoriteManager::getInstance()->getUserCommands(ctx, hubs);
 
 		if(!userCommands.empty()) {
 			menu->appendSeparator();
-			dwt::MenuPtr cur = menu;
+			auto cur = menu;
 			for(size_t n = 0; n < userCommands.size(); ++n) {
 				UserCommand* uc = &userCommands[n];
 
 				if(uc->getType() == UserCommand::TYPE_SEPARATOR) {
 					// Avoid double separators...
-					size_t count = cur->getCount();
-					if( count > 0 && !cur->isSeparator(count-1)) {
+					auto count = cur->size();
+					if(count > 0 && !cur->isSeparator(count - 1u)) {
 						cur->appendSeparator();
 					}
 
@@ -60,7 +62,7 @@ public:
 						} else {
 							bool found = false;
 							// Let's see if we find an existing item...
-							for(size_t k = 0; k < cur->getCount(); k++) {
+							for(size_t k = 0; k < cur->size(); k++) {
 								if(cur->isPopup(k) && Util::stricmp(cur->getText(k), name) == 0) {
 									found = true;
 									cur = cur->getChild(k);

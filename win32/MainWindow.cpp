@@ -281,7 +281,7 @@ void MainWindow::initMenu() {
 	}
 
 	{
-		MenuPtr file = mainMenu->appendPopup(T_("&File"));
+		auto file = mainMenu->appendPopup(T_("&File"));
 
 		file->appendItem(T_("&Quick connect...\tCtrl+Q"), [this] { handleQuickConnect(); }, WinUtil::menuIcon(IDI_HUB));
 		file->appendItem(T_("Connect to a favorite hub &group...\tCtrl+G"), [this] { handleConnectFavHubGroup(); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
@@ -343,7 +343,7 @@ void MainWindow::initMenu() {
 	}
 
 	{
-		MenuPtr window = mainMenu->appendPopup(T_("&Window"));
+		auto window = mainMenu->appendPopup(T_("&Window"));
 
 		window->appendItem(T_("Close all hubs"), [] { HubFrame::closeAll(false); }, WinUtil::menuIcon(IDI_HUB));
 		window->appendItem(T_("Close disconnected hubs"), [] { HubFrame::closeAll(true); }, WinUtil::menuIcon(IDI_HUB_OFF));
@@ -362,7 +362,7 @@ void MainWindow::initMenu() {
 	}
 
 	{
-		MenuPtr help = mainMenu->appendPopup(T_("&Help"));
+		auto help = mainMenu->appendPopup(T_("&Help"));
 
 		help->appendItem(T_("Help &Contents\tF1"), [this] { WinUtil::helpId(this, IDH_INDEX); }, WinUtil::menuIcon(IDI_HELP));
 		help->appendItem(T_("Get started"), [this] { WinUtil::helpId(this, IDH_GET_STARTED); }, WinUtil::menuIcon(IDI_GET_STARTED));
@@ -638,14 +638,14 @@ static void multiConnect(const string& group, TabViewPtr parent) {
 }
 
 void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 
-	typedef map<string, MenuPtr, noCaseStringLess> GroupMenus;
+	typedef map<string, Menu*, noCaseStringLess> GroupMenus;
 	GroupMenus groupMenus;
 
 	const FavHubGroups& groups = FavoriteManager::getInstance()->getFavHubGroups();
 	for(auto i = groups.begin(), iend = groups.end(); i != iend; ++i)
-		groupMenus.insert(make_pair(i->first, MenuPtr()));
+		groupMenus.insert(make_pair(i->first, nullptr));
 
 	for(auto i = groupMenus.begin(); i != groupMenus.end(); ++i) {
 		i->second = menu->appendPopup(escapeMenu(Text::toT(i->first)));
@@ -658,7 +658,7 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 	for(auto i = hubs.begin(), iend = hubs.end(); i != iend; ++i) {
 		FavoriteHubEntry* entry = *i;
 		auto groupMenu = groupMenus.find(entry->getGroup());
-		((groupMenu == groupMenus.end()) ? menu : groupMenu->second)->appendItem(
+		((groupMenu == groupMenus.end()) ? menu.get() : groupMenu->second)->appendItem(
 			escapeMenu(Text::toT(entry->getName())),
 			[this, entry] { HubFrame::openWindow(getTabView(), entry->getServer()); });
 	}
@@ -671,8 +671,8 @@ void addActiveParam(WindowParams& params) {
 }
 
 template<typename T, typename configureF>
-void addRecentMenu(MenuPtr& menu, MainWindow* mainWindow, const tstring& text, unsigned iconId, unsigned favIconId, configureF f) {
-	MenuPtr popup = menu->appendPopup(text, WinUtil::menuIcon(iconId));
+void addRecentMenu(Menu* menu, MainWindow* mainWindow, const tstring& text, unsigned iconId, unsigned favIconId, configureF f) {
+	auto popup = menu->appendPopup(text, WinUtil::menuIcon(iconId));
 	popup->appendItem(T_("&Configure..."), std::bind(f, mainWindow, T::id, text),
 		WinUtil::menuIcon(IDI_SETTINGS), true, true);
 	popup->appendSeparator();
@@ -703,12 +703,12 @@ void addRecentMenu(MenuPtr& menu, MainWindow* mainWindow, const tstring& text, u
 }
 
 void MainWindow::handleRecent(const dwt::ScreenCoordinate& pt) {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 
 	auto f = &MainWindow::handleConfigureRecent;
-	addRecentMenu<HubFrame>(menu, this, T_("Recent hubs"), IDI_HUB, IDI_FAVORITE_HUBS, f);
-	addRecentMenu<PrivateFrame>(menu, this, T_("Recent PMs"), IDI_PRIVATE, IDI_FAVORITE_USER_ON, f);
-	addRecentMenu<DirectoryListingFrame>(menu, this, T_("Recent file lists"), IDI_DIRECTORY, IDI_FAVORITE_USER_ON, f);
+	addRecentMenu<HubFrame>(menu.get(), this, T_("Recent hubs"), IDI_HUB, IDI_FAVORITE_HUBS, f);
+	addRecentMenu<PrivateFrame>(menu.get(), this, T_("Recent PMs"), IDI_PRIVATE, IDI_FAVORITE_USER_ON, f);
+	addRecentMenu<DirectoryListingFrame>(menu.get(), this, T_("Recent file lists"), IDI_DIRECTORY, IDI_FAVORITE_USER_ON, f);
 
 	menu->open(pt);
 }
@@ -725,7 +725,7 @@ void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
 	}
 }
 
-void MainWindow::fillLimiterMenu(MenuPtr menu, bool upload) {
+void MainWindow::fillLimiterMenu(Menu* menu, bool upload) {
 	const auto title = upload ? T_("Upload limit") : T_("Download limit");
 	menu->setTitle(title);
 
@@ -770,7 +770,7 @@ void MainWindow::fillLimiterMenu(MenuPtr menu, bool upload) {
 
 void MainWindow::handleLimiterMenu(bool upload) {
 	auto menu = addChild(WinUtil::Seeds::menu);
-	fillLimiterMenu(menu, upload);
+	fillLimiterMenu(menu.get(), upload);
 	menu->open(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
 }
 
@@ -1508,14 +1508,14 @@ void MainWindow::handleToolbarCustomized() {
 }
 
 bool MainWindow::handleToolbarContextMenu(const dwt::ScreenCoordinate& pt) {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 	menu->setTitle(T_("Toolbar"));
 
 	menu->appendItem(T_("&Customize\tDouble-click"), [this] { toolbar->customize(); },
 		WinUtil::menuIcon(IDI_SETTINGS), true, true);
 
 	{
-		MenuPtr size = menu->appendPopup(T_("Size"));
+		auto size = menu->appendPopup(T_("Size"));
 		int sizes[] = { 16, 20, 22, 24, 32 };
 		int setting = SETTING(TOOLBAR_SIZE);
 		for(size_t i = 0, iend = sizeof(sizes) / sizeof(int); i < iend; ++i) {

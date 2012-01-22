@@ -33,8 +33,7 @@ class ShellMenu : public dwt::Menu
 
 public:
 	typedef ShellMenu ThisType;
-
-	typedef dwt::shared_ptr<ShellMenu> ObjectType;
+	typedef ShellMenuPtr ObjectType;
 
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
@@ -50,7 +49,7 @@ public:
 	void open(const dwt::ScreenCoordinate& pt, unsigned flags = TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 private:
-	typedef std::pair<MenuPtr, LPCONTEXTMENU3> handlers_pair;
+	typedef std::pair<Menu*, LPCONTEXTMENU3> handlers_pair;
 	typedef std::vector<handlers_pair> handlers_type;
 	handlers_type handlers;
 

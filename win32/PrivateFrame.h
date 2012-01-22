@@ -102,7 +102,7 @@ private:
 	void runUserCommand(const UserCommand& uc);
 
 	// MDIChildFrame
-	void tabMenuImpl(dwt::MenuPtr& menu);
+	void tabMenuImpl(dwt::Menu* menu);
 
 	// AspectChat
 	void enterImpl(const tstring& s);

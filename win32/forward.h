@@ -21,7 +21,6 @@
 #define DCPLUSPLUS_WIN32_FORWARD_H_
 
 #include <dwt/forward.h>
-#include <dwt/shared_ptr.h>
 
 using dwt::ButtonPtr;
 using dwt::CheckBoxPtr;
@@ -48,7 +47,7 @@ typedef ComboBox* ComboBoxPtr;
 class HubFrame;
 
 class ShellMenu;
-typedef dwt::shared_ptr<ShellMenu> ShellMenuPtr;
+typedef std::unique_ptr<ShellMenu> ShellMenuPtr;
 
 class RichTextBox;
 typedef RichTextBox* RichTextBoxPtr;

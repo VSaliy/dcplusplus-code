@@ -107,7 +107,7 @@ typedef Label* LabelPtr;
 class LoadDialog;
 
 class Menu;
-typedef shared_ptr<Menu> MenuPtr;
+typedef std::unique_ptr<Menu> MenuPtr;
 
 class MDIChild;
 typedef MDIChild* MDIChildPtr;

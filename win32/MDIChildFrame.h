@@ -224,7 +224,7 @@ private:
 
 		menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
 
-		tabMenuImpl(menu);
+		tabMenuImpl(menu.get());
 		menu->appendItem(T_("&Close"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
 
 		menu->open(pt);
@@ -247,7 +247,7 @@ private:
 		return false;
 	}
 
-	virtual void tabMenuImpl(dwt::MenuPtr& menu) {
+	virtual void tabMenuImpl(dwt::Menu* menu) {
 		// empty on purpose; implement this in the derived class to modify the tab menu.
 	}
 };

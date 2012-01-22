@@ -1106,11 +1106,11 @@ bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 	if(userClick(pt) && handleUsersContextMenu(pt))
 		return true;
 
-	MenuPtr menu = chat->getMenu();
+	auto menu = chat->getMenu();
 
 	menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
 
-	prepareMenu(menu, UserCommand::CONTEXT_HUB, url);
+	prepareMenu(menu.get(), UserCommand::CONTEXT_HUB, url);
 
 	hubMenu = true;
 	menu->open(pt);
@@ -1124,20 +1124,20 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 			pt = users->getContextMenuPos();
 		}
 
-		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+		auto menu = addChild(WinUtil::Seeds::menu);
 
 		menu->setTitle((sel.size() == 1) ? escapeMenu(getNick(sel[0]->getUser())) : str(TF_("%1% users") % sel.size()),
 			WinUtil::userImages->getIcon(0));
 
-		appendUserItems(getParent(), menu);
+		appendUserItems(getParent(), menu.get());
 
 		menu->appendSeparator();
-		MenuPtr copyMenu = menu->appendPopup(T_("&Copy"));
+		auto copyMenu = menu->appendPopup(T_("&Copy"));
 		for(int j=0; j<COLUMN_LAST; j++) {
 			copyMenu->appendItem(T_(usersColumns[j].name), [this, j] { handleMultiCopy(j); });
 		}
 
-		prepareMenu(menu, UserCommand::CONTEXT_USER, url);
+		prepareMenu(menu.get(), UserCommand::CONTEXT_USER, url);
 
 		hubMenu = false;
 		menu->open(pt);
@@ -1146,7 +1146,7 @@ bool HubFrame::handleUsersContextMenu(dwt::ScreenCoordinate pt) {
 	return false;
 }
 
-void HubFrame::tabMenuImpl(dwt::MenuPtr& menu) {
+void HubFrame::tabMenuImpl(dwt::Menu* menu) {
 	if(!FavoriteManager::getInstance()->isFavoriteHub(url)) {
 		menu->appendItem(T_("Add To &Favorites"), [this] { addAsFavorite(); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));
 	}

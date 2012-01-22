@@ -106,7 +106,7 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 	if(valid.size() == 1)
 		handlers.push_back(make_pair(appendPopup(T_("Shell menu"), dwt::IconPtr(), false), valid[0].second));
 	else {
-		MenuPtr popup = appendPopup(T_("Shell menus"));
+		auto popup = appendPopup(T_("Shell menus"));
 		for(auto i = valid.begin(); i != valid.end(); ++i)
 			handlers.push_back(make_pair(popup->appendPopup(escapeMenu(Text::toT(i->first)), dwt::IconPtr(), false), i->second));
 	}

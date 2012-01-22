@@ -155,7 +155,7 @@ bool SpyFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 		tstring selText = searches->getText(searches->getSelected(), COLUMN_STRING);
 
-		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+		auto menu = addChild(WinUtil::Seeds::menu);
 		menu->setTitle(escapeMenu(selText), getParent()->getIcon(this));
 		menu->appendItem(T_("&Search"), [=] { handleSearch(selText); }, WinUtil::menuIcon(IDI_SEARCH));
 

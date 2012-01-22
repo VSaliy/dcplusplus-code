@@ -293,8 +293,8 @@ void FavHubsFrame::handleRemove() {
 }
 
 void FavHubsFrame::handleGroup() {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
-	fillGroupMenu(menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
+	fillGroupMenu(menu.get());
 	menu->open(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
 }
 
@@ -343,7 +343,7 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 	size_t sel = hubs->countSelected();
 
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 	menu->setTitle((sel == 0) ? getText() : (sel == 1) ? escapeMenu(hubs->getText(hubs->getSelected(), COLUMN_NAME)) :
 		str(TF_("%1% hubs") % sel), getParent()->getIcon(this));
 	menu->appendItem(T_("&Connect"), [this] { openSelected(); }, dwt::IconPtr(), sel, true);
@@ -377,7 +377,7 @@ TStringList FavHubsFrame::getSortedGroups() const {
 	return groups;
 }
 
-void FavHubsFrame::fillGroupMenu(MenuPtr menu) {
+void FavHubsFrame::fillGroupMenu(Menu* menu) {
 	TStringList groups(getSortedGroups());
 	for(auto i = groups.cbegin(), iend = groups.cend(); i != iend; ++i) {
 		const tstring& group = i->empty() ? T_("Default group") : *i;

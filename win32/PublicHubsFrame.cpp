@@ -329,7 +329,7 @@ bool PublicHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 			pt = hubs->getContextMenuPos();
 		}
 
-		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+		auto menu = addChild(WinUtil::Seeds::menu);
 		menu->setTitle(escapeMenu(hubs->getSelectedData()->getText(COLUMN_NAME)), getParent()->getIcon(this));
 		menu->appendItem(T_("&Connect"), [this] { handleConnect(); }, dwt::IconPtr(), true, true);
 		menu->appendItem(T_("Add To &Favorites"), [this] { handleAdd(); }, WinUtil::menuIcon(IDI_FAVORITE_HUBS));

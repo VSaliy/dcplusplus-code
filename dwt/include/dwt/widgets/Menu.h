@@ -33,7 +33,6 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef WINCE
 #ifndef DWT_Menu_h
 #define DWT_Menu_h
 
@@ -71,10 +70,7 @@ class Menu : private boost::noncopyable
 	} colors;
 
 public:
-	/// Type of object
 	typedef Menu ThisType;
-
-	/// Object type
 	typedef MenuPtr ObjectType;
 
 	struct Seed {
@@ -106,9 +102,7 @@ public:
 	/// Actually creates the menu
 	/** Creates the menu, the menu will be created initially empty!
 	*/
-	void create(const Seed& cs);
-
-	void attach(HMENU hMenu, const Seed& cs);
+	void create(const Seed& seed);
 
 	void setMenu();
 
@@ -130,21 +124,7 @@ public:
 	* A popup is basically another branch in the menu hierarchy <br>
 	* See the Menu project for a demonstration.
 	*/
-	ObjectType appendPopup(const tstring& text, const IconPtr& icon = IconPtr(), bool subTitle = true);
-
-	/// Returns the "System Menu"
-	/** The system menu is a special menu that ( normally ) is accessed by pressing
-	* the "window icon" at the top left of the window. <br>
-	* In SmartWin++ this menu can ALSO be easily manipulated and added items to
-	* etc... <br>
-	* Also, although references to all menu objects must be kept ( since they're
-	* not collected automatically like other Widgets ) <br>
-	* you don't have to keep a reference to the return value of this function since
-	* it's being added as a reference to the children list <br>
-	* of the "this" object. <br>
-	* See the Menu sample project for a demonstration.
-	*/
-	ObjectType getSystemMenu();
+	Menu* appendPopup(const tstring& text, const IconPtr& icon = IconPtr(), bool subTitle = true);
 
 	/// Appends a separator item to the menu
 	/** A menu separator is basically just "air" between menu items.< br >
@@ -170,7 +150,7 @@ public:
 	void removeAllItems();
 
 	/// Return the number of items in the menu
-	unsigned getCount() const;
+	unsigned size() const;
 
 	/// Displays and handles a menu which can appear anywhere in the window.
 	/** Typically called by a Right Mouse click. If both the x and the y coordinate
@@ -251,7 +231,7 @@ public:
 	/// Sets the text of a specific menu item
 	void setText(unsigned index, const tstring& text);
 
-	ObjectType getChild(UINT position);
+	Menu* getChild(unsigned position);
 
 	virtual ~Menu();
 
@@ -314,9 +294,6 @@ private:
 
 	LRESULT handleNCPaint(UINT message, WPARAM wParam, long menuWidth);
 
-	// This is used during menu destruction
-	static void destroyItemDataWrapper( ItemDataWrapper * wrapper );
-
 	Menu* getRootMenu() { return parentMenu ? parentMenu->getRootMenu() : this; }
 
 	Menu* parentMenu; /// only defined for sub-menus; this is a link to their container menu
@@ -327,9 +304,9 @@ private:
 	bool popup;
 
 	// its sub menus
-	std::vector< ObjectType > itsChildren;
+	std::vector<Menu*> itsChildren;
 	// its item data
-	std::vector < ItemDataWrapper * > itsItemData;
+	std::vector<ItemDataWrapper*> itsItemData;
 
 	static const unsigned id_offset = 100;
 	typedef std::unique_ptr<std::vector<Dispatcher::F> > commands_type;
@@ -349,12 +326,9 @@ private:
 	// if true title is drawn as sidebar
 	bool drawSidebar;
 
-	void createHelper(const Seed& cs);
-
 	Point getTextSize(const tstring& text, const FontPtr& font_) const;
 };
 
 }
 
-#endif
 #endif

@@ -90,7 +90,7 @@ private:
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
 
 	TStringList getSortedGroups() const;
-	void fillGroupMenu(MenuPtr menu);
+	void fillGroupMenu(Menu* menu);
 	void fillList();
 	void refresh();
 	FavoriteHubEntryList getSelection() const;
