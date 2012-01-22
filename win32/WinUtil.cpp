@@ -760,7 +760,7 @@ void WinUtil::reducePaths(string& message) {
 	}
 }
 
-void WinUtil::addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename, int64_t size) {
+void WinUtil::addHashItems(Menu* menu, const TTHValue& tth, const tstring& filename, int64_t size) {
 	menu->appendItem(T_("Search for alternates"), [=] { searchHash(tth); }, menuIcon(IDI_SEARCH));
 	menu->appendItem(T_("Lookup TTH at Bitzi.com"), [=] { bitziLink(tth); });
 	menu->appendItem(T_("Copy magnet link to clipboard"), [=] { copyMagnet(tth, filename, size); }, menuIcon(IDI_MAGNET));
@@ -1478,9 +1478,11 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 	}
 }
 
+namespace {
+
 typedef std::function<void(const HintedUser&, const string&)> UserFunction;
 
-static void eachUser(const HintedUserList& list, const StringList& dirs, const UserFunction& f) {
+void eachUser(const HintedUserList& list, const StringList& dirs, const UserFunction& f) {
 	size_t j = 0;
 	for(auto i = list.begin(), iend = list.end(); i != iend; ++i) {
 		try {
@@ -1492,7 +1494,7 @@ static void eachUser(const HintedUserList& list, const StringList& dirs, const U
 	}
 }
 
-static void addUsers(MenuPtr menu, const tstring& text, const HintedUserList& users, const UserFunction& f,
+void addUsers(Menu* menu, const tstring& text, const HintedUserList& users, const UserFunction& f,
 	const dwt::IconPtr& icon = dwt::IconPtr(), const StringList& dirs = StringList())
 {
 	if(users.empty())
@@ -1524,11 +1526,13 @@ HintedUserList filter(const HintedUserList& l, F f) {
 	return ret;
 }
 
-static bool isFav(const UserPtr& u) {
+bool isFav(const UserPtr& u) {
 	return !FavoriteManager::getInstance()->isFavoriteUser(u);
 }
 
-void WinUtil::addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs) {
+} // unnamed namespace
+
+void WinUtil::addUserItems(Menu* menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs) {
 	QueueManager* qm = QueueManager::getInstance();
 
 	addUsers(menu, T_("&Get file list"), users, [=](const HintedUser &u, const string& s) {

@@ -119,7 +119,7 @@ private:
 	RebarPtr rebar;
 	SplitterContainerPtr paned;
 	MenuPtr mainMenu;
-	MenuPtr viewMenu;
+	Menu* viewMenu;
 	TransferView* transfers;
 	ToolBarPtr toolbar;
 	TabViewPtr tabs;
@@ -205,7 +205,7 @@ private:
 	void saveWindowSettings();
 	void parseCommandLine(const tstring& line);
 	bool chooseFavHubGroup(const tstring& title, tstring& group);
-	void fillLimiterMenu(MenuPtr menu, bool upload);
+	void fillLimiterMenu(Menu* menu, bool upload);
 	void statusMessage(time_t t, const string& m);
 
 	void completeVersionUpdate();

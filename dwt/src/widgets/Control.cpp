@@ -83,8 +83,7 @@ bool Control::filter(MSG& msg) {
 	return accel && ::TranslateAccelerator(handle(), accel, &msg);
 }
 
-template<typename T>
-static bool forwardPainting(const MSG& msg) {
+namespace { template<typename T> bool forwardPainting(const MSG& msg) {
 	T* t = reinterpret_cast<T*>(msg.lParam);
 	if(!t)
 		return false;
@@ -94,7 +93,7 @@ static bool forwardPainting(const MSG& msg) {
 	case ODT_TAB: return TabView::handlePainting(*t); break;
 	}
 	return false;
-}
+} }
 
 bool Control::handleMessage(const MSG& msg, LRESULT& retVal) {
 	if(msg.message == WM_CLOSE && !getRoot()->getEnabled()) {

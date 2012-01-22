@@ -128,7 +128,7 @@ protected:
 		handleUserFunction([ignore](UserInfoBase* u) { u->ignoreChat(ignore); });
 	}
 
-	void appendUserItems(TabViewPtr parent, dwt::MenuPtr menu, bool defaultIsGetList = true, bool includeSendPM = true) {
+	void appendUserItems(TabViewPtr parent, Menu* menu, bool defaultIsGetList = true, bool includeSendPM = true) {
 		auto users = t().selectedUsersImpl();
 		if(users.empty())
 			return;

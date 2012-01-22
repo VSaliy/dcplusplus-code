@@ -826,102 +826,102 @@ const string& QueueFrame::getDir(HTREEITEM item) {
 }
 
 MenuPtr QueueFrame::makeSingleMenu(QueueItemInfo* qii) {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 
 	menu->setTitle(escapeMenu(qii->getText(COLUMN_TARGET)), WinUtil::fileImages->getIcon(qii->getImage(0)));
 
-	WinUtil::addHashItems(menu, qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())), qii->getSize());
+	WinUtil::addHashItems(menu.get(), qii->getTTH(), Text::toT(Util::getFileName(qii->getTarget())), qii->getSize());
 	menu->appendItem(T_("&Move/Rename"), [this] { handleMove(); });
 	menu->appendItem(T_("Re&check integrity"), [this] { handleRecheck(); });
-	addPriorityMenu(menu);
-	addBrowseMenu(menu, qii);
-	addPMMenu(menu, qii);
+	addPriorityMenu(menu.get());
+	addBrowseMenu(menu.get(), qii);
+	addPMMenu(menu.get(), qii);
 	menu->appendSeparator();
-	addReaddMenu(menu, qii);
-	addRemoveMenu(menu, qii);
-	addRemoveSourcesMenu(menu, qii);
+	addReaddMenu(menu.get(), qii);
+	addRemoveMenu(menu.get(), qii);
+	addRemoveSourcesMenu(menu.get(), qii);
 	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 	return menu;
 }
 
 MenuPtr QueueFrame::makeMultiMenu() {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 
 	size_t sel = files->countSelected();
 	menu->setTitle(str(TF_("%1% files") % sel), getParent()->getIcon(this));
 
 	menu->appendItem(T_("&Move/Rename"), [this] { handleMove(); });
 	menu->appendItem(T_("Re&check integrity"), [this] { handleRecheck(); });
-	addPriorityMenu(menu);
+	addPriorityMenu(menu.get());
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 	return menu;
 }
 
 MenuPtr QueueFrame::makeDirMenu() {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 
 	auto selData = dirs->getSelectedData();
 	menu->setTitle(escapeMenu(selData ? selData->getText() : getText()),
 		selData ? WinUtil::fileImages->getIcon(selData->getImage(0)) : getParent()->getIcon(this));
 
-	addPriorityMenu(menu);
+	addPriorityMenu(menu.get());
 	menu->appendItem(T_("&Move/Rename"), [this] { handleMove(); });
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 	return menu;
 }
 
-void QueueFrame::addPriorityMenu(const MenuPtr& parent) {
-	MenuPtr menu = parent->appendPopup(T_("Set priority"));
-	menu->appendItem(T_("Paused"), [this] { handlePriority(QueueItem::PAUSED); });
-	menu->appendItem(T_("Lowest"), [this] { handlePriority(QueueItem::LOWEST); });
-	menu->appendItem(T_("Low"), [this] { handlePriority(QueueItem::LOW); });
-	menu->appendItem(T_("Normal"), [this] { handlePriority(QueueItem::NORMAL); });
-	menu->appendItem(T_("High"), [this] { handlePriority(QueueItem::HIGH); });
-	menu->appendItem(T_("Highest"), [this] { handlePriority(QueueItem::HIGHEST); });
+void QueueFrame::addPriorityMenu(Menu* menu) {
+	auto sub = menu->appendPopup(T_("Set priority"));
+	sub->appendItem(T_("Paused"), [this] { handlePriority(QueueItem::PAUSED); });
+	sub->appendItem(T_("Lowest"), [this] { handlePriority(QueueItem::LOWEST); });
+	sub->appendItem(T_("Low"), [this] { handlePriority(QueueItem::LOW); });
+	sub->appendItem(T_("Normal"), [this] { handlePriority(QueueItem::NORMAL); });
+	sub->appendItem(T_("High"), [this] { handlePriority(QueueItem::HIGH); });
+	sub->appendItem(T_("Highest"), [this] { handlePriority(QueueItem::HIGHEST); });
 }
 
-void QueueFrame::addBrowseMenu(const MenuPtr& parent, QueueItemInfo* qii) {
-	unsigned int pos = parent->getCount();
-	MenuPtr menu = parent->appendPopup(T_("&Get file list"));
-	if(!addUsers(menu, &QueueFrame::handleGetList, qii->getSources(), false))
-		parent->setItemEnabled(pos, false);
+void QueueFrame::addBrowseMenu(Menu* menu, QueueItemInfo* qii) {
+	auto pos = menu->size();
+	auto sub = menu->appendPopup(T_("&Get file list"));
+	if(!addUsers(sub, &QueueFrame::handleGetList, qii->getSources(), false))
+		menu->setItemEnabled(pos, false);
 }
 
-void QueueFrame::addPMMenu(const MenuPtr& parent, QueueItemInfo* qii) {
-	unsigned int pos = parent->getCount();
-	MenuPtr menu = parent->appendPopup(T_("&Send private message"));
-	if(!addUsers(menu, &QueueFrame::handlePM, qii->getSources(), false))
-		parent->setItemEnabled(pos, false);
+void QueueFrame::addPMMenu(Menu* menu, QueueItemInfo* qii) {
+	auto pos = menu->size();
+	auto sub = menu->appendPopup(T_("&Send private message"));
+	if(!addUsers(sub, &QueueFrame::handlePM, qii->getSources(), false))
+		menu->setItemEnabled(pos, false);
 }
 
-void QueueFrame::addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii) {
-	unsigned int pos = parent->getCount();
-	MenuPtr menu = parent->appendPopup(T_("Re-add source"));
-	menu->appendItem(T_("All"), [this] { handleReadd(HintedUser(UserPtr(), Util::emptyString)); });
-	menu->appendSeparator();
-	if(!addUsers(menu, &QueueFrame::handleReadd, qii->getBadSources(), true))
-		parent->setItemEnabled(pos, false);
+void QueueFrame::addReaddMenu(Menu* menu, QueueItemInfo* qii) {
+	auto pos = menu->size();
+	auto sub = menu->appendPopup(T_("Re-add source"));
+	sub->appendItem(T_("All"), [this] { handleReadd(HintedUser(UserPtr(), Util::emptyString)); });
+	sub->appendSeparator();
+	if(!addUsers(sub, &QueueFrame::handleReadd, qii->getBadSources(), true))
+		menu->setItemEnabled(pos, false);
 }
 
-void QueueFrame::addRemoveMenu(const MenuPtr& parent, QueueItemInfo* qii) {
-	unsigned int pos = parent->getCount();
-	MenuPtr menu = parent->appendPopup(T_("Remove source"));
-	menu->appendItem(T_("All"), [this] { handleRemoveSource(HintedUser(UserPtr(), Util::emptyString)); });
-	menu->appendSeparator();
-	if(!addUsers(menu, &QueueFrame::handleRemoveSource, qii->getSources(), true))
-		parent->setItemEnabled(pos, false);
+void QueueFrame::addRemoveMenu(Menu* menu, QueueItemInfo* qii) {
+	auto pos = menu->size();
+	auto sub = menu->appendPopup(T_("Remove source"));
+	sub->appendItem(T_("All"), [this] { handleRemoveSource(HintedUser(UserPtr(), Util::emptyString)); });
+	sub->appendSeparator();
+	if(!addUsers(sub, &QueueFrame::handleRemoveSource, qii->getSources(), true))
+		menu->setItemEnabled(pos, false);
 }
 
-void QueueFrame::addRemoveSourcesMenu(const MenuPtr& parent, QueueItemInfo* qii) {
-	unsigned int pos = parent->getCount();
-	MenuPtr menu = parent->appendPopup(T_("Remove user from queue"));
-	if(!addUsers(menu, &QueueFrame::handleRemoveSources, qii->getSources(), true))
-		parent->setItemEnabled(pos, false);
+void QueueFrame::addRemoveSourcesMenu(Menu* menu, QueueItemInfo* qii) {
+	auto pos = menu->size();
+	auto sub = menu->appendPopup(T_("Remove user from queue"));
+	if(!addUsers(sub, &QueueFrame::handleRemoveSources, qii->getSources(), true))
+		menu->setItemEnabled(pos, false);
 }
 
-bool QueueFrame::addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const HintedUser&), const QueueItem::SourceList& sources, bool offline) {
+bool QueueFrame::addUsers(Menu* menu, void (QueueFrame::*handler)(const HintedUser&), const QueueItem::SourceList& sources, bool offline) {
 	bool added = false;
 	for(auto i = sources.begin(); i != sources.end(); ++i) {
 		const QueueItem::Source& source = *i;
@@ -966,9 +966,7 @@ bool QueueFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 
 	if(dirs->hasSelected()) {
 		usingDirMenu = true;
-		MenuPtr contextMenu = makeDirMenu();
-
-		contextMenu->open(pt);
+		makeDirMenu()->open(pt);
 		return true;
 	}
 

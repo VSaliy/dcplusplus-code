@@ -59,7 +59,7 @@ bool RichTextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
 }
 
 MenuPtr RichTextBox::getMenu() {
-	MenuPtr menu = BaseType::getMenu();
+	auto menu = BaseType::getMenu();
 
 	menu->appendSeparator();
 	menu->appendItem(T_("&Find...\tCtrl+F"), [this] { findTextNew(); }, dwt::IconPtr(), !getText().empty());

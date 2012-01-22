@@ -458,9 +458,9 @@ bool UsersFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 			pt = users->getContextMenuPos();
 		}
 
-		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+		auto menu = addChild(WinUtil::Seeds::menu);
 		menu->setTitle((sel == 1) ? escapeMenu(users->getSelectedData()->getText(COLUMN_NICK)) : str(TF_("%1% users") % sel));
-		appendUserItems(getParent(), menu);
+		appendUserItems(getParent(), menu.get());
 		menu->appendSeparator();
 		menu->appendItem(T_("&Description"), [this] { handleDescription(); });
 		menu->appendItem(T_("&Remove"), [this] { handleRemove(); });

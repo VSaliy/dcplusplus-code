@@ -245,8 +245,8 @@ private:
 	void updateList();
 
 	MenuPtr makeMenu();
-	void addTargetMenu(const MenuPtr& parent, const StringPairList& favoriteDirs, const SearchInfo::CheckTTH& checkTTH);
-	void addTargetDirMenu(const MenuPtr& parent, const StringPairList& favoriteDirs);
+	void addTargetMenu(Menu* menu, const StringPairList& favoriteDirs, const SearchInfo::CheckTTH& checkTTH);
+	void addTargetDirMenu(Menu* menu, const StringPairList& favoriteDirs);
 
 	// SearchManagerListener
 	virtual void on(SearchManagerListener::SR, const SearchResultPtr& sr) noexcept;

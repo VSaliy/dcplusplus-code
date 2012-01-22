@@ -33,8 +33,6 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef WINCE
-
 #include <dwt/widgets/Menu.h>
 
 #include <dwt/resources/Brush.h>
@@ -91,14 +89,19 @@ drawSidebar(false)
 	dwtassert(dynamic_cast<Control*>(parent), "A Menu must have a parent derived from dwt::Control");
 }
 
-void Menu::createHelper(const Seed& cs) {
-	ownerDrawn = cs.ownerDrawn;
-	popup = cs.popup;
+void Menu::create(const Seed& seed) {
+	ownerDrawn = seed.ownerDrawn;
+	popup = seed.popup;
+
+	itsHandle = popup ? ::CreatePopupMenu() : ::CreateMenu();
+	if(!itsHandle) {
+		throw Win32Exception("CreateMenu in Menu::create failed");
+	}
 
 	if(ownerDrawn) {
-		iconSize = cs.iconSize;
+		iconSize = seed.iconSize;
 
-		setFont(cs.font);
+		setFont(seed.font);
 
 		if(!popup) {
 			getParent()->addCallback(Message(WM_SYSCOLORCHANGE), Dispatchers::VoidVoid<0, false>([] { colors.reset(); }));
@@ -109,64 +112,12 @@ void Menu::createHelper(const Seed& cs) {
 			theme.load(VSCLASS_MENU, getParent(), !popup);
 		}
 	}
-}
-
-void Menu::create(const Seed& cs) {
-	createHelper(cs);
-
-	if(popup)
-		itsHandle = ::CreatePopupMenu();
-	else
-		itsHandle = ::CreateMenu();
-	if ( !itsHandle ) {
-		throw Win32Exception("CreateMenu in Menu::create failed");
-	}
 
 	if(!popup) {
 		// set the MNS_NOTIFYBYPOS style to the whole menu
 		MENUINFO mi = { sizeof(MENUINFO), MIM_STYLE, MNS_NOTIFYBYPOS };
 		if(!::SetMenuInfo(handle(), &mi))
 			throw Win32Exception("SetMenuInfo in Menu::create failed");
-	}
-}
-
-void Menu::attach(HMENU hMenu, const Seed& cs) {
-	createHelper(cs);
-
-	itsHandle = hMenu;
-
-	if(ownerDrawn) {
-		unsigned defaultItem = ::GetMenuDefaultItem(itsHandle, TRUE, GMDI_USEDISABLED);
-
-		// update all current items to be owner-drawn
-		const unsigned count = getCount();
-		for(size_t i = 0; i < count; ++i) {
-			MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_FTYPE | MIIM_SUBMENU };
-			if(::GetMenuItemInfo(itsHandle, i, TRUE, &info)) {
-				if(info.hSubMenu) {
-					ObjectType subMenu(new Menu(getParent()));
-					subMenu->attach(info.hSubMenu, cs);
-					itsChildren.push_back(subMenu);
-				}
-
-				info.fMask |= MIIM_DATA;
-				info.fType |= MFT_OWNERDRAW;
-
-				// create item data wrapper
-				ItemDataWrapper * wrapper = new ItemDataWrapper( this, i );
-				if(i == defaultItem)
-					wrapper->isDefault = true;
-				info.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
-
-				if(::SetMenuItemInfo(itsHandle, i, TRUE, &info)) {
-					itsItemData.push_back( wrapper );
-				} else {
-					throw Win32Exception("SetMenuItemInfo in Menu::attach failed");
-				}
-			} else {
-				throw Win32Exception("GetMenuItemInfo in Menu::attach failed");
-			}
-		}
 	}
 }
 
@@ -209,8 +160,7 @@ void Menu::setMenu() {
 
 	// get the width that current items will occupy
 	long menuWidth = 0;
-	const unsigned count = getCount();
-	for(size_t i = 0; i < count; ++i) {
+	for(unsigned i = 0, n = size(); i < n; ++i) {
 		::RECT rect;
 		::GetMenuItemRect(getParent()->handle(), handle(), i, &rect);
 		menuWidth += Rectangle(rect).width();
@@ -222,9 +172,9 @@ void Menu::setMenu() {
 	::DrawMenuBar(control->handle());
 }
 
-Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon, bool subTitle) {
+Menu* Menu::appendPopup(const tstring& text, const IconPtr& icon, bool subTitle) {
 	// create the sub-menu
-	ObjectType sub(new Menu(getParent()));
+	auto sub = new Menu(getParent());
 	sub->create(Seed(ownerDrawn, iconSize, font));
 	sub->parentMenu = this;
 
@@ -242,48 +192,42 @@ Menu::ObjectType Menu::appendPopup(const tstring& text, const IconPtr& icon, boo
 	info.hSubMenu = sub->handle();
 
 	// get position to insert
-	unsigned position = getCount();
+	auto position = size();
 
-	ItemDataWrapper * wrapper = NULL;
 	if(ownerDrawn) {
 		info.fMask |= MIIM_DATA | MIIM_FTYPE;
 
 		info.fType = MFT_OWNERDRAW;
 
 		// create item data
-		wrapper = new ItemDataWrapper( this, position, false, icon );
-		info.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
+		auto wrapper = new ItemDataWrapper(this, position, false, icon);
+		info.dwItemData = reinterpret_cast<ULONG_PTR>(wrapper);
+		itsItemData.push_back(wrapper);
 	}
 
 	// append to this menu at the end
-	if ( ::InsertMenuItem( itsHandle, position, TRUE, & info ) )
-	{
-		if(ownerDrawn)
-			itsItemData.push_back( wrapper );
-		itsChildren.push_back( sub );
+	if(!::InsertMenuItem(itsHandle, position, TRUE, &info)) {
+		throw Win32Exception("Could not add a sub-menu");
 	}
+	itsChildren.push_back(sub);
 	return sub;
 }
 
-Menu::~Menu()
-{
-	// Destroy this menu
-	::DestroyMenu( handle() );
-	std::for_each( itsItemData.begin(), itsItemData.end(), destroyItemDataWrapper );
-}
+Menu::~Menu() {
+	// destroy this menu.
+	::DestroyMenu(handle());
 
-void Menu::destroyItemDataWrapper( ItemDataWrapper * wrapper )
-{
-	if ( 0 != wrapper )
-		delete wrapper;
+	// delete data associated to owner-drawn menu items.
+	std::for_each(itsItemData.begin(), itsItemData.end(), [](ItemDataWrapper* wrapper) { delete wrapper; });
 
-	wrapper = 0;
+	// destroy sub-menus.
+	std::for_each(itsChildren.begin(), itsChildren.end(), [](Menu* sub) { delete sub; });
 }
 
 void Menu::setFont(FontPtr font) {
 	this->font = font ? font : new Font(Font::DefaultGui);
 	titleFont = boldFont = this->font->makeBold();
-	std::for_each(itsChildren.begin(), itsChildren.end(), [this](MenuPtr sub) { sub->setFont(this->font); });
+	std::for_each(itsChildren.begin(), itsChildren.end(), [this](Menu* sub) { sub->setFont(this->font); });
 }
 
 void Menu::setTitleFont(FontPtr font) {
@@ -374,21 +318,19 @@ void Menu::setTitle(const tstring& title, const IconPtr& icon, bool drawSidebar 
 		info.dwTypeData = const_cast<LPTSTR>(itsTitle.c_str());
 
 		// create wrapper for title item
-		ItemDataWrapper * wrapper = new ItemDataWrapper(this, 0, true, icon);
+		auto wrapper = new ItemDataWrapper(this, 0, true, icon);
+		info.dwItemData = reinterpret_cast<ULONG_PTR>(wrapper);
 
-		// set item data
-		info.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
+		// adjust item data wrappers for all existing items
+		for(size_t i = 0; i < itsItemData.size(); ++i)
+			if(itsItemData[i])
+				++itsItemData[i]->index;
 
-		if ( ( !hasTitle && ::InsertMenuItem( itsHandle, 0, TRUE, & info ) ) ||
-			( hasTitle && ::SetMenuItemInfo( itsHandle, 0, TRUE, & info ) ) )
-		{
-			// adjust item data wrappers for all existing items
-			for(size_t i = 0; i < itsItemData.size(); ++i)
-				if(itsItemData[i])
-					++itsItemData[i]->index;
+		// push back title
+		itsItemData.push_back(wrapper);
 
-			// push back title
-			itsItemData.push_back( wrapper );
+		if(!(!hasTitle ? ::InsertMenuItem(itsHandle, 0, TRUE, &info) : ::SetMenuItemInfo(itsHandle, 0, TRUE, &info))) {
+			throw Win32Exception("Could not add a menu title");
 		}
 	}
 }
@@ -780,20 +722,21 @@ void Menu::appendSeparator() {
 	MENUITEMINFO itemInfo = { sizeof(MENUITEMINFO), MIIM_FTYPE, MFT_SEPARATOR };
 
 	// get position to insert
-	unsigned position = getCount();
+	auto position = size();
 
-	ItemDataWrapper * wrapper = NULL;
 	if(ownerDrawn) {
 		itemInfo.fMask |= MIIM_DATA;
 		itemInfo.fType |= MFT_OWNERDRAW;
 
 		// create item data wrapper
-		wrapper = new ItemDataWrapper( this, position );
-		itemInfo.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
+		auto wrapper = new ItemDataWrapper(this, position);
+		itemInfo.dwItemData = reinterpret_cast<ULONG_PTR>(wrapper);
+		itsItemData.push_back(wrapper);
 	}
 
-	if ( ::InsertMenuItem( itsHandle, position, TRUE, & itemInfo ) && ownerDrawn )
-		itsItemData.push_back( wrapper );
+	if(!::InsertMenuItem(itsHandle, position, TRUE, &itemInfo)) {
+		throw Win32Exception("Could not add a menu separator");
+	}
 }
 
 void Menu::removeItem(unsigned index) {
@@ -826,10 +769,10 @@ void Menu::removeItem(unsigned index) {
 		}
 
 		// remove sub menus if any
-		if(popup)
-			for(size_t i = 0; i < itsChildren.size(); ++i)
-				if(itsChildren[i]->handle() == popup)
-					itsChildren[i].reset();
+		if(popup) {
+			itsChildren.erase(std::remove_if(itsChildren.begin(), itsChildren.end(),
+				[popup](Menu* sub) { return sub->handle() == popup; }), itsChildren.end());
+		}
 	} else {
 		dwtWin32DebugFail("Couldn't remove item in removeItem()");
 	}
@@ -837,15 +780,15 @@ void Menu::removeItem(unsigned index) {
 
 void Menu::removeAllItems() {
 	//must be backwards, since bigger indexes change on remove
-	for(int i = getCount() - 1; i >= 0; i--) {
+	for(int i = size() - 1; i >= 0; i--) {
 		removeItem( i );
 	}
 }
 
-unsigned Menu::getCount() const {
+unsigned Menu::size() const {
 	int count = ::GetMenuItemCount(itsHandle);
 	if(count < 0)
-		throw Win32Exception("GetMenuItemCount in Menu::getCount fizzled...");
+		throw Win32Exception("GetMenuItemCount in Menu::size failed");
 	return count;
 }
 
@@ -862,7 +805,7 @@ unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const Ico
 		info.fState |= MFS_DEFAULT;
 	}
 
-	const unsigned index = getCount();
+	const auto index = size();
 
 	if(f) {
 		Widget *parent = getParent();
@@ -883,24 +826,21 @@ unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const Ico
 	// set text
 	info.dwTypeData = const_cast< LPTSTR >( text.c_str() );
 
-	ItemDataWrapper * wrapper = NULL;
 	if(ownerDrawn) {
 		info.fMask |= MIIM_FTYPE | MIIM_DATA;
 		info.fType = MFT_OWNERDRAW;
 
 		// set item data
-		wrapper = new ItemDataWrapper(this, index, false, icon);
+		auto wrapper = new ItemDataWrapper(this, index, false, icon);
 		if(defaultItem)
 			wrapper->isDefault = true;
-		info.dwItemData = reinterpret_cast< ULONG_PTR >( wrapper );
+		info.dwItemData = reinterpret_cast<ULONG_PTR>(wrapper);
+		itsItemData.push_back(wrapper);
 	}
 
-	if(!::InsertMenuItem(itsHandle, index, TRUE, &info))
+	if(!::InsertMenuItem(itsHandle, index, TRUE, &info)) {
 		throw Win32Exception("Couldn't insert item in Menu::appendItem");
-
-	if(ownerDrawn)
-		itsItemData.push_back(wrapper);
-
+	}
 	return index;
 }
 
@@ -924,15 +864,15 @@ void Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 	}
 }
 
-Menu::ObjectType Menu::getChild( unsigned position ) {
+Menu* Menu::getChild(unsigned position) {
 	HMENU h = ::GetSubMenu(handle(), position);
-	for(size_t i = 0; i < itsChildren.size(); ++i) {
-		ObjectType& menu = itsChildren[i];
+	for(size_t i = 0, n = itsChildren.size(); i < n; ++i) {
+		auto menu = itsChildren[i];
 		if(menu->handle() == h) {
 			return menu;
 		}
 	}
-	return ObjectType();
+	return nullptr;
 }
 
 Point Menu::getTextSize(const tstring& text, const FontPtr& font_) const {
@@ -942,5 +882,3 @@ Point Menu::getTextSize(const tstring& text, const FontPtr& font_) const {
 }
 
 }
-
-#endif

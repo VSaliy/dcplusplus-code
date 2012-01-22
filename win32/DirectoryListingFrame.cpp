@@ -687,14 +687,14 @@ ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 	menu->setTitle(escapeMenu(ii->getText(COLUMN_FILENAME)), WinUtil::fileImages->getIcon(ii->getImage(0)));
 
 	menu->appendItem(T_("&Download"), [this] { handleDownload(); }, WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
-	addTargets(menu, ii);
+	addTargets(menu.get(), ii);
 
 	if(ii->type == ItemInfo::FILE) {
 		menu->appendItem(T_("&View as text"), [this] { handleViewAsText(); });
 
 		menu->appendSeparator();
 
-		WinUtil::addHashItems(menu, ii->file->getTTH(), Text::toT(ii->file->getName()), ii->file->getSize());
+		WinUtil::addHashItems(menu.get(), ii->file->getTTH(), Text::toT(ii->file->getName()), ii->file->getSize());
 	}
 
 	if((ii->type == ItemInfo::FILE && ii->file->getAdls()) ||
@@ -703,7 +703,7 @@ ShellMenuPtr DirectoryListingFrame::makeSingleMenu(ItemInfo* ii) {
 		menu->appendItem(T_("&Go to directory"), [this] { handleGoToDirectory(); });
 	}
 
-	addUserCommands(menu);
+	addUserCommands(menu.get());
 	return menu;
 }
 
@@ -714,8 +714,8 @@ ShellMenuPtr DirectoryListingFrame::makeMultiMenu() {
 	menu->setTitle(str(TF_("%1% items") % sel), getParent()->getIcon(this));
 
 	menu->appendItem(T_("&Download"), [this] { handleDownload(); }, WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
-	addTargets(menu);
-	addUserCommands(menu);
+	addTargets(menu.get());
+	addUserCommands(menu.get());
 
 	return menu;
 }
@@ -727,15 +727,15 @@ ShellMenuPtr DirectoryListingFrame::makeDirMenu(ItemInfo* ii) {
 		ii ? WinUtil::fileImages->getIcon(ii->getImage(0)) : getParent()->getIcon(this));
 
 	menu->appendItem(T_("&Download"), [this] { handleDownload(); }, WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
-	addTargets(menu);
+	addTargets(menu.get());
 	return menu;
 }
 
-void DirectoryListingFrame::addUserCommands(const MenuPtr& parent) {
-	prepareMenu(parent, UserCommand::CONTEXT_FILELIST, ClientManager::getInstance()->getHubUrls(dl->getUser()));
+void DirectoryListingFrame::addUserCommands(Menu* menu) {
+	prepareMenu(menu, UserCommand::CONTEXT_FILELIST, ClientManager::getInstance()->getHubUrls(dl->getUser()));
 }
 
-void DirectoryListingFrame::addShellPaths(const ShellMenuPtr& menu, const vector<ItemInfo*>& sel) {
+void DirectoryListingFrame::addShellPaths(ShellMenu* menu, const vector<ItemInfo*>& sel) {
 	StringList ShellMenuPaths;
 	for(auto i = sel.cbegin(), iend = sel.cend(); i != iend; ++i) {
 		ItemInfo* ii = *i;
@@ -751,41 +751,41 @@ void DirectoryListingFrame::addShellPaths(const ShellMenuPtr& menu, const vector
 	menu->appendShellMenu(ShellMenuPaths);
 }
 
-void DirectoryListingFrame::addUserMenu(const MenuPtr& menu) {
+void DirectoryListingFrame::addUserMenu(Menu* menu) {
 	appendUserItems(getParent(), menu->appendPopup(T_("User")));
 }
 
-void DirectoryListingFrame::addTargets(const MenuPtr& parent, ItemInfo* ii) {
-	MenuPtr menu = parent->appendPopup(T_("Download &to..."));
+void DirectoryListingFrame::addTargets(Menu* menu, ItemInfo* ii) {
+	auto sub = menu->appendPopup(T_("Download &to..."));
 	StringPairList spl = FavoriteManager::getInstance()->getFavoriteDirs();
 	size_t i = 0;
 	for(; i < spl.size(); ++i) {
-		menu->appendItem(Text::toT(spl[i].second), [this, i] { handleDownloadFavorite(i); });
+		sub->appendItem(Text::toT(spl[i].second), [this, i] { handleDownloadFavorite(i); });
 	}
 
 	if(i > 0) {
-		menu->appendSeparator();
+		sub->appendSeparator();
 	}
 
-	menu->appendItem(T_("&Browse..."), [this] { handleDownloadBrowse(); });
+	sub->appendItem(T_("&Browse..."), [this] { handleDownloadBrowse(); });
 
 	targets.clear();
 
 	if(ii && ii->type == ItemInfo::FILE) {
 		targets = QueueManager::getInstance()->getTargets(ii->file->getTTH());
 		if(!targets.empty()) {
-			menu->appendSeparator();
+			sub->appendSeparator();
 			for(i = 0; i < targets.size(); ++i) {
-				menu->appendItem(Text::toT(targets[i]), [this, i] { handleDownloadTarget(i); });
+				sub->appendItem(Text::toT(targets[i]), [this, i] { handleDownloadTarget(i); });
 			}
 		}
 	}
 
 	if(WinUtil::lastDirs.size() > 0) {
-		menu->appendSeparator();
+		sub->appendSeparator();
 
 		for(i = 0; i < WinUtil::lastDirs.size(); ++i) {
-			menu->appendItem(WinUtil::lastDirs[i], [this, i] { handleDownloadLastDir(i); });
+			sub->appendItem(WinUtil::lastDirs[i], [this, i] { handleDownloadLastDir(i); });
 		}
 	}
 }
@@ -809,10 +809,10 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 			vector<ItemInfo*> sel;
 			for(auto i = selected.cbegin(), iend = selected.cend(); i != iend; ++i)
 				sel.push_back(files->getData(*i));
-			addShellPaths(menu, sel);
+			addShellPaths(menu.get(), sel);
 		}
 
-		addUserMenu(menu);
+		addUserMenu(menu.get());
 
 		usingDirMenu = false;
 		menu->open(pt);
@@ -833,10 +833,10 @@ bool DirectoryListingFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 		auto menu = makeDirMenu(ii);
 
 		if(ii && dl->getUser() == ClientManager::getInstance()->getMe()) {
-			addShellPaths(menu, vector<ItemInfo*>(1, ii));
+			addShellPaths(menu.get(), vector<ItemInfo*>(1, ii));
 		}
 
-		addUserMenu(menu);
+		addUserMenu(menu.get());
 
 		usingDirMenu = true;
 		menu->open(pt);
@@ -1465,7 +1465,7 @@ bool DirectoryListingFrame::handleSearchChar(int c) {
 	return c == VK_RETURN;
 }
 
-void DirectoryListingFrame::tabMenuImpl(dwt::MenuPtr& menu) {
+void DirectoryListingFrame::tabMenuImpl(dwt::Menu* menu) {
 	addUserMenu(menu);
 	menu->appendSeparator();
 }

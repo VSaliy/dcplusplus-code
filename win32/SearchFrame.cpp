@@ -653,8 +653,7 @@ bool SearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 			pt = results->getContextMenuPos();
 		}
 
-		MenuPtr contextMenu = makeMenu();
-		contextMenu->open(pt);
+		makeMenu()->open(pt);
 		return true;
 	}
 	return false;
@@ -772,7 +771,7 @@ struct UserCollector {
 };
 
 MenuPtr SearchFrame::makeMenu() {
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 
 	StringPairList favoriteDirs = FavoriteManager::getInstance()->getFavoriteDirs();
 	SearchInfo::CheckTTH checkTTH = results->forEachSelectedT(SearchInfo::CheckTTH());
@@ -781,72 +780,72 @@ MenuPtr SearchFrame::makeMenu() {
 		getParent()->getIcon(this));
 
 	menu->appendItem(T_("&Download"), [this] { handleDownload(); }, WinUtil::menuIcon(IDI_DOWNLOAD), true, true);
-	addTargetMenu(menu, favoriteDirs, checkTTH);
+	addTargetMenu(menu.get(), favoriteDirs, checkTTH);
 	menu->appendItem(T_("Download whole directory"), [this] { handleDownloadDir(); });
-	addTargetDirMenu(menu, favoriteDirs);
+	addTargetDirMenu(menu.get(), favoriteDirs);
 	menu->appendItem(T_("&View as text"), [this] { handleViewAsText(); });
 
 	if(checkTTH.hasTTH) {
 		menu->appendSeparator();
-		WinUtil::addHashItems(menu, checkTTH.tth, checkTTH.name, checkTTH.size);
+		WinUtil::addHashItems(menu.get(), checkTTH.tth, checkTTH.name, checkTTH.size);
 	}
 
 	menu->appendSeparator();
 	UserCollector users = results->forEachSelectedT(UserCollector());
-	WinUtil::addUserItems(menu, users.users, getParent(), users.dirs);
+	WinUtil::addUserItems(menu.get(), users.users, getParent(), users.dirs);
 
 	menu->appendSeparator();
 	menu->appendItem(T_("&Remove"), [this] { handleRemove(); });
 
-	prepareMenu(menu, UserCommand::CONTEXT_SEARCH, checkTTH.hubs);
+	prepareMenu(menu.get(), UserCommand::CONTEXT_SEARCH, checkTTH.hubs);
 
 	return menu;
 }
 
-void SearchFrame::addTargetMenu(const MenuPtr& parent, const StringPairList& favoriteDirs, const SearchInfo::CheckTTH& checkTTH) {
-	MenuPtr menu = parent->appendPopup(T_("Download to..."));
+void SearchFrame::addTargetMenu(Menu* menu, const StringPairList& favoriteDirs, const SearchInfo::CheckTTH& checkTTH) {
+	auto sub = menu->appendPopup(T_("Download to..."));
 
 	int n = 0;
 	if(favoriteDirs.size() > 0) {
 		for(auto i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
-			menu->appendItem(Text::toT(i->second), [=] { handleDownloadFavoriteDirs(n); });
-		menu->appendSeparator();
+			sub->appendItem(Text::toT(i->second), [=] { handleDownloadFavoriteDirs(n); });
+		sub->appendSeparator();
 	}
 
 	n = 0;
-	menu->appendItem(T_("&Browse..."), [this] { handleDownloadTo(); });
+	sub->appendItem(T_("&Browse..."), [this] { handleDownloadTo(); });
 	if(WinUtil::lastDirs.size() > 0) {
-		menu->appendSeparator();
+		sub->appendSeparator();
 		for(auto i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
-			menu->appendItem(*i, [=] { handleDownloadTarget(n); });
+			sub->appendItem(*i, [=] { handleDownloadTarget(n); });
 	}
 
 	if(checkTTH.hasTTH) {
 		targets = QueueManager::getInstance()->getTargets(checkTTH.tth);
 		if(targets.size() > 0) {
-			menu->appendSeparator();
+			sub->appendSeparator();
 			for(auto i = targets.begin(); i != targets.end(); ++i, ++n)
-				menu->appendItem(Text::toT(*i), [=] { handleDownloadTarget(n); });
+				sub->appendItem(Text::toT(*i), [=] { handleDownloadTarget(n); });
 		}
 	}
 }
 
-void SearchFrame::addTargetDirMenu(const MenuPtr& parent, const StringPairList& favoriteDirs) {
-	MenuPtr menu = parent->appendPopup(T_("Download whole directory to..."));
+void SearchFrame::addTargetDirMenu(Menu* menu, const StringPairList& favoriteDirs) {
+	auto sub = menu->appendPopup(T_("Download whole directory to..."));
 
 	int n = 0;
 	if(favoriteDirs.size() > 0) {
 		for(auto i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
-			menu->appendItem(Text::toT(i->second), [=] { handleDownloadWholeFavoriteDirs(n); });
-		menu->appendSeparator();
+			sub->appendItem(Text::toT(i->second), [=] { handleDownloadWholeFavoriteDirs(n); });
+		sub->appendSeparator();
 	}
 
 	n = 0;
-	menu->appendItem(T_("&Browse..."), [this] { handleDownloadDirTo(); });
+	sub->appendItem(T_("&Browse..."), [this] { handleDownloadDirTo(); });
 	if(WinUtil::lastDirs.size() > 0) {
-		menu->appendSeparator();
+		sub->appendSeparator();
 		for(auto i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
-			menu->appendItem(*i, [=] { handleDownloadWholeTarget(n); });
+			sub->appendItem(*i, [=] { handleDownloadWholeTarget(n); });
 	}
 }
 

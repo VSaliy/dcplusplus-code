@@ -249,13 +249,13 @@ private:
 	MenuPtr makeMultiMenu();
 	MenuPtr makeDirMenu();
 
-	void addBrowseMenu(const MenuPtr& parent, QueueItemInfo* qii);
-	void addRemoveMenu(const MenuPtr& parent, QueueItemInfo* qii);
-	void addRemoveSourcesMenu(const MenuPtr& parent, QueueItemInfo* qii);
-	void addPMMenu(const MenuPtr& parent, QueueItemInfo* qii);
-	void addPriorityMenu(const MenuPtr& parent);
-	void addReaddMenu(const MenuPtr& parent, QueueItemInfo* qii);
-	bool addUsers(const MenuPtr& menu, void (QueueFrame::*handler)(const HintedUser&), const QueueItem::SourceList& sources, bool offline);
+	void addBrowseMenu(Menu* menu, QueueItemInfo* qii);
+	void addRemoveMenu(Menu* menu, QueueItemInfo* qii);
+	void addRemoveSourcesMenu(Menu* menu, QueueItemInfo* qii);
+	void addPMMenu(Menu* menu, QueueItemInfo* qii);
+	void addPriorityMenu(Menu* menu);
+	void addReaddMenu(Menu* menu, QueueItemInfo* qii);
+	bool addUsers(Menu* menu, void (QueueFrame::*handler)(const HintedUser&), const QueueItem::SourceList& sources, bool offline);
 
 	void layout();
 

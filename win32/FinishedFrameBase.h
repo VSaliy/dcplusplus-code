@@ -461,7 +461,7 @@ private:
 			menu->appendItem(T_("&Remove"), [this] { this->handleRemoveFiles(); });
 			menu->appendItem(T_("Remove &all"), [this] { this->handleRemoveAll(); });
 			menu->appendSeparator();
-			WinUtil::addUserItems(menu, files->forEachSelectedT(UserCollector()).users, this->getParent());
+			WinUtil::addUserItems(menu.get(), files->forEachSelectedT(UserCollector()).users, this->getParent());
 			menu->appendShellMenu(checker.ShellMenuPaths);
 
 			menu->open(pt);
@@ -479,13 +479,13 @@ private:
 
 			auto selData = (sel == 1) ? users->getSelectedData() : 0;
 
-			dwt::MenuPtr menu = usersWindow->addChild(WinUtil::Seeds::menu);
+			auto menu = usersWindow->addChild(WinUtil::Seeds::menu);
 			menu->setTitle(selData ? escapeMenu(selData->getText(USERS_COLUMN_NICK)) : str(TF_("%1% users") % sel),
 				selData ? WinUtil::userImages->getIcon(selData->getImage(0)) : tabs->getIcon(usersWindow));
 			menu->appendItem(T_("&Remove"), [this] { this->handleRemoveUsers(); });
 			menu->appendItem(T_("Remove &all"), [this] { this->handleRemoveAll(); });
 			menu->appendSeparator();
-			WinUtil::addUserItems(menu, users->forEachSelectedT(UserCollector()).users, this->getParent());
+			WinUtil::addUserItems(menu.get(), users->forEachSelectedT(UserCollector()).users, this->getParent());
 
 			menu->open(pt);
 			return true;

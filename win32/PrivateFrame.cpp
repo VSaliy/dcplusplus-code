@@ -385,7 +385,7 @@ void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aU
 		callAsync([this] { updateOnlineStatus(); });
 }
 
-void PrivateFrame::tabMenuImpl(dwt::MenuPtr& menu) {
+void PrivateFrame::tabMenuImpl(dwt::Menu* menu) {
 	appendUserItems(getParent(), menu, false, false);
 	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubUrls(replyTo.getUser().user->getCID(),
 		replyTo.getUser().hint, priv));
@@ -397,11 +397,11 @@ bool PrivateFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 		pt = chat->getContextMenuPos();
 	}
 
-	MenuPtr menu = chat->getMenu();
+	auto menu = chat->getMenu();
 
 	menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
 
-	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubUrls(replyTo.getUser().user->getCID(),
+	prepareMenu(menu.get(), UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubUrls(replyTo.getUser().user->getCID(),
 		replyTo.getUser().hint, priv));
 
 	menu->open(pt);

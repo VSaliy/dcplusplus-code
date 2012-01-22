@@ -184,12 +184,12 @@ bool TransferView::handleConnectionsMenu(dwt::ScreenCoordinate pt) {
 
 		auto selData = (sel == 1) ? connections->getSelectedData() : 0;
 
-		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+		auto menu = addChild(WinUtil::Seeds::menu);
 
 		menu->setTitle(selData ? escapeMenu(selData->getText(CONNECTION_COLUMN_USER)) : str(TF_("%1% users") % sel),
 			selData ? arrows->getIcon(selData->getImage(0)) : 0);
 
-		appendUserItems(mdi, menu, false);
+		appendUserItems(mdi, menu.get(), false);
 		menu->appendSeparator();
 
 		menu->appendItem(T_("&Force attempt"), [this] { handleForce(); });
@@ -212,13 +212,13 @@ bool TransferView::handleDownloadsMenu(dwt::ScreenCoordinate pt) {
 
 		auto selData = (sel == 1) ? downloads->getSelectedData() : 0;
 
-		MenuPtr menu = addChild(WinUtil::Seeds::menu);
+		auto menu = addChild(WinUtil::Seeds::menu);
 
 		menu->setTitle(selData ? escapeMenu(selData->getText(DOWNLOAD_COLUMN_FILE)) : str(TF_("%1% files") % sel),
 			selData ? WinUtil::fileImages->getIcon(selData->getImage(0)) : 0);
 
 		if(selData) {
-			WinUtil::addHashItems(menu, selData->tth, selData->getText(DOWNLOAD_COLUMN_FILE), selData->size);
+			WinUtil::addHashItems(menu.get(), selData->tth, selData->getText(DOWNLOAD_COLUMN_FILE), selData->size);
 		} else {
 			for(size_t i = 0; i < sel; ++i) {
 				selData = downloads->getData(i);

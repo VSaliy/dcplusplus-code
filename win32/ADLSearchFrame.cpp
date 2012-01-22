@@ -311,7 +311,7 @@ bool ADLSearchFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 	size_t sel = items->countSelected();
 
-	MenuPtr menu = addChild(WinUtil::Seeds::menu);
+	auto menu = addChild(WinUtil::Seeds::menu);
 	menu->setTitle((sel == 0) ? getText() : (sel == 1) ? escapeMenu(items->getText(items->getSelected(), COLUMN_ACTIVE_SEARCH_STRING)) :
 		str(TF_("%1% items") % sel), getParent()->getIcon(this));
 	menu->appendItem(T_("&New..."), [this] { handleAdd(); });

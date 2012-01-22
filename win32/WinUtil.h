@@ -272,7 +272,7 @@ public:
 	static void reducePaths(string& message);
 
 	// Hash related
-	static void addHashItems(const dwt::Menu::ObjectType& menu, const TTHValue& tth, const tstring& filename, int64_t size);
+	static void addHashItems(Menu* menu, const TTHValue& tth, const tstring& filename, int64_t size);
 	static void bitziLink(const TTHValue& aHash);
 	static void copyMagnet(const TTHValue& aHash, const tstring& aFile, int64_t size);
 	static void searchAny(const tstring& aSearch);
@@ -307,7 +307,7 @@ public:
 		return Text::fromT(tstring(buf, x));
 	}
 
-	static void addUserItems(MenuPtr menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs = StringList());
+	static void addUserItems(Menu* menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs = StringList());
 
 	/* utility functions to create icons. use these throughout the prog to make it easier to change
 	sizes globally should the need arise to later on. */
