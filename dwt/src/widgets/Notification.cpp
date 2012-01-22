@@ -32,6 +32,7 @@
 #include <dwt/widgets/Notification.h>
 
 #include <dwt/Application.h>
+#include <dwt/Widget.h>
 #include <dwt/util/win32/Version.h>
 
 namespace dwt {
@@ -60,8 +61,8 @@ legacyNOTIFYICONDATA Notification::makeNID() const {
 	return nid;
 }
 
-Notification::Notification(WindowPtr parent_) :
-parent(parent_),
+Notification::Notification(Widget* parent) :
+parent(parent),
 visible(false),
 onlyBalloons(false),
 lastTick(0)
