@@ -576,8 +576,7 @@ void MainWindow::initTransfers() {
 
 void MainWindow::initTray() {
 	dcdebug("initTray\n");
-	notifier = dwt::NotificationPtr(new dwt::Notification(this));
-	notifier->create(dwt::Notification::Seed(mainSmallIcon));
+	notifier = addChild(dwt::Notification::Seed(mainSmallIcon));
 	notifier->onContextMenu([this] { handleTrayContextMenu(); });
 	notifier->onIconClicked([this] { handleTrayClicked(); });
 	notifier->onUpdateTip([this] { handleTrayUpdate(); });

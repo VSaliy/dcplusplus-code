@@ -31,8 +31,8 @@
 #ifndef DWT_NOTIFICATION_H_
 #define DWT_NOTIFICATION_H_
 
-#include "../resources/Icon.h"
-#include "Window.h"
+#include <dwt/forward.h>
+#include <dwt/resources/Icon.h>
 
 #include <deque>
 
@@ -41,17 +41,22 @@ namespace dwt {
 /** A notification object represents a tray icon and a short message notification service */
 class Notification {
 public:
-	Notification(WindowPtr parent_);
-	~Notification();
+	typedef Notification ThisType;
+	typedef NotificationPtr ObjectType;
 
 	struct Seed {
+		typedef ThisType WidgetType;
+
 		Seed(const IconPtr& icon_ = IconPtr(), const tstring& tip_ = tstring()) : icon(icon_), tip(tip_) { }
 
 		IconPtr icon;
 		tstring tip;
 	};
 
-	void create(const Seed& seed = Seed());
+	Notification(Widget* parent);
+	~Notification();
+
+	void create(const Seed& seed);
 
 	void setIcon(const IconPtr& icon_);
 
@@ -76,7 +81,7 @@ public:
 	void onUpdateTip(const Callback& callback_) { updateTip = callback_; }
 
 private:
-	WindowPtr parent;
+	Widget* parent;
 	IconPtr icon;
 
 	bool visible;

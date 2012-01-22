@@ -35,8 +35,6 @@
 
 #include "WindowsHeaders.h"
 
-#include "shared_ptr.h"
-
 namespace boost {
 template<class T> class intrusive_ptr;
 }
@@ -122,7 +120,7 @@ typedef MDIParent* MDIParentPtr;
 enum { NaC = 0x1000000 };
 
 class Notification;
-typedef shared_ptr<Notification> NotificationPtr;
+typedef std::unique_ptr<Notification> NotificationPtr;
 
 class Pen;
 typedef boost::intrusive_ptr<Pen> PenPtr;
