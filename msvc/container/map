@@ -1,0 +1,12 @@
+#ifndef DCPP_BOOST_CONTAINER_MAP
+#define DCPP_BOOST_CONTAINER_MAP
+
+#include <boost/container/map.hpp>
+
+namespace std {
+	using boost::container::map;
+}
+
+#endif
+
+// vim: set filetype=cpp :

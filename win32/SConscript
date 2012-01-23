@@ -32,6 +32,8 @@ if env['arch'] != 'x86':
 	openssl_lib += env['arch'] + '/'
 env.Append(LIBPATH = [openssl_lib])
 
+dev.msvc_boost_containers(env)
+
 if env['RC'] == 'rc': # MSVC
 	env.Append(RCFLAGS = ['/d' + env['arch']])
 elif env['RC'].find('windres') != -1: # MinGW

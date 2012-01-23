@@ -1,3 +1,7 @@
+#ifdef _MSC_VER
+#include <map> // fix some include trouble on MSVC
+#endif
+
 #include <dwt/widgets/Window.h>
 #include <dwt/widgets/Tree.h>
 #include <dwt/Texts.h>

@@ -8,6 +8,8 @@ env.Append(CPPPATH = ['#/openssl/include', '#/bzip2', '#/zlib', '#/geoip'])
 
 env.Append(CPPDEFINES = ['BUILDING_DCPP=1'])
 
+dev.msvc_boost_containers(env)
+
 headers=dev.get_sources(source_path, "*.h")
 dev.i18n(source_path, env, [sources, headers], 'libdcpp')
 

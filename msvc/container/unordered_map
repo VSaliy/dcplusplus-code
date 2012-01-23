@@ -1,0 +1,17 @@
+#ifndef DCPP_BOOST_CONTAINER_UNORDERED_MAP
+#define DCPP_BOOST_CONTAINER_UNORDERED_MAP
+
+#include <vector>
+
+#include <boost/unordered/unordered_map.hpp>
+
+namespace std {
+	using boost::unordered_map;
+	using boost::unordered_multimap;
+}
+
+#include "custom_hash.h"
+
+#endif
+
+// vim: set filetype=cpp :

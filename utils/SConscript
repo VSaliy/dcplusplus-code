@@ -35,6 +35,8 @@ if env['arch'] != 'x86':
 	openssl_lib += env['arch'] + '/'
 env.Append(LIBPATH = [openssl_lib])
 
+dev.msvc_boost_containers(env)
+
 # imitate build_util's prepare_build
 env.VariantDir(dev.get_build_path(source_path), '.', duplicate = 0)
 if env['msvcproj']:

@@ -357,7 +357,7 @@ void UploadManager::addFailedUpload(const UserConnection& source, string filenam
 		Lock l(cs);
 		auto it = find_if(waitingUsers.begin(), waitingUsers.end(), CompareFirst<UserPtr, uint32_t>(source.getUser()));
 		if (it==waitingUsers.end()) {
-			waitingUsers.push_back(WaitingUser(source.getHintedUser(), GET_TICK()));
+			waitingUsers.emplace_back(source.getHintedUser(), GET_TICK());
 		} else {
 			it->second = GET_TICK();
 		}

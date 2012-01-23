@@ -8,6 +8,8 @@ env.Append(LIBS = ['comctl32', 'ws2_32', 'ole32', 'gdi32', 'comdlg32', 'iphlpapi
 
 env.Append(CPPPATH = ['#/dwt/include'])
 
+dev.msvc_boost_containers(env)
+
 # imitate build_util's prepare_build
 env.VariantDir(dev.get_build_path(source_path), '.', duplicate = 0)
 if env['msvcproj']:

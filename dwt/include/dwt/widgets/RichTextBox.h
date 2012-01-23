@@ -36,11 +36,11 @@
 #ifndef DWT_RichTextBox_h
 #define DWT_RichTextBox_h
 
+#include <boost/algorithm/string.hpp>
+
 #include "TextBox.h"
 #include "../tstring.h"
 #include <richedit.h>
-
-#include <boost/algorithm/string.hpp>
 
 namespace dwt {
 

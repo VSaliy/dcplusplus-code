@@ -151,7 +151,7 @@ showGen(0)
 
 	auto add = [this, grouped](tstring&& text, unsigned helpId, int group, int fontSetting, int textColorSetting, int bgColorSetting) -> Data* {
 		auto data = new SettingsData(forward<tstring>(text), helpId, fontSetting, textColorSetting, bgColorSetting);
-		table->insert(grouped ? group : -1, data);
+		this->table->insert(grouped ? group : -1, data);
 		return data;
 	};
 
