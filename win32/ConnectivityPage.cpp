@@ -63,7 +63,7 @@ edit(0)
 		cur2->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		autoDetect = cur2->addChild(CheckBox::Seed(T_("Let DC++ determine the best connectivity settings")));
-		items.push_back(Item(autoDetect, SettingsManager::AUTO_DETECT_CONNECTION, PropPage::T_BOOL));
+		items.emplace_back(autoDetect, SettingsManager::AUTO_DETECT_CONNECTION, PropPage::T_BOOL);
 		autoDetect->onClicked([this] { handleAutoClicked(); });
 
 		detectNow = cur2->addChild(Button::Seed(T_("Detect now")));

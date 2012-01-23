@@ -58,7 +58,7 @@ void Transfer::tick() {
 		}
 	}
 
-	samples.push_back(std::make_pair(t, pos));
+	samples.emplace_back(t, pos);
 }
 
 double Transfer::getAverageSpeed() const {

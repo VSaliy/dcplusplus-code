@@ -46,7 +46,7 @@ struct TorrentReader : SimpleBencodeReader::Callback {
 	};
 
 	TorrentReader(Torrent &t) : t(t), f(0) {
-		t.files.push_back(Torrent::File());
+		t.files.emplace_back();
 		f = &t.files.back();
 	}
 
@@ -96,7 +96,7 @@ struct TorrentReader : SimpleBencodeReader::Callback {
 		}
 
 		if(inState(FILES)) {
-			t.files.push_back(Torrent::File());
+			t.files.emplace_back();
 			f = &t.files.back();
 		}
 	}

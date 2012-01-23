@@ -60,7 +60,7 @@ options(0)
 
 		cur->addChild(Label::Seed(T_("Private key file")))->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::TLS_PRIVATE_KEY_FILE, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::TLS_PRIVATE_KEY_FILE, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_CERTIFICATES_PRIVATE_KEY_FILE);
 		ButtonPtr button = cur->addChild(dots);
 		button->onClicked([this, box] { handleBrowseFile(box, SettingsManager::TLS_PRIVATE_KEY_FILE); });
@@ -68,7 +68,7 @@ options(0)
 
 		cur->addChild(Label::Seed(T_("Own certificate file")))->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);
 		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::TLS_CERTIFICATE_FILE, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_CERTIFICATES_CERTIFICATE_FILE);
 		button = cur->addChild(dots);
 		button->onClicked([this, box] { handleBrowseFile(box, SettingsManager::TLS_CERTIFICATE_FILE); });
@@ -76,7 +76,7 @@ options(0)
 
 		cur->addChild(Label::Seed(T_("Trusted certificates path")))->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);
 		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_CERTIFICATES_TRUSTED_CERTIFICATES_PATH);
 		button = cur->addChild(dots);
 		button->onClicked([this, box] { handleBrowseDir(box, SettingsManager::TLS_TRUSTED_CERTIFICATES_PATH); });

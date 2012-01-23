@@ -46,9 +46,9 @@ public:
 	the first added mapper will be tried first, unless the "MAPPER" setting is not empty. */
 	template<typename T> void addMapper() {
 #ifndef _MSC_VER
-		mappers.push_back(make_pair(T::name, [](string&& localIp) {
+		mappers.emplace_back(T::name, [](string&& localIp) {
 			return new T(std::forward<string>(localIp));
-		}));
+		});
 #else
 		// the rvalue ref deal is too smart for MSVC; resort to a string copy...
 		mappers.push_back(make_pair(T::name, [](string localIp) {

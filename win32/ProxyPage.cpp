@@ -80,26 +80,26 @@ socksServer(0)
 		cur->addChild(Label::Seed(T_("IP")))->setHelpId(IDH_SETTINGS_PROXY_SOCKS_SERVER);
 		cur->addChild(Label::Seed(T_("Port")))->setHelpId(IDH_SETTINGS_PROXY_SOCKS_PORT);
 		socksServer = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(socksServer, SettingsManager::SOCKS_SERVER, PropPage::T_STR));
+		items.emplace_back(socksServer, SettingsManager::SOCKS_SERVER, PropPage::T_STR);
 		socksServer->setHelpId(IDH_SETTINGS_PROXY_SOCKS_SERVER);
 		socksServer->setTextLimit(250);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::SOCKS_PORT, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::SOCKS_PORT, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_PROXY_SOCKS_PORT);
 		box->setTextLimit(250);
 		cur->addChild(Label::Seed(T_("Login")))->setHelpId(IDH_SETTINGS_PROXY_SOCKS_USER);
 		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_SETTINGS_PROXY_SOCKS_PASSWORD);
 		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::SOCKS_USER, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::SOCKS_USER, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_PROXY_SOCKS_USER);
 		box->setTextLimit(250);
 		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_PROXY_SOCKS_PASSWORD);
 		box->setTextLimit(250);
 		CheckBoxPtr socksResolve = cur->addChild(CheckBox::Seed(T_("Use SOCKS5 server to resolve host names")));
 		cur->setWidget(socksResolve, 4, 0, 1, 2);
-		items.push_back(Item(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL));
+		items.emplace_back(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL);
 		socksResolve->setHelpId(IDH_SETTINGS_PROXY_SOCKS_RESOLVE);
 	}
 

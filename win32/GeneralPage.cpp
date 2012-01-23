@@ -53,17 +53,17 @@ connections(0)
 
 		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_SETTINGS_GENERAL_NICK);
 		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(nick, SettingsManager::NICK, PropPage::T_STR));
+		items.emplace_back(nick, SettingsManager::NICK, PropPage::T_STR);
 		nick->setHelpId(IDH_SETTINGS_GENERAL_NICK);
 
 		cur->addChild(Label::Seed(T_("E-Mail")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::EMAIL, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::EMAIL, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
 		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::DESCRIPTION, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::DESCRIPTION, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
 
 		cur->addChild(Label::Seed(T_("Line speed (upload)")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
@@ -92,17 +92,17 @@ connections(0)
 
 			auto seed = WinUtil::Seeds::Dialog::textBox;
 			seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
-			items.push_back(Item(group->addChild(seed), SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR));
+			items.emplace_back(group->addChild(seed), SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR);
 		}
 
 		// dummy grid so that the check-box doesn't fill the whole row.
 		auto box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Enable away mode when DC++ is minimized")));
 		box->setHelpId(IDH_SETTINGS_GENERAL_AUTO_AWAY);
-		items.push_back(Item(box, SettingsManager::AUTO_AWAY, PropPage::T_BOOL));
+		items.emplace_back(box, SettingsManager::AUTO_AWAY, PropPage::T_BOOL);
 
 		box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Enable away mode when the Windows session is locked")));
 		box->setHelpId(IDH_SETTINGS_GENERAL_AWAY_COMP_LOCK);
-		items.push_back(Item(box, SettingsManager::AWAY_COMP_LOCK, PropPage::T_BOOL));
+		items.emplace_back(box, SettingsManager::AWAY_COMP_LOCK, PropPage::T_BOOL);
 
 		{
 			auto idle = cur->addChild(Grid::Seed(1, 3));
@@ -113,7 +113,7 @@ connections(0)
 			idle->addChild(Label::Seed(T_("Enable away mode after")));
 
 			auto box = idle->addChild(WinUtil::Seeds::Dialog::intTextBox);
-			items.push_back(Item(box, SettingsManager::AWAY_IDLE, PropPage::T_INT_WITH_SPIN));
+			items.emplace_back(box, SettingsManager::AWAY_IDLE, PropPage::T_INT_WITH_SPIN);
 			idle->setWidget(idle->addChild(Spinner::Seed(0, UD_MAXVAL, box)));
 
 			idle->addChild(Label::Seed(T_("minutes of inactivity (0 = disabled)")));

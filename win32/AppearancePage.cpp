@@ -70,12 +70,12 @@ languages(0)
 		auto group = cur->addChild(GroupBox::Seed(T_("Timestamp format")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_TIMESTAMP_FORMAT);
 
-		items.push_back(Item(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR));
+		items.emplace_back(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::TIME_STAMPS_FORMAT, PropPage::T_STR);
 
 		group = cur->addChild(GroupBox::Seed(T_("Country format")));
 		group->setHelpId(IDH_SETTINGS_APPEARANCE_COUNTRY_FORMAT);
 
-		items.push_back(Item(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::COUNTRY_FORMAT, PropPage::T_STR));
+		items.emplace_back(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::COUNTRY_FORMAT, PropPage::T_STR);
 	}
 
 	{
@@ -91,14 +91,14 @@ languages(0)
 		cur->addChild(Label::Seed(T_("Keep it between")));
 
 		auto box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::MIN_MESSAGE_LINES, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::MIN_MESSAGE_LINES, PropPage::T_INT_WITH_SPIN);
 		auto spin = cur->addChild(Spinner::Seed(1, UD_MAXVAL, box));
 		cur->setWidget(spin);
 
 		cur->addChild(Label::Seed(T_("and")));
 
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::MAX_MESSAGE_LINES, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::MAX_MESSAGE_LINES, PropPage::T_INT_WITH_SPIN);
 		spin = cur->addChild(Spinner::Seed(1, UD_MAXVAL, box));
 		cur->setWidget(spin);
 

@@ -37,7 +37,7 @@ bool Mapper::open(const string& port, const Protocol protocol, const string& des
 	if(!add(port, protocol, description))
 		return false;
 
-	rules.push_back(make_pair(port, protocol));
+	rules.emplace_back(port, protocol);
 	return true;
 }
 

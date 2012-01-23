@@ -128,7 +128,7 @@ std::vector<std::string> ToolBar::getLayout() const {
 	for(unsigned i = 0, iend = size(); i < iend; ++i) {
 		if(sendMessage(TB_GETBUTTONINFO, i, reinterpret_cast<LPARAM>(&tb)) != -1) {
 			if((tb.fsStyle & BTNS_SEP) == BTNS_SEP)
-				ret.push_back(std::string());
+				ret.emplace_back();
 			else {
 				size_t index = tb.idCommand - id_offset;
 				if(index < buttons.size())

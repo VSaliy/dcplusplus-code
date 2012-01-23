@@ -252,7 +252,7 @@ Grid::WidgetInfo* Grid::getWidgetInfo(Control* w) {
 		return 0;
 	}
 
-	widgetInfo.push_back(WidgetInfo(w, r, c, 1, 1));
+	widgetInfo.emplace_back(w, r, c, 1, 1);
 	return &widgetInfo.back();
 }
 

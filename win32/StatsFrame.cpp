@@ -225,5 +225,5 @@ void StatsFrame::addTick(int64_t bdiff, int64_t tdiff, StatList& lst, AvgList& a
 	}
 
 	bspeed /= avg.size();
-	lst.push_front(Stat(scroll, bspeed));
+	lst.emplace_front(scroll, bspeed);
 }

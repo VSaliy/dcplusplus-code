@@ -71,7 +71,7 @@ FavoriteManager::~FavoriteManager() {
 UserCommand FavoriteManager::addUserCommand(int type, int ctx, int flags, const string& name, const string& command, const string& to, const string& hub) {
 	// No dupes, add it...
 	Lock l(cs);
-	userCommands.push_back(UserCommand(lastId++, type, ctx, flags, name, command, to, hub));
+	userCommands.emplace_back(lastId++, type, ctx, flags, name, command, to, hub);
 	UserCommand& uc = userCommands.back();
 	if(!uc.isSet(UserCommand::FLAG_NOSAVE))
 		save();
@@ -242,7 +242,7 @@ bool FavoriteManager::addFavoriteDir(const string& aDirectory, const string & aN
 			return false;
 		}
 	}
-	favoriteDirs.push_back(make_pair(aDirectory, aName));
+	favoriteDirs.emplace_back(aDirectory, aName);
 	save();
 	return true;
 }
@@ -293,6 +293,7 @@ public:
 			const string& maxUsers = getAttrib(attribs, "Maxusers", 5);
 			const string& reliability = getAttrib(attribs, "Reliability", 5);
 			const string& rating = getAttrib(attribs, "Rating", 5);
+			/// @todo change to emplace_back when MSVC has templates with var args, thus allowing these 12 arguments! (boost emulation only goes to 10)
 			publicHubs.push_back(HubEntry(name, server, description, users, country, shared, minShare, minSlots, maxHubs, maxUsers, reliability, rating));
 		}
 	}

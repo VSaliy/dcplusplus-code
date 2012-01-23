@@ -41,7 +41,7 @@ WindowManager::~WindowManager() {
 }
 
 void WindowManager::add(const string& id, const WindowParams& params) {
-	list.push_back(WindowInfo(id, params));
+	list.emplace_back(id, params);
 }
 
 void WindowManager::clear() {

@@ -68,25 +68,25 @@ otherOptions(0)
 
 		cur->addChild(Label::Seed(T_("Highest prio max size")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGHEST);
 		auto box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::PRIO_HIGHEST_SIZE, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGHEST);
 		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGHEST);
 
 		cur->addChild(Label::Seed(T_("High prio max size")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGH);
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::PRIO_HIGH_SIZE, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::PRIO_HIGH_SIZE, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGH);
 		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_HIGH);
 
 		cur->addChild(Label::Seed(T_("Normal prio max size")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_NORMAL);
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::PRIO_NORMAL_SIZE, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::PRIO_NORMAL_SIZE, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_PRIO_NORMAL);
 		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_NORMAL);
 
 		cur->addChild(Label::Seed(T_("Low prio max size")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_LOW);
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::PRIO_LOW_SIZE, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::PRIO_LOW_SIZE, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_PRIO_LOW);
 		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_PRIO_LOW);
 	}
@@ -104,37 +104,37 @@ otherOptions(0)
 
 		cur->addChild(Label::Seed(T_("Drop sources below")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_SPEED);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::AUTODROP_SPEED, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::AUTODROP_SPEED, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_SPEED);
 		cur->addChild(Label::Seed(T_("B/s")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_SPEED);
 
 		cur->addChild(Label::Seed(T_("Check every")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INTERVAL);
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::AUTODROP_INTERVAL, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::AUTODROP_INTERVAL, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INTERVAL);
 		cur->addChild(Label::Seed(T_("s")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INTERVAL);
 
 		cur->addChild(Label::Seed(T_("Min elapsed")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_ELAPSED);
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::AUTODROP_ELAPSED, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::AUTODROP_ELAPSED, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_ELAPSED);
 		cur->addChild(Label::Seed(T_("s")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_ELAPSED);
 
 		cur->addChild(Label::Seed(T_("Max inactivity")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INACTIVITY);
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::AUTODROP_INACTIVITY, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::AUTODROP_INACTIVITY, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INACTIVITY);
 		cur->addChild(Label::Seed(T_("s")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_INACTIVITY);
 
 		cur->addChild(Label::Seed(T_("Min sources online")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_MINSOURCES);
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::AUTODROP_MINSOURCES, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::AUTODROP_MINSOURCES, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_MINSOURCES);
 		cur->addChild(Label::Seed(tstring()));
 
 		cur->addChild(Label::Seed(T_("Min filesize")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE);
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT));
+		items.emplace_back(box, SettingsManager::AUTODROP_FILESIZE, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE);
 		cur->addChild(Label::Seed(T_("KiB")))->setHelpId(IDH_SETTINGS_QUEUE_AUTODROP_FILESIZE);
 	}

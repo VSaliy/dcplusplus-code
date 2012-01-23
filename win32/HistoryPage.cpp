@@ -78,8 +78,8 @@ fl_recents_init(WindowManager::getInstance()->getMaxRecentItems(DirectoryListing
 		gs.caption = T_("Chat lines to recall from history when opening a window");
 		GridPtr cur = addSubGrid(grid->addChild(gs), 2);
 
-		items.push_back(Item(addBox(cur, T_("Hubs"), IDH_SETTINGS_HISTORY_CHAT_HUBS), SettingsManager::HUB_LAST_LOG_LINES, PropPage::T_INT_WITH_SPIN));
-		items.push_back(Item(addBox(cur, T_("Private messages"), IDH_SETTINGS_HISTORY_CHAT_PM), SettingsManager::PM_LAST_LOG_LINES, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(addBox(cur, T_("Hubs"), IDH_SETTINGS_HISTORY_CHAT_HUBS), SettingsManager::HUB_LAST_LOG_LINES, PropPage::T_INT_WITH_SPIN);
+		items.emplace_back(addBox(cur, T_("Private messages"), IDH_SETTINGS_HISTORY_CHAT_PM), SettingsManager::PM_LAST_LOG_LINES, PropPage::T_INT_WITH_SPIN);
 	}
 
 	{
@@ -97,7 +97,7 @@ fl_recents_init(WindowManager::getInstance()->getMaxRecentItems(DirectoryListing
 	}
 
 	gs.caption = T_("Search history");
-	items.push_back(Item(addBox(addSubGrid(grid->addChild(gs), 1), T_("Search history"), IDH_SETTINGS_HISTORY_SEARCH_HISTORY), SettingsManager::SEARCH_HISTORY, PropPage::T_INT_WITH_SPIN));
+	items.emplace_back(addBox(addSubGrid(grid->addChild(gs), 1), T_("Search history"), IDH_SETTINGS_HISTORY_SEARCH_HISTORY), SettingsManager::SEARCH_HISTORY, PropPage::T_INT_WITH_SPIN);
 
 	PropPage::read(items);
 }

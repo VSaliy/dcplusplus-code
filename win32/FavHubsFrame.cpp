@@ -410,7 +410,7 @@ void FavHubsFrame::fillList() {
 		l.push_back(Text::toT(entry->getName()));
 		l.push_back(Text::toT(entry->getDescription()));
 		l.push_back(Text::toT(entry->getNick(false)));
-		l.push_back(tstring(entry->getPassword().size(), '*'));
+		l.emplace_back(entry->getPassword().size(), '*');
 		l.push_back(Text::toT(entry->getServer()));
 		l.push_back(Text::toT(entry->getUserDescription()));
 		l.push_back(Text::toT(group));

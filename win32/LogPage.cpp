@@ -73,7 +73,7 @@ oldSelection(-1)
 
 		cur->addChild(Label::Seed(T_("Directory")))->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
 		dir = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(dir, SettingsManager::LOG_DIRECTORY, PropPage::T_STR));
+		items.emplace_back(dir, SettingsManager::LOG_DIRECTORY, PropPage::T_STR);
 		dir->setHelpId(IDH_SETTINGS_LOG_DIRECTORY);
 
 		ButtonPtr browse = cur->addChild(Button::Seed(T_("&Browse...")));

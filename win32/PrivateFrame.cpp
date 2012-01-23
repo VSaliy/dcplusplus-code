@@ -179,7 +179,7 @@ online(replyTo.getUser().user->isOnline())
 		updateOnlineStatus();
 	});
 
-	frames.insert(std::make_pair(replyTo.getUser(), this));
+	frames.insert(make_pair(replyTo.getUser(), this));
 
 	addRecent();
 }

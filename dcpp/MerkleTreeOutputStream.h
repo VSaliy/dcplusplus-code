@@ -35,7 +35,7 @@ public:
 		while(pos < len) {
 			size_t left = len - pos;
 			if(bufPos == 0 && left >= TreeType::BYTES) {
-				tree.getLeaves().push_back(typename TreeType::MerkleValue(b + pos));
+				tree.getLeaves().emplace_back(b + pos);
 				pos += TreeType::BYTES;
 			} else {
 				size_t bytes = min(TreeType::BYTES - bufPos, left);
@@ -43,7 +43,7 @@ public:
 				bufPos += bytes;
 				pos += bytes;
 				if(bufPos == TreeType::BYTES) {
-					tree.getLeaves().push_back(typename TreeType::MerkleValue(buf));
+					tree.getLeaves().emplace_back(buf);
 					bufPos = 0;
 				}
 			}

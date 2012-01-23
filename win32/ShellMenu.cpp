@@ -87,7 +87,7 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 		handler1->Release();
 		check(hr == S_OK && handler3);
 
-		valid.push_back(make_pair(*i, handler3));
+		valid.emplace_back(*i, handler3);
 	}
 
 #undef check
@@ -104,11 +104,11 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 	appendSeparator();
 
 	if(valid.size() == 1)
-		handlers.push_back(make_pair(appendPopup(T_("Shell menu"), dwt::IconPtr(), false), valid[0].second));
+		handlers.emplace_back(appendPopup(T_("Shell menu"), dwt::IconPtr(), false), valid[0].second);
 	else {
 		auto popup = appendPopup(T_("Shell menus"));
 		for(auto i = valid.begin(); i != valid.end(); ++i)
-			handlers.push_back(make_pair(popup->appendPopup(escapeMenu(Text::toT(i->first)), dwt::IconPtr(), false), i->second));
+			handlers.emplace_back(popup->appendPopup(escapeMenu(Text::toT(i->first)), dwt::IconPtr(), false), i->second);
 	}
 
 	callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->addCallback(dwt::Message(WM_DRAWITEM),

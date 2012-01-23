@@ -77,7 +77,7 @@ void ExpertsPage::addItem(const tstring& text, int setting, bool isInt, unsigned
 	cur->column(0).mode = GridInfo::FILL;
 
 	auto box = cur->addChild(isInt ? WinUtil::Seeds::Dialog::intTextBox : WinUtil::Seeds::Dialog::textBox);
-	items.push_back(Item(box, setting, isInt ? PropPage::T_INT : PropPage::T_STR));
+	items.emplace_back(box, setting, isInt ? PropPage::T_INT : PropPage::T_STR);
 
 	if(text2.empty())
 		cur->setWidget(box, 0, 0, 1, 2);

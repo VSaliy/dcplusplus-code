@@ -95,7 +95,7 @@ remove(0)
 
 		// dummy grid so that the check-box doesn't fill the whole row.
 		CheckBoxPtr shareHidden = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Share hidden files")));
-		items.push_back(Item(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL));
+		items.emplace_back(shareHidden, SettingsManager::SHARE_HIDDEN, PropPage::T_BOOL);
 
 		shareHidden->onClicked([=] { handleShareHiddenClicked(shareHidden, SettingsManager::SHARE_HIDDEN); });
 		shareHidden->setHelpId(IDH_SETTINGS_UPLOAD_SHAREHIDDEN);
@@ -111,7 +111,7 @@ remove(0)
 		cur->addChild(Label::Seed(T_("Automatically open an extra slot if speed is below (0 = disable)")))->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::MIN_UPLOAD_SPEED, PropPage::T_INT_WITH_SPIN);
 		box->setHelpId(IDH_SETTINGS_UPLOAD_MIN_UPLOAD_SPEED);
 
 		auto spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
@@ -123,7 +123,7 @@ remove(0)
 		cur->addChild(Label::Seed(T_("Upload slots")))->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
 
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::SLOTS_PRIMARY, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::SLOTS_PRIMARY, PropPage::T_INT_WITH_SPIN);
 		box->setHelpId(IDH_SETTINGS_UPLOAD_SLOTS);
 
 		spin = cur->addChild(Spinner::Seed(1, UD_MAXVAL, box));

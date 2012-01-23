@@ -61,7 +61,7 @@ throttleTime(0)
 
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		box->setHelpId(IDH_SETTINGS_BWLIMIT_UPLOAD);
-		items.push_back(Item(box, SettingsManager::MAX_UPLOAD_SPEED_MAIN, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::MAX_UPLOAD_SPEED_MAIN, PropPage::T_INT_WITH_SPIN);
 
 		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, ThrottleManager::MAX_LIMIT, box));
 		spin->setHelpId(IDH_SETTINGS_BWLIMIT_UPLOAD);
@@ -71,7 +71,7 @@ throttleTime(0)
 
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		box->setHelpId(IDH_SETTINGS_BWLIMIT_DOWNLOAD);
-		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED_MAIN, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::MAX_DOWNLOAD_SPEED_MAIN, PropPage::T_INT_WITH_SPIN);
 
 		spin = cur->addChild(Spinner::Seed(0, ThrottleManager::MAX_LIMIT, box));
 		spin->setHelpId(IDH_SETTINGS_BWLIMIT_DOWNLOAD);
@@ -93,7 +93,7 @@ throttleTime(0)
 
 		throttleTime = cur->addChild(CheckBox::Seed(T_("Use second set of bandwidth limits from")));
 		throttleTime->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_ENABLE);
-		items.push_back(Item(throttleTime, SettingsManager::TIME_DEPENDENT_THROTTLE, PropPage::T_BOOL));
+		items.emplace_back(throttleTime, SettingsManager::TIME_DEPENDENT_THROTTLE, PropPage::T_BOOL);
 		throttleTime->onClicked([this] { fixControls(); });
 
 		timeBound[0] = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
@@ -120,7 +120,7 @@ throttleTime(0)
 
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		box->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_UPLOAD);
-		items.push_back(Item(box, SettingsManager::MAX_UPLOAD_SPEED_ALTERNATE, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::MAX_UPLOAD_SPEED_ALTERNATE, PropPage::T_INT_WITH_SPIN);
 
 		SpinnerPtr spin = cur->addChild(Spinner::Seed(0, ThrottleManager::MAX_LIMIT, box));
 		spin->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_UPLOAD);
@@ -130,7 +130,7 @@ throttleTime(0)
 
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		box->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_DOWNLOAD);
-		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED_ALTERNATE, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::MAX_DOWNLOAD_SPEED_ALTERNATE, PropPage::T_INT_WITH_SPIN);
 
 		spin = cur->addChild(Spinner::Seed(0, ThrottleManager::MAX_LIMIT, box));
 		spin->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_DOWNLOAD);
@@ -140,7 +140,7 @@ throttleTime(0)
 
 		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		box->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_SLOTS);
-		items.push_back(Item(box, SettingsManager::SLOTS_ALTERNATE_LIMITING, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::SLOTS_ALTERNATE_LIMITING, PropPage::T_INT_WITH_SPIN);
 
 		spin = cur->addChild(Spinner::Seed(0, UD_MAXVAL, box));
 		spin->setHelpId(IDH_SETTINGS_BWLIMIT_SECONDARY_SLOTS);
