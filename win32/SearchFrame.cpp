@@ -329,12 +329,12 @@ SearchFrame::~SearchFrame() {
 void SearchFrame::fillFileType(const tstring& toSelect) {
 	vector<pair<string, int>> values;
 	for(int type = SearchManager::TYPE_ANY; type != SearchManager::TYPE_LAST; ++type)
-		values.push_back(make_pair(SearchManager::getTypeStr(type), type));
+		values.emplace_back(SearchManager::getTypeStr(type), type);
 
 	const auto& searchTypes = SettingsManager::getInstance()->getSearchTypes();
 	for(auto i = searchTypes.cbegin(), iend = searchTypes.cend(); i != iend; ++i) {
 		if(i->first.size() > 1 || i->first[0] < '1' || i->first[0] > '6') { //Custom type
-			values.push_back(make_pair(i->first, SearchManager::TYPE_ANY));
+			values.emplace_back(i->first, SearchManager::TYPE_ANY);
 		}
 	}
 
@@ -584,7 +584,7 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 	}
 
 	if(!si) {
-		searchResults.push_back(SearchInfo(psr));
+		searchResults.emplace_back(psr);
 		si = &searchResults.back();
 	}
 
@@ -761,7 +761,7 @@ struct UserCollector {
 		for(auto i = si->srs.begin(), iend = si->srs.end(); i != iend; ++i) {
 			const SearchResultPtr& sr = *i;
 			if(std::find(users.begin(), users.end(), sr->getUser()) == users.end()) {
-				users.push_back(HintedUser(sr->getUser(), sr->getHubURL()));
+				users.emplace_back(sr->getUser(), sr->getHubURL());
 				dirs.push_back(Util::getFilePath(sr->getFile()));
 			}
 		}

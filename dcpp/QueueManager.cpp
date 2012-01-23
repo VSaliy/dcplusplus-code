@@ -299,7 +299,7 @@ void QueueManager::UserQueue::remove(QueueItem* qi, const UserPtr& aUser, bool r
 
 void QueueManager::FileMover::moveFile(const string& source, const string& target) {
 	Lock l(cs);
-	files.push_back(make_pair(source, target));
+	files.emplace_back(source, target);
 	if(!active) {
 		active = true;
 		start();

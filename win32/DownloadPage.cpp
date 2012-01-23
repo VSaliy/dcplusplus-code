@@ -54,7 +54,7 @@ PropPage(parent, 3, 1)
 		label->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
 
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::DOWNLOAD_DIRECTORY, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADDIR);
 
 		ButtonPtr browse = cur->addChild(Button::Seed(T_("Browse...")));
@@ -66,7 +66,7 @@ PropPage(parent, 3, 1)
 		label->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
 
 		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::TEMP_DOWNLOAD_DIRECTORY, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_TEMP_DOWNLOAD_DIRECTORY);
 
 		browse = cur->addChild(Button::Seed(T_("Browse...")));
@@ -85,7 +85,7 @@ PropPage(parent, 3, 1)
 		cur2->column(0).mode = GridInfo::STATIC;
 
 		TextBoxPtr box = cur2->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::DOWNLOAD_SLOTS, PropPage::T_INT_WITH_SPIN);
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 
 		auto spin = cur2->addChild(Spinner::Seed(0, 100, box));
@@ -95,7 +95,7 @@ PropPage(parent, 3, 1)
 		cur2->addChild(Label::Seed(T_("Maximum simultaneous downloads (0 = infinite)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_DOWNLOADS);
 
 		box = cur2->addChild(WinUtil::Seeds::Dialog::intTextBox);
-		items.push_back(Item(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN));
+		items.emplace_back(box, SettingsManager::MAX_DOWNLOAD_SPEED, PropPage::T_INT_WITH_SPIN);
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_MAXSPEED);
 
 		spin = cur2->addChild(Spinner::Seed(0, 10000, box));
@@ -119,7 +119,7 @@ PropPage(parent, 3, 1)
 
 		cur->addChild(Label::Seed(T_("HTTP Proxy (for hublist only)")))->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(box, SettingsManager::HTTP_PROXY, PropPage::T_STR));
+		items.emplace_back(box, SettingsManager::HTTP_PROXY, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_DOWNLOAD_PROXY);
 	}
 

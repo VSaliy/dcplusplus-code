@@ -145,7 +145,7 @@ bool SettingsDialog::initDialog() {
 			auto item = tree->insert(title, parent, 0, true, index);
 			if(index == setting)
 				callAsync([=] { tree->setSelected(item); tree->ensureVisible(item); });
-			pages.push_back(std::make_pair(page, item));
+			pages.emplace_back(page, item);
 			return item;
 		};
 

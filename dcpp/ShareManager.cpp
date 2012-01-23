@@ -338,7 +338,7 @@ void ShareManager::load(SimpleXML& aXml) {
 
 			const string& virtualName = aXml.getChildAttrib("Virtual");
 			string vName = validateVirtual(virtualName.empty() ? Util::getLastDir(realPath) : virtualName);
-			shares.emplace(realPath, vName);
+			shares.insert(make_pair(realPath, vName));
 			if(getByVirtual(vName) == directories.end()) {
 				directories.push_back(Directory::create(vName));
 			}
@@ -477,7 +477,7 @@ void ShareManager::addDirectory(const string& realPath, const string& virtualNam
 	{
 		Lock l(cs);
 
-		shares.emplace(realPath, vName);
+		shares.insert(make_pair(realPath, vName));
 		updateIndices(*merge(dp));
 
 		setDirty();
@@ -508,7 +508,7 @@ void ShareManager::Directory::merge(const Directory::Ptr& source) {
 			if(findFile(subSource->getName()) != files.end()) {
 				dcdebug("File named the same as directory");
 			} else {
-				directories.emplace(subSource->getName(), subSource);
+				directories.insert(make_pair(subSource->getName(), subSource));
 				subSource->parent = this;
 			}
 		} else {
@@ -723,7 +723,7 @@ void ShareManager::updateIndices(Directory& dir, const Directory::File::Set::ite
 
 	dir.addType(getType(f.getName()));
 
-	tthIndex.emplace(f.getTTH(), i);
+	tthIndex[f.getTTH()] = i;
 	bloom.add(Text::toLower(f.getName()));
 }
 
@@ -1198,7 +1198,7 @@ void ShareManager::search(SearchResultList& results, const string& aString, int 
 	StringSearch::List ssl;
 	for(auto i = sl.begin(); i != sl.end(); ++i) {
 		if(!i->empty()) {
-			ssl.push_back(StringSearch(*i));
+			ssl.emplace_back(*i);
 		}
 	}
 	if(ssl.empty())
@@ -1423,7 +1423,7 @@ void ShareManager::on(HashManagerListener::TTHDone, const string& fname, const T
 			// Get rid of false constness...
 			auto f = const_cast<Directory::File*>(&(*i));
 			f->setTTH(root);
-			tthIndex.emplace(f->getTTH(), i);
+			tthIndex[f->getTTH()] = i;
 		} else {
 			string name = Util::getFileName(fname);
 			int64_t size = File::getSize(fname);

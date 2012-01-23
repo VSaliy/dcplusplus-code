@@ -85,10 +85,10 @@ mapper(0)
 		cur->column(0).mode = GridInfo::FILL;
 
 		externalIP = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.push_back(Item(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR));
+		items.emplace_back(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR);
 
 		auto overrideIP = cur->addChild(CheckBox::Seed(T_("Don't allow hubs/NAT-PMP/UPnP to override")));
-		items.push_back(Item(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL));
+		items.emplace_back(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL);
 		overrideIP->setHelpId(IDH_SETTINGS_CONNECTIVITY_OVERRIDE);
 	}
 
@@ -104,7 +104,7 @@ mapper(0)
 			boxGrid->column(0).size = 40;
 			boxGrid->column(0).mode = GridInfo::STATIC;
 
-			items.push_back(PropPage::Item(boxGrid->addChild(WinUtil::Seeds::Dialog::intTextBox), setting, PropPage::T_INT));
+			items.emplace_back(boxGrid->addChild(WinUtil::Seeds::Dialog::intTextBox), setting, PropPage::T_INT);
 		};
 
 		addPortBox(T_("Transfer"), SettingsManager::TCP_PORT, IDH_SETTINGS_CONNECTIVITY_PORT_TCP);
@@ -124,7 +124,7 @@ mapper(0)
 		group = cur->addChild(GroupBox::Seed(T_("Bind address")));
 		group->setHelpId(IDH_SETTINGS_CONNECTIVITY_BIND_ADDRESS);
 
-		items.push_back(Item(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::BIND_ADDRESS, PropPage::T_STR));
+		items.emplace_back(group->addChild(WinUtil::Seeds::Dialog::textBox), SettingsManager::BIND_ADDRESS, PropPage::T_STR);
 	}
 
 	read();

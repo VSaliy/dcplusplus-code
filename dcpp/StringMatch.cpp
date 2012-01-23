@@ -49,7 +49,7 @@ struct Prepare : boost::static_visitor<bool> {
 		StringTokenizer<string> st(pattern, ' ');
 		for(auto i = st.getTokens().cbegin(), iend = st.getTokens().cend(); i != iend; ++i) {
 			if(!i->empty()) {
-				s.push_back(StringSearch(*i));
+				s.emplace_back(*i);
 			}
 		}
 		return true;

@@ -66,7 +66,7 @@ public:
 	{
 		size_t n = calcBlocks(aFileSize, aBlockSize);
 		for(size_t i = 0; i < n; i++)
-			leaves.push_back(MerkleValue(aData + i * Hasher::BYTES));
+			leaves.emplace_back(aData + i * Hasher::BYTES);
 
 		calcRoot();
 	}
@@ -114,7 +114,7 @@ public:
 				blocks.push_back(make_pair(MerkleValue(h.finalize()), baseBlockSize));
 				reduceBlocks();
 			} else {
-				leaves.push_back(MerkleValue(h.finalize()));
+				leaves.emplace_back(h.finalize());
 			}
 			i += n;
 		} while(i < len);

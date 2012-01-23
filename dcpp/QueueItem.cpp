@@ -59,7 +59,7 @@ void QueueItem::addSource(const HintedUser& aUser) {
 		sources.push_back(*i);
 		badSources.erase(i);
 	} else {
-		sources.push_back(Source(aUser));
+		sources.emplace_back(aUser);
 	}
 }
 

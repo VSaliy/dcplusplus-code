@@ -333,13 +333,13 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		auto addButton = [&toolbar, &ids](unsigned icon, const tstring& text, bool showText,
 			unsigned helpId, const dwt::Dispatchers::VoidVoid<>::F& f)
 		{
-			ids.push_back(std::string(1, '0' + ids.size()));
+			ids.emplace_back(1, '0' + ids.size());
 			toolbar->addButton(ids.back(), icon ? WinUtil::toolbarIcon(icon) : 0, 0, text, showText, helpId, f);
 		};
 
 		addButton(IDI_LEFT, T_("Back"), false, IDH_FILE_LIST_BACK, [this] { back(); });
 		addButton(IDI_RIGHT, T_("Forward"), false, IDH_FILE_LIST_FORWARD, [this] { this->forward(); }); // explicit ns (vs std::forward)
-		ids.push_back(string());
+		ids.emplace_back();
 		addButton(IDI_UP, T_("Up one level"), false, IDH_FILE_LIST_UP, [this] { up(); });
 		toolbar->setLayout(ids);
 
@@ -398,7 +398,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 
 	layout();
 
-	lists.insert(std::make_pair(aUser, this));
+	lists.insert(make_pair(aUser, this));
 }
 
 DirectoryListingFrame::~DirectoryListingFrame() {
@@ -1195,7 +1195,7 @@ void DirectoryListingFrame::findFile(bool reverse) {
 			lastSearches.erase(prev);
 		}
 		auto ptr = new LastSearchPair(p);
-		lastSearches.push_back(std::unique_ptr<LastSearchPair>(ptr));
+		lastSearches.emplace_back(ptr);
 		searchBox->setData(searchBox->insertValue(0, findStr), reinterpret_cast<LPARAM>(ptr));
 	}
 

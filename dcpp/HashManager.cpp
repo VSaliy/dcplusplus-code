@@ -100,7 +100,7 @@ void HashManager::HashStore::addFile(const string& aFileName, uint32_t aTimeStam
 		fileList.erase(j);
 	}
 
-	fileList.push_back(FileInfo(fname, tth.getRoot(), aTimeStamp, aUsed));
+	fileList.emplace_back(fname, tth.getRoot(), aTimeStamp, aUsed);
 	dirty = true;
 }
 
@@ -251,7 +251,11 @@ void HashManager::HashStore::rebuild() {
 		}
 
 		for (auto i = fileIndex.begin(); i != fileIndex.end(); ++i) {
+#ifdef _MSC_VER
 			auto fi = newFileIndex.emplace(i->first, FileInfoList()).first;
+#else
+			auto fi = newFileIndex.insert(make_pair(i->first, FileInfoList())).first;
+#endif
 
 			for (auto j = i->second.begin(); j != i->second.end(); ++j) {
 				if (newTreeIndex.find(j->getRoot()) != newTreeIndex.end()) {
@@ -409,8 +413,7 @@ void HashLoader::startTag(const string& name, StringPairList& attribs, bool simp
 				string fname = Text::toLower(Util::getFileName(file));
 				string fpath = Text::toLower(Util::getFilePath(file));
 
-				store.fileIndex[fpath].push_back(HashManager::HashStore::FileInfo(fname, TTHValue(root), timeStamp,
-				    false));
+				store.fileIndex[fpath].push_back(HashManager::HashStore::FileInfo(fname, TTHValue(root), timeStamp, false));
 			}
 		} else if (name == sTrees) {
 			inTrees = !simple;

@@ -137,7 +137,7 @@ void Notification::addMessage(const tstring& title, const tstring& message, cons
 		onlyBalloons = true;
 	}
 
-	balloons.push_back(std::make_pair(callback, balloonIcon));
+	balloons.emplace_back(callback, balloonIcon);
 
 	NOTIFYICONDATA nid = makeNID();
 	nid.uFlags |= NIF_INFO;
