@@ -5,6 +5,7 @@
 
 namespace std {
 	using boost::container::map;
+	using boost::container::multimap;
 }
 
 #endif

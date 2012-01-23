@@ -31,7 +31,7 @@ msvc_flags = {
 	# 4706: assignment within conditional expression
 	# 4800: converting from BOOL to bool
 	# 4996: fn unsafe, use fn_s
-	'common' : ['/W4', '/EHsc', '/Zi', '/GR', '/FC', '/wd4100', '/wd4121', '/wd4127', '/wd4189', '/wd4244', '/wd4290', '/wd4355', '/wd4510', '/wd4512', '/wd4610', '/wd4706', '/wd4800', '/wd4996'],
+	'common' : ['/W4', '/EHsc', '/Zi', '/Zm200', '/GR', '/FC', '/wd4100', '/wd4121', '/wd4127', '/wd4189', '/wd4244', '/wd4290', '/wd4355', '/wd4510', '/wd4512', '/wd4610', '/wd4706', '/wd4800', '/wd4996'],
 	'debug' : ['/MDd'],
 	'release' : ['/MD', '/O2']
 }
