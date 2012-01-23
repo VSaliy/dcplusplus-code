@@ -634,7 +634,12 @@ void DirectoryListingFrame::handleFindToggle() {
 		searchGrid->setVisible(false);
 		grid->row(0).mode = GridInfo::STATIC;
 	} else {
+#ifndef _MSC_VER
 		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i) {
+#else
+		// crbegin / crend don't play well with boost containers & MSVC...
+		for(auto i = lastSearches.rbegin(), iend = lastSearches.rend(); i != iend; ++i) {
+#endif
 			auto p = i->get();
 			searchBox->setData(searchBox->addValue(p->first), reinterpret_cast<LPARAM>(p));
 		}

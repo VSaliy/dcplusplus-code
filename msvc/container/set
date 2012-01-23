@@ -1,0 +1,12 @@
+#ifndef DCPP_BOOST_CONTAINER_SET
+#define DCPP_BOOST_CONTAINER_SET
+
+#include <boost/container/set.hpp>
+
+namespace std {
+	using boost::container::set;
+}
+
+#endif
+
+// vim: set filetype=cpp :

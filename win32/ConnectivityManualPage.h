@@ -39,7 +39,7 @@ private:
 
 	RadioButtonPtr directIn;
 	RadioButtonPtr upnp;
-	RadioButtonPtr nat;
+	RadioButtonPtr manual;
 	RadioButtonPtr passive;
 
 	TextBoxPtr externalIP;

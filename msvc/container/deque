@@ -1,0 +1,12 @@
+#ifndef DCPP_BOOST_CONTAINER_DEQUE
+#define DCPP_BOOST_CONTAINER_DEQUE
+
+#include <boost/container/deque.hpp>
+
+namespace std {
+	using boost::container::deque;
+}
+
+#endif
+
+// vim: set filetype=cpp :

@@ -1,0 +1,17 @@
+#ifndef DCPP_BOOST_CONTAINER_UNORDERED_SET
+#define DCPP_BOOST_CONTAINER_UNORDERED_SET
+
+#include <vector>
+
+#include <boost/unordered/unordered_set.hpp>
+
+namespace std {
+	using boost::unordered_set;
+	using boost::unordered_multiset;
+}
+
+#include "custom_hash.h"
+
+#endif
+
+// vim: set filetype=cpp :

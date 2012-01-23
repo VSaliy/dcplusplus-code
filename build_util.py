@@ -220,6 +220,13 @@ class Dev:
 			asciidoc = 'python ' + asciidoc
 		return asciidoc
 
+	# switch to boost containers instead of default STL containers on MSVC for the given project.
+	def msvc_boost_containers(self, env):
+		if 'msvc' in env['TOOLS']:
+			env.Append(CPPPATH = ['#/msvc/container/'])
+			# define include guards of STL files to make sure only boost containers are used.
+			env.Append(CPPDEFINES = ['_DEQUE_', '_LIST_', '_MAP_', '_SET_', '_UNORDERED_MAP_', '_UNORDERED_SET_', '_VECTOR_'])
+
 # source is *one* SCons file node (not a list!) designating the .po file
 def get_po_name(source):
 	# rely on the comments at the beginning of the po file to find the language name.
@@ -311,7 +318,6 @@ def html_to_rtf(string):
 		re.sub('^(' + line + ')', '', re.sub('(' + line + ')$', '',
 		re.sub('(' + line + ')+', line, re.sub('\s*<br ?/?>\s*', line,
 		string.replace('\\', '\\\\').replace('{', '\\{').replace('}', '\\}'))))))).replace('<u>', '{\\ul ')
-
 
 def msvcproj_workarounds(target, source, env):
 	f = open(str(target[0]), 'rb')

@@ -270,7 +270,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		uint64_t tick = GET_TICK();
 		clearFlooders(tick);
 
-		seekers.push_back(make_pair(seeker, tick));
+		seekers.emplace_back(seeker, tick);
 
 		// First, check if it's a flooder
 		for(auto fi = flooders.begin(); fi != flooders.end(); ++fi) {
@@ -290,7 +290,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 				else
 					fire(ClientListener::SearchFlood(), this, str(F_("%1% (Nick unknown)") % seeker));
 
-				flooders.push_back(make_pair(seeker, tick));
+				flooders.emplace_back(seeker, tick);
 				return;
 			}
 		}

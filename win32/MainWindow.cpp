@@ -644,7 +644,7 @@ void MainWindow::handleFavHubsDropDown(const dwt::ScreenCoordinate& pt) {
 
 	const FavHubGroups& groups = FavoriteManager::getInstance()->getFavHubGroups();
 	for(auto i = groups.begin(), iend = groups.end(); i != iend; ++i)
-		groupMenus.insert(make_pair(i->first, nullptr));
+		groupMenus.emplace(i->first, nullptr);
 
 	for(auto i = groupMenus.begin(); i != groupMenus.end(); ++i) {
 		i->second = menu->appendPopup(escapeMenu(Text::toT(i->first)));

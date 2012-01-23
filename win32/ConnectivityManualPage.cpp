@@ -42,7 +42,7 @@ autoGroup(0),
 autoDetect(0),
 directIn(0),
 upnp(0),
-nat(0),
+manual(0),
 passive(0),
 externalIP(0),
 mapper(0)
@@ -70,8 +70,8 @@ mapper(0)
 		upnp = cur->addChild(RadioButton::Seed(T_("Let DC++ configure my router (NAT-PMP / UPnP)")));
 		upnp->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_UPNP);
 
-		nat = cur->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
-		nat->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_NAT);
+		manual = cur->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
+		manual->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_NAT);
 
 		passive = cur->addChild(RadioButton::Seed(T_("Passive mode (last resort - has serious limitations)")));
 		passive->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_PASSIVE);
@@ -149,7 +149,7 @@ void ConnectivityManualPage::write() {
 
 	// Set the connection mode
 	int c = upnp->getChecked() ? SettingsManager::INCOMING_FIREWALL_UPNP :
-		nat->getChecked() ? SettingsManager::INCOMING_FIREWALL_NAT :
+		manual->getChecked() ? SettingsManager::INCOMING_FIREWALL_NAT :
 		passive->getChecked() ? SettingsManager::INCOMING_FIREWALL_PASSIVE :
 		SettingsManager::INCOMING_DIRECT;
 	if(SETTING(INCOMING_CONNECTIONS) != c) {
@@ -180,7 +180,7 @@ void ConnectivityManualPage::updateAuto() {
 void ConnectivityManualPage::read() {
 	switch(SETTING(INCOMING_CONNECTIONS)) {
 	case SettingsManager::INCOMING_FIREWALL_UPNP: upnp->setChecked(); break;
-	case SettingsManager::INCOMING_FIREWALL_NAT: nat->setChecked(); break;
+	case SettingsManager::INCOMING_FIREWALL_NAT: manual->setChecked(); break;
 	case SettingsManager::INCOMING_FIREWALL_PASSIVE: passive->setChecked(); break;
 	default: directIn->setChecked(); break;
 	}
@@ -209,7 +209,7 @@ void ConnectivityManualPage::on(SettingChanged) noexcept {
 
 		directIn->setChecked(false);
 		upnp->setChecked(false);
-		nat->setChecked(false);
+		manual->setChecked(false);
 		passive->setChecked(false);
 
 		mapper->clear();

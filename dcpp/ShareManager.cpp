@@ -338,7 +338,7 @@ void ShareManager::load(SimpleXML& aXml) {
 
 			const string& virtualName = aXml.getChildAttrib("Virtual");
 			string vName = validateVirtual(virtualName.empty() ? Util::getLastDir(realPath) : virtualName);
-			shares.insert(std::make_pair(realPath, vName));
+			shares.emplace(realPath, vName);
 			if(getByVirtual(vName) == directories.end()) {
 				directories.push_back(Directory::create(vName));
 			}
@@ -477,7 +477,7 @@ void ShareManager::addDirectory(const string& realPath, const string& virtualNam
 	{
 		Lock l(cs);
 
-		shares.insert(std::make_pair(realPath, vName));
+		shares.emplace(realPath, vName);
 		updateIndices(*merge(dp));
 
 		setDirty();
@@ -508,7 +508,7 @@ void ShareManager::Directory::merge(const Directory::Ptr& source) {
 			if(findFile(subSource->getName()) != files.end()) {
 				dcdebug("File named the same as directory");
 			} else {
-				directories.insert(std::make_pair(subSource->getName(), subSource));
+				directories.emplace(subSource->getName(), subSource);
 				subSource->parent = this;
 			}
 		} else {
@@ -723,7 +723,7 @@ void ShareManager::updateIndices(Directory& dir, const Directory::File::Set::ite
 
 	dir.addType(getType(f.getName()));
 
-	tthIndex.insert(make_pair(f.getTTH(), i));
+	tthIndex.emplace(f.getTTH(), i);
 	bloom.add(Text::toLower(f.getName()));
 }
 
@@ -757,7 +757,7 @@ StringPairList ShareManager::getDirectories() const noexcept {
 	Lock l(cs);
 	StringPairList ret;
 	for(auto i = shares.begin(); i != shares.end(); ++i) {
-		ret.push_back(make_pair(i->second, i->first));
+		ret.emplace_back(i->second, i->first);
 	}
 	return ret;
 }
@@ -1423,7 +1423,7 @@ void ShareManager::on(HashManagerListener::TTHDone, const string& fname, const T
 			// Get rid of false constness...
 			auto f = const_cast<Directory::File*>(&(*i));
 			f->setTTH(root);
-			tthIndex.insert(make_pair(f->getTTH(), i));
+			tthIndex.emplace(f->getTTH(), i);
 		} else {
 			string name = Util::getFileName(fname);
 			int64_t size = File::getSize(fname);

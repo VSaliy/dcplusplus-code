@@ -251,7 +251,7 @@ void HashManager::HashStore::rebuild() {
 		}
 
 		for (auto i = fileIndex.begin(); i != fileIndex.end(); ++i) {
-			auto fi = newFileIndex.insert(make_pair(i->first, FileInfoList())).first;
+			auto fi = newFileIndex.emplace(i->first, FileInfoList()).first;
 
 			for (auto j = i->second.begin(); j != i->second.end(); ++j) {
 				if (newTreeIndex.find(j->getRoot()) != newTreeIndex.end()) {
