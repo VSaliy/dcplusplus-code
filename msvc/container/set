@@ -5,6 +5,7 @@
 
 namespace std {
 	using boost::container::set;
+	using boost::container::multiset;
 }
 
 #endif

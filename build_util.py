@@ -225,7 +225,8 @@ class Dev:
 		if 'msvc' in env['TOOLS']:
 			env.Append(CPPPATH = ['#/msvc/container/'])
 			# define include guards of STL files to make sure only boost containers are used.
-			env.Append(CPPDEFINES = ['_DEQUE_', '_LIST_', '_MAP_', '_SET_', '_UNORDERED_MAP_', '_UNORDERED_SET_', '_VECTOR_'])
+			env.Append(CPPDEFINES = ['_DEQUE_', '_LIST_', '_MAP_', '_SET_', '_UNORDERED_MAP_', '_UNORDERED_SET_', '_VECTOR_',
+				'BOOST_DETAIL_NO_CONTAINER_FWD']) # see boost/detail/container_fwd.hpp
 
 # source is *one* SCons file node (not a list!) designating the .po file
 def get_po_name(source):
