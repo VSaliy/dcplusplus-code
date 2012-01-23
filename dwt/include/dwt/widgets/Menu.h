@@ -304,9 +304,9 @@ private:
 	bool popup;
 
 	// its sub menus
-	std::vector<Menu*> itsChildren;
+	std::vector<std::unique_ptr<Menu>> itsChildren;
 	// its item data
-	std::vector<ItemDataWrapper*> itsItemData;
+	std::vector<std::unique_ptr<ItemDataWrapper>> itsItemData;
 
 	static const unsigned id_offset = 100;
 	typedef std::unique_ptr<std::vector<Dispatcher::F> > commands_type;

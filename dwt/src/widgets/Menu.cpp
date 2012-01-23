@@ -202,32 +202,28 @@ Menu* Menu::appendPopup(const tstring& text, const IconPtr& icon, bool subTitle)
 		// create item data
 		auto wrapper = new ItemDataWrapper(this, position, false, icon);
 		info.dwItemData = reinterpret_cast<ULONG_PTR>(wrapper);
-		itsItemData.push_back(wrapper);
+		itsItemData.emplace_back(wrapper);
 	}
 
 	// append to this menu at the end
 	if(!::InsertMenuItem(itsHandle, position, TRUE, &info)) {
 		throw Win32Exception("Could not add a sub-menu");
 	}
-	itsChildren.push_back(sub);
+	itsChildren.emplace_back(sub);
 	return sub;
 }
 
 Menu::~Menu() {
 	// destroy this menu.
 	::DestroyMenu(handle());
-
-	// delete data associated to owner-drawn menu items.
-	std::for_each(itsItemData.begin(), itsItemData.end(), [](ItemDataWrapper* wrapper) { delete wrapper; });
-
-	// destroy sub-menus.
-	std::for_each(itsChildren.begin(), itsChildren.end(), [](Menu* sub) { delete sub; });
 }
 
 void Menu::setFont(FontPtr font) {
 	this->font = font ? font : new Font(Font::DefaultGui);
 	titleFont = boldFont = this->font->makeBold();
-	std::for_each(itsChildren.begin(), itsChildren.end(), [this](Menu* sub) { sub->setFont(this->font); });
+	for(auto i = itsChildren.begin(), iend = itsChildren.end(); i != iend; ++i) {
+		(*i)->setFont(this->font);
+	}
 }
 
 void Menu::setTitleFont(FontPtr font) {
@@ -327,7 +323,7 @@ void Menu::setTitle(const tstring& title, const IconPtr& icon, bool drawSidebar 
 				++itsItemData[i]->index;
 
 		// push back title
-		itsItemData.push_back(wrapper);
+		itsItemData.emplace_back(wrapper);
 
 		if(!(!hasTitle ? ::InsertMenuItem(itsHandle, 0, TRUE, &info) : ::SetMenuItemInfo(itsHandle, 0, TRUE, &info))) {
 			throw Win32Exception("Could not add a menu title");
@@ -731,7 +727,7 @@ void Menu::appendSeparator() {
 		// create item data wrapper
 		auto wrapper = new ItemDataWrapper(this, position);
 		itemInfo.dwItemData = reinterpret_cast<ULONG_PTR>(wrapper);
-		itsItemData.push_back(wrapper);
+		itsItemData.emplace_back(wrapper);
 	}
 
 	if(!::InsertMenuItem(itsHandle, position, TRUE, &itemInfo)) {
@@ -747,17 +743,15 @@ void Menu::removeItem(unsigned index) {
 	if ( ::RemoveMenu( itsHandle, index, MF_BYPOSITION ) )
 	{
 		if(ownerDrawn) {
-			ItemDataWrapper * wrapper = 0;
 			int itemRemoved = -1;
 
 			for(size_t i = 0; i < itsItemData.size(); ++i) {
 				// get current data wrapper
-				wrapper = itsItemData[i];
+				auto& wrapper = itsItemData[i];
 
 				if ( wrapper->index == index ) // if found
 				{
 					itemRemoved = int(i);
-					delete wrapper;
 					itsItemData[i] = 0;
 				}
 				else if ( wrapper->index > index )
@@ -771,7 +765,7 @@ void Menu::removeItem(unsigned index) {
 		// remove sub menus if any
 		if(popup) {
 			itsChildren.erase(std::remove_if(itsChildren.begin(), itsChildren.end(),
-				[popup](Menu* sub) { return sub->handle() == popup; }), itsChildren.end());
+				[popup](std::unique_ptr<Menu>& sub) { return sub->handle() == popup; }), itsChildren.end());
 		}
 	} else {
 		dwtWin32DebugFail("Couldn't remove item in removeItem()");
@@ -835,7 +829,7 @@ unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const Ico
 		if(defaultItem)
 			wrapper->isDefault = true;
 		info.dwItemData = reinterpret_cast<ULONG_PTR>(wrapper);
-		itsItemData.push_back(wrapper);
+		itsItemData.emplace_back(wrapper);
 	}
 
 	if(!::InsertMenuItem(itsHandle, index, TRUE, &info)) {
@@ -867,7 +861,7 @@ void Menu::open(const ScreenCoordinate& sc, unsigned flags) {
 Menu* Menu::getChild(unsigned position) {
 	HMENU h = ::GetSubMenu(handle(), position);
 	for(size_t i = 0, n = itsChildren.size(); i < n; ++i) {
-		auto menu = itsChildren[i];
+		auto menu = itsChildren[i].get();
 		if(menu->handle() == h) {
 			return menu;
 		}
