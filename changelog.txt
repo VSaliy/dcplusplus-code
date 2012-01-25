@@ -14,6 +14,7 @@
 * [L#704502] Away mode after some time of inactivity (poy)
 * Allow empty user matching definitions that match every user (poy)
 * Add predefined user matching defs for favs (bold, more red) & ops (more blue) (poy)
+* [L#300971] Keep updating GUI elements while a menu is up (poy)
 
 -- 0.791 2012-01-14 --
 * Update translations

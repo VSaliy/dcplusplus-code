@@ -49,16 +49,12 @@ public:
 	void open(const dwt::ScreenCoordinate& pt, unsigned flags = TPM_LEFTALIGN | TPM_RIGHTBUTTON);
 
 private:
-	typedef std::pair<Menu*, LPCONTEXTMENU3> handlers_pair;
-	typedef std::vector<handlers_pair> handlers_type;
-	handlers_type handlers;
+	std::vector<std::pair<Menu*, LPCONTEXTMENU3>> handlers;
 
 	LPCONTEXTMENU3 handler;
 	unsigned sel_id;
 
-	typedef std::pair<dwt::Message, dwt::Widget::CallbackIter> callbacks_pair;
-	typedef std::vector<callbacks_pair> callbacks_type;
-	callbacks_type callbacks;
+	std::vector<std::pair<dwt::Message, dwt::Widget::CallbackIter>> callbacks;
 
 	bool handleDrawItem(const MSG& msg, LRESULT& ret);
 	bool handleMeasureItem(const MSG& msg, LRESULT& ret);
