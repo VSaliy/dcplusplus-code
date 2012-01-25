@@ -736,39 +736,29 @@ void Menu::appendSeparator() {
 }
 
 void Menu::removeItem(unsigned index) {
-	// has sub menus ?
-	HMENU popup = ::GetSubMenu( itsHandle, index );
+	auto child = ::GetSubMenu(itsHandle, index);
 
-	// try to remove item
-	if ( ::RemoveMenu( itsHandle, index, MF_BYPOSITION ) )
-	{
-		if(ownerDrawn) {
-			int itemRemoved = -1;
+	if(!::RemoveMenu(itsHandle, index, MF_BYPOSITION)) {
+		throw Win32Exception("Couldn't remove item in Menu::removeItem");
+	}
 
-			for(size_t i = 0; i < itsItemData.size(); ++i) {
-				// get current data wrapper
-				auto& wrapper = itsItemData[i];
-
-				if ( wrapper->index == index ) // if found
-				{
-					itemRemoved = int(i);
-					itsItemData[i] = 0;
+	if(ownerDrawn) {
+		for(auto i = itsItemData.begin(); i != itsItemData.end();) {
+			if((*i)->index == index) {
+				i = itsItemData.erase(i);
+			} else {
+				if((*i)->index > index) {
+					--(*i)->index; // adjust succeeding item indices
 				}
-				else if ( wrapper->index > index )
-					--wrapper->index; // adjust succeeding item indices
+				++i;
 			}
-
-			if( itemRemoved != -1 )
-				itsItemData.erase( itsItemData.begin() + itemRemoved );
 		}
+	}
 
-		// remove sub menus if any
-		if(popup) {
-			itsChildren.erase(std::remove_if(itsChildren.begin(), itsChildren.end(),
-				[popup](std::unique_ptr<Menu>& sub) { return sub->handle() == popup; }), itsChildren.end());
-		}
-	} else {
-		dwtWin32DebugFail("Couldn't remove item in removeItem()");
+	// remove from the child list if this was a sub-menu.
+	if(child) {
+		itsChildren.erase(std::remove_if(itsChildren.begin(), itsChildren.end(),
+			[child](std::unique_ptr<Menu>& sub) { return sub->handle() == child; }), itsChildren.end());
 	}
 }
 

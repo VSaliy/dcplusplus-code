@@ -107,18 +107,37 @@ bool Control::handleMessage(const MSG& msg, LRESULT& retVal) {
 
 	switch(msg.message)
 	{
+		/* messages that allow Windows controls to owner-draw are sent as notifications to the
+		parent; therefore, we catch them here assuming that the parent of an owner-drawn control
+		will have this class as a base. they are then forwarded to the relevant control for further
+		processing. */
 	case WM_DRAWITEM:
-		if(forwardPainting<DRAWITEMSTRUCT>(msg)) {
-			retVal = TRUE;
-			return true;
+		{
+			if(forwardPainting<DRAWITEMSTRUCT>(msg)) {
+				retVal = TRUE;
+				return true;
+			}
+			break;
 		}
-		break;
 	case WM_MEASUREITEM:
-		if(forwardPainting<MEASUREITEMSTRUCT>(msg)) {
-			retVal = TRUE;
-			return true;
+		{
+			if(forwardPainting<MEASUREITEMSTRUCT>(msg)) {
+				retVal = TRUE;
+				return true;
+			}
+			break;
 		}
-		break;
+
+		/* menus have their own message loop. to peek into it, one can either install a hook or
+		wait for WM_ENTERIDLE messages; we choose the latter. this allows async callbakcs to keep
+		running and updating the application while a menu is up. */
+	case WM_ENTERIDLE:
+		{
+			if(msg.wParam == MSGF_MENU) {
+				Application::instance().dispatch();
+			}
+			break;
+		}
 	}
 
 	return handled;
