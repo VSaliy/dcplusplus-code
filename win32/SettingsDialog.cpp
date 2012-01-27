@@ -262,23 +262,22 @@ BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 		if(table)
 			table->onSelectionChanged([dialog, widget] { dialog->handleChildHelp(widget); });
 
-		// associate a tooltip with widgets that may provide a valid cshelp id.
-		auto id = widget->getHelpId();
-		if((id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) || table) {
-			dialog->tip->addTool(widget);
+		/* associate a tooltip callback with every widget; a tooltip will be shown for those that
+		provide a valid cshelp id; the tooltip will disappear when hovering others (to be as
+		discreet as possible). */
+		dialog->tip->addTool(widget);
 
-			// special refresh logic for tables as they may have different help ids for each item.
-			if(table) {
-				table->onMouseMove([dialog, table](const dwt::MouseEvent&) -> bool {
-					const auto id = table->getHelpId();
-					static int prevId = -1;
-					if(static_cast<int>(id) != prevId) {
-						prevId = static_cast<int>(id);
-						dialog->tip->sendMessage(TTM_UPDATE);
-					}
-					return false;
-				});
-			}
+		// special refresh logic for tables as they may have different help ids for each item.
+		if(table) {
+			table->onMouseMove([dialog, table](const dwt::MouseEvent&) -> bool {
+				const auto id = table->getHelpId();
+				static int prevId = -1;
+				if(static_cast<int>(id) != prevId) {
+					prevId = static_cast<int>(id);
+					dialog->tip->sendMessage(TTM_UPDATE);
+				}
+				return false;
+			});
 		}
 	}
 	return TRUE;

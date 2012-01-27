@@ -1075,6 +1075,10 @@ void WinUtil::helpTooltip(dwt::Control* widget, unsigned timeout) {
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help
 		new HelpPopup<true>(widget, Text::toT(getHelpText(id)), timeout);
+
+	} else if(helpPopup) {
+		// close the previous one.
+		helpPopup->close();
 	}
 }
 
