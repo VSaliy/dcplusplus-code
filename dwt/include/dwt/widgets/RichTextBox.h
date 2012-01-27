@@ -114,7 +114,7 @@ public:
 	  */
 	void addText( const std::string & txt );
 
-	void addTextSteady ( const tstring & txtRaw, std::size_t len );
+	void addTextSteady(const tstring& txtRaw);
 
 	void findText(tstring const& needle);
 

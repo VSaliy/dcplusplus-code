@@ -196,7 +196,7 @@ void RichTextBox::addText(const std::string & txt) {
 	setTextEx(txt, ST_SELECTION);
 }
 
-void RichTextBox::addTextSteady( const tstring & txtRaw, std::size_t len ) {
+void RichTextBox::addTextSteady(const tstring& txtRaw) {
 	Point scrollPos = getScrollPos();
 	bool scroll = scrollIsAtEnd();
 
@@ -208,6 +208,9 @@ void RichTextBox::addTextSteady( const tstring & txtRaw, std::size_t len ) {
 		unsigned charsRemoved = 0;
 		int multipler = 1;
 
+		/* this will include more chars than there actually are because of RTF codes. not a problem
+		here; accuracy isn't necessary since whole lines are getting chopped anyway. */
+		size_t len = txtRaw.size();
 		size_t limit = getTextLimit();
 		if(length() + len > limit) {
 			util::HoldRedraw hold2(this, scroll);

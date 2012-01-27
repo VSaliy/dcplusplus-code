@@ -30,14 +30,12 @@ using std::string;
 struct ChatMessage {
 	string text;
 
-	const OnlineUser* from;
-	const OnlineUser* to;
-	const OnlineUser* replyTo;
+	UserPtr from;
+	UserPtr to;
+	UserPtr replyTo;
 
 	bool thirdPerson;
 	time_t timestamp;
-
-	string format() const;
 };
 
 } // namespace dcpp

@@ -56,7 +56,7 @@ public:
 	const string& getId() const;
 
 	static void gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
-		const tstring& aMessage, const string& hubHint);
+		const FormattedChatMessage& message, const string& hubHint);
 	static void openWindow(TabViewPtr parent, const HintedUser& replyTo, const tstring& msg = Util::emptyStringT,
 		const string& logPath = Util::emptyString, bool activate = true);
 	static void activateWindow(const UserPtr& u);
@@ -93,8 +93,9 @@ private:
 	string getLogPath() const;
 	void openLog();
 	void fillLogParams(ParamMap& params) const;
-	void addChat(const tstring& aLine, bool log = true);
-	void addStatus(const tstring& aLine, bool log = true);
+	void addChat(const FormattedChatMessage& message, bool log = true);
+	void addChat(const tstring& text, bool log = true);
+	void addStatus(const tstring& text, bool log = true);
 	void updateOnlineStatus();
 
 	bool handleChatContextMenu(dwt::ScreenCoordinate pt);

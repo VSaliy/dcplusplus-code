@@ -56,7 +56,7 @@ void PrivateFrame::openWindow(TabViewPtr parent, const HintedUser& replyTo_, con
 }
 
 void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
-							  const tstring& aMessage, const string& hubHint)
+	const FormattedChatMessage& message, const string& hubHint)
 {
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
 	auto i = frames.find(user);
@@ -65,7 +65,7 @@ void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 		if(!BOOLSETTING(POPUNDER_PM))
 			p->activate();
 
-		p->addChat(aMessage);
+		p->addChat(message);
 
 		if(Util::getAway() && !(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT))) {
 			auto awayMessage = Util::getAwayMessage();
@@ -74,13 +74,13 @@ void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 			}
 		}
 
-		WinUtil::notify(WinUtil::NOTIFICATION_PM_WINDOW, aMessage, [user] { activateWindow(user); });
+		WinUtil::notify(WinUtil::NOTIFICATION_PM_WINDOW, message.first, [user] { activateWindow(user); });
 
 	} else {
-		i->second->addChat(aMessage);
+		i->second->addChat(message);
 	}
 
-	WinUtil::notify(WinUtil::NOTIFICATION_PM, aMessage, [user] { activateWindow(user); });
+	WinUtil::notify(WinUtil::NOTIFICATION_PM, message.first, [user] { activateWindow(user); });
 }
 
 void PrivateFrame::activateWindow(const UserPtr& u) {
@@ -187,34 +187,28 @@ online(replyTo.getUser().user->isOnline())
 PrivateFrame::~PrivateFrame() {
 }
 
-void PrivateFrame::addChat(const tstring& aLine, bool log) {
-	/// @todo null clients are allowed (eg to display log history on opening), fix later
-	Client* pClient = 0;
-	/// @todo getting the client is disabled for now (no calling findOnlineUser outside the ClientManager lock)
-	/*
-	OnlineUser *ou = ClientManager::getInstance()->findOnlineUser(*replyTo.getUser(), Util::emptyString);
-	if (ou) pClient = &(ou->getClient()); // getClient actually retuns a ref.
-	*/
-
-	ChatType::addChat(pClient, aLine);
+void PrivateFrame::addChat(const FormattedChatMessage& message, bool log) {
+	ChatType::addChat(message.second);
 
 	setDirty(SettingsManager::BOLD_PM);
 
 	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		ParamMap params;
-		params["message"] = [&aLine] { return Text::fromT(aLine); };
+		params["message"] = [&message] { return Text::fromT(message.first); };
 		fillLogParams(params);
 		LOG(LogManager::PM, params);
 	}
 }
 
-void PrivateFrame::addStatus(const tstring& aLine, bool log) {
-	tstring line = Text::toT("[" + Util::getShortTimeString() + "] ") + aLine;
+void PrivateFrame::addChat(const tstring& text, bool log) {
+	addChat(make_pair(text, chat->rtfEscape(text)), log);
+}
 
-	status->setText(STATUS_STATUS, line);
+void PrivateFrame::addStatus(const tstring& text, bool log) {
+	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString() + "] ") + text);
 
 	if(BOOLSETTING(STATUS_IN_CHAT))
-		addChat(_T("*** ") + aLine, log);
+		addChat(_T("*** ") + text, log);
 }
 
 bool PrivateFrame::preClosing() {

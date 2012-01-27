@@ -62,7 +62,7 @@ protected:
 
 		t().addAccel(FALT, 'C', [this] { this->chat->setFocus(); });
 		t().addAccel(FALT, 'M', [this] { this->message->setFocus(); });
-		t().addAccel(FALT, 'S', [this] { this->sendMessage_(); });
+		t().addAccel(FALT, 'S', [this] { this->sendMessage(); });
 		t().addAccel(0, VK_ESCAPE, [this] { this->handleEscape(); });
 		t().addAccel(FCONTROL, 'F', [this] { this->chat->findTextNew(); });
 		t().addAccel(0, VK_F3, [this] { this->chat->findTextNext(); });
@@ -70,20 +70,28 @@ protected:
 
 	virtual ~AspectChat() { }
 
-	tstring formatChatMessage(Client* aClient, const tstring& aLine) {
+	/* the first tstring is a plain formatted chat message (no style); the second tstring is a
+	formatted message with style codes. "formatted" means that the message has been prepended with
+	the sender's nick and possibly a timestamp, new lines have been converted to CR-LF and other
+	smoothing may have been applied. */
+	typedef std::pair<tstring, tstring> FormattedChatMessage;
+
+	tstring formatText(const tstring& aLine) {
 		/// @todo factor out to dwt
 		/// @todo Text::toT works but _T doesn't, verify this.
-		return Text::toT("{\\urtf1\n") + chat->rtfEscape(aLine) + Text::toT("}\n");
+		return Text::toT("{\\urtf1\n") + aLine + Text::toT("}\n");
 	}
 
-	void addChat(Client* aClient, const tstring& aLine) {
-		tstring line;
+	/** Add a chat message. The message must have already been formatted; its special RTF
+	characters must have been escaped with chat->rtfEscape. There is one exception: this method
+	handles encapsulating the message within {\urtf1...} and prepending timestamps. */
+	void addChat(const tstring& text) {
+		tstring pre;
 		if(chat->length() > 0)
-			line += _T("\r\n");
+			pre += _T("\r\n");
 		if(timeStamps)
-			line += Text::toT("[" + Util::getShortTimeString() + "] ");
-		line += Text::toDOS(aLine);
-		chat->addTextSteady(formatChatMessage(aClient, line), line.size());
+			pre += Text::toT("[" + Util::getShortTimeString() + "] ");
+		chat->addTextSteady(formatText(chat->rtfEscape(pre) + text));
 	}
 
 	void readLog(const string& logPath, const unsigned setting) {
@@ -110,8 +118,8 @@ protected:
 		lines.pop_back();
 
 		const size_t linesCount = lines.size();
-		for(size_t i = ((linesCount > setting) ? (linesCount - setting) : 0); i < linesCount; ++i) {
-			addChat(0, _T("- ") + Text::toT(lines[i]));
+		for(size_t i = (linesCount > setting) ? (linesCount - setting) : 0; i < linesCount; ++i) {
+			addChat(chat->rtfEscape(_T("- ") + Text::toT(lines[i])));
 		}
 	}
 
@@ -297,7 +305,6 @@ private:
 		t().enterImpl(s);
 		return true;
 	}
-	void sendMessage_() { sendMessage(); }
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ASPECT_CHAT_H)
