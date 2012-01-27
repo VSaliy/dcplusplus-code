@@ -133,8 +133,7 @@ void ConnectivityPage::updateAuto() {
 
 void ConnectivityPage::addLogLine(const tstring& msg) {
 	/// @todo factor out to dwt
-	const tstring message = Text::toT("{\\urtf1\n") + log->rtfEscape(msg + Text::toT("\r\n")) + Text::toT("}\n");
-	log->addTextSteady(message, message.size());
+	log->addTextSteady(Text::toT("{\\urtf1\n") + log->rtfEscape(msg + Text::toT("\r\n")) + Text::toT("}\n"));
 }
 
 void ConnectivityPage::on(Message, const string& message) noexcept {

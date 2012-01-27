@@ -215,19 +215,17 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		if(from && from->getIdentity().noChat())
 			return;
 
-		ChatMessage chatMessage = { unescape(message), from };
-
-		if(!chatMessage.from) {
+		if(!from) {
 			OnlineUser& o = getUser(nick);
 			// Assume that messages from unknown users come from the hub
 			o.getIdentity().setHub(true);
 			o.getIdentity().setHidden(true);
 			updated(o);
-
-			chatMessage.from = &o;
+			from = &o;
 		}
 
-		fire(ClientListener::Message(), this, chatMessage);
+		ChatMessage chatMessage = { unescape(message), from->getUser() };
+		fire(ClientListener::Message(), this, std::move(chatMessage));
 		return;
 	}
 
@@ -711,30 +709,29 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		if(from && from->getIdentity().noChat())
 			return;
 
-		ChatMessage message = { unescape(param.substr(j + 2)), from, &getUser(getMyNick()), findUser(rtNick) };
+		auto replyTo = findUser(rtNick);
 
-		if(!message.replyTo || !message.from) {
-			if(!message.replyTo) {
+		if(!replyTo || !from) {
+			if(!replyTo) {
 				// Assume it's from the hub
-				OnlineUser& replyTo = getUser(rtNick);
-				replyTo.getIdentity().setHub(true);
-				replyTo.getIdentity().setHidden(true);
-				updated(replyTo);
+				OnlineUser& ou = getUser(rtNick);
+				ou.getIdentity().setHub(true);
+				ou.getIdentity().setHidden(true);
+				updated(ou);
+				replyTo = &ou;
 			}
-			if(!message.from) {
+			if(!from) {
 				// Assume it's from the hub
-				OnlineUser& from = getUser(fromNick);
-				from.getIdentity().setHub(true);
-				from.getIdentity().setHidden(true);
-				updated(from);
+				OnlineUser& ou = getUser(fromNick);
+				ou.getIdentity().setHub(true);
+				ou.getIdentity().setHidden(true);
+				updated(ou);
+				from = &ou;
 			}
-
-			// Update pointers just in case they've been invalidated
-			message.replyTo = findUser(rtNick);
-			message.from = findUser(fromNick);
 		}
 
-		fire(ClientListener::Message(), this, message);
+		ChatMessage message = { unescape(param.substr(j + 2)), from->getUser(), getUser(getMyNick()).getUser(), replyTo->getUser() };
+		fire(ClientListener::Message(), this, std::move(message));
 
 	} else if(cmd == "$GetPass") {
 		OnlineUser& ou = getUser(getMyNick());
@@ -917,8 +914,8 @@ void NmdcHub::privateMessage(const OnlineUser& aUser, const string& aMessage, bo
 	Lock l(cs);
 	OnlineUser* ou = findUser(getMyNick());
 	if(ou) {
-		ChatMessage message = { aMessage, ou, &aUser, ou };
-		fire(ClientListener::Message(), this, message);
+		ChatMessage message = { aMessage, ou->getUser(), aUser.getUser(), ou->getUser() };
+		fire(ClientListener::Message(), this, std::move(message));
 	}
 }
 

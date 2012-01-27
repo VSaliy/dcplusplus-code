@@ -197,8 +197,11 @@ private:
 
 	bool tab();
 
-	void addChat(const tstring& aLine);
-	void addStatus(const tstring& aLine, bool legitimate = true);
+	enum { FROM_HUB = 1 << 0, FROM_BOT = 1 << 1 };
+	FormattedChatMessage format(const ChatMessage& message, int* pmInfo = nullptr) const;
+	void addChat(const ChatMessage& message);
+	void addChat(const tstring& text);
+	void addStatus(const tstring& text, bool legitimate = true);
 
 	pair<size_t, tstring> getStatusUsers() const;
 	tstring getStatusShared() const;
@@ -263,7 +266,7 @@ private:
 	void onConnected();
 	void onDisconnected();
 	void onGetPassword();
-	void onPrivateMessage(const UserPtr& from, const UserPtr& to, const UserPtr& replyTo, bool hub, bool bot, const tstring& m);
+	void onPrivateMessage(const ChatMessage& message);
 
 	// FavoriteManagerListener
 	virtual void on(FavoriteManagerListener::UserAdded, const FavoriteUser& /*aUser*/) noexcept;
@@ -280,7 +283,7 @@ private:
 	virtual void on(Failed, Client*, const string&) noexcept;
 	virtual void on(GetPassword, Client*) noexcept;
 	virtual void on(HubUpdated, Client*) noexcept;
-	virtual void on(Message, Client*, const ChatMessage&) noexcept;
+	virtual void on(Message, Client*, ChatMessage&&) noexcept;
 	virtual void on(StatusMessage, Client*, const string&, int = ClientListener::FLAG_NORMAL) noexcept;
 	virtual void on(NickTaken, Client*) noexcept;
 	virtual void on(SearchFlood, Client*, const string&) noexcept;
