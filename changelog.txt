@@ -16,6 +16,7 @@
 * Add predefined user matching defs for favs (bold, more red) & ops (more blue) (poy)
 * [L#300971] Keep updating GUI elements while a menu is up (poy)
 * Color nicks in chats according to user matching definitions (poy)
+* Fix favorite hub groups on Win XP (poy)
 
 -- 0.791 2012-01-14 --
 * Update translations

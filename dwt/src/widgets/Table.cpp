@@ -319,11 +319,14 @@ std::vector<int> Table::getColumnWidthsImpl() const {
 }
 
 void Table::setGroups(const std::vector<tstring>& groups) {
-	if(!grouped) {
-		grouped = ListView_EnableGroupView(handle(), TRUE) >= 0;
-		if(!grouped)
-			return;
+	bool wasGrouped = grouped;
 
+	// must be called every time on XP
+	grouped = ListView_EnableGroupView(handle(), TRUE) >= 0;
+	if(!grouped)
+		return;
+
+	if(!wasGrouped) {
 		initGroupSupport();
 	}
 
