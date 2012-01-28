@@ -562,16 +562,17 @@ HubFrame::FormattedChatMessage HubFrame::format(const ChatMessage& message, int*
 
 		nick = chat->rtfEscape(nick);
 		if(style.textColor != -1 || style.bgColor != -1) {
-			// {{\\colortbl;\\red1\\green1\\blue1;\\red2\\green2\\blue2;}\\cf1\\cb2 nick}
-			tstring colors = _T("{{\\colortbl;");
+			// {{\\colortbl\\red0\\green0\\blue0;\\red1\\green1\\blue1;}\\cf0\\highlight1 nick}
+			tstring colors = _T("{{\\colortbl");
 			tstring colSel;
 			if(style.textColor != -1) {
 				colors += toRTF(style.textColor);
-				colSel += _T("\\cf1");
+				colSel += _T("\\cf0");
 			}
 			if(style.bgColor != -1) {
 				colors += toRTF(style.bgColor);
-				colSel += (style.textColor != -1) ? _T("\\cb2") : _T("\\cb1");
+				colSel += _T("\\highlight");
+				colSel += (style.textColor != -1) ? _T("1") : _T("0");
 			}
 			nick = colors + _T("}") + colSel + _T(" ") + nick + _T("}");
 		}
@@ -599,30 +600,30 @@ HubFrame::FormattedChatMessage HubFrame::format(const ChatMessage& message, int*
 }
 
 void HubFrame::addChat(const ChatMessage& message) {
-	auto text = format(message);
+	addChat(format(message));
+}
 
-	ChatType::addChat(text.second);
+void HubFrame::addChat(const tstring& text) {
+	addChat(make_pair(text, chat->rtfEscape(text)));
+}
+
+void HubFrame::addChat(const FormattedChatMessage& message) {
+	ChatType::addChat(message.second);
 
 	{
 		auto u = url;
-		WinUtil::notify(WinUtil::NOTIFICATION_MAIN_CHAT, text.first, [this, u] { activateWindow(u); });
+		WinUtil::notify(WinUtil::NOTIFICATION_MAIN_CHAT, message.first, [this, u] { activateWindow(u); });
 	}
 	setDirty(SettingsManager::BOLD_HUB);
 
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {
 		ParamMap params;
-		params["message"] = [&text] { return Text::fromT(text.first); };
+		params["message"] = [&message] { return Text::fromT(message.first); };
 		client->getHubIdentity().getParams(params, "hub", false);
 		params["hubURL"] = [this] { return client->getHubUrl(); };
 		client->getMyIdentity().getParams(params, "my", true);
 		LOG(LogManager::CHAT, params);
 	}
-}
-
-void HubFrame::addChat(const tstring& text) {
-	// this doesn't get often called so we can afford the fromT retardedness.
-	ChatMessage message = { Text::fromT(text) };
-	addChat(message);
 }
 
 void HubFrame::addStatus(const tstring& text, bool legitimate /* = true */) {

@@ -201,6 +201,7 @@ private:
 	FormattedChatMessage format(const ChatMessage& message, int* pmInfo = nullptr) const;
 	void addChat(const ChatMessage& message);
 	void addChat(const tstring& text);
+	void addChat(const FormattedChatMessage& message);
 	void addStatus(const tstring& text, bool legitimate = true);
 
 	pair<size_t, tstring> getStatusUsers() const;
