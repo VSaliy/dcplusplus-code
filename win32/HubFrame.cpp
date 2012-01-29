@@ -561,20 +561,28 @@ HubFrame::FormattedChatMessage HubFrame::format(const ChatMessage& message, int*
 		ret.first += message.thirdPerson ? _T("* ") + nick + _T(" ") : _T("<") + nick + _T("> ");
 
 		nick = chat->rtfEscape(nick);
-		if(style.textColor != -1 || style.bgColor != -1) {
-			// {{\\colortbl\\red0\\green0\\blue0;\\red1\\green1\\blue1;}\\cf0\\highlight1 nick}
-			tstring colors = _T("{{\\colortbl");
-			tstring colSel;
-			if(style.textColor != -1) {
-				colors += toRTF(style.textColor);
-				colSel += _T("\\cf0");
+		tstring rtfHeader;
+		tstring rtfFormat;
+		if(!style.font.empty()) {
+			auto cached = WinUtil::getUserMatchFont(style.font);
+			if(cached.get()) {
+				auto lf = cached->getLogFont();
+				rtfHeader += _T("{\\fonttbl{\\f0\\fnil\\fcharset") + Text::toT(Util::toString(lf.lfCharSet)) + _T(" ") + lf.lfFaceName + _T(";}}");
+				rtfFormat += _T("\\f0\\fs") + Text::toT(Util::toString(lf.lfHeight * 2));
+				if(lf.lfWeight >= FW_BOLD) { rtfFormat += _T("\\b"); }
+				if(lf.lfItalic) { rtfFormat += _T("\\i"); }
 			}
-			if(style.bgColor != -1) {
-				colors += toRTF(style.bgColor);
-				colSel += _T("\\highlight");
-				colSel += (style.textColor != -1) ? _T("1") : _T("0");
-			}
-			nick = colors + _T("}") + colSel + _T(" ") + nick + _T("}");
+		}
+		if(!rtfFormat.empty() || style.textColor != -1 || style.bgColor != -1) {
+			/* when creating a new context (say for a font table), always redefine colors as the Rich Edit
+			control seems to randomly reset them like a boss. */
+			if(style.textColor == -1) { style.textColor = chat->getTextColor(); }
+			if(style.bgColor == -1) { style.bgColor = chat->getBgColor(); }
+			rtfHeader += _T("{\\colortbl") + toRTF(style.textColor) + toRTF(style.bgColor) + _T("}");
+			rtfFormat += _T("\\cf0\\highlight1");
+		}
+		if(!rtfFormat.empty()) {
+			nick = _T("{") + rtfHeader + rtfFormat + _T(" ") + nick + _T("}");
 		}
 		ret.second += message.thirdPerson ? _T("* ") + nick + _T(" ") : _T("<") + nick + _T("> ");
 	}
@@ -900,10 +908,9 @@ int HubFrame::UserInfo::getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgC
 	auto style = identity.getStyle();
 
 	if(!style.font.empty()) {
-		// cache lookup might fail when refreshing the list of user matching defs...
-		auto cached = WinUtil::userMatchFonts.find(style.font);
-		if(cached != WinUtil::userMatchFonts.end()) {
-			font = cached->second->handle();
+		auto cached = WinUtil::getUserMatchFont(style.font);
+		if(cached.get()) {
+			font = cached->handle();
 		}
 	}
 

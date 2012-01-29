@@ -484,6 +484,15 @@ void WinUtil::updateUserMatchFonts() {
 	}
 }
 
+dwt::FontPtr WinUtil::getUserMatchFont(const string& key) {
+	// cache lookup might fail when refreshing the list of user matching defs...
+	auto cached = userMatchFonts.find(key);
+	if(cached != userMatchFonts.end()) {
+		return cached->second;
+	}
+	return nullptr;
+}
+
 void WinUtil::updateUploadFont() {
 	updateFont(uploadFont, SettingsManager::UPLOAD_FONT);
 }

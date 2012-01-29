@@ -124,8 +124,8 @@ public:
 	/// escape Rich Edit control chars: {, }, and \, as well as \n which becomes \line.
 	static tstring rtfEscape(const tstring& str);
 
-	void setTextColor(COLORREF color);
-	void setBgColor(COLORREF color);
+	COLORREF getTextColor() const { return textColor; }
+	COLORREF getBgColor() const { return bgColor; }
 
 protected:
 	tstring currentNeedle;		// search in chat window
@@ -164,7 +164,6 @@ private:
 	// aspects::Font
 	void setFontImpl();
 
-	// store current colors for the onPrinting handler and for setFontImpl.
 	COLORREF textColor;
 	COLORREF bgColor;
 };
