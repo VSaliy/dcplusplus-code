@@ -31,13 +31,13 @@
 SplashWindow::SplashWindow() :
 dwt::Window(0)
 {
-	// 256x icons only work on >= Vista. on failure, let Windows choose the image size it prefers.
+	// 256x icons only work on >= Vista. on failure, try loading a 48x image.
 	try {
 		iconSize = 256;
 		icon = WinUtil::createIcon(IDI_DCPP, iconSize);
 	} catch(const dwt::DWTException&) {
-		icon = new dwt::Icon(IDI_DCPP);
-		iconSize = icon->getSize().x;
+		iconSize = 48;
+		icon = WinUtil::createIcon(IDI_DCPP, iconSize);
 	}
 
 	{
