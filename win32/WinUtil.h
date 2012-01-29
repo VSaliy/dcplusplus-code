@@ -131,7 +131,9 @@ public:
 	static dwt::FontPtr font;
 	static dwt::FontPtr uploadFont;
 	static dwt::FontPtr downloadFont;
-	static unordered_map<string, dwt::FontPtr> userMatchFonts;
+private:
+	static unordered_map<string, dwt::FontPtr> userMatchFonts; // use getUserMatchFont to access
+public:
 	static tstring commands;
 	static dwt::ImageListPtr fileImages;
 	static dwt::ImageListPtr userImages;
@@ -179,6 +181,7 @@ public:
 	static void decodeFont(const tstring& setting, LOGFONT &dest);
 	static void updateFont(dwt::FontPtr& font, int setting);
 	static void updateUserMatchFonts();
+	static dwt::FontPtr getUserMatchFont(const string& key);
 
 	static void updateUploadFont();
 	static void updateDownloadFont();
