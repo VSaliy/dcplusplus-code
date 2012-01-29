@@ -58,8 +58,6 @@ static const ColumnInfo filesColumns[] = {
 	{ N_("Type"), 60, false }
 };
 
-#define FILE_LIST_NAME _T("File Lists")
-
 QueueFrame::QueueFrame(TabViewPtr parent) :
 BaseType(parent, T_("Download Queue"), IDH_QUEUE, IDI_QUEUE),
 paned(0),
@@ -434,7 +432,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 		// We assume we haven't added it yet, and that all filelists go to the same
 		// directory...
 		dcassert(fileLists == NULL);
-		fileLists = dirs->insert(NULL, new DirItemInfo(dir, FILE_LIST_NAME), true);
+		fileLists = dirs->insert(NULL, new DirItemInfo(dir, T_("File Lists")), true);
 		return fileLists;
 	}
 
@@ -812,7 +810,8 @@ void QueueFrame::moveNode(HTREEITEM item, HTREEITEM parent) {
 		moveNode(next, ht);
 		next = dirs->getChild(item);
 	}
-	TreeView_DeleteItem(dirs->handle(), item);
+	/// @todo do it with dwt calls
+	TreeView_DeleteItem(dirs->treeHandle(), item);
 }
 
 const string& QueueFrame::getSelectedDir() {
