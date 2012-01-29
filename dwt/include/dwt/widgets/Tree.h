@@ -239,6 +239,10 @@ public:
 	void create( const Seed & cs = Seed() );
 
 	virtual void layout();
+
+	/// @todo should not be public
+	HWND treeHandle() const { return tree->handle(); }
+
 protected:
 	// Constructor Taking pointer to parent
 	explicit Tree( Widget * parent );
@@ -248,7 +252,6 @@ protected:
 	virtual ~Tree()
 	{}
 
-	HWND treeHandle() const { return tree->handle(); }
 private:
 	ImageListPtr itsNormalImageList;
 	ImageListPtr itsStateImageList;
