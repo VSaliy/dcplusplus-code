@@ -78,17 +78,17 @@ private:
 		tstring pre;
 		if(chat->length() > 0)
 			pre += _T("\r\n");
-		return Text::toT("{\\urtf1\n") + chat->rtfEscape(pre + message) + Text::toT("}\n");
+		return Text::toT("{\\urtf1\n") + dwt::RichTextBox::rtfEscape(pre) + message + Text::toT("}\n");
 	}
 
 public:
 	void addChat(const tstring& message) {
-		chat->addTextSteady(formatText(message));
+		chat->addTextSteady(formatText(dwt::RichTextBox::rtfEscape(message)));
 		t().addedChat(message);
 	}
 
 	void addChat(const ChatMessage& message) {
-		chat->addTextSteady(formatText(Text::toT(HtmlToRtf::convert(message.htmlMessage))));
+		chat->addTextSteady(formatText(HtmlToRtf::convert(message.htmlMessage)));
 		t().addedChat(Text::toT(message.message));
 	}
 
@@ -117,7 +117,7 @@ public:
 
 		const size_t linesCount = lines.size();
 		for(size_t i = (linesCount > setting) ? (linesCount - setting) : 0; i < linesCount; ++i) {
-			addChat(chat->rtfEscape(_T("- ") + Text::toT(lines[i])));
+			addChat(_T("- ") + Text::toT(lines[i]));
 		}
 	}
 
