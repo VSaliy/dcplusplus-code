@@ -24,7 +24,7 @@ Only simple HTML tags (those that are marked as "phrasing content" in the HTML5 
 supported. */
 class HtmlToRtf {
 public:
-	static string convert(const string& html);
+	static tstring convert(const string& html);
 };
 
 #endif
