@@ -197,11 +197,7 @@ private:
 
 	bool tab();
 
-	enum { FROM_HUB = 1 << 0, FROM_BOT = 1 << 1 };
-	FormattedChatMessage format(const ChatMessage& message, int* pmInfo = nullptr) const;
-	void addChat(const ChatMessage& message);
-	void addChat(const tstring& text);
-	void addChat(const FormattedChatMessage& message);
+	void addedChat(const tstring& message);
 	void addStatus(const tstring& text, bool legitimate = true);
 
 	pair<size_t, tstring> getStatusUsers() const;
@@ -284,7 +280,7 @@ private:
 	virtual void on(Failed, Client*, const string&) noexcept;
 	virtual void on(GetPassword, Client*) noexcept;
 	virtual void on(HubUpdated, Client*) noexcept;
-	virtual void on(Message, Client*, ChatMessage&&) noexcept;
+	virtual void on(Message, Client*, const ChatMessage&) noexcept;
 	virtual void on(StatusMessage, Client*, const string&, int = ClientListener::FLAG_NORMAL) noexcept;
 	virtual void on(NickTaken, Client*) noexcept;
 	virtual void on(SearchFlood, Client*, const string&) noexcept;

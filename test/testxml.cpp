@@ -48,7 +48,7 @@ TEST(testxml, test_simple)
 
     const char xml[] = "<?xml version='1.0' encoding='utf-8' ?><complex a='1'> <simple b=\"2\"/><complex2> data </complex2></complex>";
     for(size_t i = 0, iend = sizeof(xml); i < iend; ++i) {
-    	reader.parse(xml + i, 1, true);
+    	reader.parse(xml + i, 1);
     }
 
     ASSERT_EQ(collector.simpleTags["simple"], 1);
@@ -70,7 +70,7 @@ TEST(testxml, test_entref)
 
     const char xml[] = "<root ab='&apos;&amp;&quot;'>&lt;&gt;</root>";
     for(size_t i = 0, iend = sizeof(xml); i < iend; ++i) {
-    	reader.parse(xml + i, 1, true);
+    	reader.parse(xml + i, 1);
     }
 
     ASSERT_EQ(collector.startTags["root"], 1);
@@ -87,7 +87,7 @@ TEST(testxml, test_comment)
 
     const char xml[] = "<root><!-- comment <i>,;&--></root>";
     for(size_t i = 0, iend = sizeof(xml); i < iend; ++i) {
-    	reader.parse(xml + i, 1, true);
+    	reader.parse(xml + i, 1);
     }
 
     ASSERT_EQ(collector.startTags["root"], 1);
