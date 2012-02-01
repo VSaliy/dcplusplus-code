@@ -79,8 +79,12 @@ string HtmlToRtf::convert(const string& html) {
 	return parser.finalize();
 }
 
+static const string styleAttr = "style";
+
 void Parser::startTag(const string& name, StringPairList& attribs, bool simple) {
-	ret += name;
+	if(!attribs.empty()) {
+		const auto& style = getAttrib(attribs, styleAttr, 0);
+	}
 }
 
 void Parser::endTag(const string& name, const string& data) {
