@@ -1061,9 +1061,9 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 			} else if(d->getType() == Transfer::TYPE_FILE) {
 				q->addSegment(d->getSegment());
 
-				if(q->isFinished()) {
-					auto crcError = BOOLSETTING(SFV_CHECK) && checkSfv(q, d.get());
+				auto crcError = q->isFinished() && BOOLSETTING(SFV_CHECK) && checkSfv(q, d.get());
 
+				if(q->isFinished()) {
 					// Check if we need to move the file
 					if(!d->getTempTarget().empty() && (Util::stricmp(d->getPath().c_str(), d->getTempTarget().c_str()) != 0) ) {
 						moveFile(d->getTempTarget(), d->getPath());
