@@ -16,35 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_CHAT_MESSAGE_H
-#define DCPLUSPLUS_DCPP_CHAT_MESSAGE_H
+#ifndef DCPLUSPLUS_WIN32_HTML_TO_RTF_H
+#define DCPLUSPLUS_WIN32_HTML_TO_RTF_H
 
-#include "forward.h"
-
-#include <string>
-
-namespace dcpp {
-
-using std::string;
-
-struct ChatMessage {
-	ChatMessage(const string& text, const OnlineUser* from,
-		const OnlineUser* to = nullptr, const OnlineUser* replyTo = nullptr,
-		bool thirdPerson = false, time_t timestamp = 0);
-
-	string message;
-	string htmlMessage;
-
-	UserPtr from;
-	UserPtr to;
-	UserPtr replyTo;
-
-	time_t timestamp;
-
-	bool thirdPerson;
-	time_t messageTimestamp;
+/** Convert an HTML string to an RTF string, suitable for insertion within a Rich Edit control.
+Only simple HTML tags (those that are marked as "phrasing content" in the HTML5 spec) are
+supported. */
+class HtmlToRtf {
+public:
+	static string convert(const string& html);
 };
 
-} // namespace dcpp
-
-#endif // !defined(DCPLUSPLUS_DCPP_CHAT_MESSAGE_H)
+#endif

@@ -224,8 +224,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			from = &o;
 		}
 
-		ChatMessage chatMessage = { unescape(message), from->getUser() };
-		fire(ClientListener::Message(), this, std::move(chatMessage));
+		fire(ClientListener::Message(), this, ChatMessage(unescape(message), from));
 		return;
 	}
 
@@ -730,8 +729,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			}
 		}
 
-		ChatMessage message = { unescape(param.substr(j + 2)), from->getUser(), getUser(getMyNick()).getUser(), replyTo->getUser() };
-		fire(ClientListener::Message(), this, std::move(message));
+		fire(ClientListener::Message(), this, ChatMessage(unescape(param.substr(j + 2)), from, &getUser(getMyNick()), replyTo));
 
 	} else if(cmd == "$GetPass") {
 		OnlineUser& ou = getUser(getMyNick());
@@ -912,10 +910,9 @@ void NmdcHub::privateMessage(const OnlineUser& aUser, const string& aMessage, bo
 	privateMessage(aUser.getIdentity().getNick(), aMessage);
 	// Emulate a returning message...
 	Lock l(cs);
-	OnlineUser* ou = findUser(getMyNick());
+	auto ou = findUser(getMyNick());
 	if(ou) {
-		ChatMessage message = { aMessage, ou->getUser(), aUser.getUser(), ou->getUser() };
-		fire(ClientListener::Message(), this, std::move(message));
+		fire(ClientListener::Message(), this, ChatMessage(aMessage, ou, &aUser, ou));
 	}
 }
 

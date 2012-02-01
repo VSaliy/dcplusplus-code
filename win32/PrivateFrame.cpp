@@ -27,6 +27,7 @@
 #include "MainWindow.h"
 #include "resource.h"
 
+#include <dcpp/ChatMessage.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/Client.h>
 #include <dcpp/LogManager.h>
@@ -56,7 +57,7 @@ void PrivateFrame::openWindow(TabViewPtr parent, const HintedUser& replyTo_, con
 }
 
 void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
-	const FormattedChatMessage& message, const string& hubHint)
+	const ChatMessage& message, const string& hubHint)
 {
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
 	auto i = frames.find(user);
@@ -74,13 +75,13 @@ void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 			}
 		}
 
-		WinUtil::notify(WinUtil::NOTIFICATION_PM_WINDOW, message.first, [user] { activateWindow(user); });
+		WinUtil::notify(WinUtil::NOTIFICATION_PM_WINDOW, Text::toT(message.message), [user] { activateWindow(user); });
 
 	} else {
 		i->second->addChat(message);
 	}
 
-	WinUtil::notify(WinUtil::NOTIFICATION_PM, message.first, [user] { activateWindow(user); });
+	WinUtil::notify(WinUtil::NOTIFICATION_PM, Text::toT(message.message), [user] { activateWindow(user); });
 }
 
 void PrivateFrame::activateWindow(const UserPtr& u) {
@@ -187,28 +188,22 @@ online(replyTo.getUser().user->isOnline())
 PrivateFrame::~PrivateFrame() {
 }
 
-void PrivateFrame::addChat(const FormattedChatMessage& message, bool log) {
-	ChatType::addChat(message.second);
-
+void PrivateFrame::addedChat(const tstring& message) {
 	setDirty(SettingsManager::BOLD_PM);
 
-	if(log && BOOLSETTING(LOG_PRIVATE_CHAT)) {
+	if(BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		ParamMap params;
-		params["message"] = [&message] { return Text::fromT(message.first); };
+		params["message"] = [&message] { return Text::fromT(message); };
 		fillLogParams(params);
 		LOG(LogManager::PM, params);
 	}
 }
 
-void PrivateFrame::addChat(const tstring& text, bool log) {
-	addChat(make_pair(text, chat->rtfEscape(text)), log);
-}
-
-void PrivateFrame::addStatus(const tstring& text, bool log) {
+void PrivateFrame::addStatus(const tstring& text) {
 	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString() + "] ") + text);
 
 	if(BOOLSETTING(STATUS_IN_CHAT))
-		addChat(_T("*** ") + text, log);
+		addChat(_T("*** ") + text);
 }
 
 bool PrivateFrame::preClosing() {

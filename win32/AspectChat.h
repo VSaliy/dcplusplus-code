@@ -19,11 +19,13 @@
 #ifndef DCPLUSPLUS_WIN32_ASPECT_CHAT_H
 #define DCPLUSPLUS_WIN32_ASPECT_CHAT_H
 
+#include <dcpp/ChatMessage.h>
 #include <dcpp/File.h>
 
 #include <dwt/WidgetCreator.h>
 
 #include "HoldRedraw.h"
+#include "HtmlToRtf.h"
 #include "RichTextBox.h"
 #include "WinUtil.h"
 
@@ -39,7 +41,6 @@ protected:
 	chat(0),
 	message(0),
 	messageLines(1),
-	timeStamps(BOOLSETTING(TIME_STAMPS)),
 	curCommandPosition(0)
 	{
 	}
@@ -70,28 +71,25 @@ protected:
 
 	virtual ~AspectChat() { }
 
-	/* the first tstring is a plain formatted chat message (no style); the second tstring is a
-	formatted message with style codes. "formatted" means that the message has been prepended with
-	the sender's nick and possibly a timestamp, new lines have been converted to CR-LF and other
-	smoothing may have been applied. */
-	typedef std::pair<tstring, tstring> FormattedChatMessage;
-
-	tstring formatText(const tstring& aLine) {
+private:
+	tstring formatText(const tstring& message) {
 		/// @todo factor out to dwt
 		/// @todo Text::toT works but _T doesn't, verify this.
-		return Text::toT("{\\urtf1\n") + aLine + Text::toT("}\n");
-	}
-
-	/** Add a chat message. The message must have already been formatted; its special RTF
-	characters must have been escaped with chat->rtfEscape. There is one exception: this method
-	handles encapsulating the message within {\urtf1...} and prepending timestamps. */
-	void addChat(const tstring& text) {
 		tstring pre;
 		if(chat->length() > 0)
 			pre += _T("\r\n");
-		if(timeStamps)
-			pre += Text::toT("[" + Util::getShortTimeString() + "] ");
-		chat->addTextSteady(formatText(chat->rtfEscape(pre) + text));
+		return Text::toT("{\\urtf1\n") + chat->rtfEscape(pre + message) + Text::toT("}\n");
+	}
+
+public:
+	void addChat(const tstring& message) {
+		chat->addTextSteady(formatText(message));
+		t().addedChat(message);
+	}
+
+	void addChat(const ChatMessage& message) {
+		chat->addTextSteady(formatText(Text::toT(HtmlToRtf::convert(message.htmlMessage))));
+		t().addedChat(Text::toT(message.message));
 	}
 
 	void readLog(const string& logPath, const unsigned setting) {
@@ -145,14 +143,6 @@ protected:
 
 		} else if(Util::stricmp(cmd.c_str(), _T("f")) == 0) {
 			chat->findText(param.empty() ? chat->findTextPopup() : param);
-
-		} else if(Util::stricmp(cmd.c_str(), _T("ts")) == 0) {
-			timeStamps = !timeStamps;
-			if(timeStamps) {
-				status = T_("Timestamps enabled");
-			} else {
-				status = T_("Timestamps disabled");
-			}
 
 		} else {
 			return false;
@@ -259,8 +249,6 @@ protected:
 	unsigned messageLines;
 
 private:
-	bool timeStamps;
-
 	TStringList prevCommands;
 	tstring currentCommand;
 	TStringList::size_type curCommandPosition; //can't use an iterator because StringList is a vector, and vector iterators become invalid after resizing

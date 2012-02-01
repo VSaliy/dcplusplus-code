@@ -551,7 +551,7 @@ const TCHAR
 
 tstring
 	WinUtil::commands =
-		_T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /f <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /ts, /download, /upload");
+		_T("/refresh, /me <msg>, /clear [lines to keep], /slots #, /dslots #, /search <string>, /f <string>, /dc++, /away <msg>, /back, /g <searchstring>, /imdb <imdbquery>, /u <url>, /rebuild, /download, /upload");
 
 bool WinUtil::checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson) {
 	string::size_type i = cmd.find(' ');

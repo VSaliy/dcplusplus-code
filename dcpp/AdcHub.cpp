@@ -255,27 +255,22 @@ void AdcHub::handle(AdcCommand::MSG, AdcCommand& c) noexcept {
 	if(!from || from->getIdentity().noChat())
 		return;
 
-	ChatMessage message = { c.getParam(0), from->getUser() };
+	decltype(from) to = nullptr, replyTo = nullptr;
 
 	string temp;
 	if(c.getParam("PM", 1, temp)) { // add PM<group-cid> as well
-		auto ou = findUser(c.getTo());
-		if(!ou)
-			return;
-		message.to = ou->getUser();
 
-		ou = findUser(AdcCommand::toSID(temp));
-		if(!ou)
+		to = findUser(c.getTo());
+		if(!to)
 			return;
-		message.replyTo = ou->getUser();
+
+		replyTo = findUser(AdcCommand::toSID(temp));
+		if(!replyTo)
+			return;
 	}
 
-	message.thirdPerson = c.hasFlag("ME", 1);
-
-	if(c.getParam("TS", 1, temp))
-		message.timestamp = Util::toInt64(temp);
-
-	fire(ClientListener::Message(), this, std::move(message));
+	fire(ClientListener::Message(), this, ChatMessage(c.getParam(0), from, to, replyTo, c.hasFlag("ME", 1),
+		c.getParam("TS", 1, temp) ? Util::toInt64(temp) : 0));
 }
 
 void AdcHub::handle(AdcCommand::GPA, AdcCommand& c) noexcept {
@@ -500,8 +495,7 @@ void AdcHub::handle(AdcCommand::STA, AdcCommand& c) noexcept {
 		}
 	}
 
-	ChatMessage message = { c.getParam(1), u->getUser() };
-	fire(ClientListener::Message(), this, std::move(message));
+	fire(ClientListener::Message(), this, ChatMessage(c.getParam(1), u));
 }
 
 void AdcHub::handle(AdcCommand::SCH, AdcCommand& c) noexcept {

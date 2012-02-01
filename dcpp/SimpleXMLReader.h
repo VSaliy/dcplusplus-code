@@ -40,7 +40,9 @@ public:
 	virtual ~SimpleXMLReader() { }
 
 	void parse(InputStream& is, size_t maxSize = 0);
-	bool parse(const char* data, size_t len, bool more);
+	bool parse(const char* data, size_t len);
+	bool parse(const string& str);
+
 private:
 
 	static const size_t MAX_NAME_SIZE = 256;

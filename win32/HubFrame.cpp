@@ -518,115 +518,16 @@ void HubFrame::clearTaskList() {
 	tasks.clear();
 }
 
-namespace { tstring toRTF(COLORREF color) {
-	return Text::toT("\\red" + Util::toString(GetRValue(color)) +
-		"\\green" + Util::toString(GetGValue(color)) +
-		"\\blue" + Util::toString(GetBValue(color)) + ";");
-} }
-
-HubFrame::FormattedChatMessage HubFrame::format(const ChatMessage& message, int* pmInfo) const {
-	FormattedChatMessage ret;
-
-	if(message.timestamp) {
-		tstring tmp = _T("["); tmp += T_("Sent ") + Text::toT(Util::getShortTimeString(message.timestamp)) + _T("] ");
-		ret.first += tmp;
-		ret.second += chat->rtfEscape(tmp);
-	}
-
-	tstring nick;
-	Style style;
-	{
-		auto lock = ClientManager::getInstance()->lock();
-		if(message.from.get()) {
-			auto ou = ClientManager::getInstance()->findOnlineUser(message.from->getCID(), url, true);
-			if(ou) {
-				nick = Text::toT(ou->getIdentity().getNick());
-				style = ou->getIdentity().getStyle();
-			}
-		}
-
-		if(pmInfo) {
-			// gather info used by the PM dispatcher here to only use 1 CM lock.
-			auto& flags = *pmInfo;
-			auto ou = ClientManager::getInstance()->findOnlineUser(message.replyTo->getCID(), url, true);
-			if(ou && ou->getIdentity().isHub())
-				flags |= FROM_HUB;
-			if(ou && ou->getIdentity().isBot())
-				flags |= FROM_BOT;
-		}
-	}
-
-	if(!nick.empty()) {
-		// let's *not* obey the spec here and add a space after the star. :P
-		ret.first += message.thirdPerson ? _T("* ") + nick + _T(" ") : _T("<") + nick + _T("> ");
-
-		nick = chat->rtfEscape(nick);
-		tstring rtfHeader;
-		tstring rtfFormat;
-		if(!style.font.empty()) {
-			auto cached = WinUtil::getUserMatchFont(style.font);
-			if(cached.get()) {
-				auto lf = cached->getLogFont();
-				rtfHeader += _T("{\\fonttbl{\\f0\\fnil\\fcharset") + Text::toT(Util::toString(lf.lfCharSet)) + _T(" ") + lf.lfFaceName + _T(";}}");
-				rtfFormat += _T("\\f0\\fs") + Text::toT(Util::toString(lf.lfHeight * 2));
-				if(lf.lfWeight >= FW_BOLD) { rtfFormat += _T("\\b"); }
-				if(lf.lfItalic) { rtfFormat += _T("\\i"); }
-			}
-		}
-		if(!rtfFormat.empty() || style.textColor != -1 || style.bgColor != -1) {
-			/* when creating a new context (say for a font table), always redefine colors as the Rich Edit
-			control seems to randomly reset them like a boss. */
-			if(style.textColor == -1) { style.textColor = chat->getTextColor(); }
-			if(style.bgColor == -1) { style.bgColor = chat->getBgColor(); }
-			rtfHeader += _T("{\\colortbl") + toRTF(style.textColor) + toRTF(style.bgColor) + _T("}");
-			rtfFormat += _T("\\cf0\\highlight1");
-		}
-		if(!rtfFormat.empty()) {
-			nick = _T("{") + rtfHeader + rtfFormat + _T(" ") + nick + _T("}");
-		}
-		ret.second += message.thirdPerson ? _T("* ") + nick + _T(" ") : _T("<") + nick + _T("> ");
-	}
-
-	// Check all '<' and '[' after newlines as they're probably pastes...
-	auto text = message.text;
-	size_t i = 0;
-	while((i = text.find('\n', i)) != string::npos) {
-		++i;
-		if(i < text.size()) {
-			if(text[i] == '[' || text[i] == '<') {
-				text.insert(i, "- ");
-				i += 2;
-			}
-		}
-	}
-
-	auto tmp = Text::toT(Text::toDOS(text));
-	ret.first += tmp;
-	ret.second += chat->rtfEscape(tmp);
-
-	return ret;
-}
-
-void HubFrame::addChat(const ChatMessage& message) {
-	addChat(format(message));
-}
-
-void HubFrame::addChat(const tstring& text) {
-	addChat(make_pair(text, chat->rtfEscape(text)));
-}
-
-void HubFrame::addChat(const FormattedChatMessage& message) {
-	ChatType::addChat(message.second);
-
+void HubFrame::addedChat(const tstring& message) {
 	{
 		auto u = url;
-		WinUtil::notify(WinUtil::NOTIFICATION_MAIN_CHAT, message.first, [this, u] { activateWindow(u); });
+		WinUtil::notify(WinUtil::NOTIFICATION_MAIN_CHAT, message, [this, u] { activateWindow(u); });
 	}
 	setDirty(SettingsManager::BOLD_HUB);
 
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {
 		ParamMap params;
-		params["message"] = [&message] { return Text::fromT(message.first); };
+		params["message"] = [&message] { return Text::fromT(message); };
 		client->getHubIdentity().getParams(params, "hub", false);
 		params["hubURL"] = [this] { return client->getHubUrl(); };
 		client->getMyIdentity().getParams(params, "my", true);
@@ -728,17 +629,24 @@ void HubFrame::onGetPassword() {
 }
 
 void HubFrame::onPrivateMessage(const ChatMessage& message) {
-	int pmInfo = 0;
-	auto text = format(message, &pmInfo);
+	bool fromHub = false, fromBot = false;
+	{
+		auto lock = ClientManager::getInstance()->lock();
+		auto ou = ClientManager::getInstance()->findOnlineUser(message.replyTo->getCID(), url, true);
+		if(ou && ou->getIdentity().isHub())
+			fromHub = true;
+		if(ou && ou->getIdentity().isBot())
+			fromBot = true;
+	}
 
 	bool ignore = false, window = false;
-	if((pmInfo & FROM_HUB) == FROM_HUB) {
+	if(fromHub) {
 		if(BOOLSETTING(IGNORE_HUB_PMS)) {
 			ignore = true;
 		} else if(BOOLSETTING(POPUP_HUB_PMS) || PrivateFrame::isOpen(message.replyTo)) {
 			window = true;
 		}
-	} else if((pmInfo & FROM_BOT) == FROM_BOT) {
+	} else if(fromBot) {
 		if(BOOLSETTING(IGNORE_BOT_PMS)) {
 			ignore = true;
 		} else if(BOOLSETTING(POPUP_BOT_PMS) || PrivateFrame::isOpen(message.replyTo)) {
@@ -749,13 +657,13 @@ void HubFrame::onPrivateMessage(const ChatMessage& message) {
 	}
 
 	if(ignore) {
-		addStatus(str(TF_("Ignored message: %1%") % text.first), false);
+		addStatus(str(TF_("Ignored message: %1%") % Text::toT(message.message)), false);
 	} else {
 		if(window) {
-			PrivateFrame::gotMessage(getParent(), message.from, message.to, message.replyTo, text, url);
+			PrivateFrame::gotMessage(getParent(), message.from, message.to, message.replyTo, message, url);
 		} else {
 			/// @todo add formatting here (for PMs in main chat)
-			addChat(str(TF_("Private message from %1%: %2%") % getNick(message.from) % text.first));
+			addChat(str(TF_("Private message from %1%: %2%") % getNick(message.from) % Text::toT(message.message)));
 		}
 		WinUtil::mainWindow->TrayPM();
 	}
@@ -1014,20 +922,14 @@ void HubFrame::on(HubUpdated, Client*) noexcept {
 	callAsync([this, hubNameT] { setText(hubNameT); });
 }
 
-void HubFrame::on(Message, Client*, ChatMessage&& message) noexcept {
-	struct ChatMessageFunctor {
-		ChatMessageFunctor(HubFrame* h, ChatMessage&& message) : h(h), message(std::forward<ChatMessage>(message)) { }
-		void operator()() const {
-			if(message.to.get() && message.replyTo.get()) {
-				h->onPrivateMessage(message);
-			} else {
-				h->addChat(message);
-			}
+void HubFrame::on(Message, Client*, const ChatMessage& message) noexcept {
+	callAsync([this, message] {
+		if(message.to.get() && message.replyTo.get()) {
+			onPrivateMessage(message);
+		} else {
+			addChat(message);
 		}
-		HubFrame* h;
-		ChatMessage message;
-	};
-	callAsync(ChatMessageFunctor(this, std::forward<ChatMessage>(message)));
+	});
 }
 
 void HubFrame::on(StatusMessage, Client*, const string& line, int statusFlags) noexcept {

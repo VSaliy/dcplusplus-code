@@ -571,10 +571,15 @@ void SimpleXMLReader::parse(InputStream& stream, size_t maxSize) {
 	} while(process());
 }
 
-bool SimpleXMLReader::parse(const char* data, size_t len, bool more) {
+bool SimpleXMLReader::parse(const char* data, size_t len) {
 	buf.append(data, len);
 	return process();
 }
+
+bool SimpleXMLReader::parse(const string& str) {
+	return parse(str.c_str(), str.size());
+}
+
 bool SimpleXMLReader::spaceOrError(const char* message) {
 	if(!skipSpace()) {
 		error(message);
