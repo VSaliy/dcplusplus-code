@@ -52,7 +52,7 @@ string cssFont(const string& font) {
 	if(l.size() >= 4) {
 		std::stringstream stream;
 		stream << (Util::toInt(l[3]) ? "italic" : "normal") << " " << l[2] << " " <<
-			abs(Util::toFloat(l[1])) * 72.0 / 96.0 << "px " << l[0];
+			abs(Util::toFloat(l[1])) << "px '" << l[0] << "'";
 		return stream.str();
 	}
 	return string();
@@ -72,7 +72,7 @@ to(to ? to->getUser() : nullptr),
 replyTo(replyTo ? replyTo->getUser() : nullptr),
 timestamp(time(0)),
 thirdPerson(thirdPerson),
-messageTimestamp(timestamp)
+messageTimestamp(messageTimestamp)
 {
 	/* format the message to plain text and HTML strings before handing them over to plugins for
 	further	processing. */

@@ -88,7 +88,7 @@ public:
 	}
 
 	void addChat(const ChatMessage& message) {
-		chat->addTextSteady(formatText(HtmlToRtf::convert(message.htmlMessage)));
+		chat->addTextSteady(formatText(HtmlToRtf::convert(message.htmlMessage, chat)));
 		t().addedChat(Text::toT(message.message));
 	}
 
