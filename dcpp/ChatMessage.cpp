@@ -66,7 +66,7 @@ string cssFont(const string& font) {
 
 ChatMessage::ChatMessage(const string& text, const OnlineUser* from,
 	const OnlineUser* to, const OnlineUser* replyTo,
-	bool thirdPerson, time_t timestamp) :
+	bool thirdPerson, time_t messageTimestamp) :
 from(from->getUser()),
 to(to ? to->getUser() : nullptr),
 replyTo(replyTo ? replyTo->getUser() : nullptr),

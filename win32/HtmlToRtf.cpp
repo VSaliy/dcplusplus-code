@@ -128,13 +128,6 @@ void Parser::startTag(const string& name, StringPairList& attribs, bool simple) 
 				state = Declaration;
 				break;
 			}
-
-		default:
-			{
-				// unknown style
-				state = Declaration;
-				break;
-			}
 		}
 	}
 }
