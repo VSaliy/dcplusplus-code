@@ -658,10 +658,9 @@ void HubFrame::onPrivateMessage(const ChatMessage& message) {
 
 	if(ignore) {
 		addStatus(str(TF_("Ignored message: %1%") % Text::toT(message.message)), false);
+
 	} else {
-		if(window) {
-			PrivateFrame::gotMessage(getParent(), message.from, message.to, message.replyTo, message, url);
-		} else {
+		if(!window || !PrivateFrame::gotMessage(getParent(), message.from, message.to, message.replyTo, message, url)) {
 			/// @todo add formatting here (for PMs in main chat)
 			addChat(str(TF_("Private message from %1%: %2%") % getNick(message.from) % Text::toT(message.message)));
 		}
