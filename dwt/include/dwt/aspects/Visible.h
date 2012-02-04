@@ -77,16 +77,18 @@ public:
 	  */
 	bool getVisible() const;
 
-	/// \ingroup EventHandlersaspects::Visible
-	/// Setting the event handler for the "visible" event
-	/** When the visible state of the Widget has changed, this event will be raised.
-	  * <br>
-	  * A boolean parameter passed indicates if the Widget is visible or not. <br>
-	  * If the boolean value is true, the Widget is visible, otherwise it is
-	  * invisible.
-	  */
-	void onVisibilityChanged(const typename VisibleDispatcher::F& f) {
-		W().addCallback(Message( WM_SHOWWINDOW ), VisibleDispatcher(f));
+	/** Intercept visibility changes of this widget (when it is shown / hidden). */
+	void onVisibilityChanged(typename VisibleDispatcher::F f) {
+		W().addCallback(Message(WM_SHOWWINDOW), VisibleDispatcher(f));
+	}
+
+	/** Intercept WM_SETREDRAW messages (used to temporarily disable updating of a widget to
+	implement them better. Return true from the callback to disable regular processing of the
+	message. */
+	void onRedrawChanged(std::function<bool (bool)> f) {
+		W().addCallback(Message(WM_SETREDRAW), [f](const MSG& msg, LRESULT&) -> bool {
+			return f(msg.wParam);
+		});
 	}
 
 	/// Repaints the whole window
