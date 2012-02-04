@@ -296,7 +296,7 @@ void QueueFrame::QueueItemInfo::update() {
 			tstring tmp;
 
 			for(auto j = getSources().begin(); j != getSources().end(); ++j) {
-				if(tmp.size() > 0)
+				if(!tmp.empty())
 					tmp += _T(", ");
 
 				if(j->getUser().user->isOnline())
@@ -359,7 +359,7 @@ void QueueFrame::QueueItemInfo::update() {
 			tstring tmp;
 			for(auto j = getBadSources().begin(); j != getBadSources().end(); ++j) {
 				if(!j->isSet(QueueItem::Source::FLAG_REMOVED)) {
-					if(tmp.size() > 0)
+					if(!tmp.empty())
 						tmp += _T(", ");
 					tmp += WinUtil::getNicks(j->getUser());
 					tmp += _T(" (");
@@ -392,7 +392,7 @@ void QueueFrame::QueueItemInfo::update() {
 		}
 		if(colMask & MASK_TYPE) {
 			display->columns[COLUMN_TYPE] = Text::toT(Util::getFileExt(getTarget()));
-			if(display->columns[COLUMN_TYPE].size() > 0 && display->columns[COLUMN_TYPE][0] == '.')
+			if(!display->columns[COLUMN_TYPE].empty() && display->columns[COLUMN_TYPE][0] == '.')
 				display->columns[COLUMN_TYPE].erase(0, 1);
 		}
 	}

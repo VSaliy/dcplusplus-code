@@ -111,7 +111,7 @@ private:
 		ItemInfo(DirectoryListing::File* f) : type(FILE), file(f) {
 			columns[COLUMN_FILENAME] = Text::toT(f->getName());
 			columns[COLUMN_TYPE] = Util::getFileExt(columns[COLUMN_FILENAME]);
-			if(columns[COLUMN_TYPE].size() > 0 && columns[COLUMN_TYPE][0] == '.')
+			if(!columns[COLUMN_TYPE].empty() && columns[COLUMN_TYPE][0] == '.')
 				columns[COLUMN_TYPE].erase(0, 1);
 
 			columns[COLUMN_EXACTSIZE] = Text::toT(Util::formatExactSize(f->getSize()));

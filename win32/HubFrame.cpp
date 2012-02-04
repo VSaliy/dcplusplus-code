@@ -605,7 +605,7 @@ void HubFrame::onDisconnected() {
 }
 
 void HubFrame::onGetPassword() {
-	if(client->getPassword().size() > 0) {
+	if(!client->getPassword().empty()) {
 		client->password(client->getPassword());
 		addStatus(T_("Stored password sent..."));
 	} else if(!waitingForPW) {
@@ -1014,7 +1014,7 @@ void HubFrame::addAsFavorite() {
 		aEntry.setName(client->getHubName());
 		aEntry.setDescription(client->getHubDescription());
 		aEntry.setNick(client->getMyNick());
-		if(client->getPassword().size() > 0)  {
+		if(!client->getPassword().empty())  {
 			aEntry.setPassword(client->getPassword());
 		}
 		FavoriteManager::getInstance()->addFavorite(aEntry);

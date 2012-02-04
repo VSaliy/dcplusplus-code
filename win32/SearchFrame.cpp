@@ -806,7 +806,7 @@ void SearchFrame::addTargetMenu(Menu* menu, const StringPairList& favoriteDirs, 
 	auto sub = menu->appendPopup(T_("Download to..."));
 
 	int n = 0;
-	if(favoriteDirs.size() > 0) {
+	if(!favoriteDirs.empty()) {
 		for(auto i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
 			sub->appendItem(Text::toT(i->second), [=] { handleDownloadFavoriteDirs(n); });
 		sub->appendSeparator();
@@ -814,7 +814,7 @@ void SearchFrame::addTargetMenu(Menu* menu, const StringPairList& favoriteDirs, 
 
 	n = 0;
 	sub->appendItem(T_("&Browse..."), [this] { handleDownloadTo(); });
-	if(WinUtil::lastDirs.size() > 0) {
+	if(!WinUtil::lastDirs.empty()) {
 		sub->appendSeparator();
 		for(auto i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
 			sub->appendItem(*i, [=] { handleDownloadTarget(n); });
@@ -822,7 +822,7 @@ void SearchFrame::addTargetMenu(Menu* menu, const StringPairList& favoriteDirs, 
 
 	if(checkTTH.hasTTH) {
 		targets = QueueManager::getInstance()->getTargets(checkTTH.tth);
-		if(targets.size() > 0) {
+		if(!targets.empty()) {
 			sub->appendSeparator();
 			for(auto i = targets.begin(); i != targets.end(); ++i, ++n)
 				sub->appendItem(Text::toT(*i), [=] { handleDownloadTarget(n); });
@@ -834,7 +834,7 @@ void SearchFrame::addTargetDirMenu(Menu* menu, const StringPairList& favoriteDir
 	auto sub = menu->appendPopup(T_("Download whole directory to..."));
 
 	int n = 0;
-	if(favoriteDirs.size() > 0) {
+	if(!favoriteDirs.empty()) {
 		for(auto i = favoriteDirs.begin(); i != favoriteDirs.end(); ++i, ++n)
 			sub->appendItem(Text::toT(i->second), [=] { handleDownloadWholeFavoriteDirs(n); });
 		sub->appendSeparator();
@@ -842,7 +842,7 @@ void SearchFrame::addTargetDirMenu(Menu* menu, const StringPairList& favoriteDir
 
 	n = 0;
 	sub->appendItem(T_("&Browse..."), [this] { handleDownloadDirTo(); });
-	if(WinUtil::lastDirs.size() > 0) {
+	if(!WinUtil::lastDirs.empty()) {
 		sub->appendSeparator();
 		for(auto i = WinUtil::lastDirs.begin(); i != WinUtil::lastDirs.end(); ++i, ++n)
 			sub->appendItem(*i, [=] { handleDownloadWholeTarget(n); });
