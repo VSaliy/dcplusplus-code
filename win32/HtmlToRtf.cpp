@@ -99,6 +99,10 @@ void Parser::startTag(const string& name, StringPairList& attribs, bool simple) 
 		contexts.back().setFlag(Context::Underlined);
 	}
 
+	if(attribs.empty()) {
+		return;
+	}
+
 	const auto& style = getAttrib(attribs, "style", 0);
 
 	enum { Declaration, Font, Decoration, TextColor, BgColor, Unknown } state = Declaration;

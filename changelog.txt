@@ -17,6 +17,7 @@
 * [L#300971] Keep updating GUI elements while a menu is up (poy)
 * Apply user matching definition styles to nicks in chats (poy)
 * Fix favorite hub groups on Win XP (poy)
+* [L#925659] Safer window cleanup (poy)
 
 -- 0.791 2012-01-14 --
 * Update translations
