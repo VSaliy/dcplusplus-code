@@ -40,16 +40,17 @@ PropPage(parent, 6, 2)
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
 
-	addItem(T_("Max hash speed"), SettingsManager::MAX_HASH_SPEED, true, IDH_SETTINGS_ADVANCED3_MAX_HASH_SPEED, T_("MiB/s"));
-	addItem(T_("Write buffer size"), SettingsManager::BUFFER_SIZE, true, IDH_SETTINGS_ADVANCED3_BUFFERSIZE, T_("KiB"));
-	addItem(T_("Auto-search limit"), SettingsManager::AUTO_SEARCH_LIMIT, true, IDH_SETTINGS_ADVANCED3_AUTO_SEARCH_LIMIT);
-	addItem(T_("Mini slot size"), SettingsManager::SET_MINISLOT_SIZE, true, IDH_SETTINGS_ADVANCED3_MINISLOT_SIZE, T_("KiB"));
-	addItem(T_("Max filelist size"), SettingsManager::MAX_FILELIST_SIZE, true, IDH_SETTINGS_ADVANCED3_MAX_FILELIST_SIZE, T_("MiB"));
-	addItem(T_("PID"), SettingsManager::PRIVATE_ID, false, IDH_SETTINGS_ADVANCED3_PRIVATE_ID);
-	addItem(T_("Auto refresh time"), SettingsManager::AUTO_REFRESH_TIME, true, IDH_SETTINGS_ADVANCED3_AUTO_REFRESH_TIME, T_("minutes"));
-	addItem(T_("Settings save interval"), SettingsManager::SETTINGS_SAVE_INTERVAL, true, IDH_SETTINGS_ADVANCED3_SETTINGS_SAVE_INTERVAL, T_("minutes"));
-	addItem(T_("Socket read buffer"), SettingsManager::SOCKET_IN_BUFFER, true, IDH_SETTINGS_ADVANCED3_SOCKET_IN_BUFFER, T_("B"));
-	addItem(T_("Socket write buffer"), SettingsManager::SOCKET_OUT_BUFFER, true, IDH_SETTINGS_ADVANCED3_SOCKET_OUT_BUFFER, T_("B"));
+	addItem(T_("Max hash speed"), SettingsManager::MAX_HASH_SPEED, true, IDH_SETTINGS_EXPERT_MAX_HASH_SPEED, T_("MiB/s"));
+	addItem(T_("Write buffer size"), SettingsManager::BUFFER_SIZE, true, IDH_SETTINGS_EXPERT_BUFFERSIZE, T_("KiB"));
+	addItem(T_("Auto-search limit"), SettingsManager::AUTO_SEARCH_LIMIT, true, IDH_SETTINGS_EXPERT_AUTO_SEARCH_LIMIT);
+	addItem(T_("Mini slot size"), SettingsManager::SET_MINISLOT_SIZE, true, IDH_SETTINGS_EXPERT_MINISLOT_SIZE, T_("KiB"));
+	addItem(T_("Max filelist size"), SettingsManager::MAX_FILELIST_SIZE, true, IDH_SETTINGS_EXPERT_MAX_FILELIST_SIZE, T_("MiB"));
+	addItem(T_("PID"), SettingsManager::PRIVATE_ID, false, IDH_SETTINGS_EXPERT_PRIVATE_ID);
+	addItem(T_("Auto refresh time"), SettingsManager::AUTO_REFRESH_TIME, true, IDH_SETTINGS_EXPERT_AUTO_REFRESH_TIME, T_("minutes"));
+	addItem(T_("Settings save interval"), SettingsManager::SETTINGS_SAVE_INTERVAL, true, IDH_SETTINGS_EXPERT_SETTINGS_SAVE_INTERVAL, T_("minutes"));
+	addItem(T_("Socket read buffer"), SettingsManager::SOCKET_IN_BUFFER, true, IDH_SETTINGS_EXPERT_SOCKET_IN_BUFFER, T_("B"));
+	addItem(T_("Socket write buffer"), SettingsManager::SOCKET_OUT_BUFFER, true, IDH_SETTINGS_EXPERT_SOCKET_OUT_BUFFER, T_("B"));
+	addItem(T_("Max PM windows"), SettingsManager::MAX_PM_WINDOWS, true, IDH_SETTINGS_EXPERT_MAX_PM_WINDOWS);
 
 	PropPage::read(items);
 }

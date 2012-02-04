@@ -56,9 +56,13 @@ void PrivateFrame::openWindow(TabViewPtr parent, const HintedUser& replyTo_, con
 		frame->sendMessage(msg);
 }
 
-void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
+bool PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
 	const ChatMessage& message, const string& hubHint)
 {
+	if(frames.size() >= SETTING(MAX_PM_WINDOWS)) {
+		return false;
+	}
+
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
 	auto i = frames.find(user);
 	if(i == frames.end()) {
@@ -82,6 +86,8 @@ void PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 	}
 
 	WinUtil::notify(WinUtil::NOTIFICATION_PM, Text::toT(message.message), [user] { activateWindow(user); });
+
+	return true;
 }
 
 void PrivateFrame::activateWindow(const UserPtr& u) {

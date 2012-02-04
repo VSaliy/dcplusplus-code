@@ -55,7 +55,8 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
+	/// @return whether a new window can be opened (wrt the "Max PM windows" setting).
+	static bool gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
 		const ChatMessage& message, const string& hubHint);
 	static void openWindow(TabViewPtr parent, const HintedUser& replyTo, const tstring& msg = Util::emptyStringT,
 		const string& logPath = Util::emptyString, bool activate = true);
