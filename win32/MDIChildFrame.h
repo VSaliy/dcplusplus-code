@@ -241,7 +241,8 @@ private:
 			return true;
 		} else if(t().preClosing()) {
 			reallyClose = true;
-			this->close(true);
+			// async to make sure all other async calls have been consumed
+			this->callAsync([this] { this->close(true); });
 			return false;
 		}
 		return false;
