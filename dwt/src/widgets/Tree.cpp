@@ -78,9 +78,12 @@ void Tree::create( const Seed & cs )
 	BaseType::create(mySeed);
 	tree = WidgetCreator<TreeView>::create(this, cs);
 
-	onSized([&](const SizedEvent& e) { layout(); });
+	onSized([this](const SizedEvent& e) { layout(); });
 
-	tree->onCustomDraw([=](NMTVCUSTOMDRAW& x) { return draw(x); });
+	// let the tree control handle WM_SETREDRAW
+	onRedrawChanged([this](bool b) -> bool { tree->sendMessage(WM_SETREDRAW, b); return true; });
+
+	tree->onCustomDraw([this](NMTVCUSTOMDRAW& x) { return draw(x); });
 
 	setFont(cs.font);
 	layout();
