@@ -22,6 +22,7 @@
 #include "HtmlToRtf.h"
 
 #include <dcpp/debug.h>
+#include <dcpp/Flags.h>
 #include <dcpp/SimpleXML.h>
 #include <dcpp/StringTokenizer.h>
 #include <dcpp/Text.h>
@@ -32,31 +33,36 @@
 struct Parser : SimpleXMLReader::CallBack {
 	Parser(dwt::RichTextBox* box);
 	void startTag(const string& name, StringPairList& attribs, bool simple);
-	void endTag(const string& name, const string& data);
+	void data(const string& data);
+	void endTag(const string& name);
 	tstring finalize();
 
 private:
-	int addFont(string&& font);
+	struct Context : Flags {
+		enum { Bold = 1 << 0, Italic = 1 << 1, Underlined = 1 << 2 };
+		size_t font; // index in the "fonts" table
+		int fontSize;
+		size_t textColor; // index in the "colors" table
+		size_t bgColor; // index in the "colors" table
+		Context(dwt::RichTextBox* box, Parser& parser);
+	};
+
+	void write(Context& context);
+
+	size_t addFont(string&& font);
 	static int rtfFontSize(float px);
-	int addColor(COLORREF color);
+	size_t addColor(COLORREF color);
 
 	void parseFont(const string& s);
-	void parseColor(int& contextColor, const string& s);
+	void parseColor(size_t& contextColor, const string& s);
+	void parseDecoration(const string& s);
 
 	tstring ret;
 
 	StringList fonts;
 	StringList colors;
 
-	struct {
-		int font;
-		int fontSize;
-		int textColor;
-		int bgColor;
-		void clear() { font = fontSize = textColor = bgColor = -1; }
-	} context, defaultContext;
-
-	string header;
+	std::deque<Context> contexts;
 };
 
 tstring HtmlToRtf::convert(const string& html, dwt::RichTextBox* box) {
@@ -67,51 +73,31 @@ tstring HtmlToRtf::convert(const string& html, dwt::RichTextBox* box) {
 }
 
 Parser::Parser(dwt::RichTextBox* box) {
-	auto lf = box->getFont()->getLogFont();
-	defaultContext.font = addFont("{\\f0\\fnil\\fcharset" + Util::toString(lf.lfCharSet) + " " + Text::fromT(lf.lfFaceName) + ";}");
-	defaultContext.fontSize = rtfFontSize(abs(lf.lfHeight));
-
-	defaultContext.textColor = addColor(box->getTextColor());
-	defaultContext.bgColor = addColor(box->getBgColor());
-
-	context.clear();
+	// create a default context with the Rich Edit control's current formatting.
+	contexts.emplace_back(box, *this);
+	write(contexts.back());
 }
-
-int Parser::addFont(string&& font) {
-	auto ret = fonts.size();
-	fonts.push_back(std::forward<string>(font));
-	return ret;
-}
-
-int Parser::rtfFontSize(float px) {
-	return px * 72.0 / 96.0 // px -> font points
-		* dwt::util::dpiFactor() // respect DPI settings
-		* 2.0; // RTF font sizes are expressed in half-points
-}
-
-int Parser::addColor(COLORREF color) {
-	auto ret = colors.size();
-	colors.push_back("\\red" + Util::toString(GetRValue(color)) +
-		"\\green" + Util::toString(GetGValue(color)) +
-		"\\blue" + Util::toString(GetBValue(color)) + ";");
-	return ret;
-}
-
-static const string styleAttr = "style";
-static const string fontStyle = "font";
-static const string textColorStyle = "color";
-static const string bgColorStyle = "background-color";
-static string tmp;
 
 void Parser::startTag(const string& name, StringPairList& attribs, bool simple) {
-	if(attribs.empty()) {
+	if(simple) {
 		return;
 	}
 
-	const auto& style = getAttrib(attribs, styleAttr, 0);
+	contexts.emplace_back(contexts.back());
 
-	enum { Declaration, Font, TextColor, BgColor } state = Declaration;
+	if(name == "b") {
+		contexts.back().setFlag(Context::Bold);
+	} else if(name == "i") {
+		contexts.back().setFlag(Context::Italic);
+	} else if(name == "u") {
+		contexts.back().setFlag(Context::Underlined);
+	}
 
+	const auto& style = getAttrib(attribs, "style", 0);
+
+	enum { Declaration, Font, Decoration, TextColor, BgColor, Unknown } state = Declaration;
+
+	string tmp;
 	size_t i = 0, j;
 	while((j = style.find_first_of(":;", i)) != string::npos) {
 		tmp = style.substr(i, j - i);
@@ -120,9 +106,11 @@ void Parser::startTag(const string& name, StringPairList& attribs, bool simple) 
 		switch(state) {
 		case Declaration:
 			{
-				if(tmp == fontStyle) { state = Font; }
-				else if(tmp == textColorStyle) { state = TextColor; }
-				else if(tmp == bgColorStyle) { state = BgColor; }
+				if(tmp == "font") { state = Font; }
+				else if(tmp == "color") { state = TextColor; }
+				else if(tmp == "text-decoration") { state = Decoration; }
+				else if(tmp == "background-color") { state = BgColor; }
+				else { state = Unknown; }
 				break;
 			}
 
@@ -133,40 +121,92 @@ void Parser::startTag(const string& name, StringPairList& attribs, bool simple) 
 				break;
 			}
 
+		case Decoration:
+			{
+				parseDecoration(tmp);
+				state = Declaration;
+				break;
+			}
+
 		case TextColor:
 			{
-				parseColor(context.textColor, tmp);
+				parseColor(contexts.back().textColor, tmp);
 				state = Declaration;
 				break;
 			}
 
 		case BgColor:
 			{
-				parseColor(context.bgColor, tmp);
+				parseColor(contexts.back().bgColor, tmp);
+				state = Declaration;
+				break;
+			}
+
+		case Unknown:
+			{
 				state = Declaration;
 				break;
 			}
 		}
 	}
+
+	write(contexts.back());
 }
 
-void Parser::endTag(const string& name, const string& data) {
-	if(context.font == -1) { context.font = defaultContext.font; }
-	if(context.fontSize == -1) { context.fontSize = defaultContext.fontSize; }
-	if(context.textColor == -1) { context.textColor = defaultContext.textColor; }
-	if(context.bgColor == -1) { context.bgColor = defaultContext.bgColor; }
+void Parser::data(const string& data) {
+	ret += dwt::RichTextBox::rtfEscape(Text::toT(Text::toDOS(data)));
+}
 
-	ret += Text::toT("{\\f" + Util::toString(context.font) + "\\fs" + Util::toString(context.fontSize) +
-		"\\cf" + Util::toString(context.textColor) + "\\highlight" + Util::toString(context.bgColor) +
-		header + " ") + dwt::RichTextBox::rtfEscape(Text::toT(Text::toDOS(data))) + _T("}");
-
-	context.clear();
-	header.clear();
+void Parser::endTag(const string& name) {
+	ret += _T("}");
+	contexts.pop_back();
 }
 
 tstring Parser::finalize() {
 	return Text::toT("{{\\fonttbl" + Util::toString(Util::emptyString, fonts) +
 		"}{\\colortbl" + Util::toString(Util::emptyString, colors) + "}") + ret + _T("}");
+}
+
+Parser::Context::Context(dwt::RichTextBox* box, Parser& parser) {
+	// create a default context with the Rich Edit control's current formatting.
+	auto lf = box->getFont()->getLogFont();
+	font = parser.addFont("\\fnil\\fcharset" + Util::toString(lf.lfCharSet) + " " + Text::fromT(lf.lfFaceName));
+	fontSize = rtfFontSize(abs(lf.lfHeight));
+	if(lf.lfWeight >= FW_BOLD) { setFlag(Bold); }
+	if(lf.lfItalic) { setFlag(Italic); }
+
+	textColor = parser.addColor(box->getTextColor());
+	bgColor = parser.addColor(box->getBgColor());
+}
+
+void Parser::write(Context& context) {
+	string header;
+	if(context.isSet(Context::Bold)) { header += "\\b"; }
+	if(context.isSet(Context::Italic)) { header += "\\i"; }
+	if(context.isSet(Context::Underlined)) { header += "\\ul"; }
+	ret += Text::toT("{\\f" + Util::toString(context.font) + "\\fs" + Util::toString(context.fontSize) +
+		"\\cf" + Util::toString(context.textColor) + "\\highlight" + Util::toString(context.bgColor) +
+		header + " ");
+}
+
+size_t Parser::addFont(string&& font) {
+	auto ret = fonts.size();
+	fonts.push_back("{\\f" + Util::toString(ret) + std::forward<string>(font) + ";}");
+	return ret;
+}
+
+int Parser::rtfFontSize(float px) {
+	return px * 72.0 / 96.0 // px -> font points
+		* dwt::util::dpiFactor() // respect DPI settings
+		* 2.0; // RTF font sizes are expressed in half-points
+}
+
+size_t Parser::addColor(COLORREF color) {
+	auto ret = colors.size();
+	colors.push_back("\\red" + Util::toString(GetRValue(color)) +
+		"\\green" + Util::toString(GetGValue(color)) +
+		"\\blue" + Util::toString(GetBValue(color)) + ";");
+	return ret;
 }
 
 void Parser::parseFont(const string& s) {
@@ -195,32 +235,45 @@ void Parser::parseFont(const string& s) {
 	family.erase(std::remove(family.begin(), family.end(), '\''), family.end());
 	if(family.empty())
 		return;
-	context.font = addFont("{\\f" + Util::toString(context.font) + "\\fnil " + std::move(family) + ";}");
+	contexts.back().font = addFont("\\fnil " + std::move(family));
 
 	// parse the second to last param (font size).
 	/// @todo handle more than px sizes
 	auto& size = *(l.end() - 2);
 	if(size.size() > 2 && *(size.end() - 2) == 'p' && *(size.end() - 1) == 'x') { // 16px
-		context.fontSize = rtfFontSize(Util::toFloat(size.substr(0, size.size() - 2)));
+		contexts.back().fontSize = rtfFontSize(Util::toFloat(size.substr(0, size.size() - 2)));
 	}
 
 	// parse the optional third to last param (font weight).
-	if(params >= 3 && Util::toInt(*(l.end() - 3)) >= FW_BOLD) {
-		header += "\\b";
+	if(params > 2 && Util::toInt(*(l.end() - 3)) >= FW_BOLD) {
+		contexts.back().setFlag(Context::Bold);
 	}
 
 	// parse the optional first param (font style).
-	if(params >= 4 && l[0] == "italic") {
-		header += "\\i";
+	if(params > 2 && l[0] == "italic") {
+		contexts.back().setFlag(Context::Italic);
 	}
 }
 
-void Parser::parseColor(int& contextColor, const string& s) {
+void Parser::parseDecoration(const string& s) {
+	if(s.find("underline")) {
+		contexts.back().setFlag(Context::Underlined);
+	}
+}
+
+void Parser::parseColor(size_t& contextColor, const string& s) {
 	auto sharp = s.find('#');
 	if(sharp != string::npos && s.size() > sharp + 6) {
 		try {
+#if defined(__MINGW32__) && defined(_GLIBCXX_HAVE_BROKEN_VSWPRINTF)
+			/// @todo use stol on MinGW when it's available
+			unsigned int color = 0;
+			auto colStr = s.substr(sharp + 1, 6);
+			sscanf(colStr.c_str(), "%X", &color);
+#else
 			size_t pos = 0;
 			auto color = std::stol(s.substr(sharp + 1, 6), &pos, 16);
+#endif
 			contextColor = addColor(RGB((color & 0xFF0000) >> 16, (color & 0xFF00) >> 8, color & 0xFF));
 		} catch(const std::exception& e) { dcdebug("color parsing exception: %s with str: %s\n", e.what(), s.c_str()); }
 	}

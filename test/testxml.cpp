@@ -15,7 +15,7 @@ typedef std::unordered_map<std::string, int> Counter;
 class Collector : public SimpleXMLReader::CallBack {
 public:
 
-	virtual void startTag(const std::string& name, dcpp::StringPairList& attribs, bool simple) {
+	void startTag(const std::string& name, dcpp::StringPairList& attribs, bool simple) {
 		if(simple) {
 			simpleTags[name]++;
 		} else {
@@ -28,9 +28,12 @@ public:
 		}
 	}
 
-	virtual void endTag(const std::string& name, const std::string& data) {
-		endTags[name]++;
+	void data(const std::string& data) {
 		dataValues[data]++;
+	}
+
+	void endTag(const std::string& name) {
+		endTags[name]++;
 	}
 
 	Counter simpleTags;
@@ -46,7 +49,7 @@ TEST(testxml, test_simple)
 	Collector collector;
     SimpleXMLReader reader(&collector);
 
-    const char xml[] = "<?xml version='1.0' encoding='utf-8' ?><complex a='1'> <simple b=\"2\"/><complex2> data </complex2></complex>";
+    const char xml[] = "<?xml version='1.0' encoding='utf-8' ?><complex a='1'> data <simple b=\"2\"/><complex2> data </complex2></complex>";
     for(size_t i = 0, iend = sizeof(xml); i < iend; ++i) {
     	reader.parse(xml + i, 1);
     }
@@ -60,7 +63,7 @@ TEST(testxml, test_simple)
     ASSERT_EQ(collector.attribValues["2"], 1);
     ASSERT_EQ(collector.startTags["complex2"], 1);
     ASSERT_EQ(collector.endTags["complex2"], 1);
-    ASSERT_EQ(collector.dataValues[" data "], 1);
+    ASSERT_EQ(collector.dataValues[" data "], 2);
 }
 
 TEST(testxml, test_entref)

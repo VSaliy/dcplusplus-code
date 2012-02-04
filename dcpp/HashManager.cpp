@@ -343,8 +343,8 @@ public:
 	HashLoader(HashManager::HashStore& s) :
 		store(s), size(0), timeStamp(0), version(HASH_FILE_VERSION), inTrees(false), inFiles(false), inHashStore(false) {
 	}
-	virtual void startTag(const string& name, StringPairList& attribs, bool simple);
-	virtual void endTag(const string& name, const string& data);
+	void startTag(const string& name, StringPairList& attribs, bool simple);
+	void endTag(const string& name);
 
 private:
 	HashManager::HashStore& store;
@@ -423,7 +423,7 @@ void HashLoader::startTag(const string& name, StringPairList& attribs, bool simp
 	}
 }
 
-void HashLoader::endTag(const string& name, const string&) {
+void HashLoader::endTag(const string& name) {
 	if (name == sFile) {
 		file.clear();
 	}

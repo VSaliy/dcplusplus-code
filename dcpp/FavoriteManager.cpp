@@ -278,8 +278,7 @@ bool FavoriteManager::renameFavoriteDir(const string& aName, const string& anoth
 class XmlListLoader : public SimpleXMLReader::CallBack {
 public:
 	XmlListLoader(HubEntryList& lst) : publicHubs(lst) { }
-	virtual ~XmlListLoader() { }
-	virtual void startTag(const string& name, StringPairList& attribs, bool) {
+	void startTag(const string& name, StringPairList& attribs, bool) {
 		if(name == "Hub") {
 			const string& name = getAttrib(attribs, "Name", 0);
 			const string& server = getAttrib(attribs, "Address", 1);
@@ -296,9 +295,6 @@ public:
 			/// @todo change to emplace_back when MSVC has templates with var args, thus allowing these 12 arguments! (boost emulation only goes to 10)
 			publicHubs.push_back(HubEntry(name, server, description, users, country, shared, minShare, minSlots, maxHubs, maxUsers, reliability, rating));
 		}
-	}
-	virtual void endTag(const string&, const string&) {
-
 	}
 private:
 	HubEntryList& publicHubs;
