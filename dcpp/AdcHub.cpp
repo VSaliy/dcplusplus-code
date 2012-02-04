@@ -519,7 +519,7 @@ void AdcHub::handle(AdcCommand::RES, AdcCommand& c) noexcept {
 
 void AdcHub::handle(AdcCommand::GET, AdcCommand& c) noexcept {
 	if(c.getParameters().size() < 5) {
-		if(c.getParameters().size() > 0) {
+		if(!c.getParameters().empty()) {
 			if(c.getParam(0) == "blom") {
 				send(AdcCommand(AdcCommand::SEV_FATAL, AdcCommand::ERROR_PROTOCOL_GENERIC,
 					"Too few parameters for blom", AdcCommand::TYPE_HUB));
@@ -1024,7 +1024,7 @@ void AdcHub::info(bool /*alwaysSend*/) {
 
 	addParam(lastInfoMap, c, "SU", su);
 
-	if(c.getParameters().size() > 0) {
+	if(!c.getParameters().empty()) {
 		send(c);
 	}
 }

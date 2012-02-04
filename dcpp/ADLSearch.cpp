@@ -219,7 +219,7 @@ void ADLSearchManager::load() {
 					}
 
 					// Add search to collection
-					if(search.searchString.size() > 0) {
+					if(!search.searchString.empty()) {
 						collection.push_back(search);
 					}
 

@@ -313,7 +313,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 		i = j + 1;
 		string terms = unescape(param.substr(i));
 
-		if(terms.size() > 0) {
+		if(!terms.empty()) {
 			if(seeker.compare(0, 4, "Hub:") == 0) {
 				OnlineUser* u = findUser(seeker.substr(4));
 
@@ -356,7 +356,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 
 		string tmpDesc = unescape(param.substr(i, j-i));
 		// Look for a tag...
-		if(tmpDesc.size() > 0 && tmpDesc[tmpDesc.size()-1] == '>') {
+		if(!tmpDesc.empty() && tmpDesc[tmpDesc.size()-1] == '>') {
 			x = tmpDesc.rfind('<');
 			if(x != string::npos) {
 				// Hm, we have something...disassemble it...

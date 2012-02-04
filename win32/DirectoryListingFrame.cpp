@@ -786,7 +786,7 @@ void DirectoryListingFrame::addTargets(Menu* menu, ItemInfo* ii) {
 		}
 	}
 
-	if(WinUtil::lastDirs.size() > 0) {
+	if(!WinUtil::lastDirs.empty()) {
 		sub->appendSeparator();
 
 		for(i = 0; i < WinUtil::lastDirs.size(); ++i) {

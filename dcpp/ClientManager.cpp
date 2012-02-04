@@ -512,7 +512,7 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 				str += '|';
 			}
 
-			if(str.size() > 0)
+			if(!str.empty())
 				aClient->send(str);
 
 		} else {

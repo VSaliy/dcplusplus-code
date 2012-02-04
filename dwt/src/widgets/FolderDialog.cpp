@@ -65,7 +65,7 @@ bool FolderDialog::open(tstring& folder) {
 		if ( ::SHGetPathFromIDList( lpIDL, buf ) ) {
 			folder = buf;
 
-			if(folder.size() > 0 && folder[folder.size()-1] != _T('\\')) {
+			if(!folder.empty() && folder[folder.size()-1] != _T('\\')) {
 				folder += _T('\\');
 			}
 

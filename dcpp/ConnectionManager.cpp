@@ -434,7 +434,7 @@ void ConnectionManager::on(UserConnectionListener::MyNick, UserConnection* aSour
 		return;
 	}
 
-	dcassert(aNick.size() > 0);
+	dcassert(!aNick.empty());
 	dcdebug("ConnectionManager::onMyNick %p, %s\n", (void*)aSource, aNick.c_str());
 	dcassert(!aSource->getUser());
 

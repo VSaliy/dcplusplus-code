@@ -568,7 +568,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 		// This will be pretty slow on large queues...
 		if(BOOLSETTING(DONT_DL_ALREADY_QUEUED) && !(aFlags & QueueItem::FLAG_USER_LIST)) {
 			auto ql = fileQueue.find(root);
-			if (ql.size() > 0) {
+			if (!ql.empty()) {
 				// Found one or more existing queue items, lets see if we can add the source to them
 				bool sourceAdded = false;
 				for(auto i = ql.begin(); i != ql.end(); ++i) {
