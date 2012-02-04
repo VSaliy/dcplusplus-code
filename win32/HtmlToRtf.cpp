@@ -23,6 +23,7 @@
 
 #include <dcpp/debug.h>
 #include <dcpp/Flags.h>
+#include <dcpp/ScopedFunctor.h>
 #include <dcpp/SimpleXML.h>
 #include <dcpp/StringTokenizer.h>
 #include <dcpp/Text.h>
@@ -62,7 +63,7 @@ private:
 	StringList fonts;
 	StringList colors;
 
-	std::deque<Context> contexts;
+	vector<Context> contexts;
 };
 
 tstring HtmlToRtf::convert(const string& html, dwt::RichTextBox* box) {
@@ -79,11 +80,16 @@ Parser::Parser(dwt::RichTextBox* box) {
 }
 
 void Parser::startTag(const string& name, StringPairList& attribs, bool simple) {
+	if(name == "br") {
+		ret += _T("\\line\n");
+	}
+
 	if(simple) {
 		return;
 	}
 
 	contexts.emplace_back(contexts.back());
+	ScopedFunctor([this] { write(contexts.back()); });
 
 	if(name == "b") {
 		contexts.back().setFlag(Context::Bold);
@@ -149,8 +155,6 @@ void Parser::startTag(const string& name, StringPairList& attribs, bool simple) 
 			}
 		}
 	}
-
-	write(contexts.back());
 }
 
 void Parser::data(const string& data) {
