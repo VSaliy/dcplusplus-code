@@ -421,7 +421,7 @@ bool SimpleXMLReader::entref(string& d) {
 			d.append(1, '\'');
 			advancePos(6);
 			return true;
-			
+
 		// Ignore &#00000 decimal and &#x0000 hex values to avoid error, they wouldn't be parsed anyway
 		} else if(charAt(1) == '#' && isdigit(charAt(2)) && charAt(3) == ';') {
 			advancePos(4);
@@ -465,12 +465,6 @@ bool SimpleXMLReader::content() {
 	}
 
 	int c = charAt(0);
-	if(c == '<') {
-		if(!value.empty()) {
-			error("Mixed content not supported");
-		}
-		return false;
-	}
 
 	if(c == '&') {
 		return entref(value);
@@ -508,11 +502,7 @@ bool SimpleXMLReader::elementEndEnd() {
 	}
 
 	if(charAt(0) == '>') {
-		if(!encoding.empty() && encoding != Text::utf8) {
-			value = Text::toUtf8(encoding);
-		}
-		cb->endTag(elements.back(), value);
-		value.clear();
+		cb->endTag(elements.back());
 		elements.pop_back();
 
 		state = STATE_CONTENT;
@@ -718,8 +708,11 @@ bool SimpleXMLReader::process() {
 			return true;
 		}
 
-		if(state == STATE_CONTENT && state != oldState) {
-			// might contain whitespace from previous unfruitful contents (that turned out to be elements / comments)
+		if(oldState == STATE_CONTENT && state != oldState && !value.empty()) {
+			if(!encoding.empty() && encoding != Text::utf8) {
+				value = Text::toUtf8(value, encoding);
+			}
+			cb->data(value);
 			value.clear();
 		}
 

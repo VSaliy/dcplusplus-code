@@ -203,14 +203,15 @@ private:
 	class TagReader : public SimpleXMLReader::CallBack {
 	public:
 		TagReader(Tag* root) : cur(root) { }
-		virtual bool getData(string&) { return false; }
-		virtual void startTag(const string& name, StringPairList& attribs, bool simple) {
+		void startTag(const string& name, StringPairList& attribs, bool simple) {
 			cur->children.push_back(new Tag(name, attribs, cur));
 			if(!simple)
 				cur = cur->children.back();
 		}
-		virtual void endTag(const string&, const string& d) {
-			cur->data = d;
+		void data(const string& data) {
+			cur->data += data;
+		}
+		void endTag(const string&) {
 			if(cur->parent == NULL)
 				throw SimpleXMLException("Invalid end tag");
 			cur = cur->parent;

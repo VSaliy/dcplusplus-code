@@ -355,7 +355,7 @@ static const string STTH = "TTH";
 
 struct ShareLoader : public SimpleXMLReader::CallBack {
 	ShareLoader(ShareManager::DirList& aDirs) : dirs(aDirs), cur(0), depth(0) { }
-	virtual void startTag(const string& name, StringPairList& attribs, bool simple) {
+	void startTag(const string& name, StringPairList& attribs, bool simple) {
 		if(name == SDIRECTORY) {
 			const string& name = getAttrib(attribs, SNAME, 0);
 			if(!name.empty()) {
@@ -390,7 +390,7 @@ struct ShareLoader : public SimpleXMLReader::CallBack {
 			cur->files.insert(ShareManager::Directory::File(fname, Util::toInt64(size), cur, TTHValue(root)));
 		}
 	}
-	virtual void endTag(const string& name, const string&) {
+	void endTag(const string& name) {
 		if(name == SDIRECTORY) {
 			depth--;
 			if(cur) {

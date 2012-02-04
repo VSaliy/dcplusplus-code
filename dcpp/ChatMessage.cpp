@@ -88,29 +88,31 @@ messageTimestamp(messageTimestamp)
 		return stream.str();
 	};
 
+	htmlMessage += "<span id=\"message\">";
+
 	if(BOOLSETTING(TIME_STAMPS)) {
-		tmp = "[" + Util::getShortTimeString(timestamp) + "] ";
-		message += tmp;
-		htmlMessage += addSpan("timestamp", tmp, Util::emptyString);
+		tmp = "[" + Util::getShortTimeString(timestamp) + "]";
+		message += tmp + " ";
+		htmlMessage += addSpan("timestamp", tmp, Util::emptyString) + " ";
 	}
 
 	if(messageTimestamp) {
-		tmp = "["; tmp += str(F_("Sent %1%") % Util::getShortTimeString(messageTimestamp)); tmp += "] ";
-		message += tmp;
-		htmlMessage += addSpan("messageTimestamp", tmp, Util::emptyString);
+		tmp = "["; tmp += str(F_("Sent %1%") % Util::getShortTimeString(messageTimestamp)); tmp += "]";
+		message += tmp + " ";
+		htmlMessage += addSpan("messageTimestamp", tmp, Util::emptyString) + " ";
 	}
 
 	tmp = from->getIdentity().getNick();
 	// let's *not* obey the spec here and add a space after the star. :P
-	tmp = thirdPerson ? "* " + tmp + " " : "<" + tmp + "> ";
-	message += tmp;
+	tmp = thirdPerson ? "* " + tmp + " " : "<" + tmp + ">";
+	message += tmp + " ";
 
 	auto style = from->getIdentity().getStyle();
 	string styleAttr;
 	if(!style.font.empty()) { styleAttr += "font: " + cssFont(style.font) + ";"; }
 	if(style.textColor != -1) { styleAttr += "color: #" + cssColor(style.textColor) + ";"; }
 	if(style.bgColor != -1) { styleAttr += "background-color: #" + cssColor(style.bgColor) + ";"; }
-	htmlMessage += addSpan("nick", tmp, styleAttr);
+	htmlMessage += addSpan("nick", tmp, styleAttr) + " ";
 
 	// Check all '<' and '[' after newlines as they're probably pastes...
 	tmp = text;
@@ -126,7 +128,7 @@ messageTimestamp(messageTimestamp)
 	}
 
 	message += tmp;
-	htmlMessage += addSpan("message", tmp, Util::emptyString);
+	htmlMessage += addSpan("text", tmp, Util::emptyString) + "</span>";
 
 	/// @todo send this to plugins
 }
