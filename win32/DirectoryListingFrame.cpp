@@ -506,7 +506,7 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 		dl->save(path);
 
 		// remove previous ADLS matches.
-		for(auto dir = dirs->getChild(treeRoot); dir; dir = dirs->getNextSibling(dir)) {
+		for(auto dir = dirs->getChild(treeRoot); dir;) {
 			auto d = dirs->getData(dir)->dir;
 			if(d->getAdls()) {
 				HTREEITEM child;
@@ -514,9 +514,12 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 					dirs->erase(child);
 				}
 				dirs->erase(dir);
+				dir = dirs->getChild(treeRoot);
 				auto& pdirs = d->getParent()->directories;
 				pdirs.erase(std::remove(pdirs.begin(), pdirs.end(), d), pdirs.end());
 				delete d;
+			} else {
+				dir = dirs->getNextSibling(dir);
 			}
 		}
 		ADLSearchManager::getInstance()->matchListing(*dl);
