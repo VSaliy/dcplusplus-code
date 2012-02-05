@@ -59,13 +59,15 @@ void PrivateFrame::openWindow(TabViewPtr parent, const HintedUser& replyTo_, con
 bool PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
 	const ChatMessage& message, const string& hubHint)
 {
-	if(frames.size() >= SETTING(MAX_PM_WINDOWS)) {
-		return false;
-	}
-
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
 	auto i = frames.find(user);
 	if(i == frames.end()) {
+		// creating a new window
+
+		if(frames.size() >= SETTING(MAX_PM_WINDOWS)) {
+			return false;
+		}
+
 		auto p = new PrivateFrame(parent, HintedUser(user, hubHint));
 		if(!BOOLSETTING(POPUNDER_PM))
 			p->activate();
@@ -82,6 +84,7 @@ bool PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 		WinUtil::notify(WinUtil::NOTIFICATION_PM_WINDOW, Text::toT(message.message), [user] { activateWindow(user); });
 
 	} else {
+		// send the message to the existing window
 		i->second->addChat(message);
 	}
 

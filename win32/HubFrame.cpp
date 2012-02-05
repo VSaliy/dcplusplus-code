@@ -660,7 +660,11 @@ void HubFrame::onPrivateMessage(const ChatMessage& message) {
 		addStatus(str(TF_("Ignored message: %1%") % Text::toT(message.message)), false);
 
 	} else {
-		if(!window || !PrivateFrame::gotMessage(getParent(), message.from, message.to, message.replyTo, message, url)) {
+		if(window && !PrivateFrame::gotMessage(getParent(), message.from, message.to, message.replyTo, message, url)) {
+			window = false;
+			addStatus(T_("Failed to create a new PM window; check the \"Max PM windows\" value in Settings > Experts only"));
+		}
+		if(!window) {
 			/// @todo add formatting here (for PMs in main chat)
 			addChat(str(TF_("Private message from %1%: %2%") % getNick(message.from) % Text::toT(message.message)));
 		}
