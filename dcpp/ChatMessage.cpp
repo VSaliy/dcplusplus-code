@@ -92,7 +92,6 @@ messageTimestamp(messageTimestamp)
 
 	if(BOOLSETTING(TIME_STAMPS)) {
 		tmp = "[" + Util::getShortTimeString(timestamp) + "]";
-		message += tmp + " ";
 		htmlMessage += addSpan("timestamp", tmp, Util::emptyString) + " ";
 	}
 

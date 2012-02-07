@@ -71,27 +71,33 @@ protected:
 
 	virtual ~AspectChat() { }
 
-private:
-	tstring formatText(const tstring& message) {
-		/// @todo factor out to dwt
-		/// @todo Text::toT works but _T doesn't, verify this.
-		tstring pre;
-		if(chat->length() > 0)
-			pre += _T("\r\n");
-		return Text::toT("{\\urtf1\n") + dwt::RichTextBox::rtfEscape(pre) + message + Text::toT("}\n");
-	}
-
-public:
+	/// add a chat message and call addedChat.
 	void addChat(const tstring& message) {
-		chat->addTextSteady(formatText(dwt::RichTextBox::rtfEscape(message)));
+		addChat_(dwt::RichTextBox::rtfEscape(message));
 		t().addedChat(message);
 	}
 
+	/// add a ChatMessage and call addedChat.
 	void addChat(const ChatMessage& message) {
-		chat->addTextSteady(formatText(HtmlToRtf::convert(message.htmlMessage, chat)));
+		addChat_(HtmlToRtf::convert(message.htmlMessage, chat));
 		t().addedChat(Text::toT(message.message));
 	}
 
+	/// just add to the chat; don't call addedChat.
+	void addChatRaw(const tstring& message) {
+		addChat_(dwt::RichTextBox::rtfEscape(message));
+	}
+
+private:
+	/// @internal @param message RTF-formatted message.
+	void addChat_(tstring message) {
+		/// @todo factor out to dwt
+		if(chat->length() > 0)
+			message = _T("\\line\n") + message;
+		chat->addTextSteady(_T("{\\urtf1\n") + message + _T("}\n"));
+	}
+
+protected:
 	void readLog(const string& logPath, const unsigned setting) {
 		if(setting == 0)
 			return;
@@ -117,7 +123,7 @@ public:
 
 		const size_t linesCount = lines.size();
 		for(size_t i = (linesCount > setting) ? (linesCount - setting) : 0; i < linesCount; ++i) {
-			addChat(_T("- ") + Text::toT(lines[i]));
+			addChatRaw(_T("- ") + Text::toT(lines[i]));
 		}
 	}
 

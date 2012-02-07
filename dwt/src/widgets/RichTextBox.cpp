@@ -201,7 +201,7 @@ void RichTextBox::addTextSteady(const tstring& txtRaw) {
 	bool scroll = scrollIsAtEnd();
 
 	{
-		util::HoldRedraw hold(this, !scroll);
+		util::HoldRedraw hold(this);
 		std::pair<int, int> cr = getCaretPosRange();
 		std::string txt = escapeUnicode(txtRaw);
 
@@ -213,7 +213,6 @@ void RichTextBox::addTextSteady(const tstring& txtRaw) {
 		size_t len = txtRaw.size();
 		size_t limit = getTextLimit();
 		if(length() + len > limit) {
-			util::HoldRedraw hold2(this, scroll);
 			if(len >= limit) {
 				charsRemoved = length();
 			} else {

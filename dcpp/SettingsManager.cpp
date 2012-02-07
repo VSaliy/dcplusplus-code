@@ -327,7 +327,7 @@ SettingsManager::SettingsManager()
 	setDefault(USERS_FILTER_FAVORITE, true);
 	setDefault(USERS_FILTER_QUEUE, false);
 	setDefault(USERS_FILTER_WAITING, false);
-	setDefault(MAX_PM_WINDOWS, 20);
+	setDefault(MAX_PM_WINDOWS, 50);
 
 	setSearchTypeDefaults();
 
