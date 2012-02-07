@@ -209,10 +209,14 @@ void PrivateFrame::addedChat(const tstring& message) {
 }
 
 void PrivateFrame::addStatus(const tstring& text) {
-	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString() + "] ") + text);
+	auto message = Text::toT("[" + Util::getShortTimeString() + "] ") + text;
 
-	if(BOOLSETTING(STATUS_IN_CHAT))
-		addChat(_T("*** ") + text);
+	status->setText(STATUS_STATUS, message);
+
+	if(BOOLSETTING(STATUS_IN_CHAT)) {
+		addChat(_T("*** ") + message);
+		addedChat(text); // addedChat expects a message with no timestamp
+	}
 }
 
 bool PrivateFrame::preClosing() {

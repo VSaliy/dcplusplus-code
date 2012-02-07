@@ -536,12 +536,15 @@ void HubFrame::addedChat(const tstring& message) {
 }
 
 void HubFrame::addStatus(const tstring& text, bool legitimate /* = true */) {
-	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString() + "] ") + text);
+	auto message = Text::toT("[" + Util::getShortTimeString() + "] ") + text;
+
+	status->setText(STATUS_STATUS, message);
 
 	if(legitimate) {
-		if(BOOLSETTING(STATUS_IN_CHAT))
-			addChat(_T("*** ") + text);
-		else
+		if(BOOLSETTING(STATUS_IN_CHAT)) {
+			addChatRaw(_T("*** ") + message);
+			addedChat(text); // addedChat expects a message with no timestamp
+		} else
 			setDirty(SettingsManager::BOLD_HUB);
 	}
 
