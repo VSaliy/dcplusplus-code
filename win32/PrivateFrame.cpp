@@ -214,7 +214,7 @@ void PrivateFrame::addStatus(const tstring& text) {
 	status->setText(STATUS_STATUS, message);
 
 	if(BOOLSETTING(STATUS_IN_CHAT)) {
-		addChat(_T("*** ") + message);
+		addChatRaw(_T("*** ") + message);
 		addedChat(text); // addedChat expects a message with no timestamp
 	}
 }
