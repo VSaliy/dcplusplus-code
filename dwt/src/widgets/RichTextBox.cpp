@@ -80,15 +80,22 @@ void RichTextBox::create(const Seed& cs) {
 		// paint a background in case the text doesn't span the whole box.
 		canvas.fill(rect, Brush(bgColor));
 
-		::FORMATRANGE format = { canvas.handle(), canvas.handle() };
+		FORMATRANGE format = { canvas.handle(), canvas.handle() };
 		format.rc = rect;
-		format.rc.bottom += 2; // useful when edge lines are cropped.
+		format.rc.bottom += abs(getFont()->getLogFont().lfHeight); // make room for the last line
 		// convert to twips and respect DPI settings.
 		format.rc.right *= 1440 / canvas.getDeviceCaps(LOGPIXELSX);
 		format.rc.bottom *= 1440 / canvas.getDeviceCaps(LOGPIXELSY);
 		format.rcPage = format.rc;
-		format.chrg.cpMin = lineIndex(getFirstVisibleLine());
+
+		// find the first fully visible line (sometimes they're partially cut).
+		for(auto line = getFirstVisibleLine(); ; ++line) {
+			format.chrg.cpMin = lineIndex(line);
+			if(posFromChar(format.chrg.cpMin).y >= 0)
+				break;
+		}
 		format.chrg.cpMax = -1;
+
 		sendMessage(EM_FORMATRANGE, 1, reinterpret_cast<LPARAM>(&format));
 		sendMessage(EM_FORMATRANGE); // "free the cached information" as MSDN recommends.
 	});
