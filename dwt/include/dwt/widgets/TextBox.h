@@ -145,7 +145,7 @@ public:
 	  */
 	int getTextLimit() const ;
 
-	int lineIndex(int l = -1);
+	int lineIndex(int line = -1);
 
 	int lineFromChar(int c = -1);
 
@@ -277,8 +277,6 @@ public:
 
 	int lineFromPos(const ScreenCoordinate& pt);
 
-	int lineIndex(int line);
-
 	tstring getLine(int line);
 
 	tstring textUnderCursor(const ScreenCoordinate& p, bool includeSpaces = false);
@@ -398,8 +396,8 @@ inline int TextBoxBase::lineFromChar( int c ) {
 	return this->sendMessage( EM_LINEFROMCHAR, c );
 }
 
-inline int TextBoxBase::lineIndex( int l ) {
-	return this->sendMessage( EM_LINEINDEX, l );
+inline int TextBoxBase::lineIndex(int line) {
+	return static_cast<int>(this->sendMessage(EM_LINEINDEX, static_cast<WPARAM>(line)));
 }
 
 inline void TextBoxBase::setModify( bool modify ) {
@@ -436,10 +434,6 @@ inline int TextBox::lineFromPos(const ScreenCoordinate& pt) {
 	ClientCoordinate cc(pt, this);
 	LPARAM lp = MAKELPARAM(cc.x(), cc.y());
 	return HIWORD(sendMessage(EM_CHARFROMPOS, 0, lp));
-}
-
-inline int TextBox::lineIndex(int line) {
-	return static_cast<int>(sendMessage(EM_LINEINDEX, static_cast<WPARAM>(line)));
 }
 
 inline int TextBoxBase::lineLength(int c) {
