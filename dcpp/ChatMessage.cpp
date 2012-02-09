@@ -88,7 +88,7 @@ messageTimestamp(messageTimestamp)
 		return stream.str();
 	};
 
-	htmlMessage += "<span id=\"message\">";
+	htmlMessage += "<span id=\"message\" style=\"white-space: pre-wrap;\">";
 
 	if(BOOLSETTING(TIME_STAMPS)) {
 		tmp = "[" + Util::getShortTimeString(timestamp) + "]";
