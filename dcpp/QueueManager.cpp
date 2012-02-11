@@ -1061,8 +1061,9 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 			} else if(d->getType() == Transfer::TYPE_FILE) {
 				q->addSegment(d->getSegment());
 
-				auto crcError = q->isFinished() && BOOLSETTING(SFV_CHECK) && checkSfv(q, d.get());
+				auto crcChecked = q->isFinished() && BOOLSETTING(SFV_CHECK) && checkSfv(q, d.get());
 
+				// In case of a failed crc check segments are reset
 				if(q->isFinished()) {
 					// Check if we need to move the file
 					if(!d->getTempTarget().empty() && (Util::stricmp(d->getPath().c_str(), d->getTempTarget().c_str()) != 0) ) {
@@ -1070,7 +1071,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 					}
 
 					if (BOOLSETTING(LOG_FINISHED_DOWNLOADS)) {
-						logFinishedDownload(q, d.get(), crcError);
+						logFinishedDownload(q, d.get(), crcChecked);
 					}
 
 					userQueue.remove(q);
@@ -1620,11 +1621,11 @@ bool QueueManager::checkSfv(QueueItem* qi, Download* d) {
 			}
 
 			fire(QueueManagerListener::CRCFailed(), d, _("CRC32 inconsistency (SFV-Check)"));
-			return true;
+		} else {
+			dcdebug("QueueManager: CRC32 match for %s\n", qi->getTarget().c_str());
+			fire(QueueManagerListener::CRCChecked(), d);
 		}
-
-		dcdebug("QueueManager: CRC32 match for %s\n", qi->getTarget().c_str());
-		fire(QueueManagerListener::CRCChecked(), d);
+		return true;
 	}
 	return false;
 }
@@ -1637,14 +1638,14 @@ uint32_t QueueManager::calcCrc32(const string& file) {
 	return crc32.getValue();
 }
 
-void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcError)
+void QueueManager::logFinishedDownload(QueueItem* qi, Download* d, bool crcChecked)
 {
 	ParamMap params;
 	params["target"] = qi->getTarget();
 	params["fileSI"] = Util::toString(qi->getSize());
 	params["fileSIshort"] = Util::formatBytes(qi->getSize());
 	params["fileTR"] = qi->getTTH().toBase32();
-	params["sfv"] = Util::toString(crcError ? 1 : 0);
+	params["sfv"] = Util::toString(crcChecked ? 1 : 0);
 
 	FinishedManager::getInstance()->getParams(qi->getTarget(), params);
 
