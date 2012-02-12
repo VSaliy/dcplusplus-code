@@ -64,7 +64,7 @@ bool PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 	if(i == frames.end()) {
 		// creating a new window
 
-		if(frames.size() >= SETTING(MAX_PM_WINDOWS)) {
+		if(static_cast<int>(frames.size()) >= SETTING(MAX_PM_WINDOWS)) {
 			return false;
 		}
 
@@ -214,7 +214,7 @@ void PrivateFrame::addStatus(const tstring& text) {
 	status->setText(STATUS_STATUS, message);
 
 	if(BOOLSETTING(STATUS_IN_CHAT)) {
-		addChatRaw(_T("*** ") + message);
+		addChatPlain(_T("*** ") + message);
 		addedChat(text); // addedChat expects a message with no timestamp
 	}
 }

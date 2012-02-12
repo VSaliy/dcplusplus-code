@@ -21,6 +21,8 @@
 #include "stdafx.h"
 #include "HtmlToRtf.h"
 
+#include <boost/algorithm/string/trim.hpp>
+
 #include <dcpp/debug.h>
 #include <dcpp/Flags.h>
 #include <dcpp/ScopedFunctor.h>
@@ -79,7 +81,9 @@ Parser::Parser(dwt::RichTextBox* box) {
 	write(contexts.back());
 }
 
-void Parser::startTag(const string& name, StringPairList& attribs, bool simple) {
+void Parser::startTag(const string& name_, StringPairList& attribs, bool simple) {
+	auto name = boost::algorithm::trim_copy(name_);
+
 	if(name == "br") {
 		ret += _T("\\line\n");
 	}
@@ -112,6 +116,8 @@ void Parser::startTag(const string& name, StringPairList& attribs, bool simple) 
 	while((j = style.find_first_of(":;", i)) != string::npos) {
 		tmp = style.substr(i, j - i);
 		i = j + 1;
+
+		boost::algorithm::trim(tmp);
 
 		switch(state) {
 		case Declaration:

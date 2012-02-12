@@ -21,6 +21,7 @@
 
 #include <dcpp/ChatMessage.h>
 #include <dcpp/File.h>
+#include <dcpp/SimpleXML.h>
 
 #include <dwt/WidgetCreator.h>
 
@@ -73,28 +74,32 @@ protected:
 
 	/// add a chat message and call addedChat.
 	void addChat(const tstring& message) {
-		addChat_(dwt::RichTextBox::rtfEscape(message));
+		addChatRTF(dwt::RichTextBox::rtfEscape(message));
 		t().addedChat(message);
 	}
 
 	/// add a ChatMessage and call addedChat.
 	void addChat(const ChatMessage& message) {
-		addChat_(HtmlToRtf::convert(message.htmlMessage, chat));
+		addChatHTML(message.htmlMessage);
 		t().addedChat(Text::toT(message.message));
 	}
 
 	/// just add to the chat; don't call addedChat.
-	void addChatRaw(const tstring& message) {
-		addChat_(dwt::RichTextBox::rtfEscape(message));
+	void addChatPlain(const tstring& message) {
+		addChatRTF(dwt::RichTextBox::rtfEscape(message));
 	}
 
-private:
-	/// @internal @param message RTF-formatted message.
-	void addChat_(tstring message) {
+	/// add an RTF-formatted message.
+	void addChatRTF(tstring message) {
 		/// @todo factor out to dwt
 		if(chat->length() > 0)
 			message = _T("\\line\n") + message;
 		chat->addTextSteady(_T("{\\urtf1\n") + message + _T("}\n"));
+	}
+
+	/// add an HTML-formatted message.
+	void addChatHTML(const string& message) {
+		addChatRTF(HtmlToRtf::convert(message, chat));
 	}
 
 protected:
@@ -121,9 +126,23 @@ protected:
 		// the last line in the log file is an empty line; remove it
 		lines.pop_back();
 
+		string html;
+		string tmp;
+
 		const size_t linesCount = lines.size();
 		for(size_t i = (linesCount > setting) ? (linesCount - setting) : 0; i < linesCount; ++i) {
-			addChatRaw(_T("- ") + Text::toT(lines[i]));
+			html += SimpleXML::escape(lines[i], tmp, false) + "<br/>";
+		}
+
+		if(!html.empty()) {
+			// more grey text color
+			auto hls = RGB2HLS(chat->getTextColor());
+			auto color = HLS2RGB(HLS(HLS_H(hls), 127, HLS_S(hls) / 2));
+
+			tmp.resize(8);
+			snprintf(&tmp[0], tmp.size(), "%.2X%.2X%.2X", GetRValue(color), GetGValue(color), GetBValue(color));
+
+			addChatHTML("<span style=\"white-space: pre-wrap; color: #" + tmp + ";\">" + html + "</span>");
 		}
 	}
 

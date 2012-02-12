@@ -542,7 +542,7 @@ void HubFrame::addStatus(const tstring& text, bool legitimate /* = true */) {
 
 	if(legitimate) {
 		if(BOOLSETTING(STATUS_IN_CHAT)) {
-			addChatRaw(_T("*** ") + message);
+			addChatPlain(_T("*** ") + message);
 			addedChat(text); // addedChat expects a message with no timestamp
 		} else
 			setDirty(SettingsManager::BOLD_HUB);
