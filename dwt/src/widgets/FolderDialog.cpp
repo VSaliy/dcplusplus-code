@@ -33,24 +33,51 @@
 
 namespace dwt {
 
-FolderDialog& FolderDialog::setRoot( const int csidl ) {
-	if (FAILED(SHGetSpecialFolderLocation( getParentHandle(), csidl, &itsPidlRoot ))) {
-		itsPidlRoot = NULL;
+FolderDialog::FolderDialog(Widget* parent) :
+parent(parent),
+pidlRoot(nullptr),
+pidlInitialSel(nullptr)
+{
+}
+
+FolderDialog::~FolderDialog() {
+	if(pidlRoot) {
+		::CoTaskMemFree(pidlRoot);
 	}
+}
+
+FolderDialog& FolderDialog::setRoot(const int csidl) {
+	SHGetSpecialFolderLocation(getParentHandle(), csidl, &pidlRoot);
 	return *this;
 }
 
-bool FolderDialog::open(tstring& folder) {
-	BROWSEINFO bws = { 0 };
-	bws.hwndOwner = getParentHandle();
-	bws.pidlRoot = itsPidlRoot;
-	if(!itsTitle.empty()) {
-		bws.lpszTitle = itsTitle.c_str();
+FolderDialog& FolderDialog::setTitle(const tstring& title) {
+	this->title = title;
+	return *this;
+}
+
+FolderDialog& FolderDialog::setInitialSelection(const tstring& sel) {
+	initialSel = sel;
+	return *this;
+}
+
+FolderDialog& FolderDialog::setInitialSelection(const int csidl) {
+	SHGetSpecialFolderLocation(getParentHandle(), csidl, &pidlInitialSel);
+	return *this;
+}
+
+bool FolderDialog::open(tstring& dir) {
+	if(!dir.empty())
+		setInitialSelection(dir);
+
+	BROWSEINFO bws = { getParentHandle(), pidlRoot };
+	if(!title.empty()) {
+		bws.lpszTitle = title.c_str();
 	}
 	bws.ulFlags = BIF_USENEWUI | BIF_RETURNONLYFSDIRS | BIF_EDITBOX;
-	if(!folder.empty()) {
-		bws.lParam = reinterpret_cast<LPARAM>(folder.c_str());
+	if(!initialSel.empty() || pidlInitialSel) {
 		bws.lpfn = &browseCallbackProc;
+		bws.lParam = reinterpret_cast<LPARAM>(this);
 	}
 
 	// Avoid errors about missing cdroms, floppies etc..
@@ -60,21 +87,34 @@ bool FolderDialog::open(tstring& folder) {
 
 	::SetErrorMode(oldErrorMode);
 
+	bool ret = false;
+
 	if(lpIDL) {
 		TCHAR buf[MAX_PATH + 1];
-		if ( ::SHGetPathFromIDList( lpIDL, buf ) ) {
-			folder = buf;
-
-			if(!folder.empty() && folder[folder.size()-1] != _T('\\')) {
-				folder += _T('\\');
+		if(::SHGetPathFromIDList(lpIDL, buf)) {
+			dir = buf;
+			if(!dir.empty() && *(dir.end() - 1) != _T('\\')) {
+				dir += _T('\\');
 			}
-
-			::CoTaskMemFree(lpIDL);
-			return true;
+			ret = true;
 		}
+
 		::CoTaskMemFree(lpIDL);
 	}
-	return false;
+
+	return ret;
+}
+
+int CALLBACK FolderDialog::browseCallbackProc(HWND hwnd, UINT uMsg, LPARAM, LPARAM lpData) {
+	if(lpData && uMsg == BFFM_INITIALIZED) {
+		auto& dialog = *reinterpret_cast<FolderDialog*>(lpData);
+		auto wparam = dialog.initialSel.empty() ? FALSE : TRUE;
+		auto lparam = wparam ? reinterpret_cast<LPARAM>(dialog.initialSel.c_str()) :
+			reinterpret_cast<LPARAM>(dialog.pidlInitialSel);
+		::SendMessage(hwnd, BFFM_SETSELECTION, wparam, lparam);
+		::SendMessage(hwnd, BFFM_SETEXPANDED, wparam, lparam);
+	}
+	return 0;
 }
 
 }
