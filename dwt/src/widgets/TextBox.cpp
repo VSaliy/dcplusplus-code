@@ -149,7 +149,14 @@ ClientCoordinate TextBoxBase::ptFromPos(int pos) {
 void TextBoxBase::scrollToBottom() {
 	// this function takes care of various corner cases (not fully scrolled, scrolled too far...)
 
-	sendMessage(WM_VSCROLL, SB_BOTTOM);
+	auto sel = getCaretPosRange();
+
+	setSelection(length());
+	showCaret();
+
+	// restore the previous selection
+	setSelection(sel.first, sel.second);
+
 	sendMessage(WM_VSCROLL, SB_BOTTOM);
 }
 
