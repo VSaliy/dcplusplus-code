@@ -66,60 +66,37 @@ public:
 	// Constructor Taking pointer to parent
 	explicit FolderDialog( Widget * parent = 0 );
 
-	/// Shows the dialog
-	/** Returns string() or "empty string" if user press cancel. <br>
-	  * Returns a "folder path" if user presses ok. <br>
-	  * Use the inherited functions aspects::folderFilter::addFilter and
-	  * aspects::folderFilter::activeFilter <br>
-	  * before calling this function, if you wish the dialog to show only certain
-	  * types of folders.
-	  */
-	bool open(tstring& folder);
+	/** Set the root directory of the dialog. Only this directory or directories below it will be
+	selectable. If not defined, the default is to use the desktop as root. */
+	FolderDialog& setRoot(const int csidl);
 
-	/// Sets the root directory in the WidgetChooseFolder Widget
-	/** If given your dialog will try to start with the given directory as root, otherwise it
-	  * will use the desktop directory.
-	  */
-	FolderDialog& setRoot( const int CSIDL = CSIDL_DESKTOPDIRECTORY );
+	FolderDialog& setTitle(const tstring& title);
 
-	FolderDialog& setTitle( const tstring& title );
+	/** Set the initially selected and expanded directory. When both a CSIDL & string are defined,
+	the directory defined by string is given priority. May also be set by using the "dir" parameter
+	of the open function. */
+	FolderDialog& setInitialSelection(const tstring& sel);
+	FolderDialog& setInitialSelection(const int csidl);
+
+	/** Display the dialog.
+	@param dir On input, may define an initially selected dir (shortcut for setInitialSelection).
+	On output, contains the selected directory on success.
+	@return Whether a directory was selected and successfully resolved. */
+	bool open(tstring& dir);
 
 	~FolderDialog();
 
 private:
-	static int CALLBACK browseCallbackProc( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData )
-	{
-		if(lpData && uMsg == BFFM_INITIALIZED) {
-			::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
-		}
-		return 0;
-	}
+	Widget* parent;
+	LPITEMIDLIST pidlRoot;
+	tstring title;
+	tstring initialSel;
+	LPITEMIDLIST pidlInitialSel;
 
-	Widget* itsParent;
-	tstring itsTitle;
-	LPITEMIDLIST itsPidlRoot;
+	HWND getParentHandle() const { return parent ? parent->handle() : nullptr; }
 
-	HWND getParentHandle() { return itsParent ? itsParent->handle() : NULL; }
-
+	static int CALLBACK browseCallbackProc(HWND hwnd, UINT uMsg, LPARAM, LPARAM lpData);
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-inline FolderDialog::FolderDialog( Widget * parent )
- : itsParent( parent ), itsPidlRoot(NULL)
-{
-}
-
-inline FolderDialog& FolderDialog::setTitle( const tstring& title ) {
-	itsTitle = title;
-	return *this;
-}
-
-inline FolderDialog::~FolderDialog() {
-	::CoTaskMemFree(itsPidlRoot);
-}
 
 }
 

@@ -217,7 +217,7 @@ void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox, int setting) {
 
 void UploadPage::handleAddClicked() {
 	tstring target;
-	if(FolderDialog(this).open(target)) {
+	if(FolderDialog(this).setInitialSelection(CSIDL_PERSONAL).open(target)) {
 		addDirectory(target);
 		HashProgressDlg(this, true).run();
 	}
