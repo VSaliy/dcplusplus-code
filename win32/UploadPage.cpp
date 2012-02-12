@@ -216,7 +216,7 @@ void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox, int setting) {
 }
 
 void UploadPage::handleAddClicked() {
-	tstring target;
+	tstring target = Text::toT(SETTING(LAST_SHARED_FOLDER));
 	if(FolderDialog(this).setInitialSelection(CSIDL_PERSONAL).open(target)) {
 		addDirectory(target);
 		HashProgressDlg(this, true).run();
@@ -306,6 +306,7 @@ void UploadPage::addDirectory(const tstring& aPath) {
 			}
 			break;
 		}
+		SettingsManager::getInstance()->set(SettingsManager::LAST_SHARED_FOLDER, Text::fromT(aPath));
 	} catch(const ShareException& e) {
 		dwt::MessageBox(this).show(Text::toT(e.getError()), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
 			dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);

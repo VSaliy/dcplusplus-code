@@ -51,7 +51,7 @@ const string SettingsManager::settingTags[] =
 	"LogFormatSystem", "LogFormatStatus", "DirectoryListingFrameOrder", "DirectoryListingFrameWidths",
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
 	"Language", "DownloadsOrder", "DownloadsWidth", "Toolbar", "LastSearchType", "Mapper",
-	"SoundMainChat", "SoundPM", "SoundPMWindow", "SoundFinishedDL", "SoundFinishedFL",
+	"SoundMainChat", "SoundPM", "SoundPMWindow", "SoundFinishedDL", "SoundFinishedFL", "LastSharedFolder",
 	"SENTRY",
 	// Ints
 	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
@@ -328,6 +328,7 @@ SettingsManager::SettingsManager()
 	setDefault(USERS_FILTER_QUEUE, false);
 	setDefault(USERS_FILTER_WAITING, false);
 	setDefault(MAX_PM_WINDOWS, 50);
+	setDefault(LAST_SHARED_FOLDER, Util::emptyString);
 
 	setSearchTypeDefaults();
 
