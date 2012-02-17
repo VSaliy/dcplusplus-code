@@ -527,7 +527,7 @@ void HubFrame::addedChat(const tstring& message) {
 
 	if(BOOLSETTING(LOG_MAIN_CHAT)) {
 		ParamMap params;
-		params["message"] = [&message] { return Text::fromT(message); };
+		params["message"] = [&message] { return Text::toDOS(Text::fromT(message)); };
 		client->getHubIdentity().getParams(params, "hub", false);
 		params["hubURL"] = [this] { return client->getHubUrl(); };
 		client->getMyIdentity().getParams(params, "my", true);
