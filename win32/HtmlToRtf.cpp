@@ -270,7 +270,7 @@ void Parser::parseFont(const string& s) {
 }
 
 void Parser::parseDecoration(const string& s) {
-	if(s.find("underline")) {
+	if(s == "underline") {
 		contexts.back().setFlag(Context::Underlined);
 	}
 }

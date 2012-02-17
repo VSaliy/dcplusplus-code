@@ -202,7 +202,7 @@ void PrivateFrame::addedChat(const tstring& message) {
 
 	if(BOOLSETTING(LOG_PRIVATE_CHAT)) {
 		ParamMap params;
-		params["message"] = [&message] { return Text::fromT(message); };
+		params["message"] = [&message] { return Text::toDOS(Text::fromT(message)); };
 		fillLogParams(params);
 		LOG(LogManager::PM, params);
 	}

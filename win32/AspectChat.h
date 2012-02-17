@@ -74,7 +74,7 @@ protected:
 
 	/// add a chat message and call addedChat.
 	void addChat(const tstring& message) {
-		addChatRTF(dwt::RichTextBox::rtfEscape(message));
+		addChatPlain(message);
 		t().addedChat(message);
 	}
 
@@ -84,7 +84,7 @@ protected:
 		t().addedChat(Text::toT(message.message));
 	}
 
-	/// just add to the chat; don't call addedChat.
+	/// add a plain text message.
 	void addChatPlain(const tstring& message) {
 		addChatRTF(dwt::RichTextBox::rtfEscape(message));
 	}
