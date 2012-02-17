@@ -133,7 +133,6 @@ private:
 		int getImage(int col) const {
 			return col == 0 ? (download ? IMAGE_DOWNLOAD : IMAGE_UPLOAD) : -1;
 		}
-		using UserInfoBase::getTooltip;
 
 		static int compareItems(const ConnectionInfo* a, const ConnectionInfo* b, int col);
 	};

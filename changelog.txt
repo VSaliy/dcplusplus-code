@@ -20,6 +20,7 @@
 * [L#925659] Safer window cleanup (poy)
 * [L#923612] Show the last chat line in taskbar previews (poy)
 * Show chat logs with a dim text color (poy)
+* Re-add lost user information tooltips (poy)
 
 -- 0.791 2012-01-14 --
 * Update translations

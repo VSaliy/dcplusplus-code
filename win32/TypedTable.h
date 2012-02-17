@@ -169,25 +169,23 @@ public:
 	}
 
 private:
-	HAS_FUNC(HasText_, getText, const tstring& (ContentType::*)(int));
-	HAS_FUNC(HasTextC_, getText, const tstring& (ContentType::*)(int) const);
-#define HasText (HasText_<T>::value || HasTextC_<T>::value)
+	/// @todo simplify all these if/when the next C++ standard has static if or concepts...
 
-	HAS_FUNC(HasImage_, getImage, int (ContentType::*)(int));
-	HAS_FUNC(HasImageC_, getImage, int (ContentType::*)(int) const);
-#define HasImage (HasImage_<T>::value || HasImageC_<T>::value)
+	HAS_FUNC(HasText_, const tstring&, getText(0));
+#define HasText HasText_<T>::value
 
-	HAS_FUNC(HasSort_, compareItems, int (*)(ContentType*, ContentType*, int));
-	HAS_FUNC(HasSortC_, compareItems, int (*)(const ContentType*, const ContentType*, int));
-#define HasSort (HasSort_<T>::value || HasSortC_<T>::value)
+	HAS_FUNC(HasImage_, int, getImage(0));
+#define HasImage HasImage_<T>::value
 
-	HAS_FUNC(HasStyle_, getStyle, int (ContentType::*)(HFONT&, COLORREF&, COLORREF&, int));
-	HAS_FUNC(HasStyleC_, getStyle, int (ContentType::*)(HFONT&, COLORREF&, COLORREF&, int) const);
-#define HasStyle (HasStyle_<T>::value || HasStyleC_<T>::value)
+	HAS_FUNC(HasSort_, int, compareItems(nullptr, nullptr, 0));
+#define HasSort HasSort_<T>::value
 
-	HAS_FUNC(HasTooltip_, getTooltip, tstring (ContentType::*)());
-	HAS_FUNC(HasTooltipC_, getTooltip, tstring (ContentType::*)() const);
-#define HasTooltip (HasTooltip_<T>::value || HasTooltipC_<T>::value)
+	// over-complicated to test for lvalue refs...
+	HAS_FUNC(HasStyle_, int, getStyle(std::function<HFONT&()>()(), std::function<COLORREF&()>()(), std::function<COLORREF&()>()(), 0));
+#define HasStyle HasStyle_<T>::value
+
+	HAS_FUNC(HasTooltip_, tstring, getTooltip());
+#define HasTooltip HasTooltip_<T>::value
 
 	template<typename T> typename std::enable_if<HasText, void>::type addTextEvent() {
 		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {

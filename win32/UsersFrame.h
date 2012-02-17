@@ -95,7 +95,6 @@ private:
 			default: return -1;
 			}
 		}
-		using UserInfoBase::getTooltip;
 
 		static int compareItems(const UserInfo* a, const UserInfo* b, int col) {
 			switch(col) {
