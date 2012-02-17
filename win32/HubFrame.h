@@ -121,7 +121,6 @@ private:
 		}
 		int getImage(int col) const;
 		int getStyle(HFONT& font, COLORREF& textColor, COLORREF& bgColor, int) const;
-		using UserInfoBase::getTooltip;
 
 		static int compareItems(const UserInfo* a, const UserInfo* b, int col);
 		bool update(const Identity& identity, int sortCol);

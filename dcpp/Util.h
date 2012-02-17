@@ -89,17 +89,30 @@ inline int compare(const T& v1, const T& v2) {
 template<typename T> inline double fraction(T a, T b) { return static_cast<double>(a) / b; }
 
 /** Uses SFINAE to determine whether a type provides a function; stores the result in "value".
-Inspired by <http://stackoverflow.com/questions/257288#264088>. */
-/// @todo simplify when MSVC supports default template arguments on functions...
-#define HAS_FUNC(name, func, signature) \
-	template<typename T> struct name { \
+Inspired by <http://stackoverflow.com/a/8752988>. */
+/// @todo simplify callers when MSVC supports default template arguments on functions...
+#ifndef _MSC_VER
+#define HAS_FUNC(name, funcRet, funcTest) \
+	template<typename HAS_FUNC_T> struct name { \
 		typedef char yes[1]; \
 		typedef char no[2]; \
-		template<typename U, U> struct type_check; \
-		template<typename U> static yes& check(type_check<signature, &U::func>*); \
+		template<typename HAS_FUNC_U> static yes& check(HAS_FUNC_U* data, \
+			typename std::enable_if<std::is_same<funcRet, decltype(data->funcTest)>::value>::type* = nullptr); \
 		template<typename> static no& check(...); \
-		enum { value = sizeof(check<T>(0)) == sizeof(yes) }; \
+		static const bool value = sizeof(check<HAS_FUNC_T>(nullptr)) == sizeof(yes); \
 	}
+#else
+/// @todo don't verify the return type of the function on MSVC as it fails for obscure reasons. recheck on VC11...
+#define HAS_FUNC(name, funcRet, funcTest) \
+	template<typename HAS_FUNC_T> struct name { \
+		typedef char yes[1]; \
+		typedef char no[2]; \
+		template<typename HAS_FUNC_U> static yes& check(HAS_FUNC_U* data, \
+			decltype(data->funcTest)* = nullptr); \
+		template<typename> static no& check(...); \
+		static const bool value = sizeof(check<HAS_FUNC_T>(nullptr)) == sizeof(yes); \
+	}
+#endif
 
 class Util
 {
