@@ -72,9 +72,9 @@ protected:
 
 	virtual ~AspectChat() { }
 
-	/// add a chat message and call addedChat.
+	/// add a chat message with some formatting and call addedChat.
 	void addChat(const tstring& message) {
-		addChatPlain(message);
+		addChatPlain(Text::toT("[" + Util::getShortTimeString() + "] ") + message);
 		t().addedChat(message);
 	}
 
@@ -84,7 +84,7 @@ protected:
 		t().addedChat(Text::toT(message.message));
 	}
 
-	/// add a plain text message.
+	/// add a plain text string directly, with no formatting.
 	void addChatPlain(const tstring& message) {
 		addChatRTF(dwt::RichTextBox::rtfEscape(message));
 	}
@@ -102,7 +102,6 @@ protected:
 		addChatRTF(HtmlToRtf::convert(message, chat));
 	}
 
-protected:
 	void readLog(const string& logPath, const unsigned setting) {
 		if(setting == 0)
 			return;

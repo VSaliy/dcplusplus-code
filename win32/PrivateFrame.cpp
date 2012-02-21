@@ -209,13 +209,12 @@ void PrivateFrame::addedChat(const tstring& message) {
 }
 
 void PrivateFrame::addStatus(const tstring& text) {
-	auto message = Text::toT("[" + Util::getShortTimeString() + "] ") + text;
-
-	status->setText(STATUS_STATUS, message);
+	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString() + "] ") + text);
 
 	if(BOOLSETTING(STATUS_IN_CHAT)) {
-		addChatPlain(_T("*** ") + message);
-		addedChat(text); // addedChat expects a message with no timestamp
+		addChat(_T("*** ") + text);
+	} else {
+		setDirty(SettingsManager::BOLD_PM);
 	}
 }
 
@@ -342,7 +341,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 		} else if(Util::stricmp(cmd.c_str(), _T("log")) == 0) {
 			openLog();
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
-			addStatus(_T("*** ") + WinUtil::commands + _T(", /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>"));
+			addChat(_T("*** ") + WinUtil::commands + _T(", /getlist, /grant, /close, /favorite, /ignore, /unignore, /log <system, downloads, uploads>"));
 		} else {
 			send = true;
 		}
