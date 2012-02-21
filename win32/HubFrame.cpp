@@ -431,7 +431,7 @@ void HubFrame::enterImpl(const tstring& s) {
 			showUsers->setChecked(!showUsers->getChecked());
 			handleShowUsersClicked();
 		} else if(Util::stricmp(cmd.c_str(), _T("conn")) == 0 || Util::stricmp(cmd.c_str(), _T("connection")) == 0) {
-			addChat(Text::toT(ConnectivityManager::getInstance()->getInformation()));
+			addChat(_T("*** ") + Text::toT(ConnectivityManager::getInstance()->getInformation()));
 		} else if((Util::stricmp(cmd.c_str(), _T("favorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("fav")) == 0)) {
 			addAsFavorite();
 		} else if((Util::stricmp(cmd.c_str(), _T("removefavorite")) == 0) || (Util::stricmp(cmd.c_str(), _T("removefav")) == 0)) {
@@ -536,16 +536,14 @@ void HubFrame::addedChat(const tstring& message) {
 }
 
 void HubFrame::addStatus(const tstring& text, bool legitimate /* = true */) {
-	auto message = Text::toT("[" + Util::getShortTimeString() + "] ") + text;
-
-	status->setText(STATUS_STATUS, message);
+	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString() + "] ") + text);
 
 	if(legitimate) {
 		if(BOOLSETTING(STATUS_IN_CHAT)) {
-			addChatPlain(_T("*** ") + message);
-			addedChat(text); // addedChat expects a message with no timestamp
-		} else
+			addChat(_T("*** ") + text);
+		} else {
 			setDirty(SettingsManager::BOLD_HUB);
+		}
 	}
 
 	if(BOOLSETTING(LOG_STATUS_MESSAGES)) {
@@ -577,14 +575,14 @@ void HubFrame::execTasks() {
 			UserTask& u = static_cast<UserTask&>(*i->second);
 			if(updateUser(u)) {
 				if (showJoins || (favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
-					addStatus(str(TF_("*** Joins: %1%") % Text::toT(u.identity.getNick())));
+					addStatus(str(TF_("Joins: %1%") % Text::toT(u.identity.getNick())));
 				}
 			}
 		} else if(i->first == REMOVE_USER) {
 			UserTask& u = static_cast<UserTask&>(*i->second);
 			removeUser(u.user);
 			if (showJoins || (favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
-				addStatus(str(TF_("*** Parts: %1%") % Text::toT(u.identity.getNick())));
+				addStatus(str(TF_("Parts: %1%") % Text::toT(u.identity.getNick())));
 			}
 		}
 	}

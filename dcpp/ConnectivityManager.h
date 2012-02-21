@@ -71,6 +71,7 @@ private:
 	ConnectivityManager();
 	virtual ~ConnectivityManager() { }
 
+	void startMapping();
 	void mappingFinished(const string& mapper);
 	void log(string&& message);
 
