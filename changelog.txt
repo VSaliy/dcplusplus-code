@@ -22,6 +22,7 @@
 * Show chat logs with a dim text color (poy)
 * Re-add lost user information tooltips (poy)
 * Fix discrepancies in the /conn chat command (poy)
+* Update boost to version 1.49
 
 -- 0.791 2012-01-14 --
 * Update translations
