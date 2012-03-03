@@ -42,8 +42,8 @@ MappingManager::MappingManager() : renewal(0) {
 
 StringList MappingManager::getMappers() const {
 	StringList ret;
-	for(auto i = mappers.cbegin(), iend = mappers.cend(); i != iend; ++i)
-		ret.push_back(i->first);
+	for(auto& i: mappers)
+		ret.push_back(i.first);
 	return ret;
 }
 
@@ -141,8 +141,8 @@ int MappingManager::run() {
 		}
 	}
 
-	for(auto i = mappers.begin(); i != mappers.end(); ++i) {
-		unique_ptr<Mapper> pMapper(i->second(Util::getLocalIp()));
+	for(auto& i: mappers) {
+		unique_ptr<Mapper> pMapper(i.second(Util::getLocalIp()));
 		Mapper& mapper = *pMapper;
 
 		ScopedFunctor([&mapper] { mapper.uninit(); });
