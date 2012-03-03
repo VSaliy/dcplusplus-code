@@ -54,15 +54,15 @@ bool UserMatch::match(OnlineUser& user) const {
 		return false;
 	}
 
-	for(auto i = rules.cbegin(), iend = rules.cend(); i != iend; ++i) {
+	for(auto& i: rules) {
 		string str;
-		switch(i->field) {
+		switch(i.field) {
 		case UserMatch::Rule::NICK: str = identity.getNick(); break;
 		case UserMatch::Rule::CID: str = identity.getUser()->getCID().toBase32(); break;
 		case UserMatch::Rule::IP: str = identity.getIp(); break;
 		case UserMatch::Rule::HUB_ADDRESS: str = user.getClient().getHubUrl(); break;
 		}
-		if(!i->match(str)) {
+		if(!i.match(str)) {
 			return false;
 		}
 	}

@@ -147,8 +147,8 @@ bool Widget::handleMessage(const MSG &msg, LRESULT &retVal) {
 	bool handled = false;
 	if(i != handlers.end()) {
 		CallbackList& list = i->second;
-		for(auto j = list.begin(); j != list.end(); ++j) {
-			handled |= (*j)(msg, retVal);
+		for(auto& j: list) {
+			handled |= j(msg, retVal);
 		}
 	}
 	return handled;

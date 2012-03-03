@@ -22,9 +22,9 @@ public:
 			startTags[name]++;
 		}
 
-		for(dcpp::StringPairIter i = attribs.begin(), iend = attribs.end(); i != iend; ++i) {
-			attribKeys[i->first]++;
-			attribValues[i->second]++;
+		for(auto& i: attribs) {
+			attribKeys[i.first]++;
+			attribValues[i.second]++;
 		}
 	}
 

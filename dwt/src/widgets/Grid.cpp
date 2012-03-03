@@ -81,20 +81,20 @@ Point Grid::getPreferredSize() {
 Point Grid::getPreferredSize(size_t row, size_t column) const {
 	Point ret(0, 0);
 
-	for(auto i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
-		if(i->inCell(row, column) && i->w->hasStyle(WS_VISIBLE)) {
-			ret = i->w->getPreferredSize();
+	for(auto& i: widgetInfo) {
+		if(i.inCell(row, column) && i.w->hasStyle(WS_VISIBLE)) {
+			ret = i.w->getPreferredSize();
 			// TODO consider fractions...
-			if(i->colSpan > 1) {
-				if(ret.x > i->colSpan*spacing) {
-					ret.x = (ret.x - i->colSpan*spacing) / i->colSpan;
+			if(i.colSpan > 1) {
+				if(ret.x > i.colSpan*spacing) {
+					ret.x = (ret.x - i.colSpan*spacing) / i.colSpan;
 				} else {
 					ret.x = 0;
 				}
 			}
-			if(i->rowSpan > 1) {
-				if(ret.y > i->rowSpan*spacing) {
-					ret.y = (ret.y - i->rowSpan*spacing) / i->rowSpan;
+			if(i.rowSpan > 1) {
+				if(ret.y > i.rowSpan*spacing) {
+					ret.y = (ret.y - i.rowSpan*spacing) / i.rowSpan;
 				} else {
 					ret.y = 0;
 				}
@@ -223,9 +223,9 @@ void Grid::layout() {
 }
 
 Grid::WidgetInfo* Grid::getWidgetInfo(Control* w) {
-	for(auto i = widgetInfo.begin(); i != widgetInfo.end(); ++i) {
-		if(i->w == w) {
-			return &(*i);
+	for(auto& i: widgetInfo) {
+		if(i.w == w) {
+			return &i;
 		}
 	}
 
@@ -234,10 +234,10 @@ Grid::WidgetInfo* Grid::getWidgetInfo(Control* w) {
 
 	while(taken) {
 		taken = false;
-		for(auto i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
+		for(auto& i: widgetInfo) {
 			size_t r = pos / columns.size();
 			size_t c = pos % columns.size();
-			if(i->inCell(r, c)) {
+			if(i.inCell(r, c)) {
 				pos++;
 				taken = true;
 				break;
@@ -267,18 +267,18 @@ size_t Grid::addColumn(const GridInfo& gp) {
 }
 
 void Grid::removeRow(Control* w) {
-	for(auto i = widgetInfo.cbegin(), iend = widgetInfo.cend(); i != iend; ++i) {
-		if(i->w == w) {
-			removeRow(i->row);
+	for(auto& i: widgetInfo) {
+		if(i.w == w) {
+			removeRow(i.row);
 			break;
 		}
 	}
 }
 
 void Grid::removeColumn(Control* w) {
-	for(auto i = widgetInfo.cbegin(), iend = widgetInfo.cend(); i != iend; ++i) {
-		if(i->w == w) {
-			removeColumn(i->column);
+	for(auto& i: widgetInfo) {
+		if(i.w == w) {
+			removeColumn(i.column);
 			break;
 		}
 	}
@@ -335,12 +335,12 @@ void Grid::clearColumns() {
 void Grid::setWidget(Control* w, size_t row, size_t column, size_t rowSpan, size_t colSpan) {
 	dwtassert(w->getParent() == this, "Control must be a child of the grid");
 
-	for(auto i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
-		if(i->w == w) {
-			i->row = row;
-			i->column = column;
-			i->rowSpan = rowSpan;
-			i->colSpan = colSpan;
+	for(auto& i: widgetInfo) {
+		if(i.w == w) {
+			i.row = row;
+			i.column = column;
+			i.rowSpan = rowSpan;
+			i.colSpan = colSpan;
 			return;
 		}
 	}
@@ -349,9 +349,9 @@ void Grid::setWidget(Control* w, size_t row, size_t column, size_t rowSpan, size
 }
 
 void Grid::setWidget(Control* w) {
-	for(auto i = widgetInfo.begin(), iend = widgetInfo.end(); i != iend; ++i) {
-		if(i->w == w) {
-			i->noResize = true;
+	for(auto& i: widgetInfo) {
+		if(i.w == w) {
+			i.noResize = true;
 			return;
 		}
 	}

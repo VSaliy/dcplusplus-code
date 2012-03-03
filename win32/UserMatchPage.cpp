@@ -107,8 +107,8 @@ dirty(false)
 	WinUtil::makeColumns(table, columns, 1);
 
 	list = UserMatchManager::getInstance()->getList();
-	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
-		addEntry(*i);
+	for(auto& i: list) {
+		addEntry(i);
 	}
 
 	handleSelectionChanged();
@@ -207,8 +207,8 @@ tstring UserMatchPage::handleTooltip(int i) {
 
 	tstring fields[UserMatch::Rule::FIELD_LAST] = { T_("Nick"), T_("CID"), T_("IP"), T_("Hub address") };
 	tstring methods[UserMatch::Rule::METHOD_LAST] = { T_("Partial match"), T_("Exact match"), T_("Regular Expression") };
-	for(auto rule = matcher.rules.cbegin(), rule_end = matcher.rules.cend(); rule != rule_end; ++rule) {
-		addLine(str(TF_("%1% %2%: %3%") % fields[rule->field] % methods[rule->getMethod()] % Text::toT(rule->pattern)));
+	for(auto& rule: matcher.rules) {
+		addLine(str(TF_("%1% %2%: %3%") % fields[rule.field] % methods[rule.getMethod()] % Text::toT(rule.pattern)));
 	}
 
 	if(matcher.isSet(UserMatch::FORCE_CHAT))
@@ -262,13 +262,13 @@ void UserMatchPage::handleEditClicked() {
 void UserMatchPage::handleMoveUpClicked() {
 	HoldRedraw hold(table);
 	auto sel = table->getSelection();
-	for(auto i = sel.cbegin(), iend = sel.cend(); i != iend; ++i) {
-		if(*i > 0) {
-			std::swap(list[*i], list[*i - 1]);
+	for(auto i: sel) {
+		if(i > 0) {
+			std::swap(list[i], list[i - 1]);
 
-			table->erase(*i);
-			addEntry(list[*i - 1], *i - 1);
-			table->select(*i - 1);
+			table->erase(i);
+			addEntry(list[i - 1], i - 1);
+			table->select(i - 1);
 		}
 	}
 

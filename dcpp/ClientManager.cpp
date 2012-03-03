@@ -212,8 +212,8 @@ string ClientManager::getConnection(const CID& cid) const {
 int64_t ClientManager::getAvailable() const {
 	Lock l(cs);
 	int64_t bytes = 0;
-	for(auto i = onlineUsers.begin(); i != onlineUsers.end(); ++i) {
-		bytes += i->second->getIdentity().getBytesShared();
+	for(auto& i: onlineUsers) {
+		bytes += i.second->getIdentity().getBytesShared();
 	}
 
 	return bytes;
@@ -222,8 +222,8 @@ int64_t ClientManager::getAvailable() const {
 bool ClientManager::isConnected(const string& aUrl) const {
 	Lock l(cs);
 
-	for(auto i = clients.begin(); i != clients.end(); ++i) {
-		if((*i)->getHubUrl() == aUrl) {
+	for(auto i: clients) {
+		if(i->getHubUrl() == aUrl) {
 			return true;
 		}
 	}
@@ -244,8 +244,7 @@ string ClientManager::findHub(const string& ipPort) const {
 	}
 
 	string url;
-	for(auto i = clients.begin(); i != clients.end(); ++i) {
-		const Client* c = *i;
+	for(auto c: clients) {
 		if(c->getIp() == ip) {
 			// If exact match is found, return it
 			if(c->getPort() == port)
@@ -262,9 +261,9 @@ string ClientManager::findHub(const string& ipPort) const {
 string ClientManager::findHubEncoding(const string& aUrl) const {
 	Lock l(cs);
 
-	for(auto i = clients.begin(); i != clients.end(); ++i) {
-		if((*i)->getHubUrl() == aUrl) {
-			return (*i)->getEncoding();
+	for(auto i: clients) {
+		if(i->getHubUrl() == aUrl) {
+			return i->getEncoding();
 		}
 	}
 	return Text::systemCharset;
@@ -276,8 +275,8 @@ UserPtr ClientManager::findLegacyUser(const string& aNick) const noexcept {
 
 	Lock l(cs);
 
-	for(auto i = onlineUsers.begin(); i != onlineUsers.end(); ++i) {
-		const OnlineUser* ou = i->second;
+	for(auto& i: onlineUsers) {
+		const OnlineUser* ou = i.second;
 		if(ou->getUser()->isSet(User::NMDC) && Util::stricmp(ou->getIdentity().getNick(), aNick) == 0)
 			return ou->getUser();
 	}
@@ -477,9 +476,9 @@ void ClientManager::send(AdcCommand& cmd, const CID& cid) {
 
 void ClientManager::infoUpdated() {
 	Lock l(cs);
-	for(auto i = clients.begin(); i != clients.end(); ++i) {
-		if((*i)->isConnected()) {
-			(*i)->info(false);
+	for(auto i: clients) {
+		if(i->isConnected()) {
+			i->info(false);
 		}
 	}
 }
@@ -504,8 +503,7 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 			string name = aSeeker.substr(4);
 			// Good, we have a passive seeker, those are easier...
 			string str;
-			for(auto i = l.begin(); i != l.end(); ++i) {
-				const SearchResultPtr& sr = *i;
+			for(const auto& sr: l) {
 				str += sr->toSR(*aClient);
 				str[str.length()-1] = 5;
 				str += name;
@@ -525,8 +523,7 @@ void ClientManager::on(NmdcSearch, Client* aClient, const string& aSeeker, int a
 					return;
 				if(port.empty())
 					port = "412";
-				for(auto i = l.begin(); i != l.end(); ++i) {
-					const SearchResultPtr& sr = *i;
+				for(const auto& sr: l) {
 					udp.writeTo(ip, port, sr->toSR(*aClient));
 				}
 			} catch(const SocketException& /* e */) {
@@ -554,9 +551,9 @@ void ClientManager::on(AdcSearch, Client*, const AdcCommand& adc, const CID& fro
 void ClientManager::search(int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken) {
 	Lock l(cs);
 
-	for(auto i = clients.begin(); i != clients.end(); ++i) {
-		if((*i)->isConnected()) {
-			(*i)->search(aSizeMode, aSize, aFileType, aString, aToken, StringList() /*ExtList*/);
+	for(auto i: clients) {
+		if(i->isConnected()) {
+			i->search(aSizeMode, aSize, aFileType, aString, aToken, StringList() /*ExtList*/);
 		}
 	}
 }
@@ -564,10 +561,8 @@ void ClientManager::search(int aSizeMode, int64_t aSize, int aFileType, const st
 void ClientManager::search(StringList& who, int aSizeMode, int64_t aSize, int aFileType, const string& aString, const string& aToken, const StringList& aExtList) {
 	Lock l(cs);
 
-	for(auto it = who.begin(); it != who.end(); ++it) {
-		string& client = *it;
-		for(auto j = clients.begin(); j != clients.end(); ++j) {
-			Client* c = *j;
+	for(auto& client: who) {
+		for(auto c: clients) {
 			if(c->isConnected() && c->getHubUrl() == client) {
 				c->search(aSizeMode, aSize, aFileType, aString, aToken, aExtList);
 			}
@@ -588,8 +583,8 @@ void ClientManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) noexc
 		}
 	}
 
-	for(auto j = clients.begin(); j != clients.end(); ++j) {
-		(*j)->info(false);
+	for(auto j: clients) {
+		j->info(false);
 	}
 }
 
@@ -662,11 +657,11 @@ void ClientManager::saveUsers() const {
 
 		{
 			Lock l(cs);
-			for(auto i = nicks.begin(), iend = nicks.end(); i != iend; ++i) {
-				if(i->second.second) {
+			for(auto& i: nicks) {
+				if(i.second.second) {
 					xml.addTag("User");
-					xml.addChildAttrib("CID", i->first.toBase32());
-					xml.addChildAttrib("Nick", i->second.first);
+					xml.addChildAttrib("CID", i.first.toBase32());
+					xml.addChildAttrib("Nick", i.second.first);
 				}
 			}
 		}
@@ -701,8 +696,8 @@ void ClientManager::on(UserUpdated, Client*, const OnlineUser& user) noexcept {
 }
 
 void ClientManager::on(UsersUpdated, Client*, const OnlineUserList& l) noexcept {
-	for(auto i = l.cbegin(), iend = l.cend(); i != iend; ++i) {
-		updateUser(**i);
+	for(auto& i: l) {
+		updateUser(*i);
 	}
 }
 

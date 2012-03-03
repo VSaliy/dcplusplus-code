@@ -35,15 +35,15 @@ bool WindowInfo::operator==(const WindowInfo& rhs) const {
 
 	// compare every identifying params.
 	int rParams = 0;
-	for(auto i = rhs.params.cbegin(), iend = rhs.params.cend(); i != iend; ++i)
-		if(i->second.isSet(WindowParam::FLAG_IDENTIFIES))
+	for(auto& i: rhs.params)
+		if(i.second.isSet(WindowParam::FLAG_IDENTIFIES))
 			++rParams;
-	for(auto i = params.cbegin(), iend = params.cend(); i != iend; ++i) {
-		if(i->second.isSet(WindowParam::FLAG_IDENTIFIES)) {
-			auto ri = rhs.params.find(i->first);
+	for(auto& i: params) {
+		if(i.second.isSet(WindowParam::FLAG_IDENTIFIES)) {
+			auto ri = rhs.params.find(i.first);
 			if(ri == rhs.params.end())
 				return false;
-			if(i->second.content != ri->second.content)
+			if(i.second.content != ri->second.content)
 				return false;
 			--rParams;
 		}

@@ -63,10 +63,10 @@ void DownloadManager::on(TimerManagerListener::Second, uint64_t aTick) noexcept 
 		DownloadList tickList;
 
 		// Tick each ongoing download
-		for(auto i = downloads.begin(); i != downloads.end(); ++i) {
-			if((*i)->getPos() > 0) {
-				tickList.push_back(*i);
-				(*i)->tick();
+		for(auto i: downloads) {
+			if(i->getPos() > 0) {
+				tickList.push_back(i);
+				i->tick();
 			}
 		}
 
@@ -75,8 +75,7 @@ void DownloadManager::on(TimerManagerListener::Second, uint64_t aTick) noexcept 
 
 		// Automatically remove or disconnect slow sources
 		if((uint32_t)(aTick / 1000) % SETTING(AUTODROP_INTERVAL) == 0) {
-			for(auto i = downloads.begin(); i != downloads.end(); ++i) {
-				Download* d = *i;
+			for(auto d: downloads) {
 				uint64_t timeElapsed = aTick - d->getStart();
 				uint64_t timeInactive = aTick - d->getUserConnection().getLastActivity();
 				uint64_t bytesDownloaded = d->getPos();
@@ -100,15 +99,14 @@ void DownloadManager::on(TimerManagerListener::Second, uint64_t aTick) noexcept 
 			}
 		}
 	}
-	for(auto i = dropTargets.begin(); i != dropTargets.end(); ++i) {
-		QueueManager::getInstance()->removeSource(i->first, i->second, QueueItem::Source::FLAG_SLOW_SOURCE);
+	for(auto& i: dropTargets) {
+		QueueManager::getInstance()->removeSource(i.first, i.second, QueueItem::Source::FLAG_SLOW_SOURCE);
 	}
 }
 
 void DownloadManager::checkIdle(const UserPtr& user) {
 	Lock l(cs);
-	for(auto i = idlers.begin(); i != idlers.end(); ++i) {
-		UserConnection* uc = *i;
+	for(auto uc: idlers) {
 		if(uc->getUser() == user) {
 			uc->updated();
 			return;
@@ -326,8 +324,7 @@ void DownloadManager::endData(UserConnection* aSource) {
 int64_t DownloadManager::getRunningAverage() {
 	Lock l(cs);
 	int64_t avg = 0;
-	for(auto i = downloads.begin(); i != downloads.end(); ++i) {
-		Download* d = *i;
+	for(auto d: downloads) {
 		avg += d->getAverageSpeed();
 	}
 	return avg;

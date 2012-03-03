@@ -433,10 +433,10 @@ void WinUtil::initUserMatching() {
 	// make sure predefined definitions are here.
 	bool favDefHere = false, opDefHere = false;
 	const auto& list = UserMatchManager::getInstance()->getList();
-	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
-		if(i->isSet(UserMatch::PREDEFINED)) {
-			if(i->isSet(UserMatch::FAVS)) { favDefHere = true; }
-			else if(i->isSet(UserMatch::OPS)) { opDefHere = true; }
+	for(auto& i: list) {
+		if(i.isSet(UserMatch::PREDEFINED)) {
+			if(i.isSet(UserMatch::FAVS)) { favDefHere = true; }
+			else if(i.isSet(UserMatch::OPS)) { opDefHere = true; }
 			if(favDefHere && opDefHere) { break; }
 		}
 	}
@@ -474,12 +474,11 @@ void WinUtil::initUserMatching() {
 void WinUtil::updateUserMatchFonts() {
 	userMatchFonts.clear();
 
-	const auto& list = UserMatchManager::getInstance()->getList();
-	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
-		if(!i->style.font.empty()) {
+	for(auto& i: UserMatchManager::getInstance()->getList()) {
+		if(!i.style.font.empty()) {
 			LOGFONT lf;
-			decodeFont(Text::toT(i->style.font), lf);
-			userMatchFonts[i->style.font] = new dwt::Font(lf);
+			decodeFont(Text::toT(i.style.font), lf);
+			userMatchFonts[i.style.font] = new dwt::Font(lf);
 		}
 	}
 }
@@ -909,8 +908,8 @@ bool WinUtil::getUCParams(dwt::Widget* parent, const UserCommand& uc, ParamMap& 
 			}
 
 			if(combo_sel >= 0) {
-				for(auto i = combo_values.begin(), iend = combo_values.end(); i != iend; ++i)
-					Util::replace(_T("\t"), _T("/"), *i);
+				for(auto& i: combo_values)
+					Util::replace(_T("\t"), _T("/"), i);
 
 				// if the combo has already been displayed before, retrieve the prev value and bypass combo_sel
 				auto prev = find(combo_values.begin(), combo_values.end(), Text::toT(boost::get<string>(params["line:" + name])));
@@ -1434,14 +1433,14 @@ void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
 		typedef map<tstring, tstring> MagMap;
 		MagMap hashes;
 		tstring fname, fhash, type, param, fkey;
-		for(auto idx = mag.getTokens().begin(); idx != mag.getTokens().end(); ++idx) {
+		for(auto& idx: mag.getTokens()) {
 			// break into pairs
-			string::size_type pos = idx->find(_T('='));
+			string::size_type pos = idx.find(_T('='));
 			if(pos != string::npos) {
-				type = Text::toT(Text::toLower(Util::encodeURI(Text::fromT(idx->substr(0, pos)), true)));
-				param = Text::toT(Util::encodeURI(Text::fromT(idx->substr(pos + 1)), true));
+				type = Text::toT(Text::toLower(Util::encodeURI(Text::fromT(idx.substr(0, pos)), true)));
+				param = Text::toT(Util::encodeURI(Text::fromT(idx.substr(pos + 1)), true));
 			} else {
-				type = Text::toT(Util::encodeURI(Text::fromT(*idx), true));
+				type = Text::toT(Util::encodeURI(Text::fromT(idx), true));
 				param.clear();
 			}
 			// extract what is of value
@@ -1497,13 +1496,13 @@ typedef std::function<void(const HintedUser&, const string&)> UserFunction;
 
 void eachUser(const HintedUserList& list, const StringList& dirs, const UserFunction& f) {
 	size_t j = 0;
-	for(auto i = list.begin(), iend = list.end(); i != iend; ++i) {
+	for(auto& i: list) {
 		try {
-			f(*i, (j < dirs.size()) ? dirs[j] : string());
+			f(i, (j < dirs.size()) ? dirs[j] : string());
 		} catch (const Exception& e) {
 			LogManager::getInstance()->message(e.getError());
 		}
-		j++;
+		++j;
 	}
 }
 
@@ -1531,9 +1530,9 @@ void addUsers(Menu* menu, const tstring& text, const HintedUserList& users, cons
 template<typename F>
 HintedUserList filter(const HintedUserList& l, F f) {
 	HintedUserList ret;
-	for(auto i = l.begin(), iend = l.end(); i != iend; ++i) {
-		if(f(i->user)) {
-			ret.push_back(*i);
+	for(auto& i: l) {
+		if(f(i.user)) {
+			ret.push_back(i);
 		}
 	}
 	return ret;

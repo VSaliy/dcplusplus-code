@@ -98,9 +98,9 @@ OnlineUser* AdcHub::findUser(const uint32_t aSID) const {
 
 OnlineUser* AdcHub::findUser(const CID& aCID) const {
 	Lock l(cs);
-	for(auto i = users.begin(); i != users.end(); ++i) {
-		if(i->second->getUser()->getCID() == aCID) {
-			return i->second;
+	for(auto& i: users) {
+		if(i.second->getUser()->getCID() == aCID) {
+			return i.second;
 		}
 	}
 	return 0;
@@ -131,10 +131,10 @@ void AdcHub::clearUsers() {
 		users.swap(tmp);
 	}
 
-	for(auto i = tmp.begin(); i != tmp.end(); ++i) {
-		if(i->first != AdcCommand::HUB_SID)
-			ClientManager::getInstance()->putOffline(i->second);
-		delete i->second;
+	for(auto& i: tmp) {
+		if(i.first != AdcCommand::HUB_SID)
+			ClientManager::getInstance()->putOffline(i.second);
+		delete i.second;
 	}
 }
 
@@ -173,11 +173,11 @@ void AdcHub::handle(AdcCommand::INF, AdcCommand& c) noexcept {
 		return;
 	}
 
-	for(auto i = c.getParameters().begin(); i != c.getParameters().end(); ++i) {
-		if(i->length() < 2)
+	for(auto& i: c.getParameters()) {
+		if(i.length() < 2)
 			continue;
 
-		u->getIdentity().set(i->c_str(), i->substr(2));
+		u->getIdentity().set(i.c_str(), i.substr(2));
 	}
 
 	if(u->getIdentity().isBot()) {
@@ -210,13 +210,13 @@ void AdcHub::handle(AdcCommand::SUP, AdcCommand& c) noexcept {
 		return;
 	bool baseOk = false;
 	bool tigrOk = false;
-	for(auto i = c.getParameters().begin(); i != c.getParameters().end(); ++i) {
-		if(*i == BAS0_SUPPORT) {
+	for(auto& i: c.getParameters()) {
+		if(i == BAS0_SUPPORT) {
 			baseOk = true;
 			tigrOk = true;
-		} else if(*i == BASE_SUPPORT) {
+		} else if(i == BASE_SUPPORT) {
 			baseOk = true;
-		} else if(*i == TIGR_SUPPORT) {
+		} else if(i == TIGR_SUPPORT) {
 			tigrOk = true;
 		}
 	}
@@ -717,9 +717,9 @@ void AdcHub::sendUserCmd(const UserCommand& command, const ParamMap& params) {
 		} else {
 			const string& to = command.getTo();
 			Lock l(cs);
-			for(auto i = users.begin(); i != users.end(); ++i) {
-				if(i->second->getIdentity().getNick() == to) {
-					privateMessage(*i->second, cmd);
+			for(auto& i: users) {
+				if(i.second->getIdentity().getNick() == to) {
+					privateMessage(*i.second, cmd);
 					return;
 				}
 			}
@@ -823,8 +823,8 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 		}
 
 		StringTokenizer<string> st(aString, ' ');
-		for(auto i = st.getTokens().begin(); i != st.getTokens().end(); ++i) {
-			c.addParam("AN", *i);
+		for(auto& i: st.getTokens()) {
+			c.addParam("AN", i);
 		}
 
 		if(aFileType == SearchManager::TYPE_DIRECTORY) {
@@ -883,14 +883,14 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 				c_gr.setFeatures('+' + SEGA_FEATURE);
 
 				const auto& params = c.getParameters();
-				for(auto i = params.cbegin(), iend = params.cend(); i != iend; ++i)
-					c_gr.addParam(*i);
+				for(auto& i: params)
+					c_gr.addParam(i);
 
-				for(auto i = exts.cbegin(), iend = exts.cend(); i != iend; ++i)
-					c_gr.addParam("EX", *i);
+				for(auto& i: exts)
+					c_gr.addParam("EX", i);
 				c_gr.addParam("GR", Util::toString(gr));
-				for(auto i = rx.cbegin(), iend = rx.cend(); i != iend; ++i)
-					c_gr.addParam("RX", *i);
+				for(auto& i: rx)
+					c_gr.addParam("RX", i);
 
 				sendSearch(c_gr);
 
@@ -900,8 +900,8 @@ void AdcHub::search(int aSizeMode, int64_t aSize, int aFileType, const string& a
 			}
 		}
 
-		for(auto i = aExtList.cbegin(), iend = aExtList.cend(); i != iend; ++i)
-			c.addParam("EX", *i);
+		for(auto& i: aExtList)
+			c.addParam("EX", i);
 	}
 
 	sendSearch(c);
@@ -1032,8 +1032,8 @@ void AdcHub::info(bool /*alwaysSend*/) {
 int64_t AdcHub::getAvailable() const {
 	Lock l(cs);
 	int64_t x = 0;
-	for(auto i = users.begin(); i != users.end(); ++i) {
-		x+=i->second->getIdentity().getBytesShared();
+	for(auto& i: users) {
+		x += i.second->getIdentity().getBytesShared();
 	}
 	return x;
 }

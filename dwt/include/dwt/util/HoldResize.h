@@ -52,8 +52,8 @@ private:
 
 	bool resizeDefered() {
 		auto h = ::BeginDeferWindowPos(sizes.size());
-		for(auto i = sizes.begin(); i != sizes.end(); ++i) {
-			h = ::DeferWindowPos(h, i->hwnd, NULL, i->x, i->y, i->cx, i->cy, SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
+		for(auto& i: sizes) {
+			h = ::DeferWindowPos(h, i.hwnd, NULL, i.x, i.y, i.cx, i.cy, SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
 			if(h == NULL) {
 				return false;
 			}
@@ -67,8 +67,8 @@ private:
 	}
 
 	void resizeNormal() {
-		for(auto i = sizes.begin(); i != sizes.end(); ++i) {
-			::SetWindowPos(i->hwnd, NULL, i->x, i->y, i->cx, i->cy, SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
+		for(auto& i: sizes) {
+			::SetWindowPos(i.hwnd, NULL, i.x, i.y, i.cx, i.cy, SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
 		}
 	}
 };

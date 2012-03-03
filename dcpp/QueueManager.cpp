@@ -109,8 +109,8 @@ QueueItem* QueueManager::FileQueue::find(const string& target) {
 
 QueueManager::QueueItemList QueueManager::FileQueue::find(const TTHValue& tth) {
 	QueueItemList ql;
-	for(auto i = queue.begin(); i != queue.end(); ++i) {
-		QueueItem* qi = i->second;
+	for(auto& i: queue) {
+		auto qi = i.second;
 		if(qi->getTTH() == tth) {
 			ql.push_back(qi);
 		}
@@ -172,8 +172,8 @@ void QueueManager::FileQueue::move(QueueItem* qi, const string& aTarget) {
 }
 
 void QueueManager::UserQueue::add(QueueItem* qi) {
-	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
-		add(qi, i->getUser());
+	for(auto& i: qi->getSources()) {
+		add(qi, i.getUser());
 	}
 }
 
@@ -194,8 +194,7 @@ QueueItem* QueueManager::UserQueue::getNext(const UserPtr& aUser, QueueItem::Pri
 		auto i = userQueue[p].find(aUser);
 		if(i != userQueue[p].end()) {
 			dcassert(!i->second.empty());
-			for(auto j = i->second.begin(); j != i->second.end(); ++j) {
-				QueueItem* qi = *j;
+			for(auto qi: i->second) {
 				if(qi->isWaiting()) {
 					return qi;
 				}
@@ -256,8 +255,7 @@ pair<size_t, int64_t> QueueManager::UserQueue::getQueued(const UserPtr& aUser) c
 			continue;
 		}
 
-		for(auto j = iulm->second.begin(); j != iulm->second.end(); ++j) {
-			auto &qi = *j;
+		for(auto& qi: iulm->second) {
 			++ret.first;
 			if(qi->getSize() != -1) {
 				ret.second += qi->getSize() - qi->getDownloadedBytes();
@@ -273,8 +271,8 @@ QueueItem* QueueManager::UserQueue::getRunning(const UserPtr& aUser) {
 }
 
 void QueueManager::UserQueue::remove(QueueItem* qi, bool removeRunning) {
-	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
-		remove(qi, i->getUser(), removeRunning);
+	for(auto& i: qi->getSources()) {
+		remove(qi, i.getUser(), removeRunning);
 	}
 }
 
@@ -571,10 +569,10 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 			if (!ql.empty()) {
 				// Found one or more existing queue items, lets see if we can add the source to them
 				bool sourceAdded = false;
-				for(auto i = ql.begin(); i != ql.end(); ++i) {
-					if(!(*i)->isSource(aUser)) {
+				for(auto& i: ql) {
+					if(!i->isSource(aUser)) {
 						try {
-							wantConnection = addSource(*i, aUser, addBad ? QueueItem::Source::FLAG_MASK : 0);
+							wantConnection = addSource(i, aUser, addBad ? QueueItem::Source::FLAG_MASK : 0);
 							sourceAdded = true;
 						} catch(...) { }
 					}
@@ -761,14 +759,14 @@ int QueueManager::matchListing(const DirectoryListing& dl) noexcept {
 		TTHMap tthMap;
 		buildMap(dl.getRoot(), tthMap);
 
-		for(auto i = fileQueue.getQueue().cbegin(), iend = fileQueue.getQueue().cend(); i != iend; ++i) {
-			auto qi = i->second;
+		for(auto& i: fileQueue.getQueue()) {
+			auto qi = i.second;
 			if(qi->isFinished())
 				continue;
 			if(qi->isSet(QueueItem::FLAG_USER_LIST))
 				continue;
 			auto j = tthMap.find(qi->getTTH());
-			if(j != tthMap.end() && i->second->getSize() == qi->getSize()) {
+			if(j != tthMap.end() && i.second->getSize() == qi->getSize()) {
 				try {
 					addSource(qi, dl.getUser(), QueueItem::Source::FLAG_FILE_NOT_AVAILABLE);
 				} catch(...) {
@@ -832,9 +830,9 @@ void QueueManager::move(const string& aSource, const string& aTarget) noexcept {
 			if(qs->getSize() != qt->getSize() || qs->getTTH() != qt->getTTH())
 				return;
 
-			for(auto i = qs->getSources().begin(); i != qs->getSources().end(); ++i) {
+			for(auto& i: qs->getSources()) {
 				try {
-					addSource(qt, i->getUser(), QueueItem::Source::FLAG_MASK);
+					addSource(qt, i.getUser(), QueueItem::Source::FLAG_MASK);
 				} catch(const Exception&) {
 				}
 			}
@@ -851,8 +849,8 @@ StringList QueueManager::getTargets(const TTHValue& tth) {
 	Lock l(cs);
 	auto ql = fileQueue.find(tth);
 	StringList sl;
-	for(auto i = ql.begin(); i != ql.end(); ++i) {
-		sl.push_back((*i)->getTarget());
+	for(auto& i: ql) {
+		sl.push_back(i->getTarget());
 	}
 	return sl;
 }
@@ -1095,8 +1093,8 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 		}
 	}
 
-	for(auto i = getConn.begin(); i != getConn.end(); ++i) {
-		ConnectionManager::getInstance()->getDownloadConnection(*i);
+	for(auto& i: getConn) {
+		ConnectionManager::getInstance()->getDownloadConnection(i);
 	}
 
 	if(!fl_fname.empty()) {
@@ -1122,8 +1120,7 @@ void QueueManager::processList(const string& name, const HintedUser& user, int f
 			directories.erase(user);
 		}
 
-		for(auto i = dl.begin(); i != dl.end(); ++i) {
-			DirectoryItem* di = *i;
+		for(auto di: dl) {
 			dirList.download(di->getName(), di->getTarget(), false);
 			delete di;
 		}
@@ -1158,8 +1155,8 @@ void QueueManager::remove(const string& aTarget) noexcept {
 		}
 
 		if(q->isRunning()) {
-			for(auto i = q->getDownloads().begin(); i != q->getDownloads().end(); ++i) {
-				x.push_back((*i)->getUser());
+			for(auto& i: q->getDownloads()) {
+				x.push_back(i->getUser());
 			}
 		} else if(!q->getTempTarget().empty() && q->getTempTarget() != q->getTarget()) {
 			File::deleteFile(q->getTempTarget());
@@ -1175,8 +1172,8 @@ void QueueManager::remove(const string& aTarget) noexcept {
 		setDirty();
 	}
 
-	for(auto i = x.begin(); i != x.end(); ++i) {
-		ConnectionManager::getInstance()->disconnect(*i, true);
+	for(auto& i: x) {
+		ConnectionManager::getInstance()->disconnect(i, true);
 	}
 }
 
@@ -1290,8 +1287,8 @@ void QueueManager::setPriority(const string& aTarget, QueueItem::Priority p) noe
 		}
 	}
 
-	for(auto i = getConn.begin(); i != getConn.end(); ++i) {
-		ConnectionManager::getInstance()->getDownloadConnection(*i);
+	for(auto& i: getConn) {
+		ConnectionManager::getInstance()->getDownloadConnection(i);
 	}
 }
 
@@ -1311,8 +1308,8 @@ void QueueManager::saveQueue(bool force) noexcept {
 		f.write(LIT("<Downloads Version=\"" VERSIONSTRING "\">\r\n"));
 		string tmp;
 		string b32tmp;
-		for(auto i = fileQueue.getQueue().begin(); i != fileQueue.getQueue().end(); ++i) {
-			QueueItem* qi = i->second;
+		for(auto& i: fileQueue.getQueue()) {
+			QueueItem* qi = i.second;
 			if(!qi->isSet(QueueItem::FLAG_USER_LIST)) {
 				f.write(LIT("\t<Download Target=\""));
 				f.write(SimpleXML::escape(qi->getTarget(), tmp, true));
@@ -1331,17 +1328,17 @@ void QueueManager::saveQueue(bool force) noexcept {
 				}
 				f.write(LIT("\">\r\n"));
 
-				for(auto i = qi->getDone().begin(); i != qi->getDone().end(); ++i) {
+				for(auto& j: qi->getDone()) {
 					f.write(LIT("\t\t<Segment Start=\""));
-					f.write(Util::toString(i->getStart()));
+					f.write(Util::toString(j.getStart()));
 					f.write(LIT("\" Size=\""));
-					f.write(Util::toString(i->getSize()));
+					f.write(Util::toString(j.getSize()));
 					f.write(LIT("\"/>\r\n"));
 				}
 
-				for(auto j = qi->sources.begin(); j != qi->sources.end(); ++j) {
-					const CID& cid = j->getUser().user->getCID();
-					const string& hint = j->getUser().hint;
+				for(auto& j: qi->sources) {
+					const CID& cid = j.getUser().user->getCID();
+					const string& hint = j.getUser().hint;
 
 					f.write(LIT("\t\t<Source CID=\""));
 					f.write(cid.toBase32());
@@ -1406,8 +1403,8 @@ int QueueManager::countOnlineSources(const string& aTarget) {
 	if(!qi)
 		return 0;
 	int onlineSources = 0;
-	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
-		if(i->getUser().user->isOnline())
+	for(auto& i: qi->getSources()) {
+		if(i.getUser().user->isOnline())
 			onlineSources++;
 	}
 	return onlineSources;
@@ -1523,9 +1520,7 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) noex
 		Lock l(cs);
 		auto matches = fileQueue.find(sr->getTTH());
 
-		for(auto i = matches.begin(); i != matches.end(); ++i) {
-			QueueItem* qi = *i;
-
+		for(auto qi: matches) {
 			// Size compare to avoid popular spoof
 			if(qi->getSize() == sr->getSize() && !qi->isSource(sr->getUser())) {
 				try {
@@ -1561,8 +1556,8 @@ void QueueManager::on(ClientManagerListener::UserConnected, const UserPtr& aUser
 		for(int i = 0; i < QueueItem::LAST; ++i) {
 			auto j = userQueue.getList(i).find(aUser);
 			if(j != userQueue.getList(i).end()) {
-				for(auto m = j->second.begin(); m != j->second.end(); ++m)
-					fire(QueueManagerListener::StatusUpdated(), *m);
+				for(auto& m: j->second)
+					fire(QueueManagerListener::StatusUpdated(), m);
 				if(i != QueueItem::PAUSED)
 					hasDown = true;
 			}
@@ -1580,8 +1575,8 @@ void QueueManager::on(ClientManagerListener::UserDisconnected, const UserPtr& aU
 	for(int i = 0; i < QueueItem::LAST; ++i) {
 		auto j = userQueue.getList(i).find(aUser);
 		if(j != userQueue.getList(i).end()) {
-			for(auto m = j->second.begin(); m != j->second.end(); ++m)
-				fire(QueueManagerListener::StatusUpdated(), *m);
+			for(auto& m: j->second)
+				fire(QueueManagerListener::StatusUpdated(), m);
 		}
 	}
 }
@@ -1616,8 +1611,8 @@ bool QueueManager::checkSfv(QueueItem* qi, Download* d) {
 			setPriority(qi->getTarget(), QueueItem::PAUSED);
 
 			QueueItem::SourceList sources = qi->getSources();
-			for(auto i = sources.begin(); i != sources.end(); ++i) {
-				removeSource(qi->getTarget(), i->getUser(), QueueItem::Source::FLAG_CRC_FAILED, false);
+			for(auto& i: sources) {
+				removeSource(qi->getTarget(), i.getUser(), QueueItem::Source::FLAG_CRC_FAILED, false);
 			}
 
 			fire(QueueManagerListener::CRCFailed(), d, _("CRC32 inconsistency (SFV-Check)"));

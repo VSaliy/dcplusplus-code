@@ -47,8 +47,8 @@ public:
 	void fire(T0&& type) noexcept {
 		Lock l(listenerCS);
 		tmp = listeners;
-		for(auto i = tmp.begin(); i != tmp.end(); ++i) {
-			(*i)->on(forward<T0>(type));
+		for(auto i: tmp) {
+			i->on(forward<T0>(type));
 		}
 	}
 
@@ -56,8 +56,8 @@ public:
 	void fire(T0&& type, T1&& p1) noexcept {
 		Lock l(listenerCS);
 		tmp = listeners;
-		for(auto i = tmp.begin(); i != tmp.end(); ++i) {
-			(*i)->on(forward<T0>(type), forward<T1>(p1));
+		for(auto i: tmp) {
+			i->on(forward<T0>(type), forward<T1>(p1));
 		}
 	}
 
@@ -65,8 +65,8 @@ public:
 	void fire(T0&& type, T1&& p1, T2&& p2) noexcept {
 		Lock l(listenerCS);
 		tmp = listeners;
-		for(auto i = tmp.begin(); i != tmp.end(); ++i) {
-			(*i)->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2));
+		for(auto i: tmp) {
+			i->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2));
 		}
 	}
 
@@ -74,8 +74,8 @@ public:
 	void fire(T0&& type, T1&& p1, T2&& p2, T3&& p3) noexcept {
 		Lock l(listenerCS);
 		tmp = listeners;
-		for(auto i = tmp.begin(); i != tmp.end(); ++i) {
-			(*i)->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2), forward<T3>(p3));
+		for(auto i: tmp) {
+			i->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2), forward<T3>(p3));
 		}
 	}
 
@@ -83,8 +83,8 @@ public:
 	void fire(T0&& type, T1&& p1, T2&& p2, T3&& p3, T4&& p4) noexcept {
 		Lock l(listenerCS);
 		tmp = listeners;
-		for(auto i = tmp.begin(); i != tmp.end(); ++i) {
-			(*i)->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2), forward<T3>(p3), forward<T4>(p4));
+		for(auto i: tmp) {
+			i->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2), forward<T3>(p3), forward<T4>(p4));
 		}
 	}
 
@@ -92,8 +92,8 @@ public:
 	void fire(T0&& type, T1&& p1, T2&& p2, T3&& p3, T4&& p4, T5&& p5) noexcept {
 		Lock l(listenerCS);
 		tmp = listeners;
-		for(auto i = tmp.begin(); i != tmp.end(); ++i) {
-			(*i)->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2), forward<T3>(p3), forward<T4>(p4), forward<T5>(p5));
+		for(auto i: tmp) {
+			i->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2), forward<T3>(p3), forward<T4>(p4), forward<T5>(p5));
 		}
 	}
 
@@ -101,8 +101,8 @@ public:
 	void fire(T0&& type, T1&& p1, T2&& p2, T3&& p3, T4&& p4, T5&& p5, T6&& p6) noexcept {
 		Lock l(listenerCS);
 		tmp = listeners;
-		for(auto i = tmp.begin(); i != tmp.end(); ++i) {
-			(*i)->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2), forward<T3>(p3), forward<T4>(p4), forward<T5>(p5), forward<T6>(p6));
+		for(auto i: tmp) {
+			i->on(forward<T0>(type), forward<T1>(p1), forward<T2>(p2), forward<T3>(p3), forward<T4>(p4), forward<T5>(p5), forward<T6>(p6));
 		}
 	}
 

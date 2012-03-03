@@ -350,8 +350,8 @@ void SettingsDialog::updateTitle() {
 }
 
 void SettingsDialog::write() {
-	for(auto i = pages.begin(); i != pages.end(); ++i) {
-		i->first->write();
+	for(auto& i: pages) {
+		i.first->write();
 	}
 }
 

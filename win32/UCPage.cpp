@@ -79,9 +79,7 @@ commands(0)
 
 	WinUtil::makeColumns(commands, columns, 3);
 
-	UserCommand::List lst = FavoriteManager::getInstance()->getUserCommands();
-	for(auto i = lst.begin(); i != lst.end(); ++i) {
-		const UserCommand& uc = *i;
+	for(const auto& uc: FavoriteManager::getInstance()->getUserCommands()) {
 		if(!uc.isSet(UserCommand::FLAG_NOSAVE))
 			addEntry(uc);
 	}

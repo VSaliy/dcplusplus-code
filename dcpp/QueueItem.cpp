@@ -39,17 +39,17 @@ namespace {
 
 int QueueItem::countOnlineUsers() const {
 	int n = 0;
-	for(auto i = sources.begin(), iend = sources.end(); i != iend; ++i) {
-		if(i->getUser().user->isOnline())
+	for(auto& i: sources) {
+		if(i.getUser().user->isOnline())
 			n++;
 	}
 	return n;
 }
 
 void QueueItem::getOnlineUsers(HintedUserList& l) const {
-	for(auto i = sources.begin(), iend = sources.end(); i != iend; ++i)
-		if(i->getUser().user->isOnline())
-			l.push_back(i->getUser());
+	for(auto& i: sources)
+		if(i.getUser().user->isOnline())
+			l.push_back(i.getUser());
 }
 
 void QueueItem::addSource(const HintedUser& aUser) {
@@ -173,8 +173,8 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 
 int64_t QueueItem::getDownloadedBytes() const {
 	int64_t total = 0;
-	for(auto i = done.begin(); i != done.end(); ++i) {
-		total += i->getSize();
+	for(auto& i: done) {
+		total += i.getSize();
 	}
 	return total;
 }

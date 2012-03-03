@@ -115,14 +115,14 @@ void FinishedManager::getParams(const string & target, ParamMap& params) {
 	if (!entry->getUsers().empty()) {
 		StringList nicks, cids, ips, hubNames, hubUrls, temp;
 		string ip;
-		for(auto i = entry->getUsers().begin(), iend = entry->getUsers().end(); i != iend; ++i) {
+		for(auto& i: entry->getUsers()) {
 
-			nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks(*i)));
-			cids.push_back(i->user->getCID().toBase32());
+			nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks(i)));
+			cids.push_back(i.user->getCID().toBase32());
 
 			ip.clear();
-			if (i->user->isOnline()) {
-				OnlineUser* u = ClientManager::getInstance()->findOnlineUser(*i, false);
+			if (i.user->isOnline()) {
+				OnlineUser* u = ClientManager::getInstance()->findOnlineUser(i, false);
 				if (u) {
 					ip = u->getIdentity().getIp();
 				}
@@ -132,13 +132,13 @@ void FinishedManager::getParams(const string & target, ParamMap& params) {
 			}
 			ips.push_back(ip);
 
-			temp = ClientManager::getInstance()->getHubNames(*i);
+			temp = ClientManager::getInstance()->getHubNames(i);
 			if(temp.empty()) {
 				temp.push_back(_("Offline"));
 			}
 			hubNames.push_back(Util::toString(temp));
 
-			temp = ClientManager::getInstance()->getHubUrls(*i);
+			temp = ClientManager::getInstance()->getHubUrls(i);
 			if(temp.empty()) {
 				temp.push_back(_("Offline"));
 			}

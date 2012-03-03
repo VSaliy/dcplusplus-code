@@ -183,9 +183,8 @@ ensureVisible(ensureVisible_)
 	hubs->sendMessage(WM_SETREDRAW, FALSE);
 
 	// in grouped mode, the indexes of each item are completely random, so use entry pointers instead
-	std::vector<unsigned> selection = hubs->getSelection();
-	for(auto i = selection.begin(), iend = selection.end(); i != iend; ++i)
-		selected.push_back(reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i)));
+	for(auto i: hubs->getSelection())
+		selected.push_back(reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(i)));
 
 	scroll = hubs->getScrollInfo(SB_VERT, SIF_POS).nPos;
 }
@@ -196,8 +195,8 @@ FavHubsFrame::StateKeeper::~StateKeeper() {
 
 	hubs->scroll(0, scroll);
 
-	for(auto i = selected.begin(), iend = selected.end(); i != iend; ++i) {
-		int pos = hubs->findData(reinterpret_cast<LPARAM>(*i));
+	for(auto i: selected) {
+		int pos = hubs->findData(reinterpret_cast<LPARAM>(i));
 		hubs->select(pos);
 		if(ensureVisible)
 			hubs->ensureVisible(pos);
@@ -368,9 +367,8 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 
 TStringList FavHubsFrame::getSortedGroups() const {
 	set<tstring, noCaseStringLess> sorted_groups;
-	const FavHubGroups& favHubGroups = FavoriteManager::getInstance()->getFavHubGroups();
-	for(auto i = favHubGroups.begin(), iend = favHubGroups.end(); i != iend; ++i)
-		sorted_groups.insert(Text::toT(i->first));
+	for(auto& i: FavoriteManager::getInstance()->getFavHubGroups())
+		sorted_groups.insert(Text::toT(i.first));
 
 	TStringList groups(sorted_groups.begin(), sorted_groups.end());
 	groups.insert(groups.begin(), Util::emptyStringT); // default group (otherwise, hubs without group don't show up)
@@ -379,8 +377,8 @@ TStringList FavHubsFrame::getSortedGroups() const {
 
 void FavHubsFrame::fillGroupMenu(Menu* menu) {
 	TStringList groups(getSortedGroups());
-	for(auto i = groups.cbegin(), iend = groups.cend(); i != iend; ++i) {
-		const tstring& group = i->empty() ? T_("Default group") : *i;
+	for(auto& i: groups) {
+		const tstring& group = i.empty() ? T_("Default group") : i;
 		menu->appendItem(group, [this, group] { handleGroup(Text::fromT(group)); });
 	}
 }
@@ -390,9 +388,7 @@ void FavHubsFrame::fillList() {
 	hubs->setGroups(groups);
 	bool grouped = hubs->isGrouped();
 
-	const FavoriteHubEntryList& fl = FavoriteManager::getInstance()->getFavoriteHubs();
-	for(auto i = fl.begin(), iend = fl.end(); i != iend; ++i) {
-		const FavoriteHubEntryPtr& entry = *i;
+	for(const auto& entry: FavoriteManager::getInstance()->getFavoriteHubs()) {
 		const string& group = entry->getGroup();
 
 		int index;
@@ -431,9 +427,8 @@ void FavHubsFrame::openSelected() {
 	if(!WinUtil::checkNick())
 		return;
 
-	std::vector<unsigned> items = hubs->getSelection();
-	for(auto i = items.begin(), iend = items.end(); i != iend; ++i) {
-		HubFrame::openWindow(getParent(), reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(*i))->getServer());
+	for(auto i: hubs->getSelection()) {
+		HubFrame::openWindow(getParent(), reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(i))->getServer());
 	}
 }
 

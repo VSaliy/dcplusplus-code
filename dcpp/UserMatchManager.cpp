@@ -51,9 +51,8 @@ void UserMatchManager::setList(UserMatches&& newList) {
 	const_cast<UserMatches&>(list) = std::forward<UserMatches>(newList);
 
 	// refresh user matches.
-	auto& users = cm->getOnlineUsers();
-	for(auto i = users.begin(), iend = users.end(); i != iend; ++i) {
-		i->second->getClient().updated(*i->second);
+	for(auto& i: cm->getOnlineUsers()) {
+		i.second->getClient().updated(*i.second);
 	}
 }
 
@@ -63,24 +62,24 @@ void UserMatchManager::match(OnlineUser& user) const {
 	bool chatSet = false;
 	Style style;
 
-	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
-		if(i->match(user)) {
+	for(auto& i: list) {
+		if(i.match(user)) {
 
-			if(!chatSet && (i->isSet(UserMatch::FORCE_CHAT) || i->isSet(UserMatch::IGNORE_CHAT))) {
-				identity.setNoChat(i->isSet(UserMatch::IGNORE_CHAT));
+			if(!chatSet && (i.isSet(UserMatch::FORCE_CHAT) || i.isSet(UserMatch::IGNORE_CHAT))) {
+				identity.setNoChat(i.isSet(UserMatch::IGNORE_CHAT));
 				chatSet = true;
 			}
 
-			if(style.font.empty() && !i->style.font.empty()) {
-				style.font = i->style.font;
+			if(style.font.empty() && !i.style.font.empty()) {
+				style.font = i.style.font;
 			}
 
-			if(style.textColor < 0 && i->style.textColor >= 0) {
-				style.textColor = i->style.textColor;
+			if(style.textColor < 0 && i.style.textColor >= 0) {
+				style.textColor = i.style.textColor;
 			}
 
-			if(style.bgColor < 0 && i->style.bgColor >= 0) {
-				style.bgColor = i->style.bgColor;
+			if(style.bgColor < 0 && i.style.bgColor >= 0) {
+				style.bgColor = i.style.bgColor;
 			}
 		}
 	}
@@ -187,28 +186,28 @@ void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcep
 void UserMatchManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcept {
 	xml.addTag("UserMatches");
 	xml.stepIn();
-	for(auto i = list.cbegin(), iend = list.cend(); i != iend; ++i) {
+	for(auto& i: list) {
 		xml.addTag("UserMatch");
 
-		xml.addChildAttrib("Name", i->name);
+		xml.addChildAttrib("Name", i.name);
 
-		if(i->isSet(UserMatch::PREDEFINED)) { xml.addChildAttrib("Predefined", true); }
-		if(i->isSet(UserMatch::GENERATED)) { xml.addChildAttrib("Generated", true); }
-		if(i->isSet(UserMatch::FAVS)) { xml.addChildAttrib("Favs", true); }
-		if(i->isSet(UserMatch::OPS)) { xml.addChildAttrib("Ops", true); }
-		if(i->isSet(UserMatch::BOTS)) { xml.addChildAttrib("Bots", true); }
-		if(i->isSet(UserMatch::FORCE_CHAT)) { xml.addChildAttrib("ForceChat", true); }
-		if(i->isSet(UserMatch::IGNORE_CHAT)) { xml.addChildAttrib("IgnoreChat", true); }
+		if(i.isSet(UserMatch::PREDEFINED)) { xml.addChildAttrib("Predefined", true); }
+		if(i.isSet(UserMatch::GENERATED)) { xml.addChildAttrib("Generated", true); }
+		if(i.isSet(UserMatch::FAVS)) { xml.addChildAttrib("Favs", true); }
+		if(i.isSet(UserMatch::OPS)) { xml.addChildAttrib("Ops", true); }
+		if(i.isSet(UserMatch::BOTS)) { xml.addChildAttrib("Bots", true); }
+		if(i.isSet(UserMatch::FORCE_CHAT)) { xml.addChildAttrib("ForceChat", true); }
+		if(i.isSet(UserMatch::IGNORE_CHAT)) { xml.addChildAttrib("IgnoreChat", true); }
 
-		xml.addChildAttrib("Font", i->style.font);
-		xml.addChildAttrib("TextColor", i->style.textColor);
-		xml.addChildAttrib("BgColor", i->style.bgColor);
+		xml.addChildAttrib("Font", i.style.font);
+		xml.addChildAttrib("TextColor", i.style.textColor);
+		xml.addChildAttrib("BgColor", i.style.bgColor);
 
 		xml.stepIn();
-		for(auto rule = i->rules.cbegin(), rule_end = i->rules.cend(); rule != rule_end; ++rule) {
-			xml.addTag("Rule", rule->pattern);
-			xml.addChildAttrib("Field", rule->field);
-			xml.addChildAttrib("Method", rule->getMethod());
+		for(auto& rule: i.rules) {
+			xml.addTag("Rule", rule.pattern);
+			xml.addChildAttrib("Field", rule.field);
+			xml.addChildAttrib("Method", rule.getMethod());
 		}
 		xml.stepOut();
 	}

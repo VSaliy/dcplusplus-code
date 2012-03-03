@@ -247,8 +247,8 @@ private:
 			auto lock = FinishedManager::getInstance()->lock();
 			{
 				StringList nicks;
-				for(auto i = entry->getUsers().begin(), iend = entry->getUsers().end(); i != iend; ++i)
-					nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks(*i)));
+				for(auto& i: entry->getUsers())
+					nicks.push_back(Util::toString(ClientManager::getInstance()->getNicks(i)));
 				columns[FILES_COLUMN_NICKS] = Text::toT(Util::toString(nicks));
 			}
 			columns[FILES_COLUMN_TRANSFERRED] = Text::toT(Util::formatBytes(entry->getTransferred()));
@@ -529,15 +529,13 @@ private:
 		auto lock = FinishedManager::getInstance()->lock();
 		{
 			HoldRedraw hold(files);
-			const FinishedManager::MapByFile& map = FinishedManager::getInstance()->getMapByFile(in_UL);
-			for(auto i = map.begin(); i != map.end(); ++i)
-				addFile(i->first, i->second);
+			for(auto& i: FinishedManager::getInstance()->getMapByFile(in_UL))
+				addFile(i.first, i.second);
 		}
 		{
 			HoldRedraw hold(users);
-			const FinishedManager::MapByUser& map = FinishedManager::getInstance()->getMapByUser(in_UL);
-			for(auto i = map.begin(); i != map.end(); ++i)
-				addUser(i->first, i->second);
+			for(auto& i: FinishedManager::getInstance()->getMapByUser(in_UL))
+				addUser(i.first, i.second);
 		}
 
 		updateStatus();

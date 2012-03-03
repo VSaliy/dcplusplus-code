@@ -212,8 +212,8 @@ bool Application::dispatch() {
 		}
 	}
 
-	for(auto i = filters.begin(); i != filters.end(); ++i) {
-		if ((*i)(msg)) {
+	for(auto& i: filters) {
+		if(i(msg)) {
 			return true;
 		}
 	}

@@ -145,8 +145,8 @@ void DirectoryListingFrame::openOwnList(TabViewPtr parent, const tstring& dir, A
 }
 
 void DirectoryListingFrame::closeAll() {
-	for(auto i = lists.begin(); i != lists.end(); ++i)
-		i->second->close(true);
+	for(auto& i: lists)
+		i.second->close(true);
 }
 
 WindowParams DirectoryListingFrame::getWindowParams() const {
@@ -510,7 +510,7 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 			auto d = dirs->getData(dir)->dir;
 			if(d->getAdls()) {
 				HTREEITEM child;
-				while(child = dirs->getChild(dir)) {
+				while((child = dirs->getChild(dir))) {
 					dirs->erase(child);
 				}
 				dirs->erase(dir);
@@ -637,12 +637,7 @@ void DirectoryListingFrame::handleFindToggle() {
 		searchGrid->setVisible(false);
 		grid->row(0).mode = GridInfo::STATIC;
 	} else {
-#ifndef _MSC_VER
 		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i) {
-#else
-		// crbegin / crend don't play well with boost containers & MSVC...
-		for(auto i = lastSearches.rbegin(), iend = lastSearches.rend(); i != iend; ++i) {
-#endif
 			auto p = i->get();
 			searchBox->setData(searchBox->addValue(p->first), reinterpret_cast<LPARAM>(p));
 		}
@@ -663,7 +658,7 @@ void DirectoryListingFrame::refreshTree(const tstring& root) {
 
 	auto d = dirs->getData(ht)->dir;
 	HTREEITEM child;
-	while(child = dirs->getChild(ht)) {
+	while((child = dirs->getChild(ht))) {
 		dirs->erase(child);
 	}
 	updateDir(d, ht);
@@ -745,8 +740,7 @@ void DirectoryListingFrame::addUserCommands(Menu* menu) {
 
 void DirectoryListingFrame::addShellPaths(ShellMenu* menu, const vector<ItemInfo*>& sel) {
 	StringList ShellMenuPaths;
-	for(auto i = sel.cbegin(), iend = sel.cend(); i != iend; ++i) {
-		ItemInfo* ii = *i;
+	for(auto& ii: sel) {
 		StringList paths;
 		switch(ii->type) {
 			case ItemInfo::FILE: paths = dl->getLocalPaths(ii->file); break;
@@ -815,8 +809,8 @@ bool DirectoryListingFrame::handleFilesContextMenu(dwt::ScreenCoordinate pt) {
 
 		if(dl->getUser() == ClientManager::getInstance()->getMe()) {
 			vector<ItemInfo*> sel;
-			for(auto i = selected.cbegin(), iend = selected.cend(); i != iend; ++i)
-				sel.push_back(files->getData(*i));
+			for(auto& i: selected)
+				sel.push_back(files->getData(i));
 			addShellPaths(menu.get(), sel);
 		}
 
@@ -1052,8 +1046,8 @@ void DirectoryListingFrame::addDir(DirectoryListing::Directory* d, HTREEITEM par
 }
 
 void DirectoryListingFrame::updateDir(DirectoryListing::Directory* d, HTREEITEM parent) {
-	for(auto i = d->directories.begin(); i != d->directories.end(); ++i) {
-		addDir(*i, parent);
+	for(auto& i: d->directories) {
+		addDir(i, parent);
 	}
 }
 
@@ -1114,8 +1108,8 @@ void DirectoryListingFrame::handleSelectionChanged() {
 	addHistory(dl->getPath(d));
 
 	pathBox->clear();
-	for(auto i = history.cbegin(), iend = history.cend(); i != iend; ++i)
-		pathBox->addValue(i->empty() ? getText() : Text::toT(*i));
+	for(auto& i: history)
+		pathBox->addValue(i.empty() ? getText() : Text::toT(i));
 	pathBox->setSelected(historyIndex - 1);
 
 	updateRecent();
@@ -1125,11 +1119,11 @@ void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 	updating = true;
 	files->clear();
 
-	for(auto i = d->directories.begin(); i != d->directories.end(); ++i) {
-		files->insert(files->size(), new ItemInfo(*i));
+	for(auto& i: d->directories) {
+		files->insert(files->size(), new ItemInfo(i));
 	}
-	for(auto j = d->files.begin(); j != d->files.end(); ++j) {
-		ItemInfo* ii = new ItemInfo(*j);
+	for(auto& j: d->files) {
+		ItemInfo* ii = new ItemInfo(j);
 		files->insert(files->size(), ii);
 	}
 	files->resort();
@@ -1296,8 +1290,8 @@ void DirectoryListingFrame::findFile(bool reverse) {
 		pos = -1;
 	}
 
-	for(auto i = collapse.cbegin(), iend = collapse.cend(); i != iend; ++i)
-		dirs->collapse(*i);
+	for(auto& i: collapse)
+		dirs->collapse(i);
 
 	if(item) {
 		selectDir(item);
