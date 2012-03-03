@@ -249,7 +249,7 @@ private:
 
 	int listN;
 
-	atomic_flag refreshing;
+	static atomic_flag refreshing;
 
 	uint64_t lastXmlUpdate;
 	uint64_t lastFullUpdate;

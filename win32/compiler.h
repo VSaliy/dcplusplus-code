@@ -22,8 +22,8 @@
 #endif
 
 #elif defined(_MSC_VER)
-#if _MSC_VER < 1600
-#error MSVC 10 (2010) is required
+#if _MSC_VER < 1700
+#error MSVC 11 is required
 #endif
 
 #else

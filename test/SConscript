@@ -46,8 +46,6 @@ if env['arch'] != 'x86':
 	openssl_lib += env['arch'] + '/'
 env.Append(LIBPATH = [openssl_lib])
 
-dev.msvc_boost_containers(env)
-
 if env['msvcproj']:
 	ret = dev.build_lib(env, target, sources, dev.cpp_lib)
 else:

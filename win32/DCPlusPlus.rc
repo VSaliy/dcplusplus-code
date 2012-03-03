@@ -1,23 +1,4 @@
-// Microsoft Visual C++ generated resource script.
-//
 #include "resource.h"
-#include <winuser.h>
-#include <commctrl.h>
-/////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
-
-#ifdef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// TEXTINCLUDE
-//
-
-1 TEXTINCLUDE 
-BEGIN
-    "win32/resource.h\0"
-END
-
-#endif    // APSTUDIO_INVOKED
 
 #if defined x86
 1 24 "res/DCPlusPlus.manifest.x86"

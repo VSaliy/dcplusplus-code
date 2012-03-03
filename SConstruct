@@ -54,8 +54,9 @@ msvc_link_flags = {
 	'release' : []
 }
 
+# TODO remove _VARIADIC_MAX if/when VC has proper variadic template support
 msvc_defs = {
-	'common' : ['_REENTRANT', 'snprintf=_snprintf'],
+	'common' : ['_REENTRANT', '_VARIADIC_MAX=10', 'snprintf=_snprintf'],
 	'debug' : ['_DEBUG', '_HAS_ITERATOR_DEBUGGING=0', '_SECURE_SCL=0'],
 	'release' : ['NDEBUG']
 }
@@ -107,7 +108,9 @@ TARGET_ARCH = defEnv['arch']
 if TARGET_ARCH == 'x64':
 	TARGET_ARCH = 'amd64'
 
-env = Environment(ENV = os.environ, tools = [defEnv['tools']], options = opts, TARGET_ARCH = TARGET_ARCH, MSVS_ARCH = TARGET_ARCH)
+env = Environment(ENV = os.environ, tools = [defEnv['tools']], options = opts,
+		TARGET_ARCH = TARGET_ARCH, MSVS_ARCH = TARGET_ARCH,
+		MSVC_USE_SCRIPT = False) # TODO this disables SCons' automatic env setup as it doesn't know about VC 11 yet
 
 if 'mingw' not in env['TOOLS'] and 'gcc' in env['TOOLS']:
 	raise Exception('Non-mingw gcc builds not supported')
