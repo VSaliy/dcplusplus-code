@@ -130,8 +130,7 @@ void ConnectionManager::on(TimerManagerListener::Second, uint64_t aTick) noexcep
 
 		bool attemptDone = false;
 
-		for(auto i = downloads.begin(); i != downloads.end(); ++i) {
-			ConnectionQueueItem* cqi = *i;
+		for(auto cqi: downloads) {
 
 			if(cqi->getState() != ConnectionQueueItem::ACTIVE) {
 				if(!cqi->getUser().user->isOnline()) {
@@ -186,23 +185,23 @@ void ConnectionManager::on(TimerManagerListener::Second, uint64_t aTick) noexcep
 			}
 		}
 
-		for(auto m = removed.begin(); m != removed.end(); ++m) {
-			putCQI(*m);
+		for(auto m: removed) {
+			putCQI(m);
 		}
 
 	}
 
-	for(auto ui = passiveUsers.begin(); ui != passiveUsers.end(); ++ui) {
-		QueueManager::getInstance()->removeSource(*ui, QueueItem::Source::FLAG_PASSIVE);
+	for(auto& ui: passiveUsers) {
+		QueueManager::getInstance()->removeSource(ui, QueueItem::Source::FLAG_PASSIVE);
 	}
 }
 
 void ConnectionManager::on(TimerManagerListener::Minute, uint64_t aTick) noexcept {
 	Lock l(cs);
 
-	for(auto j = userConnections.begin(); j != userConnections.end(); ++j) {
-		if(((*j)->getLastActivity() + 180*1000) < aTick) {
-			(*j)->disconnect(true);
+	for(auto& j: userConnections) {
+		if((j->getLastActivity() + 180*1000) < aTick) {
+			j->disconnect(true);
 		}
 	}
 }
@@ -362,9 +361,9 @@ void ConnectionManager::on(AdcCommand::SUP, UserConnection* aSource, const AdcCo
 
 	bool baseOk = false;
 
-	for(auto i = cmd.getParameters().begin(); i != cmd.getParameters().end(); ++i) {
-		if(i->compare(0, 2, "AD") == 0) {
-			string feat = i->substr(2);
+	for(auto& i: cmd.getParameters()) {
+		if(i.compare(0, 2, "AD") == 0) {
+			string feat = i.substr(2);
 			if(feat == UserConnection::FEATURE_ADC_BASE || feat == UserConnection::FEATURE_ADC_BAS0) {
 				baseOk = true;
 				// ADC clients must support all these...
@@ -458,8 +457,7 @@ void ConnectionManager::on(UserConnectionListener::MyNick, UserConnection* aSour
 	// First, we try looking in the pending downloads...hopefully it's one of them...
 	{
 		Lock l(cs);
-		for(auto i = downloads.begin(); i != downloads.end(); ++i) {
-			ConnectionQueueItem* cqi = *i;
+		for(auto cqi: downloads) {
 			cqi->setErrors(0);
 			if((cqi->getState() == ConnectionQueueItem::CONNECTING || cqi->getState() == ConnectionQueueItem::WAITING) &&
 				cqi->getUser().user->getCID() == cid)
@@ -761,8 +759,7 @@ void ConnectionManager::on(UserConnectionListener::ProtocolError, UserConnection
 
 void ConnectionManager::disconnect(const UserPtr& aUser) {
 	Lock l(cs);
-	for(auto i = userConnections.begin(); i != userConnections.end(); ++i) {
-		UserConnection* uc = *i;
+	for(auto uc: userConnections) {
 		if(uc->getUser() == aUser)
 			uc->disconnect(true);
 	}
@@ -770,8 +767,7 @@ void ConnectionManager::disconnect(const UserPtr& aUser) {
 
 void ConnectionManager::disconnect(const UserPtr& aUser, int isDownload) {
 	Lock l(cs);
-	for(auto i = userConnections.begin(); i != userConnections.end(); ++i) {
-		UserConnection* uc = *i;
+	for(auto uc: userConnections) {
 		if(uc->getUser() == aUser && uc->isSet(isDownload ? UserConnection::FLAG_DOWNLOAD : UserConnection::FLAG_UPLOAD)) {
 			uc->disconnect(true);
 			break;
@@ -785,8 +781,8 @@ void ConnectionManager::shutdown() {
 	disconnect();
 	{
 		Lock l(cs);
-		for(auto j = userConnections.begin(); j != userConnections.end(); ++j) {
-			(*j)->disconnect(true);
+		for(auto j: userConnections) {
+			j->disconnect(true);
 		}
 	}
 	// Wait until all connections have died out...
@@ -803,18 +799,18 @@ void ConnectionManager::shutdown() {
 
 // UserConnectionListener
 void ConnectionManager::on(UserConnectionListener::Supports, UserConnection* conn, const StringList& feat) noexcept {
-	for(auto i = feat.begin(); i != feat.end(); ++i) {
-		if(*i == UserConnection::FEATURE_MINISLOTS) {
+	for(auto& i: feat) {
+		if(i == UserConnection::FEATURE_MINISLOTS) {
 			conn->setFlag(UserConnection::FLAG_SUPPORTS_MINISLOTS);
-		} else if(*i == UserConnection::FEATURE_XML_BZLIST) {
+		} else if(i == UserConnection::FEATURE_XML_BZLIST) {
 			conn->setFlag(UserConnection::FLAG_SUPPORTS_XML_BZLIST);
-		} else if(*i == UserConnection::FEATURE_ADCGET) {
+		} else if(i == UserConnection::FEATURE_ADCGET) {
 			conn->setFlag(UserConnection::FLAG_SUPPORTS_ADCGET);
-		} else if(*i == UserConnection::FEATURE_ZLIB_GET) {
+		} else if(i == UserConnection::FEATURE_ZLIB_GET) {
 			conn->setFlag(UserConnection::FLAG_SUPPORTS_ZLIB_GET);
-		} else if(*i == UserConnection::FEATURE_TTHL) {
+		} else if(i == UserConnection::FEATURE_TTHL) {
 			conn->setFlag(UserConnection::FLAG_SUPPORTS_TTHL);
-		} else if(*i == UserConnection::FEATURE_TTHF) {
+		} else if(i == UserConnection::FEATURE_TTHF) {
 			conn->setFlag(UserConnection::FLAG_SUPPORTS_TTHF);
 		}
 	}

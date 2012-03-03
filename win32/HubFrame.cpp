@@ -104,8 +104,7 @@ void HubFrame::closeAll(ClosePred f) {
 		str(TF_("Really close %1% hub windows?") % toClose.size()), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
 		dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES))
 	{
-		for(auto i = toClose.begin(); i != toClose.end(); ++i) {
-			auto frame = *i;
+		for(auto frame: toClose) {
 			frame->confirmClose = false;
 			frame->close(true);
 		}
@@ -124,8 +123,8 @@ void HubFrame::closeFavGroup(const string& group, bool reversed) {
 }
 
 void HubFrame::resortUsers() {
-	for(auto i = frames.begin(); i != frames.end(); ++i)
-		(*i)->resortForFavsFirst(true);
+	for(auto i: frames)
+		i->resortForFavsFirst(true);
 }
 
 WindowParams HubFrame::getWindowParams() const {
@@ -507,8 +506,8 @@ void HubFrame::enterImpl(const tstring& s) {
 
 void HubFrame::clearUserList() {
 	users->clear();
-	for(auto i = userMap.begin(); i != userMap.end(); ++i) {
-		delete i->second;
+	for(auto& i: userMap) {
+		delete i.second;
 	}
 	currentUser = 0;
 	userMap.clear();
@@ -568,18 +567,18 @@ void HubFrame::execTasks() {
 
 	HoldRedraw hold(users);
 
-	for(auto i = t.begin(); i != t.end(); ++i) {
-		if(i->first == UPDATE_USER) {
-			updateUser(static_cast<UserTask&>(*i->second));
-		} else if(i->first == UPDATE_USER_JOIN) {
-			UserTask& u = static_cast<UserTask&>(*i->second);
+	for(auto& i: t) {
+		if(i.first == UPDATE_USER) {
+			updateUser(static_cast<UserTask&>(*i.second));
+		} else if(i.first == UPDATE_USER_JOIN) {
+			UserTask& u = static_cast<UserTask&>(*i.second);
 			if(updateUser(u)) {
 				if (showJoins || (favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
 					addStatus(str(TF_("Joins: %1%") % Text::toT(u.identity.getNick())));
 				}
 			}
-		} else if(i->first == REMOVE_USER) {
-			UserTask& u = static_cast<UserTask&>(*i->second);
+		} else if(i.first == REMOVE_USER) {
+			UserTask& u = static_cast<UserTask&>(*i.second);
 			removeUser(u.user);
 			if (showJoins || (favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
 				addStatus(str(TF_("Parts: %1%") % Text::toT(u.identity.getNick())));
@@ -674,11 +673,11 @@ void HubFrame::onPrivateMessage(const ChatMessage& message) {
 }
 
 HubFrame::UserInfo* HubFrame::findUser(const tstring& nick) {
-	for(auto i = userMap.begin(); i != userMap.end(); ++i) {
-		if(i->second->getText(COLUMN_NICK) == nick)
-			return i->second;
+	for(auto& i: userMap) {
+		if(i.second->getText(COLUMN_NICK) == nick)
+			return i.second;
 	}
-	return 0;
+	return nullptr;
 }
 
 const tstring& HubFrame::getNick(const UserPtr& aUser) {
@@ -878,8 +877,8 @@ void HubFrame::on(ClientListener::UserUpdated, Client*, const OnlineUser& user) 
 	addTask(UPDATE_USER_JOIN, user);
 }
 void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) noexcept {
-	for(auto i = aList.begin(); i != aList.end(); ++i) {
-		tasks.add(UPDATE_USER, unique_ptr<Task>(new UserTask(*(*i))));
+	for(auto& i: aList) {
+		tasks.add(UPDATE_USER, unique_ptr<Task>(new UserTask(*i)));
 	}
 	updateUsers = true;
 }
@@ -965,8 +964,8 @@ tstring HubFrame::getStatusShared() const {
 
 pair<size_t, tstring> HubFrame::getStatusUsers() const {
 	size_t userCount = 0;
-	for(auto i = userMap.begin(); i != userMap.end(); ++i){
-		UserInfo* ui = i->second;
+	for(auto& i: userMap) {
+		UserInfo* ui = i.second;
 		if(!ui->isHidden())
 			userCount++;
 	}
@@ -987,8 +986,8 @@ tstring HubFrame::getStatusAverageShared() const {
 		userCount = users->countSelected();
 	} else {
 		available = std::for_each(userMap.begin(), userMap.end(), CountAvailable()).available;
-		for(auto i = userMap.begin(); i != userMap.end(); ++i){
-			UserInfo* ui = i->second;
+		for(auto& i: userMap) {
+			UserInfo* ui = i.second;
 			if(!ui->isHidden())
 				userCount++;
 		}
@@ -1071,14 +1070,14 @@ void HubFrame::updateUserList(UserInfo* ui) {
 		users->clear();
 
 		if(filter.empty()) {
-			for(auto i = userMap.begin(); i != userMap.end(); ++i) {
-				ui = i->second;
+			for(auto& i: userMap) {
+				ui = i.second;
 				if(!ui->isHidden())
-					users->insert(i->second);
+					users->insert(i.second);
 			}
 		} else {
-			for(auto i = userMap.begin(); i != userMap.end(); ++i) {
-				ui = i->second;
+			for(auto& i: userMap) {
+				ui = i.second;
 				if(!ui->isHidden() && filter.match(filterPrep, filterInfoF)) {
 					users->insert(ui);
 				}
@@ -1190,10 +1189,9 @@ void HubFrame::handleMultiCopy(unsigned index) {
 		return;
 	}
 
-	UserInfoList sel = selectedUsersImpl();
 	tstring tmpstr;
-	for(auto i = sel.begin(), iend = sel.end(); i != iend; ++i) {
-		tmpstr += static_cast<UserInfo*>(*i)->getText(index);
+	for(auto& i: selectedUsersImpl()) {
+		tmpstr += static_cast<UserInfo*>(i)->getText(index);
 		tmpstr += _T(" / ");
 	}
 	if(!tmpstr.empty()) {
@@ -1228,9 +1226,9 @@ void HubFrame::runUserCommand(const UserCommand& uc) {
 		client->sendUserCmd(uc, ucParams);
 	} else {
 		auto sel = selectedUsersImpl();
-		for(auto i = sel.cbegin(), iend = sel.cend(); i != iend; ++i) {
+		for(auto& i: sel) {
 			auto tmp = ucParams;
-			static_cast<UserInfo*>(*i)->getIdentity().getParams(tmp, "user", true);
+			static_cast<UserInfo*>(i)->getIdentity().getParams(tmp, "user", true);
 			client->sendUserCmd(uc, tmp);
 		}
 	}
@@ -1269,8 +1267,8 @@ static bool compareCharsNoCase(string::value_type a, string::value_type b) {
 tstring HubFrame::scanNickPrefix(const tstring& prefixT) {
 	string prefix = Text::fromT(prefixT), maxPrefix;
 	tabCompleteNicks.clear();
-	for (auto i = userMap.begin(); i != userMap.end(); ++i) {
-		string prevNick, nick = i->second->getIdentity().getNick(), wholeNick = nick;
+	for(auto& i: userMap) {
+		string prevNick, nick = i.second->getIdentity().getNick(), wholeNick = nick;
 
 		do {
 			string::size_type lp = prefix.size(), ln = nick.size();

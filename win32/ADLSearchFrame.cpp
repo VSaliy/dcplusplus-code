@@ -120,9 +120,8 @@ items(0)
 	layout();
 
 	// Load all searches
-	ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
-	for(auto i = collection.begin(); i != collection.end(); ++i)
-		addEntry(*i, /*itemCount*/ -1, /*scroll*/ false);
+	for(auto& i: ADLSearchManager::getInstance()->collection)
+		addEntry(i, /*itemCount*/ -1, /*scroll*/ false);
 }
 
 ADLSearchFrame::~ADLSearchFrame() {
@@ -173,24 +172,24 @@ void ADLSearchFrame::handleProperties() {
 	bool save = false;
 
 	// Get selection info
-	std::vector<unsigned> selected = items->getSelection();
-	for(auto i = selected.begin(); i != selected.end(); ++i) {
+	auto selected = items->getSelection();
+	for(auto i: selected) {
 		// Edit existing
 		ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
-		ADLSearch search = collection[*i];
+		ADLSearch search = collection[i];
 
 		// Invoke dialog with selected search
 		ADLSProperties dlg(this, search);
 		if(dlg.run() == IDOK) {
 			// Update search collection
-			collection[*i] = search;
+			collection[i] = search;
 			save = true;
 
 			// Update list control
 			HoldRedraw hold(items);
-			items->erase(*i);
-			addEntry(search, *i);
-			items->select(*i);
+			items->erase(i);
+			addEntry(search, i);
+			items->select(i);
 		}
 	}
 
@@ -203,16 +202,16 @@ void ADLSearchFrame::handleUp() {
 	bool save = false;
 
 	HoldRedraw hold(items);
-	std::vector<unsigned> selected = items->getSelection();
-	for(auto i = selected.begin(); i != selected.end(); ++i) {
-		if(*i > 0) {
-			ADLSearch search = collection[*i];
-			swap(collection[*i], collection[*i - 1]);
+	auto selected = items->getSelection();
+	for(auto i: selected) {
+		if(i > 0) {
+			ADLSearch search = collection[i];
+			swap(collection[i], collection[i - 1]);
 			save = true;
 
-			items->erase(*i);
-			addEntry(search, *i - 1);
-			items->select(*i - 1);
+			items->erase(i);
+			addEntry(search, i - 1);
+			items->select(i - 1);
 		}
 	}
 

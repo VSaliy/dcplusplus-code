@@ -196,9 +196,9 @@ void StylesPage::updateUserMatches(std::vector<UserMatch>& userMatches) {
 	}
 
 	// add current user matching rows.
-	for(auto i = userMatches.begin(), iend = userMatches.end(); i != iend; ++i) {
-		if(showGen->getChecked() || !i->isSet(UserMatch::GENERATED)) {
-			table->insert(table->isGrouped() ? GROUP_USERS : -1, new UserMatchData(*i));
+	for(auto& i: userMatches) {
+		if(showGen->getChecked() || !i.isSet(UserMatch::GENERATED)) {
+			table->insert(table->isGrouped() ? GROUP_USERS : -1, new UserMatchData(i));
 		}
 	}
 }

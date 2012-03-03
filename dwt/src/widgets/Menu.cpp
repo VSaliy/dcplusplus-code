@@ -221,8 +221,8 @@ Menu::~Menu() {
 void Menu::setFont(FontPtr font) {
 	this->font = font ? font : new Font(Font::DefaultGui);
 	titleFont = boldFont = this->font->makeBold();
-	for(auto i = itsChildren.begin(), iend = itsChildren.end(); i != iend; ++i) {
-		(*i)->setFont(this->font);
+	for(auto& i: itsChildren) {
+		i->setFont(this->font);
 	}
 }
 

@@ -102,8 +102,8 @@ void SearchFrame::openWindow(TabViewPtr parent, const tstring& str, SearchManage
 }
 
 void SearchFrame::closeAll() {
-	for(auto i = frames.begin(); i != frames.end(); ++i)
-		(*i)->close(true);
+	for(auto i: frames)
+		i->close(true);
 }
 
 SearchFrame::SearchFrame(TabViewPtr parent, const tstring& initialString, SearchManager::TypeModes initialType_) :
@@ -298,8 +298,7 @@ droppedResults(0)
 		auto lock = clientMgr->lock();
 		clientMgr->addListener(this);
 		auto& clients = clientMgr->getClients();
-		for(auto it = clients.begin(); it != clients.end(); ++it) {
-			Client* client = *it;
+		for(auto client: clients) {
 			if(!client->isConnected())
 				continue;
 
@@ -331,19 +330,18 @@ void SearchFrame::fillFileType(const tstring& toSelect) {
 	for(int type = SearchManager::TYPE_ANY; type != SearchManager::TYPE_LAST; ++type)
 		values.emplace_back(SearchManager::getTypeStr(type), type);
 
-	const auto& searchTypes = SettingsManager::getInstance()->getSearchTypes();
-	for(auto i = searchTypes.cbegin(), iend = searchTypes.cend(); i != iend; ++i) {
-		if(i->first.size() > 1 || i->first[0] < '1' || i->first[0] > '6') { //Custom type
-			values.emplace_back(i->first, SearchManager::TYPE_ANY);
+	for(auto& i: SettingsManager::getInstance()->getSearchTypes()) {
+		if(i.first.size() > 1 || i.first[0] < '1' || i.first[0] > '6') { //Custom type
+			values.emplace_back(i.first, SearchManager::TYPE_ANY);
 		}
 	}
 
 	bool selected = false;
-	for(auto i = values.cbegin(), iend = values.cend(); i != iend; ++i) {
-		tstring value = Text::toT(i->first);
+	for(auto& i: values) {
+		tstring value = Text::toT(i.first);
 		int pos = fileType->addValue(value);
-		if(i->second != SearchManager::TYPE_ANY)
-			fileType->setData(pos, i->second);
+		if(i.second != SearchManager::TYPE_ANY)
+			fileType->setData(pos, i.second);
 		if(!selected && value == toSelect) {
 			fileType->setSelected(pos);
 			selected = true;
@@ -400,9 +398,8 @@ void SearchFrame::SearchInfo::Download::operator()(SearchInfo* si) {
 }
 
 void SearchFrame::SearchInfo::Download::addFile(SearchInfo* si, const string& target) {
-	for(auto i = si->srs.begin(); i != si->srs.end(); ++i) {
+	for(const auto& sr: si->srs) {
 		total++;
-		const SearchResultPtr& sr = *i;
 		try {
 			QueueManager::getInstance()->add(target, sr->getSize(), sr->getTTH(), HintedUser(sr->getUser(), sr->getHubURL()));
 		} catch(const Exception& e) {
@@ -500,8 +497,8 @@ void SearchFrame::SearchInfo::update() {
 		columns[COLUMN_CID].clear();
 
 		std::set<std::string> hubs;
-		for(auto i = srs.begin(), iend = srs.end(); i != iend; ++i) {
-			hubs.insert((*i)->getHubName());
+		for(auto& i: srs) {
+			hubs.insert(i->getHubName());
 		}
 		columns[COLUMN_HUB] = Text::toT(Util::toString(StringList(hubs.begin(), hubs.end())));
 	} else {
@@ -533,9 +530,9 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 			return;
 		}
 	} else {
-		for(auto i = currentSearch.cbegin(), iend = currentSearch.cend(); i != iend; ++i) {
-			if((*i->begin() != _T('-') && Util::findSubString(sr.getFile(), Text::fromT(*i)) == tstring::npos) ||
-				(*i->begin() == _T('-') && i->size() != 1 && Util::findSubString(sr.getFile(), Text::fromT(i->substr(1))) != tstring::npos))
+		for(auto& i: currentSearch) {
+			if((*i.begin() != _T('-') && Util::findSubString(sr.getFile(), Text::fromT(i)) == tstring::npos) ||
+				(*i.begin() == _T('-') && i.size() != 1 && Util::findSubString(sr.getFile(), Text::fromT(i.substr(1))) != tstring::npos))
 			{
 				addDropped();
 				return;
@@ -561,8 +558,8 @@ void SearchFrame::addResult(SearchResultPtr psr) {
 	for(auto i = searchResults.begin(), iend = searchResults.end(); !si && i != iend; ++i) {
 		auto& si2 = *i;
 
-		for(auto j = si2.srs.begin(), jend = si2.srs.end(); j != jend; ++j) {
-			auto& sr2 = **j;
+		for(auto& j: si2.srs) {
+			auto& sr2 = *j;
 
 			bool sameUser = sr.getUser()->getCID() == sr2.getUser()->getCID();
 			if(sameUser && sr.getFile() == sr2.getFile()) {
@@ -758,8 +755,7 @@ void SearchFrame::handleRemove() {
 struct UserCollector {
 	template<typename T>
 	void operator()(T* si) {
-		for(auto i = si->srs.begin(), iend = si->srs.end(); i != iend; ++i) {
-			const SearchResultPtr& sr = *i;
+		for(const auto& sr: si->srs) {
 			if(std::find(users.begin(), users.end(), sr->getUser()) == users.end()) {
 				users.emplace_back(sr->getUser(), sr->getHubURL());
 				dirs.push_back(Util::getFilePath(sr->getFile()));
@@ -1058,8 +1054,7 @@ void SearchFrame::runUserCommand(const UserCommand& uc) {
 	int sel = -1;
 	while((sel = results->getNext(sel, LVNI_SELECTED)) != -1) {
 		auto si = results->getData(sel);
-		for(auto i = si->srs.cbegin(), iend = si->srs.cend(); i != iend; ++i) {
-			auto sr = *i;
+		for(auto sr: si->srs) {
 
 			if(!sr->getUser()->isOnline())
 				continue;

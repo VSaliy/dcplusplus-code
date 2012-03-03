@@ -60,12 +60,12 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 	typedef std::vector<valid_pair> valid_type;
 	valid_type valid;
 
-	for(auto i = paths.begin(); i != paths.end(); ++i) {
+	for(auto& i: paths) {
 		// ParseDisplayName creates a PIDL from a file system path relative to the IShellFolder interface
 		// but since we use the Desktop as our interface and the Desktop is the namespace root
 		// that means that it's a fully qualified PIDL, which is what we need
 		LPITEMIDLIST pidl = 0;
-		hr = desktop->ParseDisplayName(0, 0, const_cast<LPWSTR>(Text::utf8ToWide(*i).c_str()), 0, &pidl, 0);
+		hr = desktop->ParseDisplayName(0, 0, const_cast<LPWSTR>(Text::utf8ToWide(i).c_str()), 0, &pidl, 0);
 		check(hr == S_OK && pidl);
 		pidls.push_back(pidl);
 
@@ -87,13 +87,13 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 		handler1->Release();
 		check(hr == S_OK && handler3);
 
-		valid.emplace_back(*i, handler3);
+		valid.emplace_back(i, handler3);
 	}
 
 #undef check
 
-	for(auto i = pidls.begin(); i != pidls.end(); ++i)
-		lpMalloc->Free(*i);
+	for(auto& i: pidls)
+		lpMalloc->Free(i);
 	lpMalloc->Release();
 
 	desktop->Release();
@@ -107,8 +107,8 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 		handlers.emplace_back(appendPopup(T_("Shell menu"), dwt::IconPtr(), false), valid[0].second);
 	else {
 		auto popup = appendPopup(T_("Shell menus"));
-		for(auto i = valid.begin(); i != valid.end(); ++i)
-			handlers.emplace_back(popup->appendPopup(escapeMenu(Text::toT(i->first)), dwt::IconPtr(), false), i->second);
+		for(auto& i: valid)
+			handlers.emplace_back(popup->appendPopup(escapeMenu(Text::toT(i.first)), dwt::IconPtr(), false), i.second);
 	}
 
 	callbacks.push_back(make_pair(dwt::Message(WM_DRAWITEM), getParent()->addCallback(dwt::Message(WM_DRAWITEM),
@@ -126,11 +126,11 @@ void ShellMenu::appendShellMenu(const StringList& paths) {
 }
 
 ShellMenu::~ShellMenu() {
-	for(auto i = callbacks.begin(); i != callbacks.end(); ++i)
-		getParent()->clearCallback(i->first, i->second);
+	for(auto& i: callbacks)
+		getParent()->clearCallback(i.first, i.second);
 
-	for(auto i = handlers.begin(); i != handlers.end(); ++i)
-		i->second->Release();
+	for(auto& i: handlers)
+		i.second->Release();
 }
 
 void ShellMenu::open(const dwt::ScreenCoordinate& pt, unsigned flags) {
@@ -180,10 +180,10 @@ bool ShellMenu::handleMeasureItem(const MSG& msg, LRESULT& ret) {
 
 bool ShellMenu::handleInitMenuPopup(const MSG& msg, LRESULT& ret) {
 	HMENU menu = reinterpret_cast<HMENU>(msg.wParam);
-	for(auto i = handlers.begin(); i != handlers.end(); ++i) {
-		if(i->first->handle() == menu) {
-			handler = i->second;
-			handler->QueryContextMenu(i->first->handle(), 0, ID_SHELLCONTEXTMENU_MIN, ID_SHELLCONTEXTMENU_MAX, CMF_NORMAL | CMF_EXPLORE);
+	for(auto& i: handlers) {
+		if(i.first->handle() == menu) {
+			handler = i.second;
+			handler->QueryContextMenu(i.first->handle(), 0, ID_SHELLCONTEXTMENU_MIN, ID_SHELLCONTEXTMENU_MAX, CMF_NORMAL | CMF_EXPLORE);
 			break;
 		}
 	}
@@ -193,9 +193,9 @@ bool ShellMenu::handleInitMenuPopup(const MSG& msg, LRESULT& ret) {
 
 bool ShellMenu::handleUnInitMenuPopup(const MSG& msg, LRESULT& ret) {
 	HMENU menu = reinterpret_cast<HMENU>(msg.wParam);
-	for(auto i = handlers.begin(); i != handlers.end(); ++i)
-		if(i->first->handle() == menu)
-			i->first->removeAllItems();
+	for(auto& i: handlers)
+		if(i.first->handle() == menu)
+			i.first->removeAllItems();
 
 	return dispatch(msg, ret);
 }

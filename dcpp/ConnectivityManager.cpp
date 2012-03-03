@@ -143,11 +143,11 @@ void ConnectivityManager::editAutoSettings() {
 	SettingsManager::getInstance()->set(SettingsManager::AUTO_DETECT_CONNECTION, false);
 
 	auto sm = SettingsManager::getInstance();
-	for(auto i = autoSettings.cbegin(), iend = autoSettings.cend(); i != iend; ++i) {
-		if(i->first >= SettingsManager::STR_FIRST && i->first < SettingsManager::STR_LAST) {
-			sm->set(static_cast<SettingsManager::StrSetting>(i->first), boost::get<const string&>(i->second));
-		} else if(i->first >= SettingsManager::INT_FIRST && i->first < SettingsManager::INT_LAST) {
-			sm->set(static_cast<SettingsManager::IntSetting>(i->first), boost::get<int>(i->second));
+	for(auto& i: autoSettings) {
+		if(i.first >= SettingsManager::STR_FIRST && i.first < SettingsManager::STR_LAST) {
+			sm->set(static_cast<SettingsManager::StrSetting>(i.first), boost::get<const string&>(i.second));
+		} else if(i.first >= SettingsManager::INT_FIRST && i.first < SettingsManager::INT_LAST) {
+			sm->set(static_cast<SettingsManager::IntSetting>(i.first), boost::get<int>(i.second));
 		}
 	}
 	autoSettings.clear();

@@ -160,15 +160,15 @@ void UserConnection::inf(bool withToken) {
 
 void UserConnection::sup(const StringList& features) {
 	AdcCommand c(AdcCommand::CMD_SUP);
-	for(auto i = features.begin(); i != features.end(); ++i)
-		c.addParam(*i);
+	for(auto& i: features)
+		c.addParam(i);
 	send(c);
 }
 
 void UserConnection::supports(const StringList& feat) {
 	string x;
-	for(auto i = feat.begin(); i != feat.end(); ++i) {
-		x+= *i + ' ';
+	for(auto& i: feat) {
+		x+= i + ' ';
 	}
 	send("$Supports " + x + '|');
 }

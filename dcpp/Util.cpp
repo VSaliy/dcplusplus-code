@@ -185,10 +185,9 @@ void Util::initialize(PathsMap pathOverrides) {
 	paths[PATH_NOTEPAD] = paths[PATH_USER_CONFIG] + "Notepad.txt";
 
 	// Override core generated paths
-	for (auto it = pathOverrides.begin(); it != pathOverrides.end(); ++it)
-	{
-		if (!it->second.empty())
-			paths[it->first] = it->second;
+	for(auto& it: pathOverrides) {
+		if(!it.second.empty())
+			paths[it.first] = it.second;
 	}
 
 	File::ensureDirectory(paths[PATH_USER_CONFIG]);

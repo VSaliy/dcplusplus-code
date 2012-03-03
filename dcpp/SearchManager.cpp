@@ -296,8 +296,7 @@ void SearchManager::onRES(const AdcCommand& cmd, const UserPtr& from, const stri
 	string tth;
 	string token;
 
-	for(auto i = cmd.getParameters().begin(); i != cmd.getParameters().end(); ++i) {
-		const string& str = *i;
+	for(auto& str: cmd.getParameters()) {
 		if(str.compare(0, 2, "FN") == 0) {
 			file = Util::toNmdcFile(str.substr(2));
 		} else if(str.compare(0, 2, "SL") == 0) {
@@ -348,8 +347,8 @@ void SearchManager::respond(const AdcCommand& adc, const CID& from,  bool isUdpA
 	if(results.empty())
 		return;
 
-	for(auto i = results.begin(); i != results.end(); ++i) {
-		AdcCommand cmd = (*i)->toRES(AdcCommand::TYPE_UDP);
+	for(auto& i: results) {
+		AdcCommand cmd = i->toRES(AdcCommand::TYPE_UDP);
 		if(!token.empty())
 			cmd.addParam("TO", token);
 		ClientManager::getInstance()->send(cmd, from);

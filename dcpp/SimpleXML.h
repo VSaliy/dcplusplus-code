@@ -190,8 +190,8 @@ private:
 		void appendAttribString(string& tmp);
 		/** Delete all children! */
 		~Tag() {
-			for(auto i = children.begin(); i != children.end(); ++i) {
-				delete *i;
+			for(auto i: children) {
+				delete i;
 			}
 		}
 

@@ -396,8 +396,7 @@ void TabView::layout() {
 
 		// update background tabs too, but only asynchronously.
 		callAsync([this, sel]() {
-			for(auto i = viewOrder.begin(); i != viewOrder.end(); ++i) {
-				ContainerPtr w = *i;
+			for(auto w: viewOrder) {
 				if(w != sel) {
 					w->resize(clientSize);
 				}

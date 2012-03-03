@@ -218,14 +218,14 @@ void HashManager::HashStore::rebuild() {
 		DirMap newFileIndex;
 		TreeMap newTreeIndex;
 
-		for (auto i = fileIndex.begin(); i != fileIndex.end(); ++i) {
-			for (auto j = i->second.begin(); j != i->second.end(); ++j) {
-				if (!j->getUsed())
+		for (auto& i: fileIndex) {
+			for (auto& j: i.second) {
+				if (!j.getUsed())
 					continue;
 
-				auto k = treeIndex.find(j->getRoot());
+				auto k = treeIndex.find(j.getRoot());
 				if (k != treeIndex.end()) {
-					newTreeIndex[j->getRoot()] = k->second;
+					newTreeIndex[j.getRoot()] = k->second;
 				}
 			}
 		}
@@ -250,16 +250,17 @@ void HashManager::HashStore::rebuild() {
 			}
 		}
 
-		for (auto i = fileIndex.begin(); i != fileIndex.end(); ++i) {
-#ifdef _MSC_VER
-			auto fi = newFileIndex.emplace(i->first, FileInfoList()).first;
+		for (auto& i: fileIndex) {
+#ifndef __GNUC__
+			auto fi = newFileIndex.emplace(i.first, FileInfoList()).first;
 #else
-			auto fi = newFileIndex.insert(make_pair(i->first, FileInfoList())).first;
+			/// @todo retry with emplace on GCC 4.7 (see comment in compiler.h)
+			auto fi = newFileIndex.insert(make_pair(i.first, FileInfoList())).first;
 #endif
 
-			for (auto j = i->second.begin(); j != i->second.end(); ++j) {
-				if (newTreeIndex.find(j->getRoot()) != newTreeIndex.end()) {
-					fi->second.push_back(*j);
+			for (auto& j: i.second) {
+				if (newTreeIndex.find(j.getRoot()) != newTreeIndex.end()) {
+					fi->second.push_back(j);
 				}
 			}
 
@@ -292,8 +293,8 @@ void HashManager::HashStore::save() {
 
 			f.write(LIT("\t<Trees>\r\n"));
 
-			for (auto i = treeIndex.begin(); i != treeIndex.end(); ++i) {
-				const TreeInfo& ti = i->second;
+			for (auto& i: treeIndex) {
+				const TreeInfo& ti = i.second;
 				f.write(LIT("\t\t<Hash Type=\"TTH\" Index=\""));
 				f.write(Util::toString(ti.getIndex()));
 				f.write(LIT("\" BlockSize=\""));
@@ -302,16 +303,15 @@ void HashManager::HashStore::save() {
 				f.write(Util::toString(ti.getSize()));
 				f.write(LIT("\" Root=\""));
 				b32tmp.clear();
-				f.write(i->first.toBase32(b32tmp));
+				f.write(i.first.toBase32(b32tmp));
 				f.write(LIT("\"/>\r\n"));
 			}
 
 			f.write(LIT("\t</Trees>\r\n\t<Files>\r\n"));
 
-			for (auto i = fileIndex.begin(); i != fileIndex.end(); ++i) {
-				const string& dir = i->first;
-				for (auto j = i->second.begin(); j != i->second.end(); ++j) {
-					const FileInfo& fi = *j;
+			for (auto& i: fileIndex) {
+				const string& dir = i.first;
+				for (auto& fi: i.second) {
 					f.write(LIT("\t\t<File Name=\""));
 					f.write(SimpleXML::escape(dir + fi.getFileName(), tmp, true));
 					f.write(LIT("\" TimeStamp=\""));
@@ -511,8 +511,8 @@ void HashManager::Hasher::getStats(string& curFile, uint64_t& bytesLeft, size_t&
 	if (running)
 		filesLeft++;
 	bytesLeft = 0;
-	for (auto i = w.begin(); i != w.end(); ++i) {
-		bytesLeft += i->second;
+	for (auto& i: w) {
+		bytesLeft += i.second;
 	}
 	bytesLeft += currentSize;
 }

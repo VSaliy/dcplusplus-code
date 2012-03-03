@@ -123,8 +123,8 @@ bool UserMatchDlg::handleInitDialog(const UserMatch* initialMatcher) {
 		if(initialMatcher->isSet(UserMatch::OPS)) { ops->setChecked(true); }
 		if(initialMatcher->isSet(UserMatch::BOTS)) { bots->setChecked(true); }
 
-		for(auto i = initialMatcher->rules.cbegin(), iend = initialMatcher->rules.cend(); i != iend; ++i) {
-			addRow(&*i);
+		for(auto& i: initialMatcher->rules) {
+			addRow(&i);
 		}
 
 		if(initialMatcher->isSet(UserMatch::FORCE_CHAT)) { forceChat->setChecked(true); }

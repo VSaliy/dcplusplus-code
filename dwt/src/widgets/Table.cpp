@@ -331,13 +331,13 @@ void Table::setGroups(const std::vector<tstring>& groups) {
 	}
 
 	LVGROUP group = makeLVGROUP();
-	for(auto i = groups.cbegin(), iend = groups.cend(); i != iend; ++i) {
-		if(i->empty()) {
+	for(auto& i: groups) {
+		if(i.empty()) {
 			group.mask = LVGF_GROUPID;
 			group.pszHeader = 0;
 		} else {
 			group.mask = LVGF_GROUPID | LVGF_HEADER;
-			group.pszHeader = const_cast<LPWSTR>(i->c_str());
+			group.pszHeader = const_cast<LPWSTR>(i.c_str());
 		}
 		if(groupImageList) {
 			group.mask |= LVGF_TITLEIMAGE;

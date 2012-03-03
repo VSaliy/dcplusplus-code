@@ -247,10 +247,10 @@ void StatusBar::layoutSections(const Point& sz) {
 StatusBar::Part* StatusBar::getClickedPart() {
 	unsigned x = ClientCoordinate(ScreenCoordinate(Point::fromLParam(::GetMessagePos())), this).x();
 	unsigned total = 0;
-	for(auto i = parts.begin(); i != parts.end(); ++i) {
-		total += i->size;
+	for(auto& i: parts) {
+		total += i.size;
 		if(total > x)
-			return dynamic_cast<Part*>(&*i);
+			return dynamic_cast<Part*>(&i);
 	}
 
 	return 0;

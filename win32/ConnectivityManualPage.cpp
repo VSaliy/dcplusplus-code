@@ -191,8 +191,7 @@ void ConnectivityManualPage::read() {
 	int sel = 0;
 
 	auto mappers = MappingManager::getInstance()->getMappers();
-	for(auto i = mappers.cbegin(), iend = mappers.cend(); i != iend; ++i) {
-		const auto& name = *i;
+	for(const auto& name: mappers) {
 		auto pos = mapper->addValue(Text::toT(name));
 		if(!sel && name == setting)
 			sel = pos;

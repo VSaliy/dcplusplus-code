@@ -272,16 +272,15 @@ void SearchTypesPage::findRealName(string& name) const {
 }
 
 void SearchTypesPage::fillList() {
-	const auto& searchTypes = SettingsManager::getInstance()->getSearchTypes();
-	for(auto i = searchTypes.cbegin(), iend = searchTypes.cend(); i != iend; ++i) {
-		string name = i->first;
+	for(auto& i: SettingsManager::getInstance()->getSearchTypes()) {
+		string name = i.first;
 		bool predefined = false;
 		if(name.size() == 1 && name[0] >= '1' && name[0] <= '6') {
 			name = SearchManager::getTypeStr(name[0] - '0');
 			predefined = true;
 		}
 		TStringList exts;
-		Text::toT(i->second, exts);
+		Text::toT(i.second, exts);
 		addRow(Text::toT(name), predefined, exts);
 	}
 	types->resort();

@@ -49,14 +49,15 @@ tstring SearchTypeDlg::getEditDescription() const {
 
 void SearchTypeDlg::add(const tstring& s) {
 	StringTokenizer<tstring> t(s, ';');
-	for(auto i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i)
-		if(!i->empty()) {
-			if(Util::checkExtension(Text::fromT(*i))) {
-				insert(*i);
+	for(auto& i: t.getTokens()) {
+		if(!i.empty()) {
+			if(Util::checkExtension(Text::fromT(i))) {
+				insert(i);
 			} else {
-				showError(*i);
+				showError(i);
 			}
 		}
+	}
 }
 
 void SearchTypeDlg::edit(unsigned row, const tstring& s) {
@@ -64,19 +65,20 @@ void SearchTypeDlg::edit(unsigned row, const tstring& s) {
 	if(dlg.run() == IDOK) {
 		bool modified = false;
 		StringTokenizer<tstring> t(dlg.getValue(), ';');
-		for(auto i = t.getTokens().begin(), iend = t.getTokens().end(); i != iend; ++i)
-			if(!i->empty()) {
-				if(Util::checkExtension(Text::fromT(*i))) {
+		for(auto& i: t.getTokens()) {
+			if(!i.empty()) {
+				if(Util::checkExtension(Text::fromT(i))) {
 					if(!modified) {
-						modify(row, *i);
+						modify(row, i);
 						modified = true;
 					} else {
-						insert(*i, ++row);
+						insert(i, ++row);
 					}
 				} else {
-					showError(*i);
+					showError(i);
 				}
 			}
+		}
 	}
 }
 

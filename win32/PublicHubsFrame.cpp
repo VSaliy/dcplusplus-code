@@ -249,8 +249,8 @@ void PublicHubsFrame::updateStatus() {
 void PublicHubsFrame::updateDropDown() {
 	lists->clear();
 	StringList l(FavoriteManager::getInstance()->getHubLists());
-	for(auto idx = l.begin(); idx != l.end(); ++idx) {
-		lists->addValue(Text::toT(*idx).c_str());
+	for(auto& idx: l) {
+		lists->addValue(Text::toT(idx).c_str());
 	}
 	lists->setSelected((FavoriteManager::getInstance()->getSelectedHubList()) % l.size());
 }

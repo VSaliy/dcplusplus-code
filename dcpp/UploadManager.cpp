@@ -216,8 +216,7 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 int64_t UploadManager::getRunningAverage() {
 	Lock l(cs);
 	int64_t avg = 0;
-	for(auto i = uploads.begin(); i != uploads.end(); ++i) {
-		Upload* u = *i;
+	for(auto u: uploads) {
 		avg += u->getAverageSpeed();
 	}
 	return avg;
@@ -437,8 +436,7 @@ void UploadManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) noexc
 		waitingUsers.erase(i, waitingUsers.end());
 
 		if( BOOLSETTING(AUTO_KICK) ) {
-			for(auto i = uploads.begin(); i != uploads.end(); ++i) {
-				Upload* u = *i;
+			for(auto u: uploads) {
 				if(u->getUser()->isOnline()) {
 					u->unsetFlag(Upload::FLAG_PENDING_KICK);
 					continue;
@@ -458,10 +456,10 @@ void UploadManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) noexc
 		}
 	}
 
-	for(auto i = disconnects.begin(); i != disconnects.end(); ++i) {
+	for(auto& i: disconnects) {
 		LogManager::getInstance()->message(str(F_("Disconnected user leaving the hub: %1%") %
-			Util::toString(ClientManager::getInstance()->getNicks((*i)->getCID(), Util::emptyString))));
-		ConnectionManager::getInstance()->disconnect(*i, false);
+			Util::toString(ClientManager::getInstance()->getNicks(i->getCID(), Util::emptyString))));
+		ConnectionManager::getInstance()->disconnect(i, false);
 	}
 
 	int freeSlots = getFreeSlots();
@@ -506,10 +504,10 @@ void UploadManager::on(TimerManagerListener::Second, uint64_t) noexcept {
 	Lock l(cs);
 	UploadList ticks;
 
-	for(auto i = uploads.begin(); i != uploads.end(); ++i) {
-		if((*i)->getPos() > 0) {
-			ticks.push_back(*i);
-			(*i)->tick();
+	for(auto u: uploads) {
+		if(u->getPos() > 0) {
+			ticks.push_back(u);
+			u->tick();
 		}
 	}
 

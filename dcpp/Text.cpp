@@ -281,8 +281,8 @@ const wstring& toLower(const wstring& str, wstring& tmp) noexcept {
 		return Util::emptyStringW;
 	tmp.clear();
 	tmp.reserve(str.length());
-	for(auto i = str.begin(), iend = str.end(); i != iend; ++i) {
-		tmp += toLower(*i);
+	for(auto& i: str) {
+		tmp += toLower(i);
 	}
 	return tmp;
 }

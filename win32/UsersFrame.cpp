@@ -190,10 +190,8 @@ filter(usersColumns, COLUMN_LAST, [this] { updateList(); })
 
 	{
 		auto lock = ClientManager::getInstance()->lock();
-		auto &ou = ClientManager::getInstance()->getUsers();
-
-		for(auto i = ou.begin(); i != ou.end(); ++i) {
-			addUser(i->second);
+		for(auto& i: ClientManager::getInstance()->getUsers()) {
+			addUser(i.second);
 		}
 	}
 
@@ -364,9 +362,8 @@ void UsersFrame::handleSelectionChanged() {
 
 	auto info = idents[0].getInfo();
 	for(size_t i = 1; i < idents.size(); ++i) {
-		auto info2 = idents[i].getInfo();
-		for(auto j = info2.begin(); j != info2.end(); ++j) {
-			info[j->first] = j->second;
+		for(auto& j: idents[i].getInfo()) {
+			info[j.first] = j.second;
 		}
 	}
 
@@ -384,10 +381,10 @@ void UsersFrame::handleSelectionChanged() {
 		}
 	}
 
-	for(auto i = info.begin(); i != info.end(); ++i) {
+	for(auto& i: info) {
 		generalGrid->addRow();
-		generalGrid->addChild(Label::Seed(Text::toT(i->first)));
-		generalGrid->addChild(Label::Seed(Text::toT(i->second)));
+		generalGrid->addChild(Label::Seed(Text::toT(i.first)));
+		generalGrid->addChild(Label::Seed(Text::toT(i.second)));
 	}
 
 	auto queued = QueueManager::getInstance()->getQueued(user);
@@ -412,10 +409,10 @@ void UsersFrame::handleSelectionChanged() {
 		auto uploadsGroup = userInfo->addChild(GroupBox::Seed(T_("Pending uploads information")));
 		auto uploadsGrid = uploadsGroup->addChild(Grid::Seed(0, 2));
 
-		for(auto i = files.begin(); i != files.end(); ++i) {
+		for(auto& i: files) {
 			uploadsGrid->addRow();
 			uploadsGrid->addChild(Label::Seed(T_("Filename")));
-			uploadsGrid->addChild(Label::Seed(Text::toT(*i)));
+			uploadsGrid->addChild(Label::Seed(Text::toT(i)));
 		}
 	}
 }
@@ -595,22 +592,22 @@ void UsersFrame::on(WaitingRemoveUser, const HintedUser& aUser) noexcept {
 }
 
 void UsersFrame::on(Added, QueueItem* qi) noexcept {
-	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
-		auto u = i->getUser().user;
+	for(auto& i: qi->getSources()) {
+		auto u = i.getUser().user;
 		callAsync([=] { addUser(u); });
 	}
 }
 
 void UsersFrame::on(SourcesUpdated, QueueItem* qi) noexcept {
-	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
-		auto u = i->getUser().user;
+	for(auto& i: qi->getSources()) {
+		auto u = i.getUser().user;
 		callAsync([=] { updateUser(u); });
 	}
 }
 
 void UsersFrame::on(Removed, QueueItem* qi) noexcept {
-	for(auto i = qi->getSources().begin(); i != qi->getSources().end(); ++i) {
-		auto u = i->getUser().user;
+	for(auto& i: qi->getSources()) {
+		auto u = i.getUser().user;
 		callAsync([=] { updateUser(u); });
 	}
 }

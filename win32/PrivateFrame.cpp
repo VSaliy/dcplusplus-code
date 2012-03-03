@@ -100,9 +100,9 @@ void PrivateFrame::activateWindow(const UserPtr& u) {
 }
 
 void PrivateFrame::closeAll(bool offline) {
-	for(auto i = frames.begin(); i != frames.end(); ++i) {
-		if(!offline || !i->second->online) {
-			i->second->close(true);
+	for(auto& i: frames) {
+		if(!offline || !i.second->online) {
+			i.second->close(true);
 		}
 	}
 }

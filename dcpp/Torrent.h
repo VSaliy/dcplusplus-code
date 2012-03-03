@@ -38,7 +38,8 @@ using std::string;
 using std::vector;
 using boost::optional;
 
-class TorrentReader;
+struct TorrentReader;
+
 /**
  * Bittorrent interop - read torrent files and provide utilites to match them
  * to TTH's.
@@ -62,7 +63,7 @@ public:
 	const vector<SHA1Value> getPieces() { return pieces; }
 
 private:
-	friend class TorrentReader;
+	friend struct TorrentReader;
 
 	vector<File> files;
 	vector<SHA1Value> pieces;

@@ -37,8 +37,8 @@ public:
 	virtual ~SettingsDialog();
 
 	template<typename T> T* getPage() {
-		for(auto i = pages.cbegin(), iend = pages.cend(); i != iend; ++i) {
-			auto page = dynamic_cast<T*>(i->first);
+		for(auto& i: pages) {
+			auto page = dynamic_cast<T*>(i.first);
 			if(page) {
 				return page;
 			}
@@ -48,9 +48,9 @@ public:
 	}
 
 	template<typename T> void activatePage() {
-		for(auto i = pages.cbegin(), iend = pages.cend(); i != iend; ++i) {
-			if(dynamic_cast<T*>(i->first)) {
-				tree->setSelected(i->second);
+		for(auto& i: pages) {
+			if(dynamic_cast<T*>(i.first)) {
+				tree->setSelected(i.second);
 				break;
 			}
 		}

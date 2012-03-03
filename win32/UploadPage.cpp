@@ -193,9 +193,9 @@ void UploadPage::handleSelectionChanged() {
 }
 
 void UploadPage::handleDragDrop(const TStringList& files) {
-	for(auto i = files.begin(); i != files.end(); ++i)
-		if(PathIsDirectory(i->c_str()))
-			addDirectory(*i);
+	for(auto& i: files)
+		if(PathIsDirectory(i.c_str()))
+			addDirectory(i);
 }
 
 void UploadPage::handleShareHiddenClicked(CheckBoxPtr checkBox, int setting) {
@@ -272,9 +272,8 @@ void UploadPage::addRow(const string& virtualPath, const string& realPath) {
 }
 
 void UploadPage::fillList() {
-	const StringPairList dirs = ShareManager::getInstance()->getDirectories();
-	for(auto i = dirs.begin(), iend = dirs.end(); i != iend; ++i)
-		addRow(i->first, i->second);
+	for(auto& i: ShareManager::getInstance()->getDirectories())
+		addRow(i.first, i.second);
 }
 
 void UploadPage::refreshTotalSize() {

@@ -78,8 +78,8 @@ string Identity::getIp() const {
 void Identity::getParams(ParamMap& params, const string& prefix, bool compatibility) const {
 	{
 		FastLock l(cs);
-		for(auto i = info.begin(); i != info.end(); ++i) {
-			params[prefix + string((char*)(&i->first), 2)] = i->second;
+		for(auto& i: info) {
+			params[prefix + string((char*)(&i.first), 2)] = i.second;
 		}
 	}
 	if(user) {
@@ -172,8 +172,8 @@ void Identity::set(const char* name, const string& val) {
 bool Identity::supports(const string& name) const {
 	string su = get("SU");
 	StringTokenizer<string> st(su, ',');
-	for(auto i = st.getTokens().begin(); i != st.getTokens().end(); ++i) {
-		if(*i == name)
+	for(auto& i: st.getTokens()) {
+		if(i == name)
 			return true;
 	}
 	return false;
@@ -183,8 +183,8 @@ std::map<string, string> Identity::getInfo() const {
 	std::map<string, string> ret;
 
 	FastLock l(cs);
-	for(auto i = info.begin(); i != info.end(); ++i) {
-		ret[string((char*)(&i->first), 2)] = i->second;
+	for(auto& i: info) {
+		ret[string((char*)(&i.first), 2)] = i.second;
 	}
 
 	return ret;

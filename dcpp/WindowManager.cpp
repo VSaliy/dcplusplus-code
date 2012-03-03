@@ -124,14 +124,14 @@ unsigned WindowManager::getMaxRecentItems(const string& id) const {
 
 void WindowManager::prepareSave() const {
 	prepareSave(list);
-	for(auto i = recent.begin(), iend = recent.end(); i != iend; ++i)
-		prepareSave(i->second);
+	for(auto& i: recent)
+		prepareSave(i.second);
 }
 
 void WindowManager::prepareSave(const WindowInfoList& infoList) const {
-	for(auto wi = infoList.cbegin(), wiend = infoList.cend(); wi != wiend; ++wi) {
-		for(auto i = wi->getParams().cbegin(), iend = wi->getParams().cend(); i != iend; ++i) {
-			auto& param = i->second;
+	for(auto& wi: infoList) {
+		for(auto& i: wi.getParams()) {
+			auto& param = i.second;
 			if(param.empty())
 				continue;
 
@@ -187,15 +187,15 @@ void WindowManager::addTag(SimpleXML& xml, const WindowInfo& info) const {
 	if(!info.getParams().empty()) {
 		xml.stepIn();
 
-		for(auto i = info.getParams().cbegin(), iend = info.getParams().cend(); i != iend; ++i) {
-			xml.addTag("Param", i->second);
-			xml.addChildAttrib("Id", i->first);
+		for(auto& i: info.getParams()) {
+			xml.addTag("Param", i.second);
+			xml.addChildAttrib("Id", i.first);
 
-			if(!i->second.isSet(WindowParam::FLAG_IDENTIFIES))
+			if(!i.second.isSet(WindowParam::FLAG_IDENTIFIES))
 				xml.addChildAttrib("Opt", true);
-			if(i->second.isSet(WindowParam::FLAG_CID))
+			if(i.second.isSet(WindowParam::FLAG_CID))
 				xml.addChildAttrib("CID", true);
-			if(i->second.isSet(WindowParam::FLAG_FILELIST))
+			if(i.second.isSet(WindowParam::FLAG_FILELIST))
 				xml.addChildAttrib("FileList", true);
 		}
 
@@ -226,21 +226,20 @@ void WindowManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
 void WindowManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcept {
 	xml.addTag("Windows");
 	xml.stepIn();
-	for(auto i = list.begin(), iend = list.end(); i != iend; ++i)
-		addTag(xml, *i);
+	for(auto& i: list)
+		addTag(xml, i);
 	xml.stepOut();
 
 	xml.addTag("Recent");
 	xml.stepIn();
-	for(auto i = maxRecentItems.begin(), iend = maxRecentItems.end(); i != iend; ++i) {
+	for(auto& i: maxRecentItems) {
 		xml.addTag("Configuration");
-		xml.addChildAttrib("Id", i->first);
-		xml.addChildAttrib("MaxItems", i->second);
+		xml.addChildAttrib("Id", i.first);
+		xml.addChildAttrib("MaxItems", i.second);
 	}
-	for(auto ri = recent.begin(), riend = recent.end(); ri != riend; ++ri) {
-		const WindowInfoList& infoList = ri->second;
-		for(auto i = infoList.begin(), iend = infoList.end(); i != iend; ++i)
-			addTag(xml, *i);
+	for(auto& ri: recent) {
+		for(auto& i: ri.second)
+			addTag(xml, i);
 	}
 	xml.stepOut();
 }

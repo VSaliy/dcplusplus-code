@@ -178,8 +178,8 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 
 			if(updating) {
 				// just update the current file if it is already there.
-				for(auto i = cur->files.cbegin(), iend = cur->files.cend(); i != iend; ++i) {
-					auto& file = **i;
+				for(auto& i: cur->files) {
+					auto& file = *i;
 					/// @todo comparisons should be case-insensitive but it takes too long - add a cache
 					if(file.getTTH() == tth || file.getName() == n) {
 						file.setName(n);
@@ -201,10 +201,10 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 			bool incomp = getAttrib(attribs, sIncomplete, 1) == "1";
 			DirectoryListing::Directory* d = nullptr;
 			if(updating) {
-				for(auto i = cur->directories.begin(); i != cur->directories.end(); ++i) {
+				for(auto i: cur->directories) {
 					/// @todo comparisons should be case-insensitive but it takes too long - add a cache
-					if((*i)->getName() == n) {
-						d = *i;
+					if(i->getName() == n) {
+						d = i;
 						if(!d->getComplete())
 							d->setComplete(!incomp);
 						break;
@@ -232,16 +232,16 @@ void ListLoader::startTag(const string& name, StringPairList& attribs, bool simp
 		}
 
 		StringList sl = StringTokenizer<string>(base.substr(1), '/').getTokens();
-		for(auto i = sl.begin(); i != sl.end(); ++i) {
+		for(auto& i: sl) {
 			DirectoryListing::Directory* d = nullptr;
-			for(auto j = cur->directories.begin(); j != cur->directories.end(); ++j) {
-				if((*j)->getName() == *i) {
-					d = *j;
+			for(auto j: cur->directories) {
+				if(j->getName() == i) {
+					d = j;
 					break;
 				}
 			}
 			if(!d) {
-				d = new DirectoryListing::Directory(cur, *i, false, false);
+				d = new DirectoryListing::Directory(cur, i, false, false);
 				cur->directories.push_back(d);
 			}
 			cur = d;
@@ -376,14 +376,13 @@ void DirectoryListing::download(Directory* aDir, const string& aTarget, bool hig
 	// First, recurse over the directories
 	Directory::List& lst = aDir->directories;
 	sort(lst.begin(), lst.end(), Directory::DirSort());
-	for(auto j = lst.begin(); j != lst.end(); ++j) {
-		download(*j, target, highPrio);
+	for(auto& j: lst) {
+		download(j, target, highPrio);
 	}
 	// Then add the files
 	File::List& l = aDir->files;
 	sort(l.begin(), l.end(), File::FileSort());
-	for(auto i = aDir->files.begin(); i != aDir->files.end(); ++i) {
-		File* file = *i;
+	for(auto file: aDir->files) {
 		try {
 			download(file, target + file->getName(), false, highPrio);
 		} catch(const QueueException&) {
@@ -458,30 +457,30 @@ void DirectoryListing::Directory::filterList(DirectoryListing& dirList) {
 }
 
 void DirectoryListing::Directory::filterList(DirectoryListing::Directory::TTHSet& l) {
-	for(auto i = directories.begin(); i != directories.end(); ++i) (*i)->filterList(l);
+	for(auto i: directories) i->filterList(l);
 	directories.erase(std::remove_if(directories.begin(),directories.end(),DirectoryEmpty()),directories.end());
 	files.erase(std::remove_if(files.begin(),files.end(),HashContained(l)),files.end());
 }
 
 void DirectoryListing::Directory::getHashList(DirectoryListing::Directory::TTHSet& l) {
-	for(auto i = directories.begin(); i != directories.end(); ++i) (*i)->getHashList(l);
-	for(auto i = files.begin(); i != files.end(); ++i) l.insert((*i)->getTTH());
+	for(auto i: directories) i->getHashList(l);
+	for(auto i: files) l.insert(i->getTTH());
 }
 
 int64_t DirectoryListing::Directory::getTotalSize(bool adl) {
 	int64_t x = getSize();
-	for(auto i = directories.begin(); i != directories.end(); ++i) {
-		if(!(adl && (*i)->getAdls()))
-			x += (*i)->getTotalSize(adls);
+	for(auto i: directories) {
+		if(!(adl && i->getAdls()))
+			x += i->getTotalSize(adls);
 	}
 	return x;
 }
 
 size_t DirectoryListing::Directory::getTotalFileCount(bool adl) {
 	size_t x = getFileCount();
-	for(auto i = directories.begin(); i != directories.end(); ++i) {
-		if(!(adl && (*i)->getAdls()))
-			x += (*i)->getTotalFileCount(adls);
+	for(auto i: directories) {
+		if(!(adl && i->getAdls()))
+			x += i->getTotalFileCount(adls);
 	}
 	return x;
 }

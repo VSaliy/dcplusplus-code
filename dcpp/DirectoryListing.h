@@ -105,8 +105,8 @@ public:
 
 		int64_t getSize() const {
 			int64_t x = 0;
-			for(auto i = files.begin(); i != files.end(); ++i) {
-				x+=(*i)->getSize();
+			for(auto& i: files) {
+				x += i->getSize();
 			}
 			return x;
 		}

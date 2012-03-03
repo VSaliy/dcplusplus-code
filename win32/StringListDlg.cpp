@@ -169,8 +169,8 @@ bool StringListDlg::handleInitDialog(const TStringList& initialValues) {
 
 	list->addColumn();
 
-	for(auto i = initialValues.begin(), iend = initialValues.end(); i != iend; ++i)
-		insert(*i);
+	for(auto& i: initialValues)
+		insert(i);
 
 	handleSelectionChanged();
 	handleInputUpdated();

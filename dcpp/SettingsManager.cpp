@@ -541,9 +541,9 @@ void SettingsManager::save(string const& aFileName) {
 	
 	xml.addTag("SearchTypes");
 	xml.stepIn();
-	for(auto i = searchTypes.cbegin(), iend = searchTypes.cend(); i != iend; ++i) {
-		xml.addTag("SearchType", Util::toString(";", i->second));
-		xml.addChildAttrib("Id", i->first);
+	for(auto& i: searchTypes) {
+		xml.addTag("SearchType", Util::toString(";", i.second));
+		xml.addChildAttrib("Id", i.first);
 	}
 	xml.stepOut();
 

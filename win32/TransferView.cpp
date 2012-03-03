@@ -482,36 +482,36 @@ void TransferView::execTasks() {
 	HoldRedraw hold(connections, t.size() > 1);
 	HoldRedraw hold2(downloads, t.size() > 1);
 
-	for(auto i = t.begin(); i != t.end(); ++i) {
-		if(i->first == CONNECTIONS_ADD) {
-			auto &ui = static_cast<UpdateInfo&>(*i->second);
+	for(auto& i: t) {
+		if(i.first == CONNECTIONS_ADD) {
+			auto &ui = static_cast<UpdateInfo&>(*i.second);
 			ConnectionInfo* ii = new ConnectionInfo(ui.user, ui.download);
 			ii->update(ui);
 			connections->insert(ii);
-		} else if(i->first == CONNECTIONS_REMOVE) {
-			auto &ui = static_cast<UpdateInfo&>(*i->second);
+		} else if(i.first == CONNECTIONS_REMOVE) {
+			auto &ui = static_cast<UpdateInfo&>(*i.second);
 			int ic = connections->size();
-			for(int i = 0; i < ic; ++i) {
-				ConnectionInfo* ii = connections->getData(i);
+			for(int j = 0; j < ic; ++j) {
+				ConnectionInfo* ii = connections->getData(j);
 				if(ui == *ii) {
-					connections->erase(i);
+					connections->erase(j);
 					break;
 				}
 			}
-		} else if(i->first == CONNECTIONS_UPDATE) {
-			auto &ui = static_cast<UpdateInfo&>(*i->second);
+		} else if(i.first == CONNECTIONS_UPDATE) {
+			auto &ui = static_cast<UpdateInfo&>(*i.second);
 			int ic = connections->size();
-			for(int i = 0; i < ic; ++i) {
-				ConnectionInfo* ii = connections->getData(i);
+			for(int j = 0; j < ic; ++j) {
+				ConnectionInfo* ii = connections->getData(j);
 				if(ii->download == ui.download && ii->getUser() == ui.user) {
 					ii->update(ui);
-					connections->update(i);
+					connections->update(j);
 					sortConn = true;
 					break;
 				}
 			}
-		} else if(i->first == DOWNLOADS_ADD_USER) {
-			auto &ti = static_cast<TickInfo&>(*i->second);
+		} else if(i.first == DOWNLOADS_ADD_USER) {
+			auto &ti = static_cast<TickInfo&>(*i.second);
 			int i = find(ti.path);
 			if(i == -1) {
 				int64_t size = QueueManager::getInstance()->getSize(ti.path);
@@ -523,32 +523,32 @@ void TransferView::execTasks() {
 				downloads->getData(i)->users++;
 				downloads->update(i);
 			}
-		} else if(i->first == DOWNLOADS_TICK) {
-			auto &ti = static_cast<TickInfo&>(*i->second);
-			int i = find(ti.path);
-			if(i != -1) {
-				DownloadInfo* di = downloads->getData(i);
+		} else if(i.first == DOWNLOADS_TICK) {
+			auto &ti = static_cast<TickInfo&>(*i.second);
+			int j = find(ti.path);
+			if(j != -1) {
+				DownloadInfo* di = downloads->getData(j);
 				di->update(ti);
-				downloads->update(i);
+				downloads->update(j);
 				sortDown = true;
 			}
-		} else if(i->first == DOWNLOADS_REMOVE_USER) {
-			auto &ti = static_cast<TickInfo&>(*i->second);
-			int i = find(ti.path);
+		} else if(i.first == DOWNLOADS_REMOVE_USER) {
+			auto &ti = static_cast<TickInfo&>(*i.second);
+			int j = find(ti.path);
 
-			if(i != -1) {
-				DownloadInfo* di = downloads->getData(i);
+			if(j != -1) {
+				DownloadInfo* di = downloads->getData(j);
 				if(--di->users == 0) {
 					di->bps = 0;
 				}
 				di->update();
-				downloads->update(i);
+				downloads->update(j);
 			}
-		} else if(i->first == DOWNLOADS_REMOVED) {
-			auto &ti = static_cast<TickInfo&>(*i->second);
-			int i = find(ti.path);
-			if(i != -1) {
-				downloads->erase(i);
+		} else if(i.first == DOWNLOADS_REMOVED) {
+			auto &ti = static_cast<TickInfo&>(*i.second);
+			int j = find(ti.path);
+			if(j != -1) {
+				downloads->erase(j);
 			}
 		}
 
@@ -789,20 +789,19 @@ void TransferView::onTransferTick(Transfer* t, bool isDownload) {
 }
 
 void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noexcept  {
-	for(auto i = dl.begin(); i != dl.end(); ++i) {
-		onTransferTick(*i, true);
+	for(auto i: dl) {
+		onTransferTick(i, true);
 	}
 
 	std::vector<TickInfo*> dis;
-	for(auto i = dl.begin(); i != dl.end(); ++i) {
-		Download* d = *i;
+	for(auto d: dl) {
 		if(d->getType() != Transfer::TYPE_FILE) {
 			continue;
 		}
 
 		TickInfo* ti = 0;
-		for(auto j = dis.begin(); j != dis.end(); ++j) {
-			TickInfo* ti2 = *j;
+		for(auto j: dis) {
+			TickInfo* ti2 = j;
 			if(Util::stricmp(ti2->path, d->getPath()) == 0) {
 				ti = ti2;
 				break;
@@ -815,8 +814,8 @@ void TransferView::on(DownloadManagerListener::Tick, const DownloadList& dl) noe
 		ti->bps += d->getAverageSpeed();
 		ti->done += d->getPos();
 	}
-	for(auto i = dis.begin(); i != dis.end(); ++i) {
-		tasks.add(DOWNLOADS_TICK, unique_ptr<Task>(*i));
+	for(auto i: dis) {
+		tasks.add(DOWNLOADS_TICK, unique_ptr<Task>(i));
 	}
 
 	callAsync([this] { execTasks(); });
@@ -868,8 +867,8 @@ void TransferView::on(UploadManagerListener::Starting, Upload* u) noexcept {
 }
 
 void TransferView::on(UploadManagerListener::Tick, const UploadList& ul) noexcept {
-	for(auto i = ul.begin(); i != ul.end(); ++i) {
-		onTransferTick(*i, false);
+	for(auto i: ul) {
+		onTransferTick(i, false);
 	}
 
 	callAsync([this] { execTasks(); });

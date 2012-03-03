@@ -161,8 +161,8 @@ void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
 	HoldRedraw hold(files);
 	HoldRedraw hold2(dirs);
 
-	for(auto j = li.begin(); j != li.end(); ++j) {
-		QueueItem* aQI = j->second;
+	for(auto& j: li) {
+		QueueItem* aQI = j.second;
 		QueueItemInfo* ii = new QueueItemInfo(*aQI);
 		addQueueItem(ii, true);
 	}
@@ -224,8 +224,8 @@ bool QueueFrame::preClosing() {
 void QueueFrame::postClosing() {
 	dirs->clear();
 	files->clear();
-	for(auto i = directories.begin(); i != directories.end(); ++i) {
-		delete i->second;
+	for(auto& i: directories) {
+		delete i.second;
 	}
 	directories.clear();
 
@@ -295,14 +295,14 @@ void QueueFrame::QueueItemInfo::update() {
 		if(colMask & (MASK_USERS | MASK_STATUS)) {
 			tstring tmp;
 
-			for(auto j = getSources().begin(); j != getSources().end(); ++j) {
+			for(auto& j: getSources()) {
 				if(!tmp.empty())
 					tmp += _T(", ");
 
-				if(j->getUser().user->isOnline())
+				if(j.getUser().user->isOnline())
 					online++;
 
-				tmp += WinUtil::getNicks(j->getUser());
+				tmp += WinUtil::getNicks(j.getUser());
 			}
 			display->columns[COLUMN_USERS] = tmp.empty() ? T_("No users") : tmp;
 		}
@@ -357,25 +357,25 @@ void QueueFrame::QueueItemInfo::update() {
 
 		if(colMask & MASK_ERRORS) {
 			tstring tmp;
-			for(auto j = getBadSources().begin(); j != getBadSources().end(); ++j) {
-				if(!j->isSet(QueueItem::Source::FLAG_REMOVED)) {
+			for(auto& j: getBadSources()) {
+				if(!j.isSet(QueueItem::Source::FLAG_REMOVED)) {
 					if(!tmp.empty())
 						tmp += _T(", ");
-					tmp += WinUtil::getNicks(j->getUser());
+					tmp += WinUtil::getNicks(j.getUser());
 					tmp += _T(" (");
-					if(j->isSet(QueueItem::Source::FLAG_FILE_NOT_AVAILABLE)) {
+					if(j.isSet(QueueItem::Source::FLAG_FILE_NOT_AVAILABLE)) {
 						tmp += T_("File not available");
-					} else if(j->isSet(QueueItem::Source::FLAG_PASSIVE)) {
+					} else if(j.isSet(QueueItem::Source::FLAG_PASSIVE)) {
 						tmp += T_("Passive user");
-					} else if(j->isSet(QueueItem::Source::FLAG_CRC_FAILED)) {
+					} else if(j.isSet(QueueItem::Source::FLAG_CRC_FAILED)) {
 						tmp += T_("CRC32 inconsistency (SFV-Check)");
-					} else if(j->isSet(QueueItem::Source::FLAG_BAD_TREE)) {
+					} else if(j.isSet(QueueItem::Source::FLAG_BAD_TREE)) {
 						tmp += T_("Full tree does not match TTH root");
-					} else if(j->isSet(QueueItem::Source::FLAG_SLOW_SOURCE)) {
+					} else if(j.isSet(QueueItem::Source::FLAG_SLOW_SOURCE)) {
 						tmp += T_("Source too slow");
-					} else if(j->isSet(QueueItem::Source::FLAG_NO_TTHF)) {
+					} else if(j.isSet(QueueItem::Source::FLAG_NO_TTHF)) {
 						tmp += T_("Remote client does not fully support TTH - cannot download");
-					} else if(j->isSet(QueueItem::Source::FLAG_UNTRUSTED)) {
+					} else if(j.isSet(QueueItem::Source::FLAG_UNTRUSTED)) {
 						tmp += T_("User certificate not trusted");
 					}
 					tmp += ')';
@@ -672,8 +672,8 @@ void QueueFrame::handleReadd(const HintedUser& user) {
 
 		if(!user.user) {
 			// re-add all sources
-			for(auto s = ii->getBadSources().begin(); s != ii->getBadSources().end(); ++s) {
-				QueueManager::getInstance()->readd(ii->getTarget(), s->getUser());
+			for(auto& s: ii->getBadSources()) {
+				QueueManager::getInstance()->readd(ii->getTarget(), s.getUser());
 			}
 		} else {
 			try {
@@ -703,8 +703,8 @@ void QueueFrame::handleRemoveSource(const HintedUser& user) {
 		QueueItemInfo* ii = files->getSelectedData();
 
 		if(!user.user) {
-			for(auto si = ii->getSources().begin(); si != ii->getSources().end(); ++si) {
-				QueueManager::getInstance()->removeSource(ii->getTarget(), si->getUser(), QueueItem::Source::FLAG_REMOVED);
+			for(auto& si: ii->getSources()) {
+				QueueManager::getInstance()->removeSource(ii->getTarget(), si.getUser(), QueueItem::Source::FLAG_REMOVED);
 			}
 		} else {
 			QueueManager::getInstance()->removeSource(ii->getTarget(), user, QueueItem::Source::FLAG_REMOVED);
@@ -726,9 +726,8 @@ void QueueFrame::handlePriority(QueueItem::Priority p) {
 	if(usingDirMenu) {
 		setPriority(dirs->getSelected(), p);
 	} else {
-		std::vector<unsigned> selected = files->getSelection();
-		for(auto i = selected.begin(); i != selected.end(); ++i) {
-			QueueManager::getInstance()->setPriority(files->getData(*i)->getTarget(), p);
+		for(auto i: files->getSelection()) {
+			QueueManager::getInstance()->setPriority(files->getData(i)->getTarget(), p);
 		}
 	}
 }
@@ -752,9 +751,8 @@ void QueueFrame::removeDir(HTREEITEM ht) {
  * @param inc True = increase, False = decrease
  */
 void QueueFrame::changePriority(bool inc){
-	std::vector<unsigned> selected = files->getSelection();
-	for(auto i = selected.begin(); i != selected.end(); ++i) {
-		QueueItemInfo* ii = files->getData(*i);
+	for(auto i: files->getSelection()) {
+		QueueItemInfo* ii = files->getData(i);
 		QueueItem::Priority p = ii->getPriority();
 
 		if ((inc && p == QueueItem::HIGHEST) || (!inc && p == QueueItem::PAUSED)){
@@ -922,8 +920,7 @@ void QueueFrame::addRemoveSourcesMenu(Menu* menu, QueueItemInfo* qii) {
 
 bool QueueFrame::addUsers(Menu* menu, void (QueueFrame::*handler)(const HintedUser&), const QueueItem::SourceList& sources, bool offline) {
 	bool added = false;
-	for(auto i = sources.begin(); i != sources.end(); ++i) {
-		const QueueItem::Source& source = *i;
+	for(const auto& source: sources) {
 		const HintedUser& user = source.getUser();
 		if(offline || user.user->isOnline()) {
 			menu->appendItem(escapeMenu(WinUtil::getNicks(user)), [=] { (this->*handler)(user); });

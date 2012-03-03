@@ -220,8 +220,8 @@ void StatsFrame::addTick(int64_t bdiff, int64_t tdiff, StatList& lst, AvgList& a
 
 	bspeed = 0;
 
-	for(auto ai = avg.begin(); ai != avg.end(); ++ai) {
-		bspeed += *ai;
+	for(auto& ai: avg) {
+		bspeed += ai;
 	}
 
 	bspeed /= avg.size();

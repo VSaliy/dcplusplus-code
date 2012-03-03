@@ -81,9 +81,8 @@ remove(0)
 
 	WinUtil::makeColumns(directories, columns, 2);
 
-	StringPairList dirs = FavoriteManager::getInstance()->getFavoriteDirs();
-	for(auto j = dirs.begin(); j != dirs.end(); j++)
-		addRow(Text::toT(j->second), Text::toT(j->first));
+	for(auto& j: FavoriteManager::getInstance()->getFavoriteDirs())
+		addRow(Text::toT(j.second), Text::toT(j.first));
 
 	handleSelectionChanged();
 
@@ -129,9 +128,9 @@ void FavoriteDirsPage::handleSelectionChanged() {
 }
 
 void FavoriteDirsPage::handleDragDrop(const TStringList& files) {
-	for(auto i = files.begin(); i != files.end(); ++i)
-		if(PathIsDirectory(i->c_str()))
-			addDirectory(*i);
+	for(auto& i: files)
+		if(PathIsDirectory(i.c_str()))
+			addDirectory(i);
 }
 
 void FavoriteDirsPage::handleAddClicked() {

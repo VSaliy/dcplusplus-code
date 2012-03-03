@@ -59,8 +59,8 @@ SystemFrame::SystemFrame(TabViewPtr parent) :
 	// Technically, we might miss a message or two here, but who cares...
 	LogManager::getInstance()->addListener(this);
 
-	for(auto i = oldMessages.begin(); i != oldMessages.end(); ++i) {
-		addLine(i->first, Text::toT(i->second));
+	for(auto& i: oldMessages) {
+		addLine(i.first, Text::toT(i.second));
 	}
 }
 
