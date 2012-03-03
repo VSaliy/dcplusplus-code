@@ -81,7 +81,7 @@ public:
 	bool operator<(const Message& rhs) const;
 	bool operator==(const Message& rhs) const;
 private:
-	friend class std::hash<Message>;
+	friend struct std::hash<Message>;
 
 	/// Contains the actual Message
 	UINT msg;

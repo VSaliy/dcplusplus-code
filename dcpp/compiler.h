@@ -29,8 +29,8 @@ to emplace. <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=44436> */
 #endif
 
 #elif defined(_MSC_VER)
-#if _MSC_VER < 1600
-#error MSVC 10 (2010) is required
+#if _MSC_VER < 1700
+#error MSVC 11 is required
 #endif
 
 //disable the deprecated warnings for the CRT functions.

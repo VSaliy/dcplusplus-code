@@ -3,7 +3,7 @@ choice /M "%0 - Make sure you have Cygwin and Visual Studio - Make sure you have
 echo on
 if errorlevel 2 goto end
 
-set VCDIR=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC
+set VCDIR=C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC
 
 mv ../include/openssl/opensslconf.h .
 rm -rf ../include ../lib

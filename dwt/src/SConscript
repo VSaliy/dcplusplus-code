@@ -4,8 +4,6 @@ env, target, sources = dev.prepare_build(source_path, 'dwt', in_bin = False, rec
 
 env.Append(CPPPATH = ['#/dwt/include'])
 
-dev.msvc_boost_containers(env)
-
 def get_msvcproj_files(env):
 	def parse_patterns(patterns):
 		array = []

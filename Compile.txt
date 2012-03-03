@@ -73,7 +73,7 @@
 		Also grab natupnp.h from the Windows SDK and place it in the root of the repository.
 		<http://msdn.microsoft.com/en-us/windows/bb980924>
 
-	b. Microsoft Visual C++ 10 (2010):
+	b. Microsoft Visual C++ 11:
 	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
 
 		Download OpenSSL from www.openssl.org and compile it. You should get libraries called

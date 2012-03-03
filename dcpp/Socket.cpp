@@ -484,14 +484,17 @@ int Socket::getSocketOptInt(int option) {
 }
 
 void Socket::setSocketOpt(int option, int val) {
+	if(option==SO_RCVBUF) { printf("setting SO_RCVBUF - 0\n"); }
 	int len = sizeof(val);
 	if(sock4.valid()) {
 		check([&] { return ::setsockopt(sock4, SOL_SOCKET, option, (char*)&val, len); });
 	}
+	if(option==SO_RCVBUF) { printf("setting SO_RCVBUF - 1\n"); }
 
 	if(sock6.valid()) {
 		check([&] { return ::setsockopt(sock6, SOL_SOCKET, option, (char*)&val, len); });
 	}
+	if(option==SO_RCVBUF) { printf("setting SO_RCVBUF - 2\n"); }
 }
 
 int Socket::read(void* aBuffer, int aBufLen) {

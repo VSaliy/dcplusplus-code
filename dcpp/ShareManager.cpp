@@ -51,8 +51,10 @@ namespace dcpp {
 
 using std::numeric_limits;
 
+atomic_flag ShareManager::refreshing = ATOMIC_FLAG_INIT;
+
 ShareManager::ShareManager() : hits(0), xmlListLen(0), bzXmlListLen(0),
-	xmlDirty(true), forceXmlRefresh(true), refreshDirs(false), update(false), initial(true), listN(0), refreshing(false),
+	xmlDirty(true), forceXmlRefresh(true), refreshDirs(false), update(false), initial(true), listN(0),
 	lastXmlUpdate(0), lastFullUpdate(GET_TICK()), bloom(1<<20)
 {
 	SettingsManager::getInstance()->addListener(this);
