@@ -92,7 +92,7 @@ void Parser::startTag(const string& name_, StringPairList& attribs, bool simple)
 		return;
 	}
 
-	contexts.emplace_back(contexts.back());
+	contexts.push_back(contexts.back());
 	ScopedFunctor([this] { write(contexts.back()); });
 
 	if(name == "b") {

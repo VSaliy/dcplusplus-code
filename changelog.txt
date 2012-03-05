@@ -18,6 +18,7 @@
 * Apply user matching definition styles to nicks in chats (poy)
 * Fix favorite hub groups on Win XP (poy)
 * [L#925659] Safer window cleanup (poy)
+* Reduce chat flickering (bigmuscle)
 * [L#923612] Show the last chat line in taskbar previews (poy)
 * Show chat logs with a dim text color (poy)
 * Re-add lost user information tooltips (poy)

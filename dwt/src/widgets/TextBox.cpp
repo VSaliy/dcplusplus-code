@@ -149,14 +149,7 @@ ClientCoordinate TextBoxBase::ptFromPos(int pos) {
 void TextBoxBase::scrollToBottom() {
 	// this function takes care of various corner cases (not fully scrolled, scrolled too far...)
 
-	auto sel = getCaretPosRange();
-
-	setSelection(length());
-	showCaret();
-
-	// restore the previous selection
-	setSelection(sel.first, sel.second);
-
+	sendMessage(WM_VSCROLL, SB_BOTTOM);
 	sendMessage(WM_VSCROLL, SB_BOTTOM);
 }
 
@@ -222,6 +215,7 @@ bool TextBoxBase::handleMessage(const MSG& msg, LRESULT& retVal) {
 	// keep the scroll position at the end if it already was at the end
 	if((msg.message == WM_SIZE || msg.message == WM_MOVE) && hasStyle(WS_VSCROLL) && scrollIsAtEnd()) {
 		retVal = getDispatcher().chain(msg);
+		redraw(true);
 		scrollToBottom();
 		return true;
 	}
