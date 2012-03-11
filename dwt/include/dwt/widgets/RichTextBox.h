@@ -81,6 +81,7 @@ public:
 		FontPtr font;
 		bool scrollBarHorizontallyFlag;
 		bool scrollBarVerticallyFlag;
+		int events; /// additional events caught by this control; see the EM_SETEVENTMASK doc.
 
 		/// Fills with default parameters
 		Seed();

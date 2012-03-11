@@ -22,6 +22,7 @@
 #include "HtmlToRtf.h"
 
 #include <boost/algorithm/string/trim.hpp>
+#include <boost/scoped_array.hpp>
 
 #include <dcpp/debug.h>
 #include <dcpp/Flags.h>
@@ -47,10 +48,13 @@ private:
 		int fontSize;
 		size_t textColor; // index in the "colors" table
 		size_t bgColor; // index in the "colors" table
-		Context(dwt::RichTextBox* box, Parser& parser);
-	};
+		string link;
 
-	void write(Context& context);
+		Context(dwt::RichTextBox* box, Parser& parser);
+
+		tstring getBegin() const;
+		tstring getEnd() const;
+	};
 
 	size_t addFont(string&& font);
 	static int rtfFontSize(float px);
@@ -78,7 +82,6 @@ tstring HtmlToRtf::convert(const string& html, dwt::RichTextBox* box) {
 Parser::Parser(dwt::RichTextBox* box) {
 	// create a default context with the Rich Edit control's current formatting.
 	contexts.emplace_back(box, *this);
-	write(contexts.back());
 }
 
 void Parser::startTag(const string& name_, StringPairList& attribs, bool simple) {
@@ -93,7 +96,7 @@ void Parser::startTag(const string& name_, StringPairList& attribs, bool simple)
 	}
 
 	contexts.push_back(contexts.back());
-	ScopedFunctor([this] { write(contexts.back()); });
+	ScopedFunctor([this] { ret += contexts.back().getBegin(); });
 
 	if(name == "b") {
 		contexts.back().setFlag(Context::Bold);
@@ -105,6 +108,16 @@ void Parser::startTag(const string& name_, StringPairList& attribs, bool simple)
 
 	if(attribs.empty()) {
 		return;
+	}
+
+	if(name == "a") {
+		const auto& link = getAttrib(attribs, "href", 0);
+		if(!link.empty()) {
+			auto& context = contexts.back();
+			context.link = link;
+			context.setFlag(Context::Underlined);
+			/// @todo custom color
+		}
 	}
 
 	const auto& style = getAttrib(attribs, "style", 0);
@@ -172,7 +185,7 @@ void Parser::data(const string& data) {
 }
 
 void Parser::endTag(const string& name) {
-	ret += _T("}");
+	ret += contexts.back().getEnd();
 	contexts.pop_back();
 }
 
@@ -193,14 +206,25 @@ Parser::Context::Context(dwt::RichTextBox* box, Parser& parser) {
 	bgColor = parser.addColor(box->getBgColor());
 }
 
-void Parser::write(Context& context) {
-	string header;
-	if(context.isSet(Context::Bold)) { header += "\\b"; }
-	if(context.isSet(Context::Italic)) { header += "\\i"; }
-	if(context.isSet(Context::Underlined)) { header += "\\ul"; }
-	ret += Text::toT("{\\f" + Util::toString(context.font) + "\\fs" + Util::toString(context.fontSize) +
-		"\\cf" + Util::toString(context.textColor) + "\\highlight" + Util::toString(context.bgColor) +
-		header + " ");
+tstring Parser::Context::getBegin() const {
+	string ret = "{";
+
+	if(!link.empty()) {
+		ret += "\\field{\\*\\fldinst HYPERLINK \"" + link + "\"}{\\fldrslt";
+	}
+
+	ret += "\\f" + Util::toString(font) + "\\fs" + Util::toString(fontSize) +
+		"\\cf" + Util::toString(textColor) + "\\highlight" + Util::toString(bgColor);
+	if(isSet(Bold)) { ret += "\\b"; }
+	if(isSet(Italic)) { ret += "\\i"; }
+	if(isSet(Underlined)) { ret += "\\ul"; }
+
+	ret += " ";
+	return Text::toT(ret);
+}
+
+tstring Parser::Context::getEnd() const {
+	return link.empty() ? _T("}") : _T("}}");
 }
 
 size_t Parser::addFont(string&& font) {
