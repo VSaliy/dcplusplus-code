@@ -21,13 +21,23 @@
 #include "RichTextBox.h"
 
 #include "ParamDlg.h"
+#include "WinUtil.h"
 
 RichTextBox::Seed::Seed() : 
 BaseType::Seed()
 {
 }
 
-RichTextBox::RichTextBox(dwt::Widget* parent) : BaseType(parent) {
+RichTextBox::RichTextBox(dwt::Widget* parent) : BaseType(parent), linkF(0) {
+}
+
+void RichTextBox::create(const Seed& seed) {
+	BaseType::create(seed);
+
+	if((seed.events & ENM_LINK) == ENM_LINK) {
+		onRaw([this](WPARAM, LPARAM lParam) { return handleLink(*reinterpret_cast<ENLINK*>(lParam)); },
+			dwt::Message(WM_NOTIFY, EN_LINK));
+	}
 }
 
 bool RichTextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
@@ -69,12 +79,11 @@ MenuPtr RichTextBox::getMenu() {
 }
 
 tstring RichTextBox::findTextPopup() {
-	tstring param = Util::emptyStringT;
-	ParamDlg lineFind(this, T_("Search"), T_("Specify search string"), Util::emptyStringT, false);
+	ParamDlg lineFind(this, T_("Search"), T_("Specify search string"));
 	if(lineFind.run() == IDOK) {
-		param = lineFind.getValue();
+		return lineFind.getValue();
 	}
-	return param;
+	return Util::emptyStringT;
 }
 
 void RichTextBox::findTextNew() {
@@ -97,4 +106,40 @@ bool RichTextBox::handleKeyDown(int c) {
 		return true;
 	}
 	return false;
+}
+
+void RichTextBox::onLink(LinkF f) {
+	linkF = f;
+}
+
+LRESULT RichTextBox::handleLink(ENLINK& link) {
+	/* the control doesn't handle click events, just "mouse down" & "mouse up". so we have to make
+	sure the mouse hasn't moved between "down" & "up". */
+	static LPARAM clickPos = 0;
+
+	switch(link.msg) {
+	case WM_LBUTTONDOWN:
+		{
+			clickPos = link.lParam;
+			break;
+		}
+
+	case WM_LBUTTONUP:
+		{
+			if(link.lParam != clickPos)
+				break;
+
+			boost::scoped_array<TCHAR> buf(new TCHAR[link.chrg.cpMax - link.chrg.cpMin + 1]);
+			TEXTRANGE text = { link.chrg, buf.get() };
+			sendMessage(EM_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&text));
+			if(!linkF || !linkF(buf.get())) {
+				WinUtil::parseLink(buf.get());
+			}
+			break;
+		}
+
+		/// @todo context menu on rbuttonup
+		/// @todo tooltip on mouseover
+	}
+	return 0;
 }

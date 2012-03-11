@@ -292,7 +292,7 @@ public:
 
 	static bool getUCParams(dwt::Widget* parent, const UserCommand& cmd, ParamMap& params) noexcept;
 
-	static bool parseDBLClick(const tstring& aString);
+	static bool parseLink(const tstring& aString);
 	static void parseMagnetUri(const tstring& /*aUrl*/, bool aOverride = false);
 
 	static void help(dwt::Control* widget);
@@ -322,8 +322,6 @@ public:
 	static dwt::IconPtr toolbarIcon(unsigned id);
 
 private:
-	static bool handleBoxDblClick(dwt::TextBoxBase* box, const dwt::MouseEvent& ev);
-
 	static void initUserMatching();
 	static void initHelpPath();
 

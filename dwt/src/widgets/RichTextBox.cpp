@@ -44,19 +44,20 @@
 
 namespace dwt {
 
-const TCHAR RichTextBox::windowClass[] = RICHEDIT_CLASS;
+const TCHAR RichTextBox::windowClass[] = MSFTEDIT_CLASS;
 
 RichTextBox::Seed::Seed() :
 	BaseType::Seed(WS_CHILD | WS_TABSTOP | WS_VSCROLL | ES_LEFT | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL),
 	font(0),
 	scrollBarHorizontallyFlag(false),
-	scrollBarVerticallyFlag(false)
+	scrollBarVerticallyFlag(false),
+	events(ENM_LINK)
 {
 }
 
 Dispatcher& RichTextBox::makeDispatcher() {
-	// Need to load up RichEdit library!
-	static LibraryLoader richEditLibrary(_T("riched20.dll"));
+	// msftedit is the DLL containing Rich Edit 4.1, available from XP SP1 onwards.
+	static LibraryLoader richEditLibrary(_T("msftedit.dll"));
 	return ChainingDispatcher::superClass<RichTextBox>();
 }
 
@@ -68,7 +69,7 @@ void RichTextBox::create(const Seed& cs) {
 
 	setScrollBarHorizontally(cs.scrollBarHorizontallyFlag);
 	setScrollBarVertically(cs.scrollBarVerticallyFlag);
-
+	sendMessage(EM_SETEVENTMASK, 0, cs.events);
 	sendMessage(EM_AUTOURLDETECT, FALSE);
 
 	/* unlike other common controls, Rich Edits ignore WM_PRINTCLIENT messages. as per

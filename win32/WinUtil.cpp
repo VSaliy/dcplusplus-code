@@ -516,11 +516,7 @@ bool WinUtil::checkNick() {
 }
 
 void WinUtil::handleDblClicks(dwt::TextBoxBase* box) {
-	box->onLeftMouseDblClick([box](const dwt::MouseEvent &me) { return WinUtil::handleBoxDblClick(box, me); });
-}
-
-bool WinUtil::handleBoxDblClick(dwt::TextBoxBase* box, const dwt::MouseEvent& ev) {
-	return parseDBLClick(box->textUnderCursor(ev.pos));
+	box->onLeftMouseDblClick([box](const dwt::MouseEvent& me) { return parseLink(box->textUnderCursor(me.pos)); });
 }
 
 #define LINE2 _T("-- http://dcplusplus.sourceforge.net <DC++ ") _T(VERSIONSTRING) _T(">")
@@ -977,6 +973,7 @@ public:
 			seed.style |= ES_MULTILINE;
 		seed.exStyle = WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_CLIENTEDGE;
 		seed.location.size.x = std::min(getParent()->getDesktopSize().width(), static_cast<long>(maxWidth * dwt::util::dpiFactor()));
+		seed.events |= ENM_REQUESTRESIZE;
 		create(seed);
 
 		const auto margins = sendMessage(EM_GETMARGINS);
@@ -984,7 +981,6 @@ public:
 
 		// let the control figure out what the best size is.
 		onRaw([this, pt](WPARAM, LPARAM l) { return this->resize(l, pt); }, dwt::Message(WM_NOTIFY, EN_REQUESTRESIZE));
-		sendMessage(EM_SETEVENTMASK, 0, ENM_REQUESTRESIZE); ///@todo move to dwt
 		setText(text);
 	}
 
@@ -1378,7 +1374,7 @@ void WinUtil::openLink(const tstring& url) {
 	::ShellExecute(NULL, NULL, url.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
-bool WinUtil::parseDBLClick(const tstring& str) {
+bool WinUtil::parseLink(const tstring& str) {
 	auto url = Text::fromT(str);
 	string proto, host, port, file, query, fragment;
 	Util::decodeUrl(url, proto, host, port, file, query, fragment);

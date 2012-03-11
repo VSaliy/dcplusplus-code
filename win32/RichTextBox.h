@@ -25,10 +25,13 @@
 
 #include "forward.h"
 
-/// our rich text boxes that provide find functions
+/// our rich text boxes that provide find functions and handle links
 class RichTextBox : public dwt::RichTextBox {
 	typedef dwt::RichTextBox BaseType;
 	friend class dwt::WidgetCreator<RichTextBox>;
+
+	typedef std::function<bool (const tstring&)> LinkF;
+
 public:
 	typedef RichTextBox ThisType;
 	
@@ -41,6 +44,7 @@ public:
 	};
 
 	explicit RichTextBox(dwt::Widget* parent);
+	void create(const Seed& seed);
 
 	bool handleMessage(const MSG& msg, LRESULT& retVal);
 
@@ -50,8 +54,14 @@ public:
 	void findTextNew();
 	void findTextNext();
 
+	/// provides a chance to handle links differently
+	void onLink(LinkF f);
+
 private:
 	bool handleKeyDown(int c);
+	LRESULT handleLink(ENLINK& link);
+
+	LinkF linkF;
 };
 
 typedef RichTextBox::ObjectType RichTextBoxPtr;
