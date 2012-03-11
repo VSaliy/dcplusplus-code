@@ -172,6 +172,7 @@ inTabComplete(false)
 	createChat(paned);
 	chat->setHelpId(IDH_HUB_CHAT);
 	addWidget(chat);
+	chat->onLink([this](const tstring& link) { return handleChatLink(link); });
 	chat->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleChatContextMenu(sc); });
 
 	message->setHelpId(IDH_HUB_MESSAGE);
@@ -243,7 +244,6 @@ inTabComplete(false)
 
 	addAccel(FALT, 'G', [this] { handleGetList(); });
 	addAccel(FCONTROL, 'R', [this] { handleReconnect(); });
-	addAccel(FCONTROL, 'T', [this] { handleFollow(); });
 	addAccel(FALT, 'P', [this] { handlePrivateMessage(getParent()); });
 	addAccel(FALT, 'U', [this] { users->setFocus(); });
 	initAccels();
@@ -397,11 +397,10 @@ void HubFrame::enterImpl(const tstring& s) {
 			}
 		} else if(Util::stricmp(cmd.c_str(), _T("join"))==0) {
 			if(!param.empty()) {
-				redirect = Text::fromT(param);
 				if(BOOLSETTING(JOIN_OPEN_NEW_WINDOW)) {
 					HubFrame::openWindow(getParent(), Text::fromT(param));
 				} else {
-					handleFollow();
+					redirect(Text::fromT(param));
 				}
 			} else {
 				addStatus(T_("Specify a server to connect to"));
@@ -866,9 +865,11 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 }
 
 void HubFrame::on(Connecting, Client*) noexcept {
-	tstring hubUrl = Text::toT(client->getHubUrl());
-	callAsync([this, hubUrl] { addStatus(str(TF_("Connecting to %1%...") % hubUrl), true); });
-	callAsync([this, hubUrl] { setText(hubUrl); });
+	tstring hubUrl = Text::toT(Util::addBrackets(client->getHubUrl()));
+	callAsync([this, hubUrl] {
+		addStatus(str(TF_("Connecting to %1%...") % hubUrl));
+		setText(hubUrl);
+	});
 }
 void HubFrame::on(Connected, Client*) noexcept {
 	callAsync([this] { onConnected(); });
@@ -892,17 +893,28 @@ void HubFrame::on(Redirect, Client*, const string& line) noexcept {
 		callAsync([this] { addStatus(T_("Redirect request received to a hub that's already connected"), true); });
 		return;
 	}
-	redirect = line;
-	if(BOOLSETTING(AUTO_FOLLOW)) {
-		callAsync([this] { handleFollow(); });
-	} else {
-		callAsync([=] { addStatus(str(TF_("Press the follow redirect button to connect to %1%") % Text::toT(line)), true); });
-	}
+	callAsync([this, line] {
+		if(BOOLSETTING(AUTO_FOLLOW)) {
+			auto copy = line; /// @todo shouldn't the lambda have already created a copy?
+			redirect(std::move(copy));
+		} else {
+			string msg = str(F_("Received a redirect request to %1%, click here to follow it") % Util::addBrackets(line));
+			tstring msgT = Text::toT(msg);
+			string tmp;
+			addStatus(msgT, false);
+			/// @todo change to "javascript: external.redirect" when switching to an HTML control
+			addChatHTML("<span>*** </span><a href=\"redirect: " + SimpleXML::escape(line, tmp, true) + "\">" +
+				SimpleXML::escape(msg, tmp, false) + "</a>");
+			addedChat(_T("*** ") + msgT);
+		}
+	});
 }
 
 void HubFrame::on(Failed, Client*, const string& line) noexcept {
-	callAsync([=] { addStatus(Text::toT(line), true); });
-	callAsync([this] { onDisconnected(); });
+	callAsync([this, line] {
+		addStatus(Text::toT(line));
+		onDisconnected();
+	});
 }
 
 void HubFrame::on(GetPassword, Client*) noexcept {
@@ -1104,6 +1116,15 @@ bool HubFrame::userClick(const dwt::ScreenCoordinate& pt) {
 	}
 
 	return true;
+}
+
+bool HubFrame::handleChatLink(const tstring& link) {
+	if(link.size() > 10 && !link.compare(0, 10, _T("redirect: "))) {
+		redirect(Text::fromT(link.substr(10)));
+		return true;
+	}
+
+	return false;
 }
 
 bool HubFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
@@ -1358,24 +1379,22 @@ void HubFrame::handleReconnect() {
 	client->reconnect();
 }
 
-void HubFrame::handleFollow() {
-	if(!redirect.empty()) {
-		if(ClientManager::getInstance()->isConnected(redirect)) {
-			addStatus(T_("Redirect request received to a hub that's already connected"));
-			return;
-		}
-
-		url = redirect;
-
-		// the client is dead, long live the client!
-		client->removeListener(this);
-		ClientManager::getInstance()->putClient(client);
-		client = 0;
-		onDisconnected();
-		client = ClientManager::getInstance()->getClient(url);
-		client->addListener(this);
-		client->connect();
+void HubFrame::redirect(string&& target) {
+	if(ClientManager::getInstance()->isConnected(target)) {
+		addStatus(T_("Redirect request received to a hub that's already connected"));
+		return;
 	}
+
+	url = std::forward<string>(target);
+
+	// the client is dead, long live the client!
+	client->removeListener(this);
+	ClientManager::getInstance()->putClient(client);
+	client = 0;
+	onDisconnected();
+	client = ClientManager::getInstance()->getClient(url);
+	client->addListener(this);
+	client->connect();
 }
 
 void HubFrame::showFilterOpts() {

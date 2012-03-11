@@ -165,7 +165,6 @@ private:
 
 	Client* client;
 	string url;
-	string redirect;
 	bool updateUsers;
 	bool waitingForPW;
 	bool resort;
@@ -228,6 +227,7 @@ private:
 	bool handleMessageChar(int c);
 	bool handleMessageKeyDown(int c);
 	bool handleUsersKeyDown(int c);
+	bool handleChatLink(const tstring& link);
 	bool handleChatContextMenu(dwt::ScreenCoordinate pt);
 	bool handleUsersContextMenu(dwt::ScreenCoordinate pt);
 	void handleShowUsersClicked();
@@ -236,7 +236,6 @@ private:
 	void handleCopyHub();
 	void handleAddAsFavorite();
 	void handleReconnect();
-	void handleFollow();
 
 	void showFilterOpts();
 	void hideFilterOpts(dwt::Widget* w);
@@ -246,6 +245,8 @@ private:
 
 	string stripNick(const string& nick) const;
 	tstring scanNickPrefix(const tstring& prefix);
+
+	void redirect(string&& target);
 
 	// MDIChildFrame
 	void tabMenuImpl(dwt::Menu* menu);
