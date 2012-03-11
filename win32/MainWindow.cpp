@@ -288,7 +288,6 @@ void MainWindow::initMenu() {
 		file->appendSeparator();
 
 		file->appendItem(T_("&Reconnect\tCtrl+R"), [this] { handleReconnect(); }, WinUtil::menuIcon(IDI_RECONNECT));
-		file->appendItem(T_("Follow last redirec&t\tCtrl+T"), [this] { handleRedirect(); }, WinUtil::menuIcon(IDI_FOLLOW));
 		file->appendSeparator();
 
 		file->appendItem(T_("Open file list...\tCtrl+L"), [this] { handleOpenFileList(); }, WinUtil::menuIcon(IDI_OPEN_FILE_LIST));
@@ -398,8 +397,6 @@ void MainWindow::initToolbar() {
 		IDH_TOOLBAR_PUBLIC_HUBS, [this] { PublicHubsFrame::openWindow(getTabView()); });
 	toolbar->addButton("Reconnect", WinUtil::toolbarIcon(IDI_RECONNECT), 0, T_("Reconnect"), false,
 		IDH_TOOLBAR_RECONNECT, [this] { handleReconnect(); });
-	toolbar->addButton("Redirect", WinUtil::toolbarIcon(IDI_FOLLOW), 0, T_("Follow last redirect"), false,
-		IDH_TOOLBAR_FOLLOW, [this] { handleRedirect(); });
 	toolbar->addButton(FavHubsFrame::id, WinUtil::toolbarIcon(IDI_FAVORITE_HUBS), 0, T_("Favorite Hubs"), false,
 		IDH_TOOLBAR_FAVORITE_HUBS, [this] { FavHubsFrame::openWindow(getTabView()); },
 		[this](const dwt::ScreenCoordinate& pt) { handleFavHubsDropDown(pt); });
@@ -439,7 +436,6 @@ void MainWindow::initToolbar() {
 			PublicHubsFrame::id + comma +
 			comma +
 			"Reconnect" + comma +
-			"Redirect" + comma +
 			FavHubsFrame::id + comma +
 			UsersFrame::id + comma +
 			comma +
@@ -770,10 +766,6 @@ void MainWindow::handleLimiterMenu(bool upload) {
 
 void MainWindow::handleReconnect() {
 	forwardHub(&HubFrame::handleReconnect);
-}
-
-void MainWindow::handleRedirect() {
-	forwardHub(&HubFrame::handleFollow);
 }
 
 void MainWindow::forwardHub(void (HubFrame::*f)()) {
@@ -1448,15 +1440,14 @@ void MainWindow::completeGeoUpdate(bool v6) {
 
 void MainWindow::parseCommandLine(const tstring& cmdLine)
 {
-	string::size_type i = 0;
-	string::size_type j;
+	string::size_type i;
 
-	if( (j = cmdLine.find(_T("dchub://"), i)) != string::npos ||
-		(j = cmdLine.find(_T("adc://"), i)) != string::npos ||
-		(j = cmdLine.find(_T("adcs://"), i)) != string::npos ||
-		(j = cmdLine.find(_T("magnet:?"), i)) != string::npos )
+	if( (i = cmdLine.find(_T("dchub://"))) != string::npos ||
+		(i = cmdLine.find(_T("adc://"))) != string::npos ||
+		(i = cmdLine.find(_T("adcs://"))) != string::npos ||
+		(i = cmdLine.find(_T("magnet:?"))) != string::npos )
 	{
-		WinUtil::parseDBLClick(cmdLine.substr(j));
+		WinUtil::parseLink(cmdLine.substr(i));
 	}
 }
 

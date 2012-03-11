@@ -179,7 +179,6 @@ private:
 	void switchStatus();
 	bool handleSlotsUpdate(int delta);
 	void handleReconnect();
-	void handleRedirect();
 	void forwardHub(void (HubFrame::*f_t)());
 
 	// Other events

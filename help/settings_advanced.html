@@ -8,13 +8,14 @@
 <body>
 <h1>Advanced</h1>
 <dl style="margin-left: 40px;">
-  <dt>Automatically follow redirects</dt>
-  <dd cshelp="IDH_SETTINGS_ADVANCED_AUTO_FOLLOW">A connected hub can send out a redirect request, asking your
-client to disconnect from the current hub and joining another one.
-Enable this to automatically join that other hub. (You will be
-disconnected from the current hub no matter what.) If you leave it
-disabled, you can use the Follow Redirect button to manually follow the
-redirect.</dd>
+	<dt>Automatically follow redirects</dt>
+	<dd cshelp="IDH_SETTINGS_ADVANCED_AUTO_FOLLOW">
+	A connected hub can send out a redirect request, asking your client to disconnect from the
+	current hub in order to join another one. When this setting is enabled, DC++ automatically
+	follows these requests and connects to the hubs it has been asked to be redirected to. When
+	this setting is disabled, DC++ displays a link one can click on to follow the redirect request.
+	Note that DC++ disconnects hubs that have sent a redirect request no matter what.
+	</dd>
   <dt>Clear search box after each search</dt>
   <dd cshelp="IDH_SETTINGS_ADVANCED_CLEAR_SEARCH">After each search, your search terms will be cleared. The last
 terms will be accessible through the drop-down. You can set how many terms that you want to save by using <a href="settings_history.html#searchhistory">Search history</a>.</dd>
