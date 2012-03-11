@@ -56,6 +56,7 @@ const string SettingsManager::settingTags[] =
 	// Ints
 	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
 	"TextColor", "BackgroundColor", "UploadTextColor", "UploadBgColor", "DownloadTextColor", "DownloadBgColor",
+	"LinkColor", "LogColor",
 	"ShareHidden", "FilterMessages", "MinimizeToTray", "AlwaysTray",
 	"AutoSearch", "TimeStamps", "PopupHubPms", "PopupBotPms", "IgnoreHubPms", "IgnoreBotPms",
 	"ListDuplicates", "BufferSize", "DownloadSlots", "MaxDownloadSpeed", "LogMainChat", "LogPrivateChat",

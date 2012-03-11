@@ -24,45 +24,9 @@
 #include "OnlineUser.h"
 #include "SettingsManager.h"
 #include "SimpleXML.h"
-#include "StringTokenizer.h"
 #include "Util.h"
 
 namespace dcpp {
-
-namespace {
-
-// helpers that convert style settings to CSS declarations (implementation dependant).
-
-string cssColor(int color) {
-#ifdef _WIN32
-	// assume it's a COLORREF.
-	char buf[8];
-	snprintf(buf, sizeof(buf), "%.2X%.2X%.2X", GetRValue(color), GetGValue(color), GetBValue(color));
-	return buf;
-#else
-	///@todo
-	return string();
-#endif
-}
-
-string cssFont(const string& font) {
-#ifdef _WIN32
-	StringTokenizer<string> st(font, ',');
-	auto& l = st.getTokens();
-	if(l.size() >= 4) {
-		std::stringstream stream;
-		stream << (Util::toInt(l[3]) ? "italic" : "normal") << " " << l[2] << " " <<
-			abs(Util::toFloat(l[1])) << "px '" << l[0] << "'";
-		return stream.str();
-	}
-	return string();
-#else
-	///@todo
-	return string();
-#endif
-}
-
-} // unnamed namespace
 
 ChatMessage::ChatMessage(const string& text, const OnlineUser* from,
 	const OnlineUser* to, const OnlineUser* replyTo,
@@ -108,9 +72,9 @@ messageTimestamp(messageTimestamp)
 
 	auto style = from->getIdentity().getStyle();
 	string styleAttr;
-	if(!style.font.empty()) { styleAttr += "font: " + cssFont(style.font) + ";"; }
-	if(style.textColor != -1) { styleAttr += "color: #" + cssColor(style.textColor) + ";"; }
-	if(style.bgColor != -1) { styleAttr += "background-color: #" + cssColor(style.bgColor) + ";"; }
+	if(!style.font.empty()) { styleAttr += "font: " + Util::cssFont(style.font) + ";"; }
+	if(style.textColor != -1) { styleAttr += "color: #" + Util::cssColor(style.textColor) + ";"; }
+	if(style.bgColor != -1) { styleAttr += "background-color: #" + Util::cssColor(style.bgColor) + ";"; }
 	htmlMessage += addSpan("nick", tmp, styleAttr) + " ";
 
 	// Check all '<' and '[' after newlines as they're probably pastes...

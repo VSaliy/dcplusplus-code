@@ -22,7 +22,6 @@
 #include "HtmlToRtf.h"
 
 #include <boost/algorithm/string/trim.hpp>
-#include <boost/scoped_array.hpp>
 
 #include <dcpp/debug.h>
 #include <dcpp/Flags.h>
@@ -116,7 +115,6 @@ void Parser::startTag(const string& name_, StringPairList& attribs, bool simple)
 			auto& context = contexts.back();
 			context.link = link;
 			context.setFlag(Context::Underlined);
-			/// @todo custom color
 		}
 	}
 

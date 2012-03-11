@@ -44,6 +44,9 @@
 
 namespace dwt {
 
+#ifndef MSFTEDIT_CLASS /// @todo remove when MinGW has this
+#define MSFTEDIT_CLASS L"RICHEDIT50W"
+#endif
 const TCHAR RichTextBox::windowClass[] = MSFTEDIT_CLASS;
 
 RichTextBox::Seed::Seed() :

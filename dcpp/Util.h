@@ -403,6 +403,11 @@ public:
 		return t1;
 	}
 
+	/// make a color suitable for a CSS declaration (implementation dependant).
+	static string cssColor(int color);
+	/// make a font suitable for a CSS declaration (implementation dependant).
+	static string cssFont(const string& font);
+
 	static string encodeURI(const string& /*aString*/, bool reverse = false);
 	static string getLocalIp();
 	static bool isPrivateIp(string const& ip);

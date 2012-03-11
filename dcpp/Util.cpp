@@ -34,6 +34,7 @@
 #include "LogManager.h"
 #include "SettingsManager.h"
 #include "SimpleXML.h"
+#include "StringTokenizer.h"
 #include "version.h"
 
 #ifndef _WIN32
@@ -753,6 +754,35 @@ int Util::strnicmp(const char* a, const char* b, size_t n) {
 	Text::utf8ToWc(a, ca);
 	Text::utf8ToWc(b, cb);
 	return (a >= end) ? 0 : ((int)Text::toLower(ca) - (int)Text::toLower(cb));
+}
+
+string Util::cssColor(int color) {
+#ifdef _WIN32
+	// assume it's a COLORREF.
+	char buf[8];
+	snprintf(buf, sizeof(buf), "%.2X%.2X%.2X", GetRValue(color), GetGValue(color), GetBValue(color));
+	return buf;
+#else
+	///@todo
+	return string();
+#endif
+}
+
+string Util::cssFont(const string& font) {
+#ifdef _WIN32
+	StringTokenizer<string> st(font, ',');
+	auto& l = st.getTokens();
+	if(l.size() >= 4) {
+		std::stringstream stream;
+		stream << (Util::toInt(l[3]) ? "italic" : "normal") << " " << l[2] << " " <<
+			abs(Util::toFloat(l[1])) << "px '" << l[0] << "'";
+		return stream.str();
+	}
+	return string();
+#else
+	///@todo
+	return string();
+#endif
 }
 
 string Util::encodeURI(const string& aString, bool reverse) {

@@ -159,6 +159,18 @@ void WinUtil::init() {
 
 	initUserMatching();
 
+	{
+		// default link color: shift the hue, set lum & sat to middle values
+		auto hls = RGB2HLS(textColor);
+		SettingsManager::getInstance()->setDefault(SettingsManager::LINK_COLOR, HLS2RGB(HLS((HLS_H(hls) + 60) % 239, 120, 120)));
+	}
+
+	{
+		// default log color: more grey than the text color
+		auto hls = RGB2HLS(textColor);
+		SettingsManager::getInstance()->setDefault(SettingsManager::LOG_COLOR, HLS2RGB(HLS(HLS_H(hls), 120, HLS_S(hls) / 2)));
+	}
+
 	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 
 	// get the directory icon (DIR_ICON).
