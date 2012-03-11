@@ -134,14 +134,7 @@ protected:
 		}
 
 		if(!html.empty()) {
-			// more grey text color
-			auto hls = RGB2HLS(chat->getTextColor());
-			auto color = HLS2RGB(HLS(HLS_H(hls), 127, HLS_S(hls) / 2));
-
-			tmp.resize(8);
-			snprintf(&tmp[0], tmp.size(), "%.2X%.2X%.2X", GetRValue(color), GetGValue(color), GetBValue(color));
-
-			addChatHTML("<span style=\"white-space: pre-wrap; color: #" + tmp + ";\">" + html + "</span>");
+			addChatHTML("<span style=\"white-space: pre-wrap; color: #" + Util::cssColor(SETTING(LOG_COLOR)) + ";\">" + html + "</span>");
 		}
 	}
 

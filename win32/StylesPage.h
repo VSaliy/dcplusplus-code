@@ -44,16 +44,19 @@ private:
 	enum {
 		GROUP_GENERAL,
 		GROUP_TRANSFERS,
+		GROUP_CHAT,
 		GROUP_USERS,
 
 		GROUP_LAST
 	};
 
-	class Data {
+	class Data : public Flags {
 	protected:
 		typedef pair<dwt::FontPtr, LOGFONT> Font;
 
 	public:
+		enum { FONT_CHANGEABLE = 1 << 0, TEXT_COLOR_CHANGEABLE = 1 << 1, BG_COLOR_CHANGEABLE = 1 << 2 };
+
 		Data(tstring&& text, const unsigned helpId);
 		virtual ~Data() { }
 

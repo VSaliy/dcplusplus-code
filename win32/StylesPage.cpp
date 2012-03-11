@@ -145,6 +145,7 @@ showGen(0)
 	TStringList groups(GROUP_LAST);
 	groups[GROUP_GENERAL] = T_("General");
 	groups[GROUP_TRANSFERS] = T_("Transfers");
+	groups[GROUP_CHAT] = T_("Chat");
 	groups[GROUP_USERS] = T_("Users");
 	table->setGroups(groups);
 	auto grouped = table->isGrouped();
@@ -162,6 +163,9 @@ showGen(0)
 		SettingsManager::UPLOAD_FONT, SettingsManager::UPLOAD_TEXT_COLOR, SettingsManager::UPLOAD_BG_COLOR);
 	add(T_("Downloads"), IDH_SETTINGS_STYLES_DOWNLOADS, GROUP_TRANSFERS,
 		SettingsManager::DOWNLOAD_FONT, SettingsManager::DOWNLOAD_TEXT_COLOR, SettingsManager::DOWNLOAD_BG_COLOR);
+
+	add(T_("Links"), IDH_SETTINGS_STYLES_LINKS, GROUP_CHAT, -1, SettingsManager::LINK_COLOR, -1);
+	add(T_("Logs"), IDH_SETTINGS_STYLES_LOGS, GROUP_CHAT, -1, SettingsManager::LOG_COLOR, -1);
 
 	update(globalData);
 
@@ -204,6 +208,7 @@ void StylesPage::updateUserMatches(std::vector<UserMatch>& userMatches) {
 }
 
 StylesPage::Data::Data(tstring&& text, const unsigned helpId) :
+Flags(),
 text(forward<tstring>(text)),
 helpId(helpId)
 {
@@ -245,15 +250,30 @@ fontSetting(fontSetting),
 textColorSetting(textColorSetting),
 bgColorSetting(bgColorSetting)
 {
-	customFont = !SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::StrSetting>(fontSetting));
-	makeFont(font, SettingsManager::getInstance()->get(static_cast<SettingsManager::StrSetting>(fontSetting)));
-	makeFont(defaultFont, SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::StrSetting>(fontSetting)));
+	if(fontSetting != -1) {
+		setFlag(FONT_CHANGEABLE);
+		customFont = !SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::StrSetting>(fontSetting));
+		makeFont(font, SettingsManager::getInstance()->get(static_cast<SettingsManager::StrSetting>(fontSetting)));
+		makeFont(defaultFont, SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::StrSetting>(fontSetting)));
+	} else {
+		customFont = false;
+	}
 
-	customTextColor = !SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::IntSetting>(textColorSetting));
-	textColor = SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(textColorSetting));
+	if(textColorSetting != -1) {
+		setFlag(TEXT_COLOR_CHANGEABLE);
+		customTextColor = !SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::IntSetting>(textColorSetting));
+		textColor = SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(textColorSetting));
+	} else {
+		customTextColor = false;
+	}
 
-	customBgColor = !SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::IntSetting>(bgColorSetting));
-	bgColor = SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(bgColorSetting));
+	if(bgColorSetting != -1) {
+		setFlag(BG_COLOR_CHANGEABLE);
+		customBgColor = !SettingsManager::getInstance()->isDefault(static_cast<SettingsManager::IntSetting>(bgColorSetting));
+		bgColor = SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(bgColorSetting));
+	} else {
+		customBgColor = false;
+	}
 }
 
 const StylesPage::Data::Font& StylesPage::SettingsData::getFont() const {
@@ -261,30 +281,40 @@ const StylesPage::Data::Font& StylesPage::SettingsData::getFont() const {
 }
 
 int StylesPage::SettingsData::getTextColor() const {
-	return customTextColor ? textColor : SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(textColorSetting));
+	return customTextColor ? textColor :
+		(textColorSetting != -1) ? SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(textColorSetting)) :
+		-1;
 }
 
 int StylesPage::SettingsData::getBgColor() const {
-	return customBgColor ? bgColor : SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(bgColorSetting));
+	return customBgColor ? bgColor :
+		(bgColorSetting != -1) ? SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(bgColorSetting)) :
+		-1;
 }
 
 void StylesPage::SettingsData::write() {
-	if(customFont) {
-		SettingsManager::getInstance()->set(static_cast<SettingsManager::StrSetting>(fontSetting), Text::fromT(WinUtil::encodeFont(font.second)));
-	} else {
-		SettingsManager::getInstance()->unset(static_cast<SettingsManager::StrSetting>(fontSetting));
+	if(fontSetting != -1) {
+		if(customFont) {
+			SettingsManager::getInstance()->set(static_cast<SettingsManager::StrSetting>(fontSetting), Text::fromT(WinUtil::encodeFont(font.second)));
+		} else {
+			SettingsManager::getInstance()->unset(static_cast<SettingsManager::StrSetting>(fontSetting));
+		}
 	}
 
-	if(customTextColor) {
-		SettingsManager::getInstance()->set(static_cast<SettingsManager::IntSetting>(textColorSetting), textColor);
-	} else {
-		SettingsManager::getInstance()->unset(static_cast<SettingsManager::IntSetting>(textColorSetting));
+	if(textColorSetting != -1) {
+		if(customTextColor) {
+			SettingsManager::getInstance()->set(static_cast<SettingsManager::IntSetting>(textColorSetting), textColor);
+		} else {
+			SettingsManager::getInstance()->unset(static_cast<SettingsManager::IntSetting>(textColorSetting));
+		}
 	}
 
-	if(customBgColor) {
-		SettingsManager::getInstance()->set(static_cast<SettingsManager::IntSetting>(bgColorSetting), bgColor);
-	} else {
-		SettingsManager::getInstance()->unset(static_cast<SettingsManager::IntSetting>(bgColorSetting));
+	if(bgColorSetting != -1) {
+		if(customBgColor) {
+			SettingsManager::getInstance()->set(static_cast<SettingsManager::IntSetting>(bgColorSetting), bgColor);
+		} else {
+			SettingsManager::getInstance()->unset(static_cast<SettingsManager::IntSetting>(bgColorSetting));
+		}
 	}
 }
 
@@ -292,12 +322,15 @@ StylesPage::UserMatchData::UserMatchData(UserMatch& matcher) :
 Data(Text::toT(matcher.name), IDH_SETTINGS_STYLES_USER_MATCH),
 matcher(matcher)
 {
+	setFlag(FONT_CHANGEABLE);
 	customFont = !matcher.style.font.empty();
 	makeFont(font, matcher.style.font);
 
+	setFlag(TEXT_COLOR_CHANGEABLE);
 	customTextColor = matcher.style.textColor >= 0;
 	textColor = matcher.style.textColor;
 
+	setFlag(BG_COLOR_CHANGEABLE);
 	customBgColor = matcher.style.bgColor >= 0;
 	bgColor = matcher.style.bgColor;
 }
@@ -335,17 +368,17 @@ void StylesPage::handleSelectionChanged() {
 
 	enable = data && data->customFont;
 	customFont->setChecked(enable);
-	customFont->setEnabled(data);
+	customFont->setEnabled(data && data->isSet(Data::FONT_CHANGEABLE));
 	font->setEnabled(enable);
 
 	enable = data && data->customTextColor;
 	customTextColor->setChecked(enable);
-	customTextColor->setEnabled(data);
+	customTextColor->setEnabled(data && data->isSet(Data::TEXT_COLOR_CHANGEABLE));
 	textColor->setEnabled(enable);
 
 	enable = data && data->customBgColor;
 	customBgColor->setChecked(enable);
-	customBgColor->setEnabled(data);
+	customBgColor->setEnabled(data && data->isSet(Data::BG_COLOR_CHANGEABLE));
 	bgColor->setEnabled(enable);
 }
 
