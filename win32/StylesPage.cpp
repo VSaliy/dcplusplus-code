@@ -80,6 +80,7 @@ showGen(0)
 			dwt::ImageListPtr images(new dwt::ImageList(dwt::Point(16, 16)));
 			images->add(*WinUtil::createIcon(IDI_DCPP, 16));
 			images->add(*WinUtil::createIcon(IDI_NET_STATS, 16)); /// @todo better icon for the "transfers" group?
+			images->add(*WinUtil::createIcon(IDI_CHAT, 16));
 			images->add(*WinUtil::createIcon(IDI_USERS, 16));
 			table->setGroupImageList(images);
 		}
