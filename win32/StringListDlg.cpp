@@ -19,6 +19,8 @@
 #include "stdafx.h"
 #include "StringListDlg.h"
 
+#include <boost/range/adaptor/reversed.hpp>
+
 #include <dwt/widgets/Button.h>
 #include <dwt/widgets/Grid.h>
 
@@ -234,13 +236,13 @@ void StringListDlg::handleAddClicked() {
 
 void StringListDlg::handleMoveUpClicked() {
 	HoldRedraw hold(list);
-	std::vector<unsigned> selected = list->getSelection();
-	for(auto i = selected.begin(); i != selected.end(); ++i) {
-		if(*i > 0) {
-			tstring selText = list->getText(*i, 0);
-			list->erase(*i);
-			insert(selText, *i - 1);
-			list->select(*i - 1);
+	auto selected = list->getSelection();
+	for(auto i: selected) {
+		if(i > 0) {
+			tstring selText = list->getText(i, 0);
+			list->erase(i);
+			insert(selText, i - 1);
+			list->select(i - 1);
 		}
 	}
 }
@@ -248,12 +250,12 @@ void StringListDlg::handleMoveUpClicked() {
 void StringListDlg::handleMoveDownClicked() {
 	HoldRedraw hold(list);
 	auto selected = list->getSelection();
-	for(auto i = selected.rbegin(); i != selected.rend(); ++i) {
-		if(*i < list->size() - 1) {
-			tstring selText = list->getText(*i, 0);
-			list->erase(*i);
-			insert(selText, *i + 1);
-			list->select(*i + 1);
+	for(auto i: selected | boost::adaptors::reversed) {
+		if(i < list->size() - 1) {
+			tstring selText = list->getText(i, 0);
+			list->erase(i);
+			insert(selText, i + 1);
+			list->select(i + 1);
 		}
 	}
 }

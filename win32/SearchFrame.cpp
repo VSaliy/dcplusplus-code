@@ -19,6 +19,8 @@
 #include "stdafx.h"
 #include "SearchFrame.h"
 
+#include <boost/range/adaptor/reversed.hpp>
+
 #include <dcpp/ClientManager.h>
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/GeoManager.h>
@@ -148,8 +150,8 @@ droppedResults(0)
 		searchBox->getTextBox()->setCue(T_("Enter search here"));
 		addWidget(searchBox);
 
-		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i)
-			searchBox->addValue(*i);
+		for(auto& i: lastSearches | boost::adaptors::reversed)
+			searchBox->addValue(i);
 		searchBox->getTextBox()->onKeyDown([this](int c) { return handleSearchKeyDown(c); });
 		searchBox->getTextBox()->onChar([this] (int c) { return handleSearchChar(c); });
 

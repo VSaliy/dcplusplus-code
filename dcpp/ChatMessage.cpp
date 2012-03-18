@@ -110,8 +110,8 @@ messageTimestamp(messageTimestamp)
 	auto addLink = [&tmp, &xmlTmp, &tags](size_t begin, size_t end) {
 		Tag openingTag = { "<a href=\"" + SimpleXML::escape(tmp.substr(begin, end - begin), xmlTmp, true) + "\">", true, end },
 			closingTag = { "</a>", false, begin };
-		tags.emplace(begin, std::move(openingTag));
-		tags.emplace(end, std::move(closingTag));
+		tags[begin] = std::move(openingTag);
+		tags[end] = std::move(closingTag);
 	};
 
 	static const string delimiters = " \t\r\n<>\"";
@@ -124,10 +124,10 @@ messageTimestamp(messageTimestamp)
 		if((begin = tmp.find_last_of(delimiters, i)) == string::npos) begin = 0; else ++begin;
 		if((end = tmp.find_first_of(delimiters, i + 1)) == string::npos) end = n;
 
-		if(i > 0 &&
+		if(i > 0 && (
 			(i + 4 < n && tmp[i + 1] == '/' && tmp[i + 2] == '/') || // "http://", etc
-			(i >= begin + 6 && !tmp.compare(begin, 6, "magnet")) ||
-			(i >= begin + 6 && !tmp.compare(begin, 6, "mailto")))
+			(i == begin + 6 && !tmp.compare(begin, 6, "magnet")) ||
+			(i == begin + 6 && !tmp.compare(begin, 6, "mailto"))))
 		{
 			addLink(begin, end);
 			i = end;
@@ -190,8 +190,6 @@ messageTimestamp(messageTimestamp)
 	}
 
 	htmlMessage += "</span></span>";
-
-	dcdebug("html: %s\n", htmlMessage.c_str());
 
 	/// @todo send this to plugins
 }
