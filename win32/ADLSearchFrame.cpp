@@ -19,6 +19,8 @@
 #include "stdafx.h"
 #include "ADLSearchFrame.h"
 
+#include <boost/range/adaptor/reversed.hpp>
+
 #include <dcpp/Client.h>
 #include <dcpp/version.h>
 #include <dcpp/format.h>
@@ -225,15 +227,15 @@ void ADLSearchFrame::handleDown() {
 
 	HoldRedraw hold(items);
 	auto selected = items->getSelection();
-	for(auto i = selected.rbegin(); i != selected.rend(); ++i) {
-		if(*i < items->size() - 1) {
-			ADLSearch search = collection[*i];
-			swap(collection[*i], collection[*i + 1]);
+	for(auto i: selected | boost::adaptors::reversed) {
+		if(i < items->size() - 1) {
+			ADLSearch search = collection[i];
+			swap(collection[i], collection[i + 1]);
 			save = true;
 
-			items->erase(*i);
-			addEntry(search, *i + 1);
-			items->select(*i + 1);
+			items->erase(i);
+			addEntry(search, i + 1);
+			items->select(i + 1);
 		}
 	}
 

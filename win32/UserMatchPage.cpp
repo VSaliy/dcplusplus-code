@@ -19,6 +19,8 @@
 #include "stdafx.h"
 #include "UserMatchPage.h"
 
+#include <boost/range/adaptor/reversed.hpp>
+
 #include <dcpp/format.h>
 #include <dcpp/UserMatchManager.h>
 #include <dcpp/version.h>
@@ -279,13 +281,13 @@ void UserMatchPage::handleMoveUpClicked() {
 void UserMatchPage::handleMoveDownClicked() {
 	HoldRedraw hold(table);
 	auto sel = table->getSelection();
-	for(auto i = sel.crbegin(), iend = sel.crend(); i != iend; ++i) {
-		if(*i < table->size() - 1) {
-			std::swap(list[*i], list[*i + 1]);
+	for(auto i: sel | boost::adaptors::reversed) {
+		if(i < table->size() - 1) {
+			std::swap(list[i], list[i + 1]);
 
-			table->erase(*i);
-			addEntry(list[*i + 1], *i + 1);
-			table->select(*i + 1);
+			table->erase(i);
+			addEntry(list[i + 1], i + 1);
+			table->select(i + 1);
 		}
 	}
 

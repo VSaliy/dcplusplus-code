@@ -19,6 +19,8 @@
 #include "stdafx.h"
 #include "DirectoryListingFrame.h"
 
+#include <boost/range/adaptor/reversed.hpp>
+
 #include <dcpp/ADLSearch.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/FavoriteManager.h>
@@ -637,8 +639,8 @@ void DirectoryListingFrame::handleFindToggle() {
 		searchGrid->setVisible(false);
 		grid->row(0).mode = GridInfo::STATIC;
 	} else {
-		for(auto i = lastSearches.crbegin(), iend = lastSearches.crend(); i != iend; ++i) {
-			auto p = i->get();
+		for(auto& i: lastSearches | boost::adaptors::reversed) {
+			auto p = i.get();
 			searchBox->setData(searchBox->addValue(p->first), reinterpret_cast<LPARAM>(p));
 		}
 		searchGrid->setEnabled(true);
