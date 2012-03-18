@@ -26,6 +26,7 @@
 #include <dcpp/debug.h>
 #include <dcpp/Flags.h>
 #include <dcpp/ScopedFunctor.h>
+#include <dcpp/SettingsManager.h>
 #include <dcpp/SimpleXML.h>
 #include <dcpp/StringTokenizer.h>
 #include <dcpp/Text.h>
@@ -115,6 +116,7 @@ void Parser::startTag(const string& name_, StringPairList& attribs, bool simple)
 			auto& context = contexts.back();
 			context.link = link;
 			context.setFlag(Context::Underlined);
+			context.textColor = addColor(SETTING(LINK_COLOR)); /// @todo move to styles
 		}
 	}
 
@@ -218,6 +220,10 @@ tstring Parser::Context::getBegin() const {
 	if(isSet(Underlined)) { ret += "\\ul"; }
 
 	ret += " ";
+
+	// add an invisible space; otherwise link formatting may get lost...
+	if(!link.empty()) { ret += "{\\v  }"; }
+
 	return Text::toT(ret);
 }
 

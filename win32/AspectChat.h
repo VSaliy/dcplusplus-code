@@ -52,7 +52,6 @@ protected:
 			cs.style |= ES_READONLY;
 			chat = dwt::WidgetCreator<RichTextBox>::create(parent, cs);
 			chat->setTextLimit(65536);
-			WinUtil::handleDblClicks(chat);
 		}
 
 		{

@@ -903,8 +903,7 @@ void HubFrame::on(Redirect, Client*, const string& line) noexcept {
 			string tmp;
 			addStatus(msgT, false);
 			/// @todo change to "javascript: external.redirect" when switching to an HTML control
-			addChatHTML("<span>*** </span><a href=\"redirect: " + SimpleXML::escape(line, tmp, true) +
-				"\" style=\"color: #" + Util::cssColor(SETTING(LINK_COLOR)) + ";\">" +
+			addChatHTML("<span>*** </span><a href=\"redirect: " + SimpleXML::escape(line, tmp, true) + "\">" +
 				SimpleXML::escape(msg, tmp, false) + "</a>");
 			addedChat(_T("*** ") + msgT);
 		}
