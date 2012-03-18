@@ -293,7 +293,6 @@ public:
 	static bool getUCParams(dwt::Widget* parent, const UserCommand& cmd, ParamMap& params) noexcept;
 
 	static bool parseLink(const tstring& aString);
-	static void parseMagnetUri(const tstring& /*aUrl*/, bool aOverride = false);
 
 	static void help(dwt::Control* widget);
 	static void helpId(dwt::Control* widget, unsigned id);
