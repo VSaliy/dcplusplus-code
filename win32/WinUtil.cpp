@@ -30,6 +30,7 @@
 #include <dcpp/File.h>
 #include <dcpp/HashManager.h>
 #include <dcpp/LogManager.h>
+#include <dcpp/Magnet.h>
 #include <dcpp/QueueManager.h>
 #include <dcpp/SettingsManager.h>
 #include <dcpp/ShareManager.h>
@@ -1421,81 +1422,20 @@ bool WinUtil::parseLink(const tstring& str) {
 		Util::strnicmp(str.c_str(), _T("mailto:"), 7) == 0) {
 		openLink(str);
 		return true;
+
 	} else if(host == "magnet") {
-		parseMagnetUri(str);
-		return true;
-	}
-
-	return false;
-}
-
-void WinUtil::parseMagnetUri(const tstring& aUrl, bool /*aOverride*/) {
-	// official types that are of interest to us
-	//  xt = exact topic
-	//  xs = exact substitute
-	//  as = acceptable substitute
-	//  dn = display name
-	if(Util::strnicmp(aUrl.c_str(), _T("magnet:?"), 8) == 0) {
-		LogManager::getInstance()->message(str(F_("MAGNET Link detected: %1%") % Text::fromT(aUrl)));
-		StringTokenizer<tstring> mag(aUrl.substr(8), _T('&'));
-		typedef map<tstring, tstring> MagMap;
-		MagMap hashes;
-		tstring fname, fhash, type, param, fkey;
-		for(auto& idx: mag.getTokens()) {
-			// break into pairs
-			string::size_type pos = idx.find(_T('='));
-			if(pos != string::npos) {
-				type = Text::toT(Text::toLower(Util::encodeURI(Text::fromT(idx.substr(0, pos)), true)));
-				param = Text::toT(Util::encodeURI(Text::fromT(idx.substr(pos + 1)), true));
-			} else {
-				type = Text::toT(Util::encodeURI(Text::fromT(idx), true));
-				param.clear();
-			}
-			// extract what is of value
-			if(param.length() == 85 && Util::strnicmp(param.c_str(), _T("urn:bitprint:"), 13) == 0) {
-				hashes[type] = param.substr(46);
-			} else if(param.length() == 54 && Util::strnicmp(param.c_str(), _T("urn:tree:tiger:"), 15) == 0) {
-				hashes[type] = param.substr(15);
-			} else if(param.length() == 55 && Util::strnicmp(param.c_str(), _T("urn:tree:tiger/:"), 16) == 0) {
-				hashes[type] = param.substr(16);
-			} else if(param.length() == 59 && Util::strnicmp(param.c_str(), _T("urn:tree:tiger/1024:"), 20) == 0) {
-				hashes[type] = param.substr(20);
-			} else if(type.length() == 2 && Util::strnicmp(type.c_str(), _T("dn"), 2) == 0) {
-				fname = param;
-			} else if(type.length() == 2 && Util::strnicmp(type.c_str(), _T("kt"), 2) == 0) {
-				fkey = param;
-			}
-		}
-		// pick the most authoritative hash out of all of them.
-		if(hashes.find(_T("as")) != hashes.end()) {
-			fhash = hashes[_T("as")];
-		}
-		if(hashes.find(_T("xs")) != hashes.end()) {
-			fhash = hashes[_T("xs")];
-		}
-		if(hashes.find(_T("xt")) != hashes.end()) {
-			fhash = hashes[_T("xt")];
-		}
-		if(!fhash.empty() || !fkey.empty()) {
-			// ok, we have a hash, and maybe a filename.
-			//if(!BOOLSETTING(MAGNET_ASK)) {
-			//	switch(SETTING(MAGNET_ACTION)) {
-			//		case SettingsManager::MAGNET_AUTO_DOWNLOAD:
-			//			break;
-			//		case SettingsManager::MAGNET_AUTO_SEARCH:
-			//			SearchFrame::openWindow(mainWindow->getTabView(), fhash, SearchManager::TYPE_TTH);
-			//			break;
-			//	};
-			//} else {
-			// use aOverride to force the display of the dialog.  used for auto-updating
-			MagnetDlg(mainWindow, fhash, fname, fkey).run();
-			//}
+		string hash, name, key;
+		if(Magnet::parseUri(Text::fromT(str), hash, name, key)) {
+			MagnetDlg(mainWindow, Text::toT(hash), Text::toT(name), Text::toT(key)).run();
 		} else {
 			dwt::MessageBox(mainWindow).show(
 				T_("A MAGNET link was given to DC++, but it didn't contain a valid file hash for use on the Direct Connect network.  No action will be taken."),
 				T_("MAGNET Link detected"), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONEXCLAMATION);
 		}
+		return true;
 	}
+
+	return false;
 }
 
 namespace {

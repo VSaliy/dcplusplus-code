@@ -21,6 +21,7 @@
 
 #include "Client.h"
 #include "format.h"
+#include "Magnet.h"
 #include "OnlineUser.h"
 #include "SettingsManager.h"
 #include "SimpleXML.h"
@@ -106,12 +107,14 @@ messageTimestamp(messageTimestamp)
 	/* link formatting - optimize the lookup a bit by using the fact that every link identifier
 	(except www ones) contains a colon. */
 	/// @todo add support for spaces within links enclosed by brackets / quotes (see URI RFC)
-	/// @todo friendly magnet links
-	auto addLink = [&tmp, &xmlTmp, &tags](size_t begin, size_t end) {
-		Tag openingTag = { "<a href=\"" + SimpleXML::escape(tmp.substr(begin, end - begin), xmlTmp, true) + "\">", true, end },
+	auto addLinkStr = [&xmlTmp, &tags](size_t begin, size_t end, const string& link) {
+		Tag openingTag = { "<a href=\"" + SimpleXML::escape(link, xmlTmp, true) + "\">", true, end },
 			closingTag = { "</a>", false, begin };
 		tags[begin] = std::move(openingTag);
 		tags[end] = std::move(closingTag);
+	};
+	auto addLink = [&tmp, &addLinkStr](size_t begin, size_t end) {
+		addLinkStr(begin, end, tmp.substr(begin, end - begin));
 	};
 
 	static const string delimiters = " \t\r\n<>\"";
@@ -126,11 +129,27 @@ messageTimestamp(messageTimestamp)
 
 		if(i > 0 && (
 			(i + 4 < n && tmp[i + 1] == '/' && tmp[i + 2] == '/') || // "http://", etc
-			(i == begin + 6 && !tmp.compare(begin, 6, "magnet")) ||
-			(i == begin + 6 && !tmp.compare(begin, 6, "mailto"))))
+			(i == begin + 6 && i + 1 <= n && !tmp.compare(begin, 6, "mailto"))))
 		{
 			addLink(begin, end);
 			i = end;
+
+		} else if(i == begin + 6 && i + 2 <= n && !tmp.compare(begin, 6, "magnet") && tmp[i + 1] == '?') {
+			string link = tmp.substr(begin, end - begin), hash, name, key;
+			if(Magnet::parseUri(link, hash, name, key)) {
+
+				if(!name.empty()) {
+					// magnet link: replace with the friendly name
+					tmp.replace(begin, end - begin, name);
+					end += name.size() - link.size();
+				}
+
+				addLinkStr(begin, end, link);
+				i = end;
+
+			} else {
+				++i;
+			}
 
 		} else {
 			++i;
