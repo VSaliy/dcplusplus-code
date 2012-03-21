@@ -42,12 +42,20 @@ void UserInfoBase::matchQueue() {
 }
 void UserInfoBase::getList() {
 	try {
+		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW);
+	} catch(const Exception& e) {
+		LogManager::getInstance()->message(e.getError());
+	}
+}
+void UserInfoBase::browseList() {
+	if(user.user->getCID().isZero())
+		return;
+	try {
 		QueueManager::getInstance()->addList(user, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST);
 	} catch(const Exception& e) {
 		LogManager::getInstance()->message(e.getError());
 	}
 }
-
 void UserInfoBase::addFav() {
 	FavoriteManager::getInstance()->addFavoriteUser(user);
 }

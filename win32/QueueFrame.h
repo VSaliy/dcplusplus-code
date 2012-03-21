@@ -269,7 +269,7 @@ private:
 	void handlePM(const HintedUser& user);
 	void handleRemoveSource(const HintedUser& user);
 	void handleRemoveSources(const HintedUser& user);
-	void handleGetList(const HintedUser& user);
+	void handleBrowseList(const HintedUser& user);
 	void handleReadd(const HintedUser& user);
 	bool handleKeyDownFiles(int c);
 	bool handleKeyDownDirs(int c);

@@ -38,6 +38,7 @@ public:
 	UserInfoBase(const HintedUser& u, bool hubSet = false) : user(u), hubSet(hubSet) { }
 
 	virtual void getList();
+	virtual void browseList();
 	virtual void matchQueue();
 	virtual void pm(TabViewPtr);
 	virtual void grant();
@@ -109,6 +110,9 @@ protected:
 	void handleGetList() {
 		handleUserFunction([](UserInfoBase* u) { u->getList(); });
 	}
+	void handleBrowseList() {
+		handleUserFunction([](UserInfoBase* u) { u->browseList(); });
+	}
 	void handleAddFavorite() {
 		handleUserFunction([](UserInfoBase* u) { u->addFav(); });
 	}
@@ -137,6 +141,7 @@ protected:
 		for_each(users, [&](const UserInfoBase* u) { traits.parse(u); });
 
 		menu->appendItem(T_("&Get file list"), [this] { this->t().handleGetList(); }, dwt::IconPtr(), true, defaultIsGetList);
+		menu->appendItem(T_("&Browse file list"), [this] { this->t().handleBrowseList(); });
 		menu->appendItem(T_("&Match queue"), [this] { this->t().handleMatchQueue(); });
 		if(includeSendPM)
 			menu->appendItem(T_("&Send private message"), [this, parent] { this->t().handlePrivateMessage(parent); }, dwt::IconPtr(), true, !defaultIsGetList);

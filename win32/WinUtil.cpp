@@ -1496,6 +1496,9 @@ void WinUtil::addUserItems(Menu* menu, const HintedUserList& users, TabViewPtr p
 	QueueManager* qm = QueueManager::getInstance();
 
 	addUsers(menu, T_("&Get file list"), users, [=](const HintedUser &u, const string& s) {
+		qm->addList(u, QueueItem::FLAG_CLIENT_VIEW, s); }, dwt::IconPtr(), dirs);
+
+	addUsers(menu, T_("&Browse file list"), users, [=](const HintedUser &u, const string& s) {
 		qm->addList(u, QueueItem::FLAG_CLIENT_VIEW | QueueItem::FLAG_PARTIAL_LIST, s); }, dwt::IconPtr(), dirs);
 
 	addUsers(menu, T_("&Match queue"), users, [=](const HintedUser &u, const string& s) {
