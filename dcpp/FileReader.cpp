@@ -196,6 +196,18 @@ size_t FileReader::readDirect(const string& file, const DataCallback& callback) 
 }
 
 size_t FileReader::readMapped(const string& file, const DataCallback& callback) {
+	/** @todo mapped reads can fail on Windows by throwing an exception that may only be caught by
+	SEH. MinGW doesn't have that, thus making this method of reading prone to unrecoverable
+	failures. disabling this for now should be fine as DC++ always tries overlapped reads first
+	(at the moment this file reader is only used in places where overlapped reads make the most
+	sense).
+	more info:
+	<http://msdn.microsoft.com/en-us/library/aa366801(VS.85).aspx>
+	<http://stackoverflow.com/q/7244645> */
+#if 1
+	return READ_FAILED;
+#else
+
 	auto tfile = Text::toT(file);
 
 	auto tmp = ::CreateFile(tfile.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
@@ -246,6 +258,7 @@ size_t FileReader::readMapped(const string& file, const DataCallback& callback) 
 	}
 
 	return total.QuadPart;
+#endif
 }
 
 #else

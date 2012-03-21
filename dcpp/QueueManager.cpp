@@ -408,7 +408,7 @@ int QueueManager::Rechecker::run() {
 		TigerTree ttFile(tt.getBlockSize());
 
 		try {
-			FileReader().read(tempTarget, [&](const void* x, size_t n) {
+			FileReader(true).read(tempTarget, [&](const void* x, size_t n) {
 				return ttFile.update(x, n), true;
 			});
 		} catch(const FileException & e) {
@@ -1627,7 +1627,7 @@ bool QueueManager::checkSfv(QueueItem* qi, Download* d) {
 
 uint32_t QueueManager::calcCrc32(const string& file) {
 	CRC32Filter crc32;
-	FileReader().read(file, [&](const void* x, size_t n) {
+	FileReader(true).read(file, [&](const void* x, size_t n) {
 		return crc32(x, n), true;
 	});
 	return crc32.getValue();
