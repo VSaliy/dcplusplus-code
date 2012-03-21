@@ -140,6 +140,8 @@ size_t FileReader::readDirect(const string& file, const DataCallback& callback) 
 			dcdebug("First overlapped read failed: %s\n", Util::translateError(::GetLastError()).c_str());
 			return READ_FAILED;
 		}
+
+		return 0;
 	}
 
 	// Finish the read and see how it went

@@ -26,6 +26,7 @@
 * Update boost to version 1.49
 * [L#947895] Move the "follow redirect" command to inline chat links (poy)
 * Format chat links (poy)
+* [L#931560] Correctly hash empty files when using asynchronous file reading (cologic)
 
 -- 0.791 2012-01-14 --
 * Update translations
