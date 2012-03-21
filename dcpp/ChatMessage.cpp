@@ -31,9 +31,7 @@
 
 namespace dcpp {
 
-using std::make_pair;
-using std::map;
-using std::pair;
+using std::list;
 
 ChatMessage::ChatMessage(const string& text, const OnlineUser* from,
 	const OnlineUser* to, const OnlineUser* replyTo,
@@ -101,18 +99,28 @@ messageTimestamp(messageTimestamp)
 
 	/* format the message; this will involve adding custom tags. this table holds the tags to be
 	added along with their position. */
-	struct Tag { string s; bool opening; size_t otherTag; };
-	map<size_t, Tag> tags;
+
+	struct Tag { size_t pos; string s; bool opening; Tag* otherTag; };
+	list<Tag> tags;
 
 	/* link formatting - optimize the lookup a bit by using the fact that every link identifier
 	(except www ones) contains a colon. */
 	/// @todo add support for spaces within links enclosed by brackets / quotes (see URI RFC)
+
 	auto addLinkStr = [&xmlTmp, &tags](size_t begin, size_t end, const string& link) {
-		Tag openingTag = { "<a href=\"" + SimpleXML::escape(link, xmlTmp, true) + "\">", true, end },
-			closingTag = { "</a>", false, begin };
-		tags[begin] = std::move(openingTag);
-		tags[end] = std::move(closingTag);
+		Tag openingTag = { begin, "<a href=\"" + SimpleXML::escape(link, xmlTmp, true) + "\">", true },
+			closingTag = { end, "</a>", false };
+
+		tags.push_back(std::move(openingTag));
+		auto& opening = tags.back();
+
+		tags.push_back(std::move(closingTag));
+		auto& closing = tags.back();
+
+		opening.otherTag = &closing;
+		closing.otherTag = &opening;
 	};
+
 	auto addLink = [&tmp, &addLinkStr](size_t begin, size_t end) {
 		addLinkStr(begin, end, tmp.substr(begin, end - begin));
 	};
@@ -174,31 +182,33 @@ messageTimestamp(messageTimestamp)
 	/* write tags and the message data. support entangled tags, such as:
 	<a> <b> </a> </b> -> <a> <b> </b></a><b> </b> */
 
+	tags.sort([](const Tag& a, const Tag& b) { return a.pos < b.pos; });
+
 	size_t pos = 0;
-	vector<size_t> openTags;
+	vector<Tag*> openTags;
 
 	for(auto& tag: tags) {
-		htmlMessage += SimpleXML::escape(tmp.substr(pos, tag.first - pos), xmlTmp, false);
-		pos = tag.first;
+		htmlMessage += SimpleXML::escape(tmp.substr(pos, tag.pos - pos), xmlTmp, false);
+		pos = tag.pos;
 
-		if(tag.second.opening) {
-			htmlMessage += tag.second.s;
-			openTags.push_back(tag.first);
+		if(tag.opening) {
+			htmlMessage += tag.s;
+			openTags.push_back(&tag);
 
 		} else {
-			if(openTags.back() == tag.second.otherTag) {
+			if(openTags.back() == tag.otherTag) {
 				// common case: no entangled tag; just write the closing tag.
-				htmlMessage += tag.second.s;
+				htmlMessage += tag.s;
 				openTags.pop_back();
 
 			} else {
 				// there are entangled tags: write closing & opening tags of currently open tags.
-				for(auto key: openTags | boost::adaptors::reversed) { if(key >= tag.second.otherTag) {
-					htmlMessage += tags[tags[key].otherTag].s;
+				for(auto openTag: openTags | boost::adaptors::reversed) { if(openTag->pos >= tag.otherTag->pos) {
+					htmlMessage += openTag->otherTag->s;
 				} }
-				openTags.erase(remove(openTags.begin(), openTags.end(), tag.second.otherTag), openTags.end());
-				for(auto key: openTags) { if(key >= tag.second.otherTag) {
-					htmlMessage += tags[key].s;
+				openTags.erase(remove(openTags.begin(), openTags.end(), tag.otherTag), openTags.end());
+				for(auto openTag: openTags) { if(openTag->pos >= tag.otherTag->pos) {
+					htmlMessage += openTag->s;
 				} }
 			}
 		}
