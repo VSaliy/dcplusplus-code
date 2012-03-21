@@ -2,7 +2,7 @@
 * Apply ADL searches in partial file lists (poy)
 * Heuristics to send additional levels of info in partial file lists (poy)
 * Add a "Download full list" button in the file list toolbar (poy)
-* "Get file list" now defaults to partial file lists (poy)
+* "Browse file list" is now available everywhere (works for peers with ADC partial file list support only) (poy)
 * Reclaim memory after a file list match
 * Improve file reading operations
 * [L#678432] Context-sensitive help tooltips in the settings dialog (poy)

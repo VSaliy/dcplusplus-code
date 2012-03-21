@@ -1,6 +1,8 @@
 <dl style="margin-left: 40px;">
 	<dt>Get file list</dt>
 	<dd>Download the file list of the selected users.</dd>
+	<dt>Browse file list</dt>
+	<dd>Download only the required pieces of the file lists of the selected users in form of a partial file list. Note that you may not able to fully exploit certain file list functions in a partial list window until you get the whole list using the "Download full list" button.</dd>
 	<dt>Match queue</dt>
 	<dd>Matches the files in your download queue to the file lists of the selected
 	users. 2 files are considered to be the same if their TTH is the same. If matches are found in one user's file list,
