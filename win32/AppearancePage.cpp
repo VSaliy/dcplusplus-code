@@ -151,6 +151,8 @@ languages(0)
 
 		if(selected == 0 && (i.first == cur || (i.first == "en" && cur == "C"))) {
 			selected = j;
+		} else {
+			++j;
 		}
 	}
 
