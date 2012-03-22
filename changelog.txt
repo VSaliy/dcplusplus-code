@@ -2,7 +2,7 @@
 * Apply ADL searches in partial file lists (poy)
 * Heuristics to send additional levels of info in partial file lists (poy)
 * Add a "Download full list" button in the file list toolbar (poy)
-* "Browse file list" is now available everywhere (works for peers with ADC partial file list support only) (poy)
+* Partial file lists in NMDC hubs (poy)
 * Reclaim memory after a file list match
 * Improve file reading operations
 * [L#678432] Context-sensitive help tooltips in the settings dialog (poy)
@@ -26,7 +26,6 @@
 * Update boost to version 1.49
 * [L#947895] Move the "follow redirect" command to inline chat links (poy)
 * Format chat links (poy)
-* [L#931560] Correctly hash empty files when using asynchronous file reading (cologic)
 
 -- 0.791 2012-01-14 --
 * Update translations
