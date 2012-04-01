@@ -865,10 +865,10 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 }
 
 void HubFrame::on(Connecting, Client*) noexcept {
-	tstring hubUrl = Text::toT(Util::addBrackets(client->getHubUrl()));
+	auto hubUrl = client->getHubUrl();
 	callAsync([this, hubUrl] {
-		addStatus(str(TF_("Connecting to %1%...") % hubUrl));
-		setText(hubUrl);
+		addStatus(str(TF_("Connecting to %1%...") % Text::toT(Util::addBrackets(hubUrl))));
+		setText(Text::toT(hubUrl));
 	});
 }
 void HubFrame::on(Connected, Client*) noexcept {

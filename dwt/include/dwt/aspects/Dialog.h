@@ -65,14 +65,6 @@ public:
 
 protected:
 	static INT_PTR CALLBACK dialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-	static unsigned getYBorders() {
-		static unsigned ret = 0;
-		if(!ret) {
-			ret = ::GetSystemMetrics(SM_CYSIZE) + 2 * ::GetSystemMetrics(SM_CYEDGE) + 2 * ::GetSystemMetrics(SM_CXFIXEDFRAME);
-		}
-		return ret;
-	}
 };
 
 /**

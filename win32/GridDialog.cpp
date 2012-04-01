@@ -50,6 +50,11 @@ void GridDialog::layout() {
 
 	// now resize the dialog itself
 	sz.x = width * dwt::util::dpiFactor(); // don't change the horizontal size
-	sz.y += spacing * 2 + getYBorders();
+	sz.y += spacing * 2;
+
+	RECT rect = { 0, 0, 0, sz.y };
+	::AdjustWindowRectEx(&rect, ::GetWindowLong(handle(), GWL_STYLE), FALSE, ::GetWindowLong(handle(), GWL_EXSTYLE));
+	sz.y = rect.bottom - rect.top;
+
 	resize(dwt::Rectangle(getWindowRect().pos, sz));
 }
