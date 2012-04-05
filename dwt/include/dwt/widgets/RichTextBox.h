@@ -157,7 +157,7 @@ private:
 	void setTextA(const std::string& txt);
 	void setTextEx(const std::string& txt, DWORD format);
 
-	void updateTextColor();
+	void updateColors(COLORREF text, COLORREF background, bool updateFont = false);
 
 	// aspects::Colorable
 	void setColorImpl(COLORREF text, COLORREF background);
