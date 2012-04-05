@@ -338,24 +338,63 @@ tstring RichTextBox::rtfEscape(const tstring& str) {
 	return escaped;
 }
 
-void RichTextBox::updateTextColor() {
+void RichTextBox::updateColors(COLORREF text, COLORREF background, bool updateFont) {
+	util::HoldRedraw hold(this);
+
+	/* when changing the global formatting of a Rich Edit, its per-character formatting properties
+	may become funky depending on how they were initially set (the RTF context depth, for example,
+	seems to matter). the solution is to gather colors beforehand and re-apply them after the
+	global changes. */
+	std::vector<CHARFORMAT2> formats(length());
+	size_t sel = 0;
+	for(auto& format: formats) {
+		setSelection(sel, sel + 1);
+		++sel;
+		format.cbSize = sizeof(CHARFORMAT2);
+		sendMessage(EM_GETCHARFORMAT, SCF_SELECTION, reinterpret_cast<LPARAM>(&format));
+	}
+
+	if(updateFont) {
+		BaseType::setFontImpl();
+	}
+
+	// change the global text color.
+	auto prevText = textColor;
+	textColor = text;
 	CHARFORMAT textFormat = { sizeof(CHARFORMAT), CFM_COLOR };
 	textFormat.crTextColor = textColor;
 	sendMessage(EM_SETCHARFORMAT, SCF_DEFAULT, reinterpret_cast<LPARAM>(&textFormat));
+
+	// change the global background color.
+	auto prevBg = bgColor;
+	bgColor = background;
+	sendMessage(EM_SETBKGNDCOLOR, 0, static_cast<LPARAM>(bgColor));
+
+	// restore custom colors.
+	sel = 0;
+	for(auto& format: formats) {
+		format.dwMask &= CFM_COLOR | CFM_BACKCOLOR | CFM_LINK | CFM_UNDERLINE;
+		if(format.dwMask) {
+			if(format.crTextColor == prevText) { format.crTextColor = textColor; }
+			if(format.crBackColor == prevBg) { format.crBackColor = bgColor; }
+			setSelection(sel, sel + 1);
+			sendMessage(EM_SETCHARFORMAT, SCF_SELECTION, reinterpret_cast<LPARAM>(&format));
+		}
+		++sel;
+	}
 }
 
 void RichTextBox::setColorImpl(COLORREF text, COLORREF background) {
-	textColor = text;
-	updateTextColor();
-
-	bgColor = background;
-	sendMessage(EM_SETBKGNDCOLOR, 0, static_cast<LPARAM>(bgColor));
+	if(text != textColor || background != bgColor) {
+		updateColors(text, background);
+		redraw();
+	}
 }
 
 void RichTextBox::setFontImpl() {
-	// changing the default font resets the default text color.
-	BaseType::setFontImpl();
-	updateTextColor();
+	// changing the default font resets default colors.
+	updateColors(textColor, bgColor, true);
+	redraw();
 }
 
 }
