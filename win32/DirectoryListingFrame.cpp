@@ -449,6 +449,9 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		layout();
 	}
 
+	// add a "loading" message to the title bar.
+	updateTitle();
+
 	auto finishLoad = [this] {
 		delete loader;
 		loader = 0;
@@ -456,8 +459,8 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		loading->close(true);
 		loading = 0;
 		layout();
+		updateTitle();
 		if(!error.empty()) {
-			updateTitle();
 			status->setText(STATUS_STATUS, error);
 		}
 		setDirty(SettingsManager::BOLD_FL);
@@ -474,13 +477,6 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		error = std::move(s);
 		finishLoad();
 	}); });
-
-	onDestroy([this] {
-		if(loader) {
-			dl->setAbort(true);
-			loader->join();
-		}
-	});
 
 	try {
 		loader->start();
@@ -575,6 +571,12 @@ bool DirectoryListingFrame::preClosing() {
 	ClientManager::getInstance()->removeListener(this);
 
 	lists.erase(dl->getUser());
+
+	if(loader) {
+		dl->setAbort(true);
+		loader->join();
+	}
+
 	return true;
 }
 
@@ -680,7 +682,11 @@ void DirectoryListingFrame::updateTitle() {
 	}
 
 	// bypass the recent item updater if the file list hasn't been loaded yet.
-	if(loaded) setText(text); else BaseType::setText(text);
+	if(loaded) {
+		setText(text);
+	} else {
+		BaseType::setText(loading ? str(TF_("Loading file list: %1%") % text) : text);
+	}
 
 	dirs->getData(treeRoot)->setText(text);
 	dirs->redraw();
