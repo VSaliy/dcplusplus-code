@@ -42,11 +42,16 @@
 
 #include <dwt/LibraryLoader.h>
 
-namespace dwt {
-
-#ifndef MSFTEDIT_CLASS /// @todo remove when MinGW has this
+/// @todo remove when MinGW has these - defined here instead of GCCHeaders.h because they're from richedit.h
+#ifndef MSFTEDIT_CLASS
 #define MSFTEDIT_CLASS L"RICHEDIT50W"
 #endif
+#ifndef CFM_BACKCOLOR
+#define CFM_BACKCOLOR 0x04000000
+#endif
+
+namespace dwt {
+
 const TCHAR RichTextBox::windowClass[] = MSFTEDIT_CLASS;
 
 RichTextBox::Seed::Seed() :
