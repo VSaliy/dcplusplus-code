@@ -436,20 +436,24 @@ void ADLSearchManager::matchListing(DirectoryListing& aDirList) noexcept {
 	setBreakOnFirst(BOOLSETTING(ADLS_BREAK_ON_FIRST));
 
 	string path(root->getName());
-	matchRecurse(destDirs, root, path);
+	matchRecurse(destDirs, aDirList, root, path);
 
 	finalizeDestinationDirectories(destDirs, root);
 }
 
-void ADLSearchManager::matchRecurse(DestDirList &aDestList, DirectoryListing::Directory* aDir, string &aPath) {
+void ADLSearchManager::matchRecurse(DestDirList& aDestList, DirectoryListing& filelist, DirectoryListing::Directory* aDir, string& aPath) {
 	for(auto& dirIt: aDir->directories) {
+		if(filelist.getAbort()) { throw Exception(); }
 		string tmpPath = aPath + "\\" + dirIt->getName();
 		matchesDirectory(aDestList, dirIt, tmpPath);
-		matchRecurse(aDestList, dirIt, tmpPath);
+		matchRecurse(aDestList, filelist, dirIt, tmpPath);
 	}
+
 	for(auto& fileIt: aDir->files) {
+		if(filelist.getAbort()) { throw Exception(); }
 		matchesFile(aDestList, fileIt, aPath);
 	}
+
 	stepUpDirectory(aDestList);
 }
 

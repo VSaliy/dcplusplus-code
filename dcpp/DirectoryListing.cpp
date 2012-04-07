@@ -156,9 +156,7 @@ static const string sSize = "Size";
 static const string sTTH = "TTH";
 
 void ListLoader::startTag(const string& name, StringPairList& attribs, bool simple) {
-	if(list->getAbort()) {
-		throw Exception();
-	}
+	if(list->getAbort()) { throw Exception(); }
 
 	if(inListing) {
 		if(name == sFile) {
