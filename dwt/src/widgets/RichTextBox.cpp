@@ -98,10 +98,16 @@ void RichTextBox::create(const Seed& cs) {
 		format.rcPage = format.rc;
 
 		// find the first fully visible line (sometimes they're partially cut).
-		for(auto line = getFirstVisibleLine(); ; ++line) {
+		bool found = false;
+		for(long line = getFirstVisibleLine(), n = getLineCount(); line < n; ++line) {
 			format.chrg.cpMin = lineIndex(line);
-			if(posFromChar(format.chrg.cpMin).y >= 0)
+			if(posFromChar(format.chrg.cpMin).y >= 0) {
+				found = true;
 				break;
+			}
+		}
+		if(!found) {
+			format.chrg.cpMin = 0;
 		}
 		format.chrg.cpMax = -1;
 
