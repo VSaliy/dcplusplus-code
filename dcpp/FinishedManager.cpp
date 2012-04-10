@@ -183,8 +183,13 @@ void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
 					}
 				}
 				size = t->getSize();
-			} else
+			} else {
 				size = QueueManager::getInstance()->getSize(file);
+				if (size == -1) {
+					// not in the queue anymore?
+					return;
+				}
+			}	
 		}
 
 		Lock l(cs);
