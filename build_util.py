@@ -129,6 +129,9 @@ class Dev:
 		sources = self.get_sources(source_path, source_glob, recursive)
 
 		if precompiled_header is not None and env['pch'] and not env['msvcproj']:
+			# TODO we work around the 2 problems described on
+			# <http://scons.tigris.org/issues/show_bug.cgi?id=2680> - remove once not needed
+
 			for i, source in enumerate(sources):
 				if source.find(precompiled_header + '.cpp') != -1:
 					# the PCH/GCH builder will take care of this one
@@ -138,7 +141,8 @@ class Dev:
 				env['PCHSTOP'] = precompiled_header + '.h'
 				pch = env.PCH(build_path + precompiled_header + '.pch', precompiled_header + '.cpp')
 				env['PCH'] = pch[0]
-				sources.append(pch[1])
+				env['ARFLAGS'] = env['ARFLAGS'] + ' ' + str(pch[1])
+				env['LINKFLAGS'] = env['LINKFLAGS'] + ' ' + str(pch[1])
 
 			elif 'gcc' in env['TOOLS']:
 				env['Gch'] = env.Gch(build_path + precompiled_header + '.h.gch', precompiled_header + '.h')[0]
