@@ -1452,7 +1452,7 @@ void MainWindow::parseCommandLine(const tstring& cmdLine)
 }
 
 LRESULT MainWindow::handleCopyData(LPARAM lParam) {
-	parseCommandLine(Text::toT(WinUtil::getAppName() + " ") + reinterpret_cast<LPCTSTR>(reinterpret_cast<COPYDATASTRUCT*>(lParam)->lpData));
+	parseCommandLine(dwt::Application::instance().getModuleFileName() + _T(" ") + reinterpret_cast<LPCTSTR>(reinterpret_cast<COPYDATASTRUCT*>(lParam)->lpData));
 	return TRUE;
 }
 
