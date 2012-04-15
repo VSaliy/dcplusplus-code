@@ -507,7 +507,12 @@ inline void writeBacktrace(LPCONTEXT context) {
 
 #ifdef __MINGW32__
 		// read DWARF debugging info if available.
-		getDebugInfo(module.LoadedImageName, frame.AddrPC.Offset, file, line, column, function);
+		if(module.LoadedImageName[0] ||
+			// LoadedImageName is not always correcly filled in XP...
+			::GetModuleFileNameA(reinterpret_cast<HMODULE>(module.BaseOfImage), module.LoadedImageName, sizeof(module.LoadedImageName)))
+		{
+			getDebugInfo(module.LoadedImageName, frame.AddrPC.Offset, file, line, column, function);
+		}
 #endif
 
 		/* this is the usual Windows PDB reading method. we try it on MinGW too if reading DWARF

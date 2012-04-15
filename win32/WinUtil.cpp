@@ -1321,7 +1321,7 @@ bool registerHandler_(const tstring& name) {
 		::RegCloseKey(hk);
 	}
 
-	tstring app = _T("\"") + Text::toT(WinUtil::getAppName()) + _T("\" %1");
+	tstring app = _T("\"") + dwt::Application::instance().getModuleFileName() + _T("\" %1");
 	if(Util::stricmp(app.c_str(), Buf) == 0) {
 		// already registered to us
 		return true;
@@ -1345,7 +1345,7 @@ bool registerHandler_(const tstring& name) {
 	if(::RegCreateKeyEx(HKEY_CURRENT_USER, (_T("Software\\Classes\\") + name + _T("\\DefaultIcon")).c_str(),
 		0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL) == ERROR_SUCCESS)
 	{
-		app = Text::toT(WinUtil::getAppName());
+		app = dwt::Application::instance().getModuleFileName();
 		::RegSetValueEx(hk, _T(""), 0, REG_SZ, (LPBYTE) app.c_str(), sizeof(TCHAR) * (app.length() + 1));
 		::RegCloseKey(hk);
 	}

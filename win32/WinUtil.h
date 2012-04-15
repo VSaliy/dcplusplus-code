@@ -303,12 +303,6 @@ public:
 	static void registerHubHandlers();
 	static void registerMagnetHandler();
 
-	static string getAppName() {
-		TCHAR buf[MAX_PATH+1];
-		DWORD x = GetModuleFileName(NULL, buf, MAX_PATH);
-		return Text::fromT(tstring(buf, x));
-	}
-
 	static void addUserItems(Menu* menu, const HintedUserList& users, TabViewPtr parent, const StringList& dirs = StringList());
 
 	/* utility functions to create icons. use these throughout the prog to make it easier to change
