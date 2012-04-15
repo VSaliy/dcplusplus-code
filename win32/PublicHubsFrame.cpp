@@ -112,7 +112,7 @@ users(0)
 			seed.style |= WS_DISABLED | ES_MULTILINE | WS_VSCROLL | ES_READONLY;
 			seed.lines = 8;
 			blacklist = upper->addChild(seed);
-			addWidget(blacklist);
+			addWidget(blacklist, NO_FOCUS);
 		}
 
 		{

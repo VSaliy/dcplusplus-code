@@ -84,7 +84,7 @@ fileLists(0)
 
 	{
 		files = paned->addChild(WidgetFiles::Seed(WinUtil::Seeds::table));
-		addWidget(files, true);
+		addWidget(files, ALWAYS_FOCUS);
 
 		files->setSmallImageList(WinUtil::fileImages);
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(QUEUEFRAME_ORDER), SETTING(QUEUEFRAME_WIDTHS));

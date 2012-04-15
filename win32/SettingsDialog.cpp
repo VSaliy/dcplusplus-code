@@ -359,7 +359,9 @@ void SettingsDialog::layout() {
 	dwt::Point sz = getClientSize();
 	grid->resize(dwt::Rectangle(8, 8, sz.x - 16, sz.y - 16));
 
-	currentPage->getParent()->layout();
+	if(currentPage) {
+		currentPage->getParent()->layout();
+	}
 }
 
 void SettingsDialog::helpImpl(unsigned& id) {

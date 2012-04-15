@@ -176,7 +176,7 @@ inTabComplete(false)
 	chat->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleChatContextMenu(sc); });
 
 	message->setHelpId(IDH_HUB_MESSAGE);
-	addWidget(message, true, false);
+	addWidget(message, ALWAYS_FOCUS, false);
 	message->onKeyDown([this](int c) { return handleMessageKeyDown(c); });
 	message->onSysKeyDown([this](int c) { return handleMessageKeyDown(c); });
 	message->onChar([this] (int c) { return handleMessageChar(c); });
@@ -212,10 +212,10 @@ inTabComplete(false)
 		filterOpts->setHelpId(IDH_HUB_FILTER);
 
 		filter.createColumnBox(filterOpts);
-		addWidget(filter.column, false, false);
+		addWidget(filter.column, AUTO_FOCUS, false);
 
 		filter.createMethodBox(filterOpts);
-		addWidget(filter.method, false, false);
+		addWidget(filter.method, AUTO_FOCUS, false);
 
 		hideFilterOpts(nullptr);
 

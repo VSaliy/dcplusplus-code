@@ -37,7 +37,7 @@ NotepadFrame::NotepadFrame(TabViewPtr parent) :
 		TextBox::Seed cs = WinUtil::Seeds::textBox;
 		cs.style |= WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_NOHIDESEL | ES_WANTRETURN;
 		pad = addChild(cs);
-		addWidget(pad, false, false);
+		addWidget(pad, AUTO_FOCUS, false);
 		WinUtil::handleDblClicks(pad);
 	}
 
