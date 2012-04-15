@@ -455,9 +455,14 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 	auto finishLoad = [this] {
 		delete loader;
 		loader = 0;
+
 		setEnabled(true);
+
 		loading->close(true);
 		loading = 0;
+
+		files->setFocus();
+
 		layout();
 		updateTitle();
 		if(!error.empty()) {

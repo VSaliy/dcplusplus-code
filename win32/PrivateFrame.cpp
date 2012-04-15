@@ -169,7 +169,7 @@ online(replyTo.getUser().user->isOnline())
 	chat->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleChatContextMenu(sc); });
 
 	message->setHelpId(IDH_PM_MESSAGE);
-	addWidget(message, true);
+	addWidget(message, ALWAYS_FOCUS);
 	message->onKeyDown([this](int c) { return handleMessageKeyDown(c); });
 	message->onSysKeyDown([this](int c) { return handleMessageKeyDown(c); });
 	message->onChar([this](int c) { return handleMessageChar(c); });

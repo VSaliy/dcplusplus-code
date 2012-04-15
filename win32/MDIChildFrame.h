@@ -90,19 +90,21 @@ protected:
 	/** Second close phase, perform any cleanup that depends only on the UI thread */
 	void postClosing() { }
 
+	enum FocusMethod { AUTO_FOCUS, ALWAYS_FOCUS, NO_FOCUS };
+
 	template<typename W>
-	void addWidget(W* widget, bool alwaysFocus = false, bool autoTab = true, bool customColor = true) {
+	void addWidget(W* widget, FocusMethod focus = AUTO_FOCUS, bool autoTab = true, bool customColor = true) {
 		addDlgCodeMessage(widget, autoTab);
 
 		if(customColor)
 			addColor(widget);
 
-		if(alwaysFocus || (lastFocus == NULL)) {
+		if(focus == ALWAYS_FOCUS || (focus == AUTO_FOCUS && !lastFocus)) {
 			lastFocus = widget->handle();
 			if(this->getVisible())
 				::SetFocus(lastFocus);
 		}
-		if(alwaysFocus)
+		if(focus == ALWAYS_FOCUS)
 			alwaysSameFocus = true;
 	}
 
