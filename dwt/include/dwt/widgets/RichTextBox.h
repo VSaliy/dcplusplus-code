@@ -145,8 +145,6 @@ private:
 
 	static Dispatcher& makeDispatcher();
 
-	LRESULT onUnsuppRtf(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled);
-
 	int fixupLineEndings(tstring::const_iterator begin, tstring::const_iterator end,
 		tstring::difference_type ibo) const;
 
