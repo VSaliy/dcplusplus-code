@@ -17,10 +17,14 @@
  */
 
 #include "stdafx.h"
-
 #include "RichTextBox.h"
 
+#include <dwt/WidgetCreator.h>
+#include <dwt/widgets/Menu.h>
+#include <dwt/widgets/ToolTip.h>
+
 #include "ParamDlg.h"
+#include "resource.h"
 #include "WinUtil.h"
 
 RichTextBox::Seed::Seed() : 
@@ -28,13 +32,21 @@ BaseType::Seed()
 {
 }
 
-RichTextBox::RichTextBox(dwt::Widget* parent) : BaseType(parent), linkF(0) {
+RichTextBox::RichTextBox(dwt::Widget* parent) :
+BaseType(parent),
+linkTip(0),
+linkTipPos(0),
+linkF(0)
+{
 }
 
 void RichTextBox::create(const Seed& seed) {
 	BaseType::create(seed);
 
 	if((seed.events & ENM_LINK) == ENM_LINK) {
+		linkTip = dwt::WidgetCreator<dwt::ToolTip>::create(this, dwt::ToolTip::Seed());
+		linkTip->setTool(this, [this](tstring& text) { handleLinkTip(text); });
+
 		onRaw([this](WPARAM, LPARAM lParam) { return handleLink(*reinterpret_cast<ENLINK*>(lParam)); },
 			dwt::Message(WM_NOTIFY, EN_LINK));
 	}
@@ -49,6 +61,11 @@ bool RichTextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
 			if(isControlPressed() && !isAltPressed())
 				return true;
 		}
+	}
+
+	if(msg.message == WM_SETCURSOR && !currentLink.empty() && ::GetMessagePos() != linkTipPos) {
+		linkTip->setActive(false);
+		currentLink.clear();
 	}
 
 	if(BaseType::handleMessage(msg, retVal))
@@ -119,6 +136,7 @@ LRESULT RichTextBox::handleLink(ENLINK& link) {
 
 	switch(link.msg) {
 	case WM_LBUTTONDOWN:
+	case WM_RBUTTONDOWN:
 		{
 			clickPos = link.lParam;
 			break;
@@ -129,17 +147,49 @@ LRESULT RichTextBox::handleLink(ENLINK& link) {
 			if(link.lParam != clickPos)
 				break;
 
-			boost::scoped_array<TCHAR> buf(new TCHAR[link.chrg.cpMax - link.chrg.cpMin + 1]);
-			TEXTRANGE text = { link.chrg, buf.get() };
-			sendMessage(EM_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&text));
-			if(!linkF || !linkF(buf.get())) {
-				WinUtil::parseLink(buf.get());
+			auto text = getLinkText(link);
+			if(!linkF || !linkF(text)) {
+				WinUtil::parseLink(text);
 			}
 			break;
 		}
 
-		/// @todo context menu on rbuttonup
-		/// @todo tooltip on mouseover
+	case WM_RBUTTONUP:
+		{
+			if(link.lParam != clickPos)
+				break;
+
+			auto text = getLinkText(link);
+
+			auto menu = dwt::WidgetCreator<dwt::Menu>::create(this, dwt::Menu::Seed());
+			menu->setTitle(text, WinUtil::menuIcon(IDI_LINKS));
+			menu->appendItem(T_("&Open"), [text] { WinUtil::parseLink(text); }, WinUtil::menuIcon(IDI_RIGHT), true, true);
+			menu->open(dwt::ClientCoordinate(dwt::Point::fromLParam(clickPos), this));
+			return 1;
+		}
+
+	case WM_SETCURSOR:
+		{
+			auto pos = ::GetMessagePos();
+			if(pos == linkTipPos)
+				break;
+			linkTipPos = pos;
+
+			currentLink = getLinkText(link);
+			linkTip->refresh();
+			break;
+		}
 	}
 	return 0;
+}
+
+void RichTextBox::handleLinkTip(tstring& text) {
+	text = currentLink;
+}
+
+tstring RichTextBox::getLinkText(const ENLINK& link) {
+	boost::scoped_array<TCHAR> buf(new TCHAR[link.chrg.cpMax - link.chrg.cpMin + 1]);
+	TEXTRANGE text = { link.chrg, buf.get() };
+	sendMessage(EM_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&text));
+	return buf.get();
 }
