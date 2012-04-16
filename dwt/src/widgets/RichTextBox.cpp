@@ -310,15 +310,6 @@ void RichTextBox::clearCurrentNeedle()
 	currentNeedle.clear();
 }
 
-LRESULT RichTextBox::onUnsuppRtf(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled) {
-#ifdef PORT_ME
-	ENLOWFIRTF *pLow = (ENLOWFIRTF *)pnmh;
-	LogManager::getInstance()->message("Unsupported RTF code: " + string(pLow->szControl));
-	bHandled = FALSE;
-#endif
-	return 0;
-}
-
 std::string RichTextBox::unicodeEscapeFormatter(const tstring_range& match) {
 	if(match.empty())
 		return std::string();
