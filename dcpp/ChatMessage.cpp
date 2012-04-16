@@ -148,6 +148,7 @@ messageTimestamp(messageTimestamp)
 
 				if(!name.empty()) {
 					// magnet link: replace with the friendly name
+					name += " (magnet)";
 					tmp.replace(begin, end - begin, name);
 					end += name.size() - link.size();
 				}
