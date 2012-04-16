@@ -60,7 +60,13 @@ public:
 private:
 	bool handleKeyDown(int c);
 	LRESULT handleLink(ENLINK& link);
+	void handleLinkTip(tstring& text);
 
+	tstring getLinkText(const ENLINK& link);
+
+	ToolTipPtr linkTip;
+	DWORD linkTipPos;
+	tstring currentLink;
 	LinkF linkF;
 };
 
