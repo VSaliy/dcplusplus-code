@@ -220,9 +220,6 @@ protected:
 		case VK_NEXT: // page down
 			{
 				chat->sendMessage(WM_VSCROLL, SB_PAGEDOWN);
-				// sometimes scrolls too far, so add the following:
-				if(chat->scrollIsAtEnd())
-					chat->scrollToBottom();
 				return true;
 			} break;
 		case VK_HOME:

@@ -49,6 +49,15 @@
 #ifndef CFM_BACKCOLOR
 #define CFM_BACKCOLOR 0x04000000
 #endif
+#ifndef EM_SETLANGOPTIONS
+#define EM_SETLANGOPTIONS (WM_USER + 120)
+#endif
+#ifndef EM_GETLANGOPTIONS
+#define EM_GETLANGOPTIONS (WM_USER + 121)
+#endif
+#ifndef IMF_AUTOKEYBOARD
+#define IMF_AUTOKEYBOARD 0x0001
+#endif
 
 namespace dwt {
 
@@ -79,6 +88,15 @@ void RichTextBox::create(const Seed& cs) {
 	setScrollBarVertically(cs.scrollBarVerticallyFlag);
 	sendMessage(EM_SETEVENTMASK, 0, cs.events);
 	sendMessage(EM_AUTOURLDETECT, FALSE);
+
+	/* after special chars are added to the control, it sets the IMF_AUTOKEYBOARD flag which
+	results in the Win keyboard language switching. the fix is to remove that flag when the control
+	gains focus (which is when the presence of the flag actually matters). */
+	onFocus([this] {
+		auto opts = sendMessage(EM_GETLANGOPTIONS);
+		if((opts & IMF_AUTOKEYBOARD) == IMF_AUTOKEYBOARD)
+			sendMessage(EM_SETLANGOPTIONS, 0, opts & ~IMF_AUTOKEYBOARD);
+	});
 
 	/* unlike other common controls, Rich Edits ignore WM_PRINTCLIENT messages. as per
 	<http://msdn.microsoft.com/en-us/library/bb787875(VS.85).aspx>, we have to handle the printing
@@ -397,6 +415,21 @@ void RichTextBox::setFontImpl() {
 	// changing the default font resets default colors.
 	updateColors(textColor, bgColor, true);
 	redraw();
+}
+
+bool RichTextBox::handleMessage(const MSG& msg, LRESULT& retVal) {
+	bool handled = BaseType::handleMessage(msg, retVal);
+
+	/* when scrolling downwards, the content of the box sometimes scrolls up too far, leaving blank
+	space below the last line. this behavior seems to be specific to Rich Edit 4.1. */
+	if(msg.message == WM_VSCROLL && msg.wParam == SB_PAGEDOWN) {
+		retVal = getDispatcher().chain(msg);
+		if(scrollIsAtEnd())
+			scrollToBottom();
+		return true;
+	}
+
+	return handled;
 }
 
 }
