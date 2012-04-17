@@ -1,3 +1,4 @@
+-- 0.797 2012-04-17 --
 * Save and restore partial file lists (poy)
 * Apply ADL searches in partial file lists (poy)
 * Heuristics to send additional levels of info in partial file lists (poy)
