@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2011-12-29 14:41+0100\n"
+"POT-Creation-Date: 2012-04-12 17:46+0200\n"
 "PO-Revision-Date: 2011-04-10 12:42+0000\n"
 "Last-Translator: Q <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-29 12:09+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-04-17 17:53+0000\n"
+"X-Generator: Launchpad (build 15099)\n"
 
 #: dcpp\Util.cpp:550
 #, c-format, boost-format
@@ -48,12 +48,12 @@ msgstr "%.02f PiB"
 msgid "%.02f TiB"
 msgstr "%.02f TiB"
 
-#: dcpp\UserMatchManager.cpp:99
+#: dcpp\UserMatchManager.cpp:98
 #, boost-format
 msgid "%1% %2% (added by %3%)"
 msgstr ""
 
-#: dcpp\MappingManager.cpp:98 dcpp\MappingManager.cpp:135
+#: dcpp\MappingManager.cpp:118 dcpp\MappingManager.cpp:155
 #, boost-format
 msgid "%1% %2% port (%3% %4%)"
 msgstr ""
@@ -68,23 +68,23 @@ msgstr ""
 msgid "%1% (%2%) has same CID {%3%} as %4% (%5%), ignoring"
 msgstr "%1% (%2%) har samma CID {%3%} som %4% (%5%), ignorerar"
 
-#: dcpp\NmdcHub.cpp:291
+#: dcpp\NmdcHub.cpp:288
 #, boost-format
 msgid "%1% (Nick unknown)"
 msgstr "%1% (Okänt användarnamn)"
 
-#: dcpp\HashManager.cpp:866
+#: dcpp\HashManager.cpp:618
 #, boost-format
 msgid ""
 "%1% not shared; calculated CRC32 does not match the one found in SFV file."
 msgstr "%1% inte utdelad; beräknad CRC32 matchar inte den i SFV-filen."
 
-#: dcpp\AdcHub.cpp:303
+#: dcpp\AdcHub.cpp:300
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr "%1% kickades av %2%: %3%"
 
-#: dcpp\AdcHub.cpp:306
+#: dcpp\AdcHub.cpp:303
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr "%1% kickades: %2%"
@@ -94,7 +94,7 @@ msgstr "%1% kickades: %2%"
 msgid "%1%/s"
 msgstr "%1%/s"
 
-#: dcpp\DownloadManager.cpp:487
+#: dcpp\DownloadManager.cpp:461
 #, boost-format
 msgid "%1%: File not available"
 msgstr "%1%: Filen ej tillgänglig"
@@ -113,33 +113,39 @@ msgstr "%s B"
 msgid "<Enter string>"
 msgstr "<Fyll i>"
 
-#: dcpp\QueueManager.cpp:625
+#: dcpp\QueueManager.cpp:597
 msgid "A file with a different TTH root already exists in the queue"
 msgstr "En fil med en annan TTH root finns redan i kön"
 
-#: dcpp\QueueManager.cpp:622
+#: dcpp\QueueManager.cpp:594
 msgid "A file with a different size already exists in the queue"
 msgstr "En fil med annan storlek finns redan i kön"
 
-#: dcpp\QueueManager.cpp:569
+#: dcpp\QueueManager.cpp:541
 msgid "A file with the same hash already exists in your share"
 msgstr "Delar redan ut en fil med samma hash"
 
-#: dcpp\ConnectivityManager.cpp:178
+#: dcpp\ConnectivityManager.cpp:181
 msgid "Active mode behind a router"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:209
+#: dcpp\ConnectivityManager.cpp:175
+#, boost-format
+msgid ""
+"Active mode behind a router that %1% can configure; port mapping status: %2%"
+msgstr ""
+
+#: dcpp\ConnectivityManager.cpp:222
 msgid ""
 "Active mode could not be achieved; a manual configuration is recommended for "
 "better connectivity"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:176
+#: dcpp\ConnectionManager.cpp:175
 msgid "All download slots taken"
 msgstr "Alla nedladdningsplatser är upptagna"
 
-#: dcpp\MappingManager.cpp:49
+#: dcpp\MappingManager.cpp:60
 #, fuzzy
 msgid "Another port mapping attempt is in progress..."
 msgstr "UPnP portmappning pågår redan..."
@@ -152,15 +158,15 @@ msgstr "Valfri"
 msgid "Audio"
 msgstr "Ljud"
 
-#: dcpp\FavoriteManager.cpp:488
+#: dcpp\FavoriteManager.cpp:485
 msgid "Auto-connect group (converted)"
 msgstr "Automatisk anslutnings grupp (koverterad)"
 
-#: dcpp\QueueManager.cpp:1701
+#: dcpp\QueueManager.cpp:1618
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 stämmer ej (kontrollera SFV)"
 
-#: dcpp\QueueManager.cpp:1692
+#: dcpp\QueueManager.cpp:1609
 #, fuzzy, boost-format
 msgid "CRC32 inconsistency (SFV-Check): %1%"
 msgstr "CRC32 stämmer ej (kontrollera SFV)"
@@ -169,21 +175,16 @@ msgstr "CRC32 stämmer ej (kontrollera SFV)"
 msgid "Compressed"
 msgstr "Komprimerad"
 
-#: dcpp\ConnectivityManager.cpp:173
-#, boost-format
-msgid "Connection behind a router that %1% has configured with %2%"
-msgstr ""
-
-#: dcpp\BufferedSocket.cpp:196 dcpp\SSLSocket.cpp:154
+#: dcpp\BufferedSocket.cpp:198 dcpp\SSLSocket.cpp:154
 msgid "Connection closed"
 msgstr "Anslutningen stängd"
 
-#: dcpp\BufferedSocket.cpp:163 dcpp\BufferedSocket.cpp:181
-#: dcpp\ConnectionManager.cpp:183 dcpp\Socket.cpp:362
+#: dcpp\BufferedSocket.cpp:165 dcpp\BufferedSocket.cpp:183
+#: dcpp\ConnectionManager.cpp:182 dcpp\Socket.cpp:362
 msgid "Connection timeout"
 msgstr "Inget svar på förbindelsen inom tidsgränsen"
 
-#: dcpp\ConnectionManager.cpp:260
+#: dcpp\ConnectionManager.cpp:259
 #, boost-format
 msgid "Connectivity error: %1%"
 msgstr "Fel vid anslutning: %1%"
@@ -196,17 +197,24 @@ msgid ""
 "Automatic connectivity setup is: %1%\n"
 "\n"
 "\t%2%\n"
-"\tExternal IP: %3%\n"
-"\tTransfer port: %4%\n"
-"\tEncrypted transfer port: %5%\n"
-"\tSearch port: %6%"
+"\tExternal IP (v4): %3%\n"
+"\tExternal IP (v6): %4%\n"
+"\tBound interface (v4): %5%\n"
+"\tBound interface (v6): %6%\n"
+"\tTransfer port: %7%\n"
+"\tEncrypted transfer port: %8%\n"
+"\tSearch port: %9%"
 msgstr ""
 
-#: dcpp\ConnectionManager.cpp:252
+#: dcpp\ConnectionManager.cpp:251
 msgid "Connectivity restored"
 msgstr "Anslutning återställd"
 
-#: dcpp\ConnectivityManager.cpp:222
+#: dcpp\ConnectivityManager.cpp:160
+msgid "Connectivity settings are being configured; try again later"
+msgstr ""
+
+#: dcpp\ConnectivityManager.cpp:235
 msgid "Connectivity: "
 msgstr "Anslutningar: "
 
@@ -215,7 +223,7 @@ msgstr "Anslutningar: "
 msgid "Could not open port for listening"
 msgstr "Kunde ej öppna målfilen: %1%"
 
-#: dcpp\DownloadManager.cpp:232
+#: dcpp\DownloadManager.cpp:226
 #, boost-format
 msgid "Could not open target file: %1%"
 msgstr "Kunde ej öppna målfilen: %1%"
@@ -229,7 +237,7 @@ msgstr ""
 msgid "Determining the best connectivity settings..."
 msgstr "Kontrollerar anslutningstyp..."
 
-#: dcpp\ConnectivityManager.cpp:168
+#: dcpp\ConnectivityManager.cpp:170
 msgid "Direct connection to the Internet (no router)"
 msgstr ""
 
@@ -237,27 +245,27 @@ msgstr ""
 msgid "Directory"
 msgstr "Katalog"
 
-#: dcpp\ShareManager.cpp:462
+#: dcpp\ShareManager.cpp:463
 msgid "Directory already shared"
 msgstr "Katalogen är redan utdelad"
 
-#: dcpp\ShareManager.cpp:449
+#: dcpp\ShareManager.cpp:450
 msgid "Directory is hidden"
 msgstr "Mappen är dold"
 
-#: dcpp\DirectoryListing.cpp:189
+#: dcpp\DirectoryListing.cpp:197
 msgid "Directory missing name attribute"
 msgstr "Katalogen saknar namn"
 
-#: dcpp\ADLSearch.cpp:414
+#: dcpp\ADLSearch.cpp:411
 msgid "Discard"
 msgstr "Ignorera"
 
-#: dcpp\BufferedSocket.cpp:465
+#: dcpp\BufferedSocket.cpp:467
 msgid "Disconnected"
 msgstr "Frånkopplad"
 
-#: dcpp\UploadManager.cpp:462
+#: dcpp\UploadManager.cpp:460
 #, boost-format
 msgid "Disconnected user leaving the hub: %1%"
 msgstr "Frånkopplad användare lämnar hubben: %1%"
@@ -270,19 +278,19 @@ msgstr "Dokument"
 msgid "Download Queue"
 msgstr "Nedladdningskö"
 
-#: dcpp\ShareManager.cpp:715
+#: dcpp\ShareManager.cpp:716
 #, boost-format
 msgid ""
 "Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: "
 "%3%"
 msgstr "Dubletter delas inte ut: %1% (Storlek: %2% B) Är dublett av: %3%"
 
-#: dcpp\QueueManager.cpp:706 dcpp\QueueManager.cpp:710
+#: dcpp\QueueManager.cpp:678 dcpp\QueueManager.cpp:682
 #, boost-format
 msgid "Duplicate source: %1%"
 msgstr "Dubblerad källa: %1%"
 
-#: dcpp\MappingManager.cpp:104 dcpp\MappingManager.cpp:147
+#: dcpp\MappingManager.cpp:124 dcpp\MappingManager.cpp:167
 #, fuzzy
 msgid "Encrypted transfer"
 msgstr " Krypterad överföringsport (%1% TCP)"
@@ -292,20 +300,20 @@ msgstr " Krypterad överföringsport (%1% TCP)"
 msgid "Endless redirection loop (%1%)"
 msgstr ""
 
-#: dcpp\HashManager.cpp:469
+#: dcpp\HashManager.cpp:466
 #, boost-format
 msgid "Error creating hash data file: %1%"
 msgstr "Fel under framställning av hashdatafil: %1%"
 
 #: dcpp\BZUtils.cpp:33 dcpp\BZUtils.cpp:54 dcpp\BZUtils.cpp:62
-#: dcpp\ZUtils.cpp:36 dcpp\ZUtils.cpp:57 dcpp\ZUtils.cpp:79 dcpp\ZUtils.cpp:89
+#: dcpp\ZUtils.cpp:37 dcpp\ZUtils.cpp:58 dcpp\ZUtils.cpp:80 dcpp\ZUtils.cpp:90
 msgid "Error during compression"
 msgstr "Fel under komprimering"
 
 #: dcpp\BZUtils.cpp:74 dcpp\BZUtils.cpp:96 dcpp\BZUtils.cpp:99
 #: dcpp\CryptoManager.cpp:369 dcpp\CryptoManager.cpp:388
-#: dcpp\CryptoManager.cpp:402 dcpp\ZUtils.cpp:103 dcpp\ZUtils.cpp:126
-#: dcpp\ZUtils.cpp:136
+#: dcpp\CryptoManager.cpp:402 dcpp\ZUtils.cpp:104 dcpp\ZUtils.cpp:127
+#: dcpp\ZUtils.cpp:137
 msgid "Error during decompression"
 msgstr "Fel under avkomprimering"
 
@@ -313,12 +321,12 @@ msgstr "Fel under avkomprimering"
 msgid "Error generating certificate"
 msgstr "Fel vid skapandet av ceritikat"
 
-#: dcpp\HashManager.cpp:871
+#: dcpp\HashManager.cpp:623
 #, boost-format
 msgid "Error hashing %1%: %2%"
 msgstr "Fel under hashning %1%: %2%"
 
-#: dcpp\HashManager.cpp:120 dcpp\HashManager.cpp:334
+#: dcpp\HashManager.cpp:115 dcpp\HashManager.cpp:333
 #, boost-format
 msgid "Error saving hash data: %1%"
 msgstr "Fel under sparandet av hashdatan: %1%"
@@ -327,15 +335,15 @@ msgstr "Fel under sparandet av hashdatan: %1%"
 msgid "Executable"
 msgstr "Körbar fil"
 
-#: dcpp\MappingManager.cpp:173
+#: dcpp\MappingManager.cpp:93 dcpp\MappingManager.cpp:193
 msgid "Failed to create port mappings"
 msgstr "Kunde inte skapa portmappning"
 
-#: dcpp\MappingManager.cpp:162
+#: dcpp\MappingManager.cpp:182
 msgid "Failed to get external IP"
 msgstr "Kunde inte hämta externt IP"
 
-#: dcpp\MappingManager.cpp:130
+#: dcpp\MappingManager.cpp:150
 #, boost-format
 msgid "Failed to initalize the %1% interface"
 msgstr "Kunde inte initialisera interfacet %1%"
@@ -350,7 +358,12 @@ msgstr "Misslyckades att ladda certifikatfil"
 msgid "Failed to load private key"
 msgstr "Misslyckades att ladda privat nyckel"
 
-#: dcpp\MappingManager.cpp:138
+#: dcpp\CryptoManager.cpp:271
+#, boost-format
+msgid "Failed to load trusted certificate from %1%"
+msgstr ""
+
+#: dcpp\MappingManager.cpp:158
 #, fuzzy, boost-format
 msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
 msgstr "Kunde inte ta bort portmappningar med %1% interfacet"
@@ -359,7 +372,7 @@ msgstr "Kunde inte ta bort portmappningar med %1% interfacet"
 msgid "Failed to negotiate base protocol"
 msgstr "Misslyckades att förhandla basprotokoll"
 
-#: dcpp\MappingManager.cpp:186
+#: dcpp\MappingManager.cpp:206
 #, fuzzy, boost-format
 msgid ""
 "Failed to remove port mappings from the %1% device with the %2% interface"
@@ -373,25 +386,25 @@ msgstr ""
 "Misslyckades att sätta upp UDP-relay hos socks-servern (kontrollera socks-"
 "adress och port)"
 
-#: dcpp\QueueManager.cpp:693
+#: dcpp\QueueManager.cpp:665
 msgid "File already exists at the target location"
 msgstr "Filen finns redan på målplatsen"
 
-#: dcpp\ShareManager.cpp:872
+#: dcpp\ShareManager.cpp:873
 #, boost-format
 msgid "File list %1% generated"
 msgstr "Fil listan %1% generarad"
 
-#: dcpp\ShareManager.cpp:752
+#: dcpp\ShareManager.cpp:753
 #, boost-format
 msgid "File list refresh failed: %1%"
 msgstr "Misslyckades uppdatera fillistan: %1%"
 
-#: dcpp\ShareManager.cpp:800
+#: dcpp\ShareManager.cpp:801
 msgid "File list refresh finished"
 msgstr "Uppdatering av fillistan klar"
 
-#: dcpp\ShareManager.cpp:732
+#: dcpp\ShareManager.cpp:733
 msgid ""
 "File list refresh in progress, please wait for it to finish before trying to "
 "refresh again"
@@ -399,26 +412,26 @@ msgstr ""
 "Uppdatering av fillistan pågår, var god vänta tills den är klar innan du "
 "försöker uppdatera igen"
 
-#: dcpp\ShareManager.cpp:775
+#: dcpp\ShareManager.cpp:776
 msgid "File list refresh initiated"
 msgstr "Uppdatering av fillistan påbörjad"
 
-#: dcpp\HashManager.cpp:91
+#: dcpp\HashManager.cpp:86
 #, boost-format
 msgid "Finished hashing: %1%"
 msgstr "Hashning färdig: %1%"
 
-#: dcpp\HashManager.cpp:85
+#: dcpp\HashManager.cpp:80
 #, boost-format
 msgid "Finished hashing: %1% (%2% at %3%/s)"
 msgstr "Färdiga hashing: %1% (%2% at %3%/s)"
 
-#: dcpp\HashManager.cpp:88
+#: dcpp\HashManager.cpp:83
 #, boost-format
 msgid "Finished hashing: %1% (%2%)"
 msgstr "Färdiga hashing: %1% (%2%)"
 
-#: dcpp\DownloadManager.cpp:311
+#: dcpp\DownloadManager.cpp:286
 msgid "Full tree does not match TTH root"
 msgstr "Fullt träd matchar inte TTH-roten"
 
@@ -426,7 +439,7 @@ msgstr "Fullt träd matchar inte TTH-roten"
 msgid "Generated new TLS certificate"
 msgstr "Genererade nytt TLS-certifikat"
 
-#: dcpp\MappingManager.cpp:197
+#: dcpp\MappingManager.cpp:217
 msgid "Generic"
 msgstr ""
 
@@ -434,11 +447,11 @@ msgstr ""
 msgid "Hash database"
 msgstr "Hashdatabas"
 
-#: dcpp\HashManager.cpp:773
+#: dcpp\HashManager.cpp:545
 msgid "Hash database rebuilt"
 msgstr "Hashdatabasen ombyggd"
 
-#: dcpp\HashManager.cpp:78 dcpp\HashManager.cpp:278
+#: dcpp\HashManager.cpp:73 dcpp\HashManager.cpp:278
 #, boost-format
 msgid "Hashing failed: %1%"
 msgstr "Hashning misslyckades: %1%"
@@ -451,7 +464,7 @@ msgstr ""
 "Hubben använder antagligen en gammal version av ADC, uppmana gärna ägaren "
 "att uppgradera"
 
-#: dcpp\UserMatchManager.cpp:99
+#: dcpp\UserMatchManager.cpp:98
 msgid "Ignore"
 msgstr ""
 
@@ -460,7 +473,11 @@ msgstr ""
 msgid "Invalid data"
 msgstr "Ogiltig data"
 
-#: dcpp\ShareManager.cpp:635
+#: dcpp\DirectoryListing.cpp:97
+msgid "Invalid file list extension (must be .xml or .bz2)"
+msgstr ""
+
+#: dcpp\ShareManager.cpp:636
 #, boost-format
 msgid "Invalid file name found while hashing folder %1%"
 msgstr "Ogiltigt filnamn hittades när mapp %1% indexerades"
@@ -470,15 +487,15 @@ msgstr "Ogiltigt filnamn hittades när mapp %1% indexerades"
 msgid "Invalid regular expression: %1%"
 msgstr "Ogiltigt ADLSök reguljärt uttryck: %1%"
 
-#: dcpp\SettingsManager.cpp:558
+#: dcpp\SettingsManager.cpp:569
 msgid "Invalid search type name"
 msgstr "Ogiltigt namn för söktyp"
 
-#: dcpp\DownloadManager.cpp:220
+#: dcpp\DownloadManager.cpp:214
 msgid "Invalid size"
 msgstr "Ogiltig storlek"
 
-#: dcpp\QueueManager.cpp:677 dcpp\QueueManager.cpp:685
+#: dcpp\QueueManager.cpp:649 dcpp\QueueManager.cpp:657
 msgid ""
 "Invalid target file (missing directory, check default download directory "
 "setting)"
@@ -486,7 +503,7 @@ msgstr ""
 "Ogiltig målfil (saknar katalog, kontrollera standardinställning för "
 "nedladdningskatalog)"
 
-#: dcpp\FavoriteManager.cpp:436
+#: dcpp\FavoriteManager.cpp:433
 msgid "Kick user(s)"
 msgstr "Sparka användare"
 
@@ -497,7 +514,7 @@ msgstr ""
 "Lokalt nätverk med möjligt NAT upptäckt, försöker mappa portar med hjälp av "
 "UPnP..."
 
-#: dcpp\BufferedSocket.cpp:288
+#: dcpp\BufferedSocket.cpp:290
 msgid "Maximum command length exceeded"
 msgstr "Högsta längden på kommando överstigen"
 
@@ -509,11 +526,11 @@ msgstr "Skrev fler byte än efterfrågat"
 msgid "No certificate file chosen"
 msgstr "Ingen certifikatfil vald"
 
-#: dcpp\ShareManager.cpp:445
+#: dcpp\ShareManager.cpp:446
 msgid "No directory specified"
 msgstr "Ingen katalog vald"
 
-#: dcpp\MappingManager.cpp:44
+#: dcpp\MappingManager.cpp:55
 msgid "No port mapping interface available"
 msgstr ""
 
@@ -521,11 +538,11 @@ msgstr ""
 msgid "No private key file chosen"
 msgstr "Ingen privat nyckel vald"
 
-#: dcpp\DownloadManager.cpp:376
+#: dcpp\DownloadManager.cpp:350
 msgid "No slots available"
 msgstr "Inga platser tillgängliga"
 
-#: dcpp\SettingsManager.cpp:616
+#: dcpp\SettingsManager.cpp:627
 msgid "No such search type"
 msgstr "Ingen sådan söktyp"
 
@@ -533,19 +550,19 @@ msgstr "Ingen sådan söktyp"
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr "Icke-UTF-8 data i en ADC överföring"
 
-#: dcpp\AdcHub.cpp:684
+#: dcpp\AdcHub.cpp:680
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Lyssnar inte efter anslutningar - var god starta om %1%"
 
 #: dcpp\ClientManager.cpp:209 dcpp\FinishedManager.cpp:131
 #: dcpp\FinishedManager.cpp:137 dcpp\FinishedManager.cpp:143
-#: dcpp\SearchManager.cpp:255 dcpp\SearchManager.cpp:318
-#: dcpp\SearchManager.cpp:320 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
+#: dcpp\SearchManager.cpp:255 dcpp\SearchManager.cpp:317
+#: dcpp\SearchManager.cpp:319 dcpp\Transfer.cpp:81 dcpp\Transfer.cpp:85
 msgid "Offline"
 msgstr "Frånkopplad"
 
-#: dcpp\ConnectivityManager.cpp:183
+#: dcpp\ConnectivityManager.cpp:186
 msgid "Passive mode"
 msgstr ""
 
@@ -553,7 +570,7 @@ msgstr ""
 msgid "Picture"
 msgstr "Bild"
 
-#: dcpp\MappingManager.cpp:191
+#: dcpp\MappingManager.cpp:211
 #, boost-format
 msgid "Port mapping: %1%"
 msgstr ""
@@ -563,15 +580,15 @@ msgid ""
 "Public IP address detected, selecting active mode with direct connection"
 msgstr "Publik IP adress upptäckt, väljer aktivt läge med direkt anslutning"
 
-#: dcpp\FavoriteManager.cpp:440
+#: dcpp\FavoriteManager.cpp:437
 msgid "Redirect user(s)"
 msgstr "Omdirigera användare"
 
-#: dcpp\ShareManager.cpp:465
+#: dcpp\ShareManager.cpp:466
 msgid "Remove all subdirectories before adding this one"
 msgstr "Ta bort alla underkataloger innan du lägger till denna"
 
-#: dcpp\DownloadManager.cpp:225
+#: dcpp\DownloadManager.cpp:219
 msgid "Response does not match request"
 msgstr "Svaret matchar inte förfrågningen"
 
@@ -580,11 +597,11 @@ msgstr "Svaret matchar inte förfrågningen"
 msgid "SSL Error: %1% (%2%, %3%)"
 msgstr "SSL fel: %1% (%2%, %3%)"
 
-#: dcpp\MappingManager.cpp:105 dcpp\MappingManager.cpp:148
+#: dcpp\MappingManager.cpp:125 dcpp\MappingManager.cpp:168
 msgid "Search"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:253
+#: dcpp\ConnectivityManager.cpp:266
 #, fuzzy
 msgid "Search (UDP)"
 msgstr " Sökport (%1% UDP)"
@@ -603,9 +620,10 @@ msgstr "Sökning återaktiverad"
 msgid "Security certificates"
 msgstr "Fel vid skapandet av ceritikat"
 
-#: dcpp\ChatMessage.cpp:33
-msgid "Sent "
-msgstr "Skickad "
+#: dcpp\ChatMessage.cpp:68
+#, boost-format
+msgid "Sent %1%"
+msgstr ""
 
 #: dcpp\DCPlusPlus.cpp:113
 msgid "Shared Files"
@@ -616,7 +634,7 @@ msgid "Socks server authentication failed (bad login / password?)"
 msgstr ""
 "Verifiering hos socks-servern misslyckades (fel användarnamn / lösenord?)"
 
-#: dcpp\MappingManager.cpp:151
+#: dcpp\MappingManager.cpp:171
 #, fuzzy, boost-format
 msgid ""
 "Successfully created port mappings (Transfers: %1%, Encrypted transfers: "
@@ -625,7 +643,13 @@ msgstr ""
 "Lyckades skapa portmappningar (TCP: %1%, UDP: %2%, TLS: %3%), mappat genom  "
 "%4% interfacet"
 
-#: dcpp\MappingManager.cpp:185
+#: dcpp\MappingManager.cpp:90
+#, boost-format
+msgid ""
+"Successfully created port mappings on the %1% device with the %2% interface"
+msgstr ""
+
+#: dcpp\MappingManager.cpp:205
 #, fuzzy, boost-format
 msgid ""
 "Successfully removed port mappings from the %1% device with the %2% interface"
@@ -648,17 +672,13 @@ msgstr "TTH"
 msgid "TTH inconsistency"
 msgstr "TTH inkonsekvens"
 
-#: dcpp\QueueManager.cpp:957
+#: dcpp\Download.cpp:115
 msgid "Target file is missing or wrong size"
 msgstr "Målfilen saknas eller har fel storlek"
 
-#: dcpp\QueueManager.cpp:672 dcpp\QueueManager.cpp:681
+#: dcpp\QueueManager.cpp:644 dcpp\QueueManager.cpp:653
 msgid "Target filename too long"
 msgstr "Målets filnamn är för långt"
-
-#: dcpp\QueueManager.cpp:949
-msgid "Target removed"
-msgstr "Målet borttaget"
 
 #: dcpp\Socket.cpp:456
 msgid "The socks server doesn't support login / password authentication"
@@ -673,19 +693,19 @@ msgstr "Socks-servern misslyckades upprätta en anslutning"
 msgid "The socks server requires authentication"
 msgstr "Socks-servern kräver verifiering"
 
-#: dcpp\ShareManager.cpp:453
+#: dcpp\ShareManager.cpp:454
 msgid "The temporary download directory cannot be shared"
 msgstr "Den tillfälliga nedladdningskatalogen kan ej delas ut"
 
-#: dcpp\QueueManager.cpp:629
+#: dcpp\QueueManager.cpp:601
 msgid "This file has already finished downloading"
 msgstr "Den här filen har redan blivit nerladdad"
 
-#: dcpp\QueueManager.cpp:610
+#: dcpp\QueueManager.cpp:582
 msgid "This file is already queued"
 msgstr "Filen finns redan i kön"
 
-#: dcpp\NmdcHub.cpp:951
+#: dcpp\NmdcHub.cpp:945
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
@@ -694,20 +714,20 @@ msgstr ""
 "Denna hub försöker använda din klient för att spamma %1%, Var god och "
 "uppmana hubbägaren att åtgärda problemet."
 
-#: dcpp\SettingsManager.cpp:562 dcpp\SettingsManager.cpp:584
+#: dcpp\SettingsManager.cpp:573 dcpp\SettingsManager.cpp:595
 msgid "This search type already exists"
 msgstr "Den söktypen finns redan"
 
-#: dcpp\MappingManager.cpp:103 dcpp\MappingManager.cpp:146
+#: dcpp\MappingManager.cpp:123 dcpp\MappingManager.cpp:166
 msgid "Transfer"
 msgstr ""
 
-#: dcpp\ConnectivityManager.cpp:247
+#: dcpp\ConnectivityManager.cpp:260
 #, fuzzy
 msgid "Transfer (TCP)"
 msgstr " Överföringsport (%1% TCP)"
 
-#: dcpp\UserMatchManager.cpp:99
+#: dcpp\UserMatchManager.cpp:98
 msgid "Un-ignore"
 msgstr ""
 
@@ -715,12 +735,12 @@ msgstr ""
 msgid "Unable to create thread"
 msgstr "Kan ej skapa tråd"
 
-#: dcpp\QueueManager.cpp:1009
+#: dcpp\QueueManager.cpp:934
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%) nor to rename to %4% (%5%)"
 msgstr "Kan inte flytta %1% till %2% (%3%) samt döpa om till %4% (%5%)"
 
-#: dcpp\QueueManager.cpp:1006
+#: dcpp\QueueManager.cpp:931
 #, boost-format
 msgid "Unable to move %1% to %2% (%3%); renamed to %4%"
 msgstr "Kan inte flytta %1% till %2% (%3%) samt döpa om till %4%"
@@ -731,12 +751,12 @@ msgid ""
 "Unable to open %1% port(s); connectivity settings must be configured manually"
 msgstr "Kan inte öppna port %1%. Du måste göra inställningarna manuellt"
 
-#: dcpp\QueueManager.cpp:1189
+#: dcpp\QueueManager.cpp:1110
 #, boost-format
 msgid "Unable to open filelist: %1%"
 msgstr "Kan ej öppna fillista: %1%"
 
-#: dcpp\HashManager.cpp:133
+#: dcpp\HashManager.cpp:128
 msgid "Unable to read hash data file"
 msgstr "Kan ej läsa hashdatafilen"
 
@@ -763,27 +783,27 @@ msgstr "Användare"
 msgid "Video"
 msgstr "Video"
 
-#: dcpp\QueueManager.cpp:563
+#: dcpp\QueueManager.cpp:535
 msgid "You're trying to download from yourself!"
 msgstr "Du försöker ladda ner från dig själv!"
 
-#: dcpp\ConnectivityManager.cpp:161
+#: dcpp\ConnectivityManager.cpp:163
 msgid "disabled"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:181 dcpp\SettingsManager.cpp:182
+#: dcpp\SettingsManager.cpp:183 dcpp\SettingsManager.cpp:184
 msgid "downloaded from"
 msgstr "nedladdad från"
 
-#: dcpp\ConnectivityManager.cpp:161
+#: dcpp\ConnectivityManager.cpp:163
 #, fuzzy, boost-format
 msgid "enabled - %1%"
 msgstr "Sökning inaktiverad: %1%"
 
-#: dcpp\ConnectivityManager.cpp:190
+#: dcpp\ConnectivityManager.cpp:191
 msgid "undefined"
 msgstr ""
 
-#: dcpp\SettingsManager.cpp:183
+#: dcpp\SettingsManager.cpp:185
 msgid "uploaded to"
 msgstr "uppladdad till"
