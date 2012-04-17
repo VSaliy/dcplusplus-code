@@ -372,15 +372,8 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			return;
 
 		string connection = param.substr(i, j-i-1);
-		if(connection.empty()) {
-			// No connection = bot...
-			u.getUser()->setFlag(User::BOT);
-			u.getIdentity().setHub(false);
-		} else {
-			u.getUser()->unsetFlag(User::BOT);
-			u.getIdentity().setBot(false);
-		}
 
+		u.getIdentity().setBot(connection.empty()); // No connection = bot...
 		u.getIdentity().setHub(false);
 
 		u.getIdentity().set("CO", connection); 

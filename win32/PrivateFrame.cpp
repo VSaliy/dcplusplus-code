@@ -57,7 +57,7 @@ void PrivateFrame::openWindow(TabViewPtr parent, const HintedUser& replyTo_, con
 }
 
 bool PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
-	const ChatMessage& message, const string& hubHint)
+	const ChatMessage& message, const string& hubHint, bool fromBot)
 {
 	const UserPtr& user = (replyTo == ClientManager::getInstance()->getMe()) ? to : replyTo;
 	auto i = frames.find(user);
@@ -74,7 +74,7 @@ bool PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 
 		p->addChat(message);
 
-		if(Util::getAway() && !(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && user->isSet(User::BOT))) {
+		if(Util::getAway() && !(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && fromBot)) {
 			auto awayMessage = Util::getAwayMessage();
 			if(!awayMessage.empty()) {
 				p->sendMessage(Text::toT(awayMessage));

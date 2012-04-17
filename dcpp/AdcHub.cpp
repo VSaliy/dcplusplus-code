@@ -180,12 +180,6 @@ void AdcHub::handle(AdcCommand::INF, AdcCommand& c) noexcept {
 		u->getIdentity().set(i.c_str(), i.substr(2));
 	}
 
-	if(u->getIdentity().isBot()) {
-		u->getUser()->setFlag(User::BOT);
-	} else {
-		u->getUser()->unsetFlag(User::BOT);
-	}
-
 	if(u->getIdentity().supports(ADCS_FEATURE)) {
 		u->getUser()->setFlag(User::TLS);
 	}
