@@ -57,7 +57,7 @@ public:
 
 	/// @return whether a new window can be opened (wrt the "Max PM windows" setting).
 	static bool gotMessage(TabViewPtr parent, const UserPtr& from, const UserPtr& to, const UserPtr& replyTo,
-		const ChatMessage& message, const string& hubHint);
+		const ChatMessage& message, const string& hubHint, bool fromBot);
 	static void openWindow(TabViewPtr parent, const HintedUser& replyTo, const tstring& msg = Util::emptyStringT,
 		const string& logPath = Util::emptyString, bool activate = true);
 	static void activateWindow(const UserPtr& u);

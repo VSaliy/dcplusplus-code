@@ -28,6 +28,7 @@
 * Format chat links (poy)
 * Improve threaded file list loading (poy)
 * [L#981733] Prevent the keyboard language from switching
+* [L#966339] Fix bot detection in NMDC hubs
 
 -- 0.791 2012-01-14 --
 * Update translations
