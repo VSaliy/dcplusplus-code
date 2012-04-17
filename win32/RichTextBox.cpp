@@ -162,7 +162,7 @@ LRESULT RichTextBox::handleLink(ENLINK& link) {
 			auto text = getLinkText(link);
 
 			auto menu = dwt::WidgetCreator<dwt::Menu>::create(this, dwt::Menu::Seed());
-			menu->setTitle(text, WinUtil::menuIcon(IDI_LINKS));
+			menu->setTitle(dwt::util::escapeMenu(text), WinUtil::menuIcon(IDI_LINKS));
 			menu->appendItem(T_("&Open"), [text] { WinUtil::parseLink(text); }, WinUtil::menuIcon(IDI_RIGHT), true, true);
 			menu->open(dwt::ClientCoordinate(dwt::Point::fromLParam(clickPos), this));
 			return 1;

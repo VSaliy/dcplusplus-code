@@ -36,18 +36,13 @@
 #ifndef DWT_aspects_Scrollable_h
 #define DWT_aspects_Scrollable_h
 
-#include "../Dispatchers.h"
 #include "../DWTException.h"
 #include "../Message.h"
 
 namespace dwt { namespace aspects {
 
 /// Aspect class used by Widgets that have the possibility of scrolling
-/** \ingroup aspects::Classes
-  * E.g. the Slider have a scroll Aspect to it therefore Slider realize
-  * the aspects::Scrollable through inheritance.
-  */
-template< class WidgetType >
+template<typename WidgetType>
 class Scrollable
 {
 	const WidgetType& W() const { return *static_cast<const WidgetType*>(this); }
@@ -55,33 +50,23 @@ class Scrollable
 
 	HWND H() const { return W().handle(); }
 
-	typedef Dispatchers::VoidVoid<> ScrollableDispatcher;
+	typedef std::function<void ()> F;
 
 public:
 	/// @ refer to the ::GetScrollInfo doc for information on the params.
 	SCROLLINFO getScrollInfo(int fnBar, int mask = SIF_ALL) const;
 	bool scrollIsAtEnd() const;
 
-	/// \ingroup EventHandlersaspects::Scrollable
-	/// Setting the event handler for the "scrolling horizontally" event
-	/** A scrolling event occurs when for instance a Sliders value is being
-	  * manipulated through user interaction. Such an action would raise this event.
-	  * <br>
-	  * No parameters are passed.
-	  */
-	void onScrollHorz(const ScrollableDispatcher::F& f) {
-		W().addCallback(Message( WM_HSCROLL ), ScrollableDispatcher(f));
+	/** catch horizontal scrolling events.
+	@param sbFlag one of the SB_ flags defined in the WM_HSCROLL doc, or -1 as a catch-all. */
+	void onScrollHorz(F f, int sbFlag = -1) {
+		onScroll(WM_HSCROLL, f, sbFlag);
 	}
 
-	/// \ingroup EventHandlersaspects::Scrollable
-	/// Setting the event handler for the "scrolling vertically" event
-	/** A scrolling event occurs when for instance a Sliders value is being
-	  * manipulated through user interaction. Such an action would raise this event.
-	  * <br>
-	  * No parameters are passed.
-	  */
-	void onScrollVert(const ScrollableDispatcher::F& f) {
-		W().addCallback(Message( WM_VSCROLL ), ScrollableDispatcher(f));
+	/** catch vertical scrolling events.
+	@param sbFlag one of the SB_ flags defined in the WM_VSCROLL doc, or -1 as a catch-all. */
+	void onScrollVert(F f, int sbFlag = -1) {
+		onScroll(WM_VSCROLL, f, sbFlag);
 	}
 
 private:
@@ -89,9 +74,18 @@ private:
 	virtual int scrollOffsetImpl() const {
 		return 0;
 	}
+
+	void onScroll(UINT message, F f, int sbFlag) {
+		W().addCallback(Message(message), [f, sbFlag](const MSG& msg, LRESULT&) -> bool {
+			if(sbFlag == -1 || LOWORD(msg.wParam) == sbFlag) {
+				f();
+			}
+			return false;
+		});
+	}
 };
 
-template<class WidgetType>
+template<typename WidgetType>
 SCROLLINFO Scrollable<WidgetType>::getScrollInfo(int fnBar, int mask) const {
 	SCROLLINFO info = { sizeof(SCROLLINFO), mask };
 	if(!::GetScrollInfo(H(), fnBar, &info)) {
@@ -100,7 +94,7 @@ SCROLLINFO Scrollable<WidgetType>::getScrollInfo(int fnBar, int mask) const {
 	return info;
 }
 
-template<class WidgetType>
+template<typename WidgetType>
 bool Scrollable<WidgetType>::scrollIsAtEnd() const {
 	SCROLLINFO scrollInfo = getScrollInfo(SB_VERT, SIF_RANGE | SIF_PAGE | SIF_POS);
 	return !scrollInfo.nPage || scrollInfo.nPos >= static_cast<int>(scrollInfo.nMax - scrollInfo.nPage) + scrollOffsetImpl();

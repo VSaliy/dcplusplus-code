@@ -128,6 +128,8 @@ public:
 	COLORREF getTextColor() const { return textColor; }
 	COLORREF getBgColor() const { return bgColor; }
 
+	virtual bool handleMessage(const MSG& msg, LRESULT& retVal);
+
 protected:
 	tstring currentNeedle;		// search in chat window
 	int currentNeedlePos;		// search in chat window
