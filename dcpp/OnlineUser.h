@@ -157,8 +157,6 @@ public:
 
 	GETSET(Identity, identity, Identity);
 private:
-	friend class NmdcHub;
-
 	Client& client;
 };
 
