@@ -1127,6 +1127,7 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid) {
 	Button::Seed seed;
 
 	seed.caption = T_("OK");
+	seed.style |= BS_DEFPUSHBUTTON;
 	seed.menuHandle = reinterpret_cast<HMENU> (IDOK);
 	seed.padding.x = 20;
 	ButtonPtr ok = grid->addChild(seed);
@@ -1134,6 +1135,7 @@ pair<ButtonPtr, ButtonPtr> WinUtil::addDlgButtons(GridPtr grid) {
 	ok->setImage(buttonIcon(IDI_OK));
 
 	seed.caption = T_("Cancel");
+	seed.style &= ~BS_DEFPUSHBUTTON;
 	seed.menuHandle = reinterpret_cast<HMENU> (IDCANCEL);
 	seed.padding.x = 10;
 	ButtonPtr cancel = grid->addChild(seed);
