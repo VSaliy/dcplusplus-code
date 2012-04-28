@@ -498,6 +498,8 @@ void MainWindow::initStatusBar() {
 		status->setIcon(STATUS_DOWN_DIFF, icon_DL);
 		status->setIcon(STATUS_UP_DIFF, icon_UL);
 	}
+	status->setIcon(STATUS_DOWN_LIMIT, WinUtil::statusIcon(IDI_DLIMIT));
+	status->setIcon(STATUS_UP_LIMIT, WinUtil::statusIcon(IDI_ULIMIT));
 
 	{
 		auto f = [this] { handleLimiterMenu(false); };
@@ -718,7 +720,8 @@ void MainWindow::handleConfigureRecent(const string& id, const tstring& title) {
 
 void MainWindow::fillLimiterMenu(Menu* menu, bool upload) {
 	const auto title = upload ? T_("Upload limit") : T_("Download limit");
-	menu->setTitle(title);
+	const auto menuIcon = WinUtil::menuIcon(upload ? IDI_ULIMIT : IDI_DLIMIT);
+	menu->setTitle(title, menuIcon);
 
 	const auto setting = ThrottleManager::getCurSetting(
 		upload ? SettingsManager::MAX_UPLOAD_SPEED_MAIN : SettingsManager::MAX_DOWNLOAD_SPEED_MAIN);
