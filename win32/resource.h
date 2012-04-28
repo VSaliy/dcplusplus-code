@@ -79,7 +79,8 @@
 #define IDI_WINDOWS 172
 #define IDI_BALLOON 173
 #define IDI_SOUND 174
-
+#define IDI_ULIMIT 175
+#define IDI_DLIMIT 176
 // Stuff that uses multiple id's
 
 #define ID_SHELLCONTEXTMENU_MIN				3000
