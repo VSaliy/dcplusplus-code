@@ -1526,7 +1526,7 @@ void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, siz
 	std::vector<int> o(columnCount);
 
 	for(size_t i = 0; i < columnCount; ++i) {
-		n[i].header = Text::toT(columnInfo[i].name);
+		n[i].header = T_(columnInfo[i].name);
 		n[i].width = columnInfo[i].size;
 		n[i].alignment = columnInfo[i].numerical ? dwt::Column::RIGHT : dwt::Column::LEFT;
 		o[i] = i;
