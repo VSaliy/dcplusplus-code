@@ -1044,11 +1044,11 @@ void MainWindow::updateStatus() {
 	status->setToolTip(STATUS_UP_DIFF, str(TF_("U: %1%/s (%2%)") % s % UploadManager::getInstance()->getUploadCount()));
 
 	s = Text::toT(Util::formatBytes(ThrottleManager::getDownLimit() * 1024));
-	status->setText(STATUS_DOWN_LIMIT, str(TF_("D Lim: %1%/s") % s));
+	status->setText(STATUS_DOWN_LIMIT, str(TF_("%1%/s") % s));
 	status->setToolTip(STATUS_DOWN_LIMIT, str(TF_("Download limit: %1%/s - Click to adjust") % s));
 
 	s = Text::toT(Util::formatBytes(ThrottleManager::getUpLimit() * 1024));
-	status->setText(STATUS_UP_LIMIT, str(TF_("U Lim: %1%/s") % s));
+	status->setText(STATUS_UP_LIMIT, str(TF_("%1%/s") % s));
 	status->setToolTip(STATUS_UP_LIMIT, str(TF_("Upload limit: %1%/s - Click to adjust") % s));
 }
 
