@@ -1621,8 +1621,8 @@ void MainWindow::handleTrayContextMenu() {
 	menu->appendItem(T_("Open downloads directory"), [this] { handleOpenDownloadsDir(); }, WinUtil::menuIcon(IDI_OPEN_DL_DIR));
 	menu->appendSeparator();
 	menu->appendItem(T_("Settings"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));
-	fillLimiterMenu(menu->appendPopup(T_("Download limit")), false);
-	fillLimiterMenu(menu->appendPopup(T_("Upload limit")), true);
+	fillLimiterMenu(menu->appendPopup(T_("Download limit"), WinUtil::menuIcon(IDI_DLIMIT), false), false);
+	fillLimiterMenu(menu->appendPopup(T_("Upload limit"), WinUtil::menuIcon(IDI_ULIMIT), false), true);
 	menu->appendSeparator();
 	menu->appendItem(T_("Exit"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
 
