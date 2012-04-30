@@ -63,6 +63,7 @@ private:
 	void handleLinkTip(tstring& text);
 
 	tstring getLinkText(const ENLINK& link);
+	void openLink(const tstring& text);
 
 	ToolTipPtr linkTip;
 	DWORD linkTipPos;

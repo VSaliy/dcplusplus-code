@@ -1,3 +1,7 @@
+* Add icons (iceman50)
+* Fix table header column translations (emtee)
+* Improve chat link menus (poy)
+
 -- 0.797 2012-04-17 --
 * Save and restore partial file lists (poy)
 * Apply ADL searches in partial file lists (poy)

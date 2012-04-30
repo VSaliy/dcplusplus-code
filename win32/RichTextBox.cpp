@@ -89,8 +89,17 @@ MenuPtr RichTextBox::getMenu() {
 	auto menu = BaseType::getMenu();
 
 	menu->appendSeparator();
-	menu->appendItem(T_("&Find...\tCtrl+F"), [this] { findTextNew(); }, dwt::IconPtr(), !getText().empty());
-	menu->appendItem(T_("Find &Next\tF3"), [this] { findTextNext(); }, dwt::IconPtr(), !getText().empty());
+	auto enabled = !getText().empty();
+	menu->appendItem(T_("&Find...\tCtrl+F"), [this] { findTextNew(); }, dwt::IconPtr(), enabled);
+	menu->appendItem(T_("Find &Next\tF3"), [this] { findTextNext(); }, dwt::IconPtr(), enabled);
+
+	if(!currentLink.empty()) {
+		menu->appendSeparator();
+		auto text = currentLink;
+		auto linkMenu = menu->appendPopup(T_("Link"), WinUtil::menuIcon(IDI_LINKS));
+		linkMenu->appendItem(T_("&Open"), [this, text] { openLink(text); }, WinUtil::menuIcon(IDI_RIGHT), true, true);
+		linkMenu->appendItem(T_("&Copy"), [this, text] { WinUtil::setClipboard(text); });
+	}
 
 	return menu;
 }
@@ -136,7 +145,6 @@ LRESULT RichTextBox::handleLink(ENLINK& link) {
 
 	switch(link.msg) {
 	case WM_LBUTTONDOWN:
-	case WM_RBUTTONDOWN:
 		{
 			clickPos = link.lParam;
 			break;
@@ -147,25 +155,8 @@ LRESULT RichTextBox::handleLink(ENLINK& link) {
 			if(link.lParam != clickPos)
 				break;
 
-			auto text = getLinkText(link);
-			if(!linkF || !linkF(text)) {
-				WinUtil::parseLink(text);
-			}
+			openLink(getLinkText(link));
 			break;
-		}
-
-	case WM_RBUTTONUP:
-		{
-			if(link.lParam != clickPos)
-				break;
-
-			auto text = getLinkText(link);
-
-			auto menu = dwt::WidgetCreator<dwt::Menu>::create(this, dwt::Menu::Seed());
-			menu->setTitle(dwt::util::escapeMenu(text), WinUtil::menuIcon(IDI_LINKS));
-			menu->appendItem(T_("&Open"), [text] { WinUtil::parseLink(text); }, WinUtil::menuIcon(IDI_RIGHT), true, true);
-			menu->open(dwt::ClientCoordinate(dwt::Point::fromLParam(clickPos), this));
-			return 1;
 		}
 
 	case WM_SETCURSOR:
@@ -192,4 +183,10 @@ tstring RichTextBox::getLinkText(const ENLINK& link) {
 	TEXTRANGE text = { link.chrg, buf.get() };
 	sendMessage(EM_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&text));
 	return buf.get();
+}
+
+void RichTextBox::openLink(const tstring& text) {
+	if(!linkF || !linkF(text)) {
+		WinUtil::parseLink(text);
+	}
 }
