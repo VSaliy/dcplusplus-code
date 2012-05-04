@@ -1,6 +1,8 @@
 * Add icons (iceman50)
 * Fix table header column translations (emtee)
 * Improve chat link menus (poy)
+* Fix crashes when closing the DL queue window (poy)
+* [L#330176] More reasonable DL queue directory expansion (poy)
 
 -- 0.797 2012-04-17 --
 * Save and restore partial file lists (poy)

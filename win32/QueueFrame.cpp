@@ -167,6 +167,13 @@ void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
 		addQueueItem(ii, true);
 	}
 
+	// expand top-level directories.
+	auto node = dirs->getRoot();
+	while(node) {
+		dirs->expand(node);
+		node = dirs->getNextSibling(node);
+	}
+
 	files->resort();
 }
 
@@ -222,12 +229,9 @@ bool QueueFrame::preClosing() {
 }
 
 void QueueFrame::postClosing() {
-	dirs->clear();
-	files->clear();
 	for(auto& i: directories) {
 		delete i.second;
 	}
-	directories.clear();
 
 	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getSplitterPos(0));
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
@@ -432,7 +436,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 		// We assume we haven't added it yet, and that all filelists go to the same
 		// directory...
 		dcassert(fileLists == NULL);
-		fileLists = dirs->insert(NULL, new DirItemInfo(dir, T_("File Lists")), true);
+		fileLists = dirs->insert(NULL, new DirItemInfo(dir, T_("File Lists")));
 		return fileLists;
 	}
 
@@ -462,10 +466,10 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			// First addition, set commonStart to the dir minus the last part...
 			i = dir.rfind('\\', dir.length()-2);
 			if(i != string::npos) {
-				next = dirs->insert(NULL, new DirItemInfo(dir.substr(0, i+1)), true);
+				next = dirs->insert(NULL, new DirItemInfo(dir.substr(0, i+1)));
 			} else {
 				dcassert(dir.length() == 3);
-				next = dirs->insert(NULL, new DirItemInfo(dir, Text::toT(dir)), true);
+				next = dirs->insert(NULL, new DirItemInfo(dir, Text::toT(dir)));
 			}
 		}
 
@@ -488,7 +492,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			HTREEITEM oldRoot = next;
 
 			// Create a new root
-			HTREEITEM newRoot = dirs->insert(NULL, new DirItemInfo(rootStr.substr(0, i)), true);
+			HTREEITEM newRoot = dirs->insert(NULL, new DirItemInfo(rootStr.substr(0, i)));
 
 			parent = addDirectory(rootStr, false, newRoot);
 
@@ -531,7 +535,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			// We didn't find it, add...
 			j = dir.find('\\', i);
 			dcassert(j != string::npos);
-			parent = dirs->insert(parent, new DirItemInfo(dir.substr(0, j+1), Text::toT(dir.substr(i, j-i))), true);
+			parent = dirs->insert(parent, new DirItemInfo(dir.substr(0, j+1), Text::toT(dir.substr(i, j-i))));
 			i = j + 1;
 		}
 	}
