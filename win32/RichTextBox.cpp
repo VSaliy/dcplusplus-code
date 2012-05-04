@@ -96,7 +96,7 @@ MenuPtr RichTextBox::getMenu() {
 	if(!currentLink.empty()) {
 		menu->appendSeparator();
 		auto text = currentLink;
-		auto linkMenu = menu->appendPopup(T_("Link"), WinUtil::menuIcon(IDI_LINKS));
+		auto linkMenu = menu->appendPopup(dwt::util::escapeMenu(text), WinUtil::menuIcon(IDI_LINKS));
 		linkMenu->appendItem(T_("&Open"), [this, text] { openLink(text); }, WinUtil::menuIcon(IDI_RIGHT), true, true);
 		linkMenu->appendItem(T_("&Copy"), [this, text] { WinUtil::setClipboard(text); });
 	}
