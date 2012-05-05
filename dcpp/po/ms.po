@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-04-12 17:46+0200\n"
+"POT-Creation-Date: 2012-05-05 14:46+0200\n"
 "PO-Revision-Date: 2008-03-13 23:10+0000\n"
 "Last-Translator: Tian Seng Leong <tleong@andrew.cmu.edu>\n"
 "Language-Team: Malay <ms@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-17 17:54+0000\n"
-"X-Generator: Launchpad (build 15099)\n"
+"X-Launchpad-Export-Date: 2012-05-05 11:57+0000\n"
+"X-Generator: Launchpad (build 15195)\n"
 
 #: dcpp\Util.cpp:550
 #, c-format, boost-format
@@ -81,12 +81,12 @@ msgstr ""
 "%1% tidak dikongsi; kiraan CRC32 tidak sama dengan objek yang dijumpai di "
 "fail SFV"
 
-#: dcpp\AdcHub.cpp:300
+#: dcpp\AdcHub.cpp:294
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:303
+#: dcpp\AdcHub.cpp:297
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr ""
@@ -377,7 +377,7 @@ msgstr ""
 msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
 msgstr "Tidak boleh mencipta thread"
 
-#: dcpp\AdcHub.cpp:225
+#: dcpp\AdcHub.cpp:219
 msgid "Failed to negotiate base protocol"
 msgstr ""
 
@@ -467,7 +467,7 @@ msgstr "Pangakalan Data hash dibina semula"
 msgid "Hashing failed: %1%"
 msgstr "Hashing telah gagal: %1%"
 
-#: dcpp\AdcHub.cpp:231
+#: dcpp\AdcHub.cpp:225
 msgid ""
 "Hub probably uses an old version of ADC, please encourage the owner to "
 "upgrade"
@@ -558,7 +558,7 @@ msgstr ""
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr ""
 
-#: dcpp\AdcHub.cpp:680
+#: dcpp\AdcHub.cpp:674
 #, fuzzy, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Tidak mendenggar untuk sambungan - sila memulakan semula DC++"
@@ -714,7 +714,7 @@ msgstr "Fail ini sudah dalam barisan"
 msgid "This file is already queued"
 msgstr "Fail ini sudah dalam barisan"
 
-#: dcpp\NmdcHub.cpp:945
+#: dcpp\NmdcHub.cpp:938
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcplusplus\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-04-12 17:46+0200\n"
+"POT-Creation-Date: 2012-05-05 14:46+0200\n"
 "PO-Revision-Date: 2011-12-31 14:44+0000\n"
 "Last-Translator: IgorWare <Unknown>\n"
 "Language-Team: Serbian <sr@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-17 17:54+0000\n"
-"X-Generator: Launchpad (build 15099)\n"
+"X-Launchpad-Export-Date: 2012-05-05 11:57+0000\n"
+"X-Generator: Launchpad (build 15195)\n"
 
 #: dcpp\Util.cpp:550
 #, c-format, boost-format
@@ -80,12 +80,12 @@ msgid ""
 msgstr ""
 "%1% nije deljeno; izračunati CRC32 se ne poklapa sa onim u SFV datoteci."
 
-#: dcpp\AdcHub.cpp:300
+#: dcpp\AdcHub.cpp:294
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr "%1% je izbačen od %2%: %3%"
 
-#: dcpp\AdcHub.cpp:303
+#: dcpp\AdcHub.cpp:297
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr "%1% je izbačen: %2%"
@@ -367,7 +367,7 @@ msgstr ""
 msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
 msgstr "Neuspešno mapiranje %1% port (%2% %3%) sa %4% interfejsom"
 
-#: dcpp\AdcHub.cpp:225
+#: dcpp\AdcHub.cpp:219
 msgid "Failed to negotiate base protocol"
 msgstr "Ne mogu da uspostavim bazni protokol"
 
@@ -456,7 +456,7 @@ msgstr "Obnavaljam hash bazu podataka"
 msgid "Hashing failed: %1%"
 msgstr "Hashovanje nije uspelo: %1%"
 
-#: dcpp\AdcHub.cpp:231
+#: dcpp\AdcHub.cpp:225
 msgid ""
 "Hub probably uses an old version of ADC, please encourage the owner to "
 "upgrade"
@@ -549,7 +549,7 @@ msgstr "Ne postojeći tip pretrage"
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr "Ne-UTF-8 podatci u ADC konekciji"
 
-#: dcpp\AdcHub.cpp:680
+#: dcpp\AdcHub.cpp:674
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Ne osluškujem konekcije - molim restartujte %1%"
@@ -701,7 +701,7 @@ msgstr "Ova datoteka je već preuzeta"
 msgid "This file is already queued"
 msgstr "Ova datoteka se već deli"
 
-#: dcpp\NmdcHub.cpp:945
+#: dcpp\NmdcHub.cpp:938
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "
