@@ -1,7 +1,7 @@
 diff -ru old/Configure new/Configure
 --- old/Configure	2008-09-18 14:56:10.000000000 +0200
 +++ new/Configure	2009-03-10 23:48:48.034829900 +0100
-@@ -505,7 +505,7 @@
+@@ -531,7 +531,7 @@
  "BC-32","bcc32::::WIN32::BN_LLONG DES_PTR RC4_INDEX EXPORT_VAR_AS_FN:${no_asm}:win32",
  
  # MinGW
@@ -10,7 +10,7 @@ diff -ru old/Configure new/Configure
  # As for OPENSSL_USE_APPLINK. Applink makes it possible to use .dll
  # compiled with one compiler with application compiled with another
  # compiler. It's possible to engage Applink support in mingw64 build,
-@@ -513,7 +513,7 @@
+@@ -539,7 +539,7 @@
  # handling, one can't seriously consider its binaries for using with
  # non-mingw64 run-time environment. And as mingw64 is always consistent
  # with itself, Applink is never engaged and can as well be omitted.
@@ -44,20 +44,20 @@ diff -ru old/ms/do_nasm.bat new/ms/do_nasm.bat
 diff -ru old/ms/do_win64a.bat new/ms/do_win64a.bat
 --- old/ms/do_win64a.bat	2005-07-05 02:24:12.000000000 +0200
 +++ new/ms/do_win64a.bat	2009-03-10 23:57:55.316079900 +0100
-@@ -3,6 +3,7 @@
- perl ms\uplink.pl win64a > ms\uptable.asm
- ml64 -c -Foms\uptable.obj ms\uptable.asm
- perl util\mk1mf.pl no-asm VC-WIN64A >ms\nt.mak
-+perl util\mk1mf.pl debug no-asm VC-WIN64A >ms\ntdebug.mak
- perl util\mk1mf.pl dll no-asm VC-WIN64A >ms\ntdll.mak
+@@ -13,6 +13,7 @@
+ 
+ :proceed
+ perl util\mk1mf.pl VC-WIN64A >ms\nt.mak
++perl util\mk1mf.pl debug VC-WIN64A >ms\ntdebug.mak
+ perl util\mk1mf.pl dll VC-WIN64A >ms\ntdll.mak
  
  perl util\mkdef.pl 32 libeay > ms\libeay32.def
 diff -ru old/util/pl/VC-32.pl new/util/pl/VC-32.pl
 --- old/util/pl/VC-32.pl	2008-11-18 23:23:20.000000000 +0100
 +++ new/util/pl/VC-32.pl	2009-03-11 00:14:08.175454900 +0100
-@@ -6,10 +6,10 @@
- $ssl=	"ssleay32";
- $crypto="libeay32";
+@@ -16,10 +16,10 @@
+ 	$crypto="libeay32";
+ 	}
  
 -$o='\\';
 +$o='/';
@@ -68,7 +68,7 @@ diff -ru old/util/pl/VC-32.pl new/util/pl/VC-32.pl
  
  $zlib_lib="zlib1.lib";
  
-@@ -140,6 +140,7 @@
+@@ -150,6 +150,7 @@
  # generate symbols.pdb unconditionally
  $app_cflag.=" /Zi /Fd\$(TMP_D)/app";
  $lib_cflag.=" /Zi /Fd\$(TMP_D)/lib";

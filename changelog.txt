@@ -1,8 +1,11 @@
+-- 0.799 2012-05-05 --
 * Add icons (iceman50)
 * Fix table header column translations (emtee)
 * Improve chat link menus (poy)
 * Fix crashes when closing the DL queue window (poy)
 * [L#330176] More reasonable DL queue directory expansion (poy)
+* Update OpenSSL to version 1.0.1b
+* Update zlib to version 1.2.7
 
 -- 0.797 2012-04-17 --
 * Save and restore partial file lists (poy)

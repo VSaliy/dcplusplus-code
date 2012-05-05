@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dcpp\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-04-12 17:46+0200\n"
+"POT-Creation-Date: 2012-05-05 14:46+0200\n"
 "PO-Revision-Date: 2011-01-20 07:45+0000\n"
 "Last-Translator: Andy C. Candet <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-17 17:54+0000\n"
-"X-Generator: Launchpad (build 15099)\n"
+"X-Launchpad-Export-Date: 2012-05-05 11:57+0000\n"
+"X-Generator: Launchpad (build 15195)\n"
 
 #: dcpp\Util.cpp:550
 #, c-format, boost-format
@@ -81,12 +81,12 @@ msgstr ""
 "%1% nu e partajat; calculul CRC32 nu se potrivește cu cel găsit în fișierul "
 "SFV."
 
-#: dcpp\AdcHub.cpp:300
+#: dcpp\AdcHub.cpp:294
 #, boost-format
 msgid "%1% was kicked by %2%: %3%"
 msgstr "%1% a fost dat afară de %2%: %3%"
 
-#: dcpp\AdcHub.cpp:303
+#: dcpp\AdcHub.cpp:297
 #, boost-format
 msgid "%1% was kicked: %2%"
 msgstr "%1% a fost dat afară: %2%"
@@ -369,7 +369,7 @@ msgstr ""
 msgid "Failed to map the %1% port (%2% %3%) with the %4% interface"
 msgstr "Nu se poate crea firul de execuţie"
 
-#: dcpp\AdcHub.cpp:225
+#: dcpp\AdcHub.cpp:219
 msgid "Failed to negotiate base protocol"
 msgstr "Negocierea protocolului de bază a eșuat"
 
@@ -457,7 +457,7 @@ msgstr "Baza de date a codurilor hash refăcută"
 msgid "Hashing failed: %1%"
 msgstr "Calcularea codului hash eșuată: %1%"
 
-#: dcpp\AdcHub.cpp:231
+#: dcpp\AdcHub.cpp:225
 msgid ""
 "Hub probably uses an old version of ADC, please encourage the owner to "
 "upgrade"
@@ -548,7 +548,7 @@ msgstr "Nu există acest tip de căutare"
 msgid "Non-UTF-8 data in an ADC connection"
 msgstr "Date non-UTF-8 într-o conexiune ADC"
 
-#: dcpp\AdcHub.cpp:680
+#: dcpp\AdcHub.cpp:674
 #, boost-format
 msgid "Not listening for connections - please restart %1%"
 msgstr "Socket-ul nu a intrat în modul de ascultare - reporniți %1%"
@@ -701,7 +701,7 @@ msgstr "Acest fițier s-a descărcat deja complet"
 msgid "This file is already queued"
 msgstr "Acest fișier există deja în coadă"
 
-#: dcpp\NmdcHub.cpp:945
+#: dcpp\NmdcHub.cpp:938
 #, boost-format
 msgid ""
 "This hub is trying to use your client to spam %1%, please urge hub owner to "

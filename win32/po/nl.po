@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-04-17 20:13+0200\n"
+"POT-Creation-Date: 2012-05-05 14:46+0200\n"
 "PO-Revision-Date: 2011-07-17 13:37+0000\n"
 "Last-Translator: Geert Wirken <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-04-17 17:52+0000\n"
-"X-Generator: Launchpad (build 15099)\n"
+"X-Launchpad-Export-Date: 2012-05-05 11:56+0000\n"
+"X-Generator: Launchpad (build 15195)\n"
 
 #: win32\PublicHubsFrame.cpp:425
 msgid " from Coral"
@@ -27,7 +27,7 @@ msgstr " van Coral"
 msgid "% transferred"
 msgstr "% verzonden"
 
-#: win32\MainWindow.cpp:1302
+#: win32\MainWindow.cpp:1305
 #, boost-format
 msgid ""
 "%1%\n"
@@ -68,7 +68,7 @@ msgstr "%1% / %2% bronnen genegeerd: %3%"
 msgid "%1% dropped"
 msgstr "%1% gefilterd"
 
-#: win32\QueueFrame.cpp:849 win32\TransferView.cpp:217 win32\WinUtil.cpp:834
+#: win32\QueueFrame.cpp:853 win32\TransferView.cpp:217 win32\WinUtil.cpp:834
 #: win32\FinishedFrameBase.h:455
 #, boost-format
 msgid "%1% files"
@@ -79,7 +79,7 @@ msgstr "%1% bestanden"
 msgid "%1% files/h, %2% files left"
 msgstr "%1% bestanden/h, %2% bestanden resterend"
 
-#: win32\MainWindow.cpp:1021
+#: win32\MainWindow.cpp:1024
 #, boost-format
 msgid "%1% free slots of %2% total upload slots"
 msgstr ""
@@ -111,7 +111,7 @@ msgstr "%1% resterend"
 msgid "%1% port"
 msgstr "%1% resterend"
 
-#: win32\MainWindow.cpp:713
+#: win32\MainWindow.cpp:715
 #, boost-format
 msgid "%1% recent items will be saved from now on."
 msgstr "%1% recente items zullen vanaf nu bewaard worden."
@@ -139,13 +139,14 @@ msgstr[1] "%1% gebruikers"
 msgid "%1% users"
 msgstr "%1% gebruikers"
 
-#: win32\MainWindow.cpp:1020 win32\UserInfoBase.cpp:136
+#: win32\MainWindow.cpp:1023 win32\UserInfoBase.cpp:136
 #, boost-format
 msgid "%1%/%2%"
 msgstr "%1%/%2%"
 
-#: win32\MainWindow.cpp:743 win32\MainWindow.cpp:1036
-#: win32\MainWindow.cpp:1040 win32\TransferView.cpp:630
+#: win32\MainWindow.cpp:746 win32\MainWindow.cpp:1039
+#: win32\MainWindow.cpp:1043 win32\MainWindow.cpp:1047
+#: win32\MainWindow.cpp:1051 win32\TransferView.cpp:630
 #: win32\TransferView.cpp:682 win32\UsersFrame.cpp:73
 #: win32\FinishedFrameBase.h:566
 #, boost-format
@@ -176,7 +177,7 @@ msgstr "Directory &toevoegen"
 msgid "&Add to the list"
 msgstr "%Toevoegen aan de lijst"
 
-#: win32\WinUtil.cpp:1501 win32\UserInfoBase.h:144
+#: win32\WinUtil.cpp:1503 win32\UserInfoBase.h:144
 msgid "&Browse file list"
 msgstr "&Blader door bestandslijst"
 
@@ -198,7 +199,7 @@ msgstr "&Sluiten"
 msgid "&Configure"
 msgstr "&Instellen"
 
-#: win32\MainWindow.cpp:667
+#: win32\MainWindow.cpp:669
 msgid "&Configure..."
 msgstr "&Instellen..."
 
@@ -207,7 +208,7 @@ msgstr "&Instellen..."
 msgid "&Connect"
 msgstr "&Verbinden"
 
-#: win32\HubFrame.cpp:1164
+#: win32\HubFrame.cpp:1164 win32\RichTextBox.cpp:101
 msgid "&Copy"
 msgstr "&Kopiëren"
 
@@ -215,7 +216,7 @@ msgstr "&Kopiëren"
 msgid "&Copy\tCtrl+C"
 msgstr "&Kopiëren\tCtrl+C"
 
-#: win32\MainWindow.cpp:1499
+#: win32\MainWindow.cpp:1502
 msgid "&Customize\tDouble-click"
 msgstr "&Aanpassen\tDubbelklikken"
 
@@ -257,7 +258,7 @@ msgstr "&Favoriete hubs\tCtrl+F"
 msgid "&File"
 msgstr "&Bestand"
 
-#: win32\RichTextBox.cpp:92
+#: win32\RichTextBox.cpp:93
 #, fuzzy
 msgid "&Find...\tCtrl+F"
 msgstr "&Zoek...\t F3"
@@ -266,7 +267,7 @@ msgstr "&Zoek...\t F3"
 msgid "&Force attempt"
 msgstr "&Forceer poging"
 
-#: win32\QueueFrame.cpp:885 win32\WinUtil.cpp:1498 win32\UserInfoBase.h:143
+#: win32\QueueFrame.cpp:889 win32\WinUtil.cpp:1500 win32\UserInfoBase.h:143
 msgid "&Get file list"
 msgstr "&Laad bestandslijst"
 
@@ -278,11 +279,11 @@ msgstr "&Ga naar directory"
 msgid "&Help"
 msgstr "&Help"
 
-#: win32\MainWindow.cpp:1515
+#: win32\MainWindow.cpp:1518
 msgid "&Hide\tCtrl+1"
 msgstr "&Verbergen\tCtrl+1"
 
-#: win32\WinUtil.cpp:1504 win32\UserInfoBase.h:145
+#: win32\WinUtil.cpp:1506 win32\UserInfoBase.h:145
 msgid "&Match queue"
 msgstr "&Wachtrij bijwerken"
 
@@ -291,7 +292,7 @@ msgstr "&Wachtrij bijwerken"
 msgid "&Move to group"
 msgstr "&Verplaats naar groep"
 
-#: win32\QueueFrame.cpp:832 win32\QueueFrame.cpp:851 win32\QueueFrame.cpp:867
+#: win32\QueueFrame.cpp:836 win32\QueueFrame.cpp:855 win32\QueueFrame.cpp:871
 msgid "&Move/Rename"
 msgstr "&Verplaats/Hernoem"
 
@@ -304,7 +305,7 @@ msgstr "&Nieuw..."
 msgid "&Notepad\tCtrl+N"
 msgstr "&Kladblok\tCtrl+N"
 
-#: win32\RichTextBox.cpp:166 win32\SystemFrame.cpp:126
+#: win32\RichTextBox.cpp:100 win32\SystemFrame.cpp:126
 #: win32\FinishedFrameBase.h:458
 msgid "&Open"
 msgstr "&Open"
@@ -337,7 +338,7 @@ msgstr "Ve&rnieuwen"
 #: win32\ADLSearchFrame.cpp:109 win32\ADLSearchFrame.cpp:320
 #: win32\FavHubGroupsDlg.cpp:101 win32\FavHubsFrame.cpp:126
 #: win32\FavHubsFrame.cpp:355 win32\FavoriteDirsPage.cpp:78
-#: win32\QueueFrame.cpp:841 win32\QueueFrame.cpp:855 win32\QueueFrame.cpp:869
+#: win32\QueueFrame.cpp:845 win32\QueueFrame.cpp:859 win32\QueueFrame.cpp:873
 #: win32\SearchFrame.cpp:796 win32\SearchTypesPage.cpp:94
 #: win32\StringListDlg.cpp:160 win32\UCPage.cpp:76 win32\UploadPage.cpp:90
 #: win32\UserMatchPage.cpp:98 win32\UsersFrame.cpp:463
@@ -353,7 +354,7 @@ msgstr "&Zoeken"
 msgid "&Search\tCtrl+S"
 msgstr "&Zoeken\tCtrl+S"
 
-#: win32\QueueFrame.cpp:892 win32\WinUtil.cpp:1507 win32\UserInfoBase.h:147
+#: win32\QueueFrame.cpp:896 win32\WinUtil.cpp:1509 win32\UserInfoBase.h:147
 msgid "&Send private message"
 msgstr "&Stuur privébericht"
 
@@ -383,7 +384,7 @@ msgstr "&Bekijk als tekst"
 msgid "&Window"
 msgstr "&Venster"
 
-#: win32\MainWindow.cpp:674
+#: win32\MainWindow.cpp:676
 msgid "(No recent item found)"
 msgstr "(Geen recent item gevonden)"
 
@@ -402,7 +403,7 @@ msgstr "-.-- bestanden/h, %1% resterende bestanden"
 msgid "-:--:--"
 msgstr "-:--:-- resterend"
 
-#: win32\WinUtil.cpp:1432
+#: win32\WinUtil.cpp:1434
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -437,7 +438,7 @@ msgid "Accept custom user commands from hub"
 msgstr "Accepteer aangepaste gebruikercommando's van hub"
 
 #: win32\HubFrame.cpp:1180 win32\PublicHubsFrame.cpp:335
-#: win32\WinUtil.cpp:1510 win32\UserInfoBase.h:149
+#: win32\WinUtil.cpp:1512 win32\UserInfoBase.h:149
 msgid "Add To &Favorites"
 msgstr "Voeg toe aan &favorieten"
 
@@ -454,7 +455,7 @@ msgid "Added"
 msgstr "Toegevoegd"
 
 #: win32\FavHubProperties.cpp:76 win32\HubListsDlg.cpp:52
-#: win32\MainWindow.cpp:782 win32\PublicHubsFrame.cpp:44
+#: win32\MainWindow.cpp:785 win32\PublicHubsFrame.cpp:44
 msgid "Address"
 msgstr "Adres"
 
@@ -462,11 +463,11 @@ msgstr "Adres"
 msgid "Advanced"
 msgstr "Geavanceerd"
 
-#: win32\QueueFrame.cpp:900 win32\QueueFrame.cpp:909 win32\WinUtil.cpp:1465
+#: win32\QueueFrame.cpp:904 win32\QueueFrame.cpp:913 win32\WinUtil.cpp:1467
 msgid "All"
 msgstr "Alle"
 
-#: win32\QueueFrame.cpp:323
+#: win32\QueueFrame.cpp:327
 #, boost-format
 msgid "All %1% users offline"
 msgstr "Alle %1% gebruikers offline"
@@ -704,7 +705,7 @@ msgstr "CID"
 msgid "CRC Checked"
 msgstr "CRC Checked"
 
-#: win32\QueueFrame.cpp:371
+#: win32\QueueFrame.cpp:375
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 inconsistentie (SFV-controle)"
 
@@ -712,7 +713,7 @@ msgstr "CRC32 inconsistentie (SFV-controle)"
 msgid "Cached hub list is corrupted or unsupported"
 msgstr "De gecachede hublijst is corrupt of wordt niet ondersteund"
 
-#: win32\WinUtil.cpp:1136
+#: win32\WinUtil.cpp:1137
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -773,7 +774,7 @@ msgstr "Sluit alle bestandslijsten"
 msgid "Close all hubs"
 msgstr "Sluit alle hubs"
 
-#: win32\MainWindow.cpp:349 win32\MainWindow.cpp:1465
+#: win32\MainWindow.cpp:349 win32\MainWindow.cpp:1468
 msgid "Close all hubs of a favorite group"
 msgstr "Sluit alle hubs van een favorietengroep"
 
@@ -789,7 +790,7 @@ msgstr "Sluit alle zoekvensters"
 msgid "Close disconnected hubs"
 msgstr "Sluit niet-verbonden hubs"
 
-#: win32\MainWindow.cpp:350 win32\MainWindow.cpp:1465
+#: win32\MainWindow.cpp:350 win32\MainWindow.cpp:1468
 msgid "Close hubs not in a favorite group"
 msgstr "Sluit hubs die niet in een favorietengroep zitten"
 
@@ -857,11 +858,11 @@ msgstr "Verbinden"
 msgid "Connect to a favorite hub &group...\tCtrl+G"
 msgstr "Maak verbinding met een favoriete hub&groep...\tCtrl+G"
 
-#: win32\MainWindow.cpp:801
+#: win32\MainWindow.cpp:804
 msgid "Connect to a favorite hub group"
 msgstr "Maak verbinding met een favorietengroep"
 
-#: win32\MainWindow.cpp:646
+#: win32\MainWindow.cpp:648
 msgid "Connect to all hubs in this group"
 msgstr "Maak verbinding met alle hubs in deze groep"
 
@@ -964,26 +965,21 @@ msgstr ""
 msgid "Custom text color"
 msgstr ""
 
-#: win32\MainWindow.cpp:752
+#: win32\MainWindow.cpp:755
 msgid "Custom..."
 msgstr ""
 
-#: win32\MainWindow.cpp:1044
-#, boost-format
-msgid "D Lim: %1%/s"
-msgstr "D lim: %1%/s"
-
-#: win32\MainWindow.cpp:1029
+#: win32\MainWindow.cpp:1032
 #, boost-format
 msgid "D: %1%"
 msgstr "D: %1%"
 
-#: win32\MainWindow.cpp:1037
+#: win32\MainWindow.cpp:1040
 #, boost-format
 msgid "D: %1%/s (%2%)"
 msgstr "D: %1%/s (%2%)"
 
-#: win32\MainWindow.cpp:1640
+#: win32\MainWindow.cpp:1643
 #, boost-format
 msgid ""
 "D: %1%/s (%2%)\r\n"
@@ -992,7 +988,7 @@ msgstr ""
 "D: %1%/s (%2%)\r\n"
 "U: %3%/s (%4%)"
 
-#: win32\MainWindow.cpp:606
+#: win32\MainWindow.cpp:608
 #, fuzzy, boost-format
 msgid "DC++ - %1%"
 msgstr "D: %1%"
@@ -1058,7 +1054,7 @@ msgstr "Map"
 msgid "Directory or directory name already exists"
 msgstr "Bestand of bestandsnaam bestaat reeds"
 
-#: win32\MainWindow.cpp:743
+#: win32\MainWindow.cpp:746
 #, fuzzy
 msgid "Disabled"
 msgstr "Geactiveerd"
@@ -1131,7 +1127,7 @@ msgstr "Donaties (PayPal)"
 msgid "Done"
 msgstr "Voltooid"
 
-#: win32\QueueFrame.cpp:1086
+#: win32\QueueFrame.cpp:1090
 msgid "Done."
 msgstr "Gereed."
 
@@ -1161,7 +1157,7 @@ msgstr "Downloaden klaar"
 msgid "Download full list"
 msgstr ""
 
-#: win32\MainWindow.cpp:720 win32\MainWindow.cpp:1621
+#: win32\MainWindow.cpp:722 win32\MainWindow.cpp:1624
 #, fuzzy
 msgid "Download limit"
 msgstr "Downloadlimiet uitgeschakeld"
@@ -1175,7 +1171,7 @@ msgstr "Downloadlimiet uitgeschakeld"
 msgid "Download limit set to %1% KiB/s"
 msgstr "Downloadlimiet ingesteld op %d KiB/s"
 
-#: win32\MainWindow.cpp:1045
+#: win32\MainWindow.cpp:1048
 #, fuzzy, boost-format
 msgid "Download limit: %1%/s - Click to adjust"
 msgstr "Downloadlimiet ingesteld op %d KiB/s"
@@ -1244,7 +1240,7 @@ msgstr "Bezig met downloaden..."
 msgid "Downloads"
 msgstr "Downloads"
 
-#: win32\QueueFrame.cpp:1077
+#: win32\QueueFrame.cpp:1081
 msgid "Downloads running, please disconnect them"
 msgstr "Downloads zijn bezig, ontkoppel ze aub"
 
@@ -1328,7 +1324,7 @@ msgid "Error processing version information"
 msgstr ""
 "Er is een fout opgetreden tijdens de verwerking van de versie informatie"
 
-#: win32\WinUtil.cpp:1359
+#: win32\WinUtil.cpp:1361
 #, boost-format
 msgid "Error registering %1%:// link handler"
 msgstr "Fout bij registreren %1%:// link"
@@ -1351,7 +1347,7 @@ msgstr ""
 "Grafisch: Martin Skogevall en anderen\n"
 "DC++ is uitgebracht onder GPL-licentie\n"
 
-#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1174
+#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1176
 msgid "Exact match"
 msgstr ""
 
@@ -1364,7 +1360,7 @@ msgstr "Exacte grootte"
 msgid "Example hub tab"
 msgstr "Voorbeeld hub tabblad"
 
-#: win32\MainWindow.cpp:1624
+#: win32\MainWindow.cpp:1627
 msgid "Exit"
 msgstr "Afsluiten"
 
@@ -1471,11 +1467,11 @@ msgstr "Hash bestanden:"
 msgid "File List"
 msgstr "Bestandslijst"
 
-#: win32\QueueFrame.cpp:435 win32\WinUtil.cpp:844
+#: win32\QueueFrame.cpp:439 win32\WinUtil.cpp:844
 msgid "File Lists"
 msgstr "Bestandslijsten"
 
-#: win32\QueueFrame.cpp:1083
+#: win32\QueueFrame.cpp:1087
 msgid "File is already finished"
 msgstr "Bestand is al reeds voltooid"
 
@@ -1484,7 +1480,7 @@ msgstr "Bestand is al reeds voltooid"
 msgid "File list downloaded"
 msgstr "Hublijst gedownload%1% (%2%)"
 
-#: win32\QueueFrame.cpp:367
+#: win32\QueueFrame.cpp:371
 msgid "File not available"
 msgstr "Bestand niet beschikbaar"
 
@@ -1515,7 +1511,7 @@ msgid "Files"
 msgstr "Bestanden"
 
 #: win32\DirectoryListingFrame.cpp:1068 win32\DirectoryListingFrame.cpp:1084
-#: win32\QueueFrame.cpp:213
+#: win32\QueueFrame.cpp:220
 #, boost-format
 msgid "Files: %1%"
 msgstr "Bestanden: %1%"
@@ -1553,7 +1549,7 @@ msgstr "F&ilter"
 msgid "Find"
 msgstr "Vind"
 
-#: win32\RichTextBox.cpp:93
+#: win32\RichTextBox.cpp:94
 msgid "Find &Next\tF3"
 msgstr ""
 
@@ -1571,7 +1567,7 @@ msgstr "Vind"
 msgid "Find previous"
 msgstr ""
 
-#: win32\QueueFrame.cpp:329
+#: win32\QueueFrame.cpp:333
 msgid "Finished"
 msgstr "Voltooid"
 
@@ -1610,7 +1606,7 @@ msgstr "Veel voorkomende vragen (FAQ)"
 msgid "Full Path"
 msgstr "Volledig pad"
 
-#: win32\QueueFrame.cpp:373
+#: win32\QueueFrame.cpp:377
 msgid "Full tree does not match TTH root"
 msgstr "Mapstructuur komt niet overeen met TTH Root"
 
@@ -1655,7 +1651,7 @@ msgstr "GiB"
 msgid "Global application style"
 msgstr "Afsluiten van DC++ bevestigen"
 
-#: win32\WinUtil.cpp:1513 win32\UserInfoBase.h:150
+#: win32\WinUtil.cpp:1515 win32\UserInfoBase.h:150
 msgid "Grant &extra slot"
 msgstr "Sta &extra slot toe"
 
@@ -1695,7 +1691,7 @@ msgstr "HTTP-proxy (alleen voor hublijst)"
 msgid "Height of the message editing box"
 msgstr "Hoogte van het berichtvak"
 
-#: win32\WinUtil.cpp:1147
+#: win32\WinUtil.cpp:1149
 msgid "Help"
 msgstr "Help"
 
@@ -1715,7 +1711,7 @@ msgstr "Verborgen gebruiker"
 msgid "Hide files already in share"
 msgstr "Verberg reeds gedeelde bestanden"
 
-#: win32\QueueFrame.cpp:348 win32\QueueFrame.cpp:879
+#: win32\QueueFrame.cpp:352 win32\QueueFrame.cpp:883
 msgid "High"
 msgstr "Hoog"
 
@@ -1723,7 +1719,7 @@ msgstr "Hoog"
 msgid "High prio max size"
 msgstr "Hoge Prio grootte (maximaal)"
 
-#: win32\QueueFrame.cpp:349 win32\QueueFrame.cpp:880
+#: win32\QueueFrame.cpp:353 win32\QueueFrame.cpp:884
 msgid "Highest"
 msgstr "Hoogste"
 
@@ -1818,7 +1814,7 @@ msgstr "Hubs"
 msgid "Hubs (registered)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1016 win32\PublicHubsFrame.cpp:245
+#: win32\MainWindow.cpp:1019 win32\PublicHubsFrame.cpp:245
 #: win32\UserInfoBase.cpp:102
 #, boost-format
 msgid "Hubs: %1%"
@@ -1843,7 +1839,7 @@ msgstr ""
 msgid "IP (v6)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1410
+#: win32\MainWindow.cpp:1413
 msgid ""
 "IP -> country mappings are disabled. Turn them back on via Settings > "
 "Appearance."
@@ -1892,7 +1888,7 @@ msgstr "In afwezigheidsmodus"
 msgid "Indexing progress"
 msgstr "Indexeringsvoortgang"
 
-#: win32\QueueFrame.cpp:1043
+#: win32\QueueFrame.cpp:1047
 #, boost-format
 msgid "Integrity check: %1% (%2%)"
 msgstr "Integriteitscontrole: %1% (%2%)"
@@ -1902,7 +1898,7 @@ msgstr "Integriteitscontrole: %1% (%2%)"
 msgid "Invalid extension: %1%"
 msgstr "Ongeldige extensie: %1%"
 
-#: win32\MainWindow.cpp:1205
+#: win32\MainWindow.cpp:1208
 msgid "Invalid file list name"
 msgstr "Ongeldige naam voor bestandslijst"
 
@@ -1914,7 +1910,7 @@ msgstr "Ongeldig aantal Slots"
 msgid "Item edition"
 msgstr "Itemeditie"
 
-#: win32\QueueFrame.cpp:209
+#: win32\QueueFrame.cpp:216
 #, boost-format
 msgid "Items: %1%"
 msgstr "Items: %1%"
@@ -2076,7 +2072,7 @@ msgstr "Logbestanden"
 msgid "Lookup TTH at Bitzi.com"
 msgstr "Zoek TTH bij Bitzi.com"
 
-#: win32\QueueFrame.cpp:346 win32\QueueFrame.cpp:877
+#: win32\QueueFrame.cpp:350 win32\QueueFrame.cpp:881
 msgid "Low"
 msgstr "Laag"
 
@@ -2084,7 +2080,7 @@ msgstr "Laag"
 msgid "Low prio max size"
 msgstr "Lage Prio grootte (maximaal)"
 
-#: win32\QueueFrame.cpp:345 win32\QueueFrame.cpp:876
+#: win32\QueueFrame.cpp:349 win32\QueueFrame.cpp:880
 msgid "Lowest"
 msgstr "Zeer laag"
 
@@ -2092,7 +2088,7 @@ msgstr "Zeer laag"
 msgid "M&odify"
 msgstr "W&ijzigen"
 
-#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1433
+#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1435
 msgid "MAGNET Link detected"
 msgstr "MAGNET-Link herkend"
 
@@ -2197,7 +2193,7 @@ msgstr "Maximale downloadsnelheid (KiB/s) (0 = onbeperkt)"
 msgid "Maximum Upload Rate (KiB/s) (0 = infinite)"
 msgstr "Maximale uploadsnelheid (KiB/s) (0 = onbeperkt)"
 
-#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:709
+#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:711
 msgid "Maximum number of recent items to save"
 msgstr "Maximum aantal recente items om te bewaren"
 
@@ -2310,7 +2306,7 @@ msgstr "Gemiddeld: %1%"
 msgid "Network Statistics"
 msgstr "Netwerkstatistieken"
 
-#: win32\MainWindow.cpp:754
+#: win32\MainWindow.cpp:757
 #, fuzzy
 msgid "New limit (KiB/s) (0 = infinite)"
 msgstr "Maximale uploadsnelheid (KiB/s) (0 = onbeperkt)"
@@ -2348,15 +2344,15 @@ msgstr "Nee"
 msgid "No away message"
 msgstr ""
 
-#: win32\QueueFrame.cpp:384
+#: win32\QueueFrame.cpp:388
 msgid "No errors"
 msgstr "Geen fouten"
 
-#: win32\MainWindow.cpp:861
+#: win32\MainWindow.cpp:864
 msgid "No favorite hub group found"
 msgstr "Geen favoriete hubgroep gevonden"
 
-#: win32\QueueFrame.cpp:1080
+#: win32\QueueFrame.cpp:1084
 msgid "No full tree available"
 msgstr "Geen volledig boomoverzicht beschikbaar"
 
@@ -2378,11 +2374,11 @@ msgstr "Geen nieuwe downloads, indien sneller (kiB/s, 0 = gedeactiveerd)"
 msgid "No transfers yet"
 msgstr "nog geen downloads"
 
-#: win32\QueueFrame.cpp:307
+#: win32\QueueFrame.cpp:311
 msgid "No users"
 msgstr "Geen Gebruikers"
 
-#: win32\QueueFrame.cpp:319
+#: win32\QueueFrame.cpp:323
 msgid "No users to download from"
 msgstr "Geen Gebruiker voor download"
 
@@ -2390,7 +2386,7 @@ msgstr "Geen Gebruiker voor download"
 msgid "Noon"
 msgstr "Middag"
 
-#: win32\QueueFrame.cpp:347 win32\QueueFrame.cpp:878 win32\SearchFrame.cpp:180
+#: win32\QueueFrame.cpp:351 win32\QueueFrame.cpp:882 win32\SearchFrame.cpp:180
 msgid "Normal"
 msgstr "Normaal"
 
@@ -2463,7 +2459,7 @@ msgstr "Open map"
 msgid "Open crash log"
 msgstr ""
 
-#: win32\MainWindow.cpp:297 win32\MainWindow.cpp:1618
+#: win32\MainWindow.cpp:297 win32\MainWindow.cpp:1621
 msgid "Open downloads directory"
 msgstr "Open downloadmap"
 
@@ -2536,7 +2532,7 @@ msgstr "Parameters"
 msgid "Partial file list loaded"
 msgstr ""
 
-#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1174
+#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1176
 msgid "Partial match"
 msgstr ""
 
@@ -2549,7 +2545,7 @@ msgstr ""
 msgid "Passive mode (last resort - has serious limitations)"
 msgstr "Passieve modus (laatste optie - heeft ernstige beperkingen)"
 
-#: win32\QueueFrame.cpp:369
+#: win32\QueueFrame.cpp:373
 msgid "Passive user"
 msgstr "Passieve Gebruiker"
 
@@ -2567,8 +2563,8 @@ msgstr "Pad"
 msgid "Pause hashing"
 msgstr "Hashen pauzeren"
 
-#: win32\HashProgressDlg.cpp:147 win32\QueueFrame.cpp:344
-#: win32\QueueFrame.cpp:875
+#: win32\HashProgressDlg.cpp:147 win32\QueueFrame.cpp:348
+#: win32\QueueFrame.cpp:879
 msgid "Paused"
 msgstr "Pauze"
 
@@ -2719,7 +2715,7 @@ msgstr "In wachtrij geplaatst"
 msgid "Queued files"
 msgstr "In wachtrij geplaatst"
 
-#: win32\MainWindow.cpp:782
+#: win32\MainWindow.cpp:785
 msgid "Quick Connect"
 msgstr "Snelle verbinding"
 
@@ -2736,7 +2732,7 @@ msgstr "Verhouding (up/down): %1$0.2f"
 msgid "Raw"
 msgstr "Raw"
 
-#: win32\QueueFrame.cpp:833 win32\QueueFrame.cpp:852
+#: win32\QueueFrame.cpp:837 win32\QueueFrame.cpp:856
 msgid "Re&check integrity"
 msgstr "Her%controleer integriteit"
 
@@ -2745,7 +2741,7 @@ msgstr "Her%controleer integriteit"
 msgid "Re&name"
 msgstr "Her&noemen"
 
-#: win32\QueueFrame.cpp:899
+#: win32\QueueFrame.cpp:903
 msgid "Re-add source"
 msgstr "Bron weer toevoegen"
 
@@ -2767,12 +2763,12 @@ msgstr "Bevestig sluiten?"
 msgid "Really close?"
 msgstr "Bevestig sluiten?"
 
-#: win32\MainWindow.cpp:922
+#: win32\MainWindow.cpp:925
 msgid "Really exit?"
 msgstr "Weet u zeker dat u DC++ wilt afsluiten?"
 
 #: win32\ADLSearchFrame.cpp:249 win32\FavHubsFrame.cpp:287
-#: win32\QueueFrame.cpp:595 win32\QueueFrame.cpp:600 win32\UsersFrame.cpp:435
+#: win32\QueueFrame.cpp:599 win32\QueueFrame.cpp:604 win32\UsersFrame.cpp:435
 msgid "Really remove?"
 msgstr "Weet u zeker dat u dit item wilt verwijderen?"
 
@@ -2781,15 +2777,15 @@ msgstr "Weet u zeker dat u dit item wilt verwijderen?"
 msgid "Received a redirect request to %1%, click here to follow it"
 msgstr ""
 
-#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:701
+#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:703
 msgid "Recent PMs"
 msgstr "Recente PBs"
 
-#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:702
+#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:704
 msgid "Recent file lists"
 msgstr "Recente bestandslijsten"
 
-#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:700
+#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:702
 msgid "Recent hubs"
 msgstr "Recente hubs"
 
@@ -2823,7 +2819,7 @@ msgid "Register with Windows to handle magnet: URI links"
 msgstr "Bij Windows registreren om magnet: links te verwerken"
 
 #: win32\ADLSearchFrame.cpp:45 win32\ADLSProperties.cpp:68
-#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1174
+#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1176
 msgid "Regular Expression"
 msgstr "Reguliere expressie"
 
@@ -2831,7 +2827,7 @@ msgstr "Reguliere expressie"
 msgid "Reliability"
 msgstr "Betrouwbaarheid"
 
-#: win32\QueueFrame.cpp:377 win32\TransferView.cpp:710
+#: win32\QueueFrame.cpp:381 win32\TransferView.cpp:710
 msgid "Remote client does not fully support TTH - cannot download"
 msgstr "Client ondersteunt TTH niet volledig- download gestopt"
 
@@ -2843,11 +2839,11 @@ msgstr "Alles verwijderen"
 msgid "Remove slow filelists"
 msgstr "Verwijder langzame bestandslijsten"
 
-#: win32\QueueFrame.cpp:908
+#: win32\QueueFrame.cpp:912
 msgid "Remove source"
 msgstr "Bron verwijderen"
 
-#: win32\QueueFrame.cpp:917 win32\WinUtil.cpp:1516 win32\UserInfoBase.h:154
+#: win32\QueueFrame.cpp:921 win32\WinUtil.cpp:1518 win32\UserInfoBase.h:154
 msgid "Remove user from queue"
 msgstr "Gebruiker uit wachtlijst verwijderen"
 
@@ -2876,7 +2872,7 @@ msgstr "Hashen pauzeren"
 msgid "Run in background"
 msgstr "In achtergrond uitvoeren"
 
-#: win32\QueueFrame.cpp:327
+#: win32\QueueFrame.cpp:331
 msgid "Running..."
 msgstr "Bezig..."
 
@@ -2885,7 +2881,7 @@ msgid "SOCKS5"
 msgstr "SOCKS5"
 
 #: win32\ConnectivityManualPage.cpp:112 win32\MainWindow.cpp:411
-#: win32\RichTextBox.cpp:99 win32\SearchFrame.cpp:112
+#: win32\RichTextBox.cpp:108 win32\SearchFrame.cpp:112
 #: win32\SearchFrame.cpp:165 win32\TabsPage.cpp:41
 msgid "Search"
 msgstr "Zoeken"
@@ -2992,7 +2988,7 @@ msgstr "Veiligheidscertificaten"
 msgid "Select &All\tCtrl+A"
 msgstr "&Alles selecteren\tCtrl+A"
 
-#: win32\MainWindow.cpp:869
+#: win32\MainWindow.cpp:872
 msgid "Select a favorite hub group"
 msgstr "Selecteer een favoriete hubgroep"
 
@@ -3032,11 +3028,11 @@ msgstr ""
 "Stel laagste prioriteit voor nieuw toegevoegde bestanden hoger in dan de "
 "grootte van de laagste prioriteit"
 
-#: win32\QueueFrame.cpp:874
+#: win32\QueueFrame.cpp:878
 msgid "Set priority"
 msgstr "Prioriteit wijzigen"
 
-#: win32\MainWindow.cpp:423 win32\MainWindow.cpp:1620
+#: win32\MainWindow.cpp:423 win32\MainWindow.cpp:1623
 #: win32\SettingsDialog.cpp:349
 msgid "Settings"
 msgstr "Instellingen"
@@ -3084,7 +3080,7 @@ msgstr "Systeemmenu"
 msgid "Shell menus"
 msgstr "Shell menus"
 
-#: win32\MainWindow.cpp:1617
+#: win32\MainWindow.cpp:1620
 msgid "Show"
 msgstr "Weergeven"
 
@@ -3100,7 +3096,7 @@ msgstr ""
 msgid "Show timestamps in chat by default"
 msgstr "Toon standaard tijd in chat"
 
-#: win32\DirectoryListingFrame.cpp:64 win32\MainWindow.cpp:1503
+#: win32\DirectoryListingFrame.cpp:64 win32\MainWindow.cpp:1506
 #: win32\QueueFrame.cpp:49 win32\SearchFrame.cpp:51 win32\SearchFrame.cpp:170
 #: win32\TransferView.cpp:69 win32\UploadPage.cpp:48
 msgid "Size"
@@ -3111,7 +3107,7 @@ msgid "Size Type"
 msgstr "Groottetype"
 
 #: win32\DirectoryListingFrame.cpp:1069 win32\DirectoryListingFrame.cpp:1086
-#: win32\QueueFrame.cpp:210 win32\QueueFrame.cpp:214
+#: win32\QueueFrame.cpp:217 win32\QueueFrame.cpp:221
 #, boost-format
 msgid "Size: %1%"
 msgstr "Grootte: %1%"
@@ -3162,7 +3158,7 @@ msgstr "Instellingen"
 msgid "Source Type"
 msgstr "Brontype"
 
-#: win32\QueueFrame.cpp:375
+#: win32\QueueFrame.cpp:379
 msgid "Source too slow"
 msgstr "Bron te langzaam"
 
@@ -3182,7 +3178,7 @@ msgstr "Zoektekst invoeren"
 msgid "Specify a server to connect to"
 msgstr "Doelserver waarmee moet worden verbonden aangeven"
 
-#: win32\RichTextBox.cpp:99
+#: win32\RichTextBox.cpp:108
 msgid "Specify search string"
 msgstr "Verduidelijk zoekterm"
 
@@ -3200,7 +3196,7 @@ msgstr "Snelheid: %1%/s"
 msgid "Start a search for this file"
 msgstr "Zoeken voor dit bestand starten"
 
-#: win32\QueueFrame.cpp:1068
+#: win32\QueueFrame.cpp:1072
 msgid "Started..."
 msgstr "Gestart..."
 
@@ -3221,11 +3217,11 @@ msgstr "Voor de laatste keer gebeurd"
 msgid "Status bar\tCtrl+3"
 msgstr "Statusbalk\tCtrl+3"
 
-#: win32\MainWindow.cpp:1055
+#: win32\MainWindow.cpp:1058
 msgid "Status: Available - Double-click to switch to Away"
 msgstr "Status: Beschikbaar - dubbelklik voor afwezig"
 
-#: win32\MainWindow.cpp:1054
+#: win32\MainWindow.cpp:1057
 msgid "Status: Away - Double-click to switch to Available"
 msgstr "Status: Afwezig - dubbelklik voor beschikbaar"
 
@@ -3284,12 +3280,12 @@ msgstr "Tabbladen"
 msgid "Tag"
 msgstr "Label"
 
-#: win32\MainWindow.cpp:1438
+#: win32\MainWindow.cpp:1441
 #, fuzzy, boost-format
 msgid "The %1% GeoIP database could not be updated"
 msgstr "GeoIP database-update"
 
-#: win32\MainWindow.cpp:1434
+#: win32\MainWindow.cpp:1437
 #, boost-format
 msgid "The %1% GeoIP database has been successfully updated"
 msgstr ""
@@ -3352,7 +3348,7 @@ msgstr "Naar"
 msgid "Toggle window when selecting an active tab"
 msgstr "Bij selectie van tab actieve venster omschakelen"
 
-#: win32\MainWindow.cpp:1497
+#: win32\MainWindow.cpp:1500
 msgid "Toolbar"
 msgstr "Werkbalk"
 
@@ -3413,17 +3409,12 @@ msgstr "Pad naar vertrouwde certificaten"
 msgid "Type"
 msgstr "Type"
 
-#: win32\MainWindow.cpp:1048
-#, boost-format
-msgid "U Lim: %1%/s"
-msgstr "U lim: %1%/s"
-
-#: win32\MainWindow.cpp:1033
+#: win32\MainWindow.cpp:1036
 #, boost-format
 msgid "U: %1%"
 msgstr "U: %1%"
 
-#: win32\MainWindow.cpp:1041
+#: win32\MainWindow.cpp:1044
 #, boost-format
 msgid "U: %1%/s (%2%)"
 msgstr "U: %1%/s (%2%)"
@@ -3432,7 +3423,7 @@ msgstr "U: %1%/s (%2%)"
 msgid "Un-ignore chat"
 msgstr ""
 
-#: win32\MainWindow.cpp:1192
+#: win32\MainWindow.cpp:1195
 #, boost-format
 msgid ""
 "Unable to open %1% port. Searching or file transfers will not work correctly "
@@ -3455,15 +3446,15 @@ msgstr "Met welke naam is file zichtbaar"
 msgid "Unfinished downloads directory"
 msgstr "Directory voor niet-voltooide downloads"
 
-#: win32\QueueFrame.cpp:1071
+#: win32\QueueFrame.cpp:1075
 msgid "Unfinished file not found"
 msgstr "Incompleet bestand niet gevonden"
 
-#: win32\QueueFrame.cpp:1074
+#: win32\QueueFrame.cpp:1078
 msgid "Unfinished file too small"
 msgstr "Incompleet bestand te klein"
 
-#: win32\QueueFrame.cpp:333 win32\QueueFrame.cpp:334
+#: win32\QueueFrame.cpp:337 win32\QueueFrame.cpp:338
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -3476,7 +3467,7 @@ msgstr "Onbekende instructie: %1%"
 msgid "Up one level"
 msgstr "Één niveau omhoog"
 
-#: win32\MainWindow.cpp:1420
+#: win32\MainWindow.cpp:1423
 #, boost-format
 msgid "Updating the %1% GeoIP database..."
 msgstr ""
@@ -3485,7 +3476,7 @@ msgstr ""
 msgid "Upload Slots"
 msgstr "Uploadslots"
 
-#: win32\MainWindow.cpp:720 win32\MainWindow.cpp:1622
+#: win32\MainWindow.cpp:722 win32\MainWindow.cpp:1625
 #, fuzzy
 msgid "Upload limit"
 msgstr "Uploadslots"
@@ -3499,7 +3490,7 @@ msgstr "Uploadlimit uitgeschakeld"
 msgid "Upload limit set to %1% KiB/s"
 msgstr "Uploadlimiet ingesteld op %d KiB/s"
 
-#: win32\MainWindow.cpp:1049
+#: win32\MainWindow.cpp:1052
 #, fuzzy, boost-format
 msgid "Upload limit: %1%/s - Click to adjust"
 msgstr "Uploadlimiet ingesteld op %d KiB/s"
@@ -3572,7 +3563,7 @@ msgstr "Gebruikeromschrijving"
 msgid "User Menu"
 msgstr "Gebruikersmenu"
 
-#: win32\QueueFrame.cpp:379
+#: win32\QueueFrame.cpp:383
 msgid "User certificate not trusted"
 msgstr "Gebruik niet goedgekeurde certificaten"
 
@@ -3594,7 +3585,7 @@ msgstr ""
 msgid "User matching definitions"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:1117 win32\QueueFrame.cpp:321
+#: win32\DirectoryListingFrame.cpp:1117 win32\QueueFrame.cpp:325
 msgid "User offline"
 msgstr "Gebruikeroffline"
 
@@ -3629,12 +3620,12 @@ msgstr ""
 msgid "Virtual name"
 msgstr "Virtuele naam"
 
-#: win32\QueueFrame.cpp:315
+#: win32\QueueFrame.cpp:319
 #, boost-format
 msgid "Waiting (%1% of %2% users online)"
 msgstr "Wachten (%1% van %2% gebruiker online)"
 
-#: win32\QueueFrame.cpp:313
+#: win32\QueueFrame.cpp:317
 msgid "Waiting (User online)"
 msgstr "Wachten (Gebruiker online)"
 
@@ -3747,3 +3738,9 @@ msgstr "s"
 #: win32\BandwidthLimitPage.cpp:100
 msgid "to"
 msgstr "naar"
+
+#~ msgid "D Lim: %1%/s"
+#~ msgstr "D lim: %1%/s"
+
+#~ msgid "U Lim: %1%/s"
+#~ msgstr "U lim: %1%/s"

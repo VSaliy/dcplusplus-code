@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: win32\n"
 "Report-Msgid-Bugs-To: dcplusplus-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-04-17 20:13+0200\n"
+"POT-Creation-Date: 2012-05-05 14:46+0200\n"
 "PO-Revision-Date: 2012-04-05 17:29+0000\n"
 "Last-Translator: Miha Gašperšič <mihec.gaspersic@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Launchpad-Export-Date: 2012-04-17 17:52+0000\n"
-"X-Generator: Launchpad (build 15099)\n"
+"X-Launchpad-Export-Date: 2012-05-05 11:57+0000\n"
+"X-Generator: Launchpad (build 15195)\n"
 
 #: win32\PublicHubsFrame.cpp:425
 msgid " from Coral"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "% transferred"
 msgstr "% prenešeno"
 
-#: win32\MainWindow.cpp:1302
+#: win32\MainWindow.cpp:1305
 #, boost-format
 msgid ""
 "%1%\n"
@@ -71,7 +71,7 @@ msgstr "%1% / %2% prezrtih virov: %3%"
 msgid "%1% dropped"
 msgstr "%1% opustiti"
 
-#: win32\QueueFrame.cpp:849 win32\TransferView.cpp:217 win32\WinUtil.cpp:834
+#: win32\QueueFrame.cpp:853 win32\TransferView.cpp:217 win32\WinUtil.cpp:834
 #: win32\FinishedFrameBase.h:455
 #, boost-format
 msgid "%1% files"
@@ -82,7 +82,7 @@ msgstr "%1% datotek"
 msgid "%1% files/h, %2% files left"
 msgstr "%1% datotek/h, %2% datotek ostalo"
 
-#: win32\MainWindow.cpp:1021
+#: win32\MainWindow.cpp:1024
 #, boost-format
 msgid "%1% free slots of %2% total upload slots"
 msgstr "%1% prostih mest od %2% skupaj rež shranjevanja"
@@ -116,7 +116,7 @@ msgstr "%1% preostalo"
 msgid "%1% port"
 msgstr "%1% vrata"
 
-#: win32\MainWindow.cpp:713
+#: win32\MainWindow.cpp:715
 #, boost-format
 msgid "%1% recent items will be saved from now on."
 msgstr ""
@@ -146,13 +146,14 @@ msgstr[3] "%1% uporabniki"
 msgid "%1% users"
 msgstr "%1% uporabnikov"
 
-#: win32\MainWindow.cpp:1020 win32\UserInfoBase.cpp:136
+#: win32\MainWindow.cpp:1023 win32\UserInfoBase.cpp:136
 #, boost-format
 msgid "%1%/%2%"
 msgstr "%1%/%2%"
 
-#: win32\MainWindow.cpp:743 win32\MainWindow.cpp:1036
-#: win32\MainWindow.cpp:1040 win32\TransferView.cpp:630
+#: win32\MainWindow.cpp:746 win32\MainWindow.cpp:1039
+#: win32\MainWindow.cpp:1043 win32\MainWindow.cpp:1047
+#: win32\MainWindow.cpp:1051 win32\TransferView.cpp:630
 #: win32\TransferView.cpp:682 win32\UsersFrame.cpp:73
 #: win32\FinishedFrameBase.h:566
 #, boost-format
@@ -183,7 +184,7 @@ msgstr "&Dodaj mapo"
 msgid "&Add to the list"
 msgstr "&Dodaj na seznam"
 
-#: win32\WinUtil.cpp:1501 win32\UserInfoBase.h:144
+#: win32\WinUtil.cpp:1503 win32\UserInfoBase.h:144
 msgid "&Browse file list"
 msgstr "&Brskaj po seznamu datotek"
 
@@ -205,7 +206,7 @@ msgstr "&Zapri"
 msgid "&Configure"
 msgstr "&Nastavi"
 
-#: win32\MainWindow.cpp:667
+#: win32\MainWindow.cpp:669
 msgid "&Configure..."
 msgstr "&Nastavi ..."
 
@@ -214,7 +215,7 @@ msgstr "&Nastavi ..."
 msgid "&Connect"
 msgstr "&Poveži"
 
-#: win32\HubFrame.cpp:1164
+#: win32\HubFrame.cpp:1164 win32\RichTextBox.cpp:101
 msgid "&Copy"
 msgstr "&Kopiraj"
 
@@ -222,7 +223,7 @@ msgstr "&Kopiraj"
 msgid "&Copy\tCtrl+C"
 msgstr "&Kopiraj\tCtrl+C"
 
-#: win32\MainWindow.cpp:1499
+#: win32\MainWindow.cpp:1502
 msgid "&Customize\tDouble-click"
 msgstr "&Uredi\tdvojni klik"
 
@@ -264,7 +265,7 @@ msgstr "Priljubljena vozlišča (hubi)"
 msgid "&File"
 msgstr "&Datoteka"
 
-#: win32\RichTextBox.cpp:92
+#: win32\RichTextBox.cpp:93
 #, fuzzy
 msgid "&Find...\tCtrl+F"
 msgstr "&Išči\tCtrl+S"
@@ -273,7 +274,7 @@ msgstr "&Išči\tCtrl+S"
 msgid "&Force attempt"
 msgstr "&Prisilni poskus"
 
-#: win32\QueueFrame.cpp:885 win32\WinUtil.cpp:1498 win32\UserInfoBase.h:143
+#: win32\QueueFrame.cpp:889 win32\WinUtil.cpp:1500 win32\UserInfoBase.h:143
 msgid "&Get file list"
 msgstr "&Poišči seznam datotek"
 
@@ -285,12 +286,12 @@ msgstr "&Pojdi v mapo"
 msgid "&Help"
 msgstr "&Pomoč"
 
-#: win32\MainWindow.cpp:1515
+#: win32\MainWindow.cpp:1518
 #, fuzzy
 msgid "&Hide\tCtrl+1"
 msgstr "&Išči\tCtrl+S"
 
-#: win32\WinUtil.cpp:1504 win32\UserInfoBase.h:145
+#: win32\WinUtil.cpp:1506 win32\UserInfoBase.h:145
 msgid "&Match queue"
 msgstr "Primerjaj ujemanje s čakalno vrsto"
 
@@ -299,7 +300,7 @@ msgstr "Primerjaj ujemanje s čakalno vrsto"
 msgid "&Move to group"
 msgstr ""
 
-#: win32\QueueFrame.cpp:832 win32\QueueFrame.cpp:851 win32\QueueFrame.cpp:867
+#: win32\QueueFrame.cpp:836 win32\QueueFrame.cpp:855 win32\QueueFrame.cpp:871
 msgid "&Move/Rename"
 msgstr "&Premakni/Preimenuj"
 
@@ -312,7 +313,7 @@ msgstr "&Novo ..."
 msgid "&Notepad\tCtrl+N"
 msgstr "&Beležnica\tCtrl+N"
 
-#: win32\RichTextBox.cpp:166 win32\SystemFrame.cpp:126
+#: win32\RichTextBox.cpp:100 win32\SystemFrame.cpp:126
 #: win32\FinishedFrameBase.h:458
 msgid "&Open"
 msgstr "&Odpri"
@@ -347,7 +348,7 @@ msgstr "&Osveži"
 #: win32\ADLSearchFrame.cpp:109 win32\ADLSearchFrame.cpp:320
 #: win32\FavHubGroupsDlg.cpp:101 win32\FavHubsFrame.cpp:126
 #: win32\FavHubsFrame.cpp:355 win32\FavoriteDirsPage.cpp:78
-#: win32\QueueFrame.cpp:841 win32\QueueFrame.cpp:855 win32\QueueFrame.cpp:869
+#: win32\QueueFrame.cpp:845 win32\QueueFrame.cpp:859 win32\QueueFrame.cpp:873
 #: win32\SearchFrame.cpp:796 win32\SearchTypesPage.cpp:94
 #: win32\StringListDlg.cpp:160 win32\UCPage.cpp:76 win32\UploadPage.cpp:90
 #: win32\UserMatchPage.cpp:98 win32\UsersFrame.cpp:463
@@ -363,7 +364,7 @@ msgstr "&Iskanje"
 msgid "&Search\tCtrl+S"
 msgstr "&Išči\tCtrl+S"
 
-#: win32\QueueFrame.cpp:892 win32\WinUtil.cpp:1507 win32\UserInfoBase.h:147
+#: win32\QueueFrame.cpp:896 win32\WinUtil.cpp:1509 win32\UserInfoBase.h:147
 msgid "&Send private message"
 msgstr "&Pošlji zasebno sporočilo"
 
@@ -394,7 +395,7 @@ msgstr "&Glej kot besedilo"
 msgid "&Window"
 msgstr "&Okno"
 
-#: win32\MainWindow.cpp:674
+#: win32\MainWindow.cpp:676
 msgid "(No recent item found)"
 msgstr ""
 
@@ -412,7 +413,7 @@ msgstr "-.-- datotek/h, %1% datotek ostalo"
 msgid "-:--:--"
 msgstr "-:--:--"
 
-#: win32\WinUtil.cpp:1432
+#: win32\WinUtil.cpp:1434
 msgid ""
 "A MAGNET link was given to DC++, but it didn't contain a valid file hash for "
 "use on the Direct Connect network.  No action will be taken."
@@ -444,7 +445,7 @@ msgid "Accept custom user commands from hub"
 msgstr "Dovoli neobičajne ukaze uporabnikov iz vozlišča (huba)"
 
 #: win32\HubFrame.cpp:1180 win32\PublicHubsFrame.cpp:335
-#: win32\WinUtil.cpp:1510 win32\UserInfoBase.h:149
+#: win32\WinUtil.cpp:1512 win32\UserInfoBase.h:149
 msgid "Add To &Favorites"
 msgstr "Dodaj k priljubljenim"
 
@@ -461,7 +462,7 @@ msgid "Added"
 msgstr "Dodano"
 
 #: win32\FavHubProperties.cpp:76 win32\HubListsDlg.cpp:52
-#: win32\MainWindow.cpp:782 win32\PublicHubsFrame.cpp:44
+#: win32\MainWindow.cpp:785 win32\PublicHubsFrame.cpp:44
 msgid "Address"
 msgstr "Naslov"
 
@@ -469,11 +470,11 @@ msgstr "Naslov"
 msgid "Advanced"
 msgstr "Napredno"
 
-#: win32\QueueFrame.cpp:900 win32\QueueFrame.cpp:909 win32\WinUtil.cpp:1465
+#: win32\QueueFrame.cpp:904 win32\QueueFrame.cpp:913 win32\WinUtil.cpp:1467
 msgid "All"
 msgstr "Vse"
 
-#: win32\QueueFrame.cpp:323
+#: win32\QueueFrame.cpp:327
 #, boost-format
 msgid "All %1% users offline"
 msgstr "Vsi %1% uporabniki odsotni"
@@ -706,7 +707,7 @@ msgstr "CID"
 msgid "CRC Checked"
 msgstr "CRC preverjen"
 
-#: win32\QueueFrame.cpp:371
+#: win32\QueueFrame.cpp:375
 msgid "CRC32 inconsistency (SFV-Check)"
 msgstr "CRC32 neskadnost (SFV-preverjanje)"
 
@@ -714,7 +715,7 @@ msgstr "CRC32 neskadnost (SFV-preverjanje)"
 msgid "Cached hub list is corrupted or unsupported"
 msgstr ""
 
-#: win32\WinUtil.cpp:1136
+#: win32\WinUtil.cpp:1137
 msgid "Cancel"
 msgstr "Prekliči"
 
@@ -774,7 +775,7 @@ msgstr "Zapri vse okna s seznami datotek"
 msgid "Close all hubs"
 msgstr "Zaprite vse razdelilnike"
 
-#: win32\MainWindow.cpp:349 win32\MainWindow.cpp:1465
+#: win32\MainWindow.cpp:349 win32\MainWindow.cpp:1468
 msgid "Close all hubs of a favorite group"
 msgstr "Zaprite vse razdelilnike priljubljene skupine"
 
@@ -790,7 +791,7 @@ msgstr "Zapri vsa iskalna okna"
 msgid "Close disconnected hubs"
 msgstr "Zaprite izklopljene razdelilnike"
 
-#: win32\MainWindow.cpp:350 win32\MainWindow.cpp:1465
+#: win32\MainWindow.cpp:350 win32\MainWindow.cpp:1468
 #, fuzzy
 msgid "Close hubs not in a favorite group"
 msgstr "To vozlišče (hub) ni med priljubljenimi"
@@ -861,12 +862,12 @@ msgstr "Poveži"
 msgid "Connect to a favorite hub &group...\tCtrl+G"
 msgstr ""
 
-#: win32\MainWindow.cpp:801
+#: win32\MainWindow.cpp:804
 #, fuzzy
 msgid "Connect to a favorite hub group"
 msgstr "Potrjevanje odstranitve priljubljenih vozlišč (hubov)"
 
-#: win32\MainWindow.cpp:646
+#: win32\MainWindow.cpp:648
 msgid "Connect to all hubs in this group"
 msgstr ""
 
@@ -967,26 +968,21 @@ msgstr "Pisava po meri"
 msgid "Custom text color"
 msgstr ""
 
-#: win32\MainWindow.cpp:752
+#: win32\MainWindow.cpp:755
 msgid "Custom..."
 msgstr "Po meri ..."
 
-#: win32\MainWindow.cpp:1044
-#, fuzzy, boost-format
-msgid "D Lim: %1%/s"
-msgstr "D: %1%"
-
-#: win32\MainWindow.cpp:1029
+#: win32\MainWindow.cpp:1032
 #, boost-format
 msgid "D: %1%"
 msgstr "D: %1%"
 
-#: win32\MainWindow.cpp:1037
+#: win32\MainWindow.cpp:1040
 #, boost-format
 msgid "D: %1%/s (%2%)"
 msgstr "D: %1%/s (%2%)"
 
-#: win32\MainWindow.cpp:1640
+#: win32\MainWindow.cpp:1643
 #, boost-format
 msgid ""
 "D: %1%/s (%2%)\r\n"
@@ -995,7 +991,7 @@ msgstr ""
 "D: %1%/s (%2%)\r\n"
 "U: %3%/s (%4%)"
 
-#: win32\MainWindow.cpp:606
+#: win32\MainWindow.cpp:608
 #, boost-format
 msgid "DC++ - %1%"
 msgstr "DC++ - %1%"
@@ -1063,7 +1059,7 @@ msgstr "Mapa"
 msgid "Directory or directory name already exists"
 msgstr "Mapa ali ime mape že obstaja"
 
-#: win32\MainWindow.cpp:743
+#: win32\MainWindow.cpp:746
 msgid "Disabled"
 msgstr "Onemogočeno"
 
@@ -1133,7 +1129,7 @@ msgstr "Prispevaj (preko sistema Paypal)"
 msgid "Done"
 msgstr "Končano"
 
-#: win32\QueueFrame.cpp:1086
+#: win32\QueueFrame.cpp:1090
 msgid "Done."
 msgstr "Opravljeno."
 
@@ -1162,7 +1158,7 @@ msgstr "Prejem je končan"
 msgid "Download full list"
 msgstr ""
 
-#: win32\MainWindow.cpp:720 win32\MainWindow.cpp:1621
+#: win32\MainWindow.cpp:722 win32\MainWindow.cpp:1624
 #, fuzzy
 msgid "Download limit"
 msgstr "Odjemanja"
@@ -1177,7 +1173,7 @@ msgstr "Odjemanja"
 msgid "Download limit set to %1% KiB/s"
 msgstr "Odjemanja"
 
-#: win32\MainWindow.cpp:1045
+#: win32\MainWindow.cpp:1048
 #, fuzzy, boost-format
 msgid "Download limit: %1%/s - Click to adjust"
 msgstr "Odjemanja"
@@ -1248,7 +1244,7 @@ msgstr "Odjemanje..."
 msgid "Downloads"
 msgstr "Odjemanja"
 
-#: win32\QueueFrame.cpp:1077
+#: win32\QueueFrame.cpp:1081
 msgid "Downloads running, please disconnect them"
 msgstr ""
 
@@ -1331,7 +1327,7 @@ msgstr ""
 msgid "Error processing version information"
 msgstr "Osebni podatki"
 
-#: win32\WinUtil.cpp:1359
+#: win32\WinUtil.cpp:1361
 #, fuzzy, boost-format
 msgid "Error registering %1%:// link handler"
 msgstr "Napaka pri kreiranju magnetnega registerskega ključa"
@@ -1358,7 +1354,7 @@ msgstr ""
 "DC++ je zaščitena znamka pod GPL\n"
 "http://dcplusplus.sourceforge.net/"
 
-#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1174
+#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1176
 msgid "Exact match"
 msgstr "Točno ujemanje"
 
@@ -1371,7 +1367,7 @@ msgstr "Natančna velikost"
 msgid "Example hub tab"
 msgstr ""
 
-#: win32\MainWindow.cpp:1624
+#: win32\MainWindow.cpp:1627
 msgid "Exit"
 msgstr "Izhod"
 
@@ -1478,11 +1474,11 @@ msgstr "Temeljito pregledovanje datotek:"
 msgid "File List"
 msgstr "Seznam datotek"
 
-#: win32\QueueFrame.cpp:435 win32\WinUtil.cpp:844
+#: win32\QueueFrame.cpp:439 win32\WinUtil.cpp:844
 msgid "File Lists"
 msgstr "Seznami datotek"
 
-#: win32\QueueFrame.cpp:1083
+#: win32\QueueFrame.cpp:1087
 #, fuzzy
 msgid "File is already finished"
 msgstr "Skrij datoteke, ki jih že delim"
@@ -1492,7 +1488,7 @@ msgstr "Skrij datoteke, ki jih že delim"
 msgid "File list downloaded"
 msgstr "Seznam vozlišč (hubov) naložen... (%1%)"
 
-#: win32\QueueFrame.cpp:367
+#: win32\QueueFrame.cpp:371
 msgid "File not available"
 msgstr "Datoteka ni na voljo"
 
@@ -1523,7 +1519,7 @@ msgid "Files"
 msgstr "Datoteke"
 
 #: win32\DirectoryListingFrame.cpp:1068 win32\DirectoryListingFrame.cpp:1084
-#: win32\QueueFrame.cpp:213
+#: win32\QueueFrame.cpp:220
 #, boost-format
 msgid "Files: %1%"
 msgstr "Datotek: %1%"
@@ -1561,7 +1557,7 @@ msgstr "Filter:"
 msgid "Find"
 msgstr "Poišči"
 
-#: win32\RichTextBox.cpp:93
+#: win32\RichTextBox.cpp:94
 msgid "Find &Next\tF3"
 msgstr ""
 
@@ -1578,7 +1574,7 @@ msgstr "Najdi naslednje"
 msgid "Find previous"
 msgstr "Najdi prejšnje"
 
-#: win32\QueueFrame.cpp:329
+#: win32\QueueFrame.cpp:333
 msgid "Finished"
 msgstr "Končano"
 
@@ -1617,7 +1613,7 @@ msgstr "Pogosto zastavljana vprašanja (FAQ)"
 msgid "Full Path"
 msgstr "Celotna pot"
 
-#: win32\QueueFrame.cpp:373
+#: win32\QueueFrame.cpp:377
 msgid "Full tree does not match TTH root"
 msgstr "Celotno drevo se ne ujema v TTH"
 
@@ -1660,7 +1656,7 @@ msgstr "GiB"
 msgid "Global application style"
 msgstr "Potrjevanje izhoda iz programa"
 
-#: win32\WinUtil.cpp:1513 win32\UserInfoBase.h:150
+#: win32\WinUtil.cpp:1515 win32\UserInfoBase.h:150
 msgid "Grant &extra slot"
 msgstr "Odpri izredno režo"
 
@@ -1700,7 +1696,7 @@ msgstr "HTTP Proxy (samo za hubliste)"
 msgid "Height of the message editing box"
 msgstr ""
 
-#: win32\WinUtil.cpp:1147
+#: win32\WinUtil.cpp:1149
 msgid "Help"
 msgstr "Pomoč"
 
@@ -1720,7 +1716,7 @@ msgstr "Skriti uporabnik"
 msgid "Hide files already in share"
 msgstr "Skrij datoteke, ki jih že delim"
 
-#: win32\QueueFrame.cpp:348 win32\QueueFrame.cpp:879
+#: win32\QueueFrame.cpp:352 win32\QueueFrame.cpp:883
 msgid "High"
 msgstr "Visoka"
 
@@ -1728,7 +1724,7 @@ msgstr "Visoka"
 msgid "High prio max size"
 msgstr "Velika prio velikost"
 
-#: win32\QueueFrame.cpp:349 win32\QueueFrame.cpp:880
+#: win32\QueueFrame.cpp:353 win32\QueueFrame.cpp:884
 msgid "Highest"
 msgstr "Najvišja"
 
@@ -1823,7 +1819,7 @@ msgstr "Vozlišča (hubi)"
 msgid "Hubs (registered)"
 msgstr ""
 
-#: win32\MainWindow.cpp:1016 win32\PublicHubsFrame.cpp:245
+#: win32\MainWindow.cpp:1019 win32\PublicHubsFrame.cpp:245
 #: win32\UserInfoBase.cpp:102
 #, boost-format
 msgid "Hubs: %1%"
@@ -1848,7 +1844,7 @@ msgstr "IP (v4)"
 msgid "IP (v6)"
 msgstr "IP (v6)"
 
-#: win32\MainWindow.cpp:1410
+#: win32\MainWindow.cpp:1413
 msgid ""
 "IP -> country mappings are disabled. Turn them back on via Settings > "
 "Appearance."
@@ -1898,7 +1894,7 @@ msgstr "Odsotni način izključen"
 msgid "Indexing progress"
 msgstr "Napredovanje kreiranja seznama datotek"
 
-#: win32\QueueFrame.cpp:1043
+#: win32\QueueFrame.cpp:1047
 #, boost-format
 msgid "Integrity check: %1% (%2%)"
 msgstr ""
@@ -1908,7 +1904,7 @@ msgstr ""
 msgid "Invalid extension: %1%"
 msgstr ""
 
-#: win32\MainWindow.cpp:1205
+#: win32\MainWindow.cpp:1208
 msgid "Invalid file list name"
 msgstr "Napačno ime seznama datotek"
 
@@ -1920,7 +1916,7 @@ msgstr "Napačna številka reže (slota)"
 msgid "Item edition"
 msgstr ""
 
-#: win32\QueueFrame.cpp:209
+#: win32\QueueFrame.cpp:216
 #, boost-format
 msgid "Items: %1%"
 msgstr "Predmetov: %1%"
@@ -2082,7 +2078,7 @@ msgstr "Dnevniki"
 msgid "Lookup TTH at Bitzi.com"
 msgstr "Preglej TTH na strani Bitzi.com"
 
-#: win32\QueueFrame.cpp:346 win32\QueueFrame.cpp:877
+#: win32\QueueFrame.cpp:350 win32\QueueFrame.cpp:881
 msgid "Low"
 msgstr "Nizko"
 
@@ -2090,7 +2086,7 @@ msgstr "Nizko"
 msgid "Low prio max size"
 msgstr "Največja velikost nizke prioritete"
 
-#: win32\QueueFrame.cpp:345 win32\QueueFrame.cpp:876
+#: win32\QueueFrame.cpp:349 win32\QueueFrame.cpp:880
 msgid "Lowest"
 msgstr "Najnižja"
 
@@ -2098,7 +2094,7 @@ msgstr "Najnižja"
 msgid "M&odify"
 msgstr "Spr&emeni"
 
-#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1433
+#: win32\MagnetDlg.cpp:122 win32\WinUtil.cpp:1435
 msgid "MAGNET Link detected"
 msgstr "MAGNETNA povezava zaznana"
 
@@ -2208,7 +2204,7 @@ msgstr "Max vzporednih odjemanj (0 = neskončno)"
 msgid "Maximum Upload Rate (KiB/s) (0 = infinite)"
 msgstr "Max vzporednih odjemanj (0 = neskončno)"
 
-#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:709
+#: win32\HistoryPage.cpp:86 win32\MainWindow.cpp:711
 msgid "Maximum number of recent items to save"
 msgstr ""
 
@@ -2322,7 +2318,7 @@ msgstr "Povprečno: %1%"
 msgid "Network Statistics"
 msgstr "Statistika omrežja"
 
-#: win32\MainWindow.cpp:754
+#: win32\MainWindow.cpp:757
 #, fuzzy
 msgid "New limit (KiB/s) (0 = infinite)"
 msgstr "Max vzporednih odjemanj (0 = neskončno)"
@@ -2361,16 +2357,16 @@ msgstr "Ne"
 msgid "No away message"
 msgstr ""
 
-#: win32\QueueFrame.cpp:384
+#: win32\QueueFrame.cpp:388
 msgid "No errors"
 msgstr "Brez napak"
 
-#: win32\MainWindow.cpp:861
+#: win32\MainWindow.cpp:864
 #, fuzzy
 msgid "No favorite hub group found"
 msgstr "Priljubljeno vozlišče (hub) odstranjeno"
 
-#: win32\QueueFrame.cpp:1080
+#: win32\QueueFrame.cpp:1084
 #, fuzzy
 msgid "No full tree available"
 msgstr "Datoteka ni na voljo"
@@ -2393,11 +2389,11 @@ msgstr "Meja za pavziranje novih odjemanj (KiB/s, 0 = onemogočeno)"
 msgid "No transfers yet"
 msgstr "Še nobenih odjemanj"
 
-#: win32\QueueFrame.cpp:307
+#: win32\QueueFrame.cpp:311
 msgid "No users"
 msgstr "Ni uporabnikov"
 
-#: win32\QueueFrame.cpp:319
+#: win32\QueueFrame.cpp:323
 msgid "No users to download from"
 msgstr "Ni uporabnikov za odjemanje"
 
@@ -2406,7 +2402,7 @@ msgstr "Ni uporabnikov za odjemanje"
 msgid "Noon"
 msgstr "Ne"
 
-#: win32\QueueFrame.cpp:347 win32\QueueFrame.cpp:878 win32\SearchFrame.cpp:180
+#: win32\QueueFrame.cpp:351 win32\QueueFrame.cpp:882 win32\SearchFrame.cpp:180
 msgid "Normal"
 msgstr "Navadno"
 
@@ -2479,7 +2475,7 @@ msgstr "Odpri mapo"
 msgid "Open crash log"
 msgstr ""
 
-#: win32\MainWindow.cpp:297 win32\MainWindow.cpp:1618
+#: win32\MainWindow.cpp:297 win32\MainWindow.cpp:1621
 msgid "Open downloads directory"
 msgstr "Odpri mapo odjemanj"
 
@@ -2552,7 +2548,7 @@ msgstr "Parametri"
 msgid "Partial file list loaded"
 msgstr ""
 
-#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1174
+#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1176
 msgid "Partial match"
 msgstr ""
 
@@ -2565,7 +2561,7 @@ msgstr ""
 msgid "Passive mode (last resort - has serious limitations)"
 msgstr ""
 
-#: win32\QueueFrame.cpp:369
+#: win32\QueueFrame.cpp:373
 msgid "Passive user"
 msgstr "Pasiven uporabnik"
 
@@ -2583,8 +2579,8 @@ msgstr "Pot"
 msgid "Pause hashing"
 msgstr ""
 
-#: win32\HashProgressDlg.cpp:147 win32\QueueFrame.cpp:344
-#: win32\QueueFrame.cpp:875
+#: win32\HashProgressDlg.cpp:147 win32\QueueFrame.cpp:348
+#: win32\QueueFrame.cpp:879
 msgid "Paused"
 msgstr "Zadržano"
 
@@ -2737,7 +2733,7 @@ msgstr "V čakalni vrsti"
 msgid "Queued files"
 msgstr "V čakalni vrsti"
 
-#: win32\MainWindow.cpp:782
+#: win32\MainWindow.cpp:785
 msgid "Quick Connect"
 msgstr "Hitro povezovanje"
 
@@ -2754,7 +2750,7 @@ msgstr "Razmerje (gor/dol): %1$0.2f"
 msgid "Raw"
 msgstr "Surov"
 
-#: win32\QueueFrame.cpp:833 win32\QueueFrame.cpp:852
+#: win32\QueueFrame.cpp:837 win32\QueueFrame.cpp:856
 msgid "Re&check integrity"
 msgstr ""
 
@@ -2764,7 +2760,7 @@ msgstr ""
 msgid "Re&name"
 msgstr "Preimenuj"
 
-#: win32\QueueFrame.cpp:899
+#: win32\QueueFrame.cpp:903
 msgid "Re-add source"
 msgstr "Ponovno dodaj izvor"
 
@@ -2787,12 +2783,12 @@ msgstr "Ali res želite odstraniti?"
 msgid "Really close?"
 msgstr "Ali res želite odstraniti?"
 
-#: win32\MainWindow.cpp:922
+#: win32\MainWindow.cpp:925
 msgid "Really exit?"
 msgstr "Ali res želite zapreti program?"
 
 #: win32\ADLSearchFrame.cpp:249 win32\FavHubsFrame.cpp:287
-#: win32\QueueFrame.cpp:595 win32\QueueFrame.cpp:600 win32\UsersFrame.cpp:435
+#: win32\QueueFrame.cpp:599 win32\QueueFrame.cpp:604 win32\UsersFrame.cpp:435
 msgid "Really remove?"
 msgstr "Ali res želite odstraniti?"
 
@@ -2801,16 +2797,16 @@ msgstr "Ali res želite odstraniti?"
 msgid "Received a redirect request to %1%, click here to follow it"
 msgstr ""
 
-#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:701
+#: win32\HistoryPage.cpp:92 win32\MainWindow.cpp:703
 msgid "Recent PMs"
 msgstr ""
 
-#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:702
+#: win32\HistoryPage.cpp:95 win32\MainWindow.cpp:704
 #, fuzzy
 msgid "Recent file lists"
 msgstr "&Poišči seznam datotek"
 
-#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:700
+#: win32\HistoryPage.cpp:89 win32\MainWindow.cpp:702
 msgid "Recent hubs"
 msgstr ""
 
@@ -2846,7 +2842,7 @@ msgid "Register with Windows to handle magnet: URI links"
 msgstr "Naj Windowsi upravljajo z magnetnimi: URI linki"
 
 #: win32\ADLSearchFrame.cpp:45 win32\ADLSProperties.cpp:68
-#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1174
+#: win32\UserMatchPage.cpp:211 win32\WinUtil.cpp:1176
 msgid "Regular Expression"
 msgstr ""
 
@@ -2854,7 +2850,7 @@ msgstr ""
 msgid "Reliability"
 msgstr "Zanesljivost"
 
-#: win32\QueueFrame.cpp:377 win32\TransferView.cpp:710
+#: win32\QueueFrame.cpp:381 win32\TransferView.cpp:710
 msgid "Remote client does not fully support TTH - cannot download"
 msgstr "Oddaljeni klient ne podpira TTH - ni možno odjemanje datotek"
 
@@ -2866,11 +2862,11 @@ msgstr "Odstrani vse"
 msgid "Remove slow filelists"
 msgstr "Zavrzi počasne sezname datotek"
 
-#: win32\QueueFrame.cpp:908
+#: win32\QueueFrame.cpp:912
 msgid "Remove source"
 msgstr "Odstrani vir"
 
-#: win32\QueueFrame.cpp:917 win32\WinUtil.cpp:1516 win32\UserInfoBase.h:154
+#: win32\QueueFrame.cpp:921 win32\WinUtil.cpp:1518 win32\UserInfoBase.h:154
 msgid "Remove user from queue"
 msgstr "Odstrani uporabnika iz čakalne vrste"
 
@@ -2899,7 +2895,7 @@ msgstr ""
 msgid "Run in background"
 msgstr "Deluj v ozadju"
 
-#: win32\QueueFrame.cpp:327
+#: win32\QueueFrame.cpp:331
 msgid "Running..."
 msgstr "Izvajanje..."
 
@@ -2908,7 +2904,7 @@ msgid "SOCKS5"
 msgstr "SOCKS5"
 
 #: win32\ConnectivityManualPage.cpp:112 win32\MainWindow.cpp:411
-#: win32\RichTextBox.cpp:99 win32\SearchFrame.cpp:112
+#: win32\RichTextBox.cpp:108 win32\SearchFrame.cpp:112
 #: win32\SearchFrame.cpp:165 win32\TabsPage.cpp:41
 msgid "Search"
 msgstr "Iskanje"
@@ -3018,7 +3014,7 @@ msgstr "Varnostni certifikat"
 msgid "Select &All\tCtrl+A"
 msgstr ""
 
-#: win32\MainWindow.cpp:869
+#: win32\MainWindow.cpp:872
 msgid "Select a favorite hub group"
 msgstr ""
 
@@ -3059,11 +3055,11 @@ msgstr ""
 "Nastavi nizko prioriteto za novo dodane datokeke večje kot največja velikost "
 "nizke prioritete"
 
-#: win32\QueueFrame.cpp:874
+#: win32\QueueFrame.cpp:878
 msgid "Set priority"
 msgstr "Nastavi prioriteto"
 
-#: win32\MainWindow.cpp:423 win32\MainWindow.cpp:1620
+#: win32\MainWindow.cpp:423 win32\MainWindow.cpp:1623
 #: win32\SettingsDialog.cpp:349
 msgid "Settings"
 msgstr "Nastavitve"
@@ -3112,7 +3108,7 @@ msgstr ""
 msgid "Shell menus"
 msgstr ""
 
-#: win32\MainWindow.cpp:1617
+#: win32\MainWindow.cpp:1620
 msgid "Show"
 msgstr "Pokaži"
 
@@ -3128,7 +3124,7 @@ msgstr ""
 msgid "Show timestamps in chat by default"
 msgstr "Prikaži uro v pogovorih in hubih kot privzeto"
 
-#: win32\DirectoryListingFrame.cpp:64 win32\MainWindow.cpp:1503
+#: win32\DirectoryListingFrame.cpp:64 win32\MainWindow.cpp:1506
 #: win32\QueueFrame.cpp:49 win32\SearchFrame.cpp:51 win32\SearchFrame.cpp:170
 #: win32\TransferView.cpp:69 win32\UploadPage.cpp:48
 msgid "Size"
@@ -3139,7 +3135,7 @@ msgid "Size Type"
 msgstr "Tip velikosti"
 
 #: win32\DirectoryListingFrame.cpp:1069 win32\DirectoryListingFrame.cpp:1086
-#: win32\QueueFrame.cpp:210 win32\QueueFrame.cpp:214
+#: win32\QueueFrame.cpp:217 win32\QueueFrame.cpp:221
 #, boost-format
 msgid "Size: %1%"
 msgstr "Velikost: %1%"
@@ -3190,7 +3186,7 @@ msgstr "Nastavitve"
 msgid "Source Type"
 msgstr "Vrsta vira"
 
-#: win32\QueueFrame.cpp:375
+#: win32\QueueFrame.cpp:379
 msgid "Source too slow"
 msgstr "Vir je prepočasen"
 
@@ -3210,7 +3206,7 @@ msgstr "Določi iskalni niz"
 msgid "Specify a server to connect to"
 msgstr "Določi strežnik za povezavo"
 
-#: win32\RichTextBox.cpp:99
+#: win32\RichTextBox.cpp:108
 #, fuzzy
 msgid "Specify search string"
 msgstr "Določi iskalni niz"
@@ -3229,7 +3225,7 @@ msgstr "Hitrost: %1%/s"
 msgid "Start a search for this file"
 msgstr "Najdi to datoteko"
 
-#: win32\QueueFrame.cpp:1068
+#: win32\QueueFrame.cpp:1072
 #, fuzzy
 msgid "Started..."
 msgstr "V souporabi"
@@ -3251,11 +3247,11 @@ msgstr "Zadnjič viden"
 msgid "Status bar\tCtrl+3"
 msgstr ""
 
-#: win32\MainWindow.cpp:1055
+#: win32\MainWindow.cpp:1058
 msgid "Status: Available - Double-click to switch to Away"
 msgstr ""
 
-#: win32\MainWindow.cpp:1054
+#: win32\MainWindow.cpp:1057
 msgid "Status: Away - Double-click to switch to Available"
 msgstr ""
 
@@ -3315,12 +3311,12 @@ msgstr "Zavihki"
 msgid "Tag"
 msgstr "Oznaka"
 
-#: win32\MainWindow.cpp:1438
+#: win32\MainWindow.cpp:1441
 #, fuzzy, boost-format
 msgid "The %1% GeoIP database could not be updated"
 msgstr "Nadgradnja GeoIP podatkovne baze"
 
-#: win32\MainWindow.cpp:1434
+#: win32\MainWindow.cpp:1437
 #, boost-format
 msgid "The %1% GeoIP database has been successfully updated"
 msgstr ""
@@ -3376,7 +3372,7 @@ msgstr "Za"
 msgid "Toggle window when selecting an active tab"
 msgstr "Premakni okno kadar izberem aktivno vrstico"
 
-#: win32\MainWindow.cpp:1497
+#: win32\MainWindow.cpp:1500
 msgid "Toolbar"
 msgstr ""
 
@@ -3438,17 +3434,12 @@ msgstr "Pot zaupnih certifikatov"
 msgid "Type"
 msgstr "Tip"
 
-#: win32\MainWindow.cpp:1048
-#, fuzzy, boost-format
-msgid "U Lim: %1%/s"
-msgstr "U: %1%"
-
-#: win32\MainWindow.cpp:1033
+#: win32\MainWindow.cpp:1036
 #, boost-format
 msgid "U: %1%"
 msgstr "U: %1%"
 
-#: win32\MainWindow.cpp:1041
+#: win32\MainWindow.cpp:1044
 #, boost-format
 msgid "U: %1%/s (%2%)"
 msgstr "U: %1%/s (%2%)"
@@ -3457,7 +3448,7 @@ msgstr "U: %1%/s (%2%)"
 msgid "Un-ignore chat"
 msgstr ""
 
-#: win32\MainWindow.cpp:1192
+#: win32\MainWindow.cpp:1195
 #, fuzzy, boost-format
 msgid ""
 "Unable to open %1% port. Searching or file transfers will not work correctly "
@@ -3480,15 +3471,15 @@ msgstr "Pod kakšnim imenom ti vidiš ta direktorij"
 msgid "Unfinished downloads directory"
 msgstr "Mapa za nedokončana odjemanja"
 
-#: win32\QueueFrame.cpp:1071
+#: win32\QueueFrame.cpp:1075
 msgid "Unfinished file not found"
 msgstr ""
 
-#: win32\QueueFrame.cpp:1074
+#: win32\QueueFrame.cpp:1078
 msgid "Unfinished file too small"
 msgstr ""
 
-#: win32\QueueFrame.cpp:333 win32\QueueFrame.cpp:334
+#: win32\QueueFrame.cpp:337 win32\QueueFrame.cpp:338
 msgid "Unknown"
 msgstr "Neznan"
 
@@ -3501,7 +3492,7 @@ msgstr "Neznani ukaz: %1%"
 msgid "Up one level"
 msgstr ""
 
-#: win32\MainWindow.cpp:1420
+#: win32\MainWindow.cpp:1423
 #, boost-format
 msgid "Updating the %1% GeoIP database..."
 msgstr ""
@@ -3511,7 +3502,7 @@ msgstr ""
 msgid "Upload Slots"
 msgstr "Reže(sloti) za oddajanja"
 
-#: win32\MainWindow.cpp:720 win32\MainWindow.cpp:1622
+#: win32\MainWindow.cpp:722 win32\MainWindow.cpp:1625
 #, fuzzy
 msgid "Upload limit"
 msgstr "Reže(sloti) za oddajanja"
@@ -3526,7 +3517,7 @@ msgstr "Reže(sloti) za oddajanja"
 msgid "Upload limit set to %1% KiB/s"
 msgstr "Odjemanja"
 
-#: win32\MainWindow.cpp:1049
+#: win32\MainWindow.cpp:1052
 #, boost-format
 msgid "Upload limit: %1%/s - Click to adjust"
 msgstr ""
@@ -3603,7 +3594,7 @@ msgstr "Uporabniški opis"
 msgid "User Menu"
 msgstr "Uporabniški meni"
 
-#: win32\QueueFrame.cpp:379
+#: win32\QueueFrame.cpp:383
 #, fuzzy
 msgid "User certificate not trusted"
 msgstr "Generanje certifikata"
@@ -3626,7 +3617,7 @@ msgstr ""
 msgid "User matching definitions"
 msgstr ""
 
-#: win32\DirectoryListingFrame.cpp:1117 win32\QueueFrame.cpp:321
+#: win32\DirectoryListingFrame.cpp:1117 win32\QueueFrame.cpp:325
 msgid "User offline"
 msgstr "Uporabnik odsoten"
 
@@ -3661,12 +3652,12 @@ msgstr ""
 msgid "Virtual name"
 msgstr "Navidezno ime"
 
-#: win32\QueueFrame.cpp:315
+#: win32\QueueFrame.cpp:319
 #, boost-format
 msgid "Waiting (%1% of %2% users online)"
 msgstr "Čakam (%1% od %2% uporabnikov priključenih)"
 
-#: win32\QueueFrame.cpp:313
+#: win32\QueueFrame.cpp:317
 msgid "Waiting (User online)"
 msgstr "Čakam (Uporabnik priključen)"
 
