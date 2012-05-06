@@ -130,7 +130,7 @@ public:
 	GETSET(HintedUser, user, User)
 
 	/// @remarks Used to add ADLSearch directories to an existing DirectoryListing
-	void matchListing(DirectoryListing& aDirList) noexcept;
+	void matchListing(DirectoryListing& aDirList);
 
 private:
 	// Recurse through the directories and files of a directory.
