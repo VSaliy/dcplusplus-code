@@ -171,7 +171,7 @@ void DebugFrame::addLine(const tstring& msg) {
 }
 
 void DebugFrame::addDbgLine(const string& cmd) {
-	callAsync([=] { cmdList.push_back(cmd); });
+	cmdList.push_back(cmd);
 	
 	auto x = Util::emptyString;
 	{		
