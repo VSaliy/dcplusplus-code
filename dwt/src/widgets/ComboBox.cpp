@@ -62,6 +62,10 @@ tstring ComboBox::getValue( int index ) {
 	return retVal;
 }
 
+int ComboBox::findString(const tstring& text) {
+	return ComboBox_FindStringExact(handle(), -1, text.c_str()); 
+}
+
 Point ComboBox::getPreferredSize() {
 	// Pixels between text and arrow
 	const int MARGIN = 2;

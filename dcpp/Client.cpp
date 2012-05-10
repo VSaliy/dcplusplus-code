@@ -22,6 +22,7 @@
 #include "BufferedSocket.h"
 #include "ClientManager.h"
 #include "ConnectivityManager.h"
+#include "DebugManager.h"
 #include "FavoriteManager.h"
 #include "TimerManager.h"
 #include "UserMatchManager.h"
@@ -121,6 +122,7 @@ void Client::send(const char* aMessage, size_t aLen) {
 	}
 	updateActivity();
 	sock->write(aMessage, aLen);
+	COMMAND_DEBUG(aMessage, DebugManager::HUB_OUT, getIpPort());
 }
 
 void Client::on(Connected) noexcept {
@@ -227,8 +229,9 @@ void Client::updated(OnlineUserList& users) {
 	fire(ClientListener::UsersUpdated(), this, users);
 }
 
-void Client::on(Line, const string& /*aLine*/) noexcept {
+void Client::on(Line, const string& aLine) noexcept {
 	updateActivity();
+	COMMAND_DEBUG(aLine, DebugManager::HUB_IN, getIpPort());
 }
 
 void Client::on(Second, uint64_t aTick) noexcept {
