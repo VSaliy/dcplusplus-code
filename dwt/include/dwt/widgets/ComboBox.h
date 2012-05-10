@@ -110,6 +110,11 @@ public:
 	  */
 	tstring getValue( int index );
 
+	/** Finds the first string in a combo box list that exactly matches the specified string,
+	 * except that the search is not case sensitive.
+	 */
+	int findString(const tstring& text);
+
 	/// Actually creates the ComboBox Control
 	/** You should call WidgetFactory::createComboBox if you instantiate class
 	  * directly. <br>

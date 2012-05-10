@@ -1093,9 +1093,6 @@ void AdcHub::on(Line l, const string& aLine) noexcept {
 		return;
 	}
 
-	if(BOOLSETTING(ADC_DEBUG)) {
-		fire(ClientListener::StatusMessage(), this, "<ADC>" + aLine + "</ADC>");
-	}
 	dispatch(aLine);
 }
 

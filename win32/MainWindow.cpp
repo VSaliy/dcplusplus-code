@@ -78,6 +78,7 @@
 #include "StatsFrame.h"
 #include "SystemFrame.h"
 #include "UsersFrame.h"
+#include "DebugFrame.h"
 
 #ifdef HAVE_HTMLHELP_H
 #include <htmlhelp.h>
@@ -332,6 +333,8 @@ void MainWindow::initMenu() {
 			[this] { NotepadFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_NOTEPAD));
 		viewIndexes[SystemFrame::id] = viewMenu->appendItem(T_("System Log"),
 			[this] { SystemFrame::openWindow(getTabView()); });
+		viewIndexes[DebugFrame::id] = viewMenu->appendItem(T_("Debug Messages"),
+			[this] { DebugFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_DCPP));
 		viewIndexes[StatsFrame::id] = viewMenu->appendItem(T_("Network Statistics"),
 			[this] { StatsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_NET_STATS));
 		viewMenu->appendItem(T_("Indexing progress"), [this] { handleHashProgress(); }, WinUtil::menuIcon(IDI_INDEXING));
