@@ -22,7 +22,6 @@
 #include <dcpp/Client.h>
 #include <dcpp/ClientManagerListener.h>
 #include <dcpp/DebugManager.h>
-#include <dcpp/Semaphore.h>
 
 #include <deque>
 
@@ -30,7 +29,7 @@
 
 using std::deque;
 
-class DebugFrame : public StaticFrame<DebugFrame>, public Thread,
+class DebugFrame : public StaticFrame<DebugFrame>,
 	private DebugManagerListener,
 	private ClientManagerListener
 {
@@ -47,45 +46,8 @@ public:
 	static const string id;
 	const string& getId() const;
 	
-	void addLine(const tstring& msg);
-
 private:
-	bool stop;
-	CriticalSection cs;
-	Semaphore s;
 	deque<string> cmdList;
-
-	int run() {
-		setThreadPriority(Thread::LOW);
-		string x = Util::emptyString;
-		stop = false;
-
-		while(true) {
-			s.wait();
-			if(stop)
-				break;
-
-			{
-				Lock l(cs);
-				if(cmdList.empty()) continue;
-
-				x = cmdList.front();
-				cmdList.pop_front();
-			}
-			addLine(Text::toT(x));
-		}
-		
-		stop = false;
-		return 0;
-	}
-
-	void addDbgLine(const string& cmd) {
-		{
-			Lock l(cs);
-			cmdList.push_back(cmd);
-		}
-		s.signal();
-	}
 
 	struct HubInfo : public FastAlloc<HubInfo> {
 		HubInfo(const tstring& aIp) : ip(aIp) { }
@@ -111,6 +73,10 @@ private:
 
 	void layout();
 	void updateStatus();
+	
+	void addLine(const tstring& msg);
+	void addDbgLine(const string& cmd);
+	
 	bool preClosing();
 	
 	void clearMessages();
@@ -120,41 +86,6 @@ private:
 
 	bool handleKeyDown(int c);
 	
-	void on(DebugManagerListener::DebugCommand, const string& aLine, int cmdType, const string& ip) throw() {
-			auto url = hubs->getText();
-			switch(cmdType) {
-				case DebugManager::HUB_IN:
-						if(!showHubMsg)
-							return;
-						if(!filterByHub || Text::toT(ip) == url) {
-							addDbgLine("From Hub:\t\t<" + ip + ">\t \t" + aLine);
-						}
-					break;
-				case DebugManager::HUB_OUT:
-						if(!showHubMsg)
-							return;
-						if(!filterByHub || Text::toT(ip) == url) {
-							addDbgLine("To Hub:\t\t<" + ip + ">\t \t" + aLine);
-						}
-					break;
-				case DebugManager::CLIENT_IN:
-						if(!showClientMsg)
-							return;
-						if(!filterByHub || Text::toT(ip) == url) {
-							addDbgLine("From Client:\t\t<" + ip + ">\t \t" + aLine);
-						}
-					break;
-				case DebugManager::CLIENT_OUT:
-						if(!showClientMsg)
-							return;
-						if(!filterByHub || Text::toT(ip) == url) {
-							addDbgLine("To Client:\t\t<" + ip + ">\t \t" + aLine);
-						}
-					break;
-				default: dcassert(0);
-			}
-	}
-
 	// ClientManagerListener
 	virtual void on(ClientConnected, Client* c) noexcept;
 	virtual void on(ClientDisconnected, Client* c) noexcept;
@@ -163,7 +94,7 @@ private:
 	void onHubRemoved(HubInfo* info);
 
 	// DebugManagerListener
-	virtual void on(DebugCommand, const string& message) noexcept;
+	virtual void on(DebugManagerListener::DebugCommand, const string& aLine, int cmdType, const string& ip) noexcept;
 
 };
 

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #include "stdafx.h"
 
 #include "DebugFrame.h"
@@ -123,8 +123,7 @@ hubs(0)
 	}
 	
 	updateStatus();
-	
-	start();
+
 	DebugManager::getInstance()->addListener(this);	
 }
 
@@ -171,12 +170,23 @@ void DebugFrame::addLine(const tstring& msg) {
 	setDirty(SettingsManager::BOLD_SYSTEM_LOG);
 }
 
+void DebugFrame::addDbgLine(const string& cmd) {
+	callAsync([=] { cmdList.push_back(cmd); });
+	
+	auto x = Util::emptyString;
+	{		
+		if(cmdList.empty())
+			return;
+			
+		x = cmdList.front();
+		cmdList.pop_front();
+	}	
+	callAsync([=] { addLine(Text::toT(x)); });
+}
+
 bool DebugFrame::preClosing() {
 	ClientManager::getInstance()->removeListener(this);
 	DebugManager::getInstance()->removeListener(this);	
-	
-	stop = true;
-	s.signal();
 		
 	return true;
 }
@@ -229,6 +239,37 @@ void DebugFrame::onHubRemoved(HubInfo* info) {
 	hubs->erase(idx);
 }
 
-void DebugFrame::on(DebugCommand, const string& message) noexcept {
-	callAsync([=] { addLine(Text::toT(message)); });
+void DebugFrame::on(DebugCommand, const string& aLine, int cmdType, const string& ip) noexcept {
+	auto url = hubs->getText();
+	switch(cmdType) {
+		case DebugManager::HUB_IN:
+			if(!showHubMsg)
+				return;
+			if(!filterByHub || Text::toT(ip) == url) {
+				callAsync([=] { addDbgLine("From Hub:\t\t<" + ip + ">\t \t" + aLine); });
+			}
+			break;
+		case DebugManager::HUB_OUT:
+			if(!showHubMsg)
+				return;
+			if(!filterByHub || Text::toT(ip) == url) {
+				callAsync([=] { addDbgLine("To Hub:\t\t<" + ip + ">\t \t" + aLine); });
+			}
+			break;
+		case DebugManager::CLIENT_IN:
+			if(!showClientMsg)
+				return;
+			if(!filterByHub || Text::toT(ip) == url) {
+				callAsync([=] { addDbgLine("From Client:\t\t<" + ip + ">\t \t" + aLine); });
+			}
+			break;
+		case DebugManager::CLIENT_OUT:
+			if(!showClientMsg)
+				return;
+			if(!filterByHub || Text::toT(ip) == url) {
+				callAsync([=] { addDbgLine("To Client:\t\t<" + ip + ">\t \t" + aLine); });
+			}
+			break;
+		default: dcassert(0);
+	}
 }
