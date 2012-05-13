@@ -123,7 +123,7 @@ Widget::CallbackIter Widget::setCallback(const Message& msg, const CallbackType&
 	return --callbacks.end();
 }
 
-void Widget::clearCallback(const Message& msg, CallbackIter& i) {
+void Widget::clearCallback(const Message& msg, const CallbackIter& i) {
 	CallbackList& callbacks = handlers[msg];
 	callbacks.erase(i);
 }
