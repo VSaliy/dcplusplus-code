@@ -61,7 +61,7 @@ public:
 	ConvertBase(const typename BaseType::F& f_) : BaseType(f_) { }
 
 	bool operator()(const MSG& msg, LRESULT& ret) const {
-		f((*C)(msg));
+		this->f((*C)(msg));
 		ret = value;
 		return handled;
 	}
@@ -73,7 +73,7 @@ struct VoidVoid : public Base<void ()> {
 	VoidVoid(const F& f_) : Base<void ()>(f_) { }
 
 	bool operator()(const MSG& msg, LRESULT& ret) const {
-		f();
+		this->f();
 		ret = value;
 		return handled;
 	}

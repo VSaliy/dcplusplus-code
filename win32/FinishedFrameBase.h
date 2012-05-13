@@ -105,7 +105,7 @@ protected:
 		{
 			files = filesWindow->addChild(typename WidgetFiles::Seed(WinUtil::Seeds::table));
 			files->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
-			addWidget(files);
+			this->addWidget(files);
 
 			WinUtil::makeColumns(files, filesColumns, FILES_COLUMN_LAST, SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_ORDER : SettingsManager::FINISHED_DL_FILES_ORDER),
 				SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_WIDTHS : SettingsManager::FINISHED_DL_FILES_WIDTHS));
@@ -121,7 +121,7 @@ protected:
 		{
 			users = usersWindow->addChild(typename WidgetUsers::Seed(WinUtil::Seeds::table));
 			users->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
-			addWidget(users);
+			this->addWidget(users);
 
 			WinUtil::makeColumns(users, usersColumns, USERS_COLUMN_LAST, SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_ORDER : SettingsManager::FINISHED_DL_USERS_ORDER),
 				SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_WIDTHS : SettingsManager::FINISHED_DL_USERS_WIDTHS));
@@ -675,41 +675,41 @@ private:
 
 	virtual void on(AddedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) noexcept {
 		if(upload == in_UL)
-			callAsync([=] { this->onAddedFile(file, entry); });
+			this->callAsync([=] { this->onAddedFile(file, entry); });
 	}
 
 	virtual void on(AddedUser, bool upload, const HintedUser& user, const FinishedUserItemPtr& entry) noexcept {
 		if(upload == in_UL)
-			callAsync([=] { this->onAddedUser(user, entry); });
+			this->callAsync([=] { this->onAddedUser(user, entry); });
 	}
 
 	virtual void on(UpdatedFile, bool upload, const string& file, const FinishedFileItemPtr& entry) noexcept {
 		if(upload == in_UL) {
 			if(bOnlyFull && entry->isFull())
-				callAsync([=] { this->onAddedFile(file, entry); });
+				this->callAsync([=] { this->onAddedFile(file, entry); });
 			else
-				callAsync([=] { this->onUpdatedFile(file); });
+				this->callAsync([=] { this->onUpdatedFile(file); });
 		}
 	}
 
 	virtual void on(UpdatedUser, bool upload, const HintedUser& user) noexcept {
 		if(upload == in_UL)
-			callAsync([=] { this->onUpdatedUser(user); });
+			this->callAsync([=] { this->onUpdatedUser(user); });
 	}
 
 	virtual void on(RemovedFile, bool upload, const string& file) noexcept {
 		if(upload == in_UL)
-			callAsync([=] { this->onRemovedFile(file); });
+			this->callAsync([=] { this->onRemovedFile(file); });
 	}
 
 	virtual void on(RemovedUser, bool upload, const HintedUser& user) noexcept {
 		if(upload == in_UL)
-			callAsync([=] { this->onRemovedUser(user); });
+			this->callAsync([=] { this->onRemovedUser(user); });
 	}
 
 	virtual void on(RemovedAll, bool upload) noexcept {
 		if(upload == in_UL)
-			callAsync([=] { this->onRemovedAll(); });
+			this->callAsync([=] { this->onRemovedAll(); });
 	}
 };
 

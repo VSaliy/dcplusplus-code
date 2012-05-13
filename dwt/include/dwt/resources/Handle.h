@@ -84,7 +84,7 @@ protected:
 
 	virtual ~Handle() {
 		if(owned && h != Policy::NULL_HANDLE)
-			release(h);
+			this->release(h);
 	}
 
 private:

@@ -119,7 +119,7 @@ public:
 	CallbackIter setCallback(const Message& msg, const CallbackType& callback);
 
 	/// Clear a callback registered to msg
-	void clearCallback(const Message& msg, CallbackIter& i);
+	void clearCallback(const Message& msg, const CallbackIter& i);
 
 	/** Run a function bound to this widget asynchronously */
 	void callAsync(const Application::Callback& f);
