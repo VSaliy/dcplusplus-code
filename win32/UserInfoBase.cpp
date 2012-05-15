@@ -86,11 +86,9 @@ void UserInfoBase::ignoreChat(bool ignore) {
 }
 
 tstring UserInfoBase::getTooltip() const {
-	auto priv = keepHub();
-
 	static const size_t maxChars = 100; // max chars per tooltip line
 
-	tstring ret(WinUtil::getNicks(user, priv));
+	tstring ret(WinUtil::getNicks(user));
 	dwt::util::cutStr(ret, maxChars);
 
 	auto addLine = [&ret](tstring line) {
@@ -98,11 +96,10 @@ tstring UserInfoBase::getTooltip() const {
 		ret += _T("\r\n") + line;
 	};
 
-	if(!hubSet)
-		addLine(str(TF_("Hubs: %1%") % WinUtil::getHubNames(user, priv).first));
+	addLine(str(TF_("Hubs: %1%") % WinUtil::getHubNames(user).first));
 
 	auto lock = ClientManager::getInstance()->lock();
-	auto ou = ClientManager::getInstance()->findOnlineUser(user, priv);
+	auto ou = ClientManager::getInstance()->findOnlineUser(user);
 	if(!ou)
 		return ret;
 	const Identity& id = ou->getIdentity();
@@ -140,10 +137,6 @@ tstring UserInfoBase::getTooltip() const {
 	return ret;
 }
 
-bool UserInfoBase::keepHub() const {
-	return hubSet || FavoriteManager::getInstance()->isPrivate(user.hint);
-}
-
 UserTraits::UserTraits() :
 Flags(adcOnly | favOnly | nonFavOnly | chatIgnoredOnly | chatNotIgnoredOnly)
 {
@@ -161,9 +154,8 @@ void UserTraits::parse(const UserInfoBase* ui) {
 		unsetFlag(favOnly);
 	}
 
-	auto priv = ui->keepHub();
 	auto lock = ClientManager::getInstance()->lock();
-	auto ou = ClientManager::getInstance()->findOnlineUser(ui->getUser(), priv);
+	auto ou = ClientManager::getInstance()->findOnlineUser(ui->getUser());
 	if(ou) {
 		if(ou->getIdentity().noChat()) {
 			unsetFlag(chatNotIgnoredOnly);

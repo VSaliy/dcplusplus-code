@@ -119,7 +119,7 @@ private:
 
 	void updateFromTag(Identity& id, const string& tag);
 
-	virtual string checkNick(const string& aNick);
+	virtual void checkNick(string& nick);
 	virtual bool v4only() const { return true; }
 
 	// TimerManagerListener

@@ -93,12 +93,13 @@ public:
 	bool isFavoriteHub(const std::string& aUrl);
 	FavoriteHubEntryPtr getFavoriteHubEntry(const string& aServer) const;
 
+	void mergeHubSettings(const FavoriteHubEntry& entry, HubSettings& settings) const;
+
 // Favorite hub groups
 	const FavHubGroups& getFavHubGroups() const { return favHubGroups; }
 	void setFavHubGroups(const FavHubGroups& favHubGroups_) { favHubGroups = favHubGroups_; }
 
 	FavoriteHubEntryList getFavoriteHubs(const string& group) const;
-	bool isPrivate(const string& url) const;
 
 // Favorite Directories
 	bool addFavoriteDir(const string& aDirectory, const string& aName);

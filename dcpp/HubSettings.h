@@ -16,17 +16,35 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_FAVHUBGROUP_H
-#define DCPLUSPLUS_DCPP_FAVHUBGROUP_H
+#ifndef DCPLUSPLUS_DCPP_HUBSETTINGS_H
+#define DCPLUSPLUS_DCPP_HUBSETTINGS_H
 
-#include <unordered_map>
+#include <string>
 
-#include "HubSettings.h"
+#include "GetSet.h"
+#include "SimpleXML.h"
 
 namespace dcpp {
 
-typedef std::unordered_map<string, HubSettings> FavHubGroups;
-typedef FavHubGroups::value_type FavHubGroup;
+using std::string;
+
+/** Stores settings to be applied to a hub. There are 3 HubSettings levels in DC++: global; per
+favorite hub group; per favorite hub entry. */
+struct HubSettings
+{
+	/** Apply a set of sub-settings that may override current ones. Strings are overridden when not
+	null. */
+	void merge(const HubSettings& sub);
+
+	void load(SimpleXML& xml);
+	void save(SimpleXML& xml) const;
+
+	GETSET(string, nick, Nick);
+	GETSET(string, description, Description);
+	GETSET(string, email, Email);
+
+	friend class Client;
+};
 
 } // namespace dcpp
 

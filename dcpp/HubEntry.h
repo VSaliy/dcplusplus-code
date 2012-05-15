@@ -21,8 +21,8 @@
 
 #include <string>
 
-#include "SettingsManager.h"
 #include "GetSet.h"
+#include "HubSettings.h"
 
 namespace dcpp {
 
@@ -64,32 +64,19 @@ public:
 	GETSET(int, maxUsers, MaxUsers);
 };
 
-class FavoriteHubEntry {
+class FavoriteHubEntry : public HubSettings {
 public:
 	FavoriteHubEntry() : encoding(Text::systemCharset) { }
 	FavoriteHubEntry(const HubEntry& rhs) : name(rhs.getName()), server(rhs.getServer()),
-		description(rhs.getDescription()), encoding(Text::systemCharset) { }
-	FavoriteHubEntry(const FavoriteHubEntry& rhs) : userdescription(rhs.userdescription),
-		name(rhs.getName()), server(rhs.getServer()), description(rhs.getDescription()),
-		password(rhs.getPassword()), encoding(rhs.getEncoding()), group(rhs.getGroup()), nick(rhs.nick) { }
+		hubDescription(rhs.getDescription()), encoding(Text::systemCharset) { }
 	~FavoriteHubEntry() { }
 
-	const string& getNick(bool useDefault = true) const {
-		return (!nick.empty() || !useDefault) ? nick : SETTING(NICK);
-	}
-
-	void setNick(const string& aNick) { nick = aNick; }
-
-	GETSET(string, userdescription, UserDescription);
 	GETSET(string, name, Name);
 	GETSET(string, server, Server);
-	GETSET(string, description, Description);
+	GETSET(string, hubDescription, HubDescription);
 	GETSET(string, password, Password);
 	GETSET(string, encoding, Encoding);
 	GETSET(string, group, Group);
-
-private:
-	string nick;
 };
 
 }

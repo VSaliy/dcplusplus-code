@@ -80,62 +80,32 @@ size_t ClientManager::getUserCount() const {
 }
 
 StringList ClientManager::getHubUrls(const CID& cid, const string& hintUrl) {
-	return getHubUrls(cid, hintUrl, FavoriteManager::getInstance()->isPrivate(hintUrl));
+	Lock l(cs);
+	StringList lst;
+	OnlinePairC op = onlineUsers.equal_range(cid);
+	for(auto i = op.first; i != op.second; ++i) {
+		lst.push_back(i->second->getClient().getHubUrl());
+	}
+	return lst;
 }
 
 StringList ClientManager::getHubNames(const CID& cid, const string& hintUrl) {
-	return getHubNames(cid, hintUrl, FavoriteManager::getInstance()->isPrivate(hintUrl));
+	Lock l(cs);
+	StringList lst;
+	OnlinePairC op = onlineUsers.equal_range(cid);
+	for(auto i = op.first; i != op.second; ++i) {
+		lst.push_back(i->second->getClient().getHubName());
+	}
+	return lst;
 }
 
 StringList ClientManager::getNicks(const CID& cid, const string& hintUrl) {
-	return getNicks(cid, hintUrl, FavoriteManager::getInstance()->isPrivate(hintUrl));
-}
-
-StringList ClientManager::getHubUrls(const CID& cid, const string& hintUrl, bool priv) {
-	Lock l(cs);
-	StringList lst;
-	if(!priv) {
-		OnlinePairC op = onlineUsers.equal_range(cid);
-		for(auto i = op.first; i != op.second; ++i) {
-			lst.push_back(i->second->getClient().getHubUrl());
-		}
-	} else {
-		OnlineUser* u = findOnlineUserHint(cid, hintUrl);
-		if(u)
-			lst.push_back(u->getClient().getHubUrl());
-	}
-	return lst;
-}
-
-StringList ClientManager::getHubNames(const CID& cid, const string& hintUrl, bool priv) {
-	Lock l(cs);
-	StringList lst;
-	if(!priv) {
-		OnlinePairC op = onlineUsers.equal_range(cid);
-		for(auto i = op.first; i != op.second; ++i) {
-			lst.push_back(i->second->getClient().getHubName());
-		}
-	} else {
-		OnlineUser* u = findOnlineUserHint(cid, hintUrl);
-		if(u)
-			lst.push_back(u->getClient().getHubName());
-	}
-	return lst;
-}
-
-StringList ClientManager::getNicks(const CID& cid, const string& hintUrl, bool priv) {
 	Lock l(cs);
 	StringSet ret;
 
-	if(!priv) {
-		OnlinePairC op = onlineUsers.equal_range(cid);
-		for(auto i = op.first; i != op.second; ++i) {
-			ret.insert(i->second->getIdentity().getNick());
-		}
-	} else {
-		OnlineUser* u = findOnlineUserHint(cid, hintUrl);
-		if(u)
-			ret.insert(u->getIdentity().getNick());
+	OnlinePairC op = onlineUsers.equal_range(cid);
+	for(auto i = op.first; i != op.second; ++i) {
+		ret.insert(i->second->getIdentity().getNick());
 	}
 
 	if(ret.empty()) {
@@ -151,18 +121,12 @@ StringList ClientManager::getNicks(const CID& cid, const string& hintUrl, bool p
 	return StringList(ret.begin(), ret.end());
 }
 
-StringPairList ClientManager::getHubs(const CID& cid, const string& hintUrl, bool priv) {
+StringPairList ClientManager::getHubs(const CID& cid, const string& hintUrl) {
 	Lock l(cs);
 	StringPairList lst;
-	if(!priv) {
-		auto op = onlineUsers.equal_range(cid);
-		for(auto i = op.first; i != op.second; ++i) {
-			lst.push_back(make_pair(i->second->getClient().getHubUrl(), i->second->getClient().getHubName()));
-		}
-	} else {
-		OnlineUser* u = findOnlineUserHint(cid, hintUrl);
-		if(u)
-			lst.push_back(make_pair(u->getClient().getHubUrl(), u->getClient().getHubName()));
+	auto op = onlineUsers.equal_range(cid);
+	for(auto i = op.first; i != op.second; ++i) {
+		lst.push_back(make_pair(i->second->getClient().getHubUrl(), i->second->getClient().getHubName()));
 	}
 	return lst;
 }
@@ -395,11 +359,11 @@ OnlineUser* ClientManager::findOnlineUserHint(const CID& cid, const string& hint
 	return 0;
 }
 
-OnlineUser* ClientManager::findOnlineUser(const HintedUser& user, bool priv) {
-	return findOnlineUser(user.user->getCID(), user.hint, priv);
+OnlineUser* ClientManager::findOnlineUser(const HintedUser& user) {
+	return findOnlineUser(user.user->getCID(), user.hint);
 }
 
-OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl, bool priv) {
+OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl) {
 	OnlinePairC p;
 	OnlineUser* u = findOnlineUserHint(cid, hintUrl, p);
 	if(u) // found an exact match (CID + hint).
@@ -408,19 +372,18 @@ OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl,
 	if(p.first == p.second) // no user found with the given CID.
 		return 0;
 
-	// if the hint hub is private, don't allow connecting to the same user from another hub.
-	if(priv)
-		return 0;
-
-	// ok, hub not private, return a random user that matches the given CID but not the hint.
+	// return a random user that matches the given CID but not the hint.
 	return p.first->second;
 }
 
-void ClientManager::connect(const HintedUser& user, const string& token) {
-	bool priv = FavoriteManager::getInstance()->isPrivate(user.hint);
+OnlineUser* ClientManager::findOnlineUserHint(const CID& cid, const string& hintUrl) const {
+	OnlinePairC p;
+	return findOnlineUserHint(cid, hintUrl, p);
+}
 
+void ClientManager::connect(const HintedUser& user, const string& token) {
 	Lock l(cs);
-	OnlineUser* u = findOnlineUser(user, priv);
+	OnlineUser* u = findOnlineUser(user);
 
 	if(u) {
 		u->getClient().connect(*u, token);
@@ -428,10 +391,8 @@ void ClientManager::connect(const HintedUser& user, const string& token) {
 }
 
 void ClientManager::privateMessage(const HintedUser& user, const string& msg, bool thirdPerson) {
-	bool priv = FavoriteManager::getInstance()->isPrivate(user.hint);
-
 	Lock l(cs);
-	OnlineUser* u = findOnlineUser(user, priv);
+	OnlineUser* u = findOnlineUser(user);
 
 	if(u) {
 		u->getClient().privateMessage(*u, msg, thirdPerson);
@@ -440,12 +401,12 @@ void ClientManager::privateMessage(const HintedUser& user, const string& msg, bo
 
 void ClientManager::userCommand(const HintedUser& user, const UserCommand& uc, ParamMap& params, bool compatibility) {
 	Lock l(cs);
-	/** @todo we allow wrong hints for now ("false" param of findOnlineUser) because users
+	/** @todo we allow wrong hints for now because users
 	 * extracted from search results don't always have a correct hint; see
 	 * SearchManager::onRES(const AdcCommand& cmd, ...). when that is done, and SearchResults are
 	 * switched to storing only reliable HintedUsers (found with the token of the ADC command),
 	 * change this call to findOnlineUserHint. */
-	OnlineUser* ou = findOnlineUser(user.user->getCID(), user.hint.empty() ? uc.getHub() : user.hint, false);
+	OnlineUser* ou = findOnlineUser(user.user->getCID(), user.hint.empty() ? uc.getHub() : user.hint);
 	if(!ou)
 		return;
 

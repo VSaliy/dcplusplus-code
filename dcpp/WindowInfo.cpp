@@ -21,8 +21,6 @@
 
 namespace dcpp {
 
-const string WindowInfo::address = "Address";
-
 WindowInfo::WindowInfo(const string& id_, const WindowParams& params_) :
 id(id_),
 params(params_)

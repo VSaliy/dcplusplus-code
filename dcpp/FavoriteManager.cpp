@@ -21,7 +21,6 @@
 
 #include "ClientManager.h"
 #include "CryptoManager.h"
-#include "WindowManager.h"
 
 #include "HttpConnection.h"
 #include "StringTokenizer.h"
@@ -352,20 +351,18 @@ void FavoriteManager::save() {
 		for(auto& i: favHubGroups) {
 			xml.addTag("Group");
 			xml.addChildAttrib("Name", i.first);
-			xml.addChildAttrib("Private", i.second.priv);
-			xml.addChildAttrib("Connect", i.second.connect);
+			i.second.save(xml);
 		}
 
 		for(auto& i: favoriteHubs) {
 			xml.addTag("Hub");
 			xml.addChildAttrib("Name", i->getName());
-			xml.addChildAttrib("Description", i->getDescription());
-			xml.addChildAttrib("Nick", i->getNick(false));
+			xml.addChildAttrib("Description", i->getHubDescription());
 			xml.addChildAttrib("Password", i->getPassword());
 			xml.addChildAttrib("Server", i->getServer());
-			xml.addChildAttrib("UserDescription", i->getUserDescription());
 			xml.addChildAttrib("Encoding", i->getEncoding());
 			xml.addChildAttrib("Group", i->getGroup());
+			i->save(xml);
 		}
 
 		xml.stepOut();
@@ -463,48 +460,25 @@ void FavoriteManager::load(SimpleXML& aXml) {
 			string name = aXml.getChildAttrib("Name");
 			if(name.empty())
 				continue;
-			FavHubGroupProperties props = { aXml.getBoolChildAttrib("Private"), aXml.getBoolChildAttrib("Connect") };
-			favHubGroups[name] = props;
+			HubSettings settings;
+			settings.load(aXml);
+			favHubGroups[name] = std::move(settings);
 		}
 
 		aXml.resetCurrentChild();
 		while(aXml.findChild("Hub")) {
 			FavoriteHubEntry* e = new FavoriteHubEntry();
 			e->setName(aXml.getChildAttrib("Name"));
-			e->setDescription(aXml.getChildAttrib("Description"));
-			e->setNick(aXml.getChildAttrib("Nick"));
+			e->setHubDescription(aXml.getChildAttrib("Description"));
 			e->setPassword(aXml.getChildAttrib("Password"));
 			e->setServer(aXml.getChildAttrib("Server"));
-			e->setUserDescription(aXml.getChildAttrib("UserDescription"));
 			e->setEncoding(aXml.getChildAttrib("Encoding"));
 			e->setGroup(aXml.getChildAttrib("Group"));
+			e->load(aXml);
 			favoriteHubs.push_back(e);
-
-			if(aXml.getBoolChildAttrib("Connect")) {
-				// this entry dates from before the window manager & fav hub groups; convert it.
-				const string name = _("Auto-connect group (converted)");
-				if(favHubGroups.find(name) == favHubGroups.end()) {
-					FavHubGroupProperties props = { false, true };
-					favHubGroups[name] = props;
-				}
-				e->setGroup(name);
-				needSave = true;
-			}
 		}
 
 		aXml.stepOut();
-	}
-
-	// parse groups that have the "Connect" param and send their hubs to WindowManager
-	for(auto& i: favHubGroups) {
-		if(i.second.connect) {
-			FavoriteHubEntryList hubs = getFavoriteHubs(i.first);
-			for(auto& hub: hubs) {
-				WindowParams params;
-				params[WindowInfo::address] = WindowParam(hub->getServer(), WindowParam::FLAG_IDENTIFIES);
-				WindowManager::getInstance()->add(WindowManager::hub(), params);
-			}
-		}
 	}
 
 	aXml.resetCurrentChild();
@@ -584,28 +558,25 @@ FavoriteHubEntryPtr FavoriteManager::getFavoriteHubEntry(const string& aServer) 
 	return NULL;
 }
 
+void FavoriteManager::mergeHubSettings(const FavoriteHubEntry& entry, HubSettings& settings) const {
+	// apply group settings first.
+	const string& name = entry.getGroup();
+	if(!name.empty()) {
+		auto group = favHubGroups.find(name);
+		if(group != favHubGroups.end())
+			settings.merge(group->second);
+	}
+
+	// apply fav entry settings next.
+	settings.merge(entry);
+}
+
 FavoriteHubEntryList FavoriteManager::getFavoriteHubs(const string& group) const {
 	FavoriteHubEntryList ret;
 	for(auto& i: favoriteHubs)
 		if(i->getGroup() == group)
 			ret.push_back(i);
 	return ret;
-}
-
-bool FavoriteManager::isPrivate(const string& url) const {
-	if(url.empty())
-		return false;
-
-	FavoriteHubEntry* fav = getFavoriteHubEntry(url);
-	if(fav) {
-		const string& name = fav->getGroup();
-		if(!name.empty()) {
-			auto group = favHubGroups.find(name);
-			if(group != favHubGroups.end())
-				return group->second.priv;
-		}
-	}
-	return false;
 }
 
 optional<FavoriteUser> FavoriteManager::getFavoriteUser(const UserPtr &aUser) const {

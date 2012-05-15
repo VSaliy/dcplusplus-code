@@ -20,6 +20,7 @@
 #include "FavHubProperties.h"
 
 #include <dcpp/FavoriteManager.h>
+#include <dcpp/HubEntry.h>
 #include <dcpp/version.h>
 
 #include <dwt/widgets/Grid.h>
@@ -39,10 +40,11 @@ FavHubProperties::FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry
 GridDialog(parent, 320, DS_CONTEXTHELP),
 name(0),
 address(0),
-description(0),
+hubDescription(0),
 nick(0),
 password(0),
-userDescription(0),
+description(0),
+email(0),
 groups(0),
 entry(_entry)
 {
@@ -61,10 +63,10 @@ bool FavHubProperties::handleInitDialog() {
 	grid->column(1).mode = GridInfo::FILL;
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Hub")));
+		auto group = grid->addChild(GroupBox::Seed(T_("Hub")));
 		grid->setWidget(group, 0, 0, 1, 2);
 
-		GridPtr cur = group->addChild(Grid::Seed(3, 2));
+		auto cur = group->addChild(Grid::Seed(3, 2));
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
@@ -79,51 +81,56 @@ bool FavHubProperties::handleInitDialog() {
 		address->setHelpId(IDH_FAVORITE_HUB_ADDRESS);
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_DESC);
-		description = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		description->setText(Text::toT(entry->getDescription()));
-		description->setHelpId(IDH_FAVORITE_HUB_DESC);
+		hubDescription = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		hubDescription->setText(Text::toT(entry->getHubDescription()));
+		hubDescription->setHelpId(IDH_FAVORITE_HUB_DESC);
 	}
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Identification (leave blank for defaults)")));
+		auto group = grid->addChild(GroupBox::Seed(T_("Identification (leave blank for defaults)")));
 		grid->setWidget(group, 1, 0, 1, 2);
 
-		GridPtr cur = group->addChild(Grid::Seed(3, 2));
+		auto cur = group->addChild(Grid::Seed(4, 2));
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
 		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
 		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		nick->setText(Text::toT(entry->getNick(false)));
-		nick->onUpdated([this] { handleTextChanged(nick); });
+		nick->setText(Text::toT(entry->getNick()));
 		nick->setHelpId(IDH_FAVORITE_HUB_NICK);
+		WinUtil::preventSpaces(nick);
 
 		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
 		password = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		password->setPassword();
 		password->setText(Text::toT(entry->getPassword()));
-		password->onUpdated([this] { handleTextChanged(password); });
 		password->setHelpId(IDH_FAVORITE_HUB_PASSWORD);
+		WinUtil::preventSpaces(password);
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
-		userDescription = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		userDescription->setText(Text::toT(entry->getUserDescription()));
-		userDescription->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
+		description = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		description->setText(Text::toT(entry->getDescription()));
+		description->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
+
+		cur->addChild(Label::Seed(T_("Email")))->setHelpId(IDH_FAVORITE_HUB_EMAIL);
+		email = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		email->setText(Text::toT(entry->getEmail()));
+		email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
 	}
 
 	{
-		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Group")));
+		auto group = grid->addChild(GroupBox::Seed(T_("Group")));
 		grid->setWidget(group, 2, 0, 1, 2);
 
-		GridPtr cur = group->addChild(Grid::Seed(1, 2));
+		auto cur = group->addChild(Grid::Seed(1, 2));
 		cur->column(0).mode = GridInfo::FILL;
 
-		ComboBox::Seed seed = WinUtil::Seeds::Dialog::comboBox;
+		auto seed = WinUtil::Seeds::Dialog::comboBox;
 		seed.style |= CBS_SORT;
 		groups = cur->addChild(seed);
 		groups->setHelpId(IDH_FAVORITE_HUB_GROUP);
 
-		ButtonPtr manage = cur->addChild(Button::Seed(T_("Manage &groups")));
+		auto manage = cur->addChild(Button::Seed(T_("Manage &groups")));
 		manage->setHelpId(IDH_FAVORITE_HUBS_MANAGE_GROUPS);
 		manage->onClicked([this] { handleGroups(); });
 	}
@@ -142,25 +149,6 @@ bool FavHubProperties::handleInitDialog() {
 	return false;
 }
 
-void FavHubProperties::handleTextChanged(TextBoxPtr textBox) {
-	tstring text = textBox->getText();
-	bool update = false;
-
-	// Strip ' '
-	tstring::size_type i;
-	while((i = text.find(' ')) != string::npos) {
-		text.erase(i, 1);
-		update = true;
-	}
-
-	if(update) {
-		// Something changed; update window text without changing cursor pos
-		long caretPos = textBox->getCaretPos() - 1;
-		textBox->setText(text);
-		textBox->setSelection(caretPos, caretPos);
-	}
-}
-
 void FavHubProperties::handleOKClicked() {
 	tstring addressText = address->getText();
 	if(addressText.empty()) {
@@ -169,10 +157,11 @@ void FavHubProperties::handleOKClicked() {
 	}
 	entry->setServer(Text::fromT(addressText));
 	entry->setName(Text::fromT(name->getText()));
-	entry->setDescription(Text::fromT(description->getText()));
+	entry->setHubDescription(Text::fromT(hubDescription->getText()));
 	entry->setNick(Text::fromT(nick->getText()));
 	entry->setPassword(Text::fromT(password->getText()));
-	entry->setUserDescription(Text::fromT(userDescription->getText()));
+	entry->setDescription(Text::fromT(description->getText()));
+	entry->setEmail(Text::fromT(email->getText()));
 	entry->setGroup(Text::fromT(groups->getText()));
 	FavoriteManager::getInstance()->save();
 	endDialog(IDOK);

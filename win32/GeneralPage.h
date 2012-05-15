@@ -34,8 +34,6 @@ private:
 
 	TextBoxPtr nick;
 	ComboBoxPtr connections;
-
-	void handleNickTextChanged();
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_GENERAL_PAGE_H)

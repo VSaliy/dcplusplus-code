@@ -55,6 +55,7 @@ connections(0)
 		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.emplace_back(nick, SettingsManager::NICK, PropPage::T_STR);
 		nick->setHelpId(IDH_SETTINGS_GENERAL_NICK);
+		WinUtil::preventSpaces(nick);
 
 		cur->addChild(Label::Seed(T_("E-Mail")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
 		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
@@ -122,8 +123,6 @@ connections(0)
 
 	PropPage::read(items);
 
-	nick->onUpdated([this] { handleNickTextChanged(); });
-
 	if(SETTING(NICK).empty()) {
 		// fill the Nick field with the Win user account name.
 		DWORD size = 0;
@@ -153,23 +152,4 @@ void GeneralPage::write() {
 	PropPage::write(items);
 
 	SettingsManager::getInstance()->set(SettingsManager::UPLOAD_SPEED, Text::fromT(connections->getText()));
-}
-
-void GeneralPage::handleNickTextChanged() {
-	tstring text = nick->getText();
-	bool update = false;
-
-	// Strip ' '
-	tstring::size_type i;
-	while((i = text.find(' ')) != string::npos) {
-		text.erase(i, 1);
-		update = true;
-	}
-
-	if(update) {
-		// Something changed; update window text without changing cursor pos
-		long caretPos = nick->getCaretPos() - 1;
-		nick->setText(text);
-		nick->setSelection(caretPos, caretPos);
-	}
 }

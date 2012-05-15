@@ -35,7 +35,7 @@ using boost::range::for_each;
 
 class UserInfoBase {
 public:
-	UserInfoBase(const HintedUser& u, bool hubSet = false) : user(u), hubSet(hubSet) { }
+	UserInfoBase(const HintedUser& u) : user(u) { }
 
 	virtual void getList();
 	virtual void browseList();
@@ -50,13 +50,9 @@ public:
 	tstring getTooltip() const;
 
 	const HintedUser& getUser() const { return user; }
-	bool keepHub() const;
 
 protected:
 	HintedUser user;
-
-private:
-	bool hubSet; // always respect the user's hub hint
 };
 
 struct UserTraits : Flags {

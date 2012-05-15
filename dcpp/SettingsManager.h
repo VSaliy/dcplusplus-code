@@ -23,6 +23,7 @@
 #include "Speaker.h"
 #include "Singleton.h"
 #include "Exception.h"
+#include "HubSettings.h"
 
 namespace dcpp {
 
@@ -242,6 +243,8 @@ public:
 
 	void load(const string& aFileName);
 	void save(const string& aFileName);
+
+	HubSettings getHubSettings() const;
 
 	// Search types
 	void validateSearchTypeName(const string& name) const;

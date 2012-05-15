@@ -36,9 +36,7 @@ using dwt::GridInfo;
 using dwt::Label;
 
 static const ColumnInfo columns[] = {
-	{ N_("Group name"), 100, false },
-	{ N_("Private"), 80, false },
-	{ N_("Connect"), 80, false }
+	{ N_("Group name"), 100, false }
 };
 
 FavHubGroupsDlg::FavHubGroupsDlg(dwt::Widget* parent, FavoriteHubEntry* parentEntry_) :
@@ -49,7 +47,9 @@ update(0),
 remove(0),
 properties(0),
 edit(0),
-priv_box(0),
+nick(0),
+description(0),
+email(0),
 parentEntry(parentEntry_)
 {
 	onInitDialog([this] { return handleInitDialog(); });
@@ -66,8 +66,6 @@ int FavHubGroupsDlg::run() {
 
 FavHubGroupsDlg::GroupInfo::GroupInfo(const FavHubGroup& group_) : group(group_) {
 	columns[COLUMN_NAME] = Text::toT(group.first);
-	columns[COLUMN_PRIVATE] = group.second.priv ? T_("Yes") : T_("No");
-	columns[COLUMN_CONNECT] = group.second.connect ? T_("Yes") : T_("No");
 }
 
 const tstring& FavHubGroupsDlg::GroupInfo::getText(int col) const {
@@ -90,7 +88,7 @@ bool FavHubGroupsDlg::handleInitDialog() {
 	groups->setHelpId(IDH_FAV_HUB_GROUPS_LIST);
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		auto cur = grid->addChild(Grid::Seed(1, 2));
 		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
 
 		Button::Seed seed(T_("&Update"));
@@ -106,11 +104,11 @@ bool FavHubGroupsDlg::handleInitDialog() {
 
 	{
 		properties = grid->addChild(GroupBox::Seed(T_("Group properties")));
-		GridPtr cur = properties->addChild(Grid::Seed(2, 1));
+		auto cur = properties->addChild(Grid::Seed(2, 1));
 		cur->column(0).mode = GridInfo::FILL;
 
 		{
-			GridPtr cur2 = cur->addChild(Grid::Seed(1, 2));
+			auto cur2 = cur->addChild(Grid::Seed(1, 2));
 			cur2->column(1).mode = GridInfo::FILL;
 			cur2->setHelpId(IDH_FAV_HUB_GROUPS_NAME);
 
@@ -120,23 +118,36 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		}
 
 		{
-			GridPtr cur2 = cur->addChild(Grid::Seed(3, 1));
-			cur2->column(0).align = GridInfo::TOP_LEFT;
+			auto cur2 = cur->addChild(Grid::Seed(2, 1));
+			cur2->column(0).mode = GridInfo::FILL;
 
-			priv_box = cur2->addChild(CheckBox::Seed(T_("Mark hubs in this group as private hubs")));
-			priv_box->setHelpId(IDH_FAV_HUB_GROUPS_PRIVATE);
+			auto group = cur2->addChild(GroupBox::Seed(T_("Identification (leave blank for defaults)")));
 
-			connect_box = cur2->addChild(CheckBox::Seed(T_("Connect to all hubs in this group when the program starts")));
-			connect_box->setHelpId(IDH_FAV_HUB_GROUPS_CONNECT);
+			auto cur3 = group->addChild(Grid::Seed(3, 2));
+			cur3->column(0).align = GridInfo::BOTTOM_RIGHT;
+			cur3->column(1).mode = GridInfo::FILL;
 
-			ButtonPtr add = cur2->addChild(Button::Seed(T_("&Add to the list")));
+			cur3->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
+			nick = cur3->addChild(WinUtil::Seeds::Dialog::textBox);
+			nick->setHelpId(IDH_FAVORITE_HUB_NICK);
+			WinUtil::preventSpaces(nick);
+
+			cur3->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
+			description = cur3->addChild(WinUtil::Seeds::Dialog::textBox);
+			description->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
+
+			cur3->addChild(Label::Seed(T_("Email")))->setHelpId(IDH_FAVORITE_HUB_EMAIL);
+			email = cur3->addChild(WinUtil::Seeds::Dialog::textBox);
+			email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
+
+			auto add = cur2->addChild(Button::Seed(T_("&Add to the list")));
 			add->setHelpId(IDH_FAV_HUB_GROUPS_ADD);
 			add->onClicked([this] { handleAdd(); });
 		}
 	}
 
 	{
-		GridPtr cur = grid->addChild(Grid::Seed(1, 2));
+		auto cur = grid->addChild(Grid::Seed(1, 2));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 
@@ -186,20 +197,16 @@ void FavHubGroupsDlg::handleSelectionChanged() {
 	remove->setEnabled(selected > 0);
 
 	tstring text;
-	bool priv;
-	bool connect;
+	HubSettings settings;
 	if(selected == 1) {
 		const FavHubGroup& group = groups->getSelectedData()->group;
 		text = Text::toT(group.first);
-		priv = group.second.priv;
-		connect = group.second.connect;
-	} else {
-		priv = false;
-		connect = false;
+		settings = group.second;
 	}
 	edit->setText(text);
-	priv_box->setChecked(priv);
-	connect_box->setChecked(connect);
+	nick->setText(Text::toT(settings.getNick()));
+	description->setText(Text::toT(settings.getDescription()));
+	email->setText(Text::toT(settings.getEmail()));
 }
 
 void FavHubGroupsDlg::handleUpdate() {
@@ -219,10 +226,9 @@ void FavHubGroupsDlg::handleUpdate() {
 	}
 
 	HoldRedraw hold(groups);
-	const bool priv = priv_box->getChecked();
-	const bool connect = connect_box->getChecked();
+	auto settings = getSettings();
 	groups->erase(selected);
-	add(name, priv, connect);
+	add(name, std::move(settings));
 }
 
 void FavHubGroupsDlg::handleRemove() {
@@ -233,7 +239,7 @@ void FavHubGroupsDlg::handleAdd() {
 	tstring name = edit->getText();
 	if(addable(name)) {
 		HoldRedraw hold(groups);
-		add(name, priv_box->getChecked(), connect_box->getChecked());
+		add(name, getSettings());
 	}
 }
 
@@ -250,9 +256,16 @@ void FavHubGroupsDlg::add(const FavHubGroup& group, bool ensureVisible) {
 		groups->ensureVisible(pos);
 }
 
-void FavHubGroupsDlg::add(const tstring& name, bool priv, bool connect) {
-	FavHubGroupProperties props = { priv, connect };
-	add(FavHubGroup(Text::fromT(name), props));
+void FavHubGroupsDlg::add(const tstring& name, HubSettings&& settings) {
+	add(FavHubGroup(Text::fromT(name), std::forward<HubSettings>(settings)));
+}
+
+HubSettings FavHubGroupsDlg::getSettings() const {
+	HubSettings settings;
+	settings.setNick(Text::fromT(nick->getText()));
+	settings.setDescription(Text::fromT(description->getText()));
+	settings.setEmail(Text::fromT(email->getText()));
+	return settings;
 }
 
 bool FavHubGroupsDlg::addable(const tstring& name, int ignore) {
@@ -299,5 +312,5 @@ void FavHubGroupsDlg::layout() {
 	dwt::Point sz = getClientSize();
 	grid->resize(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 
-	groups->setColumnWidth(0, groups->getWindowSize().x - 180);
+	groups->setColumnWidth(0, groups->getWindowSize().x - 20);
 }

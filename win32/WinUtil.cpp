@@ -706,10 +706,6 @@ tstring WinUtil::getNicks(const UserPtr& u, const string& hintUrl) {
 	return getNicks(u->getCID(), hintUrl);
 }
 
-tstring WinUtil::getNicks(const CID& cid, const string& hintUrl, bool priv) {
-	return Text::toT(Util::toString(ClientManager::getInstance()->getNicks(cid, hintUrl, priv)));
-}
-
 static pair<tstring, bool> formatHubNames(const StringList& hubs) {
 	if(hubs.empty()) {
 		return make_pair(T_("Offline"), false);
@@ -724,10 +720,6 @@ pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& hintUrl) 
 
 pair<tstring, bool> WinUtil::getHubNames(const UserPtr& u, const string& hintUrl) {
 	return getHubNames(u->getCID(), hintUrl);
-}
-
-pair<tstring, bool> WinUtil::getHubNames(const CID& cid, const string& hintUrl, bool priv) {
-	return formatHubNames(ClientManager::getInstance()->getHubNames(cid, hintUrl, priv));
 }
 
 size_t WinUtil::getFileIcon(const string& fileName) {
@@ -1175,6 +1167,27 @@ void WinUtil::addSearchIcon(TextBoxPtr box) {
 void WinUtil::addFilterMethods(ComboBoxPtr box) {
 	tstring methods[StringMatch::METHOD_LAST] = { T_("Partial match"), T_("Exact match"), T_("Regular Expression") };
 	std::for_each(methods, methods + StringMatch::METHOD_LAST, [box](const tstring& str) { box->addValue(str); });
+}
+
+void WinUtil::preventSpaces(TextBoxPtr box) {
+	box->onUpdated([box] {
+		auto text = box->getText();
+		bool update = false;
+
+		// Strip ' '
+		tstring::size_type i;
+		while((i = text.find(' ')) != string::npos) {
+			text.erase(i, 1);
+			update = true;
+		}
+
+		if(update) {
+			// Something changed; update window text without changing cursor pos
+			long caretPos = box->getCaretPos() - 1;
+			box->setText(text);
+			box->setSelection(caretPos, caretPos);
+		}
+	});
 }
 
 void WinUtil::setColor(dwt::Control* widget) {
