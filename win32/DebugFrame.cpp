@@ -40,14 +40,14 @@ const string DebugFrame::id = "DebugMessages";
 const string& DebugFrame::getId() const { return id; }
 
 DebugFrame::DebugFrame(TabViewPtr parent) :
-BaseType(parent, T_("Debug Messages"), IDH_DEBUG_FRAME, IDI_DCPP, false),
+BaseType(parent, T_("Debug Messages"), IDH_DEBUG_FRAME, IDI_DEBUG, false),
 grid(0),
 debug(0),
 clientMsg(0),
-showClientMsg(true),
 hubMsg(0),
-showHubMsg(true),
 filterHub(0),
+showClientMsg(true),
+showHubMsg(true),
 filterByHub(false),
 hubs(0)
 {
@@ -113,8 +113,7 @@ hubs(0)
 		auto lock = clientMgr->lock();
 		clientMgr->addListener(this);
 		auto& clients = clientMgr->getClients();
-		for(auto it = clients.begin(); it != clients.end(); ++it) {
-			Client* client = *it;
+		for(auto client: clients) {
 			if(!client->isConnected())
 				continue;
 

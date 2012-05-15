@@ -81,6 +81,7 @@
 #define IDI_SOUND 174
 #define IDI_ULIMIT 175
 #define IDI_DLIMIT 176
+#define IDI_DEBUG 177
 // Stuff that uses multiple id's
 
 #define ID_SHELLCONTEXTMENU_MIN				3000

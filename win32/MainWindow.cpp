@@ -334,7 +334,7 @@ void MainWindow::initMenu() {
 		viewIndexes[SystemFrame::id] = viewMenu->appendItem(T_("System Log"),
 			[this] { SystemFrame::openWindow(getTabView()); });
 		viewIndexes[DebugFrame::id] = viewMenu->appendItem(T_("Debug Messages"),
-			[this] { DebugFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_DCPP));
+			[this] { DebugFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_DEBUG));
 		viewIndexes[StatsFrame::id] = viewMenu->appendItem(T_("Network Statistics"),
 			[this] { StatsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_NET_STATS));
 		viewMenu->appendItem(T_("Indexing progress"), [this] { handleHashProgress(); }, WinUtil::menuIcon(IDI_INDEXING));
