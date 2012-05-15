@@ -93,6 +93,7 @@ IDI_BALLOON             ICON                    "res/Balloon.ico"
 IDI_SOUND               ICON                    "res/Sound.ico"
 IDI_ULIMIT				ICON					"res/ULimit.ico"
 IDI_DLIMIT				ICON					"res/DLimit.ico"
+IDI_DEBUG				ICON					"res/Debug.ico"
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
