@@ -74,8 +74,7 @@ private:
 	void layout();
 	void updateStatus();
 	
-	void addLine(const tstring& msg);
-	void addDbgLine(const string& cmd);
+	void addLine(const string& msg);
 	
 	bool preClosing();
 	

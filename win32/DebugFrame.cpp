@@ -158,19 +158,8 @@ void DebugFrame::updateStatus() {
 	}
 }
 
-void DebugFrame::addLine(const tstring& msg) {
-	bool scroll = debug->scrollIsAtEnd();
-
-	debug->addText(Text::toT("\r\n[" + Util::getTimeString() + "] ") + msg);
-
-	if(scroll)
-		debug->scrollToBottom();
-
-	setDirty(SettingsManager::BOLD_SYSTEM_LOG);
-}
-
-void DebugFrame::addDbgLine(const string& cmd) {
-	cmdList.push_back(cmd);
+void DebugFrame::addLine(const string& msg) {
+	cmdList.push_back(msg);
 	
 	auto x = Util::emptyString;
 	{		
@@ -179,8 +168,16 @@ void DebugFrame::addDbgLine(const string& cmd) {
 			
 		x = cmdList.front();
 		cmdList.pop_front();
-	}	
-	callAsync([=] { addLine(Text::toT(x)); });
+	}
+	
+	bool scroll = debug->scrollIsAtEnd();
+
+	debug->addText(Text::toT("\r\n[" + Util::getTimeString() + "] " + msg));
+
+	if(scroll)
+		debug->scrollToBottom();
+
+	setDirty(SettingsManager::BOLD_SYSTEM_LOG);
 }
 
 bool DebugFrame::preClosing() {
@@ -245,28 +242,28 @@ void DebugFrame::on(DebugCommand, const string& aLine, int cmdType, const string
 			if(!showHubMsg)
 				return;
 			if(!filterByHub || Text::toT(ip) == url) {
-				callAsync([=] { addDbgLine("From Hub:\t\t<" + ip + ">\t \t" + aLine); });
+				callAsync([=] { addLine("From Hub:\t\t<" + ip + ">\t \t" + aLine); });
 			}
 			break;
 		case DebugManager::HUB_OUT:
 			if(!showHubMsg)
 				return;
 			if(!filterByHub || Text::toT(ip) == url) {
-				callAsync([=] { addDbgLine("To Hub:\t\t<" + ip + ">\t \t" + aLine); });
+				callAsync([=] { addLine("To Hub:\t\t<" + ip + ">\t \t" + aLine); });
 			}
 			break;
 		case DebugManager::CLIENT_IN:
 			if(!showClientMsg)
 				return;
 			if(!filterByHub || Text::toT(ip) == url) {
-				callAsync([=] { addDbgLine("From Client:\t\t<" + ip + ">\t \t" + aLine); });
+				callAsync([=] { addLine("From Client:\t\t<" + ip + ">\t \t" + aLine); });
 			}
 			break;
 		case DebugManager::CLIENT_OUT:
 			if(!showClientMsg)
 				return;
 			if(!filterByHub || Text::toT(ip) == url) {
-				callAsync([=] { addDbgLine("To Client:\t\t<" + ip + ">\t \t" + aLine); });
+				callAsync([=] { addLine("To Client:\t\t<" + ip + ">\t \t" + aLine); });
 			}
 			break;
 		default: dcassert(0);
