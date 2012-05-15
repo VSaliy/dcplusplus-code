@@ -59,9 +59,6 @@ public:
 	GETSET(WindowParams, params, Params);
 
 	bool operator==(const WindowInfo& rhs) const;
-
-	/// special param for hub addresses.
-	static const string address;
 };
 
 } // namespace dcpp

@@ -99,7 +99,7 @@ private:
 
 	static const vector<StringList> searchExts;
 
-	virtual string checkNick(const string& nick);
+	virtual void checkNick(string& nick);
 
 	OnlineUser& getUser(const uint32_t aSID, const CID& aCID);
 	OnlineUser* findUser(const uint32_t sid) const;

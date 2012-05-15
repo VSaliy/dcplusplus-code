@@ -79,7 +79,6 @@ private:
 	ParamMap ucLineParams;
 
 	UserInfoBase replyTo;
-	const bool priv;
 	bool online;
 
 	typedef unordered_map<UserPtr, PrivateFrame*, User::Hash> FrameMap;

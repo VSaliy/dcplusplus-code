@@ -23,6 +23,7 @@
 #include <dcpp/FavHubGroup.h>
 #include <dcpp/FastAlloc.h>
 #include <dcpp/HubEntry.h>
+#include <dcpp/HubSettings.h>
 
 #include <dwt/widgets/ModalDialog.h>
 
@@ -40,8 +41,6 @@ public:
 private:
 	enum {
 		COLUMN_NAME,
-		COLUMN_PRIVATE,
-		COLUMN_CONNECT,
 		COLUMN_LAST
 	};
 
@@ -75,8 +74,9 @@ private:
 	ButtonPtr remove;
 	GroupBoxPtr properties;
 	TextBoxPtr edit;
-	CheckBoxPtr priv_box;
-	CheckBoxPtr connect_box;
+	TextBoxPtr nick;
+	TextBoxPtr description;
+	TextBoxPtr email;
 
 	FavoriteHubEntry* parentEntry;
 
@@ -89,7 +89,8 @@ private:
 	void handleClose();
 
 	void add(const FavHubGroup& group, bool ensureVisible = true);
-	void add(const tstring& name, bool priv, bool connect);
+	void add(const tstring& name, HubSettings&& settings);
+	HubSettings getSettings() const;
 	bool addable(const tstring& name, int ignore = -1);
 	void removeGroup(const GroupInfo* group);
 

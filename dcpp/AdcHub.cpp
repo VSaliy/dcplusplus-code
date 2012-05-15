@@ -966,8 +966,8 @@ void AdcHub::info(bool /*alwaysSend*/) {
 
 	addParam(lastInfoMap, c, "ID", ClientManager::getInstance()->getMyCID().toBase32());
 	addParam(lastInfoMap, c, "PD", ClientManager::getInstance()->getMyPID().toBase32());
-	addParam(lastInfoMap, c, "NI", getCurrentNick());
-	addParam(lastInfoMap, c, "DE", getCurrentDescription());
+	addParam(lastInfoMap, c, "NI", settings.getNick());
+	addParam(lastInfoMap, c, "DE", settings.getDescription());
 	addParam(lastInfoMap, c, "SL", Util::toString(SETTING(SLOTS)));
 	addParam(lastInfoMap, c, "FS", Util::toString(UploadManager::getInstance()->getFreeSlots()));
 	addParam(lastInfoMap, c, "SS", ShareManager::getInstance()->getShareSizeString());
@@ -1032,14 +1032,12 @@ int64_t AdcHub::getAvailable() const {
 	return x;
 }
 
-string AdcHub::checkNick(const string& aNick) {
-	string tmp = aNick;
-	for(size_t i = 0; i < aNick.size(); ++i) {
-		if(static_cast<uint8_t>(tmp[i]) <= 32) {
-			tmp[i] = '_';
+void AdcHub::checkNick(string& nick) {
+	for(size_t i = 0, n = nick.size(); i < n; ++i) {
+		if(static_cast<uint8_t>(nick[i]) <= 32) {
+			nick[i] = '_';
 		}
 	}
-	return tmp;
 }
 
 void AdcHub::send(const AdcCommand& cmd) {

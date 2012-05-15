@@ -80,7 +80,7 @@ OnlineUser& NmdcHub::getUser(const string& aNick) {
 	}
 
 	UserPtr p;
-	if(aNick == getCurrentNick()) {
+	if(aNick == settings.getNick()) {
 		p = ClientManager::getInstance()->getMe();
 	} else {
 		p = ClientManager::getInstance()->getUser(aNick, getHubUrl());
@@ -555,7 +555,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			}
 
 			key(CryptoManager::getInstance()->makeKey(lock));
-			OnlineUser& ou = getUser(getCurrentNick());
+			OnlineUser& ou = getUser(settings.getNick());
 			validateNick(ou.getIdentity().getNick());
 		}
 	} else if(cmd == "$Hello") {
@@ -743,14 +743,12 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 	}
 }
 
-string NmdcHub::checkNick(const string& aNick) {
-	string tmp = aNick;
-	for(size_t i = 0; i < aNick.size(); ++i) {
-		if(static_cast<uint8_t>(tmp[i]) <= 32 || tmp[i] == '|' || tmp[i] == '$' || tmp[i] == '<' || tmp[i] == '>') {
-			tmp[i] = '_';
+void NmdcHub::checkNick(string& nick) {
+	for(size_t i = 0, n = nick.size(); i < n; ++i) {
+		if(static_cast<uint8_t>(nick[i]) <= 32 || nick[i] == '|' || nick[i] == '$' || nick[i] == '<' || nick[i] == '>') {
+			nick[i] = '_';
 		}
 	}
-	return tmp;
 }
 
 void NmdcHub::connectToMe(const OnlineUser& aUser) {
@@ -808,7 +806,7 @@ void NmdcHub::myInfo(bool alwaysSend) {
 		
 	string uMin = (SETTING(MIN_UPLOAD_SPEED) == 0) ? Util::emptyString : tmp5 + Util::toString(SETTING(MIN_UPLOAD_SPEED));
 	string myInfoA =
-		"$MyINFO $ALL " + fromUtf8(getMyNick()) + " " + fromUtf8(escape(getCurrentDescription())) +
+		"$MyINFO $ALL " + fromUtf8(getMyNick()) + " " + fromUtf8(escape(settings.getDescription())) +
 		tmp1 + VERSIONSTRING + tmp2 + modeChar + tmp3 + getCounts();
 	string myInfoB = tmp4 + Util::toString(SETTING(SLOTS));
 	string myInfoC = uMin +

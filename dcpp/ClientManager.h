@@ -67,15 +67,11 @@ public:
 	StringList getNicks(const CID& cid, const string& hintUrl = Util::emptyString);
 	string getField(const CID& cid, const string& hintUrl, const char* field) const;
 
-	StringList getHubUrls(const CID& cid, const string& hintUrl, bool priv);
-	StringList getHubNames(const CID& cid, const string& hintUrl, bool priv);
-	StringList getNicks(const CID& cid, const string& hintUrl, bool priv);
-
 	StringList getNicks(const HintedUser& user) { return getNicks(user.user->getCID(), user.hint); }
 	StringList getHubNames(const HintedUser& user) { return getHubNames(user.user->getCID(), user.hint); }
 	StringList getHubUrls(const HintedUser& user) { return getHubUrls(user.user->getCID(), user.hint); }
 
-	StringPairList getHubs(const CID& cid, const string& hintUrl, bool priv);
+	StringPairList getHubs(const CID& cid, const string& hintUrl);
 
 	vector<Identity> getIdentities(const UserPtr &u) const;
 
@@ -94,11 +90,12 @@ public:
 	string findHubEncoding(const string& aUrl) const;
 
 	/** Get an OnlineUser object - lock it with lock()!
-	* @param priv discard any user that doesn't match the hint.
-	* @return OnlineUser* found by CID and hint; might be only by CID if priv is false.
+	* @return OnlineUser* found by CID, using the hub URL as a hint.
 	*/
-	OnlineUser* findOnlineUser(const HintedUser& user, bool priv);
-	OnlineUser* findOnlineUser(const CID& cid, const string& hintUrl, bool priv);
+	OnlineUser* findOnlineUser(const HintedUser& user);
+	OnlineUser* findOnlineUser(const CID& cid, const string& hintUrl);
+	/// @return OnlineUser* found by CID and hint; discard any user that doesn't match the hint.
+	OnlineUser* findOnlineUserHint(const CID& cid, const string& hintUrl) const;
 
 	UserPtr findUser(const string& aNick, const string& aHubUrl) const noexcept { return findUser(makeCid(aNick, aHubUrl)); }
 	UserPtr findUser(const CID& cid) const noexcept;
@@ -175,11 +172,6 @@ private:
 
 	void updateUser(const OnlineUser& user) noexcept;
 
-	/// @return OnlineUser* found by CID and hint; discard any user that doesn't match the hint.
-	OnlineUser* findOnlineUserHint(const CID& cid, const string& hintUrl) const {
-		OnlinePairC p;
-		return findOnlineUserHint(cid, hintUrl, p);
-	}
 	/**
 	* @param p OnlinePair of all the users found by CID, even those who don't match the hint.
 	* @return OnlineUser* found by CID and hint; discard any user that doesn't match the hint.

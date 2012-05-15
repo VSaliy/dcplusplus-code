@@ -68,25 +68,25 @@ void Client::shutdown() {
 }
 
 void Client::reloadSettings(bool updateNick) {
-	FavoriteHubEntry* hub = FavoriteManager::getInstance()->getFavoriteHubEntry(getHubUrl());
-	if(hub) {
-		if(updateNick) {
-			setCurrentNick(checkNick(hub->getNick(true)));
-		}
+	/// @todo update the nick in ADC hubs?
+	string prevNick;
+	if(!updateNick)
+		prevNick = settings.getNick();
 
-		if(!hub->getUserDescription().empty()) {
-			setCurrentDescription(hub->getUserDescription());
-		} else {
-			setCurrentDescription(SETTING(DESCRIPTION));
-		}
-		if(!hub->getPassword().empty())
-			setPassword(hub->getPassword());
-	} else {
-		if(updateNick) {
-			setCurrentNick(checkNick(SETTING(NICK)));
-		}
-		setCurrentDescription(SETTING(DESCRIPTION));
+	settings = SettingsManager::getInstance()->getHubSettings();
+
+	auto fav = FavoriteManager::getInstance()->getFavoriteHubEntry(getHubUrl());
+	if(fav) {
+		FavoriteManager::getInstance()->mergeHubSettings(*fav, settings);
+
+		if(!fav->getPassword().empty())
+			setPassword(fav->getPassword());
 	}
+
+	if(updateNick)
+		checkNick(settings.nick);
+	else
+		settings.setNick(prevNick);
 }
 
 void Client::connect() {

@@ -130,18 +130,18 @@ void HubFrame::resortUsers() {
 WindowParams HubFrame::getWindowParams() const {
 	WindowParams ret;
 	addRecentParams(ret);
-	ret[WindowInfo::address] = WindowParam(url, WindowParam::FLAG_IDENTIFIES);
+	ret["Address"] = WindowParam(url, WindowParam::FLAG_IDENTIFIES);
 	return ret;
 }
 
 void HubFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params) {
-	auto address = params.find(WindowInfo::address);
+	auto address = params.find("Address");
 	if(address != params.end())
 		openWindow(parent, address->second, parseActivateParam(params), params.find("NoConnect") == params.end());
 }
 
 bool HubFrame::isFavorite(const WindowParams& params) {
-	auto i = params.find(WindowInfo::address);
+	auto i = params.find("Address");
 	if(i != params.end())
 		return FavoriteManager::getInstance()->isFavoriteHub(i->second);
 	return false;
@@ -631,7 +631,7 @@ void HubFrame::onPrivateMessage(const ChatMessage& message) {
 	bool fromHub = false, fromBot = false;
 	{
 		auto lock = ClientManager::getInstance()->lock();
-		auto ou = ClientManager::getInstance()->findOnlineUser(message.replyTo->getCID(), url, true);
+		auto ou = ClientManager::getInstance()->findOnlineUserHint(message.replyTo->getCID(), url);
 		if(ou && ou->getIdentity().isHub())
 			fromHub = true;
 		if(ou && ou->getIdentity().isBot())
@@ -1025,15 +1025,14 @@ void HubFrame::resortForFavsFirst(bool justDoIt /* = false */) {
 void HubFrame::addAsFavorite() {
 	FavoriteHubEntry* existingHub = FavoriteManager::getInstance()->getFavoriteHubEntry(client->getHubUrl());
 	if(!existingHub) {
-		FavoriteHubEntry aEntry;
-		aEntry.setServer(url);
-		aEntry.setName(client->getHubName());
-		aEntry.setDescription(client->getHubDescription());
-		aEntry.setNick(client->getMyNick());
+		FavoriteHubEntry entry;
+		entry.setServer(url);
+		entry.setName(client->getHubName());
+		entry.setHubDescription(client->getHubDescription());
 		if(!client->getPassword().empty())  {
-			aEntry.setPassword(client->getPassword());
+			entry.setPassword(client->getPassword());
 		}
-		FavoriteManager::getInstance()->addFavorite(aEntry);
+		FavoriteManager::getInstance()->addFavorite(entry);
 		addStatus(T_("Favorite hub added"));
 	} else {
 		addStatus(T_("Hub already exists as a favorite"));

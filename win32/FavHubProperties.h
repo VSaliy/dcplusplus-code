@@ -19,9 +19,10 @@
 #ifndef DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H
 #define DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H
 
+#include <dcpp/forward.h>
+
 #include "GridDialog.h"
 
-#include <dcpp/HubEntry.h>
 class FavHubProperties : public GridDialog
 {
 public:
@@ -31,16 +32,16 @@ public:
 private:
 	TextBoxPtr name;
 	TextBoxPtr address;
-	TextBoxPtr description;
+	TextBoxPtr hubDescription;
 	TextBoxPtr nick;
 	TextBoxPtr password;
-	TextBoxPtr userDescription;
+	TextBoxPtr description;
+	TextBoxPtr email;
 	ComboBoxPtr groups;
 
 	FavoriteHubEntry *entry;
 
 	bool handleInitDialog();
-	void handleTextChanged(TextBoxPtr textBox);
 	void handleGroups();
 	void handleOKClicked();
 

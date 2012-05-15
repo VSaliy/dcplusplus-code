@@ -563,6 +563,14 @@ void SettingsManager::save(string const& aFileName) {
 	}
 }
 
+HubSettings SettingsManager::getHubSettings() const {
+	HubSettings ret;
+	ret.setNick(get(NICK));
+	ret.setDescription(get(DESCRIPTION));
+	ret.setEmail(get(EMAIL));
+	return ret;
+}
+
 void SettingsManager::validateSearchTypeName(const string& name) const {
 	if(name.empty() || (name.size() == 1 && name[0] >= '1' && name[0] <= '6')) {
 		throw SearchTypeException(_("Invalid search type name"));

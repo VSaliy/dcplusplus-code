@@ -16,18 +16,27 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_FAVHUBGROUP_H
-#define DCPLUSPLUS_DCPP_FAVHUBGROUP_H
-
-#include <unordered_map>
-
+#include "stdinc.h"
 #include "HubSettings.h"
 
 namespace dcpp {
 
-typedef std::unordered_map<string, HubSettings> FavHubGroups;
-typedef FavHubGroups::value_type FavHubGroup;
+void HubSettings::merge(const HubSettings& sub) {
+	if(!sub.nick.empty()) { nick = sub.nick; }
+	if(!sub.description.empty()) { description = sub.description; }
+	if(!sub.email.empty()) { email = sub.email; }
+}
+
+void HubSettings::load(SimpleXML& xml) {
+	nick = xml.getChildAttrib("Nick");
+	description = xml.getChildAttrib("UserDescription"); // not "Description" for compat with prev fav hub lists
+	email = xml.getChildAttrib("Email");
+}
+
+void HubSettings::save(SimpleXML& xml) const {
+	xml.addChildAttrib("Nick", nick);
+	xml.addChildAttrib("UserDescription", description);
+	xml.addChildAttrib("Email", email);
+}
 
 } // namespace dcpp
-
-#endif
