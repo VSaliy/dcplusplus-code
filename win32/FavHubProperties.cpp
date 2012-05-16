@@ -58,7 +58,7 @@ FavHubProperties::~FavHubProperties() {
 bool FavHubProperties::handleInitDialog() {
 	setHelpId(IDH_FAVORITE_HUB);
 
-	grid = addChild(Grid::Seed(4, 2));
+	grid = addChild(Grid::Seed(5, 2));
 	grid->column(0).mode = GridInfo::FILL;
 	grid->column(1).mode = GridInfo::FILL;
 
@@ -119,8 +119,25 @@ bool FavHubProperties::handleInitDialog() {
 	}
 
 	{
+		auto cur = grid->addChild(Grid::Seed(2, 2));
+		grid->setWidget(cur, 2, 0, 1, 2);
+		cur->column(0).mode = GridInfo::FILL;
+		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
+
+		cur->addChild(Label::Seed(T_("Show joins / parts in chat by default")));
+		showJoins = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
+		WinUtil::fillTriboolCombo(showJoins);
+		showJoins->setSelected(toInt(entry->showJoins));
+
+		cur->addChild(Label::Seed(T_("Only show joins / parts for favorite users")));
+		favShowJoins = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
+		WinUtil::fillTriboolCombo(favShowJoins);
+		favShowJoins->setSelected(toInt(entry->favShowJoins));
+	}
+
+	{
 		auto group = grid->addChild(GroupBox::Seed(T_("Group")));
-		grid->setWidget(group, 2, 0, 1, 2);
+		grid->setWidget(group, 3, 0, 1, 2);
 
 		auto cur = group->addChild(Grid::Seed(1, 2));
 		cur->column(0).mode = GridInfo::FILL;
@@ -162,6 +179,8 @@ void FavHubProperties::handleOKClicked() {
 	entry->setPassword(Text::fromT(password->getText()));
 	entry->setDescription(Text::fromT(description->getText()));
 	entry->setEmail(Text::fromT(email->getText()));
+	entry->showJoins = to3bool(showJoins->getSelected());
+	entry->favShowJoins = to3bool(favShowJoins->getSelected());
 	entry->setGroup(Text::fromT(groups->getText()));
 	FavoriteManager::getInstance()->save();
 	endDialog(IDOK);

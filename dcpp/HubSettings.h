@@ -23,6 +23,7 @@
 
 #include "GetSet.h"
 #include "SimpleXML.h"
+#include "tribool.h"
 
 namespace dcpp {
 
@@ -32,8 +33,10 @@ using std::string;
 favorite hub group; per favorite hub entry. */
 struct HubSettings
 {
+	HubSettings () : showJoins(indeterminate), favShowJoins(indeterminate) { }
+
 	/** Apply a set of sub-settings that may override current ones. Strings are overridden when not
-	null. */
+	null. Tribools are overridden when not in an indeterminate state. */
 	void merge(const HubSettings& sub);
 
 	void load(SimpleXML& xml);
@@ -42,6 +45,11 @@ struct HubSettings
 	GETSET(string, nick, Nick);
 	GETSET(string, description, Description);
 	GETSET(string, email, Email);
+
+	/* don't forget to init new tribools to indeterminate in the constructor! they default to false
+	otherwise. */
+	tribool showJoins;
+	tribool favShowJoins;
 
 	friend class Client;
 };

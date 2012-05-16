@@ -57,15 +57,15 @@ connections(0)
 		nick->setHelpId(IDH_SETTINGS_GENERAL_NICK);
 		WinUtil::preventSpaces(nick);
 
-		cur->addChild(Label::Seed(T_("E-Mail")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.emplace_back(box, SettingsManager::EMAIL, PropPage::T_STR);
-		box->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
-
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
-		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		auto box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.emplace_back(box, SettingsManager::DESCRIPTION, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_GENERAL_DESCRIPTION);
+
+		cur->addChild(Label::Seed(T_("Email")))->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
+		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		items.emplace_back(box, SettingsManager::EMAIL, PropPage::T_STR);
+		box->setHelpId(IDH_SETTINGS_GENERAL_EMAIL);
 
 		cur->addChild(Label::Seed(T_("Line speed (upload)")))->setHelpId(IDH_SETTINGS_GENERAL_CONNECTION);
 

@@ -160,8 +160,6 @@ url(url_),
 updateUsers(false),
 waitingForPW(false),
 resort(false),
-showJoins(BOOLSETTING(SHOW_JOINS)),
-favShowJoins(BOOLSETTING(FAV_SHOW_JOINS)),
 confirmClose(true),
 currentUser(0),
 hubMenu(false),
@@ -410,15 +408,15 @@ void HubFrame::enterImpl(const tstring& s) {
 			client->password(Text::fromT(param));
 			waitingForPW = false;
 		} else if( Util::stricmp(cmd.c_str(), _T("showjoins")) == 0 ) {
-			showJoins = !showJoins;
-			if(showJoins) {
+			client->settings.showJoins = !client->settings.showJoins;
+			if(client->settings.showJoins) {
 				addStatus(T_("Join/part showing on"));
 			} else {
 				addStatus(T_("Join/part showing off"));
 			}
 		} else if( Util::stricmp(cmd.c_str(), _T("favshowjoins")) == 0 ) {
-			favShowJoins = !favShowJoins;
-			if(favShowJoins) {
+			client->settings.favShowJoins = !client->settings.favShowJoins;
+			if(client->settings.favShowJoins) {
 				addStatus(T_("Join/part of favorite users showing on"));
 			} else {
 				addStatus(T_("Join/part of favorite users showing off"));
@@ -572,14 +570,14 @@ void HubFrame::execTasks() {
 		} else if(i.first == UPDATE_USER_JOIN) {
 			UserTask& u = static_cast<UserTask&>(*i.second);
 			if(updateUser(u)) {
-				if (showJoins || (favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
+				if(client->settings.showJoins || (client->settings.favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
 					addStatus(str(TF_("Joins: %1%") % Text::toT(u.identity.getNick())));
 				}
 			}
 		} else if(i.first == REMOVE_USER) {
 			UserTask& u = static_cast<UserTask&>(*i.second);
 			removeUser(u.user);
-			if (showJoins || (favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
+			if(client->settings.showJoins || (client->settings.favShowJoins && FavoriteManager::getInstance()->isFavoriteUser(u.user))) {
 				addStatus(str(TF_("Parts: %1%") % Text::toT(u.identity.getNick())));
 			}
 		}

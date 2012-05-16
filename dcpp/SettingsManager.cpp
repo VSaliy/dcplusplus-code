@@ -568,6 +568,8 @@ HubSettings SettingsManager::getHubSettings() const {
 	ret.setNick(get(NICK));
 	ret.setDescription(get(DESCRIPTION));
 	ret.setEmail(get(EMAIL));
+	ret.showJoins = getBool(SHOW_JOINS);
+	ret.favShowJoins = getBool(FAV_SHOW_JOINS);
 	return ret;
 }
 
