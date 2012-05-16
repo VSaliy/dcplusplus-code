@@ -77,15 +77,17 @@ private:
 	TextBoxPtr nick;
 	TextBoxPtr description;
 	TextBoxPtr email;
+	ComboBoxPtr showJoins;
+	ComboBoxPtr favShowJoins;
 
 	FavoriteHubEntry* parentEntry;
 
 	bool handleInitDialog();
 	bool handleKeyDown(int c);
 	void handleSelectionChanged();
+	void handleAdd();
 	void handleUpdate();
 	void handleRemove();
-	void handleAdd();
 	void handleClose();
 
 	void add(const FavHubGroup& group, bool ensureVisible = true);

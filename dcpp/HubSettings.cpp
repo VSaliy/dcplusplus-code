@@ -25,18 +25,24 @@ void HubSettings::merge(const HubSettings& sub) {
 	if(!sub.nick.empty()) { nick = sub.nick; }
 	if(!sub.description.empty()) { description = sub.description; }
 	if(!sub.email.empty()) { email = sub.email; }
+	if(!indeterminate(sub.showJoins)) { showJoins = sub.showJoins; }
+	if(!indeterminate(sub.favShowJoins)) { favShowJoins = sub.favShowJoins; }
 }
 
 void HubSettings::load(SimpleXML& xml) {
 	nick = xml.getChildAttrib("Nick");
 	description = xml.getChildAttrib("UserDescription"); // not "Description" for compat with prev fav hub lists
 	email = xml.getChildAttrib("Email");
+	showJoins = to3bool(xml.getIntChildAttrib("ShowJoins"));
+	favShowJoins = to3bool(xml.getIntChildAttrib("FavShowJoins"));
 }
 
 void HubSettings::save(SimpleXML& xml) const {
 	xml.addChildAttrib("Nick", nick);
 	xml.addChildAttrib("UserDescription", description);
 	xml.addChildAttrib("Email", email);
+	xml.addChildAttrib("ShowJoins", toInt(showJoins));
+	xml.addChildAttrib("FavShowJoins", toInt(favShowJoins));
 }
 
 } // namespace dcpp

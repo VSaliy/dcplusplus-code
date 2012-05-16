@@ -16,38 +16,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H
-#define DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H
+#ifndef DCPLUSPLUS_DCPP_TRIBOOL_H
+#define DCPLUSPLUS_DCPP_TRIBOOL_H
 
-#include <dcpp/forward.h>
+#include <boost/logic/tribool.hpp>
 
-#include "GridDialog.h"
+using boost::indeterminate;
+using boost::tribool;
 
-class FavHubProperties : public GridDialog
-{
-public:
-	FavHubProperties(dwt::Widget* parent, FavoriteHubEntry *_entry);
-	virtual ~FavHubProperties();
+// conversions between tribools and ints, with 0 being the indeterminate value
+namespace {
+	inline tribool to3bool(int x) { if(x) { return tribool(x == 1); } return tribool(indeterminate); }
+	inline int toInt(tribool x) { return x ? 1 : !x ? 2 : 0; }
+}
 
-private:
-	TextBoxPtr name;
-	TextBoxPtr address;
-	TextBoxPtr hubDescription;
-	TextBoxPtr nick;
-	TextBoxPtr password;
-	TextBoxPtr description;
-	TextBoxPtr email;
-	ComboBoxPtr showJoins;
-	ComboBoxPtr favShowJoins;
-	ComboBoxPtr groups;
-
-	FavoriteHubEntry *entry;
-
-	bool handleInitDialog();
-	void handleGroups();
-	void handleOKClicked();
-
-	void fillGroups();
-};
-
-#endif // !defined(DCPLUSPLUS_WIN32_FAV_HUB_PROPERTIES_H)
+#endif

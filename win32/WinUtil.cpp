@@ -1169,6 +1169,12 @@ void WinUtil::addFilterMethods(ComboBoxPtr box) {
 	std::for_each(methods, methods + StringMatch::METHOD_LAST, [box](const tstring& str) { box->addValue(str); });
 }
 
+void WinUtil::fillTriboolCombo(ComboBoxPtr box) {
+	box->addValue(T_("Default"));
+	box->addValue(T_("Yes"));
+	box->addValue(T_("No"));
+}
+
 void WinUtil::preventSpaces(TextBoxPtr box) {
 	box->onUpdated([box] {
 		auto text = box->getText();

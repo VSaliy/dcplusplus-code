@@ -168,8 +168,6 @@ private:
 	bool updateUsers;
 	bool waitingForPW;
 	bool resort;
-	bool showJoins;
-	bool favShowJoins;
 	bool confirmClose;
 
 	TaskQueue tasks; // todo get rid of TaskQueue

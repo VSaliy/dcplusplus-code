@@ -50,6 +50,8 @@ edit(0),
 nick(0),
 description(0),
 email(0),
+showJoins(0),
+favShowJoins(0),
 parentEntry(parentEntry_)
 {
 	onInitDialog([this] { return handleInitDialog(); });
@@ -88,10 +90,14 @@ bool FavHubGroupsDlg::handleInitDialog() {
 	groups->setHelpId(IDH_FAV_HUB_GROUPS_LIST);
 
 	{
-		auto cur = grid->addChild(Grid::Seed(1, 2));
-		cur->column(1).align = GridInfo::BOTTOM_RIGHT;
+		auto cur = grid->addChild(Grid::Seed(1, 3));
 
-		Button::Seed seed(T_("&Update"));
+		Button::Seed seed(T_("&Add"));
+		auto add = cur->addChild(seed);
+		add->setHelpId(IDH_FAV_HUB_GROUPS_ADD);
+		add->onClicked([this] { handleAdd(); });
+
+		seed.caption = T_("&Update");
 		update = cur->addChild(seed);
 		update->setHelpId(IDH_FAV_HUB_GROUPS_UPDATE);
 		update->onClicked([this] { handleUpdate(); });
@@ -104,7 +110,7 @@ bool FavHubGroupsDlg::handleInitDialog() {
 
 	{
 		properties = grid->addChild(GroupBox::Seed(T_("Group properties")));
-		auto cur = properties->addChild(Grid::Seed(2, 1));
+		auto cur = properties->addChild(Grid::Seed(3, 1));
 		cur->column(0).mode = GridInfo::FILL;
 
 		{
@@ -118,31 +124,40 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		}
 
 		{
-			auto cur2 = cur->addChild(Grid::Seed(2, 1));
-			cur2->column(0).mode = GridInfo::FILL;
+			auto group = cur->addChild(GroupBox::Seed(T_("Identification (leave blank for defaults)")));
 
-			auto group = cur2->addChild(GroupBox::Seed(T_("Identification (leave blank for defaults)")));
+			auto cur2 = group->addChild(Grid::Seed(3, 2));
+			cur2->column(0).align = GridInfo::BOTTOM_RIGHT;
+			cur2->column(1).mode = GridInfo::FILL;
 
-			auto cur3 = group->addChild(Grid::Seed(3, 2));
-			cur3->column(0).align = GridInfo::BOTTOM_RIGHT;
-			cur3->column(1).mode = GridInfo::FILL;
-
-			cur3->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
-			nick = cur3->addChild(WinUtil::Seeds::Dialog::textBox);
+			cur2->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
+			nick = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
 			nick->setHelpId(IDH_FAVORITE_HUB_NICK);
 			WinUtil::preventSpaces(nick);
 
-			cur3->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
-			description = cur3->addChild(WinUtil::Seeds::Dialog::textBox);
+			cur2->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
+			description = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
 			description->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
 
-			cur3->addChild(Label::Seed(T_("Email")))->setHelpId(IDH_FAVORITE_HUB_EMAIL);
-			email = cur3->addChild(WinUtil::Seeds::Dialog::textBox);
+			cur2->addChild(Label::Seed(T_("Email")))->setHelpId(IDH_FAVORITE_HUB_EMAIL);
+			email = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
 			email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
+		}
 
-			auto add = cur2->addChild(Button::Seed(T_("&Add to the list")));
-			add->setHelpId(IDH_FAV_HUB_GROUPS_ADD);
-			add->onClicked([this] { handleAdd(); });
+		{
+			auto cur2 = cur->addChild(Grid::Seed(2, 2));
+			cur2->column(0).mode = GridInfo::FILL;
+			cur2->column(0).align = GridInfo::BOTTOM_RIGHT;
+
+			cur2->addChild(Label::Seed(T_("Show joins / parts in chat by default")));
+			showJoins = cur2->addChild(WinUtil::Seeds::Dialog::comboBox);
+			WinUtil::fillTriboolCombo(showJoins);
+			showJoins->setSelected(0);
+
+			cur2->addChild(Label::Seed(T_("Only show joins / parts for favorite users")));
+			favShowJoins = cur2->addChild(WinUtil::Seeds::Dialog::comboBox);
+			WinUtil::fillTriboolCombo(favShowJoins);
+			favShowJoins->setSelected(0);
 		}
 	}
 
@@ -207,6 +222,16 @@ void FavHubGroupsDlg::handleSelectionChanged() {
 	nick->setText(Text::toT(settings.getNick()));
 	description->setText(Text::toT(settings.getDescription()));
 	email->setText(Text::toT(settings.getEmail()));
+	showJoins->setSelected(toInt(settings.showJoins));
+	favShowJoins->setSelected(toInt(settings.favShowJoins));
+}
+
+void FavHubGroupsDlg::handleAdd() {
+	tstring name = edit->getText();
+	if(addable(name)) {
+		HoldRedraw hold(groups);
+		add(name, getSettings());
+	}
 }
 
 void FavHubGroupsDlg::handleUpdate() {
@@ -235,14 +260,6 @@ void FavHubGroupsDlg::handleRemove() {
 	groups->forEachSelectedT([this](const GroupInfo *group) { removeGroup(group); }, true);
 }
 
-void FavHubGroupsDlg::handleAdd() {
-	tstring name = edit->getText();
-	if(addable(name)) {
-		HoldRedraw hold(groups);
-		add(name, getSettings());
-	}
-}
-
 void FavHubGroupsDlg::handleClose() {
 	FavoriteManager::getInstance()->setFavHubGroups(groups->forEachT(GroupCollector()).groups);
 	FavoriteManager::getInstance()->save();
@@ -265,6 +282,8 @@ HubSettings FavHubGroupsDlg::getSettings() const {
 	settings.setNick(Text::fromT(nick->getText()));
 	settings.setDescription(Text::fromT(description->getText()));
 	settings.setEmail(Text::fromT(email->getText()));
+	settings.showJoins = to3bool(showJoins->getSelected());
+	settings.favShowJoins = to3bool(favShowJoins->getSelected());
 	return settings;
 }
 

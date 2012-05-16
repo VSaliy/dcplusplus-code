@@ -250,6 +250,7 @@ public:
 	static ButtonPtr addHelpButton(GridPtr grid);
 	static void addSearchIcon(TextBoxPtr box);
 	static void addFilterMethods(ComboBoxPtr box);
+	static void fillTriboolCombo(ComboBoxPtr box);
 	static void preventSpaces(TextBoxPtr box);
 
 	static void setColor(dwt::Control* widget);
