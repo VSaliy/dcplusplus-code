@@ -1,5 +1,4 @@
 # Locale::Po4a::Common -- Common parts of the po4a scripts and utils
-# $Id: Common.pm,v 1.21 2009-12-27 01:16:02 nekral-guest Exp $
 #
 # Copyright 2005 by Jordi Vilalta <jvprat@gmail.com>
 #
@@ -12,7 +11,7 @@
 
 =head1 NAME
 
-Locale::Po4a::Common - Common parts of the po4a scripts and utils
+Locale::Po4a::Common - common parts of the po4a scripts and utils
 
 =head1 DESCRIPTION
 
@@ -108,7 +107,7 @@ sub show_version {
     print sprintf(gettext(
 	"%s version %s.\n".
 	"written by Martin Quinson and Denis Barbier.\n\n".
-	"Copyright (C) 2002, 2003, 2004 Software of Public Interest, Inc.\n".
+	"Copyright (C) 2002, 2003, 2004 Software in the Public Interest, Inc.\n".
 	"This is free software; see source code for copying\n".
 	"conditions. There is NO warranty; not even for\n".
 	"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."

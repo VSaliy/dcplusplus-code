@@ -1,5 +1,4 @@
-# Locale::Po4a::Pod -- Convert POD data to PO file, for translation.
-# $Id: Chooser.pm,v 1.42 2009-12-27 01:16:02 nekral-guest Exp $
+# Locale::Po4a::Chooser -- Manage po4a modules
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the terms of GPL (see COPYING).
@@ -59,15 +58,15 @@ sub list {
     warn wrap_msg(gettext("List of valid formats:")
 #	."\n  - ".gettext("bibtex: BibTex bibliography format.")
 	."\n  - ".gettext("dia: uncompressed Dia diagrams.")
-	."\n  - ".gettext("docbook: Docbook XML.")
-	."\n  - ".gettext("guide: Gentoo Linux's xml documentation format.")
+	."\n  - ".gettext("docbook: DocBook XML.")
+	."\n  - ".gettext("guide: Gentoo Linux's XML documentation format.")
 #	."\n  - ".gettext("html: HTML documents (EXPERIMENTAL).")
-	."\n  - ".gettext("ini: .INI format.")
+	."\n  - ".gettext("ini: INI format.")
 	."\n  - ".gettext("kernelhelp: Help messages of each kernel compilation option.")
 	."\n  - ".gettext("latex: LaTeX format.")
 	."\n  - ".gettext("man: Good old manual page format.")
 	."\n  - ".gettext("pod: Perl Online Documentation format.")
-	."\n  - ".gettext("sgml: either debiandoc or docbook DTD.")
+	."\n  - ".gettext("sgml: either DebianDoc or DocBook DTD.")
 	."\n  - ".gettext("texinfo: The info page format.")
 	."\n  - ".gettext("tex: generic TeX documents (see also latex).")
 	."\n  - ".gettext("text: simple text document.")
@@ -88,20 +87,20 @@ __END__
 
 =head1 NAME
 
-Locale::Po4a::Chooser - Manage po4a modules
+Locale::Po4a::Chooser - manage po4a modules
 
 =head1 DESCRIPTION
 
-Locale::Po4a::Chooser is a module to manage po4a modules. Before, all po4a
+Locale::Po4a::Chooser is a module to manage po4a modules. Previously, all po4a
 binaries used to know all po4a modules (pod, man, sgml, etc). This made the
-add of a new module boring, to make sure the documentation is synchronized
+addition of a new module boring, to make sure the documentation is synchronized
 in all modules, and that each of them can access the new module.
 
 Now, you just have to call the Locale::Po4a::Chooser::new() function,
 passing the name of module as argument.
 
 You also have the Locale::Po4a::Chooser::list() function which lists the
-available format and exits on the value passed as argument.
+available formats and exits on the value passed as argument.
 
 =head1 SEE ALSO
 
@@ -109,9 +108,9 @@ available format and exits on the value passed as argument.
 
 =item About po4a:
 
-L<po4a(7)|po4a.7>, 
+L<Locale::Po4a::Po(3pm)>,
 L<Locale::Po4a::TransTractor(3pm)>,
-L<Locale::Po4a::Po(3pm)>
+L<po4a(7)|po4a.7>
 
 =item About modules:
 
