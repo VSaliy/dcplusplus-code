@@ -208,14 +208,12 @@ sub pushline {
 		} else {
 			# TODO: It will be hard to identify the location.
 			#       => find a way to retrieve the reference.
-			die wrap_mod("po4a::xml", dgettext("po4a", "'po4a-id=%d' in the translation does not exist in the original string (or 'po4a-id=%d' used twice in the translation)."), $id, $id);
+			die wrap_mod("po4a::xml", dgettext("po4a", "'po4a-id=%d' in the translation does not exist in the original string (or 'po4a-id=%d' used twice in the translation). Translation: %s"), $id, $id, $translation);
 		}
 	}
-# TODO: check that %folded_attributes is empty at some time
-# => in translate_paragraph?
 
 	if (   ($#save_holders > 0)
-	    or ($translation =~ m/<placeholder\s+type="[^"]+"\s+id="(\d+)"\s*\/>/s)) {
+	    or ($translation =~ m/<placeholder\s+id=(\d+)\s*\/>/s)) {
 		$holder->{'translation'} = $translation;
 	} else {
 		$self->SUPER::pushline($translation);
@@ -397,7 +395,7 @@ translated separately.
 The location of the placeholder in its block will be marked with a string
 similar to:
 
-  <placeholder type=\"footnote\" id=\"0\"/>
+  <placeholder id=0/>
 
 The tags must be in the form <aaa>, but you can join some
 (<bbb><aaa>), if a tag (<aaa>) should only be considered 
@@ -1405,14 +1403,13 @@ sub treat_content {
 	NEXT_TAG:
 		my @text;
 		my $type = $self->tag_type;
-		my $f_extract = $tag_types[$type]->{'f_extract'};
-		if (    defined($f_extract)
-		    and $f_extract eq \&tag_extract_comment) {
+		if ($tag_types[$type]->{'beginning'} eq "!--" or $tag_types[$type]->{'beginning'} eq "!--#") {
 			# Remove the content of the comments
 			($eof, @text) = $self->extract_tag($type,1);
 			$text[$#text-1] .= "\0";
 			if ($tag_types[$type]->{'beginning'} eq "!--#") {
-				$text[0] = "#".$text[0];
+				# Convert SSIs into standard comments
+				$text[0] = " [SSI comment parsed by po4a] ".$text[0];
 			}
 			push @comments, @text;
 		} else {
@@ -1435,7 +1432,7 @@ sub treat_content {
 						# paragraph, and save the @paragraph in the
 						# current holder.
 						my $last_holder = $save_holders[$#save_holders];
-						my $placeholder_str = "<placeholder type=\"".$cur_tag_name."\" id=\"".($#{$last_holder->{'sub_translations'}}+1)."\"/>";
+						my $placeholder_str = "<placeholder id=".($#{$last_holder->{'sub_translations'}}+1)."/>";
 						push @paragraph, ($placeholder_str, $text[1]);
 						my @saved_paragraph = @paragraph;
 
@@ -1668,16 +1665,22 @@ sub translate_paragraph {
 	# numbered.
 	{
 		my $holder = $save_holders[$#save_holders];
+
+		# Make sure all folded attributes have been un-folded.
+		if (%{$holder->{folded_attributes}}) {
+			die wrap_ref_mod($paragraph[1], "po4a::xml", dgettext("po4a", "po4a-id attributes mis-match (path: %s; string: %s)"), $self->get_path, $para);
+		}
+
 		my $translation = $holder->{'translation'};
 
 		# Count the number of <placeholder ...> in $translation
 		my $count = 0;
 		my $str = $translation;
 		while (    (defined $str)
-		       and ($str =~ m/^.*?<placeholder\s+type="[^"]+"\s+id="(\d+)"\s*\/>(.*)$/s)) {
+		       and ($str =~ m/^.*?<placeholder\s+id=(\d+)\s*\/>(.*)$/s)) {
 			$count += 1;
 			$str = $2;
-			if ($holder->{'sub_translations'}->[$1] =~ m/<placeholder\s+type="[^"]+"\s+id="(\d+)"\s*\/>/s) {
+			if ($holder->{'sub_translations'}->[$1] =~ m/<placeholder\s+id=(\d+)\s*\/>/s) {
 				$count = -1;
 				last;
 			}
@@ -1688,7 +1691,7 @@ sub translate_paragraph {
 			# OK, all the holders of the current paragraph are
 			# closed (and translated).
 			# Replace them by their translation.
-			while ($translation =~ m/^(.*?)<placeholder\s+type="[^"]+"\s+id="(\d+)"\s*\/>(.*)$/s) {
+			while ($translation =~ m/^(.*?)<placeholder\s+id=(\d+)\s*\/>(.*)$/s) {
 				# FIXME: we could also check that
 				#          * the holder exists
 				#          * all the holders are used
