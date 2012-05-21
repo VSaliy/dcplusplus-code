@@ -32,11 +32,11 @@
 
 =head1 NAME
 
-Locale::Po4a::Xml - Convert XML documents and derivates from/to PO files
+Locale::Po4a::Xml - convert XML documents and derivates from/to PO files
 
 =head1 DESCRIPTION
 
-The po4a (po for anything) project goal is to ease translations (and more
+The po4a (PO for anything) project goal is to ease translations (and more
 interestingly, the maintenance of translations) using gettext tools on
 areas where they were not expected like documentation.
 
@@ -70,6 +70,7 @@ my @path;
 my %entities;
 
 my @comments;
+my %translate_options_cache;
 
 my $_shiftline_in_comment = 0;
 sub shiftline {
@@ -207,12 +208,14 @@ sub pushline {
 		} else {
 			# TODO: It will be hard to identify the location.
 			#       => find a way to retrieve the reference.
-			die wrap_mod("po4a::xml", dgettext("po4a", "'po4a-id=%d' in the translation does not exist in the original string (or 'po4a-id=%d' used twice in the translation). Translation: %s"), $id, $id, $translation);
+			die wrap_mod("po4a::xml", dgettext("po4a", "'po4a-id=%d' in the translation does not exist in the original string (or 'po4a-id=%d' used twice in the translation)."), $id, $id);
 		}
 	}
+# TODO: check that %folded_attributes is empty at some time
+# => in translate_paragraph?
 
 	if (   ($#save_holders > 0)
-	    or ($translation =~ m/<placeholder\s+id=(\d+)\s*\/>/s)) {
+	    or ($translation =~ m/<placeholder\s+type="[^"]+"\s+id="(\d+)"\s*\/>/s)) {
 		$holder->{'translation'} = $translation;
 	} else {
 		$self->SUPER::pushline($translation);
@@ -229,7 +232,7 @@ written in most XML based documents.
 There are some options (described in the next section) that can customize
 this behavior.  If this doesn't fit to your document format you're encouraged
 to write your own module derived from this, to describe your format's details.
-See the section "Writing derivate modules" below, for the process description.
+See the section B<WRITING DERIVATE MODULES> below, for the process description.
 
 =cut
 
@@ -285,7 +288,7 @@ documents.
 =item B<ontagerror>
 
 This option defines the behavior of the module when it encounter a invalid
-Xml syntax (a closing tag which does not match the last opening tag, or a
+XML syntax (a closing tag which does not match the last opening tag, or a
 tag's attribute without value).
 It can take the following values:
 
@@ -394,7 +397,7 @@ translated separately.
 The location of the placeholder in its block will be marked with a string
 similar to:
 
-  <placeholder id=0/>
+  <placeholder type=\"footnote\" id=\"0\"/>
 
 The tags must be in the form <aaa>, but you can join some
 (<bbb><aaa>), if a tag (<aaa>) should only be considered 
@@ -551,6 +554,9 @@ sub initialize {
 	$self->{nodefault}=();
 
 	$self->treat_options;
+
+	#  Clear cache
+	%translate_options_cache=();
 }
 
 =head1 WRITING DERIVATE MODULES
@@ -662,15 +668,15 @@ define a tag type you'll have to make a hash with the following keys:
 
 =over 4
 
-=item beginning
+=item B<beginning>
 
 Specifies the beginning of the tag, after the "E<lt>".
 
-=item end
+=item B<end>
 
 Specifies the end of the tag, before the "E<gt>".
 
-=item breaking
+=item B<breaking>
 
 It says if this is a breaking tag class.  A non-breaking (inline) tag is one
 that can be taken as part of the content of another tag.  It can take the
@@ -678,12 +684,12 @@ values false (0), true (1) or undefined.  If you leave this undefined, you'll
 have to define the f_breaking function that will say whether a concrete tag of
 this class is a breaking tag or not.
 
-=item f_breaking
+=item B<f_breaking>
 
 It's a function that will tell if the next tag is a breaking one or not.  It
-should be defined if the "breaking" option is not.
+should be defined if the B<breaking> option is not.
 
-=item f_extract
+=item B<f_extract>
 
 If you leave this key undefined, the generic extraction function will have to
 extract the tag itself.  It's useful for tags that can have other tags or
@@ -691,7 +697,7 @@ special structures in them, so that the main parser doesn't get mad.  This
 function receives a boolean that says if the tag should be removed from the
 input stream or not.
 
-=item f_translate
+=item B<f_translate>
 
 This function receives the tag (in the get_string_until() format) and returns
 the translated tag (translated attributes or all needed transformations) as a
@@ -728,7 +734,7 @@ our @tag_types = (
 		f_extract	=> \&tag_extract_doctype,
 		f_translate	=> \&tag_trans_doctype},
 	{	beginning	=> "![CDATA[",
-		end		=> "",
+		end		=> "]]",
 		breaking	=> 1,
 		f_extract	=> \&CDATA_extract,
 		f_translate	=> \&CDATA_trans},
@@ -975,7 +981,7 @@ sub tag_trans_open {
 This function returns the path to the current tag from the document's root,
 in the form E<lt>htmlE<gt>E<lt>bodyE<gt>E<lt>pE<gt>.
 
-An additional array of tags (without brackets) can be passed in argument.
+An additional array of tags (without brackets) can be passed as argument.
 These path elements are added to the end of the current path.
 
 =cut
@@ -1264,7 +1270,6 @@ sub treat_attributes {
 #   n: a custom tag
 #
 # A translatable inline tag in an untranslated tag is treated as a translatable breaking tag.
-my %translate_options_cache;
 sub get_translate_options {
 	my $self = shift;
 	my $path = shift;
@@ -1400,13 +1405,14 @@ sub treat_content {
 	NEXT_TAG:
 		my @text;
 		my $type = $self->tag_type;
-		if ($tag_types[$type]->{'beginning'} eq "!--" or $tag_types[$type]->{'beginning'} eq "!--#") {
+		my $f_extract = $tag_types[$type]->{'f_extract'};
+		if (    defined($f_extract)
+		    and $f_extract eq \&tag_extract_comment) {
 			# Remove the content of the comments
 			($eof, @text) = $self->extract_tag($type,1);
 			$text[$#text-1] .= "\0";
 			if ($tag_types[$type]->{'beginning'} eq "!--#") {
-				# Convert SSIs into standard comments
-				$text[0] = " [SSI comment parsed by po4a] ".$text[0];
+				$text[0] = "#".$text[0];
 			}
 			push @comments, @text;
 		} else {
@@ -1429,7 +1435,7 @@ sub treat_content {
 						# paragraph, and save the @paragraph in the
 						# current holder.
 						my $last_holder = $save_holders[$#save_holders];
-						my $placeholder_str = "<placeholder id=".($#{$last_holder->{'sub_translations'}}+1)."/>";
+						my $placeholder_str = "<placeholder type=\"".$cur_tag_name."\" id=\"".($#{$last_holder->{'sub_translations'}}+1)."\"/>";
 						push @paragraph, ($placeholder_str, $text[1]);
 						my @saved_paragraph = @paragraph;
 
@@ -1662,22 +1668,16 @@ sub translate_paragraph {
 	# numbered.
 	{
 		my $holder = $save_holders[$#save_holders];
-
-		# Make sure all folded attributes have been un-folded.
-		if (%{$holder->{folded_attributes}}) {
-			die wrap_ref_mod($paragraph[1], "po4a::xml", dgettext("po4a", "po4a-id attributes mis-match (path: %s; string: %s)"), $self->get_path, $para);
-		}
-
 		my $translation = $holder->{'translation'};
 
 		# Count the number of <placeholder ...> in $translation
 		my $count = 0;
 		my $str = $translation;
 		while (    (defined $str)
-		       and ($str =~ m/^.*?<placeholder\s+id=(\d+)\s*\/>(.*)$/s)) {
+		       and ($str =~ m/^.*?<placeholder\s+type="[^"]+"\s+id="(\d+)"\s*\/>(.*)$/s)) {
 			$count += 1;
 			$str = $2;
-			if ($holder->{'sub_translations'}->[$1] =~ m/<placeholder\s+id=(\d+)\s*\/>/s) {
+			if ($holder->{'sub_translations'}->[$1] =~ m/<placeholder\s+type="[^"]+"\s+id="(\d+)"\s*\/>/s) {
 				$count = -1;
 				last;
 			}
@@ -1688,7 +1688,7 @@ sub translate_paragraph {
 			# OK, all the holders of the current paragraph are
 			# closed (and translated).
 			# Replace them by their translation.
-			while ($translation =~ m/^(.*?)<placeholder\s+id=(\d+)\s*\/>(.*)$/s) {
+			while ($translation =~ m/^(.*?)<placeholder\s+type="[^"]+"\s+id="(\d+)"\s*\/>(.*)$/s) {
 				# FIXME: we could also check that
 				#          * the holder exists
 				#          * all the holders are used
@@ -1919,15 +1919,15 @@ The valid options are:
 
 =over 4
 
-=item include
+=item B<include>
 
 This makes the returned array to contain the searched text
 
-=item remove
+=item B<remove>
 
 This removes the returned stream from the input
 
-=item unquoted
+=item B<unquoted>
 
 This ensures that the searched text is outside any quotes
 
@@ -2061,7 +2061,8 @@ MODIFY TAG TYPES FROM INHERITED MODULES
 
 =head1 SEE ALSO
 
-L<po4a(7)|po4a.7>, L<Locale::Po4a::TransTractor(3pm)|Locale::Po4a::TransTractor>.
+L<Locale::Po4a::TransTractor(3pm)|Locale::Po4a::TransTractor>,
+L<po4a(7)|po4a.7>
 
 =head1 AUTHORS
 

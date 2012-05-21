@@ -2,9 +2,9 @@
 
 # Po4a::Xhtml.pm 
 # 
-# extract and translate translatable strings from Xhtml documents.
+# extract and translate translatable strings from XHTML documents.
 # 
-# This code extracts plain text from tags and attributes from strict Xhtml
+# This code extracts plain text from tags and attributes from strict XHTML
 # documents.
 #
 # Copyright (c) 2005 by Yves Rütschlé <po4a@rutschle.net>
@@ -30,15 +30,15 @@
 
 =head1 NAME
 
-Locale::Po4a::Xhtml - Convert Xhtml documents from/to PO files
+Locale::Po4a::Xhtml - convert XHTML documents from/to PO files
 
 =head1 DESCRIPTION
 
-The goal of the po4a (po for anything) project is to ease translations (and
-more interestingly, the maintenance of translations) using gettext tools on
-areas where they were not originally expected like documentation.
+The po4a (PO for anything) project goal is to ease translations (and more
+interestingly, the maintenance of translations) using gettext tools on
+areas where they were not expected like documentation.
 
-Locale::Po4a::Xhtml is a module to help the translation of Xhtml documents into
+Locale::Po4a::Xhtml is a module to help the translation of XHTML documents into
 other [human] languages.
 
 =head1 OPTIONS ACCEPTED BY THIS MODULE
@@ -47,7 +47,7 @@ These are this module's particular options:
 
 =over 4
 
-=item B<includessi>[=I<rootpath>]
+=item B<includessi>[B<=>I<rootpath>]
 
 Include files specified by an include SSI (Server Side Includes) element
 (e.g. <!--#include virtual="/foo/bar.html" -->).
@@ -70,7 +70,7 @@ particular, tables are getting no testing whatsoever, as we don't use them.
 
 =head1 SEE ALSO
 
-L<po4a(7)|po4a.7>, L<Locale::Po4a::TransTractor(3pm)>, L<Locale::Po4a::Xml(3pm)>.
+L<Locale::Po4a::TransTractor(3pm)>, L<Locale::Po4a::Xml(3pm)>, L<po4a(7)|po4a.7>
 
 =head1 AUTHORS
 
@@ -145,6 +145,8 @@ sub tag_extract_SSI {
                         my ($ir, $il) = (pop @include, pop @include);
                         $self->unshiftline($il,$ir);
                 }
+                $t =~ s/<!--#include/<!-- SSI included by po4a: /;
+                $self->unshiftline($t, $r);
         }
         return ($eof,@tag);
 }

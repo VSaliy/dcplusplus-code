@@ -1,5 +1,4 @@
-# Locale::Po4a::Po -- manipulation of po files
-# $Id: Po.pm,v 1.97 2009-12-30 21:12:31 nekral-guest Exp $
+# Locale::Po4a::Po -- manipulation of PO files
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the terms of GPL (see COPYING).
@@ -12,14 +11,14 @@
 
 =head1 NAME
 
-Locale::Po4a::Po - po file manipulation module
+Locale::Po4a::Po - PO file manipulation module
 
 =head1 SYNOPSIS
 
     use Locale::Po4a::Po;
     my $pofile=Locale::Po4a::Po->new();
 
-    # Read po file
+    # Read PO file
     $pofile->read('file.po');
 
     # Add an entry
@@ -39,10 +38,10 @@ catalogs. You can load and write from/to a file (which extension is often
 I<po>), you can build new entries on the fly or request for the translation
 of a string.
 
-For a more complete description of message catalogs in the po format and
+For a more complete description of message catalogs in the PO format and
 their use, please refer to the documentation of the gettext program.
 
-This module is part of the PO4A project, which objective is to use po files
+This module is part of the po4a project, which objective is to use PO files
 (designed at origin to ease the translation of program messages) to
 translate everything, including documentation (man page, info manual),
 package description, debconf templates, and everything which may benefit
@@ -52,10 +51,10 @@ from this.
 
 =over 4
 
-=item porefs
+=item B<porefs>
 
-This specifies the reference format. It can be one of 'none' to not produce
-any reference, 'noline' to not specify the line number, and 'full' to
+This specifies the reference format. It can be one of B<none> to not produce
+any reference, B<noline> to not specify the line number, and B<full> to
 include complete references.
 
 =back
@@ -110,7 +109,7 @@ our %debug=('canonize'  => 0,
 =item new()
 
 Creates a new message catalog. If an argument is provided, it's the name of
-a po file we should load.
+a PO file we should load.
 
 =cut
 
@@ -196,11 +195,13 @@ sub initialize {
                                 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n".
                                 "Last-Translator: FULL NAME <EMAIL\@ADDRESS>\n".
                                 "Language-Team: LANGUAGE <LL\@li.org>\n".
+                                "Language: \n".
                                 "MIME-Version: 1.0\n".
                                 "Content-Type: text/plain; charset=CHARSET\n".
-                                "Content-Transfer-Encoding: ENCODING");
+                                "Content-Transfer-Encoding: 8bit\n");
 
     $self->{encoder}=find_encoding("ascii");
+    $self->{footer}=[];
 
     # To make stats about gettext hits
     $self->stats_clear();
@@ -208,7 +209,7 @@ sub initialize {
 
 =item read($)
 
-Reads a po file (which name is given as argument).  Previously existing
+Reads a PO file (which name is given as argument).  Previously existing
 entries in self are not removed, the new ones are added to the end of the
 catalog.
 
@@ -249,8 +250,12 @@ sub read {
     my $linenum=0;
 
     foreach my $msg (split (/\n\n/,$pofile)) {
-        my ($msgid,$msgstr,$comment,$automatic,$reference,$flags,$buffer);
+        my ($msgid,$msgstr,$comment,$previous,$automatic,$reference,$flags,$buffer);
         my ($msgid_plural, $msgstr_plural);
+        if ($msg =~ m/^#~/m) {
+            push(@{$self->{footer}}, $msg);
+            next;
+        }
         foreach my $line (split (/\n/,$msg)) {
             $linenum++;
             if ($line =~ /^#\. ?(.*)$/) {  # Automatic comment
@@ -261,6 +266,9 @@ sub read {
 
             } elsif ($line =~ /^#, ?(.*)$/) { # flags
                 $flags .= (defined($flags) ? "\n" : "").$1;
+
+            } elsif ($line =~ /^#\| ?(.*)$/) { # previous translation
+                $previous .= (defined($previous) ? "\n" : "").($1||"");
 
             } elsif ($line =~ /^#(.*)$/) {  # Translator comments
                 $comment .= (defined($comment) ? "\n" : "").($1||"");
@@ -324,6 +332,7 @@ sub read {
                              'reference' => $reference,
                              'flags'     => $flags,
                              'comment'   => $comment,
+                             'previous'  => $previous,
                              'automatic' => $automatic,
                              'plural'    => 0);
 
@@ -337,6 +346,7 @@ sub read {
                              'reference' => $reference,
                              'flags'     => $flags,
                              'comment'   => $comment,
+                             'previous'  => $previous,
                              'automatic' => $automatic,
                              'plural'    => 1);
         } else {
@@ -350,6 +360,7 @@ sub read {
                              'reference' => $reference,
                              'flags'     => $flags,
                              'comment'   => $comment,
+                             'previous'  => $previous,
                              'automatic' => $automatic);
         }
     }
@@ -392,7 +403,7 @@ sub write{
     print $fh "msgstr ".quote_text($self->{header})."\n\n";
 
 
-    my $buf_msgstr_plural; # USed to keep the first msgstr of plural forms
+    my $buf_msgstr_plural; # Used to keep the first msgstr of plural forms
     my $first=1;
     foreach my $msgid ( sort { ($self->{po}{"$a"}{'pos'}) <=>
                                ($self->{po}{"$b"}{'pos'})
@@ -424,6 +435,9 @@ sub write{
         $output .= "#, ". join(", ", sort split(/\s+/,$self->{po}{$msgid}{'flags'}))."\n"
             if    defined($self->{po}{$msgid}{'flags'})
                && length ($self->{po}{$msgid}{'flags'});
+        $output .= format_comment($self->{po}{$msgid}{'previous'},"| ")
+            if    defined($self->{po}{$msgid}{'previous'})
+               && length ($self->{po}{$msgid}{'previous'});
 
         if (exists $self->{po}{$msgid}{'plural'}) {
             if ($self->{po}{$msgid}{'plural'} == 0) {
@@ -467,6 +481,8 @@ sub write{
 
         print $fh $output;
     }
+    print $fh join("\n\n", @{$self->{footer}}) if scalar @{$self->{footer}};
+
 #    print STDERR "$fh";
 #    if ($filename ne '-') {
 #        close $fh
@@ -480,7 +496,7 @@ sub write{
 
 Like write, but if the PO or POT file already exists, the object will be
 written in a temporary file which will be compared with the existing file
-to check that the update is needed (this avoids to change a POT just to
+to check if the update is needed (this avoids to change a POT just to
 update a line reference or the POT-Creation-Date field).
 
 =cut
@@ -502,12 +518,6 @@ sub move_po_if_needed {
             my ($atime, $mtime) = (time,time);
             utime $atime, $mtime, $old_po;
         } else {
-            if ($backup) {
-                copy $old_po, $old_po."~"
-                    or die wrap_msg(dgettext("po4a","Can't copy %s to %s: %s."),
-                                    $old_po, $old_po."~", $!);
-            } else {
-            }
             move $new_po, $old_po
                 or die wrap_msg(dgettext("po4a","Can't move %s to %s: %s."),
                                 $new_po, $old_po, $!);
@@ -589,7 +599,7 @@ sub gettextize {
 
     if ( $poorig->get_charset =~ /^utf-8$/i ) {
         $potrans->to_utf8;
-        $pores->set_charset("utf-8");
+        $pores->set_charset("UTF-8");
     } else {
         if ($potrans->get_charset eq "CHARSET") {
             $pores->set_charset("ascii");
@@ -635,6 +645,13 @@ sub gettextize {
         #
         if ($typeorig ne $typetrans){
             $pores->write("gettextization.failed.po");
+            eval {
+               # Recode $trans into current charset, if possible
+               require I18N::Langinfo;
+               I18N::Langinfo->import(qw(langinfo CODESET));
+               my $codeset = langinfo(CODESET());
+               Encode::from_to($trans, $potrans->get_charset, $codeset);
+            };
             die wrap_msg(dgettext("po4a",
                          "po4a gettextization: Structure disparity between ".
                          "original and translated files:\n".
@@ -684,11 +701,11 @@ sub gettextize {
 This function extracts a catalog from an existing one. Only the entries having
 a reference in the given file will be placed in the resulting catalog.
 
-This function parses its argument, converts it to a perl function definition,
-eval this definition and filter the fields for which this function returns
+This function parses its argument, converts it to a Perl function definition,
+evals this definition and filters the fields for which this function returns
 true.
 
-I love perl sometimes ;)
+I love Perl sometimes ;)
 
 =cut
 
@@ -789,7 +806,7 @@ sub filter {
             # check that we've got a valid field name,
             # and the number it referes to
             # DO NOT CHANGE THE ORDER
-            my @names=qw(msgid msgstr reference flags comment automatic);
+            my @names=qw(msgid msgstr reference flags comment previous automatic);
             my $fieldpos;
             for ($fieldpos = 0;
                  $fieldpos < scalar @names && $field ne $names[$fieldpos];
@@ -849,7 +866,7 @@ sub filter {
                 $pos++;
             }
             # and now, add the code to check this equality
-            $code .= "(\$_[$fieldpos] =~ m/$arg/)";
+            $code .= "(\$_[$fieldpos] =~ m{$arg})";
 
         }
         showmethecode("End of expression")
@@ -877,7 +894,7 @@ sub filter {
          $cpt<$self->count_entries();
          $cpt++) {
 
-        my ($msgid,$ref,$msgstr,$flags,$type,$comment,$automatic);
+        my ($msgid,$ref,$msgstr,$flags,$type,$comment,$previous,$automatic);
 
         $msgid = $self->msgid($cpt);
         $ref=$self->{po}{$msgid}{'reference'};
@@ -886,6 +903,7 @@ sub filter {
         $flags =  $self->{po}{$msgid}{'flags'};
         $type = $self->{po}{$msgid}{'type'};
         $comment = $self->{po}{$msgid}{'comment'};
+        $previous = $self->{po}{$msgid}{'previous'};
         $automatic = $self->{po}{$msgid}{'automatic'};
 
         # DO NOT CHANGE THE ORDER
@@ -895,8 +913,9 @@ sub filter {
                        'type'  => $type,
                        'reference' => $ref,
                        'comment' => $comment,
+                       'previous' => $previous,
                        'automatic' => $automatic)
-               if (apply($msgid,$msgstr,$ref,$flags,$comment,$automatic));
+               if (apply($msgid,$msgstr,$ref,$flags,$comment,$previous,$automatic));
     }
     # delete the apply subroutine
     # otherwise it will be redefined.
@@ -906,9 +925,9 @@ sub filter {
 
 =item to_utf8()
 
-Recodes to utf-8 the po's msgstrs. Does nothing if the charset is not
-specified in the po file ("CHARSET" value), or if it's already utf-8 or
-ascii.
+Recodes to UTF-8 the PO's msgstrs. Does nothing if the charset is not
+specified in the PO file ("CHARSET" value), or if it's already UTF-8 or
+ASCII.
 
 =cut
 
@@ -922,7 +941,7 @@ sub to_utf8 {
         foreach my $msgid ( keys %{$this->{po}} ) {
             Encode::from_to($this->{po}{$msgid}{'msgstr'}, $charset, "utf-8");
         }
-        $this->set_charset("utf-8");
+        $this->set_charset("UTF-8");
     }
 }
 
@@ -943,15 +962,15 @@ arguments. Here are the valid entries:
 
 =over
 
-=item wrap
+=item B<wrap>
 
 boolean indicating whether we can consider that whitespaces in string are
 not important. If yes, the function canonizes the string before looking for
 a translation, and wraps the result.
 
-=item wrapcol
+=item B<wrapcol>
 
-The column at which we should wrap (default: 76).
+the column at which we should wrap (default: 76).
 
 =back
 
@@ -1024,10 +1043,10 @@ sub gettext {
 Returns statistics about the hit ratio of gettext since the last time that
 stats_clear() was called. Please note that it's not the same
 statistics than the one printed by msgfmt --statistic. Here, it's statistics
-about recent usage of the po file, while msgfmt reports the status of the
+about recent usage of the PO file, while msgfmt reports the status of the
 file.  Example of use:
 
-    [some use of the po file to translate stuff]
+    [some use of the PO file to translate stuff]
 
     ($percent,$hit,$queries) = $pofile->stats_get();
     print "So far, we found translations for $percent\%  ($hit of $queries) of strings.\n";
@@ -1070,66 +1089,66 @@ form a hash table. The valid keys are:
 
 =over 4
 
-=item msgid
+=item B<msgid>
 
 the string in original language.
 
-=item msgstr
+=item B<msgstr>
 
 the translation.
 
-=item reference
+=item B<reference>
 
 an indication of where this string was found. Example: file.c:46 (meaning
 in 'file.c' at line 46). It can be a space-separated list in case of
 multiple occurrences.
 
-=item comment
+=item B<comment>
 
 a comment added here manually (by the translators). The format here is free.
 
-=item automatic
+=item B<automatic>
 
 a comment which was automatically added by the string extraction
-program. See the I<--add-comments> option of the B<xgettext> program for
+program. See the B<--add-comments> option of the B<xgettext> program for
 more information.
 
-=item flags
+=item B<flags>
 
 space-separated list of all defined flags for this entry.
 
-Valid flags are: c-text, python-text, lisp-text, elisp-text, librep-text,
-smalltalk-text, java-text, awk-text, object-pascal-text, ycp-text,
-tcl-text, wrap, no-wrap and fuzzy.
+Valid flags are: B<c-text>, B<python-text>, B<lisp-text>, B<elisp-text>, B<librep-text>,
+B<smalltalk-text>, B<java-text>, B<awk-text>, B<object-pascal-text>, B<ycp-text>,
+B<tcl-text>, B<wrap>, B<no-wrap> and B<fuzzy>.
 
 See the gettext documentation for their meaning.
 
-=item type
+=item B<type>
 
-This is mostly an internal argument: it is used while gettextizing
+this is mostly an internal argument: it is used while gettextizing
 documents. The idea here is to parse both the original and the translation
-into a po object, and merge them, using one's msgid as msgid and the
-other's msgid as msgstr. To make sure that things get ok, each msgid in po
+into a PO object, and merge them, using one's msgid as msgid and the
+other's msgid as msgstr. To make sure that things get ok, each msgid in PO
 objects are given a type, based on their structure (like "chapt", "sect1",
-"p" and so on in docbook). If the types of strings are not the same, that
+"p" and so on in DocBook). If the types of strings are not the same, that
 means that both files do not share the same structure, and the process
 reports an error.
 
-This information is written as automatic comment in the po file since this
+This information is written as automatic comment in the PO file since this
 gives to translators some context about the strings to translate.
 
-=item wrap
+=item B<wrap>
 
 boolean indicating whether whitespaces can be mangled in cosmetic
 reformattings. If true, the string is canonized before use.
 
-This information is written to the po file using the 'wrap' or 'no-wrap' flag.
+This information is written to the PO file using the B<wrap> or B<no-wrap> flag.
 
-=item wrapcol
+=item B<wrapcol>
 
-The column at which we should wrap (default: 76).
+the column at which we should wrap (default: 76).
 
-This information is not written to the po file.
+This information is not written to the PO file.
 
 =back
 
@@ -1139,7 +1158,7 @@ sub push {
     my $self=shift;
     my %entry=@_;
 
-    my $validoption="wrap wrapcol type msgid msgstr automatic flags reference";
+    my $validoption="wrap wrapcol type msgid msgstr automatic previous flags reference";
     my %validoption;
 
     map { $validoption{$_}=1 } (split(/ /,$validoption));
@@ -1172,10 +1191,10 @@ sub push {
 sub push_raw {
     my $self=shift;
     my %entry=@_;
-    my ($msgid,$msgstr,$reference,$comment,$automatic,$flags,$type,$transref)=
+    my ($msgid,$msgstr,$reference,$comment,$automatic,$previous,$flags,$type,$transref)=
         ($entry{'msgid'},$entry{'msgstr'},
          $entry{'reference'},$entry{'comment'},$entry{'automatic'},
-         $entry{'flags'},$entry{'type'},$entry{'transref'});
+         $entry{'previous'},$entry{'flags'},$entry{'type'},$entry{'transref'});
     my $keep_conflict = $entry{'conflict'};
 
 #    print STDERR "Push_raw\n";
@@ -1266,6 +1285,7 @@ sub push_raw {
     $self->{po}{$msgid}{'msgstr'} = $msgstr;
     $self->{po}{$msgid}{'comment'} = $comment;
     $self->{po}{$msgid}{'automatic'} = $automatic;
+    $self->{po}{$msgid}{'previous'} = $previous;
     if (defined($self->{po}{$msgid}{'pos_doc'})) {
         $self->{po}{$msgid}{'pos_doc'} .= " ".$self->{count_doc}++;
     } else {
@@ -1364,7 +1384,7 @@ sub msgid_doc($$) {
 
 =item get_charset()
 
-Returns the character set specified in the po header. If it hasn't been
+Returns the character set specified in the PO header. If it hasn't been
 set, it will return "CHARSET".
 
 =cut
@@ -1383,7 +1403,7 @@ sub get_charset() {
 
 =item set_charset($)
 
-This sets the character set of the po header to the value specified in its
+This sets the character set of the PO header to the value specified in its
 first argument. If you never call this function (and no file with a specified
 character set is read), the default value is left to "CHARSET". This value
 doesn't change the behavior of this module, it's just used to fill that field
@@ -1404,7 +1424,7 @@ sub set_charset() {
 
 #----[ helper functions ]---------------------------------------------------
 
-# transforme the string from its po file representation to the form which
+# transforme the string from its PO file representation to the form which
 #   should be used to print it
 sub unescape_text {
     my $text = shift;
@@ -1426,6 +1446,13 @@ sub unescape_text {
                 (\\\\)*    #    followed by any even number of '\'
                )\\n        # and followed by an escaped newline
               /$1\n/sgx;   # single string, match globally, allow comments
+    # unescape carriage returns
+    $text =~ s/(           # $1:
+                (\G|[^\\]) #    beginning of the line or any char
+                           #    different from '\'
+                (\\\\)*    #    followed by any even number of '\'
+               )\\r        # and followed by an escaped carriage return
+              /$1\r/sgx;   # single string, match globally, allow comments
     # unescape tabulations
     $text =~ s/(          # $1:
                 (\G|[^\\])#    beginning of the line or any char
@@ -1440,7 +1467,7 @@ sub unescape_text {
     return $text;
 }
 
-# transform the string to its representation as it should be written in po
+# transform the string to its representation as it should be written in PO
 # files
 sub escape_text {
     my $text = shift;
@@ -1449,6 +1476,7 @@ sub escape_text {
     $text =~ s/\\/\\\\/g;
     $text =~ s/"/\\"/g;
     $text =~ s/\n/\\n/g;
+    $text =~ s/\r/\\r/g;
     $text =~ s/\t/\\t/g;
     print STDERR ">$text<\n" if $debug{'escape'};
 
@@ -1562,7 +1590,7 @@ sub wrap {
     return $res;
 }
 
-# outputs properly a '# ... ' line to be put in the po file
+# outputs properly a '# ... ' line to be put in the PO file
 sub format_comment {
     my $comment=shift;
     my $char=shift;
