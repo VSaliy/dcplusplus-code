@@ -77,6 +77,7 @@ private:
 	TextBoxPtr nick;
 	TextBoxPtr description;
 	TextBoxPtr email;
+	TextBoxPtr userIp;
 	ComboBoxPtr showJoins;
 	ComboBoxPtr favShowJoins;
 

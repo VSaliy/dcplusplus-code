@@ -42,8 +42,7 @@ autoGroup(0),
 autoDetect(0),
 directOut(0),
 socks5(0),
-socksSettings(0),
-socksServer(0)
+socksSettings(0)
 {
 	setHelpId(IDH_PROXYPAGE);
 
@@ -77,27 +76,37 @@ socksServer(0)
 
 		socksSettings = cur->addChild(GroupBox::Seed(T_("SOCKS5")));
 		cur = socksSettings->addChild(Grid::Seed(5, 2));
+
 		cur->addChild(Label::Seed(T_("IP")))->setHelpId(IDH_SETTINGS_PROXY_SOCKS_SERVER);
+
 		cur->addChild(Label::Seed(T_("Port")))->setHelpId(IDH_SETTINGS_PROXY_SOCKS_PORT);
-		socksServer = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		items.emplace_back(socksServer, SettingsManager::SOCKS_SERVER, PropPage::T_STR);
-		socksServer->setHelpId(IDH_SETTINGS_PROXY_SOCKS_SERVER);
-		socksServer->setTextLimit(250);
-		TextBoxPtr box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
+
+		auto box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		items.emplace_back(box, SettingsManager::SOCKS_SERVER, PropPage::T_STR);
+		box->setHelpId(IDH_SETTINGS_PROXY_SOCKS_SERVER);
+		box->setTextLimit(250);
+		WinUtil::preventSpaces(box);
+
+		box = cur->addChild(WinUtil::Seeds::Dialog::intTextBox);
 		items.emplace_back(box, SettingsManager::SOCKS_PORT, PropPage::T_INT);
 		box->setHelpId(IDH_SETTINGS_PROXY_SOCKS_PORT);
 		box->setTextLimit(250);
+
 		cur->addChild(Label::Seed(T_("Login")))->setHelpId(IDH_SETTINGS_PROXY_SOCKS_USER);
+
 		cur->addChild(Label::Seed(T_("Password")))->setHelpId(IDH_SETTINGS_PROXY_SOCKS_PASSWORD);
+
 		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.emplace_back(box, SettingsManager::SOCKS_USER, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_PROXY_SOCKS_USER);
 		box->setTextLimit(250);
+
 		box = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.emplace_back(box, SettingsManager::SOCKS_PASSWORD, PropPage::T_STR);
 		box->setHelpId(IDH_SETTINGS_PROXY_SOCKS_PASSWORD);
 		box->setTextLimit(250);
-		CheckBoxPtr socksResolve = cur->addChild(CheckBox::Seed(T_("Use SOCKS5 server to resolve host names")));
+
+		auto socksResolve = cur->addChild(CheckBox::Seed(T_("Use SOCKS5 server to resolve host names")));
 		cur->setWidget(socksResolve, 4, 0, 1, 2);
 		items.emplace_back(socksResolve, SettingsManager::SOCKS_RESOLVE, PropPage::T_BOOL);
 		socksResolve->setHelpId(IDH_SETTINGS_PROXY_SOCKS_RESOLVE);
@@ -119,13 +128,6 @@ ProxyPage::~ProxyPage() {
 }
 
 void ProxyPage::write() {
-	tstring x = socksServer->getText();
-	tstring::size_type i;
-
-	while((i = x.find(' ')) != string::npos)
-		x.erase(i, 1);
-	socksServer->setText(x);
-
 	PropPage::write(items);
 
 	SettingsManager::getInstance()->set(SettingsManager::OUTGOING_CONNECTIONS,

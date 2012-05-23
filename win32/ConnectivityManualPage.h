@@ -42,8 +42,6 @@ private:
 	RadioButtonPtr manual;
 	RadioButtonPtr passive;
 
-	TextBoxPtr externalIP;
-
 	ComboBoxPtr mapper;
 
 	void handleAutoClicked();

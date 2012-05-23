@@ -89,6 +89,13 @@ void Client::reloadSettings(bool updateNick) {
 		settings.setNick(prevNick);
 }
 
+const string& Client::getUserIp() const {
+	if(!settings.getUserIp().empty()) {
+		return settings.getUserIp();
+	}
+	return CONNSETTING(EXTERNAL_IP);
+}
+
 void Client::connect() {
 	if(sock) {
 		BufferedSocket::putSocket(sock);
@@ -128,7 +135,6 @@ void Client::send(const char* aMessage, size_t aLen) {
 void Client::on(Connected) noexcept {
 	updateActivity();
 	ip = sock->getIp();
-	localIp = sock->getLocalIp();
 
 	if(sock->isSecure() && keyprint.compare(0, 7, "SHA256/") == 0) {
 		auto kp = sock->getKeyprint();
@@ -192,23 +198,6 @@ void Client::updateCounts(bool aRemove) {
 		}
 		++counts[countType];
 	}
-}
-
-string Client::getLocalIp() const {
-	// Best case - the server detected it
-	if((!CONNSETTING(NO_IP_OVERRIDE) || CONNSETTING(EXTERNAL_IP).empty()) && !getMyIdentity().getIp().empty()) {
-		return getMyIdentity().getIp();
-	}
-
-	if(!CONNSETTING(EXTERNAL_IP).empty()) {
-		return Socket::resolve(CONNSETTING(EXTERNAL_IP), AF_INET);
-	}
-
-	if(localIp.empty()) {
-		return Util::getLocalIp();
-	}
-
-	return localIp;
 }
 
 string Client::getCounts() {

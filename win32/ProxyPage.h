@@ -41,7 +41,6 @@ private:
 	RadioButtonPtr socks5;
 
 	GroupBoxPtr socksSettings;
-	TextBoxPtr socksServer;
 	CheckBoxPtr socksResolve;
 
 	void handleAutoClicked();

@@ -44,7 +44,6 @@ directIn(0),
 upnp(0),
 manual(0),
 passive(0),
-externalIP(0),
 mapper(0)
 {
 	setHelpId(IDH_CONNECTIVITYMANUALPAGE);
@@ -84,8 +83,9 @@ mapper(0)
 		auto cur = group->addChild(Grid::Seed(2, 1));
 		cur->column(0).mode = GridInfo::FILL;
 
-		externalIP = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		auto externalIP = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		items.emplace_back(externalIP, SettingsManager::EXTERNAL_IP, PropPage::T_STR);
+		WinUtil::preventSpaces(externalIP);
 
 		auto overrideIP = cur->addChild(CheckBox::Seed(T_("Don't allow hubs/NAT-PMP/UPnP to override")));
 		items.emplace_back(overrideIP, SettingsManager::NO_IP_OVERRIDE, PropPage::T_BOOL);
@@ -139,12 +139,6 @@ ConnectivityManualPage::~ConnectivityManualPage() {
 }
 
 void ConnectivityManualPage::write() {
-	tstring x = externalIP->getText();
-	tstring::size_type i;
-	while((i = x.find(' ')) != string::npos)
-		x.erase(i, 1);
-	externalIP->setText(x);
-
 	PropPage::write(items);
 
 	// Set the connection mode

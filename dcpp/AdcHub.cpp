@@ -594,7 +594,7 @@ void AdcHub::handle(AdcCommand::NAT, AdcCommand& c) noexcept {
 
 	// Trigger connection attempt sequence locally ...
 	auto localPort = Util::toString(sock->getLocalPort());
-	dcdebug("triggering connecting attempt in NAT: remote port = %s, local IP = %s, local port = %d\n", port.c_str(), sock->getLocalIp().c_str(), sock->getLocalPort());
+	dcdebug("triggering connecting attempt in NAT: remote port = %s, local port = %d\n", port.c_str(), sock->getLocalPort());
 	ConnectionManager::getInstance()->adcConnect(*u, port, localPort, BufferedSocket::NAT_CLIENT, token, secure);
 
 	// ... and signal other client to do likewise.
@@ -624,7 +624,7 @@ void AdcHub::handle(AdcCommand::RNT, AdcCommand& c) noexcept {
 	}
 
 	// Trigger connection attempt sequence locally
-	dcdebug("triggering connecting attempt in RNT: remote port = %s, local IP = %s, local port = %d\n", port.c_str(), sock->getLocalIp().c_str(), sock->getLocalPort());
+	dcdebug("triggering connecting attempt in RNT: remote port = %s, local port = %d\n", port.c_str(), sock->getLocalPort());
 	ConnectionManager::getInstance()->adcConnect(*u, port, Util::toString(sock->getLocalPort()), BufferedSocket::NAT_SERVER, token, secure);
 }
 
@@ -1002,8 +1002,8 @@ void AdcHub::info(bool /*alwaysSend*/) {
 		addParam(lastInfoMap, c, "KP", "SHA256/" + Encoder::toBase32(&kp[0], kp.size()));
 	}
 
-	if(CONNSETTING(NO_IP_OVERRIDE) && !CONNSETTING(EXTERNAL_IP).empty()) {
-		addParam(lastInfoMap, c, "I4", Socket::resolve(CONNSETTING(EXTERNAL_IP), AF_INET));
+	if(CONNSETTING(NO_IP_OVERRIDE) && !getUserIp().empty()) {
+		addParam(lastInfoMap, c, "I4", Socket::resolve(getUserIp(), AF_INET));
 	} else {
 		addParam(lastInfoMap, c, "I4", "0.0.0.0");
 	}
