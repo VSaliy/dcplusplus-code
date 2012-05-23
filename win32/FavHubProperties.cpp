@@ -45,6 +45,9 @@ nick(0),
 password(0),
 description(0),
 email(0),
+userIp(0),
+showJoins(0),
+favShowJoins(0),
 groups(0),
 entry(_entry)
 {
@@ -90,7 +93,7 @@ bool FavHubProperties::handleInitDialog() {
 		auto group = grid->addChild(GroupBox::Seed(T_("Identification (leave blank for defaults)")));
 		grid->setWidget(group, 1, 0, 1, 2);
 
-		auto cur = group->addChild(Grid::Seed(4, 2));
+		auto cur = group->addChild(Grid::Seed(5, 2));
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
 		cur->column(1).mode = GridInfo::FILL;
 
@@ -116,6 +119,12 @@ bool FavHubProperties::handleInitDialog() {
 		email = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		email->setText(Text::toT(entry->getEmail()));
 		email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
+
+		cur->addChild(Label::Seed(T_("External / WAN IP")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
+		userIp = cur->addChild(WinUtil::Seeds::Dialog::textBox);
+		userIp->setText(Text::toT(entry->getUserIp()));
+		userIp->setHelpId(IDH_FAVORITE_HUB_USER_IP);
+		WinUtil::preventSpaces(userIp);
 	}
 
 	{
@@ -179,6 +188,7 @@ void FavHubProperties::handleOKClicked() {
 	entry->setPassword(Text::fromT(password->getText()));
 	entry->setDescription(Text::fromT(description->getText()));
 	entry->setEmail(Text::fromT(email->getText()));
+	entry->setUserIp(Text::fromT(userIp->getText()));
 	entry->showJoins = to3bool(showJoins->getSelected());
 	entry->favShowJoins = to3bool(favShowJoins->getSelected());
 	entry->setGroup(Text::fromT(groups->getText()));

@@ -65,7 +65,6 @@ public:
 
 	const string& getIp() const { return ip; }
 	string getIpPort() const { return getIp() + ':' + port; }
-	string getLocalIp() const;
 
 	void updated(OnlineUser& user);
 	void updated(OnlineUserList& users);
@@ -128,6 +127,8 @@ protected:
 
 	/** Reload details from favmanager or settings */
 	void reloadSettings(bool updateNick);
+	/// Get the external IP the user has defined for this hub, if any.
+	const string& getUserIp() const;
 
 	virtual void checkNick(string& nick) = 0;
 
@@ -148,7 +149,6 @@ private:
 	string hubUrl;
 	string address;
 	string ip;
-	string localIp;
 	string keyprint;
 	string port;
 	char separator;

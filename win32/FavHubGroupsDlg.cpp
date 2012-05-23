@@ -50,6 +50,7 @@ edit(0),
 nick(0),
 description(0),
 email(0),
+userIp(0),
 showJoins(0),
 favShowJoins(0),
 parentEntry(parentEntry_)
@@ -126,7 +127,7 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		{
 			auto group = cur->addChild(GroupBox::Seed(T_("Identification (leave blank for defaults)")));
 
-			auto cur2 = group->addChild(Grid::Seed(3, 2));
+			auto cur2 = group->addChild(Grid::Seed(4, 2));
 			cur2->column(0).align = GridInfo::BOTTOM_RIGHT;
 			cur2->column(1).mode = GridInfo::FILL;
 
@@ -142,6 +143,11 @@ bool FavHubGroupsDlg::handleInitDialog() {
 			cur2->addChild(Label::Seed(T_("Email")))->setHelpId(IDH_FAVORITE_HUB_EMAIL);
 			email = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
 			email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
+
+			cur2->addChild(Label::Seed(T_("External / WAN IP")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
+			userIp = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
+			userIp->setHelpId(IDH_FAVORITE_HUB_USER_IP);
+			WinUtil::preventSpaces(userIp);
 		}
 
 		{
@@ -222,6 +228,7 @@ void FavHubGroupsDlg::handleSelectionChanged() {
 	nick->setText(Text::toT(settings.getNick()));
 	description->setText(Text::toT(settings.getDescription()));
 	email->setText(Text::toT(settings.getEmail()));
+	userIp->setText(Text::toT(settings.getUserIp()));
 	showJoins->setSelected(toInt(settings.showJoins));
 	favShowJoins->setSelected(toInt(settings.favShowJoins));
 }
@@ -282,6 +289,7 @@ HubSettings FavHubGroupsDlg::getSettings() const {
 	settings.setNick(Text::fromT(nick->getText()));
 	settings.setDescription(Text::fromT(description->getText()));
 	settings.setEmail(Text::fromT(email->getText()));
+	settings.setUserIp(Text::fromT(userIp->getText()));
 	settings.showJoins = to3bool(showJoins->getSelected());
 	settings.favShowJoins = to3bool(favShowJoins->getSelected());
 	return settings;

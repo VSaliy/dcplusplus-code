@@ -45,6 +45,7 @@ struct HubSettings
 	GETSET(string, nick, Nick);
 	GETSET(string, description, Description);
 	GETSET(string, email, Email);
+	GETSET(string, userIp, UserIp);
 
 	/* don't forget to init new tribools to indeterminate in the constructor! they default to false
 	otherwise. */
