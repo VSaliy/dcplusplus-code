@@ -966,13 +966,13 @@ void AdcHub::info(bool /*alwaysSend*/) {
 
 	addParam(lastInfoMap, c, "ID", ClientManager::getInstance()->getMyCID().toBase32());
 	addParam(lastInfoMap, c, "PD", ClientManager::getInstance()->getMyPID().toBase32());
-	addParam(lastInfoMap, c, "NI", settings.getNick());
-	addParam(lastInfoMap, c, "DE", settings.getDescription());
+	addParam(lastInfoMap, c, "NI", get(Nick));
+	addParam(lastInfoMap, c, "DE", get(Description));
 	addParam(lastInfoMap, c, "SL", Util::toString(SETTING(SLOTS)));
 	addParam(lastInfoMap, c, "FS", Util::toString(UploadManager::getInstance()->getFreeSlots()));
 	addParam(lastInfoMap, c, "SS", ShareManager::getInstance()->getShareSizeString());
 	addParam(lastInfoMap, c, "SF", Util::toString(ShareManager::getInstance()->getSharedFiles()));
-	addParam(lastInfoMap, c, "EM", settings.getEmail());
+	addParam(lastInfoMap, c, "EM", get(Email));
 	addParam(lastInfoMap, c, "HN", Util::toString(counts[COUNT_NORMAL]));
 	addParam(lastInfoMap, c, "HR", Util::toString(counts[COUNT_REGISTERED]));
 	addParam(lastInfoMap, c, "HO", Util::toString(counts[COUNT_OP]));

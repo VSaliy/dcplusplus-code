@@ -80,7 +80,7 @@ OnlineUser& NmdcHub::getUser(const string& aNick) {
 	}
 
 	UserPtr p;
-	if(aNick == settings.getNick()) {
+	if(aNick == get(Nick)) {
 		p = ClientManager::getInstance()->getMe();
 	} else {
 		p = ClientManager::getInstance()->getUser(aNick, getHubUrl());
@@ -555,7 +555,7 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			}
 
 			key(CryptoManager::getInstance()->makeKey(lock));
-			OnlineUser& ou = getUser(settings.getNick());
+			OnlineUser& ou = getUser(get(Nick));
 			validateNick(ou.getIdentity().getNick());
 		}
 	} else if(cmd == "$Hello") {
@@ -807,11 +807,11 @@ void NmdcHub::myInfo(bool alwaysSend) {
 
 	string uMin = (SETTING(MIN_UPLOAD_SPEED) == 0) ? Util::emptyString : tmp5 + Util::toString(SETTING(MIN_UPLOAD_SPEED));
 	string myInfoA =
-		"$MyINFO $ALL " + fromUtf8(getMyNick()) + " " + fromUtf8(escape(settings.getDescription())) +
+		"$MyINFO $ALL " + fromUtf8(getMyNick()) + " " + fromUtf8(escape(get(Description))) +
 		tmp1 + VERSIONSTRING + tmp2 + modeChar + tmp3 + getCounts();
 	string myInfoB = tmp4 + Util::toString(SETTING(SLOTS));
 	string myInfoC = uMin +
-		">$ $" + uploadSpeed + "\x01$" + fromUtf8(escape(settings.getEmail())) + '$';
+		">$ $" + uploadSpeed + "\x01$" + fromUtf8(escape(get(Email))) + '$';
 	string myInfoD = ShareManager::getInstance()->getShareSizeString() + "$|";
 	// we always send A and C; however, B (slots) and D (share size) can frequently change so we delay them if needed
  	if(lastMyInfoA != myInfoA || lastMyInfoC != myInfoC ||

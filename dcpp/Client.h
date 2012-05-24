@@ -34,7 +34,12 @@
 namespace dcpp {
 
 /** Yes, this should probably be called a Hub */
-class Client : public Speaker<ClientListener>, public BufferedSocketListener, protected TimerManagerListener {
+class Client :
+	public Speaker<ClientListener>,
+	public BufferedSocketListener,
+	protected TimerManagerListener,
+	public HubSettings
+{
 public:
 	virtual void connect();
 	virtual void disconnect(bool graceless);
@@ -84,8 +89,6 @@ public:
 	Identity& getHubIdentity() { return hubIdentity; }
 
 	const string& getHubUrl() const { return hubUrl; }
-
-	HubSettings settings;
 
 	GETSET(Identity, myIdentity, MyIdentity);
 	GETSET(Identity, hubIdentity, HubIdentity);

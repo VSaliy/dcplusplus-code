@@ -565,11 +565,11 @@ void SettingsManager::save(string const& aFileName) {
 
 HubSettings SettingsManager::getHubSettings() const {
 	HubSettings ret;
-	ret.setNick(get(NICK));
-	ret.setDescription(get(DESCRIPTION));
-	ret.setEmail(get(EMAIL));
-	ret.showJoins = getBool(SHOW_JOINS);
-	ret.favShowJoins = getBool(FAV_SHOW_JOINS);
+	ret.get(HubSettings::Nick) = get(NICK);
+	ret.get(HubSettings::Description) = get(DESCRIPTION);
+	ret.get(HubSettings::Email) = get(EMAIL);
+	ret.get(HubSettings::ShowJoins) = getBool(SHOW_JOINS);
+	ret.get(HubSettings::FavShowJoins) = getBool(FAV_SHOW_JOINS);
 	return ret;
 }
 

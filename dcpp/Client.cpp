@@ -71,27 +71,27 @@ void Client::reloadSettings(bool updateNick) {
 	/// @todo update the nick in ADC hubs?
 	string prevNick;
 	if(!updateNick)
-		prevNick = settings.getNick();
+		prevNick = get(Nick);
 
-	settings = SettingsManager::getInstance()->getHubSettings();
+	*static_cast<HubSettings*>(this) = SettingsManager::getInstance()->getHubSettings();
 
 	auto fav = FavoriteManager::getInstance()->getFavoriteHubEntry(getHubUrl());
 	if(fav) {
-		FavoriteManager::getInstance()->mergeHubSettings(*fav, settings);
+		FavoriteManager::getInstance()->mergeHubSettings(*fav, *this);
 
 		if(!fav->getPassword().empty())
 			setPassword(fav->getPassword());
 	}
 
 	if(updateNick)
-		checkNick(settings.nick);
+		checkNick(get(Nick));
 	else
-		settings.setNick(prevNick);
+		get(Nick) = prevNick;
 }
 
 const string& Client::getUserIp() const {
-	if(!settings.getUserIp().empty()) {
-		return settings.getUserIp();
+	if(!get(UserIp).empty()) {
+		return get(UserIp);
 	}
 	return CONNSETTING(EXTERNAL_IP);
 }
