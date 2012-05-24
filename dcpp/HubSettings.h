@@ -21,7 +21,6 @@
 
 #include <string>
 
-#include "GetSet.h"
 #include "SimpleXML.h"
 #include "tribool.h"
 
@@ -33,7 +32,34 @@ using std::string;
 favorite hub group; per favorite hub entry. */
 struct HubSettings
 {
-	HubSettings () : showJoins(indeterminate), favShowJoins(indeterminate) { }
+	enum HubStrSetting {
+		HubStrFirst,
+
+		Nick = HubStrFirst,
+		Description,
+		Email,
+		UserIp,
+		// don't forget to edit stringNames in HubSettings.cpp when adding a def here!
+
+		HubStrLast
+	};
+
+	enum HubBoolSetting {
+		HubBoolFirst = HubStrLast + 1,
+
+		ShowJoins = HubBoolFirst,
+		FavShowJoins,
+		// don't forget to edit boolNames in HubSettings.cpp when adding a def here!
+
+		HubBoolLast
+	};
+
+	HubSettings();
+
+	const string& get(HubStrSetting setting) const;
+	const tribool& get(HubBoolSetting setting) const;
+	string& get(HubStrSetting setting);
+	tribool& get(HubBoolSetting setting);
 
 	/** Apply a set of sub-settings that may override current ones. Strings are overridden when not
 	null. Tribools are overridden when not in an indeterminate state. */
@@ -42,17 +68,12 @@ struct HubSettings
 	void load(SimpleXML& xml);
 	void save(SimpleXML& xml) const;
 
-	GETSET(string, nick, Nick);
-	GETSET(string, description, Description);
-	GETSET(string, email, Email);
-	GETSET(string, userIp, UserIp);
+private:
+	static const string stringNames[HubStrLast - HubStrFirst];
+	static const string boolNames[HubBoolLast - HubBoolFirst];
 
-	/* don't forget to init new tribools to indeterminate in the constructor! they default to false
-	otherwise. */
-	tribool showJoins;
-	tribool favShowJoins;
-
-	friend class Client;
+	string strings[HubStrLast - HubStrFirst];
+	tribool bools[HubBoolLast - HubBoolFirst];
 };
 
 } // namespace dcpp

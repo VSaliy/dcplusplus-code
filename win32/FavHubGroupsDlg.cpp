@@ -225,12 +225,12 @@ void FavHubGroupsDlg::handleSelectionChanged() {
 		settings = group.second;
 	}
 	edit->setText(text);
-	nick->setText(Text::toT(settings.getNick()));
-	description->setText(Text::toT(settings.getDescription()));
-	email->setText(Text::toT(settings.getEmail()));
-	userIp->setText(Text::toT(settings.getUserIp()));
-	showJoins->setSelected(toInt(settings.showJoins));
-	favShowJoins->setSelected(toInt(settings.favShowJoins));
+	nick->setText(Text::toT(settings.get(HubSettings::Nick)));
+	description->setText(Text::toT(settings.get(HubSettings::Description)));
+	email->setText(Text::toT(settings.get(HubSettings::Email)));
+	userIp->setText(Text::toT(settings.get(HubSettings::UserIp)));
+	showJoins->setSelected(toInt(settings.get(HubSettings::ShowJoins)));
+	favShowJoins->setSelected(toInt(settings.get(HubSettings::FavShowJoins)));
 }
 
 void FavHubGroupsDlg::handleAdd() {
@@ -286,12 +286,12 @@ void FavHubGroupsDlg::add(const tstring& name, HubSettings&& settings) {
 
 HubSettings FavHubGroupsDlg::getSettings() const {
 	HubSettings settings;
-	settings.setNick(Text::fromT(nick->getText()));
-	settings.setDescription(Text::fromT(description->getText()));
-	settings.setEmail(Text::fromT(email->getText()));
-	settings.setUserIp(Text::fromT(userIp->getText()));
-	settings.showJoins = to3bool(showJoins->getSelected());
-	settings.favShowJoins = to3bool(favShowJoins->getSelected());
+	settings.get(HubSettings::Nick) = Text::fromT(nick->getText());
+	settings.get(HubSettings::Description) = Text::fromT(description->getText());
+	settings.get(HubSettings::Email) = Text::fromT(email->getText());
+	settings.get(HubSettings::UserIp) = Text::fromT(userIp->getText());
+	settings.get(HubSettings::ShowJoins) = to3bool(showJoins->getSelected());
+	settings.get(HubSettings::FavShowJoins) = to3bool(favShowJoins->getSelected());
 	return settings;
 }
 

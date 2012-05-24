@@ -405,10 +405,10 @@ void FavHubsFrame::fillList() {
 		TStringList l;
 		l.push_back(Text::toT(entry->getName()));
 		l.push_back(Text::toT(entry->getHubDescription()));
-		l.push_back(Text::toT(entry->getNick()));
+		l.push_back(Text::toT(entry->get(HubSettings::Nick)));
 		l.emplace_back(entry->getPassword().size(), '*');
 		l.push_back(Text::toT(entry->getServer()));
-		l.push_back(Text::toT(entry->getDescription()));
+		l.push_back(Text::toT(entry->get(HubSettings::Description)));
 		l.push_back(Text::toT(group));
 
 		hubs->insert(l, reinterpret_cast<LPARAM>(entry), index);

@@ -99,7 +99,7 @@ bool FavHubProperties::handleInitDialog() {
 
 		cur->addChild(Label::Seed(T_("Nick")))->setHelpId(IDH_FAVORITE_HUB_NICK);
 		nick = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		nick->setText(Text::toT(entry->getNick()));
+		nick->setText(Text::toT(entry->get(HubSettings::Nick)));
 		nick->setHelpId(IDH_FAVORITE_HUB_NICK);
 		WinUtil::preventSpaces(nick);
 
@@ -112,17 +112,17 @@ bool FavHubProperties::handleInitDialog() {
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
 		description = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		description->setText(Text::toT(entry->getDescription()));
+		description->setText(Text::toT(entry->get(HubSettings::Description)));
 		description->setHelpId(IDH_FAVORITE_HUB_USER_DESC);
 
 		cur->addChild(Label::Seed(T_("Email")))->setHelpId(IDH_FAVORITE_HUB_EMAIL);
 		email = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		email->setText(Text::toT(entry->getEmail()));
+		email->setText(Text::toT(entry->get(HubSettings::Email)));
 		email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
 
 		cur->addChild(Label::Seed(T_("External / WAN IP")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
 		userIp = cur->addChild(WinUtil::Seeds::Dialog::textBox);
-		userIp->setText(Text::toT(entry->getUserIp()));
+		userIp->setText(Text::toT(entry->get(HubSettings::UserIp)));
 		userIp->setHelpId(IDH_FAVORITE_HUB_USER_IP);
 		WinUtil::preventSpaces(userIp);
 	}
@@ -136,12 +136,12 @@ bool FavHubProperties::handleInitDialog() {
 		cur->addChild(Label::Seed(T_("Show joins / parts in chat by default")));
 		showJoins = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
 		WinUtil::fillTriboolCombo(showJoins);
-		showJoins->setSelected(toInt(entry->showJoins));
+		showJoins->setSelected(toInt(entry->get(HubSettings::ShowJoins)));
 
 		cur->addChild(Label::Seed(T_("Only show joins / parts for favorite users")));
 		favShowJoins = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
 		WinUtil::fillTriboolCombo(favShowJoins);
-		favShowJoins->setSelected(toInt(entry->favShowJoins));
+		favShowJoins->setSelected(toInt(entry->get(HubSettings::FavShowJoins)));
 	}
 
 	{
@@ -184,13 +184,13 @@ void FavHubProperties::handleOKClicked() {
 	entry->setServer(Text::fromT(addressText));
 	entry->setName(Text::fromT(name->getText()));
 	entry->setHubDescription(Text::fromT(hubDescription->getText()));
-	entry->setNick(Text::fromT(nick->getText()));
+	entry->get(HubSettings::Nick) = Text::fromT(nick->getText());
 	entry->setPassword(Text::fromT(password->getText()));
-	entry->setDescription(Text::fromT(description->getText()));
-	entry->setEmail(Text::fromT(email->getText()));
-	entry->setUserIp(Text::fromT(userIp->getText()));
-	entry->showJoins = to3bool(showJoins->getSelected());
-	entry->favShowJoins = to3bool(favShowJoins->getSelected());
+	entry->get(HubSettings::Description) = Text::fromT(description->getText());
+	entry->get(HubSettings::Email) = Text::fromT(email->getText());
+	entry->get(HubSettings::UserIp) = Text::fromT(userIp->getText());
+	entry->get(HubSettings::ShowJoins) = to3bool(showJoins->getSelected());
+	entry->get(HubSettings::FavShowJoins) = to3bool(favShowJoins->getSelected());
 	entry->setGroup(Text::fromT(groups->getText()));
 	FavoriteManager::getInstance()->save();
 	endDialog(IDOK);
