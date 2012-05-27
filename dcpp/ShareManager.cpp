@@ -151,15 +151,22 @@ string ShareManager::toVirtual(const TTHValue& tth) const {
 }
 
 string ShareManager::toReal(const string& virtualFile) {
+	return toRealWithSize(virtualFile).first;
+}
+
+pair<string, int64_t> ShareManager::toRealWithSize(const string& virtualFile) {
 	Lock l(cs);
+
 	if(virtualFile == "MyList.DcLst") {
 		throw ShareException("NMDC-style lists no longer supported, please upgrade your client");
-	} else if(virtualFile == Transfer::USER_LIST_NAME_BZ || virtualFile == Transfer::USER_LIST_NAME) {
+	}
+	if(virtualFile == Transfer::USER_LIST_NAME_BZ || virtualFile == Transfer::USER_LIST_NAME) {
 		generateXmlList();
-		return getBZXmlFile();
+		return make_pair(getBZXmlFile(), 0);
 	}
 
-	return findFile(virtualFile)->getRealPath();
+	auto i = findFile(virtualFile);
+	return make_pair(i->getRealPath(), i->getSize());
 }
 
 StringList ShareManager::getRealPaths(const string& virtualPath) {

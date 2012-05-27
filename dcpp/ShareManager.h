@@ -70,6 +70,8 @@ public:
 
 	string toVirtual(const TTHValue& tth) const;
 	string toReal(const string& virtualFile);
+	/** @return Actual file path & size. Returns 0 for file lists. */
+	pair<string, int64_t> toRealWithSize(const string& virtualFile);
 	StringList getRealPaths(const string& virtualPath);
 	TTHValue getTTH(const string& virtualFile) const;
 
