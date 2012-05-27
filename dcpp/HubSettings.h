@@ -69,11 +69,14 @@ struct HubSettings
 	void save(SimpleXML& xml) const;
 
 private:
-	static const string stringNames[HubStrLast - HubStrFirst];
-	static const string boolNames[HubBoolLast - HubBoolFirst];
+	enum { StringCount = HubStrLast - HubStrFirst,
+		BoolCount = HubBoolLast - HubBoolFirst };
 
-	string strings[HubStrLast - HubStrFirst];
-	tribool bools[HubBoolLast - HubBoolFirst];
+	static const string stringNames[StringCount];
+	static const string boolNames[BoolCount];
+
+	string strings[StringCount];
+	tribool bools[BoolCount];
 };
 
 } // namespace dcpp
