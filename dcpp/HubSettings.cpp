@@ -21,14 +21,19 @@
 
 namespace dcpp {
 
-const string HubSettings::stringNames[HubStrLast - HubStrFirst] = {
+const string HubSettings::stringNames[StringCount] = {
 	"Nick", "UserDescription", "Email", "UserIp" // not "Description" for compat with prev fav hub lists
 };
-const string HubSettings::boolNames[HubBoolLast - HubBoolFirst] = {
+const string HubSettings::boolNames[BoolCount] = {
 	"ShowJoins", "FavShowJoins"
 };
 
-HubSettings::HubSettings () {
+namespace {
+inline bool defined(const string& s) { return !s.empty(); }
+inline bool defined(tribool b) { return !indeterminate(b); }
+}
+
+HubSettings::HubSettings() {
 	// tribools default to false; init them to an indeterminate value.
 	for(auto& setting: bools) {
 		setting = indeterminate;
@@ -52,35 +57,35 @@ tribool& HubSettings::get(HubBoolSetting setting) {
 }
 
 void HubSettings::merge(const HubSettings& sub) {
-	for(uint8_t i = 0; i < HubStrLast - HubStrFirst; ++i) {
-		if(!sub.strings[i].empty()) {
+	for(uint8_t i = 0; i < StringCount; ++i) {
+		if(defined(sub.strings[i])) {
 			strings[i] = sub.strings[i];
 		}
 	}
-	for(uint8_t i = 0; i < HubBoolLast - HubBoolFirst; ++i) {
-		if(!indeterminate(sub.bools[i])) {
+	for(uint8_t i = 0; i < BoolCount; ++i) {
+		if(defined(sub.bools[i])) {
 			bools[i] = sub.bools[i];
 		}
 	}
 }
 
 void HubSettings::load(SimpleXML& xml) {
-	for(uint8_t i = 0; i < HubStrLast - HubStrFirst; ++i) {
+	for(uint8_t i = 0; i < StringCount; ++i) {
 		strings[i] = xml.getChildAttrib(stringNames[i]);
 	}
-	for(uint8_t i = 0; i < HubBoolLast - HubBoolFirst; ++i) {
+	for(uint8_t i = 0; i < BoolCount; ++i) {
 		bools[i] = to3bool(xml.getIntChildAttrib(boolNames[i]));
 	}
 }
 
 void HubSettings::save(SimpleXML& xml) const {
-	for(uint8_t i = 0; i < HubStrLast - HubStrFirst; ++i) {
-		if(!strings[i].empty()) {
+	for(uint8_t i = 0; i < StringCount; ++i) {
+		if(defined(strings[i])) {
 			xml.addChildAttrib(stringNames[i], strings[i]);
 		}
 	}
-	for(uint8_t i = 0; i < HubBoolLast - HubBoolFirst; ++i) {
-		if(!indeterminate(bools[i])) {
+	for(uint8_t i = 0; i < BoolCount; ++i) {
+		if(defined(bools[i])) {
 			xml.addChildAttrib(boolNames[i], toInt(bools[i]));
 		}
 	}

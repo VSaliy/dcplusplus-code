@@ -84,11 +84,10 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 				string bz2 = File(sourceFile, File::READ, File::OPEN).read();
 				string xml;
 				CryptoManager::getInstance()->decodeBZ2(reinterpret_cast<const uint8_t*>(bz2.data()), bz2.size(), xml);
-				// Clear to save some memory...
-				string().swap(bz2);
 				is = new MemoryInputStream(xml);
 				start = 0;
 				size = xml.size();
+
 			} else {
 				File* f = new File(sourceFile, File::READ, File::OPEN);
 
@@ -111,6 +110,7 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 				}
 			}
 			type = userlist ? Transfer::TYPE_FULL_LIST : Transfer::TYPE_FILE;
+
 		} else if(aType == Transfer::names[Transfer::TYPE_TREE]) {
 			sourceFile = ShareManager::getInstance()->toReal(aFile);
 			MemoryInputStream* mis = ShareManager::getInstance()->getTree(aFile);
@@ -124,10 +124,11 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 			is = mis;
 			free = true;
 			type = Transfer::TYPE_TREE;
+
 		} else if(aType == Transfer::names[Transfer::TYPE_PARTIAL_LIST]) {
 			// Partial file list
 			MemoryInputStream* mis = ShareManager::getInstance()->generatePartialList(aFile, listRecursive);
-			if(mis == NULL) {
+			if(!mis) {
 				aSource.fileNotAvail();
 				return false;
 			}
@@ -137,6 +138,7 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 			is = mis;
 			free = true;
 			type = Transfer::TYPE_PARTIAL_LIST;
+
 		} else {
 			aSource.fileNotAvail("Unknown file type");
 			return false;
@@ -150,12 +152,10 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 		return false;
 	}
 
-	Lock l(cs);
-
 	bool extraSlot = false;
 
 	if(!aSource.isSet(UserConnection::FLAG_HASSLOT)) {
-		bool hasReserved = (reservedSlots.find(aSource.getUser()) != reservedSlots.end());
+		bool hasReserved = hasReservedSlot(aSource.getUser());
 		bool isFavorite = FavoriteManager::getInstance()->hasSlot(aSource.getUser());
 
 		if(!(hasReserved || isFavorite || getFreeSlots() > 0 || getAutoSlot())) {
@@ -183,6 +183,8 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 
 		setLastGrant(GET_TICK());
 	}
+
+	Lock l(cs);
 
 	Upload* u = new Upload(aSource, sourceFile, TTHValue());
 	u->setStream(is);
@@ -247,6 +249,11 @@ void UploadManager::reserveSlot(const HintedUser& aUser) {
 	}
 	if(aUser.user->isOnline())
 		ClientManager::getInstance()->connect(aUser, Util::toString(Util::rand()));
+}
+
+bool UploadManager::hasReservedSlot(const UserPtr& user) const {
+	Lock l(cs);
+	return reservedSlots.find(user) != reservedSlots.end();
 }
 
 void UploadManager::on(UserConnectionListener::Get, UserConnection* aSource, const string& aFile, int64_t aResume) noexcept {
