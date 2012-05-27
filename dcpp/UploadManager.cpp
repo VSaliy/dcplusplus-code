@@ -37,8 +37,6 @@
 
 namespace dcpp {
 
-static const string UPLOAD_AREA = "Uploads";
-
 UploadManager::UploadManager() noexcept : running(0), extra(0), lastGrant(0), lastFreeSlots(-1) {
 	ClientManager::getInstance()->addListener(this);
 	TimerManager::getInstance()->addListener(this);
