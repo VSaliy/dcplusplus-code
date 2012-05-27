@@ -35,8 +35,6 @@
 
 namespace dcpp {
 
-static const string DOWNLOAD_AREA = "Downloads";
-
 DownloadManager::DownloadManager() {
 	TimerManager::getInstance()->addListener(this);
 }
