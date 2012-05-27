@@ -61,23 +61,33 @@ void PropPage::read(const ItemList& items) {
 	for(auto& i: items) {
 		switch(i.type) {
 		case T_STR:
-			if(!settings->isDefault(i.setting)) {
-				static_cast<TextBoxPtr>(i.widget)->setText(Text::toT(settings->get((SettingsManager::StrSetting)i.setting)));
+			{
+				auto setting = static_cast<SettingsManager::StrSetting>(i.setting);
+				if(!settings->isDefault(setting)) {
+					static_cast<TextBoxPtr>(i.widget)->setText(Text::toT(settings->get(setting)));
+				}
+				break;
 			}
-			break;
 		case T_INT:
-			if(!settings->isDefault(i.setting)) {
-				static_cast<TextBoxPtr>(i.widget)->setText(Text::toT(Util::toString(settings->get((SettingsManager::IntSetting)i.setting))));
+			{
+				auto setting = static_cast<SettingsManager::IntSetting>(i.setting);
+				if(!settings->isDefault(setting)) {
+					static_cast<TextBoxPtr>(i.widget)->setText(Text::toT(Util::toString(settings->get(setting))));
+				}
+				break;
 			}
-			break;
 		case T_INT_WITH_SPIN:
-			static_cast<TextBoxPtr>(i.widget)->setText(Text::toT(Util::toString(settings->get((SettingsManager::IntSetting)i.setting))));
-			break;
+			{
+				auto setting = static_cast<SettingsManager::IntSetting>(i.setting);
+				static_cast<TextBoxPtr>(i.widget)->setText(Text::toT(Util::toString(settings->get(setting))));
+				break;
+			}
 		case T_BOOL:
-			static_cast<CheckBoxPtr>(i.widget)->setChecked(settings->getBool((SettingsManager::IntSetting)i.setting));
-			break;
-		case T_END:
-			dcassert(false); break;
+			{
+				auto setting = static_cast<SettingsManager::IntSetting>(i.setting);
+				static_cast<CheckBoxPtr>(i.widget)->setChecked(settings->getBool(setting));
+				break;
+			}
 		}
 	}
 }
@@ -106,17 +116,24 @@ void PropPage::write(const ItemList& items) {
 	for(auto& i: items) {
 		switch(i.type) {
 		case T_STR:
-				settings->set((SettingsManager::StrSetting)i.setting, Text::fromT(static_cast<TextBoxPtr>(i.widget)->getText()));
+			{
+				auto setting = static_cast<SettingsManager::StrSetting>(i.setting);
+				settings->set(setting, Text::fromT(static_cast<TextBoxPtr>(i.widget)->getText()));
 				break;
+			}
 		case T_INT:
 		case T_INT_WITH_SPIN:
-			settings->set((SettingsManager::IntSetting)i.setting, Text::fromT(static_cast<TextBoxPtr>(i.widget)->getText()));
-			break;
+			{
+				auto setting = static_cast<SettingsManager::IntSetting>(i.setting);
+				settings->set(setting, Text::fromT(static_cast<TextBoxPtr>(i.widget)->getText()));
+				break;
+			}
 		case T_BOOL:
-			settings->set((SettingsManager::IntSetting)i.setting, static_cast<CheckBoxPtr>(i.widget)->getChecked());
-			break;
-		case T_END:
-			dcassert(false); break;
+			{
+				auto setting = static_cast<SettingsManager::IntSetting>(i.setting);
+				settings->set(setting, static_cast<CheckBoxPtr>(i.widget)->getChecked());
+				break;
+			}
 		}
 	}
 }

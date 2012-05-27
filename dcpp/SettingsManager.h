@@ -229,7 +229,9 @@ public:
 		floatDefaults[key - FLOAT_FIRST] = value;
 	}
 
-	bool isDefault(size_t key) { return !isSet[key]; }
+	template<typename KeyT> bool isDefault(KeyT key) {
+		return !isSet[key] || get(key, false) == getDefault(key);
+	}
 
 	void unset(size_t key) { isSet[key] = false; }
 
