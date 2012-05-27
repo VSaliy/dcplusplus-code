@@ -1,3 +1,6 @@
+* Revamp favorite hub settings (poy)
+* Reduce resource consumption when slots are full
+
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
 * Fix table header column translations (emtee)

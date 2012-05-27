@@ -65,79 +65,30 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 		return false;
 	}
 
-	InputStream* is = 0;
-	int64_t start = 0;
-	int64_t size = 0;
+	/* do some preliminary checking of the transfer request that doesn't involve any filesystem
+	access. we want to know the type of the upload to see if the user deserves a mini-slot. */
 
-	bool userlist = (aFile == Transfer::USER_LIST_NAME_BZ || aFile == Transfer::USER_LIST_NAME);
-	bool free = userlist;
+	bool miniSlot;
 
 	string sourceFile;
 	Transfer::Type type;
 
 	try {
 		if(aType == Transfer::names[Transfer::TYPE_FILE]) {
-			sourceFile = ShareManager::getInstance()->toReal(aFile);
-
-			if(aFile == Transfer::USER_LIST_NAME) {
-				// Unpack before sending...
-				string bz2 = File(sourceFile, File::READ, File::OPEN).read();
-				string xml;
-				CryptoManager::getInstance()->decodeBZ2(reinterpret_cast<const uint8_t*>(bz2.data()), bz2.size(), xml);
-				is = new MemoryInputStream(xml);
-				start = 0;
-				size = xml.size();
-
-			} else {
-				File* f = new File(sourceFile, File::READ, File::OPEN);
-
-				start = aStartPos;
-				int64_t sz = f->getSize();
-				size = (aBytes == -1) ? sz - start : aBytes;
-
-				if((start + size) > sz) {
-					aSource.fileNotAvail();
-					delete f;
-					return false;
-				}
-
-				free = free || (sz <= (int64_t)(SETTING(SET_MINISLOT_SIZE) * 1024) );
-
-				f->setPos(start);
-				is = f;
-				if((start + size) < sz) {
-					is = new LimitedInputStream<true>(is, size);
-				}
-			}
-			type = userlist ? Transfer::TYPE_FULL_LIST : Transfer::TYPE_FILE;
+			auto info = ShareManager::getInstance()->toRealWithSize(aFile);
+			sourceFile = move(info.first);
+			type = (aFile == Transfer::USER_LIST_NAME_BZ || aFile == Transfer::USER_LIST_NAME) ?
+				Transfer::TYPE_FULL_LIST : Transfer::TYPE_FILE;
+			miniSlot = type == Transfer::TYPE_FULL_LIST || info.second <= static_cast<int64_t>(SETTING(SET_MINISLOT_SIZE) * 1024);
 
 		} else if(aType == Transfer::names[Transfer::TYPE_TREE]) {
 			sourceFile = ShareManager::getInstance()->toReal(aFile);
-			MemoryInputStream* mis = ShareManager::getInstance()->getTree(aFile);
-			if(!mis) {
-				aSource.fileNotAvail();
-				return false;
-			}
-
-			start = 0;
-			size = mis->getSize();
-			is = mis;
-			free = true;
 			type = Transfer::TYPE_TREE;
+			miniSlot = true;
 
 		} else if(aType == Transfer::names[Transfer::TYPE_PARTIAL_LIST]) {
-			// Partial file list
-			MemoryInputStream* mis = ShareManager::getInstance()->generatePartialList(aFile, listRecursive);
-			if(!mis) {
-				aSource.fileNotAvail();
-				return false;
-			}
-
-			start = 0;
-			size = mis->getSize();
-			is = mis;
-			free = true;
 			type = Transfer::TYPE_PARTIAL_LIST;
+			miniSlot = true;
 
 		} else {
 			aSource.fileNotAvail("Unknown file type");
@@ -146,25 +97,23 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 	} catch(const ShareException& e) {
 		aSource.fileNotAvail(e.getError());
 		return false;
-	} catch(const Exception& e) {
-		LogManager::getInstance()->message(str(F_("Unable to send file %1%: %2%") % Util::addBrackets(sourceFile) % e.getError()));
-		aSource.fileNotAvail();
-		return false;
 	}
 
+	/* let's see if a slot is available to serve the upload. */
+
 	bool extraSlot = false;
+	bool gotFullSlot = false;
 
 	if(!aSource.isSet(UserConnection::FLAG_HASSLOT)) {
 		bool hasReserved = hasReservedSlot(aSource.getUser());
 		bool isFavorite = FavoriteManager::getInstance()->hasSlot(aSource.getUser());
 
 		if(!(hasReserved || isFavorite || getFreeSlots() > 0 || getAutoSlot())) {
-			bool supportsFree = aSource.isSet(UserConnection::FLAG_SUPPORTS_MINISLOTS);
-			bool allowedFree = aSource.isSet(UserConnection::FLAG_HASEXTRASLOT) || aSource.isSet(UserConnection::FLAG_OP) || getFreeExtraSlots() > 0;
-			if(free && supportsFree && allowedFree) {
+			bool supportsMini = aSource.isSet(UserConnection::FLAG_SUPPORTS_MINISLOTS);
+			bool allowedMini = aSource.isSet(UserConnection::FLAG_HASEXTRASLOT) || aSource.isSet(UserConnection::FLAG_OP) || getFreeExtraSlots() > 0;
+			if(miniSlot && supportsMini && allowedMini) {
 				extraSlot = true;
 			} else {
-				delete is;
 				aSource.maxedOut();
 
 				// Check for tth root identifier
@@ -178,10 +127,89 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 				return false;
 			}
 		} else {
-			clearUserFiles(aSource.getUser());	// this user is using a full slot, nix them.
+			gotFullSlot = true;
+		}
+	}
+
+	/* cool! the request is correct, and the user can have a slot. let's prepare the file. */
+
+	InputStream* is = 0;
+	int64_t start = 0;
+	int64_t size = 0;
+
+	try {
+		switch(type) {
+		case Transfer::TYPE_FILE:
+		case Transfer::TYPE_FULL_LIST:
+			{
+				if(aFile == Transfer::USER_LIST_NAME) {
+					// Unpack before sending...
+					string bz2 = File(sourceFile, File::READ, File::OPEN).read();
+					string xml;
+					CryptoManager::getInstance()->decodeBZ2(reinterpret_cast<const uint8_t*>(bz2.data()), bz2.size(), xml);
+					is = new MemoryInputStream(xml);
+					start = 0;
+					size = xml.size();
+
+				} else {
+					File* f = new File(sourceFile, File::READ, File::OPEN);
+
+					start = aStartPos;
+					int64_t sz = f->getSize();
+					size = (aBytes == -1) ? sz - start : aBytes;
+
+					if((start + size) > sz) {
+						aSource.fileNotAvail();
+						delete f;
+						return false;
+					}
+
+					f->setPos(start);
+					is = f;
+					if((start + size) < sz) {
+						is = new LimitedInputStream<true>(is, size);
+					}
+				}
+				break;
+			}
+
+		case Transfer::TYPE_TREE:
+			{
+				MemoryInputStream* mis = ShareManager::getInstance()->getTree(aFile);
+				if(!mis) {
+					aSource.fileNotAvail();
+					return false;
+				}
+
+				start = 0;
+				size = mis->getSize();
+				is = mis;
+				break;
+			}
+
+		case Transfer::TYPE_PARTIAL_LIST:
+			{
+				// Partial file list
+				MemoryInputStream* mis = ShareManager::getInstance()->generatePartialList(aFile, listRecursive);
+				if(!mis) {
+					aSource.fileNotAvail();
+					return false;
+				}
+
+				start = 0;
+				size = mis->getSize();
+				is = mis;
+				break;
+			}
 		}
 
-		setLastGrant(GET_TICK());
+	} catch(const ShareException& e) {
+		aSource.fileNotAvail(e.getError());
+		return false;
+	} catch(const Exception& e) {
+		LogManager::getInstance()->message(str(F_("Unable to send file %1%: %2%") % Util::addBrackets(sourceFile) % e.getError()));
+		aSource.fileNotAvail();
+		return false;
 	}
 
 	Lock l(cs);
@@ -194,7 +222,11 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 
 	uploads.push_back(u);
 
+	/* the upload is all set. update slot counts if the user just gained a slot. */
+
 	if(!aSource.isSet(UserConnection::FLAG_HASSLOT)) {
+		setLastGrant(GET_TICK());
+
 		if(extraSlot) {
 			if(!aSource.isSet(UserConnection::FLAG_HASEXTRASLOT)) {
 				aSource.setFlag(UserConnection::FLAG_HASEXTRASLOT);
@@ -210,6 +242,10 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 		}
 
 		reservedSlots.erase(aSource.getUser());
+
+		if(gotFullSlot) {
+			clearUserFiles(aSource.getUser());	// this user is using a full slot, nix them.
+		}
 	}
 
 	return true;
