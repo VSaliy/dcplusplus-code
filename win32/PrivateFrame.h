@@ -76,6 +76,8 @@ private:
 	ComboBoxPtr hubBox;
 
 	StringPairList hubs;
+	string initialHub;
+	tstring hubName;
 	ParamMap ucLineParams;
 
 	UserInfoBase replyTo;

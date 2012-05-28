@@ -141,6 +141,7 @@ BaseType(parent, _T(""), IDH_PM, IDI_PRIVATE, false),
 grid(0),
 hubGrid(0),
 hubBox(0),
+initialHub(replyTo_.hint),
 replyTo(replyTo_),
 online(replyTo.getUser().user->isOnline())
 {
@@ -158,6 +159,11 @@ online(replyTo.getUser().user->isOnline())
 	}
 	hubBox = hubGrid->addChild(WinUtil::Seeds::comboBox);
 	addWidget(hubBox);
+	hubBox->onSelectionChanged([this] {
+		replyTo.getUser().hint = hubs[hubBox->getSelected()].first;
+		if(replyTo.getUser().hint.empty())
+			replyTo.getUser().hint = initialHub;
+	});
 
 	hubGrid->setEnabled(false);
 	hubGrid->setVisible(false);
@@ -235,12 +241,10 @@ void PrivateFrame::openLog() {
 }
 
 void PrivateFrame::fillLogParams(ParamMap& params) const {
-	const CID& cid = replyTo.getUser().user->getCID();
-	const string& hint = replyTo.getUser().hint;
-	params["hubNI"] = [&] { return Util::toString(ClientManager::getInstance()->getHubNames(cid, hint)); };
-	params["hubURL"] = [&] { return Util::toString(ClientManager::getInstance()->getHubUrls(cid, hint)); };
-	params["userCID"] = [&cid] { return cid.toBase32(); };
-	params["userNI"] = [&] { return ClientManager::getInstance()->getNicks(cid, hint)[0]; };
+	params["hubNI"] = [this] { return Text::fromT(hubName); };
+	params["hubURL"] = [this] { return replyTo.getUser().hint; };
+	params["userCID"] = [this] { return replyTo.getUser().user->getCID().toBase32(); };
+	params["userNI"] = [this] { return ClientManager::getInstance()->getNicks(replyTo.getUser())[0]; };
 	params["myCID"] = [] { return ClientManager::getInstance()->getMe()->getCID().toBase32(); };
 }
 
@@ -266,6 +270,7 @@ void PrivateFrame::updateOnlineStatus() {
 	pair<tstring, bool> hubNames = WinUtil::getHubNames(cid, hint);
 
 	setText(WinUtil::getNicks(cid, hint) + _T(" - ") + hubNames.first);
+	hubName = move(hubNames.first);
 
 	online = hubNames.second;
 	setIcon(online ? IDI_PRIVATE : IDI_PRIVATE_OFF);
@@ -362,10 +367,7 @@ void PrivateFrame::enterImpl(const tstring& s) {
 }
 
 void PrivateFrame::sendMessage(const tstring& msg, bool thirdPerson) {
-	auto sel = hubBox->getSelected();
-
-	auto &url = sel >= 0 && static_cast<size_t>(sel) < hubs.size() ? hubs[static_cast<size_t>(sel)].first : replyTo.getUser().hint;
-	ClientManager::getInstance()->privateMessage(HintedUser(replyTo.getUser().user, url), Text::fromT(msg), thirdPerson);
+	ClientManager::getInstance()->privateMessage(replyTo.getUser(), Text::fromT(msg), thirdPerson);
 }
 
 PrivateFrame::UserInfoList PrivateFrame::selectedUsersImpl() {
@@ -387,8 +389,7 @@ void PrivateFrame::on(ClientManagerListener::UserDisconnected, const UserPtr& aU
 
 void PrivateFrame::tabMenuImpl(dwt::Menu* menu) {
 	appendUserItems(getParent(), menu, false, false);
-	prepareMenu(menu, UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubUrls(replyTo.getUser().user->getCID(),
-		replyTo.getUser().hint));
+	prepareMenu(menu, UserCommand::CONTEXT_USER, replyTo.getUser().hint);
 	menu->appendSeparator();
 }
 
@@ -401,8 +402,7 @@ bool PrivateFrame::handleChatContextMenu(dwt::ScreenCoordinate pt) {
 
 	menu->setTitle(escapeMenu(getText()), getParent()->getIcon(this));
 
-	prepareMenu(menu.get(), UserCommand::CONTEXT_USER, ClientManager::getInstance()->getHubUrls(replyTo.getUser().user->getCID(),
-		replyTo.getUser().hint));
+	prepareMenu(menu.get(), UserCommand::CONTEXT_USER, replyTo.getUser().hint);
 
 	menu->open(pt);
 	return true;
