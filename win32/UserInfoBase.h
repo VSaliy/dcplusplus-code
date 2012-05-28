@@ -50,6 +50,7 @@ public:
 	tstring getTooltip() const;
 
 	const HintedUser& getUser() const { return user; }
+	HintedUser& getUser() { return user; }
 
 protected:
 	HintedUser user;
