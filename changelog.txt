@@ -1,6 +1,7 @@
 * Revamp favorite hub settings (poy)
 * Reduce resource consumption when slots are full
 * [L#984330] Make PM windows more aware of the selected hub
+* [L#927821] Don't choke on hub addresses with spaces
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)

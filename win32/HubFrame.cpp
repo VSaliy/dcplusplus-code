@@ -20,6 +20,8 @@
 
 #include "HubFrame.h"
 
+#include <boost/algorithm/string/trim.hpp>
+
 #include <dcpp/AdcHub.h>
 #include <dcpp/ChatMessage.h>
 #include <dcpp/ClientManager.h>
@@ -67,15 +69,25 @@ static const ColumnInfo usersColumns[] = {
 
 HubFrame::FrameList HubFrame::frames;
 
-void HubFrame::openWindow(TabViewPtr parent, const string& url, bool activate, bool connect) {
+void HubFrame::openWindow(TabViewPtr parent, string url, bool activate, bool connect) {
+	boost::algorithm::trim(url);
+
+	if(url.empty()) {
+		dwt::MessageBox(WinUtil::mainWindow).show(T_("Empty hub address specified"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+			dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+		return;
+	}
+
 	auto i = find_if(frames.begin(), frames.end(), [&url](HubFrame* frame) { return frame->url == url; });
 
 	if(i == frames.end()) {
-		auto frame = new HubFrame(parent, url, connect);
+		// new hub window
+		auto frame = new HubFrame(parent, move(url), connect);
 		if(activate)
 			frame->activate();
 
 	} else {
+		// signal an existing hub window
 		auto frame = *i;
 		if(activate)
 			frame->activate();
@@ -147,8 +159,8 @@ bool HubFrame::isFavorite(const WindowParams& params) {
 	return false;
 }
 
-HubFrame::HubFrame(TabViewPtr parent, const string& url_, bool connect) :
-BaseType(parent, Text::toT(url_), IDH_HUB, IDI_HUB_OFF, false),
+HubFrame::HubFrame(TabViewPtr parent, string&& url, bool connect) :
+BaseType(parent, Text::toT(url), IDH_HUB, IDI_HUB_OFF, false),
 paned(0),
 userGrid(0),
 users(0),
@@ -156,7 +168,7 @@ filter(usersColumns, COLUMN_LAST, [this] { updateUserList(); }),
 filterOpts(0),
 showUsers(0),
 client(0),
-url(url_),
+url(url),
 updateUsers(false),
 waitingForPW(false),
 resort(false),
@@ -1377,6 +1389,13 @@ void HubFrame::handleReconnect() {
 }
 
 void HubFrame::redirect(string&& target) {
+	boost::algorithm::trim(target);
+
+	if(target.empty()) {
+		addStatus(T_("Redirect request to an empty hub address"));
+		return;
+	}
+
 	if(ClientManager::getInstance()->isConnected(target)) {
 		addStatus(T_("Redirect request received to a hub that's already connected"));
 		return;

@@ -73,12 +73,7 @@ void UserInfoBase::removeFromQueue() {
 }
 
 void UserInfoBase::connectFav(TabViewPtr parent) {
-	std::string url = user.hint;
-	if(url.empty())
-		url = FavoriteManager::getInstance()->getUserURL(user);
-	if(!url.empty()) {
-		HubFrame::openWindow(parent, url);
-	}
+	HubFrame::openWindow(parent, user.hint.empty() ? FavoriteManager::getInstance()->getUserURL(user) : user.hint);
 }
 
 void UserInfoBase::ignoreChat(bool ignore) {
