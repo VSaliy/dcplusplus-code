@@ -786,16 +786,8 @@ void MainWindow::handleQuickConnect() {
 		return;
 
 	ParamDlg dlg(this, T_("Quick Connect"), T_("Address"));
-
-	if (dlg.run() == IDOK) {
-
-		tstring tmp = dlg.getValue();
-		// Strip out all the spaces
-		string::size_type i;
-		while ((i = tmp.find(' ')) != string::npos)
-			tmp.erase(i, 1);
-
-		HubFrame::openWindow(getTabView(), Text::fromT(tmp));
+	if(dlg.run() == IDOK) {
+		HubFrame::openWindow(getTabView(), Text::fromT(dlg.getValue()));
 	}
 }
 

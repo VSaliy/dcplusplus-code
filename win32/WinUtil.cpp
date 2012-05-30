@@ -1417,9 +1417,7 @@ bool WinUtil::parseLink(const tstring& str) {
 		Util::stricmp(proto.c_str(), "adcs") == 0 ||
 		Util::stricmp(proto.c_str(), "dchub") == 0 )
 	{
-		if(!host.empty()) {
-			HubFrame::openWindow(mainWindow->getTabView(), url);
-		}
+		HubFrame::openWindow(mainWindow->getTabView(), url);
 
 		if(!file.empty()) {
 			if(file[0] == '/') {
@@ -1438,6 +1436,7 @@ bool WinUtil::parseLink(const tstring& str) {
 		}
 
 		return true;
+
 	} else if(!proto.empty() ||
 		Util::strnicmp(str.c_str(), _T("www."), 4) == 0 ||
 		Util::strnicmp(str.c_str(), _T("mailto:"), 7) == 0) {

@@ -66,7 +66,7 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void openWindow(TabViewPtr parent, const string& url, bool activate = true, bool connect = true);
+	static void openWindow(TabViewPtr parent, string url, bool activate = true, bool connect = true);
 	static void activateWindow(const string& url);
 
 private:
@@ -184,7 +184,7 @@ private:
 	typedef std::vector<HubFrame*> FrameList;
 	static FrameList frames;
 
-	HubFrame(TabViewPtr parent, const string& url, bool connect);
+	HubFrame(TabViewPtr parent, string&& url, bool connect);
 	virtual ~HubFrame();
 
 	void layout();

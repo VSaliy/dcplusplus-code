@@ -82,6 +82,7 @@ bool FavHubProperties::handleInitDialog() {
 		address = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		address->setText(Text::toT(entry->getServer()));
 		address->setHelpId(IDH_FAVORITE_HUB_ADDRESS);
+		WinUtil::preventSpaces(address);
 
 		cur->addChild(Label::Seed(T_("Description")))->setHelpId(IDH_FAVORITE_HUB_DESC);
 		hubDescription = cur->addChild(WinUtil::Seeds::Dialog::textBox);
