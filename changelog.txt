@@ -3,6 +3,7 @@
 * [L#984330] Make PM windows more aware of the selected hub
 * [L#927821] Don't choke on hub addresses with spaces
 * Update OpenSSL to version 1.0.1c
+* Fix a mixup between IPs and hostnames leading to wrong search results
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
