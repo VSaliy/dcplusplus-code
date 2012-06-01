@@ -77,8 +77,9 @@ class Dev:
 
 			# work around a few bugs in MSVC project generation, see msvcproj_workarounds for details.
 			from SCons.Action import Action
-			from SCons.Tool.msvs import GenerateProject
+			from SCons.Tool.msvs import GenerateProject, GenerateSolution
 			self.env['MSVSPROJECTCOM'] = [Action(GenerateProject, None), Action(msvcproj_workarounds, None)]
+			self.env['MSVSSOLUTIONCOM'] = [Action(GenerateSolution, None), Action(msvcsol_workarounds, None)]
 
 	def finalize(self):
 		if self.env['msvcproj']:
@@ -165,21 +166,33 @@ class Dev:
 			if msvcproj_name is None:
 				import os
 				msvcproj_name = os.path.basename(os.path.dirname(sources[0]))
+
 			glob_inc, glob_src = msvcproj_glob(env)
 			# when there's only 1 file, SCons strips directories from the path...
 			if len(glob_inc) == 1: glob_inc.append(env.File('dummy'))
 			if len(glob_src) == 1: glob_src.append(env.File('dummy'))
+
 			path = self.msvcproj_path + msvcproj_name + env['MSVSPROJECTSUFFIX']
 			env.Precious(path)
-			self.msvcproj_projects.append(env.MSVSProject(
+
+			# we cheat a bit here: only the win32 project will be buildable. this is to avoid
+			# simulatenous builds of all the projects at the same time and general mayhem.
+			if msvcproj_name == 'win32':
+				self.msvcproj_projects.insert(0, env.MSVSProject(
 				path,
 				variant = self.msvcproj_variant,
 				auto_build_solution = 0,
 				incs = [f.abspath for f in glob_inc],
 				srcs = [f.abspath for f in glob_src],
-				# we cheat a bit here: only the main project will be buildable. this is to avoid
-				# simulatenous builds of all the projects at the same time and general mayhem.
-				MSVSSCONSCOM = env['MSVSSCONSCOM'] if msvcproj_name == 'win32' else ''))
+				buildtarget = target + env['PROGSUFFIX']))
+			else:
+				self.msvcproj_projects.append(env.MSVSProject(
+					path,
+					variant = self.msvcproj_variant,
+					auto_build_solution = 0,
+					incs = [f.abspath for f in glob_inc],
+					srcs = [f.abspath for f in glob_src],
+					MSVSSCONSCOM = ''))
 			return
 
 		return env.StaticLibrary(target, sources)
@@ -335,6 +348,24 @@ def msvcproj_workarounds(target, source, env):
 
 	# remove SConstruct from included files since it points nowhere anyway.
 	contents = re.sub('<ItemGroup>\s*<None Include="SConstruct" />\s*</ItemGroup>', '', contents)
+
+	# update the platform toolset to the VS 2012 one.
+	# TODO remove when SCons knows about VS 2012.
+	contents = contents.replace('<UseOfMfc>false</UseOfMfc>',
+	'<UseOfMfc>false</UseOfMfc>\r\n\t\t<PlatformToolset>v110</PlatformToolset>')
+
+	f = open(str(target[0]), 'wb')
+	f.write(contents)
+	f.close()
+
+def msvcsol_workarounds(target, source, env):
+	f = open(str(target[0]), 'rb')
+	contents = f.read()
+	f.close()
+
+	# modify solution files to open in VS 2012 by default.
+	# TODO remove when SCons knows about VS 2012.
+	contents = contents.replace('# Visual Studio 2010', '# Visual Studio 2012')
 
 	f = open(str(target[0]), 'wb')
 	f.write(contents)
