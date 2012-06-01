@@ -357,7 +357,7 @@ bool FavHubsFrame::handleContextMenu(dwt::ScreenCoordinate pt) {
 	if(sel) {
 		fillGroupMenu(menu->appendPopup(T_("&Move to group")));
 	} else {
-		menu->appendItem(T_("&Move to group"), 0, dwt::IconPtr(), false);
+		menu->appendItem(T_("&Move to group"), nullptr, dwt::IconPtr(), false);
 	}
 	menu->appendItem(T_("Manage &groups"), [this] { handleGroups(); });
 

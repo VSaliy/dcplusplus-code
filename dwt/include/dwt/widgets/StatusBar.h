@@ -167,7 +167,7 @@ private:
 
 	// standard part (with icon / text).
 	struct Part : PartBase {
-		Part() : PartBase(), icon(0), clickF(0), rightClickF(0), dblClickF(0) { }
+		Part() : PartBase(), icon(nullptr), clickF(nullptr), rightClickF(nullptr), dblClickF(nullptr) { }
 
 		tstring text;
 		IconPtr icon;

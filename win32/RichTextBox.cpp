@@ -36,7 +36,7 @@ RichTextBox::RichTextBox(dwt::Widget* parent) :
 BaseType(parent),
 linkTip(0),
 linkTipPos(0),
-linkF(0)
+linkF(nullptr)
 {
 }
 

@@ -202,7 +202,7 @@ public:
 	 */
 	static bool checkCommand(tstring& cmd, tstring& param, tstring& message, tstring& status, bool& thirdPerson);
 
-	static void notify(NotificationType notification, const tstring& balloonText, const std::function<void ()>& balloonCallback = 0);
+	static void notify(NotificationType notification, const tstring& balloonText, const std::function<void ()>& balloonCallback = nullptr);
 	static void playSound(const tstring& sound);
 
 	static void openFile(const tstring& file);

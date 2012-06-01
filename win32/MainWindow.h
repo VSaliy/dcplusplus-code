@@ -66,7 +66,7 @@ public:
 	void handleSettings();
 
 	/** show a balloon popup. refer to the dwt::Notification::addMessage doc for info about parameters. */
-	void notify(const tstring& title, const tstring& message, const std::function<void ()>& callback = 0, const dwt::IconPtr& balloonIcon = 0);
+	void notify(const tstring& title, const tstring& message, const std::function<void ()>& callback = nullptr, const dwt::IconPtr& balloonIcon = nullptr);
 	void setStaticWindowState(const string& id, bool open);
 	void TrayPM();
 

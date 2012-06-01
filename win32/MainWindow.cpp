@@ -422,7 +422,7 @@ void MainWindow::initToolbar() {
 	toolbar->addButton("OpenFL", WinUtil::toolbarIcon(IDI_OPEN_FILE_LIST), 0, T_("Open file list..."), false,
 		IDH_TOOLBAR_FILE_LIST, [this] { handleOpenFileList(); });
 	toolbar->addButton("Recents", WinUtil::toolbarIcon(IDI_RECENTS), 0, T_("Recent windows"), false,
-		IDH_TOOLBAR_RECENT, 0, [this](const dwt::ScreenCoordinate& pt) { handleRecent(pt); });
+		IDH_TOOLBAR_RECENT, nullptr, [this](const dwt::ScreenCoordinate& pt) { handleRecent(pt); });
 	toolbar->addButton("Settings", WinUtil::toolbarIcon(IDI_SETTINGS), 0, T_("Settings"), false,
 		IDH_TOOLBAR_SETTINGS, [this] { handleSettings(); });
 	toolbar->addButton(NotepadFrame::id, WinUtil::toolbarIcon(IDI_NOTEPAD), 0, T_("Notepad"), false,
@@ -676,7 +676,7 @@ void addRecentMenu(Menu* menu, MainWindow* mainWindow, const tstring& text, unsi
 	const auto& recent = WindowManager::getInstance()->getRecent();
 	auto it = recent.find(T::id);
 	if(it == recent.end()) {
-		popup->appendItem(T_("(No recent item found)"), 0, 0, false);
+		popup->appendItem(T_("(No recent item found)"), nullptr, nullptr, false);
 	} else {
 
 		dwt::IconPtr favIcon = WinUtil::menuIcon(favIconId);
@@ -693,7 +693,7 @@ void addRecentMenu(Menu* menu, MainWindow* mainWindow, const tstring& text, unsi
 
 			popup->appendItem(escapeMenu(Text::toT(title->second)),
 				std::bind(&T::parseWindowParams, mainWindow->getTabView(), params),
-				T::isFavorite(params) ? favIcon : 0);
+				T::isFavorite(params) ? favIcon : nullptr);
 		}
 	}
 }
