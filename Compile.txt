@@ -73,7 +73,7 @@
 		Also grab natupnp.h from the Windows SDK and place it in the root of the repository.
 		<http://msdn.microsoft.com/en-us/windows/bb980924>
 
-	b. Microsoft Visual C++ 11:
+	b. Microsoft Visual Studio 2012:
 	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
 
 		Download OpenSSL from www.openssl.org and compile it. You should get libraries called
@@ -84,6 +84,8 @@
 		Rename debug libraries to libeay32d.lib and ssleay32d.lib; put them in openssl/lib.
 
 		To generate project files for MSVC, run "scons" with "msvcproj=1" and "tools=default".
+		[Temporary until SCons fully supports VS 2012: the above command has to be run from a VS
+		command prompt.]
 		The resulting solution file (DCPlusPlus.sln) will be in msvc/[mode-arch]/.
 
 
