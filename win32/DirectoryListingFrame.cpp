@@ -366,7 +366,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		ids.push_back("Find");
 		auto findId = ids.back();
 		toolbar->addButton(findId, WinUtil::toolbarIcon(IDI_SEARCH), 0, T_("Find"), true, IDH_FILE_LIST_FIND,
-			0, [this](const dwt::ScreenCoordinate&) { handleFindToggle(); });
+			nullptr, [this](const dwt::ScreenCoordinate&) { handleFindToggle(); });
 		toolbar->setLayout(ids);
 
 		rebar->add(toolbar, RBBS_NOGRIPPER);

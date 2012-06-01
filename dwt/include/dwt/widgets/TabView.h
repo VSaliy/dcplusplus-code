@@ -154,7 +154,7 @@ private:
 		bool marked;
 
 		TabInfo(TabView* control, ContainerPtr w, IconPtr icon) :
-		control(control), w(w), icon(icon), handleContextMenu(0), marked(false) { }
+		control(control), w(w), icon(icon), handleContextMenu(nullptr), marked(false) { }
 	};
 
 	Theme theme;

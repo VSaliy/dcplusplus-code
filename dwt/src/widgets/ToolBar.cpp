@@ -46,8 +46,8 @@ itsNormalImageList(0),
 itsHotImageList(0),
 itsDisabledImageList(0),
 customizing(false),
-customized(0),
-customizeHelp(0)
+customized(nullptr),
+customizeHelp(nullptr)
 {
 }
 

@@ -100,9 +100,9 @@ public:
 	* @param showText show text on the button itself (otherwise, it will only be used for tooltips).
 	*/
 	void addButton(const std::string& id, const IconPtr& icon, const IconPtr& hotIcon, const tstring& text, bool showText = false,
-		unsigned helpId = 0, const Dispatcher::F& f = 0, const DropDownFunction& dropDownF = 0);
+		unsigned helpId = 0, const Dispatcher::F& f = nullptr, const DropDownFunction& dropDownF = nullptr);
 	void addButton(const std::string& id, int image, const tstring& text, bool showText = false,
-		unsigned helpId = 0, const Dispatcher::F& f = 0, const DropDownFunction& dropDownF = 0);
+		unsigned helpId = 0, const Dispatcher::F& f = nullptr, const DropDownFunction& dropDownF = nullptr);
 
 	/**
 	* fills a vector with ids of the current buttons, to represent the current state of the
