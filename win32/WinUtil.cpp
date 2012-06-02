@@ -954,23 +954,9 @@ class HelpPopup : private RichTextBox {
 	typedef RichTextBox BaseType;
 
 public:
-	HelpPopup(dwt::Widget* parent, const tstring& text, unsigned timeout = 0, bool multiline = false) :
-		BaseType(parent), text(text), timeout(timeout)
+	HelpPopup(dwt::Widget* parent, const tstring& text, const dwt::Point& pos = dwt::Point(), bool multiline = false) :
+		BaseType(parent)
 	{
-		// where to position the popup.
-		dwt::Point pt;
-		if(!tooltip && isAnyKeyPressed()) {
-			auto rect = parent->getWindowRect();
-			pt.x = rect.left() + rect.width() / 2;
-			pt.y = rect.bottom() + margin;
-		} else {
-			pt = dwt::Point::fromLParam(::GetMessagePos());
-			if(tooltip) {
-				// don't cover the parent window.
-				pt.y = parent->getWindowRect().bottom() + margin;
-			}
-		}
-
 		// create the box as an invisible popup window.
 		auto seed = WinUtil::Seeds::richTextBox;
 		seed.style = WS_POPUP | ES_READONLY;
@@ -985,12 +971,12 @@ public:
 		sendMessage(EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(LOWORD(margins) + margin, HIWORD(margins) + margin));
 
 		// let the control figure out what the best size is.
-		onRaw([this, pt](WPARAM, LPARAM l) { return this->resize(l, pt); }, dwt::Message(WM_NOTIFY, EN_REQUESTRESIZE));
+		onRaw([this, text, pos](WPARAM, LPARAM l) { return this->resize(l, text, pos); }, dwt::Message(WM_NOTIFY, EN_REQUESTRESIZE));
 		setText(text);
 	}
 
 private:
-	LRESULT resize(LPARAM lParam, const dwt::Point& pos) {
+	LRESULT resize(LPARAM lParam, const tstring& text, dwt::Point pos) {
 		if(getVisible())
 			return 0;
 
@@ -998,7 +984,7 @@ private:
 
 		if(rect.width() > getWindowRect().width() && !hasStyle(ES_MULTILINE)) {
 			// can't add ES_MULTILINE at run time, so create the control again.
-			new ThisType(getParent(), text, timeout, true);
+			new ThisType(getParent(), text, pos, true);
 			close();
 			return 0;
 		}
@@ -1009,6 +995,17 @@ private:
 		}
 		helpPopup = this;
 		onDestroy([this] { if(this == helpPopup) helpPopup = nullptr; });
+
+		// where to position the popup.
+		if(!tooltip) {
+			if(isAnyKeyPressed()) {
+				auto rect = getParent()->getWindowRect();
+				pos.x = rect.left() + rect.width() / 2;
+				pos.y = rect.bottom() + margin;
+			} else {
+				pos = dwt::Point::fromLParam(::GetMessagePos());
+			}
+		}
 
 		// adjust the size to account for borders and margins.
 		rect.pos = pos;
@@ -1022,7 +1019,6 @@ private:
 
 		if(tooltip) {
 			// this help popup acts as a tooltip; it will close by itself.
-			setTimer([this] { return !this->close(); }, timeout);
 			onMouseMove([this](const dwt::MouseEvent&) { return this->close(); });
 
 		} else {
@@ -1057,9 +1053,6 @@ private:
 
 	static const long margin = 6;
 	static const long maxWidth = 400;
-
-	const tstring text;
-	unsigned timeout;
 };
 
 void WinUtil::help(dwt::Control* widget) {
@@ -1070,6 +1063,7 @@ void WinUtil::helpId(dwt::Control* widget, unsigned id) {
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help
 		new HelpPopup<false>(widget, Text::toT(getHelpText(id)));
+
 	} else {
 #ifdef HAVE_HTMLHELP_H
 		if(id < IDH_BEGIN || id > IDH_END)
@@ -1079,15 +1073,20 @@ void WinUtil::helpId(dwt::Control* widget, unsigned id) {
 	}
 }
 
-void WinUtil::helpTooltip(dwt::Control* widget, unsigned timeout) {
+void WinUtil::helpTooltip(dwt::Control* widget, const dwt::Point& pos) {
+	killHelpTooltip();
+
 	auto id = widget->getHelpId();
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help
-		new HelpPopup<true>(widget, Text::toT(getHelpText(id)), timeout);
+		new HelpPopup<true>(widget, Text::toT(getHelpText(id)), pos);
+	}
+}
 
-	} else if(helpPopup) {
-		// close the previous one.
+void WinUtil::killHelpTooltip() {
+	if(helpPopup) {
 		helpPopup->close();
+		helpPopup = nullptr;
 	}
 }
 

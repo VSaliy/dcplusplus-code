@@ -60,10 +60,10 @@ void ToolTip::setText(Widget* widget, const tstring& text_) {
 	setTool(widget, [this](tstring& ret) { ret = text; });
 }
 
-void ToolTip::addTool(Widget* widget) {
+void ToolTip::addTool(Widget* widget, LPTSTR text) {
 	TOOLINFO ti = { sizeof(TOOLINFO), TTF_IDISHWND | TTF_SUBCLASS, getParent()->handle(),
 		reinterpret_cast<UINT_PTR>(widget->handle()) };
-	ti.lpszText = LPSTR_TEXTCALLBACK;
+	ti.lpszText = text;
 	sendMessage(TTM_ADDTOOL, 0, reinterpret_cast<LPARAM>(&ti));
 }
 
