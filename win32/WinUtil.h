@@ -295,7 +295,8 @@ public:
 
 	static void help(dwt::Control* widget);
 	static void helpId(dwt::Control* widget, unsigned id);
-	static void helpTooltip(dwt::Control* widget, unsigned timeout);
+	static void helpTooltip(dwt::Control* widget, const dwt::Point& pos);
+	static void killHelpTooltip();
 	static string getHelpText(unsigned id);
 
 	// URL related

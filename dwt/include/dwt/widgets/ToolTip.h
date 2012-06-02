@@ -73,7 +73,7 @@ public:
 
 	void setText(const tstring& text_);
 	void setText(Widget* widget, const tstring& text);
-	void addTool(Widget* widget);
+	void addTool(Widget* widget, LPTSTR text = LPSTR_TEXTCALLBACK);
 	void setTool(Widget* widget, F callback);
 
 	void setMaxTipWidth(int width);

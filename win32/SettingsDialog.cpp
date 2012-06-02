@@ -218,17 +218,29 @@ bool SettingsDialog::initDialog() {
 	tip = addChild(ToolTip::Seed());
 
 	// make tooltips last longer
-	auto timeout = tip->getDelay(TTDT_AUTOPOP) * 3;
-	tip->setDelay(TTDT_AUTOPOP, timeout);
+	tip->setDelay(TTDT_AUTOPOP, tip->getDelay(TTDT_AUTOPOP) * 3);
 
-	tip->addCallback(dwt::Message(WM_NOTIFY, TTN_GETDISPINFO), [timeout](const MSG& msg, LRESULT&) -> bool {
-		auto& ttdi = *reinterpret_cast<LPNMTTDISPINFO>(msg.lParam);
+	// wait more time before displaying tooltips
+	tip->setDelay(TTDT_INITIAL, tip->getDelay(TTDT_INITIAL) + 1000);
+	tip->setDelay(TTDT_RESHOW, tip->getDelay(TTDT_INITIAL));
+
+	// on TTN_SHOW, hide the actual tooltip and display our rich one in its place.
+	tip->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
+		auto pos = tip->getWindowRect().pos;
+		::SetWindowPos(tip->handle(), 0, 0, 0, 0, 0, SWP_HIDEWINDOW | SWP_NOACTIVATE);
+		auto& ttdi = *reinterpret_cast<LPNMTTDISPINFO>(lParam);
 		auto widget = dwt::hwnd_cast<dwt::Control*>(reinterpret_cast<HWND>(ttdi.hdr.idFrom));
 		if(widget) {
-			WinUtil::helpTooltip(widget, timeout);
+			WinUtil::helpTooltip(widget, pos);
 		}
-		return true;
-	});
+		return TRUE;
+	}, dwt::Message(WM_NOTIFY, TTN_SHOW));
+
+	// kill our rich tooltip on TTN_POP.
+	tip->onRaw([this](WPARAM, LPARAM) -> LRESULT {
+		WinUtil::killHelpTooltip();
+		return 0;
+	}, dwt::Message(WM_NOTIFY, TTN_POP));
 
 	/*
 	* catch WM_SETFOCUS messages (onFocus events) sent to every children of this dialog. the normal
@@ -264,8 +276,9 @@ BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 
 		/* associate a tooltip callback with every widget; a tooltip will be shown for those that
 		provide a valid cshelp id; the tooltip will disappear when hovering others (to be as
-		discreet as possible). */
-		dialog->tip->addTool(widget);
+		discreet as possible). the tooltip is provided a random text to make it believe in its
+		usefulness (we will actually hide it and show our own rich one on top of it). */
+		dialog->tip->addTool(widget, _T("M"));
 
 		// special refresh logic for tables as they may have different help ids for each item.
 		if(table) {
@@ -274,7 +287,7 @@ BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 				static int prevId = -1;
 				if(static_cast<int>(id) != prevId) {
 					prevId = static_cast<int>(id);
-					dialog->tip->sendMessage(TTM_UPDATE);
+					dialog->tip->refresh();
 				}
 				return false;
 			});
