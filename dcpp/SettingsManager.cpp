@@ -69,7 +69,7 @@ const string SettingsManager::settingTags[] =
 	"MaxCompression", "NoAwayMsgToBots", "SkipZeroByte", "AdlsBreakOnFirst",
 	"HubUserCommands", "AutoSearchAutoMatch", "LogSystem",
 	"LogFilelistTransfers", "SendUnknownCommands", "MaxHashSpeed", "OpenUserCmdHelp",
-	"GetUserCountry", "FavShowJoins", "LogStatusMessages", "ShowStatusbar",
+	"GetUserCountry", "FavShowJoins", "LogStatusMessages", "ShowMenuBar", "ShowStatusbar",
 	"ShowToolbar", "ShowTransferview", "PopunderPm", "PopunderFilelist", "MagnetAsk", "MagnetAction", "MagnetRegister",
 	"AddFinishedInstantly", "DontDLAlreadyShared", "UseCTRLForLineHistory",
 	"OpenNewWindow", "UDPPort", "HubLastLogLines", "PMLastLogLines",
@@ -225,6 +225,7 @@ SettingsManager::SettingsManager()
 	setDefault(GET_USER_COUNTRY, true);
 	setDefault(FAV_SHOW_JOINS, false);
 	setDefault(LOG_STATUS_MESSAGES, false);
+	setDefault(SHOW_MENU_BAR, true);
 	setDefault(SHOW_TRANSFERVIEW, true);
 	setDefault(SHOW_STATUSBAR, true);
 	setDefault(SHOW_TOOLBAR, true);

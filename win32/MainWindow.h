@@ -174,6 +174,7 @@ private:
 	void handleToolbarCustomized();
 	bool handleToolbarContextMenu(const dwt::ScreenCoordinate& pt);
 	void handleToolbarSize(int size);
+	void switchMenuBar();
 	void switchToolbar();
 	void switchTransfers();
 	void switchStatus();

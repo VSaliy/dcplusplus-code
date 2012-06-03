@@ -132,6 +132,7 @@ fullSlots(false)
 	initTransfers();
 	initTray();
 
+	addAccel(FCONTROL, '0', [this] { switchMenuBar(); });
 	addAccel(FCONTROL, '1', [this] { switchToolbar(); });
 	addAccel(FCONTROL, '2', [this] { switchTransfers(); });
 	addAccel(FCONTROL, '3', [this] { switchStatus(); });
@@ -339,6 +340,7 @@ void MainWindow::initMenu() {
 			[this] { StatsFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_NET_STATS));
 		viewMenu->appendItem(T_("Indexing progress"), [this] { handleHashProgress(); }, WinUtil::menuIcon(IDI_INDEXING));
 		viewMenu->appendSeparator();
+		viewIndexes["Menu"] = viewMenu->appendItem(T_("Menu bar\tCtrl+0"), [this] { switchMenuBar(); });
 		viewIndexes["Toolbar"] = viewMenu->appendItem(T_("Toolbar\tCtrl+1"), [this] { switchToolbar(); });
 		viewIndexes["Transfers"] = viewMenu->appendItem(T_("Transfer view\tCtrl+2"), [this] { switchTransfers(); });
 		viewIndexes["Status"] = viewMenu->appendItem(T_("Status bar\tCtrl+3"), [this] { switchStatus(); });
@@ -387,6 +389,28 @@ void MainWindow::initMenu() {
 	}
 
 	mainMenu->setMenu();
+
+	if(BOOLSETTING(SHOW_MENU_BAR)) {
+		viewMenu->checkItem(viewIndexes["Menu"], true);
+	} else {
+		::SetMenu(handle(), nullptr);
+	}
+
+	/* when the menu bar is hidden, catch WM_ENTERMENULOOP & WM_EXITMENULOOP to determine when it
+	should be shown (such as when pressing Alt or F10).
+	idea from Notepad++ <http://notepad-plus-plus.org/>. */
+
+	auto updateMenuBar = [this](bool show) -> std::function<LRESULT (WPARAM, LPARAM)> {
+		return [=](WPARAM wParam, LPARAM) -> LRESULT {
+			if(!wParam && !BOOLSETTING(SHOW_MENU_BAR)) {
+				::SetMenu(handle(), show ? mainMenu->handle() : nullptr);
+			}
+			return 0;
+		};
+	};
+
+	onRaw(updateMenuBar(true), dwt::Message(WM_ENTERMENULOOP));
+	onRaw(updateMenuBar(false), dwt::Message(WM_EXITMENULOOP));
 }
 
 void MainWindow::initToolbar() {
@@ -1520,6 +1544,12 @@ void MainWindow::handleToolbarSize(int size) {
 	SettingsManager::getInstance()->set(SettingsManager::TOOLBAR_SIZE, size);
 	switchToolbar();
 	switchToolbar();
+}
+
+void MainWindow::switchMenuBar() {
+	SettingsManager::getInstance()->set(SettingsManager::SHOW_MENU_BAR, !BOOLSETTING(SHOW_MENU_BAR));
+	::SetMenu(handle(), BOOLSETTING(SHOW_MENU_BAR) ? mainMenu->handle() : nullptr);
+	viewMenu->checkItem(viewIndexes["Menu"], BOOLSETTING(SHOW_MENU_BAR));
 }
 
 void MainWindow::switchToolbar() {
