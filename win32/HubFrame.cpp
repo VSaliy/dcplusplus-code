@@ -405,6 +405,21 @@ void HubFrame::enterImpl(const tstring& s) {
 			if(!status.empty()) {
 				addStatus(status);
 			}
+		} else if(Util::stricmp(cmd.c_str(), _T("info")) == 0) {
+			map<tstring, string> info;
+			info[T_("Hub address")] = url;
+			info[T_("Hub IP & port")] = client->getIpPort();
+			info[T_("Online users")] = Util::toString(getUserCount());
+			info[T_("Shared")] = Util::formatBytes(client->getAvailable());
+			info[T_("Nick")] = client->get(HubSettings::Nick);
+			info[T_("Description")] = client->get(HubSettings::Description);
+			info[T_("Email")] = client->get(HubSettings::Email);
+			info[T_("External / WAN IP")] = client->get(HubSettings::UserIp);
+			tstring text;
+			for(auto& i: info) {
+				text += _T("\r\n") + i.first + _T(": ") + Text::toT(i.second);
+			}
+			addChat(_T("*** ") + text);
 		} else if(Util::stricmp(cmd.c_str(), _T("join"))==0) {
 			if(!param.empty()) {
 				if(BOOLSETTING(JOIN_OPEN_NEW_WINDOW)) {
@@ -473,7 +488,7 @@ void HubFrame::enterImpl(const tstring& s) {
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
 			addChat(_T("*** ") + WinUtil::commands +
 				_T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, ")
-				_T("/conn[ection], /fav[orite], /removefav[orite], ")
+				_T("/conn[ection], /fav[orite], /removefav[orite], /info, ")
 				_T("/pm <user> [message], /getlist <user>, /ignore <user>, /unignore <user>, ")
 				_T("/log <status, system, downloads, uploads>"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
@@ -984,19 +999,25 @@ tstring HubFrame::getStatusShared() const {
 	return Text::toT(Util::formatBytes(available));
 }
 
-pair<size_t, tstring> HubFrame::getStatusUsers() const {
+size_t HubFrame::getUserCount() const {
 	size_t userCount = 0;
 	for(auto& i: userMap) {
-		UserInfo* ui = i.second;
-		if(!ui->isHidden())
-			userCount++;
+		if(!i.second->isHidden()) {
+			++userCount;
+		}
 	}
+	return userCount;
+}
+
+pair<size_t, tstring> HubFrame::getStatusUsers() const {
+	auto userCount = getUserCount();
 
 	tstring textForUsers;
 	if (users->countSelected() > 1)
 		textForUsers += Text::toT(Util::toString(users->countSelected()) + "/");
 	if (showUsers->getChecked() && users->size() < userCount)
 		textForUsers += Text::toT(Util::toString(users->size()) + "/");
+
 	return make_pair(userCount, textForUsers);
 }
 

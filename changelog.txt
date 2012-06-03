@@ -6,6 +6,7 @@
 * Fix a mixup between IPs and hostnames leading to wrong search results (poy)
 * Tweak help tooltips in the settings dialog (poy)
 * Make the menu bar hideable (poy)
+* Add a /info hub command (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
