@@ -458,6 +458,7 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 
 		setEnabled(true);
 
+		loading->setVisible(false);
 		loading->close(true);
 		loading = 0;
 

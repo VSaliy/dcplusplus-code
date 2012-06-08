@@ -7,6 +7,7 @@
 * Tweak help tooltips in the settings dialog (poy)
 * Make the menu bar hideable (poy)
 * Add a /info hub command (poy)
+* [L#957994] Fix glitches with the file list loader (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
