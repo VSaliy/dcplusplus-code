@@ -103,6 +103,7 @@ public:
 
 	int64_t getSize(const string& target) noexcept;
 	int64_t getPos(const string& target) noexcept;
+	void getSizeInfo(int64_t& size, int64_t& pos, const string& target) noexcept;
 
 	/** Move the target location of a queued item. Running items are silently ignored */
 	void move(const string& aSource, const string& aTarget) noexcept;
