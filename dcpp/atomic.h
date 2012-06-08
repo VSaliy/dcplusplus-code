@@ -19,8 +19,9 @@
 #ifndef DCPLUSPLUS_DCPP_ATOMIC_HPP_
 #define DCPLUSPLUS_DCPP_ATOMIC_HPP_
 
-// GCC 4.6 and below has issues with atomic - see https://bugs.launchpad.net/dcplusplus/+bug/735512
-#if defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 7))
+// GCC has issues with atomic - see https://bugs.launchpad.net/dcplusplus/+bug/735512
+/// @todo check this again when GCC improves their threading support
+#if defined(__GNUC__)
 
 #include <boost/atomic.hpp>
 

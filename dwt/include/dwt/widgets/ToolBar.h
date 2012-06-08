@@ -315,7 +315,7 @@ inline void ToolBar::setButtonVisible( unsigned int id, bool show )
 
 inline bool ToolBar::getButtonVisible( unsigned int id )
 {
-	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, id };
+	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, static_cast<int>(id) };
 	sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
 	return ( tb.fsState & TBSTATE_HIDDEN ) == 0;
 }
@@ -327,14 +327,14 @@ inline void ToolBar::setButtonEnabled( unsigned id, bool enable )
 
 inline bool ToolBar::getButtonEnabled( unsigned int id )
 {
-	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, id };
+	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, static_cast<int>(id) };
 	sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
 	return ( tb.fsState & TBSTATE_ENABLED ) == TBSTATE_ENABLED;
 }
 
 inline bool ToolBar::getButtonChecked( unsigned int id )
 {
-	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, id };
+	TBBUTTONINFO tb = { sizeof(TBBUTTONINFO), TBIF_STATE, static_cast<int>(id) };
 	sendMessage(TB_GETBUTTONINFO, id, reinterpret_cast< LPARAM >( & tb ) );
 	return ( tb.fsState & TBSTATE_CHECKED ) == TBSTATE_CHECKED;
 }

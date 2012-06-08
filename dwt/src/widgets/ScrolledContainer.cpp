@@ -65,7 +65,7 @@ void ScrolledContainer::layout() {
 }
 
 void ScrolledContainer::setScrollInfo(int type, int page, int max, int pos) {
-	SCROLLINFO si = { sizeof(SCROLLINFO), SIF_ALL, 0, max - 1, page, pos };
+	SCROLLINFO si = { sizeof(SCROLLINFO), SIF_ALL, 0, max - 1, static_cast<UINT>(page), pos };
 	::SetScrollInfo(handle(), type, &si, TRUE);
 }
 

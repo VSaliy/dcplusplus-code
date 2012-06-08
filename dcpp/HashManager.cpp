@@ -109,7 +109,7 @@ void HashManager::HashStore::addTree(const TigerTree& tt) noexcept {
 		try {
 			File f(getDataFile(), File::READ | File::WRITE, File::OPEN);
 			int64_t index = saveTree(f, tt);
-			treeIndex.insert(make_pair(tt.getRoot(), TreeInfo(tt.getFileSize(), index, tt.getBlockSize())));
+			treeIndex.emplace(tt.getRoot(), TreeInfo(tt.getFileSize(), index, tt.getBlockSize()));
 			dirty = true;
 		} catch (const FileException& e) {
 			LogManager::getInstance()->message(str(F_("Error saving hash data: %1%") % e.getError()));
@@ -251,12 +251,7 @@ void HashManager::HashStore::rebuild() {
 		}
 
 		for (auto& i: fileIndex) {
-#ifndef __GNUC__
 			auto fi = newFileIndex.emplace(i.first, FileInfoList()).first;
-#else
-			/// @todo retry with emplace on GCC 4.7 (see comment in compiler.h)
-			auto fi = newFileIndex.insert(make_pair(i.first, FileInfoList())).first;
-#endif
 
 			for (auto& j: i.second) {
 				if (newTreeIndex.find(j.getRoot()) != newTreeIndex.end()) {
@@ -469,7 +464,7 @@ void HashManager::HashStore::createDataFile(const string& name) {
 
 void HashManager::Hasher::hashFile(const string& fileName, int64_t size) {
 	Lock l(cs);
-	if (w.insert(make_pair(fileName, size)).second) {
+	if(w.insert(make_pair(fileName, size)).second) {
 		if(paused > 0)
 			paused++;
 		else

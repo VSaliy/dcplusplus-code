@@ -717,7 +717,7 @@ bool HubFrame::updateUser(const UserTask& u) {
 	auto i = userMap.find(u.user);
 	if(i == userMap.end()) {
 		UserInfo* ui = new UserInfo(u);
-		userMap.insert(make_pair(u.user, ui));
+		userMap.emplace(u.user, ui);
 		if(!ui->isHidden() && showUsers->getChecked())
 			users->insert(ui);
 

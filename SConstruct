@@ -12,7 +12,7 @@ gcc_flags = {
 }
 
 gcc_xxflags = {
-	'common' : ['-std=gnu++0x'],
+	'common' : ['-std=gnu++11'],
 	'debug' : [],
 	'release' : []
 }

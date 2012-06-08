@@ -364,7 +364,7 @@ public:
 
 	void setTableStyle(int style);
 
-	int insert(int mask, int i, LPCTSTR text, UINT state, UINT stateMask, int image, LPARAM lparam);
+	int insert(unsigned mask, int i, LPCTSTR text, unsigned state, unsigned stateMask, int image, LPARAM lparam);
 
 	int getNext(int i, int type) const;
 
@@ -630,7 +630,7 @@ inline int Table::getNext(int i, int type) const {
 }
 
 inline int Table::find(const tstring& b, int start, bool aPartial) {
-    LVFINDINFO fi = { aPartial ? LVFI_PARTIAL : LVFI_STRING, b.c_str() };
+    LVFINDINFO fi = { static_cast<UINT>(aPartial ? LVFI_PARTIAL : LVFI_STRING), b.c_str() };
     return ListView_FindItem(handle(), start, &fi);
 }
 

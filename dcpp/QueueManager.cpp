@@ -90,7 +90,7 @@ QueueItem* QueueManager::FileQueue::add(const string& aTarget, int64_t aSize,
 
 void QueueManager::FileQueue::add(QueueItem* qi) {
 	if(lastInsert == queue.end())
-		lastInsert = queue.insert(make_pair(const_cast<string*>(&qi->getTarget()), qi)).first;
+		lastInsert = queue.emplace(const_cast<string*>(&qi->getTarget()), qi).first;
 	else
 		lastInsert = queue.insert(lastInsert, make_pair(const_cast<string*>(&qi->getTarget()), qi));
 }
@@ -712,7 +712,7 @@ void QueueManager::addDirectory(const string& aDir, const HintedUser& aUser, con
 		}
 
 		// Unique directory, fine...
-		directories.insert(make_pair(aUser, new DirectoryItem(aUser, aDir, aTarget, p)));
+		directories.emplace(aUser, new DirectoryItem(aUser, aDir, aTarget, p));
 		needList = (dp.first == dp.second);
 		setDirty();
 	}
@@ -745,7 +745,7 @@ void buildMap(const DirectoryListing::Directory* dir, TTHMap& tthMap) noexcept {
 	});
 
 	std::for_each(dir->files.cbegin(), dir->files.cend(), [&](DirectoryListing::File* f) {
-		tthMap.insert(make_pair(f->getTTH(), f));
+		tthMap.emplace(f->getTTH(), f);
 	});
 }
 }

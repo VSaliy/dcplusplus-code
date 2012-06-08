@@ -82,7 +82,7 @@ OnlineUser& AdcHub::getUser(const uint32_t aSID, const CID& aCID) {
 
 	{
 		Lock l(cs);
-		ou = users.insert(make_pair(aSID, new OnlineUser(p, *this, aSID))).first->second;
+		ou = users.emplace(aSID, new OnlineUser(p, *this, aSID)).first->second;
 	}
 
 	if(aSID != AdcCommand::HUB_SID)
@@ -947,7 +947,7 @@ static void addParam(StringMap& lastInfoMap, AdcCommand& c, const string& var, c
 			c.addParam(var, value);
 		}
 	} else if(!value.empty()) {
-		lastInfoMap.insert(make_pair(var, value));
+		lastInfoMap.emplace(var, value);
 		c.addParam(var, value);
 	}
 }
