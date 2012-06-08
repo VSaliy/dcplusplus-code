@@ -799,6 +799,17 @@ int64_t QueueManager::getSize(const string& target) noexcept {
 	return -1;
 }
 
+void QueueManager::getSizeInfo(int64_t& size, int64_t& pos, const string& target) noexcept {
+	Lock l(cs);
+	QueueItem* qi = fileQueue.find(target);
+	if(qi) {
+		size = qi->getSize();
+		pos = qi->getDownloadedBytes();
+	} else {
+		size = -1;
+	}
+}
+
 
 void QueueManager::move(const string& aSource, const string& aTarget) noexcept {
 	string target = Util::validateFileName(aTarget);
