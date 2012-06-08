@@ -117,7 +117,7 @@ class MDIParent;
 typedef MDIParent* MDIParentPtr;
 
 // Not a Color - corresponds to 1 + 0xFFFFFF (the max value of a COLORREF)
-enum { NaC = 0x1000000 };
+static const COLORREF NaC = 0x1000000;
 
 class Notification;
 typedef std::unique_ptr<Notification> NotificationPtr;

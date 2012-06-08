@@ -248,7 +248,7 @@ void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
 	const string& dir = ii->getPath();
 
 	bool updateDir = (directories.find(dir) == directories.end());
-	directories.insert(make_pair(dir, ii));
+	directories.emplace(dir, ii);
 
 	if(updateDir) {
 		addDirectory(dir, ii->isSet(QueueItem::FLAG_USER_LIST));

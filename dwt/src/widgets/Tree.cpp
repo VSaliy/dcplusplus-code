@@ -139,7 +139,7 @@ tstring Tree::getText( HTREEITEM node, int column)
 		}
 	} else {
 		auto i = texts.find(node);
-		if(i != texts.end() && i->second.size() > column) {
+		if(i != texts.end() && i->second.size() > static_cast<size_t>(column)) {
 			return i->second[column];
 		}
 	}
@@ -152,9 +152,9 @@ void Tree::setText(HTREEITEM node, int column, const tstring& text) {
 		TVITEMEX item = { TVIF_HANDLE | TVIF_TEXT, node };
 		item.pszText = const_cast<LPTSTR>(text.c_str());
 		TreeView_SetItem(treeHandle(), &item);
-	} else if(column < getColumnCount()) {
+	} else if(static_cast<size_t>(column) < getColumnCount()) {
 		auto &v = texts[node];
-		if(v.size() <= column) v.resize(column + 1);
+		if(v.size() <= static_cast<size_t>(column)) v.resize(column + 1);
 		v[column] = text;
 	}
 }

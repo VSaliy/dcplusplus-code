@@ -220,7 +220,7 @@ int Table::insert(const std::vector<tstring>& row, LPARAM lPar, int index, int i
 	return ret;
 }
 
-int Table::insert(int mask, int i, LPCTSTR text, UINT state, UINT stateMask, int image, LPARAM lparam) {
+int Table::insert(unsigned mask, int i, LPCTSTR text, unsigned state, unsigned stateMask, int image, LPARAM lparam) {
 	LVITEM item = { mask };
 	item.state = state;
 	item.stateMask = stateMask;
@@ -482,7 +482,7 @@ void Table::clearImpl() {
 }
 
 void Table::setIcon(unsigned row, unsigned column, int newIconIndex) {
-	LVITEM item = { LVIF_IMAGE, row, column };
+	LVITEM item = { LVIF_IMAGE, static_cast<int>(row), static_cast<int>(column) };
 	item.iImage = newIconIndex;
 	ListView_SetItem(handle(), &item);
 }

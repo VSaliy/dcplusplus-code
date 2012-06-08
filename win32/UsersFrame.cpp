@@ -289,7 +289,7 @@ void UsersFrame::addUser(const UserPtr& aUser) {
 
 	auto ui = userInfos.find(aUser);
 	if(ui == userInfos.end()) {
-		auto x = userInfos.insert(make_pair(aUser, UserInfo(aUser, false))).first;
+		auto x = userInfos.emplace(aUser, UserInfo(aUser, false)).first;
 
 		if(matches(x->second)) {
 			x->second.update(aUser, true);

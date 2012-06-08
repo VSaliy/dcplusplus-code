@@ -259,7 +259,7 @@ UserPtr ClientManager::getUser(const string& aNick, const string& aHubUrl) noexc
 
 	UserPtr p(new User(cid));
 	p->setFlag(User::NMDC);
-	users.insert(make_pair(cid, p));
+	users.emplace(cid, p);
 
 	return p;
 }
@@ -272,7 +272,7 @@ UserPtr ClientManager::getUser(const CID& cid) noexcept {
 	}
 
 	UserPtr p(new User(cid));
-	users.insert(make_pair(cid, p));
+	users.emplace(cid, p);
 	return p;
 }
 
@@ -306,7 +306,7 @@ CID ClientManager::makeCid(const string& aNick, const string& aHubUrl) const noe
 void ClientManager::putOnline(OnlineUser* ou) noexcept {
 	{
 		Lock l(cs);
-		onlineUsers.insert(make_pair(ou->getUser()->getCID(), ou));
+		onlineUsers.emplace(ou->getUser()->getCID(), ou);
 	}
 
 	if(!ou->getUser()->isOnline()) {
@@ -554,7 +554,7 @@ UserPtr& ClientManager::getMe() {
 		Lock l(cs);
 		if(!me) {
 			me = new User(getMyCID());
-			users.insert(make_pair(me->getCID(), me));
+			users.emplace(me->getCID(), me);
 		}
 	}
 	return me;

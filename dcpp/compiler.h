@@ -20,11 +20,8 @@
 #define DCPLUSPLUS_DCPP_COMPILER_H
 
 #if defined(__GNUC__)
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
-#error GCC 4.6 is required
-
-/** @todo when switching to GCC 4.7, see if unordered_map's insert/make_pair combo can be changed
-to emplace. <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=44436> */
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 7)
+#error GCC 4.7 is required
 
 #endif
 

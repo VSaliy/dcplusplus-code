@@ -19,6 +19,9 @@
 #ifndef DCPLUSPLUS_DCPP_CONNECTION_MANAGER_H
 #define DCPLUSPLUS_DCPP_CONNECTION_MANAGER_H
 
+#include <memory>
+#include <unordered_map>
+
 #include "TimerManager.h"
 #include "UserConnectionListener.h"
 #include "CriticalSection.h"
@@ -30,6 +33,7 @@
 namespace dcpp {
 
 using std::unique_ptr;
+using std::unordered_map;
 
 class SocketException;
 
@@ -65,7 +69,7 @@ class ExpectedMap {
 public:
 	void add(const string& aNick, const string& aMyNick, const string& aHubUrl) {
 		Lock l(cs);
-		expectedConnections.insert(make_pair(aNick, make_pair(aMyNick, aHubUrl)));
+		expectedConnections.emplace(aNick, make_pair(aMyNick, aHubUrl));
 	}
 
 	StringPair remove(const string& aNick) {
@@ -83,7 +87,7 @@ public:
 
 private:
 	/** Nick -> myNick, hubUrl for expected NMDC incoming connections */
-	typedef map<string, StringPair> ExpectMap;
+	typedef unordered_map<string, StringPair> ExpectMap;
 	ExpectMap expectedConnections;
 
 	CriticalSection cs;

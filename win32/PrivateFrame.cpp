@@ -194,7 +194,7 @@ online(replyTo.getUser().user->isOnline())
 		updateOnlineStatus();
 	});
 
-	frames.insert(make_pair(replyTo.getUser(), this));
+	frames.emplace(replyTo.getUser(), this);
 
 	addRecent();
 }

@@ -400,7 +400,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 
 	layout();
 
-	lists.insert(make_pair(aUser, this));
+	lists.emplace(aUser, this);
 }
 
 DirectoryListingFrame::~DirectoryListingFrame() {

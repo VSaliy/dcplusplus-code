@@ -54,7 +54,7 @@ class Scrollable
 
 public:
 	/// @ refer to the ::GetScrollInfo doc for information on the params.
-	SCROLLINFO getScrollInfo(int fnBar, int mask = SIF_ALL) const;
+	SCROLLINFO getScrollInfo(int fnBar, unsigned mask = SIF_ALL) const;
 	bool scrollIsAtEnd() const;
 
 	/** catch horizontal scrolling events.
@@ -86,7 +86,7 @@ private:
 };
 
 template<typename WidgetType>
-SCROLLINFO Scrollable<WidgetType>::getScrollInfo(int fnBar, int mask) const {
+SCROLLINFO Scrollable<WidgetType>::getScrollInfo(int fnBar, unsigned mask) const {
 	SCROLLINFO info = { sizeof(SCROLLINFO), mask };
 	if(!::GetScrollInfo(H(), fnBar, &info)) {
 		throw Win32Exception("aspects::Scrollable: Can't get scroll info");

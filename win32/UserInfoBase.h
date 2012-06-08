@@ -36,6 +36,7 @@ using boost::range::for_each;
 class UserInfoBase {
 public:
 	UserInfoBase(const HintedUser& u) : user(u) { }
+	virtual ~UserInfoBase() { }
 
 	virtual void getList();
 	virtual void browseList();
