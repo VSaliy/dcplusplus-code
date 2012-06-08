@@ -396,21 +396,13 @@ void MainWindow::initMenu() {
 		::SetMenu(handle(), nullptr);
 	}
 
-	/* when the menu bar is hidden, catch WM_ENTERMENULOOP & WM_EXITMENULOOP to determine when it
-	should be shown (such as when pressing Alt or F10).
-	idea from Notepad++ <http://notepad-plus-plus.org/>. */
-
-	auto updateMenuBar = [this](bool show) -> std::function<LRESULT (WPARAM, LPARAM)> {
-		return [=](WPARAM wParam, LPARAM) -> LRESULT {
-			if(!wParam && !BOOLSETTING(SHOW_MENU_BAR)) {
-				::SetMenu(handle(), show ? mainMenu->handle() : nullptr);
-			}
-			return 0;
-		};
-	};
-
-	onRaw(updateMenuBar(true), dwt::Message(WM_ENTERMENULOOP));
-	onRaw(updateMenuBar(false), dwt::Message(WM_EXITMENULOOP));
+	// hide the temporary menu bar on WM_EXITMENULOOP
+	onRaw([this](WPARAM wParam, LPARAM) -> LRESULT {
+		if(!wParam && !BOOLSETTING(SHOW_MENU_BAR) && ::GetMenu(handle())) {
+			::SetMenu(handle(), nullptr);
+		}
+		return 0;
+	}, dwt::Message(WM_EXITMENULOOP));
 }
 
 void MainWindow::initToolbar() {
@@ -611,6 +603,24 @@ void MainWindow::initTray() {
 }
 
 bool MainWindow::filter(MSG& msg) {
+	if(msg.message == WM_SYSKEYDOWN && (msg.wParam == VK_MENU || msg.wParam == VK_F10) &&
+		!BOOLSETTING(SHOW_MENU_BAR) && !::GetMenu(handle()) && !isShiftPressed())
+	{
+		// show the temporary menu bar when pressing Alt or F10
+		::SetMenu(handle(), mainMenu->handle());
+
+	} else if((msg.message == WM_KEYUP || msg.message == WM_SYSKEYUP) && (msg.wParam == VK_MENU || msg.wParam == VK_F10)  &&
+		!BOOLSETTING(SHOW_MENU_BAR) && ::GetMenu(handle()))
+	{
+		// hide the temporary menu bar if when releasing Alt or F10, the menu bar isn't focused
+		callAsync([this] {
+			MENUBARINFO info = { sizeof(MENUBARINFO) };
+			if(!::GetMenuBarInfo(handle(), OBJID_MENU, 0, &info) || !info.fBarFocused) {
+				::SetMenu(handle(), nullptr);
+			}
+		});
+	}
+
 	if(tabs && tabs->filter(msg)) {
 		return true;
 	}
@@ -1286,6 +1296,11 @@ void MainWindow::handleMatchAll() {
 }
 
 void MainWindow::handleActivate(bool active) {
+	// hide the temporary menu bar when moving out of the main window
+	if(!active && !BOOLSETTING(SHOW_MENU_BAR) && ::GetMenu(handle())) {
+		::SetMenu(handle(), nullptr);
+	}
+
 	// focus the active tab window
 	Container* w = getTabView()->getActive();
 	if(w) {
@@ -1547,9 +1562,15 @@ void MainWindow::handleToolbarSize(int size) {
 }
 
 void MainWindow::switchMenuBar() {
-	SettingsManager::getInstance()->set(SettingsManager::SHOW_MENU_BAR, !BOOLSETTING(SHOW_MENU_BAR));
-	::SetMenu(handle(), BOOLSETTING(SHOW_MENU_BAR) ? mainMenu->handle() : nullptr);
-	viewMenu->checkItem(viewIndexes["Menu"], BOOLSETTING(SHOW_MENU_BAR));
+	auto show = !BOOLSETTING(SHOW_MENU_BAR);
+	SettingsManager::getInstance()->set(SettingsManager::SHOW_MENU_BAR, show);
+	::SetMenu(handle(), show ? mainMenu->handle() : nullptr);
+	viewMenu->checkItem(viewIndexes["Menu"], show);
+
+	if(!show) {
+		dwt::MessageBox(this).show(T_("The menu bar is now hidden. Press Alt or F10 to temporarily bring it back into view."),
+			_T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONINFORMATION);
+	}
 }
 
 void MainWindow::switchToolbar() {
