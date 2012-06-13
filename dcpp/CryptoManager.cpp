@@ -122,7 +122,7 @@ CryptoManager::~CryptoManager() {
 }
 
 bool CryptoManager::TLSOk() const noexcept {
-	return BOOLSETTING(USE_TLS) && certsLoaded && !keyprint.empty();
+	return certsLoaded && !keyprint.empty();
 }
 
 void CryptoManager::generateCertificate() {
@@ -197,7 +197,7 @@ void CryptoManager::generateCertificate() {
 }
 
 void CryptoManager::loadCertificates() noexcept {
-	if(!BOOLSETTING(USE_TLS) || !clientContext || !clientVerContext || !serverContext || !serverVerContext)
+	if(!clientContext || !clientVerContext || !serverContext || !serverVerContext)
 		return;
 
 	keyprint.clear();

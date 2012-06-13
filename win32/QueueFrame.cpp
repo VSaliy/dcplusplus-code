@@ -381,6 +381,8 @@ void QueueFrame::QueueItemInfo::update() {
 						tmp += T_("Remote client does not fully support TTH - cannot download");
 					} else if(j.isSet(QueueItem::Source::FLAG_UNTRUSTED)) {
 						tmp += T_("User certificate not trusted");
+					} else if(j.isSet(QueueItem::Source::FLAG_UNENCRYPTED)) {
+						tmp += T_("Remote ADC client does not use TLS encryption");
 					}
 					tmp += ')';
 				}

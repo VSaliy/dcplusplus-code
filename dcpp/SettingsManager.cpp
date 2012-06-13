@@ -81,7 +81,7 @@ const string SettingsManager::settingTags[] =
 	"NoIpOverride", "SearchOnlyFreeSlots", "BoldFinishedDownloads", "BoldFinishedUploads", "BoldQueue",
 	"BoldHub", "BoldPm", "BoldFL", "BoldSearch", "BoldSearchSpy", "SocketInBuffer", "SocketOutBuffer",
 	"BoldSystemLog", "AutoRefreshTime",
-	"UseTLS", "AutoSearchLimit", "AltSortOrder", "AutoKickNoFavs", "PromptPassword", "SpyFrameIgnoreTthSearches",
+	"AutoSearchLimit", "AltSortOrder", "AutoKickNoFavs", "PromptPassword", "SpyFrameIgnoreTthSearches",
 	"DontDlAlreadyQueued", "MaxCommandLength", "AllowUntrustedHubs", "AllowUntrustedClients",
 	"TLSPort", "SortFavUsersFirst", "SegmentedDL", "FollowLinks",
 	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "FinishedDLOnlyFull",
@@ -95,7 +95,7 @@ const string SettingsManager::settingTags[] =
 	"AutoDetectIncomingConnection", "SettingsSaveInterval",
 	"BalloonMainChat", "BalloonPM", "BalloonPMWindow", "BalloonFinishedDL", "BalloonFinishedFL",
 	"UsersFilterOnline","UsersFilterFavorite","UsersFilterQueue","UsersFilterWaiting",
-	"MaxPMWindows",
+	"MaxPMWindows", "RequireTLS",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -276,7 +276,6 @@ SettingsManager::SettingsManager()
 	setDefault(BOLD_SEARCH_SPY, true);
 	setDefault(BOLD_SYSTEM_LOG, true);
 	setDefault(AUTO_REFRESH_TIME, 60);
-	setDefault(USE_TLS, true);
 	setDefault(AUTO_SEARCH_LIMIT, 5);
 	setDefault(ALT_SORT_ORDER, false);
 	setDefault(AUTO_KICK_NO_FAVS, false);
@@ -329,6 +328,7 @@ SettingsManager::SettingsManager()
 	setDefault(USERS_FILTER_QUEUE, false);
 	setDefault(USERS_FILTER_WAITING, false);
 	setDefault(MAX_PM_WINDOWS, 50);
+	setDefault(REQUIRE_TLS, false);
 	setDefault(LAST_SHARED_FOLDER, Util::emptyString);
 
 	setSearchTypeDefaults();

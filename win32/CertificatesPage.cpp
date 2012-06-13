@@ -34,7 +34,7 @@ using dwt::GridInfo;
 using dwt::Label;
 
 PropPage::ListItem CertificatesPage::listItems[] = {
-	{ SettingsManager::USE_TLS, N_("Use TLS when remote client supports it"), IDH_SETTINGS_CERTIFICATES_USE_TLS },
+	{ SettingsManager::REQUIRE_TLS, N_("Require TLS ADC client-client connections"), IDH_SETTINGS_CERTIFICATES_ALLOW_UNTRUSTED_HUBS },
 	{ SettingsManager::ALLOW_UNTRUSTED_HUBS, N_("Allow TLS connections to hubs without trusted certificate"), IDH_SETTINGS_CERTIFICATES_ALLOW_UNTRUSTED_HUBS },
 	{ SettingsManager::ALLOW_UNTRUSTED_CLIENTS, N_("Allow TLS connections to clients without trusted certificate"), IDH_SETTINGS_CERTIFICATES_ALLOW_UNTRUSTED_CLIENTS },
 	{ 0, 0 }
