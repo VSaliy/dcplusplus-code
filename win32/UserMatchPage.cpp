@@ -169,14 +169,20 @@ bool UserMatchPage::handleKeyDown(int c) {
 }
 
 void UserMatchPage::handleSelectionChanged() {
-	auto sel = table->countSelected();
-	auto& matcher = list[sel];
-	auto predef = matcher.isSet(UserMatch::PREDEFINED);
+	auto sel = table->getSelection();
 
-	edit->setEnabled(sel == 1 && !predef);
-	up->setEnabled(sel > 0);
-	down->setEnabled(sel > 0);
-	remove->setEnabled(sel > 0 && !predef);
+	bool predef = false;
+	for(auto i: sel) {
+		if(list[i].isSet(UserMatch::PREDEFINED)) {
+			predef = true;
+			break;
+		}
+	}
+
+	edit->setEnabled(sel.size() == 1 && !predef);
+	up->setEnabled(!sel.empty());
+	down->setEnabled(!sel.empty());
+	remove->setEnabled(!sel.empty() && !predef);
 }
 
 tstring UserMatchPage::handleTooltip(int i) {

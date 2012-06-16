@@ -8,7 +8,8 @@
 * Make the menu bar hideable (poy)
 * Add a /info hub command (poy)
 * [L#957994] Fix glitches with the file list loader (poy)
-* [1007103] Correct download logging after an app restart (emtee)
+* [L#1007103] Correct download logging after an app restart (emtee)
+* [L#1007099] Fix disabled buttons in user matching settings (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
