@@ -472,7 +472,6 @@ dwarf_next_cu_header_internal(Dwarf_Debug dbg,
             dis->de_cu_context->cc_length +
             dis->de_cu_context->cc_length_size +
             dis->de_cu_context->cc_extension_size;
-		new_offset = (new_offset + 3) / 4 * 4;
     }
 
     /*  Check that there is room in .debug_info beyond the new offset
@@ -535,7 +534,6 @@ dwarf_next_cu_header_internal(Dwarf_Debug dbg,
 
     new_offset = new_offset + cu_context->cc_length +
         cu_context->cc_length_size + cu_context->cc_extension_size;
-	new_offset = (new_offset + 3) / 4 * 4;
     *next_cu_offset = new_offset;
     return (DW_DLV_OK);
 }
