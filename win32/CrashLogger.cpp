@@ -58,7 +58,7 @@ int get_section_info(void* obj, Dwarf_Half section_index, Dwarf_Obj_Access_Secti
 	};
 
 	return_section->addr = 0; // 0 is ok for non-ELF as per the comments in dwarf_opaque.h.
-	return_section->size = section->SizeOfRawData;
+	return_section->size = section->Misc.VirtualSize;
 	return_section->name = reinterpret_cast<const char*>(section->Name);
 	if(return_section->name[0] == '/') {
 		/* This is a long string (> 8 characters) in the format "/x", where "x" is an offset of the
@@ -159,10 +159,33 @@ Dwarf_Die followRef(Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attribute, Dwarf_
 	Dwarf_Die ret = 0;
 	Dwarf_Attribute attr;
 	if(dwarf_attr(die, attribute, &attr, &error) == DW_DLV_OK) {
-		Dwarf_Off offset;
-		if(dwarf_global_formref(attr, &offset, &error) == DW_DLV_OK) {
-			dwarf_offdie(dbg, offset, &ret, &error);
+
+		Dwarf_Half form;
+		if(dwarf_whatform(attr, &form, &error) == DW_DLV_OK && form == DW_FORM_ref_sig8) {
+			// DWARF 4 pointer to a type DIE in the .debug_types section.
+			Dwarf_Sig8 sig;
+			if(dwarf_formsig8(attr, &sig, &error) == DW_DLV_OK) {
+
+				/* browse through available type DIEs, looking for the one type DIE whose 8-byte
+				signature matches "sig". */
+				Dwarf_Sig8 cu_sig;
+				Dwarf_Unsigned cu_offset = 0, type_offset, next = 0;
+				while(dwarf_next_cu_header_c(dbg, 0, 0, 0, 0, 0, 0, 0, &cu_sig, &type_offset, &next, &error) == DW_DLV_OK) {
+					if(!memcmp(&cu_sig, &sig, sizeof(Dwarf_Sig8))) {
+						dwarf_offdie_b(dbg, cu_offset + type_offset, 0, &ret, &error);
+						break;
+					}
+					cu_offset = next;
+				}
+			}
+
+		} else {
+			Dwarf_Off offset;
+			if(dwarf_global_formref(attr, &offset, &error) == DW_DLV_OK) {
+				dwarf_offdie_b(dbg, offset, 1, &ret, &error);
+			}
 		}
+
 		dwarf_dealloc(dbg, attr, DW_DLA_ATTR);
 	}
 	return ret;
@@ -244,7 +267,7 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column,
 				if(dwarf_get_cu_die_offset(arange, &die_offset, &error) == DW_DLV_OK) {
 
 					Dwarf_Die cu_die;
-					if(dwarf_offdie(dbg, die_offset, &cu_die, &error) == DW_DLV_OK) {
+					if(dwarf_offdie_b(dbg, die_offset, 1, &cu_die, &error) == DW_DLV_OK) {
 
 						/* inside this CU, find the exact statement (DWARF calls it a "line") that
 						corresponds to the address we want to find information about. */
