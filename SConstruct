@@ -8,9 +8,12 @@ from build_util import Dev, gen_po_name
 # force DWARF 4 in order to benefit from the typed DWARF stack (duplicated type info entries are
 # grouped in a new .debug_types section). reduces the pdb size by 15MB and improves type resolution
 # in the crash logger.
+# TODO switch to DWARF 4 in the future when the following bugs are fixed:
+# - ICE when building in release mode
+# - GDB crash: <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=47308>
 
 gcc_flags = {
-	'common': ['-gdwarf-4', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-fexceptions', '-mthreads'],
+	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-fexceptions', '-mthreads'],
 	'debug': [], 
 	'release' : ['-O3', '-mwindows']
 }
@@ -47,7 +50,7 @@ msvc_xxflags = {
 }
 
 gcc_link_flags = {
-	'common' : ['-gdwarf-4', '-static-libgcc', '-static-libstdc++', '-Wl,--no-undefined,--nxcompat,--dynamicbase', '-time', '-mthreads'],
+	'common' : ['-g', '-static-libgcc', '-static-libstdc++', '-Wl,--no-undefined,--nxcompat,--dynamicbase', '-time', '-mthreads'],
 	'debug' : [],
 	'release' : ['-mwindows']
 }
