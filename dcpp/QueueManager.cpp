@@ -1533,7 +1533,7 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) noex
 
 		for(auto qi: matches) {
 			// Size compare to avoid popular spoof
-			if(qi->getSize() == sr->getSize() && !qi->isSource(sr->getUser())) {
+			if(qi->getSize() == sr->getSize() && !qi->isSource(sr->getUser()) && !qi->isBadSource(sr->getUser())) {
 				try {
 					if(!BOOLSETTING(AUTO_SEARCH_AUTO_MATCH))
 						wantConnection = addSource(qi, HintedUser(sr->getUser(), sr->getHubURL()), 0);
