@@ -12,10 +12,14 @@ from build_util import Dev, gen_po_name
 # - ICE when building in release mode
 # - GDB crash: <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=47308>
 
+# TODO the ipa-cp-clone optimization is disabled; it causes a crash when starting a DL.
+
+# TODO enable LTO when it doesn't ICE... (-flto)
+
 gcc_flags = {
 	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-fexceptions', '-mthreads'],
 	'debug': [], 
-	'release' : ['-O3', '-mwindows']
+	'release' : ['-O3', '-fno-ipa-cp-clone', '-mwindows']
 }
 
 gcc_xxflags = {
@@ -52,7 +56,7 @@ msvc_xxflags = {
 gcc_link_flags = {
 	'common' : ['-g', '-static-libgcc', '-static-libstdc++', '-Wl,--no-undefined,--nxcompat,--dynamicbase', '-time', '-mthreads'],
 	'debug' : [],
-	'release' : ['-mwindows']
+	'release' : ['-O3', '-mwindows']
 }
 
 msvc_link_flags = {
