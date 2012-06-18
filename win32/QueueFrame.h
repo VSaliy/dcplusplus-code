@@ -218,7 +218,7 @@ private:
 	void updateStatus();
 	void updateFiles();
 
-	void addQueueItem(QueueItemPtr&& ii, bool noSort);
+	void addQueueItem(QueueItemPtr&& ii, bool single);
 	void addQueueList(const QueueItem::StringMap& l);
 
 	HTREEITEM addDirectory(const string& dir, bool isFileList = false, HTREEITEM startAt = NULL);
