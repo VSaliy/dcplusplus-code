@@ -152,7 +152,7 @@ showGen(0)
 	auto grouped = table->isGrouped();
 
 	auto add = [this, grouped](tstring&& text, unsigned helpId, int group, int fontSetting, int textColorSetting, int bgColorSetting) -> Data* {
-		auto data = new SettingsData(forward<tstring>(text), helpId, fontSetting, textColorSetting, bgColorSetting);
+		auto data = new SettingsData(move(text), helpId, fontSetting, textColorSetting, bgColorSetting);
 		this->table->insert(grouped ? group : -1, data);
 		return data;
 	};
@@ -210,7 +210,7 @@ void StylesPage::updateUserMatches(std::vector<UserMatch>& userMatches) {
 
 StylesPage::Data::Data(tstring&& text, const unsigned helpId) :
 Flags(),
-text(forward<tstring>(text)),
+text(move(text)),
 helpId(helpId)
 {
 }
@@ -246,7 +246,7 @@ void StylesPage::Data::makeFont(Font& dest, const string& setting) {
 }
 
 StylesPage::SettingsData::SettingsData(tstring&& text, unsigned helpId, int fontSetting, int textColorSetting, int bgColorSetting) :
-Data(forward<tstring>(text), helpId),
+Data(move(text), helpId),
 fontSetting(fontSetting),
 textColorSetting(textColorSetting),
 bgColorSetting(bgColorSetting)

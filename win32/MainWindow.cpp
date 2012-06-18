@@ -1259,7 +1259,7 @@ DWORD WINAPI MainWindow::stopper(void* p) {
 
 class ListMatcher : public Thread {
 public:
-	ListMatcher(StringList&& files) : files(std::forward<StringList>(files)) { }
+	ListMatcher(StringList&& files) : files(move(files)) { }
 
 	int run() {
 		for(auto& i: files) {

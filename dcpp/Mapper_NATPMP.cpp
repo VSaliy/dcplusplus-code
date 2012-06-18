@@ -38,7 +38,7 @@ const string Mapper_NATPMP::name = "NAT-PMP";
 static natpmp_t nat;
 
 Mapper_NATPMP::Mapper_NATPMP(string&& localIp) :
-Mapper(std::forward<string>(localIp)),
+Mapper(move(localIp)),
 lifetime(0)
 {
 }

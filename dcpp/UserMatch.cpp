@@ -31,7 +31,7 @@ bool UserMatch::Rule::operator==(const Rule& rhs) const {
 
 void UserMatch::addRule(Rule&& rule) {
 	if(rule.prepare()) {
-		rules.push_back(std::forward<Rule>(rule));
+		rules.push_back(move(rule));
 	}
 }
 

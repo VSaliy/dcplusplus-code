@@ -44,7 +44,7 @@ public: std::conditional<std::is_class<t>::value, const t&, t>::type get##name2(
 	set##name2(GetSetT name) { this->name = name; } /* small type: simple setter that just copies */ \
 	\
 	template<typename GetSetT> typename std::enable_if<std::is_class<GetSetT>::value, void>::type \
-	set##name2(GetSetT&& name) { this->name = std::forward<GetSetT>(name); } /* large type: move the rvalue ref */ \
+	set##name2(GetSetT&& name) { this->name = std::move(name); } /* large type: move the rvalue ref */ \
 	\
 	template<typename GetSetT> typename std::enable_if<std::is_class<GetSetT>::value, void>::type \
 	set##name2(const GetSetT& name) { this->name = name; } /* large type: copy the parameter */

@@ -233,7 +233,7 @@ tstring Parser::Context::getEnd() const {
 
 size_t Parser::addFont(string&& font) {
 	auto ret = fonts.size();
-	fonts.push_back("{\\f" + Util::toString(ret) + std::forward<string>(font) + ";}");
+	fonts.push_back("{\\f" + Util::toString(ret) + move(font) + ";}");
 	return ret;
 }
 
