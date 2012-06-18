@@ -163,7 +163,7 @@ void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
 
 	for(auto& i: li) {
 		QueueItem* aQI = i.second;
-		addQueueItem(QueueItemPtr(new QueueItemInfo(*aQI)), true);
+		addQueueItem(QueueItemPtr(new QueueItemInfo(*aQI)), false);
 	}
 
 	// expand top-level directories.
@@ -232,7 +232,7 @@ void QueueFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
 
-void QueueFrame::addQueueItem(QueueItemPtr&& ii, bool noSort) {
+void QueueFrame::addQueueItem(QueueItemPtr&& ii, bool single) {
 	if(!ii->isSet(QueueItem::FLAG_USER_LIST)) {
 		queueSize+=ii->getSize();
 	}
@@ -242,18 +242,22 @@ void QueueFrame::addQueueItem(QueueItemPtr&& ii, bool noSort) {
 	auto p = ii.get();
 	const auto& dir = p->getPath();
 
-	bool updateDir = (directories.find(dir) == directories.end());
+	const bool newDir = directories.find(dir) == directories.end();
 	directories.emplace(dir, move(ii));
 
-	if(updateDir) {
-		addDirectory(dir, p->isSet(QueueItem::FLAG_USER_LIST));
+	if(newDir) {
+		auto node = addDirectory(dir, p->isSet(QueueItem::FLAG_USER_LIST));
+		if(single) {
+			dirs->ensureVisible(node);
+		}
 	}
+
 	if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(dir)) {
 		p->update();
-		if(noSort) {
-			files->insert(files->size(), p);
+		if(single) {
+			files->insert(p); // sort
 		} else {
-			files->insert(p);
+			files->insert(files->size(), p); // no sort (resort the whole list later)
 		}
 	}
 }
@@ -973,7 +977,7 @@ bool QueueFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 
 void QueueFrame::onAdded(QueueItemInfo* ii) {
 	dcassert(files->find(ii) == -1);
-	addQueueItem(QueueItemPtr(ii), false);
+	addQueueItem(QueueItemPtr(ii), true);
 	updateStatus();
 }
 
