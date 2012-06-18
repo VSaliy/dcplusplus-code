@@ -44,7 +44,6 @@ public:
 		STATUS_AWAY,
 		STATUS_COUNTS,
 		STATUS_SLOTS,
-		STATUS_SLOTS_SPIN,
 		STATUS_DOWN_TOTAL,
 		STATUS_UP_TOTAL,
 		STATUS_DOWN_DIFF,
@@ -123,7 +122,6 @@ private:
 	TransferView* transfers;
 	ToolBarPtr toolbar;
 	TabViewPtr tabs;
-	SpinnerPtr slotsSpin;
 
 	typedef unordered_map<string, unsigned> ViewIndexes;
 	ViewIndexes viewIndexes; /// indexes of menu commands of the "View" menu that open static windows
@@ -178,7 +176,7 @@ private:
 	void switchToolbar();
 	void switchTransfers();
 	void switchStatus();
-	bool handleSlotsUpdate(int delta);
+	void handleSlotsMenu();
 	void handleReconnect();
 	void forwardHub(void (HubFrame::*f_t)());
 
