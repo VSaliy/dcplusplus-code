@@ -47,22 +47,8 @@ const TCHAR Tree::TreeView::windowClass[] = WC_TREEVIEW;
 Tree::TreeView::TreeView(Widget* parent) : Control(parent, ChainingDispatcher::superClass<TreeView>()) { }
 
 bool Tree::TreeView::handleMessage(const MSG& msg, LRESULT &retVal) {
-	if(BaseType::handleMessage(msg, retVal)) {
-		return true;
-	}
-
-	if(msg.message == WM_NOTIFY) {
-		// Forward tree notifications
-		return getParent()->handleMessage(msg, retVal);
-	}
-
-	if(msg.message == WM_RBUTTONDOWN) {
-		// Tree view control does strange things to rbuttondown, preventing wm_contextmenu from reaching it
-		retVal = ::DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);
-		return true;
-	}
-
-	return false;
+	// give the parent control a chance to handle messages as well.
+	return BaseType::handleMessage(msg, retVal) || getParent()->handleMessage(msg, retVal);
 }
 
 Tree::Seed::Seed() :
@@ -80,8 +66,13 @@ void Tree::create( const Seed & cs )
 
 	onSized([this](const SizedEvent& e) { layout(); });
 
-	// let the tree control handle WM_SETREDRAW
-	onRedrawChanged([this](bool b) -> bool { tree->sendMessage(WM_SETREDRAW, b); return true; });
+	/* forward WM_SETREDRAW to the tree control handle. do it with Dispatcher::chain to avoid an
+	infinite loop. */
+	onRedrawChanged([this](bool b) -> bool {
+		MSG msg = { treeHandle(), WM_SETREDRAW, b };
+		tree->getDispatcher().chain(msg);
+		return true;
+	});
 
 	tree->onCustomDraw([this](NMTVCUSTOMDRAW& x) { return draw(x); });
 
