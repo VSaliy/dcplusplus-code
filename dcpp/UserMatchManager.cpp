@@ -48,7 +48,7 @@ void UserMatchManager::setList(UserMatches&& newList) {
 	auto lock = cm->lock();
 
 	// assign the new list.
-	const_cast<UserMatches&>(list) = std::forward<UserMatches>(newList);
+	const_cast<UserMatches&>(list) = move(newList);
 
 	// refresh user matches.
 	for(auto& i: cm->getOnlineUsers()) {

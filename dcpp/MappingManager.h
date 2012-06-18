@@ -46,7 +46,7 @@ public:
 	the first added mapper will be tried first, unless the "MAPPER" setting is not empty. */
 	template<typename T> void addMapper() {
 		mappers.emplace_back(T::name, [](string&& localIp) {
-			return new T(std::forward<string>(localIp));
+			return new T(move(localIp));
 		});
 	}
 	StringList getMappers() const;

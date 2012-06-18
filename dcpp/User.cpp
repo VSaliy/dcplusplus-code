@@ -207,7 +207,7 @@ Style Identity::getStyle() const {
 
 void Identity::setStyle(Style&& style) {
 	FastLock l(cs);
-	this->style = std::forward<Style>(style);
+	this->style = move(style);
 }
 
 void FavoriteUser::update(const OnlineUser& info) {

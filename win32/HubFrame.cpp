@@ -1422,7 +1422,7 @@ void HubFrame::redirect(string&& target) {
 		return;
 	}
 
-	url = std::forward<string>(target);
+	url = move(target);
 
 	// the client is dead, long live the client!
 	client->removeListener(this);

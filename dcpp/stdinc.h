@@ -85,4 +85,8 @@
 
 #endif
 
+// always include
+#include <type_traits>
+using std::move;
+
 #endif // !defined(STDINC_H)

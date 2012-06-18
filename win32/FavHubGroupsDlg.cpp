@@ -281,7 +281,7 @@ void FavHubGroupsDlg::add(const FavHubGroup& group, bool ensureVisible) {
 }
 
 void FavHubGroupsDlg::add(const tstring& name, HubSettings&& settings) {
-	add(FavHubGroup(Text::fromT(name), std::forward<HubSettings>(settings)));
+	add(FavHubGroup(Text::fromT(name), move(settings)));
 }
 
 HubSettings FavHubGroupsDlg::getSettings() const {
