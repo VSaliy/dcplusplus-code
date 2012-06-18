@@ -161,10 +161,9 @@ void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
 	HoldRedraw hold(files);
 	HoldRedraw hold2(dirs);
 
-	for(auto& j: li) {
-		QueueItem* aQI = j.second;
-		QueueItemInfo* ii = new QueueItemInfo(*aQI);
-		addQueueItem(ii, true);
+	for(auto& i: li) {
+		QueueItem* aQI = i.second;
+		addQueueItem(QueueItemPtr(new QueueItemInfo(*aQI)), true);
 	}
 
 	// expand top-level directories.
@@ -178,11 +177,10 @@ void QueueFrame::addQueueList(const QueueItem::StringMap& li) {
 }
 
 QueueFrame::QueueItemInfo* QueueFrame::getItemInfo(const string& target) {
-	auto path = Util::getFilePath(target);
-	auto items = directories.equal_range(path);
+	auto items = directories.equal_range(Util::getFilePath(target));
 	for(auto i = items.first; i != items.second; ++i) {
 		if(i->second->getTarget() == target) {
-			return i->second;
+			return i->second.get();
 		}
 	}
 	return 0;
@@ -229,36 +227,33 @@ bool QueueFrame::preClosing() {
 }
 
 void QueueFrame::postClosing() {
-	for(auto& i: directories) {
-		delete i.second;
-	}
-
 	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getSplitterPos(0));
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
 }
 
-void QueueFrame::addQueueItem(QueueItemInfo* ii, bool noSort) {
+void QueueFrame::addQueueItem(QueueItemPtr&& ii, bool noSort) {
 	if(!ii->isSet(QueueItem::FLAG_USER_LIST)) {
 		queueSize+=ii->getSize();
 	}
 	queueItems++;
 	dirty = true;
 
-	const string& dir = ii->getPath();
+	auto p = ii.get();
+	const auto& dir = p->getPath();
 
 	bool updateDir = (directories.find(dir) == directories.end());
-	directories.emplace(dir, ii);
+	directories.emplace(dir, move(ii));
 
 	if(updateDir) {
-		addDirectory(dir, ii->isSet(QueueItem::FLAG_USER_LIST));
+		addDirectory(dir, p->isSet(QueueItem::FLAG_USER_LIST));
 	}
 	if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(dir)) {
-		ii->update();
+		p->update();
 		if(noSort) {
-			files->insert(files->size(), ii);
+			files->insert(files->size(), p);
 		} else {
-			files->insert(ii);
+			files->insert(p);
 		}
 	}
 }
@@ -267,7 +262,8 @@ void QueueFrame::updateFiles() {
 	HoldRedraw hold(files);
 
 	files->clear();
-	pair<DirectoryIter, DirectoryIter> i;
+
+	decltype(directories.equal_range(string())) i;
 	if(BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
 		i = directories.equal_range(getSelectedDir());
 	} else {
@@ -276,9 +272,9 @@ void QueueFrame::updateFiles() {
 	}
 
 	for(auto j = i.first; j != i.second; ++j) {
-		QueueItemInfo* ii = j->second;
+		auto& ii = j->second;
 		ii->update();
-		files->insert(files->size(), ii);
+		files->insert(files->size(), ii.get());
 	}
 
 	files->resort();
@@ -657,7 +653,7 @@ void QueueFrame::moveDir(HTREEITEM ht, const string& target) {
 	auto p = directories.equal_range(dir);
 
 	for(auto i = p.first; i != p.second; ++i) {
-		QueueItemInfo* ii = i->second;
+		auto& ii = i->second;
 		QueueManager::getInstance()->move(ii->getTarget(), target + Util::getFileName(ii->getTarget()));
 	}
 }
@@ -747,8 +743,7 @@ void QueueFrame::removeDir(HTREEITEM ht) {
 		removeDir(child);
 		child = dirs->getNextSibling(child);
 	}
-	const string& name = getDir(ht);
-	auto dp = directories.equal_range(name);
+	auto dp = directories.equal_range(getDir(ht));
 	for(auto i = dp.first; i != dp.second; ++i) {
 		QueueManager::getInstance()->remove(i->second->getTarget());
 	}
@@ -978,7 +973,7 @@ bool QueueFrame::handleDirsContextMenu(dwt::ScreenCoordinate pt) {
 
 void QueueFrame::onAdded(QueueItemInfo* ii) {
 	dcassert(files->find(ii) == -1);
-	addQueueItem(ii, false);
+	addQueueItem(QueueItemPtr(ii), false);
 	updateStatus();
 }
 
@@ -989,12 +984,14 @@ void QueueFrame::onRemoved(const string& s) {
 		return;
 	}
 
-	if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(ii->getPath()) ) {
+	const auto path = ii->getPath();
+	const auto userList = ii->isSet(QueueItem::FLAG_USER_LIST);
+	const auto isCur = isCurDir(path);
+
+	if(isCur || !BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
 		dcassert(files->find(ii) != -1);
 		files->erase(ii);
 	}
-
-	bool userList = ii->isSet(QueueItem::FLAG_USER_LIST);
 
 	if(!userList) {
 		queueSize-=ii->getSize();
@@ -1003,21 +1000,21 @@ void QueueFrame::onRemoved(const string& s) {
 	queueItems--;
 	dcassert(queueItems >= 0);
 
-	auto i = directories.equal_range(ii->getPath());
+	auto i = directories.equal_range(path);
 	auto j = i.first;
 	for(; j != i.second; ++j) {
-		if(j->second == ii)
+		if(j->second.get() == ii)
 			break;
 	}
 	dcassert(j != i.second);
 	directories.erase(j);
-	if(directories.count(ii->getPath()) == 0) {
-		removeDirectory(ii->getPath(), ii->isSet(QueueItem::FLAG_USER_LIST));
-		if(isCurDir(ii->getPath()))
+
+	if(directories.count(path) == 0) {
+		removeDirectory(path, userList);
+		if(isCur)
 			curDir.clear();
 	}
 
-	delete ii;
 	updateStatus();
 	if(!userList)
 		setDirty(SettingsManager::BOLD_QUEUE);
