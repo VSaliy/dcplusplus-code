@@ -828,19 +828,15 @@ unsigned Menu::appendItem(const tstring& text, const Dispatcher::F& f, const Ico
 	return index;
 }
 
+void Menu::open(unsigned flags) {
+	open(ScreenCoordinate(Point::fromLParam(::GetMessagePos())), flags);
+}
+
 void Menu::open(const ScreenCoordinate& sc, unsigned flags) {
-	long x = sc.getPoint().x, y = sc.getPoint().y;
-
-	if(x == - 1 || y == - 1) {
-		DWORD pos = ::GetMessagePos();
-		x = LOWORD(pos);
-		y = HIWORD(pos);
-	}
-
 	// sub-menus of the menu bar send WM_MENUCOMMAND; however, commands from ephemeral menus are handled right here.
 	if(getRootMenu()->popup && (flags & TPM_RETURNCMD) != TPM_RETURNCMD)
 		flags |= TPM_RETURNCMD;
-	unsigned ret = ::TrackPopupMenu(handle(), flags, x, y, 0, getParent()->handle(), 0);
+	unsigned ret = ::TrackPopupMenu(handle(), flags, sc.getPoint().x, sc.getPoint().y, 0, getParent()->handle(), 0);
 	if(ret >= id_offset) {
 		commands_type& commands_ref = getRootMenu()->commands;
 		if(commands_ref.get() && ret - id_offset < commands_ref->size())

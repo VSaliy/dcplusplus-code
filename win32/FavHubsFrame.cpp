@@ -294,7 +294,7 @@ void FavHubsFrame::handleRemove() {
 void FavHubsFrame::handleGroup() {
 	auto menu = addChild(WinUtil::Seeds::menu);
 	fillGroupMenu(menu.get());
-	menu->open(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
+	menu->open();
 }
 
 void FavHubsFrame::handleGroup(const string& group) {

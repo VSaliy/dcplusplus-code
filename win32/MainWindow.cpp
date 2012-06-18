@@ -101,7 +101,6 @@ paned(0),
 transfers(0),
 toolbar(0),
 tabs(0),
-slotsSpin(0),
 tray_pm(false),
 stopperThread(NULL),
 lastUp(0),
@@ -498,12 +497,6 @@ void MainWindow::initStatusBar() {
 
 	updateAwayStatus();
 
-	slotsSpin = addChild(Spinner::Seed());
-	slotsSpin->setHelpId(IDH_MAIN_SLOTS_SPIN);
-	slotsSpin->onUpdate([this](int, int delta) { return handleSlotsUpdate(delta); });
-	status->setWidget(STATUS_SLOTS_SPIN, slotsSpin, dwt::Rectangle(0, 0, 3, 1));
-	status->setSize(STATUS_SLOTS_SPIN, 22);
-
 	/// @todo set to resizedrag width really
 	status->setSize(STATUS_DUMMY, 32);
 
@@ -519,6 +512,12 @@ void MainWindow::initStatusBar() {
 	}
 	status->setIcon(STATUS_DOWN_LIMIT, WinUtil::statusIcon(IDI_DLIMIT));
 	status->setIcon(STATUS_UP_LIMIT, WinUtil::statusIcon(IDI_ULIMIT));
+
+	{
+		auto f = [this] { handleSlotsMenu(); };
+		status->onClicked(STATUS_SLOTS, f);
+		status->onRightClicked(STATUS_SLOTS, f);
+	}
 
 	{
 		auto f = [this] { handleLimiterMenu(false); };
@@ -801,7 +800,7 @@ void MainWindow::fillLimiterMenu(Menu* menu, bool upload) {
 void MainWindow::handleLimiterMenu(bool upload) {
 	auto menu = addChild(WinUtil::Seeds::menu);
 	fillLimiterMenu(menu.get(), upload);
-	menu->open(dwt::ScreenCoordinate(dwt::Point::fromLParam(::GetMessagePos())));
+	menu->open();
 }
 
 void MainWindow::handleReconnect() {
@@ -1050,7 +1049,7 @@ void MainWindow::updateStatus() {
 	auto freeSlots = UploadManager::getInstance()->getFreeSlots();
 	auto totalSlots = SETTING(SLOTS);
 	status->setText(STATUS_SLOTS, str(TF_("%1%/%2%") % freeSlots % totalSlots), true);
-	status->setToolTip(STATUS_SLOTS, str(TF_("%1% free slots of %2% total upload slots") % freeSlots % totalSlots));
+	status->setToolTip(STATUS_SLOTS, str(TF_("%1% free slots of %2% total upload slots - Click to adjust") % freeSlots % totalSlots));
 	if(!freeSlots ^ fullSlots) {
 		fullSlots = !freeSlots;
 		status->setIcon(STATUS_SLOTS, WinUtil::statusIcon(fullSlots ? IDI_SLOTS_FULL : IDI_SLOTS));
@@ -1576,7 +1575,7 @@ void MainWindow::switchMenuBar() {
 void MainWindow::switchToolbar() {
 	if(toolbar) {
 		rebar->remove(toolbar);
-		::DestroyWindow(toolbar->handle());
+		toolbar->close();
 		toolbar = 0;
 
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_TOOLBAR, false);
@@ -1614,11 +1613,8 @@ void MainWindow::switchTransfers() {
 
 void MainWindow::switchStatus() {
 	if(status) {
-		::DestroyWindow(status->handle());
+		status->close();
 		status = 0;
-
-		::DestroyWindow(slotsSpin->handle());
-		slotsSpin = 0;
 
 		SettingsManager::getInstance()->set(SettingsManager::SHOW_STATUSBAR, false);
 		viewMenu->checkItem(viewIndexes["Status"], false);
@@ -1631,12 +1627,25 @@ void MainWindow::switchStatus() {
 	layout();
 }
 
-bool MainWindow::handleSlotsUpdate(int delta) {
-	int newSlots = SETTING(SLOTS) + delta;
-	SettingsManager::getInstance()->set(SettingsManager::SLOTS, newSlots);
-	ThrottleManager::setSetting(ThrottleManager::getCurSetting(SettingsManager::SLOTS), newSlots);
-	updateStatus();
-	return true;
+void MainWindow::handleSlotsMenu() {
+	auto changeSlots = [this](int slots) -> function<void ()> { return [=] {
+		SettingsManager::getInstance()->set(SettingsManager::SLOTS, slots);
+		ThrottleManager::setSetting(ThrottleManager::getCurSetting(SettingsManager::SLOTS), slots);
+		updateStatus();
+	}; };
+
+	auto menu = addChild(WinUtil::Seeds::menu);
+
+	menu->setTitle(T_("Upload slots"), WinUtil::menuIcon(IDI_SLOTS));
+
+	auto setting = SETTING(SLOTS);
+	for(decltype(setting) i = 1; i < setting + 10; ++i) {
+		auto pos = menu->appendItem(Text::toT(Util::toString(i)), changeSlots(i), nullptr, true, i == setting);
+		if(i == setting)
+			menu->checkItem(pos);
+	}
+
+	menu->open();
 }
 
 void MainWindow::handleRefreshFileList() {
