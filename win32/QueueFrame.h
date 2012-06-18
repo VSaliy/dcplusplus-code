@@ -28,6 +28,7 @@
 
 #include "StaticFrame.h"
 
+using std::unique_ptr;
 using std::unordered_multimap;
 
 class QueueFrame :
@@ -181,11 +182,13 @@ private:
 
 	private:
 
-		std::unique_ptr<Display> display;
+		unique_ptr<Display> display;
 
 		QueueItemInfo(const QueueItemInfo&);
 		QueueItemInfo& operator=(const QueueItemInfo&);
 	};
+
+	typedef unique_ptr<QueueItemInfo> QueueItemPtr;
 
 	SplitterContainerPtr paned;
 
@@ -197,10 +200,7 @@ private:
 	typedef WidgetFiles* WidgetFilesPtr;
 	WidgetFilesPtr files;
 
-	typedef unordered_multimap<string, QueueItemInfo*, noCaseStringHash, noCaseStringEq> DirectoryMap;
-	typedef DirectoryMap::iterator DirectoryIter;
-	typedef pair<DirectoryIter, DirectoryIter> DirectoryPair;
-	DirectoryMap directories;
+	unordered_multimap<string, QueueItemPtr, noCaseStringHash, noCaseStringEq> directories;
 
 	std::string curDir;
 
@@ -218,7 +218,7 @@ private:
 	void updateStatus();
 	void updateFiles();
 
-	void addQueueItem(QueueItemInfo* qi, bool noSort);
+	void addQueueItem(QueueItemPtr&& ii, bool noSort);
 	void addQueueList(const QueueItem::StringMap& l);
 
 	HTREEITEM addDirectory(const string& dir, bool isFileList = false, HTREEITEM startAt = NULL);
