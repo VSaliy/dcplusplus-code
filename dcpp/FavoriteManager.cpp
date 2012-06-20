@@ -676,11 +676,15 @@ void FavoriteManager::setHubList(int aHubList) {
 
 void FavoriteManager::refresh(bool forceDownload /* = false */) {
 	StringList sl = getHubLists();
-	if(sl.empty())
+	if(sl.empty()) {
+		fire(FavoriteManagerListener::DownloadFailed(), Util::emptyString);
 		return;
+	}
+
 	publicListServer = sl[(lastServer) % sl.size()];
 	if(Util::strnicmp(publicListServer.c_str(), "http://", 7) != 0) {
 		lastServer++;
+		fire(FavoriteManagerListener::DownloadFailed(), str(F_("Invalid URL: %1%") % Util::addBrackets(publicListServer)));
 		return;
 	}
 
