@@ -84,7 +84,7 @@ AdcCommand Download::getCommand(bool zlib) {
 	cmd.addParam(Util::toString(getStartPos()));
 	cmd.addParam(Util::toString(getSize()));
 
-	if(zlib && BOOLSETTING(COMPRESS_TRANSFERS)) {
+	if(zlib && SETTING(COMPRESS_TRANSFERS)) {
 		cmd.addParam("ZL1");
 	}
 

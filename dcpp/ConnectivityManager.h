@@ -52,8 +52,9 @@ public:
 class ConnectivityManager : public Singleton<ConnectivityManager>, public Speaker<ConnectivityManagerListener>
 {
 public:
-	const string& get(SettingsManager::StrSetting setting) const;
+	bool get(SettingsManager::BoolSetting setting) const;
 	int get(SettingsManager::IntSetting setting) const;
+	const string& get(SettingsManager::StrSetting setting) const;
 	void set(SettingsManager::StrSetting setting, const string& str);
 
 	void detectConnection();
@@ -87,7 +88,7 @@ private:
 	/* contains auto-detected settings. they are stored separately from manual connectivity
 	settings (stored in SettingsManager) in case the user wants to keep the manually set ones for
 	future use. */
-	unordered_map<int, boost::variant<int, string>> autoSettings;
+	unordered_map<int, boost::variant<bool, int, string>> autoSettings;
 };
 
 #define CONNSETTING(k) ConnectivityManager::getInstance()->get(SettingsManager::k)

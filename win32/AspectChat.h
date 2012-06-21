@@ -288,7 +288,7 @@ private:
 	}
 
 	bool historyActive() const {
-		return t().isAltPressed() || (BOOLSETTING(USE_CTRL_FOR_LINE_HISTORY) && t().isControlPressed());
+		return t().isAltPressed() || (SETTING(USE_CTRL_FOR_LINE_HISTORY) && t().isControlPressed());
 	}
 
 	bool sendMessage() {

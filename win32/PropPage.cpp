@@ -84,8 +84,8 @@ void PropPage::read(const ItemList& items) {
 			}
 		case T_BOOL:
 			{
-				auto setting = static_cast<SettingsManager::IntSetting>(i.setting);
-				static_cast<CheckBoxPtr>(i.widget)->setChecked(settings->getBool(setting));
+				auto setting = static_cast<SettingsManager::BoolSetting>(i.setting);
+				static_cast<CheckBoxPtr>(i.widget)->setChecked(settings->get(setting));
 				break;
 			}
 		}
@@ -102,7 +102,7 @@ void PropPage::read(const ListItem* listItems, TablePtr list) {
 	for(size_t i = 0; listItems[i].setting != 0; ++i) {
 		TStringList row;
 		row.push_back(T_(listItems[i].desc));
-		list->setChecked(list->insert(row), settings->getBool(SettingsManager::IntSetting(listItems[i].setting), true));
+		list->setChecked(list->insert(row), settings->get(static_cast<SettingsManager::BoolSetting>(listItems[i].setting), true));
 	}
 
 	list->setColumnWidth(0, LVSCW_AUTOSIZE);
@@ -130,7 +130,7 @@ void PropPage::write(const ItemList& items) {
 			}
 		case T_BOOL:
 			{
-				auto setting = static_cast<SettingsManager::IntSetting>(i.setting);
+				auto setting = static_cast<SettingsManager::BoolSetting>(i.setting);
 				settings->set(setting, static_cast<CheckBoxPtr>(i.widget)->getChecked());
 				break;
 			}
@@ -143,7 +143,7 @@ void PropPage::write(TablePtr list) {
 	const ListItem* listItems = lists[list];
 	SettingsManager* settings = SettingsManager::getInstance();
 	for(size_t i = 0; listItems[i].setting != 0; ++i)
-		settings->set(SettingsManager::IntSetting(listItems[i].setting), list->isChecked(i));
+		settings->set(static_cast<SettingsManager::BoolSetting>(listItems[i].setting), list->isChecked(i));
 }
 
 void PropPage::handleBrowseDir(TextBoxPtr box, int setting) {

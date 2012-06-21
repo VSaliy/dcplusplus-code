@@ -187,8 +187,8 @@ fullSlots(false)
 	::WTSRegisterSessionNotification(handle(), NOTIFY_FOR_THIS_SESSION);
 	onRaw([](WPARAM wParam, LPARAM) -> LRESULT {
 		switch(wParam) {
-		case WTS_SESSION_LOCK: if(BOOLSETTING(AWAY_COMP_LOCK)) Util::incAway(); break;
-		case WTS_SESSION_UNLOCK: if(BOOLSETTING(AWAY_COMP_LOCK)) Util::decAway(); break;
+		case WTS_SESSION_LOCK: if(SETTING(AWAY_COMP_LOCK)) Util::incAway(); break;
+		case WTS_SESSION_UNLOCK: if(SETTING(AWAY_COMP_LOCK)) Util::decAway(); break;
 		}
 		return 0;
 	}, dwt::Message(WM_WTSSESSION_CHANGE));
@@ -389,7 +389,7 @@ void MainWindow::initMenu() {
 
 	mainMenu->setMenu();
 
-	if(BOOLSETTING(SHOW_MENU_BAR)) {
+	if(SETTING(SHOW_MENU_BAR)) {
 		viewMenu->checkItem(viewIndexes["Menu"], true);
 	} else {
 		::SetMenu(handle(), nullptr);
@@ -397,7 +397,7 @@ void MainWindow::initMenu() {
 
 	// hide the temporary menu bar on WM_EXITMENULOOP
 	onRaw([this](WPARAM wParam, LPARAM) -> LRESULT {
-		if(!wParam && !BOOLSETTING(SHOW_MENU_BAR) && ::GetMenu(handle())) {
+		if(!wParam && !SETTING(SHOW_MENU_BAR) && ::GetMenu(handle())) {
 			::SetMenu(handle(), nullptr);
 		}
 		return 0;
@@ -405,7 +405,7 @@ void MainWindow::initMenu() {
 }
 
 void MainWindow::initToolbar() {
-	if(!BOOLSETTING(SHOW_TOOLBAR))
+	if(!SETTING(SHOW_TOOLBAR))
 		return;
 
 	dcdebug("initToolbar\n");
@@ -489,7 +489,7 @@ void MainWindow::initToolbar() {
 }
 
 void MainWindow::initStatusBar() {
-	if(!BOOLSETTING(SHOW_STATUSBAR))
+	if(!SETTING(SHOW_STATUSBAR))
 		return;
 
 	dcdebug("initStatusBar\n");
@@ -572,7 +572,7 @@ void MainWindow::initTabs() {
 	if(SETTING(TAB_STYLE) & SettingsManager::TAB_STYLE_BUTTONS)
 		seed.style |= TCS_BUTTONS;
 	seed.closeIcon = WinUtil::tabIcon(IDI_EXIT);
-	seed.toggleActive = BOOLSETTING(TOGGLE_ACTIVE_WINDOW);
+	seed.toggleActive = SETTING(TOGGLE_ACTIVE_WINDOW);
 	seed.ctrlTab = true;
 	tabs = paned->addChild(seed);
 	tabs->initTaskbar(this);
@@ -581,7 +581,7 @@ void MainWindow::initTabs() {
 }
 
 void MainWindow::initTransfers() {
-	if(!BOOLSETTING(SHOW_TRANSFERVIEW))
+	if(!SETTING(SHOW_TRANSFERVIEW))
 		return;
 
 	dcdebug("initTransfers\n");
@@ -596,20 +596,20 @@ void MainWindow::initTray() {
 	notifier->onContextMenu([this] { handleTrayContextMenu(); });
 	notifier->onIconClicked([this] { handleTrayClicked(); });
 	notifier->onUpdateTip([this] { handleTrayUpdate(); });
-	if(BOOLSETTING(ALWAYS_TRAY)) {
+	if(SETTING(ALWAYS_TRAY)) {
 		notifier->setVisible(true);
 	}
 }
 
 bool MainWindow::filter(MSG& msg) {
 	if(msg.message == WM_SYSKEYDOWN && (msg.wParam == VK_MENU || msg.wParam == VK_F10) &&
-		!BOOLSETTING(SHOW_MENU_BAR) && !::GetMenu(handle()) && !isShiftPressed())
+		!SETTING(SHOW_MENU_BAR) && !::GetMenu(handle()) && !isShiftPressed())
 	{
 		// show the temporary menu bar when pressing Alt or F10
 		::SetMenu(handle(), mainMenu->handle());
 
 	} else if((msg.message == WM_KEYUP || msg.message == WM_SYSKEYUP) && (msg.wParam == VK_MENU || msg.wParam == VK_F10)  &&
-		!BOOLSETTING(SHOW_MENU_BAR) && ::GetMenu(handle()))
+		!SETTING(SHOW_MENU_BAR) && ::GetMenu(handle()))
 	{
 		// hide the temporary menu bar if when releasing Alt or F10, the menu bar isn't focused
 		callAsync([this] {
@@ -841,10 +841,10 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 	if(sz.isMinimized) {
 		handleMinimized();
 	} else if(sz.isMaximized || sz.isRestored) {
-		if(BOOLSETTING(AUTO_AWAY)) {
+		if(SETTING(AUTO_AWAY)) {
 			Util::decAway();
 		}
-		if(!BOOLSETTING(ALWAYS_TRAY)) {
+		if(!SETTING(ALWAYS_TRAY)) {
 			notifier->setVisible(false);
 		}
 		layout();
@@ -852,11 +852,11 @@ void MainWindow::handleSized(const dwt::SizedEvent& sz) {
 }
 
 void MainWindow::handleMinimized() {
-	if(BOOLSETTING(AUTO_AWAY)) {
+	if(SETTING(AUTO_AWAY)) {
 		Util::incAway();
 	}
-	if(BOOLSETTING(MINIMIZE_TRAY) != WinUtil::isShift()) {
-		if(!BOOLSETTING(ALWAYS_TRAY)) {
+	if(SETTING(MINIMIZE_TRAY) != WinUtil::isShift()) {
+		if(!SETTING(ALWAYS_TRAY)) {
 			notifier->setVisible(true);
 		}
 		setVisible(false);
@@ -950,7 +950,7 @@ void MainWindow::saveWindowSettings() {
 
 bool MainWindow::handleClosing() {
 	if(!closing()) {
-		if(!BOOLSETTING(CONFIRM_EXIT) || (dwt::MessageBox(this).show(T_("Really exit?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
+		if(!SETTING(CONFIRM_EXIT) || (dwt::MessageBox(this).show(T_("Really exit?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
 			dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES))
 		{
 
@@ -1130,17 +1130,17 @@ void MainWindow::handleSettings() {
 	auto prevBind6 = SETTING(BIND_ADDRESS6);
 	auto prevProxy = CONNSETTING(OUTGOING_CONNECTIONS);
 
-	auto prevGeo = BOOLSETTING(GET_USER_COUNTRY);
+	auto prevGeo = SETTING(GET_USER_COUNTRY);
 	auto prevGeoFormat = SETTING(COUNTRY_FORMAT);
 
 	auto prevFont = SETTING(MAIN_FONT);
 	auto prevUploadFont = SETTING(UPLOAD_FONT);
 	auto prevDownloadFont = SETTING(DOWNLOAD_FONT);
 
-	auto prevTray = BOOLSETTING(ALWAYS_TRAY);
-	auto prevSortFavUsersFirst = BOOLSETTING(SORT_FAVUSERS_FIRST);
-	auto prevURLReg = BOOLSETTING(URL_HANDLER);
-	auto prevMagnetReg = BOOLSETTING(MAGNET_REGISTER);
+	auto prevTray = SETTING(ALWAYS_TRAY);
+	auto prevSortFavUsersFirst = SETTING(SORT_FAVUSERS_FIRST);
+	auto prevURLReg = SETTING(URL_HANDLER);
+	auto prevMagnetReg = SETTING(MAGNET_REGISTER);
 	auto prevSettingsSave = SETTING(SETTINGS_SAVE_INTERVAL);
 
 	if(SettingsDialog(this).run() == IDOK) {
@@ -1162,8 +1162,8 @@ void MainWindow::handleSettings() {
 		ClientManager::getInstance()->infoUpdated();
 
 		bool rebuildGeo = prevGeo && SETTING(COUNTRY_FORMAT) != prevGeoFormat;
-		if(BOOLSETTING(GET_USER_COUNTRY) != prevGeo) {
-			if(BOOLSETTING(GET_USER_COUNTRY)) {
+		if(SETTING(GET_USER_COUNTRY) != prevGeo) {
+			if(SETTING(GET_USER_COUNTRY)) {
 				GeoManager::getInstance()->init();
 				checkGeoUpdate();
 			} else {
@@ -1202,15 +1202,15 @@ void MainWindow::handleSettings() {
 			::EnumChildWindows(handle(), updateColors, 0);
 		}
 
-		if(BOOLSETTING(ALWAYS_TRAY) != prevTray)
-			notifier->setVisible(BOOLSETTING(ALWAYS_TRAY));
+		if(SETTING(ALWAYS_TRAY) != prevTray)
+			notifier->setVisible(SETTING(ALWAYS_TRAY));
 
-		if(BOOLSETTING(SORT_FAVUSERS_FIRST) != prevSortFavUsersFirst)
+		if(SETTING(SORT_FAVUSERS_FIRST) != prevSortFavUsersFirst)
 			HubFrame::resortUsers();
 
-		if(BOOLSETTING(URL_HANDLER) != prevURLReg)
+		if(SETTING(URL_HANDLER) != prevURLReg)
 			WinUtil::registerHubHandlers();
-		if(BOOLSETTING(MAGNET_REGISTER) != prevMagnetReg)
+		if(SETTING(MAGNET_REGISTER) != prevMagnetReg)
 			WinUtil::registerMagnetHandler();
 
 		if(SETTING(SETTINGS_SAVE_INTERVAL) != prevSettingsSave)
@@ -1296,7 +1296,7 @@ void MainWindow::handleMatchAll() {
 
 void MainWindow::handleActivate(bool active) {
 	// hide the temporary menu bar when moving out of the main window
-	if(!active && !BOOLSETTING(SHOW_MENU_BAR) && ::GetMenu(handle())) {
+	if(!active && !SETTING(SHOW_MENU_BAR) && ::GetMenu(handle())) {
 		::SetMenu(handle(), nullptr);
 	}
 
@@ -1417,7 +1417,7 @@ void MainWindow::completeVersionUpdate() {
 	conns[CONN_VERSION].reset();
 
 	// check after the version.xml download in case it contains updated GeoIP links.
-	if(BOOLSETTING(GET_USER_COUNTRY)) {
+	if(SETTING(GET_USER_COUNTRY)) {
 		checkGeoUpdate();
 	}
 }
@@ -1439,7 +1439,7 @@ void MainWindow::checkGeoUpdate(bool v6) {
 }
 
 void MainWindow::updateGeo() {
-	if(BOOLSETTING(GET_USER_COUNTRY)) {
+	if(SETTING(GET_USER_COUNTRY)) {
 		updateGeo(true);
 		updateGeo(false);
 	} else {
@@ -1561,7 +1561,7 @@ void MainWindow::handleToolbarSize(int size) {
 }
 
 void MainWindow::switchMenuBar() {
-	auto show = !BOOLSETTING(SHOW_MENU_BAR);
+	auto show = !SETTING(SHOW_MENU_BAR);
 	SettingsManager::getInstance()->set(SettingsManager::SHOW_MENU_BAR, show);
 	::SetMenu(handle(), show ? mainMenu->handle() : nullptr);
 	viewMenu->checkItem(viewIndexes["Menu"], show);

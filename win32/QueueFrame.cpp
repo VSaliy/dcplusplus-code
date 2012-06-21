@@ -94,7 +94,7 @@ fileLists(0)
 		files->onSelectionChanged([this] { callAsync([&] { updateStatus(); }); });
 		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
 
-		if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
+		if(!SETTING(QUEUEFRAME_SHOW_TREE)) {
 			paned->maximize(files);
 		}
 	}
@@ -104,7 +104,7 @@ fileLists(0)
 	{
 		auto showTree = addChild(WinUtil::Seeds::splitCheckBox);
 		showTree->setHelpId(IDH_QUEUE_SHOW_TREE);
-		showTree->setChecked(BOOLSETTING(QUEUEFRAME_SHOW_TREE));
+		showTree->setChecked(SETTING(QUEUEFRAME_SHOW_TREE));
 		showTree->onClicked([this, showTree] {
 			auto checked = showTree->getChecked();
 			SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_SHOW_TREE, checked);
@@ -195,7 +195,7 @@ void QueueFrame::updateStatus() {
 	int cnt = files->countSelected();
 	if(cnt < 2) {
 		cnt = files->size();
-		if(BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
+		if(SETTING(QUEUEFRAME_SHOW_TREE)) {
 			for(auto i = 0; i < cnt; ++i) {
 				QueueItemInfo* ii = files->getData(i);
 				total += (ii->getSize() > 0) ? ii->getSize() : 0;
@@ -252,7 +252,7 @@ void QueueFrame::addQueueItem(QueueItemPtr&& ii, bool single) {
 		}
 	}
 
-	if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(dir)) {
+	if(!SETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(dir)) {
 		p->update();
 		if(single) {
 			files->insert(p); // sort
@@ -268,7 +268,7 @@ void QueueFrame::updateFiles() {
 	files->clear();
 
 	decltype(directories.equal_range(string())) i;
-	if(BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
+	if(SETTING(QUEUEFRAME_SHOW_TREE)) {
 		i = directories.equal_range(getSelectedDir());
 	} else {
 		i.first = directories.begin();
@@ -598,12 +598,12 @@ void QueueFrame::removeDirectories(HTREEITEM ht) {
 }
 
 void QueueFrame::removeSelected() {
-	if(!BOOLSETTING(CONFIRM_ITEM_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)
+	if(!SETTING(CONFIRM_ITEM_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)
 		files->forEachSelected(&QueueItemInfo::remove);
 }
 
 void QueueFrame::removeSelectedDir() {
-	if(!BOOLSETTING(CONFIRM_ITEM_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)
+	if(!SETTING(CONFIRM_ITEM_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES)
 		removeDir(dirs->getSelected());
 }
 
@@ -619,7 +619,7 @@ void QueueFrame::moveSelected() {
 		}
 	} else if(n > 1) {
 		tstring name;
-		if(BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
+		if(SETTING(QUEUEFRAME_SHOW_TREE)) {
 			name = Text::toT(curDir);
 		}
 		if(FolderDialog(this).open(name)) {
@@ -992,7 +992,7 @@ void QueueFrame::onRemoved(const string& s) {
 	const auto userList = ii->isSet(QueueItem::FLAG_USER_LIST);
 	const auto isCur = isCurDir(path);
 
-	if(isCur || !BOOLSETTING(QUEUEFRAME_SHOW_TREE)) {
+	if(isCur || !SETTING(QUEUEFRAME_SHOW_TREE)) {
 		dcassert(files->find(ii) != -1);
 		files->erase(ii);
 	}
@@ -1036,7 +1036,7 @@ void QueueFrame::onUpdated(QueueItem* qi) {
 
 	ii->updateMask |= QueueItemInfo::MASK_PRIORITY | QueueItemInfo::MASK_USERS | QueueItemInfo::MASK_ERRORS | QueueItemInfo::MASK_STATUS | QueueItemInfo::MASK_DOWNLOADED;
 
-	if(!BOOLSETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(ii->getPath())) {
+	if(!SETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(ii->getPath())) {
 		dcassert(files->find(ii) != -1);
 		ii->update();
 		files->update(ii);

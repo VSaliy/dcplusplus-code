@@ -69,12 +69,12 @@ bool PrivateFrame::gotMessage(TabViewPtr parent, const UserPtr& from, const User
 		}
 
 		auto p = new PrivateFrame(parent, HintedUser(user, hubHint));
-		if(!BOOLSETTING(POPUNDER_PM))
+		if(!SETTING(POPUNDER_PM))
 			p->activate();
 
 		p->addChat(message);
 
-		if(Util::getAway() && !(BOOLSETTING(NO_AWAYMSG_TO_BOTS) && fromBot)) {
+		if(Util::getAway() && !(SETTING(NO_AWAYMSG_TO_BOTS) && fromBot)) {
 			auto awayMessage = Util::getAwayMessage();
 			if(!awayMessage.empty()) {
 				p->sendMessage(Text::toT(awayMessage));
@@ -205,7 +205,7 @@ PrivateFrame::~PrivateFrame() {
 void PrivateFrame::addedChat(const tstring& message) {
 	setDirty(SettingsManager::BOLD_PM);
 
-	if(BOOLSETTING(LOG_PRIVATE_CHAT)) {
+	if(SETTING(LOG_PRIVATE_CHAT)) {
 		ParamMap params;
 		params["message"] = [&message] { return Text::toDOS(Text::fromT(message)); };
 		fillLogParams(params);
@@ -216,7 +216,7 @@ void PrivateFrame::addedChat(const tstring& message) {
 void PrivateFrame::addStatus(const tstring& text) {
 	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString() + "] ") + text);
 
-	if(BOOLSETTING(STATUS_IN_CHAT)) {
+	if(SETTING(STATUS_IN_CHAT)) {
 		addChat(_T("*** ") + text);
 	} else {
 		setDirty(SettingsManager::BOLD_PM);

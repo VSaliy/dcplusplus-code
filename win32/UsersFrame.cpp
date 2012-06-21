@@ -170,12 +170,12 @@ filter(usersColumns, COLUMN_LAST, [this] { updateList(); })
 		filter.method->setHelpId(IDH_USERS_FILTER);
 		addWidget(filter.method);
 
-		auto addFilterBox = [this, cur](const tstring& text, SettingsManager::IntSetting setting, unsigned helpId) {
+		auto addFilterBox = [this, cur](const tstring& text, SettingsManager::BoolSetting setting, unsigned helpId) {
 			auto box = cur->addChild(WinUtil::Seeds::checkBox);
 			box->setHelpId(helpId);
 			addWidget(box);
 			box->setText(text);
-			box->setChecked(SettingsManager::getInstance()->getBool(setting, true));
+			box->setChecked(SettingsManager::getInstance()->get(setting, true));
 			box->onClicked([=] {
 				SettingsManager::getInstance()->set(setting, box->getChecked());
 				updateList();
@@ -432,7 +432,7 @@ void UsersFrame::handleDescription() {
 }
 
 void UsersFrame::handleRemove() {
-	if(!BOOLSETTING(CONFIRM_USER_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == dwt::MessageBox::RETBOX_YES)
+	if(!SETTING(CONFIRM_USER_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == dwt::MessageBox::RETBOX_YES)
 		users->forEachSelected(&UsersFrame::UserInfo::remove);
 }
 
@@ -530,19 +530,19 @@ bool UsersFrame::show(const UserPtr &u, bool any) const {
 		return true;
 	}
 
-	if(BOOLSETTING(USERS_FILTER_ONLINE) && !u->isOnline()) {
+	if(SETTING(USERS_FILTER_ONLINE) && !u->isOnline()) {
 		return false;
 	}
 
-	if(BOOLSETTING(USERS_FILTER_FAVORITE) && !isFav(u)) {
+	if(SETTING(USERS_FILTER_FAVORITE) && !isFav(u)) {
 		return false;
 	}
 
-	if(BOOLSETTING(USERS_FILTER_WAITING) && !isWaiting(u)) {
+	if(SETTING(USERS_FILTER_WAITING) && !isWaiting(u)) {
 		return false;
 	}
 
-	if(BOOLSETTING(USERS_FILTER_QUEUE) && !hasDownload(u)) {
+	if(SETTING(USERS_FILTER_QUEUE) && !hasDownload(u)) {
 		return false;
 	}
 

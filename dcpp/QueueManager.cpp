@@ -464,7 +464,7 @@ QueueManager::~QueueManager() {
 	TimerManager::getInstance()->removeListener(this);
 	ClientManager::getInstance()->removeListener(this);
 
-	if(!BOOLSETTING(KEEP_LISTS)) {
+	if(!SETTING(KEEP_LISTS)) {
 		string path = Util::getListPath();
 
 		std::sort(protectedFileLists.begin(), protectedFileLists.end());
@@ -494,7 +494,7 @@ void QueueManager::on(TimerManagerListener::Minute, uint64_t aTick) noexcept {
 	{
 		Lock l(cs);
 
-		if(BOOLSETTING(AUTO_SEARCH) && (aTick >= nextSearch) && (fileQueue.getSize() > 0)) {
+		if(SETTING(AUTO_SEARCH) && (aTick >= nextSearch) && (fileQueue.getSize() > 0)) {
 			// We keep 30 recent searches to avoid duplicate searches
 			while((recent.size() >= fileQueue.getSize()) || (recent.size() > 30)) {
 				recent.erase(recent.begin());
@@ -536,7 +536,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 	}
 
 	// Check if we're not downloading something already in our share
-	if(BOOLSETTING(DONT_DL_ALREADY_SHARED)){
+	if(SETTING(DONT_DL_ALREADY_SHARED)){
 		if (ShareManager::getInstance()->isTTHShared(root)){
 			throw QueueException(_("A file with the same hash already exists in your share"));
 		}
@@ -553,7 +553,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 
 	// Check if it's a zero-byte file, if so, create and return...
 	if(aSize == 0) {
-		if(!BOOLSETTING(SKIP_ZERO_BYTE)) {
+		if(!SETTING(SKIP_ZERO_BYTE)) {
 			File::ensureDirectory(target);
 			File f(target, File::WRITE, File::CREATE);
 		}
@@ -564,7 +564,7 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 		Lock l(cs);
 
 		// This will be pretty slow on large queues...
-		if(BOOLSETTING(DONT_DL_ALREADY_QUEUED) && !(aFlags & QueueItem::FLAG_USER_LIST)) {
+		if(SETTING(DONT_DL_ALREADY_QUEUED) && !(aFlags & QueueItem::FLAG_USER_LIST)) {
 			auto ql = fileQueue.find(root);
 			if (!ql.empty()) {
 				// Found one or more existing queue items, lets see if we can add the source to them
@@ -957,7 +957,7 @@ void QueueManager::moveStuckFile(QueueItem* qi) {
 
 	string target = qi->getTarget();
 
-	if(!BOOLSETTING(KEEP_FINISHED_FILES)) {
+	if(!SETTING(KEEP_FINISHED_FILES)) {
 		fire(QueueManagerListener::Removed(), qi);
 		fileQueue.remove(qi);
 	 } else {
@@ -1070,7 +1070,7 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 			} else if(d->getType() == Transfer::TYPE_FILE) {
 				q->addSegment(d->getSegment());
 
-				auto crcChecked = q->isFinished() && BOOLSETTING(SFV_CHECK) && checkSfv(q, d.get());
+				auto crcChecked = q->isFinished() && SETTING(SFV_CHECK) && checkSfv(q, d.get());
 
 				// In case of a failed crc check segments are reset
 				if(q->isFinished()) {
@@ -1079,14 +1079,14 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 						moveFile(d->getTempTarget(), d->getPath());
 					}
 
-					if (BOOLSETTING(LOG_FINISHED_DOWNLOADS)) {
+					if (SETTING(LOG_FINISHED_DOWNLOADS)) {
 						logFinishedDownload(q, d.get(), crcChecked);
 					}
 
 					userQueue.remove(q);
 					fire(QueueManagerListener::Finished(), q, Util::emptyString, d->getAverageSpeed());
 
-					if(BOOLSETTING(KEEP_FINISHED_FILES)) {
+					if(SETTING(KEEP_FINISHED_FILES)) {
 						fire(QueueManagerListener::StatusUpdated(), q);
 					} else {
 						fire(QueueManagerListener::Removed(), q);
@@ -1517,7 +1517,7 @@ void QueueLoader::endTag(const string& name) {
 }
 
 void QueueManager::noDeleteFileList(const string& path) {
-	if(!BOOLSETTING(KEEP_LISTS)) {
+	if(!SETTING(KEEP_LISTS)) {
 		protectedFileLists.push_back(path);
 	}
 }
@@ -1535,7 +1535,7 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) noex
 			// Size compare to avoid popular spoof
 			if(qi->getSize() == sr->getSize() && !qi->isSource(sr->getUser()) && !qi->isBadSource(sr->getUser())) {
 				try {
-					if(!BOOLSETTING(AUTO_SEARCH_AUTO_MATCH))
+					if(!SETTING(AUTO_SEARCH_AUTO_MATCH))
 						wantConnection = addSource(qi, HintedUser(sr->getUser(), sr->getHubURL()), 0);
 					added = true;
 				} catch(const Exception&) {
@@ -1546,7 +1546,7 @@ void QueueManager::on(SearchManagerListener::SR, const SearchResultPtr& sr) noex
 		}
 	}
 
-	if(added && BOOLSETTING(AUTO_SEARCH_AUTO_MATCH)) {
+	if(added && SETTING(AUTO_SEARCH_AUTO_MATCH)) {
 		try {
 			addList(HintedUser(sr->getUser(), sr->getHubURL()), QueueItem::FLAG_MATCH_QUEUE);
 		} catch(const Exception&) {

@@ -175,7 +175,7 @@ void WinUtil::init() {
 	fileImages = dwt::ImageListPtr(new dwt::ImageList(dwt::Point(16, 16)));
 
 	// get the directory icon (DIR_ICON).
-	if(BOOLSETTING(USE_SYSTEM_ICONS)) {
+	if(SETTING(USE_SYSTEM_ICONS)) {
 		::SHFILEINFO info;
 		if(::SHGetFileInfo(_T("./"), FILE_ATTRIBUTE_DIRECTORY, &info, sizeof(info),
 			SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES) && info.hIcon)
@@ -283,7 +283,7 @@ void WinUtil::initSeeds() {
 
 	xlabel.font = font;
 
-	xmenu.ownerDrawn = BOOLSETTING(OWNER_DRAWN_MENUS);
+	xmenu.ownerDrawn = SETTING(OWNER_DRAWN_MENUS);
 	if(xmenu.ownerDrawn)
 		xmenu.font = font;
 
@@ -723,7 +723,7 @@ pair<tstring, bool> WinUtil::getHubNames(const UserPtr& u, const string& hintUrl
 }
 
 size_t WinUtil::getFileIcon(const string& fileName) {
-	if(BOOLSETTING(USE_SYSTEM_ICONS)) {
+	if(SETTING(USE_SYSTEM_ICONS)) {
 		string ext = Text::toLower(Util::getFileExt(fileName));
 		if(!ext.empty()) {
 			auto index = fileIndexes.find(ext);
@@ -1381,7 +1381,7 @@ bool registerHandler(const tstring& name) {
 }
 
 void WinUtil::registerHubHandlers() {
-	if(BOOLSETTING(URL_HANDLER)) {
+	if(SETTING(URL_HANDLER)) {
 		if(!urlDcADCRegistered) {
 			urlDcADCRegistered = registerHandler(_T("dchub")) && registerHandler(_T("adc")) && registerHandler(_T("adcs"));
 		}
@@ -1394,7 +1394,7 @@ void WinUtil::registerHubHandlers() {
 }
 
 void WinUtil::registerMagnetHandler() {
-	if(BOOLSETTING(MAGNET_REGISTER)) {
+	if(SETTING(MAGNET_REGISTER)) {
 		if(!urlMagnetRegistered) {
 			urlMagnetRegistered = registerHandler(_T("magnet"));
 		}

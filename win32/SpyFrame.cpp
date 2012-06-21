@@ -46,7 +46,7 @@ SpyFrame::SpyFrame(TabViewPtr parent) :
 	BaseType(parent, T_("Search Spy"), IDH_SEARCH_SPY, IDI_SPY),
 	searches(0),
 	ignoreTTH(0),
-	bIgnoreTTH(BOOLSETTING(SPY_FRAME_IGNORE_TTH_SEARCHES)),
+	bIgnoreTTH(SETTING(SPY_FRAME_IGNORE_TTH_SEARCHES)),
 	total(0),
 	cur(0)
 {

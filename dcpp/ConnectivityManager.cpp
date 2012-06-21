@@ -21,6 +21,7 @@
 
 #include "ClientManager.h"
 #include "ConnectionManager.h"
+#include "debug.h"
 #include "format.h"
 #include "LogManager.h"
 #include "MappingManager.h"
@@ -36,18 +37,18 @@ running(false)
 {
 }
 
-const string& ConnectivityManager::get(SettingsManager::StrSetting setting) const {
-	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
+bool ConnectivityManager::get(SettingsManager::BoolSetting setting) const {
+	if(SETTING(AUTO_DETECT_CONNECTION)) {
 		auto i = autoSettings.find(setting);
 		if(i != autoSettings.end()) {
-			return boost::get<const string&>(i->second);
+			return boost::get<bool>(i->second);
 		}
 	}
 	return SettingsManager::getInstance()->get(setting);
 }
 
 int ConnectivityManager::get(SettingsManager::IntSetting setting) const {
-	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
+	if(SETTING(AUTO_DETECT_CONNECTION)) {
 		auto i = autoSettings.find(setting);
 		if(i != autoSettings.end()) {
 			return boost::get<int>(i->second);
@@ -56,8 +57,18 @@ int ConnectivityManager::get(SettingsManager::IntSetting setting) const {
 	return SettingsManager::getInstance()->get(setting);
 }
 
+const string& ConnectivityManager::get(SettingsManager::StrSetting setting) const {
+	if(SETTING(AUTO_DETECT_CONNECTION)) {
+		auto i = autoSettings.find(setting);
+		if(i != autoSettings.end()) {
+			return boost::get<const string&>(i->second);
+		}
+	}
+	return SettingsManager::getInstance()->get(setting);
+}
+
 void ConnectivityManager::set(SettingsManager::StrSetting setting, const string& str) {
-	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
+	if(SETTING(AUTO_DETECT_CONNECTION)) {
 		autoSettings[setting] = str;
 	} else {
 		SettingsManager::getInstance()->set(setting, str);
@@ -88,6 +99,10 @@ void ConnectivityManager::detectConnection() {
 			autoSettings[setting] = SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::StrSetting>(setting));
 		} else if(setting >= SettingsManager::INT_FIRST && setting < SettingsManager::INT_LAST) {
 			autoSettings[setting] = SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::IntSetting>(setting));
+		} else if(setting >= SettingsManager::BOOL_FIRST && setting < SettingsManager::BOOL_LAST) {
+			autoSettings[setting] = SettingsManager::getInstance()->getDefault(static_cast<SettingsManager::BoolSetting>(setting));
+		} else {
+			dcassert(0);
 		}
 	});
 
@@ -119,7 +134,7 @@ void ConnectivityManager::detectConnection() {
 }
 
 void ConnectivityManager::setup(bool settingsChanged) {
-	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
+	if(SETTING(AUTO_DETECT_CONNECTION)) {
 		if(!autoDetected) {
 			detectConnection();
 		}
@@ -148,6 +163,10 @@ void ConnectivityManager::editAutoSettings() {
 			sm->set(static_cast<SettingsManager::StrSetting>(i.first), boost::get<const string&>(i.second));
 		} else if(i.first >= SettingsManager::INT_FIRST && i.first < SettingsManager::INT_LAST) {
 			sm->set(static_cast<SettingsManager::IntSetting>(i.first), boost::get<int>(i.second));
+		} else if(i.first >= SettingsManager::BOOL_FIRST && i.first < SettingsManager::BOOL_LAST) {
+			sm->set(static_cast<SettingsManager::BoolSetting>(i.first), boost::get<bool>(i.second));
+		} else {
+			dcassert(0);
 		}
 	}
 	autoSettings.clear();
@@ -215,7 +234,7 @@ void ConnectivityManager::startMapping() {
 }
 
 void ConnectivityManager::mappingFinished(const string& mapper) {
-	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
+	if(SETTING(AUTO_DETECT_CONNECTION)) {
 		if(mapper.empty()) {
 			disconnect();
 			autoSettings[SettingsManager::INCOMING_CONNECTIONS] = SettingsManager::INCOMING_FIREWALL_PASSIVE;
@@ -230,7 +249,7 @@ void ConnectivityManager::mappingFinished(const string& mapper) {
 }
 
 void ConnectivityManager::log(string&& message) {
-	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
+	if(SETTING(AUTO_DETECT_CONNECTION)) {
 		status = move(message);
 		LogManager::getInstance()->message(_("Connectivity: ") + status);
 		fire(ConnectivityManagerListener::Message(), status);

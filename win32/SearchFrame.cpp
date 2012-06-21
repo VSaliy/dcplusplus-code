@@ -118,9 +118,9 @@ mode(0),
 size(0),
 sizeMode(0),
 fileType(0),
-onlyFree(BOOLSETTING(SEARCH_ONLY_FREE_SLOTS)),
-hideShared(BOOLSETTING(SEARCH_FILTER_SHARED)),
-merge(BOOLSETTING(SEARCH_MERGE)),
+onlyFree(SETTING(SEARCH_ONLY_FREE_SLOTS)),
+hideShared(SETTING(SEARCH_FILTER_SHARED)),
+merge(SETTING(SEARCH_MERGE)),
 hubs(0),
 results(0),
 filter(resultsColumns, COLUMN_LAST, [this] { updateList(); }),
@@ -892,11 +892,11 @@ void SearchFrame::onHubRemoved(HubInfo* info) {
 
 void SearchFrame::runSearch() {
 	// change settings if changed
-	if(onlyFree != BOOLSETTING(SEARCH_ONLY_FREE_SLOTS))
+	if(onlyFree != SETTING(SEARCH_ONLY_FREE_SLOTS))
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_ONLY_FREE_SLOTS, onlyFree);
-	if(hideShared != BOOLSETTING(SEARCH_FILTER_SHARED))
+	if(hideShared != SETTING(SEARCH_FILTER_SHARED))
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_FILTER_SHARED, hideShared);
-	if(merge != BOOLSETTING(SEARCH_MERGE))
+	if(merge != SETTING(SEARCH_MERGE))
 		SettingsManager::getInstance()->set(SettingsManager::SEARCH_MERGE, merge);
 	if(initialType == SearchManager::TYPE_ANY) {
 		string text = Text::fromT(fileType->getText());
@@ -990,7 +990,7 @@ void SearchFrame::runSearch() {
 	if(SearchManager::getInstance()->okToSearch()) {
 		SearchManager::getInstance()->search(clients, Text::fromT(s), llsize,
 			(SearchManager::TypeModes)ftype, searchMode, token, extList);
-		if(BOOLSETTING(CLEAR_SEARCH)) // Only clear if the search was sent
+		if(SETTING(CLEAR_SEARCH)) // Only clear if the search was sent
 			searchBox->setText(Util::emptyStringT);
 
 	} else {

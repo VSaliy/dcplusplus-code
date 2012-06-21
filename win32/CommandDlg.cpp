@@ -157,7 +157,7 @@ bool CommandDlg::handleInitDialog() {
 
 	openHelp = grid->addChild(CheckBox::Seed(T_("Always open help file with this dialog")));
 	grid->setWidget(openHelp, 3, 0, 1, 3);
-	bool bOpenHelp = BOOLSETTING(OPEN_USER_CMD_HELP);
+	bool bOpenHelp = SETTING(OPEN_USER_CMD_HELP);
 	openHelp->setChecked(bOpenHelp);
 
 	WinUtil::addDlgButtons(grid,

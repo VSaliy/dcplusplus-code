@@ -129,7 +129,7 @@ void DirectoryListingFrame::openWindow_(TabViewPtr parent, const tstring& aFile,
 		path.erase(n - 4);
 	}
 
-	if(activate == FORCE_ACTIVE || (activate == FOLLOW_SETTING && !BOOLSETTING(POPUNDER_FILELIST))) {
+	if(activate == FORCE_ACTIVE || (activate == FOLLOW_SETTING && !SETTING(POPUNDER_FILELIST))) {
 		frame->loadFile(aDir);
 		frame->activate();
 	} else {
@@ -205,7 +205,7 @@ void DirectoryListingFrame::openWindow(TabViewPtr parent, const HintedUser& aUse
 	} else {
 		DirectoryListingFrame* frame = new DirectoryListingFrame(parent, aUser, aSpeed);
 		frame->loadXML(txt);
-		if(BOOLSETTING(POPUNDER_FILELIST))
+		if(SETTING(POPUNDER_FILELIST))
 			frame->setDirty(SettingsManager::BOLD_FL);
 		else
 			frame->activate();

@@ -162,7 +162,7 @@ void FinishedManager::getParams(const string & target, ParamMap& params) {
 }
 
 void FinishedManager::onComplete(Transfer* t, bool upload, bool crc32Checked) {
-	if(t->getType() == Transfer::TYPE_FILE || (t->getType() == Transfer::TYPE_FULL_LIST && BOOLSETTING(LOG_FILELIST_TRANSFERS))) {
+	if(t->getType() == Transfer::TYPE_FILE || (t->getType() == Transfer::TYPE_FULL_LIST && SETTING(LOG_FILELIST_TRANSFERS))) {
 		string file = t->getPath();
 		const HintedUser& user = t->getHintedUser();
 
