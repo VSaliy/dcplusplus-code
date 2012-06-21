@@ -13,6 +13,10 @@
 * Do not automatch queue for bad/removed sources (emtee)
 * Minor DL queue tab fixes (poy)
 * Replace the slot up-down control by a context menu (poy)
+* [L#733381] Add protocol debug window (bigmuscle, iceman50)
+* [L#745162] Fix upload log format for partial lists (emtee)
+* Fix GUI problems in a download attempt of a public hublist with invalid address (emtee)
+* Fix unsuccessful HTTP redirections (emtee)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
