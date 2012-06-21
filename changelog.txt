@@ -9,6 +9,7 @@
 * Add a /info hub command (poy)
 * [L#957994] Fix glitches with the file list loader (poy)
 * [L#1007103] Correct download logging after an app restart (emtee)
+* Replace option to disable ADC C-C TLS with one to require it (cologic)
 * [L#1007099] Fix disabled buttons in user matching settings (poy)
 * Do not automatch queue for bad/removed sources (emtee)
 * Minor DL queue tab fixes (poy)
