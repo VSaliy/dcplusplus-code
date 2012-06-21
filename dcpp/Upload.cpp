@@ -35,7 +35,7 @@ Upload::~Upload() {
 
 void Upload::getParams(const UserConnection& aSource, ParamMap& params) {
 	Transfer::getParams(aSource, params);
-	params["source"] = getPath();
+	params["source"] = (getType() == TYPE_PARTIAL_LIST ? _("Partial file list") : getPath());
 }
 
 } // namespace dcpp
