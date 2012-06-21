@@ -646,9 +646,9 @@ ShareManager::Directory::Ptr ShareManager::buildTree(const string& aName, const 
 		
 		if(name == "." || name == "..")
 			continue;
-		if(!BOOLSETTING(SHARE_HIDDEN) && i->isHidden())
+		if(!SETTING(SHARE_HIDDEN) && i->isHidden())
 			continue;
-		if(!BOOLSETTING(FOLLOW_LINKS) && i->isLink())
+		if(!SETTING(FOLLOW_LINKS) && i->isLink())
  			continue;
 
 		if(i->isDirectory()) {
@@ -682,7 +682,7 @@ bool ShareManager::checkHidden(const string& aName) const {
 	FileFindIter ff = FileFindIter(aName.substr(0, aName.size() - 1));
 
 	if (ff != FileFindIter()) {
-		return (BOOLSETTING(SHARE_HIDDEN) || !ff->isHidden());
+		return (SETTING(SHARE_HIDDEN) || !ff->isHidden());
 	}
 
 	return true;
@@ -1400,7 +1400,7 @@ ShareManager::Directory::Ptr ShareManager::getDirectory(const string& fname) {
 }
 
 void ShareManager::on(QueueManagerListener::FileMoved, const string& n) noexcept {
-	if(BOOLSETTING(ADD_FINISHED_INSTANTLY)) {
+	if(SETTING(ADD_FINISHED_INSTANTLY)) {
 		// Check if finished download is supposed to be shared
 		Lock l(cs);
 		for(auto& i: shares) {

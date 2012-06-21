@@ -136,7 +136,7 @@ protected:
 		this->initStatus();
 
 		if(!in_UL) {
-			bOnlyFull = BOOLSETTING(FINISHED_DL_ONLY_FULL);
+			bOnlyFull = SETTING(FINISHED_DL_ONLY_FULL);
 			{
 				CheckBox::Seed seed = WinUtil::Seeds::checkBox;
 				seed.caption = T_("Only show fully downloaded files");

@@ -118,7 +118,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 	announce(_("Download Queue"));
 	QueueManager::getInstance()->loadQueue();
 
-	if(BOOLSETTING(GET_USER_COUNTRY)) {
+	if(SETTING(GET_USER_COUNTRY)) {
 		announce(_("Country information"));
 		GeoManager::getInstance()->init();
 	}

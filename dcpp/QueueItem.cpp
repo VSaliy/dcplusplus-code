@@ -94,7 +94,7 @@ Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 		return Segment(0, -1);
 	}
 
-	if(!BOOLSETTING(SEGMENTED_DL)) {
+	if(!SETTING(SEGMENTED_DL)) {
 		if(!downloads.empty()) {
 			return Segment(0, 0);
 		}

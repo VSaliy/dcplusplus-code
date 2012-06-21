@@ -89,7 +89,7 @@ edit(0)
 
 	updateAuto();
 
-	if(BOOLSETTING(AUTO_DETECT_CONNECTION)) {
+	if(SETTING(AUTO_DETECT_CONNECTION)) {
 		const auto& status = ConnectivityManager::getInstance()->getStatus();
 		if(!status.empty()) {
 			addLogLine(Text::toT(status));
@@ -123,7 +123,7 @@ void ConnectivityPage::handleEdit() {
 }
 
 void ConnectivityPage::updateAuto() {
-	bool enable = BOOLSETTING(AUTO_DETECT_CONNECTION);
+	bool enable = SETTING(AUTO_DETECT_CONNECTION);
 	autoDetect->setChecked(enable);
 
 	enable = enable && !ConnectivityManager::getInstance()->isRunning();

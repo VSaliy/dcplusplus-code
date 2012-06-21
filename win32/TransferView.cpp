@@ -440,7 +440,7 @@ TransferView::UserInfoList TransferView::selectedUsersImpl() const {
 }
 
 int TransferView::ConnectionInfo::compareItems(const ConnectionInfo* a, const ConnectionInfo* b, int col) {
-	if(BOOLSETTING(ALT_SORT_ORDER)) {
+	if(SETTING(ALT_SORT_ORDER)) {
 		if(a->download == b->download) {
 			if(a->status != b->status) {
 				return (a->status == ConnectionInfo::STATUS_RUNNING) ? -1 : 1;

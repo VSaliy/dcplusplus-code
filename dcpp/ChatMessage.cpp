@@ -59,7 +59,7 @@ messageTimestamp(messageTimestamp)
 
 	htmlMessage += "<span id=\"message\" style=\"white-space: pre-wrap;\">";
 
-	if(BOOLSETTING(TIME_STAMPS)) {
+	if(SETTING(TIME_STAMPS)) {
 		tmp = "[" + Util::getShortTimeString(timestamp) + "]";
 		htmlMessage += addSpan("timestamp", tmp, Util::emptyString) + " ";
 	}

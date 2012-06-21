@@ -1071,10 +1071,10 @@ void AdcHub::on(Connected c) noexcept {
 	AdcCommand cmd(AdcCommand::CMD_SUP, AdcCommand::TYPE_HUB);
 	cmd.addParam(BAS0_SUPPORT).addParam(BASE_SUPPORT).addParam(TIGR_SUPPORT);
 
-	if(BOOLSETTING(HUB_USER_COMMANDS)) {
+	if(SETTING(HUB_USER_COMMANDS)) {
 		cmd.addParam(UCM0_SUPPORT);
 	}
-	if(BOOLSETTING(SEND_BLOOM)) {
+	if(SETTING(SEND_BLOOM)) {
 		cmd.addParam(BLO0_SUPPORT);
 	}
 	

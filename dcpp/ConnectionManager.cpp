@@ -389,7 +389,7 @@ void ConnectionManager::on(AdcCommand::SUP, UserConnection* aSource, const AdcCo
 
 	if(aSource->isSet(UserConnection::FLAG_INCOMING)) {
 		StringList defFeatures = adcFeatures;
-		if(BOOLSETTING(COMPRESS_TRANSFERS)) {
+		if(SETTING(COMPRESS_TRANSFERS)) {
 			defFeatures.push_back("AD" + UserConnection::FEATURE_ZLIB_GET);
 		}
 		aSource->sup(defFeatures);
@@ -405,13 +405,13 @@ void ConnectionManager::on(AdcCommand::STA, UserConnection*, const AdcCommand& c
 }
 
 void ConnectionManager::on(UserConnectionListener::Connected, UserConnection* aSource) noexcept {
-	if(BOOLSETTING(REQUIRE_TLS) && !aSource->isSet(UserConnection::FLAG_NMDC) && !aSource->isSecure()) {
+	if(SETTING(REQUIRE_TLS) && !aSource->isSet(UserConnection::FLAG_NMDC) && !aSource->isSecure()) {
 		putConnection(aSource);
 		QueueManager::getInstance()->removeSource(aSource->getUser(), QueueItem::Source::FLAG_UNENCRYPTED);
 		return;
 	}
 
-	if(aSource->isSecure() && !aSource->isTrusted() && !BOOLSETTING(ALLOW_UNTRUSTED_CLIENTS)) {
+	if(aSource->isSecure() && !aSource->isTrusted() && !SETTING(ALLOW_UNTRUSTED_CLIENTS)) {
 		putConnection(aSource);
 		QueueManager::getInstance()->removeSource(aSource->getUser(), QueueItem::Source::FLAG_UNTRUSTED);
 		return;
@@ -423,7 +423,7 @@ void ConnectionManager::on(UserConnectionListener::Connected, UserConnection* aS
 		aSource->lock(CryptoManager::getInstance()->getLock(), CryptoManager::getInstance()->getPk() + "Ref=" + aSource->getHubUrl());
 	} else {
 		StringList defFeatures = adcFeatures;
-		if(BOOLSETTING(COMPRESS_TRANSFERS)) {
+		if(SETTING(COMPRESS_TRANSFERS)) {
 			defFeatures.push_back("AD" + UserConnection::FEATURE_ZLIB_GET);
 		}
 		aSource->sup(defFeatures);
@@ -508,7 +508,7 @@ void ConnectionManager::on(UserConnectionListener::CLock, UserConnection* aSourc
 
 	if( CryptoManager::getInstance()->isExtended(aLock) ) {
 		StringList defFeatures = features;
-		if(BOOLSETTING(COMPRESS_TRANSFERS)) {
+		if(SETTING(COMPRESS_TRANSFERS)) {
 			defFeatures.push_back(UserConnection::FEATURE_ZLIB_GET);
 		}
 

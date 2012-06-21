@@ -246,7 +246,7 @@ void ADLSearchFrame::handleDown() {
 void ADLSearchFrame::handleRemove() {
 	bool save = false;
 
-	if(!BOOLSETTING(CONFIRM_ADLS_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES) {
+	if(!SETTING(CONFIRM_ADLS_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES) {
 		ADLSearchManager::SearchCollection& collection = ADLSearchManager::getInstance()->collection;
 		int i;
 		while((i = items->getNext(-1, LVNI_SELECTED)) != -1) {

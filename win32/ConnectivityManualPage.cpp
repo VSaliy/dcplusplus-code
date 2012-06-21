@@ -160,7 +160,7 @@ void ConnectivityManualPage::handleAutoClicked() {
 }
 
 void ConnectivityManualPage::updateAuto() {
-	bool setting = BOOLSETTING(AUTO_DETECT_CONNECTION);
+	bool setting = SETTING(AUTO_DETECT_CONNECTION);
 	autoDetect->setChecked(setting);
 
 	auto controls = grid->getChildren<Control>();

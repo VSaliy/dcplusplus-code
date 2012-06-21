@@ -108,8 +108,8 @@ protected:
 			alwaysSameFocus = true;
 	}
 
-	void setDirty(SettingsManager::IntSetting setting) {
-		if(SettingsManager::getInstance()->getBool(setting)) {
+	void setDirty(SettingsManager::BoolSetting setting) {
+		if(SettingsManager::getInstance()->get(setting)) {
 			getParent()->mark(this);
 		}
 	}

@@ -54,48 +54,48 @@ const string SettingsManager::settingTags[] =
 	"SoundMainChat", "SoundPM", "SoundPMWindow", "SoundFinishedDL", "SoundFinishedFL", "LastSharedFolder",
 	"SENTRY",
 	// Ints
-	"IncomingConnections", "InPort", "Slots", "AutoFollow", "ClearSearch",
-	"TextColor", "BackgroundColor", "UploadTextColor", "UploadBgColor", "DownloadTextColor", "DownloadBgColor",
-	"LinkColor", "LogColor",
-	"ShareHidden", "FilterMessages", "MinimizeToTray", "AlwaysTray",
-	"AutoSearch", "TimeStamps", "PopupHubPms", "PopupBotPms", "IgnoreHubPms", "IgnoreBotPms",
-	"ListDuplicates", "BufferSize", "DownloadSlots", "MaxDownloadSpeed", "LogMainChat", "LogPrivateChat",
-	"LogDownloads", "LogFinishedDownloads", "LogUploads", "StatusInChat", "ShowJoins",
-	"UseSystemIcons", "PopupPMs", "MinUploadSpeed", "GetUserInfo", "UrlHandler", "MainWindowState",
-	"MainWindowSizeX", "MainWindowSizeY", "MainWindowPosX", "MainWindowPosY",
-	"SettingsWidth", "SettingsHeight", "SettingsPage",
-	"SocksPort", "SocksResolve", "KeepLists", "AutoKick", "QueueFrameShowTree",
-	"CompressTransfers", "SFVCheck", "AutoAway", "AwayCompLock", "AwayIdle",
-	"MaxCompression", "NoAwayMsgToBots", "SkipZeroByte", "AdlsBreakOnFirst",
-	"HubUserCommands", "AutoSearchAutoMatch", "LogSystem",
-	"LogFilelistTransfers", "SendUnknownCommands", "MaxHashSpeed", "OpenUserCmdHelp",
-	"GetUserCountry", "FavShowJoins", "LogStatusMessages", "ShowMenuBar", "ShowStatusbar",
-	"ShowToolbar", "ShowTransferview", "PopunderPm", "PopunderFilelist", "MagnetAsk", "MagnetAction", "MagnetRegister",
-	"AddFinishedInstantly", "DontDLAlreadyShared", "UseCTRLForLineHistory",
-	"OpenNewWindow", "UDPPort", "HubLastLogLines", "PMLastLogLines",
-	"ToggleActiveTab", "SearchHistory", "SetMinislotSize", "MaxFilelistSize",
-	"HighestPrioSize", "HighPrioSize", "NormalPrioSize", "LowPrioSize", "LowestPrio",
-	"AutoDropSpeed", "AutoDropInterval", "AutoDropElapsed", "AutoDropInactivity", "AutoDropMinSources", "AutoDropFilesize",
-	"AutoDropAll", "AutoDropFilelists", "AutoDropDisconnect",
-	"OutgoingConnections",
-	"NoIpOverride", "SearchOnlyFreeSlots", "BoldFinishedDownloads", "BoldFinishedUploads", "BoldQueue",
-	"BoldHub", "BoldPm", "BoldFL", "BoldSearch", "BoldSearchSpy", "SocketInBuffer", "SocketOutBuffer",
-	"BoldSystemLog", "AutoRefreshTime",
-	"AutoSearchLimit", "AltSortOrder", "AutoKickNoFavs", "PromptPassword", "SpyFrameIgnoreTthSearches",
-	"DontDlAlreadyQueued", "MaxCommandLength", "AllowUntrustedHubs", "AllowUntrustedClients",
-	"TLSPort", "SortFavUsersFirst", "SegmentedDL", "FollowLinks",
-	"SendBloom", "OwnerDrawnMenus", "Coral", "SearchFilterShared", "FinishedDLOnlyFull",
-	"ConfirmExit", "ConfirmHubClosing", "ConfirmHubRemoval", "ConfirmUserRemoval", "ConfirmItemRemoval", "ConfirmADLSRemoval",
-	"SearchMerge", "ToolbarSize", "TabWidth", "TabStyle",
-	"KeepFinishedFiles",
-	"MinMessageLines", "MaxMessageLines",
-	"BandwidthLimitStart", "BandwidthLimitEnd", "TimeDependentThrottle", "MaxDownloadSpeedRealTime",
+	"IncomingConnections", "OutgoingConnections", "InPort", "UDPPort", "TLSPort",
+	"SocksPort", "SocketInBuffer", "SocketOutBuffer",
+	"TextColor", "BackgroundColor", "UploadTextColor", "UploadBgColor", "DownloadTextColor",
+	"DownloadBgColor", "LinkColor", "LogColor",
+	"BandwidthLimitStart", "BandwidthLimitEnd", "MaxDownloadSpeedRealTime",
 	"MaxUploadSpeedTime", "MaxDownloadSpeedPrimary", "MaxUploadSpeedPrimary",
 	"SlotsAlternateLimiting", "SlotsPrimaryLimiting",
-	"AutoDetectIncomingConnection", "SettingsSaveInterval",
+	"MainWindowState", "MainWindowSizeX", "MainWindowSizeY", "MainWindowPosX",
+	"MainWindowPosY", "SettingsWidth", "SettingsHeight", "SettingsPage",
+	"HighestPrioSize", "HighPrioSize", "NormalPrioSize", "LowPrioSize", "AutoDropSpeed",
+	"AutoDropInterval", "AutoDropElapsed", "AutoDropInactivity", "AutoDropMinSources",
+	"AutoDropFilesize",
 	"BalloonMainChat", "BalloonPM", "BalloonPMWindow", "BalloonFinishedDL", "BalloonFinishedFL",
-	"UsersFilterOnline","UsersFilterFavorite","UsersFilterQueue","UsersFilterWaiting",
-	"MaxPMWindows", "RequireTLS",
+	"AwayIdle", "AutoRefreshTime", "AutoSearchLimit", "BufferSize", "DownloadSlots",
+	"HubLastLogLines", "MagnetAction", "MaxCommandLength", "MaxCompression", "MaxDownloadSpeed",
+	"MaxFilelistSize", "MaxHashSpeed", "MaxMessageLines", "MaxPMWindows", "MinMessageLines",
+	"MinUploadSpeed", "PMLastLogLines", "SearchHistory", "SetMinislotSize",
+	"SettingsSaveInterval", "Slots", "TabStyle", "TabWidth", "ToolbarSize",
+	"SENTRY",
+	// Bools
+	"AddFinishedInstantly", "AdlsBreakOnFirst", "AltSortOrder",
+	"AllowUntrustedClients", "AllowUntrustedHubs", "AlwaysTray", "AutoAway",
+	"AutoDetectIncomingConnection", "AutoFollow", "AutoKick", "AutoKickNoFavs", "AutoSearch",
+	"AutoSearchAutoMatch", "AutoDropAll", "AutoDropDisconnect", "AutoDropFilelists",
+	"AwayCompLock", "BoldFinishedDownloads", "BoldFinishedUploads", "BoldFL", "BoldHub", "BoldPm",
+	"BoldQueue", "BoldSearch", "BoldSearchSpy", "BoldSystemLog", "ClearSearch",
+	"CompressTransfers", "ConfirmADLSRemoval", "ConfirmExit", "ConfirmHubClosing",
+	"ConfirmHubRemoval", "ConfirmItemRemoval", "ConfirmUserRemoval", "Coral",
+	"DontDlAlreadyQueued", "DontDLAlreadyShared", "FavShowJoins", "FilterMessages",
+	"FinishedDLOnlyFull", "FollowLinks", "GetUserCountry", "GetUserInfo", "HubUserCommands",
+	"IgnoreBotPms", "IgnoreHubPms", "OpenNewWindow", "KeepFinishedFiles", "KeepLists",
+	"ListDuplicates", "LogDownloads", "LogFilelistTransfers", "LogFinishedDownloads", "LogMainChat",
+	"LogPrivateChat", "LogStatusMessages", "LogSystem", "LogUploads", "MagnetAsk",
+	"MagnetRegister", "MinimizeToTray", "NoAwayMsgToBots", "NoIpOverride", "OpenUserCmdHelp",
+	"OwnerDrawnMenus", "PopupBotPms", "PopupHubPms", "PopupPMs", "PopunderFilelist", "PopunderPm",
+	"LowestPrio", "PromptPassword", "QueueFrameShowTree", "RequireTLS", "SearchFilterShared",
+	"SearchMerge", "SearchOnlyFreeSlots", "SegmentedDL", "SendBloom", "SendUnknownCommands",
+	"SFVCheck", "ShareHidden", "ShowJoins", "ShowMenuBar", "ShowStatusbar", "ShowToolbar",
+	"ShowTransferview", "SkipZeroByte", "SocksResolve", "SortFavUsersFirst",
+	"SpyFrameIgnoreTthSearches", "StatusInChat", "TimeDependentThrottle", "TimeStamps",
+	"ToggleActiveTab", "UrlHandler", "UseCTRLForLineHistory", "UseSystemIcons",
+	"UsersFilterFavorite", "UsersFilterOnline", "UsersFilterQueue", "UsersFilterWaiting",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -130,6 +130,10 @@ SettingsManager::SettingsManager()
 	for(int i=0; i<INT_LAST-INT_FIRST; i++) {
 		intDefaults[i] = 0;
 		intSettings[i] = 0;
+	}
+	for(int i=0; i<BOOL_LAST-BOOL_FIRST; i++) {
+		boolDefaults[i] = false;
+		boolSettings[i] = false;
 	}
 	for(int i=0; i<INT64_LAST-INT64_FIRST; i++) {
 		int64Defaults[i] = 0;
@@ -381,6 +385,15 @@ void SettingsManager::load(string const& aFileName)
 					set(IntSetting(i), Util::toInt(xml.getChildData()));
 				xml.resetCurrentChild();
 			}
+			for(i=BOOL_FIRST; i<BOOL_LAST; i++)
+			{
+				const string& attr = settingTags[i];
+				dcassert(attr.find("SENTRY") == string::npos);
+
+				if(xml.findChild(attr))
+					set(BoolSetting(i), Util::toInt(xml.getChildData()));
+				xml.resetCurrentChild();
+			}
 			for(i=FLOAT_FIRST; i<FLOAT_LAST; i++)
 			{
 				const string& attr = settingTags[i];
@@ -522,6 +535,13 @@ void SettingsManager::save(string const& aFileName) {
 			xml.addChildAttrib(type, curType);
 		}
 	}
+	for(i=BOOL_FIRST; i<BOOL_LAST; i++)
+	{
+		if(isSet[i]) {
+			xml.addTag(settingTags[i], get(BoolSetting(i), false));
+			xml.addChildAttrib(type, curType);
+		}
+	}
 	for(i=FLOAT_FIRST; i<FLOAT_LAST; i++)
 	{
 		if(isSet[i]) {
@@ -569,8 +589,8 @@ HubSettings SettingsManager::getHubSettings() const {
 	ret.get(HubSettings::Nick) = get(NICK);
 	ret.get(HubSettings::Description) = get(DESCRIPTION);
 	ret.get(HubSettings::Email) = get(EMAIL);
-	ret.get(HubSettings::ShowJoins) = getBool(SHOW_JOINS);
-	ret.get(HubSettings::FavShowJoins) = getBool(FAV_SHOW_JOINS);
+	ret.get(HubSettings::ShowJoins) = get(SHOW_JOINS);
+	ret.get(HubSettings::FavShowJoins) = get(FAV_SHOW_JOINS);
 	return ret;
 }
 

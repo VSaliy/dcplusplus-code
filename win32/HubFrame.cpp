@@ -112,7 +112,7 @@ void HubFrame::closeAll(ClosePred f) {
 		toClose.erase(std::remove_if(toClose.begin(), toClose.end(), f), toClose.end());
 	}
 
-	if(!toClose.empty() && (!BOOLSETTING(CONFIRM_HUB_CLOSING) || dwt::MessageBox(WinUtil::mainWindow).show(
+	if(!toClose.empty() && (!SETTING(CONFIRM_HUB_CLOSING) || dwt::MessageBox(WinUtil::mainWindow).show(
 		str(TF_("Really close %1% hub windows?") % toClose.size()), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
 		dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == IDYES))
 	{
@@ -243,7 +243,7 @@ inTabComplete(false)
 
 	showUsers = addChild(WinUtil::Seeds::splitCheckBox);
 	showUsers->setHelpId(IDH_HUB_SHOW_USERS);
-	showUsers->setChecked(BOOLSETTING(GET_USER_INFO));
+	showUsers->setChecked(SETTING(GET_USER_INFO));
 	status->setWidget(STATUS_SHOW_USERS, showUsers);
 
 	status->setHelpId(STATUS_STATUS, IDH_HUB_STATUS);
@@ -284,7 +284,7 @@ HubFrame::~HubFrame() {
 }
 
 bool HubFrame::preClosing() {
-	if(BOOLSETTING(CONFIRM_HUB_CLOSING) && confirmClose && !WinUtil::mainWindow->closing() &&
+	if(SETTING(CONFIRM_HUB_CLOSING) && confirmClose && !WinUtil::mainWindow->closing() &&
 		dwt::MessageBox(this).show(getText() + _T("\n\n") + T_("Really close?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
 		dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) != IDYES)
 	{
@@ -422,7 +422,7 @@ void HubFrame::enterImpl(const tstring& s) {
 			addChat(_T("*** ") + text);
 		} else if(Util::stricmp(cmd.c_str(), _T("join"))==0) {
 			if(!param.empty()) {
-				if(BOOLSETTING(JOIN_OPEN_NEW_WINDOW)) {
+				if(SETTING(JOIN_OPEN_NEW_WINDOW)) {
 					HubFrame::openWindow(getParent(), Text::fromT(param));
 				} else {
 					redirect(Text::fromT(param));
@@ -510,7 +510,7 @@ void HubFrame::enterImpl(const tstring& s) {
 				}
 			}
 		} else {
-			if (BOOLSETTING(SEND_UNKNOWN_COMMANDS)) {
+			if (SETTING(SEND_UNKNOWN_COMMANDS)) {
 				client->hubMessage(Text::fromT(s));
 			} else {
 				addStatus(str(TF_("Unknown command: %1%") % cmd));
@@ -548,7 +548,7 @@ void HubFrame::addedChat(const tstring& message) {
 	}
 	setDirty(SettingsManager::BOLD_HUB);
 
-	if(BOOLSETTING(LOG_MAIN_CHAT)) {
+	if(SETTING(LOG_MAIN_CHAT)) {
 		ParamMap params;
 		params["message"] = [&message] { return Text::toDOS(Text::fromT(message)); };
 		client->getHubIdentity().getParams(params, "hub", false);
@@ -562,14 +562,14 @@ void HubFrame::addStatus(const tstring& text, bool legitimate /* = true */) {
 	status->setText(STATUS_STATUS, Text::toT("[" + Util::getShortTimeString() + "] ") + text);
 
 	if(legitimate) {
-		if(BOOLSETTING(STATUS_IN_CHAT)) {
+		if(SETTING(STATUS_IN_CHAT)) {
 			addChat(_T("*** ") + text);
 		} else {
 			setDirty(SettingsManager::BOLD_HUB);
 		}
 	}
 
-	if(BOOLSETTING(LOG_STATUS_MESSAGES)) {
+	if(SETTING(LOG_STATUS_MESSAGES)) {
 		ParamMap params;
 		client->getHubIdentity().getParams(params, "hub", false);
 		params["hubURL"] = [this] { return client->getHubUrl(); };
@@ -634,7 +634,7 @@ void HubFrame::onGetPassword() {
 		addStatus(T_("Stored password sent..."));
 	} else if(!waitingForPW) {
 		waitingForPW = true;
-		if(BOOLSETTING(PROMPT_PASSWORD)) {
+		if(SETTING(PROMPT_PASSWORD)) {
 			ParamDlg linePwd(this, getText(), T_("Please enter a password"), Util::emptyStringT, true);
 			auto res = linePwd.run();
 			waitingForPW = false;
@@ -665,18 +665,18 @@ void HubFrame::onPrivateMessage(const ChatMessage& message) {
 
 	bool ignore = false, window = false;
 	if(fromHub) {
-		if(BOOLSETTING(IGNORE_HUB_PMS)) {
+		if(SETTING(IGNORE_HUB_PMS)) {
 			ignore = true;
-		} else if(BOOLSETTING(POPUP_HUB_PMS) || PrivateFrame::isOpen(message.replyTo)) {
+		} else if(SETTING(POPUP_HUB_PMS) || PrivateFrame::isOpen(message.replyTo)) {
 			window = true;
 		}
 	} else if(fromBot) {
-		if(BOOLSETTING(IGNORE_BOT_PMS)) {
+		if(SETTING(IGNORE_BOT_PMS)) {
 			ignore = true;
-		} else if(BOOLSETTING(POPUP_BOT_PMS) || PrivateFrame::isOpen(message.replyTo)) {
+		} else if(SETTING(POPUP_BOT_PMS) || PrivateFrame::isOpen(message.replyTo)) {
 			window = true;
 		}
-	} else if(BOOLSETTING(POPUP_PMS) || PrivateFrame::isOpen(message.replyTo) || message.from == client->getMyIdentity().getUser()) {
+	} else if(SETTING(POPUP_PMS) || PrivateFrame::isOpen(message.replyTo) || message.from == client->getMyIdentity().getUser()) {
 		window = true;
 	}
 
@@ -874,7 +874,7 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 			return -1;
 		if(!a_isOp && b_isOp)
 			return 1;
-		if(BOOLSETTING(SORT_FAVUSERS_FIRST)) {
+		if(SETTING(SORT_FAVUSERS_FIRST)) {
 			bool a_isFav = FavoriteManager::getInstance()->isFavoriteUser(a->getIdentity().getUser()),
 				b_isFav = FavoriteManager::getInstance()->isFavoriteUser(b->getIdentity().getUser());
 			if(a_isFav && !b_isFav)
@@ -919,7 +919,7 @@ void HubFrame::on(Redirect, Client*, const string& line) noexcept {
 		return;
 	}
 	callAsync([this, line] {
-		if(BOOLSETTING(AUTO_FOLLOW)) {
+		if(SETTING(AUTO_FOLLOW)) {
 			auto copy = line; /// @todo shouldn't the lambda have already created a copy?
 			redirect(std::move(copy));
 		} else {
@@ -986,7 +986,7 @@ void HubFrame::on(SearchFlood, Client*, const string& line) noexcept {
 
 void HubFrame::onStatusMessage(const string& line, int flags) {
 	callAsync([=] { addStatus(Text::toT(line),
-		!(flags & ClientListener::FLAG_IS_SPAM) || !BOOLSETTING(FILTER_MESSAGES)); });
+		!(flags & ClientListener::FLAG_IS_SPAM) || !SETTING(FILTER_MESSAGES)); });
 }
 
 tstring HubFrame::getStatusShared() const {
@@ -1047,7 +1047,7 @@ void HubFrame::on(FavoriteManagerListener::UserRemoved, const FavoriteUser& /*aU
 }
 
 void HubFrame::resortForFavsFirst(bool justDoIt /* = false */) {
-	if(justDoIt || BOOLSETTING(SORT_FAVUSERS_FIRST)) {
+	if(justDoIt || SETTING(SORT_FAVUSERS_FIRST)) {
 		resort = true;
 		callAsync([this] { execTasks(); });
 	}

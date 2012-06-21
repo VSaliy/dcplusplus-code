@@ -382,7 +382,7 @@ void UploadManager::on(UserConnectionListener::TransmitDone, UserConnection* aSo
 
 	aSource->setState(UserConnection::STATE_GET);
 
-	if(BOOLSETTING(LOG_UPLOADS) && u->getType() != Transfer::TYPE_TREE && (BOOLSETTING(LOG_FILELIST_TRANSFERS) || u->getType() != Transfer::TYPE_FULL_LIST)) {
+	if(SETTING(LOG_UPLOADS) && u->getType() != Transfer::TYPE_TREE && (SETTING(LOG_FILELIST_TRANSFERS) || u->getType() != Transfer::TYPE_FULL_LIST)) {
 		ParamMap params;
 		u->getParams(*aSource, params);
 		LOG(LogManager::UPLOAD, params);
@@ -476,7 +476,7 @@ void UploadManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) noexc
 
 		waitingUsers.erase(i, waitingUsers.end());
 
-		if( BOOLSETTING(AUTO_KICK) ) {
+		if( SETTING(AUTO_KICK) ) {
 			for(auto u: uploads) {
 				if(u->getUser()->isOnline()) {
 					u->unsetFlag(Upload::FLAG_PENDING_KICK);
@@ -488,7 +488,7 @@ void UploadManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) noexc
 					continue;
 				}
 
-				if(BOOLSETTING(AUTO_KICK_NO_FAVS) && FavoriteManager::getInstance()->isFavoriteUser(u->getUser())) {
+				if(SETTING(AUTO_KICK_NO_FAVS) && FavoriteManager::getInstance()->isFavoriteUser(u->getUser())) {
 					continue;
 				}
 

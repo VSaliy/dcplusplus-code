@@ -284,7 +284,7 @@ void FavHubsFrame::handleMove(bool up) {
 }
 
 void FavHubsFrame::handleRemove() {
-	if(hubs->hasSelected() && (!BOOLSETTING(CONFIRM_HUB_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == dwt::MessageBox::RETBOX_YES)) {
+	if(hubs->hasSelected() && (!SETTING(CONFIRM_HUB_REMOVAL) || dwt::MessageBox(this).show(T_("Really remove?"), _T(APPNAME) _T(" ") _T(VERSIONSTRING), dwt::MessageBox::BOX_YESNO, dwt::MessageBox::BOX_ICONQUESTION) == dwt::MessageBox::RETBOX_YES)) {
 		int i;
 		while((i = hubs->getNext(-1, LVNI_SELECTED)) != -1)
 			FavoriteManager::getInstance()->removeFavorite(reinterpret_cast<FavoriteHubEntryPtr>(hubs->getData(i)));

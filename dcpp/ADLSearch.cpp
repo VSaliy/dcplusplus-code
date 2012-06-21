@@ -433,7 +433,7 @@ void ADLSearchManager::matchListing(DirectoryListing& aDirList) {
 
 	DestDirList destDirs;
 	prepareDestinationDirectories(destDirs, aDirList.getRoot(), params);
-	setBreakOnFirst(BOOLSETTING(ADLS_BREAK_ON_FIRST));
+	setBreakOnFirst(SETTING(ADLS_BREAK_ON_FIRST));
 
 	string path(root->getName());
 	matchRecurse(destDirs, aDirList, root, path);
