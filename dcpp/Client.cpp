@@ -206,6 +206,11 @@ string Client::getCounts() {
 		counts[COUNT_NORMAL].load(), counts[COUNT_REGISTERED].load(), counts[COUNT_OP].load()));
 }
 
+void Client::updateUsers() {
+	// this is a public call, can come from any thread. bring it to this hub's thread.
+	if(sock) sock->callAsync([this] { auto users = getUsers(); updated(users); });
+}
+
 void Client::updated(OnlineUser& user) {
 	UserMatchManager::getInstance()->match(user);
 

@@ -77,18 +77,11 @@ private:
 	friend class Identity;
 
 	AdcHub(const string& aHubURL, bool secure);
-
-	AdcHub(const AdcHub&);
-	AdcHub& operator=(const AdcHub&);
 	virtual ~AdcHub();
-
-	/** Map session id to OnlineUser */
-	typedef unordered_map<uint32_t, OnlineUser*> SIDMap;
-	typedef SIDMap::iterator SIDIter;
 
 	bool oldPassword;
 	Socket udp;
-	SIDMap users;
+	unordered_map<uint32_t, OnlineUser*> users; /** Map session id to OnlineUser */
 	StringMap lastInfoMap;
 	mutable CriticalSection cs;
 
@@ -141,6 +134,7 @@ private:
 
 	virtual void on(Second, uint64_t aTick) noexcept;
 
+	OnlineUserList getUsers() const;
 };
 
 } // namespace dcpp

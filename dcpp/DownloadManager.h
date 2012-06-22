@@ -78,6 +78,7 @@ private:
 	virtual ~DownloadManager();
 
 	void checkDownloads(UserConnection* aConn);
+	void revive(UserConnection* uc);
 	void startData(UserConnection* aSource, int64_t start, int64_t newSize, bool z);
 	void endData(UserConnection* aSource);
 
@@ -89,7 +90,6 @@ private:
 	virtual void on(ProtocolError, UserConnection* aSource, const string& aError) noexcept { onFailed(aSource, aError); }
 	virtual void on(MaxedOut, UserConnection*) noexcept;
 	virtual	void on(FileNotAvailable, UserConnection*) noexcept;
-	virtual void on(Updated, UserConnection*) noexcept;
 
 	virtual void on(AdcCommand::SND, UserConnection*, const AdcCommand&) noexcept;
 	virtual void on(AdcCommand::STA, UserConnection*, const AdcCommand&) noexcept;

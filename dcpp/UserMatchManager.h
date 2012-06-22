@@ -44,6 +44,7 @@ public:
 	void match(OnlineUser& user) const;
 
 	void ignoreChat(const HintedUser& user, bool ignore);
+	void ignoreChat(const HintedUserList& users, bool ignore);
 
 private:
 	friend class Singleton<UserMatchManager>;
@@ -52,6 +53,8 @@ private:
 
 	UserMatchManager();
 	virtual ~UserMatchManager();
+
+	static UserMatches ignoreChatImpl(const UserMatches& list, const HintedUser& user, bool ignore);
 
 	void on(SettingsManagerListener::Load, SimpleXML& xml) noexcept;
 	void on(SettingsManagerListener::Save, SimpleXML& xml) noexcept;

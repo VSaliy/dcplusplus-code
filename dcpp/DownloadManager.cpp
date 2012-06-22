@@ -106,10 +106,22 @@ void DownloadManager::checkIdle(const UserPtr& user) {
 	Lock l(cs);
 	for(auto uc: idlers) {
 		if(uc->getUser() == user) {
-			uc->updated();
+			uc->callAsync([this, uc] { revive(uc); });
 			return;
 		}
 	}
+}
+
+void DownloadManager::revive(UserConnection* uc) {
+	{
+		Lock l(cs);
+		auto i = find(idlers.begin(), idlers.end(), uc);
+		if(i == idlers.end())
+			return;
+		idlers.erase(i);
+	}
+
+	checkDownloads(uc);
 }
 
 void DownloadManager::addConnection(UserConnectionPtr conn) {
@@ -430,18 +442,6 @@ void DownloadManager::on(AdcCommand::STA, UserConnection* aSource, const AdcComm
 		return;
 	}
 	aSource->disconnect();
-}
-
-void DownloadManager::on(UserConnectionListener::Updated, UserConnection* aSource) noexcept {
-	{
-		Lock l(cs);
-		auto i = find(idlers.begin(), idlers.end(), aSource);
-		if(i == idlers.end())
-			return;
-		idlers.erase(i);
-	}
-
-	checkDownloads(aSource);
 }
 
 void DownloadManager::fileNotAvailable(UserConnection* aSource) {
