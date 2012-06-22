@@ -18,6 +18,7 @@
 * [L#745162] Fix upload log format for partial lists (emtee)
 * Fix GUI problems in a download attempt of a public hublist with invalid address (emtee)
 * Fix unsuccessful HTTP redirections (emtee)
+* [L#1016205] Avoid deadlocks when changing user matchings (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)

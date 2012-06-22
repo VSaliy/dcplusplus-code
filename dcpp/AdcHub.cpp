@@ -125,7 +125,7 @@ void AdcHub::putUser(const uint32_t aSID, bool disconnect) {
 }
 
 void AdcHub::clearUsers() {
-	SIDMap tmp;
+	decltype(users) tmp;
 	{
 		Lock l(cs);
 		users.swap(tmp);
@@ -1104,6 +1104,15 @@ void AdcHub::on(Second s, uint64_t aTick) noexcept {
 	if(state == STATE_NORMAL && (aTick > (getLastActivity() + 120*1000))) {
 		send("\n", 1);
 	}
+}
+
+OnlineUserList AdcHub::getUsers() const {
+	Lock l(cs);
+	OnlineUserList ret;
+	ret.reserve(users.size());
+	for(auto& i: users)
+		ret.push_back(i.second);
+	return ret;
 }
 
 } // namespace dcpp

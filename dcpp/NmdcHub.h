@@ -67,10 +67,7 @@ private:
 
 	mutable CriticalSection cs;
 
-	typedef unordered_map<string, OnlineUser*, noCaseStringHash, noCaseStringEq> NickMap;
-	typedef NickMap::iterator NickIter;
-
-	NickMap users;
+	unordered_map<string, OnlineUser*, noCaseStringHash, noCaseStringEq> users;
 
 	int supportFlags;
 
@@ -91,10 +88,6 @@ private:
 
 	NmdcHub(const string& aHubURL);
 	virtual ~NmdcHub();
-
-	// Dummy
-	NmdcHub(const NmdcHub&);
-	NmdcHub& operator=(const NmdcHub&);
 
 	void clearUsers();
 	void onLine(const string& aLine) noexcept;
@@ -132,6 +125,7 @@ private:
 	virtual void on(Line, const string& l) noexcept;
 	virtual void on(Failed, const string&) noexcept;
 
+	OnlineUserList getUsers() const;
 };
 
 } // namespace dcpp

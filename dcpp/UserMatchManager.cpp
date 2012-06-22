@@ -51,8 +51,8 @@ void UserMatchManager::setList(UserMatches&& newList) {
 	const_cast<UserMatches&>(list) = move(newList);
 
 	// refresh user matches.
-	for(auto& i: cm->getOnlineUsers()) {
-		i.second->getClient().updated(*i.second);
+	for(auto i: cm->getClients()) {
+		i->updateUsers();
 	}
 }
 
@@ -89,6 +89,18 @@ void UserMatchManager::match(OnlineUser& user) const {
 }
 
 void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
+	setList(ignoreChatImpl(list, user, ignore));
+}
+
+void UserMatchManager::ignoreChat(const HintedUserList& users, bool ignore) {
+	auto newList = list;
+	for(auto& user: users) {
+		newList = ignoreChatImpl(newList, user, ignore);
+	}
+	setList(move(newList));
+}
+
+UserMatchManager::UserMatches UserMatchManager::ignoreChatImpl(const UserMatches& list, const HintedUser& user, bool ignore) {
 	auto nick = ClientManager::getInstance()->getNicks(user)[0];
 
 	UserMatch matcher;
@@ -132,7 +144,7 @@ void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
 	}
 
 	newList.insert(newList.begin(), std::move(matcher));
-	setList(std::move(newList));
+	return newList;
 }
 
 void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {

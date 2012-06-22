@@ -21,15 +21,16 @@
 
 #include "compiler.h"
 
-#include "forward.h"
-
-#include "HubSettings.h"
-#include "Speaker.h"
-#include "BufferedSocketListener.h"
-#include "TimerManager.h"
-#include "ClientListener.h"
-#include "OnlineUser.h"
 #include "atomic.h"
+#include "BufferedSocketListener.h"
+#include "ClientListener.h"
+#include "forward.h"
+#include "HubSettings.h"
+#include "OnlineUser.h"
+#include "Speaker.h"
+#include "TimerManager.h"
+
+#include <boost/noncopyable.hpp>
 
 namespace dcpp {
 
@@ -38,7 +39,8 @@ class Client :
 	public Speaker<ClientListener>,
 	public BufferedSocketListener,
 	protected TimerManagerListener,
-	public HubSettings
+	public HubSettings,
+	private boost::noncopyable
 {
 public:
 	virtual void connect();
@@ -71,8 +73,8 @@ public:
 	const string& getIp() const { return ip; }
 	string getIpPort() const { return getIp() + ':' + port; }
 
-	void updated(OnlineUser& user);
-	void updated(OnlineUserList& users);
+	/** Send a ClientListener::Updated signal for every connected user. */
+	void updateUsers();
 
 	static string getCounts();
 
@@ -128,6 +130,9 @@ protected:
 	void updateCounts(bool aRemove);
 	void updateActivity() { lastActivity = GET_TICK(); }
 
+	void updated(OnlineUser& user);
+	void updated(OnlineUserList& users);
+
 	/** Reload details from favmanager or settings */
 	void reloadSettings(bool updateNick);
 	/// Get the external IP the user has defined for this hub, if any.
@@ -137,6 +142,7 @@ protected:
 
 	// TimerManagerListener
 	virtual void on(Second, uint64_t aTick) noexcept;
+
 	// BufferedSocketListener
 	virtual void on(Connecting) noexcept { fire(ClientListener::Connecting(), this); }
 	virtual void on(Connected) noexcept;
@@ -144,10 +150,9 @@ protected:
 	virtual void on(Failed, const string&) noexcept;
 
 	virtual bool v4only() const = 0;
-private:
 
-	Client(const Client&);
-	Client& operator=(const Client&);
+private:
+	virtual OnlineUserList getUsers() const = 0;
 
 	string hubUrl;
 	string address;

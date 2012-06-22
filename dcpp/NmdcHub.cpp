@@ -128,7 +128,7 @@ void NmdcHub::putUser(const string& aNick) {
 }
 
 void NmdcHub::clearUsers() {
-	NickMap u2;
+	decltype(users) u2;
 
 	{
 		Lock l(cs);
@@ -1015,6 +1015,15 @@ void NmdcHub::on(Minute, uint64_t aTick) noexcept {
 
 		lastProtectedIPsUpdate = aTick;
 	}
+}
+
+OnlineUserList NmdcHub::getUsers() const {
+	Lock l(cs);
+	OnlineUserList ret;
+	ret.reserve(users.size());
+	for(auto& i: users)
+		ret.push_back(i.second);
+	return ret;
 }
 
 } // namespace dcpp

@@ -80,6 +80,10 @@ void UserInfoBase::ignoreChat(bool ignore) {
 	UserMatchManager::getInstance()->ignoreChat(user, ignore);
 }
 
+void UserInfoBase::ignoreChat(const HintedUserList& users, bool ignore) {
+	UserMatchManager::getInstance()->ignoreChat(users, ignore);
+}
+
 tstring UserInfoBase::getTooltip() const {
 	static const size_t maxChars = 100; // max chars per tooltip line
 

@@ -126,7 +126,8 @@ public:
 	void connect(const string& aServer, const string& aPort, const string& localPort, const BufferedSocket::NatRoles natRole);
 	void accept(const Socket& aServer);
 
-	void updated() { if(socket) socket->updated(); }
+	template<typename F>
+	void callAsync(F f) { if(socket) socket->callAsync(f); }
 
 	void disconnect(bool graceless = false) { if(socket) socket->disconnect(graceless); }
 	void transmitFile(InputStream* f) { socket->transmitFile(f); }
@@ -212,7 +213,6 @@ private:
 	virtual void on(ModeChange) noexcept;
 	virtual void on(TransmitDone) noexcept;
 	virtual void on(Failed, const string&) noexcept;
-	virtual void on(Updated) noexcept;
 };
 
 } // namespace dcpp
