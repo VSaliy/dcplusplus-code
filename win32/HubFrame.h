@@ -203,8 +203,8 @@ private:
 	void updateStatus();
 	void updateSecureStatus();
 
-	void initSecond();
-	bool eachSecond();
+	void initTimer();
+	bool runTimer();
 
 	UserInfo* findUser(const tstring& nick);
 	bool updateUser(const UserTask& u);

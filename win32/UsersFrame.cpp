@@ -141,7 +141,6 @@ filter(usersColumns, COLUMN_LAST, [this] { updateList(); })
 		users->onDblClicked([this] { handleGetList(); });
 		users->onKeyDown([this](int c) { return handleKeyDown(c); });
 		users->onContextMenu([this](dwt::ScreenCoordinate pt) { return handleContextMenu(pt); });
-		users->onSelectionChanged([this] { handleSelectionChanged(); });
 		users->setSmallImageList(userIcons);
 		users->onLeftMouseDown([this](const dwt::MouseEvent &me) { return handleClick(me); });
 
@@ -201,6 +200,8 @@ filter(usersColumns, COLUMN_LAST, [this] { updateList(); })
 	QueueManager::getInstance()->addListener(this);
 
 	initStatus();
+
+	setTimer([this]() -> bool { updateUserInfo(); return true; }, 500);
 
 	addAccel(FALT, 'I', [this] { filter.text->setFocus(); });
 	initAccels();
@@ -317,11 +318,7 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 			ui->second.update(aUser, true);
 			auto i = users->find(&ui->second);
 			if(i != -1) {
-				if(users->getSelected() == i) {
-					handleSelectionChanged();
-				} else {
-					users->update(i);
-				}
+				users->update(i);
 			} else {
 				users->insert(&ui->second);
 			}
@@ -329,7 +326,7 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 	}
 }
 
-void UsersFrame::handleSelectionChanged() {
+void UsersFrame::updateUserInfo() {
 	ScopedFunctor([&] { scroll->layout(); userInfo->layout(); userInfo->redraw(); });
 
 	HoldRedraw hold(userInfo);
