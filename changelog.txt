@@ -20,6 +20,7 @@
 * Fix unsuccessful HTTP redirections (emtee)
 * [L#1016205] Avoid deadlocks when changing user matchings (poy)
 * [L#249159] Improve performance when selecting lots of lines in lists (poy)
+* [L#1016907] Exclude temporary downloads from queue dupe check (emtee)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
