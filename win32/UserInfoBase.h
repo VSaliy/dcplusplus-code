@@ -47,7 +47,6 @@ public:
 	virtual void removeFromQueue();
 	virtual void connectFav(TabViewPtr);
 	virtual void ignoreChat(bool ignore);
-	static void ignoreChat(const HintedUserList& users, bool ignore);
 
 	tstring getTooltip() const;
 
@@ -128,10 +127,7 @@ protected:
 		handleUserFunction([&](UserInfoBase* u) { u->connectFav(parent); });
 	}
 	void handleIgnoreChat(bool ignore) {
-		// group multiple ignore calls into a single one.
-		HintedUserList users;
-		handleUserFunction([&users](UserInfoBase* u) { users.push_back(u->getUser()); });
-		UserInfoBase::ignoreChat(users, ignore);
+		handleUserFunction([ignore](UserInfoBase* u) { u->ignoreChat(ignore); });
 	}
 
 	void appendUserItems(TabViewPtr parent, Menu* menu, bool defaultIsGetList = true, bool includeSendPM = true) {

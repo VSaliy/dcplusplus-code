@@ -444,20 +444,12 @@ void WinUtil::updateFont(dwt::FontPtr& font, int setting) {
 
 void WinUtil::initUserMatching() {
 	// make sure predefined definitions are here.
-	bool favDefHere = false, opDefHere = false;
-	const auto& list = UserMatchManager::getInstance()->getList();
-	for(auto& i: list) {
-		if(i.isSet(UserMatch::PREDEFINED)) {
-			if(i.isSet(UserMatch::FAVS)) { favDefHere = true; }
-			else if(i.isSet(UserMatch::OPS)) { opDefHere = true; }
-			if(favDefHere && opDefHere) { break; }
-		}
-	}
+	auto here = UserMatchManager::getInstance()->checkPredef();
 
-	if(!favDefHere || !opDefHere) {
-		auto newList = list;
+	if(!here.first || !here.second) {
+		auto newList = UserMatchManager::getInstance()->getList();
 
-		if(!favDefHere) {
+		if(!here.first) {
 			// add a matcher for favs.
 			UserMatch matcher;
 			matcher.setFlag(UserMatch::PREDEFINED);
@@ -468,7 +460,7 @@ void WinUtil::initUserMatching() {
 			newList.push_back(std::move(matcher));
 		}
 
-		if(!opDefHere) {
+		if(!here.second) {
 			// add a matcher for ops.
 			UserMatch matcher;
 			matcher.setFlag(UserMatch::PREDEFINED);
@@ -487,12 +479,10 @@ void WinUtil::initUserMatching() {
 void WinUtil::updateUserMatchFonts() {
 	userMatchFonts.clear();
 
-	for(auto& i: UserMatchManager::getInstance()->getList()) {
-		if(!i.style.font.empty()) {
-			LOGFONT lf;
-			decodeFont(Text::toT(i.style.font), lf);
-			userMatchFonts[i.style.font] = new dwt::Font(lf);
-		}
+	for(auto& font: UserMatchManager::getInstance()->getFonts()) {
+		LOGFONT lf;
+		decodeFont(Text::toT(font), lf);
+		userMatchFonts[font] = new dwt::Font(lf);
 	}
 }
 

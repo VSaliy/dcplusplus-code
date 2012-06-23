@@ -303,6 +303,13 @@ CID ClientManager::makeCid(const string& aNick, const string& aHubUrl) const noe
 	return CID(th.finalize());
 }
 
+void ClientManager::updateUsers() {
+	Lock l(cs);
+	for(auto client: clients) {
+		client->updateUsers();
+	}
+}
+
 void ClientManager::putOnline(OnlineUser* ou) noexcept {
 	{
 		Lock l(cs);
@@ -359,11 +366,15 @@ OnlineUser* ClientManager::findOnlineUserHint(const CID& cid, const string& hint
 	return 0;
 }
 
-OnlineUser* ClientManager::findOnlineUser(const HintedUser& user) {
+OnlineUser* ClientManager::findOnlineUser(const HintedUser& user) const {
 	return findOnlineUser(user.user->getCID(), user.hint);
 }
 
-OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl) {
+OnlineUser* ClientManager::findOnlineUserHint(const HintedUser& user) const {
+	return findOnlineUserHint(user.user->getCID(), user.hint);
+}
+
+OnlineUser* ClientManager::findOnlineUser(const CID& cid, const string& hintUrl) const {
 	OnlinePairC p;
 	OnlineUser* u = findOnlineUserHint(cid, hintUrl, p);
 	if(u) // found an exact match (CID + hint).
