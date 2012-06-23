@@ -314,7 +314,6 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(DIRECTORYLISTINGFRAME_ORDER), SETTING(DIRECTORYLISTINGFRAME_WIDTHS));
 		files->setSort(COLUMN_FILENAME);
 
-		files->onSelectionChanged([this] { callAsync([&] { updateStatus(); }); });
 		files->onDblClicked([this] { handleDoubleClickFiles(); });
 		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
 		files->onSysKeyDown([this](int c) { return handleKeyDownFiles(c); });
@@ -386,6 +385,8 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		});
 		status->setWidget(STATUS_SHOW_TREE, showTree);
 	}
+
+	setTimer([this]() -> bool { updateStatus(); return true; }, 500);
 
 	dirs->setFocus();
 

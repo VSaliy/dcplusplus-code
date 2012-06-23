@@ -91,7 +91,6 @@ fileLists(0)
 		files->setSort(COLUMN_TARGET);
 
 		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
-		files->onSelectionChanged([this] { callAsync([&] { updateStatus(); }); });
 		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
 
 		if(!SETTING(QUEUEFRAME_SHOW_TREE)) {
@@ -118,9 +117,9 @@ fileLists(0)
 	status->setHelpId(STATUS_TOTAL_COUNT, IDH_QUEUE_TOTAL_COUNT);
 	status->setHelpId(STATUS_TOTAL_BYTES, IDH_QUEUE_TOTAL_BYTES);
 
-	QueueManager::getInstance()->addListener(this, [this](const QueueItem::StringMap& qsm) { addQueueList(qsm); });
+	setTimer([this]() -> bool { updateStatus(); return true; }, 500);
 
-	updateStatus();
+	QueueManager::getInstance()->addListener(this, [this](const QueueItem::StringMap& qsm) { addQueueList(qsm); });
 
 	layout();
 }

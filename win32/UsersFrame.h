@@ -131,13 +131,13 @@ private:
 
 	void addUser(const UserPtr& aUser);
 	void updateUser(const UserPtr& aUser);
+	void updateUserInfo();
 
 	void handleDescription();
 	void handleRemove();
 	bool handleKeyDown(int c);
 	LRESULT handleItemChanged(LPARAM lParam);
 	bool handleContextMenu(dwt::ScreenCoordinate pt);
-	void handleSelectionChanged();
 	bool handleClick(const dwt::MouseEvent &me);
 
 	void updateList();

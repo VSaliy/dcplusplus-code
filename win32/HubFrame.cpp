@@ -204,7 +204,6 @@ inTabComplete(false)
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
 		users->setSort(COLUMN_NICK);
 
-		users->onSelectionChanged([this] { callAsync([&] { updateStatus(); }); });
 		users->onDblClicked([this] { handleDoubleClickUsers(); });
 		users->onKeyDown([this](int c) { return handleUsersKeyDown(c); });
 		users->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleUsersContextMenu(sc); });
@@ -260,7 +259,7 @@ inTabComplete(false)
 
 	layout();
 
-	initSecond();
+	initTimer();
 
 	client = ClientManager::getInstance()->getClient(url);
 	client->addListener(this);
@@ -372,11 +371,11 @@ void HubFrame::updateSecureStatus() {
 	status->setToolTip(STATUS_SECURE, text);
 }
 
-void HubFrame::initSecond() {
-	setTimer([this] { return eachSecond(); }, 1000);
+void HubFrame::initTimer() {
+	setTimer([this] { return runTimer(); }, 500);
 }
 
-bool HubFrame::eachSecond() {
+bool HubFrame::runTimer() {
 	if(updateUsers) {
 		updateUsers = false;
 		callAsync([this] { execTasks(); });
