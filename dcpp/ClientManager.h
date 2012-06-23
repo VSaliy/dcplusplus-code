@@ -92,9 +92,10 @@ public:
 	/** Get an OnlineUser object - lock it with lock()!
 	* @return OnlineUser* found by CID, using the hub URL as a hint.
 	*/
-	OnlineUser* findOnlineUser(const HintedUser& user);
-	OnlineUser* findOnlineUser(const CID& cid, const string& hintUrl);
+	OnlineUser* findOnlineUser(const HintedUser& user) const;
+	OnlineUser* findOnlineUser(const CID& cid, const string& hintUrl) const;
 	/// @return OnlineUser* found by CID and hint; discard any user that doesn't match the hint.
+	OnlineUser* findOnlineUserHint(const HintedUser& user) const;
 	OnlineUser* findOnlineUserHint(const CID& cid, const string& hintUrl) const;
 
 	UserPtr findUser(const string& aNick, const string& aHubUrl) const noexcept { return findUser(makeCid(aNick, aHubUrl)); }
@@ -111,6 +112,8 @@ public:
 	/** Constructs a synthetic, hopefully unique CID */
 	CID makeCid(const string& nick, const string& hubUrl) const noexcept;
 
+	/** Send a ClientListener::Updated signal for every connected user. */
+	void updateUsers();
 	void putOnline(OnlineUser* ou) noexcept;
 	void putOffline(OnlineUser* ou, bool disconnect = false) noexcept;
 

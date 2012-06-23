@@ -35,28 +35,30 @@ UserMatchManager::~UserMatchManager() {
 	SettingsManager::getInstance()->removeListener(this);
 }
 
-const UserMatchManager::UserMatches& UserMatchManager::getList() const {
+UserMatchManager::UserMatches UserMatchManager::getList() const {
+	boost::shared_lock<boost::shared_mutex> lock(mutex);
 	return list;
 }
 
-void UserMatchManager::setList(UserMatches&& newList) {
+void UserMatchManager::setList(UserMatches&& newList, bool updateUsers) {
 	if(list.empty() && newList.empty())
 		return;
 
-	// operate within the ClientManager lock.
-	auto cm = ClientManager::getInstance();
-	auto lock = cm->lock();
+	{
+		boost::unique_lock<boost::shared_mutex> lock(mutex);
+		const_cast<UserMatches&>(list) = move(newList);
+	}
 
-	// assign the new list.
-	const_cast<UserMatches&>(list) = move(newList);
-
-	// refresh user matches.
-	for(auto i: cm->getClients()) {
-		i->updateUsers();
+	if(updateUsers) {
+		/* this is here as a convenience because user properties have to be refreshed most of the
+		time when the matching list has been modified. */
+		ClientManager::getInstance()->updateUsers();
 	}
 }
 
 void UserMatchManager::match(OnlineUser& user) const {
+	boost::shared_lock<boost::shared_mutex> lock(mutex);
+
 	auto& identity = user.getIdentity();
 
 	bool chatSet = false;
@@ -88,20 +90,40 @@ void UserMatchManager::match(OnlineUser& user) const {
 	identity.setStyle(std::move(style));
 }
 
-void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
-	setList(ignoreChatImpl(list, user, ignore));
-}
-
-void UserMatchManager::ignoreChat(const HintedUserList& users, bool ignore) {
-	auto newList = list;
-	for(auto& user: users) {
-		newList = ignoreChatImpl(newList, user, ignore);
+pair<bool, bool> UserMatchManager::checkPredef() const {
+	boost::shared_lock<boost::shared_mutex> lock(mutex);
+	pair<bool, bool> ret(false, false);
+	for(auto& i: list) {
+		if(i.isSet(UserMatch::PREDEFINED)) {
+			if(i.isSet(UserMatch::FAVS)) { ret.first = true; }
+			else if(i.isSet(UserMatch::OPS)) { ret.second = true; }
+			if(ret.first && ret.second) { break; }
+		}
 	}
-	setList(move(newList));
+	return ret;
 }
 
-UserMatchManager::UserMatches UserMatchManager::ignoreChatImpl(const UserMatches& list, const HintedUser& user, bool ignore) {
-	auto nick = ClientManager::getInstance()->getNicks(user)[0];
+unordered_set<string> UserMatchManager::getFonts() const {
+	boost::shared_lock<boost::shared_mutex> lock(mutex);
+	unordered_set<string> ret;
+	for(auto& i: list) {
+		if(!i.style.font.empty()) {
+			ret.insert(i.style.font);
+		}
+	}
+	return ret;
+}
+
+void UserMatchManager::ignoreChat(const HintedUser& user, bool ignore) {
+	auto lock = ClientManager::getInstance()->lock();
+	auto ou = ClientManager::getInstance()->findOnlineUserHint(user);
+	if(!ou) {
+		return;
+	}
+	auto nick = ou->getIdentity().getNick();
+	// no need to re-match all users; just update this one.
+	ou->getIdentity().setNoChat(ignore);
+	lock.unlock();
 
 	UserMatch matcher;
 	matcher.setFlag(UserMatch::GENERATED);
@@ -144,7 +166,7 @@ UserMatchManager::UserMatches UserMatchManager::ignoreChatImpl(const UserMatches
 	}
 
 	newList.insert(newList.begin(), std::move(matcher));
-	return newList;
+	setList(move(newList), false);
 }
 
 void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcept {
@@ -196,6 +218,8 @@ void UserMatchManager::on(SettingsManagerListener::Load, SimpleXML& xml) noexcep
 }
 
 void UserMatchManager::on(SettingsManagerListener::Save, SimpleXML& xml) noexcept {
+	boost::shared_lock<boost::shared_mutex> lock(mutex);
+
 	xml.addTag("UserMatches");
 	xml.stepIn();
 	for(auto& i: list) {
