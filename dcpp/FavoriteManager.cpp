@@ -127,6 +127,7 @@ int FavoriteManager::findUserCommand(const string& aName, const string& aUrl) {
 void FavoriteManager::removeUserCommand(int cid) {
 	bool nosave = true;
 	Lock l(cs);
+
 	for(auto i = userCommands.begin(); i != userCommands.end(); ++i) {
 		if(i->getId() == cid) {
 			nosave = i->isSet(UserCommand::FLAG_NOSAVE);
@@ -134,29 +135,24 @@ void FavoriteManager::removeUserCommand(int cid) {
 			break;
 		}
 	}
-	if(!nosave)
+
+	if(!nosave) {
+		l.unlock();
 		save();
+	}
 }
 void FavoriteManager::removeUserCommand(const string& srv) {
 	Lock l(cs);
-	for(auto i = userCommands.begin(); i != userCommands.end(); ) {
-		if((i->getHub() == srv) && i->isSet(UserCommand::FLAG_NOSAVE)) {
-			i = userCommands.erase(i);
-		} else {
-			++i;
-		}
-	}
+	std::remove_if(userCommands.begin(), userCommands.end(), [&](const UserCommand& uc) -> bool {
+		return uc.getHub() == srv && uc.isSet(UserCommand::FLAG_NOSAVE);
+	});
 }
 
 void FavoriteManager::removeHubUserCommands(int ctx, const string& hub) {
 	Lock l(cs);
-	for(auto i = userCommands.begin(); i != userCommands.end(); ) {
-		if(i->getHub() == hub && i->isSet(UserCommand::FLAG_NOSAVE) && i->getCtx() & ctx) {
-			i = userCommands.erase(i);
-		} else {
-			++i;
-		}
-	}
+	std::remove_if(userCommands.begin(), userCommands.end(), [&](const UserCommand& uc) -> bool {
+		return uc.getHub() == hub && uc.isSet(UserCommand::FLAG_NOSAVE) && uc.getCtx() == ctx;
+	});
 }
 
 void FavoriteManager::addFavoriteUser(const UserPtr& aUser) {
