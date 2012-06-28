@@ -75,6 +75,8 @@ private:
 public:
 	static void closeAll(bool disconnected);
 	static void closeFavGroup(const string& group, bool reversed);
+	
+	static void reconnectDisconnected();
 
 	static void resortUsers();
 
