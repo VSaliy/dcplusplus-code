@@ -134,6 +134,13 @@ void HubFrame::closeFavGroup(const string& group, bool reversed) {
 	});
 }
 
+void HubFrame::reconnectDisconnected() {
+	for(auto i: frames) {
+		if(!i->client->isConnected())
+			i->handleReconnect();
+	}
+}
+
 void HubFrame::resortUsers() {
 	for(auto i: frames)
 		i->resortForFavsFirst(true);
