@@ -27,6 +27,7 @@
 #include <map>
 
 #include <boost/range/algorithm/find_if.hpp>
+#include <boost/range/algorithm/remove_if.hpp>
 
 #ifdef _WIN32
 
@@ -48,7 +49,6 @@
 
 namespace dcpp {
 
-using boost::find_if;
 using std::map;
 
 #define LIT(x) x, (sizeof(x)-1)
@@ -394,12 +394,9 @@ public:
 
 	template<typename T>
 	static T& intersect(T& t1, const T& t2) {
-		for(auto i = t1.begin(); i != t1.end();) {
-			if(find_if(t2, [&](const typename T::value_type &v) { return v == *i; }) == t2.end())
-				i = t1.erase(i);
-			else
-				++i;
-		}
+		boost::remove_if(t1, [&](const typename T::value_type& v1) {
+			return boost::find_if(t2, [&](const typename T::value_type& v2) { return v2 == v1; }) == t2.end();
+		});
 		return t1;
 	}
 
