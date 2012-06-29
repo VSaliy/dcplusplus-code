@@ -74,7 +74,9 @@ private:
 
 	size_t ensureSplitters();
 
-	double getMaxSize(SplitterPtr splitter);
+	/** Make sure the splitter's position is within acceptable bounds and doesn't step on other
+	splitters. */
+	void checkSplitterPos(SplitterPtr splitter);
 
 	void onMove();
 
