@@ -440,6 +440,7 @@ private:
 
 void DirectoryListingFrame::loadFile(const tstring& dir) {
 	setEnabled(false);
+	status->setVisible(false);
 
 	{
 		// this control will cover the whole window.
@@ -457,6 +458,7 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		delete loader;
 		loader = 0;
 
+		status->setVisible(true);
 		setEnabled(true);
 
 		loading->setVisible(false);

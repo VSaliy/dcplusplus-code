@@ -66,13 +66,18 @@ void Tree::create( const Seed & cs )
 
 	onSized([this](const SizedEvent& e) { layout(); });
 
-	/* forward WM_SETREDRAW to the tree control handle. do it with Dispatcher::chain to avoid an
+	/* forward these messages to the tree control handle. do it with Dispatcher::chain to avoid an
 	infinite loop. */
-	onRedrawChanged([this](bool b) -> bool {
-		MSG msg = { treeHandle(), WM_SETREDRAW, b };
-		tree->getDispatcher().chain(msg);
-		return true;
-	});
+	auto forwardMsg = [this](const Message& message) {
+		addCallback(message, [this](const MSG& msg, LRESULT& ret) -> bool {
+			MSG treeMsg = msg;
+			treeMsg.hwnd = treeHandle();
+			ret = tree->getDispatcher().chain(treeMsg);
+			return true;
+		});
+	};
+	forwardMsg(Message(WM_SETFONT));
+	forwardMsg(Message(WM_SETREDRAW));
 
 	tree->onCustomDraw([this](NMTVCUSTOMDRAW& x) { return draw(x); });
 
