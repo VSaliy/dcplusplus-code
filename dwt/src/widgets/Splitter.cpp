@@ -49,7 +49,7 @@ void Splitter::create(const Seed& cs) {
 	theme.load(VSCLASS_WINDOW, this);
 	onPainting([this](PaintCanvas& canvas) { handlePainting(canvas); });
 
-	onLeftMouseDown([this](const MouseEvent&) { return handleLButtonDown(); });
+	onLeftMouseDown([this](const MouseEvent& mouseEvent) { return handleLButtonDown(mouseEvent); });
 	onMouseMove([this](const MouseEvent& mouseEvent) { return handleMouseMove(mouseEvent); });
 	onLeftMouseUp([this](const MouseEvent&) { return handleLButtonUp(); });
 
@@ -92,6 +92,18 @@ void Splitter::handlePainting(PaintCanvas& canvas) {
 	}
 }
 
+bool Splitter::handleLButtonDown(const MouseEvent& mouseEvent) {
+	::SetCapture(handle());
+	moving = mouseEvent.pos.getPoint();
+	return true;
+}
+
+bool Splitter::handleLButtonUp() {
+	::ReleaseCapture();
+	moving.reset();
+	return true;
+}
+
 bool Splitter::handleMouseMove(const MouseEvent& mouseEvent) {
 	if(!hovering) {
 		hovering = true;
@@ -104,7 +116,8 @@ bool Splitter::handleMouseMove(const MouseEvent& mouseEvent) {
 		});
 	}
 
-	if(moving && mouseEvent.ButtonPressed == MouseEvent::LEFT) {
+	if(moving && mouseEvent.ButtonPressed == MouseEvent::LEFT && mouseEvent.pos.getPoint() != moving) {
+		moving = mouseEvent.pos.getPoint();
 		ClientCoordinate cc(mouseEvent.pos, getParent());
 		double mpos = horizontal ? cc.y() : cc.x();
 		double size = horizontal ? getParent()->getClientSize().y : getParent()->getClientSize().x;

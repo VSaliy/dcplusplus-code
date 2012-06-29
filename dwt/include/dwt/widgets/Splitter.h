@@ -32,6 +32,8 @@
 #ifndef DWT_SPLITTER_H
 #define DWT_SPLITTER_H
 
+#include <boost/optional.hpp>
+
 #include <dwt/forward.h>
 #include "Control.h"
 #include <dwt/Theme.h>
@@ -89,25 +91,16 @@ private:
 	Theme theme;
 
 	double pos;
+	bool horizontal;
 
 	bool hovering;
-	bool moving;
-	bool horizontal;
+	boost::optional<Point> moving; // store the last point to only handle actual moves
 
 	void handlePainting(PaintCanvas& canvas);
 
-	bool handleLButtonDown() {
-		::SetCapture(handle());
-		moving = true;
-		return true;
-	}
-
+	bool handleLButtonDown(const MouseEvent& mouseEvent);
+	bool handleLButtonUp();
 	bool handleMouseMove(const MouseEvent& mouseEvent);
-	bool handleLButtonUp() {
-		::ReleaseCapture();
-		moving = false;
-		return true;
-	}
 
 	int thickness() { return ::GetSystemMetrics(horizontal ? SM_CYEDGE : SM_CXEDGE) + 2; }
 };
@@ -121,9 +114,8 @@ pos(pos_), horizontal(horizontal)
 inline Splitter::Splitter(Widget* parent) :
 BaseType(parent, NormalDispatcher::newClass<ThisType>(0, 0, NULL)),
 pos(0.5),
-hovering(false),
-moving(false),
-horizontal(false)
+horizontal(false),
+hovering(false)
 {
 }
 
