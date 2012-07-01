@@ -568,7 +568,9 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 			auto ql = fileQueue.find(root);
 			if (!ql.empty()) {
 				// Found one or more existing queue items, lets see if we can add the source to them
-				bool sourceAdded = false;
+				// Check if any of the existing queue items are for permanent downloads; if so then no addition
+				// If all existing queue items are for pending temporary downloads then add a new queue item or the source
+				bool sourceAdded = false, permanentExists = false;
 				for(auto& i: ql) {
 					if(!i->isSource(aUser)) {
 						try {
@@ -576,12 +578,15 @@ void QueueManager::add(const string& aTarget, int64_t aSize, const TTHValue& roo
 							sourceAdded = true;
 						} catch(...) { }
 					}
+					if (!i->isSet(QueueItem::FLAG_CLIENT_VIEW)) {
+						permanentExists = true;
+					}
 				}
 
-				if(!sourceAdded) {
+				if(!sourceAdded && permanentExists) {
 					throw QueueException(_("This file is already queued"));
 				}
-				goto connect;
+				if (permanentExists) goto connect;
 			}
 		}
 

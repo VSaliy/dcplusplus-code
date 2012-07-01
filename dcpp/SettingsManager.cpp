@@ -246,8 +246,8 @@ SettingsManager::SettingsManager()
 	setDefault(PM_LAST_LOG_LINES, 10);
 	setDefault(TOGGLE_ACTIVE_WINDOW, false);
 	setDefault(SEARCH_HISTORY, 10);
-	setDefault(SET_MINISLOT_SIZE, 64);
-	setDefault(MAX_FILELIST_SIZE, 256);
+	setDefault(SET_MINISLOT_SIZE, 512);
+	setDefault(MAX_FILELIST_SIZE, 512);
 	setDefault(PRIO_HIGHEST_SIZE, 64);
 	setDefault(PRIO_HIGH_SIZE, 0);
 	setDefault(PRIO_NORMAL_SIZE, 0);
@@ -478,8 +478,8 @@ void SettingsManager::load(string const& aFileName)
 			}
 		}
 
-		if(SETTING(SET_MINISLOT_SIZE) < 64)
-			set(SET_MINISLOT_SIZE, 64);
+		if(SETTING(SET_MINISLOT_SIZE) < 512)
+			set(SET_MINISLOT_SIZE, 512);
 		if(SETTING(AUTODROP_INTERVAL) < 1)
 			set(AUTODROP_INTERVAL, 1);
 		if(SETTING(AUTODROP_ELAPSED) < 1)

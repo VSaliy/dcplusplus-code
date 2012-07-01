@@ -114,7 +114,10 @@ one, will consume some drive space.</dd>
 exist in one of your shared directories.</dd>
   <dt>Don't download files already in the queue</dt>
   <dd cshelp="IDH_SETTINGS_QUEUE_DONT_DL_ALREADY_QUEUED">This option will stop you from downloading files which already
-exist in your queue.</dd>
+exist in your queue by blocking the addition of the same file to a different place in the queue. The comparsion is made
+by TTH and not by the name or the size of the file. Even though the addition is blocked the possible new sources will still 
+be aquired and added to the existing file in the queue. If the file already exists in the queue and no new sources found either
+then a &quot;File is already in the queue&quot; message will be shown.</dd>
   <dt id="keepfinished">Keep finished files in the queue</dt>
   <dd cshelp="IDH_SETTINGS_QUEUE_KEEP_FINISHED_FILES">Enable this option if you want to keep downloaded files and folders
 in the download queue after they have been finished. After downloaded the queue items will have 'Finished' status and you
