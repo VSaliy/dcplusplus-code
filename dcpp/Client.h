@@ -27,6 +27,7 @@
 #include "forward.h"
 #include "HubSettings.h"
 #include "OnlineUser.h"
+#include "PluginEntity.h"
 #include "Speaker.h"
 #include "TimerManager.h"
 
@@ -36,6 +37,7 @@ namespace dcpp {
 
 /** Yes, this should probably be called a Hub */
 class Client :
+	public PluginEntity<HubData>,
 	public Speaker<ClientListener>,
 	public BufferedSocketListener,
 	protected TimerManagerListener,
@@ -57,6 +59,7 @@ public:
 	virtual size_t getUserCount() const = 0;
 	virtual int64_t getAvailable() const = 0;
 
+	virtual void emulateCommand(const string& cmd) = 0;
 	virtual void send(const AdcCommand& command) = 0;
 
 	bool isConnected() const { return state != STATE_CONNECTING && state != STATE_DISCONNECTED; }
@@ -83,6 +86,8 @@ public:
 
 	void send(const string& aMessage) { send(aMessage.c_str(), aMessage.length()); }
 	void send(const char* aMessage, size_t aLen);
+
+	HubData* getPluginObject() noexcept;
 
 	string getMyNick() const { return getMyIdentity().getNick(); }
 	string getHubName() const { return getHubIdentity().getNick().empty() ? getHubUrl() : getHubIdentity().getNick(); }

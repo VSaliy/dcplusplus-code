@@ -30,6 +30,7 @@
 #include "Style.h"
 #include "Util.h"
 #include "User.h"
+#include "PluginEntity.h"
 
 namespace dcpp {
 
@@ -139,7 +140,7 @@ private:
 	static FastCriticalSection cs;
 };
 
-class OnlineUser : public FastAlloc<OnlineUser>, private boost::noncopyable {
+class OnlineUser : public FastAlloc<OnlineUser>, private boost::noncopyable, public PluginEntity<UserData> {
 public:
 	typedef vector<OnlineUser*> List;
 	typedef List::iterator Iter;
@@ -154,6 +155,8 @@ public:
 	Identity& getIdentity() { return identity; }
 	Client& getClient() { return client; }
 	const Client& getClient() const { return client; }
+
+	UserData* getPluginObject() noexcept;
 
 	GETSET(Identity, identity, Identity);
 private:

@@ -33,6 +33,19 @@ OnlineUser::OnlineUser(const UserPtr& ptr, Client& client_, uint32_t sid_) : ide
 
 }
 
+UserData* OnlineUser::getPluginObject() noexcept {
+	resetEntity();
+
+	pod.nick = pluginString(getIdentity().getNick());
+	pod.hubHint = pluginString(getClient().getHubUrl());
+	pod.cid = pluginString(getUser()->getCID().toBase32());
+	pod.sid = getIdentity().getSID();
+	pod.protocol = getUser()->isNMDC() ? PROTOCOL_NMDC : PROTOCOL_ADC; // TODO: isNMDC() is not practical if more than two protocols
+	pod.isOp = getIdentity().isOp() ? True : False;
+
+	return &pod;
+}
+
 bool Identity::isTcpActive() const {
 	return isTcp4Active() || isTcp6Active();
 }

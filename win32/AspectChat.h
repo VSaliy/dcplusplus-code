@@ -22,6 +22,7 @@
 #include <dcpp/ChatMessage.h>
 #include <dcpp/File.h>
 #include <dcpp/SimpleXML.h>
+#include <dcpp/PluginManager.h>
 
 #include <dwt/WidgetCreator.h>
 
@@ -73,7 +74,14 @@ protected:
 
 	/// add a chat message with some formatting and call addedChat.
 	void addChat(const tstring& message) {
-		addChatPlain(Text::toT("[" + Util::getShortTimeString() + "] ") + message);
+		string tmp;
+		string htmlMessage = "<span id=\"message\" style=\"white-space: pre-wrap;\">"
+			"<span id=\"timestamp\">" + SimpleXML::escape("[" + Util::getShortTimeString() + "]", tmp, false) + "</span> "
+			"<span id=\"text\">" + SimpleXML::escape(Text::fromT(message), tmp, false) + "</span></span>"; 
+
+		if(PluginManager::getInstance()->onChatDisplay(htmlMessage)) {
+			addChatHTML(htmlMessage);
+		} else addChatPlain(Text::toT("[" + Util::getShortTimeString() + "] ") + message);
 		t().addedChat(message);
 	}
 

@@ -31,6 +31,7 @@
 #include <dcpp/ClientManager.h>
 #include <dcpp/Client.h>
 #include <dcpp/LogManager.h>
+#include <dcpp/PluginManager.h>
 #include <dcpp/User.h>
 #include <dcpp/WindowInfo.h>
 
@@ -317,7 +318,12 @@ void PrivateFrame::enterImpl(const tstring& s) {
 		tstring message;
 		tstring status;
 		bool thirdPerson = false;
-		if(WinUtil::checkCommand(cmd, param, message, status, thirdPerson)) {
+
+		if(PluginManager::getInstance()->onChatCommandPM(replyTo.getUser(), Text::fromT(s))) {
+			// Plugins, chat commands
+			resetText = true;
+			send = false;
+		} else if(WinUtil::checkCommand(cmd, param, message, status, thirdPerson)) {
 			if(!message.empty()) {
 				sendMessage(message, thirdPerson);
 			}

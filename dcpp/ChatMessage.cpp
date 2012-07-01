@@ -26,6 +26,7 @@
 #include "SettingsManager.h"
 #include "SimpleXML.h"
 #include "Util.h"
+#include "PluginManager.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 
@@ -33,7 +34,7 @@ namespace dcpp {
 
 using std::list;
 
-ChatMessage::ChatMessage(const string& text, const OnlineUser* from,
+ChatMessage::ChatMessage(const string& text, OnlineUser* from,
 	const OnlineUser* to, const OnlineUser* replyTo,
 	bool thirdPerson, time_t messageTimestamp) :
 from(from->getUser()),
@@ -221,7 +222,8 @@ messageTimestamp(messageTimestamp)
 
 	htmlMessage += "</span></span>";
 
-	/// @todo send this to plugins
+	/// forward to plugins
+	PluginManager::getInstance()->onChatDisplay(htmlMessage, from);
 }
 
 } // namespace dcpp

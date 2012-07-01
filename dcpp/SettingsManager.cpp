@@ -659,4 +659,31 @@ SettingsManager::SearchTypes::iterator SettingsManager::getSearchType(const stri
 	return ret;
 }
 
+bool SettingsManager::getType(const char* name, int& n, Types& type) const {
+	for(n = 0; n < FLOAT_LAST; ++n) {
+		if(strcmp(settingTags[n].c_str(), name) == 0) {
+			return getType(n, type);
+		}
+	}
+	return false;
+}
+
+bool SettingsManager::getType(const int& n, Types& type) const {
+	if(n < STR_FIRST || n >= SETTINGS_LAST)
+		return false;
+
+	if(n < STR_LAST) {
+		type = TYPE_STRING;
+	} else if(n < INT_LAST) {
+		type = TYPE_INT;
+	} else if(n < BOOL_LAST) {
+		type = TYPE_BOOL;
+	} else if(n < INT64_LAST) {
+		type = TYPE_INT64;
+	} else {
+		type = TYPE_FLOAT;
+	}
+	return true;
+}
+
 } // namespace dcpp

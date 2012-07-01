@@ -29,6 +29,7 @@
 #include "SearchManager.h"
 #include "SearchResult.h"
 #include "ShareManager.h"
+#include "PluginManager.h"
 #include "SimpleXML.h"
 #include "UserCommand.h"
 
@@ -405,7 +406,7 @@ void ClientManager::privateMessage(const HintedUser& user, const string& msg, bo
 	Lock l(cs);
 	OnlineUser* u = findOnlineUser(user);
 
-	if(u) {
+	if(u && !PluginManager::getInstance()->runHook(HOOK_CHAT_PM_OUT, u, msg)) {
 		u->getClient().privateMessage(*u, msg, thirdPerson);
 	}
 }

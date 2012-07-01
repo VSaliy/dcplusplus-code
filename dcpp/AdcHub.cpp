@@ -34,6 +34,7 @@
 #include "StringTokenizer.h"
 #include "ThrottleManager.h"
 #include "UploadManager.h"
+#include "PluginManager.h"
 #include "UserCommand.h"
 #include "Util.h"
 #include "version.h"
@@ -252,6 +253,7 @@ void AdcHub::handle(AdcCommand::MSG, AdcCommand& c) noexcept {
 	decltype(from) to = nullptr, replyTo = nullptr;
 
 	string temp;
+	string chatMessage = c.getParam(0);
 	if(c.getParam("PM", 1, temp)) { // add PM<group-cid> as well
 
 		to = findUser(c.getTo());
@@ -259,9 +261,10 @@ void AdcHub::handle(AdcCommand::MSG, AdcCommand& c) noexcept {
 			return;
 
 		replyTo = findUser(AdcCommand::toSID(temp));
-		if(!replyTo)
+		if(!replyTo || PluginManager::getInstance()->runHook(HOOK_CHAT_PM_IN, replyTo, chatMessage))
 			return;
-	}
+	} else if(PluginManager::getInstance()->runHook(HOOK_CHAT_IN, this, chatMessage))
+		return;
 
 	fire(ClientListener::Message(), this, ChatMessage(c.getParam(0), from, to, replyTo, c.hasFlag("ME", 1),
 		c.getParam("TS", 1, temp) ? Util::toInt64(temp) : 0));
@@ -683,6 +686,10 @@ void AdcHub::connect(const OnlineUser& user, string const& token, bool secure) {
 void AdcHub::hubMessage(const string& aMessage, bool thirdPerson) {
 	if(state != STATE_NORMAL)
 		return;
+
+	if(PluginManager::getInstance()->runHook(HOOK_CHAT_OUT, this, aMessage))
+		return;
+
 	AdcCommand c(AdcCommand::CMD_MSG, AdcCommand::TYPE_BROADCAST);
 	c.addParam(aMessage);
 	if(thirdPerson)
@@ -1090,6 +1097,9 @@ void AdcHub::on(Line l, const string& aLine) noexcept {
 		// @todo report to user?
 		return;
 	}
+
+	if(PluginManager::getInstance()->runHook(HOOK_NETWORK_HUB_IN, this, aLine))
+		return;
 
 	dispatch(aLine);
 }

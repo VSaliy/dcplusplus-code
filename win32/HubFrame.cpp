@@ -30,6 +30,7 @@
 #include <dcpp/FavoriteManager.h>
 #include <dcpp/LogManager.h>
 #include <dcpp/SearchManager.h>
+#include <dcpp/PluginManager.h>
 #include <dcpp/User.h>
 #include <dcpp/UserMatch.h>
 #include <dcpp/version.h>
@@ -400,7 +401,11 @@ void HubFrame::enterImpl(const tstring& s) {
 		tstring msg;
 		tstring status;
 		bool thirdPerson = false;
-		if(WinUtil::checkCommand(cmd, param, msg, status, thirdPerson)) {
+
+		if(PluginManager::getInstance()->onChatCommand(client, Text::fromT(s))) {
+			// Plugins, chat commands
+			message->setText(Util::emptyStringT);
+		} else if(WinUtil::checkCommand(cmd, param, msg, status, thirdPerson)) {
 			if(!msg.empty()) {
 				client->hubMessage(Text::fromT(msg), thirdPerson);
 			}
@@ -989,6 +994,17 @@ void HubFrame::on(NickTaken, Client*) noexcept {
 void HubFrame::on(SearchFlood, Client*, const string& line) noexcept {
 	callAsync([=] { onStatusMessage(str(F_("Search spam detected from %1%") % line), ClientListener::FLAG_IS_SPAM); });
 }
+
+void HubFrame::on(ClientLine, Client*, const string& line, int type) noexcept {
+	if(type == MSG_STATUS) {
+		callAsync([=] { onStatusMessage(line, ClientListener::FLAG_IS_SPAM); });
+	} else if(type == MSG_SYSTEM) {
+		callAsync([=] { onStatusMessage(line, ClientListener::FLAG_NORMAL); });
+	} else {
+		callAsync([=] { addChat(Text::toT(line)); });
+	}
+}
+
 
 void HubFrame::onStatusMessage(const string& line, int flags) {
 	callAsync([=] { addStatus(Text::toT(line),

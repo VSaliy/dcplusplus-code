@@ -28,10 +28,11 @@
 #include "HintedUser.h"
 #include "AdcCommand.h"
 #include "MerkleTree.h"
+#include "PluginEntity.h"
 
 namespace dcpp {
 
-class UserConnection : public Speaker<UserConnectionListener>,
+class UserConnection : public PluginEntity<ConnectionData>, public Speaker<UserConnectionListener>,
 	private BufferedSocketListener, public Flags, private CommandHandler<UserConnection>,
 	private boost::noncopyable
 {
@@ -123,6 +124,7 @@ public:
 	void setDataMode(int64_t aBytes = -1) { dcassert(socket); socket->setDataMode(aBytes); }
 	void setLineMode(size_t rollback) { dcassert(socket); socket->setLineMode(rollback); }
 
+	void sendRaw(const string& raw) { send(raw); }
 	void connect(const string& aServer, const string& aPort, const string& localPort, const BufferedSocket::NatRoles natRole);
 	void accept(const Socket& aServer);
 
@@ -171,9 +173,12 @@ public:
 	GETSET(string, hubUrl, HubUrl);
 	GETSET(string, token, Token);
 	GETSET(string, encoding, Encoding);
+	GETSET(string, port, Port);
 	GETSET(States, state, State);
 	GETSET(uint64_t, lastActivity, LastActivity);
 	GETSET(double, speed, Speed);
+
+	ConnectionData* getPluginObject() noexcept;
 private:
 	int64_t chunkSize;
 	BufferedSocket* socket;

@@ -26,6 +26,7 @@
 #include "Transfer.h"
 #include "format.h"
 #include "SettingsManager.h"
+#include "PluginManager.h"
 #include "DebugManager.h"
 
 namespace dcpp {
@@ -55,6 +56,12 @@ void UserConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 		return;
 	}
 
+	if(aLine[0] == '$')
+		setFlag(FLAG_NMDC);
+
+	if(PluginManager::getInstance()->runHook(HOOK_NETWORK_CONN_IN, this, aLine))
+		return;
+
 	if(aLine[0] == 'C' && !isSet(FLAG_NMDC)) {
 		if(!Text::validateUtf8(aLine)) {
 			fire(UserConnectionListener::ProtocolError(), this, _("Non-UTF-8 data in an ADC connection"));
@@ -62,9 +69,7 @@ void UserConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 		}
 		dispatch(aLine);
 		return;
-	} else if(aLine[0] == '$') {
-		setFlag(FLAG_NMDC);
-	} else {
+	} else if(!isSet(FLAG_NMDC)) {
 		fire(UserConnectionListener::ProtocolError(), this, _("Invalid data"));
 		return;
 	}
@@ -140,6 +145,7 @@ void UserConnection::on(BufferedSocketListener::Line, const string& aLine) noexc
 void UserConnection::connect(const string& aServer, const string& aPort, const string& localPort, BufferedSocket::NatRoles natRole) {
 	dcassert(!socket);
 
+	port = aPort;
 	socket = BufferedSocket::getSocket(0);
 	socket->addListener(this);
 	socket->connect(aServer, aPort, localPort, natRole, secure, SETTING(ALLOW_UNTRUSTED_CLIENTS), true);
@@ -258,7 +264,23 @@ void UserConnection::updateChunkSize(int64_t leafSize, int64_t lastChunk, uint64
 	chunkSize = targetSize;
 }
 
+ConnectionData* UserConnection::getPluginObject() noexcept {
+	resetEntity();
+
+	pod.ip = pluginString(getRemoteIp());
+	pod.object = this;
+	pod.port = Util::toInt(port);
+	pod.protocol = isSet(UserConnection::FLAG_NMDC) ? PROTOCOL_NMDC : PROTOCOL_ADC; // TODO: isSet(...) not practical if more than two protocols
+	pod.isOp = isSet(UserConnection::FLAG_OP) ? True : False;
+	pod.isSecure = isSecure() ? True : False;
+
+	return &pod;
+}
+
 void UserConnection::send(const string& aString) {
+	if(PluginManager::getInstance()->runHook(HOOK_NETWORK_CONN_OUT, this, aString))
+		return;
+
 	lastActivity = GET_TICK();
 	COMMAND_DEBUG(aString, DebugManager::CLIENT_OUT, getRemoteIp());
 	socket->write(aString);
