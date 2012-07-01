@@ -871,12 +871,9 @@ StringList QueueManager::getTargets(const TTHValue& tth) {
 	return sl;
 }
 
-void QueueManager::addListener(QueueManagerListener* ql, const function<void (const QueueItem::StringMap&)>& currentQueue) {
+void QueueManager::lockedOperation(const function<void (const QueueItem::StringMap&)>& currentQueue) {
 	Lock l(cs);
-	Speaker<QueueManagerListener>::addListener(ql);
-	if(currentQueue) {
-		currentQueue(fileQueue.getQueue());
-	}
+	if(currentQueue) currentQueue(fileQueue.getQueue());
 }
 
 Download* QueueManager::getDownload(UserConnection& aSource) noexcept {

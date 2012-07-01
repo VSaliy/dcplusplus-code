@@ -106,6 +106,15 @@ public:
 		return (*currentChild)->data;
 	}
 
+	StringMap getCurrentChildren() {
+		dcassert(current != NULL);
+		StringMap d;
+		for(Tag::Iter i = current->children.begin(); i != current->children.end(); ++i) {
+			d[(*i)->name] = (*i)->data;
+		}
+		return d;
+	}
+
 	const string& getChildAttrib(const string& aName, const string& aDefault = Util::emptyString) {
 		checkChildSelected();
 		return (*currentChild)->getAttrib(aName, aDefault);

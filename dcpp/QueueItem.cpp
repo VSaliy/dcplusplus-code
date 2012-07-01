@@ -89,6 +89,19 @@ const string& QueueItem::getTempTarget() {
 	return tempTarget;
 }
 
+QueueData* QueueItem::getPluginObject() noexcept {
+	resetEntity();
+
+	pod.target = pluginString(getTarget());
+	pod.location = isFinished() ? pod.target : pluginString(getTempTarget());
+	pod.hash = pluginString(tthRoot.toBase32());
+	pod.object = this;
+	pod.size = size;
+	pod.isFileList = isSet(QueueItem::FLAG_USER_LIST) ? True : False;
+
+	return &pod;
+}
+
 Segment QueueItem::getNextSegment(int64_t blockSize, int64_t wantedSize) const {
 	if(getSize() == -1 || blockSize == 0) {
 		return Segment(0, -1);

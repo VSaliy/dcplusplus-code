@@ -61,6 +61,8 @@
 #include "SearchTypesPage.h"
 #include "UserMatchPage.h"
 
+#include "PluginPage.h"
+
 using dwt::Grid;
 using dwt::GridInfo;
 
@@ -188,6 +190,8 @@ bool SettingsDialog::initDialog() {
 			addPage(T_("Search types"), new SearchTypesPage(container), IDI_SEARCH, item);
 			addPage(T_("User matching"), new UserMatchPage(container), IDI_USERS, item);
 		}
+
+		addPage(T_("Plugins"), new PluginPage(container), IDI_PLUGINS, TVI_ROOT);
 
 		Grid::Seed gs(1, 1);
 		gs.style |= WS_BORDER;

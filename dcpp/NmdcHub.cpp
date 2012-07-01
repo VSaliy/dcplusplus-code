@@ -30,6 +30,7 @@
 #include "Socket.h"
 #include "StringTokenizer.h"
 #include "ThrottleManager.h"
+#include "PluginManager.h"
 #include "UserCommand.h"
 #include "version.h"
 
@@ -224,7 +225,11 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			from = &o;
 		}
 
-		fire(ClientListener::Message(), this, ChatMessage(unescape(message), from));
+		auto chatMessage = unescape(message);
+		if(PluginManager::getInstance()->runHook(HOOK_CHAT_IN, this, chatMessage))
+			return;
+
+		fire(ClientListener::Message(), this, ChatMessage(chatMessage, from));
 		return;
 	}
 
@@ -723,7 +728,11 @@ void NmdcHub::onLine(const string& aLine) noexcept {
 			}
 		}
 
-		fire(ClientListener::Message(), this, ChatMessage(unescape(param.substr(j + 2)), from, &getUser(getMyNick()), replyTo));
+		auto chatMessage = unescape(param.substr(j + 2));
+		if(PluginManager::getInstance()->runHook(HOOK_CHAT_PM_IN, replyTo, chatMessage))
+			return;
+
+		fire(ClientListener::Message(), this, ChatMessage(chatMessage, from, &getUser(getMyNick()), replyTo));
 
 	} else if(cmd == "$GetPass") {
 		OnlineUser& ou = getUser(getMyNick());
@@ -768,7 +777,8 @@ void NmdcHub::revConnectToMe(const OnlineUser& aUser) {
 
 void NmdcHub::hubMessage(const string& aMessage, bool thirdPerson) {
 	checkstate();
-	send(fromUtf8( "<" + getMyNick() + "> " + escape(thirdPerson ? "/me " + aMessage : aMessage) + "|" ) );
+	if(!PluginManager::getInstance()->runHook(HOOK_CHAT_OUT, this, aMessage))
+		send(fromUtf8( "<" + getMyNick() + "> " + escape(thirdPerson ? "/me " + aMessage : aMessage) + "|" ) );
 }
 
 void NmdcHub::myInfo(bool alwaysSend) {
@@ -979,6 +989,10 @@ void NmdcHub::on(Connected) noexcept {
 
 void NmdcHub::on(Line, const string& aLine) noexcept {
 	Client::on(Line(), aLine);
+
+	if(PluginManager::getInstance()->runHook(HOOK_NETWORK_HUB_IN, this, validateMessage(aLine, true)))
+		return;
+
 	onLine(aLine);
 }
 

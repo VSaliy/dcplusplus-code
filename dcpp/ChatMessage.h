@@ -38,7 +38,7 @@ order to facilitate identification of the part.
 DC++ formats the strings first according to settings, then hands them over to plugins for further
 processing. */
 struct ChatMessage {
-	ChatMessage(const string& text, const OnlineUser* from,
+	ChatMessage(const string& text, OnlineUser* from,
 		const OnlineUser* to = nullptr, const OnlineUser* replyTo = nullptr,
 		bool thirdPerson = false, time_t messageTimestamp = 0);
 

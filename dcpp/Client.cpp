@@ -26,6 +26,9 @@
 #include "FavoriteManager.h"
 #include "TimerManager.h"
 #include "UserMatchManager.h"
+#include "PluginManager.h"
+
+#include "AdcHub.h" // for dynamic_cast
 
 namespace dcpp {
 
@@ -127,9 +130,27 @@ void Client::send(const char* aMessage, size_t aLen) {
 		dcassert(0);
 		return;
 	}
+
+	if(PluginManager::getInstance()->runHook(HOOK_NETWORK_HUB_OUT, this, aMessage))
+		return;
+
 	updateActivity();
 	sock->write(aMessage, aLen);
 	COMMAND_DEBUG(aMessage, DebugManager::HUB_OUT, getIpPort());
+}
+
+HubData* Client::getPluginObject() noexcept {
+	resetEntity();
+
+	pod.url = pluginString(hubUrl);
+	pod.ip = pluginString(ip);
+	pod.object = this;
+	pod.port = Util::toInt(port);
+	pod.protocol = dynamic_cast<AdcHub*>(this) ? PROTOCOL_ADC : PROTOCOL_NMDC; // TODO: dynamic_cast not practical if more than two protocols
+	pod.isOp = isOp() ? True : False;
+	pod.isSecure = isSecure() ? True : False;
+
+	return &pod;
 }
 
 void Client::on(Connected) noexcept {

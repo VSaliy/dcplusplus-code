@@ -285,6 +285,7 @@ private:
 	virtual void on(StatusMessage, Client*, const string&, int = ClientListener::FLAG_NORMAL) noexcept;
 	virtual void on(NickTaken, Client*) noexcept;
 	virtual void on(SearchFlood, Client*, const string&) noexcept;
+	virtual void on(ClientLine, Client*, const string& line, int type) noexcept;
 	void onStatusMessage(const string& line, int flags);
 };
 

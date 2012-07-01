@@ -39,6 +39,7 @@
 #include "ShareManager.h"
 #include "ThrottleManager.h"
 #include "UploadManager.h"
+#include "PluginManager.h"
 #include "UserMatchManager.h"
 #include "WindowManager.h"
 
@@ -83,6 +84,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 	GeoManager::newInstance();
 	UserMatchManager::newInstance();
 	WindowManager::newInstance();
+	PluginManager::newInstance();
 	DebugManager::newInstance();
 
 	SettingsManager::getInstance()->load();
@@ -106,6 +108,8 @@ void startup(void (*f)(void*, const string&), void* p) {
 	ClientManager::getInstance()->loadUsers();
 	FavoriteManager::getInstance()->load();
 
+	PluginManager::getInstance()->loadPlugins(f, p);
+
 	announce(_("Security certificates"));
 	CryptoManager::getInstance()->loadCertificates();
 
@@ -125,6 +129,7 @@ void startup(void (*f)(void*, const string&), void* p) {
 }
 
 void shutdown() {
+	PluginManager::getInstance()->unloadPlugins();
 	TimerManager::getInstance()->shutdown();
 	HashManager::getInstance()->shutdown();
 	ThrottleManager::getInstance()->shutdown();
@@ -138,6 +143,7 @@ void shutdown() {
 	ClientManager::getInstance()->saveUsers();
 	SettingsManager::getInstance()->save();
 
+	PluginManager::deleteInstance();
 	DebugManager::deleteInstance();
 	WindowManager::deleteInstance();
 	UserMatchManager::deleteInstance();

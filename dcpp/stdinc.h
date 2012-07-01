@@ -25,6 +25,14 @@
 #define BZ_NO_STDIO 1
 #endif
 
+#ifndef DCAPI_HOST
+#define DCAPI_HOST 1
+#endif
+
+#ifndef memzero
+#define memzero(dest, n) memset(dest, 0, n)
+#endif
+
 #ifdef HAS_PCH
 
 #ifdef _WIN32

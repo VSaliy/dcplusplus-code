@@ -50,6 +50,14 @@ class SettingsManager : public Singleton<SettingsManager>, public Speaker<Settin
 public:
 	typedef std::unordered_map<string, StringList> SearchTypes;
 
+	enum Types {
+		TYPE_STRING,
+		TYPE_INT,
+		TYPE_BOOL,
+		TYPE_INT64,
+		TYPE_FLOAT
+	};
+
 	static StringList connectionSpeeds;
 
 	enum StrSetting { STR_FIRST,
@@ -230,6 +238,14 @@ public:
 		return boolDefaults[key - BOOL_FIRST];
 	}
 
+	int64_t getDefault(Int64Setting key) const {
+		return int64Defaults[key - INT64_FIRST];
+	}
+
+	float getDefault(FloatSetting key) const {
+		return floatDefaults[key - FLOAT_FIRST];
+	}
+
 	void setDefault(StrSetting key, string const& value) {
 		strDefaults[key - STR_FIRST] = value;
 	}
@@ -266,6 +282,13 @@ public:
 
 	void load(const string& aFileName);
 	void save(const string& aFileName);
+
+	bool getType(const char* name, int& n, Types& type) const;
+	bool getType(const int& n, Types& type) const;
+
+	const string (&getSettingTags() const)[SETTINGS_LAST+1] {
+		return settingTags;
+	}
 
 	HubSettings getHubSettings() const;
 

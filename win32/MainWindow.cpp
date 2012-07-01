@@ -40,6 +40,7 @@
 #include <dcpp/ThrottleManager.h>
 #include <dcpp/TimerManager.h>
 #include <dcpp/UploadManager.h>
+#include <dcpp/PluginManager.h>
 #include <dcpp/version.h>
 #include <dcpp/WindowInfo.h>
 
@@ -247,6 +248,8 @@ fullSlots(false)
 			handleSettings();
 		});
 	}
+
+	PluginManager::getInstance()->runHook(HOOK_UI_CREATED, handle(), NULL);
 
 	if(SETTING(SETTINGS_SAVE_INTERVAL) > 0)
 		setSaveTimer();
