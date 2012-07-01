@@ -119,7 +119,8 @@ fileLists(0)
 
 	setTimer([this]() -> bool { updateStatus(); return true; }, 500);
 
-	QueueManager::getInstance()->addListener(this, [this](const QueueItem::StringMap& qsm) { addQueueList(qsm); });
+	QueueManager::getInstance()->addListener(this);
+	QueueManager::getInstance()->lockedOperation([this](const QueueItem::StringMap& qsm) { addQueueList(qsm); });
 
 	layout();
 }
