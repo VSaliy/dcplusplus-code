@@ -112,7 +112,7 @@ typedef enum tagConfigType {
 	CFG_TYPE_REMOVE,											/* Config value will be removed */
 	CFG_TYPE_STRING,											/* Config value is string */
 	CFG_TYPE_INT,												/* Config value is 32bit integer */
-	CFG_TYPE_BOOL,											/* Config value is unsigned char (either 1 or 0) */
+	CFG_TYPE_BOOL,												/* Config value is unsigned int (either 1 or 0) */
 	CFG_TYPE_INT64												/* Config value is 64bit integer */
 } ConfigType;
 
