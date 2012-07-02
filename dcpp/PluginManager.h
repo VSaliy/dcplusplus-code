@@ -38,9 +38,9 @@
 #include "PluginApiImpl.h"
 
 #ifdef _WIN32
-typedef HMODULE pluginHandle;
+typedef HMODULE PluginHandle;
 #else
-typedef void* pluginHandle;
+typedef void* PluginHandle;
 #endif
 
 namespace dcpp {
@@ -75,7 +75,7 @@ class PluginInfo : private boost::noncopyable
 public:
 	typedef	DCMAIN	(DCAPI *PLUGIN_INIT)(MetaDataPtr info);
 
-	PluginInfo(const string& aFile, pluginHandle hInst, MetaData aInfo, DCMAIN aMain)
+	PluginInfo(const string& aFile, PluginHandle hInst, MetaData aInfo, DCMAIN aMain)
 		: dcMain(aMain), info(aInfo), file(aFile), handle(hInst) { };
 
 	~PluginInfo();
@@ -87,14 +87,12 @@ public:
 private:
 	MetaData info;
 	string file;
-	pluginHandle handle;
+	PluginHandle handle;
 };
 
 class PluginManager : public Singleton<PluginManager>, private TimerManagerListener,
 	private ClientManagerListener, private QueueManagerListener, private SettingsManagerListener
 {
-	typedef vector<PluginInfo*> PluginList;
-
 public:
 	PluginManager() : shutdown(false), secNum(Util::rand()) {
 		memzero(&dcCore, sizeof(DCCore));
@@ -110,14 +108,14 @@ public:
 	bool isLoaded(const string& guid);
 
 	void unloadPlugins();
-	void unloadPlugin(int index);
+	void unloadPlugin(size_t index);
 
-	bool addInactivePlugin(pluginHandle h);
+	bool addInactivePlugin(PluginHandle h);
 	bool getShutdown() const { return shutdown; }
 
 	void movePlugin(size_t index, int pos);
-	PluginList getPluginList() const { Lock l(cs); return plugins; };
-	const PluginInfo* getPlugin(size_t index) const { Lock l(cs); return plugins[index]; }
+	vector<PluginInfo*> getPluginList() const;
+	const PluginInfo* getPlugin(size_t index) const;
 
 	DCCorePtr getCore() { return &dcCore; }
 
@@ -185,8 +183,8 @@ private:
 	void on(SettingsManagerListener::Load, SimpleXML& /*xml*/) noexcept;
 	void on(SettingsManagerListener::Save, SimpleXML& /*xml*/) noexcept;
 
-	PluginList plugins;
-	vector<pluginHandle> inactive;
+	vector<unique_ptr<PluginInfo>> plugins;
+	vector<PluginHandle> inactive;
 
 	map<string, unique_ptr<PluginHook>> hooks;
 	map<string, dcptr_t> interfaces;
