@@ -159,7 +159,7 @@ class Dev:
 	c_lib = simple_lib('h', 'c')
 	cpp_lib = simple_lib('h', 'cpp')
 
-	def build_lib(self, env, target, sources, msvcproj_glob = None, msvcproj_name = None):
+	def build_lib(self, env, target, sources, msvcproj_glob = None, msvcproj_name = None, shared = False):
 		if env['msvcproj']:
 			if msvcproj_glob is None:
 				return
@@ -195,7 +195,7 @@ class Dev:
 					MSVSSCONSCOM = ''))
 			return
 
-		return env.StaticLibrary(target, sources)
+		return env.SharedLibrary(target, sources) if shared else env.StaticLibrary(target, sources)
 
 	def i18n (self, source_path, buildenv, sources, name):
 		if not self.env['i18n']:

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2012 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,33 +21,13 @@
 
 #ifdef _WIN32
 
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0501
-#endif
-
-#define STRICT
-#define WIN32_LEAN_AND_MEAN
-
-#ifdef _MSC_VER
-
-/* disable the deprecated warnings for the CRT functions. */
-#define _CRT_SECURE_NO_DEPRECATE 1
-#define _ATL_SECURE_NO_DEPRECATE 1
-#define _CRT_NON_CONFORMING_SWPRINTFS 1
-
-#if _MSC_VER == 1400 || _MSC_VER == 1500
-#define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
-/* disable the deprecated warnings for the crt functions. */
-#pragma warning(disable: 4996)
-#endif
-
-#endif
-
 #include <windows.h>
 #include <tchar.h>
 
 #else
+
 #include <unistd.h>
+
 #endif
 
 /* This can make a #define value to string (from boost) */
