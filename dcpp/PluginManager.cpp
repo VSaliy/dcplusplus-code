@@ -190,7 +190,8 @@ void PluginManager::movePlugin(size_t index, int pos) {
 vector<PluginInfo*> PluginManager::getPluginList() const {
 	Lock l(cs);
 	vector<PluginInfo*> ret;
-	std::copy(plugins.begin(), plugins.end(), ret.begin());
+	std::transform(plugins.begin(), plugins.end(), ret.begin(),
+		[](const unique_ptr<PluginInfo>& p) { return p.get(); });
 	return ret;
 };
 

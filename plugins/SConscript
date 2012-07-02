@@ -1,0 +1,8 @@
+Import('dev source_path')
+
+if not dev.env['plugins']:
+	Return()
+
+ret = dev.build('SamplePlugin/')
+
+Return('ret')
