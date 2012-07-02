@@ -19,16 +19,15 @@
 #include "stdinc.h"
 #include "PluginManager.h"
 
-#include <utility>
-
+#include "Client.h"
+#include "ClientManager.h"
 #include "ConnectionManager.h"
 #include "QueueManager.h"
-#include "ClientManager.h"
-#include "StringTokenizer.h"
 #include "SimpleXML.h"
-
+#include "StringTokenizer.h"
 #include "UserConnection.h"
-#include "Client.h"
+
+#include <utility>
 
 #ifdef _WIN32
 # define PLUGIN_EXT "*.dll"
@@ -81,7 +80,7 @@ bool PluginManager::loadPlugin(const string& fileName, bool isInstall /*= false*
 
 	dcassert(dcCore.apiVersion != 0);
 
-	pluginHandle hr = LOAD_LIBRARY(fileName);
+	PluginHandle hr = LOAD_LIBRARY(fileName);
 	if(!hr) {
 		LogManager::getInstance()->message(str(F_("Error loading %1%: %2%") % Util::getFileName(fileName) % GET_ERROR()));
 		return false;
@@ -97,7 +96,7 @@ bool PluginManager::loadPlugin(const string& fileName, bool isInstall /*= false*
 		if((dcMain = pluginInfo(&info)) != NULL) {
 			if(checkPlugin(info)) {
 				if(dcMain((isInstall ? ON_INSTALL : ON_LOAD), &dcCore, NULL) != False) {
-					plugins.push_back(new PluginInfo(fileName, hr, info, dcMain));
+					plugins.emplace_back(new PluginInfo(fileName, hr, info, dcMain));
 					return true;
 				}
 			}
@@ -109,7 +108,7 @@ bool PluginManager::loadPlugin(const string& fileName, bool isInstall /*= false*
 }
 
 bool PluginManager::isLoaded(const string& guid) {
-	auto pluginComp = [&guid](const PluginInfo* p) -> bool { return strcmp(p->getInfo().guid, guid.c_str()) == 0; };
+	auto pluginComp = [&guid](const unique_ptr<PluginInfo>& p) -> bool { return strcmp(p->getInfo().guid, guid.c_str()) == 0; };
 	auto i = std::find_if(plugins.begin(), plugins.end(), pluginComp);
 	return (i != plugins.end());
 }
@@ -144,21 +143,20 @@ void PluginManager::unloadPlugins() {
 	Lock l(cs);
 	shutdown = true;
 
-	// Off we go...
-	string installed;
-	for(PluginList::reverse_iterator i = plugins.rbegin(); i != plugins.rend();) {
-		PluginInfo* plugin = *i;
-		installed.size() ? installed = plugin->getFile() + ";" + installed : installed = plugin->getFile(); 
-		i = PluginList::reverse_iterator(plugins.erase(i.base()-1));
-		delete plugin;
-	}
-
 	// Update plugin order
+	string installed;
+	for(auto& i: plugins) {
+		if(!installed.empty()) installed += ";";
+		installed += i->getFile();
+	}
 	setPluginSetting("CoreSetup", "Plugins", installed);
 
+	// Off we go...
+	plugins.clear();
+
 	// Really unload plugins that have been flagged inactive (ON_UNLOAD returns False)
-	for(auto i = inactive.begin(); i != inactive.end(); ++i)
-		FREE_LIBRARY(*i);
+	for(auto& i: inactive)
+		FREE_LIBRARY(i);
 
 	// Destroy hooks that may have not been correctly freed
 	hooks.clear();
@@ -170,15 +168,12 @@ void PluginManager::unloadPlugins() {
 	PluginApiImpl::releaseAPI();
 }
 
-void PluginManager::unloadPlugin(int index) {
+void PluginManager::unloadPlugin(size_t index) {
 	Lock l(cs);
-
-	PluginInfo* plugin = plugins[index];
 	plugins.erase(plugins.begin() + index);
-	delete plugin;
 }
 
-bool PluginManager::addInactivePlugin(pluginHandle h) {
+bool PluginManager::addInactivePlugin(PluginHandle h) {
 	if(std::find(inactive.begin(), inactive.end(), h) == inactive.end()) {
 		inactive.push_back(h);
 		return true;
@@ -190,6 +185,18 @@ void PluginManager::movePlugin(size_t index, int pos) {
 	Lock l(cs);
 	auto i = plugins.begin() + index;
 	swap(*i, *(i + pos));
+}
+
+vector<PluginInfo*> PluginManager::getPluginList() const {
+	Lock l(cs);
+	vector<PluginInfo*> ret;
+	std::copy(plugins.begin(), plugins.end(), ret.begin());
+	return ret;
+};
+
+const PluginInfo* PluginManager::getPlugin(size_t index) const {
+	Lock l(cs);
+	return plugins[index].get();
 }
 
 // Functions that call the plugin
