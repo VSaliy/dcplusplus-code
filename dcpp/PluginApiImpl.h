@@ -26,6 +26,7 @@
 
 #include <cstdint>
 
+#include "forward.h"
 #include "typedefs.h"
 #include "PluginDefs.h"
 
@@ -117,7 +118,8 @@ private:
 	static DCQueue dcQueue;
 	static DCUtils dcUtils;
 
-	static Socket apiSocket;
+	static Socket* udpSocket;
+	static Socket& getUdpSocket();
 };
 
 } // namepsace dcpp

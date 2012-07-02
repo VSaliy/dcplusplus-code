@@ -28,17 +28,12 @@ public:
 	PluginPage(dwt::Widget* parent);
 	virtual ~PluginPage();
 
-	virtual void write();
-
 private:
-	ItemList items;
-
 	TablePtr plugins;
 
 	ButtonPtr add, configure, moveUp, moveDown, remove;
 
 	GridPtr pluginInfo;
-	LabelPtr webLink;
 
 	void handleDoubleClick();
 	bool handleKeyDown(int c);

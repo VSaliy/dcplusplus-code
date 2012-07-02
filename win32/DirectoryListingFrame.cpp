@@ -564,6 +564,7 @@ void DirectoryListingFrame::layout() {
 		loading->setZOrder(HWND_TOPMOST);
 		loading->resize(r);
 		loading->redraw(true);
+		redraw(true);
 		return;
 	}
 

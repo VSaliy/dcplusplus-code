@@ -286,10 +286,6 @@ public:
 	bool getType(const char* name, int& n, Types& type) const;
 	bool getType(const int& n, Types& type) const;
 
-	const string (&getSettingTags() const)[SETTINGS_LAST+1] {
-		return settingTags;
-	}
-
 	HubSettings getHubSettings() const;
 
 	// Search types

@@ -382,6 +382,18 @@ void SettingsDialog::layout() {
 }
 
 void SettingsDialog::helpImpl(unsigned& id) {
-	if(id == IDH_INDEX && currentPage)
+	if(id == IDH_INDEX && currentPage) {
+
+		/* when a control has no help id, it asks its parent and so on. here we go back to children
+		from the top parent, so there is a possibility of an infinite loop if a page has no help
+		id. */
+		static bool recursion = false;
+		if(recursion)
+			return;
+		recursion = true;
+
 		id = currentPage->getHelpId();
+
+		recursion = false;
+	}
 }
