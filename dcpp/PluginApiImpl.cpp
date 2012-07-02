@@ -158,7 +158,13 @@ DCUtils PluginApiImpl::dcUtils = {
 	&PluginApiImpl::fromBase32
 };
 
-Socket PluginApiImpl::apiSocket(Socket::TYPE_UDP);
+Socket* PluginApiImpl::udpSocket = nullptr;
+Socket& PluginApiImpl::getUdpSocket() {
+	if(!udpSocket) {
+		udpSocket = new Socket(Socket::TYPE_UDP);
+	}
+	return *udpSocket;
+}
 
 void PluginApiImpl::initAPI(DCCore& dcCore) {
 	dcCore.apiVersion = DCAPI_CORE_VER;
@@ -184,7 +190,11 @@ void PluginApiImpl::initAPI(DCCore& dcCore) {
 }
 
 void PluginApiImpl::releaseAPI() {
-	apiSocket.disconnect();
+	if(udpSocket) {
+		udpSocket->disconnect();
+		delete udpSocket;
+		udpSocket = nullptr;
+	}
 }
 
 // Functions for DCCore
@@ -279,7 +289,7 @@ ConfigValuePtr PluginApiImpl::getConfig(const char* guid, const char* setting, C
 					return copyData((ConfigValuePtr)&value);
 				}
 				case SettingsManager::TYPE_BOOL: {
-					ConfigBool value = { CFG_TYPE_BOOL, SettingsManager::getInstance()->get(static_cast<SettingsManager::BoolSetting>(n)) };
+					ConfigBool value = { CFG_TYPE_BOOL, SettingsManager::getInstance()->get(static_cast<SettingsManager::BoolSetting>(n)) ? True : False };
 					return copyData((ConfigValuePtr)&value);
 				}
 				case SettingsManager::TYPE_INT64: {
@@ -305,7 +315,7 @@ ConfigValuePtr PluginApiImpl::getConfig(const char* guid, const char* setting, C
 			return copyData((ConfigValuePtr)&value);
 		}
 		case CFG_TYPE_BOOL: {
-			ConfigBool value = { type, Util::toUInt(pm->getPluginSetting(guid, setting)) };
+			ConfigBool value = { type, pm->getPluginSetting(guid, setting) != "0" ? True : False };
 			return copyData((ConfigValuePtr)&value);
 		}
 		case CFG_TYPE_INT64: {
@@ -403,7 +413,7 @@ void PluginApiImpl::terminateConnection(ConnectionDataPtr conn, Bool graceless) 
 }
 
 void PluginApiImpl::sendUdpData(const char* ip, uint32_t port, dcptr_t data, size_t n) {
-	try { apiSocket.writeTo(ip, Util::toString(port), data, n); } catch (const Exception&) { /* ... */ }
+	try { getUdpSocket().writeTo(ip, Util::toString(port), data, n); } catch (const Exception&) { /* ... */ }
 }
 
 // Functions for DCUtils

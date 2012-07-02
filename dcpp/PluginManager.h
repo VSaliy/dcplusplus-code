@@ -21,7 +21,10 @@
 
 #include "typedefs.h"
 
+#include <functional>
 #include <map>
+#include <memory>
+#include <vector>
 
 #include "Singleton.h"
 #include "SettingsManager.h"
@@ -42,8 +45,10 @@ typedef void* pluginHandle;
 
 namespace dcpp {
 
-using std::map;
 using std::function;
+using std::map;
+using std::unique_ptr;
+using std::vector;
 
 // Represents a plugin in hook context
 struct HookSubscriber {
@@ -60,7 +65,7 @@ struct PluginHook {
 	string guid;
 	DCHOOK defProc;
 
-	vector<HookSubscriber*> subscribers;
+	vector<unique_ptr<HookSubscriber>> subscribers;
 	CriticalSection cs;
 };
 
@@ -88,9 +93,9 @@ private:
 class PluginManager : public Singleton<PluginManager>, private TimerManagerListener,
 	private ClientManagerListener, private QueueManagerListener, private SettingsManagerListener
 {
-public:
-	typedef vector<PluginInfo*> pluginList;
+	typedef vector<PluginInfo*> PluginList;
 
+public:
 	PluginManager() : shutdown(false), secNum(Util::rand()) {
 		memzero(&dcCore, sizeof(DCCore));
 		SettingsManager::getInstance()->addListener(this);
@@ -111,8 +116,8 @@ public:
 	bool getShutdown() const { return shutdown; }
 
 	void movePlugin(size_t index, int pos);
-	const pluginList& getPluginList() { Lock l(cs); return plugins; };
-	const PluginInfo* getPlugin(size_t index) { Lock l(cs); return plugins[index]; }
+	PluginList getPluginList() const { Lock l(cs); return plugins; };
+	const PluginInfo* getPlugin(size_t index) const { Lock l(cs); return plugins[index]; }
 
 	DCCorePtr getCore() { return &dcCore; }
 
@@ -126,7 +131,7 @@ public:
 		if(shutdown) return false;
 		auto i = hooks.find(guid);
 		dcassert(i != hooks.end());
-		return runHook(i->second, pObject, pData);
+		return runHook(i->second.get(), pObject, pData);
 	}
 
 	template<class T>
@@ -180,16 +185,16 @@ private:
 	void on(SettingsManagerListener::Load, SimpleXML& /*xml*/) noexcept;
 	void on(SettingsManagerListener::Save, SimpleXML& /*xml*/) noexcept;
 
-	pluginList plugins;
+	PluginList plugins;
 	vector<pluginHandle> inactive;
 
-	map<string, PluginHook*> hooks;
+	map<string, unique_ptr<PluginHook>> hooks;
 	map<string, dcptr_t> interfaces;
 
 	map<string, StringMap> settings;
 
 	DCCore dcCore;
-	CriticalSection cs, csHook;
+	mutable CriticalSection cs, csHook;
 	bool shutdown;
 
 	uintptr_t secNum;

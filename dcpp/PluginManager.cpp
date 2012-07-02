@@ -146,10 +146,10 @@ void PluginManager::unloadPlugins() {
 
 	// Off we go...
 	string installed;
-	for(pluginList::reverse_iterator i = plugins.rbegin(); i != plugins.rend();) {
+	for(PluginList::reverse_iterator i = plugins.rbegin(); i != plugins.rend();) {
 		PluginInfo* plugin = *i;
 		installed.size() ? installed = plugin->getFile() + ";" + installed : installed = plugin->getFile(); 
-		i = pluginList::reverse_iterator(plugins.erase(i.base()-1));
+		i = PluginList::reverse_iterator(plugins.erase(i.base()-1));
 		delete plugin;
 	}
 
@@ -160,16 +160,8 @@ void PluginManager::unloadPlugins() {
 	for(auto i = inactive.begin(); i != inactive.end(); ++i)
 		FREE_LIBRARY(*i);
 
-	if(!hooks.empty()) {
-		// Destroy all hooks not freed correctly
-		for(auto i = hooks.begin(); !hooks.empty();) {
-			PluginHook* hook = i->second;
-			for_each(hook->subscribers.begin(), hook->subscribers.end(), DeleteFunction());
-			hook->subscribers.clear();
-			hooks.erase(i++);
-			delete hook;
-		}
-	}
+	// Destroy hooks that may have not been correctly freed
+	hooks.clear();
 
 	TimerManager::getInstance()->removeListener(this);
 	ClientManager::getInstance()->removeListener(this);
@@ -196,7 +188,7 @@ bool PluginManager::addInactivePlugin(pluginHandle h) {
 
 void PluginManager::movePlugin(size_t index, int pos) {
 	Lock l(cs);
-	pluginList::iterator i = (plugins.begin() + index);
+	auto i = plugins.begin() + index;
 	swap(*i, *(i + pos));
 }
 
@@ -299,11 +291,12 @@ PluginHook* PluginManager::createHook(const string& guid, DCHOOK defProc) {
 	auto i = hooks.find(guid);
 	if(i != hooks.end()) return NULL;
 
-	PluginHook* hook = new PluginHook();
+	auto hook = make_unique<PluginHook>();
+	auto pHook = hook.get();
 	hook->guid = guid;
 	hook->defProc = defProc;
-	hooks[guid] = hook;
-	return hook;
+	hooks[guid] = move(hook);
+	return pHook;
 }
 
 bool PluginManager::destroyHook(PluginHook* hook) {
@@ -311,31 +304,29 @@ bool PluginManager::destroyHook(PluginHook* hook) {
 
 	auto i = hooks.find(hook->guid);
 	if(i != hooks.end()) {
-		for_each(hook->subscribers.begin(), hook->subscribers.end(), DeleteFunction());
-		hook->subscribers.clear();
 		hooks.erase(i);
-		delete hook;
 		return true;
-	} else return false;
+	}
+	return false;
 }
 
 HookSubscriber* PluginManager::bindHook(const string& guid, DCHOOK hookProc, void* pCommon) {
 	Lock l(csHook);
 
-	PluginHook* hook;
 	auto i = hooks.find(guid);
-
 	if(i == hooks.end()) {
 		return NULL;
-	} else hook = i->second;
+	}
+	auto& hook = i->second;
 
-	HookSubscriber* subscribtion = new HookSubscriber();
-	subscribtion->hookProc = hookProc;
-	subscribtion->common = pCommon;
-	subscribtion->owner = hook->guid;
-	hook->subscribers.push_back(subscribtion);
+	auto subscription = make_unique<HookSubscriber>();
+	auto pSub = subscription.get();
+	subscription->hookProc = hookProc;
+	subscription->common = pCommon;
+	subscription->owner = hook->guid;
+	hook->subscribers.push_back(move(subscription));
 
-	return subscribtion;
+	return pSub;
 }
 
 bool PluginManager::runHook(PluginHook* hook, dcptr_t pObject, dcptr_t pData) {
@@ -346,8 +337,7 @@ bool PluginManager::runHook(PluginHook* hook, dcptr_t pObject, dcptr_t pData) {
 
 	Bool bBreak = False;
 	Bool bRes = False;
-	for(auto i = hook->subscribers.cbegin(); i != hook->subscribers.cend(); ++i) {
-		HookSubscriber* sub = *i;
+	for(auto& sub: hook->subscribers) {
 		if(sub->common ? sub->hookProcCommon(pObject, pData, sub->common, &bBreak) : sub->hookProc(pObject, pData, &bBreak))
 			bRes = True;
 		if(bBreak) return (bRes != False);
@@ -368,17 +358,14 @@ size_t PluginManager::releaseHook(HookSubscriber* subscription) {
 	if(subscription == NULL)
 		return 0;
 
-	PluginHook* hook = NULL;
-
 	auto i = hooks.find(subscription->owner);
-	if(i != hooks.end())
-		hook = i->second;
-
-	if(hook == NULL)
+	if(i == hooks.end()) {
 		return 0;
+	}
+	auto& hook = i->second;
 
-	hook->subscribers.erase(std::remove(hook->subscribers.begin(), hook->subscribers.end(), subscription), hook->subscribers.end());
-	delete subscription;
+	hook->subscribers.erase(std::remove_if(hook->subscribers.begin(), hook->subscribers.end(),
+		[subscription](const unique_ptr<HookSubscriber>& sub) { return sub.get() == subscription; }), hook->subscribers.end());
 
 	return hook->subscribers.size();
 }

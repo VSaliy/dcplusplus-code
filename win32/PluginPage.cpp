@@ -19,31 +19,35 @@
 #include "stdafx.h"
 #include "PluginPage.h"
 
-#include "resource.h"
 #include "HoldRedraw.h"
+#include "resource.h"
+#include "WinUtil.h"
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Label.h>
 #include <dwt/widgets/LoadDialog.h>
 #include <dwt/widgets/MessageBox.h>
 
-#include <vector>
+#include <boost/range/algorithm/for_each.hpp>
 
 #include <dcpp/ScopedFunctor.h>
 
 #include <dcpp/format.h>
 #include <dcpp/version.h>
 
-#include "WinUtil.h"
-
-using std::for_each;
-using std::vector;
-
 using dwt::Grid;
 using dwt::GridInfo;
 using dwt::Label;
 using dwt::LoadDialog;
 
+#define IDH_PLUGIN_PAGE 0
+#define IDH_PLUGINS_INFO 0
+#define IDH_PLUGINS_INSTALLED 0
+#define IDH_PLUGIN_ADD 0
+#define IDH_PLUGIN_CONFIGURE 0
+#define IDH_PLUGIN_UP 0
+#define IDH_PLUGIN_DOWN 0
+#define IDH_PLUGIN_REMOVE 0
 
 static const ColumnInfo columns[] = {
 	{ "", 440, false },
@@ -57,8 +61,7 @@ configure(0),
 moveUp(0),
 moveDown(0),
 remove(0),
-pluginInfo(0),
-webLink(0)
+pluginInfo(0)
 {
 
 	setHelpId(IDH_PLUGIN_PAGE);
@@ -74,7 +77,7 @@ webLink(0)
 		{
 			auto group = grid->addChild(GroupBox::Seed(T_("Installed Plugins")));
 
-			auto cur = group->addChild(Grid::Seed(4, 1));
+			auto cur = group->addChild(Grid::Seed(2, 1));
 			cur->column(0).mode = GridInfo::FILL;
 			cur->row(0).mode = GridInfo::FILL;
 			cur->row(0).align = GridInfo::STRETCH;
@@ -139,14 +142,10 @@ webLink(0)
 		grid->addChild(Label::Seed(str(TF_("Some plugins may require you to restart %1%") % Text::toT(APPNAME))));
 	}
 
-	PropPage::read(items);
-
 	WinUtil::makeColumns(plugins, columns, 1);
 
-	{
-		const auto& list = PluginManager::getInstance()->getPluginList();
-		for(auto& i: list)
-			addEntry(plugins->size(), i->getInfo());
+	for(auto& plugin: PluginManager::getInstance()->getPluginList()) {
+		addEntry(plugins->size(), plugin->getInfo());
 	}
 
 	handleSelectionChanged();
@@ -157,11 +156,6 @@ webLink(0)
 }
 
 PluginPage::~PluginPage() {
-}
-
-void PluginPage::write()
-{
-	PropPage::write(items);
 }
 
 void PluginPage::handleDoubleClick() {
@@ -193,10 +187,7 @@ void PluginPage::handleSelectionChanged() {
 
 	HoldRedraw hold(pluginInfo);
 
-	auto children = pluginInfo->getChildren<Control>();
-	auto v = std::vector<Control*>(children.first, children.second);
-
-	for_each(v.begin(), v.end(), [](Control *w) { w->close(); });
+	boost::for_each(pluginInfo->getChildren<Control>(), [](Control *w) { w->close(); });
 
 	pluginInfo->clearRows();
 
@@ -209,38 +200,24 @@ void PluginPage::handleSelectionChanged() {
 	pluginInfo->addRow();
 	auto infoGrid = pluginInfo->addChild(Grid::Seed(0, 2));
 
-	vector<pair<tstring, tstring> >  pluginMap;
-
-	auto addInfo = [this, &pluginMap] (tstring&& name, const string& value) -> void { pluginMap.emplace_back(move(name), Text::toT(value)); };
-
-	{
-		const MetaData* info = (MetaData*)plugins->getData(plugins->getSelected());
-
-		addInfo(T_("Name: "), info->name);
-		addInfo(T_("Version: "), Util::toString(info->version));
-		addInfo(T_("Description: "), info->description);
-		addInfo(T_("Author: "), info->author);
-		addInfo(T_("Website: "), info->web);
-	}
-
-	for(auto& i : pluginMap) {
+	auto addInfo = [this, infoGrid](tstring name, const string& value, bool link) {
 		infoGrid->addRow();
-		if(!i.second.empty() && i.second.compare(_T("N/A")) != 0) {
-			if(i.first.compare(T_("Website: ")) != 0) {
-				infoGrid->addChild(Label::Seed(i.first));
-				infoGrid->addChild(Label::Seed(i.second));
-			} else {
-				infoGrid->addChild(Label::Seed(i.first));
-				webLink = infoGrid->addChild(Label::Seed(i.second));
-				// TODO: act more like a hyperlink, where is my dwt::HyperLink :P
-				webLink->setColor(RGB(0, 0, 255), ::GetSysColor(COLOR_BTNFACE));
-				webLink->onClicked([this] { WinUtil::openLink(webLink->getText()); });
-			}
-		} else {
-			infoGrid->addChild(Label::Seed(i.first));
-			infoGrid->addChild(Label::Seed(T_("<Information unavailable>")));
+		infoGrid->addChild(Label::Seed(name));
+		auto control = infoGrid->addChild(Label::Seed(value.empty() ?
+			T_("<Information unavailable>") : Text::toT(value)));
+		if(link && !value.empty()) {
+			/// @todo proper link control
+			control->onClicked([control] { WinUtil::openLink(control->getText()); });
 		}
-	}
+	};
+
+	auto info = reinterpret_cast<MetaData*>(plugins->getData(plugins->getSelected()));
+
+	addInfo(T_("Name: "), info->name, false);
+	addInfo(T_("Version: "), Util::toString(info->version), false);
+	addInfo(T_("Description: "), info->description, false);
+	addInfo(T_("Author: "), info->author, false);
+	addInfo(T_("Website: "), info->web, true);
 }
 
 bool PluginPage::handleContextMenu(dwt::ScreenCoordinate pt) {
