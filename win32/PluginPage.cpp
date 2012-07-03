@@ -187,7 +187,10 @@ void PluginPage::handleSelectionChanged() {
 
 	HoldRedraw hold(pluginInfo);
 
-	boost::for_each(pluginInfo->getChildren<Control>(), [](Control *w) { w->close(); });
+	/* destroy previous children. store them in a vector beforehand or the enumeration will fail
+	(since they're getting destroyed)... */
+	auto children = pluginInfo->getChildren<Control>();
+	boost::for_each(std::vector<Control*>(children.first, children.second), [](Control* w) { w->close(); });
 
 	pluginInfo->clearRows();
 
