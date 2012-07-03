@@ -102,6 +102,9 @@ typedef boost::intrusive_ptr<ImageList> ImageListPtr;
 class Label;
 typedef Label* LabelPtr;
 
+class Link;
+typedef Link* LinkPtr;
+
 class LoadDialog;
 
 class Menu;

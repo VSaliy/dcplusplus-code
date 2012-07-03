@@ -25,6 +25,7 @@
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Label.h>
+#include <dwt/widgets/Link.h>
 #include <dwt/widgets/LoadDialog.h>
 #include <dwt/widgets/MessageBox.h>
 
@@ -38,6 +39,7 @@
 using dwt::Grid;
 using dwt::GridInfo;
 using dwt::Label;
+using dwt::Link;
 using dwt::LoadDialog;
 
 #define IDH_PLUGIN_PAGE 0
@@ -206,11 +208,12 @@ void PluginPage::handleSelectionChanged() {
 	auto addInfo = [this, infoGrid](tstring name, const string& value, bool link) {
 		infoGrid->addRow();
 		infoGrid->addChild(Label::Seed(name));
-		auto control = infoGrid->addChild(Label::Seed(value.empty() ?
-			T_("<Information unavailable>") : Text::toT(value)));
 		if(link && !value.empty()) {
-			/// @todo proper link control
-			control->onClicked([control] { WinUtil::openLink(control->getText()); });
+			auto valueT = Text::toT(value);
+			infoGrid->addChild(Link::Seed(valueT, true));
+		} else {
+			infoGrid->addChild(Label::Seed(value.empty() ?
+				T_("<Information unavailable>") : Text::toT(value)));
 		}
 	};
 
