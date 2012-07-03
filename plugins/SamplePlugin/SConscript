@@ -4,4 +4,12 @@ env, target, sources = dev.prepare_build(source_path, 'SamplePlugin', source_glo
 
 env.Append(CPPPATH = ['#/dcpp'])
 
-ret = dev.build_lib(env, target, sources, shared = True)
+res = env.RES(dev.get_sources(source_path, '*.rc'))
+env.Depends(res, 'resource.h')
+
+if 'g++' in env['LINK']:
+	env.Append(SHLINKFLAGS = '-Wl,--add-stdcall-alias')
+elif 'link' in env['LINK']:
+	sources.append('Plugin.def')
+
+ret = dev.build_lib(env, target, [sources, res], shared = True)
