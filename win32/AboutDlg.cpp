@@ -28,6 +28,7 @@
 
 #include <dwt/widgets/Grid.h>
 #include <dwt/widgets/Label.h>
+#include <dwt/widgets/Link.h>
 
 #include "resource.h"
 #include "WinUtil.h"
@@ -35,6 +36,7 @@
 using dwt::Grid;
 using dwt::GridInfo;
 using dwt::Label;
+using dwt::Link;
 
 static const char thanks[] = "Big thanks to all donators and people who have contributed with ideas "
 "and code! Thanks go out to sourceforge.net for hosting the project. "
@@ -89,16 +91,17 @@ bool AboutDlg::handleInitDialog() {
 	ls.style |= SS_CENTER;
 
 	{
-		auto cur = grid->addChild(gs)->addChild(Grid::Seed(3, 1));
+		auto cur = grid->addChild(gs)->addChild(Grid::Seed(4, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::CENTER;
 
 		cur->addChild(Label::Seed(WinUtil::createIcon(IDI_DCPP, 48)));
 
 		ls.caption = Text::toT(dcpp::fullVersionString) + _T("\n(c) Copyright 2001-2012 Jacek Sieka\n");
-		ls.caption += T_("Ex-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL\n");
-		ls.caption += _T("http://dcplusplus.sourceforge.net/");
+		ls.caption += T_("Ex-codeveloper: Per Lind\303\251n\nGraphics: Martin Skogevall et al.\nDC++ is licenced under GPL");
 		cur->addChild(ls);
+
+		cur->addChild(Link::Seed(_T("http://dcplusplus.sourceforge.net/"), true));
 
 		gs.caption = T_("TTH");
 		auto seed = WinUtil::Seeds::Dialog::textBox;
@@ -135,10 +138,11 @@ bool AboutDlg::handleInitDialog() {
 	ls.caption = T_("Downloading...");
 	version = grid->addChild(gs)->addChild(ls);
 
-	WinUtil::addDlgButtons(grid,
+	auto buttons = WinUtil::addDlgButtons(grid,
 		[this] { endDialog(IDOK); },
-		[this] { endDialog(IDCANCEL); }
-		).second->setVisible(false);
+		[this] { endDialog(IDCANCEL); });
+	buttons.first->setFocus();
+	buttons.second->setVisible(false);
 
 	setText(T_("About DC++"));
 	setSmallIcon(WinUtil::createIcon(IDI_DCPP, 16));
