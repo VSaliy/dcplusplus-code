@@ -21,13 +21,15 @@
 
 #include "compiler.h"
 
+#include <functional>
 #include <string>
 
 namespace dcpp {
 
+using std::function;
 using std::string;
 
-extern void startup(void (*f)(void*, const string&), void* p);
+extern void startup(function<void (const string&)> f);
 extern void shutdown();
 
 } // namespace dcpp

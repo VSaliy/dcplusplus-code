@@ -61,7 +61,7 @@ PluginInfo::~PluginInfo() {
 	}
 }
 
-void PluginManager::loadPlugins(void (*f)(void*, const string&), void* p) {
+void PluginManager::loadPlugins(function<void (const string&)> f) {
 	PluginApiImpl::initAPI(dcCore);
 
 	TimerManager::getInstance()->addListener(this);
@@ -69,20 +69,21 @@ void PluginManager::loadPlugins(void (*f)(void*, const string&), void* p) {
 	QueueManager::getInstance()->addListener(this);
 
 	StringTokenizer<string> st(getPluginSetting("CoreSetup", "Plugins"), ";");
-	for(StringIter i = st.getTokens().begin(); i != st.getTokens().end(); ++i) {
-		if(!loadPlugin(*i) || !f) continue;
-		(*f)(p, Util::getFileName(*i));
+	auto err = [](const string& str) { LogManager::getInstance()->message(str); };
+	for(auto& i: st.getTokens()) {
+		if(!loadPlugin(i, err) || !f) continue;
+		f(Util::getFileName(i));
 	}
 }
 
-bool PluginManager::loadPlugin(const string& fileName, bool isInstall /*= false*/) {
+bool PluginManager::loadPlugin(const string& fileName, function<void (const string&)> err, bool install) {
 	Lock l(cs);
 
 	dcassert(dcCore.apiVersion != 0);
 
 	PluginHandle hr = LOAD_LIBRARY(fileName);
 	if(!hr) {
-		LogManager::getInstance()->message(str(F_("Error loading %1%: %2%") % Util::getFileName(fileName) % GET_ERROR()));
+		err(str(F_("Error loading %1%: %2%") % Util::getFileName(fileName) % GET_ERROR()));
 		return false;
 	}
 
@@ -94,14 +95,14 @@ bool PluginManager::loadPlugin(const string& fileName, bool isInstall /*= false*
 
 		DCMAIN dcMain;
 		if((dcMain = pluginInfo(&info)) != NULL) {
-			if(checkPlugin(info)) {
-				if(dcMain((isInstall ? ON_INSTALL : ON_LOAD), &dcCore, NULL) != False) {
+			if(checkPlugin(info, err)) {
+				if(dcMain((install ? ON_INSTALL : ON_LOAD), &dcCore, NULL) != False) {
 					plugins.emplace_back(new PluginInfo(fileName, hr, info, dcMain));
 					return true;
 				}
 			}
 		}
-	} else LogManager::getInstance()->message(str(F_("%1% is not a valid plugin") % Util::getFileName(fileName)));
+	} else err(str(F_("%1% is not a valid plugin") % Util::getFileName(fileName)));
 
 	FREE_LIBRARY(hr);
 	return false;
@@ -113,16 +114,16 @@ bool PluginManager::isLoaded(const string& guid) {
 	return (i != plugins.end());
 }
 
-bool PluginManager::checkPlugin(const MetaData& info) {
+bool PluginManager::checkPlugin(const MetaData& info, function<void (const string&)> err) {
 	// Check if user is trying to load a duplicate
 	if(isLoaded(info.guid)) {
-		LogManager::getInstance()->message(str(F_("%1% is already installed") % info.name));
+		err(str(F_("%1% is already installed") % info.name));
 		return false;
 	}
 
 	// Check API compatibility (this should only block on absolutely wrecking api changes, which generally should not happen)
 	if(info.apiVersion < DCAPI_CORE_VER) {
-		LogManager::getInstance()->message(str(F_("%1% is too old, contact the plugin author for an update") % info.name));
+		err(str(F_("%1% is too old, contact the plugin author for an update") % info.name));
 		return false;
 	}
 
@@ -130,7 +131,7 @@ bool PluginManager::checkPlugin(const MetaData& info) {
 	if(info.numDependencies != 0) {
 		for(size_t i = 0; i < info.numDependencies; ++i) {
 			if(!isLoaded(info.dependencies[i])) {
-				LogManager::getInstance()->message(str(F_("Missing dependencies for %1%") % info.name));
+				err(str(F_("Missing dependencies for %1%") % info.name));
 				return false;
 			}
 		}
