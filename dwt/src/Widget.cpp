@@ -53,6 +53,8 @@
 
 namespace dwt {
 
+GlobalAtom Widget::propAtom(_T("dwt::Widget*"));
+
 Widget::Widget(Widget* parent_, Dispatcher& dispatcher_) :
 	hwnd(NULL), parent(parent_), dispatcher(dispatcher_)
 {
@@ -60,7 +62,9 @@ Widget::Widget(Widget* parent_, Dispatcher& dispatcher_) :
 }
 
 Widget::~Widget() {
-
+	if(hwnd) {
+		::RemoveProp(hwnd, propAtom);
+	}
 }
 
 void Widget::kill() {
@@ -87,13 +91,7 @@ void Widget::setHandle(HWND h) {
 
 	hwnd = h;
 
-	dwtassert((::GetWindowLongPtr(hwnd, GWLP_USERDATA) == 0), "Userdata already set");
-
-	::SetLastError(0);
-	LONG_PTR ret = ::SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
-	if(ret == 0 && ::GetLastError() != 0) {
-		throw Win32Exception("Error while setting pointer");
-	}
+	::SetProp(hwnd, propAtom, reinterpret_cast<HANDLE>(this));
 
 	::SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc::wndProc));
 }

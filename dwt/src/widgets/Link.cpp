@@ -68,7 +68,7 @@ void Link::setLink(const tstring& link, size_t index) {
 Point Link::getPreferredSize() {
 	if(util::win32::ensureVersion(util::win32::VISTA)) {
 		SIZE size = { 0 };
-		sendMessage(LM_GETIDEALSIZE, getParent()->getClientSize().x, reinterpret_cast<LPARAM>(&size));
+		sendMessage(LM_GETIDEALSIZE, getRoot()->getClientSize().x, reinterpret_cast<LPARAM>(&size));
 		return Point(size.cx, size.cy);
 	}
 
