@@ -31,6 +31,8 @@
 
 #include <dwt/widgets/Link.h>
 
+#include <dwt/util/win32/Version.h>
+
 namespace dwt {
 
 const TCHAR Link::windowClass[] = WC_LINK;
@@ -59,14 +61,29 @@ void Link::create(const Seed& seed) {
 }
 
 void Link::setLink(const tstring& link, size_t index) {
-	LITEM item = { LIF_ITEMINDEX | LIF_URL, index };
-	link.copy(item.szUrl, std::min(link.size(), L_MAX_URL_LENGTH - 1));
+	LITEM item = { LIF_ITEMINDEX | LIF_URL, static_cast<int>(index) };
+	link.copy(item.szUrl, std::min(link.size(), static_cast<size_t>(L_MAX_URL_LENGTH - 1)));
 }
 
 Point Link::getPreferredSize() {
-	SIZE size = { 0 };
-	sendMessage(LM_GETIDEALSIZE, getParent()->getClientSize().x, reinterpret_cast<LPARAM>(&size));
-	return Point(size.cx, size.cy);
+	if(util::win32::ensureVersion(util::win32::VISTA)) {
+		SIZE size = { 0 };
+		sendMessage(LM_GETIDEALSIZE, getParent()->getClientSize().x, reinterpret_cast<LPARAM>(&size));
+		return Point(size.cx, size.cy);
+	}
+
+	// no LM_GETIDEALSIZE on XP; do it by hand...
+	auto text = getText();
+	size_t start, end, closing, closingEnd;
+	while((start = text.find(_T("<a"))) != tstring::npos &&
+		(end = text.find(_T(">"), start)) != tstring::npos &&
+		(closing = text.find(_T("</a"), end)) != tstring::npos &&
+		(closingEnd = text.find(_T(">"), closing)) != tstring::npos)
+	{
+		text.erase(closing, closingEnd - closing);
+		text.erase(start, end - start);
+	}
+	return getTextSize(text);
 }
 
 }
