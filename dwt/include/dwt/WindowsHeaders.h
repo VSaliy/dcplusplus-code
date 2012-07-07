@@ -81,7 +81,7 @@
 // Other quirks
 
 // LM_GETIDEALSIZE is a >=Vista message; we check the OS version before using it.
-#if WINVER < 0x600
+#ifndef LM_GETIDEALSIZE
 #define LM_GETIDEALSIZE LM_GETIDEALHEIGHT
 #endif
 

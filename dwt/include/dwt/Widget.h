@@ -37,6 +37,7 @@
 #define DWT_Widget_h
 
 #include "Application.h"
+#include "Atom.h"
 #include "forward.h"
 #include "Rectangle.h"
 #include "Point.h"
@@ -236,6 +237,9 @@ private:
 
 	static Rectangle getDesktopSize(HMONITOR mon);
 
+	/// The atom with which the pointer to the Widget is registered on the HWND
+	static GlobalAtom propAtom;
+
 	// Contains the list of signals we're (this window) processing
 	CallbackCollectionType handlers;
 
@@ -317,7 +321,7 @@ inline bool Widget::getEnabled() const {
 
 template<typename T>
 T hwnd_cast(HWND hwnd) {
-	Widget* w = reinterpret_cast<Widget*>(::GetWindowLongPtr(hwnd, GWLP_USERDATA));
+	Widget* w = reinterpret_cast<Widget*>(::GetProp(hwnd, Widget::propAtom));
 	return dynamic_cast<T>(w);
 }
 
