@@ -30,7 +30,6 @@
 #include "Singleton.h"
 #include "SettingsManager.h"
 #include "TimerManager.h"
-#include "LogManager.h"
 
 #include "QueueManagerListener.h"
 #include "ClientManagerListener.h"

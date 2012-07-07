@@ -1397,7 +1397,7 @@ void WinUtil::openLink(const tstring& url) {
 	::ShellExecute(NULL, NULL, url.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
-bool WinUtil::parseLink(const tstring& str) {
+bool WinUtil::parseLink(const tstring& str, bool followExternal) {
 	auto url = Text::fromT(str);
 	string proto, host, port, file, query, fragment;
 	Util::decodeUrl(url, proto, host, port, file, query, fragment);
@@ -1426,9 +1426,10 @@ bool WinUtil::parseLink(const tstring& str) {
 
 		return true;
 
-	} else if(!proto.empty() ||
+	} else if(followExternal && (!proto.empty() ||
 		Util::strnicmp(str.c_str(), _T("www."), 4) == 0 ||
-		Util::strnicmp(str.c_str(), _T("mailto:"), 7) == 0) {
+		Util::strnicmp(str.c_str(), _T("mailto:"), 7) == 0))
+	{
 		openLink(str);
 		return true;
 

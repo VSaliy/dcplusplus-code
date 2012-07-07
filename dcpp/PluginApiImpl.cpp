@@ -28,16 +28,15 @@
 #include "stdinc.h"
 #include "PluginApiImpl.h"
 
-#include "File.h"
-
-#include "PluginManager.h"
+#include "Client.h"
+#include "ClientManager.h"
 #include "ConnectionManager.h"
 #include "FavoriteManager.h"
+#include "File.h"
+#include "LogManager.h"
+#include "PluginManager.h"
 #include "QueueManager.h"
-#include "ClientManager.h"
-
 #include "UserConnection.h"
-#include "Client.h"
 
 namespace dcpp {
 

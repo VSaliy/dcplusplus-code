@@ -298,14 +298,18 @@ void MainWindow::initMenu() {
 		file->appendItem(T_("Open own list"), [this] { DirectoryListingFrame::openOwnList(getTabView(), Util::emptyStringT, DirectoryListingFrame::FORCE_ACTIVE); });
 		file->appendItem(T_("Match downloaded lists"), [this] { handleMatchAll(); });
 		file->appendItem(T_("Refresh file list\tF5"), [this] { handleRefreshFileList(); }, WinUtil::menuIcon(IDI_REFRESH));
+		file->appendSeparator();
+
 		file->appendItem(T_("Open downloads directory"), [this] { handleOpenDownloadsDir(); }, WinUtil::menuIcon(IDI_OPEN_DL_DIR));
 		file->appendItem(T_("Open crash log"), [this] { TextFrame::openWindow(getTabView(), CrashLogger::getPath()); });
 		file->appendSeparator();
 
 		file->appendItem(T_("Settings\tCtrl+F3"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));
 		file->appendSeparator();
+
 		file->appendItem(T_("GeoIP database update"), [this] { updateGeo(); });
 		file->appendSeparator();
+
 		file->appendItem(T_("E&xit\tAlt+F4"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
 	}
 
@@ -824,8 +828,8 @@ void MainWindow::handleQuickConnect() {
 	if(!WinUtil::checkNick())
 		return;
 
-	ParamDlg dlg(this, T_("Quick Connect"), T_("Address"));
-	if(dlg.run() == IDOK) {
+	ParamDlg dlg(this, T_("Quick Connect"), T_("Hub address or Magnet link"));
+	if(dlg.run() == IDOK && !WinUtil::parseLink(dlg.getValue(), false)) {
 		HubFrame::openWindow(getTabView(), Text::fromT(dlg.getValue()));
 	}
 }
