@@ -58,11 +58,6 @@ BOOL CALLBACK searchOtherInstance(HWND hWnd, LPARAM lParam) {
 	return TRUE;
 }
 
-void callBack(void* ptr, const string& a) {
-	SplashWindow& splash = *((SplashWindow*)ptr);
-	splash(a);
-}
-
 #ifdef _DEBUG
 void (*old_handler)();
 
@@ -140,7 +135,7 @@ int dwtMain(dwt::Application& app) {
 
 	try {
 		SplashWindow* splash(new SplashWindow);
-		startup(&callBack, splash);
+		startup([splash](const string& str) { (*splash)(str); });
 
 		bindtextdomain(PACKAGE, LOCALEDIR);
 		textdomain(PACKAGE);

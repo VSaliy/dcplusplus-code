@@ -253,15 +253,17 @@ MenuPtr PluginPage::makeMenu() {
 }
 
 void PluginPage::handleAddPlugin() {
-	auto aPath = Util::emptyStringT;
-		LoadDialog dlg(this);
-		dlg.addFilter(T_("DLL Files"), _T("*.dll"));
-		dlg.setInitialDirectory(Text::toT(Util::getPath(Util::PATH_GLOBAL_CONFIG) + "Plugins"));
-	
-	if(dlg.open(aPath)) {
+	tstring path;
+	if(LoadDialog(this).addFilter(T_("DLL files"), _T("*.dll"))
+		.setInitialDirectory(Text::toT(Util::getPath(Util::PATH_GLOBAL_CONFIG) + "Plugins")).open(path))
+	{
 		auto idx = plugins->size();
-		if(PluginManager::getInstance()->loadPlugin(Text::fromT(aPath), true))
+		if(PluginManager::getInstance()->loadPlugin(Text::fromT(path), [this, &path](const string& str) {
+			dwt::MessageBox(this).show(Text::toT(str), Text::toT(Util::getFileName(Text::fromT(path))),
+				dwt::MessageBox::BOX_OK, dwt::MessageBox::BOX_ICONSTOP);
+		}, true)) {
 			addEntry(idx, PluginManager::getInstance()->getPlugin(idx)->getInfo());
+		}
 	}
 }
 

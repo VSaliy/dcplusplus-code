@@ -24,6 +24,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "Singleton.h"
@@ -47,6 +48,7 @@ namespace dcpp {
 
 using std::function;
 using std::map;
+using std::string;
 using std::unique_ptr;
 using std::vector;
 
@@ -103,8 +105,8 @@ public:
 		SettingsManager::getInstance()->removeListener(this);
 	}
 
-	void loadPlugins(void (*f)(void*, const string&), void* p);
-	bool loadPlugin(const string& fileName, bool isInstall = false);
+	void loadPlugins(function<void (const string&)> f);
+	bool loadPlugin(const string& fileName, function<void (const string&)> err, bool install = false);
 	bool isLoaded(const string& guid);
 
 	void unloadPlugins();
@@ -166,7 +168,7 @@ public:
 
 private:
 	// Check if plugin can be loaded
-	bool checkPlugin(const MetaData& info);
+	bool checkPlugin(const MetaData& info, function<void (const string&)> err);
 
 	// Listeners
 	void on(TimerManagerListener::Second, uint64_t ticks) noexcept { runHook(HOOK_TIMER_SECOND, NULL, &ticks); }
