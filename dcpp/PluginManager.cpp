@@ -22,6 +22,7 @@
 #include "Client.h"
 #include "ClientManager.h"
 #include "ConnectionManager.h"
+#include "LogManager.h"
 #include "QueueManager.h"
 #include "SimpleXML.h"
 #include "StringTokenizer.h"

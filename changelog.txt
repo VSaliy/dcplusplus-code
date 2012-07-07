@@ -24,6 +24,7 @@
 * Greatly improve user command removal time when closing a hub
 * Add plugin API (Crise, iceman50)
 * [dwt] Add a link control (poy)
+* Allow Magnet links to be pasted in the "Quick connect" box (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)

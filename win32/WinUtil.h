@@ -291,7 +291,7 @@ public:
 
 	static bool getUCParams(dwt::Widget* parent, const UserCommand& cmd, ParamMap& params) noexcept;
 
-	static bool parseLink(const tstring& aString);
+	static bool parseLink(const tstring& str, bool followExternal = true);
 
 	static void help(dwt::Control* widget);
 	static void helpId(dwt::Control* widget, unsigned id);
