@@ -209,8 +209,7 @@ void PluginPage::handleSelectionChanged() {
 		infoGrid->addRow();
 		infoGrid->addChild(Label::Seed(name));
 		if(link && !value.empty()) {
-			auto valueT = Text::toT(value);
-			infoGrid->addChild(Link::Seed(valueT, true));
+			infoGrid->addChild(Link::Seed(Text::toT(value), true));
 		} else {
 			infoGrid->addChild(Label::Seed(value.empty() ?
 				T_("<Information unavailable>") : Text::toT(value)));

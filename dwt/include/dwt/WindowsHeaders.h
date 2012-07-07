@@ -78,4 +78,11 @@
 #include <list>
 #include <boost/noncopyable.hpp>
 
+// Other quirks
+
+// LM_GETIDEALSIZE is a >=Vista message; we check the OS version before using it.
+#if WINVER < 0x600
+#define LM_GETIDEALSIZE LM_GETIDEALHEIGHT
+#endif
+
 #endif // !WindowsHeaders_h
