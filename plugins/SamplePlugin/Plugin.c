@@ -103,7 +103,7 @@ Bool onUnload() {
 }
 
 /* Event handlers */
-Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, Bool* bBreak) {
+Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, void *opaque, Bool* bBreak) {
 	HubDataPtr hHub = (HubDataPtr)pObject;
 	CommandDataPtr cmd = (CommandDataPtr)pData;
 
@@ -189,7 +189,7 @@ Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, Bool* bBreak) {
 	return False;
 }
 
-Bool DCAPI onHubOnline(dcptr_t pObject, dcptr_t pData, Bool* bBreak) {
+Bool DCAPI onHubOnline(dcptr_t pObject, dcptr_t pData, void *opaque, Bool* bBreak) {
 	HubDataPtr hHub = (HubDataPtr)pObject;
 
 	char* buf = (char*)memset(malloc(256), 0, 256);
