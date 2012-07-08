@@ -280,7 +280,7 @@ typedef Bool (DCAPI* DCMAIN)		(PluginState pluginState, DCCorePtr core, dcptr_t 
 /* Hooks (events) system - required interface! */
 
 /* Hook function prototypes */
-typedef Bool (DCAPI* DCHOOK)		(dcptr_t pObject, dcptr_t pData, void* pCommon, Bool* bBreak);
+typedef Bool (DCAPI* DCHOOK)		(dcptr_t pObject, dcptr_t pData, dcptr_t pCommon, Bool* bBreak);
 
 /* Hook system functions */
 typedef struct tagDCHooks {
