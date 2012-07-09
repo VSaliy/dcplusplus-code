@@ -22,7 +22,7 @@
 * [L#249159] Improve performance when selecting lots of lines in lists (poy)
 * [L#1016907] Exclude temporary downloads from queue dupe check (emtee)
 * Greatly improve user command removal time when closing a hub
-* Add plugin API (Crise, iceman50)
+* [L#587597] Add plugin API (Crise, iceman50)
 * [dwt] Add a link control (poy)
 * Allow Magnet links to be pasted in the "Quick connect" box (poy)
 
