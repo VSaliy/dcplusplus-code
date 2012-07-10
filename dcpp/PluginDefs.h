@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 /* Version of the plugin api (must change if old plugins simply can't be seen as viably working) */
-#define DCAPI_CORE_VER				3
+#define DCAPI_CORE_VER				4
 
 #ifdef _WIN32
 # define DCAPI __stdcall
