@@ -275,7 +275,7 @@ private:
 				case FILES_COLUMN_PERCENTAGE: return compare(a->entry->getTransferredPercentage(), b->entry->getTransferredPercentage());
 				case FILES_COLUMN_SPEED: return compare(a->entry->getAverageSpeed(), b->entry->getAverageSpeed());
 				case FILES_COLUMN_ELAPSED: return compare(a->entry->getMilliSeconds(), b->entry->getMilliSeconds());
-				default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+				default: return compare(a->columns[col], b->columns[col]);
 			}
 		}
 
@@ -356,7 +356,7 @@ private:
 				case USERS_COLUMN_TRANSFERRED: return compare(a->entry->getTransferred(), b->entry->getTransferred());
 				case USERS_COLUMN_SPEED: return compare(a->entry->getAverageSpeed(), b->entry->getAverageSpeed());
 				case USERS_COLUMN_ELAPSED: return compare(a->entry->getMilliSeconds(), b->entry->getMilliSeconds());
-				default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+				default: return compare(a->columns[col], b->columns[col]);
 			}
 		}
 

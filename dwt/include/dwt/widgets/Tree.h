@@ -47,22 +47,6 @@
 
 namespace dwt {
 
-class Tree;
-
-class TreeItem : boost::noncopyable {
-public:
-
-private:
-	friend class Tree;
-
-	TreeItem(HTREEITEM handle);
-
-	HTREEITEM handle;
-};
-
- /** \ingroup WidgetControls
-   * \WidgetUsageInfo
-   */
 class Tree :
 	public Control,
 	public aspects::Clickable<Tree>,
@@ -127,8 +111,12 @@ public:
 		Seed();
 	};
 
-	/// Inserts a "node" into the TreeView
-	HTREEITEM insert(const tstring& text, HTREEITEM parent = NULL, LPARAM param = 0, bool expanded = false, int iconIndex = - 1, int selectedIconIndex = - 1);
+	/** Inserts a node into the tree control.
+	@param insertAfter One of TVI_FIRST, TVI_LAST, TVI_SORT; or an existing HTREEITEM. Be careful,
+	TVI_SORT can have an important performance impact. */
+	HTREEITEM insert(const tstring& text, HTREEITEM parent, HTREEITEM insertAfter = TVI_LAST,
+		LPARAM param = 0, bool expanded = false, int iconIndex = -1, int selectedIconIndex = -1);
+	HTREEITEM insert(TVINSERTSTRUCT& tvis);
 
 	HTREEITEM getNext(HTREEITEM node, unsigned flag);
 

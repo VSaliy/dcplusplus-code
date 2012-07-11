@@ -40,11 +40,6 @@ public:
 	class File : public FastAlloc<File> {
 	public:
 		typedef File* Ptr;
-		struct FileSort {
-			bool operator()(const Ptr& a, const Ptr& b) const {
-				return Util::stricmp(a->getName().c_str(), b->getName().c_str()) < 0;
-			}
-		};
 		typedef vector<Ptr> List;
 		typedef List::iterator Iter;
 
@@ -66,6 +61,8 @@ public:
 
 		void save(OutputStream& stream, string& indent, string& tmp) const;
 
+		struct Sort { bool operator()(const Ptr& a, const Ptr& b) const; };
+
 		GETSET(string, name, Name);
 		GETSET(int64_t, size, Size);
 		GETSET(Directory*, parent, Parent);
@@ -76,11 +73,6 @@ public:
 	class Directory : public FastAlloc<Directory>, boost::noncopyable {
 	public:
 		typedef Directory* Ptr;
-		struct DirSort {
-			bool operator()(const Ptr& a, const Ptr& b) const {
-				return Util::stricmp(a->getName().c_str(), b->getName().c_str()) < 0;
-			}
-		};
 		typedef vector<Ptr> List;
 		typedef List::iterator Iter;
 
@@ -100,6 +92,7 @@ public:
 		void filterList(TTHSet& l);
 		void getHashList(TTHSet& l);
 		void save(OutputStream& stream, string& indent, string& tmp) const;
+		void sortDirs();
 
 		size_t getFileCount() const { return files.size(); }
 
@@ -110,6 +103,8 @@ public:
 			}
 			return x;
 		}
+
+		struct Sort { bool operator()(const Ptr& a, const Ptr& b) const; };
 
 		GETSET(string, name, Name);
 		GETSET(Directory*, parent, Parent);
@@ -134,6 +129,8 @@ public:
 
 	/** write an XML representation of this file list to the specified file. */
 	void save(const string& path) const;
+	/** sort directories and sub-directories recursively (case-insensitive). */
+	void sortDirs();
 
 	void download(const string& aDir, const string& aTarget, bool highPrio);
 	void download(Directory* aDir, const string& aTarget, bool highPrio);

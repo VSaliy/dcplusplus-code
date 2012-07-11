@@ -37,7 +37,6 @@ using dwt::SpinnerPtr;
 using dwt::SplitterContainerPtr;
 using dwt::TabViewPtr;
 using dwt::TextBoxPtr;
-using dwt::TreePtr;
 using dwt::ToolBarPtr;
 using dwt::ToolTipPtr;
 
@@ -57,10 +56,10 @@ typedef Table* TablePtr;
 
 class TransferView;
 
-template<typename ContentType, bool managed = true>
+template<typename ContentType, bool managed = true, typename TableType = Table>
 class TypedTable;
 
-template<typename ContentType, bool managed = true>
+template<typename ContentType, bool managed = true, typename TreeType = dwt::Tree>
 class TypedTree;
 
 #endif /* FORWARD_H_ */

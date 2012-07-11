@@ -104,7 +104,7 @@ modify(0)
 	}
 
 	WinUtil::makeColumns(types, columns, 3);
-	types->setSort(0, dwt::Table::SORT_STRING_NOCASE);
+	types->setSort(0, dwt::Table::SORT_STRING);
 
 	fillList();
 

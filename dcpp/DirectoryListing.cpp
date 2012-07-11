@@ -335,6 +335,25 @@ void DirectoryListing::File::save(OutputStream& stream, string& indent, string& 
 	stream.write(LIT("\"/>\r\n"));
 }
 
+void DirectoryListing::sortDirs() {
+	root->sortDirs();
+}
+
+void DirectoryListing::Directory::sortDirs() {
+	for(auto d: directories) {
+		d->sortDirs();
+	}
+	sort(directories.begin(), directories.end(), Directory::Sort());
+}
+
+bool DirectoryListing::Directory::Sort::operator()(const Ptr& a, const Ptr& b) const {
+	return compare(a->getName(), b->getName()) < 0;
+}
+
+bool DirectoryListing::File::Sort::operator()(const Ptr& a, const Ptr& b) const {
+	return compare(a->getName(), b->getName()) < 0;
+}
+
 string DirectoryListing::getPath(const Directory* d) const {
 	if(d == root)
 		return "";
@@ -373,13 +392,13 @@ void DirectoryListing::download(Directory* aDir, const string& aTarget, bool hig
 	string target = (aDir == getRoot()) ? aTarget : aTarget + aDir->getName() + PATH_SEPARATOR;
 	// First, recurse over the directories
 	Directory::List& lst = aDir->directories;
-	sort(lst.begin(), lst.end(), Directory::DirSort());
+	sort(lst.begin(), lst.end(), Directory::Sort());
 	for(auto& j: lst) {
 		download(j, target, highPrio);
 	}
 	// Then add the files
 	File::List& l = aDir->files;
-	sort(l.begin(), l.end(), File::FileSort());
+	sort(l.begin(), l.end(), File::Sort());
 	for(auto file: aDir->files) {
 		try {
 			download(file, target + file->getName(), false, highPrio);

@@ -85,10 +85,13 @@ void Tree::create( const Seed & cs )
 	layout();
 }
 
-HTREEITEM Tree::insert(const tstring& text, HTREEITEM parent, LPARAM param, bool expanded, int iconIndex, int selectedIconIndex) {
-	TVITEMEX t = { TVIF_TEXT };
-	if ( param != 0 )
-	{
+HTREEITEM Tree::insert(const tstring& text, HTREEITEM parent, HTREEITEM insertAfter,
+					   LPARAM param, bool expanded, int iconIndex, int selectedIconIndex)
+{
+	TVINSERTSTRUCT item = { parent, insertAfter, { { TVIF_TEXT } } };
+	auto& t = item.itemex;
+	t.pszText = const_cast<TCHAR*>(text.c_str());
+	if(param) {
 		t.mask |= TVIF_PARAM;
 		t.lParam = param;
 	}
@@ -97,21 +100,16 @@ HTREEITEM Tree::insert(const tstring& text, HTREEITEM parent, LPARAM param, bool
 		t.state = TVIS_EXPANDED;
 		t.stateMask = TVIS_EXPANDED;
 	}
-	if ( itsNormalImageList )
-	{
+	if(itsNormalImageList) {
 		t.mask |= TVIF_IMAGE | TVIF_SELECTEDIMAGE;
-		t.iImage = ( iconIndex == - 1 ? I_IMAGECALLBACK : iconIndex );
-		t.iSelectedImage = ( selectedIconIndex == - 1 ? t.iImage : selectedIconIndex );
+		t.iImage = (iconIndex == -1) ? I_IMAGECALLBACK : iconIndex;
+		t.iSelectedImage = (selectedIconIndex == - 1) ? t.iImage : selectedIconIndex;
 	}
-	t.pszText = const_cast < TCHAR * >( text.c_str() );
+	return insert(item);
+}
 
-	TVINSERTSTRUCT tv = { parent, TVI_LAST };
-#ifdef WINCE
-	tv.item = t;
-#else
-	tv.itemex = t;
-#endif
-	return TreeView_InsertItem(treeHandle(), &tv);
+HTREEITEM Tree::insert(TVINSERTSTRUCT& tvis) {
+	return TreeView_InsertItem(treeHandle(), &tvis);
 }
 
 tstring Tree::getSelectedText() {

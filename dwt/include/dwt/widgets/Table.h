@@ -114,9 +114,9 @@ public:
 	};
 
 	enum SortType {
-		SORT_CALLBACK,
- 		SORT_STRING,
-		SORT_STRING_NOCASE,
+		SORT_CALLBACK, /// Call a custom callback function to sort items.
+ 		SORT_STRING, /// Sort alphabetically, respecting international characters in the user's locale.
+		SORT_STRING_SIMPLE, /// Sort alphabetically; ignore the user's locale.
 		SORT_INT,
 		SORT_FLOAT
 	};

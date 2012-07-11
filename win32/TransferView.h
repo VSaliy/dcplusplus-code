@@ -212,7 +212,7 @@ private:
 			case DOWNLOAD_COLUMN_SPEED: return compare(a->bps, b->bps);
 			case DOWNLOAD_COLUMN_SIZE: return compare(a->size, b->size);
 			case DOWNLOAD_COLUMN_DONE: return compare(a->done, b->done);
-			default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+			default: return compare(a->columns[col], b->columns[col]);
 			}
 		}
 

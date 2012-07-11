@@ -82,10 +82,10 @@ int SearchFrame::SearchInfo::compareItems(const SearchInfo* a, const SearchInfo*
 		else if (a->srs.size() > 1 || b->srs.size() > 1)
 			return(a->srs.size() > 1) ? -1 : 1;
 		else
-			return lstrcmpi(a->columns[COLUMN_NICK].c_str(), b->columns[COLUMN_NICK].c_str());
+			return compare(a->columns[COLUMN_NICK], b->columns[COLUMN_NICK]);
 	case COLUMN_TYPE:
 		if(a->srs[0]->getType() == b->srs[0]->getType())
-			return lstrcmpi(a->columns[COLUMN_TYPE].c_str(), b->columns[COLUMN_TYPE].c_str());
+			return compare(a->columns[COLUMN_TYPE], b->columns[COLUMN_TYPE]);
 		else
 			return(a->srs[0]->getType() == SearchResult::TYPE_DIRECTORY) ? -1 : 1;
 	case COLUMN_SLOTS:
@@ -95,7 +95,7 @@ int SearchFrame::SearchInfo::compareItems(const SearchInfo* a, const SearchInfo*
 			return compare(a->srs[0]->getFreeSlots(), b->srs[0]->getFreeSlots());
 	case COLUMN_SIZE: // Fall through
 	case COLUMN_EXACT_SIZE: return compare(a->srs[0]->getSize(), b->srs[0]->getSize());
-	default: return lstrcmpi(a->getText(col).c_str(), b->getText(col).c_str());
+	default: return compare(a->getText(col), b->getText(col));
 	}
 }
 

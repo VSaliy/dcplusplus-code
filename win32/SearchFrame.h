@@ -149,7 +149,7 @@ private:
 			return 0;
 		}
 		static int compareItems(const HubInfo* a, const HubInfo* b, int col) {
-			return (col == 0) ? lstrcmpi(a->name.c_str(), b->name.c_str()) : 0;
+			return (col == 0) ? compare(a->name, b->name) : 0;
 		}
 		tstring url;
 		tstring name;

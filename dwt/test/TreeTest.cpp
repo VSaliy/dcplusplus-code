@@ -27,7 +27,7 @@ int dwtMain(dwt::Application& app)
 		tstring name(_T("item 1"));
 		name.back() += i;
 
-		auto item = tree->insert(name, NULL, 1);
+		auto item = tree->insert(name, nullptr, TVI_LAST, 1);
 		tree->setText(item, 1, _T("sub") + name);
 
 		assert(tree->getData(item) == 1);
