@@ -463,7 +463,7 @@ int TransferView::ConnectionInfo::compareItems(const ConnectionInfo* a, const Co
 	case CONNECTION_COLUMN_TRANSFERED: return compare(a->transfered, b->transfered);
 	case CONNECTION_COLUMN_QUEUED: return compare(a->queued, b->queued);
 	case CONNECTION_COLUMN_CHUNK: return compare(a->chunk, b->chunk);
-	default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+	default: return compare(a->columns[col], b->columns[col]);
 	}
 }
 

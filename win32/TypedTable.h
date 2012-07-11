@@ -51,11 +51,11 @@ for each sub-item).
 @note Support for tooltips:
 The ContentType class must provide a tstring getTooltip() [const] function. Note that tooltips are
 only for the first column. */
-template<typename ContentType, bool managed>
-class TypedTable : public Table
+template<typename ContentType, bool managed, typename TableType>
+class TypedTable : public TableType
 {
-	typedef Table BaseType;
-	typedef TypedTable<ContentType, managed> ThisType;
+	typedef TableType BaseType;
+	typedef TypedTable<ContentType, managed, TableType> ThisType;
 
 public:
 	typedef ThisType* ObjectType;
@@ -67,7 +67,7 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		Seed(const BaseType::Seed& seed) : BaseType::Seed(seed) {
+		Seed(const typename BaseType::Seed& seed) : BaseType::Seed(seed) {
 		}
 	};
 
@@ -87,7 +87,7 @@ public:
 		addTooltipEvent<ContentType>();
 
 		if(managed) {
-			onDestroy([this] { this->clear(); });
+			this->onDestroy([this] { this->clear(); });
 		}
 	}
 
@@ -119,7 +119,7 @@ public:
 	using BaseType::find;
 
 	int find(ContentType* item) {
-		return findData(reinterpret_cast<LPARAM>(item));
+		return this->findData(reinterpret_cast<LPARAM>(item));
 	}
 
 	struct CompFirst {
@@ -154,7 +154,7 @@ public:
 	}
 
 	void update(int i) {
-		redraw(i, i);
+		this->redraw(i, i);
 	}
 
 	void update(ContentType* item) { int i = find(item); if(i != -1) update(i); }

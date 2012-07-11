@@ -76,7 +76,7 @@ int PublicHubsFrame::HubInfo::compareItems(const HubInfo* a, const HubInfo* b, i
 	case COLUMN_MAXHUBS: return compare(a->entry->getMaxHubs(), b->entry->getMaxHubs());
 	case COLUMN_MAXUSERS: return compare(a->entry->getMaxUsers(), b->entry->getMaxUsers());
 	case COLUMN_RELIABILITY: return compare(a->entry->getReliability(), b->entry->getReliability());
-	default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+	default: return compare(a->columns[col], b->columns[col]);
 	}
 }
 

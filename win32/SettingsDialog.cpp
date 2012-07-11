@@ -144,7 +144,7 @@ bool SettingsDialog::initDialog() {
 				setSmallIcon(WinUtil::createIcon(icon, 16));
 				setLargeIcon(WinUtil::createIcon(icon, 32));
 			} });
-			auto item = tree->insert(title, parent, 0, true, index);
+			auto item = tree->insert(title, parent, TVI_LAST, 0, true, index);
 			if(index == setting)
 				callAsync([=] { tree->setSelected(item); tree->ensureVisible(item); });
 			pages.emplace_back(page, item);

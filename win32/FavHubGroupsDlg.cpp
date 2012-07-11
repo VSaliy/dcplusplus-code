@@ -76,7 +76,7 @@ const tstring& FavHubGroupsDlg::GroupInfo::getText(int col) const {
 }
 
 int FavHubGroupsDlg::GroupInfo::compareItems(const GroupInfo* a, const GroupInfo* b, int col) {
-	return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+	return compare(a->columns[col], b->columns[col]);
 }
 
 bool FavHubGroupsDlg::handleInitDialog() {

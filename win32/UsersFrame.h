@@ -100,7 +100,7 @@ private:
 			switch(col) {
 			case COLUMN_FAVORITE: return compare(a->isFavorite, b->isFavorite);
 			case COLUMN_SLOT: return compare(a->grantSlot, b->grantSlot);
-			default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+			default: return compare(a->columns[col], b->columns[col]);
 			}
 		}
 

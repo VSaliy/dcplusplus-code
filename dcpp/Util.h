@@ -80,13 +80,16 @@ private:
  * @return -1 if v1 < v2, 0 if v1 == v2 and 1 if v1 > v2
  */
 template<typename T>
-inline int compare(const T& v1, const T& v2) {
-	static_assert(!std::is_same<T, string>::value && !std::is_same<T, wstring>::value, "trying to numerically compare strings");
-
+int compare(const T& v1, const T& v2) {
 	return (v1 < v2) ? -1 : ((v1 == v2) ? 0 : 1);
 }
+/** Locale-aware string comparison, to be used when sorting. */
+int compare(const std::string& a, const std::string& b);
+int compare(const std::wstring& a, const std::wstring& b);
+int compare(const char* a, const char* b);
+int compare(const wchar_t* a, const wchar_t* b);
 
-template<typename T> inline double fraction(T a, T b) { return static_cast<double>(a) / b; }
+template<typename T> double fraction(T a, T b) { return static_cast<double>(a) / b; }
 
 /** Uses SFINAE to determine whether a type provides a function; stores the result in "value".
 Inspired by <http://stackoverflow.com/a/8752988>. */

@@ -27,11 +27,11 @@
 @tparam ContentType Type of the objects associated to each item.
 
 @tparam managed Whether this class should handle deleting associated objects. */
-template<typename ContentType, bool managed>
-class TypedTree : public dwt::Tree
+template<typename ContentType, bool managed, typename TreeType>
+class TypedTree : public TreeType
 {
-	typedef typename dwt::Tree BaseType;
-	typedef TypedTree<ContentType, managed> ThisType;
+	typedef TreeType BaseType;
+	typedef TypedTree<ContentType, managed, TreeType> ThisType;
 
 public:
 	typedef ThisType* ObjectType;
@@ -41,7 +41,7 @@ public:
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
 
-		Seed(const BaseType::Seed& seed) : BaseType::Seed(seed) {
+		Seed(const typename BaseType::Seed& seed) : BaseType::Seed(seed) {
 		}
 	};
 
@@ -58,21 +58,22 @@ public:
 		}, dwt::Message(WM_NOTIFY, TVN_GETDISPINFO));
 
 		if(managed) {
-			onDestroy([this] { this->clear(); });
+			this->onDestroy([this] { this->clear(); });
 		}
 	}
 
-	HTREEITEM insert(HTREEITEM parent, ContentType* data) {
-		TVINSERTSTRUCT item = { parent, TVI_SORT, { { TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM | TVIF_TEXT } } };
+	using BaseType::insert;
+
+	/** Inserts a node into the tree control.
+	@param insertAfter One of TVI_FIRST, TVI_LAST, TVI_SORT; or an existing HTREEITEM. Be careful,
+	TVI_SORT can have an important performance impact. */
+	HTREEITEM insert(ContentType* data, HTREEITEM parent, HTREEITEM insertAfter = TVI_LAST) {
+		TVINSERTSTRUCT item = { parent, insertAfter, { { TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM | TVIF_TEXT } } };
 		item.itemex.pszText = LPSTR_TEXTCALLBACK;
 		item.itemex.iImage = I_IMAGECALLBACK;
 		item.itemex.iSelectedImage = I_IMAGECALLBACK;
 		item.itemex.lParam = reinterpret_cast<LPARAM>(data);
-		return this->insert(&item);
-	}
-
-	HTREEITEM insert(TVINSERTSTRUCT* tvis) {
-		return TreeView_InsertItem(this->treeHandle(), tvis);
+		return insert(item);
 	}
 
 	ContentType* getData(HTREEITEM item) {

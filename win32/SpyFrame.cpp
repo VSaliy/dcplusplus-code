@@ -142,7 +142,7 @@ void SpyFrame::handleColumnClick(int column) {
 		if(column == COLUMN_COUNT) {
 			searches->setSort(column, dwt::Table::SORT_INT);
 		} else {
-			searches->setSort(column, dwt::Table::SORT_STRING_NOCASE);
+			searches->setSort(column, dwt::Table::SORT_STRING);
 		}
 	}
 }

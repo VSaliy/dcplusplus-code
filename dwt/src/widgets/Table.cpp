@@ -576,9 +576,9 @@ int CALLBACK Table::compareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSor
 		ListView_GetItemText(p->handle(), nb, p->sortColumn, buf2, BUF_SIZE);
 
 		if(type == SORT_STRING) {
-			result = lstrcmp(buf, buf2);
-		} else if(type == SORT_STRING_NOCASE) {
-			result = lstrcmpi(buf, buf2);
+			result = wcscoll(buf, buf2);
+		} else if(type == SORT_STRING_SIMPLE) {
+			result = wcscmp(buf, buf2);
 		} else if(type == SORT_INT) {
 			result = compare(_ttoi(buf), _ttoi(buf2));
 		} else if(type == SORT_FLOAT) {

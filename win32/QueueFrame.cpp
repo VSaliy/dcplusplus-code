@@ -26,6 +26,7 @@
 #include <dwt/widgets/FolderDialog.h>
 #include <dwt/widgets/MessageBox.h>
 #include <dwt/widgets/SplitterContainer.h>
+#include <dwt/widgets/Tree.h>
 
 #include "WinUtil.h"
 #include "resource.h"
@@ -438,7 +439,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 		// We assume we haven't added it yet, and that all filelists go to the same
 		// directory...
 		dcassert(fileLists == NULL);
-		fileLists = dirs->insert(NULL, new DirItemInfo(dir, T_("File Lists")));
+		fileLists = dirs->insert(new DirItemInfo(dir, T_("File Lists")), nullptr, TVI_SORT);
 		return fileLists;
 	}
 
@@ -468,10 +469,10 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			// First addition, set commonStart to the dir minus the last part...
 			i = dir.rfind('\\', dir.length()-2);
 			if(i != string::npos) {
-				next = dirs->insert(NULL, new DirItemInfo(dir.substr(0, i+1)));
+				next = dirs->insert(new DirItemInfo(dir.substr(0, i+1)), nullptr, TVI_SORT);
 			} else {
 				dcassert(dir.length() == 3);
-				next = dirs->insert(NULL, new DirItemInfo(dir, Text::toT(dir)));
+				next = dirs->insert(new DirItemInfo(dir, Text::toT(dir)), nullptr, TVI_SORT);
 			}
 		}
 
@@ -494,7 +495,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			HTREEITEM oldRoot = next;
 
 			// Create a new root
-			HTREEITEM newRoot = dirs->insert(NULL, new DirItemInfo(rootStr.substr(0, i)));
+			HTREEITEM newRoot = dirs->insert(new DirItemInfo(rootStr.substr(0, i)), nullptr, TVI_SORT);
 
 			parent = addDirectory(rootStr, false, newRoot);
 
@@ -537,7 +538,7 @@ HTREEITEM QueueFrame::addDirectory(const string& dir, bool isFileList /* = false
 			// We didn't find it, add...
 			j = dir.find('\\', i);
 			dcassert(j != string::npos);
-			parent = dirs->insert(parent, new DirItemInfo(dir.substr(0, j+1), Text::toT(dir.substr(i, j-i))));
+			parent = dirs->insert(new DirItemInfo(dir.substr(0, j+1), Text::toT(dir.substr(i, j-i))), parent, TVI_SORT);
 			i = j + 1;
 		}
 	}
@@ -808,7 +809,7 @@ void QueueFrame::moveNode(HTREEITEM item, HTREEITEM parent) {
 	dirs->getItem(&tvis.itemex);
 	tvis.hInsertAfter =	TVI_SORT;
 	tvis.hParent = parent;
-	HTREEITEM ht = dirs->insert(&tvis);
+	HTREEITEM ht = dirs->insert(tvis);
 	HTREEITEM next = dirs->getChild(item);
 	while(next != NULL) {
 		moveNode(next, ht);

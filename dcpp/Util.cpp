@@ -717,8 +717,9 @@ wstring::size_type Util::findSubString(const wstring& aString, const wstring& aS
 }
 
 int Util::stricmp(const char* a, const char* b) {
+	wchar_t ca = 0, cb = 0;
 	while(*a) {
-		wchar_t ca = 0, cb = 0;
+		ca = cb = 0;
 		int na = Text::utf8ToWc(a, ca);
 		int nb = Text::utf8ToWc(b, cb);
 		ca = Text::toLower(ca);
@@ -729,17 +730,17 @@ int Util::stricmp(const char* a, const char* b) {
 		a += abs(na);
 		b += abs(nb);
 	}
-	wchar_t ca = 0, cb = 0;
+	ca = cb = 0;
 	Text::utf8ToWc(a, ca);
 	Text::utf8ToWc(b, cb);
-
 	return (int)Text::toLower(ca) - (int)Text::toLower(cb);
 }
 
 int Util::strnicmp(const char* a, const char* b, size_t n) {
 	const char* end = a + n;
+	wchar_t ca = 0, cb = 0;
 	while(*a && a < end) {
-		wchar_t ca = 0, cb = 0;
+		ca = cb = 0;
 		int na = Text::utf8ToWc(a, ca);
 		int nb = Text::utf8ToWc(b, cb);
 		ca = Text::toLower(ca);
@@ -750,10 +751,39 @@ int Util::strnicmp(const char* a, const char* b, size_t n) {
 		a += abs(na);
 		b += abs(nb);
 	}
-	wchar_t ca = 0, cb = 0;
+	ca = cb = 0;
 	Text::utf8ToWc(a, ca);
 	Text::utf8ToWc(b, cb);
 	return (a >= end) ? 0 : ((int)Text::toLower(ca) - (int)Text::toLower(cb));
+}
+
+int compare(const std::string& a, const std::string& b) {
+	return compare(a.c_str(), b.c_str());
+}
+int compare(const std::wstring& a, const std::wstring& b) {
+	return compare(a.c_str(), b.c_str());
+}
+int compare(const char* a, const char* b) {
+	// compare wide chars because the locale is usually not *.utf8 (never on Win)
+	wchar_t ca[2] = { 0 }, cb[2] = { 0 };
+	while(*a) {
+		ca[0] = cb[0] = 0;
+		int na = Text::utf8ToWc(a, ca[0]);
+		int nb = Text::utf8ToWc(b, cb[0]);
+		auto comp = compare(const_cast<const wchar_t*>(ca), const_cast<const wchar_t*>(cb));
+		if(comp) {
+			return comp;
+		}
+		a += abs(na);
+		b += abs(nb);
+	}
+	ca[0] = cb[0] = 0;
+	Text::utf8ToWc(a, ca[0]);
+	Text::utf8ToWc(b, cb[0]);
+	return compare(const_cast<const wchar_t*>(ca), const_cast<const wchar_t*>(cb));
+}
+int compare(const wchar_t* a, const wchar_t* b) {
+	return wcscoll(a, b);
 }
 
 string Util::cssColor(int color) {

@@ -37,6 +37,7 @@
 #include <dwt/widgets/SaveDialog.h>
 #include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/ToolBar.h>
+#include <dwt/widgets/Tree.h>//#include <dwt/widgets/VirtualTree.h>
 
 #include "TypedTable.h"
 #include "TypedTree.h"
@@ -88,7 +89,7 @@ int DirectoryListingFrame::ItemInfo::compareItems(const ItemInfo* a, const ItemI
 			switch(col) {
 			case COLUMN_EXACTSIZE: return compare(a->dir->getTotalSize(), b->dir->getTotalSize());
 			case COLUMN_SIZE: return compare(a->dir->getTotalSize(), b->dir->getTotalSize());
-			default: return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+			default: return compare(a->columns[col], b->columns[col]);
 			}
 		} else {
 			return -1;
@@ -99,7 +100,7 @@ int DirectoryListingFrame::ItemInfo::compareItems(const ItemInfo* a, const ItemI
 		switch(col) {
 		case COLUMN_EXACTSIZE: return compare(a->file->getSize(), b->file->getSize());
 		case COLUMN_SIZE: return compare(a->file->getSize(), b->file->getSize());
-		default: return lstrcmp(a->columns[col].c_str(), b->columns[col].c_str());
+		default: return compare(a->columns[col], b->columns[col]);
 		}
 	}
 }
@@ -390,7 +391,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 
 	dirs->setFocus();
 
-	treeRoot = dirs->insert(NULL, new ItemInfo(true, dl->getRoot()));
+	treeRoot = dirs->insert(new ItemInfo(true, dl->getRoot()), nullptr);
 
 	ClientManager::getInstance()->addListener(this);
 	updateTitle();
@@ -423,6 +424,7 @@ public:
 	int run() {
 		try {
 			dl->loadFile(path);
+			dl->sortDirs();
 			ADLSearchManager::getInstance()->matchListing(*dl);
 			successF();
 		} catch(const Exception& e) {
@@ -510,6 +512,7 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 		}
 
 		auto base = dl->updateXML(txt);
+		dl->sortDirs();
 		dl->save(path);
 
 		// remove previous ADLS matches.
@@ -1057,7 +1060,7 @@ string DirectoryListingFrame::getSelectedDir() const {
 }
 
 void DirectoryListingFrame::addDir(DirectoryListing::Directory* d, HTREEITEM parent) {
-	auto item = dirs->insert(parent, new ItemInfo(d));
+	auto item = dirs->insert(new ItemInfo(d), parent);
 	if(d->getAdls())
 		dirs->setItemState(item, TVIS_BOLD, TVIS_BOLD);
 	updateDir(d, item);

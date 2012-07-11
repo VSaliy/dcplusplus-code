@@ -27,6 +27,8 @@
 #include "forward.h"
 #include "PropPage.h"
 
+using dwt::TreePtr;
+
 class SettingsDialog : public dwt::ModalDialog
 {
 public:

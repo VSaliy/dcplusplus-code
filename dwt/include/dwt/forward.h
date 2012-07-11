@@ -185,6 +185,9 @@ typedef ToolTip* ToolTipPtr;
 class Tree;
 typedef Tree* TreePtr;
 
+class VirtualTree;
+typedef VirtualTree* VirtualTreePtr;
+
 class Window;
 typedef Window* WindowPtr;
 

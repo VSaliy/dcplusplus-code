@@ -897,7 +897,7 @@ int HubFrame::UserInfo::compareItems(const HubFrame::UserInfo* a, const HubFrame
 	if(col == COLUMN_SHARED) {
 		return compare(a->identity.getBytesShared(), b->identity.getBytesShared());;
 	}
-	return lstrcmpi(a->columns[col].c_str(), b->columns[col].c_str());
+	return compare(a->columns[col], b->columns[col]);
 }
 
 void HubFrame::on(Connecting, Client*) noexcept {

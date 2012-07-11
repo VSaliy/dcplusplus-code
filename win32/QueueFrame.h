@@ -141,7 +141,7 @@ private:
 				case COLUMN_PRIORITY: return compare((int)a->getPriority(), (int)b->getPriority());
 				case COLUMN_DOWNLOADED: return compare(a->getDownloadedBytes(), b->getDownloadedBytes());
 				case COLUMN_ADDED: return compare(a->getAdded(), b->getAdded());
-				default: return lstrcmpi(a->getDisplay()->columns[col].c_str(), b->getDisplay()->columns[col].c_str());
+				default: return compare(a->getDisplay()->columns[col], b->getDisplay()->columns[col]);
 			}
 		}
 

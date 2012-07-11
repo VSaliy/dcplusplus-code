@@ -30,7 +30,6 @@ using namespace dcpp;
 
 #ifdef HAS_PCH
 
-
 #include <dwt/forward.h>
 #include <dwt/util/StringUtils.h>
 #include <dwt/widgets/Button.h>
@@ -49,7 +48,6 @@ using namespace dcpp;
 #include <dwt/widgets/Table.h>
 #include <dwt/widgets/TabView.h>
 #include <dwt/widgets/TextBox.h>
-#include <dwt/widgets/Tree.h>
 #include <dwt/widgets/Window.h>
 
 #include "ComboBox.h"
