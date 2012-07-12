@@ -240,11 +240,12 @@ protected:
 	virtual ~Tree()
 	{}
 
+	TreeViewPtr tree;
+
 private:
 	ImageListPtr itsNormalImageList;
 	ImageListPtr itsStateImageList;
 
-	TreeViewPtr tree;
 	HeaderPtr header;
 
 	std::map<HTREEITEM, std::vector<tstring>> texts;
