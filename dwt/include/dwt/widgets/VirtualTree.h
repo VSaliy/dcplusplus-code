@@ -80,7 +80,6 @@ private:
 		Item* next;
 		Item* firstChild;
 		Item* lastChild;
-		UINT mask;
 		UINT state;
 		boost::optional<tstring> text;
 		int image;

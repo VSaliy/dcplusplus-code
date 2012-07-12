@@ -66,7 +66,7 @@ bool VirtualTree::handleMessage(const MSG& msg, LRESULT& retVal) {
 		}
 	case TVM_GETCOUNT:
 		{
-			retVal = items.size();
+			retVal = items.size() - 1; // don't count the fake root
 			return true;
 		}
 	case TVM_GETITEM:
@@ -139,7 +139,6 @@ VirtualTree::Item::Item() :
 	next(nullptr),
 	firstChild(nullptr),
 	lastChild(nullptr),
-	mask(0),
 	state(TVIS_EXPANDED),
 	image(0),
 	selectedImage(0),
@@ -154,7 +153,6 @@ VirtualTree::Item::Item(TVINSERTSTRUCT& tvis) :
 	next(nullptr),
 	firstChild(nullptr),
 	lastChild(nullptr),
-	mask(tvis.itemex.mask),
 	state(tvis.itemex.state & tvis.itemex.stateMask),
 	image(tvis.itemex.iImage),
 	selectedImage(tvis.itemex.iSelectedImage),
@@ -245,11 +243,14 @@ VirtualTree::Item* VirtualTree::Item::nextVisible() const {
 
 bool VirtualTree::handleDelete(LPARAM lParam) {
 	if(!lParam || lParam == reinterpret_cast<LPARAM>(TVI_ROOT)) {
+		// delete all items.
 		bool ret = sendTreeMsg(TVM_DELETEITEM, 0, lParam);
 		items.clear();
 		addRoot();
 		return ret;
 	}
+
+	// delete one item.
 	auto item = reinterpret_cast<Item*>(lParam);
 	if(!validate(item)) { return false; }
 	hide(*item);
@@ -283,6 +284,7 @@ void VirtualTree::handleExpanded(NMTREEVIEW& data) {
 	case TVE_COLLAPSE:
 		{
 			if(item->expanded()) { item->state &= ~TVIS_EXPANDED; }
+			// remove children of this item when collapsing it.
 			auto child = item->firstChild;
 			while(child) {
 				hide(*child);
@@ -309,6 +311,7 @@ void VirtualTree::handleExpanding(NMTREEVIEW& data) {
 		}
 	case TVE_EXPAND:
 		{
+			// add direct children of this item before expanding it.
 			auto child = item->firstChild;
 			while(child) {
 				display(*child);
@@ -470,6 +473,7 @@ void VirtualTree::remove(Item* item) {
 }
 
 void VirtualTree::updateChildDisplay(Item* item) {
+	// this determines whether the item has a +/- sign next to it.
 	if(!item->handle) { return; }
 	TVITEMEX tv = { TVIF_CHILDREN, item->handle };
 	tv.cChildren = item->firstChild ? 1 : 0;
