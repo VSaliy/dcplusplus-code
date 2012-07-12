@@ -66,6 +66,7 @@ bool ADLSProperties::handleInitDialog() {
 		searchString->setText(Text::toT(search.searchString));
 
 		reg = cur->addChild(CheckBox::Seed(T_("Regular Expression")));
+		reg->setHelpId(IDH_ADLSP_SEARCH_REGULAR_EXPRESSION);
 		reg->setChecked(search.isRegEx());
 	}
 

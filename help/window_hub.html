@@ -71,8 +71,14 @@ This window can be focused with Alt+U.
 
 <h2>Users list filter (bottom right)</h2>
 <p cshelp="IDH_HUB_FILTER">
-Here, you can filter the users list so you will only see specific users. Eg, selecting 'Nick' in the drop down, and writing "foo" in the filter, will only display users that have "foo" in their nick.<br/>
-Note; users will only be visually filtered, not disconnected. You can revert to showing all users at any time by cleaning the text you have written in the filter.
+<div>
+	Here, you can filter the users list so you will only see specific users.
+</div>
+<!--#include virtual="window_list_filter.inc" -->
+<div>
+	Eg, selecting 'Nick' in the drop down, and writing "foo" in the filter, will only display users that have "foo" in their nick.<br/>
+	Note that users will only be visually filtered, not disconnected; also note that the remaining parts of the filtering control set are visible only when the filter input box is focused.
+</div>
 </p>
 
 <h2>Field to write a message (bottom left)</h2>
