@@ -52,7 +52,7 @@ protected:
 			RichTextBox::Seed cs = WinUtil::Seeds::richTextBox;
 			cs.style |= ES_READONLY;
 			chat = dwt::WidgetCreator<RichTextBox>::create(parent, cs);
-			chat->setTextLimit(65536);
+			chat->setTextLimit(1024*64*2);
 		}
 
 		{
