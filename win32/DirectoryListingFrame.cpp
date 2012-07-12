@@ -37,7 +37,7 @@
 #include <dwt/widgets/SaveDialog.h>
 #include <dwt/widgets/SplitterContainer.h>
 #include <dwt/widgets/ToolBar.h>
-#include <dwt/widgets/Tree.h>//#include <dwt/widgets/VirtualTree.h>
+#include <dwt/widgets/VirtualTree.h>
 
 #include "TypedTable.h"
 #include "TypedTree.h"
@@ -439,6 +439,7 @@ private:
 	ErrorF errorF;
 
 	void cacheInfo(DirectoryListing::Directory* d) {
+		if(parent.dl->getAbort()) { throw Exception(); }
 		for(auto i: d->directories) {
 			parent.dirCache[i] = make_unique<DirectoryListingFrame::ItemInfo>(i);
 			cacheInfo(i);
@@ -494,6 +495,7 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		// error callback
 		error = std::move(s);
 		finishLoad();
+		dirCache.clear();
 	}); });
 
 	try {
