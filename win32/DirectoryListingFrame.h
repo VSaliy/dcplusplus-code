@@ -174,7 +174,7 @@ private:
 	ComboBoxPtr searchBox;
 	ComboBoxPtr filterMethod;
 
-	typedef TypedTree<ItemInfo, true/*, dwt::VirtualTree*/> WidgetDirs;
+	typedef TypedTree<ItemInfo, true, dwt::VirtualTree> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
 	WidgetDirsPtr dirs;
 

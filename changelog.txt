@@ -26,6 +26,9 @@
 * [dwt] Add a link control (poy)
 * Allow Magnet links to be pasted in the "Quick connect" box (poy)
 * Rise the minislot size to 512 KiB
+* More Alt+I shortcuts for list filters (emtee)
+* Increase the chat buffer limit (iceman50)
+* Eliminate GUI freezes when opening large file lists (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
