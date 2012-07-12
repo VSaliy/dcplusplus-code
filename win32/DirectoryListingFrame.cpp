@@ -413,9 +413,8 @@ class FileListLoader : public Thread {
 	typedef std::function<void (tstring)> ErrorF;
 
 public:
-	FileListLoader(DirectoryListing* dl, const string& path, SuccessF successF, ErrorF errorF) :
-	dl(dl),
-	path(path),
+	FileListLoader(DirectoryListingFrame& parent, SuccessF successF, ErrorF errorF) :
+	parent(parent),
 	successF(successF),
 	errorF(errorF)
 	{
@@ -423,9 +422,10 @@ public:
 
 	int run() {
 		try {
-			dl->loadFile(path);
-			dl->sortDirs();
-			ADLSearchManager::getInstance()->matchListing(*dl);
+			parent.dl->loadFile(parent.path);
+			ADLSearchManager::getInstance()->matchListing(*parent.dl);
+			parent.dl->sortDirs();
+			cacheInfo(parent.dl->getRoot());
 			successF();
 		} catch(const Exception& e) {
 			errorF(Text::toT(e.getError()));
@@ -434,10 +434,16 @@ public:
 	}
 
 private:
-	DirectoryListing* dl;
-	const string& path;
+	DirectoryListingFrame& parent;
 	SuccessF successF;
 	ErrorF errorF;
+
+	void cacheInfo(DirectoryListing::Directory* d) {
+		for(auto i: d->directories) {
+			parent.dirCache[i] = make_unique<DirectoryListingFrame::ItemInfo>(i);
+			cacheInfo(i);
+		}
+	}
 };
 
 void DirectoryListingFrame::loadFile(const tstring& dir) {
@@ -477,12 +483,13 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		setDirty(SettingsManager::BOLD_FL);
 	};
 
-	loader = new FileListLoader(dl.get(), path, [this, dir, finishLoad] { callAsync([=] {
+	loader = new FileListLoader(*this, [this, dir, finishLoad] { callAsync([=] {
 		// success callback
 		loaded = true;
 		finishLoad();
 		addRecent();
 		refreshTree(dir);
+		dirCache.clear();
 	}); }, [this, finishLoad](tstring s) { callAsync([=] {
 		// error callback
 		error = std::move(s);
@@ -512,7 +519,6 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 		}
 
 		auto base = dl->updateXML(txt);
-		dl->sortDirs();
 		dl->save(path);
 
 		// remove previous ADLS matches.
@@ -533,6 +539,8 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 			}
 		}
 		ADLSearchManager::getInstance()->matchListing(*dl);
+
+		dl->sortDirs();
 
 		loaded = true;
 		addRecent();
@@ -1060,7 +1068,8 @@ string DirectoryListingFrame::getSelectedDir() const {
 }
 
 void DirectoryListingFrame::addDir(DirectoryListing::Directory* d, HTREEITEM parent) {
-	auto item = dirs->insert(new ItemInfo(d), parent);
+	auto cached = dirCache.find(d);
+	auto item = dirs->insert(cached != dirCache.end() ? cached->second.release() : new ItemInfo(d), parent);
 	if(d->getAdls())
 		dirs->setItemState(item, TVIS_BOLD, TVIS_BOLD);
 	updateDir(d, item);

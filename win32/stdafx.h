@@ -48,6 +48,7 @@ using namespace dcpp;
 #include <dwt/widgets/Table.h>
 #include <dwt/widgets/TabView.h>
 #include <dwt/widgets/TextBox.h>
+#include <dwt/widgets/Tree.h>
 #include <dwt/widgets/Window.h>
 
 #include "ComboBox.h"

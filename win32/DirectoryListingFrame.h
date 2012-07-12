@@ -19,6 +19,10 @@
 #ifndef DCPLUSPLUS_WIN32_DIRECTORY_LISTING_FRAME_H
 #define DCPLUSPLUS_WIN32_DIRECTORY_LISTING_FRAME_H
 
+#include <deque>
+#include <memory>
+#include <unordered_map>
+
 #include <dcpp/forward.h>
 #include <dcpp/ClientManagerListener.h>
 #include <dcpp/DirectoryListing.h>
@@ -32,6 +36,8 @@
 #include "UserInfoBase.h"
 
 using std::deque;
+using std::unique_ptr;
+using std::unordered_map;
 
 class FileListLoader;
 
@@ -49,6 +55,8 @@ class DirectoryListingFrame :
 	friend class AspectUserCommand<DirectoryListingFrame>;
 
 	using IRecent<DirectoryListingFrame>::setText;
+
+	friend class FileListLoader;
 
 public:
 	enum Status {
@@ -155,6 +163,7 @@ private:
 
 	FileListLoader* loader;
 	LabelPtr loading;
+	unordered_map<DirectoryListing::Directory*, unique_ptr<ItemInfo>> dirCache;
 
 	RebarPtr rebar;
 	ComboBoxPtr pathBox;
