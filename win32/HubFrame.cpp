@@ -263,6 +263,7 @@ inTabComplete(false)
 	addAccel(FCONTROL, 'R', [this] { handleReconnect(); });
 	addAccel(FALT, 'P', [this] { handlePrivateMessage(getParent()); });
 	addAccel(FALT, 'U', [this] { users->setFocus(); });
+	addAccel(FALT, 'I', [this] { filter.text->setFocus(); });
 	initAccels();
 
 	layout();

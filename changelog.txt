@@ -25,6 +25,7 @@
 * [L#587597] Add plugin API (Crise, iceman50)
 * [dwt] Add a link control (poy)
 * Allow Magnet links to be pasted in the "Quick connect" box (poy)
+* Rise the minislot size to 512 KiB
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)

@@ -109,7 +109,7 @@ void SearchFrame::closeAll() {
 }
 
 SearchFrame::SearchFrame(TabViewPtr parent, const tstring& initialString, SearchManager::TypeModes initialType_) :
-BaseType(parent, T_("Search"), IDH_SEARCH, IDI_SEARCH),
+BaseType(parent, T_("Search"), IDH_SEARCH, IDI_SEARCH, false),
 paned(0),
 options(0),
 searchBox(0),
@@ -291,6 +291,9 @@ droppedResults(0)
 		showUI->onClicked([this, showUI] { paned->maximize(showUI->getChecked() ? nullptr : results->getParent()); });
 		status->setWidget(STATUS_SHOW_UI, showUI);
 	}
+
+	addAccel(FALT, 'I', [this] { filter.text->setFocus(); });
+	initAccels();
 
 	layout();
 	activate();

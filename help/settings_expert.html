@@ -20,15 +20,14 @@ disk for downloads. Measured in kibibytes. (default: 16 KiB)</dd>
   <dt id="autosearchlimit">Auto-search limit</dt>
   <dd cshelp="IDH_SETTINGS_EXPERT_AUTO_SEARCH_LIMIT">This will limit the amount of sources a file can have before it will no longer be auto searched for. For example, if this option is set to 2, if a file has more than or exactly 2 sources, the file will be excluded from the auto-search list.</dd>
   <dt id="minislotsize">Mini slot size</dt>
-  <dd cshelp="IDH_SETTINGS_EXPERT_MINISLOT_SIZE">This defines the size of the <a href="settings_sharing.html#slots">mini slot</a>. The
-minimum value for this setting is 64 KiB. (default: 64 KiB)</dd>
+  <dd cshelp="IDH_SETTINGS_EXPERT_MINISLOT_SIZE">This value defines a file size border for mini slots; a <a href="settings_sharing.html#slots">mini slot</a> will be given to peers on requesting files below this size. The minimum value for this setting is 512 KiB. (default: 512 KiB)</dd>
   <dt id="maxlistsize">Max filelist size</dt>
   <dd cshelp="IDH_SETTINGS_EXPERT_MAX_FILELIST_SIZE">This setting controls the size of the maximum file list
 that DC++
 will open, in mebibytes. This setting helps protect against
 malformed file lists that require large amounts of memory to decode.
 You may need to reduce or increase the value of this setting
-based on personal experience. (default: 256 MiB)</dd>
+based on personal experience. (default: 512 MiB)</dd>
   <dt>PID</dt>
   <dd cshelp="IDH_SETTINGS_EXPERT_PRIVATE_ID">This is your unique private ID (PID). This will later with an algorithm be used to identify you on ADC hubs. <b>Do not share this with other users.</b></dd>
   <dt id="autorefresh">Auto refresh time</dt>
