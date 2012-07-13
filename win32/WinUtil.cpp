@@ -1399,6 +1399,8 @@ void WinUtil::openLink(const tstring& url) {
 
 bool WinUtil::parseLink(const tstring& str, bool followExternal) {
 	auto url = Text::fromT(str);
+	Util::sanitizeUrl(url);
+
 	string proto, host, port, file, query, fragment;
 	Util::decodeUrl(url, proto, host, port, file, query, fragment);
 

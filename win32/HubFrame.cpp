@@ -20,8 +20,6 @@
 
 #include "HubFrame.h"
 
-#include <boost/algorithm/string/trim.hpp>
-
 #include <dcpp/AdcHub.h>
 #include <dcpp/ChatMessage.h>
 #include <dcpp/ClientManager.h>
@@ -71,7 +69,7 @@ static const ColumnInfo usersColumns[] = {
 HubFrame::FrameList HubFrame::frames;
 
 void HubFrame::openWindow(TabViewPtr parent, string url, bool activate, bool connect) {
-	boost::algorithm::trim(url);
+	Util::sanitizeUrl(url);
 
 	if(url.empty()) {
 		dwt::MessageBox(WinUtil::mainWindow).show(T_("Empty hub address specified"), _T(APPNAME) _T(" ") _T(VERSIONSTRING),
@@ -1433,7 +1431,7 @@ void HubFrame::handleReconnect() {
 }
 
 void HubFrame::redirect(string&& target) {
-	boost::algorithm::trim(target);
+	Util::sanitizeUrl(target);
 
 	if(target.empty()) {
 		addStatus(T_("Redirect request to an empty hub address"));
