@@ -174,6 +174,14 @@ HTREEITEM VirtualTree::Item::ptr() const {
 	return reinterpret_cast<HTREEITEM>(const_cast<Item*>(this));
 }
 
+size_t VirtualTree::Item::Hash::operator()(const Item& item) const {
+	return reinterpret_cast<size_t>(&item) / sizeof(Item);
+}
+
+bool VirtualTree::Item::Equal::operator()(const Item& a, const Item& b) const {
+	return &a == &b;
+}
+
 void VirtualTree::Item::insertBefore(Item* sibling) {
 	if(sibling) {
 		if(sibling->prev) {
@@ -364,8 +372,7 @@ VirtualTree::Item* VirtualTree::handleInsert(TVINSERTSTRUCT& tvis) {
 	if(tvis.hParent == TVI_ROOT || !tvis.hParent) {
 		tvis.hParent = root->ptr();
 	}
-	items.emplace_back(tvis);
-	auto& item = items.back();
+	auto& item = const_cast<Item&>(*items.emplace(tvis).first);
 	if(item.parent->firstChild == item.parent->lastChild) {
 		updateChildDisplay(item.parent);
 	}
@@ -401,29 +408,31 @@ bool VirtualTree::handleSetItem(TVITEMEX& tv) {
 }
 
 void VirtualTree::addRoot() {
-	items.emplace_back();
-	root = &items.back();
+	root = const_cast<Item*>(&*items.emplace().first);
 }
 
 bool VirtualTree::validate(Item* item) const {
-	return item;
-	/* ideally one would check that the item does point to an element of the "items" list, but
-	iterating through the list takes too long when it's a large one. */
+	return item && items.find(*item) != items.cend();
 }
 
 VirtualTree::Item* VirtualTree::find(HTREEITEM handle) {
 	if(!handle) { return nullptr; }
-	for(auto& i: items) { if(i.handle == handle) { return &i; } }
+	for(auto& i: items) { if(i.handle == handle) { return const_cast<Item*>(&i); } }
 	return nullptr;
 }
 
 void VirtualTree::display(Item& item) {
+	// insert the item in the actual tree control.
 	if(item.handle) { return; }
+
 	if(item.parent != root && !item.parent->handle) { display(*item.parent); }
-	TVINSERTSTRUCT tvis = { item.parent->handle, item.prev ? item.prev->handle : item.next ? TVI_FIRST : TVI_LAST, { {
-		TVIF_CHILDREN | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM | TVIF_STATE | TVIF_TEXT } } };
+
+	// don't insert items as expanded; instead expand them manually if they were expanded before.
 	auto expanded = item.expanded();
 	if(expanded) { item.state &= ~TVIS_EXPANDED; }
+
+	TVINSERTSTRUCT tvis = { item.parent->handle, item.prev ? item.prev->handle : item.next ? TVI_FIRST : TVI_LAST, { {
+		TVIF_CHILDREN | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM | TVIF_STATE | TVIF_TEXT } } };
 	tvis.itemex.state = item.state;
 	tvis.itemex.stateMask = item.state;
 	tvis.itemex.pszText = item.text ? const_cast<TCHAR*>(item.text->c_str()) : LPSTR_TEXTCALLBACK;
@@ -432,10 +441,12 @@ void VirtualTree::display(Item& item) {
 	tvis.itemex.cChildren = item.firstChild ? 1 : 0;
 	tvis.itemex.lParam = item.lParam;
 	item.handle = reinterpret_cast<HTREEITEM>(sendTreeMsg(TVM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&tvis)));
+
 	if(expanded) { sendTreeMsg(TVM_EXPAND, TVE_EXPAND, reinterpret_cast<LPARAM>(item.handle)); }
 }
 
 void VirtualTree::hide(Item& item) {
+	// remove the item and its children from the actual tree control.
 	if(!item.handle) { return; }
 	auto child = item.firstChild;
 	while(child) {
@@ -464,12 +475,7 @@ void VirtualTree::remove(Item* item) {
 	if(item->prev) { item->prev->next = item->next; }
 	if(item->next) { item->next->prev = item->prev; }
 	if(item == selected) { selected = nullptr; }
-	for(auto i = items.begin(), iend = items.end(); i != iend; ++i) {
-		if(&*i == item) {
-			items.erase(i);
-			break;
-		}
-	}
+	items.erase(*item);
 }
 
 void VirtualTree::updateChildDisplay(Item* item) {

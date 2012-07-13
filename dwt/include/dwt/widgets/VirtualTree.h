@@ -32,7 +32,7 @@
 #ifndef DWT_VIRTUALTREE_H
 #define DWT_VIRTUALTREE_H
 
-#include <list>
+#include <unordered_set>
 
 #include <boost/optional.hpp>
 
@@ -90,6 +90,8 @@ private:
 		Item(TVINSERTSTRUCT& tvis);
 
 		HTREEITEM ptr() const;
+		struct Hash { size_t operator()(const Item& item) const; };
+		struct Equal { bool operator()(const Item& a, const Item& b) const; };
 
 		void insertBefore(Item* sibling);
 		void insertAfter(Item* sibling);
@@ -101,7 +103,7 @@ private:
 		Item* nextVisible() const;
 	};
 
-	std::list<Item> items;
+	std::unordered_set<Item, Item::Hash, Item::Equal> items;
 	Item* root;
 	Item* selected;
 
