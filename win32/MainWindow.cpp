@@ -1493,7 +1493,7 @@ void MainWindow::parseCommandLine(const tstring& cmdLine)
 		(i = cmdLine.find(_T("adcs://"))) != string::npos ||
 		(i = cmdLine.find(_T("magnet:?"))) != string::npos )
 	{
-		WinUtil::parseLink(cmdLine.substr(i));
+		WinUtil::parseLink(cmdLine.substr(i), false);
 	}
 }
 

@@ -22,9 +22,11 @@
 #ifdef _WIN32
 
 #include "w.h"
-#include "shlobj.h"
+#include <shlobj.h>
 
 #endif
+
+#include <boost/algorithm/string/trim.hpp>
 
 #include "CID.h"
 #include "ClientManager.h"
@@ -369,6 +371,10 @@ string Util::getShortTimeString(time_t t) {
 		strftime(buf, 254, SETTING(TIME_STAMPS_FORMAT).c_str(), _tm);
 	}
 	return Text::toUtf8(buf);
+}
+
+void Util::sanitizeUrl(string& url) {
+	boost::algorithm::trim_if(url, boost::is_space() || boost::is_any_of("<>\""));
 }
 
 /**
