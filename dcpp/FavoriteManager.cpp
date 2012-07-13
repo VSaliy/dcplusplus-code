@@ -151,7 +151,7 @@ void FavoriteManager::removeUserCommand(const string& srv) {
 void FavoriteManager::removeHubUserCommands(int ctx, const string& hub) {
 	Lock l(cs);
 	std::remove_if(userCommands.begin(), userCommands.end(), [&](const UserCommand& uc) -> bool {
-		return uc.getHub() == hub && uc.isSet(UserCommand::FLAG_NOSAVE) && uc.getCtx() == ctx;
+		return uc.getHub() == hub && uc.isSet(UserCommand::FLAG_NOSAVE) && uc.getCtx() & ctx;
 	});
 }
 
