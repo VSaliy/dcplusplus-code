@@ -143,16 +143,16 @@ void FavoriteManager::removeUserCommand(int cid) {
 }
 void FavoriteManager::removeUserCommand(const string& srv) {
 	Lock l(cs);
-	std::remove_if(userCommands.begin(), userCommands.end(), [&](const UserCommand& uc) -> bool {
+	userCommands.erase(std::remove_if(userCommands.begin(), userCommands.end(), [&](const UserCommand& uc) {
 		return uc.getHub() == srv && uc.isSet(UserCommand::FLAG_NOSAVE);
-	});
+	}), userCommands.end());
 }
 
 void FavoriteManager::removeHubUserCommands(int ctx, const string& hub) {
 	Lock l(cs);
-	std::remove_if(userCommands.begin(), userCommands.end(), [&](const UserCommand& uc) -> bool {
+	userCommands.erase(std::remove_if(userCommands.begin(), userCommands.end(), [&](const UserCommand& uc) {
 		return uc.getHub() == hub && uc.isSet(UserCommand::FLAG_NOSAVE) && uc.getCtx() & ctx;
-	});
+	}), userCommands.end());
 }
 
 void FavoriteManager::addFavoriteUser(const UserPtr& aUser) {

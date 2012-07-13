@@ -398,9 +398,9 @@ public:
 
 	template<typename T>
 	static T& intersect(T& t1, const T& t2) {
-		boost::remove_if(t1, [&](const typename T::value_type& v1) {
+		t1.erase(boost::remove_if(t1, [&](const typename T::value_type& v1) {
 			return boost::find_if(t2, [&](const typename T::value_type& v2) { return v2 == v1; }) == t2.end();
-		});
+		}), t1.end());
 		return t1;
 	}
 
