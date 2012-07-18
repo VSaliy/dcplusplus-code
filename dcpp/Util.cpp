@@ -195,6 +195,47 @@ void Util::initialize(PathsMap pathOverrides) {
 
 	File::ensureDirectory(paths[PATH_USER_CONFIG]);
 	File::ensureDirectory(paths[PATH_USER_LOCAL]);
+
+}
+
+string Util::convertCEscapes(string tmp)
+{
+	string::size_type i = 0;
+	while( (i = tmp.find('\\', i)) != string::npos) {
+		switch(tmp[i + 1]) {
+			case '\0':
+				return tmp;
+				break;
+			case 'a': tmp.replace(i, 2, "\a"); break;
+			case 'b': tmp.replace(i, 2, "\b"); break;
+			case 'e': tmp.replace(i, 2, "\033"); break;
+			case 'f': tmp.replace(i, 2, "\f"); break;
+			case 'n': tmp.replace(i, 2, "\n"); break;
+			case 'r': tmp.replace(i, 2, "\r"); break;
+			case 't': tmp.replace(i, 2, "\t"); break;
+			case 'v': tmp.replace(i, 2, "\v"); break;
+			case '\\': tmp.replace(i, 2, "\\"); break;
+			case 'x':
+				if(i < tmp.length() - 3) {
+					int num = strtol(tmp.substr(i + 2, 2).c_str(), NULL, 16);
+					tmp.replace(i, 4, string(1, (char)num));
+				}
+				break;
+			default:
+				if(tmp[i + 1] >= '0' && tmp[i + 1] <= '7') {
+					int c = 1;
+					if(tmp[i + 2] >= '0' && tmp[i + 2] <= '7') {
+						++c;
+						if(tmp[i + 1] <= '3' && tmp[i + 3] >= '0' && tmp[i + 3] <= '7')
+							++c;
+					}
+					int num = strtol(tmp.substr(i + 1, c).c_str(), NULL, 8);
+					tmp.replace(i, c + 1, string(1, (char)num));
+				}
+		}
+		i += 1;
+	}
+	return tmp;
 }
 
 void Util::migrate(const string& file) {
