@@ -55,12 +55,12 @@ class ModelessDialog :
 	public aspects::Dialog<ModelessDialog>
 {
 	typedef Frame BaseType;
-public:
-	/// Class type
-	typedef ModelessDialog ThisType;
 
-	/// Object type
-	typedef ThisType * ObjectType;
+	friend class WidgetCreator<ModelessDialog>;
+
+public:
+	typedef ModelessDialog ThisType;
+	typedef ThisType* ObjectType;
 
 	struct Seed : public BaseType::Seed {
 		typedef ThisType WidgetType;
@@ -71,23 +71,13 @@ public:
 	void create(const Seed& cs = Seed());
 
 protected:
-	// Protected since this Widget we HAVE to inherit from
-	explicit ModelessDialog( Widget * parent = 0 );
-
-	virtual ~ModelessDialog()
-	{}
+	explicit ModelessDialog(Widget* parent);
+	virtual ~ModelessDialog() { }
 
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR *windowClass;
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Implementation of class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-inline ModelessDialog::ModelessDialog( Widget * parent )
-	: BaseType(parent, ChainingDispatcher::superClass<ModelessDialog>())
-{}
 
 }
 
