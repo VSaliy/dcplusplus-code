@@ -37,7 +37,7 @@ bool ScriptInstance::MakeCallRaw(const string& table, const string& method, int 
 			return true;
 		}
 		const char *msg = lua_tostring(L, -1);
-		Util::logMessage((msg != NULL) ? string("LUA Error: ") + msg : string("LUA Error: (unknown)"));
+		Util::logMessage((msg != NULL) ? string("Lua Error: ") + msg : string("Lua Error: (unknown)"));
 		lua_pop(L, 1);
 	} else {
 		lua_settop(L, 0);
