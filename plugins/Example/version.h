@@ -19,12 +19,22 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define PLUGIN_GUID "{5fa64766-ab6e-4d79-8439-dad40fda9738}"	/* UUID/GUID for this plugin project */
+/* UUID/GUID for this plugin project */
+#define PLUGIN_GUID "{5fa64766-ab6e-4d79-8439-dad40fda9738}"
 
-#define PLUGIN_NAME "Sample Plugin"								/* Name of the plugin */
-#define PLUGIN_AUTHOR "dcplusplus-team"							/* Author of the plugin */
-#define PLUGIN_DESC "Sample plugin project"						/* Short description about the plugin */
-#define PLUGIN_VERSION 1.00										/* Version of the plugin (note: not api version) */
-#define PLUGIN_WEB "http://dcplusplus.sourceforge.net/"			/* Plugin website, set to "N/A" if none */
+/* Name of the plugin */
+#define PLUGIN_NAME "Example plugin"
+
+/* Author of the plugin */
+#define PLUGIN_AUTHOR "DC++"
+
+/* Short description of the plugin */
+#define PLUGIN_DESC "Example project"
+
+/* Version of the plugin (note: not API version) */
+#define PLUGIN_VERSION 1.0
+
+/* Plugin website, set to "N/A" if none */
+#define PLUGIN_WEB "http://dcplusplus.sourceforge.net/"
 
 #endif /* VERSION_H */

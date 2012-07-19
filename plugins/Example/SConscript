@@ -1,6 +1,6 @@
 Import('dev source_path')
 
-env, target, sources = dev.prepare_build(source_path, 'SamplePlugin', source_glob = '*.c', in_bin = False)
+env, target, sources = dev.prepare_build(source_path, 'ExamplePlugin', source_glob = '*.c', in_bin = False)
 
 env.Append(CPPPATH = ['#/dcpp'])
 
@@ -13,3 +13,4 @@ elif 'link' in env['LINK']:
 	sources.append('Plugin.def')
 
 ret = dev.build_lib(env, target, [sources, res], shared = True)
+Return('ret')

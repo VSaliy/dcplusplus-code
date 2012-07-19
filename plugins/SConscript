@@ -1,8 +1,7 @@
 Import('dev source_path')
 
-if not dev.env['plugins']:
-	Return()
-
-ret = dev.build('SamplePlugin/')
+ret = []
+for plugin in dev.env['plugins']:
+	ret.append(dev.build(plugin + '/'))
 
 Return('ret')
