@@ -19,8 +19,6 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-#include "version.h"
-
 #ifdef _WIN32
 extern HINSTANCE hInst;
 #endif

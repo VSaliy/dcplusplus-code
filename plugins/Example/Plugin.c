@@ -18,6 +18,7 @@
 
 #include "stdafx.h"
 #include "Plugin.h"
+#include "version.h"
 
 #ifndef __cplusplus
 # include <stdio.h>
@@ -112,9 +113,9 @@ Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBre
 
 	if(stricmp(cmd->command, "help") == 0 && stricmp(cmd->params, "plugins") == 0) {
 		const char* help =
-			"\t\t\t Help: SamplePlugin \t\t\t\n"
+			"\t\t\t Help: Example plugin \t\t\t\n"
 			"\t /pluginhelp \t\t\t Prints info about the purpose of this plugin\n"
-			"\t /plugininfo \t\t\t Prints info about the sample plugin\n"
+			"\t /plugininfo \t\t\t Prints info about the example plugin\n"
 			"\t /unhook <index> \t\t Hooks test\n"
 			"\t /rehook <index> \t\t Hooks test\n"
 			"\t /send <text> \t\t\t Chat message test\n";
@@ -123,8 +124,8 @@ Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBre
 		return True;
 	} else if(stricmp(cmd->command, "pluginhelp") == 0) {
 		const char* pluginhelp =
-			"\t\t\t Plugin Help: SamplePlugin \t\t\t\n"
-			"\t The sample plugin project is intended to both demostrate the use and test the implementation of the API\n"
+			"\t\t\t Plugin help: Example plugin \t\t\t\n"
+			"\t The example plugin project is intended to both demonstrate the use and test the implementation of the API\n"
 			"\t as such the plugin itself does nothing useful but it can be used to verify whether an implementation works\n"
 			"\t with the API or not, however, it is by no means intended to be a comprehensive testing tool for the API.\n";
 
@@ -132,7 +133,7 @@ Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBre
 		return True;
 	} else if(stricmp(cmd->command, "plugininfo") == 0) {
 		const char* info =
-			"\t\t\t Plugin Info: SamplePlugin \t\t\t\n"
+			"\t\t\t Plugin info: Example plugin \t\t\t\n"
 			"\t Name: \t\t\t\t" PLUGIN_NAME "\n"
 			"\t Author: \t\t\t" PLUGIN_AUTHOR "\n"
 			"\t Version: \t\t\t" STRINGIZE(PLUGIN_VERSION) "\n"
@@ -237,7 +238,7 @@ BOOL onConfigClose(HWND hWnd, UINT wID) {
 	return FALSE;
 }
 
-BOOL CALLBACK configProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+INT_PTR CALLBACK configProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	UNREFERENCED_PARAMETER(lParam);
 	switch(uMsg) {
 		case WM_INITDIALOG:
@@ -257,7 +258,7 @@ BOOL CALLBACK configProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 Bool onConfig(dcptr_t hWnd) {
 #ifdef _WIN32
-	DialogBox(hInst, MAKEINTRESOURCE(IDD_PLUGINDLG), (HWND)hWnd, (DLGPROC)&configProc);
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_PLUGINDLG), (HWND)hWnd, configProc);
 	return True;
 #else
 	return False;

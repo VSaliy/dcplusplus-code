@@ -18,6 +18,7 @@
 
 #include "stdafx.h"
 #include "Plugin.h"
+#include "version.h"
 
 const char* dependencies[] = {
 	/* Plugins with these GUID's must have been loaded *before* this plugin */
@@ -53,10 +54,10 @@ extern "C" {
 #ifdef _WIN32
 HINSTANCE hInst = NULL;
 
-BOOL APIENTRY DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved) {
-	UNREFERENCED_PARAMETER(reason);
-	UNREFERENCED_PARAMETER(lpReserved);
-	hInst = (HINSTANCE)hModule;
+BOOL APIENTRY DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
+	UNREFERENCED_PARAMETER(fdwReason);
+	UNREFERENCED_PARAMETER(lpvReserved);
+	hInst = hinstDLL;
 	return TRUE;
 }
 #endif

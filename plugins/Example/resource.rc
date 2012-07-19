@@ -69,12 +69,13 @@ BEGIN
     BEGIN
         BLOCK "080004b0"
         BEGIN
-            VALUE "FileDescription", "SamplePlugin Dynamic Link Library"
+            VALUE "Comments", "http://dcplusplus.sourceforge.net"
+            VALUE "FileDescription", "Example plugin for DC++"
             VALUE "FileVersion", "1, 0, 0, 0"
-            VALUE "InternalName", "SamplePlugin"
+            VALUE "InternalName", "ExamplePlugin"
             VALUE "LegalCopyright", "Copyright (C) 2012 Jacek Sieka"
-            VALUE "OriginalFilename", "SamplePlugin.dll"
-            VALUE "ProductName", "SamplePlugin Dynamic Link Library"
+            VALUE "OriginalFilename", "ExamplePlugin.dll"
+            VALUE "ProductName", "Example plugin for DC++"
             VALUE "ProductVersion", "1, 0, 0, 0"
         END
     END
@@ -92,7 +93,7 @@ END
 
 IDD_PLUGINDLG DIALOGEX 0, 0, 244, 75
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "SamplePlugin Settings"
+CAPTION "Example plugin settings"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,132,54,50,14
