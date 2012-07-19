@@ -4,6 +4,7 @@
 ./.sconsign.dblite
 ./.settings
 custom.py
+*.aps
 *.lib
 *.pdb
 ./dcpp/version-revno.inc
