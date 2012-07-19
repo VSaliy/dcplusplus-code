@@ -36,9 +36,14 @@ namespace dwt {
 const TCHAR *ModelessDialog::windowClass = WC_DIALOG;
 
 ModelessDialog::Seed::Seed(const Point& size, DWORD styles_) :
-BaseType::Seed(tstring(), styles_ | DS_CONTROL | WS_CHILD, WS_EX_CONTROLPARENT)
+BaseType::Seed(tstring(), styles_ | WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_VISIBLE, WS_EX_CONTROLPARENT)
 {
 	location.size = size;
+}
+
+ModelessDialog::ModelessDialog(Widget* parent) :
+	BaseType(parent, ChainingDispatcher::superClass<ModelessDialog>())
+{
 }
 
 void ModelessDialog::create(const Seed& cs) {
@@ -48,16 +53,11 @@ void ModelessDialog::create(const Seed& cs) {
 		cs2.exStyle |= WS_EX_CONTEXTHELP;
 	}
 
-	if((cs.style & DS_CONTROL) == DS_CONTROL) {
-		cs2.style &= ~WS_CAPTION;
-		cs2.style &= ~WS_SYSMENU;
-	}
-
-	cs2.style &= ~WS_VISIBLE;
-
 	BaseType::create(cs2);
 
 	SetWindowLongPtr(handle(), DWLP_DLGPROC, (LPARAM)dialogProc);
+
+	onClosing([this]() -> bool { ::DestroyWindow(handle()); return false; });
 
 	HWND hwndDefaultFocus = GetNextDlgTabItem(handle(), NULL, FALSE);
 	if (sendMessage(WM_INITDIALOG, (WPARAM)hwndDefaultFocus)) {

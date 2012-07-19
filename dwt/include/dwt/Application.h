@@ -42,7 +42,6 @@
 #include <functional>
 
 #ifdef _MSC_VER
-#ifndef WINCE
 #ifdef _DEBUG
 // Enable memory leak detection with file/line tracing.
 #define _CRTDBG_MAP_ALLOC
@@ -50,16 +49,11 @@
 #include <crtdbg.h>
 #endif
 #endif
-#endif
 
 namespace dwt {
 
 // Forward declaration of friends
 class Widget;
-
-namespace Policies {
-class ModelessDialog;
-}
 
 /// Class declaration for the application class
 /** Every application using SmartWin will get ONE and ONLY one Application object
@@ -78,20 +72,9 @@ class ModelessDialog;
   */
 class Application :public boost::noncopyable
 {
-#ifdef WINCE
-	friend int WINAPI ::WinMain( HINSTANCE hInstance,
-				HINSTANCE hPrevInstance,
-				LPTSTR lpCmdLine,
-				int nCmdShow );
-#else
-	friend int PASCAL ::WinMain( HINSTANCE hInstance,
-				HINSTANCE hPrevInstance,
-				LPSTR lpCmdLine,
-				int nCmdShow );
-#endif
+	static int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 
 	friend class Widget;
-	friend class Policies::ModelessDialog;
 public:
 	typedef std::function<void()> Callback;
 

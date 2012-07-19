@@ -45,16 +45,6 @@ extern int dwtMain(dwt::Application& app);
 
 namespace dwt {
 
-// link to Common Controls to relieve user of explicitly doing so
-#ifdef _MSC_VER
-#ifdef WINCE
-#pragma comment( lib, "commctrl.lib" )
-#else
-#pragma comment( lib, "comctl32.lib" )
-#endif //! WINCE
-#endif //! _MSC_VER
-// Friend functions to Application
-
 Application* Application::itsInstance = 0;
 HANDLE Application::itsMutex = 0;
 
@@ -273,8 +263,7 @@ void Application::removeFilter(const FilterIter& i) {
 
 } // namespace dwt
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
+int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	dwt::Application::init(nCmdShow);
 
 	int ret = dwtMain(dwt::Application::instance()); // Call library user's startup function.
