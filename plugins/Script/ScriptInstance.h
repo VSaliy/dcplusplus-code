@@ -42,7 +42,6 @@ protected:
 	template <typename T>
 	bool MakeCall(const string& table, const string& method, int ret, const T& t) throw() {
 		Lock l(cs);
-		dcassert(lua_gettop(L) == 0);
 		LuaPush(t);
 		return MakeCallRaw(table, method, 1, ret);
 	}
@@ -50,7 +49,6 @@ protected:
 	template <typename T, typename T2>
 	bool MakeCall(const string& table, const string& method, int ret, const T& t, const T2& t2) throw() {
 		Lock l(cs);
-		dcassert(lua_gettop(L) == 0);
 		LuaPush(t);
 		LuaPush(t2);
 		return MakeCallRaw(table, method, 2, ret);
