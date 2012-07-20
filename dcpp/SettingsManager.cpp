@@ -46,7 +46,7 @@ const string SettingsManager::settingTags[] =
 	"LogFormatPostFinishedDownload", "LogFormatPostUpload", "LogFormatMainChat", "LogFormatPrivateChat",
 	"TempDownloadDirectory", "BindAddress", "BindAddress6", "SocksServer", "SocksUser", "SocksPassword", "ConfigVersion",
 	"DefaultAwayMessage", "TimeStampsFormat", "CountryFormat", "ADLSearchFrameOrder", "ADLSearchFrameWidths",
-	"CID", "SpyFrameWidths", "SpyFrameOrder", "LogFileMainChat", "LogFilePrivateChat",
+	"CID", "LogFileMainChat", "LogFilePrivateChat",
 	"LogFileStatus", "LogFileUpload", "LogFileDownload", "LogFileFinishedDownload", "LogFileSystem",
 	"LogFormatSystem", "LogFormatStatus", "DirectoryListingFrameOrder", "DirectoryListingFrameWidths",
 	"TLSPrivateKeyFile", "TLSCertificateFile", "TLSTrustedCertificatesPath",
@@ -79,7 +79,7 @@ const string SettingsManager::settingTags[] =
 	"AutoDetectIncomingConnection", "AutoFollow", "AutoKick", "AutoKickNoFavs", "AutoSearch",
 	"AutoSearchAutoMatch", "AutoDropAll", "AutoDropDisconnect", "AutoDropFilelists",
 	"AwayCompLock", "BoldFinishedDownloads", "BoldFinishedUploads", "BoldFL", "BoldHub", "BoldPm",
-	"BoldQueue", "BoldSearch", "BoldSearchSpy", "BoldSystemLog", "ClearSearch",
+	"BoldQueue", "BoldSearch", "BoldSystemLog", "ClearSearch",
 	"CompressTransfers", "ConfirmADLSRemoval", "ConfirmExit", "ConfirmHubClosing",
 	"ConfirmHubRemoval", "ConfirmItemRemoval", "ConfirmUserRemoval", "Coral",
 	"DontDlAlreadyQueued", "DontDLAlreadyShared", "FavShowJoins", "FilterMessages",
@@ -93,7 +93,7 @@ const string SettingsManager::settingTags[] =
 	"SearchMerge", "SearchOnlyFreeSlots", "SegmentedDL", "SendBloom", "SendUnknownCommands",
 	"SFVCheck", "ShareHidden", "ShowJoins", "ShowMenuBar", "ShowStatusbar", "ShowToolbar",
 	"ShowTransferview", "SkipZeroByte", "SocksResolve", "SortFavUsersFirst",
-	"SpyFrameIgnoreTthSearches", "StatusInChat", "TimeDependentThrottle", "TimeStamps",
+	"StatusInChat", "TimeDependentThrottle", "TimeStamps",
 	"ToggleActiveTab", "UrlHandler", "UseCTRLForLineHistory", "UseSystemIcons",
 	"UsersFilterFavorite", "UsersFilterOnline", "UsersFilterQueue", "UsersFilterWaiting",
 	"SENTRY",
@@ -277,14 +277,12 @@ SettingsManager::SettingsManager()
 	setDefault(BOLD_PM, true);
 	setDefault(BOLD_FL, true);
 	setDefault(BOLD_SEARCH, true);
-	setDefault(BOLD_SEARCH_SPY, true);
 	setDefault(BOLD_SYSTEM_LOG, true);
 	setDefault(AUTO_REFRESH_TIME, 60);
 	setDefault(AUTO_SEARCH_LIMIT, 5);
 	setDefault(ALT_SORT_ORDER, false);
 	setDefault(AUTO_KICK_NO_FAVS, false);
 	setDefault(PROMPT_PASSWORD, false);
-	setDefault(SPY_FRAME_IGNORE_TTH_SEARCHES, false);
 	setDefault(DONT_DL_ALREADY_QUEUED, false);
 	setDefault(MAX_COMMAND_LENGTH, 16*1024*1024);
 	setDefault(ALLOW_UNTRUSTED_HUBS, true);
