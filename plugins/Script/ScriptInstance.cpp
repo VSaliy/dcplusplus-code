@@ -27,21 +27,27 @@ lua_State* ScriptInstance::L = NULL;
 CriticalSection ScriptInstance::cs;
 
 bool ScriptInstance::MakeCallRaw(const string& table, const string& method, int args, int ret) throw() {
+	auto stack_pre = lua_gettop(L) - args;
 	lua_getglobal(L, table.c_str());		// args + 1
-	lua_pushstring(L, method.c_str());		// args + 2
-	if (lua_istable(L, -2)) {
+	if (lua_istable(L, -1)) {
+		lua_pushstring(L, method.c_str());	// args + 2
 		lua_gettable(L, -2);				// args + 2
 		lua_remove(L, -2);					// args + 1
-		lua_insert(L, 1);					// args + 1
+		lua_insert(L, stack_pre + 1);		// args + 1
 		if(lua_pcall(L, args, ret, 0) == 0) {
+			dcassert(lua_gettop(L) - stack_pre == ret);
 			return true;
 		}
 		const char *msg = lua_tostring(L, -1);
-		Util::logMessage((msg != NULL) ? string("Lua Error: ") + msg : string("Lua Error: (unknown)"));
+		Util::logMessage((msg != NULL) ? string("Lua Error calling ") + table + "." + method + ": " + msg : string("Lua Error: (unknown)"));
 		lua_pop(L, 1);
 	} else {
-		lua_settop(L, 0);
+		// Abandon to garbage collector arguments pushed to function in table
+		// that doesn't exist, up to point in stack where this instance of Lua
+		// (in a possibly re-entrant manner) started building.
+		lua_settop(L, stack_pre);
 	}
+	dcassert(lua_gettop(L) == stack_pre);
 	return false;
 }
 
