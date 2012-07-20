@@ -21,13 +21,16 @@
 #include "resource.h"
 #include "Util.h"
 
+#include <unordered_set>
 #include <vector>
 
 #include <CriticalSection.h>
 
 #include <commctrl.h>
+#include <windowsx.h>
 
 using std::move;
+using std::unordered_set;
 using std::vector;
 
 using dcpp::CriticalSection;
@@ -38,12 +41,16 @@ HINSTANCE Dialog::instance;
 namespace {
 
 // store the messages to be displayed here; process them with a timer.
-struct Message { bool sending; string ip; string peer; string message; };
+struct Message { bool hubOrUser; bool sending; string ip; string peer; string message; };
 vector<Message> messages;
 
 CriticalSection mutex;
 uint16_t counter = 0;
 bool scroll = true;
+bool hubMessages = true;
+bool userMessages = true;
+unordered_set<tstring> filter;
+tstring filterSel;
 
 struct Item {
 	tstring index;
@@ -52,6 +59,12 @@ struct Item {
 	tstring peer;
 	tstring message;
 };
+
+void initFilter(HWND hwnd) {
+#define noFilter _T("0 - No filtering")
+	auto control = GetDlgItem(hwnd, IDC_FILTER);
+	ComboBox_SetCurSel(control, ComboBox_AddString(control, noFilter));
+}
 
 BOOL init(HWND hwnd) {
 	auto control = GetDlgItem(hwnd, IDC_MESSAGES);
@@ -80,6 +93,10 @@ BOOL init(HWND hwnd) {
 	ListView_InsertColumn(control, 4, &col);
 
 	SendMessage(GetDlgItem(hwnd, IDC_SCROLL), BM_SETCHECK, BST_CHECKED, 0);
+	SendMessage(GetDlgItem(hwnd, IDC_HUB_MESSAGES), BM_SETCHECK, BST_CHECKED, 0);
+	SendMessage(GetDlgItem(hwnd, IDC_USER_MESSAGES), BM_SETCHECK, BST_CHECKED, 0);
+
+	initFilter(hwnd);
 
 	SetTimer(hwnd, 1, 500, 0);
 
@@ -101,10 +118,19 @@ void timer(HWND hwnd) {
 	LVITEM lvi = { 0 };
 
 	for(auto& message: messages_) {
+		if(!(message.hubOrUser ? hubMessages : userMessages)) {
+			continue;
+		}
+
+		auto ip = Util::toT(message.ip);
+		if(!filterSel.empty() && ip != filterSel) {
+			continue;
+		}
+
 		auto item = new Item;
 		item->index = Util::toT(Util::toString(counter));
 		item->dir = message.sending ? _T("Out") : _T("In");
-		item->ip = Util::toT(message.ip);
+		item->ip = move(ip);
 		item->peer = Util::toT(message.peer);
 		item->message = Util::toT(message.message);
 
@@ -136,9 +162,13 @@ void timer(HWND hwnd) {
 		ListView_SetItem(control, &lvi);
 
 		++counter;
+
+		if(filter.find(item->ip) == filter.end()) {
+			ComboBox_AddString(GetDlgItem(hwnd, IDC_FILTER), filter.insert(item->ip).first->c_str());
+		}
 	}
 
-	if(scroll) {
+	if(scroll && lvi.lParam) { // make sure something was added
 		ListView_EnsureVisible(control, lvi.iItem, FALSE);
 	}
 }
@@ -184,8 +214,19 @@ void copy(HWND hwnd) {
 	CloseClipboard();
 }
 
-void switchScroll(HWND hwnd) {
-	scroll = SendMessage(GetDlgItem(hwnd, IDC_SCROLL), BM_GETCHECK, 0, 0) == BST_CHECKED;
+void filterSelChanged(HWND hwnd) {
+	auto control = GetDlgItem(hwnd, IDC_FILTER);
+
+	auto sel = ComboBox_GetCurSel(hwnd);
+
+	tstring str(ComboBox_GetLBTextLen(control, sel), '\0');
+	ComboBox_GetLBText(control, sel, &str[0]);
+
+	if(str == noFilter) {
+		filterSel.clear();
+	} else {
+		filterSel = move(str);
+	}
 }
 
 void clear(HWND hwnd) {
@@ -201,10 +242,15 @@ void clear(HWND hwnd) {
 
 	ListView_DeleteAllItems(control);
 	counter = 0;
+
+	ComboBox_ResetContent(GetDlgItem(hwnd, IDC_FILTER));
+	filter.clear();
+	filterSel.clear();
+	initFilter(hwnd);
 }
 
-void command(HWND hwnd, UINT id) {
-	switch(id) {
+void command(HWND hwnd, WPARAM wParam) {
+	switch(LOWORD(wParam)) {
 	case IDOK:
 	case IDCANCEL:
 		{
@@ -220,7 +266,27 @@ void command(HWND hwnd, UINT id) {
 
 	case IDC_SCROLL:
 		{
-			switchScroll(hwnd);
+			scroll = SendMessage(GetDlgItem(hwnd, IDC_SCROLL), BM_GETCHECK, 0, 0) == BST_CHECKED;
+			break;
+		}
+
+	case IDC_HUB_MESSAGES:
+		{
+			hubMessages = SendMessage(GetDlgItem(hwnd, IDC_HUB_MESSAGES), BM_GETCHECK, 0, 0) == BST_CHECKED;
+			break;
+		}
+
+	case IDC_USER_MESSAGES:
+		{
+			userMessages = SendMessage(GetDlgItem(hwnd, IDC_USER_MESSAGES), BM_GETCHECK, 0, 0) == BST_CHECKED;
+			break;
+		}
+
+	case IDC_FILTER:
+		{
+			if(HIWORD(wParam) == CBN_SELENDOK) {
+				filterSelChanged(hwnd);
+			}
 			break;
 		}
 
@@ -245,7 +311,7 @@ INT_PTR CALLBACK DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		}
 	case WM_COMMAND:
 		{
-			command(hwnd, LOWORD(wParam));
+			command(hwnd, wParam);
 			break;
 		}
 	case WM_CLOSE:
@@ -286,8 +352,8 @@ void Dialog::create(HWND parent) {
 #endif
 }
 
-void Dialog::write(bool sending, string ip, string peer, string message) {
-	Message msg = { sending, move(ip), move(peer), move(message) };
+void Dialog::write(bool hubOrUser, bool sending, string ip, string peer, string message) {
+	Message msg = { hubOrUser, sending, move(ip), move(peer), move(message) };
 	Lock l(mutex);
 	messages.push_back(move(msg));
 }

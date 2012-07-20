@@ -28,7 +28,7 @@ public:
 	~Dialog();
 
 	void create(HWND parent);
-	void write(bool sending, string ip, string peer, string message);
+	void write(bool hubOrUser, bool sending, string ip, string peer, string message);
 
 	static HINSTANCE instance;
 
