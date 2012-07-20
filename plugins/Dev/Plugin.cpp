@@ -98,22 +98,22 @@ Bool Plugin::onHubConnected(HubDataPtr hHub) {
 }
 
 Bool Plugin::onHubDataIn(HubDataPtr hHub, const char* message) {
-	dialog.write("From " + string(hHub->ip) + " (" + string(hHub->url) + "): " + string(message) + "\n");
+	dialog.write(false, hHub->ip, "Hub " + string(hHub->url), message);
 	return False;
 }
 
 Bool Plugin::onHubDataOut(HubDataPtr hHub, const char* message, Bool* bBreak) {
-	dialog.write("To " + string(hHub->ip) + " (" + string(hHub->url) + "): " + string(message) + "\n");
+	dialog.write(true, hHub->ip, "Hub " + string(hHub->url), message);
 	return False;
 }
 
 Bool Plugin::onConnectionDataIn(ConnectionDataPtr hConn, const char* message) {
-	dialog.write("From " + string(hConn->ip) + " (" + string(reinterpret_cast<UserDataPtr>(hConn->object)->nick) + "): " + string(message) + "\n");
+	dialog.write(false, hConn->ip, "User " + string(reinterpret_cast<UserDataPtr>(hConn->object)->nick), message);
 	return False;
 }
 
 Bool Plugin::onConnectionDataOut(ConnectionDataPtr hConn, const char* message) {
-	dialog.write("To " + string(hConn->ip) + " (" + string(reinterpret_cast<UserDataPtr>(hConn->object)->nick) + "): " + string(message) + "\n");
+	dialog.write(true, hConn->ip, "User " + string(reinterpret_cast<UserDataPtr>(hConn->object)->nick), message);
 	return False;
 }
 

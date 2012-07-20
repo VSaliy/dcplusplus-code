@@ -28,13 +28,12 @@ public:
 	~Dialog();
 
 	void create(HWND parent);
-	void write(string&& text);
+	void write(bool sending, string ip, string peer, string message);
 
 	static HINSTANCE instance;
 
 private:
 	HWND hwnd;
-	HMODULE richEditLib;
 };
 
 #endif
