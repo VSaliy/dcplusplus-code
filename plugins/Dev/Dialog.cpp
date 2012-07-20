@@ -24,6 +24,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include <boost/regex.hpp>
+
 #include <CriticalSection.h>
 
 #include <commctrl.h>
@@ -51,6 +53,7 @@ bool hubMessages = true;
 bool userMessages = true;
 unordered_set<tstring> filter;
 tstring filterSel;
+boost::regex regex;
 
 struct Item {
 	tstring index;
@@ -125,6 +128,17 @@ void timer(HWND hwnd) {
 		auto ip = Util::toT(message.ip);
 		if(!filterSel.empty() && ip != filterSel) {
 			continue;
+		}
+
+		if(!regex.empty()) {
+			try {
+				if(!boost::regex_search(message.message, regex)) {
+					continue;
+				}
+			} catch(const std::runtime_error&) {
+				// most likely a stack overflow, ignore...
+				continue;
+			}
 		}
 
 		auto item = new Item;
@@ -229,6 +243,24 @@ void filterSelChanged(HWND hwnd) {
 	}
 }
 
+void applyRegex(HWND hwnd) {
+	regex = "";
+
+	auto control = GetDlgItem(hwnd, IDC_REGEX);
+
+	auto n = SendMessage(control, WM_GETTEXTLENGTH, 0, 0);
+	if(!n) { return; }
+	tstring str(n + 1, 0);
+	str.resize(SendMessage(control, WM_GETTEXT, static_cast<WPARAM>(n + 1), reinterpret_cast<LPARAM>(&str[0])));
+
+	try {
+		regex.assign(Util::fromT(str));
+	} catch(const std::runtime_error&) {
+		MessageBox(hwnd, _T("Invalid regular expression"), _T("Dev plugin"), MB_OK);
+		return;
+	}
+}
+
 void clear(HWND hwnd) {
 	auto control = GetDlgItem(hwnd, IDC_MESSAGES);
 
@@ -287,6 +319,12 @@ void command(HWND hwnd, WPARAM wParam) {
 			if(HIWORD(wParam) == CBN_SELENDOK) {
 				filterSelChanged(hwnd);
 			}
+			break;
+		}
+
+	case IDC_REGEX_APPLY:
+		{
+			applyRegex(hwnd);
 			break;
 		}
 
