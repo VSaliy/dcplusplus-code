@@ -75,7 +75,6 @@
 #include "PublicHubsFrame.h"
 #include "QueueFrame.h"
 #include "SearchFrame.h"
-#include "SpyFrame.h"
 #include "StatsFrame.h"
 #include "SystemFrame.h"
 #include "UsersFrame.h"
@@ -332,8 +331,6 @@ void MainWindow::initMenu() {
 		viewMenu->appendItem(T_("&Search\tCtrl+S"), [this] { SearchFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_SEARCH));
 		viewIndexes[ADLSearchFrame::id] = viewMenu->appendItem(T_("ADL Search"),
 			[this] { ADLSearchFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_ADLSEARCH));
-		viewIndexes[SpyFrame::id] = viewMenu->appendItem(T_("Search Spy"),
-			[this] { SpyFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_SPY));
 		viewMenu->appendSeparator();
 		viewIndexes[NotepadFrame::id] = viewMenu->appendItem(T_("&Notepad\tCtrl+N"),
 			[this] { NotepadFrame::openWindow(getTabView()); }, WinUtil::menuIcon(IDI_NOTEPAD));
@@ -437,8 +434,6 @@ void MainWindow::initToolbar() {
 		IDH_TOOLBAR_SEARCH, [this] { SearchFrame::openWindow(getTabView()); });
 	toolbar->addButton(ADLSearchFrame::id, WinUtil::toolbarIcon(IDI_ADLSEARCH), 0, T_("ADL Search"), false,
 		IDH_TOOLBAR_ADL_SEARCH, [this] { ADLSearchFrame::openWindow(getTabView()); });
-	toolbar->addButton(SpyFrame::id, WinUtil::toolbarIcon(IDI_SPY), 0, T_("Search Spy"), false,
-		IDH_TOOLBAR_SEARCH_SPY, [this] { SpyFrame::openWindow(getTabView()); });
 	toolbar->addButton(StatsFrame::id, WinUtil::toolbarIcon(IDI_NET_STATS), 0, T_("Network Statistics"), false,
 		IDH_TOOLBAR_NET_STATS, [this] { StatsFrame::openWindow(getTabView()); });
 	toolbar->addButton("OpenFL", WinUtil::toolbarIcon(IDI_OPEN_FILE_LIST), 0, T_("Open file list..."), false,
@@ -470,7 +465,6 @@ void MainWindow::initToolbar() {
 			comma +
 			SearchFrame::id + comma +
 			ADLSearchFrame::id + comma +
-			SpyFrame::id + comma +
 			comma +
 			StatsFrame::id + comma +
 			comma +
@@ -1761,7 +1755,6 @@ void MainWindow::openWindow(const string& id, const WindowParams& params) {
 	compare_id(FinishedDLFrame);
 	compare_id(FinishedULFrame);
 	compare_id(ADLSearchFrame);
-	compare_id(SpyFrame);
 	compare_id(NotepadFrame);
 	compare_id(SystemFrame);
 	compare_id(StatsFrame);

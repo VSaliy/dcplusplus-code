@@ -28,6 +28,7 @@
 * More Alt+I shortcuts for list filters (emtee)
 * Increase the chat buffer limit (iceman50)
 * Eliminate GUI freezes when opening large file lists (poy)
+* Remove the search spy in favor of the dev plugin - works on ADC too (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)

@@ -39,7 +39,6 @@ IDH_FINISHED_DL=window_finished_downloads.html
 IDH_FINISHED_UL=window_finished_uploads.html
 IDH_SEARCH=window_search.html
 IDH_ADL_SEARCH=window_adlsearch.html
-IDH_SEARCH_SPY=window_search_spy.html
 IDH_NOTEPAD=window_notepad.html
 IDH_TEXT_VIEWER=window_text_viewer.html
 IDH_SYSTEM_LOG=window_system_log.html
