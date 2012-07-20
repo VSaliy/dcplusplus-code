@@ -27,7 +27,6 @@
 #include "format.h"
 #include "SettingsManager.h"
 #include "PluginManager.h"
-#include "DebugManager.h"
 
 namespace dcpp {
 
@@ -48,8 +47,6 @@ const string UserConnection::UPLOAD = "Upload";
 const string UserConnection::DOWNLOAD = "Download";
 
 void UserConnection::on(BufferedSocketListener::Line, const string& aLine) noexcept {
-
-	COMMAND_DEBUG(aLine, DebugManager::CLIENT_IN, getRemoteIp());
 
 	if(aLine.length() < 2) {
 		fire(UserConnectionListener::ProtocolError(), this, _("Invalid data"));
@@ -282,7 +279,6 @@ void UserConnection::send(const string& aString) {
 		return;
 
 	lastActivity = GET_TICK();
-	COMMAND_DEBUG(aString, DebugManager::CLIENT_OUT, getRemoteIp());
 	socket->write(aString);
 }
 

@@ -24,7 +24,6 @@
 #include "ConnectionManager.h"
 #include "ConnectivityManager.h"
 #include "CryptoManager.h"
-#include "DebugManager.h"
 #include "DownloadManager.h"
 #include "FavoriteManager.h"
 #include "FinishedManager.h"
@@ -85,7 +84,6 @@ void startup(function<void (const string&)> f) {
 	UserMatchManager::newInstance();
 	WindowManager::newInstance();
 	PluginManager::newInstance();
-	DebugManager::newInstance();
 
 	SettingsManager::getInstance()->load();
 
@@ -145,7 +143,6 @@ void shutdown() {
 	SettingsManager::getInstance()->save();
 
 	PluginManager::deleteInstance();
-	DebugManager::deleteInstance();
 	WindowManager::deleteInstance();
 	UserMatchManager::deleteInstance();
 	GeoManager::deleteInstance();
