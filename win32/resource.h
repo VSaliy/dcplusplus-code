@@ -18,7 +18,6 @@
 #define IDI_FINISHED_UL				110
 #define IDI_ADLSEARCH				111
 #define IDI_USERS					112
-#define IDI_SPY						113
 #define IDI_NET_STATS				114
 #define IDI_MAGNET					116
 #define IDI_HUB_OFF					117
@@ -81,7 +80,6 @@
 #define IDI_SOUND 174
 #define IDI_ULIMIT 175
 #define IDI_DLIMIT 176
-#define IDI_DEBUG 177
 #define IDI_PLUGINS 178
 
 // Stuff that uses multiple id's

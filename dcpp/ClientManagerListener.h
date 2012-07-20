@@ -22,11 +22,7 @@
 #include "forward.h"
 #include "noexcept.h"
 
-#include <string>
-
 namespace dcpp {
-
-using std::string;
 
 class ClientManagerListener {
 public:
@@ -36,17 +32,15 @@ public:
 	typedef X<0> UserConnected;
 	typedef X<1> UserUpdated;
 	typedef X<2> UserDisconnected;
-	typedef X<3> IncomingSearch;
-	typedef X<4> ClientConnected;
-	typedef X<5> ClientUpdated;
-	typedef X<6> ClientDisconnected;
+	typedef X<3> ClientConnected;
+	typedef X<4> ClientUpdated;
+	typedef X<5> ClientDisconnected;
 
 	/** User online in at least one hub */
 	virtual void on(UserConnected, const UserPtr&) noexcept { }
 	virtual void on(UserUpdated, const OnlineUser&) noexcept { }
 	/** User offline in all hubs */
 	virtual void on(UserDisconnected, const UserPtr&) noexcept { }
-	virtual void on(IncomingSearch, const string&) noexcept { }
 	virtual void on(ClientConnected, Client*) noexcept { }
 	virtual void on(ClientUpdated, Client*) noexcept { }
 	virtual void on(ClientDisconnected, Client*) noexcept { }
