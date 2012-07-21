@@ -40,6 +40,10 @@ using dcpp::Lock;
 
 HINSTANCE Dialog::instance;
 
+#ifndef LVS_EX_DOUBLEBUFFER
+#define LVS_EX_DOUBLEBUFFER     0x00010000
+#endif
+
 namespace {
 
 // store the messages to be displayed here; process them with a timer.
@@ -77,7 +81,7 @@ BOOL init(HWND hwnd) {
 	RECT rect;
 	GetClientRect(control, &rect);
 
-	LVCOLUMN col = { LVCF_FMT | LVCF_TEXT | LVCF_WIDTH, LVCFMT_LEFT, 50, _T("N°") };
+	LVCOLUMN col = { LVCF_FMT | LVCF_TEXT | LVCF_WIDTH, LVCFMT_LEFT, 50, _T("#") };
 	ListView_InsertColumn(control, 0, &col);
 
 	col.pszText = _T("Dir");
@@ -198,7 +202,7 @@ void copy(HWND hwnd) {
 		if(ListView_GetItem(control, &lvi)) {
 			auto& item = *reinterpret_cast<Item*>(lvi.lParam);
 			if(!str.empty()) { str += _T("\r\n"); }
-			str += item.index + _T(" ") + item.ip + _T(" (") + item.peer + _T("): ") + item.message;
+			str += item.index + _T(" [") + item.dir + _T("] ") + item.ip + _T(" (") + item.peer + _T("): ") + item.message;
 		}
 	}
 
@@ -231,7 +235,7 @@ void copy(HWND hwnd) {
 void filterSelChanged(HWND hwnd) {
 	auto control = GetDlgItem(hwnd, IDC_FILTER);
 
-	auto sel = ComboBox_GetCurSel(hwnd);
+	auto sel = ComboBox_GetCurSel(control);
 
 	tstring str(ComboBox_GetLBTextLen(control, sel), '\0');
 	ComboBox_GetLBText(control, sel, &str[0]);
@@ -379,7 +383,7 @@ Dialog::~Dialog() {
 }
 
 void Dialog::create(HWND parent) {
-	hwnd = CreateDialog(instance, MAKEINTRESOURCE(IDD_PLUGINDLG), hwnd, DialogProc);
+	hwnd = CreateDialog(instance, MAKEINTRESOURCE(IDD_PLUGINDLG), 0, DialogProc);
 
 #ifdef _DEBUG
 	if(!hwnd) {
