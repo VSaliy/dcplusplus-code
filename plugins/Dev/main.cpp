@@ -23,19 +23,17 @@
 
 extern "C" {
 
-	// Plugin loader
-	DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
-		info->name = PLUGIN_NAME;
-		info->author = PLUGIN_AUTHOR;
-		info->description = PLUGIN_DESC;
-		info->web = PLUGIN_WEB;
-		info->version = PLUGIN_VERSION;
-		info->apiVersion = DCAPI_CORE_VER;
-		info->guid = PLUGIN_GUID;
+// Plugin loader
+DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
+	info->name = PLUGIN_NAME;
+	info->author = PLUGIN_AUTHOR;
+	info->description = PLUGIN_DESC;
+	info->web = PLUGIN_WEB;
+	info->version = PLUGIN_VERSION;
+	info->apiVersion = DCAPI_CORE_VER;
+	info->guid = PLUGIN_GUID;
 
-		return &Plugin::main;
-	}
-
+	return &Plugin::main;
 }
 
 #ifdef _WIN32
@@ -44,3 +42,5 @@ BOOL APIENTRY DllMain(HINSTANCE hinstDLL, DWORD /*fdwReason*/, LPVOID /*lpvReser
 	return TRUE;
 }
 #endif
+
+}

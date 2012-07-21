@@ -30,26 +30,22 @@ const char* dependencies[] = {
 extern "C" {
 #endif
 
-	/* Plugin loader */
-	DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
-		info->name = PLUGIN_NAME;
-		info->author = PLUGIN_AUTHOR;
-		info->description = PLUGIN_DESC;
-		info->version = PLUGIN_VERSION;
-		info->web = PLUGIN_WEB;
-		info->apiVersion = DCAPI_CORE_VER;
-		info->guid = PLUGIN_GUID;
+/* Plugin loader */
+DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
+	info->name = PLUGIN_NAME;
+	info->author = PLUGIN_AUTHOR;
+	info->description = PLUGIN_DESC;
+	info->version = PLUGIN_VERSION;
+	info->web = PLUGIN_WEB;
+	info->apiVersion = DCAPI_CORE_VER;
+	info->guid = PLUGIN_GUID;
 
-		/* Plugin dependencies 
-		info->dependencies = dependencies;
-		info->numDependencies = 2;*/
+	/* Plugin dependencies 
+	info->dependencies = dependencies;
+	info->numDependencies = 2;*/
 
-		return &pluginMain;
-	}
-
-#ifdef __cplusplus
+	return &pluginMain;
 }
-#endif
 
 #ifdef _WIN32
 HINSTANCE hInst = NULL;
@@ -59,5 +55,9 @@ BOOL APIENTRY DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
 	UNREFERENCED_PARAMETER(lpvReserved);
 	hInst = hinstDLL;
 	return TRUE;
+}
+#endif
+
+#ifdef __cplusplus
 }
 #endif
