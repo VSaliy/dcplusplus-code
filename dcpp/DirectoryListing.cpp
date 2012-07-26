@@ -354,6 +354,17 @@ bool DirectoryListing::File::Sort::operator()(const Ptr& a, const Ptr& b) const 
 	return compare(a->getName(), b->getName()) < 0;
 }
 
+void DirectoryListing::setComplete(bool complete) {
+	root->setAllComplete(complete);
+}
+
+void DirectoryListing::Directory::setAllComplete(bool complete) {
+	for(auto d: directories) {
+		d->setAllComplete(complete);
+	}
+	setComplete(complete);
+}
+
 string DirectoryListing::getPath(const Directory* d) const {
 	if(d == root)
 		return "";

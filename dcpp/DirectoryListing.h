@@ -93,6 +93,7 @@ public:
 		void getHashList(TTHSet& l);
 		void save(OutputStream& stream, string& indent, string& tmp) const;
 		void sortDirs();
+		void setAllComplete(bool complete);
 
 		size_t getFileCount() const { return files.size(); }
 
@@ -131,6 +132,8 @@ public:
 	void save(const string& path) const;
 	/** sort directories and sub-directories recursively (case-insensitive). */
 	void sortDirs();
+	/** recursively mark directories and sub-directories as complete or incomplete. */
+	void setComplete(bool complete);
 
 	void download(const string& aDir, const string& aTarget, bool highPrio);
 	void download(Directory* aDir, const string& aTarget, bool highPrio);
