@@ -518,6 +518,9 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 		if(!loaded && File::getSize(path) != -1) {
 			// load the cached list.
 			dl->updateXML(File(path, File::READ, File::OPEN).read());
+
+			// mark all dirs as incomplete (the list we have loaded may be old).
+			dl->setComplete(false);
 		}
 
 		auto base = dl->updateXML(txt);
