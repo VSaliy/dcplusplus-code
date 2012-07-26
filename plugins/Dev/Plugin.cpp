@@ -108,12 +108,12 @@ Bool Plugin::onHubDataOut(HubDataPtr hHub, const char* message, Bool* bBreak) {
 }
 
 Bool Plugin::onConnectionDataIn(ConnectionDataPtr hConn, const char* message) {
-	dialog.write(false, false, hConn->ip, "User " + string(reinterpret_cast<UserDataPtr>(hConn->object)->nick), message);
+	dialog.write(false, false, hConn->ip, "User" /** @todo get user's nick */, message);
 	return False;
 }
 
 Bool Plugin::onConnectionDataOut(ConnectionDataPtr hConn, const char* message) {
-	dialog.write(false, true, hConn->ip, "User " + string(reinterpret_cast<UserDataPtr>(hConn->object)->nick), message);
+	dialog.write(false, true, hConn->ip, "User" /** @todo get user's nick */, message);
 	return False;
 }
 

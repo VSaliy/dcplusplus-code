@@ -21,59 +21,90 @@
 #include "resource.h"
 #include "Util.h"
 
-#include <unordered_set>
-#include <vector>
-
-#include <boost/regex.hpp>
-
-#include <CriticalSection.h>
-
 #include <commctrl.h>
 #include <windowsx.h>
-
-using std::move;
-using std::unordered_set;
-using std::vector;
-
-using dcpp::CriticalSection;
-using dcpp::Lock;
-
-HINSTANCE Dialog::instance;
 
 #ifndef LVS_EX_DOUBLEBUFFER
 #define LVS_EX_DOUBLEBUFFER     0x00010000
 #endif
 
-namespace {
-
-// store the messages to be displayed here; process them with a timer.
-struct Message { bool hubOrUser; bool sending; string ip; string peer; string message; };
-vector<Message> messages;
-
-CriticalSection mutex;
-uint16_t counter = 0;
-bool scroll = true;
-bool hubMessages = true;
-bool userMessages = true;
-unordered_set<tstring> filter;
-tstring filterSel;
-boost::regex regex;
-
-struct Item {
-	tstring index;
-	tstring dir;
-	tstring ip;
-	tstring peer;
-	tstring message;
-};
-
-void initFilter(HWND hwnd) {
 #define noFilter _T("0 - No filtering")
-	auto control = GetDlgItem(hwnd, IDC_FILTER);
-	ComboBox_SetCurSel(control, ComboBox_AddString(control, noFilter));
+
+HINSTANCE Dialog::instance;
+Dialog* dlg = nullptr;
+
+Dialog::Dialog() :
+	hwnd(nullptr),
+	counter(0),
+	scroll(true),
+	hubMessages(true),
+	userMessages(true)
+{
+	dlg = this;
 }
 
-BOOL init(HWND hwnd) {
+Dialog::~Dialog() {
+	if(hwnd) {
+		DestroyWindow(hwnd);
+	}
+
+	dlg = nullptr;
+}
+
+void Dialog::create(HWND parent) {
+	if(hwnd) {
+		MessageBox(parent, _T("The dev plugin hasn't been properly shut down; you better restart DC++"),
+			_T("Error creating the dev plugin's dialog"), MB_OK);
+		return;
+	}
+
+	CreateDialog(instance, MAKEINTRESOURCE(IDD_PLUGINDLG), 0, DialogProc);
+
+	if(!hwnd) {
+		TCHAR buf[256];
+		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, buf, 256, 0);
+		MessageBox(parent, buf, _T("Error creating the dev plugin's dialog"), MB_OK);
+	}
+}
+
+void Dialog::write(bool hubOrUser, bool sending, string ip, string peer, string message) {
+	Message msg = { hubOrUser, sending, move(ip), move(peer), move(message) };
+	Lock l(mutex);
+	messages.push_back(move(msg));
+}
+
+INT_PTR CALLBACK Dialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM) {
+	switch(uMsg) {
+	case WM_INITDIALOG:
+		{
+			dlg->hwnd = hwnd;
+			return dlg->init();
+		}
+	case WM_TIMER:
+		{
+			dlg->timer();
+			break;
+		}
+	case WM_COMMAND:
+		{
+			dlg->command(wParam);
+			break;
+		}
+	case WM_CLOSE:
+		{
+			delete dlg;
+			break;
+		}
+	case WM_DESTROY:
+		{
+			dlg->clear();
+			break;
+		}
+	}
+	return FALSE;
+}
+
+BOOL Dialog::init() {
 	auto control = GetDlgItem(hwnd, IDC_MESSAGES);
 
 	ListView_SetExtendedListViewStyle(control, LVS_EX_DOUBLEBUFFER | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP);
@@ -103,14 +134,14 @@ BOOL init(HWND hwnd) {
 	SendMessage(GetDlgItem(hwnd, IDC_HUB_MESSAGES), BM_SETCHECK, BST_CHECKED, 0);
 	SendMessage(GetDlgItem(hwnd, IDC_USER_MESSAGES), BM_SETCHECK, BST_CHECKED, 0);
 
-	initFilter(hwnd);
+	initFilter();
 
 	SetTimer(hwnd, 1, 500, 0);
 
 	return TRUE;
 }
 
-void timer(HWND hwnd) {
+void Dialog::timer() {
 	decltype(messages) messages_;
 	{
 		Lock l(mutex);
@@ -191,7 +222,100 @@ void timer(HWND hwnd) {
 	}
 }
 
-void copy(HWND hwnd) {
+void Dialog::command(WPARAM wParam) {
+	switch(LOWORD(wParam)) {
+	case IDOK:
+	case IDCANCEL:
+		{
+			SendMessage(hwnd, WM_CLOSE, 0, 0);
+			break;
+		}
+
+	case IDC_SCROLL:
+		{
+			scroll = SendMessage(GetDlgItem(hwnd, IDC_SCROLL), BM_GETCHECK, 0, 0) == BST_CHECKED;
+			break;
+		}
+
+	case IDC_HUB_MESSAGES:
+		{
+			hubMessages = SendMessage(GetDlgItem(hwnd, IDC_HUB_MESSAGES), BM_GETCHECK, 0, 0) == BST_CHECKED;
+			break;
+		}
+
+	case IDC_USER_MESSAGES:
+		{
+			userMessages = SendMessage(GetDlgItem(hwnd, IDC_USER_MESSAGES), BM_GETCHECK, 0, 0) == BST_CHECKED;
+			break;
+		}
+
+	case IDC_FILTER:
+		{
+			if(HIWORD(wParam) == CBN_SELENDOK) {
+				filterSelChanged();
+			}
+			break;
+		}
+
+	case IDC_REGEX_APPLY:
+		{
+			applyRegex();
+			break;
+		}
+
+	case IDC_COPY:
+		{
+			copy();
+			break;
+		}
+
+	case IDC_CLEAR:
+		{
+			clear();
+			break;
+		}
+	}
+}
+
+void Dialog::initFilter() {
+	auto control = GetDlgItem(hwnd, IDC_FILTER);
+	ComboBox_SetCurSel(control, ComboBox_AddString(control, noFilter));
+}
+
+void Dialog::filterSelChanged() {
+	auto control = GetDlgItem(hwnd, IDC_FILTER);
+
+	auto sel = ComboBox_GetCurSel(control);
+
+	tstring str(ComboBox_GetLBTextLen(control, sel), '\0');
+	ComboBox_GetLBText(control, sel, &str[0]);
+
+	if(str == noFilter) {
+		filterSel.clear();
+	} else {
+		filterSel = move(str);
+	}
+}
+
+void Dialog::applyRegex() {
+	regex = "";
+
+	auto control = GetDlgItem(hwnd, IDC_REGEX);
+
+	auto n = SendMessage(control, WM_GETTEXTLENGTH, 0, 0);
+	if(!n) { return; }
+	tstring str(n + 1, 0);
+	str.resize(SendMessage(control, WM_GETTEXT, static_cast<WPARAM>(n + 1), reinterpret_cast<LPARAM>(&str[0])));
+
+	try {
+		regex.assign(Util::fromT(str));
+	} catch(const std::runtime_error&) {
+		MessageBox(hwnd, _T("Invalid regular expression"), _T("Dev plugin"), MB_OK);
+		return;
+	}
+}
+
+void Dialog::copy() {
 	tstring str;
 
 	auto control = GetDlgItem(hwnd, IDC_MESSAGES);
@@ -232,40 +356,7 @@ void copy(HWND hwnd) {
 	CloseClipboard();
 }
 
-void filterSelChanged(HWND hwnd) {
-	auto control = GetDlgItem(hwnd, IDC_FILTER);
-
-	auto sel = ComboBox_GetCurSel(control);
-
-	tstring str(ComboBox_GetLBTextLen(control, sel), '\0');
-	ComboBox_GetLBText(control, sel, &str[0]);
-
-	if(str == noFilter) {
-		filterSel.clear();
-	} else {
-		filterSel = move(str);
-	}
-}
-
-void applyRegex(HWND hwnd) {
-	regex = "";
-
-	auto control = GetDlgItem(hwnd, IDC_REGEX);
-
-	auto n = SendMessage(control, WM_GETTEXTLENGTH, 0, 0);
-	if(!n) { return; }
-	tstring str(n + 1, 0);
-	str.resize(SendMessage(control, WM_GETTEXT, static_cast<WPARAM>(n + 1), reinterpret_cast<LPARAM>(&str[0])));
-
-	try {
-		regex.assign(Util::fromT(str));
-	} catch(const std::runtime_error&) {
-		MessageBox(hwnd, _T("Invalid regular expression"), _T("Dev plugin"), MB_OK);
-		return;
-	}
-}
-
-void clear(HWND hwnd) {
+void Dialog::clear() {
 	auto control = GetDlgItem(hwnd, IDC_MESSAGES);
 
 	LVITEM lvi = { LVIF_PARAM };
@@ -282,120 +373,5 @@ void clear(HWND hwnd) {
 	ComboBox_ResetContent(GetDlgItem(hwnd, IDC_FILTER));
 	filter.clear();
 	filterSel.clear();
-	initFilter(hwnd);
-}
-
-void command(HWND hwnd, WPARAM wParam) {
-	switch(LOWORD(wParam)) {
-	case IDOK:
-	case IDCANCEL:
-		{
-			SendMessage(hwnd, WM_CLOSE, 0, 0);
-			break;
-		}
-
-	case IDC_COPY:
-		{
-			copy(hwnd);
-			break;
-		}
-
-	case IDC_SCROLL:
-		{
-			scroll = SendMessage(GetDlgItem(hwnd, IDC_SCROLL), BM_GETCHECK, 0, 0) == BST_CHECKED;
-			break;
-		}
-
-	case IDC_HUB_MESSAGES:
-		{
-			hubMessages = SendMessage(GetDlgItem(hwnd, IDC_HUB_MESSAGES), BM_GETCHECK, 0, 0) == BST_CHECKED;
-			break;
-		}
-
-	case IDC_USER_MESSAGES:
-		{
-			userMessages = SendMessage(GetDlgItem(hwnd, IDC_USER_MESSAGES), BM_GETCHECK, 0, 0) == BST_CHECKED;
-			break;
-		}
-
-	case IDC_FILTER:
-		{
-			if(HIWORD(wParam) == CBN_SELENDOK) {
-				filterSelChanged(hwnd);
-			}
-			break;
-		}
-
-	case IDC_REGEX_APPLY:
-		{
-			applyRegex(hwnd);
-			break;
-		}
-
-	case IDC_CLEAR:
-		{
-			clear(hwnd);
-			break;
-		}
-	}
-}
-
-INT_PTR CALLBACK DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	switch(uMsg) {
-	case WM_INITDIALOG:
-		{
-			return init(hwnd);
-		}
-	case WM_TIMER:
-		{
-			timer(hwnd);
-			break;
-		}
-	case WM_COMMAND:
-		{
-			command(hwnd, wParam);
-			break;
-		}
-	case WM_CLOSE:
-		{
-			DestroyWindow(hwnd);
-			break;
-		}
-	case WM_DESTROY:
-		{
-			clear(hwnd);
-			break;
-		}
-	}
-	return FALSE;
-}
-
-} // unnamed namespace
-
-Dialog::Dialog() : hwnd(nullptr)
-{
-}
-
-Dialog::~Dialog() {
-	if(hwnd) {
-		DestroyWindow(hwnd);
-	}
-}
-
-void Dialog::create(HWND parent) {
-	hwnd = CreateDialog(instance, MAKEINTRESOURCE(IDD_PLUGINDLG), 0, DialogProc);
-
-#ifdef _DEBUG
-	if(!hwnd) {
-		TCHAR buf[256];
-		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, buf, 256, 0);
-		MessageBox(parent, buf, _T("Error creating the dev plugin's dialog"), MB_OK);
-	}
-#endif
-}
-
-void Dialog::write(bool hubOrUser, bool sending, string ip, string peer, string message) {
-	Message msg = { hubOrUser, sending, move(ip), move(peer), move(message) };
-	Lock l(mutex);
-	messages.push_back(move(msg));
+	initFilter();
 }

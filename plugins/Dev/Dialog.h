@@ -19,7 +19,20 @@
 #ifndef PLUGINS_DEV_DIALOG_H
 #define PLUGINS_DEV_DIALOG_H
 
+#include <unordered_set>
+#include <vector>
+
+#include <boost/regex.hpp>
+
+#include <CriticalSection.h>
+
+using std::move;
 using std::string;
+using std::unordered_set;
+using std::vector;
+
+using dcpp::CriticalSection;
+using dcpp::Lock;
 
 class Dialog
 {
@@ -33,7 +46,44 @@ public:
 	static HINSTANCE instance;
 
 private:
+	static INT_PTR CALLBACK DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM);
+
+	// events called by DialogProc
+	BOOL init();
+	void timer();
+	void command(WPARAM wParam);
+
+	// other helpers
+	void initFilter();
+	void filterSelChanged();
+	void applyRegex();
+	void copy();
+	void clear();
+
 	HWND hwnd;
+
+	// store the messages to be displayed here; process them with a timer.
+	struct Message { bool hubOrUser; bool sending; string ip; string peer; string message; };
+	vector<Message> messages;
+
+	CriticalSection mutex;
+
+	uint16_t counter;
+	bool scroll;
+	bool hubMessages;
+	bool userMessages;
+	unordered_set<tstring> filter;
+	tstring filterSel;
+	boost::regex regex;
+
+	// objects associated to each list litem as LPARAMs.
+	struct Item {
+		tstring index;
+		tstring dir;
+		tstring ip;
+		tstring peer;
+		tstring message;
+	};
 };
 
 #endif
