@@ -328,15 +328,17 @@ HookSubscriber* PluginManager::bindHook(const string& guid, DCHOOK hookProc, voi
 		return NULL;
 	}
 	auto& hook = i->second;
+	{
+		Lock l(hook->cs);	// not strictly needed, for additions, due to characteristic of std::vector<..>
+		auto subscription = make_unique<HookSubscriber>();
+		auto pSub = subscription.get();
+		subscription->hookProc = hookProc;
+		subscription->common = pCommon;
+		subscription->owner = hook->guid;
+		hook->subscribers.push_back(move(subscription));
 
-	auto subscription = make_unique<HookSubscriber>();
-	auto pSub = subscription.get();
-	subscription->hookProc = hookProc;
-	subscription->common = pCommon;
-	subscription->owner = hook->guid;
-	hook->subscribers.push_back(move(subscription));
-
-	return pSub;
+		return pSub;
+	}
 }
 
 bool PluginManager::runHook(PluginHook* hook, dcptr_t pObject, dcptr_t pData) {
@@ -373,11 +375,13 @@ size_t PluginManager::releaseHook(HookSubscriber* subscription) {
 		return 0;
 	}
 	auto& hook = i->second;
+	{
+		Lock l(hook->cs);
+		hook->subscribers.erase(std::remove_if(hook->subscribers.begin(), hook->subscribers.end(),
+			[subscription](const unique_ptr<HookSubscriber>& sub) { return sub.get() == subscription; }), hook->subscribers.end());
 
-	hook->subscribers.erase(std::remove_if(hook->subscribers.begin(), hook->subscribers.end(),
-		[subscription](const unique_ptr<HookSubscriber>& sub) { return sub.get() == subscription; }), hook->subscribers.end());
-
-	return hook->subscribers.size();
+		return hook->subscribers.size();
+	}
 }
 
 // Plugin configuration
