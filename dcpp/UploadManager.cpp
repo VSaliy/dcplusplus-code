@@ -105,22 +105,22 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 	if(!aSource.isSet(UserConnection::FLAG_HASSLOT)) {
 		bool hasReserved = hasReservedSlot(aSource.getUser());
 		bool isFavorite = FavoriteManager::getInstance()->hasSlot(aSource.getUser());
+		bool hasFreeSlot = (getFreeSlots() > 0) && ((waitingFiles.empty() && connectingUsers.empty()) || isConnecting(aSource.getUser()));
 
-		if(!(hasReserved || isFavorite || getFreeSlots() > 0 || getAutoSlot())) {
+		if(!(hasReserved || isFavorite || getAutoSlot() || hasFreeSlot)) {
 			bool supportsMini = aSource.isSet(UserConnection::FLAG_SUPPORTS_MINISLOTS);
 			bool allowedMini = aSource.isSet(UserConnection::FLAG_HASEXTRASLOT) || aSource.isSet(UserConnection::FLAG_OP) || getFreeExtraSlots() > 0;
 			if(miniSlot && supportsMini && allowedMini) {
 				extraSlot = true;
 			} else {
-				aSource.maxedOut();
 
 				// Check for tth root identifier
 				string tFile = aFile;
 				if (tFile.compare(0, 4, "TTH/") == 0)
 					tFile = ShareManager::getInstance()->toVirtual(TTHValue(aFile.substr(4)));
 
-				addFailedUpload(aSource, tFile +
-					" (" +  Util::formatBytes(aStartPos) + " - " + Util::formatBytes(aStartPos + aBytes) + ")");
+				aSource.maxedOut(addFailedUpload(aSource, tFile +
+					" (" +  Util::formatBytes(aStartPos) + " - " + Util::formatBytes(aStartPos + aBytes) + ")"));
 				aSource.disconnect();
 				return false;
 			}
@@ -199,6 +199,7 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 				is = mis;
 				break;
 			}
+		case Transfer::TYPE_LAST: break;
 		}
 
 	} catch(const ShareException& e) {
@@ -243,6 +244,12 @@ bool UploadManager::prepareFile(UserConnection& aSource, const string& aType, co
 
 		if(gotFullSlot) {
 			clearUserFiles(aSource.getUser());	// this user is using a full slot, nix them.
+
+			// remove user from connecting list
+			auto cu = connectingUsers.find(aSource.getUser());
+			if(cu != connectingUsers.end()) {
+				connectingUsers.erase(cu);
+			}
 		}
 	}
 
@@ -281,8 +288,12 @@ void UploadManager::reserveSlot(const HintedUser& aUser) {
 		Lock l(cs);
 		reservedSlots.insert(aUser);
 	}
-	if(aUser.user->isOnline())
-		ClientManager::getInstance()->connect(aUser, Util::toString(Util::rand()));
+	if(aUser.user->isOnline()) {
+		 auto it = find_if(waitingUsers.cbegin(), waitingUsers.cend(), [&](const UserPtr& u) { return u == aUser.user; });
+		 if(it != waitingUsers.cend()) {
+			ClientManager::getInstance()->connect(aUser, it->token);
+		}
+	}
 }
 
 bool UploadManager::hasReservedSlot(const UserPtr& user) const {
@@ -392,30 +403,29 @@ void UploadManager::on(UserConnectionListener::TransmitDone, UserConnection* aSo
 	removeUpload(u);
 }
 
-void UploadManager::addFailedUpload(const UserConnection& source, string filename) {
+size_t UploadManager::addFailedUpload(const UserConnection& source, string filename) {
+	size_t queue_position = 0;
 	{
 		Lock l(cs);
-		auto it = find_if(waitingUsers.begin(), waitingUsers.end(), CompareFirst<UserPtr, uint32_t>(source.getUser()));
+		auto it = find_if(waitingUsers.begin(), waitingUsers.end(), [&](const UserPtr& u) -> bool { ++queue_position; return u == source.getUser(); });
 		if (it==waitingUsers.end()) {
-			waitingUsers.emplace_back(source.getHintedUser(), GET_TICK());
-		} else {
-			it->second = GET_TICK();
+			waitingUsers.emplace_back(source.getHintedUser(), source.getToken());
 		}
 		waitingFiles[source.getUser()].insert(filename);		//files for which user's asked
 	}
-
 	fire(UploadManagerListener::WaitingAddFile(), source.getHintedUser(), filename);
+	return queue_position;
 }
 
 void UploadManager::clearUserFiles(const UserPtr& source) {
 	Lock l(cs);
 	//run this when a user's got a slot or goes offline.
-	auto sit = find_if(waitingUsers.begin(), waitingUsers.end(), CompareFirst<UserPtr, uint32_t>(source));
+	auto sit = find_if(waitingUsers.begin(), waitingUsers.end(), [&source](const UserPtr& other) { return other == source; });
 	if (sit == waitingUsers.end()) return;
 
-	auto fit = waitingFiles.find(sit->first);
+	auto fit = waitingFiles.find(sit->user);
 	if (fit != waitingFiles.end()) waitingFiles.erase(fit);
-	fire(UploadManagerListener::WaitingRemoveUser(), sit->first);
+	fire(UploadManagerListener::WaitingRemoveUser(), sit->user);
 
 	waitingUsers.erase(sit);
 }
@@ -424,7 +434,7 @@ HintedUserList UploadManager::getWaitingUsers() const {
 	Lock l(cs);
 	HintedUserList u;
 	for(auto i = waitingUsers.begin(), iend = waitingUsers.end(); i != iend; ++i) {
-		u.push_back(i->first);
+		u.push_back(i->user);
 	}
 	return u;
 }
@@ -462,19 +472,41 @@ void UploadManager::removeConnection(UserConnection* aSource) {
 	}
 }
 
-void UploadManager::on(TimerManagerListener::Minute, uint64_t /* aTick */) noexcept {
+void UploadManager::notifyQueuedUsers() {
+	if(waitingUsers.empty()) return;	//no users to notify
+
+	int freeSlots = getFreeSlots();
+	if(freeSlots > 0) {
+		freeSlots -= connectingUsers.size();
+		while(!waitingUsers.empty() && freeSlots > 0) {
+			// let's keep him in the connectingList until he asks for a file
+			WaitingUser queuedUser = waitingUsers.front();
+			auto isOnline = queuedUser.user.user->isOnline();
+			if(isOnline) {
+				clearUserFiles(queuedUser.user);
+				connectingUsers[queuedUser.user] = GET_TICK();
+				ClientManager::getInstance()->connect(queuedUser.user, queuedUser.token);
+				freeSlots--;
+			} else {
+				clearUserFiles(queuedUser.user);
+			}
+		}
+	}
+}
+
+void UploadManager::on(TimerManagerListener::Minute, uint64_t  aTick ) noexcept {
 	UserList disconnects;
 	{
 		Lock l(cs);
 
-		auto i = stable_partition(waitingUsers.begin(), waitingUsers.end(), WaitingUserFresh());
-		for (auto j = i; j != waitingUsers.end(); ++j) {
-			auto fit = waitingFiles.find(j->first);
-			if (fit != waitingFiles.end()) waitingFiles.erase(fit);
-			fire(UploadManagerListener::WaitingRemoveUser(), j->first);
+		for(auto i = connectingUsers.begin(); i != connectingUsers.end();) {
+			if((i->second + (90 * 1000)) < aTick) {
+				clearUserFiles(i->first);
+				connectingUsers.erase(i++);
+			} else {
+				++i;
+			}
 		}
-
-		waitingUsers.erase(i, waitingUsers.end());
 
 		if( SETTING(AUTO_KICK) ) {
 			for(auto u: uploads) {
@@ -554,6 +586,8 @@ void UploadManager::on(TimerManagerListener::Second, uint64_t) noexcept {
 
 	if(!uploads.empty())
 		fire(UploadManagerListener::Tick(), UploadList(uploads));
+		
+	notifyQueuedUsers();
 }
 
 void UploadManager::on(ClientManagerListener::UserDisconnected, const UserPtr& aUser) noexcept {

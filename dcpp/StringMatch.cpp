@@ -34,6 +34,7 @@ void StringMatch::setMethod(Method method) {
 	case PARTIAL: search = StringSearch::List(); break;
 	case EXACT: search = string(); break;
 	case REGEX: search = boost::regex(); break;
+	case METHOD_LAST: break;
 	}
 }
 
