@@ -53,7 +53,7 @@ Dialog::~Dialog() {
 
 void Dialog::create(HWND parent) {
 	if(hwnd) {
-		MessageBox(parent, _T("The dev plugin hasn't been properly shut down; you better restart DC++"),
+		MessageBox(parent, Util::toT("The dev plugin hasn't been properly shut down; you better restart " + Util::appName).c_str(),
 			_T("Error creating the dev plugin's dialog"), MB_OK);
 		return;
 	}

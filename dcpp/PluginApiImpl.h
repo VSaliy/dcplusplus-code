@@ -56,6 +56,9 @@ private:
 	static DCInterfacePtr DCAPI queryInterface(const char* guid, uint32_t version);
 	static Bool DCAPI releaseInterface(intfHandle hInterface);
 
+	static Bool DCAPI isLoaded(const char* guid);
+	static const char* DCAPI hostName();
+
 	// Functions for DCHooks
 	static hookHandle DCAPI createHook(const char* guid, DCHOOK defProc);
 	static Bool DCAPI destroyHook(hookHandle hHook);

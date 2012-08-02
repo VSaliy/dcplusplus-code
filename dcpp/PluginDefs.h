@@ -272,6 +272,12 @@ typedef struct tagDCCore {
 	intfHandle			(DCAPI *register_interface)	(const char* guid, dcptr_t pInterface);
 	DCInterfacePtr		(DCAPI *query_interface)	(const char* guid, uint32_t version);
 	Bool				(DCAPI *release_interface)	(intfHandle hInterface);
+
+	/* Check if another plugin is loaded (for soft dependencies) */
+	Bool				(DCAPI *has_plugin)			(const char* guid);				
+
+	/* Retrieve host application name */
+	const char*			(DCAPI *host_name)			();
 } DCCore, *DCCorePtr;
 
 /* Plugin main function */

@@ -45,7 +45,8 @@ using std::string;
 class Util
 {
 public:
-	static void initialize(DCUtilsPtr coreUtils, DCConfigPtr coreConfig, DCLogPtr coreLogger) {
+	static void initialize(string coreName, DCUtilsPtr coreUtils, DCConfigPtr coreConfig, DCLogPtr coreLogger) {
+		appName = std::move(coreName);
 		utils = coreUtils;
 		config = coreConfig;
 		logger = coreLogger;
@@ -99,6 +100,8 @@ public:
 
 	static string fromUtf8(const string& str);
 	static string toUtf8(const string& str);
+
+	static string appName;
 
 private:
 	static DCUtilsPtr utils;
