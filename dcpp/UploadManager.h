@@ -34,6 +34,7 @@
 #include "Speaker.h"
 #include "SettingsManager.h"
 #include "HintedUser.h"
+#include "UserConnection.h"
 #include "GetSet.h"
 
 namespace dcpp {
@@ -42,6 +43,15 @@ using std::max;
 using std::list;
 using std::set;
 using std::unordered_map;
+
+struct WaitingUser {
+	HintedUser user;
+	string token;
+	
+	WaitingUser(const HintedUser& _user, const std::string& _token) : user(_user), token(_token) { }
+	
+	operator const UserPtr&() const { return user.user; }
+};
 
 class UploadManager : private ClientManagerListener, private UserConnectionListener, public Speaker<UploadManagerListener>, private TimerManagerListener, public Singleton<UploadManager>
 {
@@ -65,6 +75,7 @@ public:
 
 	/** @param aUser Reserve an upload slot for this user and connect. */
 	void reserveSlot(const HintedUser& aUser);
+	bool isConnecting(const UserPtr& aUser) const { return connectingUsers.find(aUser) != connectingUsers.end(); }
 
 	typedef set<string> FileSet;
 	typedef unordered_map<UserPtr, FileSet, User::Hash> FilesMap;
@@ -87,20 +98,20 @@ private:
 	typedef unordered_set<UserPtr, User::Hash> SlotSet;
 	typedef SlotSet::iterator SlotIter;
 	SlotSet reservedSlots;
+	
+	typedef unordered_map<UserPtr, uint64_t, User::Hash> SlotMap;
+	typedef SlotMap::iterator SlotMapIter;
+	SlotMap connectingUsers;
 
 	int lastFreeSlots; /// amount of free slots at the previous minute
 
-	typedef pair<HintedUser, uint64_t> WaitingUser;
 	typedef list<WaitingUser> WaitingUserList;
-
-	struct WaitingUserFresh {
-		bool operator()(const WaitingUser& wu) { return wu.second > GET_TICK() - 5*60*1000; }
-	};
 
 	//functions for manipulating waitingFiles and waitingUsers
 	WaitingUserList waitingUsers;		//this one merely lists the users waiting for slots
 	FilesMap waitingFiles;		//set of files which this user has asked for
-	void addFailedUpload(const UserConnection& source, string filename);
+	size_t addFailedUpload(const UserConnection& source, string filename);
+	void notifyQueuedUsers();
 
 	friend class Singleton<UploadManager>;
 	UploadManager() noexcept;

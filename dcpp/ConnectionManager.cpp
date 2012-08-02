@@ -682,6 +682,7 @@ void ConnectionManager::on(AdcCommand::INF, UserConnection* aSource, const AdcCo
 		/** @todo check tokens for upload connections */
 	}
 
+	aSource->setToken(token);
 	if(down) {
 		aSource->setFlag(UserConnection::FLAG_DOWNLOAD);
 		addDownloadConnection(aSource);

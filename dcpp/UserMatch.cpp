@@ -61,6 +61,7 @@ bool UserMatch::match(OnlineUser& user) const {
 		case UserMatch::Rule::CID: str = identity.getUser()->getCID().toBase32(); break;
 		case UserMatch::Rule::IP: str = identity.getIp(); break;
 		case UserMatch::Rule::HUB_ADDRESS: str = user.getClient().getHubUrl(); break;
+		case UserMatch::Rule::FIELD_LAST: break;
 		}
 		if(!i.match(str)) {
 			return false;

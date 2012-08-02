@@ -633,6 +633,11 @@ bool TabView::handleXMouseUp(const MouseEvent& mouseEvent) {
 	switch(mouseEvent.ButtonPressed) {
 	case MouseEvent::X1: next(true); break;
 	case MouseEvent::X2: next(); break;
+	
+	case MouseEvent::OTHER: break;
+	case MouseEvent::LEFT: break;
+	case MouseEvent::RIGHT: break;
+	case MouseEvent::MIDDLE: break;
 	}
 	return true;
 }
