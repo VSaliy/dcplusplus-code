@@ -37,6 +37,7 @@
 #include "PluginManager.h"
 #include "QueueManager.h"
 #include "UserConnection.h"
+#include "version.h"
 
 namespace dcpp {
 
@@ -69,6 +70,8 @@ static const char* hookGuids[IMPL_HOOKS_COUNT] = {
 	HOOK_UI_LOCAL_CHAT_DISPLAY,
 	HOOK_UI_PROCESS_CHAT_CMD		
 };
+
+static const char* hostName = APPNAME;
 
 // lambdas are not used because certain compiler is being a pain about it (for now)
 DCHooks PluginApiImpl::dcHooks = {
@@ -173,6 +176,10 @@ void PluginApiImpl::initAPI(DCCore& dcCore) {
 	dcCore.query_interface = &PluginApiImpl::queryInterface;
 	dcCore.release_interface = &PluginApiImpl::releaseInterface;
 
+	// Core functions
+	dcCore.has_plugin = &PluginApiImpl::isLoaded;
+	dcCore.host_name = &PluginApiImpl::hostName;
+
 	// Interfaces (since these outlast any plugin they don't need to be explictly released)
 	dcCore.register_interface(DCINTF_HOOKS, &dcHooks);
 	dcCore.register_interface(DCINTF_CONFIG, &dcConfig);
@@ -209,6 +216,14 @@ DCInterfacePtr PluginApiImpl::queryInterface(const char* guid, uint32_t version)
 
 Bool PluginApiImpl::releaseInterface(intfHandle hInterface) {
 	return PluginManager::getInstance()->releaseInterface(hInterface) ? True : False;
+}
+
+Bool PluginApiImpl::isLoaded(const char* guid) {
+	return PluginManager::getInstance()->isLoaded(guid) ? True : False;
+}
+
+const char* PluginApiImpl::hostName() {
+	return dcpp::hostName;
 }
 
 // Functions for DCHook

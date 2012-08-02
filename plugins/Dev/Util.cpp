@@ -21,6 +21,8 @@
 
 #include "version.h"
 
+string Util::appName; 
+
 DCUtilsPtr Util::utils = nullptr;
 DCConfigPtr Util::config = nullptr;
 DCLogPtr Util::logger = nullptr;

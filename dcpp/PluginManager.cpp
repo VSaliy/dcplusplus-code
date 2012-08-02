@@ -329,7 +329,7 @@ HookSubscriber* PluginManager::bindHook(const string& guid, DCHOOK hookProc, voi
 	}
 	auto& hook = i->second;
 	{
-		Lock l(hook->cs);	// not strictly needed, for additions, due to characteristic of std::vector<..>
+		Lock l(hook->cs);
 		auto subscription = make_unique<HookSubscriber>();
 		auto pSub = subscription.get();
 		subscription->hookProc = hookProc;

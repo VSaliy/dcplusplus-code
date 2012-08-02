@@ -89,7 +89,7 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 		return;
 	}
 
-	Util::initialize(utils, config, logger);
+	Util::initialize(core->host_name(), utils, config, logger);
 
 	if(install) {
 		// Default settings
@@ -97,7 +97,7 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 		Util::setConfig("LuaDebug", false);
 		Util::setConfig("FormatChat", true);
 
-		Util::logMessage("Script plugin installed, please restart the client to begin using the plugin.");
+		Util::logMessage("Script plugin installed, please restart " + Util::appName + " to begin using the plugin.");
 		return;
 	}
 
