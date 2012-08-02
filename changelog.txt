@@ -30,6 +30,8 @@
 * Eliminate GUI freezes when opening large file lists (poy)
 * Remove the search spy in favor of the dev plugin - works on ADC too (poy)
 * Fix partial list browsing after loading an old full list (poy)
+* Add QP support (iceman50)
+* [L#305811] Grant extra slot hangs connection in ADC hubs (iceman50)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
