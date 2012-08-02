@@ -130,7 +130,7 @@ messageTimestamp(messageTimestamp)
 
 	i = 0;
 	size_t begin, end;
-	const auto n = tmp.size();
+	auto n = tmp.size();
 	while((i = tmp.find(':', i)) != string::npos) {
 
 		if((begin = tmp.find_last_of(delimiters, i)) == string::npos) begin = 0; else ++begin;
@@ -151,7 +151,11 @@ messageTimestamp(messageTimestamp)
 					// magnet link: replace with the friendly name
 					name += " (magnet)";
 					tmp.replace(begin, end - begin, name);
-					end += name.size() - link.size();
+
+					// the size of the string has changed; update counts.
+					auto delta = name.size() - link.size();
+					end += delta;
+					n += delta;
 				}
 
 				addLinkStr(begin, end, link);
@@ -174,6 +178,7 @@ messageTimestamp(messageTimestamp)
 			if(i + 5 <= end) {
 				addLink(i, end);
 				i = end;
+				continue;
 			}
 		}
 		i += 5;
