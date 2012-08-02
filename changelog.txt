@@ -32,6 +32,7 @@
 * Fix partial list browsing after loading an old full list (poy)
 * Add QP support (iceman50)
 * [L#305811] Grant extra slot hangs connection in ADC hubs (iceman50)
+* [L#1032227] Fix a crash when parsing messages with Magnet links (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
