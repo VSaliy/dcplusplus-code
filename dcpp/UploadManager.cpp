@@ -296,8 +296,10 @@ void UploadManager::reserveSlot(const HintedUser& aUser) {
 			auto it = find_if(waitingUsers.cbegin(), waitingUsers.cend(), [&](const UserPtr& u) { return u == aUser.user; });
 			return (it != waitingUsers.cend()) ? it->token : Util::emptyString;
 		};
-		 
-		ClientManager::getInstance()->connect(aUser, userToken());
+		
+		string token;
+		if((token = userToken()) != Util::emptyString)
+			ClientManager::getInstance()->connect(aUser, token);
 	}
 }
 
@@ -583,18 +585,20 @@ void UploadManager::on(AdcCommand::GFI, UserConnection* aSource, const AdcComman
 
 // TimerManagerListener
 void UploadManager::on(TimerManagerListener::Second, uint64_t) noexcept {
-	Lock l(cs);
-	UploadList ticks;
+	{
+		Lock l(cs);
+		UploadList ticks;
 
-	for(auto u: uploads) {
-		if(u->getPos() > 0) {
-			ticks.push_back(u);
-			u->tick();
+		for(auto u: uploads) {
+			if(u->getPos() > 0) {
+				ticks.push_back(u);
+				u->tick();
+			}
 		}
-	}
 
-	if(!uploads.empty())
-		fire(UploadManagerListener::Tick(), UploadList(uploads));
+		if(!uploads.empty())
+			fire(UploadManagerListener::Tick(), UploadList(uploads));
+	}
 		
 	notifyQueuedUsers();
 }
