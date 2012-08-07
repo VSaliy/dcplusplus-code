@@ -115,7 +115,7 @@ public:
 		bool sendPos = queue_position > 0;
 
 		if(isSet(FLAG_NMDC)) {
-			send("$MaxedOut" + (sendPos ? (" " + Util::toString(queue_position)) : Util::emptyString) + "|");
+			send("$MaxedOut|");
 		} else {
 			AdcCommand cmd(AdcCommand::SEV_RECOVERABLE, AdcCommand::ERROR_SLOTS_FULL, "Slots full");
 			if(sendPos) {
