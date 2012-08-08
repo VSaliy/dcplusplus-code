@@ -502,7 +502,7 @@ void UploadManager::notifyQueuedUsers() {
 		}
 	}
 	for(auto it = notifyList.cbegin(); it != notifyList.cend(); ++it)
-		ClientManager::getInstance()->connect((*it).user, (*it).token);
+		ClientManager::getInstance()->connect(it->user, it->token);
 }
 
 void UploadManager::on(TimerManagerListener::Minute, uint64_t  aTick ) noexcept {

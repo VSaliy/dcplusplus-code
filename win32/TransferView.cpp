@@ -722,9 +722,16 @@ static tstring getFile(Transfer* t) {
 	} else if(t->getType() == Transfer::TYPE_FULL_LIST || t->getType() == Transfer::TYPE_PARTIAL_LIST) {
 		file = T_("file list");
 	} else {
-		file = Text::toT(Util::getFileName(t->getPath()) +
-			" (" + Util::formatBytes(t->getStartPos()) +
-			" - " + Util::formatBytes(t->getStartPos() + t->getSize()) + ")");
+		string path, total = Util::emptyString;
+		if (dynamic_cast <Upload*> (t)) {
+			path = "<" + t->getPath() + ">";
+			WinUtil::reducePaths(path);
+			total = _(" of ") + Util::formatBytes(File::getSize(t->getPath()));
+		} else {
+			path = Util::getFileName(t->getPath());
+		}
+		file = Text::toT(path + " (" + Util::formatBytes(t->getStartPos()) +
+			" - " + Util::formatBytes(t->getStartPos() + t->getSize()) + total + ")");
 	}
 	return file;
 }
