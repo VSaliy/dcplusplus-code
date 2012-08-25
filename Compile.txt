@@ -84,8 +84,6 @@
 		Rename debug libraries to libeay32d.lib and ssleay32d.lib; put them in openssl/lib.
 
 		To generate project files for MSVC, run "scons" with "msvcproj=1" and "tools=default".
-		[Temporary until SCons fully supports VS 2012: the above command has to be run from a VS
-		command prompt.]
 		The resulting solution file (DCPlusPlus.sln) will be in msvc/[mode-arch]/.
 
 
