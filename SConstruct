@@ -121,8 +121,7 @@ if TARGET_ARCH == 'x64':
 	TARGET_ARCH = 'amd64'
 
 env = Environment(ENV = os.environ, tools = [defEnv['tools']], options = opts,
-		TARGET_ARCH = TARGET_ARCH, MSVS_ARCH = TARGET_ARCH,
-		MSVC_USE_SCRIPT = False) # TODO this disables SCons' automatic env setup as it doesn't know about VC 11 yet
+		TARGET_ARCH = TARGET_ARCH, MSVS_ARCH = TARGET_ARCH)
 
 if 'mingw' not in env['TOOLS'] and 'gcc' in env['TOOLS']:
 	raise Exception('Non-mingw gcc builds not supported')

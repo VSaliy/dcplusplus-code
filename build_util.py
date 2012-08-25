@@ -77,9 +77,8 @@ class Dev:
 
 			# work around a few bugs in MSVC project generation, see msvcproj_workarounds for details.
 			from SCons.Action import Action
-			from SCons.Tool.msvs import GenerateProject, GenerateSolution
+			from SCons.Tool.msvs import GenerateProject
 			self.env['MSVSPROJECTCOM'] = [Action(GenerateProject, None), Action(msvcproj_workarounds, None)]
-			self.env['MSVSSOLUTIONCOM'] = [Action(GenerateSolution, None), Action(msvcsol_workarounds, None)]
 
 	def finalize(self):
 		if self.env['msvcproj']:
@@ -350,22 +349,9 @@ def msvcproj_workarounds(target, source, env):
 	contents = re.sub('<ItemGroup>\s*<None Include="SConstruct" />\s*</ItemGroup>', '', contents)
 
 	# update the platform toolset to the VS 2012 one.
-	# TODO remove when SCons knows about VS 2012.
+	# TODO remove when SCons adds this.
 	contents = contents.replace('<UseOfMfc>false</UseOfMfc>',
 	'<UseOfMfc>false</UseOfMfc>\r\n\t\t<PlatformToolset>v110</PlatformToolset>')
-
-	f = open(str(target[0]), 'wb')
-	f.write(contents)
-	f.close()
-
-def msvcsol_workarounds(target, source, env):
-	f = open(str(target[0]), 'rb')
-	contents = f.read()
-	f.close()
-
-	# modify solution files to open in VS 2012 by default.
-	# TODO remove when SCons knows about VS 2012.
-	contents = contents.replace('# Visual Studio 2010', '# Visual Studio 2012')
 
 	f = open(str(target[0]), 'wb')
 	f.write(contents)
