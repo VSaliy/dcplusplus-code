@@ -12,5 +12,5 @@ if 'g++' in env['LINK']:
 elif 'link' in env['LINK']:
 	sources.append('Plugin.def')
 
-ret = dev.build_lib(env, target, [sources, res, dev.build('lua/')], shared = True)
+ret = dev.build_lib(env, target, [sources, res, dev.build('lua/'), dev.boost], shared = True)
 Return('ret')
