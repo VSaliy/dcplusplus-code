@@ -40,9 +40,8 @@ ConnectivityManualPage::ConnectivityManualPage(dwt::Widget* parent) :
 PropPage(parent, 5, 1),
 autoGroup(0),
 autoDetect(0),
-directIn(0),
+active(0),
 upnp(0),
-manual(0),
 passive(0),
 mapper(0)
 {
@@ -59,21 +58,18 @@ mapper(0)
 	}
 
 	{
-		auto cur = grid->addChild(GroupBox::Seed())->addChild(Grid::Seed(4, 1));
+		auto cur = grid->addChild(GroupBox::Seed())->addChild(Grid::Seed(3, 1));
 		cur->column(0).mode = GridInfo::FILL;
 		cur->setSpacing(grid->getSpacing());
 
-		directIn = cur->addChild(RadioButton::Seed(T_("My computer is directly connected to the Internet (no router)")));
-		directIn->setHelpId(IDH_SETTINGS_CONNECTIVITY_DIRECT);
+		active = cur->addChild(RadioButton::Seed(T_("Active mode (no router or manual router configuration)")));
+		active->setHelpId(IDH_SETTINGS_CONNECTIVITY_ACTIVE);
 
-		upnp = cur->addChild(RadioButton::Seed(T_("Let DC++ configure my router (NAT-PMP / UPnP)")));
-		upnp->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_UPNP);
-
-		manual = cur->addChild(RadioButton::Seed(T_("Manual port forwarding (I have configured my router by myself)")));
-		manual->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_NAT);
+		upnp = cur->addChild(RadioButton::Seed(T_("Active mode (let DC++ configure my router with NAT-PMP / UPnP)")));
+		upnp->setHelpId(IDH_SETTINGS_CONNECTIVITY_UPNP);
 
 		passive = cur->addChild(RadioButton::Seed(T_("Passive mode (last resort - has serious limitations)")));
-		passive->setHelpId(IDH_SETTINGS_CONNECTIVITY_FIREWALL_PASSIVE);
+		passive->setHelpId(IDH_SETTINGS_CONNECTIVITY_PASSIVE);
 	}
 
 	{
@@ -142,10 +138,9 @@ void ConnectivityManualPage::write() {
 	PropPage::write(items);
 
 	// Set the connection mode
-	int c = upnp->getChecked() ? SettingsManager::INCOMING_FIREWALL_UPNP :
-		manual->getChecked() ? SettingsManager::INCOMING_FIREWALL_NAT :
-		passive->getChecked() ? SettingsManager::INCOMING_FIREWALL_PASSIVE :
-		SettingsManager::INCOMING_DIRECT;
+	int c = upnp->getChecked() ? SettingsManager::INCOMING_ACTIVE_UPNP :
+		passive->getChecked() ? SettingsManager::INCOMING_PASSIVE :
+		SettingsManager::INCOMING_ACTIVE;
 	if(SETTING(INCOMING_CONNECTIONS) != c) {
 		SettingsManager::getInstance()->set(SettingsManager::INCOMING_CONNECTIONS, c);
 	}
@@ -173,10 +168,9 @@ void ConnectivityManualPage::updateAuto() {
 
 void ConnectivityManualPage::read() {
 	switch(SETTING(INCOMING_CONNECTIONS)) {
-	case SettingsManager::INCOMING_FIREWALL_UPNP: upnp->setChecked(); break;
-	case SettingsManager::INCOMING_FIREWALL_NAT: manual->setChecked(); break;
-	case SettingsManager::INCOMING_FIREWALL_PASSIVE: passive->setChecked(); break;
-	default: directIn->setChecked(); break;
+	case SettingsManager::INCOMING_ACTIVE_UPNP: upnp->setChecked(); break;
+	case SettingsManager::INCOMING_PASSIVE: passive->setChecked(); break;
+	default: active->setChecked(); break;
 	}
 
 	PropPage::read(items);
@@ -200,9 +194,8 @@ void ConnectivityManualPage::on(SettingChanged) noexcept {
 
 		// reload settings in case they have been changed (eg by the "Edit detected settings" feature).
 
-		directIn->setChecked(false);
+		active->setChecked(false);
 		upnp->setChecked(false);
-		manual->setChecked(false);
 		passive->setChecked(false);
 
 		mapper->clear();

@@ -35,6 +35,7 @@
 * [L#1032227] Fix a crash when parsing messages with Magnet links (poy)
 * [L#1039537] Fix a crash in Windows 8 (poy)
 * Update Boost to version 1.51
+* Merge 2 identical active mode settings (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
