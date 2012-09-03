@@ -152,7 +152,7 @@ SettingsManager::SettingsManager()
 	setDefault(TCP_PORT, 0);
 	setDefault(UDP_PORT, 0);
 	setDefault(TLS_PORT, 0);
-	setDefault(INCOMING_CONNECTIONS, INCOMING_DIRECT);
+	setDefault(INCOMING_CONNECTIONS, INCOMING_ACTIVE);
 	setDefault(OUTGOING_CONNECTIONS, OUTGOING_DIRECT);
 	setDefault(AUTO_DETECT_CONNECTION, true);
 	setDefault(AUTO_FOLLOW, true);
@@ -455,8 +455,20 @@ void SettingsManager::load(string const& aFileName)
 			unset(LOG_FILE_SYSTEM);
 		}
 
-		if(v <= 0.770 && SETTING(INCOMING_CONNECTIONS) != INCOMING_FIREWALL_PASSIVE) {
+		// previous incoming connection modes, kept here for back-compat.
+		enum { OLD_INCOMING_DIRECT, OLD_INCOMING_UPNP, OLD_INCOMING_NAT, OLD_INCOMING_PASSIVE };
+
+		if(v <= 0.770 && SETTING(INCOMING_CONNECTIONS) != OLD_INCOMING_PASSIVE) {
 			set(AUTO_DETECT_CONNECTION, false); //Don't touch if it works
+		}
+
+		if(v <= 0.799) {
+			// port previous conn settings
+			switch(SETTING(INCOMING_CONNECTIONS)) {
+			case OLD_INCOMING_UPNP: set(INCOMING_CONNECTIONS, INCOMING_ACTIVE_UPNP); break;
+			case OLD_INCOMING_PASSIVE: set(INCOMING_CONNECTIONS, INCOMING_PASSIVE); break;
+			default: set(INCOMING_CONNECTIONS, INCOMING_ACTIVE); break;
+			}
 		}
 
 		if(v <= 0.782) {
@@ -470,7 +482,7 @@ void SettingsManager::load(string const& aFileName)
 		}
 
 		if(v <= 0.791) {
-			// the meaning of a default away message has changed: it now means "no away message".
+			// the meaning of a blank default away message has changed: it now means "no away message".
 			if(SETTING(DEFAULT_AWAY_MESSAGE).empty()) {
 				set(DEFAULT_AWAY_MESSAGE, "I'm away. State your business and I might answer later if you're lucky.");
 			}

@@ -571,7 +571,7 @@ UserPtr& ClientManager::getMe() {
 }
 
 bool ClientManager::isActive() const {
-	return CONNSETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_FIREWALL_PASSIVE;
+	return CONNSETTING(INCOMING_CONNECTIONS) != SettingsManager::INCOMING_PASSIVE;
 }
 
 const CID& ClientManager::getMyPID() {

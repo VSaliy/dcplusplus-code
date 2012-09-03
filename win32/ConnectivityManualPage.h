@@ -37,9 +37,8 @@ private:
 	GroupBoxPtr autoGroup;
 	CheckBoxPtr autoDetect;
 
-	RadioButtonPtr directIn;
+	RadioButtonPtr active;
 	RadioButtonPtr upnp;
-	RadioButtonPtr manual;
 	RadioButtonPtr passive;
 
 	ComboBoxPtr mapper;

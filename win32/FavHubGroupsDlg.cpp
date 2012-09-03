@@ -144,7 +144,7 @@ bool FavHubGroupsDlg::handleInitDialog() {
 			email = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
 			email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
 
-			cur2->addChild(Label::Seed(T_("External / WAN IP")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
+			cur2->addChild(Label::Seed(T_("IP")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
 			userIp = cur2->addChild(WinUtil::Seeds::Dialog::textBox);
 			userIp->setHelpId(IDH_FAVORITE_HUB_USER_IP);
 			WinUtil::preventSpaces(userIp);

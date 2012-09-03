@@ -121,7 +121,7 @@ bool FavHubProperties::handleInitDialog() {
 		email->setText(Text::toT(entry->get(HubSettings::Email)));
 		email->setHelpId(IDH_FAVORITE_HUB_EMAIL);
 
-		cur->addChild(Label::Seed(T_("External / WAN IP")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
+		cur->addChild(Label::Seed(T_("IP")))->setHelpId(IDH_FAVORITE_HUB_USER_IP);
 		userIp = cur->addChild(WinUtil::Seeds::Dialog::textBox);
 		userIp->setText(Text::toT(entry->get(HubSettings::UserIp)));
 		userIp->setHelpId(IDH_FAVORITE_HUB_USER_IP);
