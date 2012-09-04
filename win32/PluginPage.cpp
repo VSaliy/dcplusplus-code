@@ -42,15 +42,6 @@ using dwt::Label;
 using dwt::Link;
 using dwt::LoadDialog;
 
-#define IDH_PLUGIN_PAGE 0
-#define IDH_PLUGINS_INFO 0
-#define IDH_PLUGINS_INSTALLED 0
-#define IDH_PLUGIN_ADD 0
-#define IDH_PLUGIN_CONFIGURE 0
-#define IDH_PLUGIN_UP 0
-#define IDH_PLUGIN_DOWN 0
-#define IDH_PLUGIN_REMOVE 0
-
 static const ColumnInfo columns[] = {
 	{ "", 440, false },
 };
@@ -66,7 +57,7 @@ remove(0),
 pluginInfo(0)
 {
 
-	setHelpId(IDH_PLUGIN_PAGE);
+	setHelpId(IDH_PLUGINPAGE);
 
 	grid->column(0).mode = GridInfo::FILL;
 	grid->row(0).mode = GridInfo::FILL;
@@ -83,7 +74,7 @@ pluginInfo(0)
 			cur->column(0).mode = GridInfo::FILL;
 			cur->row(0).mode = GridInfo::FILL;
 			cur->row(0).align = GridInfo::STRETCH;
-			cur->setHelpId(IDH_PLUGINS_INSTALLED);
+			cur->setHelpId(IDH_SETTINGS_PLUGINS_LIST);
 			cur->setSpacing(6);
 	
 			auto seed = WinUtil::Seeds::Dialog::table;
@@ -108,33 +99,33 @@ pluginInfo(0)
 				add = buttons->addChild(Button::Seed(T_("&Add")));
 				add->onClicked([this] { handleAddPlugin(); });
 				add->setImage(WinUtil::buttonIcon(IDI_OK));
-				add->setHelpId(IDH_PLUGIN_ADD);
+				add->setHelpId(IDH_SETTINGS_PLUGINS_ADD);
 
 				configure = buttons->addChild(Button::Seed(T_("&Configure")));
 				configure->onClicked([this] { handleConfigurePlugin(); });
 				configure->setImage(WinUtil::buttonIcon(IDI_SETTINGS));
-				configure->setHelpId(IDH_PLUGIN_CONFIGURE);
+				configure->setHelpId(IDH_SETTINGS_PLUGINS_CONFIGURE);
 
 				moveUp = buttons->addChild(Button::Seed(T_("Move &up")));
 				moveUp->onClicked([this] { handleMovePluginUp(); });
 				moveUp->setImage(WinUtil::buttonIcon(IDI_UPLOAD));
-				moveUp->setHelpId(IDH_PLUGIN_UP);
+				moveUp->setHelpId(IDH_SETTINGS_PLUGINS_MOVE_UP);
 
 				moveDown = buttons->addChild(Button::Seed(T_("Move &down")));
 				moveDown->onClicked([this] { handleMovePluginDown(); });
 				moveDown->setImage(WinUtil::buttonIcon(IDI_DOWNLOAD));
-				moveDown->setHelpId(IDH_PLUGIN_DOWN);
+				moveDown->setHelpId(IDH_SETTINGS_PLUGINS_MOVE_DOWN);
 
 				remove = buttons->addChild(Button::Seed(T_("&Remove")));
 				remove->onClicked([this] { handleRemovePlugin(); });
 				remove->setImage(WinUtil::buttonIcon(IDI_CANCEL));
-				remove->setHelpId(IDH_PLUGIN_REMOVE);
+				remove->setHelpId(IDH_SETTINGS_PLUGINS_REMOVE);
 			}
 	}
 
 	{
 		GroupBoxPtr group = grid->addChild(GroupBox::Seed(T_("Plugin information")));
-		group->setHelpId(IDH_PLUGINS_INFO);
+		group->setHelpId(IDH_SETTINGS_PLUGINS_INFO);
 		pluginInfo = group->addChild(Grid::Seed(1, 1));
 		pluginInfo->column(0).mode = GridInfo::FILL;
 		pluginInfo->row(0).mode = GridInfo::STATIC;
