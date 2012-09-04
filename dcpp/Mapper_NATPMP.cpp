@@ -105,7 +105,7 @@ bool Mapper_NATPMP::add(const string& port, const Protocol protocol, const strin
 	if(sendRequest(port_, protocol, 3600)) {
 		natpmpresp_t response;
 		if(read(response) && response.type == respType(protocol) && response.pnu.newportmapping.mappedpublicport == port_) {
-			lifetime = std::min(lifetime ? lifetime : 3600, response.pnu.newportmapping.lifetime);
+			lifetime = std::min(lifetime ? lifetime : 3600, response.pnu.newportmapping.lifetime) / 60;
 			return true;
 		}
 	}
