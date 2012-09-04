@@ -76,6 +76,7 @@ IDH_UCPAGE=settings_user_commands.html
 IDH_CERTIFICATESPAGE=settings_certs.html
 IDH_SEARCHTYPESPAGE=settings_search_types.html
 IDH_USERMATCHPAGE=settings_user_matching.html
+IDH_PLUGINPAGE=settings_plugins.html
 
 [MAP]
 #include resource.h

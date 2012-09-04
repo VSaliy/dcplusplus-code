@@ -79,25 +79,25 @@ dialog. This will enable the controls on the <a href="settings_connectivity_manu
 pane where you can alter connectivity settings manually.</p>
 
 <p>When you look at the <a href="settings_connectivity_manual.html#connection">Incoming connection settings</a>
-you will find 3 options for active mode and the last option for being passive
+you will find 2 options for active mode and the last option for being passive
 as a last resort. For being active:</p>
 
 <ul>
-	<li style="margin-left: 10px;">You can use the <i>My computer is directly connected 
-to Internet (no router)</i> option <b>ONLY if you don't have a router/gateway</b>.</li>
-	<li style="margin-left: 10px;">If you <b>have a router/gateway you can use ONLY
-the 2nd or the 3rd option</b> : <i>Let DC++ configure
-my router (NAT-PMP / UPnP)</i> or <i>Manual port forwarding (I have configured my router by myself)</i></li>
+	<li style="margin-left: 10px;"><b>If you don't have a router/gateway</b> you need to set the 
+	<i>Active mode (I have no router / I have configured my router)</i> option.</li>
+	<li style="margin-left: 10px;">If you <b>connecting through a router/gateway you can choose between
+the 1st or the 2nd option</b> : <i>Active mode (I have no router / I have configured my router)</i>
+	or <i>Active mode (let DC++ configure my router with NAT-PMP / UPnP)</i>.</li>
 </ul>
 
 <h2>Setting up active mode if you are directly connected (NOT behind a router)</h2>
 
 <ul>
-	<li>	
-      Click on File menu and then Settings. Click on the <a href="settings_connectivity_manual.html">Manual configuration pane</a>.
+	<li>
+	Click on File menu and then Settings. Click on the <a href="settings_connectivity_manual.html">Manual configuration pane</a>.
 	</li>
 	<li>
-	Select the <b>My computer is directly connected to the Internet (no router)</b> radio button. Leave the fields in 
+	Select the <b>Active mode (I have no router / I have configured my router)</b> radio button. Leave the fields in 
 	the 'External / WAN IP' box blank. This will make DC++ use the current IP assigned to your network card. 
 	You must NOT have an internal IP address for this to work.
 	</li>
@@ -115,6 +115,7 @@ my router (NAT-PMP / UPnP)</i> or <i>Manual port forwarding (I have configured m
 	If not, then you are likely behind a router, have an internal IP address or haven't properly configured your <a href="faq_unblock.html">security software to unblock DC++</a>.
 	</li>
 </ul>
+<p>Note hat this is the proper connection mode to choose if you're <b>using DC++ to connect to local hubs</b> and you plan to connect to users in your local network only.</p>
 
 <h2>Setting up active mode if you are behind a router</h2>
 
@@ -147,8 +148,7 @@ a successful attempt. To enable automatic port mapping
 	Click on File menu and then Settings. Click on the <a href="settings_connectivity_manual.html">Manual configuration pane</a>.
 	</li>
 	<li>
-	Select the <b>Let DC++ configure my router (NAT-PMP / UPnP)</b> radio button. Leave the fields in the 'External / WAN IP'
-	box blank.
+	Select the <b>Active mode (let DC++ configure my router with NAT-PMP / UPnP)</b> radio button. Leave the fields in the &quot;External / WAN IP&quot; box blank.
 	</li>
 	<li>
 	Leave the transfers and search port fields blank also. This will make DC++ randomize the port it uses each time.
