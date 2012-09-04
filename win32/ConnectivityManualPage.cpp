@@ -62,7 +62,7 @@ mapper(0)
 		cur->column(0).mode = GridInfo::FILL;
 		cur->setSpacing(grid->getSpacing());
 
-		active = cur->addChild(RadioButton::Seed(T_("Active mode (no router or manual router configuration)")));
+		active = cur->addChild(RadioButton::Seed(T_("Active mode (I have no router / I have configured my router)")));
 		active->setHelpId(IDH_SETTINGS_CONNECTIVITY_ACTIVE);
 
 		upnp = cur->addChild(RadioButton::Seed(T_("Active mode (let DC++ configure my router with NAT-PMP / UPnP)")));
