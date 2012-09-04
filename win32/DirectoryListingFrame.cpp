@@ -550,13 +550,12 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 		loaded = true;
 		addRecent();
 
-		std::for_each(dl->getRoot()->directories.cbegin(), dl->getRoot()->directories.cend(),
-			[this](DirectoryListing::Directory* d)
-		{
+		HTREEITEM adlsPos = TVI_FIRST;
+		for(auto d: dl->getRoot()->directories) {
 			if(d->getAdls()) {
-				addDir(d, treeRoot);
+				adlsPos = addDir(d, treeRoot, adlsPos);
 			}
-		});
+		}
 		refreshTree(Text::toT(Util::toNmdcFile(base)));
 
 		if(!sel.empty()) {
@@ -1072,12 +1071,13 @@ string DirectoryListingFrame::getSelectedDir() const {
 	return Util::emptyString;
 }
 
-void DirectoryListingFrame::addDir(DirectoryListing::Directory* d, HTREEITEM parent) {
+HTREEITEM DirectoryListingFrame::addDir(DirectoryListing::Directory* d, HTREEITEM parent, HTREEITEM insertAfter) {
 	auto cached = dirCache.find(d);
-	auto item = dirs->insert(cached != dirCache.end() ? cached->second.release() : new ItemInfo(d), parent);
+	auto item = dirs->insert(cached != dirCache.end() ? cached->second.release() : new ItemInfo(d), parent, insertAfter);
 	if(d->getAdls())
 		dirs->setItemState(item, TVIS_BOLD, TVIS_BOLD);
 	updateDir(d, item);
+	return item;
 }
 
 void DirectoryListingFrame::updateDir(DirectoryListing::Directory* d, HTREEITEM parent) {

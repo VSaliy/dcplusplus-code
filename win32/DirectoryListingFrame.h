@@ -269,7 +269,7 @@ private:
 	bool handleXMouseUp(const dwt::MouseEvent& mouseEvent);
 
 	void changeDir(DirectoryListing::Directory* d);
-	void addDir(DirectoryListing::Directory* d, HTREEITEM parent);
+	HTREEITEM addDir(DirectoryListing::Directory* d, HTREEITEM parent, HTREEITEM insertAfter = TVI_LAST);
 	void updateDir(DirectoryListing::Directory* d, HTREEITEM parent);
 	HTREEITEM findItem(HTREEITEM ht, const tstring& name);
 	void selectItem(const tstring& name);
