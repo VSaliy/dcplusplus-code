@@ -23,16 +23,13 @@
 #include "format.h"
 #include "Magnet.h"
 #include "OnlineUser.h"
+#include "PluginManager.h"
 #include "SettingsManager.h"
 #include "SimpleXML.h"
+#include "Tagger.h"
 #include "Util.h"
-#include "PluginManager.h"
-
-#include <boost/range/adaptor/reversed.hpp>
 
 namespace dcpp {
-
-using std::list;
 
 ChatMessage::ChatMessage(const string& text, OnlineUser* from,
 	const OnlineUser* to, const OnlineUser* replyTo,
@@ -98,28 +95,16 @@ messageTimestamp(messageTimestamp)
 
 	message += tmp;
 
-	/* format the message; this will involve adding custom tags. this table holds the tags to be
-	added along with their position. */
+	/* format the message; this will involve adding custom tags. use the Tagger class to that end. */
 
-	struct Tag { size_t pos; string s; bool opening; Tag* otherTag; };
-	list<Tag> tags;
+	Tagger tags;
 
 	/* link formatting - optimize the lookup a bit by using the fact that every link identifier
 	(except www ones) contains a colon. */
 	/// @todo add support for spaces within links enclosed by brackets / quotes (see URI RFC)
 
 	auto addLinkStr = [&xmlTmp, &tags](size_t begin, size_t end, const string& link) {
-		Tag openingTag = { begin, "<a href=\"" + SimpleXML::escape(link, xmlTmp, true) + "\">", true },
-			closingTag = { end, "</a>", false };
-
-		tags.push_back(std::move(openingTag));
-		auto& opening = tags.back();
-
-		tags.push_back(std::move(closingTag));
-		auto& closing = tags.back();
-
-		opening.otherTag = &closing;
-		closing.otherTag = &opening;
+		tags.add(begin, end, "a", "href=\"" + SimpleXML::escape(link, xmlTmp, true) + "\"");
 	};
 
 	auto addLink = [&tmp, &addLinkStr](size_t begin, size_t end) {
@@ -184,50 +169,12 @@ messageTimestamp(messageTimestamp)
 		i += 5;
 	}
 
-	htmlMessage += "<span id=\"text\">";
+	// let plugins play with the tag list
+	PluginManager::getInstance()->onChatTags(tmp, tags, from);
 
-	/* write tags and the message data. support entangled tags, such as:
-	<a> <b> </a> </b> -> <a> <b> </b></a><b> </b> */
+	htmlMessage += "<span id=\"text\">" + tags.merge(tmp, xmlTmp) + "</span></span>";
 
-	tags.sort([](const Tag& a, const Tag& b) { return a.pos < b.pos; });
-
-	size_t pos = 0;
-	vector<Tag*> openTags;
-
-	for(auto& tag: tags) {
-		htmlMessage += SimpleXML::escape(tmp.substr(pos, tag.pos - pos), xmlTmp, false);
-		pos = tag.pos;
-
-		if(tag.opening) {
-			htmlMessage += tag.s;
-			openTags.push_back(&tag);
-
-		} else {
-			if(openTags.back() == tag.otherTag) {
-				// common case: no entangled tag; just write the closing tag.
-				htmlMessage += tag.s;
-				openTags.pop_back();
-
-			} else {
-				// there are entangled tags: write closing & opening tags of currently open tags.
-				for(auto openTag: openTags | boost::adaptors::reversed) { if(openTag->pos >= tag.otherTag->pos) {
-					htmlMessage += openTag->otherTag->s;
-				} }
-				openTags.erase(remove(openTags.begin(), openTags.end(), tag.otherTag), openTags.end());
-				for(auto openTag: openTags) { if(openTag->pos >= tag.otherTag->pos) {
-					htmlMessage += openTag->s;
-				} }
-			}
-		}
-	}
-
-	if(pos != n) {
-		htmlMessage += SimpleXML::escape(tmp.substr(pos), xmlTmp, false);
-	}
-
-	htmlMessage += "</span></span>";
-
-	/// forward to plugins
+	// forward to plugins
 	PluginManager::getInstance()->onChatDisplay(htmlMessage, from);
 }
 

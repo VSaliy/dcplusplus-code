@@ -21,6 +21,7 @@
 
 #include <list>
 
+#include "CriticalSection.h"
 #include "PluginApiImpl.h"
 
 namespace dcpp {
@@ -31,7 +32,14 @@ template<typename PluginType>
 class PluginEntity
 {
 public:
-	PluginEntity() { memzero(&pod, sizeof(PluginType)); pod.isManaged = True; }
+	PluginEntity() {
+#ifndef _MSC_VER
+		pod = { };
+#else
+		memset(&pod, 0, sizeof(PluginType));
+#endif
+		pod.isManaged = True;
+	}
 	virtual ~PluginEntity() { psCache.clear(); }
 
 	PluginType* copyPluginObject() {
