@@ -36,6 +36,7 @@
 #include "LogManager.h"
 #include "PluginManager.h"
 #include "QueueManager.h"
+#include "Tagger.h"
 #include "UserConnection.h"
 #include "version.h"
 
@@ -66,8 +67,8 @@ static const char* hookGuids[IMPL_HOOKS_COUNT] = {
 	HOOK_QUEUE_FINISHED,
 
 	HOOK_UI_CREATED,
+	HOOK_UI_CHAT_TAGS,
 	HOOK_UI_CHAT_DISPLAY,
-	HOOK_UI_LOCAL_CHAT_DISPLAY,
 	HOOK_UI_PROCESS_CHAT_CMD		
 };
 
@@ -160,6 +161,12 @@ DCUtils PluginApiImpl::dcUtils = {
 	&PluginApiImpl::fromBase32
 };
 
+DCTagger PluginApiImpl::dcTagger = {
+	DCINTF_DCPP_TAGGER_VER,
+
+	&PluginApiImpl::addTag
+};
+
 Socket* PluginApiImpl::udpSocket = nullptr;
 Socket& PluginApiImpl::getUdpSocket() {
 	if(!udpSocket) {
@@ -189,6 +196,7 @@ void PluginApiImpl::initAPI(DCCore& dcCore) {
 	dcCore.register_interface(DCINTF_DCPP_HUBS, &dcHub);
 	dcCore.register_interface(DCINTF_DCPP_QUEUE, &dcQueue);
 	dcCore.register_interface(DCINTF_DCPP_UTILS, &dcUtils);
+	dcCore.register_interface(DCINTF_DCPP_TAGGER, &dcTagger);
 
 	// Create provided hooks (since these outlast any plugin they don't need to be explictly released)
 	for(int i = 0; i < IMPL_HOOKS_COUNT; ++i)
@@ -471,6 +479,11 @@ size_t PluginApiImpl::fromBase32(uint8_t* dst, const char* src, size_t n) {
 	return n;
 }
 
+// Functions for DCTagger
+void PluginApiImpl::addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes) {
+	reinterpret_cast<Tagger*>(hTags->object)->add(start, end, id, attributes);
+}
+
 // Functions for DCQueue
 QueueDataPtr PluginApiImpl::addList(UserDataPtr user, Bool silent) {
 	auto u = ClientManager::getInstance()->findUser(CID(user->cid));
@@ -703,8 +716,3 @@ void PluginApiImpl::releaseData(UserDataPtr user) {
 }
 
 } // namespace dcpp
-
-/**
- * @file
- * $Id: PluginApiImpl.cpp 1248 2012-01-22 01:49:30Z crise $
- */

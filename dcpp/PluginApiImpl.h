@@ -90,6 +90,9 @@ private:
 	static size_t DCAPI toBase32(char* dst, const uint8_t* src, size_t n);
 	static size_t DCAPI fromBase32(uint8_t* dst, const char* src, size_t n);
 
+	// Functions for DCTagger
+	static void DCAPI addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
+
 	// Functions for DCQueue
 	static QueueDataPtr DCAPI addList(UserDataPtr user, Bool silent);
 	static QueueDataPtr DCAPI addDownload(const char* hash, uint64_t size, const char* target);
@@ -120,6 +123,7 @@ private:
 	static DCHub dcHub;
 	static DCQueue dcQueue;
 	static DCUtils dcUtils;
+	static DCTagger dcTagger;
 
 	static Socket* udpSocket;
 	static Socket& getUdpSocket();
@@ -128,8 +132,3 @@ private:
 } // namepsace dcpp
 
 #endif // !defined(DCPLUSPLUS_DCPP_PLUGIN_API_H)
-
-/**
- * @file
- * $Id: PluginApiImpl.h 1248 2012-01-22 01:49:30Z crise $
- */

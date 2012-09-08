@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 /* Version of the plugin api (must change if old plugins simply can't be seen as viably working) */
-#define DCAPI_CORE_VER				4
+#define DCAPI_CORE_VER				5
 
 #ifdef _WIN32
 # define DCAPI __stdcall
@@ -62,11 +62,14 @@ extern "C" {
 #define DCINTF_DCPP_HUBS			"dcpp.network.DCHub"		/* Hubs */
 #define DCINTF_DCPP_HUBS_VER		1
 
-#define DCINTF_DCPP_QUEUE			"dcpp.queue.DCQueue"		/* Download Queue (TODO: expand) */
+#define DCINTF_DCPP_QUEUE			"dcpp.queue.DCQueue"		/* Download Queue */
 #define DCINTF_DCPP_QUEUE_VER		1
 
 #define DCINTF_DCPP_UTILS			"dcpp.utils.DCUtils"		/* Utility and convenience functions */
 #define DCINTF_DCPP_UTILS_VER		1
+
+#define DCINTF_DCPP_TAGGER			"dcpp.xml.Tagger"			/* Manipulation of an XML tagger */
+#define DCINTF_DCPP_TAGGER_VER		1
 
 /* Hook GUID's for Hooks (events) system */
 #define HOOK_CHAT_IN				"dcpp.chat.onIncomingChat"	/* Incoming chat from hub (obj: HubData) */
@@ -93,8 +96,8 @@ extern "C" {
 #define HOOK_QUEUE_FINISHED			"dcpp.queue.onFinished"		/* Item has just finished downloading (obj: QueueData) */
 
 #define HOOK_UI_CREATED				"dcpp.ui.onCreated"				/* Host application UI has been created (obj: if any, impl. dependant) */
-#define HOOK_UI_CHAT_DISPLAY		"dcpp.ui.onChatDisplay"			/* Chat messages before displayed in chat (obj: UserData; data: StringData) */
-#define HOOK_UI_LOCAL_CHAT_DISPLAY	"dcpp.ui.onLocalChatDisplay"	/* Local chat messages (such as system messages) before they are displayed in chat (obj: NULL; data: StringData) */
+#define HOOK_UI_CHAT_TAGS			"dcpp.ui.onTags"				/* Chat message tags before tag merging (obj: UserData; data: TagData) */
+#define HOOK_UI_CHAT_DISPLAY		"dcpp.ui.onChatDisplay"			/* Chat messages before they are displayed in chat (obj: UserData; data: StringData) */
 #define HOOK_UI_PROCESS_CHAT_CMD	"dcpp.ui.onProcessCmd"			/* Client side commands in chat (obj: HubData/UserData; data: CommandData) */
 
 /* Main hook events (returned by pluginInit) */
@@ -244,6 +247,13 @@ typedef struct tagQueueData {
 	Bool isManaged;												/* False if plugin has to call release(...) for this object */
 } QueueData, *QueueDataPtr;
 
+/* Tagging intentions */
+typedef struct tagTagData {
+	const char* text;											/* Plain text string to apply tags on */
+	dcptr_t object;												/* Internal */
+	Bool isManaged;												/* Always True for now */
+} TagData, *TagDataPtr;
+
 /* Plugin meta data */
 typedef struct tagMetaData { 
 	const char* name;											/* Name of the plugin */
@@ -363,7 +373,7 @@ typedef struct tagDCHub {
 	void			(DCAPI *release)				(HubDataPtr hCopy);
 } DCHub, *DCHubPtr;
 
-/* Download Queue (TODO: expand) */
+/* Download Queue */
 typedef struct tagDCQueue {
 	/* Queue API version */
 	uint32_t apiVersion;
@@ -394,13 +404,16 @@ typedef struct tagDCUtils {
 	size_t		(DCAPI *from_base32)				(uint8_t* dst, const char* src, size_t n);
 } DCUtils, *DCUtilsPtr;
 
+/* Manipulation of an XML tagger */
+typedef struct tagDCTagger {
+	/* Tagger API version */
+	uint32_t apiVersion;
+
+	void		(DCAPI *add_tag)					(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
+} DCTagger, *DCTaggerPtr;
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* !defined(DCPLUSPLUS_DCPP_PLUGIN_DEFS_H) */
-
-/**
- * @file
- * $Id: PluginDefs.h 1248 2012-01-22 01:49:30Z crise $
- */

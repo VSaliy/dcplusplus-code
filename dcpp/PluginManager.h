@@ -19,23 +19,22 @@
 #ifndef DCPLUSPLUS_DCPP_PLUGIN_MANAGER_H
 #define DCPLUSPLUS_DCPP_PLUGIN_MANAGER_H
 
-#include "typedefs.h"
-
 #include <functional>
 #include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "Singleton.h"
-#include "SettingsManager.h"
-#include "TimerManager.h"
+#include "typedefs.h"
 
-#include "QueueManagerListener.h"
 #include "ClientManagerListener.h"
-
-#include "PluginEntity.h"
 #include "PluginApiImpl.h"
+#include "PluginEntity.h"
+#include "QueueManagerListener.h"
+#include "SettingsManager.h"
+#include "Singleton.h"
+#include "Tagger.h"
+#include "TimerManager.h"
 
 #ifdef _WIN32
 typedef HMODULE PluginHandle;
@@ -92,14 +91,8 @@ class PluginManager : public Singleton<PluginManager>, private TimerManagerListe
 	private ClientManagerListener, private QueueManagerListener, private SettingsManagerListener
 {
 public:
-	PluginManager() : shutdown(false), secNum(Util::rand()) {
-		memzero(&dcCore, sizeof(DCCore));
-		SettingsManager::getInstance()->addListener(this);
-	}
-
-	~PluginManager() {
-		SettingsManager::getInstance()->removeListener(this);
-	}
+	PluginManager();
+	~PluginManager();
 
 	void loadPlugins(function<void (const string&)> f);
 	bool loadPlugin(const string& fileName, function<void (const string&)> err, bool install = false);
@@ -118,7 +111,8 @@ public:
 	DCCorePtr getCore() { return &dcCore; }
 
 	// Functions that call the plugin
-	bool onChatDisplay(string& htmlMessage, OnlineUser* from = NULL);
+	bool onChatTags(const string& text, Tagger& tagger, OnlineUser* from = nullptr);
+	bool onChatDisplay(string& htmlMessage, OnlineUser* from = nullptr);
 	bool onChatCommand(Client* client, const string& line);
 	bool onChatCommandPM(const HintedUser& user, const string& line);
 
@@ -132,8 +126,11 @@ public:
 
 	template<class T>
 	bool runHook(const string& guid, PluginEntity<T>* entity, dcptr_t pData = NULL) {
-		Lock l(entity->cs);
-		return runHook(guid, entity->getPluginObject(), pData);
+		if(entity) {
+			Lock l(entity->cs);
+			return runHook(guid, entity->getPluginObject(), pData);
+		}
+		return runHook(guid, nullptr, pData);
 	}
 
 	template<class T>
@@ -199,8 +196,3 @@ private:
 } // namespace dcpp
 
 #endif // !defined(DCPLUSPLUS_DCPP_PLUGIN_MANAGER_H)
-
-/**
- * @file
- * $Id: PluginManager.h 1245 2012-01-21 15:09:54Z crise $
- */

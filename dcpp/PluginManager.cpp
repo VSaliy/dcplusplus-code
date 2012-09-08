@@ -62,6 +62,19 @@ PluginInfo::~PluginInfo() {
 	}
 }
 
+PluginManager::PluginManager() : shutdown(false), secNum(Util::rand()) {
+#ifndef _MSC_VER
+	dcCore = { };
+#else
+	memset(&dcCore, 0, sizeof(DCCore));
+#endif
+	SettingsManager::getInstance()->addListener(this);
+}
+
+PluginManager::~PluginManager() {
+	SettingsManager::getInstance()->removeListener(this);
+}
+
 void PluginManager::loadPlugins(function<void (const string&)> f) {
 	PluginApiImpl::initAPI(dcCore);
 
@@ -91,11 +104,9 @@ bool PluginManager::loadPlugin(const string& fileName, function<void (const stri
 	PluginInfo::PLUGIN_INIT pluginInfo = reinterpret_cast<PluginInfo::PLUGIN_INIT>(GET_ADDRESS(hr, "pluginInit"));
 
 	if(pluginInfo != NULL) {
-		MetaData info;
-		memzero(&info, sizeof(MetaData));
-
+		MetaData info = { 0 };
 		DCMAIN dcMain;
-		if((dcMain = pluginInfo(&info)) != NULL) {
+		if((dcMain = pluginInfo(&info))) {
 			if(checkPlugin(info, err)) {
 				if(dcMain((install ? ON_INSTALL : ON_LOAD), &dcCore, NULL) != False) {
 					plugins.emplace_back(new PluginInfo(fileName, hr, info, dcMain));
@@ -203,27 +214,24 @@ const PluginInfo* PluginManager::getPlugin(size_t index) const {
 }
 
 // Functions that call the plugin
+bool PluginManager::onChatTags(const string& text, Tagger& tagger, OnlineUser* from) {
+	TagData data = { text.c_str(), reinterpret_cast<dcptr_t>(&tagger), True };
+	return runHook(HOOK_UI_CHAT_TAGS, from, &data);
+}
+
 bool PluginManager::onChatDisplay(string& htmlMessage, OnlineUser* from) {
-	StringData data;
-	memzero(&data, sizeof(StringData));
-
-	data.in = htmlMessage.c_str();
-
-	bool handled = from ? runHook(HOOK_UI_CHAT_DISPLAY, from, &data) : runHook(HOOK_UI_LOCAL_CHAT_DISPLAY, NULL, &data);
-	if(handled && data.out != NULL) {
+	StringData data = { htmlMessage.c_str() };
+	bool handled = runHook(HOOK_UI_CHAT_DISPLAY, from, &data);
+	if(handled && data.out) {
 		htmlMessage = data.out;
 		return true;
 	}
-
 	return false;
 }
 
 bool PluginManager::onChatCommand(Client* client, const string& line) {
-	CommandData data;
-	memzero(&data, sizeof(CommandData));
-
 	string cmd, param;
-	string::size_type si = line.find(' ');
+	auto si = line.find(' ');
 	if(si != string::npos) {
 		param = line.substr(si + 1);
 		cmd = line.substr(1, si - 1);
@@ -231,10 +239,7 @@ bool PluginManager::onChatCommand(Client* client, const string& line) {
 		cmd = line.substr(1);
 	}
 
-	data.command = cmd.c_str();
-	data.params = param.c_str();
-	data.isPrivate = False;
-
+	CommandData data = { cmd.c_str(), param.c_str(), False };
 	return runHook(HOOK_UI_PROCESS_CHAT_CMD, client, &data);
 }
 
@@ -245,11 +250,8 @@ bool PluginManager::onChatCommandPM(const HintedUser& user, const string& line) 
 	OnlineUser* ou = ClientManager::getInstance()->findOnlineUser(user.user->getCID(), user.hint);
 
 	if(ou) {
-		CommandData data;
-		memzero(&data, sizeof(CommandData));
-
 		string cmd, param;
-		string::size_type si = line.find(' ');
+		auto si = line.find(' ');
 		if(si != string::npos) {
 			param = line.substr(si + 1);
 			cmd = line.substr(1, si - 1);
@@ -257,10 +259,7 @@ bool PluginManager::onChatCommandPM(const HintedUser& user, const string& line) 
 			cmd = line.substr(1);
 		}
 
-		data.command = cmd.c_str();
-		data.params = param.c_str();
-		data.isPrivate = True;
-
+		CommandData data = { cmd.c_str(), param.c_str(), True };
 		res = runHook(HOOK_UI_PROCESS_CHAT_CMD, ou, &data);
 	}
 
@@ -513,8 +512,3 @@ void PluginManager::on(SettingsManagerListener::Save, SimpleXML& /*xml*/) noexce
 }
 
 } // namespace dcpp
-
-/**
- * @file
- * $Id: PluginManager.cpp 1245 2012-01-21 15:09:54Z crise $
- */
