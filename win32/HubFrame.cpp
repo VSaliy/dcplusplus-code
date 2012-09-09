@@ -495,16 +495,14 @@ void HubFrame::enterImpl(const tstring& s) {
 				openLog();
 			else if(Util::stricmp(param.c_str(), _T("status")) == 0)
 				openLog(true);
-		} else if(Util::stricmp(cmd.c_str(), _T("raw")) == 0) {
-			client->send(Util::convertCEscapes(Text::fromT(param)));
 		} else if(Util::stricmp(cmd.c_str(), _T("topic")) == 0) {
-			addChat(_T("Current hub topic: " + Text::toT(client->getHubDescription())));
+			addChat(str(TF_("Current hub topic: %1%") % Text::toT(client->getHubDescription())));
 		} else if(Util::stricmp(cmd.c_str(), _T("help")) == 0) {
 			addChat(_T("*** ") + WinUtil::commands +
 				_T(", /join <hub-ip>, /showjoins, /favshowjoins, /close, /userlist, ")
 				_T("/conn[ection], /fav[orite], /removefav[orite], /info, ")
 				_T("/pm <user> [message], /getlist <user>, /ignore <user>, /unignore <user>, ")
-				_T("/log <status, system, downloads, uploads>, /raw <raw-command>, /topic"));
+				_T("/log <status, system, downloads, uploads>, /topic"));
 		} else if(Util::stricmp(cmd.c_str(), _T("pm")) == 0) {
 			string::size_type j = param.find(_T(' '));
 			if(j != string::npos) {
