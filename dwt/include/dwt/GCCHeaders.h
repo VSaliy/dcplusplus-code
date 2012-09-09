@@ -389,13 +389,13 @@ typedef struct _DTTOPTS
 } DTTOPTS, *PDTTOPTS; 
 #endif
 
-// No definition of this struct in mingw
+#ifndef _WIN64 // mingw64 already has this
 typedef struct tagNMTTCUSTOMDRAW
 {
     NMCUSTOMDRAW nmcd;
     UINT uDrawFlags;
 } NMTTCUSTOMDRAW, *LPNMTTCUSTOMDRAW;
-
+#endif
 
 #ifdef max
 #undef max

@@ -19,9 +19,12 @@
 #include "stdafx.h"
 #include "RichTextBox.h"
 
+#include <boost/scoped_array.hpp>
+
 #include <dwt/WidgetCreator.h>
 #include <dwt/widgets/Menu.h>
 #include <dwt/widgets/ToolTip.h>
+#include <dwt/util/StringUtils.h>
 
 #include "ParamDlg.h"
 #include "resource.h"

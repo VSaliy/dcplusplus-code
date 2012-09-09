@@ -412,11 +412,11 @@ void getDebugInfo(string path, DWORD addr, string& file, int& line, int& column,
 #define SymGetModuleInfo64 SymGetModuleInfo
 #define SymGetSymFromAddr64 SymGetSymFromAddr
 
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) || defined(__MINGW64__)
 
 #include <dbghelp.h>
 
-// Nothing special for MSVC besides that include file.
+// MSVC & MinGW64 use SEH. Nothing special to add besides that include file.
 
 #else
 
@@ -473,7 +473,7 @@ inline void writeBacktrace(LPCONTEXT context) {
 	HANDLE const process = GetCurrentProcess();
 	HANDLE const thread = GetCurrentThread();
 
-#ifdef __MINGW32__
+#if defined(__MINGW32__) && !defined(_WIN64)
 	SymSetOptions(SYMOPT_DEFERRED_LOADS);
 #else
 	SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
@@ -528,10 +528,10 @@ inline void writeBacktrace(LPCONTEXT context) {
 			continue;
 		fprintf(f, "%s: ", module.ModuleName);
 
-#ifdef __MINGW32__
+#if defined(__MINGW32__) && !defined(_WIN64)
 		// read DWARF debugging info if available.
 		if(module.LoadedImageName[0] ||
-			// LoadedImageName is not always correcly filled in XP...
+			// LoadedImageName is not always correctly filled in XP...
 			::GetModuleFileNameA(reinterpret_cast<HMODULE>(module.BaseOfImage), module.LoadedImageName, sizeof(module.LoadedImageName)))
 		{
 			getDebugInfo(module.LoadedImageName, frame.AddrPC.Offset, file, line, column, function);
