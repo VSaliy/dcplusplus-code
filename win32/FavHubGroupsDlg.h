@@ -80,6 +80,7 @@ private:
 	TextBoxPtr userIp;
 	ComboBoxPtr showJoins;
 	ComboBoxPtr favShowJoins;
+	ComboBoxPtr logMainChat;
 
 	FavoriteHubEntry* parentEntry;
 

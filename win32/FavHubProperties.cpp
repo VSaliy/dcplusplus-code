@@ -48,6 +48,7 @@ email(0),
 userIp(0),
 showJoins(0),
 favShowJoins(0),
+logMainChat(0),
 groups(0),
 entry(_entry)
 {
@@ -129,7 +130,7 @@ bool FavHubProperties::handleInitDialog() {
 	}
 
 	{
-		auto cur = grid->addChild(Grid::Seed(2, 2));
+		auto cur = grid->addChild(Grid::Seed(3, 2));
 		grid->setWidget(cur, 2, 0, 1, 2);
 		cur->column(0).mode = GridInfo::FILL;
 		cur->column(0).align = GridInfo::BOTTOM_RIGHT;
@@ -143,6 +144,11 @@ bool FavHubProperties::handleInitDialog() {
 		favShowJoins = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
 		WinUtil::fillTriboolCombo(favShowJoins);
 		favShowJoins->setSelected(toInt(entry->get(HubSettings::FavShowJoins)));
+
+		cur->addChild(Label::Seed(T_("Log main chat")));
+		logMainChat = cur->addChild(WinUtil::Seeds::Dialog::comboBox);
+		WinUtil::fillTriboolCombo(logMainChat);
+		logMainChat->setSelected(toInt(entry->get(HubSettings::LogMainChat)));
 	}
 
 	{
@@ -192,6 +198,7 @@ void FavHubProperties::handleOKClicked() {
 	entry->get(HubSettings::UserIp) = Text::fromT(userIp->getText());
 	entry->get(HubSettings::ShowJoins) = to3bool(showJoins->getSelected());
 	entry->get(HubSettings::FavShowJoins) = to3bool(favShowJoins->getSelected());
+	entry->get(HubSettings::LogMainChat) = to3bool(logMainChat->getSelected());
 	entry->setGroup(Text::fromT(groups->getText()));
 	FavoriteManager::getInstance()->save();
 	endDialog(IDOK);
