@@ -40,6 +40,7 @@ private:
 	TextBoxPtr userIp;
 	ComboBoxPtr showJoins;
 	ComboBoxPtr favShowJoins;
+	ComboBoxPtr logMainChat;
 	ComboBoxPtr groups;
 
 	FavoriteHubEntry *entry;

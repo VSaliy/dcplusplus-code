@@ -601,6 +601,7 @@ HubSettings SettingsManager::getHubSettings() const {
 	ret.get(HubSettings::Email) = get(EMAIL);
 	ret.get(HubSettings::ShowJoins) = get(SHOW_JOINS);
 	ret.get(HubSettings::FavShowJoins) = get(FAV_SHOW_JOINS);
+	ret.get(HubSettings::LogMainChat) = get(LOG_MAIN_CHAT);
 	return ret;
 }
 

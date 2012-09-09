@@ -53,6 +53,7 @@ email(0),
 userIp(0),
 showJoins(0),
 favShowJoins(0),
+logMainChat(0),
 parentEntry(parentEntry_)
 {
 	onInitDialog([this] { return handleInitDialog(); });
@@ -151,7 +152,7 @@ bool FavHubGroupsDlg::handleInitDialog() {
 		}
 
 		{
-			auto cur2 = cur->addChild(Grid::Seed(2, 2));
+			auto cur2 = cur->addChild(Grid::Seed(3, 2));
 			cur2->column(0).mode = GridInfo::FILL;
 			cur2->column(0).align = GridInfo::BOTTOM_RIGHT;
 
@@ -164,6 +165,11 @@ bool FavHubGroupsDlg::handleInitDialog() {
 			favShowJoins = cur2->addChild(WinUtil::Seeds::Dialog::comboBox);
 			WinUtil::fillTriboolCombo(favShowJoins);
 			favShowJoins->setSelected(0);
+
+			cur2->addChild(Label::Seed(T_("Log main chat")));
+			logMainChat = cur2->addChild(WinUtil::Seeds::Dialog::comboBox);
+			WinUtil::fillTriboolCombo(logMainChat);
+			logMainChat->setSelected(0);
 		}
 	}
 
@@ -231,6 +237,7 @@ void FavHubGroupsDlg::handleSelectionChanged() {
 	userIp->setText(Text::toT(settings.get(HubSettings::UserIp)));
 	showJoins->setSelected(toInt(settings.get(HubSettings::ShowJoins)));
 	favShowJoins->setSelected(toInt(settings.get(HubSettings::FavShowJoins)));
+	logMainChat->setSelected(toInt(settings.get(HubSettings::LogMainChat)));
 }
 
 void FavHubGroupsDlg::handleAdd() {
@@ -292,6 +299,7 @@ HubSettings FavHubGroupsDlg::getSettings() const {
 	settings.get(HubSettings::UserIp) = Text::fromT(userIp->getText());
 	settings.get(HubSettings::ShowJoins) = to3bool(showJoins->getSelected());
 	settings.get(HubSettings::FavShowJoins) = to3bool(favShowJoins->getSelected());
+	settings.get(HubSettings::LogMainChat) = to3bool(logMainChat->getSelected());
 	return settings;
 }
 

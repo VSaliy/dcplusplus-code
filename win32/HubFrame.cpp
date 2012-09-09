@@ -560,7 +560,7 @@ void HubFrame::addedChat(const tstring& message) {
 	}
 	setDirty(SettingsManager::BOLD_HUB);
 
-	if(SETTING(LOG_MAIN_CHAT)) {
+	if(client->get(HubSettings::LogMainChat)) {
 		ParamMap params;
 		params["message"] = [&message] { return Text::toDOS(Text::fromT(message)); };
 		client->getHubIdentity().getParams(params, "hub", false);

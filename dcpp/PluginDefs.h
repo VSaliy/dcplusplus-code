@@ -96,7 +96,7 @@ extern "C" {
 #define HOOK_QUEUE_FINISHED			"dcpp.queue.onFinished"		/* Item has just finished downloading (obj: QueueData) */
 
 #define HOOK_UI_CREATED				"dcpp.ui.onCreated"				/* Host application UI has been created (obj: if any, impl. dependant) */
-#define HOOK_UI_CHAT_TAGS			"dcpp.ui.onTags"				/* Chat message tags before tag merging (obj: UserData; data: TagData) */
+#define HOOK_UI_CHAT_TAGS			"dcpp.ui.onChatTags"			/* Chat message tags before tag merging (obj: UserData; data: TagData) */
 #define HOOK_UI_CHAT_DISPLAY		"dcpp.ui.onChatDisplay"			/* Chat messages before they are displayed in chat (obj: UserData; data: StringData) */
 #define HOOK_UI_PROCESS_CHAT_CMD	"dcpp.ui.onProcessCmd"			/* Client side commands in chat (obj: HubData/UserData; data: CommandData) */
 
