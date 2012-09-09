@@ -271,6 +271,9 @@
 
 /* Define to 1 if you have the `mempcpy' function. */
 /* #undef HAVE_MEMPCPY */
+#ifdef _WIN64
+#define HAVE_MEMPCPY 1
+#endif
 
 /* Define to 1 if you have a working `mmap' system call. */
 /* #undef HAVE_MMAP */

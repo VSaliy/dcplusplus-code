@@ -166,7 +166,7 @@ inline std::vector<int> Columns<WidgetType>::getColumnWidths() const {
 
 template<typename WidgetType>
 inline void Columns<WidgetType>::setColumnWidths(const std::vector<int>& widths) {
-	for(auto i = 0u, iend = widths.size(); i < iend; ++i) setColumnWidth(i, widths[i]);
+	for(size_t i = 0, iend = widths.size(); i < iend; ++i) setColumnWidth(i, widths[i]);
 }
 
 template<typename WidgetType>

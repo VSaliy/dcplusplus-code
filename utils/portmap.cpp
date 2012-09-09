@@ -3,12 +3,14 @@
 #include <dcpp/stdinc.h>
 
 #include <iostream>
+#include <memory>
 
 #include <dcpp/Mapper_MiniUPnPc.h>
 #include <dcpp/Mapper_NATPMP.h>
 #include <dcpp/Mapper_WinUPnP.h>
 #include <dcpp/ScopedFunctor.h>
 #include <dcpp/Util.h>
+#include <dcpp/w.h>
 
 using namespace std;
 using namespace dcpp;

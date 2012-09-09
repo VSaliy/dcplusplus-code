@@ -90,7 +90,7 @@
 #endif
 
 // always include
-#include <type_traits>
+#include <utility>
 using std::move;
 
 #endif // !defined(STDINC_H)
