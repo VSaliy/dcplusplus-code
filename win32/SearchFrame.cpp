@@ -258,7 +258,9 @@ droppedResults(0)
 		addWidget(results);
 
 		results->setSmallImageList(WinUtil::fileImages);
+
 		WinUtil::makeColumns(results, resultsColumns, COLUMN_LAST, SETTING(SEARCHFRAME_ORDER), SETTING(SEARCHFRAME_WIDTHS));
+		WinUtil::setTableSort(results, COLUMN_LAST, SettingsManager::SEARCHFRAME_SORT, -1);
 
 		results->onDblClicked([this] { handleDownload(); });
 		results->onKeyDown([this](int c) { return handleKeyDown(c); });
@@ -384,6 +386,7 @@ void SearchFrame::postClosing() {
 
 	SettingsManager::getInstance()->set(SettingsManager::SEARCHFRAME_ORDER, WinUtil::toString(results->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::SEARCHFRAME_WIDTHS, WinUtil::toString(results->getColumnWidths()));
+	SettingsManager::getInstance()->set(SettingsManager::SEARCHFRAME_SORT, WinUtil::getTableSort(results));
 }
 
 void SearchFrame::SearchInfo::view() {

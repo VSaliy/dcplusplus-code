@@ -66,6 +66,7 @@ items(0)
 
 	{
 		auto cs = WinUtil::Seeds::table;
+		cs.style |= LVS_NOSORTHEADER;
 		cs.lvStyle |= LVS_EX_CHECKBOXES;
 		items = grid->addChild(cs);
 		grid->setWidget(items, 0, 0, 1, 6);

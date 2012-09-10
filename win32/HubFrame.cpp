@@ -183,7 +183,7 @@ currentUser(0),
 hubMenu(false),
 inTabComplete(false)
 {
-	paned = addChild(SplitterContainer::Seed(0.7));
+	paned = addChild(SplitterContainer::Seed(SETTING(HUB_PANED_POS)));
 
 	createChat(paned);
 	chat->setHelpId(IDH_HUB_CHAT);
@@ -207,8 +207,9 @@ inTabComplete(false)
 		addWidget(users);
 
 		users->setSmallImageList(WinUtil::userImages);
+
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(HUBFRAME_ORDER), SETTING(HUBFRAME_WIDTHS));
-		users->setSort(COLUMN_NICK);
+		WinUtil::setTableSort(users, COLUMN_LAST, SettingsManager::HUBFRAME_SORT, COLUMN_NICK);
 
 		users->onDblClicked([this] { handleDoubleClickUsers(); });
 		users->onKeyDown([this](int c) { return handleUsersKeyDown(c); });
@@ -306,13 +307,16 @@ bool HubFrame::preClosing() {
 }
 
 void HubFrame::postClosing() {
-	SettingsManager::getInstance()->set(SettingsManager::GET_USER_INFO, showUsers->getChecked());
-
 	clearUserList();
 	clearTaskList();
 
+	SettingsManager::getInstance()->set(SettingsManager::GET_USER_INFO, showUsers->getChecked());
+
+	SettingsManager::getInstance()->set(SettingsManager::HUB_PANED_POS, paned->getSplitterPos(0));
+
 	SettingsManager::getInstance()->set(SettingsManager::HUBFRAME_ORDER, WinUtil::toString(users->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::HUBFRAME_WIDTHS, WinUtil::toString(users->getColumnWidths()));
+	SettingsManager::getInstance()->set(SettingsManager::HUBFRAME_SORT, WinUtil::getTableSort(users));
 }
 
 void HubFrame::layout() {

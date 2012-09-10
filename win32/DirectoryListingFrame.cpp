@@ -230,6 +230,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	searchGrid(0),
 	searchBox(0),
 	filterMethod(0),
+	paned(0),
 	dirs(0),
 	files(0),
 	speed(aSpeed),
@@ -293,7 +294,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	searchGrid->setEnabled(false);
 	searchGrid->setVisible(false);
 
-	auto paned = grid->addChild(SplitterContainer::Seed(0.3));
+	paned = grid->addChild(SplitterContainer::Seed(SETTING(FILE_LIST_PANED_POS)));
 
 	{
 		dirs = paned->addChild(WidgetDirs::Seed(WinUtil::Seeds::treeView));
@@ -312,8 +313,9 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 		addWidget(files);
 
 		files->setSmallImageList(WinUtil::fileImages);
+
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(DIRECTORYLISTINGFRAME_ORDER), SETTING(DIRECTORYLISTINGFRAME_WIDTHS));
-		files->setSort(COLUMN_FILENAME);
+		WinUtil::setTableSort(files, COLUMN_LAST, SettingsManager::DIRECTORYLISTINGFRAME_SORT, COLUMN_FILENAME);
 
 		files->onDblClicked([this] { handleDoubleClickFiles(); });
 		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
@@ -379,7 +381,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	{
 		auto showTree = addChild(WinUtil::Seeds::splitCheckBox);
 		showTree->setChecked(true);
-		showTree->onClicked([this, showTree, paned] {
+		showTree->onClicked([this, showTree] {
 			auto checked = showTree->getChecked();
 			dirs->setEnabled(checked);
 			paned->maximize(checked ? nullptr : files);
@@ -606,8 +608,11 @@ bool DirectoryListingFrame::preClosing() {
 }
 
 void DirectoryListingFrame::postClosing() {
+	SettingsManager::getInstance()->set(SettingsManager::FILE_LIST_PANED_POS, paned->getSplitterPos(0));
+
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
+	SettingsManager::getInstance()->set(SettingsManager::DIRECTORYLISTINGFRAME_SORT, WinUtil::getTableSort(files));
 }
 
 void DirectoryListingFrame::handleSearchSelChanged() {

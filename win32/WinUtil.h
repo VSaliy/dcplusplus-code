@@ -211,29 +211,24 @@ public:
 	static void makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, size_t columnCount,
 		const string& order = Util::emptyString, const string& widths = Util::emptyString);
 
+	/* functions to get / set table column sorting. a little trick is used to encode both the
+	column index & the "ascending sort" flag into an int. */
+private:
+	static int tableSortSetting(int column, bool ascending);
+	static pair<int, bool> tableSortSetting(int columnCount, int setting, int defaultCol, bool defaultAscending);
+public:
 	template<typename T>
-	static std::vector<int> splitTokens(const string& str, const T& defaults) {
-		const size_t n = sizeof(defaults) / sizeof(defaults[0]);
-		std::vector<int> ret(defaults, defaults + n);
-		StringTokenizer<string> tokens(str, ',') ;
-		const StringList& l = tokens.getTokens();
-		for(size_t i = 0; i < std::min(ret.size(), l.size()); ++i) {
-			ret[i] = Util::toInt(l[i]);
-		}
-		return ret;
+	static int getTableSort(T table) {
+		return tableSortSetting(table->getSortColumn(), table->isAscending());
 	}
+	template<typename T>
+	static void setTableSort(T table, int columnCount, int setting, int defaultCol, bool defaultAscending = true) {
+		auto sort = tableSortSetting(columnCount, setting, defaultCol, defaultAscending);
+		table->setSort(sort.first, sort.second);
+	}
+
 	static std::string toString(const std::vector<int>& tokens);
 	static void toInts(const string& str, std::vector<int>& tokens);
-
-	template<typename T>
-	static TStringList getStrings(const T& t) {
-		const size_t n = sizeof(t) / sizeof(t[0]);
-		TStringList ret(n);
-		for(size_t i = 0; i < n; ++i) {
-			ret[i] = T_(t[i]);
-		}
-		return ret;
-	}
 
 	// GUI related
 private:

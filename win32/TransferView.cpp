@@ -119,9 +119,9 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 		connections->setSmallImageList(arrows);
 
 		WinUtil::makeColumns(connections, connectionColumns, CONNECTION_COLUMN_LAST, SETTING(CONNECTIONS_ORDER), SETTING(CONNECTIONS_WIDTHS));
+		WinUtil::setTableSort(connections, CONNECTION_COLUMN_LAST, SettingsManager::CONNECTIONS_SORT, CONNECTION_COLUMN_USER);
 
 		WinUtil::setColor(connections);
-		connections->setSort(CONNECTION_COLUMN_USER);
 
 		connections->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleConnectionsMenu(sc); });
 		connections->onKeyDown([this](int c) { return handleKeyDown(c); });
@@ -133,7 +133,8 @@ TransferView::TransferView(dwt::Widget* parent, TabViewPtr mdi_) :
 		downloads = downloadsWindow->addChild(WidgetDownloads::Seed(WinUtil::Seeds::table));
 
 		WinUtil::makeColumns(downloads, downloadColumns, DOWNLOAD_COLUMN_LAST, SETTING(DOWNLOADS_ORDER), SETTING(DOWNLOADS_WIDTHS));
-		downloads->setSort(DOWNLOAD_COLUMN_STATUS);
+		WinUtil::setTableSort(downloads, DOWNLOAD_COLUMN_LAST, SettingsManager::DOWNLOADS_SORT, DOWNLOAD_COLUMN_STATUS);
+
 		WinUtil::setColor(downloads);
 		downloads->setSmallImageList(WinUtil::fileImages);
 
@@ -170,9 +171,11 @@ void TransferView::prepareClose() {
 void TransferView::handleDestroy() {
 	SettingsManager::getInstance()->set(SettingsManager::CONNECTIONS_ORDER, WinUtil::toString(connections->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::CONNECTIONS_WIDTHS, WinUtil::toString(connections->getColumnWidths()));
+	SettingsManager::getInstance()->set(SettingsManager::CONNECTIONS_SORT, WinUtil::getTableSort(connections));
 
 	SettingsManager::getInstance()->set(SettingsManager::DOWNLOADS_ORDER, WinUtil::toString(downloads->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::DOWNLOADS_WIDTHS, WinUtil::toString(downloads->getColumnWidths()));
+	SettingsManager::getInstance()->set(SettingsManager::DOWNLOADS_SORT, WinUtil::getTableSort(downloads));
 }
 
 bool TransferView::handleConnectionsMenu(dwt::ScreenCoordinate pt) {

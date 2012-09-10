@@ -67,6 +67,10 @@ const string SettingsManager::settingTags[] =
 	"AutoDropInterval", "AutoDropElapsed", "AutoDropInactivity", "AutoDropMinSources",
 	"AutoDropFilesize",
 	"BalloonMainChat", "BalloonPM", "BalloonPMWindow", "BalloonFinishedDL", "BalloonFinishedFL",
+	"ADLSearchFrameSort", "ConnectionsSort", "DirectoryListingFrameSort", "DownloadsSort",
+	"FinishedDLFilesSort", "FinishedDLUsersSort", "FinishedULFilesSort",
+	"FinishedULUsersSort", "HubFrameSort", "PublicHubsFrameSort", "QueueFrameSort",
+	"SearchFrameSort", "UsersFrameSort",
 	"AwayIdle", "AutoRefreshTime", "AutoSearchLimit", "BufferSize", "DownloadSlots",
 	"HubLastLogLines", "MagnetAction", "MaxCommandLength", "MaxCompression", "MaxDownloadSpeed",
 	"MaxFilelistSize", "MaxHashSpeed", "MaxMessageLines", "MaxPMWindows", "MinMessageLines",
@@ -101,7 +105,8 @@ const string SettingsManager::settingTags[] =
 	"TotalUpload", "TotalDownload",
 	"SENTRY",
 	// Floats
-	"TransfersPanedPos", "QueuePanedPos", "SearchPanedPos",
+	"FileListPanedPos", "HubPanedPos", "QueuePanedPos", "SearchPanedPos",
+	"TransfersPanedPos", "UsersPanedPos",
 	"SENTRY"
 };
 
@@ -304,9 +309,12 @@ SettingsManager::SettingsManager()
 	setDefault(TOOLBAR_SIZE, 20);
 	setDefault(TAB_WIDTH, 150);
 	setDefault(TAB_STYLE, TAB_STYLE_OD | TAB_STYLE_BROWSER);
-	setDefault(TRANSFERS_PANED_POS, .7);
+	setDefault(FILE_LIST_PANED_POS, .3);
+	setDefault(HUB_PANED_POS, .7);
 	setDefault(QUEUE_PANED_POS, .3);
 	setDefault(SEARCH_PANED_POS, .2);
+	setDefault(TRANSFERS_PANED_POS, .7);
+	setDefault(USERS_PANED_POS, .7);
 	setDefault(KEEP_FINISHED_FILES, false);
 	setDefault(MIN_MESSAGE_LINES, 1);
 	setDefault(MAX_MESSAGE_LINES, 10);

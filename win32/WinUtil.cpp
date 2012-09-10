@@ -1553,6 +1553,21 @@ void WinUtil::makeColumns(dwt::TablePtr table, const ColumnInfo* columnInfo, siz
 	table->setColumnOrder(o);
 }
 
+int WinUtil::tableSortSetting(int column, bool ascending) {
+	return ascending || column == -1 ? column : -column - 2;
+}
+
+pair<int, bool> WinUtil::tableSortSetting(int columnCount, int setting, int defaultCol, bool defaultAscending) {
+	SettingsManager::getInstance()->setDefault(static_cast<SettingsManager::IntSetting>(setting),
+		tableSortSetting(defaultCol, defaultAscending));
+	auto s = SettingsManager::getInstance()->get(static_cast<SettingsManager::IntSetting>(setting));
+	auto ret = s >= -1 ? make_pair(s, true) : make_pair(-s - 2, false);
+	if(ret.first >= columnCount) {
+		return make_pair(defaultCol, defaultAscending);
+	}
+	return ret;
+}
+
 dwt::IconPtr WinUtil::createIcon(unsigned id, long size) {
 	return new dwt::Icon(id, dwt::Point(size, size));
 }

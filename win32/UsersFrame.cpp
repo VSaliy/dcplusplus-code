@@ -107,6 +107,7 @@ static const FieldName fields[] =
 UsersFrame::UsersFrame(TabViewPtr parent) :
 BaseType(parent, T_("Users"), IDH_USERS, IDI_USERS, false),
 grid(0),
+splitter(0),
 users(0),
 scroll(0),
 userInfo(0),
@@ -118,7 +119,7 @@ filter(usersColumns, COLUMN_LAST, [this] { updateList(); })
 	grid->row(0).align = GridInfo::STRETCH;
 
 	{
-		auto splitter = grid->addChild(SplitterContainer::Seed(0.7));
+		splitter = grid->addChild(SplitterContainer::Seed(SETTING(USERS_PANED_POS)));
 
 		if(!userIcons) {
 			const dwt::Point size(16, 16);
@@ -135,7 +136,7 @@ filter(usersColumns, COLUMN_LAST, [this] { updateList(); })
 		addWidget(users);
 
 		WinUtil::makeColumns(users, usersColumns, COLUMN_LAST, SETTING(USERSFRAME_ORDER), SETTING(USERSFRAME_WIDTHS));
-		users->setSort(COLUMN_NICK);
+		WinUtil::setTableSort(users, COLUMN_LAST, SettingsManager::USERSFRAME_SORT, COLUMN_NICK);
 
 		// TODO check default (browse vs get)
 		users->onDblClicked([this] { handleGetList(); });
@@ -232,8 +233,11 @@ bool UsersFrame::preClosing() {
 }
 
 void UsersFrame::postClosing() {
+	SettingsManager::getInstance()->set(SettingsManager::USERS_PANED_POS, splitter->getSplitterPos(0));
+
 	SettingsManager::getInstance()->set(SettingsManager::USERSFRAME_ORDER, WinUtil::toString(users->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::USERSFRAME_WIDTHS, WinUtil::toString(users->getColumnWidths()));
+	SettingsManager::getInstance()->set(SettingsManager::USERSFRAME_SORT, WinUtil::getTableSort(users));
 }
 
 UsersFrame::UserInfo::UserInfo(const UserPtr& u, bool visible) :

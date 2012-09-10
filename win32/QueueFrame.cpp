@@ -88,8 +88,9 @@ fileLists(0)
 		addWidget(files, ALWAYS_FOCUS);
 
 		files->setSmallImageList(WinUtil::fileImages);
+
 		WinUtil::makeColumns(files, filesColumns, COLUMN_LAST, SETTING(QUEUEFRAME_ORDER), SETTING(QUEUEFRAME_WIDTHS));
-		files->setSort(COLUMN_TARGET);
+		WinUtil::setTableSort(files, COLUMN_LAST, SettingsManager::QUEUEFRAME_SORT, COLUMN_TARGET);
 
 		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
 		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
@@ -229,8 +230,10 @@ bool QueueFrame::preClosing() {
 
 void QueueFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::QUEUE_PANED_POS, paned->getSplitterPos(0));
+
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_ORDER, WinUtil::toString(files->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_WIDTHS, WinUtil::toString(files->getColumnWidths()));
+	SettingsManager::getInstance()->set(SettingsManager::QUEUEFRAME_SORT, WinUtil::getTableSort(files));
 }
 
 void QueueFrame::addQueueItem(QueueItemPtr&& ii, bool single) {
