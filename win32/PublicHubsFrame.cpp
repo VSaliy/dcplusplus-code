@@ -123,7 +123,7 @@ users(0)
 		}
 
 		WinUtil::makeColumns(hubs, hubsColumns, COLUMN_LAST, SETTING(PUBLICHUBSFRAME_ORDER), SETTING(PUBLICHUBSFRAME_WIDTHS));
-		hubs->setSort(COLUMN_USERS, false);
+		WinUtil::setTableSort(hubs, COLUMN_LAST, SettingsManager::PUBLICHUBSFRAME_SORT, COLUMN_USERS, false);
 
 		hubs->onDblClicked([this] { openSelected(); });
 		hubs->onKeyDown([this](int c) { return handleKeyDown(c); });
@@ -228,6 +228,7 @@ bool PublicHubsFrame::preClosing() {
 void PublicHubsFrame::postClosing() {
 	SettingsManager::getInstance()->set(SettingsManager::PUBLICHUBSFRAME_ORDER, WinUtil::toString(hubs->getColumnOrder()));
 	SettingsManager::getInstance()->set(SettingsManager::PUBLICHUBSFRAME_WIDTHS, WinUtil::toString(hubs->getColumnWidths()));
+	SettingsManager::getInstance()->set(SettingsManager::PUBLICHUBSFRAME_SORT, WinUtil::getTableSort(hubs));
 }
 
 void PublicHubsFrame::layout() {

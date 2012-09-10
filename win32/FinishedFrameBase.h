@@ -107,9 +107,11 @@ protected:
 			files->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
 			this->addWidget(files);
 
-			WinUtil::makeColumns(files, filesColumns, FILES_COLUMN_LAST, SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_ORDER : SettingsManager::FINISHED_DL_FILES_ORDER),
+			WinUtil::makeColumns(files, filesColumns, FILES_COLUMN_LAST,
+				SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_ORDER : SettingsManager::FINISHED_DL_FILES_ORDER),
 				SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_FILES_WIDTHS : SettingsManager::FINISHED_DL_FILES_WIDTHS));
-			files->setSort(FILES_COLUMN_TIME);
+			WinUtil::setTableSort(files, FILES_COLUMN_LAST,
+				in_UL ? SettingsManager::FINISHED_UL_FILES_SORT : SettingsManager::FINISHED_DL_FILES_SORT, FILES_COLUMN_TIME);
 
 			files->setSmallImageList(WinUtil::fileImages);
 
@@ -123,9 +125,11 @@ protected:
 			users->setTableStyle(LVS_EX_LABELTIP | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT);
 			this->addWidget(users);
 
-			WinUtil::makeColumns(users, usersColumns, USERS_COLUMN_LAST, SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_ORDER : SettingsManager::FINISHED_DL_USERS_ORDER),
+			WinUtil::makeColumns(users, usersColumns, USERS_COLUMN_LAST,
+				SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_ORDER : SettingsManager::FINISHED_DL_USERS_ORDER),
 				SettingsManager::getInstance()->get(in_UL ? SettingsManager::FINISHED_UL_USERS_WIDTHS : SettingsManager::FINISHED_DL_USERS_WIDTHS));
-			users->setSort(USERS_COLUMN_TIME);
+			WinUtil::setTableSort(users, USERS_COLUMN_LAST,
+				in_UL ? SettingsManager::FINISHED_UL_USERS_SORT : SettingsManager::FINISHED_DL_USERS_SORT, USERS_COLUMN_TIME);
 
 			users->setSmallImageList(WinUtil::userImages);
 
@@ -187,10 +191,12 @@ protected:
 	void postClosing() {
 		saveColumns(files,
 			in_UL ? SettingsManager::FINISHED_UL_FILES_ORDER : SettingsManager::FINISHED_DL_FILES_ORDER,
-			in_UL ? SettingsManager::FINISHED_UL_FILES_WIDTHS : SettingsManager::FINISHED_DL_FILES_WIDTHS);
+			in_UL ? SettingsManager::FINISHED_UL_FILES_WIDTHS : SettingsManager::FINISHED_DL_FILES_WIDTHS,
+			in_UL ? SettingsManager::FINISHED_UL_FILES_SORT : SettingsManager::FINISHED_DL_FILES_SORT);
 		saveColumns(users,
 			in_UL ? SettingsManager::FINISHED_UL_USERS_ORDER : SettingsManager::FINISHED_DL_USERS_ORDER,
-			in_UL ? SettingsManager::FINISHED_UL_USERS_WIDTHS : SettingsManager::FINISHED_DL_USERS_WIDTHS);
+			in_UL ? SettingsManager::FINISHED_UL_USERS_WIDTHS : SettingsManager::FINISHED_DL_USERS_WIDTHS,
+			in_UL ? SettingsManager::FINISHED_UL_USERS_SORT : SettingsManager::FINISHED_DL_USERS_SORT);
 
 		if(!in_UL)
 			SettingsManager::getInstance()->set(SettingsManager::FINISHED_DL_ONLY_FULL, bOnlyFull);
@@ -600,13 +606,15 @@ private:
 		return 0;
 	}
 
-	void saveColumns(dwt::TablePtr table, SettingsManager::StrSetting order, SettingsManager::StrSetting widths) {
+	template<typename TableType>
+	void saveColumns(TableType table, SettingsManager::StrSetting order, SettingsManager::StrSetting widths, SettingsManager::IntSetting sort) {
 		SettingsManager::getInstance()->set(order, WinUtil::toString(table->getColumnOrder()));
 		SettingsManager::getInstance()->set(widths, WinUtil::toString(table->getColumnWidths()));
+		SettingsManager::getInstance()->set(sort, WinUtil::getTableSort(table));
 	}
 
 	template<typename TableType>
-	void clearTable(TableType* table) {
+	void clearTable(TableType table) {
 		table->clear();
 	}
 	inline void clearTables() {

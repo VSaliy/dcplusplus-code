@@ -116,6 +116,8 @@ private:
 
 	GridPtr grid;
 
+	SplitterContainerPtr splitter;
+
 	typedef TypedTable<UserInfo, false> WidgetUsers;
 	typedef WidgetUsers* WidgetUsersPtr;
 	WidgetUsersPtr users;
