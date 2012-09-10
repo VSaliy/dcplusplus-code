@@ -301,7 +301,7 @@ BOOL CALLBACK SettingsDialog::EnumChildProc(HWND hwnd, LPARAM lParam) {
 }
 
 void SettingsDialog::handleChildHelp(dwt::Control* widget) {
-	help->setText(Text::toT(WinUtil::getHelpText(widget->getHelpId())));
+	help->setText(Text::toT(WinUtil::getHelpText(widget->getHelpId()).second));
 }
 
 bool SettingsDialog::handleClosing() {

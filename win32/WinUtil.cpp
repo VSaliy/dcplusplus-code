@@ -1052,7 +1052,7 @@ void WinUtil::help(dwt::Control* widget) {
 void WinUtil::helpId(dwt::Control* widget, unsigned id) {
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help
-		new HelpPopup<false>(widget, Text::toT(getHelpText(id)));
+		new HelpPopup<false>(widget, Text::toT(getHelpText(id).second));
 
 	} else {
 #ifdef HAVE_HTMLHELP_H
@@ -1069,7 +1069,10 @@ void WinUtil::helpTooltip(dwt::Control* widget, const dwt::Point& pos) {
 	auto id = widget->getHelpId();
 	if(id >= IDH_CSHELP_BEGIN && id <= IDH_CSHELP_END) {
 		// context-sensitive help
-		new HelpPopup<true>(widget, Text::toT(getHelpText(id)), pos);
+		auto text = getHelpText(id);
+		if(text.first) {
+			new HelpPopup<true>(widget, Text::toT(getHelpText(id).second), pos);
+		}
 	}
 }
 
@@ -1080,19 +1083,19 @@ void WinUtil::killHelpTooltip() {
 	}
 }
 
-string WinUtil::getHelpText(unsigned id) {
+pair<bool, string> WinUtil::getHelpText(unsigned id) {
 	if(id >= IDH_CSHELP_BEGIN) {
 		id -= IDH_CSHELP_BEGIN;
 
 		if(id < helpTexts.size()) {
 			const auto& ret = helpTexts[id];
 			if(!ret.empty()) {
-				return ret;
+				return make_pair(true, ret);
 			}
 		}
 	}
 
-	return _("No help information available");
+	return make_pair(false, _("No help information available"));
 }
 
 void WinUtil::toInts(const string& str, std::vector<int>& array) {
