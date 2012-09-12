@@ -954,6 +954,7 @@ public:
 			seed.style |= ES_MULTILINE;
 		seed.exStyle = WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_CLIENTEDGE;
 		seed.location.size.x = std::min(getParent()->getDesktopSize().width(), static_cast<long>(maxWidth * dwt::util::dpiFactor()));
+		seed.location.size.y = 1; // so that Rich Edit 8 sends EN_REQUESTRESIZE
 		seed.events |= ENM_REQUESTRESIZE;
 		create(seed);
 
@@ -967,9 +968,6 @@ public:
 
 private:
 	LRESULT resize(LPARAM lParam, const tstring& text, dwt::Point pos) {
-		if(getVisible())
-			return 0;
-
 		dwt::Rectangle rect(reinterpret_cast<REQRESIZE*>(lParam)->rc);
 
 		if(rect.width() > getWindowRect().width() && !hasStyle(ES_MULTILINE)) {
@@ -1071,7 +1069,7 @@ void WinUtil::helpTooltip(dwt::Control* widget, const dwt::Point& pos) {
 		// context-sensitive help
 		auto text = getHelpText(id);
 		if(text.first) {
-			new HelpPopup<true>(widget, Text::toT(getHelpText(id).second), pos);
+			new HelpPopup<true>(widget, Text::toT(text.second), pos);
 		}
 	}
 }
