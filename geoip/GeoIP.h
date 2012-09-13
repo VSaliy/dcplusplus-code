@@ -158,7 +158,11 @@ extern const char GeoIP_country_continent[254][3];
 GEOIP_API void GeoIP_setup_custom_directory(char *dir);
 GEOIP_API GeoIP* GeoIP_open_type (int type, int flags);
 GEOIP_API GeoIP* GeoIP_new(int flags);
+#ifdef _WIN32
+GEOIP_API GeoIP* GeoIP_open(const wchar_t * filename, int flags);
+#else
 GEOIP_API GeoIP* GeoIP_open(const char * filename, int flags);
+#endif
 GEOIP_API int GeoIP_db_avail(int type);
 GEOIP_API void GeoIP_delete(GeoIP* gi);
 GEOIP_API const char *GeoIP_country_code_by_addr (GeoIP* gi, const char *addr);
