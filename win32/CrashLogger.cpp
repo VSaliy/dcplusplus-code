@@ -584,7 +584,7 @@ LONG WINAPI exceptionFilter(LPEXCEPTION_POINTERS info) {
 		return EXCEPTION_CONTINUE_EXECUTION;
 	}
 
-	f = fopen(CrashLogger::getPath().c_str(), "w");
+	f = _wfopen(CrashLogger::getPath().c_str(), L"w");
 	if(f) {
 		writeAppInfo();
 
@@ -617,6 +617,6 @@ CrashLogger::~CrashLogger() {
 	SetUnhandledExceptionFilter(prevFilter);
 }
 
-string CrashLogger::getPath() {
-	return Util::getPath(Util::PATH_USER_LOCAL) + "CrashLog.txt";
+tstring CrashLogger::getPath() {
+	return Text::toT(Util::getPath(Util::PATH_USER_LOCAL)) + _T("CrashLog.txt");
 }
