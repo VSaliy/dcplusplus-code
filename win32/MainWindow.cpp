@@ -299,7 +299,7 @@ void MainWindow::initMenu() {
 		file->appendSeparator();
 
 		file->appendItem(T_("Open downloads directory"), [this] { handleOpenDownloadsDir(); }, WinUtil::menuIcon(IDI_OPEN_DL_DIR));
-		file->appendItem(T_("Open crash log"), [this] { TextFrame::openWindow(getTabView(), CrashLogger::getPath()); });
+		file->appendItem(T_("Open crash log"), [this] { TextFrame::openWindow(getTabView(), Text::fromT(CrashLogger::getPath())); });
 		file->appendSeparator();
 
 		file->appendItem(T_("Settings\tCtrl+F3"), [this] { handleSettings(); }, WinUtil::menuIcon(IDI_SETTINGS));

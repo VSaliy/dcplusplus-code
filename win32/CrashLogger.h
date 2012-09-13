@@ -19,11 +19,13 @@
 #ifndef DCPLUSPLUS_WIN32_CRASH_LOGGER_H
 #define DCPLUSPLUS_WIN32_CRASH_LOGGER_H
 
+#include <dcpp/typedefs.h>
+
 struct CrashLogger {
 	CrashLogger();
 	~CrashLogger();
 
-	static string getPath();
+	static tstring getPath();
 };
 
 #endif // DCPLUSPLUS_WIN32_CRASH_LOGGER_H
