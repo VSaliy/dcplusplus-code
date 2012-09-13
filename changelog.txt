@@ -39,6 +39,7 @@
 * Fix NAT-PMP renewal (poy)
 * [L#226968] Remember list sorting & splitter positions (poy)
 * [L#1041553] Fix help tooltips in Windows 8 (poy)
+* Fix GeoIP decompression with wide character paths (poy)
 
 -- 0.799 2012-05-05 --
 * Add icons (iceman50)
