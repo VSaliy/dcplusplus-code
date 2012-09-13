@@ -937,7 +937,11 @@ GeoIP* GeoIP_new (int flags) {
 	return gi;
 }
 
+#ifdef _WIN32
+GeoIP* GeoIP_open (const wchar_t * filename, int flags) {
+#else
 GeoIP* GeoIP_open (const char * filename, int flags) {
+#endif
 	struct stat buf;
 	GeoIP * gi;
 	size_t len;
@@ -945,6 +949,10 @@ GeoIP* GeoIP_open (const char * filename, int flags) {
 	gi = (GeoIP *)malloc(sizeof(GeoIP));
 	if (gi == NULL)
 		return NULL;
+#ifdef _WIN32
+	gi->GeoIPDatabase = _wfopen(filename,L"rb");
+	gi->file_path = malloc(0);
+#else
        	len = sizeof(char) * (strlen(filename)+1);
 	gi->file_path = malloc(len);
 	if (gi->file_path == NULL) {
@@ -953,6 +961,7 @@ GeoIP* GeoIP_open (const char * filename, int flags) {
 	}
 	strncpy(gi->file_path, filename, len);
 	gi->GeoIPDatabase = fopen(filename,"rb");
+#endif
 	if (gi->GeoIPDatabase == NULL) {
 		fprintf(stderr,"Error Opening file %s\n",filename);
 		free(gi->file_path);
