@@ -116,7 +116,12 @@ public:
 	{
 	}
 
-	virtual ~ListLoader() { }
+	virtual ~ListLoader() {
+		// some clients forget the "Base" param...
+		if(list->base.empty()) {
+			list->base = base;
+		}
+	}
 
 	void startTag(const string& name, StringPairList& attribs, bool simple);
 	void endTag(const string& name);
