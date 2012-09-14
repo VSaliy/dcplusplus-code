@@ -63,6 +63,7 @@ void Link::create(const Seed& seed) {
 void Link::setLink(const tstring& link, size_t index) {
 	LITEM item = { LIF_ITEMINDEX | LIF_URL, static_cast<int>(index) };
 	link.copy(item.szUrl, std::min(link.size(), static_cast<size_t>(L_MAX_URL_LENGTH - 1)));
+	sendMessage(LM_SETITEM, 0, reinterpret_cast<LPARAM>(&item));
 }
 
 Point Link::getPreferredSize() {
@@ -80,8 +81,8 @@ Point Link::getPreferredSize() {
 		(closing = text.find(_T("</a"), end)) != tstring::npos &&
 		(closingEnd = text.find(_T(">"), closing)) != tstring::npos)
 	{
-		text.erase(closing, closingEnd - closing);
-		text.erase(start, end - start);
+		text.erase(closing, closingEnd - closing + 1);
+		text.erase(start, end - start + 1);
 	}
 	return getTextSize(text);
 }

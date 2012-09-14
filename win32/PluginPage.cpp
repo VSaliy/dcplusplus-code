@@ -43,7 +43,7 @@ using dwt::Link;
 using dwt::LoadDialog;
 
 static const ColumnInfo columns[] = {
-	{ "", 440, false },
+	{ "", 100, false },
 };
 
 PluginPage::PluginPage(dwt::Widget* parent) :
@@ -128,8 +128,7 @@ pluginInfo(0)
 		group->setHelpId(IDH_SETTINGS_PLUGINS_INFO);
 		pluginInfo = group->addChild(Grid::Seed(1, 1));
 		pluginInfo->column(0).mode = GridInfo::FILL;
-		pluginInfo->row(0).mode = GridInfo::STATIC;
-		pluginInfo->row(0).align = GridInfo::STRETCH;
+		pluginInfo->setSpacing(grid->getSpacing());
 	}
 
 		grid->addChild(Label::Seed(str(TF_("Some plugins may require you to restart %1%") % Text::toT(APPNAME))));
@@ -149,6 +148,12 @@ pluginInfo(0)
 }
 
 PluginPage::~PluginPage() {
+}
+
+void PluginPage::layout() {
+	PropPage::layout();
+
+	plugins->setColumnWidth(0, plugins->getWindowSize().x - 20);
 }
 
 void PluginPage::handleDoubleClick() {
@@ -180,26 +185,34 @@ void PluginPage::handleSelectionChanged() {
 
 	HoldRedraw hold(pluginInfo);
 
+	pluginInfo->clearRows();
+
 	/* destroy previous children. store them in a vector beforehand or the enumeration will fail
 	(since they're getting destroyed)... */
 	auto children = pluginInfo->getChildren<Control>();
 	boost::for_each(std::vector<Control*>(children.first, children.second), [](Control* w) { w->close(); });
 
-	pluginInfo->clearRows();
-
 	if(plugins->countSelected() != 1) {
-		pluginInfo->addRow();
+		pluginInfo->addRow(GridInfo(0, GridInfo::FILL, GridInfo::STRETCH));
 		pluginInfo->addChild(Label::Seed(T_("No plugin has been selected")));
 		return;
 	}
 
-	pluginInfo->addRow();
+	pluginInfo->addRow(GridInfo(0, GridInfo::FILL, GridInfo::STRETCH));
 	auto infoGrid = pluginInfo->addChild(Grid::Seed(0, 2));
+	infoGrid->column(1).mode = GridInfo::FILL;
+	infoGrid->setSpacing(pluginInfo->getSpacing());
 
-	auto addInfo = [this, infoGrid](tstring name, const string& value, bool link) {
-		infoGrid->addRow();
+	enum Type { Name, Version, Description, Author, Website };
+
+	auto addInfo = [this, infoGrid](tstring name, const string& value, Type type) {
+		if(type == Description) {
+			infoGrid->addRow(GridInfo(0, GridInfo::FILL, GridInfo::STRETCH));
+		} else {
+			infoGrid->addRow();
+		}
 		infoGrid->addChild(Label::Seed(name));
-		if(link && !value.empty()) {
+		if(type == Website && !value.empty()) {
 			infoGrid->addChild(Link::Seed(Text::toT(value), true));
 		} else {
 			infoGrid->addChild(Label::Seed(value.empty() ?
@@ -209,11 +222,11 @@ void PluginPage::handleSelectionChanged() {
 
 	auto info = reinterpret_cast<MetaData*>(plugins->getData(plugins->getSelected()));
 
-	addInfo(T_("Name: "), info->name, false);
-	addInfo(T_("Version: "), Util::toString(info->version), false);
-	addInfo(T_("Description: "), info->description, false);
-	addInfo(T_("Author: "), info->author, false);
-	addInfo(T_("Website: "), info->web, true);
+	addInfo(T_("Name: "), info->name, Name);
+	addInfo(T_("Version: "), Util::toString(info->version), Version);
+	addInfo(T_("Description: "), info->description, Description);
+	addInfo(T_("Author: "), info->author, Author);
+	addInfo(T_("Website: "), info->web, Website);
 }
 
 bool PluginPage::handleContextMenu(dwt::ScreenCoordinate pt) {

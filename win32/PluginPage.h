@@ -28,6 +28,8 @@ public:
 	PluginPage(dwt::Widget* parent);
 	virtual ~PluginPage();
 
+	virtual void layout();
+
 private:
 	TablePtr plugins;
 
