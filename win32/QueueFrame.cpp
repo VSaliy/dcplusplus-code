@@ -994,9 +994,8 @@ void QueueFrame::onRemoved(const string& s) {
 
 	const auto path = ii->getPath();
 	const auto userList = ii->isSet(QueueItem::FLAG_USER_LIST);
-	const auto isCur = isCurDir(path);
 
-	if(isCur || !SETTING(QUEUEFRAME_SHOW_TREE)) {
+	if(!SETTING(QUEUEFRAME_SHOW_TREE) || isCurDir(path)) {
 		dcassert(files->find(ii) != -1);
 		files->erase(ii);
 	}
@@ -1019,7 +1018,7 @@ void QueueFrame::onRemoved(const string& s) {
 
 	if(directories.count(path) == 0) {
 		removeDirectory(path, userList);
-		if(isCur)
+		if(isCurDir(path))
 			curDir.clear();
 	}
 
