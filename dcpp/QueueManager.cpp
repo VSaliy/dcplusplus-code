@@ -1190,6 +1190,8 @@ void QueueManager::remove(const string& aTarget) noexcept {
 	}
 }
 
+#define MAX_SIZE_WO_TREE 20*1024*1024
+
 void QueueManager::removeSource(const string& aTarget, const UserPtr& aUser, int reason, bool removeConn /* = true */) noexcept {
 	bool isRunning = false;
 	bool removeCompletely = false;
@@ -1209,7 +1211,9 @@ void QueueManager::removeSource(const string& aTarget, const UserPtr& aUser, int
 
 		if(reason == QueueItem::Source::FLAG_NO_TREE) {
 			q->getSource(aUser)->setFlag(reason);
-			return;
+			if (q->getSize() < MAX_SIZE_WO_TREE) {
+				return;
+			}
 		}
 
 		if(q->isRunning() && userQueue.getRunning(aUser) == q) {
