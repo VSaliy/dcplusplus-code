@@ -1,4 +1,4 @@
-* Revamp favorite hub settings (poy)
+* [L#270107] Revamp favorite hub settings (poy)
 * Reduce resource consumption when slots are full (poy)
 * [L#984330] Make PM windows more aware of the selected hub (poy)
 * [L#927821] Don't choke on hub addresses with spaces (poy)
