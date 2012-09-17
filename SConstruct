@@ -17,7 +17,7 @@ from build_util import Dev, gen_po_name
 # TODO enable LTO when it doesn't ICE... (-flto)
 
 gcc_flags = {
-	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-fexceptions', '-mthreads'],
+	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-Wno-unknown-pragmas', '-fexceptions', '-mthreads'],
 	'debug': [], 
 	'release' : ['-O3', '-fno-ipa-cp-clone', '-mwindows']
 }
@@ -202,14 +202,11 @@ else:
 
 	env.Tool("gch", toolpath=".")
 
-	env.Append(CPPPATH = ['#/htmlhelp/preload/', '#/htmlhelp/include/'])
-	html_lib = '#/htmlhelp/lib/'
+	env.Append(CPPPATH = ['#/mingw/preload/', '#/mingw/include/'])
+	mingw_lib = '#/mingw/lib/'
 	if env['arch'] != 'x86':
-		html_lib = html_lib + env['arch'] + '/'
-	env.Append(LIBPATH = [html_lib])
-
-	# for MinGW64 to accept natupnp.h
-	env.Append(CPPDEFINES = ['__MIDL_user_allocate_free_DEFINED__'])
+		mingw_lib = mingw_lib + env['arch'] + '/'
+	env.Append(LIBPATH = [mingw_lib])
 
 env.Append(CPPDEFINES = defs[env['mode']])
 env.Append(CPPDEFINES = defs['common'])
