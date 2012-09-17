@@ -30,10 +30,6 @@
 		* Html Help Workshop (only needed to build help files)
 		<http://msdn.microsoft.com/en-us/library/ms669985%28VS.85%29.aspx>
 
-		Go to your HTML Help Workshop include directory (HTML Help Workshop/include) and copy
-		htmlhelp.h to the htmlhelp/include directory of the DC++ source.
-		Go to your HTML Help Workshop lib directory (HTML Help Workshop/lib) and copy htmlhelp.lib
-		to the htmlhelp/lib directory of the DC++ source.
 		Make sure that hhc.exe is in your PATH environment variable.
 
 		* asciidoc (only needed to build help files)
@@ -70,8 +66,17 @@
 			prefix='i686-pc-mingw32-'
 		Make sure that Cygwin\bin is in your PATH environment variable.
 
-		Also grab natupnp.h from the Windows SDK and place it in the root of the repository.
-		<http://msdn.microsoft.com/en-us/windows/bb980924>
+		To build a version with HTML Help and Windows UPnP support, copy the following files from a
+		Windows SDK (Windows SDK path -> DC++ source code path):
+		Include/shared/winapifamily.h -> mingw/include/winapifamily.h
+		Include/um/HtmlHelp.h -> mingw/include/htmlhelp.h
+		Include/um/natupnp.h -> mingw/include/natupnp.h
+		Lib/win8/um/x86/Htmlhelp.Lib -> mingw/lib/htmlhelp.lib
+		Lib/win8/um/x64/Htmlhelp.Lib -> mingw/lib/x64/htmlhelp.lib
+
+		The latest Windows SDK is currently at
+		<http://msdn.microsoft.com/en-US/windows/desktop/hh852363>; it installs into
+		"C:\Program Files (x86)\Windows Kits\8.0".
 
 	b. Microsoft Visual Studio 2012:
 	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
