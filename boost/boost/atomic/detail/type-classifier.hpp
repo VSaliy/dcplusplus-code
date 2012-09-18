@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_ATOMIC_TYPE_CLASSIFIER_HPP
-#define BOOST_DETAIL_ATOMIC_TYPE_CLASSIFIER_HPP
+#ifndef BOOST_ATOMIC_DETAIL_TYPE_CLASSIFIER_HPP
+#define BOOST_ATOMIC_DETAIL_TYPE_CLASSIFIER_HPP
 
 //  Copyright (c) 2011 Helge Bahmann
 //
@@ -7,11 +7,13 @@
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-namespace boost { namespace detail { namespace atomic {
+namespace boost {
+namespace atomics {
+namespace detail {
 
 template<typename T>
 struct type_classifier {
-	typedef void test;
+    typedef void test;
 };
 
 template<>
@@ -44,7 +46,7 @@ struct type_classifier<T *> {typedef void * test;};
 
 template<typename T>
 struct sign_trait {
-	typedef void test;
+    typedef void test;
 };
 
 template<>
