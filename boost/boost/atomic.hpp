@@ -10,10 +10,10 @@
 #include <cstddef>
 #include <boost/cstdint.hpp>
 
-#include <boost/atomic/detail/base.hpp>
-#if !defined(BOOST_ATOMIC_FORCE_FALLBACK)
+#include <boost/memory_order.hpp>
+
+#include <boost/atomic/config.hpp>
 #include <boost/atomic/platform.hpp>
-#endif
 #include <boost/atomic/detail/type-classifier.hpp>
 #include <boost/type_traits/is_signed.hpp>
 
@@ -51,9 +51,11 @@ namespace boost {
 #define BOOST_ATOMIC_LLONG_LOCK_FREE 0
 #endif
 
-#ifndef BOOST_ATOMIC_ADDRESS_LOCK_FREE
-#define BOOST_ATOMIC_ADDRESS_LOCK_FREE 0
+#ifndef BOOST_ATOMIC_POINTER_LOCK_FREE
+#define BOOST_ATOMIC_POINTER_LOCK_FREE 0
 #endif
+
+#define BOOST_ATOMIC_ADDRESS_LOCK_FREE BOOST_ATOMIC_POINTER_LOCK_FREE
 
 #ifndef BOOST_ATOMIC_BOOL_LOCK_FREE
 #define BOOST_ATOMIC_BOOL_LOCK_FREE 0
@@ -61,7 +63,7 @@ namespace boost {
 
 #ifndef BOOST_ATOMIC_THREAD_FENCE
 #define BOOST_ATOMIC_THREAD_FENCE 0
-inline void
+static inline void
 atomic_thread_fence(memory_order)
 {
 }
@@ -69,30 +71,30 @@ atomic_thread_fence(memory_order)
 
 #ifndef BOOST_ATOMIC_SIGNAL_FENCE
 #define BOOST_ATOMIC_SIGNAL_FENCE 0
-inline void
+static inline void
 atomic_signal_fence(memory_order order)
 {
-	atomic_thread_fence(order);
+    atomic_thread_fence(order);
 }
 #endif
 
 template<typename T>
-class atomic : public detail::atomic::base_atomic<T, typename detail::atomic::type_classifier<T>::test, sizeof(T), boost::is_signed<T>::value > {
+class atomic : public atomics::detail::base_atomic<T, typename atomics::detail::type_classifier<T>::test, sizeof(T), boost::is_signed<T>::value > {
 private:
-	typedef T value_type;
-	typedef detail::atomic::base_atomic<T, typename detail::atomic::type_classifier<T>::test, sizeof(T), boost::is_signed<T>::value > super;
+    typedef T value_type;
+    typedef atomics::detail::base_atomic<T, typename atomics::detail::type_classifier<T>::test, sizeof(T), boost::is_signed<T>::value > super;
 public:
-	atomic(void) : super() {}
-	explicit atomic(const value_type & v) : super(v) {}
-	
-	atomic & operator=(value_type v) volatile
-	{
-		super::operator=(v);
-		return *const_cast<atomic *>(this);
-	}
+    atomic(void) : super() {}
+    explicit atomic(const value_type & v) : super(v) {}
+
+    atomic & operator=(value_type v) volatile
+    {
+        super::operator=(v);
+        return *const_cast<atomic *>(this);
+    }
 private:
-	atomic(const atomic &) /* =delete */ ;
-	atomic & operator=(const atomic &) /* =delete */ ;
+    atomic(const atomic &) /* =delete */ ;
+    atomic & operator=(const atomic &) /* =delete */ ;
 };
 
 typedef atomic<char> atomic_char;
@@ -113,33 +115,35 @@ typedef atomic<long> atomic_long;
 typedef atomic<uint64_t> atomic_uint64_t;
 typedef atomic<int64_t> atomic_int64_t;
 #ifdef BOOST_HAS_LONG_LONG
-typedef atomic<unsigned long long> atomic_ullong;
-typedef atomic<long long> atomic_llong;
+typedef atomic<boost::ulong_long_type> atomic_ullong;
+typedef atomic<boost::long_long_type> atomic_llong;
 #endif
 typedef atomic<void*> atomic_address;
 typedef atomic<bool> atomic_bool;
 
+#ifndef BOOST_ATOMIC_FLAG_LOCK_FREE
+#define BOOST_ATOMIC_FLAG_LOCK_FREE 0
 class atomic_flag {
 public:
-	atomic_flag() : v_(false) {}
-	atomic_flag(bool b) : v_(b) {}
-	
-	bool
-	test_and_set(memory_order order = memory_order_seq_cst)
-	{
-		return v_.exchange(true, order);
-	}
-	
-	void
-	clear(memory_order order = memory_order_seq_cst) volatile
-	{
-		v_.store(false, order);
-	}
+    atomic_flag(void) : v_(false) {}
+
+    bool
+    test_and_set(memory_order order = memory_order_seq_cst)
+    {
+        return v_.exchange(true, order);
+    }
+
+    void
+    clear(memory_order order = memory_order_seq_cst) volatile
+    {
+        v_.store(false, order);
+    }
 private:
-	atomic_flag(const atomic_flag &) /* = delete */ ;
-	atomic_flag & operator=(const atomic_flag &) /* = delete */ ;
-	atomic<bool> v_;
+    atomic_flag(const atomic_flag &) /* = delete */ ;
+    atomic_flag & operator=(const atomic_flag &) /* = delete */ ;
+    atomic<bool> v_;
 };
+#endif
 
 typedef atomic<char> atomic_char;
 typedef atomic<unsigned char> atomic_uchar;
@@ -158,8 +162,10 @@ typedef atomic<unsigned long> atomic_ulong;
 typedef atomic<long> atomic_long;
 typedef atomic<uint64_t> atomic_uint64_t;
 typedef atomic<int64_t> atomic_int64_t;
-typedef atomic<unsigned long long> atomic_ullong;
-typedef atomic<long long> atomic_llong;
+#ifdef BOOST_HAS_LONG_LONG
+typedef atomic<boost::ulong_long_type> atomic_ullong;
+typedef atomic<boost::long_long_type> atomic_llong;
+#endif
 typedef atomic<void*> atomic_address;
 typedef atomic<bool> atomic_bool;
 

@@ -34,7 +34,7 @@ using boost::atomic_flag;
 }
 
 #ifndef ATOMIC_FLAG_INIT
-#define ATOMIC_FLAG_INIT { 0 }
+#define ATOMIC_FLAG_INIT { }
 #endif
 
 #else

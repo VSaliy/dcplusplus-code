@@ -151,7 +151,7 @@ dev.prepare()
 
 env.SConsignFile()
 
-env.Append(CPPPATH = ['#/', '#/boost/', '#/intl/', '#/atomic/'])
+env.Append(CPPPATH = ['#/', '#/boost/', '#/intl/'])
 
 if dev.is_win32():
 	# Windows header defines <http://msdn.microsoft.com/en-us/library/aa383745(VS.85).aspx>
