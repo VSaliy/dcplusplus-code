@@ -30,6 +30,7 @@
 #include "FinishedManager.h"
 #include "HashManager.h"
 #include "LogManager.h"
+#include "ScopedFunctor.h"
 #include "SearchManager.h"
 #include "SearchResult.h"
 #include "SFVReader.h"
@@ -51,6 +52,9 @@ namespace dcpp {
 
 using boost::adaptors::map_values;
 using boost::range::for_each;
+
+atomic_flag QueueManager::Rechecker::active = ATOMIC_FLAG_INIT;
+atomic_flag QueueManager::FileMover::active = ATOMIC_FLAG_INIT;
 
 QueueManager::FileQueue::~FileQueue() {
 	for_each(queue | map_values, DeleteFunction());
@@ -296,51 +300,40 @@ void QueueManager::UserQueue::remove(QueueItem* qi, const UserPtr& aUser, bool r
 }
 
 void QueueManager::FileMover::moveFile(const string& source, const string& target) {
-	Lock l(cs);
-	files.emplace_back(source, target);
-	if(!active) {
-		active = true;
+	files.push(make_pair(source, target));
+	if(!active.test_and_set()) {
 		start();
 	}
 }
 
 int QueueManager::FileMover::run() {
-	for(;;) {
+	ScopedFunctor([this] { active.clear(); });
+
+	while(true) {
 		FilePair next;
-		{
-			Lock l(cs);
-			if(files.empty()) {
-				active = false;
-				return 0;
-			}
-			next = files.back();
-			files.pop_back();
+		if(!files.pop(next)) {
+			return 0;
 		}
+
 		moveFile_(next.first, next.second);
 	}
+	return 0;
 }
 
 void QueueManager::Rechecker::add(const string& file) {
-	Lock l(cs);
-	files.push_back(file);
-	if(!active) {
-		active = true;
+	files.push(file);
+	if(!active.test_and_set()) {
 		start();
 	}
 }
 
 int QueueManager::Rechecker::run() {
+	ScopedFunctor([this] { active.clear(); });
+
 	while(true) {
 		string file;
-		{
-			Lock l(cs);
-			auto i = files.begin();
-			if(i == files.end()) {
-				active = false;
-				return 0;
-			}
-			file = *i;
-			files.erase(i);
+		if(!files.pop(file)) {
+			return 0;
 		}
 
 		QueueItem* q;
