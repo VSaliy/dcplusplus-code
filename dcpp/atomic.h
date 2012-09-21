@@ -21,6 +21,8 @@
 
 // GCC has issues with atomic - see https://bugs.launchpad.net/dcplusplus/+bug/735512
 /// @todo check this again when GCC improves their threading support
+/// @todo track the progress of <https://svn.boost.org/trac/boost/ticket/7403> when updating boost
+/// (failure to apply the patch makes MSVC lockfree lists not actually lock-free).
 #if defined(__GNUC__)
 
 #include <boost/atomic.hpp>
