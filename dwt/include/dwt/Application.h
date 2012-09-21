@@ -41,6 +41,8 @@
 #include "CommandLine.h"
 #include <functional>
 
+#include <boost/lockfree/queue.hpp>
+
 #ifdef _MSC_VER
 #ifdef _DEBUG
 // Enable memory leak detection with file/line tracing.
@@ -186,8 +188,7 @@ private:
 	// The according signals we must raise, go in this vector.
 	std::vector<Callback> itsVSignals;
 
-	HANDLE taskMutex;
-	std::list<Callback> tasks;
+	boost::lockfree::queue<Callback> tasks;
 
 	FilterList filters;
 

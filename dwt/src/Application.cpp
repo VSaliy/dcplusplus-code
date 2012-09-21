@@ -74,13 +74,14 @@ void Application::init(int nCmdShow) {
 }
 
 Application::Application(int nCmdShow) :
-	itsCmdShow(nCmdShow), taskMutex(::CreateMutex(NULL, FALSE, NULL)), quit(false),
+	itsCmdShow(nCmdShow),
+	tasks(1024),
+	quit(false),
 	threadId(::GetCurrentThreadId())
 {
 }
 
 Application::~Application() {
-	::CloseHandle(taskMutex);
 }
 
 const CommandLine& Application::getCommandLine() const {
@@ -222,34 +223,17 @@ int Application::getCmdShow() const {
 	return itsCmdShow;
 }
 
-struct MutexLock {
-	MutexLock(HANDLE h_) : h(h_) {
-		::WaitForSingleObject(h, INFINITE);
-	}
-	~MutexLock() {
-		::ReleaseMutex(h);
-	}
-	HANDLE h;
-};
-
 bool Application::dispatchAsync() {
 	Callback callback;
-	{
-		MutexLock m(taskMutex);
-		if(tasks.empty()) {
-			return false;
-		}
-		callback = tasks.front();
-		tasks.pop_front();
+	if(tasks.pop(callback)) {
+		callback();
+		return true;
 	}
-
-	callback();
-	return true;
+	return false;
 }
 
 void Application::callAsync(const Callback& callback) {
-	MutexLock m(taskMutex);
-	tasks.push_back(callback);
+	tasks.push(callback);
 	wake();
 }
 
