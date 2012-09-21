@@ -22,21 +22,22 @@
 #include <functional>
 #include <unordered_map>
 
-#include "TimerManager.h"
+#include <boost/lockfree/queue.hpp>
 
+#include "atomic.h"
+#include "BundleItem.h"
+#include "ClientManagerListener.h"
 #include "CriticalSection.h"
-#include "Exception.h"
-#include "User.h"
-#include "File.h"
-#include "QueueItem.h"
-#include "Singleton.h"
 #include "DirectoryListing.h"
+#include "Exception.h"
+#include "File.h"
 #include "MerkleTree.h"
-
+#include "QueueItem.h"
 #include "QueueManagerListener.h"
 #include "SearchManagerListener.h"
-#include "ClientManagerListener.h"
-#include "BundleItem.h"
+#include "Singleton.h"
+#include "TimerManager.h"
+#include "User.h"
 
 namespace dcpp {
 
@@ -141,23 +142,20 @@ public:
 	GETSET(string, queueFile, QueueFile);
 
 private:
-	enum { MOVER_LIMIT = 10*1024*1024 };
+	static const int64_t MOVER_LIMIT = 10*1024*1024;
+
 	class FileMover : public Thread {
 	public:
-		FileMover() : active(false) { }
+		FileMover() : files(8) { }
 		virtual ~FileMover() { join(); }
 
 		void moveFile(const string& source, const string& target);
 		virtual int run();
+
 	private:
+		static atomic_flag active;
 		typedef pair<string, string> FilePair;
-		typedef vector<FilePair> FileList;
-		typedef FileList::iterator FileIter;
-
-		bool active;
-
-		FileList files;
-		CriticalSection cs;
+		boost::lockfree::queue<FilePair> files;
 	} mover;
 
 	class Rechecker : public Thread {
@@ -167,7 +165,7 @@ private:
 		};
 
 	public:
-		explicit Rechecker(QueueManager* qm_) : qm(qm_), active(false) { }
+		explicit Rechecker(QueueManager* qm_) : qm(qm_), files(8) { }
 		virtual ~Rechecker() { join(); }
 
 		void add(const string& file);
@@ -175,10 +173,8 @@ private:
 
 	private:
 		QueueManager* qm;
-		bool active;
-
-		StringList files;
-		CriticalSection cs;
+		static atomic_flag active;
+		boost::lockfree::queue<string> files;
 	} rechecker;
 
 	/** All queue items by target */
