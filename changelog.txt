@@ -1,3 +1,5 @@
+* Perf improvements using lock-free queues, requires P6 CPUs (poy)
+
 -- 0.800 2012-09-16 --
 * [L#270107] Revamp favorite hub settings (poy)
 * Reduce resource consumption when slots are full (poy)
