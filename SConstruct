@@ -72,12 +72,8 @@ msvc_defs = {
 	'release' : ['NDEBUG']
 }
 
-# define __i686__ because the default MinGW is for __i386__. we need i686 instructions for
-# atomic<int64_t>, required by boost::lockfree (otherwise lockfree lists won't actually be lock-
-# free).
-# TODO check ramifications / possibly switch to an actual i686 compiler...
 gcc_defs = {
-	'common' : ['__i686__', '_REENTRANT', 'NO_VIZ'],
+	'common' : ['_REENTRANT', 'NO_VIZ'],
 	'debug' : ['_DEBUG'],
 	'release' : ['NDEBUG']
 }
@@ -175,6 +171,11 @@ if 'gcc' in env['TOOLS']:
 		env.Append(CCFLAGS = ['-save-temps', '-fverbose-asm'])
 	else:
 		env.Append(CCFLAGS = ['-pipe'])
+
+	# require i686 instructions for atomic<int64_t>, used by boost::lockfree (otherwise lockfree
+	# lists won't actually be lock-free).
+	if env['arch'] == 'x86':
+		env.Append(CCFLAGS = ['-march=i686'])
 
 if env['pch']:
 	env.Append(CPPDEFINES = ['HAS_PCH'])
