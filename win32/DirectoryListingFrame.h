@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_WIN32_DIRECTORY_LISTING_FRAME_H
 
 #include <deque>
+#include <list>
 #include <memory>
 #include <unordered_map>
 
@@ -36,6 +37,7 @@
 #include "UserInfoBase.h"
 
 using std::deque;
+using std::list;
 using std::unique_ptr;
 using std::unordered_map;
 
@@ -163,7 +165,8 @@ private:
 
 	FileListLoader* loader;
 	LabelPtr loading;
-	unordered_map<DirectoryListing::Directory*, unique_ptr<ItemInfo>> dirCache;
+	unordered_map<DirectoryListing::Directory*, ItemInfo> dirCache;
+	unordered_map<DirectoryListing::Directory*, list<ItemInfo>> fileCache;
 
 	RebarPtr rebar;
 	ComboBoxPtr pathBox;
@@ -176,11 +179,11 @@ private:
 
 	SplitterContainerPtr paned;
 
-	typedef TypedTree<ItemInfo, true, dwt::VirtualTree> WidgetDirs;
+	typedef TypedTree<ItemInfo, false, dwt::VirtualTree> WidgetDirs;
 	typedef WidgetDirs* WidgetDirsPtr;
 	WidgetDirsPtr dirs;
 
-	typedef TypedTable<ItemInfo> WidgetFiles;
+	typedef TypedTable<ItemInfo, false> WidgetFiles;
 	typedef WidgetFiles* WidgetFilesPtr;
 	WidgetFilesPtr files;
 
@@ -270,6 +273,7 @@ private:
 	bool handleFilesContextMenu(dwt::ScreenCoordinate pt);
 	bool handleXMouseUp(const dwt::MouseEvent& mouseEvent);
 
+	ItemInfo* getCachedDir(DirectoryListing::Directory* d);
 	void changeDir(DirectoryListing::Directory* d);
 	HTREEITEM addDir(DirectoryListing::Directory* d, HTREEITEM parent, HTREEITEM insertAfter = TVI_LAST);
 	void updateDir(DirectoryListing::Directory* d, HTREEITEM parent);
