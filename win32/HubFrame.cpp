@@ -176,6 +176,8 @@ showUsers(0),
 client(0),
 url(url),
 updateUsers(false),
+selCount(0),
+statusDirty(true),
 waitingForPW(false),
 resort(false),
 confirmClose(true),
@@ -361,8 +363,9 @@ void HubFrame::updateStatus() {
 	status->setText(STATUS_USERS, users.second + Text::toT(Util::toString(users.first)));
 	status->setToolTip(STATUS_USERS, users.second + str(TFN_("%1% user", "%1% users", users.first) % users.first));
 
-	status->setText(STATUS_SHARED, getStatusShared());
-	status->setText(STATUS_AVERAGE_SHARED, getStatusAverageShared());
+	auto shared = getStatusShared();
+	status->setText(STATUS_SHARED, shared.first);
+	status->setText(STATUS_AVERAGE_SHARED, shared.second);
 }
 
 void HubFrame::updateSecureStatus() {
@@ -392,7 +395,12 @@ bool HubFrame::runTimer() {
 		callAsync([this] { execTasks(); });
 	}
 
-	updateStatus();
+	auto prevSelCount = selCount;
+	selCount = users->countSelected();
+	if(statusDirty || selCount != prevSelCount) {
+		statusDirty = false;
+		updateStatus();
+	}
 	return true;
 }
 
@@ -1016,16 +1024,6 @@ void HubFrame::onStatusMessage(const string& line, int flags) {
 		!(flags & ClientListener::FLAG_IS_SPAM) || !SETTING(FILTER_MESSAGES)); });
 }
 
-tstring HubFrame::getStatusShared() const {
-	int64_t available;
-	if (users->countSelected() > 1) {
-		available = users->forEachSelectedT(CountAvailable()).available;
-	} else {
-		available = std::for_each(userMap.begin(), userMap.end(), CountAvailable()).available;
-	}
-	return Text::toT(Util::formatBytes(available));
-}
-
 size_t HubFrame::getUserCount() const {
 	size_t userCount = 0;
 	for(auto& i: userMap) {
@@ -1040,30 +1038,28 @@ pair<size_t, tstring> HubFrame::getStatusUsers() const {
 	auto userCount = getUserCount();
 
 	tstring textForUsers;
-	if (users->countSelected() > 1)
-		textForUsers += Text::toT(Util::toString(users->countSelected()) + "/");
-	if (showUsers->getChecked() && users->size() < userCount)
-		textForUsers += Text::toT(Util::toString(users->size()) + "/");
+	if(selCount > 1)
+		textForUsers += Text::toT(Util::toString(selCount) + "/");
+	auto filteredCount = users->size();
+	if(showUsers->getChecked() && filteredCount < userCount)
+		textForUsers += Text::toT(Util::toString(filteredCount) + "/");
 
 	return make_pair(userCount, textForUsers);
 }
 
-tstring HubFrame::getStatusAverageShared() const {
+pair<tstring, tstring> HubFrame::getStatusShared() const {
 	int64_t available;
 	size_t userCount = 0;
-	if (users->countSelected() > 1) {
+	if(selCount > 1) {
 		available = users->forEachSelectedT(CountAvailable()).available;
-		userCount = users->countSelected();
+		userCount = selCount;
 	} else {
-		available = std::for_each(userMap.begin(), userMap.end(), CountAvailable()).available;
-		for(auto& i: userMap) {
-			UserInfo* ui = i.second;
-			if(!ui->isHidden())
-				userCount++;
-		}
+		available = users->forEachT(CountAvailable()).available;
+		userCount = users->size();
 	}
 
-	return str(TF_("Average: %1%") % Text::toT(Util::formatBytes(userCount > 0 ? available / userCount : 0)));
+	return make_pair(Text::toT(Util::formatBytes(available)),
+		str(TF_("Average: %1%") % Text::toT(Util::formatBytes(userCount > 0 ? available / userCount : 0))));
 }
 
 void HubFrame::on(FavoriteManagerListener::UserAdded, const FavoriteUser& /*aUser*/) noexcept {
@@ -1153,6 +1149,8 @@ void HubFrame::updateUserList(UserInfo* ui) {
 			}
 		}
 	}
+
+	statusDirty = true;
 }
 
 bool HubFrame::userClick(const dwt::ScreenCoordinate& pt) {
@@ -1260,6 +1258,7 @@ void HubFrame::handleShowUsersClicked() {
 	SettingsManager::getInstance()->set(SettingsManager::GET_USER_INFO, checked);
 
 	layout();
+	statusDirty = true;
 }
 
 void HubFrame::handleMultiCopy(unsigned index) {

@@ -168,6 +168,8 @@ private:
 	Client* client;
 	string url;
 	bool updateUsers;
+	size_t selCount;
+	bool statusDirty;
 	bool waitingForPW;
 	bool resort;
 	bool confirmClose;
@@ -200,8 +202,7 @@ private:
 
 	size_t getUserCount() const;
 	pair<size_t, tstring> getStatusUsers() const;
-	tstring getStatusShared() const;
-	tstring getStatusAverageShared() const;
+	pair<tstring, tstring> getStatusShared() const;
 	void updateStatus();
 	void updateSecureStatus();
 
