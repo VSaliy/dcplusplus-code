@@ -1,5 +1,6 @@
 * Perf improvements using lock-free queues, requires P6 CPUs (poy)
 * Reduce freezes when displaying file list dirs that contain lots of files (poy)
+* Less CPU consumption in large hubs (poy)
 
 -- 0.800 2012-09-16 --
 * [L#270107] Revamp favorite hub settings (poy)
