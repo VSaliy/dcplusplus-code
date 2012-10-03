@@ -424,35 +424,46 @@ public:
 	{
 	}
 
+#ifdef _DEBUG
+#define step(x) dcdebug("Loading file list <%s>: " x "\n", parent.path.c_str());
+#else
+#define step(x)
+#endif
+
 	int run() {
 		/* load the file list; prepare the directory cache in order to have the directory tree
 		ready by the time the file list is displayed. no need to lock the mutex at this point
 		because it is guaranteed that the file list window won't try to read the directory cache
 		until this process is over. */
 		try {
+			step("parsing XML & building structures");
 			parent.dl->loadFile(parent.path);
+
+			step("ADLS");
 			ADLSearchManager::getInstance()->matchListing(*parent.dl);
+
+			step("sorting dirs");
 			parent.dl->sortDirs();
+
+			step("caching dirs");
 			cacheDirs(parent.dl->getRoot());
+
+			step("dir cache done; displaying");
 			successF();
+
 		} catch(const Exception& e) {
+			step("error")
 			errorF(Text::toT(e.getError()));
 		}
 
 		/* now that the file list is being displayed, prepare individual file items, hoping that
 		they will have been processed by the time the user wants them to be displayed. */
 		try {
+			step("caching files");
 			cacheFiles(parent.dl->getRoot());
 		} catch(const Exception&) { }
 
-		/**
-		@todo:
-		- fill dircache after a partial list dl
-		- it still freezes a bit on large lists - sort items before adding them, as is now done for
-		the tree?
-		- merge dirCache & fileCache?
-		*/
-
+		step("file cache done; destroying thread");
 		endF();
 		return 0;
 	}
@@ -460,28 +471,28 @@ public:
 	/* if the loader is still running (it hasn't finished processing all the files in the list),
 	this function can be used to request that the loader updates the cache of the specified
 	directory. */
-	void updateCache(DirectoryListing::Directory* d) {
+	bool updateCache(DirectoryListing::Directory* d) {
+		step("getting a dir cache");
 		Lock l(cs);
 		auto i = cache.find(d);
 		if(i != cache.end()) {
-			auto dest = parent.fileCache.find(d);
-			if(dest == parent.fileCache.end() || dest->second.empty()) {
-				parent.fileCache[d] = move(i->second);
-			}
+			step("dir cache found");
+			parent.fileCache.emplace(d, move(i->second));
 			cache.erase(i);
+			return true;
 		}
+		step("dir cache not found");
+		return false;
 	}
 
 	/* called after a cache has been generated for every item in the file list. the parent window
 	cache will be synchronized with the generated cache. no need to lock because this function runs
 	after the thread has been destroyed. */
 	void updateCache() {
+		step("updating parent cache");
 		for(auto& i: cache) {
-			if(!i.second.empty()) {
-				auto dest = parent.fileCache.find(i.first);
-				if(dest == parent.fileCache.end() || dest->second.empty()) {
-					parent.fileCache[i.first] = move(i.second);
-				}
+			if(parent.fileCache.find(i.first) == parent.fileCache.end()) {
+				parent.fileCache.emplace(i.first, move(i.second));
 			}
 		}
 	}
@@ -515,7 +526,7 @@ private:
 		}
 		{
 			Lock l(cs);
-			cache[d] = move(files);
+			cache.emplace(d, move(files));
 		}
 
 		// process sub-directories.
@@ -1155,7 +1166,7 @@ string DirectoryListingFrame::getSelectedDir() const {
 }
 
 HTREEITEM DirectoryListingFrame::addDir(DirectoryListing::Directory* d, HTREEITEM parent, HTREEITEM insertAfter) {
-	auto item = dirs->insert(&dirCache.at(d), parent, insertAfter);
+	auto item = dirs->insert(getCachedDir(d), parent, insertAfter);
 	if(d->getAdls())
 		dirs->setItemState(item, TVIS_BOLD, TVIS_BOLD);
 	updateDir(d, item);
@@ -1232,26 +1243,38 @@ void DirectoryListingFrame::handleSelectionChanged() {
 	updateRecent();
 }
 
+DirectoryListingFrame::ItemInfo* DirectoryListingFrame::getCachedDir(DirectoryListing::Directory* d) {
+	auto cache = dirCache.find(d);
+	if(cache != dirCache.end()) {
+		return &cache->second;
+	}
+
+	// the dir wasn't cached; add it now.
+	return &dirCache.emplace(d, d).first->second;
+}
+
 void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 	updating = true;
 	files->clear();
 
-	if(loader) {
-		loader->updateCache(d);
-	}
-	auto& cache = fileCache[d];
-	if(cache.empty()) {
-		/* dang, the file cache isn't ready for this directory. fill it on-the-fly; might freeze
-		the interface (this is the operation the file cache is meant to prevent). */
-		for(auto& i: d->files) {
-			cache.emplace_back(i);
+	auto cache = fileCache.find(d);
+	if(cache == fileCache.end()) {
+		if(!loader || !loader->updateCache(d)) {
+			/* dang, the file cache isn't ready for this directory. fill it on-the-fly; might
+			freeze the interface (this is the operation the file cache is meant to prevent). */
+			list<ItemInfo> list;
+			for(auto& i: d->files) {
+				list.emplace_back(i);
+			}
+			fileCache.emplace(d, move(list));
 		}
+		cache = fileCache.find(d);
 	}
 
 	for(auto& i: d->directories) {
-		files->insert(files->size(), &dirCache.at(i));
+		files->insert(files->size(), getCachedDir(i));
 	}
-	for(auto& i: cache) {
+	for(auto& i: cache->second) {
 		files->insert(files->size(), &i);
 	}
 

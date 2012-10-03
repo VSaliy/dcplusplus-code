@@ -39,7 +39,9 @@ ZFilter::ZFilter() : totalIn(0), totalOut(0), compressing(true) {
 }
 
 ZFilter::~ZFilter() {
+#ifdef ZLIB_DEBUG
 	dcdebug("ZFilter end, %ld/%ld = %.04f\n", zs.total_out, zs.total_in, (float)zs.total_out / max((float)zs.total_in, (float)1));
+#endif
 	deflateEnd(&zs);
 }
 
@@ -105,7 +107,9 @@ UnZFilter::UnZFilter() {
 }
 
 UnZFilter::~UnZFilter() {
+#ifdef ZLIB_DEBUG
 	dcdebug("UnZFilter end, %ld/%ld = %.04f\n", zs.total_out, zs.total_in, (float)zs.total_out / max((float)zs.total_in, (float)1));
+#endif
 	inflateEnd(&zs);
 }
 
