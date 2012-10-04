@@ -20,16 +20,15 @@
 #define DCPLUSPLUS_DCPP_TASK_H
 
 #include <memory>
-#include <utility>
 #include <vector>
+
+#include <boost/noncopyable.hpp>
 
 #include "CriticalSection.h"
 
 namespace dcpp {
 
-using std::make_pair;
 using std::pair;
-using std::swap;
 using std::unique_ptr;
 using std::vector;
 
@@ -37,36 +36,40 @@ struct Task {
 	virtual ~Task() { };
 };
 
-struct StringTask : public Task {
-	StringTask(const string& str_) : str(str_) { }
+struct StringTask : Task {
+	StringTask(string str) : str(move(str)) { }
 	string str;
 };
 
-class TaskQueue {
+template<bool threadsafe>
+class TaskQueue : private boost::noncopyable {
+protected:
+	typedef vector<pair<int, unique_ptr<Task>>> List;
+
 public:
-	typedef pair<int, unique_ptr<Task>> Pair;
-	typedef vector<Pair> List;
-
-	TaskQueue() {
-	}
-
-	~TaskQueue() {
+	virtual ~TaskQueue() {
 		clear();
 	}
 
-	void add(int type, std::unique_ptr<Task> && data) { Lock l(cs); tasks.push_back(make_pair(type, move(data))); }
-	void get(List& list) { Lock l(cs); swap(tasks, list); }
-	void clear() {
-		List tmp;
-		get(tmp);
-	}
+	void add(int type, std::unique_ptr<Task> && data) { tasks.emplace_back(type, move(data)); }
+	List get() { return move(tasks); }
+	void clear() { tasks.clear(); }
+
 private:
-
-	TaskQueue(const TaskQueue&);
-	TaskQueue& operator=(const TaskQueue&);
-
-	CriticalSection cs;
 	List tasks;
+};
+
+template<>
+class TaskQueue<true> : public TaskQueue<false> {
+	typedef TaskQueue<false> BaseType;
+
+public:
+	void add(int type, std::unique_ptr<Task> && data) { Lock l(cs); BaseType::add(type, move(data)); }
+	List get() { Lock l(cs); return BaseType::get(); }
+	void clear() { Lock l(cs); BaseType::clear(); }
+
+private:
+	CriticalSection cs;
 };
 
 } // namespace dcpp

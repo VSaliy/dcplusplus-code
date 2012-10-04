@@ -593,6 +593,8 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 	} catch(const ThreadException& e) {
 		error = Text::toT(e.getError());
 		finishLoad();
+		delete loader;
+		loader = nullptr;
 	}
 
 	initStatusText();

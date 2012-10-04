@@ -251,7 +251,7 @@ private:
 
 	bool startup;
 
-	TaskQueue tasks; // todo get rid of TaskQueue
+	TaskQueue<true> tasks; // todo get rid of TaskQueue
 
 	ParamMap ucLineParams;
 

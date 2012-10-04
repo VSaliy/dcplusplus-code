@@ -105,7 +105,7 @@ private:
 		UPDATE_USER_JOIN, UPDATE_USER, REMOVE_USER
 	};
 
-	struct UserTask : public Task {
+	struct UserTask : Task {
 		UserTask(const OnlineUser& ou);
 
 		HintedUser user;
@@ -174,7 +174,7 @@ private:
 	bool resort;
 	bool confirmClose;
 
-	TaskQueue tasks; // todo get rid of TaskQueue
+	TaskQueue<false> tasks;
 
 	UserInfo* currentUser; /// only for situations when the user list is hidden
 
@@ -208,6 +208,8 @@ private:
 
 	void initTimer();
 	bool runTimer();
+
+	void execTasks();
 
 	UserInfo* findUser(const tstring& nick);
 	bool updateUser(const UserTask& u);
@@ -258,9 +260,6 @@ private:
 
 	// AspectUserInfo
 	UserInfoList selectedUsersImpl() const;
-
-	void addTask(Tasks s, const OnlineUser& u);
-	void execTasks();
 
 	void onConnected();
 	void onDisconnected();
