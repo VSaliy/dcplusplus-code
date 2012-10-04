@@ -289,7 +289,6 @@ inTabComplete(false)
 
 HubFrame::~HubFrame() {
 	ClientManager::getInstance()->putClient(client);
-	clearTaskList();
 }
 
 bool HubFrame::preClosing() {
@@ -603,15 +602,9 @@ void HubFrame::addStatus(const tstring& text, bool legitimate /* = true */) {
 	}
 }
 
-void HubFrame::addTask(Tasks s, const OnlineUser& u) {
-	tasks.add(s, unique_ptr<Task>(new UserTask(u)));
-	updateUsers = true;
-}
-
 void HubFrame::execTasks() {
 	updateUsers = false;
-	TaskQueue::List t;
-	tasks.get(t);
+	auto t = tasks.get();
 
 	HoldRedraw hold(users);
 
@@ -790,13 +783,9 @@ bool HubFrame::UserInfo::update(const Identity& identity, int sortCol) {
 
 void HubFrame::removeUser(const UserPtr& aUser) {
 	auto i = userMap.find(aUser);
-	if(i == userMap.end()) {
-		// Should never happen?
-		dcassert(i != userMap.end());
-		return;
-	}
+	dcassert(i != userMap.end());
 
-	UserInfo* ui = i->second;
+	auto ui = i->second;
 	if(!ui->isHidden() && showUsers->getChecked())
 		users->erase(ui);
 
@@ -920,21 +909,33 @@ void HubFrame::on(Connecting, Client*) noexcept {
 		setText(Text::toT(hubUrl));
 	});
 }
+
 void HubFrame::on(Connected, Client*) noexcept {
 	callAsync([this] { onConnected(); });
 }
+
 void HubFrame::on(ClientListener::UserUpdated, Client*, const OnlineUser& user) noexcept {
-	addTask(UPDATE_USER_JOIN, user);
+	auto task = new UserTask(user);
+	callAsync([this, task] {
+		tasks.add(UPDATE_USER_JOIN, unique_ptr<Task>(task));
+		updateUsers = true;
+	});
 }
+
 void HubFrame::on(UsersUpdated, Client*, const OnlineUserList& aList) noexcept {
 	for(auto& i: aList) {
-		tasks.add(UPDATE_USER, unique_ptr<Task>(new UserTask(*i)));
+		auto task = new UserTask(*i);
+		callAsync([this, task] { tasks.add(UPDATE_USER, unique_ptr<Task>(task)); });
 	}
-	updateUsers = true;
+	callAsync([this] { updateUsers = true; });
 }
 
 void HubFrame::on(ClientListener::UserRemoved, Client*, const OnlineUser& user) noexcept {
-	addTask(REMOVE_USER, user);
+	auto task = new UserTask(user);
+	callAsync([this, task] {
+		tasks.add(REMOVE_USER, unique_ptr<Task>(task));
+		updateUsers = true;
+	});
 }
 
 void HubFrame::on(Redirect, Client*, const string& line) noexcept {

@@ -476,8 +476,7 @@ void TransferView::addTask(int type, Task* ui) {
 }
 
 void TransferView::execTasks() {
-	TaskQueue::List t;
-	tasks.get(t);
+	auto t = tasks.get();
 
 	bool sortConn = false;
 	bool sortDown = false;
