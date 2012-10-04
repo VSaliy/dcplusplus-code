@@ -3,6 +3,9 @@
 * Less CPU consumption in large hubs (poy)
 * Fix incorrect user lists when DC++ is under heavy load (poy)
 
+-- 0.801 2012-09-29 --
+* [L#1029629] Prevent crashes on heavy use by updating Boost.Atomic
+
 -- 0.800 2012-09-16 --
 * [L#270107] Revamp favorite hub settings (poy)
 * Reduce resource consumption when slots are full (poy)
