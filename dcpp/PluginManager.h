@@ -160,6 +160,9 @@ public:
 	void removePluginSetting(const string& pluginName, const string& setting);
 
 private:
+	// So the constructor can easily call it.
+	void loadSettings() noexcept;
+
 	// Check if plugin can be loaded
 	bool checkPlugin(const MetaData& info, function<void (const string&)> err);
 

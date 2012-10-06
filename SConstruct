@@ -16,8 +16,11 @@ from build_util import Dev, gen_po_name
 
 # TODO enable LTO when it doesn't ICE... (-flto)
 
+# TODO remove -Wno-format when http://cygwin.com/ml/cygwin/2012-01/msg00061.html
+# ("mingw64-i686-gcc-4.5.3-4: -Wformat warnings broken in C++") fixed
+
 gcc_flags = {
-	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-Wno-unknown-pragmas', '-fexceptions', '-mthreads'],
+	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-Wno-unknown-pragmas', '-Wno-format', '-fexceptions', '-mthreads'],
 	'debug': [], 
 	'release' : ['-O3', '-fno-ipa-cp-clone', '-mwindows']
 }

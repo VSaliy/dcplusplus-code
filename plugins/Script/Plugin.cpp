@@ -91,12 +91,17 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 
 	Util::initialize(core->host_name(), utils, config, logger);
 
-	if(install) {
-		// Default settings
+	// Default settings
+	if(Util::getConfig("ScriptPath").empty())
 		Util::setConfig("ScriptPath", Util::getPath(PATH_RESOURCES) + "scripts" PATH_SEPARATOR_STR);
+
+	if(Util::getConfig("LuaDebug").empty())
 		Util::setConfig("LuaDebug", false);
+
+	if(Util::getConfig("FormatChat").empty())
 		Util::setConfig("FormatChat", true);
 
+	if(install) {
 		Util::logMessage("Script plugin installed, please restart " + Util::appName + " to begin using the plugin.");
 		return;
 	}
