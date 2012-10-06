@@ -69,6 +69,7 @@ PluginManager::PluginManager() : shutdown(false), secNum(Util::rand()) {
 	memset(&dcCore, 0, sizeof(DCCore));
 #endif
 	SettingsManager::getInstance()->addListener(this);
+	loadSettings(); // workaround for SettingsManager loading memory of this when loading fails
 }
 
 PluginManager::~PluginManager() {
@@ -455,7 +456,7 @@ void PluginManager::on(QueueManagerListener::Finished, QueueItem* qi, const stri
 }
 
 // Load / Save settings
-void PluginManager::on(SettingsManagerListener::Load, SimpleXML& /*xml*/) noexcept {
+void PluginManager::loadSettings() noexcept {
 	Lock l(cs);
 
 	try {
@@ -479,7 +480,11 @@ void PluginManager::on(SettingsManagerListener::Load, SimpleXML& /*xml*/) noexce
 	} catch(const Exception& e) {
 		dcdebug("PluginManager::loadSettings: %s\n", e.getError().c_str());
 	}
- }
+}
+
+void PluginManager::on(SettingsManagerListener::Load, SimpleXML& /*xml*/) noexcept {
+	loadSettings();
+}
 
 void PluginManager::on(SettingsManagerListener::Save, SimpleXML& /*xml*/) noexcept {
 	Lock l(cs);
