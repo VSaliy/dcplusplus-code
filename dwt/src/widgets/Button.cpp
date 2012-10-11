@@ -44,6 +44,11 @@ padding(3, 2)
 {
 }
 
+Button::Button(Widget* parent) :
+	BaseType(parent, ChainingDispatcher::superClass<ThisType>())
+{
+}
+
 void Button::create(const Seed& cs) {
 	BaseType::create(cs);
 	setFont(cs.font);
@@ -62,14 +67,8 @@ void Button::setImage(IconPtr icon) {
 
 Point Button::getPreferredSize() {
 	SIZE size = { 0 };
-	if(sendMessage(BCM_GETIDEALSIZE, 0, reinterpret_cast<LPARAM>(&size))) {
-		return Point(size.cx, size.cy);
-	}
-
-	// BCM_GETIDEALSIZE fails on comctrl < 6, so resort to the standard method
-	UpdateCanvas c(this);
-	auto select(c.select(*getFont()));
-	return c.getTextExtent(getText()) + Point(3, 2) + Point(::GetSystemMetrics(SM_CYFIXEDFRAME) * 2, ::GetSystemMetrics(SM_CXFIXEDFRAME) * 2);
+	sendMessage(BCM_GETIDEALSIZE, 0, reinterpret_cast<LPARAM>(&size));
+	return Point(size.cx, size.cy);
 }
 
 }

@@ -224,6 +224,7 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	BaseType(parent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY, false),
 	loader(nullptr),
 	loading(0),
+	useCache(true),
 	rebar(0),
 	pathBox(0),
 	grid(0),
@@ -425,7 +426,7 @@ public:
 	}
 
 #ifdef _DEBUG
-#define step(x) dcdebug("Loading file list <%s>: " x "\n", parent.path.c_str());
+#define step(x) dcdebug("Loading file list <%s>: " x "\n", parent.path.c_str())
 #else
 #define step(x)
 #endif
@@ -452,16 +453,16 @@ public:
 			successF();
 
 		} catch(const Exception& e) {
-			step("error")
+			step("error");
 			errorF(Text::toT(e.getError()));
 		}
 
 		/* now that the file list is being displayed, prepare individual file items, hoping that
 		they will have been processed by the time the user wants them to be displayed. */
-		try {
+		if(parent.useCache) { try {
 			step("caching files");
 			cacheFiles(parent.dl->getRoot());
-		} catch(const Exception&) { }
+		} catch(const Exception&) { } }
 
 		step("file cache done; destroying thread");
 		endF();
@@ -1257,27 +1258,34 @@ DirectoryListingFrame::ItemInfo* DirectoryListingFrame::getCachedDir(DirectoryLi
 
 void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 	updating = true;
+	if(!useCache) { files->forEachT([](ItemInfo* i) { if(i->type == ItemInfo::FILE) { delete i; } }); } /// @todo also delete when closing the window
 	files->clear();
-
-	auto cache = fileCache.find(d);
-	if(cache == fileCache.end()) {
-		if(!loader || !loader->updateCache(d)) {
-			/* dang, the file cache isn't ready for this directory. fill it on-the-fly; might
-			freeze the interface (this is the operation the file cache is meant to prevent). */
-			list<ItemInfo> list;
-			for(auto& i: d->files) {
-				list.emplace_back(i);
-			}
-			fileCache.emplace(d, move(list));
-		}
-		cache = fileCache.find(d);
-	}
 
 	for(auto& i: d->directories) {
 		files->insert(files->size(), getCachedDir(i));
 	}
-	for(auto& i: cache->second) {
-		files->insert(files->size(), &i);
+
+	if(useCache) {
+		auto cache = fileCache.find(d);
+		if(cache == fileCache.end()) {
+			if(!loader || !loader->updateCache(d)) {
+				/* dang, the file cache isn't ready for this directory. fill it on-the-fly; might
+				freeze the interface (this is the operation the file cache is meant to prevent). */
+				list<ItemInfo> list;
+				for(auto& i: d->files) {
+					list.emplace_back(i);
+				}
+				fileCache.emplace(d, move(list));
+			}
+			cache = fileCache.find(d);
+		}
+		for(auto& i: cache->second) {
+			files->insert(files->size(), &i);
+		}
+	} else {
+		for(auto& i: d->files) {
+			files->insert(files->size(), new ItemInfo(i));
+		}
 	}
 
 	files->resort();

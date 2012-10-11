@@ -65,6 +65,7 @@ paned(0),
 dirs(0),
 files(0),
 dirty(true),
+filesDirty(true),
 usingDirMenu(false),
 queueSize(0),
 queueItems(0),
@@ -94,6 +95,7 @@ fileLists(0)
 
 		files->onKeyDown([this](int c) { return handleKeyDownFiles(c); });
 		files->onContextMenu([this](const dwt::ScreenCoordinate &sc) { return handleFilesContextMenu(sc); });
+		files->onSelectionChanged([this] { filesDirty = true; });
 
 		if(!SETTING(QUEUEFRAME_SHOW_TREE)) {
 			paned->maximize(files);
@@ -193,33 +195,38 @@ bool QueueFrame::isCurDir(const std::string& aDir) const {
 }
 
 void QueueFrame::updateStatus() {
-	int64_t total = 0;
-	int cnt = files->countSelected();
-	if(cnt < 2) {
-		cnt = files->size();
-		if(SETTING(QUEUEFRAME_SHOW_TREE)) {
-			for(auto i = 0; i < cnt; ++i) {
+	if(filesDirty || dirty) {
+		filesDirty = false;
+
+		auto cnt = files->countSelected();
+		int64_t total = 0;
+		if(cnt < 2) {
+			cnt = files->size();
+			if(SETTING(QUEUEFRAME_SHOW_TREE)) {
+				for(decltype(cnt) i = 0; i < cnt; ++i) {
+					QueueItemInfo* ii = files->getData(i);
+					total += (ii->getSize() > 0) ? ii->getSize() : 0;
+				}
+			} else {
+				total = queueSize;
+			}
+		} else {
+			int i = -1;
+			while( (i = files->getNext(i, LVNI_SELECTED)) != -1) {
 				QueueItemInfo* ii = files->getData(i);
 				total += (ii->getSize() > 0) ? ii->getSize() : 0;
 			}
-		} else {
-			total = queueSize;
 		}
-	} else {
-		int i = -1;
-		while( (i = files->getNext(i, LVNI_SELECTED)) != -1) {
-			QueueItemInfo* ii = files->getData(i);
-			total += (ii->getSize() > 0) ? ii->getSize() : 0;
-		}
+
+		status->setText(STATUS_PARTIAL_COUNT, str(TF_("Items: %1%") % cnt));
+		status->setText(STATUS_PARTIAL_BYTES, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(total))));
 	}
 
-	status->setText(STATUS_PARTIAL_COUNT, str(TF_("Items: %1%") % cnt));
-	status->setText(STATUS_PARTIAL_BYTES, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(total))));
-
 	if(dirty) {
+		dirty = false;
+
 		status->setText(STATUS_TOTAL_COUNT, str(TF_("Files: %1%") % queueItems));
 		status->setText(STATUS_TOTAL_BYTES, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(queueSize))));
-		dirty = false;
 	}
 }
 
@@ -288,6 +295,8 @@ void QueueFrame::updateFiles() {
 	files->resort();
 
 	curDir = getSelectedDir();
+
+	filesDirty = true;
 	updateStatus();
 }
 

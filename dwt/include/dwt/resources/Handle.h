@@ -56,17 +56,11 @@ struct GdiPolicy : public NullPolicy<H> {
 template<typename Policy>
 class Handle;
 
-template<typename Policy>
-void intrusive_ptr_add_ref(Handle<Policy>* resource);
-
-template<typename Policy>
-void intrusive_ptr_release(Handle<Policy>* resource);
-
 /**
  * Ref-counted base class for resources - nothing stops you from using this one the stack as well
  */
 template<typename Policy>
-class Handle : protected Policy, public boost::noncopyable {
+class Handle : protected Policy, boost::noncopyable {
 public:
 	typedef typename Policy::HandleType HandleType;
 
@@ -88,8 +82,8 @@ protected:
 	}
 
 private:
-	friend void intrusive_ptr_add_ref<Policy>(Handle<Policy>*);
-	friend void intrusive_ptr_release<Policy>(Handle<Policy>*);
+	friend void intrusive_ptr_add_ref(Handle<Policy>* p) { ++p->ref; }
+	friend void intrusive_ptr_release(Handle<Policy>* p) { if(--p->ref == 0) { delete p; } }
 
 	HandleType h;
 	bool owned;
@@ -97,17 +91,6 @@ private:
 	long ref;
 };
 
-template<typename Policy>
-void intrusive_ptr_add_ref(Handle<Policy>* resource) {
-	::InterlockedIncrement(&resource->ref);
 }
 
-template<typename Policy>
-void intrusive_ptr_release(Handle<Policy>* resource) {
-	if(::InterlockedDecrement(&resource->ref) == 0) {
-		delete resource;
-	}
-}
-
-}
 #endif /*RESOURCE_H_*/
