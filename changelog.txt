@@ -3,6 +3,7 @@
 * Less CPU consumption with large hubs/queues/lists (poy)
 * Fix incorrect user lists when DC++ is under heavy load (poy)
 * Plug resource leaks (poy)
+* [L#411484] [ADC] Fix BLOM when h > 32 (thanks yorhel)
 
 -- 0.801 2012-09-29 --
 * [L#1029629] Prevent crashes on heavy use by updating Boost.Atomic
