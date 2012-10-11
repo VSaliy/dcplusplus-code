@@ -111,7 +111,8 @@ splitter(0),
 users(0),
 scroll(0),
 userInfo(0),
-filter(usersColumns, COLUMN_LAST, [this] { updateList(); })
+filter(usersColumns, COLUMN_LAST, [this] { updateList(); }),
+selected(-1)
 {
 	grid = addChild(Grid::Seed(2, 1));
 	grid->column(0).mode = GridInfo::FILL;
@@ -331,6 +332,11 @@ void UsersFrame::updateUser(const UserPtr& aUser) {
 }
 
 void UsersFrame::updateUserInfo() {
+	auto prevSelected = selected;
+	selected = users->countSelected() == 1 ? users->getSelected() : -1;
+	if(selected == prevSelected)
+		return;
+
 	ScopedFunctor([&] { scroll->layout(); userInfo->layout(); userInfo->redraw(); });
 
 	HoldRedraw hold(userInfo);
@@ -344,20 +350,17 @@ void UsersFrame::updateUserInfo() {
 	userInfo->clearRows();
 
 	if(users->countSelected() != 1) {
-		userInfo->redraw();
 		return;
 	}
 
 	auto sel = users->getSelectedData();
 	if(!sel) {
-		userInfo->redraw();
 		return;
 	}
 
 	auto user = sel->getUser();
 	auto idents = ClientManager::getInstance()->getIdentities(user);
 	if(idents.empty()) {
-		userInfo->redraw();
 		return;
 	}
 
@@ -427,7 +430,6 @@ void UsersFrame::handleDescription() {
 		if(dlg.run() == IDOK) {
 			FavoriteManager::getInstance()->setUserDescription(ui->getUser(), Text::fromT(dlg.getValue()));
 			ui->columns[COLUMN_DESCRIPTION] = dlg.getValue();
-			users->update(i);
 		}
 	}
 }

@@ -47,10 +47,6 @@ protected:
 	typedef vector<pair<int, unique_ptr<Task>>> List;
 
 public:
-	virtual ~TaskQueue() {
-		clear();
-	}
-
 	void add(int type, std::unique_ptr<Task> && data) { tasks.emplace_back(type, move(data)); }
 	List get() { return move(tasks); }
 	void clear() { tasks.clear(); }

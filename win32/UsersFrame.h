@@ -127,6 +127,8 @@ private:
 
 	ListFilter filter;
 
+	int selected;
+
 	static dwt::ImageListPtr userIcons;
 
 	std::unordered_map<UserPtr, UserInfo, User::Hash> userInfos;

@@ -33,6 +33,7 @@
 #define DWT_ToolTip_H_
 
 #include "../Widget.h"
+#include "../aspects/Closeable.h"
 #include "../aspects/CustomDraw.h"
 #include "../aspects/Enabled.h"
 #include "../aspects/Fonts.h"
@@ -44,6 +45,7 @@ namespace dwt {
 
 class ToolTip :
 	public Widget,
+	public aspects::Closeable<ToolTip>,
 	public aspects::CustomDraw<ToolTip, NMTTCUSTOMDRAW>,
 	public aspects::Enabled<ToolTip>,
 	public aspects::Fonts<ToolTip>,
@@ -87,12 +89,12 @@ public:
 
 	void onGetTip(F f);
 
-	/// Actually creates the Toolbar
-	/** You should call WidgetFactory::createToolbar if you instantiate class
-	  * directly. <br>
-	  * Only if you DERIVE from class you should call this function directly.
-	  */
-	void create( const Seed & cs = Seed() );
+	/** Create the ToolTip control.
+	@note Be careful about tooltip destruction! Unlike other widgets, tooltips aren't regular
+	children; they are instead "owned" by their parent (Windows terminology). Therefore, unless the
+	owner doesn't have any non-owner parent, Windows won't destroy the tooltip control when the
+	owner is destroyed; so make sure you explicitly destroy it by calling the "close" method. */
+	void create(const Seed& cs = Seed());
 
 protected:
 	// Constructor Taking pointer to parent

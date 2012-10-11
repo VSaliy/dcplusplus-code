@@ -1,7 +1,8 @@
 * Perf improvements using lock-free queues, requires P6 CPUs (poy)
 * Reduce freezes when displaying file list dirs that contain lots of files (poy)
-* Less CPU consumption in large hubs (poy)
+* Less CPU consumption with large hubs/queues/lists (poy)
 * Fix incorrect user lists when DC++ is under heavy load (poy)
+* Plug resource leaks (poy)
 
 -- 0.801 2012-09-29 --
 * [L#1029629] Prevent crashes on heavy use by updating Boost.Atomic

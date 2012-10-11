@@ -108,11 +108,6 @@ inline Message Button::getDblClickMessage() {
 	return Message(WM_COMMAND, MAKEWPARAM(0, BN_DBLCLK));
 }
 
-inline Button::Button(Widget* parent) :
-	BaseType(parent, ChainingDispatcher::superClass<ThisType>())
-{
-}
-
 }
 
 #endif /*ASPECTBUTTON_H_*/

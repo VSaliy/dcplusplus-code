@@ -205,6 +205,8 @@ private:
 	std::string curDir;
 
 	bool dirty;
+	bool filesDirty;
+
 	bool usingDirMenu;
 
 	int64_t queueSize;

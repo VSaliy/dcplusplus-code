@@ -53,7 +53,9 @@ void Splitter::create(const Seed& cs) {
 	onMouseMove([this](const MouseEvent& mouseEvent) { return handleMouseMove(mouseEvent); });
 	onLeftMouseUp([this](const MouseEvent&) { return handleLButtonUp(); });
 
-	WidgetCreator<ToolTip>::create(this, ToolTip::Seed())->setText(Texts::get(Texts::resize));
+	auto tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
+	tip->setText(Texts::get(Texts::resize));
+	onDestroy([tip] { tip->close(); });
 }
 
 SplitterContainerPtr Splitter::getParent() const {

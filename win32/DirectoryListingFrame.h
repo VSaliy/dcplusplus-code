@@ -27,7 +27,6 @@
 #include <dcpp/forward.h>
 #include <dcpp/ClientManagerListener.h>
 #include <dcpp/DirectoryListing.h>
-#include <dcpp/FastAlloc.h>
 #include <dcpp/StringMatch.h>
 #include <dcpp/User.h>
 
@@ -103,7 +102,7 @@ private:
 		COLUMN_LAST
 	};
 
-	class ItemInfo : public FastAlloc<ItemInfo> {
+	class ItemInfo {
 	public:
 		enum ItemType {
 			FILE,
@@ -167,6 +166,7 @@ private:
 	LabelPtr loading;
 	unordered_map<DirectoryListing::Directory*, ItemInfo> dirCache;
 	unordered_map<DirectoryListing::Directory*, list<ItemInfo>> fileCache;
+	bool useCache;
 
 	RebarPtr rebar;
 	ComboBoxPtr pathBox;

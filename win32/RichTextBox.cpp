@@ -49,6 +49,7 @@ void RichTextBox::create(const Seed& seed) {
 	if((seed.events & ENM_LINK) == ENM_LINK) {
 		linkTip = dwt::WidgetCreator<dwt::ToolTip>::create(this, dwt::ToolTip::Seed());
 		linkTip->setTool(this, [this](tstring& text) { handleLinkTip(text); });
+		onDestroy([this] { linkTip->close(); linkTip = nullptr; });
 
 		onRaw([this](WPARAM, LPARAM lParam) { return handleLink(*reinterpret_cast<ENLINK*>(lParam)); },
 			dwt::Message(WM_NOTIFY, EN_LINK));

@@ -70,6 +70,7 @@ void StatusBar::create(const Seed& cs) {
 
 	tip = WidgetCreator<ToolTip>::create(this, ToolTip::Seed());
 	tip->setTool(this, [this](tstring& text) { handleToolTip(text); });
+	onDestroy([this] { tip->close(); tip = nullptr; });
 }
 
 void StatusBar::setSize(unsigned part, unsigned size) {
