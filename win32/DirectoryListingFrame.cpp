@@ -21,6 +21,7 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 
+#include <dcpp/atomic.h>
 #include <dcpp/ADLSearch.h>
 #include <dcpp/ClientManager.h>
 #include <dcpp/FavoriteManager.h>
@@ -224,7 +225,6 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	BaseType(parent, _T(""), IDH_FILE_LIST, IDI_DIRECTORY, false),
 	loader(nullptr),
 	loading(0),
-	useCache(true),
 	rebar(0),
 	pathBox(0),
 	grid(0),
@@ -239,7 +239,8 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 	user(aUser),
 	usingDirMenu(false),
 	historyIndex(0),
-	treeRoot(NULL),
+	treeRoot(nullptr),
+	curDir(nullptr),
 	loaded(false),
 	updating(false),
 	searching(false)
@@ -394,7 +395,8 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 
 	dirs->setFocus();
 
-	treeRoot = dirs->insert(new ItemInfo(true, dl->getRoot()), nullptr);
+	curDir = dl->getRoot();
+	treeRoot = dirs->insert(new ItemInfo(true, curDir), nullptr);
 
 	ClientManager::getInstance()->addListener(this);
 	updateTitle();
@@ -409,6 +411,21 @@ DirectoryListingFrame::DirectoryListingFrame(TabViewPtr parent, const HintedUser
 }
 
 DirectoryListingFrame::~DirectoryListingFrame() {
+}
+
+namespace {
+	/* items cached by all open file lists. caching can take up a lot of memory so we use this
+	counter to keep tabs on the caches and make sure they don't grow too big. */
+	atomic<uint64_t> cacheCount = 0;
+
+	// minimum amount of items to require a cache.
+	const uint64_t cacheLowerBound = 1024;
+	// maximum amount of items all file list caches can contain.
+	const uint64_t maxCacheCount = 1048576;
+
+	template<typename T> bool canCache(T items) {
+		return items > cacheLowerBound && cacheCount + static_cast<uint64_t>(items) < maxCacheCount;
+	}
 }
 
 class FileListLoader : public Thread {
@@ -459,10 +476,10 @@ public:
 
 		/* now that the file list is being displayed, prepare individual file items, hoping that
 		they will have been processed by the time the user wants them to be displayed. */
-		if(parent.useCache) { try {
+		try {
 			step("caching files");
 			cacheFiles(parent.dl->getRoot());
-		} catch(const Exception&) { } }
+		} catch(const Exception&) { }
 
 		step("file cache done; destroying thread");
 		endF();
@@ -486,14 +503,15 @@ public:
 		return false;
 	}
 
-	/* called after a cache has been generated for every item in the file list. the parent window
-	cache will be synchronized with the generated cache. no need to lock because this function runs
-	after the thread has been destroyed. */
-	void updateCache() {
+	/* synchronize the parent window cache with the generated cache. no need to lock because the
+	thread has already been destroyed at this point. */
+	~FileListLoader() {
 		step("updating parent cache");
 		for(auto& i: cache) {
 			if(parent.fileCache.find(i.first) == parent.fileCache.end()) {
 				parent.fileCache.emplace(i.first, move(i.second));
+			} else {
+				cacheCount -= i.second.size();
 			}
 		}
 	}
@@ -511,6 +529,7 @@ private:
 		if(parent.dl->getAbort()) { throw Exception(); }
 
 		for(auto i: d->directories) {
+			++cacheCount;
 			parent.dirCache.emplace(i, i);
 			cacheDirs(i);
 		}
@@ -519,15 +538,20 @@ private:
 	void cacheFiles(DirectoryListing::Directory* d) {
 		if(parent.dl->getAbort()) { throw Exception(); }
 
-		/* the directory may contain a lot of files, so we first create a cache for the whole
-		directory then move it all later to the global cache. */
-		list<DirectoryListingFrame::ItemInfo> files;
-		for(auto i: d->files) {
-			files.emplace_back(i);
-		}
-		{
-			Lock l(cs);
-			cache.emplace(d, move(files));
+		const auto count = d->files.size();
+		if(canCache(count)) {
+			cacheCount += count;
+
+			/* the directory may contain a lot of files, so we first create a cache for the whole
+			directory then move it all later to the global cache. */
+			list<DirectoryListingFrame::ItemInfo> files;
+			for(auto i: d->files) {
+				files.emplace_back(i);
+			}
+			{
+				Lock l(cs);
+				cache.emplace(d, move(files));
+			}
 		}
 
 		// process sub-directories.
@@ -583,7 +607,6 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		finishLoad();
 	}); }, [this] { callAsync([=] {
 		// ending callback
-		loader->updateCache();
 		delete loader;
 		loader = nullptr;
 	}); });
@@ -698,7 +721,12 @@ bool DirectoryListingFrame::preClosing() {
 }
 
 void DirectoryListingFrame::postClosing() {
+	clearFiles();
+
 	delete dirs->getData(treeRoot);
+
+	cacheCount -= dirCache.size();
+	for(auto& i: fileCache) { cacheCount -= i.second.size(); }
 
 	SettingsManager::getInstance()->set(SettingsManager::FILE_LIST_PANED_POS, paned->getSplitterPos(0));
 
@@ -1215,7 +1243,7 @@ void DirectoryListingFrame::handleSelectionChanged() {
 	}
 
 	DirectoryListing::Directory* d = ii->dir;
-	if(d == 0) {
+	if(!d) {
 		return;
 	}
 
@@ -1253,36 +1281,49 @@ DirectoryListingFrame::ItemInfo* DirectoryListingFrame::getCachedDir(DirectoryLi
 	}
 
 	// the dir wasn't cached; add it now.
+	++cacheCount;
 	return &dirCache.emplace(d, d).first->second;
 }
 
 void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 	updating = true;
-	if(!useCache) { files->forEachT([](ItemInfo* i) { if(i->type == ItemInfo::FILE) { delete i; } }); } /// @todo also delete when closing the window
-	files->clear();
+	clearFiles();
+	curDir = d;
 
 	for(auto& i: d->directories) {
 		files->insert(files->size(), getCachedDir(i));
 	}
 
-	if(useCache) {
-		auto cache = fileCache.find(d);
-		if(cache == fileCache.end()) {
-			if(!loader || !loader->updateCache(d)) {
-				/* dang, the file cache isn't ready for this directory. fill it on-the-fly; might
-				freeze the interface (this is the operation the file cache is meant to prevent). */
+	auto useCache = true;
+
+	auto cache = fileCache.find(d);
+	if(cache == fileCache.end()) {
+		if(!loader || !loader->updateCache(d)) {
+			/* dang, the file cache isn't ready for this directory. fill it on-the-fly; might
+			freeze the interface (this is the operation the file cache is meant to prevent). */
+			const auto count = d->files.size();
+			if(canCache(count)) {
+				cacheCount += count;
 				list<ItemInfo> list;
 				for(auto& i: d->files) {
 					list.emplace_back(i);
 				}
 				fileCache.emplace(d, move(list));
+			} else {
+				useCache = false;
 			}
+		}
+		if(useCache) {
 			cache = fileCache.find(d);
 		}
+	}
+	if(useCache) {
+		dcdebug("loading file info from the cache\n");
 		for(auto& i: cache->second) {
 			files->insert(files->size(), &i);
 		}
 	} else {
+		dcdebug("creating file info on-the-fly\n");
 		for(auto& i: d->files) {
 			files->insert(files->size(), new ItemInfo(i));
 		}
@@ -1292,6 +1333,17 @@ void DirectoryListingFrame::changeDir(DirectoryListing::Directory* d) {
 
 	updating = false;
 	updateStatus();
+}
+
+void DirectoryListingFrame::clearFiles() {
+	if(curDir && fileCache.find(curDir) != fileCache.end()) {
+		// files in this directory are cached; no need to delete them.
+		files->clear();
+		return;
+	}
+
+	files->forEachT([](ItemInfo* i) { if(i->type == ItemInfo::FILE) { delete i; } });
+	files->clear();
 }
 
 void DirectoryListingFrame::addHistory(const string& name) {
