@@ -1,5 +1,4 @@
 #include <dcpp/stdinc.h>
-#include <dcpp/DCPlusPlus.h>
 
 #include <dcpp/Torrent.h>
 #include <unordered_map>
