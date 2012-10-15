@@ -1,5 +1,6 @@
 #include <dcpp/stdinc.h>
-#include <dcpp/DCPlusPlus.h>
+
+#include <dcpp/atomic.h>
 
 #include <boost/lockfree/queue.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
@@ -8,6 +9,15 @@
 #include "gtest.h"
 
 using namespace dcpp;
+
+TEST(testlockfree, test_atomic)
+{
+	ASSERT_EQ(true, atomic<bool>().is_lock_free());
+	ASSERT_EQ(true, atomic<int32_t>().is_lock_free());
+	ASSERT_EQ(true, atomic<uint32_t>().is_lock_free());
+	ASSERT_EQ(true, atomic<int64_t>().is_lock_free());
+	ASSERT_EQ(true, atomic<uint64_t>().is_lock_free());
+}
 
 TEST(testlockfree, test_queue)
 {
