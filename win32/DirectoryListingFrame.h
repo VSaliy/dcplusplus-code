@@ -166,7 +166,6 @@ private:
 	LabelPtr loading;
 	unordered_map<DirectoryListing::Directory*, ItemInfo> dirCache;
 	unordered_map<DirectoryListing::Directory*, list<ItemInfo>> fileCache;
-	bool useCache;
 
 	RebarPtr rebar;
 	ComboBoxPtr pathBox;
@@ -209,6 +208,7 @@ private:
 	size_t historyIndex;
 
 	HTREEITEM treeRoot;
+	DirectoryListing::Directory* curDir;
 
 	string size;
 
@@ -275,6 +275,7 @@ private:
 
 	ItemInfo* getCachedDir(DirectoryListing::Directory* d);
 	void changeDir(DirectoryListing::Directory* d);
+	void clearFiles();
 	HTREEITEM addDir(DirectoryListing::Directory* d, HTREEITEM parent, HTREEITEM insertAfter = TVI_LAST);
 	void updateDir(DirectoryListing::Directory* d, HTREEITEM parent);
 	HTREEITEM findItem(HTREEITEM ht, const tstring& name);
