@@ -49,7 +49,7 @@ protected:
 		BaseType(tabView),
 		lastFocus(NULL),
 		alwaysSameFocus(false),
-		reallyClose(false)
+		closing(false)
 	{
 		typename ThisType::Seed cs;
 		cs.style &= ~WS_VISIBLE;
@@ -155,7 +155,7 @@ private:
 	HWND lastFocus; // last focused widget
 	bool alwaysSameFocus; // always focus the same widget
 
-	bool reallyClose;
+	bool closing;
 
 	void addDlgCodeMessage(ComboBox* widget, bool autoTab = true) {
 		widget->onRaw([=](WPARAM w, LPARAM) { return this->handleGetDlgCode(w, autoTab); }, dwt::Message(WM_GETDLGCODE));
@@ -234,17 +234,17 @@ private:
 	}
 
 	bool handleClosing() {
-		if(reallyClose) {
-			t().postClosing();
-			if(getParent()->getActive() == this) {
-				// Prevent flicker by selecting the next tab - WM_DESTROY would already be too late
-				getParent()->next();
-			}
-			return true;
-		} else if(t().preClosing()) {
-			reallyClose = true;
+		if(!closing && t().preClosing()) {
+			closing = true;
 			// async to make sure all other async calls have been consumed
-			this->callAsync([this] { this->close(true); });
+			this->callAsync([this] {
+				t().postClosing();
+				if(getParent()->getActive() == this) {
+					// Prevent flicker by selecting the next tab - WM_DESTROY would already be too late
+					getParent()->next();
+				}
+				::DestroyWindow(handle());
+			});
 			return false;
 		}
 		return false;
