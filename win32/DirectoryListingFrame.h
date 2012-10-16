@@ -210,8 +210,6 @@ private:
 	HTREEITEM treeRoot;
 	DirectoryListing::Directory* curDir;
 
-	string size;
-
 	bool loaded;
 	bool updating;
 	bool searching;
