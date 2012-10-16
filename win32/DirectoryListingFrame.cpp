@@ -610,6 +610,7 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		finishLoad();
 		addRecent();
 		refreshTree(dir);
+		initStatusText();
 	}); }, [this, finishLoad](tstring s) { callAsync([=] {
 		// error callback
 		error = std::move(s);
@@ -629,8 +630,6 @@ void DirectoryListingFrame::loadFile(const tstring& dir) {
 		delete loader;
 		loader = nullptr;
 	}
-
-	initStatusText();
 }
 
 void DirectoryListingFrame::loadXML(const string& txt) {
@@ -1220,8 +1219,8 @@ void DirectoryListingFrame::updateDir(DirectoryListing::Directory* d, HTREEITEM 
 }
 
 void DirectoryListingFrame::initStatusText() {
-	status->setText(STATUS_TOTAL_FILES, str(TF_("Files: %1%") % dl->getTotalFileCount(true)));
-	status->setText(STATUS_TOTAL_SIZE, str(TF_("Size: %1%") % Text::toT(Util::formatBytes(dl->getTotalSize(true)))));
+	status->setText(STATUS_TOTAL_FILES, str(TF_("Files (total): %1%") % dl->getTotalFileCount(true)));
+	status->setText(STATUS_TOTAL_SIZE, str(TF_("Size (total): %1%") % Text::toT(Util::formatBytes(dl->getTotalSize(true)))));
 	status->setText(STATUS_SPEED, str(TF_("Speed: %1%/s") % Text::toT(Util::formatBytes(speed))));
 }
 
