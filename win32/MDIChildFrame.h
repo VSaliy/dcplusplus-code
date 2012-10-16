@@ -238,10 +238,10 @@ private:
 			closing = true;
 			// async to make sure all other async calls have been consumed
 			this->callAsync([this] {
-				t().postClosing();
-				if(getParent()->getActive() == this) {
+				this->t().postClosing();
+				if(this->getParent()->getActive() == this) {
 					// Prevent flicker by selecting the next tab - WM_DESTROY would already be too late
-					getParent()->next();
+					this->getParent()->next();
 				}
 				::DestroyWindow(handle());
 			});
