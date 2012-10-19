@@ -19,6 +19,9 @@
 #ifndef DCPLUSPLUS_WIN32_TYPED_TREE_H
 #define DCPLUSPLUS_WIN32_TYPED_TREE_H
 
+#include <memory>
+#include <vector>
+
 #include "forward.h"
 #include "WinUtil.h"
 
@@ -95,11 +98,20 @@ public:
 
 	void clear() {
 		if(managed) {
+			/* go through every node to gather the data to delete. don't delete it right away
+			because the clear() call might lead to tree-view notifications which will need the data
+			to still be available. */
+			std::vector<std::unique_ptr<ContentType>> deleter;
+			deleter.reserve(this->size());
+
 			auto item = this->getRoot();
 			while(item) {
-				this->clear(item);
+				this->clear(item, deleter);
 				item = this->getNextSibling(item);
 			}
+
+			this->BaseType::clear();
+			return;
 		}
 
 		this->BaseType::clear();
@@ -127,13 +139,14 @@ private:
 		}
 	}
 
-	void clear(HTREEITEM item) {
+	template<typename Deleter>
+	void clear(HTREEITEM item, Deleter& deleter) {
 		auto next = this->getChild(item);
 		while(next) {
-			clear(next);
+			clear(next, deleter);
 			next = this->getNextSibling(next);
 		}
-		delete this->getData(item);
+		deleter.emplace_back(this->getData(item));
 	}
 };
 

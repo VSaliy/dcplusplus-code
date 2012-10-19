@@ -4,6 +4,7 @@
 * Fix incorrect user lists when DC++ is under heavy load (poy)
 * Plug resource leaks (poy)
 * [L#411484] [ADC] Fix BLOM when h > 32 (thanks yorhel)
+* [L#198416] Fix a crash when closing the download queue (poy)
 
 -- 0.801 2012-09-29 --
 * [L#1029629] Prevent crashes on heavy use by updating Boost.Atomic
