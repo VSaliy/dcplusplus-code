@@ -278,9 +278,11 @@ void QueueFrame::updateFiles() {
 
 	files->clear();
 
+	curDir = getSelectedDir();
+
 	decltype(directories.equal_range(string())) i;
 	if(SETTING(QUEUEFRAME_SHOW_TREE)) {
-		i = directories.equal_range(getSelectedDir());
+		i = directories.equal_range(curDir);
 	} else {
 		i.first = directories.begin();
 		i.second = directories.end();
@@ -293,8 +295,6 @@ void QueueFrame::updateFiles() {
 	}
 
 	files->resort();
-
-	curDir = getSelectedDir();
 
 	filesDirty = true;
 	updateStatus();
