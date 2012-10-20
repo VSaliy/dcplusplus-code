@@ -416,24 +416,24 @@ DirectoryListingFrame::~DirectoryListingFrame() {
 namespace {
 	/* items cached by all open file lists. caching can take up a lot of memory so we use this
 	counter to keep tabs on the caches and make sure they don't grow too big. */
-	atomic<uint64_t> cacheCount(0);
+	atomic<uint32_t> cacheCount(0);
 
 	/* minimum amount of items to require a cache. this helps skip directories that don't have many
 	files: file information for small directories is easy to build up on-the-fly without inducing
 	any GUI freeze, so we don't cache these small directories. this value can be increased as long
 	as displaying a directory with cacheLowerBound files doesn't freeze the GUI for too long. */
-	const uint64_t cacheLowerBound = 1024;
+	const uint32_t cacheLowerBound = 1024;
 
 	/* maximum amount of items all file list caches can contain. we aim for 500MB max on x86 and
 	1GB max on x64, with the assumption that one cached item occupies around 1KB. */
 #ifdef _WIN64
-	const uint64_t maxCacheCount = 1024 * 1024;
+	const uint32_t maxCacheCount = 1024 * 1024;
 #else
-	const uint64_t maxCacheCount = 512 * 1024;
+	const uint32_t maxCacheCount = 512 * 1024;
 #endif
 
 	template<typename T> bool canCache(T items) {
-		return items > cacheLowerBound && cacheCount + static_cast<uint64_t>(items) < maxCacheCount;
+		return items > cacheLowerBound && cacheCount + static_cast<uint32_t>(items) < maxCacheCount;
 	}
 }
 
