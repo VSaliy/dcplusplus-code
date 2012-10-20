@@ -174,7 +174,7 @@ fullSlots(false)
 	TimerManager::getInstance()->start();
 
 	conns[CONN_VERSION].reset(new HttpDownload("http://dcplusplus.sourceforge.net/version.xml",
-		[this] { callAsync([=] { completeVersionUpdate(); }); }));
+		[this](bool success, const string& result) { callAsync([=] { completeVersionUpdate(success, result); }); }));
 
 	try {
 		ConnectivityManager::getInstance()->setup(true);
@@ -1308,12 +1308,12 @@ void MainWindow::handleActivate(bool active) {
 	}
 }
 
-void MainWindow::completeVersionUpdate() {
+void MainWindow::completeVersionUpdate(bool success, const string& result) {
 	if(!conns[CONN_VERSION]) { return; }
 
 	try {
 		SimpleXML xml;
-		xml.fromXML(conns[CONN_VERSION]->buf);
+		xml.fromXML(result);
 		xml.stepIn();
 
 		string url = Text::fromT(links.homepage);
@@ -1456,17 +1456,17 @@ void MainWindow::updateGeo(bool v6) {
 
 	LogManager::getInstance()->message(str(F_("Updating the %1% GeoIP database...") % (v6 ? "IPv6" : "IPv4")));
 	conn.reset(new HttpDownload(Text::fromT(v6 ? links.geoip6 : links.geoip4),
-		[this, v6] { callAsync([=] { completeGeoUpdate(v6); }); }, false));
+		[this, v6](bool success, const string& result) { callAsync([=] { completeGeoUpdate(v6, success, result); }); }, false));
 }
 
-void MainWindow::completeGeoUpdate(bool v6) {
+void MainWindow::completeGeoUpdate(bool v6, bool success, const string& result) {
 	auto& conn = conns[v6 ? CONN_GEO_V6 : CONN_GEO_V4];
 	if(!conn) { return; }
 	ScopedFunctor([&conn] { conn.reset(); });
 
-	if(!conn->buf.empty()) {
+	if(success && !result.empty()) {
 		try {
-			File(GeoManager::getDbPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE).write(conn->buf);
+			File(GeoManager::getDbPath(v6) + ".gz", File::WRITE, File::CREATE | File::TRUNCATE).write(result);
 			GeoManager::getInstance()->update(v6);
 			LogManager::getInstance()->message(str(F_("The %1% GeoIP database has been successfully updated") % (v6 ? "IPv6" : "IPv4")));
 			return;

@@ -152,7 +152,7 @@ bool AboutDlg::handleInitDialog() {
 	centerWindow();
 
 	c.reset(new HttpDownload("http://dcplusplus.sourceforge.net/version.xml",
-		[this] { callAsync([=] { completeDownload(); }); }));
+		[this](bool success, const string& result) { callAsync([=] { completeDownload(success, result); }); }));
 
 	return false;
 }
@@ -162,13 +162,13 @@ void AboutDlg::layout() {
 	grid->resize(dwt::Rectangle(3, 3, sz.x - 6, sz.y - 6));
 }
 
-void AboutDlg::completeDownload() {
+void AboutDlg::completeDownload(bool success, const string& result) {
 	tstring str;
 
-	if(!c->buf.empty()) {
+	if(success && !result.empty()) {
 		try {
 			SimpleXML xml;
-			xml.fromXML(c->buf);
+			xml.fromXML(result);
 			if(xml.findChild("DCUpdate")) {
 				xml.stepIn();
 				if(xml.findChild("Version")) {
@@ -183,7 +183,7 @@ void AboutDlg::completeDownload() {
 		}
 	}
 
-	version->setText(str.empty() ? Text::toT(c->status) : str);
+	version->setText(str.empty() ? Text::toT(result) : str);
 
 	c.reset();
 }

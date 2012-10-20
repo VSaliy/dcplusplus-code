@@ -27,19 +27,21 @@ using std::string;
 
 /** Helper struct to manage a single HTTP download. Calls a completion function when finished. */
 struct HttpDownload : private HttpConnectionListener, private boost::noncopyable {
-	HttpConnection c;
-	string buf;
-	string status;
-	typedef std::function<void ()> CompletionF;
-	CompletionF f;
-
-	explicit HttpDownload(const string& address, CompletionF f, bool coralize = true);
+	typedef std::function<void (bool success, const string& result)> CompletionFunc;
+	
+	explicit HttpDownload(const string& address, CompletionFunc f, bool coralize = true);
+	explicit HttpDownload(const string& address, const StringMap& data, CompletionFunc f, bool coralize = true);
 	~HttpDownload();
 
+private:
+	HttpConnection c;
+	string buf;
+	CompletionFunc f;
+
 	// HttpConnectionListener
-	void on(HttpConnectionListener::Data, HttpConnection*, const uint8_t* buf_, size_t len) noexcept;
-	void on(HttpConnectionListener::Failed, HttpConnection*, const string& status_) noexcept;
-	void on(HttpConnectionListener::Complete, HttpConnection*, const string& status_, bool) noexcept;
+	void on(HttpConnectionListener::Data, HttpConnection* c, const uint8_t* buf_, size_t len) noexcept;
+	void on(HttpConnectionListener::Failed, HttpConnection*, const string& line) noexcept;
+	void on(HttpConnectionListener::Complete, HttpConnection*, const string& line, bool) noexcept;
 	void on(HttpConnectionListener::Retried, HttpConnection*, bool connected) noexcept;
 };
 

@@ -790,6 +790,8 @@ void FavoriteManager::on(Complete, HttpConnection*, const string& aLine, bool fr
 	bool parseSuccess = false;
 	c->removeListener(this);
 	if(useHttp) {
+		if(c->getMimeType() == "application/x-bzip2")
+			listType = TYPE_BZIP2;
 		parseSuccess = onHttpFinished(true);
 	}	
 	running = false;
@@ -800,14 +802,6 @@ void FavoriteManager::on(Complete, HttpConnection*, const string& aLine, bool fr
 void FavoriteManager::on(Redirected, HttpConnection*, const string& aLine) noexcept {
 	if(useHttp)
 		fire(FavoriteManagerListener::DownloadStarting(), aLine);
-}
-void FavoriteManager::on(TypeNormal, HttpConnection*) noexcept {
-	if(useHttp)
-		listType = TYPE_NORMAL;
-}
-void FavoriteManager::on(TypeBZ2, HttpConnection*) noexcept {
-	if(useHttp)
-		listType = TYPE_BZIP2;
 }
 void FavoriteManager::on(Retried, HttpConnection*, bool connected) noexcept {
 	if(connected)
