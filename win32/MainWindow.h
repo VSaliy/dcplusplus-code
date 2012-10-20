@@ -206,12 +206,12 @@ private:
 	void fillLimiterMenu(Menu* menu, bool upload);
 	void statusMessage(time_t t, const string& m);
 
-	void completeVersionUpdate();
+	void completeVersionUpdate(bool success, const string& result);
 	void checkGeoUpdate();
 	void checkGeoUpdate(bool v6);
 	void updateGeo();
 	void updateGeo(bool v6);
-	void completeGeoUpdate(bool v6);
+	void completeGeoUpdate(bool v6, bool success, const string& result);
 
 	bool filter(MSG& msg);
 

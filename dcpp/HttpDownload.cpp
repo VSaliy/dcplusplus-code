@@ -21,31 +21,41 @@
 
 namespace dcpp {
 
-HttpDownload::HttpDownload(const string& address, CompletionF f, bool coralize) :
+HttpDownload::HttpDownload(const string& address, CompletionFunc f, bool coralize) :
 c(coralize),
-f(f)
+f(f),
+buf("")
 {
 	c.addListener(this);
 	c.downloadFile(address);
+}
+
+HttpDownload::HttpDownload(const string& address, const StringMap& data, CompletionFunc f, bool coralize) :
+c(coralize),
+f(f),
+buf("")
+{
+	c.addListener(this);
+	c.postData(address, data);
 }
 
 HttpDownload::~HttpDownload() {
 	c.removeListener(this);
 }
 
-void HttpDownload::on(HttpConnectionListener::Data, HttpConnection*, const uint8_t* buf_, size_t len) noexcept {
+void HttpDownload::on(HttpConnectionListener::Data, HttpConnection* c, const uint8_t* buf_, size_t len) noexcept {
+	if(buf.empty() && c->getSize() != -1)
+		buf.reserve(c->getSize());
 	buf.append(reinterpret_cast<const char*>(buf_), len);
 }
 
-void HttpDownload::on(HttpConnectionListener::Failed, HttpConnection*, const string& status_) noexcept {
+void HttpDownload::on(HttpConnectionListener::Failed, HttpConnection*, const string& line) noexcept {
 	buf.clear();
-	status = status_;
-	f();
+	f(false, line);
 }
 
-void HttpDownload::on(HttpConnectionListener::Complete, HttpConnection*, const string& status_, bool) noexcept {
-	status = status_;
-	f();
+void HttpDownload::on(HttpConnectionListener::Complete, HttpConnection*, const string& line, bool) noexcept {
+	f(true, buf);
 }
 
 void HttpDownload::on(HttpConnectionListener::Retried, HttpConnection*, bool connected) noexcept {
