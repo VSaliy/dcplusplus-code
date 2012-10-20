@@ -117,7 +117,15 @@ public:
 		this->BaseType::clear();
 	}
 
-	void erase(HTREEITEM item) { if(managed) delete getData(item); this->BaseType::erase(item); }
+	void erase(HTREEITEM item) {
+		if(managed) {
+			auto data = getData(item);
+			this->BaseType::erase(item);
+			delete data;
+		} else {
+			this->BaseType::erase(item);
+		}
+	}
 
 private:
 	void handleDisplay(NMTVDISPINFO& data) {
