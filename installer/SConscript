@@ -101,7 +101,7 @@ def gen_installer(target, source, env):
 				name = 'NorwegianNynorsk'
 			elif name == 'Brazilian Portuguese':
 				name = 'PortugueseBR'
-			elif name == 'Simplified Chinese':
+			elif name == 'Chinese' or name == 'Simplified Chinese' or name == 'Chinese (Simplified)':
 				name = 'SimpChinese'
 			if os.path.exists(os.path.dirname(nsis) + '/Contrib/Language files/' + name + '.nlf'):
 				f_i18n.write('!insertmacro MUI_LANGUAGE "' + name + '"\n!insertmacro LANGFILE_INCLUDE "_' + name + '.nsh"\n')
