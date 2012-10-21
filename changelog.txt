@@ -1,3 +1,4 @@
+-- 0.802 2012-10-20 --
 * Perf improvements using lock-free queues, requires P6 CPUs (poy)
 * Reduce freezes when displaying file list dirs that contain lots of files (poy)
 * Less CPU consumption with large hubs/queues/lists (poy)
