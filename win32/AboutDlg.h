@@ -45,7 +45,7 @@ private:
 
 	void layout();
 
-	void completeDownload();
+	void completeDownload(bool success, const string& result);
 };
 
 #endif // !defined(DCPLUSPLUS_WIN32_ABOUT_DLG_H)
