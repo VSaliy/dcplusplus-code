@@ -1057,8 +1057,8 @@ void QueueManager::putDownload(Download* aDownload, bool finished) noexcept {
 						| (q->isSet(QueueItem::FLAG_MATCH_QUEUE) ? QueueItem::FLAG_MATCH_QUEUE : 0);
 				}
 
-				userQueue.remove(q);
 				fire(QueueManagerListener::Finished(), q, dir, d->getAverageSpeed());
+				userQueue.remove(q);
 
 				fire(QueueManagerListener::Removed(), q);
 				fileQueue.remove(q);
