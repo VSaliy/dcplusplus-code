@@ -105,6 +105,10 @@ connections(0)
 		box->setHelpId(IDH_SETTINGS_GENERAL_AWAY_COMP_LOCK);
 		items.emplace_back(box, SettingsManager::AWAY_COMP_LOCK, PropPage::T_BOOL);
 
+		box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Add timestamp to the end of away messages automatically")));
+		box->setHelpId(IDH_SETTINGS_GENERAL_AWAY_TIMESTAMP);
+		items.emplace_back(box, SettingsManager::AWAY_TIMESTAMP, PropPage::T_BOOL);
+
 		{
 			auto idle = cur->addChild(Grid::Seed(1, 3));
 			idle->setHelpId(IDH_SETTINGS_GENERAL_AWAY_IDLE);

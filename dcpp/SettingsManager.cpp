@@ -100,6 +100,7 @@ const string SettingsManager::settingTags[] =
 	"StatusInChat", "TimeDependentThrottle", "TimeStamps",
 	"ToggleActiveTab", "UrlHandler", "UseCTRLForLineHistory", "UseSystemIcons",
 	"UsersFilterFavorite", "UsersFilterOnline", "UsersFilterQueue", "UsersFilterWaiting",
+	"AwayTimeStamp",
 	"SENTRY",
 	// Int64
 	"TotalUpload", "TotalDownload",
@@ -218,6 +219,7 @@ SettingsManager::SettingsManager()
 	setDefault(AUTO_AWAY, false);
 	setDefault(AWAY_COMP_LOCK, true);
 	setDefault(AWAY_IDLE, 10);
+	setDefault(AWAY_TIMESTAMP, false);
 	setDefault(TIME_STAMPS_FORMAT, "%H:%M");
 	setDefault(COUNTRY_FORMAT, "%[2code] - %[name]");
 	setDefault(MAX_COMPRESSION, 6);

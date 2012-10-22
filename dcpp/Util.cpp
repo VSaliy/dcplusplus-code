@@ -504,7 +504,11 @@ map<string, string> Util::decodeQuery(const string& query) {
 
 string Util::getAwayMessage() {
 	const auto& msg = awayMsg.empty() ? SETTING(DEFAULT_AWAY_MESSAGE) : awayMsg;
-	return msg.empty() ? msg : formatTime(msg, awayTime) + " <" APPNAME " v" VERSIONSTRING ">";
+	if (SETTING(AWAY_TIMESTAMP)) {
+		return msg.empty() ? msg : formatTime(msg + "[%x %X]", awayTime) + " <DC++ v" VERSIONSTRING ">";
+	} else {
+		return msg.empty() ? msg : formatTime(msg, awayTime) + " <DC++ v" VERSIONSTRING ">";
+	}
 }
 
 string Util::formatBytes(int64_t aBytes) {
