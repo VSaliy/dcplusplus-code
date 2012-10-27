@@ -386,7 +386,7 @@ void WinUtil::initFont() {
 tstring WinUtil::encodeFont(LOGFONT const& font) {
 	tstring res(font.lfFaceName);
 	res += _T(',');
-	res += Text::toT(Util::toString(static_cast<int>(font.lfHeight / dwt::util::dpiFactor())));
+	res += Text::toT(Util::toString(static_cast<int>(std::floor(static_cast<float>(font.lfHeight) / dwt::util::dpiFactor()))));
 	res += _T(',');
 	res += Text::toT(Util::toString(font.lfWeight));
 	res += _T(',');
@@ -418,7 +418,7 @@ void WinUtil::decodeFont(const tstring& setting, LOGFONT &dest) {
 	tstring face;
 	if(sl.size() >= 4) {
 		face = sl[0];
-		dest.lfHeight = Util::toInt(Text::fromT(sl[1])) * dwt::util::dpiFactor();
+		dest.lfHeight = std::ceil(static_cast<float>(Util::toInt(Text::fromT(sl[1]))) * dwt::util::dpiFactor());
 		dest.lfWeight = Util::toInt(Text::fromT(sl[2]));
 		dest.lfItalic = static_cast<BYTE>(Util::toInt(Text::fromT(sl[3])));
 		if(sl.size() >= 5) {

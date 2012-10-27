@@ -238,9 +238,9 @@ size_t Parser::addFont(string&& font) {
 }
 
 int Parser::rtfFontSize(float px) {
-	return px * 72.0 / 96.0 // px -> font points
-		* dwt::util::dpiFactor() // respect DPI settings
-		* 2.0; // RTF font sizes are expressed in half-points
+	return std::floor(px
+		* 72.0 / 96.0 // px -> font points
+		* 2.0); // RTF font sizes are expressed in half-points
 }
 
 size_t Parser::addColor(COLORREF color) {
@@ -283,7 +283,7 @@ void Parser::parseFont(const string& s) {
 	/// @todo handle more than px sizes
 	auto& size = *(l.end() - 2);
 	if(size.size() > 2 && *(size.end() - 2) == 'p' && *(size.end() - 1) == 'x') { // 16px
-		contexts.back().fontSize = rtfFontSize(Util::toFloat(size.substr(0, size.size() - 2)));
+		contexts.back().fontSize = rtfFontSize(Util::toFloat(size.substr(0, size.size() - 2)) * dwt::util::dpiFactor());
 	}
 
 	// parse the optional third to last param (font weight).
