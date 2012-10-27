@@ -265,8 +265,6 @@ env.Append(BUILDERS = {'PotBuild' : pot_bld})
 conf = Configure(env, conf_dir = dev.get_build_path('.sconf_temp'), log_file = dev.get_build_path('config.log'), clean = False, help = False)
 if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
 	conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
-if conf.CheckCXXHeader('natupnp.h', '<>'):
-	conf.env.Append(CPPDEFINES='HAVE_NATUPNP_H')
 env = conf.Finish()
 
 dev.boost = dev.build('boost/')
