@@ -68,8 +68,11 @@ extern "C" {
 #define DCINTF_DCPP_UTILS			"dcpp.utils.DCUtils"		/* Utility and convenience functions */
 #define DCINTF_DCPP_UTILS_VER		1
 
-#define DCINTF_DCPP_TAGGER			"dcpp.xml.Tagger"			/* Manipulation of an XML tagger */
+#define DCINTF_DCPP_TAGGER			"dcpp.xml.DCTagger"			/* Manipulation of an XML tagger */
 #define DCINTF_DCPP_TAGGER_VER		1
+
+#define DCINTF_DCPP_UI				"dcpp.ui.DCUI"				/* User interface */
+#define DCINTF_DCPP_UI_VER			1
 
 /* Hook GUID's for Hooks (events) system */
 #define HOOK_CHAT_IN				"dcpp.chat.onIncomingChat"	/* Incoming chat from hub (obj: HubData) */
@@ -411,6 +414,14 @@ typedef struct tagDCTagger {
 
 	void		(DCAPI *add_tag)					(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
 } DCTagger, *DCTaggerPtr;
+
+/* User interface */
+typedef struct DCUI {
+	/* User interface API version */
+	uint32_t apiVersion;
+
+	void		(DCAPI *play_sound)					(const char* path);
+} DCUI, *DCUIPtr;
 
 #ifdef __cplusplus
 }

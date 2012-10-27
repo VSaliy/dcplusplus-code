@@ -93,6 +93,9 @@ private:
 	// Functions for DCTagger
 	static void DCAPI addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
 
+	// Functions for DCUI - the host has to define these
+	static void DCAPI playSound(const char* path);
+
 	// Functions for DCQueue
 	static QueueDataPtr DCAPI addList(UserDataPtr user, Bool silent);
 	static QueueDataPtr DCAPI addDownload(const char* hash, uint64_t size, const char* target);
@@ -124,6 +127,7 @@ private:
 	static DCQueue dcQueue;
 	static DCUtils dcUtils;
 	static DCTagger dcTagger;
+	static DCUI dcUI;
 
 	static Socket* udpSocket;
 	static Socket& getUdpSocket();

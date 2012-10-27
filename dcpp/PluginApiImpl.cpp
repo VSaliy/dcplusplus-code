@@ -74,7 +74,6 @@ static const char* hookGuids[IMPL_HOOKS_COUNT] = {
 
 static const char* hostName = APPNAME;
 
-// lambdas are not used because certain compiler is being a pain about it (for now)
 DCHooks PluginApiImpl::dcHooks = {
 	DCINTF_HOOKS_VER,
 
@@ -167,6 +166,12 @@ DCTagger PluginApiImpl::dcTagger = {
 	&PluginApiImpl::addTag
 };
 
+DCUI PluginApiImpl::dcUI = {
+	DCINTF_DCPP_UI_VER,
+
+	&PluginApiImpl::playSound
+};
+
 Socket* PluginApiImpl::udpSocket = nullptr;
 Socket& PluginApiImpl::getUdpSocket() {
 	if(!udpSocket) {
@@ -197,6 +202,7 @@ void PluginApiImpl::initAPI(DCCore& dcCore) {
 	dcCore.register_interface(DCINTF_DCPP_QUEUE, &dcQueue);
 	dcCore.register_interface(DCINTF_DCPP_UTILS, &dcUtils);
 	dcCore.register_interface(DCINTF_DCPP_TAGGER, &dcTagger);
+	dcCore.register_interface(DCINTF_DCPP_UI, &dcUI);
 
 	// Create provided hooks (since these outlast any plugin they don't need to be explictly released)
 	for(int i = 0; i < IMPL_HOOKS_COUNT; ++i)
