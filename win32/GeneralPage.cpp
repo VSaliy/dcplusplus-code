@@ -91,9 +91,16 @@ connections(0)
 			group = cur->addChild(GroupBox::Seed(T_("Away message (empty = no away message)")));
 			group->setHelpId(IDH_SETTINGS_GENERAL_DEFAULT_AWAY_MESSAGE);
 
+			auto cur2 = group->addChild(Grid::Seed(2, 1));
+			cur2->column(0).mode = GridInfo::FILL;
+
 			auto seed = WinUtil::Seeds::Dialog::textBox;
 			seed.style |= ES_MULTILINE | WS_VSCROLL | ES_WANTRETURN;
-			items.emplace_back(group->addChild(seed), SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR);
+			items.emplace_back(cur2->addChild(seed), SettingsManager::DEFAULT_AWAY_MESSAGE, PropPage::T_STR);
+
+			auto box = cur2->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Add timestamp to the end of away messages")));
+			box->setHelpId(IDH_SETTINGS_GENERAL_AWAY_TIMESTAMP);
+			items.emplace_back(box, SettingsManager::AWAY_TIMESTAMP, PropPage::T_BOOL);
 		}
 
 		// dummy grid so that the check-box doesn't fill the whole row.
@@ -104,10 +111,6 @@ connections(0)
 		box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Enable away mode when the Windows session is locked")));
 		box->setHelpId(IDH_SETTINGS_GENERAL_AWAY_COMP_LOCK);
 		items.emplace_back(box, SettingsManager::AWAY_COMP_LOCK, PropPage::T_BOOL);
-
-		box = cur->addChild(Grid::Seed(1, 1))->addChild(CheckBox::Seed(T_("Add timestamp to the end of away messages")));
-		box->setHelpId(IDH_SETTINGS_GENERAL_AWAY_TIMESTAMP);
-		items.emplace_back(box, SettingsManager::AWAY_TIMESTAMP, PropPage::T_BOOL);
 
 		{
 			auto idle = cur->addChild(Grid::Seed(1, 3));
