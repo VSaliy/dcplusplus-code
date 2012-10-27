@@ -25,7 +25,6 @@
 #include "LogManager.h"
 #include "Mapper_MiniUPnPc.h"
 #include "Mapper_NATPMP.h"
-#include "Mapper_WinUPnP.h"
 #include "ScopedFunctor.h"
 #include "SearchManager.h"
 #include "version.h"
@@ -37,7 +36,6 @@ atomic_flag MappingManager::busy = ATOMIC_FLAG_INIT;
 MappingManager::MappingManager() : renewal(0) {
 	addMapper<Mapper_NATPMP>();
 	addMapper<Mapper_MiniUPnPc>();
-	addMapper<Mapper_WinUPnP>();
 }
 
 StringList MappingManager::getMappers() const {
