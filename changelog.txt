@@ -3,6 +3,7 @@
 * Add "chunked" transfer encoding as per the HTTP/1.1 spec (crise)
 * [L#1072041] Fix DPI conversion problems (poy
 * Remove the "Windows UPnP" port mapper in favor of MiniUPnP (poy)
+* Add a UI interface to the plugin API (poy)
 
 -- 0.802 2012-10-20 --
 * Perf improvements using lock-free queues, requires P6 CPUs (poy)

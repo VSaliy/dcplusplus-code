@@ -94,6 +94,9 @@ private:
 	static void DCAPI addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
 
 	// Functions for DCUI - the host has to define these
+	static void DCAPI addCommand(const char* name, void (*command)());
+	static void DCAPI removeCommand(const char* name);
+
 	static void DCAPI playSound(const char* path);
 
 	// Functions for DCQueue

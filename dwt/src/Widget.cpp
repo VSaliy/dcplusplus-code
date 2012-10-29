@@ -124,6 +124,13 @@ Widget::CallbackIter Widget::setCallback(const Message& msg, const CallbackType&
 void Widget::clearCallback(const Message& msg, const CallbackIter& i) {
 	CallbackList& callbacks = handlers[msg];
 	callbacks.erase(i);
+	if(callbacks.empty()) {
+		handlers.erase(msg);
+	}
+}
+
+void Widget::clearCallbacks(const Message& msg) {
+	handlers.erase(msg);
 }
 
 /// Make sure that handle is still valid before calling f

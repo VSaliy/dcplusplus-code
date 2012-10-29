@@ -755,17 +755,21 @@ void Menu::removeItem(unsigned index) {
 		}
 	}
 
-	// remove from the child list if this was a sub-menu.
 	if(child) {
+		// remove this sub-menu from the child list.
 		itsChildren.erase(std::remove_if(itsChildren.begin(), itsChildren.end(),
 			[child](std::unique_ptr<Menu>& sub) { return sub->handle() == child; }), itsChildren.end());
+
+	} else if(!getRootMenu()->popup) {
+		// in the menu bar: remove the callback.
+		getParent()->clearCallbacks(Message(WM_MENUCOMMAND, index * 31 + reinterpret_cast<LPARAM>(handle())));
 	}
 }
 
 void Menu::removeAllItems() {
-	//must be backwards, since bigger indexes change on remove
-	for(int i = size() - 1; i >= 0; i--) {
-		removeItem( i );
+	// must be backwards, since higher indexes change when removing lower ones
+	for(int i = size() - 1, end = itsTitle.empty() ? 0 : 1; i >= end; --i) {
+		removeItem(i);
 	}
 }
 

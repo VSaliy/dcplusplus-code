@@ -90,6 +90,8 @@ using dwt::SplitterContainer;
 using dwt::Spinner;
 using dwt::ToolBar;
 
+map<tstring, function<void ()>, noCaseStringLess> MainWindow::pluginCommands;
+
 static dwt::IconPtr mainIcon(WinUtil::createIcon(IDI_DCPP, 32));
 static dwt::IconPtr mainSmallIcon(WinUtil::createIcon(IDI_DCPP, 16));
 
@@ -306,6 +308,10 @@ void MainWindow::initMenu() {
 		file->appendSeparator();
 
 		file->appendItem(T_("GeoIP database update"), [this] { updateGeo(); });
+		file->appendSeparator();
+
+		pluginMenu = file->appendPopup(T_("Plugins"));
+		refreshPluginMenu();
 		file->appendSeparator();
 
 		file->appendItem(T_("E&xit\tAlt+F4"), [this] { close(true); }, WinUtil::menuIcon(IDI_EXIT));
@@ -641,7 +647,40 @@ bool MainWindow::filter(MSG& msg) {
 	return false;
 }
 
-void MainWindow::notify(const tstring& title, const tstring& message, const std::function<void ()>& callback, const dwt::IconPtr& balloonIcon) {
+void MainWindow::addPluginCommand(const tstring& text, function<void ()> command) {
+	pluginCommands.emplace(text, command);
+
+	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
+		WinUtil::mainWindow->pluginMenu->removeAllItems();
+		WinUtil::mainWindow->refreshPluginMenu();
+	}
+}
+
+void MainWindow::removePluginCommand(const tstring& text) {
+	auto i = pluginCommands.find(text);
+	if(i == pluginCommands.end()) return;
+	auto index = std::distance(pluginCommands.begin(), i);
+	pluginCommands.erase(i);
+
+	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
+		WinUtil::mainWindow->pluginMenu->removeItem(index + 1 /* account for the menu title */);
+		if(pluginCommands.empty()) {
+			WinUtil::mainWindow->refreshPluginMenu();
+		}
+	}
+}
+
+void MainWindow::refreshPluginMenu() {
+	if(pluginCommands.empty()) {
+		pluginMenu->appendItem(T_("(No plugin command found)"), nullptr, nullptr, false);
+	} else {
+		for(auto& i: pluginCommands) {
+			pluginMenu->appendItem(i.first, i.second);
+		}
+	}
+}
+
+void MainWindow::notify(const tstring& title, const tstring& message, function<void ()> callback, const dwt::IconPtr& balloonIcon) {
 	notifier->addMessage(str(TF_("DC++ - %1%") % title), message, [this, callback] { handleRestore(); if(callback) callback(); }, balloonIcon);
 }
 
@@ -981,9 +1020,10 @@ bool MainWindow::handleClosing() {
 	// This should end immediately, as it only should be the stopper that sends another WM_CLOSE
 	WaitForSingleObject(stopperThread, 60*1000);
 	CloseHandle(stopperThread);
-	stopperThread = NULL;
 	::PostQuitMessage(0);
 	dcdebug("Quit message posted\n");
+
+	WinUtil::mainWindow = nullptr;
 	return true;
 }
 

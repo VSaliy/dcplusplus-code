@@ -22,13 +22,17 @@
 
 Plugin* Plugin::instance = nullptr;
 
+const char* switchText = "Dev plugin: enable/disable";
+
 Plugin::Plugin() {
 }
 
 Plugin::~Plugin() {
-	for(auto& i: events)
-		hooks->release_hook(i.second);
-	events.clear();
+	clearHooks();
+
+	if(ui) {
+		ui->remove_command(switchText);
+	}
 }
 
 Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
@@ -37,15 +41,16 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 	case ON_LOAD:
 		{
 			Bool res = True;
-			newInstance();
-			getInstance()->onLoad(core, (state == ON_INSTALL), res);
+			instance = new Plugin();
+			instance->onLoad(core, (state == ON_INSTALL), res);
 			return res;
 		}
 
 	case ON_UNINSTALL:
 	case ON_UNLOAD:
 		{
-			deleteInstance();
+			delete instance;
+			instance = nullptr;
 			return True;
 		}
 
@@ -56,6 +61,37 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 	}
 }
 
+void Plugin::dlgClosed() {
+	instance->close();
+}
+
+void Plugin::addHooks() {
+	events[HOOK_NETWORK_HUB_IN] = hooks->bind_hook(HOOK_NETWORK_HUB_IN, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onHubDataIn(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
+	events[HOOK_NETWORK_HUB_OUT] = hooks->bind_hook(HOOK_NETWORK_HUB_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onHubDataOut(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
+	events[HOOK_NETWORK_CONN_IN] = hooks->bind_hook(HOOK_NETWORK_CONN_IN, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onConnectionDataIn(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
+	events[HOOK_NETWORK_CONN_OUT] = hooks->bind_hook(HOOK_NETWORK_CONN_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onConnectionDataOut(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
+}
+
+void Plugin::clearHooks() {
+	for(auto& i: events)
+		hooks->release_hook(i.second);
+	events.clear();
+}
+
+void Plugin::start() {
+	dialog.create();
+	addHooks();
+}
+
+void Plugin::close() {
+	clearHooks();
+	dialog.close();
+}
+
 void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	dcpp = core;
 	hooks = reinterpret_cast<DCHooksPtr>(core->query_interface(DCINTF_HOOKS, DCINTF_HOOKS_VER));
@@ -63,38 +99,31 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	auto utils = reinterpret_cast<DCUtilsPtr>(core->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER));
 	auto config = reinterpret_cast<DCConfigPtr>(core->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER));
 	auto logger = reinterpret_cast<DCLogPtr>(core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER));
+	ui = reinterpret_cast<DCUIPtr>(core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER));
 
-	if(!utils || !config || !logger) {
+	if(!utils || !config || !logger || !ui) {
 		loadRes = False;
 		return;
 	}
 
 	Util::initialize(core->host_name(), utils, config, logger);
 
-	/*if(install) {
-		// Default settings
+	if(install) {
+		/// @todo config enabled/disabled
 
-		Util::logMessage("Dev plugin installed, please restart " + Util::appName + " to begin using the plugin.");
-		return;
-	}*/
+		Util::logMessage("The dev plugin has been installed; check the \"" + string(switchText) + "\" command.");
+	}
 
-	events[HOOK_HUB_OFFLINE]			= hooks->bind_hook(HOOK_HUB_OFFLINE, &hubOfflineEvent, NULL);
-	events[HOOK_HUB_ONLINE]				= hooks->bind_hook(HOOK_HUB_ONLINE, &hubOnlineEvent, NULL);
-
-	events[HOOK_NETWORK_HUB_IN]			= hooks->bind_hook(HOOK_NETWORK_HUB_IN, &netHubInEvent, NULL);
-	events[HOOK_NETWORK_HUB_OUT]		= hooks->bind_hook(HOOK_NETWORK_HUB_OUT, &netHubOutEvent, NULL);
-	events[HOOK_NETWORK_CONN_IN]		= hooks->bind_hook(HOOK_NETWORK_CONN_IN, &netConnInEvent, NULL);
-	events[HOOK_NETWORK_CONN_OUT]		= hooks->bind_hook(HOOK_NETWORK_CONN_OUT, &netConnOutEvent, NULL);
-
-	events[HOOK_UI_CREATED]				= hooks->bind_hook(HOOK_UI_CREATED, &uiCreatedEvent, NULL);
+	start();
+	ui->add_command(switchText, [] { instance->onSwitched(); });
 }
 
-Bool Plugin::onHubDisconnected(HubDataPtr hHub) {
-	return False;
-}
-
-Bool Plugin::onHubConnected(HubDataPtr hHub) {
-	return False;
+void Plugin::onSwitched() {
+	if(events.empty()) {
+		start();
+	} else {
+		close();
+	}
 }
 
 Bool Plugin::onHubDataIn(HubDataPtr hHub, const char* message) {
@@ -102,7 +131,7 @@ Bool Plugin::onHubDataIn(HubDataPtr hHub, const char* message) {
 	return False;
 }
 
-Bool Plugin::onHubDataOut(HubDataPtr hHub, const char* message, Bool* bBreak) {
+Bool Plugin::onHubDataOut(HubDataPtr hHub, const char* message) {
 	dialog.write(true, true, hHub->ip, "Hub " + string(hHub->url), message);
 	return False;
 }
@@ -114,10 +143,5 @@ Bool Plugin::onConnectionDataIn(ConnectionDataPtr hConn, const char* message) {
 
 Bool Plugin::onConnectionDataOut(ConnectionDataPtr hConn, const char* message) {
 	dialog.write(false, true, hConn->ip, "User" /** @todo get user's nick */, message);
-	return False;
-}
-
-Bool Plugin::onUiCreated(HWND hwnd) {
-	dialog.create(hwnd);
 	return False;
 }

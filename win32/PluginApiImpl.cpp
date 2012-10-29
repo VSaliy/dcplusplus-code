@@ -24,11 +24,20 @@
 
 #include <dcpp/Text.h>
 
+#include "MainWindow.h"
 #include "WinUtil.h"
 
 namespace dcpp {
 
 // Functions for DCUI
+void PluginApiImpl::addCommand(const char* name, void (*command)()) {
+	MainWindow::addPluginCommand(Text::toT(name), command);
+}
+
+void PluginApiImpl::removeCommand(const char* name) {
+	MainWindow::removePluginCommand(Text::toT(name));
+}
+
 void PluginApiImpl::playSound(const char* path) {
 	WinUtil::playSound(Text::toT(path));
 }

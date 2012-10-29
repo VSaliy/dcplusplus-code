@@ -18,6 +18,7 @@
 
 #include "stdafx.h"
 #include "Dialog.h"
+#include "Plugin.h"
 #include "resource.h"
 #include "Util.h"
 
@@ -44,16 +45,14 @@ Dialog::Dialog() :
 }
 
 Dialog::~Dialog() {
-	if(hwnd) {
-		DestroyWindow(hwnd);
-	}
+	close();
 
 	dlg = nullptr;
 }
 
-void Dialog::create(HWND parent) {
+void Dialog::create() {
 	if(hwnd) {
-		MessageBox(parent, Util::toT("The dev plugin hasn't been properly shut down; you better restart " + Util::appName).c_str(),
+		MessageBox(0, Util::toT("The dev plugin hasn't been properly shut down; you better restart " + Util::appName).c_str(),
 			_T("Error creating the dev plugin's dialog"), MB_OK);
 		return;
 	}
@@ -63,7 +62,7 @@ void Dialog::create(HWND parent) {
 	if(!hwnd) {
 		TCHAR buf[256];
 		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, GetLastError(), 0, buf, 256, 0);
-		MessageBox(parent, buf, _T("Error creating the dev plugin's dialog"), MB_OK);
+		MessageBox(0, buf, _T("Error creating the dev plugin's dialog"), MB_OK);
 	}
 }
 
@@ -71,6 +70,13 @@ void Dialog::write(bool hubOrUser, bool sending, string ip, string peer, string 
 	Message msg = { hubOrUser, sending, move(ip), move(peer), move(message) };
 	Lock l(mutex);
 	messages.push_back(move(msg));
+}
+
+void Dialog::close() {
+	if(hwnd) {
+		DestroyWindow(hwnd);
+		hwnd = nullptr;
+	}
 }
 
 INT_PTR CALLBACK Dialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM) {
@@ -92,7 +98,7 @@ INT_PTR CALLBACK Dialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM)
 		}
 	case WM_CLOSE:
 		{
-			delete dlg;
+			Plugin::dlgClosed();
 			break;
 		}
 	case WM_DESTROY:

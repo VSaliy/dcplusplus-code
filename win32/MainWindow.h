@@ -30,6 +30,7 @@
 #include "forward.h"
 #include "AspectStatus.h"
 
+using std::function;
 using std::unique_ptr;
 
 class MainWindow :
@@ -64,8 +65,11 @@ public:
 
 	void handleSettings();
 
+	static void addPluginCommand(const tstring& text, function<void ()> command);
+	static void removePluginCommand(const tstring& text);
+
 	/** show a balloon popup. refer to the dwt::Notification::addMessage doc for info about parameters. */
-	void notify(const tstring& title, const tstring& message, const std::function<void ()>& callback = nullptr, const dwt::IconPtr& balloonIcon = nullptr);
+	void notify(const tstring& title, const tstring& message, function<void ()> callback = nullptr, const dwt::IconPtr& balloonIcon = nullptr);
 	void setStaticWindowState(const string& id, bool open);
 	void TrayPM();
 
@@ -118,6 +122,7 @@ private:
 	RebarPtr rebar;
 	SplitterContainerPtr paned;
 	MenuPtr mainMenu;
+	Menu* pluginMenu;
 	Menu* viewMenu;
 	TransferView* transfers;
 	ToolBarPtr toolbar;
@@ -127,6 +132,10 @@ private:
 	ViewIndexes viewIndexes; /// indexes of menu commands of the "View" menu that open static windows
 
 	bool tray_pm;
+
+	/* sorted list of plugin commands. static because they may be added before the window has
+	actually been created. */
+	static map<tstring, function<void ()>, noCaseStringLess> pluginCommands;
 
 	unique_ptr<HttpDownload> conns[CONN_LAST];
 
@@ -197,6 +206,7 @@ private:
 	void layout();
 	void updateStatus();
 	void updateAwayStatus();
+	void refreshPluginMenu();
 	void showPortsError(const string& port);
 	void setSaveTimer();
 	void saveSettings();
