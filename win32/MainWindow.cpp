@@ -648,7 +648,7 @@ bool MainWindow::filter(MSG& msg) {
 }
 
 void MainWindow::addPluginCommand(const tstring& text, function<void ()> command) {
-	pluginCommands.emplace(text, command);
+	pluginCommands[text] = command;
 
 	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
 		WinUtil::mainWindow->pluginMenu->removeAllItems();
