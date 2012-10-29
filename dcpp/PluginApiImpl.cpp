@@ -169,6 +169,9 @@ DCTagger PluginApiImpl::dcTagger = {
 DCUI PluginApiImpl::dcUI = {
 	DCINTF_DCPP_UI_VER,
 
+	&PluginApiImpl::addCommand,
+	&PluginApiImpl::removeCommand,
+
 	&PluginApiImpl::playSound
 };
 

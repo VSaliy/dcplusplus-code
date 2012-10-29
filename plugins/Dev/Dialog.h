@@ -40,8 +40,9 @@ public:
 	Dialog();
 	~Dialog();
 
-	void create(HWND parent);
+	void create();
 	void write(bool hubOrUser, bool sending, string ip, string peer, string message);
+	void close();
 
 	static HINSTANCE instance;
 

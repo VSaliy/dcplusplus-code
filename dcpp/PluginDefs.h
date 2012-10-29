@@ -420,6 +420,9 @@ typedef struct DCUI {
 	/* User interface API version */
 	uint32_t apiVersion;
 
+	void		(DCAPI *add_command)				(const char* name, void (*command)());
+	void		(DCAPI *remove_command)				(const char* name);
+
 	void		(DCAPI *play_sound)					(const char* path);
 } DCUI, *DCUIPtr;
 

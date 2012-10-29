@@ -111,7 +111,6 @@ public:
 	typedef std::function<bool(const MSG& msg, LRESULT& ret)> CallbackType;
 	typedef std::list<CallbackType> CallbackList;
 	typedef CallbackList::iterator CallbackIter;
-	typedef std::unordered_map<Message, CallbackList> CallbackCollectionType;
 
 	/// Adds a new callback - multiple callbacks for the same message will be called in the order they were added
 	CallbackIter addCallback(const Message& msg, const CallbackType& callback);
@@ -122,10 +121,11 @@ public:
 	/// Clear a callback registered to msg
 	void clearCallback(const Message& msg, const CallbackIter& i);
 
+	/// Clear all callbacks registered to msg
+	void clearCallbacks(const Message& msg);
+
 	/** Run a function bound to this widget asynchronously */
 	void callAsync(const Application::Callback& f);
-
-	CallbackCollectionType &getCallbacks();
 
 	/// Returns true if handled, else false
 	virtual bool handleMessage(const MSG &msg, LRESULT &retVal);
@@ -241,7 +241,7 @@ private:
 	static GlobalAtom propAtom;
 
 	// Contains the list of signals we're (this window) processing
-	CallbackCollectionType handlers;
+	std::unordered_map<Message, CallbackList> handlers;
 
 	HWND hwnd;
 
@@ -276,10 +276,6 @@ inline bool Widget::hasStyle(DWORD style) const {
 
 inline bool Widget::hasExStyle(DWORD style) const {
 	return (::GetWindowLong(handle(), GWL_EXSTYLE) & style) == style;
-}
-
-inline Widget::CallbackCollectionType& Widget::getCallbacks() {
-	return handlers;
 }
 
 inline HWND Widget::getParentHandle() {

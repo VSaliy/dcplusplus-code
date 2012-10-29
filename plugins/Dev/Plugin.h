@@ -19,8 +19,6 @@
 #ifndef PLUGINS_DEV_PLUGIN_H
 #define PLUGINS_DEV_PLUGIN_H
 
-#include <Singleton.h>
-
 #include <map>
 
 #include "Dialog.h"
@@ -28,42 +26,40 @@
 using std::map;
 using std::string;
 
-class Plugin : public dcpp::Singleton<Plugin>
+class Plugin
 {
 public:
 	static Bool DCAPI main(PluginState state, DCCorePtr core, dcptr_t);
 
-private:
-	friend class dcpp::Singleton<Plugin>;
+	static void dlgClosed();
 
+private:
 	Plugin();
 	~Plugin();
 
+	void addHooks();
+	void clearHooks();
+
+	void start();
+	void close();
+
 	void onLoad(DCCorePtr core, bool install, Bool& loadRes);
-	Bool onHubDisconnected(HubDataPtr hHub);
-	Bool onHubConnected(HubDataPtr hHub);
+	void onSwitched();
 	Bool onHubDataIn(HubDataPtr hHub, const char* message);
-	Bool onHubDataOut(HubDataPtr hHub, const char* message, Bool* bBreak);
+	Bool onHubDataOut(HubDataPtr hHub, const char* message);
 	Bool onConnectionDataIn(ConnectionDataPtr hConn, const char* message);
 	Bool onConnectionDataOut(ConnectionDataPtr hConn, const char* message);
-	Bool onUiCreated(HWND hwnd);
-
-	// Event wrappers
-	static Bool DCAPI hubOfflineEvent(dcptr_t pObject, dcptr_t /*pData*/, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onHubDisconnected(reinterpret_cast<HubDataPtr>(pObject)); }
-	static Bool DCAPI hubOnlineEvent(dcptr_t pObject, dcptr_t /*pData*/, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onHubConnected(reinterpret_cast<HubDataPtr>(pObject)); }
-	static Bool DCAPI netHubInEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onHubDataIn(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }
-	static Bool DCAPI netHubOutEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* bBreak) { return getInstance()->onHubDataOut(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData), bBreak); }
-	static Bool DCAPI netConnInEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onConnectionDataIn(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }
-	static Bool DCAPI netConnOutEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onConnectionDataOut(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }
-	static Bool DCAPI uiCreatedEvent(dcptr_t pObject, dcptr_t /*pData*/, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onUiCreated(reinterpret_cast<HWND>(pObject)); }
 
 	map<string, subsHandle> events;
 
 	DCCorePtr dcpp;
 	DCHooksPtr hooks;
+	DCUIPtr ui;
 
 	Dialog dialog;
 
+	/** @todo switch to dcpp::Singleton when <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=51494>
+	is fixed */
 	static Plugin* instance;
 };
 
