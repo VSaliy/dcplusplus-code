@@ -728,7 +728,7 @@ static tstring getFile(Transfer* t) {
 		if (dynamic_cast <Upload*> (t)) {
 			path = "<" + t->getPath() + ">";
 			WinUtil::reducePaths(path);
-			total = _(" of ") + Util::formatBytes(File::getSize(t->getPath()));
+			total = str(F_(" of %1") % Util::formatBytes(File::getSize(t->getPath())));
 		} else {
 			path = Util::getFileName(t->getPath());
 		}
