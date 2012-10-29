@@ -21,8 +21,6 @@
 
 #include "ScriptInstance.h"
 
-#include <Singleton.h>
-
 #include <map>
 #include <set>
 
@@ -30,20 +28,12 @@ using std::string;
 using std::map;
 using std::set;
 
-class Plugin : public ScriptInstance, public dcpp::Singleton<Plugin>
+class Plugin : public ScriptInstance
 {
 public:
 	static Bool DCAPI main(PluginState state, DCCorePtr core, dcptr_t);
 
-	void setTimer(bool bState) {
-		auto i = events.find(HOOK_TIMER_SECOND);
-		if(bState &&  i == events.end()) {
-			events[HOOK_TIMER_SECOND] = hooks->bind_hook(HOOK_TIMER_SECOND, &timerEvent, NULL);
-		} else if(i != events.end()) {
-			hooks->release_hook(i->second);
-			i->second = NULL;
-		}
-	}
+	void setTimer(bool bState);
 
 	HubDataPtr createHub(const char* url, const char* nick, const char* password) {
 		auto hHub = hub->add_hub(url, nick, password);
@@ -85,35 +75,23 @@ public:
 			connection->terminate_conn(hConn, graceless ? True : False);
 	}
 
-private:
-	friend class dcpp::Singleton<Plugin>;
+	static Plugin* getInstance() { return instance; }
 
+private:
 	Plugin();
 	~Plugin();
 
 	void onLoad(DCCorePtr core, bool install, Bool& loadRes);
 	Bool onHubEnter(HubDataPtr hHub, CommandDataPtr cmd);
 	Bool onOwnChatOut(HubDataPtr hHub, const char* message);
-	Bool onHubDisconnected(HubDataPtr hHub);
 	Bool onHubConnected(HubDataPtr hHub);
+	Bool onHubDisconnected(HubDataPtr hHub);
 	Bool onHubDataIn(HubDataPtr hHub, const char* message);
 	Bool onHubDataOut(HubDataPtr hHub, const char* message, Bool* bBreak);
 	Bool onConnectionDataIn(ConnectionDataPtr hConn, const char* message);
 	Bool onConnectionDataOut(ConnectionDataPtr hConn, const char* message);
 	Bool onFormatChat(UserDataPtr hUser, StringDataPtr line, Bool* bBreak);
 	Bool onTimer();
-
-	// Event wrappers
-	static Bool DCAPI chatOutEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onOwnChatOut(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }
-	static Bool DCAPI hubOfflineEvent(dcptr_t pObject, dcptr_t /*pData*/, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onHubDisconnected(reinterpret_cast<HubDataPtr>(pObject)); }
-	static Bool DCAPI hubOnlineEvent(dcptr_t pObject, dcptr_t /*pData*/, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onHubConnected(reinterpret_cast<HubDataPtr>(pObject)); }
-	static Bool DCAPI netHubInEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onHubDataIn(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }
-	static Bool DCAPI netHubOutEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* bBreak) { return getInstance()->onHubDataOut(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData), bBreak); }
-	static Bool DCAPI netConnInEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onConnectionDataIn(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }
-	static Bool DCAPI netConnOutEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onConnectionDataOut(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }
-	static Bool DCAPI chatCmdEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onHubEnter(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<CommandDataPtr>(pData)); }
-	static Bool DCAPI chatDisplayEvent(dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* bBreak) { return getInstance()->onFormatChat((UserDataPtr)pObject, reinterpret_cast<StringDataPtr>(pData), bBreak); }
-	static Bool DCAPI timerEvent(dcptr_t /*pObject*/, dcptr_t /*pData*/, dcptr_t, Bool* /*bBreak*/) { return getInstance()->onTimer(); }
 
 	void removeChatCache(const HubDataPtr hub) {
 		auto j = chatCache.find(hub->url);
@@ -131,6 +109,8 @@ private:
 	DCHubPtr hub;
 	DCConnectionPtr connection;
 
+	/** @todo switch to dcpp::Singleton when <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=51494>
+	is fixed */
 	static Plugin* instance;
 };
 

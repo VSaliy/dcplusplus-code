@@ -19,7 +19,6 @@
 #include "stdafx.h"
 #include "Plugin.h"
 #include "version.h"
-
 #include "Util.h"
 
 Plugin* Plugin::instance = nullptr;
@@ -54,15 +53,16 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 	case ON_LOAD:
 		{
 			Bool res = True;
-			newInstance();
-			getInstance()->onLoad(core, (state == ON_INSTALL), res);
+			instance = new Plugin();
+			instance->onLoad(core, (state == ON_INSTALL), res);
 			return res;
 		}
 
 	case ON_UNINSTALL:
 	case ON_UNLOAD:
 		{
-			deleteInstance();
+			delete instance;
+			instance = nullptr;
 			return True;
 		}
 
@@ -117,17 +117,25 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	Lunar<LuaManager>::Register(L);
 	lua_pop(L, lua_gettop(L));
 
-	events[HOOK_CHAT_OUT]				= hooks->bind_hook(HOOK_CHAT_OUT, &chatOutEvent, NULL);
+	events[HOOK_CHAT_OUT] = hooks->bind_hook(HOOK_CHAT_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onOwnChatOut(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
 
-	events[HOOK_HUB_OFFLINE]			= hooks->bind_hook(HOOK_HUB_OFFLINE, &hubOfflineEvent, NULL);
-	events[HOOK_HUB_ONLINE]				= hooks->bind_hook(HOOK_HUB_ONLINE, &hubOnlineEvent, NULL);
+	events[HOOK_HUB_ONLINE] = hooks->bind_hook(HOOK_HUB_ONLINE, [](dcptr_t pObject, dcptr_t, dcptr_t, Bool*) {
+		return instance->onHubConnected(reinterpret_cast<HubDataPtr>(pObject)); }, nullptr);
+	events[HOOK_HUB_OFFLINE] = hooks->bind_hook(HOOK_HUB_OFFLINE, [](dcptr_t pObject, dcptr_t, dcptr_t, Bool*) {
+		return instance->onHubDisconnected(reinterpret_cast<HubDataPtr>(pObject)); }, nullptr);
 
-	events[HOOK_NETWORK_HUB_IN]			= hooks->bind_hook(HOOK_NETWORK_HUB_IN, &netHubInEvent, NULL);
-	events[HOOK_NETWORK_HUB_OUT]		= hooks->bind_hook(HOOK_NETWORK_HUB_OUT, &netHubOutEvent, NULL);
-	events[HOOK_NETWORK_CONN_IN]		= hooks->bind_hook(HOOK_NETWORK_CONN_IN, &netConnInEvent, NULL);
-	events[HOOK_NETWORK_CONN_OUT]		= hooks->bind_hook(HOOK_NETWORK_CONN_OUT, &netConnOutEvent, NULL);
+	events[HOOK_NETWORK_HUB_IN] = hooks->bind_hook(HOOK_NETWORK_HUB_IN, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onHubDataIn(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
+	events[HOOK_NETWORK_HUB_OUT] = hooks->bind_hook(HOOK_NETWORK_HUB_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* bBreak) {
+		return instance->onHubDataOut(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData), bBreak); }, nullptr);
+	events[HOOK_NETWORK_CONN_IN] = hooks->bind_hook(HOOK_NETWORK_CONN_IN, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onConnectionDataIn(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
+	events[HOOK_NETWORK_CONN_OUT] = hooks->bind_hook(HOOK_NETWORK_CONN_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onConnectionDataOut(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
 
-	events[HOOK_UI_PROCESS_CHAT_CMD]	= hooks->bind_hook(HOOK_UI_PROCESS_CHAT_CMD, &chatCmdEvent, NULL);
+	events[HOOK_UI_PROCESS_CHAT_CMD] = hooks->bind_hook(HOOK_UI_PROCESS_CHAT_CMD, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onHubEnter(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<CommandDataPtr>(pData)); }, nullptr);
 
 	/// @todo let the user configure which files to auto-load
 	auto file = Util::fromUtf8(SETTING(ScriptPath)) + "startup.lua";
@@ -135,8 +143,21 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 		ScriptInstance::EvaluateFile(file);
 
 	// This ensures that FormatChatText is only called when present...
-	if(CheckFunction("dcpp", "FormatChatHTML"))
-		events[HOOK_UI_CHAT_DISPLAY] = hooks->bind_hook(HOOK_UI_CHAT_DISPLAY, &chatDisplayEvent, NULL);
+	if(CheckFunction("dcpp", "FormatChatHTML")) {
+		events[HOOK_UI_CHAT_DISPLAY] = hooks->bind_hook(HOOK_UI_CHAT_DISPLAY, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool* bBreak) {
+			return instance->onFormatChat(reinterpret_cast<UserDataPtr>(pObject), reinterpret_cast<StringDataPtr>(pData), bBreak); }, nullptr);
+	}
+}
+
+void Plugin::setTimer(bool bState) {
+	auto i = events.find(HOOK_TIMER_SECOND);
+	if(bState && i == events.end()) {
+		events[HOOK_TIMER_SECOND] = hooks->bind_hook(HOOK_TIMER_SECOND, [](dcptr_t, dcptr_t, dcptr_t, Bool*) {
+			return instance->onTimer(); }, nullptr);
+	} else if(i != events.end()) {
+		hooks->release_hook(i->second);
+		i->second = nullptr;
+	}
 }
 
 Bool Plugin::onHubEnter(HubDataPtr hHub, CommandDataPtr cmd) {
@@ -203,16 +224,16 @@ Bool Plugin::onOwnChatOut(HubDataPtr hHub, const char* message) {
 	return MakeCall("dcpp", "OnCommandEnter", 1, hHub, string(message)) ? GetLuaBool() : False;
 }
 
-Bool Plugin::onHubDisconnected(HubDataPtr hHub) {
-	// fixme: DC++ may trigger this incorrectly (for hubs where OnHubAdded was never invoked), if socket creation fails...
-	MakeCall(GetHubType(hHub), "OnHubRemoved", 0, hHub);
-	removeChatCache(hHub);
+Bool Plugin::onHubConnected(HubDataPtr hHub) {
+	MakeCall(GetHubType(hHub), "OnHubAdded", 0, hHub);
 
 	return False;
 }
 
-Bool Plugin::onHubConnected(HubDataPtr hHub) {
-	MakeCall(GetHubType(hHub), "OnHubAdded", 0, hHub);
+Bool Plugin::onHubDisconnected(HubDataPtr hHub) {
+	// fixme: DC++ may trigger this incorrectly (for hubs where OnHubAdded was never invoked), if socket creation fails...
+	MakeCall(GetHubType(hHub), "OnHubRemoved", 0, hHub);
+	removeChatCache(hHub);
 
 	return False;
 }
