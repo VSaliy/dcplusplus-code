@@ -19,31 +19,23 @@
 #ifndef PLUGINS_DEV_PLUGIN_H
 #define PLUGINS_DEV_PLUGIN_H
 
-#include <Singleton.h>
-
 #include <map>
 
 using std::map;
 using std::string;
 
-class Plugin : public dcpp::Singleton<Plugin>
+class Plugin
 {
 public:
 	static Bool DCAPI main(PluginState state, DCCorePtr core, dcptr_t);
 
 private:
-	friend class dcpp::Singleton<Plugin>;
-
 	Plugin();
 	~Plugin();
 
 	void onLoad(DCCorePtr core, bool install, Bool& loadRes);
+	Bool onSecond(uint64_t tick);
 	Bool onUiChatTags(TagDataPtr tags);
-
-	// Event wrappers
-	static Bool DCAPI uiChatTags(dcptr_t /*pObject*/, dcptr_t pData, dcptr_t, Bool* /*bBreak*/) {
-		return getInstance()->onUiChatTags(reinterpret_cast<TagDataPtr>(pData));
-	}
 
 	map<string, subsHandle> events;
 
@@ -51,6 +43,11 @@ private:
 	DCHooksPtr hooks;
 
 	DCTaggerPtr tagger;
+	DCUIPtr ui;
+
+	/** @todo switch to dcpp::Singleton when <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=51494>
+	is fixed */
+	static Plugin* instance;
 };
 
 #endif
