@@ -20,6 +20,8 @@
 #include "Plugin.h"
 #include "Util.h"
 
+Plugin* Plugin::instance = nullptr;
+
 Plugin::Plugin() {
 }
 
@@ -35,15 +37,16 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 	case ON_LOAD:
 		{
 			Bool res = True;
-			newInstance();
-			getInstance()->onLoad(core, (state == ON_INSTALL), res);
+			instance = new Plugin();
+			instance->onLoad(core, (state == ON_INSTALL), res);
 			return res;
 		}
 
 	case ON_UNINSTALL:
 	case ON_UNLOAD:
 		{
-			deleteInstance();
+			delete instance;
+			instance = nullptr;
 			return True;
 		}
 
@@ -61,10 +64,10 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	auto utils = reinterpret_cast<DCUtilsPtr>(core->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER));
 	auto config = reinterpret_cast<DCConfigPtr>(core->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER));
 	auto logger = reinterpret_cast<DCLogPtr>(core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER));
-
 	tagger = reinterpret_cast<DCTaggerPtr>(core->query_interface(DCINTF_DCPP_TAGGER, DCINTF_DCPP_TAGGER_VER));
+	ui = reinterpret_cast<DCUIPtr>(core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER));
 
-	if(!utils || !config || !logger || !tagger) {
+	if(!utils || !config || !logger || !tagger || !ui) {
 		loadRes = False;
 		return;
 	}
@@ -80,7 +83,20 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 		return;
 	}*/
 
-	events[HOOK_UI_CHAT_TAGS] = hooks->bind_hook(HOOK_UI_CHAT_TAGS, &uiChatTags, 0);
+	events[HOOK_TIMER_SECOND] = hooks->bind_hook(HOOK_TIMER_SECOND, [](dcptr_t, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onSecond(*reinterpret_cast<uint64_t*>(pData)); }, nullptr);
+
+	events[HOOK_UI_CHAT_TAGS] = hooks->bind_hook(HOOK_UI_CHAT_TAGS, [](dcptr_t, dcptr_t pData, dcptr_t, Bool*) {
+		return instance->onUiChatTags(reinterpret_cast<TagDataPtr>(pData)); }, nullptr);
+}
+
+Bool Plugin::onSecond(uint64_t tick) {
+	static uint64_t prevTick = 0;
+	if(tick - prevTick >= 10*1000) {
+		prevTick = tick;
+		ui->play_sound("Media\\tada.wav");
+	}
+	return False;
 }
 
 Bool Plugin::onUiChatTags(TagDataPtr tags) {
