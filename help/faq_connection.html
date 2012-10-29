@@ -139,7 +139,7 @@ years should support at least UPnP and it should be enabled by default (this may
 In any case its best to consult the documentation of the device about what port mapping protocol does the router 
 support and how to enable it.</p>
 
-<p>Currently, DC++ includes two different UPnP implementations and support for NAT-PMP as well. If automatic port mapping
+<p>Currently, DC++ includes support for both UPnP and NAT-PMP. If automatic port mapping
 is enabled in the connectivity configuration DC++ will try to map the ports with all the available mapper interfaces until
 a successful attempt. To enable automatic port mapping
 
@@ -181,10 +181,11 @@ a successful attempt. To enable automatic port mapping
 		especially if you see 'Port mapping: Failed to get external IP' message in the <a href="window_system_log.html">
 		System Log</a> window or wrong IP addess shown if you use the /conn chat command. Don't forget to 
 		<a href="settings_connectivity_manual.html#noipoverride">disallow the automatic IP override</a> in these cases.</li>
+	<!--Readd this when DC++ gets WinUPnP support again
 	<li>While the preferred UPnP interface is MiniUPnP, in some cases you may find the legacy Windows UPnP mapper more 
 		successful (eg. if you have an older router model and it worked well with older versions of DC++). In any case it
 		worth a try if the other mappers are failed and you'll find troubleshooting tips for the <u>Windows UPnP only</u> in
-		<a href="http://www.dslreports.com/faq/11043" target="_blank" class="external">this FAQ</a>.</li>
+		<a href="http://www.dslreports.com/faq/11043" target="_blank" class="external">this FAQ</a>.</li>-->
 </ul>
 </p>
 

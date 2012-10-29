@@ -389,7 +389,7 @@ void QueueFrame::QueueItemInfo::update() {
 					} else if(j.isSet(QueueItem::Source::FLAG_BAD_TREE)) {
 						tmp += T_("Full tree does not match TTH root");
 					} else if(j.isSet(QueueItem::Source::FLAG_NO_TREE)) {
-						tmp += T_("Full tree does not match TTH root"); /// @todo change to "No full tree available"
+						tmp += T_("No full tree available");
 					} else if(j.isSet(QueueItem::Source::FLAG_SLOW_SOURCE)) {
 						tmp += T_("Source too slow");
 					} else if(j.isSet(QueueItem::Source::FLAG_NO_TTHF)) {
