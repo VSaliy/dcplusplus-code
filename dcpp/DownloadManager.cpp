@@ -357,7 +357,7 @@ void DownloadManager::noSlots(UserConnection* aSource, string param) {
 		return;
 	}
 
-	string extra = param.empty() ? Util::emptyString : str(F_(" - Queued: %1") % param);
+	string extra = param.empty() ? Util::emptyString : str(F_(" - Queued: %1%") % param);
 	failDownload(aSource, _("No slots available") + extra);
 }
 
