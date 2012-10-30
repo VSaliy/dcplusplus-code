@@ -20,19 +20,13 @@
 #define PLUGINS_DEV_DIALOG_H
 
 #include <unordered_set>
-#include <vector>
 
+#include <boost/lockfree/queue.hpp>
 #include <boost/regex.hpp>
-
-#include <CriticalSection.h>
 
 using std::move;
 using std::string;
 using std::unordered_set;
-using std::vector;
-
-using dcpp::CriticalSection;
-using dcpp::Lock;
 
 class Dialog
 {
@@ -65,9 +59,7 @@ private:
 
 	// store the messages to be displayed here; process them with a timer.
 	struct Message { bool hubOrUser; bool sending; string ip; string peer; string message; };
-	vector<Message> messages;
-
-	CriticalSection mutex;
+	boost::lockfree::queue<Message> messages;
 
 	uint16_t counter;
 	bool scroll;

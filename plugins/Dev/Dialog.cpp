@@ -36,6 +36,7 @@ Dialog* dlg = nullptr;
 
 Dialog::Dialog() :
 	hwnd(nullptr),
+	messages(1024),
 	counter(0),
 	scroll(true),
 	hubMessages(true),
@@ -68,8 +69,7 @@ void Dialog::create() {
 
 void Dialog::write(bool hubOrUser, bool sending, string ip, string peer, string message) {
 	Message msg = { hubOrUser, sending, move(ip), move(peer), move(message) };
-	Lock l(mutex);
-	messages.push_back(move(msg));
+	messages.push(msg);
 }
 
 void Dialog::close() {
@@ -148,20 +148,13 @@ BOOL Dialog::init() {
 }
 
 void Dialog::timer() {
-	decltype(messages) messages_;
-	{
-		Lock l(mutex);
-		messages_.swap(messages);
-	}
-	if(messages_.empty()) {
-		return;
-	}
-
 	auto control = GetDlgItem(hwnd, IDC_MESSAGES);
 
 	LVITEM lvi = { 0 };
 
-	for(auto& message: messages_) {
+	Message message;
+	while(messages.pop(message)) {
+
 		if(!(message.hubOrUser ? hubMessages : userMessages)) {
 			continue;
 		}
