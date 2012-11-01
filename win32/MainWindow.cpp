@@ -1766,8 +1766,7 @@ void MainWindow::on(QueueManagerListener::Finished, QueueItem* qi, const string&
 		} else if(qi->isSet(QueueItem::FLAG_TEXT)) {
 			auto file = qi->getTarget();
 			callAsync([this, file] {
-				TextFrame::openWindow(getTabView(), file);
-				File::deleteFile(file);
+				TextFrame::openWindow(getTabView(), file, true, true);
 			});
 		}
 	}
