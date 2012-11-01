@@ -28,7 +28,7 @@ public:
 	static const string id;
 	const string& getId() const;
 
-	static void openWindow(TabViewPtr parent, const string& fileName, bool activate = true);
+	static void openWindow(TabViewPtr parent, const string& fileName, bool activate = true, bool temporary = false);
 
 	WindowParams getWindowParams() const;
 	static void parseWindowParams(TabViewPtr parent, const WindowParams& params);
@@ -41,10 +41,11 @@ public:
 private:
 	friend class MDIChildFrame<TextFrame>;
 
-	TextFrame(TabViewPtr parent, const string& path);
+	TextFrame(TabViewPtr parent, const string& path, bool temporary);
 	virtual ~TextFrame() { }
 
 	void layout();
+	void postClosing();
 
 	void handleFontChange();
 
@@ -52,6 +53,7 @@ private:
 	TextBoxPtr pad;
 
 	const string path;
+	const bool temporary;
 };
 
 #endif

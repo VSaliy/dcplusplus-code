@@ -27,6 +27,7 @@
 #include <dwt/widgets/FontDialog.h>
 #include <dwt/widgets/Grid.h>
 
+#include "MainWindow.h"
 #include "WinUtil.h"
 
 using dwt::FontDialog;
@@ -38,8 +39,8 @@ const string& TextFrame::getId() const { return id; }
 
 static const size_t MAX_TEXT_LEN = 64*1024;
 
-void TextFrame::openWindow(TabViewPtr parent, const string& fileName, bool activate) {
-	auto window = new TextFrame(parent, fileName);
+void TextFrame::openWindow(TabViewPtr parent, const string& fileName, bool activate, bool temporary) {
+	auto window = new TextFrame(parent, fileName, temporary);
 	if(activate)
 		window->activate();
 }
@@ -57,11 +58,12 @@ void TextFrame::parseWindowParams(TabViewPtr parent, const WindowParams& params)
 	}
 }
 
-TextFrame::TextFrame(TabViewPtr parent, const string& path) :
+TextFrame::TextFrame(TabViewPtr parent, const string& path, bool temporary) :
 BaseType(parent, Text::toT(Util::getFileName(path)), IDH_TEXT_VIEWER),
 grid(0),
 pad(0),
-path(path)
+path(path),
+temporary(temporary)
 {
 	setIcon(WinUtil::fileImages->getIcon(WinUtil::getFileIcon(path)));
 
@@ -114,6 +116,12 @@ void TextFrame::layout() {
 
 	r.size.y -= grid->getSpacing(); // add a bottom margin not to be too stuck to the status bar.
 	grid->resize(r);
+}
+
+void TextFrame::postClosing() {
+	if(temporary && !WinUtil::mainWindow->closing()) {
+		File::deleteFile(path);
+	}
 }
 
 void TextFrame::handleFontChange() {
