@@ -195,7 +195,7 @@ bool ShellMenu::handleUnInitMenuPopup(const MSG& msg, LRESULT& ret) {
 	HMENU menu = reinterpret_cast<HMENU>(msg.wParam);
 	for(auto& i: handlers)
 		if(i.first->handle() == menu)
-			i.first->removeAllItems();
+			i.first->clear();
 
 	return dispatch(msg, ret);
 }

@@ -142,12 +142,12 @@ public:
 	* all subsequent items change positions. To remove a range of items, remove from
 	* end to start.
 	*/
-	void removeItem(unsigned index);
+	void remove(unsigned index);
 
 	/// Remove all items from the menu
 	/** Will also delete any submenus.
 	*/
-	void removeAllItems();
+	void clear();
 
 	/// Return the number of items in the menu
 	unsigned size() const;

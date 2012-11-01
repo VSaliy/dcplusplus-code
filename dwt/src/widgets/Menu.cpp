@@ -230,13 +230,12 @@ void Menu::setTitleFont(FontPtr font) {
 	titleFont = font;
 }
 
-void Menu::clearTitle( bool clearSidebar /* = false */)
-{
+void Menu::clearTitle(bool clearSidebar) {
 	if(!ownerDrawn)
 		return;
 
-	if ( !clearSidebar && !itsTitle.empty() )
-		removeItem( 0 );
+	if(!clearSidebar && !itsTitle.empty())
+		remove(0);
 
 	// clear title text
 	itsTitle.clear();
@@ -735,11 +734,11 @@ void Menu::appendSeparator() {
 	}
 }
 
-void Menu::removeItem(unsigned index) {
+void Menu::remove(unsigned index) {
 	auto child = ::GetSubMenu(itsHandle, index);
 
 	if(!::RemoveMenu(itsHandle, index, MF_BYPOSITION)) {
-		throw Win32Exception("Couldn't remove item in Menu::removeItem");
+		throw Win32Exception("Couldn't remove item in Menu::remove");
 	}
 
 	if(ownerDrawn) {
@@ -766,10 +765,10 @@ void Menu::removeItem(unsigned index) {
 	}
 }
 
-void Menu::removeAllItems() {
+void Menu::clear() {
 	// must be backwards, since higher indexes change when removing lower ones
 	for(int i = size() - 1, end = itsTitle.empty() ? 0 : 1; i >= end; --i) {
-		removeItem(i);
+		remove(i);
 	}
 }
 
