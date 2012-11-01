@@ -651,7 +651,7 @@ void MainWindow::addPluginCommand(const tstring& text, function<void ()> command
 	pluginCommands[text] = command;
 
 	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
-		WinUtil::mainWindow->pluginMenu->removeAllItems();
+		WinUtil::mainWindow->pluginMenu->clear();
 		WinUtil::mainWindow->refreshPluginMenu();
 	}
 }
@@ -663,7 +663,7 @@ void MainWindow::removePluginCommand(const tstring& text) {
 	pluginCommands.erase(i);
 
 	if(WinUtil::mainWindow && !WinUtil::mainWindow->closing()) {
-		WinUtil::mainWindow->pluginMenu->removeItem(index + 1 /* account for the menu title */);
+		WinUtil::mainWindow->pluginMenu->remove(index + 1 /* account for the menu title */);
 		if(pluginCommands.empty()) {
 			WinUtil::mainWindow->refreshPluginMenu();
 		}
