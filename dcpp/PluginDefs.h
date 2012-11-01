@@ -63,7 +63,7 @@ extern "C" {
 #define DCINTF_DCPP_HUBS_VER		1
 
 #define DCINTF_DCPP_QUEUE			"dcpp.queue.DCQueue"		/* Download Queue */
-#define DCINTF_DCPP_QUEUE_VER		1
+#define DCINTF_DCPP_QUEUE_VER		2
 
 #define DCINTF_DCPP_UTILS			"dcpp.utils.DCUtils"		/* Utility and convenience functions */
 #define DCINTF_DCPP_UTILS_VER		1
@@ -144,8 +144,7 @@ typedef enum tagMsgType {
 
 typedef enum tagQueuePrio {
 	PRIO_DEFAULT = -1,
-	PRIO_PAUSED = 0,
-	PRIO_LOWEST,
+	PRIO_LOWEST = 1,
 	PRIO_LOW,
 	PRIO_NORMAL,
 	PRIO_HIGH,
@@ -390,6 +389,9 @@ typedef struct tagDCQueue {
 
 	QueueDataPtr	(DCAPI *copy)					(const QueueDataPtr hItem);
 	void			(DCAPI *release)				(QueueDataPtr hCopy);
+
+	/* Version 2 functions */
+	Bool			(DCAPI *pause)					(QueueDataPtr hItem);
 } DCQueue, *DCQueuePtr;
 
 /* Utility and convenience functions */
@@ -416,11 +418,13 @@ typedef struct tagDCTagger {
 } DCTagger, *DCTaggerPtr;
 
 /* User interface */
+typedef void (DCAPI* DCCommandFunc)		();
+
 typedef struct DCUI {
 	/* User interface API version */
 	uint32_t apiVersion;
 
-	void		(DCAPI *add_command)				(const char* name, void (*command)());
+	void		(DCAPI *add_command)				(const char* name, DCCommandFunc command);
 	void		(DCAPI *remove_command)				(const char* name);
 
 	void		(DCAPI *play_sound)					(const char* path);

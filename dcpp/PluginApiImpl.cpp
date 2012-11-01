@@ -144,7 +144,9 @@ DCQueue PluginApiImpl::dcQueue = {
 	&PluginApiImpl::setPriority,
 
 	&PluginApiImpl::copyData,
-	&PluginApiImpl::releaseData
+	&PluginApiImpl::releaseData,
+
+	&PluginApiImpl::pause
 };
 
 DCUtils PluginApiImpl::dcUtils = {
@@ -541,6 +543,14 @@ void PluginApiImpl::removeDownload(QueueDataPtr qi) {
 
 void PluginApiImpl::setPriority(QueueDataPtr qi, QueuePrio priority) {
 	reinterpret_cast<QueueItem*>(qi->object)->setPriority(static_cast<QueueItem::Priority>(priority));
+}
+
+Bool PluginApiImpl::pause(QueueDataPtr qi) {
+	auto item = reinterpret_cast<QueueItem*>(qi->object);
+	bool paused = (item->getPriority() == QueueItem::PAUSED);
+
+	item->setPriority(paused ? QueueItem::DEFAULT : QueueItem::PAUSED);
+	return (!paused ? True : False);
 }
 
 QueueDataPtr PluginApiImpl::copyData(const QueueDataPtr qi) {
