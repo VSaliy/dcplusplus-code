@@ -74,6 +74,10 @@ void Plugin::addHooks() {
 		return instance->onConnectionDataIn(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
 	events[HOOK_NETWORK_CONN_OUT] = hooks->bind_hook(HOOK_NETWORK_CONN_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
 		return instance->onConnectionDataOut(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
+	events[HOOK_UI_PROCESS_CHAT_CMD] = hooks->bind_hook(HOOK_UI_PROCESS_CHAT_CMD, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+		auto cmd = reinterpret_cast<CommandDataPtr>(pData);
+		if(cmd->isPrivate) { return False; }
+		return instance->onChatCommand(reinterpret_cast<HubDataPtr>(pObject), cmd); }, nullptr);
 }
 
 void Plugin::clearHooks() {
@@ -85,9 +89,11 @@ void Plugin::clearHooks() {
 void Plugin::start() {
 	dialog.create();
 	addHooks();
+	Util::setConfig("Enabled", true);
 }
 
 void Plugin::close() {
+	Util::setConfig("Enabled", false);
 	clearHooks();
 	dialog.close();
 }
@@ -99,6 +105,7 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	auto utils = reinterpret_cast<DCUtilsPtr>(core->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER));
 	auto config = reinterpret_cast<DCConfigPtr>(core->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER));
 	auto logger = reinterpret_cast<DCLogPtr>(core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER));
+	hubs = reinterpret_cast<DCHubPtr>(core->query_interface(DCINTF_DCPP_HUBS, DCINTF_DCPP_HUBS_VER));
 	ui = reinterpret_cast<DCUIPtr>(core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER));
 
 	if(!utils || !config || !logger || !ui) {
@@ -109,12 +116,15 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	Util::initialize(core->host_name(), utils, config, logger);
 
 	if(install) {
-		/// @todo config enabled/disabled
+		Util::setConfig("Enabled", true);
 
-		Util::logMessage("The dev plugin has been installed; check the \"" + string(switchText) + "\" command.");
+		Util::logMessage("The dev plugin has been installed; check the \"" + string(switchText) + "\" command and the /raw chat command.");
 	}
 
-	start();
+	if(Util::getBoolConfig("Enabled")) {
+		start();
+	}
+
 	ui->add_command(switchText, [] { instance->onSwitched(); });
 }
 
@@ -143,5 +153,20 @@ Bool Plugin::onConnectionDataIn(ConnectionDataPtr hConn, const char* message) {
 
 Bool Plugin::onConnectionDataOut(ConnectionDataPtr hConn, const char* message) {
 	dialog.write(false, true, hConn->ip, "User" /** @todo get user's nick */, message);
+	return False;
+}
+
+Bool Plugin::onChatCommand(HubDataPtr hub, CommandDataPtr cmd) {
+	if(stricmp(cmd->command, "help") == 0) {
+		hubs->local_message(hub, "/raw <message>", MSG_SYSTEM);
+
+	} else if(stricmp(cmd->command, "raw") == 0) {
+		if(strlen(cmd->params) == 0) {
+			hubs->local_message(hub, "Specify a message to send", MSG_SYSTEM);
+		} else {
+			hubs->send_protocol_cmd(hub, cmd->params);
+		}
+	}
+
 	return False;
 }
