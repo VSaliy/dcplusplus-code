@@ -19,8 +19,6 @@
 #include "stdafx.h"
 #include "Util.h"
 
-#include "version.h"
-
 string Util::appName; 
 
 DCUtilsPtr Util::utils = nullptr;
@@ -28,12 +26,13 @@ DCConfigPtr Util::config = nullptr;
 DCLogPtr Util::logger = nullptr;
 
 void Util::setConfig(const char* name, const char* value) {
-	ConfigStr val;
-	memset(&val, 0, sizeof(ConfigStr));
+	ConfigStr val = { CFG_TYPE_STRING, value };
+	setConfig(name, val);
+}
 
-	val.type = CFG_TYPE_STRING;
-	val.value = value;
-	config->set_cfg(PLUGIN_GUID, name, (ConfigValuePtr)&val);
+void Util::setConfig(const char* name, bool value) {
+	ConfigBool val = { CFG_TYPE_BOOL, value ? True : False };
+	setConfig(name, val);
 }
 
 string Util::getConfig(const char *name) {

@@ -19,6 +19,8 @@
 #ifndef PLUGINS_DEV_UTIL_H
 #define PLUGINS_DEV_UTIL_H
 
+#include "version.h"
+
 #ifdef _WIN32
 # define PATH_SEPARATOR '\\'
 # define PATH_SEPARATOR_STR "\\"
@@ -83,9 +85,13 @@ public:
 		logger->log(message.c_str());
 	}
 
+	/// @todo SFINAE to ensure that ConfigT is a ConfigStr/Bool/etc?
+	template<typename ConfigT> static void setConfig(const char* name, ConfigT& val) {
+		config->set_cfg(PLUGIN_GUID, name, reinterpret_cast<ConfigValuePtr>(&val));
+	}
 	static void setConfig(const char* name, const char* value);
 	static void setConfig(const char* name, const string& value) { setConfig(name, value.c_str()); }
-	static void setConfig(const char* name, bool state) { setConfig(name, string(state ? "1" : "0")); }
+	static void setConfig(const char* name, bool state);
 
 	static string getConfig(const char *name);
 	static bool getBoolConfig(const char* name);

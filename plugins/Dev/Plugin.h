@@ -49,11 +49,13 @@ private:
 	Bool onHubDataOut(HubDataPtr hHub, const char* message);
 	Bool onConnectionDataIn(ConnectionDataPtr hConn, const char* message);
 	Bool onConnectionDataOut(ConnectionDataPtr hConn, const char* message);
+	Bool onChatCommand(HubDataPtr hub, CommandDataPtr cmd);
 
 	map<string, subsHandle> events;
 
 	DCCorePtr dcpp;
 	DCHooksPtr hooks;
+	DCHubPtr hubs;
 	DCUIPtr ui;
 
 	Dialog dialog;
