@@ -42,7 +42,7 @@
 
 #endif
 
-#if defined(_MSC_VER) || (defined(__MINGW32__) && !defined(_WIN64))
+#if defined(_MSC_VER) || (defined(__MINGW32__) && !defined(HAVE_MINGW64))
 #define _LL(x) x##ll
 #define _ULL(x) x##ull
 #define I64_FMT "%I64d"

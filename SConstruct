@@ -265,6 +265,10 @@ env.Append(BUILDERS = {'PotBuild' : pot_bld})
 conf = Configure(env, conf_dir = dev.get_build_path('.sconf_temp'), log_file = dev.get_build_path('config.log'), clean = False, help = False)
 if conf.CheckCXXHeader(['windows.h', 'htmlhelp.h'], '<>'):
 	conf.env.Append(CPPDEFINES='HAVE_HTMLHELP_H')
+# see whether we're compiling with MinGW or MinGW-w64 (2 different projects that can both build
+# a 32-bit program). the only differentiator is __MINGW64_VERSION_MAJOR.
+if conf.CheckDeclaration('__MINGW64_VERSION_MAJOR', '#include <windows.h>', 'C++'):
+	conf.env.Append(CPPDEFINES='HAVE_MINGW64')
 env = conf.Finish()
 
 dev.boost = dev.build('boost/')

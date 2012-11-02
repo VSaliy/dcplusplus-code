@@ -1,11 +1,7 @@
-#include <dcpp/stdinc.h>
+#include "testbase.h"
 
 #include <dcpp/SimpleXMLReader.h>
 #include <unordered_map>
-
-#include "gtest.h"
-
-#define _(x)
 
 using namespace dcpp;
 
