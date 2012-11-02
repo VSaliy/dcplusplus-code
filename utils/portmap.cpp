@@ -1,6 +1,6 @@
 // Tool to add or remove port mapping rules using the interfaces provided by DC++.
 
-#include <dcpp/stdinc.h>
+#include "base.h"
 
 #include <iostream>
 #include <memory>

@@ -1,10 +1,8 @@
-#include <dcpp/stdinc.h>
+#include "testbase.h"
 
 #include <dcpp/HashBloom.h>
 #include <dcpp/HashValue.h>
 #include <dcpp/TigerHash.h>
-
-#include "gtest.h"
 
 using namespace dcpp;
 

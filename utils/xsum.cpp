@@ -1,10 +1,11 @@
-#include <iostream>
+#include "base.h"
 
-#include <dcpp/stdinc.h>
+#include <iostream>
+#include <cstdlib>
+
 #include <dcpp/FileReader.h>
 #include <dcpp/Util.h>
 #include <dcpp/MerkleTree.h>
-#include <stdlib.h>
 
 #include <boost/date_time/posix_time/ptime.hpp>
 using namespace boost::posix_time;

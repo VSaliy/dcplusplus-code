@@ -1,12 +1,10 @@
-#include <dcpp/stdinc.h>
+#include "testbase.h"
 
 #include <dcpp/atomic.h>
 
 #include <boost/lockfree/queue.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
 #include <boost/lockfree/stack.hpp>
-
-#include "gtest.h"
 
 using namespace dcpp;
 

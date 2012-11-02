@@ -71,7 +71,7 @@
 extern "C" {
 	void HH_GS_CALL __GSHandlerCheck() { }
 	void HH_GS_CALL __security_check_cookie(uintptr_t) { }
-#ifndef _WIN64
+#ifndef HAVE_MINGW64
 	uintptr_t __security_cookie;
 #endif
 }
