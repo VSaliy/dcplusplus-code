@@ -18,7 +18,11 @@
 
 #include "stdafx.h"
 #include "Plugin.h"
-#include "Util.h"
+
+#include <pluginsdk/Config.h>
+#include <pluginsdk/Core.h>
+#include <pluginsdk/Logger.h>
+#include <pluginsdk/Util.h>
 
 Plugin* Plugin::instance = nullptr;
 
@@ -89,39 +93,34 @@ void Plugin::clearHooks() {
 void Plugin::start() {
 	dialog.create();
 	addHooks();
-	Util::setConfig("Enabled", true);
+	Config::setConfig("Enabled", true);
 }
 
 void Plugin::close() {
-	Util::setConfig("Enabled", false);
+	Config::setConfig("Enabled", false);
 	clearHooks();
 	dialog.close();
 }
 
 void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
-	dcpp = core;
 	hooks = reinterpret_cast<DCHooksPtr>(core->query_interface(DCINTF_HOOKS, DCINTF_HOOKS_VER));
 
-	auto utils = reinterpret_cast<DCUtilsPtr>(core->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER));
-	auto config = reinterpret_cast<DCConfigPtr>(core->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER));
-	auto logger = reinterpret_cast<DCLogPtr>(core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER));
 	hubs = reinterpret_cast<DCHubPtr>(core->query_interface(DCINTF_DCPP_HUBS, DCINTF_DCPP_HUBS_VER));
 	ui = reinterpret_cast<DCUIPtr>(core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER));
 
-	if(!utils || !config || !logger || !ui) {
+	if(!Util::init(core) || !Config::init(core) || !Logger::init(core) || !hooks || !hubs || !ui) {
 		loadRes = False;
 		return;
 	}
-
-	Util::initialize(core->host_name(), utils, config, logger);
+	Core::init(core);
 
 	if(install) {
-		Util::setConfig("Enabled", true);
+		Config::setConfig("Enabled", true);
 
-		Util::logMessage("The dev plugin has been installed; check the \"" + string(switchText) + "\" command and the /raw chat command.");
+		Logger::log("The dev plugin has been installed; check the \"" + string(switchText) + "\" command and the /raw chat command.");
 	}
 
-	if(Util::getBoolConfig("Enabled")) {
+	if(Config::getBoolConfig("Enabled")) {
 		start();
 	}
 

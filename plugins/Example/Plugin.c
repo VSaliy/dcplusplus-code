@@ -18,7 +18,6 @@
 
 #include "stdafx.h"
 #include "Plugin.h"
-#include "version.h"
 
 #ifndef __cplusplus
 # include <stdio.h>

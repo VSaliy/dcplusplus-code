@@ -2,7 +2,7 @@ Import('dev source_path')
 
 env, target, sources = dev.prepare_build(source_path, 'ScriptPlugin', source_glob = '*.cpp', in_bin = False)
 
-env.Append(CPPPATH = ['#/dcpp', 'lua'])
+env.Append(CPPPATH = ['#/pluginsdk/cpp', 'lua'])
 
 # TODO remove this when GCC stops whining about stateless lambdas
 if dev.is_win32() and 'gcc' in env['TOOLS']:

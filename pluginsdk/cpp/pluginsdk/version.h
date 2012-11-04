@@ -16,28 +16,27 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "stdafx.h"
-#include "Plugin.h"
+/* Information about the plugin - fill this out! */
 
-extern "C" {
+#ifndef PLUGINSDK_VERSION_H
+#define PLUGINSDK_VERSION_H
 
-// Plugin loader
-DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
-	info->name = PLUGIN_NAME;
-	info->author = PLUGIN_AUTHOR;
-	info->description = PLUGIN_DESC;
-	info->web = PLUGIN_WEB;
-	info->version = PLUGIN_VERSION;
-	info->apiVersion = DCAPI_CORE_VER;
-	info->guid = PLUGIN_GUID;
+/* UUID/GUID for this plugin project */
+#define PLUGIN_GUID "..."
 
-	return &Plugin::main;
-}
+/* Name of the plugin */
+#define PLUGIN_NAME "..."
 
-#ifdef _WIN32
-BOOL APIENTRY DllMain(HINSTANCE /*hinstDLL*/, DWORD /*fdwReason*/, LPVOID /*lpvReserved*/) {
-	return TRUE;
-}
+/* Author of the plugin */
+#define PLUGIN_AUTHOR "..."
+
+/* Short description of the plugin */
+#define PLUGIN_DESC "..."
+
+/* Version of the plugin (note: not API version) */
+#define PLUGIN_VERSION 1.0
+
+/* Plugin website, set to "N/A" if none */
+#define PLUGIN_WEB "N/A"
+
 #endif
-
-}

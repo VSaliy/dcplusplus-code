@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_PLUGIN_DEFS_H
-#define DCPLUSPLUS_DCPP_PLUGIN_DEFS_H
+#ifndef PLUGINSDK_PLUGINDEFS_H
+#define PLUGINSDK_PLUGINDEFS_H
 
 #ifdef __cplusplus
 extern "C" {

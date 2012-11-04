@@ -18,7 +18,11 @@
 
 #include "stdafx.h"
 #include "Plugin.h"
-#include "Util.h"
+
+#include <pluginsdk/Config.h>
+#include <pluginsdk/Core.h>
+#include <pluginsdk/Logger.h>
+#include <pluginsdk/Util.h>
 
 Plugin* Plugin::instance = nullptr;
 
@@ -58,30 +62,22 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 }
 
 void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
-	dcpp = core;
 	hooks = reinterpret_cast<DCHooksPtr>(core->query_interface(DCINTF_HOOKS, DCINTF_HOOKS_VER));
 
-	auto utils = reinterpret_cast<DCUtilsPtr>(core->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER));
-	auto config = reinterpret_cast<DCConfigPtr>(core->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER));
-	auto logger = reinterpret_cast<DCLogPtr>(core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER));
 	tagger = reinterpret_cast<DCTaggerPtr>(core->query_interface(DCINTF_DCPP_TAGGER, DCINTF_DCPP_TAGGER_VER));
 	ui = reinterpret_cast<DCUIPtr>(core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER));
 
-	if(!utils || !config || !logger || !tagger || !ui) {
+	if(!Util::init(core) || !Config::init(core) || !Logger::init(core) || !hooks || !tagger || !ui) {
 		loadRes = False;
 		return;
 	}
+	Core::init(core);
 
-	Util::initialize(core->host_name(), utils, config, logger);
+	if(install) {
+		Logger::log("The test plugin has been installed.");
+	}
 
-	Util::logMessage("Test plugin loaded, watch out!");
-
-	/*if(install) {
-		// Default settings
-
-		Util::logMessage("Test plugin installed, please restart " + Util::appName + " to begin using the plugin.");
-		return;
-	}*/
+	Logger::log("Test plugin loaded, watch out!");
 
 	events[HOOK_TIMER_SECOND] = hooks->bind_hook(HOOK_TIMER_SECOND, [](dcptr_t, dcptr_t pData, dcptr_t, Bool*) {
 		return instance->onSecond(*reinterpret_cast<uint64_t*>(pData)); }, nullptr);

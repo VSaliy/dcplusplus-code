@@ -5,7 +5,7 @@ if not dev.is_win32():
 
 env, target, sources = dev.prepare_build(source_path, 'DevPlugin', source_glob = '*.cpp', in_bin = False)
 
-env.Append(CPPPATH = ['#/dcpp'])
+env.Append(CPPPATH = ['#/pluginsdk/cpp'])
 
 # TODO remove this when GCC stops whining about stateless lambdas
 if dev.is_win32() and 'gcc' in env['TOOLS']:

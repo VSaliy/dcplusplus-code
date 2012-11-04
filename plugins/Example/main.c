@@ -18,7 +18,6 @@
 
 #include "stdafx.h"
 #include "Plugin.h"
-#include "version.h"
 
 const char* dependencies[] = {
 	/* Plugins with these GUID's must have been loaded *before* this plugin */

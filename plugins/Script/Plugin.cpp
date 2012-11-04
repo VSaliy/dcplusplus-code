@@ -18,8 +18,13 @@
 
 #include "stdafx.h"
 #include "Plugin.h"
-#include "version.h"
-#include "Util.h"
+
+#include <pluginsdk/Config.h>
+#include <pluginsdk/Core.h>
+#include <pluginsdk/Logger.h>
+#include <pluginsdk/Util.h>
+
+#include <boost/filesystem.hpp>
 
 Plugin* Plugin::instance = nullptr;
 
@@ -33,7 +38,7 @@ Plugin::~Plugin() {
 				hub->release(i);
 			}
 
-			Util::logMessage("Script plugin warning: scripts do not correctly remove hubs they add!");
+			Logger::log("Script plugin warning: scripts do not correctly remove hubs they add!");
 			hubs.clear();
 		}
 
@@ -74,35 +79,31 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 }
 
 void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
-	dcpp = core;
 	hooks = reinterpret_cast<DCHooksPtr>(core->query_interface(DCINTF_HOOKS, DCINTF_HOOKS_VER));
 
 	hub = reinterpret_cast<DCHubPtr>(core->query_interface(DCINTF_DCPP_HUBS, DCINTF_DCPP_HUBS_VER));
 	connection = reinterpret_cast<DCConnectionPtr>(core->query_interface(DCINTF_DCPP_CONNECTIONS, DCINTF_DCPP_CONNECTIONS_VER));
 
-	auto utils = reinterpret_cast<DCUtilsPtr>(core->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER));
-	auto config = reinterpret_cast<DCConfigPtr>(core->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER));
-	auto logger = reinterpret_cast<DCLogPtr>(core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER));
-
-	if(!utils || !config || !logger || !hub || !connection) {
+	if(!Util::init(core) || !Config::init(core) || !Logger::init(core) || !hooks || !hub || !connection) {
 		loadRes = False;
 		return;
 	}
-
-	Util::initialize(core->host_name(), utils, config, logger);
+	Core::init(core);
 
 	// Default settings
-	if(Util::getConfig("ScriptPath").empty())
-		Util::setConfig("ScriptPath", Util::getPath(PATH_RESOURCES) + "scripts" PATH_SEPARATOR_STR);
+	if(Config::getConfig("ScriptPath").empty()) {
+		Config::setConfig("ScriptPath", Config::getPath(PATH_RESOURCES) + "scripts" +
+			Util::fromT(boost::filesystem::path::string_type(boost::filesystem::path::preferred_separator)));
+	}
 
-	if(Util::getConfig("LuaDebug").empty())
-		Util::setConfig("LuaDebug", false);
+	if(Config::getConfig("LuaDebug").empty())
+		Config::setConfig("LuaDebug", false);
 
-	if(Util::getConfig("FormatChat").empty())
-		Util::setConfig("FormatChat", true);
+	if(Config::getConfig("FormatChat").empty())
+		Config::setConfig("FormatChat", true);
 
 	if(install) {
-		Util::logMessage("Script plugin installed, please restart " + Util::appName + " to begin using the plugin.");
+		Logger::log("Script plugin installed, please restart " + Core::appName + " to begin using the plugin.");
 		return;
 	}
 
@@ -138,8 +139,8 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 		return instance->onHubEnter(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<CommandDataPtr>(pData)); }, nullptr);
 
 	/// @todo let the user configure which files to auto-load
-	auto file = Util::fromUtf8(SETTING(ScriptPath)) + "startup.lua";
-	if(Util::fileExists(file))
+	auto file = Util::fromUtf8(Config::getConfig("ScriptPath")) + "startup.lua";
+	if(boost::filesystem::exists(file))
 		ScriptInstance::EvaluateFile(file);
 
 	// This ensures that FormatChatText is only called when present...
@@ -159,6 +160,16 @@ void Plugin::setTimer(bool bState) {
 		i->second = nullptr;
 	}
 }
+
+namespace { string formatBytes(double val) {
+	int i = 0;
+	while(val >= 1024 && i < 5) { val = val / 1024; i += 1; }
+	const char units[5][4] = { "KiB", "MiB", "GiB", "TiB", "PiB" };
+
+	char buf[64];
+	snprintf(buf, sizeof(buf), "%.02f %s", val, units[i]);
+	return buf;
+} }
 
 Bool Plugin::onHubEnter(HubDataPtr hHub, CommandDataPtr cmd) {
 	if(cmd->isPrivate)
@@ -195,22 +206,22 @@ Bool Plugin::onHubEnter(HubDataPtr hHub, CommandDataPtr cmd) {
 		// Run GC and get LUA memory usage
 		lua_gc(L, LUA_GCCOLLECT, 0);
 		double mem = lua_gc(L, LUA_GCCOUNT, 0);
-		auto stats = "Scripts (" LUA_DIST ") are using " + Util::formatBytes(mem) + " of system memory";
+		auto stats = "Scripts (" LUA_DIST ") are using " + formatBytes(mem) + " of system memory";
 
 		hub->local_message(hHub, stats.c_str(), MSG_SYSTEM);
 		return True;
 	} else if(stricmp(cmd->command, "luadebug") == 0) {
-		bool state = BOOLSETTING(LuaDebug);
+		bool state = Config::getBoolConfig("LuaDebug");
 		const char* status = (state ? "Additional error messages disabled" : "Additional error messages enabled");
 
-		Util::setConfig("LuaDebug", state);
+		Config::setConfig("LuaDebug", state);
 		hub->local_message(hHub, status, MSG_SYSTEM);
 		return True;
 	} else if(stricmp(cmd->command, "formatchat") == 0) {
-		bool state = BOOLSETTING(FormatChat);
+		bool state = Config::getBoolConfig("FormatChat");
 		const char* status = (state ? "Lua chat formatting disabled" : "Lua chat formatting enabled");
 
-		Util::setConfig("FormatChat", state);
+		Config::setConfig("FormatChat", state);
 		hub->local_message(hHub, status, MSG_SYSTEM);
 		return True;
 	}
@@ -281,7 +292,7 @@ Bool Plugin::onConnectionDataOut(ConnectionDataPtr hConn, const char* message) {
 
 Bool Plugin::onFormatChat(UserDataPtr hUser, StringDataPtr line, Bool* bBreak) {
 	Lock l(cs);
-	if(!hUser || !BOOLSETTING(FormatChat) || !MakeCall("dcpp", "FormatChatHTML", 1, hUser, string(line->in)))
+	if(!hUser || !Config::getBoolConfig("FormatChat") || !MakeCall("dcpp", "FormatChatHTML", 1, hUser, string(line->in)))
 		return False;
 
 	if(lua_isstring(L, -1)) {

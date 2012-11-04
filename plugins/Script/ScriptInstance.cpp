@@ -19,9 +19,12 @@
 #include "stdafx.h"
 #include "ScriptInstance.h"
 
-#include "Util.h"
+#include "debug.h"
 #include "LuaExec.h"
-#include "version.h"
+
+#include <pluginsdk/Config.h>
+#include <pluginsdk/Logger.h>
+#include <pluginsdk/Util.h>
 
 lua_State* ScriptInstance::L = NULL;
 CriticalSection ScriptInstance::cs;
@@ -39,7 +42,7 @@ bool ScriptInstance::MakeCallRaw(const string& table, const string& method, int 
 			return true;
 		}
 		const char *msg = lua_tostring(L, -1);
-		Util::logMessage((msg != NULL) ? string("Lua Error calling ") + table + "." + method + ": " + msg : string("Lua Error: (unknown)"));
+		Logger::log((msg != NULL) ? string("Lua Error calling ") + table + "." + method + ": " + msg : string("Lua Error: (unknown)"));
 		lua_pop(L, 1);
 	} else {
 		// Abandon to garbage collector arguments pushed to function in table
@@ -88,5 +91,5 @@ void ScriptInstance::EvaluateChunk(const string& chunk) {
 
 void ScriptInstance::EvaluateFile(const string& fn) {
 	Lock l(cs);
-	lua_dofile(L, (fn[1] == ':' || fn[0] == '/') ? fn.c_str() : Util::fromUtf8(SETTING(ScriptPath) + fn).c_str());
+	lua_dofile(L, (fn[1] == ':' || fn[0] == '/') ? fn.c_str() : Util::fromUtf8(Config::getConfig("ScriptPath") + fn).c_str());
 }
