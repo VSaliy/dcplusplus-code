@@ -19,7 +19,6 @@
 #include "stdafx.h"
 #include "Dialog.h"
 #include "Plugin.h"
-#include "version.h"
 
 extern "C" {
 

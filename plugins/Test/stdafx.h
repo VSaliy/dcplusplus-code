@@ -34,7 +34,9 @@
 #include <cstdint>
 #include <string>
 
-#include <PluginDefs.h>
+#include <pluginsdk/PluginDefs.h>
+
+#include "version.h"
 
 #ifdef _UNICODE
 typedef std::wstring tstring;

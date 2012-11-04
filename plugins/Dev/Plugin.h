@@ -53,7 +53,6 @@ private:
 
 	map<string, subsHandle> events;
 
-	DCCorePtr dcpp;
 	DCHooksPtr hooks;
 	DCHubPtr hubs;
 	DCUIPtr ui;

@@ -16,28 +16,41 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "stdafx.h"
-#include "Plugin.h"
+/* Helpers around the DCUtils interface. */
 
-extern "C" {
+#ifndef PLUGINSDK_UTIL_H
+#define PLUGINSDK_UTIL_H
 
-// Plugin loader
-DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
-	info->name = PLUGIN_NAME;
-	info->author = PLUGIN_AUTHOR;
-	info->description = PLUGIN_DESC;
-	info->web = PLUGIN_WEB;
-	info->version = PLUGIN_VERSION;
-	info->apiVersion = DCAPI_CORE_VER;
-	info->guid = PLUGIN_GUID;
+#include <cstdint>
+#include <string>
 
-	return &Plugin::main;
-}
+#include <pluginsdk/PluginDefs.h>
 
-#ifdef _WIN32
-BOOL APIENTRY DllMain(HINSTANCE /*hinstDLL*/, DWORD /*fdwReason*/, LPVOID /*lpvReserved*/) {
-	return TRUE;
-}
+using std::string;
+#ifdef _UNICODE
+using std::wstring;
 #endif
 
-}
+class Util
+{
+public:
+	static bool init(DCCorePtr core);
+	static void init(DCUtilsPtr coreUtils);
+
+#ifdef _UNICODE
+	static string fromT(const wstring& str);
+	static wstring toT(const string& str);
+
+	// identities (for convenience)
+	static string fromT(const string& str);
+	static wstring toT(const wstring& str);
+#endif // _UNICODE
+
+	static string fromUtf8(const string& str);
+	static string toUtf8(const string& str);
+
+private:
+	static DCUtilsPtr utils;
+};
+
+#endif

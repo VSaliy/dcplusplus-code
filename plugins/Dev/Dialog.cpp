@@ -20,7 +20,11 @@
 #include "Dialog.h"
 #include "Plugin.h"
 #include "resource.h"
-#include "Util.h"
+
+#include <pluginsdk/Core.h>
+#include <pluginsdk/Util.h>
+
+#include <boost/lexical_cast.hpp>
 
 #include <commctrl.h>
 #include <windowsx.h>
@@ -53,7 +57,7 @@ Dialog::~Dialog() {
 
 void Dialog::create() {
 	if(hwnd) {
-		MessageBox(0, Util::toT("The dev plugin hasn't been properly shut down; you better restart " + Util::appName).c_str(),
+		MessageBox(0, Util::toT("The dev plugin hasn't been properly shut down; you better restart " + Core::appName).c_str(),
 			_T("Error creating the dev plugin's dialog"), MB_OK);
 		return;
 	}
@@ -176,7 +180,7 @@ void Dialog::timer() {
 		}
 
 		auto item = new Item;
-		item->index = Util::toT(Util::toString(counter));
+		item->index = Util::toT(boost::lexical_cast<string>(counter));
 		item->dir = message.sending ? _T("Out") : _T("In");
 		item->ip = move(ip);
 		item->peer = Util::toT(message.peer);

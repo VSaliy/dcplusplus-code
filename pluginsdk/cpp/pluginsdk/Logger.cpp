@@ -16,28 +16,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "stdafx.h"
-#include "Plugin.h"
+/* Helpers around the DCLog interface. */
 
-extern "C" {
+#include "Logger.h"
 
-// Plugin loader
-DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
-	info->name = PLUGIN_NAME;
-	info->author = PLUGIN_AUTHOR;
-	info->description = PLUGIN_DESC;
-	info->web = PLUGIN_WEB;
-	info->version = PLUGIN_VERSION;
-	info->apiVersion = DCAPI_CORE_VER;
-	info->guid = PLUGIN_GUID;
+DCLogPtr Logger::logger;
 
-	return &Plugin::main;
+bool Logger::init(DCCorePtr core) {
+	init(reinterpret_cast<DCLogPtr>(core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER)));
+	return logger;
 }
+void Logger::init(DCLogPtr coreLogger) { logger = coreLogger; }
 
-#ifdef _WIN32
-BOOL APIENTRY DllMain(HINSTANCE /*hinstDLL*/, DWORD /*fdwReason*/, LPVOID /*lpvReserved*/) {
-	return TRUE;
-}
-#endif
-
-}
+void Logger::log(const string& message) { logger->log(message.c_str()); }

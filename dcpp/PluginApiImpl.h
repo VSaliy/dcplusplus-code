@@ -28,7 +28,8 @@
 
 #include "forward.h"
 #include "typedefs.h"
-#include "PluginDefs.h"
+
+#include <pluginsdk/PluginDefs.h>
 
 namespace dcpp {
 

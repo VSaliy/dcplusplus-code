@@ -19,9 +19,7 @@
 #ifndef SCRIPT_INSTANCE_H
 #define SCRIPT_INSTANCE_H
 
-#include <CriticalSection.h>
-#include <debug.h>
-
+#include "CriticalSection.h"
 #include "LuaManager.h"
 
 using dcpp::CriticalSection;

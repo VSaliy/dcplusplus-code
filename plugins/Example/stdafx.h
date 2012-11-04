@@ -35,6 +35,9 @@
 #define DO_STRINGIZE(X) #X
 
 #include <stdint.h>
-#include <PluginDefs.h>
+
+#include <pluginsdk/PluginDefs.h>
+
+#include "version.h"
 
 #endif /* PLUGIN_STDAFX_H */

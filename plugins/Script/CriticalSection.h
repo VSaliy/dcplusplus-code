@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2012 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "stdafx.h"
-#include "Plugin.h"
+#ifndef DCPLUSPLUS_DCPP_CRITICAL_SECTION_H
+#define DCPLUSPLUS_DCPP_CRITICAL_SECTION_H
 
-extern "C" {
+#include <boost/thread/recursive_mutex.hpp>
 
-// Plugin loader
-DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
-	info->name = PLUGIN_NAME;
-	info->author = PLUGIN_AUTHOR;
-	info->description = PLUGIN_DESC;
-	info->web = PLUGIN_WEB;
-	info->version = PLUGIN_VERSION;
-	info->apiVersion = DCAPI_CORE_VER;
-	info->guid = PLUGIN_GUID;
+namespace dcpp {
 
-	return &Plugin::main;
-}
+// TODO: At some point (probably when c++0x support is solid enough), remove these old names
+typedef boost::recursive_mutex CriticalSection;
+typedef boost::detail::spinlock	FastCriticalSection;
+typedef boost::unique_lock<boost::recursive_mutex> Lock;
+typedef boost::lock_guard<boost::detail::spinlock> FastLock;
 
-#ifdef _WIN32
-BOOL APIENTRY DllMain(HINSTANCE /*hinstDLL*/, DWORD /*fdwReason*/, LPVOID /*lpvReserved*/) {
-	return TRUE;
-}
-#endif
+} // namespace dcpp
 
-}
+#endif // DCPLUSPLUS_DCPP_CRITICAL_SECTION_H

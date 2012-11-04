@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Jacek Sieka, arnetheduck on gmail point com
+ * Copyright (C) 2001-2012 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,33 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "stdafx.h"
-#include "Plugin.h"
+#ifndef DCPP_DCPLUSPLUS_DEBUG_H_
+#define DCPP_DCPLUSPLUS_DEBUG_H_
 
-extern "C" {
+#include <cstdio>
 
-// Plugin loader
-DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
-	info->name = PLUGIN_NAME;
-	info->author = PLUGIN_AUTHOR;
-	info->description = PLUGIN_DESC;
-	info->web = PLUGIN_WEB;
-	info->version = PLUGIN_VERSION;
-	info->apiVersion = DCAPI_CORE_VER;
-	info->guid = PLUGIN_GUID;
+#ifdef _DEBUG
 
-	return &Plugin::main;
-}
+#include <cassert>
 
-#ifdef _WIN32
-BOOL APIENTRY DllMain(HINSTANCE /*hinstDLL*/, DWORD /*fdwReason*/, LPVOID /*lpvReserved*/) {
-	return TRUE;
-}
+#define dcdebug printf
+#ifdef _MSC_VER
+
+#include <crtdbg.h>
+
+#define dcassert(exp) \
+do { if (!(exp)) { \
+	dcdebug("Assertion hit in %s(%d): " #exp "\n", __FILE__, __LINE__); \
+	if(1 == _CrtDbgReport(_CRT_ASSERT, __FILE__, __LINE__, NULL, #exp)) \
+_CrtDbgBreak(); } } while(false)
+#else
+#define dcassert(exp) assert(exp)
 #endif
+#define dcdrun(exp) exp
+#else //_DEBUG
+#define dcdebug if (false) printf
+#define dcassert(exp)
+#define dcdrun(exp)
+#endif //_DEBUG
 
-}
+#endif /* DCPP_DCPLUSPLUS_DEBUG_H_ */

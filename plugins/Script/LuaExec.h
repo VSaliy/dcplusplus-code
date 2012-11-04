@@ -19,6 +19,9 @@
 #ifndef LUA_EXEC_H
 #define LUA_EXEC_H
 
+#include <pluginsdk/Logger.h>
+#include <pluginsdk/Util.h>
+
 static void callalert (lua_State *L, int status) {
 	if (status != 0) {
 		lua_getglobal(L, "_ALERT");
@@ -27,7 +30,7 @@ static void callalert (lua_State *L, int status) {
 			lua_call(L, 1, 0);
 		}
 		else {  /* no _ALERT function; print it on stderr */
-			Util::logMessage(Util::toUtf8(string("Lua ERROR: ") + lua_tostring(L, -2)));
+			Logger::log(Util::toUtf8(string("Lua ERROR: ") + lua_tostring(L, -2)));
 			lua_pop(L, 2);  /* remove error message and _ALERT */
 		}
 	}

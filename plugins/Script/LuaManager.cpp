@@ -20,7 +20,12 @@
 #include "LuaManager.h"
 
 #include "Plugin.h"
-#include "Util.h"
+
+#include <pluginsdk/Config.h>
+#include <pluginsdk/Logger.h>
+#include <pluginsdk/Util.h>
+
+#include <boost/lexical_cast.hpp>
 
 const char LuaManager::className[] = "DC";
 Lunar<LuaManager>::RegType LuaManager::methods[] = {
@@ -80,7 +85,7 @@ int LuaManager::SendUDPPacket(lua_State* L) {
 int LuaManager::GenerateDebugMessage(lua_State* L) {
 	/* arguments: string */
 	if (lua_gettop(L) == 1 && lua_isstring(L, -1))
-		Util::logMessage(lua_tostring(L, -1));
+		Logger::log(lua_tostring(L, -1));
 
 	return 0;
 }
@@ -106,7 +111,7 @@ int LuaManager::GetHubIpPort(lua_State* L) {
 	}
 
 	// TODO: ipv6 awareness
-	lua_pushstring(L, (string(client->ip) + ":" + Util::toString(client->port)).c_str());
+	lua_pushstring(L, (string(client->ip) + ":" + boost::lexical_cast<string>(client->port)).c_str());
 	return 1;
 }
 
@@ -122,13 +127,47 @@ int LuaManager::GetHubUrl(lua_State* L) {
 	return 1;
 }
 
+// Make BCDC's Lua user commands work... hopefully
+namespace { string ucLuaConvert(const string& str, bool isAdc) {
+	string::size_type i, j, k;
+	i = j = k = 0;
+	string tmp = str;
+	while((i = tmp.find("%[lua:", i)) != string::npos) {
+		i += 6;
+		j = tmp.find(']', i);
+		if(j == string::npos) break;
+		string chunk = tmp.substr(i, j-i);
+		k = 0;
+		while((k = chunk.find("!%")) != string::npos) {
+			chunk.erase(k, 2);
+			chunk.insert(k, "%");
+		}
+		k = 0;
+		while((k = chunk.find("!{")) != string::npos) {
+			chunk.erase(k, 2);
+			chunk.insert(k, "[");
+		}
+		k = 0;
+		while((k = chunk.find("!}")) != string::npos) {
+			chunk.erase(k, 2);
+			chunk.insert(k, "]");
+		}
+		i -= 6;
+		tmp.erase(i, j-i+1);
+		tmp.insert(i, (isAdc ? "LuaExec " : "&#36;LuaExec ") + chunk);
+		i += (isAdc ? 8 : 13) + chunk.length();
+	}
+
+	return tmp;
+} }
+
 int LuaManager::InjectHubMessage(lua_State* L) {
 	if (lua_gettop(L) == 2 && lua_islightuserdata(L, -2) && lua_isstring(L, -1)) {
 		string message = string(lua_tostring(L, -1));
 		if(message.find("$UserCommand") != string::npos) {
-			message = Util::ucLuaConvert(message, false);
+			message = ucLuaConvert(message, false);
 		} else if(message.find("CMD") != string::npos) {
-			message = Util::ucLuaConvert(message, true);
+			message = ucLuaConvert(message, true);
 		}
 		Plugin::getInstance()->injectHubCommand(reinterpret_cast<HubDataPtr>(lua_touserdata(L, -2)), message.c_str());
 	}
@@ -172,7 +211,7 @@ int LuaManager::RunTimer(lua_State* L) {
 int LuaManager::GetSetting(lua_State* L) {
 	/* arguments: string */
 	if(lua_gettop(L) == 1 && lua_isstring(L, -1)) {
-		auto setting = Util::getCoreConfig(lua_tostring(L, -1));
+		auto setting = Config::getCoreConfig(lua_tostring(L, -1));
 		switch(setting->type) {
 			case CFG_TYPE_STRING: {
 				auto str = (ConfigStrPtr)setting;
@@ -190,12 +229,12 @@ int LuaManager::GetSetting(lua_State* L) {
 				break;
 			}
 			default:
-				Util::freeCoreConfig(setting);
+				Config::freeCoreConfig(setting);
 				LuaError(L, "GetSetting: setting not found", false);
 				return 0;
 		}
 
-		Util::freeCoreConfig(setting);
+		Config::freeCoreConfig(setting);
 		return 1;
 	}
 
@@ -226,17 +265,17 @@ int LuaManager::FromUtf8(lua_State* L) {
 }
 
 int LuaManager::GetAppPath(lua_State* L) {
-	lua_pushstring(L, Util::fromUtf8(Util::getPath(PATH_RESOURCES)).c_str());
+	lua_pushstring(L, Util::fromUtf8(Config::getPath(PATH_RESOURCES)).c_str());
 	return 1;
 }
 
 int LuaManager::GetConfigPath(lua_State* L) {
-	lua_pushstring(L, Util::fromUtf8(Util::getPath(PATH_USER_CONFIG)).c_str());
+	lua_pushstring(L, Util::fromUtf8(Config::getPath(PATH_USER_CONFIG)).c_str());
 	return 1;
 }
 
 int LuaManager::GetScriptPath(lua_State* L) {
-	lua_pushstring(L, Util::fromUtf8(SETTING(ScriptPath)).c_str());
+	lua_pushstring(L, Util::fromUtf8(Config::getConfig("ScriptPath")).c_str());
 	return 1;
 }
 
@@ -250,7 +289,7 @@ int LuaManager::DropUserConnection(lua_State* L) {
 }
 
 void LuaManager::LuaError(lua_State* L, const char* fmt, bool fatal /*= true*/, ...) {
-	if(fatal || BOOLSETTING(LuaDebug)) {
+	if(fatal || Config::getBoolConfig("LuaDebug")) {
 		va_list argp;
 		va_start(argp, fatal);
 		luaL_error(L, fmt, argp);
