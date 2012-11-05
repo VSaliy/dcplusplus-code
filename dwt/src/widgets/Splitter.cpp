@@ -65,7 +65,7 @@ SplitterContainerPtr Splitter::getParent() const {
 void Splitter::handlePainting(PaintCanvas& canvas) {
 	if(hovering) {
 		if(theme) {
-			Rectangle rect(getClientSize());
+			Rectangle rect { getClientSize() };
 			// don't draw edges.
 			(horizontal ? rect.pos.x : rect.pos.y) -= 2;
 			(horizontal ? rect.size.x : rect.size.y) += 4;
@@ -79,7 +79,7 @@ void Splitter::handlePainting(PaintCanvas& canvas) {
 	} else {
 		auto size = getClientSize();
 
-		Pen pen(Color::predefined(COLOR_3DSHADOW));
+		Pen pen { Color::predefined(COLOR_3DSHADOW) };
 		auto select(canvas.select(pen));
 
 		if(horizontal) {

@@ -24,7 +24,7 @@
 #include <pluginsdk/Logger.h>
 #include <pluginsdk/Util.h>
 
-#include <boost/filesystem.hpp>
+#include <boost/filesystem/operations.hpp>
 
 Plugin* Plugin::instance = nullptr;
 
@@ -92,8 +92,9 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 
 	// Default settings
 	if(Config::getConfig("ScriptPath").empty()) {
-		Config::setConfig("ScriptPath", Config::getPath(PATH_RESOURCES) + "scripts" +
-			Util::fromT(boost::filesystem::path::string_type(boost::filesystem::path::preferred_separator)));
+		auto path = Config::getPath(PATH_RESOURCES);
+		auto sep = !path.empty() ? *(path.end() - 1) : '/';
+		Config::setConfig("ScriptPath", path + string("scripts") + sep);
 	}
 
 	if(Config::getConfig("LuaDebug").empty())

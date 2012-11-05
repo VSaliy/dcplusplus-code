@@ -40,7 +40,7 @@
 namespace dwt {
 
 LRESULT CALLBACK WindowProc::initProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	MSG msg = { hwnd, uMsg, wParam, lParam };
+	MSG msg { hwnd, uMsg, wParam, lParam };
 
 	Widget* w = getInitWidget(msg);
 	if(w) {
@@ -53,7 +53,7 @@ LRESULT CALLBACK WindowProc::initProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 }
 
 LRESULT CALLBACK WindowProc::wndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	MSG msg = { hwnd, uMsg, wParam, lParam };
+	MSG msg { hwnd, uMsg, wParam, lParam };
 
 	// We dispatch certain messages back to the child widget, so that their
 	// potential callbacks will die along with the child when the time comes

@@ -50,16 +50,16 @@ public:
 		Winding = WINDING
 	};
 
-	explicit Region(HRGN h, bool own = true);
+	Region(HRGN h, bool own = true);
 
 	/// create a rectangular region; more information in the ::CreateRectRgn doc.
-	explicit Region(const Rectangle& rect);
+	Region(const Rectangle& rect);
 
 	/**
 	* creates a polygonal region; more information in the ::CreatePolygonRgn doc.
 	* @param points coordinates of the vertices of the polygon that this region will represent.
 	*/
-	explicit Region(const std::vector<Point>& points, PolyFillMode mode = Winding);
+	Region(const std::vector<Point>& points, PolyFillMode mode = Winding);
 
 	/// @todo make an XFORM creator in dwt to simplify basic transformations
 	/**

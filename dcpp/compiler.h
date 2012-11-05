@@ -26,8 +26,8 @@
 #endif
 
 #elif defined(_MSC_VER)
-#if _MSC_VER < 1700
-#error MSVC 11 is required
+#if _MSC_VER < 1700 || _MSC_FULL_VER < 170051025
+#error Visual Studio 2012 with the Nov 2012 CTP is required
 #endif
 
 //disable the deprecated warnings for the CRT functions.

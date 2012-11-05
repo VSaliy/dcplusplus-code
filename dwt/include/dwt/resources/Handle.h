@@ -68,8 +68,8 @@ public:
 	HandleType handle() const { return *this; }
 
 protected:
-	Handle() : h(Policy::NULL_HANDLE), owned(false), ref(0) { }
-	Handle(HandleType h_, bool owned_ = true) : h(h_), owned(owned_), ref(0) { }
+	Handle() : Handle(Policy::NULL_HANDLE, false) { }
+	Handle(HandleType h, bool owned = true) : h(h), owned(owned), ref(0) { }
 
 	void init(HandleType h_, bool owned_) {
 		h = h_;

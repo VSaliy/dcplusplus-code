@@ -222,18 +222,18 @@ void Taskbar::setTaskbarIcon(ContainerPtr tab, const IconPtr& icon) {
 }
 
 BitmapPtr Taskbar::getBitmap(ContainerPtr tab, LPARAM thumbnailSize) {
-	UpdateCanvas canvas(tab);
+	UpdateCanvas canvas { tab };
 
 	// get the actual size of the tab.
-	const Point size_full(tab->getClientSize());
+	const Point size_full { tab->getClientSize() };
 	if(size_full.x <= 0 || size_full.y <= 0)
 		return 0;
 
 	// this DIB will hold a full capture of the tab.
-	BITMAPINFO info = { { sizeof(BITMAPINFOHEADER), size_full.x, size_full.y, 1, 32, BI_RGB } };
-	BitmapPtr bitmap_full(new Bitmap(::CreateDIBSection(canvas.handle(), &info, DIB_RGB_COLORS, 0, 0, 0)));
+	BITMAPINFO info { { sizeof(BITMAPINFOHEADER), size_full.x, size_full.y, 1, 32, BI_RGB } };
+	BitmapPtr bitmap_full { new Bitmap { ::CreateDIBSection(canvas.handle(), &info, DIB_RGB_COLORS, 0, 0, 0) } };
 
-	CompatibleCanvas canvas_full(canvas.handle());
+	CompatibleCanvas canvas_full { canvas.handle() };
 	auto select_full(canvas_full.select(*bitmap_full));
 
 	tab->sendMessage(WM_PRINT, reinterpret_cast<WPARAM>(canvas_full.handle()), PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN | PRF_ERASEBKGND);
@@ -245,18 +245,18 @@ BitmapPtr Taskbar::getBitmap(ContainerPtr tab, LPARAM thumbnailSize) {
 		return bitmap_full;
 
 	// compute the size of the thumbnail, must not exceed the LPARAM values.
-	double factor = std::min(static_cast<double>(HIWORD(thumbnailSize)) / static_cast<double>(size_full.x),
-		static_cast<double>(LOWORD(thumbnailSize)) / static_cast<double>(size_full.y));
-	const Point size_thumb(size_full.x * factor, size_full.y * factor);
+	double factor { std::min(static_cast<double>(HIWORD(thumbnailSize)) / static_cast<double>(size_full.x),
+		static_cast<double>(LOWORD(thumbnailSize)) / static_cast<double>(size_full.y)) };
+	const Point size_thumb { static_cast<long>(size_full.x * factor), static_cast<long>(size_full.y * factor) };
 	if(size_thumb.x <= 0 || size_thumb.y <= 0)
 		return 0;
 
 	// this DIB will hold a resized view of the tab, to be used as a thumbnail.
 	info.bmiHeader.biWidth = size_thumb.x;
 	info.bmiHeader.biHeight = size_thumb.y;
-	BitmapPtr bitmap_thumb(new Bitmap(::CreateDIBSection(canvas.handle(), &info, DIB_RGB_COLORS, 0, 0, 0)));
+	BitmapPtr bitmap_thumb { new Bitmap { ::CreateDIBSection(canvas.handle(), &info, DIB_RGB_COLORS, 0, 0, 0) } };
 
-	CompatibleCanvas canvas_thumb(canvas.handle());
+	CompatibleCanvas canvas_thumb { canvas.handle() };
 	auto select_thumb(canvas_thumb.select(*bitmap_thumb));
 
 	::SetStretchBltMode(canvas_thumb.handle(), HALFTONE);

@@ -673,10 +673,10 @@ void TabView::handleMouseLeave() {
 }
 
 bool TabView::handlePainting(DRAWITEMSTRUCT& info, TabInfo* ti) {
-	FreeCanvas canvas(info.hDC);
+	FreeCanvas canvas { info.hDC };
 	auto bkMode(canvas.setBkMode(true));
 
-	Rectangle rect(info.rcItem);
+	Rectangle rect { info.rcItem };
 	if(theme) {
 		// remove some borders
 		rect.pos.x -= 1;
@@ -690,7 +690,7 @@ bool TabView::handlePainting(DRAWITEMSTRUCT& info, TabInfo* ti) {
 }
 
 void TabView::handlePainting(PaintCanvas& canvas) {
-	Rectangle rect(canvas.getPaintRect());
+	Rectangle rect { canvas.getPaintRect() };
 	if(rect.width() == 0 || rect.height() == 0)
 		return;
 
@@ -745,7 +745,7 @@ void TabView::draw(Canvas& canvas, unsigned index, Rectangle&& rect, bool isSele
 		rect.size.y -= 1;
 	}
 
-	const Point margin(4, 1);
+	const Point margin { 4, 1 };
 	rect.pos += margin;
 	rect.size -= margin + margin;
 
@@ -894,9 +894,9 @@ dwt::Rectangle TabView::getUsableArea(bool cutBorders) const
 	RECT rc;
 	::GetClientRect(handle(), &rc);
 	TabCtrl_AdjustRect( this->handle(), false, &rc );
-	Rectangle rect( rc );
+	Rectangle rect { rc };
 	if(cutBorders) {
-		Rectangle rctabs(Widget::getClientSize());
+		Rectangle rctabs { Widget::getClientSize() };
 		// Get rid of ugly border...assume y border is the same as x border
 		const long border = (rctabs.width() - rect.width()) / 2;
 		const long upStretching = hasStyle(TCS_BUTTONS) ? 4 : 2;

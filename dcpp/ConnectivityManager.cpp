@@ -90,7 +90,7 @@ void ConnectivityManager::detectConnection() {
 	disconnect();
 
 	// restore auto settings to their default value.
-	int settings[] = { SettingsManager::TCP_PORT, SettingsManager::TLS_PORT, SettingsManager::UDP_PORT,
+	int settings[] { SettingsManager::TCP_PORT, SettingsManager::TLS_PORT, SettingsManager::UDP_PORT,
 		SettingsManager::EXTERNAL_IP, SettingsManager::EXTERNAL_IP6, SettingsManager::NO_IP_OVERRIDE,
 		SettingsManager::BIND_ADDRESS, SettingsManager::BIND_ADDRESS6,
 		SettingsManager::INCOMING_CONNECTIONS, SettingsManager::OUTGOING_CONNECTIONS };

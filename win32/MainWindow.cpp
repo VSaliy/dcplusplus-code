@@ -973,10 +973,10 @@ void MainWindow::saveWindowSettings() {
 
 	SettingsManager::getInstance()->set(SettingsManager::TRANSFERS_PANED_POS, paned->getSplitterPos(0));
 
-	WINDOWPLACEMENT wp = { sizeof(wp) };
+	WINDOWPLACEMENT wp { sizeof(wp) };
 	if(::GetWindowPlacement(this->handle(), &wp)) {
 
-		dwt::Rectangle rect(wp.rcNormalPosition);
+		dwt::Rectangle rect { wp.rcNormalPosition };
 		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_X, static_cast<int>(rect.left()));
 		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_POS_Y, static_cast<int>(rect.top()));
 		SettingsManager::getInstance()->set(SettingsManager::MAIN_WINDOW_SIZE_X, static_cast<int>(rect.width()));
@@ -1028,7 +1028,7 @@ bool MainWindow::handleClosing() {
 }
 
 void MainWindow::layout() {
-	dwt::Rectangle r(getClientSize());
+	dwt::Rectangle r { getClientSize() };
 
 	if(!rebar->empty()) {
 		auto y = rebar->refresh();

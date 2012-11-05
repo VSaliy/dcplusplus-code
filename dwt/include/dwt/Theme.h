@@ -71,7 +71,7 @@ public:
 	bool getPartSize(Canvas& canvas, int part, int state, Point& ret);
 	bool isBackgroundPartiallyTransparent(int part, int state);
 
-	operator bool() const;
+	explicit operator bool() const;
 
 private:
 	void open(const tstring& classes);

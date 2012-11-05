@@ -89,6 +89,11 @@
 	b. Microsoft Visual Studio 2012:
 	<http://msdn.microsoft.com/en-us/visualc/default.aspx>
 
+		Make sure VS is up-to-date; in particular, you will need the Nov 2012 CTP from
+		<http://www.microsoft.com/en-us/download/details.aspx?id=35515>. Use the patch in
+		msvc/nov2012ctp.patch to patch your VC/vcvarsall.bat file to make use of it (if you
+		generate project files and compile from the VS GUI, that won't be necessary).
+
 		Download OpenSSL from www.openssl.org and compile it. You should get libraries called
 		libeay32.lib and ssleay32.lib; copy them in openssl/lib.
 

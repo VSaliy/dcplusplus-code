@@ -55,19 +55,19 @@ struct IconPolicy : public NullPolicy<HICON> {
 class Icon : public Handle<IconPolicy>
 {
 public:
-	explicit Icon(HICON icon, bool own = true);
+	Icon(HICON icon, bool own = true);
 
 	/** Construct an icon from a resource id.
 	 * @param size desired size, useful to pick up the correct image when the icon contains
 	 * multiple images. if 0, the system will figure out the size of the 1st image by itself.
 	 */
-	explicit Icon(const unsigned resourceId, const Point& size = Point(0, 0));
+	Icon(const unsigned resourceId, const Point& size = Point(0, 0));
 
 	/** Construct an icon from a file.
 	 * @param size desired size, useful to pick up the correct image when the icon contains
 	 * multiple images. if 0, the system will figure out the size of the 1st image by itself.
 	 */
-	explicit Icon(const tstring& filePath, const Point& size = Point(0, 0));
+	Icon(const tstring& filePath, const Point& size = Point(0, 0));
 
 	/**
 	* get the size of the icon, in pixels. note: icons can contain multiple images with different

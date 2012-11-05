@@ -351,7 +351,7 @@ def msvcproj_workarounds(target, source, env):
 	# update the platform toolset to the VS 2012 one.
 	# TODO remove when SCons adds this.
 	contents = contents.replace('<UseOfMfc>false</UseOfMfc>',
-	'<UseOfMfc>false</UseOfMfc>\r\n\t\t<PlatformToolset>v110</PlatformToolset>')
+	'<UseOfMfc>false</UseOfMfc>\r\n\t\t<PlatformToolset>v120_CTP_Nov2012</PlatformToolset>')
 
 	f = open(str(target[0]), 'wb')
 	f.write(contents)

@@ -39,7 +39,7 @@ namespace dwt {
 
 Region::Region(HRGN h, bool own) : ResourceType(h, own) { }
 
-Region::Region(const Rectangle& rect) : ResourceType(::CreateRectRgn(rect.left(), rect.top(), rect.right(), rect.bottom()), true) { }
+Region::Region(const Rectangle& rect) : Region(::CreateRectRgn(rect.left(), rect.top(), rect.right(), rect.bottom()), true) { }
 
 Region::Region(const std::vector<Point>& points, PolyFillMode mode)
 {

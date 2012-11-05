@@ -45,7 +45,7 @@ StatsFrame::StatsFrame(TabViewPtr parent) :
 	setFont(WinUtil::font);
 
 	onPainting([this](dwt::PaintCanvas& canvas) {
-		dwt::Rectangle rect = canvas.getPaintRect();
+		dwt::Rectangle rect { canvas.getPaintRect() };
 		if(rect.width() == 0 || rect.height() == 0)
 			return;
 		draw(canvas, rect);
@@ -97,7 +97,7 @@ void StatsFrame::draw(dwt::Canvas& canvas, const dwt::Rectangle& rect) {
 				long tw = txtSize.x;
 				if(tw + 2 > twidth)
 					twidth = tw + 2;
-				dwt::Rectangle rect(dwt::Point(1, ypos), txtSize);
+				dwt::Rectangle rect { dwt::Point(1, ypos), txtSize };
 				canvas.drawText(txt, rect, DT_LEFT | DT_TOP | DT_SINGLELINE);
 			}
 		}
@@ -108,7 +108,7 @@ void StatsFrame::draw(dwt::Canvas& canvas, const dwt::Rectangle& rect) {
 			long tw = txtSize.x;
 			if(tw + 2 > twidth)
 				twidth = tw + 2;
-			dwt::Rectangle rect(dwt::Point(1, 1), txtSize);
+			dwt::Rectangle rect { dwt::Point(1, 1), txtSize };
 			canvas.drawText(txt, rect, DT_LEFT | DT_TOP | DT_SINGLELINE);
 		}
 
@@ -128,7 +128,7 @@ void StatsFrame::draw(dwt::Canvas& canvas, const dwt::Rectangle& rect) {
 }
 
 void StatsFrame::layout() {
-	dwt::Rectangle r(getClientSize());
+	dwt::Rectangle r { getClientSize() };
 
 	r.size.y -= status->refresh();
 

@@ -53,9 +53,9 @@ public:
 		Null = PS_NULL,
 		InsideFrame = PS_INSIDEFRAME
 	};
-	explicit Pen(HPEN h, bool own = true);
+	Pen(HPEN h, bool own = true);
 
-	explicit Pen(COLORREF color, PenStyle style = Solid, int width = 0);
+	Pen(COLORREF color, PenStyle style = Solid, int width = 0);
 
 private:
 	friend class Handle<GdiPolicy<HPEN> >;

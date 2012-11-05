@@ -419,8 +419,8 @@ protected:
 class BoundCanvas : public Canvas
 {
 protected:
-	explicit BoundCanvas(HWND hWnd);
-	explicit BoundCanvas(Widget* widget);
+	BoundCanvas(HWND hWnd);
+	BoundCanvas(Widget* widget);
 
 	HWND itsHandle;
 };
@@ -443,7 +443,7 @@ class PaintCanvas : public BoundCanvas
 public:
 	/// Constructor, automatically calls BeginPaint
 	template<typename W>
-	explicit PaintCanvas(W widget) :
+	PaintCanvas(W widget) :
 	BoundCanvas(widget)
 	{
 		initialize();
@@ -484,7 +484,7 @@ class UpdateCanvas_ : public BoundCanvas
 public:
 	/// Constructor, automatically calls GetDC or GetWindowDC
 	template<typename W>
-	explicit UpdateCanvas_(W widget) :
+	UpdateCanvas_(W widget) :
 	BoundCanvas(widget)
 	{
 		itsHdc = windowDC ? ::GetWindowDC(itsHandle) : ::GetDC(itsHandle);
@@ -517,7 +517,7 @@ class FreeCanvas : public Canvas
 {
 public:
 	/// Constructor, assigns the given HDC to the object
-	explicit FreeCanvas(HDC hdc);
+	FreeCanvas(HDC hdc);
 
 	virtual ~FreeCanvas() { }
 };
@@ -526,7 +526,7 @@ public:
 class CompatibleCanvas : public FreeCanvas
 {
 public:
-	explicit CompatibleCanvas(HDC hdc);
+	CompatibleCanvas(HDC hdc);
 
 	virtual ~CompatibleCanvas();
 };

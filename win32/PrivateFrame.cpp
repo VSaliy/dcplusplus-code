@@ -252,7 +252,7 @@ void PrivateFrame::fillLogParams(ParamMap& params) const {
 void PrivateFrame::layout() {
 	const int border = 2;
 
-	dwt::Rectangle r(getClientSize());
+	dwt::Rectangle r { getClientSize() };
 
 	r.size.y -= status->refresh();
 

@@ -39,7 +39,6 @@ private:
 
 	map<string, subsHandle> events;
 
-	DCCorePtr dcpp;
 	DCHooksPtr hooks;
 
 	DCTaggerPtr tagger;

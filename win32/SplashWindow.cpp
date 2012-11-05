@@ -61,19 +61,19 @@ void SplashWindow::operator()(const string& status) {
 	auto text = str(TF_("Loading DC++, please wait... (%1%)") % Text::toT(status));
 
 	// set up sizes.
-	const long spacing = 6; // space between the icon and the text
-	const dwt::Point padding(4, 4); // padding borders around the text
+	const long spacing { 6 }; // space between the icon and the text
+	const dwt::Point padding { 4, 4 }; // padding borders around the text
 	const auto textSize = getTextSize(text) + padding + padding;
-	SIZE size = { std::max(iconSize, textSize.x), iconSize + spacing + textSize.y };
-	dwt::Rectangle textRect(std::max(iconSize - textSize.x, 0L) / 2, size.cy - textSize.y, textSize.x, textSize.y);
+	SIZE size { std::max(iconSize, textSize.x), iconSize + spacing + textSize.y };
+	dwt::Rectangle textRect { std::max(iconSize - textSize.x, 0L) / 2, size.cy - textSize.y, textSize.x, textSize.y };
 
-	dwt::UpdateCanvas windowCanvas(this);
-	dwt::CompatibleCanvas canvas(windowCanvas.handle());
+	dwt::UpdateCanvas windowCanvas { this };
+	dwt::CompatibleCanvas canvas { windowCanvas.handle() };
 
 	// create the bitmap with CreateDIBSection to have access to its bits (used when drawing text).
-	BITMAPINFO info = { { sizeof(BITMAPINFOHEADER), size.cx, -size.cy, 1, 32, BI_RGB } };
+	BITMAPINFO info { { sizeof(BITMAPINFOHEADER), size.cx, -size.cy, 1, 32, BI_RGB } };
 	RGBQUAD* bits;
-	dwt::Bitmap bitmap(::CreateDIBSection(windowCanvas.handle(), &info, DIB_RGB_COLORS, &reinterpret_cast<void*&>(bits), 0, 0));
+	dwt::Bitmap bitmap { ::CreateDIBSection(windowCanvas.handle(), &info, DIB_RGB_COLORS, &reinterpret_cast<void*&>(bits), 0, 0) };
 	auto select(canvas.select(bitmap));
 
 	// draw the icon.
@@ -97,8 +97,8 @@ void SplashWindow::operator()(const string& status) {
 	}
 
 	auto desktop = getPrimaryDesktopSize();
-	POINT pt = { std::max(desktop.x - size.cx, 0L) / 2, std::max(desktop.y - size.cy - iconSize, 0L) / 2 };
-	POINT canvasPt = { 0 };
-	BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
+	POINT pt { std::max(desktop.x - size.cx, 0L) / 2, std::max(desktop.y - size.cy - iconSize, 0L) / 2 };
+	POINT canvasPt { 0 };
+	BLENDFUNCTION blend { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
 	::UpdateLayeredWindow(handle(), windowCanvas.handle(), &pt, &size, canvas.handle(), &canvasPt, 0, &blend, ULW_ALPHA);
 }

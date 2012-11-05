@@ -38,17 +38,17 @@
 namespace dwt {
 
 Font::Font(HFONT font, bool owned) :
-ResourceType(font, owned)
+	ResourceType(font, owned)
 {
 }
 
 Font::Font(LOGFONT& lf) :
-ResourceType(::CreateFontIndirect(&lf), true)
+	Font(::CreateFontIndirect(&lf), true)
 {
 }
 
 Font::Font(Predefined predef) :
-ResourceType(reinterpret_cast<HFONT>(::GetStockObject(predef)), true)
+	Font(reinterpret_cast<HFONT>(::GetStockObject(predef)), true)
 {
 }
 

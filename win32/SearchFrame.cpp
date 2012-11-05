@@ -365,7 +365,7 @@ void SearchFrame::searchTypesChanged() {
 }
 
 void SearchFrame::layout() {
-	dwt::Rectangle r(getClientSize());
+	dwt::Rectangle r { getClientSize() };
 
 	r.size.y -= status->refresh();
 

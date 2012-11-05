@@ -173,7 +173,7 @@ bool Application::sleep() {
 }
 
 bool Application::dispatch() {
-	MSG msg = { 0 };
+	MSG msg { 0 };
 	if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == 0) {
 		return dispatchAsync();
 	}

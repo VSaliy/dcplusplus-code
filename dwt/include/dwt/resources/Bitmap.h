@@ -55,14 +55,14 @@ public:
 	  * Class takes "control" of HBITMAP meaning it will automatically free the
 	  * contained HBITMAP upon destruction
 	  */
-	explicit Bitmap( HBITMAP bitmap, bool own = true);
+	Bitmap( HBITMAP bitmap, bool own = true);
 
 	/// RAII Constructor loading a bitmap from a resource ID
 	/** Note! <br>
 	  * Class takes "control" of HBITMAP meaning it will automatically free the
 	  * contained HBITMAP upon destruction
 	  */
-	explicit Bitmap( unsigned resourceId, unsigned flags = LR_CREATEDIBSECTION );
+	Bitmap( unsigned resourceId, unsigned flags = LR_CREATEDIBSECTION );
 
 	/// RAII Constructor loading a bitmap from a file on disc
 	/** Note! <br>
@@ -79,7 +79,7 @@ public:
 	  * <li>Icons (ICO)</li>
 	  * </ul>
 	  */
-	explicit Bitmap( const tstring & filePath, unsigned flags = LR_CREATEDIBSECTION );
+	Bitmap( const tstring & filePath, unsigned flags = LR_CREATEDIBSECTION );
 
 	/// @deprecated, use handle
 	HBITMAP getBitmap() const;

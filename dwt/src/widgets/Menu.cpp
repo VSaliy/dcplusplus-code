@@ -123,22 +123,22 @@ void Menu::create(const Seed& seed) {
 
 LRESULT Menu::handleNCPaint(UINT message, WPARAM wParam, long menuWidth) {
 	// forward to ::DefWindowProc
-	const MSG msg = { getParent()->handle(), message, wParam, 0 };
+	const MSG msg { getParent()->handle(), message, wParam, 0 };
 	getParent()->getDispatcher().chain(msg);
 
 	auto& theme = getRootMenu()->theme;
 	if(!theme)
 		return TRUE;
 
-	MENUBARINFO info = { sizeof(MENUBARINFO) };
+	MENUBARINFO info { sizeof(MENUBARINFO) };
 	if(::GetMenuBarInfo(getParent()->handle(), OBJID_MENU, 0, &info)) {
-		Rectangle rect(info.rcBar);
+		Rectangle rect { info.rcBar };
 		rect.pos -= getParent()->getWindowRect().pos; // convert to client coords
 
 		rect.pos.x += menuWidth;
 		rect.size.x -= menuWidth;
 
-		BufferedCanvas<WindowUpdateCanvas> canvas(getParent(), rect.left(), rect.top());
+		BufferedCanvas<WindowUpdateCanvas> canvas { getParent(), rect.left(), rect.top() };
 
 		// avoid non-drawn left edge
 		Rectangle rect_bg = rect;
@@ -331,7 +331,7 @@ void Menu::setTitle(const tstring& title, const IconPtr& icon, bool drawSidebar 
 }
 
 bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
-	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_CHECKMARKS | MIIM_FTYPE | MIIM_DATA | MIIM_STATE | MIIM_STRING | MIIM_SUBMENU };
+	MENUITEMINFO info { sizeof(MENUITEMINFO), MIIM_CHECKMARKS | MIIM_FTYPE | MIIM_DATA | MIIM_STATE | MIIM_STRING | MIIM_SUBMENU };
 	if(!::GetMenuItemInfo(handle(), wrapper.index, TRUE, &info))
 		throw Win32Exception("Couldn't get menu item info when drawing");
 
@@ -350,10 +350,10 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 
 	int stripWidth = iconSize.x + textIconGap;
 
-	Rectangle rect(drawInfo.rcItem);
+	Rectangle rect { drawInfo.rcItem };
 
 	auto& theme = getRootMenu()->theme;
-	BufferedCanvas<FreeCanvas> canvas(drawInfo.hDC, rect.left(), rect.top());
+	BufferedCanvas<FreeCanvas> canvas { drawInfo.hDC, rect.left(), rect.top() };
 
 	// this will contain adjusted sidebar width
 	int sidebarWidth = 0;
@@ -366,7 +366,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 		lf.lfOrientation = lf.lfEscapement = 900;
 
 		// create title font from logical info and select it
-		Font vertFont(lf);
+		Font vertFont { lf };
 		auto select(canvas.select(vertFont));
 
 		// set sidebar width to text height
@@ -391,7 +391,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 			//rc.left -= borderGap;
 
 			// set title rectangle
-			Rectangle textRect(0, 0, sidebarWidth, rc.bottom - rc.top);
+			Rectangle textRect { 0, 0, sidebarWidth, rc.bottom - rc.top };
 
 			// draw background
 			canvas.fill(textRect, Brush(colors.stripBar));
@@ -449,7 +449,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 		canvas.fill(rect, Brush(color));
 	}
 
-	Rectangle stripRect(rect);
+	Rectangle stripRect { rect };
 	stripRect.size.x = stripWidth;
 
 	if(!(theme ? (isSelected || isHighlighted) : highlight) && popup && !wrapper.isTitle) {
@@ -466,7 +466,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 
 	if(popup && info.fType & MFT_SEPARATOR) {
 		// separator
-		Rectangle sepRect(rect);
+		Rectangle sepRect { rect };
 		sepRect.pos.x += stripWidth + textIconGap;
 
 		if(theme) {
@@ -481,7 +481,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 			sepRect.pos.y += sepRect.height() / 2 - 1;
 
 			// draw the separator as a line
-			Pen pen(colors.gray);
+			Pen pen { colors.gray };
 			auto select(canvas.select(pen));
 			canvas.moveTo(sepRect.pos);
 			canvas.lineTo(sepRect.width(), sepRect.top());
@@ -554,7 +554,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 		}
 
 		// set up icon rectangle
-		Rectangle iconRect(rect.pos, iconSize);
+		Rectangle iconRect { rect.pos, iconSize };
 		iconRect.pos.x += (stripWidth - iconSize.x) / 2;
 		iconRect.pos.y += (rect.height() - iconSize.y) / 2;
 		if(isSelected && !isDisabled && !isGrayed) {
@@ -573,8 +573,8 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 			// background color
 			canvas.fill(iconRect, Brush(highlight ? colors.highlightBackground : colors.stripBar));
 
-			CompatibleCanvas boxCanvas(canvas.handle());
-			Bitmap bitmap(::CreateCompatibleBitmap(canvas.handle(), iconSize.x, iconSize.y));
+			CompatibleCanvas boxCanvas { canvas.handle() };
+			Bitmap bitmap { ::CreateCompatibleBitmap(canvas.handle(), iconSize.x, iconSize.y) };
 			auto select(boxCanvas.select(bitmap));
 
 			::RECT rc = Rectangle(iconSize);
@@ -593,7 +593,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 			stripRect.size.x -= 2;
 			stripRect.size.y -= 2;
 
-			Pen pen(colors.gray);
+			Pen pen { colors.gray };
 			auto select(canvas.select(pen));
 			canvas.line(stripRect);
 		}
@@ -602,7 +602,7 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 		if(popup && info.hSubMenu) {
 			if(theme) {
 				int part_arrow = MENU_POPUPSUBMENU, state_arrow = (isDisabled || isGrayed) ? MSM_DISABLED : MSM_NORMAL;
-				Point pt(9, 9);
+				Point pt { 9, 9 };
 				theme.getPartSize(canvas, part_arrow, state_arrow, pt);
 				Rectangle arrowRect = rect;
 				theme.formatRect(canvas, part_arrow, state_arrow, arrowRect);
@@ -610,21 +610,21 @@ bool Menu::handlePainting(DRAWITEMSTRUCT& drawInfo, ItemDataWrapper& wrapper) {
 					Rectangle(arrowRect.pos + Point(arrowRect.size.x - pt.x, std::max(arrowRect.size.y - pt.y, 0L) / 2), pt), false);
 
 			} else {
-				Point pt(12, 12);
+				Point pt { 12, 12 };
 				Rectangle arrowRect(rect.pos + Point(rect.size.x - pt.x - 3, std::max(rect.size.y - pt.y, 0L) / 2), pt);
 
-				CompatibleCanvas arrowCanvas(canvas.handle());
-				Bitmap bitmap(::CreateCompatibleBitmap(arrowCanvas.handle(), pt.x, pt.y));
+				CompatibleCanvas arrowCanvas { canvas.handle() };
+				Bitmap bitmap { ::CreateCompatibleBitmap(arrowCanvas.handle(), pt.x, pt.y) };
 				auto select(arrowCanvas.select(bitmap));
 
 				::RECT rc = Rectangle(pt);
 				::DrawFrameControl(arrowCanvas.handle(), &rc, DFC_MENU, DFCS_MENUARROW);
 
 				// same color as the text color
-				Brush brush(isGrayed ? colors.gray :
+				Brush brush { isGrayed ? colors.gray :
 					wrapper.isTitle ? colors.titleText :
 					highlight ? colors.highlightText :
-					colors.text);
+					colors.text };
 				auto selectBrush(canvas.select(brush));
 
 				// DrawFrameControl returns a monochrome mask; use it with these ROPs to paint just the arrow.
@@ -654,7 +654,7 @@ bool Menu::handlePainting(MEASUREITEMSTRUCT& measureInfo, ItemDataWrapper& wrapp
 	auto& itemWidth = measureInfo.itemWidth;
 	auto& itemHeight = measureInfo.itemHeight;
 
-	MENUITEMINFO info = { sizeof(MENUITEMINFO), MIIM_FTYPE | MIIM_DATA | MIIM_CHECKMARKS | MIIM_STRING };
+	MENUITEMINFO info { sizeof(MENUITEMINFO), MIIM_FTYPE | MIIM_DATA | MIIM_CHECKMARKS | MIIM_STRING };
 	if(!::GetMenuItemInfo(handle(), wrapper.index, TRUE, &info))
 		throw Win32Exception("Couldn't get menu item info when measuring");
 
@@ -664,7 +664,7 @@ bool Menu::handlePainting(MEASUREITEMSTRUCT& measureInfo, ItemDataWrapper& wrapp
 	if(info.fType & MFT_SEPARATOR) {
 		auto& theme = getRootMenu()->theme;
 		if(theme) {
-			UpdateCanvas canvas(getParent());
+			UpdateCanvas canvas { getParent() };
 			Point pt;
 			if(theme.getPartSize(canvas, MENU_POPUPSEPARATOR, 0, pt)) {
 				itemWidth = pt.x;
@@ -714,7 +714,7 @@ bool Menu::handlePainting(MEASUREITEMSTRUCT& measureInfo, ItemDataWrapper& wrapp
 
 void Menu::appendSeparator() {
 	// init structure for new item
-	MENUITEMINFO itemInfo = { sizeof(MENUITEMINFO), MIIM_FTYPE, MFT_SEPARATOR };
+	MENUITEMINFO itemInfo { sizeof(MENUITEMINFO), MIIM_FTYPE, MFT_SEPARATOR };
 
 	// get position to insert
 	auto position = size();

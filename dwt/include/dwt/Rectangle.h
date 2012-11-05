@@ -50,7 +50,7 @@ struct Rectangle {
 	  */
 	Rectangle() { };
 
-	explicit Rectangle(const ::RECT& rc) : pos(rc.left, rc.top), size(rc.right - rc.left, rc.bottom - rc.top) { }
+	Rectangle(const ::RECT& rc) : pos(rc.left, rc.top), size(rc.right - rc.left, rc.bottom - rc.top) { }
 
 	/// Constructor initializing the rectangle with a position and size.
 	/** Note that the pSize is actually a size and NOT the lower right Point.
@@ -60,7 +60,7 @@ struct Rectangle {
 	/// Constructor initializing the rectangle with a size.
 	/** Top-left becomes (0, 0), while bottom-right is set to pSize.
 	  */
-	explicit Rectangle( const Point & pSize ) : pos(0, 0), size(pSize) { }
+	Rectangle( const Point & pSize ) : pos(0, 0), size(pSize) { }
 
 	::RECT toRECT() const;
 	operator ::RECT() const;
