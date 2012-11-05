@@ -22,7 +22,7 @@ from build_util import Dev, gen_po_name
 gcc_flags = {
 	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-Wno-unknown-pragmas', '-Wno-format', '-fexceptions', '-mthreads'],
 	'debug': [], 
-	'release' : ['-O3', '-fno-ipa-cp-clone', '-mwindows']
+	'release' : ['-O3', '-fno-omit-frame-pointer', '-fno-ipa-cp-clone', '-mwindows']
 }
 
 gcc_xxflags = {
