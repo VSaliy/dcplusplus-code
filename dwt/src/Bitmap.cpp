@@ -40,21 +40,19 @@
 
 namespace dwt {
 
-Bitmap::Bitmap( HBITMAP bitmap, bool own )
-	: ResourceType(bitmap, own)
-{}
+Bitmap::Bitmap(HBITMAP bitmap, bool own) : ResourceType(bitmap, own)
+{
+}
 
-Bitmap::Bitmap( unsigned resourceId, unsigned flags )
-	: ResourceType( ( HBITMAP )::LoadImage( ::GetModuleHandle(NULL), MAKEINTRESOURCE( resourceId ), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION ) )
-{}
+Bitmap::Bitmap(unsigned resourceId, unsigned flags) :
+	Bitmap(reinterpret_cast<HBITMAP>(::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(resourceId), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION)))
+{
+}
 
-Bitmap::Bitmap( const tstring & filePath, unsigned flags )
-#ifdef WINCE
-	: itsBitmap( ::SHLoadImageFile( filePath.c_str() ) )
-#else
-	: ResourceType( ( HBITMAP )::LoadImage( ::GetModuleHandle(NULL), filePath.c_str(), IMAGE_BITMAP, 0, 0, flags | LR_LOADFROMFILE ) )
-#endif
-{}
+Bitmap::Bitmap(const tstring& filePath, unsigned flags) :
+	Bitmap(reinterpret_cast<HBITMAP>(::LoadImage(::GetModuleHandle(NULL), filePath.c_str(), IMAGE_BITMAP, 0, 0, flags | LR_LOADFROMFILE)))
+{
+}
 
 HBITMAP Bitmap::getBitmap() const
 {
@@ -66,23 +64,23 @@ Point Bitmap::getSize() const
 	return getSize(handle());
 }
 
-Point Bitmap::getSize( HBITMAP bitmap )
+Point Bitmap::getSize(HBITMAP bitmap)
 {
 	// init struct for bitmap info
-	BITMAP bm = { 0 };
+	BITMAP bm { };
 
 	// get bitmap info
-	::GetObject( bitmap, sizeof( BITMAP ), & bm );
+	::GetObject(bitmap, sizeof(BITMAP), &bm);
 
-	return Point( bm.bmWidth, bm.bmHeight );
+	return Point(bm.bmWidth, bm.bmHeight);
 }
 
 BitmapPtr Bitmap::resize(const Point& newSize) const {
-	CompatibleCanvas dc1(0);
+	CompatibleCanvas dc1 { 0 };
 	auto select1(dc1.select(*this));
 
-	CompatibleCanvas dc2(0);
-	BitmapPtr ret(new Bitmap(::CreateCompatibleBitmap(dc1.handle(), newSize.x, newSize.y)));
+	CompatibleCanvas dc2 { 0 };
+	BitmapPtr ret { new Bitmap { ::CreateCompatibleBitmap(dc1.handle(), newSize.x, newSize.y) } };
 	auto select2(dc2.select(*ret));
 
 	const Point oldSize = getSize();

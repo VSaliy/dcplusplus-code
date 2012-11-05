@@ -102,12 +102,12 @@ void RichTextBox::create(const Seed& cs) {
 	<http://msdn.microsoft.com/en-us/library/bb787875(VS.85).aspx>, we have to handle the printing
 	by ourselves. this is crucial for taskbar thumbnails and "Aero Peek" previews. */
 	onPrinting([this](Canvas& canvas) {
-		Rectangle rect(getClientSize());
+		Rectangle rect { getClientSize() };
 
 		// paint a background in case the text doesn't span the whole box.
 		canvas.fill(rect, Brush(bgColor));
 
-		FORMATRANGE format = { canvas.handle(), canvas.handle() };
+		FORMATRANGE format { canvas.handle(), canvas.handle() };
 		format.rc = rect;
 		format.rc.bottom += abs(getFont()->getLogFont().lfHeight); // make room for the last line
 		// convert to twips and respect DPI settings.

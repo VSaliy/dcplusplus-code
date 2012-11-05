@@ -83,11 +83,11 @@ public:
 		GradientInActiveCaption = COLOR_GRADIENTINACTIVECAPTION
 	};
 
-	explicit Brush(HBRUSH h, bool own = true);
+	Brush(HBRUSH h, bool own = true);
 
-	explicit Brush(SysColor color);
+	Brush(SysColor color);
 
-	explicit Brush(COLORREF color);
+	Brush(COLORREF color);
 
 private:
 	friend class Handle<GdiPolicy<HBRUSH> >;

@@ -696,7 +696,7 @@ void DirectoryListingFrame::loadXML(const string& txt) {
 }
 
 void DirectoryListingFrame::layout() {
-	dwt::Rectangle r(getClientSize());
+	dwt::Rectangle r { getClientSize() };
 
 	if(loading) {
 		loading->setZOrder(HWND_TOPMOST);

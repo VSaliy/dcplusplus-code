@@ -35,6 +35,6 @@ namespace dwt {
 
 Pen::Pen(HPEN h, bool own) : ResourceType(h, own) { }
 
-Pen::Pen(COLORREF color, PenStyle style, int width) : ResourceType(::CreatePen(style, width, color), true) { }
+Pen::Pen(COLORREF color, PenStyle style, int width) : Pen(::CreatePen(style, width, color), true) { }
 
 }

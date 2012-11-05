@@ -58,7 +58,7 @@ public:
 	  */
 	void onPainting(std::function<void (PaintCanvas&)> f) {
 		W().addCallback(Message(WM_PAINT), [f, this](const MSG&, LRESULT&) -> bool {
-			PaintCanvas canvas(&this->W());
+			PaintCanvas canvas { &this->W() };
 			f(canvas);
 			return true;
 		});
@@ -66,7 +66,7 @@ public:
 
 	void onPrinting(std::function<void (Canvas&)> f) {
 		W().addCallback(Message(WM_PRINTCLIENT), [f](const MSG& msg, LRESULT&) -> bool {
-			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
+			FreeCanvas canvas { reinterpret_cast<HDC>(msg.wParam) };
 			f(canvas);
 			return true;
 		});

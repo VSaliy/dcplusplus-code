@@ -393,8 +393,8 @@ void Table::initGroupSupport() {
 					/* the theme color and the bg color are too close to each other; start by
 					filling the canvas with an invert of the bg, then invert the whole canvas after
 					everything has been drawn (after CDDS_POSTPAINT). */
-					FreeCanvas canvas(data.nmcd.hdc);
-					Brush brush(0xFFFFFF - bgColor);
+					FreeCanvas canvas { data.nmcd.hdc };
+					Brush brush { 0xFFFFFF - bgColor };
 
 					Rectangle rect;
 					if(!getGroupRect(data.nmcd.dwItemSpec, rect))
@@ -404,7 +404,8 @@ void Table::initGroupSupport() {
 
 					if(groupImageList) {
 						// don't invert the icon. let's find out where it is placed...
-						if(theme) {
+						/// @todo explicit cast for the VS Nov 2012 CTP - recheck later
+						if(static_cast<bool>(theme)) {
 							auto temp = rect;
 							theme.formatRect(canvas, LVP_GROUPHEADER, LVGH_OPEN, temp);
 							iconPos = temp.left() - rect.left();
@@ -432,7 +433,7 @@ void Table::initGroupSupport() {
 				if(data.nmcd.lItemlParam) {
 					LONG iconPos = data.nmcd.lItemlParam - 1;
 
-					FreeCanvas canvas(data.nmcd.hdc);
+					FreeCanvas canvas { data.nmcd.hdc };
 
 					Rectangle rect;
 					if(!getGroupRect(data.nmcd.dwItemSpec, rect))

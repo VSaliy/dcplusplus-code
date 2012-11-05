@@ -41,7 +41,7 @@ public:
 	operator T*() { return t; }
 	operator const T*() const { return t; }
 
-	operator bool() const { return t; }
+	explicit operator bool() const { return t; }
 
 	T* operator->() { return t; }
 	const T* operator->() const { return t; }

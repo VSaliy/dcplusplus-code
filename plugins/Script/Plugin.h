@@ -103,7 +103,6 @@ private:
 	map<string, string> chatCache;
 	set<HubDataPtr> hubs;
 
-	DCCorePtr dcpp;
 	DCHooksPtr hooks;
 
 	DCHubPtr hub;

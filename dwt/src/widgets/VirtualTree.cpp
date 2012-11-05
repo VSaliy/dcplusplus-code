@@ -488,7 +488,7 @@ void VirtualTree::updateChildDisplay(Item* item) {
 
 LRESULT VirtualTree::sendTreeMsg(UINT msg, WPARAM wParam, LPARAM lParam) {
 	// send with a direct dispatcher call to avoid loops (since we catch tree messages).
-	MSG treeMsg = { treeHandle(), msg, wParam, lParam };
+	MSG treeMsg { treeHandle(), msg, wParam, lParam };
 	return tree->getDispatcher().chain(treeMsg);
 }
 

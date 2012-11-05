@@ -37,11 +37,11 @@ Brush::Brush(HBRUSH h, bool own) : ResourceType(h, own) {
 
 }
 
-Brush::Brush(SysColor color) : ResourceType(::GetSysColorBrush(color), false) {
+Brush::Brush(SysColor color) : Brush(::GetSysColorBrush(color), false) {
 
 }
 
-Brush::Brush(COLORREF color) : ResourceType(::CreateSolidBrush(color), true) {
+Brush::Brush(COLORREF color) : Brush(::CreateSolidBrush(color), true) {
 
 }
 

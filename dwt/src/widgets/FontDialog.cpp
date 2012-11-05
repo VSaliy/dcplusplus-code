@@ -97,7 +97,7 @@ UINT_PTR CALLBACK FontDialog::CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			hidden. our only solution to paint a background is therefore to reproduce that painting
 			by ourselves. thanks to Wine (dlls/comdlg32/fontdlg.c) for showing how this is done. */
 
-			PaintCanvas canvas(hwnd);
+			PaintCanvas canvas { hwnd };
 			auto bkMode(canvas.setBkMode(true));
 
 			HWND box = ::GetDlgItem(hwnd, stc5);
@@ -105,7 +105,7 @@ UINT_PTR CALLBACK FontDialog::CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			::RECT rc;
 			::GetClientRect(box, &rc);
 			::MapWindowPoints(box, hwnd, reinterpret_cast<LPPOINT>(&rc), 2);
-			Rectangle rect(rc);
+			Rectangle rect { rc };
 
 			canvas.fill(rect, Brush(*reinterpret_cast<COLORREF*>(prop)));
 
@@ -116,7 +116,7 @@ UINT_PTR CALLBACK FontDialog::CFHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 
 			LOGFONT logFont;
 			::SendMessage(hwnd, WM_CHOOSEFONT_GETLOGFONT, 0, reinterpret_cast<LPARAM>(&logFont));
-			Font font(logFont);
+			Font font { logFont };
 			auto select(canvas.select(font));
 
 			canvas.drawText(util::win32::getWindowText(box), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);

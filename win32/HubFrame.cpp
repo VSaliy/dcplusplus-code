@@ -323,7 +323,7 @@ void HubFrame::postClosing() {
 void HubFrame::layout() {
 	const int border = 2;
 
-	dwt::Rectangle r(getClientSize());
+	dwt::Rectangle r { getClientSize() };
 
 	r.size.y -= status->refresh();
 

@@ -180,7 +180,7 @@ void WinUtil::init() {
 		if(::SHGetFileInfo(_T("./"), FILE_ATTRIBUTE_DIRECTORY, &info, sizeof(info),
 			SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES) && info.hIcon)
 		{
-			dwt::Icon icon(info.hIcon);
+			dwt::Icon icon { info.hIcon };
 			fileImages->add(icon);
 		}
 	}
@@ -728,7 +728,7 @@ size_t WinUtil::getFileIcon(const string& fileName) {
 			size_t ret = fileImages->size();
 			fileIndexes[ext] = ret;
 
-			dwt::Icon icon(info.hIcon);
+			dwt::Icon icon { info.hIcon };
 			fileImages->add(icon);
 
 			return ret;
@@ -968,7 +968,7 @@ public:
 
 private:
 	LRESULT resize(LPARAM lParam, const tstring& text, dwt::Point pos) {
-		dwt::Rectangle rect(reinterpret_cast<REQRESIZE*>(lParam)->rc);
+		dwt::Rectangle rect { reinterpret_cast<REQRESIZE*>(lParam)->rc };
 
 		if(rect.width() > getWindowRect().width() && !hasStyle(ES_MULTILINE)) {
 			// can't add ES_MULTILINE at run time, so create the control again.

@@ -309,22 +309,22 @@ namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, i
 	int mod = (HLS_L(RGB2HLS(bgBase)) >= 128) ? -30 : 30;
 
 	// Dark, medium and light shades
-	COLORREF barPal[3] = { HLS_TRANSFORM(barBase, -40, 50), barBase, HLS_TRANSFORM(barBase, 40, -30) };
+	COLORREF barPal[3] { HLS_TRANSFORM(barBase, -40, 50), barBase, HLS_TRANSFORM(barBase, 40, -30) };
 
 	// Two shades of the background color
-	COLORREF bgPal[2] = { HLS_TRANSFORM(bgBase, mod, 0), HLS_TRANSFORM(bgBase, mod/2, 0) };
+	COLORREF bgPal[2] { HLS_TRANSFORM(bgBase, mod, 0), HLS_TRANSFORM(bgBase, mod/2, 0) };
 
-	dwt::FreeCanvas canvas(hdc);
+	dwt::FreeCanvas canvas { hdc };
 
 	dwt::Rectangle rc = rcItem;
 
 	// draw background
 
 	{
-		dwt::Brush brush(::CreateSolidBrush(bgPal[1]));
+		dwt::Brush brush { ::CreateSolidBrush(bgPal[1]) };
 		auto selectBg(canvas.select(brush));
 
-		dwt::Pen pen(bgPal[0]);
+		dwt::Pen pen { bgPal[0] };
 		auto selectPen(canvas.select(pen));
 
 		// TODO Don't draw where the finished part will be drawn
@@ -338,11 +338,11 @@ namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, i
 	dwt::Rectangle textRect;
 
 	{
-		dwt::Brush brush(::CreateSolidBrush(barPal[1]));
+		dwt::Brush brush { ::CreateSolidBrush(barPal[1]) };
 		auto selectBg(canvas.select(brush));
 
 		{
-			dwt::Pen pen(barPal[0]);
+			dwt::Pen pen { barPal[0] };
 			auto selectPen(canvas.select(pen));
 
 			// "Finished" part
@@ -355,7 +355,7 @@ namespace { void drawProgress(HDC hdc, const dwt::Rectangle& rcItem, int item, i
 
 		// draw progressbar highlight
 		if(rc.width() > 2) {
-			dwt::Pen pen(barPal[2], dwt::Pen::Solid, 1);
+			dwt::Pen pen { barPal[2], dwt::Pen::Solid, 1 };
 			auto selectPen(canvas.select(pen));
 
 			rc.pos.y += 2;

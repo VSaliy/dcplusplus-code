@@ -159,7 +159,7 @@ FavHubsFrame::~FavHubsFrame() {
 }
 
 void FavHubsFrame::layout() {
-	dwt::Rectangle r(getClientSize());
+	dwt::Rectangle r { getClientSize() };
 
 	// TODO status->layout(r);
 

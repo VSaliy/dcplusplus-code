@@ -64,7 +64,7 @@ public:
 	  * HIMAGELIST meaning it will automatically free the
 	  * contained HIMAGELIST upon destruction
 	  */
-	explicit ImageList( HIMAGELIST imageList, bool own = true );
+	ImageList( HIMAGELIST imageList, bool own = true );
 
 	/// RAII Constructor
 	/** Creates a new ImageList <br>

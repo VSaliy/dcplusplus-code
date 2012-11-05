@@ -64,7 +64,7 @@ public:
 	  */
 	void onEraseBackground(std::function<bool (Canvas&)> f) {
 		W().setCallback(Message(WM_ERASEBKGND), [f](const MSG& msg, LRESULT& ret) -> bool {
-			FreeCanvas canvas(reinterpret_cast<HDC>(msg.wParam));
+			FreeCanvas canvas { reinterpret_cast<HDC>(msg.wParam) };
 			ret = f(canvas);
 			return ret;
 		});
