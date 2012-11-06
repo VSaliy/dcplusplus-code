@@ -69,9 +69,8 @@ msvc_link_flags = {
 	'release' : []
 }
 
-# TODO remove _VARIADIC_MAX if/when VC has proper variadic template support
 msvc_defs = {
-	'common' : ['_REENTRANT', '_VARIADIC_MAX=10', 'snprintf=_snprintf'],
+	'common' : ['_REENTRANT', 'snprintf=_snprintf'],
 	'debug' : ['_DEBUG', '_HAS_ITERATOR_DEBUGGING=0', '_SECURE_SCL=0'],
 	'release' : ['NDEBUG']
 }
