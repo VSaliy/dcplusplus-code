@@ -5,7 +5,7 @@
 * Remove the "Windows UPnP" port mapper in favor of MiniUPnP (poy)
 * Add a UI interface to the plugin API (poy)
 * Delete "View as text" files only when their window is closed (poy)
-* Fix queue matching when files have the same TTH but a different size (thanks bigmuscle)
+* Fix queue matching when files have the same TTH but a different size (thanks irainman)
 * Update Boost to version 1.52
 
 -- 0.802 2012-10-20 --

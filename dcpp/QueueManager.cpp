@@ -764,7 +764,7 @@ int QueueManager::matchListing(const DirectoryListing& dl) noexcept {
 			if(qi->isSet(QueueItem::FLAG_USER_LIST))
 				continue;
 			auto j = tthMap.find(qi->getTTH());
-			if(j != tthMap.end() && i.second->getSize() == j->second->getSize()) {
+			if(j != tthMap.end() && j->second->getSize() == qi->getSize()) {
 				try {
 					addSource(qi, dl.getUser(), QueueItem::Source::FLAG_FILE_NOT_AVAILABLE);
 				} catch(...) {
