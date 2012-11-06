@@ -136,22 +136,22 @@ void Plugin::onSwitched() {
 }
 
 Bool Plugin::onHubDataIn(HubDataPtr hHub, const char* message) {
-	dialog.write(true, false, hHub->ip, "Hub " + string(hHub->url), message);
+	dialog.write(true, false, hHub->ip, hHub->port, "Hub " + string(hHub->url), message);
 	return False;
 }
 
 Bool Plugin::onHubDataOut(HubDataPtr hHub, const char* message) {
-	dialog.write(true, true, hHub->ip, "Hub " + string(hHub->url), message);
+	dialog.write(true, true, hHub->ip, hHub->port, "Hub " + string(hHub->url), message);
 	return False;
 }
 
 Bool Plugin::onConnectionDataIn(ConnectionDataPtr hConn, const char* message) {
-	dialog.write(false, false, hConn->ip, "User" /** @todo get user's nick */, message);
+	dialog.write(false, false, hConn->ip, hConn->port, "User" /** @todo get user's nick */, message);
 	return False;
 }
 
 Bool Plugin::onConnectionDataOut(ConnectionDataPtr hConn, const char* message) {
-	dialog.write(false, true, hConn->ip, "User" /** @todo get user's nick */, message);
+	dialog.write(false, true, hConn->ip, hConn->port, "User" /** @todo get user's nick */, message);
 	return False;
 }
 

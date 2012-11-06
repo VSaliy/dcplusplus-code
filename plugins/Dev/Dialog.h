@@ -35,7 +35,7 @@ public:
 	~Dialog();
 
 	void create();
-	void write(bool hubOrUser, bool sending, string ip, string peer, string message);
+	void write(bool hubOrUser, bool sending, string ip, decltype(ConnectionData().port) port, string peer, string message);
 	void close();
 
 	static HINSTANCE instance;
@@ -58,7 +58,7 @@ private:
 	HWND hwnd;
 
 	// store the messages to be displayed here; process them with a timer.
-	struct Message { bool hubOrUser; bool sending; string ip; string peer; string message; };
+	struct Message { bool hubOrUser; bool sending; string ip; decltype(ConnectionData().port) port; string peer; string message; };
 	boost::lockfree::queue<Message> messages;
 
 	uint16_t counter;
@@ -74,6 +74,7 @@ private:
 		tstring index;
 		tstring dir;
 		tstring ip;
+		tstring port;
 		tstring peer;
 		tstring message;
 	};

@@ -71,8 +71,8 @@ void Dialog::create() {
 	}
 }
 
-void Dialog::write(bool hubOrUser, bool sending, string ip, string peer, string message) {
-	Message msg = { hubOrUser, sending, move(ip), move(peer), move(message) };
+void Dialog::write(bool hubOrUser, bool sending, string ip, decltype(ConnectionData().port) port, string peer, string message) {
+	Message msg = { hubOrUser, sending, move(ip), port, move(peer), move(message) };
 	messages.push(msg);
 }
 
@@ -132,13 +132,17 @@ BOOL Dialog::init() {
 	col.pszText = _T("IP");
 	ListView_InsertColumn(control, 2, &col);
 
-	col.cx = 200;
-	col.pszText = _T("Peer info");
+	col.cx = 50;
+	col.pszText = _T("Port");
 	ListView_InsertColumn(control, 3, &col);
 
-	col.cx = rect.right - rect.left - 50 - 50 - 100 - 200 - 30;
-	col.pszText = _T("Message");
+	col.cx = 200;
+	col.pszText = _T("Peer info");
 	ListView_InsertColumn(control, 4, &col);
+
+	col.cx = rect.right - rect.left - 50 - 50 - 100 - 50 - 200 - 30;
+	col.pszText = _T("Message");
+	ListView_InsertColumn(control, 5, &col);
 
 	SendMessage(GetDlgItem(hwnd, IDC_SCROLL), BM_SETCHECK, BST_CHECKED, 0);
 	SendMessage(GetDlgItem(hwnd, IDC_HUB_MESSAGES), BM_SETCHECK, BST_CHECKED, 0);
@@ -183,6 +187,7 @@ void Dialog::timer() {
 		item->index = Util::toT(boost::lexical_cast<string>(counter));
 		item->dir = message.sending ? _T("Out") : _T("In");
 		item->ip = move(ip);
+		item->port = Util::toT(boost::lexical_cast<string>(message.port));
 		item->peer = Util::toT(message.peer);
 		item->message = Util::toT(message.message);
 
@@ -206,10 +211,14 @@ void Dialog::timer() {
 		ListView_SetItem(control, &lvi);
 
 		lvi.iSubItem = 3;
-		lvi.pszText = const_cast<LPTSTR>(item->peer.c_str());
+		lvi.pszText = const_cast<LPTSTR>(item->port.c_str());
 		ListView_SetItem(control, &lvi);
 
 		lvi.iSubItem = 4;
+		lvi.pszText = const_cast<LPTSTR>(item->peer.c_str());
+		ListView_SetItem(control, &lvi);
+
+		lvi.iSubItem = 5;
 		lvi.pszText = const_cast<LPTSTR>(item->message.c_str());
 		ListView_SetItem(control, &lvi);
 
@@ -329,7 +338,7 @@ void Dialog::copy() {
 		if(ListView_GetItem(control, &lvi)) {
 			auto& item = *reinterpret_cast<Item*>(lvi.lParam);
 			if(!str.empty()) { str += _T("\r\n"); }
-			str += item.index + _T(" [") + item.dir + _T("] ") + item.ip + _T(" (") + item.peer + _T("): ") + item.message;
+			str += item.index + _T(" [") + item.dir + _T("] ") + item.ip + _T(":") + item.port + _T(" (") + item.peer + _T("): ") + item.message;
 		}
 	}
 
