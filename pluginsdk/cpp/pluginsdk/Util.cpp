@@ -20,6 +20,8 @@
 
 #include "Util.h"
 
+namespace dcapi {
+
 DCUtilsPtr Util::utils;
 
 bool Util::init(DCCorePtr core) {
@@ -68,3 +70,5 @@ string Util::toUtf8(const string& str) {
 	res.resize(utils->to_utf8(&res[0], &str[0], str.size()));
 	return res;
 }
+
+} // namespace dcapi

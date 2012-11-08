@@ -26,6 +26,8 @@
 
 #include <pluginsdk/PluginDefs.h>
 
+namespace dcapi {
+
 using std::string;
 
 class Logger
@@ -39,5 +41,7 @@ public:
 private:
 	static DCLogPtr logger;
 };
+
+} // namespace dcapi
 
 #endif

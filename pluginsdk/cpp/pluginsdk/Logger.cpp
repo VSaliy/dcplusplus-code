@@ -20,6 +20,8 @@
 
 #include "Logger.h"
 
+namespace dcapi {
+
 DCLogPtr Logger::logger;
 
 bool Logger::init(DCCorePtr core) {
@@ -29,3 +31,5 @@ bool Logger::init(DCCorePtr core) {
 void Logger::init(DCLogPtr coreLogger) { logger = coreLogger; }
 
 void Logger::log(const string& message) { logger->log(message.c_str()); }
+
+} // namespace dcapi

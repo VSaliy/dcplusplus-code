@@ -26,6 +26,8 @@
 
 #include <pluginsdk/PluginDefs.h>
 
+namespace dcapi {
+
 using std::string;
 
 class Core
@@ -38,5 +40,7 @@ public:
 private:
 	static DCCorePtr core;
 };
+
+} // namespace dcapi
 
 #endif

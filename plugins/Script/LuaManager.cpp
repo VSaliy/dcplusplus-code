@@ -27,6 +27,10 @@
 
 #include <boost/lexical_cast.hpp>
 
+using dcapi::Config;
+using dcapi::Logger;
+using dcapi::Util;
+
 const char LuaManager::className[] = "DC";
 Lunar<LuaManager>::RegType LuaManager::methods[] = {
 	{"SendHubMessage", &LuaManager::SendHubMessage },

@@ -26,6 +26,8 @@
 
 #include <pluginsdk/PluginDefs.h>
 
+namespace dcapi {
+
 using std::string;
 
 class Config
@@ -68,5 +70,7 @@ template<typename ConfigT, typename RetT> RetT Config::getConfig(const char* nam
 	config->release(cfg);
 	return ret;
 }
+
+} // namespace dcapi
 
 #endif

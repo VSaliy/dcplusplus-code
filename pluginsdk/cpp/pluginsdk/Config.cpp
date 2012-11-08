@@ -20,6 +20,8 @@
 
 #include "Config.h"
 
+namespace dcapi {
+
 DCConfigPtr Config::config;
 
 bool Config::init(DCCorePtr core) {
@@ -43,3 +45,5 @@ ConfigValuePtr Config::getCoreConfig(const char* name) { return config->get_cfg(
 void Config::freeCoreConfig(ConfigValuePtr value) { config->release(value); }
 
 string Config::getPath(PathType type) { return config->get_path(type); }
+
+} // namespace dcapi

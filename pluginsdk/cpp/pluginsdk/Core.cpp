@@ -20,6 +20,8 @@
 
 #include "Core.h"
 
+namespace dcapi {
+
 DCCorePtr Core::core;
 string Core::appName;
 
@@ -27,3 +29,5 @@ void Core::init(DCCorePtr corePtr) {
 	core = corePtr;
 	appName = core->host_name();
 }
+
+} // namespace dcapi

@@ -35,6 +35,9 @@
 
 #define noFilter _T("0 - No filtering")
 
+using dcapi::Core;
+using dcapi::Util;
+
 HINSTANCE Dialog::instance;
 Dialog* dlg = nullptr;
 

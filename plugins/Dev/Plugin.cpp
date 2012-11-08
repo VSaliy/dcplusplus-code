@@ -24,18 +24,21 @@
 #include <pluginsdk/Logger.h>
 #include <pluginsdk/Util.h>
 
+using dcapi::Config;
+using dcapi::Core;
+using dcapi::Logger;
+using dcapi::Util;
+
 Plugin* Plugin::instance = nullptr;
 
-const char* switchText = "Dev plugin: enable/disable";
-
-Plugin::Plugin() {
+Plugin::Plugin() : commandName(PLUGIN_NAME ": enable") {
 }
 
 Plugin::~Plugin() {
 	clearHooks();
 
 	if(ui) {
-		ui->remove_command(switchText);
+		ui->remove_command(commandName.c_str());
 	}
 }
 
@@ -66,7 +69,11 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 }
 
 void Plugin::dlgClosed() {
+	auto oldCommand = instance->commandName;
 	instance->close();
+
+	instance->ui->remove_command(oldCommand.c_str());
+	instance->ui->add_command(instance->commandName.c_str(), [] { instance->onSwitched(); });
 }
 
 void Plugin::addHooks() {
@@ -94,12 +101,14 @@ void Plugin::start() {
 	dialog.create();
 	addHooks();
 	Config::setConfig("Enabled", true);
+	commandName = PLUGIN_NAME ": disable";
 }
 
 void Plugin::close() {
 	Config::setConfig("Enabled", false);
 	clearHooks();
 	dialog.close();
+	commandName = PLUGIN_NAME ": enable";
 }
 
 void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
@@ -117,22 +126,26 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	if(install) {
 		Config::setConfig("Enabled", true);
 
-		Logger::log("The dev plugin has been installed; check the \"" + string(switchText) + "\" command and the /raw chat command.");
+		Logger::log("The dev plugin has been installed; check the plugins menu and the /raw chat command.");
 	}
 
 	if(Config::getBoolConfig("Enabled")) {
 		start();
 	}
 
-	ui->add_command(switchText, [] { instance->onSwitched(); });
+	ui->add_command(commandName.c_str(), [] { instance->onSwitched(); });
 }
 
 void Plugin::onSwitched() {
+	auto oldCommand = commandName;
 	if(events.empty()) {
 		start();
 	} else {
 		close();
 	}
+
+	ui->remove_command(oldCommand.c_str());
+	ui->add_command(commandName.c_str(), [] { instance->onSwitched(); });
 }
 
 Bool Plugin::onHubDataIn(HubDataPtr hHub, const char* message) {
