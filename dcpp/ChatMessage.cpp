@@ -26,6 +26,7 @@
 #include "PluginManager.h"
 #include "SettingsManager.h"
 #include "SimpleXML.h"
+#include "Tagger.h"
 #include "Util.h"
 
 namespace dcpp {
@@ -107,6 +108,12 @@ messageTimestamp(messageTimestamp)
 	PluginManager::getInstance()->onChatDisplay(htmlMessage, from);
 }
 
+namespace { inline bool validSchemeChar(char c, bool first) {
+	return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+		(!first && c >= '0' && c <= '9') ||
+		(!first && (c == '+' || c == '.' || c == '-'));
+} }
+
 void ChatMessage::format(string& text, Tagger& tags, string& tmp) {
 	/* link formatting - optimize the lookup a bit by using the fact that every link identifier
 	(except www ones) contains a colon. */
@@ -124,7 +131,13 @@ void ChatMessage::format(string& text, Tagger& tags, string& tmp) {
 	size_t i = 0, begin, end, n = text.size();
 	while((i = text.find(':', i)) != string::npos) {
 
-		if((begin = text.find_last_of(delimiters, i)) == string::npos) begin = 0; else ++begin;
+		// get the left bound; make sure it's a valid scheme according to RFC 3986, section 3.1
+		begin = i;
+		while(begin > 0 && validSchemeChar(text[begin - 1], false)) { --begin; }
+		while(begin < i && !validSchemeChar(text[begin], true)) { ++begin; }
+		if(begin == i) { ++i; continue; }
+
+		// get the right bound
 		if((end = text.find_first_of(delimiters, i + 1)) == string::npos) end = n;
 
 		if(i > 0 && (
