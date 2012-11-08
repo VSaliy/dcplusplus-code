@@ -22,6 +22,7 @@
 #include <dcpp/ChatMessage.h>
 #include <dcpp/File.h>
 #include <dcpp/SimpleXML.h>
+#include <dcpp/Tagger.h>
 #include <dcpp/PluginManager.h>
 
 #include <dwt/WidgetCreator.h>
@@ -74,14 +75,18 @@ protected:
 
 	/// add a chat message with some formatting and call addedChat.
 	void addChat(const tstring& message) {
-		string tmp;
-		string htmlMessage = "<span id=\"message\" style=\"white-space: pre-wrap;\">"
-			"<span id=\"timestamp\">" + SimpleXML::escape("[" + Util::getShortTimeString() + "]", tmp, false) + "</span> "
-			"<span id=\"text\">" + SimpleXML::escape(Text::fromT(message), tmp, false) + "</span></span>"; 
+		string xmlTmp, tmp = Text::fromT(message);
+		Tagger tags;
 
-		if(PluginManager::getInstance()->onChatDisplay(htmlMessage)) {
-			addChatHTML(htmlMessage);
-		} else addChatPlain(Text::toT("[" + Util::getShortTimeString() + "] ") + message);
+		PluginManager::getInstance()->onChatTags(tmp, tags);
+
+		string htmlMessage = "<span id=\"message\" style=\"white-space: pre-wrap;\">"
+			"<span id=\"timestamp\">" + SimpleXML::escape("[" + Util::getShortTimeString() + "]", xmlTmp, false) + "</span> "
+			"<span id=\"text\">" + tags.merge(tmp, xmlTmp) + "</span></span>";
+
+		PluginManager::getInstance()->onChatDisplay(htmlMessage);
+
+		addChatHTML(htmlMessage);
 		t().addedChat(message);
 	}
 
