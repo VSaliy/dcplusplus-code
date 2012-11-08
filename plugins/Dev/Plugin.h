@@ -59,6 +59,8 @@ private:
 
 	Dialog dialog;
 
+	string commandName;
+
 	/** @todo switch to dcpp::Singleton when <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=51494>
 	is fixed */
 	static Plugin* instance;

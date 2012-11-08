@@ -30,7 +30,7 @@ static void callalert (lua_State *L, int status) {
 			lua_call(L, 1, 0);
 		}
 		else {  /* no _ALERT function; print it on stderr */
-			Logger::log(Util::toUtf8(string("Lua ERROR: ") + lua_tostring(L, -2)));
+			dcapi::Logger::log(dcapi::Util::toUtf8(string("Lua ERROR: ") + lua_tostring(L, -2)));
 			lua_pop(L, 2);  /* remove error message and _ALERT */
 		}
 	}

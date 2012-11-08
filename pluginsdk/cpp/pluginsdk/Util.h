@@ -26,6 +26,8 @@
 
 #include <pluginsdk/PluginDefs.h>
 
+namespace dcapi {
+
 using std::string;
 #ifdef _UNICODE
 using std::wstring;
@@ -52,5 +54,7 @@ public:
 private:
 	static DCUtilsPtr utils;
 };
+
+} // namespace dcapi
 
 #endif

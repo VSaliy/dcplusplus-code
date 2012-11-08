@@ -26,6 +26,11 @@
 
 #include <boost/filesystem/operations.hpp>
 
+using dcapi::Config;
+using dcapi::Core;
+using dcapi::Logger;
+using dcapi::Util;
+
 Plugin* Plugin::instance = nullptr;
 
 Plugin::Plugin() { L = nullptr; }

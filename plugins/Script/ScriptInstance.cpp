@@ -26,6 +26,10 @@
 #include <pluginsdk/Logger.h>
 #include <pluginsdk/Util.h>
 
+using dcapi::Config;
+using dcapi::Logger;
+using dcapi::Util;
+
 lua_State* ScriptInstance::L = NULL;
 CriticalSection ScriptInstance::cs;
 

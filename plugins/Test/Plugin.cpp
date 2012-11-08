@@ -24,6 +24,11 @@
 #include <pluginsdk/Logger.h>
 #include <pluginsdk/Util.h>
 
+using dcapi::Config;
+using dcapi::Core;
+using dcapi::Logger;
+using dcapi::Util;
+
 Plugin* Plugin::instance = nullptr;
 
 Plugin::Plugin() {
