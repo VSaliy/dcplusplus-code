@@ -99,6 +99,8 @@ class SocketException;
 
 class StringSearch;
 
+class Tagger;
+
 class TigerHash;
 
 class Transfer;
