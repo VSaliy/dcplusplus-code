@@ -76,7 +76,9 @@ protected:
 	/// add a chat message with some formatting and call addedChat.
 	void addChat(const tstring& message) {
 		string xmlTmp, tmp = Text::fromT(message);
+
 		Tagger tags;
+		ChatMessage::format(tmp, tags, xmlTmp);
 
 		PluginManager::getInstance()->onChatTags(tmp, tags);
 

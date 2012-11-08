@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_DCPP_CHAT_MESSAGE_H
 
 #include "forward.h"
+#include "Tagger.h"
 
 #include <string>
 
@@ -58,6 +59,10 @@ struct ChatMessage {
 	bool thirdPerson;
 	/** [ADC only] Time when the message was initially sent. */
 	time_t messageTimestamp;
+
+	/** Store context-agnostic formattings that can be applied to the given message in the tagger.
+	Note that the string may be modified. */
+	static void format(string& text, Tagger& tags, string& tmp);
 };
 
 } // namespace dcpp

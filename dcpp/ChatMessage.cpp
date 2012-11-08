@@ -26,7 +26,6 @@
 #include "PluginManager.h"
 #include "SettingsManager.h"
 #include "SimpleXML.h"
-#include "Tagger.h"
 #include "Util.h"
 
 namespace dcpp {
@@ -96,46 +95,53 @@ messageTimestamp(messageTimestamp)
 	message += tmp;
 
 	/* format the message; this will involve adding custom tags. use the Tagger class to that end. */
-
 	Tagger tags;
+	format(tmp, tags, xmlTmp);
 
+	// let plugins play with the tag list
+	PluginManager::getInstance()->onChatTags(tmp, tags, from);
+
+	htmlMessage += "<span id=\"text\">" + tags.merge(tmp, xmlTmp) + "</span></span>";
+
+	// forward to plugins
+	PluginManager::getInstance()->onChatDisplay(htmlMessage, from);
+}
+
+void ChatMessage::format(string& text, Tagger& tags, string& tmp) {
 	/* link formatting - optimize the lookup a bit by using the fact that every link identifier
 	(except www ones) contains a colon. */
-	/// @todo add support for spaces within links enclosed by brackets / quotes (see URI RFC)
 
-	auto addLinkStr = [&xmlTmp, &tags](size_t begin, size_t end, const string& link) {
-		tags.add(begin, end, "a", "href=\"" + SimpleXML::escape(link, xmlTmp, true) + "\"");
+	auto addLinkStr = [&tmp, &tags](size_t begin, size_t end, const string& link) {
+		tags.add(begin, end, "a", "href=\"" + SimpleXML::escape(link, tmp, true) + "\"");
 	};
 
-	auto addLink = [&tmp, &addLinkStr](size_t begin, size_t end) {
-		addLinkStr(begin, end, tmp.substr(begin, end - begin));
+	auto addLink = [&text, &addLinkStr](size_t begin, size_t end) {
+		addLinkStr(begin, end, text.substr(begin, end - begin));
 	};
 
 	static const string delimiters = " \t\r\n<>\"";
 
-	i = 0;
-	size_t begin, end;
-	auto n = tmp.size();
-	while((i = tmp.find(':', i)) != string::npos) {
+	size_t i = 0, begin, end, n = text.size();
+	while((i = text.find(':', i)) != string::npos) {
 
-		if((begin = tmp.find_last_of(delimiters, i)) == string::npos) begin = 0; else ++begin;
-		if((end = tmp.find_first_of(delimiters, i + 1)) == string::npos) end = n;
+		if((begin = text.find_last_of(delimiters, i)) == string::npos) begin = 0; else ++begin;
+		if((end = text.find_first_of(delimiters, i + 1)) == string::npos) end = n;
 
 		if(i > 0 && (
-			(i + 4 < n && tmp[i + 1] == '/' && tmp[i + 2] == '/') || // "http://", etc
-			(i == begin + 6 && i + 1 <= n && !tmp.compare(begin, 6, "mailto"))))
+			(i + 4 < n && text[i + 1] == '/' && text[i + 2] == '/') || // "http://", etc
+			(i == begin + 6 && i + 1 <= n && !text.compare(begin, 6, "mailto"))))
 		{
 			addLink(begin, end);
 			i = end;
 
-		} else if(i == begin + 6 && i + 2 <= n && !tmp.compare(begin, 6, "magnet") && tmp[i + 1] == '?') {
-			string link = tmp.substr(begin, end - begin), hash, name, key;
+		} else if(i == begin + 6 && i + 2 <= n && !text.compare(begin, 6, "magnet") && text[i + 1] == '?') {
+			string link = text.substr(begin, end - begin), hash, name, key;
 			if(Magnet::parseUri(link, hash, name, key)) {
 
 				if(!name.empty()) {
 					// magnet link: replace with the friendly name
 					name += " (magnet)";
-					tmp.replace(begin, end - begin, name);
+					text.replace(begin, end - begin, name);
 
 					// the size of the string has changed; update counts.
 					auto delta = name.size() - link.size();
@@ -157,9 +163,9 @@ messageTimestamp(messageTimestamp)
 
 	// check for www links.
 	i = 0;
-	while((i = tmp.find("www.", i)) != string::npos) {
-		if(i + 5 <= n && (i == 0 || delimiters.find(tmp[i - 1]) != string::npos)) {
-			if((end = tmp.find_first_of(delimiters, i + 4)) == string::npos) end = n;
+	while((i = text.find("www.", i)) != string::npos) {
+		if(i + 5 <= n && (i == 0 || delimiters.find(text[i - 1]) != string::npos)) {
+			if((end = text.find_first_of(delimiters, i + 4)) == string::npos) end = n;
 			if(i + 5 <= end) {
 				addLink(i, end);
 				i = end;
@@ -168,14 +174,6 @@ messageTimestamp(messageTimestamp)
 		}
 		i += 5;
 	}
-
-	// let plugins play with the tag list
-	PluginManager::getInstance()->onChatTags(tmp, tags, from);
-
-	htmlMessage += "<span id=\"text\">" + tags.merge(tmp, xmlTmp) + "</span></span>";
-
-	// forward to plugins
-	PluginManager::getInstance()->onChatDisplay(htmlMessage, from);
 }
 
 } // namespace dcpp
