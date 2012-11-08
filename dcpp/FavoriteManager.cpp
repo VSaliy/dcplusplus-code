@@ -287,7 +287,8 @@ public:
 			const string& maxUsers = getAttrib(attribs, "Maxusers", 5);
 			const string& reliability = getAttrib(attribs, "Reliability", 5);
 			const string& rating = getAttrib(attribs, "Rating", 5);
-			publicHubs.emplace_back(name, server, description, users, country, shared, minShare, minSlots, maxHubs, maxUsers, reliability, rating);
+			/// @todo change to emplace_back when MSVC has templates with var args, thus allowing these 12 arguments! (its current emulation only goes up to 10)
+			publicHubs.push_back(HubEntry(name, server, description, users, country, shared, minShare, minSlots, maxHubs, maxUsers, reliability, rating));
 		}
 	}
 private:
