@@ -29,6 +29,8 @@
 # include <cstring>
 #endif
 
+#include <pluginsdk/Config.h>
+
 #ifdef _WIN32
 # include "resource.h"
 # ifdef _MSC_VER
@@ -50,19 +52,25 @@ DCConfigPtr config;
 DCLogPtr logging;
 
 DCHubPtr hub;
+DCTaggerPtr tagger;
 DCUtilsPtr utils = NULL;
+DCUIPtr ui = NULL;
 
 /* Hook subscription store */
-#define HOOKS_SUBSCRIBED 2
+#define HOOKS_SUBSCRIBED 4
 
 const char* hookGuids[HOOKS_SUBSCRIBED] = {
 	HOOK_UI_PROCESS_CHAT_CMD,
-	HOOK_HUB_ONLINE
+	HOOK_HUB_ONLINE,
+	HOOK_TIMER_SECOND,
+	HOOK_UI_CHAT_TAGS
 };
 
 DCHOOK hookFuncs[HOOKS_SUBSCRIBED] = {
 	&onHubEnter,
-	&onHubOnline
+	&onHubOnline,
+	&onSecond,
+	&onChatTags
 };
 
 subsHandle subs[HOOKS_SUBSCRIBED];
@@ -76,14 +84,21 @@ Bool onLoad(uint32_t eventId, DCCorePtr core) {
 	logging = (DCLogPtr)core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER);
 
 	hub = (DCHubPtr)core->query_interface(DCINTF_DCPP_HUBS, DCINTF_DCPP_HUBS_VER);
+	tagger = (DCTaggerPtr)core->query_interface(DCINTF_DCPP_TAGGER, DCINTF_DCPP_TAGGER_VER);
 #ifdef _WIN32
 	utils = (DCUtilsPtr)core->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER);
+	ui = (DCUIPtr)core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER); 
 #endif
+
+	if(!hooks || !config || !logging || !hub || !tagger)
+		return False;
 
 	if(eventId == ON_INSTALL) {
 		/* Default settings */
-		set_cfg("SendSuffix", "<DC++ Plugins Test>");
+		set_cfg("SendSuffix", "<Plugins Test - " PLUGIN_NAME ">");
 	}
+
+	logging->log(PLUGIN_NAME " loaded...");
 
 	while(i < HOOKS_SUBSCRIBED) {
 		subs[i] = hooks->bind_hook(hookGuids[i], hookFuncs[i], NULL);
@@ -112,19 +127,17 @@ Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBre
 
 	if(stricmp(cmd->command, "help") == 0 && stricmp(cmd->params, "plugins") == 0) {
 		const char* help =
-			"\t\t\t Help: Example plugin \t\t\t\n"
-			"\t /pluginhelp \t\t\t Prints info about the purpose of this plugin\n"
-			"\t /plugininfo \t\t\t Prints info about the example plugin\n"
-			"\t /unhook <index> \t\t Hooks test\n"
-			"\t /rehook <index> \t\t Hooks test\n"
-			"\t /send <text> \t\t\t Chat message test\n";
+			"\t\t\t Help: " PLUGIN_NAME " \n"
+			"\t /pluginhelp    \t Prints info about the purpose of this plugin\n"
+			"\t /plugininfo    \t Prints info about this plugin\n"
+			"\t /send <text>   \t Chat message test\n";
 
 		hub->local_message(hHub, help, MSG_SYSTEM);
 		return True;
 	} else if(stricmp(cmd->command, "pluginhelp") == 0) {
 		const char* pluginhelp =
-			"\t\t\t Plugin help: Example plugin \t\t\t\n"
-			"\t The example plugin project is intended to both demonstrate the use and test the implementation of the API\n"
+			"\t\t\t Plugin help: " PLUGIN_NAME " \n"
+			"\t This plugin project is intended to both demonstrate the use and test the implementation of the core API\n"
 			"\t as such the plugin itself does nothing useful but it can be used to verify whether an implementation works\n"
 			"\t with the API or not, however, it is by no means intended to be a comprehensive testing tool for the API.\n";
 
@@ -132,39 +145,15 @@ Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBre
 		return True;
 	} else if(stricmp(cmd->command, "plugininfo") == 0) {
 		const char* info =
-			"\t\t\t Plugin info: Example plugin \t\t\t\n"
-			"\t Name: \t\t\t\t" PLUGIN_NAME "\n"
-			"\t Author: \t\t\t" PLUGIN_AUTHOR "\n"
-			"\t Version: \t\t\t" STRINGIZE(PLUGIN_VERSION) "\n"
-			"\t Description: \t\t\t" PLUGIN_DESC "\n"
-			"\t GUID/UUID: \t\t\t" PLUGIN_GUID "\n";
+			"\t\t\t Plugin info: " PLUGIN_NAME " \n"
+			"\t Name:           \t" PLUGIN_NAME "\n"
+			"\t Author:         \t" PLUGIN_AUTHOR "\n"
+			"\t Version:        \t" STRINGIZE(PLUGIN_VERSION) "\n"
+			"\t Description:    \t" PLUGIN_DESC "\n"
+			"\t GUID/UUID:      \t" PLUGIN_GUID "\n"
+			"\t Core API Ver:   \t" STRINGIZE(DCAPI_CORE_VER) "\n";
 
 		hub->local_message(hHub, info, MSG_SYSTEM);
-		return True;
-	} else if(stricmp(cmd->command, "unhook") == 0) {
-		/* Unhook test */
-		if(strlen(cmd->params) == 0) {
-			hub->local_message(hHub, "You must supply a parameter!", MSG_SYSTEM);
-		} else {
-			uint32_t subIdx = atoi(cmd->params);
-			if((subIdx < HOOKS_SUBSCRIBED) && subs[subIdx]) {
-				hooks->release_hook(subs[subIdx]);
-				subs[subIdx] = 0;
-				hub->local_message(hHub, "Hooking changed...", MSG_SYSTEM);
-			}
-		}
-		return True;
-	} else if(stricmp(cmd->command, "rehook") == 0) {
-		/* Rehook test */
-		if(strlen(cmd->params) == 0) {
-			hub->local_message(hHub, "You must supply a parameter!", MSG_SYSTEM);
-		} else {
-			uint32_t subIdx = atoi(cmd->params);
-			if((subIdx < HOOKS_SUBSCRIBED) && !subs[subIdx]) {
-				subs[subIdx] = hooks->bind_hook(hookGuids[subIdx], hookFuncs[subIdx], NULL);
-				hub->local_message(hHub, "Hooking changed...", MSG_SYSTEM);
-			}
-		}
 		return True;
 	} else if(stricmp(cmd->command, "send") == 0) {
 		size_t len = strlen(cmd->params);
@@ -180,7 +169,7 @@ Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBre
 			hub->send_message(hHub, text, (strnicmp(text, "/me ", 4) == 0) ? True : False);
 
 			free(text);
-			config->release((ConfigValuePtr)suffix);
+			free_cfg((ConfigValuePtr)suffix);
 		} else {
 			hub->local_message(hHub, "You must supply a parameter!", MSG_SYSTEM);
 		}
@@ -201,6 +190,40 @@ Bool DCAPI onHubOnline(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBr
 	return False;
 }
 
+Bool DCAPI onSecond(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak) {
+	static uint64_t prevTick = 0;
+	uint64_t tick = *(uint64_t*)pData;
+
+	if(tick - prevTick >= 10*1000) {
+		prevTick = tick;
+		if(!ui) {
+			char* buf = (char*)memset(malloc(128), 0, 128);
+			snprintf(buf, 128, "*** Plugin timer tick (%lld)", tick);
+
+			logging->log(buf);
+			free(buf);
+		} else ui->play_sound("Media\\tada.wav");
+	}
+	return False;
+}
+
+Bool DCAPI onChatTags(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak) {
+	static const char* pattern = "ABC DEF";
+	TagDataPtr tags = (TagDataPtr)pData;
+	char* text = strstr(tags->text, pattern);
+
+	while(text != NULL) {	
+		tagger->add_tag(tags, text - tags->text, (text - tags->text) + strlen(pattern), "b", "");
+		text = strstr(text + strlen(pattern), pattern);
+	}
+
+	text = strstr(tags->text, "***");
+	if (text != NULL && (text - tags->text) == 0)
+		tagger->add_tag(tags, 0, strlen(tags->text), "b", "");
+
+	return False;
+}
+
 #ifdef _WIN32
 /* Config dialog stuff */
 BOOL onConfigInit(HWND hWnd) {
@@ -209,7 +232,7 @@ BOOL onConfigInit(HWND hWnd) {
 	TCHAR* buf = (TCHAR*)memset(malloc(len * sizeof(TCHAR)), 0, len * sizeof(TCHAR));
 
 	utils->utf8_to_wcs(buf, value->value, len);
-	config->release((ConfigValuePtr)value);
+	free_cfg((ConfigValuePtr)value);
 	value = NULL;
 
 	SetDlgItemText(hWnd, IDC_SUFFIX, buf);
@@ -257,51 +280,12 @@ INT_PTR CALLBACK configProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
 Bool onConfig(dcptr_t hWnd) {
 #ifdef _WIN32
-	DialogBox(hInst, MAKEINTRESOURCE(IDD_PLUGINDLG), (HWND)hWnd, configProc);
-	return True;
-#else
-	return False;
+	if(utils) {
+		DialogBox(hInst, MAKEINTRESOURCE(IDD_PLUGINDLG), (HWND)hWnd, configProc);
+		return True;
+	}
 #endif
-}
-
-/* Settings helpers */
-ConfigStrPtr DCAPI get_cfg(const char* name) {
-	return (ConfigStrPtr)config->get_cfg(PLUGIN_GUID, name, CFG_TYPE_STRING);
-}
-
-ConfigIntPtr DCAPI get_cfg_int(const char* name) {
-	return (ConfigIntPtr)config->get_cfg(PLUGIN_GUID, name, CFG_TYPE_INT);
-}
-
-ConfigInt64Ptr DCAPI get_cfg_int64(const char* name) {
-	return (ConfigInt64Ptr)config->get_cfg(PLUGIN_GUID, name, CFG_TYPE_INT64);
-}
-
-void DCAPI set_cfg(const char* name, const char* value) {
-	ConfigStr val;
-	memset(&val, 0, sizeof(ConfigStr));
-
-	val.type = CFG_TYPE_STRING;
-	val.value = value;
-	config->set_cfg(PLUGIN_GUID, name, (ConfigValuePtr)&val);
-}
-
-void DCAPI set_cfg_int(const char* name, int32_t value) {
-	ConfigInt val;
-	memset(&val, 0, sizeof(ConfigInt64));
-
-	val.type = CFG_TYPE_INT;
-	val.value = value;
-	config->set_cfg(PLUGIN_GUID, name, (ConfigValuePtr)&val);
-}
-
-void DCAPI set_cfg_int64(const char* name, int64_t value) {
-	ConfigInt64 val;
-	memset(&val, 0, sizeof(ConfigInt64));
-
-	val.type = CFG_TYPE_INT64;
-	val.value = value;
-	config->set_cfg(PLUGIN_GUID, name, (ConfigValuePtr)&val);
+	return False;
 }
 
 /* Plugin main function */

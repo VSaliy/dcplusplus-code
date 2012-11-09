@@ -5,8 +5,11 @@ env, target, sources = dev.prepare_build(source_path, 'ExamplePlugin', source_gl
 res = env.RES(dev.get_sources(source_path, '*.rc'))
 env.Depends(res, 'resource.h')
 
+env.Append(CPPPATH = ['#/pluginsdk/c'])
+
 if 'g++' in env['LINK']:
 	env.Append(SHLINKFLAGS = '-Wl,--add-stdcall-alias')
+	env.Prepend(CCFLAGS = '-c -std=c99')
 elif 'link' in env['LINK'] and env['arch'] == 'x86':
 	sources.append('Plugin.def')
 
