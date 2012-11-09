@@ -23,18 +23,11 @@
 extern HINSTANCE hInst;
 #endif
 
-/* Settings helpers */
-ConfigStrPtr DCAPI get_cfg(const char* name);
-ConfigIntPtr DCAPI get_cfg_int(const char* name);
-ConfigInt64Ptr DCAPI get_cfg_int64(const char* name);
-
-void DCAPI set_cfg(const char* name, const char* value);
-void DCAPI set_cfg_int(const char* name, int32_t value);
-void DCAPI set_cfg_int64(const char* name, int64_t value);
-
 /* Event handlers */
 Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak);
 Bool DCAPI onHubOnline(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak);
+Bool DCAPI onSecond(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak);
+Bool DCAPI onChatTags(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak);
 
 /* Plugin main function */
 Bool DCAPI pluginMain(PluginState state, DCCorePtr core, dcptr_t pData);
