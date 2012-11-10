@@ -21,11 +21,13 @@
 
 #include <pluginsdk/Config.h>
 #include <pluginsdk/Core.h>
+#include <pluginsdk/Hooks.h>
 #include <pluginsdk/Logger.h>
 #include <pluginsdk/Util.h>
 
 using dcapi::Config;
 using dcapi::Core;
+using dcapi::Hooks;
 using dcapi::Logger;
 using dcapi::Util;
 
@@ -77,8 +79,8 @@ void Plugin::dlgClosed() {
 }
 
 void Plugin::addHooks() {
-	events[HOOK_NETWORK_HUB_IN] = hooks->bind_hook(HOOK_NETWORK_HUB_IN, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
-		return instance->onHubDataIn(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
+	Hooks::onHubDataIn([this](HubDataPtr hHub, const char* message, bool&) { return onHubDataIn(hHub, message); });
+	/*
 	events[HOOK_NETWORK_HUB_OUT] = hooks->bind_hook(HOOK_NETWORK_HUB_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
 		return instance->onHubDataOut(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
 	events[HOOK_NETWORK_CONN_IN] = hooks->bind_hook(HOOK_NETWORK_CONN_IN, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
@@ -88,13 +90,11 @@ void Plugin::addHooks() {
 	events[HOOK_UI_PROCESS_CHAT_CMD] = hooks->bind_hook(HOOK_UI_PROCESS_CHAT_CMD, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
 		auto cmd = reinterpret_cast<CommandDataPtr>(pData);
 		if(cmd->isPrivate) { return False; }
-		return instance->onChatCommand(reinterpret_cast<HubDataPtr>(pObject), cmd); }, nullptr);
+		return instance->onChatCommand(reinterpret_cast<HubDataPtr>(pObject), cmd); }, nullptr);*/
 }
 
 void Plugin::clearHooks() {
-	for(auto& i: events)
-		hooks->release_hook(i.second);
-	events.clear();
+	Hooks::clear();
 }
 
 void Plugin::start() {
@@ -112,12 +112,10 @@ void Plugin::close() {
 }
 
 void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
-	hooks = reinterpret_cast<DCHooksPtr>(core->query_interface(DCINTF_HOOKS, DCINTF_HOOKS_VER));
-
 	hubs = reinterpret_cast<DCHubPtr>(core->query_interface(DCINTF_DCPP_HUBS, DCINTF_DCPP_HUBS_VER));
 	ui = reinterpret_cast<DCUIPtr>(core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER));
 
-	if(!Util::init(core) || !Config::init(core) || !Logger::init(core) || !hooks || !hubs || !ui) {
+	if(!Config::init(core) || !Hooks::init(core) || !Logger::init(core) || !Util::init(core) || !hubs || !ui) {
 		loadRes = False;
 		return;
 	}
@@ -138,7 +136,7 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 
 void Plugin::onSwitched() {
 	auto oldCommand = commandName;
-	if(events.empty()) {
+	if(Hooks::empty()) {
 		start();
 	} else {
 		close();
