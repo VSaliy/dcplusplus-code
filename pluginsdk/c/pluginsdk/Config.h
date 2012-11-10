@@ -21,18 +21,7 @@
 #ifndef PLUGINSDK_CONFIG_H
 #define PLUGINSDK_CONFIG_H
 
-// TODO need this for size_t...
-#ifdef _WIN32
-
-#include <windows.h>
-#include <tchar.h>
-
-#else
-
-#include <unistd.h>
-
-#endif
-
+#include <stddef.h>
 #include <stdint.h>
 
 #include <pluginsdk/PluginDefs.h>

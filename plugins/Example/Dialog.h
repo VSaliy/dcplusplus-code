@@ -1,4 +1,3 @@
-# include "resource.h"
 /*
  * Copyright (C) 2012 Jacek Sieka, arnetheduck on gmail point com
  *
