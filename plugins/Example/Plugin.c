@@ -19,6 +19,8 @@
 #include "stdafx.h"
 #include "Plugin.h"
 
+#include "Dialog.h"
+
 #ifndef __cplusplus
 # include <stdio.h>
 # include <stdlib.h>
@@ -31,29 +33,14 @@
 
 #include <pluginsdk/Config.h>
 
-#ifdef _WIN32
-# include "resource.h"
-# ifdef _MSC_VER
-#  define snprintf _snprintf
-#  define snwprintf _snwprintf
-# endif
-#elif __GNUC__
-# define stricmp strcasecmp
-# define strnicmp strncasecmp
-#else
-# error No supported compiler found
-#endif
-
 /* Variables */
 DCCorePtr dcpp;
 
 DCHooksPtr hooks;
-DCConfigPtr config;
 DCLogPtr logging;
 
 DCHubPtr hub;
 DCTaggerPtr tagger;
-DCUtilsPtr utils = NULL;
 DCUIPtr ui = NULL;
 
 /* Hook subscription store */
@@ -80,17 +67,13 @@ Bool onLoad(uint32_t eventId, DCCorePtr core) {
 	dcpp = core;
 
 	hooks = (DCHooksPtr)core->query_interface(DCINTF_HOOKS, DCINTF_HOOKS_VER);
-	config = (DCConfigPtr)core->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER);
 	logging = (DCLogPtr)core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER);
 
 	hub = (DCHubPtr)core->query_interface(DCINTF_DCPP_HUBS, DCINTF_DCPP_HUBS_VER);
 	tagger = (DCTaggerPtr)core->query_interface(DCINTF_DCPP_TAGGER, DCINTF_DCPP_TAGGER_VER);
-#ifdef _WIN32
-	utils = (DCUtilsPtr)core->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER);
 	ui = (DCUIPtr)core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER); 
-#endif
 
-	if(!hooks || !config || !logging || !hub || !tagger)
+	if(!hooks || !init_cfg(core) || !logging || !hub || !tagger)
 		return False;
 
 	if(eventId == ON_INSTALL) {
@@ -158,18 +141,18 @@ Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBre
 	} else if(stricmp(cmd->command, "send") == 0) {
 		size_t len = strlen(cmd->params);
 		if(len > 0) {
-			ConfigStrPtr suffix = get_cfg("SendSuffix");
-			size_t msgLen = len + strlen(suffix->value) + 2;
+			char* suffix = get_cfg("SendSuffix");
+			size_t msgLen = len + strlen(suffix) + 2;
 			char* text = (char*)memset(malloc(msgLen), 0, msgLen);
 
-			strcat(text, cmd->params);
+			strncat(text, cmd->params, len);
 			text[len] = ' ';
-			strcat(text, suffix->value);
+			strncat(text, suffix, msgLen - (len + 2));
 
 			hub->send_message(hHub, text, (strnicmp(text, "/me ", 4) == 0) ? True : False);
 
 			free(text);
-			free_cfg((ConfigValuePtr)suffix);
+			free(suffix);
 		} else {
 			hub->local_message(hHub, "You must supply a parameter!", MSG_SYSTEM);
 		}
@@ -224,70 +207,6 @@ Bool DCAPI onChatTags(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBre
 	return False;
 }
 
-#ifdef _WIN32
-/* Config dialog stuff */
-BOOL onConfigInit(HWND hWnd) {
-	ConfigStrPtr value = get_cfg("SendSuffix");
-	size_t len = strlen(value->value) + 1;
-	TCHAR* buf = (TCHAR*)memset(malloc(len * sizeof(TCHAR)), 0, len * sizeof(TCHAR));
-
-	utils->utf8_to_wcs(buf, value->value, len);
-	free_cfg((ConfigValuePtr)value);
-	value = NULL;
-
-	SetDlgItemText(hWnd, IDC_SUFFIX, buf);
-	SetWindowText(hWnd, _T(PLUGIN_NAME) _T(" Settings"));
-
-	free(buf);
-	return TRUE;
-}
-
-BOOL onConfigClose(HWND hWnd, UINT wID) {
-	if(wID == IDOK) {
-		int len = GetWindowTextLength(GetDlgItem(hWnd, IDC_SUFFIX)) + 1;
-		TCHAR* wbuf = (TCHAR*)memset(malloc(len * sizeof(TCHAR)), 0, len * sizeof(TCHAR));
-		char* value = (char*)memset(malloc(len), 0, len);
-
-		GetWindowText(GetDlgItem(hWnd, IDC_SUFFIX), wbuf, len);
-		utils->wcs_to_utf8(value, wbuf, len);
-		set_cfg("SendSuffix", value);
-
-		free(value);
-		free(wbuf);
-	}
-
-	EndDialog(hWnd, wID);
-	return FALSE;
-}
-
-INT_PTR CALLBACK configProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	UNREFERENCED_PARAMETER(lParam);
-	switch(uMsg) {
-		case WM_INITDIALOG:
-			return onConfigInit(hWnd);
-		case WM_COMMAND: {
-			switch(LOWORD(wParam)) {
-				case IDOK:
-				case IDCANCEL:
-				case IDCLOSE:
-					return onConfigClose(hWnd, LOWORD(wParam));
-			}
-		}
-	}
-	return FALSE;
-}
-#endif
-
-Bool onConfig(dcptr_t hWnd) {
-#ifdef _WIN32
-	if(utils) {
-		DialogBox(hInst, MAKEINTRESOURCE(IDD_PLUGINDLG), (HWND)hWnd, configProc);
-		return True;
-	}
-#endif
-	return False;
-}
-
 /* Plugin main function */
 Bool DCAPI pluginMain(PluginState state, DCCorePtr core, dcptr_t pData) {
 	switch(state) {
@@ -298,7 +217,8 @@ Bool DCAPI pluginMain(PluginState state, DCCorePtr core, dcptr_t pData) {
 		case ON_UNLOAD:
 			return onUnload();
 		case ON_CONFIGURE:
-			return onConfig(pData);
+			/* Note: core may be NULL for this call */
+			return dialog_create(pData, dcpp);
 		default: return False;
 	}
 }

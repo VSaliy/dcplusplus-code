@@ -20,7 +20,44 @@
 
 #include "Config.h"
 
+#include <stdlib.h>
 #include <string.h>
+
+DCConfigPtr config = NULL;
+
+Bool DCAPI init_cfg(DCCorePtr core) {
+	config = (DCConfigPtr)core->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER);
+	return config ? True : False;
+}
+
+char* DCAPI get_cfg(const char* name) {
+	ConfigStrPtr val = (ConfigStrPtr)config->get_cfg(PLUGIN_GUID, name, CFG_TYPE_STRING);
+	int len = strlen(val->value) + 1;
+	char* value = (char*)memset(malloc(len), 0, len);
+
+	strncpy(value, val->value, len);
+	config->release((ConfigValuePtr)val);
+
+	return value;
+}
+
+int32_t DCAPI get_cfg_int(const char* name) {
+	ConfigIntPtr val = (ConfigIntPtr)config->get_cfg(PLUGIN_GUID, name, CFG_TYPE_INT);
+	int32_t value = val->value;
+
+	config->release((ConfigValuePtr)val);
+
+	return value;
+}
+
+int64_t DCAPI get_cfg_int64(const char* name) {
+	ConfigInt64Ptr val = (ConfigInt64Ptr)config->get_cfg(PLUGIN_GUID, name, CFG_TYPE_INT64);
+	int64_t value = val->value;
+
+	config->release((ConfigValuePtr)val);
+
+	return value;
+}
 
 void DCAPI set_cfg(const char* name, const char* value) {
 	ConfigStr val;
@@ -49,9 +86,7 @@ void DCAPI set_cfg_int64(const char* name, int64_t value) {
 	config->set_cfg(PLUGIN_GUID, name, (ConfigValuePtr)&val);
 }
 
-extern ConfigStrPtr DCAPI get_cfg(const char* name);
-extern ConfigIntPtr DCAPI get_cfg_int(const char* name);
-extern ConfigInt64Ptr DCAPI get_cfg_int64(const char* name);
+ConfigValuePtr DCAPI get_core_cfg(const char* name) { return config->get_cfg("CoreSetup", name, CFG_TYPE_UNKNOWN); }
+void DCAPI free_core_cfg(ConfigValuePtr val) { config->release(val); }
 
-extern ConfigValuePtr DCAPI get_core_cfg(const char* name);
-extern void DCAPI free_cfg(ConfigValuePtr val);
+const char* DCAPI get_cfg_path(PathType path) { return config->get_path(path); }

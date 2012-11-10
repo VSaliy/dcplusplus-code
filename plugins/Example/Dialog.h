@@ -1,3 +1,4 @@
+# include "resource.h"
 /*
  * Copyright (C) 2012 Jacek Sieka, arnetheduck on gmail point com
  *
@@ -16,26 +17,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
+#ifndef DIALOG_H
+#define DIALOG_H
 
-#ifdef _MSC_VER
-# define snprintf _snprintf
-# define snwprintf _snwprintf
-#elif __GNUC__
-# define stricmp strcasecmp
-# define strnicmp strncasecmp
-#else
-# error No supported compiler found
-#endif
+Bool dialog_create(dcptr_t hWnd, DCCorePtr core);
 
-/* Event handlers */
-Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak);
-Bool DCAPI onHubOnline(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak);
-Bool DCAPI onSecond(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak);
-Bool DCAPI onChatTags(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak);
-
-/* Plugin main function */
-Bool DCAPI pluginMain(PluginState state, DCCorePtr core, dcptr_t pData);
-
-#endif /* PLUGIN_H */
+#endif /* DIALOG_H */
