@@ -25,17 +25,19 @@
 
 #include <pluginsdk/PluginDefs.h>
 
-extern DCConfigPtr config;
+Bool DCAPI init_cfg(DCCorePtr core);
+
+char* DCAPI get_cfg(const char* name);
+int32_t DCAPI get_cfg_int(const char* name);
+int64_t DCAPI get_cfg_int64(const char* name);
 
 void DCAPI set_cfg(const char* name, const char* value);
 void DCAPI set_cfg_int(const char* name, int32_t value);
 void DCAPI set_cfg_int64(const char* name, int64_t value);
 
-inline ConfigStrPtr DCAPI get_cfg(const char* name) { return (ConfigStrPtr)config->get_cfg(PLUGIN_GUID, name, CFG_TYPE_STRING); }
-inline ConfigIntPtr DCAPI get_cfg_int(const char* name) { return (ConfigIntPtr)config->get_cfg(PLUGIN_GUID, name, CFG_TYPE_INT); }
-inline ConfigInt64Ptr DCAPI get_cfg_int64(const char* name) { return (ConfigInt64Ptr)config->get_cfg(PLUGIN_GUID, name, CFG_TYPE_INT64); }
+ConfigValuePtr DCAPI get_core_cfg(const char* name);
+void DCAPI free_core_cfg(ConfigValuePtr val);
 
-inline ConfigValuePtr DCAPI get_core_cfg(const char* name) { return config->get_cfg("CoreSetup", name, CFG_TYPE_UNKNOWN); }
-inline void DCAPI free_cfg(ConfigValuePtr val) { config->release(val); }
+const char* DCAPI get_cfg_path(PathType path);
 
 #endif
