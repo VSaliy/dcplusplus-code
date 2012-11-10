@@ -93,7 +93,6 @@ template<typename T> double fraction(T a, T b) { return static_cast<double>(a) /
 
 /** Uses SFINAE to determine whether a type provides a function; stores the result in "value".
 Inspired by <http://stackoverflow.com/a/8752988>. */
-/// @todo simplify callers when MSVC supports default template arguments on functions...
 #ifndef _MSC_VER
 #define HAS_FUNC(name, funcRet, funcTest) \
 	template<typename HAS_FUNC_T> struct name { \
@@ -105,7 +104,7 @@ Inspired by <http://stackoverflow.com/a/8752988>. */
 		static const bool value = sizeof(check<HAS_FUNC_T>(nullptr)) == sizeof(yes); \
 	}
 #else
-/// @todo don't verify the return type of the function on MSVC as it fails for obscure reasons. recheck on VC11...
+/// @todo don't verify the return type of the function on MSVC as it fails for obscure reasons. recheck later...
 #define HAS_FUNC(name, funcRet, funcTest) \
 	template<typename HAS_FUNC_T> struct name { \
 		typedef char yes[1]; \
