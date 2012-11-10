@@ -80,11 +80,11 @@ public:
 #endif
 		BaseType::create(seed);
 
-		addTextEvent<ContentType>();
-		addImageEvent<ContentType>();
-		addSortEvent<ContentType>();
-		addStyleEvent<ContentType>();
-		addTooltipEvent<ContentType>();
+		addTextEvent();
+		addImageEvent();
+		addSortEvent();
+		addStyleEvent();
+		addTooltipEvent();
 
 		if(managed) {
 			this->onDestroy([this] { this->clear(); });
@@ -92,7 +92,7 @@ public:
 	}
 
 	int insert(ContentType* item) {
-		return insert(getSortPos<ContentType>(item), item);
+		return insert(getSortPos(item), item);
 	}
 
 	int insert(int i, ContentType* item) {
@@ -171,69 +171,63 @@ public:
 private:
 	/// @todo simplify all these if/when the next C++ standard has static if or concepts...
 
-	HAS_FUNC(HasText_, const tstring&, getText(0));
-#define HasText HasText_<T>::value
+#define define_if(tester, retType) template<typename DeducedType = ContentType> \
+	typename std::enable_if<tester<DeducedType>::value, retType>::type
 
-	HAS_FUNC(HasImage_, int, getImage(0));
-#define HasImage HasImage_<T>::value
-
-	HAS_FUNC(HasSort_, int, compareItems(nullptr, nullptr, 0));
-#define HasSort HasSort_<T>::value
-
+	HAS_FUNC(HasText, const tstring&, getText(0));
+	HAS_FUNC(HasImage, int, getImage(0));
+	HAS_FUNC(HasSort, int, compareItems(nullptr, nullptr, 0));
 	// over-complicated to test for lvalue refs...
-	HAS_FUNC(HasStyle_, int, getStyle(std::function<HFONT&()>()(), std::function<COLORREF&()>()(), std::function<COLORREF&()>()(), 0));
-#define HasStyle HasStyle_<T>::value
+	HAS_FUNC(HasStyle, int, getStyle(std::function<HFONT&()>()(), std::function<COLORREF&()>()(), std::function<COLORREF&()>()(), 0));
+	HAS_FUNC(HasTooltip, tstring, getTooltip());
 
-	HAS_FUNC(HasTooltip_, tstring, getTooltip());
-#define HasTooltip HasTooltip_<T>::value
-
-	template<typename T> typename std::enable_if<HasText, void>::type addTextEvent() {
+	define_if(HasText, void) addTextEvent() {
 		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
 			auto& data = *reinterpret_cast<NMLVDISPINFO*>(lParam);
 			if(data.item.mask & LVIF_TEXT) {
-				this->handleText<ContentType>(data);
+				this->handleText(data);
 			}
 			return 0;
 		}, dwt::Message(WM_NOTIFY, LVN_GETDISPINFO));
 	}
-	template<typename T> typename std::enable_if<!HasText, void>::type addTextEvent() { }
+	define_if(!HasText, void) addTextEvent() { }
 
-	template<typename T> typename std::enable_if<HasImage, void>::type addImageEvent() {
+	define_if(HasImage, void) addImageEvent() {
 		this->onRaw([this](WPARAM, LPARAM lParam) -> LRESULT {
 			auto& data = *reinterpret_cast<NMLVDISPINFO*>(lParam);
 			if(data.item.mask & LVIF_IMAGE) {
-				this->handleImage<ContentType>(data);
+				this->handleImage(data);
 			}
 			return 0;
 		}, dwt::Message(WM_NOTIFY, LVN_GETDISPINFO));
 	}
-	template<typename T> typename std::enable_if<!HasImage, void>::type addImageEvent() { }
+	define_if(!HasImage, void) addImageEvent() { }
 
-	template<typename T> typename std::enable_if<HasSort, void>::type addSortEvent() {
-		this->onSortItems([this](LPARAM lhs, LPARAM rhs) { return this->handleSort<ContentType>(lhs, rhs); });
-		this->onColumnClick([this](int column) { this->handleColumnClick<ContentType>(column); });
+	define_if(HasSort, void) addSortEvent() {
+		this->onSortItems([this](LPARAM lhs, LPARAM rhs) { return this->handleSort(lhs, rhs); });
+		this->onColumnClick([this](int column) { this->handleColumnClick(column); });
 	}
-	template<typename T> typename std::enable_if<!HasSort, void>::type addSortEvent() { }
+	define_if(!HasSort, void) addSortEvent() { }
 
-	template<typename T> typename std::enable_if<HasStyle, void>::type addStyleEvent() {
-		this->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return this->handleCustomDraw<ContentType>(data); });
+	define_if(HasStyle, void) addStyleEvent() {
+		this->onCustomDraw([this](NMLVCUSTOMDRAW& data) { return this->handleCustomDraw(data); });
 	}
-	template<typename T> typename std::enable_if<!HasStyle, void>::type addStyleEvent() { }
+	define_if(!HasStyle, void) addStyleEvent() { }
 
-	template<typename T> typename std::enable_if<HasTooltip, void>::type addTooltipEvent() {
+	define_if(HasTooltip, void) addTooltipEvent() {
 		this->setTooltips([this](int i) -> tstring { return this->getData(i)->getTooltip(); });
 	}
-	template<typename T> typename std::enable_if<!HasTooltip, void>::type addTooltipEvent() { }
+	define_if(!HasTooltip, void) addTooltipEvent() { }
 
 #ifdef _DEBUG
 	void writeDebugInfo() {
 		typedef ContentType T;
 		printf("Creating a TypedTable<%s>; text: %d, images: %d, sorting: %d, custom styles: %d, tooltips: %d\n",
-			typeid(T).name(), HasText, HasImage, HasSort, HasStyle, HasTooltip);
+			typeid(T).name(), HasText<T>::value, HasImage<T>::value, HasSort<T>::value, HasStyle<T>::value, HasTooltip<T>::value);
 	}
 #endif
 
-	template<typename T> typename std::enable_if<HasSort, int>::type getSortPos(ContentType* a) {
+	define_if(HasSort, int) getSortPos(ContentType* a) {
 		int high = this->size();
 		if((this->getSortColumn() == -1) || (high == 0))
 			return high;
@@ -269,11 +263,11 @@ private:
 
 		return mid;
 	}
-	template<typename T> typename std::enable_if<!HasSort, int>::type getSortPos(ContentType* a) {
+	define_if(!HasSort, int) getSortPos(ContentType* a) {
 		return this->size();
 	}
 
-	template<typename T> typename std::enable_if<HasText, void>::type handleText(NMLVDISPINFO& data) {
+	define_if(HasText, void) handleText(NMLVDISPINFO& data) {
 		ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
 		const tstring& text = content->getText(data.item.iSubItem);
 		_tcsncpy(data.item.pszText, text.data(), std::min(text.size(), static_cast<size_t>(data.item.cchTextMax)));
@@ -282,12 +276,12 @@ private:
 		}
 	}
 
-	template<typename T> typename std::enable_if<HasImage, void>::type handleImage(NMLVDISPINFO& data) {
+	define_if(HasImage, void) handleImage(NMLVDISPINFO& data) {
 		ContentType* content = reinterpret_cast<ContentType*>(data.item.lParam);
 		data.item.iImage = content->getImage(data.item.iSubItem);
 	}
 
-	template<typename T> typename std::enable_if<HasSort, void>::type handleColumnClick(int column) {
+	define_if(HasSort, void) handleColumnClick(int column) {
 		if(column != this->getSortColumn()) {
 			this->setSort(column, true);
 		} else if(this->isAscending()) {
@@ -297,11 +291,11 @@ private:
 		}
 	}
 
-	template<typename T> typename std::enable_if<HasSort, int>::type handleSort(LPARAM lhs, LPARAM rhs) {
+	define_if(HasSort, int) handleSort(LPARAM lhs, LPARAM rhs) {
 		return ContentType::compareItems(reinterpret_cast<ContentType*>(lhs), reinterpret_cast<ContentType*>(rhs), this->getSortColumn());
 	}
 
-	template<typename T> typename std::enable_if<HasStyle, LRESULT>::type handleCustomDraw(NMLVCUSTOMDRAW& data) {
+	define_if(HasStyle, LRESULT) handleCustomDraw(NMLVCUSTOMDRAW& data) {
 		if(data.nmcd.dwDrawStage == CDDS_PREPAINT) {
 			return CDRF_NOTIFYITEMDRAW;
 		}
