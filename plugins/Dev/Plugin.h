@@ -19,11 +19,8 @@
 #ifndef PLUGINS_DEV_PLUGIN_H
 #define PLUGINS_DEV_PLUGIN_H
 
-#include <map>
-
 #include "Dialog.h"
 
-using std::map;
 using std::string;
 
 class Plugin
@@ -51,9 +48,6 @@ private:
 	Bool onConnectionDataOut(ConnectionDataPtr hConn, const char* message);
 	Bool onChatCommand(HubDataPtr hub, CommandDataPtr cmd);
 
-	map<string, subsHandle> events;
-
-	DCHooksPtr hooks;
 	DCHubPtr hubs;
 	DCUIPtr ui;
 
@@ -61,8 +55,6 @@ private:
 
 	string commandName;
 
-	/** @todo switch to dcpp::Singleton when <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=51494>
-	is fixed */
 	static Plugin* instance;
 };
 
