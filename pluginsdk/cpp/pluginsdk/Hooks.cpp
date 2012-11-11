@@ -144,6 +144,14 @@ void Hooks::clear() {
 	events.clear();
 }
 
+void Hooks::remove(const char* id) {
+	auto i = events.find(id);
+	if(i != events.end()) {
+		hooks->release_hook(i->second.first);
+		events.erase(i);
+	}
+}
+
 void Hooks::addEvent(const char* id, Callback f) {
 	// insert first to construct map keys etc; then create the hook, using the map key as pCommon.
 	auto it = events.insert(make_pair(id, make_pair(nullptr, f))).first;

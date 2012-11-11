@@ -35,45 +35,16 @@ public:
 
 	void setTimer(bool bState);
 
-	HubDataPtr createHub(const char* url, const char* nick, const char* password) {
-		auto hHub = hub->add_hub(url, nick, password);
-		if(!hHub) hubs.insert(hHub);
-		return hHub;
-	}
+	HubDataPtr createHub(const char* url, const char* nick, const char* password);
+	void destroyHub(HubDataPtr hHub);
 
-	void destroyHub(HubDataPtr hHub) {
-		auto i = hubs.find(hHub);
-		if(i != hubs.end()) {
-			hub->remove_hub(*i);
-			hub->release(*i);
-			hubs.erase(i);
-		}
-	}
-
-	void sendHubCommand(HubDataPtr hHub, const string& cmd) {
-		if(hHub)
-			hub->send_protocol_cmd(hHub, cmd.c_str());
-	}
-
-	void injectHubCommand(HubDataPtr hHub, const string& cmd) {
-		if(hHub)
-			hub->emulate_protocol_cmd(hHub, cmd.c_str());
-	}
+	void sendHubCommand(HubDataPtr hHub, const string& cmd);
+	void injectHubCommand(HubDataPtr hHub, const string& cmd);
 
 	// Accessors (c<->c connections)
-	void sendUdpPacket(const char* ip, uint32_t port, const string& data) {
-		connection->send_udp_data(ip, port, (dcptr_t)data.c_str(), data.size());
-	}
-
-	void sendClientCommand(ConnectionDataPtr hConn, const char* cmd) {
-		if(hConn)
-			connection->send_protocol_cmd(hConn, cmd);
-	}
-
-	void dropClientConnection(ConnectionDataPtr hConn, bool graceless) {
-		if(hConn)
-			connection->terminate_conn(hConn, graceless ? True : False);
-	}
+	void sendUdpPacket(const char* ip, uint32_t port, const string& data);
+	void sendClientCommand(ConnectionDataPtr hConn, const char* cmd);
+	void dropClientConnection(ConnectionDataPtr hConn, bool graceless);
 
 	static Plugin* getInstance() { return instance; }
 
@@ -81,17 +52,17 @@ private:
 	Plugin();
 	~Plugin();
 
-	void onLoad(DCCorePtr core, bool install, Bool& loadRes);
-	Bool onHubEnter(HubDataPtr hHub, CommandDataPtr cmd);
-	Bool onOwnChatOut(HubDataPtr hHub, const char* message);
-	Bool onHubConnected(HubDataPtr hHub);
-	Bool onHubDisconnected(HubDataPtr hHub);
-	Bool onHubDataIn(HubDataPtr hHub, const char* message);
-	Bool onHubDataOut(HubDataPtr hHub, const char* message, Bool* bBreak);
-	Bool onConnectionDataIn(ConnectionDataPtr hConn, const char* message);
-	Bool onConnectionDataOut(ConnectionDataPtr hConn, const char* message);
-	Bool onFormatChat(UserDataPtr hUser, StringDataPtr line, Bool* bBreak);
-	Bool onTimer();
+	bool onLoad(DCCorePtr core, bool install);
+	bool onHubEnter(HubDataPtr hHub, CommandDataPtr cmd);
+	bool onOwnChatOut(HubDataPtr hHub, char* message);
+	bool onHubConnected(HubDataPtr hHub);
+	bool onHubDisconnected(HubDataPtr hHub);
+	bool onHubDataIn(HubDataPtr hHub, char* message);
+	bool onHubDataOut(HubDataPtr hHub, char* message, bool& bBreak);
+	bool onConnectionDataIn(ConnectionDataPtr hConn, char* message);
+	bool onConnectionDataOut(ConnectionDataPtr hConn, char* message);
+	bool onFormatChat(UserDataPtr hUser, StringDataPtr line, bool& bBreak);
+	bool onTimer();
 
 	void removeChatCache(const HubDataPtr hub) {
 		auto j = chatCache.find(hub->url);
@@ -99,17 +70,9 @@ private:
 			chatCache.erase(j);
 	}
 
-	map<string, subsHandle> events;
 	map<string, string> chatCache;
 	set<HubDataPtr> hubs;
 
-	DCHooksPtr hooks;
-
-	DCHubPtr hub;
-	DCConnectionPtr connection;
-
-	/** @todo switch to dcpp::Singleton when <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=51494>
-	is fixed */
 	static Plugin* instance;
 };
 
