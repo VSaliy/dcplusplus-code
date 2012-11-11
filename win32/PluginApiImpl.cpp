@@ -31,7 +31,7 @@ namespace dcpp {
 
 // Functions for DCUI
 void PluginApiImpl::addCommand(const char* name, DCCommandFunc command) {
-	MainWindow::addPluginCommand(Text::toT(name), command);
+	MainWindow::addPluginCommand(Text::toT(name), [=] { command(name); });
 }
 
 void PluginApiImpl::removeCommand(const char* name) {

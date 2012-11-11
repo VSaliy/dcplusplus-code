@@ -418,7 +418,7 @@ typedef struct tagDCTagger {
 } DCTagger, *DCTaggerPtr;
 
 /* User interface */
-typedef void (DCAPI* DCCommandFunc)		();
+typedef void (DCAPI* DCCommandFunc)		(const char* name);
 
 typedef struct DCUI {
 	/* User interface API version */

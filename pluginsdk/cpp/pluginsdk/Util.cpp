@@ -29,6 +29,7 @@ bool Util::init(DCCorePtr core) {
 	return utils;
 }
 void Util::init(DCUtilsPtr coreUtils) { utils = coreUtils; }
+DCUtilsPtr Util::handle() { return utils; }
 
 #ifdef _UNICODE
 string Util::fromT(const wstring& str) {

@@ -23,12 +23,14 @@
 #include <pluginsdk/Core.h>
 #include <pluginsdk/Hooks.h>
 #include <pluginsdk/Logger.h>
+#include <pluginsdk/UI.h>
 #include <pluginsdk/Util.h>
 
 using dcapi::Config;
 using dcapi::Core;
 using dcapi::Hooks;
 using dcapi::Logger;
+using dcapi::UI;
 using dcapi::Util;
 
 Plugin* Plugin::instance = nullptr;
@@ -39,8 +41,8 @@ Plugin::Plugin() {
 Plugin::~Plugin() {
 	clearHooks();
 
-	if(ui) {
-		ui->remove_command(commandName.c_str());
+	if(UI::handle()) {
+		UI::removeCommand(commandName);
 	}
 }
 
@@ -101,16 +103,15 @@ void Plugin::close() {
 }
 
 void Plugin::refreshSwitchCommand() {
-	ui->remove_command(commandName.c_str());
+	UI::removeCommand(commandName);
 	commandName = Hooks::empty() ? PLUGIN_NAME ": enable" : PLUGIN_NAME ": disable";
-	ui->add_command(commandName.c_str(), [] { instance->onSwitched(); });
+	UI::addCommand(commandName, [this] { onSwitched(); });
 }
 
 void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	hubs = reinterpret_cast<DCHubPtr>(core->query_interface(DCINTF_DCPP_HUBS, DCINTF_DCPP_HUBS_VER));
-	ui = reinterpret_cast<DCUIPtr>(core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER));
 
-	if(!Config::init(core) || !Hooks::init(core) || !Logger::init(core) || !Util::init(core) || !hubs || !ui) {
+	if(!Config::init(core) || !Hooks::init(core) || !Logger::init(core) || !UI::init(core) || !Util::init(core) || !hubs) {
 		loadRes = False;
 		return;
 	}

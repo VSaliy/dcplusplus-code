@@ -35,6 +35,7 @@ class Config
 public:
 	static bool init(DCCorePtr core);
 	static void init(DCConfigPtr coreConfig);
+	static DCConfigPtr handle();
 
 	static void setConfig(const char* name, const char* value);
 	static void setConfig(const char* name, const string& value);

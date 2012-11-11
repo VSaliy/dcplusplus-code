@@ -29,6 +29,7 @@ bool Config::init(DCCorePtr core) {
 	return config;
 }
 void Config::init(DCConfigPtr coreConfig) { config = coreConfig; }
+DCConfigPtr Config::handle() { return config; }
 
 void Config::setConfig(const char* name, const char* value) { setConfig<ConfigStr>(name, CFG_TYPE_STRING, value); }
 void Config::setConfig(const char* name, const string& value) { setConfig(name, value.c_str()); }

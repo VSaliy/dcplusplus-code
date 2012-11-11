@@ -7,4 +7,5 @@ project; but it's impractical in the DC++ repository (would need some decent sym
 #include <pluginsdk/Config.cpp>
 #include <pluginsdk/Hooks.cpp>
 #include <pluginsdk/Logger.cpp>
+#include <pluginsdk/UI.cpp>
 #include <pluginsdk/Util.cpp>

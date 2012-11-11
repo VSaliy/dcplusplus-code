@@ -14,8 +14,6 @@ from build_util import Dev, gen_po_name
 
 # TODO the ipa-cp-clone optimization is disabled; it causes a crash when starting a DL.
 
-# TODO the omit-frame-pointer is disabled; it causes freezes when using lambdas in plugin callbacks.
-
 # TODO add -Og when using GCC 4.8
 
 # TODO enable LTO when it doesn't ICE... (-flto)
@@ -26,7 +24,7 @@ from build_util import Dev, gen_po_name
 gcc_flags = {
 	'common': ['-g', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-value', '-Wno-missing-field-initializers', '-Wno-address', '-Wno-unknown-pragmas', '-Wno-format', '-fexceptions', '-mthreads'],
 	'debug': [], 
-	'release' : ['-O3', '-fno-omit-frame-pointer', '-fno-ipa-cp-clone', '-mwindows']
+	'release' : ['-O3', '-fno-ipa-cp-clone', '-mwindows']
 }
 
 gcc_xxflags = {

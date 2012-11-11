@@ -7,10 +7,6 @@ env, target, sources = dev.prepare_build(source_path, 'DevPlugin', source_glob =
 
 env.Append(CPPPATH = ['#/pluginsdk/cpp'])
 
-# TODO remove this when GCC stops whining about stateless lambdas
-if dev.is_win32() and 'gcc' in env['TOOLS']:
-	env.Append(CPPFLAGS = ['-fpermissive'])
-
 res = env.RES(dev.get_sources(source_path, '*.rc'))
 env.Depends(res, 'resource.h')
 
