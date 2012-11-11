@@ -111,11 +111,11 @@ void Plugin::refreshSwitchCommand() {
 void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	hubs = reinterpret_cast<DCHubPtr>(core->query_interface(DCINTF_DCPP_HUBS, DCINTF_DCPP_HUBS_VER));
 
-	if(!Config::init(core) || !Hooks::init(core) || !Logger::init(core) || !UI::init(core) || !Util::init(core) || !hubs) {
+	Core::init(core);
+	if(!Config::init() || !Hooks::init() || !Logger::init() || !UI::init() || !Util::init() || !hubs) {
 		loadRes = False;
 		return;
 	}
-	Core::init(core);
 
 	if(install) {
 		Config::setConfig("Enabled", true);

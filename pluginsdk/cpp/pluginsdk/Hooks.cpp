@@ -20,13 +20,16 @@
 
 #include "Hooks.h"
 
+#include "Core.h"
+
 namespace dcapi {
 
 DCHooksPtr Hooks::hooks;
 map<string, pair<subsHandle, Hooks::Callback>> Hooks::events;
 
-bool Hooks::init(DCCorePtr core) {
-	init(reinterpret_cast<DCHooksPtr>(core->query_interface(DCINTF_HOOKS, DCINTF_HOOKS_VER)));
+bool Hooks::init() {
+	if(!Core::handle()) { return false; }
+	init(reinterpret_cast<DCHooksPtr>(Core::handle()->query_interface(DCINTF_HOOKS, DCINTF_HOOKS_VER)));
 	return hooks;
 }
 void Hooks::init(DCHooksPtr coreHooks) { hooks = coreHooks; }

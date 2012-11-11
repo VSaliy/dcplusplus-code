@@ -37,7 +37,7 @@ using std::unordered_map;
 class UI
 {
 public:
-	static bool init(DCCorePtr core);
+	static bool init();
 	static void init(DCUIPtr coreUI);
 	static DCUIPtr handle();
 

@@ -39,7 +39,7 @@ using std::pair;
 class Hooks
 {
 public:
-	static bool init(DCCorePtr core);
+	static bool init();
 	static void init(DCHooksPtr coreHooks);
 	static DCHooksPtr handle();
 

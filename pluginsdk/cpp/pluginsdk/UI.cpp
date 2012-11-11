@@ -20,13 +20,16 @@
 
 #include "UI.h"
 
+#include "Core.h"
+
 namespace dcapi {
 
 DCUIPtr UI::ui;
 unordered_map<string, UI::Command> UI::commands;
 
-bool UI::init(DCCorePtr core) {
-	init(reinterpret_cast<DCUIPtr>(core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER)));
+bool UI::init() {
+	if(!Core::handle()) { return false; }
+	init(reinterpret_cast<DCUIPtr>(Core::handle()->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER)));
 	return ui;
 }
 void UI::init(DCUIPtr coreUI) { ui = coreUI; }
