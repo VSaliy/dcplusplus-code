@@ -20,12 +20,15 @@
 
 #include "Util.h"
 
+#include "Core.h"
+
 namespace dcapi {
 
 DCUtilsPtr Util::utils;
 
-bool Util::init(DCCorePtr core) {
-	init(reinterpret_cast<DCUtilsPtr>(core->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER)));
+bool Util::init() {
+	if(!Core::handle()) { return false; }
+	init(reinterpret_cast<DCUtilsPtr>(Core::handle()->query_interface(DCINTF_DCPP_UTILS, DCINTF_DCPP_UTILS_VER)));
 	return utils;
 }
 void Util::init(DCUtilsPtr coreUtils) { utils = coreUtils; }

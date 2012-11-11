@@ -20,12 +20,15 @@
 
 #include "Config.h"
 
+#include "Core.h"
+
 namespace dcapi {
 
 DCConfigPtr Config::config;
 
-bool Config::init(DCCorePtr core) {
-	init(reinterpret_cast<DCConfigPtr>(core->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER)));
+bool Config::init() {
+	if(!Core::handle()) { return false; }
+	init(reinterpret_cast<DCConfigPtr>(Core::handle()->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER)));
 	return config;
 }
 void Config::init(DCConfigPtr coreConfig) { config = coreConfig; }

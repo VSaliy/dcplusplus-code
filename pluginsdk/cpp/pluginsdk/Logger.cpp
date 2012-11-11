@@ -20,12 +20,15 @@
 
 #include "Logger.h"
 
+#include "Core.h"
+
 namespace dcapi {
 
 DCLogPtr Logger::logger;
 
-bool Logger::init(DCCorePtr core) {
-	init(reinterpret_cast<DCLogPtr>(core->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER)));
+bool Logger::init() {
+	if(!Core::handle()) { return false; }
+	init(reinterpret_cast<DCLogPtr>(Core::handle()->query_interface(DCINTF_LOGGING, DCINTF_LOGGING_VER)));
 	return logger;
 }
 void Logger::init(DCLogPtr coreLogger) { logger = coreLogger; }

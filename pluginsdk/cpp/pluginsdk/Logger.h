@@ -33,7 +33,7 @@ using std::string;
 class Logger
 {
 public:
-	static bool init(DCCorePtr core);
+	static bool init();
 	static void init(DCLogPtr coreLogger);
 	static DCLogPtr handle();
 

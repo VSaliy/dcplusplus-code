@@ -36,7 +36,7 @@ using std::wstring;
 class Util
 {
 public:
-	static bool init(DCCorePtr core);
+	static bool init();
 	static void init(DCUtilsPtr coreUtils);
 	static DCUtilsPtr handle();
 

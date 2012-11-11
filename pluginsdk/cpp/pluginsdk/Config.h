@@ -33,7 +33,7 @@ using std::string;
 class Config
 {
 public:
-	static bool init(DCCorePtr core);
+	static bool init();
 	static void init(DCConfigPtr coreConfig);
 	static DCConfigPtr handle();
 
