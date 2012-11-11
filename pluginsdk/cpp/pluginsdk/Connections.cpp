@@ -16,43 +16,22 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef PLUGINS_DEV_PLUGIN_H
-#define PLUGINS_DEV_PLUGIN_H
+/* Helpers around the DCConnection interface. */
 
-#include "Dialog.h"
+#include "Connections.h"
 
-using std::string;
+#include "Core.h"
 
-class Plugin
-{
-public:
-	static Bool DCAPI main(PluginState state, DCCorePtr core, dcptr_t);
+namespace dcapi {
 
-	static void dlgClosed();
+DCConnectionPtr Connections::connections;
 
-private:
-	Plugin();
-	~Plugin();
+bool Connections::init() {
+	if(!Core::handle()) { return false; }
+	init(reinterpret_cast<DCConnectionPtr>(Core::handle()->query_interface(DCINTF_DCPP_CONNECTIONS, DCINTF_DCPP_CONNECTIONS_VER)));
+	return connections;
+}
+void Connections::init(DCConnectionPtr coreConnections) { connections = coreConnections; }
+DCConnectionPtr Connections::handle() { return connections; }
 
-	void addHooks();
-	void clearHooks();
-
-	void start();
-	void close();
-
-	void refreshSwitchCommand();
-
-	bool onLoad(DCCorePtr core, bool install);
-	void onSwitched();
-	bool onHubDataIn(HubDataPtr hHub, char* message);
-	bool onHubDataOut(HubDataPtr hHub, char* message);
-	bool onClientDataIn(ConnectionDataPtr hConn, char* message);
-	bool onClientDataOut(ConnectionDataPtr hConn, char* message);
-	bool onChatCommand(HubDataPtr hub, CommandDataPtr cmd);
-
-	Dialog dialog;
-
-	string commandName;
-};
-
-#endif
+} // namespace dcapi

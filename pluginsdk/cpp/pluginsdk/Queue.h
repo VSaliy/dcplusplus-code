@@ -16,43 +16,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef PLUGINS_DEV_PLUGIN_H
-#define PLUGINS_DEV_PLUGIN_H
+/* Helpers around the DCQueue interface. */
 
-#include "Dialog.h"
+#ifndef PLUGINSDK_QUEUE_H
+#define PLUGINSDK_QUEUE_H
 
-using std::string;
+#include <cstdint>
 
-class Plugin
+#include <pluginsdk/PluginDefs.h>
+
+namespace dcapi {
+
+class Queue
 {
 public:
-	static Bool DCAPI main(PluginState state, DCCorePtr core, dcptr_t);
-
-	static void dlgClosed();
+	static bool init();
+	static void init(DCQueuePtr coreQueue);
+	static DCQueuePtr handle();
 
 private:
-	Plugin();
-	~Plugin();
-
-	void addHooks();
-	void clearHooks();
-
-	void start();
-	void close();
-
-	void refreshSwitchCommand();
-
-	bool onLoad(DCCorePtr core, bool install);
-	void onSwitched();
-	bool onHubDataIn(HubDataPtr hHub, char* message);
-	bool onHubDataOut(HubDataPtr hHub, char* message);
-	bool onClientDataIn(ConnectionDataPtr hConn, char* message);
-	bool onClientDataOut(ConnectionDataPtr hConn, char* message);
-	bool onChatCommand(HubDataPtr hub, CommandDataPtr cmd);
-
-	Dialog dialog;
-
-	string commandName;
+	static DCQueuePtr queue;
 };
+
+} // namespace dcapi
 
 #endif
