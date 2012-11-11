@@ -22,6 +22,7 @@
 #include <pluginsdk/Config.h>
 #include <pluginsdk/Core.h>
 #include <pluginsdk/Hooks.h>
+#include <pluginsdk/Hubs.h>
 #include <pluginsdk/Logger.h>
 #include <pluginsdk/UI.h>
 #include <pluginsdk/Util.h>
@@ -29,11 +30,10 @@
 using dcapi::Config;
 using dcapi::Core;
 using dcapi::Hooks;
+using dcapi::Hubs;
 using dcapi::Logger;
 using dcapi::UI;
 using dcapi::Util;
-
-Plugin* Plugin::instance = nullptr;
 
 Plugin::Plugin() {
 }
@@ -46,15 +46,15 @@ Plugin::~Plugin() {
 	}
 }
 
+Plugin* instance;
+
 Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 	switch(state) {
 	case ON_INSTALL:
 	case ON_LOAD:
 		{
-			Bool res = True;
 			instance = new Plugin();
-			instance->onLoad(core, (state == ON_INSTALL), res);
-			return res;
+			return instance->onLoad(core, state == ON_INSTALL) ? True : False;
 		}
 
 	case ON_UNINSTALL:
@@ -108,13 +108,10 @@ void Plugin::refreshSwitchCommand() {
 	UI::addCommand(commandName, [this] { onSwitched(); });
 }
 
-void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
-	hubs = reinterpret_cast<DCHubPtr>(core->query_interface(DCINTF_DCPP_HUBS, DCINTF_DCPP_HUBS_VER));
-
+bool Plugin::onLoad(DCCorePtr core, bool install) {
 	Core::init(core);
-	if(!Config::init() || !Hooks::init() || !Logger::init() || !UI::init() || !Util::init() || !hubs) {
-		loadRes = False;
-		return;
+	if(!Config::init() || !Hooks::init() || !Hubs::init() || !Logger::init() || !UI::init() || !Util::init()) {
+		return false;
 	}
 
 	if(install) {
@@ -128,6 +125,8 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	} else {
 		refreshSwitchCommand();
 	}
+
+	return true;
 }
 
 void Plugin::onSwitched() {
@@ -160,13 +159,13 @@ bool Plugin::onClientDataOut(ConnectionDataPtr hConn, char* message) {
 
 bool Plugin::onChatCommand(HubDataPtr hub, CommandDataPtr cmd) {
 	if(stricmp(cmd->command, "help") == 0) {
-		hubs->local_message(hub, "/raw <message>", MSG_SYSTEM);
+		Hubs::handle()->local_message(hub, "/raw <message>", MSG_SYSTEM);
 
 	} else if(stricmp(cmd->command, "raw") == 0) {
 		if(strlen(cmd->params) == 0) {
-			hubs->local_message(hub, "Specify a message to send", MSG_SYSTEM);
+			Hubs::handle()->local_message(hub, "Specify a message to send", MSG_SYSTEM);
 		} else {
-			hubs->send_protocol_cmd(hub, cmd->params);
+			Hubs::handle()->send_protocol_cmd(hub, cmd->params);
 		}
 	}
 

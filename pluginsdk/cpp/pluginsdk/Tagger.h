@@ -16,43 +16,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef PLUGINS_DEV_PLUGIN_H
-#define PLUGINS_DEV_PLUGIN_H
+/* Helpers around the DCTagger interface. */
 
-#include "Dialog.h"
+#ifndef PLUGINSDK_TAGGER_H
+#define PLUGINSDK_TAGGER_H
 
-using std::string;
+#include <cstdint>
 
-class Plugin
+#include <pluginsdk/PluginDefs.h>
+
+namespace dcapi {
+
+class Tagger
 {
 public:
-	static Bool DCAPI main(PluginState state, DCCorePtr core, dcptr_t);
-
-	static void dlgClosed();
+	static bool init();
+	static void init(DCTaggerPtr coreTagger);
+	static DCTaggerPtr handle();
 
 private:
-	Plugin();
-	~Plugin();
-
-	void addHooks();
-	void clearHooks();
-
-	void start();
-	void close();
-
-	void refreshSwitchCommand();
-
-	bool onLoad(DCCorePtr core, bool install);
-	void onSwitched();
-	bool onHubDataIn(HubDataPtr hHub, char* message);
-	bool onHubDataOut(HubDataPtr hHub, char* message);
-	bool onClientDataIn(ConnectionDataPtr hConn, char* message);
-	bool onClientDataOut(ConnectionDataPtr hConn, char* message);
-	bool onChatCommand(HubDataPtr hub, CommandDataPtr cmd);
-
-	Dialog dialog;
-
-	string commandName;
+	static DCTaggerPtr tagger;
 };
+
+} // namespace dcapi
 
 #endif
