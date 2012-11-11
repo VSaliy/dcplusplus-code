@@ -40,13 +40,15 @@ private:
 	void start();
 	void close();
 
+	void refreshSwitchCommand();
+
 	void onLoad(DCCorePtr core, bool install, Bool& loadRes);
 	void onSwitched();
-	Bool onHubDataIn(HubDataPtr hHub, const char* message);
-	Bool onHubDataOut(HubDataPtr hHub, const char* message);
-	Bool onConnectionDataIn(ConnectionDataPtr hConn, const char* message);
-	Bool onConnectionDataOut(ConnectionDataPtr hConn, const char* message);
-	Bool onChatCommand(HubDataPtr hub, CommandDataPtr cmd);
+	bool onHubDataIn(HubDataPtr hHub, char* message);
+	bool onHubDataOut(HubDataPtr hHub, char* message);
+	bool onClientDataIn(ConnectionDataPtr hConn, char* message);
+	bool onClientDataOut(ConnectionDataPtr hConn, char* message);
+	bool onChatCommand(HubDataPtr hub, CommandDataPtr cmd);
 
 	DCHubPtr hubs;
 	DCUIPtr ui;

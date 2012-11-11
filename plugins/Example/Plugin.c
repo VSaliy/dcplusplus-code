@@ -47,7 +47,7 @@ DCUIPtr ui = NULL;
 #define HOOKS_SUBSCRIBED 4
 
 const char* hookGuids[HOOKS_SUBSCRIBED] = {
-	HOOK_UI_PROCESS_CHAT_CMD,
+	HOOK_UI_CHAT_COMMAND,
 	HOOK_HUB_ONLINE,
 	HOOK_TIMER_SECOND,
 	HOOK_UI_CHAT_TAGS
@@ -104,9 +104,6 @@ Bool onUnload() {
 Bool DCAPI onHubEnter(dcptr_t pObject, dcptr_t pData, dcptr_t opaque, Bool* bBreak) {
 	HubDataPtr hHub = (HubDataPtr)pObject;
 	CommandDataPtr cmd = (CommandDataPtr)pData;
-
-	if(cmd->isPrivate)
-		return False;
 
 	if(stricmp(cmd->command, "help") == 0 && stricmp(cmd->params, "plugins") == 0) {
 		const char* help =

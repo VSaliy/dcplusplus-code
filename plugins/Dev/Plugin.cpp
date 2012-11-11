@@ -33,7 +33,7 @@ using dcapi::Util;
 
 Plugin* Plugin::instance = nullptr;
 
-Plugin::Plugin() : commandName(PLUGIN_NAME ": enable") {
+Plugin::Plugin() {
 }
 
 Plugin::~Plugin() {
@@ -71,26 +71,15 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 }
 
 void Plugin::dlgClosed() {
-	auto oldCommand = instance->commandName;
 	instance->close();
-
-	instance->ui->remove_command(oldCommand.c_str());
-	instance->ui->add_command(instance->commandName.c_str(), [] { instance->onSwitched(); });
 }
 
 void Plugin::addHooks() {
-	Hooks::onHubDataIn([this](HubDataPtr hHub, const char* message, bool&) { return onHubDataIn(hHub, message); });
-	/*
-	events[HOOK_NETWORK_HUB_OUT] = hooks->bind_hook(HOOK_NETWORK_HUB_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
-		return instance->onHubDataOut(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
-	events[HOOK_NETWORK_CONN_IN] = hooks->bind_hook(HOOK_NETWORK_CONN_IN, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
-		return instance->onConnectionDataIn(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
-	events[HOOK_NETWORK_CONN_OUT] = hooks->bind_hook(HOOK_NETWORK_CONN_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
-		return instance->onConnectionDataOut(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
-	events[HOOK_UI_PROCESS_CHAT_CMD] = hooks->bind_hook(HOOK_UI_PROCESS_CHAT_CMD, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
-		auto cmd = reinterpret_cast<CommandDataPtr>(pData);
-		if(cmd->isPrivate) { return False; }
-		return instance->onChatCommand(reinterpret_cast<HubDataPtr>(pObject), cmd); }, nullptr);*/
+	Hooks::Network::onHubDataIn([this](HubDataPtr hHub, char* message, bool&) { return onHubDataIn(hHub, message); });
+	Hooks::Network::onHubDataOut([this](HubDataPtr hHub, char* message, bool&) { return onHubDataOut(hHub, message); });
+	Hooks::Network::onClientDataIn([this](ConnectionDataPtr hConn, char* message, bool&) { return onClientDataIn(hConn, message); });
+	Hooks::Network::onClientDataOut([this](ConnectionDataPtr hConn, char* message, bool&) { return onClientDataOut(hConn, message); });
+	Hooks::UI::onChatCommand([this](HubDataPtr hHub, CommandDataPtr cmd, bool&) { return onChatCommand(hHub, cmd); });
 }
 
 void Plugin::clearHooks() {
@@ -101,14 +90,20 @@ void Plugin::start() {
 	dialog.create();
 	addHooks();
 	Config::setConfig("Enabled", true);
-	commandName = PLUGIN_NAME ": disable";
+	refreshSwitchCommand();
 }
 
 void Plugin::close() {
 	Config::setConfig("Enabled", false);
 	clearHooks();
 	dialog.close();
-	commandName = PLUGIN_NAME ": enable";
+	refreshSwitchCommand();
+}
+
+void Plugin::refreshSwitchCommand() {
+	ui->remove_command(commandName.c_str());
+	commandName = Hooks::empty() ? PLUGIN_NAME ": enable" : PLUGIN_NAME ": disable";
+	ui->add_command(commandName.c_str(), [] { instance->onSwitched(); });
 }
 
 void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
@@ -129,44 +124,40 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 
 	if(Config::getBoolConfig("Enabled")) {
 		start();
+	} else {
+		refreshSwitchCommand();
 	}
-
-	ui->add_command(commandName.c_str(), [] { instance->onSwitched(); });
 }
 
 void Plugin::onSwitched() {
-	auto oldCommand = commandName;
 	if(Hooks::empty()) {
 		start();
 	} else {
 		close();
 	}
-
-	ui->remove_command(oldCommand.c_str());
-	ui->add_command(commandName.c_str(), [] { instance->onSwitched(); });
 }
 
-Bool Plugin::onHubDataIn(HubDataPtr hHub, const char* message) {
+bool Plugin::onHubDataIn(HubDataPtr hHub, char* message) {
 	dialog.write(true, false, hHub->ip, hHub->port, "Hub " + string(hHub->url), message);
-	return False;
+	return false;
 }
 
-Bool Plugin::onHubDataOut(HubDataPtr hHub, const char* message) {
+bool Plugin::onHubDataOut(HubDataPtr hHub, char* message) {
 	dialog.write(true, true, hHub->ip, hHub->port, "Hub " + string(hHub->url), message);
-	return False;
+	return false;
 }
 
-Bool Plugin::onConnectionDataIn(ConnectionDataPtr hConn, const char* message) {
+bool Plugin::onClientDataIn(ConnectionDataPtr hConn, char* message) {
 	dialog.write(false, false, hConn->ip, hConn->port, "User" /** @todo get user's nick */, message);
-	return False;
+	return false;
 }
 
-Bool Plugin::onConnectionDataOut(ConnectionDataPtr hConn, const char* message) {
+bool Plugin::onClientDataOut(ConnectionDataPtr hConn, char* message) {
 	dialog.write(false, true, hConn->ip, hConn->port, "User" /** @todo get user's nick */, message);
-	return False;
+	return false;
 }
 
-Bool Plugin::onChatCommand(HubDataPtr hub, CommandDataPtr cmd) {
+bool Plugin::onChatCommand(HubDataPtr hub, CommandDataPtr cmd) {
 	if(stricmp(cmd->command, "help") == 0) {
 		hubs->local_message(hub, "/raw <message>", MSG_SYSTEM);
 
@@ -178,5 +169,5 @@ Bool Plugin::onChatCommand(HubDataPtr hub, CommandDataPtr cmd) {
 		}
 	}
 
-	return False;
+	return false;
 }

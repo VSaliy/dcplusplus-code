@@ -42,7 +42,56 @@ public:
 	static bool init(DCCorePtr core);
 	static void init(DCHooksPtr coreHooks);
 
-	static void onHubDataIn(function<bool (HubDataPtr, char*, bool&)> f);
+	/* The following functions register events. See the Hooks section of PluginDefs.h to see a
+	description of each.
+	Callbacks return a bool to indicate whether they want to prevent the plugin host from doing any
+	further processing related to the event.
+	Callbacks are also given a "bool& bBreak" argument to indicate whether they want to prevent
+	other plugins from catching the event. */
+
+	struct Chat {
+		static void onIncomingChat(function<bool (HubDataPtr, char*, bool&)> f);
+		static void onOutgoingChat(function<bool (HubDataPtr, char*, bool&)> f);
+		static void onIncomingPM(function<bool (UserDataPtr, char*, bool&)> f);
+		static void onOutgoingPM(function<bool (UserDataPtr, char*, bool&)> f);
+	};
+
+	struct Timer {
+		static void onSecond(function<bool (uint64_t, bool&)> f);
+		static void onMinute(function<bool (uint64_t, bool&)> f);
+	};
+
+	struct Hubs {
+		static void onOnline(function<bool (HubDataPtr, bool&)> f);
+		static void onOffline(function<bool (HubDataPtr, bool&)> f);
+	};
+
+	struct Users {
+		static void onOnline(function<bool (UserDataPtr, bool&)> f);
+		static void onOffline(function<bool (UserDataPtr, bool&)> f);
+	};
+
+	struct Network {
+		static void onHubDataIn(function<bool (HubDataPtr, char*, bool&)> f);
+		static void onHubDataOut(function<bool (HubDataPtr, char*, bool&)> f);
+		static void onClientDataIn(function<bool (ConnectionDataPtr, char*, bool&)> f);
+		static void onClientDataOut(function<bool (ConnectionDataPtr, char*, bool&)> f);
+	};
+
+	struct Queue {
+		static void onAdded(function<bool (QueueDataPtr, bool&)> f);
+		static void onMoved(function<bool (QueueDataPtr, bool&)> f);
+		static void onRemoved(function<bool (QueueDataPtr, bool&)> f);
+		static void onFinished(function<bool (QueueDataPtr, bool&)> f);
+	};
+
+	struct UI {
+		static void onCreated(function<bool (dcptr_t, bool&)> f);
+		static void onChatTags(function<bool (UserDataPtr, TagDataPtr, bool&)> f);
+		static void onChatDisplay(function<bool (UserDataPtr, StringDataPtr, bool&)> f);
+		static void onChatCommand(function<bool (HubDataPtr, CommandDataPtr, bool&)> f);
+		static void onChatCommandPM(function<bool (UserDataPtr, CommandDataPtr, bool&)> f);
+	};
 
 	static bool empty();
 	static void clear();
