@@ -16,23 +16,4 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef PLUGINS_TEST_PLUGIN_H
-#define PLUGINS_TEST_PLUGIN_H
-
-using std::string;
-
-class Plugin
-{
-public:
-	static Bool DCAPI main(PluginState state, DCCorePtr core, dcptr_t);
-
-private:
-	Plugin();
-	~Plugin();
-
-	bool onLoad(DCCorePtr core, bool install);
-	bool onSecond(uint64_t tick);
-	bool onUiChatTags(TagDataPtr tags);
-};
-
-#endif
+#include "stdafx.h"

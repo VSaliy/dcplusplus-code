@@ -16,27 +16,32 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/* Information about the plugin - fill this out! */
+#ifndef PLUGIN_STDAFX_H
+#define PLUGIN_STDAFX_H
 
-#ifndef PLUGINSDK_VERSION_H
-#define PLUGINSDK_VERSION_H
+#ifdef _WIN32
 
-/* UUID/GUID for this plugin project */
-#define PLUGIN_GUID "..."
+#include <windows.h>
+#include <tchar.h>
 
-/* Name of the plugin */
-#define PLUGIN_NAME "..."
+#else
 
-/* Author of the plugin */
-#define PLUGIN_AUTHOR "..."
+#include <unistd.h>
 
-/* Short description of the plugin */
-#define PLUGIN_DESC "..."
+#endif
 
-/* Version of the plugin (note: not API version) */
-#define PLUGIN_VERSION 1.0
+#include <cstdio>
+#include <cstdint>
+#include <string>
 
-/* Plugin website, set to "N/A" if none */
-#define PLUGIN_WEB "N/A"
+#include <pluginsdk/PluginDefs.h>
+
+#include "version.h"
+
+#ifdef _UNICODE
+typedef std::wstring tstring;
+#else
+typedef std::string tstring;
+#endif
 
 #endif

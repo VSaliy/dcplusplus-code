@@ -16,23 +16,29 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef PLUGINS_TEST_PLUGIN_H
-#define PLUGINS_TEST_PLUGIN_H
+#include "stdafx.h"
+#include "Plugin.h"
+#include "version.h"
 
-using std::string;
+extern "C" {
 
-class Plugin
-{
-public:
-	static Bool DCAPI main(PluginState state, DCCorePtr core, dcptr_t);
+// Plugin loader
+DCEXP DCMAIN DCAPI pluginInit(MetaDataPtr info) {
+	info->name = PLUGIN_NAME;
+	info->author = PLUGIN_AUTHOR;
+	info->description = PLUGIN_DESC;
+	info->web = PLUGIN_WEB;
+	info->version = PLUGIN_VERSION;
+	info->apiVersion = DCAPI_CORE_VER;
+	info->guid = PLUGIN_GUID;
 
-private:
-	Plugin();
-	~Plugin();
+	return &Plugin::main;
+}
 
-	bool onLoad(DCCorePtr core, bool install);
-	bool onSecond(uint64_t tick);
-	bool onUiChatTags(TagDataPtr tags);
-};
-
+#ifdef _WIN32
+BOOL APIENTRY DllMain(HINSTANCE /*hinstDLL*/, DWORD /*fdwReason*/, LPVOID /*lpvReserved*/) {
+	return TRUE;
+}
 #endif
+
+}

@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef PLUGINS_TEST_PLUGIN_H
-#define PLUGINS_TEST_PLUGIN_H
+#ifndef PLUGIN_PLUGIN_H
+#define PLUGIN_PLUGIN_H
 
 using std::string;
 
@@ -31,8 +31,6 @@ private:
 	~Plugin();
 
 	bool onLoad(DCCorePtr core, bool install);
-	bool onSecond(uint64_t tick);
-	bool onUiChatTags(TagDataPtr tags);
 };
 
 #endif

@@ -110,7 +110,7 @@ void Plugin::refreshSwitchCommand() {
 
 bool Plugin::onLoad(DCCorePtr core, bool install) {
 	Core::init(core);
-	if(!Config::init() || !Hooks::init() || !Hubs::init() || !Logger::init() || !UI::init() || !Util::init()) {
+	if(!Config::init(PLUGIN_GUID) || !Hooks::init() || !Hubs::init() || !Logger::init() || !UI::init() || !Util::init()) {
 		return false;
 	}
 

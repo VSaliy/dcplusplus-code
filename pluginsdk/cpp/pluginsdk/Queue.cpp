@@ -28,7 +28,7 @@ DCQueuePtr Queue::queue;
 
 bool Queue::init() {
 	if(!Core::handle()) { return false; }
-	init(reinterpret_cast<DCQueuePtr>(Core::handle()->query_interface(DCINTF_QUEUE, DCINTF_QUEUE_VER)));
+	init(reinterpret_cast<DCQueuePtr>(Core::handle()->query_interface(DCINTF_DCPP_QUEUE, DCINTF_DCPP_QUEUE_VER)));
 	return queue;
 }
 void Queue::init(DCQueuePtr coreQueue) { queue = coreQueue; }

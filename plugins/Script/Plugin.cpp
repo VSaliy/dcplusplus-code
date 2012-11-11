@@ -87,7 +87,7 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 
 bool Plugin::onLoad(DCCorePtr core, bool install) {
 	Core::init(core);
-	if(!Config::init() || !Connections::init() || !Hooks::init() || !Hubs::init() || !Logger::init() || !Util::init()) {
+	if(!Config::init(PLUGIN_GUID) || !Connections::init() || !Hooks::init() || !Hubs::init() || !Logger::init() || !Util::init()) {
 		return false;
 	}
 

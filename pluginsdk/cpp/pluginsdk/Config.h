@@ -33,8 +33,8 @@ using std::string;
 class Config
 {
 public:
-	static bool init();
-	static void init(DCConfigPtr coreConfig);
+	static bool init(string pluginGuid);
+	static void init(DCConfigPtr coreConfig, string pluginGuid);
 	static DCConfigPtr handle();
 
 	static void setConfig(const char* name, const char* value);
@@ -58,15 +58,17 @@ private:
 	template<typename ConfigT, typename RetT> static RetT getConfig(const char* name, ConfigType type);
 
 	static DCConfigPtr config;
+
+	static string guid;
 };
 
 template<typename ConfigT, typename ValueT> void Config::setConfig(const char* name, ConfigType type, ValueT value) {
 	ConfigT val = { type, value };
-	config->set_cfg(PLUGIN_GUID, name, reinterpret_cast<ConfigValuePtr>(&val));
+	config->set_cfg(guid.c_str(), name, reinterpret_cast<ConfigValuePtr>(&val));
 }
 
 template<typename ConfigT, typename RetT> RetT Config::getConfig(const char* name, ConfigType type) {
-	auto cfg = config->get_cfg(PLUGIN_GUID, name, type);
+	auto cfg = config->get_cfg(guid.c_str(), name, type);
 	RetT ret(reinterpret_cast<ConfigT>(cfg)->value);
 	config->release(cfg);
 	return ret;

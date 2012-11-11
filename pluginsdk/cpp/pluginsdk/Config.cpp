@@ -25,13 +25,14 @@
 namespace dcapi {
 
 DCConfigPtr Config::config;
+string Config::guid;
 
-bool Config::init() {
+bool Config::init(string pluginGuid) {
 	if(!Core::handle()) { return false; }
-	init(reinterpret_cast<DCConfigPtr>(Core::handle()->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER)));
+	init(reinterpret_cast<DCConfigPtr>(Core::handle()->query_interface(DCINTF_CONFIG, DCINTF_CONFIG_VER)), move(pluginGuid));
 	return config;
 }
-void Config::init(DCConfigPtr coreConfig) { config = coreConfig; }
+void Config::init(DCConfigPtr coreConfig, string pluginGuid) { config = coreConfig; guid = move(pluginGuid); }
 DCConfigPtr Config::handle() { return config; }
 
 void Config::setConfig(const char* name, const char* value) { setConfig<ConfigStr>(name, CFG_TYPE_STRING, value); }
