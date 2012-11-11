@@ -21,34 +21,36 @@
 
 #include <pluginsdk/Config.h>
 #include <pluginsdk/Core.h>
+#include <pluginsdk/Hooks.h>
 #include <pluginsdk/Logger.h>
+#include <pluginsdk/Tagger.h>
+#include <pluginsdk/UI.h>
 #include <pluginsdk/Util.h>
 
 using dcapi::Config;
 using dcapi::Core;
+using dcapi::Hooks;
 using dcapi::Logger;
+using dcapi::Tagger;
+using dcapi::UI;
 using dcapi::Util;
-
-Plugin* Plugin::instance = nullptr;
 
 Plugin::Plugin() {
 }
 
 Plugin::~Plugin() {
-	for(auto& i: events)
-		hooks->release_hook(i.second);
-	events.clear();
+	Hooks::clear();
 }
 
 Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
+	static Plugin* instance;
+
 	switch(state) {
 	case ON_INSTALL:
 	case ON_LOAD:
 		{
-			Bool res = True;
 			instance = new Plugin();
-			instance->onLoad(core, (state == ON_INSTALL), res);
-			return res;
+			return instance->onLoad(core, state == ON_INSTALL) ? True : False;
 		}
 
 	case ON_UNINSTALL:
@@ -66,17 +68,11 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 	}
 }
 
-void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
-	hooks = reinterpret_cast<DCHooksPtr>(core->query_interface(DCINTF_HOOKS, DCINTF_HOOKS_VER));
-
-	tagger = reinterpret_cast<DCTaggerPtr>(core->query_interface(DCINTF_DCPP_TAGGER, DCINTF_DCPP_TAGGER_VER));
-	ui = reinterpret_cast<DCUIPtr>(core->query_interface(DCINTF_DCPP_UI, DCINTF_DCPP_UI_VER));
-
-	if(!Util::init(core) || !Config::init(core) || !Logger::init(core) || !hooks || !tagger || !ui) {
-		loadRes = False;
-		return;
-	}
+bool Plugin::onLoad(DCCorePtr core, bool install) {
 	Core::init(core);
+	if(!Config::init() || !Hooks::init() || !Logger::init() || !Tagger::init() || !UI::init() || !Util::init()) {
+		return false;
+	}
 
 	if(install) {
 		Logger::log("The test plugin has been installed.");
@@ -84,23 +80,22 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 
 	Logger::log("Test plugin loaded, watch out!");
 
-	events[HOOK_TIMER_SECOND] = hooks->bind_hook(HOOK_TIMER_SECOND, [](dcptr_t, dcptr_t pData, dcptr_t, Bool*) {
-		return instance->onSecond(*reinterpret_cast<uint64_t*>(pData)); }, nullptr);
+	Hooks::Timer::onSecond([this](uint64_t tick, bool&) { return onSecond(tick); });
+	Hooks::UI::onChatTags([this](UserDataPtr, TagDataPtr tags, bool&) { return onUiChatTags(tags); });
 
-	events[HOOK_UI_CHAT_TAGS] = hooks->bind_hook(HOOK_UI_CHAT_TAGS, [](dcptr_t, dcptr_t pData, dcptr_t, Bool*) {
-		return instance->onUiChatTags(reinterpret_cast<TagDataPtr>(pData)); }, nullptr);
+	return true;
 }
 
-Bool Plugin::onSecond(uint64_t tick) {
+bool Plugin::onSecond(uint64_t tick) {
 	static uint64_t prevTick = 0;
 	if(tick - prevTick >= 10*1000) {
 		prevTick = tick;
-		ui->play_sound("Media\\tada.wav");
+		UI::handle()->play_sound("Media\\tada.wav");
 	}
-	return False;
+	return false;
 }
 
-Bool Plugin::onUiChatTags(TagDataPtr tags) {
+bool Plugin::onUiChatTags(TagDataPtr tags) {
 	// look for the pattern and make it bold.
 	const string pattern = "ABC DEF";
 
@@ -108,7 +103,7 @@ Bool Plugin::onUiChatTags(TagDataPtr tags) {
 	size_t start, end = 0;
 	while((start = text.find(pattern, end)) != string::npos) {
 		end = start + pattern.size();
-		tagger->add_tag(tags, start, end, "b", "");
+		Tagger::handle()->add_tag(tags, start, end, "b", "");
 	}
-	return False;
+	return false;
 }
