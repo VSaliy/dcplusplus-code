@@ -240,8 +240,8 @@ bool PluginManager::onChatCommand(Client* client, const string& line) {
 		cmd = line.substr(1);
 	}
 
-	CommandData data = { cmd.c_str(), param.c_str(), False };
-	return runHook(HOOK_UI_PROCESS_CHAT_CMD, client, &data);
+	CommandData data = { cmd.c_str(), param.c_str() };
+	return runHook(HOOK_UI_CHAT_COMMAND, client, &data);
 }
 
 bool PluginManager::onChatCommandPM(const HintedUser& user, const string& line) {
@@ -260,8 +260,8 @@ bool PluginManager::onChatCommandPM(const HintedUser& user, const string& line) 
 			cmd = line.substr(1);
 		}
 
-		CommandData data = { cmd.c_str(), param.c_str(), True };
-		res = runHook(HOOK_UI_PROCESS_CHAT_CMD, ou, &data);
+		CommandData data = { cmd.c_str(), param.c_str() };
+		res = runHook(HOOK_UI_CHAT_COMMAND_PM, ou, &data);
 	}
 
 	return res;
@@ -440,15 +440,15 @@ void PluginManager::on(ClientManagerListener::ClientDisconnected, Client* aClien
 }
 
 void PluginManager::on(QueueManagerListener::Added, QueueItem* qi) noexcept {
-	runHook(HOOK_QUEUE_ADD, qi);
+	runHook(HOOK_QUEUE_ADDED, qi);
 }
 
 void PluginManager::on(QueueManagerListener::Moved, QueueItem* qi, const string& /*aSource*/) noexcept {
-	runHook(HOOK_QUEUE_MOVE, qi);
+	runHook(HOOK_QUEUE_MOVED, qi);
 }
 
 void PluginManager::on(QueueManagerListener::Removed, QueueItem* qi) noexcept {
-	runHook(HOOK_QUEUE_REMOVE, qi);
+	runHook(HOOK_QUEUE_REMOVED, qi);
 }
 
 void PluginManager::on(QueueManagerListener::Finished, QueueItem* qi, const string& /*dir*/, int64_t /*speed*/) noexcept {

@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 /* Version of the plugin api (must change if old plugins simply can't be seen as viably working) */
-#define DCAPI_CORE_VER				5
+#define DCAPI_CORE_VER				6
 
 #ifdef _WIN32
 # define DCAPI __stdcall
@@ -75,33 +75,34 @@ extern "C" {
 #define DCINTF_DCPP_UI_VER			1
 
 /* Hook GUID's for Hooks (events) system */
-#define HOOK_CHAT_IN				"dcpp.chat.onIncomingChat"	/* Incoming chat from hub (obj: HubData) */
-#define HOOK_CHAT_OUT				"dcpp.chat.onOutgoingChat"	/* Outgoing chat (obj: HubData) */
-#define HOOK_CHAT_PM_IN				"dcpp.chat.onIncomingPM"	/* Incoming private message (obj: UserData) */
-#define HOOK_CHAT_PM_OUT			"dcpp.chat.onOutgoingPM"	/* Outgoing private message (obj: UserData) */
+#define HOOK_CHAT_IN				"dcpp.chat.onIncomingChat"		/* Incoming chat from hub (obj: HubData) */
+#define HOOK_CHAT_OUT				"dcpp.chat.onOutgoingChat"		/* Outgoing chat (obj: HubData) */
+#define HOOK_CHAT_PM_IN				"dcpp.chat.onIncomingPM"		/* Incoming private message (obj: UserData) */
+#define HOOK_CHAT_PM_OUT			"dcpp.chat.onOutgoingPM"		/* Outgoing private message (obj: UserData) */
 
-#define HOOK_TIMER_SECOND			"dcpp.timer.onSecond"		/* Timer event fired once per second (data: tick value) */
-#define HOOK_TIMER_MINUTE			"dcpp.timer.onMinute"		/* Timer event fired once per minute (data: tick value) */
+#define HOOK_TIMER_SECOND			"dcpp.timer.onSecond"			/* Timer event fired once per second (data: tick value) */
+#define HOOK_TIMER_MINUTE			"dcpp.timer.onMinute"			/* Timer event fired once per minute (data: tick value) */
 
-#define HOOK_HUB_ONLINE				"dcpp.hubs.onOnline"		/* (New) hub has just gone online (obj: HubData) */
-#define HOOK_HUB_OFFLINE			"dcpp.hubs.onOffline"		/* Hub has just gone offline (obj: HubData) */
-#define HOOK_USER_ONLINE			"dcpp.users.onOnline"		/* User is online (obj: UserData) */
-#define HOOK_USER_OFFLINE			"dcpp.users.onOffline"		/* User is offline (obj: UserData) */
+#define HOOK_HUB_ONLINE				"dcpp.hubs.onOnline"			/* (New) hub has just gone online (obj: HubData) */
+#define HOOK_HUB_OFFLINE			"dcpp.hubs.onOffline"			/* Hub has just gone offline (obj: HubData) */
+#define HOOK_USER_ONLINE			"dcpp.users.onOnline"			/* User is online (obj: UserData) */
+#define HOOK_USER_OFFLINE			"dcpp.users.onOffline"			/* User is offline (obj: UserData) */
 
 #define HOOK_NETWORK_HUB_IN			"dcpp.network.onHubDataIn"		/* Incoming protocol messages from hub (obj: HubData) */
 #define HOOK_NETWORK_HUB_OUT		"dcpp.network.onHubDataOut"		/* Outgoing protocol message to hub (obj: HubData) */
 #define HOOK_NETWORK_CONN_IN		"dcpp.network.onClientDataIn"	/* Incoming client<->client protocol message (obj: ConnectionData) */
 #define HOOK_NETWORK_CONN_OUT		"dcpp.network.onClientDataOut"	/* Outgoing client<->client protocol message (obj: ConnectionData) */
 
-#define HOOK_QUEUE_ADD				"dcpp.queue.onAdd"			/* (New) item has been added to download queue (obj: QueueData) */
-#define HOOK_QUEUE_MOVE				"dcpp.queue.onMove"			/* Download queue item has been moved to new location (obj: QueueData) */
-#define HOOK_QUEUE_REMOVE			"dcpp.queue.onRemove"		/* Item has just been removed from download queue (obj: QueueData) */
-#define HOOK_QUEUE_FINISHED			"dcpp.queue.onFinished"		/* Item has just finished downloading (obj: QueueData) */
+#define HOOK_QUEUE_ADDED			"dcpp.queue.onAdded"			/* (New) item has been added to download queue (obj: QueueData) */
+#define HOOK_QUEUE_MOVED			"dcpp.queue.onMoved"			/* Download queue item has been moved to new location (obj: QueueData) */
+#define HOOK_QUEUE_REMOVED			"dcpp.queue.onRemoved"			/* Item has just been removed from download queue (obj: QueueData) */
+#define HOOK_QUEUE_FINISHED			"dcpp.queue.onFinished"			/* Item has just finished downloading (obj: QueueData) */
 
 #define HOOK_UI_CREATED				"dcpp.ui.onCreated"				/* Host application UI has been created (obj: if any, impl. dependant) */
 #define HOOK_UI_CHAT_TAGS			"dcpp.ui.onChatTags"			/* Chat message tags before tag merging (obj: UserData; data: TagData) */
 #define HOOK_UI_CHAT_DISPLAY		"dcpp.ui.onChatDisplay"			/* Chat messages before they are displayed in chat (obj: UserData; data: StringData) */
-#define HOOK_UI_PROCESS_CHAT_CMD	"dcpp.ui.onProcessCmd"			/* Client side commands in chat (obj: HubData/UserData; data: CommandData) */
+#define HOOK_UI_CHAT_COMMAND		"dcpp.ui.onChatCommand"			/* Client side commands in hub chat (obj: HubData; data: CommandData) */
+#define HOOK_UI_CHAT_COMMAND_PM		"dcpp.ui.onChatCommandPM"		/* Client side commands in private chat (obj: UserData; data: CommandData) */
 
 /* Main hook events (returned by pluginInit) */
 typedef enum tagPluginState {
@@ -200,7 +201,6 @@ typedef struct tagStringData {
 typedef struct tagCommandData {
 	const char* command;										/* Command name */
 	const char* params;											/* Command parameters passed */
-	Bool isPrivate;												/* Used in a private context (private messages) */
 } CommandData, *CommandDataPtr;
 
 /* Users */

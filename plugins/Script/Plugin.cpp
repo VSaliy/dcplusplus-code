@@ -141,7 +141,7 @@ void Plugin::onLoad(DCCorePtr core, bool install, Bool& loadRes) {
 	events[HOOK_NETWORK_CONN_OUT] = hooks->bind_hook(HOOK_NETWORK_CONN_OUT, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
 		return instance->onConnectionDataOut(reinterpret_cast<ConnectionDataPtr>(pObject), reinterpret_cast<char*>(pData)); }, nullptr);
 
-	events[HOOK_UI_PROCESS_CHAT_CMD] = hooks->bind_hook(HOOK_UI_PROCESS_CHAT_CMD, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
+	events[HOOK_UI_CHAT_COMMAND] = hooks->bind_hook(HOOK_UI_CHAT_COMMAND, [](dcptr_t pObject, dcptr_t pData, dcptr_t, Bool*) {
 		return instance->onHubEnter(reinterpret_cast<HubDataPtr>(pObject), reinterpret_cast<CommandDataPtr>(pData)); }, nullptr);
 
 	/// @todo let the user configure which files to auto-load
@@ -178,9 +178,6 @@ namespace { string formatBytes(double val) {
 } }
 
 Bool Plugin::onHubEnter(HubDataPtr hHub, CommandDataPtr cmd) {
-	if(cmd->isPrivate)
-		return False;
-
 	if(stricmp(cmd->command, "help") == 0) {
 		if(stricmp(cmd->params, "plugins") == 0) {
 			const char* help =
