@@ -98,6 +98,7 @@ public:
 
 	static bool empty();
 	static void clear();
+	static void remove(const char* id);
 
 private:
 	typedef function<bool (dcptr_t, dcptr_t, bool&)> Callback;

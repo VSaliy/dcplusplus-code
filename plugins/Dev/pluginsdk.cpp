@@ -3,8 +3,8 @@ project; but it's impractical in the DC++ repository (would need some decent sym
 
 #include "version.h"
 
-#include <pluginsdk/Core.cpp>
 #include <pluginsdk/Config.cpp>
+#include <pluginsdk/Core.cpp>
 #include <pluginsdk/Hooks.cpp>
 #include <pluginsdk/Hubs.cpp>
 #include <pluginsdk/Logger.cpp>
