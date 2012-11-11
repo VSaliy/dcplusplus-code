@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef PLUGINS_DEV_PLUGIN_H
-#define PLUGINS_DEV_PLUGIN_H
+#ifndef PLUGINS_TEST_PLUGIN_H
+#define PLUGINS_TEST_PLUGIN_H
 
 #include <map>
 
@@ -33,20 +33,9 @@ private:
 	Plugin();
 	~Plugin();
 
-	void onLoad(DCCorePtr core, bool install, Bool& loadRes);
-	Bool onSecond(uint64_t tick);
-	Bool onUiChatTags(TagDataPtr tags);
-
-	map<string, subsHandle> events;
-
-	DCHooksPtr hooks;
-
-	DCTaggerPtr tagger;
-	DCUIPtr ui;
-
-	/** @todo switch to dcpp::Singleton when <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=51494>
-	is fixed */
-	static Plugin* instance;
+	bool onLoad(DCCorePtr core, bool install);
+	bool onSecond(uint64_t tick);
+	bool onUiChatTags(TagDataPtr tags);
 };
 
 #endif
