@@ -16,10 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/* Information about the plugin - fill this out! */
+/* Information about the plugin - fill this out! Don't forget to edit the resource file as well. */
 
-#ifndef PLUGINSDK_VERSION_H
-#define PLUGINSDK_VERSION_H
+#ifndef PLUGIN_VERSION_H
+#define PLUGIN_VERSION_H
 
 /* UUID/GUID for this plugin project */
 #define PLUGIN_GUID "..."

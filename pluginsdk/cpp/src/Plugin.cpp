@@ -19,20 +19,19 @@
 #include "stdafx.h"
 #include "Plugin.h"
 
+/* Include plugin SDK helpers. There are more interfaces available that can be included in the same
+fashion (check the pluginsdk directory). */
 #include <pluginsdk/Config.h>
 #include <pluginsdk/Core.h>
 #include <pluginsdk/Hooks.h>
 #include <pluginsdk/Logger.h>
-#include <pluginsdk/Tagger.h>
-#include <pluginsdk/UI.h>
 #include <pluginsdk/Util.h>
 
+/* Plugin SDK helpers are in the "dcapi" namespace; ease their calling. */
 using dcapi::Config;
 using dcapi::Core;
 using dcapi::Hooks;
 using dcapi::Logger;
-using dcapi::Tagger;
-using dcapi::UI;
 using dcapi::Util;
 
 Plugin::Plugin() {
@@ -69,41 +68,18 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 }
 
 bool Plugin::onLoad(DCCorePtr core, bool install) {
+	/* Initialization phase. Initiate additional interfaces that you may have included from the
+	plugin SDK. */
 	Core::init(core);
-	if(!Config::init(PLUGIN_GUID) || !Hooks::init() || !Logger::init() || !Tagger::init() || !UI::init() || !Util::init()) {
+	if(!Config::init(PLUGIN_GUID) || !Hooks::init() || !Logger::init() || !Util::init()) {
 		return false;
 	}
 
 	if(install) {
-		Logger::log("The test plugin has been installed.");
+		// This only executes when the plugin has been installed for the first time.
 	}
 
-	Logger::log("Test plugin loaded, watch out!");
-
-	Hooks::Timer::onSecond([this](uint64_t tick, bool&) { return onSecond(tick); });
-	Hooks::UI::onChatTags([this](UserDataPtr, TagDataPtr tags, bool&) { return onUiChatTags(tags); });
+	// Start the plugin logic here; add hooks with functions from the Hooks interface.
 
 	return true;
-}
-
-bool Plugin::onSecond(uint64_t tick) {
-	static uint64_t prevTick = 0;
-	if(tick - prevTick >= 10*1000) {
-		prevTick = tick;
-		UI::handle()->play_sound("Media\\tada.wav");
-	}
-	return false;
-}
-
-bool Plugin::onUiChatTags(TagDataPtr tags) {
-	// look for the pattern and make it bold.
-	const string pattern = "ABC DEF";
-
-	string text(tags->text);
-	size_t start, end = 0;
-	while((start = text.find(pattern, end)) != string::npos) {
-		end = start + pattern.size();
-		Tagger::handle()->add_tag(tags, start, end, "b", "");
-	}
-	return false;
 }
