@@ -30,6 +30,7 @@ bool Hooks::init(DCCorePtr core) {
 	return hooks;
 }
 void Hooks::init(DCHooksPtr coreHooks) { hooks = coreHooks; }
+DCHooksPtr Hooks::handle() { return hooks; }
 
 void Hooks::Chat::onIncomingChat(function<bool (HubDataPtr, char*, bool&)> f) {
 	addEvent(HOOK_CHAT_IN, [f](dcptr_t pObject, dcptr_t pData, bool& bBreak) {

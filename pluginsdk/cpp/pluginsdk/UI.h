@@ -16,30 +16,41 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/* Helpers around the DCCore interface. */
+/* Helpers around the DCUI interface. */
 
-#ifndef PLUGINSDK_CORE_H
-#define PLUGINSDK_CORE_H
+#ifndef PLUGINSDK_UI_H
+#define PLUGINSDK_UI_H
 
 #include <cstdint>
+#include <functional>
 #include <string>
+#include <unordered_map>
 
 #include <pluginsdk/PluginDefs.h>
 
 namespace dcapi {
 
+using std::function;
 using std::string;
+using std::unordered_map;
 
-class Core
+class UI
 {
 public:
-	static void init(DCCorePtr corePtr);
-	static DCCorePtr handle();
+	static bool init(DCCorePtr core);
+	static void init(DCUIPtr coreUI);
+	static DCUIPtr handle();
 
-	static string appName;
+	typedef function<void ()> Command;
+	static void addCommand(string name, Command command);
+	static void removeCommand(const string& name);
 
 private:
-	static DCCorePtr core;
+	static void DCAPI commandCallback(const char* name);
+
+	static DCUIPtr ui;
+
+	static unordered_map<string, Command> commands;
 };
 
 } // namespace dcapi

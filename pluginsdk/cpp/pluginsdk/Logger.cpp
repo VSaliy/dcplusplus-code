@@ -29,6 +29,7 @@ bool Logger::init(DCCorePtr core) {
 	return logger;
 }
 void Logger::init(DCLogPtr coreLogger) { logger = coreLogger; }
+DCLogPtr Logger::handle() { return logger; }
 
 void Logger::log(const string& message) { logger->log(message.c_str()); }
 

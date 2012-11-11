@@ -30,4 +30,6 @@ void Core::init(DCCorePtr corePtr) {
 	appName = core->host_name();
 }
 
+DCCorePtr Core::handle() { return core; }
+
 } // namespace dcapi

@@ -41,13 +41,16 @@ class Hooks
 public:
 	static bool init(DCCorePtr core);
 	static void init(DCHooksPtr coreHooks);
+	static DCHooksPtr handle();
 
 	/* The following functions register events. See the Hooks section of PluginDefs.h to see a
 	description of each.
 	Callbacks return a bool to indicate whether they want to prevent the plugin host from doing any
 	further processing related to the event.
 	Callbacks are also given a "bool& bBreak" argument to indicate whether they want to prevent
-	other plugins from catching the event. */
+	other plugins from catching the event.
+	Remember to remove hooks the plugin has added by calling Hooks::clear() before destroying the
+	plugin. */
 
 	struct Chat {
 		static void onIncomingChat(function<bool (HubDataPtr, char*, bool&)> f);

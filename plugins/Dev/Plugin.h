@@ -51,7 +51,6 @@ private:
 	bool onChatCommand(HubDataPtr hub, CommandDataPtr cmd);
 
 	DCHubPtr hubs;
-	DCUIPtr ui;
 
 	Dialog dialog;
 

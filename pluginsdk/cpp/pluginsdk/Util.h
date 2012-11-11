@@ -38,6 +38,7 @@ class Util
 public:
 	static bool init(DCCorePtr core);
 	static void init(DCUtilsPtr coreUtils);
+	static DCUtilsPtr handle();
 
 #ifdef _UNICODE
 	static string fromT(const wstring& str);
