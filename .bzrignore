@@ -24,6 +24,7 @@ openssl/build/openssl*
 ./msvc/debug-*
 ./msvc/release-*
 ./mingw/include/*.h
+./pluginsdk/c/pluginsdk/PluginDefs.h
 ./pluginsdk/cpp/pluginsdk/PluginDefs.h
 ./pluginsdk/cpp/projects/make/build
 ./pluginsdk/cpp/projects/vs2010/Debug
