@@ -21,8 +21,6 @@
 #ifndef PLUGINSDK_QUEUE_H
 #define PLUGINSDK_QUEUE_H
 
-#include <cstdint>
-
 #include <pluginsdk/PluginDefs.h>
 
 namespace dcapi {

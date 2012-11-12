@@ -21,7 +21,6 @@
 #ifndef PLUGINSDK_HOOKS_H
 #define PLUGINSDK_HOOKS_H
 
-#include <cstdint>
 #include <functional>
 #include <map>
 #include <string>

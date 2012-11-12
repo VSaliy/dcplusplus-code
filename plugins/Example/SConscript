@@ -9,8 +9,8 @@ env.Append(CPPPATH = ['#/pluginsdk/c'])
 
 if 'g++' in env['LINK']:
 	env.Append(SHLINKFLAGS = '-Wl,--add-stdcall-alias')
-elif 'link' in env['LINK'] and env['arch'] == 'x86':
-	sources.append('Plugin.def')
+elif 'link' in env['LINK']:
+	env.Append(SHLINKFLAGS = '/EXPORT:pluginInit')
 
 ret = dev.build_lib(env, target, [sources, res], shared = True)
 Return('ret')

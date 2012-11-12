@@ -21,7 +21,6 @@
 #ifndef PLUGINSDK_CORE_H
 #define PLUGINSDK_CORE_H
 
-#include <cstdint>
 #include <string>
 
 #include <pluginsdk/PluginDefs.h>

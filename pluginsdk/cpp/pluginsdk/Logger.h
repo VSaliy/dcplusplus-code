@@ -21,7 +21,6 @@
 #ifndef PLUGINSDK_LOGGER_H
 #define PLUGINSDK_LOGGER_H
 
-#include <cstdint>
 #include <string>
 
 #include <pluginsdk/PluginDefs.h>

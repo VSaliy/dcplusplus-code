@@ -56,7 +56,7 @@ Bool DCAPI Plugin::main(PluginState state, DCCorePtr core, dcptr_t) {
 	case ON_UNLOAD:
 		{
 			delete instance;
-			instance = nullptr;
+			instance = 0;
 			return True;
 		}
 

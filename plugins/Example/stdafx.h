@@ -34,9 +34,6 @@
 #define STRINGIZE(X) DO_STRINGIZE(X)
 #define DO_STRINGIZE(X) #X
 
-#include <stddef.h>
-#include <stdint.h>
-
 #include <pluginsdk/PluginDefs.h>
 
 #include "version.h"

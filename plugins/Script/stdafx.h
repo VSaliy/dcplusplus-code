@@ -35,7 +35,6 @@
 #define DO_STRINGIZE(X) #X
 
 #include <cstdio>
-#include <cstdint>
 #include <string>
 
 #include <pluginsdk/PluginDefs.h>
