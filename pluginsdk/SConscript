@@ -1,0 +1,27 @@
+# Package the DC++ plugin SDK; build one package for each language
+# Dependencies:
+# - zip (MSYS / Cygwin provide one)
+
+Import('dev')
+env = dev.env.Clone()
+
+if not env['pluginsdk']:
+	Return()
+
+if env.WhereIs('zip') is None:
+	raise Exception('"zip" is required to build the distro; get the one from MSYS or Cygwin')
+
+from build_util import nixify
+
+def gen_zip(target, source, env):
+	source_dir = str(source[0])
+
+	# make sure PluginDefs.h is here
+	env.Execute(Copy(source_dir + '/pluginsdk', 'pluginsdk/PluginDefs.h'))
+
+	# create the zip file
+	return env.Execute('cd "' + source_dir + '" && zip -9 -r "' + nixify(str(target[0].abspath)) + '" . -x "projects/make/build\\*" -x "projects/vs2010/Debug\\*" -x "projects/vs2010/ipch\\*" -x "projects/vs2010/Release\\*" -x "projects/vs2012/Debug\\*" -x "projects/vs2012/Release\\*" -x "\\*.sdf" -x "\\*.suo" -x "\\*.vcxproj.user" && cd "' + env.Dir('#').abspath + '"')
+
+build_path = '#/build/pluginsdk/'
+for kind in ['cpp']: # TODO add 'c'
+	env.Command(build_path + 'dcpp_plugin_sdk_' + kind + '.zip', kind, Action(gen_zip, 'Plugin SDK: packaging $TARGET'))
