@@ -18,6 +18,8 @@
 
 /* Information about the plugin - fill this out! Don't forget to edit the resource file as well. */
 
+#error Version information not set! Remove this error once you have filled version.h and the resource file.
+
 #ifndef PLUGIN_VERSION_H
 #define PLUGIN_VERSION_H
 

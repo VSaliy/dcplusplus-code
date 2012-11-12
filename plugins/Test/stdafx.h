@@ -31,7 +31,6 @@
 #endif
 
 #include <cstdio>
-#include <cstdint>
 #include <string>
 
 #include <pluginsdk/PluginDefs.h>

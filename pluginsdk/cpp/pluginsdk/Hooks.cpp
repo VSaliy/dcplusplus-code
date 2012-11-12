@@ -139,8 +139,8 @@ bool Hooks::empty() {
 }
 
 void Hooks::clear() {
-	for(auto& i: events)
-		hooks->release_hook(i.second.first);
+	for(auto i = events.begin(), iend = events.end(); i != iend; ++i)
+		hooks->release_hook(i->second.first);
 	events.clear();
 }
 
@@ -154,7 +154,7 @@ void Hooks::remove(const char* id) {
 
 void Hooks::addEvent(const char* id, Callback f) {
 	// insert first to construct map keys etc; then create the hook, using the map key as pCommon.
-	auto it = events.insert(make_pair(id, make_pair(nullptr, f))).first;
+	auto it = events.insert(std::make_pair(id, std::make_pair((void*)0, f))).first;
 	it->second.first = hooks->bind_hook(id, eventCallback, reinterpret_cast<dcptr_t>(const_cast<char*>(it->first.c_str())));
 }
 

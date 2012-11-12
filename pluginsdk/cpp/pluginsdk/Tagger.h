@@ -21,8 +21,6 @@
 #ifndef PLUGINSDK_TAGGER_H
 #define PLUGINSDK_TAGGER_H
 
-#include <cstdint>
-
 #include <pluginsdk/PluginDefs.h>
 
 namespace dcapi {

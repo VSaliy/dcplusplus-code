@@ -21,7 +21,6 @@
 #ifndef PLUGINSDK_UI_H
 #define PLUGINSDK_UI_H
 
-#include <cstdint>
 #include <functional>
 #include <string>
 #include <unordered_map>

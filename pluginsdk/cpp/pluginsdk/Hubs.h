@@ -21,8 +21,6 @@
 #ifndef PLUGINSDK_HUBS_H
 #define PLUGINSDK_HUBS_H
 
-#include <cstdint>
-
 #include <pluginsdk/PluginDefs.h>
 
 namespace dcapi {

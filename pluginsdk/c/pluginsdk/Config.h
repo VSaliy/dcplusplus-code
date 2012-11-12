@@ -21,9 +21,6 @@
 #ifndef PLUGINSDK_CONFIG_H
 #define PLUGINSDK_CONFIG_H
 
-#include <stddef.h>
-#include <stdint.h>
-
 #include <pluginsdk/PluginDefs.h>
 
 Bool DCAPI init_cfg(DCCorePtr core);

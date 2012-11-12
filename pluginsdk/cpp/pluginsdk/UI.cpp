@@ -36,7 +36,7 @@ void UI::init(DCUIPtr coreUI) { ui = coreUI; }
 DCUIPtr UI::handle() { return ui; }
 
 void UI::addCommand(string name, Command command) {
-	ui->add_command(commands.emplace(move(name), command).first->first.c_str(), commandCallback);
+	ui->add_command(commands.insert(std::make_pair(move(name), command)).first->first.c_str(), commandCallback);
 }
 
 void UI::removeCommand(const string& name) {
