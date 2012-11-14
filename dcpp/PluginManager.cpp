@@ -62,14 +62,8 @@ PluginInfo::~PluginInfo() {
 	}
 }
 
-PluginManager::PluginManager() : shutdown(false), secNum(Util::rand()) {
-#ifndef _MSC_VER
-	dcCore = { };
-#else
-	memset(&dcCore, 0, sizeof(DCCore));
-#endif
+PluginManager::PluginManager() : dcCore(), shutdown(false), secNum(Util::rand()) {
 	SettingsManager::getInstance()->addListener(this);
-	loadSettings(); // workaround for SettingsManager loading memory of this when loading fails
 }
 
 PluginManager::~PluginManager() {
@@ -77,11 +71,11 @@ PluginManager::~PluginManager() {
 }
 
 void PluginManager::loadPlugins(function<void (const string&)> f) {
-	PluginApiImpl::initAPI(dcCore);
-
 	TimerManager::getInstance()->addListener(this);
 	ClientManager::getInstance()->addListener(this);
 	QueueManager::getInstance()->addListener(this);
+
+	loadSettings(); // workaround for SettingsManager loading memory of this when loading fails
 
 	StringTokenizer<string> st(getPluginSetting("CoreSetup", "Plugins"), ";");
 	auto err = [](const string& str) { LogManager::getInstance()->message(str); };
@@ -178,8 +172,6 @@ void PluginManager::unloadPlugins() {
 	TimerManager::getInstance()->removeListener(this);
 	ClientManager::getInstance()->removeListener(this);
 	QueueManager::getInstance()->removeListener(this);
-
-	PluginApiImpl::releaseAPI();
 }
 
 void PluginManager::unloadPlugin(size_t index) {

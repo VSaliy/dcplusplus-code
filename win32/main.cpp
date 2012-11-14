@@ -21,11 +21,13 @@
 #include <exception>
 
 #include "CrashLogger.h"
-#include "SingleInstance.h"
-#include "WinUtil.h"
 #include "MainWindow.h"
+#include "PluginApiWin.h"
+#include "SingleInstance.h"
 #include "SplashWindow.h"
+#include "WinUtil.h"
 
+#include <dcpp/DCPlusPlus.h>
 #include <dcpp/MerkleTree.h>
 #include <dcpp/File.h>
 #include <dcpp/Text.h>
@@ -135,7 +137,11 @@ int dwtMain(dwt::Application& app) {
 
 	try {
 		SplashWindow* splash(new SplashWindow);
-		startup([splash](const string& str) { (*splash)(str); });
+
+		startup();
+		PluginApiWin::init();
+
+		load([splash](const string& str) { (*splash)(str); });
 
 		bindtextdomain(PACKAGE, LOCALEDIR);
 		textdomain(PACKAGE);

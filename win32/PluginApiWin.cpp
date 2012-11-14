@@ -16,30 +16,37 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/** @file implement UI-specific functions of the plugin API. */
-
 #include "stdafx.h"
+#include "PluginApiWin.h"
 
-#include <dcpp/PluginApiImpl.h>
-
+#include <dcpp/PluginManager.h>
 #include <dcpp/Text.h>
 
 #include "MainWindow.h"
 #include "WinUtil.h"
 
-namespace dcpp {
+DCUI PluginApiWin::dcUI = {
+	DCINTF_DCPP_UI_VER,
+
+	&PluginApiWin::addCommand,
+	&PluginApiWin::removeCommand,
+
+	&PluginApiWin::playSound
+};
+
+void PluginApiWin::init() {
+	PluginManager::getInstance()->registerInterface(DCINTF_DCPP_UI, &dcUI);
+}
 
 // Functions for DCUI
-void PluginApiImpl::addCommand(const char* name, DCCommandFunc command) {
+void PluginApiWin::addCommand(const char* name, DCCommandFunc command) {
 	MainWindow::addPluginCommand(Text::toT(name), [=] { command(name); });
 }
 
-void PluginApiImpl::removeCommand(const char* name) {
+void PluginApiWin::removeCommand(const char* name) {
 	MainWindow::removePluginCommand(Text::toT(name));
 }
 
-void PluginApiImpl::playSound(const char* path) {
+void PluginApiWin::playSound(const char* path) {
 	WinUtil::playSound(Text::toT(path));
 }
-
-} // namespace dcpp

@@ -169,15 +169,6 @@ DCTagger PluginApiImpl::dcTagger = {
 	&PluginApiImpl::addTag
 };
 
-DCUI PluginApiImpl::dcUI = {
-	DCINTF_DCPP_UI_VER,
-
-	&PluginApiImpl::addCommand,
-	&PluginApiImpl::removeCommand,
-
-	&PluginApiImpl::playSound
-};
-
 Socket* PluginApiImpl::udpSocket = nullptr;
 Socket& PluginApiImpl::getUdpSocket() {
 	if(!udpSocket) {
@@ -186,7 +177,9 @@ Socket& PluginApiImpl::getUdpSocket() {
 	return *udpSocket;
 }
 
-void PluginApiImpl::initAPI(DCCore& dcCore) {
+void PluginApiImpl::init() {
+	auto& dcCore = *PluginManager::getInstance()->getCore();
+
 	dcCore.apiVersion = DCAPI_CORE_VER;
 
 	// Interface registry
@@ -208,14 +201,13 @@ void PluginApiImpl::initAPI(DCCore& dcCore) {
 	dcCore.register_interface(DCINTF_DCPP_QUEUE, &dcQueue);
 	dcCore.register_interface(DCINTF_DCPP_UTILS, &dcUtils);
 	dcCore.register_interface(DCINTF_DCPP_TAGGER, &dcTagger);
-	dcCore.register_interface(DCINTF_DCPP_UI, &dcUI);
 
 	// Create provided hooks (since these outlast any plugin they don't need to be explictly released)
 	for(int i = 0; i < IMPL_HOOKS_COUNT; ++i)
 		dcHooks.create_hook(hookGuids[i], NULL);
 }
 
-void PluginApiImpl::releaseAPI() {
+void PluginApiImpl::shutdown() {
 	if(udpSocket) {
 		udpSocket->disconnect();
 		delete udpSocket;

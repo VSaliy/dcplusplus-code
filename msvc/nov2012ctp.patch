@@ -3,7 +3,7 @@ toolset by default when compiling from the command line.
 
 --- vcvarsall - original.bat	2011-12-12 12:52:48.000000000 +0100
 +++ vcvarsall.bat	2012-11-05 19:00:44.875000000 +0100
-@@ -13,10 +13,14 @@
+@@ -13,11 +13,15 @@
  :x86
  if not exist "%~dp0bin\vcvars32.bat" goto missing
  call "%~dp0bin\vcvars32.bat"
@@ -13,24 +13,25 @@ toolset by default when compiling from the command line.
  
  :amd64
  if not exist "%~dp0bin\amd64\vcvars64.bat" goto missing
+ call "%~dp0bin\amd64\vcvars64.bat"
 +set PATH=C:\Program Files (x86)\Microsoft Visual C++ Compiler Nov 2012 CTP\bin\amd64;%PATH%
 +set INCLUDE=C:\Program Files (x86)\Microsoft Visual C++ Compiler Nov 2012 CTP\include;%INCLUDE%
- call "%~dp0bin\amd64\vcvars64.bat"
  goto :SetVisualStudioVersion
  
-@@ -27,11 +31,15 @@
- 
+ :arm
+@@ -28,11 +32,15 @@
  :x86_amd64
  if not exist "%~dp0bin\x86_amd64\vcvarsx86_amd64.bat" goto missing
+ call "%~dp0bin\x86_amd64\vcvarsx86_amd64.bat"
 +set PATH=C:\Program Files (x86)\Microsoft Visual C++ Compiler Nov 2012 CTP\bin\x86_amd64;%PATH%
 +set INCLUDE=C:\Program Files (x86)\Microsoft Visual C++ Compiler Nov 2012 CTP\include;%INCLUDE%
- call "%~dp0bin\x86_amd64\vcvarsx86_amd64.bat"
  goto :SetVisualStudioVersion
  
  :x86_arm
  if not exist "%~dp0bin\x86_arm\vcvarsx86_arm.bat" goto missing
+ call "%~dp0bin\x86_arm\vcvarsx86_arm.bat"
 +set PATH=C:\Program Files (x86)\Microsoft Visual C++ Compiler Nov 2012 CTP\bin\x86_arm;%PATH%
 +set INCLUDE=C:\Program Files (x86)\Microsoft Visual C++ Compiler Nov 2012 CTP\include;%INCLUDE%
- call "%~dp0bin\x86_arm\vcvarsx86_arm.bat"
  goto :SetVisualStudioVersion
  
+ :SetVisualStudioVersion

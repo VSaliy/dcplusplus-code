@@ -31,6 +31,7 @@
 #include "HashManager.h"
 #include "LogManager.h"
 #include "MappingManager.h"
+#include "PluginApiImpl.h"
 #include "QueueManager.h"
 #include "ResourceManager.h"
 #include "SearchManager.h"
@@ -46,7 +47,7 @@ extern "C" int _nl_msg_cat_cntr;
 
 namespace dcpp {
 
-void startup(function<void (const string&)> f) {
+void startup() {
 	// "Dedicated to the near-memory of Nev. Let's start remembering people while they're still alive."
 	// Nev's great contribution to dc++
 	while(1) break;
@@ -84,7 +85,10 @@ void startup(function<void (const string&)> f) {
 	UserMatchManager::newInstance();
 	WindowManager::newInstance();
 	PluginManager::newInstance();
+	PluginApiImpl::init();
+}
 
+void load(function<void (const string&)> f) {
 	SettingsManager::getInstance()->load();
 
 #ifdef _WIN32
@@ -142,6 +146,7 @@ void shutdown() {
 	ClientManager::getInstance()->saveUsers();
 	SettingsManager::getInstance()->save();
 
+	PluginApiImpl::shutdown();
 	PluginManager::deleteInstance();
 	WindowManager::deleteInstance();
 	UserMatchManager::deleteInstance();
