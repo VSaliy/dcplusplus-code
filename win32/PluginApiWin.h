@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (C) 2001-2012 Jacek Sieka, arnetheduck on gmail point com
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,21 +16,25 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DCPLUSPLUS_DCPP_DCPLUSPLUS_H
-#define DCPLUSPLUS_DCPP_DCPLUSPLUS_H
+/** @file implement UI-specific functions of the plugin API. */
 
-#include <functional>
-#include <string>
+#ifndef DCPLUSPLUS_WIN32_PLUGINAPIWIN_H
+#define DCPLUSPLUS_WIN32_PLUGINAPIWIN_H
 
-namespace dcpp {
+#include <pluginsdk/PluginDefs.h>
 
-using std::function;
-using std::string;
+class PluginApiWin {
+public:
+	static void init();
 
-void startup();
-void load(function<void (const string&)> f);
-void shutdown();
+private:
+	// Functions for DCUI
+	static void DCAPI addCommand(const char* name, DCCommandFunc command);
+	static void DCAPI removeCommand(const char* name);
 
-} // namespace dcpp
+	static void DCAPI playSound(const char* path);
 
-#endif // !defined(DC_PLUS_PLUS_H)
+	static DCUI dcUI;
+};
+
+#endif

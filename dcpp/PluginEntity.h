@@ -32,12 +32,7 @@ template<typename PluginType>
 class PluginEntity
 {
 public:
-	PluginEntity() {
-#ifndef _MSC_VER
-		pod = { };
-#else
-		memset(&pod, 0, sizeof(PluginType));
-#endif
+	PluginEntity() : pod() {
 		pod.isManaged = True;
 	}
 	virtual ~PluginEntity() { psCache.clear(); }

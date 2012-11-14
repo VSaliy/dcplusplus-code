@@ -24,8 +24,6 @@
 #ifndef DCPLUSPLUS_DCPP_PLUGIN_API_IMPL_H
 #define DCPLUSPLUS_DCPP_PLUGIN_API_IMPL_H
 
-#include <cstdint>
-
 #include "forward.h"
 #include "typedefs.h"
 
@@ -36,8 +34,8 @@ namespace dcpp {
 class PluginApiImpl
 {
 public:
-	static void initAPI(DCCore& dcCore);
-	static void releaseAPI();
+	static void init();
+	static void shutdown();
 
 	static HubDataPtr DCAPI copyData(const HubDataPtr hub);
 	static void DCAPI releaseData(HubDataPtr hub);
@@ -94,12 +92,6 @@ private:
 	// Functions for DCTagger
 	static void DCAPI addTag(TagDataPtr hTags, size_t start, size_t end, const char* id, const char* attributes);
 
-	// Functions for DCUI - the host has to define these
-	static void DCAPI addCommand(const char* name, DCCommandFunc command);
-	static void DCAPI removeCommand(const char* name);
-
-	static void DCAPI playSound(const char* path);
-
 	// Functions for DCQueue
 	static QueueDataPtr DCAPI addList(UserDataPtr user, Bool silent);
 	static QueueDataPtr DCAPI addDownload(const char* hash, uint64_t size, const char* target);
@@ -133,7 +125,6 @@ private:
 	static DCQueue dcQueue;
 	static DCUtils dcUtils;
 	static DCTagger dcTagger;
-	static DCUI dcUI;
 
 	static Socket* udpSocket;
 	static Socket& getUdpSocket();

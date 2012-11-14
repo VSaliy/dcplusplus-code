@@ -23,9 +23,9 @@
 #include "compiler.h"
 
 #include <dcpp/stdinc.h>
-#include <dcpp/DCPlusPlus.h>
 #include <dcpp/w.h>
 
+namespace dcpp { }
 using namespace dcpp;
 
 #ifdef HAS_PCH
