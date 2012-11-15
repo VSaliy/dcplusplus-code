@@ -84,8 +84,6 @@ gcc_defs = {
 	'release' : ['NDEBUG']
 }
 
-plugins = filter(lambda x: os.path.isfile(os.path.join('plugins', x, 'SConscript')), os.listdir('plugins'))
-
 # defEnv will hold a temporary Environment used to get options that can't be set after the actual
 # Environment has been created
 defEnv = Environment(ENV = os.environ)
@@ -103,7 +101,6 @@ opts.AddVariables(
 	BoolVariable('webhelp', 'Build help files for the web (requires help=1)', 'no'),
 	('prefix', 'Prefix to use when cross compiling', ''),
 	EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64']),
-	ListVariable('plugins', 'The plugins to compile', 'none', plugins),
 	BoolVariable('msvcproj', 'Build MSVC project files', 'no'),
 	BoolVariable('distro', 'Produce the official distro (forces tools=mingw, mode=release, unicode=1, i18n=1, help=1, webhelp=1, arch=x86)', 'no')
 )
@@ -284,7 +281,6 @@ dev.natpmp = dev.build('natpmp/')
 dev.dwt = dev.build('dwt/src/')
 dev.dwt_test = dev.build('dwt/test/')
 dev.client = dev.build('dcpp/')
-dev.plugins = dev.build('plugins/')
 dev.help = dev.build('help/')
 dev.test = dev.build('test/')
 dev.utils = dev.build('utils/')
