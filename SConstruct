@@ -103,10 +103,9 @@ opts.AddVariables(
 	BoolVariable('webhelp', 'Build help files for the web (requires help=1)', 'no'),
 	('prefix', 'Prefix to use when cross compiling', ''),
 	EnumVariable('arch', 'Target architecture', 'x86', ['x86', 'x64', 'ia64']),
-	ListVariable('plugins', 'The plugins to compile', 'all', plugins),
+	ListVariable('plugins', 'The plugins to compile', 'none', plugins),
 	BoolVariable('msvcproj', 'Build MSVC project files', 'no'),
-	BoolVariable('distro', 'Produce the official distro (forces tools=mingw, mode=release, unicode=1, i18n=1, help=1, webhelp=1, arch=x86)', 'no'),
-	BoolVariable('pluginsdk', 'Package the plugin SDK', 'no')
+	BoolVariable('distro', 'Produce the official distro (forces tools=mingw, mode=release, unicode=1, i18n=1, help=1, webhelp=1, arch=x86)', 'no')
 )
 
 opts.Update(defEnv)
@@ -291,5 +290,4 @@ dev.test = dev.build('test/')
 dev.utils = dev.build('utils/')
 dev.win32 = dev.build('win32/')
 dev.installer = dev.build('installer/')
-dev.pluginsdk = dev.build('pluginsdk/')
 dev.finalize()
