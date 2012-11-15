@@ -28,14 +28,13 @@
 #include "typedefs.h"
 
 #include "ClientManagerListener.h"
+#include "PluginDefs.h"
 #include "PluginEntity.h"
 #include "QueueManagerListener.h"
 #include "SettingsManager.h"
 #include "Singleton.h"
 #include "Tagger.h"
 #include "TimerManager.h"
-
-#include <pluginsdk/PluginDefs.h>
 
 #ifdef _WIN32
 typedef HMODULE PluginHandle;

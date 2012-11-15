@@ -21,7 +21,7 @@
 #ifndef DCPLUSPLUS_WIN32_PLUGINAPIWIN_H
 #define DCPLUSPLUS_WIN32_PLUGINAPIWIN_H
 
-#include <pluginsdk/PluginDefs.h>
+#include <dcpp/PluginDefs.h>
 
 class PluginApiWin {
 public:
