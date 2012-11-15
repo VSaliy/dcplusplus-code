@@ -125,26 +125,26 @@ BOOL Dialog::init() {
 	RECT rect;
 	GetClientRect(control, &rect);
 
-	LVCOLUMN col = { LVCF_FMT | LVCF_TEXT | LVCF_WIDTH, LVCFMT_LEFT, 50, _T("#") };
+	LVCOLUMN col = { LVCF_FMT | LVCF_TEXT | LVCF_WIDTH, LVCFMT_LEFT, 50, (LPWSTR)_T("#") };
 	ListView_InsertColumn(control, 0, &col);
 
-	col.pszText = _T("Dir");
+	col.pszText = (LPWSTR)_T("Dir");
 	ListView_InsertColumn(control, 1, &col);
 
 	col.cx = 100;
-	col.pszText = _T("IP");
+	col.pszText = (LPWSTR)_T("IP");
 	ListView_InsertColumn(control, 2, &col);
 
 	col.cx = 50;
-	col.pszText = _T("Port");
+	col.pszText = (LPWSTR) _T("Port");
 	ListView_InsertColumn(control, 3, &col);
 
 	col.cx = 200;
-	col.pszText = _T("Peer info");
+	col.pszText = (LPWSTR)_T("Peer info");
 	ListView_InsertColumn(control, 4, &col);
 
 	col.cx = rect.right - rect.left - 50 - 50 - 100 - 50 - 200 - 30;
-	col.pszText = _T("Message");
+	col.pszText = (LPWSTR)_T("Message");
 	ListView_InsertColumn(control, 5, &col);
 
 	SendMessage(GetDlgItem(hwnd, IDC_SCROLL), BM_SETCHECK, BST_CHECKED, 0);
