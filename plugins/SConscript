@@ -1,7 +1,0 @@
-Import('dev source_path')
-
-ret = []
-for plugin in dev.env['plugins']:
-	ret.append(dev.build(plugin + '/'))
-
-Return('ret')
