@@ -23,8 +23,7 @@ namespace dcpp {
 
 HttpDownload::HttpDownload(const string& address, CompletionFunc f, bool coralize) :
 c(coralize),
-f(f),
-buf("")
+f(f)
 {
 	c.addListener(this);
 	c.downloadFile(address);
@@ -32,8 +31,7 @@ buf("")
 
 HttpDownload::HttpDownload(const string& address, const StringMap& data, CompletionFunc f, bool coralize) :
 c(coralize),
-f(f),
-buf("")
+f(f)
 {
 	c.addListener(this);
 	c.postData(address, data);
