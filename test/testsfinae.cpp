@@ -6,11 +6,16 @@
 
 using namespace dcpp;
 
-struct Funcs {
+struct Base {
+	void fbase1() { }
+};
+
+struct Funcs : Base {
 	void f1() { }
 	void f2(int) { }
 	int f3() { return 0; }
 	void f4(const string&) { }
+	void f5(string&) { }
 };
 
 template<typename T>
@@ -20,6 +25,8 @@ struct X {
 	HAS_FUNC(F2, void, f2(0));
 	HAS_FUNC(F3, int, f3());
 	HAS_FUNC(F4, void, f4(string()));
+	HAS_FUNC(F5, void, f5(std::function<string&()>()()));
+	HAS_FUNC(F6, void, fbase1());
 
 	// these should be false.
 	HAS_FUNC(FN1, void, lol());
@@ -30,6 +37,8 @@ struct X {
 	bool test_F2() { return F2<T>::value; }
 	bool test_F3() { return F3<T>::value; }
 	bool test_F4() { return F4<T>::value; }
+	bool test_F5() { return F5<T>::value; }
+	bool test_F6() { return F6<T>::value; }
 
 	bool test_FN1() { return FN1<T>::value; }
 	bool test_FN2() { return FN2<T>::value; }
@@ -51,14 +60,12 @@ TEST(testsfinae, test_has_func)
 	ASSERT_EQ(true, x.test_F2());
 	ASSERT_EQ(true, x.test_F3());
 	ASSERT_EQ(true, x.test_F4());
+	ASSERT_EQ(true, x.test_F5());
+	ASSERT_EQ(true, x.test_F6());
 
 	ASSERT_EQ(false, x.test_FN1());
-#ifndef _MSC_VER
-	/* TODO these tests ensure that the return value of the tested function is correctly validated.
-	doesn't work in MSVC, as explained by the definition of HAS_FUNC. */
 	ASSERT_EQ(false, x.test_FN2());
 	ASSERT_EQ(false, x.test_FN3());
-#endif
 
 	ASSERT_EQ(true, x.i());
 }

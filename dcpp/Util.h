@@ -92,29 +92,20 @@ int compare(const wchar_t* a, const wchar_t* b);
 template<typename T> double fraction(T a, T b) { return static_cast<double>(a) / b; }
 
 /** Uses SFINAE to determine whether a type provides a function; stores the result in "value".
-Inspired by <http://stackoverflow.com/a/8752988>. */
-#ifndef _MSC_VER
+Inspired by <http://stackoverflow.com/a/8752988>.
+Note that checkRet & check could be merged into 1 function, but VS 11 doesn't like having a
+decltype inside that enable_if; so the 2 checks are separate. */
 #define HAS_FUNC(name, funcRet, funcTest) \
 	template<typename HAS_FUNC_T> struct name { \
 		typedef char yes[1]; \
 		typedef char no[2]; \
-		template<typename HAS_FUNC_U> static yes& check(HAS_FUNC_U* data, \
-			typename std::enable_if<std::is_same<funcRet, decltype(data->funcTest)>::value>::type* = nullptr); \
+		template<typename HAS_FUNC_V> static void checkRet( \
+			typename std::enable_if<std::is_same<funcRet, HAS_FUNC_V>::value>::type*); \
+		template<typename HAS_FUNC_U> static yes& check( \
+			decltype(checkRet<decltype(std::declval<HAS_FUNC_U>().funcTest)>(nullptr))*); \
 		template<typename> static no& check(...); \
 		static const bool value = sizeof(check<HAS_FUNC_T>(nullptr)) == sizeof(yes); \
 	}
-#else
-/// @todo don't verify the return type of the function on MSVC as it fails for obscure reasons. recheck later...
-#define HAS_FUNC(name, funcRet, funcTest) \
-	template<typename HAS_FUNC_T> struct name { \
-		typedef char yes[1]; \
-		typedef char no[2]; \
-		template<typename HAS_FUNC_U> static yes& check(HAS_FUNC_U* data, \
-			decltype(data->funcTest)* = nullptr); \
-		template<typename> static no& check(...); \
-		static const bool value = sizeof(check<HAS_FUNC_T>(nullptr)) == sizeof(yes); \
-	}
-#endif
 
 class Util
 {
