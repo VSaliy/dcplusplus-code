@@ -270,9 +270,9 @@ const wstring& utf8ToWide(const string& str, wstring& tgt) noexcept {
 
 wchar_t toLower(wchar_t c) noexcept {
 #ifdef _WIN32
-		return static_cast<wchar_t>(reinterpret_cast<ptrdiff_t>(CharLowerW((LPWSTR)c)));
+	return *CharLowerW(&c);
 #else
-		return (wchar_t)towlower(c);
+	return (wchar_t)towlower(c);
 #endif
 }
 
