@@ -205,7 +205,7 @@ void Taskbar::addToTaskbar(ContainerPtr tab) {
 void Taskbar::removeFromTaskbar(ContainerPtr tab) {
 	auto proxy = tabs[tab];
 	taskbar->UnregisterTab(proxy->handle());
-	proxy->close();
+	::DestroyWindow(proxy->handle());
 	tabs.erase(tab);
 }
 

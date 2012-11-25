@@ -77,29 +77,6 @@ class Control:
 	typedef Widget BaseType;
 
 public:
-
-	/// Setting the event handler for the "create" event
-	/** The event handler must have the signature "void foo( CREATESTRUCT * )" where
-	  * the WidgetType is the type of Widget that realizes the Aspect. <br>
-	  * If you supply an event handler for this event your handler will be called
-	  * when Widget is initially created. <br>
-	  */
-	void onCreate(std::function<void (const CREATESTRUCT&)> f) {
-		addCallback(Message(WM_CREATE), [f](const MSG& msg, LRESULT&) -> bool {
-			auto cs = reinterpret_cast<const CREATESTRUCT*>(msg.lParam);
-			f(*cs);
-			return false;
-		});
-	}
-
-	/// Callback to execute right before destroying the control.
-	void onDestroy(std::function<void ()> f) {
-		addCallback(Message(WM_DESTROY), [f](const MSG&, LRESULT&) -> bool {
-			f();
-			return false;
-		});
-	}
-
 	/**
 	* add a combination of keys that will launch a function when they are hit. see the ACCEL
 	* structure doc for information about the "fVirt" and "key" arguments.

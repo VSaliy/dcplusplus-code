@@ -31,9 +31,14 @@
 
 #include <dwt/widgets/ComboBox.h>
 
+#include <dwt/WidgetCreator.h>
+#include <dwt/widgets/TextBox.h>
+
 namespace dwt {
 
 const TCHAR ComboBox::windowClass[] = WC_COMBOBOX;
+
+const TCHAR ComboBox::DropListBox::windowClass[] = _T("ComboLBox"); // undocumented
 
 ComboBox::Seed::Seed() :
 BaseType::Seed(CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_CHILD | WS_TABSTOP | WS_VSCROLL),
@@ -42,8 +47,10 @@ extended(true)
 {
 }
 
-ComboBox::ComboBox(Widget* parent ) :
-BaseType(parent, ChainingDispatcher::superClass<ComboBox>())
+ComboBox::ComboBox(Widget* parent) :
+	BaseType(parent, ChainingDispatcher::superClass<ComboBox>()),
+	listBox(nullptr),
+	textBox(nullptr)
 {
 }
 
@@ -64,6 +71,24 @@ tstring ComboBox::getValue( int index ) {
 
 int ComboBox::findString(const tstring& text) {
 	return ComboBox_FindStringExact(handle(), -1, text.c_str()); 
+}
+
+ComboBox::DropListBoxPtr ComboBox::getListBox() {
+	if(!listBox) {
+		COMBOBOXINFO info = { sizeof(COMBOBOXINFO) };
+		if(::GetComboBoxInfo(handle(), &info) && info.hwndList && info.hwndList != handle())
+			listBox = WidgetCreator<DropListBox>::attach(this, info.hwndList);
+	}
+	return listBox;
+}
+
+TextBoxPtr ComboBox::getTextBox() {
+	if(!textBox) {
+		COMBOBOXINFO info = { sizeof(COMBOBOXINFO) };
+		if(::GetComboBoxInfo(handle(), &info) && info.hwndItem && info.hwndItem != handle())
+			textBox = WidgetCreator<TextBox>::attach(this, info.hwndItem);
+	}
+	return textBox;
 }
 
 Point ComboBox::getPreferredSize() {

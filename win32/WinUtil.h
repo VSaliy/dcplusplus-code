@@ -31,13 +31,13 @@
 #include <dwt/forward.h>
 #include <dwt/widgets/Button.h>
 #include <dwt/widgets/CheckBox.h>
+#include <dwt/widgets/ComboBox.h>
 #include <dwt/widgets/GroupBox.h>
 #include <dwt/widgets/Label.h>
 #include <dwt/widgets/TabView.h>
 #include <dwt/widgets/Tree.h>
 
 #include "forward.h"
-#include "ComboBox.h"
 #include "RichTextBox.h"
 #include "Table.h"
 
@@ -45,6 +45,7 @@ using std::unordered_map;
 
 using dwt::Button;
 using dwt::CheckBox;
+using dwt::ComboBox;
 using dwt::GroupBox;
 using dwt::Label;
 using dwt::Menu;

@@ -165,11 +165,29 @@ public:
 
 	/**
 	 * Attaches the instance to an existing window.
+	 * @return the previous window proc, if there was one.
 	 */
-	void setHandle(HWND hwnd);
+	WNDPROC setHandle(HWND hwnd);
 
 	/// get the top-most parent window of this widget (either a main window or a modal dialog).
 	Widget* getRoot() const;
+
+	/** Callback to execute when creating the widget. */
+	void onCreate(std::function<void (const CREATESTRUCT&)> f) {
+		addCallback(Message(WM_CREATE), [f](const MSG& msg, LRESULT&) -> bool {
+			auto cs = reinterpret_cast<const CREATESTRUCT*>(msg.lParam);
+			f(*cs);
+			return false;
+		});
+	}
+
+	/** Callback to execute right before destroying the widget. */
+	void onDestroy(std::function<void ()> f) {
+		addCallback(Message(WM_DESTROY), [f](const MSG&, LRESULT&) -> bool {
+			f();
+			return false;
+		});
+	}
 
 protected:
 	/** Most Widgets can override the creational parameters which sets the style and the

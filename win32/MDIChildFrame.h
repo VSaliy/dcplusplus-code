@@ -159,7 +159,7 @@ private:
 
 	void addDlgCodeMessage(ComboBox* widget, bool autoTab = true) {
 		widget->onRaw([=](WPARAM w, LPARAM) { return this->handleGetDlgCode(w, autoTab); }, dwt::Message(WM_GETDLGCODE));
-		TextBox* text = widget->getTextBox();
+		auto text = widget->getTextBox();
 		if(text)
 			text->onRaw([=](WPARAM w, LPARAM) { return this->handleGetDlgCode(w, autoTab); }, dwt::Message(WM_GETDLGCODE));
 	}
@@ -172,11 +172,11 @@ private:
 	void addColor(ComboBox* widget) {
 		// do not apply our custom colors to the combo itself, but apply it to its drop-down and edit controls
 
-		ListBoxPtr listBox = widget->getListBox();
+		auto listBox = widget->getListBox();
 		if(listBox)
 			addColor(listBox);
 
-		TextBoxPtr text = widget->getTextBox();
+		auto text = widget->getTextBox();
 		if(text)
 			addColor(text);
 	}

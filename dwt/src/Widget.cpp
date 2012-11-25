@@ -84,7 +84,7 @@ HWND Widget::create(const Seed & cs) {
 	return hWnd;
 }
 
-void Widget::setHandle(HWND h) {
+WNDPROC Widget::setHandle(HWND h) {
 	if(hwnd) {
 		throw DWTException("You may not attach to a widget that's already attached");
 	}
@@ -93,7 +93,7 @@ void Widget::setHandle(HWND h) {
 
 	::SetProp(hwnd, propAtom, reinterpret_cast<HANDLE>(this));
 
-	::SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc::wndProc));
+	return reinterpret_cast<WNDPROC>(::SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc::wndProc)));
 }
 
 Widget* Widget::getRoot() const {

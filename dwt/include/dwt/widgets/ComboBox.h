@@ -69,6 +69,24 @@ class ComboBox :
 	friend class aspects::Clickable<ComboBox>;
 	friend class aspects::Data<ComboBox, int>;
 
+	/** @internal Wraps the drop-down list of a ComboBox. Carefully named to avoid clashes with
+	regular ListBox controls. */
+	class DropListBox :
+		public Control
+	{
+		typedef Control BaseType;
+		friend class WidgetCreator<DropListBox>;
+	public:
+		typedef DropListBox ThisType;
+		typedef ThisType* ObjectType;
+		struct Seed : BaseType::Seed { typedef ThisType WidgetType; };
+		explicit DropListBox(Widget* parent) : BaseType(parent, ChainingDispatcher::superClass<DropListBox>()) { }
+	private:
+		friend class ChainingDispatcher;
+		static const TCHAR windowClass[];
+	};
+	typedef DropListBox::ObjectType DropListBoxPtr;
+
 public:
 	/// Class type
 	typedef ComboBox ThisType;
@@ -122,6 +140,12 @@ public:
 	  */
 	void create( const Seed & cs = Seed() );
 
+	/** Get a widget that controls the drop-down list box used by this combo box. */
+	DropListBoxPtr getListBox();
+
+	/** Get a widget that controls the text box used by this combo box. */
+	TextBoxPtr getTextBox();
+
 	virtual Point getPreferredSize();
 
 	using aspects::Clickable<ThisType>::onClicked;
@@ -138,6 +162,9 @@ protected:
 private:
 	friend class ChainingDispatcher;
 	static const TCHAR windowClass[];
+
+	DropListBoxPtr listBox;
+	TextBoxPtr textBox;
 
 	// aspects::Selection
 	int getSelectedImpl() const;

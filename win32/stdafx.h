@@ -51,7 +51,6 @@ using namespace dcpp;
 #include <dwt/widgets/Tree.h>
 #include <dwt/widgets/Window.h>
 
-#include "ComboBox.h"
 #include "RichTextBox.h"
 #include "ShellMenu.h"
 #include "Table.h"

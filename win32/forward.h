@@ -24,6 +24,7 @@
 
 using dwt::ButtonPtr;
 using dwt::CheckBoxPtr;
+using dwt::ComboBoxPtr;
 using dwt::ContainerPtr;
 using dwt::GridPtr;
 using dwt::GroupBoxPtr;
@@ -39,9 +40,6 @@ using dwt::TabViewPtr;
 using dwt::TextBoxPtr;
 using dwt::ToolBarPtr;
 using dwt::ToolTipPtr;
-
-class ComboBox;
-typedef ComboBox* ComboBoxPtr;
 
 class HubFrame;
 
