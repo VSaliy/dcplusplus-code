@@ -165,9 +165,8 @@ public:
 
 	/**
 	 * Attaches the instance to an existing window.
-	 * @return the previous window proc, if there was one.
 	 */
-	WNDPROC setHandle(HWND hwnd);
+	void setHandle(HWND hwnd);
 
 	/// get the top-most parent window of this widget (either a main window or a modal dialog).
 	Widget* getRoot() const;

@@ -76,8 +76,15 @@ int ComboBox::findString(const tstring& text) {
 ComboBox::DropListBoxPtr ComboBox::getListBox() {
 	if(!listBox) {
 		COMBOBOXINFO info = { sizeof(COMBOBOXINFO) };
-		if(::GetComboBoxInfo(handle(), &info) && info.hwndList && info.hwndList != handle())
+		if(::GetComboBoxInfo(handle(), &info) && info.hwndList && info.hwndList != handle()) {
+			/* unlike other controls, the list window doesn't send/receive WM_DESTROY/WN_NCDESTROY.
+			as a result, the listBox widget leaks. the workaround is to "detach" from the list (by
+			giving it back its initial window procedure) when the combo is being destroyed. */
+			auto proc = ::GetWindowLongPtr(info.hwndList, GWLP_WNDPROC);
 			listBox = WidgetCreator<DropListBox>::attach(this, info.hwndList);
+			listBox->onDestroy([this] { listBox = nullptr; });
+			onDestroy([this, proc] { if(listBox) { ::SetWindowLongPtr(listBox->handle(), GWLP_WNDPROC, proc); listBox->kill(); } });
+		}
 	}
 	return listBox;
 }
@@ -85,8 +92,14 @@ ComboBox::DropListBoxPtr ComboBox::getListBox() {
 TextBoxPtr ComboBox::getTextBox() {
 	if(!textBox) {
 		COMBOBOXINFO info = { sizeof(COMBOBOXINFO) };
-		if(::GetComboBoxInfo(handle(), &info) && info.hwndItem && info.hwndItem != handle())
+		if(::GetComboBoxInfo(handle(), &info) && info.hwndItem && info.hwndItem != handle()) {
+			/* combo edits do receive destruction messages, but we do the same crap as for lists
+			to be on the safe side. */
+			auto proc = ::GetWindowLongPtr(info.hwndItem, GWLP_WNDPROC);
 			textBox = WidgetCreator<TextBox>::attach(this, info.hwndItem);
+			textBox->onDestroy([this] { textBox = nullptr; });
+			onDestroy([this, proc] { if(textBox) { ::SetWindowLongPtr(textBox->handle(), GWLP_WNDPROC, proc); textBox->kill(); } });
+		}
 	}
 	return textBox;
 }
