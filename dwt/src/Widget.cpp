@@ -55,16 +55,27 @@ namespace dwt {
 
 GlobalAtom Widget::propAtom(_T("dwt::Widget*"));
 
+#ifdef _DEBUG
+int widgetCount;
+#endif
+
 Widget::Widget(Widget* parent_, Dispatcher& dispatcher_) :
 	hwnd(NULL), parent(parent_), dispatcher(dispatcher_)
 {
-
+#ifdef _DEBUG
+	++widgetCount;
+	printf("created a dwt widget; count: %d\n", widgetCount);
+#endif
 }
 
 Widget::~Widget() {
 	if(hwnd) {
 		::RemoveProp(hwnd, propAtom);
 	}
+#ifdef _DEBUG
+	--widgetCount;
+	printf("destroying a dwt widget; count: %d\n", widgetCount);
+#endif
 }
 
 void Widget::kill() {
@@ -84,7 +95,7 @@ HWND Widget::create(const Seed & cs) {
 	return hWnd;
 }
 
-WNDPROC Widget::setHandle(HWND h) {
+void Widget::setHandle(HWND h) {
 	if(hwnd) {
 		throw DWTException("You may not attach to a widget that's already attached");
 	}
@@ -93,7 +104,7 @@ WNDPROC Widget::setHandle(HWND h) {
 
 	::SetProp(hwnd, propAtom, reinterpret_cast<HANDLE>(this));
 
-	return reinterpret_cast<WNDPROC>(::SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc::wndProc)));
+	::SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc::wndProc));
 }
 
 Widget* Widget::getRoot() const {

@@ -85,9 +85,7 @@ public:
 	static typename WidgetType::ObjectType attach(Widget* parent, HWND hwnd)
 	{
 		typename WidgetType::ObjectType w(new WidgetType(parent));
-		auto proc = w->setHandle(hwnd);
-		// "detach" from the window before the parent is destroyed.
-		parent->onDestroy([=] { ::SetWindowLongPtr(w->handle(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(proc)); w->kill(); });
+		w->setHandle(hwnd);
 		return w;
 	}
 };
