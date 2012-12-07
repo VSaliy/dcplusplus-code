@@ -198,7 +198,7 @@ Parser::Context::Context(dwt::RichTextBox* box, Parser& parser) {
 	// create a default context with the Rich Edit control's current formatting.
 	auto lf = box->getFont()->getLogFont();
 	font = parser.addFont("\\fnil\\fcharset" + Util::toString(lf.lfCharSet) + " " + Text::fromT(lf.lfFaceName));
-	fontSize = rtfFontSize(abs(lf.lfHeight));
+	fontSize = rtfFontSize(static_cast<float>(abs(lf.lfHeight)) / dwt::util::dpiFactor());
 	if(lf.lfWeight >= FW_BOLD) { setFlag(Bold); }
 	if(lf.lfItalic) { setFlag(Italic); }
 
@@ -238,6 +238,7 @@ size_t Parser::addFont(string&& font) {
 }
 
 int Parser::rtfFontSize(float px) {
+	// the px value must not take DPI settings into account; the Rich Edit control handles that.
 	return std::floor(px
 		* 72.0 / 96.0 // px -> font points
 		* 2.0); // RTF font sizes are expressed in half-points
@@ -283,7 +284,7 @@ void Parser::parseFont(const string& s) {
 	/// @todo handle more than px sizes
 	auto& size = *(l.end() - 2);
 	if(size.size() > 2 && *(size.end() - 2) == 'p' && *(size.end() - 1) == 'x') { // 16px
-		contexts.back().fontSize = rtfFontSize(Util::toFloat(size.substr(0, size.size() - 2)) * dwt::util::dpiFactor());
+		contexts.back().fontSize = rtfFontSize(Util::toFloat(size.substr(0, size.size() - 2)));
 	}
 
 	// parse the optional third to last param (font weight).
