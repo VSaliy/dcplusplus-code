@@ -1,11 +1,6 @@
 #include <dwt/widgets/Window.h>
 #include <dwt/widgets/Label.h>
 #include <dwt/widgets/SplitterContainer.h>
-#include <dwt/Texts.h>
-
-namespace dwt {
-tstring Texts::get(Text text) { return _T("test"); }
-}
 
 int dwtMain(dwt::Application& app)
 {

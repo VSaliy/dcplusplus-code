@@ -21,6 +21,7 @@
 #include <exception>
 
 #include "CrashLogger.h"
+#include "dwtTexts.h"
 #include "MainWindow.h"
 #include "PluginApiWin.h"
 #include "SingleInstance.h"
@@ -149,6 +150,8 @@ int dwtMain(dwt::Application& app) {
 		if(ResourceManager::getInstance()->isRTL()) {
 			SetProcessDefaultLayout(LAYOUT_RTL);
 		}
+
+		dwtTexts::init();
 
 		WinUtil::init();
 
