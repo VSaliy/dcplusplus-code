@@ -17,27 +17,28 @@
  */
 
 #include "stdafx.h"
-
-#include <dwt/Texts.h>
+#include "dwtTexts.h"
 
 #include <dcpp/Text.h>
 
-namespace dwt {
+#include <dwt/Texts.h>
 
-tstring Texts::get(Text text) {
-	switch(text) {
-	case undo: return T_("&Undo\tCtrl+Z");
-	case cut: return T_("Cu&t\tCtrl+X");
-	case copy: return T_("&Copy\tCtrl+C");
-	case paste: return T_("&Paste\tCtrl+V");
-	case del: return T_("&Delete\tDel");
-	case selAll: return T_("Select &All\tCtrl+A");
-	case resize: return T_("Click and drag to resize");
-	case close: return T_("Close");
-	}
+void dwtTexts::init() {
+	dwt::Texts::get = [](dwt::Texts::Text text) -> tstring {
+		using namespace dwt;
 
-	assert(0);
-	return tstring();
-}
+		switch(text) {
+		case Texts::undo: return T_("&Undo\tCtrl+Z");
+		case Texts::cut: return T_("Cu&t\tCtrl+X");
+		case Texts::copy: return T_("&Copy\tCtrl+C");
+		case Texts::paste: return T_("&Paste\tCtrl+V");
+		case Texts::del: return T_("&Delete\tDel");
+		case Texts::selAll: return T_("Select &All\tCtrl+A");
+		case Texts::resize: return T_("Click and drag to resize");
+		case Texts::close: return T_("Close");
+		}
 
+		dcassert(0);
+		return dcpp::tstring();
+	};
 }

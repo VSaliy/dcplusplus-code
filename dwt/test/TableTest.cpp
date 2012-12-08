@@ -1,10 +1,5 @@
 #include <dwt/widgets/Window.h>
 #include <dwt/widgets/Table.h>
-#include <dwt/Texts.h>
-
-namespace dwt {
-tstring Texts::get(Text text) { return _T("test"); }
-}
 
 using dwt::tstring;
 

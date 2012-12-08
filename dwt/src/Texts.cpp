@@ -29,26 +29,29 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DWT_TEXTS_H
-#define DWT_TEXTS_H
+#include <dwt/Texts.h>
 
-#include <functional>
-
-#include "tstring.h"
+#include <dwt/WindowsHeaders.h>
+#include <dwt/util/check.h>
 
 namespace dwt {
 
-/** Texts used throughout DWT. The host can override the getter by modifying the "get" variable. */
-struct Texts {
-	enum Text {
-		undo, cut, copy, paste, del, selAll, // text-box menu commands
-		resize, // tooltip for splitters
-		close // tooltip for closing an owner-drawn tab
-	};
+decltype(Texts::get) Texts::get = [](Text text) -> tstring {
+	using namespace dwt;
 
-	static std::function<tstring (Text)> get;
+	switch(text) {
+	case Texts::undo: return _T("&Undo\tCtrl+Z");
+	case Texts::cut: return _T("Cu&t\tCtrl+X");
+	case Texts::copy: return _T("&Copy\tCtrl+C");
+	case Texts::paste: return _T("&Paste\tCtrl+V");
+	case Texts::del: return _T("&Delete\tDel");
+	case Texts::selAll: return _T("Select &All\tCtrl+A");
+	case Texts::resize: return _T("Click and drag to resize");
+	case Texts::close: return _T("Close");
+	}
+
+	dwtDebugFail("unknown dwt text");
+	return tstring();
 };
 
 }
-
-#endif

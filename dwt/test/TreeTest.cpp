@@ -1,12 +1,7 @@
 #include <dwt/widgets/Window.h>
 #include <dwt/widgets/Tree.h>
-#include <dwt/Texts.h>
 
 #include <iostream>
-
-namespace dwt {
-tstring Texts::get(Text text) { return _T("test"); }
-}
 
 using dwt::tstring;
 
