@@ -2,7 +2,6 @@
 
 #include "base.h"
 
-#include <ctime>
 #include <iostream>
 
 #include <boost/accumulators/accumulators.hpp>
@@ -12,6 +11,8 @@
 #include <dcpp/FileReader.h>
 #include <dcpp/MerkleTree.h>
 #include <dcpp/TigerHash.h>
+#include <dcpp/TimerManager.h>
+#include <dcpp/Util.h>
 
 using namespace std;
 using namespace dcpp;
@@ -43,7 +44,7 @@ Info run(const string& path) {
 
 	TigerTree tt { bs };
 
-	auto start = clock();
+	auto start = GET_TICK();
 
 	FileReader(true).read(path, [&](const void* buf, size_t n) -> bool {
 		tt.update(buf, n);
@@ -52,7 +53,7 @@ Info run(const string& path) {
 
 	tt.finalize();
 
-	auto end = clock();
+	auto end = GET_TICK();
 
 	double speed = 0.0;
 	if(end > start) {
@@ -77,7 +78,7 @@ int main(int argc, char* argv[]) {
 		cout << "Hashed <" << path << ">:" << endl
 			<< "\tTTH: " << info.root << endl
 			<< "\tTime: " << info.time << " ms" << endl
-			<< "\tSpeed: " << info.speed << " bytes/s" << endl;
+			<< "\tSpeed: " << Util::formatBytes(info.speed) << "/s" << endl;
 	} catch(const FileException& e) {
 		cout << "Error reading <" << path << ">: " << e.getError() << endl;
 		help();
@@ -111,8 +112,8 @@ int main(int argc, char* argv[]) {
 		}
 
 		cout << "Statistics on " << count << " runs:" << endl
-			<< "\tTime: mean = " << mean(time) << " s, std dev = " << sqrt(variance(time)) << " s" << endl
-			<< "\tSpeed: mean = " << mean(speed) << " bytes/s, std dev = " << sqrt(variance(speed)) << " bytes/s" << endl;
+			<< "\tTime: mean = " << mean(time) << " ms, std dev = " << sqrt(variance(time)) << " ms" << endl
+			<< "\tSpeed: mean = " << Util::formatBytes(mean(speed)) << "/s, std dev = " << Util::formatBytes(sqrt(variance(speed))) << "/s" << endl;
 	}
 
 	return 0;
