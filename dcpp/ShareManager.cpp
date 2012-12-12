@@ -486,17 +486,17 @@ void ShareManager::addDirectory(const string& realPath, const string& virtualNam
 		Lock l(cs);
 
 		shares.emplace(realPath, vName);
-		updateIndices(*merge(dp));
+		updateIndices(*merge(dp, realPath));
 
 		setDirty();
 	}
 }
 
-ShareManager::Directory::Ptr ShareManager::merge(const Directory::Ptr& directory) {
+ShareManager::Directory::Ptr ShareManager::merge(const Directory::Ptr& directory, const string& realPath) {
 	for(auto& i: directories) {
 		if(Util::stricmp(i->getName(), directory->getName()) == 0) {
-			dcdebug("Merging directory %s\n", directory->getName().c_str());
-			i->merge(directory);
+			dcdebug("Merging directory <%s> into %s\n", realPath.c_str(), directory->getName().c_str());
+			i->merge(directory, realPath);
 			return i;
 		}
 	}
@@ -507,38 +507,63 @@ ShareManager::Directory::Ptr ShareManager::merge(const Directory::Ptr& directory
 	return directory;
 }
 
-void ShareManager::Directory::merge(const Directory::Ptr& source) {
+void ShareManager::Directory::merge(const Directory::Ptr& source, const string& realPath) {
+	// merge directories
 	for(auto& i: source->directories) {
 		auto subSource = i.second;
 
 		auto ti = directories.find(subSource->getName());
 		if(ti == directories.end()) {
-			if(findFile(subSource->getName()) != files.end()) {
-				dcdebug("File named the same as directory");
-			} else {
-				directories.emplace(subSource->getName(), subSource);
-				subSource->parent = this;
+			// the directory doesn't exist; create it.
+			directories.emplace(subSource->getName(), subSource);
+			subSource->parent = this;
+
+			auto f = findFile(subSource->getName());
+			if(f != files.end()) {
+				// we have a file that has the same name as the dir being merged; rename it.
+				const_cast<File&>(*f).validateName(Util::getFilePath(f->getRealPath()));
 			}
+
 		} else {
+			// the directory was already existing; merge into it.
 			auto subTarget = ti->second;
-			subTarget->merge(subSource);
+			subTarget->merge(subSource, realPath + subSource->getName() + PATH_SEPARATOR);
 		}
 	}
 
-	// All subdirs either deleted or moved to target...
-	source->directories.clear();
-
+	// merge files
 	for(auto& i: source->files) {
-		if(findFile(i.getName()) == files.end()) {
-			if(directories.find(i.getName()) != directories.end()) {
-				dcdebug("Directory named the same as file");
-			} else {
-				auto added = files.insert(i);
-				if(added.second) {
-					const_cast<File&>(*added.first).setParent(this);
-				}
-			}
+		auto& file = const_cast<File&>(i);
+
+		file.setParent(this);
+		file.validateName(realPath);
+
+		files.insert(move(file));
+	}
+}
+
+bool ShareManager::Directory::nameInUse(const string& name) const {
+	return findFile(name) != files.end() || directories.find(name) != directories.end();
+}
+
+void ShareManager::Directory::File::validateName(const string& sourcePath) {
+	if(parent->nameInUse(name)) {
+		uint32_t num = 0;
+		string base = name, ext, vname;
+		auto dot = base.rfind('.');
+		if(dot != string::npos) {
+			ext = base.substr(dot);
+			base.erase(dot);
 		}
+		do {
+			++num;
+			vname = base + " (" + Util::toString(num) + ")" + ext;
+		} while(parent->nameInUse(vname));
+		dcdebug("Renaming duplicate <%s> to <%s>\n", name.c_str(), vname.c_str());
+		realPath = sourcePath + name;
+		name = move(vname);
+	} else {
+		realPath.reset();
 	}
 }
 
@@ -573,7 +598,7 @@ void ShareManager::removeDirectory(const string& realPath) {
 		if(Util::stricmp(i->second, vName) == 0 && checkHidden(i->first)) {
 			Directory::Ptr dp = buildTree(i->first, 0);
 			dp->setName(i->second);
-			merge(dp);
+			merge(dp, i->first);
 		}
 	}
 
@@ -721,7 +746,7 @@ void ShareManager::updateIndices(Directory& dir, const Directory::File::Set::ite
 		if(!SETTING(LIST_DUPES)) {
 			try {
 				LogManager::getInstance()->message(str(F_("Duplicate file will not be shared: %1% (Size: %2% B) Dupe matched against: %3%")
-				% Util::addBrackets(dir.getRealPath(f.getName())) % Util::toString(f.getSize()) % Util::addBrackets(j->second->getParent()->getRealPath(j->second->getName()))));
+					% Util::addBrackets(f.getRealPath()) % Util::toString(f.getSize()) % Util::addBrackets(j->second->getRealPath())));
 				dir.files.erase(i);
 			} catch (const ShareException&) {
 			}
@@ -784,12 +809,12 @@ int ShareManager::run() {
 
 		lastFullUpdate = GET_TICK();
 
-		DirList newDirs;
+		vector<pair<Directory::Ptr, string>> newDirs;
 		for(auto& i: dirs) {
 			if (checkHidden(i.second)) {
 				Directory::Ptr dp = buildTree(i.second, Directory::Ptr());
 				dp->setName(i.first);
-				newDirs.push_back(dp);
+				newDirs.emplace_back(dp, i.second);
 			}
 		}
 
@@ -798,7 +823,7 @@ int ShareManager::run() {
 			directories.clear();
 
 			for(auto& i: newDirs) {
-				merge(i);
+				merge(i.first, i.second);
 			}
 
 			rebuildIndices();

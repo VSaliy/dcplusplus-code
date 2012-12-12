@@ -9,6 +9,7 @@
 * Update Boost to version 1.52
 * Restore "Requesting" messages in the transfer list
 * [L#1071363] Apply link & plugin formatting to status messages (crise, poy)
+* [L#311818] Share file name duplicates due to directory merges (poy)
 
 -- 0.802 2012-10-20 --
 * Perf improvements using lock-free queues, requires P6 CPUs (poy)
