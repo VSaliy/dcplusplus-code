@@ -24,6 +24,8 @@
 #include <set>
 #include <unordered_map>
 
+#include <boost/optional.hpp>
+
 #include "TimerManager.h"
 #include "SearchManager.h"
 #include "SettingsManager.h"
@@ -143,28 +145,28 @@ private:
 			File() : size(0), parent(0) { }
 			File(const string& aName, int64_t aSize, const Directory::Ptr& aParent, const TTHValue& aRoot) :
 			name(aName), tth(aRoot), size(aSize), parent(aParent.get()) { }
-			File(const File& rhs) :
-			name(rhs.getName()), tth(rhs.getTTH()), size(rhs.getSize()), parent(rhs.getParent()) { }
-
-			~File() { }
-
-			File& operator=(const File& rhs) {
-				name = rhs.name; size = rhs.size; parent = rhs.parent; tth = rhs.tth;
-				return *this;
-			}
 
 			bool operator==(const File& rhs) const {
 				return getParent() == rhs.getParent() && (Util::stricmp(getName(), rhs.getName()) == 0);
 			}
 
+			/** Ensure this file's name doesn't clash with the names of the parent directory's sub-
+			directories or files; rename to "file (N).ext" otherwise (and set realPath to the
+			actual path on disk).
+			@param sourcePath Real path (on the disk) of the directory this file came from. */
+			void validateName(const string& sourcePath);
+
 			string getADCPath() const { return parent->getADCPath() + name; }
 			string getFullName() const { return parent->getFullName() + name; }
-			string getRealPath() const { return parent->getRealPath(name); }
+			string getRealPath() const { return realPath ? realPath.get() : parent->getRealPath(name); }
 
 			GETSET(string, name, Name);
 			GETSET(TTHValue, tth, TTH);
 			GETSET(int64_t, size, Size);
 			GETSET(Directory*, parent, Parent);
+
+		private:
+			boost::optional<string> realPath;
 		};
 
 		int64_t size;
@@ -182,6 +184,10 @@ private:
 		string getFullName() const noexcept;
 		string getRealPath(const std::string& path) const;
 
+		/** Check whether the given name would clash with this directory's sub-directories or
+		files. */
+		bool nameInUse(const string& name) const;
+
 		int64_t getSize() const noexcept;
 
 		void search(SearchResultList& aResults, StringSearch::List& aStrings, int aSearchType, int64_t aSize, int aFileType, Client* aClient, StringList::size_type maxResults) const noexcept;
@@ -193,7 +199,7 @@ private:
 
 		File::Set::const_iterator findFile(const string& aFile) const { return find_if(files.begin(), files.end(), Directory::File::StringComp(aFile)); }
 
-		void merge(const Ptr& source);
+		void merge(const Ptr& source, const string& realPath);
 
 		GETSET(string, name, Name);
 		GETSET(Directory*, parent, Parent);
@@ -262,8 +268,9 @@ private:
 	typedef std::list<Directory::Ptr> DirList;
 	DirList directories;
 
-	/** Map real name to virtual name - multiple real names may be mapped to a single virtual one */
-	StringMap shares;
+	/** Map real name to virtual name - multiple real names may be mapped to a single virtual one.
+	The map is sorted to make sure conflicts are always resolved in the same order when merging. */
+	map<string, string> shares;
 
 	typedef unordered_map<TTHValue, Directory::File::Set::const_iterator> HashFileMap;
 	typedef HashFileMap::iterator HashFileIter;
@@ -282,7 +289,7 @@ private:
 	void updateIndices(Directory& aDirectory);
 	void updateIndices(Directory& dir, const Directory::File::Set::iterator& i);
 
-	Directory::Ptr merge(const Directory::Ptr& directory);
+	Directory::Ptr merge(const Directory::Ptr& directory, const string& realPath);
 
 	void generateXmlList();
 	bool loadCache() noexcept;
