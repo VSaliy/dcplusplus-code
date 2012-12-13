@@ -85,9 +85,7 @@ struct Point
 class ScreenCoordinate {
 public:
 	ScreenCoordinate() { }
-	ScreenCoordinate(const ScreenCoordinate& sc) : point(sc.point) { }
-
-	explicit ScreenCoordinate(const Point& pt) : point(pt) { }
+	ScreenCoordinate(const Point& pt) : point(pt) { }
 
 	const Point& getPoint() const { return point; }
 	Point& getPoint() { return point; }
@@ -95,7 +93,6 @@ public:
 	long x() const { return getPoint().x; }
 	long y() const { return getPoint().y; }
 
-	ScreenCoordinate& operator=(const ScreenCoordinate& rhs) { point = rhs.point; return *this; }
 private:
 	Point point;
 };

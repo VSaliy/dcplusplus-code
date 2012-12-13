@@ -76,8 +76,6 @@ public:
 	// forceValues will if false "manipulate" the values for easy comparison
 	Message( const MSG& msg );
 
-	~Message() { }
-
 	bool operator<(const Message& rhs) const;
 	bool operator==(const Message& rhs) const;
 private:

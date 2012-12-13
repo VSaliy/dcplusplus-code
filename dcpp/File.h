@@ -108,9 +108,6 @@ protected:
 #else
 	int h;
 #endif
-private:
-	File(const File&);
-	File& operator=(const File&);
 };
 
 class FileFindIter {
