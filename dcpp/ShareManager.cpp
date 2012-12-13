@@ -135,9 +135,9 @@ int64_t ShareManager::Directory::getSize() const noexcept {
 }
 
 string ShareManager::toVirtual(const TTHValue& tth) const {
-	if(tth == bzXmlRoot) {
+	if(bzXmlRoot && tth == bzXmlRoot) {
 		return Transfer::USER_LIST_NAME_BZ;
-	} else if(tth == xmlRoot) {
+	} else if(xmlRoot && tth == xmlRoot) {
 		return Transfer::USER_LIST_NAME;
 	}
 
@@ -165,8 +165,8 @@ pair<string, int64_t> ShareManager::toRealWithSize(const string& virtualFile) {
 		return make_pair(getBZXmlFile(), 0);
 	}
 
-	auto i = findFile(virtualFile);
-	return make_pair(i->getRealPath(), i->getSize());
+	auto f = findFile(virtualFile);
+	return make_pair(f.getRealPath(), f.getSize());
 }
 
 StringList ShareManager::getRealPaths(const string& virtualPath) {
@@ -203,7 +203,7 @@ StringList ShareManager::getRealPaths(const string& virtualPath) {
 	return ret;
 }
 
-TTHValue ShareManager::getTTH(const string& virtualFile) const {
+optional<TTHValue> ShareManager::getTTH(const string& virtualFile) const {
 	Lock l(cs);
 	if(virtualFile == Transfer::USER_LIST_NAME_BZ) {
 		return bzXmlRoot;
@@ -211,20 +211,21 @@ TTHValue ShareManager::getTTH(const string& virtualFile) const {
 		return xmlRoot;
 	}
 
-	return findFile(virtualFile)->getTTH();
+	return findFile(virtualFile).tth;
 }
 
 MemoryInputStream* ShareManager::getTree(const string& virtualFile) const {
 	TigerTree tree;
 	if(virtualFile.compare(0, 4, "TTH/") == 0) {
 		if(!HashManager::getInstance()->getTree(TTHValue(virtualFile.substr(4)), tree))
-			return 0;
+			return nullptr;
 	} else {
 		try {
-			TTHValue tth = getTTH(virtualFile);
-			HashManager::getInstance()->getTree(tth, tree);
+			auto tth = getTTH(virtualFile);
+			if(!tth) { return nullptr; }
+			HashManager::getInstance()->getTree(*tth, tree);
 		} catch(const Exception&) {
-			return 0;
+			return nullptr;
 		}
 	}
 
@@ -235,18 +236,27 @@ MemoryInputStream* ShareManager::getTree(const string& virtualFile) const {
 AdcCommand ShareManager::getFileInfo(const string& aFile) {
 	if(aFile == Transfer::USER_LIST_NAME) {
 		generateXmlList();
+		if(!xmlRoot) {
+			throw ShareException(UserConnection::FILE_NOT_AVAILABLE);
+		}
+
 		AdcCommand cmd(AdcCommand::CMD_RES);
 		cmd.addParam("FN", aFile);
 		cmd.addParam("SI", Util::toString(xmlListLen));
-		cmd.addParam("TR", xmlRoot.toBase32());
+		cmd.addParam("TR", xmlRoot->toBase32());
 		return cmd;
-	} else if(aFile == Transfer::USER_LIST_NAME_BZ) {
+	}
+
+	if(aFile == Transfer::USER_LIST_NAME_BZ) {
 		generateXmlList();
+		if(!bzXmlRoot) {
+			throw ShareException(UserConnection::FILE_NOT_AVAILABLE);
+		}
 
 		AdcCommand cmd(AdcCommand::CMD_RES);
 		cmd.addParam("FN", aFile);
 		cmd.addParam("SI", Util::toString(bzXmlListLen));
-		cmd.addParam("TR", bzXmlRoot.toBase32());
+		cmd.addParam("TR", bzXmlRoot->toBase32());
 		return cmd;
 	}
 
@@ -264,7 +274,7 @@ AdcCommand ShareManager::getFileInfo(const string& aFile) {
 	AdcCommand cmd(AdcCommand::CMD_RES);
 	cmd.addParam("FN", f.getADCPath());
 	cmd.addParam("SI", Util::toString(f.getSize()));
-	cmd.addParam("TR", f.getTTH().toBase32());
+	cmd.addParam("TR", f.tth->toBase32());
 	return cmd;
 }
 
@@ -297,13 +307,13 @@ pair<ShareManager::Directory::Ptr, string> ShareManager::splitVirtual(const stri
 	return make_pair(d, virtualPath.substr(j));
 }
 
-ShareManager::Directory::File::Set::const_iterator ShareManager::findFile(const string& virtualFile) const {
+const ShareManager::Directory::File& ShareManager::findFile(const string& virtualFile) const {
 	if(virtualFile.compare(0, 4, "TTH/") == 0) {
 		auto i = tthIndex.find(TTHValue(virtualFile.substr(4)));
 		if(i == tthIndex.end()) {
 			throw ShareException(UserConnection::FILE_NOT_AVAILABLE);
 		}
-		return i->second;
+		return *i->second;
 	}
 
 	auto v = splitVirtual(virtualFile);
@@ -311,7 +321,7 @@ ShareManager::Directory::File::Set::const_iterator ShareManager::findFile(const 
 		Directory::File::StringComp(v.second));
 	if(it == v.first->files.end())
 		throw ShareException(UserConnection::FILE_NOT_AVAILABLE);
-	return it;
+	return *it;
 }
 
 string ShareManager::validateVirtual(const string& aVirt) const noexcept {
@@ -683,20 +693,17 @@ ShareManager::Directory::Ptr ShareManager::buildTree(const string& aName, const 
 			}
 		} else {
 			// Not a directory, assume it's a file...make sure we're not sharing the settings file...
-			if( (Util::stricmp(name.c_str(), "DCPlusPlus.xml") != 0) &&
-				(Util::stricmp(name.c_str(), "Favorites.xml") != 0)) {
+			if(Util::stricmp(name.c_str(), "DCPlusPlus.xml") == 0 ||
+				Util::stricmp(name.c_str(), "Favorites.xml") == 0) { continue; }
 
-				int64_t size = i->getSize();
-				string fileName = aName + name;
-				if(Util::stricmp(fileName, SETTING(TLS_PRIVATE_KEY_FILE)) == 0) {
-					continue;
-				}
-				try {
-					if(HashManager::getInstance()->checkTTH(fileName, size, i->getLastWriteTime()))
-						lastFileIter = dir->files.insert(lastFileIter, Directory::File(name, size, dir, HashManager::getInstance()->getTTH(fileName, size)));
-				} catch(const HashException&) {
-				}
-			}
+			int64_t size = i->getSize();
+			string fileName = aName + name;
+
+			// don't share the private key file
+			if(Util::stricmp(fileName, SETTING(TLS_PRIVATE_KEY_FILE)) == 0) { continue; }
+
+			lastFileIter = dir->files.insert(lastFileIter, Directory::File(name, size, dir,
+				HashManager::getInstance()->getTTH(fileName, size, i->getLastWriteTime())));
 		}
 	}
 
@@ -739,9 +746,14 @@ void ShareManager::rebuildIndices() {
 void ShareManager::updateIndices(Directory& dir, const Directory::File::Set::iterator& i) {
 	const Directory::File& f = *i;
 
-	auto j = tthIndex.find(f.getTTH());
+	if(!f.tth) {
+		return;
+	}
+
+	auto j = tthIndex.find(*f.tth);
 	if(j == tthIndex.end()) {
-		dir.size+=f.getSize();
+		dir.size += f.getSize();
+
 	} else {
 		if(!SETTING(LIST_DUPES)) {
 			try {
@@ -756,7 +768,7 @@ void ShareManager::updateIndices(Directory& dir, const Directory::File::Set::ite
 
 	dir.addType(getType(f.getName()));
 
-	tthIndex[f.getTTH()] = i;
+	tthIndex[*f.tth] = &f;
 	bloom.add(Text::toLower(f.getName()));
 }
 
@@ -1013,6 +1025,7 @@ void ShareManager::Directory::toXml(OutputStream& xmlFile, string& indent, strin
 
 void ShareManager::Directory::filesToXml(OutputStream& xmlFile, string& indent, string& tmp2) const {
 	for(auto& f: files) {
+		if(!f.tth) { continue; }
 		xmlFile.write(indent);
 		xmlFile.write(LITERAL("<File Name=\""));
 		xmlFile.write(SimpleXML::escape(f.getName(), tmp2, true));
@@ -1020,7 +1033,7 @@ void ShareManager::Directory::filesToXml(OutputStream& xmlFile, string& indent, 
 		xmlFile.write(Util::toString(f.getSize()));
 		xmlFile.write(LITERAL("\" TTH=\""));
 		tmp2.clear();
-		xmlFile.write(f.getTTH().toBase32(tmp2));
+		xmlFile.write(f.tth->toBase32(tmp2));
 		xmlFile.write(LITERAL("\"/>\r\n"));
 	}
 }
@@ -1166,15 +1179,18 @@ void ShareManager::Directory::search(SearchResultList& aResults, StringSearch::L
 
 	bool sizeOk = (aSearchType != SearchManager::SIZE_ATLEAST) || (aSize == 0);
 	if( (cur->empty()) &&
-		(((aFileType == SearchManager::TYPE_ANY) && sizeOk) || (aFileType == SearchManager::TYPE_DIRECTORY)) ) {
+		(((aFileType == SearchManager::TYPE_ANY) && sizeOk) || (aFileType == SearchManager::TYPE_DIRECTORY)) )
+	{
 		// We satisfied all the search words! Add the directory...(NMDC searches don't support directory size)
-		SearchResultPtr sr(new SearchResult(SearchResult::TYPE_DIRECTORY, 0, getFullName(), TTHValue()));
+		/// @todo send the directory hash when we have one
+		SearchResultPtr sr(new SearchResult(SearchResult::TYPE_DIRECTORY, 0, getFullName(), TTHValue(string(39, 'A'))));
 		aResults.push_back(sr);
 		ShareManager::getInstance()->setHits(ShareManager::getInstance()->getHits()+1);
 	}
 
 	if(aFileType != SearchManager::TYPE_DIRECTORY) {
 		for(auto& i: files) {
+			if(!i.tth) { continue; }
 
 			if(aSearchType == SearchManager::SIZE_ATLEAST && aSize > i.getSize()) {
 				continue;
@@ -1190,7 +1206,7 @@ void ShareManager::Directory::search(SearchResultList& aResults, StringSearch::L
 
 			// Check file type...
 			if(checkType(i.getName(), aFileType)) {
-				SearchResultPtr sr(new SearchResult(SearchResult::TYPE_FILE, i.getSize(), getFullName() + i.getName(), i.getTTH()));
+				SearchResultPtr sr(new SearchResult(SearchResult::TYPE_FILE, i.getSize(), getFullName() + i.getName(), *i.tth));
 				aResults.push_back(sr);
 				ShareManager::getInstance()->setHits(ShareManager::getInstance()->getHits()+1);
 				if(aResults.size() >= maxResults) {
@@ -1213,7 +1229,7 @@ void ShareManager::search(SearchResultList& results, const string& aString, int 
 			auto i = tthIndex.find(tth);
 			if(i != tthIndex.end()) {
 				SearchResultPtr sr(new SearchResult(SearchResult::TYPE_FILE, i->second->getSize(),
-					i->second->getParent()->getFullName() + i->second->getName(), i->second->getTTH()));
+					i->second->getParent()->getFullName() + i->second->getName(), *i->second->tth));
 
 				results.push_back(sr);
 				ShareManager::getInstance()->addHits(1);
@@ -1245,7 +1261,7 @@ namespace {
 }
 
 ShareManager::AdcSearch::AdcSearch(const StringList& params) : include(&includeX), gt(0),
-	lt(numeric_limits<int64_t>::max()), hasRoot(false), isDirectory(false)
+	lt(numeric_limits<int64_t>::max()), isDirectory(false)
 {
 	for(const auto& p: params) {
 		if(p.length() <= 2)
@@ -1253,7 +1269,6 @@ ShareManager::AdcSearch::AdcSearch(const StringList& params) : include(&includeX
 
 		uint16_t cmd = toCode(p[0], p[1]);
 		if(toCode('T', 'R') == cmd) {
-			hasRoot = true;
 			root = TTHValue(p.substr(2));
 			return;
 		} else if(toCode('A', 'N') == cmd) {
@@ -1324,13 +1339,15 @@ void ShareManager::Directory::search(SearchResultList& aResults, AdcSearch& aStr
 	bool sizeOk = (aStrings.gt == 0);
 	if( cur->empty() && aStrings.ext.empty() && sizeOk ) {
 		// We satisfied all the search words! Add the directory...
-		SearchResultPtr sr(new SearchResult(SearchResult::TYPE_DIRECTORY, getSize(), getFullName(), TTHValue()));
+		/// @todo send the directory hash when we have one
+		SearchResultPtr sr(new SearchResult(SearchResult::TYPE_DIRECTORY, getSize(), getFullName(), TTHValue(string(39, 'A'))));
 		aResults.push_back(sr);
 		ShareManager::getInstance()->setHits(ShareManager::getInstance()->getHits()+1);
 	}
 
 	if(!aStrings.isDirectory) {
 		for(auto& i: files) {
+			if(!i.tth) { continue; }
 
 			if(!(i.getSize() >= aStrings.gt)) {
 				continue;
@@ -1352,7 +1369,7 @@ void ShareManager::Directory::search(SearchResultList& aResults, AdcSearch& aStr
 			if(aStrings.hasExt(i.getName())) {
 
 				SearchResultPtr sr(new SearchResult(SearchResult::TYPE_FILE,
-					i.getSize(), getFullName() + i.getName(), i.getTTH()));
+					i.getSize(), getFullName() + i.getName(), *i.tth));
 				aResults.push_back(sr);
 				ShareManager::getInstance()->addHits(1);
 				if(aResults.size() >= maxResults) {
@@ -1373,12 +1390,12 @@ void ShareManager::search(SearchResultList& results, const StringList& params, S
 
 	Lock l(cs);
 
-	if(srch.hasRoot) {
-		auto i = tthIndex.find(srch.root);
+	if(srch.root) {
+		auto i = tthIndex.find(*srch.root);
 		if(i != tthIndex.end()) {
 			SearchResultPtr sr(new SearchResult(SearchResult::TYPE_FILE,
 				i->second->getSize(), i->second->getParent()->getFullName() + i->second->getName(),
-				i->second->getTTH()));
+				*i->second->tth));
 			results.push_back(sr);
 			addHits(1);
 		}
@@ -1395,9 +1412,9 @@ void ShareManager::search(SearchResultList& results, const StringList& params, S
 	}
 }
 
-ShareManager::Directory::Ptr ShareManager::getDirectory(const string& fname) {
+ShareManager::Directory::Ptr ShareManager::getDirectory(const string& realPath) noexcept {
 	for(auto& mi: shares) {
-		if(Util::strnicmp(fname, mi.first, mi.first.length()) == 0) {
+		if(Util::strnicmp(realPath, mi.first, mi.first.length()) == 0) {
 			Directory::Ptr d;
 			for(auto& i: directories) {
 				if(Util::stricmp(i->getName(), mi.second) == 0) {
@@ -1411,8 +1428,8 @@ ShareManager::Directory::Ptr ShareManager::getDirectory(const string& fname) {
 
 			string::size_type i;
 			string::size_type j = mi.first.length();
-			while( (i = fname.find(PATH_SEPARATOR, j)) != string::npos) {
-				auto dmi = d->directories.find(fname.substr(j, i-j));
+			while( (i = realPath.find(PATH_SEPARATOR, j)) != string::npos) {
+				auto dmi = d->directories.find(realPath.substr(j, i-j));
 				j = i + 1;
 				if(dmi == d->directories.end())
 					return Directory::Ptr();
@@ -1424,42 +1441,82 @@ ShareManager::Directory::Ptr ShareManager::getDirectory(const string& fname) {
 	return Directory::Ptr();
 }
 
-void ShareManager::on(QueueManagerListener::FileMoved, const string& n) noexcept {
+optional<const ShareManager::Directory::File&> ShareManager::getFile(const string& realPath, Directory::Ptr d) noexcept {
+	if(!d) {
+		d = getDirectory(realPath);
+		if(!d) {
+			return nullptr;
+		}
+	}
+
+	auto i = d->findFile(Util::getFileName(realPath));
+	if(i == d->files.end()) {
+		/* should never happen, but let's fail gracefully (maybe a synchro issue with a dir being
+		removed during hashing...)... */
+		dcdebug("ShareManager::getFile: the file <%s> could not be found, strange!\n", realPath.c_str());
+		return nullptr;
+	}
+
+	if(i->realPath && i->realPath == realPath) {
+		/* lucky! the base file already had a real path set (should never happen - it's only for
+		dupes). */
+		dcdebug("ShareManager::getFile: wtf, a non-renamed file has realPath set: <%s>\n", realPath.c_str());
+		return *i;
+	}
+
+	/* see if the files sorted right before this one have a real path we are looking for. this is
+	the most common case for dupes: "x (1).ext" is sorted before "x.ext". */
+	auto real = i;
+	--real;
+	while(real != d->files.end() && real->realPath) {
+		if(real->realPath == realPath) {
+			return *real;
+		}
+		--real;
+	}
+
+	/* couldn't find it before the base file? maybe it's sorted after; could happen with files with
+	no ext: "x (1)" is sorted after "x". */
+	real = i;
+	++real;
+	while(real != d->files.end() && real->realPath) {
+		if(real->realPath == realPath) {
+			return *real;
+		}
+		++real;
+	}
+
+	/* most common case: no duplicate; just return the base file. */
+	return *i;
+}
+
+void ShareManager::on(QueueManagerListener::FileMoved, const string& realPath) noexcept {
 	if(SETTING(ADD_FINISHED_INSTANTLY)) {
-		// Check if finished download is supposed to be shared
+		auto size = File::getSize(realPath);
+		if(size == -1) {
+			// looks like the file isn't actually there...
+			return;
+		}
+
 		Lock l(cs);
-		for(auto& i: shares) {
-			if(Util::strnicmp(i.first, n, i.first.size()) == 0 && n[i.first.size() - 1] == PATH_SEPARATOR) {
-				try {
-					// Schedule for hashing, it'll be added automatically later on...
-					HashManager::getInstance()->checkTTH(n, File::getSize(n), 0);
-				} catch(const Exception&) {
-					// Not a vital feature...
-				}
-				break;
-			}
+		// Check if the finished download dir is supposed to be shared
+		auto dir = getDirectory(realPath);
+		if(dir) {
+			dir->files.insert(Directory::File(Util::getFileName(realPath), size, dir,
+				HashManager::getInstance()->getTTH(realPath, size, 0)));
 		}
 	}
 }
 
-void ShareManager::on(HashManagerListener::TTHDone, const string& fname, const TTHValue& root) noexcept {
+void ShareManager::on(HashManagerListener::TTHDone, const string& realPath, const TTHValue& root) noexcept {
 	Lock l(cs);
-	Directory::Ptr d = getDirectory(fname);
-	if(d) {
-		auto i = d->findFile(Util::getFileName(fname));
-		if(i != d->files.end()) {
-			if(root != i->getTTH())
-				tthIndex.erase(i->getTTH());
-			// Get rid of false constness...
-			auto f = const_cast<Directory::File*>(&(*i));
-			f->setTTH(root);
-			tthIndex[f->getTTH()] = i;
-		} else {
-			string name = Util::getFileName(fname);
-			int64_t size = File::getSize(fname);
-			auto it = d->files.insert(Directory::File(name, size, d, root)).first;
-			updateIndices(*d, it);
-		}
+	auto f = getFile(realPath);
+	if(f) {
+		if(f->tth && root != f->tth)
+			tthIndex.erase(*f->tth);
+		const_cast<Directory::File&>(*f).tth = root;
+		tthIndex[*f->tth] = &f.get();
+
 		setDirty();
 		forceXmlRefresh = true;
 	}

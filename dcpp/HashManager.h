@@ -21,6 +21,8 @@
 
 #include <map>
 
+#include <boost/optional.hpp>
+
 #include "Singleton.h"
 #include "MerkleTree.h"
 #include "Thread.h"
@@ -33,6 +35,8 @@
 namespace dcpp {
 
 using std::map;
+
+using boost::optional;
 
 STANDARD_EXCEPTION(HashException);
 
@@ -54,16 +58,11 @@ public:
 		hasher.join();
 	}
 
-	/**
-	 * Check if the TTH tree associated with the filename is current.
-	 */
-	bool checkTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp);
+	/** Get the TTH root associated with the filename if its tree is current. */
+	optional<TTHValue> getTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp) noexcept;
 
 	void stopHashing(const string& baseDir) { hasher.stopHashing(baseDir); }
 	void setPriority(Thread::Priority p) { hasher.setThreadPriority(p); }
-
-	/** @return TTH root */
-	TTHValue getTTH(const string& aFileName, int64_t aSize);
 
 	bool getTree(const TTHValue& root, TigerTree& tt);
 
@@ -102,21 +101,21 @@ public:
 	};
 
 	/// @return whether hashing was already paused
-	bool pauseHashing();
-	void resumeHashing();
-	bool isHashingPaused() const;
+	bool pauseHashing() noexcept;
+	void resumeHashing() noexcept;
+	bool isHashingPaused() const noexcept;
 
 private:
 	class Hasher : public Thread {
 	public:
 		Hasher() : stop(false), running(false), paused(0), rebuild(false), currentSize(0) { }
 
-		void hashFile(const string& fileName, int64_t size);
+		void hashFile(const string& fileName, int64_t size) noexcept;
 
 		/// @return whether hashing was already paused
-		bool pause();
-		void resume();
-		bool isPaused() const;
+		bool pause() noexcept;
+		void resume() noexcept;
+		bool isPaused() const noexcept;
 
 		void stopHashing(const string& baseDir);
 		virtual int run();
@@ -157,10 +156,9 @@ private:
 
 		void rebuild();
 
-		bool checkTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp);
+		optional<TTHValue> getTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp) noexcept;
 
 		void addTree(const TigerTree& tt) noexcept;
-		const TTHValue* getTTH(const string& aFileName);
 		bool getTree(const TTHValue& root, TigerTree& tth);
 		size_t getBlockSize(const TTHValue& root) const;
 		bool isDirty() { return dirty; }
