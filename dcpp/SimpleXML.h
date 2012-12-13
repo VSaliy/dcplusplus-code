@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_DCPP_SIMPLE_XML_H
 #define DCPLUSPLUS_DCPP_SIMPLE_XML_H
 
+#include <boost/noncopyable.hpp>
+
 #include "forward.h"
 #include "noexcept.h"
 #include "Exception.h"
@@ -157,7 +159,7 @@ public:
 	}
 	static const string utf8Header;
 private:
-	class Tag {
+	class Tag : boost::noncopyable {
 	public:
 		typedef Tag* Ptr;
 		typedef vector<Ptr> List;
@@ -203,10 +205,6 @@ private:
 				delete i;
 			}
 		}
-
-	private:
-		Tag(const Tag&);
-		Tag& operator=(Tag&);
 	};
 
 	class TagReader : public SimpleXMLReader::CallBack {

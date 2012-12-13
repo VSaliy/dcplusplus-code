@@ -52,13 +52,6 @@ public:
 		{
 		}
 
-		File& operator=(const File& rhs) {
-			name = rhs.name; size = rhs.size; parent = rhs.parent; tthRoot = rhs.tthRoot;
-			return *this;
-		}
-
-		~File() { }
-
 		void save(OutputStream& stream, string& indent, string& tmp) const;
 
 		struct Sort { bool operator()(const Ptr& a, const Ptr& b) const; };

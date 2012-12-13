@@ -26,11 +26,13 @@
 #include "Pointer.h"
 #include "Util.h"
 
+#include <boost/noncopyable.hpp>
+
 namespace dcpp {
 
 class SearchManager;
 
-class SearchResult : public FastAlloc<SearchResult>, public intrusive_ptr_base<SearchResult> {
+class SearchResult : public FastAlloc<SearchResult>, public intrusive_ptr_base<SearchResult>, boost::noncopyable {
 public:
 	enum Types {
 		TYPE_FILE,
@@ -65,8 +67,6 @@ private:
 	friend class SearchManager;
 
 	SearchResult();
-
-	SearchResult(const SearchResult& rhs);
 
 	string file;
 	string hubName;

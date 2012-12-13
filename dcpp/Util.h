@@ -60,7 +60,6 @@ public:
 	CompareFirst(const T1& compareTo) : a(compareTo) { }
 	bool operator()(const pair<T1, T2>& p) { return op()(p.first, a); }
 private:
-	CompareFirst& operator=(const CompareFirst&);
 	const T1& a;
 };
 
@@ -71,7 +70,6 @@ public:
 	CompareSecond(const T2& compareTo) : a(compareTo) { }
 	bool operator()(const pair<T1, T2>& p) { return op()(p.second, a); }
 private:
-	CompareSecond& operator=(const CompareSecond&);
 	const T2& a;
 };
 

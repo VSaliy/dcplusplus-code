@@ -138,8 +138,6 @@ private:
 				StringComp(const string& s) : a(s) { }
 				bool operator()(const File& b) const { return Util::stricmp(a, b.getName()) == 0; }
 				const string& a;
-			private:
-				StringComp& operator=(const StringComp&);
 			};
 			struct FileLess {
 				bool operator()(const File& a, const File& b) const { return (Util::stricmp(a.getName(), b.getName()) < 0); }

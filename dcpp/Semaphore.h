@@ -19,6 +19,8 @@
 #ifndef DCPLUSPLUS_DCPP_SEMAPHORE_H
 #define DCPLUSPLUS_DCPP_SEMAPHORE_H
 
+#include <boost/noncopyable.hpp>
+
 #ifdef _WIN32
 #include "w.h"
 #else
@@ -31,7 +33,7 @@
 
 namespace dcpp {
 
-class Semaphore
+class Semaphore : boost::noncopyable
 {
 #ifdef _WIN32
 public:
@@ -97,9 +99,6 @@ public:
 private:
 	sem_t semaphore;
 #endif
-	Semaphore(const Semaphore&);
-	Semaphore& operator=(const Semaphore&);
-
 };
 
 } // namespace dcpp

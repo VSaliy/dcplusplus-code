@@ -42,7 +42,6 @@ class Bundle : public intrusive_ptr_base<Bundle> {
 public:
 	struct Entry {
 		Entry() { }
-		Entry(const string& name, int64_t size, TTHValue tth, bool include) : name(name), size(size), tth(tth), include(include) { }
 		string name;
 		int64_t size;
 		TTHValue tth;

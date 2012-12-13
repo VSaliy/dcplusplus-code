@@ -22,6 +22,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include <boost/noncopyable.hpp>
+
 #include <dcpp/FastAlloc.h>
 #include <dcpp/QueueManagerListener.h>
 #include <dcpp/QueueItem.h>
@@ -87,7 +89,7 @@ private:
 	class QueueItemInfo;
 	friend class QueueItemInfo;
 
-	class QueueItemInfo : public Flags, public FastAlloc<QueueItemInfo> {
+	class QueueItemInfo : public Flags, public FastAlloc<QueueItemInfo>, boost::noncopyable {
 	public:
 
 		struct Display : public FastAlloc<Display> {
@@ -181,11 +183,7 @@ private:
 		uint32_t updateMask;
 
 	private:
-
 		unique_ptr<Display> display;
-
-		QueueItemInfo(const QueueItemInfo&);
-		QueueItemInfo& operator=(const QueueItemInfo&);
 	};
 
 	typedef unique_ptr<QueueItemInfo> QueueItemPtr;

@@ -167,8 +167,6 @@ private:
 		struct TreeInfo {
 			TreeInfo() : size(0), index(0), blockSize(0) { }
 			TreeInfo(int64_t aSize, int64_t aIndex, int64_t aBlockSize) : size(aSize), index(aIndex), blockSize(aBlockSize) { }
-			TreeInfo(const TreeInfo& rhs) : size(rhs.size), index(rhs.index), blockSize(rhs.blockSize) { }
-			TreeInfo& operator=(const TreeInfo& rhs) { size = rhs.size; index = rhs.index; blockSize = rhs.blockSize; return *this; }
 
 			GETSET(int64_t, size, Size);
 			GETSET(int64_t, index, Index);

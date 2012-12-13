@@ -19,12 +19,14 @@
 #ifndef DCPLUSPLUS_DCPP_SINGLETON_H
 #define DCPLUSPLUS_DCPP_SINGLETON_H
 
+#include <boost/noncopyable.hpp>
+
 #include "debug.h"
 
 namespace dcpp {
 
 template<typename T>
-class Singleton {
+class Singleton : boost::noncopyable {
 public:
 	Singleton() { }
 	virtual ~Singleton() { }
@@ -48,10 +50,6 @@ public:
 	}
 protected:
 	static T* instance;
-private:
-	Singleton(const Singleton&);
-	Singleton& operator=(const Singleton&);
-
 };
 
 template<class T> T* Singleton<T>::instance = NULL;
