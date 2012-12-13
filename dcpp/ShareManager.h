@@ -20,6 +20,7 @@
 #define DCPLUSPLUS_DCPP_SHARE_MANAGER_H
 
 #include <list>
+#include <map>
 #include <memory>
 #include <set>
 #include <unordered_map>
@@ -45,9 +46,12 @@
 
 namespace dcpp {
 
+using std::map;
 using std::set;
 using std::unique_ptr;
 using std::unordered_map;
+
+using boost::optional;
 
 STANDARD_EXCEPTION(ShareException);
 
@@ -75,7 +79,7 @@ public:
 	/** @return Actual file path & size. Returns 0 for file lists. */
 	pair<string, int64_t> toRealWithSize(const string& virtualFile);
 	StringList getRealPaths(const string& virtualPath);
-	TTHValue getTTH(const string& virtualFile) const;
+	optional<TTHValue> getTTH(const string& virtualFile) const;
 
 	void refresh(bool dirs = false, bool aUpdate = true, bool block = false) noexcept;
 	void setDirty() { xmlDirty = true; }
@@ -143,8 +147,8 @@ private:
 			typedef set<File, FileLess> Set;
 
 			File() : size(0), parent(0) { }
-			File(const string& aName, int64_t aSize, const Directory::Ptr& aParent, const TTHValue& aRoot) :
-			name(aName), tth(aRoot), size(aSize), parent(aParent.get()) { }
+			File(const string& aName, int64_t aSize, const Directory::Ptr& aParent, const optional<TTHValue>& aRoot) :
+				name(aName), tth(aRoot), size(aSize), parent(aParent.get()) { }
 
 			bool operator==(const File& rhs) const {
 				return getParent() == rhs.getParent() && (Util::stricmp(getName(), rhs.getName()) == 0);
@@ -161,12 +165,10 @@ private:
 			string getRealPath() const { return realPath ? realPath.get() : parent->getRealPath(name); }
 
 			GETSET(string, name, Name);
-			GETSET(TTHValue, tth, TTH);
+			optional<string> realPath; // only defined if this file had to be renamed to avoid duplication.
+			optional<TTHValue> tth;
 			GETSET(int64_t, size, Size);
 			GETSET(Directory*, parent, Parent);
-
-		private:
-			boost::optional<string> realPath;
 		};
 
 		int64_t size;
@@ -237,16 +239,15 @@ private:
 		int64_t gt;
 		int64_t lt;
 
-		TTHValue root;
-		bool hasRoot;
+		optional<TTHValue> root;
 
 		bool isDirectory;
 	};
 
 	int64_t xmlListLen;
-	TTHValue xmlRoot;
+	optional<TTHValue> xmlRoot;
 	int64_t bzXmlListLen;
-	TTHValue bzXmlRoot;
+	optional<TTHValue> bzXmlRoot;
 	unique_ptr<File> bzXmlRef;
 
 	bool xmlDirty;
@@ -272,14 +273,11 @@ private:
 	The map is sorted to make sure conflicts are always resolved in the same order when merging. */
 	map<string, string> shares;
 
-	typedef unordered_map<TTHValue, Directory::File::Set::const_iterator> HashFileMap;
-	typedef HashFileMap::iterator HashFileIter;
-
-	HashFileMap tthIndex;
+	unordered_map<TTHValue, const Directory::File*> tthIndex;
 
 	BloomFilter<5> bloom;
 
-	Directory::File::Set::const_iterator findFile(const string& virtualFile) const;
+	const Directory::File& findFile(const string& virtualFile) const;
 
 	Directory::Ptr buildTree(const string& aName, const Directory::Ptr& aParent);
 	bool checkHidden(const string& aName) const;
@@ -297,15 +295,19 @@ private:
 	pair<Directory::Ptr, string> splitVirtual(const string& virtualPath) const;
 	string findRealRoot(const string& virtualRoot, const string& virtualLeaf) const;
 
-	Directory::Ptr getDirectory(const string& fname);
+	/** Get the directory pointer corresponding to a given real path (on disk). Note that only
+	directories are considered here but not the file's base name. */
+	Directory::Ptr getDirectory(const string& realPath) noexcept;
+	/** Get the file corresponding to a given real path (on disk). */
+	optional<const ShareManager::Directory::File&> getFile(const string& realPath, Directory::Ptr d = nullptr) noexcept;
 
 	virtual int run();
 
 	// QueueManagerListener
-	virtual void on(QueueManagerListener::FileMoved, const string& n) noexcept;
+	virtual void on(QueueManagerListener::FileMoved, const string& realPath) noexcept;
 
 	// HashManagerListener
-	virtual void on(HashManagerListener::TTHDone, const string& fname, const TTHValue& root) noexcept;
+	virtual void on(HashManagerListener::TTHDone, const string& realPath, const TTHValue& root) noexcept;
 
 	// SettingsManagerListener
 	virtual void on(SettingsManagerListener::Save, SimpleXML& xml) noexcept {

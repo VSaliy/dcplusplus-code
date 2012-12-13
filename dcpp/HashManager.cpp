@@ -36,23 +36,13 @@ using std::swap;
 static const uint32_t HASH_FILE_VERSION = 2;
 const int64_t HashManager::MIN_BLOCK_SIZE = 64 * 1024;
 
-bool HashManager::checkTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp) {
+optional<TTHValue> HashManager::getTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp) noexcept {
 	Lock l(cs);
-	if (!store.checkTTH(aFileName, aSize, aTimeStamp)) {
+	auto tth = store.getTTH(aFileName, aSize, aTimeStamp);
+	if(!tth) {
 		hasher.hashFile(aFileName, aSize);
-		return false;
 	}
-	return true;
-}
-
-TTHValue HashManager::getTTH(const string& aFileName, int64_t aSize) {
-	Lock l(cs);
-	const TTHValue* tth = store.getTTH(aFileName);
-	if (tth == NULL) {
-		hasher.hashFile(aFileName, aSize);
-		throw HashException();
-	}
-	return *tth;
+	return tth;
 }
 
 bool HashManager::getTree(const TTHValue& root, TigerTree& tt) {
@@ -178,39 +168,28 @@ size_t HashManager::HashStore::getBlockSize(const TTHValue& root) const {
 	return i == treeIndex.end() ? 0 : i->second.getBlockSize();
 }
 
-bool HashManager::HashStore::checkTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp) {
+optional<TTHValue> HashManager::HashStore::getTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp) noexcept {
 	auto fname = Text::toLower(Util::getFileName(aFileName));
 	auto fpath = Text::toLower(Util::getFilePath(aFileName));
+
 	auto i = fileIndex.find(fpath);
 	if (i != fileIndex.end()) {
 		auto j = find(i->second.begin(), i->second.end(), fname);
 		if (j != i->second.end()) {
 			FileInfo& fi = *j;
-			auto ti = treeIndex.find(fi.getRoot());
-			if (ti == treeIndex.end() || ti->second.getSize() != aSize || fi.getTimeStamp() != aTimeStamp) {
-				i->second.erase(j);
-				dirty = true;
-				return false;
+			const auto& root = fi.getRoot();
+			auto ti = treeIndex.find(root);
+			if(ti != treeIndex.end() && ti->second.getSize() == aSize && fi.getTimeStamp() == aTimeStamp) {
+				fi.setUsed(true);
+				return root;
 			}
-			return true;
+
+			// the file size or the timestamp has changed
+			i->second.erase(j);
+			dirty = true;
 		}
 	}
-	return false;
-}
-
-const TTHValue* HashManager::HashStore::getTTH(const string& aFileName) {
-	auto fname = Text::toLower(Util::getFileName(aFileName));
-	auto fpath = Text::toLower(Util::getFilePath(aFileName));
-
-	auto i = fileIndex.find(fpath);
-	if (i != fileIndex.end()) {
-		auto j = find(i->second.begin(), i->second.end(), fname);
-		if (j != i->second.end()) {
-			j->setUsed(true);
-			return &(j->getRoot());
-		}
-	}
-	return NULL;
+	return nullptr;
 }
 
 void HashManager::HashStore::rebuild() {
@@ -462,7 +441,7 @@ void HashManager::HashStore::createDataFile(const string& name) {
 	}
 }
 
-void HashManager::Hasher::hashFile(const string& fileName, int64_t size) {
+void HashManager::Hasher::hashFile(const string& fileName, int64_t size) noexcept {
 	Lock l(cs);
 	if(w.insert(make_pair(fileName, size)).second) {
 		if(paused > 0)
@@ -472,18 +451,18 @@ void HashManager::Hasher::hashFile(const string& fileName, int64_t size) {
 	}
 }
 
-bool HashManager::Hasher::pause() {
+bool HashManager::Hasher::pause() noexcept {
 	Lock l(cs);
 	return paused++;
 }
 
-void HashManager::Hasher::resume() {
+void HashManager::Hasher::resume() noexcept {
 	Lock l(cs);
 	while(--paused > 0)
 		s.signal();
 }
 
-bool HashManager::Hasher::isPaused() const {
+bool HashManager::Hasher::isPaused() const noexcept {
 	Lock l(cs);
 	return paused > 0;
 }
@@ -637,17 +616,17 @@ HashManager::HashPauser::~HashPauser() {
 		HashManager::getInstance()->resumeHashing();
 }
 
-bool HashManager::pauseHashing() {
+bool HashManager::pauseHashing() noexcept {
 	Lock l(cs);
 	return hasher.pause();
 }
 
-void HashManager::resumeHashing() {
+void HashManager::resumeHashing() noexcept {
 	Lock l(cs);
 	hasher.resume();
 }
 
-bool HashManager::isHashingPaused() const {
+bool HashManager::isHashingPaused() const noexcept {
 	Lock l(cs);
 	return hasher.isPaused();
 }
