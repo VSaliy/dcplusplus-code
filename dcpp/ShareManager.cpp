@@ -357,7 +357,7 @@ void ShareManager::load(SimpleXML& aXml) {
 
 			const string& virtualName = aXml.getChildAttrib("Virtual");
 			string vName = validateVirtual(virtualName.empty() ? Util::getLastDir(realPath) : virtualName);
-			shares.emplace(realPath, vName);
+			shares[move(realPath)] = vName;
 			if(getByVirtual(vName) == directories.end()) {
 				directories.push_back(Directory::create(vName));
 			}
@@ -495,7 +495,7 @@ void ShareManager::addDirectory(const string& realPath, const string& virtualNam
 	{
 		Lock l(cs);
 
-		shares.emplace(realPath, vName);
+		shares[realPath] = move(vName);
 		updateIndices(*merge(dp, realPath));
 
 		setDirty();
