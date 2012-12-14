@@ -32,8 +32,12 @@ namespace dcpp {
 
 using std::swap;
 
-#define HASH_FILE_VERSION_STRING "2"
-static const uint32_t HASH_FILE_VERSION = 2;
+/* Version history:
+- Version 1: DC++ 0.307 to 0.68.
+- Version 2: DC++ 0.670 to DC++ 0.802. Improved efficiency.
+- Version 3: from DC++ 0.810 on. Changed the file registry to be case-sensitive. */
+#define HASH_FILE_VERSION_STRING "3"
+static const uint32_t HASH_FILE_VERSION = 3;
 const int64_t HashManager::MIN_BLOCK_SIZE = 64 * 1024;
 
 optional<TTHValue> HashManager::getTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp) noexcept {
@@ -50,7 +54,7 @@ bool HashManager::getTree(const TTHValue& root, TigerTree& tt) {
 	return store.getTree(root, tt);
 }
 
-size_t HashManager::getBlockSize(const TTHValue& root) {
+int64_t HashManager::getBlockSize(const TTHValue& root) {
 	Lock l(cs);
 	return store.getBlockSize(root);
 }
@@ -80,10 +84,9 @@ void HashManager::hashDone(const string& aFileName, uint32_t aTimeStamp, const T
 void HashManager::HashStore::addFile(const string& aFileName, uint32_t aTimeStamp, const TigerTree& tth, bool aUsed) {
 	addTree(tth);
 
-	string fname = Text::toLower(Util::getFileName(aFileName));
-	string fpath = Text::toLower(Util::getFilePath(aFileName));
+	auto fname = Util::getFileName(aFileName), fpath = Util::getFilePath(aFileName);
 
-	FileInfoList& fileList = fileIndex[fpath];
+	auto& fileList = fileIndex[fpath];
 
 	auto j = find(fileList.begin(), fileList.end(), fname);
 	if (j != fileList.end()) {
@@ -163,14 +166,13 @@ bool HashManager::HashStore::getTree(const TTHValue& root, TigerTree& tt) {
 	}
 }
 
-size_t HashManager::HashStore::getBlockSize(const TTHValue& root) const {
+int64_t HashManager::HashStore::getBlockSize(const TTHValue& root) const {
 	auto i = treeIndex.find(root);
 	return i == treeIndex.end() ? 0 : i->second.getBlockSize();
 }
 
 optional<TTHValue> HashManager::HashStore::getTTH(const string& aFileName, int64_t aSize, uint32_t aTimeStamp) noexcept {
-	auto fname = Text::toLower(Util::getFileName(aFileName));
-	auto fpath = Text::toLower(Util::getFilePath(aFileName));
+	auto fname = Util::getFileName(aFileName), fpath = Util::getFilePath(aFileName);
 
 	auto i = fileIndex.find(fpath);
 	if (i != fileIndex.end()) {
@@ -194,8 +196,8 @@ optional<TTHValue> HashManager::HashStore::getTTH(const string& aFileName, int64
 
 void HashManager::HashStore::rebuild() {
 	try {
-		DirMap newFileIndex;
-		TreeMap newTreeIndex;
+		decltype(fileIndex) newFileIndex;
+		decltype(treeIndex) newTreeIndex;
 
 		for (auto& i: fileIndex) {
 			for (auto& j: i.second) {
@@ -230,16 +232,22 @@ void HashManager::HashStore::rebuild() {
 		}
 
 		for (auto& i: fileIndex) {
-			auto fi = newFileIndex.emplace(i.first, FileInfoList()).first;
+#ifndef _MSC_VER
+			decltype(fileIndex)::mapped_type newFileList;
+#else
+			/// @todo remove this workaround when VS has a proper decltype...
+			decltype(fileIndex.begin()->second) newFileList;
+#endif
 
 			for (auto& j: i.second) {
 				if (newTreeIndex.find(j.getRoot()) != newTreeIndex.end()) {
-					fi->second.push_back(j);
+					newFileList.push_back(j);
 				}
 			}
 
-			if (fi->second.empty())
-				newFileIndex.erase(fi);
+			if(!newFileList.empty()) {
+				newFileIndex[i.first] = move(newFileList);
+			}
 		}
 
 		File::deleteFile(origName);
@@ -315,17 +323,13 @@ string HashManager::HashStore::getDataFile() { return Util::getPath(Util::PATH_U
 class HashLoader: public SimpleXMLReader::CallBack {
 public:
 	HashLoader(HashManager::HashStore& s) :
-		store(s), size(0), timeStamp(0), version(HASH_FILE_VERSION), inTrees(false), inFiles(false), inHashStore(false) {
+		store(s), version(HASH_FILE_VERSION), inTrees(false), inFiles(false), inHashStore(false) {
 	}
 	void startTag(const string& name, StringPairList& attribs, bool simple);
-	void endTag(const string& name);
 
 private:
 	HashManager::HashStore& store;
 
-	string file;
-	int64_t size;
-	uint32_t timeStamp;
 	int version;
 
 	bool inTrees;
@@ -368,7 +372,8 @@ void HashLoader::startTag(const string& name, StringPairList& attribs, bool simp
 			version = Util::toInt(getAttrib(attribs, sversion, 0));
 		}
 		inHashStore = !simple;
-	} else if (inHashStore && version == 2) {
+	} else if (inHashStore && (version == 2 || version == 3)) {
+		// when upgrading from version 2 to 3, import trees but not the file registry.
 		if (inTrees && name == sHash) {
 			const string& type = getAttrib(attribs, sType, 0);
 			int64_t index = Util::toInt64(getAttrib(attribs, sIndex, 1));
@@ -378,28 +383,20 @@ void HashLoader::startTag(const string& name, StringPairList& attribs, bool simp
 			if (!root.empty() && type == sTTH && (index >= 8 || index == HashManager::SMALL_TREE) && blockSize >= 1024) {
 				store.treeIndex[TTHValue(root)] = HashManager::HashStore::TreeInfo(size, index, blockSize);
 			}
-		} else if (inFiles && name == sFile) {
-			file = getAttrib(attribs, sName, 0);
-			timeStamp = Util::toUInt32(getAttrib(attribs, sTimeStamp, 1));
-			const string& root = getAttrib(attribs, sRoot, 2);
+		} else if (inFiles && version != 2 && name == sFile) {
+			const auto& file = getAttrib(attribs, sName, 0);
+			auto timeStamp = Util::toUInt32(getAttrib(attribs, sTimeStamp, 1));
+			const auto& root = getAttrib(attribs, sRoot, 2);
 
-			if (!file.empty() && size >= 0 && timeStamp > 0 && !root.empty()) {
-				string fname = Text::toLower(Util::getFileName(file));
-				string fpath = Text::toLower(Util::getFilePath(file));
-
-				store.fileIndex[fpath].push_back(HashManager::HashStore::FileInfo(fname, TTHValue(root), timeStamp, false));
+			if (!file.empty() && timeStamp > 0 && !root.empty()) {
+				auto fname = Util::getFileName(file), fpath = Util::getFilePath(file);
+				store.fileIndex[fpath].emplace_back(fname, TTHValue(root), timeStamp, false);
 			}
 		} else if (name == sTrees) {
 			inTrees = !simple;
 		} else if (name == sFiles) {
 			inFiles = !simple;
 		}
-	}
-}
-
-void HashLoader::endTag(const string& name) {
-	if (name == sFile) {
-		file.clear();
 	}
 }
 
@@ -469,8 +466,8 @@ bool HashManager::Hasher::isPaused() const noexcept {
 
 void HashManager::Hasher::stopHashing(const string& baseDir) {
 	Lock l(cs);
-	for (auto i = w.begin(); i != w.end();) {
-		if (Util::strnicmp(baseDir, i->first, baseDir.length()) == 0) {
+	for(auto i = w.begin(); i != w.end();) {
+		if(strncmp(baseDir.c_str(), i->first.c_str(), baseDir.size()) == 0) {
 			w.erase(i++);
 		} else {
 			++i;

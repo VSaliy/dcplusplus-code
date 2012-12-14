@@ -67,7 +67,7 @@ public:
 	bool getTree(const TTHValue& root, TigerTree& tt);
 
 	/** Return block size of the tree associated with root, or 0 if no such tree is in the store */
-	size_t getBlockSize(const TTHValue& root);
+	int64_t getBlockSize(const TTHValue& root);
 
 	void addTree(const string& aFileName, uint32_t aTimeStamp, const TigerTree& tt) {
 		hashDone(aFileName, aTimeStamp, tt, -1, -1);
@@ -127,10 +127,7 @@ private:
 	private:
 		// Case-sensitive (faster), it is rather unlikely that case changes, and if it does it's harmless.
 		// map because it's sorted (to avoid random hash order that would create quite strange shares while hashing)
-		typedef map<string, int64_t> WorkMap;
-		typedef WorkMap::iterator WorkIter;
-
-		WorkMap w;
+		map<string, int64_t> w;
 		mutable CriticalSection cs;
 		Semaphore s;
 
@@ -160,7 +157,7 @@ private:
 
 		void addTree(const TigerTree& tt) noexcept;
 		bool getTree(const TTHValue& root, TigerTree& tth);
-		size_t getBlockSize(const TTHValue& root) const;
+		int64_t getBlockSize(const TTHValue& root) const;
 		bool isDirty() { return dirty; }
 	private:
 		/** Root -> tree mapping info, we assume there's only one tree for each root (a collision would mean we've broken tiger...) */
@@ -187,19 +184,10 @@ private:
 			GETSET(bool, used, Used);
 		};
 
-		typedef vector<FileInfo> FileInfoList;
-		typedef FileInfoList::iterator FileInfoIter;
-
-		typedef unordered_map<string, FileInfoList> DirMap;
-		typedef DirMap::iterator DirIter;
-
-		typedef unordered_map<TTHValue, TreeInfo> TreeMap;
-		typedef TreeMap::iterator TreeIter;
-
 		friend class HashLoader;
 
-		DirMap fileIndex;
-		TreeMap treeIndex;
+		unordered_map<string, vector<FileInfo>> fileIndex;
+		unordered_map<TTHValue, TreeInfo> treeIndex;
 
 		bool dirty;
 
