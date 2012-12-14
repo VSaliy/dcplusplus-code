@@ -702,8 +702,10 @@ ShareManager::Directory::Ptr ShareManager::buildTree(const string& aName, const 
 			// don't share the private key file
 			if(Util::stricmp(fileName, SETTING(TLS_PRIVATE_KEY_FILE)) == 0) { continue; }
 
-			lastFileIter = dir->files.insert(lastFileIter, Directory::File(name, size, dir,
-				HashManager::getInstance()->getTTH(fileName, size, i->getLastWriteTime())));
+			Directory::File f(name, size, dir,
+				HashManager::getInstance()->getTTH(fileName, size, i->getLastWriteTime()));
+			f.validateName(aName);
+			lastFileIter = dir->files.insert(lastFileIter, move(f));
 		}
 	}
 
@@ -1502,8 +1504,10 @@ void ShareManager::on(QueueManagerListener::FileMoved, const string& realPath) n
 		// Check if the finished download dir is supposed to be shared
 		auto dir = getDirectory(realPath);
 		if(dir) {
-			dir->files.insert(Directory::File(Util::getFileName(realPath), size, dir,
-				HashManager::getInstance()->getTTH(realPath, size, 0)));
+			Directory::File f(Util::getFileName(realPath), size, dir,
+				HashManager::getInstance()->getTTH(realPath, size, 0));
+			f.validateName(Util::getFilePath(realPath));
+			dir->files.insert(move(f));
 		}
 	}
 }

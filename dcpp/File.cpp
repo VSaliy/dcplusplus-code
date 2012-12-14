@@ -41,7 +41,8 @@ File::File(const string& aFileName, int access, int mode) {
 	}
 	DWORD shared = FILE_SHARE_READ | (mode & SHARED ? FILE_SHARE_WRITE : 0);
 
-	h = ::CreateFile(Text::toT(aFileName).c_str(), access, shared, NULL, m, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
+	h = ::CreateFile(Text::toT(aFileName).c_str(), access, shared, nullptr, m,
+		FILE_FLAG_POSIX_SEMANTICS | FILE_FLAG_SEQUENTIAL_SCAN, nullptr);
 
 	if(h == INVALID_HANDLE_VALUE) {
 		throw FileException(Util::translateError(GetLastError()));
@@ -164,17 +165,8 @@ void File::deleteFile(const string& aFileName) noexcept
 }
 
 int64_t File::getSize(const string& aFileName) noexcept {
-	WIN32_FIND_DATA fd;
-	HANDLE hFind;
-
-	hFind = FindFirstFile(Text::toT(aFileName).c_str(), &fd);
-
-	if (hFind == INVALID_HANDLE_VALUE) {
-		return -1;
-	} else {
-		FindClose(hFind);
-		return ((int64_t)fd.nFileSizeHigh << 32 | (int64_t)fd.nFileSizeLow);
-	}
+	auto i = FileFindIter(aFileName);
+	return i != FileFindIter() ? i->getSize() : -1;
 }
 
 void File::ensureDirectory(const string& aFile) noexcept {
@@ -422,19 +414,14 @@ StringList File::findFiles(const string& path, const string& pattern) {
 	StringList ret;
 
 #ifdef _WIN32
-	WIN32_FIND_DATA data;
-	HANDLE hFind;
-
-	hFind = ::FindFirstFile(Text::toT(path + pattern).c_str(), &data);
-	if(hFind != INVALID_HANDLE_VALUE) {
-		do {
-			const char* extra = (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? "\\" : "";
-			ret.push_back(path + Text::fromT(data.cFileName) + extra);
-		} while(::FindNextFile(hFind, &data));
-
-		::FindClose(hFind);
+	for(FileFindIter i(path + pattern), end; i != end; ++i) {
+		ret.push_back(path + i->getFileName());
+		if(i->isDirectory()) {
+			ret.back() += PATH_SEPARATOR;
+		}
 	}
 #else
+	/// @todo can FileFindIter be used on linux?
 	DIR* dir = opendir(Text::fromUtf8(path).c_str());
 	if (dir) {
 		while (struct dirent* ent = readdir(dir)) {
@@ -457,7 +444,8 @@ StringList File::findFiles(const string& path, const string& pattern) {
 FileFindIter::FileFindIter() : handle(INVALID_HANDLE_VALUE) { }
 
 FileFindIter::FileFindIter(const string& path) : handle(INVALID_HANDLE_VALUE) {
-	handle = ::FindFirstFile(Text::toT(path).c_str(), &data);
+	handle = ::FindFirstFileEx(Text::toT(path).c_str(), FindExInfoStandard, &data,
+		FindExSearchNameMatch, nullptr, FIND_FIRST_EX_CASE_SENSITIVE);
 }
 
 FileFindIter::~FileFindIter() {

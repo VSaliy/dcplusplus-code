@@ -208,7 +208,7 @@ QueueItem* QueueManager::UserQueue::getNext(const UserPtr& aUser, QueueItem::Pri
 					continue;
 				}
 				if(!qi->isSet(QueueItem::FLAG_USER_LIST)) {
-					int64_t blockSize = HashManager::getInstance()->getBlockSize(qi->getTTH());
+					auto blockSize = HashManager::getInstance()->getBlockSize(qi->getTTH());
 					if(blockSize == 0)
 						blockSize = qi->getSize();
 					if(qi->getNextSegment(blockSize, wantedSize).getSize() == 0) {

@@ -1,3 +1,7 @@
+*** WARNING ***
+  In order to allow case-sensitive sharing, your files will have to be
+  re-hashed. Hashes stored by queued downloads won't be lost.
+*** WARNING ***
 * Fix a race condition on file list download (thanks bigmuscle)
 * [L#668548] Fix a potential infinite loop in BufferedSocket->setDataMode (crise)
 * Add "chunked" transfer encoding as per the HTTP/1.1 spec (crise)
@@ -10,6 +14,7 @@
 * Restore "Requesting" messages in the transfer list
 * [L#1071363] Apply link & plugin formatting to status messages (crise, poy)
 * [L#311818] Share file name duplicates due to directory merges (poy)
+* [L#311818] Share file name duplicates due to case differences (poy)
 
 -- 0.802 2012-10-20 --
 * Perf improvements using lock-free queues, requires P6 CPUs (poy)

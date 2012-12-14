@@ -110,8 +110,8 @@ size_t FileReader::readDirect(const string& file, const DataCallback& callback) 
 		return READ_FAILED;
 	}
 
-	auto tmp = ::CreateFile(tfile.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
-		FILE_FLAG_NO_BUFFERING | FILE_FLAG_OVERLAPPED, NULL);
+	auto tmp = ::CreateFile(tfile.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+		FILE_FLAG_NO_BUFFERING | FILE_FLAG_OVERLAPPED | FILE_FLAG_POSIX_SEMANTICS, nullptr);
 
 	if (tmp == INVALID_HANDLE_VALUE) {
 		dcdebug("Failed to open unbuffered file: %s\n", Util::translateError(::GetLastError()).c_str());
@@ -210,8 +210,8 @@ size_t FileReader::readMapped(const string& file, const DataCallback& callback) 
 
 	auto tfile = Text::toT(file);
 
-	auto tmp = ::CreateFile(tfile.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
-		FILE_FLAG_SEQUENTIAL_SCAN, NULL);
+	auto tmp = ::CreateFile(tfile.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+		FILE_FLAG_POSIX_SEMANTICS | FILE_FLAG_SEQUENTIAL_SCAN, nullptr);
 
 	if (tmp == INVALID_HANDLE_VALUE) {
 		dcdebug("Failed to open unbuffered file: %s\n", Util::translateError(::GetLastError()).c_str());
