@@ -331,6 +331,7 @@ private:
 	HashManager::HashStore& store;
 
 	int version;
+	string file;
 
 	bool inTrees;
 	bool inFiles;
@@ -347,6 +348,93 @@ void HashManager::HashStore::load() {
 	} catch (const Exception&) {
 		// ...
 	}
+}
+
+namespace {
+/* version 2 files were stored in lower-case; carry the file registration over only if the file can
+be found, and if it has no case-insensitive duplicate. */
+
+#ifdef _WIN32
+
+/* we are going to use GetFinalPathNameByHandle to retrieve a properly cased path out of the
+lower-case one that the version 2 file registry has provided us with. that API is only available
+on Windows >= Vista. */
+typedef DWORD (WINAPI *t_GetFinalPathNameByHandle)(HANDLE, LPTSTR, DWORD, DWORD);
+t_GetFinalPathNameByHandle initGFPNBH() {
+	static bool init = false;
+	static t_GetFinalPathNameByHandle GetFinalPathNameByHandle = nullptr;
+
+	if(!init) {
+		init = true;
+
+		auto lib = ::LoadLibrary(_T("kernel32.dll"));
+		if(lib) {
+			GetFinalPathNameByHandle = reinterpret_cast<t_GetFinalPathNameByHandle>(
+				::GetProcAddress(lib, "GetFinalPathNameByHandleW"));
+		}
+	}
+
+	return GetFinalPathNameByHandle;
+}
+
+bool upgradeFromV2(string& file) {
+	auto GetFinalPathNameByHandle = initGFPNBH();
+	if(!GetFinalPathNameByHandle) {
+		return false;
+	}
+
+	WIN32_FIND_DATA data;
+	// FindFirstFile does a case-insensitive search by default
+	auto handle = ::FindFirstFile(Text::toT(file).c_str(), &data);
+	if(handle == INVALID_HANDLE_VALUE) {
+		// file not found
+		return false;
+	}
+	if(::FindNextFile(handle, &data)) {
+		// found a dupe
+		::FindClose(handle);
+		return false;
+	}
+	::FindClose(handle);
+
+	// don't use dcpp::File as that would be case-sensitive
+	handle = ::CreateFile((Text::toT(Util::getFilePath(file)) + data.cFileName).c_str(),
+		GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+	if(handle == INVALID_HANDLE_VALUE) {
+		return false;
+	}
+
+	wstring buf(file.size() * 2, 0);
+	buf.resize(GetFinalPathNameByHandle(handle, &buf[0], buf.size(), 0));
+
+	::CloseHandle(handle);
+
+	if(buf.empty()) {
+		return false;
+	}
+	// GetFinalPathNameByHandle prepends "\\?\"; remove it.
+	if(buf.size() >= 4 && buf.substr(0, 4) == L"\\\\?\\") {
+		buf.erase(0, 4);
+	}
+
+	auto buf8 = Text::fromT(buf);
+	if(Text::toLower(buf8) == file) {
+		file = move(buf8);
+		return true;
+	}
+
+	return false;
+}
+
+#else
+
+bool upgradeFromV2(string& file) {
+	/// @todo implement this on Linux; by default, force re-hashing.
+	return false;
+}
+
+#endif
+
 }
 
 static const string sHashStore = "HashStore";
@@ -373,7 +461,6 @@ void HashLoader::startTag(const string& name, StringPairList& attribs, bool simp
 		}
 		inHashStore = !simple;
 	} else if (inHashStore && (version == 2 || version == 3)) {
-		// when upgrading from version 2 to 3, import trees but not the file registry.
 		if (inTrees && name == sHash) {
 			const string& type = getAttrib(attribs, sType, 0);
 			int64_t index = Util::toInt64(getAttrib(attribs, sIndex, 1));
@@ -383,12 +470,11 @@ void HashLoader::startTag(const string& name, StringPairList& attribs, bool simp
 			if (!root.empty() && type == sTTH && (index >= 8 || index == HashManager::SMALL_TREE) && blockSize >= 1024) {
 				store.treeIndex[TTHValue(root)] = HashManager::HashStore::TreeInfo(size, index, blockSize);
 			}
-		} else if (inFiles && version != 2 && name == sFile) {
-			const auto& file = getAttrib(attribs, sName, 0);
+		} else if (inFiles && name == sFile) {
+			file = getAttrib(attribs, sName, 0);
 			auto timeStamp = Util::toUInt32(getAttrib(attribs, sTimeStamp, 1));
 			const auto& root = getAttrib(attribs, sRoot, 2);
-
-			if (!file.empty() && timeStamp > 0 && !root.empty()) {
+			if(!file.empty() && timeStamp > 0 && !root.empty() && (version != 2 || upgradeFromV2(file))) {
 				auto fname = Util::getFileName(file), fpath = Util::getFilePath(file);
 				store.fileIndex[fpath].emplace_back(fname, TTHValue(root), timeStamp, false);
 			}
